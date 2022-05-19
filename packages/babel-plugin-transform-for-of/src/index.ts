@@ -9,6 +9,24 @@ export interface Options {
   loose?: boolean;
 }
 
+function buildLoopBody(path, declar, newBody?) {
+  let block;
+  const bodyPath = path.get("body");
+  const body = newBody ?? bodyPath.node;
+  if (
+    t.isBlockStatement(body) &&
+    Object.keys(path.getBindingIdentifiers()).some(id =>
+      bodyPath.scope.hasOwnBinding(id),
+    )
+  ) {
+    block = t.blockStatement([declar, body]);
+  } else {
+    block = t.toBlock(body);
+    block.body.unshift(declar);
+  }
+  return block;
+}
+
 export default declare((api, options: Options) => {
   api.assertVersion(7);
 
@@ -90,20 +108,6 @@ export default declare((api, options: Options) => {
             );
           }
 
-          let blockBody;
-          const body = path.get("body");
-          if (
-            body.isBlockStatement() &&
-            Object.keys(path.getBindingIdentifiers()).some(id =>
-              body.scope.hasOwnBinding(id),
-            )
-          ) {
-            blockBody = t.blockStatement([assignment, body.node]);
-          } else {
-            blockBody = t.toBlock(body.node);
-            blockBody.body.unshift(assignment);
-          }
-
           path.replaceWith(
             t.forStatement(
               t.variableDeclaration("let", inits),
@@ -113,7 +117,7 @@ export default declare((api, options: Options) => {
                 t.memberExpression(t.cloneNode(array), t.identifier("length")),
               ),
               t.updateExpression("++", t.cloneNode(i)),
-              blockBody,
+              buildLoopBody(path, assignment),
             ),
           );
         },
@@ -174,28 +178,18 @@ export default declare((api, options: Options) => {
       true,
     );
 
-    if (
-      t.isBlockStatement(loop.body) &&
-      Object.keys(path.getBindingIdentifiers()).some(id =>
-        path.get("body").scope.hasOwnBinding(id),
-      )
-    ) {
-      loop.body = t.blockStatement([loop.body]);
-    } else {
-      loop.body = t.toBlock(loop.body);
-    }
-
+    let declar;
     const left = node.left;
     if (t.isVariableDeclaration(left)) {
       left.declarations[0].init = iterationValue;
-      loop.body.body.unshift(left);
+      declar = left;
     } else {
-      loop.body.body.unshift(
-        t.expressionStatement(
-          t.assignmentExpression("=", left, iterationValue),
-        ),
+      declar = t.expressionStatement(
+        t.assignmentExpression("=", left, iterationValue),
       );
     }
+
+    loop.body = buildLoopBody(path, declar, loop.body);
 
     return loop;
   }
@@ -242,20 +236,6 @@ export default declare((api, options: Options) => {
           );
         }
 
-        let blockBody;
-        const body = path.get("body");
-        if (
-          body.isBlockStatement() &&
-          Object.keys(path.getBindingIdentifiers()).some(id =>
-            body.scope.hasOwnBinding(id),
-          )
-        ) {
-          blockBody = t.blockStatement([declar, body.node]);
-        } else {
-          blockBody = t.toBlock(body.node);
-          blockBody.body.unshift(declar);
-        }
-
         const nodes = builder.build({
           CREATE_ITERATOR_HELPER: state.addHelper(builder.helper),
           ITERATOR_HELPER: scope.generateUidIdentifier("iterator"),
@@ -264,7 +244,7 @@ export default declare((api, options: Options) => {
             : null,
           STEP_KEY: t.identifier(stepKey),
           OBJECT: node.right,
-          BODY: blockBody,
+          BODY: buildLoopBody(path, declar),
         });
         const container = builder.getContainer(nodes);
 
