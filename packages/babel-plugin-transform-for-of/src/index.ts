@@ -234,10 +234,19 @@ export default declare((api, options: Options) => {
           );
         }
 
-        // ensure that it's a block so we can take all its statements
-        path.ensureBlock();
-
-        (node.body as t.BlockStatement).body.unshift(declar);
+        let blockBody;
+        const body = path.get("body");
+        if (
+          body.isBlockStatement() &&
+          Object.keys(path.getBindingIdentifiers()).some(id =>
+            body.scope.hasOwnBinding(id),
+          )
+        ) {
+          blockBody = t.blockStatement([declar, body.node]);
+        } else {
+          blockBody = t.toBlock(body.node);
+          blockBody.body.unshift(declar);
+        }
 
         const nodes = builder.build({
           CREATE_ITERATOR_HELPER: state.addHelper(builder.helper),
@@ -247,7 +256,7 @@ export default declare((api, options: Options) => {
             : null,
           STEP_KEY: t.identifier(stepKey),
           OBJECT: node.right,
-          BODY: node.body,
+          BODY: blockBody,
         });
         const container = builder.getContainer(nodes);
 
