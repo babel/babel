@@ -497,6 +497,9 @@
       "@babel/plugin-transform-react-jsx": [
         "./packages/babel-plugin-transform-react-jsx/src"
       ],
+      "@babel/plugin-transform-react-jsx/lib/development": [
+        "./packages/babel-plugin-transform-react-jsx/src/development.ts"
+      ],
       "@babel/plugin-transform-react-jsx-compat": [
         "./packages/babel-plugin-transform-react-jsx-compat/src"
       ],
