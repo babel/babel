@@ -26,7 +26,7 @@ let Outer = /*#__PURE__*/function (_Hello) {
 
     babelHelpers.classCallCheck(this, Outer);
     _this = _super.call(this);
-    _dec = babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Outer.prototype)), "dec", _thisSuper)
+    _dec = babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Outer.prototype)), "dec", _thisSuper);
     let Inner = /*#__PURE__*/babelHelpers.createClass(function Inner() {
       babelHelpers.classCallCheck(this, Inner);
       babelHelpers.defineProperty(this, "hello", _init_hello(this));

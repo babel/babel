@@ -23,11 +23,11 @@ class Foo {
 
   static #C = 456;
 
-  static get 'c'() {
+  static get ['c']() {
     return this.#C;
   }
 
-  static set 'c'(v) {
+  static set ['c'](v) {
     this.#C = v;
   }
 

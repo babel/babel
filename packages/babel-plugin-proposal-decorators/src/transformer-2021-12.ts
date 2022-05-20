@@ -502,7 +502,7 @@ function transformClass(
     if (element.node.decorators && element.node.decorators.length > 0) {
       hasElementDecorators = true;
     } else if (element.node.type === "ClassAccessorProperty") {
-      const { key, value, static: isStatic } = element.node;
+      const { key, value, static: isStatic, computed } = element.node;
 
       const newId = generateClassPrivateUid();
 
@@ -511,7 +511,7 @@ function transformClass(
       const newField = generateClassProperty(newId, valueNode, isStatic);
 
       const [newPath] = element.replaceWith(newField);
-      addProxyAccessorsFor(newPath, key, newId, element.node.computed);
+      addProxyAccessorsFor(newPath, key, newId, computed);
     }
   }
 

@@ -17,11 +17,11 @@ class Foo {
     babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _B, v);
   }
 
-  static get 'c'() {
+  static get ['c']() {
     return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _C);
   }
 
-  static set 'c'(v) {
+  static set ['c'](v) {
     babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _C, v);
   }
 
