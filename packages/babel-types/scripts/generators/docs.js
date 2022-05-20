@@ -176,6 +176,7 @@ function generateMapAliasToNodeTypes() {
   return result;
 }
 const aliasDescriptions = {
+  Accessor: "A cover of ClassAccessorProperty.",
   Binary:
     "A cover of BinaryExpression and LogicalExpression, which share the same AST shape.",
   Block: "Deprecated. Will be removed in Babel 8.",
