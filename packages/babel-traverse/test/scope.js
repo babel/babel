@@ -256,6 +256,32 @@ describe("scope", () => {
       });
     });
 
+    describe("decorator", () => {
+      const parserOptions = {
+        plugins: [["decorators", { decoratorsBeforeExport: true }]],
+      };
+      it("should not have visibility of declarations inside method body", () => {
+        expect(
+          getPath(
+            `var a = "outside"; class foo { @(() => () => a) m() { let a = "inside"; } }`,
+            parserOptions,
+          )
+            .get("body.1.body.body.0.decorators.0.expression.body.body")
+            .scope.getBinding("a").path.node.init.value,
+        ).toBe("outside");
+      });
+      it("should not have visibility on parameter bindings", () => {
+        expect(
+          getPath(
+            `var a = "outside"; class foo { @(() => () => a) m(a = "inside") {} }`,
+            parserOptions,
+          )
+            .get("body.1.body.body.0.decorators.0.expression.body.body")
+            .scope.getBinding("a").path.node.init.value,
+        ).toBe("outside");
+      });
+    });
+
     it("variable declaration", function () {
       expect(getPath("var foo = null;").scope.getBinding("foo").path.type).toBe(
         "VariableDeclarator",

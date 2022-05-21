@@ -132,8 +132,13 @@ export function setScope(this: NodePath) {
 
   let path = this.parentPath;
 
-  // Skip method scope if is computed method key
-  if (this.key === "key" && path.isMethod()) path = path.parentPath;
+  // Skip method scope if is computed method key or decorator expression
+  if (
+    (this.key === "key" || this.listKey === "decorators") &&
+    path.isMethod()
+  ) {
+    path = path.parentPath;
+  }
 
   let target;
   while (path && !target) {

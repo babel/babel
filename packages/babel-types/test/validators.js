@@ -266,6 +266,20 @@ describe("validators", function () {
       });
     });
 
+    describe("ClassDeclaration", () => {
+      it("returns true if node is a class heritage", function () {
+        const node = t.identifier("A");
+        const parent = t.classDeclaration(
+          t.identifier("C"),
+          node,
+          t.classBody([]),
+          [],
+        );
+
+        expect(t.isReferenced(node, parent)).toBe(true);
+      });
+    });
+
     describe("exports", function () {
       it("returns false for re-exports", function () {
         const node = t.identifier("foo");

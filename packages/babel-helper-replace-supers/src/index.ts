@@ -57,7 +57,9 @@ const visitor = traverse.visitors.merge<
   },
 ]);
 
-const unshadowSuperBindingVisitor = traverse.visitors.merge([
+const unshadowSuperBindingVisitor = traverse.visitors.merge<{
+  refName: string;
+}>([
   environmentVisitor,
   {
     Scopable(path, { refName }) {

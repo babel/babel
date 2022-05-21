@@ -38,11 +38,11 @@ class Foo {
     babelHelpers.classPrivateFieldSet(this, _B, v);
   }
 
-  get 'c'() {
+  get ['c']() {
     return babelHelpers.classPrivateFieldGet(this, _C);
   }
 
-  set 'c'(v) {
+  set ['c'](v) {
     babelHelpers.classPrivateFieldSet(this, _C, v);
   }
 
