@@ -4,6 +4,16 @@ import stripAnsi from "strip-ansi";
 import _highlight, { shouldHighlight, getChalk } from "../lib/index.js";
 const highlight = _highlight.default;
 
+const FORCE_COLOR = process.env["FORCE_COLOR"];
+
+beforeAll(() => {
+  process.env["FORCE_COLOR"] = "true";
+});
+
+afterAll(() => {
+  process.env["FORCE_COLOR"] = FORCE_COLOR;
+});
+
 describe("@babel/highlight", function () {
   function stubColorSupport(supported) {
     let originalSupportsColor;

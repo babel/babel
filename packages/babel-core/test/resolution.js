@@ -464,9 +464,9 @@ describe("addon resolution", function () {
     }).toThrow(/Cannot (?:find|resolve) module 'babel-plugin-foo'/);
   });
 
-  const nodeGte12 = parseInt(process.versions.node, 10) >= 12 ? it : it.skip;
+  const itNodeGte12 = parseInt(process.versions.node, 10) >= 12 ? it : it.skip;
 
-  nodeGte12("should respect package.json#exports", async function () {
+  itNodeGte12("should respect package.json#exports for CJS", function () {
     process.chdir("pkg-exports");
 
     expect(
@@ -477,16 +477,29 @@ describe("addon resolution", function () {
         plugins: ["babel-plugin-dual"],
       }).code,
     ).toBe(`"CJS"`);
-
-    expect(
-      (
-        await babel.transformAsync("", {
-          filename: "filename.js",
-          babelrc: false,
-          configFile: false,
-          plugins: ["babel-plugin-dual"],
-        })
-      ).code,
-    ).toBe(`"ESM"`);
   });
+
+  // only jest-light-runner support ESM
+  const itSupportESM =
+    itNodeGte12 == it && new Error().stack.includes("jest-light-runner")
+      ? it
+      : it.skip;
+
+  itSupportESM(
+    "should respect package.json#exports for ESM",
+    async function () {
+      process.chdir("pkg-exports");
+
+      expect(
+        (
+          await babel.transformAsync("", {
+            filename: "filename.js",
+            babelrc: false,
+            configFile: false,
+            plugins: ["babel-plugin-dual"],
+          })
+        ).code,
+      ).toBe(`"ESM"`);
+    },
+  );
 });

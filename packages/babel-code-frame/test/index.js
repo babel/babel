@@ -4,6 +4,16 @@ import stripAnsi from "strip-ansi";
 import _codeFrame, { codeFrameColumns } from "../lib/index.js";
 const codeFrame = _codeFrame.default;
 
+const FORCE_COLOR = process.env["FORCE_COLOR"];
+
+beforeAll(() => {
+  process.env["FORCE_COLOR"] = "true";
+});
+
+afterAll(() => {
+  process.env["FORCE_COLOR"] = FORCE_COLOR;
+});
+
 describe("@babel/code-frame", function () {
   test("basic usage", function () {
     const rawLines = ["class Foo {", "  constructor()", "};"].join("\n");

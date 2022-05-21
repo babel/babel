@@ -82,8 +82,9 @@ jobs:
           cache: "yarn"
       - name: Build babel artifacts
         run: |
-          BABEL_ENV=test-legacy make -j build-standalone-ci
+          make -j build-standalone-ci
         env:
+          BABEL_ENV: test-legacy
           BABEL_8_BREAKING: false
           STRIP_BABEL_8_FLAG: true
       - name: Ensure cwd does not contain uncommitted changes
@@ -116,8 +117,9 @@ jobs:
       - name: Build babel artifacts
         shell: bash
         run: |
-          BABEL_ENV=test-legacy make -j build-standalone-ci
+          make -j build-standalone-ci
         env:
+          BABEL_ENV: test-legacy
           BABEL_8_BREAKING: false
           STRIP_BABEL_8_FLAG: true
       - name: Ensure cwd does not contain uncommitted changes
@@ -165,7 +167,7 @@ jobs:
         run: |
           yarn install
       - name: Downgrade Jest for node <= 10
-        if: matrix.node-version == '6' || matrix.node-version == '8' || matrix.node-version == '10'
+        if: contains(fromJSON('["6","8","10"]'), matrix.node-version)
         run: |
           yarn remove jest
           yarn add --dev jest@24
@@ -182,17 +184,26 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Test on node.js ${{ matrix.node-version }}
+      - name: Test
         # Hack: --color has supports-color@5 returned true for GitHub CI
         # Remove once `chalk` is bumped to 4.0.
 
         # Todo(Babel 8): Jest execution path is hardcoded because Yarn 2 does not support node 6
         run: |
-          BABEL_ENV=test node --max-old-space-size=4096 ./node_modules/.bin/jest --ci --color
+          node --max-old-space-size=4096 ./node_modules/.bin/jest --ci --color
         env:
-          TEST_FUZZ: "${{ (matrix.node-version == '6' || matrix.node-version == '8' || matrix.node-version == '10') && 'false' || 'true' }}"
+          BABEL_ENV: test
+          TEST_FUZZ: ${{ contains(fromJSON('["6","8","10"]'), matrix.node-version) && false || true }}
+      - name: Test with jest-runner
+        if: ${{ !contains(fromJSON('["6","8","10"]'), matrix.node-version) }}
+        run: |
+          yarn jest --ci --color
+        env:
+          BABEL_ENV: test
+          TEST_FUZZ: ${{ contains(fromJSON('["6","8","10"]'), matrix.node-version) && false || true }}
+          BABEL_USE_JEST_LIGHT: false
       - name: Use Node.js latest # For `yarn version` in post actions of the first actions/setup-node
-        if: matrix.node-version == '6' || matrix.node-version == '8' || matrix.node-version == '10'
+        if: contains(fromJSON('["6","8","10"]'), matrix.node-version)
         uses: actions/setup-node@v3
         with:
           node-version: "*"
@@ -231,6 +242,16 @@ jobs:
           BABEL_ENV: test
           BABEL_8_BREAKING: true
           BABEL_TYPES_8_BREAKING: true
+      - name: Test with jest-runner
+        # Hack: --color has supports-color@5 returned true for GitHub CI
+        # Remove once `chalk` is bumped to 4.0.
+        run: |
+          yarn jest --ci --color
+        env:
+          BABEL_ENV: test
+          BABEL_8_BREAKING: true
+          BABEL_TYPES_8_BREAKING: true
+          BABEL_USE_JEST_LIGHT: false
 
   test-windows:
     name: Test on Windows
@@ -252,12 +273,19 @@ jobs:
       - name: Generate runtime helpers
         run: |
           make build-plugin-transform-runtime-dist
-      - name: Test on Windows
+      - name: Test
         # Hack: --color has supports-color@5 returned true for GitHub CI
         # Remove once `chalk` is bumped to 4.0.
-        run: yarn jest --ci --color
+        run: |
+          yarn jest --ci --color
         env:
           BABEL_ENV: test
+      - name: Test with jest-runner
+        run: |
+          yarn jest --ci --color
+        env:
+          BABEL_ENV: test
+          BABEL_USE_JEST_LIGHT: false
 
   external-parser-tests:
     name: Third-party Parser Tests
