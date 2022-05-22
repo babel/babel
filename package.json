@@ -93,7 +93,8 @@
     "@types/babel__core": "link:./nope",
     "@types/babel__traverse": "link:./nope",
     "@babel/parser/@babel/types": "workspace:*",
-    "babel-plugin-polyfill-corejs2/@babel/compat-data": "workspace:*"
+    "babel-plugin-polyfill-corejs2/@babel/compat-data": "workspace:*",
+    "jest-light-runner@^0.2.1": "patch:jest-light-runner@npm:0.2.1#.yarn/patches/jest-light-runner-npm-0.2.1-5360f47d73"
   },
   "engines": {
     "yarn": ">=1.4.0"

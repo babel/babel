@@ -10481,7 +10481,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"jest-light-runner@npm:^0.2.1":
+"jest-light-runner@npm:0.2.1":
   version: 0.2.1
   resolution: "jest-light-runner@npm:0.2.1"
   dependencies:
@@ -10495,6 +10495,23 @@ fsevents@^1.2.7:
   peerDependencies:
     jest: ^27.0.0 || ^28.0.0
   checksum: 09b1f9228adcffa99daf5f8271756ce35e8e9dbf82233812304c9b175a4a3ef9c6aa85fab686162b9580d7a1e77f78a7ce75ed78677d7e7cf146b35b2c354538
+  languageName: node
+  linkType: hard
+
+"jest-light-runner@patch:jest-light-runner@npm:0.2.1#.yarn/patches/jest-light-runner-npm-0.2.1-5360f47d73::locator=babel%40workspace%3A.":
+  version: 0.2.1
+  resolution: "jest-light-runner@patch:jest-light-runner@npm%3A0.2.1#.yarn/patches/jest-light-runner-npm-0.2.1-5360f47d73::version=0.2.1&hash=748cf1&locator=babel%40workspace%3A."
+  dependencies:
+    "@jest/expect": ^28.0.2
+    jest-circus: ^28.0.0
+    jest-each: ^28.0.0
+    jest-mock: ^28.0.0
+    jest-snapshot: ^28.0.0
+    piscina: ^3.1.0
+    supports-color: ^9.2.1
+  peerDependencies:
+    jest: ^27.0.0 || ^28.0.0
+  checksum: 0834c234d9dc97dde1b5dde4bdfd9ff669f4458edf4e38e76e3627fe1e24551873b50d58c03bf594d2113b2c138e328e655558807b141050d4d2ad83b4dc5040
   languageName: node
   linkType: hard
 

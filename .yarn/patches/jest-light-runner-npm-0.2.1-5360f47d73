@@ -1,0 +1,29 @@
+diff --git a/src/index.js b/src/index.js
+index 909d42c216c591982cbb7772d68f70a195e732a1..f75f64626c7ea3e8f56e142114348b6200a25f3d 100644
+--- a/src/index.js
++++ b/src/index.js
+@@ -52,7 +52,23 @@ export default class LightRunner {
+         mc.port2.onmessage = () => onStart(test);
+         mc.port2.unref();
+ 
+-        return this._piscina
++        let _piscina = this._piscina;
++
++        if(test.path.includes("babel-register")){
++          console.log("jest-light: use a new Worker", test.path);
++          _piscina = new Piscina({
++              filename: new URL("./worker-runner.js", import.meta.url).href,
++              maxThreads: 1,
++              env: {
++                // Workers don't have a tty; we whant them to inherit
++                // the color support level from the main thread.
++                FORCE_COLOR: supportsColor.stdout.level,
++                ...process.env,
++              },
++            });
++        }
++
++        return _piscina
+           .run(
+             { test, updateSnapshot, testNamePattern, port: mc.port1 },
+             { transferList: [mc.port1] }
