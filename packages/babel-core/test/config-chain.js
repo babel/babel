@@ -3,6 +3,7 @@ import os from "os";
 import path from "path";
 import { fileURLToPath } from "url";
 import babel from "../lib/index.js";
+import rimraf from "rimraf";
 
 import _getTargets from "@babel/helper-compilation-targets";
 const getTargets = _getTargets.default;
@@ -81,25 +82,8 @@ async function getTemp(name) {
 }
 
 afterAll(() => {
-  function deleteDir(path) {
-    // Copy from packages\babel-cli\src\babel\util.ts
-    if (fs.existsSync(path)) {
-      fs.readdirSync(path).forEach(function (file) {
-        const curPath = path + "/" + file;
-        if (fs.lstatSync(curPath).isDirectory()) {
-          // recurse
-          deleteDir(curPath);
-        } else {
-          // delete file
-          fs.unlinkSync(curPath);
-        }
-      });
-      fs.rmdirSync(path);
-    }
-  }
-
   for (const dir of tempDirs) {
-    deleteDir(dir);
+    rimraf.sync(dir);
   }
 });
 
