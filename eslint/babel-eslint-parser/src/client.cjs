@@ -60,10 +60,12 @@ exports.WorkerClient = class WorkerClient extends Client {
     { env: WorkerClient.#worker_threads.SHARE_ENV },
   );
 
-  #signal = new Int32Array(new SharedArrayBuffer(8));
-
   constructor() {
     super((action, payload) => {
+      // We create a new SharedArrayBuffer every time rather than reusing
+      // the same one, otherwise sometimes its contents get corrupted and
+      // Atomics.wait wakes up too early.
+      // https://github.com/babel/babel/pull/14541
       const signal = new Int32Array(new SharedArrayBuffer(8));
 
       const subChannel = new WorkerClient.#worker_threads.MessageChannel();
@@ -73,28 +75,11 @@ exports.WorkerClient = class WorkerClient extends Client {
         [subChannel.port1],
       );
 
-      let wakeReason = Atomics.wait(signal, 0, 0);
+      Atomics.wait(signal, 0, 0);
+      const { message } = WorkerClient.#worker_threads.receiveMessageOnPort(
+        subChannel.port2,
+      );
 
-      let response;
-      let i = 0;
-      // Sometimes receiveMessageOnPort returns "undefined" instead of the
-      // actual response object. Try multiple times, with a timeout of 5ms
-      // on Atomic.wait starting from the second one.
-      do {
-        if (i > 0) wakeReason = Atomics.wait(signal, 1, 0, 5);
-
-        response = WorkerClient.#worker_threads.receiveMessageOnPort(
-          subChannel.port2,
-        );
-
-        if (i > 0) {
-          console.log(
-            `WORKER COMMUNICATION: i=${i}, wakeReason=${wakeReason}, hasResponse=${!!response}`,
-          );
-        }
-      } while (!response && i++ < 100);
-
-      const { message } = response;
       if (message.error) throw Object.assign(message.error, message.errorData);
       else return message.result;
     });
