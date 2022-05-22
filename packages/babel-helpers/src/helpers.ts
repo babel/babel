@@ -292,7 +292,7 @@ helpers.defineProperty = helper("7.0.0-beta.0")`
 // need a bind because https://github.com/babel/babel/issues/14527
 helpers.extends = helper("7.0.0-beta.0")`
   export default function _extends() {
-    _extends = Object.assign.bind() || function (target) {
+    _extends = Object.assign ? Object.assign.bind() : function (target) {
       for (var i = 1; i < arguments.length; i++) {
         var source = arguments[i];
         for (var key in source) {
