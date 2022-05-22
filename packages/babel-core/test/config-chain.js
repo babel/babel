@@ -68,13 +68,40 @@ function escapeRegExp(string) {
   return string.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&");
 }
 
+const tempDirs = [];
+
 async function getTemp(name) {
-  const cwd = await pfs.mkdtemp(os.tmpdir() + path.sep + name);
+  const tempDir = os.tmpdir() + path.sep + name;
+  tempDirs.push(tempDir);
+  const cwd = await pfs.mkdtemp(tempDir);
   const tmp = name => path.join(cwd, name);
   const config = name =>
     pfs.copyFile(fixture("config-files-templates", name), tmp(name));
   return { cwd, tmp, config };
 }
+
+afterAll(() => {
+  function deleteDir(path) {
+    // Copy from packages\babel-cli\src\babel\util.ts
+    if (fs.existsSync(path)) {
+      fs.readdirSync(path).forEach(function (file) {
+        const curPath = path + "/" + file;
+        if (fs.lstatSync(curPath).isDirectory()) {
+          // recurse
+          deleteDir(curPath);
+        } else {
+          // delete file
+          fs.unlinkSync(curPath);
+        }
+      });
+      fs.rmdirSync(path);
+    }
+  }
+
+  for (const dir of tempDirs) {
+    deleteDir(dir);
+  }
+});
 
 describe("buildConfigChain", function () {
   describe("test", () => {
