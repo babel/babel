@@ -68,7 +68,7 @@ export function DeclareFunction(
   this.semicolon();
 }
 
-export function InferredPredicate(/*node: Object*/) {
+export function InferredPredicate(this: Printer) {
   this.token("%");
   this.word("checks");
 }
@@ -159,7 +159,7 @@ export function DeclareExportDeclaration(
   FlowExportDeclaration.apply(this, arguments);
 }
 
-export function DeclareExportAllDeclaration(/*node: Object*/) {
+export function DeclareExportAllDeclaration(this: Printer) {
   this.word("declare");
   this.space();
   ExportAllDeclaration.apply(this, arguments);
@@ -258,7 +258,7 @@ export function EnumStringMember(this: Printer, node: t.EnumStringMember) {
   enumInitializedMember(this, node);
 }
 
-function FlowExportDeclaration(node: any) {
+function FlowExportDeclaration(this: Printer, node: any) {
   if (node.declaration) {
     const declar = node.declaration;
     this.print(declar, node);
@@ -403,7 +403,7 @@ export function InterfaceDeclaration(
   this._interfaceish(node);
 }
 
-function andSeparator() {
+function andSeparator(this: Printer) {
   this.space();
   this.token("&");
   this.space();
@@ -707,7 +707,7 @@ export function SymbolTypeAnnotation(this: Printer) {
   this.word("symbol");
 }
 
-function orSeparator() {
+function orSeparator(this: Printer) {
   this.space();
   this.token("|");
   this.space();

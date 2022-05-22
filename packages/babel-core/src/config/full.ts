@@ -494,7 +494,7 @@ function chain(a, b) {
   const fns = [a, b].filter(Boolean);
   if (fns.length <= 1) return fns[0];
 
-  return function (...args) {
+  return function (this: unknown, ...args) {
     for (const fn of fns) {
       fn.apply(this, args);
     }

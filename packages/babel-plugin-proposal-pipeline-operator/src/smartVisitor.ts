@@ -1,6 +1,8 @@
 import { types as t } from "@babel/core";
+import type { PluginPass } from "@babel/core";
+import type { Visitor } from "@babel/traverse";
 
-const updateTopicReferenceVisitor = {
+const updateTopicReferenceVisitor: Visitor<{ topicId: t.Identifier }> = {
   PipelinePrimaryTopicReference(path) {
     path.replaceWith(t.cloneNode(this.topicId));
   },
@@ -9,7 +11,7 @@ const updateTopicReferenceVisitor = {
   },
 };
 
-const smartVisitor = {
+const smartVisitor: Visitor<PluginPass> = {
   BinaryExpression(path) {
     const { scope } = path;
     const { node } = path;
@@ -28,7 +30,7 @@ const smartVisitor = {
       call = right.expression;
     } else {
       // PipelineBareFunction
-      let callee = right.callee;
+      let callee = (right as t.CallExpression).callee;
       if (t.isIdentifier(callee, { name: "eval" })) {
         callee = t.sequenceExpression([t.numericLiteral(0), callee]);
       }
@@ -38,7 +40,12 @@ const smartVisitor = {
 
     path.replaceWith(
       t.sequenceExpression([
-        t.assignmentExpression("=", t.cloneNode(placeholder), left),
+        t.assignmentExpression(
+          "=",
+          t.cloneNode(placeholder),
+          // left must not be a PrivateName because operator is not "in"
+          left as t.Expression,
+        ),
         call,
       ]),
     );

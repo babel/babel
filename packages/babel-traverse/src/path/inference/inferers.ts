@@ -21,10 +21,13 @@ import {
   unionTypeAnnotation,
   voidTypeAnnotation,
 } from "@babel/types";
+import type * as t from "@babel/types";
 
 export { default as Identifier } from "./inferer-reference";
 
-export function VariableDeclarator() {
+import type NodePath from "..";
+
+export function VariableDeclarator(this: NodePath<t.VariableDeclarator>) {
   const id = this.get("id");
 
   if (!id.isIdentifier()) return;
@@ -52,7 +55,7 @@ export function TypeCastExpression(node) {
 
 TypeCastExpression.validParent = true;
 
-export function NewExpression(node) {
+export function NewExpression(this: NodePath<t.NewExpression>, node) {
   if (this.get("callee").isIdentifier()) {
     // only resolve identifier callee
     return genericTypeAnnotation(node.callee);
@@ -77,7 +80,7 @@ export function UnaryExpression(node) {
   }
 }
 
-export function BinaryExpression(node) {
+export function BinaryExpression(this: NodePath<t.BinaryExpression>, node) {
   const operator = node.operator;
 
   if (NUMBER_BINARY_OPERATORS.indexOf(operator) >= 0) {
@@ -104,13 +107,14 @@ export function BinaryExpression(node) {
   }
 }
 
-export function LogicalExpression() {
+export function LogicalExpression(this: NodePath<t.LogicalExpression>) {
   const argumentTypes = [
     this.get("left").getTypeAnnotation(),
     this.get("right").getTypeAnnotation(),
   ];
 
   if (isTSTypeAnnotation(argumentTypes[0]) && createTSUnionType) {
+    // @ts-expect-error Fixme: getTypeAnnotation also returns TS types
     return createTSUnionType(argumentTypes);
   }
 
@@ -121,13 +125,14 @@ export function LogicalExpression() {
   return createUnionTypeAnnotation(argumentTypes);
 }
 
-export function ConditionalExpression() {
+export function ConditionalExpression(this: NodePath<t.ConditionalExpression>) {
   const argumentTypes = [
     this.get("consequent").getTypeAnnotation(),
     this.get("alternate").getTypeAnnotation(),
   ];
 
   if (isTSTypeAnnotation(argumentTypes[0]) && createTSUnionType) {
+    // @ts-expect-error Fixme: getTypeAnnotation also returns TS types
     return createTSUnionType(argumentTypes);
   }
 
@@ -138,19 +143,21 @@ export function ConditionalExpression() {
   return createUnionTypeAnnotation(argumentTypes);
 }
 
-export function SequenceExpression() {
+export function SequenceExpression(this: NodePath<t.SequenceExpression>) {
   return this.get("expressions").pop().getTypeAnnotation();
 }
 
-export function ParenthesizedExpression() {
+export function ParenthesizedExpression(
+  this: NodePath<t.ParenthesizedExpression>,
+) {
   return this.get("expression").getTypeAnnotation();
 }
 
-export function AssignmentExpression() {
+export function AssignmentExpression(this: NodePath<t.AssignmentExpression>) {
   return this.get("right").getTypeAnnotation();
 }
 
-export function UpdateExpression(node) {
+export function UpdateExpression(this: NodePath<t.UpdateExpression>, node) {
   const operator = node.operator;
   if (operator === "++" || operator === "--") {
     return numberTypeAnnotation();
@@ -207,7 +214,7 @@ const isArrayFrom = buildMatchMemberExpression("Array.from");
 const isObjectKeys = buildMatchMemberExpression("Object.keys");
 const isObjectValues = buildMatchMemberExpression("Object.values");
 const isObjectEntries = buildMatchMemberExpression("Object.entries");
-export function CallExpression() {
+export function CallExpression(this: NodePath<t.CallExpression>) {
   const { callee } = this.node;
   if (isObjectKeys(callee)) {
     return arrayTypeAnnotation(stringTypeAnnotation());
@@ -222,7 +229,9 @@ export function CallExpression() {
   return resolveCall(this.get("callee"));
 }
 
-export function TaggedTemplateExpression() {
+export function TaggedTemplateExpression(
+  this: NodePath<t.TaggedTemplateExpression>,
+) {
   return resolveCall(this.get("tag"));
 }
 

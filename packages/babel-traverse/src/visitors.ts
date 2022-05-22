@@ -264,7 +264,7 @@ function ensureCallbackArrays(obj) {
 }
 
 function wrapCheck(wrapper, fn) {
-  const newFn = function (path) {
+  const newFn = function (this: unknown, path) {
     if (wrapper.checkPath(path)) {
       return fn.apply(this, arguments);
     }

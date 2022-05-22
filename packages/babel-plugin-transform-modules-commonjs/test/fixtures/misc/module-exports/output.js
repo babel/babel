@@ -8,15 +8,16 @@ console.log(function () {
 console.log(function () {
   throw new Error("The CommonJS '" + "exports" + "' variable is not available in ES6 modules." + "Consider setting setting sourceType:script or sourceType:unambiguous in your " + "Babel config for this file.");
 }().prop);
-
-exports += function () {
+exports += (function () {
   throw new Error("The CommonJS '" + "exports" + "' variable is not available in ES6 modules." + "Consider setting setting sourceType:script or sourceType:unambiguous in your " + "Babel config for this file.");
-}();
-
-exports = function () {
+}(), function () {
   throw new Error("The CommonJS '" + "exports" + "' variable is not available in ES6 modules." + "Consider setting setting sourceType:script or sourceType:unambiguous in your " + "Babel config for this file.");
-}() + 4;
-
+}());
+exports = (function () {
+  throw new Error("The CommonJS '" + "exports" + "' variable is not available in ES6 modules." + "Consider setting setting sourceType:script or sourceType:unambiguous in your " + "Babel config for this file.");
+}() + 4, function () {
+  throw new Error("The CommonJS '" + "exports" + "' variable is not available in ES6 modules." + "Consider setting setting sourceType:script or sourceType:unambiguous in your " + "Babel config for this file.");
+}());
 ({
   exports
 } = ({}, function () {
@@ -25,7 +26,9 @@ exports = function () {
 [exports] = ([], function () {
   throw new Error("The CommonJS '" + "exports" + "' variable is not available in ES6 modules." + "Consider setting setting sourceType:script or sourceType:unambiguous in your " + "Babel config for this file.");
 }());
-exports = {};
+exports = ({}, function () {
+  throw new Error("The CommonJS '" + "exports" + "' variable is not available in ES6 modules." + "Consider setting setting sourceType:script or sourceType:unambiguous in your " + "Babel config for this file.");
+}());
 (function () {
   throw new Error("The CommonJS '" + "exports" + "' variable is not available in ES6 modules." + "Consider setting setting sourceType:script or sourceType:unambiguous in your " + "Babel config for this file.");
 })().prop = "";
@@ -35,15 +38,16 @@ console.log(function () {
 console.log(function () {
   throw new Error("The CommonJS '" + "module" + "' variable is not available in ES6 modules." + "Consider setting setting sourceType:script or sourceType:unambiguous in your " + "Babel config for this file.");
 }().exports);
-
-module += function () {
+module += (function () {
   throw new Error("The CommonJS '" + "module" + "' variable is not available in ES6 modules." + "Consider setting setting sourceType:script or sourceType:unambiguous in your " + "Babel config for this file.");
-}();
-
-module = function () {
+}(), function () {
   throw new Error("The CommonJS '" + "module" + "' variable is not available in ES6 modules." + "Consider setting setting sourceType:script or sourceType:unambiguous in your " + "Babel config for this file.");
-}() + 4;
-
+}());
+module = (function () {
+  throw new Error("The CommonJS '" + "module" + "' variable is not available in ES6 modules." + "Consider setting setting sourceType:script or sourceType:unambiguous in your " + "Babel config for this file.");
+}() + 4, function () {
+  throw new Error("The CommonJS '" + "module" + "' variable is not available in ES6 modules." + "Consider setting setting sourceType:script or sourceType:unambiguous in your " + "Babel config for this file.");
+}());
 ({
   module
 } = ({}, function () {
@@ -52,7 +56,9 @@ module = function () {
 [module] = ([], function () {
   throw new Error("The CommonJS '" + "module" + "' variable is not available in ES6 modules." + "Consider setting setting sourceType:script or sourceType:unambiguous in your " + "Babel config for this file.");
 }());
-module = {};
+module = ({}, function () {
+  throw new Error("The CommonJS '" + "module" + "' variable is not available in ES6 modules." + "Consider setting setting sourceType:script or sourceType:unambiguous in your " + "Babel config for this file.");
+}());
 (function () {
   throw new Error("The CommonJS '" + "module" + "' variable is not available in ES6 modules." + "Consider setting setting sourceType:script or sourceType:unambiguous in your " + "Babel config for this file.");
 })().prop = "";

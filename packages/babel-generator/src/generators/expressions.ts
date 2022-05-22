@@ -219,7 +219,7 @@ export function Import(this: Printer) {
 }
 
 function buildYieldAwait(keyword: string) {
-  return function (node: any) {
+  return function (this: Printer, node: any) {
     this.word(keyword);
 
     if (node.delegate) {
@@ -348,7 +348,7 @@ export function V8IntrinsicIdentifier(
   this.word(node.name);
 }
 
-export function ModuleExpression(node: t.ModuleExpression) {
+export function ModuleExpression(this: Printer, node: t.ModuleExpression) {
   this.word("module");
   this.space();
   this.token("{");
