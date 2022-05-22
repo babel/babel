@@ -27,8 +27,20 @@ function getTsPkgs(subRoot) {
   return fs
     .readdirSync(new URL(subRoot, root))
     .filter(name => name.startsWith("babel-"))
-    .map(name => {
-      const relative = `./${subRoot}/${name}`;
+    .map(name => ({
+      name: name.replace(/^babel-/, "@babel/"),
+      relative: `./${subRoot}/${name}`,
+    }))
+    .filter(
+      ({ name, relative }) =>
+        // @babel/register is special-cased because its entry point is a js file
+        name === "@babel/register" ||
+        // @babel/compat-data is used by preset-env
+        name === "@babel/compat-data" ||
+        fs.existsSync(new URL(relative + "/src/index.ts", root)) ||
+        fs.existsSync(new URL(relative + "/src/index.cts", root))
+    )
+    .map(({ name, relative }) => {
       const packageJSON = importJSON(new URL(relative + "/package.json", root));
       // Babel 8 exports > Babel 7 exports > {}
       const exports =
@@ -38,10 +50,10 @@ function getTsPkgs(subRoot) {
       const subExports = Object.entries(exports).flatMap(
         ([_export, exportPath]) => {
           // The @babel/standalone has babel.js as exports, but we don't have src/babel.ts
-          if (name === "babel-standalone") {
+          if (name === "@babel/standalone") {
             return [["", "/src"]];
           }
-          if (name === "babel-compat-data") {
+          if (name === "@babel/compat-data") {
             // map ./plugins to ./data/plugins.json
             const subExport = _export.slice(1);
             const subExportPath = exportPath
@@ -68,20 +80,8 @@ function getTsPkgs(subRoot) {
           return [];
         }
       );
-      return {
-        name: name.replace(/^babel-/, "@babel/"),
-        relative,
-        subExports,
-      };
-    })
-    .filter(
-      ({ name, relative }) =>
-        // @babel/register is special-cased because its entry point is a js file
-        name === "@babel/register" ||
-        // @babel/compat-data is used by preset-env
-        name === "@babel/compat-data" ||
-        fs.existsSync(new URL(relative + "/src/index.ts", root))
-    );
+      return { name, relative, subExports };
+    });
 }
 
 const tsPkgs = [
@@ -96,7 +96,10 @@ fs.writeFileSync(
     JSON.stringify(
       {
         extends: "./tsconfig.base.json",
-        include: tsPkgs.map(({ relative }) => `${relative}/src/**/*.ts`),
+        include: tsPkgs.flatMap(({ relative }) => [
+          `${relative}/src/**/*.ts`,
+          `${relative}/src/**/*.cts`,
+        ]),
         compilerOptions: {
           paths: Object.fromEntries([
             ...tsPkgs.flatMap(({ name, relative, subExports }) => {
