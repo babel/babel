@@ -1,26 +1,49 @@
 diff --git a/src/index.js b/src/index.js
-index 909d42c216c591982cbb7772d68f70a195e732a1..f75f64626c7ea3e8f56e142114348b6200a25f3d 100644
+index 909d42c216c591982cbb7772d68f70a195e732a1..c20b83704d39ab04ec0ff256e95b3474c58ff7f4 100644
 --- a/src/index.js
 +++ b/src/index.js
-@@ -52,7 +52,23 @@ export default class LightRunner {
+@@ -1,6 +1,10 @@
+ import { Piscina } from "piscina";
+ import supportsColor from "supports-color";
+ import { MessageChannel } from "worker_threads";
++import { createRequire } from "module";
++import { readFileSync } from "fs";
++
++const require = createRequire(import.meta.url);
+
+ /** @typedef {import("@jest/test-result").Test} Test */
+
+@@ -25,7 +29,7 @@ export default class LightRunner {
+     const runInBand = maxWorkers === 1;
+
+     this._piscina = new (runInBand ? InBandPiscina : Piscina)({
+       filename: new URL("./worker-runner.js", import.meta.url).href,
+       maxThreads: maxWorkers,
+       env: {
+         // Workers don't have a tty; we whant them to inherit
+@@ -52,7 +56,27 @@ export default class LightRunner {
          mc.port2.onmessage = () => onStart(test);
          mc.port2.unref();
- 
+
 -        return this._piscina
 +        let _piscina = this._piscina;
 +
-+        if(test.path.includes("babel-register")){
++        if (
++          readFileSync(test.path, "utf8")
++            .substring(0, 64)
++            .includes("jest-light-new-env")
++        ) {
 +          console.log("jest-light: use a new Worker", test.path);
 +          _piscina = new Piscina({
-+              filename: new URL("./worker-runner.js", import.meta.url).href,
-+              maxThreads: 1,
-+              env: {
-+                // Workers don't have a tty; we whant them to inherit
-+                // the color support level from the main thread.
-+                FORCE_COLOR: supportsColor.stdout.level,
-+                ...process.env,
-+              },
-+            });
++            filename: new URL("./worker-runner.js", import.meta.url).href,
++            maxThreads: 1,
++            env: {
++              // Workers don't have a tty; we whant them to inherit
++              // the color support level from the main thread.
++              FORCE_COLOR: supportsColor.stdout.level,
++              ...process.env,
++            },
++          });
 +        }
 +
 +        return _piscina
