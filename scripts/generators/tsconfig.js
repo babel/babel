@@ -28,6 +28,14 @@ function getTsPkgs(subRoot) {
           if (name === "babel-standalone") {
             return [["", "/src"]];
           }
+          if (name === "babel-compat-data") {
+            // map ./plugins to ./data/plugins.json
+            const subExport = _export.slice(1);
+            const subExportPath = exportPath
+              .replace("./", "/data/")
+              .replace(/\.js$/, ".json");
+            return [[subExport, subExportPath]];
+          }
           // [{esm, default}, "./lib/index.js"]
           if (Array.isArray(exportPath)) {
             exportPath = exportPath[1];
@@ -55,8 +63,10 @@ function getTsPkgs(subRoot) {
     })
     .filter(
       ({ name, relative }) =>
-        // babel-register is special-cased because its entry point is a js file
+        // @babel/register is special-cased because its entry point is a js file
         name === "@babel/register" ||
+        // @babel/compat-data is used by preset-env
+        name === "@babel/compat-data" ||
         fs.existsSync(new URL(relative + "/src/index.ts", root))
     );
 }
