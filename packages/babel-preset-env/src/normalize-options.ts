@@ -113,7 +113,9 @@ export const checkDuplicateIncludeExcludes = (
   );
 };
 
-const normalizeTargets = (targets): Options["targets"] => {
+const normalizeTargets = (
+  targets: string | string[] | Options["targets"],
+): Options["targets"] => {
   // TODO: Allow to use only query or strings as a targets from next breaking change.
   if (typeof targets === "string" || Array.isArray(targets)) {
     return { browsers: targets };
@@ -125,6 +127,7 @@ export const validateModulesOption = (
   modulesOpt: ModuleOption = ModulesOption.auto,
 ) => {
   v.invariant(
+    // @ts-ignore we have provided fallback for undefined keys
     ModulesOption[modulesOpt.toString()] || modulesOpt === ModulesOption.false,
     `The 'modules' option must be one of \n` +
       ` - 'false' to indicate no module processing\n` +
@@ -140,6 +143,7 @@ export const validateUseBuiltInsOption = (
   builtInsOpt: BuiltInsOption = false,
 ) => {
   v.invariant(
+    // @ts-ignore we have provided fallback for undefined keys
     UseBuiltInsOption[builtInsOpt.toString()] ||
       builtInsOpt === UseBuiltInsOption.false,
     `The 'useBuiltIns' option must be either
@@ -261,7 +265,7 @@ export default function normalizeOptions(opts: Options) {
     spec: v.validateBooleanOption(TopLevelOptions.spec, opts.spec, false),
     targets: normalizeTargets(opts.targets),
     useBuiltIns: useBuiltIns,
-    browserslistEnv: v.validateStringOption(
+    browserslistEnv: v.validateStringOption<string>(
       TopLevelOptions.browserslistEnv,
       opts.browserslistEnv,
     ),

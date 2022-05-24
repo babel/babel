@@ -35,8 +35,6 @@ const pluginSyntaxEntries = Object.keys(pluginSyntaxObject).map<
   ];
 });
 
-const pluginSyntaxMap: Map<string, string | null> = new Map(
-  pluginSyntaxEntries,
-);
+const pluginSyntaxMap = new Map(pluginSyntaxEntries);
 
 export { proposalPlugins, proposalSyntaxPlugins, pluginSyntaxMap };
