@@ -8,6 +8,18 @@ const archivedSyntaxPkgs = importJSON(
   new URL("./archived-syntax-pkgs.json", import.meta.url)
 );
 
+const thirdPartyBabelPlugins = [
+  "@babel/preset-modules/lib/plugins/transform-async-arrows-in-class",
+  "@babel/preset-modules/lib/plugins/transform-edge-default-parameters",
+  "@babel/preset-modules/lib/plugins/transform-edge-function-name",
+  "@babel/preset-modules/lib/plugins/transform-tagged-template-caching",
+  "@babel/preset-modules/lib/plugins/transform-safari-block-shadowing",
+  "@babel/preset-modules/lib/plugins/transform-safari-for-shadowing",
+  "babel-plugin-polyfill-corejs2",
+  "babel-plugin-polyfill-corejs3",
+  "babel-plugin-polyfill-regenerator",
+];
+
 const root = new URL("../../", import.meta.url);
 
 function getTsPkgs(subRoot) {
@@ -94,6 +106,10 @@ fs.writeFileSync(
             ...archivedSyntaxPkgs.map(name => [
               name,
               ["./lib/archived-libs.d.ts"],
+            ]),
+            ...thirdPartyBabelPlugins.map(name => [
+              name,
+              ["./lib/third-party-libs.d.ts"],
             ]),
           ]),
         },

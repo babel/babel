@@ -665,6 +665,33 @@
       ],
       "@babel/plugin-syntax-trailing-function-commas": [
         "./lib/archived-libs.d.ts"
+      ],
+      "@babel/preset-modules/lib/plugins/transform-async-arrows-in-class": [
+        "./lib/third-party-libs.d.ts"
+      ],
+      "@babel/preset-modules/lib/plugins/transform-edge-default-parameters": [
+        "./lib/third-party-libs.d.ts"
+      ],
+      "@babel/preset-modules/lib/plugins/transform-edge-function-name": [
+        "./lib/third-party-libs.d.ts"
+      ],
+      "@babel/preset-modules/lib/plugins/transform-tagged-template-caching": [
+        "./lib/third-party-libs.d.ts"
+      ],
+      "@babel/preset-modules/lib/plugins/transform-safari-block-shadowing": [
+        "./lib/third-party-libs.d.ts"
+      ],
+      "@babel/preset-modules/lib/plugins/transform-safari-for-shadowing": [
+        "./lib/third-party-libs.d.ts"
+      ],
+      "babel-plugin-polyfill-corejs2": [
+        "./lib/third-party-libs.d.ts"
+      ],
+      "babel-plugin-polyfill-corejs3": [
+        "./lib/third-party-libs.d.ts"
+      ],
+      "babel-plugin-polyfill-regenerator": [
+        "./lib/third-party-libs.d.ts"
       ]
     }
   }
