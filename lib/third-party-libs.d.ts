@@ -1,4 +1,6 @@
+import type { PluginPass } from "@babel/core";
 import { declare } from "@babel/helper-plugin-utils";
+import type * as t from "@babel/types";
 declare module "js-tokens" {
   // TODO(Babel 8): Remove this
   export { default } from "js-tokens-BABEL_8_BREAKING-true";
@@ -38,6 +40,11 @@ declare module "babel-plugin-polyfill-corejs3" {
   export = { default: plugin };
 }
 declare module "babel-plugin-polyfill-regenerator" {
+  let plugin: ReturnType<typeof declare>;
+  export = { default: plugin };
+}
+
+declare module "regenerator-transform" {
   let plugin: ReturnType<typeof declare>;
   export = { default: plugin };
 }

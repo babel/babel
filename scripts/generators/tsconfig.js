@@ -18,6 +18,7 @@ const thirdPartyBabelPlugins = [
   "babel-plugin-polyfill-corejs2",
   "babel-plugin-polyfill-corejs3",
   "babel-plugin-polyfill-regenerator",
+  "regenerator-transform",
 ];
 
 const root = new URL("../../", import.meta.url);
@@ -111,6 +112,10 @@ fs.writeFileSync(
               name,
               ["./lib/third-party-libs.d.ts"],
             ]),
+            [
+              "babel-plugin-dynamic-import-node/utils",
+              ["./lib/babel-plugin-dynamic-import-node.d.ts"],
+            ],
           ]),
         },
       },
