@@ -3,6 +3,7 @@ import { basename, extname } from "path";
 import {
   isModule,
   rewriteModuleStatementsAndPrepareHeader,
+  type RewriteModuleStatementsAndPrepareHeaderOptions,
   hasExports,
   isSideEffectImport,
   buildNamespaceInitStatements,
@@ -44,7 +45,7 @@ export interface Options extends PluginOptions {
   allowTopLevelThis?: boolean;
   exactGlobals?: boolean;
   globals?: Record<string, string>;
-  importInterop?: "babel" | "node";
+  importInterop?: RewriteModuleStatementsAndPrepareHeaderOptions["importInterop"];
   loose?: boolean;
   noInterop?: boolean;
   strict?: boolean;

@@ -2,6 +2,7 @@ import { declare } from "@babel/helper-plugin-utils";
 import {
   isModule,
   rewriteModuleStatementsAndPrepareHeader,
+  type RewriteModuleStatementsAndPrepareHeaderOptions,
   hasExports,
   isSideEffectImport,
   buildNamespaceInitStatements,
@@ -12,33 +13,35 @@ import {
 import { template, types as t } from "@babel/core";
 import { getImportSource } from "babel-plugin-dynamic-import-node/utils";
 import type { PluginOptions } from "@babel/helper-module-transforms";
+import type { NodePath } from "@babel/traverse";
 
-const buildWrapper = template(`
+const buildWrapper = template.statement(`
   define(MODULE_NAME, AMD_ARGUMENTS, function(IMPORT_NAMES) {
   })
 `);
 
-const buildAnonymousWrapper = template(`
+const buildAnonymousWrapper = template.statement(`
   define(["require"], function(REQUIRE) {
   })
 `);
 
-function injectWrapper(path, wrapper) {
+function injectWrapper(path: NodePath<t.Program>, wrapper: t.Statement) {
   const { body, directives } = path.node;
   path.node.directives = [];
   path.node.body = [];
   const amdWrapper = path.pushContainer("body", wrapper)[0];
-  const amdFactory = amdWrapper
-    .get("expression.arguments")
+  const amdFactory = (
+    amdWrapper.get("expression.arguments") as NodePath<t.Expression>[]
+  )
     .filter(arg => arg.isFunctionExpression())[0]
-    .get("body");
+    .get("body") as NodePath;
   amdFactory.pushContainer("directives", directives);
   amdFactory.pushContainer("body", body);
 }
 
 export interface Options extends PluginOptions {
   allowTopLevelThis?: boolean;
-  importInterop?: "babel" | "node";
+  importInterop?: RewriteModuleStatementsAndPrepareHeaderOptions["importInterop"];
   loose?: boolean;
   noInterop?: boolean;
   strict?: boolean;
