@@ -53,7 +53,6 @@ export default function transformClass(
     userConstructorPath: undefined,
     hasConstructor: false,
 
-    staticPropBody: [],
     body: [],
     superThises: [],
     pushedConstructor: false,
@@ -711,12 +710,6 @@ export default function transformClass(
         ),
       );
     }
-
-    body.push(
-      ...classState.staticPropBody.map(fn =>
-        fn(t.cloneNode(classState.classRef)),
-      ),
-    );
 
     const isStrict = path.isInStrictMode();
     let constructorOnly = classState.classId && body.length === 1;
