@@ -20,6 +20,11 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.18.3 (2022-05-25)
+
+#### :bug: Bug Fix
+* `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#14588](https://github.com/babel/babel/pull/14588) Restore es5 compatibility in `@babel/runtime/regenerator` ([@jlowcs](https://github.com/jlowcs))
 ## v7.18.2 (2022-05-25)
 
 #### :bug: Bug Fix
