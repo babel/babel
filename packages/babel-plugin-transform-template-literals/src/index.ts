@@ -1,5 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { template, types as t } from "@babel/core";
+import type { NodePath } from "@babel/traverse";
 
 export interface Options {
   loose?: boolean;
@@ -31,8 +32,9 @@ export default declare((api, options: Options) => {
    * the second member and convert that one, which reflects the spec behavior
    * of template literals.
    */
-  function buildConcatCallExpressions(items) {
+  function buildConcatCallExpressions(items: t.Expression[]): t.CallExpression {
     let avail = true;
+    // @ts-expect-error items must not be empty
     return items.reduce(function (left, right) {
       let canBeInserted = t.isLiteral(right);
 
@@ -104,8 +106,12 @@ export default declare((api, options: Options) => {
       },
 
       TemplateLiteral(path) {
-        const nodes = [];
-        const expressions = path.get("expressions");
+        // Skip TemplateLiteral in TSLiteralType
+        if (path.parent.type === "TSLiteralType") {
+          return;
+        }
+        const nodes: t.Expression[] = [];
+        const expressions = path.get("expressions") as NodePath<t.Expression>[];
 
         let index = 0;
         for (const elem of path.node.quasis) {
