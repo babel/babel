@@ -13,15 +13,23 @@
  * <sometag __source={{fileName: __jsxFileName, lineNumber: 10, columnNumber: 1}}/>
  */
 import { declare } from "@babel/helper-plugin-utils";
-import { types as t } from "@babel/core";
+import { type PluginPass, types as t } from "@babel/core";
+import type { Visitor } from "@babel/traverse";
 
 const TRACE_ID = "__source";
 const FILE_NAME_VAR = "_jsxFileName";
 
-export default declare(api => {
+type State = {
+  fileNameIdentifier: t.Identifier;
+};
+export default declare<State>(api => {
   api.assertVersion(7);
 
-  function makeTrace(fileNameIdentifier, lineNumber, column0Based) {
+  function makeTrace(
+    fileNameIdentifier: t.Identifier,
+    lineNumber: number,
+    column0Based: number,
+  ) {
     const fileLineLiteral =
       lineNumber != null ? t.numericLiteral(lineNumber) : t.nullLiteral();
     const fileColumnLiteral =
@@ -47,18 +55,21 @@ export default declare(api => {
     ]);
   }
 
-  const visitor = {
+  const visitor: Visitor<State & PluginPass> = {
     JSXOpeningElement(path, state) {
       const id = t.jsxIdentifier(TRACE_ID);
-      const location = path.container.openingElement.loc;
+      const location = (path.container as t.JSXElement).openingElement.loc;
       if (!location) {
         // the element was generated and doesn't have location information
         return;
       }
 
-      const attributes = path.container.openingElement.attributes;
+      const attributes = (path.container as t.JSXElement).openingElement
+        .attributes;
       for (let i = 0; i < attributes.length; i++) {
-        const name = attributes[i].name;
+        // @ts-expect-error .name is not defined in JSXSpreadElement
+        const name = attributes[i].name as t.JSXAttribute["name"] | void;
+        // @ts-expect-error TS can not narrow down optional chain
         if (name?.name === TRACE_ID) {
           // The __source attribute already exists
           return;
