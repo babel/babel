@@ -1,5 +1,5 @@
 import v8 from "v8";
-import cloneDeep from "lodash.clonedeep";
+import cloneDeep from "clone-deep";
 import semver from "semver";
 
 export default function (value) {
