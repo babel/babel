@@ -45,8 +45,10 @@ type DefineMap = {
   kind: "get" | "set" | "value" | "initializer";
 };
 
+export type MutatorMap = Record<string, DefineMap>;
+
 export function push(
-  mutatorMap: any,
+  mutatorMap: MutatorMap,
   node: t.Property | t.Method,
   kind: DefineMap["kind"],
   file: File,
