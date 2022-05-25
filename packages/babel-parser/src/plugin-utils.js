@@ -168,12 +168,12 @@ export function validatePlugins(plugins: PluginList) {
           "Cannot combine importAssertions and moduleAttributes plugins.",
         );
       }
-      const moduleAttributesVerionPluginOption = getPluginOption(
+      const moduleAttributesVersionPluginOption = getPluginOption(
         plugins,
         "moduleAttributes",
         "version",
       );
-      if (moduleAttributesVerionPluginOption !== "may-2020") {
+      if (moduleAttributesVersionPluginOption !== "may-2020") {
         throw new Error(
           "The 'moduleAttributes' plugin requires a 'version' option," +
             " representing the last proposal update. Currently, the" +
