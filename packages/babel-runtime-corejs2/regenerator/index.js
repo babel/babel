@@ -1,6 +1,6 @@
 // TODO(Babel 8): Remove this file.
 
-const runtime = require("../helpers/regeneratorRuntime")();
+var runtime = require("../helpers/regeneratorRuntime")();
 module.exports = runtime;
 
 // Copied from https://github.com/facebook/regenerator/blob/main/packages/runtime/runtime.js#L736=
