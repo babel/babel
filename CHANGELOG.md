@@ -20,6 +20,24 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.18.2 (2022-05-25)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-template-literals`
+  * [#14582](https://github.com/babel/babel/pull/14582) fix: skip template literal transform for TSLiteralType ([@JLHwung](https://github.com/JLHwung))
+* `babel-helpers`
+  * [#14537](https://github.com/babel/babel/pull/14537) Support frozen built-ins in `@babel/runtime` ([@Jack-Works](https://github.com/Jack-Works))
+* `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#14581](https://github.com/babel/babel/pull/14581) Define the global `regeneratorRuntime` in `@babel/runtime/regenerator` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-environment-visitor`, `babel-helper-replace-supers`, `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-decorators`, `babel-traverse`, `babel-types`
+  * [#14371](https://github.com/babel/babel/pull/14371) environmentVisitor should skip decorator expressions ([@JLHwung](https://github.com/JLHwung))
+
+#### :memo: Documentation
+* `babel-types`
+  * [#14571](https://github.com/babel/babel/pull/14571) add Accessor alias description ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* [#14541](https://github.com/babel/babel/pull/14541) Fix synchronization between main thread and worker ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.18.1 (2022-05-19)
 
 #### :bug: Bug Fix
