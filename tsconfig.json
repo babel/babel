@@ -3,6 +3,7 @@
   "extends": "./tsconfig.base.json",
   "include": [
     "./packages/babel-code-frame/src/**/*.ts",
+    "./packages/babel-compat-data/src/**/*.ts",
     "./packages/babel-core/src/**/*.ts",
     "./packages/babel-generator/src/**/*.ts",
     "./packages/babel-helper-annotate-as-pure/src/**/*.ts",
@@ -151,6 +152,24 @@
     "paths": {
       "@babel/code-frame": [
         "./packages/babel-code-frame/src"
+      ],
+      "@babel/compat-data/plugins": [
+        "./packages/babel-compat-data/data/plugins.json"
+      ],
+      "@babel/compat-data/native-modules": [
+        "./packages/babel-compat-data/data/native-modules.json"
+      ],
+      "@babel/compat-data/corejs2-built-ins": [
+        "./packages/babel-compat-data/data/corejs2-built-ins.json"
+      ],
+      "@babel/compat-data/corejs3-shipped-proposals": [
+        "./packages/babel-compat-data/data/corejs3-shipped-proposals.json"
+      ],
+      "@babel/compat-data/overlapping-plugins": [
+        "./packages/babel-compat-data/data/overlapping-plugins.json"
+      ],
+      "@babel/compat-data/plugin-bugfixes": [
+        "./packages/babel-compat-data/data/plugin-bugfixes.json"
       ],
       "@babel/core": [
         "./packages/babel-core/src"
@@ -646,6 +665,39 @@
       ],
       "@babel/plugin-syntax-trailing-function-commas": [
         "./lib/archived-libs.d.ts"
+      ],
+      "@babel/preset-modules/lib/plugins/transform-async-arrows-in-class": [
+        "./lib/third-party-libs.d.ts"
+      ],
+      "@babel/preset-modules/lib/plugins/transform-edge-default-parameters": [
+        "./lib/third-party-libs.d.ts"
+      ],
+      "@babel/preset-modules/lib/plugins/transform-edge-function-name": [
+        "./lib/third-party-libs.d.ts"
+      ],
+      "@babel/preset-modules/lib/plugins/transform-tagged-template-caching": [
+        "./lib/third-party-libs.d.ts"
+      ],
+      "@babel/preset-modules/lib/plugins/transform-safari-block-shadowing": [
+        "./lib/third-party-libs.d.ts"
+      ],
+      "@babel/preset-modules/lib/plugins/transform-safari-for-shadowing": [
+        "./lib/third-party-libs.d.ts"
+      ],
+      "babel-plugin-polyfill-corejs2": [
+        "./lib/third-party-libs.d.ts"
+      ],
+      "babel-plugin-polyfill-corejs3": [
+        "./lib/third-party-libs.d.ts"
+      ],
+      "babel-plugin-polyfill-regenerator": [
+        "./lib/third-party-libs.d.ts"
+      ],
+      "regenerator-transform": [
+        "./lib/third-party-libs.d.ts"
+      ],
+      "babel-plugin-dynamic-import-node/utils": [
+        "./lib/babel-plugin-dynamic-import-node.d.ts"
       ]
     }
   }

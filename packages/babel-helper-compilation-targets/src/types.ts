@@ -13,7 +13,7 @@ export type Target =
   | "samsung";
 
 export type Targets = {
-  [target in Target]: string;
+  [target in Target]?: string;
 };
 
 export type TargetsTuple = {

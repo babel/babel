@@ -8,6 +8,19 @@ const archivedSyntaxPkgs = importJSON(
   new URL("./archived-syntax-pkgs.json", import.meta.url)
 );
 
+const thirdPartyBabelPlugins = [
+  "@babel/preset-modules/lib/plugins/transform-async-arrows-in-class",
+  "@babel/preset-modules/lib/plugins/transform-edge-default-parameters",
+  "@babel/preset-modules/lib/plugins/transform-edge-function-name",
+  "@babel/preset-modules/lib/plugins/transform-tagged-template-caching",
+  "@babel/preset-modules/lib/plugins/transform-safari-block-shadowing",
+  "@babel/preset-modules/lib/plugins/transform-safari-for-shadowing",
+  "babel-plugin-polyfill-corejs2",
+  "babel-plugin-polyfill-corejs3",
+  "babel-plugin-polyfill-regenerator",
+  "regenerator-transform",
+];
+
 const root = new URL("../../", import.meta.url);
 
 function getTsPkgs(subRoot) {
@@ -27,6 +40,14 @@ function getTsPkgs(subRoot) {
           // The @babel/standalone has babel.js as exports, but we don't have src/babel.ts
           if (name === "babel-standalone") {
             return [["", "/src"]];
+          }
+          if (name === "babel-compat-data") {
+            // map ./plugins to ./data/plugins.json
+            const subExport = _export.slice(1);
+            const subExportPath = exportPath
+              .replace("./", "/data/")
+              .replace(/\.js$/, ".json");
+            return [[subExport, subExportPath]];
           }
           // [{esm, default}, "./lib/index.js"]
           if (Array.isArray(exportPath)) {
@@ -55,8 +76,10 @@ function getTsPkgs(subRoot) {
     })
     .filter(
       ({ name, relative }) =>
-        // babel-register is special-cased because its entry point is a js file
+        // @babel/register is special-cased because its entry point is a js file
         name === "@babel/register" ||
+        // @babel/compat-data is used by preset-env
+        name === "@babel/compat-data" ||
         fs.existsSync(new URL(relative + "/src/index.ts", root))
     );
 }
@@ -85,6 +108,14 @@ fs.writeFileSync(
               name,
               ["./lib/archived-libs.d.ts"],
             ]),
+            ...thirdPartyBabelPlugins.map(name => [
+              name,
+              ["./lib/third-party-libs.d.ts"],
+            ]),
+            [
+              "babel-plugin-dynamic-import-node/utils",
+              ["./lib/babel-plugin-dynamic-import-node.d.ts"],
+            ],
           ]),
         },
       },
