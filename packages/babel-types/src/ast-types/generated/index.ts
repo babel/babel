@@ -811,11 +811,7 @@ export interface ExportAllDeclaration extends BaseNode {
 
 export interface ExportDefaultDeclaration extends BaseNode {
   type: "ExportDefaultDeclaration";
-  declaration:
-    | FunctionDeclaration
-    | TSDeclareFunction
-    | ClassDeclaration
-    | Expression;
+  declaration: FunctionDeclaration | ClassDeclaration | Expression;
   exportKind?: "value" | null;
 }
 

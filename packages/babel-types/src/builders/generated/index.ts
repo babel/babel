@@ -634,11 +634,7 @@ export function exportAllDeclaration(
   });
 }
 export function exportDefaultDeclaration(
-  declaration:
-    | t.FunctionDeclaration
-    | t.TSDeclareFunction
-    | t.ClassDeclaration
-    | t.Expression,
+  declaration: t.FunctionDeclaration | t.ClassDeclaration | t.Expression,
 ): t.ExportDefaultDeclaration {
   return validateNode<t.ExportDefaultDeclaration>({
     type: "ExportDefaultDeclaration",

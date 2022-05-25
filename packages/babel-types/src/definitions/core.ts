@@ -1490,7 +1490,6 @@ defineType("ExportDefaultDeclaration", {
     declaration: {
       validate: assertNodeType(
         "FunctionDeclaration",
-        "TSDeclareFunction",
         "ClassDeclaration",
         "Expression",
       ),
