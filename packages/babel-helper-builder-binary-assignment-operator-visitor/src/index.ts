@@ -3,7 +3,13 @@ import { assignmentExpression, sequenceExpression } from "@babel/types";
 import type { Visitor } from "@babel/traverse";
 import type * as t from "@babel/types";
 
-export default function (opts: { build: Function; operator: string }) {
+export default function (opts: {
+  build: (
+    left: t.Expression | t.PrivateName,
+    right: t.BinaryExpression["right"],
+  ) => t.Expression;
+  operator: t.BinaryExpression["operator"];
+}) {
   const { build, operator } = opts;
 
   const visitor: Visitor = {
