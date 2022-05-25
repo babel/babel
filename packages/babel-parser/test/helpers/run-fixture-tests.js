@@ -1,6 +1,6 @@
 import { multiple as getFixtures } from "@babel/helper-fixtures";
 import _checkDuplicateNodes from "@babel/helper-check-duplicate-nodes";
-import { readFileSync, unlinkSync, writeFileSync } from "fs";
+import { readFileSync, unlinkSync, writeFileSync, existsSync } from "fs";
 import { join } from "path";
 import Difference from "./difference.js";
 import FixtureError from "./fixture-error.js";
@@ -102,12 +102,6 @@ function runParseTest(parse, test, onlyCompareErrors) {
   // No differences means we passed and there's nothing left to do.
   if (difference === Difference.None) return;
 
-  const error = FixtureError.fromDifference(difference, actual);
-
-  // If we're not overwriting the current values with whatever we get this time
-  // around, then we have a legitimate error that we need to report.
-  if (CI || !OVERWRITE) throw error;
-
   // We only write the output of the original test, not all it's auto-generated
   // variations.
   if (!test.original) return;
@@ -124,8 +118,23 @@ function runParseTest(parse, test, onlyCompareErrors) {
 
   // We want to throw away the contents of `throws` here.
   // eslint-disable-next-line no-unused-vars
-  const { throws: _, ...oldOptions } = readJSON(optionsLocation);
+  const { throws: expectedThrows, ...oldOptions } = readJSON(optionsLocation);
   const newOptions = { ...oldOptions, ...(throws && { throws }) };
+
+  const normalLocation = join(testLocation, "output.json");
+  const extendedLocation = join(testLocation, "output.extended.json");
+
+  // If we're not overwriting the current values with whatever we get this time
+  // around, then we have a legitimate error that we need to report.
+
+  const shouldThrow =
+    expectedThrows !== undefined ||
+    existsSync(normalLocation) ||
+    existsSync(extendedLocation);
+
+  if (CI || (!OVERWRITE && shouldThrow)) {
+    throw FixtureError.fromDifference(difference, actual);
+  }
 
   // Store (or overwrite) the options file if there's anything to record,
   // otherwise remove it.
@@ -141,9 +150,6 @@ function runParseTest(parse, test, onlyCompareErrors) {
   // When only comparing errors, we don't want to overwrite the AST JSON because
   // it belongs to a different test.
   if (onlyCompareErrors) return;
-
-  const normalLocation = join(testLocation, "output.json");
-  const extendedLocation = join(testLocation, "output.extended.json");
 
   const [extended, serialized] = actual.ast ? serialize(actual.ast) : [];
   const outputLocation =
