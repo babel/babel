@@ -1,9 +1,20 @@
 import { declare } from "@babel/helper-plugin-utils";
-import { template, types as t } from "@babel/core";
+import { template, types as t, type PluginPass } from "@babel/core";
+import type { Scope } from "@babel/traverse";
 
 export interface Options {
   loose?: boolean;
 }
+
+type PropertyInfo = {
+  scope: Scope;
+  objId: t.Identifier;
+  body: t.Statement[];
+  computedProps: t.ObjectMember[];
+  initPropExpression: t.ObjectExpression;
+  getMutatorId: () => t.Identifier;
+  state: PluginPass;
+};
 
 export default declare((api, options: Options) => {
   api.assertVersion(7);
@@ -15,12 +26,12 @@ export default declare((api, options: Options) => {
     ? pushComputedPropsLoose
     : pushComputedPropsSpec;
 
-  const buildMutatorMapAssign = template(`
+  const buildMutatorMapAssign = template.statements(`
     MUTATOR_MAP_REF[KEY] = MUTATOR_MAP_REF[KEY] || {};
     MUTATOR_MAP_REF[KEY].KIND = VALUE;
   `);
 
-  function getValue(prop) {
+  function getValue(prop: t.ObjectMember) {
     if (t.isObjectProperty(prop)) {
       return prop.value;
     } else if (t.isObjectMethod(prop)) {
@@ -34,28 +45,31 @@ export default declare((api, options: Options) => {
     }
   }
 
-  function pushAssign(objId, prop, body) {
-    if (prop.kind === "get" && prop.kind === "set") {
-      pushMutatorDefine(objId, prop);
-    } else {
-      body.push(
-        t.expressionStatement(
-          t.assignmentExpression(
-            "=",
-            t.memberExpression(
-              t.cloneNode(objId),
-              prop.key,
-              prop.computed || t.isLiteral(prop.key),
-            ),
-            // @ts-expect-error todo(flow->ts): double-check type error
-            getValue(prop),
+  function pushAssign(
+    objId: t.Identifier,
+    prop: t.ObjectMember,
+    body: t.Statement[],
+  ) {
+    body.push(
+      t.expressionStatement(
+        t.assignmentExpression(
+          "=",
+          t.memberExpression(
+            t.cloneNode(objId),
+            prop.key,
+            prop.computed || t.isLiteral(prop.key),
           ),
+          // @ts-expect-error todo(flow->ts): double-check type error
+          getValue(prop),
         ),
-      );
-    }
+      ),
+    );
   }
 
-  function pushMutatorDefine({ body, getMutatorId, scope }, prop) {
+  function pushMutatorDefine(
+    { body, getMutatorId, scope }: PropertyInfo,
+    prop: t.ObjectMethod,
+  ) {
     let key =
       !prop.computed && t.isIdentifier(prop.key)
         ? t.stringLiteral(prop.key.name)
@@ -70,18 +84,21 @@ export default declare((api, options: Options) => {
     }
 
     body.push(
-      ...(buildMutatorMapAssign({
+      ...buildMutatorMapAssign({
         MUTATOR_MAP_REF: getMutatorId(),
         KEY: t.cloneNode(key),
         VALUE: getValue(prop),
         KIND: t.identifier(prop.kind),
-      }) as t.Statement[]),
+      }),
     );
   }
 
-  function pushComputedPropsLoose(info) {
+  function pushComputedPropsLoose(info: PropertyInfo) {
     for (const prop of info.computedProps) {
-      if (prop.kind === "get" || prop.kind === "set") {
+      if (
+        t.isObjectMethod(prop) &&
+        (prop.kind === "get" || prop.kind === "set")
+      ) {
         pushMutatorDefine(info, prop);
       } else {
         pushAssign(t.cloneNode(info.objId), prop, info.body);
@@ -89,20 +106,26 @@ export default declare((api, options: Options) => {
     }
   }
 
-  function pushComputedPropsSpec(info) {
+  function pushComputedPropsSpec(info: PropertyInfo) {
     const { objId, body, computedProps, state } = info;
 
     for (const prop of computedProps) {
-      const key = t.toComputedKey(prop);
+      // PrivateName must not be in ObjectExpression
+      const key = t.toComputedKey(prop) as t.Expression;
 
-      if (prop.kind === "get" || prop.kind === "set") {
+      if (
+        t.isObjectMethod(prop) &&
+        (prop.kind === "get" || prop.kind === "set")
+      ) {
         pushMutatorDefine(info, prop);
       } else {
+        // the value of ObjectProperty in ObjectExpression must be an expression
+        const value = getValue(prop) as t.Expression;
         if (computedProps.length === 1) {
           return t.callExpression(state.addHelper("defineProperty"), [
             info.initPropExpression,
             key,
-            getValue(prop),
+            value,
           ]);
         } else {
           body.push(
@@ -110,7 +133,7 @@ export default declare((api, options: Options) => {
               t.callExpression(state.addHelper("defineProperty"), [
                 t.cloneNode(objId),
                 key,
-                getValue(prop),
+                value,
               ]),
             ),
           );
@@ -137,12 +160,14 @@ export default declare((api, options: Options) => {
           // put all getters/setters into the first object expression as well as all initialisers up
           // to the first computed property
 
-          const initProps = [];
-          const computedProps = [];
+          const initProps: t.ObjectMember[] = [];
+          const computedProps: t.ObjectMember[] = [];
           let foundComputed = false;
 
           for (const prop of node.properties) {
-            // @ts-ignore SpreadElement must not have computed property
+            if (t.isSpreadElement(prop)) {
+              continue;
+            }
             if (prop.computed) {
               foundComputed = true;
             }
@@ -164,7 +189,7 @@ export default declare((api, options: Options) => {
             ]),
           );
 
-          let mutatorRef;
+          let mutatorRef: t.Identifier;
 
           const getMutatorId = function () {
             if (!mutatorRef) {
