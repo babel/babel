@@ -28,6 +28,14 @@ export type InteropType =
   | "node-namespace" // Node.js interop for namespace or default+named imports
   | "none"; // No interop, or named-only imports
 
+export type ImportInterop =
+  | "none"
+  | "babel"
+  | "node"
+  | ((source: string, filename?: string) => "none" | "babel" | "node");
+
+export type Lazy = boolean | string[] | ((source: string) => boolean);
+
 export interface SourceModuleMetadata {
   // A unique variable name to use for this namespace object. Centralized for simplicity.
   name: string;
@@ -45,7 +53,7 @@ export interface SourceModuleMetadata {
   reexportAll: null | {
     loc: t.SourceLocation | undefined | null;
   };
-  lazy?;
+  lazy?: Lazy;
 }
 
 export interface LocalExportMetadata {
@@ -75,7 +83,7 @@ export function isSideEffectImport(source: SourceModuleMetadata) {
 
 export function validateImportInteropOption(
   importInterop: any,
-): importInterop is "none" | "babel" | "node" | Function {
+): importInterop is ImportInterop {
   if (
     typeof importInterop !== "function" &&
     importInterop !== "none" &&
@@ -90,8 +98,8 @@ export function validateImportInteropOption(
 }
 
 function resolveImportInterop(
-  importInterop,
-  source,
+  importInterop: ImportInterop,
+  source: string,
   filename: string | undefined,
 ) {
   if (typeof importInterop === "function") {
@@ -113,6 +121,12 @@ export default function normalizeModuleAndLoadMetadata(
     lazy = false,
     esNamespaceOnly = false,
     filename,
+  }: {
+    importInterop: ImportInterop;
+    initializeReexports: boolean | void;
+    lazy: Lazy;
+    esNamespaceOnly: boolean;
+    filename: string;
   },
 ): ModuleMetadata {
   if (!exportName) {
@@ -219,8 +233,8 @@ function getModuleMetadata(
     initializeReexports,
   }: {
     // todo(flow-ts) changed from boolean, to match expected usage inside the function
-    lazy: boolean | string[] | Function;
-    initializeReexports: boolean;
+    lazy: boolean | string[] | ((source: string) => boolean);
+    initializeReexports: boolean | void;
   },
   stringSpecifiers: Set<string>,
 ) {
@@ -231,7 +245,7 @@ function getModuleMetadata(
   );
 
   const sourceData = new Map();
-  const getData = sourceNode => {
+  const getData = (sourceNode: t.StringLiteral) => {
     const source = sourceNode.value;
 
     let data = sourceData.get(source);
@@ -409,22 +423,26 @@ function getModuleMetadata(
   };
 }
 
+type ModuleBindingKind = "import" | "hoisted" | "block" | "var";
 /**
  * Get metadata about local variables that are exported.
  */
 function getLocalExportMetadata(
   programPath: NodePath<t.Program>,
-  initializeReexports: boolean,
+  initializeReexports: boolean | void,
   stringSpecifiers: Set<string>,
 ): Map<string, LocalExportMetadata> {
   const bindingKindLookup = new Map();
 
-  programPath.get("body").forEach((child: any) => {
-    let kind;
+  programPath.get("body").forEach(child => {
+    let kind: ModuleBindingKind;
     if (child.isImportDeclaration()) {
       kind = "import";
     } else {
-      if (child.isExportDefaultDeclaration()) child = child.get("declaration");
+      if (child.isExportDefaultDeclaration()) {
+        // @ts-ignore
+        child = child.get("declaration");
+      }
       if (child.isExportNamedDeclaration()) {
         if (child.node.declaration) {
           child = child.get("declaration");
@@ -460,7 +478,7 @@ function getLocalExportMetadata(
   });
 
   const localMetadata = new Map();
-  const getLocalMetadata = idPath => {
+  const getLocalMetadata = (idPath: NodePath<t.Identifier>) => {
     const localName = idPath.node.name;
     let metadata = localMetadata.get(localName);
 
