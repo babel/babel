@@ -289,9 +289,10 @@ helpers.defineProperty = helper("7.0.0-beta.0")`
   }
 `;
 
+// need a bind because https://github.com/babel/babel/issues/14527
 helpers.extends = helper("7.0.0-beta.0")`
   export default function _extends() {
-    _extends = Object.assign || function (target) {
+    _extends = Object.assign ? Object.assign.bind() : function (target) {
       for (var i = 1; i < arguments.length; i++) {
         var source = arguments[i];
         for (var key in source) {
@@ -360,10 +361,11 @@ helpers.inheritsLoose = helper("7.0.0-beta.0")`
   }
 `;
 
+// need a bind because https://github.com/babel/babel/issues/14527
 helpers.getPrototypeOf = helper("7.0.0-beta.0")`
   export default function _getPrototypeOf(o) {
     _getPrototypeOf = Object.setPrototypeOf
-      ? Object.getPrototypeOf
+      ? Object.getPrototypeOf.bind()
       : function _getPrototypeOf(o) {
           return o.__proto__ || Object.getPrototypeOf(o);
         };
@@ -373,10 +375,12 @@ helpers.getPrototypeOf = helper("7.0.0-beta.0")`
 
 helpers.setPrototypeOf = helper("7.0.0-beta.0")`
   export default function _setPrototypeOf(o, p) {
-    _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
-      o.__proto__ = p;
-      return o;
-    };
+    _setPrototypeOf = Object.setPrototypeOf
+      ? Object.setPrototypeOf.bind()
+      : function _setPrototypeOf(o, p) {
+          o.__proto__ = p;
+          return o;
+        };
     return _setPrototypeOf(o, p);
   }
 `;
@@ -409,13 +413,14 @@ helpers.isNativeReflectConstruct = helper("7.9.0")`
   }
 `;
 
+// need a bind because https://github.com/babel/babel/issues/14527
 helpers.construct = helper("7.0.0-beta.0")`
   import setPrototypeOf from "setPrototypeOf";
   import isNativeReflectConstruct from "isNativeReflectConstruct";
 
   export default function _construct(Parent, args, Class) {
     if (isNativeReflectConstruct()) {
-      _construct = Reflect.construct;
+      _construct = Reflect.construct.bind();
     } else {
       // NOTE: If Parent !== Class, the correct __proto__ is set *after*
       //       calling the constructor.
@@ -656,6 +661,7 @@ helpers.superPropBase = helper("7.0.0-beta.0")`
   }
 `;
 
+// need a bind because https://github.com/babel/babel/issues/14527
 // https://tc39.es/ecma262/multipage/reflection.html#sec-reflect.get
 //
 //  28.1.5 Reflect.get ( target, propertyKey [ , receiver ] )
@@ -665,7 +671,7 @@ helpers.get = helper("7.0.0-beta.0")`
 
   export default function _get() {
     if (typeof Reflect !== "undefined" && Reflect.get) {
-      _get = Reflect.get;
+      _get = Reflect.get.bind();
     } else {
       _get = function _get(target, property, receiver) {
         var base = superPropBase(target, property);
