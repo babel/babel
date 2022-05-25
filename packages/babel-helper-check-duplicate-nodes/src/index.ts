@@ -5,7 +5,7 @@ export default function checkDuplicateNodes(ast) {
     throw new Error("checkDuplicateNodes accepts only one argument: ast");
   }
   // A Map from node to its parent
-  const parentsMap = new WeakMap();
+  const parentsMap = new Map();
 
   const hidePrivateProperties = (key, val) => {
     // Hides properties like _shadowedFunctionLiteral,
@@ -42,7 +42,7 @@ export default function checkDuplicateNodes(ast) {
         for (const child of subNode) {
           stack.push({ node: child, parent: node });
         }
-      } else {
+      } else if (typeof subNode === "object" && subNode !== null) {
         stack.push({ node: subNode, parent: node });
       }
     }
