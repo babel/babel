@@ -4,6 +4,7 @@ import { types as t } from "@babel/core";
 
 import { hasMinVersion } from "./helpers";
 import getRuntimePath, { resolveFSPath } from "./get-runtime-path";
+import type { PluginAPI, PluginObject, CallerMetadata } from "@babel/core";
 
 import _pluginCorejs2 from "babel-plugin-polyfill-corejs2";
 import _pluginCorejs3 from "babel-plugin-polyfill-corejs3";
@@ -17,7 +18,8 @@ const pluginRegenerator = (_pluginRegenerator.default ||
 
 const pluginsCompat = "#__secret_key__@babel/runtime__compatibility";
 
-function supportsStaticESM(caller) {
+function supportsStaticESM(caller: CallerMetadata | void) {
+  // @ts-ignore TS does not narrow down optional chaining
   return !!caller?.supportsStaticESM;
 }
 
@@ -28,6 +30,35 @@ export interface Options {
   regenerator?: boolean;
   useESModules?: boolean | "auto";
   version?: string;
+}
+
+interface CoreJS2PluginOptions {
+  absoluteImports: string | false;
+  method: "usage-pure";
+  [pluginsCompat]: {
+    runtimeVersion: string;
+    useBabelRuntime: string | false;
+    ext: string;
+  };
+}
+
+interface RegeneratorPluginOptions {
+  absoluteImports: string | false;
+  method: "usage-pure";
+  [pluginsCompat]: {
+    useBabelRuntime: string | false;
+  };
+}
+
+interface CoreJS3PluginOptions {
+  absoluteImports: string | false;
+  method: "usage-pure";
+  proposals: boolean;
+  version: number;
+  [pluginsCompat]: {
+    useBabelRuntime: string | false;
+    ext: string;
+  };
 }
 
 export default declare((api, options: Options, dirname) => {
@@ -106,11 +137,12 @@ export default declare((api, options: Options, dirname) => {
     var supportsCJSDefault = hasMinVersion(DUAL_MODE_RUNTIME, runtimeVersion);
   }
 
-  function has(obj, key) {
+  function has(obj: {}, key: string) {
     return Object.prototype.hasOwnProperty.call(obj, key);
   }
 
   if (has(options, "useBuiltIns")) {
+    // @ts-expect-error deprecated options
     if (options["useBuiltIns"]) {
       throw new Error(
         "The 'useBuiltIns' option has been removed. The @babel/runtime " +
@@ -125,6 +157,7 @@ export default declare((api, options: Options, dirname) => {
   }
 
   if (has(options, "polyfill")) {
+    // @ts-expect-error deprecated options
     if (options["polyfill"] === false) {
       throw new Error(
         "The 'polyfill' option has been removed. The @babel/runtime " +
@@ -163,8 +196,20 @@ export default declare((api, options: Options, dirname) => {
 
   const modulePath = getRuntimePath(moduleName, dirname, absoluteRuntime);
 
-  function createCorejsPlgin(plugin, options, regeneratorPlugin) {
-    return (api, _, filename) => {
+  function createCorejsPlgin<Options extends {}>(
+    plugin: (
+      api: PluginAPI,
+      options: Options,
+      filename: string,
+    ) => PluginObject,
+    options: Options,
+    regeneratorPlugin: (
+      api: PluginAPI,
+      options: RegeneratorPluginOptions,
+      filename: string,
+    ) => PluginObject,
+  ): (api: PluginAPI, options: {}, filename: string) => PluginObject {
+    return (api: PluginAPI, _: {}, filename: string) => {
       return {
         ...plugin(api, options, filename),
         inherits: regeneratorPlugin,
@@ -173,7 +218,13 @@ export default declare((api, options: Options, dirname) => {
   }
 
   // TODO: Remove this in Babel 8
-  function createRegeneratorPlugin(options) {
+  function createRegeneratorPlugin(
+    options: RegeneratorPluginOptions,
+  ): (
+    api: PluginAPI,
+    options: RegeneratorPluginOptions,
+    filename: string,
+  ) => PluginObject {
     if (!useRuntimeRegenerator) return undefined;
     return (api, _, filename) => {
       return pluginRegenerator(api, options, filename);
@@ -184,7 +235,7 @@ export default declare((api, options: Options, dirname) => {
     name: "transform-runtime",
 
     inherits: injectCoreJS2
-      ? createCorejsPlgin(
+      ? createCorejsPlgin<CoreJS2PluginOptions>(
           pluginCorejs2,
           {
             method: "usage-pure",
@@ -202,7 +253,7 @@ export default declare((api, options: Options, dirname) => {
           }),
         )
       : injectCoreJS3
-      ? createCorejsPlgin(
+      ? createCorejsPlgin<CoreJS3PluginOptions>(
           pluginCorejs3,
           {
             method: "usage-pure",
@@ -226,7 +277,7 @@ export default declare((api, options: Options, dirname) => {
     pre(file) {
       if (!useRuntimeHelpers) return;
 
-      file.set("helperGenerator", name => {
+      file.set("helperGenerator", (name: string) => {
         // If the helper didn't exist yet at the version given, we bail
         // out and let Babel either insert it directly, or throw an error
         // so that plugins can handle that case properly.
@@ -271,9 +322,9 @@ export default declare((api, options: Options, dirname) => {
       const cache = new Map();
 
       function addDefaultImport(
-        source,
-        nameHint,
-        blockHoist,
+        source: string,
+        nameHint: string,
+        blockHoist: number,
         isHelper = false,
       ) {
         // If something on the page adds a helper when the file is an ES6
