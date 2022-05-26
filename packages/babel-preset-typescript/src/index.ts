@@ -18,7 +18,7 @@ export default declarePreset((api, opts: Options) => {
   } = normalizeOptions(opts);
 
   const pluginOptions = process.env.BABEL_8_BREAKING
-    ? (isTSX, disallowAmbiguousJSXLike) => ({
+    ? (isTSX: boolean, disallowAmbiguousJSXLike: boolean) => ({
         allowNamespaces,
         disallowAmbiguousJSXLike,
         isTSX,
@@ -27,7 +27,7 @@ export default declarePreset((api, opts: Options) => {
         onlyRemoveTypeImports,
         optimizeConstEnums,
       })
-    : (isTSX, disallowAmbiguousJSXLike) => ({
+    : (isTSX: boolean, disallowAmbiguousJSXLike: boolean) => ({
         allowDeclareFields: opts.allowDeclareFields,
         allowNamespaces,
         disallowAmbiguousJSXLike,
