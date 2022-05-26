@@ -170,14 +170,14 @@ export default declare<PluginState>((api, options: Options) => {
   api.assertVersion(7);
 
   const { systemGlobal = "System", allowTopLevelThis = false } = options;
-  const IGNORE_REASSIGNMENT_SYMBOL = Symbol();
+  const reassignmentVisited = new WeakSet();
 
   const reassignmentVisitor: Visitor<ReassignmentVisitorState> = {
     "AssignmentExpression|UpdateExpression"(
       path: NodePath<t.AssignmentExpression | t.UpdateExpression>,
     ) {
-      if (path.node[IGNORE_REASSIGNMENT_SYMBOL]) return;
-      path.node[IGNORE_REASSIGNMENT_SYMBOL] = true;
+      if (reassignmentVisited.has(path.node)) return;
+      reassignmentVisited.add(path.node);
 
       const arg = path.isAssignmentExpression()
         ? path.get("left")
