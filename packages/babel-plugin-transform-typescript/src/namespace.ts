@@ -1,29 +1,33 @@
 import { template, types as t } from "@babel/core";
 import type { NodePath } from "@babel/traverse";
 
-export default function transpileNamespace(path, t, allowNamespaces) {
+export default function transpileNamespace(
+  path: NodePath<t.TSModuleDeclaration>,
+  allowNamespaces: boolean,
+) {
   if (path.node.declare || path.node.id.type === "StringLiteral") {
     path.remove();
     return;
   }
 
   if (!allowNamespaces) {
-    throw path.hub.file.buildCodeFrameError(
-      path.node.id,
-      "Namespace not marked type-only declare." +
-        " Non-declarative namespaces are only supported experimentally in Babel." +
-        " To enable and review caveats see:" +
-        " https://babeljs.io/docs/en/babel-plugin-transform-typescript",
-    );
+    throw path
+      .get("id")
+      .buildCodeFrameError(
+        "Namespace not marked type-only declare." +
+          " Non-declarative namespaces are only supported experimentally in Babel." +
+          " To enable and review caveats see:" +
+          " https://babeljs.io/docs/en/babel-plugin-transform-typescript",
+      );
   }
 
   const name = path.node.id.name;
-  const value = handleNested(path, t, t.cloneDeep(path.node));
+  const value = handleNested(path, t.cloneNode(path.node, true));
   const bound = path.scope.hasOwnBinding(name);
   if (path.parent.type === "ExportNamedDeclaration") {
     if (!bound) {
       path.parentPath.insertAfter(value);
-      path.replaceWith(getDeclaration(t, name));
+      path.replaceWith(getDeclaration(name));
       path.scope.registerDeclaration(path.parentPath);
     } else {
       path.parentPath.replaceWith(value);
@@ -32,18 +36,18 @@ export default function transpileNamespace(path, t, allowNamespaces) {
     path.replaceWith(value);
   } else {
     path.scope.registerDeclaration(
-      path.replaceWithMultiple([getDeclaration(t, name), value])[0],
+      path.replaceWithMultiple([getDeclaration(name), value])[0],
     );
   }
 }
 
-function getDeclaration(t, name) {
+function getDeclaration(name: string) {
   return t.variableDeclaration("let", [
     t.variableDeclarator(t.identifier(name)),
   ]);
 }
 
-function getMemberExpression(t, name, itemName) {
+function getMemberExpression(name: string, itemName: string) {
   return t.memberExpression(t.identifier(name), t.identifier(itemName));
 }
 
@@ -79,7 +83,7 @@ function handleVariableDeclaration(
     for (const declarator of declarations) {
       declarator.init = t.assignmentExpression(
         "=",
-        getMemberExpression(t, name, declarator.id.name),
+        getMemberExpression(name, declarator.id.name),
         declarator.init,
       );
     }
@@ -95,7 +99,7 @@ function handleVariableDeclaration(
     assignments.push(
       t.assignmentExpression(
         "=",
-        getMemberExpression(t, name, idName),
+        getMemberExpression(name, idName),
         t.cloneNode(bindingIdentifiers[idName]),
       ),
     );
@@ -113,9 +117,8 @@ function buildNestedAmbiendModuleError(path: NodePath, node: t.Node) {
 
 function handleNested(
   path: NodePath,
-  t: typeof import("@babel/types"),
   node: t.TSModuleDeclaration,
-  parentExport?,
+  parentExport?: t.Expression,
 ) {
   const names = new Set();
   const realName = node.id;
@@ -142,7 +145,7 @@ function handleNested(
           throw buildNestedAmbiendModuleError(path, subNode);
         }
 
-        const transformed = handleNested(path, t, subNode);
+        const transformed = handleNested(path, subNode);
         const moduleName = subNode.id.name;
         if (names.has(moduleName)) {
           namespaceTopLevel[i] = transformed;
@@ -151,7 +154,7 @@ function handleNested(
           namespaceTopLevel.splice(
             i++,
             1,
-            getDeclaration(t, moduleName),
+            getDeclaration(moduleName),
             transformed,
           );
         }
@@ -191,7 +194,7 @@ function handleNested(
           t.expressionStatement(
             t.assignmentExpression(
               "=",
-              getMemberExpression(t, name, itemName),
+              getMemberExpression(name, itemName),
               t.identifier(itemName),
             ),
           ),
@@ -215,7 +218,6 @@ function handleNested(
 
         const transformed = handleNested(
           path,
-          t,
           subNode.declaration,
           t.identifier(name),
         );
@@ -227,7 +229,7 @@ function handleNested(
           namespaceTopLevel.splice(
             i++,
             1,
-            getDeclaration(t, moduleName),
+            getDeclaration(moduleName),
             transformed,
           );
         }

@@ -39,7 +39,7 @@ export default function transpileEnum(
       throw new Error(`Unexpected enum parent '${path.parent.type}`);
   }
 
-  function seen(parentPath: NodePath<t.Node>) {
+  function seen(parentPath: NodePath<t.Node>): boolean {
     if (parentPath.isExportDeclaration()) {
       return seen(parentPath.parentPath);
     }
@@ -193,12 +193,12 @@ export function translateEnumValues(
 
 // Based on the TypeScript repository's `evalConstant` in `checker.ts`.
 function evaluate(
-  expr,
+  expr: t.Node,
   seen: PreviousEnumMembers,
 ): number | string | typeof undefined {
   return evalConstant(expr);
 
-  function evalConstant(expr): number | typeof undefined {
+  function evalConstant(expr: t.Node): number | typeof undefined {
     switch (expr.type) {
       case "StringLiteral":
         return expr.value;
@@ -225,7 +225,7 @@ function evaluate(
   function evalUnaryExpression({
     argument,
     operator,
-  }): number | typeof undefined {
+  }: t.UnaryExpression): number | typeof undefined {
     const value = evalConstant(argument);
     if (value === undefined) {
       return undefined;
@@ -243,7 +243,7 @@ function evaluate(
     }
   }
 
-  function evalBinaryExpression(expr): number | typeof undefined {
+  function evalBinaryExpression(expr: t.BinaryExpression): number | undefined {
     const left = evalConstant(expr.left);
     if (left === undefined) {
       return undefined;
