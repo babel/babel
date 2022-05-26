@@ -245,7 +245,7 @@ function evaluate(
 
   function evalBinaryExpression(
     expr: t.BinaryExpression,
-  ): number | typeof undefined {
+  ): number | undefined {
     const left = evalConstant(expr.left);
     if (left === undefined) {
       return undefined;
