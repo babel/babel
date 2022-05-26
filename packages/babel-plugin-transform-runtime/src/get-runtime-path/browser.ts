@@ -1,4 +1,8 @@
-export default function (moduleName, dirname, absoluteRuntime) {
+export default function (
+  moduleName: string,
+  dirname: string,
+  absoluteRuntime: string | boolean,
+) {
   if (absoluteRuntime === false) return moduleName;
 
   resolveFSPath();

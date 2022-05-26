@@ -1,6 +1,9 @@
 import semver from "semver";
 
-export function hasMinVersion(minVersion, runtimeVersion) {
+export function hasMinVersion(
+  minVersion: string,
+  runtimeVersion: string | void,
+) {
   // If the range is unavailable, we're running the script during Babel's
   // build process, and we want to assume that all versions are satisfied so
   // that the built output will include all definitions.
