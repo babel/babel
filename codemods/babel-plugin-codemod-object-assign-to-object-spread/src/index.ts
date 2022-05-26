@@ -1,6 +1,7 @@
 import syntaxObjectRestSpread from "@babel/plugin-syntax-object-rest-spread";
+import type { PluginAPI, PluginObject } from "@babel/core";
 
-export default function ({ types: t }) {
+export default function ({ types: t }: PluginAPI): PluginObject {
   return {
     inherits: syntaxObjectRestSpread.default,
 
@@ -21,10 +22,15 @@ export default function ({ types: t }) {
           const arg = args[i];
           const { node } = arg;
 
-          if (arg.isObjectExpression()) {
+          if (t.isObjectExpression(node)) {
             properties.push(...node.properties);
           } else {
-            properties.push(t.spreadElement(node));
+            properties.push(
+              t.spreadElement(
+                // @ts-expect-error fixme
+                node,
+              ),
+            );
           }
         }
 
