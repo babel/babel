@@ -1163,7 +1163,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (abstract) this.next();
         this.next(); // eat `new`
       }
-      this.tsFillSignature(tt.arrow, node);
+      this.tsInAllowConditionalTypesContext(() =>
+        this.tsFillSignature(tt.arrow, node),
+      );
       return this.finishNode(node, type);
     }
 
