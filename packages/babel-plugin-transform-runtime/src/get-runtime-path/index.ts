@@ -3,7 +3,11 @@ import path from "path";
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 
-export default function (moduleName, dirname, absoluteRuntime) {
+export default function (
+  moduleName: string,
+  dirname: string,
+  absoluteRuntime: string | boolean,
+) {
   if (absoluteRuntime === false) return moduleName;
 
   return resolveAbsoluteRuntime(
@@ -33,6 +37,6 @@ function resolveAbsoluteRuntime(moduleName: string, dirname: string) {
   }
 }
 
-export function resolveFSPath(path) {
+export function resolveFSPath(path: string) {
   return require.resolve(path).replace(/\\/g, "/");
 }

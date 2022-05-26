@@ -32,6 +32,8 @@ export {
 } from "./config";
 
 export type {
+  CallerMetadata,
+  InputOptions,
   PluginAPI,
   PluginObject,
   PresetAPI,

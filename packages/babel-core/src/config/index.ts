@@ -18,7 +18,10 @@ type PluginAPI = basePluginAPI & typeof import("..");
 type PresetAPI = basePresetAPI & typeof import("..");
 export type { PluginAPI, PresetAPI };
 // todo: may need to refine PresetObject to be a subset of ValidatedOptions
-export type { ValidatedOptions as PresetObject } from "./validation/options";
+export type {
+  CallerMetadata,
+  ValidatedOptions as PresetObject,
+} from "./validation/options";
 
 import loadFullConfig from "./full";
 import { loadPartialConfig as loadPartialConfigRunner } from "./partial";
