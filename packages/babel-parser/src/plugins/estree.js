@@ -13,8 +13,8 @@ const toUnenumerable = (object, key) =>
   defineProperty(object, key, { enumerable: false, value: object[key] });
 
 function toESTreeLocation(node: any) {
-  toUnenumerable(node.loc.start, "index");
-  toUnenumerable(node.loc.end, "index");
+  node.loc.start && toUnenumerable(node.loc.start, "index");
+  node.loc.end && toUnenumerable(node.loc.end, "index");
 
   return node;
 }
@@ -499,6 +499,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     finishNodeAt<T: NodeType>(node: T, type: string, endLoc: Position): T {
       return toESTreeLocation(super.finishNodeAt(node, type, endLoc));
+    }
+
+    resetStartLocation(node: N.Node, start: number, startLoc: Position) {
+      super.resetStartLocation(node, start, startLoc);
+      toESTreeLocation(node);
     }
 
     resetEndLocation(
