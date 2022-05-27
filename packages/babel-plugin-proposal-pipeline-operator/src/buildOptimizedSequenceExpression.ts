@@ -7,7 +7,7 @@ import type { NodePath } from "@babel/traverse";
 //   (a = b, a + e)
 
 type Options = {
-  call: t.CallExpression;
+  call: t.CallExpression | t.AwaitExpression;
   path: NodePath<t.BinaryExpression & { operator: "|>" }>;
   placeholder: t.Identifier;
 };
@@ -27,6 +27,7 @@ const buildOptimizedSequenceExpression = ({
   path,
   placeholder,
 }: Options) => {
+  // @ts-expect-error AwaitExpression does not have callee property
   const { callee: calledExpression } = call;
   // pipelineLeft must not be a PrivateName
   const pipelineLeft = path.node.left as t.Expression;
@@ -63,7 +64,7 @@ const buildOptimizedSequenceExpression = ({
       calledExpression,
     ]);
 
-    call.callee = evalSequence;
+    (call as t.CallExpression).callee = evalSequence;
   }
   path.scope.push({ id: t.cloneNode(placeholder) });
 

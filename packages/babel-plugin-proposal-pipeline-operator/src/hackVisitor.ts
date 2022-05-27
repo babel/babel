@@ -52,7 +52,7 @@ export default {
         return;
       }
 
-      const visitorState = {
+      const visitorState: State = {
         topicReferences: [],
         // pipeBodyPath might be a function, and it won't be visited by
         // topicReferenceVisitor because traverse() skips the top-level

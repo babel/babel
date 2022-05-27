@@ -1,7 +1,8 @@
-import { types as t } from "@babel/core";
+import { types as t, type PluginObject } from "@babel/core";
+import type { NodePath } from "@babel/traverse";
 import buildOptimizedSequenceExpression from "./buildOptimizedSequenceExpression";
 
-const minimalVisitor = {
+const minimalVisitor: PluginObject["visitor"] = {
   BinaryExpression(path) {
     const { scope, node } = path;
     const { operator, left, right } = node;
@@ -14,7 +15,7 @@ const minimalVisitor = {
       buildOptimizedSequenceExpression({
         placeholder,
         call,
-        path,
+        path: path as NodePath<t.BinaryExpression & { operator: "|>" }>,
       }),
     );
   },
