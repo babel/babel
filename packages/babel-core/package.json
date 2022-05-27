@@ -41,11 +41,9 @@
     "./lib/config/files/index.js": "./lib/config/files/index-browser.js",
     "./lib/config/resolve-targets.js": "./lib/config/resolve-targets-browser.js",
     "./lib/transform-file.js": "./lib/transform-file-browser.js",
-    "./lib/transformation/util/clone-deep.js": "./lib/transformation/util/clone-deep-browser.js",
     "./src/config/files/index.ts": "./src/config/files/index-browser.ts",
     "./src/config/resolve-targets.ts": "./src/config/resolve-targets-browser.ts",
-    "./src/transform-file.ts": "./src/transform-file-browser.ts",
-    "./src/transformation/util/clone-deep.ts": "./src/transformation/util/clone-deep-browser.ts"
+    "./src/transform-file.ts": "./src/transform-file-browser.ts"
   },
   "dependencies": {
     "@ampproject/remapping": "^2.1.0",
@@ -58,7 +56,6 @@
     "@babel/template": "workspace:^",
     "@babel/traverse": "workspace:^",
     "@babel/types": "workspace:^",
-    "clone-deep": "^4.0.1",
     "convert-source-map": "^1.7.0",
     "debug": "^4.1.0",
     "gensync": "^1.0.0-beta.2",
