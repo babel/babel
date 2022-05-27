@@ -575,8 +575,16 @@ export default declare((api, opts: Options) => {
 
       [process.env.BABEL_8_BREAKING
         ? "TSNonNullExpression|TSInstantiationExpression"
-        : // This has been introduced in Babel 7.18.0
-        t.tsInstantiationExpression
+        : /* This has been introduced in Babel 7.18.0
+             We use api.types.* and not t.* for feature detection,
+             because the Babel version that is running this plugin
+             (where we check if the visitor is valid) might be different
+             from the Babel version that we resolve with `import "@babel/core"`.
+             This happens, for example, with Next.js that bundled `@babel/core`
+             but allows loading unbundled plugin (which cannot obviously import
+             the bundled `@babel/core` version).
+           */
+        api.types.tsInstantiationExpression
         ? "TSNonNullExpression|TSInstantiationExpression"
         : "TSNonNullExpression"](
         path: NodePath<t.TSNonNullExpression | t.TSExpressionWithTypeArguments>,
