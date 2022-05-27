@@ -166,30 +166,22 @@ export default class ImportInjector {
     );
   }
 
-  _applyDefaults(importedSource, opts, isInit = false) {
-    const optsList = [];
+  _applyDefaults(
+    importedSource: string | ImportOptions,
+    opts: ImportOptions | undefined,
+    isInit = false,
+  ) {
+    let newOpts: ImportOptions;
     if (typeof importedSource === "string") {
-      optsList.push({ importedSource });
-      optsList.push(opts);
+      newOpts = { ...this._defaultOpts, importedSource, ...opts };
     } else {
       assert(!opts, "Unexpected secondary arguments.");
-
-      optsList.push(importedSource);
+      newOpts = { ...this._defaultOpts, ...importedSource };
     }
 
-    const newOpts: ImportOptions = {
-      ...this._defaultOpts,
-    };
-    for (const opts of optsList) {
-      if (!opts) continue;
-      Object.keys(newOpts).forEach(key => {
-        if (opts[key] !== undefined) newOpts[key] = opts[key];
-      });
-
-      if (!isInit) {
-        if (opts.nameHint !== undefined) newOpts.nameHint = opts.nameHint;
-        if (opts.blockHoist !== undefined) newOpts.blockHoist = opts.blockHoist;
-      }
+    if (!isInit && opts) {
+      if (opts.nameHint !== undefined) newOpts.nameHint = opts.nameHint;
+      if (opts.blockHoist !== undefined) newOpts.blockHoist = opts.blockHoist;
     }
     return newOpts;
   }
