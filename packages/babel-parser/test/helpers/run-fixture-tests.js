@@ -86,7 +86,7 @@ const toJustErrors = result => ({
 function runParseTest(parse, test, onlyCompareErrors) {
   const { adjust, expected, source, filename, options } = test;
 
-  if (expected.threw && expected.ast) {
+  if (!OVERWRITE && expected.threw && expected.ast) {
     throw Error(
       "File expected.json exists although options specify throws. Remove expected.json.",
     );
@@ -140,7 +140,7 @@ function runParseTest(parse, test, onlyCompareErrors) {
   // otherwise remove it.
   if (Object.keys(newOptions).length <= 0) {
     rmf(optionsLocation);
-  } else if (throws) {
+  } else if (throws !== expectedThrows) {
     // The idea here is that we shouldn't need to change anything if this doesn't
     // throw, and stringify will produce different output than what prettier
     // wants.
