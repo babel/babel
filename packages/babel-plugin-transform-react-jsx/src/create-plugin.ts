@@ -50,8 +50,14 @@ export interface Options {
   useBuiltIns: boolean;
   useSpread?: boolean;
 }
-export default function createPlugin({ name, development }) {
-  return declare((api, options: Options) => {
+export default function createPlugin({
+  name,
+  development,
+}: {
+  name: string;
+  development: boolean;
+}) {
+  return declare((_, options: Options) => {
     const {
       pure: PURE_ANNOTATION,
 
@@ -369,7 +375,10 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       return false;
     }
 
-    function convertJSXIdentifier(node, parent) {
+    function convertJSXIdentifier(
+      node: t.JSXIdentifier | t.JSXMemberExpression | t.JSXNamespacedName,
+      parent: t.JSXOpeningElement | t.JSXMemberExpression,
+    ): t.ThisExpression | t.StringLiteral | t.MemberExpression | t.Identifier {
       if (t.isJSXIdentifier(node)) {
         if (node.name === "this" && t.isReferenced(node, parent)) {
           return t.thisExpression();
@@ -392,10 +401,13 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         return t.stringLiteral(`${node.namespace.name}:${node.name.name}`);
       }
 
+      // @ts-expect-error
       return node;
     }
 
-    function convertAttributeValue(node) {
+    function convertAttributeValue(
+      node: t.JSXAttribute["value"] | t.BooleanLiteral,
+    ) {
       if (t.isJSXExpressionContainer(node)) {
         return node.expression;
       } else {
@@ -486,7 +498,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     // Development: React.jsxDEV(type, arguments, key, isStaticChildren, source, self)
     function buildJSXElementCall(path: NodePath<JSXElement>, file: PluginPass) {
       const openingPath = path.get("openingElement");
-      const args = [getTag(openingPath)];
+      const args: t.Expression[] = [getTag(openingPath)];
 
       const attribsArray = [];
       const extracted = Object.create(null);
@@ -640,6 +652,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
           path,
           openingPath.get("attributes"),
         ),
+        // @ts-expect-error JSXSpreadChild has been transformed in convertAttributeValue
         ...t.react.buildChildren(path.node),
       ]);
     }
@@ -650,11 +663,10 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         openingPath.node,
       );
 
-      let tagName;
+      let tagName: string;
       if (t.isIdentifier(tagExpr)) {
         tagName = tagExpr.name;
-      } else if (t.isLiteral(tagExpr)) {
-        // @ts-expect-error todo(flow->ts) value in missing for NullLiteral
+      } else if (t.isStringLiteral(tagExpr)) {
         tagName = tagExpr.value;
       }
 
@@ -723,7 +735,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         }
       }
 
-      const props = [];
+      const props: ObjectExpression["properties"] = [];
       const found = Object.create(null);
 
       for (const attr of attribs) {

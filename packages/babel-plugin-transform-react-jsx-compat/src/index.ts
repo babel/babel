@@ -8,7 +8,7 @@ export default declare(api => {
   return {
     name: "transform-react-jsx-compat",
 
-    manipulateOptions(opts, parserOpts) {
+    manipulateOptions(_, parserOpts) {
       parserOpts.plugins.push("jsx");
     },
 
