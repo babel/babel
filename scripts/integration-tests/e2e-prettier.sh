@@ -40,7 +40,7 @@ yarn install
 
 if [ "$BABEL_8_BREAKING" = true ] ; then
   # Prettier's tests use `>` in JSX, which is invalid syntax
-  sed -i 's§<in T>() => {}</in>;§<in T>() = {}</in>;§g' tests/format/typescript/optional-variance/{with-jsx.tsx,__snapshots__/jsfmt.spec.js.snap}
+  sed -i 's$<in T>() => {}</in>;$<in T>() = {}</in>;$g' tests/format/typescript/optional-variance/{with-jsx.tsx,__snapshots__/jsfmt.spec.js.snap}
   node -e '
     const filepath = "jsfmt.spec.js.snap";
     const file = fs.readFileSync(filepath, "utf8");
