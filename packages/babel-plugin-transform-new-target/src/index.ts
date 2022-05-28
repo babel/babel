@@ -53,6 +53,7 @@ export default declare(api => {
             // packages/babel-helper-create-class-features-plugin/src/fields.ts#L192 unshadow
             let scope = path.scope;
             while (
+              scope !== func.parentPath.scope &&
               scope?.hasBinding(node.id.name) &&
               !scope.bindingIdentifierEquals(node.id.name, node.id)
             ) {
