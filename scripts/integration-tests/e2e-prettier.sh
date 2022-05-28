@@ -42,7 +42,7 @@ if [ "$BABEL_8_BREAKING" = true ] ; then
   # Prettier's tests use `>` in JSX, which is invalid syntax
   sed -i 's$<in T>() => {}</in>;$<in T>() = {}</in>;$g' tests/format/typescript/optional-variance/{with-jsx.tsx,__snapshots__/jsfmt.spec.js.snap}
   node -e '
-    const filepath = "jsfmt.spec.js.snap";
+    const filepath = "tests/format/typescript/optional-variance/__snapshots__/jsfmt.spec.js.snap";
     const file = fs.readFileSync(filepath, "utf8");
     const BEFORE_READ = "exports[`with-jsx.tsx [babel-ts] format 1`] = `";
     const END_READ = "`;";
