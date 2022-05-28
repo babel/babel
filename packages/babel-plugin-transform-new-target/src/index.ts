@@ -49,6 +49,16 @@ export default declare(api => {
           }
           if (!node.id) {
             node.id = scope.generateUidIdentifier("target");
+          } else {
+            // packages/babel-helper-create-class-features-plugin/src/fields.ts#L192 unshadow
+            let scope = path.scope;
+            while (
+              scope?.hasBinding(node.id.name) &&
+              !scope.bindingIdentifierEquals(node.id.name, node.id)
+            ) {
+              scope.rename(node.id.name);
+              scope = scope.parent;
+            }
           }
 
           const constructor = t.memberExpression(
