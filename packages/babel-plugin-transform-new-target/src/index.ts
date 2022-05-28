@@ -52,12 +52,14 @@ export default declare(api => {
           } else {
             // packages/babel-helper-create-class-features-plugin/src/fields.ts#L192 unshadow
             let scope = path.scope;
-            while (
-              scope !== func.parentPath.scope &&
-              scope?.hasBinding(node.id.name) &&
-              !scope.bindingIdentifierEquals(node.id.name, node.id)
-            ) {
-              scope.rename(node.id.name);
+            const name = node.id.name;
+            while (scope !== func.parentPath.scope) {
+              if (
+                scope.hasOwnBinding(name) &&
+                !scope.bindingIdentifierEquals(name, node.id)
+              ) {
+                scope.rename(name);
+              }
               scope = scope.parent;
             }
           }
