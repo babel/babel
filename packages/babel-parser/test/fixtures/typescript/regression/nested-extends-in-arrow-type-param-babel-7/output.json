@@ -30,7 +30,7 @@
           "extendsType": {
             "type": "TSFunctionType",
             "start":24,"end":53,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":53,"index":53}},
-            "params": [
+            "parameters": [
               {
                 "type": "Identifier",
                 "start":25,"end":47,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":47,"index":47},"identifierName":"x"},
@@ -81,7 +81,7 @@
                 }
               }
             ],
-            "returnType": {
+            "typeAnnotation": {
               "type": "TSTypeAnnotation",
               "start":49,"end":53,"loc":{"start":{"line":1,"column":49,"index":49},"end":{"line":1,"column":53,"index":53}},
               "typeAnnotation": {

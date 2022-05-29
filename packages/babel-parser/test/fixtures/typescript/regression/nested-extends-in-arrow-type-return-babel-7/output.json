@@ -30,8 +30,8 @@
           "extendsType": {
             "type": "TSFunctionType",
             "start":24,"end":49,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":49,"index":49}},
-            "params": [],
-            "returnType": {
+            "parameters": [],
+            "typeAnnotation": {
               "type": "TSTypeAnnotation",
               "start":27,"end":49,"loc":{"start":{"line":1,"column":27,"index":27},"end":{"line":1,"column":49,"index":49}},
               "typeAnnotation": {
