@@ -20,6 +20,23 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.18.4 (2022-05-29)
+
+#### :eyeglasses: Spec Compliance
+* `babel-types`
+  * [#14591](https://github.com/babel/babel/pull/14591) fix: remove TSDeclareFunction from ExportDefaultDeclaration ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-typescript`
+  * [#14610](https://github.com/babel/babel/pull/14610) Fix `@babel/transform-typescript` compatibility with Next.js ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#14604](https://github.com/babel/babel/pull/14604) [ts] FIx parsing of nested `extends` type in arrow type ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-check-duplicate-nodes`, `babel-parser`
+  * [#14595](https://github.com/babel/babel/pull/14595) fix: `loc.index` of some nodes is wrongly enumerable. ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :house: Internal
+* `babel-plugin-transform-block-scoping`, `babel-plugin-transform-classes`, `babel-plugin-transform-modules-systemjs`
+  * [#14599](https://github.com/babel/babel/pull/14599) refactor: avoid mutating AST nodes ([@JLHwung](https://github.com/JLHwung))
 ## v7.18.3 (2022-05-25)
 
 #### :bug: Bug Fix
