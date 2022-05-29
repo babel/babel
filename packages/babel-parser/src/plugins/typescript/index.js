@@ -3233,10 +3233,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       // Either way, we're looking at a '<': tt.jsxTagStart or relational.
 
-      let typeParameters: ?N.TsTypeParameterDeclaration;
-      let invalidSingleType: ?N.TsTypeParameter;
-      state = state || this.state.clone();
+      // If the state was cloned in the JSX parsing branch above but there
+      // have been any error in the tryParse call, this.state is set to state
+      // so we still need to clone it.
+      if (!state || state === this.state) state = this.state.clone();
 
+      let typeParameters: ?N.TsTypeParameterDeclaration;
       const arrow = this.tryParse(abort => {
         // This is similar to TypeScript's `tryParseParenthesizedArrowFunctionExpression`.
         typeParameters = this.tsParseTypeParameters();
@@ -3255,31 +3257,27 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
         expr.typeParameters = typeParameters;
 
-        // report error if single type parameter used without trailing comma.
-        if (
-          this.hasPlugin("jsx") &&
-          expr.typeParameters.params.length === 1 &&
-          !expr.typeParameters.extra?.trailingComma
-        ) {
-          const parameter = expr.typeParameters.params[0];
-          if (!parameter.constraint) {
-            // A single type parameter must either have constraints
-            // or a trailing comma, otherwise it's ambiguous with JSX.
-            invalidSingleType = parameter;
+        if (process.env.BABEL_8_BREAKING) {
+          if (
+            this.hasPlugin("jsx") &&
+            expr.typeParameters.params.length === 1 &&
+            !expr.typeParameters.extra?.trailingComma
+          ) {
+            // report error if single type parameter used without trailing comma.
+            const parameter = expr.typeParameters.params[0];
+            if (!parameter.constraint) {
+              // A single type parameter must either have constraints
+              // or a trailing comma, otherwise it's ambiguous with JSX.
+              this.raise(TSErrors.SingleTypeParameterWithoutTrailingComma, {
+                at: createPositionWithColumnOffset(parameter.loc.end, 1),
+                typeParameterName: parameter.name.name,
+              });
+            }
           }
         }
 
         return expr;
       }, state);
-
-      if (process.env.BABEL_8_BREAKING) {
-        if (invalidSingleType) {
-          this.raise(TSErrors.SingleTypeParameterWithoutTrailingComma, {
-            at: createPositionWithColumnOffset(invalidSingleType.loc.end, 1),
-            typeParameterName: invalidSingleType.name.name,
-          });
-        }
-      }
 
       /*:: invariant(arrow.node != null) */
       if (!arrow.error && !arrow.aborted) {
