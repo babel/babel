@@ -72,12 +72,18 @@ type PluginState = {
   stringSpecifiers: Set<string>;
 };
 
+type ModuleMetadata = {
+  key: string;
+  imports: any[];
+  exports: any[];
+};
+
 function constructExportCall(
-  path,
-  exportIdent,
-  exportNames,
-  exportValues,
-  exportStarTarget,
+  path: NodePath<t.Program>,
+  exportIdent: t.Identifier,
+  exportNames: string[],
+  exportValues: t.Expression[],
+  exportStarTarget: t.Identifier | null,
   stringSpecifiers: Set<string>,
 ) {
   const statements = [];
@@ -312,27 +318,31 @@ export default declare<PluginState>((api, options: Options) => {
             rewriteThis(path);
           }
         },
-        exit(path: NodePath<t.Program>, state: PluginState) {
+        exit(path, state) {
           const scope = path.scope;
           const exportIdent = scope.generateUid("export");
           const { contextIdent, stringSpecifiers } = state;
 
-          const exportMap = Object.create(null);
-          const modules = [];
+          const exportMap: Record<string, string[]> = Object.create(null);
+          const modules: ModuleMetadata[] = [];
 
           const beforeBody = [];
-          const setters = [];
-          const sources = [];
+          const setters: t.Expression[] = [];
+          const sources: t.StringLiteral[] = [];
           const variableIds = [];
           const removedPaths = [];
 
-          function addExportName(key, val) {
+          function addExportName(key: string, val: string) {
             exportMap[key] = exportMap[key] || [];
             exportMap[key].push(val);
           }
 
-          function pushModule(source, key, specifiers) {
-            let module;
+          function pushModule(
+            source: string,
+            key: "imports" | "exports",
+            specifiers: t.ModuleSpecifier[] | t.ExportAllDeclaration,
+          ) {
+            let module: ModuleMetadata;
             modules.forEach(function (m) {
               if (m.key === source) {
                 module = m;
@@ -346,7 +356,7 @@ export default declare<PluginState>((api, options: Options) => {
             module[key] = module[key].concat(specifiers);
           }
 
-          function buildExportCall(name, val) {
+          function buildExportCall(name: string, val: t.Expression) {
             return t.expressionStatement(
               t.callExpression(t.identifier(exportIdent), [
                 t.stringLiteral(name),
@@ -356,7 +366,7 @@ export default declare<PluginState>((api, options: Options) => {
           }
 
           const exportNames = [];
-          const exportValues = [];
+          const exportValues: t.Expression[] = [];
 
           const body = path.get("body");
 
@@ -391,9 +401,9 @@ export default declare<PluginState>((api, options: Options) => {
               pushModule(path.node.source.value, "exports", path.node);
               path.remove();
             } else if (path.isExportDefaultDeclaration()) {
-              const declar = path.get("declaration");
-              if (declar.isClassDeclaration()) {
-                const id = declar.node.id;
+              const declar = path.node.declaration;
+              if (t.isClassDeclaration(declar)) {
+                const id = declar.id;
                 if (id) {
                   exportNames.push("default");
                   exportValues.push(scope.buildUndefinedNode());
@@ -404,67 +414,66 @@ export default declare<PluginState>((api, options: Options) => {
                       t.assignmentExpression(
                         "=",
                         t.cloneNode(id),
-                        t.toExpression(declar.node),
+                        t.toExpression(declar),
                       ),
                     ),
                   );
                 } else {
                   exportNames.push("default");
-                  exportValues.push(t.toExpression(declar.node));
+                  exportValues.push(t.toExpression(declar));
                   removedPaths.push(path);
                 }
-              } else if (declar.isFunctionDeclaration()) {
-                const id = declar.node.id;
+              } else if (t.isFunctionDeclaration(declar)) {
+                const id = declar.id;
                 if (id) {
-                  beforeBody.push(declar.node);
+                  beforeBody.push(declar);
                   exportNames.push("default");
                   exportValues.push(t.cloneNode(id));
                   addExportName(id.name, "default");
                 } else {
                   exportNames.push("default");
-                  exportValues.push(t.toExpression(declar.node));
+                  exportValues.push(t.toExpression(declar));
                 }
                 removedPaths.push(path);
               } else {
-                path.replaceWith(buildExportCall("default", declar.node));
+                path.replaceWith(buildExportCall("default", declar));
               }
             } else if (path.isExportNamedDeclaration()) {
-              const declar = path.get("declaration");
+              const declar = path.node.declaration;
 
-              if (declar.node) {
+              if (declar) {
                 path.replaceWith(declar);
 
-                if (declar.isFunction()) {
-                  const node = declar.node;
-                  const name = node.id.name;
+                if (t.isFunction(declar)) {
+                  const name = declar.id.name;
                   addExportName(name, name);
-                  beforeBody.push(node);
+                  beforeBody.push(declar);
                   exportNames.push(name);
-                  exportValues.push(t.cloneNode(node.id));
+                  exportValues.push(t.cloneNode(declar.id));
                   removedPaths.push(path);
-                } else if (declar.isClass()) {
-                  const name = declar.node.id.name;
+                } else if (t.isClass(declar)) {
+                  const name = declar.id.name;
                   exportNames.push(name);
                   exportValues.push(scope.buildUndefinedNode());
-                  variableIds.push(t.cloneNode(declar.node.id));
+                  variableIds.push(t.cloneNode(declar.id));
                   path.replaceWith(
                     t.expressionStatement(
                       t.assignmentExpression(
                         "=",
-                        t.cloneNode(declar.node.id),
-                        t.toExpression(declar.node),
+                        t.cloneNode(declar.id),
+                        t.toExpression(declar),
                       ),
                     ),
                   );
                   addExportName(name, name);
                 } else {
-                  if (declar.isVariableDeclaration()) {
+                  if (t.isVariableDeclaration(declar)) {
                     // Convert top-level variable declarations to "var",
                     // because they must be hoisted
-                    declar.node.kind = "var";
+                    declar.kind = "var";
                   }
                   for (const name of Object.keys(
-                    declar.getBindingIdentifiers(),
+                    t.getBindingIdentifiers(declar),
                   )) {
                     addExportName(name, name);
                   }
