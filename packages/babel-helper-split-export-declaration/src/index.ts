@@ -14,10 +14,11 @@ export default function splitExportDeclaration(
     t.ExportDefaultDeclaration | t.ExportNamedDeclaration
   >,
 ) {
-  if (!exportDeclaration.isExportDeclaration()) {
-    throw new Error("Only export declarations can be split.");
-  } else if (exportDeclaration.isExportAllDeclaration()) {
-    return;
+  if (
+    !exportDeclaration.isExportDeclaration() ||
+    exportDeclaration.isExportAllDeclaration()
+  ) {
+    throw new Error("Only default and named export declarations can be split.");
   }
 
   // build specifiers that point back to this export declaration
