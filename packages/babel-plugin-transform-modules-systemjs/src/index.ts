@@ -340,16 +340,7 @@ export default declare<PluginState>((api, options: Options) => {
           function pushModule(
             source: string,
             key: "imports" | "exports",
-            specifiers:
-              | (
-                  | t.ImportSpecifier
-                  | t.ImportDefaultSpecifier
-                  | t.ImportNamespaceSpecifier
-                  | t.ExportSpecifier
-                  | t.ExportDefaultSpecifier
-                  | t.ExportNamespaceSpecifier
-                )[]
-              | t.ExportAllDeclaration,
+            specifiers: t.ModuleSpecifier[] | t.ExportAllDeclaration,
           ) {
             let module: ModuleMetadata;
             modules.forEach(function (m) {

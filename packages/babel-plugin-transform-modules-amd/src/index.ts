@@ -25,16 +25,22 @@ const buildAnonymousWrapper = template.statement(`
   })
 `);
 
-function injectWrapper(path: NodePath<t.Program>, wrapper: t.Statement) {
+function injectWrapper(
+  path: NodePath<t.Program>,
+  wrapper: t.ExpressionStatement,
+) {
   const { body, directives } = path.node;
   path.node.directives = [];
   path.node.body = [];
-  const amdWrapper = path.pushContainer("body", wrapper)[0];
+  const amdFactoryCall = (
+    path.pushContainer("body", wrapper)[0] as NodePath<t.ExpressionStatement>
+  ).get("expression") as NodePath<t.CallExpression>;
+  const amdFactoryCallArgs = amdFactoryCall.get("arguments");
   const amdFactory = (
-    amdWrapper.get("expression.arguments") as NodePath<t.Expression>[]
-  )
-    .filter(arg => arg.isFunctionExpression())[0]
-    .get("body") as NodePath;
+    amdFactoryCallArgs[
+      amdFactoryCallArgs.length - 1
+    ] as NodePath<t.FunctionExpression>
+  ).get("body") as NodePath<t.BlockStatement>;
   amdFactory.pushContainer("directives", directives);
   amdFactory.pushContainer("body", body);
 }
@@ -110,7 +116,9 @@ export default declare<State>((api, options: Options) => {
             if (requireId) {
               injectWrapper(
                 path,
-                buildAnonymousWrapper({ REQUIRE: t.cloneNode(requireId) }),
+                buildAnonymousWrapper({
+                  REQUIRE: t.cloneNode(requireId),
+                }) as t.ExpressionStatement,
               );
             }
             return;
@@ -189,7 +197,7 @@ export default declare<State>((api, options: Options) => {
 
               AMD_ARGUMENTS: t.arrayExpression(amdArgs),
               IMPORT_NAMES: importNames,
-            }),
+            }) as t.ExpressionStatement,
           );
         },
       },
