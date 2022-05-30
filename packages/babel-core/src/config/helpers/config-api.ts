@@ -47,7 +47,7 @@ export type PluginAPI = {
 export function makeConfigAPI<SideChannel extends Context.SimpleConfig>(
   cache: CacheConfigurator<SideChannel>,
 ): ConfigAPI {
-  const env: any = value =>
+  const env: any = (value: any) =>
     cache.using(data => {
       if (typeof value === "undefined") return data.envName;
       if (typeof value === "function") {
@@ -63,7 +63,8 @@ export function makeConfigAPI<SideChannel extends Context.SimpleConfig>(
       });
     });
 
-  const caller = cb => cache.using(data => assertSimpleType(cb(data.caller)));
+  const caller = (cb: Function) =>
+    cache.using(data => assertSimpleType(cb(data.caller)));
 
   return {
     version: coreVersion,
@@ -98,7 +99,8 @@ export function makePluginAPI<SideChannel extends Context.SimplePlugin>(
   cache: CacheConfigurator<SideChannel>,
   externalDependencies: Array<string>,
 ): PluginAPI {
-  const assumption = name => cache.using(data => data.assumptions[name]);
+  const assumption = (name: string) =>
+    cache.using(data => data.assumptions[name]);
 
   return { ...makePresetAPI(cache, externalDependencies), assumption };
 }

@@ -7,7 +7,7 @@ type TransformFile = {
 export const transformFile: TransformFile = function transformFile(
   filename,
   opts,
-  callback?,
+  callback?: Function,
 ) {
   if (typeof opts === "function") {
     callback = opts;

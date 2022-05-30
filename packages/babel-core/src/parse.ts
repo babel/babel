@@ -5,6 +5,7 @@ import type { InputOptions } from "./config";
 import parser from "./parser";
 import type { ParseResult } from "./parser";
 import normalizeOptions from "./transformation/normalize-opts";
+import type { ValidatedOptions } from "./config/validation/options";
 
 type FileParseCallback = {
   (err: Error, ast: null): any;
@@ -33,10 +34,14 @@ const parseRunner = gensync<
   return yield* parser(config.passes, normalizeOptions(config), code);
 });
 
-export const parse: Parse = function parse(code, opts?, callback?) {
+export const parse: Parse = function parse(
+  code,
+  opts?,
+  callback?: FileParseCallback,
+) {
   if (typeof opts === "function") {
     callback = opts;
-    opts = undefined;
+    opts = undefined as ValidatedOptions;
   }
 
   // For backward-compat with Babel 7's early betas, we allow sync parsing when

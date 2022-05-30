@@ -27,10 +27,14 @@ const transformRunner = gensync<
   return yield* run(config, code);
 });
 
-export const transform: Transform = function transform(code, opts?, callback?) {
+export const transform: Transform = function transform(
+  code,
+  opts?,
+  callback?: FileResultCallback,
+) {
   if (typeof opts === "function") {
     callback = opts;
-    opts = undefined;
+    opts = undefined as InputOptions;
   }
 
   // For backward-compat with Babel 6, we allow sync transformation when

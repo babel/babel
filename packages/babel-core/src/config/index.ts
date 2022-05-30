@@ -1,4 +1,5 @@
 import gensync from "gensync";
+import type { Gensync } from "gensync";
 
 export type {
   ResolvedConfig,
@@ -43,13 +44,14 @@ const createConfigItemRunner =
     createConfigItemImpl,
   );
 
-const maybeErrback = runner => (opts: unknown, callback?: Function) => {
-  if (callback === undefined && typeof opts === "function") {
-    callback = opts;
-    opts = undefined;
-  }
-  return callback ? runner.errback(opts, callback) : runner.sync(opts);
-};
+const maybeErrback =
+  (runner: Gensync<any>) => (opts: unknown, callback?: any) => {
+    if (callback === undefined && typeof opts === "function") {
+      callback = opts;
+      opts = undefined;
+    }
+    return callback ? runner.errback(opts, callback) : runner.sync(opts);
+  };
 
 export const loadPartialConfig = maybeErrback(loadPartialConfigRunner);
 export const loadPartialConfigSync = loadPartialConfigRunner.sync;

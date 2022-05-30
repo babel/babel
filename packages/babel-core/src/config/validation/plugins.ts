@@ -92,7 +92,9 @@ export type PluginObject<S extends PluginPass = PluginPass> = {
   generatorOverride?: Function;
 };
 
-export function validatePluginObject(obj: {}): PluginObject {
+export function validatePluginObject(obj: {
+  [key: string]: unknown;
+}): PluginObject {
   const rootPath: RootPath = {
     type: "root",
     source: "plugin",

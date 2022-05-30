@@ -1,6 +1,6 @@
 import * as helpers from "@babel/helpers";
 import { NodePath, Scope } from "@babel/traverse";
-import type { HubInterface } from "@babel/traverse";
+import type { HubInterface, Visitor } from "@babel/traverse";
 import { codeFrameColumns } from "@babel/code-frame";
 import traverse from "@babel/traverse";
 import { cloneNode, interpreterDirective } from "@babel/types";
@@ -10,7 +10,7 @@ import semver from "semver";
 
 import type { NormalizedFile } from "../normalize-file";
 
-const errorVisitor = {
+const errorVisitor: Visitor<{ loc: NodeLocation["loc"] | null }> = {
   enter(path, state) {
     const loc = path.node.loc;
     if (loc) {
@@ -191,7 +191,7 @@ export default class File {
     const uid = (this.declarations[name] =
       this.scope.generateUidIdentifier(name));
 
-    const dependencies = {};
+    const dependencies: { [key: string]: t.Identifier } = {};
     for (const dep of helpers.getDependencies(name)) {
       dependencies[dep] = this.addHelper(dep);
     }
@@ -239,7 +239,7 @@ export default class File {
     let loc = node && (node.loc || node._loc);
 
     if (!loc && node) {
-      const state = {
+      const state: { loc?: NodeLocation["loc"] | null } = {
         loc: null,
       };
       traverse(node as t.Node, errorVisitor, this.scope, state);

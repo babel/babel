@@ -348,7 +348,7 @@ class CacheConfigurator<SideChannel = void> {
 function makeSimpleConfigurator(
   cache: CacheConfigurator<any>,
 ): SimpleCacheConfigurator {
-  function cacheFn(val) {
+  function cacheFn(val: any) {
     if (typeof val === "boolean") {
       if (val) cache.forever();
       else cache.never();
@@ -359,8 +359,9 @@ function makeSimpleConfigurator(
   }
   cacheFn.forever = () => cache.forever();
   cacheFn.never = () => cache.never();
-  cacheFn.using = cb => cache.using(() => assertSimpleType(cb()));
-  cacheFn.invalidate = cb => cache.invalidate(() => assertSimpleType(cb()));
+  cacheFn.using = (cb: Function) => cache.using(() => assertSimpleType(cb()));
+  cacheFn.invalidate = (cb: Function) =>
+    cache.invalidate(() => assertSimpleType(cb()));
 
   return cacheFn as any;
 }

@@ -72,7 +72,7 @@ export function* resolveShowConfigPath(
   return null;
 }
 
-export const ROOT_CONFIG_FILENAMES = [];
+export const ROOT_CONFIG_FILENAMES: any[] = [];
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function resolvePlugin(name: string, dirname: string): string | null {

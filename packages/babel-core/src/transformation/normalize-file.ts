@@ -105,7 +105,11 @@ const INLINE_SOURCEMAP_REGEX =
 const EXTERNAL_SOURCEMAP_REGEX =
   /^[@#][ \t]+sourceMappingURL=([^\s'"`]+)[ \t]*$/;
 
-function extractCommentsFromList(regex, comments, lastComment) {
+function extractCommentsFromList(
+  regex: RegExp,
+  comments: ReadonlyArray<t.Comment>,
+  lastComment: string | null,
+): [ReadonlyArray<t.Comment>, string | null] {
   if (comments) {
     comments = comments.filter(({ value }) => {
       if (regex.test(value)) {
@@ -118,8 +122,8 @@ function extractCommentsFromList(regex, comments, lastComment) {
   return [comments, lastComment];
 }
 
-function extractComments(regex, ast) {
-  let lastComment = null;
+function extractComments(regex: RegExp, ast: t.Node) {
+  let lastComment: string = null;
   traverseFast(ast, node => {
     [node.leadingComments, lastComment] = extractCommentsFromList(
       regex,

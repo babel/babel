@@ -1,7 +1,7 @@
 export type ConfigFile = {
   filepath: string;
   dirname: string;
-  options: {};
+  options: { [key: string]: any };
 };
 
 export type IgnoreFile = {
