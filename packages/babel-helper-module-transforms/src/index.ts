@@ -27,7 +27,9 @@ import normalizeModuleAndLoadMetadata, {
   validateImportInteropOption,
 } from "./normalize-and-load-metadata";
 import type {
+  ImportInterop,
   InteropType,
+  Lazy,
   ModuleMetadata,
   SourceModuleMetadata,
 } from "./normalize-and-load-metadata";
@@ -37,6 +39,22 @@ export { default as getModuleName } from "./get-module-name";
 export type { PluginOptions } from "./get-module-name";
 
 export { hasExports, isSideEffectImport, isModule, rewriteThis };
+
+export interface RewriteModuleStatementsAndPrepareHeaderOptions {
+  exportName?: string;
+  strict: boolean;
+  allowTopLevelThis?: boolean;
+  strictMode: boolean;
+  loose?: boolean;
+  importInterop?: ImportInterop;
+  noInterop?: boolean;
+  lazy?: Lazy;
+  esNamespaceOnly?: boolean;
+  filename: string | undefined;
+  constantReexports?: boolean | void;
+  enumerableModuleMeta?: boolean | void;
+  noIncompleteNsImportDetection?: boolean | void;
+}
 
 /**
  * Perform all of the generic ES6 module rewriting needed to handle initial
@@ -63,21 +81,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
     constantReexports = loose,
     enumerableModuleMeta = loose,
     noIncompleteNsImportDetection,
-  }: {
-    exportName?;
-    strict;
-    allowTopLevelThis?;
-    strictMode;
-    loose?;
-    importInterop?: "none" | "babel" | "node";
-    noInterop?;
-    lazy?;
-    esNamespaceOnly?;
-    filename: string | undefined;
-    constantReexports?;
-    enumerableModuleMeta?;
-    noIncompleteNsImportDetection?: boolean;
-  },
+  }: RewriteModuleStatementsAndPrepareHeaderOptions,
 ) {
   validateImportInteropOption(importInterop);
   assert(isModule(path), "Cannot process module statements in a script");
@@ -138,9 +142,10 @@ export function rewriteModuleStatementsAndPrepareHeader(
  * Flag a set of statements as hoisted above all else so that module init
  * statements all run before user code.
  */
-export function ensureStatementsHoisted(statements) {
+export function ensureStatementsHoisted(statements: t.Statement[]) {
   // Force all of the header fields to be at the top of the file.
   statements.forEach(header => {
+    // @ts-ignore Fixme: handle _blockHoist property
     header._blockHoist = 3;
   });
 }
@@ -303,7 +308,7 @@ const buildReexportsFromMeta = (
  */
 function buildESModuleHeader(
   metadata: ModuleMetadata,
-  enumerableModuleMeta: boolean = false,
+  enumerableModuleMeta: boolean | void = false,
 ) {
   return (
     enumerableModuleMeta
@@ -321,7 +326,11 @@ function buildESModuleHeader(
 /**
  * Create a re-export initialization loop for a specific imported namespace.
  */
-function buildNamespaceReexport(metadata, namespace, constantReexports) {
+function buildNamespaceReexport(
+  metadata: ModuleMetadata,
+  namespace: t.Identifier | t.CallExpression,
+  constantReexports: boolean | void,
+) {
   return (
     constantReexports
       ? template.statement`
@@ -413,8 +422,8 @@ function buildExportNameListDeclaration(
 function buildExportInitializationStatements(
   programPath: NodePath,
   metadata: ModuleMetadata,
-  constantReexports: boolean = false,
-  noIncompleteNsImportDetection = false,
+  constantReexports: boolean | void = false,
+  noIncompleteNsImportDetection: boolean | void = false,
 ) {
   const initStatements: Array<[string, t.Statement | null]> = [];
 
@@ -514,7 +523,11 @@ const InitTemplate = {
   default: template.expression`EXPORTS.NAME = VALUE`,
 };
 
-function buildInitStatement(metadata: ModuleMetadata, exportNames, initExpr) {
+function buildInitStatement(
+  metadata: ModuleMetadata,
+  exportNames: string[],
+  initExpr: t.Expression,
+) {
   const { stringSpecifiers, exportName: EXPORTS } = metadata;
   return expressionStatement(
     exportNames.reduce((acc, exportName) => {
