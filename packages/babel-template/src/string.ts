@@ -1,5 +1,6 @@
 import type { Formatter } from "./formatters";
 import type { TemplateOpts } from "./options";
+import type { Metadata } from "./parse";
 import { normalizeReplacements } from "./options";
 import parseAndBuildMetadata from "./parse";
 import populatePlaceholders from "./populate";
@@ -11,7 +12,7 @@ export default function stringTemplate<T>(
 ): (arg?: unknown) => T {
   code = formatter.code(code);
 
-  let metadata;
+  let metadata: Metadata;
 
   return (arg?: unknown) => {
     const replacements = normalizeReplacements(arg);
