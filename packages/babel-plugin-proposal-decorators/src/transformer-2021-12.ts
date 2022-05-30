@@ -5,7 +5,7 @@ import ReplaceSupers from "@babel/helper-replace-supers";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import * as charCodes from "charcodes";
 import type { PluginAPI, PluginObject, PluginPass } from "@babel/core";
-import type { Options } from "..";
+import type { Options } from "./index";
 
 type ClassDecoratableElement =
   | t.ClassMethod
@@ -52,7 +52,7 @@ function incrementId(id: number[], idx = id.length - 1): void {
 function createPrivateUidGeneratorForClass(
   classPath: NodePath<t.ClassDeclaration | t.ClassExpression>,
 ): () => t.PrivateName {
-  const currentPrivateId = [];
+  const currentPrivateId: number[] = [];
   const privateNames = new Set<string>();
 
   classPath.traverse({
@@ -888,7 +888,11 @@ function transformClass(
 
   if (classDecorators) {
     locals.push(classLocal, classInitLocal);
-    const statics = [];
+    const statics: (
+      | t.ClassProperty
+      | t.ClassPrivateProperty
+      | t.ClassPrivateMethod
+    )[] = [];
     let staticBlocks: t.StaticBlock[] = [];
     path.get("body.body").forEach(element => {
       // Static blocks cannot be compiled to "instance blocks", but we can inline
