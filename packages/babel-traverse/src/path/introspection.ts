@@ -455,15 +455,16 @@ function _guessExecutionStatusRelativeToDifferentFunctionsInternal(
     // Prevent infinite loops in recursive functions
     if (executionOrderCheckedNodes.has(path.node)) continue;
     executionOrderCheckedNodes.add(path.node);
+    try {
+      const status = this._guessExecutionStatusRelativeTo(path);
 
-    const status = this._guessExecutionStatusRelativeTo(path);
-
-    executionOrderCheckedNodes.delete(path.node);
-
-    if (allStatus && allStatus !== status) {
-      return "unknown";
-    } else {
-      allStatus = status;
+      if (allStatus && allStatus !== status) {
+        return "unknown";
+      } else {
+        allStatus = status;
+      }
+    } finally {
+      executionOrderCheckedNodes.delete(path.node);
     }
   }
 
