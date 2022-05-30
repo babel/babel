@@ -1,5 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxClassStaticBlock from "@babel/plugin-syntax-class-static-block";
+import type { Scope } from "@babel/traverse";
 
 import {
   enableFeature,
@@ -10,11 +11,11 @@ import type * as t from "@babel/types";
 /**
  * Generate a uid that is not in `denyList`
  *
- * @param {*} scope
+ * @param {Scope} scope
  * @param {Set<string>} denyList a deny list that the generated uid should avoid
  * @returns
  */
-function generateUid(scope, denyList: Set<string>) {
+function generateUid(scope: Scope, denyList: Set<string>) {
   const name = "";
   let uid;
   let i = 1;
