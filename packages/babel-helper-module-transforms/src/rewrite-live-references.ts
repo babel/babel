@@ -27,12 +27,12 @@ import type { ModuleMetadata } from "./normalize-and-load-metadata";
 interface RewriteReferencesVisitorState {
   exported: Map<any, any>;
   metadata: ModuleMetadata;
-  requeueInParent: (path) => void;
+  requeueInParent: (path: NodePath) => void;
   scope: Scope;
   imported: Map<any, any>;
   buildImportReference: (
-    [source, importName, localName]: readonly [any, any, any],
-    identNode,
+    [source, importName, localName]: readonly [string, string, string],
+    identNode: t.Identifier | t.CallExpression | t.JSXIdentifier,
   ) => any;
   seen: WeakSet<object>;
 }
@@ -40,11 +40,11 @@ interface RewriteReferencesVisitorState {
 interface RewriteBindingInitVisitorState {
   exported: Map<any, any>;
   metadata: ModuleMetadata;
-  requeueInParent: (path) => void;
+  requeueInParent: (path: NodePath) => void;
   scope: Scope;
 }
 
-function isInType(path) {
+function isInType(path: NodePath) {
   do {
     switch (path.parent.type) {
       case "TSTypeAnnotation":
@@ -54,7 +54,13 @@ function isInType(path) {
       case "TypeAlias":
         return true;
       case "ExportSpecifier":
-        return path.parentPath.parent.exportKind === "type";
+        return (
+          (
+            path.parentPath.parent as
+              | t.ExportDefaultDeclaration
+              | t.ExportNamedDeclaration
+          ).exportKind === "type"
+        );
       default:
         if (path.parentPath.isStatement() || path.parentPath.isExpression()) {
           return false;
@@ -69,7 +75,7 @@ export default function rewriteLiveReferences(
 ) {
   const imported = new Map();
   const exported = new Map();
-  const requeueInParent = path => {
+  const requeueInParent = (path: NodePath) => {
     // Manually re-queue `exports.default =` expressions so that the ES3
     // transform has an opportunity to convert them. Ideally this would
     // happen automatically from the replaceWith above. See #4140 for
@@ -127,7 +133,13 @@ export default function rewriteLiveReferences(
       const meta = metadata.source.get(source);
 
       if (localName) {
-        if (meta.lazy) identNode = callExpression(identNode, []);
+        if (meta.lazy) {
+          identNode = callExpression(
+            // @ts-expect-error Fixme: we should handle the case when identNode is a JSXIdentifier
+            identNode,
+            [],
+          );
+        }
         return identNode;
       }
 
@@ -203,9 +215,9 @@ const rewriteBindingInitVisitor: Visitor<RewriteBindingInitVisitorState> = {
 };
 
 const buildBindingExportAssignmentExpression = (
-  metadata,
-  exportNames,
-  localExpr,
+  metadata: ModuleMetadata,
+  exportNames: string[],
+  localExpr: t.Expression,
 ) => {
   return (exportNames || []).reduce((expr, exportName) => {
     // class Foo {} export { Foo, Foo as Bar };
@@ -225,7 +237,7 @@ const buildBindingExportAssignmentExpression = (
   }, localExpr);
 };
 
-const buildImportThrow = localName => {
+const buildImportThrow = (localName: string) => {
   return template.expression.ast`
     (function() {
       throw new Error('"' + '${localName}' + '" is read-only.');
@@ -403,7 +415,7 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
           const assignment = path.node;
 
           if (importData) {
-            assignment.left = buildImportReference(importData, assignment.left);
+            assignment.left = buildImportReference(importData, left.node);
 
             assignment.right = sequenceExpression([
               assignment.right,
@@ -437,7 +449,7 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
 
         // Complex ({a, b, c} = {}); export { a, c };
         // =>   ({a, b, c} = {}), (exports.a = a, exports.c = c);
-        const items = [];
+        const items: t.Expression[] = [];
         programScopeIds.forEach(localName => {
           const exportedNames = exported.get(localName) || [];
           if (exportedNames.length > 0) {
