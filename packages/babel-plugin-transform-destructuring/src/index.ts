@@ -5,6 +5,7 @@ import {
   convertVariableDeclaration,
   convertAssignmentExpression,
   unshiftForXStatementBody,
+  type DestructuringTransformerNode,
 } from "./util";
 export { buildObjectExcludingKeys, unshiftForXStatementBody } from "./util";
 
@@ -112,7 +113,7 @@ export default declare((api, options: Options) => {
           t.variableDeclarator(key, null),
         ]);
 
-        const nodes = [];
+        const nodes: DestructuringTransformerNode[] = [];
 
         const destructuring = new DestructuringTransformer({
           kind: left.kind,
@@ -138,7 +139,7 @@ export default declare((api, options: Options) => {
         const ref = scope.generateUidIdentifier("ref");
         node.param = ref;
 
-        const nodes = [];
+        const nodes: DestructuringTransformerNode[] = [];
 
         const destructuring = new DestructuringTransformer({
           kind: "let",
@@ -152,7 +153,7 @@ export default declare((api, options: Options) => {
         });
         destructuring.init(pattern, ref);
 
-        node.body.body = nodes.concat(node.body.body);
+        node.body.body = [...nodes, ...node.body.body];
         scope.crawl();
       },
 
