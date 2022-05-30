@@ -268,23 +268,23 @@ function getLocalTargets(
   });
 }
 
-function supportsStaticESM(caller: CallerMetadata | void) {
-  // @ts-expect-error optional chaining
+function supportsStaticESM(caller: CallerMetadata | undefined) {
+  // @ts-expect-error supportsStaticESM is not defined in CallerMetadata
   return !!caller?.supportsStaticESM;
 }
 
-function supportsDynamicImport(caller: CallerMetadata | void) {
-  // @ts-expect-error optional chaining
+function supportsDynamicImport(caller: CallerMetadata | undefined) {
+  // @ts-expect-error supportsDynamicImport is not defined in CallerMetadata
   return !!caller?.supportsDynamicImport;
 }
 
-function supportsExportNamespaceFrom(caller: CallerMetadata | void) {
-  // @ts-expect-error optional chaining
+function supportsExportNamespaceFrom(caller: CallerMetadata | undefined) {
+  // @ts-expect-error supportsExportNamespaceFrom is not defined in CallerMetadata
   return !!caller?.supportsExportNamespaceFrom;
 }
 
-function supportsTopLevelAwait(caller: CallerMetadata | void) {
-  // @ts-expect-error optional chaining
+function supportsTopLevelAwait(caller: CallerMetadata | undefined) {
+  // @ts-expect-error supportsTopLevelAwait is not defined in CallerMetadata
   return !!caller?.supportsTopLevelAwait;
 }
 
