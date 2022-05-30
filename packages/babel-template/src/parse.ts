@@ -54,15 +54,15 @@ export default function parseAndBuildMetadata<T>(
 
   formatter.validate(ast);
 
-  const syntactic = {
+  const syntactic: MetadataState["syntactic"] = {
     placeholders: [],
-    placeholderNames: new Set<string>(),
+    placeholderNames: new Set(),
   };
-  const legacy = {
+  const legacy: MetadataState["legacy"] = {
     placeholders: [],
-    placeholderNames: new Set<string>(),
+    placeholderNames: new Set(),
   };
-  const isLegacyRef = { value: undefined };
+  const isLegacyRef: MetadataState["isLegacyRef"] = { value: undefined };
 
   traverse(ast, placeholderVisitorHandler as TraversalHandler<any>, {
     syntactic,
