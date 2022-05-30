@@ -44,15 +44,15 @@ export type NodeLocation = {
 };
 
 export default class File {
-  _map: Map<any, any> = new Map();
-  opts: any;
-  declarations: any = {};
-  path: NodePath<t.Program> = null;
-  ast: any = {};
+  _map: Map<unknown, unknown> = new Map();
+  opts: { [key: string]: any };
+  declarations: { [key: string]: t.Identifier } = {};
+  path: NodePath<t.Program>;
+  ast: t.File;
   scope: Scope;
-  metadata: {} = {};
+  metadata: { [key: string]: any } = {};
   code: string = "";
-  inputMap: any | null = null;
+  inputMap: any;
 
   hub: HubInterface & { file: File } = {
     // keep it for the usage in babel-core, ex: path.hub.file.opts.filename

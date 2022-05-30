@@ -8,8 +8,8 @@ import normalizeOptions from "./transformation/normalize-opts";
 import type { ValidatedOptions } from "./config/validation/options";
 
 type FileParseCallback = {
-  (err: Error, ast: null): any;
-  (err: null, ast: ParseResult | null): any;
+  (err: Error, ast: null): void;
+  (err: null, ast: ParseResult | null): void;
 };
 
 type Parse = {

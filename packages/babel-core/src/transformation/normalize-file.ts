@@ -16,13 +16,13 @@ const LARGE_INPUT_SOURCEMAP_THRESHOLD = 1_000_000;
 
 export type NormalizedFile = {
   code: string;
-  ast: {};
+  ast: t.File;
   inputMap: Converter | null;
 };
 
 export default function* normalizeFile(
   pluginPasses: PluginPasses,
-  options: any,
+  options: { [key: string]: any },
   code: string,
   ast?: t.File | t.Program | null,
 ): Handler<File> {
@@ -36,7 +36,7 @@ export default function* normalizeFile(
     }
 
     if (options.cloneInputAst) {
-      ast = cloneDeep(ast);
+      ast = cloneDeep(ast) as t.File;
     }
   } else {
     ast = yield* parser(pluginPasses, options, code);
