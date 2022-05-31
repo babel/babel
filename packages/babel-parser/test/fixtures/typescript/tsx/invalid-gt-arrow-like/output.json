@@ -1,0 +1,63 @@
+{
+  "type": "File",
+  "start":0,"end":16,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":16,"index":16}},
+  "errors": [
+    "SyntaxError: Unexpected token `>`. Did you mean `&gt;` or `{'>'}`? (1:7)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":16,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":16,"index":16}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":16,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":16,"index":16}},
+        "expression": {
+          "type": "JSXElement",
+          "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}},
+          "openingElement": {
+            "type": "JSXOpeningElement",
+            "start":0,"end":3,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":3,"index":3}},
+            "name": {
+              "type": "JSXIdentifier",
+              "start":1,"end":2,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":2,"index":2}},
+              "name": "T"
+            },
+            "attributes": [],
+            "selfClosing": false
+          },
+          "closingElement": {
+            "type": "JSXClosingElement",
+            "start":11,"end":15,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":15,"index":15}},
+            "name": {
+              "type": "JSXIdentifier",
+              "start":13,"end":14,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":14,"index":14}},
+              "name": "T"
+            }
+          },
+          "children": [
+            {
+              "type": "JSXText",
+              "start":3,"end":9,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":1,"column":9,"index":9}},
+              "extra": {
+                "rawValue": "() => ",
+                "raw": "() => "
+              },
+              "value": "() => "
+            },
+            {
+              "type": "JSXExpressionContainer",
+              "start":9,"end":11,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":11,"index":11}},
+              "expression": {
+                "type": "JSXEmptyExpression",
+                "start":10,"end":10,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":10,"index":10}}
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}
