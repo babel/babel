@@ -95,7 +95,13 @@ function isInDetachedTree(path: NodePath) {
     const { parentPath, container, listKey } = path;
     const parentNode = parentPath.node;
     if (listKey) {
-      if (container !== parentNode[listKey]) return true;
+      if (
+        container !==
+        // @ts-expect-error listKey must be a valid parent node key
+        parentNode[listKey]
+      ) {
+        return true;
+      }
     } else {
       if (container !== parentNode) return true;
     }
@@ -208,10 +214,9 @@ const handle = {
         );
       }
 
-      const startingProp = startingOptional.isOptionalMemberExpression()
-        ? "object"
-        : "callee";
-      const startingNode = startingOptional.node[startingProp];
+      const startingNode = startingOptional.isOptionalMemberExpression()
+        ? startingOptional.node.object
+        : startingOptional.node.callee;
       const baseNeedsMemoised = scope.maybeGenerateMemoised(startingNode);
       const baseRef = baseNeedsMemoised ?? startingNode;
 
@@ -281,7 +286,12 @@ const handle = {
       }
 
       const baseMemoised = baseNeedsMemoised
-        ? assignmentExpression("=", cloneNode(baseRef), cloneNode(startingNode))
+        ? assignmentExpression(
+            "=",
+            // When base needs memoised, the baseRef must be an identifier
+            cloneNode(baseRef as t.Identifier),
+            cloneNode(startingNode),
+          )
         : cloneNode(baseRef);
 
       if (willEndPathCastToBoolean) {

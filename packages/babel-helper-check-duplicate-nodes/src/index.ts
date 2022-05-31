@@ -1,20 +1,25 @@
 import { VISITOR_KEYS } from "@babel/types";
+import type * as t from "@babel/types";
 
-export default function checkDuplicateNodes(ast) {
+type StackItem = {
+  node: t.Node;
+  parent: t.Node | null;
+};
+export default function checkDuplicateNodes(ast: t.Node) {
   if (arguments.length !== 1) {
     throw new Error("checkDuplicateNodes accepts only one argument: ast");
   }
   // A Map from node to its parent
   const parentsMap = new Map();
 
-  const hidePrivateProperties = (key, val) => {
+  const hidePrivateProperties = (key: string, val: unknown) => {
     // Hides properties like _shadowedFunctionLiteral,
     // which makes the AST circular
     if (key[0] === "_") return "[Private]";
     return val;
   };
 
-  const stack = [{ node: ast, parent: null }];
+  const stack: StackItem[] = [{ node: ast, parent: null }];
   let item;
 
   while ((item = stack.pop()) !== undefined) {
@@ -36,7 +41,9 @@ export default function checkDuplicateNodes(ast) {
     parentsMap.set(node, parent);
 
     for (const key of keys) {
-      const subNode = node[key];
+      const subNode =
+        // @ts-expect-error visitor keys must present in node
+        node[key];
 
       if (Array.isArray(subNode)) {
         for (const child of subNode) {

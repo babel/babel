@@ -4,7 +4,7 @@ import {
   identifier,
 } from "@babel/types";
 import type * as t from "@babel/types";
-import type { NodePath } from "@babel/traverse";
+import type { NodePath, Visitor } from "@babel/traverse";
 
 export type EmitFunction = (
   id: t.Identifier,
@@ -19,16 +19,16 @@ type State = {
 
 type Unpacked<T> = T extends (infer U)[] ? U : T;
 
-const visitor = {
-  Scope(path: NodePath, state: State) {
+const visitor: Visitor<State> = {
+  Scope(path, state) {
     if (state.kind === "let") path.skip();
   },
 
-  FunctionParent(path: NodePath) {
+  FunctionParent(path) {
     path.skip();
   },
 
-  VariableDeclaration(path: NodePath<t.VariableDeclaration>, state: State) {
+  VariableDeclaration(path, state) {
     if (state.kind && path.node.kind !== state.kind) return;
 
     const nodes = [];
