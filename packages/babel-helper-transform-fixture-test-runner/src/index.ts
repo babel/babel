@@ -1,9 +1,15 @@
 /* eslint-env jest */
 import * as babel from "@babel/core";
-import { buildExternalHelpers } from "@babel/core";
+import {
+  buildExternalHelpers,
+  type InputOptions,
+  type FileResult,
+} from "@babel/core";
 import {
   default as getFixtures,
   resolveOptionPluginOrPreset,
+  type Test,
+  type TestFile,
 } from "@babel/helper-fixtures";
 import { codeFrameColumns } from "@babel/code-frame";
 import { TraceMap, originalPositionFor } from "@jridgewell/trace-mapping";
@@ -20,6 +26,11 @@ const require = createRequire(import.meta.url);
 
 import checkDuplicateNodes from "@babel/helper-check-duplicate-nodes";
 
+type Module = {
+  id: string;
+  exports: Record<string, unknown>;
+};
+
 const EXTERNAL_HELPERS_VERSION = "7.100.0";
 
 const cachedScripts = new QuickLRU<
@@ -33,7 +44,7 @@ const sharedTestContext = createContext();
 // babel.config.js file, so we disable config loading by
 // default. Tests can still set `configFile: true | string`
 // to re-enable config loading.
-function transformWithoutConfigFile(code, opts) {
+function transformWithoutConfigFile(code: string, opts: InputOptions) {
   return babel.transform(code, {
     configFile: false,
     babelrc: false,
@@ -74,7 +85,7 @@ function runCacheableScriptInTestContext(
   srcFn: () => string,
   context: vm.Context,
   moduleCache: any,
-) {
+): Module {
   let cached = cachedScripts.get(filename);
   if (!cached) {
     const code = `(function (exports, require, module, __filename, __dirname) {\n${srcFn()}\n});`;
@@ -111,7 +122,8 @@ function runCacheableScriptInTestContext(
     id: filename,
     exports: {},
   };
-  const req = id => runModuleInTestContext(id, filename, context, moduleCache);
+  const req = (id: string) =>
+    runModuleInTestContext(id, filename, context, moduleCache);
   const dirname = path.dirname(filename);
 
   script
@@ -169,9 +181,10 @@ export function runCodeInTestContext(
   const filename = opts.filename;
   const dirname = path.dirname(filename);
   const moduleCache = contextModuleCache.get(context);
-  const req = id => runModuleInTestContext(id, filename, context, moduleCache);
+  const req = (id: string) =>
+    runModuleInTestContext(id, filename, context, moduleCache);
 
-  const module = {
+  const module: Module = {
     id: filename,
     exports: {},
   };
@@ -194,7 +207,7 @@ export function runCodeInTestContext(
   }
 }
 
-function maybeMockConsole(validateLogs, run) {
+function maybeMockConsole<R>(validateLogs: boolean, run: () => R) {
   const actualLogs = { stdout: "", stderr: "" };
 
   if (!validateLogs) return { result: run(), actualLogs };
@@ -214,7 +227,7 @@ function maybeMockConsole(validateLogs, run) {
   }
 }
 
-function run(task) {
+function run(task: Test) {
   const {
     actual,
     expect: expected,
@@ -229,7 +242,7 @@ function run(task) {
   } = task;
 
   // todo(flow->ts) add proper return type (added any, because empty object is inferred)
-  function getOpts(self): any {
+  function getOpts(self: TestFile): any {
     const newOpts = {
       ast: true,
       cwd: path.dirname(self.loc),
@@ -247,7 +260,7 @@ function run(task) {
   }
 
   let execCode = exec.code;
-  let result;
+  let result: FileResult;
   let resultExec;
 
   if (execCode) {
@@ -257,7 +270,7 @@ function run(task) {
     // Ignore Babel logs of exec.js files.
     // They will be validated in input/output files.
     ({ result } = maybeMockConsole(validateLogs, () =>
-      babel.transform(execCode, execOpts),
+      babel.transformSync(execCode, execOpts),
     ));
 
     checkDuplicateNodes(result.ast);
@@ -279,7 +292,7 @@ function run(task) {
     let actualLogs;
 
     ({ result, actualLogs } = maybeMockConsole(validateLogs, () =>
-      babel.transform(inputCode, getOpts(actual)),
+      babel.transformSync(inputCode, getOpts(actual)),
     ));
 
     const outputCode = normalizeOutput(result.code);
@@ -361,7 +374,11 @@ function run(task) {
   }
 }
 
-function validateFile(actualCode, expectedLoc, expectedCode) {
+function validateFile(
+  actualCode: string,
+  expectedLoc: string,
+  expectedCode: string,
+) {
   try {
     expect(actualCode).toEqualFile({
       filename: expectedLoc,
@@ -375,11 +392,11 @@ function validateFile(actualCode, expectedLoc, expectedCode) {
   }
 }
 
-function escapeRegExp(string) {
+function escapeRegExp(string: string) {
   return string.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&");
 }
 
-function normalizeOutput(code, normalizePathSeparator?) {
+function normalizeOutput(code: string, normalizePathSeparator?: boolean) {
   const projectRoot = path.resolve(
     path.dirname(fileURLToPath(import.meta.url)),
     "../../../",
@@ -412,7 +429,7 @@ function normalizeOutput(code, normalizePathSeparator?) {
 }
 
 expect.extend({
-  toEqualFile(actual, { filename, code }) {
+  toEqualFile(actual, { filename, code }: Pick<TestFile, "filename" | "code">) {
     if (this.isNot) {
       throw new Error(".toEqualFile does not support negation");
     }
@@ -439,7 +456,10 @@ declare global {
   namespace jest {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface Matchers<R> {
-      toEqualFile({ filename, code }): jest.CustomMatcherResult;
+      toEqualFile({
+        filename,
+        code,
+      }: Pick<TestFile, "filename" | "code">): jest.CustomMatcherResult;
     }
   }
 }
@@ -485,12 +505,13 @@ export default function (
 
             if (dynamicOpts) dynamicOpts(task.options, task);
 
-            // @ts-expect-error todo(flow->ts) missing property
             if (task.externalHelpers) {
-              (task.options.plugins ??= []).push([
-                "external-helpers",
-                { helperVersion: EXTERNAL_HELPERS_VERSION },
-              ]);
+              (task.options.plugins ??= [])
+                // @ts-ignore manipulating input options
+                .push([
+                  "external-helpers",
+                  { helperVersion: EXTERNAL_HELPERS_VERSION },
+                ]);
             }
 
             const throwMsg = task.options.throws;
