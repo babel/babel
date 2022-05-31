@@ -18,6 +18,7 @@ import {
   toBindingIdentifierName,
 } from "@babel/types";
 import type * as t from "@babel/types";
+import type { NodePath, Scope, Visitor } from "@babel/traverse";
 
 function getFunctionArity(node: t.Function): number {
   const count = node.params.findIndex(
@@ -26,7 +27,7 @@ function getFunctionArity(node: t.Function): number {
   return count === -1 ? node.params.length : count;
 }
 
-const buildPropertyMethodAssignmentWrapper = template(`
+const buildPropertyMethodAssignmentWrapper = template.statement(`
   (function (FUNCTION_KEY) {
     function FUNCTION_ID() {
       return FUNCTION_KEY.apply(this, arguments);
@@ -40,7 +41,7 @@ const buildPropertyMethodAssignmentWrapper = template(`
   })(FUNCTION)
 `);
 
-const buildGeneratorPropertyMethodAssignmentWrapper = template(`
+const buildGeneratorPropertyMethodAssignmentWrapper = template.statement(`
   (function (FUNCTION_KEY) {
     function* FUNCTION_ID() {
       return yield* FUNCTION_KEY.apply(this, arguments);
@@ -54,8 +55,18 @@ const buildGeneratorPropertyMethodAssignmentWrapper = template(`
   })(FUNCTION)
 `);
 
-const visitor = {
-  "ReferencedIdentifier|BindingIdentifier"(path, state) {
+type State = {
+  name: string;
+  outerDeclar: t.Identifier;
+  selfAssignment: boolean;
+  selfReference: boolean;
+};
+
+const visitor: Visitor<State> = {
+  "ReferencedIdentifier|BindingIdentifier"(
+    path: NodePath<t.Identifier>,
+    state,
+  ) {
     // check if this node matches our function id
     if (path.node.name !== state.name) return;
 
@@ -69,7 +80,7 @@ const visitor = {
   },
 };
 
-function getNameFromLiteralId(id) {
+function getNameFromLiteralId(id: t.Literal) {
   if (isNullLiteral(id)) {
     return "null";
   }
@@ -89,7 +100,12 @@ function getNameFromLiteralId(id) {
   return "";
 }
 
-function wrap(state, method, id, scope) {
+function wrap(
+  state: State,
+  method: t.FunctionExpression | t.ClassExpression,
+  id: t.Identifier,
+  scope: Scope,
+) {
   if (state.selfReference) {
     if (scope.hasBinding(id.name) && !scope.hasGlobal(id.name)) {
       // we can just munge the local binding
@@ -131,12 +147,15 @@ function wrap(state, method, id, scope) {
   scope.getProgramParent().references[id.name] = true;
 }
 
-function visit(node, name, scope) {
-  const state = {
+function visit(
+  node: t.FunctionExpression | t.ClassExpression,
+  name: string,
+  scope: Scope,
+) {
+  const state: State = {
     selfAssignment: false,
     selfReference: false,
     outerDeclar: scope.getBindingIdentifier(name),
-    references: [],
     name: name,
   };
 
@@ -188,7 +207,12 @@ export default function (
     parent,
     scope,
     id,
-  }: { node: any; parent?: any; scope: any; id?: any },
+  }: {
+    node: t.FunctionExpression | t.ClassExpression;
+    parent?: t.Node;
+    scope: Scope;
+    id?: any;
+  },
   localBinding = false,
   supportUnicodeId = false,
 ) {
@@ -215,6 +239,7 @@ export default function (
       ) {
         // always going to reference this method
         node.id = cloneNode(id);
+        // @ts-expect-error Fixme: avoid mutating AST nodes
         node.id[NOT_LOCAL_BINDING] = true;
         return;
       }
@@ -242,13 +267,14 @@ export default function (
   }
 
   name = toBindingIdentifierName(name);
-  id = identifier(name);
+  const newId = identifier(name);
 
   // The id shouldn't be considered a local binding to the function because
   // we are simply trying to set the function name and not actually create
   // a local binding.
-  id[NOT_LOCAL_BINDING] = true;
+  // @ts-ignore Fixme: avoid mutating AST nodes
+  newId[NOT_LOCAL_BINDING] = true;
 
   const state = visit(node, name, scope);
-  return wrap(state, node, id, scope) || node;
+  return wrap(state, node, newId, scope) || node;
 }

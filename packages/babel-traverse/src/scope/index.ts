@@ -380,9 +380,9 @@ export default class Scope {
   inited;
 
   bindings: { [name: string]: Binding };
-  references: object;
-  globals: object;
-  uids: object;
+  references: { [name: string]: true };
+  globals: { [name: string]: t.Identifier | t.JSXIdentifier };
+  uids: { [name: string]: true };
   data: object;
   crawling: boolean;
 
@@ -798,8 +798,7 @@ export default class Scope {
     }
   }
 
-  // todo: flow->ts maybe add more specific type
-  addGlobal(node: Extract<t.Node, { name: string }>) {
+  addGlobal(node: t.Identifier | t.JSXIdentifier) {
     this.globals[node.name] = node;
   }
 
