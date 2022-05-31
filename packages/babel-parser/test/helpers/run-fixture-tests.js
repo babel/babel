@@ -1,6 +1,6 @@
 import { multiple as getFixtures } from "@babel/helper-fixtures";
 import _checkDuplicateNodes from "@babel/helper-check-duplicate-nodes";
-import { readFileSync, unlinkSync, writeFileSync } from "fs";
+import { readFileSync, unlinkSync, writeFileSync, existsSync } from "fs";
 import { join } from "path";
 import Difference from "./difference.js";
 import FixtureError from "./fixture-error.js";
@@ -86,7 +86,7 @@ const toJustErrors = result => ({
 function runParseTest(parse, test, onlyCompareErrors) {
   const { adjust, expected, source, filename, options } = test;
 
-  if (expected.threw && expected.ast) {
+  if (!OVERWRITE && expected.threw && expected.ast) {
     throw Error(
       "File expected.json exists although options specify throws. Remove expected.json.",
     );
@@ -102,12 +102,6 @@ function runParseTest(parse, test, onlyCompareErrors) {
   // No differences means we passed and there's nothing left to do.
   if (difference === Difference.None) return;
 
-  const error = FixtureError.fromDifference(difference, actual);
-
-  // If we're not overwriting the current values with whatever we get this time
-  // around, then we have a legitimate error that we need to report.
-  if (CI || !OVERWRITE) throw error;
-
   // We only write the output of the original test, not all it's auto-generated
   // variations.
   if (!test.original) return;
@@ -119,19 +113,34 @@ function runParseTest(parse, test, onlyCompareErrors) {
   // store for each error in the `errors` array. In both cases, we should
   // serialize the full error to be able to property test locations,
   // reasonCodes, etc.
-  const throws = !!actual.threw && actual.threw.message;
+  const throws = actual.threw ? actual.threw.message : undefined;
   const optionsLocation = join(testLocation, "options.json");
 
   // We want to throw away the contents of `throws` here.
   // eslint-disable-next-line no-unused-vars
-  const { throws: _, ...oldOptions } = readJSON(optionsLocation);
+  const { throws: expectedThrows, ...oldOptions } = readJSON(optionsLocation);
   const newOptions = { ...oldOptions, ...(throws && { throws }) };
+
+  const normalLocation = join(testLocation, "output.json");
+  const extendedLocation = join(testLocation, "output.extended.json");
+
+  // If we're not overwriting the current values with whatever we get this time
+  // around, then we have a legitimate error that we need to report.
+
+  const shouldThrow =
+    expectedThrows !== undefined ||
+    existsSync(normalLocation) ||
+    existsSync(extendedLocation);
+
+  if (CI || (!OVERWRITE && shouldThrow)) {
+    throw FixtureError.fromDifference(difference, actual);
+  }
 
   // Store (or overwrite) the options file if there's anything to record,
   // otherwise remove it.
   if (Object.keys(newOptions).length <= 0) {
     rmf(optionsLocation);
-  } else if (throws) {
+  } else if (throws !== expectedThrows) {
     // The idea here is that we shouldn't need to change anything if this doesn't
     // throw, and stringify will produce different output than what prettier
     // wants.
@@ -141,9 +150,6 @@ function runParseTest(parse, test, onlyCompareErrors) {
   // When only comparing errors, we don't want to overwrite the AST JSON because
   // it belongs to a different test.
   if (onlyCompareErrors) return;
-
-  const normalLocation = join(testLocation, "output.json");
-  const extendedLocation = join(testLocation, "output.extended.json");
 
   const [extended, serialized] = actual.ast ? serialize(actual.ast) : [];
   const outputLocation =
