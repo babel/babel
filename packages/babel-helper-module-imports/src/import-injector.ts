@@ -1,7 +1,8 @@
 import assert from "assert";
 import { numericLiteral, sequenceExpression } from "@babel/types";
 import type * as t from "@babel/types";
-import type { NodePath, Scope, HubInterface } from "@babel/traverse";
+import type { NodePath, Scope } from "@babel/traverse";
+import type { File } from "@babel/core";
 
 import ImportBuilder from "./import-builder";
 import isModule from "./is-module";
@@ -93,8 +94,8 @@ export type ImportOptions = {
    */
   importPosition: "before" | "after";
 
-  nameHint?;
-  blockHoist?;
+  nameHint?: string;
+  blockHoist?: number;
 };
 
 /**
@@ -114,7 +115,7 @@ export default class ImportInjector {
   /**
    * The file used to inject helpers and resolve paths.
    */
-  declare _hub: HubInterface;
+  declare _hub: File["hub"];
 
   /**
    * The default options to use with this instance when imports are added.
@@ -129,21 +130,29 @@ export default class ImportInjector {
     importPosition: "before",
   };
 
-  constructor(path: NodePath, importedSource?, opts?) {
+  constructor(
+    path: NodePath,
+    importedSource?: string,
+    opts?: Partial<ImportOptions>,
+  ) {
     const programPath = path.find(p => p.isProgram()) as NodePath<t.Program>;
 
     this._programPath = programPath;
     this._programScope = programPath.scope;
-    this._hub = programPath.hub;
+    this._hub = programPath.hub as File["hub"];
 
     this._defaultOpts = this._applyDefaults(importedSource, opts, true);
   }
 
-  addDefault(importedSourceIn, opts) {
+  addDefault(importedSourceIn: string, opts: Partial<ImportOptions>) {
     return this.addNamed("default", importedSourceIn, opts);
   }
 
-  addNamed(importName, importedSourceIn, opts) {
+  addNamed(
+    importName: string,
+    importedSourceIn: string,
+    opts: Partial<ImportOptions>,
+  ) {
     assert(typeof importName === "string");
 
     return this._generateImport(
@@ -152,49 +161,44 @@ export default class ImportInjector {
     );
   }
 
-  addNamespace(importedSourceIn, opts) {
+  addNamespace(importedSourceIn: string, opts: Partial<ImportOptions>) {
     return this._generateImport(
       this._applyDefaults(importedSourceIn, opts),
       null,
     );
   }
 
-  addSideEffect(importedSourceIn, opts) {
+  addSideEffect(importedSourceIn: string, opts: Partial<ImportOptions>) {
     return this._generateImport(
       this._applyDefaults(importedSourceIn, opts),
-      false,
+      void 0,
     );
   }
 
-  _applyDefaults(importedSource, opts, isInit = false) {
-    const optsList = [];
+  _applyDefaults(
+    importedSource: string | Partial<ImportOptions>,
+    opts: Partial<ImportOptions> | undefined,
+    isInit = false,
+  ) {
+    let newOpts: ImportOptions;
     if (typeof importedSource === "string") {
-      optsList.push({ importedSource });
-      optsList.push(opts);
+      newOpts = { ...this._defaultOpts, importedSource, ...opts };
     } else {
       assert(!opts, "Unexpected secondary arguments.");
-
-      optsList.push(importedSource);
+      newOpts = { ...this._defaultOpts, ...importedSource };
     }
 
-    const newOpts: ImportOptions = {
-      ...this._defaultOpts,
-    };
-    for (const opts of optsList) {
-      if (!opts) continue;
-      Object.keys(newOpts).forEach(key => {
-        if (opts[key] !== undefined) newOpts[key] = opts[key];
-      });
-
-      if (!isInit) {
-        if (opts.nameHint !== undefined) newOpts.nameHint = opts.nameHint;
-        if (opts.blockHoist !== undefined) newOpts.blockHoist = opts.blockHoist;
-      }
+    if (!isInit && opts) {
+      if (opts.nameHint !== undefined) newOpts.nameHint = opts.nameHint;
+      if (opts.blockHoist !== undefined) newOpts.blockHoist = opts.blockHoist;
     }
     return newOpts;
   }
 
-  _generateImport(opts, importName) {
+  _generateImport(
+    opts: Partial<ImportOptions>,
+    importName: string | null | undefined,
+  ) {
     const isDefault = importName === "default";
     const isNamed = !!importName && !isDefault;
     const isNamespace = importName === null;
@@ -422,7 +426,11 @@ export default class ImportInjector {
     return resultName;
   }
 
-  _insertStatements(statements, importPosition = "before", blockHoist = 3) {
+  _insertStatements(
+    statements: t.Statement[],
+    importPosition = "before",
+    blockHoist = 3,
+  ) {
     const body = this._programPath.get("body");
 
     if (importPosition === "after") {
@@ -434,6 +442,7 @@ export default class ImportInjector {
       }
     } else {
       statements.forEach(node => {
+        // @ts-expect-error handle _blockHoist
         node._blockHoist = blockHoist;
       });
 
