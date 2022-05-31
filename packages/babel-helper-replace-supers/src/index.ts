@@ -24,6 +24,12 @@ export {
   skipAllButComputedKey,
 } from "@babel/helper-environment-visitor";
 
+type ThisRef =
+  | {
+      memo: t.AssignmentExpression;
+      this: t.Identifier;
+    }
+  | { this: t.ThisExpression };
 /**
  * Creates an expression which result is the proto of objectRef.
  *
@@ -35,7 +41,12 @@ export {
  *
  *   helpers.getPrototypeOf(CLASS.prototype)
  */
-function getPrototypeOfExpression(objectRef, isStatic, file, isPrivateMethod) {
+function getPrototypeOfExpression(
+  objectRef: t.Identifier,
+  isStatic: boolean,
+  file: File,
+  isPrivateMethod: boolean,
+) {
   objectRef = cloneNode(objectRef);
   const targetRef =
     isStatic || isPrivateMethod
@@ -79,8 +90,8 @@ type SharedState = {
   isDerivedConstructor: boolean;
   isStatic: boolean;
   isPrivateMethod: boolean;
-  getObjectRef: () => t.Node;
-  getSuperRef: () => t.Node;
+  getObjectRef: () => t.Identifier;
+  getSuperRef: () => t.Identifier;
   // we dont need boundGet here, but memberExpressionToFunctions handler needs it.
   boundGet: HandlerState["get"];
 };
@@ -93,11 +104,25 @@ type SuperMember = NodePath<
     }
 >;
 
-const specHandlers = {
-  memoise(
-    this: Handler & typeof specHandlers,
+interface SpecHandler
+  extends Pick<
+    Handler,
+    "get" | "set" | "destructureSet" | "call" | "optionalCall" | "memoise"
+  > {
+  _get(
+    this: Handler & SpecHandler,
     superMember: SuperMember,
-    count,
+    thisRefs: ThisRef,
+  ): t.CallExpression;
+  _getThisRefs(): ThisRef;
+  prop(this: Handler & SpecHandler, superMember: SuperMember): t.Expression;
+}
+
+const specHandlers: SpecHandler = {
+  memoise(
+    this: Handler & SpecHandler,
+    superMember: SuperMember,
+    count: number,
   ) {
     const { scope, node } = superMember;
     const { computed, property } = node;
@@ -113,7 +138,7 @@ const specHandlers = {
     this.memoiser.set(property, memo, count);
   },
 
-  prop(this: Handler & typeof specHandlers, superMember: SuperMember) {
+  prop(this: Handler & SpecHandler, superMember: SuperMember) {
     const { computed, property } = superMember.node;
     if (this.memoiser.has(property)) {
       return cloneNode(this.memoiser.get(property));
@@ -126,14 +151,14 @@ const specHandlers = {
     return stringLiteral((property as t.Identifier).name);
   },
 
-  get(this: Handler & typeof specHandlers, superMember: SuperMember) {
+  get(this: Handler & SpecHandler, superMember: SuperMember) {
     return this._get(superMember, this._getThisRefs());
   },
 
   _get(
-    this: Handler & typeof specHandlers,
+    this: Handler & SpecHandler,
     superMember: SuperMember,
-    thisRefs,
+    thisRefs: ThisRef,
   ) {
     const proto = getPrototypeOfExpression(
       this.getObjectRef(),
@@ -142,13 +167,14 @@ const specHandlers = {
       this.isPrivateMethod,
     );
     return callExpression(this.file.addHelper("get"), [
+      // @ts-ignore memo does not exist when this.isDerivedConstructor is false
       thisRefs.memo ? sequenceExpression([thisRefs.memo, proto]) : proto,
       this.prop(superMember),
       thisRefs.this,
     ]);
   },
 
-  _getThisRefs(this: Handler & typeof specHandlers) {
+  _getThisRefs(this: Handler & SpecHandler): ThisRef {
     if (!this.isDerivedConstructor) {
       return { this: thisExpression() };
     }
@@ -159,7 +185,11 @@ const specHandlers = {
     };
   },
 
-  set(this: Handler & typeof specHandlers, superMember: SuperMember, value) {
+  set(
+    this: Handler & SpecHandler,
+    superMember: SuperMember,
+    value: t.Expression,
+  ) {
     const thisRefs = this._getThisRefs();
     const proto = getPrototypeOfExpression(
       this.getObjectRef(),
@@ -168,6 +198,7 @@ const specHandlers = {
       this.isPrivateMethod,
     );
     return callExpression(this.file.addHelper("set"), [
+      // @ts-ignore memo does not exist when this.isDerivedConstructor is false
       thisRefs.memo ? sequenceExpression([thisRefs.memo, proto]) : proto,
       this.prop(superMember),
       value,
@@ -176,16 +207,17 @@ const specHandlers = {
     ]);
   },
 
-  destructureSet(
-    this: Handler & typeof specHandlers,
-    superMember: SuperMember,
-  ) {
+  destructureSet(this: Handler & SpecHandler, superMember: SuperMember) {
     throw superMember.buildCodeFrameError(
       `Destructuring to a super field is not supported yet.`,
     );
   },
 
-  call(this: Handler & typeof specHandlers, superMember: SuperMember, args) {
+  call(
+    this: Handler & SpecHandler,
+    superMember: SuperMember,
+    args: t.CallExpression["arguments"],
+  ) {
     const thisRefs = this._getThisRefs();
     return optimiseCall(
       this._get(superMember, thisRefs),
@@ -196,9 +228,9 @@ const specHandlers = {
   },
 
   optionalCall(
-    this: Handler & typeof specHandlers,
+    this: Handler & SpecHandler,
     superMember: SuperMember,
-    args,
+    args: t.CallExpression["arguments"],
   ) {
     const thisRefs = this._getThisRefs();
     return optimiseCall(
@@ -242,7 +274,11 @@ const looseHandlers = {
     return memberExpression(object, prop, computed);
   },
 
-  set(this: Handler & typeof specHandlers, superMember: SuperMember, value) {
+  set(
+    this: Handler & typeof specHandlers,
+    superMember: SuperMember,
+    value: t.Expression,
+  ) {
     const { computed } = superMember.node;
     const prop = this.prop(superMember);
 
@@ -263,14 +299,18 @@ const looseHandlers = {
     return memberExpression(thisExpression(), prop, computed);
   },
 
-  call(this: Handler & typeof specHandlers, superMember: SuperMember, args) {
+  call(
+    this: Handler & typeof specHandlers,
+    superMember: SuperMember,
+    args: t.CallExpression["arguments"],
+  ) {
     return optimiseCall(this.get(superMember), thisExpression(), args, false);
   },
 
   optionalCall(
     this: Handler & typeof specHandlers,
     superMember: SuperMember,
-    args,
+    args: t.CallExpression["arguments"],
   ) {
     return optimiseCall(this.get(superMember), thisExpression(), args, true);
   },
