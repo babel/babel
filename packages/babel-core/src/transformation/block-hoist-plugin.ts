@@ -19,11 +19,11 @@ export default function loadBlockHoistPlugin(): Plugin {
 
   return LOADED_PLUGIN;
 }
-function priority(bodyNode: Statement & { _blockHoist?: number | boolean }) {
+function priority(bodyNode: Statement & { _blockHoist?: number | true }) {
   const priority = bodyNode?._blockHoist;
   if (priority == null) return 1;
   if (priority === true) return 2;
-  return priority as number;
+  return priority;
 }
 
 function stableSort(body: Statement[]) {

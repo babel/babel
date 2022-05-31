@@ -47,15 +47,13 @@ export type PluginAPI = {
 export function makeConfigAPI<SideChannel extends Context.SimpleConfig>(
   cache: CacheConfigurator<SideChannel>,
 ): ConfigAPI {
-  const env: any = (value: any) =>
+  const env: EnvFunction = value =>
     cache.using(data => {
       if (typeof value === "undefined") return data.envName;
       if (typeof value === "function") {
         return assertSimpleType(value(data.envName));
       }
-      if (!Array.isArray(value)) value = [value];
-
-      return value.some((entry: unknown) => {
+      return (Array.isArray(value) ? value : [value]).some(entry => {
         if (typeof entry !== "string") {
           throw new Error("Unexpected non-string value");
         }
