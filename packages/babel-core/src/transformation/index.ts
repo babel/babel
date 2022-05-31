@@ -33,7 +33,7 @@ export type FileResult = {
 export function* run(
   config: ResolvedConfig,
   code: string,
-  ast?: t.File | null,
+  ast?: t.File | t.Program | null,
 ): Handler<FileResult> {
   const file = yield* normalizeFile(
     config.passes,
