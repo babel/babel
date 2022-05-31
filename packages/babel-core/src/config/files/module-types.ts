@@ -6,7 +6,7 @@ import { createRequire } from "module";
 
 const require = createRequire(import.meta.url);
 
-let import_: any;
+let import_: ((specifier: string | URL) => any) | undefined;
 try {
   // Node < 13.3 doesn't support import() syntax.
   import_ = require("./import").default;

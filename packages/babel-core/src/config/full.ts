@@ -223,7 +223,7 @@ export default gensync<(inputOpts: unknown) => ResolvedConfig | null>(
   },
 );
 
-function enhanceError<T extends Function>(context: any, fn: T): T {
+function enhanceError<T extends Function>(context: ConfigContext, fn: T): T {
   return function* (arg1: unknown, arg2: unknown) {
     try {
       return yield* fn(arg1, arg2);
@@ -392,8 +392,8 @@ const instantiatePlugin = makeWeakCache(function* (
       return cache.invalidate(data => run(inheritsDescriptor, data));
     });
 
-    plugin.pre = chain(inherits.pre, plugin.pre);
-    plugin.post = chain(inherits.post, plugin.post);
+    plugin.pre = chain(inherits.pre as (...args: any[]) => void, plugin.pre);
+    plugin.post = chain(inherits.post as (...args: any[]) => void, plugin.post);
     plugin.manipulateOptions = chain(
       inherits.manipulateOptions,
       plugin.manipulateOptions,
@@ -490,7 +490,10 @@ const instantiatePreset = makeWeakCacheSync(
   },
 );
 
-function chain(a: any, b: any) {
+function chain<Args extends any[]>(
+  a: undefined | ((...args: Args) => void),
+  b: undefined | ((...args: Args) => void),
+) {
   const fns = [a, b].filter(Boolean);
   if (fns.length <= 1) return fns[0];
 
