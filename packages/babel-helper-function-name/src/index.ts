@@ -102,7 +102,7 @@ function getNameFromLiteralId(id: t.Literal) {
 
 function wrap(
   state: State,
-  method: t.FunctionExpression | t.ClassExpression,
+  method: t.FunctionExpression | t.Class,
   id: t.Identifier,
   scope: Scope,
 ) {
@@ -148,7 +148,7 @@ function wrap(
 }
 
 function visit(
-  node: t.FunctionExpression | t.ClassExpression,
+  node: t.FunctionExpression | t.Class,
   name: string,
   scope: Scope,
 ) {
@@ -201,21 +201,21 @@ function visit(
  * @param {Boolean} localBinding whether a name could shadow a self-reference (e.g. converting arrow function)
  * @param {Boolean} supportUnicodeId whether a target support unicodeId or not
  */
-export default function (
+export default function <N extends t.FunctionExpression | t.Class>(
   {
     node,
     parent,
     scope,
     id,
   }: {
-    node: t.FunctionExpression | t.ClassExpression;
+    node: N;
     parent?: t.Node;
     scope: Scope;
     id?: any;
   },
   localBinding = false,
   supportUnicodeId = false,
-) {
+): t.CallExpression | N {
   // has an `id` so we don't need to infer one
   if (node.id) return;
 

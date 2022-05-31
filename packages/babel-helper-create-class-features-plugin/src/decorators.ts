@@ -108,9 +108,20 @@ function extractElementDescriptor(
   ].filter(Boolean);
 
   if (t.isClassMethod(node)) {
-    const id = node.computed ? null : node.key;
-    t.toExpression(node);
-    properties.push(prop("value", nameFunction({ node, id, scope }) || node));
+    const id = node.computed
+      ? null
+      : (node.key as
+          | t.Identifier
+          | t.StringLiteral
+          | t.NumericLiteral
+          | t.BigIntLiteral);
+    const transformed = t.toExpression(node);
+    properties.push(
+      prop(
+        "value",
+        nameFunction({ node: transformed, id, scope }) || transformed,
+      ),
+    );
   } else if (t.isClassProperty(node) && node.value) {
     properties.push(
       method("value", template.statements.ast`return ${node.value}`),
