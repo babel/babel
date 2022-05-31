@@ -9,9 +9,9 @@ export default declare(api => {
     name: "transform-property-mutators",
 
     visitor: {
-      ObjectExpression(path, file) {
+      ObjectExpression(path, { file }) {
         const { node } = path;
-        let mutatorMap;
+        let mutatorMap: defineMap.MutatorMap | void;
         const newProperties = node.properties.filter(function (prop) {
           if (t.isObjectMethod(prop)) {
             if (prop.kind === "get" || prop.kind === "set") {
