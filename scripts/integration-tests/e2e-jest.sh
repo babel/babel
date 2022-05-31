@@ -58,6 +58,8 @@ if [ "$BABEL_8_BREAKING" = true ] ; then
   "
 fi
 
+sed -i 's/"skipLibCheck": false,/"skipLibCheck": true,/g' tsconfig.json # Speedup
+
 yarn build
 
 # The full test suite takes about 20mins on CircleCI. We run only a few of them
