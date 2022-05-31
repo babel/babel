@@ -113,7 +113,7 @@ function runParseTest(parse, test, onlyCompareErrors) {
   // store for each error in the `errors` array. In both cases, we should
   // serialize the full error to be able to property test locations,
   // reasonCodes, etc.
-  const throws = !!actual.threw && actual.threw.message;
+  const throws = actual.threw ? actual.threw.message : undefined;
   const optionsLocation = join(testLocation, "options.json");
 
   // We want to throw away the contents of `throws` here.
