@@ -12,7 +12,7 @@ import {
   pluginSyntaxMap,
   proposalPlugins,
   proposalSyntaxPlugins,
-} from "../data/shipped-proposals";
+} from "./shipped-proposals";
 import {
   plugins as pluginsList,
   pluginsBugfixes as pluginsBugfixesList,
@@ -21,6 +21,8 @@ import overlappingPlugins from "@babel/compat-data/overlapping-plugins";
 
 import removeRegeneratorEntryPlugin from "./polyfills/regenerator";
 import legacyBabelPolyfillPlugin from "./polyfills/babel-polyfill";
+
+import type { CallerMetadata } from "@babel/core";
 
 import _pluginCoreJS2 from "babel-plugin-polyfill-corejs2";
 import _pluginCoreJS3 from "babel-plugin-polyfill-corejs3";
@@ -55,6 +57,7 @@ function filterStageFromList(
 ) {
   return Object.keys(list).reduce((result, item) => {
     if (!stageList.has(item)) {
+      // @ts-ignore
       result[item] = list[item];
     }
 
@@ -87,7 +90,9 @@ function getPluginList(proposals: boolean, bugfixes: boolean) {
 }
 
 const getPlugin = (pluginName: string) => {
-  const plugin = availablePlugins[pluginName]();
+  const plugin =
+    // @ts-ignore plugin name is constructed from available plugin list
+    availablePlugins[pluginName]();
 
   if (!plugin) {
     throw new Error(
@@ -243,10 +248,10 @@ export const getPolyfillPlugins = ({
 };
 
 function getLocalTargets(
-  optionsTargets,
-  ignoreBrowserslistConfig,
-  configPath,
-  browserslistEnv,
+  optionsTargets: Options["targets"],
+  ignoreBrowserslistConfig: boolean,
+  configPath: string,
+  browserslistEnv: string,
 ) {
   if (optionsTargets?.esmodules && optionsTargets.browsers) {
     console.warn(`
@@ -262,19 +267,23 @@ function getLocalTargets(
   });
 }
 
-function supportsStaticESM(caller) {
+function supportsStaticESM(caller: CallerMetadata | undefined) {
+  // @ts-expect-error supportsStaticESM is not defined in CallerMetadata
   return !!caller?.supportsStaticESM;
 }
 
-function supportsDynamicImport(caller) {
+function supportsDynamicImport(caller: CallerMetadata | undefined) {
+  // @ts-expect-error supportsDynamicImport is not defined in CallerMetadata
   return !!caller?.supportsDynamicImport;
 }
 
-function supportsExportNamespaceFrom(caller) {
+function supportsExportNamespaceFrom(caller: CallerMetadata | undefined) {
+  // @ts-expect-error supportsExportNamespaceFrom is not defined in CallerMetadata
   return !!caller?.supportsExportNamespaceFrom;
 }
 
-function supportsTopLevelAwait(caller) {
+function supportsTopLevelAwait(caller: CallerMetadata | undefined) {
+  // @ts-expect-error supportsTopLevelAwait is not defined in CallerMetadata
   return !!caller?.supportsTopLevelAwait;
 }
 

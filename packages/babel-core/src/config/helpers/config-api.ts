@@ -21,7 +21,7 @@ type EnvFunction = {
 };
 
 type CallerFactory = (
-  extractor: (callerMetadata: CallerMetadata | void) => unknown,
+  extractor: (callerMetadata: CallerMetadata | undefined) => unknown,
 ) => SimpleType;
 type TargetsFunction = () => Targets;
 type AssumptionFunction = (name: AssumptionName) => boolean | void;

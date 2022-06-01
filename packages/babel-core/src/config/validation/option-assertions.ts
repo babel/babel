@@ -135,7 +135,7 @@ export function assertSourceType(
 export function assertCallerMetadata(
   loc: OptionPath,
   value: unknown,
-): CallerMetadata | void {
+): CallerMetadata | undefined {
   const obj = assertObject(loc, value);
   if (obj) {
     if (typeof obj.name !== "string") {
