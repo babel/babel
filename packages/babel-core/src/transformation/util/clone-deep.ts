@@ -1,5 +1,3 @@
-import type { types } from "@babel/core";
-
 //https://github.com/babel/babel/pull/14583#discussion_r882828856
 function deepClone(value: any, cache: Map<any, any>): any {
   if (value !== null) {
@@ -28,7 +26,7 @@ function deepClone(value: any, cache: Map<any, any>): any {
   return value;
 }
 
-export default function <T = types.Node>(value: T): T {
+export default function <T>(value: T): T {
   if (typeof value !== "object") return value;
   return deepClone(value, new Map());
 }
