@@ -33,7 +33,7 @@ const topicReferenceVisitor: Visitor<State> = {
 // with sequence expressions containing assignment expressions
 // with automatically generated variables,
 // from inside to outside, from left to right.
-export default {
+const visitor: Visitor<PluginPass> = {
   BinaryExpression: {
     exit(path) {
       const { scope, node } = path;
@@ -93,4 +93,6 @@ export default {
       );
     },
   },
-} as Visitor<PluginPass>;
+};
+
+export default visitor;
