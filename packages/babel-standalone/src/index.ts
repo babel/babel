@@ -106,7 +106,7 @@ export function transform(code: string, options: InputOptions) {
 }
 
 export function transformFromAst(
-  ast: any,
+  ast: Parameters<typeof babelTransformFromAst>[0],
   code: string,
   options: InputOptions,
 ) {
