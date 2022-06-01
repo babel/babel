@@ -11,6 +11,8 @@ jobs:
   createPullRequest:
     name: Update compat-table
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # for Git to git push
     steps:
       - uses: actions/checkout@v3
       - uses: actions/checkout@v3
@@ -53,8 +55,6 @@ jobs:
           BABEL_8_BREAKING: true
       - name: Commit changes
         if: steps.updated.outputs.updated == 'true'
-        permissions:
-          contents: write # for Git to git push
         run: |
           git config user.name "Babel Bot"
           git config user.email "babel-bot@users.noreply.github.com"
