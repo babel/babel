@@ -1,4 +1,39 @@
 import { template, types as t } from "@babel/core";
+import type { NodePath, Visitor } from "@babel/traverse";
+
+type Candidate = {
+  cause: "indexGetter" | "lengthGetter" | "argSpread";
+  path: NodePath<t.Identifier | t.JSXIdentifier>;
+};
+
+type State = {
+  references: [];
+  offset: number;
+
+  argumentsNode: t.Identifier;
+  outerBinding: t.Identifier;
+
+  // candidate member expressions we could optimise if there are no other references
+  candidates: Candidate[];
+
+  // local rest binding name
+  name: string;
+
+  /*
+  It may be possible to optimize the output code in certain ways, such as
+  not generating code to initialize an array (perhaps substituting direct
+  references to arguments[i] or arguments.length for reads of the
+  corresponding rest parameter property) or positioning the initialization
+  code so that it may not have to execute depending on runtime conditions.
+
+  This property tracks eligibility for optimization. "deopted" means give up
+  and don't perform optimization. For example, when any of rest's elements /
+  properties is assigned to at the top level, or referenced at all in a
+  nested function.
+  */
+  deopted: boolean;
+  noOptimise: boolean;
+};
 
 const buildRest = template(`
   for (var LEN = ARGUMENTS.length,
@@ -22,7 +57,10 @@ const restLength = template(`
   ARGUMENTS.length <= OFFSET ? 0 : ARGUMENTS.length - OFFSET
 `);
 
-function referencesRest(path, state) {
+function referencesRest(
+  path: NodePath<t.Identifier | t.JSXIdentifier>,
+  state: State,
+) {
   if (path.node.name === state.name) {
     // Check rest parameter is not shadowed by a binding in another scope.
     return path.scope.bindingIdentifierEquals(state.name, state.outerBinding);
@@ -31,7 +69,7 @@ function referencesRest(path, state) {
   return false;
 }
 
-const memberExpressionOptimisationVisitor = {
+const memberExpressionOptimisationVisitor: Visitor<State> = {
   Scope(path, state) {
     // check if this scope has a local binding that will shadow the rest parameter
     if (!path.scope.bindingIdentifierEquals(state.name, state.outerBinding)) {
@@ -39,7 +77,7 @@ const memberExpressionOptimisationVisitor = {
     }
   },
 
-  Flow(path) {
+  Flow(path: NodePath<t.Flow>) {
     // Do not skip TypeCastExpressions as the contain valid non flow code
     if (path.isTypeCastExpression()) return;
     // don't touch reference in type annotations

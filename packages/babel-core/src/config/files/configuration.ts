@@ -57,7 +57,7 @@ export function findConfigUpwards(rootDir: string): string | null {
 export function* findRelativeConfig(
   packageData: FilePackageData,
   envName: string,
-  caller: CallerMetadata | void,
+  caller: CallerMetadata | undefined,
 ): Handler<RelativeConfig> {
   let config = null;
   let ignore = null;
@@ -93,7 +93,7 @@ export function* findRelativeConfig(
 export function findRootConfig(
   dirname: string,
   envName: string,
-  caller: CallerMetadata | void,
+  caller: CallerMetadata | undefined,
 ): Handler<ConfigFile | null> {
   return loadOneConfig(ROOT_CONFIG_FILENAMES, dirname, envName, caller);
 }
@@ -102,7 +102,7 @@ function* loadOneConfig(
   names: string[],
   dirname: string,
   envName: string,
-  caller: CallerMetadata | void,
+  caller: CallerMetadata | undefined,
   previousConfig: ConfigFile | null = null,
 ): Handler<ConfigFile | null> {
   const configs = yield* gensync.all(
@@ -133,7 +133,7 @@ export function* loadConfig(
   name: string,
   dirname: string,
   envName: string,
-  caller: CallerMetadata | void,
+  caller: CallerMetadata | undefined,
 ): Handler<ConfigFile> {
   const filepath = require.resolve(name, { paths: [dirname] });
 
@@ -163,7 +163,7 @@ const readConfigJS = makeStrongCache(function* readConfigJS(
   filepath: string,
   cache: CacheConfigurator<{
     envName: string;
-    caller: CallerMetadata | void;
+    caller: CallerMetadata | undefined;
   }>,
 ): Handler<ConfigFile | null> {
   if (!nodeFs.existsSync(filepath)) {
