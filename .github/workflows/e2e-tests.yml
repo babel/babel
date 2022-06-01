@@ -44,13 +44,34 @@ jobs:
           - react-native
           - prettier
     steps:
+      - name: Get yarn1 cache directory path
+        id: yarn1-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Use Node.js latest
         uses: actions/setup-node@v3
         with:
           node-version: "*"
-          cache: "yarn"
+      - name: Get yarn3 cache directory path
+        id: yarn3-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+      - name: Use yarn1 cache
+        uses: actions/cache@v3
+        id: yarn1-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn1-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn1-e2e-${{ matrix.project }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn1-e2e-${{ matrix.project }}-
+      - name: Use yarn3 cache
+        uses: actions/cache@v3
+        id: yarn3-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn3-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn3-e2e-${{ matrix.project }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn3-e2e-${{ matrix.project }}-
       - uses: actions/download-artifact@v3
         with:
           name: verdaccio-workspace
