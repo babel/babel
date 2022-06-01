@@ -24,7 +24,7 @@ jobs:
           node-version: "*"
       - name: Get latest kangax/compat-table commit
         id: lastCommit
-        run: echo "::set-output name=sha1::$(node ./scripts/update-compat-table/get-last-commit.sh)"
+        run: echo "::set-output name=sha1::$(./scripts/update-compat-table/get-last-commit.sh)"
       - name: Update compat-table commit
         run: echo ${{ steps.lastCommit.outputs.sha1 }} | ./scripts/update-compat-table/bump-compat-table-commit.sh
       - name: Check if it has been updated
