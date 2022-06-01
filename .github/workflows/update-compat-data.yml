@@ -17,6 +17,7 @@ jobs:
         with:
           repository: kangax/compat-table
           path: packages/babel-compat-data/build/compat-table
+          fetch-depth: 2
       - name: Use Node.js latest
         uses: actions/setup-node@v2-beta
         with:
