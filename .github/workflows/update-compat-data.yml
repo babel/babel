@@ -70,5 +70,5 @@ jobs:
           title: Update compat data
           description: Update compat data to [${{ steps.lastCommit.outputs.sha1 }}](https://github.com/kangax/compat-table/commit/${{ steps.lastCommit.outputs.sha1 }}).
           labels: |
-            area: compat-data
+            area: compat-table
             repo automation :robot:
