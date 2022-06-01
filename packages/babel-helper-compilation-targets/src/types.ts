@@ -1,4 +1,4 @@
-// Targets
+// Targets, engine names defined in compat-tables
 export type Target =
   | "node"
   | "chrome"
@@ -17,7 +17,9 @@ export type Targets = {
 };
 
 export type TargetsTuple = {
-  [target in Target]: string;
+  [target in Exclude<Target, "node">]: string;
+} & {
+  node: string | true;
 };
 
 export type Browsers = string | ReadonlyArray<string>;
@@ -31,3 +33,5 @@ export type InputTargets = {
   // remove `intersect`.
   esmodules?: boolean | "intersect";
 } & Targets;
+
+export type { BrowserslistBrowserName } from "./targets";

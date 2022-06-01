@@ -1,8 +1,11 @@
 export const unreleasedLabels = {
   safari: "tp",
-};
+} as const;
 
-export const browserNameMap = {
+import type { Target } from "./types";
+
+// Map from browserslist|@mdn/browser-compat-data browser names to @kangax/compat-table browser names
+export const browserNameMap: Record<string, Target> = {
   and_chr: "chrome",
   and_ff: "firefox",
   android: "android",
@@ -17,4 +20,6 @@ export const browserNameMap = {
   opera: "opera",
   safari: "safari",
   samsung: "samsung",
-};
+} as const;
+
+export type BrowserslistBrowserName = keyof typeof browserNameMap;
