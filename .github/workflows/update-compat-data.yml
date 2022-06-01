@@ -12,12 +12,11 @@ jobs:
     name: Update compat-table
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
         with:
           repository: kangax/compat-table
           path: packages/babel-compat-data/build/compat-table
-          fetch-depth: 2
       - name: Use Node.js latest
         uses: actions/setup-node@v2-beta
         with:
