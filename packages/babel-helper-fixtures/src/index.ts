@@ -316,7 +316,7 @@ function pushTask(
 
 function wrapPackagesArray(
   type: "plugin" | "preset",
-  names: (string | string[])[],
+  names: (string | [string, object?, string?])[],
   optionsDir: string,
 ) {
   return names.map(function (val) {
