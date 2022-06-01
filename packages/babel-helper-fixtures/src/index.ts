@@ -3,56 +3,81 @@ import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
+import type { InputOptions } from "@babel/core";
+import type { EncodedSourceMap, Mapping } from "@jridgewell/gen-mapping";
 
 const require = createRequire(import.meta.url);
 
 const nodeVersion = semver.clean(process.version.slice(1));
 
-function humanize(val, noext?) {
+function humanize(val: string, noext?: boolean) {
   if (noext) val = path.basename(val, path.extname(val));
   return val.replace(/-/g, " ");
 }
 
-type TestFile = {
+interface TestIO {
   loc: string;
   code: string;
-  filename: string;
-};
+}
 
-type Test = {
+export interface TestFile extends TestIO {
+  filename: string;
+}
+
+export interface Test {
+  taskDir: string;
   title: string;
   disabled: boolean;
-  options: any;
+  options: TaskOptions;
+  optionsDir: string;
+  doNotSetSourceType: boolean;
+  externalHelpers: boolean;
+  ignoreOutput: boolean;
+  stdout: TestIO;
+  stderr: TestIO;
   exec: TestFile;
   actual: TestFile;
-  expected: TestFile;
-  // todo(flow->ts): improve types here
-  sourceMappings;
-  sourceMap;
+  expect: TestFile;
+  inputSourceMap?: EncodedSourceMap;
+  sourceMappings?: Mapping[];
+  sourceMap: string;
   sourceMapFile: TestFile;
-};
+  validateLogs: boolean;
+}
+
+interface TaskOptions extends InputOptions {
+  BABEL_8_BREAKING?: boolean;
+  DO_NOT_SET_SOURCE_TYPE?: boolean;
+  externalHelpers?: boolean;
+  ignoreOutput?: boolean;
+  minNodeVersion?: string;
+  sourceMap?: boolean;
+  os?: string | string[];
+  validateLogs?: boolean;
+  throws?: boolean | string;
+}
 
 type Suite = {
-  options: any;
+  options: TaskOptions;
   tests: Array<Test>;
   title: string;
   filename: string;
 };
 
-function tryResolve(module) {
+function tryResolve(module: string) {
   try {
     return require.resolve(module);
   } catch (e) {
     return null;
   }
 }
-function assertDirectory(loc) {
+function assertDirectory(loc: string) {
   if (!fs.statSync(loc).isDirectory()) {
     throw new Error(`Expected ${loc} to be a directory.`);
   }
 }
 
-function shouldIgnore(name, ignore?: Array<string>) {
+function shouldIgnore(name: string, ignore?: Array<string>) {
   if (ignore && ignore.indexOf(name) >= 0) {
     return true;
   }
@@ -87,7 +112,12 @@ function findFile(filepath: string, allowJSON?: boolean) {
   return matches[0];
 }
 
-function pushTask(taskName, taskDir, suite, suiteName) {
+function pushTask(
+  taskName: string,
+  taskDir: string,
+  suite: Suite,
+  suiteName: string,
+) {
   const taskDirStats = fs.statSync(taskDir);
   let actualLoc = findFile(taskDir + "/input");
   let execLoc = findFile(taskDir + "/exec");
@@ -126,12 +156,12 @@ function pushTask(taskName, taskDir, suite, suiteName) {
     execLocAlias = suiteName + "/" + taskName;
   }
 
-  const taskOpts = JSON.parse(JSON.stringify(suite.options));
+  const taskOpts: TaskOptions = JSON.parse(JSON.stringify(suite.options));
 
   const taskOptsLoc = tryResolve(taskDir + "/options");
   if (taskOptsLoc) Object.assign(taskOpts, require(taskOptsLoc));
 
-  const test = {
+  const test: Test = {
     taskDir,
     optionsDir: taskOptsLoc ? path.dirname(taskOptsLoc) : null,
     title: humanize(taskName, true),
@@ -264,7 +294,7 @@ function pushTask(taskName, taskDir, suite, suiteName) {
         (test.stdout.code ? stdoutLoc : stderrLoc),
     );
   }
-  if (test.options.ignoreOutput) {
+  if (test.ignoreOutput) {
     if (test.expect.code) {
       throw new Error(
         "Test cannot ignore its output and also validate it: " + expectLoc,
@@ -284,7 +314,11 @@ function pushTask(taskName, taskDir, suite, suiteName) {
   delete test.options.externalHelpers;
 }
 
-function wrapPackagesArray(type, names, optionsDir) {
+function wrapPackagesArray(
+  type: "plugin" | "preset",
+  names: (string | [string, object?, string?])[],
+  optionsDir: string,
+) {
   return names.map(function (val) {
     if (typeof val === "string") val = [val];
 
@@ -362,10 +396,10 @@ export function resolveOptionPluginOrPreset(
   return options;
 }
 
-export default function get(entryLoc): Array<Suite> {
+export default function get(entryLoc: string): Array<Suite> {
   const suites = [];
 
-  let rootOpts = {};
+  let rootOpts: TaskOptions = {};
   const rootOptsLoc = tryResolve(entryLoc + "/options");
   if (rootOptsLoc) rootOpts = require(rootOptsLoc);
 
@@ -374,7 +408,7 @@ export default function get(entryLoc): Array<Suite> {
 
     const suite = {
       options: { ...rootOpts },
-      tests: [],
+      tests: [] as Test[],
       title: humanize(suiteName),
       filename: entryLoc + "/" + suiteName,
     };
@@ -398,8 +432,8 @@ export default function get(entryLoc): Array<Suite> {
   return suites;
 }
 
-export function multiple(entryLoc, ignore?: Array<string>) {
-  const categories = {};
+export function multiple(entryLoc: string, ignore?: Array<string>) {
+  const categories: Record<string, unknown> = {};
 
   for (const name of fs.readdirSync(entryLoc)) {
     if (shouldIgnore(name, ignore)) continue;
@@ -413,7 +447,7 @@ export function multiple(entryLoc, ignore?: Array<string>) {
   return categories;
 }
 
-export function readFile(filename) {
+export function readFile(filename: string) {
   if (fs.existsSync(filename)) {
     let file = fs.readFileSync(filename, "utf8").trimRight();
     file = file.replace(/\r\n/g, "\n");
