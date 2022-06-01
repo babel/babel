@@ -52,11 +52,8 @@ jobs:
         with:
           token: ${{ secrets.BOT_TOKEN }}
           branch: update-test262-parser
-          commit-user: Babel Bot
-          commit-email: babel-bot@users.noreply.github.com
-          commit-title: chore: update test262 to ${{ steps.test262.outputs.sha1 }}
-          pr-title: Update test262
-          pr-description: Update test262 to [${{ steps.test262.outputs.sha1 }}](https://github.com/tc39/test262/commit/${{ steps.test262.outputs.sha1 }}).
-          pr-labels: |
+          title: Update test262
+          description: Update test262 to [${{ steps.test262.outputs.sha1 }}](https://github.com/tc39/test262/commit/${{ steps.test262.outputs.sha1 }}).
+          labels: |
             area: test262
             repo automation :robot:
