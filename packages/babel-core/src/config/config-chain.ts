@@ -55,7 +55,7 @@ export type ConfigContext = {
   cwd: string;
   root: string;
   envName: string;
-  caller: CallerMetadata | void;
+  caller: CallerMetadata | undefined;
   showConfig: boolean;
 };
 

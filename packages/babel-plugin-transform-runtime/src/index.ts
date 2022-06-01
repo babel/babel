@@ -18,7 +18,7 @@ const pluginRegenerator = (_pluginRegenerator.default ||
 
 const pluginsCompat = "#__secret_key__@babel/runtime__compatibility";
 
-function supportsStaticESM(caller: CallerMetadata | void) {
+function supportsStaticESM(caller: CallerMetadata | undefined) {
   // @ts-ignore TS does not narrow down optional chaining
   return !!caller?.supportsStaticESM;
 }
