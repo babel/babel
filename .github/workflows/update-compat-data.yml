@@ -37,42 +37,12 @@ jobs:
           git commit -am "chore: update compat data to ${{ steps.lastCommit.outputs.sha1 }}"
           git push --force origin update-compat-data
       - name: Create Pull Request
-        uses: actions/github-script@v4
+        uses: babel/actions/create-pull-request@v2
         with:
-          github-token: ${{ secrets.BOT_TOKEN }}
-          script: |
-            const base = process.env.GITHUB_REF.replace("refs/heads/", "");
-            const requestParam = {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              head: context.repo.owner + ":update-compat-data",
-              base: base,
-              state: "open"
-            };
-            const result = await github.pulls.list(requestParam);
-            console.log("Open PR request: ", requestParam);
-            console.log("Open PR response: ", result);
-            const prs = result.data;
-            if (prs.length === 0) {
-              const requestParam = {
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                head: "update-compat-data",
-                base: base,
-                maintainer_can_modify: true,
-                title: "Update compat data",
-                body: "Update compat data to [${{ steps.lastCommit.outputs.sha1 }}](https://github.com/kangax/compat-table/commit/${{ steps.lastCommit.outputs.sha1 }}).",
-              };
-              const result = await github.pulls.create(requestParam);
-              console.log("Create PR request: ", requestParam)
-              console.log("Create PR response: ", result);
-
-              github.issues.addLabels({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: result.data.number,
-                labels: ["area: compat-data", "repo automation :robot:"]
-              })
-            }
-
-
+          token: ${{ secrets.BOT_TOKEN }}
+          branch: update-compat-data
+          title: Update compat data
+          description: Update compat data to [${{ steps.lastCommit.outputs.sha1 }}](https://github.com/kangax/compat-table/commit/${{ steps.lastCommit.outputs.sha1 }}).
+          labels: |
+            area: compat-data
+            repo automation :robot:
