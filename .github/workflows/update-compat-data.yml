@@ -23,13 +23,19 @@ jobs:
       - name: Get latest kangax/compat-data commit
         id: lastCommit
         run: echo "::set-output name=sha1::$(node ./scripts/update-compat-data/get-last-commit.sh)"
-      - name: Compare last kangax/compat-data commit with current one
-        run: echo ${{ steps.lastCommit.outputs.sha1 }} | node ./scripts/update-compat-data/compare-with-current-commit.js
       - name: Update compat-data commit
         run: echo ${{ steps.lastCommit.outputs.sha1 }} | ./scripts/update-compat-data/bump-data-compat-version.sh
+      - name: Check if it has been updated
+        run: |
+          [[ -z $(git status -s) ]] &&
+            echo "::set-output name=updated::false" ||
+            echo "::set-output name=updated::true"
+        id: updated
       - name: Run update script
+        if: steps.updated.outputs.updated == 'true'
         run: make build-compat-data
       - name: Commit changes
+        if: steps.updated.outputs.updated == 'true'
         run: |
           git config user.name "Babel Bot"
           git config user.email "babel-bot@users.noreply.github.com"
@@ -37,6 +43,7 @@ jobs:
           git commit -am "chore: update compat data to ${{ steps.lastCommit.outputs.sha1 }}"
           git push --force origin update-compat-data
       - name: Create Pull Request
+        if: steps.updated.outputs.updated == 'true'
         uses: babel/actions/create-pull-request@v2
         with:
           token: ${{ secrets.BOT_TOKEN }}
