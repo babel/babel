@@ -63,16 +63,14 @@ jobs:
         with:
           path: ${{ steps.yarn1-cache-dir-path.outputs.dir }}
           key: ${{ runner.os }}-yarn1-e2e-breaking-${{ matrix.project }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn1-e2e-breaking-${{ matrix.project }}-
+          restore-keys: ${{ runner.os }}-yarn1-e2e-breaking-${{ matrix.project }}-
       - name: Use yarn3 cache
         uses: actions/cache@v3
         id: yarn3-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
           path: ${{ steps.yarn3-cache-dir-path.outputs.dir }}
           key: ${{ runner.os }}-yarn3-e2e-breaking-${{ matrix.project }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn3-e2e-breaking-${{ matrix.project }}-
+          restore-keys: ${{ runner.os }}-yarn3-e2e-breaking-${{ matrix.project }}-
       - name: Clean babel cache
         run: |
           rm -rf ${{ steps.yarn1-cache-dir-path.outputs.dir }}/*babel*
