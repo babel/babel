@@ -358,9 +358,9 @@ defineType("TSMappedType", {
   aliases: ["TSType"],
   visitor: ["typeParameter", "typeAnnotation", "nameType"],
   fields: {
-    readonly: validateOptional(bool),
+    readonly: validateOptional(assertOneOf(true, false, "+", "-")),
     typeParameter: validateType("TSTypeParameter"),
-    optional: validateOptional(bool),
+    optional: validateOptional(assertOneOf(true, false, "+", "-")),
     typeAnnotation: validateOptionalType("TSType"),
     nameType: validateOptionalType("TSType"),
   },

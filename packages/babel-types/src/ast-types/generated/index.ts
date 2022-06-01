@@ -1909,8 +1909,8 @@ export interface TSMappedType extends BaseNode {
   typeParameter: TSTypeParameter;
   typeAnnotation?: TSType | null;
   nameType?: TSType | null;
-  optional?: boolean | null;
-  readonly?: boolean | null;
+  optional?: true | false | "+" | "-" | null;
+  readonly?: true | false | "+" | "-" | null;
 }
 
 export interface TSLiteralType extends BaseNode {
