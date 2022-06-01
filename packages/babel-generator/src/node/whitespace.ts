@@ -15,8 +15,10 @@ import {
   isStringLiteral,
 } from "@babel/types";
 
+import type { NodeHandlers } from "./index";
+
 import type * as t from "@babel/types";
-type WhitespaceObject = {
+export type WhitespaceObject = {
   before?: boolean;
   after?: boolean;
 };
@@ -72,7 +74,7 @@ function isHelper(node: t.Node): boolean {
   }
 }
 
-function isType(node) {
+function isType(node: t.Node) {
   return (
     isLiteral(node) ||
     isObjectExpression(node) ||
@@ -86,16 +88,7 @@ function isType(node) {
  * Tests for node types that need whitespace.
  */
 
-export const nodes: {
-  [K in string]?: (
-    node: K extends t.Node["type"] ? Extract<t.Node, { type: K }> : t.Node,
-    // todo:
-    // node: K extends keyof typeof t
-    //   ? Extract<typeof t[K], { type: "string" }>
-    //   : t.Node,
-    parent: t.Node,
-  ) => void;
-} = {
+export const nodes: NodeHandlers<WhitespaceObject | undefined | null> = {
   /**
    * Test if AssignmentExpression needs whitespace.
    */
@@ -221,7 +214,7 @@ nodes.ObjectProperty =
   nodes.ObjectMethod =
     function (
       node: t.ObjectProperty | t.ObjectTypeProperty | t.ObjectMethod,
-      parent: any,
+      parent: t.ObjectExpression,
     ): WhitespaceObject | undefined | null {
       if (parent.properties[0] === node) {
         return {
@@ -232,7 +225,7 @@ nodes.ObjectProperty =
 
 nodes.ObjectTypeCallProperty = function (
   node: t.ObjectTypeCallProperty,
-  parent: any,
+  parent: t.ObjectTypeAnnotation,
 ): WhitespaceObject | undefined | null {
   if (parent.callProperties[0] === node && !parent.properties?.length) {
     return {
@@ -243,7 +236,7 @@ nodes.ObjectTypeCallProperty = function (
 
 nodes.ObjectTypeIndexer = function (
   node: t.ObjectTypeIndexer,
-  parent: any,
+  parent: t.ObjectTypeAnnotation,
 ): WhitespaceObject | undefined | null {
   if (
     parent.indexers[0] === node &&
@@ -258,7 +251,7 @@ nodes.ObjectTypeIndexer = function (
 
 nodes.ObjectTypeInternalSlot = function (
   node: t.ObjectTypeInternalSlot,
-  parent: any,
+  parent: t.ObjectTypeAnnotation,
 ): WhitespaceObject | undefined | null {
   if (
     parent.internalSlots[0] === node &&
@@ -276,7 +269,7 @@ nodes.ObjectTypeInternalSlot = function (
  * Returns lists from node types that need whitespace.
  */
 
-export const list = {
+export const list: NodeHandlers<t.Node[]> = {
   /**
    * Return VariableDeclaration declarations init properties.
    */
@@ -314,16 +307,13 @@ export const list = {
     ["LabeledStatement", true],
     ["SwitchStatement", true],
     ["TryStatement", true],
-  ] as Array<[string, any]>
+  ] as const
 ).forEach(function ([type, amounts]) {
-  if (typeof amounts === "boolean") {
-    amounts = { after: amounts, before: amounts };
-  }
   [type as string]
     .concat(FLIPPED_ALIAS_KEYS[type] || [])
     .forEach(function (type) {
       nodes[type] = function () {
-        return amounts;
+        return { after: amounts, before: amounts };
       };
     });
 });

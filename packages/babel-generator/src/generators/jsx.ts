@@ -52,7 +52,7 @@ export function JSXSpreadChild(this: Printer, node: t.JSXSpreadChild) {
 }
 
 export function JSXText(this: Printer, node: t.JSXText) {
-  const raw = this.getPossibleRaw(node);
+  const raw = this.getPossibleRaw(node) as string;
 
   if (raw != null) {
     this.token(raw);

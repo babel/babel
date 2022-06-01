@@ -74,7 +74,7 @@ export function ConditionalExpression(
 export function NewExpression(
   this: Printer,
   node: t.NewExpression,
-  parent: any,
+  parent: t.Node,
 ) {
   this.word("new");
   this.space();
@@ -116,7 +116,7 @@ export function Super(this: Printer) {
 
 function isDecoratorMemberExpression(
   node: t.Expression | t.V8IntrinsicIdentifier,
-) {
+): boolean {
   switch (node.type) {
     case "Identifier":
       return true;
@@ -265,7 +265,7 @@ export function AssignmentPattern(this: Printer, node: t.AssignmentPattern) {
 export function AssignmentExpression(
   this: Printer,
   node: t.AssignmentExpression,
-  parent: any,
+  parent: t.Node,
 ) {
   // Somewhere inside a for statement `init` node but doesn't usually
   // needs a paren except for `in` expressions: `for (a in b ? a : b;;)`

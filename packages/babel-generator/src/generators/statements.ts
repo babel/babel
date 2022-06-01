@@ -50,9 +50,20 @@ export function IfStatement(this: Printer, node: t.IfStatement) {
 }
 
 // Recursively get the last statement.
-function getLastStatement(statement) {
-  if (!isStatement(statement.body)) return statement;
-  return getLastStatement(statement.body);
+function getLastStatement(statement: t.Statement): t.Statement {
+  if (
+    !isStatement(
+      // @ts-ignore body is not in BreakStatement
+      statement.body,
+    )
+  ) {
+    return statement;
+  }
+
+  return getLastStatement(
+    // @ts-ignore body is not in BreakStatement
+    statement.body,
+  );
 }
 
 export function ForStatement(this: Printer, node: t.ForStatement) {
@@ -89,11 +100,11 @@ export function WhileStatement(this: Printer, node: t.WhileStatement) {
   this.printBlock(node);
 }
 
-const buildForXStatement = function (op) {
-  return function (this: Printer, node: any) {
+const buildForXStatement = function (op: "in" | "of") {
+  return function (this: Printer, node: t.ForXStatement) {
     this.word("for");
     this.space();
-    if (op === "of" && node.await) {
+    if (node.type === "ForOfStatement" && node.await) {
       this.word("await");
       this.space();
     }
@@ -124,7 +135,7 @@ export function DoWhileStatement(this: Printer, node: t.DoWhileStatement) {
   this.semicolon();
 }
 
-function buildLabelStatement(prefix, key = "label") {
+function buildLabelStatement(prefix: string, key = "label") {
   return function (this: Printer, node: any) {
     this.word(prefix);
 
