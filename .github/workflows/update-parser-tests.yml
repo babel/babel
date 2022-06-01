@@ -12,6 +12,7 @@ permissions:
 
 jobs:
   createPullRequest:
+    name: Update parser test262 tests
     permissions:
       contents: write # for Git to git push
     runs-on: ubuntu-latest
