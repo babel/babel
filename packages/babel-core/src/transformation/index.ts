@@ -23,7 +23,7 @@ export type FileResultCallback = {
 export type FileResult = {
   metadata: {};
   options: {};
-  ast: {} | null;
+  ast: t.File | null;
   code: string | null;
   map: SourceMap | null;
   sourceType: "string" | "module";

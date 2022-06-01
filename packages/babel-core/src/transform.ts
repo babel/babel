@@ -6,6 +6,8 @@ import { run } from "./transformation";
 
 import type { FileResult, FileResultCallback } from "./transformation";
 
+export type { FileResult } from "./transformation";
+
 type Transform = {
   (code: string, callback: FileResultCallback): void;
   (

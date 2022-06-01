@@ -2,7 +2,7 @@ import testRunner from "@babel/helper-transform-fixture-test-runner";
 import path from "path";
 import { URL } from "url";
 
-export default function (loc) {
+export default function (loc: string) {
   if (!process.env.BABEL_8_BREAKING) {
     if (!loc.startsWith("file://")) {
       const name = path.basename(path.dirname(loc));
