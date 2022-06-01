@@ -1,6 +1,6 @@
 /// <reference path="../../../lib/third-party-libs.d.ts" />
 
-import type { Token, JSXToken } from "js-tokens";
+import type { Token as JSToken, JSXToken } from "js-tokens";
 import jsTokens from "js-tokens";
 
 import {
@@ -33,6 +33,10 @@ type InternalTokenType =
   | "comment"
   | "invalid";
 
+type Token = {
+  type: InternalTokenType | "uncolored";
+  value: string;
+};
 /**
  * Chalk styles for token types.
  */
@@ -69,7 +73,7 @@ if (process.env.BABEL_8_BREAKING) {
    * Get the type of token, specifying punctuator type.
    */
   const getTokenType = function (
-    token: Token | JSXToken,
+    token: JSToken | JSXToken,
   ): InternalTokenType | "uncolored" {
     if (token.type === "IdentifierName") {
       if (
@@ -128,7 +132,7 @@ if (process.env.BABEL_8_BREAKING) {
   /**
    * Turn a string of JS into an array of objects.
    */
-  tokenize = function* (text: string) {
+  tokenize = function* (text: string): Generator<Token> {
     for (const token of jsTokens(text, { jsx: true })) {
       switch (token.type) {
         case "TemplateHead":
@@ -161,7 +165,9 @@ if (process.env.BABEL_8_BREAKING) {
    */
   const JSX_TAG = /^[a-z][\w-]*$/i;
 
-  const getTokenType = function (token, offset, text) {
+  // The token here is defined in js-tokens@4. However we don't bother
+  // typing it since the whole block will be removed in Babel 8
+  const getTokenType = function (token: any, offset: number, text: string) {
     if (token.type === "name") {
       if (
         isKeyword(token.value) ||
