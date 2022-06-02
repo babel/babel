@@ -1,2 +1,1 @@
-makeBox<number>
-[a]
+makeBox<number>[a]
