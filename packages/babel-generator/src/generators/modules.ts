@@ -98,28 +98,6 @@ export function ExportNamedDeclaration(
 
   this.word("export");
   this.space();
-  ExportDeclaration.apply(this, arguments);
-}
-
-export function ExportDefaultDeclaration(
-  this: Printer,
-  node: t.ExportDefaultDeclaration,
-) {
-  if (
-    this.format.decoratorsBeforeExport &&
-    isClassDeclaration(node.declaration)
-  ) {
-    this.printJoin(node.declaration.decorators, node);
-  }
-
-  this.word("export");
-  this.space();
-  this.word("default");
-  this.space();
-  ExportDeclaration.apply(this, arguments);
-}
-
-function ExportDeclaration(this: Printer, node: any) {
   if (node.declaration) {
     const declar = node.declaration;
     this.print(declar, node);
@@ -171,6 +149,26 @@ function ExportDeclaration(this: Printer, node: any) {
 
     this.semicolon();
   }
+}
+
+export function ExportDefaultDeclaration(
+  this: Printer,
+  node: t.ExportDefaultDeclaration,
+) {
+  if (
+    this.format.decoratorsBeforeExport &&
+    isClassDeclaration(node.declaration)
+  ) {
+    this.printJoin(node.declaration.decorators, node);
+  }
+
+  this.word("export");
+  this.space();
+  this.word("default");
+  this.space();
+  const declar = node.declaration;
+  this.print(declar, node);
+  if (!isStatement(declar)) this.semicolon();
 }
 
 export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
