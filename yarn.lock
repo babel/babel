@@ -3794,7 +3794,7 @@ __metadata:
     "@babel/parser": "workspace:^"
     chalk: ^4.1.0
     glob: ^7.1.7
-    to-fast-properties: ^2.0.0
+    to-fast-properties: "condition:BABEL_8_BREAKING ? ^4.0.0 : ^2.0.0"
   languageName: unknown
   linkType: soft
 
@@ -14704,10 +14704,27 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"to-fast-properties@npm:^2.0.0":
+"to-fast-properties-BABEL_8_BREAKING-false@npm:to-fast-properties@^2.0.0, to-fast-properties@npm:^2.0.0":
   version: 2.0.0
   resolution: "to-fast-properties@npm:2.0.0"
   checksum: be2de62fe58ead94e3e592680052683b1ec986c72d589e7b21e5697f8744cdbf48c266fa72f6c15932894c10187b5f54573a3bcf7da0bfd964d5caf23d436168
+  languageName: node
+  linkType: hard
+
+"to-fast-properties-BABEL_8_BREAKING-true@npm:to-fast-properties@^4.0.0":
+  version: 4.0.0
+  resolution: "to-fast-properties@npm:4.0.0"
+  checksum: c72297bdd126a7e7ffe9cc6230eee60182f0439a7abb19d281e73137880d87d12fc971a47ff4bd1e0dc68e17262344fbf98499400ff5e341db431715c3620346
+  languageName: node
+  linkType: hard
+
+"to-fast-properties@condition:BABEL_8_BREAKING ? ^4.0.0 : ^2.0.0":
+  version: 0.0.0-condition-ce57b6
+  resolution: "to-fast-properties@condition:BABEL_8_BREAKING?^4.0.0:^2.0.0#ce57b6"
+  dependencies:
+    to-fast-properties-BABEL_8_BREAKING-false: "npm:to-fast-properties@^2.0.0"
+    to-fast-properties-BABEL_8_BREAKING-true: "npm:to-fast-properties@^4.0.0"
+  checksum: e301950506020ee20ad9ebdf7da40174c08f441a9ac0fe89d0efeb70a7fcedefdb3079433eae3d5a840ee38d589c0c2c9e27774d93fb60cd5af9b22b8b95df67
   languageName: node
   linkType: hard
 
