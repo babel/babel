@@ -49,9 +49,7 @@ export function UpdateExpression(this: Printer, node: t.UpdateExpression) {
     this.token(node.operator);
     this.print(node.argument, node);
   } else {
-    this.startTerminatorless(true);
-    this.print(node.argument, node);
-    this.endTerminatorless();
+    this.printTerminatorless(node.argument, node, true);
     this.token(node.operator);
   }
 }
@@ -228,9 +226,7 @@ function buildYieldAwait(keyword: string) {
 
     if (node.argument) {
       this.space();
-      const terminatorState = this.startTerminatorless();
-      this.print(node.argument, node);
-      this.endTerminatorless(terminatorState);
+      this.printTerminatorless(node.argument, node, false);
     }
   };
 }

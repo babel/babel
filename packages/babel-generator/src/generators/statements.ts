@@ -135,27 +135,39 @@ export function DoWhileStatement(this: Printer, node: t.DoWhileStatement) {
   this.semicolon();
 }
 
-function buildLabelStatement(prefix: string, key = "label") {
-  return function (this: Printer, node: any) {
-    this.word(prefix);
+function printStatementAfterKeyword(
+  this: Printer,
+  node: t.Node,
+  parent: t.Node,
+  isLabel: boolean,
+) {
+  if (node) {
+    this.space();
+    this.printTerminatorless(node, parent, isLabel);
+  }
 
-    const label = node[key];
-    if (label) {
-      this.space();
-      const isLabel = key == "label";
-      const terminatorState = this.startTerminatorless(isLabel);
-      this.print(label, node);
-      this.endTerminatorless(terminatorState);
-    }
-
-    this.semicolon();
-  };
+  this.semicolon();
 }
 
-export const ContinueStatement = buildLabelStatement("continue");
-export const ReturnStatement = buildLabelStatement("return", "argument");
-export const BreakStatement = buildLabelStatement("break");
-export const ThrowStatement = buildLabelStatement("throw", "argument");
+export function BreakStatement(this: Printer, node: t.ContinueStatement) {
+  this.word("break");
+  printStatementAfterKeyword.call(this, node.label, node, true);
+}
+
+export function ContinueStatement(this: Printer, node: t.ContinueStatement) {
+  this.word("continue");
+  printStatementAfterKeyword.call(this, node.label, node, true);
+}
+
+export function ReturnStatement(this: Printer, node: t.ReturnStatement) {
+  this.word("return");
+  printStatementAfterKeyword.call(this, node.argument, node, false);
+}
+
+export function ThrowStatement(this: Printer, node: t.ThrowStatement) {
+  this.word("throw");
+  printStatementAfterKeyword.call(this, node.argument, node, false);
+}
 
 export function LabeledStatement(this: Printer, node: t.LabeledStatement) {
   this.print(node.label, node);

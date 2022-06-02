@@ -388,43 +388,40 @@ class Printer {
     return this.format.indent.style.repeat(this._indent);
   }
 
-  /**
-   * Set some state that will be modified if a newline has been inserted before any
-   * non-space characters.
-   *
-   * This is to prevent breaking semantics for terminatorless separator nodes. eg:
-   *
-   *   return foo;
-   *
-   * returns `foo`. But if we do:
-   *
-   *   return
-   *   foo;
-   *
-   *  `undefined` will be returned and not `foo` due to the terminator.
-   */
-
-  startTerminatorless(isLabel: boolean = false) {
+  printTerminatorless(node: t.Node, parent: t.Node, isLabel: boolean) {
+    /**
+     * Set some state that will be modified if a newline has been inserted before any
+     * non-space characters.
+     *
+     * This is to prevent breaking semantics for terminatorless separator nodes. eg:
+     *
+     *   return foo;
+     *
+     * returns `foo`. But if we do:
+     *
+     *   return
+     *   foo;
+     *
+     *  `undefined` will be returned and not `foo` due to the terminator.
+     */
     if (isLabel) {
       this._noLineTerminator = true;
-      return null;
+      this.print(node, parent);
+      this._noLineTerminator = false;
     } else {
-      return (this._parenPushNewlineState = {
+      const terminatorState = {
         printed: false,
-      });
-    }
-  }
-
-  /**
-   * Print an ending parentheses if a starting one has been printed.
-   */
-
-  endTerminatorless(state?: any) {
-    this._noLineTerminator = false;
-    if (state?.printed) {
-      this.dedent();
-      this.newline();
-      this.token(")");
+      };
+      this._parenPushNewlineState = terminatorState;
+      this.print(node, parent);
+      /**
+       * Print an ending parentheses if a starting one has been printed.
+       */
+      if (terminatorState.printed) {
+        this.dedent();
+        this.newline();
+        this.token(")");
+      }
     }
   }
 
