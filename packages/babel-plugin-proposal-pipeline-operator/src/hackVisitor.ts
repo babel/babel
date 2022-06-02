@@ -33,7 +33,7 @@ const topicReferenceVisitor: Visitor<State> = {
 // with sequence expressions containing assignment expressions
 // with automatically generated variables,
 // from inside to outside, from left to right.
-export default {
+const visitor: Visitor<PluginPass> = {
   BinaryExpression: {
     exit(path) {
       const { scope, node } = path;
@@ -52,7 +52,7 @@ export default {
         return;
       }
 
-      const visitorState = {
+      const visitorState: State = {
         topicReferences: [],
         // pipeBodyPath might be a function, and it won't be visited by
         // topicReferenceVisitor because traverse() skips the top-level
@@ -93,4 +93,6 @@ export default {
       );
     },
   },
-} as Visitor<PluginPass>;
+};
+
+export default visitor;
