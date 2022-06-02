@@ -10,7 +10,7 @@ if [ "$TEST_DEBUG" ]; then
 fi
 
 if [ -n "$CI" ]; then
-  jestArgs+=("--maxWorkers=4")
+  jestArgs+=("--maxWorkers=2")
   jestArgs+=("--ci")
 fi
 
