@@ -190,7 +190,7 @@ jobs:
 
         # Todo(Babel 8): Jest execution path is hardcoded because Yarn 2 does not support node 6
         run: |
-          node --max-old-space-size=4096 ./node_modules/.bin/jest --ci --color --maxWorkers=2
+          node --max-old-space-size=4096 ./node_modules/.bin/jest --ci --color --maxWorkers=${{ (matrix.node-version == '8') && 1 || 2 }}
         env:
           BABEL_ENV: test
           TEST_FUZZ: ${{ contains(fromJSON('["6","8","10"]'), matrix.node-version) && false || true }}
