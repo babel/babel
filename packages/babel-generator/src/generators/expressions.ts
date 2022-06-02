@@ -216,23 +216,27 @@ export function Import(this: Printer) {
   this.word("import");
 }
 
-function buildYieldAwait(keyword: string) {
-  return function (this: Printer, node: any) {
-    this.word(keyword);
+export function AwaitExpression(this: Printer, node: t.AwaitExpression) {
+  this.word("await");
 
-    if (node.delegate) {
-      this.token("*");
-    }
-
-    if (node.argument) {
-      this.space();
-      this.printTerminatorless(node.argument, node, false);
-    }
-  };
+  if (node.argument) {
+    this.space();
+    this.printTerminatorless(node.argument, node, false);
+  }
 }
 
-export const YieldExpression = buildYieldAwait("yield");
-export const AwaitExpression = buildYieldAwait("await");
+export function YieldExpression(this: Printer, node: t.YieldExpression) {
+  this.word("yield");
+
+  if (node.delegate) {
+    this.token("*");
+  }
+
+  if (node.argument) {
+    this.space();
+    this.printTerminatorless(node.argument, node, false);
+  }
+}
 
 export function EmptyStatement(this: Printer) {
   this.semicolon(true /* force */);
