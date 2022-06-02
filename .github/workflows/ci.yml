@@ -190,17 +190,17 @@ jobs:
 
         # Todo(Babel 8): Jest execution path is hardcoded because Yarn 2 does not support node 6
         run: |
-          node --max-old-space-size=4096 ./node_modules/.bin/jest --ci --color
+          node --max-old-space-size=4096 ./node_modules/.bin/jest --ci --color --maxWorkers=4
         env:
           BABEL_ENV: test
           TEST_FUZZ: ${{ contains(fromJSON('["6","8","10"]'), matrix.node-version) && false || true }}
       - name: Test with jest-runner
-        if: ${{ !contains(fromJSON('["6","8","10"]'), matrix.node-version) }}
+        if: ${{ matrix.node-version == '16' }}
         run: |
-          yarn jest --ci --color
+          yarn jest --ci --color --maxWorkers=4
         env:
           BABEL_ENV: test
-          TEST_FUZZ: ${{ contains(fromJSON('["6","8","10"]'), matrix.node-version) && false || true }}
+          TEST_FUZZ: true
           BABEL_USE_JEST_LIGHT: false
       - name: Use Node.js latest # For `yarn version` in post actions of the first actions/setup-node
         if: contains(fromJSON('["6","8","10"]'), matrix.node-version)
@@ -236,7 +236,7 @@ jobs:
         # Hack: --color has supports-color@5 returned true for GitHub CI
         # Remove once `chalk` is bumped to 4.0.
         run: |
-          yarn jest --ci --color
+          yarn jest --ci --color --maxWorkers=4
           yarn test:esm
         env:
           BABEL_ENV: test
@@ -246,7 +246,7 @@ jobs:
         # Hack: --color has supports-color@5 returned true for GitHub CI
         # Remove once `chalk` is bumped to 4.0.
         run: |
-          yarn jest --ci --color
+          yarn jest --ci --color --maxWorkers=4
         env:
           BABEL_ENV: test
           BABEL_8_BREAKING: true
@@ -277,12 +277,12 @@ jobs:
         # Hack: --color has supports-color@5 returned true for GitHub CI
         # Remove once `chalk` is bumped to 4.0.
         run: |
-          yarn jest --ci --color
+          yarn jest --ci --color --maxWorkers=4
         env:
           BABEL_ENV: test
       - name: Test with jest-runner
         run: |
-          yarn jest --ci --color
+          yarn jest --ci --color --maxWorkers=4
         env:
           BABEL_ENV: test
           BABEL_USE_JEST_LIGHT: false
