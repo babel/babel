@@ -14,14 +14,19 @@ import {
 } from "../builders/generated";
 import cloneNode from "../clone/cloneNode";
 import type * as t from "..";
-import type { Scope } from "./Scope";
+import type { Scope } from "@babel/traverse";
+
+export type DeclarationInfo = {
+  kind: t.VariableDeclaration["kind"];
+  id: t.Identifier;
+};
 
 export default function gatherSequenceExpressions(
   nodes: ReadonlyArray<t.Node>,
   scope: Scope,
-  declars: Array<any>,
-): t.SequenceExpression {
-  const exprs = [];
+  declars: Array<DeclarationInfo>,
+) {
+  const exprs: t.Expression[] = [];
   let ensureLastUndefined = true;
 
   for (const node of nodes) {
@@ -62,7 +67,6 @@ export default function gatherSequenceExpressions(
         : scope.buildUndefinedNode();
       if (!consequent || !alternate) return; // bailed
 
-      // @ts-expect-error todo(flow->ts) consequent - Argument of type 'Node' is not assignable to parameter of type 'Expression'
       exprs.push(conditionalExpression(node.test, consequent, alternate));
     } else if (isBlockStatement(node)) {
       const body = gatherSequenceExpressions(node.body, scope, declars);

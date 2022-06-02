@@ -7,6 +7,10 @@ import type * as t from "..";
  */
 export default function isVar(node: t.Node): boolean {
   return (
-    isVariableDeclaration(node, { kind: "var" }) && !node[BLOCK_SCOPED_SYMBOL]
+    isVariableDeclaration(node, { kind: "var" }) &&
+    !(
+      // @ts-ignore document private properties
+      node[BLOCK_SCOPED_SYMBOL]
+    )
   );
 }

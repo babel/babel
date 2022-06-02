@@ -25,41 +25,45 @@ export default function isNodesEquivalent<T extends Partial<t.Node>>(
   const visitorKeys = VISITOR_KEYS[a.type];
 
   for (const field of fields) {
-    if (typeof a[field] !== typeof b[field]) {
+    const val_a =
+      // @ts-ignore field must present in a
+      a[field];
+    const val_b = b[field];
+    if (typeof val_a !== typeof val_b) {
       return false;
     }
-    if (a[field] == null && b[field] == null) {
+    if (val_a == null && val_b == null) {
       continue;
-    } else if (a[field] == null || b[field] == null) {
+    } else if (val_a == null || val_b == null) {
       return false;
     }
 
-    if (Array.isArray(a[field])) {
-      if (!Array.isArray(b[field])) {
+    if (Array.isArray(val_a)) {
+      if (!Array.isArray(val_b)) {
         return false;
       }
-      if (a[field].length !== b[field].length) {
+      if (val_a.length !== val_b.length) {
         return false;
       }
 
-      for (let i = 0; i < a[field].length; i++) {
-        if (!isNodesEquivalent(a[field][i], b[field][i])) {
+      for (let i = 0; i < val_a.length; i++) {
+        if (!isNodesEquivalent(val_a[i], val_b[i])) {
           return false;
         }
       }
       continue;
     }
 
-    if (typeof a[field] === "object" && !visitorKeys?.includes(field)) {
-      for (const key of Object.keys(a[field])) {
-        if (a[field][key] !== b[field][key]) {
+    if (typeof val_a === "object" && !visitorKeys?.includes(field)) {
+      for (const key of Object.keys(val_a)) {
+        if (val_a[key] !== val_b[key]) {
           return false;
         }
       }
       continue;
     }
 
-    if (!isNodesEquivalent(a[field], b[field])) {
+    if (!isNodesEquivalent(val_a, val_b)) {
       return false;
     }
   }

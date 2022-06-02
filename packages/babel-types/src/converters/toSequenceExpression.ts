@@ -1,6 +1,7 @@
 import gatherSequenceExpressions from "./gatherSequenceExpressions";
 import type * as t from "..";
-import type { Scope } from "./Scope";
+import type { Scope } from "@babel/traverse";
+import type { DeclarationInfo } from "./gatherSequenceExpressions";
 
 /**
  * Turn an array of statement `nodes` into a `SequenceExpression`.
@@ -16,7 +17,7 @@ export default function toSequenceExpression(
 ): t.SequenceExpression | undefined {
   if (!nodes?.length) return;
 
-  const declars = [];
+  const declars: DeclarationInfo[] = [];
   const result = gatherSequenceExpressions(nodes, scope, declars);
   if (!result) return;
 
@@ -24,5 +25,6 @@ export default function toSequenceExpression(
     scope.push(declar);
   }
 
+  // @ts-ignore fixme: gatherSequenceExpressions will return an Expression when there are only one element
   return result;
 }

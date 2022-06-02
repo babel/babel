@@ -179,7 +179,7 @@ const tsKeywordTypes = [
   "TSUndefinedKeyword",
   "TSUnknownKeyword",
   "TSVoidKeyword",
-];
+] as const;
 
 for (const type of tsKeywordTypes) {
   defineType(type, {
@@ -384,7 +384,7 @@ defineType("TSLiteralType", {
           "BooleanLiteral",
           "BigIntLiteral",
         );
-        function validator(parent, key: string, node) {
+        function validator(parent: any, key: string, node: any) {
           // type A = -1 | 1;
           if (is("UnaryExpression", node)) {
             // check operator first
