@@ -451,7 +451,11 @@ function buildFileLogger(
 function buildRootDescriptors(
   { dirname, options }: Partial<ValidatedFile>,
   alias: string,
-  descriptors: Function,
+  descriptors: (
+    dirname: string,
+    options: ValidatedOptions,
+    alias: string,
+  ) => OptionsAndDescriptors,
 ) {
   return descriptors(dirname, options, alias);
 }
@@ -465,7 +469,7 @@ function buildProgrammaticLogger(
     return () => {};
   }
   return baseLogger.configure(context.showConfig, ChainFormatter.Programmatic, {
-    // @ts-expect-error caller maybe void
+    // @ts-expect-error caller may be void
     callerName: context.caller?.name,
   });
 }
@@ -473,7 +477,11 @@ function buildProgrammaticLogger(
 function buildEnvDescriptors(
   { dirname, options }: Partial<ValidatedFile>,
   alias: string,
-  descriptors: Function,
+  descriptors: (
+    dirname: string,
+    options: ValidatedOptions,
+    alias: string,
+  ) => OptionsAndDescriptors,
   envName: string,
 ) {
   const opts = options.env && options.env[envName];
@@ -483,7 +491,11 @@ function buildEnvDescriptors(
 function buildOverrideDescriptors(
   { dirname, options }: Partial<ValidatedFile>,
   alias: string,
-  descriptors: Function,
+  descriptors: (
+    dirname: string,
+    options: ValidatedOptions,
+    alias: string,
+  ) => OptionsAndDescriptors,
   index: number,
 ) {
   const opts = options.overrides && options.overrides[index];
@@ -495,7 +507,11 @@ function buildOverrideDescriptors(
 function buildOverrideEnvDescriptors(
   { dirname, options }: Partial<ValidatedFile>,
   alias: string,
-  descriptors: Function,
+  descriptors: (
+    dirname: string,
+    options: ValidatedOptions,
+    alias: string,
+  ) => OptionsAndDescriptors,
   index: number,
   envName: string,
 ) {

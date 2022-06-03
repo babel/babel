@@ -392,8 +392,8 @@ const instantiatePlugin = makeWeakCache(function* (
       return cache.invalidate(data => run(inheritsDescriptor, data));
     });
 
-    plugin.pre = chain(inherits.pre as (...args: any[]) => void, plugin.pre);
-    plugin.post = chain(inherits.post as (...args: any[]) => void, plugin.post);
+    plugin.pre = chain(inherits.pre, plugin.pre);
+    plugin.post = chain(inherits.post, plugin.post);
     plugin.manipulateOptions = chain(
       inherits.manipulateOptions,
       plugin.manipulateOptions,

@@ -1,7 +1,9 @@
+import type { InputOptions } from "..";
+
 export type ConfigFile = {
   filepath: string;
   dirname: string;
-  options: { [key: string]: any };
+  options: InputOptions;
 };
 
 export type IgnoreFile = {

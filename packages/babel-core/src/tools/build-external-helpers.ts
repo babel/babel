@@ -95,10 +95,7 @@ function buildModule(allowlist?: Array<string>) {
     exportNamedDeclaration(
       null,
       Object.keys(refs).map(name => {
-        return exportSpecifier(
-          cloneNode(refs[name] as t.Identifier),
-          identifier(name),
-        );
+        return exportSpecifier(cloneNode(refs[name]), identifier(name));
       }),
     ),
   );
@@ -148,6 +145,17 @@ function buildVar(allowlist?: Array<string>) {
   body.push(expressionStatement(namespace));
   return tree;
 }
+
+function buildHelpers(
+  body: t.Statement[],
+  namespace: t.Expression,
+  allowlist?: Array<string>,
+): Record<string, t.MemberExpression>;
+function buildHelpers(
+  body: t.Statement[],
+  namespace: null,
+  allowlist?: Array<string>,
+): Record<string, t.Identifier>;
 
 function buildHelpers(
   body: t.Statement[],
