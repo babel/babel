@@ -141,7 +141,16 @@ function featureShouldIgnore(feature) {
 
 const ignoredTests = ["built-ins/RegExp/", "language/literals/regexp/"];
 
-const featuresToPlugins = new Map([["import-assertions", "importAssertions"]]);
+const featuresToPlugins = new Map([
+  ["import-assertions", "importAssertions"],
+  [
+    "decorators",
+    [
+      ["decorators", { version: "2021-12", decoratorsBeforeExport: false }],
+      "decoratorAutoAccessors",
+    ],
+  ],
+]);
 
 const unmappedFeatures = new Set();
 
@@ -179,7 +188,7 @@ const runner = new TestRunner({
         fileName,
         id: `${fileName}(${test.scenario})`,
         sourceType: test.attrs.flags.module ? "module" : "script",
-        plugins: Array.from(getPlugins(test.attrs.features)),
+        plugins: Array.from(getPlugins(test.attrs.features)).flat(),
         expectedError:
           !!test.attrs.negative &&
           (test.attrs.negative.phase === "parse" ||
