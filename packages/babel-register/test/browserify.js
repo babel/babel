@@ -21,5 +21,5 @@ describe("browserify", function () {
         resolve();
       });
     });
-  });
+  }, 15000);
 });
