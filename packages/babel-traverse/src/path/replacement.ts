@@ -40,7 +40,7 @@ import hoistVariables from "@babel/helper-hoist-variables";
 
 export function replaceWithMultiple(
   this: NodePath,
-  nodes: t.Node[],
+  nodes: t.Node | t.Node[],
 ): NodePath[] {
   this.resync();
 

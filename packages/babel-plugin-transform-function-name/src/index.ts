@@ -25,7 +25,12 @@ export default declare(api => {
       ObjectProperty(path) {
         const value = path.get("value");
         if (value.isFunction()) {
-          const newNode = nameFunction(value, false, supportUnicodeId);
+          const newNode = nameFunction(
+            // @ts-ignore Fixme: should check ArrowFunctionExpression
+            value,
+            false,
+            supportUnicodeId,
+          );
           if (newNode) value.replaceWith(newNode);
         }
       },
