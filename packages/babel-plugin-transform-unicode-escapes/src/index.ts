@@ -1,5 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
+import type { NodePath } from "@babel/traverse";
 
 export default declare(api => {
   api.assertVersion(7);
@@ -7,7 +8,7 @@ export default declare(api => {
   const surrogate = /[\ud800-\udfff]/g;
   const unicodeEscape = /(\\+)u\{([0-9a-fA-F]+)\}/g;
 
-  function escape(code) {
+  function escape(code: number) {
     let str = code.toString(16);
     // Sigh, node 6 doesn't have padStart
     // TODO: Remove in Babel 8, when we drop node 6.
@@ -15,7 +16,7 @@ export default declare(api => {
     return "\\u" + str;
   }
 
-  function replacer(match, backslashes, code) {
+  function replacer(match: string, backslashes: string[], code: string) {
     if (backslashes.length % 2 === 0) {
       return match;
     }
@@ -26,11 +27,11 @@ export default declare(api => {
     return char.length === 1 ? escaped : escaped + escape(char.charCodeAt(1));
   }
 
-  function replaceUnicodeEscapes(str) {
+  function replaceUnicodeEscapes(str: string) {
     return str.replace(unicodeEscape, replacer);
   }
 
-  function getUnicodeEscape(str) {
+  function getUnicodeEscape(str: string) {
     let match;
     while ((match = unicodeEscape.exec(str))) {
       if (match[1].length % 2 === 0) continue;
@@ -88,11 +89,13 @@ export default declare(api => {
         );
       },
 
-      "StringLiteral|DirectiveLiteral"(path) {
+      "StringLiteral|DirectiveLiteral"(
+        path: NodePath<t.StringLiteral | t.DirectiveLiteral>,
+      ) {
         const { node } = path;
         const { extra } = node;
 
-        if (extra?.raw) extra.raw = replaceUnicodeEscapes(extra.raw);
+        if (extra?.raw) extra.raw = replaceUnicodeEscapes(extra.raw as string);
       },
 
       TemplateElement(path) {

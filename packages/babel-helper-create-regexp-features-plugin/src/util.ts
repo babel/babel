@@ -1,14 +1,7 @@
 import type { types as t } from "@babel/core";
 import { FEATURES, hasFeature } from "./features";
 
-type RegexpuOptions = {
-  unicodeFlag: "transform" | false;
-  unicodeSetsFlag: "transform" | "parse" | false;
-  dotAllFlag: "transform" | false;
-  unicodePropertyEscapes: "transform" | false;
-  namedGroups: "transform" | false;
-  onNamedGroup: (name: string, index: number) => void;
-};
+import type { RegexpuOptions } from "regexpu-core";
 
 export function generateRegexpuOptions(toTransform: number): RegexpuOptions {
   type Experimental = 1;
