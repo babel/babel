@@ -7,9 +7,9 @@ export default function generateAstTypes() {
 
 interface BaseComment {
   value: string;
-  start: number;
-  end: number;
-  loc: SourceLocation;
+  start?: number;
+  end?: number;
+  loc?: SourceLocation;
   type: "CommentBlock" | "CommentLine";
 }
 

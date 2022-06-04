@@ -1,22 +1,35 @@
 import { declare } from "@babel/helper-plugin-utils";
-import { types as t } from "@babel/core";
+import { types as t, type File } from "@babel/core";
 
 export default declare(api => {
   api.assertVersion(7);
 
-  function isProtoKey(node) {
-    return t.isLiteral(t.toComputedKey(node, node.key), { value: "__proto__" });
-  }
-
-  function isProtoAssignmentExpression(node): node is t.MemberExpression {
-    const left = node;
+  function isProtoKey(node: t.ObjectExpression["properties"][number]) {
     return (
-      t.isMemberExpression(left) &&
-      t.isLiteral(t.toComputedKey(left, left.property), { value: "__proto__" })
+      !t.isSpreadElement(node) &&
+      t.isStringLiteral(t.toComputedKey(node, node.key), {
+        value: "__proto__",
+      })
     );
   }
 
-  function buildDefaultsCallExpression(expr, ref, file) {
+  function isProtoAssignmentExpression(
+    node: t.Node,
+  ): node is t.MemberExpression {
+    const left = node;
+    return (
+      t.isMemberExpression(left) &&
+      t.isStringLiteral(t.toComputedKey(left, left.property), {
+        value: "__proto__",
+      })
+    );
+  }
+
+  function buildDefaultsCallExpression(
+    expr: t.AssignmentExpression,
+    ref: t.MemberExpression["object"],
+    file: File,
+  ) {
     return t.expressionStatement(
       t.callExpression(file.addHelper("defaults"), [ref, expr.right]),
     );
@@ -26,7 +39,7 @@ export default declare(api => {
     name: "transform-proto-to-assign",
 
     visitor: {
-      AssignmentExpression(path, file) {
+      AssignmentExpression(path, { file }) {
         if (!isProtoAssignmentExpression(path.node.left)) return;
 
         const nodes = [];
@@ -50,7 +63,7 @@ export default declare(api => {
         path.replaceWithMultiple(nodes);
       },
 
-      ExpressionStatement(path, file) {
+      ExpressionStatement(path, { file }) {
         const expr = path.node.expression;
         if (!t.isAssignmentExpression(expr, { operator: "=" })) return;
 
@@ -61,7 +74,7 @@ export default declare(api => {
         }
       },
 
-      ObjectExpression(path, file) {
+      ObjectExpression(path, { file }) {
         let proto;
         const { node } = path;
         const { properties } = node;

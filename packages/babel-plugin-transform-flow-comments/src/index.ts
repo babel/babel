@@ -7,7 +7,7 @@ import type { NodePath } from "@babel/traverse";
 export default declare(api => {
   api.assertVersion(7);
 
-  function commentFromString(comment) {
+  function commentFromString(comment: string | t.Comment): t.Comment {
     return typeof comment === "string"
       ? { type: "CommentBlock", value: comment }
       : comment;
@@ -21,12 +21,12 @@ export default declare(api => {
     comments = generateComment(ofPath, optional),
     keepType = false,
   }: {
-    ofPath?;
-    toPath?;
-    where?: string;
-    optional?;
-    comments?;
-    keepType?;
+    ofPath?: NodePath;
+    toPath?: NodePath;
+    where?: t.CommentTypeShorthand;
+    optional?: boolean;
+    comments?: string | t.Comment | (string | t.Comment)[];
+    keepType?: boolean;
   }) {
     if (!toPath?.node) {
       toPath = ofPath.getPrevSibling();
@@ -43,7 +43,7 @@ export default declare(api => {
     if (!Array.isArray(comments)) {
       comments = [comments];
     }
-    comments = comments.map(commentFromString);
+    const newComments = comments.map(commentFromString);
     if (!keepType && ofPath?.node) {
       // Removes the node at `ofPath` while conserving the comments attached
       // to it.
@@ -58,24 +58,28 @@ export default declare(api => {
       if (isSingleChild && leading) {
         parent.addComments("inner", leading);
       }
-      toPath.addComments(where, comments);
+      toPath.addComments(where, newComments);
       ofPath.remove();
       if (isSingleChild && trailing) {
         parent.addComments("inner", trailing);
       }
     } else {
-      toPath.addComments(where, comments);
+      toPath.addComments(where, newComments);
     }
   }
 
-  function wrapInFlowComment(path) {
+  function wrapInFlowComment(path: NodePath) {
     attachComment({
       ofPath: path,
-      comments: generateComment(path, path.parent.optional),
+      comments: generateComment(
+        path,
+        // @ts-ignore
+        path.parent.optional,
+      ),
     });
   }
 
-  function generateComment(path, optional?) {
+  function generateComment(path: NodePath, optional?: boolean | void) {
     let comment = path
       .getSource()
       .replace(/\*-\//g, "*-ESCAPED/")
@@ -85,7 +89,7 @@ export default declare(api => {
     return comment;
   }
 
-  function isTypeImport(importKind) {
+  function isTypeImport(importKind: "type" | "typeof" | "value") {
     return importKind === "type" || importKind === "typeof";
   }
 
@@ -236,7 +240,11 @@ export default declare(api => {
         }
       },
 
-      Flow(path) {
+      Flow(
+        path: NodePath<
+          t.Flow | t.ImportDeclaration | t.ExportDeclaration | t.ImportSpecifier
+        >,
+      ) {
         wrapInFlowComment(path);
       },
 
