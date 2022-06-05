@@ -12,7 +12,7 @@ import parser from "../parser";
 import cloneDeep from "./util/clone-deep";
 
 const debug = buildDebug("babel:transform:file");
-const LARGE_INPUT_SOURCEMAP_THRESHOLD = 1_000_000;
+const LARGE_INPUT_SOURCEMAP_THRESHOLD = 3_000_000;
 
 export type NormalizedFile = {
   code: string;
