@@ -51,9 +51,9 @@ export const transformFromAst: TransformFromAst = function transformFromAst(
         "Starting from Babel 8.0.0, the 'transformFromAst' function expects a callback. If you need to call it synchronously, please use 'transformFromAstSync'.",
       );
     } else {
-      console.warn(
-        "Starting from Babel 8.0.0, the 'transformFromAst' function will expect a callback. If you need to call it synchronously, please use 'transformFromAstSync'.",
-      );
+      // console.warn(
+      //   "Starting from Babel 8.0.0, the 'transformFromAst' function will expect a callback. If you need to call it synchronously, please use 'transformFromAstSync'.",
+      // );
       return transformFromAstRunner.sync(ast, code, opts);
     }
   }

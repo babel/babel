@@ -45,9 +45,9 @@ export const parse: Parse = function parse(code, opts?, callback?) {
         "Starting from Babel 8.0.0, the 'parse' function expects a callback. If you need to call it synchronously, please use 'parseSync'.",
       );
     } else {
-      console.warn(
-        "Starting from Babel 8.0.0, the 'parse' function will expect a callback. If you need to call it synchronously, please use 'parseSync'.",
-      );
+      // console.warn(
+      //   "Starting from Babel 8.0.0, the 'parse' function will expect a callback. If you need to call it synchronously, please use 'parseSync'.",
+      // );
       return parseRunner.sync(code, opts);
     }
   }
