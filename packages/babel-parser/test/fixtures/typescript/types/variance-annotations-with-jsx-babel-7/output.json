@@ -2,7 +2,6 @@
   "type": "File",
   "start":0,"end":3346,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":163,"column":81,"index":3346}},
   "errors": [
-    "SyntaxError: Unexpected token `>`. Did you mean `&gt;` or `{'>'}`? (2:10)",
     "SyntaxError: 'public' modifier cannot appear on a type parameter. (98:9)",
     "SyntaxError: Duplicate modifier: 'in'. (99:16)",
     "SyntaxError: 'in' modifier must precede 'out' modifier. (99:16)",
@@ -100,11 +99,7 @@
               "type": "TSTypeParameter",
               "start":50,"end":55,"loc":{"start":{"line":4,"column":15,"index":50},"end":{"line":4,"column":20,"index":55}},
               "out": true,
-              "name": {
-                "type": "Identifier",
-                "start":54,"end":55,"loc":{"start":{"line":4,"column":19,"index":54},"end":{"line":4,"column":20,"index":55},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -281,11 +276,7 @@
               "type": "TSTypeParameter",
               "start":266,"end":270,"loc":{"start":{"line":14,"column":19,"index":266},"end":{"line":14,"column":23,"index":270}},
               "in": true,
-              "name": {
-                "type": "Identifier",
-                "start":269,"end":270,"loc":{"start":{"line":14,"column":22,"index":269},"end":{"line":14,"column":23,"index":270},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -308,7 +299,7 @@
                 "typeAnnotation": {
                   "type": "TSFunctionType",
                   "start":283,"end":297,"loc":{"start":{"line":15,"column":7,"index":283},"end":{"line":15,"column":21,"index":297}},
-                  "params": [
+                  "parameters": [
                     {
                       "type": "Identifier",
                       "start":284,"end":288,"loc":{"start":{"line":15,"column":8,"index":284},"end":{"line":15,"column":12,"index":288},"identifierName":"x"},
@@ -328,7 +319,7 @@
                       }
                     }
                   ],
-                  "returnType": {
+                  "typeAnnotation": {
                     "type": "TSTypeAnnotation",
                     "start":290,"end":297,"loc":{"start":{"line":15,"column":14,"index":290},"end":{"line":15,"column":21,"index":297}},
                     "typeAnnotation": {
@@ -500,11 +491,7 @@
               "start":522,"end":530,"loc":{"start":{"line":24,"column":15,"index":522},"end":{"line":24,"column":23,"index":530}},
               "in": true,
               "out": true,
-              "name": {
-                "type": "Identifier",
-                "start":529,"end":530,"loc":{"start":{"line":24,"column":22,"index":529},"end":{"line":24,"column":23,"index":530},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -527,7 +514,7 @@
                 "typeAnnotation": {
                   "type": "TSFunctionType",
                   "start":543,"end":554,"loc":{"start":{"line":25,"column":7,"index":543},"end":{"line":25,"column":18,"index":554}},
-                  "params": [
+                  "parameters": [
                     {
                       "type": "Identifier",
                       "start":544,"end":548,"loc":{"start":{"line":25,"column":8,"index":544},"end":{"line":25,"column":12,"index":548},"identifierName":"x"},
@@ -547,7 +534,7 @@
                       }
                     }
                   ],
-                  "returnType": {
+                  "typeAnnotation": {
                     "type": "TSTypeAnnotation",
                     "start":550,"end":554,"loc":{"start":{"line":25,"column":14,"index":550},"end":{"line":25,"column":18,"index":554}},
                     "typeAnnotation": {
@@ -728,11 +715,7 @@
               "type": "TSTypeParameter",
               "start":793,"end":798,"loc":{"start":{"line":36,"column":9,"index":793},"end":{"line":36,"column":14,"index":798}},
               "out": true,
-              "name": {
-                "type": "Identifier",
-                "start":797,"end":798,"loc":{"start":{"line":36,"column":13,"index":797},"end":{"line":36,"column":14,"index":798},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -774,11 +757,7 @@
               "type": "TSTypeParameter",
               "start":814,"end":818,"loc":{"start":{"line":37,"column":9,"index":814},"end":{"line":37,"column":13,"index":818}},
               "in": true,
-              "name": {
-                "type": "Identifier",
-                "start":817,"end":818,"loc":{"start":{"line":37,"column":12,"index":817},"end":{"line":37,"column":13,"index":818},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -813,21 +792,13 @@
               "type": "TSTypeParameter",
               "start":840,"end":845,"loc":{"start":{"line":38,"column":9,"index":840},"end":{"line":38,"column":14,"index":845}},
               "out": true,
-              "name": {
-                "type": "Identifier",
-                "start":844,"end":845,"loc":{"start":{"line":38,"column":13,"index":844},"end":{"line":38,"column":14,"index":845},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             },
             {
               "type": "TSTypeParameter",
               "start":847,"end":868,"loc":{"start":{"line":38,"column":16,"index":847},"end":{"line":38,"column":37,"index":868}},
               "out": true,
-              "name": {
-                "type": "Identifier",
-                "start":851,"end":852,"loc":{"start":{"line":38,"column":20,"index":851},"end":{"line":38,"column":21,"index":852},"identifierName":"K"},
-                "name": "K"
-              },
+              "name": "K",
               "constraint": {
                 "type": "TSTypeOperator",
                 "start":861,"end":868,"loc":{"start":{"line":38,"column":30,"index":861},"end":{"line":38,"column":37,"index":868}},
@@ -885,11 +856,7 @@
               "start":887,"end":895,"loc":{"start":{"line":39,"column":9,"index":887},"end":{"line":39,"column":17,"index":895}},
               "in": true,
               "out": true,
-              "name": {
-                "type": "Identifier",
-                "start":894,"end":895,"loc":{"start":{"line":39,"column":16,"index":894},"end":{"line":39,"column":17,"index":895},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -944,11 +911,7 @@
               "type": "TSTypeParameter",
               "start":959,"end":963,"loc":{"start":{"line":43,"column":16,"index":959},"end":{"line":43,"column":20,"index":963}},
               "in": true,
-              "name": {
-                "type": "Identifier",
-                "start":962,"end":963,"loc":{"start":{"line":43,"column":19,"index":962},"end":{"line":43,"column":20,"index":963},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -1012,11 +975,7 @@
               "type": "TSTypeParameter",
               "start":1012,"end":1017,"loc":{"start":{"line":47,"column":20,"index":1012},"end":{"line":47,"column":25,"index":1017}},
               "out": true,
-              "name": {
-                "type": "Identifier",
-                "start":1016,"end":1017,"loc":{"start":{"line":47,"column":24,"index":1016},"end":{"line":47,"column":25,"index":1017},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -1058,11 +1017,7 @@
               "type": "TSTypeParameter",
               "start":1061,"end":1066,"loc":{"start":{"line":49,"column":20,"index":1061},"end":{"line":49,"column":25,"index":1066}},
               "out": true,
-              "name": {
-                "type": "Identifier",
-                "start":1065,"end":1066,"loc":{"start":{"line":49,"column":24,"index":1065},"end":{"line":49,"column":25,"index":1066},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -1085,7 +1040,7 @@
                 "typeAnnotation": {
                   "type": "TSFunctionType",
                   "start":1089,"end":1103,"loc":{"start":{"line":50,"column":7,"index":1089},"end":{"line":50,"column":21,"index":1103}},
-                  "params": [
+                  "parameters": [
                     {
                       "type": "Identifier",
                       "start":1090,"end":1094,"loc":{"start":{"line":50,"column":8,"index":1090},"end":{"line":50,"column":12,"index":1094},"identifierName":"x"},
@@ -1105,7 +1060,7 @@
                       }
                     }
                   ],
-                  "returnType": {
+                  "typeAnnotation": {
                     "type": "TSTypeAnnotation",
                     "start":1096,"end":1103,"loc":{"start":{"line":50,"column":14,"index":1096},"end":{"line":50,"column":21,"index":1103}},
                     "typeAnnotation": {
@@ -1149,11 +1104,7 @@
               "type": "TSTypeParameter",
               "start":1124,"end":1128,"loc":{"start":{"line":53,"column":16,"index":1124},"end":{"line":53,"column":20,"index":1128}},
               "in": true,
-              "name": {
-                "type": "Identifier",
-                "start":1127,"end":1128,"loc":{"start":{"line":53,"column":19,"index":1127},"end":{"line":53,"column":20,"index":1128},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -1176,7 +1127,7 @@
                 "typeAnnotation": {
                   "type": "TSFunctionType",
                   "start":1151,"end":1162,"loc":{"start":{"line":54,"column":7,"index":1151},"end":{"line":54,"column":18,"index":1162}},
-                  "params": [
+                  "parameters": [
                     {
                       "type": "Identifier",
                       "start":1152,"end":1156,"loc":{"start":{"line":54,"column":8,"index":1152},"end":{"line":54,"column":12,"index":1156},"identifierName":"x"},
@@ -1196,7 +1147,7 @@
                       }
                     }
                   ],
-                  "returnType": {
+                  "typeAnnotation": {
                     "type": "TSTypeAnnotation",
                     "start":1158,"end":1162,"loc":{"start":{"line":54,"column":14,"index":1158},"end":{"line":54,"column":18,"index":1162}},
                     "typeAnnotation": {
@@ -1238,11 +1189,7 @@
               "type": "TSTypeParameter",
               "start":1183,"end":1188,"loc":{"start":{"line":57,"column":16,"index":1183},"end":{"line":57,"column":21,"index":1188}},
               "out": true,
-              "name": {
-                "type": "Identifier",
-                "start":1187,"end":1188,"loc":{"start":{"line":57,"column":20,"index":1187},"end":{"line":57,"column":21,"index":1188},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -1265,7 +1212,7 @@
                 "typeAnnotation": {
                   "type": "TSFunctionType",
                   "start":1211,"end":1222,"loc":{"start":{"line":58,"column":7,"index":1211},"end":{"line":58,"column":18,"index":1222}},
-                  "params": [
+                  "parameters": [
                     {
                       "type": "Identifier",
                       "start":1212,"end":1216,"loc":{"start":{"line":58,"column":8,"index":1212},"end":{"line":58,"column":12,"index":1216},"identifierName":"x"},
@@ -1285,7 +1232,7 @@
                       }
                     }
                   ],
-                  "returnType": {
+                  "typeAnnotation": {
                     "type": "TSTypeAnnotation",
                     "start":1218,"end":1222,"loc":{"start":{"line":58,"column":14,"index":1218},"end":{"line":58,"column":18,"index":1222}},
                     "typeAnnotation": {
@@ -1334,11 +1281,7 @@
               "type": "TSTypeParameter",
               "start":1268,"end":1272,"loc":{"start":{"line":63,"column":10,"index":1268},"end":{"line":63,"column":14,"index":1272}},
               "in": true,
-              "name": {
-                "type": "Identifier",
-                "start":1271,"end":1272,"loc":{"start":{"line":63,"column":13,"index":1271},"end":{"line":63,"column":14,"index":1272},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -1439,18 +1382,14 @@
             {
               "type": "TSTypeParameter",
               "start":1331,"end":1332,"loc":{"start":{"line":68,"column":12,"index":1331},"end":{"line":68,"column":13,"index":1332}},
-              "name": {
-                "type": "Identifier",
-                "start":1331,"end":1332,"loc":{"start":{"line":68,"column":12,"index":1331},"end":{"line":68,"column":13,"index":1332},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
         "typeAnnotation": {
           "type": "TSFunctionType",
           "start":1336,"end":1360,"loc":{"start":{"line":68,"column":17,"index":1336},"end":{"line":68,"column":41,"index":1360}},
-          "params": [
+          "parameters": [
             {
               "type": "Identifier",
               "start":1337,"end":1351,"loc":{"start":{"line":68,"column":18,"index":1337},"end":{"line":68,"column":32,"index":1351},"identifierName":"foo"},
@@ -1489,7 +1428,7 @@
               }
             }
           ],
-          "returnType": {
+          "typeAnnotation": {
             "type": "TSTypeAnnotation",
             "start":1353,"end":1360,"loc":{"start":{"line":68,"column":34,"index":1353},"end":{"line":68,"column":41,"index":1360}},
             "typeAnnotation": {
@@ -1514,11 +1453,7 @@
             {
               "type": "TSTypeParameter",
               "start":1373,"end":1374,"loc":{"start":{"line":70,"column":10,"index":1373},"end":{"line":70,"column":11,"index":1374}},
-              "name": {
-                "type": "Identifier",
-                "start":1373,"end":1374,"loc":{"start":{"line":70,"column":10,"index":1373},"end":{"line":70,"column":11,"index":1374},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -1587,11 +1522,7 @@
               "type": "TSTypeParameter",
               "start":1415,"end":1420,"loc":{"start":{"line":74,"column":10,"index":1415},"end":{"line":74,"column":15,"index":1420}},
               "out": true,
-              "name": {
-                "type": "Identifier",
-                "start":1419,"end":1420,"loc":{"start":{"line":74,"column":14,"index":1419},"end":{"line":74,"column":15,"index":1420},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -1685,18 +1616,14 @@
             {
               "type": "TSTypeParameter",
               "start":1479,"end":1480,"loc":{"start":{"line":79,"column":12,"index":1479},"end":{"line":79,"column":13,"index":1480}},
-              "name": {
-                "type": "Identifier",
-                "start":1479,"end":1480,"loc":{"start":{"line":79,"column":12,"index":1479},"end":{"line":79,"column":13,"index":1480},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
         "typeAnnotation": {
           "type": "TSFunctionType",
           "start":1484,"end":1508,"loc":{"start":{"line":79,"column":17,"index":1484},"end":{"line":79,"column":41,"index":1508}},
-          "params": [
+          "parameters": [
             {
               "type": "Identifier",
               "start":1485,"end":1499,"loc":{"start":{"line":79,"column":18,"index":1485},"end":{"line":79,"column":32,"index":1499},"identifierName":"foo"},
@@ -1735,7 +1662,7 @@
               }
             }
           ],
-          "returnType": {
+          "typeAnnotation": {
             "type": "TSTypeAnnotation",
             "start":1501,"end":1508,"loc":{"start":{"line":79,"column":34,"index":1501},"end":{"line":79,"column":41,"index":1508}},
             "typeAnnotation": {
@@ -1760,11 +1687,7 @@
             {
               "type": "TSTypeParameter",
               "start":1521,"end":1522,"loc":{"start":{"line":81,"column":10,"index":1521},"end":{"line":81,"column":11,"index":1522}},
-              "name": {
-                "type": "Identifier",
-                "start":1521,"end":1522,"loc":{"start":{"line":81,"column":10,"index":1521},"end":{"line":81,"column":11,"index":1522},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -1834,11 +1757,7 @@
               "start":1563,"end":1571,"loc":{"start":{"line":85,"column":10,"index":1563},"end":{"line":85,"column":18,"index":1571}},
               "in": true,
               "out": true,
-              "name": {
-                "type": "Identifier",
-                "start":1570,"end":1571,"loc":{"start":{"line":85,"column":17,"index":1570},"end":{"line":85,"column":18,"index":1571},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -1925,18 +1844,14 @@
             {
               "type": "TSTypeParameter",
               "start":1620,"end":1621,"loc":{"start":{"line":90,"column":12,"index":1620},"end":{"line":90,"column":13,"index":1621}},
-              "name": {
-                "type": "Identifier",
-                "start":1620,"end":1621,"loc":{"start":{"line":90,"column":12,"index":1620},"end":{"line":90,"column":13,"index":1621},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
         "typeAnnotation": {
           "type": "TSFunctionType",
           "start":1625,"end":1649,"loc":{"start":{"line":90,"column":17,"index":1625},"end":{"line":90,"column":41,"index":1649}},
-          "params": [
+          "parameters": [
             {
               "type": "Identifier",
               "start":1626,"end":1640,"loc":{"start":{"line":90,"column":18,"index":1626},"end":{"line":90,"column":32,"index":1640},"identifierName":"foo"},
@@ -1975,7 +1890,7 @@
               }
             }
           ],
-          "returnType": {
+          "typeAnnotation": {
             "type": "TSTypeAnnotation",
             "start":1642,"end":1649,"loc":{"start":{"line":90,"column":34,"index":1642},"end":{"line":90,"column":41,"index":1649}},
             "typeAnnotation": {
@@ -2000,11 +1915,7 @@
             {
               "type": "TSTypeParameter",
               "start":1662,"end":1663,"loc":{"start":{"line":92,"column":10,"index":1662},"end":{"line":92,"column":11,"index":1663}},
-              "name": {
-                "type": "Identifier",
-                "start":1662,"end":1663,"loc":{"start":{"line":92,"column":10,"index":1662},"end":{"line":92,"column":11,"index":1663},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -2080,11 +1991,7 @@
               "type": "TSTypeParameter",
               "start":1728,"end":1736,"loc":{"start":{"line":98,"column":9,"index":1728},"end":{"line":98,"column":17,"index":1736}},
               "accessibility": "public",
-              "name": {
-                "type": "Identifier",
-                "start":1735,"end":1736,"loc":{"start":{"line":98,"column":16,"index":1735},"end":{"line":98,"column":17,"index":1736},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -2129,11 +2036,7 @@
               "start":1762,"end":1773,"loc":{"start":{"line":99,"column":9,"index":1762},"end":{"line":99,"column":20,"index":1773}},
               "in": true,
               "out": true,
-              "name": {
-                "type": "Identifier",
-                "start":1772,"end":1773,"loc":{"start":{"line":99,"column":19,"index":1772},"end":{"line":99,"column":20,"index":1773},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -2178,11 +2081,7 @@
               "start":1799,"end":1811,"loc":{"start":{"line":100,"column":9,"index":1799},"end":{"line":100,"column":21,"index":1811}},
               "in": true,
               "out": true,
-              "name": {
-                "type": "Identifier",
-                "start":1810,"end":1811,"loc":{"start":{"line":100,"column":20,"index":1810},"end":{"line":100,"column":21,"index":1811},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -2227,11 +2126,7 @@
               "start":1837,"end":1845,"loc":{"start":{"line":101,"column":9,"index":1837},"end":{"line":101,"column":17,"index":1845}},
               "out": true,
               "in": true,
-              "name": {
-                "type": "Identifier",
-                "start":1844,"end":1845,"loc":{"start":{"line":101,"column":16,"index":1844},"end":{"line":101,"column":17,"index":1845},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -2278,11 +2173,7 @@
               "type": "TSTypeParameter",
               "start":1883,"end":1887,"loc":{"start":{"line":103,"column":20,"index":1883},"end":{"line":103,"column":24,"index":1887}},
               "in": true,
-              "name": {
-                "type": "Identifier",
-                "start":1886,"end":1887,"loc":{"start":{"line":103,"column":23,"index":1886},"end":{"line":103,"column":24,"index":1887},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -2348,11 +2239,7 @@
               "type": "TSTypeParameter",
               "start":1932,"end":1937,"loc":{"start":{"line":104,"column":20,"index":1932},"end":{"line":104,"column":25,"index":1937}},
               "out": true,
-              "name": {
-                "type": "Identifier",
-                "start":1936,"end":1937,"loc":{"start":{"line":104,"column":24,"index":1936},"end":{"line":104,"column":25,"index":1937},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -2494,11 +2381,7 @@
               "type": "TSTypeParameter",
               "start":2054,"end":2059,"loc":{"start":{"line":113,"column":14,"index":2054},"end":{"line":113,"column":19,"index":2059}},
               "out": true,
-              "name": {
-                "type": "Identifier",
-                "start":2058,"end":2059,"loc":{"start":{"line":113,"column":18,"index":2058},"end":{"line":113,"column":19,"index":2059},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -2531,11 +2414,7 @@
               "type": "TSTypeParameter",
               "start":2078,"end":2082,"loc":{"start":{"line":114,"column":14,"index":2078},"end":{"line":114,"column":18,"index":2082}},
               "in": true,
-              "name": {
-                "type": "Identifier",
-                "start":2081,"end":2082,"loc":{"start":{"line":114,"column":17,"index":2081},"end":{"line":114,"column":18,"index":2082},"identifierName":"T"},
-                "name": "T"
-              }
+              "name": "T"
             }
           ]
         },
@@ -2707,11 +2586,7 @@
               "type": "TSTypeParameter",
               "start":2238,"end":2243,"loc":{"start":{"line":124,"column":17,"index":2238},"end":{"line":124,"column":22,"index":2243}},
               "out": true,
-              "name": {
-                "type": "Identifier",
-                "start":2242,"end":2243,"loc":{"start":{"line":124,"column":21,"index":2242},"end":{"line":124,"column":22,"index":2243},"identifierName":"A"},
-                "name": "A"
-              }
+              "name": "A"
             }
           ]
         },
@@ -2845,20 +2720,12 @@
             {
               "type": "TSTypeParameter",
               "start":2324,"end":2325,"loc":{"start":{"line":129,"column":16,"index":2324},"end":{"line":129,"column":17,"index":2325}},
-              "name": {
-                "type": "Identifier",
-                "start":2324,"end":2325,"loc":{"start":{"line":129,"column":16,"index":2324},"end":{"line":129,"column":17,"index":2325},"identifierName":"A"},
-                "name": "A"
-              }
+              "name": "A"
             },
             {
               "type": "TSTypeParameter",
               "start":2327,"end":2338,"loc":{"start":{"line":129,"column":19,"index":2327},"end":{"line":129,"column":30,"index":2338}},
-              "name": {
-                "type": "Identifier",
-                "start":2327,"end":2328,"loc":{"start":{"line":129,"column":19,"index":2327},"end":{"line":129,"column":20,"index":2328},"identifierName":"B"},
-                "name": "B"
-              },
+              "name": "B",
               "default": {
                 "type": "TSUnknownKeyword",
                 "start":2331,"end":2338,"loc":{"start":{"line":129,"column":23,"index":2331},"end":{"line":129,"column":30,"index":2338}}
@@ -2964,11 +2831,7 @@
             {
               "type": "TSTypeParameter",
               "start":2413,"end":2414,"loc":{"start":{"line":134,"column":12,"index":2413},"end":{"line":134,"column":13,"index":2414}},
-              "name": {
-                "type": "Identifier",
-                "start":2413,"end":2414,"loc":{"start":{"line":134,"column":12,"index":2413},"end":{"line":134,"column":13,"index":2414},"identifierName":"A"},
-                "name": "A"
-              }
+              "name": "A"
             }
           ]
         },
@@ -3284,22 +3147,14 @@
             {
               "type": "TSTypeParameter",
               "start":2673,"end":2681,"loc":{"start":{"line":143,"column":24,"index":2673},"end":{"line":143,"column":32,"index":2681}},
-              "name": {
-                "type": "Identifier",
-                "start":2673,"end":2681,"loc":{"start":{"line":143,"column":24,"index":2673},"end":{"line":143,"column":32,"index":2681},"identifierName":"TContext"},
-                "name": "TContext"
-              }
+              "name": "TContext"
             },
             {
               "type": "TSTypeParameter",
               "start":2683,"end":2721,"loc":{"start":{"line":143,"column":34,"index":2683},"end":{"line":143,"column":72,"index":2721}},
               "in": true,
               "out": true,
-              "name": {
-                "type": "Identifier",
-                "start":2690,"end":2696,"loc":{"start":{"line":143,"column":41,"index":2690},"end":{"line":143,"column":47,"index":2696},"identifierName":"TEvent"},
-                "name": "TEvent"
-              },
+              "name": "TEvent",
               "constraint": {
                 "type": "TSTypeLiteral",
                 "start":2705,"end":2721,"loc":{"start":{"line":143,"column":56,"index":2705},"end":{"line":143,"column":72,"index":2721}},
@@ -3471,11 +3326,7 @@
             {
               "type": "TSTypeParameter",
               "start":2850,"end":2881,"loc":{"start":{"line":149,"column":23,"index":2850},"end":{"line":149,"column":54,"index":2881}},
-              "name": {
-                "type": "Identifier",
-                "start":2850,"end":2856,"loc":{"start":{"line":149,"column":23,"index":2850},"end":{"line":149,"column":29,"index":2856},"identifierName":"TEvent"},
-                "name": "TEvent"
-              },
+              "name": "TEvent",
               "constraint": {
                 "type": "TSTypeLiteral",
                 "start":2865,"end":2881,"loc":{"start":{"line":149,"column":38,"index":2865},"end":{"line":149,"column":54,"index":2881}},
@@ -3522,7 +3373,7 @@
                 "typeAnnotation": {
                   "type": "TSFunctionType",
                   "start":2895,"end":2933,"loc":{"start":{"line":150,"column":10,"index":2895},"end":{"line":150,"column":48,"index":2933}},
-                  "params": [
+                  "parameters": [
                     {
                       "type": "Identifier",
                       "start":2896,"end":2924,"loc":{"start":{"line":150,"column":11,"index":2896},"end":{"line":150,"column":39,"index":2924},"identifierName":"meta"},
@@ -3561,7 +3412,7 @@
                       }
                     }
                   ],
-                  "returnType": {
+                  "typeAnnotation": {
                     "type": "TSTypeAnnotation",
                     "start":2926,"end":2933,"loc":{"start":{"line":150,"column":41,"index":2926},"end":{"line":150,"column":48,"index":2933}},
                     "typeAnnotation": {
@@ -3593,11 +3444,7 @@
             {
               "type": "TSTypeParameter",
               "start":2969,"end":3000,"loc":{"start":{"line":153,"column":31,"index":2969},"end":{"line":153,"column":62,"index":3000}},
-              "name": {
-                "type": "Identifier",
-                "start":2969,"end":2975,"loc":{"start":{"line":153,"column":31,"index":2969},"end":{"line":153,"column":37,"index":2975},"identifierName":"TEvent"},
-                "name": "TEvent"
-              },
+              "name": "TEvent",
               "constraint": {
                 "type": "TSTypeLiteral",
                 "start":2984,"end":3000,"loc":{"start":{"line":153,"column":46,"index":2984},"end":{"line":153,"column":62,"index":3000}},
@@ -3706,11 +3553,7 @@
             {
               "type": "TSTypeParameter",
               "start":3082,"end":3090,"loc":{"start":{"line":155,"column":27,"index":3082},"end":{"line":155,"column":35,"index":3090}},
-              "name": {
-                "type": "Identifier",
-                "start":3082,"end":3090,"loc":{"start":{"line":155,"column":27,"index":3082},"end":{"line":155,"column":35,"index":3090},"identifierName":"TContext"},
-                "name": "TContext"
-              }
+              "name": "TContext"
             }
           ]
         },
