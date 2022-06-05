@@ -63,10 +63,10 @@ export const DEFAULT_EXTENSIONS = Object.freeze([
 ] as const);
 
 // For easier backward-compatibility, provide an API like the one we exposed in Babel 6.
-import { loadOptions } from "./config";
+import { loadOptionsSync } from "./config";
 export class OptionManager {
   init(opts: {}) {
-    return loadOptions(opts);
+    return loadOptionsSync(opts);
   }
 }
 

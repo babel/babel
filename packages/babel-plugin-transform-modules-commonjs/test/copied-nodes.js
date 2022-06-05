@@ -7,7 +7,7 @@ import transformCommonJS from "../lib/index.js";
 test("Doesn't use the same object for two different nodes in the AST", function () {
   const code = 'import Foo from "bar"; Foo; Foo;';
 
-  const ast = babel.transform(code, {
+  const ast = babel.transformSync(code, {
     cwd: path.dirname(fileURLToPath(import.meta.url)),
     ast: true,
     plugins: [[transformCommonJS, { loose: true }]],
