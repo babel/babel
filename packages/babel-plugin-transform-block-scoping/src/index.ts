@@ -124,7 +124,7 @@ const buildRetCheck = template.statement(`
 function isBlockScoped(node: t.Node): node is t.VariableDeclaration {
   if (!t.isVariableDeclaration(node)) return false;
   if (
-    // @ts-expect-error Fixme: avoid mutating AST nodes
+    // @ts-expect-error Fixme: document symbol properties
     node[t.BLOCK_SCOPED_SYMBOL]
   ) {
     return true;
