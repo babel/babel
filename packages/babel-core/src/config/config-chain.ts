@@ -469,7 +469,6 @@ function buildProgrammaticLogger(
     return () => {};
   }
   return baseLogger.configure(context.showConfig, ChainFormatter.Programmatic, {
-    // @ts-expect-error caller may be void
     callerName: context.caller?.name,
   });
 }

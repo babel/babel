@@ -62,7 +62,7 @@ export function makeConfigAPI<SideChannel extends Context.SimpleConfig>(
     });
 
   const caller = (cb: {
-    (CallerMetadata: void | CallerMetadata): SimpleType;
+    (CallerMetadata: CallerMetadata | undefined): SimpleType;
   }) => cache.using(data => assertSimpleType(cb(data.caller)));
 
   return {

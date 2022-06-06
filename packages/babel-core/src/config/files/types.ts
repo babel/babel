@@ -3,7 +3,7 @@ import type { InputOptions } from "..";
 export type ConfigFile = {
   filepath: string;
   dirname: string;
-  options: InputOptions;
+  options: InputOptions & { babel?: unknown };
 };
 
 export type IgnoreFile = {

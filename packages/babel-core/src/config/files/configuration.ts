@@ -153,7 +153,7 @@ export function* loadConfig(
 function readConfig(
   filepath: string,
   envName: string,
-  caller: void | CallerMetadata,
+  caller: CallerMetadata | undefined,
 ): Handler<ConfigFile | null> {
   const ext = path.extname(filepath);
   return ext === ".js" || ext === ".cjs" || ext === ".mjs"
