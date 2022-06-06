@@ -31,9 +31,16 @@ export default declare((api, options: Options) => {
     MUTATOR_MAP_REF[KEY].KIND = VALUE;
   `);
 
+  /**
+   * Get value of an object member under object expression.
+   * Returns a function expression if prop is a ObjectMethod.
+   *
+   * @param {t.ObjectMember} prop
+   * @returns t.Expression
+   */
   function getValue(prop: t.ObjectMember) {
     if (t.isObjectProperty(prop)) {
-      return prop.value;
+      return prop.value as t.Expression;
     } else if (t.isObjectMethod(prop)) {
       return t.functionExpression(
         null,
@@ -59,7 +66,6 @@ export default declare((api, options: Options) => {
             prop.key,
             prop.computed || t.isLiteral(prop.key),
           ),
-          // @ts-expect-error todo(flow->ts): double-check type error
           getValue(prop),
         ),
       ),

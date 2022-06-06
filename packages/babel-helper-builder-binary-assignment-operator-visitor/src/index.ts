@@ -6,7 +6,7 @@ import type * as t from "@babel/types";
 export default function (opts: {
   build: (
     left: t.Expression | t.PrivateName,
-    right: t.BinaryExpression["right"],
+    right: t.Expression,
   ) => t.Expression;
   operator: t.BinaryExpression["operator"];
 }) {
@@ -18,7 +18,7 @@ export default function (opts: {
       if (node.operator !== operator + "=") return;
 
       const nodes: t.AssignmentExpression[] = [];
-      // @ts-expect-error todo(flow->ts)
+      // @ts-expect-error Fixme: node.left can be a TSAsExpression
       const exploded = explode(node.left, nodes, this, scope);
       nodes.push(
         assignmentExpression(

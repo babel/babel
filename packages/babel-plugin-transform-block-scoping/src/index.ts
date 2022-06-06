@@ -739,11 +739,7 @@ class BlockScoping {
       const { parentPath, listKey, key } = this.blockPath;
 
       this.blockPath.replaceWithMultiple(this.body);
-      callPath =
-        parentPath.get(listKey)[
-          // @ts-ignore
-          key + index
-        ];
+      callPath = parentPath.get(listKey)[(key as number) + index];
     } else {
       block.body = this.body;
       callPath = this.blockPath.get("body")[index];
