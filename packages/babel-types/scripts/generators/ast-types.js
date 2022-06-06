@@ -37,9 +37,9 @@ export interface SourceLocation {
 
 interface BaseNode {
   type: Node["type"];
-  leadingComments?: ReadonlyArray<Comment> | null;
-  innerComments?: ReadonlyArray<Comment> | null;
-  trailingComments?: ReadonlyArray<Comment> | null;
+  leadingComments?: Comment[] | null;
+  innerComments?: Comment[] | null;
+  trailingComments?: Comment[] | null;
   start?: number | null;
   end?: number | null;
   loc?: SourceLocation | null;
