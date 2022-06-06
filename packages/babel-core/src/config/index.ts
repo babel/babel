@@ -24,7 +24,7 @@ export type {
   ValidatedOptions as PresetObject,
 } from "./validation/options";
 
-import loadFullConfig from "./full";
+import loadFullConfig, { type ResolvedConfig } from "./full";
 import { loadPartialConfig as loadPartialConfigRunner } from "./partial";
 
 export { loadFullConfig as default };
@@ -33,11 +33,13 @@ export type { PartialConfig } from "./partial";
 import { createConfigItem as createConfigItemImpl } from "./item";
 import type { ConfigItem } from "./item";
 
-const loadOptionsRunner = gensync<(opts: unknown) => any>(function* (opts) {
-  const config = yield* loadFullConfig(opts);
-  // NOTE: We want to return "null" explicitly, while ?. alone returns undefined
-  return config?.options ?? null;
-});
+const loadOptionsRunner = gensync<(opts: unknown) => ResolvedConfig | null>(
+  function* (opts) {
+    const config = yield* loadFullConfig(opts);
+    // NOTE: We want to return "null" explicitly, while ?. alone returns undefined
+    return config?.options ?? null;
+  },
+);
 
 const createConfigItemRunner =
   gensync<(...args: Parameters<typeof createConfigItemImpl>) => ConfigItem>(
@@ -45,7 +47,8 @@ const createConfigItemRunner =
   );
 
 const maybeErrback =
-  (runner: Gensync<any>) => (opts: unknown, callback?: any) => {
+  (runner: Gensync<(...args: any) => any>) =>
+  (opts: unknown, callback?: any) => {
     if (callback === undefined && typeof opts === "function") {
       callback = opts;
       opts = undefined;
@@ -65,7 +68,7 @@ export const createConfigItemSync = createConfigItemRunner.sync;
 export const createConfigItemAsync = createConfigItemRunner.async;
 export function createConfigItem(
   target: PluginTarget,
-  options: any,
+  options: Parameters<typeof createConfigItemImpl>[1],
   callback?: (err: Error, val: ConfigItem | null) => void,
 ) {
   if (callback !== undefined) {
