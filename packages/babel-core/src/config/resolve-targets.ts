@@ -7,7 +7,9 @@ type nodeType = typeof import("./resolve-targets");
 
 import type { ValidatedOptions } from "./validation/options";
 import path from "path";
-import getTargets from "@babel/helper-compilation-targets";
+import getTargets, {
+  type InputTargets,
+} from "@babel/helper-compilation-targets";
 
 import type { Targets } from "@babel/helper-compilation-targets";
 
@@ -22,10 +24,11 @@ export function resolveTargets(
   options: ValidatedOptions,
   root: string,
 ): Targets {
-  // todo(flow->ts) remove any and refactor to not assign different types into same variable
-  let targets: any = options.targets;
-  if (typeof targets === "string" || Array.isArray(targets)) {
-    targets = { browsers: targets };
+  const optTargets = options.targets;
+  let targets: InputTargets;
+
+  if (typeof optTargets === "string" || Array.isArray(optTargets)) {
+    targets = { browsers: optTargets };
   }
   if (targets && targets.esmodules) {
     targets = { ...targets, esmodules: "intersect" };
