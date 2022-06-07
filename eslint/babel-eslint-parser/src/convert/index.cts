@@ -11,7 +11,9 @@ exports.ast = function convert(ast, code, tokLabels, visitorKeys) {
 
 exports.error = function convertError(err) {
   if (err instanceof SyntaxError) {
+    // @ts-expect-error The lineNumber, column and loc properties don't exist on SyntaxError.
     err.lineNumber = err.loc.line;
+    // @ts-expect-error The lineNumber, column and loc properties don't exist on SyntaxError.
     err.column = err.loc.column;
   }
   return err;

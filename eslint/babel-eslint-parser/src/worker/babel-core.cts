@@ -11,7 +11,13 @@ function initialize(babel) {
 }
 
 if (process.env.BABEL_8_BREAKING) {
-  exports.init = import("@babel/core").then(ns => initialize(ns.default));
+  exports.init = import("@babel/core").then(ns =>
+    initialize(
+      // @ts-expect-error TS doesn't know that @babel/core is compiled to
+      // CJS and thus all its named exports are on the default property.
+      ns.default
+    )
+  );
 } else {
   initialize(require("@babel/core"));
 }

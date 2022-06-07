@@ -1,4 +1,4 @@
-const babel = require("./babel-core.cjs");
+const babel = require("./babel-core.cjs") as typeof import("@babel/core");
 const ESLINT_VERSION = require("../utils/eslint-version.cjs");
 
 /**

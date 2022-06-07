@@ -1,4 +1,4 @@
-const babel = require("./babel-core.cjs");
+const babel = require("./babel-core.cjs") as typeof import("@babel/core");
 const convert = require("../convert/index.cjs");
 const { getVisitorKeys, getTokLabels } = require("./ast-info.cjs");
 const extractParserOptionsPlugin = require("./extract-parser-options-plugin.cjs");
@@ -12,7 +12,7 @@ module.exports = function maybeParse(code, options) {
   if (!extractParserOptionsConfigItem) {
     extractParserOptionsConfigItem = babel.createConfigItem(
       [extractParserOptionsPlugin, ref],
-      { dirname: __dirname, type: "plugin" },
+      { dirname: __dirname, type: "plugin" }
     );
   }
   const { plugins } = options;

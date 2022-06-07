@@ -1,4 +1,4 @@
-const babel = require("./babel-core.cjs");
+const babel = require("./babel-core.cjs") as typeof import("@babel/core");
 const maybeParse = require("./maybeParse.cjs");
 const { getVisitorKeys, getTokLabels } = require("./ast-info.cjs");
 const {
@@ -21,13 +21,13 @@ module.exports = function handleMessage(action, payload) {
       return getVisitorKeys();
     case "MAYBE_PARSE":
       return normalizeBabelParseConfig(payload.options).then(options =>
-        maybeParse(payload.code, options),
+        maybeParse(payload.code, options)
       );
     case "MAYBE_PARSE_SYNC":
       if (!process.env.BABEL_8_BREAKING) {
         return maybeParse(
           payload.code,
-          normalizeBabelParseConfigSync(payload.options),
+          normalizeBabelParseConfigSync(payload.options)
         );
       }
   }

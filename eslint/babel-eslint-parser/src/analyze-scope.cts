@@ -86,6 +86,8 @@ class Referencer extends OriginalReferencer {
       options = { processRightHandNodes: false };
     }
 
+    // @ts-expect-error OriginalPatternVisitor takes three arguments,
+    // but for some reason TS doesn't like it.
     const visitor = new PatternVisitor(this.options, node, callback);
     visitor.visit(node);
 
@@ -106,7 +108,7 @@ class Referencer extends OriginalReferencer {
     // Flow super types.
     this._visitTypeAnnotation(node.implements);
     this._visitTypeAnnotation(
-      node.superTypeParameters && node.superTypeParameters.params,
+      node.superTypeParameters && node.superTypeParameters.params
     );
 
     // Basic.
@@ -226,7 +228,7 @@ class Referencer extends OriginalReferencer {
   _createScopeVariable(node, name) {
     this.currentScope().variableScope.__define(
       name,
-      new Definition("Variable", name, node, null, null, null),
+      new Definition("Variable", name, node, null, null, null)
     );
   }
 
@@ -241,7 +243,7 @@ class Referencer extends OriginalReferencer {
       "type-parameters",
       parentScope,
       node,
-      false,
+      false
     );
 
     this.scopeManager.__nestScope(scope);
@@ -345,9 +347,8 @@ module.exports = function analyzeScope(ast, parserOptions, client) {
     sourceType: ast.sourceType,
     ecmaVersion: parserOptions.ecmaVersion,
     fallback,
+    childVisitorKeys: client.getVisitorKeys(),
   };
-
-  options.childVisitorKeys = client.getVisitorKeys();
 
   const scopeManager = new escope.ScopeManager(options);
   const referencer = new Referencer(options, scopeManager, client);

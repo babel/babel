@@ -285,15 +285,25 @@ type ReplaceSupersOptionsBase = {
   refToPreserve?: t.Identifier;
 };
 
-type ReplaceSupersOptions = ReplaceSupersOptionsBase &
-  (
-    | { objectRef?: undefined; getObjectRef: () => t.Node }
-    | { objectRef: t.Node; getObjectRef?: undefined }
-  ) &
-  (
-    | { superRef?: undefined; getSuperRef: () => t.Node }
-    | { superRef: t.Node; getSuperRef?: undefined }
-  );
+// TODO: This type was originally like this:
+//   type ReplaceSupersOptions = ReplaceSupersOptionsBase &
+//     (
+//       | { objectRef?: undefined; getObjectRef: () => t.Node }
+//       | { objectRef: t.Node; getObjectRef?: undefined }
+//     ) &
+//     (
+//       | { superRef?: undefined; getSuperRef: () => t.Node }
+//       | { superRef: t.Node; getSuperRef?: undefined }
+//     );
+// However, there seems to be a bug with TS 4.7.3 that makes it
+// report an error when doing
+//    this.opts.objectRef || this.opts.getObjectRef()
+type ReplaceSupersOptions = ReplaceSupersOptionsBase & {
+  objectRef?: t.Node | undefined;
+  getObjectRef?: (() => t.Node) | undefined;
+  superRef?: t.Node | undefined;
+  getSuperRef?: (() => t.Node) | undefined;
+};
 
 interface ReplaceState {
   file: unknown;

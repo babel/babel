@@ -1,5 +1,5 @@
 const ESLINT_VISITOR_KEYS = require("eslint-visitor-keys").KEYS;
-const babel = require("./babel-core.cjs");
+const babel = require("./babel-core.cjs") as typeof import("@babel/core");
 
 let visitorKeys;
 exports.getVisitorKeys = function getVisitorKeys() {
@@ -10,11 +10,11 @@ exports.getVisitorKeys = function getVisitorKeys() {
       ImportExpression: ESLINT_VISITOR_KEYS.ImportExpression,
       Literal: ESLINT_VISITOR_KEYS.Literal,
       MethodDefinition: ["decorators"].concat(
-        ESLINT_VISITOR_KEYS.MethodDefinition,
+        ESLINT_VISITOR_KEYS.MethodDefinition
       ),
       Property: ["decorators"].concat(ESLINT_VISITOR_KEYS.Property),
       PropertyDefinition: ["decorators", "typeAnnotation"].concat(
-        ESLINT_VISITOR_KEYS.PropertyDefinition,
+        ESLINT_VISITOR_KEYS.PropertyDefinition
       ),
     };
 
@@ -22,7 +22,7 @@ exports.getVisitorKeys = function getVisitorKeys() {
     const conflictTypes = {
       // todo: remove this when we drop Babel 7 support
       ClassPrivateMethod: ["decorators"].concat(
-        ESLINT_VISITOR_KEYS.MethodDefinition,
+        ESLINT_VISITOR_KEYS.MethodDefinition
       ),
       ExportAllDeclaration: ESLINT_VISITOR_KEYS.ExportAllDeclaration,
     };
