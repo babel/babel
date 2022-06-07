@@ -353,6 +353,7 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
     if (
       path.isFunctionExpression() &&
       path.has("id") &&
+      // @ts-ignore Fixme: document symbol ast properties
       !path.get("id").node[NOT_LOCAL_BINDING]
     ) {
       path.scope.registerBinding("local", path.get("id"), path);
@@ -360,7 +361,11 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
   },
 
   ClassExpression(path) {
-    if (path.has("id") && !path.get("id").node[NOT_LOCAL_BINDING]) {
+    if (
+      path.has("id") &&
+      // @ts-ignore Fixme: document symbol ast properties
+      !path.get("id").node[NOT_LOCAL_BINDING]
+    ) {
       path.scope.registerBinding("local", path);
     }
   },
@@ -374,7 +379,7 @@ export default class Scope {
   uid;
 
   path: NodePath;
-  block: t.Node;
+  block: t.Pattern | t.Scopable;
 
   labels;
   inited;
@@ -382,15 +387,15 @@ export default class Scope {
   bindings: { [name: string]: Binding };
   references: { [name: string]: true };
   globals: { [name: string]: t.Identifier | t.JSXIdentifier };
-  uids: { [name: string]: true };
-  data: object;
+  uids: { [name: string]: boolean };
+  data: { [key: string | symbol]: unknown };
   crawling: boolean;
 
   /**
    * This searches the current "scope" and collects all references/bindings
    * within.
    */
-  constructor(path: NodePath) {
+  constructor(path: NodePath<t.Pattern | t.Scopable>) {
     const { node } = path;
     const cached = scopeCache.get(node);
     // Sometimes, a scopable path is placed higher in the AST tree.
@@ -452,7 +457,7 @@ export default class Scope {
   /**
    * Traverse node with current scope and path.
    */
-  traverse(node: any, opts: any, state?) {
+  traverse<S>(node: any, opts: any, state?: S) {
     traverse(node, opts, this, state, this.path);
   }
 
@@ -506,14 +511,14 @@ export default class Scope {
    * Generate an `_id1`.
    */
 
-  _generateUid(name, i) {
+  _generateUid(name: string, i: number) {
     let id = name;
     if (i > 1) id += i;
     return `_${id}`;
   }
 
   generateUidBasedOnNode(node: t.Node, defaultName?: string) {
-    const parts = [];
+    const parts: any[] = [];
     gatherNodeParts(node, parts);
 
     let id = parts.join("$");
@@ -605,7 +610,7 @@ export default class Scope {
     }
   }
 
-  rename(oldName: string, newName?: string, block?: t.Node) {
+  rename(oldName: string, newName?: string, block?: t.Pattern | t.Scopable) {
     const binding = this.getBinding(oldName);
     if (binding) {
       newName = newName || this.generateUidIdentifier(oldName).name;
@@ -613,7 +618,13 @@ export default class Scope {
     }
   }
 
-  _renameFromMap(map, oldName, newName, value) {
+  /** @deprecated Not used in our codebase */
+  _renameFromMap(
+    map: Record<string | symbol, unknown>,
+    oldName: string | symbol,
+    newName: string | symbol,
+    value: unknown,
+  ) {
     if (map[oldName]) {
       map[newName] = value;
       map[oldName] = null;
@@ -826,7 +837,7 @@ export default class Scope {
     return !!this.getProgramParent().references[name];
   }
 
-  isPure(node: t.Node, constantsOnly?: boolean) {
+  isPure(node: t.Node, constantsOnly?: boolean): boolean {
     if (isIdentifier(node)) {
       const binding = this.getBinding(node.name);
       if (!binding) return false;
@@ -1029,6 +1040,7 @@ export default class Scope {
     }
 
     if (path.isLoop() || path.isCatchClause() || path.isFunction()) {
+      // @ts-expect-error TS can not infer NodePath<Loop> | NodePath<CatchClause> as NodePath<Loop | CatchClause>
       path.ensureBlock();
       // @ts-expect-error todo(flow->ts): improve types
       path = path.get("body");
@@ -1046,7 +1058,10 @@ export default class Scope {
       // @ts-expect-error todo(flow->ts): avoid modifying nodes
       declar._blockHoist = blockHoist;
 
-      [declarPath] = path.unshiftContainer("body", [declar]);
+      [declarPath] = (path as NodePath<t.BlockStatement>).unshiftContainer(
+        "body",
+        [declar],
+      );
       if (!unique) path.setData(dataKey, declarPath);
     }
 
@@ -1218,7 +1233,7 @@ export default class Scope {
     return !!this.getOwnBinding(name);
   }
 
-  hasBinding(name: string, noGlobals?) {
+  hasBinding(name: string, noGlobals?: boolean) {
     if (!name) return false;
     if (this.hasOwnBinding(name)) return true;
     if (this.parentHasBinding(name, noGlobals)) return true;
@@ -1228,7 +1243,7 @@ export default class Scope {
     return false;
   }
 
-  parentHasBinding(name: string, noGlobals?) {
+  parentHasBinding(name: string, noGlobals?: boolean) {
     return this.parent?.hasBinding(name, noGlobals);
   }
 

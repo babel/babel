@@ -48,7 +48,7 @@ export function addComment(
 export function addComments(
   this: NodePath,
   type: t.CommentTypeShorthand,
-  comments: readonly t.Comment[],
+  comments: t.Comment[],
 ) {
   _addComments(this.node, type, comments);
 }

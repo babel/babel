@@ -133,7 +133,7 @@ export function getEarliestCommonAncestorFrom(
 export function getDeepestCommonAncestorFrom(
   this: NodePath,
   paths: Array<NodePath>,
-  filter?: (deepest: t.Node, i: number, ancestries: NodePath[][]) => NodePath,
+  filter?: (deepest: NodePath, i: number, ancestries: NodePath[][]) => NodePath,
 ): NodePath {
   if (!paths.length) {
     return this;

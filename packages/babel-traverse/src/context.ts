@@ -1,9 +1,17 @@
 import NodePath from "./path";
 import { VISITOR_KEYS } from "@babel/types";
 import type Scope from "./scope";
+import type { TraverseOptions } from ".";
+import type * as t from "@babel/types";
+import type { Visitor } from "./types";
 
-export default class TraversalContext {
-  constructor(scope, opts, state, parentPath) {
+export default class TraversalContext<S = unknown> {
+  constructor(
+    scope: Scope,
+    opts: TraverseOptions,
+    state: S,
+    parentPath: NodePath,
+  ) {
     this.parentPath = parentPath;
     this.scope = scope;
     this.state = state;
@@ -12,8 +20,8 @@ export default class TraversalContext {
 
   declare parentPath: NodePath;
   declare scope: Scope;
-  declare state;
-  declare opts;
+  declare state: S;
+  declare opts: TraverseOptions;
   queue: Array<NodePath> | null = null;
   priorityQueue: Array<NodePath> | null = null;
 
@@ -22,8 +30,8 @@ export default class TraversalContext {
    * visit a node. This will prevent us from constructing a NodePath.
    */
 
-  shouldVisit(node): boolean {
-    const opts = this.opts;
+  shouldVisit(node: t.Node): boolean {
+    const opts = this.opts as Visitor;
     if (opts.enter || opts.exit) return true;
 
     // check if we have a visitor for this node
@@ -35,25 +43,35 @@ export default class TraversalContext {
 
     // we need to traverse into this node so ensure that it has children to traverse into!
     for (const key of keys) {
-      if (node[key]) return true;
+      if (
+        // @ts-ignore key is from visitor keys
+        node[key]
+      ) {
+        return true;
+      }
     }
 
     return false;
   }
 
-  create(node, obj, key, listKey?): NodePath {
+  create(
+    node: t.Node,
+    container: t.Node | t.Node[],
+    key: string | number,
+    listKey?: string,
+  ): NodePath {
     // We don't need to `.setContext()` here, since `.visitQueue()` already
     // calls `.pushContext`.
     return NodePath.get({
       parentPath: this.parentPath,
       parent: node,
-      container: obj,
+      container,
       key: key,
       listKey,
     });
   }
 
-  maybeQueue(path, notPriority?: boolean) {
+  maybeQueue(path: NodePath, notPriority?: boolean) {
     if (this.queue) {
       if (notPriority) {
         this.queue.push(path);
@@ -63,7 +81,7 @@ export default class TraversalContext {
     }
   }
 
-  visitMultiple(container, parent, listKey) {
+  visitMultiple(container: t.Node[], parent: t.Node, listKey: string) {
     // nothing to traverse!
     if (container.length === 0) return false;
 
@@ -80,15 +98,20 @@ export default class TraversalContext {
     return this.visitQueue(queue);
   }
 
-  visitSingle(node, key): boolean {
-    if (this.shouldVisit(node[key])) {
+  visitSingle(node: t.Node, key: string): boolean {
+    if (
+      this.shouldVisit(
+        // @ts-expect-error
+        node[key],
+      )
+    ) {
       return this.visitQueue([this.create(node, node, key)]);
     } else {
       return false;
     }
   }
 
-  visitQueue(queue: Array<NodePath>) {
+  visitQueue(queue: Array<NodePath>): boolean {
     // set queue
     this.queue = queue;
     this.priorityQueue = [];
@@ -142,8 +165,9 @@ export default class TraversalContext {
     return stop;
   }
 
-  visit(node, key) {
-    const nodes = node[key];
+  visit(node: t.Node, key: string) {
+    // @ts-expect-error
+    const nodes = node[key] as t.Node | t.Node[] | null;
     if (!nodes) return false;
 
     if (Array.isArray(nodes)) {

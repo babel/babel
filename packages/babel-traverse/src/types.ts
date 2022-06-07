@@ -9,7 +9,15 @@ export type Visitor<S = {}> = VisitNodeObject<S, t.Node> & {
 } & {
   [K in keyof VirtualTypeAliases]?: VisitNode<S, VirtualTypeAliases[K]>;
 } & {
+  [K in keyof InternalVisitorFlags]?: InternalVisitorFlags[K];
+} & {
   [k: string]: VisitNode<S, t.Node>;
+};
+
+/** @internal */
+type InternalVisitorFlags = {
+  _exploded?: boolean;
+  _verified?: boolean;
 };
 
 export type VisitNode<S, P extends t.Node> =

@@ -4,6 +4,7 @@ import { traverseNode } from "../traverse-node";
 import { SHOULD_SKIP, SHOULD_STOP } from "./index";
 import type TraversalContext from "../context";
 import type NodePath from "./index";
+import type * as t from "@babel/types";
 
 export function call(this: NodePath, key: string): boolean {
   const opts = this.opts;
@@ -152,7 +153,10 @@ export function setScope(this: NodePath) {
   if (this.scope) this.scope.init();
 }
 
-export function setContext(this: NodePath, context?: TraversalContext) {
+export function setContext<S = unknown>(
+  this: NodePath,
+  context?: TraversalContext<S>,
+) {
   if (this.skipKeys != null) {
     this.skipKeys = {};
   }
@@ -194,7 +198,13 @@ export function _resyncParent(this: NodePath) {
 export function _resyncKey(this: NodePath) {
   if (!this.container) return;
 
-  if (this.node === this.container[this.key]) return;
+  if (
+    this.node ===
+    // @ts-expect-error this.key should present in this.container
+    this.container[this.key]
+  ) {
+    return;
+  }
 
   // grrr, path key is out of sync. this is likely due to a modification to the AST
   // not done through our path APIs
@@ -207,6 +217,7 @@ export function _resyncKey(this: NodePath) {
     }
   } else {
     for (const key of Object.keys(this.container)) {
+      // @ts-expect-error this.key should present in this.container
       if (this.container[key] === this.node) {
         return this.setKey(key);
       }
@@ -220,7 +231,9 @@ export function _resyncKey(this: NodePath) {
 export function _resyncList(this: NodePath) {
   if (!this.parent || !this.inList) return;
 
-  const newContainer = this.parent[this.listKey];
+  const newContainer =
+    // @ts-expect-error this.listKey should present in this.parent
+    this.parent[this.listKey];
   if (this.container === newContainer) return;
 
   // container is out of sync. this is likely the result of it being reassigned
@@ -231,6 +244,7 @@ export function _resyncRemoved(this: NodePath) {
   if (
     this.key == null ||
     !this.container ||
+    // @ts-expect-error this.key should present in this.container
     this.container[this.key] !== this.node
   ) {
     this._markRemoved();
@@ -251,7 +265,13 @@ export function pushContext(this: NodePath, context: TraversalContext) {
   this.setContext(context);
 }
 
-export function setup(this: NodePath, parentPath, container, listKey, key) {
+export function setup(
+  this: NodePath,
+  parentPath: NodePath | undefined,
+  container: t.Node,
+  listKey: string,
+  key: string | number,
+) {
   this.listKey = listKey;
   this.container = container;
 
@@ -259,9 +279,11 @@ export function setup(this: NodePath, parentPath, container, listKey, key) {
   this.setKey(key);
 }
 
-export function setKey(this: NodePath, key) {
+export function setKey(this: NodePath, key: string | number) {
   this.key = key;
-  this.node = this.container[this.key];
+  this.node =
+    // @ts-expect-error this.key must present in this.container
+    this.container[this.key];
   this.type = this.node?.type;
 }
 

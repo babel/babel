@@ -1,13 +1,7 @@
 import Binding from "../binding";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
-import {
-  assignmentExpression,
-  identifier,
-  toExpression,
-  variableDeclaration,
-  variableDeclarator,
-} from "@babel/types";
-import type { Visitor } from "../../types";
+import * as t from "@babel/types";
+import type { NodePath, Visitor } from "../..";
 import { requeueComputedKeyAndDecorators } from "@babel/helper-environment-visitor";
 
 const renameVisitor: Visitor<Renamer> = {
@@ -31,7 +25,10 @@ const renameVisitor: Visitor<Renamer> = {
     }
   },
 
-  "AssignmentExpression|Declaration|VariableDeclarator"(path, state) {
+  "AssignmentExpression|Declaration|VariableDeclarator"(
+    path: NodePath<t.AssignmentPattern | t.Declaration | t.VariableDeclarator>,
+    state,
+  ) {
     if (path.isVariableDeclaration()) return;
     const ids = path.getOuterBindingIdentifiers();
 
@@ -52,63 +49,40 @@ export default class Renamer {
   declare newName: string;
   declare binding: Binding;
 
-  maybeConvertFromExportDeclaration(parentDeclar) {
+  maybeConvertFromExportDeclaration(parentDeclar: NodePath) {
     const maybeExportDeclar = parentDeclar.parentPath;
 
     if (!maybeExportDeclar.isExportDeclaration()) {
       return;
     }
 
-    if (
-      maybeExportDeclar.isExportDefaultDeclaration() &&
-      !maybeExportDeclar.get("declaration").node.id
-    ) {
+    if (maybeExportDeclar.isExportDefaultDeclaration()) {
+      const { declaration } = maybeExportDeclar.node;
+      if (t.isDeclaration(declaration) && !declaration.id) {
+        return;
+      }
+    }
+
+    if (maybeExportDeclar.isExportAllDeclaration()) {
       return;
     }
 
-    splitExportDeclaration(maybeExportDeclar);
-  }
-
-  maybeConvertFromClassFunctionDeclaration(path) {
-    return; // TODO
-
-    // retain the `name` of a class/function declaration
-
-    // eslint-disable-next-line no-unreachable
-    if (!path.isFunctionDeclaration() && !path.isClassDeclaration()) return;
-    if (this.binding.kind !== "hoisted") return;
-
-    path.node.id = identifier(this.oldName);
-    path.node._blockHoist = 3;
-
-    path.replaceWith(
-      variableDeclaration("let", [
-        variableDeclarator(identifier(this.newName), toExpression(path.node)),
-      ]),
+    splitExportDeclaration(
+      maybeExportDeclar as NodePath<
+        Exclude<t.ExportDeclaration, t.ExportAllDeclaration>
+      >,
     );
   }
 
-  maybeConvertFromClassFunctionExpression(path) {
+  maybeConvertFromClassFunctionDeclaration() {
     return; // TODO
-
-    // retain the `name` of a class/function expression
-
-    // eslint-disable-next-line no-unreachable
-    if (!path.isFunctionExpression() && !path.isClassExpression()) return;
-    if (this.binding.kind !== "local") return;
-
-    path.node.id = identifier(this.oldName);
-
-    this.binding.scope.parent.push({
-      id: identifier(this.newName),
-    });
-
-    path.replaceWith(
-      assignmentExpression("=", identifier(this.newName), path.node),
-    );
   }
 
-  rename(block?) {
+  maybeConvertFromClassFunctionExpression() {
+    return; // TODO
+  }
+
+  rename(block?: t.Pattern | t.Scopable) {
     const { binding, oldName, newName } = this;
     const { scope, path } = binding;
 
@@ -144,8 +118,8 @@ export default class Renamer {
     }
 
     if (parentDeclar) {
-      this.maybeConvertFromClassFunctionDeclaration(parentDeclar);
-      this.maybeConvertFromClassFunctionExpression(parentDeclar);
+      this.maybeConvertFromClassFunctionDeclaration();
+      this.maybeConvertFromClassFunctionExpression();
     }
   }
 }

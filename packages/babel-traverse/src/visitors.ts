@@ -1,6 +1,7 @@
 import * as virtualTypes from "./path/lib/virtual-types";
+import type { Wrapper } from "./path/lib/virtual-types";
 import { DEPRECATED_KEYS, FLIPPED_ALIAS_KEYS, TYPES } from "@babel/types";
-import type { Visitor } from "./types";
+import type { NodePath, Visitor } from "./index";
 
 /**
  * explode() will take a visitor object with all of the various shorthands
@@ -18,7 +19,7 @@ import type { Visitor } from "./types";
  * * `enter` and `exit` functions are wrapped in arrays, to ease merging of
  *   visitors
  */
-export function explode(visitor) {
+export function explode(visitor: Visitor) {
   if (visitor._exploded) return visitor;
   visitor._exploded = true;
 
@@ -54,12 +55,14 @@ export function explode(visitor) {
   for (const nodeType of Object.keys(visitor)) {
     if (shouldIgnoreKey(nodeType)) continue;
 
+    // @ts-expect-error Fixme: nodeType could index virtualTypes
     const wrapper = virtualTypes[nodeType];
     if (!wrapper) continue;
 
     // wrap all the functions
     const fns = visitor[nodeType];
     for (const type of Object.keys(fns)) {
+      // @ts-expect-error manipulating visitors
       fns[type] = wrapCheck(wrapper, fns[type]);
     }
 
@@ -114,13 +117,16 @@ export function explode(visitor) {
   for (const nodeType of Object.keys(visitor)) {
     if (shouldIgnoreKey(nodeType)) continue;
 
-    ensureCallbackArrays(visitor[nodeType]);
+    ensureCallbackArrays(
+      // @ts-expect-error nodeType must present in visitor after previous validations
+      visitor[nodeType],
+    );
   }
 
   return visitor;
 }
 
-export function verify(visitor) {
+export function verify(visitor: Visitor) {
   if (visitor._verified) return;
 
   if (typeof visitor === "function") {
@@ -165,7 +171,10 @@ export function verify(visitor) {
   visitor._verified = true;
 }
 
-function validateVisitorMethods(path, val) {
+function validateVisitorMethods(
+  path: string,
+  val: any,
+): asserts val is Function | Function[] {
   const fns = [].concat(val);
   for (const fn of fns) {
     if (typeof fn !== "function") {
@@ -187,7 +196,7 @@ export function merge(
   states: any[] = [],
   wrapper?: Function | null,
 ) {
-  const rootVisitor = {};
+  const rootVisitor: Visitor = {};
 
   for (let i = 0; i < visitors.length; i++) {
     const visitor = visitors[i];
@@ -211,8 +220,12 @@ export function merge(
   return rootVisitor;
 }
 
-function wrapWithStateOrWrapper(oldVisitor, state, wrapper?: Function | null) {
-  const newVisitor = {};
+function wrapWithStateOrWrapper<State>(
+  oldVisitor: Visitor<State>,
+  state: State,
+  wrapper?: Function | null,
+) {
+  const newVisitor: Visitor = {};
 
   for (const key of Object.keys(oldVisitor)) {
     let fns = oldVisitor[key];
@@ -220,16 +233,18 @@ function wrapWithStateOrWrapper(oldVisitor, state, wrapper?: Function | null) {
     // not an enter/exit array of callbacks
     if (!Array.isArray(fns)) continue;
 
+    // @ts-ignore manipulating visitors
     fns = fns.map(function (fn) {
       let newFn = fn;
 
       if (state) {
-        newFn = function (path) {
+        newFn = function (path: NodePath) {
           return fn.call(state, path, state);
         };
       }
 
       if (wrapper) {
+        // @ts-ignore Fixme: document state.key
         newFn = wrapper(state.key, key, newFn);
       }
 
@@ -247,7 +262,7 @@ function wrapWithStateOrWrapper(oldVisitor, state, wrapper?: Function | null) {
   return newVisitor;
 }
 
-function ensureEntranceObjects(obj) {
+function ensureEntranceObjects(obj: Visitor) {
   for (const key of Object.keys(obj)) {
     if (shouldIgnoreKey(key)) continue;
 
@@ -258,13 +273,15 @@ function ensureEntranceObjects(obj) {
   }
 }
 
-function ensureCallbackArrays(obj) {
+function ensureCallbackArrays(obj: Visitor) {
+  // @ts-ignore normalizing enter property
   if (obj.enter && !Array.isArray(obj.enter)) obj.enter = [obj.enter];
+  // @ts-ignore normalizing exit property
   if (obj.exit && !Array.isArray(obj.exit)) obj.exit = [obj.exit];
 }
 
-function wrapCheck(wrapper, fn) {
-  const newFn = function (this: unknown, path) {
+function wrapCheck(wrapper: Wrapper, fn: Function) {
+  const newFn = function (this: unknown, path: NodePath) {
     if (wrapper.checkPath(path)) {
       return fn.apply(this, arguments);
     }
@@ -273,7 +290,7 @@ function wrapCheck(wrapper, fn) {
   return newFn;
 }
 
-function shouldIgnoreKey(key) {
+function shouldIgnoreKey(key: string) {
   // internal/hidden key
   if (key[0] === "_") return true;
 
@@ -294,7 +311,7 @@ function shouldIgnoreKey(key) {
   return false;
 }
 
-function mergePair(dest, src) {
+function mergePair(dest: any, src: any) {
   for (const key of Object.keys(src)) {
     dest[key] = [].concat(dest[key] || [], src[key]);
   }

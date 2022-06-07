@@ -23,7 +23,14 @@ import {
 import type * as t from "@babel/types";
 const { isCompatTag } = react;
 
-export const ReferencedIdentifier = {
+type NodeTypes = t.Node["type"] | t.Comment["type"] | keyof t.Aliases;
+
+export type Wrapper = {
+  types?: NodeTypes[];
+  checkPath?(path: NodePath): boolean;
+};
+
+export const ReferencedIdentifier: Wrapper = {
   types: ["Identifier", "JSXIdentifier"],
   checkPath(path: NodePath, opts?: any): boolean {
     const { node, parent } = path;
@@ -41,14 +48,14 @@ export const ReferencedIdentifier = {
   },
 };
 
-export const ReferencedMemberExpression = {
+export const ReferencedMemberExpression: Wrapper = {
   types: ["MemberExpression"],
-  checkPath({ node, parent }) {
+  checkPath({ node, parent }: NodePath) {
     return isMemberExpression(node) && isReferenced(node, parent);
   },
 };
 
-export const BindingIdentifier = {
+export const BindingIdentifier: Wrapper = {
   types: ["Identifier"],
   checkPath(path: NodePath): boolean {
     const { node, parent } = path;
@@ -57,7 +64,7 @@ export const BindingIdentifier = {
   },
 };
 
-export const Statement = {
+export const Statement: Wrapper = {
   types: ["Statement"],
   checkPath({ node, parent }: NodePath): boolean {
     if (isStatement(node)) {
@@ -73,7 +80,7 @@ export const Statement = {
   },
 };
 
-export const Expression = {
+export const Expression: Wrapper = {
   types: ["Expression"],
   checkPath(path: NodePath): boolean {
     if (path.isIdentifier()) {
@@ -84,52 +91,52 @@ export const Expression = {
   },
 };
 
-export const Scope = {
+export const Scope: Wrapper = {
   // When pattern is inside the function params, it is a scope
   types: ["Scopable", "Pattern"],
-  checkPath(path) {
+  checkPath(path: NodePath) {
     return isScope(path.node, path.parent);
   },
 };
 
-export const Referenced = {
+export const Referenced: Wrapper = {
   checkPath(path: NodePath): boolean {
     return isReferenced(path.node, path.parent);
   },
 };
 
-export const BlockScoped = {
+export const BlockScoped: Wrapper = {
   checkPath(path: NodePath): boolean {
     return isBlockScoped(path.node);
   },
 };
 
-export const Var = {
+export const Var: Wrapper = {
   types: ["VariableDeclaration"],
   checkPath(path: NodePath): boolean {
     return isVar(path.node);
   },
 };
 
-export const User = {
+export const User: Wrapper = {
   checkPath(path: NodePath): boolean {
     return path.node && !!path.node.loc;
   },
 };
 
-export const Generated = {
+export const Generated: Wrapper = {
   checkPath(path: NodePath): boolean {
     return !path.isUser();
   },
 };
 
-export const Pure = {
+export const Pure: Wrapper = {
   checkPath(path: NodePath, constantsOnly?: boolean): boolean {
     return path.scope.isPure(path.node, constantsOnly);
   },
 };
 
-export const Flow = {
+export const Flow: Wrapper = {
   types: ["Flow", "ImportDeclaration", "ExportDeclaration", "ImportSpecifier"],
   checkPath({ node }: NodePath): boolean {
     if (isFlow(node)) {
@@ -147,29 +154,29 @@ export const Flow = {
 };
 
 // TODO: 7.0 Backwards Compat
-export const RestProperty = {
+export const RestProperty: Wrapper = {
   types: ["RestElement"],
   checkPath(path: NodePath): boolean {
     return path.parentPath && path.parentPath.isObjectPattern();
   },
 };
 
-export const SpreadProperty = {
+export const SpreadProperty: Wrapper = {
   types: ["RestElement"],
   checkPath(path: NodePath): boolean {
     return path.parentPath && path.parentPath.isObjectExpression();
   },
 };
 
-export const ExistentialTypeParam = {
+export const ExistentialTypeParam: Wrapper = {
   types: ["ExistsTypeAnnotation"],
 };
 
-export const NumericLiteralTypeAnnotation = {
+export const NumericLiteralTypeAnnotation: Wrapper = {
   types: ["NumberLiteralTypeAnnotation"],
 };
 
-export const ForAwaitStatement = {
+export const ForAwaitStatement: Wrapper = {
   types: ["ForOfStatement"],
   checkPath({ node }: NodePath<t.ForOfStatement>): boolean {
     return node.await === true;
