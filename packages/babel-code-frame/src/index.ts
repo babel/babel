@@ -1,5 +1,7 @@
 import highlight, { shouldHighlight, getChalk } from "@babel/highlight";
 
+type Chalk = ReturnType<typeof getChalk>;
+
 let deprecationWarningShown = false;
 
 type Location = {
@@ -37,7 +39,7 @@ export interface Options {
 /**
  * Chalk styles for code frame token types.
  */
-function getDefs(chalk) {
+function getDefs(chalk: Chalk) {
   return {
     gutter: chalk.grey,
     marker: chalk.red.bold,
@@ -55,6 +57,8 @@ const NEWLINE = /\r\n|[\n\r\u2028\u2029]/;
  * Extract what lines should be marked and highlighted.
  */
 
+type MarkerLines = Record<number, true | [number, number]>;
+
 function getMarkerLines(
   loc: NodeLocation,
   source: Array<string>,
@@ -62,7 +66,7 @@ function getMarkerLines(
 ): {
   start: number;
   end: number;
-  markerLines: any;
+  markerLines: MarkerLines;
 } {
   const startLoc: Location = {
     column: 0,
@@ -91,7 +95,7 @@ function getMarkerLines(
   }
 
   const lineDiff = endLine - startLine;
-  const markerLines = {};
+  const markerLines: MarkerLines = {};
 
   if (lineDiff) {
     for (let i = 0; i <= lineDiff; i++) {
@@ -135,7 +139,7 @@ export function codeFrameColumns(
     (opts.highlightCode || opts.forceColor) && shouldHighlight(opts);
   const chalk = getChalk(opts);
   const defs = getDefs(chalk);
-  const maybeHighlight = (chalkFn, string) => {
+  const maybeHighlight = (chalkFn: Chalk, string: string) => {
     return highlighted ? chalkFn(string) : string;
   };
   const lines = rawLines.split(NEWLINE);

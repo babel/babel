@@ -117,6 +117,7 @@ fs.writeFileSync(
               ["./lib/babel-plugin-dynamic-import-node.d.ts"],
             ],
             ["globals", ["./node_modules/globals-BABEL_8_BREAKING-true"]],
+            ["js-tokens", ["./node_modules/js-tokens-BABEL_8_BREAKING-true"]],
             ["regexpu-core", ["./lib/regexpu-core.d.ts"]],
           ]),
         },
