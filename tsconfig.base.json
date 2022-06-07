@@ -12,6 +12,7 @@
     "isolatedModules": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "noImplicitThis": true
+    "noImplicitThis": true,
+    "moduleDetection": "force"
   }
 }
