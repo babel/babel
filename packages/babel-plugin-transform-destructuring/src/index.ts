@@ -8,6 +8,7 @@ import {
   type DestructuringTransformerNode,
 } from "./util";
 export { buildObjectExcludingKeys, unshiftForXStatementBody } from "./util";
+import type { NodePath } from "@babel/traverse";
 
 /**
  * Test if a VariableDeclaration's declarations contains any Patterns.
@@ -68,7 +69,7 @@ export default declare((api, options: Options) => {
         path.scope.crawl();
       },
 
-      ForXStatement(path) {
+      ForXStatement(path: NodePath<t.ForXStatement>) {
         const { node, scope } = path;
         const left = node.left;
 
@@ -82,7 +83,7 @@ export default declare((api, options: Options) => {
           ]);
 
           path.ensureBlock();
-          const statementBody = (node.body as t.BlockStatement).body;
+          const statementBody = path.node.body.body;
           const nodes = [];
           // todo: the completion of a for statement can only be observed from
           // a do block (or eval that we don't support),

@@ -1,7 +1,7 @@
 import { template, types as t } from "@babel/core";
 import type { NodePath, Scope, Visitor } from "@babel/traverse";
 
-const buildDefaultParam = template(`
+const buildDefaultParam = template.statement(`
   let VARIABLE_NAME =
     arguments.length > ARGUMENT_KEY && arguments[ARGUMENT_KEY] !== undefined ?
       arguments[ARGUMENT_KEY]
@@ -9,17 +9,17 @@ const buildDefaultParam = template(`
       DEFAULT_VALUE;
 `);
 
-const buildLooseDefaultParam = template(`
+const buildLooseDefaultParam = template.statement(`
   if (ASSIGNMENT_IDENTIFIER === UNDEFINED) {
     ASSIGNMENT_IDENTIFIER = DEFAULT_VALUE;
   }
 `);
 
-const buildLooseDestructuredDefaultParam = template(`
+const buildLooseDestructuredDefaultParam = template.statement(`
   let ASSIGNMENT_IDENTIFIER = PARAMETER_NAME === UNDEFINED ? DEFAULT_VALUE : PARAMETER_NAME ;
 `);
 
-const buildSafeArgumentsAccess = template(`
+const buildSafeArgumentsAccess = template.statement(`
   let $0 = arguments.length > $1 ? arguments[$1] : undefined;
 `);
 
@@ -238,7 +238,7 @@ export default function convertFunctionParams(
     // throws, it must reject asynchronously.
     path.node.generator = false;
   } else {
-    path.get("body").unshiftContainer("body", body as t.Statement[]);
+    path.get("body").unshiftContainer("body", body);
   }
 
   return true;

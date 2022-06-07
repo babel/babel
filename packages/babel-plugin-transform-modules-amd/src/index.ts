@@ -32,9 +32,9 @@ function injectWrapper(
   const { body, directives } = path.node;
   path.node.directives = [];
   path.node.body = [];
-  const amdFactoryCall = (
-    path.pushContainer("body", wrapper)[0] as NodePath<t.ExpressionStatement>
-  ).get("expression") as NodePath<t.CallExpression>;
+  const amdFactoryCall = path
+    .pushContainer("body", wrapper)[0]
+    .get("expression") as NodePath<t.CallExpression>;
   const amdFactoryCallArgs = amdFactoryCall.get("arguments");
   const amdFactory = (
     amdFactoryCallArgs[

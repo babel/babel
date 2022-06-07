@@ -264,7 +264,7 @@ export default declare((api, options: Options) => {
           ])[0] as NodePath<t.ExpressionStatement>;
           const umdFactory = (
             umdWrapper.get("expression.arguments")[1] as NodePath<t.Function>
-          ).get("body");
+          ).get("body") as NodePath<t.BlockStatement>;
           umdFactory.pushContainer("directives", directives);
           umdFactory.pushContainer("body", body);
         },
