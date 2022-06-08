@@ -322,6 +322,8 @@ function isExecutionUncertainInList(paths, maxIndex) {
 // is both before and unknown/after like if it were before.
 type RelativeExecutionStatus = "before" | "after" | "unknown";
 
+type ExecutionStatusCache = Map<t.Node, Map<t.Node, RelativeExecutionStatus>>;
+
 /**
  * Given a `target` check the execution status of it relative to the current path.
  *
@@ -333,28 +335,38 @@ export function _guessExecutionStatusRelativeTo(
   this: NodePath,
   target: NodePath,
 ): RelativeExecutionStatus {
+  return _guessExecutionStatusRelativeToCached(this, target, new Map());
+}
+
+function _guessExecutionStatusRelativeToCached(
+  base: NodePath,
+  target: NodePath,
+  cache: ExecutionStatusCache,
+): RelativeExecutionStatus {
   // check if the two paths are in different functions, we can't track execution of these
   const funcParent = {
-    this: getOuterFunction(this),
+    this: getOuterFunction(base),
     target: getOuterFunction(target),
   };
 
   // here we check the `node` equality as sometimes we may have different paths for the
   // same node due to path thrashing
   if (funcParent.target.node !== funcParent.this.node) {
-    return this._guessExecutionStatusRelativeToDifferentFunctions(
+    return _guessExecutionStatusRelativeToDifferentFunctionsCached(
+      base,
       funcParent.target,
+      cache,
     );
   }
 
   const paths = {
     target: target.getAncestry(),
-    this: this.getAncestry(),
+    this: base.getAncestry(),
   };
 
   // If this is an ancestor of the target path,
   // e.g. f(g); where this is f and target is g.
-  if (paths.target.indexOf(this) >= 0) return "after";
+  if (paths.target.indexOf(base) >= 0) return "after";
   if (paths.this.indexOf(target) >= 0) return "before";
 
   // get ancestor where the branches intersect
@@ -416,8 +428,9 @@ export function _guessExecutionStatusRelativeTo(
 const executionOrderCheckedNodes = new Set();
 
 function _guessExecutionStatusRelativeToDifferentFunctionsInternal(
-  this: NodePath,
+  base: NodePath,
   target: NodePath,
+  cache: ExecutionStatusCache,
 ): RelativeExecutionStatus {
   if (
     !target.isFunctionDeclaration() ||
@@ -456,7 +469,7 @@ function _guessExecutionStatusRelativeToDifferentFunctionsInternal(
     if (executionOrderCheckedNodes.has(path.node)) continue;
     executionOrderCheckedNodes.add(path.node);
     try {
-      const status = this._guessExecutionStatusRelativeTo(path);
+      const status = _guessExecutionStatusRelativeToCached(base, path, cache);
 
       if (allStatus && allStatus !== status) {
         return "unknown";
@@ -471,41 +484,26 @@ function _guessExecutionStatusRelativeToDifferentFunctionsInternal(
   return allStatus;
 }
 
-let executionStatusCache: Map<
-  NodePath["node"],
-  Map<NodePath["node"], RelativeExecutionStatus>
->;
-
-export function _guessExecutionStatusRelativeToDifferentFunctions(
-  this: NodePath,
+function _guessExecutionStatusRelativeToDifferentFunctionsCached(
+  base: NodePath,
   target: NodePath,
+  cache: ExecutionStatusCache,
 ): RelativeExecutionStatus {
-  const inited = !!executionStatusCache;
-  if (!inited) {
-    executionStatusCache = new Map();
+  let nodeMap = cache.get(base.node);
+  if (!nodeMap) {
+    cache.set(base.node, (nodeMap = new Map()));
+  } else if (nodeMap.has(target.node)) {
+    return nodeMap.get(target.node);
   }
 
-  try {
-    let nodeMap = executionStatusCache.get(this.node);
-    if (!nodeMap) {
-      executionStatusCache.set(this.node, (nodeMap = new Map()));
-    } else if (nodeMap.has(target.node)) {
-      return nodeMap.get(target.node);
-    }
+  const result = _guessExecutionStatusRelativeToDifferentFunctionsInternal(
+    base,
+    target,
+    cache,
+  );
 
-    const result =
-      _guessExecutionStatusRelativeToDifferentFunctionsInternal.call(
-        this,
-        target,
-      );
-
-    nodeMap.set(target.node, result);
-    return result;
-  } finally {
-    if (!inited) {
-      executionStatusCache = undefined;
-    }
-  }
+  nodeMap.set(target.node, result);
+  return result;
 }
 
 /**

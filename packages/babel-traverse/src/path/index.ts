@@ -230,6 +230,15 @@ Object.assign(
   NodePath_comments,
 );
 
+if (!process.env.BABEL_8_BREAKING) {
+  // The original _guessExecutionStatusRelativeToDifferentFunctions only worked for paths in
+  // different functions, but _guessExecutionStatusRelativeTo works as a replacement in those cases.
+
+  // @ts-ignore
+  NodePath.prototype._guessExecutionStatusRelativeToDifferentFunctions =
+    NodePath_introspection._guessExecutionStatusRelativeTo;
+}
+
 // we can not use `import { TYPES } from "@babel/types"` here
 // because the transformNamedBabelTypesImportToDestructuring plugin in babel.config.js
 // does not offer live bindings for `TYPES`
