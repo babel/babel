@@ -7,7 +7,7 @@ import {
 } from "../../validators/generated";
 import type * as t from "../..";
 
-function getQualifiedName(node: t.GenericTypeAnnotation["id"]) {
+function getQualifiedName(node: t.GenericTypeAnnotation["id"]): string {
   return isIdentifier(node)
     ? node.name
     : `${node.id.name}.${getQualifiedName(node.qualification)}`;
@@ -20,13 +20,16 @@ export default function removeTypeDuplicates(
   // todo(babel-8): change type to Array<...>
   nodes: ReadonlyArray<t.FlowType | false | null | undefined>,
 ): t.FlowType[] {
-  const generics = {};
-  const bases = {};
+  const generics: Record<string, t.GenericTypeAnnotation> = {};
+  const bases = {} as Record<
+    t.FlowBaseAnnotation["type"],
+    t.FlowBaseAnnotation
+  >;
 
   // store union type groups to circular references
   const typeGroups = new Set<t.FlowType[]>();
 
-  const types = [];
+  const types: t.FlowType[] = [];
 
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i];
@@ -61,7 +64,7 @@ export default function removeTypeDuplicates(
       const name = getQualifiedName(node.id);
 
       if (generics[name]) {
-        let existing = generics[name];
+        let existing: t.Flow = generics[name];
         if (existing.typeParameters) {
           if (node.typeParameters) {
             existing.typeParameters.params = removeTypeDuplicates(
@@ -82,7 +85,7 @@ export default function removeTypeDuplicates(
   }
 
   // add back in bases
-  for (const type of Object.keys(bases)) {
+  for (const type of Object.keys(bases) as (keyof typeof bases)[]) {
     types.push(bases[type]);
   }
 

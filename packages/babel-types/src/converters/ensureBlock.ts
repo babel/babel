@@ -11,5 +11,9 @@ export default function ensureBlock(
   node: t.Node,
   key: string = "body",
 ): t.BlockStatement {
-  return (node[key] = toBlock(node[key], node));
+  // @ts-ignore Fixme: key may not exist in node, consider remove key = "body"
+  const result = toBlock(node[key], node);
+  // @ts-ignore
+  node[key] = result;
+  return result;
 }

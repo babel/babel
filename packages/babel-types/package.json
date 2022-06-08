@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@babel/helper-validator-identifier": "workspace:^",
-    "to-fast-properties": "^2.0.0"
+    "to-fast-properties": "condition:BABEL_8_BREAKING ? ^4.0.0 : ^2.0.0"
   },
   "devDependencies": {
     "@babel/generator": "workspace:^",

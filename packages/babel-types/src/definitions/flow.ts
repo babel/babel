@@ -13,8 +13,7 @@ import {
 const defineType = defineAliasedType("Flow");
 
 const defineInterfaceishType = (
-  name: string,
-  typeParameterType: string = "TypeParameterDeclaration",
+  name: "DeclareClass" | "DeclareInterface" | "InterfaceDeclaration",
 ) => {
   defineType(name, {
     builder: ["id", "typeParameters", "extends", "body"],
@@ -29,7 +28,7 @@ const defineInterfaceishType = (
     aliases: ["FlowDeclaration", "Statement", "Declaration"],
     fields: {
       id: validateType("Identifier"),
-      typeParameters: validateOptionalType(typeParameterType),
+      typeParameters: validateOptionalType("TypeParameterDeclaration"),
       extends: validateOptional(arrayOfType("InterfaceExtends")),
       mixins: validateOptional(arrayOfType("InterfaceExtends")),
       implements: validateOptional(arrayOfType("ClassImplements")),

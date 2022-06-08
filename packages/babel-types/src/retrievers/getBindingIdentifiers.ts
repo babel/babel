@@ -36,14 +36,16 @@ function getBindingIdentifiers(
   duplicates?: boolean,
   outerOnly?: boolean,
 ): Record<string, t.Identifier> | Record<string, Array<t.Identifier>> {
-  let search = [].concat(node);
+  const search: t.Node[] = [].concat(node);
   const ids = Object.create(null);
 
   while (search.length) {
     const id = search.shift();
     if (!id) continue;
 
-    const keys = getBindingIdentifiers.keys[id.type];
+    const keys =
+      // @ts-expect-error getBindingIdentifiers.keys do not cover all AST types
+      getBindingIdentifiers.keys[id.type];
 
     if (isIdentifier(id)) {
       if (duplicates) {
@@ -76,8 +78,11 @@ function getBindingIdentifiers(
     if (keys) {
       for (let i = 0; i < keys.length; i++) {
         const key = keys[i];
-        if (id[key]) {
-          search = search.concat(id[key]);
+        const nodes =
+          // @ts-ignore key must present in id
+          id[key] as t.Node[] | t.Node | undefined | null;
+        if (nodes) {
+          Array.isArray(nodes) ? search.push(...nodes) : search.push(nodes);
         }
       }
     }

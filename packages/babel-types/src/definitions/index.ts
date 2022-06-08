@@ -50,3 +50,5 @@ export {
   PLACEHOLDERS_FLIPPED_ALIAS,
   TYPES,
 };
+
+export type { FieldOptions } from "./utils";

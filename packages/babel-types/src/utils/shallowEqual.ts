@@ -2,10 +2,13 @@ export default function shallowEqual<T extends object>(
   actual: object,
   expected: T,
 ): actual is T {
-  const keys = Object.keys(expected);
+  const keys = Object.keys(expected) as (keyof T)[];
 
   for (const key of keys) {
-    if (actual[key] !== expected[key]) {
+    if (
+      // @ts-ignore maybe we should check whether key exists first
+      actual[key] !== expected[key]
+    ) {
       return false;
     }
   }

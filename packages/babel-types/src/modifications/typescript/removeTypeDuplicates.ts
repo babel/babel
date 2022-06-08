@@ -12,12 +12,12 @@ export default function removeTypeDuplicates(
   nodes: Array<t.TSType>,
 ): Array<t.TSType> {
   const generics = {};
-  const bases = {};
+  const bases = {} as Record<t.TSBaseType["type"], t.TSBaseType>;
 
   // store union type groups to circular references
   const typeGroups = new Set<t.TSType[]>();
 
-  const types = [];
+  const types: t.TSType[] = [];
 
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i];
@@ -53,13 +53,16 @@ export default function removeTypeDuplicates(
   }
 
   // add back in bases
-  for (const type of Object.keys(bases)) {
+  for (const type of Object.keys(bases) as (keyof typeof bases)[]) {
     types.push(bases[type]);
   }
 
   // add back in generics
   for (const name of Object.keys(generics)) {
-    types.push(generics[name]);
+    types.push(
+      // @ts-ignore generics are not implemented
+      generics[name],
+    );
   }
 
   return types;
