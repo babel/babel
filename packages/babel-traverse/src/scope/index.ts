@@ -26,9 +26,11 @@ import {
   isMethod,
   isModuleDeclaration,
   isModuleSpecifier,
+  isNullLiteral,
   isObjectExpression,
   isProperty,
   isPureish,
+  isRegExpLiteral,
   isSuper,
   isTaggedTemplateExpression,
   isTemplateLiteral,
@@ -53,8 +55,9 @@ import type * as t from "@babel/types";
 import { scope as scopeCache } from "../cache";
 import type { Visitor } from "../types";
 
+type NodePart = string | number | boolean;
 // Recursively gathers the identifying names of a node.
-function gatherNodeParts(node: t.Node, parts: any[]) {
+function gatherNodeParts(node: t.Node, parts: NodePart[]) {
   switch (node?.type) {
     default:
       if (isModuleDeclaration(node)) {
@@ -89,14 +92,12 @@ function gatherNodeParts(node: t.Node, parts: any[]) {
         //    allowing only nodes with `.local`?
         // @ts-expect-error todo(flow->ts)
         gatherNodeParts(node.local, parts);
-      } else if (isLiteral(node)) {
-        // todo(flow->ts): should condition be stricter to ensure value is there
-        //   ```
-        //   !t.isNullLiteral(node) &&
-        //   !t.isRegExpLiteral(node) &&
-        //   !isTemplateLiteral(node)
-        //   ```
-        // @ts-expect-error todo(flow->ts)
+      } else if (
+        isLiteral(node) &&
+        !isNullLiteral(node) &&
+        !isRegExpLiteral(node) &&
+        !isTemplateLiteral(node)
+      ) {
         parts.push(node.value);
       }
       break;
@@ -204,7 +205,7 @@ function gatherNodeParts(node: t.Node, parts: any[]) {
       break;
 
     case "JSXOpeningElement":
-      parts.push(node.name);
+      gatherNodeParts(node.name, parts);
       break;
 
     case "JSXFragment":
@@ -518,7 +519,7 @@ export default class Scope {
   }
 
   generateUidBasedOnNode(node: t.Node, defaultName?: string) {
-    const parts: any[] = [];
+    const parts: NodePart[] = [];
     gatherNodeParts(node, parts);
 
     let id = parts.join("$");
