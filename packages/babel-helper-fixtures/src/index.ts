@@ -45,7 +45,7 @@ export interface Test {
   validateLogs: boolean;
 }
 
-interface TaskOptions extends InputOptions {
+export interface TaskOptions extends InputOptions {
   BABEL_8_BREAKING?: boolean;
   DO_NOT_SET_SOURCE_TYPE?: boolean;
   externalHelpers?: boolean;
