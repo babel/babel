@@ -1,7 +1,7 @@
 import type SourceMap from "./source-map";
 import * as charcodes from "charcodes";
 
-type Pos = {
+export type Pos = {
   line: number;
   column: number;
 };
