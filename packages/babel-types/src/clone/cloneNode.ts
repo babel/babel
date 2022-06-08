@@ -4,8 +4,15 @@ import { isFile, isIdentifier } from "../validators/generated";
 
 const has = Function.call.bind(Object.prototype.hasOwnProperty);
 
+type CommentCache = Map<t.Comment, t.Comment>;
+
 // This function will never be called for comments, only for real nodes.
-function cloneIfNode(obj, deep, withoutLoc, commentsCache) {
+function cloneIfNode(
+  obj: t.Node | undefined | null,
+  deep: boolean,
+  withoutLoc: boolean,
+  commentsCache: CommentCache,
+) {
   if (obj && typeof obj.type === "string") {
     return cloneNodeInternal(obj, deep, withoutLoc, commentsCache);
   }
@@ -13,7 +20,12 @@ function cloneIfNode(obj, deep, withoutLoc, commentsCache) {
   return obj;
 }
 
-function cloneIfNodeOrArray(obj, deep, withoutLoc, commentsCache) {
+function cloneIfNodeOrArray(
+  obj: t.Node | undefined | null | (t.Node | undefined | null)[],
+  deep: boolean,
+  withoutLoc: boolean,
+  commentsCache: CommentCache,
+) {
   if (Array.isArray(obj)) {
     return obj.map(node => cloneIfNode(node, deep, withoutLoc, commentsCache));
   }
@@ -37,7 +49,7 @@ function cloneNodeInternal<T extends t.Node>(
   node: T,
   deep: boolean = true,
   withoutLoc: boolean = false,
-  commentsCache: Map<t.Comment, t.Comment>,
+  commentsCache: CommentCache,
 ): T {
   if (!node) return node;
 
@@ -77,13 +89,16 @@ function cloneNodeInternal<T extends t.Node>(
                   commentsCache,
                 )
               : cloneIfNodeOrArray(
+                  // @ts-expect-error node[field] has been guarded by has check
                   node[field],
                   true,
                   withoutLoc,
                   commentsCache,
                 );
         } else {
-          newNode[field] = node[field];
+          newNode[field] =
+            // @ts-expect-error node[field] has been guarded by has check
+            node[field];
         }
       }
     }

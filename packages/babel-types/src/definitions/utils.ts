@@ -1,15 +1,16 @@
 import is from "../validators/is";
 import { validateField, validateChild } from "../validators/validate";
+import type * as t from "..";
 
 export const VISITOR_KEYS: Record<string, string[]> = {};
 export const ALIAS_KEYS: Record<string, string[]> = {};
 export const FLIPPED_ALIAS_KEYS: Record<string, string[]> = {};
-export const NODE_FIELDS: Record<string, {}> = {};
+export const NODE_FIELDS: Record<string, FieldDefinitions> = {};
 export const BUILDER_KEYS: Record<string, string[]> = {};
 export const DEPRECATED_KEYS: Record<string, string> = {};
-export const NODE_PARENT_VALIDATIONS = {};
+export const NODE_PARENT_VALIDATIONS: Record<string, Validator> = {};
 
-function getType(val) {
+function getType(val: any) {
   if (Array.isArray(val)) {
     return "array";
   } else if (val === null) {
@@ -19,32 +20,37 @@ function getType(val) {
   }
 }
 
+type NodeTypes = t.Node["type"] | t.Comment["type"] | keyof t.Aliases;
+
+type PrimitiveTypes = ReturnType<typeof getType>;
+
+type FieldDefinitions = {
+  [x: string]: FieldOptions;
+};
+
 type DefineTypeOpts = {
-  fields?: {
-    [x: string]: FieldOptions;
-  };
+  fields?: FieldDefinitions;
   visitor?: Array<string>;
   aliases?: Array<string>;
   builder?: Array<string>;
-  inherits?: string;
+  inherits?: NodeTypes;
   deprecatedAlias?: string;
   validate?: Validator;
 };
 
-type Validator = (
-  | { type: string }
+export type Validator = (
+  | { type: PrimitiveTypes }
   | { each: Validator }
   | { chainOf: Validator[] }
   | { oneOf: any[] }
-  | { oneOfNodeTypes: string[] }
-  | { oneOfNodeOrValueTypes: string[] }
+  | { oneOfNodeTypes: NodeTypes[] }
+  | { oneOfNodeOrValueTypes: (NodeTypes | PrimitiveTypes)[] }
   | { shapeOf: { [x: string]: FieldOptions } }
   | {}
 ) &
-  // TODO: Import and use Node instead of any
-  ((parent: any, key: string, node: any) => void);
+  ((node: t.Node, key: string, val: any) => void);
 
-type FieldOptions = {
+export type FieldOptions = {
   default?: any;
   optional?: boolean;
   validate?: Validator;
@@ -54,13 +60,13 @@ export function validate(validate: Validator): FieldOptions {
   return { validate };
 }
 
-export function typeIs(typeName: string | string[]) {
+export function typeIs(typeName: NodeTypes | NodeTypes[]) {
   return typeof typeName === "string"
     ? assertNodeType(typeName)
     : assertNodeType(...typeName);
 }
 
-export function validateType(typeName: string | string[]) {
+export function validateType(typeName: NodeTypes | NodeTypes[]) {
   return validate(typeIs(typeName));
 }
 
@@ -69,7 +75,7 @@ export function validateOptional(validate: Validator): FieldOptions {
 }
 
 export function validateOptionalType(
-  typeName: string | string[],
+  typeName: NodeTypes | NodeTypes[],
 ): FieldOptions {
   return { validate: typeIs(typeName), optional: true };
 }
@@ -78,16 +84,16 @@ export function arrayOf(elementType: Validator): Validator {
   return chain(assertValueType("array"), assertEach(elementType));
 }
 
-export function arrayOfType(typeName: string | string[]) {
+export function arrayOfType(typeName: NodeTypes | NodeTypes[]) {
   return arrayOf(typeIs(typeName));
 }
 
-export function validateArrayOfType(typeName: string | string[]) {
+export function validateArrayOfType(typeName: NodeTypes | NodeTypes[]) {
   return validate(arrayOfType(typeName));
 }
 
 export function assertEach(callback: Validator): Validator {
-  function validator(node, key, val) {
+  function validator(node: t.Node, key: string, val: any) {
     if (!Array.isArray(val)) return;
 
     for (let i = 0; i < val.length; i++) {
@@ -117,8 +123,8 @@ export function assertOneOf(...values: Array<any>): Validator {
   return validate;
 }
 
-export function assertNodeType(...types: Array<string>): Validator {
-  function validate(node, key, val) {
+export function assertNodeType(...types: NodeTypes[]): Validator {
+  function validate(node: t.Node, key: string, val: any) {
     for (const type of types) {
       if (is(type, val)) {
         validateChild(node, key, val);
@@ -140,8 +146,10 @@ export function assertNodeType(...types: Array<string>): Validator {
   return validate;
 }
 
-export function assertNodeOrValueType(...types: Array<string>): Validator {
-  function validate(node, key, val) {
+export function assertNodeOrValueType(
+  ...types: (NodeTypes | PrimitiveTypes)[]
+): Validator {
+  function validate(node: t.Node, key: string, val: any) {
     for (const type of types) {
       if (getType(val) === type || is(type, val)) {
         validateChild(node, key, val);
@@ -163,8 +171,8 @@ export function assertNodeOrValueType(...types: Array<string>): Validator {
   return validate;
 }
 
-export function assertValueType(type: string): Validator {
-  function validate(node, key, val) {
+export function assertValueType(type: PrimitiveTypes): Validator {
+  function validate(node: t.Node, key: string, val: any) {
     const valid = getType(val) === type;
 
     if (!valid) {
@@ -180,7 +188,7 @@ export function assertValueType(type: string): Validator {
 }
 
 export function assertShape(shape: { [x: string]: FieldOptions }): Validator {
-  function validate(node, key, val) {
+  function validate(node: t.Node, key: string, val: any) {
     const errors = [];
     for (const property of Object.keys(shape)) {
       try {
@@ -208,7 +216,7 @@ export function assertShape(shape: { [x: string]: FieldOptions }): Validator {
 }
 
 export function assertOptionalChainStart(): Validator {
-  function validate(node) {
+  function validate(node: t.Node) {
     let current = node;
     while (node) {
       const { type } = current;
@@ -270,7 +278,7 @@ const validFieldKeys = ["default", "optional", "validate"];
 
 // Wraps defineType to ensure these aliases are included.
 export function defineAliasedType(...aliases: string[]) {
-  return (type: string, opts: DefineTypeOpts = {}) => {
+  return (type: NodeTypes, opts: DefineTypeOpts = {}) => {
     let defined = opts.aliases;
     if (!defined) {
       if (opts.inherits) defined = store[opts.inherits].aliases?.slice();
@@ -283,7 +291,7 @@ export function defineAliasedType(...aliases: string[]) {
   };
 }
 
-export default function defineType(type: string, opts: DefineTypeOpts = {}) {
+export default function defineType(type: NodeTypes, opts: DefineTypeOpts = {}) {
   const inherits = (opts.inherits && store[opts.inherits]) || {};
 
   let fields = opts.fields;
@@ -365,4 +373,4 @@ export default function defineType(type: string, opts: DefineTypeOpts = {}) {
   store[type] = opts;
 }
 
-const store = {};
+const store = {} as Record<NodeTypes, DefineTypeOpts>;

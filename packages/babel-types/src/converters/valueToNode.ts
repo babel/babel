@@ -31,15 +31,15 @@ export default valueToNode as {
   (value: unknown): t.Expression;
 };
 
-const objectToString: (value: object) => string = Function.call.bind(
+const objectToString: (value: unknown) => string = Function.call.bind(
   Object.prototype.toString,
 );
 
-function isRegExp(value): value is RegExp {
+function isRegExp(value: unknown): value is RegExp {
   return objectToString(value) === "[object RegExp]";
 }
 
-function isPlainObject(value): value is object {
+function isPlainObject(value: unknown): value is object {
   if (
     typeof value !== "object" ||
     value === null ||
@@ -122,7 +122,15 @@ function valueToNode(value: unknown): t.Expression {
       } else {
         nodeKey = stringLiteral(key);
       }
-      props.push(objectProperty(nodeKey, valueToNode(value[key])));
+      props.push(
+        objectProperty(
+          nodeKey,
+          valueToNode(
+            // @ts-expect-error key must present in value
+            value[key],
+          ),
+        ),
+      );
     }
     return objectExpression(props);
   }
