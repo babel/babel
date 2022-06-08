@@ -47,6 +47,17 @@ export default declare(api => {
             path.replaceWith(scope.buildUndefinedNode());
             return;
           }
+
+          const constructor = t.memberExpression(
+            t.thisExpression(),
+            t.identifier("constructor"),
+          );
+
+          if (func.isClass()) {
+            path.replaceWith(constructor);
+            return;
+          }
+
           if (!node.id) {
             node.id = scope.generateUidIdentifier("target");
           } else {
@@ -62,16 +73,6 @@ export default declare(api => {
               }
               scope = scope.parent;
             }
-          }
-
-          const constructor = t.memberExpression(
-            t.thisExpression(),
-            t.identifier("constructor"),
-          );
-
-          if (func.isClass()) {
-            path.replaceWith(constructor);
-            return;
           }
 
           path.replaceWith(
