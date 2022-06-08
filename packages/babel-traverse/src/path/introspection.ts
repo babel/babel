@@ -413,9 +413,9 @@ export function _guessExecutionStatusRelativeTo(
 //   function f() { if (false) f(); }
 //   f();
 // It also works with indirect recursion.
-const executionOrderCheckedNodes = new WeakSet();
+const executionOrderCheckedNodes = new Set();
 
-export function _guessExecutionStatusRelativeToDifferentFunctions(
+function _guessExecutionStatusRelativeToDifferentFunctionsInternal(
   this: NodePath,
   target: NodePath,
 ): RelativeExecutionStatus {
@@ -455,19 +455,57 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(
     // Prevent infinite loops in recursive functions
     if (executionOrderCheckedNodes.has(path.node)) continue;
     executionOrderCheckedNodes.add(path.node);
+    try {
+      const status = this._guessExecutionStatusRelativeTo(path);
 
-    const status = this._guessExecutionStatusRelativeTo(path);
-
-    executionOrderCheckedNodes.delete(path.node);
-
-    if (allStatus && allStatus !== status) {
-      return "unknown";
-    } else {
-      allStatus = status;
+      if (allStatus && allStatus !== status) {
+        return "unknown";
+      } else {
+        allStatus = status;
+      }
+    } finally {
+      executionOrderCheckedNodes.delete(path.node);
     }
   }
 
   return allStatus;
+}
+
+let executionStatusCache: Map<
+  NodePath["node"],
+  Map<NodePath["node"], RelativeExecutionStatus>
+>;
+
+export function _guessExecutionStatusRelativeToDifferentFunctions(
+  this: NodePath,
+  target: NodePath,
+): RelativeExecutionStatus {
+  const inited = !!executionStatusCache;
+  if (!inited) {
+    executionStatusCache = new Map();
+  }
+
+  try {
+    let nodeMap = executionStatusCache.get(this.node);
+    if (!nodeMap) {
+      executionStatusCache.set(this.node, (nodeMap = new Map()));
+    } else if (nodeMap.has(target.node)) {
+      return nodeMap.get(target.node);
+    }
+
+    const result =
+      _guessExecutionStatusRelativeToDifferentFunctionsInternal.call(
+        this,
+        target,
+      );
+
+    nodeMap.set(target.node, result);
+    return result;
+  } finally {
+    if (!inited) {
+      executionStatusCache = undefined;
+    }
+  }
 }
 
 /**
