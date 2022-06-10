@@ -3,6 +3,7 @@ import os from "os";
 import path from "path";
 import { fileURLToPath } from "url";
 import babel from "../lib/index.js";
+import rimraf from "rimraf";
 
 import _getTargets from "@babel/helper-compilation-targets";
 const getTargets = _getTargets.default;
@@ -68,13 +69,23 @@ function escapeRegExp(string) {
   return string.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&");
 }
 
+const tempDirs = [];
+
 async function getTemp(name) {
-  const cwd = await pfs.mkdtemp(os.tmpdir() + path.sep + name);
+  const tempDir = os.tmpdir() + path.sep + name;
+  tempDirs.push(tempDir);
+  const cwd = await pfs.mkdtemp(tempDir);
   const tmp = name => path.join(cwd, name);
   const config = name =>
     pfs.copyFile(fixture("config-files-templates", name), tmp(name));
   return { cwd, tmp, config };
 }
+
+afterAll(() => {
+  for (const dir of tempDirs) {
+    rimraf.sync(dir);
+  }
+});
 
 describe("buildConfigChain", function () {
   describe("test", () => {
