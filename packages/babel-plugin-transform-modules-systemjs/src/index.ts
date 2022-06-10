@@ -190,7 +190,7 @@ export default declare<PluginState>((api, options: Options) => {
             return;
           }
           const exportedNames = this.exports[name];
-          if (!exportedNames) return;
+          if (!exportedNames) continue;
           for (const exportedName of exportedNames) {
             exprs.push(
               this.buildCall(exportedName, t.identifier(name)).expression,
