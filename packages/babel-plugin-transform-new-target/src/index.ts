@@ -47,9 +47,6 @@ export default declare(api => {
             path.replaceWith(scope.buildUndefinedNode());
             return;
           }
-          if (!node.id) {
-            node.id = scope.generateUidIdentifier("target");
-          }
 
           const constructor = t.memberExpression(
             t.thisExpression(),
@@ -59,6 +56,23 @@ export default declare(api => {
           if (func.isClass()) {
             path.replaceWith(constructor);
             return;
+          }
+
+          if (!node.id) {
+            node.id = scope.generateUidIdentifier("target");
+          } else {
+            // packages/babel-helper-create-class-features-plugin/src/fields.ts#L192 unshadow
+            let scope = path.scope;
+            const name = node.id.name;
+            while (scope !== func.parentPath.scope) {
+              if (
+                scope.hasOwnBinding(name) &&
+                !scope.bindingIdentifierEquals(name, node.id)
+              ) {
+                scope.rename(name);
+              }
+              scope = scope.parent;
+            }
           }
 
           path.replaceWith(
