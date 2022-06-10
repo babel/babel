@@ -531,7 +531,7 @@ class Printer {
       | t.DecimalLiteral
       | t.DirectiveLiteral
       | t.JSXText,
-  ) {
+  ): string | void {
     const extra = node.extra;
     if (
       extra &&
@@ -539,6 +539,7 @@ class Printer {
       extra.rawValue != null &&
       node.value === extra.rawValue
     ) {
+      // @ts-expect-error: The extra.raw of these AST node types must be a string
       return extra.raw;
     }
   }

@@ -185,7 +185,7 @@ export function NullLiteral(this: Printer) {
 }
 
 export function NumericLiteral(this: Printer, node: t.NumericLiteral) {
-  const raw = this.getPossibleRaw(node) as string | undefined;
+  const raw = this.getPossibleRaw(node);
   const opts = this.format.jsescOption;
   const value = node.value + "";
   if (opts.numbers) {
