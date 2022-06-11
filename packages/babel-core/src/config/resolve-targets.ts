@@ -30,10 +30,11 @@ export function resolveTargets(
   if (typeof optTargets === "string" || Array.isArray(optTargets)) {
     targets = { browsers: optTargets };
   } else if (optTargets) {
-    // https://github.com/microsoft/TypeScript/issues/17002
-    targets = optTargets as InputTargets;
     if ("esmodules" in optTargets) {
       targets = { ...optTargets, esmodules: "intersect" };
+    } else {
+      // https://github.com/microsoft/TypeScript/issues/17002
+      targets = optTargets as InputTargets;
     }
   }
 
