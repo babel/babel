@@ -3,7 +3,7 @@ import gensync from "gensync";
 import type { Gensync, Handler } from "gensync";
 type MaybePromise<T> = T | Promise<T>;
 
-const id = x => x;
+const id = <T>(x: T): T => x;
 
 const runGenerator: {
   sync<Return>(gen: Generator<unknown, Return>): Return;

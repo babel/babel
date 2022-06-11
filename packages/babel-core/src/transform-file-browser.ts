@@ -1,13 +1,17 @@
 // duplicated from transform-file so we do not have to import anything here
 type TransformFile = {
-  (filename: string, callback: Function): void;
-  (filename: string, opts: any, callback: Function): void;
+  (filename: string, callback: (error: Error, file: null) => void): void;
+  (
+    filename: string,
+    opts: any,
+    callback: (error: Error, file: null) => void,
+  ): void;
 };
 
 export const transformFile: TransformFile = function transformFile(
   filename,
   opts,
-  callback?,
+  callback?: (error: Error, file: null) => void,
 ) {
   if (typeof opts === "function") {
     callback = opts;

@@ -5,9 +5,9 @@ import type { PluginObject } from "./validation/plugins";
 export default class Plugin {
   key: string | undefined | null;
   manipulateOptions?: (options: unknown, parserOpts: unknown) => void;
-  post?: Function;
-  pre?: Function;
-  visitor: {};
+  post?: PluginObject["post"];
+  pre?: PluginObject["pre"];
+  visitor: PluginObject["visitor"];
 
   parserOverride?: Function;
   generatorOverride?: Function;

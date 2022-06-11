@@ -37,12 +37,17 @@ const transformFromAstRunner = gensync<
 export const transformFromAst: TransformFromAst = function transformFromAst(
   ast,
   code,
-  opts,
-  callback?,
+  optsOrCallback?: InputOptions | null | undefined | FileResultCallback,
+  maybeCallback?: FileResultCallback,
 ) {
-  if (typeof opts === "function") {
-    callback = opts;
+  let opts: InputOptions | undefined | null;
+  let callback: FileResultCallback | undefined;
+  if (typeof optsOrCallback === "function") {
+    callback = optsOrCallback;
     opts = undefined;
+  } else {
+    opts = optsOrCallback;
+    callback = maybeCallback;
   }
 
   if (callback === undefined) {

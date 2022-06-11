@@ -13,16 +13,18 @@ export function mergeOptions(
       const targetObj = target[k] || (target[k] = {});
       mergeDefaultFields(targetObj, parserOpts);
     } else {
+      //@ts-expect-error
       const val = source[k];
+      //@ts-expect-error
       if (val !== undefined) target[k] = val as any;
     }
   }
 }
 
 function mergeDefaultFields<T extends {}>(target: T, source: T) {
-  for (const k of Object.keys(source)) {
+  for (const k of Object.keys(source) as (keyof T)[]) {
     const val = source[k];
-    if (val !== undefined) target[k] = val as any;
+    if (val !== undefined) target[k] = val;
   }
 }
 

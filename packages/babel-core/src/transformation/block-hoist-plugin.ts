@@ -1,4 +1,6 @@
 import traverse from "@babel/traverse";
+import type { Statement } from "@babel/types";
+import type { PluginObject } from "../config";
 import Plugin from "../config/plugin";
 
 let LOADED_PLUGIN: Plugin | void;
@@ -17,14 +19,14 @@ export default function loadBlockHoistPlugin(): Plugin {
 
   return LOADED_PLUGIN;
 }
-function priority(bodyNode) {
+function priority(bodyNode: Statement & { _blockHoist?: number | true }) {
   const priority = bodyNode?._blockHoist;
   if (priority == null) return 1;
   if (priority === true) return 2;
   return priority;
 }
 
-function stableSort(body) {
+function stableSort(body: Statement[]) {
   // By default, we use priorities of 0-4.
   const buckets = Object.create(null);
 
@@ -54,7 +56,7 @@ function stableSort(body) {
   return body;
 }
 
-const blockHoistPlugin = {
+const blockHoistPlugin: PluginObject = {
   /**
    * [Please add a description.]
    *

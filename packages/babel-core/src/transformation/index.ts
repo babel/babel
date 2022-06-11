@@ -16,17 +16,17 @@ import type File from "./file/file";
 import { flattenToSet } from "../config/helpers/deep-array";
 
 export type FileResultCallback = {
-  (err: Error, file: null): any;
-  (err: null, file: FileResult | null): any;
+  (err: Error, file: null): void;
+  (err: null, file: FileResult | null): void;
 };
 
 export type FileResult = {
-  metadata: {};
-  options: {};
+  metadata: { [key: string]: any };
+  options: { [key: string]: any };
   ast: t.File | null;
   code: string | null;
   map: SourceMap | null;
-  sourceType: "string" | "module";
+  sourceType: "script" | "module";
   externalDependencies: Set<string>;
 };
 

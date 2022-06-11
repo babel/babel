@@ -181,7 +181,7 @@ export default gensync<(inputOpts: unknown) => ResolvedConfig | null>(
       pluginDescriptorsByPass[0].unshift(...initialPluginsDescriptors);
 
       for (const descs of pluginDescriptorsByPass) {
-        const pass = [];
+        const pass: Plugin[] = [];
         passes.push(pass);
 
         for (let i = 0; i < descs.length; i++) {
@@ -223,8 +223,8 @@ export default gensync<(inputOpts: unknown) => ResolvedConfig | null>(
   },
 );
 
-function enhanceError<T extends Function>(context, fn: T): T {
-  return function* (arg1, arg2) {
+function enhanceError<T extends Function>(context: ConfigContext, fn: T): T {
+  return function* (arg1: unknown, arg2: unknown) {
     try {
       return yield* fn(arg1, arg2);
     } catch (e) {
@@ -376,7 +376,7 @@ const instantiatePlugin = makeWeakCache(function* (
   }
 
   if (plugin.inherits) {
-    const inheritsDescriptor = {
+    const inheritsDescriptor: UnloadedDescriptor = {
       name: undefined,
       alias: `${alias}$inherits`,
       value: plugin.inherits,
@@ -490,11 +490,14 @@ const instantiatePreset = makeWeakCacheSync(
   },
 );
 
-function chain(a, b) {
+function chain<Args extends any[]>(
+  a: undefined | ((...args: Args) => void),
+  b: undefined | ((...args: Args) => void),
+) {
   const fns = [a, b].filter(Boolean);
   if (fns.length <= 1) return fns[0];
 
-  return function (this: unknown, ...args) {
+  return function (this: unknown, ...args: unknown[]) {
     for (const fn of fns) {
       fn.apply(this, args);
     }

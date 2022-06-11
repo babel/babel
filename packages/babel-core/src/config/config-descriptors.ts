@@ -126,8 +126,8 @@ export function createUncachedDescriptors(
   // The returned result here is cached to represent a config object in
   // memory, so we build and memoize the descriptors to ensure the same
   // values are returned consistently.
-  let plugins;
-  let presets;
+  let plugins: UnloadedDescriptor[];
+  let presets: UnloadedDescriptor[];
 
   return {
     options: optionsWithResolvedBrowserslistConfigFile(options, dirname),
