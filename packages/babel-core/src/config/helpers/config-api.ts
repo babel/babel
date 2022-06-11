@@ -47,7 +47,13 @@ export type PluginAPI = {
 export function makeConfigAPI<SideChannel extends Context.SimpleConfig>(
   cache: CacheConfigurator<SideChannel>,
 ): ConfigAPI {
-  const env: EnvFunction = value =>
+  // TODO(@nicolo-ribaudo): If we remove the explicit type from `value`
+  // and the `as any` type cast, TypeScript crashes in an infinite
+  // recursion. After upgrading to TS4.7 and finishing the noImplicitAny
+  // PR, we should check if it still crashes and report it to the TS team.
+  const env: EnvFunction = ((
+    value: string | string[] | (<T>(babelEnv: string) => T),
+  ) =>
     cache.using(data => {
       if (typeof value === "undefined") return data.envName;
       if (typeof value === "function") {
@@ -59,7 +65,7 @@ export function makeConfigAPI<SideChannel extends Context.SimpleConfig>(
         }
         return entry === data.envName;
       });
-    });
+    })) as any;
 
   const caller = (cb: {
     (CallerMetadata: CallerMetadata | undefined): SimpleType;
