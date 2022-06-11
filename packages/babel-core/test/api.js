@@ -267,8 +267,8 @@ describe("api", function () {
     //test6
     var b;
     `;
-    const node = parse(program);
-    const { code } = transformFromAst(node, program, {
+    const node = parseSync(program);
+    const { code } = transformFromAstSync(node, program, {
       plugins: [
         function () {
           return {
@@ -281,7 +281,7 @@ describe("api", function () {
         },
       ],
     });
-    const { code: code2 } = transformFromAst(node, program, {
+    const { code: code2 } = transformFromAstSync(node, program, {
       cloneInputAst: false,
       plugins: [
         function () {
