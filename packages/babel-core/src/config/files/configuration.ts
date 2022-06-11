@@ -150,7 +150,11 @@ export function* loadConfig(
  * Read the given config file, returning the result. Returns null if no config was found, but will
  * throw if there are parsing errors while loading a config.
  */
-function readConfig(filepath, envName, caller): Handler<ConfigFile | null> {
+function readConfig(
+  filepath: string,
+  envName: string,
+  caller: CallerMetadata | undefined,
+): Handler<ConfigFile | null> {
   const ext = path.extname(filepath);
   return ext === ".js" || ext === ".cjs" || ext === ".mjs"
     ? readConfigJS(filepath, { envName, caller })

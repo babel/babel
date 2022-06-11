@@ -296,7 +296,7 @@ export function validate(type: OptionsSource, opts: {}): ValidatedOptions {
   );
 }
 
-function validateNested(loc: NestingPath, opts: {}) {
+function validateNested(loc: NestingPath, opts: { [key: string]: unknown }) {
   const type = getSource(loc);
 
   assertNoDuplicateSourcemap(opts);

@@ -27,10 +27,19 @@ const transformRunner = gensync<
   return yield* run(config, code);
 });
 
-export const transform: Transform = function transform(code, opts?, callback?) {
-  if (typeof opts === "function") {
-    callback = opts;
+export const transform: Transform = function transform(
+  code,
+  optsOrCallback?: InputOptions | null | undefined | FileResultCallback,
+  maybeCallback?: FileResultCallback,
+) {
+  let opts: InputOptions | undefined | null;
+  let callback: FileResultCallback | undefined;
+  if (typeof optsOrCallback === "function") {
+    callback = optsOrCallback;
     opts = undefined;
+  } else {
+    opts = optsOrCallback;
+    callback = maybeCallback;
   }
 
   if (callback === undefined) {

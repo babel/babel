@@ -383,7 +383,12 @@ const loadFileChainWalker = makeChainWalker<ValidatedFile>({
     buildFileLogger(file.filepath, context, baseLogger),
 });
 
-function* loadFileChain(input, context, files, baseLogger) {
+function* loadFileChain(
+  input: ValidatedFile,
+  context: ConfigContext,
+  files: Set<ConfigFile>,
+  baseLogger: ConfigPrinter,
+) {
   const chain = yield* loadFileChainWalker(input, context, files, baseLogger);
   if (chain) {
     chain.files.add(input.filepath);
@@ -443,11 +448,23 @@ function buildFileLogger(
   });
 }
 
-function buildRootDescriptors({ dirname, options }, alias, descriptors) {
+function buildRootDescriptors(
+  { dirname, options }: Partial<ValidatedFile>,
+  alias: string,
+  descriptors: (
+    dirname: string,
+    options: ValidatedOptions,
+    alias: string,
+  ) => OptionsAndDescriptors,
+) {
   return descriptors(dirname, options, alias);
 }
 
-function buildProgrammaticLogger(_, context, baseLogger: ConfigPrinter | void) {
+function buildProgrammaticLogger(
+  _: unknown,
+  context: ConfigContext,
+  baseLogger: ConfigPrinter | void,
+) {
   if (!baseLogger) {
     return () => {};
   }
@@ -457,20 +474,28 @@ function buildProgrammaticLogger(_, context, baseLogger: ConfigPrinter | void) {
 }
 
 function buildEnvDescriptors(
-  { dirname, options },
-  alias,
-  descriptors,
-  envName,
+  { dirname, options }: Partial<ValidatedFile>,
+  alias: string,
+  descriptors: (
+    dirname: string,
+    options: ValidatedOptions,
+    alias: string,
+  ) => OptionsAndDescriptors,
+  envName: string,
 ) {
   const opts = options.env && options.env[envName];
   return opts ? descriptors(dirname, opts, `${alias}.env["${envName}"]`) : null;
 }
 
 function buildOverrideDescriptors(
-  { dirname, options },
-  alias,
-  descriptors,
-  index,
+  { dirname, options }: Partial<ValidatedFile>,
+  alias: string,
+  descriptors: (
+    dirname: string,
+    options: ValidatedOptions,
+    alias: string,
+  ) => OptionsAndDescriptors,
+  index: number,
 ) {
   const opts = options.overrides && options.overrides[index];
   if (!opts) throw new Error("Assertion failure - missing override");
@@ -479,11 +504,15 @@ function buildOverrideDescriptors(
 }
 
 function buildOverrideEnvDescriptors(
-  { dirname, options },
-  alias,
-  descriptors,
-  index,
-  envName,
+  { dirname, options }: Partial<ValidatedFile>,
+  alias: string,
+  descriptors: (
+    dirname: string,
+    options: ValidatedOptions,
+    alias: string,
+  ) => OptionsAndDescriptors,
+  index: number,
+  envName: string,
 ) {
   const override = options.overrides && options.overrides[index];
   if (!override) throw new Error("Assertion failure - missing override");
@@ -850,9 +879,9 @@ function matchesPatterns(
 }
 
 function matchPattern(
-  pattern,
-  dirname,
-  pathToTest,
+  pattern: IgnoreItem,
+  dirname: string,
+  pathToTest: unknown,
   context: ConfigContext,
 ): boolean {
   if (typeof pattern === "function") {

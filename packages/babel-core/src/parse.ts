@@ -5,10 +5,11 @@ import type { InputOptions } from "./config";
 import parser from "./parser";
 import type { ParseResult } from "./parser";
 import normalizeOptions from "./transformation/normalize-opts";
+import type { ValidatedOptions } from "./config/validation/options";
 
 type FileParseCallback = {
-  (err: Error, ast: null): any;
-  (err: null, ast: ParseResult | null): any;
+  (err: Error, ast: null): void;
+  (err: null, ast: ParseResult | null): void;
 };
 
 type Parse = {
@@ -33,10 +34,14 @@ const parseRunner = gensync<
   return yield* parser(config.passes, normalizeOptions(config), code);
 });
 
-export const parse: Parse = function parse(code, opts?, callback?) {
+export const parse: Parse = function parse(
+  code,
+  opts?,
+  callback?: FileParseCallback,
+) {
   if (typeof opts === "function") {
     callback = opts;
-    opts = undefined;
+    opts = undefined as ValidatedOptions;
   }
 
   if (callback === undefined) {
