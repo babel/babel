@@ -15,8 +15,8 @@ if (process.env.BABEL_8_BREAKING) {
     initialize(
       // @ts-expect-error TS doesn't know that @babel/core is compiled to
       // CJS and thus all its named exports are on the default property.
-      ns.default
-    )
+      ns.default,
+    ),
   );
 } else {
   initialize(require("@babel/core"));

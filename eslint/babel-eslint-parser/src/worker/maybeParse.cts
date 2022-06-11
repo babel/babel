@@ -12,7 +12,7 @@ module.exports = function maybeParse(code, options) {
   if (!extractParserOptionsConfigItem) {
     extractParserOptionsConfigItem = babel.createConfigItem(
       [extractParserOptionsPlugin, ref],
-      { dirname: __dirname, type: "plugin" }
+      { dirname: __dirname, type: "plugin" },
     );
   }
   const { plugins } = options;

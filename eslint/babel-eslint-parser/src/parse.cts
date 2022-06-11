@@ -18,7 +18,7 @@ module.exports = function parse(code, options, client) {
   if (typeof isRunningMinSupportedCoreVersion !== "boolean") {
     isRunningMinSupportedCoreVersion = semver.satisfies(
       client.getVersion(),
-      minSupportedCoreVersion
+      minSupportedCoreVersion,
     );
   }
 
@@ -26,7 +26,7 @@ module.exports = function parse(code, options, client) {
     throw new Error(
       `@babel/eslint-parser@${
         PACKAGE_JSON.version
-      } does not support @babel/core@${client.getVersion()}. Please upgrade to @babel/core@${minSupportedCoreVersion}.`
+      } does not support @babel/core@${client.getVersion()}. Please upgrade to @babel/core@${minSupportedCoreVersion}.`,
     );
   }
 
@@ -39,7 +39,7 @@ module.exports = function parse(code, options, client) {
       babelParser.parse(code, parserOptions),
       code,
       client.getTokLabels(),
-      client.getVisitorKeys()
+      client.getVisitorKeys(),
     );
   } catch (err) {
     throw convert.error(err);

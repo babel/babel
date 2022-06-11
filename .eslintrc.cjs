@@ -46,7 +46,7 @@ module.exports = {
       },
     },
     {
-      files: sourceFiles("js,ts,cjs,mjs"),
+      files: sourceFiles("js,ts,cjs,mjs,cts"),
       rules: {
         "@babel/development/no-undefined-identifier": "error",
         "@babel/development/no-deprecated-clone": "error",
