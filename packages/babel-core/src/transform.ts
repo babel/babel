@@ -29,12 +29,17 @@ const transformRunner = gensync<
 
 export const transform: Transform = function transform(
   code,
-  opts?,
-  callback?: FileResultCallback,
+  optsOrCallback?: InputOptions | null | undefined | FileResultCallback,
+  maybeCallback?: FileResultCallback,
 ) {
-  if (typeof opts === "function") {
-    callback = opts;
-    opts = undefined as InputOptions;
+  let opts: InputOptions | undefined | null;
+  let callback: FileResultCallback | undefined;
+  if (typeof optsOrCallback === "function") {
+    callback = optsOrCallback;
+    opts = undefined;
+  } else {
+    opts = optsOrCallback;
+    callback = maybeCallback;
   }
 
   // For backward-compat with Babel 6, we allow sync transformation when

@@ -6,7 +6,6 @@ import { run } from "./transformation";
 import type * as t from "@babel/types";
 
 import type { FileResult, FileResultCallback } from "./transformation";
-import type { ValidatedOptions } from "./config/validation/options";
 type AstRoot = t.File | t.Program;
 
 type TransformFromAst = {
@@ -38,12 +37,17 @@ const transformFromAstRunner = gensync<
 export const transformFromAst: TransformFromAst = function transformFromAst(
   ast,
   code,
-  opts,
-  callback?: FileResultCallback,
+  optsOrCallback?: InputOptions | null | undefined | FileResultCallback,
+  maybeCallback?: FileResultCallback,
 ) {
-  if (typeof opts === "function") {
-    callback = opts;
-    opts = undefined as ValidatedOptions;
+  let opts: InputOptions | undefined | null;
+  let callback: FileResultCallback | undefined;
+  if (typeof optsOrCallback === "function") {
+    callback = optsOrCallback;
+    opts = undefined;
+  } else {
+    opts = optsOrCallback;
+    callback = maybeCallback;
   }
 
   // For backward-compat with Babel 6, we allow sync transformation when
