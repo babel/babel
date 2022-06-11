@@ -20,6 +20,24 @@ const require = createRequire(import.meta.url);
 
 import checkDuplicateNodes from "@babel/helper-check-duplicate-nodes";
 
+if (!process.env.BABEL_8_BREAKING) {
+  // Introduced in Node.js 10
+  if (!assert.rejects) {
+    assert.rejects = async function (promise, validateError) {
+      try {
+        await promise;
+        return Promise.reject(new Error("Promise not rejected"));
+      } catch (error) {
+        if (!validateError(error)) {
+          return Promise.reject(
+            new Error("Promise rejected with invalid error"),
+          );
+        }
+      }
+    };
+  }
+}
+
 const EXTERNAL_HELPERS_VERSION = "7.100.0";
 
 const cachedScripts = new QuickLRU<
@@ -40,12 +58,20 @@ function transformWithoutConfigFile(code, opts) {
     ...opts,
   });
 }
+function transformAsyncWithoutConfigFile(code, opts) {
+  return babel.transformAsync(code, {
+    configFile: false,
+    babelrc: false,
+    ...opts,
+  });
+}
 
 function createContext() {
   const context = vm.createContext({
     ...helpers,
     process: process,
     transform: transformWithoutConfigFile,
+    transformAsync: transformAsyncWithoutConfigFile,
     setTimeout: setTimeout,
     setImmediate: setImmediate,
     expect,
@@ -194,10 +220,10 @@ export function runCodeInTestContext(
   }
 }
 
-function maybeMockConsole(validateLogs, run) {
+async function maybeMockConsole(validateLogs, run) {
   const actualLogs = { stdout: "", stderr: "" };
 
-  if (!validateLogs) return { result: run(), actualLogs };
+  if (!validateLogs) return { result: await run(), actualLogs };
 
   const spy1 = jest.spyOn(console, "log").mockImplementation(msg => {
     actualLogs.stdout += `${msg}\n`;
@@ -207,14 +233,14 @@ function maybeMockConsole(validateLogs, run) {
   });
 
   try {
-    return { result: run(), actualLogs };
+    return { result: await run(), actualLogs };
   } finally {
     spy1.mockRestore();
     spy2.mockRestore();
   }
 }
 
-function run(task) {
+async function run(task) {
   const {
     actual,
     expect: expected,
@@ -256,8 +282,8 @@ function run(task) {
 
     // Ignore Babel logs of exec.js files.
     // They will be validated in input/output files.
-    ({ result } = maybeMockConsole(validateLogs, () =>
-      babel.transformSync(execCode, execOpts),
+    ({ result } = await maybeMockConsole(validateLogs, () =>
+      babel.transformAsync(execCode, execOpts),
     ));
 
     checkDuplicateNodes(result.ast);
@@ -278,8 +304,8 @@ function run(task) {
   if (!execCode || inputCode) {
     let actualLogs;
 
-    ({ result, actualLogs } = maybeMockConsole(validateLogs, () =>
-      babel.transformSync(inputCode, getOpts(actual)),
+    ({ result, actualLogs } = await maybeMockConsole(validateLogs, () =>
+      babel.transformAsync(inputCode, getOpts(actual)),
     ));
 
     const outputCode = normalizeOutput(result.code);
@@ -470,11 +496,7 @@ export default function (
         testFn(
           task.title,
 
-          function () {
-            function runTask() {
-              run(task);
-            }
-
+          async function () {
             if ("sourceMap" in task.options === false) {
               task.options.sourceMap = !!(
                 task.sourceMappings || task.sourceMap
@@ -499,7 +521,7 @@ export default function (
               // the options object with useless options
               delete task.options.throws;
 
-              assert.throws(runTask, function (err: Error) {
+              await assert.rejects(run(task), function (err: Error) {
                 assert.ok(
                   throwMsg === true || err.message.includes(throwMsg),
                   `
@@ -509,13 +531,11 @@ Actual Error: ${err.message}`,
                 return true;
               });
             } else {
+              const result = await run(task);
               if (task.exec.code) {
-                const result = run(task);
                 if (result && typeof result.then === "function") {
                   return result;
                 }
-              } else {
-                runTask();
               }
             }
           },
