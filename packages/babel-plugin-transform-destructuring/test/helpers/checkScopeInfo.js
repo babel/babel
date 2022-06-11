@@ -1,5 +1,4 @@
-// checkScopeInfo.js
-module.exports = () => {
+export default () => {
   return {
     visitor: {
       Program: {
