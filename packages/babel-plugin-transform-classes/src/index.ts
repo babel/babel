@@ -7,7 +7,7 @@ import globals from "globals";
 import transformClass from "./transformClass";
 import type { Visitor, NodePath } from "@babel/traverse";
 
-const getBuiltinClasses = (category: string) =>
+const getBuiltinClasses = (category: keyof typeof globals) =>
   Object.keys(globals[category]).filter(name => /^[A-Z]/.test(name));
 
 const builtinClasses = new Set([

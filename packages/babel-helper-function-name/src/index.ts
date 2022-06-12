@@ -211,7 +211,7 @@ export default function <N extends t.FunctionExpression | t.Class>(
     node: N;
     parent?: t.Node;
     scope: Scope;
-    id?: any;
+    id?: t.LVal | t.StringLiteral | t.NumericLiteral | t.BigIntLiteral;
   },
   localBinding = false,
   supportUnicodeId = false,
@@ -224,7 +224,11 @@ export default function <N extends t.FunctionExpression | t.Class>(
     (!parent.computed || isLiteral(parent.key))
   ) {
     // { foo() {} };
-    id = parent.key;
+    id = parent.key as
+      | t.Identifier
+      | t.StringLiteral
+      | t.NumericLiteral
+      | t.BigIntLiteral;
   } else if (isVariableDeclarator(parent)) {
     // let foo = function () {};
     id = parent.id;
