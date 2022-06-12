@@ -1,8 +1,5 @@
-import babel from "@babel/core";
+import { parseSync, traverse, types as t } from "@babel/core";
 import { traversePattern, privateKeyPathIterator } from "../lib/util.js";
-const { isObjectProperty, isPrivateName } = babel.types;
-
-const { parseSync, traverse } = babel;
 
 function wrapSourceInClassEnvironment(input) {
   const usedPrivateNames = new Set();
@@ -44,9 +41,9 @@ describe("traversePattern", () => {
     );
     const keys = [
       ...traversePattern(patternPath.node, function* (node) {
-        if (isObjectProperty(node)) {
+        if (t.isObjectProperty(node)) {
           const propertyKey = node.key;
-          if (isPrivateName(propertyKey)) {
+          if (t.isPrivateName(propertyKey)) {
             yield propertyKey.id.name;
           }
         }

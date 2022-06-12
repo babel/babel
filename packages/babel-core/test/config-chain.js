@@ -2,7 +2,7 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 import { fileURLToPath } from "url";
-import babel from "../lib/index.js";
+import * as babel from "../lib/index.js";
 import rimraf from "rimraf";
 
 import _getTargets from "@babel/helper-compilation-targets";

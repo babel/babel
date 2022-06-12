@@ -1,4 +1,4 @@
-import babel from "../lib/index.js";
+import * as babel from "../lib/index.js";
 import { TraceMap, originalPositionFor } from "@jridgewell/trace-mapping";
 import path from "path";
 import generator from "@babel/generator";

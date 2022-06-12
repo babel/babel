@@ -2,7 +2,7 @@ import path from "path";
 import fs from "fs";
 import { createRequire } from "module";
 import helpers from "@babel/helpers";
-import babel from "@babel/core";
+import { transformFromAstSync, File } from "@babel/core";
 import template from "@babel/template";
 import t from "@babel/types";
 import { fileURLToPath } from "url";
@@ -217,7 +217,7 @@ function buildHelper(
 
   if (!esm) {
     bindings = [];
-    helpers.ensure(helperName, babel.File);
+    helpers.ensure(helperName, File);
     for (const dep of helpers.getDependencies(helperName)) {
       const id = (dependencies[dep] = t.identifier(t.toIdentifier(dep)));
       tree.body.push(template.statement.ast`
@@ -235,7 +235,7 @@ function buildHelper(
   );
   tree.body.push(...helper.nodes);
 
-  return babel.transformFromAstSync(tree, null, {
+  return transformFromAstSync(tree, null, {
     filename: helperFilename,
     presets: [["@babel/preset-env", { modules: false }]],
     plugins: [

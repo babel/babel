@@ -1,6 +1,5 @@
 import _checkDuplicateNodes from "../lib/index.js";
-import babel from "@babel/core";
-const { parseSync, traverse, types: t } = babel;
+import { parseSync, traverse, types as t } from "@babel/core";
 const checkDuplicateNodes = _checkDuplicateNodes.default;
 
 describe("checkDuplicateNodes", () => {
@@ -53,7 +52,7 @@ describe("checkDuplicateNodes", () => {
   });
   it("should throw when more than one arguments are passed", () => {
     expect(() => {
-      checkDuplicateNodes(babel, {});
+      checkDuplicateNodes({}, {});
     }).toThrow("checkDuplicateNodes accepts only one argument: ast");
   });
 });
