@@ -168,32 +168,12 @@ export function assertCallerMetadata(
   return value;
 }
 
-function inputMayBeSourceMap(inputObj = {}) {
-  // https://docs.google.com/document/d/1U1RGAehQwRypUTovF1KRlpiOFze0b-_2gc6fAH0KY0k/edit#heading=h.mofvlxcwqzej
-  // keys required in sourcemap format
-  const sourceMapKeys = ["version", "sources", "names", "mappings"];
-  let mayBeSourceMap = true;
-  for (let index = 0; index < sourceMapKeys.length; index++) {
-    const sourceMapKey = sourceMapKeys[index];
-    if (!inputObj[sourceMapKey]) {
-      mayBeSourceMap = false;
-      break;
-    }
-  }
-  return mayBeSourceMap;
-}
-
 export function assertInputSourceMap(
   loc: OptionPath,
   value: unknown,
 ): RootInputSourceMapOption | void {
   if (typeof value == "string") {
-    try {
-      const parsedValue = JSON.parse(value);
-      if (inputMayBeSourceMap(parsedValue)) {
-        return parsedValue;
-      }
-    } catch {}
+    value = JSON.parse(value);
   }
   if (
     value !== undefined &&

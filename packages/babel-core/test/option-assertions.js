@@ -23,14 +23,7 @@ const testAssetsPass = [
   [{}, {}],
 ];
 
-const sampleNoneSourceMapJson = { ...sampleSourceMapJson };
-delete sampleNoneSourceMapJson.version;
-
-const testAssetsFailed = [
-  JSON.stringify(sampleNoneSourceMapJson),
-  "kaljsdfkl",
-  42,
-];
+const testAssetsFailed = ["kaljsdfkl", 42];
 
 describe("assertInputSourceMap", () => {
   it.each(testAssetsPass)("%p should work", (input, expected) => {
