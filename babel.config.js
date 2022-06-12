@@ -221,6 +221,15 @@ module.exports = function (api) {
         ],
       },
       convertESM && {
+        test: ["./packages/babel-core/src"].map(normalize),
+        plugins: [
+          [
+            pluginInjectNodeReexportsHints,
+            { names: ["types", "tokTypes", "traverse", "template"] },
+          ],
+        ],
+      },
+      convertESM && {
         test: sources.map(normalize),
         exclude: lazyRequireSources.map(normalize),
         plugins: [
@@ -726,6 +735,46 @@ function pluginDynamicESLintVersionCheck({ template }) {
             ? parseInt(process.env.ESLINT_VERSION_FOR_BABEL, 10)
             : ${path.node}
         `);
+      },
+    },
+  };
+}
+
+// Inject `0 && exports.foo = 0` hints for the specified exports,
+// to help the Node.js CJS-ESM interop. This is only
+// needed when compiling ESM re-exports to CJS in `lazy` mode.
+function pluginInjectNodeReexportsHints({ types: t, template }, { names }) {
+  return {
+    visitor: {
+      Program: {
+        exit(path) {
+          const seen = [];
+          for (const stmt of path.get("body")) {
+            if (!stmt.isExpressionStatement()) continue;
+            const expr = stmt.get("expression");
+            if (
+              !expr.isCallExpression() ||
+              !expr.get("callee").matchesPattern("Object.defineProperty") ||
+              expr.node.arguments.length !== 3 ||
+              !expr.get("arguments.0").isIdentifier({ name: "exports" }) ||
+              !expr.get("arguments.1").isStringLiteral() ||
+              !names.includes(expr.node.arguments[1].value)
+            ) {
+              continue;
+            }
+
+            expr
+              .get("arguments.0")
+              .replaceWith(template.expression.ast`(0, exports)`);
+            seen.push(expr.node.arguments[1].value);
+          }
+
+          const assign = seen.reduce(
+            (rhs, name) => template.expression.ast`exports.${name} = ${rhs}`,
+            t.numericLiteral(0)
+          );
+          path.pushContainer("body", template.statement.ast`0 && (${assign})`);
+        },
       },
     },
   };
