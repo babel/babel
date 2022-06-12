@@ -11,7 +11,6 @@ import type {
   CallExpression,
   Expression,
   OptionalCallExpression,
-  SpreadElement,
 } from "@babel/types";
 
 /**
@@ -21,14 +20,14 @@ import type {
  * @export
  * @param {Expression} callee The callee of call expression
  * @param {Expression} thisNode The desired this of call expression
- * @param {Readonly<Array<Expression | SpreadElement>>} args The arguments of call expression
+ * @param {Readonly<CallExpression["arguments"]>} args The arguments of call expression
  * @param {boolean} optional Whether the call expression is optional
  * @returns {CallExpression | OptionalCallExpression} The generated new call expression
  */
 export default function optimiseCallExpression(
   callee: Expression,
   thisNode: Expression,
-  args: Readonly<Array<Expression | SpreadElement>>,
+  args: Readonly<CallExpression["arguments"]>,
   optional: boolean,
 ): CallExpression | OptionalCallExpression {
   if (

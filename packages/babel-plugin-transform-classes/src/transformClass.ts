@@ -1,9 +1,9 @@
-import type { NodePath, Visitor } from "@babel/traverse";
+import type { NodePath, Scope, Visitor } from "@babel/traverse";
 import nameFunction from "@babel/helper-function-name";
 import ReplaceSupers from "@babel/helper-replace-supers";
 import environmentVisitor from "@babel/helper-environment-visitor";
 import optimiseCall from "@babel/helper-optimise-call-expression";
-import { traverse, template, types as t } from "@babel/core";
+import { traverse, template, types as t, type File } from "@babel/core";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 
 import addCreateSuperHelper from "./inline-createSuper-helpers";
@@ -15,7 +15,13 @@ type ClassAssumptions = {
   noClassCalls: boolean;
 };
 
-function buildConstructor(classRef, constructorBody, node) {
+type ClassConstructor = t.ClassMethod & { kind: "constructor" };
+
+function buildConstructor(
+  classRef: t.Identifier,
+  constructorBody: t.BlockStatement,
+  node: t.Class,
+) {
   const func = t.functionDeclaration(
     t.cloneNode(classRef),
     [],
@@ -25,14 +31,75 @@ function buildConstructor(classRef, constructorBody, node) {
   return func;
 }
 
+type Descriptor = {
+  key: t.Expression;
+  get?: t.Expression | null;
+  set?: t.Expression | null;
+  value?: t.Expression | null;
+  constructor?: t.Expression | null;
+};
+
+type State = {
+  parent: t.Node;
+  scope: Scope;
+  node: t.Class;
+  path: NodePath<t.Class>;
+  file: File;
+
+  classId: t.Identifier | void;
+  classRef: t.Identifier;
+  superFnId: t.Identifier;
+  superName: t.Expression | null;
+  superReturns: NodePath<t.ReturnStatement>[];
+  isDerived: boolean;
+  extendsNative: boolean;
+
+  construct: t.FunctionDeclaration;
+  constructorBody: t.BlockStatement;
+  userConstructor: ClassConstructor;
+  userConstructorPath: NodePath<ClassConstructor>;
+  hasConstructor: boolean;
+
+  body: t.Statement[];
+  superThises: NodePath<t.ThisExpression>[];
+  pushedConstructor: boolean;
+  pushedInherits: boolean;
+  pushedCreateClass: boolean;
+  protoAlias: t.Identifier | null;
+  isLoose: boolean;
+
+  dynamicKeys: Map<string, t.Expression>;
+
+  methods: {
+    // 'list' is in the same order as the elements appear in the class body.
+    // if there aren't computed keys, we can safely reorder class elements
+    // and use 'map' to merge duplicates.
+    instance: {
+      hasComputed: boolean;
+      list: Descriptor[];
+      map: Map<string, Descriptor>;
+    };
+    static: {
+      hasComputed: boolean;
+      list: Descriptor[];
+      map: Map<string, Descriptor>;
+    };
+  };
+};
+
+type PropertyInfo = {
+  instance: t.ObjectExpression[] | null;
+  static: t.ObjectExpression[] | null;
+};
+
 export default function transformClass(
-  path: NodePath,
-  file: any,
+  path: NodePath<t.Class>,
+  file: File,
   builtinClasses: ReadonlySet<string>,
   isLoose: boolean,
   assumptions: ClassAssumptions,
 ) {
-  const classState = {
+  const classState: State = {
     parent: undefined,
     scope: undefined,
     node: undefined,
@@ -42,7 +109,7 @@ export default function transformClass(
     classId: undefined,
     classRef: undefined,
     superFnId: undefined,
-    superName: undefined,
+    superName: null,
     superReturns: [],
     isDerived: false,
     extendsNative: false,
@@ -53,7 +120,6 @@ export default function transformClass(
     userConstructorPath: undefined,
     hasConstructor: false,
 
-    staticPropBody: [],
     body: [],
     superThises: [],
     pushedConstructor: false,
@@ -65,9 +131,6 @@ export default function transformClass(
     dynamicKeys: new Map(),
 
     methods: {
-      // 'list' is in the same order as the elements appear in the class body.
-      // if there aren't computed keys, we can safely reorder class elements
-      // and use 'map' to merge duplicates.
       instance: {
         hasComputed: false,
         list: [],
@@ -81,7 +144,7 @@ export default function transformClass(
     },
   };
 
-  const setState = newState => {
+  const setState = (newState: Partial<State>) => {
     Object.assign(classState, newState);
   };
 
@@ -94,7 +157,7 @@ export default function transformClass(
     },
   ]);
 
-  function createClassHelper(args) {
+  function createClassHelper(args: t.Expression[]) {
     return t.callExpression(classState.file.addHelper("createClass"), args);
   }
 
@@ -110,7 +173,7 @@ export default function transformClass(
     }
     if (hasConstructor) return;
 
-    let params, body;
+    let params: t.FunctionExpression["params"], body;
 
     if (classState.isDerived) {
       const constructor = template.expression.ast`
@@ -179,7 +242,7 @@ export default function transformClass(
 
         replaceSupers.replace();
 
-        const superReturns = [];
+        const superReturns: NodePath<t.ReturnStatement>[] = [];
         path.traverse(
           traverse.visitors.merge([
             environmentVisitor,
@@ -194,7 +257,7 @@ export default function transformClass(
         );
 
         if (isConstructor) {
-          pushConstructor(superReturns, node, path);
+          pushConstructor(superReturns, node as ClassConstructor, path);
         } else {
           pushMethod(node, path);
         }
@@ -207,19 +270,19 @@ export default function transformClass(
 
     const { body } = classState;
 
-    const props = {
+    const props: PropertyInfo = {
       instance: null,
       static: null,
     };
 
-    for (const placement of ["static", "instance"]) {
+    for (const placement of ["static", "instance"] as const) {
       if (classState.methods[placement].list.length) {
         props[placement] = classState.methods[placement].list.map(desc => {
           const obj = t.objectExpression([
             t.objectProperty(t.identifier("key"), desc.key),
           ]);
 
-          for (const kind of ["get", "set", "value"]) {
+          for (const kind of ["get", "set", "value"] as const) {
             if (desc[kind] != null) {
               obj.properties.push(
                 t.objectProperty(t.identifier(kind), desc[kind]),
@@ -250,7 +313,12 @@ export default function transformClass(
     }
   }
 
-  function wrapSuperCall(bareSuper, superRef, thisRef, body) {
+  function wrapSuperCall(
+    bareSuper: NodePath<t.CallExpression>,
+    superRef: t.Expression,
+    thisRef: () => t.Identifier,
+    body: NodePath<t.BlockStatement>,
+  ) {
     const bareSuperNode = bareSuper.node;
     let call;
 
@@ -373,7 +441,7 @@ export default function transformClass(
     let wrapReturn;
 
     if (classState.isLoose) {
-      wrapReturn = returnArg => {
+      wrapReturn = (returnArg: t.Expression | void) => {
         const thisExpr = t.callExpression(
           classState.file.addHelper("assertThisInitialized"),
           [thisRef()],
@@ -383,11 +451,16 @@ export default function transformClass(
           : thisExpr;
       };
     } else {
-      wrapReturn = returnArg =>
-        t.callExpression(
+      wrapReturn = (returnArg: t.Expression | undefined) => {
+        const returnParams: t.Expression[] = [thisRef()];
+        if (returnArg != null) {
+          returnParams.push(returnArg);
+        }
+        return t.callExpression(
           classState.file.addHelper("possibleConstructorReturn"),
-          [thisRef()].concat(returnArg || []),
+          returnParams,
         );
+      };
     }
 
     // if we have a return as the last node in the body then we've already caught that
@@ -428,11 +501,13 @@ export default function transformClass(
         ? t.stringLiteral(String(node.key.value))
         : t.toComputedKey(node);
 
-    let fn = t.toExpression(node);
+    let fn: t.Expression = t.toExpression(node);
 
     if (t.isStringLiteral(key)) {
       // infer function name
       if (node.kind === "method") {
+        // @ts-ignore Fixme: we are passing a ClassMethod to nameFunction, but nameFunction
+        // does not seem to support it
         fn = nameFunction({ id: key, node: node, scope });
       }
     } else {
@@ -440,7 +515,7 @@ export default function transformClass(
       methods.hasComputed = true;
     }
 
-    let descriptor;
+    let descriptor: Descriptor;
     if (
       !methods.hasComputed &&
       methods.map.has((key as t.StringLiteral).value)
@@ -455,7 +530,12 @@ export default function transformClass(
         descriptor.value = null;
       }
     } else {
-      descriptor = { key: key, [descKey]: fn };
+      descriptor = {
+        key:
+          // private name has been handled in class-properties transform
+          key as t.Expression,
+        [descKey]: fn,
+      } as Descriptor;
       methods.list.push(descriptor);
 
       if (!methods.hasComputed) {
@@ -464,7 +544,7 @@ export default function transformClass(
     }
   }
 
-  function processMethod(node, scope) {
+  function processMethod(node: t.ClassMethod, scope: Scope) {
     if (assumptions.setClassMethods && !node.decorators) {
       // use assignments instead of define properties for loose classes
       let { classRef } = classState;
@@ -478,8 +558,9 @@ export default function transformClass(
         node.computed || t.isLiteral(node.key),
       );
 
-      let func = t.functionExpression(
+      let func: t.Expression = t.functionExpression(
         null,
+        // @ts-expect-error Fixme: should throw when we see TSParameterProperty
         node.params,
         node.body,
         node.generator,
@@ -526,9 +607,9 @@ export default function transformClass(
    * Replace the constructor body of our class.
    */
   function pushConstructor(
-    superReturns,
-    method: t.ClassMethod,
-    path: NodePath,
+    superReturns: NodePath<t.ReturnStatement>[],
+    method: ClassConstructor,
+    path: NodePath<ClassConstructor>,
   ) {
     setState({
       userConstructorPath: path,
@@ -541,6 +622,7 @@ export default function transformClass(
 
     t.inheritsComments(construct, method);
 
+    // @ts-expect-error Fixme: should throw when we see TSParameterProperty
     construct.params = method.params;
 
     t.inherits(construct.body, method.body);
@@ -603,11 +685,7 @@ export default function transformClass(
   }
 
   function extractDynamicKeys() {
-    const { dynamicKeys, node, scope } = classState as {
-      dynamicKeys: Map<string, t.Expression>;
-      node: t.Class;
-      scope: NodePath["scope"];
-    };
+    const { dynamicKeys, node, scope } = classState;
 
     for (const elem of node.body.body) {
       if (!t.isClassMethod(elem) || !elem.computed) continue;
@@ -652,8 +730,8 @@ export default function transformClass(
   }
 
   function classTransformer(
-    path: NodePath,
-    file,
+    path: NodePath<t.Class>,
+    file: File,
     builtinClasses: ReadonlySet<string>,
     isLoose: boolean,
   ) {
@@ -679,7 +757,7 @@ export default function transformClass(
 
     setState({
       extendsNative:
-        classState.isDerived &&
+        t.isIdentifier(classState.superName) &&
         builtinClasses.has(classState.superName.name) &&
         !classState.scope.hasBinding(
           classState.superName.name,
@@ -712,12 +790,6 @@ export default function transformClass(
       );
     }
 
-    body.push(
-      ...classState.staticPropBody.map(fn =>
-        fn(t.cloneNode(classState.classRef)),
-      ),
-    );
-
     const isStrict = path.isInStrictMode();
     let constructorOnly = classState.classId && body.length === 1;
     if (constructorOnly && !isStrict) {
@@ -732,18 +804,23 @@ export default function transformClass(
       }
     }
 
-    const directives = constructorOnly ? body[0].body.directives : [];
+    const directives = constructorOnly
+      ? (body[0] as t.FunctionExpression | t.FunctionDeclaration).body
+          .directives
+      : [];
     if (!isStrict) {
       directives.push(t.directive(t.directiveLiteral("use strict")));
     }
 
     if (constructorOnly) {
       // named class with only a constructor
-      const expr = t.toExpression(body[0]);
+      const expr = t.toExpression(
+        body[0] as t.FunctionExpression | t.FunctionDeclaration,
+      );
       return classState.isLoose ? expr : createClassHelper([expr]);
     }
 
-    let returnArg = t.cloneNode(classState.classRef);
+    let returnArg: t.Expression = t.cloneNode(classState.classRef);
     if (!classState.pushedCreateClass && !classState.isLoose) {
       returnArg = createClassHelper([returnArg]);
     }
