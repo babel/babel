@@ -528,7 +528,7 @@ class Printer {
       | t.DecimalLiteral
       | t.DirectiveLiteral
       | t.JSXText,
-  ): string | void {
+  ): string | undefined {
     const extra = node.extra;
     if (
       extra &&

@@ -50,7 +50,9 @@ export function IfStatement(this: Printer, node: t.IfStatement) {
 }
 
 // Recursively get the last statement.
-function getLastStatement(statement: Exclude<t.Statement, t.BreakStatement>): t.Statement {
+function getLastStatement(
+  statement: Exclude<t.Statement, t.BreakStatement>,
+): t.Statement {
   if (
     !isStatement(
       // @ts-ignore body is not in BreakStatement
@@ -100,27 +102,26 @@ export function WhileStatement(this: Printer, node: t.WhileStatement) {
   this.printBlock(node);
 }
 
-const buildForXStatement = function (op: "in" | "of") {
-  return function (this: Printer, node: t.ForXStatement) {
-    this.word("for");
+function ForXStatement(this: Printer, node: t.ForXStatement) {
+  this.word("for");
+  this.space();
+  const isForOf = node.type === "ForOfStatement";
+  if (isForOf && node.await) {
+    this.word("await");
     this.space();
-    if (node.type === "ForOfStatement" && node.await) {
-      this.word("await");
-      this.space();
-    }
-    this.token("(");
-    this.print(node.left, node);
-    this.space();
-    this.word(op);
-    this.space();
-    this.print(node.right, node);
-    this.token(")");
-    this.printBlock(node);
-  };
-};
+  }
+  this.token("(");
+  this.print(node.left, node);
+  this.space();
+  this.word(isForOf ? "of" : "in");
+  this.space();
+  this.print(node.right, node);
+  this.token(")");
+  this.printBlock(node);
+}
 
-export const ForInStatement = buildForXStatement("in");
-export const ForOfStatement = buildForXStatement("of");
+export const ForInStatement = ForXStatement;
+export const ForOfStatement = ForXStatement;
 
 export function DoWhileStatement(this: Printer, node: t.DoWhileStatement) {
   this.word("do");
@@ -136,37 +137,37 @@ export function DoWhileStatement(this: Printer, node: t.DoWhileStatement) {
 }
 
 function printStatementAfterKeyword(
-  this: Printer,
+  printer: Printer,
   node: t.Node,
   parent: t.Node,
   isLabel: boolean,
 ) {
   if (node) {
-    this.space();
-    this.printTerminatorless(node, parent, isLabel);
+    printer.space();
+    printer.printTerminatorless(node, parent, isLabel);
   }
 
-  this.semicolon();
+  printer.semicolon();
 }
 
 export function BreakStatement(this: Printer, node: t.ContinueStatement) {
   this.word("break");
-  printStatementAfterKeyword.call(this, node.label, node, true);
+  printStatementAfterKeyword(this, node.label, node, true);
 }
 
 export function ContinueStatement(this: Printer, node: t.ContinueStatement) {
   this.word("continue");
-  printStatementAfterKeyword.call(this, node.label, node, true);
+  printStatementAfterKeyword(this, node.label, node, true);
 }
 
 export function ReturnStatement(this: Printer, node: t.ReturnStatement) {
   this.word("return");
-  printStatementAfterKeyword.call(this, node.argument, node, false);
+  printStatementAfterKeyword(this, node.argument, node, false);
 }
 
 export function ThrowStatement(this: Printer, node: t.ThrowStatement) {
   this.word("throw");
-  printStatementAfterKeyword.call(this, node.argument, node, false);
+  printStatementAfterKeyword(this, node.argument, node, false);
 }
 
 export function LabeledStatement(this: Printer, node: t.LabeledStatement) {
