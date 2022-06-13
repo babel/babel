@@ -81,14 +81,14 @@ export function needsWhitespace(
   node: t.Node,
   parent: t.Node,
   type: "before" | "after",
-): boolean | 0 {
-  if (!node) return 0;
+): boolean {
+  if (!node) return false;
 
   if (isExpressionStatement(node)) {
     node = node.expression;
   }
 
-  let linesInfo: WhitespaceObject | null | boolean | 0 = find(
+  let linesInfo: WhitespaceObject | null | boolean = find(
     expandedWhitespaceNodes,
     node,
     parent,
@@ -105,10 +105,10 @@ export function needsWhitespace(
   }
 
   if (typeof linesInfo === "object" && linesInfo !== null) {
-    return linesInfo[type] || 0;
+    return linesInfo[type] || false;
   }
 
-  return 0;
+  return false;
 }
 
 export function needsWhitespaceBefore(node: t.Node, parent: t.Node) {
