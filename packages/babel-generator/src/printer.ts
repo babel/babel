@@ -443,10 +443,7 @@ class Printer {
           // removed
           | "Noop"
           // renamed
-          | "NumberLiteral"
-          | "RegexLiteral"
-          | "RestProperty"
-          | "SpreadProperty"
+          | t.DeprecatedAliases["type"]
         >
       ];
     if (!printMethod) {

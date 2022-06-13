@@ -50,7 +50,7 @@ export function IfStatement(this: Printer, node: t.IfStatement) {
 }
 
 // Recursively get the last statement.
-function getLastStatement(statement: t.Statement): t.Statement {
+function getLastStatement(statement: Exclude<t.Statement, t.BreakStatement>): t.Statement {
   if (
     !isStatement(
       // @ts-ignore body is not in BreakStatement
