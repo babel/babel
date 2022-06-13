@@ -294,23 +294,23 @@ export function tsPrintTypeLiteralOrInterfaceBody(
   members: t.TSTypeElement[],
   node: t.TSType | t.TSInterfaceBody,
 ) {
-  this.tsPrintBraced(members, node);
+  tsPrintBraced(this, members, node);
 }
 
-export function tsPrintBraced(this: Printer, members: t.Node[], node: t.Node) {
-  this.token("{");
+function tsPrintBraced(printer: Printer, members: t.Node[], node: t.Node) {
+  printer.token("{");
   if (members.length) {
-    this.indent();
-    this.newline();
+    printer.indent();
+    printer.newline();
     for (const member of members) {
-      this.print(member, node);
+      printer.print(member, node);
       //this.token(sep);
-      this.newline();
+      printer.newline();
     }
-    this.dedent();
-    this.rightBrace();
+    printer.dedent();
+    printer.rightBrace();
   } else {
-    this.token("}");
+    printer.token("}");
   }
 }
 
@@ -344,19 +344,19 @@ export function TSNamedTupleMember(this: Printer, node: t.TSNamedTupleMember) {
 }
 
 export function TSUnionType(this: Printer, node: t.TSUnionType) {
-  this.tsPrintUnionOrIntersectionType(node, "|");
+  tsPrintUnionOrIntersectionType(this, node, "|");
 }
 
 export function TSIntersectionType(this: Printer, node: t.TSIntersectionType) {
-  this.tsPrintUnionOrIntersectionType(node, "&");
+  tsPrintUnionOrIntersectionType(this, node, "&");
 }
 
-export function tsPrintUnionOrIntersectionType(
-  this: Printer,
+function tsPrintUnionOrIntersectionType(
+  printer: Printer,
   node: t.TSUnionType | t.TSIntersectionType,
   sep: "|" | "&",
 ) {
-  this.printJoin(node.types, node, {
+  printer.printJoin(node.types, node, {
     separator() {
       this.space();
       this.token(sep);
@@ -558,7 +558,7 @@ export function TSEnumDeclaration(this: Printer, node: t.TSEnumDeclaration) {
   this.space();
   this.print(id, node);
   this.space();
-  this.tsPrintBraced(members, node);
+  tsPrintBraced(this, members, node);
 }
 
 export function TSEnumMember(this: Printer, node: t.TSEnumMember) {
@@ -607,7 +607,7 @@ export function TSModuleDeclaration(
 }
 
 export function TSModuleBlock(this: Printer, node: t.TSModuleBlock) {
-  this.tsPrintBraced(node.body, node);
+  tsPrintBraced(this, node.body, node);
 }
 
 export function TSImportType(this: Printer, node: t.TSImportType) {
