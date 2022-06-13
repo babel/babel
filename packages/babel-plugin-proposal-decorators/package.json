@@ -24,8 +24,7 @@
     "@babel/helper-plugin-utils": "workspace:^",
     "@babel/helper-replace-supers": "workspace:^",
     "@babel/helper-split-export-declaration": "workspace:^",
-    "@babel/plugin-syntax-decorators": "workspace:^",
-    "charcodes": "^0.2.0"
+    "@babel/plugin-syntax-decorators": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
