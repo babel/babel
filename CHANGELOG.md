@@ -23,6 +23,32 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.18.5 (2022-06-13)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-new-target`
+  * [#14611](https://github.com/babel/babel/pull/14611) fix: `new.target` with shadowed class name ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-plugin-transform-modules-systemjs`
+  * [#14655](https://github.com/babel/babel/pull/14655) Fix named destructuring exports ([@underfin](https://github.com/underfin))
+
+#### :memo: Documentation
+* [#14332](https://github.com/babel/babel/pull/14332) docs: eslint-parser requireConfigFile behaviour ([@JLHwung](https://github.com/JLHwung))
+* [#14619](https://github.com/babel/babel/pull/14619) Move v7 prereleases changelog to a separate file ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-traverse`
+  * [#14649](https://github.com/babel/babel/pull/14649) Rely on the call stack to clean up cache in `_guessExecutionStatusRelativeTo` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`
+  * [#14641](https://github.com/babel/babel/pull/14641) Change limit of source map 3MB ([@vasicvuk](https://github.com/vasicvuk))
+* Other
+  * [#14627](https://github.com/babel/babel/pull/14627) Speedup e2e test on github ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+  * [#14248](https://github.com/babel/babel/pull/14248) chore: automate compat-data update ([@tony-go](https://github.com/tony-go))
+* `babel-parser`
+  * [#14592](https://github.com/babel/babel/pull/14592) feat: Automatically generate test results that do not exist ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :running_woman: Performance
+* `babel-traverse`
+  * [#14617](https://github.com/babel/babel/pull/14617) Fix `_guessExecutionStatusRelativeToDifferentFunctions` perf ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.18.4 (2022-05-29)
 
 #### :eyeglasses: Spec Compliance
