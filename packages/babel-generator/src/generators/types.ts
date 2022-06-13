@@ -201,7 +201,7 @@ export function NumericLiteral(this: Printer, node: t.NumericLiteral) {
 
 export function StringLiteral(this: Printer, node: t.StringLiteral) {
   const raw = this.getPossibleRaw(node);
-  if (!this.format.minified && raw != null) {
+  if (!this.format.minified && raw !== undefined) {
     this.token(raw);
     return;
   }
@@ -221,7 +221,7 @@ export function StringLiteral(this: Printer, node: t.StringLiteral) {
 
 export function BigIntLiteral(this: Printer, node: t.BigIntLiteral) {
   const raw = this.getPossibleRaw(node);
-  if (!this.format.minified && raw != null) {
+  if (!this.format.minified && raw !== undefined) {
     this.word(raw);
     return;
   }
@@ -230,7 +230,7 @@ export function BigIntLiteral(this: Printer, node: t.BigIntLiteral) {
 
 export function DecimalLiteral(this: Printer, node: t.DecimalLiteral) {
   const raw = this.getPossibleRaw(node);
-  if (!this.format.minified && raw != null) {
+  if (!this.format.minified && raw !== undefined) {
     this.word(raw);
     return;
   }

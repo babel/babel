@@ -1,7 +1,13 @@
 import Buffer from "./buffer";
+import type { Loc } from "./buffer";
 import * as n from "./node";
 import { isProgram, isFile, isEmptyStatement } from "@babel/types";
 import type * as t from "@babel/types";
+import type {
+  RecordAndTuplePluginOptions,
+  PipelineOperatorPluginOptions,
+} from "@babel/parser";
+import type { Opts as jsescOptions } from "jsesc";
 
 import * as generatorFunctions from "./generators";
 import type SourceMap from "./source-map";
@@ -30,16 +36,35 @@ export type Format = {
     base: number;
   };
   decoratorsBeforeExport: boolean;
-  recordAndTupleSyntaxType: "bar" | "hash";
-  jsescOption;
-  jsonCompatibleStrings?;
+  recordAndTupleSyntaxType: RecordAndTuplePluginOptions["syntaxType"];
+  jsescOption: jsescOptions;
+  jsonCompatibleStrings?: boolean;
   /**
    * For use with the Hack-style pipe operator.
    * Changes what token is used for pipe bodies’ topic references.
    */
-  topicToken?: "#";
+  topicToken?: PipelineOperatorPluginOptions["topicToken"];
 };
 
+interface AddNewlinesOptions {
+  addNewlines(leading: boolean, node: t.Node): number;
+}
+
+interface PrintSequenceOptions extends Partial<AddNewlinesOptions> {
+  statement?: boolean;
+  indent?: boolean;
+}
+
+interface PrintListOptions {
+  separator?: (this: Printer) => void;
+  statement?: boolean;
+  indent?: boolean;
+}
+
+type PrintJoinOptions = PrintListOptions &
+  PrintSequenceOptions & {
+    iterator?: (node: t.Node, index: number) => void;
+  };
 class Printer {
   constructor(format: Format, map: SourceMap) {
     this.format = format;
@@ -53,14 +78,14 @@ class Printer {
   _printStack: Array<t.Node> = [];
   _indent: number = 0;
   _insideAux: boolean = false;
-  _parenPushNewlineState: any = null;
+  _parenPushNewlineState: { printed: boolean } | null = null;
   _noLineTerminator: boolean = false;
   _printAuxAfterOnNextUserNode: boolean = false;
-  _printedComments: WeakSet<any> = new WeakSet();
+  _printedComments = new WeakSet<t.Comment>();
   _endsWithInteger = false;
   _endsWithWord = false;
 
-  generate(ast) {
+  generate(ast: t.Node) {
     this.print(ast);
     this._maybeAddAuxComment();
 
@@ -229,19 +254,23 @@ class Printer {
     this._buf.removeTrailingNewline();
   }
 
-  exactSource(loc: any, cb: () => void) {
+  exactSource(loc: Loc | undefined, cb: () => void) {
     this._catchUp("start", loc);
 
     this._buf.exactSource(loc, cb);
   }
 
-  source(prop: string, loc: any): void {
+  source(prop: "start" | "end", loc: Loc | undefined): void {
     this._catchUp(prop, loc);
 
     this._buf.source(prop, loc);
   }
 
-  withSource(prop: string, loc: any, cb: () => void): void {
+  withSource(
+    prop: "start" | "end",
+    loc: Loc | undefined,
+    cb: () => void,
+  ): void {
     this._catchUp(prop, loc);
 
     this._buf.withSource(prop, loc, cb);
@@ -337,7 +366,7 @@ class Printer {
     parenPushNewlineState.printed = true;
   }
 
-  _catchUp(prop: string, loc: any) {
+  _catchUp(prop: "start" | "end", loc?: Loc) {
     if (!this.format.retainLines) return;
 
     // catch up to this nodes newline if we're behind
@@ -359,55 +388,64 @@ class Printer {
     return this.format.indent.style.repeat(this._indent);
   }
 
-  /**
-   * Set some state that will be modified if a newline has been inserted before any
-   * non-space characters.
-   *
-   * This is to prevent breaking semantics for terminatorless separator nodes. eg:
-   *
-   *   return foo;
-   *
-   * returns `foo`. But if we do:
-   *
-   *   return
-   *   foo;
-   *
-   *  `undefined` will be returned and not `foo` due to the terminator.
-   */
-
-  startTerminatorless(isLabel: boolean = false) {
+  printTerminatorless(node: t.Node, parent: t.Node, isLabel: boolean) {
+    /**
+     * Set some state that will be modified if a newline has been inserted before any
+     * non-space characters.
+     *
+     * This is to prevent breaking semantics for terminatorless separator nodes. eg:
+     *
+     *   return foo;
+     *
+     * returns `foo`. But if we do:
+     *
+     *   return
+     *   foo;
+     *
+     *  `undefined` will be returned and not `foo` due to the terminator.
+     */
     if (isLabel) {
       this._noLineTerminator = true;
-      return null;
+      this.print(node, parent);
+      this._noLineTerminator = false;
     } else {
-      return (this._parenPushNewlineState = {
+      const terminatorState = {
         printed: false,
-      });
+      };
+      this._parenPushNewlineState = terminatorState;
+      this.print(node, parent);
+      /**
+       * Print an ending parentheses if a starting one has been printed.
+       */
+      if (terminatorState.printed) {
+        this.dedent();
+        this.newline();
+        this.token(")");
+      }
     }
   }
 
-  /**
-   * Print an ending parentheses if a starting one has been printed.
-   */
-
-  endTerminatorless(state?: any) {
-    this._noLineTerminator = false;
-    if (state?.printed) {
-      this.dedent();
-      this.newline();
-      this.token(")");
-    }
-  }
-
-  print(node, parent?) {
+  print(node: t.Node | null, parent?: t.Node) {
     if (!node) return;
 
     const oldConcise = this.format.concise;
-    if (node._compact) {
+    if (
+      // @ts-ignore document _compact AST properties
+      node._compact
+    ) {
       this.format.concise = true;
     }
 
-    const printMethod = this[node.type];
+    const printMethod =
+      this[
+        node.type as Exclude<
+          t.Node["type"],
+          // removed
+          | "Noop"
+          // renamed
+          | t.DeprecatedAliases["type"]
+        >
+      ];
     if (!printMethod) {
       throw new ReferenceError(
         `unknown node of type ${JSON.stringify(
@@ -451,7 +489,7 @@ class Printer {
     this._insideAux = oldInAux;
   }
 
-  _maybeAddAuxComment(enteredPositionlessNode?) {
+  _maybeAddAuxComment(enteredPositionlessNode?: boolean) {
     if (enteredPositionlessNode) this._printAuxBeforeComment();
     if (!this._insideAux) this._printAuxAfterComment();
   }
@@ -482,7 +520,15 @@ class Printer {
     }
   }
 
-  getPossibleRaw(node) {
+  getPossibleRaw(
+    node:
+      | t.StringLiteral
+      | t.NumericLiteral
+      | t.BigIntLiteral
+      | t.DecimalLiteral
+      | t.DirectiveLiteral
+      | t.JSXText,
+  ): string | undefined {
     const extra = node.extra;
     if (
       extra &&
@@ -490,16 +536,21 @@ class Printer {
       extra.rawValue != null &&
       node.value === extra.rawValue
     ) {
+      // @ts-expect-error: The extra.raw of these AST node types must be a string
       return extra.raw;
     }
   }
 
-  printJoin(nodes: Array<any> | undefined | null, parent: any, opts: any = {}) {
+  printJoin(
+    nodes: Array<t.Node> | undefined | null,
+    parent: t.Node,
+    opts: PrintJoinOptions = {},
+  ) {
     if (!nodes?.length) return;
 
     if (opts.indent) this.indent();
 
-    const newlineOpts = {
+    const newlineOpts: AddNewlinesOptions = {
       addNewlines: opts.addNewlines,
     };
 
@@ -525,14 +576,14 @@ class Printer {
     if (opts.indent) this.dedent();
   }
 
-  printAndIndentOnComments(node, parent) {
+  printAndIndentOnComments(node: t.Node, parent: t.Node) {
     const indent = node.leadingComments && node.leadingComments.length > 0;
     if (indent) this.indent();
     this.print(node, parent);
     if (indent) this.dedent();
   }
 
-  printBlock(parent) {
+  printBlock(parent: Extract<t.Node, { body: t.Statement }>) {
     const node = parent.body;
 
     if (!isEmptyStatement(node)) {
@@ -542,11 +593,11 @@ class Printer {
     this.print(node, parent);
   }
 
-  _printTrailingComments(node) {
+  _printTrailingComments(node: t.Node) {
     this._printComments(this._getComments(false, node));
   }
 
-  _printLeadingComments(node) {
+  _printLeadingComments(node: t.Node) {
     this._printComments(
       this._getComments(true, node),
       // Don't add leading/trailing new lines to #__PURE__ annotations
@@ -554,7 +605,7 @@ class Printer {
     );
   }
 
-  printInnerComments(node, indent = true) {
+  printInnerComments(node: t.Node, indent = true) {
     if (!node.innerComments?.length) return;
     if (indent) this.indent();
     this._printComments(node.innerComments);
@@ -562,23 +613,15 @@ class Printer {
   }
 
   printSequence(
-    nodes,
-    parent,
-    opts: {
-      statement?: boolean;
-      indent?: boolean;
-      addNewlines?: Function;
-    } = {},
+    nodes: t.Node[],
+    parent: t.Node,
+    opts: PrintSequenceOptions = {},
   ) {
     opts.statement = true;
     return this.printJoin(nodes, parent, opts);
   }
 
-  printList(
-    items,
-    parent,
-    opts: { separator?: Function; indent?: boolean; statement?: boolean } = {},
-  ) {
+  printList(items: t.Node[], parent: t.Node, opts: PrintListOptions = {}) {
     if (opts.separator == null) {
       opts.separator = commaSeparator;
     }
@@ -586,7 +629,12 @@ class Printer {
     return this.printJoin(items, parent, opts);
   }
 
-  _printNewline(leading, node, parent, opts) {
+  _printNewline(
+    leading: boolean,
+    node: t.Node,
+    parent: t.Node,
+    opts: AddNewlinesOptions,
+  ) {
     // Fast path since 'this.newline' does nothing when not tracking lines.
     if (this.format.retainLines || this.format.compact) return;
 
@@ -610,7 +658,7 @@ class Printer {
     this.newline(Math.min(2, lines));
   }
 
-  _getComments(leading, node) {
+  _getComments(leading: boolean, node: t.Node) {
     // Note, we use a boolean flag here instead of passing in the attribute name as it is faster
     // because this is called extremely frequently.
     return (
@@ -618,11 +666,12 @@ class Printer {
     );
   }
 
-  _printComment(comment, skipNewLines?: boolean) {
+  _printComment(comment: t.Comment, skipNewLines?: boolean) {
     if (!this.format.shouldPrintComment(comment.value)) return;
 
     // Some plugins use this to mark comments as removed using the AST-root 'comments' property,
     // where they can't manually mutate the AST node comment lists.
+    // @ts-ignore todo: which plugin?
     if (comment.ignore) return;
 
     if (this._printedComments.has(comment)) return;
@@ -674,7 +723,10 @@ class Printer {
     if (printNewLines) this.newline(1);
   }
 
-  _printComments(comments?: Array<any>, inlinePureAnnotation?: boolean) {
+  _printComments(
+    comments?: readonly t.Comment[],
+    inlinePureAnnotation?: boolean,
+  ) {
     if (!comments?.length) return;
 
     if (
@@ -694,7 +746,7 @@ class Printer {
     }
   }
   // todo(flow->ts): was Node
-  printAssertions(node) {
+  printAssertions(node: Extract<t.Node, { assertions?: t.ImportAttribute[] }>) {
     if (node.assertions?.length) {
       this.space();
       this.word("assert");
