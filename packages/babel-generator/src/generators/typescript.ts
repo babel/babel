@@ -131,7 +131,10 @@ export function TSPropertySignature(
   this.token(";");
 }
 
-export function tsPrintPropertyOrMethodName(this: Printer, node) {
+export function tsPrintPropertyOrMethodName(
+  this: Printer,
+  node: t.TSPropertySignature | t.TSMethodSignature,
+) {
   if (node.computed) {
     this.token("[");
   }
@@ -232,12 +235,12 @@ export function TSConstructorType(this: Printer, node: t.TSConstructorType) {
 
 export function tsPrintFunctionOrConstructorType(
   this: Printer,
-  // todo: missing type FunctionOrConstructorType
-  node: any,
+  node: t.TSFunctionType | t.TSConstructorType,
 ) {
   const { typeParameters } = node;
   const parameters = process.env.BABEL_8_BREAKING
-    ? node.params
+    ? // @ts-expect-error Babel 8 AST shape
+      node.params
     : node.parameters;
   this.print(typeParameters, node);
   this.token("(");
@@ -247,7 +250,8 @@ export function tsPrintFunctionOrConstructorType(
   this.token("=>");
   this.space();
   const returnType = process.env.BABEL_8_BREAKING
-    ? node.returnType
+    ? // @ts-expect-error Babel 8 AST shape
+      node.returnType
     : node.typeAnnotation;
   this.print(returnType.typeAnnotation, node);
 }
@@ -287,26 +291,26 @@ export function TSTypeLiteral(this: Printer, node: t.TSTypeLiteral) {
 
 export function tsPrintTypeLiteralOrInterfaceBody(
   this: Printer,
-  members,
-  node,
+  members: t.TSTypeElement[],
+  node: t.TSType | t.TSInterfaceBody,
 ) {
-  this.tsPrintBraced(members, node);
+  tsPrintBraced(this, members, node);
 }
 
-export function tsPrintBraced(this: Printer, members, node) {
-  this.token("{");
+function tsPrintBraced(printer: Printer, members: t.Node[], node: t.Node) {
+  printer.token("{");
   if (members.length) {
-    this.indent();
-    this.newline();
+    printer.indent();
+    printer.newline();
     for (const member of members) {
-      this.print(member, node);
+      printer.print(member, node);
       //this.token(sep);
-      this.newline();
+      printer.newline();
     }
-    this.dedent();
-    this.rightBrace();
+    printer.dedent();
+    printer.rightBrace();
   } else {
-    this.token("}");
+    printer.token("}");
   }
 }
 
@@ -340,15 +344,19 @@ export function TSNamedTupleMember(this: Printer, node: t.TSNamedTupleMember) {
 }
 
 export function TSUnionType(this: Printer, node: t.TSUnionType) {
-  this.tsPrintUnionOrIntersectionType(node, "|");
+  tsPrintUnionOrIntersectionType(this, node, "|");
 }
 
 export function TSIntersectionType(this: Printer, node: t.TSIntersectionType) {
-  this.tsPrintUnionOrIntersectionType(node, "&");
+  tsPrintUnionOrIntersectionType(this, node, "&");
 }
 
-export function tsPrintUnionOrIntersectionType(this: Printer, node: any, sep) {
-  this.printJoin(node.types, node, {
+function tsPrintUnionOrIntersectionType(
+  printer: Printer,
+  node: t.TSUnionType | t.TSIntersectionType,
+  sep: "|" | "&",
+) {
+  printer.printJoin(node.types, node, {
     separator() {
       this.space();
       this.token(sep);
@@ -445,7 +453,7 @@ export function TSMappedType(this: Printer, node: t.TSMappedType) {
   this.token("}");
 }
 
-function tokenIfPlusMinus(self, tok) {
+function tokenIfPlusMinus(self: Printer, tok: true | "+" | "-") {
   if (tok !== true) {
     self.token(tok);
   }
@@ -550,7 +558,7 @@ export function TSEnumDeclaration(this: Printer, node: t.TSEnumDeclaration) {
   this.space();
   this.print(id, node);
   this.space();
-  this.tsPrintBraced(members, node);
+  tsPrintBraced(this, members, node);
 }
 
 export function TSEnumMember(this: Printer, node: t.TSEnumMember) {
@@ -599,7 +607,7 @@ export function TSModuleDeclaration(
 }
 
 export function TSModuleBlock(this: Printer, node: t.TSModuleBlock) {
-  this.tsPrintBraced(node.body, node);
+  tsPrintBraced(this, node.body, node);
 }
 
 export function TSImportType(this: Printer, node: t.TSImportType) {
@@ -690,7 +698,17 @@ export function tsPrintSignatureDeclarationBase(this: Printer, node: any) {
   this.print(returnType, node);
 }
 
-export function tsPrintClassMemberModifiers(this: Printer, node: any, isField) {
+export function tsPrintClassMemberModifiers(
+  this: Printer,
+  node:
+    | t.ClassProperty
+    | t.ClassAccessorProperty
+    | t.ClassMethod
+    | t.ClassPrivateMethod
+    | t.TSDeclareMethod,
+) {
+  const isField =
+    node.type === "ClassAccessorProperty" || node.type === "ClassProperty";
   if (isField && node.declare) {
     this.word("declare");
     this.space();

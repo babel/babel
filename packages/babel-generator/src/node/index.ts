@@ -7,11 +7,28 @@ import {
   isMemberExpression,
   isNewExpression,
 } from "@babel/types";
+import type * as t from "@babel/types";
+import type { WhitespaceObject } from "./whitespace";
 
-function expandAliases(obj) {
-  const newObj = {};
+export type NodeHandlers<R> = {
+  [K in string]?: (
+    node: K extends t.Node["type"] ? Extract<t.Node, { type: K }> : t.Node,
+    // todo:
+    // node: K extends keyof typeof t
+    //   ? Extract<typeof t[K], { type: "string" }>
+    //   : t.Node,
+    parent: t.Node,
+    stack: t.Node[],
+  ) => R;
+};
 
-  function add(type, func) {
+function expandAliases<R>(obj: NodeHandlers<R>) {
+  const newObj: NodeHandlers<R> = {};
+
+  function add(
+    type: string,
+    func: (node: t.Node, parent: t.Node, stack: t.Node[]) => R,
+  ) {
     const fn = newObj[type];
     newObj[type] = fn
       ? function (node, parent, stack) {
@@ -42,12 +59,17 @@ const expandedParens = expandAliases(parens);
 const expandedWhitespaceNodes = expandAliases(whitespace.nodes);
 const expandedWhitespaceList = expandAliases(whitespace.list);
 
-function find(obj, node, parent, printStack?) {
+function find<R>(
+  obj: NodeHandlers<R>,
+  node: t.Node,
+  parent: t.Node,
+  printStack?: t.Node[],
+): R | null {
   const fn = obj[node.type];
   return fn ? fn(node, parent, printStack) : null;
 }
 
-function isOrHasCallExpression(node) {
+function isOrHasCallExpression(node: t.Node): boolean {
   if (isCallExpression(node)) {
     return true;
   }
@@ -55,14 +77,22 @@ function isOrHasCallExpression(node) {
   return isMemberExpression(node) && isOrHasCallExpression(node.object);
 }
 
-export function needsWhitespace(node, parent, type) {
-  if (!node) return 0;
+export function needsWhitespace(
+  node: t.Node,
+  parent: t.Node,
+  type: "before" | "after",
+): boolean {
+  if (!node) return false;
 
   if (isExpressionStatement(node)) {
     node = node.expression;
   }
 
-  let linesInfo = find(expandedWhitespaceNodes, node, parent);
+  let linesInfo: WhitespaceObject | null | boolean = find(
+    expandedWhitespaceNodes,
+    node,
+    parent,
+  );
 
   if (!linesInfo) {
     const items = find(expandedWhitespaceList, node, parent);
@@ -75,21 +105,25 @@ export function needsWhitespace(node, parent, type) {
   }
 
   if (typeof linesInfo === "object" && linesInfo !== null) {
-    return linesInfo[type] || 0;
+    return linesInfo[type] || false;
   }
 
-  return 0;
+  return false;
 }
 
-export function needsWhitespaceBefore(node, parent) {
+export function needsWhitespaceBefore(node: t.Node, parent: t.Node) {
   return needsWhitespace(node, parent, "before");
 }
 
-export function needsWhitespaceAfter(node, parent) {
+export function needsWhitespaceAfter(node: t.Node, parent: t.Node) {
   return needsWhitespace(node, parent, "after");
 }
 
-export function needsParens(node, parent, printStack?) {
+export function needsParens(
+  node: t.Node,
+  parent: t.Node,
+  printStack?: t.Node[],
+) {
   if (!parent) return false;
 
   if (isNewExpression(parent) && parent.callee === node) {

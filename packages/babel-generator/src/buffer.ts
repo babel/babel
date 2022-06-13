@@ -1,12 +1,11 @@
 import type SourceMap from "./source-map";
-import type * as t from "@babel/types";
 import * as charcodes from "charcodes";
 
-type Pos = {
+export type Pos = {
   line: number;
   column: number;
 };
-type Loc = {
+export type Loc = {
   start?: Pos;
   end?: Pos;
   identifierName?: string;
@@ -63,14 +62,18 @@ export default class Buffer {
 
       // Encoding the sourcemap is moderately CPU expensive.
       get map() {
-        return (result.map = map ? map.get() : null);
+        const resultMap = map ? map.get() : null;
+        result.map = resultMap;
+        return resultMap;
       },
       set map(value) {
         Object.defineProperty(result, "map", { value, writable: true });
       },
       // Retrieving the raw mappings is very memory intensive.
       get rawMappings() {
-        return (result.rawMappings = map?.getRawMappings());
+        const mappings = map?.getRawMappings();
+        result.rawMappings = mappings;
+        return mappings;
       },
       set rawMappings(value) {
         Object.defineProperty(result, "rawMappings", { value, writable: true });
@@ -241,7 +244,7 @@ export default class Buffer {
    * With this line, there will be one mapping range over "mod" and another
    * over "();", where previously it would have been a single mapping.
    */
-  exactSource(loc: any, cb: () => void) {
+  exactSource(loc: Loc | undefined, cb: () => void) {
     this.source("start", loc);
 
     cb();
@@ -262,7 +265,7 @@ export default class Buffer {
    * will be given this position in the sourcemap.
    */
 
-  source(prop: string, loc: t.SourceLocation): void {
+  source(prop: "start" | "end", loc: Loc | undefined): void {
     if (prop && !loc) return;
 
     // Since this is called extremely often, we re-use the same _sourcePosition
@@ -274,7 +277,7 @@ export default class Buffer {
    * Call a callback with a specific source location and restore on completion.
    */
 
-  withSource(prop: string, loc: t.SourceLocation, cb: () => void): void {
+  withSource(prop: "start" | "end", loc: Loc, cb: () => void): void {
     if (!this._map) return cb();
 
     // Use the call stack to manage a stack of "source location" data because
@@ -309,14 +312,14 @@ export default class Buffer {
    * sourcemap output, so that certain printers can be sure that the
    * "end" location that they set is actually treated as the end position.
    */
-  _disallowPop(prop: string, loc: t.SourceLocation) {
+  _disallowPop(prop: "start" | "end", loc: Loc) {
     if (prop && !loc) return;
 
     this._disallowedPop = this._normalizePosition(prop, loc, SourcePos());
   }
 
   _normalizePosition(
-    prop: string,
+    prop: "start" | "end",
     loc: Loc | undefined | null,
     targetObj: SourcePos,
   ) {

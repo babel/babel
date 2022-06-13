@@ -49,9 +49,7 @@ export function UpdateExpression(this: Printer, node: t.UpdateExpression) {
     this.token(node.operator);
     this.print(node.argument, node);
   } else {
-    this.startTerminatorless(true);
-    this.print(node.argument, node);
-    this.endTerminatorless();
+    this.printTerminatorless(node.argument, node, true);
     this.token(node.operator);
   }
 }
@@ -74,7 +72,7 @@ export function ConditionalExpression(
 export function NewExpression(
   this: Printer,
   node: t.NewExpression,
-  parent: any,
+  parent: t.Node,
 ) {
   this.word("new");
   this.space();
@@ -116,7 +114,7 @@ export function Super(this: Printer) {
 
 function isDecoratorMemberExpression(
   node: t.Expression | t.V8IntrinsicIdentifier,
-) {
+): boolean {
   switch (node.type) {
     case "Identifier":
       return true;
@@ -218,25 +216,27 @@ export function Import(this: Printer) {
   this.word("import");
 }
 
-function buildYieldAwait(keyword: string) {
-  return function (this: Printer, node: any) {
-    this.word(keyword);
+export function AwaitExpression(this: Printer, node: t.AwaitExpression) {
+  this.word("await");
 
-    if (node.delegate) {
-      this.token("*");
-    }
-
-    if (node.argument) {
-      this.space();
-      const terminatorState = this.startTerminatorless();
-      this.print(node.argument, node);
-      this.endTerminatorless(terminatorState);
-    }
-  };
+  if (node.argument) {
+    this.space();
+    this.printTerminatorless(node.argument, node, false);
+  }
 }
 
-export const YieldExpression = buildYieldAwait("yield");
-export const AwaitExpression = buildYieldAwait("await");
+export function YieldExpression(this: Printer, node: t.YieldExpression) {
+  this.word("yield");
+
+  if (node.delegate) {
+    this.token("*");
+  }
+
+  if (node.argument) {
+    this.space();
+    this.printTerminatorless(node.argument, node, false);
+  }
+}
 
 export function EmptyStatement(this: Printer) {
   this.semicolon(true /* force */);
@@ -265,7 +265,7 @@ export function AssignmentPattern(this: Printer, node: t.AssignmentPattern) {
 export function AssignmentExpression(
   this: Printer,
   node: t.AssignmentExpression,
-  parent: any,
+  parent: t.Node,
 ) {
   // Somewhere inside a for statement `init` node but doesn't usually
   // needs a paren except for `in` expressions: `for (a in b ? a : b;;)`
