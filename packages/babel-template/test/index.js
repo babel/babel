@@ -231,7 +231,7 @@ describe("@babel/template", function () {
 
     it("should return assertions in ExportNamedDeclaration when using .ast", () => {
       const result = template.ast(
-        `export { foo2 } from "foo.json" assert { type: "json" };`,
+        `export { default as foo2 } from "foo.json" assert { type: "json" };`,
         {
           plugins: ["importAssertions"],
         },

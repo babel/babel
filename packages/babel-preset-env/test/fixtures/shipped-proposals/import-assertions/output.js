@@ -1,3 +1,3 @@
 "use strict";
 
-var _package = require("./package.json");
+var _package = babelHelpers.interopRequireDefault(require("./package.json"));
