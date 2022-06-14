@@ -3,16 +3,22 @@ import type { Handler } from "gensync";
 import path from "path";
 import { pathToFileURL } from "url";
 import { createRequire } from "module";
+import semver from "semver";
 
 const require = createRequire(import.meta.url);
 
 let import_;
 try {
-  // Node < 13.3 doesn't support import() syntax.
+  // Old Node.js versions don't support import() syntax.
   import_ = require("./import").default;
 } catch {}
 
-export const supportsESM = !!import_;
+export const supportsESM = semver.satisfies(
+  process.versions.node,
+  // older versions, starting from 10, support the dynamic
+  // import syntax but always return a rejected promise.
+  "^12.17 || >=13.2",
+);
 
 export default function* loadCjsOrMjsDefault(
   filepath: string,
