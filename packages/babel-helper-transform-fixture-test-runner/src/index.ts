@@ -21,11 +21,11 @@ const require = createRequire(import.meta.url);
 import checkDuplicateNodes from "@babel/helper-check-duplicate-nodes";
 
 if (!process.env.BABEL_8_BREAKING) {
-  // Introduced in Node.js 10
+  // Introduced in Node.js 8
   if (!assert.rejects) {
-    assert.rejects = async function (promise, validateError) {
+    assert.rejects = async function (block, validateError) {
       try {
-        await promise;
+        await block();
         return Promise.reject(new Error("Promise not rejected"));
       } catch (error) {
         if (!validateError(error)) {
@@ -497,6 +497,7 @@ export default function (
           task.title,
 
           async function () {
+            const runTask = () => run(task);
             if ("sourceMap" in task.options === false) {
               task.options.sourceMap = !!(
                 task.sourceMappings || task.sourceMap
@@ -521,7 +522,7 @@ export default function (
               // the options object with useless options
               delete task.options.throws;
 
-              await assert.rejects(run(task), function (err: Error) {
+              await assert.rejects(runTask, function (err: Error) {
                 assert.ok(
                   throwMsg === true || err.message.includes(throwMsg),
                   `
@@ -531,12 +532,7 @@ Actual Error: ${err.message}`,
                 return true;
               });
             } else {
-              const result = await run(task);
-              if (task.exec.code) {
-                if (result && typeof result.then === "function") {
-                  return result;
-                }
-              }
+              return runTask();
             }
           },
         );
