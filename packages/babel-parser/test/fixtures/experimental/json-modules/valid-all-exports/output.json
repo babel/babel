@@ -1,0 +1,46 @@
+{
+  "type": "File",
+  "start":0,"end":54,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":54,"index":54}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":54,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":54,"index":54}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportAllDeclaration",
+        "start":0,"end":54,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":54,"index":54}},
+        "source": {
+          "type": "StringLiteral",
+          "start":14,"end":30,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":30,"index":30}},
+          "extra": {
+            "rawValue": "./fixture.json",
+            "raw": "\"./fixture.json\""
+          },
+          "value": "./fixture.json"
+        },
+        "assertions": [
+          {
+            "type": "ImportAttribute",
+            "start":40,"end":52,"loc":{"start":{"line":1,"column":40,"index":40},"end":{"line":1,"column":52,"index":52}},
+            "key": {
+              "type": "Identifier",
+              "start":40,"end":44,"loc":{"start":{"line":1,"column":40,"index":40},"end":{"line":1,"column":44,"index":44},"identifierName":"type"},
+              "name": "type"
+            },
+            "value": {
+              "type": "StringLiteral",
+              "start":46,"end":52,"loc":{"start":{"line":1,"column":46,"index":46},"end":{"line":1,"column":52,"index":52}},
+              "extra": {
+                "rawValue": "json",
+                "raw": "\"json\""
+              },
+              "value": "json"
+            }
+          }
+        ]
+      }
+    ],
+    "directives": []
+  }
+}

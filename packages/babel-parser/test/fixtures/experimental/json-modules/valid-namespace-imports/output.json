@@ -1,0 +1,57 @@
+{
+  "type": "File",
+  "start":0,"end":60,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":60,"index":60}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":60,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":60,"index":60}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":60,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":60,"index":60}},
+        "specifiers": [
+          {
+            "type": "ImportNamespaceSpecifier",
+            "start":7,"end":14,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":14,"index":14}},
+            "local": {
+              "type": "Identifier",
+              "start":12,"end":14,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":14,"index":14},"identifierName":"ns"},
+              "name": "ns"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":20,"end":36,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":36,"index":36}},
+          "extra": {
+            "rawValue": "./fixture.json",
+            "raw": "\"./fixture.json\""
+          },
+          "value": "./fixture.json"
+        },
+        "assertions": [
+          {
+            "type": "ImportAttribute",
+            "start":46,"end":58,"loc":{"start":{"line":1,"column":46,"index":46},"end":{"line":1,"column":58,"index":58}},
+            "key": {
+              "type": "Identifier",
+              "start":46,"end":50,"loc":{"start":{"line":1,"column":46,"index":46},"end":{"line":1,"column":50,"index":50},"identifierName":"type"},
+              "name": "type"
+            },
+            "value": {
+              "type": "StringLiteral",
+              "start":52,"end":58,"loc":{"start":{"line":1,"column":52,"index":52},"end":{"line":1,"column":58,"index":58}},
+              "extra": {
+                "rawValue": "json",
+                "raw": "\"json\""
+              },
+              "value": "json"
+            }
+          }
+        ]
+      }
+    ],
+    "directives": []
+  }
+}
