@@ -2425,11 +2425,9 @@ export default class StatementParser extends ExpressionParser {
       | N.ExportNamedDeclaration
       | N.ImportDeclaration,
   ) {
-    if (this.isJSONModuleImport(node)) {
+    if (this.isJSONModuleImport(node) && node.type !== "ExportAllDeclaration") {
       const { specifiers } = node;
-      if (specifiers == null) {
-        // ExportAllDeclaration
-      } else {
+      if (node.specifiers != null) {
         const nonDefaultNamedSpecifier = specifiers.find(specifier => {
           let imported;
           if (specifier.type === "ExportSpecifier") {
