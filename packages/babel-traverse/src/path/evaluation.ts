@@ -6,14 +6,14 @@ import type * as t from "@babel/types";
 const VALID_CALLEES = ["String", "Number", "Math"] as const;
 const INVALID_METHODS = ["random"] as const;
 
-function isValidCalless(val: string): val is typeof VALID_CALLEES[number] {
+function isValidCallee(val: string): val is typeof VALID_CALLEES[number] {
   return VALID_CALLEES.includes(
     // @ts-expect-error
     val,
   );
 }
 
-function isInvalidMethods(val: string): val is typeof INVALID_METHODS[number] {
+function isInvalidMethod(val: string): val is typeof INVALID_METHODS[number] {
   return INVALID_METHODS.includes(
     // @ts-expect-error
     val,
@@ -371,7 +371,7 @@ function _evaluate(path: NodePath, state: State): any {
     if (
       callee.isIdentifier() &&
       !path.scope.getBinding(callee.node.name) &&
-      isValidCalless(callee.node.name)
+      isValidCallee(callee.node.name)
     ) {
       func = global[callee.node.name];
     }
@@ -384,8 +384,8 @@ function _evaluate(path: NodePath, state: State): any {
       if (
         object.isIdentifier() &&
         property.isIdentifier() &&
-        isValidCalless(object.node.name) &&
-        !isInvalidMethods(property.node.name)
+        isValidCallee(object.node.name) &&
+        !isInvalidMethod(property.node.name)
       ) {
         context = global[object.node.name];
         // @ts-ignore property may not exist in context object
