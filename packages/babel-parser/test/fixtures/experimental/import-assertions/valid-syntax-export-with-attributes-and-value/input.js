@@ -1,2 +1,2 @@
-export { x } from "foo" assert { type: "json" }
+export { "default" as x } from "foo" assert { type: "json" }
 [0]

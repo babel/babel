@@ -1,1 +1,1 @@
-export { foo } from "foo.json" assert { lazy: "true" };
+export { default } from "foo.json" assert { lazy: "true" };

@@ -1,15 +1,18 @@
 {
   "type": "File",
-  "start":0,"end":66,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":66,"index":66}},
+  "start":0,"end":80,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":80,"index":80}},
+  "errors": [
+    "SyntaxError: Duplicate key \"type\" is not allowed in module attributes. (1:65)"
+  ],
   "program": {
     "type": "Program",
-    "start":0,"end":66,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":66,"index":66}},
+    "start":0,"end":80,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":80,"index":80}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "ExportNamedDeclaration",
-        "start":0,"end":66,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":66,"index":66}},
+        "start":0,"end":80,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":80,"index":80}},
         "specifiers": [
           {
             "type": "ExportSpecifier",
@@ -53,6 +56,24 @@
                 "raw": "\"json\""
               },
               "value": "json"
+            }
+          },
+          {
+            "type": "ImportAttribute",
+            "start":65,"end":77,"loc":{"start":{"line":1,"column":65,"index":65},"end":{"line":1,"column":77,"index":77}},
+            "key": {
+              "type": "Identifier",
+              "start":65,"end":69,"loc":{"start":{"line":1,"column":65,"index":65},"end":{"line":1,"column":69,"index":69},"identifierName":"type"},
+              "name": "type"
+            },
+            "value": {
+              "type": "StringLiteral",
+              "start":71,"end":77,"loc":{"start":{"line":1,"column":71,"index":71},"end":{"line":1,"column":77,"index":77}},
+              "extra": {
+                "rawValue": "html",
+                "raw": "\"html\""
+              },
+              "value": "html"
             }
           }
         ]
