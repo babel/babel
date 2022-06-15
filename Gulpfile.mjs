@@ -673,24 +673,33 @@ gulp.task(
   )
 );
 
+function watch() {
+  gulp.watch(defaultSourcesGlob, gulp.task("build-no-bundle-watch"));
+  gulp.watch(babelStandalonePluginConfigGlob, gulp.task("generate-standalone"));
+  gulp.watch(buildTypingsWatchGlob, gulp.task("generate-type-helpers"));
+  gulp.watch(
+    "./packages/babel-helpers/src/helpers/*.js",
+    gulp.task("generate-runtime-helpers")
+  );
+}
+
+function watch() {
+  gulp.watch(defaultSourcesGlob, gulp.task("build-no-bundle-watch"));
+  gulp.watch(babelStandalonePluginConfigGlob, gulp.task("generate-standalone"));
+  gulp.watch(buildTypingsWatchGlob, gulp.task("generate-type-helpers"));
+  gulp.watch(
+    "./packages/babel-helpers/src/helpers/*.js",
+    gulp.task("generate-runtime-helpers")
+  );
+  if (USE_ESM) {
+    gulp.watch(
+      cjsBundles.map(({ src }) => `./${src}/lib/**.js`),
+      gulp.task("build-cjs-bundles")
+    );
+  }
+}
+
 gulp.task(
   "watch",
-  gulp.series("build-dev", function watch() {
-    gulp.watch(defaultSourcesGlob, gulp.task("build-no-bundle-watch"));
-    gulp.watch(
-      babelStandalonePluginConfigGlob,
-      gulp.task("generate-standalone")
-    );
-    gulp.watch(buildTypingsWatchGlob, gulp.task("generate-type-helpers"));
-    gulp.watch(
-      "./packages/babel-helpers/src/helpers/*.js",
-      gulp.task("generate-runtime-helpers")
-    );
-    if (USE_ESM) {
-      gulp.watch(
-        cjsBundles.map(({ src }) => `./${src}/lib/**.js`),
-        gulp.task("build-cjs-bundles")
-      );
-    }
-  })
+  process.env.WATCH_SKIP_BUILD ? watch : gulp.series("build-dev", watch)
 );

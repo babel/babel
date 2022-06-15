@@ -72,7 +72,7 @@ build-plugin-transform-runtime-dist:
 	$(NODE) scripts/build-dist.js
 
 watch: build-no-bundle
-	BABEL_ENV=development $(YARN) gulp watch
+	BABEL_ENV=development WATCH_SKIP_BUILD=true $(YARN) gulp watch
 
 code-quality: tscheck lint
 
@@ -165,9 +165,8 @@ test-test262:
 test-test262-update-allowlist:
 	$(NODE) scripts/parser-tests/test262 --update-allowlist
 
-# Does not work on Windows
 clone-license:
-	./scripts/clone-license.sh
+	$(NODE) ./scripts/clone-license.js
 
 prepublish-build: clean-lib clean-runtime-helpers
 	NODE_ENV=production BABEL_ENV=production STRIP_BABEL_8_FLAG=true $(MAKE) build-bundle

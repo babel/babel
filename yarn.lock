@@ -5885,6 +5885,7 @@ __metadata:
     rollup-plugin-polyfill-node: ^0.9.0
     rollup-plugin-terser: ^7.0.2
     semver: ^6.3.0
+    shelljs: ^0.8.5
     test262-stream: ^1.4.0
     through2: ^4.0.0
     typescript: ~4.7.4
@@ -13745,6 +13746,19 @@ fsevents@^1.2.7:
   version: 1.7.2
   resolution: "shell-quote@npm:1.7.2"
   checksum: efad426fb25d8a54d06363f1f45774aa9e195f62f14fa696d542b44bfe418ab41206448b63af18d726c62e099e66d9a3f4f44858b9ea2ce4b794b41b802672d1
+  languageName: node
+  linkType: hard
+
+"shelljs@npm:^0.8.5":
+  version: 0.8.5
+  resolution: "shelljs@npm:0.8.5"
+  dependencies:
+    glob: ^7.0.0
+    interpret: ^1.0.0
+    rechoir: ^0.6.2
+  bin:
+    shjs: bin/shjs
+  checksum: 7babc46f732a98f4c054ec1f048b55b9149b98aa2da32f6cf9844c434b43c6251efebd6eec120937bd0999e13811ebd45efe17410edb3ca938f82f9381302748
   languageName: node
   linkType: hard
 

@@ -116,7 +116,7 @@ jobs:
           STRIP_BABEL_8_FLAG: true
       - name: Ensure cwd does not contain uncommitted changes
         run: |
-          ./scripts/assert-dir-git-clean.sh
+          node ./scripts/assert-dir-git-clean.js
       - uses: actions/upload-artifact@v3
         with:
           name: babel-artifact
@@ -149,9 +149,8 @@ jobs:
           BABEL_8_BREAKING: false
           STRIP_BABEL_8_FLAG: true
       - name: Ensure cwd does not contain uncommitted changes
-        shell: bash
         run: |
-          ./scripts/assert-dir-git-clean.sh
+          node ./scripts/assert-dir-git-clean.js
 
   lint:
     name: Lint
