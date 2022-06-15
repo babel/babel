@@ -107,3 +107,5 @@ jobs:
 
             3. Open the package's home page on npm like https://www.npmjs.com/package/@babel/core
             and check if the version you want exists.
+
+            4. See https://gist.github.com/hzoo/df94af2d2ec48696e683b772c775aa67
