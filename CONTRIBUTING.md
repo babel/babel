@@ -43,8 +43,8 @@ _Yarn_: Make sure that Yarn 1 is [installed](https://classic.yarnpkg.com/en/docs
 
 _Make_: If you are running Windows 10, you'll need to do one of the following:
 
-- Clone the repository and run the commands inside [WSL 2](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
-- Install [Make for Windows](http://gnuwin32.sourceforge.net/packages/make.htm).
+- Run the commands inside [WSL 2](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
+- Using make normally (`make` or `./make`), it will automatically call the cross-platform `Makefile.mjs`. (There may be a small part of the function not implemented.)
 
 ### Setup
 
