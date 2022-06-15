@@ -277,7 +277,8 @@ target["lint"] = function () {
         "benchmark",
         ...SOURCES,
         "*.{js,cjs,mjs,ts}",
-        "--format=codeframe",
+        "--format",
+        "codeframe",
         "--ext",
         ".js,.cjs,.mjs,.ts",
       ]);
