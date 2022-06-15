@@ -6,6 +6,6 @@
     "transform-block-scoping",
     "proposal-object-rest-spread",
     "transform-regenerator",
-    "../../../res/checkScopeInfo.js"
+    "../../helpers/checkScopeInfo.js"
   ]
 }
