@@ -278,7 +278,8 @@ target["lint"] = function () {
         ...SOURCES,
         "*.{js,cjs,mjs,ts}",
         "--format=codeframe",
-        "--ext .js,.cjs,.mjs,.ts",
+        "--ext",
+        ".js,.cjs,.mjs,.ts",
       ]);
     },
     {
@@ -336,6 +337,6 @@ target["test"] = function () {
   target["test-only"]();
 };
 
-target["test-only"] = function (args) {
+target["test-only"] = function (args = []) {
   yarn(["jest", ...args]);
 };
