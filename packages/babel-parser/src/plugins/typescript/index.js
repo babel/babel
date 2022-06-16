@@ -13,7 +13,6 @@ import {
   type TokenType,
   tokenIsTemplate,
   tokenCanStartExpression,
-  tokenIsBinaryOperator,
 } from "../../tokenizer/types";
 import { types as tc } from "../../tokenizer/context";
 import * as N from "../../types";
@@ -64,12 +63,6 @@ function assert(x: boolean): void {
   if (!x) {
     throw new Error("Assert fail");
   }
-}
-
-function tsTokenCanStartExpression(token: TokenType) {
-  // tsc considers binary operators as "can start expression" tokens:
-  // https://github.com/microsoft/TypeScript/blob/eca1b4/src/compiler/parser.ts#L4260-L4266
-  return tokenCanStartExpression(token) || tokenIsBinaryOperator(token);
 }
 
 type ParsingContext =
@@ -2429,11 +2422,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           }
 
           const typeArguments = this.tsParseTypeArgumentsInExpression();
-          if (!typeArguments) throw this.unexpected();
+          if (!typeArguments) return;
 
           if (isOptionalCall && !this.match(tt.parenL)) {
             missingParenErrorLoc = this.state.curPosition();
-            throw this.unexpected();
+            return;
           }
 
           if (tokenIsTemplate(this.state.type)) {
@@ -2469,19 +2462,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             return this.finishCallExpression(node, state.optionalChainMember);
           }
 
-          // TODO: This doesn't exactly match what TS does when it comes to ASI.
-          // For example,
-          //   a<b>
-          //   if (0);
-          // is not valid TS code (https://github.com/microsoft/TypeScript/issues/48654)
-          // However, it should correctly parse anything that is correctly parsed by TS.
+          const tokenType = this.state.type;
           if (
-            tsTokenCanStartExpression(this.state.type) &&
-            this.state.type !== tt.parenL
+            // a<b>>c is not (a<b>)>c, but a<(b>>c)
+            tokenType === tt.gt ||
+            // a<b>c is (a<b)>c
+            (tokenType !== tt.parenL &&
+              tokenCanStartExpression(tokenType) &&
+              !this.hasPrecedingLineBreak())
           ) {
-            // Bail out. We have something like a<b>c, which is not an expression with
-            // type arguments but an (a < b) > c comparison.
-            throw this.unexpected();
+            // Bail out.
+            return;
           }
 
           const node: N.TsInstantiationExpression = this.startNodeAt(
