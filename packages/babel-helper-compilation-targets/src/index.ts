@@ -12,7 +12,14 @@ import {
 import { OptionValidator } from "@babel/helper-validator-option";
 import { browserNameMap } from "./targets";
 import { TargetNames } from "./options";
-import type { Targets, InputTargets, Browsers, TargetsTuple } from "./types";
+import type {
+  Target,
+  Targets,
+  InputTargets,
+  Browsers,
+  BrowserslistBrowserName,
+  TargetsTuple,
+} from "./types";
 
 export type { Targets, InputTargets };
 
@@ -58,50 +65,49 @@ function validateBrowsers(browsers: Browsers | undefined) {
 }
 
 function getLowestVersions(browsers: Array<string>): Targets {
-  return browsers.reduce((all: any, browser: string): any => {
-    const [browserName, browserVersion] = browser.split(" ");
-    const normalizedBrowserName = browserNameMap[browserName];
+  return browsers.reduce((all, browser) => {
+    const [browserName, browserVersion] = browser.split(" ") as [
+      BrowserslistBrowserName,
+      string,
+    ];
+    const target: Target = browserNameMap[browserName];
 
-    if (!normalizedBrowserName) {
+    if (!target) {
       return all;
     }
 
     try {
       // Browser version can return as "10.0-10.2"
       const splitVersion = browserVersion.split("-")[0].toLowerCase();
-      const isSplitUnreleased = isUnreleasedVersion(splitVersion, browserName);
+      const isSplitUnreleased = isUnreleasedVersion(splitVersion, target);
 
-      if (!all[normalizedBrowserName]) {
-        all[normalizedBrowserName] = isSplitUnreleased
+      if (!all[target]) {
+        all[target] = isSplitUnreleased
           ? splitVersion
           : semverify(splitVersion);
         return all;
       }
 
-      const version = all[normalizedBrowserName];
-      const isUnreleased = isUnreleasedVersion(version, browserName);
+      const version = all[target];
+      const isUnreleased = isUnreleasedVersion(version, target);
 
       if (isUnreleased && isSplitUnreleased) {
-        all[normalizedBrowserName] = getLowestUnreleased(
-          version,
-          splitVersion,
-          browserName,
-        );
+        all[target] = getLowestUnreleased(version, splitVersion, target);
       } else if (isUnreleased) {
-        all[normalizedBrowserName] = semverify(splitVersion);
+        all[target] = semverify(splitVersion);
       } else if (!isUnreleased && !isSplitUnreleased) {
         const parsedBrowserVersion = semverify(splitVersion);
 
-        all[normalizedBrowserName] = semverMin(version, parsedBrowserVersion);
+        all[target] = semverMin(version, parsedBrowserVersion);
       }
     } catch (e) {}
 
     return all;
-  }, {});
+  }, {} as Record<Target, string>);
 }
 
 function outputDecimalWarning(
-  decimalTargets: Array<{ target: string; value: string }>,
+  decimalTargets: Array<{ target: string; value: number }>,
 ): void {
   if (!decimalTargets.length) {
     return;
@@ -117,7 +123,7 @@ getting parsed as 6.1, which can lead to unexpected behavior.
 `);
 }
 
-function semverifyTarget(target, value) {
+function semverifyTarget(target: keyof Targets, value: string) {
   try {
     return semverify(value);
   } catch (error) {
@@ -129,23 +135,24 @@ function semverifyTarget(target, value) {
   }
 }
 
-const targetParserMap = {
-  __default(target, value) {
-    const version = isUnreleasedVersion(value, target)
-      ? value.toLowerCase()
-      : semverifyTarget(target, value);
-    return [target, version];
-  },
+// Parse `node: true` and `node: "current"` to version
+function nodeTargetParser(value: true | string) {
+  const parsed =
+    value === true || value === "current"
+      ? process.versions.node
+      : semverifyTarget("node", value);
+  return ["node" as const, parsed] as const;
+}
 
-  // Parse `node: true` and `node: "current"` to version
-  node(target, value) {
-    const parsed =
-      value === true || value === "current"
-        ? process.versions.node
-        : semverifyTarget(target, value);
-    return [target, parsed];
-  },
-};
+function defaultTargetParser(
+  target: Exclude<Target, "node">,
+  value: string,
+): readonly [Exclude<Target, "node">, string] {
+  const version = isUnreleasedVersion(value, target)
+    ? value.toLowerCase()
+    : semverifyTarget(target, value);
+  return [target, version] as const;
+}
 
 function generateTargets(inputTargets: InputTargets): Targets {
   const input = { ...inputTargets };
@@ -214,7 +221,10 @@ export default function getTargets(
   // These values OVERRIDE the `browsers` field.
   if (esmodules && (esmodules !== "intersect" || !browsers?.length)) {
     browsers = Object.keys(ESM_SUPPORT)
-      .map(browser => `${browser} >= ${ESM_SUPPORT[browser]}`)
+      .map(
+        (browser: keyof typeof ESM_SUPPORT) =>
+          `${browser} >= ${ESM_SUPPORT[browser]}`,
+      )
       .join(", ");
     esmodules = false;
   }
@@ -226,13 +236,16 @@ export default function getTargets(
     const queryBrowsers = resolveTargets(browsers, options.browserslistEnv);
 
     if (esmodules === "intersect") {
-      for (const browser of Object.keys(queryBrowsers)) {
+      for (const browser of Object.keys(queryBrowsers) as Target[]) {
         const version = queryBrowsers[browser];
+        const esmSupportVersion =
+          // @ts-ignore ie is not in ESM_SUPPORT
+          ESM_SUPPORT[browser];
 
-        if (ESM_SUPPORT[browser]) {
+        if (esmSupportVersion) {
           queryBrowsers[browser] = getHighestUnreleased(
             version,
-            semverify(ESM_SUPPORT[browser]),
+            semverify(esmSupportVersion),
             browser,
           );
         } else {
@@ -247,7 +260,7 @@ export default function getTargets(
   // Parse remaining targets
   const result: Targets = {} as Targets;
   const decimalWarnings = [];
-  for (const target of Object.keys(targets).sort()) {
+  for (const target of Object.keys(targets).sort() as Target[]) {
     const value = targets[target];
 
     // Warn when specifying minor/patch as a decimal
@@ -255,10 +268,10 @@ export default function getTargets(
       decimalWarnings.push({ target, value });
     }
 
-    // Check if we have a target parser?
-    // $FlowIgnore - Flow doesn't like that some targetParserMap[target] might be missing
-    const parser = targetParserMap[target] ?? targetParserMap.__default;
-    const [parsedTarget, parsedValue] = parser(target, value);
+    const [parsedTarget, parsedValue] =
+      target === "node"
+        ? nodeTargetParser(value)
+        : defaultTargetParser(target, value as string);
 
     if (parsedValue) {
       // Merge (lowest wins)

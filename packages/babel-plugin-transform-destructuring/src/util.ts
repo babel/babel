@@ -72,7 +72,7 @@ const arrayUnpackVisitor = (
   }
 };
 
-type DestructuringTransformerNode =
+export type DestructuringTransformerNode =
   | t.VariableDeclaration
   | t.ExpressionStatement
   | t.ReturnStatement;
@@ -302,7 +302,7 @@ export class DestructuringTransformer {
 
     // Replace impure computed key expressions if we have a rest parameter
     if (hasObjectRest(pattern)) {
-      let copiedPattern;
+      let copiedPattern: t.ObjectPattern;
       for (let i = 0; i < pattern.properties.length; i++) {
         const prop = pattern.properties[i];
         if (t.isRestElement(prop)) {
@@ -322,7 +322,7 @@ export class DestructuringTransformer {
             };
           }
           copiedPattern.properties[i] = {
-            ...copiedPattern.properties[i],
+            ...prop,
             key: name,
           };
         }
@@ -589,18 +589,19 @@ export function convertVariableDeclaration(
     const patternId = declar.init;
     const pattern = declar.id;
 
-    const destructuring = new DestructuringTransformer({
-      // @ts-expect-error(todo): avoid internal properties access
-      blockHoist: node._blockHoist,
-      nodes: nodes,
-      scope: scope,
-      kind: node.kind,
-      iterableIsArray,
-      arrayLikeIsIterable,
-      useBuiltIns,
-      objectRestNoSymbols,
-      addHelper,
-    });
+    const destructuring: DestructuringTransformer =
+      new DestructuringTransformer({
+        // @ts-expect-error(todo): avoid internal properties access
+        blockHoist: node._blockHoist,
+        nodes: nodes,
+        scope: scope,
+        kind: node.kind,
+        iterableIsArray,
+        arrayLikeIsIterable,
+        useBuiltIns,
+        objectRestNoSymbols,
+        addHelper,
+      });
 
     if (t.isPattern(pattern)) {
       destructuring.init(pattern, patternId);
@@ -623,19 +624,24 @@ export function convertVariableDeclaration(
   let tail: t.VariableDeclaration | null = null;
   const nodesOut = [];
   for (const node of nodes) {
-    if (tail !== null && t.isVariableDeclaration(node)) {
-      // Create a single compound declarations
-      tail.declarations.push(...node.declarations);
-    } else {
-      // Make sure the original node kind is used for each compound declaration
-      node.kind = nodeKind;
-      // Propagate the original declaration node's location
-      if (!node.loc) {
-        node.loc = nodeLoc;
+    if (t.isVariableDeclaration(node)) {
+      if (tail !== null) {
+        // Create a single compound declarations
+        tail.declarations.push(...node.declarations);
+        continue;
+      } else {
+        // Make sure the original node kind is used for each compound declaration
+        node.kind = nodeKind;
+        tail = node;
       }
-      nodesOut.push(node);
-      tail = t.isVariableDeclaration(node) ? node : null;
+    } else {
+      tail = null;
     }
+    // Propagate the original declaration node's location
+    if (!node.loc) {
+      node.loc = nodeLoc;
+    }
+    nodesOut.push(node);
   }
 
   if (nodesOut.length === 1) {
@@ -656,7 +662,7 @@ export function convertAssignmentExpression(
 ) {
   const { node, scope, parentPath } = path;
 
-  const nodes = [];
+  const nodes: DestructuringTransformerNode[] = [];
 
   const destructuring = new DestructuringTransformer({
     operator: node.operator,

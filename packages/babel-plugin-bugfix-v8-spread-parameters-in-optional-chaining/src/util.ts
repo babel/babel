@@ -6,7 +6,7 @@ import { types as t } from "@babel/core";
 // check if there is a spread element followed by another argument.
 // (...[], 0) or (...[], ...[])
 
-function matchAffectedArguments(argumentNodes) {
+function matchAffectedArguments(argumentNodes: t.CallExpression["arguments"]) {
   const spreadIndex = argumentNodes.findIndex(node => t.isSpreadElement(node));
   return spreadIndex >= 0 && spreadIndex !== argumentNodes.length - 1;
 }

@@ -8,7 +8,9 @@ import { willPathCastToBoolean, findOutermostTransparentParent } from "./util";
 
 const { ast } = template.expression;
 
-function isSimpleMemberExpression(expression) {
+function isSimpleMemberExpression(
+  expression: t.Expression,
+): expression is t.Identifier | t.Super | t.MemberExpression {
   expression = skipTransparentExprWrapperNodes(expression);
   return (
     t.isIdentifier(expression) ||
@@ -24,18 +26,21 @@ function isSimpleMemberExpression(expression) {
  * @param {NodePath} path
  * @returns {boolean}
  */
-function needsMemoize(path) {
-  let optionalPath = path;
+function needsMemoize(
+  path: NodePath<t.OptionalCallExpression | t.OptionalMemberExpression>,
+) {
+  let optionalPath: NodePath = path;
   const { scope } = path;
   while (
     optionalPath.isOptionalMemberExpression() ||
     optionalPath.isOptionalCallExpression()
   ) {
     const { node } = optionalPath;
-    const childKey = optionalPath.isOptionalMemberExpression()
-      ? "object"
-      : "callee";
-    const childPath = skipTransparentExprWrappers(optionalPath.get(childKey));
+    const childPath = skipTransparentExprWrappers(
+      optionalPath.isOptionalMemberExpression()
+        ? optionalPath.get("object")
+        : optionalPath.get("callee"),
+    );
     if (node.optional) {
       return !scope.isStatic(childPath.node);
     }
@@ -102,12 +107,16 @@ export function transform(
     isDeleteOperation = true;
   }
   for (let i = optionals.length - 1; i >= 0; i--) {
-    const node = optionals[i];
+    const node = optionals[i] as unknown as
+      | t.MemberExpression
+      | t.CallExpression;
 
     const isCall = t.isCallExpression(node);
-    const replaceKey = isCall ? "callee" : "object";
 
-    const chainWithTypes = node[replaceKey];
+    const chainWithTypes = isCall
+      ? // V8 intrinsics must not be an optional call
+        (node.callee as t.Expression)
+      : node.object;
     const chain = skipTransparentExprWrapperNodes(chainWithTypes);
 
     let ref;
@@ -115,12 +124,12 @@ export function transform(
     if (isCall && t.isIdentifier(chain, { name: "eval" })) {
       check = ref = chain;
       // `eval?.()` is an indirect eval call transformed to `(0,eval)()`
-      node[replaceKey] = t.sequenceExpression([t.numericLiteral(0), ref]);
+      node.callee = t.sequenceExpression([t.numericLiteral(0), ref]);
     } else if (pureGetters && isCall && isSimpleMemberExpression(chain)) {
       // If we assume getters are pure (avoiding a Function#call) and we are at the call,
       // we can avoid a needless memoize. We only do this if the callee is a simple member
       // expression, to avoid multiple calls to nested call expressions.
-      check = ref = chainWithTypes;
+      check = ref = node.callee;
     } else {
       ref = scope.maybeGenerateMemoised(chain);
       if (ref) {
@@ -133,7 +142,7 @@ export function transform(
           chainWithTypes,
         );
 
-        node[replaceKey] = ref;
+        isCall ? (node.callee = ref) : (node.object = ref);
       } else {
         check = ref = chainWithTypes;
       }

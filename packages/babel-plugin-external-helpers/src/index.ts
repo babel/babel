@@ -25,7 +25,7 @@ export default declare((api, options: Options) => {
   return {
     name: "external-helpers",
     pre(file) {
-      file.set("helperGenerator", name => {
+      file.set("helperGenerator", (name: string) => {
         // If the helper didn't exist yet at the version given, we bail
         // out and let Babel either insert it directly, or throw an error
         // so that plugins can handle that case properly.

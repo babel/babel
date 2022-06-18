@@ -15,7 +15,9 @@ const {
  * See https://github.com/babel/babel/pull/13711#issuecomment-914388382 for discussion
  * on further optimizations.
  */
-export default function shouldStoreRHSInTemporaryVariable(node: t.LVal) {
+export default function shouldStoreRHSInTemporaryVariable(
+  node: t.LVal,
+): boolean {
   if (isArrayPattern(node)) {
     const nonNullElements = node.elements.filter(element => element !== null);
     if (nonNullElements.length > 1) return true;

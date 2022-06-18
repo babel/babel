@@ -34,5 +34,5 @@ export function getInclusionReasons(
     }
 
     return result;
-  }, {});
+  }, {} as Partial<Record<Target, string>>);
 }
