@@ -9,7 +9,7 @@ const { min } = Math;
 // https://rosettacode.org/wiki/Levenshtein_distance#ES5
 function levenshtein(a: string, b: string): number {
   let t = [],
-    u = [],
+    u: number[] = [],
     i,
     j;
   const m = a.length,

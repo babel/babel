@@ -10,6 +10,7 @@ import {
   resolveOptionPluginOrPreset,
   type Test,
   type TestFile,
+  type TaskOptions,
 } from "@babel/helper-fixtures";
 import { codeFrameColumns } from "@babel/code-frame";
 import { TraceMap, originalPositionFor } from "@jridgewell/trace-mapping";
@@ -490,12 +491,17 @@ declare global {
   }
 }
 
+export type SuiteOptions = {
+  ignoreSuites?: string[];
+  ignoreTasks?: string[];
+};
+
 export default function (
   fixturesLoc: string,
   name: string,
-  suiteOpts: any = {},
-  taskOpts: any = {},
-  dynamicOpts?: Function,
+  suiteOpts: SuiteOptions = {},
+  taskOpts: TaskOptions = {},
+  dynamicOpts?: (options: TaskOptions, task: Test) => void,
 ) {
   const suites = getFixtures(fixturesLoc);
 

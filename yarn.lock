@@ -1302,6 +1302,7 @@ __metadata:
     "@babel/helper-split-export-declaration": "workspace:^"
     "@babel/plugin-syntax-decorators": "workspace:^"
     "@babel/traverse": "workspace:^"
+    "@types/charcodes": ^0.2.0
     babel-plugin-polyfill-es-shims: ^0.6.0
     charcodes: ^0.2.0
     object.getownpropertydescriptors: ^2.1.1
@@ -4371,6 +4372,13 @@ __metadata:
   dependencies:
     chalk: "*"
   checksum: 846437590d0bf0026d8c2f454e5d91a486becfabde61c0441025e791a0fed75304e143717bc4d025569394dcce5a32f2c53d97253d0c735ac1abae63f1b25c3e
+  languageName: node
+  linkType: hard
+
+"@types/charcodes@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "@types/charcodes@npm:0.2.0"
+  checksum: 3403a591f7dba4164a2a1a48342855a0eee0e22f4f94903c39331339c4e96006ba4f9d5b81072bcd8f61f15d774891b6bb9f3cbe1fb202d558d9ae90f35baa49
   languageName: node
   linkType: hard
 

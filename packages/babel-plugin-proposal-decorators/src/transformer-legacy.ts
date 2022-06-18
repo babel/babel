@@ -1,19 +1,26 @@
 // Fork of https://github.com/loganfsmyth/babel-plugin-proposal-decorators-legacy
 
-import { template, types as t } from "@babel/core";
-import type { Visitor } from "@babel/traverse";
+import { template, types as t, type PluginPass } from "@babel/core";
+import type { NodePath, Visitor } from "@babel/traverse";
 
-const buildClassDecorator = template(`
+const buildClassDecorator = template.statement(`
   DECORATOR(CLASS_REF = INNER) || CLASS_REF;
-`) as (replacements: { DECORATOR; CLASS_REF; INNER }) => t.ExpressionStatement;
+`) as (replacements: {
+  DECORATOR: t.Expression;
+  CLASS_REF: t.Identifier;
+  INNER: t.Expression;
+}) => t.ExpressionStatement;
 
 const buildClassPrototype = template(`
   CLASS_REF.prototype;
-`) as (replacements: { CLASS_REF }) => t.ExpressionStatement;
+`) as (replacements: { CLASS_REF: t.Identifier }) => t.ExpressionStatement;
 
 const buildGetDescriptor = template(`
     Object.getOwnPropertyDescriptor(TARGET, PROPERTY);
-`) as (replacements: { TARGET; PROPERTY }) => t.ExpressionStatement;
+`) as (replacements: {
+  TARGET: t.Expression;
+  PROPERTY: t.Literal;
+}) => t.ExpressionStatement;
 
 const buildGetObjectInitializer = template(`
     (TEMP = Object.getOwnPropertyDescriptor(TARGET, PROPERTY), (TEMP = TEMP ? TEMP.value : undefined), {
@@ -24,21 +31,45 @@ const buildGetObjectInitializer = template(`
             return TEMP;
         }
     })
-`) as (replacements: { TEMP; TARGET; PROPERTY }) => t.ExpressionStatement;
+`) as (replacements: {
+  TEMP: t.Identifier;
+  TARGET: t.Expression;
+  PROPERTY: t.Literal;
+}) => t.ExpressionStatement;
 
 const WARNING_CALLS = new WeakSet();
+
+// legacy decorator does not support ClassAccessorProperty
+type ClassDecoratableElement =
+  | t.ClassMethod
+  | t.ClassPrivateMethod
+  | t.ClassProperty
+  | t.ClassPrivateProperty;
 
 /**
  * If the decorator expressions are non-identifiers, hoist them to before the class so we can be sure
  * that they are evaluated in order.
  */
-function applyEnsureOrdering(path) {
+function applyEnsureOrdering(
+  path: NodePath<t.ClassExpression | t.ObjectExpression>,
+) {
   // TODO: This should probably also hoist computed properties.
-  const decorators = (
+  const decorators: t.Decorator[] = (
     path.isClass()
-      ? [path].concat(path.get("body.body"))
+      ? [
+          path,
+          ...(path.get("body.body") as NodePath<ClassDecoratableElement>[]),
+        ]
       : path.get("properties")
-  ).reduce((acc, prop) => acc.concat(prop.node.decorators || []), []);
+  ).reduce(
+    (
+      acc: t.Decorator[],
+      prop: NodePath<
+        t.ObjectMember | t.ClassExpression | ClassDecoratableElement
+      >,
+    ) => acc.concat(prop.node.decorators || []),
+    [],
+  );
 
   const identDecorators = decorators.filter(
     decorator => !t.isIdentifier(decorator.expression),
@@ -47,7 +78,7 @@ function applyEnsureOrdering(path) {
 
   return t.sequenceExpression(
     identDecorators
-      .map(decorator => {
+      .map((decorator): t.Expression => {
         const expression = decorator.expression;
         const id = (decorator.expression =
           path.scope.generateDeclaredUidIdentifier("dec"));
@@ -61,7 +92,7 @@ function applyEnsureOrdering(path) {
  * Given a class expression with class-level decorators, create a new expression
  * with the proper decorated behavior.
  */
-function applyClassDecorators(classPath) {
+function applyClassDecorators(classPath: NodePath<t.ClassExpression>) {
   if (!hasClassDecorators(classPath.node)) return;
 
   const decorators = classPath.node.decorators || [];
@@ -81,7 +112,7 @@ function applyClassDecorators(classPath) {
     }, classPath.node);
 }
 
-function hasClassDecorators(classNode) {
+function hasClassDecorators(classNode: t.Class) {
   return !!(classNode.decorators && classNode.decorators.length);
 }
 
@@ -89,52 +120,88 @@ function hasClassDecorators(classNode) {
  * Given a class expression with method-level decorators, create a new expression
  * with the proper decorated behavior.
  */
-function applyMethodDecorators(path, state) {
+function applyMethodDecorators(
+  path: NodePath<t.ClassExpression>,
+  state: PluginPass,
+) {
   if (!hasMethodDecorators(path.node.body.body)) return;
 
-  return applyTargetDecorators(path, state, path.node.body.body);
+  return applyTargetDecorators(
+    path,
+    state,
+    // @ts-expect-error ClassAccessorProperty is not supported in legacy decorator
+    path.node.body.body,
+  );
 }
 
-function hasMethodDecorators(body) {
-  return body.some(node => node.decorators?.length);
+function hasMethodDecorators(
+  body: t.ClassBody["body"] | t.ObjectExpression["properties"],
+) {
+  return body.some(
+    node =>
+      // @ts-expect-error decorators not in SpreadElement/StaticBlock
+      node.decorators?.length,
+  );
 }
 
 /**
  * Given an object expression with property decorators, create a new expression
  * with the proper decorated behavior.
  */
-function applyObjectDecorators(path, state) {
+function applyObjectDecorators(
+  path: NodePath<t.ObjectExpression>,
+  state: PluginPass,
+) {
   if (!hasMethodDecorators(path.node.properties)) return;
 
-  return applyTargetDecorators(path, state, path.node.properties);
+  return applyTargetDecorators(
+    path,
+    state,
+    path.node.properties.filter(
+      (prop): prop is t.ObjectMember => prop.type !== "SpreadElement",
+    ),
+  );
 }
 
 /**
  * A helper to pull out property decorators into a sequence expression.
  */
-function applyTargetDecorators(path, state, decoratedProps) {
+function applyTargetDecorators(
+  path: NodePath<t.ClassExpression | t.ObjectExpression>,
+  state: PluginPass,
+  decoratedProps: (t.ObjectMember | ClassDecoratableElement)[],
+) {
   const name = path.scope.generateDeclaredUidIdentifier(
     path.isClass() ? "class" : "obj",
   );
 
   const exprs = decoratedProps.reduce(function (acc, node) {
-    const decorators = node.decorators || [];
-    node.decorators = null;
+    let decorators: t.Decorator[] = [];
+    if (node.decorators != null) {
+      decorators = node.decorators;
+      node.decorators = null;
+    }
 
     if (decorators.length === 0) return acc;
 
-    if (node.computed) {
+    if (
+      // @ts-expect-error computed is not in ClassPrivateProperty
+      node.computed
+    ) {
       throw path.buildCodeFrameError(
         "Computed method/property decorators are not yet supported.",
       );
     }
 
-    const property = t.isLiteral(node.key)
+    const property: t.Literal = t.isLiteral(node.key)
       ? node.key
-      : t.stringLiteral(node.key.name);
+      : t.stringLiteral(
+          // @ts-expect-error: should we handle ClassPrivateProperty?
+          node.key.name,
+        );
 
     const target =
-      path.isClass() && !node.static
+      path.isClass() && !(node as ClassDecoratableElement).static
         ? buildClassPrototype({
             CLASS_REF: name,
           }).expression
@@ -217,7 +284,7 @@ function applyTargetDecorators(path, state, decoratedProps) {
   ]);
 }
 
-function decoratedClassToExpression({ node, scope }) {
+function decoratedClassToExpression({ node, scope }: NodePath<t.Class>) {
   if (!hasClassDecorators(node) && !hasMethodDecorators(node.body.body)) {
     return;
   }
@@ -231,7 +298,7 @@ function decoratedClassToExpression({ node, scope }) {
   ]);
 }
 
-export default {
+const visitor: Visitor<PluginPass> = {
   ExportDefaultDeclaration(path) {
     const decl = path.get("declaration");
     if (!decl.isClassDeclaration()) return;
@@ -320,4 +387,6 @@ export default {
       ]),
     );
   },
-} as Visitor<any>;
+};
+
+export default visitor;

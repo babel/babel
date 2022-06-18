@@ -40,7 +40,7 @@ export default declare(function ({ assertVersion, assumption, types: t }) {
       );
       if (firstPrivateIndex === -1) return;
       // wrap function body within IIFE if any param is shadowed
-      convertFunctionParams(path, ignoreFunctionLength, () => false, false);
+      convertFunctionParams(path, ignoreFunctionLength, () => false);
       // invariant: path.body is always a BlockStatement after `convertFunctionParams`
       const { node, scope } = path;
       const { params } = node;
