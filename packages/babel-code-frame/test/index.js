@@ -2,7 +2,7 @@ import chalk from "chalk";
 import stripAnsi from "strip-ansi";
 
 import _codeFrame, { codeFrameColumns } from "../lib/index.js";
-const codeFrame = _codeFrame.default;
+const codeFrame = _codeFrame.default || _codeFrame;
 
 describe("@babel/code-frame", function () {
   test("basic usage", function () {

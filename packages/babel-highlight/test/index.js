@@ -2,7 +2,7 @@ import chalk from "chalk";
 import stripAnsi from "strip-ansi";
 
 import _highlight, { shouldHighlight, getChalk } from "../lib/index.js";
-const highlight = _highlight.default;
+const highlight = _highlight.default || _highlight;
 
 describe("@babel/highlight", function () {
   function stubColorSupport(supported) {

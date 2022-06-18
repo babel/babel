@@ -10,7 +10,8 @@ import toContextualSyntaxError from "./to-contextual-syntax-error.js";
 
 const { CI, OVERWRITE } = process.env;
 const { stringify, parse: JSONParse } = JSON;
-const checkDuplicateNodes = _checkDuplicateNodes.default;
+const checkDuplicateNodes =
+  _checkDuplicateNodes.default || _checkDuplicateNodes;
 
 const writeFileWithNewline = (path, string) =>
   writeFileSync(path, `${string}\n`, "utf-8");

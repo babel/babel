@@ -3,7 +3,7 @@ import { fileURLToPath } from "url";
 import path from "path";
 
 import _Plugin from "../lib/config/plugin.js";
-const Plugin = _Plugin.default;
+const Plugin = _Plugin.default || _Plugin;
 
 const cwd = path.dirname(fileURLToPath(import.meta.url));
 

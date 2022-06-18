@@ -1,7 +1,7 @@
 import { parse } from "@babel/parser";
 
 import _traverse from "@babel/traverse";
-const traverse = _traverse.default;
+const traverse = _traverse.default || _traverse;
 
 describe("evaluation", function () {
   function addTest(code, type, value, notConfident) {

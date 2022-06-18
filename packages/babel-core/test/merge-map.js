@@ -1,5 +1,5 @@
 import _mergeSourceMap from "../lib/transformation/file/merge-map.js";
-const mergeSourceMap = _mergeSourceMap.default;
+const mergeSourceMap = _mergeSourceMap.default || _mergeSourceMap;
 
 describe("merge-map", () => {
   it("returns a plain js object", () => {

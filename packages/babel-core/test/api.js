@@ -5,7 +5,7 @@ import generator from "@babel/generator";
 import { fileURLToPath } from "url";
 
 import _Plugin from "../lib/config/plugin.js";
-const Plugin = _Plugin.default;
+const Plugin = _Plugin.default || _Plugin;
 
 import presetEnv from "../../babel-preset-env/lib/index.js";
 import pluginSyntaxFlow from "../../babel-plugin-syntax-flow/lib/index.js";
@@ -73,7 +73,7 @@ describe("parser and generator options", function () {
       return opts.parser.parse(code);
     },
     print: function (ast) {
-      return generator(ast);
+      return (generator.default || generator)(ast);
     },
   };
 
@@ -400,11 +400,14 @@ describe("api", function () {
           },
 
           // env preset
-          [presetEnv, { targets: { browsers: "ie 6" } }],
+          [presetEnv.default || presetEnv, { targets: { browsers: "ie 6" } }],
 
           // Third preset for Flow.
           () => ({
-            plugins: [pluginSyntaxFlow, pluginFlowStripTypes],
+            plugins: [
+              pluginSyntaxFlow.default || pluginSyntaxFlow,
+              pluginFlowStripTypes.default || pluginFlowStripTypes,
+            ],
           }),
         ],
       });
