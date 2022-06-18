@@ -7,11 +7,14 @@ import type { Visitor } from "@babel/traverse";
 export default declare(api => {
   api.assertVersion(7);
 
-  const isFunctionSent = node =>
+  const isFunctionSent = (node: t.MetaProperty) =>
     t.isIdentifier(node.meta, { name: "function" }) &&
     t.isIdentifier(node.property, { name: "sent" });
 
-  const hasBeenReplaced = (node, sentId) =>
+  const hasBeenReplaced = (
+    node: t.Node,
+    sentId: string,
+  ): node is t.AssignmentExpression =>
     t.isAssignmentExpression(node) &&
     t.isIdentifier(node.left, { name: sentId });
 
