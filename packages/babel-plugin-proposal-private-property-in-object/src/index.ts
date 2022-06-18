@@ -7,7 +7,7 @@ import {
 } from "@babel/helper-create-class-features-plugin";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 import type * as t from "@babel/types";
-import type { NodePath } from "@babel/traverse";
+import type { NodePath, Scope } from "@babel/traverse";
 
 export interface Options {
   loose?: boolean;
@@ -23,29 +23,40 @@ export default declare((api, opt: Options) => {
   // The visitor of this plugin is only effective when not compiling
   // private fields and methods.
 
-  const classWeakSets = new WeakMap();
-  const fieldsWeakSets = new WeakMap();
+  const classWeakSets: WeakMap<t.Class, t.Identifier> = new WeakMap();
+  const fieldsWeakSets: WeakMap<
+    t.ClassPrivateProperty | t.ClassPrivateMethod,
+    t.Identifier
+  > = new WeakMap();
 
-  function unshadow(name, targetScope, scope) {
+  function unshadow(name: string, targetScope: Scope, scope: Scope) {
     while (scope !== targetScope) {
       if (scope.hasOwnBinding(name)) scope.rename(name);
       scope = scope.parent;
     }
   }
 
-  function injectToFieldInit(fieldPath, expr, before = false) {
+  function injectToFieldInit(
+    fieldPath: NodePath<t.ClassPrivateProperty | t.ClassProperty>,
+    expr: t.Expression,
+    before = false,
+  ) {
     if (fieldPath.node.value) {
+      const value = fieldPath.get("value");
       if (before) {
-        fieldPath.get("value").insertBefore(expr);
+        value.insertBefore(expr);
       } else {
-        fieldPath.get("value").insertAfter(expr);
+        value.insertAfter(expr);
       }
     } else {
       fieldPath.set("value", t.unaryExpression("void", expr));
     }
   }
 
-  function injectInitialization(classPath, init) {
+  function injectInitialization(
+    classPath: NodePath<t.Class>,
+    init: t.Expression,
+  ) {
     let firstFieldPath;
     let consturctorPath;
 
@@ -71,12 +82,22 @@ export default declare((api, opt: Options) => {
     }
   }
 
-  function getWeakSetId(weakSets, outerClass, reference, name = "", inject) {
-    let id = classWeakSets.get(reference.node);
+  function getWeakSetId<Ref extends t.Node>(
+    weakSets: WeakMap<Ref, t.Identifier>,
+    outerClass: NodePath<t.Class>,
+    reference: NodePath<Ref>,
+    name = "",
+    inject: (
+      reference: NodePath<Ref>,
+      expression: t.Expression,
+      before?: boolean,
+    ) => void,
+  ) {
+    let id = weakSets.get(reference.node);
 
     if (!id) {
       id = outerClass.scope.generateUidIdentifier(`${name || ""} brandCheck`);
-      classWeakSets.set(reference.node, id);
+      weakSets.set(reference.node, id);
 
       inject(reference, template.expression.ast`${t.cloneNode(id)}.add(this)`);
 
@@ -105,13 +126,17 @@ export default declare((api, opt: Options) => {
 
         const { name } = node.left.id;
 
-        let privateElement;
+        let privateElement: NodePath<
+          t.ClassPrivateMethod | t.ClassPrivateProperty
+        >;
         const outerClass = path.findParent(path => {
           if (!path.isClass()) return false;
 
-          privateElement = path
-            .get("body.body")
-            .find(({ node }) => t.isPrivate(node) && node.key.id.name === name);
+          privateElement = path.get("body.body").find(
+            ({ node }) =>
+              // fixme: Support class accessor property
+              t.isPrivate(node) && node.key.id.name === name,
+          ) as NodePath<t.ClassPrivateMethod | t.ClassPrivateProperty>;
 
           return !!privateElement;
         }) as NodePath<t.Class>;
@@ -124,7 +149,7 @@ export default declare((api, opt: Options) => {
           return;
         }
 
-        if (privateElement.isMethod()) {
+        if (privateElement.node.type === "ClassPrivateMethod") {
           if (privateElement.node.static) {
             if (outerClass.node.id) {
               unshadow(outerClass.node.id.name, outerClass.scope, path.scope);
@@ -153,10 +178,10 @@ export default declare((api, opt: Options) => {
           // Private fields might not all be initialized: see the 'halfConstructed'
           // example at https://v8.dev/features/private-brand-checks.
 
-          const id = getWeakSetId(
+          const id = getWeakSetId<t.ClassPrivateProperty>(
             fieldsWeakSets,
             outerClass,
-            privateElement,
+            privateElement as NodePath<t.ClassPrivateProperty>,
             privateElement.node.key.id.name,
             injectToFieldInit,
           );

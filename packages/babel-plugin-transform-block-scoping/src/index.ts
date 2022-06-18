@@ -3,7 +3,7 @@ import type { NodePath, Visitor, Scope } from "@babel/traverse";
 import { visitor as tdzVisitor } from "./tdz";
 import type { TDZVisitorState } from "./tdz";
 import { traverse, template, types as t } from "@babel/core";
-import type { File } from "@babel/core";
+import type { PluginPass } from "@babel/core";
 
 const DONE = new WeakSet();
 
@@ -67,7 +67,7 @@ export default declare((api, opts: Options) => {
         path.ensureBlock();
         const blockScoping = new BlockScoping(
           path,
-          path.get("body"),
+          path.get("body") as NodePath<t.BlockStatement>,
           parent,
           scope,
           throwIfClosureRequired,
@@ -109,21 +109,27 @@ export default declare((api, opts: Options) => {
           blockScoping.run();
         }
       },
-    } as Visitor<File>,
+    },
   };
 });
 
-function ignoreBlock(path) {
+function ignoreBlock(path: NodePath) {
   return t.isLoop(path.parent) || t.isCatchClause(path.parent);
 }
 
-const buildRetCheck = template(`
+const buildRetCheck = template.statement(`
   if (typeof RETURN === "object") return RETURN.v;
 `);
 
-function isBlockScoped(node) {
+function isBlockScoped(node: t.Node): node is t.VariableDeclaration {
   if (!t.isVariableDeclaration(node)) return false;
-  if (node[t.BLOCK_SCOPED_SYMBOL]) return true;
+  if (
+    // @ts-expect-error Fixme: document symbol properties
+    node[t.BLOCK_SCOPED_SYMBOL]
+  ) {
+    return true;
+  }
+
   if (node.kind !== "let" && node.kind !== "const") return false;
   return true;
 }
@@ -132,7 +138,7 @@ function isBlockScoped(node) {
  * If there is a loop ancestor closer than the closest function, we
  * consider ourselves to be in a loop.
  */
-function isInLoop(path) {
+function isInLoop(path: NodePath) {
   const loopOrFunctionParent = path.find(
     path => path.isLoop() || path.isFunction(),
   );
@@ -141,10 +147,10 @@ function isInLoop(path) {
 }
 
 function convertBlockScopedToVar(
-  path,
-  node,
-  parent,
-  scope,
+  path: NodePath<t.VariableDeclaration>,
+  node: t.VariableDeclaration,
+  parent: t.Node,
+  scope: Scope,
   moveBindingsToParent = false,
 ) {
   if (!node) {
@@ -159,6 +165,7 @@ function convertBlockScopedToVar(
     }
   }
 
+  // @ts-expect-error todo(flow->ts): avoid mutations
   node[t.BLOCK_SCOPED_SYMBOL] = true;
   node.kind = "var";
 
@@ -173,15 +180,12 @@ function convertBlockScopedToVar(
   }
 }
 
-function isVar(node): node is t.VariableDeclaration {
+function isVar(node: t.Node): node is t.VariableDeclaration {
   return t.isVariableDeclaration(node, { kind: "var" }) && !isBlockScoped(node);
 }
 
 interface LetReferenceVisitorState extends TDZVisitorState {
-  tdzEnabled: boolean;
   loopDepth: number;
-  addHelper: (name) => any;
-  letReferences: any;
   closurify: boolean;
 }
 
@@ -260,12 +264,12 @@ const hoistVarDeclarationsVisitor: Visitor<BlockScoping> = {
 type LoopVisitorState = {
   inSwitchCase: boolean;
   hasBreakContinue: boolean;
-  innerLabels: any[];
+  innerLabels: string[];
   hasReturn: boolean;
   ignoreLabeless: boolean;
   loopIgnored: WeakSet<t.Node>;
   isLoop: boolean;
-  map: any;
+  map: Map<string, t.BreakStatement | t.ContinueStatement>;
 };
 
 const loopLabelVisitor: Visitor<LoopVisitorState> = {
@@ -298,7 +302,7 @@ const continuationVisitor: Visitor<ContinuationVisitorState> = {
   },
 };
 
-function loopNodeTo(node) {
+function loopNodeTo(node: t.Node) {
   if (t.isBreakStatement(node)) {
     return "break";
   } else if (t.isContinueStatement(node)) {
@@ -360,7 +364,7 @@ const loopVisitor: Visitor<LoopVisitorState> = {
       }
 
       state.hasBreakContinue = true;
-      state.map[loopText] = node;
+      state.map.set(loopText, node);
       replace = t.stringLiteral(loopText);
     }
 
@@ -383,7 +387,7 @@ const loopVisitor: Visitor<LoopVisitorState> = {
   },
 };
 
-function isStrict(path) {
+function isStrict(path: NodePath) {
   return !!path.find(({ node }) => {
     if (t.isProgram(node)) {
       if (node.sourceType === "module") return true;
@@ -396,31 +400,31 @@ function isStrict(path) {
 }
 
 class BlockScoping {
-  private parent: any;
-  private state: any;
+  private parent: t.Node;
+  private state: PluginPass;
   private scope: Scope;
   private throwIfClosureRequired: boolean;
   private tdzEnabled: boolean;
-  private blockPath: NodePath;
-  private block: t.Node;
+  private blockPath: NodePath<t.Block | t.SwitchStatement>;
+  private block: t.Block | t.SwitchStatement;
   private outsideLetReferences: Map<string, t.Identifier>;
   private hasLetReferences: boolean;
-  private letReferences: any;
-  private body: any[];
+  private letReferences: Map<string, t.Identifier>;
+  private body: t.Statement[];
   // todo(flow->ts) add more specific type
   private loopParent: t.Node;
   private loopLabel: t.Identifier;
   private loopPath: NodePath<t.Loop>;
   private loop: t.Loop;
-  private has: any;
+  private has: LoopVisitorState;
   constructor(
     loopPath: NodePath<t.Loop> | undefined | null,
-    blockPath: NodePath,
-    parent: any,
+    blockPath: NodePath<t.Block | t.SwitchStatement>,
+    parent: t.Node,
     scope: Scope,
     throwIfClosureRequired: boolean,
     tdzEnabled: boolean,
-    state: any,
+    state: PluginPass,
   ) {
     this.parent = parent;
     this.scope = scope;
@@ -669,15 +673,14 @@ class BlockScoping {
     const args = Array.from(outsideRefs.values(), node => t.cloneNode(node));
     const params = args.map(id => t.cloneNode(id));
 
-    const isSwitch = this.blockPath.isSwitchStatement();
+    const isSwitch = block.type === "SwitchStatement";
 
     // build the closure that we're going to wrap the block with, possible wrapping switch(){}
     const fn = t.functionExpression(
       null,
       params,
-      // @ts-expect-error todo(flow->ts) improve block type annotations
       t.blockStatement(isSwitch ? [block] : block.body),
-    );
+    ) as t.FunctionExpression & { params: t.Identifier[] };
 
     // continuation
     this.addContinuations(fn);
@@ -730,20 +733,19 @@ class BlockScoping {
       index = this.body.length - 1;
     }
 
-    let callPath;
+    let callPath: NodePath;
     // replace the current block body with the one we're going to build
     if (isSwitch) {
       const { parentPath, listKey, key } = this.blockPath;
 
       this.blockPath.replaceWithMultiple(this.body);
-      callPath = parentPath.get(listKey)[key + index];
+      callPath = parentPath.get(listKey)[(key as number) + index];
     } else {
-      // @ts-expect-error todo(flow->ts) improve block type annotations
       block.body = this.body;
       callPath = this.blockPath.get("body")[index];
     }
 
-    const placeholder = callPath.get(placeholderPath);
+    const placeholder = callPath.get(placeholderPath) as NodePath;
 
     let fnPath;
     if (this.loop) {
@@ -773,7 +775,7 @@ class BlockScoping {
    * Reference: https://github.com/babel/babel/issues/1078
    */
 
-  addContinuations(fn) {
+  addContinuations(fn: t.FunctionExpression & { params: t.Identifier[] }) {
     const state: ContinuationVisitorState = {
       reassignments: {},
       returnStatements: [],
@@ -834,17 +836,24 @@ class BlockScoping {
       }
     }
 
-    const addDeclarationsFromChild = (path, node) => {
-      node = node || path.node;
+    const addDeclarationsFromChild = (
+      path: NodePath<t.Statement | t.SwitchCase>,
+      node: t.Statement | t.SwitchCase,
+    ) => {
       if (
         t.isClassDeclaration(node) ||
         t.isFunctionDeclaration(node) ||
         isBlockScoped(node)
       ) {
         if (isBlockScoped(node)) {
-          convertBlockScopedToVar(path, node, block, this.scope);
+          convertBlockScopedToVar(
+            path as NodePath<t.VariableDeclaration>,
+            node,
+            block,
+            this.scope,
+          );
         }
-        if (node.declarations) {
+        if (node.type === "VariableDeclaration") {
           for (let i = 0; i < node.declarations.length; i++) {
             declarators.push(node.declarations[i]);
           }
@@ -857,28 +866,22 @@ class BlockScoping {
       }
     };
 
-    // @ts-expect-error todo(flow->ts) check block node type instead
-    if (block.body) {
-      const declarPaths = this.blockPath.get("body");
-      // @ts-expect-error todo(flow->ts)
-      for (let i = 0; i < block.body.length; i++) {
-        // @ts-expect-error todo(flow->ts)
-        addDeclarationsFromChild(declarPaths[i]);
-      }
-    }
-
-    // @ts-expect-error todo(flow->ts) check block node type instead
-    if (block.cases) {
-      const declarPaths = this.blockPath.get("cases");
-      // @ts-expect-error todo(flow->ts)
+    if (block.type === "SwitchStatement") {
+      const declarPaths = (this.blockPath as NodePath<t.SwitchStatement>).get(
+        "cases",
+      );
       for (let i = 0; i < block.cases.length; i++) {
-        // @ts-expect-error todo(flow->ts)
         const consequents = block.cases[i].consequent;
 
         for (let j = 0; j < consequents.length; j++) {
           const declar = consequents[j];
           addDeclarationsFromChild(declarPaths[i], declar);
         }
+      }
+    } else {
+      const declarPaths = (this.blockPath as NodePath<t.Block>).get("body");
+      for (let i = 0; i < block.body.length; i++) {
+        addDeclarationsFromChild(declarPaths[i], declarPaths[i].node);
       }
     }
 
@@ -933,7 +936,7 @@ class BlockScoping {
       innerLabels: [],
       hasReturn: false,
       isLoop: !!this.loop,
-      map: {},
+      map: new Map(),
       loopIgnored: new WeakSet(),
     };
 
@@ -988,11 +991,11 @@ class BlockScoping {
     const has = this.has;
 
     if (has.hasBreakContinue) {
-      for (const key of Object.keys(has.map)) {
+      for (const key of has.map.keys()) {
         body.push(
           t.ifStatement(
             t.binaryExpression("===", t.identifier(ret), t.stringLiteral(key)),
-            has.map[key],
+            has.map.get(key),
           ),
         );
       }
