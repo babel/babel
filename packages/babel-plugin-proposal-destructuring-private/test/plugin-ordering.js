@@ -1,4 +1,4 @@
-import babel from "@babel/core";
+import { transformSync } from "@babel/core";
 import proposalDestructuringPrivate from "../lib/index.js";
 
 describe("plugin ordering", () => {
@@ -12,7 +12,7 @@ describe("plugin ordering", () => {
     `;
     expect(
       () =>
-        babel.transformSync(source, {
+        transformSync(source, {
           filename: "example.js",
           highlightCode: false,
           configFile: false,

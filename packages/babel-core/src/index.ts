@@ -8,9 +8,11 @@ export { resolvePlugin, resolvePreset } from "./config/files";
 
 export { getEnv } from "./config/helpers/environment";
 
+// NOTE: Lazy re-exports aren't detected by the Node.js CJS-ESM interop.
+// These are handled by pluginInjectNodeReexportsHints in our babel.config.js
+// so that they can work well.
 export * as types from "@babel/types";
 export { tokTypes } from "@babel/parser";
-
 export { default as traverse } from "@babel/traverse";
 export { default as template } from "@babel/template";
 
