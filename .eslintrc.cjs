@@ -83,6 +83,7 @@ module.exports = {
           "error",
           { version: "12.17.0", ignores: ["modules"] },
         ],
+        "@babel/development-internal/require-default-import-fallback": "error",
       },
     },
     {
