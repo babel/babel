@@ -32,5 +32,6 @@
   },
   "devDependencies": {
     "@babel/core": "workspace:^"
-  }
+  },
+  "type": "commonjs"
 }

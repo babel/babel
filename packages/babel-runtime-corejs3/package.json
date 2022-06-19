@@ -1177,5 +1177,6 @@
   },
   "engines": {
     "node": ">=6.9.0"
-  }
+  },
+  "type": "commonjs"
 }

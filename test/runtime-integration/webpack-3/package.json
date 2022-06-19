@@ -4,5 +4,6 @@
   "devDependencies": {
     "@babel/runtime": "workspace:^",
     "webpack": "^3.12.0"
-  }
+  },
+  "type": "commonjs"
 }

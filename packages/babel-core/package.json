@@ -85,5 +85,6 @@
   "exports": {
     ".": "./lib/index.js",
     "./package.json": "./package.json"
-  }
+  },
+  "type": "commonjs"
 }

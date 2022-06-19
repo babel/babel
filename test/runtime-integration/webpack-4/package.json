@@ -5,5 +5,6 @@
     "@babel/runtime": "workspace:^",
     "webpack": "^4.46.0",
     "webpack-cli": "^4.5.0"
-  }
+  },
+  "type": "commonjs"
 }
