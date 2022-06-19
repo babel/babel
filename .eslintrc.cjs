@@ -155,6 +155,15 @@ module.exports = {
       },
     },
     {
+      files: ["packages/babel-preset-env/data/**/*.js"],
+      rules: {
+        "import/no-extraneous-dependencies": [
+          "error",
+          { packageDir: "./packages/babel-preset-env" },
+        ],
+      },
+    },
+    {
       files: ["scripts/**/*.js"],
       rules: {
         "import/no-extraneous-dependencies": ["error", { packageDir: "." }],

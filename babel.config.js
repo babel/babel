@@ -277,13 +277,14 @@ const monorepoPackages = ["codemods", "eslint", "packages"]
   .reduce((a, b) => a.concat(b))
   .map(name => name.replace(/^babel-/, "@babel/"));
 
-function importInteropSrc(source) {
+function importInteropSrc(source, filename) {
   if (
     // These internal files are "real CJS" (whose default export is
     // on module.exports) and not compiled ESM.
     source.startsWith("@babel/compat-data/") ||
     source.includes("babel-eslint-shared-fixtures/utils") ||
-    source.endsWith(".cjs")
+    (source.includes("../data/") &&
+      /babel-preset-env[\\/]src[\\/]/.test(filename))
   ) {
     return "node";
   }
