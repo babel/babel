@@ -1,5 +1,4 @@
-import { lt } from "semver";
-import type { SemVer } from "semver";
+import semver, { type SemVer } from "semver";
 import { logPlugin } from "./debug";
 import getOptionSpecificExcludesFor from "./get-option-specific-excludes";
 import {
@@ -308,7 +307,7 @@ export default declarePreset((api, opts: Options) => {
     // @babel/core < 7.13.0 doesn't load targets (api.targets() always
     // returns {} thanks to @babel/helper-plugin-utils), so we always want
     // to fallback to the old targets behavior in this case.
-    lt(api.version, "7.13.0") ||
+    semver.lt(api.version, "7.13.0") ||
     // If any browserslist-related option is specified, fallback to the old
     // behavior of not using the targets specified in the top-level options.
     opts.targets ||
