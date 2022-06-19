@@ -80,6 +80,12 @@
       {
         "exports": null
       }
+    ],
+    "USE_ESM": [
+      {
+        "type": "module"
+      },
+      null
     ]
   },
   "exports": {
