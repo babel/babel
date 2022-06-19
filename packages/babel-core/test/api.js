@@ -7,9 +7,9 @@ import { fileURLToPath } from "url";
 import _Plugin from "../lib/config/plugin.js";
 const Plugin = _Plugin.default || _Plugin;
 
-import presetEnv from "../../babel-preset-env/lib/index.js";
-import pluginSyntaxFlow from "../../babel-plugin-syntax-flow/lib/index.js";
-import pluginFlowStripTypes from "../../babel-plugin-transform-flow-strip-types/lib/index.js";
+import presetEnv from "@babel/preset-env";
+import pluginSyntaxFlow from "@babel/plugin-syntax-flow";
+import pluginFlowStripTypes from "@babel/plugin-transform-flow-strip-types";
 
 const cwd = path.dirname(fileURLToPath(import.meta.url));
 
@@ -400,14 +400,11 @@ describe("api", function () {
           },
 
           // env preset
-          [presetEnv.default || presetEnv, { targets: { browsers: "ie 6" } }],
+          [presetEnv, { targets: { browsers: "ie 6" } }],
 
           // Third preset for Flow.
           () => ({
-            plugins: [
-              pluginSyntaxFlow.default || pluginSyntaxFlow,
-              pluginFlowStripTypes.default || pluginFlowStripTypes,
-            ],
+            plugins: [pluginSyntaxFlow, pluginFlowStripTypes],
           }),
         ],
       });
