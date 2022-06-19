@@ -94,6 +94,7 @@ module.exports = {
       ],
       rules: {
         "no-restricted-globals": ["error", ...cjsGlobals],
+        "no-restricted-imports": ["error", { patterns: ["**/*.json"] }],
       },
     },
     {

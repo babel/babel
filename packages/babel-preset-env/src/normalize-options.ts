@@ -1,7 +1,7 @@
-import corejs3Polyfills from "core-js-compat/data.json";
 import { coerce } from "semver";
 import type { SemVer } from "semver";
 import corejs2Polyfills from "@babel/compat-data/corejs2-built-ins";
+import corejs3Polyfills from "../data/core-js-compat.cjs";
 import { plugins as pluginsList } from "./plugins-compat-data";
 import moduleTransformations from "./module-transformations";
 import { TopLevelOptions, ModulesOption, UseBuiltInsOption } from "./options";
