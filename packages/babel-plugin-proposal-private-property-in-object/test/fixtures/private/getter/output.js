@@ -1,5 +1,3 @@
-var _A = /*#__PURE__*/new WeakMap();
-
 var _foo = /*#__PURE__*/new WeakMap();
 
 let Foo = /*#__PURE__*/function () {
@@ -9,11 +7,7 @@ let Foo = /*#__PURE__*/function () {
     babelHelpers.classCallCheck(this, Foo);
     babelHelpers.classPrivateFieldInitSpec(this, _foo, {
       get: _get_foo,
-      set: _set_foo
-    });
-    babelHelpers.classPrivateFieldInitSpec(this, _A, {
-      writable: true,
-      value: void 0
+      set: void 0
     });
   }
 
@@ -26,10 +20,4 @@ let Foo = /*#__PURE__*/function () {
   return Foo;
 }();
 
-function _get_foo() {
-  return babelHelpers.classPrivateFieldGet(this, _A);
-}
-
-function _set_foo(v) {
-  babelHelpers.classPrivateFieldSet(this, _A, v);
-}
+function _get_foo() {}

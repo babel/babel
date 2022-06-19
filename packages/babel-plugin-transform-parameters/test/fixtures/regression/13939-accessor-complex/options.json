@@ -1,0 +1,9 @@
+{
+  "plugins": [
+    "transform-parameters",
+    [
+      "syntax-decorators",
+      { "version": "2021-12", "decoratorsBeforeExport": true }
+    ]
+  ]
+}

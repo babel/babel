@@ -23,8 +23,8 @@ export default declare((api, opt: Options) => {
   // The visitor of this plugin is only effective when not compiling
   // private fields and methods.
 
+  // A map from class(element) node to BrandCheckSets id
   const classWeakSets = new WeakMap();
-  const fieldsWeakSets = new WeakMap();
 
   function unshadow(name, targetScope, scope) {
     while (scope !== targetScope) {
@@ -50,10 +50,7 @@ export default declare((api, opt: Options) => {
     let consturctorPath;
 
     for (const el of classPath.get("body.body")) {
-      if (
-        (el.isClassProperty() || el.isClassPrivateProperty()) &&
-        !el.node.static
-      ) {
+      if (el.isProperty({ static: false })) {
         firstFieldPath = el;
         break;
       }
@@ -71,7 +68,7 @@ export default declare((api, opt: Options) => {
     }
   }
 
-  function getWeakSetId(weakSets, outerClass, reference, name = "", inject) {
+  function getWeakSetId(outerClass, reference, name = "", inject) {
     let id = classWeakSets.get(reference.node);
 
     if (!id) {
@@ -111,7 +108,10 @@ export default declare((api, opt: Options) => {
 
           privateElement = path
             .get("body.body")
-            .find(({ node }) => t.isPrivate(node) && node.key.id.name === name);
+            .find(
+              ({ node }) =>
+                t.isPrivateName(node.key) && node.key.id.name === name,
+            );
 
           return !!privateElement;
         }) as NodePath<t.Class>;
@@ -138,7 +138,6 @@ export default declare((api, opt: Options) => {
             );
           } else {
             const id = getWeakSetId(
-              classWeakSets,
               outerClass,
               outerClass,
               outerClass.node.id?.name,
@@ -154,7 +153,6 @@ export default declare((api, opt: Options) => {
           // example at https://v8.dev/features/private-brand-checks.
 
           const id = getWeakSetId(
-            fieldsWeakSets,
             outerClass,
             privateElement,
             privateElement.node.key.id.name,

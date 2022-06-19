@@ -1,5 +1,3 @@
-var _A = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("A");
-
 var _foo = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("foo");
 
 let Foo = /*#__PURE__*/function () {
@@ -9,11 +7,7 @@ let Foo = /*#__PURE__*/function () {
     babelHelpers.classCallCheck(this, Foo);
     Object.defineProperty(this, _foo, {
       get: _get_foo,
-      set: _set_foo
-    });
-    Object.defineProperty(this, _A, {
-      writable: true,
-      value: void 0
+      set: void 0
     });
   }
 
@@ -26,10 +20,4 @@ let Foo = /*#__PURE__*/function () {
   return Foo;
 }();
 
-function _get_foo() {
-  return babelHelpers.classPrivateFieldLooseBase(this, _A)[_A];
-}
-
-function _set_foo(v) {
-  babelHelpers.classPrivateFieldLooseBase(this, _A)[_A] = v;
-}
+function _get_foo() {}
