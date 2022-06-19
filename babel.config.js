@@ -282,7 +282,8 @@ function importInteropSrc(source) {
     // These internal files are "real CJS" (whose default export is
     // on module.exports) and not compiled ESM.
     source.startsWith("@babel/compat-data/") ||
-    source.includes("babel-eslint-shared-fixtures/utils")
+    source.includes("babel-eslint-shared-fixtures/utils") ||
+    source.endsWith(".cjs")
   ) {
     return "node";
   }
