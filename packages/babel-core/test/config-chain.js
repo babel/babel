@@ -6,7 +6,7 @@ import * as babel from "../lib/index.js";
 import rimraf from "rimraf";
 
 import _getTargets from "@babel/helper-compilation-targets";
-const getTargets = _getTargets.default;
+const getTargets = _getTargets.default || _getTargets;
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 

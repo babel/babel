@@ -8,8 +8,8 @@ import { fileURLToPath } from "url";
 
 import _Printer from "../lib/printer.js";
 import _generate, { CodeGenerator } from "../lib/index.js";
-const Printer = _Printer.default;
-const generate = _generate.default;
+const Printer = _Printer.default || _Printer;
+const generate = _generate.default || _generate;
 
 describe("generation", function () {
   it("completeness", function () {
@@ -806,7 +806,7 @@ describe("CodeGenerator", function () {
   });
 });
 
-const suites = fixtures.default(
+const suites = (fixtures.default || fixtures)(
   path.join(path.dirname(fileURLToPath(import.meta.url)), "fixtures"),
 );
 

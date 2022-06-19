@@ -2,7 +2,7 @@ import { fileURLToPath } from "url";
 import path from "path";
 
 import _getTargets from "../../lib/index.js";
-const getTargets = _getTargets.default;
+const getTargets = _getTargets.default || _getTargets;
 
 const oldCwd = process.cwd();
 

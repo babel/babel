@@ -8,7 +8,7 @@ import { createRequire } from "module";
 
 const require = createRequire(import.meta.url);
 
-const loadConfig = _loadConfigRunner.default.sync;
+const loadConfig = (_loadConfigRunner.default || _loadConfigRunner).sync;
 
 describe("@babel/core config loading", () => {
   const FILEPATH = path.join(

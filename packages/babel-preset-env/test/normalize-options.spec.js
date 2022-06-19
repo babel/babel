@@ -4,7 +4,7 @@ import _normalizeOptions, {
   validateUseBuiltInsOption,
   normalizePluginName,
 } from "../lib/normalize-options.js";
-const normalizeOptions = _normalizeOptions.default;
+const normalizeOptions = _normalizeOptions.default || _normalizeOptions;
 
 describe("normalize-options", () => {
   describe("normalizeOptions", () => {

@@ -3,7 +3,7 @@ import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 
 import _getTargets from "../lib/index.js";
-const getTargets = _getTargets.default;
+const getTargets = _getTargets.default || _getTargets;
 
 describe("getTargets", () => {
   it("parses", () => {

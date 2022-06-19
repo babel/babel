@@ -2,7 +2,7 @@ import * as t from "../lib/index.js";
 import { parse } from "@babel/parser";
 
 import _generate from "@babel/generator";
-const generate = _generate.default;
+const generate = _generate.default || _generate;
 
 function parseCode(string) {
   return parse(string, {

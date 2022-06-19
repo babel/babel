@@ -5,11 +5,11 @@ import generator from "@babel/generator";
 import { fileURLToPath } from "url";
 
 import _Plugin from "../lib/config/plugin.js";
-const Plugin = _Plugin.default;
+const Plugin = _Plugin.default || _Plugin;
 
-import presetEnv from "../../babel-preset-env/lib/index.js";
-import pluginSyntaxFlow from "../../babel-plugin-syntax-flow/lib/index.js";
-import pluginFlowStripTypes from "../../babel-plugin-transform-flow-strip-types/lib/index.js";
+import presetEnv from "@babel/preset-env";
+import pluginSyntaxFlow from "@babel/plugin-syntax-flow";
+import pluginFlowStripTypes from "@babel/plugin-transform-flow-strip-types";
 
 const cwd = path.dirname(fileURLToPath(import.meta.url));
 
@@ -73,7 +73,7 @@ describe("parser and generator options", function () {
       return opts.parser.parse(code);
     },
     print: function (ast) {
-      return generator(ast);
+      return (generator.default || generator)(ast);
     },
   };
 

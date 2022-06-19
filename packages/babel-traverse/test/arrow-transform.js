@@ -3,7 +3,7 @@ import { parse } from "@babel/parser";
 import * as t from "@babel/types";
 
 import _generate from "@babel/generator";
-const generate = _generate.default;
+const generate = _generate.default || _generate;
 
 function assertConversion(
   input,
