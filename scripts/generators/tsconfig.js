@@ -32,7 +32,7 @@ function getTsPkgs(subRoot) {
       const packageJSON = importJSON(new URL(relative + "/package.json", root));
       // Babel 8 exports > Babel 7 exports > {}
       const exports =
-        packageJSON.conditions?.BABEL_8_BREAKING[0]?.exports ??
+        packageJSON.conditions?.BABEL_8_BREAKING?.[0]?.exports ??
         packageJSON.exports ??
         {};
       const subExports = Object.entries(exports).flatMap(
