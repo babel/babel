@@ -86,3 +86,7 @@ gen_enforced_field(WorkspaceCwd, 'exports', '{ ".": "./lib/index.js", "./package
   WorkspaceIdent \= '@babel/standalone',
   \+ atom_concat('@babel/eslint-', _, WorkspaceIdent),
   \+ atom_concat('@babel/runtime', _, WorkspaceIdent).
+
+% Enforces the type field to be set
+gen_enforced_field(WorkspaceCwd, 'type', 'commonjs') :-
+  \+ workspace_field(WorkspaceCwd, 'type', 'module').
