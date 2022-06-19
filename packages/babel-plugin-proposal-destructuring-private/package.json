@@ -39,5 +39,13 @@
     ".": "./lib/index.js",
     "./package.json": "./package.json"
   },
-  "type": "commonjs"
+  "type": "commonjs",
+  "conditions": {
+    "USE_ESM": [
+      {
+        "type": "module"
+      },
+      null
+    ]
+  }
 }

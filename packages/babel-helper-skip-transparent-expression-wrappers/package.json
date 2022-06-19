@@ -26,5 +26,13 @@
     "node": ">=6.9.0"
   },
   "author": "The Babel Team (https://babel.dev/team)",
-  "type": "commonjs"
+  "type": "commonjs",
+  "conditions": {
+    "USE_ESM": [
+      {
+        "type": "module"
+      },
+      null
+    ]
+  }
 }
