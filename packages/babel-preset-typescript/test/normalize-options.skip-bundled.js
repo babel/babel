@@ -1,5 +1,5 @@
 import _normalizeOptions from "../lib/normalize-options.js";
-const normalizeOptions = _normalizeOptions.default;
+const normalizeOptions = _normalizeOptions.default || _normalizeOptions;
 
 describe("normalize options", () => {
   (process.env.BABEL_8_BREAKING ? describe : describe.skip)("Babel 8", () => {

@@ -9,6 +9,7 @@ module.exports = {
   create(ctx) {
     return {
       ImportDeclaration(node) {
+        const filename = ctx.getFilename();
         const src = node.source.value;
         if (
           // Not a source file in the monorepo
@@ -20,11 +21,9 @@ module.exports = {
           // This will not become an ESM file.
           src.endsWith(".cjs") ||
           // @babel/core automatically unwraps .default from plugins/presets.
-          src.startsWith("@babel/plugin-") ||
-          src.startsWith("@babel/preset-") ||
-          (src.startsWith(".") &&
-            (ctx.getFilename().includes("/babel-plugin-") ||
-              ctx.getFilename().includes("/babel-preset-")))
+          /^@babel\/(plugin|preset)-/.test(src) ||
+          (src.endsWith("./lib/index.js") &&
+            /babel-(plugin|preset)-/.test(filename))
         ) {
           return;
         }

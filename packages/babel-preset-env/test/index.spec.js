@@ -7,10 +7,12 @@ import _removeRegeneratorEntryPlugin from "../lib/polyfills/regenerator.js";
 import _pluginLegacyBabelPolyfill from "../lib/polyfills/babel-polyfill.js";
 import _transformations from "../lib/module-transformations.js";
 import _availablePlugins from "../lib/available-plugins.js";
-const removeRegeneratorEntryPlugin = _removeRegeneratorEntryPlugin.default;
-const pluginLegacyBabelPolyfill = _pluginLegacyBabelPolyfill.default;
-const transformations = _transformations.default;
-const availablePlugins = _availablePlugins.default;
+const removeRegeneratorEntryPlugin =
+  _removeRegeneratorEntryPlugin.default || _removeRegeneratorEntryPlugin;
+const pluginLegacyBabelPolyfill =
+  _pluginLegacyBabelPolyfill.default || _pluginLegacyBabelPolyfill;
+const transformations = _transformations.default || _transformations;
+const availablePlugins = _availablePlugins.default || _availablePlugins;
 
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
