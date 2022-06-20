@@ -50,22 +50,14 @@ export function IfStatement(this: Printer, node: t.IfStatement) {
 }
 
 // Recursively get the last statement.
-function getLastStatement(
-  statement: Exclude<t.Statement, t.BreakStatement>,
-): t.Statement {
-  if (
-    !isStatement(
-      // @ts-ignore body is not in BreakStatement
-      statement.body,
-    )
-  ) {
+function getLastStatement(statement: t.Statement): t.Statement {
+  // @ts-ignore: If statement.body is empty or not a Node, isStatement will return false
+  const { body } = statement;
+  if (isStatement(body) === false) {
     return statement;
   }
 
-  return getLastStatement(
-    // @ts-ignore body is not in BreakStatement
-    statement.body,
-  );
+  return getLastStatement(body);
 }
 
 export function ForStatement(this: Printer, node: t.ForStatement) {
