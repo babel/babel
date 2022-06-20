@@ -25,12 +25,14 @@ const outputFileSync = function (filePath, data) {
   fs.writeFileSync(filePath, data);
 };
 
-const presetLocs = [path.join(rootDir, "./packages/babel-preset-react")];
+const getPath = name => path.join(rootDir, "packages", name, "lib", "index.js");
+
+const presetLocs = [getPath("babel-preset-react")];
 
 const pluginLocs = [
-  path.join(rootDir, "./packages/babel-plugin-transform-arrow-functions"),
-  path.join(rootDir, "./packages/babel-plugin-transform-strict-mode"),
-  path.join(rootDir, "./packages/babel-plugin-transform-modules-commonjs"),
+  getPath("babel-plugin-transform-arrow-functions"),
+  getPath("babel-plugin-transform-strict-mode"),
+  getPath("babel-plugin-transform-modules-commonjs"),
 ].join(",");
 
 const readDir = function (loc, filter) {

@@ -309,7 +309,7 @@ function wrapPackagesArray(type, names, optionsDir) {
         path.dirname(fileURLToPath(import.meta.url)),
         "../../..",
         name.startsWith("codemod") ? "codemods" : "packages",
-        `babel-${type}-${name}`,
+        `babel-${type}-${name}/lib/index.js`,
       );
 
       if (fs.existsSync(monorepoPath)) {
