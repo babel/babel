@@ -1,6 +1,6 @@
 // from code:
 // export default {
-//   plugins: [__dirname + "/../../../../../babel-plugin-syntax-decorators"]
+//   plugins: [__dirname + "/../../../../../babel-plugin-syntax-decorators/lib/index.js"]
 // };
 "use strict";
 
@@ -9,7 +9,8 @@ module.exports = function () {
   return {
     plugins: [
       [
-        __dirname + "/../../../../../babel-plugin-syntax-decorators",
+        __dirname +
+          "/../../../../../babel-plugin-syntax-decorators/lib/index.js",
         { legacy: true },
       ],
     ],
