@@ -278,7 +278,7 @@ const validFieldKeys = ["default", "optional", "validate"];
 
 // Wraps defineType to ensure these aliases are included.
 export function defineAliasedType(...aliases: string[]) {
-  return (type: NodeTypes, opts: DefineTypeOpts = {}) => {
+  return (type: string, opts: DefineTypeOpts = {}) => {
     let defined = opts.aliases;
     if (!defined) {
       if (opts.inherits) defined = store[opts.inherits].aliases?.slice();
@@ -291,7 +291,7 @@ export function defineAliasedType(...aliases: string[]) {
   };
 }
 
-export default function defineType(type: NodeTypes, opts: DefineTypeOpts = {}) {
+export default function defineType(type: string, opts: DefineTypeOpts = {}) {
   const inherits = (opts.inherits && store[opts.inherits]) || {};
 
   let fields = opts.fields;
@@ -373,4 +373,4 @@ export default function defineType(type: NodeTypes, opts: DefineTypeOpts = {}) {
   store[type] = opts;
 }
 
-const store = {} as Record<NodeTypes, DefineTypeOpts>;
+const store = {} as Record<string, DefineTypeOpts>;

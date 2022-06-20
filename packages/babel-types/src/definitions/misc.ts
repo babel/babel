@@ -9,7 +9,6 @@ import { PLACEHOLDERS } from "./placeholders";
 const defineType = defineAliasedType("Miscellaneous");
 
 if (!process.env.BABEL_8_BREAKING) {
-  // @ts-ignore Babel 7 AST
   defineType("Noop", {
     visitor: [],
   });
