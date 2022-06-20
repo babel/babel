@@ -107,9 +107,9 @@ const EXTERNAL_SOURCEMAP_REGEX =
 
 function extractCommentsFromList(
   regex: RegExp,
-  comments: ReadonlyArray<t.Comment>,
+  comments: t.Comment[],
   lastComment: string | null,
-): [ReadonlyArray<t.Comment>, string | null] {
+): [t.Comment[], string | null] {
   if (comments) {
     comments = comments.filter(({ value }) => {
       if (regex.test(value)) {
