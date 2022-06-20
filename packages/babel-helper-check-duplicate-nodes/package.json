@@ -32,5 +32,14 @@
   },
   "devDependencies": {
     "@babel/core": "workspace:^"
+  },
+  "type": "commonjs",
+  "conditions": {
+    "USE_ESM": [
+      {
+        "type": "module"
+      },
+      null
+    ]
   }
 }

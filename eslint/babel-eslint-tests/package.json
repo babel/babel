@@ -11,5 +11,6 @@
     "eslint": "^7.27.0",
     "eslint-plugin-import": "^2.25.4",
     "npm-babel-parser": "npm:@babel/parser@^7.14.0"
-  }
+  },
+  "type": "commonjs"
 }

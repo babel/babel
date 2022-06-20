@@ -1177,5 +1177,14 @@
   },
   "engines": {
     "node": ">=6.9.0"
+  },
+  "type": "commonjs",
+  "conditions": {
+    "USE_ESM": [
+      {
+        "type": "module"
+      },
+      null
+    ]
   }
 }

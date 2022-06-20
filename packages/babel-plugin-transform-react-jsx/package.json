@@ -41,11 +41,18 @@
       {
         "exports": null
       }
+    ],
+    "USE_ESM": [
+      {
+        "type": "module"
+      },
+      null
     ]
   },
   "exports": {
     ".": "./lib/index.js",
     "./lib/development": "./lib/development.js",
     "./package.json": "./package.json"
-  }
+  },
+  "type": "commonjs"
 }

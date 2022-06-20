@@ -140,6 +140,12 @@
       {
         "exports": null
       }
+    ],
+    "USE_ESM": [
+      {
+        "type": "module"
+      },
+      null
     ]
   },
   "exports": {
@@ -147,5 +153,6 @@
     "./babel.js": "./babel.js",
     "./babel.min.js": "./babel.min.js",
     "./package.json": "./package.json"
-  }
+  },
+  "type": "commonjs"
 }

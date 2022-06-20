@@ -16,5 +16,6 @@
     "@babel/preset-flow": "workspace:^",
     "@babel/preset-react": "workspace:^",
     "eslint": "^7.27.0"
-  }
+  },
+  "type": "commonjs"
 }
