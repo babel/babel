@@ -33,14 +33,16 @@ type Module = {
 };
 
 if (!process.env.BABEL_8_BREAKING) {
-  // Introduced in Node.js 8
+  // Introduced in Node.js 10
   if (!assert.rejects) {
     assert.rejects = async function (block, validateError) {
       try {
-        await block();
+        await (typeof block === "function" ? block() : block);
         return Promise.reject(new Error("Promise not rejected"));
       } catch (error) {
-        if (!validateError(error)) {
+        // @ts-ignore Fixme: validateError can be a string | object
+        // see https://nodejs.org/api/assert.html#assertrejectsasyncfn-error-message
+        if (typeof validateError === "function" && !validateError(error)) {
           return Promise.reject(
             new Error("Promise rejected with invalid error"),
           );
