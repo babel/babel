@@ -12,7 +12,7 @@ let programPath;
 let forOfPath;
 let functionPath;
 
-transform(code, {
+return transformAsync(code, {
   configFile: false,
   plugins: [
     __dirname + "/../../../../lib",
@@ -26,13 +26,13 @@ transform(code, {
       }
     }
   ]
+}).then(() => {
+  expect(Object.keys(programPath.scope.bindings)).toEqual(["foo", "bar"]);
+
+  // for declarations should be transformed to for bindings
+  expect(forOfPath.scope.bindings).toEqual({});
+  // The body should be wrapped into closure
+  expect(forOfPath.get("body").scope.bindings).toEqual({});
+
+  expect(Object.keys(functionPath.scope.bindings)).toEqual(["foo", "bar", "qux", "quux"]);
 });
-
-expect(Object.keys(programPath.scope.bindings)).toEqual(["foo", "bar"]);
-
-// for declarations should be transformed to for bindings
-expect(forOfPath.scope.bindings).toEqual({});
-// The body should be wrapped into closure
-expect(forOfPath.get("body").scope.bindings).toEqual({});
-
-expect(Object.keys(functionPath.scope.bindings)).toEqual(["foo", "bar", "qux", "quux"]);

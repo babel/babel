@@ -11,6 +11,8 @@ import transformRuntime from "../lib/index.js";
 import corejs2Definitions from "./runtime-corejs2-definitions.js";
 import corejs3Definitions from "./runtime-corejs3-definitions.js";
 
+import presetEnv from "@babel/preset-env";
+
 const require = createRequire(import.meta.url);
 const runtimeVersion = require("@babel/runtime/package.json").version;
 
@@ -237,7 +239,7 @@ function buildHelper(
 
   return transformFromAstSync(tree, null, {
     filename: helperFilename,
-    presets: [["@babel/preset-env", { modules: false }]],
+    presets: [[presetEnv, { modules: false }]],
     plugins: [
       [transformRuntime, { corejs, version: runtimeVersion }],
       buildRuntimeRewritePlugin(runtimeName, helperName),

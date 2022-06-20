@@ -1,6 +1,7 @@
-const nameFunction = require("@babel/helper-function-name").default;
+import _nameFunction from "@babel/helper-function-name";
+const nameFunction = _nameFunction.default || _nameFunction;
 
-module.exports = api => ({
+export default api => ({
   visitor: {
     FunctionExpression(path) {
       const replacement = nameFunction(path);

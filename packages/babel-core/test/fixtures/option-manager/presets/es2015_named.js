@@ -1,8 +1,9 @@
 // from code:
 // export const plugins = [
-//   require('../../../../../babel-plugin-syntax-decorators'),
+//   __dirname + "/../../../../../babel-plugin-syntax-decorators"
 // ];
-'use strict';
+"use strict";
 
 exports.__esModule = true;
-var plugins = exports.plugins = [require('../../../../../babel-plugin-syntax-decorators')];
+var plugins = [__dirname + "/../../../../../babel-plugin-syntax-decorators"];
+exports.plugins = plugins;

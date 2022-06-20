@@ -1,11 +1,15 @@
-import { loadOptions as loadOptionsOrig } from "../lib/index.js";
+import * as babel from "../lib/index.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
 const cwd = path.dirname(fileURLToPath(import.meta.url));
 
 function loadOptions(opts) {
-  return loadOptionsOrig({ cwd, ...opts });
+  return babel.loadOptionsSync({ cwd, ...opts });
+}
+
+function loadOptionsAsync(opts) {
+  return babel.loadOptionsAsync({ cwd, ...opts });
 }
 
 describe("option-manager", () => {
@@ -61,10 +65,10 @@ describe("option-manager", () => {
       }).toThrowErrorMatchingSnapshot();
     });
 
-    it("should not throw when a preset string followed by valid preset object", () => {
+    it("should not throw when a preset string followed by valid preset object", async () => {
       const { plugin } = makePlugin();
       expect(
-        loadOptions({
+        await loadOptionsAsync({
           presets: [
             "@babel/env",
             { plugins: [[plugin, undefined, "my-plugin"]] },
@@ -234,8 +238,8 @@ describe("option-manager", () => {
       "es5_object",
       "es2015_default_function",
       "es2015_default_object",
-    ])("%p should work", name => {
-      const options = loadOptions({
+    ])("%p should work", async name => {
+      const options = await loadOptionsAsync({
         presets: [path.join(cwd, "fixtures/option-manager/presets", name)],
       });
 
@@ -248,12 +252,12 @@ describe("option-manager", () => {
       ["es2015_named", /Must export a default export when using ES6 modules/],
       ["es2015_invalid", /Unsupported format: string/],
       ["es5_invalid", /Unsupported format: string/],
-    ])("%p should throw %p", (name, msg) => {
-      expect(() =>
-        loadOptions({
+    ])("%p should throw %p", async (name, msg) => {
+      await expect(
+        loadOptionsAsync({
           presets: [path.join(cwd, "fixtures/option-manager/presets", name)],
         }),
-      ).toThrow(msg);
+      ).rejects.toThrow(msg);
     });
   });
 });
