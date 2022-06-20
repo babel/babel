@@ -2,6 +2,6 @@
 // import() isn't supported, we can try/catch around the require() call
 // when loading this file.
 
-export default function import_(filepath: string) {
+module.exports = function import_(filepath: string) {
   return import(filepath);
-}
+};
