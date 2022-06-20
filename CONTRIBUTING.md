@@ -80,6 +80,19 @@ If you wish to build a copy of Babel for distribution, then run:
 $ make build-dist
 ```
 
+## Develop compiling to CommonJS or to ECMAScript modules
+
+Babel can currently be compiled both to CJS and to ESM. You can toggle between those two
+modes by running one of the following commands:
+```sh
+make use-esm
+```
+```sh
+make use-cjs
+```
+
+Note that they need to recompile the whole monorepo, so please make sure to stop any running `make watch` process before running them.
+
 ### Running linting/tests
 
 #### Lint
@@ -121,16 +134,17 @@ $ TEST_ONLY=babel-cli make test
   <summary>More options</summary>
   <code>TEST_ONLY</code> will also match substrings of the package name:
 
-  ```sh
-  # Run tests for the @babel/plugin-transform-classes package.
-  $ TEST_ONLY=babel-plugin-transform-classes make test
-  ```
+```sh
+# Run tests for the @babel/plugin-transform-classes package.
+$ TEST_ONLY=babel-plugin-transform-classes make test
+```
 
-  Or you can use Yarn: 
+Or you can use Yarn:
 
-  ```sh
-  $ yarn jest babel-cli
-  ```
+```sh
+$ yarn jest babel-cli
+```
+
 </details>
 <br>
 
@@ -145,16 +159,19 @@ $ TEST_GREP=transformation make test
 Substitute spaces for hyphens and forward slashes when targeting specific test names:
 
 For example, for the following path:
+
 ```sh
 packages/babel-plugin-transform-arrow-functions/test/fixtures/arrow-functions/destructuring-parameters
 ```
 
 You can use:
+
 ```sh
 $ TEST_GREP="arrow functions destructuring parameters" make test
 ```
 
 Or you can directly use Yarn:
+
 ```sh
 $ yarn jest -t "arrow functions destructuring parameters"
 ```

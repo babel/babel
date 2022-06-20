@@ -11,6 +11,14 @@ function normalize(src) {
 module.exports = function (api) {
   const env = api.env();
 
+  const outputType = api.cache.invalidate(() => {
+    try {
+      return fs.readFileSync(__dirname + "/.module-type", "utf-8").trim();
+    } catch (_) {
+      return "script";
+    }
+  });
+
   const sources = ["packages/*/src", "codemods/*/src", "eslint/*/src"];
 
   const includeCoverage = process.env.BABEL_COVERAGE === "true";
@@ -54,7 +62,8 @@ module.exports = function (api) {
   };
 
   let targets = {};
-  let convertESM = true;
+  let convertESM = outputType === "script";
+  let addImportExtension = !convertESM;
   let ignoreLib = true;
   let includeRegeneratorRuntime = false;
   let needsPolyfillsForOldNode = false;
@@ -84,6 +93,7 @@ module.exports = function (api) {
     case "standalone":
       includeRegeneratorRuntime = true;
       convertESM = false;
+      addImportExtension = false;
       ignoreLib = false;
       // rollup-commonjs will converts node_modules to ESM
       unambiguousSources.push(
@@ -95,6 +105,7 @@ module.exports = function (api) {
       break;
     case "rollup":
       convertESM = false;
+      addImportExtension = false;
       ignoreLib = false;
       // rollup-commonjs will converts node_modules to ESM
       unambiguousSources.push(
@@ -216,7 +227,10 @@ module.exports = function (api) {
       {
         test: sources.map(normalize),
         assumptions: sourceAssumptions,
-        plugins: [transformNamedBabelTypesImportToDestructuring],
+        plugins: [
+          transformNamedBabelTypesImportToDestructuring,
+          addImportExtension ? pluginAddImportExtension : null,
+        ].filter(Boolean),
       },
       convertESM && {
         test: lazyRequireSources.map(normalize),
@@ -653,6 +667,56 @@ function pluginImportMetaUrl({ types: t, template }) {
             }
           },
         });
+      },
+    },
+  };
+}
+
+function pluginAddImportExtension() {
+  return {
+    visitor: {
+      "ImportDeclaration|ExportDeclaration"({ node }) {
+        const { source } = node;
+        if (!source) return;
+
+        if (source.value.startsWith(".") && !/\.[a-z]+$/.test(source.value)) {
+          const dir = pathUtils.dirname(this.filename);
+
+          try {
+            const pkg = JSON.parse(
+              fs.readFileSync(
+                pathUtils.join(dir, `${source.value}/package.json`)
+              ),
+              "utf8"
+            );
+
+            if (pkg.main) source.value = pathUtils.join(source.value, pkg.main);
+          } catch (_) {}
+
+          try {
+            if (fs.statSync(pathUtils.join(dir, source.value)).isFile()) return;
+          } catch (_) {}
+
+          for (const [src, lib = src] of [["ts", "js"], ["js"], ["cjs"]]) {
+            try {
+              fs.statSync(pathUtils.join(dir, `${source.value}.${src}`));
+              source.value += `.${lib}`;
+              return;
+            } catch (_) {}
+          }
+
+          source.value += "/index.js";
+        }
+        if (
+          source.value.startsWith("lodash/") ||
+          source.value.startsWith("core-js-compat/") ||
+          source.value === "babel-plugin-dynamic-import-node/utils"
+        ) {
+          source.value += ".js";
+        }
+        if (source.value.startsWith("@babel/preset-modules/")) {
+          source.value += "/index.js";
+        }
       },
     },
   };
