@@ -1,6 +1,12 @@
-import { default as shell } from "shelljs";
+import { readFileSync, writeFileSync } from "fs";
+import shell from "shelljs";
+import path from "path";
 
 console.log("Cloning LICENSE to babel packages");
+
+const LICENSE = readFileSync("LICENSE", "utf8");
+
+console.log(LICENSE);
 
 shell.ls("-d", "./packages/*/").forEach(dir => {
   if (
@@ -8,12 +14,12 @@ shell.ls("-d", "./packages/*/").forEach(dir => {
       /.*packages\/(babel-parser|babel-plugin-transform-object-assign)\/?$/
     )
   ) {
-    shell.cp("LICENSE", dir);
+    writeFileSync(path.join(dir, "LICENSE"), LICENSE);
   }
 });
 
 shell.ls("-d", "./eslint/*/").forEach(dir => {
   if (!dir.match(/.*eslint\/(babel-eslint-plugin)\/?$/)) {
-    shell.cp("LICENSE", dir);
+    writeFileSync(path.join(dir, "LICENSE"), LICENSE);
   }
 });

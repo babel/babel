@@ -1,5 +1,5 @@
 import "shelljs/make.js";
-import { default as path } from "path";
+import path from "path";
 import { execFileSync } from "child_process";
 import { writeFileSync } from "fs";
 
