@@ -10,6 +10,8 @@ interface BaseComment {
   start?: number;
   end?: number;
   loc?: SourceLocation;
+  // generator will skip the comment if ignore is true
+  ignore?: boolean;
   type: "CommentBlock" | "CommentLine";
 }
 
