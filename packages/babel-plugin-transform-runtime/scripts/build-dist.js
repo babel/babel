@@ -1,10 +1,10 @@
 import path from "path";
 import fs from "fs";
 import { createRequire } from "module";
-import helpers from "@babel/helpers";
+import * as helpers from "@babel/helpers";
 import { transformFromAstSync, File } from "@babel/core";
 import template from "@babel/template";
-import t from "@babel/types";
+import * as t from "@babel/types";
 import { fileURLToPath } from "url";
 
 import transformRuntime from "../lib/index.js";

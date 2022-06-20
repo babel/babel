@@ -1,7 +1,6 @@
-import corejs3Polyfills from "core-js-compat/data.json";
-import { coerce } from "semver";
-import type { SemVer } from "semver";
+import semver, { type SemVer } from "semver";
 import corejs2Polyfills from "@babel/compat-data/corejs2-built-ins";
+import corejs3Polyfills from "../data/core-js-compat";
 import { plugins as pluginsList } from "./plugins-compat-data";
 import moduleTransformations from "./module-transformations";
 import { TopLevelOptions, ModulesOption, UseBuiltInsOption } from "./options";
@@ -187,7 +186,7 @@ export function normalizeCoreJSOption(
     rawVersion = corejs;
   }
 
-  const version = rawVersion ? coerce(String(rawVersion)) : false;
+  const version = rawVersion ? semver.coerce(String(rawVersion)) : false;
 
   if (!useBuiltIns && version) {
     console.warn(
