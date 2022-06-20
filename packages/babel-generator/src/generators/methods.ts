@@ -37,13 +37,7 @@ export function _parameters(
 
 export function _param(
   this: Printer,
-  parameter:
-    | t.Function["params"][number]
-    | t.TSIndexSignature["parameters"][number]
-    | t.TSDeclareMethod["params"][number]
-    | t.TSDeclareFunction["params"][number]
-    | t.TSFunctionType["parameters"][number]
-    | t.TSConstructorType["parameters"][number],
+  parameter: t.Identifier | t.RestElement | t.Pattern | t.TSParameterProperty,
   parent?:
     | t.Function
     | t.TSIndexSignature
