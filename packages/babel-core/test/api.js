@@ -261,7 +261,45 @@ describe("api", function () {
     },
   );
 
-  it("transformFromAstSync should not mutate the AST", function () {
+  it("transformFromAst should generate same code with different cloneInputAst", function () {
+    const program = `//test1
+    /*test2*/var/*test3*/ a = 1/*test4*/;//test5
+    //test6
+    var b;
+    `;
+    const node = parseSync(program);
+    const { code } = transformFromAstSync(node, program, {
+      plugins: [
+        function () {
+          return {
+            visitor: {
+              Identifier: function (path) {
+                path.node.name = "replaced";
+              },
+            },
+          };
+        },
+      ],
+    });
+    const { code: code2 } = transformFromAstSync(node, program, {
+      cloneInputAst: false,
+      plugins: [
+        function () {
+          return {
+            visitor: {
+              Identifier: function (path) {
+                path.node.name = "replaced";
+              },
+            },
+          };
+        },
+      ],
+    });
+
+    expect(code).toBe(code2);
+  });
+
+  it("transformFromAst should not mutate the AST", function () {
     const program = "const identifier = 1";
     const node = parseSync(program);
     const { code } = transformFromAstSync(node, program, {

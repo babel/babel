@@ -1,9 +1,32 @@
-import v8 from "v8";
-import cloneDeep from "./clone-deep-browser";
-
-export default function (value) {
-  if (v8.deserialize && v8.serialize) {
-    return v8.deserialize(v8.serialize(value));
+//https://github.com/babel/babel/pull/14583#discussion_r882828856
+function deepClone(value: any, cache: Map<any, any>): any {
+  if (value !== null) {
+    if (cache.has(value)) return cache.get(value);
+    let cloned: any;
+    if (Array.isArray(value)) {
+      cloned = new Array(value.length);
+      for (let i = 0; i < value.length; i++) {
+        cloned[i] =
+          typeof value[i] !== "object" ? value[i] : deepClone(value[i], cache);
+      }
+    } else {
+      cloned = {};
+      const keys = Object.keys(value);
+      for (let i = 0; i < keys.length; i++) {
+        const key = keys[i];
+        cloned[key] =
+          typeof value[key] !== "object"
+            ? value[key]
+            : deepClone(value[key], cache);
+      }
+    }
+    cache.set(value, cloned);
+    return cloned;
   }
-  return cloneDeep(value);
+  return value;
+}
+
+export default function <T>(value: T): T {
+  if (typeof value !== "object") return value;
+  return deepClone(value, new Map());
 }
