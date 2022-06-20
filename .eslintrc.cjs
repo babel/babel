@@ -54,7 +54,7 @@ module.exports = {
         "guard-for-in": "error",
         "import/extensions": ["error", { json: "always", cjs: "always" }],
       },
-      globals: { PACKAGE_JSON: "readonly" },
+      globals: { PACKAGE_JSON: "readonly", USE_ESM: "readonly" },
     },
     {
       files: [

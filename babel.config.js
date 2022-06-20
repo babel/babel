@@ -190,10 +190,6 @@ module.exports = function (api) {
 
       pluginPackageJsonMacro,
 
-      process.env.STRIP_BABEL_8_FLAG && [
-        pluginToggleBabel8Breaking,
-        { breaking: bool(process.env.BABEL_8_BREAKING) },
-      ],
       needsPolyfillsForOldNode && pluginPolyfillsOldNode,
     ].filter(Boolean),
     overrides: [
@@ -230,6 +226,21 @@ module.exports = function (api) {
         plugins: [
           transformNamedBabelTypesImportToDestructuring,
           addImportExtension ? pluginAddImportExtension : null,
+
+          [
+            pluginToggleBooleanFlag,
+            { name: "USE_ESM", value: outputType === "module" },
+            "flag-USE_ESM",
+          ],
+
+          process.env.STRIP_BABEL_8_FLAG && [
+            pluginToggleBooleanFlag,
+            {
+              name: "process.env.BABEL_8_BREAKING",
+              value: bool(process.env.BABEL_8_BREAKING),
+            },
+            "flag-BABEL_8_BREAKING",
+          ],
         ].filter(Boolean),
       },
       convertESM && {
@@ -458,20 +469,19 @@ function pluginPolyfillsOldNode({ template, types: t }) {
     },
   };
 }
-
-function pluginToggleBabel8Breaking({ types: t }, { breaking }) {
+function pluginToggleBooleanFlag({ types: t }, { name, value }) {
   return {
     visitor: {
       "IfStatement|ConditionalExpression"(path) {
         let test = path.get("test");
-        let keepConsequent = breaking;
+        let keepConsequent = value;
 
         if (test.isUnaryExpression({ operator: "!" })) {
           test = test.get("argument");
           keepConsequent = !keepConsequent;
         }
 
-        // yarn-plugin-conditions inject bool(process.env.BABEL_8_BREAKING)
+        // yarn-plugin-conditions injects bool(process.env.BABEL_8_BREAKING)
         // tests, to properly cast the env variable to a boolean.
         if (
           test.isCallExpression() &&
@@ -481,7 +491,7 @@ function pluginToggleBabel8Breaking({ types: t }, { breaking }) {
           test = test.get("arguments")[0];
         }
 
-        if (!test.matchesPattern("process.env.BABEL_8_BREAKING")) return;
+        if (!test.isIdentifier({ name }) && !test.matchesPattern(name)) return;
 
         path.replaceWith(
           keepConsequent
@@ -490,7 +500,12 @@ function pluginToggleBabel8Breaking({ types: t }, { breaking }) {
         );
       },
       MemberExpression(path) {
-        if (path.matchesPattern("process.env.BABEL_8_BREAKING")) {
+        if (path.matchesPattern(name)) {
+          throw path.buildCodeFrameError("This check could not be stripped.");
+        }
+      },
+      ReferencedIdentifier(path) {
+        if (path.node.name === name) {
           throw path.buildCodeFrameError("This check could not be stripped.");
         }
       },
