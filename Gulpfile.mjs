@@ -25,6 +25,14 @@ import { resolve as importMetaResolve } from "import-meta-resolve";
 import rollupBabelSource from "./scripts/rollup-plugin-babel-source.js";
 import formatCode from "./scripts/utils/formatCode.js";
 
+let USE_ESM = false;
+try {
+  const type = fs
+    .readFileSync(new URL(".module-type", import.meta.url), "utf-8")
+    .trim();
+  USE_ESM = type === "module";
+} catch {}
+
 const require = createRequire(import.meta.url);
 const monorepoRoot = path.dirname(fileURLToPath(import.meta.url));
 
@@ -480,9 +488,14 @@ const libBundles = [
   "packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression",
 ].map(src => ({
   src,
-  format: "cjs",
+  format: USE_ESM ? "esm" : "cjs",
   dest: "lib",
 }));
+
+const cjsBundles = [
+  // This is used by Prettier, @babel/register and @babel/eslint-parser
+  { src: "packages/babel-parser" },
+];
 
 const dtsBundles = ["packages/babel-types"];
 
@@ -581,6 +594,41 @@ ${fs.readFileSync(path.join(path.dirname(input), "license"), "utf8")}*/
   );
 });
 
+gulp.task("build-cjs-bundles", () => {
+  if (!USE_ESM) {
+    fancyLog(chalk.yellow("Skipping CJS bundles because not compiling to ESM"));
+    return Promise.resolve();
+  }
+  return Promise.all(
+    cjsBundles.map(async ({ src, external = [] }) => {
+      const input = `./${src}/lib/index.js`;
+      const output = `./${src}/lib/index.cjs`;
+
+      const bundle = await rollup({
+        input,
+        external,
+        onwarn(warning, warn) {
+          if (warning.code === "CIRCULAR_DEPENDENCY") return;
+          warn(warning);
+        },
+        plugins: [
+          rollupCommonJs({ defaultIsModuleExports: true }),
+          rollupNodeResolve({
+            extensions: [".js", ".mjs", ".cjs", ".json"],
+            preferBuiltins: true,
+          }),
+        ],
+      });
+
+      await bundle.write({
+        file: output,
+        format: "cjs",
+        sourcemap: false,
+      });
+    })
+  );
+});
+
 gulp.task(
   "build",
   gulp.series(
@@ -590,7 +638,7 @@ gulp.task(
     // rebuild @babel/types and @babel/helpers since
     // type-helpers and generated helpers may be changed
     "build-babel",
-    "generate-standalone"
+    gulp.parallel("generate-standalone", "build-cjs-bundles")
   )
 );
 
@@ -612,7 +660,8 @@ gulp.task(
       gulp.series(
         "generate-type-helpers",
         // rebuild @babel/types since type-helpers may be changed
-        "build-no-bundle"
+        "build-no-bundle",
+        "build-cjs-bundles"
       )
     )
   )
@@ -631,5 +680,11 @@ gulp.task(
       "./packages/babel-helpers/src/helpers/*.js",
       gulp.task("generate-runtime-helpers")
     );
+    if (USE_ESM) {
+      gulp.watch(
+        cjsBundles.map(({ src }) => `./${src}/lib/**.js`),
+        gulp.task("build-cjs-bundles")
+      );
+    }
   })
 );
