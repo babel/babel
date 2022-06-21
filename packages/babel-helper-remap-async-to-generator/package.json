@@ -14,11 +14,11 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
+    "@babel/core": "workspace:^",
     "@babel/helper-annotate-as-pure": "workspace:^",
+    "@babel/helper-environment-visitor": "workspace:^",
     "@babel/helper-wrap-function": "workspace:^",
-    "@babel/helper-environment-visitor":"workspace:^",
-    "@babel/types": "workspace:^",
-    "@babel/core":"workspace:^"
+    "@babel/types": "workspace:^"
   },
   "devDependencies": {
     "@babel/traverse": "workspace:^"

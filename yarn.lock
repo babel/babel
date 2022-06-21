@@ -856,7 +856,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-remap-async-to-generator@workspace:packages/babel-helper-remap-async-to-generator"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/helper-annotate-as-pure": "workspace:^"
+    "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-wrap-function": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
@@ -1225,6 +1227,7 @@ __metadata:
   resolution: "@babel/plugin-proposal-async-generator-functions@workspace:packages/babel-plugin-proposal-async-generator-functions"
   dependencies:
     "@babel/core": "workspace:^"
+    "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-remap-async-to-generator": "workspace:^"
