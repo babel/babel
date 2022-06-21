@@ -107,6 +107,7 @@ interface PrivateNameVisitorState {
 function privateNameVisitorFactory<S>(
   visitor: Visitor<PrivateNameVisitorState & S>,
 ) {
+  // @ts-ignore Fixme: TS complains _exploded: boolean does not satisfy visitor functions
   const privateNameVisitor: Visitor<PrivateNameVisitorState & S> = {
     ...visitor,
 
@@ -490,7 +491,15 @@ export function transformPrivateNamesUsage(
   ref: t.Identifier,
   path: NodePath<t.Class>,
   privateNamesMap: PrivateNamesMap,
-  { privateFieldsAsProperties, noDocumentAll, innerBinding },
+  {
+    privateFieldsAsProperties,
+    noDocumentAll,
+    innerBinding,
+  }: {
+    privateFieldsAsProperties: boolean;
+    noDocumentAll: boolean;
+    innerBinding: t.Identifier;
+  },
   state: File,
 ) {
   if (!privateNamesMap.size) return;
@@ -539,7 +548,7 @@ function buildPrivateInstanceFieldInitSpec(
   ref: t.Expression,
   prop: NodePath<t.ClassPrivateProperty>,
   privateNamesMap: PrivateNamesMap,
-  state,
+  state: File,
 ) {
   const { id } = privateNamesMap.get(prop.node.key.id.name);
   const value = prop.node.value || prop.scope.buildUndefinedNode();
@@ -646,7 +655,7 @@ function buildPrivateInstanceMethodInitSpec(
   ref: t.Expression,
   prop: NodePath<t.ClassPrivateMethod>,
   privateNamesMap: PrivateNamesMap,
-  state,
+  state: File,
 ) {
   const privateName = privateNamesMap.get(prop.node.key.id.name);
   const { getId, setId, initAdded } = privateName;
@@ -675,7 +684,7 @@ function buildPrivateAccessorInitialization(
   ref: t.Expression,
   prop: NodePath<t.ClassPrivateMethod>,
   privateNamesMap: PrivateNamesMap,
-  state,
+  state: File,
 ) {
   const privateName = privateNamesMap.get(prop.node.key.id.name);
   const { id, getId, setId } = privateName;
@@ -711,7 +720,7 @@ function buildPrivateInstanceMethodInitalization(
   ref: t.Expression,
   prop: NodePath<t.ClassPrivateMethod>,
   privateNamesMap: PrivateNamesMap,
-  state,
+  state: File,
 ) {
   const privateName = privateNamesMap.get(prop.node.key.id.name);
   const { id } = privateName;
@@ -748,7 +757,7 @@ function buildPublicFieldInitLoose(
 function buildPublicFieldInitSpec(
   ref: t.Expression,
   prop: NodePath<t.ClassProperty>,
-  state,
+  state: File,
 ) {
   const { key, computed } = prop.node;
   const value = prop.node.value || prop.scope.buildUndefinedNode();
@@ -767,7 +776,7 @@ function buildPublicFieldInitSpec(
 function buildPrivateStaticMethodInitLoose(
   ref: t.Expression,
   prop: NodePath<t.ClassPrivateMethod>,
-  state,
+  state: File,
   privateNamesMap: PrivateNamesMap,
 ) {
   const privateName = privateNamesMap.get(prop.node.key.id.name);

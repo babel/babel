@@ -38,20 +38,27 @@ export function semverify(version: number | string): string {
 
 export function isUnreleasedVersion(
   version: string | number,
-  env: string,
+  env: Target,
 ): boolean {
-  const unreleasedLabel = unreleasedLabels[env];
+  const unreleasedLabel =
+    // @ts-expect-error unreleasedLabel will be guarded later
+    unreleasedLabels[env];
   return (
     !!unreleasedLabel && unreleasedLabel === version.toString().toLowerCase()
   );
 }
 
-export function getLowestUnreleased(a: string, b: string, env: string): string {
-  const unreleasedLabel = unreleasedLabels[env];
-  const hasUnreleased = [a, b].some(item => item === unreleasedLabel);
-  if (hasUnreleased) {
-    // @ts-expect-error todo(flow->ts): probably a bug - types of a hasUnreleased to not overlap
-    return a === hasUnreleased ? b : a || b;
+export function getLowestUnreleased(a: string, b: string, env: Target): string {
+  const unreleasedLabel:
+    | typeof unreleasedLabels[keyof typeof unreleasedLabels]
+    | undefined =
+    // @ts-ignore unreleasedLabel is undefined when env is not safari
+    unreleasedLabels[env];
+  if (a === unreleasedLabel) {
+    return b;
+  }
+  if (b === unreleasedLabel) {
+    return a;
   }
   return semverMin(a, b);
 }
@@ -59,7 +66,7 @@ export function getLowestUnreleased(a: string, b: string, env: string): string {
 export function getHighestUnreleased(
   a: string,
   b: string,
-  env: string,
+  env: Target,
 ): string {
   return getLowestUnreleased(a, b, env) === a ? b : a;
 }

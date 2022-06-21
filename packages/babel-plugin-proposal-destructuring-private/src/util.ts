@@ -117,7 +117,7 @@ function buildAssignmentsFromPatternList(
   transformed: Transformed[];
 } {
   const newElements: (t.Identifier | t.RestElement)[] = [],
-    transformed = [];
+    transformed: Transformed[] = [];
   for (let element of elements) {
     if (element === null) {
       newElements.push(null);
@@ -142,13 +142,19 @@ function buildAssignmentsFromPatternList(
       });
     } else {
       transformed.push({
-        left: element,
+        left: element as Transformed["left"],
         right: cloneNode(tempId),
       });
     }
   }
   return { elements: newElements, transformed };
 }
+
+type StackItem = {
+  node: t.LVal | t.ObjectProperty | null;
+  index: number;
+  depth: number;
+};
 
 /**
  * A DFS simplified pattern traverser. It skips computed property keys and assignment pattern
@@ -170,13 +176,9 @@ export function* traversePattern(
     depth: number,
   ) => Generator<any, void, any>,
 ) {
-  const stack = [];
+  const stack: StackItem[] = [];
   stack.push({ node: root, index: 0, depth: 0 });
-  let item: {
-    node: t.LVal | t.ObjectProperty | null;
-    index: number;
-    depth: number;
-  };
+  let item: StackItem;
   while ((item = stack.pop()) !== undefined) {
     const { node, index } = item;
     if (node === null) continue;
@@ -188,7 +190,7 @@ export function* traversePattern(
         break;
       case "ObjectProperty":
         // inherit the depth and index as an object property can not be an LHS without object pattern
-        stack.push({ node: node.value, index, depth: item.depth });
+        stack.push({ node: node.value as t.LVal, index, depth: item.depth });
         break;
       case "RestElement":
         stack.push({ node: node.argument, index: 0, depth });
@@ -250,7 +252,7 @@ export function hasPrivateClassElement(node: t.ClassBody): boolean {
  * @param {t.LVal} pattern
  */
 export function* privateKeyPathIterator(pattern: t.LVal) {
-  const indexPath = [];
+  const indexPath: number[] = [];
   yield* traversePattern(pattern, function* (node, index, depth) {
     indexPath[depth] = index;
     if (isObjectProperty(node) && isPrivateName(node.key)) {

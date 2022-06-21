@@ -6,11 +6,11 @@ import type * as t from "..";
 export default function addComments<T extends t.Node>(
   node: T,
   type: t.CommentTypeShorthand,
-  comments: ReadonlyArray<t.Comment>,
+  comments: Array<t.Comment>,
 ): T {
   if (!comments || !node) return node;
 
-  const key = `${type}Comments`;
+  const key = `${type}Comments` as const;
 
   if (node[key]) {
     if (type === "leading") {

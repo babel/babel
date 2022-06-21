@@ -1,8 +1,13 @@
 import { declare } from "@babel/helper-plugin-utils";
 import ReplaceSupers from "@babel/helper-replace-supers";
-import { types as t } from "@babel/core";
+import { types as t, type File } from "@babel/core";
+import type { NodePath } from "@babel/traverse";
 
-function replacePropertySuper(path, getObjectRef, file) {
+function replacePropertySuper(
+  path: NodePath<t.ObjectMethod>,
+  getObjectRef: () => t.Identifier,
+  file: File,
+) {
   // @ts-expect-error todo(flow->ts):
   const replaceSupers = new ReplaceSupers({
     getObjectRef: getObjectRef,
@@ -21,14 +26,14 @@ export default declare(api => {
 
     visitor: {
       ObjectExpression(path, state) {
-        let objectRef;
+        let objectRef: t.Identifier;
         const getObjectRef = () =>
           (objectRef = objectRef || path.scope.generateUidIdentifier("obj"));
 
         path.get("properties").forEach(propPath => {
           if (!propPath.isMethod()) return;
 
-          replacePropertySuper(propPath, getObjectRef, state);
+          replacePropertySuper(propPath, getObjectRef, state.file);
         });
 
         if (objectRef) {

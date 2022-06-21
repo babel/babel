@@ -49,14 +49,17 @@ export function VariableDeclarator(this: NodePath<t.VariableDeclarator>) {
   return type;
 }
 
-export function TypeCastExpression(node) {
+export function TypeCastExpression(node: t.TypeCastExpression) {
   return node.typeAnnotation;
 }
 
 TypeCastExpression.validParent = true;
 
-export function NewExpression(this: NodePath<t.NewExpression>, node) {
-  if (this.get("callee").isIdentifier()) {
+export function NewExpression(
+  this: NodePath<t.NewExpression>,
+  node: t.NewExpression,
+) {
+  if (node.callee.type === "Identifier") {
     // only resolve identifier callee
     return genericTypeAnnotation(node.callee);
   }
@@ -66,7 +69,7 @@ export function TemplateLiteral() {
   return stringTypeAnnotation();
 }
 
-export function UnaryExpression(node) {
+export function UnaryExpression(node: t.UnaryExpression) {
   const operator = node.operator;
 
   if (operator === "void") {
@@ -80,7 +83,10 @@ export function UnaryExpression(node) {
   }
 }
 
-export function BinaryExpression(this: NodePath<t.BinaryExpression>, node) {
+export function BinaryExpression(
+  this: NodePath<t.BinaryExpression>,
+  node: t.BinaryExpression,
+) {
   const operator = node.operator;
 
   if (NUMBER_BINARY_OPERATORS.indexOf(operator) >= 0) {
@@ -157,7 +163,10 @@ export function AssignmentExpression(this: NodePath<t.AssignmentExpression>) {
   return this.get("right").getTypeAnnotation();
 }
 
-export function UpdateExpression(this: NodePath<t.UpdateExpression>, node) {
+export function UpdateExpression(
+  this: NodePath<t.UpdateExpression>,
+  node: t.UpdateExpression,
+) {
   const operator = node.operator;
   if (operator === "++" || operator === "--") {
     return numberTypeAnnotation();
@@ -235,7 +244,7 @@ export function TaggedTemplateExpression(
   return resolveCall(this.get("tag"));
 }
 
-function resolveCall(callee) {
+function resolveCall(callee: NodePath) {
   callee = callee.resolve();
 
   if (callee.isFunction()) {

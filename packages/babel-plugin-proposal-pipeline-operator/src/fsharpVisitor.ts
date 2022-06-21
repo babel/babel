@@ -1,7 +1,8 @@
-import { types as t } from "@babel/core";
+import { types as t, type PluginObject } from "@babel/core";
+import type { NodePath } from "@babel/traverse";
 import buildOptimizedSequenceExpression from "./buildOptimizedSequenceExpression";
 
-const fsharpVisitor = {
+const fsharpVisitor: PluginObject["visitor"] = {
   BinaryExpression(path) {
     const { scope, node } = path;
     const { operator, left, right } = node;
@@ -16,7 +17,7 @@ const fsharpVisitor = {
     const sequence = buildOptimizedSequenceExpression({
       placeholder,
       call,
-      path,
+      path: path as NodePath<t.BinaryExpression & { operator: "|>" }>,
     });
     path.replaceWith(sequence);
   },

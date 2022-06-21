@@ -81,11 +81,14 @@ export function _getTypeAnnotation(this: NodePath): any {
   typeAnnotationInferringNodes.add(node);
 
   try {
-    let inferer = inferers[node.type];
+    let inferer =
+      // @ts-expect-error inferers do not cover all AST types
+      inferers[node.type];
     if (inferer) {
       return inferer.call(this, node);
     }
 
+    // @ts-expect-error inferers do not cover all AST types
     inferer = inferers[this.parentPath.type];
     if (inferer?.validParent) {
       return this.parentPath.getTypeAnnotation();
@@ -103,7 +106,11 @@ export function isBaseType(
   return _isBaseType(baseName, this.getTypeAnnotation(), soft);
 }
 
-function _isBaseType(baseName: string, type?, soft?): boolean {
+function _isBaseType(
+  baseName: string,
+  type?: t.FlowType,
+  soft?: boolean,
+): boolean {
   if (baseName === "string") {
     return isStringTypeAnnotation(type);
   } else if (baseName === "number") {

@@ -2,17 +2,24 @@ import { declare } from "@babel/helper-plugin-utils";
 import path from "path";
 import { types as t } from "@babel/core";
 
+type ReactCreateClassCall = t.CallExpression & {
+  arguments: [t.ObjectExpression];
+};
+
 export default declare(api => {
   api.assertVersion(7);
 
-  function addDisplayName(id, call) {
+  function addDisplayName(id: string, call: ReactCreateClassCall) {
     const props = call.arguments[0].properties;
     let safe = true;
 
     for (let i = 0; i < props.length; i++) {
       const prop = props[i];
+      if (t.isSpreadElement(prop)) {
+        continue;
+      }
       const key = t.toComputedKey(prop);
-      if (t.isLiteral(key, { value: "displayName" })) {
+      if (t.isStringLiteral(key, { value: "displayName" })) {
         safe = false;
         break;
       }
@@ -27,9 +34,10 @@ export default declare(api => {
 
   const isCreateClassCallExpression =
     t.buildMatchMemberExpression("React.createClass");
-  const isCreateClassAddon = callee => callee.name === "createReactClass";
+  const isCreateClassAddon = (callee: t.CallExpression["callee"]) =>
+    t.isIdentifier(callee, { name: "createReactClass" });
 
-  function isCreateClass(node) {
+  function isCreateClass(node?: t.Node): node is ReactCreateClassCall {
     if (!node || !t.isCallExpression(node)) return false;
 
     // not createReactClass nor React.createClass call member object
@@ -74,7 +82,7 @@ export default declare(api => {
         const { node } = path;
         if (!isCreateClass(node)) return;
 
-        let id;
+        let id: t.LVal | t.Expression | t.PrivateName | null;
 
         // crawl up the ancestry looking for possible candidates for displayName inference
         path.find(function (path) {

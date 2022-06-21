@@ -1,6 +1,7 @@
 import { template, types as t } from "@babel/core";
+import type { NodePath, Scope, Visitor } from "@babel/traverse";
 
-const buildDefaultParam = template(`
+const buildDefaultParam = template.statement(`
   let VARIABLE_NAME =
     arguments.length > ARGUMENT_KEY && arguments[ARGUMENT_KEY] !== undefined ?
       arguments[ARGUMENT_KEY]
@@ -8,22 +9,25 @@ const buildDefaultParam = template(`
       DEFAULT_VALUE;
 `);
 
-const buildLooseDefaultParam = template(`
+const buildLooseDefaultParam = template.statement(`
   if (ASSIGNMENT_IDENTIFIER === UNDEFINED) {
     ASSIGNMENT_IDENTIFIER = DEFAULT_VALUE;
   }
 `);
 
-const buildLooseDestructuredDefaultParam = template(`
+const buildLooseDestructuredDefaultParam = template.statement(`
   let ASSIGNMENT_IDENTIFIER = PARAMETER_NAME === UNDEFINED ? DEFAULT_VALUE : PARAMETER_NAME ;
 `);
 
-const buildSafeArgumentsAccess = template(`
+const buildSafeArgumentsAccess = template.statement(`
   let $0 = arguments.length > $1 ? arguments[$1] : undefined;
 `);
 
-const iifeVisitor = {
-  "ReferencedIdentifier|BindingIdentifier"(path, state) {
+const iifeVisitor: Visitor<State> = {
+  "ReferencedIdentifier|BindingIdentifier"(
+    path: NodePath<t.Identifier>,
+    state,
+  ) {
     const { scope, node } = path;
     const { name } = node;
 
@@ -38,15 +42,25 @@ const iifeVisitor = {
   },
   // type annotations don't use or introduce "real" bindings
   "TypeAnnotation|TSTypeAnnotation|TypeParameterDeclaration|TSTypeParameterDeclaration":
-    path => path.skip(),
+    (path: NodePath) => path.skip(),
+};
+
+type State = {
+  stop: boolean;
+  needsOuterBinding: boolean;
+  scope: Scope;
 };
 
 // last 2 parameters are optional -- they are used by proposal-object-rest-spread/src/index.js
 export default function convertFunctionParams(
-  path,
-  ignoreFunctionLength,
-  shouldTransformParam?,
-  replaceRestElement?,
+  path: NodePath<t.Function>,
+  ignoreFunctionLength: boolean | void,
+  shouldTransformParam?: (index: number) => boolean,
+  replaceRestElement?: (
+    path: NodePath<t.Function>,
+    paramPath: NodePath<t.Function["params"][number]>,
+    transformedRestNodes: t.Statement[],
+  ) => void,
 ) {
   const params = path.get("params");
 
@@ -62,7 +76,7 @@ export default function convertFunctionParams(
   };
 
   const body = [];
-  const shadowedParams = new Set();
+  const shadowedParams = new Set<string>();
 
   for (const param of params) {
     for (const name of Object.keys(param.getBindingIdentifiers())) {
@@ -117,15 +131,15 @@ export default function convertFunctionParams(
     if (shouldTransformParam && !shouldTransformParam(i)) {
       continue;
     }
-    const transformedRestNodes = [];
+    const transformedRestNodes: t.Statement[] = [];
     if (replaceRestElement) {
-      replaceRestElement(param.parentPath, param, transformedRestNodes);
+      replaceRestElement(path, param, transformedRestNodes);
     }
 
     const paramIsAssignmentPattern = param.isAssignmentPattern();
     if (
       paramIsAssignmentPattern &&
-      (ignoreFunctionLength || node.kind === "set")
+      (ignoreFunctionLength || t.isMethod(node, { kind: "set" }))
     ) {
       const left = param.get("left");
       const right = param.get("right");
@@ -198,14 +212,21 @@ export default function convertFunctionParams(
   path.ensureBlock();
 
   if (state.needsOuterBinding || shadowedParams.size > 0) {
-    body.push(buildScopeIIFE(shadowedParams, path.get("body").node));
+    body.push(
+      buildScopeIIFE(
+        shadowedParams,
+        (path.get("body") as NodePath<t.BlockStatement>).node,
+      ),
+    );
 
-    path.set("body", t.blockStatement(body));
+    path.set("body", t.blockStatement(body as t.Statement[]));
 
     // We inject an arrow and then transform it to a normal function, to be
     // sure that we correctly handle this and arguments.
-    const bodyPath = path.get("body.body");
-    const arrowPath = bodyPath[bodyPath.length - 1].get("argument.callee");
+    const bodyPath = path.get("body.body") as NodePath<t.Statement>[];
+    const arrowPath = bodyPath[bodyPath.length - 1].get(
+      "argument.callee",
+    ) as NodePath<t.ArrowFunctionExpression>;
 
     // This is an IIFE, so we don't need to worry about the noNewArrows assumption
     arrowPath.arrowFunctionToExpression();
@@ -223,7 +244,7 @@ export default function convertFunctionParams(
   return true;
 }
 
-function buildScopeIIFE(shadowedParams, body) {
+function buildScopeIIFE(shadowedParams: Set<string>, body: t.BlockStatement) {
   const args = [];
   const params = [];
 

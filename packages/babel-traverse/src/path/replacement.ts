@@ -40,7 +40,7 @@ import hoistVariables from "@babel/helper-hoist-variables";
 
 export function replaceWithMultiple(
   this: NodePath,
-  nodes: t.Node[],
+  nodes: t.Node | t.Node[],
 ): NodePath[] {
   this.resync();
 
@@ -48,7 +48,9 @@ export function replaceWithMultiple(
   inheritLeadingComments(nodes[0], this.node);
   inheritTrailingComments(nodes[nodes.length - 1], this.node);
   pathCache.get(this.parent)?.delete(this.node);
-  this.node = this.container[this.key] = null;
+  this.node =
+    // @ts-expect-error this.key must present in this.container
+    this.container[this.key] = null;
   const paths = this.insertAfter(nodes);
 
   if (this.node) {
@@ -67,12 +69,13 @@ export function replaceWithMultiple(
  * easier to use, your transforms will be extremely brittle.
  */
 
-export function replaceWithSourceString(this: NodePath, replacement) {
+export function replaceWithSourceString(this: NodePath, replacement: string) {
   this.resync();
+  let ast: t.File;
 
   try {
     replacement = `(${replacement})`;
-    replacement = parse(replacement);
+    ast = parse(replacement);
   } catch (err) {
     const loc = err.loc;
     if (loc) {
@@ -89,25 +92,30 @@ export function replaceWithSourceString(this: NodePath, replacement) {
     throw err;
   }
 
-  replacement = replacement.program.body[0].expression;
-  traverse.removeProperties(replacement);
-  return this.replaceWith(replacement);
+  const expressionAST = (ast.program.body[0] as t.ExpressionStatement)
+    .expression;
+  traverse.removeProperties(expressionAST);
+  return this.replaceWith(expressionAST);
 }
 
 /**
  * Replace the current node with another.
  */
 
-export function replaceWith(this: NodePath, replacement: t.Node | NodePath) {
+export function replaceWith<R extends t.Node>(
+  this: NodePath,
+  replacementPath: R | NodePath<R>,
+): [NodePath<R>] {
   this.resync();
 
   if (this.removed) {
     throw new Error("You can't replace this node, we've already removed it");
   }
 
-  if (replacement instanceof NodePath) {
-    replacement = replacement.node;
-  }
+  let replacement: t.Node =
+    replacementPath instanceof NodePath
+      ? replacementPath.node
+      : replacementPath;
 
   if (!replacement) {
     throw new Error(
@@ -116,7 +124,7 @@ export function replaceWith(this: NodePath, replacement: t.Node | NodePath) {
   }
 
   if (this.node === replacement) {
-    return [this];
+    return [this as NodePath<R>];
   }
 
   if (this.isProgram() && !isProgram(replacement)) {
@@ -157,7 +165,9 @@ export function replaceWith(this: NodePath, replacement: t.Node | NodePath) {
       !this.canSwapBetweenExpressionAndStatement(replacement)
     ) {
       // replacing an expression with a statement so let's explode it
-      return this.replaceExpressionWithStatements([replacement]);
+      return this.replaceExpressionWithStatements([replacement]) as [
+        NodePath<R>,
+      ];
     }
   }
 
@@ -177,14 +187,16 @@ export function replaceWith(this: NodePath, replacement: t.Node | NodePath) {
   // requeue for visiting
   this.requeue();
 
-  return [nodePath ? this.get(nodePath) : this];
+  return [
+    nodePath ? (this.get(nodePath) as NodePath<R>) : (this as NodePath<R>),
+  ];
 }
 
 /**
  * Description
  */
 
-export function _replaceWith(this: NodePath, node) {
+export function _replaceWith(this: NodePath, node: t.Node) {
   if (!this.container) {
     throw new ReferenceError("Container is falsy");
   }
@@ -199,7 +211,9 @@ export function _replaceWith(this: NodePath, node) {
   this.debug(`Replace with ${node?.type}`);
   pathCache.get(this.parent)?.set(node, this).delete(this.node);
 
-  this.node = this.container[this.key] = node;
+  this.node =
+    // @ts-expect-error this.key must present in this.container
+    this.container[this.key] = node;
 }
 
 /**
@@ -229,7 +243,9 @@ export function replaceExpressionWithStatements(
   this.replaceWith(callExpression(container, []));
   // replaceWith changes the type of "this", but it isn't trackable by TS
   type ThisType = NodePath<
-    t.CallExpression & { callee: t.ArrowFunctionExpression }
+    t.CallExpression & {
+      callee: t.ArrowFunctionExpression & { body: t.BlockStatement };
+    }
   >;
 
   // hoist variable declaration in do block

@@ -13,7 +13,7 @@ export type TemplateBuilder<T> = {
   (tpl: string, opts?: PublicOpts): (replacements?: PublicReplacements) => T;
 
   // Building from a template literal produces an AST builder function by default.
-  (tpl: TemplateStringsArray, ...args: Array<any>): (
+  (tpl: TemplateStringsArray, ...args: Array<unknown>): (
     replacements?: PublicReplacements,
   ) => T;
 
@@ -21,7 +21,7 @@ export type TemplateBuilder<T> = {
   // the need for an intermediate function.
   ast: {
     (tpl: string, opts?: PublicOpts): T;
-    (tpl: TemplateStringsArray, ...args: Array<any>): T;
+    (tpl: TemplateStringsArray, ...args: Array<unknown>): T;
   };
 };
 
@@ -66,7 +66,7 @@ export default function createTemplateBuilder<T>(
       throw new Error(`Unexpected template param ${typeof tpl}`);
     }) as TemplateBuilder<T>,
     {
-      ast: (tpl, ...args) => {
+      ast: (tpl: string | Array<string>, ...args: Array<unknown>) => {
         if (typeof tpl === "string") {
           if (args.length > 1) throw new Error("Unexpected extra params.");
           return stringTemplate(

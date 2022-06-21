@@ -1,4 +1,7 @@
-const pluginNameMap = {
+const pluginNameMap: Record<
+  string,
+  Partial<Record<"syntax" | "transform", Record<"name" | "url", string>>>
+> = {
   asyncDoExpressions: {
     syntax: {
       name: "@babel/plugin-syntax-async-do-expressions",
@@ -291,7 +294,8 @@ const pluginNameMap = {
 //todo: we don't have plugin-syntax-private-property-in-object
 pluginNameMap.privateIn.syntax = pluginNameMap.privateIn.transform;
 
-const getNameURLCombination = ({ name, url }) => `${name} (${url})`;
+const getNameURLCombination = ({ name, url }: { name: string; url: string }) =>
+  `${name} (${url})`;
 
 /*
 Returns a string of the format:

@@ -11,8 +11,8 @@ import {
 } from "@babel/types";
 import type * as t from "@babel/types";
 
-const NORMAL_COMPLETION = 0;
-const BREAK_COMPLETION = 1;
+const NORMAL_COMPLETION = 0 as const;
+const BREAK_COMPLETION = 1 as const;
 
 type Completion = {
   path: NodePath;
@@ -65,7 +65,7 @@ function completionRecordForSwitch(
   context: CompletionContext,
 ): Completion[] {
   // https://tc39.es/ecma262/#sec-runtime-semantics-caseblockevaluation
-  let lastNormalCompletions = [];
+  let lastNormalCompletions: Completion[] = [];
   for (let i = 0; i < cases.length; i++) {
     const casePath = cases[i];
     const caseCompletions = _getCompletionRecords(casePath, context);
@@ -227,7 +227,7 @@ function _getCompletionRecords(
   path: NodePath,
   context: CompletionContext,
 ): Completion[] {
-  let records = [];
+  let records: Completion[] = [];
   if (path.isIfStatement()) {
     records = addCompletionRecords(path.get("consequent"), records, context);
     records = addCompletionRecords(path.get("alternate"), records, context);
@@ -413,7 +413,9 @@ export function _getKey<T extends t.Node>(
   context?: TraversalContext,
 ): NodePath | NodePath[] {
   const node = this.node;
-  const container = node[key];
+  const container =
+    // @ts-ignore
+    node[key];
 
   if (Array.isArray(container)) {
     // requested a container so give them all the paths
@@ -448,6 +450,7 @@ export function _getPattern(
       path = path.parentPath;
     } else {
       if (Array.isArray(path)) {
+        // @ts-ignore
         path = path[part];
       } else {
         path = path.get(part, context);
@@ -503,7 +506,8 @@ export function getBindingIdentifierPaths(
   duplicates: boolean = false,
   outerOnly: boolean = false,
 ): {
-  [x: string]: NodePath;
+  // todo: returns NodePath<t.Identifier>[] when duplicates is true
+  [x: string]: NodePath<t.Identifier>;
 } {
   const path = this;
   const search = [path];
@@ -514,7 +518,9 @@ export function getBindingIdentifierPaths(
     if (!id) continue;
     if (!id.node) continue;
 
-    const keys = _getBindingIdentifiers.keys[id.node.type];
+    const keys =
+      // @ts-ignore
+      _getBindingIdentifiers.keys[id.node.type];
 
     if (id.isIdentifier()) {
       if (duplicates) {
@@ -564,8 +570,6 @@ export function getBindingIdentifierPaths(
 export function getOuterBindingIdentifierPaths(
   this: NodePath,
   duplicates?: boolean,
-): {
-  [x: string]: NodePath;
-} {
+) {
   return this.getBindingIdentifierPaths(duplicates, true);
 }

@@ -35,7 +35,10 @@ export function matchesPattern(
  */
 
 export function has(this: NodePath, key: string): boolean {
-  const val = this.node && this.node[key];
+  const val =
+    this.node &&
+    // @ts-ignore
+    this.node[key];
   if (val && Array.isArray(val)) {
     return !!val.length;
   } else {
@@ -69,7 +72,8 @@ export function isnt(this: NodePath, key: string): boolean {
  * Check whether the path node `key` strict equals `value`.
  */
 
-export function equals(this: NodePath, key: string, value): boolean {
+export function equals(this: NodePath, key: string, value: any): boolean {
+  // @ts-ignore
   return this.node[key] === value;
 }
 
@@ -249,15 +253,18 @@ export function getSource(this: NodePath): string {
   return "";
 }
 
-export function willIMaybeExecuteBefore(this: NodePath, target): boolean {
+export function willIMaybeExecuteBefore(
+  this: NodePath,
+  target: NodePath,
+): boolean {
   return this._guessExecutionStatusRelativeTo(target) !== "after";
 }
 
-function getOuterFunction(path) {
+function getOuterFunction(path: NodePath) {
   return (path.scope.getFunctionParent() || path.scope.getProgramParent()).path;
 }
 
-function isExecutionUncertain(type, key) {
+function isExecutionUncertain(type: t.Node["type"], key: string) {
   switch (type) {
     // a && FOO
     // a || FOO
@@ -306,7 +313,7 @@ function isExecutionUncertain(type, key) {
   }
 }
 
-function isExecutionUncertainInList(paths, maxIndex) {
+function isExecutionUncertainInList(paths: NodePath[], maxIndex: number) {
   for (let i = 0; i < maxIndex; i++) {
     const path = paths[i];
     if (isExecutionUncertain(path.parent.type, path.parentKey)) {
@@ -509,14 +516,18 @@ function _guessExecutionStatusRelativeToDifferentFunctionsCached(
 /**
  * Resolve a "pointer" `NodePath` to it's absolute path.
  */
-export function resolve(this: NodePath, dangerous?, resolved?) {
+export function resolve(
+  this: NodePath,
+  dangerous?: boolean,
+  resolved?: NodePath[],
+) {
   return this._resolve(dangerous, resolved) || this;
 }
 
 export function _resolve(
   this: NodePath,
-  dangerous?,
-  resolved?,
+  dangerous?: boolean,
+  resolved?: NodePath[],
 ): NodePath | undefined | null {
   // detect infinite recursion
   // todo: possibly have a max length on this just to be safe
@@ -587,7 +598,7 @@ export function _resolve(
   }
 }
 
-export function isConstantExpression(this: NodePath) {
+export function isConstantExpression(this: NodePath): boolean {
   if (this.isIdentifier()) {
     const binding = this.scope.getBinding(this.node.name);
     if (!binding) return false;

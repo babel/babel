@@ -1,6 +1,7 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxPartialApplication from "@babel/plugin-syntax-partial-application";
 import { types as t } from "@babel/core";
+import type { Scope } from "@babel/traverse";
 
 export default declare(api => {
   api.assertVersion(7);
@@ -11,56 +12,67 @@ export default declare(api => {
    * @param node a callExpression node
    * @returns boolean
    */
-  function hasArgumentPlaceholder(node) {
+  function hasArgumentPlaceholder(node: t.CallExpression) {
     return node.arguments.some(arg => t.isArgumentPlaceholder(arg));
   }
 
-  function unwrapArguments(node, scope) {
-    const init = [];
-    for (let i = 0; i < node.arguments.length; i++) {
-      if (
-        !t.isArgumentPlaceholder(node.arguments[i]) &&
-        !t.isImmutable(node.arguments[i])
-      ) {
-        const id = scope.generateUidIdentifierBasedOnNode(
-          node.arguments[i],
-          "param",
-        );
+  function unwrapArguments(
+    { arguments: args }: t.CallExpression,
+    scope: Scope,
+  ) {
+    const init: t.AssignmentExpression[] = [];
+    for (let i = 0; i < args.length; i++) {
+      const node = args[i];
+      if (!t.isArgumentPlaceholder(node) && !t.isImmutable(node)) {
+        const id = scope.generateUidIdentifierBasedOnNode(node, "param");
         scope.push({ id });
-        if (t.isSpreadElement(node.arguments[i])) {
+        if (t.isSpreadElement(node)) {
           init.push(
             t.assignmentExpression(
               "=",
               t.cloneNode(id),
-              t.arrayExpression([t.spreadElement(node.arguments[i].argument)]),
+              t.arrayExpression([t.spreadElement(node.argument)]),
             ),
           );
-          node.arguments[i].argument = t.cloneNode(id);
+          node.argument = t.cloneNode(id);
         } else {
           init.push(
-            t.assignmentExpression("=", t.cloneNode(id), node.arguments[i]),
+            t.assignmentExpression(
+              "=",
+              t.cloneNode(id),
+              // @ts-ignore Fixme: may need to handle JSXNamespacedName here
+              node,
+            ),
           );
-          node.arguments[i] = t.cloneNode(id);
+          args[i] = t.cloneNode(id);
         }
       }
     }
     return init;
   }
 
-  function replacePlaceholders(node, scope) {
-    const placeholders = [];
-    const args = [];
+  type CallArgsWithoutPlaceholder = Exclude<
+    t.CallExpression["arguments"][number],
+    t.ArgumentPlaceholder
+  >[];
+
+  function replacePlaceholders(
+    node: t.CallExpression,
+    scope: Scope,
+  ): [t.Identifier[], CallArgsWithoutPlaceholder] {
+    const placeholders: t.Identifier[] = [];
+    const newArgs: CallArgsWithoutPlaceholder = [];
 
     node.arguments.forEach(arg => {
       if (t.isArgumentPlaceholder(arg)) {
         const id = scope.generateUid("_argPlaceholder");
         placeholders.push(t.identifier(id));
-        args.push(t.identifier(id));
+        newArgs.push(t.identifier(id));
       } else {
-        args.push(arg);
+        newArgs.push(arg);
       }
     });
-    return [placeholders, args];
+    return [placeholders, newArgs];
   }
 
   return {

@@ -19,13 +19,16 @@ export function declare<State = {}, Option = {}>(
 ) => PluginObject<State & PluginPass> {
   // @ts-ignore
   return (api, options: Option, dirname: string) => {
-    let clonedApi;
+    let clonedApi: PluginAPI;
 
-    for (const name of Object.keys(apiPolyfills)) {
+    for (const name of Object.keys(
+      apiPolyfills,
+    ) as (keyof typeof apiPolyfills)[]) {
       if (api[name]) continue;
 
       // TODO: Use ??= when flow lets us to do so
       clonedApi = clonedApi ?? copyApiObject(api);
+      // @ts-expect-error The shape of API polyfill is guaranteed by APIPolyfillFactory
       clonedApi[name] = apiPolyfills[name](clonedApi);
     }
 
@@ -38,11 +41,21 @@ export const declarePreset = declare as <Option = {}>(
   builder: (api: PresetAPI, options: Option, dirname: string) => PresetObject,
 ) => (api: PresetAPI, options: Option, dirname: string) => PresetObject;
 
-const apiPolyfills = {
+type APIPolyfillFactory<T extends keyof PluginAPI> = (
+  api: PluginAPI,
+) => PluginAPI[T];
+
+type APIPolyfills = {
+  assertVersion: APIPolyfillFactory<"assertVersion">;
+  targets: APIPolyfillFactory<"targets">;
+  assumption: APIPolyfillFactory<"assumption">;
+};
+
+const apiPolyfills: APIPolyfills = {
   // Not supported by Babel 7 and early versions of Babel 7 beta.
   // It's important that this is polyfilled for older Babel versions
   // since it's needed to report the version mismatch.
-  assertVersion: api => range => {
+  assertVersion: (api: PluginAPI) => (range: number | string) => {
     throwVersionError(range, api.version);
   },
   // This is supported starting from Babel 7.13
@@ -52,10 +65,12 @@ const apiPolyfills = {
   },
   // This is supported starting from Babel 7.13
   // TODO(Babel 8): Remove this polyfill
-  assumption: () => () => {},
+  assumption: () => () => {
+    return undefined;
+  },
 };
 
-function copyApiObject(api) {
+function copyApiObject(api: PluginAPI): PluginAPI {
   // Babel >= 7 <= beta.41 passed the API as a new object that had
   // babel/core as the prototype. While slightly faster, it also
   // means that the Object.assign copy below fails. Rather than
@@ -81,11 +96,11 @@ function copyApiObject(api) {
   };
 }
 
-function has(obj, key) {
+function has(obj: {}, key: string) {
   return Object.prototype.hasOwnProperty.call(obj, key);
 }
 
-function throwVersionError(range, version) {
+function throwVersionError(range: string | number, version: string) {
   if (typeof range === "number") {
     if (!Number.isInteger(range)) {
       throw new Error("Expected string or integer value.");

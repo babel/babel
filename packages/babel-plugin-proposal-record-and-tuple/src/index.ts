@@ -34,6 +34,10 @@ type State = {
   programPath: NodePath<t.Program>;
 };
 
+// program -> cacheKey -> localBindingName
+type Cache = Map<string, string>;
+type ImportCache = WeakMap<t.Program, Cache>;
+
 export default declare<State>((api, options: Options) => {
   api.assertVersion(7);
 
@@ -48,16 +52,28 @@ export default declare<State>((api, options: Options) => {
     !!options.polyfillModuleName,
   );
 
-  // program -> cacheKey -> localBindingName
-  const importCaches = new WeakMap();
+  const importCaches: ImportCache = new WeakMap();
 
-  function getOr(map, key, getDefault) {
+  function getOr<K, V>(map: Map<K, V>, key: K, getDefault: () => V): V;
+  function getOr<K extends object, V>(
+    map: WeakMap<K, V>,
+    key: K,
+    getDefault: () => V,
+  ): V;
+  function getOr<K extends object, V>(
+    map: WeakMap<K, V>,
+    key: K,
+    getDefault: () => V,
+  ) {
     let value = map.get(key);
     if (!value) map.set(key, (value = getDefault()));
     return value;
   }
 
-  function getBuiltIn(name, programPath) {
+  function getBuiltIn(
+    name: "Record" | "Tuple",
+    programPath: NodePath<t.Program>,
+  ) {
     if (!shouldImportPolyfill) return t.identifier(name);
     if (!programPath) {
       throw new Error("Internal error: unable to find the Program node.");
@@ -65,7 +81,11 @@ export default declare<State>((api, options: Options) => {
 
     const cacheKey = `${name}:${isModule(programPath)}`;
 
-    const cache = getOr(importCaches, programPath.node, () => new Map());
+    const cache = getOr(
+      importCaches,
+      programPath.node,
+      () => new Map<string, string>(),
+    );
     const localBindingName = getOr(cache, cacheKey, () => {
       return addNamed(programPath, name, polyfillModuleName, {
         importedInterop: "uncompiled",

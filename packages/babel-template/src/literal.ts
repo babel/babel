@@ -46,7 +46,7 @@ function buildLiteralData<T>(
   opts: TemplateOpts,
 ) {
   let names;
-  let nameSet;
+  let nameSet: Set<string>;
   let metadata;
   let prefix = "";
 

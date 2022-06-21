@@ -20,6 +20,7 @@ if (!process.env.BABEL_8_BREAKING) {
   var ZERO_REFS = t.isReferenced(node, property, pattern) ? 1 : 0;
 }
 
+type Param = NodePath<t.Function["params"][number]>;
 export interface Options {
   useBuiltIns?: boolean;
   loose?: boolean;
@@ -52,7 +53,7 @@ export default declare((api, opts: Options) => {
       : file.addHelper("extends");
   }
 
-  function hasRestElement(path) {
+  function hasRestElement(path: Param) {
     let foundRestElement = false;
     visitRestElements(path, restElement => {
       foundRestElement = true;
@@ -242,7 +243,7 @@ export default declare((api, opts: Options) => {
 
   function replaceRestElement(
     parentPath: NodePath<t.Function | t.CatchClause>,
-    paramPath: NodePath,
+    paramPath: Param | NodePath<t.AssignmentPattern["left"]>,
     container?: t.VariableDeclaration[],
   ): void {
     if (paramPath.isAssignmentPattern()) {
@@ -254,7 +255,12 @@ export default declare((api, opts: Options) => {
       const elements = paramPath.get("elements");
 
       for (let i = 0; i < elements.length; i++) {
-        replaceRestElement(parentPath, elements[i], container);
+        replaceRestElement(
+          parentPath,
+          // @ts-expect-error Fixme: handle TSAsExpression
+          elements[i],
+          container,
+        );
       }
     }
 
@@ -283,7 +289,7 @@ export default declare((api, opts: Options) => {
       // function a({ b, ...c }) {}
       Function(path) {
         const params = path.get("params");
-        const paramsWithRestElement = new Set();
+        const paramsWithRestElement = new Set<number>();
         const idsInRestParams = new Set();
         for (let i = 0; i < params.length; ++i) {
           const param = params[i];
@@ -300,7 +306,10 @@ export default declare((api, opts: Options) => {
         // example: f({...R}, a = R)
         let idInRest = false;
 
-        const IdentifierHandler = function (path, functionScope) {
+        const IdentifierHandler = function (
+          path: NodePath<t.Identifier>,
+          functionScope: Scope,
+        ) {
           const name = path.node.name;
           if (
             path.scope.getBinding(name) === functionScope.getBinding(name) &&
@@ -311,12 +320,12 @@ export default declare((api, opts: Options) => {
           }
         };
 
-        let i;
+        let i: number;
         for (i = 0; i < params.length && !idInRest; ++i) {
           const param = params[i];
           if (!paramsWithRestElement.has(i)) {
             if (param.isReferencedIdentifier() || param.isBindingIdentifier()) {
-              IdentifierHandler(path, path.scope);
+              IdentifierHandler(param, path.scope);
             } else {
               param.traverse(
                 {
@@ -337,7 +346,7 @@ export default declare((api, opts: Options) => {
             }
           }
         } else {
-          const shouldTransformParam = idx =>
+          const shouldTransformParam = (idx: number) =>
             idx >= i - 1 || paramsWithRestElement.has(idx);
           convertFunctionParams(
             path,
@@ -531,7 +540,7 @@ export default declare((api, opts: Options) => {
       },
 
       // taken from transform-destructuring/src/index.js#visitor
-      ForXStatement(path) {
+      ForXStatement(path: NodePath<t.ForXStatement>) {
         const { node, scope } = path;
         const leftPath = path.get("left");
         const left = node.left;
@@ -549,7 +558,7 @@ export default declare((api, opts: Options) => {
           ]);
 
           path.ensureBlock();
-          const body = node.body as t.BlockStatement;
+          const body = path.node.body;
 
           if (body.body.length === 0 && path.isCompletionRecord()) {
             body.body.unshift(
@@ -584,7 +593,7 @@ export default declare((api, opts: Options) => {
 
       // [{a, ...b}] = c;
       ArrayPattern(path) {
-        const objectPatterns = [];
+        const objectPatterns: t.VariableDeclarator[] = [];
 
         visitRestElements(path, path => {
           if (!path.parentPath.isObjectPattern()) {
@@ -620,7 +629,7 @@ export default declare((api, opts: Options) => {
       ObjectExpression(path, file) {
         if (!hasSpread(path.node)) return;
 
-        let helper;
+        let helper: t.Identifier | t.MemberExpression;
         if (setSpreadProperties) {
           helper = getExtendsHelper(file);
         } else {
@@ -638,8 +647,8 @@ export default declare((api, opts: Options) => {
           }
         }
 
-        let exp = null;
-        let props = [];
+        let exp: t.CallExpression = null;
+        let props: t.ObjectMember[] = [];
 
         function make() {
           const hadProps = props.length > 0;

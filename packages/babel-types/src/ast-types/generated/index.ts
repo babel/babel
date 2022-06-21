@@ -3,9 +3,11 @@
 
 interface BaseComment {
   value: string;
-  start: number;
-  end: number;
-  loc: SourceLocation;
+  start?: number;
+  end?: number;
+  loc?: SourceLocation;
+  // generator will skip the comment if ignore is true
+  ignore?: boolean;
   type: "CommentBlock" | "CommentLine";
 }
 
@@ -33,9 +35,9 @@ export interface SourceLocation {
 
 interface BaseNode {
   type: Node["type"];
-  leadingComments?: ReadonlyArray<Comment> | null;
-  innerComments?: ReadonlyArray<Comment> | null;
-  trailingComments?: ReadonlyArray<Comment> | null;
+  leadingComments?: Comment[] | null;
+  innerComments?: Comment[] | null;
+  trailingComments?: Comment[] | null;
   start?: number | null;
   end?: number | null;
   loc?: SourceLocation | null;
@@ -1909,8 +1911,8 @@ export interface TSMappedType extends BaseNode {
   typeParameter: TSTypeParameter;
   typeAnnotation?: TSType | null;
   nameType?: TSType | null;
-  optional?: boolean | null;
-  readonly?: boolean | null;
+  optional?: true | false | "+" | "-" | null;
+  readonly?: true | false | "+" | "-" | null;
 }
 
 export interface TSLiteralType extends BaseNode {

@@ -1,7 +1,10 @@
-import { types as t, template } from "@babel/core";
-import type { Visitor } from "@babel/traverse";
+import { types as t, template, type PluginPass } from "@babel/core";
+import type { NodePath, Scope, Visitor } from "@babel/traverse";
 
-function getTDZStatus(refPath, bindingPath) {
+function getTDZStatus(
+  refPath: NodePath<t.Identifier | t.JSXIdentifier>,
+  bindingPath: NodePath,
+) {
   const executionStatus = bindingPath._guessExecutionStatusRelativeTo(refPath);
 
   if (executionStatus === "before") {
@@ -13,14 +16,22 @@ function getTDZStatus(refPath, bindingPath) {
   }
 }
 
-function buildTDZAssert(node, state) {
+function buildTDZAssert(
+  node: t.Identifier | t.JSXIdentifier,
+  state: TDZVisitorState,
+) {
   return t.callExpression(state.addHelper("temporalRef"), [
+    // @ts-expect-error Fixme: we may need to handle JSXIdentifier
     node,
     t.stringLiteral(node.name),
   ]);
 }
 
-function isReference(node, scope, state) {
+function isReference(
+  node: t.Identifier | t.JSXIdentifier,
+  scope: Scope,
+  state: TDZVisitorState,
+) {
   const declared = state.letReferences.get(node.name);
   if (!declared) return false;
 
@@ -32,7 +43,8 @@ const visitedMaybeTDZNodes = new WeakSet();
 
 export interface TDZVisitorState {
   tdzEnabled: boolean;
-  addHelper: (name) => any;
+  addHelper: PluginPass["addHelper"];
+  letReferences: Map<string, t.Identifier>;
 }
 
 export const visitor: Visitor<TDZVisitorState> = {

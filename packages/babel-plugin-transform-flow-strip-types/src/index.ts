@@ -1,6 +1,7 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxFlow from "@babel/plugin-syntax-flow";
 import { types as t } from "@babel/core";
+import type { NodePath } from "@babel/traverse";
 
 export interface Options {
   requireDirective?: boolean;
@@ -75,7 +76,11 @@ export default declare((api, opts: Options) => {
         }
       },
 
-      Flow(path) {
+      Flow(
+        path: NodePath<
+          t.Flow | t.ImportDeclaration | t.ExportDeclaration | t.ImportSpecifier
+        >,
+      ) {
         if (skipStrip) {
           throw path.buildCodeFrameError(
             "A @flow directive is required when using Flow annotations with " +

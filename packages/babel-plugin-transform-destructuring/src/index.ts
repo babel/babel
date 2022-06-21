@@ -5,8 +5,10 @@ import {
   convertVariableDeclaration,
   convertAssignmentExpression,
   unshiftForXStatementBody,
+  type DestructuringTransformerNode,
 } from "./util";
 export { buildObjectExcludingKeys, unshiftForXStatementBody } from "./util";
+import type { NodePath } from "@babel/traverse";
 
 /**
  * Test if a VariableDeclaration's declarations contains any Patterns.
@@ -67,7 +69,7 @@ export default declare((api, options: Options) => {
         path.scope.crawl();
       },
 
-      ForXStatement(path) {
+      ForXStatement(path: NodePath<t.ForXStatement>) {
         const { node, scope } = path;
         const left = node.left;
 
@@ -81,7 +83,7 @@ export default declare((api, options: Options) => {
           ]);
 
           path.ensureBlock();
-          const statementBody = (node.body as t.BlockStatement).body;
+          const statementBody = path.node.body.body;
           const nodes = [];
           // todo: the completion of a for statement can only be observed from
           // a do block (or eval that we don't support),
@@ -112,7 +114,7 @@ export default declare((api, options: Options) => {
           t.variableDeclarator(key, null),
         ]);
 
-        const nodes = [];
+        const nodes: DestructuringTransformerNode[] = [];
 
         const destructuring = new DestructuringTransformer({
           kind: left.kind,
@@ -138,7 +140,7 @@ export default declare((api, options: Options) => {
         const ref = scope.generateUidIdentifier("ref");
         node.param = ref;
 
-        const nodes = [];
+        const nodes: DestructuringTransformerNode[] = [];
 
         const destructuring = new DestructuringTransformer({
           kind: "let",
@@ -152,7 +154,7 @@ export default declare((api, options: Options) => {
         });
         destructuring.init(pattern, ref);
 
-        node.body.body = nodes.concat(node.body.body);
+        node.body.body = [...nodes, ...node.body.body];
         scope.crawl();
       },
 

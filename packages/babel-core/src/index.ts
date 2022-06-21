@@ -32,13 +32,20 @@ export {
 } from "./config";
 
 export type {
+  CallerMetadata,
+  InputOptions,
   PluginAPI,
   PluginObject,
   PresetAPI,
   PresetObject,
 } from "./config";
 
-export { transform, transformSync, transformAsync } from "./transform";
+export {
+  transform,
+  transformSync,
+  transformAsync,
+  type FileResult,
+} from "./transform";
 export {
   transformFile,
   transformFileSync,

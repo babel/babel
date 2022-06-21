@@ -1,7 +1,8 @@
 import { declare } from "@babel/helper-plugin-utils";
+import type { ParserPlugin } from "@babel/parser";
 
-function removePlugin(plugins, name) {
-  const indices = [];
+function removePlugin(plugins: ParserPlugin[], name: string) {
+  const indices: number[] = [];
   plugins.forEach((plugin, i) => {
     const n = Array.isArray(plugin) ? plugin[0] : plugin;
 

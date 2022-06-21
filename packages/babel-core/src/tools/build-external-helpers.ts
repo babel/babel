@@ -24,10 +24,11 @@ import {
 } from "@babel/types";
 import type * as t from "@babel/types";
 import File from "../transformation/file/file";
+import type { PublicReplacements } from "@babel/template/src/options";
 
 // Wrapped to avoid wasting time parsing this when almost no-one uses
 // build-external-helpers.
-const buildUmdWrapper = replacements =>
+const buildUmdWrapper = (replacements: PublicReplacements) =>
   template.statement`
     (function (root, factory) {
       if (typeof define === "function" && define.amd) {
@@ -147,6 +148,17 @@ function buildVar(allowlist?: Array<string>) {
 
 function buildHelpers(
   body: t.Statement[],
+  namespace: t.Expression,
+  allowlist?: Array<string>,
+): Record<string, t.MemberExpression>;
+function buildHelpers(
+  body: t.Statement[],
+  namespace: null,
+  allowlist?: Array<string>,
+): Record<string, t.Identifier>;
+
+function buildHelpers(
+  body: t.Statement[],
   namespace: t.Expression | null,
   allowlist?: Array<string>,
 ) {
@@ -156,7 +168,7 @@ function buildHelpers(
       : identifier(`_${name}`);
   };
 
-  const refs = {};
+  const refs: { [key: string]: t.Identifier | t.MemberExpression } = {};
   helpers.list.forEach(function (name) {
     if (allowlist && allowlist.indexOf(name) < 0) return;
 

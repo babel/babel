@@ -33,7 +33,7 @@ export type ValidatorSet = {
 
 export type Validator<T> = (loc: OptionPath, value: unknown) => T;
 
-export function msg(loc: NestingPath | GeneralPath) {
+export function msg(loc: NestingPath | GeneralPath): string {
   switch (loc.type) {
     case "root":
       return ``;
@@ -135,7 +135,7 @@ export function assertSourceType(
 export function assertCallerMetadata(
   loc: OptionPath,
   value: unknown,
-): CallerMetadata | void {
+): CallerMetadata | undefined {
   const obj = assertObject(loc, value);
   if (obj) {
     if (typeof obj.name !== "string") {
@@ -446,7 +446,7 @@ function assertBrowserVersion(loc: GeneralPath, value: unknown) {
 
 export function assertAssumptions(
   loc: GeneralPath,
-  value: unknown,
+  value: { [key: string]: unknown },
 ): { [name: string]: boolean } | void {
   if (value === undefined) return;
 

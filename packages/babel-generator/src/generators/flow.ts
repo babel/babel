@@ -48,7 +48,7 @@ export function DeclareClass(
 export function DeclareFunction(
   this: Printer,
   node: t.DeclareFunction,
-  parent: any,
+  parent: t.Node,
 ) {
   if (!isDeclareExportDeclaration(parent)) {
     this.word("declare");
@@ -118,7 +118,7 @@ export function DeclareTypeAlias(this: Printer, node: t.DeclareTypeAlias) {
 export function DeclareOpaqueType(
   this: Printer,
   node: t.DeclareOpaqueType,
-  parent: any,
+  parent: t.Node,
 ) {
   if (!isDeclareExportDeclaration(parent)) {
     this.word("declare");
@@ -130,7 +130,7 @@ export function DeclareOpaqueType(
 export function DeclareVariable(
   this: Printer,
   node: t.DeclareVariable,
-  parent: any,
+  parent: t.Node,
 ) {
   if (!isDeclareExportDeclaration(parent)) {
     this.word("declare");
@@ -174,7 +174,7 @@ export function EnumDeclaration(this: Printer, node: t.EnumDeclaration) {
 }
 
 function enumExplicitType(
-  context: any,
+  context: Printer,
   name: string,
   hasExplicitType: boolean,
 ) {
@@ -187,7 +187,7 @@ function enumExplicitType(
   context.space();
 }
 
-function enumBody(context: any, node: any) {
+function enumBody(context: Printer, node: t.EnumBody) {
   const { members } = node;
   context.token("{");
   context.indent();
@@ -236,7 +236,10 @@ export function EnumDefaultedMember(
   this.token(",");
 }
 
-function enumInitializedMember(context: any, node: any) {
+function enumInitializedMember(
+  context: Printer,
+  node: t.EnumBooleanMember | t.EnumNumberMember | t.EnumStringMember,
+) {
   const { id, init } = node;
   context.print(id, node);
   context.space();
@@ -258,7 +261,10 @@ export function EnumStringMember(this: Printer, node: t.EnumStringMember) {
   enumInitializedMember(this, node);
 }
 
-function FlowExportDeclaration(this: Printer, node: any) {
+function FlowExportDeclaration(
+  this: Printer,
+  node: t.DeclareExportDeclaration,
+) {
   if (node.declaration) {
     const declar = node.declaration;
     this.print(declar, node);
@@ -384,7 +390,16 @@ export function _interfaceish(
   this.print(node.body, node);
 }
 
-export function _variance(this: Printer, node) {
+export function _variance(
+  this: Printer,
+  node:
+    | t.TypeParameter
+    | t.ObjectTypeIndexer
+    | t.ObjectTypeProperty
+    | t.ClassProperty
+    | t.ClassPrivateProperty
+    | t.ClassAccessorProperty,
+) {
   if (node.variance) {
     if (node.variance.kind === "plus") {
       this.token("+");

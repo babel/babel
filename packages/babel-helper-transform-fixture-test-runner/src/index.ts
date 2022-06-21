@@ -1,9 +1,16 @@
 /* eslint-env jest */
 import * as babel from "@babel/core";
-import { buildExternalHelpers } from "@babel/core";
+import {
+  buildExternalHelpers,
+  type InputOptions,
+  type FileResult,
+} from "@babel/core";
 import {
   default as getFixtures,
   resolveOptionPluginOrPreset,
+  type Test,
+  type TestFile,
+  type TaskOptions,
 } from "@babel/helper-fixtures";
 import { codeFrameColumns } from "@babel/code-frame";
 import { TraceMap, originalPositionFor } from "@jridgewell/trace-mapping";
@@ -20,15 +27,22 @@ const require = createRequire(import.meta.url);
 
 import checkDuplicateNodes from "@babel/helper-check-duplicate-nodes";
 
+type Module = {
+  id: string;
+  exports: Record<string, unknown>;
+};
+
 if (!process.env.BABEL_8_BREAKING) {
-  // Introduced in Node.js 8
+  // Introduced in Node.js 10
   if (!assert.rejects) {
     assert.rejects = async function (block, validateError) {
       try {
-        await block();
+        await (typeof block === "function" ? block() : block);
         return Promise.reject(new Error("Promise not rejected"));
       } catch (error) {
-        if (!validateError(error)) {
+        // @ts-ignore Fixme: validateError can be a string | object
+        // see https://nodejs.org/api/assert.html#assertrejectsasyncfn-error-message
+        if (typeof validateError === "function" && !validateError(error)) {
           return Promise.reject(
             new Error("Promise rejected with invalid error"),
           );
@@ -51,14 +65,14 @@ const sharedTestContext = createContext();
 // babel.config.js file, so we disable config loading by
 // default. Tests can still set `configFile: true | string`
 // to re-enable config loading.
-function transformWithoutConfigFile(code, opts) {
+function transformWithoutConfigFile(code: string, opts: InputOptions) {
   return babel.transformSync(code, {
     configFile: false,
     babelrc: false,
     ...opts,
   });
 }
-function transformAsyncWithoutConfigFile(code, opts) {
+function transformAsyncWithoutConfigFile(code: string, opts: InputOptions) {
   return babel.transformAsync(code, {
     configFile: false,
     babelrc: false,
@@ -100,7 +114,7 @@ function runCacheableScriptInTestContext(
   srcFn: () => string,
   context: vm.Context,
   moduleCache: any,
-) {
+): Module {
   let cached = cachedScripts.get(filename);
   if (!cached) {
     const code = `(function (exports, require, module, __filename, __dirname) {\n${srcFn()}\n});`;
@@ -137,7 +151,8 @@ function runCacheableScriptInTestContext(
     id: filename,
     exports: {},
   };
-  const req = id => runModuleInTestContext(id, filename, context, moduleCache);
+  const req = (id: string) =>
+    runModuleInTestContext(id, filename, context, moduleCache);
   const dirname = path.dirname(filename);
 
   script
@@ -195,9 +210,10 @@ export function runCodeInTestContext(
   const filename = opts.filename;
   const dirname = path.dirname(filename);
   const moduleCache = contextModuleCache.get(context);
-  const req = id => runModuleInTestContext(id, filename, context, moduleCache);
+  const req = (id: string) =>
+    runModuleInTestContext(id, filename, context, moduleCache);
 
-  const module = {
+  const module: Module = {
     id: filename,
     exports: {},
   };
@@ -220,7 +236,7 @@ export function runCodeInTestContext(
   }
 }
 
-async function maybeMockConsole(validateLogs, run) {
+async function maybeMockConsole<R>(validateLogs: boolean, run: () => R) {
   const actualLogs = { stdout: "", stderr: "" };
 
   if (!validateLogs) return { result: await run(), actualLogs };
@@ -240,7 +256,7 @@ async function maybeMockConsole(validateLogs, run) {
   }
 }
 
-async function run(task) {
+async function run(task: Test) {
   const {
     actual,
     expect: expected,
@@ -255,7 +271,7 @@ async function run(task) {
   } = task;
 
   // todo(flow->ts) add proper return type (added any, because empty object is inferred)
-  function getOpts(self): any {
+  function getOpts(self: TestFile): any {
     const newOpts = {
       ast: true,
       cwd: path.dirname(self.loc),
@@ -273,7 +289,7 @@ async function run(task) {
   }
 
   let execCode = exec.code;
-  let result;
+  let result: FileResult;
   let resultExec;
 
   if (execCode) {
@@ -387,7 +403,11 @@ async function run(task) {
   }
 }
 
-function validateFile(actualCode, expectedLoc, expectedCode) {
+function validateFile(
+  actualCode: string,
+  expectedLoc: string,
+  expectedCode: string,
+) {
   try {
     expect(actualCode).toEqualFile({
       filename: expectedLoc,
@@ -401,11 +421,11 @@ function validateFile(actualCode, expectedLoc, expectedCode) {
   }
 }
 
-function escapeRegExp(string) {
+function escapeRegExp(string: string) {
   return string.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&");
 }
 
-function normalizeOutput(code, normalizePathSeparator?) {
+function normalizeOutput(code: string, normalizePathSeparator?: boolean) {
   const projectRoot = path.resolve(
     path.dirname(fileURLToPath(import.meta.url)),
     "../../../",
@@ -438,7 +458,7 @@ function normalizeOutput(code, normalizePathSeparator?) {
 }
 
 expect.extend({
-  toEqualFile(actual, { filename, code }) {
+  toEqualFile(actual, { filename, code }: Pick<TestFile, "filename" | "code">) {
     if (this.isNot) {
       throw new Error(".toEqualFile does not support negation");
     }
@@ -465,17 +485,25 @@ declare global {
   namespace jest {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface Matchers<R> {
-      toEqualFile({ filename, code }): jest.CustomMatcherResult;
+      toEqualFile({
+        filename,
+        code,
+      }: Pick<TestFile, "filename" | "code">): jest.CustomMatcherResult;
     }
   }
 }
 
+export type SuiteOptions = {
+  ignoreSuites?: string[];
+  ignoreTasks?: string[];
+};
+
 export default function (
   fixturesLoc: string,
   name: string,
-  suiteOpts: any = {},
-  taskOpts: any = {},
-  dynamicOpts?: Function,
+  suiteOpts: SuiteOptions = {},
+  taskOpts: TaskOptions = {},
+  dynamicOpts?: (options: TaskOptions, task: Test) => void,
 ) {
   const suites = getFixtures(fixturesLoc);
 
@@ -508,12 +536,13 @@ export default function (
 
             if (dynamicOpts) dynamicOpts(task.options, task);
 
-            // @ts-expect-error todo(flow->ts) missing property
             if (task.externalHelpers) {
-              (task.options.plugins ??= []).push([
-                "external-helpers",
-                { helperVersion: EXTERNAL_HELPERS_VERSION },
-              ]);
+              (task.options.plugins ??= [])
+                // @ts-ignore manipulating input options
+                .push([
+                  "external-helpers",
+                  { helperVersion: EXTERNAL_HELPERS_VERSION },
+                ]);
             }
 
             const throwMsg = task.options.throws;

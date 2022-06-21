@@ -1,6 +1,7 @@
 import rewritePattern from "regexpu-core";
 import { featuresKey, FEATURES, enableFeature, runtimeKey } from "./features";
 import { generateRegexpuOptions, canSkipRegexpu, transformFlags } from "./util";
+import type { NodePath } from "@babel/traverse";
 
 import { types as t } from "@babel/core";
 import type { PluginObject } from "@babel/core";
@@ -17,12 +18,22 @@ const version = PACKAGE_JSON.version
   .reduce((v, x) => v * 1e5 + +x, 0);
 const versionKey = "@babel/plugin-regexp-features/version";
 
+export interface Options {
+  name: string;
+  feature: keyof typeof FEATURES;
+  options?: {
+    useUnicodeFlag?: boolean;
+    runtime?: boolean;
+  };
+  manipulateOptions?: PluginObject["manipulateOptions"];
+}
+
 export function createRegExpFeaturePlugin({
   name,
   feature,
-  options = {} as any,
-  manipulateOptions = (() => {}) as PluginObject["manipulateOptions"],
-}): PluginObject {
+  options = {},
+  manipulateOptions = () => {},
+}: Options): PluginObject {
   return {
     name,
 
@@ -60,7 +71,7 @@ export function createRegExpFeaturePlugin({
         const regexpuOptions = generateRegexpuOptions(features);
         if (canSkipRegexpu(node, regexpuOptions)) return;
 
-        const namedCaptureGroups = {};
+        const namedCaptureGroups: Record<string, number> = {};
         if (regexpuOptions.namedGroups === "transform") {
           regexpuOptions.onNamedGroup = (name, index) => {
             namedCaptureGroups[name] = index;
@@ -90,7 +101,7 @@ export function createRegExpFeaturePlugin({
   };
 }
 
-function isRegExpTest(path) {
+function isRegExpTest(path: NodePath<t.RegExpLiteral>) {
   return (
     path.parentPath.isMemberExpression({
       object: path.node,

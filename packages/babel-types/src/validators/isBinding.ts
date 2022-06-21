@@ -19,11 +19,15 @@ export default function isBinding(
     return false;
   }
 
-  const keys = getBindingIdentifiers.keys[parent.type];
+  const keys =
+    // @ts-expect-error getBindingIdentifiers.keys does not cover all AST types
+    getBindingIdentifiers.keys[parent.type];
   if (keys) {
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i];
-      const val = parent[key];
+      const val =
+        // @ts-expect-error key must present in parent
+        parent[key];
       if (Array.isArray(val)) {
         if (val.indexOf(node) >= 0) return true;
       } else {

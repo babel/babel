@@ -78,7 +78,7 @@ export default function (
   scope: Scope,
   allowedSingleIdent?: boolean,
 ): {
-  uid: t.Identifier | t.MemberExpression;
+  uid: t.Identifier | t.MemberExpression | t.Super;
   ref: t.Identifier | t.MemberExpression;
 } {
   let obj;

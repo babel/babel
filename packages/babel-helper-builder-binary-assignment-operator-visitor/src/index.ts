@@ -1,8 +1,15 @@
 import explode from "@babel/helper-explode-assignable-expression";
 import { assignmentExpression, sequenceExpression } from "@babel/types";
 import type { Visitor } from "@babel/traverse";
+import type * as t from "@babel/types";
 
-export default function (opts: { build: Function; operator: string }) {
+export default function (opts: {
+  build: (
+    left: t.Expression | t.PrivateName,
+    right: t.Expression,
+  ) => t.Expression;
+  operator: t.BinaryExpression["operator"];
+}) {
   const { build, operator } = opts;
 
   const visitor: Visitor = {
@@ -10,8 +17,8 @@ export default function (opts: { build: Function; operator: string }) {
       const { node, scope } = path;
       if (node.operator !== operator + "=") return;
 
-      const nodes = [];
-      // @ts-expect-error todo(flow->ts)
+      const nodes: t.AssignmentExpression[] = [];
+      // @ts-expect-error Fixme: node.left can be a TSAsExpression
       const exploded = explode(node.left, nodes, this, scope);
       nodes.push(
         assignmentExpression(

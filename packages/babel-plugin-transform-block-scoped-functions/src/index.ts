@@ -1,16 +1,14 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
+import type { NodePath } from "@babel/traverse";
 
 export default declare(api => {
   api.assertVersion(7);
 
-  function statementList(key, path) {
-    const paths = path.get(key);
-
+  function transformStatementList(paths: NodePath<t.Statement>[]) {
     for (const path of paths) {
-      const func = path.node;
       if (!path.isFunctionDeclaration()) continue;
-
+      const func = path.node;
       const declar = t.variableDeclaration("let", [
         t.variableDeclarator(func.id, t.toExpression(func)),
       ]);
@@ -39,11 +37,11 @@ export default declare(api => {
           return;
         }
 
-        statementList("body", path);
+        transformStatementList(path.get("body"));
       },
 
       SwitchCase(path) {
-        statementList("consequent", path);
+        transformStatementList(path.get("consequent"));
       },
     },
   };

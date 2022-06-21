@@ -13,20 +13,23 @@ import {
   variableDeclaration,
   variableDeclarator,
 } from "@babel/types";
+import type * as t from "@babel/types";
+import type { Scope } from "@babel/traverse";
+import type { File } from "@babel/core";
 
 /**
  * A class to track and accumulate mutations to the AST that will eventually
  * output a new require/import statement list.
  */
 export default class ImportBuilder {
-  _statements = [];
-  _resultName = null;
+  private _statements: t.Statement[] = [];
+  private _resultName: t.Identifier | t.MemberExpression = null;
 
-  _scope = null;
-  _hub = null;
-  private _importedSource: any;
+  declare _scope: Scope;
+  declare _hub: File["hub"];
+  private _importedSource: string;
 
-  constructor(importedSource, scope, hub) {
+  constructor(importedSource: string, scope: Scope, hub: File["hub"]) {
     this._scope = scope;
     this._hub = hub;
     this._importedSource = importedSource;
@@ -67,29 +70,29 @@ export default class ImportBuilder {
     this._resultName = cloneNode(local);
     return this;
   }
-  default(name) {
-    name = this._scope.generateUidIdentifier(name);
+  default(name: string) {
+    const id = this._scope.generateUidIdentifier(name);
     const statement = this._statements[this._statements.length - 1];
     assert(statement.type === "ImportDeclaration");
     assert(statement.specifiers.length === 0);
-    statement.specifiers = [importDefaultSpecifier(name)];
-    this._resultName = cloneNode(name);
+    statement.specifiers = [importDefaultSpecifier(id)];
+    this._resultName = cloneNode(id);
     return this;
   }
-  named(name, importName) {
+  named(name: string, importName: string) {
     if (importName === "default") return this.default(name);
 
-    name = this._scope.generateUidIdentifier(name);
+    const id = this._scope.generateUidIdentifier(name);
     const statement = this._statements[this._statements.length - 1];
     assert(statement.type === "ImportDeclaration");
     assert(statement.specifiers.length === 0);
-    statement.specifiers = [importSpecifier(name, identifier(importName))];
-    this._resultName = cloneNode(name);
+    statement.specifiers = [importSpecifier(id, identifier(importName))];
+    this._resultName = cloneNode(id);
     return this;
   }
 
-  var(name) {
-    name = this._scope.generateUidIdentifier(name);
+  var(name: string) {
+    const id = this._scope.generateUidIdentifier(name);
     let statement = this._statements[this._statements.length - 1];
     if (statement.type !== "ExpressionStatement") {
       assert(this._resultName);
@@ -97,9 +100,9 @@ export default class ImportBuilder {
       this._statements.push(statement);
     }
     this._statements[this._statements.length - 1] = variableDeclaration("var", [
-      variableDeclarator(name, statement.expression),
+      variableDeclarator(id, statement.expression),
     ]);
-    this._resultName = cloneNode(name);
+    this._resultName = cloneNode(id);
     return this;
   }
 
@@ -110,7 +113,7 @@ export default class ImportBuilder {
     return this._interop(this._hub.addHelper("interopRequireWildcard"));
   }
 
-  _interop(callee) {
+  _interop(callee: t.Expression) {
     const statement = this._statements[this._statements.length - 1];
     if (statement.type === "ExpressionStatement") {
       statement.expression = callExpression(callee, [statement.expression]);
@@ -125,7 +128,7 @@ export default class ImportBuilder {
     return this;
   }
 
-  prop(name) {
+  prop(name: string) {
     const statement = this._statements[this._statements.length - 1];
     if (statement.type === "ExpressionStatement") {
       statement.expression = memberExpression(
@@ -144,7 +147,7 @@ export default class ImportBuilder {
     return this;
   }
 
-  read(name) {
+  read(name: string) {
     this._resultName = memberExpression(this._resultName, identifier(name));
   }
 }

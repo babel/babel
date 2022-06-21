@@ -25,7 +25,7 @@ import type * as t from "@babel/types";
 import { willPathCastToBoolean } from "./util";
 
 class AssignmentMemoiser {
-  private _map: WeakMap<t.Expression, { count: number; value: t.LVal }>;
+  private _map: WeakMap<t.Expression, { count: number; value: t.Identifier }>;
   constructor() {
     this._map = new WeakMap();
   }
@@ -49,7 +49,7 @@ class AssignmentMemoiser {
     return value;
   }
 
-  set(key: t.Expression, value: t.LVal, count: number) {
+  set(key: t.Expression, value: t.Identifier, count: number) {
     return this._map.set(key, { count, value });
   }
 }
@@ -66,11 +66,12 @@ function toNonOptional(
   if (path.isOptionalCallExpression()) {
     const callee = path.get("callee");
     if (path.node.optional && callee.isOptionalMemberExpression()) {
-      const { object } = callee.node;
-      const context = path.scope.maybeGenerateMemoised(object) || object;
+      // object must be a conditional expression because the optional private access in object has been transformed
+      const object = callee.node.object as t.ConditionalExpression;
+      const context = path.scope.maybeGenerateMemoised(object);
       callee
         .get("object")
-        .replaceWith(assignmentExpression("=", context as t.LVal, object));
+        .replaceWith(assignmentExpression("=", context, object));
 
       return callExpression(memberExpression(base, identifier("call")), [
         context,
@@ -95,7 +96,13 @@ function isInDetachedTree(path: NodePath) {
     const { parentPath, container, listKey } = path;
     const parentNode = parentPath.node;
     if (listKey) {
-      if (container !== parentNode[listKey]) return true;
+      if (
+        container !==
+        // @ts-expect-error listKey must be a valid parent node key
+        parentNode[listKey]
+      ) {
+        return true;
+      }
     } else {
       if (container !== parentNode) return true;
     }
@@ -208,10 +215,9 @@ const handle = {
         );
       }
 
-      const startingProp = startingOptional.isOptionalMemberExpression()
-        ? "object"
-        : "callee";
-      const startingNode = startingOptional.node[startingProp];
+      const startingNode = startingOptional.isOptionalMemberExpression()
+        ? startingOptional.node.object
+        : startingOptional.node.callee;
       const baseNeedsMemoised = scope.maybeGenerateMemoised(startingNode);
       const baseRef = baseNeedsMemoised ?? startingNode;
 
@@ -281,7 +287,12 @@ const handle = {
       }
 
       const baseMemoised = baseNeedsMemoised
-        ? assignmentExpression("=", cloneNode(baseRef), cloneNode(startingNode))
+        ? assignmentExpression(
+            "=",
+            // When base needs memoised, the baseRef must be an identifier
+            cloneNode(baseRef as t.Identifier),
+            cloneNode(startingNode),
+          )
         : cloneNode(baseRef);
 
       if (willEndPathCastToBoolean) {

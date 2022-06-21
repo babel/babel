@@ -1,4 +1,5 @@
 import { types as t, template } from "@babel/core";
+import type { NodePath } from "@babel/traverse";
 
 const buildForAwait = template(`
   async function wrapper() {
@@ -29,7 +30,10 @@ const buildForAwait = template(`
   }
 `);
 
-export default function (path, { getAsyncIterator }) {
+export default function (
+  path: NodePath<t.ForOfStatement>,
+  { getAsyncIterator }: { getAsyncIterator: t.Identifier },
+) {
   const { node, scope, parent } = path;
 
   const stepKey = scope.generateUidIdentifier("step");

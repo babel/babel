@@ -30,7 +30,7 @@ const buildNamedExpressionWrapper = template.expression(`
   })()
 `);
 
-const buildDeclarationWrapper = template(`
+const buildDeclarationWrapper = template.statements(`
   function NAME(PARAMS) { return REF.apply(this, arguments); }
   function REF() {
     REF = FUNCTION;
@@ -109,8 +109,8 @@ function plainFunction(
   });
 
   if (isDeclaration) {
-    path.replaceWith(container[0]);
-    path.insertAfter(container[1]);
+    path.replaceWith((container as t.Statement[])[0]);
+    path.insertAfter((container as t.Statement[])[1]);
   } else {
     // @ts-expect-error todo(flow->ts) separate `wrapper` for `isDeclaration` and `else` branches
     const retFunction = container.callee.body.body[1].argument;

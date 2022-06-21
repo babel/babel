@@ -26,13 +26,15 @@ const tSFunctionTypeAnnotationCommon = {
   returnType: {
     validate: process.env.BABEL_8_BREAKING
       ? assertNodeType("TSTypeAnnotation")
-      : assertNodeType("TSTypeAnnotation", "Noop"),
+      : // @ts-ignore Babel 7 AST
+        assertNodeType("TSTypeAnnotation", "Noop"),
     optional: true,
   },
   typeParameters: {
     validate: process.env.BABEL_8_BREAKING
       ? assertNodeType("TSTypeParameterDeclaration")
-      : assertNodeType("TSTypeParameterDeclaration", "Noop"),
+      : // @ts-ignore Babel 7 AST
+        assertNodeType("TSTypeParameterDeclaration", "Noop"),
     optional: true,
   },
 };
@@ -179,7 +181,7 @@ const tsKeywordTypes = [
   "TSUndefinedKeyword",
   "TSUnknownKeyword",
   "TSVoidKeyword",
-];
+] as const;
 
 for (const type of tsKeywordTypes) {
   defineType(type, {
@@ -358,9 +360,9 @@ defineType("TSMappedType", {
   aliases: ["TSType"],
   visitor: ["typeParameter", "typeAnnotation", "nameType"],
   fields: {
-    readonly: validateOptional(bool),
+    readonly: validateOptional(assertOneOf(true, false, "+", "-")),
     typeParameter: validateType("TSTypeParameter"),
-    optional: validateOptional(bool),
+    optional: validateOptional(assertOneOf(true, false, "+", "-")),
     typeAnnotation: validateOptionalType("TSType"),
     nameType: validateOptionalType("TSType"),
   },
@@ -384,7 +386,7 @@ defineType("TSLiteralType", {
           "BooleanLiteral",
           "BigIntLiteral",
         );
-        function validator(parent, key: string, node) {
+        function validator(parent: any, key: string, node: any) {
           // type A = -1 | 1;
           if (is("UnaryExpression", node)) {
             // check operator first

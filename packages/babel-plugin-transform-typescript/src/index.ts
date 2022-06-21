@@ -2,7 +2,7 @@ import { declare } from "@babel/helper-plugin-utils";
 import syntaxTypeScript from "@babel/plugin-syntax-typescript";
 import { types as t, template } from "@babel/core";
 import { injectInitialization } from "@babel/helper-create-class-features-plugin";
-import type { NodePath } from "@babel/traverse";
+import type { Binding, NodePath } from "@babel/traverse";
 import type { Options as SyntaxOptions } from "@babel/plugin-syntax-typescript";
 
 import transpileConstEnum from "./const-enum";
@@ -149,7 +149,7 @@ export default declare((api, opts: Options) => {
       if (node.declare) node.declare = null;
       if (node.override) node.override = null;
     },
-    method({ node }) {
+    method({ node }: NodePath<t.ClassMethod | t.ClassPrivateMethod>) {
       if (node.accessibility) node.accessibility = null;
       if (node.abstract) node.abstract = null;
       if (node.optional) node.optional = null;
@@ -157,7 +157,7 @@ export default declare((api, opts: Options) => {
 
       // Rest handled by Function visitor
     },
-    constructor(path, classPath) {
+    constructor(path: NodePath<t.ClassMethod>, classPath: NodePath<t.Class>) {
       if (path.node.accessibility) path.node.accessibility = null;
       // Collects parameter properties so that we can add an assignment
       // for each of them in the constructor body
@@ -487,7 +487,11 @@ export default declare((api, opts: Options) => {
         path.get("body.body").forEach(child => {
           if (child.isClassMethod() || child.isClassPrivateMethod()) {
             if (child.node.kind === "constructor") {
-              classMemberVisitors.constructor(child, path);
+              classMemberVisitors.constructor(
+                // @ts-expect-error A constructor must not be a private method
+                child,
+                path,
+              );
             } else {
               classMemberVisitors.method(child);
             }
@@ -512,7 +516,7 @@ export default declare((api, opts: Options) => {
       },
 
       TSModuleDeclaration(path) {
-        transpileNamespace(path, t, allowNamespaces);
+        transpileNamespace(path, allowNamespaces);
       },
 
       TSInterfaceDeclaration(path) {
@@ -622,7 +626,9 @@ export default declare((api, opts: Options) => {
     return node;
   }
 
-  function visitPattern({ node }) {
+  function visitPattern({
+    node,
+  }: NodePath<t.Identifier | t.Pattern | t.RestElement>) {
     if (node.typeAnnotation) node.typeAnnotation = null;
     if (t.isIdentifier(node) && node.optional) node.optional = null;
     // 'access' and 'readonly' are only for parameter properties, so constructor visitor will handle them.
@@ -633,6 +639,11 @@ export default declare((api, opts: Options) => {
     programPath,
     pragmaImportName,
     pragmaFragImportName,
+  }: {
+    binding: Binding;
+    programPath: NodePath<t.Program>;
+    pragmaImportName: string;
+    pragmaFragImportName: string;
   }) {
     for (const path of binding.referencePaths) {
       if (!isInType(path)) {

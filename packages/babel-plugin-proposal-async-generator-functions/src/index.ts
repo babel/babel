@@ -3,7 +3,7 @@ import remapAsyncToGenerator from "@babel/helper-remap-async-to-generator";
 import syntaxAsyncGenerators from "@babel/plugin-syntax-async-generators";
 import { types as t } from "@babel/core";
 import type { PluginPass } from "@babel/core";
-import type { Visitor } from "@babel/traverse";
+import type { NodePath, Visitor } from "@babel/traverse";
 import rewriteForAwait from "./for-await";
 
 export default declare(api => {
@@ -29,7 +29,7 @@ export default declare(api => {
       path.skip();
     },
 
-    ForOfStatement(path, { file }) {
+    ForOfStatement(path: NodePath<t.ForOfStatement>, { file }) {
       const { node } = path;
       if (!node.await) return;
 
@@ -49,7 +49,7 @@ export default declare(api => {
       }
 
       // push the rest of the original loop body onto our new body
-      block.body.push(...(node.body as t.BlockStatement).body);
+      block.body.push(...path.node.body.body);
 
       t.inherits(loop, node);
       t.inherits(loop.body, node.body);

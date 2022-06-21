@@ -33,17 +33,17 @@ function toStatement(node: t.Node, ignore?: boolean): t.Statement | false {
 
   if (isClass(node)) {
     mustHaveId = true;
-    newType = "ClassDeclaration";
+    newType = "ClassDeclaration" as const;
   } else if (isFunction(node)) {
     mustHaveId = true;
-    newType = "FunctionDeclaration";
+    newType = "FunctionDeclaration" as const;
   } else if (isAssignmentExpression(node)) {
     return expressionStatement(node);
   }
 
   // @ts-expect-error todo(flow->ts): node.id might be missing
   if (mustHaveId && !node.id) {
-    newType = false;
+    newType = false as false;
   }
 
   if (!newType) {
@@ -54,6 +54,7 @@ function toStatement(node: t.Node, ignore?: boolean): t.Statement | false {
     }
   }
 
+  // @ts-expect-error manipulating node.type
   node.type = newType;
 
   // @ts-expect-error todo(flow->ts) refactor to avoid type unsafe mutations like reassigning node type above

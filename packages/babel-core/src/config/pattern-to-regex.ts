@@ -11,7 +11,7 @@ const starPatLast = `(?:${substitution}${endSep})`;
 const starStarPat = `${starPat}*?`;
 const starStarPatLast = `${starPat}*?${starPatLast}?`;
 
-function escapeRegExp(string) {
+function escapeRegExp(string: string) {
   return string.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&");
 }
 

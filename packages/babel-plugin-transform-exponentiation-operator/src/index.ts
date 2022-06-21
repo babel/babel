@@ -14,7 +14,11 @@ export default declare(api => {
       build(left, right) {
         return t.callExpression(
           t.memberExpression(t.identifier("Math"), t.identifier("pow")),
-          [left, right],
+          [
+            // left can be PrivateName only if operator is `"in"`
+            left as t.Expression,
+            right,
+          ],
         );
       },
     }),

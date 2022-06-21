@@ -1,6 +1,6 @@
 /* @noflow */
 
-import type { NodePath } from "@babel/traverse";
+import type { NodePath, Visitor } from "@babel/traverse";
 import wrapFunction from "@babel/helper-wrap-function";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 import {
@@ -10,8 +10,9 @@ import {
   isThisExpression,
   yieldExpression,
 } from "@babel/types";
+import type * as t from "@babel/types";
 
-const awaitVisitor = {
+const awaitVisitor: Visitor<{ wrapAwait: t.Expression }> = {
   Function(path) {
     path.skip();
   },
@@ -32,8 +33,8 @@ const awaitVisitor = {
 export default function (
   path: NodePath<any>,
   helpers: {
-    wrapAsync: any;
-    wrapAwait?: any;
+    wrapAsync: t.Expression;
+    wrapAwait?: t.Expression;
   },
   noNewArrows?: boolean,
   ignoreFunctionLength?: boolean,

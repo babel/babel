@@ -9,7 +9,6 @@ import {
   isJSXMemberExpression,
   isJSXNamespacedName,
   isJSXSpreadAttribute,
-  isLiteral,
   isObjectExpression,
   isReferenced,
   isStringLiteral,
@@ -24,10 +23,12 @@ import {
   thisExpression,
 } from "@babel/types";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
-import type { Visitor } from "@babel/traverse";
+import type { NodePath, Visitor } from "@babel/traverse";
+import type { PluginPass, File } from "@babel/core";
+import type * as t from "@babel/types";
 
 type ElementState = {
-  tagExpr: any; // tag node,
+  tagExpr: t.Expression; // tag node,
   tagName: string | undefined | null; // raw string tag name,
   args: Array<any>; // array of call arguments,
   call?: any; // optional call property that can be set to override the call expression returned,
@@ -35,8 +36,17 @@ type ElementState = {
   callee?: any;
 };
 
-export default function (opts) {
-  const visitor: Visitor = {};
+export interface Options {
+  filter?: (node: t.Node, file: File) => boolean;
+  pre?: (state: ElementState, file: File) => void;
+  post?: (state: ElementState, file: File) => void;
+  compat?: boolean;
+  pure?: string;
+  throwIfNamespace?: boolean;
+}
+
+export default function (opts: Options) {
+  const visitor: Visitor<PluginPass> = {};
 
   visitor.JSXNamespacedName = function (path) {
     if (opts.throwIfNamespace) {
@@ -54,8 +64,8 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
   };
 
   visitor.JSXElement = {
-    exit(path, file) {
-      const callExpr = buildElementCall(path, file);
+    exit(path, state) {
+      const callExpr = buildElementCall(path, state.file);
       if (callExpr) {
         path.replaceWith(inherits(callExpr, path.node));
       }
@@ -63,13 +73,13 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
   };
 
   visitor.JSXFragment = {
-    exit(path, file) {
+    exit(path, state) {
       if (opts.compat) {
         throw path.buildCodeFrameError(
           "Fragment tags are only supported in React 16 and up.",
         );
       }
-      const callExpr = buildFragmentCall(path, file);
+      const callExpr = buildFragmentCall(path, state.file);
       if (callExpr) {
         path.replaceWith(inherits(callExpr, path.node));
       }
@@ -78,7 +88,10 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
 
   return visitor;
 
-  function convertJSXIdentifier(node, parent) {
+  function convertJSXIdentifier(
+    node: t.JSXIdentifier | t.JSXMemberExpression | t.JSXNamespacedName,
+    parent: t.JSXOpeningElement | t.JSXMemberExpression,
+  ): t.ThisExpression | t.StringLiteral | t.MemberExpression | t.Identifier {
     if (isJSXIdentifier(node)) {
       if (node.name === "this" && isReferenced(node, parent)) {
         return thisExpression();
@@ -101,10 +114,13 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       return stringLiteral(`${node.namespace.name}:${node.name.name}`);
     }
 
+    // @ts-expect-error
     return node;
   }
 
-  function convertAttributeValue(node) {
+  function convertAttributeValue(
+    node: t.JSXAttribute["value"] | t.BooleanLiteral,
+  ) {
     if (isJSXExpressionContainer(node)) {
       return node.expression;
     } else {
@@ -112,12 +128,11 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     }
   }
 
-  function convertAttribute(node) {
-    const value = convertAttributeValue(node.value || booleanLiteral(true));
-
+  function convertAttribute(node: t.JSXAttribute | t.JSXSpreadAttribute) {
     if (isJSXSpreadAttribute(node)) {
       return spreadElement(node.argument);
     }
+    const value = convertAttributeValue(node.value || booleanLiteral(true));
 
     if (isStringLiteral(value) && !isJSXExpressionContainer(node.value)) {
       value.value = value.value.replace(/\n\s+/g, " ");
@@ -127,35 +142,45 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     }
 
     if (isJSXNamespacedName(node.name)) {
+      // @ts-expect-error Mutating AST nodes
       node.name = stringLiteral(
         node.name.namespace.name + ":" + node.name.name.name,
       );
     } else if (isValidIdentifier(node.name.name, false)) {
+      // @ts-expect-error Mutating AST nodes
       node.name.type = "Identifier";
     } else {
+      // @ts-expect-error Mutating AST nodes
       node.name = stringLiteral(node.name.name);
     }
 
-    return inherits(objectProperty(node.name, value), node);
+    return inherits(
+      objectProperty(
+        // @ts-expect-error Mutating AST nodes
+        node.name,
+        value,
+      ),
+      node,
+    );
   }
 
-  function buildElementCall(path, file) {
+  function buildElementCall(path: NodePath<t.JSXElement>, file: File) {
     if (opts.filter && !opts.filter(path.node, file)) return;
 
     const openingPath = path.get("openingElement");
-    openingPath.parent.children = react.buildChildren(openingPath.parent);
+    // @ts-expect-error mutating AST nodes
+    path.node.children = react.buildChildren(path.node);
 
     const tagExpr = convertJSXIdentifier(
       openingPath.node.name,
       openingPath.node,
     );
-    const args = [];
+    const args: (t.Expression | t.JSXElement | t.JSXFragment)[] = [];
 
-    let tagName;
+    let tagName: string;
     if (isIdentifier(tagExpr)) {
       tagName = tagExpr.name;
-    } else if (isLiteral(tagExpr)) {
-      // @ts-expect-error todo(flow->ts) NullLiteral
+    } else if (isStringLiteral(tagExpr)) {
       tagName = tagExpr.value;
     }
 
@@ -170,18 +195,23 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       opts.pre(state, file);
     }
 
-    let attribs = openingPath.node.attributes;
+    const attribs = openingPath.node.attributes;
+    let convertedAttributes: t.Expression;
     if (attribs.length) {
       if (process.env.BABEL_8_BREAKING) {
-        attribs = objectExpression(attribs.map(convertAttribute));
+        convertedAttributes = objectExpression(attribs.map(convertAttribute));
       } else {
-        attribs = buildOpeningElementAttributes(attribs, file);
+        convertedAttributes = buildOpeningElementAttributes(attribs, file);
       }
     } else {
-      attribs = nullLiteral();
+      convertedAttributes = nullLiteral();
     }
 
-    args.push(attribs, ...path.node.children);
+    args.push(
+      convertedAttributes,
+      // @ts-expect-error JSXExpressionContainer has been transformed by convertAttributeValue
+      ...path.node.children,
+    );
 
     if (opts.post) {
       opts.post(state, file);
@@ -193,7 +223,10 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     return call;
   }
 
-  function pushProps(_props, objs) {
+  function pushProps(
+    _props: (t.ObjectProperty | t.SpreadElement)[],
+    objs: t.Expression[],
+  ) {
     if (!_props.length) return _props;
 
     objs.push(objectExpression(_props));
@@ -207,9 +240,12 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
    * all prior attributes to an array for later processing.
    */
 
-  function buildOpeningElementAttributes(attribs, file) {
-    let _props = [];
-    const objs = [];
+  function buildOpeningElementAttributes(
+    attribs: (t.JSXAttribute | t.JSXSpreadAttribute)[],
+    file: File,
+  ): t.Expression {
+    let _props: (t.ObjectProperty | t.SpreadElement)[] = [];
+    const objs: t.Expression[] = [];
 
     const { useSpread = false } = file.opts;
     if (typeof useSpread !== "boolean") {
@@ -250,10 +286,11 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     }
 
     pushProps(_props, objs);
+    let convertedAttribs: t.Expression;
 
     if (objs.length === 1) {
       // only one object
-      attribs = objs[0];
+      convertedAttribs = objs[0];
     } else {
       // looks like we have multiple objects
       if (!isObjectExpression(objs[0])) {
@@ -265,20 +302,20 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         : file.addHelper("extends");
 
       // spread it
-      attribs = callExpression(helper, objs);
+      convertedAttribs = callExpression(helper, objs);
     }
 
-    return attribs;
+    return convertedAttribs;
   }
 
-  function buildFragmentCall(path, file) {
+  function buildFragmentCall(path: NodePath<t.JSXFragment>, file: File) {
     if (opts.filter && !opts.filter(path.node, file)) return;
 
-    const openingPath = path.get("openingElement");
-    openingPath.parent.children = react.buildChildren(openingPath.parent);
+    // @ts-expect-error mutating AST nodes
+    path.node.children = react.buildChildren(path.node);
 
-    const args = [];
-    const tagName = null;
+    const args: t.Expression[] = [];
+    const tagName: null = null;
     const tagExpr = file.get("jsxFragIdentifier")();
 
     const state: ElementState = {
@@ -293,7 +330,11 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     }
 
     // no attributes are allowed with <> syntax
-    args.push(nullLiteral(), ...path.node.children);
+    args.push(
+      nullLiteral(),
+      // @ts-expect-error JSXExpressionContainer has been transformed by convertAttributeValue
+      ...path.node.children,
+    );
 
     if (opts.post) {
       opts.post(state, file);

@@ -16,7 +16,7 @@ export type FullPlugin = {
 // process 'ignore'/'only' and other filename-based logic.
 export type SimpleConfig = {
   envName: string;
-  caller: CallerMetadata | void;
+  caller: CallerMetadata | undefined;
 };
 export type SimplePreset = {
   targets: Targets;

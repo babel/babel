@@ -1,7 +1,9 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
 
-function getName(key) {
+function getName(
+  key: t.Identifier | t.StringLiteral | t.NumericLiteral | t.BigIntLiteral,
+) {
   if (t.isIdentifier(key)) {
     return key.name;
   }
@@ -34,7 +36,14 @@ export default declare(api => {
         const alreadySeenSetters = Object.create(null);
 
         for (const prop of plainProps) {
-          const name = getName(prop.key);
+          const name = getName(
+            // prop must be non-computed
+            prop.key as
+              | t.Identifier
+              | t.StringLiteral
+              | t.NumericLiteral
+              | t.BigIntLiteral,
+          );
           let isDuplicate = false;
           // @ts-ignore prop.kind is not defined in ObjectProperty
           switch (prop.kind) {

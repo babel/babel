@@ -1,8 +1,8 @@
-import { template, types as t } from "@babel/core";
+import { template, types as t, type File } from "@babel/core";
 
 const helperIDs = new WeakMap();
 
-export default function addCreateSuperHelper(file) {
+export default function addCreateSuperHelper(file: File) {
   if (helperIDs.has(file)) {
     // TODO: Only use t.cloneNode in Babel 8
     // t.cloneNode isn't supported in every version

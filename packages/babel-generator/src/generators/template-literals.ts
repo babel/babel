@@ -13,7 +13,7 @@ export function TaggedTemplateExpression(
 export function TemplateElement(
   this: Printer,
   node: t.TemplateElement,
-  parent: any,
+  parent: t.TemplateLiteral,
 ) {
   const isFirst = parent.quasis[0] === node;
   const isLast = parent.quasis[parent.quasis.length - 1] === node;

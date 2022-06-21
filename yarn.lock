@@ -1302,6 +1302,7 @@ __metadata:
     "@babel/helper-split-export-declaration": "workspace:^"
     "@babel/plugin-syntax-decorators": "workspace:^"
     "@babel/traverse": "workspace:^"
+    "@types/charcodes": ^0.2.0
     babel-plugin-polyfill-es-shims: ^0.6.1
     charcodes: ^0.2.0
     object.getownpropertydescriptors: ^2.1.1
@@ -3798,7 +3799,7 @@ __metadata:
     "@babel/parser": "workspace:^"
     chalk: ^4.1.0
     glob: ^7.1.7
-    to-fast-properties: ^2.0.0
+    to-fast-properties: "condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0"
   languageName: unknown
   linkType: soft
 
@@ -4371,6 +4372,13 @@ __metadata:
   dependencies:
     chalk: "*"
   checksum: 846437590d0bf0026d8c2f454e5d91a486becfabde61c0441025e791a0fed75304e143717bc4d025569394dcce5a32f2c53d97253d0c735ac1abae63f1b25c3e
+  languageName: node
+  linkType: hard
+
+"@types/charcodes@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "@types/charcodes@npm:0.2.0"
+  checksum: 3403a591f7dba4164a2a1a48342855a0eee0e22f4f94903c39331339c4e96006ba4f9d5b81072bcd8f61f15d774891b6bb9f3cbe1fb202d558d9ae90f35baa49
   languageName: node
   linkType: hard
 
@@ -14708,10 +14716,27 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"to-fast-properties@npm:^2.0.0":
+"to-fast-properties-BABEL_8_BREAKING-false@npm:to-fast-properties@^2.0.0, to-fast-properties@npm:^2.0.0":
   version: 2.0.0
   resolution: "to-fast-properties@npm:2.0.0"
   checksum: be2de62fe58ead94e3e592680052683b1ec986c72d589e7b21e5697f8744cdbf48c266fa72f6c15932894c10187b5f54573a3bcf7da0bfd964d5caf23d436168
+  languageName: node
+  linkType: hard
+
+"to-fast-properties-BABEL_8_BREAKING-true@npm:to-fast-properties@^3.0.0":
+  version: 3.0.1
+  resolution: "to-fast-properties@npm:3.0.1"
+  checksum: 66b79f2c0d420d116a4eeb781c87c8c6b2de426a15f16118759e706aa1111833b0c578355a1108514ada966c08f4dba0cb7994aca025d80a535a139f7a631e22
+  languageName: node
+  linkType: hard
+
+"to-fast-properties@condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0":
+  version: 0.0.0-condition-8fb1fb
+  resolution: "to-fast-properties@condition:BABEL_8_BREAKING?^3.0.0:^2.0.0#8fb1fb"
+  dependencies:
+    to-fast-properties-BABEL_8_BREAKING-false: "npm:to-fast-properties@^2.0.0"
+    to-fast-properties-BABEL_8_BREAKING-true: "npm:to-fast-properties@^3.0.0"
+  checksum: 6c5259ab91c280bfa3d2db3edd2fa26be985fd06f63974d0c288391426523f9d70035a812d05b65fe0e3fef864d969fcc3630b441cb563693e3ec70c54def266
   languageName: node
   linkType: hard
 

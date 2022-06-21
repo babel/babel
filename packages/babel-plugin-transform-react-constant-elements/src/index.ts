@@ -29,7 +29,7 @@ export default declare((api, options: Options) => {
   // Element -> Target scope
   const HOISTED = new WeakMap();
 
-  function declares(node: t.Identifier | t.JSXIdentifier, scope) {
+  function declares(node: t.Identifier | t.JSXIdentifier, scope: Scope) {
     if (
       t.isJSXIdentifier(node, { name: "this" }) ||
       t.isJSXIdentifier(node, { name: "arguments" }) ||
@@ -43,11 +43,11 @@ export default declare((api, options: Options) => {
     return scope.hasOwnBinding(node.name);
   }
 
-  function isHoistingScope({ path }) {
+  function isHoistingScope({ path }: Scope) {
     return path.isFunctionParent() || path.isLoop() || path.isProgram();
   }
 
-  function getHoistingScope(scope) {
+  function getHoistingScope(scope: Scope) {
     while (!isHoistingScope(scope)) scope = scope.parent;
     return scope;
   }
