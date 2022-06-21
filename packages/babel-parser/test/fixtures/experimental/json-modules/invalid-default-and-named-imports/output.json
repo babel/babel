@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":71,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":71,"index":71}},
   "errors": [
-    "SyntaxError: A JSON module can only be imported with \"default\". (1:18)"
+    "SyntaxError: A JSON module can only be imported with `default`. (1:18)"
   ],
   "program": {
     "type": "Program",
