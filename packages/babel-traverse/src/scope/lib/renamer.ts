@@ -74,12 +74,41 @@ export default class Renamer {
     );
   }
 
-  maybeConvertFromClassFunctionDeclaration() {
-    return; // TODO
+  maybeConvertFromClassFunctionDeclaration(path: NodePath) {
+    return path; // TODO
+
+    // // retain the `name` of a class/function declaration
+
+    // if (!path.isFunctionDeclaration() && !path.isClassDeclaration()) return;
+    // if (this.binding.kind !== "hoisted") return;
+
+    // path.node.id = identifier(this.oldName);
+    // path.node._blockHoist = 3;
+
+    // path.replaceWith(
+    //   variableDeclaration("let", [
+    //     variableDeclarator(identifier(this.newName), toExpression(path.node)),
+    //   ]),
+    // );
   }
 
-  maybeConvertFromClassFunctionExpression() {
-    return; // TODO
+  maybeConvertFromClassFunctionExpression(path: NodePath) {
+    return path; // TODO
+
+    // // retain the `name` of a class/function expression
+
+    // if (!path.isFunctionExpression() && !path.isClassExpression()) return;
+    // if (this.binding.kind !== "local") return;
+
+    // path.node.id = identifier(this.oldName);
+
+    // this.binding.scope.parent.push({
+    //   id: identifier(this.newName),
+    // });
+
+    // path.replaceWith(
+    //   assignmentExpression("=", identifier(this.newName), path.node),
+    // );
   }
 
   rename(block?: t.Pattern | t.Scopable) {
@@ -118,8 +147,8 @@ export default class Renamer {
     }
 
     if (parentDeclar) {
-      this.maybeConvertFromClassFunctionDeclaration();
-      this.maybeConvertFromClassFunctionExpression();
+      this.maybeConvertFromClassFunctionDeclaration(path);
+      this.maybeConvertFromClassFunctionExpression(path);
     }
   }
 }
