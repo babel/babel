@@ -130,7 +130,7 @@ export default (_: typeof toParseErrorCredentials) => ({
   ImportCallNotNewExpression: _("Cannot use new with import(...)."),
   ImportCallSpreadArgument: _("`...` is not allowed in `import()`."),
   ImportJSONBindingNotDefault: _(
-    `A JSON module can only be imported with "default".`,
+    "A JSON module can only be imported with `default`.",
   ),
   IncompatibleRegExpUVFlags: _(
     "The 'u' and 'v' regular expression flags cannot be enabled at the same time.",
