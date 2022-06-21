@@ -54,7 +54,10 @@ export * from "./definitions";
 export { default as appendToMemberExpression } from "./modifications/appendToMemberExpression";
 export { default as inherits } from "./modifications/inherits";
 export { default as prependToMemberExpression } from "./modifications/prependToMemberExpression";
-export { default as removeProperties } from "./modifications/removeProperties";
+export {
+  default as removeProperties,
+  type Options as RemovePropertiesOptions,
+} from "./modifications/removeProperties";
 export { default as removePropertiesDeep } from "./modifications/removePropertiesDeep";
 export { default as removeTypeDuplicates } from "./modifications/flow/removeTypeDuplicates";
 

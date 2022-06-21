@@ -51,7 +51,7 @@ export default function splitExportDeclaration(
     }
 
     const updatedDeclaration = standaloneDeclaration
-      ? declaration
+      ? declaration.node
       : variableDeclaration("var", [
           variableDeclarator(
             cloneNode(id),

@@ -239,9 +239,10 @@ export function tsPrintFunctionOrConstructorType(
 ) {
   const { typeParameters } = node;
   const parameters = process.env.BABEL_8_BREAKING
-    ? // @ts-expect-error Babel 8 AST shape
+    ? // @ts-ignore Babel 8 AST shape
       node.params
-    : node.parameters;
+    : // @ts-ignore Babel 7 AST shape
+      node.parameters;
   this.print(typeParameters, node);
   this.token("(");
   this._parameters(parameters, node);
@@ -250,9 +251,10 @@ export function tsPrintFunctionOrConstructorType(
   this.token("=>");
   this.space();
   const returnType = process.env.BABEL_8_BREAKING
-    ? // @ts-expect-error Babel 8 AST shape
+    ? // @ts-ignore Babel 8 AST shape
       node.returnType
-    : node.typeAnnotation;
+    : // @ts-ignore Babel 7 AST shape
+      node.typeAnnotation;
   this.print(returnType.typeAnnotation, node);
 }
 

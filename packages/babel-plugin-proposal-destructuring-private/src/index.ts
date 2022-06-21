@@ -10,7 +10,8 @@ import { convertFunctionParams } from "@babel/plugin-transform-parameters";
 import { unshiftForXStatementBody } from "@babel/plugin-transform-destructuring";
 
 import type { PluginPass } from "@babel/core";
-import type { Visitor } from "@babel/traverse";
+import type { NodePath, Visitor } from "@babel/traverse";
+import type * as t from "@babel/types";
 
 export default declare(function ({ assertVersion, assumption, types: t }) {
   assertVersion("^7.17.0");
@@ -51,7 +52,10 @@ export default declare(function ({ assertVersion, assumption, types: t }) {
       const { params: transformedParams, variableDeclaration } =
         buildVariableDeclarationFromParams(paramsAfterIndex, scope);
 
-      path.get("body").unshiftContainer("body", variableDeclaration);
+      (path.get("body") as NodePath<t.BlockStatement>).unshiftContainer(
+        "body",
+        variableDeclaration,
+      );
       params.push(...transformedParams);
       // preserve function.length
       // (b, p1) => {}

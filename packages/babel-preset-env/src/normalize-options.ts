@@ -1,5 +1,8 @@
 import semver, { type SemVer } from "semver";
 import corejs2Polyfills from "@babel/compat-data/corejs2-built-ins";
+// @ts-ignore Fixme: TS can not infer types from ../data/core-js-compat.js
+// but we can't import core-js-compat/data.json because JSON imports does
+// not work on Node 14
 import corejs3Polyfills from "../data/core-js-compat";
 import { plugins as pluginsList } from "./plugins-compat-data";
 import moduleTransformations from "./module-transformations";

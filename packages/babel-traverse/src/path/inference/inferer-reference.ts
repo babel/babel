@@ -12,7 +12,7 @@ import {
 import type * as t from "@babel/types";
 import type Binding from "../../scope/binding";
 
-export default function (this: NodePath, node: any) {
+export default function (this: NodePath<t.Identifier>, node: t.Identifier) {
   if (!this.isReferenced()) return;
 
   // check if a binding exists of this value and if so then return a union type of all
@@ -40,10 +40,14 @@ export default function (this: NodePath, node: any) {
   }
 }
 
-function getTypeAnnotationBindingConstantViolations(binding, path, name) {
+function getTypeAnnotationBindingConstantViolations(
+  binding: Binding,
+  path: NodePath<t.Identifier>,
+  name: string,
+) {
   const types = [];
 
-  const functionConstantViolations = [];
+  const functionConstantViolations: NodePath[] = [];
   let constantViolations = getConstantViolationsBefore(
     binding,
     path,
@@ -107,17 +111,24 @@ function getTypeAnnotationBindingConstantViolations(binding, path, name) {
   }
 
   if (isTSTypeAnnotation(types[0]) && createTSUnionType) {
-    return createTSUnionType(types);
+    return createTSUnionType(
+      // @ts-ignore fixme: createTSUnionType should handle voidTypeAnnotation
+      types as t.TSTypeAnnotation[],
+    );
   }
 
   if (createFlowUnionType) {
-    return createFlowUnionType(types);
+    return createFlowUnionType(types as t.FlowType[]);
   }
 
-  return createUnionTypeAnnotation(types);
+  return createUnionTypeAnnotation(types as t.FlowType[]);
 }
 
-function getConstantViolationsBefore(binding: Binding, path, functions?) {
+function getConstantViolationsBefore(
+  binding: Binding,
+  path: NodePath,
+  functions?: NodePath[],
+) {
   const violations = binding.constantViolations.slice();
   violations.unshift(binding.path);
   return violations.filter(violation => {
@@ -186,7 +197,11 @@ function inferAnnotationFromBinaryExpression(
   return createTypeAnnotationBasedOnTypeof(typeValue);
 }
 
-function getParentConditionalPath(binding, path, name) {
+function getParentConditionalPath(
+  binding: Binding,
+  path: NodePath,
+  name: string,
+) {
   let parentPath;
   while ((parentPath = path.parentPath)) {
     if (parentPath.isIfStatement() || parentPath.isConditionalExpression()) {
@@ -194,7 +209,7 @@ function getParentConditionalPath(binding, path, name) {
         return;
       }
 
-      return parentPath;
+      return parentPath as NodePath<t.IfStatement | t.ConditionalExpression>;
     }
     if (parentPath.isFunction()) {
       if (parentPath.parentPath.scope.getBinding(name) !== binding) return;
@@ -207,8 +222,11 @@ function getParentConditionalPath(binding, path, name) {
 function getConditionalAnnotation<T extends t.Node>(
   binding: Binding,
   path: NodePath<T>,
-  name?,
-) {
+  name?: string,
+): {
+  typeAnnotation: t.FlowType | t.TSType;
+  ifStatement: NodePath<t.IfStatement | t.ConditionalExpression>;
+} {
   const ifStatement = getParentConditionalPath(binding, path, name);
   if (!ifStatement) return;
 
@@ -233,7 +251,10 @@ function getConditionalAnnotation<T extends t.Node>(
   if (types.length) {
     if (isTSTypeAnnotation(types[0]) && createTSUnionType) {
       return {
-        typeAnnotation: createTSUnionType(types),
+        typeAnnotation: createTSUnionType(
+          // @ts-ignore fixme: createTSUnionType should handle voidTypeAnnotation
+          types as t.TSTypeAnnotation[],
+        ),
         ifStatement,
       };
     }
@@ -251,5 +272,5 @@ function getConditionalAnnotation<T extends t.Node>(
     };
   }
 
-  return getConditionalAnnotation(ifStatement, name);
+  return getConditionalAnnotation(binding, ifStatement, name);
 }

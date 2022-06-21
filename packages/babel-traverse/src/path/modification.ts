@@ -26,7 +26,10 @@ import type Scope from "../scope";
  * Insert the provided nodes before the current one.
  */
 
-export function insertBefore(this: NodePath, nodes_: t.Node | t.Node[]) {
+export function insertBefore(
+  this: NodePath,
+  nodes_: t.Node | t.Node[],
+): NodePath[] {
   this._assertUnremoved();
 
   const nodes = this._verifyNodeList(nodes_);
@@ -57,7 +60,11 @@ export function insertBefore(this: NodePath, nodes_: t.Node | t.Node[]) {
         (node as t.ExpressionStatement).expression != null);
 
     this.replaceWith(blockStatement(shouldInsertCurrentNode ? [node] : []));
-    return this.unshiftContainer("body", nodes);
+    return (this as NodePath<t.BlockStatement>).unshiftContainer(
+      "body",
+      // @ts-ignore Fixme: refine nodes to t.BlockStatement["body"] when this is a BlockStatement path
+      nodes,
+    );
   } else {
     throw new Error(
       "We don't know what to do with this node type. " +
@@ -66,16 +73,20 @@ export function insertBefore(this: NodePath, nodes_: t.Node | t.Node[]) {
   }
 }
 
-export function _containerInsert(this: NodePath, from, nodes) {
+export function _containerInsert<N extends t.Node>(
+  this: NodePath,
+  from: number,
+  nodes: N[],
+): NodePath<N>[] {
   this.updateSiblingKeys(from, nodes.length);
 
-  const paths = [];
+  const paths: NodePath<N>[] = [];
 
   // @ts-expect-error todo(flow->ts): this.container could be a NodePath
   this.container.splice(from, 0, ...nodes);
   for (let i = 0; i < nodes.length; i++) {
     const to = from + i;
-    const path = this.getSibling(to);
+    const path = this.getSibling(to) as NodePath<N>;
     paths.push(path);
 
     if (this.context && this.context.queue) {
@@ -97,18 +108,23 @@ export function _containerInsert(this: NodePath, from, nodes) {
   return paths;
 }
 
-export function _containerInsertBefore(this: NodePath, nodes) {
-  return this._containerInsert(this.key, nodes);
+export function _containerInsertBefore<N extends t.Node>(
+  this: NodePath,
+  nodes: N[],
+) {
+  return this._containerInsert(this.key as number, nodes);
 }
 
-export function _containerInsertAfter(this: NodePath, nodes) {
-  // @ts-expect-error todo(flow->ts): this.key could be a string
-  return this._containerInsert(this.key + 1, nodes);
+export function _containerInsertAfter<N extends t.Node>(
+  this: NodePath,
+  nodes: N[],
+) {
+  return this._containerInsert((this.key as number) + 1, nodes);
 }
 
-const last = arr => arr[arr.length - 1];
+const last = <T>(arr: T[]) => arr[arr.length - 1];
 
-function isHiddenInSequenceExpression(path: NodePath) {
+function isHiddenInSequenceExpression(path: NodePath): boolean {
   return (
     isSequenceExpression(path.parent) &&
     (last(path.parent.expressions) !== path.node ||
@@ -185,7 +201,7 @@ export function insertAfter(
         assertExpression(node);
 
         this.replaceWith(callExpression(arrowFunctionExpression([], node), []));
-        (this.get("callee.body") as NodePath).insertAfter(nodes);
+        (this.get("callee.body") as NodePath<t.Expression>).insertAfter(nodes);
         return [this];
       }
 
@@ -233,6 +249,7 @@ export function insertAfter(
         (node as t.ExpressionStatement).expression != null);
 
     this.replaceWith(blockStatement(shouldInsertCurrentNode ? [node] : []));
+    // @ts-ignore Fixme: refine nodes to t.BlockStatement["body"] when this is a BlockStatement path
     return this.pushContainer("body", nodes);
   } else {
     throw new Error(
@@ -261,10 +278,10 @@ export function updateSiblingKeys(
   }
 }
 
-export function _verifyNodeList(
+export function _verifyNodeList<N extends t.Node>(
   this: NodePath,
-  nodes: t.Node | t.Node[],
-): t.Node[] {
+  nodes: N | N[],
+): N[] {
   if (!nodes) {
     return [];
   }
@@ -298,11 +315,17 @@ export function _verifyNodeList(
   return nodes;
 }
 
-export function unshiftContainer<Nodes extends t.Node | t.Node[]>(
-  this: NodePath,
-  listKey: string,
-  nodes: Nodes,
-): NodePath[] {
+export function unshiftContainer<N extends t.Node, K extends keyof N & string>(
+  this: NodePath<N>,
+  listKey: K,
+  nodes: N[K] extends (infer E)[]
+    ? E | E[]
+    : // todo: refine to t.Node[]
+      //  ? E extends t.Node
+      //    ? E | E[]
+      //    : never
+      never,
+) {
   // todo: NodePaths<Nodes>
   this._assertUnremoved();
 
@@ -314,22 +337,34 @@ export function unshiftContainer<Nodes extends t.Node | t.Node[]>(
   const path = NodePath.get({
     parentPath: this,
     parent: this.node,
-    container: this.node[listKey],
+    container: this.node[listKey] as unknown as t.Node | t.Node[],
     listKey,
     key: 0,
   }).setContext(this.context);
 
-  return path._containerInsertBefore(nodes);
+  return path._containerInsertBefore(
+    // @ts-expect-error typings needed to narrow down nodes as t.Node[]
+    nodes,
+  );
 }
 
-export function pushContainer(
-  this: NodePath,
-  listKey: string,
-  nodes: t.Node | t.Node[],
+export function pushContainer<N extends t.Node, K extends keyof N & string>(
+  this: NodePath<N>,
+  listKey: K,
+  nodes: N[K] extends (infer E)[]
+    ? E | E[]
+    : // todo: refine to t.Node[]
+      //  ? E extends t.Node
+      //    ? E | E[]
+      //    : never
+      never,
 ) {
   this._assertUnremoved();
 
-  const verifiedNodes = this._verifyNodeList(nodes);
+  const verifiedNodes = this._verifyNodeList(
+    // @ts-expect-error refine typings
+    nodes,
+  );
 
   // get an invisible path that represents the last node + 1 and replace it with our
   // nodes, effectively inlining it
@@ -338,8 +373,9 @@ export function pushContainer(
   const path = NodePath.get({
     parentPath: this,
     parent: this.node,
-    container: container,
+    container: container as unknown as t.Node | t.Node[],
     listKey,
+    // @ts-expect-error TS cannot infer that container is t.Node[]
     key: container.length,
   }).setContext(this.context);
 

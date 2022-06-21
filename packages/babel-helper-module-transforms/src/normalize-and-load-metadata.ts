@@ -580,7 +580,9 @@ function removeModuleDeclarations(programPath: NodePath<t.Program>) {
       ) {
         // @ts-expect-error todo(flow->ts): avoid mutations
         declaration._blockHoist = child.node._blockHoist;
-        child.replaceWith(declaration);
+        child.replaceWith(
+          declaration as NodePath<t.FunctionDeclaration | t.ClassDeclaration>,
+        );
       } else {
         // These should have been removed by the nameAnonymousExports() call.
         throw declaration.buildCodeFrameError(

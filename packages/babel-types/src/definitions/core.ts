@@ -381,7 +381,12 @@ export const functionTypeAnnotationCommon = {
   returnType: {
     validate: process.env.BABEL_8_BREAKING
       ? assertNodeType("TypeAnnotation", "TSTypeAnnotation")
-      : assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
+      : assertNodeType(
+          "TypeAnnotation",
+          "TSTypeAnnotation",
+          // @ts-ignore Babel 7 AST
+          "Noop",
+        ),
     optional: true,
   },
   typeParameters: {
@@ -390,6 +395,7 @@ export const functionTypeAnnotationCommon = {
       : assertNodeType(
           "TypeParameterDeclaration",
           "TSTypeParameterDeclaration",
+          // @ts-ignore Babel 7 AST
           "Noop",
         ),
     optional: true,
@@ -475,7 +481,12 @@ export const patternLikeCommon = {
   typeAnnotation: {
     validate: process.env.BABEL_8_BREAKING
       ? assertNodeType("TypeAnnotation", "TSTypeAnnotation")
-      : assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
+      : assertNodeType(
+          "TypeAnnotation",
+          "TSTypeAnnotation",
+          // @ts-ignore Babel 7 AST
+          "Noop",
+        ),
     optional: true,
   },
   decorators: {
@@ -1354,6 +1365,7 @@ defineType("ClassExpression", {
         : assertNodeType(
             "TypeParameterDeclaration",
             "TSTypeParameterDeclaration",
+            // @ts-ignore Babel 7 AST
             "Noop",
           ),
       optional: true,
@@ -1411,6 +1423,7 @@ defineType("ClassDeclaration", {
         : assertNodeType(
             "TypeParameterDeclaration",
             "TSTypeParameterDeclaration",
+            // @ts-ignore Babel 7 AST
             "Noop",
           ),
       optional: true,
@@ -2159,7 +2172,12 @@ defineType("ClassProperty", {
     typeAnnotation: {
       validate: process.env.BABEL_8_BREAKING
         ? assertNodeType("TypeAnnotation", "TSTypeAnnotation")
-        : assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
+        : assertNodeType(
+            "TypeAnnotation",
+            "TSTypeAnnotation",
+            // @ts-ignore Babel 7 AST
+            "Noop",
+          ),
       optional: true,
     },
     decorators: {
@@ -2233,7 +2251,12 @@ defineType("ClassAccessorProperty", {
     typeAnnotation: {
       validate: process.env.BABEL_8_BREAKING
         ? assertNodeType("TypeAnnotation", "TSTypeAnnotation")
-        : assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
+        : assertNodeType(
+            "TypeAnnotation",
+            "TSTypeAnnotation",
+            // @ts-ignore Babel 7 AST
+            "Noop",
+          ),
       optional: true,
     },
     decorators: {
@@ -2273,7 +2296,12 @@ defineType("ClassPrivateProperty", {
     typeAnnotation: {
       validate: process.env.BABEL_8_BREAKING
         ? assertNodeType("TypeAnnotation", "TSTypeAnnotation")
-        : assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
+        : assertNodeType(
+            "TypeAnnotation",
+            "TSTypeAnnotation",
+            // @ts-ignore Babel 7 AST
+            "Noop",
+          ),
       optional: true,
     },
     decorators: {

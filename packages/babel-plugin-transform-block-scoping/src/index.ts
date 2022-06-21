@@ -62,12 +62,12 @@ export default declare((api, opts: Options) => {
         }
       },
 
-      Loop(path, state) {
+      Loop(path: NodePath<t.Loop>, state) {
         const { parent, scope } = path;
         path.ensureBlock();
         const blockScoping = new BlockScoping(
           path,
-          path.get("body") as NodePath<t.BlockStatement>,
+          path.get("body"),
           parent,
           scope,
           throwIfClosureRequired,
@@ -534,6 +534,7 @@ class BlockScoping {
             ]),
           );
         } else if (violation.isForXStatement()) {
+          // @ts-expect-error TS requires explicit annotation of "violation"
           violation.ensureBlock();
           violation
             .get("left")

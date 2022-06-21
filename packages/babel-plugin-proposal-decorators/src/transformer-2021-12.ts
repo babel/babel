@@ -143,7 +143,10 @@ function replaceClassWithVar(
       t.sequenceExpression([newClassExpr, varId]),
     );
 
-    return [t.cloneNode(varId), newPath.get("expressions.0")];
+    return [
+      t.cloneNode(varId),
+      newPath.get("expressions.0") as NodePath<t.ClassExpression>,
+    ];
   }
 }
 

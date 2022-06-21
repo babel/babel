@@ -87,7 +87,7 @@ export default class PathHoister<T extends t.Node = t.Node> {
   }
 
   // A scope is compatible if all required bindings are reachable.
-  isCompatibleScope(scope) {
+  isCompatibleScope(scope: Scope) {
     for (const key of Object.keys(this.bindings)) {
       const binding = this.bindings[key];
       if (!scope.bindingIdentifierEquals(key, binding.identifier)) {
@@ -198,7 +198,7 @@ export default class PathHoister<T extends t.Node = t.Node> {
   }
 
   // Find an attachment for this path.
-  getAttachmentParentForPath(path) {
+  getAttachmentParentForPath(path: NodePath) {
     do {
       if (
         // Beginning of the scope
@@ -212,7 +212,7 @@ export default class PathHoister<T extends t.Node = t.Node> {
   }
 
   // Returns true if a scope has param bindings.
-  hasOwnParamBindings(scope) {
+  hasOwnParamBindings(scope: Scope) {
     for (const name of Object.keys(this.bindings)) {
       if (!scope.hasOwnBinding(name)) continue;
 
@@ -238,7 +238,8 @@ export default class PathHoister<T extends t.Node = t.Node> {
     if (attachTo.getFunctionParent() === this.path.getFunctionParent()) return;
 
     // generate declaration and insert it to our point
-    let uid = attachTo.scope.generateUidIdentifier("ref");
+    let uid: t.Identifier | t.JSXExpressionContainer =
+      attachTo.scope.generateUidIdentifier("ref");
 
     // @ts-expect-error todo(flow->ts): more specific type for this.path
     const declarator = variableDeclarator(uid, this.path.node);

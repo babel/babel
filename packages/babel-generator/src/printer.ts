@@ -669,9 +669,8 @@ class Printer {
   _printComment(comment: t.Comment, skipNewLines?: boolean) {
     if (!this.format.shouldPrintComment(comment.value)) return;
 
-    // Some plugins use this to mark comments as removed using the AST-root 'comments' property,
+    // Some plugins (such as flow-strip-types) use this to mark comments as removed using the AST-root 'comments' property,
     // where they can't manually mutate the AST node comment lists.
-    // @ts-ignore todo: which plugin?
     if (comment.ignore) return;
 
     if (this._printedComments.has(comment)) return;

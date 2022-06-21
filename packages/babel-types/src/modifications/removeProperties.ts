@@ -17,13 +17,14 @@ const CLEAR_KEYS_PLUS_COMMENTS = [
   ...CLEAR_KEYS,
 ] as const;
 
+export type Options = { preserveComments?: boolean };
 /**
  * Remove all of the _* properties from a node along with the additional metadata
  * properties like location data and raw token data.
  */
 export default function removeProperties(
   node: t.Node,
-  opts: { preserveComments?: boolean } = {},
+  opts: Options = {},
 ): void {
   const map = opts.preserveComments ? CLEAR_KEYS : CLEAR_KEYS_PLUS_COMMENTS;
   for (const key of map) {

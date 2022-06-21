@@ -540,7 +540,7 @@ export default declare((api, opts: Options) => {
       },
 
       // taken from transform-destructuring/src/index.js#visitor
-      ForXStatement(path) {
+      ForXStatement(path: NodePath<t.ForXStatement>) {
         const { node, scope } = path;
         const leftPath = path.get("left");
         const left = node.left;
@@ -558,7 +558,7 @@ export default declare((api, opts: Options) => {
           ]);
 
           path.ensureBlock();
-          const body = node.body as t.BlockStatement;
+          const body = path.node.body;
 
           if (body.body.length === 0 && path.isCompletionRecord()) {
             body.body.unshift(

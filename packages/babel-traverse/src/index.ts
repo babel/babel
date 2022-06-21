@@ -1,5 +1,10 @@
 import * as visitors from "./visitors";
-import { VISITOR_KEYS, removeProperties, traverseFast } from "@babel/types";
+import {
+  VISITOR_KEYS,
+  removeProperties,
+  type RemovePropertiesOptions,
+  traverseFast,
+} from "@babel/types";
 import type * as t from "@babel/types";
 import * as cache from "./cache";
 import type NodePath from "./path";
@@ -15,6 +20,11 @@ export type { HubInterface } from "./hub";
 
 export { visitors };
 
+// fixme: The TraverseOptions should have been { scope ... } & Visitor<S>
+// however TS does not support excluding certain string literals from general string
+// type. If we change here to { scope ... } & Visitor<S>, TS will throw
+// noScope: boolean because it matched `noScope` to the [k in string]: VisitNode<> catch-all
+// in Visitor
 export type TraverseOptions<S = t.Node> =
   | {
       scope?: Scope;
@@ -39,9 +49,10 @@ function traverse(
   parentPath?: NodePath,
 ): void;
 
-function traverse(
+function traverse<Options extends TraverseOptions>(
   parent: t.Node,
-  opts: TraverseOptions = {},
+  // @ts-ignore provide {} as default value for Options
+  opts: Options = {},
   scope?: Scope,
   state?: any,
   parentPath?: NodePath,
@@ -62,7 +73,7 @@ function traverse(
     return;
   }
 
-  visitors.explode(opts);
+  visitors.explode(opts as Visitor);
 
   traverseNode(parent, opts, scope, state, parentPath);
 }
@@ -73,7 +84,7 @@ traverse.visitors = visitors;
 traverse.verify = visitors.verify;
 traverse.explode = visitors.explode;
 
-traverse.cheap = function (node, enter) {
+traverse.cheap = function (node: t.Node, enter: (node: t.Node) => void) {
   return traverseFast(node, enter);
 };
 
@@ -83,24 +94,31 @@ traverse.node = function (
   scope?: Scope,
   state?: any,
   path?: NodePath,
-  skipKeys?: string[],
+  skipKeys?: Record<string, boolean>,
 ) {
   traverseNode(node, opts, scope, state, path, skipKeys);
   // traverse.node always returns undefined
 };
 
-traverse.clearNode = function (node: t.Node, opts?) {
+traverse.clearNode = function (node: t.Node, opts?: RemovePropertiesOptions) {
   removeProperties(node, opts);
 
   cache.path.delete(node);
 };
 
-traverse.removeProperties = function (tree, opts?) {
+traverse.removeProperties = function (
+  tree: t.Node,
+  opts?: RemovePropertiesOptions,
+) {
   traverseFast(tree, traverse.clearNode, opts);
   return tree;
 };
 
-function hasDenylistedType(path: NodePath, state) {
+type HasDenylistedTypeState = {
+  has: boolean;
+  type: t.Node["type"];
+};
+function hasDenylistedType(path: NodePath, state: HasDenylistedTypeState) {
   if (path.node.type === state.type) {
     state.has = true;
     path.stop();
@@ -108,8 +126,8 @@ function hasDenylistedType(path: NodePath, state) {
 }
 
 traverse.hasType = function (
-  tree: any,
-  type: any,
+  tree: t.Node,
+  type: t.Node["type"],
   denylistTypes?: Array<string>,
 ): boolean {
   // the node we're searching in is denylisted
@@ -118,7 +136,7 @@ traverse.hasType = function (
   // the type we're looking for is the same as the passed node
   if (tree.type === type) return true;
 
-  const state = {
+  const state: HasDenylistedTypeState = {
     has: false,
     type: type,
   };
