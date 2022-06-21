@@ -227,6 +227,7 @@ interface CollectVisitorState {
   assignments: NodePath<t.AssignmentExpression>[];
   references: NodePath<t.Identifier | t.JSXIdentifier>[];
   constantViolations: NodePath[];
+  sloppyFunctionDeclarationsStack: NodePath<t.FunctionDeclaration>[][];
 }
 
 const collectorVisitor: Visitor<CollectVisitorState> = {
@@ -321,11 +322,27 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
     }
   },
 
-  BlockScoped(path) {
+  BlockScoped(path, state) {
     let scope = path.scope;
     if (scope.path === path) scope = scope.parent;
 
     const parent = scope.getBlockParent();
+
+    if (
+      path.isFunctionDeclaration({ async: false, generator: false }) &&
+      !parent.path.isProgram() &&
+      !parent.path.isFunction() &&
+      !parent.path.isInStrictMode()
+    ) {
+      // Sloppy mode function declaration which may need to be hoisted up to a higher block.
+      // Defer resolving what scope it should be bound to until exiting parent function,
+      // when all other bindings have been registered.
+      state.sloppyFunctionDeclarationsStack[
+        state.sloppyFunctionDeclarationsStack.length - 1
+      ].push(path);
+      return;
+    }
+
     parent.registerDeclaration(path);
 
     // Register class identifier in class' scope if this is a class declaration.
@@ -341,22 +358,31 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
     path.scope.registerBinding("let", path);
   },
 
-  Function(path) {
-    const params: Array<NodePath> = path.get("params");
-    for (const param of params) {
-      path.scope.registerBinding("param", param);
-    }
+  Function: {
+    enter(path, state) {
+      const params: Array<NodePath> = path.get("params");
+      for (const param of params) {
+        path.scope.registerBinding("param", param);
+      }
 
-    // Register function expression id after params. When the id
-    // collides with a function param, the id effectively can't be
-    // referenced: here we registered it as a constantViolation
-    if (
-      path.isFunctionExpression() &&
-      path.has("id") &&
-      !path.get("id").node[NOT_LOCAL_BINDING]
-    ) {
-      path.scope.registerBinding("local", path.get("id"), path);
-    }
+      // Register function expression id after params. When the id
+      // collides with a function param, the id effectively can't be
+      // referenced: here we registered it as a constantViolation
+      if (
+        path.isFunctionExpression() &&
+        path.has("id") &&
+        !path.get("id").node[NOT_LOCAL_BINDING]
+      ) {
+        path.scope.registerBinding("local", path.get("id"), path);
+      }
+
+      state.sloppyFunctionDeclarationsStack.push([]);
+    },
+    exit(path, state) {
+      path.scope._registerSloppyFunctionDeclarations(
+        state.sloppyFunctionDeclarationsStack.pop(),
+      );
+    },
   },
 
   ClassExpression(path) {
@@ -798,6 +824,47 @@ export default class Scope {
     }
   }
 
+  // Must only be called on a scope attached to a program or function path.
+  // Must only be called with functions defined in sloppy mode.
+  // Must not be called with async or generator functions.
+  _registerSloppyFunctionDeclarations(
+    paths: NodePath<t.FunctionDeclaration>[],
+  ) {
+    if (paths.length === 0) return;
+    for (const fnPath of paths) {
+      this._registerSloppyFunctionDeclaration(fnPath);
+    }
+  }
+
+  _registerSloppyFunctionDeclaration(path: NodePath<t.FunctionDeclaration>) {
+    const id = path.get("id"),
+      { name } = id.node;
+    let scope = path.scope.parent;
+    const localBinding = scope.getOwnBinding(name);
+    if (!localBinding) {
+      // Function should be bound in highest scope which does not already have
+      // a `let` / `const` / `param` / `module` binding registered
+      do {
+        const nextScope = scope.parent,
+          binding = nextScope.getOwnBinding(name);
+        if (binding) {
+          const { kind } = binding;
+          if (kind === "var" || kind === "hoisted" || kind === "local") {
+            // Can re-declare in this scope
+            scope = nextScope;
+            break;
+          }
+          // Cannot register in this scope
+          break;
+        }
+        // Can register in this scope, but maybe can go higher still
+        scope = nextScope;
+      } while (scope !== this);
+    }
+
+    scope.registerBinding("hoisted", id, path);
+  }
+
   // todo: flow->ts maybe add more specific type
   addGlobal(node: Extract<t.Node, { name: string }>) {
     this.globals[node.name] = node;
@@ -960,6 +1027,7 @@ export default class Scope {
       references: [],
       constantViolations: [],
       assignments: [],
+      sloppyFunctionDeclarationsStack: [[]],
     };
 
     this.crawling = true;
@@ -979,6 +1047,11 @@ export default class Scope {
       }
     }
     path.traverse(collectorVisitor, state);
+    (
+      this.getFunctionParent() || this.getProgramParent()
+    )._registerSloppyFunctionDeclarations(
+      state.sloppyFunctionDeclarationsStack.pop(),
+    );
     this.crawling = false;
 
     // register assignments

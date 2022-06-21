@@ -914,6 +914,306 @@ describe("scope", () => {
         expect(switchStatement.scope.hasOwnBinding("foo")).toBe(true);
       });
     });
+    // Function declarations should be declared in the nearest BlockParent ancestry
+    // if in strict mode or if function is async or generator.
+    // Otherwise declared in furthest BlockParent ancestry within parent function.
+    describe("function declarations should be registered", () => {
+      describe("in strict mode", () => {
+        it("in program", () => {
+          const program = getPath("'use strict'; function foo() {}");
+          expect(program.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        it("in function declaration", () => {
+          const functionDeclaration = getPath(
+            "'use strict'; function f() { function foo() {} }",
+          ).get("body.0");
+          expect(functionDeclaration.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        it("in function expression", () => {
+          const functionExpression = getPath(
+            "'use strict'; (function () { function foo() {} })",
+          ).get("body.0.expression");
+          expect(functionExpression.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        it("in arrow expression", () => {
+          const arrowExpression = getPath(
+            "'use strict'; () => { function foo() {} }",
+          ).get("body.0.expression");
+          expect(arrowExpression.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        it("in object method", () => {
+          const objectMethod = getPath(
+            "'use strict'; ({ method() { function foo() {} } })",
+          ).get("body.0.expression.properties.0");
+          expect(objectMethod.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        it("in class method", () => {
+          const classMethod = getPath(
+            "(class { method() { function foo() {} } })",
+          ).get("body.0.expression.body.body.0");
+          expect(classMethod.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        it("in class private method", () => {
+          const classMethod = getPath(
+            "(class { #method() { function foo() {} } })",
+          ).get("body.0.expression.body.body.0");
+          expect(classMethod.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        it("in static block", () => {
+          const staticBlock = getPath(
+            "(class { static { function foo() {} } })",
+            {
+              plugins: ["classStaticBlock"],
+            },
+          ).get("body.0.expression.body.body.0");
+          expect(staticBlock.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        it("in block statement", () => {
+          const blockStatement = getPath(
+            "'use strict'; { function foo() {} }",
+          ).get("body.0");
+          expect(blockStatement.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        it("in catch clause", () => {
+          const catchClause = getPath(
+            "'use strict'; try {} catch { function foo() {} }",
+          ).get("body.0.handler");
+          expect(catchClause.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        it("in switch statement", () => {
+          const switchStatement = getPath(
+            "'use strict'; switch (0) { case 0: function foo() {} }",
+          ).get("body.0");
+          expect(switchStatement.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        it("in block statement nested in function declaration", () => {
+          const functionDeclaration = getPath(
+            "'use strict'; function f() { { function foo() {} } }",
+          ).get("body.0.body.body.0");
+          expect(functionDeclaration.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        it("in block statement nested in function declaration where outer function strict", () => {
+          const functionDeclaration = getPath(
+            "function f() { 'use strict'; { function foo() {} } }",
+          ).get("body.0.body.body.0");
+          expect(functionDeclaration.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        it("in block statement nested 2 deep in function declaration", () => {
+          const functionDeclaration = getPath(
+            "'use strict'; function f() { { { function foo() {} } } }",
+          ).get("body.0.body.body.0.body.0");
+          expect(functionDeclaration.scope.hasOwnBinding("foo")).toBe(true);
+        });
+      });
+      describe("in sloppy mode", () => {
+        it("in program", () => {
+          const program = getPath("function foo() {}");
+          expect(program.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        it("in function declaration", () => {
+          const functionDeclaration = getPath(
+            "function f() { function foo() {} }",
+          ).get("body.0");
+          expect(functionDeclaration.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        it("in function expression", () => {
+          const functionExpression = getPath(
+            "(function () { function foo() {} })",
+          ).get("body.0.expression");
+          expect(functionExpression.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        it("in arrow expression", () => {
+          const arrowExpression = getPath("() => { function foo() {} }").get(
+            "body.0.expression",
+          );
+          expect(arrowExpression.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        it("in object method", () => {
+          const objectMethod = getPath(
+            "({ method() { function foo() {} } })",
+          ).get("body.0.expression.properties.0");
+          expect(objectMethod.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        it("in program if function nested in block statement", () => {
+          const program = getPath("{ function foo() {} }");
+          expect(program.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        it("in program if function nested in block statements 2 deep", () => {
+          const program = getPath("{ { function foo() {} } }");
+          expect(program.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        it("in program if function nested in catch clause", () => {
+          const program = getPath("try {} catch { function foo() {} }");
+          expect(program.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        it("in program if function nested in switch statement", () => {
+          const program = getPath("switch (0) { case 0: function foo() {} }");
+          expect(program.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        it("in program if function nested in block statement and function itself is strict mode", () => {
+          const program = getPath("{ function foo() { 'use strict'; } }");
+          expect(program.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        it("in program if function nested in block statement and program contains var statement with same var name", () => {
+          const program = getPath("var foo; { function foo() {} }");
+          expect(program.scope.hasOwnBinding("foo")).toBe(true);
+          expect(program.get("body.1").scope.hasOwnBinding("foo")).toBe(false);
+        });
+        it("in program if function nested in block statements 2 deep and program contains var statement with same var name", () => {
+          const program = getPath("var foo; { { function foo() {} } }");
+          expect(program.scope.hasOwnBinding("foo")).toBe(true);
+          expect(program.get("body.1").scope.hasOwnBinding("foo")).toBe(false);
+          expect(program.get("body.1.body.0").scope.hasOwnBinding("foo")).toBe(
+            false,
+          );
+        });
+        it("in program if function nested in block statement and program contains function declaration with same name", () => {
+          const program = getPath("function foo() {} { function foo() {} }");
+          expect(program.scope.hasOwnBinding("foo")).toBe(true);
+          expect(program.get("body.1").scope.hasOwnBinding("foo")).toBe(false);
+        });
+        it("in program if function nested in block statements 2 deep and program contains function declaration with same name", () => {
+          const program = getPath(
+            "function foo() {} { { function foo() {} } }",
+          );
+          expect(program.scope.hasOwnBinding("foo")).toBe(true);
+          expect(program.get("body.1").scope.hasOwnBinding("foo")).toBe(false);
+          expect(program.get("body.1.body.0").scope.hasOwnBinding("foo")).toBe(
+            false,
+          );
+        });
+        describe("in block statement if function is", () => {
+          it("async", () => {
+            const blockStatement = getPath("{ async function foo() {} }").get(
+              "body.0",
+            );
+            expect(blockStatement.scope.hasOwnBinding("foo")).toBe(true);
+          });
+          it("generator", () => {
+            const blockStatement = getPath("{ function* foo() {} }").get(
+              "body.0",
+            );
+            expect(blockStatement.scope.hasOwnBinding("foo")).toBe(true);
+          });
+          it("async generator", () => {
+            const blockStatement = getPath("{ async function* foo() {} }").get(
+              "body.0",
+            );
+            expect(blockStatement.scope.hasOwnBinding("foo")).toBe(true);
+          });
+        });
+        describe("in block statement if program contains", () => {
+          it("const statement with same name", () => {
+            const blockStatement = getPath(
+              "{ function foo() {} } const foo = 1;",
+            ).get("body.0");
+            expect(blockStatement.scope.hasOwnBinding("foo")).toBe(true);
+          });
+          it("let statement with same name", () => {
+            const blockStatement = getPath(
+              "{ function foo() {} } let foo = 1;",
+            ).get("body.0");
+            expect(blockStatement.scope.hasOwnBinding("foo")).toBe(true);
+          });
+          it("class declaration with same name", () => {
+            const blockStatement = getPath(
+              "{ function foo() {} } class foo {}",
+            ).get("body.0");
+            expect(blockStatement.scope.hasOwnBinding("foo")).toBe(true);
+          });
+        });
+        it("in block statement where defined if block above contains let statement with same var name", () => {
+          const blockStatement = getPath(
+            "{ { function foo() {} } let foo; }",
+          ).get("body.0.body.0");
+          expect(blockStatement.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        it("in block statement above where defined if block above that contains let statement with same var name", () => {
+          const blockStatement = getPath(
+            "{ { { function foo() {} } } let foo; }",
+          ).get("body.0.body.0");
+          expect(blockStatement.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        it("in block statement 2 above where defined if block above that contains let statement with same var name", () => {
+          const blockStatement = getPath(
+            "{ { { { function foo() {} } } } let foo; }",
+          ).get("body.0.body.0");
+          expect(blockStatement.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        describe("in function where function declaration nested in block statement", () => {
+          it("and no conflicting bindings", () => {
+            const functionDeclaration = getPath(
+              "function f() { { function foo() {} } }",
+            ).get("body.0");
+            expect(functionDeclaration.scope.hasOwnBinding("foo")).toBe(true);
+          });
+          it("and outer and inner functions have same name", () => {
+            // `local`-kind binding with same name
+            const functionExpression = getPath(
+              "(function foo() { { function foo() {} } })",
+            ).get("body.0.expression");
+            expect(functionExpression.scope.hasOwnBinding("foo")).toBe(true);
+            expect(
+              functionExpression.get("body.body.0").scope.hasOwnBinding("foo"),
+            ).toBe(false);
+          });
+          it("and outer function contains var statement with same var name", () => {
+            const functionDeclaration = getPath(
+              "function f() { var foo; { function foo() {} } }",
+            ).get("body.0");
+            expect(functionDeclaration.scope.hasOwnBinding("foo")).toBe(true);
+            expect(
+              functionDeclaration.get("body.body.1").scope.hasOwnBinding("foo"),
+            ).toBe(false);
+          });
+          it("and outer function contains function declaration with same name", () => {
+            const functionDeclaration = getPath(
+              "function f() { function foo() {} { function foo() {} } }",
+            ).get("body.0");
+            expect(functionDeclaration.scope.hasOwnBinding("foo")).toBe(true);
+            expect(
+              functionDeclaration.get("body.body.1").scope.hasOwnBinding("foo"),
+            ).toBe(false);
+          });
+        });
+        it("in block statement where defined if outer function has param with same name", () => {
+          const blockStatement = getPath(
+            "function f(foo) { { function foo() {} } }",
+          ).get("body.0.body.body.0");
+          expect(blockStatement.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        it("in block statement where defined if outer function contains let statement with same var name", () => {
+          const blockStatement = getPath(
+            "function f() { { function foo() {} } let foo; }",
+          ).get("body.0.body.body.0");
+          expect(blockStatement.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        it("in block statement where defined if outer function contains block statement containing let statement with same var name", () => {
+          const blockStatement = getPath(
+            "function f() { { { function foo() {} } let foo; } }",
+          ).get("body.0.body.body.0.body.0");
+          expect(blockStatement.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        it("in block statement above where defined if outer function contains let statement with same var name", () => {
+          const blockStatement = getPath(
+            "function f() { { { function foo() {} } } let foo; }",
+          ).get("body.0.body.body.0");
+          expect(blockStatement.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        it("in block statement above where defined if outer function has param with same name", () => {
+          const blockStatement = getPath(
+            "function f(foo) { { { function foo() {} } } }",
+          ).get("body.0.body.body.0");
+          expect(blockStatement.scope.hasOwnBinding("foo")).toBe(true);
+        });
+        it("in block statement 2 above where defined if block above that contains let statement with same var name", () => {
+          const blockStatement = getPath(
+            "function f(foo) { { { { { function foo() {} } } } let foo; } }",
+          ).get("body.0.body.body.0.body.0");
+          expect(blockStatement.scope.hasOwnBinding("foo")).toBe(true);
+        });
+      });
+    });
   });
 
   describe(".push", () => {
