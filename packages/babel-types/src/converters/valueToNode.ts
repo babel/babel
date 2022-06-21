@@ -31,6 +31,7 @@ export default valueToNode as {
   (value: unknown): t.Expression;
 };
 
+// @ts-expect-error: Object.prototype.toString must return a string
 const objectToString: (value: unknown) => string = Function.call.bind(
   Object.prototype.toString,
 );
