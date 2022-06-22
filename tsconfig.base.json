@@ -13,6 +13,7 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "noImplicitThis": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "strictBindCallApply": true
   }
 }

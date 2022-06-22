@@ -156,13 +156,16 @@ export function DeclareExportDeclaration(
     this.space();
   }
 
-  FlowExportDeclaration.apply(this, arguments);
+  FlowExportDeclaration.call(this, node);
 }
 
-export function DeclareExportAllDeclaration(this: Printer) {
+export function DeclareExportAllDeclaration(
+  this: Printer,
+  node: t.DeclareExportAllDeclaration,
+) {
   this.word("declare");
   this.space();
-  ExportAllDeclaration.apply(this, arguments);
+  ExportAllDeclaration.call(this, node);
 }
 
 export function EnumDeclaration(this: Printer, node: t.EnumDeclaration) {

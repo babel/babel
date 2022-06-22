@@ -68,7 +68,7 @@ export function ExportNamespaceSpecifier(
 
 export function ExportAllDeclaration(
   this: Printer,
-  node: t.ExportAllDeclaration,
+  node: t.ExportAllDeclaration | t.DeclareExportAllDeclaration,
 ) {
   this.word("export");
   this.space();
@@ -81,6 +81,7 @@ export function ExportAllDeclaration(
   this.word("from");
   this.space();
   this.print(node.source, node);
+  // @ts-expect-error Fixme: assertions is not defined in DeclareExportAllDeclaration
   this.printAssertions(node);
   this.semicolon();
 }
