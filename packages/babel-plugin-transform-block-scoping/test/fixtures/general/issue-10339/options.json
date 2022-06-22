@@ -2,5 +2,6 @@
   "plugins": [
     "transform-block-scoping",
     ["proposal-object-rest-spread", { "loose": true }]
-  ]
+  ],
+  "parserOpts": { "allowReturnOutsideFunction": true }
 }

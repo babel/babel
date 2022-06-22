@@ -9,6 +9,7 @@ const Plugin = _Plugin.default || _Plugin;
 
 import presetEnv from "@babel/preset-env";
 import pluginSyntaxFlow from "@babel/plugin-syntax-flow";
+import pluginSyntaxJSX from "@babel/plugin-syntax-jsx";
 import pluginFlowStripTypes from "@babel/plugin-transform-flow-strip-types";
 
 const cwd = path.dirname(fileURLToPath(import.meta.url));
@@ -115,7 +116,7 @@ describe("parser and generator options", function () {
     function newTransformWithPlugins(string) {
       return transformSync(string, {
         ast: true,
-        plugins: [cwd + "/../../babel-plugin-syntax-flow"],
+        plugins: [pluginSyntaxFlow],
         parserOpts: {
           parser: recast.parse,
         },
@@ -351,20 +352,21 @@ describe("api", function () {
   it("options throw on falsy true", function () {
     return expect(function () {
       transformSync("", {
-        plugins: [cwd + "/../../babel-plugin-syntax-jsx", false],
+        plugins: [pluginSyntaxJSX, false],
       });
     }).toThrow(/.plugins\[1\] must be a string, object, function/);
   });
 
-  it("options merge backwards", function () {
-    return transformAsync("", {
-      presets: [cwd + "/../../babel-preset-env"],
-      plugins: [cwd + "/../../babel-plugin-syntax-jsx"],
-    }).then(function (result) {
-      expect(result.options.plugins[0].manipulateOptions.toString()).toEqual(
-        expect.stringContaining("jsx"),
-      );
+  it("options merge backwards", async function () {
+    const result = await transformAsync("", {
+      cwd,
+      presets: ["@babel/preset-env"],
+      plugins: ["@babel/plugin-syntax-jsx"],
     });
+
+    expect(result.options.plugins[0].manipulateOptions.toString()).toEqual(
+      expect.stringContaining("jsx"),
+    );
   });
 
   it("option wrapPluginVisitorMethod", function () {

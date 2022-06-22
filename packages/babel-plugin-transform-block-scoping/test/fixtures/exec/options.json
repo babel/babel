@@ -4,5 +4,6 @@
     "transform-arrow-functions",
     "transform-destructuring",
     "transform-block-scoping"
-  ]
+  ],
+  "parserOpts": { "allowReturnOutsideFunction": true }
 }

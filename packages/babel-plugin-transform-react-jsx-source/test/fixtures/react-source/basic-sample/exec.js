@@ -1,7 +1,7 @@
-var actual = transform(
+var actualP = transformAsync(
   'var x = <sometag />',
   Object.assign({}, opts, { filename: '/fake/path/mock.js' })
-).code;
+)
 
 var expected = `
 var _jsxFileName = "/fake/path/mock.js";
@@ -12,4 +12,6 @@ var x = <sometag __source={{
 }} />;
 `.trim();
 
-expect(actual).toBe(expected);
+return actualP.then(actual => {
+  expect(actual.code).toBe(expected);
+});
