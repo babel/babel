@@ -84,7 +84,14 @@
     ],
     "USE_ESM": [
       {
-        "type": "module"
+        "type": "module",
+        "exports": {
+          ".": {
+            "require": "./cjs-proxy.cjs",
+            "default": "./lib/index.js"
+          },
+          "./package.json": "./package.json"
+        }
       },
       null
     ]
