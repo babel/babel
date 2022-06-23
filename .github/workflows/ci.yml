@@ -65,6 +65,30 @@ jobs:
       - name: Upload coverage report
         uses: codecov/codecov-action@v1
 
+  test-esm:
+    name: Test ESM version
+    needs: prepare-yarn-cache
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Use Node.js latest
+        uses: actions/setup-node@v3
+        with:
+          node-version: "*"
+          cache: "yarn"
+      - name: Use ESM and build
+        run: make use-esm
+        env:
+          USE_ESM: true
+      - name: Test
+        # Hack: --color has supports-color@5 returned true for GitHub CI
+        # Remove once `chalk` is bumped to 4.0.
+        run: yarn jest --ci --color
+        env:
+          BABEL_ENV: test
+          USE_ESM: true
+
   build:
     name: Build Babel Artifacts
     needs: prepare-yarn-cache
