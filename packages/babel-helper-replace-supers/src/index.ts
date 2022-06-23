@@ -375,7 +375,7 @@ export default class ReplaceSupers {
   getObjectRef() {
     return cloneNode(
       this.opts.objectRef ||
-        // @ts-expect-error https://github.com/microsoft/TypeScript/issues/49646
+        // @ts-expect-error https://github.com/microsoft/TypeScript/issues/49643
         this.opts.getObjectRef(),
     );
   }
@@ -384,7 +384,7 @@ export default class ReplaceSupers {
     if (this.opts.superRef) return cloneNode(this.opts.superRef);
     if (this.opts.getSuperRef) {
       return cloneNode(
-        // @ts-expect-error https://github.com/microsoft/TypeScript/issues/49646
+        // @ts-expect-error https://github.com/microsoft/TypeScript/issues/49643
         this.opts.getSuperRef(),
       );
     }
