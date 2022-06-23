@@ -1,1 +1,1 @@
-export { foo } from "foo.json" assert { type: "json", hasOwnProperty: "true" };
+export { default } from "foo.json" assert { type: "json", hasOwnProperty: "true" };

@@ -1,9 +1,9 @@
 {
   "type": "File",
-  "start":0,"end":97,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":50,"index":97}},
+  "start":0,"end":108,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":61,"index":108}},
   "program": {
     "type": "Program",
-    "start":0,"end":97,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":50,"index":97}},
+    "start":0,"end":108,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":61,"index":108}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
@@ -53,26 +53,26 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start":47,"end":97,"loc":{"start":{"line":2,"column":0,"index":47},"end":{"line":2,"column":50,"index":97}},
+        "start":47,"end":108,"loc":{"start":{"line":2,"column":0,"index":47},"end":{"line":2,"column":61,"index":108}},
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start":56,"end":59,"loc":{"start":{"line":2,"column":9,"index":56},"end":{"line":2,"column":12,"index":59}},
+            "start":56,"end":70,"loc":{"start":{"line":2,"column":9,"index":56},"end":{"line":2,"column":23,"index":70}},
             "local": {
               "type": "Identifier",
-              "start":56,"end":59,"loc":{"start":{"line":2,"column":9,"index":56},"end":{"line":2,"column":12,"index":59},"identifierName":"foo"},
-              "name": "foo"
+              "start":56,"end":63,"loc":{"start":{"line":2,"column":9,"index":56},"end":{"line":2,"column":16,"index":63},"identifierName":"default"},
+              "name": "default"
             },
             "exported": {
               "type": "Identifier",
-              "start":56,"end":59,"loc":{"start":{"line":2,"column":9,"index":56},"end":{"line":2,"column":12,"index":59},"identifierName":"foo"},
+              "start":67,"end":70,"loc":{"start":{"line":2,"column":20,"index":67},"end":{"line":2,"column":23,"index":70},"identifierName":"foo"},
               "name": "foo"
             }
           }
         ],
         "source": {
           "type": "StringLiteral",
-          "start":67,"end":72,"loc":{"start":{"line":2,"column":20,"index":67},"end":{"line":2,"column":25,"index":72}},
+          "start":78,"end":83,"loc":{"start":{"line":2,"column":31,"index":78},"end":{"line":2,"column":36,"index":83}},
           "extra": {
             "rawValue": "foo",
             "raw": "\"foo\""
@@ -83,15 +83,15 @@
         "assertions": [
           {
             "type": "ImportAttribute",
-            "start":82,"end":94,"loc":{"start":{"line":2,"column":35,"index":82},"end":{"line":2,"column":47,"index":94}},
+            "start":93,"end":105,"loc":{"start":{"line":2,"column":46,"index":93},"end":{"line":2,"column":58,"index":105}},
             "key": {
               "type": "Identifier",
-              "start":82,"end":86,"loc":{"start":{"line":2,"column":35,"index":82},"end":{"line":2,"column":39,"index":86},"identifierName":"type"},
+              "start":93,"end":97,"loc":{"start":{"line":2,"column":46,"index":93},"end":{"line":2,"column":50,"index":97},"identifierName":"type"},
               "name": "type"
             },
             "value": {
               "type": "StringLiteral",
-              "start":88,"end":94,"loc":{"start":{"line":2,"column":41,"index":88},"end":{"line":2,"column":47,"index":94}},
+              "start":99,"end":105,"loc":{"start":{"line":2,"column":52,"index":99},"end":{"line":2,"column":58,"index":105}},
               "extra": {
                 "rawValue": "json",
                 "raw": "\"json\""

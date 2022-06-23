@@ -2182,6 +2182,7 @@ export default class StatementParser extends ExpressionParser {
       const assertions = this.maybeParseImportAssertions();
       if (assertions) {
         node.assertions = assertions;
+        this.checkJSONModuleImport(node);
       }
     } else if (expect) {
       this.unexpected();
@@ -2399,6 +2400,56 @@ export default class StatementParser extends ExpressionParser {
     return this.parseIdentifier(true);
   }
 
+  isJSONModuleImport(
+    node:
+      | N.ExportAllDeclaration
+      | N.ExportNamedDeclaration
+      | N.ImportDeclaration,
+  ): boolean {
+    if (node.assertions != null) {
+      return node.assertions.some(({ key, value }) => {
+        return (
+          value.value === "json" &&
+          (key.type === "Identifier"
+            ? key.name === "type"
+            : key.value === "type")
+        );
+      });
+    }
+    return false;
+  }
+
+  checkJSONModuleImport(
+    node:
+      | N.ExportAllDeclaration
+      | N.ExportNamedDeclaration
+      | N.ImportDeclaration,
+  ) {
+    if (this.isJSONModuleImport(node) && node.type !== "ExportAllDeclaration") {
+      const { specifiers } = node;
+      if (node.specifiers != null) {
+        const nonDefaultNamedSpecifier = specifiers.find(specifier => {
+          let imported;
+          if (specifier.type === "ExportSpecifier") {
+            imported = specifier.local;
+          } else if (specifier.type === "ImportSpecifier") {
+            imported = specifier.imported;
+          }
+          if (imported !== undefined) {
+            return imported.type === "Identifier"
+              ? imported.name !== "default"
+              : imported.value !== "default";
+          }
+        });
+        if (nonDefaultNamedSpecifier !== undefined) {
+          this.raise(Errors.ImportJSONBindingNotDefault, {
+            at: nonDefaultNamedSpecifier.loc.start,
+          });
+        }
+      }
+    }
+  }
+
   // Parses import declaration.
   // https://tc39.es/ecma262/#prod-ImportDeclaration
 
@@ -2437,6 +2488,7 @@ export default class StatementParser extends ExpressionParser {
         node.attributes = attributes;
       }
     }
+    this.checkJSONModuleImport(node);
 
     this.semicolon();
     return this.finishNode(node, "ImportDeclaration");
