@@ -50,15 +50,7 @@ const require = createRequire(import.meta.url);
     it("should support decorators versioned 2021-12", () => {
       const output = Babel.transform("@dec class C {}", {
         plugins: [["external-helpers", { helperVersion: "7.100.0" }]],
-        presets: [
-          [
-            "stage-1",
-            {
-              decoratorsVersion: "2021-12",
-              decoratorsBeforeExport: false,
-            },
-          ],
-        ],
+        presets: [["stage-1", { decoratorsVersion: "2021-12" }]],
       }).code;
       expect(output).toMatch("babelHelpers.applyDecs");
     });

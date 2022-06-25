@@ -90,11 +90,13 @@ export function ExportNamedDeclaration(
   this: Printer,
   node: t.ExportNamedDeclaration,
 ) {
-  if (
-    this.format.decoratorsBeforeExport &&
-    isClassDeclaration(node.declaration)
-  ) {
-    this.printJoin(node.declaration.decorators, node);
+  if (!process.env.BABEL_8_BREAKING) {
+    if (
+      this.format.decoratorsBeforeExport &&
+      isClassDeclaration(node.declaration)
+    ) {
+      this.printJoin(node.declaration.decorators, node);
+    }
   }
 
   this.word("export");
@@ -156,11 +158,13 @@ export function ExportDefaultDeclaration(
   this: Printer,
   node: t.ExportDefaultDeclaration,
 ) {
-  if (
-    this.format.decoratorsBeforeExport &&
-    isClassDeclaration(node.declaration)
-  ) {
-    this.printJoin(node.declaration.decorators, node);
+  if (!process.env.BABEL_8_BREAKING) {
+    if (
+      this.format.decoratorsBeforeExport &&
+      isClassDeclaration(node.declaration)
+    ) {
+      this.printJoin(node.declaration.decorators, node);
+    }
   }
 
   this.word("export");
