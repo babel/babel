@@ -10,7 +10,7 @@ function _fn() {
     }
 
     class B extends A {
-      [await 1]() {}
+      [yield babelHelpers.awaitAsyncGenerator(1)]() {}
 
     }
   });

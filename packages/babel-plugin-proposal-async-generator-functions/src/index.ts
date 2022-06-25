@@ -12,7 +12,9 @@ export default declare(api => {
   const yieldStarVisitor = traverse.visitors.merge<PluginPass>([
     {
       Function(path) {
-        path.skip();
+        if (path.isArrowFunctionExpression()) {
+          path.skip();
+        }
       },
 
       YieldExpression({ node }, state) {
@@ -30,7 +32,9 @@ export default declare(api => {
   const forAwaitVisitor = traverse.visitors.merge<PluginPass>([
     {
       Function(path) {
-        path.skip();
+        if (path.isArrowFunctionExpression()) {
+          path.skip();
+        }
       },
 
       ForOfStatement(path: NodePath<t.ForOfStatement>, { file }) {
