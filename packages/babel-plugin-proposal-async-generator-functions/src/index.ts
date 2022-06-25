@@ -11,10 +11,8 @@ export default declare(api => {
 
   const yieldStarVisitor = traverse.visitors.merge<PluginPass>([
     {
-      Function(path) {
-        if (path.isArrowFunctionExpression()) {
-          path.skip();
-        }
+      ArrowFunctionExpression(path) {
+        path.skip();
       },
 
       YieldExpression({ node }, state) {
