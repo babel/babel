@@ -43,9 +43,7 @@ module.exports = {
     // Some tests require internal files of bundled packages, which are not available
     // in production builds. They are marked using the .skip-bundled.js extension.
     ...(isPublishBundle ? ["\\.skip-bundled\\.js$"] : []),
-    ...(LIB_USE_ESM
-      ? ["/babel-node/", "/babel-register/", "/babel-helpers/"]
-      : []),
+    ...(LIB_USE_ESM ? ["/babel-node/", "/babel-helpers/"] : []),
   ],
   testEnvironment: "node",
   transformIgnorePatterns: [
