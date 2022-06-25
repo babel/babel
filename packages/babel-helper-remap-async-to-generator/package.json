@@ -23,7 +23,7 @@
     "@babel/traverse": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core":"workspace:^"
+    "@babel/core": "workspace:^"
   },
   "engines": {
     "node": ">=6.9.0"

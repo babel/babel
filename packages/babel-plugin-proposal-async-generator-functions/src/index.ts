@@ -29,10 +29,8 @@ export default declare(api => {
 
   const forAwaitVisitor = traverse.visitors.merge<PluginPass>([
     {
-      Function(path) {
-        if (path.isArrowFunctionExpression()) {
-          path.skip();
-        }
+      ArrowFunctionExpression(path) {
+        path.skip();
       },
 
       ForOfStatement(path: NodePath<t.ForOfStatement>, { file }) {

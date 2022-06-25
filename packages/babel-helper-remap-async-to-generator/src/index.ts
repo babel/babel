@@ -16,10 +16,8 @@ import type * as t from "@babel/types";
 
 const awaitVisitor = traverse.visitors.merge<{ wrapAwait: t.Expression }>([
   {
-    Function(path) {
-      if (path.isArrowFunctionExpression()) {
-        path.skip();
-      }
+    ArrowFunctionExpression(path) {
+      path.skip();
     },
 
     AwaitExpression(path, { wrapAwait }) {
