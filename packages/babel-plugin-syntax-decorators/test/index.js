@@ -10,7 +10,6 @@ function makeParser(code, options) {
     });
 }
 
-const babel7 = process.env.BABEL_8_BREAKING ? test.skip : test;
 const babel8 = process.env.BABEL_8_BREAKING ? test : test.skip;
 const babel7describe = process.env.BABEL_8_BREAKING ? describe.skip : describe;
 
@@ -32,14 +31,14 @@ babel7describe("'legacy' option", function () {
   });
 });
 
-describe("'decoratorsBeforeExport' option", function () {
+babel7describe("'decoratorsBeforeExport' option", function () {
   test("must be boolean", function () {
     expect(
       makeParser("", { version: "2021-12", decoratorsBeforeExport: "before" }),
     ).toThrow();
   });
 
-  babel7("is required with 2018-09 decorators", function () {
+  test("is required with 2018-09 decorators", function () {
     expect(makeParser("", { legacy: false })).toThrow(/decoratorsBeforeExport/);
     expect(makeParser("", { version: "2018-09" })).toThrow(
       /decoratorsBeforeExport/,
@@ -52,7 +51,7 @@ describe("'decoratorsBeforeExport' option", function () {
     ).toThrow();
   });
 
-  babel7("is incompatible with legacy when using the 'legacy' option", () => {
+  test("is incompatible with legacy when using the 'legacy' option", () => {
     expect(
       makeParser("", { decoratorsBeforeExport: false, legacy: true }),
     ).toThrow();
