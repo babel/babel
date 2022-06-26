@@ -187,6 +187,7 @@ export default function convertFunctionParams(
       body.push(defNode);
     } else if (param.isObjectPattern() || param.isArrayPattern()) {
       const uid = path.scope.generateUidIdentifier("ref");
+      uid.typeAnnotation = param.node.typeAnnotation;
 
       const defNode = t.variableDeclaration("let", [
         t.variableDeclarator(param.node, uid),
