@@ -66,7 +66,6 @@ function normalizeOptions(
       style: "  ",
       base: 0,
     },
-    decoratorsBeforeExport: !!opts.decoratorsBeforeExport,
     jsescOption: {
       quotes: "double",
       wrap: true,
@@ -78,6 +77,7 @@ function normalizeOptions(
   };
 
   if (!process.env.BABEL_8_BREAKING) {
+    format.decoratorsBeforeExport = !!opts.decoratorsBeforeExport;
     format.jsonCompatibleStrings = opts.jsonCompatibleStrings;
   }
 
@@ -193,6 +193,7 @@ export interface GeneratorOptions {
   /**
    * Set to true to enable support for experimental decorators syntax before module exports.
    * Defaults to `false`.
+   * @deprecated Removed in Babel 8
    */
   decoratorsBeforeExport?: boolean;
 

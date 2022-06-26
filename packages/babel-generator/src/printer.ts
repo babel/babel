@@ -35,7 +35,6 @@ export type Format = {
     style: string;
     base: number;
   };
-  decoratorsBeforeExport: boolean;
   recordAndTupleSyntaxType: RecordAndTuplePluginOptions["syntaxType"];
   jsescOption: jsescOptions;
   jsonCompatibleStrings?: boolean;
@@ -44,6 +43,10 @@ export type Format = {
    * Changes what token is used for pipe bodies’ topic references.
    */
   topicToken?: PipelineOperatorPluginOptions["topicToken"];
+  /**
+   * @deprecated Removed in Babel 8
+   */
+  decoratorsBeforeExport?: boolean;
 };
 
 interface AddNewlinesOptions {

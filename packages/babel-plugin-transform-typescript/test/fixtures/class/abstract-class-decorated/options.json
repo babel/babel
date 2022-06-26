@@ -4,7 +4,7 @@
     [
       "proposal-decorators",
       {
-        "legacy": true
+        "version": "legacy"
       }
     ]
   ],
