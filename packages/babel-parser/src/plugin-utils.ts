@@ -85,14 +85,10 @@ export function validatePlugins(plugins: PluginList) {
       "decorators",
       "decoratorsBeforeExport",
     );
-    if (decoratorsBeforeExport == null) {
-      throw new Error(
-        "The 'decorators' plugin requires a 'decoratorsBeforeExport' option," +
-          " whose value must be a boolean. If you are migrating from" +
-          " Babylon/Babel 6 or want to use the old decorators proposal, you" +
-          " should use the 'decorators-legacy' plugin instead of 'decorators'.",
-      );
-    } else if (typeof decoratorsBeforeExport !== "boolean") {
+    if (
+      decoratorsBeforeExport != null &&
+      typeof decoratorsBeforeExport !== "boolean"
+    ) {
       throw new Error("'decoratorsBeforeExport' must be a boolean.");
     }
   }
