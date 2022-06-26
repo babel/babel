@@ -53,6 +53,9 @@ export type ParserPluginWithOptions =
   | ["flow", FlowPluginOptions]
   | ["typescript", TypeScriptPluginOptions];
 
+export type PluginOptions<PluginName extends ParserPluginWithOptions[0]> =
+  Extract<ParserPluginWithOptions, [PluginName, any]>[1];
+
 export interface DecoratorsPluginOptions {
   decoratorsBeforeExport?: boolean;
 }
