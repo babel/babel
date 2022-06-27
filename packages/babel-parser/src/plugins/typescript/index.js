@@ -167,6 +167,10 @@ const TSErrors = ParseErrorEnum`typescript`(_ => ({
     ({ orderedModifiers }) =>
       `'${orderedModifiers[0]}' modifier must precede '${orderedModifiers[1]}' modifier.`,
   ),
+  InvalidPropertyAccessAfterInstantiationExpression: _(
+    "Invalid property access after an instantiation expression. " +
+      "You can either wrap the instantiation expression in parentheses, or delete the type arguments.",
+  ),
   InvalidTupleMemberLabel: _(
     "Tuple members must be labeled with a simple identifier.",
   ),
@@ -2488,7 +2492,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.unexpected(missingParenErrorLoc, tt.parenL);
         }
 
-        if (result) return result;
+        if (result) {
+          if (
+            result.type === "TSInstantiationExpression" &&
+            (this.match(tt.dot) ||
+              (this.match(tt.questionDot) &&
+                this.lookaheadCharCode() !== charCodes.leftParenthesis))
+          ) {
+            this.raise(
+              TSErrors.InvalidPropertyAccessAfterInstantiationExpression,
+              { at: this.state.startLoc },
+            );
+          }
+          return result;
+        }
       }
 
       return super.parseSubscript(base, startPos, startLoc, noCalls, state);
