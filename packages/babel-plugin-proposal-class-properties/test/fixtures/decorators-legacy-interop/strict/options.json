@@ -1,6 +1,6 @@
 {
   "plugins": [
-    ["proposal-decorators", { "legacy": true }],
+    ["proposal-decorators", { "version": "legacy" }],
     ["proposal-class-properties"],
     "transform-classes"
   ]

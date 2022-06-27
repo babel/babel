@@ -21,9 +21,17 @@ export default declare((api, options: Options) => {
   api.assertVersion(7);
 
   // Options are validated in @babel/plugin-syntax-decorators
-  const { legacy, version } = options;
+  if (!process.env.BABEL_8_BREAKING) {
+    // eslint-disable-next-line no-var
+    var { legacy } = options;
+  }
+  const { version } = options;
 
-  if (legacy || version === "legacy") {
+  if (
+    process.env.BABEL_8_BREAKING
+      ? version === "legacy"
+      : legacy || version === "legacy"
+  ) {
     return {
       name: "proposal-decorators",
       inherits: syntaxDecorators,
@@ -31,7 +39,7 @@ export default declare((api, options: Options) => {
     };
   } else if (version === "2021-12") {
     return transformer2021_12(api, options);
-  } else {
+  } else if (!process.env.BABEL_8_BREAKING) {
     return createClassFeaturePlugin({
       name: "proposal-decorators",
 
@@ -40,5 +48,9 @@ export default declare((api, options: Options) => {
       inherits: syntaxDecorators,
       // loose: options.loose, Not supported
     });
+  } else {
+    throw new Error(
+      "The '.version' option must be one of 'legacy' or '2021-12'",
+    );
   }
 });

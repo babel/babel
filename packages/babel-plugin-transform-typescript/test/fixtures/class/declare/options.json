@@ -2,6 +2,6 @@
   "BABEL_8_BREAKING": true,
   "plugins": [
     "transform-typescript",
-    ["syntax-decorators", { "legacy": true }]
+    ["syntax-decorators", { "version": "legacy" }]
   ]
 }
