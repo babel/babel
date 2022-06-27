@@ -450,7 +450,7 @@ __metadata:
     "@babel/helper-fixtures": "workspace:^"
     "@babel/parser": "workspace:^"
     "@babel/types": "workspace:^"
-    "@jridgewell/gen-mapping": ^0.3.0
+    "@jridgewell/gen-mapping": ^0.3.2
     "@jridgewell/trace-mapping": ^0.3.8
     "@types/jsesc": ^2.5.0
     charcodes: ^0.2.0
@@ -769,6 +769,7 @@ __metadata:
   resolution: "@babel/helper-module-transforms@condition:BABEL_8_BREAKING?:workspace:^7.18.6#893c47"
   dependencies:
     "@babel/helper-module-transforms-BABEL_8_BREAKING-false": "npm:@babel/helper-module-transforms@workspace:^7.18.6"
+  checksum: 7d7ccf481c03d5ba93f2c2fd3d736c67ad544fe53dddd5175790b1b5e0de4130b70566514c073fb51ec56a2ace0fdaa9102ac3cdd0790cc5ac5321142407321c
   languageName: node
   linkType: hard
 
@@ -4077,14 +4078,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jridgewell/gen-mapping@npm:^0.3.0":
-  version: 0.3.0
-  resolution: "@jridgewell/gen-mapping@npm:0.3.0"
+"@jridgewell/gen-mapping@npm:^0.3.0, @jridgewell/gen-mapping@npm:^0.3.2":
+  version: 0.3.2
+  resolution: "@jridgewell/gen-mapping@npm:0.3.2"
   dependencies:
-    "@jridgewell/set-array": ^1.0.0
+    "@jridgewell/set-array": ^1.0.1
     "@jridgewell/sourcemap-codec": ^1.4.10
     "@jridgewell/trace-mapping": ^0.3.9
-  checksum: ccc9b288d2bbf09d81a85cd07b0e0dd461f2a8d2fd0d46eefc1c04e994e9f95a51bb9e1c8718f4182e87a21c11d2f5ed687a789024cbd160c8e5421de8b011f6
+  checksum: 1832707a1c476afebe4d0fbbd4b9434fdb51a4c3e009ab1e9938648e21b7a97049fa6009393bdf05cab7504108413441df26d8a3c12193996e65493a4efb6882
   languageName: node
   linkType: hard
 
@@ -4095,10 +4096,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jridgewell/set-array@npm:^1.0.0":
-  version: 1.1.0
-  resolution: "@jridgewell/set-array@npm:1.1.0"
-  checksum: 86ddd72ce7d2f7756dfb69804b35d0e760a85dcef30ed72e8610bf2c5e843f8878d977a0c77c4fdfa6a0e3d5b18e5bde4a1f1dd73fd2db06b200c998e9b5a6c5
+"@jridgewell/set-array@npm:^1.0.1":
+  version: 1.1.2
+  resolution: "@jridgewell/set-array@npm:1.1.2"
+  checksum: 69a84d5980385f396ff60a175f7177af0b8da4ddb81824cb7016a9ef914eee9806c72b6b65942003c63f7983d4f39a5c6c27185bbca88eb4690b62075602e28e
   languageName: node
   linkType: hard
 
