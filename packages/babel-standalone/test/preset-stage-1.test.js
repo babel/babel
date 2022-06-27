@@ -68,5 +68,11 @@ const require = createRequire(import.meta.url);
       }).code;
       expect(output).not.toContain("#x:");
     });
+    it("should support regexp v flag", () => {
+      const output = Babel.transform("/[[a-p]&&[d-z]]/v", {
+        presets: [["stage-1", { decoratorsVersion: "2021-12" }]],
+      }).code;
+      expect(output).toMatchInlineSnapshot(`"/[d-p]/u;"`);
+    });
   },
 );

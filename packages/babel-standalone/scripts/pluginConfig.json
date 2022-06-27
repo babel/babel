@@ -44,6 +44,7 @@
   "proposal-private-property-in-object",
   "proposal-throw-expressions",
   "proposal-unicode-property-regex",
+  "proposal-unicode-sets-regex",
   "transform-async-to-generator",
   "transform-arrow-functions",
   "transform-block-scoped-functions",

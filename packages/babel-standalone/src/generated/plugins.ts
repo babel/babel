@@ -47,6 +47,7 @@ import proposalPrivateMethods from "@babel/plugin-proposal-private-methods";
 import proposalPrivatePropertyInObject from "@babel/plugin-proposal-private-property-in-object";
 import proposalThrowExpressions from "@babel/plugin-proposal-throw-expressions";
 import proposalUnicodePropertyRegex from "@babel/plugin-proposal-unicode-property-regex";
+import proposalUnicodeSetsRegex from "@babel/plugin-proposal-unicode-sets-regex";
 import transformAsyncToGenerator from "@babel/plugin-transform-async-to-generator";
 import transformArrowFunctions from "@babel/plugin-transform-arrow-functions";
 import transformBlockScopedFunctions from "@babel/plugin-transform-block-scoped-functions";
@@ -144,6 +145,7 @@ export {
   proposalPrivatePropertyInObject,
   proposalThrowExpressions,
   proposalUnicodePropertyRegex,
+  proposalUnicodeSetsRegex,
   transformAsyncToGenerator,
   transformArrowFunctions,
   transformBlockScopedFunctions,
@@ -242,6 +244,7 @@ export const all: { [k: string]: any } = {
   "proposal-private-property-in-object": proposalPrivatePropertyInObject,
   "proposal-throw-expressions": proposalThrowExpressions,
   "proposal-unicode-property-regex": proposalUnicodePropertyRegex,
+  "proposal-unicode-sets-regex": proposalUnicodeSetsRegex,
   "transform-async-to-generator": transformAsyncToGenerator,
   "transform-arrow-functions": transformArrowFunctions,
   "transform-block-scoped-functions": transformBlockScopedFunctions,

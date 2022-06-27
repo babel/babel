@@ -1730,7 +1730,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-proposal-unicode-sets-regex@workspace:packages/babel-plugin-proposal-unicode-sets-regex":
+"@babel/plugin-proposal-unicode-sets-regex@workspace:^, @babel/plugin-proposal-unicode-sets-regex@workspace:packages/babel-plugin-proposal-unicode-sets-regex":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-unicode-sets-regex@workspace:packages/babel-plugin-proposal-unicode-sets-regex"
   dependencies:
@@ -3610,6 +3610,7 @@ __metadata:
     "@babel/plugin-proposal-private-property-in-object": "workspace:^"
     "@babel/plugin-proposal-throw-expressions": "workspace:^"
     "@babel/plugin-proposal-unicode-property-regex": "workspace:^"
+    "@babel/plugin-proposal-unicode-sets-regex": "workspace:^"
     "@babel/plugin-syntax-async-generators": ^7.8.4
     "@babel/plugin-syntax-class-properties": ^7.12.13
     "@babel/plugin-syntax-class-static-block": ^7.14.5
