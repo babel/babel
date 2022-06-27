@@ -162,7 +162,11 @@ module.exports = function (api) {
     presets: [
       [
         "@babel/preset-typescript",
-        { onlyRemoveTypeImports: true, allowDeclareFields: true },
+        {
+          onlyRemoveTypeImports: true,
+          allowDeclareFields: true,
+          optimizeConstEnums: true,
+        },
       ],
       ["@babel/env", envOpts],
       ["@babel/preset-flow", { allowDeclareFields: true }],
@@ -199,6 +203,10 @@ module.exports = function (api) {
           "packages/babel-plugin-proposal-decorators",
         ].map(normalize),
         plugins: ["babel-plugin-transform-charcodes"],
+      },
+      {
+        test: ["packages/babel-generator"].map(normalize),
+        plugins: [pluginGeneratorOptimization],
       },
       convertESM && {
         test: ["./packages/babel-node/src"].map(normalize),
@@ -776,6 +784,40 @@ function pluginInjectNodeReexportsHints({ types: t, template }, { names }) {
             t.numericLiteral(0)
           );
           path.pushContainer("body", template.statement.ast`0 && (${assign})`);
+        },
+      },
+    },
+  };
+}
+
+/**
+ * @param {import("@babel/core")} pluginAPI
+ * @returns {import("@babel/core").PluginObj}
+ */
+function pluginGeneratorOptimization({ types: t }) {
+  return {
+    visitor: {
+      CallExpression: {
+        exit(path) {
+          const node = path.node;
+          if (
+            t.isMemberExpression(node.callee) &&
+            t.isThisExpression(node.callee.object)
+          ) {
+            const args = node.arguments;
+
+            if (
+              node.callee.property.name === "token" &&
+              args.length === 1 &&
+              t.isStringLiteral(args[0])
+            ) {
+              const str = args[0].value;
+              if (str.length == 1) {
+                node.callee.property.name = "tokenChar";
+                args[0] = t.numericLiteral(str.charCodeAt(0));
+              }
+            }
+          }
         },
       },
     },

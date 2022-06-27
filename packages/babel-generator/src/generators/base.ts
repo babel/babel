@@ -85,7 +85,7 @@ export function InterpreterDirective(
   this: Printer,
   node: t.InterpreterDirective,
 ) {
-  this.token(`#!${node.value}\n`);
+  this.token(`#!${node.value}\n`, true);
 }
 
 export function Placeholder(this: Printer, node: t.Placeholder) {

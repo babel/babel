@@ -72,6 +72,9 @@ class Printer {
   constructor(format: Format, map: SourceMap) {
     this.format = format;
     this._buf = new Buffer(map);
+
+    this._indentChar = format.indent.style.charCodeAt(0);
+    this._indentRepeat = format.indent.style.length;
   }
 
   declare format: Format;
@@ -80,11 +83,13 @@ class Printer {
   declare _buf: Buffer;
   _printStack: Array<t.Node> = [];
   _indent: number = 0;
+  _indentChar: number = 0;
+  _indentRepeat: number = 0;
   _insideAux: boolean = false;
   _parenPushNewlineState: { printed: boolean } | null = null;
   _noLineTerminator: boolean = false;
   _printAuxAfterOnNextUserNode: boolean = false;
-  _printedComments = new WeakSet<t.Comment>();
+  _printedComments = new Set<t.Comment>();
   _endsWithInteger = false;
   _endsWithWord = false;
 
@@ -121,7 +126,11 @@ class Printer {
 
   semicolon(force: boolean = false): void {
     this._maybeAddAuxComment();
-    this._append(";", !force /* queue */);
+    if (force) {
+      this._appendChar(charCodes.semicolon);
+    } else {
+      this._queue(charCodes.semicolon);
+    }
   }
 
   /**
@@ -160,13 +169,13 @@ class Printer {
     // prevent concatenating words and creating // comment out of division and regex
     if (
       this._endsWithWord ||
-      (this.endsWith(charCodes.slash) && str.charCodeAt(0) === charCodes.slash)
+      (str.charCodeAt(0) === charCodes.slash && this.endsWith(charCodes.slash))
     ) {
       this._space();
     }
 
     this._maybeAddAuxComment();
-    this._append(str);
+    this._append(str, false);
 
     this._endsWithWord = true;
   }
@@ -192,13 +201,13 @@ class Printer {
    * Writes a simple token.
    */
 
-  token(str: string): void {
+  token(str: string, maybeNewline = false): void {
     // space is mandatory to avoid outputting <!--
     // http://javascript.spec.whatwg.org/#comment-syntax
     const lastChar = this.getLastChar();
     const strFirst = str.charCodeAt(0);
     if (
-      (str === "--" && lastChar === charCodes.exclamationMark) ||
+      (lastChar === charCodes.exclamationMark && str === "--") ||
       // Need spaces for operators of the same kind to avoid: `a+++b`
       (strFirst === charCodes.plusSign && lastChar === charCodes.plusSign) ||
       (strFirst === charCodes.dash && lastChar === charCodes.dash) ||
@@ -209,7 +218,25 @@ class Printer {
     }
 
     this._maybeAddAuxComment();
-    this._append(str);
+    this._append(str, maybeNewline);
+  }
+
+  tokenChar(char: number): void {
+    // space is mandatory to avoid outputting <!--
+    // http://javascript.spec.whatwg.org/#comment-syntax
+    const lastChar = this.getLastChar();
+    if (
+      // Need spaces for operators of the same kind to avoid: `a+++b`
+      (char === charCodes.plusSign && lastChar === charCodes.plusSign) ||
+      (char === charCodes.dash && lastChar === charCodes.dash) ||
+      // Needs spaces to avoid changing '34' to '34.', which would still be a valid number.
+      (char === charCodes.dot && this._endsWithInteger)
+    ) {
+      this._space();
+    }
+
+    this._maybeAddAuxComment();
+    this._appendChar(char);
   }
 
   /**
@@ -280,33 +307,80 @@ class Printer {
   }
 
   _space(): void {
-    this._append(" ", true /* queue */);
+    this._queue(charCodes.space);
   }
 
   _newline(): void {
-    this._append("\n", true /* queue */);
+    this._queue(charCodes.lineFeed);
   }
 
-  _append(str: string, queue: boolean = false) {
+  _append(str: string, maybeNewline: boolean): void {
     this._maybeAddParen(str);
-    this._maybeIndent(str);
+    this._maybeIndent(str.charCodeAt(0));
 
-    if (queue) this._buf.queue(str);
-    else this._buf.append(str);
+    this._buf.append(str, maybeNewline);
 
     this._endsWithWord = false;
     this._endsWithInteger = false;
   }
 
-  _maybeIndent(str: string): void {
+  _appendChar(char: number): void {
+    this._maybeAddParenChar(char);
+    this._maybeIndent(char);
+
+    this._buf.appendChar(char);
+
+    this._endsWithWord = false;
+    this._endsWithInteger = false;
+  }
+
+  _queue(char: number) {
+    this._maybeAddParenChar(char);
+    this._maybeIndent(char);
+
+    this._buf.queue(char);
+
+    this._endsWithWord = false;
+    this._endsWithInteger = false;
+  }
+
+  _maybeIndent(firstChar: number): void {
     // we've got a newline before us so prepend on the indentation
     if (
       this._indent &&
-      this.endsWith(charCodes.lineFeed) &&
-      str.charCodeAt(0) !== charCodes.lineFeed
+      firstChar !== charCodes.lineFeed &&
+      this.endsWith(charCodes.lineFeed)
     ) {
-      this._buf.queueIndentation(this._getIndent());
+      this._buf.queueIndentation(this._indentChar, this._getIndent());
     }
+  }
+
+  _maybeAddParenChar(char: number): void {
+    // see startTerminatorless() instance method
+    const parenPushNewlineState = this._parenPushNewlineState;
+    if (!parenPushNewlineState) return;
+
+    // This function does two things:
+    // - If needed, prints a parenthesis
+    // - If the currently printed string removes the need for the paren,
+    //   it resets the _parenPushNewlineState field.
+    //   Almost everything removes the need for a paren, except for
+    //   comments and whitespaces.
+
+    if (char === charCodes.space) {
+      // Whitespaces only, the parentheses might still be needed.
+      return;
+    }
+
+    // Check for newline or comment.
+    if (char !== charCodes.lineFeed) {
+      this._parenPushNewlineState = null;
+      return;
+    }
+
+    this.token("(");
+    this.indent();
+    parenPushNewlineState.printed = true;
   }
 
   _maybeAddParen(str: string): void {
@@ -321,33 +395,35 @@ class Printer {
     //   Almost everything removes the need for a paren, except for
     //   comments and whitespaces.
 
+    const len = str.length;
+
     let i;
-    for (i = 0; i < str.length && str[i] === " "; i++) continue;
-    if (i === str.length) {
+    for (i = 0; i < len && str.charCodeAt(i) === charCodes.space; i++) continue;
+    if (i === len) {
       // Whitespaces only, the parentheses might still be needed.
       return;
     }
 
     // Check for newline or comment.
-    const cha = str[i];
-    if (cha !== "\n") {
+    const cha = str.charCodeAt(i);
+    if (cha !== charCodes.lineFeed) {
       if (
         // This is not a comment (it doesn't start with /)
-        cha !== "/" ||
+        cha !== charCodes.slash ||
         // This is not a comment (it's a / operator)
-        i + 1 === str.length
+        i + 1 === len
       ) {
         // After a normal token, the parentheses aren't needed anymore
         this._parenPushNewlineState = null;
         return;
       }
 
-      const chaPost = str[i + 1];
+      const chaPost = str.charCodeAt(i + 1);
 
-      if (chaPost === "*") {
+      if (chaPost === charCodes.asterisk) {
         // This is a block comment
 
-        if (PURE_ANNOTATION_RE.test(str.slice(i + 2, str.length - 2))) {
+        if (PURE_ANNOTATION_RE.test(str.slice(i + 2, len - 2))) {
           // We avoid printing newlines after #__PURE__ comments (we treat
           // then as unary operators), but we must keep the old
           // parenPushNewlineState because, if a newline was forbidden, it is
@@ -356,7 +432,7 @@ class Printer {
         }
 
         // NOTE: code flow continues from here to after these if/elses
-      } else if (chaPost !== "/") {
+      } else if (chaPost !== charCodes.slash) {
         // This is neither a block comment, nor a line comment.
         // After a normal token, the parentheses aren't needed anymore
         this._parenPushNewlineState = null;
@@ -387,8 +463,8 @@ class Printer {
    * Get the current indent.
    */
 
-  _getIndent(): string {
-    return this.format.indent.style.repeat(this._indent);
+  _getIndent(): number {
+    return this._indentRepeat * this._indent;
   }
 
   printTerminatorless(node: t.Node, parent: t.Node, isLabel: boolean) {
@@ -463,7 +539,7 @@ class Printer {
     this._insideAux = !node.loc;
     this._maybeAddAuxComment(this._insideAux && !oldInAux);
 
-    let shouldPrintParens = needsParens(node, parent, this._printStack);
+    let shouldPrintParens;
     if (
       this.format.retainFunctionParens &&
       node.type === "FunctionExpression" &&
@@ -471,15 +547,16 @@ class Printer {
       node.extra.parenthesized
     ) {
       shouldPrintParens = true;
+    } else {
+      shouldPrintParens = needsParens(node, parent, this._printStack);
     }
     if (shouldPrintParens) this.token("(");
 
     this._printLeadingComments(node);
 
     const loc = isProgram(node) || isFile(node) ? null : node.loc;
-    this.withSource("start", loc, () => {
-      printMethod.call(this, node, parent);
-    });
+
+    this.withSource("start", loc, printMethod.bind(this, node, parent));
 
     this._printTrailingComments(node);
 
@@ -557,7 +634,8 @@ class Printer {
       addNewlines: opts.addNewlines,
     };
 
-    for (let i = 0; i < nodes.length; i++) {
+    const len = nodes.length;
+    for (let i = 0; i < len; i++) {
       const node = nodes[i];
       if (!node) continue;
 
@@ -569,7 +647,7 @@ class Printer {
         opts.iterator(node, i);
       }
 
-      if (opts.separator && i < nodes.length - 1) {
+      if (opts.separator && i < len - 1) {
         opts.separator.call(this);
       }
 
@@ -665,18 +743,19 @@ class Printer {
     // Note, we use a boolean flag here instead of passing in the attribute name as it is faster
     // because this is called extremely frequently.
     return (
-      (node && (leading ? node.leadingComments : node.trailingComments)) || []
+      (node && (leading ? node.leadingComments : node.trailingComments)) || null
     );
   }
 
   _printComment(comment: t.Comment, skipNewLines?: boolean) {
-    if (!this.format.shouldPrintComment(comment.value)) return;
-
     // Some plugins (such as flow-strip-types) use this to mark comments as removed using the AST-root 'comments' property,
     // where they can't manually mutate the AST node comment lists.
     if (comment.ignore) return;
 
     if (this._printedComments.has(comment)) return;
+
+    if (!this.format.shouldPrintComment(comment.value)) return;
+
     this._printedComments.add(comment);
 
     const isBlockComment = comment.type === "CommentBlock";
@@ -696,31 +775,38 @@ class Printer {
       this.space();
     }
 
-    let val =
-      !isBlockComment && !this._noLineTerminator
-        ? `//${comment.value}\n`
-        : `/*${comment.value}*/`;
+    let val;
+    let maybeNewline = false;
+    if (isBlockComment) {
+      val = `/*${comment.value}*/`;
+      if (this.format.indent.adjustMultilineComment) {
+        const offset = comment.loc?.start.column;
+        if (offset) {
+          const newlineRegex = new RegExp("\\n\\s{1," + offset + "}", "g");
+          val = val.replace(newlineRegex, "\n");
+        }
 
-    if (isBlockComment && this.format.indent.adjustMultilineComment) {
-      const offset = comment.loc?.start.column;
-      if (offset) {
-        const newlineRegex = new RegExp("\\n\\s{1," + offset + "}", "g");
-        val = val.replace(newlineRegex, "\n");
+        const indentSize = Math.max(
+          this._getIndent(),
+          this.format.retainLines ? 0 : this._buf.getCurrentColumn(),
+        );
+        val = val.replace(/\n(?!$)/g, `\n${" ".repeat(indentSize)}`);
+
+        maybeNewline = true;
       }
-
-      const indentSize = Math.max(
-        this._getIndent().length,
-        this.format.retainLines ? 0 : this._buf.getCurrentColumn(),
-      );
-      val = val.replace(/\n(?!$)/g, `\n${" ".repeat(indentSize)}`);
+    } else if (!this._noLineTerminator) {
+      val = `//${comment.value}\n`;
+      maybeNewline = true;
     }
 
     // Avoid creating //* comments
     if (this.endsWith(charCodes.slash)) this._space();
 
-    this.withSource("start", comment.loc, () => {
-      this._append(val);
-    });
+    this.withSource(
+      "start",
+      comment.loc,
+      this._append.bind(this, val, maybeNewline),
+    );
 
     if (printNewLines) this.newline(1);
   }

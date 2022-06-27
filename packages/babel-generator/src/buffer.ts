@@ -18,6 +18,15 @@ type SourcePos = {
   filename: string | undefined;
 };
 
+type queueObj = {
+  char: number;
+  repeat: number;
+  line: number | undefined;
+  column: number | undefined;
+  identifierName: string | undefined;
+  filename: string | undefined;
+};
+
 function SourcePos(): SourcePos {
   return {
     identifierName: undefined,
@@ -27,23 +36,78 @@ function SourcePos(): SourcePos {
   };
 }
 
-const SPACES_RE = /^[ \t]+$/;
 export default class Buffer {
   constructor(map?: SourceMap | null) {
     this._map = map;
+
+    this._allocQueue();
   }
 
   _map: SourceMap = null;
   _buf = "";
+  _str = "";
+  _appendCount = 0;
   _last = 0;
-  _queue: Parameters<Buffer["_append"]>[] = [];
+  _queue: queueObj[] = [];
+  _queueCursor = 0;
 
   _position = {
     line: 1,
     column: 0,
   };
   _sourcePosition = SourcePos();
-  _disallowedPop: SourcePos | null = null;
+  _disallowedPop: SourcePos & { ok: boolean } = {
+    identifierName: undefined,
+    line: undefined,
+    column: undefined,
+    filename: undefined,
+    ok: false,
+  };
+
+  _allocQueue() {
+    const queue = this._queue;
+
+    for (let i = 0; i < 16; i++) {
+      queue.push({
+        char: 0,
+        repeat: 1,
+        line: undefined,
+        column: undefined,
+        identifierName: undefined,
+        filename: "",
+      });
+    }
+  }
+
+  _pushQueue(
+    char: number,
+    repeat: number,
+    line: number | undefined,
+    column: number | undefined,
+    identifierName: string | undefined,
+    filename: string | undefined,
+  ) {
+    const cursor = this._queueCursor;
+    if (cursor === this._queue.length) {
+      this._allocQueue();
+    }
+    const obj = this._queue[cursor];
+    obj.char = char;
+    obj.repeat = repeat;
+    obj.line = line;
+    obj.column = column;
+    obj.identifierName = identifierName;
+    obj.filename = filename;
+
+    this._queueCursor++;
+  }
+
+  _popQueue(): queueObj {
+    if (this._queueCursor === 0) {
+      throw new Error("Cannot pop from empty queue");
+    }
+    return this._queue[--this._queueCursor];
+  }
 
   /**
    * Get the final string output from the buffer, along with the sourcemap if one exists.
@@ -56,7 +120,7 @@ export default class Buffer {
     const result = {
       // Whatever trim is used here should not execute a regex against the
       // source string since it may be arbitrarily large after all transformations
-      code: this._buf.trimRight(),
+      code: (this._buf + this._str).trimRight(),
       // Decoded sourcemap is free to generate.
       decodedMap: map?.getDecoded(),
 
@@ -87,50 +151,105 @@ export default class Buffer {
    * Add a string to the buffer that cannot be reverted.
    */
 
-  append(str: string): void {
+  append(str: string, maybeNewline: boolean): void {
     this._flush();
-    const { line, column, filename, identifierName } = this._sourcePosition;
-    this._append(str, line, column, identifierName, filename);
+
+    this._append(str, this._sourcePosition, maybeNewline);
+  }
+
+  appendChar(char: number): void {
+    this._flush();
+    this._appendChar(char, 1, this._sourcePosition);
   }
 
   /**
    * Add a string to the buffer than can be reverted.
    */
-  queue(str: string): void {
+  queue(char: number): void {
     // Drop trailing spaces when a newline is inserted.
-    if (str === "\n") {
-      while (this._queue.length > 0 && SPACES_RE.test(this._queue[0][0])) {
-        this._queue.shift();
+    if (char === charcodes.lineFeed) {
+      while (this._queueCursor !== 0) {
+        const char = this._queue[this._queueCursor - 1].char;
+        if (char !== charcodes.space && char !== charcodes.tab) {
+          break;
+        }
+
+        this._queueCursor--;
       }
     }
 
-    const { line, column, filename, identifierName } = this._sourcePosition;
-    this._queue.unshift([str, line, column, identifierName, filename]);
+    const sourcePosition = this._sourcePosition;
+    this._pushQueue(
+      char,
+      1,
+      sourcePosition.line,
+      sourcePosition.column,
+      sourcePosition.identifierName,
+      sourcePosition.filename,
+    );
   }
 
   /**
    * Same as queue, but this indentation will never have a sourcmap marker.
    */
-  queueIndentation(str: string): void {
-    this._queue.unshift([str, undefined, undefined, undefined, undefined]);
+  queueIndentation(char: number, repeat: number): void {
+    this._pushQueue(char, repeat, undefined, undefined, undefined, undefined);
   }
 
   _flush(): void {
-    let item: Parameters<Buffer["_append"]>;
-    while ((item = this._queue.pop())) {
-      this._append(...item);
+    const queueCursor = this._queueCursor;
+    const queue = this._queue;
+    for (let i = 0; i < queueCursor; i++) {
+      const item: queueObj = queue[i];
+      this._appendChar(item.char, item.repeat, item);
+    }
+    this._queueCursor = 0;
+  }
+
+  _appendChar(char: number, repeat: number, sourcePos: SourcePos): void {
+    this._last = char;
+
+    this._str +=
+      repeat > 1
+        ? String.fromCharCode(char).repeat(repeat)
+        : String.fromCharCode(char);
+
+    if (char !== charcodes.lineFeed) {
+      this._mark(
+        sourcePos.line,
+        sourcePos.column,
+        sourcePos.identifierName,
+        sourcePos.filename,
+      );
+      this._position.column += repeat;
+    } else {
+      this._position.line++;
+      this._position.column = 0;
     }
   }
 
-  _append(
-    str: string,
-    line: number | undefined,
-    column: number | undefined,
-    identifierName: string | undefined,
-    filename: string | undefined,
-  ): void {
-    this._buf += str;
-    this._last = str.charCodeAt(str.length - 1);
+  _append(str: string, sourcePos: SourcePos, maybeNewline: boolean): void {
+    const len = str.length;
+
+    this._last = str.charCodeAt(len - 1);
+
+    if (++this._appendCount > 4096) {
+      // @ts-ignore
+      this._str | 0; // Unexplainable huge performance boost. Ref: https://github.com/davidmarkclements/flatstr License: MIT
+      this._buf += this._str;
+      this._str = str;
+      this._appendCount = 0;
+    } else {
+      this._str += str;
+    }
+
+    if (!maybeNewline && !this._map) {
+      this._position.column += len;
+      return;
+    }
+
+    const { column, identifierName, filename } = sourcePos;
+    let line = sourcePos.line;
 
     // Search for newline chars. We search only for `\n`, since both `\r` and
     // `\r\n` are normalized to `\n` during parse. We exclude `\u2028` and
@@ -171,26 +290,28 @@ export default class Buffer {
   }
 
   removeTrailingNewline(): void {
-    if (this._queue.length > 0 && this._queue[0][0] === "\n") {
-      this._queue.shift();
+    const queueCursor = this._queueCursor;
+    if (
+      queueCursor !== 0 &&
+      this._queue[queueCursor - 1].char === charcodes.lineFeed
+    ) {
+      this._queueCursor--;
     }
   }
 
   removeLastSemicolon(): void {
-    if (this._queue.length > 0 && this._queue[0][0] === ";") {
-      this._queue.shift();
+    const queueCursor = this._queueCursor;
+    if (
+      queueCursor !== 0 &&
+      this._queue[queueCursor - 1].char === charcodes.semicolon
+    ) {
+      this._queueCursor--;
     }
   }
 
   getLastChar(): number {
-    let last;
-    if (this._queue.length > 0) {
-      const str = this._queue[0][0];
-      last = str.charCodeAt(0);
-    } else {
-      last = this._last;
-    }
-    return last;
+    const queueCursor = this._queueCursor;
+    return queueCursor !== 0 ? this._queue[queueCursor - 1].char : this._last;
   }
 
   /**
@@ -201,14 +322,13 @@ export default class Buffer {
    */
   endsWithCharAndNewline(): number {
     const queue = this._queue;
-    if (queue.length > 0) {
-      const last = queue[0][0];
+    const queueCursor = this._queueCursor;
+    if (queueCursor !== 0) {
       // every element in queue is one-length whitespace string
-      const lastCp = last.charCodeAt(0);
+      const lastCp = queue[queueCursor - 1].char;
       if (lastCp !== charcodes.lineFeed) return;
-      if (queue.length > 1) {
-        const secondLast = queue[1][0];
-        return secondLast.charCodeAt(0);
+      if (queueCursor > 1) {
+        return queue[queueCursor - 2].char;
       } else {
         return this._last;
       }
@@ -218,7 +338,7 @@ export default class Buffer {
   }
 
   hasContent(): boolean {
-    return this._queue.length > 0 || !!this._last;
+    return this._queueCursor !== 0 || !!this._last;
   }
 
   /**
@@ -245,6 +365,8 @@ export default class Buffer {
    * over "();", where previously it would have been a single mapping.
    */
   exactSource(loc: Loc | undefined, cb: () => void) {
+    if (!this._map) return cb();
+
     this.source("start", loc);
 
     cb();
@@ -266,7 +388,7 @@ export default class Buffer {
    */
 
   source(prop: "start" | "end", loc: Loc | undefined): void {
-    if (prop && !loc) return;
+    if (!loc) return;
 
     // Since this is called extremely often, we re-use the same _sourcePosition
     // object for the whole lifetime of the buffer.
@@ -294,7 +416,7 @@ export default class Buffer {
 
     if (
       // Verify if reactivating this specific position has been disallowed.
-      !this._disallowedPop ||
+      !this._disallowedPop.ok ||
       this._disallowedPop.line !== originalLine ||
       this._disallowedPop.column !== originalColumn ||
       this._disallowedPop.filename !== originalFilename
@@ -303,7 +425,7 @@ export default class Buffer {
       this._sourcePosition.column = originalColumn;
       this._sourcePosition.filename = originalFilename;
       this._sourcePosition.identifierName = originalIdentifierName;
-      this._disallowedPop = null;
+      this._disallowedPop.ok = false;
     }
   }
 
@@ -313,42 +435,55 @@ export default class Buffer {
    * "end" location that they set is actually treated as the end position.
    */
   _disallowPop(prop: "start" | "end", loc: Loc) {
-    if (prop && !loc) return;
+    if (!loc) return;
 
-    this._disallowedPop = this._normalizePosition(prop, loc, SourcePos());
+    const disallowedPop = this._disallowedPop;
+
+    this._normalizePosition(prop, loc, disallowedPop);
+
+    disallowedPop.ok = true;
   }
 
-  _normalizePosition(
-    prop: "start" | "end",
-    loc: Loc | undefined | null,
-    targetObj: SourcePos,
-  ) {
-    const pos = loc ? loc[prop] : null;
+  _normalizePosition(prop: "start" | "end", loc: Loc, targetObj: SourcePos) {
+    const pos = loc[prop];
 
     targetObj.identifierName =
-      (prop === "start" && loc?.identifierName) || undefined;
-    targetObj.line = pos?.line;
-    targetObj.column = pos?.column;
-    targetObj.filename = loc?.filename;
-
-    return targetObj;
+      (prop === "start" && loc.identifierName) || undefined;
+    if (pos) {
+      targetObj.line = pos.line;
+      targetObj.column = pos.column;
+      targetObj.filename = loc.filename;
+    } else {
+      targetObj.line = null;
+      targetObj.column = null;
+      targetObj.filename = null;
+    }
   }
 
   getCurrentColumn(): number {
-    const extra = this._queue.reduce((acc, item) => item[0] + acc, "");
-    const lastIndex = extra.lastIndexOf("\n");
+    const queue = this._queue;
 
-    return lastIndex === -1
-      ? this._position.column + extra.length
-      : extra.length - 1 - lastIndex;
+    let lastIndex = -1;
+    let len = 0;
+    for (let i = 0; i < this._queueCursor; i++) {
+      const item = queue[i];
+      if (item.char === charcodes.lineFeed) {
+        lastIndex = i;
+        len += item.repeat;
+      }
+    }
+
+    return lastIndex === -1 ? this._position.column + len : len - 1 - lastIndex;
   }
 
   getCurrentLine(): number {
-    const extra = this._queue.reduce((acc, item) => item[0] + acc, "");
-
     let count = 0;
-    for (let i = 0; i < extra.length; i++) {
-      if (extra[i] === "\n") count++;
+
+    const queue = this._queue;
+    for (let i = 0; i < this._queueCursor; i++) {
+      if (queue[i].char === charcodes.lineFeed) {
+        count++;
+      }
     }
 
     return this._position.line + count;

@@ -91,8 +91,8 @@ function normalizeOptions(
       format.shouldPrintComment ||
       (value =>
         format.comments ||
-        value.indexOf("@license") >= 0 ||
-        value.indexOf("@preserve") >= 0);
+        value.includes("@license") ||
+        value.includes("@preserve"));
   }
 
   if (format.compact === "auto") {

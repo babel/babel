@@ -8,7 +8,6 @@ import {
   isNewExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
-import type { WhitespaceObject } from "./whitespace";
 
 export type NodeHandlers<R> = {
   [K in string]?: (
@@ -80,7 +79,7 @@ function isOrHasCallExpression(node: t.Node): boolean {
 export function needsWhitespace(
   node: t.Node,
   parent: t.Node,
-  type: "before" | "after",
+  type: number,
 ): boolean {
   if (!node) return false;
 
@@ -88,11 +87,7 @@ export function needsWhitespace(
     node = node.expression;
   }
 
-  let linesInfo: WhitespaceObject | null | boolean = find(
-    expandedWhitespaceNodes,
-    node,
-    parent,
-  );
+  let linesInfo: any = find(expandedWhitespaceNodes, node, parent);
 
   if (!linesInfo) {
     const items = find(expandedWhitespaceList, node, parent);
@@ -104,19 +99,19 @@ export function needsWhitespace(
     }
   }
 
-  if (typeof linesInfo === "object" && linesInfo !== null) {
-    return linesInfo[type] || false;
+  if (typeof linesInfo === "number") {
+    return (linesInfo & type) !== 0;
   }
 
   return false;
 }
 
 export function needsWhitespaceBefore(node: t.Node, parent: t.Node) {
-  return needsWhitespace(node, parent, "before");
+  return needsWhitespace(node, parent, 1);
 }
 
 export function needsWhitespaceAfter(node: t.Node, parent: t.Node) {
-  return needsWhitespace(node, parent, "after");
+  return needsWhitespace(node, parent, 2);
 }
 
 export function needsParens(

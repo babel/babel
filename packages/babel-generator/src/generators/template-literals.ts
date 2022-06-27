@@ -20,7 +20,7 @@ export function TemplateElement(
 
   const value = (isFirst ? "`" : "}") + node.value.raw + (isLast ? "`" : "${");
 
-  this.token(value);
+  this.token(value, true);
 }
 
 export function TemplateLiteral(this: Printer, node: t.TemplateLiteral) {

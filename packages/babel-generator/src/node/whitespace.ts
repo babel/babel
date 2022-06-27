@@ -18,10 +18,37 @@ import {
 import type { NodeHandlers } from "./index";
 
 import type * as t from "@babel/types";
-export type WhitespaceObject = {
-  before?: boolean;
-  after?: boolean;
-};
+
+const enum WhitespaceFlag {
+  before = 1 << 0,
+  after = 1 << 1,
+}
+
+function crawlInternal(
+  node: t.Node,
+  state: { hasCall: boolean; hasFunction: boolean; hasHelper: boolean },
+) {
+  if (!node) return state;
+
+  if (isMemberExpression(node) || isOptionalMemberExpression(node)) {
+    crawlInternal(node.object, state);
+    if (node.computed) crawlInternal(node.property, state);
+  } else if (isBinary(node) || isAssignmentExpression(node)) {
+    crawlInternal(node.left, state);
+    crawlInternal(node.right, state);
+  } else if (isCallExpression(node) || isOptionalCallExpression(node)) {
+    state.hasCall = true;
+    crawlInternal(node.callee, state);
+  } else if (isFunction(node)) {
+    state.hasFunction = true;
+  } else if (isIdentifier(node)) {
+    state.hasHelper =
+      // @ts-expect-error todo(flow->ts): node.callee is not really expected here…
+      state.hasHelper || (node.callee && isHelper(node.callee));
+  }
+
+  return state;
+}
 
 /**
  * Crawl a node to test if it contains a CallExpression, a Function, or a Helper.
@@ -31,27 +58,12 @@ export type WhitespaceObject = {
  * // { hasCall: false, hasFunction: true, hasHelper: false }
  */
 
-function crawl(
-  node: t.Node,
-  state: { hasCall?: boolean; hasFunction?: boolean; hasHelper?: boolean } = {},
-) {
-  if (isMemberExpression(node) || isOptionalMemberExpression(node)) {
-    crawl(node.object, state);
-    if (node.computed) crawl(node.property, state);
-  } else if (isBinary(node) || isAssignmentExpression(node)) {
-    crawl(node.left, state);
-    crawl(node.right, state);
-  } else if (isCallExpression(node) || isOptionalCallExpression(node)) {
-    state.hasCall = true;
-    crawl(node.callee, state);
-  } else if (isFunction(node)) {
-    state.hasFunction = true;
-  } else if (isIdentifier(node)) {
-    // @ts-expect-error todo(flow->ts): node.callee is not really expected here…
-    state.hasHelper = state.hasHelper || isHelper(node.callee);
-  }
-
-  return state;
+function crawl(node: t.Node) {
+  return crawlInternal(node, {
+    hasCall: false,
+    hasFunction: false,
+    hasHelper: false,
+  });
 }
 
 /**
@@ -59,10 +71,12 @@ function crawl(
  */
 
 function isHelper(node: t.Node): boolean {
+  if (!node) return false;
+
   if (isMemberExpression(node)) {
     return isHelper(node.object) || isHelper(node.property);
   } else if (isIdentifier(node)) {
-    return node.name === "require" || node.name[0] === "_";
+    return node.name === "require" || node.name.charCodeAt(0) === 95; //node.name[0] === "_";
   } else if (isCallExpression(node)) {
     return isHelper(node.callee);
   } else if (isBinary(node) || isAssignmentExpression(node)) {
@@ -88,20 +102,17 @@ function isType(node: t.Node) {
  * Tests for node types that need whitespace.
  */
 
-export const nodes: NodeHandlers<WhitespaceObject | undefined | null> = {
+export const nodes: NodeHandlers<WhitespaceFlag> = {
   /**
    * Test if AssignmentExpression needs whitespace.
    */
 
-  AssignmentExpression(
-    node: t.AssignmentExpression,
-  ): WhitespaceObject | undefined | null {
+  AssignmentExpression(node: t.AssignmentExpression): WhitespaceFlag {
     const state = crawl(node.right);
     if ((state.hasCall && state.hasHelper) || state.hasFunction) {
-      return {
-        before: state.hasFunction,
-        after: true,
-      };
+      return state.hasFunction
+        ? WhitespaceFlag.before | WhitespaceFlag.after
+        : WhitespaceFlag.after;
     }
   },
 
@@ -109,24 +120,24 @@ export const nodes: NodeHandlers<WhitespaceObject | undefined | null> = {
    * Test if SwitchCase needs whitespace.
    */
 
-  SwitchCase(node: t.SwitchCase, parent: t.SwitchStatement): WhitespaceObject {
-    return {
-      before: !!node.consequent.length || parent.cases[0] === node,
-      after:
-        !node.consequent.length &&
-        parent.cases[parent.cases.length - 1] === node,
-    };
+  SwitchCase(node: t.SwitchCase, parent: t.SwitchStatement): WhitespaceFlag {
+    return (
+      (!!node.consequent.length || parent.cases[0] === node
+        ? WhitespaceFlag.before
+        : 0) |
+      (!node.consequent.length && parent.cases[parent.cases.length - 1] === node
+        ? WhitespaceFlag.after
+        : 0)
+    );
   },
 
   /**
    * Test if LogicalExpression needs whitespace.
    */
 
-  LogicalExpression(node: t.LogicalExpression): WhitespaceObject | undefined {
+  LogicalExpression(node: t.LogicalExpression): WhitespaceFlag {
     if (isFunction(node.left) || isFunction(node.right)) {
-      return {
-        after: true,
-      };
+      return WhitespaceFlag.after;
     }
   },
 
@@ -134,11 +145,9 @@ export const nodes: NodeHandlers<WhitespaceObject | undefined | null> = {
    * Test if Literal needs whitespace.
    */
 
-  Literal(node: t.Literal): WhitespaceObject | undefined | null {
+  Literal(node: t.Literal): WhitespaceFlag {
     if (isStringLiteral(node) && node.value === "use strict") {
-      return {
-        after: true,
-      };
+      return WhitespaceFlag.after;
     }
   },
 
@@ -146,23 +155,15 @@ export const nodes: NodeHandlers<WhitespaceObject | undefined | null> = {
    * Test if CallExpressionish needs whitespace.
    */
 
-  CallExpression(node: t.CallExpression): WhitespaceObject | undefined | null {
+  CallExpression(node: t.CallExpression): WhitespaceFlag {
     if (isFunction(node.callee) || isHelper(node)) {
-      return {
-        before: true,
-        after: true,
-      };
+      return WhitespaceFlag.before | WhitespaceFlag.after;
     }
   },
 
-  OptionalCallExpression(
-    node: t.OptionalCallExpression,
-  ): WhitespaceObject | undefined | null {
+  OptionalCallExpression(node: t.OptionalCallExpression): WhitespaceFlag {
     if (isFunction(node.callee)) {
-      return {
-        before: true,
-        after: true,
-      };
+      return WhitespaceFlag.before | WhitespaceFlag.after;
     }
   },
 
@@ -170,23 +171,18 @@ export const nodes: NodeHandlers<WhitespaceObject | undefined | null> = {
    * Test if VariableDeclaration needs whitespace.
    */
 
-  VariableDeclaration(
-    node: t.VariableDeclaration,
-  ): WhitespaceObject | undefined | null {
+  VariableDeclaration(node: t.VariableDeclaration): WhitespaceFlag {
     for (let i = 0; i < node.declarations.length; i++) {
       const declar = node.declarations[i];
 
       let enabled = isHelper(declar.id) && !isType(declar.init);
-      if (!enabled) {
+      if (!enabled && declar.init) {
         const state = crawl(declar.init);
         enabled = (isHelper(declar.init) && state.hasCall) || state.hasFunction;
       }
 
       if (enabled) {
-        return {
-          before: true,
-          after: true,
-        };
+        return WhitespaceFlag.before | WhitespaceFlag.after;
       }
     }
   },
@@ -195,12 +191,9 @@ export const nodes: NodeHandlers<WhitespaceObject | undefined | null> = {
    * Test if IfStatement needs whitespace.
    */
 
-  IfStatement(node: t.IfStatement): WhitespaceObject | undefined | null {
+  IfStatement(node: t.IfStatement): WhitespaceFlag {
     if (isBlockStatement(node.consequent)) {
-      return {
-        before: true,
-        after: true,
-      };
+      return WhitespaceFlag.before | WhitespaceFlag.after;
     }
   },
 };
@@ -215,53 +208,45 @@ nodes.ObjectProperty =
     function (
       node: t.ObjectProperty | t.ObjectTypeProperty | t.ObjectMethod,
       parent: t.ObjectExpression,
-    ): WhitespaceObject | undefined | null {
+    ): WhitespaceFlag {
       if (parent.properties[0] === node) {
-        return {
-          before: true,
-        };
+        return WhitespaceFlag.before;
       }
     };
 
 nodes.ObjectTypeCallProperty = function (
   node: t.ObjectTypeCallProperty,
   parent: t.ObjectTypeAnnotation,
-): WhitespaceObject | undefined | null {
+): WhitespaceFlag {
   if (parent.callProperties[0] === node && !parent.properties?.length) {
-    return {
-      before: true,
-    };
+    return WhitespaceFlag.before;
   }
 };
 
 nodes.ObjectTypeIndexer = function (
   node: t.ObjectTypeIndexer,
   parent: t.ObjectTypeAnnotation,
-): WhitespaceObject | undefined | null {
+): WhitespaceFlag {
   if (
     parent.indexers[0] === node &&
     !parent.properties?.length &&
     !parent.callProperties?.length
   ) {
-    return {
-      before: true,
-    };
+    return WhitespaceFlag.before;
   }
 };
 
 nodes.ObjectTypeInternalSlot = function (
   node: t.ObjectTypeInternalSlot,
   parent: t.ObjectTypeAnnotation,
-): WhitespaceObject | undefined | null {
+): WhitespaceFlag {
   if (
     parent.internalSlots[0] === node &&
     !parent.properties?.length &&
     !parent.callProperties?.length &&
     !parent.indexers?.length
   ) {
-    return {
-      before: true,
-    };
+    return WhitespaceFlag.before;
   }
 };
 
@@ -312,8 +297,8 @@ export const list: NodeHandlers<t.Node[]> = {
   [type as string]
     .concat(FLIPPED_ALIAS_KEYS[type] || [])
     .forEach(function (type) {
-      nodes[type] = function () {
-        return { after: amounts, before: amounts };
-      };
+      nodes[type] = function (ret: number) {
+        return ret;
+      }.bind(null, amounts ? WhitespaceFlag.before | WhitespaceFlag.after : 0);
     });
 });
