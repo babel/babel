@@ -23,6 +23,37 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.18.6 (2022-06-27)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#14650](https://github.com/babel/babel/pull/14650) [ts] Disallow property access after instantiation expression ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#14636](https://github.com/babel/babel/pull/14636) [ts] Allow `...<...>` followed by newline or binary operator ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`, `babel-parser`, `babel-preset-env`, `babel-template`
+  * [#14668](https://github.com/babel/babel/pull/14668) JSON modules should be imported with default ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-helper-remap-async-to-generator`, `babel-plugin-proposal-async-generator-functions`
+  * [#14391](https://github.com/babel/babel/pull/14391) Transform `await` in computed class keys ([@Yokubjon-J](https://github.com/Yokubjon-J))
+* `babel-plugin-transform-parameters`
+  * [#14694](https://github.com/babel/babel/pull/14694) fix: preserve function params type if possible ([@magic-akari](https://github.com/magic-akari))
+* `babel-core`
+  * [#14583](https://github.com/babel/babel/pull/14583) fix: Memory leak when deep cloning in `babel-core` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-core`, `babel-helper-check-duplicate-nodes`, `babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression`, `babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining`, `babel-plugin-proposal-destructuring-private`, `babel-plugin-proposal-optional-chaining`, `babel-plugin-transform-runtime`
+  * [#14663](https://github.com/babel/babel/pull/14663) Fix `import { types } from "@babel/core"` with native ESM ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-standalone`
+  * [#14697](https://github.com/babel/babel/pull/14697) Add `proposal-unicode-sets-regex` to `@babel/standalone` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* Other
+  * [#14687](https://github.com/babel/babel/pull/14687) chore: Update bench baselines ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-generator`, `babel-types`
+  * [#14685](https://github.com/babel/babel/pull/14685) enable TS compiler option: strictBindCallApply ([@JLHwung](https://github.com/JLHwung))
+* `babel-code-frame`, `babel-core`, `babel-generator`, `babel-helper-annotate-as-pure`, `babel-helper-builder-binary-assignment-operator-visitor`, `babel-helper-builder-react-jsx`, `babel-helper-check-duplicate-nodes`, `babel-helper-compilation-targets`, `babel-helper-create-class-features-plugin`, `babel-helper-create-regexp-features-plugin`, `babel-helper-define-map`, `babel-helper-explode-assignable-expression`, `babel-helper-fixtures`, `babel-helper-function-name`, `babel-helper-hoist-variables`, `babel-helper-member-expression-to-functions`, `babel-helper-module-imports`, `babel-helper-module-transforms`, `babel-helper-optimise-call-expression`, `babel-helper-plugin-test-runner`, `babel-helper-plugin-utils`, `babel-helper-remap-async-to-generator`, `babel-helper-replace-supers`, `babel-helper-simple-access`, `babel-helper-split-export-declaration`, `babel-helper-transform-fixture-test-runner`, `babel-helper-validator-option`, `babel-helper-wrap-function`, `babel-helpers`, `babel-highlight`, `babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining`, `babel-plugin-external-helpers`, `babel-plugin-proposal-async-generator-functions`, `babel-plugin-proposal-class-static-block`, `babel-plugin-proposal-decorators`, `babel-plugin-proposal-destructuring-private`, `babel-plugin-proposal-function-bind`, `babel-plugin-proposal-function-sent`, `babel-plugin-proposal-json-strings`, `babel-plugin-proposal-object-rest-spread`, `babel-plugin-proposal-optional-chaining`, `babel-plugin-proposal-partial-application`, `babel-plugin-proposal-pipeline-operator`, `babel-plugin-proposal-private-property-in-object`, `babel-plugin-proposal-record-and-tuple`, `babel-plugin-syntax-typescript`, `babel-plugin-transform-block-scoped-functions`, `babel-plugin-transform-block-scoping`, `babel-plugin-transform-classes`, `babel-plugin-transform-computed-properties`, `babel-plugin-transform-destructuring`, `babel-plugin-transform-duplicate-keys`, `babel-plugin-transform-exponentiation-operator`, `babel-plugin-transform-flow-comments`, `babel-plugin-transform-flow-strip-types`, `babel-plugin-transform-for-of`, `babel-plugin-transform-function-name`, `babel-plugin-transform-modules-amd`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-systemjs`, `babel-plugin-transform-modules-umd`, `babel-plugin-transform-object-super`, `babel-plugin-transform-parameters`, `babel-plugin-transform-property-mutators`, `babel-plugin-transform-proto-to-assign`, `babel-plugin-transform-react-constant-elements`, `babel-plugin-transform-react-display-name`, `babel-plugin-transform-react-inline-elements`, `babel-plugin-transform-react-jsx-compat`, `babel-plugin-transform-react-jsx-source`, `babel-plugin-transform-react-jsx`, `babel-plugin-transform-runtime`, `babel-plugin-transform-typescript`, `babel-plugin-transform-unicode-escapes`, `babel-preset-env`, `babel-preset-typescript`, `babel-standalone`, `babel-template`, `babel-traverse`, `babel-types`
+  * [#14601](https://github.com/babel/babel/pull/14601) enable noImplicitAny ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`, `babel-helper-transform-fixture-test-runner`, `babel-plugin-transform-destructuring`
+  * [#14659](https://github.com/babel/babel/pull/14659) Run Babel asynchronously in fixtures ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
 ## v7.18.5 (2022-06-13)
 
 #### :bug: Bug Fix
