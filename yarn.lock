@@ -845,9 +845,12 @@ __metadata:
   resolution: "@babel/helper-remap-async-to-generator@workspace:packages/babel-helper-remap-async-to-generator"
   dependencies:
     "@babel/helper-annotate-as-pure": "workspace:^"
+    "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-wrap-function": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
+  peerDependencies:
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1197,6 +1200,7 @@ __metadata:
   resolution: "@babel/plugin-proposal-async-generator-functions@workspace:packages/babel-plugin-proposal-async-generator-functions"
   dependencies:
     "@babel/core": "workspace:^"
+    "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-remap-async-to-generator": "workspace:^"

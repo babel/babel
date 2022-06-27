@@ -1,8 +1,10 @@
 /* @noflow */
 
-import type { NodePath, Visitor } from "@babel/traverse";
+import type { NodePath } from "@babel/traverse";
 import wrapFunction from "@babel/helper-wrap-function";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
+import environmentVisitor from "@babel/helper-environment-visitor";
+import { traverse } from "@babel/core";
 import {
   callExpression,
   cloneNode,
@@ -12,23 +14,26 @@ import {
 } from "@babel/types";
 import type * as t from "@babel/types";
 
-const awaitVisitor: Visitor<{ wrapAwait: t.Expression }> = {
-  Function(path) {
-    path.skip();
-  },
+const awaitVisitor = traverse.visitors.merge<{ wrapAwait: t.Expression }>([
+  {
+    ArrowFunctionExpression(path) {
+      path.skip();
+    },
 
-  AwaitExpression(path, { wrapAwait }) {
-    const argument = path.get("argument");
+    AwaitExpression(path, { wrapAwait }) {
+      const argument = path.get("argument");
 
-    path.replaceWith(
-      yieldExpression(
-        wrapAwait
-          ? callExpression(cloneNode(wrapAwait), [argument.node])
-          : argument.node,
-      ),
-    );
+      path.replaceWith(
+        yieldExpression(
+          wrapAwait
+            ? callExpression(cloneNode(wrapAwait), [argument.node])
+            : argument.node,
+        ),
+      );
+    },
   },
-};
+  environmentVisitor,
+]);
 
 export default function (
   path: NodePath<any>,
