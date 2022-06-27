@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-shorthand-properties",
-  "version": "7.16.7",
+  "version": "7.18.6",
   "description": "Compile ES2015 shorthand properties to ES5",
   "repository": {
     "type": "git",

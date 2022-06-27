@@ -1,6 +1,6 @@
 {
   "name": "@babel/register",
-  "version": "7.17.7",
+  "version": "7.18.6",
   "description": "babel require hook",
   "license": "MIT",
   "publishConfig": {

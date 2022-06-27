@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-hoist-variables",
-  "version": "7.16.7",
+  "version": "7.18.6",
   "description": "Helper function to hoist variables",
   "repository": {
     "type": "git",

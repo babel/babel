@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-define-map",
-  "version": "7.18.0",
+  "version": "7.18.6",
   "description": "Helper function to define a map",
   "repository": {
     "type": "git",

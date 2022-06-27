@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-pipeline-operator",
-  "version": "7.17.12",
+  "version": "7.18.6",
   "description": "Allow parsing of the pipeline operator",
   "repository": {
     "type": "git",

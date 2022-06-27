@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-builder-react-jsx",
-  "version": "7.16.7",
+  "version": "7.18.6",
   "description": "Helper function to build react jsx",
   "repository": {
     "type": "git",

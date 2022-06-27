@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-explode-assignable-expression",
-  "version": "7.16.7",
+  "version": "7.18.6",
   "description": "Helper function to explode an assignable expression",
   "repository": {
     "type": "git",
