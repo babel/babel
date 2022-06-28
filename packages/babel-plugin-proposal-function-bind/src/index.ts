@@ -14,11 +14,16 @@ export default declare(api => {
     return scope.path.setData("functionBind", id);
   }
 
+  function getObject(bind: t.BindExpression) {
+    if (t.isExpression(bind.object)) {
+      return bind.object;
+    }
+
+    return (bind.callee as t.MemberExpression).object;
+  }
+
   function getStaticContext(bind: t.BindExpression, scope: Scope) {
-    const object =
-      bind.object ||
-      // @ts-ignore Fixme: should check bind.callee type first
-      bind.callee.object;
+    const object = getObject(bind);
     return (
       scope.isStatic(object) &&
       (t.isSuper(object) ? t.thisExpression() : object)
@@ -35,12 +40,10 @@ export default declare(api => {
         t.assignmentExpression("=", tempId, bind.object),
         bind.callee,
       ]);
-    } else {
-      // @ts-ignore Fixme: should check bind.callee type first
+    } else if (t.isMemberExpression(bind.callee)) {
       bind.callee.object = t.assignmentExpression(
         "=",
         tempId,
-        // @ts-ignore Fixme: should check bind.callee type first
         bind.callee.object,
       );
     }
