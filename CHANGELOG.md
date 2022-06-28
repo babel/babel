@@ -23,6 +23,11 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.18.7 (2022-06-28)
+
+#### :bug: Bug Fix
+* `babel-types`
+  * [#14706](https://github.com/babel/babel/pull/14706) fix: `@babel/types` exception in typescript project. ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.18.6 (2022-06-27)
 
 #### :eyeglasses: Spec Compliance
