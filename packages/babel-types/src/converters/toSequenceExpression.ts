@@ -1,6 +1,5 @@
 import gatherSequenceExpressions from "./gatherSequenceExpressions";
 import type * as t from "..";
-import type { Scope } from "@babel/traverse";
 import type { DeclarationInfo } from "./gatherSequenceExpressions";
 
 /**
@@ -13,7 +12,7 @@ import type { DeclarationInfo } from "./gatherSequenceExpressions";
  */
 export default function toSequenceExpression(
   nodes: ReadonlyArray<t.Node>,
-  scope: Scope,
+  scope: any,
 ): t.SequenceExpression | undefined {
   if (!nodes?.length) return;
 
