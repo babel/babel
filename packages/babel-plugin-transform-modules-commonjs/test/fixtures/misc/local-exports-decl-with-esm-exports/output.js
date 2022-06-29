@@ -10,5 +10,5 @@ exports.x = x;
 
 function fn() {
   exports.x = x = 3;
-  var exports = 4;
+  var _exports2 = 4;
 }
