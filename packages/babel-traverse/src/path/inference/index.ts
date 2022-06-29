@@ -3,6 +3,7 @@ import * as inferers from "./inferers";
 import {
   anyTypeAnnotation,
   isAnyTypeAnnotation,
+  isArrayTypeAnnotation,
   isBooleanTypeAnnotation,
   isEmptyTypeAnnotation,
   isFlowBaseAnnotation,
@@ -11,6 +12,10 @@ import {
   isMixedTypeAnnotation,
   isNumberTypeAnnotation,
   isStringTypeAnnotation,
+  isTSArrayType,
+  isTSTypeAnnotation,
+  isTSTypeReference,
+  isTupleTypeAnnotation,
   isTypeAnnotation,
   isUnionTypeAnnotation,
   isVoidTypeAnnotation,
@@ -23,13 +28,15 @@ import type * as t from "@babel/types";
  * Infer the type of the current `NodePath`.
  */
 
-export function getTypeAnnotation(this: NodePath): t.FlowType {
+export function getTypeAnnotation(this: NodePath): t.FlowType | t.TSType {
   let type = this.getData("typeAnnotation");
   if (type != null) {
     return type;
   }
   type = this._getTypeAnnotation() || anyTypeAnnotation();
-  if (isTypeAnnotation(type)) type = type.typeAnnotation;
+  if (isTypeAnnotation(type) || isTSTypeAnnotation(type)) {
+    type = type.typeAnnotation;
+  }
   this.setData("typeAnnotation", type);
   return type;
 }
@@ -108,7 +115,7 @@ export function isBaseType(
 
 function _isBaseType(
   baseName: string,
-  type?: t.FlowType,
+  type?: t.FlowType | t.TSType,
   soft?: boolean,
 ): boolean {
   if (baseName === "string") {
@@ -165,8 +172,24 @@ export function baseTypeStrictlyMatches(
 
 export function isGenericType(this: NodePath, genericName: string): boolean {
   const type = this.getTypeAnnotation();
+  if (genericName === "Array") {
+    // T[]
+    if (
+      isTSArrayType(type) ||
+      isArrayTypeAnnotation(type) ||
+      isTupleTypeAnnotation(type)
+    ) {
+      return true;
+    }
+  }
   return (
-    isGenericTypeAnnotation(type) &&
-    isIdentifier(type.id, { name: genericName })
+    (isGenericTypeAnnotation(type) &&
+      isIdentifier(type.id, {
+        name: genericName,
+      })) ||
+    (isTSTypeReference(type) &&
+      isIdentifier(type.typeName, {
+        name: genericName,
+      }))
   );
 }

@@ -208,8 +208,10 @@ export default declare((api, options: Options) => {
         const right = path.get("right");
         if (
           right.isArrayExpression() ||
-          right.isGenericType("Array") ||
-          t.isArrayTypeAnnotation(right.getTypeAnnotation())
+          (process.env.BABEL_8_BREAKING
+            ? right.isGenericType("Array")
+            : right.isGenericType("Array") ||
+              t.isArrayTypeAnnotation(right.getTypeAnnotation()))
         ) {
           path.replaceWith(_ForOfStatementArray(path));
           return;

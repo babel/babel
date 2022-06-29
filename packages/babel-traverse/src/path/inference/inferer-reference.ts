@@ -1,16 +1,14 @@
 import type NodePath from "../index";
 import {
   BOOLEAN_NUMBER_BINARY_OPERATORS,
-  createFlowUnionType,
-  createTSUnionType,
   createTypeAnnotationBasedOnTypeof,
-  createUnionTypeAnnotation,
-  isTSTypeAnnotation,
   numberTypeAnnotation,
   voidTypeAnnotation,
 } from "@babel/types";
 import type * as t from "@babel/types";
 import type Binding from "../../scope/binding";
+
+import { createUnionType } from "./util";
 
 export default function (this: NodePath<t.Identifier>, node: t.Identifier) {
   if (!this.isReferenced()) return;
@@ -110,18 +108,7 @@ function getTypeAnnotationBindingConstantViolations(
     return;
   }
 
-  if (isTSTypeAnnotation(types[0]) && createTSUnionType) {
-    return createTSUnionType(
-      // @ts-ignore fixme: createTSUnionType should handle voidTypeAnnotation
-      types as t.TSTypeAnnotation[],
-    );
-  }
-
-  if (createFlowUnionType) {
-    return createFlowUnionType(types as t.FlowType[]);
-  }
-
-  return createUnionTypeAnnotation(types as t.FlowType[]);
+  return createUnionType(types);
 }
 
 function getConstantViolationsBefore(
@@ -249,25 +236,8 @@ function getConditionalAnnotation<T extends t.Node>(
   }
 
   if (types.length) {
-    if (isTSTypeAnnotation(types[0]) && createTSUnionType) {
-      return {
-        typeAnnotation: createTSUnionType(
-          // @ts-ignore fixme: createTSUnionType should handle voidTypeAnnotation
-          types as t.TSTypeAnnotation[],
-        ),
-        ifStatement,
-      };
-    }
-
-    if (createFlowUnionType) {
-      return {
-        typeAnnotation: createFlowUnionType(types),
-        ifStatement,
-      };
-    }
-
     return {
-      typeAnnotation: createUnionTypeAnnotation(types),
+      typeAnnotation: createUnionType(types),
       ifStatement,
     };
   }

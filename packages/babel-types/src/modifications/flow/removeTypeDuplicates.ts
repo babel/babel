@@ -20,11 +20,8 @@ export default function removeTypeDuplicates(
   // todo(babel-8): change type to Array<...>
   nodes: ReadonlyArray<t.FlowType | false | null | undefined>,
 ): t.FlowType[] {
-  const generics: Record<string, t.GenericTypeAnnotation> = {};
-  const bases = {} as Record<
-    t.FlowBaseAnnotation["type"],
-    t.FlowBaseAnnotation
-  >;
+  const generics = new Map<string, t.GenericTypeAnnotation>();
+  const bases = new Map<t.FlowBaseAnnotation["type"], t.FlowBaseAnnotation>();
 
   // store union type groups to circular references
   const typeGroups = new Set<t.FlowType[]>();
@@ -46,7 +43,7 @@ export default function removeTypeDuplicates(
     }
 
     if (isFlowBaseAnnotation(node)) {
-      bases[node.type] = node;
+      bases.set(node.type, node);
       continue;
     }
 
@@ -63,8 +60,8 @@ export default function removeTypeDuplicates(
     if (isGenericTypeAnnotation(node)) {
       const name = getQualifiedName(node.id);
 
-      if (generics[name]) {
-        let existing: t.Flow = generics[name];
+      if (generics.has(name)) {
+        let existing: t.Flow = generics.get(name);
         if (existing.typeParameters) {
           if (node.typeParameters) {
             existing.typeParameters.params = removeTypeDuplicates(
@@ -75,7 +72,7 @@ export default function removeTypeDuplicates(
           existing = node.typeParameters;
         }
       } else {
-        generics[name] = node;
+        generics.set(name, node);
       }
 
       continue;
@@ -85,13 +82,13 @@ export default function removeTypeDuplicates(
   }
 
   // add back in bases
-  for (const type of Object.keys(bases) as (keyof typeof bases)[]) {
-    types.push(bases[type]);
+  for (const [, baseType] of bases) {
+    types.push(baseType);
   }
 
   // add back in generics
-  for (const name of Object.keys(generics)) {
-    types.push(generics[name]);
+  for (const [, genericName] of generics) {
+    types.push(genericName);
   }
 
   return types;

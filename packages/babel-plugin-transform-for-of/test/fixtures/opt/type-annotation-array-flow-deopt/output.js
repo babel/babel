@@ -1,7 +1,4 @@
-for (var _i = 0, _arr = b; _i < _arr.length; _i++) {
-  const y = _arr[_i];
-}
-
+// This won't be optimize because when `for-of` is handled, the b's type annotation has been removed by the Flow plugin
 function a(b) {
   var _iterator = babelHelpers.createForOfIteratorHelper(b),
       _step;
