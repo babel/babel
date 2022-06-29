@@ -183,6 +183,7 @@ const rewriteBindingInitVisitor: Visitor<RewriteBindingInitVisitorState> = {
           metadata,
           exportNames,
           identifier(localName),
+          path.scope,
         ),
       );
       // @ts-expect-error todo(flow->ts): avoid mutations
@@ -203,6 +204,7 @@ const rewriteBindingInitVisitor: Visitor<RewriteBindingInitVisitorState> = {
             metadata,
             exportNames,
             identifier(localName),
+            path.scope,
           ),
         );
         // @ts-expect-error todo(flow->ts): avoid mutations
@@ -218,7 +220,18 @@ const buildBindingExportAssignmentExpression = (
   metadata: ModuleMetadata,
   exportNames: string[],
   localExpr: t.Expression,
+  scope: Scope,
 ) => {
+  const exportsObjectName = metadata.exportName;
+  for (
+    let currentScope = scope;
+    currentScope != null;
+    currentScope = currentScope.parent
+  ) {
+    if (currentScope.hasOwnBinding(exportsObjectName)) {
+      currentScope.rename(exportsObjectName);
+    }
+  }
   return (exportNames || []).reduce((expr, exportName) => {
     // class Foo {} export { Foo, Foo as Bar };
     // as
@@ -228,7 +241,7 @@ const buildBindingExportAssignmentExpression = (
     return assignmentExpression(
       "=",
       memberExpression(
-        identifier(metadata.exportName),
+        identifier(exportsObjectName),
         computed ? stringLiteral(exportName) : identifier(exportName),
         /* computed */ computed,
       ),
@@ -352,6 +365,7 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
               this.metadata,
               exportedNames,
               cloneNode(update),
+              path.scope,
             ),
           );
         } else {
@@ -366,6 +380,7 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
                 this.metadata,
                 exportedNames,
                 identifier(localName),
+                path.scope,
               ),
               cloneNode(ref),
             ]),
@@ -428,6 +443,7 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
               this.metadata,
               exportedNames,
               assignment,
+              path.scope,
             ),
           );
           requeueInParent(path);
@@ -458,6 +474,7 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
                 this.metadata,
                 exportedNames,
                 identifier(localName),
+                path.scope,
               ),
             );
           }
