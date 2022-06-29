@@ -835,6 +835,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-remap-async-to-generator@workspace:packages/babel-helper-remap-async-to-generator"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/helper-annotate-as-pure": "workspace:^"
     "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-wrap-function": "workspace:^"
