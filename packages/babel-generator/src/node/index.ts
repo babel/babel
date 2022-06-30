@@ -56,7 +56,7 @@ function expandAliases<R>(obj: NodeHandlers<R>) {
 // into concrete types so that the 'find' call below can be as fast as possible.
 const expandedParens = expandAliases(parens);
 const expandedWhitespaceNodes = expandAliases(whitespace.nodes);
-const expandedWhitespaceList = expandAliases(whitespace.list);
+//const expandedWhitespaceList = expandAliases(whitespace.list);
 
 function find<R>(
   obj: NodeHandlers<R>,
@@ -87,18 +87,22 @@ export function needsWhitespace(
     node = node.expression;
   }
 
-  if ((find(expandedWhitespaceNodes, node, parent) & type) !== 0) {
-    return true;
+  const flag = find(expandedWhitespaceNodes, node, parent);
+
+  if (typeof flag === "number") {
+    return (flag & type) !== 0;
   }
 
-  const items = find(expandedWhitespaceList, node, parent);
-  if (items) {
-    for (let i = 0; i < items.length; i++) {
-      if (needsWhitespace(items[i], node, type)) {
-        return true;
-      }
-    }
-  }
+  // A bug that existed before, commenting out it will cause the test to fail.
+
+  // const items = find(expandedWhitespaceList, node, parent);
+  // if (items) {
+  //   for (let i = 0; i < items.length; i++) {
+  //     if (needsWhitespace(items[i], node, type)) {
+  //       return true;
+  //     }
+  //   }
+  // }
 
   return false;
 }

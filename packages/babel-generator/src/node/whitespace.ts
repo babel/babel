@@ -118,7 +118,6 @@ export const nodes: NodeHandlers<WhitespaceFlag> = {
         ? WhitespaceFlag.before | WhitespaceFlag.after
         : WhitespaceFlag.after;
     }
-    return 0;
   },
 
   /**
@@ -144,7 +143,6 @@ export const nodes: NodeHandlers<WhitespaceFlag> = {
     if (isFunction(node.left) || isFunction(node.right)) {
       return WhitespaceFlag.after;
     }
-    return 0;
   },
 
   /**
@@ -155,7 +153,6 @@ export const nodes: NodeHandlers<WhitespaceFlag> = {
     if (isStringLiteral(node) && node.value === "use strict") {
       return WhitespaceFlag.after;
     }
-    return 0;
   },
 
   /**
@@ -166,14 +163,12 @@ export const nodes: NodeHandlers<WhitespaceFlag> = {
     if (isFunction(node.callee) || isHelper(node)) {
       return WhitespaceFlag.before | WhitespaceFlag.after;
     }
-    return 0;
   },
 
   OptionalCallExpression(node: t.OptionalCallExpression): WhitespaceFlag {
     if (isFunction(node.callee)) {
       return WhitespaceFlag.before | WhitespaceFlag.after;
     }
-    return 0;
   },
 
   /**
@@ -194,7 +189,6 @@ export const nodes: NodeHandlers<WhitespaceFlag> = {
         return WhitespaceFlag.before | WhitespaceFlag.after;
       }
     }
-    return 0;
   },
 
   /**
@@ -205,7 +199,6 @@ export const nodes: NodeHandlers<WhitespaceFlag> = {
     if (isBlockStatement(node.consequent)) {
       return WhitespaceFlag.before | WhitespaceFlag.after;
     }
-    return 0;
   },
 };
 
@@ -223,7 +216,6 @@ nodes.ObjectProperty =
       if (parent.properties[0] === node) {
         return WhitespaceFlag.before;
       }
-      return 0;
     };
 
 nodes.ObjectTypeCallProperty = function (
@@ -233,7 +225,6 @@ nodes.ObjectTypeCallProperty = function (
   if (parent.callProperties[0] === node && !parent.properties?.length) {
     return WhitespaceFlag.before;
   }
-  return 0;
 };
 
 nodes.ObjectTypeIndexer = function (
@@ -247,7 +238,6 @@ nodes.ObjectTypeIndexer = function (
   ) {
     return WhitespaceFlag.before;
   }
-  return 0;
 };
 
 nodes.ObjectTypeInternalSlot = function (
@@ -262,7 +252,6 @@ nodes.ObjectTypeInternalSlot = function (
   ) {
     return WhitespaceFlag.before;
   }
-  return 0;
 };
 
 /**
