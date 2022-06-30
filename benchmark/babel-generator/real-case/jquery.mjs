@@ -31,7 +31,4 @@ function benchCases(name, implementation, options) {
 benchCases("current", current.default);
 benchCases("baseline", baseline.default);
 
-benchCases("baseline", baseline.default);
-benchCases("current", current.default);
-
 suite.on("cycle", report).run();

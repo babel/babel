@@ -87,20 +87,17 @@ export function needsWhitespace(
     node = node.expression;
   }
 
-  let linesInfo: any = find(expandedWhitespaceNodes, node, parent);
-
-  if (!linesInfo) {
-    const items = find(expandedWhitespaceList, node, parent);
-    if (items) {
-      for (let i = 0; i < items.length; i++) {
-        linesInfo = needsWhitespace(items[i], node, type);
-        if (linesInfo) break;
-      }
-    }
+  if ((find(expandedWhitespaceNodes, node, parent) & type) !== 0) {
+    return true;
   }
 
-  if (typeof linesInfo === "number") {
-    return (linesInfo & type) !== 0;
+  const items = find(expandedWhitespaceList, node, parent);
+  if (items) {
+    for (let i = 0; i < items.length; i++) {
+      if (needsWhitespace(items[i], node, type)) {
+        return true;
+      }
+    }
   }
 
   return false;

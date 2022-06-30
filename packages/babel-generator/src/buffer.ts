@@ -18,7 +18,7 @@ type SourcePos = {
   filename: string | undefined;
 };
 
-type queueObj = {
+type queueItem = {
   char: number;
   repeat: number;
   line: number | undefined;
@@ -48,7 +48,7 @@ export default class Buffer {
   _str = "";
   _appendCount = 0;
   _last = 0;
-  _queue: queueObj[] = [];
+  _queue: queueItem[] = [];
   _queueCursor = 0;
 
   _position = {
@@ -91,18 +91,18 @@ export default class Buffer {
     if (cursor === this._queue.length) {
       this._allocQueue();
     }
-    const obj = this._queue[cursor];
-    obj.char = char;
-    obj.repeat = repeat;
-    obj.line = line;
-    obj.column = column;
-    obj.identifierName = identifierName;
-    obj.filename = filename;
+    const item = this._queue[cursor];
+    item.char = char;
+    item.repeat = repeat;
+    item.line = line;
+    item.column = column;
+    item.identifierName = identifierName;
+    item.filename = filename;
 
     this._queueCursor++;
   }
 
-  _popQueue(): queueObj {
+  _popQueue(): queueItem {
     if (this._queueCursor === 0) {
       throw new Error("Cannot pop from empty queue");
     }
@@ -200,7 +200,7 @@ export default class Buffer {
     const queueCursor = this._queueCursor;
     const queue = this._queue;
     for (let i = 0; i < queueCursor; i++) {
-      const item: queueObj = queue[i];
+      const item: queueItem = queue[i];
       this._appendChar(item.char, item.repeat, item);
     }
     this._queueCursor = 0;
@@ -235,7 +235,7 @@ export default class Buffer {
 
     if (++this._appendCount > 4096) {
       // @ts-ignore
-      this._str | 0; // Unexplainable huge performance boost. Ref: https://github.com/davidmarkclements/flatstr License: MIT
+      +this._str; // Unexplainable huge performance boost. Ref: https://github.com/davidmarkclements/flatstr License: MIT
       this._buf += this._str;
       this._str = str;
       this._appendCount = 0;
