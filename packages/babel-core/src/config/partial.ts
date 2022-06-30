@@ -159,9 +159,9 @@ type LoadPartialConfigOpts = {
   showIgnoredFiles?: boolean;
 };
 
-export const loadPartialConfig = gensync<
-  (opts?: LoadPartialConfigOpts) => PartialConfig | null
->(function* (opts) {
+export const loadPartialConfig = gensync(function* (
+  opts?: LoadPartialConfigOpts,
+): Handler<PartialConfig | null> {
   let showIgnoredFiles = false;
   // We only extract showIgnoredFiles if opts is an object, so that
   // loadPrivatePartialConfig can throw the appropriate error if it's not.

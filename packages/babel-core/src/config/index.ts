@@ -1,5 +1,4 @@
-import gensync from "gensync";
-import type { Gensync } from "gensync";
+import gensync, { type Handler } from "gensync";
 
 export type {
   ResolvedConfig,
@@ -33,27 +32,34 @@ export type { PartialConfig } from "./partial";
 import { createConfigItem as createConfigItemImpl } from "./item";
 import type { ConfigItem } from "./item";
 
-const loadOptionsRunner = gensync<(opts: unknown) => ResolvedConfig | null>(
-  function* (opts) {
-    const config = yield* loadFullConfig(opts);
-    // NOTE: We want to return "null" explicitly, while ?. alone returns undefined
-    return config?.options ?? null;
-  },
-);
+const loadOptionsRunner = gensync(function* (
+  opts: unknown,
+): Handler<ResolvedConfig | null> {
+  const config = yield* loadFullConfig(opts);
+  // NOTE: We want to return "null" explicitly, while ?. alone returns undefined
+  return config?.options ?? null;
+});
 
-const createConfigItemRunner =
-  gensync<(...args: Parameters<typeof createConfigItemImpl>) => ConfigItem>(
-    createConfigItemImpl,
-  );
+const createConfigItemRunner = gensync(createConfigItemImpl);
+
+// TODO: Could the gensync type definitions export this?
+type Callback<R> = [R] extends [void]
+  ? (err: unknown) => void
+  : (err: unknown, result: R) => void;
 
 const maybeErrback =
-  (runner: Gensync<(...args: any) => any>) =>
-  (opts: unknown, callback?: any) => {
-    if (callback === undefined && typeof opts === "function") {
-      callback = opts;
-      opts = undefined;
+  <Arg, Return>(runner: gensync.Gensync<[Arg], Return>) =>
+  (argOrCallback: Arg | Callback<Return>, maybeCallback?: Callback<Return>) => {
+    let arg: Arg | undefined;
+    let callback: Callback<Return>;
+    if (maybeCallback === undefined && typeof argOrCallback === "function") {
+      callback = argOrCallback as Callback<Return>;
+      arg = undefined;
+    } else {
+      callback = maybeCallback;
+      arg = argOrCallback as Arg;
     }
-    return callback ? runner.errback(opts, callback) : runner.sync(opts);
+    return callback ? runner.errback(arg, callback) : runner.sync(arg);
   };
 
 export const loadPartialConfig = maybeErrback(loadPartialConfigRunner);

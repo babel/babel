@@ -26,7 +26,7 @@ export type CacheEntry<ResultT, SideChannel> = Array<{
   valid: (channel: SideChannel) => Handler<boolean>;
 }>;
 
-const synchronize = <ArgsT extends any[], ResultT>(
+const synchronize = <ArgsT extends unknown[], ResultT>(
   gen: (...args: ArgsT) => Handler<ResultT>,
 ): ((...args: ArgsT) => ResultT) => {
   return gensync(gen).sync;
@@ -128,9 +128,7 @@ function makeCachedFunction<ArgT, ResultT, SideChannel>(
     let value: ResultT;
 
     if (isIterableIterator(handlerResult)) {
-      const gen = handlerResult as Generator<unknown, ResultT, unknown>;
-
-      value = yield* onFirstPause(gen, () => {
+      value = yield* onFirstPause(handlerResult, () => {
         finishLock = setupAsyncLocks(cache, futureCache, arg);
       });
     } else {

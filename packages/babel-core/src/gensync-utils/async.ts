@@ -1,26 +1,25 @@
-import gensync from "gensync";
+import gensync, { type Gensync, type Handler } from "gensync";
 
-import type { Gensync, Handler } from "gensync";
 type MaybePromise<T> = T | Promise<T>;
+
+// TODO: Could the gensync type definitions export this?
+type Callback<R> = [R] extends [void]
+  ? (err: unknown) => void
+  : (err: unknown, result: R) => void;
 
 const id = <T>(x: T): T => x;
 
 const runGenerator: {
-  sync<Return>(gen: Generator<unknown, Return>): Return;
-  async<Return>(gen: Generator<unknown, Return>): Promise<Return>;
-  errback<Return>(
-    gen: Generator<unknown, Return>,
-    cb: (err: Error, val: Return) => void,
-  ): void;
-} = gensync<(item: Generator) => any>(function* <Return>(
-  item: Generator<unknown, Return>,
-) {
+  sync<Return>(gen: Handler<Return>): Return;
+  async<Return>(gen: Handler<Return>): Promise<Return>;
+  errback<Return>(gen: Handler<Return>, cb: Callback<Return>): void;
+} = gensync(function* (item: Handler<any>): Handler<any> {
   return yield* item;
 });
 
 // This Gensync returns true if the current execution context is
 // asynchronous, otherwise it returns false.
-export const isAsync = gensync<() => boolean>({
+export const isAsync = gensync({
   sync: () => false,
   errback: cb => cb(null, true),
 });
@@ -30,13 +29,13 @@ export const isAsync = gensync<() => boolean>({
 // but the current execution context is synchronous, it will throw the
 // provided error.
 // This is used to handle user-provided functions which could be asynchronous.
-export function maybeAsync<Fn extends (...args: any) => any>(
-  fn: Fn,
+export function maybeAsync<Args extends unknown[], Return>(
+  fn: (...args: Args) => Return,
   message: string,
-): Gensync<Fn> {
+): Gensync<Args, Return> {
   return gensync({
     sync(...args) {
-      const result = fn.apply(this, args) as ReturnType<Fn>;
+      const result = fn.apply(this, args) as Return;
       if (isThenable(result)) throw new Error(message);
       return result;
     },
@@ -46,9 +45,9 @@ export function maybeAsync<Fn extends (...args: any) => any>(
   });
 }
 
-const withKind = gensync<(cb: (kind: "sync" | "async") => any) => any>({
+const withKind = gensync({
   sync: cb => cb("sync"),
-  async: cb => cb("async"),
+  async: async cb => cb("async"),
 }) as <T>(cb: (kind: "sync" | "async") => MaybePromise<T>) => Handler<T>;
 
 // This function wraps a generator (or a Gensync) into another function which,
@@ -65,16 +64,13 @@ const withKind = gensync<(cb: (kind: "sync" | "async") => any) => any>({
 //         return wrappedFn(x);
 //       })
 //     )
-export function forwardAsync<
-  Action extends (...args: unknown[]) => any,
-  Return,
->(
-  action: (...args: Parameters<Action>) => Handler<ReturnType<Action>>,
+export function forwardAsync<Args extends unknown[], Return>(
+  action: (...args: Args) => Handler<Return>,
   cb: (
-    adapted: (...args: Parameters<Action>) => MaybePromise<ReturnType<Action>>,
+    adapted: (...args: Args) => MaybePromise<Return>,
   ) => MaybePromise<Return>,
 ): Handler<Return> {
-  const g = gensync<Action>(action);
+  const g = gensync(action);
   return withKind(kind => {
     const adapted = g[kind];
     return cb(adapted);
@@ -84,7 +80,10 @@ export function forwardAsync<
 // If the given generator is executed asynchronously, the first time that it
 // is paused (i.e. When it yields a gensync generator which can't be run
 // synchronously), call the "firstPause" callback.
-export const onFirstPause = gensync<(gen: Generator, cb: Function) => any>({
+export const onFirstPause = gensync<
+  [gen: Handler<unknown>, firstPause: () => void],
+  unknown
+>({
   name: "onFirstPause",
   arity: 2,
   sync: function (item) {
@@ -102,11 +101,12 @@ export const onFirstPause = gensync<(gen: Generator, cb: Function) => any>({
       firstPause();
     }
   },
-}) as <T>(gen: Generator<any, T, any>, cb: Function) => Handler<T>;
+}) as <T>(gen: Handler<T>, firstPause: () => void) => Handler<T>;
 
 // Wait for the given promise to be resolved
 export const waitFor = gensync({
   sync: id,
+  // @ts-ignore?
   async: id,
 }) as <T>(p: T | Promise<T>) => Handler<T>;
 
