@@ -539,7 +539,7 @@ class Printer {
     this._insideAux = !node.loc;
     this._maybeAddAuxComment(this._insideAux && !oldInAux);
 
-    let shouldPrintParens;
+    let shouldPrintParens: boolean;
     if (
       this.format.retainFunctionParens &&
       node.type === "FunctionExpression" &&
