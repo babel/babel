@@ -5877,7 +5877,7 @@ __metadata:
     jest-worker: ^27.4.0
     lint-staged: ^9.2.0
     mergeiterator: ^1.4.4
-    prettier: 2.5.0
+    prettier: 2.7.1
     rollup: ^2.70.2
     rollup-plugin-dts: ^4.2.1
     rollup-plugin-polyfill-node: ^0.9.0
@@ -12716,12 +12716,12 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"prettier@npm:2.5.0":
-  version: 2.5.0
-  resolution: "prettier@npm:2.5.0"
+"prettier@npm:2.7.1":
+  version: 2.7.1
+  resolution: "prettier@npm:2.7.1"
   bin:
     prettier: bin-prettier.js
-  checksum: aad1b35b73e7c14596d389d90977a83dad0db689ba5802a0ef319c357b7867f55b885db197972aa6a56c30f53088c9f8e0d7f7930ae074c275a4e9cbe091d21d
+  checksum: 55a4409182260866ab31284d929b3cb961e5fdb91fe0d2e099dac92eaecec890f36e524b4c19e6ceae839c99c6d7195817579cdffc8e2c80da0cb794463a748b
   languageName: node
   linkType: hard
 
