@@ -399,7 +399,7 @@ export default function transformClass(
       );
     }
 
-    const bareSupers = new Array<NodePath<t.CallExpression>>();
+    const bareSupers: NodePath<t.CallExpression>[] = [];
     path.traverse(
       traverse.visitors.merge([
         environmentVisitor,
