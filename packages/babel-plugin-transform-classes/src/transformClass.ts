@@ -399,7 +399,7 @@ export default function transformClass(
       );
     }
 
-    const bareSupers = new Set<NodePath<t.CallExpression>>();
+    const bareSupers: NodePath<t.CallExpression>[] = [];
     path.traverse(
       traverse.visitors.merge([
         environmentVisitor,
@@ -407,14 +407,14 @@ export default function transformClass(
           Super(path) {
             const { node, parentPath } = path;
             if (parentPath.isCallExpression({ callee: node })) {
-              bareSupers.add(parentPath);
+              bareSupers.unshift(parentPath);
             }
           },
         } as Visitor,
       ]),
     );
 
-    let guaranteedSuperBeforeFinish = !!bareSupers.size;
+    let guaranteedSuperBeforeFinish = !!bareSupers.length;
 
     for (const bareSuper of bareSupers) {
       wrapSuperCall(bareSuper, classState.superName, thisRef, body);
