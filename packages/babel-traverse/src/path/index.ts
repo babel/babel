@@ -139,7 +139,7 @@ class NodePath<T extends t.Node = t.Node> {
   traverse<T>(visitor: Visitor<T>, state: T): void;
   traverse(visitor: Visitor): void;
   traverse(visitor: any, state?: any) {
-    traverse(this.node, visitor, this.scope, state, this);
+    traverse.direct(this, visitor, false, state);
   }
 
   set(key: string, node: any) {
