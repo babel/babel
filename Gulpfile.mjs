@@ -1,5 +1,6 @@
 import path from "path";
 import fs from "fs";
+import { cpus } from "os";
 import { createRequire } from "module";
 import { fileURLToPath } from "url";
 import plumber from "gulp-plumber";
@@ -222,7 +223,8 @@ function getFiles(glob, { include, exclude }) {
 }
 
 function createWorker(useWorker) {
-  const numWorkers = require("os").cpus().length / 2 - 1;
+  // jest-worker defaults
+  const numWorkers = cpus().length - 1;
   if (numWorkers === 0 || !useWorker) {
     return require("./babel-worker.cjs");
   }
