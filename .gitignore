@@ -79,7 +79,9 @@ packages/babel-standalone/babel.min.js
 /eslint/*/lib
 /eslint/*/LICENSE
 !/packages/babel-eslint-plugin/LICENSE
+
 /.vscode
+!/.vscode/settings.example.json
 # local directory for VSCode Extension - https://marketplace.visualstudio.com/items?itemName=xyz.local-history
 /.history
 

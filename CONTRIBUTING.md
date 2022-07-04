@@ -334,6 +334,14 @@ For both `@babel/plugin-x` and `@babel/parser`, you can easily generate an `outp
               - output.json (will be generated if not created)
 ```
 
+#### Editor setup
+
+We have JSON Schema definitions so that your editor can provide autocomplete for `options.json` files in fixtures:
+- `./packages/babel-helper-fixtures/data/schema.json` for plugins/presets tests
+- `./packages/babel-parser/test/schema.json` for parser tests
+
+If you use VS Code you can copy the contents of `.vscode/settings.example.json` into `.vscode/settings.json` to make it use the JSON Schema definitions. Other editors have different options to load JSON Schema files.
+
 ### Debugging code
 
 A common approach to debugging JavaScript code is to walk through the code using the [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools/) debugger.
