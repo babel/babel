@@ -223,8 +223,7 @@ function getFiles(glob, { include, exclude }) {
 }
 
 function createWorker(useWorker) {
-  // jest-worker defaults
-  const numWorkers = cpus().length - 1;
+  const numWorkers = Math.ceil(cpus().length / 2) - 1;
   if (numWorkers === 0 || !useWorker) {
     return require("./babel-worker.cjs");
   }
