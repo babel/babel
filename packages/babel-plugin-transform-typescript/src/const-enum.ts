@@ -16,9 +16,13 @@ export default function transpileConstEnum(
     isExported = path.parent.body.some(
       stmt =>
         t.isExportNamedDeclaration(stmt) &&
+        stmt.exportKind !== "type" &&
         !stmt.source &&
         stmt.specifiers.some(
-          spec => t.isExportSpecifier(spec) && spec.local.name === name,
+          spec =>
+            t.isExportSpecifier(spec) &&
+            spec.exportKind !== "type" &&
+            spec.local.name === name,
         ),
     );
   }
