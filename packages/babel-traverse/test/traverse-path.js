@@ -12,7 +12,7 @@ describe("traverse.direct", function () {
     };
   `;
 
-  it("traverses a NodePath childrens", () => {
+  it("traverses a NodePath's children", () => {
     let reference;
     const ast = parse(code);
 
