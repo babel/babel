@@ -57,7 +57,7 @@ describe("traverse.direct", function () {
 };`);
   });
 
-  it("traverses a NodePath directly and it's childrens", () => {
+  it("traverses a NodePath directly and its children", () => {
     let reference;
     const ast = parse(code);
 
