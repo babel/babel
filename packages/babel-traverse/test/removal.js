@@ -45,4 +45,41 @@ describe("removal", function () {
 
     expect(generate(ast).code).toBe("");
   });
+
+  it("remove AssignmentExpression and check binding", function () {
+    const ast = parse("var a=1;a=2;");
+    traverse(ast, {
+      AssignmentExpression: function (path) {
+        path.remove();
+        expect(path.scope.getBinding("a")).toBeDefined();
+      },
+    });
+  });
+
+  it("remove for and check binding", function () {
+    const ast = parse("var x = 1;for (x of []) { }");
+    traverse(ast, {
+      ForOfStatement: function (path) {
+        path.remove();
+        expect(path.scope.getBinding("x")).toBeDefined();
+      },
+    });
+  });
+
+  it("remove block and check binding", function () {
+    const ast = parse("var x=1;{{{x=2;var y=x;}}};");
+    traverse(ast, {
+      BlockStatement: function (path) {
+        path.remove();
+        path.stop();
+        const binding = path.scope.getBinding("x");
+        expect(binding).toBeDefined();
+        expect(binding.constantViolations.length).toBe(0);
+        expect(binding.constant).toBe(true);
+        expect(binding.referencePaths.length).toBe(0);
+        expect(binding.references).toBe(0);
+        expect(binding.referenced).toBe(false);
+      },
+    });
+  });
 });

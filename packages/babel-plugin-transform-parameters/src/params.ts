@@ -82,7 +82,7 @@ export default function convertFunctionParams(
     for (const name of Object.keys(param.getBindingIdentifiers())) {
       const constantViolations = scope.bindings[name]?.constantViolations;
       if (constantViolations) {
-        for (const redeclarator of constantViolations) {
+        for (const redeclarator of constantViolations.slice()) {
           const node = redeclarator.node;
           // If a constant violation is a var or a function declaration,
           // we first check to see if it's a var without an init.

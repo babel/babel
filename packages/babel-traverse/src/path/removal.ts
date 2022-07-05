@@ -23,8 +23,45 @@ export function remove(this: NodePath) {
 }
 
 export function _removeFromScope(this: NodePath) {
-  const bindings = this.getBindingIdentifiers();
-  Object.keys(bindings).forEach(name => this.scope.removeBinding(name));
+  const allBindings = [];
+
+  let scope = this.scope;
+  do {
+    for (const name of Object.keys(scope.bindings)) {
+      const binding = this.scope.getBinding(name);
+      if (binding != undefined) {
+        allBindings.push(binding);
+      }
+    }
+  } while ((scope = scope.parent));
+
+  scope = this.scope;
+
+  function enter(p: NodePath) {
+    allBindings.forEach(binding => {
+      if (binding.identifier == p.node) {
+        scope.removeBinding(binding.identifier.name);
+      }
+      let i;
+      i = binding.constantViolations.indexOf(p);
+      if (i != -1) {
+        binding.constantViolations.splice(i, 1);
+        binding.constant = binding.constantViolations.length == 0;
+      }
+      i = binding.referencePaths.indexOf(p);
+      if (i != -1) {
+        binding.referencePaths.splice(i, 1);
+        binding.references = binding.referencePaths.length;
+        binding.referenced = binding.referencePaths.length != 0;
+      }
+    });
+  }
+
+  enter(this);
+
+  this.traverse({
+    enter: enter,
+  });
 }
 
 export function _callRemovalHooks(this: NodePath) {
