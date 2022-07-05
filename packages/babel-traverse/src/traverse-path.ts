@@ -25,6 +25,9 @@ export const traversePath = (
 
   const queue: NodePath[] | [] = [];
   const keys = VISITOR_KEYS[type];
+
+  if (path.shouldSkip) return queue;
+
   for (const key of keys) {
     // @ts-expect-error
     const nodes = node[key] as Node | Node[] | null;
