@@ -2,7 +2,8 @@ import type { HubInterface } from "../hub";
 import type TraversalContext from "../context";
 import * as virtualTypes from "./lib/virtual-types";
 import buildDebug from "debug";
-import traverse from "../index";
+import { traversePath } from "../traverse-path";
+import type { TraversePathOptions } from "../traverse-path";
 import type { Visitor } from "../types";
 import Scope from "../scope";
 import { validate } from "@babel/types";
@@ -138,8 +139,8 @@ class NodePath<T extends t.Node = t.Node> {
 
   traverse<T>(visitor: Visitor<T>, state: T): void;
   traverse(visitor: Visitor): void;
-  traverse(visitor: any, state?: any) {
-    traverse.direct(this, visitor, false, state);
+  traverse(visitor: any, state?: any, opts?: TraversePathOptions) {
+    traversePath(this, visitor, state, opts);
   }
 
   set(key: string, node: any) {

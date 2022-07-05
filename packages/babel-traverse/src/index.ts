@@ -11,7 +11,6 @@ import type NodePath from "./path";
 import type { default as Scope, Binding } from "./scope";
 import type { Visitor } from "./types";
 import { traverseNode } from "./traverse-node";
-import { traversePath } from "./traverse-path";
 
 export type { Visitor, Binding };
 export { default as NodePath } from "./path";
@@ -99,17 +98,6 @@ traverse.node = function (
 ) {
   traverseNode(node, opts, scope, state, path, skipKeys);
   // traverse.node always returns undefined
-};
-
-traverse.direct = function (
-  path: NodePath,
-  opts: TraverseOptions,
-  visitSelf: boolean = false,
-  state?: any,
-) {
-  if (!path) return;
-  visitors.explode(opts as Visitor);
-  traversePath(path, opts, visitSelf, state);
 };
 
 traverse.clearNode = function (node: t.Node, opts?: RemovePropertiesOptions) {

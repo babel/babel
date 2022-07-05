@@ -1,10 +1,11 @@
 import { parse } from "@babel/parser";
+import { traversePath } from "../lib/traverse-path.js";
 import _traverse from "../lib/index.js";
 const traverse = _traverse.default || _traverse;
 import _generate from "@babel/generator";
 const generate = _generate.default || _generate;
 
-describe("traverse.direct", function () {
+describe("traversePath", function () {
   const code = `
     const foo = bar => {
       const lorem = "ipsum";
@@ -37,7 +38,7 @@ describe("traverse.direct", function () {
     };
 
     // no third argument provided, `visitSelf` defaults to false
-    traverse.direct(reference, visitor);
+    traversePath(reference, visitor);
 
     expect(parentPath.node.type).toBe("Program");
     expect(reference.parentPath.node.type).toBe("Program");
@@ -82,7 +83,7 @@ describe("traverse.direct", function () {
     };
 
     // third argument provided as true, `visitSelf` is true
-    traverse.direct(reference, visitor, true);
+    traversePath(reference, visitor, null, { visitSelf: true });
 
     expect(parentPath.node.type).toBe("Program");
     expect(reference.parentPath.node.type).toBe("Program");
