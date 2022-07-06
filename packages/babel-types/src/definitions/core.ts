@@ -787,6 +787,7 @@ defineType("ObjectMethod", {
           "Identifier",
           "StringLiteral",
           "NumericLiteral",
+          "BigIntLiteral",
         );
         const computed = assertNodeType("Expression");
 
@@ -800,6 +801,7 @@ defineType("ObjectMethod", {
           "Identifier",
           "StringLiteral",
           "NumericLiteral",
+          "BigIntLiteral",
         ];
         return validator;
       })(),
@@ -1825,6 +1827,7 @@ export const classMethodOrPropertyCommon = {
         "Identifier",
         "StringLiteral",
         "NumericLiteral",
+        "BigIntLiteral",
         "Expression",
       ),
     ),
@@ -2222,6 +2225,7 @@ defineType("ClassAccessorProperty", {
             "Identifier",
             "StringLiteral",
             "NumericLiteral",
+            "BigIntLiteral",
             "PrivateName",
           );
           const computed = assertNodeType("Expression");
@@ -2235,6 +2239,7 @@ defineType("ClassAccessorProperty", {
           "Identifier",
           "StringLiteral",
           "NumericLiteral",
+          "BigIntLiteral",
           "Expression",
           "PrivateName",
         ),
