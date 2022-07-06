@@ -2356,6 +2356,10 @@ defineType("ClassPrivateMethod", {
   fields: {
     ...classMethodOrDeclareMethodCommon,
     ...functionTypeAnnotationCommon,
+    kind: {
+      validate: assertOneOf("get", "set", "method"),
+      default: "method",
+    },
     key: {
       validate: assertNodeType("PrivateName"),
     },

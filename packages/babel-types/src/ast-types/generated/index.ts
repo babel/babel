@@ -1046,7 +1046,7 @@ export interface ClassPrivateProperty extends BaseNode {
 
 export interface ClassPrivateMethod extends BaseNode {
   type: "ClassPrivateMethod";
-  kind?: "get" | "set" | "method" | "constructor";
+  kind: "get" | "set" | "method";
   key: PrivateName;
   params: Array<Identifier | Pattern | RestElement | TSParameterProperty>;
   body: BlockStatement;

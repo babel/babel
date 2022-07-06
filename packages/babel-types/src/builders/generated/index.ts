@@ -937,7 +937,7 @@ export function classPrivateProperty(
   });
 }
 export function classPrivateMethod(
-  kind: "get" | "set" | "method" | "constructor" | undefined = "method",
+  kind: "get" | "set" | "method" | undefined = "method",
   key: t.PrivateName,
   params: Array<
     t.Identifier | t.Pattern | t.RestElement | t.TSParameterProperty
