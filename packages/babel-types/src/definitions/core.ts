@@ -2316,6 +2316,10 @@ defineType("ClassPrivateProperty", {
       ),
       optional: true,
     },
+    static: {
+      validate: assertValueType("boolean"),
+      default: false,
+    },
     readonly: {
       validate: assertValueType("boolean"),
       optional: true,
