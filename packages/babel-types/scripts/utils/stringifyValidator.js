@@ -61,6 +61,6 @@ export default function stringifyValidator(validator, nodePrefix) {
  * Heuristic to decide whether or not the given type is a value type (eg. "null")
  * or a Node type (eg. "Expression").
  */
-function isValueType(type) {
+export function isValueType(type) {
   return type.charAt(0).toLowerCase() === type.charAt(0);
 }

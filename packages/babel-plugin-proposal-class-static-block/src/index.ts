@@ -49,7 +49,10 @@ export default declare(({ types: t, template, assertVersion }) => {
         const body = classBody.get("body");
         for (const path of body) {
           if (path.isPrivate()) {
-            privateNames.add(path.get("key.id").node.name);
+            privateNames.add(
+              // @ts-expect-error TS can't infer that NodePath<t.ClassBody[body][number]> & NodePath<t.Private> equals to NodePath<t.ClassBody[body][number] & isPrivate>
+              path.get("key.id").node.name,
+            );
           }
         }
         for (const path of body) {
