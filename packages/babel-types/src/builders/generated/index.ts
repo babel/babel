@@ -2268,6 +2268,7 @@ export function tsLiteralType(
     | t.StringLiteral
     | t.BooleanLiteral
     | t.BigIntLiteral
+    | t.TemplateLiteral
     | t.UnaryExpression,
 ): t.TSLiteralType {
   return validateNode<t.TSLiteralType>({

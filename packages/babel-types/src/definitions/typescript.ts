@@ -385,6 +385,7 @@ defineType("TSLiteralType", {
           "StringLiteral",
           "BooleanLiteral",
           "BigIntLiteral",
+          "TemplateLiteral",
         );
         function validator(parent: any, key: string, node: any) {
           // type A = -1 | 1;
@@ -403,6 +404,7 @@ defineType("TSLiteralType", {
           "StringLiteral",
           "BooleanLiteral",
           "BigIntLiteral",
+          "TemplateLiteral",
           "UnaryExpression",
         ];
 

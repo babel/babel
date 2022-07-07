@@ -1928,6 +1928,7 @@ export interface TSLiteralType extends BaseNode {
     | StringLiteral
     | BooleanLiteral
     | BigIntLiteral
+    | TemplateLiteral
     | UnaryExpression;
 }
 
