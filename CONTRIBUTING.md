@@ -93,6 +93,8 @@ make use-cjs
 
 Note that they need to recompile the whole monorepo, so please make sure to stop any running `make watch` process before running them.
 
+If you never run a `make use-*` (or if you delete the `.module-type` file that they generate), our build process defaults to CJS.
+
 ### Running linting/tests
 
 #### Lint
