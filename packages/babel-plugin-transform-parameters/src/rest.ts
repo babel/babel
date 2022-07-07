@@ -300,6 +300,8 @@ export default function convertFunctionRest(path: NodePath<t.Function>) {
     const pattern = rest;
     rest = scope.generateUidIdentifier("ref");
 
+    console.log(Object.keys(t.getBindingIdentifiers(pattern)));
+
     const declar = t.variableDeclaration("let", [
       t.variableDeclarator(pattern, rest),
     ]);
