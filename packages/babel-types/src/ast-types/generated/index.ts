@@ -444,8 +444,8 @@ export interface FunctionDeclaration extends BaseNode {
   id?: Identifier | null;
   params: Array<Identifier | Pattern | RestElement>;
   body: BlockStatement;
-  generator?: boolean;
-  async?: boolean;
+  generator: boolean;
+  async: boolean;
   declare?: boolean | null;
   predicate?: DeclaredPredicate | InferredPredicate | null;
   returnType?: TypeAnnotation | TSTypeAnnotation | Noop | null;
@@ -461,8 +461,8 @@ export interface FunctionExpression extends BaseNode {
   id?: Identifier | null;
   params: Array<Identifier | Pattern | RestElement>;
   body: BlockStatement;
-  generator?: boolean;
-  async?: boolean;
+  generator: boolean;
+  async: boolean;
   predicate?: DeclaredPredicate | InferredPredicate | null;
   returnType?: TypeAnnotation | TSTypeAnnotation | Noop | null;
   typeParameters?:
@@ -582,8 +582,8 @@ export interface ObjectMethod extends BaseNode {
   params: Array<Identifier | Pattern | RestElement>;
   body: BlockStatement;
   computed: boolean;
-  generator?: boolean;
-  async?: boolean;
+  generator: boolean;
+  async: boolean;
   decorators?: Array<Decorator> | null;
   returnType?: TypeAnnotation | TSTypeAnnotation | Noop | null;
   typeParameters?:
@@ -738,7 +738,7 @@ export interface ArrowFunctionExpression extends BaseNode {
   type: "ArrowFunctionExpression";
   params: Array<Identifier | Pattern | RestElement>;
   body: BlockStatement | Expression;
-  async?: boolean;
+  async: boolean;
   expression: boolean;
   generator?: boolean;
   predicate?: DeclaredPredicate | InferredPredicate | null;
@@ -878,14 +878,14 @@ export interface MetaProperty extends BaseNode {
 
 export interface ClassMethod extends BaseNode {
   type: "ClassMethod";
-  kind?: "get" | "set" | "method" | "constructor";
+  kind: "get" | "set" | "method" | "constructor";
   key: Identifier | StringLiteral | NumericLiteral | BigIntLiteral | Expression;
   params: Array<Identifier | Pattern | RestElement | TSParameterProperty>;
   body: BlockStatement;
-  computed?: boolean;
-  static?: boolean;
-  generator?: boolean;
-  async?: boolean;
+  computed: boolean;
+  static: boolean;
+  generator: boolean;
+  async: boolean;
   abstract?: boolean | null;
   access?: "public" | "private" | "protected" | null;
   accessibility?: "public" | "private" | "protected" | null;
@@ -996,8 +996,8 @@ export interface ClassProperty extends BaseNode {
   value?: Expression | null;
   typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
   decorators?: Array<Decorator> | null;
-  computed?: boolean;
-  static?: boolean;
+  computed: boolean;
+  static: boolean;
   abstract?: boolean | null;
   accessibility?: "public" | "private" | "protected" | null;
   declare?: boolean | null;
@@ -1020,8 +1020,8 @@ export interface ClassAccessorProperty extends BaseNode {
   value?: Expression | null;
   typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
   decorators?: Array<Decorator> | null;
-  computed?: boolean;
-  static?: boolean;
+  computed: boolean;
+  static: boolean;
   abstract?: boolean | null;
   accessibility?: "public" | "private" | "protected" | null;
   declare?: boolean | null;
@@ -1050,7 +1050,7 @@ export interface ClassPrivateMethod extends BaseNode {
   key: PrivateName;
   params: Array<Identifier | Pattern | RestElement | TSParameterProperty>;
   body: BlockStatement;
-  static?: boolean;
+  static: boolean;
   abstract?: boolean | null;
   access?: "public" | "private" | "protected" | null;
   accessibility?: "public" | "private" | "protected" | null;
@@ -1725,7 +1725,7 @@ export interface TSPropertySignature extends BaseNode {
   key: Expression;
   typeAnnotation?: TSTypeAnnotation | null;
   initializer?: Expression | null;
-  computed?: boolean | null;
+  computed?: boolean;
   kind: "get" | "set";
   optional?: boolean | null;
   readonly?: boolean | null;
@@ -1737,7 +1737,7 @@ export interface TSMethodSignature extends BaseNode {
   typeParameters?: TSTypeParameterDeclaration | null;
   parameters: Array<Identifier | RestElement>;
   typeAnnotation?: TSTypeAnnotation | null;
-  computed?: boolean | null;
+  computed?: boolean;
   kind: "method" | "get" | "set";
   optional?: boolean | null;
 }
