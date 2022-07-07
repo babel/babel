@@ -169,10 +169,11 @@ $ TEST_DEBUG=true make test
 
 <details>
   <summary>More options</summary>
-  Or you can directly use Yarn
+
+  You can also run `jest` directly, but you must remember to include `--runInBand` or `-i` or you [may not hit breakpoints with the chrome debugger](https://github.com/nodejs/node/issues/26609).
 
   ```sh
-  $ yarn node --inspect-brk node_modules/jest/bin/jest.js --runInBand
+  yarn run --inspect-brk jest -i packages/package-to-test
   ```
 </details>
 <br>
