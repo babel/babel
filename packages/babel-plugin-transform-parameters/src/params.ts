@@ -47,11 +47,6 @@ export default function convertFunctionParams(
 
   const { node, scope } = path;
 
-  const state = {
-    needsOuterBinding: false,
-    scope,
-  };
-
   const body = [];
   const shadowedParams = new Set<string>();
 
@@ -59,6 +54,10 @@ export default function convertFunctionParams(
     collectShadowedParamsNames(param, scope, shadowedParams);
   }
 
+  const state = {
+    needsOuterBinding: false,
+    scope,
+  };
   if (shadowedParams.size === 0) {
     for (const param of params) {
       if (!param.isIdentifier()) param.traverse(iifeVisitor, state);
@@ -156,12 +155,7 @@ export default function convertFunctionParams(
   path.ensureBlock();
 
   if (state.needsOuterBinding || shadowedParams.size > 0) {
-    body.push(
-      buildScopeIIFE(
-        shadowedParams,
-        (path.get("body") as NodePath<t.BlockStatement>).node,
-      ),
-    );
+    body.push(buildScopeIIFE(shadowedParams, path.node.body));
 
     path.set("body", t.blockStatement(body as t.Statement[]));
 
