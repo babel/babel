@@ -525,7 +525,7 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseDecorator(): N.Decorator {
-    this.expectOnePlugin(["decorators-legacy", "decorators"]);
+    this.expectOnePlugin(["decorators", "decorators-legacy"]);
 
     const node = this.startNode();
     this.next();

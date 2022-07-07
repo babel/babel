@@ -578,7 +578,7 @@ export interface ObjectExpression extends BaseNode {
 export interface ObjectMethod extends BaseNode {
   type: "ObjectMethod";
   kind: "method" | "get" | "set";
-  key: Expression | Identifier | StringLiteral | NumericLiteral;
+  key: Expression | Identifier | StringLiteral | NumericLiteral | BigIntLiteral;
   params: Array<Identifier | Pattern | RestElement>;
   body: BlockStatement;
   computed: boolean;
@@ -879,7 +879,7 @@ export interface MetaProperty extends BaseNode {
 export interface ClassMethod extends BaseNode {
   type: "ClassMethod";
   kind?: "get" | "set" | "method" | "constructor";
-  key: Identifier | StringLiteral | NumericLiteral | Expression;
+  key: Identifier | StringLiteral | NumericLiteral | BigIntLiteral | Expression;
   params: Array<Identifier | Pattern | RestElement | TSParameterProperty>;
   body: BlockStatement;
   computed?: boolean;
@@ -992,7 +992,7 @@ export interface OptionalCallExpression extends BaseNode {
 
 export interface ClassProperty extends BaseNode {
   type: "ClassProperty";
-  key: Identifier | StringLiteral | NumericLiteral | Expression;
+  key: Identifier | StringLiteral | NumericLiteral | BigIntLiteral | Expression;
   value?: Expression | null;
   typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
   decorators?: Array<Decorator> | null;
@@ -1010,7 +1010,13 @@ export interface ClassProperty extends BaseNode {
 
 export interface ClassAccessorProperty extends BaseNode {
   type: "ClassAccessorProperty";
-  key: Identifier | StringLiteral | NumericLiteral | Expression | PrivateName;
+  key:
+    | Identifier
+    | StringLiteral
+    | NumericLiteral
+    | BigIntLiteral
+    | Expression
+    | PrivateName;
   value?: Expression | null;
   typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
   decorators?: Array<Decorator> | null;
@@ -1031,7 +1037,7 @@ export interface ClassPrivateProperty extends BaseNode {
   key: PrivateName;
   value?: Expression | null;
   decorators?: Array<Decorator> | null;
-  static: any;
+  static: boolean;
   definite?: boolean | null;
   readonly?: boolean | null;
   typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
@@ -1040,7 +1046,7 @@ export interface ClassPrivateProperty extends BaseNode {
 
 export interface ClassPrivateMethod extends BaseNode {
   type: "ClassPrivateMethod";
-  kind?: "get" | "set" | "method" | "constructor";
+  kind: "get" | "set" | "method";
   key: PrivateName;
   params: Array<Identifier | Pattern | RestElement | TSParameterProperty>;
   body: BlockStatement;
@@ -1678,7 +1684,7 @@ export interface TSDeclareFunction extends BaseNode {
 export interface TSDeclareMethod extends BaseNode {
   type: "TSDeclareMethod";
   decorators?: Array<Decorator> | null;
-  key: Identifier | StringLiteral | NumericLiteral | Expression;
+  key: Identifier | StringLiteral | NumericLiteral | BigIntLiteral | Expression;
   typeParameters?: TSTypeParameterDeclaration | Noop | null;
   params: Array<Identifier | Pattern | RestElement | TSParameterProperty>;
   returnType?: TSTypeAnnotation | Noop | null;
