@@ -565,7 +565,7 @@ export function assignmentPattern(
   });
 }
 export function arrayPattern(
-  elements: Array<null | t.PatternLike>,
+  elements: Array<null | t.PatternLike | t.LVal>,
 ): t.ArrayPattern {
   return validateNode<t.ArrayPattern>({
     type: "ArrayPattern",

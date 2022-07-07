@@ -728,7 +728,7 @@ export interface AssignmentPattern extends BaseNode {
 
 export interface ArrayPattern extends BaseNode {
   type: "ArrayPattern";
-  elements: Array<null | PatternLike>;
+  elements: Array<null | PatternLike | LVal>;
   decorators?: Array<Decorator> | null;
   optional?: boolean | null;
   typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;

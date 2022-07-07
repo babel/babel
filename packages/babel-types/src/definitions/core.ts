@@ -1270,7 +1270,7 @@ defineType("ArrayPattern", {
     elements: {
       validate: chain(
         assertValueType("array"),
-        assertEach(assertNodeOrValueType("null", "PatternLike")),
+        assertEach(assertNodeOrValueType("null", "PatternLike", "LVal")),
       ),
     },
     // For TypeScript
