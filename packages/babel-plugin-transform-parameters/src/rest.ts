@@ -325,15 +325,12 @@ export default function convertFunctionRest(path: NodePath<t.Function>) {
     }
   }
 
-  let rest = (node.params.pop() as t.RestElement).argument as
-    | t.Pattern
-    | t.Identifier;
+  let rest = restPath.node;
+  node.params.pop(); // This returns 'rest'
 
   if (t.isPattern(rest)) {
     const pattern = rest;
     rest = scope.generateUidIdentifier("ref");
-
-    console.log(Object.keys(t.getBindingIdentifiers(pattern)));
 
     const declar = t.variableDeclaration("let", [
       t.variableDeclarator(pattern, rest),
