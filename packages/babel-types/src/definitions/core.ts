@@ -362,7 +362,7 @@ defineType("ForStatement", {
   },
 });
 
-export const functionCommon = {
+export const functionCommon = () => ({
   params: {
     validate: chain(
       assertValueType("array"),
@@ -375,9 +375,9 @@ export const functionCommon = {
   async: {
     default: false,
   },
-};
+});
 
-export const functionTypeAnnotationCommon = {
+export const functionTypeAnnotationCommon = () => ({
   returnType: {
     validate: process.env.BABEL_8_BREAKING
       ? assertNodeType("TypeAnnotation", "TSTypeAnnotation")
@@ -400,10 +400,10 @@ export const functionTypeAnnotationCommon = {
         ),
     optional: true,
   },
-};
+});
 
-export const functionDeclarationCommon = {
-  ...functionCommon,
+export const functionDeclarationCommon = () => ({
+  ...functionCommon(),
   declare: {
     validate: assertValueType("boolean"),
     optional: true,
@@ -412,14 +412,14 @@ export const functionDeclarationCommon = {
     validate: assertNodeType("Identifier"),
     optional: true, // May be null for `export default function`
   },
-};
+});
 
 defineType("FunctionDeclaration", {
   builder: ["id", "params", "body", "generator", "async"],
   visitor: ["id", "params", "body", "returnType", "typeParameters"],
   fields: {
-    ...functionDeclarationCommon,
-    ...functionTypeAnnotationCommon,
+    ...functionDeclarationCommon(),
+    ...functionTypeAnnotationCommon(),
     body: {
       validate: assertNodeType("BlockStatement"),
     },
@@ -461,8 +461,8 @@ defineType("FunctionExpression", {
     "Pureish",
   ],
   fields: {
-    ...functionCommon,
-    ...functionTypeAnnotationCommon,
+    ...functionCommon(),
+    ...functionTypeAnnotationCommon(),
     id: {
       validate: assertNodeType("Identifier"),
       optional: true,
@@ -477,7 +477,7 @@ defineType("FunctionExpression", {
   },
 });
 
-export const patternLikeCommon = {
+export const patternLikeCommon = () => ({
   typeAnnotation: {
     validate: process.env.BABEL_8_BREAKING
       ? assertNodeType("TypeAnnotation", "TSTypeAnnotation")
@@ -494,15 +494,16 @@ export const patternLikeCommon = {
       assertValueType("array"),
       assertEach(assertNodeType("Decorator")),
     ),
+    optional: true,
   },
-};
+});
 
 defineType("Identifier", {
   builder: ["name"],
   visitor: ["typeAnnotation", "decorators" /* for legacy param decorators */],
   aliases: ["Expression", "PatternLike", "LVal", "TSEntityName"],
   fields: {
-    ...patternLikeCommon,
+    ...patternLikeCommon(),
     name: {
       validate: chain(
         assertValueType("string"),
@@ -772,8 +773,8 @@ defineType("ObjectExpression", {
 defineType("ObjectMethod", {
   builder: ["kind", "key", "params", "body", "computed", "generator", "async"],
   fields: {
-    ...functionCommon,
-    ...functionTypeAnnotationCommon,
+    ...functionCommon(),
+    ...functionTypeAnnotationCommon(),
     kind: {
       validate: assertOneOf("method", "get", "set"),
       ...(!process.env.BABEL_TYPES_8_BREAKING ? { default: "method" } : {}),
@@ -948,7 +949,7 @@ defineType("RestElement", {
   aliases: ["LVal", "PatternLike"],
   deprecatedAlias: "RestProperty",
   fields: {
-    ...patternLikeCommon,
+    ...patternLikeCommon(),
     argument: {
       validate: !process.env.BABEL_TYPES_8_BREAKING
         ? assertNodeType("LVal")
@@ -1234,7 +1235,7 @@ defineType("AssignmentPattern", {
   builder: ["left", "right"],
   aliases: ["Pattern", "PatternLike", "LVal"],
   fields: {
-    ...patternLikeCommon,
+    ...patternLikeCommon(),
     left: {
       validate: assertNodeType(
         "Identifier",
@@ -1265,7 +1266,7 @@ defineType("ArrayPattern", {
   builder: ["elements"],
   aliases: ["Pattern", "PatternLike", "LVal"],
   fields: {
-    ...patternLikeCommon,
+    ...patternLikeCommon(),
     elements: {
       validate: chain(
         assertValueType("array"),
@@ -1299,8 +1300,8 @@ defineType("ArrowFunctionExpression", {
     "Pureish",
   ],
   fields: {
-    ...functionCommon,
-    ...functionTypeAnnotationCommon,
+    ...functionCommon(),
+    ...functionTypeAnnotationCommon(),
     expression: {
       // https://github.com/babel/babylon/issues/505
       validate: assertValueType("boolean"),
@@ -1786,7 +1787,7 @@ defineType("MetaProperty", {
   },
 });
 
-export const classMethodOrPropertyCommon = {
+export const classMethodOrPropertyCommon = () => ({
   abstract: {
     validate: assertValueType("boolean"),
     optional: true,
@@ -1832,11 +1833,11 @@ export const classMethodOrPropertyCommon = {
       ),
     ),
   },
-};
+});
 
-export const classMethodOrDeclareMethodCommon = {
-  ...functionCommon,
-  ...classMethodOrPropertyCommon,
+export const classMethodOrDeclareMethodCommon = () => ({
+  ...functionCommon(),
+  ...classMethodOrPropertyCommon(),
   params: {
     validate: chain(
       assertValueType("array"),
@@ -1868,7 +1869,7 @@ export const classMethodOrDeclareMethodCommon = {
     ),
     optional: true,
   },
-};
+});
 
 defineType("ClassMethod", {
   aliases: ["Function", "Scopable", "BlockParent", "FunctionParent", "Method"],
@@ -1891,8 +1892,8 @@ defineType("ClassMethod", {
     "typeParameters",
   ],
   fields: {
-    ...classMethodOrDeclareMethodCommon,
-    ...functionTypeAnnotationCommon,
+    ...classMethodOrDeclareMethodCommon(),
+    ...functionTypeAnnotationCommon(),
     body: {
       validate: assertNodeType("BlockStatement"),
     },
@@ -1908,7 +1909,7 @@ defineType("ObjectPattern", {
   builder: ["properties"],
   aliases: ["Pattern", "PatternLike", "LVal"],
   fields: {
-    ...patternLikeCommon,
+    ...patternLikeCommon(),
     properties: {
       validate: chain(
         assertValueType("array"),
@@ -2163,7 +2164,7 @@ defineType("ClassProperty", {
   ],
   aliases: ["Property"],
   fields: {
-    ...classMethodOrPropertyCommon,
+    ...classMethodOrPropertyCommon(),
     value: {
       validate: assertNodeType("Expression"),
       optional: true,
@@ -2217,7 +2218,7 @@ defineType("ClassAccessorProperty", {
   ],
   aliases: ["Property", "Accessor"],
   fields: {
-    ...classMethodOrPropertyCommon,
+    ...classMethodOrPropertyCommon(),
     key: {
       validate: chain(
         (function () {
@@ -2354,8 +2355,8 @@ defineType("ClassPrivateMethod", {
     "Private",
   ],
   fields: {
-    ...classMethodOrDeclareMethodCommon,
-    ...functionTypeAnnotationCommon,
+    ...classMethodOrDeclareMethodCommon(),
+    ...functionTypeAnnotationCommon(),
     kind: {
       validate: assertOneOf("get", "set", "method"),
       default: "method",

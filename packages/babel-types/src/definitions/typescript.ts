@@ -22,7 +22,7 @@ const defineType = defineAliasedType("TypeScript");
 
 const bool = assertValueType("boolean");
 
-const tSFunctionTypeAnnotationCommon = {
+const tSFunctionTypeAnnotationCommon = () => ({
   returnType: {
     validate: process.env.BABEL_8_BREAKING
       ? assertNodeType("TSTypeAnnotation")
@@ -37,7 +37,7 @@ const tSFunctionTypeAnnotationCommon = {
         assertNodeType("TSTypeParameterDeclaration", "Noop"),
     optional: true,
   },
-};
+});
 
 defineType("TSParameterProperty", {
   aliases: ["LVal"], // TODO: This isn't usable in general as an LVal. Should have a "Parameter" alias.
@@ -72,16 +72,16 @@ defineType("TSDeclareFunction", {
   aliases: ["Statement", "Declaration"],
   visitor: ["id", "typeParameters", "params", "returnType"],
   fields: {
-    ...functionDeclarationCommon,
-    ...tSFunctionTypeAnnotationCommon,
+    ...functionDeclarationCommon(),
+    ...tSFunctionTypeAnnotationCommon(),
   },
 });
 
 defineType("TSDeclareMethod", {
   visitor: ["decorators", "key", "typeParameters", "params", "returnType"],
   fields: {
-    ...classMethodOrDeclareMethodCommon,
-    ...tSFunctionTypeAnnotationCommon,
+    ...classMethodOrDeclareMethodCommon(),
+    ...tSFunctionTypeAnnotationCommon(),
   },
 });
 
@@ -94,14 +94,14 @@ defineType("TSQualifiedName", {
   },
 });
 
-const signatureDeclarationCommon = {
+const signatureDeclarationCommon = () => ({
   typeParameters: validateOptionalType("TSTypeParameterDeclaration"),
   [process.env.BABEL_8_BREAKING ? "params" : "parameters"]: validateArrayOfType(
     ["Identifier", "RestElement"],
   ),
   [process.env.BABEL_8_BREAKING ? "returnType" : "typeAnnotation"]:
     validateOptionalType("TSTypeAnnotation"),
-};
+});
 
 const callConstructSignatureDeclaration = {
   aliases: ["TSTypeElement"],
@@ -110,7 +110,7 @@ const callConstructSignatureDeclaration = {
     process.env.BABEL_8_BREAKING ? "params" : "parameters",
     process.env.BABEL_8_BREAKING ? "returnType" : "typeAnnotation",
   ],
-  fields: signatureDeclarationCommon,
+  fields: signatureDeclarationCommon(),
 };
 
 defineType("TSCallSignatureDeclaration", callConstructSignatureDeclaration);
@@ -119,17 +119,17 @@ defineType(
   callConstructSignatureDeclaration,
 );
 
-const namedTypeElementCommon = {
+const namedTypeElementCommon = () => ({
   key: validateType("Expression"),
-  computed: validate(bool),
+  computed: { default: false },
   optional: validateOptional(bool),
-};
+});
 
 defineType("TSPropertySignature", {
   aliases: ["TSTypeElement"],
   visitor: ["key", "typeAnnotation", "initializer"],
   fields: {
-    ...namedTypeElementCommon,
+    ...namedTypeElementCommon(),
     readonly: validateOptional(bool),
     typeAnnotation: validateOptionalType("TSTypeAnnotation"),
     initializer: validateOptionalType("Expression"),
@@ -148,8 +148,8 @@ defineType("TSMethodSignature", {
     process.env.BABEL_8_BREAKING ? "returnType" : "typeAnnotation",
   ],
   fields: {
-    ...signatureDeclarationCommon,
-    ...namedTypeElementCommon,
+    ...signatureDeclarationCommon(),
+    ...namedTypeElementCommon(),
     kind: {
       validate: assertOneOf("method", "get", "set"),
     },
@@ -208,12 +208,12 @@ const fnOrCtrBase = {
 
 defineType("TSFunctionType", {
   ...fnOrCtrBase,
-  fields: signatureDeclarationCommon,
+  fields: signatureDeclarationCommon(),
 });
 defineType("TSConstructorType", {
   ...fnOrCtrBase,
   fields: {
-    ...signatureDeclarationCommon,
+    ...signatureDeclarationCommon(),
     abstract: validateOptional(bool),
   },
 });
