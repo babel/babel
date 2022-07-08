@@ -18,7 +18,7 @@ type SourcePos = {
   filename: string | undefined;
 };
 
-type queueItem = {
+type QueueItem = {
   char: number;
   repeat: number;
   line: number | undefined;
@@ -48,7 +48,7 @@ export default class Buffer {
   _str = "";
   _appendCount = 0;
   _last = 0;
-  _queue: queueItem[] = [];
+  _queue: QueueItem[] = [];
   _queueCursor = 0;
 
   _position = {
@@ -56,12 +56,12 @@ export default class Buffer {
     column: 0,
   };
   _sourcePosition = SourcePos();
-  _disallowedPop: SourcePos & { ok: boolean } = {
+  _disallowedPop: SourcePos & { objectReusable: boolean } = {
     identifierName: undefined,
     line: undefined,
     column: undefined,
     filename: undefined,
-    ok: false,
+    objectReusable: true, // To avoid deleting and re-creating objects, we reuse existing objects when they are not needed anymore.
   };
 
   _allocQueue() {
@@ -102,7 +102,7 @@ export default class Buffer {
     this._queueCursor++;
   }
 
-  _popQueue(): queueItem {
+  _popQueue(): QueueItem {
     if (this._queueCursor === 0) {
       throw new Error("Cannot pop from empty queue");
     }
@@ -200,7 +200,7 @@ export default class Buffer {
     const queueCursor = this._queueCursor;
     const queue = this._queue;
     for (let i = 0; i < queueCursor; i++) {
-      const item: queueItem = queue[i];
+      const item: QueueItem = queue[i];
       this._appendChar(item.char, item.repeat, item);
     }
     this._queueCursor = 0;
@@ -416,7 +416,7 @@ export default class Buffer {
 
     if (
       // Verify if reactivating this specific position has been disallowed.
-      !this._disallowedPop.ok ||
+      this._disallowedPop.objectReusable ||
       this._disallowedPop.line !== originalLine ||
       this._disallowedPop.column !== originalColumn ||
       this._disallowedPop.filename !== originalFilename
@@ -425,7 +425,7 @@ export default class Buffer {
       this._sourcePosition.column = originalColumn;
       this._sourcePosition.filename = originalFilename;
       this._sourcePosition.identifierName = originalIdentifierName;
-      this._disallowedPop.ok = false;
+      this._disallowedPop.objectReusable = true;
     }
   }
 
@@ -441,7 +441,7 @@ export default class Buffer {
 
     this._normalizePosition(prop, loc, disallowedPop);
 
-    disallowedPop.ok = true;
+    disallowedPop.objectReusable = false;
   }
 
   _normalizePosition(prop: "start" | "end", loc: Loc, targetObj: SourcePos) {

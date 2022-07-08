@@ -9,6 +9,8 @@ import {
 } from "@babel/types";
 import type * as t from "@babel/types";
 
+import type { WhitespaceFlag } from "./whitespace";
+
 export type NodeHandlers<R> = {
   [K in string]?: (
     node: K extends t.Node["type"] ? Extract<t.Node, { type: K }> : t.Node,
@@ -56,7 +58,6 @@ function expandAliases<R>(obj: NodeHandlers<R>) {
 // into concrete types so that the 'find' call below can be as fast as possible.
 const expandedParens = expandAliases(parens);
 const expandedWhitespaceNodes = expandAliases(whitespace.nodes);
-//const expandedWhitespaceList = expandAliases(whitespace.list);
 
 function find<R>(
   obj: NodeHandlers<R>,
@@ -79,7 +80,7 @@ function isOrHasCallExpression(node: t.Node): boolean {
 export function needsWhitespace(
   node: t.Node,
   parent: t.Node,
-  type: number,
+  type: WhitespaceFlag,
 ): boolean {
   if (!node) return false;
 
@@ -92,17 +93,6 @@ export function needsWhitespace(
   if (typeof flag === "number") {
     return (flag & type) !== 0;
   }
-
-  // A bug that existed before, commenting out it will cause the test to fail.
-
-  // const items = find(expandedWhitespaceList, node, parent);
-  // if (items) {
-  //   for (let i = 0; i < items.length; i++) {
-  //     if (needsWhitespace(items[i], node, type)) {
-  //       return true;
-  //     }
-  //   }
-  // }
 
   return false;
 }

@@ -25,6 +25,8 @@ const enum WhitespaceFlag {
   after = 1 << 1,
 }
 
+export type { WhitespaceFlag };
+
 function crawlInternal(
   node: t.Node,
   state: { hasCall: boolean; hasFunction: boolean; hasHelper: boolean },
@@ -252,36 +254,6 @@ nodes.ObjectTypeInternalSlot = function (
   ) {
     return WhitespaceFlag.before;
   }
-};
-
-/**
- * Returns lists from node types that need whitespace.
- */
-
-export const list: NodeHandlers<t.Node[]> = {
-  /**
-   * Return VariableDeclaration declarations init properties.
-   */
-
-  VariableDeclaration(node: t.VariableDeclaration) {
-    return node.declarations.map(decl => decl.init);
-  },
-
-  /**
-   * Return VariableDeclaration elements.
-   */
-
-  ArrayExpression(node: t.ArrayExpression) {
-    return node.elements;
-  },
-
-  /**
-   * Return VariableDeclaration properties.
-   */
-
-  ObjectExpression(node: t.ObjectExpression) {
-    return node.properties;
-  },
 };
 
 /**
