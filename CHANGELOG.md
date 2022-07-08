@@ -23,6 +23,36 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.18.8 (2022-07-08)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`, `babel-types`
+  * [#14730](https://github.com/babel/babel/pull/14730) Misc fixes to `@babel/types` AST definitions ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-parameters`
+  * [#14736](https://github.com/babel/babel/pull/14736) Inject IIFE when variables shadow binding in rest param ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-classes`
+  * [#14709](https://github.com/babel/babel/pull/14709) Fix compilation of nested `super(...)` calls ([@dbacarel](https://github.com/dbacarel))
+* `babel-plugin-transform-for-of`, `babel-plugin-transform-spread`, `babel-traverse`, `babel-types`
+  * [#14393](https://github.com/babel/babel/pull/14393) Support some TSTypes in the inferrer ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-module-transforms`, `babel-plugin-transform-modules-commonjs`
+  * [#14708](https://github.com/babel/babel/pull/14708) Unshadow `cjs` exports when transforming mutations ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :memo: Documentation
+* [#14486](https://github.com/babel/babel/pull/14486) Fix test debugging instructions for contributors ([@conartist6](https://github.com/conartist6))
+
+#### :house: Internal
+* `babel-types`
+  * [#14737](https://github.com/babel/babel/pull/14737) fix: deep clone shared AST field definitions ([@JLHwung](https://github.com/JLHwung))
+* Other
+  * [#14720](https://github.com/babel/babel/pull/14720) fix: support compiling monorepo on single-core CPU machines ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-fixtures`, `babel-parser`
+  * [#12619](https://github.com/babel/babel/pull/12619) Add json schema of fixture runner options ([@JLHwung](https://github.com/JLHwung))
+
+#### :microscope: Output optimization
+* `babel-plugin-transform-typescript`
+  * [#14723](https://github.com/babel/babel/pull/14723) [optimizeConstEnums] Inline const enum if only exported as type ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.18.7 (2022-06-28)
 
 #### :bug: Bug Fix
