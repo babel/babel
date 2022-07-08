@@ -301,8 +301,7 @@ export const list: NodeHandlers<t.Node[]> = {
   [type as string]
     .concat(FLIPPED_ALIAS_KEYS[type] || [])
     .forEach(function (type) {
-      nodes[type] = function (ret: number) {
-        return ret;
-      }.bind(null, amounts ? WhitespaceFlag.before | WhitespaceFlag.after : 0);
+      const ret = amounts ? WhitespaceFlag.before | WhitespaceFlag.after : 0;
+      nodes[type] = () => ret;
     });
 });
