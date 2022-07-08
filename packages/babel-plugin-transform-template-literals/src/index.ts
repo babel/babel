@@ -99,7 +99,7 @@ export default declare((api, options: Options) => {
                 ${tmp} = ${this.addHelper(helperName)}(${helperArgs})
               )
             `,
-            //@ts-ignore Fixme: quasi.expressions may contain TSAnyKeyword
+            // @ts-expect-error Fixme: quasi.expressions may contain TSAnyKeyword
             ...quasi.expressions,
           ]),
         );

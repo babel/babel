@@ -122,7 +122,7 @@ export default declare((api, opts: Options) => {
         keys.push(
           t.stringLiteral(
             String(
-              //@ts-ignore prop.key can not be a NullLiteral
+              // @ts-expect-error prop.key can not be a NullLiteral
               prop.key.value,
             ),
           ),
