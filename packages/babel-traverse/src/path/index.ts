@@ -272,7 +272,7 @@ for (const type of Object.keys(virtualTypes) as (keyof typeof virtualTypes)[]) {
 
   const virtualType = virtualTypes[type];
 
-  NodePath.prototype[`is${type}`] = function (opts) {
+  NodePath.prototype[`is${type}`] = function (opts?: any) {
     // @ts-expect-error checkPath will throw when type is ExistentialTypeParam/NumericLiteralTypeAnnotation
     return virtualType.checkPath(this, opts);
   };

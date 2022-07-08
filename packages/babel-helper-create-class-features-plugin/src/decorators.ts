@@ -94,13 +94,17 @@ function extractElementDescriptor(
 
   const { node, scope } = path as NodePath<SupportedElement>;
 
-  new ReplaceSupers({
-    methodPath: path,
-    objectRef: classRef,
-    superRef,
-    file,
-    refToPreserve: classRef,
-  }).replace();
+  if (!path.isTSDeclareMethod()) {
+    new ReplaceSupers({
+      methodPath: path as NodePath<
+        Exclude<SupportedElement, t.TSDeclareMethod>
+      >,
+      objectRef: classRef,
+      superRef,
+      file,
+      refToPreserve: classRef,
+    }).replace();
+  }
 
   const properties: t.ObjectExpression["properties"] = [
     prop("kind", t.stringLiteral(t.isClassMethod(node) ? node.kind : "field")),

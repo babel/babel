@@ -685,10 +685,10 @@ function transformClass(
 
           const replaceSupers = new ReplaceSupers({
             constantSuper,
-            methodPath: element,
+            methodPath: element as NodePath<t.ClassPrivateMethod>,
             objectRef: classLocal,
             superRef: path.node.superClass,
-            file: state,
+            file: state.file,
             refToPreserve: classLocal,
           });
 

@@ -243,7 +243,9 @@ export default declare((api, opts: Options) => {
 
   function replaceRestElement(
     parentPath: NodePath<t.Function | t.CatchClause>,
-    paramPath: Param | NodePath<t.AssignmentPattern["left"]>,
+    paramPath: NodePath<
+      t.Function["params"][number] | t.AssignmentPattern["left"]
+    >,
     container?: t.VariableDeclaration[],
   ): void {
     if (paramPath.isAssignmentPattern()) {
@@ -255,12 +257,7 @@ export default declare((api, opts: Options) => {
       const elements = paramPath.get("elements");
 
       for (let i = 0; i < elements.length; i++) {
-        replaceRestElement(
-          parentPath,
-          // @ts-expect-error Fixme: handle TSAsExpression
-          elements[i],
-          container,
-        );
+        replaceRestElement(parentPath, elements[i], container);
       }
     }
 

@@ -122,7 +122,7 @@ export function extractComputedKeys(
   };
   for (const computedPath of computedPaths) {
     const computedKey = computedPath.get("key");
-    if (computedKey.isIdentifier() && computedKey.isReferencedIdentifier()) {
+    if (computedKey.isReferencedIdentifier()) {
       handleClassTDZ(computedKey, state);
     } else {
       computedKey.traverse(classFieldDefinitionEvaluationTDZVisitor, state);

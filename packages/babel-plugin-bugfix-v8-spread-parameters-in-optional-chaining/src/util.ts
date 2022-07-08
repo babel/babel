@@ -23,18 +23,16 @@ export function shouldTransform(
   path: NodePath<t.OptionalMemberExpression | t.OptionalCallExpression>,
 ): boolean {
   let optionalPath: NodePath<t.Expression> = path;
-  const chains = [];
-  while (
-    optionalPath.isOptionalMemberExpression() ||
-    optionalPath.isOptionalCallExpression()
-  ) {
-    const { node } = optionalPath;
-    chains.push(node);
-
+  const chains: (t.OptionalCallExpression | t.OptionalMemberExpression)[] = [];
+  for (;;) {
     if (optionalPath.isOptionalMemberExpression()) {
+      chains.push(optionalPath.node);
       optionalPath = skipTransparentExprWrappers(optionalPath.get("object"));
     } else if (optionalPath.isOptionalCallExpression()) {
+      chains.push(optionalPath.node);
       optionalPath = skipTransparentExprWrappers(optionalPath.get("callee"));
+    } else {
+      break;
     }
   }
   for (let i = 0; i < chains.length; i++) {

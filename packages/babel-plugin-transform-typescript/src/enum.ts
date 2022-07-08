@@ -156,10 +156,7 @@ export function translateEnumValues(
       } else {
         const initializerPath = memberPath.get("initializer");
 
-        if (
-          initializerPath.isIdentifier() &&
-          initializerPath.isReferencedIdentifier()
-        ) {
+        if (initializerPath.isReferencedIdentifier()) {
           ReferencedIdentifier(initializerPath, {
             t,
             seen,

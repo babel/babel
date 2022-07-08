@@ -1,4 +1,4 @@
-import type { HubInterface, NodePath, Scope } from "@babel/traverse";
+import type { NodePath, Scope } from "@babel/traverse";
 import traverse from "@babel/traverse";
 import memberExpressionToFunctions from "@babel/helper-member-expression-to-functions";
 import type { HandlerState } from "@babel/helper-member-expression-to-functions";
@@ -317,9 +317,16 @@ const looseHandlers = {
 };
 
 type ReplaceSupersOptionsBase = {
-  methodPath: NodePath<any>;
+  methodPath: NodePath<
+    | t.ClassMethod
+    | t.ClassProperty
+    | t.ObjectMethod
+    | t.ClassPrivateMethod
+    | t.ClassPrivateProperty
+    | t.StaticBlock
+  >;
   constantSuper?: boolean;
-  file: any;
+  file: File;
   // objectRef might have been shadowed in child scopes,
   // in that case, we need to rename related variables.
   refToPreserve?: t.Identifier;
@@ -336,7 +343,7 @@ type ReplaceSupersOptions = ReplaceSupersOptionsBase &
   );
 
 interface ReplaceState {
-  file: unknown;
+  file: File;
   scope: Scope;
   isDerivedConstructor: boolean;
   isStatic: boolean;
@@ -353,7 +360,10 @@ export default class ReplaceSupers {
     this.isDerivedConstructor =
       path.isClassMethod({ kind: "constructor" }) && !!opts.superRef;
     this.isStatic =
-      path.isObjectMethod() || path.node.static || path.isStaticBlock?.();
+      path.isObjectMethod() ||
+      // @ts-expect-error static is not in ClassPrivateMethod
+      path.node.static ||
+      path.isStaticBlock?.();
     this.isPrivateMethod = path.isPrivate() && path.isMethod();
 
     this.file = opts.file;
@@ -364,7 +374,7 @@ export default class ReplaceSupers {
     this.opts = opts;
   }
 
-  declare file: HubInterface;
+  declare file: File;
   declare isDerivedConstructor: boolean;
   declare constantSuper: boolean;
   declare isPrivateMethod: boolean;
