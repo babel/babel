@@ -72,12 +72,9 @@ function plainFunction(
   noNewArrows: boolean,
   ignoreFunctionLength: boolean,
 ) {
-  if (path.isArrowFunctionExpression()) {
-    path.arrowFunctionToExpression({ noNewArrows });
-  }
   const node = path.node;
   const isDeclaration = path.isFunctionDeclaration();
-  // @ts-expect-error node is FunctionDeclaration|FunctionExpression
+  // @ts-expect-error id is not in ArrowFunctionExpression
   const functionId = node.id;
   const wrapper = isDeclaration
     ? buildDeclarationWrapper
@@ -85,6 +82,9 @@ function plainFunction(
     ? buildNamedExpressionWrapper
     : buildAnonymousExpressionWrapper;
 
+  if (path.isArrowFunctionExpression()) {
+    path.arrowFunctionToExpression({ noNewArrows });
+  }
   // @ts-expect-error node is FunctionDeclaration|FunctionExpression
   node.id = null;
 
