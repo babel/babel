@@ -17,7 +17,6 @@ export function declare<State = {}, Option = {}>(
   options: Option,
   dirname: string,
 ) => PluginObject<State & PluginPass> {
-  // @ts-ignore
   return (api, options: Option, dirname: string) => {
     let clonedApi: PluginAPI;
 
@@ -32,7 +31,7 @@ export function declare<State = {}, Option = {}>(
       clonedApi[name] = apiPolyfills[name](clonedApi);
     }
 
-    // @ts-ignore
+    // @ts-expect-error
     return builder(clonedApi ?? api, options || {}, dirname);
   };
 }

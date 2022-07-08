@@ -46,7 +46,7 @@ export function msg(loc: NestingPath | GeneralPath): string {
     case "access":
       return `${msg(loc.parent)}[${JSON.stringify(loc.name)}]`;
     default:
-      // @ts-ignore should not happen when code is type checked
+      // @ts-expect-error should not happen when code is type checked
       throw new Error(`Assertion failure: Unknown type ${loc.type}`);
   }
 }

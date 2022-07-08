@@ -26,7 +26,7 @@ export default declare(api => {
           } else {
             path.replaceWith(
               t.callExpression(helper, [
-                // @ts-ignore node.left can be PrivateName only when node.operator is "in"
+                // @ts-expect-error node.left can be PrivateName only when node.operator is "in"
                 node.left,
                 node.right,
               ]),

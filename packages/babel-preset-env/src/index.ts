@@ -57,7 +57,7 @@ function filterStageFromList(
 ) {
   return Object.keys(list).reduce((result, item) => {
     if (!stageList.has(item)) {
-      // @ts-ignore
+      // @ts-expect-error
       result[item] = list[item];
     }
 
@@ -91,7 +91,7 @@ function getPluginList(proposals: boolean, bugfixes: boolean) {
 
 const getPlugin = (pluginName: string) => {
   const plugin =
-    // @ts-ignore plugin name is constructed from available plugin list
+    // @ts-expect-error plugin name is constructed from available plugin list
     availablePlugins[pluginName]();
 
   if (!plugin) {

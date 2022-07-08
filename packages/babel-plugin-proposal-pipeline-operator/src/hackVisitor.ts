@@ -85,7 +85,7 @@ const visitor: Visitor<PluginPass> = {
           t.assignmentExpression(
             "=",
             t.cloneNode(topicVariable),
-            // @ts-ignore node.left must not be a PrivateName when operator is |>
+            // @ts-expect-error node.left must not be a PrivateName when operator is |>
             node.left,
           ),
           node.right,

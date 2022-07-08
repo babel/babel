@@ -79,7 +79,7 @@ function getBindingIdentifiers(
       for (let i = 0; i < keys.length; i++) {
         const key = keys[i];
         const nodes =
-          // @ts-ignore key must present in id
+          // @ts-expect-error key must present in id
           id[key] as t.Node[] | t.Node | undefined | null;
         if (nodes) {
           Array.isArray(nodes) ? search.push(...nodes) : search.push(nodes);

@@ -506,7 +506,7 @@ export default function transformClass(
     if (t.isStringLiteral(key)) {
       // infer function name
       if (node.kind === "method") {
-        // @ts-ignore Fixme: we are passing a ClassMethod to nameFunction, but nameFunction
+        // @ts-expect-error Fixme: we are passing a ClassMethod to nameFunction, but nameFunction
         // does not seem to support it
         fn = nameFunction({ id: key, node: node, scope });
       }

@@ -9,7 +9,7 @@ export default function isLet(node: t.Node): boolean {
   return (
     isVariableDeclaration(node) &&
     (node.kind !== "var" ||
-      // @ts-ignore Fixme: document private properties
+      // @ts-expect-error Fixme: document private properties
       node[BLOCK_SCOPED_SYMBOL])
   );
 }

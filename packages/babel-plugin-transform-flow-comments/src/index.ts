@@ -73,7 +73,7 @@ export default declare(api => {
       ofPath: path,
       comments: generateComment(
         path,
-        // @ts-ignore
+        // @ts-expect-error
         path.parent.optional,
       ),
     });
@@ -137,9 +137,9 @@ export default declare(api => {
       AssignmentPattern: {
         exit({ node }) {
           const { left } = node;
-          // @ts-ignore optional is not in ObjectPattern
+          // @ts-expect-error optional is not in ObjectPattern
           if (left.optional) {
-            // @ts-ignore optional is not in ObjectPattern
+            // @ts-expect-error optional is not in ObjectPattern
             left.optional = false;
           }
         },
@@ -153,7 +153,7 @@ export default declare(api => {
           attachComment({
             ofPath: path.get("typeParameters"),
             toPath: path.get("id"),
-            // @ts-ignore Fixme: optional is not in t.TypeParameterDeclaration
+            // @ts-expect-error Fixme: optional is not in t.TypeParameterDeclaration
             optional: node.typeParameters.optional,
           });
         }
@@ -162,7 +162,7 @@ export default declare(api => {
             ofPath: path.get("returnType"),
             toPath: path.get("body"),
             where: "leading",
-            // @ts-ignore Fixme: optional is not in t.TypeAnnotation
+            // @ts-expect-error Fixme: optional is not in t.TypeAnnotation
             optional: node.returnType.typeAnnotation.optional,
           });
         }
@@ -177,7 +177,7 @@ export default declare(api => {
           attachComment({
             ofPath: path.get("typeAnnotation"),
             toPath: path.get("key"),
-            // @ts-ignore Fixme: optional is not in t.TypeAnnotation
+            // @ts-expect-error Fixme: optional is not in t.TypeAnnotation
             optional: node.typeAnnotation.optional,
           });
         }
@@ -232,9 +232,9 @@ export default declare(api => {
             ofPath: path.get("typeAnnotation"),
             toPath: path,
             optional:
-              // @ts-ignore optional is not in ObjectPattern
+              // @ts-expect-error optional is not in ObjectPattern
               node.optional ||
-              // @ts-ignore Fixme: optional is not in t.TypeAnnotation
+              // @ts-expect-error Fixme: optional is not in t.TypeAnnotation
               node.typeAnnotation.optional,
           });
         }
@@ -254,7 +254,7 @@ export default declare(api => {
         if (node.typeParameters) {
           const typeParameters = path.get("typeParameters");
           comments.push(
-            // @ts-ignore optional is not in TypeParameterDeclaration
+            // @ts-expect-error optional is not in TypeParameterDeclaration
             generateComment(typeParameters, node.typeParameters.optional),
           );
           const trailingComments = node.typeParameters.trailingComments;
@@ -280,7 +280,7 @@ export default declare(api => {
             comments.push(
               generateComment(
                 superTypeParameters,
-                // @ts-ignore optional is not in TypeParameterInstantiation
+                // @ts-expect-error optional is not in TypeParameterInstantiation
                 superTypeParameters.node.optional,
               ),
             );

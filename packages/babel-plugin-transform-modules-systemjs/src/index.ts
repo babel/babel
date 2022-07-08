@@ -232,7 +232,7 @@ export default declare<PluginState>((api, options: Options) => {
           t.unaryExpression(
             "+",
             t.cloneNode(
-              // @ts-ignore node is UpdateExpression
+              // @ts-expect-error node is UpdateExpression
               node.argument,
             ),
           ),

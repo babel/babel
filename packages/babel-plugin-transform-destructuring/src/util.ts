@@ -19,7 +19,6 @@ export function unshiftForXStatementBody(
     // var a = 0;for (const { #x: x, [a++]: y } of z) { const a = 1; }
     node.body = t.blockStatement([...newStatements, node.body]);
   } else {
-    // @ts-ignore statementPath.ensureBlock() has been called, node.body is always a BlockStatement
     node.body.body.unshift(...newStatements);
   }
 }

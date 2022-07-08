@@ -51,7 +51,7 @@ export function IfStatement(this: Printer, node: t.IfStatement) {
 
 // Recursively get the last statement.
 function getLastStatement(statement: t.Statement): t.Statement {
-  // @ts-ignore: If statement.body is empty or not a Node, isStatement will return false
+  // @ts-expect-error: If statement.body is empty or not a Node, isStatement will return false
   const { body } = statement;
   if (isStatement(body) === false) {
     return statement;

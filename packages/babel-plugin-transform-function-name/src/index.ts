@@ -26,7 +26,7 @@ export default declare(api => {
         const value = path.get("value");
         if (value.isFunction()) {
           const newNode = nameFunction(
-            // @ts-ignore Fixme: should check ArrowFunctionExpression
+            // @ts-expect-error Fixme: should check ArrowFunctionExpression
             value,
             false,
             supportUnicodeId,

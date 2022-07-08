@@ -388,7 +388,7 @@ function _evaluate(path: NodePath, state: State): any {
         !isInvalidMethod(property.node.name)
       ) {
         context = global[object.node.name];
-        // @ts-ignore property may not exist in context object
+        // @ts-expect-error property may not exist in context object
         func = context[property.node.name];
       }
 

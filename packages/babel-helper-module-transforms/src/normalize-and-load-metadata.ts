@@ -440,7 +440,7 @@ function getLocalExportMetadata(
       kind = "import";
     } else {
       if (child.isExportDefaultDeclaration()) {
-        // @ts-ignore
+        // @ts-expect-error
         child = child.get("declaration");
       }
       if (child.isExportNamedDeclaration()) {

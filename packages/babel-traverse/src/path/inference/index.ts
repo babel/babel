@@ -75,9 +75,9 @@ export function _getTypeAnnotation(this: NodePath): any {
     }
   }
 
-  // @ts-ignore
+  // @ts-expect-error
   if (node.typeAnnotation) {
-    // @ts-ignore
+    // @ts-expect-error
     return node.typeAnnotation;
   }
 

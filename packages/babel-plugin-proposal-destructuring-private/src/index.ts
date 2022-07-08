@@ -63,7 +63,7 @@ export default declare(function ({ assertVersion, assumption, types: t }) {
       // (b, p1 = void 0) => {}
       if (firstAssignmentPatternIndex >= firstPrivateIndex) {
         params[firstAssignmentPatternIndex] = assignmentPattern(
-          // @ts-ignore The transformed assignment pattern must not be a RestElement
+          // @ts-expect-error The transformed assignment pattern must not be a RestElement
           params[firstAssignmentPatternIndex],
           scope.buildUndefinedNode(),
         );

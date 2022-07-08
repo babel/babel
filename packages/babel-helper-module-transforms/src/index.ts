@@ -145,7 +145,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
 export function ensureStatementsHoisted(statements: t.Statement[]) {
   // Force all of the header fields to be at the top of the file.
   statements.forEach(header => {
-    // @ts-ignore Fixme: handle _blockHoist property
+    // @ts-expect-error Fixme: handle _blockHoist property
     header._blockHoist = 3;
   });
 }

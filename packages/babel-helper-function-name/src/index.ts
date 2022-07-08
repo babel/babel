@@ -276,7 +276,7 @@ export default function <N extends t.FunctionExpression | t.Class>(
   // The id shouldn't be considered a local binding to the function because
   // we are simply trying to set the function name and not actually create
   // a local binding.
-  // @ts-ignore Fixme: avoid mutating AST nodes
+  // @ts-expect-error Fixme: avoid mutating AST nodes
   newId[NOT_LOCAL_BINDING] = true;
 
   const state = visit(node, name, scope);

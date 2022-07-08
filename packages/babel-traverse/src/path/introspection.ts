@@ -37,7 +37,7 @@ export function matchesPattern(
 export function has(this: NodePath, key: string): boolean {
   const val =
     this.node &&
-    // @ts-ignore
+    // @ts-expect-error
     this.node[key];
   if (val && Array.isArray(val)) {
     return !!val.length;
@@ -73,7 +73,7 @@ export function isnt(this: NodePath, key: string): boolean {
  */
 
 export function equals(this: NodePath, key: string, value: any): boolean {
-  // @ts-ignore
+  // @ts-expect-error
   return this.node[key] === value;
 }
 

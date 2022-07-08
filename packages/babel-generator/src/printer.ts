@@ -433,7 +433,7 @@ class Printer {
 
     const oldConcise = this.format.concise;
     if (
-      // @ts-ignore document _compact AST properties
+      // @ts-expect-error document _compact AST properties
       node._compact
     ) {
       this.format.concise = true;
@@ -766,7 +766,7 @@ class Printer {
 Object.assign(Printer.prototype, generatorFunctions);
 
 if (!process.env.BABEL_8_BREAKING) {
-  // @ts-ignore
+  // @ts-ignore(Babel 7 vs Babel 8)
   Printer.prototype.Noop = function Noop(this: Printer) {};
 }
 
