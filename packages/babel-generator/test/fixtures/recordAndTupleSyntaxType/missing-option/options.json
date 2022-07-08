@@ -1,4 +1,0 @@
-{
-  "plugins": [["recordAndTuple", { "syntaxType": "hash" }]],
-  "throws": "The \"recordAndTupleSyntaxType\" generator option must be \"bar\" or \"hash\" (undefined received)"
-}

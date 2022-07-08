@@ -187,12 +187,13 @@ export function validatePlugins(plugins: PluginList) {
 
   if (
     hasPlugin(plugins, "recordAndTuple") &&
+    getPluginOption(plugins, "recordAndTuple", "syntaxType") != null &&
     !RECORD_AND_TUPLE_SYNTAX_TYPES.includes(
       getPluginOption(plugins, "recordAndTuple", "syntaxType"),
     )
   ) {
     throw new Error(
-      "'recordAndTuple' requires 'syntaxType' option whose value should be one of: " +
+      "The 'syntaxType' option of the 'recordAndTuple' plugin must be one of: " +
         RECORD_AND_TUPLE_SYNTAX_TYPES.map(p => `'${p}'`).join(", "),
     );
   }

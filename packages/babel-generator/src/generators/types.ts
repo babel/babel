@@ -117,15 +117,18 @@ export function RecordExpression(this: Printer, node: t.RecordExpression) {
   if (this.format.recordAndTupleSyntaxType === "bar") {
     startToken = "{|";
     endToken = "|}";
-  } else if (this.format.recordAndTupleSyntaxType === "hash") {
-    startToken = "#{";
-    endToken = "}";
-  } else {
+  } else if (
+    this.format.recordAndTupleSyntaxType !== "hash" &&
+    this.format.recordAndTupleSyntaxType != null
+  ) {
     throw new Error(
       `The "recordAndTupleSyntaxType" generator option must be "bar" or "hash" (${JSON.stringify(
         this.format.recordAndTupleSyntaxType,
       )} received).`,
     );
+  } else {
+    startToken = "#{";
+    endToken = "}";
   }
 
   this.token(startToken);
