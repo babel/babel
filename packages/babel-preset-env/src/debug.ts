@@ -24,7 +24,7 @@ export const logPlugin = (
     if (!first) formattedTargets += `,`;
     first = false;
     formattedTargets += ` ${target}`;
-    // @ts-ignore
+    // @ts-expect-error
     if (support[target]) formattedTargets += ` < ${support[target]}`;
   }
   formattedTargets += ` }`;

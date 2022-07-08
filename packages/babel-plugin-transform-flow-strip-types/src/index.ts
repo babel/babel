@@ -64,7 +64,7 @@ export default declare((api, opts: Options) => {
 
         let typeCount = 0;
 
-        // @ts-ignore importKind is only in importSpecifier
+        // @ts-expect-error importKind is only in importSpecifier
         path.node.specifiers.forEach(({ importKind }) => {
           if (importKind === "type" || importKind === "typeof") {
             typeCount++;
@@ -155,7 +155,7 @@ export default declare((api, opts: Options) => {
         for (let i = 0; i < node.params.length; i++) {
           let param = node.params[i];
           if (param.type === "AssignmentPattern") {
-            // @ts-ignore
+            // @ts-expect-error
             param = param.left;
           }
           // @ts-expect-error optional is not in ObjectPattern
@@ -174,7 +174,7 @@ export default declare((api, opts: Options) => {
         if (skipStrip) return;
         let { node } = path;
         do {
-          // @ts-ignore node is a search pointer
+          // @ts-expect-error node is a search pointer
           node = node.expression;
         } while (t.isTypeCastExpression(node));
         path.replaceWith(node);

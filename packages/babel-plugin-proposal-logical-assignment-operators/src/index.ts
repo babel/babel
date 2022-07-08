@@ -47,7 +47,7 @@ export default declare(api => {
 
         path.replaceWith(
           t.logicalExpression(
-            // @ts-ignore operatorTrunc has been tested by t.LOGICAL_OPERATORS
+            // @ts-expect-error operatorTrunc has been tested by t.LOGICAL_OPERATORS
             operatorTrunc,
             lhs,
             t.assignmentExpression("=", left, right),

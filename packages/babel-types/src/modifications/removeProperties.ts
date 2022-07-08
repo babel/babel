@@ -28,18 +28,18 @@ export default function removeProperties(
 ): void {
   const map = opts.preserveComments ? CLEAR_KEYS : CLEAR_KEYS_PLUS_COMMENTS;
   for (const key of map) {
-    // @ts-ignore
+    // @ts-expect-error
     if (node[key] != null) node[key] = undefined;
   }
 
   for (const key of Object.keys(node)) {
-    // @ts-ignore
+    // @ts-expect-error
     if (key[0] === "_" && node[key] != null) node[key] = undefined;
   }
 
   const symbols: Array<symbol> = Object.getOwnPropertySymbols(node);
   for (const sym of symbols) {
-    // @ts-ignore Fixme: document symbol properties
+    // @ts-expect-error Fixme: document symbol properties
     node[sym] = null;
   }
 }

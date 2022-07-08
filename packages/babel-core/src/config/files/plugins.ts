@@ -100,7 +100,7 @@ function* resolveAlternativesHelper(
   const { error, value } = yield standardizedName;
   if (!error) return value;
 
-  // @ts-ignore
+  // @ts-expect-error
   if (error.code !== "MODULE_NOT_FOUND") throw error;
 
   if (standardizedName !== name && !(yield name).error) {

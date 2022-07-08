@@ -42,7 +42,7 @@ export function createClassFeaturePlugin({
   feature,
   loose,
   manipulateOptions,
-  // @ts-ignore TODO(Babel 8): Remove the default value
+  // @ts-ignore(Babel 7 vs Babel 8) TODO(Babel 8): Remove the default value
   api = { assumption: () => void 0 },
   inherits,
 }: Options): PluginObject {

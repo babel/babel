@@ -62,7 +62,7 @@ export function insertBefore(
     this.replaceWith(blockStatement(shouldInsertCurrentNode ? [node] : []));
     return (this as NodePath<t.BlockStatement>).unshiftContainer(
       "body",
-      // @ts-ignore Fixme: refine nodes to t.BlockStatement["body"] when this is a BlockStatement path
+      // @ts-expect-error Fixme: refine nodes to t.BlockStatement["body"] when this is a BlockStatement path
       nodes,
     );
   } else {
@@ -249,7 +249,7 @@ export function insertAfter(
         (node as t.ExpressionStatement).expression != null);
 
     this.replaceWith(blockStatement(shouldInsertCurrentNode ? [node] : []));
-    // @ts-ignore Fixme: refine nodes to t.BlockStatement["body"] when this is a BlockStatement path
+    // @ts-expect-error Fixme: refine nodes to t.BlockStatement["body"] when this is a BlockStatement path
     return this.pushContainer("body", nodes);
   } else {
     throw new Error(

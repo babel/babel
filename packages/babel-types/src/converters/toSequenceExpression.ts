@@ -24,6 +24,6 @@ export default function toSequenceExpression(
     scope.push(declar);
   }
 
-  // @ts-ignore fixme: gatherSequenceExpressions will return an Expression when there are only one element
+  // @ts-expect-error fixme: gatherSequenceExpressions will return an Expression when there are only one element
   return result;
 }

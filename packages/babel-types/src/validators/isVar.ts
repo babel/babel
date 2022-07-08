@@ -9,7 +9,7 @@ export default function isVar(node: t.Node): boolean {
   return (
     isVariableDeclaration(node, { kind: "var" }) &&
     !(
-      // @ts-ignore document private properties
+      // @ts-expect-error document private properties
       node[BLOCK_SCOPED_SYMBOL]
     )
   );

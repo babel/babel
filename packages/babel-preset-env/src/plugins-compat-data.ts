@@ -7,14 +7,14 @@ const bugfixPluginsFiltered = {};
 
 for (const plugin of Object.keys(plugins)) {
   if (Object.hasOwnProperty.call(availablePlugins, plugin)) {
-    // @ts-ignore
+    // @ts-expect-error
     pluginsFiltered[plugin] = plugins[plugin];
   }
 }
 
 for (const plugin of Object.keys(bugfixPlugins)) {
   if (Object.hasOwnProperty.call(availablePlugins, plugin)) {
-    // @ts-ignore
+    // @ts-expect-error
     bugfixPluginsFiltered[plugin] = bugfixPlugins[plugin];
   }
 }

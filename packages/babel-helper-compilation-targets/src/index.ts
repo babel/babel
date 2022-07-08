@@ -239,7 +239,7 @@ export default function getTargets(
       for (const browser of Object.keys(queryBrowsers) as Target[]) {
         const version = queryBrowsers[browser];
         const esmSupportVersion =
-          // @ts-ignore ie is not in ESM_SUPPORT
+          // @ts-expect-error ie is not in ESM_SUPPORT
           ESM_SUPPORT[browser];
 
         if (esmSupportVersion) {

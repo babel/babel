@@ -45,7 +45,7 @@ export default declare(api => {
               | t.BigIntLiteral,
           );
           let isDuplicate = false;
-          // @ts-ignore prop.kind is not defined in ObjectProperty
+          // @ts-expect-error prop.kind is not defined in ObjectProperty
           switch (prop.kind) {
             case "get":
               if (alreadySeenData[name] || alreadySeenGetters[name]) {

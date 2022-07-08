@@ -414,7 +414,7 @@ export function _getKey<T extends t.Node>(
 ): NodePath | NodePath[] {
   const node = this.node;
   const container =
-    // @ts-ignore
+    // @ts-expect-error
     node[key];
 
   if (Array.isArray(container)) {
@@ -450,7 +450,7 @@ export function _getPattern(
       path = path.parentPath;
     } else {
       if (Array.isArray(path)) {
-        // @ts-ignore
+        // @ts-expect-error
         path = path[part];
       } else {
         path = path.get(part, context);
@@ -519,7 +519,7 @@ export function getBindingIdentifierPaths(
     if (!id.node) continue;
 
     const keys =
-      // @ts-ignore
+      // @ts-expect-error
       _getBindingIdentifiers.keys[id.node.type];
 
     if (id.isIdentifier()) {

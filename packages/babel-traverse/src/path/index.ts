@@ -85,7 +85,7 @@ class NodePath<T extends t.Node = t.Node> {
     }
 
     const targetNode =
-      // @ts-ignore key must present in container
+      // @ts-expect-error key must present in container
       container[key];
 
     let paths = pathCache.get(parent);
@@ -238,7 +238,7 @@ if (!process.env.BABEL_8_BREAKING) {
   // The original _guessExecutionStatusRelativeToDifferentFunctions only worked for paths in
   // different functions, but _guessExecutionStatusRelativeTo works as a replacement in those cases.
 
-  // @ts-ignore
+  // @ts-expect-error
   NodePath.prototype._guessExecutionStatusRelativeToDifferentFunctions =
     NodePath_introspection._guessExecutionStatusRelativeTo;
 }
@@ -288,7 +288,7 @@ type NodePathMixins = typeof NodePath_ancestry &
   typeof NodePath_family &
   typeof NodePath_comments;
 
-// @ts-ignore TS throws because ensureBlock returns the body node path
+// @ts-expect-error TS throws because ensureBlock returns the body node path
 // however, we don't use the return value and treat it as a transform and
 // assertion utilities. For better type inference we annotate it as an
 // assertion method

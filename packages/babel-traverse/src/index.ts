@@ -51,7 +51,7 @@ function traverse(
 
 function traverse<Options extends TraverseOptions>(
   parent: t.Node,
-  // @ts-ignore provide {} as default value for Options
+  // @ts-expect-error provide {} as default value for Options
   opts: Options = {},
   scope?: Scope,
   state?: any,

@@ -167,7 +167,7 @@ const specHandlers: SpecHandler = {
       this.isPrivateMethod,
     );
     return callExpression(this.file.addHelper("get"), [
-      // @ts-ignore memo does not exist when this.isDerivedConstructor is false
+      // @ts-expect-error memo does not exist when this.isDerivedConstructor is false
       thisRefs.memo ? sequenceExpression([thisRefs.memo, proto]) : proto,
       this.prop(superMember),
       thisRefs.this,
@@ -198,7 +198,7 @@ const specHandlers: SpecHandler = {
       this.isPrivateMethod,
     );
     return callExpression(this.file.addHelper("set"), [
-      // @ts-ignore memo does not exist when this.isDerivedConstructor is false
+      // @ts-expect-error memo does not exist when this.isDerivedConstructor is false
       thisRefs.memo ? sequenceExpression([thisRefs.memo, proto]) : proto,
       this.prop(superMember),
       value,

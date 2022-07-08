@@ -40,7 +40,6 @@ function assertVisitorMap(loc: OptionPath, value: unknown): Visitor {
   if (obj) {
     Object.keys(obj).forEach(prop => assertVisitorHandler(prop, obj[prop]));
 
-    // @ts-ignore
     if (obj.enter || obj.exit) {
       throw new Error(
         `${msg(

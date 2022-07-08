@@ -384,7 +384,7 @@ export const functionTypeAnnotationCommon = () => ({
       : assertNodeType(
           "TypeAnnotation",
           "TSTypeAnnotation",
-          // @ts-ignore Babel 7 AST
+          // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
           "Noop",
         ),
     optional: true,
@@ -395,7 +395,7 @@ export const functionTypeAnnotationCommon = () => ({
       : assertNodeType(
           "TypeParameterDeclaration",
           "TSTypeParameterDeclaration",
-          // @ts-ignore Babel 7 AST
+          // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
           "Noop",
         ),
     optional: true,
@@ -484,7 +484,7 @@ export const patternLikeCommon = () => ({
       : assertNodeType(
           "TypeAnnotation",
           "TSTypeAnnotation",
-          // @ts-ignore Babel 7 AST
+          // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
           "Noop",
         ),
     optional: true,
@@ -1368,7 +1368,7 @@ defineType("ClassExpression", {
         : assertNodeType(
             "TypeParameterDeclaration",
             "TSTypeParameterDeclaration",
-            // @ts-ignore Babel 7 AST
+            // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
             "Noop",
           ),
       optional: true,
@@ -1426,7 +1426,7 @@ defineType("ClassDeclaration", {
         : assertNodeType(
             "TypeParameterDeclaration",
             "TSTypeParameterDeclaration",
-            // @ts-ignore Babel 7 AST
+            // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
             "Noop",
           ),
       optional: true,
@@ -2179,7 +2179,7 @@ defineType("ClassProperty", {
         : assertNodeType(
             "TypeAnnotation",
             "TSTypeAnnotation",
-            // @ts-ignore Babel 7 AST
+            // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
             "Noop",
           ),
       optional: true,
@@ -2260,7 +2260,7 @@ defineType("ClassAccessorProperty", {
         : assertNodeType(
             "TypeAnnotation",
             "TSTypeAnnotation",
-            // @ts-ignore Babel 7 AST
+            // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
             "Noop",
           ),
       optional: true,
@@ -2305,7 +2305,7 @@ defineType("ClassPrivateProperty", {
         : assertNodeType(
             "TypeAnnotation",
             "TSTypeAnnotation",
-            // @ts-ignore Babel 7 AST
+            // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
             "Noop",
           ),
       optional: true,

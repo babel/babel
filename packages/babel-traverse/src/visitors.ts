@@ -233,7 +233,7 @@ function wrapWithStateOrWrapper<State>(
     // not an enter/exit array of callbacks
     if (!Array.isArray(fns)) continue;
 
-    // @ts-ignore manipulating visitors
+    // @ts-expect-error manipulating visitors
     fns = fns.map(function (fn) {
       let newFn = fn;
 
@@ -244,7 +244,7 @@ function wrapWithStateOrWrapper<State>(
       }
 
       if (wrapper) {
-        // @ts-ignore Fixme: document state.key
+        // @ts-expect-error Fixme: document state.key
         newFn = wrapper(state.key, key, newFn);
       }
 
@@ -274,9 +274,9 @@ function ensureEntranceObjects(obj: Visitor) {
 }
 
 function ensureCallbackArrays(obj: Visitor) {
-  // @ts-ignore normalizing enter property
+  // @ts-expect-error normalizing enter property
   if (obj.enter && !Array.isArray(obj.enter)) obj.enter = [obj.enter];
-  // @ts-ignore normalizing exit property
+  // @ts-expect-error normalizing exit property
   if (obj.exit && !Array.isArray(obj.exit)) obj.exit = [obj.exit];
 }
 

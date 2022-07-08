@@ -205,7 +205,7 @@ export const availablePresets = {
   flow: presetFlow,
 };
 
-// @ts-ignore VERSION is to be replaced by rollup
+// @ts-expect-error VERSION is to be replaced by rollup
 export const version: string = VERSION;
 
 function onDOMContentLoaded() {

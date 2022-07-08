@@ -80,7 +80,7 @@ export function _methodHead(this: Printer, node: t.Method | t.TSDeclareMethod) {
 
   if (
     kind === "method" ||
-    // @ts-ignore Fixme: kind: "init" is not defined
+    // @ts-expect-error Fixme: kind: "init" is not defined
     kind === "init"
   ) {
     if (node.generator) {

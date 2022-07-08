@@ -26,14 +26,14 @@ const tSFunctionTypeAnnotationCommon = () => ({
   returnType: {
     validate: process.env.BABEL_8_BREAKING
       ? assertNodeType("TSTypeAnnotation")
-      : // @ts-ignore Babel 7 AST
+      : // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
         assertNodeType("TSTypeAnnotation", "Noop"),
     optional: true,
   },
   typeParameters: {
     validate: process.env.BABEL_8_BREAKING
       ? assertNodeType("TSTypeParameterDeclaration")
-      : // @ts-ignore Babel 7 AST
+      : // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
         assertNodeType("TSTypeParameterDeclaration", "Noop"),
     optional: true,
   },

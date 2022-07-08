@@ -16,7 +16,7 @@ export function requeueComputedKeyAndDecorators(
   path: NodePath<t.Method | t.Property>,
 ) {
   const { context, node } = path;
-  //@ts-ignore ClassPrivateProperty does not have computed
+  // @ts-expect-error ClassPrivateProperty does not have computed
   if (node.computed) {
     // requeue the computed key
     context.maybeQueue(path.get("key"));

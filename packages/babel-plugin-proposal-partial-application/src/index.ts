@@ -40,7 +40,7 @@ export default declare(api => {
             t.assignmentExpression(
               "=",
               t.cloneNode(id),
-              // @ts-ignore Fixme: may need to handle JSXNamespacedName here
+              // @ts-expect-error Fixme: may need to handle JSXNamespacedName here
               node,
             ),
           );

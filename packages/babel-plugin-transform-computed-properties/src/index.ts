@@ -157,7 +157,7 @@ export default declare((api, options: Options) => {
           const { node, parent, scope } = path;
           let hasComputed = false;
           for (const prop of node.properties) {
-            // @ts-ignore SpreadElement must not have computed property
+            // @ts-expect-error SpreadElement must not have computed property
             hasComputed = prop.computed === true;
             if (hasComputed) break;
           }

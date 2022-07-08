@@ -193,7 +193,7 @@ export default declare((api, options: Options) => {
         let jsxScope;
         let current = path;
         while (!jsxScope && current.parentPath.isJSX()) {
-          // @ts-ignore current is a search pointer
+          // @ts-expect-error current is a search pointer
           current = current.parentPath;
           jsxScope = HOISTED.get(current.node);
         }

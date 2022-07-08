@@ -29,7 +29,7 @@ export function removeUnsupportedItems(
       has(minVersions, item) &&
       semver.lt(
         babelVersion,
-        // @ts-ignore we have checked minVersions[item] in has call
+        // @ts-expect-error we have checked minVersions[item] in has call
         minVersions[item],
       )
     ) {

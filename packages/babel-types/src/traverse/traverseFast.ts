@@ -20,7 +20,7 @@ export default function traverseFast<Options = {}>(
 
   for (const key of keys) {
     const subNode: t.Node | undefined | null =
-      // @ts-ignore key must present in node
+      // @ts-expect-error key must present in node
       node[key];
 
     if (Array.isArray(subNode)) {

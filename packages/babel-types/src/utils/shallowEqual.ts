@@ -6,7 +6,7 @@ export default function shallowEqual<T extends object>(
 
   for (const key of keys) {
     if (
-      // @ts-ignore maybe we should check whether key exists first
+      // @ts-expect-error maybe we should check whether key exists first
       actual[key] !== expected[key]
     ) {
       return false;

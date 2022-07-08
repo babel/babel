@@ -40,7 +40,7 @@ if (!process.env.BABEL_8_BREAKING) {
         await (typeof block === "function" ? block() : block);
         return Promise.reject(new Error("Promise not rejected"));
       } catch (error) {
-        // @ts-ignore Fixme: validateError can be a string | object
+        // @ts-expect-error Fixme: validateError can be a string | object
         // see https://nodejs.org/api/assert.html#assertrejectsasyncfn-error-message
         if (typeof validateError === "function" && !validateError(error)) {
           return Promise.reject(
@@ -538,7 +538,7 @@ export default function (
 
             if (task.externalHelpers) {
               (task.options.plugins ??= [])
-                // @ts-ignore manipulating input options
+                // @ts-expect-error manipulating input options
                 .push([
                   "external-helpers",
                   { helperVersion: EXTERNAL_HELPERS_VERSION },

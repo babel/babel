@@ -44,7 +44,7 @@ export default class TraversalContext<S = unknown> {
     // we need to traverse into this node so ensure that it has children to traverse into!
     for (const key of keys) {
       if (
-        // @ts-ignore key is from visitor keys
+        // @ts-expect-error key is from visitor keys
         node[key]
       ) {
         return true;
