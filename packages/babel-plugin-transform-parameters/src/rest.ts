@@ -1,6 +1,12 @@
 import { template, types as t } from "@babel/core";
 import type { NodePath, Visitor } from "@babel/traverse";
 
+import {
+  iifeVisitor,
+  collectShadowedParamsNames,
+  buildScopeIIFE,
+} from "./shadow-utils";
+
 const buildRest = template.statement(`
   for (var LEN = ARGUMENTS.length,
            ARRAY = new Array(ARRAY_LEN),
@@ -292,9 +298,35 @@ export default function convertFunctionRest(path: NodePath<t.Function>) {
   const { node, scope } = path;
   if (!hasRest(node)) return false;
 
-  let rest = (node.params.pop() as t.RestElement).argument as
-    | t.Pattern
-    | t.Identifier;
+  const restPath = path.get(
+    `params.${node.params.length - 1}.argument`,
+  ) as NodePath<t.Pattern | t.Identifier>;
+
+  if (!restPath.isIdentifier()) {
+    const shadowedParams = new Set<string>();
+    collectShadowedParamsNames(restPath, path.scope, shadowedParams);
+
+    let needsIIFE = shadowedParams.size > 0;
+    if (!needsIIFE) {
+      const state = {
+        needsOuterBinding: false,
+        scope,
+      };
+      restPath.traverse(iifeVisitor, state);
+      needsIIFE = state.needsOuterBinding;
+    }
+
+    if (needsIIFE) {
+      path.ensureBlock();
+      path.set(
+        "body",
+        t.blockStatement([buildScopeIIFE(shadowedParams, path.node.body)]),
+      );
+    }
+  }
+
+  let rest = restPath.node;
+  node.params.pop(); // This returns 'rest'
 
   if (t.isPattern(rest)) {
     const pattern = rest;
