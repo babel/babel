@@ -15,16 +15,20 @@ function createInput(length) {
   );
 }
 
+const inputs = [1, 4, 16, 64].map(length => ({
+  tag: length,
+  body: createInput(length),
+}));
+
 function benchCases(name, implementation, options) {
-  for (const length of [1, 2]) {
-    const input = createInput(length);
-    suite.add(`${name} ${length} jquery 3.6`, () => {
-      implementation(input, options);
+  for (const input of inputs) {
+    suite.add(`${name} ${input.tag} jquery 3.6`, () => {
+      implementation(input.body, options);
     });
   }
 }
 
-benchCases("baseline", baseline.default);
 benchCases("current", current.default);
+benchCases("baseline", baseline.default);
 
 suite.on("cycle", report).run();

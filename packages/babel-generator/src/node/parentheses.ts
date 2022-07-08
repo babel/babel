@@ -80,6 +80,15 @@ const PRECEDENCE = {
   "**": 10,
 };
 
+const enum CheckParam {
+  expressionStatement = 1 << 0,
+  arrowBody = 1 << 1,
+  exportDefault = 1 << 2,
+  forHead = 1 << 3,
+  forInHead = 1 << 4,
+  forOfHead = 1 << 5,
+}
+
 const isClassExtendsClause = (
   node: t.Node,
   parent: t.Node,
@@ -107,6 +116,8 @@ export function FunctionTypeAnnotation(
   parent: t.Node,
   printStack: Array<t.Node>,
 ): boolean {
+  if (printStack.length < 3) return;
+
   return (
     // (() => A) | (() => B)
     isUnionTypeAnnotation(parent) ||
@@ -133,10 +144,10 @@ export function ObjectExpression(
   parent: t.Node,
   printStack: Array<t.Node>,
 ): boolean {
-  return isFirstInContext(printStack, {
-    expressionStatement: true,
-    arrowBody: true,
-  });
+  return isFirstInContext(
+    printStack,
+    CheckParam.expressionStatement | CheckParam.arrowBody,
+  );
 }
 
 export function DoExpression(
@@ -146,7 +157,7 @@ export function DoExpression(
 ): boolean {
   // `async do` can start an expression statement
   return (
-    !node.async && isFirstInContext(printStack, { expressionStatement: true })
+    !node.async && isFirstInContext(printStack, CheckParam.expressionStatement)
   );
 }
 
@@ -305,10 +316,10 @@ export function ClassExpression(
   parent: t.Node,
   printStack: Array<t.Node>,
 ): boolean {
-  return isFirstInContext(printStack, {
-    expressionStatement: true,
-    exportDefault: true,
-  });
+  return isFirstInContext(
+    printStack,
+    CheckParam.expressionStatement | CheckParam.exportDefault,
+  );
 }
 
 export function UnaryLike(
@@ -331,10 +342,10 @@ export function FunctionExpression(
   parent: t.Node,
   printStack: Array<t.Node>,
 ): boolean {
-  return isFirstInContext(printStack, {
-    expressionStatement: true,
-    exportDefault: true,
-  });
+  return isFirstInContext(
+    printStack,
+    CheckParam.expressionStatement | CheckParam.exportDefault,
+  );
 }
 
 export function ArrowFunctionExpression(
@@ -433,12 +444,15 @@ export function Identifier(
         computed: true,
         optional: false,
       });
-    return isFirstInContext(printStack, {
-      expressionStatement: isFollowedByBracket,
-      forHead: isFollowedByBracket,
-      forInHead: isFollowedByBracket,
-      forOfHead: true,
-    });
+    return isFirstInContext(
+      printStack,
+      isFollowedByBracket
+        ? CheckParam.expressionStatement |
+            CheckParam.forHead |
+            CheckParam.forInHead |
+            CheckParam.forOfHead
+        : CheckParam.forOfHead,
+    );
   }
 
   // ECMAScript specifically forbids a for-of loop from starting with the
@@ -458,16 +472,17 @@ export function Identifier(
 // in a particular context.
 function isFirstInContext(
   printStack: Array<t.Node>,
-  {
-    expressionStatement = false,
-    arrowBody = false,
-    exportDefault = false,
-    forHead = false,
-    forInHead = false,
-    forOfHead = false,
-  },
+  checkParam: CheckParam,
 ): boolean {
+  const expressionStatement = checkParam & CheckParam.expressionStatement;
+  const arrowBody = checkParam & CheckParam.arrowBody;
+  const exportDefault = checkParam & CheckParam.exportDefault;
+  const forHead = checkParam & CheckParam.forHead;
+  const forInHead = checkParam & CheckParam.forInHead;
+  const forOfHead = checkParam & CheckParam.forOfHead;
+
   let i = printStack.length - 1;
+  if (i <= 0) return;
   let node = printStack[i];
   i--;
   let parent = printStack[i];
@@ -486,12 +501,13 @@ function isFirstInContext(
     }
 
     if (
-      (hasPostfixPart(node, parent) && !isNewExpression(parent)) ||
-      (isSequenceExpression(parent) && parent.expressions[0] === node) ||
-      (isUpdateExpression(parent) && !parent.prefix) ||
-      isConditional(parent, { test: node }) ||
-      isBinary(parent, { left: node }) ||
-      isAssignmentExpression(parent, { left: node })
+      i > 0 &&
+      ((hasPostfixPart(node, parent) && !isNewExpression(parent)) ||
+        (isSequenceExpression(parent) && parent.expressions[0] === node) ||
+        (isUpdateExpression(parent) && !parent.prefix) ||
+        isConditional(parent, { test: node }) ||
+        isBinary(parent, { left: node }) ||
+        isAssignmentExpression(parent, { left: node }))
     ) {
       node = parent;
       i--;

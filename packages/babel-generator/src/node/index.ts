@@ -8,7 +8,8 @@ import {
   isNewExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
-import type { WhitespaceObject } from "./whitespace";
+
+import type { WhitespaceFlag } from "./whitespace";
 
 export type NodeHandlers<R> = {
   [K in string]?: (
@@ -57,7 +58,6 @@ function expandAliases<R>(obj: NodeHandlers<R>) {
 // into concrete types so that the 'find' call below can be as fast as possible.
 const expandedParens = expandAliases(parens);
 const expandedWhitespaceNodes = expandAliases(whitespace.nodes);
-const expandedWhitespaceList = expandAliases(whitespace.list);
 
 function find<R>(
   obj: NodeHandlers<R>,
@@ -80,7 +80,7 @@ function isOrHasCallExpression(node: t.Node): boolean {
 export function needsWhitespace(
   node: t.Node,
   parent: t.Node,
-  type: "before" | "after",
+  type: WhitespaceFlag,
 ): boolean {
   if (!node) return false;
 
@@ -88,35 +88,21 @@ export function needsWhitespace(
     node = node.expression;
   }
 
-  let linesInfo: WhitespaceObject | null | boolean = find(
-    expandedWhitespaceNodes,
-    node,
-    parent,
-  );
+  const flag = find(expandedWhitespaceNodes, node, parent);
 
-  if (!linesInfo) {
-    const items = find(expandedWhitespaceList, node, parent);
-    if (items) {
-      for (let i = 0; i < items.length; i++) {
-        linesInfo = needsWhitespace(items[i], node, type);
-        if (linesInfo) break;
-      }
-    }
-  }
-
-  if (typeof linesInfo === "object" && linesInfo !== null) {
-    return linesInfo[type] || false;
+  if (typeof flag === "number") {
+    return (flag & type) !== 0;
   }
 
   return false;
 }
 
 export function needsWhitespaceBefore(node: t.Node, parent: t.Node) {
-  return needsWhitespace(node, parent, "before");
+  return needsWhitespace(node, parent, 1);
 }
 
 export function needsWhitespaceAfter(node: t.Node, parent: t.Node) {
-  return needsWhitespace(node, parent, "after");
+  return needsWhitespace(node, parent, 2);
 }
 
 export function needsParens(
