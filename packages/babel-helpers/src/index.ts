@@ -59,6 +59,7 @@ function getHelperMetadata(file: File): HelperMetadata {
       }
       if (
         child.get("specifiers").length !== 1 ||
+        // @ts-expect-error isImportDefaultSpecifier does not work with NodePath union
         !child.get("specifiers.0").isImportDefaultSpecifier()
       ) {
         throw child.buildCodeFrameError(
