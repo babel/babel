@@ -645,8 +645,6 @@ export function isInStrictMode(this: NodePath) {
 
     if (path.isClass()) return true;
 
-    if (!path.isProgram() && !path.isFunction()) return false;
-
     if (
       path.isArrowFunctionExpression() &&
       !path.get("body").isBlockStatement()
@@ -654,9 +652,14 @@ export function isInStrictMode(this: NodePath) {
       return false;
     }
 
-    const body: t.BlockStatement | t.Program = path.isFunction()
-      ? (path.node.body as t.BlockStatement)
-      : (path.node as t.Program);
+    let body: t.BlockStatement | t.Program;
+    if (path.isFunction()) {
+      body = path.node.body as t.BlockStatement;
+    } else if (path.isProgram()) {
+      body = path.node;
+    } else {
+      return false;
+    }
 
     for (const directive of body.directives) {
       if (directive.value.value === "use strict") {

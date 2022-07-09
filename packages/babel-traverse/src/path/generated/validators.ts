@@ -7,459 +7,1265 @@ import NodePath from "../index";
 import type { VirtualTypeAliases } from "./virtual-types";
 
 export interface NodePathValidators {
-  isAccessor(opts?: object): this is NodePath<t.Accessor>;
-  isAnyTypeAnnotation(opts?: object): this is NodePath<t.AnyTypeAnnotation>;
-  isArgumentPlaceholder(opts?: object): this is NodePath<t.ArgumentPlaceholder>;
-  isArrayExpression(opts?: object): this is NodePath<t.ArrayExpression>;
-  isArrayPattern(opts?: object): this is NodePath<t.ArrayPattern>;
-  isArrayTypeAnnotation(opts?: object): this is NodePath<t.ArrayTypeAnnotation>;
-  isArrowFunctionExpression(
+  isAccessor<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.ArrowFunctionExpression>;
-  isAssignmentExpression(
+  ): this is NodePath<T & t.Accessor>;
+  isAnyTypeAnnotation<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.AssignmentExpression>;
-  isAssignmentPattern(opts?: object): this is NodePath<t.AssignmentPattern>;
-  isAwaitExpression(opts?: object): this is NodePath<t.AwaitExpression>;
-  isBigIntLiteral(opts?: object): this is NodePath<t.BigIntLiteral>;
-  isBinary(opts?: object): this is NodePath<t.Binary>;
-  isBinaryExpression(opts?: object): this is NodePath<t.BinaryExpression>;
-  isBindExpression(opts?: object): this is NodePath<t.BindExpression>;
-  isBlock(opts?: object): this is NodePath<t.Block>;
-  isBlockParent(opts?: object): this is NodePath<t.BlockParent>;
-  isBlockStatement(opts?: object): this is NodePath<t.BlockStatement>;
-  isBooleanLiteral(opts?: object): this is NodePath<t.BooleanLiteral>;
-  isBooleanLiteralTypeAnnotation(
+  ): this is NodePath<T & t.AnyTypeAnnotation>;
+  isArgumentPlaceholder<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.BooleanLiteralTypeAnnotation>;
-  isBooleanTypeAnnotation(
+  ): this is NodePath<T & t.ArgumentPlaceholder>;
+  isArrayExpression<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.BooleanTypeAnnotation>;
-  isBreakStatement(opts?: object): this is NodePath<t.BreakStatement>;
-  isCallExpression(opts?: object): this is NodePath<t.CallExpression>;
-  isCatchClause(opts?: object): this is NodePath<t.CatchClause>;
-  isClass(opts?: object): this is NodePath<t.Class>;
-  isClassAccessorProperty(
+  ): this is NodePath<T & t.ArrayExpression>;
+  isArrayPattern<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.ClassAccessorProperty>;
-  isClassBody(opts?: object): this is NodePath<t.ClassBody>;
-  isClassDeclaration(opts?: object): this is NodePath<t.ClassDeclaration>;
-  isClassExpression(opts?: object): this is NodePath<t.ClassExpression>;
-  isClassImplements(opts?: object): this is NodePath<t.ClassImplements>;
-  isClassMethod(opts?: object): this is NodePath<t.ClassMethod>;
-  isClassPrivateMethod(opts?: object): this is NodePath<t.ClassPrivateMethod>;
-  isClassPrivateProperty(
+  ): this is NodePath<T & t.ArrayPattern>;
+  isArrayTypeAnnotation<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.ClassPrivateProperty>;
-  isClassProperty(opts?: object): this is NodePath<t.ClassProperty>;
-  isCompletionStatement(opts?: object): this is NodePath<t.CompletionStatement>;
-  isConditional(opts?: object): this is NodePath<t.Conditional>;
-  isConditionalExpression(
+  ): this is NodePath<T & t.ArrayTypeAnnotation>;
+  isArrowFunctionExpression<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.ConditionalExpression>;
-  isContinueStatement(opts?: object): this is NodePath<t.ContinueStatement>;
-  isDebuggerStatement(opts?: object): this is NodePath<t.DebuggerStatement>;
-  isDecimalLiteral(opts?: object): this is NodePath<t.DecimalLiteral>;
-  isDeclaration(opts?: object): this is NodePath<t.Declaration>;
-  isDeclareClass(opts?: object): this is NodePath<t.DeclareClass>;
-  isDeclareExportAllDeclaration(
+  ): this is NodePath<T & t.ArrowFunctionExpression>;
+  isAssignmentExpression<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.DeclareExportAllDeclaration>;
-  isDeclareExportDeclaration(
+  ): this is NodePath<T & t.AssignmentExpression>;
+  isAssignmentPattern<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.DeclareExportDeclaration>;
-  isDeclareFunction(opts?: object): this is NodePath<t.DeclareFunction>;
-  isDeclareInterface(opts?: object): this is NodePath<t.DeclareInterface>;
-  isDeclareModule(opts?: object): this is NodePath<t.DeclareModule>;
-  isDeclareModuleExports(
+  ): this is NodePath<T & t.AssignmentPattern>;
+  isAwaitExpression<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.DeclareModuleExports>;
-  isDeclareOpaqueType(opts?: object): this is NodePath<t.DeclareOpaqueType>;
-  isDeclareTypeAlias(opts?: object): this is NodePath<t.DeclareTypeAlias>;
-  isDeclareVariable(opts?: object): this is NodePath<t.DeclareVariable>;
-  isDeclaredPredicate(opts?: object): this is NodePath<t.DeclaredPredicate>;
-  isDecorator(opts?: object): this is NodePath<t.Decorator>;
-  isDirective(opts?: object): this is NodePath<t.Directive>;
-  isDirectiveLiteral(opts?: object): this is NodePath<t.DirectiveLiteral>;
-  isDoExpression(opts?: object): this is NodePath<t.DoExpression>;
-  isDoWhileStatement(opts?: object): this is NodePath<t.DoWhileStatement>;
-  isEmptyStatement(opts?: object): this is NodePath<t.EmptyStatement>;
-  isEmptyTypeAnnotation(opts?: object): this is NodePath<t.EmptyTypeAnnotation>;
-  isEnumBody(opts?: object): this is NodePath<t.EnumBody>;
-  isEnumBooleanBody(opts?: object): this is NodePath<t.EnumBooleanBody>;
-  isEnumBooleanMember(opts?: object): this is NodePath<t.EnumBooleanMember>;
-  isEnumDeclaration(opts?: object): this is NodePath<t.EnumDeclaration>;
-  isEnumDefaultedMember(opts?: object): this is NodePath<t.EnumDefaultedMember>;
-  isEnumMember(opts?: object): this is NodePath<t.EnumMember>;
-  isEnumNumberBody(opts?: object): this is NodePath<t.EnumNumberBody>;
-  isEnumNumberMember(opts?: object): this is NodePath<t.EnumNumberMember>;
-  isEnumStringBody(opts?: object): this is NodePath<t.EnumStringBody>;
-  isEnumStringMember(opts?: object): this is NodePath<t.EnumStringMember>;
-  isEnumSymbolBody(opts?: object): this is NodePath<t.EnumSymbolBody>;
-  isExistsTypeAnnotation(
+  ): this is NodePath<T & t.AwaitExpression>;
+  isBigIntLiteral<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.ExistsTypeAnnotation>;
-  isExportAllDeclaration(
+  ): this is NodePath<T & t.BigIntLiteral>;
+  isBinary<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.ExportAllDeclaration>;
-  isExportDeclaration(opts?: object): this is NodePath<t.ExportDeclaration>;
-  isExportDefaultDeclaration(
+  ): this is NodePath<T & t.Binary>;
+  isBinaryExpression<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.ExportDefaultDeclaration>;
-  isExportDefaultSpecifier(
+  ): this is NodePath<T & t.BinaryExpression>;
+  isBindExpression<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.ExportDefaultSpecifier>;
-  isExportNamedDeclaration(
+  ): this is NodePath<T & t.BindExpression>;
+  isBlock<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.ExportNamedDeclaration>;
-  isExportNamespaceSpecifier(
+  ): this is NodePath<T & t.Block>;
+  isBlockParent<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.ExportNamespaceSpecifier>;
-  isExportSpecifier(opts?: object): this is NodePath<t.ExportSpecifier>;
-  isExpression(opts?: object): this is NodePath<t.Expression>;
-  isExpressionStatement(opts?: object): this is NodePath<t.ExpressionStatement>;
-  isExpressionWrapper(opts?: object): this is NodePath<t.ExpressionWrapper>;
-  isFile(opts?: object): this is NodePath<t.File>;
-  isFlow(opts?: object): this is NodePath<t.Flow>;
-  isFlowBaseAnnotation(opts?: object): this is NodePath<t.FlowBaseAnnotation>;
-  isFlowDeclaration(opts?: object): this is NodePath<t.FlowDeclaration>;
-  isFlowPredicate(opts?: object): this is NodePath<t.FlowPredicate>;
-  isFlowType(opts?: object): this is NodePath<t.FlowType>;
-  isFor(opts?: object): this is NodePath<t.For>;
-  isForInStatement(opts?: object): this is NodePath<t.ForInStatement>;
-  isForOfStatement(opts?: object): this is NodePath<t.ForOfStatement>;
-  isForStatement(opts?: object): this is NodePath<t.ForStatement>;
-  isForXStatement(opts?: object): this is NodePath<t.ForXStatement>;
-  isFunction(opts?: object): this is NodePath<t.Function>;
-  isFunctionDeclaration(opts?: object): this is NodePath<t.FunctionDeclaration>;
-  isFunctionExpression(opts?: object): this is NodePath<t.FunctionExpression>;
-  isFunctionParent(opts?: object): this is NodePath<t.FunctionParent>;
-  isFunctionTypeAnnotation(
+  ): this is NodePath<T & t.BlockParent>;
+  isBlockStatement<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.FunctionTypeAnnotation>;
-  isFunctionTypeParam(opts?: object): this is NodePath<t.FunctionTypeParam>;
-  isGenericTypeAnnotation(
+  ): this is NodePath<T & t.BlockStatement>;
+  isBooleanLiteral<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.GenericTypeAnnotation>;
-  isIdentifier(opts?: object): this is NodePath<t.Identifier>;
-  isIfStatement(opts?: object): this is NodePath<t.IfStatement>;
-  isImmutable(opts?: object): this is NodePath<t.Immutable>;
-  isImport(opts?: object): this is NodePath<t.Import>;
-  isImportAttribute(opts?: object): this is NodePath<t.ImportAttribute>;
-  isImportDeclaration(opts?: object): this is NodePath<t.ImportDeclaration>;
-  isImportDefaultSpecifier(
+  ): this is NodePath<T & t.BooleanLiteral>;
+  isBooleanLiteralTypeAnnotation<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.ImportDefaultSpecifier>;
-  isImportNamespaceSpecifier(
+  ): this is NodePath<T & t.BooleanLiteralTypeAnnotation>;
+  isBooleanTypeAnnotation<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.ImportNamespaceSpecifier>;
-  isImportSpecifier(opts?: object): this is NodePath<t.ImportSpecifier>;
-  isIndexedAccessType(opts?: object): this is NodePath<t.IndexedAccessType>;
-  isInferredPredicate(opts?: object): this is NodePath<t.InferredPredicate>;
-  isInterfaceDeclaration(
+  ): this is NodePath<T & t.BooleanTypeAnnotation>;
+  isBreakStatement<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.InterfaceDeclaration>;
-  isInterfaceExtends(opts?: object): this is NodePath<t.InterfaceExtends>;
-  isInterfaceTypeAnnotation(
+  ): this is NodePath<T & t.BreakStatement>;
+  isCallExpression<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.InterfaceTypeAnnotation>;
-  isInterpreterDirective(
+  ): this is NodePath<T & t.CallExpression>;
+  isCatchClause<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.InterpreterDirective>;
-  isIntersectionTypeAnnotation(
+  ): this is NodePath<T & t.CatchClause>;
+  isClass<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.IntersectionTypeAnnotation>;
-  isJSX(opts?: object): this is NodePath<t.JSX>;
-  isJSXAttribute(opts?: object): this is NodePath<t.JSXAttribute>;
-  isJSXClosingElement(opts?: object): this is NodePath<t.JSXClosingElement>;
-  isJSXClosingFragment(opts?: object): this is NodePath<t.JSXClosingFragment>;
-  isJSXElement(opts?: object): this is NodePath<t.JSXElement>;
-  isJSXEmptyExpression(opts?: object): this is NodePath<t.JSXEmptyExpression>;
-  isJSXExpressionContainer(
+  ): this is NodePath<T & t.Class>;
+  isClassAccessorProperty<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.JSXExpressionContainer>;
-  isJSXFragment(opts?: object): this is NodePath<t.JSXFragment>;
-  isJSXIdentifier(opts?: object): this is NodePath<t.JSXIdentifier>;
-  isJSXMemberExpression(opts?: object): this is NodePath<t.JSXMemberExpression>;
-  isJSXNamespacedName(opts?: object): this is NodePath<t.JSXNamespacedName>;
-  isJSXOpeningElement(opts?: object): this is NodePath<t.JSXOpeningElement>;
-  isJSXOpeningFragment(opts?: object): this is NodePath<t.JSXOpeningFragment>;
-  isJSXSpreadAttribute(opts?: object): this is NodePath<t.JSXSpreadAttribute>;
-  isJSXSpreadChild(opts?: object): this is NodePath<t.JSXSpreadChild>;
-  isJSXText(opts?: object): this is NodePath<t.JSXText>;
-  isLVal(opts?: object): this is NodePath<t.LVal>;
-  isLabeledStatement(opts?: object): this is NodePath<t.LabeledStatement>;
-  isLiteral(opts?: object): this is NodePath<t.Literal>;
-  isLogicalExpression(opts?: object): this is NodePath<t.LogicalExpression>;
-  isLoop(opts?: object): this is NodePath<t.Loop>;
-  isMemberExpression(opts?: object): this is NodePath<t.MemberExpression>;
-  isMetaProperty(opts?: object): this is NodePath<t.MetaProperty>;
-  isMethod(opts?: object): this is NodePath<t.Method>;
-  isMiscellaneous(opts?: object): this is NodePath<t.Miscellaneous>;
-  isMixedTypeAnnotation(opts?: object): this is NodePath<t.MixedTypeAnnotation>;
-  isModuleDeclaration(opts?: object): this is NodePath<t.ModuleDeclaration>;
-  isModuleExpression(opts?: object): this is NodePath<t.ModuleExpression>;
-  isModuleSpecifier(opts?: object): this is NodePath<t.ModuleSpecifier>;
-  isNewExpression(opts?: object): this is NodePath<t.NewExpression>;
-  isNoop(opts?: object): this is NodePath<t.Noop>;
-  isNullLiteral(opts?: object): this is NodePath<t.NullLiteral>;
-  isNullLiteralTypeAnnotation(
+  ): this is NodePath<T & t.ClassAccessorProperty>;
+  isClassBody<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.NullLiteralTypeAnnotation>;
-  isNullableTypeAnnotation(
+  ): this is NodePath<T & t.ClassBody>;
+  isClassDeclaration<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.NullableTypeAnnotation>;
-  isNumberLiteral(opts?: object): this is NodePath<t.NumberLiteral>;
-  isNumberLiteralTypeAnnotation(
+  ): this is NodePath<T & t.ClassDeclaration>;
+  isClassExpression<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.NumberLiteralTypeAnnotation>;
-  isNumberTypeAnnotation(
+  ): this is NodePath<T & t.ClassExpression>;
+  isClassImplements<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.NumberTypeAnnotation>;
-  isNumericLiteral(opts?: object): this is NodePath<t.NumericLiteral>;
-  isObjectExpression(opts?: object): this is NodePath<t.ObjectExpression>;
-  isObjectMember(opts?: object): this is NodePath<t.ObjectMember>;
-  isObjectMethod(opts?: object): this is NodePath<t.ObjectMethod>;
-  isObjectPattern(opts?: object): this is NodePath<t.ObjectPattern>;
-  isObjectProperty(opts?: object): this is NodePath<t.ObjectProperty>;
-  isObjectTypeAnnotation(
+  ): this is NodePath<T & t.ClassImplements>;
+  isClassMethod<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.ObjectTypeAnnotation>;
-  isObjectTypeCallProperty(
+  ): this is NodePath<T & t.ClassMethod>;
+  isClassPrivateMethod<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.ObjectTypeCallProperty>;
-  isObjectTypeIndexer(opts?: object): this is NodePath<t.ObjectTypeIndexer>;
-  isObjectTypeInternalSlot(
+  ): this is NodePath<T & t.ClassPrivateMethod>;
+  isClassPrivateProperty<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.ObjectTypeInternalSlot>;
-  isObjectTypeProperty(opts?: object): this is NodePath<t.ObjectTypeProperty>;
-  isObjectTypeSpreadProperty(
+  ): this is NodePath<T & t.ClassPrivateProperty>;
+  isClassProperty<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.ObjectTypeSpreadProperty>;
-  isOpaqueType(opts?: object): this is NodePath<t.OpaqueType>;
-  isOptionalCallExpression(
+  ): this is NodePath<T & t.ClassProperty>;
+  isCompletionStatement<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.OptionalCallExpression>;
-  isOptionalIndexedAccessType(
+  ): this is NodePath<T & t.CompletionStatement>;
+  isConditional<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.OptionalIndexedAccessType>;
-  isOptionalMemberExpression(
+  ): this is NodePath<T & t.Conditional>;
+  isConditionalExpression<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.OptionalMemberExpression>;
-  isParenthesizedExpression(
+  ): this is NodePath<T & t.ConditionalExpression>;
+  isContinueStatement<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.ParenthesizedExpression>;
-  isPattern(opts?: object): this is NodePath<t.Pattern>;
-  isPatternLike(opts?: object): this is NodePath<t.PatternLike>;
-  isPipelineBareFunction(
+  ): this is NodePath<T & t.ContinueStatement>;
+  isDebuggerStatement<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.PipelineBareFunction>;
-  isPipelinePrimaryTopicReference(
+  ): this is NodePath<T & t.DebuggerStatement>;
+  isDecimalLiteral<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.PipelinePrimaryTopicReference>;
-  isPipelineTopicExpression(
+  ): this is NodePath<T & t.DecimalLiteral>;
+  isDeclaration<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.PipelineTopicExpression>;
-  isPlaceholder(opts?: object): this is NodePath<t.Placeholder>;
-  isPrivate(opts?: object): this is NodePath<t.Private>;
-  isPrivateName(opts?: object): this is NodePath<t.PrivateName>;
-  isProgram(opts?: object): this is NodePath<t.Program>;
-  isProperty(opts?: object): this is NodePath<t.Property>;
-  isPureish(opts?: object): this is NodePath<t.Pureish>;
-  isQualifiedTypeIdentifier(
+  ): this is NodePath<T & t.Declaration>;
+  isDeclareClass<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.QualifiedTypeIdentifier>;
-  isRecordExpression(opts?: object): this is NodePath<t.RecordExpression>;
-  isRegExpLiteral(opts?: object): this is NodePath<t.RegExpLiteral>;
-  isRegexLiteral(opts?: object): this is NodePath<t.RegexLiteral>;
-  isRestElement(opts?: object): this is NodePath<t.RestElement>;
-  isRestProperty(opts?: object): this is NodePath<t.RestProperty>;
-  isReturnStatement(opts?: object): this is NodePath<t.ReturnStatement>;
-  isScopable(opts?: object): this is NodePath<t.Scopable>;
-  isSequenceExpression(opts?: object): this is NodePath<t.SequenceExpression>;
-  isSpreadElement(opts?: object): this is NodePath<t.SpreadElement>;
-  isSpreadProperty(opts?: object): this is NodePath<t.SpreadProperty>;
-  isStandardized(opts?: object): this is NodePath<t.Standardized>;
-  isStatement(opts?: object): this is NodePath<t.Statement>;
-  isStaticBlock(opts?: object): this is NodePath<t.StaticBlock>;
-  isStringLiteral(opts?: object): this is NodePath<t.StringLiteral>;
-  isStringLiteralTypeAnnotation(
+  ): this is NodePath<T & t.DeclareClass>;
+  isDeclareExportAllDeclaration<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.StringLiteralTypeAnnotation>;
-  isStringTypeAnnotation(
+  ): this is NodePath<T & t.DeclareExportAllDeclaration>;
+  isDeclareExportDeclaration<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.StringTypeAnnotation>;
-  isSuper(opts?: object): this is NodePath<t.Super>;
-  isSwitchCase(opts?: object): this is NodePath<t.SwitchCase>;
-  isSwitchStatement(opts?: object): this is NodePath<t.SwitchStatement>;
-  isSymbolTypeAnnotation(
+  ): this is NodePath<T & t.DeclareExportDeclaration>;
+  isDeclareFunction<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.SymbolTypeAnnotation>;
-  isTSAnyKeyword(opts?: object): this is NodePath<t.TSAnyKeyword>;
-  isTSArrayType(opts?: object): this is NodePath<t.TSArrayType>;
-  isTSAsExpression(opts?: object): this is NodePath<t.TSAsExpression>;
-  isTSBaseType(opts?: object): this is NodePath<t.TSBaseType>;
-  isTSBigIntKeyword(opts?: object): this is NodePath<t.TSBigIntKeyword>;
-  isTSBooleanKeyword(opts?: object): this is NodePath<t.TSBooleanKeyword>;
-  isTSCallSignatureDeclaration(
+  ): this is NodePath<T & t.DeclareFunction>;
+  isDeclareInterface<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.TSCallSignatureDeclaration>;
-  isTSConditionalType(opts?: object): this is NodePath<t.TSConditionalType>;
-  isTSConstructSignatureDeclaration(
+  ): this is NodePath<T & t.DeclareInterface>;
+  isDeclareModule<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.TSConstructSignatureDeclaration>;
-  isTSConstructorType(opts?: object): this is NodePath<t.TSConstructorType>;
-  isTSDeclareFunction(opts?: object): this is NodePath<t.TSDeclareFunction>;
-  isTSDeclareMethod(opts?: object): this is NodePath<t.TSDeclareMethod>;
-  isTSEntityName(opts?: object): this is NodePath<t.TSEntityName>;
-  isTSEnumDeclaration(opts?: object): this is NodePath<t.TSEnumDeclaration>;
-  isTSEnumMember(opts?: object): this is NodePath<t.TSEnumMember>;
-  isTSExportAssignment(opts?: object): this is NodePath<t.TSExportAssignment>;
-  isTSExpressionWithTypeArguments(
+  ): this is NodePath<T & t.DeclareModule>;
+  isDeclareModuleExports<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.TSExpressionWithTypeArguments>;
-  isTSExternalModuleReference(
+  ): this is NodePath<T & t.DeclareModuleExports>;
+  isDeclareOpaqueType<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.TSExternalModuleReference>;
-  isTSFunctionType(opts?: object): this is NodePath<t.TSFunctionType>;
-  isTSImportEqualsDeclaration(
+  ): this is NodePath<T & t.DeclareOpaqueType>;
+  isDeclareTypeAlias<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.TSImportEqualsDeclaration>;
-  isTSImportType(opts?: object): this is NodePath<t.TSImportType>;
-  isTSIndexSignature(opts?: object): this is NodePath<t.TSIndexSignature>;
-  isTSIndexedAccessType(opts?: object): this is NodePath<t.TSIndexedAccessType>;
-  isTSInferType(opts?: object): this is NodePath<t.TSInferType>;
-  isTSInstantiationExpression(
+  ): this is NodePath<T & t.DeclareTypeAlias>;
+  isDeclareVariable<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.TSInstantiationExpression>;
-  isTSInterfaceBody(opts?: object): this is NodePath<t.TSInterfaceBody>;
-  isTSInterfaceDeclaration(
+  ): this is NodePath<T & t.DeclareVariable>;
+  isDeclaredPredicate<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.TSInterfaceDeclaration>;
-  isTSIntersectionType(opts?: object): this is NodePath<t.TSIntersectionType>;
-  isTSIntrinsicKeyword(opts?: object): this is NodePath<t.TSIntrinsicKeyword>;
-  isTSLiteralType(opts?: object): this is NodePath<t.TSLiteralType>;
-  isTSMappedType(opts?: object): this is NodePath<t.TSMappedType>;
-  isTSMethodSignature(opts?: object): this is NodePath<t.TSMethodSignature>;
-  isTSModuleBlock(opts?: object): this is NodePath<t.TSModuleBlock>;
-  isTSModuleDeclaration(opts?: object): this is NodePath<t.TSModuleDeclaration>;
-  isTSNamedTupleMember(opts?: object): this is NodePath<t.TSNamedTupleMember>;
-  isTSNamespaceExportDeclaration(
+  ): this is NodePath<T & t.DeclaredPredicate>;
+  isDecorator<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.TSNamespaceExportDeclaration>;
-  isTSNeverKeyword(opts?: object): this is NodePath<t.TSNeverKeyword>;
-  isTSNonNullExpression(opts?: object): this is NodePath<t.TSNonNullExpression>;
-  isTSNullKeyword(opts?: object): this is NodePath<t.TSNullKeyword>;
-  isTSNumberKeyword(opts?: object): this is NodePath<t.TSNumberKeyword>;
-  isTSObjectKeyword(opts?: object): this is NodePath<t.TSObjectKeyword>;
-  isTSOptionalType(opts?: object): this is NodePath<t.TSOptionalType>;
-  isTSParameterProperty(opts?: object): this is NodePath<t.TSParameterProperty>;
-  isTSParenthesizedType(opts?: object): this is NodePath<t.TSParenthesizedType>;
-  isTSPropertySignature(opts?: object): this is NodePath<t.TSPropertySignature>;
-  isTSQualifiedName(opts?: object): this is NodePath<t.TSQualifiedName>;
-  isTSRestType(opts?: object): this is NodePath<t.TSRestType>;
-  isTSStringKeyword(opts?: object): this is NodePath<t.TSStringKeyword>;
-  isTSSymbolKeyword(opts?: object): this is NodePath<t.TSSymbolKeyword>;
-  isTSThisType(opts?: object): this is NodePath<t.TSThisType>;
-  isTSTupleType(opts?: object): this is NodePath<t.TSTupleType>;
-  isTSType(opts?: object): this is NodePath<t.TSType>;
-  isTSTypeAliasDeclaration(
+  ): this is NodePath<T & t.Decorator>;
+  isDirective<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.TSTypeAliasDeclaration>;
-  isTSTypeAnnotation(opts?: object): this is NodePath<t.TSTypeAnnotation>;
-  isTSTypeAssertion(opts?: object): this is NodePath<t.TSTypeAssertion>;
-  isTSTypeElement(opts?: object): this is NodePath<t.TSTypeElement>;
-  isTSTypeLiteral(opts?: object): this is NodePath<t.TSTypeLiteral>;
-  isTSTypeOperator(opts?: object): this is NodePath<t.TSTypeOperator>;
-  isTSTypeParameter(opts?: object): this is NodePath<t.TSTypeParameter>;
-  isTSTypeParameterDeclaration(
+  ): this is NodePath<T & t.Directive>;
+  isDirectiveLiteral<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.TSTypeParameterDeclaration>;
-  isTSTypeParameterInstantiation(
+  ): this is NodePath<T & t.DirectiveLiteral>;
+  isDoExpression<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.TSTypeParameterInstantiation>;
-  isTSTypePredicate(opts?: object): this is NodePath<t.TSTypePredicate>;
-  isTSTypeQuery(opts?: object): this is NodePath<t.TSTypeQuery>;
-  isTSTypeReference(opts?: object): this is NodePath<t.TSTypeReference>;
-  isTSUndefinedKeyword(opts?: object): this is NodePath<t.TSUndefinedKeyword>;
-  isTSUnionType(opts?: object): this is NodePath<t.TSUnionType>;
-  isTSUnknownKeyword(opts?: object): this is NodePath<t.TSUnknownKeyword>;
-  isTSVoidKeyword(opts?: object): this is NodePath<t.TSVoidKeyword>;
-  isTaggedTemplateExpression(
+  ): this is NodePath<T & t.DoExpression>;
+  isDoWhileStatement<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.TaggedTemplateExpression>;
-  isTemplateElement(opts?: object): this is NodePath<t.TemplateElement>;
-  isTemplateLiteral(opts?: object): this is NodePath<t.TemplateLiteral>;
-  isTerminatorless(opts?: object): this is NodePath<t.Terminatorless>;
-  isThisExpression(opts?: object): this is NodePath<t.ThisExpression>;
-  isThisTypeAnnotation(opts?: object): this is NodePath<t.ThisTypeAnnotation>;
-  isThrowStatement(opts?: object): this is NodePath<t.ThrowStatement>;
-  isTopicReference(opts?: object): this is NodePath<t.TopicReference>;
-  isTryStatement(opts?: object): this is NodePath<t.TryStatement>;
-  isTupleExpression(opts?: object): this is NodePath<t.TupleExpression>;
-  isTupleTypeAnnotation(opts?: object): this is NodePath<t.TupleTypeAnnotation>;
-  isTypeAlias(opts?: object): this is NodePath<t.TypeAlias>;
-  isTypeAnnotation(opts?: object): this is NodePath<t.TypeAnnotation>;
-  isTypeCastExpression(opts?: object): this is NodePath<t.TypeCastExpression>;
-  isTypeParameter(opts?: object): this is NodePath<t.TypeParameter>;
-  isTypeParameterDeclaration(
+  ): this is NodePath<T & t.DoWhileStatement>;
+  isEmptyStatement<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.TypeParameterDeclaration>;
-  isTypeParameterInstantiation(
+  ): this is NodePath<T & t.EmptyStatement>;
+  isEmptyTypeAnnotation<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.TypeParameterInstantiation>;
-  isTypeScript(opts?: object): this is NodePath<t.TypeScript>;
-  isTypeofTypeAnnotation(
+  ): this is NodePath<T & t.EmptyTypeAnnotation>;
+  isEnumBody<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.TypeofTypeAnnotation>;
-  isUnaryExpression(opts?: object): this is NodePath<t.UnaryExpression>;
-  isUnaryLike(opts?: object): this is NodePath<t.UnaryLike>;
-  isUnionTypeAnnotation(opts?: object): this is NodePath<t.UnionTypeAnnotation>;
-  isUpdateExpression(opts?: object): this is NodePath<t.UpdateExpression>;
-  isUserWhitespacable(opts?: object): this is NodePath<t.UserWhitespacable>;
-  isV8IntrinsicIdentifier(
+  ): this is NodePath<T & t.EnumBody>;
+  isEnumBooleanBody<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<t.V8IntrinsicIdentifier>;
-  isVariableDeclaration(opts?: object): this is NodePath<t.VariableDeclaration>;
-  isVariableDeclarator(opts?: object): this is NodePath<t.VariableDeclarator>;
-  isVariance(opts?: object): this is NodePath<t.Variance>;
-  isVoidTypeAnnotation(opts?: object): this is NodePath<t.VoidTypeAnnotation>;
-  isWhile(opts?: object): this is NodePath<t.While>;
-  isWhileStatement(opts?: object): this is NodePath<t.WhileStatement>;
-  isWithStatement(opts?: object): this is NodePath<t.WithStatement>;
-  isYieldExpression(opts?: object): this is NodePath<t.YieldExpression>;
-  isBindingIdentifier(
+  ): this is NodePath<T & t.EnumBooleanBody>;
+  isEnumBooleanMember<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<VirtualTypeAliases["BindingIdentifier"]>;
+  ): this is NodePath<T & t.EnumBooleanMember>;
+  isEnumDeclaration<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.EnumDeclaration>;
+  isEnumDefaultedMember<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.EnumDefaultedMember>;
+  isEnumMember<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.EnumMember>;
+  isEnumNumberBody<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.EnumNumberBody>;
+  isEnumNumberMember<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.EnumNumberMember>;
+  isEnumStringBody<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.EnumStringBody>;
+  isEnumStringMember<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.EnumStringMember>;
+  isEnumSymbolBody<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.EnumSymbolBody>;
+  isExistsTypeAnnotation<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ExistsTypeAnnotation>;
+  isExportAllDeclaration<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ExportAllDeclaration>;
+  isExportDeclaration<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ExportDeclaration>;
+  isExportDefaultDeclaration<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ExportDefaultDeclaration>;
+  isExportDefaultSpecifier<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ExportDefaultSpecifier>;
+  isExportNamedDeclaration<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ExportNamedDeclaration>;
+  isExportNamespaceSpecifier<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ExportNamespaceSpecifier>;
+  isExportSpecifier<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ExportSpecifier>;
+  isExpression<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.Expression>;
+  isExpressionStatement<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ExpressionStatement>;
+  isExpressionWrapper<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ExpressionWrapper>;
+  isFile<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.File>;
+  isFlow<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.Flow>;
+  isFlowBaseAnnotation<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.FlowBaseAnnotation>;
+  isFlowDeclaration<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.FlowDeclaration>;
+  isFlowPredicate<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.FlowPredicate>;
+  isFlowType<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.FlowType>;
+  isFor<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.For>;
+  isForInStatement<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ForInStatement>;
+  isForOfStatement<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ForOfStatement>;
+  isForStatement<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ForStatement>;
+  isForXStatement<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ForXStatement>;
+  isFunction<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.Function>;
+  isFunctionDeclaration<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.FunctionDeclaration>;
+  isFunctionExpression<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.FunctionExpression>;
+  isFunctionParent<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.FunctionParent>;
+  isFunctionTypeAnnotation<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.FunctionTypeAnnotation>;
+  isFunctionTypeParam<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.FunctionTypeParam>;
+  isGenericTypeAnnotation<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.GenericTypeAnnotation>;
+  isIdentifier<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.Identifier>;
+  isIfStatement<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.IfStatement>;
+  isImmutable<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.Immutable>;
+  isImport<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.Import>;
+  isImportAttribute<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ImportAttribute>;
+  isImportDeclaration<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ImportDeclaration>;
+  isImportDefaultSpecifier<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ImportDefaultSpecifier>;
+  isImportNamespaceSpecifier<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ImportNamespaceSpecifier>;
+  isImportSpecifier<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ImportSpecifier>;
+  isIndexedAccessType<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.IndexedAccessType>;
+  isInferredPredicate<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.InferredPredicate>;
+  isInterfaceDeclaration<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.InterfaceDeclaration>;
+  isInterfaceExtends<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.InterfaceExtends>;
+  isInterfaceTypeAnnotation<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.InterfaceTypeAnnotation>;
+  isInterpreterDirective<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.InterpreterDirective>;
+  isIntersectionTypeAnnotation<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.IntersectionTypeAnnotation>;
+  isJSX<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.JSX>;
+  isJSXAttribute<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.JSXAttribute>;
+  isJSXClosingElement<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.JSXClosingElement>;
+  isJSXClosingFragment<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.JSXClosingFragment>;
+  isJSXElement<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.JSXElement>;
+  isJSXEmptyExpression<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.JSXEmptyExpression>;
+  isJSXExpressionContainer<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.JSXExpressionContainer>;
+  isJSXFragment<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.JSXFragment>;
+  isJSXIdentifier<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.JSXIdentifier>;
+  isJSXMemberExpression<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.JSXMemberExpression>;
+  isJSXNamespacedName<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.JSXNamespacedName>;
+  isJSXOpeningElement<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.JSXOpeningElement>;
+  isJSXOpeningFragment<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.JSXOpeningFragment>;
+  isJSXSpreadAttribute<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.JSXSpreadAttribute>;
+  isJSXSpreadChild<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.JSXSpreadChild>;
+  isJSXText<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.JSXText>;
+  isLVal<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.LVal>;
+  isLabeledStatement<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.LabeledStatement>;
+  isLiteral<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.Literal>;
+  isLogicalExpression<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.LogicalExpression>;
+  isLoop<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.Loop>;
+  isMemberExpression<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.MemberExpression>;
+  isMetaProperty<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.MetaProperty>;
+  isMethod<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.Method>;
+  isMiscellaneous<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.Miscellaneous>;
+  isMixedTypeAnnotation<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.MixedTypeAnnotation>;
+  isModuleDeclaration<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ModuleDeclaration>;
+  isModuleExpression<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ModuleExpression>;
+  isModuleSpecifier<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ModuleSpecifier>;
+  isNewExpression<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.NewExpression>;
+  isNoop<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.Noop>;
+  isNullLiteral<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.NullLiteral>;
+  isNullLiteralTypeAnnotation<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.NullLiteralTypeAnnotation>;
+  isNullableTypeAnnotation<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.NullableTypeAnnotation>;
+  isNumberLiteral<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.NumberLiteral>;
+  isNumberLiteralTypeAnnotation<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.NumberLiteralTypeAnnotation>;
+  isNumberTypeAnnotation<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.NumberTypeAnnotation>;
+  isNumericLiteral<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.NumericLiteral>;
+  isObjectExpression<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ObjectExpression>;
+  isObjectMember<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ObjectMember>;
+  isObjectMethod<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ObjectMethod>;
+  isObjectPattern<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ObjectPattern>;
+  isObjectProperty<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ObjectProperty>;
+  isObjectTypeAnnotation<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ObjectTypeAnnotation>;
+  isObjectTypeCallProperty<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ObjectTypeCallProperty>;
+  isObjectTypeIndexer<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ObjectTypeIndexer>;
+  isObjectTypeInternalSlot<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ObjectTypeInternalSlot>;
+  isObjectTypeProperty<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ObjectTypeProperty>;
+  isObjectTypeSpreadProperty<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ObjectTypeSpreadProperty>;
+  isOpaqueType<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.OpaqueType>;
+  isOptionalCallExpression<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.OptionalCallExpression>;
+  isOptionalIndexedAccessType<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.OptionalIndexedAccessType>;
+  isOptionalMemberExpression<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.OptionalMemberExpression>;
+  isParenthesizedExpression<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ParenthesizedExpression>;
+  isPattern<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.Pattern>;
+  isPatternLike<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.PatternLike>;
+  isPipelineBareFunction<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.PipelineBareFunction>;
+  isPipelinePrimaryTopicReference<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.PipelinePrimaryTopicReference>;
+  isPipelineTopicExpression<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.PipelineTopicExpression>;
+  isPlaceholder<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.Placeholder>;
+  isPrivate<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.Private>;
+  isPrivateName<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.PrivateName>;
+  isProgram<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.Program>;
+  isProperty<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.Property>;
+  isPureish<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.Pureish>;
+  isQualifiedTypeIdentifier<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.QualifiedTypeIdentifier>;
+  isRecordExpression<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.RecordExpression>;
+  isRegExpLiteral<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.RegExpLiteral>;
+  isRegexLiteral<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.RegexLiteral>;
+  isRestElement<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.RestElement>;
+  isRestProperty<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.RestProperty>;
+  isReturnStatement<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ReturnStatement>;
+  isScopable<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.Scopable>;
+  isSequenceExpression<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.SequenceExpression>;
+  isSpreadElement<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.SpreadElement>;
+  isSpreadProperty<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.SpreadProperty>;
+  isStandardized<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.Standardized>;
+  isStatement<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.Statement>;
+  isStaticBlock<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.StaticBlock>;
+  isStringLiteral<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.StringLiteral>;
+  isStringLiteralTypeAnnotation<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.StringLiteralTypeAnnotation>;
+  isStringTypeAnnotation<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.StringTypeAnnotation>;
+  isSuper<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.Super>;
+  isSwitchCase<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.SwitchCase>;
+  isSwitchStatement<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.SwitchStatement>;
+  isSymbolTypeAnnotation<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.SymbolTypeAnnotation>;
+  isTSAnyKeyword<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSAnyKeyword>;
+  isTSArrayType<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSArrayType>;
+  isTSAsExpression<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSAsExpression>;
+  isTSBaseType<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSBaseType>;
+  isTSBigIntKeyword<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSBigIntKeyword>;
+  isTSBooleanKeyword<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSBooleanKeyword>;
+  isTSCallSignatureDeclaration<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSCallSignatureDeclaration>;
+  isTSConditionalType<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSConditionalType>;
+  isTSConstructSignatureDeclaration<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSConstructSignatureDeclaration>;
+  isTSConstructorType<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSConstructorType>;
+  isTSDeclareFunction<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSDeclareFunction>;
+  isTSDeclareMethod<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSDeclareMethod>;
+  isTSEntityName<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSEntityName>;
+  isTSEnumDeclaration<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSEnumDeclaration>;
+  isTSEnumMember<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSEnumMember>;
+  isTSExportAssignment<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSExportAssignment>;
+  isTSExpressionWithTypeArguments<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSExpressionWithTypeArguments>;
+  isTSExternalModuleReference<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSExternalModuleReference>;
+  isTSFunctionType<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSFunctionType>;
+  isTSImportEqualsDeclaration<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSImportEqualsDeclaration>;
+  isTSImportType<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSImportType>;
+  isTSIndexSignature<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSIndexSignature>;
+  isTSIndexedAccessType<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSIndexedAccessType>;
+  isTSInferType<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSInferType>;
+  isTSInstantiationExpression<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSInstantiationExpression>;
+  isTSInterfaceBody<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSInterfaceBody>;
+  isTSInterfaceDeclaration<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSInterfaceDeclaration>;
+  isTSIntersectionType<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSIntersectionType>;
+  isTSIntrinsicKeyword<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSIntrinsicKeyword>;
+  isTSLiteralType<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSLiteralType>;
+  isTSMappedType<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSMappedType>;
+  isTSMethodSignature<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSMethodSignature>;
+  isTSModuleBlock<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSModuleBlock>;
+  isTSModuleDeclaration<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSModuleDeclaration>;
+  isTSNamedTupleMember<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSNamedTupleMember>;
+  isTSNamespaceExportDeclaration<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSNamespaceExportDeclaration>;
+  isTSNeverKeyword<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSNeverKeyword>;
+  isTSNonNullExpression<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSNonNullExpression>;
+  isTSNullKeyword<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSNullKeyword>;
+  isTSNumberKeyword<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSNumberKeyword>;
+  isTSObjectKeyword<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSObjectKeyword>;
+  isTSOptionalType<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSOptionalType>;
+  isTSParameterProperty<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSParameterProperty>;
+  isTSParenthesizedType<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSParenthesizedType>;
+  isTSPropertySignature<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSPropertySignature>;
+  isTSQualifiedName<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSQualifiedName>;
+  isTSRestType<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSRestType>;
+  isTSStringKeyword<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSStringKeyword>;
+  isTSSymbolKeyword<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSSymbolKeyword>;
+  isTSThisType<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSThisType>;
+  isTSTupleType<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSTupleType>;
+  isTSType<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSType>;
+  isTSTypeAliasDeclaration<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSTypeAliasDeclaration>;
+  isTSTypeAnnotation<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSTypeAnnotation>;
+  isTSTypeAssertion<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSTypeAssertion>;
+  isTSTypeElement<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSTypeElement>;
+  isTSTypeLiteral<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSTypeLiteral>;
+  isTSTypeOperator<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSTypeOperator>;
+  isTSTypeParameter<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSTypeParameter>;
+  isTSTypeParameterDeclaration<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSTypeParameterDeclaration>;
+  isTSTypeParameterInstantiation<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSTypeParameterInstantiation>;
+  isTSTypePredicate<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSTypePredicate>;
+  isTSTypeQuery<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSTypeQuery>;
+  isTSTypeReference<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSTypeReference>;
+  isTSUndefinedKeyword<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSUndefinedKeyword>;
+  isTSUnionType<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSUnionType>;
+  isTSUnknownKeyword<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSUnknownKeyword>;
+  isTSVoidKeyword<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSVoidKeyword>;
+  isTaggedTemplateExpression<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TaggedTemplateExpression>;
+  isTemplateElement<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TemplateElement>;
+  isTemplateLiteral<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TemplateLiteral>;
+  isTerminatorless<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.Terminatorless>;
+  isThisExpression<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ThisExpression>;
+  isThisTypeAnnotation<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ThisTypeAnnotation>;
+  isThrowStatement<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ThrowStatement>;
+  isTopicReference<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TopicReference>;
+  isTryStatement<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TryStatement>;
+  isTupleExpression<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TupleExpression>;
+  isTupleTypeAnnotation<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TupleTypeAnnotation>;
+  isTypeAlias<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TypeAlias>;
+  isTypeAnnotation<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TypeAnnotation>;
+  isTypeCastExpression<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TypeCastExpression>;
+  isTypeParameter<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TypeParameter>;
+  isTypeParameterDeclaration<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TypeParameterDeclaration>;
+  isTypeParameterInstantiation<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TypeParameterInstantiation>;
+  isTypeScript<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TypeScript>;
+  isTypeofTypeAnnotation<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TypeofTypeAnnotation>;
+  isUnaryExpression<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.UnaryExpression>;
+  isUnaryLike<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.UnaryLike>;
+  isUnionTypeAnnotation<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.UnionTypeAnnotation>;
+  isUpdateExpression<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.UpdateExpression>;
+  isUserWhitespacable<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.UserWhitespacable>;
+  isV8IntrinsicIdentifier<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.V8IntrinsicIdentifier>;
+  isVariableDeclaration<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.VariableDeclaration>;
+  isVariableDeclarator<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.VariableDeclarator>;
+  isVariance<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.Variance>;
+  isVoidTypeAnnotation<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.VoidTypeAnnotation>;
+  isWhile<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.While>;
+  isWhileStatement<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.WhileStatement>;
+  isWithStatement<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.WithStatement>;
+  isYieldExpression<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.YieldExpression>;
+  isBindingIdentifier<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & VirtualTypeAliases["BindingIdentifier"]>;
   isBlockScoped(opts?: object): boolean;
-  isExistentialTypeParam(
+  isExistentialTypeParam<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<VirtualTypeAliases["ExistentialTypeParam"]>;
-  isExpression(opts?: object): this is NodePath<t.Expression>;
-  isFlow(opts?: object): this is NodePath<t.Flow>;
-  isForAwaitStatement(
+  ): this is NodePath<T & VirtualTypeAliases["ExistentialTypeParam"]>;
+  isExpression<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<VirtualTypeAliases["ForAwaitStatement"]>;
+  ): this is NodePath<T & t.Expression>;
+  isFlow<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.Flow>;
+  isForAwaitStatement<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & VirtualTypeAliases["ForAwaitStatement"]>;
   isGenerated(opts?: object): boolean;
-  isNumericLiteralTypeAnnotation(
+  isNumericLiteralTypeAnnotation<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<VirtualTypeAliases["NumericLiteralTypeAnnotation"]>;
+  ): this is NodePath<T & VirtualTypeAliases["NumericLiteralTypeAnnotation"]>;
   isPure(constantsOnly?: boolean): boolean;
   isReferenced(opts?: object): boolean;
-  isReferencedIdentifier(
+  isReferencedIdentifier<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<VirtualTypeAliases["ReferencedIdentifier"]>;
-  isReferencedMemberExpression(
+  ): this is NodePath<T & VirtualTypeAliases["ReferencedIdentifier"]>;
+  isReferencedMemberExpression<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<VirtualTypeAliases["ReferencedMemberExpression"]>;
-  isRestProperty(
+  ): this is NodePath<T & VirtualTypeAliases["ReferencedMemberExpression"]>;
+  isRestProperty<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<VirtualTypeAliases["RestProperty"]>;
-  isScope(opts?: object): this is NodePath<VirtualTypeAliases["Scope"]>;
-  isSpreadProperty(
+  ): this is NodePath<T & VirtualTypeAliases["RestProperty"]>;
+  isScope<T extends t.Node>(
+    this: NodePath<T>,
     opts?: object,
-  ): this is NodePath<VirtualTypeAliases["SpreadProperty"]>;
-  isStatement(opts?: object): this is NodePath<t.Statement>;
+  ): this is NodePath<T & VirtualTypeAliases["Scope"]>;
+  isSpreadProperty<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & VirtualTypeAliases["SpreadProperty"]>;
+  isStatement<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.Statement>;
   isUser(opts?: object): boolean;
-  isVar(opts?: object): this is NodePath<VirtualTypeAliases["Var"]>;
+  isVar<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & VirtualTypeAliases["Var"]>;
 }

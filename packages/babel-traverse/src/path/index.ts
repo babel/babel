@@ -32,7 +32,7 @@ export const SHOULD_STOP = 1 << 1;
 export const SHOULD_SKIP = 1 << 2;
 
 class NodePath<T extends t.Node = t.Node> {
-  constructor(hub: HubInterface, parent: t.Node) {
+  constructor(hub: HubInterface, parent: t.ParentMaps[T["type"]]) {
     this.parent = parent;
     this.hub = hub;
     this.data = null;
@@ -41,7 +41,7 @@ class NodePath<T extends t.Node = t.Node> {
     this.scope = null;
   }
 
-  declare parent: t.Node;
+  declare parent: t.ParentMaps[T["type"]];
   declare hub: HubInterface;
   declare data: Record<string | symbol, unknown>;
   // TraversalContext is configured by setContext
@@ -54,7 +54,9 @@ class NodePath<T extends t.Node = t.Node> {
   // this.shouldSkip = false; this.shouldStop = false; this.removed = false;
   _traverseFlags: number = 0;
   skipKeys: any = null;
-  parentPath: NodePath | null = null;
+  parentPath: t.ParentMaps[T["type"]] extends null
+    ? null
+    : NodePath<t.ParentMaps[T["type"]]> | null = null;
   container: t.Node | Array<t.Node> | null = null;
   listKey: string | null = null;
   key: string | number | null = null;
@@ -270,7 +272,7 @@ for (const type of Object.keys(virtualTypes) as (keyof typeof virtualTypes)[]) {
 
   const virtualType = virtualTypes[type];
 
-  NodePath.prototype[`is${type}`] = function (opts) {
+  NodePath.prototype[`is${type}`] = function (opts?: any) {
     // @ts-expect-error checkPath will throw when type is ExistentialTypeParam/NumericLiteralTypeAnnotation
     return virtualType.checkPath(this, opts);
   };

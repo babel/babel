@@ -36,7 +36,7 @@ const awaitVisitor = traverse.visitors.merge<{ wrapAwait: t.Expression }>([
 ]);
 
 export default function (
-  path: NodePath<any>,
+  path: NodePath<t.Function>,
   helpers: {
     wrapAsync: t.Expression;
     wrapAwait?: t.Expression;

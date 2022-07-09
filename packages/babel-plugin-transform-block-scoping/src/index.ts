@@ -113,7 +113,9 @@ export default declare((api, opts: Options) => {
   };
 });
 
-function ignoreBlock(path: NodePath) {
+function ignoreBlock(
+  path: NodePath<t.BlockStatement | t.SwitchStatement | t.Program>,
+) {
   return t.isLoop(path.parent) || t.isCatchClause(path.parent);
 }
 

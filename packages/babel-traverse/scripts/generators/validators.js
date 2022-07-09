@@ -14,7 +14,7 @@ export interface NodePathValidators {
 `;
 
   for (const type of [...t.TYPES].sort()) {
-    output += `is${type}(opts?: object): this is NodePath<t.${type}>;`;
+    output += `is${type}<T extends t.Node>(this: NodePath<T>, opts?: object): this is NodePath<T & t.${type}>;`;
   }
 
   for (const type of Object.keys(virtualTypes)) {
@@ -24,9 +24,9 @@ export interface NodePathValidators {
     const { types } = virtualTypes[type];
     if (type[0] === "_") continue;
     if (t.NODE_FIELDS[type] || t.FLIPPED_ALIAS_KEYS[type]) {
-      output += `is${type}(opts?: object): this is NodePath<t.${type}>;`;
+      output += `is${type}<T extends t.Node>(this: NodePath<T>, opts?: object): this is NodePath<T & t.${type}>;`;
     } else if (types /* in VirtualTypeAliases */) {
-      output += `is${type}(opts?: object): this is NodePath<VirtualTypeAliases["${type}"]>;`;
+      output += `is${type}<T extends t.Node>(this: NodePath<T>, opts?: object): this is NodePath<T & VirtualTypeAliases["${type}"]>;`;
     } else if (type === "Pure") {
       output += `isPure(constantsOnly?: boolean): boolean;`;
     } else {

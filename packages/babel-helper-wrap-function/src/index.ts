@@ -40,7 +40,7 @@ const buildDeclarationWrapper = template.statements(`
 
 function classOrObjectMethod(
   path: NodePath<t.ClassMethod | t.ClassPrivateMethod | t.ObjectMethod>,
-  callId: any,
+  callId: t.Expression,
 ) {
   const node = path.node;
   const body = node.body;
@@ -67,13 +67,14 @@ function classOrObjectMethod(
 }
 
 function plainFunction(
-  path: NodePath<any>,
-  callId: any,
+  path: NodePath<Exclude<t.Function, t.Method>>,
+  callId: t.Expression,
   noNewArrows: boolean,
   ignoreFunctionLength: boolean,
 ) {
   const node = path.node;
   const isDeclaration = path.isFunctionDeclaration();
+  // @ts-expect-error id is not in ArrowFunctionExpression
   const functionId = node.id;
   const wrapper = isDeclaration
     ? buildDeclarationWrapper
@@ -84,14 +85,16 @@ function plainFunction(
   if (path.isArrowFunctionExpression()) {
     path.arrowFunctionToExpression({ noNewArrows });
   }
-
+  // @ts-expect-error node is FunctionDeclaration|FunctionExpression
   node.id = null;
 
   if (isDeclaration) {
     node.type = "FunctionExpression";
   }
 
-  const built = callExpression(callId, [node]);
+  const built = callExpression(callId, [
+    node as Exclude<t.Function, t.Method | t.FunctionDeclaration>,
+  ]);
 
   const params: t.Identifier[] = [];
   for (const param of node.params) {
@@ -138,8 +141,8 @@ function plainFunction(
 }
 
 export default function wrapFunction(
-  path: NodePath,
-  callId: any,
+  path: NodePath<t.Function>,
+  callId: t.Expression,
   // TODO(Babel 8): Consider defaulting to false for spec compliancy
   noNewArrows: boolean = true,
   ignoreFunctionLength: boolean = false,
@@ -147,6 +150,11 @@ export default function wrapFunction(
   if (path.isMethod()) {
     classOrObjectMethod(path, callId);
   } else {
-    plainFunction(path, callId, noNewArrows, ignoreFunctionLength);
+    plainFunction(
+      path as NodePath<Exclude<t.Function, t.Method>>,
+      callId,
+      noNewArrows,
+      ignoreFunctionLength,
+    );
   }
 }

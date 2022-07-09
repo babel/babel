@@ -565,7 +565,7 @@ export function assignmentPattern(
   });
 }
 export function arrayPattern(
-  elements: Array<null | t.PatternLike>,
+  elements: Array<null | t.PatternLike | t.LVal>,
 ): t.ArrayPattern {
   return validateNode<t.ArrayPattern>({
     type: "ArrayPattern",
@@ -2268,6 +2268,7 @@ export function tsLiteralType(
     | t.StringLiteral
     | t.BooleanLiteral
     | t.BigIntLiteral
+    | t.TemplateLiteral
     | t.UnaryExpression,
 ): t.TSLiteralType {
   return validateNode<t.TSLiteralType>({
