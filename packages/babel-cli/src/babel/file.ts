@@ -201,6 +201,8 @@ export default async function ({
     if (cliOptions.watch) {
       filenames.forEach(watcher.watch);
 
+      watcher.startWatcher();
+
       watcher.onFilesChange((changes, event, cause) => {
         const actionableChange = changes.some(
           filename =>

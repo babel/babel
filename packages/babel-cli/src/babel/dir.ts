@@ -225,6 +225,8 @@ export default async function ({
       watcher.watch(filenameOrDir);
     });
 
+    watcher.startWatcher();
+
     watcher.onFilesChange(async filenames => {
       processing++;
       if (startTime === null) startTime = process.hrtime();

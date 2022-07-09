@@ -6,6 +6,8 @@ const depToFiles = new Map<string, Set<string>>();
 
 let isWatchMode = false;
 let watcher;
+const watchQueue = new Set<string>();
+let hasStarted = false;
 
 export function enable({ enableGlobbing }: { enableGlobbing: boolean }) {
   isWatchMode = true;
@@ -25,6 +27,19 @@ export function enable({ enableGlobbing }: { enableGlobbing: boolean }) {
   watcher.on("unlink", unwatchFile);
 }
 
+export function startWatcher() {
+  hasStarted = true;
+
+  for (const dep of watchQueue) {
+    watcher.add(dep);
+  }
+  watchQueue.clear();
+
+  watcher.on("ready", () => {
+    console.log("The watcher is ready.");
+  });
+}
+
 export function watch(filename: string): void {
   if (!isWatchMode) {
     throw new Error(
@@ -32,7 +47,11 @@ export function watch(filename: string): void {
     );
   }
 
-  watcher.add(path.resolve(filename));
+  if (!hasStarted) {
+    watchQueue.add(path.resolve(filename));
+  } else {
+    watcher.add(path.resolve(filename));
+  }
 }
 
 /**
@@ -86,7 +105,11 @@ export function updateExternalDependencies(
     if (!depToFiles.has(dep)) {
       depToFiles.set(dep, new Set());
 
-      watcher.add(dep);
+      if (!hasStarted) {
+        watchQueue.add(dep);
+      } else {
+        watcher.add(dep);
+      }
     }
     depToFiles.get(dep).add(absFilename);
   }
@@ -100,7 +123,11 @@ function removeFileDependency(filename: string, dep: string) {
   if (depToFiles.get(dep).size === 0) {
     depToFiles.delete(dep);
 
-    watcher.unwatch(dep);
+    if (!hasStarted) {
+      watchQueue.delete(dep);
+    } else {
+      watcher.unwatch(dep);
+    }
   }
 }
 
