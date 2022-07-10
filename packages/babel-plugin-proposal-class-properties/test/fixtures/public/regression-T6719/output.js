@@ -1,7 +1,7 @@
 function withContext(ComposedComponent) {
-  var _class, _temp;
+  var _class;
 
-  return _temp = _class = /*#__PURE__*/function (_Component) {
+  return _class = /*#__PURE__*/function (_Component) {
     "use strict";
 
     babelHelpers.inherits(WithContext, _Component);
@@ -13,12 +13,12 @@ function withContext(ComposedComponent) {
       return _super.apply(this, arguments);
     }
 
-    return WithContext;
+    return babelHelpers.createClass(WithContext);
   }(Component), babelHelpers.defineProperty(_class, "propTypes", {
     context: PropTypes.shape({
       addCss: PropTypes.func,
       setTitle: PropTypes.func,
       setMeta: PropTypes.func
     })
-  }), _temp;
+  }), _class;
 }

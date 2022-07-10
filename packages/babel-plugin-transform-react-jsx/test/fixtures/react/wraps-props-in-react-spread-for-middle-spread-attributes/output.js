@@ -1,6 +1,6 @@
 /*#__PURE__*/
-React.createElement(Component, babelHelpers.extends({
-  y: 2
-}, x, {
+React.createElement(Component, {
+  y: 2,
+  ...x,
   z: true
-}));
+});

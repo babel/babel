@@ -1,0 +1,12 @@
+{
+  "assumptions": {
+    "objectRestNoSymbols": true
+  },
+  "plugins": [
+    "proposal-destructuring-private",
+    "proposal-class-static-block",
+    "proposal-class-properties",
+    "proposal-private-methods",
+    ["proposal-object-rest-spread", { "useBuiltIns": true }]
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "type": "File",
+  "start":0,"end":69,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":69,"index":69}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":69,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":69,"index":69}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":69,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":69,"index":69}},
+        "specifiers": [
+          {
+            "type": "ExportDefaultSpecifier",
+            "start":7,"end":14,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":14,"index":14}},
+            "exported": {
+              "type": "Identifier",
+              "start":7,"end":14,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":14,"index":14},"identifierName":"fixture"},
+              "name": "fixture"
+            }
+          },
+          {
+            "type": "ExportNamespaceSpecifier",
+            "start":16,"end":23,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":23,"index":23}},
+            "exported": {
+              "type": "Identifier",
+              "start":21,"end":23,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":23,"index":23},"identifierName":"ns"},
+              "name": "ns"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":29,"end":45,"loc":{"start":{"line":1,"column":29,"index":29},"end":{"line":1,"column":45,"index":45}},
+          "extra": {
+            "rawValue": "./fixture.json",
+            "raw": "\"./fixture.json\""
+          },
+          "value": "./fixture.json"
+        },
+        "assertions": [
+          {
+            "type": "ImportAttribute",
+            "start":55,"end":67,"loc":{"start":{"line":1,"column":55,"index":55},"end":{"line":1,"column":67,"index":67}},
+            "key": {
+              "type": "Identifier",
+              "start":55,"end":59,"loc":{"start":{"line":1,"column":55,"index":55},"end":{"line":1,"column":59,"index":59},"identifierName":"type"},
+              "name": "type"
+            },
+            "value": {
+              "type": "StringLiteral",
+              "start":61,"end":67,"loc":{"start":{"line":1,"column":61,"index":61},"end":{"line":1,"column":67,"index":67}},
+              "extra": {
+                "rawValue": "json",
+                "raw": "\"json\""
+              },
+              "value": "json"
+            }
+          }
+        ]
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,3 @@
+{
+  "plugins": [["proposal-decorators", { "version": "2021-12" }]]
+}

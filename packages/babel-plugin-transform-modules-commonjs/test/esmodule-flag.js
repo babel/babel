@@ -1,5 +1,9 @@
-const babel = require("@babel/core");
-const vm = require("vm");
+import * as babel from "@babel/core";
+import vm from "vm";
+import { fileURLToPath } from "url";
+import path from "path";
+
+import transformCommonJS from "../lib/index.js";
 
 test("Re-export doesn't overwrite __esModule flag", function () {
   let code = 'export * from "./dep";';
@@ -13,14 +17,14 @@ test("Re-export doesn't overwrite __esModule flag", function () {
     },
     require: function (id) {
       if (id === "./dep") return depStub;
-      return require(id);
+      throw new Error("Unexpected dependency: " + id);
     },
   };
   context.exports = context.module.exports;
 
-  code = babel.transform(code, {
-    cwd: __dirname,
-    plugins: [[require("../"), { loose: true }]],
+  code = babel.transformSync(code, {
+    cwd: path.dirname(fileURLToPath(import.meta.url)),
+    plugins: [[transformCommonJS, { loose: true }]],
     ast: false,
   }).code;
 

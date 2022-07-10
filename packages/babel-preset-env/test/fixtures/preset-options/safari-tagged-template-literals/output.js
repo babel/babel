@@ -1,13 +1,6 @@
-function _templateObject() {
-  var data = _taggedTemplateLiteral(["Safari 12 borked"]);
+var _ = function _(t) {
+  return t;
+},
+    _t;
 
-  _templateObject = function _templateObject() {
-    return data;
-  };
-
-  return data;
-}
-
-function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
-
-tag(_templateObject());
+tag(_t || (_t = _`Safari 12 borked`));

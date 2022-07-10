@@ -1,6 +1,3 @@
 {
-  "plugins": [
-    ["external-helpers", { "helperVersion": "7.100.0" }],
-    ["transform-for-of", { "loose": true, "allowArrayLike": true }]
-  ]
+  "plugins": [["transform-for-of", { "loose": true, "allowArrayLike": true }]]
 }

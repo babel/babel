@@ -1,0 +1,58 @@
+{
+  "type": "File",
+  "start":0,"end":40,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":25,"index":40}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":40,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":25,"index":40}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":14,"index":14}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":13,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":13,"index":13}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":8,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":8,"index":8},"identifierName":"as"},
+              "name": "as"
+            },
+            "init": {
+              "type": "ObjectExpression",
+              "start":11,"end":13,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":13,"index":13}},
+              "properties": []
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":15,"end":40,"loc":{"start":{"line":2,"column":0,"index":15},"end":{"line":2,"column":25,"index":40}},
+        "exportKind": "value",
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":24,"end":37,"loc":{"start":{"line":2,"column":9,"index":24},"end":{"line":2,"column":22,"index":37}},
+            "local": {
+              "type": "Identifier",
+              "start":29,"end":31,"loc":{"start":{"line":2,"column":14,"index":29},"end":{"line":2,"column":16,"index":31},"identifierName":"as"},
+              "name": "as"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":35,"end":37,"loc":{"start":{"line":2,"column":20,"index":35},"end":{"line":2,"column":22,"index":37},"identifierName":"if"},
+              "name": "if"
+            },
+            "exportKind": "type"
+          }
+        ],
+        "source": null,
+        "declaration": null
+      }
+    ],
+    "directives": []
+  }
+}

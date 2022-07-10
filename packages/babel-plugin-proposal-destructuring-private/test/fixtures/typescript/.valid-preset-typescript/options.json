@@ -1,0 +1,4 @@
+{
+  "plugins": ["proposal-destructuring-private"],
+  "presets": ["typescript"]
+}

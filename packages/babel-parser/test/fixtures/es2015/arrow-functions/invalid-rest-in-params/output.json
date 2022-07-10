@@ -1,0 +1,55 @@
+{
+  "type": "File",
+  "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":8,"index":46}},
+  "errors": [
+    "SyntaxError: Rest element must be last element. (3:13)",
+    "SyntaxError: Unexpected trailing comma after rest element. (3:4)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":8,"index":46}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":8,"index":46}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":0,"end":45,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":7,"index":45}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "Identifier",
+              "start":6,"end":11,"loc":{"start":{"line":2,"column":4,"index":6},"end":{"line":2,"column":9,"index":11},"identifierName":"first"},
+              "name": "first"
+            },
+            {
+              "type": "RestElement",
+              "start":17,"end":26,"loc":{"start":{"line":3,"column":4,"index":17},"end":{"line":3,"column":13,"index":26}},
+              "argument": {
+                "type": "Identifier",
+                "start":20,"end":26,"loc":{"start":{"line":3,"column":7,"index":20},"end":{"line":3,"column":13,"index":26},"identifierName":"second"},
+                "name": "second"
+              }
+            },
+            {
+              "type": "Identifier",
+              "start":32,"end":37,"loc":{"start":{"line":4,"column":4,"index":32},"end":{"line":4,"column":9,"index":37},"identifierName":"third"},
+              "name": "third"
+            }
+          ],
+          "body": {
+            "type": "BlockStatement",
+            "start":43,"end":45,"loc":{"start":{"line":5,"column":5,"index":43},"end":{"line":5,"column":7,"index":45}},
+            "body": [],
+            "directives": []
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

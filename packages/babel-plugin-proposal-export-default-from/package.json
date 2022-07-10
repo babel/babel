@@ -1,29 +1,53 @@
 {
   "name": "@babel/plugin-proposal-export-default-from",
-  "version": "7.10.1",
+  "version": "7.18.6",
   "description": "Compile export default to ES2015",
   "repository": {
     "type": "git",
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-plugin-proposal-export-default-from"
   },
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-export-default-from",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "keywords": [
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "^7.10.1",
-    "@babel/plugin-syntax-export-default-from": "^7.10.1"
+    "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/plugin-syntax-export-default-from": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.1",
-    "@babel/helper-plugin-test-runner": "^7.10.1"
-  }
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^"
+  },
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)",
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      null,
+      {
+        "exports": null
+      }
+    ],
+    "USE_ESM": [
+      {
+        "type": "module"
+      },
+      null
+    ]
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
+  "type": "commonjs"
 }

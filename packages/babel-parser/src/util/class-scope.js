@@ -5,7 +5,9 @@ import {
   CLASS_ELEMENT_FLAG_STATIC,
   type ClassElementTypes,
 } from "./scopeflags";
-import { Errors } from "../parser/error";
+import { Position } from "./location";
+import { Errors } from "../parse-error";
+import Tokenizer from "../tokenizer";
 
 export class ClassScope {
   // A list of private named declared in the current class
@@ -16,18 +18,16 @@ export class ClassScope {
 
   // A list of private names used before being defined, mapping to
   // their position.
-  undefinedPrivateNames: Map<string, number> = new Map();
+  undefinedPrivateNames: Map<string, Position> = new Map();
 }
 
-type raiseFunction = (number, string, ...any) => void;
-
 export default class ClassScopeHandler {
+  parser: Tokenizer;
   stack: Array<ClassScope> = [];
-  raise: raiseFunction;
-  undefinedPrivateNames: Map<string, number> = new Map();
+  undefinedPrivateNames: Map<string, Position> = new Map();
 
-  constructor(raise: raiseFunction) {
-    this.raise = raise;
+  constructor(parser: Tokenizer) {
+    this.parser = parser;
   }
 
   current(): ClassScope {
@@ -47,13 +47,16 @@ export default class ClassScopeHandler {
     const current = this.current();
 
     // Array.from is needed because this is compiled to an array-like for loop
-    for (const [name, pos] of Array.from(oldClassScope.undefinedPrivateNames)) {
+    for (const [name, loc] of Array.from(oldClassScope.undefinedPrivateNames)) {
       if (current) {
         if (!current.undefinedPrivateNames.has(name)) {
-          current.undefinedPrivateNames.set(name, pos);
+          current.undefinedPrivateNames.set(name, loc);
         }
       } else {
-        this.raise(pos, Errors.InvalidPrivateFieldResolution, name);
+        this.parser.raise(Errors.InvalidPrivateFieldResolution, {
+          at: loc,
+          identifierName: name,
+        });
       }
     }
   }
@@ -61,13 +64,14 @@ export default class ClassScopeHandler {
   declarePrivateName(
     name: string,
     elementType: ClassElementTypes,
-    pos: number,
+    loc: Position,
   ) {
-    const classScope = this.current();
-    let redefined = classScope.privateNames.has(name);
+    const { privateNames, loneAccessors, undefinedPrivateNames } =
+      this.current();
+    let redefined = privateNames.has(name);
 
     if (elementType & CLASS_ELEMENT_KIND_ACCESSOR) {
-      const accessor = redefined && classScope.loneAccessors.get(name);
+      const accessor = redefined && loneAccessors.get(name);
       if (accessor) {
         const oldStatic = accessor & CLASS_ELEMENT_FLAG_STATIC;
         const newStatic = elementType & CLASS_ELEMENT_FLAG_STATIC;
@@ -80,31 +84,37 @@ export default class ClassScopeHandler {
         // they have the same placement (static or not).
         redefined = oldKind === newKind || oldStatic !== newStatic;
 
-        if (!redefined) classScope.loneAccessors.delete(name);
+        if (!redefined) loneAccessors.delete(name);
       } else if (!redefined) {
-        classScope.loneAccessors.set(name, elementType);
+        loneAccessors.set(name, elementType);
       }
     }
 
     if (redefined) {
-      this.raise(pos, Errors.PrivateNameRedeclaration, name);
+      this.parser.raise(Errors.PrivateNameRedeclaration, {
+        at: loc,
+        identifierName: name,
+      });
     }
 
-    classScope.privateNames.add(name);
-    classScope.undefinedPrivateNames.delete(name);
+    privateNames.add(name);
+    undefinedPrivateNames.delete(name);
   }
 
-  usePrivateName(name: string, pos: number) {
+  usePrivateName(name: string, loc: Position) {
     let classScope;
     for (classScope of this.stack) {
       if (classScope.privateNames.has(name)) return;
     }
 
     if (classScope) {
-      classScope.undefinedPrivateNames.set(name, pos);
+      classScope.undefinedPrivateNames.set(name, loc);
     } else {
       // top-level
-      this.raise(pos, Errors.InvalidPrivateFieldResolution, name);
+      this.parser.raise(Errors.InvalidPrivateFieldResolution, {
+        at: loc,
+        identifierName: name,
+      });
     }
   }
 }

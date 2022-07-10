@@ -1,0 +1,89 @@
+{
+  "type": "File",
+  "start":0,"end":43,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":43}},
+  "errors": [
+    "SyntaxError: Duplicate private name #x. (3:6)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":43,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":43}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":43,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":43}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":43,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":4,"column":1,"index":43}},
+          "body": [
+            {
+              "type": "ClassPrivateMethod",
+              "start":12,"end":26,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":2,"column":16,"index":26}},
+              "static": true,
+              "key": {
+                "type": "PrivateName",
+                "start":19,"end":21,"loc":{"start":{"line":2,"column":9,"index":19},"end":{"line":2,"column":11,"index":21}},
+                "id": {
+                  "type": "Identifier",
+                  "start":20,"end":21,"loc":{"start":{"line":2,"column":10,"index":20},"end":{"line":2,"column":11,"index":21},"identifierName":"x"},
+                  "name": "x"
+                }
+              },
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":24,"end":26,"loc":{"start":{"line":2,"column":14,"index":24},"end":{"line":2,"column":16,"index":26}},
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "ClassPrivateMethod",
+              "start":29,"end":41,"loc":{"start":{"line":3,"column":2,"index":29},"end":{"line":3,"column":14,"index":41}},
+              "static": false,
+              "key": {
+                "type": "PrivateName",
+                "start":33,"end":35,"loc":{"start":{"line":3,"column":6,"index":33},"end":{"line":3,"column":8,"index":35}},
+                "id": {
+                  "type": "Identifier",
+                  "start":34,"end":35,"loc":{"start":{"line":3,"column":7,"index":34},"end":{"line":3,"column":8,"index":35},"identifierName":"x"},
+                  "name": "x"
+                }
+              },
+              "computed": false,
+              "kind": "set",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start":36,"end":37,"loc":{"start":{"line":3,"column":9,"index":36},"end":{"line":3,"column":10,"index":37},"identifierName":"_"},
+                  "name": "_"
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start":39,"end":41,"loc":{"start":{"line":3,"column":12,"index":39},"end":{"line":3,"column":14,"index":41}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

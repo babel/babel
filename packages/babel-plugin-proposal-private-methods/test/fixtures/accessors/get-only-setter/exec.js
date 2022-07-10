@@ -6,7 +6,7 @@ class Cl {
   }
 
   constructor() {
-    expect(this.#privateFieldValue).toBeUndefined();
+    expect(() => this.#privateFieldValue).toThrow(TypeError);
   }
 }
 

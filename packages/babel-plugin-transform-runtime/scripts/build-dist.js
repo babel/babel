@@ -1,17 +1,25 @@
-"use strict";
+import path from "path";
+import fs from "fs";
+import { createRequire } from "module";
+import * as helpers from "@babel/helpers";
+import { transformFromAstSync, File } from "@babel/core";
+import template from "@babel/template";
+import * as t from "@babel/types";
+import { fileURLToPath } from "url";
 
-const path = require("path");
-const outputFile = require("output-file-sync");
-const helpers = require("@babel/helpers");
-const babel = require("@babel/core");
-const template = require("@babel/template");
-const t = require("@babel/types");
+import transformRuntime from "../lib/index.js";
+import corejs2Definitions from "./runtime-corejs2-definitions.js";
+import corejs3Definitions from "./runtime-corejs3-definitions.js";
 
-const transformRuntime = require("../");
+import presetEnv from "@babel/preset-env";
 
+const require = createRequire(import.meta.url);
 const runtimeVersion = require("@babel/runtime/package.json").version;
-const corejs2Definitions = require("../lib/runtime-corejs2-definitions").default();
-const corejs3Definitions = require("../lib/runtime-corejs3-definitions").default();
+
+function outputFile(filePath, data) {
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  fs.writeFileSync(filePath, data);
+}
 
 writeHelpers("@babel/runtime");
 writeHelpers("@babel/runtime-corejs2", { corejs: 2 });
@@ -84,37 +92,114 @@ function writeCoreJS({
       `module.exports = require("${corejsRoot}/${corejsPath}");`
     );
   });
+
+  writeCorejsExports(pkgDirname, runtimeRoot, paths);
+}
+
+function writeCorejsExports(pkgDirname, runtimeRoot, paths) {
+  const pkgJsonPath = require.resolve(`${pkgDirname}/package.json`);
+  const pkgJson = require(pkgJsonPath);
+  const exports = pkgJson.exports;
+  // Export `./core-js/` so `import "@babel/runtime-corejs3/core-js/some-feature.js"` works
+  exports[`./${runtimeRoot}/`] = `./${runtimeRoot}/`;
+  for (const corejsPath of paths) {
+    // Export `./core-js/some-feature` so `import "@babel/runtime-corejs3/core-js/some-feature"` also works
+    const corejsExportPath = `./${runtimeRoot}/${corejsPath}`;
+    exports[corejsExportPath] = corejsExportPath + ".js";
+  }
+  pkgJson.exports = exports;
+  outputFile(pkgJsonPath, JSON.stringify(pkgJson, undefined, 2) + "\n");
+}
+
+function writeHelperFile(
+  runtimeName,
+  pkgDirname,
+  helperPath,
+  helperName,
+  { esm, corejs }
+) {
+  const fileName = `${helperName}.js`;
+  const filePath = esm
+    ? path.join("helpers", "esm", fileName)
+    : path.join("helpers", fileName);
+  const fullPath = path.join(pkgDirname, filePath);
+
+  outputFile(
+    fullPath,
+    buildHelper(runtimeName, pkgDirname, fullPath, helperName, { esm, corejs })
+  );
+
+  return esm ? `./helpers/esm/${fileName}` : `./helpers/${fileName}`;
 }
 
 function writeHelpers(runtimeName, { corejs } = {}) {
-  writeHelperFiles(runtimeName, { corejs, esm: false });
-  writeHelperFiles(runtimeName, { corejs, esm: true });
+  const pkgDirname = getRuntimeRoot(runtimeName);
+  const helperSubExports = {};
+  for (const helperName of helpers.list) {
+    const helperPath = path.join("helpers", helperName);
+    const cjs = writeHelperFile(
+      runtimeName,
+      pkgDirname,
+      helperPath,
+      helperName,
+      { esm: false, corejs }
+    );
+    const esm = writeHelperFile(
+      runtimeName,
+      pkgDirname,
+      helperPath,
+      helperName,
+      { esm: true, corejs }
+    );
+
+    // Node.js versions >=13.0.0, <13.7.0 support the `exports` field but
+    // not conditional exports (`require`/`node`/`default`)
+    // We can specify exports with an array of fallbacks:
+    // - Node.js >=13.7.0 and bundlers will successfully load the first
+    //   array entry:
+    //    * Node.js will always load the CJS file
+    //    * Modern tools when using "import" will load the ESM file
+    //    * Everything else (old tools, or require() in tools) will
+    //      load the CJS file
+    // - Node.js 13.2-13.7 will ignore the "node" and "import" conditions,
+    //   will fallback to "default" and load the CJS file
+    // - Node.js <13.2.0 will fail resolving the first array entry, and will
+    //   fallback to the second entry (the CJS file)
+    // In Babel 8 we can simplify this.
+    helperSubExports[`./${path.posix.join("helpers", helperName)}`] = [
+      { node: cjs, import: esm, default: cjs },
+      cjs,
+    ];
+    // For backward compatibility. We can remove this in Babel 8.
+    helperSubExports[`./${path.posix.join("helpers", "esm", helperName)}`] =
+      esm;
+  }
+
+  writeHelperExports(runtimeName, helperSubExports);
 }
 
-function writeHelperFiles(runtimeName, { esm, corejs }) {
+function writeHelperExports(runtimeName, helperSubExports) {
+  const exports = {
+    ...helperSubExports,
+    "./package": "./package.json",
+    "./package.json": "./package.json",
+    "./regenerator": "./regenerator/index.js",
+    "./regenerator/*.js": "./regenerator/*.js",
+    // These patterns are deprecated, but since patterns
+    // containing * are not supported in every Node.js
+    // version we keep them for better compatibility.
+    "./regenerator/": "./regenerator/",
+  };
   const pkgDirname = getRuntimeRoot(runtimeName);
-
-  for (const helperName of helpers.list) {
-    const helperFilename = path.join(
-      pkgDirname,
-      "helpers",
-      esm ? "esm" : "",
-      `${helperName}.js`
-    );
-
-    outputFile(
-      helperFilename,
-      buildHelper(runtimeName, pkgDirname, helperFilename, helperName, {
-        esm,
-        corejs,
-      })
-    );
-  }
+  const pkgJsonPath = require.resolve(`${pkgDirname}/package.json`);
+  const pkgJson = require(pkgJsonPath);
+  pkgJson.exports = exports;
+  outputFile(pkgJsonPath, JSON.stringify(pkgJson, undefined, 2) + "\n");
 }
 
 function getRuntimeRoot(runtimeName) {
   return path.resolve(
-    __dirname,
+    path.dirname(fileURLToPath(import.meta.url)),
     "..",
     "..",
     runtimeName.replace(/^@babel\//, "babel-")
@@ -134,11 +219,11 @@ function buildHelper(
 
   if (!esm) {
     bindings = [];
-    helpers.ensure(helperName, babel.File);
+    helpers.ensure(helperName, File);
     for (const dep of helpers.getDependencies(helperName)) {
       const id = (dependencies[dep] = t.identifier(t.toIdentifier(dep)));
       tree.body.push(template.statement.ast`
-        var ${id} = require("${`./${dep}`}");
+        var ${id} = require("${dep}");
       `);
       bindings.push(id.name);
     }
@@ -152,40 +237,37 @@ function buildHelper(
   );
   tree.body.push(...helper.nodes);
 
-  return babel.transformFromAst(tree, null, {
+  return transformFromAstSync(tree, null, {
     filename: helperFilename,
-    presets: [
-      [
-        "@babel/preset-env",
-        { modules: false, exclude: ["@babel/plugin-transform-typeof-symbol"] },
-      ],
-    ],
+    presets: [[presetEnv, { modules: false }]],
     plugins: [
-      [
-        transformRuntime,
-        { corejs, useESModules: esm, version: runtimeVersion },
-      ],
-      buildRuntimeRewritePlugin(
-        runtimeName,
-        path.relative(path.dirname(helperFilename), pkgDirname),
-        helperName
-      ),
-    ],
-    overrides: [
-      {
-        exclude: /typeof/,
-        plugins: ["@babel/plugin-transform-typeof-symbol"],
-      },
-    ],
+      [transformRuntime, { corejs, version: runtimeVersion }],
+      buildRuntimeRewritePlugin(runtimeName, helperName),
+      esm ? null : addDefaultCJSExport,
+    ].filter(Boolean),
   }).code;
 }
 
-function buildRuntimeRewritePlugin(runtimeName, relativePath, helperName) {
-  function adjustImportPath(node, relativePath) {
-    node.value =
-      helpers.list.indexOf(node.value) !== -1
-        ? `./${node.value}`
-        : node.value.replace(runtimeName + "/", relativePath + "/");
+function buildRuntimeRewritePlugin(runtimeName, helperName) {
+  /**
+   * Rewrite helper imports to load the adequate module format version
+   * @example
+   * adjustImportPath(ast`"setPrototypeOf"`)
+   * // returns ast`"./setPrototypeOf"`
+   * @example
+   * adjustImportPath(ast`"@babel/runtime/helpers/typeof"`)
+   * // returns ast`"./typeof"`
+   * @param {*} node The string literal that contains the import path
+   */
+  function adjustImportPath(node) {
+    const helpersPath = path.posix.join(runtimeName, "helpers");
+    const helper = node.value.startsWith(helpersPath)
+      ? path.basename(node.value)
+      : node.value;
+
+    if (helpers.list.includes(helper)) {
+      node.value = `./${helper}.js`;
+    }
   }
 
   return {
@@ -200,7 +282,7 @@ function buildRuntimeRewritePlugin(runtimeName, relativePath, helperName) {
     },
     visitor: {
       ImportDeclaration(path) {
-        adjustImportPath(path.get("source").node, relativePath);
+        adjustImportPath(path.get("source").node);
       },
       CallExpression(path) {
         if (
@@ -211,9 +293,35 @@ function buildRuntimeRewritePlugin(runtimeName, relativePath, helperName) {
           return;
         }
 
-        // replace any reference to @babel/runtime and other helpers
-        // with a relative path
-        adjustImportPath(path.get("arguments")[0].node, relativePath);
+        // replace reference to internal helpers with @babel/runtime import path
+        adjustImportPath(path.get("arguments")[0].node);
+      },
+    },
+  };
+}
+
+function addDefaultCJSExport({ template }) {
+  const transformed = new WeakSet();
+
+  return {
+    visitor: {
+      AssignmentExpression: {
+        exit(path) {
+          if (path.get("left").matchesPattern("module.exports")) {
+            if (transformed.has(path.node)) return;
+            transformed.add(path.node);
+
+            // Ensure that the completion value is still `module.exports`.
+            // This would be guaranteed by `insertAfter`, but by using `replaceWith`
+            // we can do it by putting `module.exports` last so that we don't need
+            // to inject temporary variables.
+            path.replaceWith(template.expression.ast`
+              ${path.node},
+              module.exports.__esModule = true,
+              module.exports.default = module.exports
+            `);
+          }
+        },
       },
     },
   };

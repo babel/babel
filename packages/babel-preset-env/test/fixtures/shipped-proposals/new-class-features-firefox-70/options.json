@@ -1,0 +1,4 @@
+{
+  "targets": { "firefox": 70 },
+  "presets": [["env", { "shippedProposals": true }]]
+}

@@ -1,6 +1,6 @@
 <!--
 Before making a PR, please read our contributing guidelines
-https://github.com/babel/babel/blob/master/CONTRIBUTING.md
+https://github.com/babel/babel/blob/main/CONTRIBUTING.md
 
 Please note that the Babel Team requires two approvals before merging most PRs.
 

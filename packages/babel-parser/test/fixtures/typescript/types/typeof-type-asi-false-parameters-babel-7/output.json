@@ -1,0 +1,102 @@
+{
+  "type": "File",
+  "start":0,"end":118,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":2,"index":118}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":118,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":2,"index":118}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSInterfaceDeclaration",
+        "start":57,"end":117,"loc":{"start":{"line":3,"column":0,"index":57},"end":{"line":7,"column":1,"index":117}},
+        "id": {
+          "type": "Identifier",
+          "start":67,"end":74,"loc":{"start":{"line":3,"column":10,"index":67},"end":{"line":3,"column":17,"index":74},"identifierName":"Example"},
+          "name": "Example"
+        },
+        "body": {
+          "type": "TSInterfaceBody",
+          "start":75,"end":117,"loc":{"start":{"line":3,"column":18,"index":75},"end":{"line":7,"column":1,"index":117}},
+          "body": [
+            {
+              "type": "TSCallSignatureDeclaration",
+              "start":79,"end":100,"loc":{"start":{"line":4,"column":2,"index":79},"end":{"line":4,"column":23,"index":100}},
+              "parameters": [
+                {
+                  "type": "Identifier",
+                  "start":80,"end":89,"loc":{"start":{"line":4,"column":3,"index":80},"end":{"line":4,"column":12,"index":89},"identifierName":"a"},
+                  "name": "a",
+                  "typeAnnotation": {
+                    "type": "TSTypeAnnotation",
+                    "start":81,"end":89,"loc":{"start":{"line":4,"column":4,"index":81},"end":{"line":4,"column":12,"index":89}},
+                    "typeAnnotation": {
+                      "type": "TSNumberKeyword",
+                      "start":83,"end":89,"loc":{"start":{"line":4,"column":6,"index":83},"end":{"line":4,"column":12,"index":89}}
+                    }
+                  }
+                }
+              ],
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":90,"end":100,"loc":{"start":{"line":4,"column":13,"index":90},"end":{"line":4,"column":23,"index":100}},
+                "typeAnnotation": {
+                  "type": "TSTypeQuery",
+                  "start":92,"end":100,"loc":{"start":{"line":4,"column":15,"index":92},"end":{"line":4,"column":23,"index":100}},
+                  "exprName": {
+                    "type": "Identifier",
+                    "start":99,"end":100,"loc":{"start":{"line":4,"column":22,"index":99},"end":{"line":4,"column":23,"index":100},"identifierName":"a"},
+                    "name": "a"
+                  }
+                }
+              }
+            },
+            {
+              "type": "TSCallSignatureDeclaration",
+              "start":104,"end":115,"loc":{"start":{"line":6,"column":2,"index":104},"end":{"line":6,"column":13,"index":115}},
+              "typeParameters": {
+                "type": "TSTypeParameterDeclaration",
+                "start":104,"end":107,"loc":{"start":{"line":6,"column":2,"index":104},"end":{"line":6,"column":5,"index":107}},
+                "params": [
+                  {
+                    "type": "TSTypeParameter",
+                    "start":105,"end":106,"loc":{"start":{"line":6,"column":3,"index":105},"end":{"line":6,"column":4,"index":106}},
+                    "name": "T"
+                  }
+                ]
+              },
+              "parameters": [],
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":109,"end":115,"loc":{"start":{"line":6,"column":7,"index":109},"end":{"line":6,"column":13,"index":115}},
+                "typeAnnotation": {
+                  "type": "TSVoidKeyword",
+                  "start":111,"end":115,"loc":{"start":{"line":6,"column":9,"index":111},"end":{"line":6,"column":13,"index":115}}
+                }
+              }
+            }
+          ]
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " https://github.com/microsoft/TypeScript/issues/48711",
+            "start":0,"end":55,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":55,"index":55}}
+          }
+        ]
+      },
+      {
+        "type": "EmptyStatement",
+        "start":117,"end":118,"loc":{"start":{"line":7,"column":1,"index":117},"end":{"line":7,"column":2,"index":118}}
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " https://github.com/microsoft/TypeScript/issues/48711",
+      "start":0,"end":55,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":55,"index":55}}
+    }
+  ]
+}

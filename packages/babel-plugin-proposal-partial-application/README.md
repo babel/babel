@@ -2,7 +2,7 @@
 
 > Introduces a new ? token in an argument list which allows for partially applying an argument list to a call expression
 
-See our website [@babel/plugin-proposal-partial-application](https://babeljs.io/docs/en/next/babel-plugin-proposal-partial-application.html) for more information.
+See our website [@babel/plugin-proposal-partial-application](https://babeljs.io/docs/en/babel-plugin-proposal-partial-application) for more information.
 
 ## Install
 

@@ -1,18 +1,18 @@
 {
   "type": "File",
-  "start":0,"end":18,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":2}},
+  "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":2,"index":18}},
   "program": {
     "type": "Program",
-    "start":0,"end":18,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":2}},
+    "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":2,"index":18}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
-        "start":16,"end":18,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":2}},
+        "start":16,"end":18,"loc":{"start":{"line":2,"column":0,"index":16},"end":{"line":2,"column":2,"index":18}},
         "expression": {
           "type": "NumericLiteral",
-          "start":16,"end":18,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":2}},
+          "start":16,"end":18,"loc":{"start":{"line":2,"column":0,"index":16},"end":{"line":2,"column":2,"index":18}},
           "extra": {
             "rawValue": 42,
             "raw": "42"
@@ -23,7 +23,7 @@
           {
             "type": "CommentLine",
             "value": " line comment",
-            "start":0,"end":15,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":15}}
+            "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}}
           }
         ]
       }
@@ -34,7 +34,7 @@
     {
       "type": "CommentLine",
       "value": " line comment",
-      "start":0,"end":15,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":15}}
+      "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}}
     }
   ]
 }

@@ -3,30 +3,55 @@
 /*:: declare var invariant; */
 
 import type { Options } from "../options";
+import {
+  Position,
+  SourceLocation,
+  createPositionWithColumnOffset,
+} from "../util/location";
+import CommentsParser from "../parser/comments";
 import * as N from "../types";
-import type { Position } from "../util/location";
 import * as charCodes from "charcodes";
 import { isIdentifierStart, isIdentifierChar } from "../util/identifier";
-import { types as tt, keywords as keywordTypes, type TokenType } from "./types";
-import { type TokContext, types as ct } from "./context";
-import ParserErrors, { Errors } from "../parser/error";
-import { SourceLocation } from "../util/location";
 import {
-  lineBreak,
+  tokenIsKeyword,
+  tokenLabelName,
+  tt,
+  keywords as keywordTypes,
+  type TokenType,
+} from "./types";
+import { type TokContext } from "./context";
+import {
+  Errors,
+  type ParseError,
+  type ParseErrorConstructor,
+  type RaiseProperties,
+} from "../parse-error";
+import {
   lineBreakG,
   isNewLine,
   isWhitespace,
   skipWhiteSpace,
 } from "../util/whitespace";
 import State from "./state";
+import type { LookaheadState, DeferredStrictError } from "./state";
 
-const VALID_REGEX_FLAGS = new Set(["g", "m", "s", "i", "y", "u"]);
+const VALID_REGEX_FLAGS = new Set([
+  charCodes.lowercaseG,
+  charCodes.lowercaseM,
+  charCodes.lowercaseS,
+  charCodes.lowercaseI,
+  charCodes.lowercaseY,
+  charCodes.lowercaseU,
+  charCodes.lowercaseD,
+  // This is only valid when using the regexpUnicodeSets plugin
+  charCodes.lowercaseV,
+]);
 
 // The following character codes are forbidden from being
 // an immediate sibling of NumericLiteralSeparator _
 
 const forbiddenNumericSeparatorSiblings = {
-  decBinOct: [
+  decBinOct: new Set([
     charCodes.dot,
     charCodes.uppercaseB,
     charCodes.uppercaseE,
@@ -35,58 +60,31 @@ const forbiddenNumericSeparatorSiblings = {
     charCodes.lowercaseB,
     charCodes.lowercaseE,
     charCodes.lowercaseO,
-  ],
-  hex: [
+  ]),
+  hex: new Set([
     charCodes.dot,
     charCodes.uppercaseX,
     charCodes.underscore, // multiple separators are not allowed
     charCodes.lowercaseX,
-  ],
+  ]),
 };
 
-const allowedNumericSeparatorSiblings = {};
-allowedNumericSeparatorSiblings.bin = [
+const isAllowedNumericSeparatorSibling = {
   // 0 - 1
-  charCodes.digit0,
-  charCodes.digit1,
-];
-allowedNumericSeparatorSiblings.oct = [
+  bin: ch => ch === charCodes.digit0 || ch === charCodes.digit1,
+
   // 0 - 7
-  ...allowedNumericSeparatorSiblings.bin,
+  oct: ch => ch >= charCodes.digit0 && ch <= charCodes.digit7,
 
-  charCodes.digit2,
-  charCodes.digit3,
-  charCodes.digit4,
-  charCodes.digit5,
-  charCodes.digit6,
-  charCodes.digit7,
-];
-allowedNumericSeparatorSiblings.dec = [
   // 0 - 9
-  ...allowedNumericSeparatorSiblings.oct,
+  dec: ch => ch >= charCodes.digit0 && ch <= charCodes.digit9,
 
-  charCodes.digit8,
-  charCodes.digit9,
-];
-
-allowedNumericSeparatorSiblings.hex = [
   // 0 - 9, A - F, a - f,
-  ...allowedNumericSeparatorSiblings.dec,
-
-  charCodes.uppercaseA,
-  charCodes.uppercaseB,
-  charCodes.uppercaseC,
-  charCodes.uppercaseD,
-  charCodes.uppercaseE,
-  charCodes.uppercaseF,
-
-  charCodes.lowercaseA,
-  charCodes.lowercaseB,
-  charCodes.lowercaseC,
-  charCodes.lowercaseD,
-  charCodes.lowercaseE,
-  charCodes.lowercaseF,
-];
+  hex: ch =>
+    (ch >= charCodes.digit0 && ch <= charCodes.digit9) ||
+    (ch >= charCodes.uppercaseA && ch <= charCodes.uppercaseF) ||
+    (ch >= charCodes.lowercaseA && ch <= charCodes.lowercaseF),
+};
 
 // Object type used to represent tokens. Note that normally, tokens
 // simply exist as properties on the parser object. This is only
@@ -101,23 +99,16 @@ export class Token {
     this.loc = new SourceLocation(state.startLoc, state.endLoc);
   }
 
-  type: TokenType;
-  value: any;
-  start: number;
-  end: number;
-  loc: SourceLocation;
+  declare type: TokenType;
+  declare value: any;
+  declare start: number;
+  declare end: number;
+  declare loc: SourceLocation;
 }
 
 // ## Tokenizer
 
-export default class Tokenizer extends ParserErrors {
-  // Forward-declarations
-  // parser/util.js
-  /*::
-  +unexpected: (pos?: ?number, messageOrType?: string | TokenType) => empty;
-  +expectPlugin: (name: string, pos?: ?number) => true;
-  */
-
+export default class Tokenizer extends CommentsParser {
   isLookahead: boolean;
 
   // Token store.
@@ -143,14 +134,11 @@ export default class Tokenizer extends ParserErrors {
   // Move to the next token
 
   next(): void {
-    if (!this.isLookahead) {
-      this.checkKeywordEscapes();
-      if (this.options.tokens) {
-        this.pushToken(new Token(this.state));
-      }
+    this.checkKeywordEscapes();
+    if (this.options.tokens) {
+      this.pushToken(new Token(this.state));
     }
 
-    this.state.lastTokEnd = this.state.end;
     this.state.lastTokStart = this.state.start;
     this.state.lastTokEndLoc = this.state.endLoc;
     this.state.lastTokStartLoc = this.state.startLoc;
@@ -168,20 +156,65 @@ export default class Tokenizer extends ParserErrors {
     }
   }
 
-  // TODO
-
+  /**
+   * Whether current token matches given type
+   *
+   * @param {TokenType} type
+   * @returns {boolean}
+   * @memberof Tokenizer
+   */
   match(type: TokenType): boolean {
     return this.state.type === type;
   }
 
-  // TODO
+  /**
+   * Create a LookaheadState from current parser state
+   *
+   * @param {State} state
+   * @returns {LookaheadState}
+   * @memberof Tokenizer
+   */
+  createLookaheadState(state: State): LookaheadState {
+    return {
+      pos: state.pos,
+      value: null,
+      type: state.type,
+      start: state.start,
+      end: state.end,
+      context: [this.curContext()],
+      inType: state.inType,
+      startLoc: state.startLoc,
+      lastTokEndLoc: state.lastTokEndLoc,
+      curLine: state.curLine,
+      lineStart: state.lineStart,
+      curPosition: state.curPosition,
+    };
+  }
 
-  lookahead(): State {
+  /**
+   * lookahead peeks the next token, skipping changes to token context and
+   * comment stack. For performance it returns a limited LookaheadState
+   * instead of full parser state.
+   *
+   * The { column, line } Loc info is not included in lookahead since such usage
+   * is rare. Although it may return other location properties e.g. `curLine` and
+   * `lineStart`, these properties are not listed in the LookaheadState interface
+   * and thus the returned value is _NOT_ reliable.
+   *
+   * The tokenizer should make best efforts to avoid using any parser state
+   * other than those defined in LookaheadState
+   *
+   * @returns {LookaheadState}
+   * @memberof Tokenizer
+   */
+  lookahead(): LookaheadState {
     const old = this.state;
-    this.state = old.clone(true);
+    // For performance we use a simplified tokenizer state structure
+    // $FlowIgnore
+    this.state = this.createLookaheadState(old);
 
     this.isLookahead = true;
-    this.next();
+    this.nextToken();
     this.isLookahead = false;
 
     const curr = this.state;
@@ -195,13 +228,26 @@ export default class Tokenizer extends ParserErrors {
 
   nextTokenStartSince(pos: number): number {
     skipWhiteSpace.lastIndex = pos;
-    const skip = skipWhiteSpace.exec(this.input);
-    // $FlowIgnore: The skipWhiteSpace ensures to match any string
-    return pos + skip[0].length;
+    return skipWhiteSpace.test(this.input) ? skipWhiteSpace.lastIndex : pos;
   }
 
   lookaheadCharCode(): number {
     return this.input.charCodeAt(this.nextTokenStart());
+  }
+
+  codePointAtPos(pos: number): number {
+    // The implementation is based on
+    // https://source.chromium.org/chromium/chromium/src/+/master:v8/src/builtins/builtins-string-gen.cc;l=1455;drc=221e331b49dfefadbc6fa40b0c68e6f97606d0b3;bpv=0;bpt=1
+    // We reimplement `codePointAt` because `codePointAt` is a V8 builtin which is not inlined by TurboFan (as of M91)
+    // since `input` is mostly ASCII, an inlined `charCodeAt` wins here
+    let cp = this.input.charCodeAt(pos);
+    if ((cp & 0xfc00) === 0xd800 && ++pos < this.input.length) {
+      const trail = this.input.charCodeAt(pos);
+      if ((trail & 0xfc00) === 0xdc00) {
+        cp = 0x10000 + ((cp & 0x3ff) << 10) + (trail & 0x3ff);
+      }
+    }
+    return cp;
   }
 
   // Toggle strict mode. Re-reads the next number or string to please
@@ -209,14 +255,16 @@ export default class Tokenizer extends ParserErrors {
 
   setStrict(strict: boolean): void {
     this.state.strict = strict;
-    if (!this.match(tt.num) && !this.match(tt.string)) return;
-    this.state.pos = this.state.start;
-    while (this.state.pos < this.state.lineStart) {
-      this.state.lineStart =
-        this.input.lastIndexOf("\n", this.state.lineStart - 2) + 1;
-      --this.state.curLine;
+    if (strict) {
+      // Throw an error for any string decimal escape found before/immediately
+      // after a "use strict" directive. Strict mode will be set at parse
+      // time for any literals that occur after the next node of the strict
+      // directive.
+      this.state.strictErrors.forEach(([toParseError, at]) =>
+        this.raise(toParseError, { at }),
+      );
+      this.state.strictErrors.clear();
     }
-    this.nextToken();
   }
 
   curContext(): TokContext {
@@ -227,80 +275,58 @@ export default class Tokenizer extends ParserErrors {
   // properties.
 
   nextToken(): void {
-    const curContext = this.curContext();
-    if (!curContext?.preserveSpace) this.skipSpace();
-
-    this.state.octalPositions = [];
+    this.skipSpace();
     this.state.start = this.state.pos;
-    this.state.startLoc = this.state.curPosition();
+    if (!this.isLookahead) this.state.startLoc = this.state.curPosition();
     if (this.state.pos >= this.length) {
       this.finishToken(tt.eof);
       return;
     }
 
-    const override = curContext?.override;
-    if (override) {
-      override(this);
-    } else {
-      this.getTokenFromCode(this.input.codePointAt(this.state.pos));
-    }
+    this.getTokenFromCode(this.codePointAtPos(this.state.pos));
   }
 
-  pushComment(
-    block: boolean,
-    text: string,
-    start: number,
-    end: number,
-    startLoc: Position,
-    endLoc: Position,
-  ): void {
-    const comment = {
-      type: block ? "CommentBlock" : "CommentLine",
-      value: text,
-      start: start,
-      end: end,
-      loc: new SourceLocation(startLoc, endLoc),
-    };
-
-    if (this.options.tokens) this.pushToken(comment);
-    this.state.comments.push(comment);
-    this.addComment(comment);
-  }
-
-  skipBlockComment(): void {
-    const startLoc = this.state.curPosition();
+  skipBlockComment(): N.CommentBlock | void {
+    let startLoc;
+    if (!this.isLookahead) startLoc = this.state.curPosition();
     const start = this.state.pos;
-    const end = this.input.indexOf("*/", this.state.pos + 2);
-    if (end === -1) throw this.raise(start, Errors.UnterminatedComment);
+    const end = this.input.indexOf("*/", start + 2);
+    if (end === -1) {
+      // We have to call this again here because startLoc may not be set...
+      // This seems to be for performance reasons:
+      // https://github.com/babel/babel/commit/acf2a10899f696a8aaf34df78bf9725b5ea7f2da
+      throw this.raise(Errors.UnterminatedComment, {
+        at: this.state.curPosition(),
+      });
+    }
 
     this.state.pos = end + 2;
-    lineBreakG.lastIndex = start;
-    let match;
-    while (
-      (match = lineBreakG.exec(this.input)) &&
-      match.index < this.state.pos
-    ) {
+    lineBreakG.lastIndex = start + 2;
+    while (lineBreakG.test(this.input) && lineBreakG.lastIndex <= end) {
       ++this.state.curLine;
-      this.state.lineStart = match.index + match[0].length;
+      this.state.lineStart = lineBreakG.lastIndex;
     }
 
     // If we are doing a lookahead right now we need to advance the position (above code)
     // but we do not want to push the comment to the state.
     if (this.isLookahead) return;
+    /*:: invariant(startLoc) */
 
-    this.pushComment(
-      true,
-      this.input.slice(start + 2, end),
+    const comment = {
+      type: "CommentBlock",
+      value: this.input.slice(start + 2, end),
       start,
-      this.state.pos,
-      startLoc,
-      this.state.curPosition(),
-    );
+      end: end + 2,
+      loc: new SourceLocation(startLoc, this.state.curPosition()),
+    };
+    if (this.options.tokens) this.pushToken(comment);
+    return comment;
   }
 
-  skipLineComment(startSkip: number): void {
+  skipLineComment(startSkip: number): N.CommentLine | void {
     const start = this.state.pos;
-    const startLoc = this.state.curPosition();
+    let startLoc;
+    if (!this.isLookahead) startLoc = this.state.curPosition();
     let ch = this.input.charCodeAt((this.state.pos += startSkip));
     if (this.state.pos < this.length) {
       while (!isNewLine(ch) && ++this.state.pos < this.length) {
@@ -311,21 +337,28 @@ export default class Tokenizer extends ParserErrors {
     // If we are doing a lookahead right now we need to advance the position (above code)
     // but we do not want to push the comment to the state.
     if (this.isLookahead) return;
+    /*:: invariant(startLoc) */
 
-    this.pushComment(
-      false,
-      this.input.slice(start + startSkip, this.state.pos),
+    const end = this.state.pos;
+    const value = this.input.slice(start + startSkip, end);
+
+    const comment = {
+      type: "CommentLine",
+      value,
       start,
-      this.state.pos,
-      startLoc,
-      this.state.curPosition(),
-    );
+      end,
+      loc: new SourceLocation(startLoc, this.state.curPosition()),
+    };
+    if (this.options.tokens) this.pushToken(comment);
+    return comment;
   }
 
   // Called at the start of the parse and after every token. Skips
   // whitespace and comments, and.
 
   skipSpace(): void {
+    const spaceStart = this.state.pos;
+    const comments = [];
     loop: while (this.state.pos < this.length) {
       const ch = this.input.charCodeAt(this.state.pos);
       switch (ch) {
@@ -351,13 +384,23 @@ export default class Tokenizer extends ParserErrors {
 
         case charCodes.slash:
           switch (this.input.charCodeAt(this.state.pos + 1)) {
-            case charCodes.asterisk:
-              this.skipBlockComment();
+            case charCodes.asterisk: {
+              const comment = this.skipBlockComment();
+              if (comment !== undefined) {
+                this.addComment(comment);
+                if (this.options.attachComment) comments.push(comment);
+              }
               break;
+            }
 
-            case charCodes.slash:
-              this.skipLineComment(2);
+            case charCodes.slash: {
+              const comment = this.skipLineComment(2);
+              if (comment !== undefined) {
+                this.addComment(comment);
+                if (this.options.attachComment) comments.push(comment);
+              }
               break;
+            }
 
             default:
               break loop;
@@ -367,15 +410,60 @@ export default class Tokenizer extends ParserErrors {
         default:
           if (isWhitespace(ch)) {
             ++this.state.pos;
+          } else if (ch === charCodes.dash && !this.inModule) {
+            const pos = this.state.pos;
+            if (
+              this.input.charCodeAt(pos + 1) === charCodes.dash &&
+              this.input.charCodeAt(pos + 2) === charCodes.greaterThan &&
+              (spaceStart === 0 || this.state.lineStart > spaceStart)
+            ) {
+              // A `-->` line comment
+              const comment = this.skipLineComment(3);
+              if (comment !== undefined) {
+                this.addComment(comment);
+                if (this.options.attachComment) comments.push(comment);
+              }
+            } else {
+              break loop;
+            }
+          } else if (ch === charCodes.lessThan && !this.inModule) {
+            const pos = this.state.pos;
+            if (
+              this.input.charCodeAt(pos + 1) === charCodes.exclamationMark &&
+              this.input.charCodeAt(pos + 2) === charCodes.dash &&
+              this.input.charCodeAt(pos + 3) === charCodes.dash
+            ) {
+              // `<!--`, an XML-style comment that should be interpreted as a line comment
+              const comment = this.skipLineComment(4);
+              if (comment !== undefined) {
+                this.addComment(comment);
+                if (this.options.attachComment) comments.push(comment);
+              }
+            } else {
+              break loop;
+            }
           } else {
             break loop;
           }
       }
     }
+
+    if (comments.length > 0) {
+      const end = this.state.pos;
+      const CommentWhitespace = {
+        start: spaceStart,
+        end,
+        comments,
+        leadingNode: null,
+        trailingNode: null,
+        containingNode: null,
+      };
+      this.state.commentStack.push(CommentWhitespace);
+    }
   }
 
   // Called at the end of every token. Sets `end`, `val`, and
-  // maintains `context` and `exprAllowed`, and skips the space after
+  // maintains `context` and `canStartJSXElement`, and skips the space after
   // the token, so that the next one's `start` will point at the
   // right position.
 
@@ -386,7 +474,17 @@ export default class Tokenizer extends ParserErrors {
     this.state.type = type;
     this.state.value = val;
 
-    if (!this.isLookahead) this.updateContext(prevType);
+    if (!this.isLookahead) {
+      this.updateContext(prevType);
+    }
+  }
+
+  replaceToken(type: TokenType): void {
+    this.state.type = type;
+    // the prevType of updateContext is required
+    // only when the new type is tt.slash/tt.jsxTagEnd
+    // $FlowIgnore
+    this.updateContext();
   }
 
   // ### Token reading
@@ -405,9 +503,11 @@ export default class Tokenizer extends ParserErrors {
     }
 
     const nextPos = this.state.pos + 1;
-    const next = this.input.charCodeAt(nextPos);
+    const next = this.codePointAtPos(nextPos);
     if (next >= charCodes.digit0 && next <= charCodes.digit9) {
-      throw this.raise(this.state.pos, Errors.UnexpectedDigitAfterHash);
+      throw this.raise(Errors.UnexpectedDigitAfterHash, {
+        at: this.state.curPosition(),
+      });
     }
 
     if (
@@ -421,13 +521,14 @@ export default class Tokenizer extends ParserErrors {
       this.expectPlugin("recordAndTuple");
       if (this.getPluginOption("recordAndTuple", "syntaxType") !== "hash") {
         throw this.raise(
-          this.state.pos,
           next === charCodes.leftCurlyBrace
             ? Errors.RecordExpressionHashIncorrectStartSyntaxType
             : Errors.TupleExpressionHashIncorrectStartSyntaxType,
+          { at: this.state.curPosition() },
         );
       }
 
+      this.state.pos += 2;
       if (next === charCodes.leftCurlyBrace) {
         // #{
         this.finishToken(tt.braceHashL);
@@ -435,7 +536,12 @@ export default class Tokenizer extends ParserErrors {
         // #[
         this.finishToken(tt.bracketHashL);
       }
-      this.state.pos += 2;
+    } else if (isIdentifierStart(next)) {
+      ++this.state.pos;
+      this.finishToken(tt.privateName, this.readWord1(next));
+    } else if (next === charCodes.backslash) {
+      ++this.state.pos;
+      this.finishToken(tt.privateName, this.readWord1());
     } else {
       this.finishOp(tt.hash, 1);
     }
@@ -461,16 +567,9 @@ export default class Tokenizer extends ParserErrors {
   }
 
   readToken_slash(): void {
-    // '/'
-    if (this.state.exprAllowed && !this.state.inType) {
-      ++this.state.pos;
-      this.readRegexp();
-      return;
-    }
-
     const next = this.input.charCodeAt(this.state.pos + 1);
     if (next === charCodes.equalsTo) {
-      this.finishOp(tt.assign, 2);
+      this.finishOp(tt.slashAssign, 2);
     } else {
       this.finishOp(tt.slash, 1);
     }
@@ -497,22 +596,25 @@ export default class Tokenizer extends ParserErrors {
   }
 
   readToken_mult_modulo(code: number): void {
-    // '%*'
+    // '%' or '*'
     let type = code === charCodes.asterisk ? tt.star : tt.modulo;
     let width = 1;
     let next = this.input.charCodeAt(this.state.pos + 1);
-    const exprAllowed = this.state.exprAllowed;
 
-    // Exponentiation operator **
+    // Exponentiation operator '**'
     if (code === charCodes.asterisk && next === charCodes.asterisk) {
       width++;
       next = this.input.charCodeAt(this.state.pos + 2);
       type = tt.exponent;
     }
 
-    if (next === charCodes.equalsTo && !exprAllowed) {
+    // '%=' or '*='
+    if (next === charCodes.equalsTo && !this.state.inType) {
       width++;
-      type = tt.assign;
+      // `tt.moduloAssign` is only needed to support % as a Hack-pipe topic token.
+      // If the proposal ends up choosing a different token,
+      // it can be merged with tt.assign.
+      type = code === charCodes.percentSign ? tt.moduloAssign : tt.assign;
     }
 
     this.finishOp(type, width);
@@ -546,13 +648,12 @@ export default class Tokenizer extends ParserErrors {
         next === charCodes.rightCurlyBrace
       ) {
         if (this.getPluginOption("recordAndTuple", "syntaxType") !== "bar") {
-          throw this.raise(
-            this.state.pos,
-            Errors.RecordExpressionBarIncorrectEndSyntaxType,
-          );
+          throw this.raise(Errors.RecordExpressionBarIncorrectEndSyntaxType, {
+            at: this.state.curPosition(),
+          });
         }
-
-        this.finishOp(tt.braceBarR, 2);
+        this.state.pos += 2;
+        this.finishToken(tt.braceBarR);
         return;
       }
 
@@ -562,13 +663,12 @@ export default class Tokenizer extends ParserErrors {
         next === charCodes.rightSquareBracket
       ) {
         if (this.getPluginOption("recordAndTuple", "syntaxType") !== "bar") {
-          throw this.raise(
-            this.state.pos,
-            Errors.TupleExpressionBarIncorrectEndSyntaxType,
-          );
+          throw this.raise(Errors.TupleExpressionBarIncorrectEndSyntaxType, {
+            at: this.state.curPosition(),
+          });
         }
-
-        this.finishOp(tt.bracketBarR, 2);
+        this.state.pos += 2;
+        this.finishToken(tt.bracketBarR);
         return;
       }
     }
@@ -585,12 +685,55 @@ export default class Tokenizer extends ParserErrors {
   }
 
   readToken_caret(): void {
-    // '^'
     const next = this.input.charCodeAt(this.state.pos + 1);
-    if (next === charCodes.equalsTo) {
-      this.finishOp(tt.assign, 2);
-    } else {
+
+    // '^='
+    if (next === charCodes.equalsTo && !this.state.inType) {
+      // `tt.xorAssign` is only needed to support ^ as a Hack-pipe topic token.
+      // If the proposal ends up choosing a different token,
+      // it can be merged with tt.assign.
+      this.finishOp(tt.xorAssign, 2);
+    }
+    // '^^'
+    else if (
+      next === charCodes.caret &&
+      // If the ^^ token is not enabled, we don't throw but parse two single ^s
+      // because it could be a ^ hack token followed by a ^ binary operator.
+      this.hasPlugin([
+        "pipelineOperator",
+        { proposal: "hack", topicToken: "^^" },
+      ])
+    ) {
+      this.finishOp(tt.doubleCaret, 2);
+
+      // `^^^` is forbidden and must be separated by a space.
+      const lookaheadCh = this.input.codePointAt(this.state.pos);
+      if (lookaheadCh === charCodes.caret) {
+        throw this.unexpected();
+      }
+    }
+    // '^'
+    else {
       this.finishOp(tt.bitwiseXOR, 1);
+    }
+  }
+
+  readToken_atSign(): void {
+    const next = this.input.charCodeAt(this.state.pos + 1);
+
+    // '@@'
+    if (
+      next === charCodes.atSign &&
+      this.hasPlugin([
+        "pipelineOperator",
+        { proposal: "hack", topicToken: "@@" },
+      ])
+    ) {
+      this.finishOp(tt.doubleAt, 2);
+    }
+    // '@'
+    else {
+      this.finishOp(tt.at, 1);
     }
   }
 
@@ -599,21 +742,6 @@ export default class Tokenizer extends ParserErrors {
     const next = this.input.charCodeAt(this.state.pos + 1);
 
     if (next === code) {
-      if (
-        next === charCodes.dash &&
-        !this.inModule &&
-        this.input.charCodeAt(this.state.pos + 2) === charCodes.greaterThan &&
-        (this.state.lastTokEnd === 0 ||
-          lineBreak.test(
-            this.input.slice(this.state.lastTokEnd, this.state.pos),
-          ))
-      ) {
-        // A `-->` line comment
-        this.skipLineComment(3);
-        this.skipSpace();
-        this.nextToken();
-        return;
-      }
       this.finishOp(tt.incDec, 2);
       return;
     }
@@ -625,45 +753,52 @@ export default class Tokenizer extends ParserErrors {
     }
   }
 
-  readToken_lt_gt(code: number): void {
-    // '<>'
-    const next = this.input.charCodeAt(this.state.pos + 1);
-    let size = 1;
+  readToken_lt(): void {
+    // '<'
+    const { pos } = this.state;
+    const next = this.input.charCodeAt(pos + 1);
 
-    if (next === code) {
-      size =
-        code === charCodes.greaterThan &&
-        this.input.charCodeAt(this.state.pos + 2) === charCodes.greaterThan
-          ? 3
-          : 2;
-      if (this.input.charCodeAt(this.state.pos + size) === charCodes.equalsTo) {
-        this.finishOp(tt.assign, size + 1);
+    if (next === charCodes.lessThan) {
+      if (this.input.charCodeAt(pos + 2) === charCodes.equalsTo) {
+        this.finishOp(tt.assign, 3);
         return;
       }
-      this.finishOp(tt.bitShift, size);
+      this.finishOp(tt.bitShiftL, 2);
       return;
     }
 
-    if (
-      next === charCodes.exclamationMark &&
-      code === charCodes.lessThan &&
-      !this.inModule &&
-      this.input.charCodeAt(this.state.pos + 2) === charCodes.dash &&
-      this.input.charCodeAt(this.state.pos + 3) === charCodes.dash
-    ) {
-      // `<!--`, an XML-style comment that should be interpreted as a line comment
-      this.skipLineComment(4);
-      this.skipSpace();
-      this.nextToken();
+    if (next === charCodes.equalsTo) {
+      // <=
+      this.finishOp(tt.relational, 2);
+      return;
+    }
+
+    this.finishOp(tt.lt, 1);
+  }
+
+  readToken_gt(): void {
+    // '>'
+    const { pos } = this.state;
+    const next = this.input.charCodeAt(pos + 1);
+
+    if (next === charCodes.greaterThan) {
+      const size =
+        this.input.charCodeAt(pos + 2) === charCodes.greaterThan ? 3 : 2;
+      if (this.input.charCodeAt(pos + size) === charCodes.equalsTo) {
+        this.finishOp(tt.assign, size + 1);
+        return;
+      }
+      this.finishOp(tt.bitShiftR, size);
       return;
     }
 
     if (next === charCodes.equalsTo) {
       // <= | >=
-      size = 2;
+      this.finishOp(tt.relational, 2);
+      return;
     }
 
-    this.finishOp(tt.relational, size);
+    this.finishOp(tt.gt, 1);
   }
 
   readToken_eq_excl(code: number): void {
@@ -691,7 +826,7 @@ export default class Tokenizer extends ParserErrors {
     // '?'
     const next = this.input.charCodeAt(this.state.pos + 1);
     const next2 = this.input.charCodeAt(this.state.pos + 2);
-    if (next === charCodes.questionMark && !this.state.inType) {
+    if (next === charCodes.questionMark) {
       if (next2 === charCodes.equalsTo) {
         // '??='
         this.finishOp(tt.assign, 3);
@@ -745,14 +880,14 @@ export default class Tokenizer extends ParserErrors {
         ) {
           if (this.getPluginOption("recordAndTuple", "syntaxType") !== "bar") {
             throw this.raise(
-              this.state.pos,
               Errors.TupleExpressionBarIncorrectStartSyntaxType,
+              { at: this.state.curPosition() },
             );
           }
 
           // [|
-          this.finishToken(tt.bracketBarL);
           this.state.pos += 2;
+          this.finishToken(tt.bracketBarL);
         } else {
           ++this.state.pos;
           this.finishToken(tt.bracketL);
@@ -769,14 +904,14 @@ export default class Tokenizer extends ParserErrors {
         ) {
           if (this.getPluginOption("recordAndTuple", "syntaxType") !== "bar") {
             throw this.raise(
-              this.state.pos,
               Errors.RecordExpressionBarIncorrectStartSyntaxType,
+              { at: this.state.curPosition() },
             );
           }
 
           // {|
-          this.finishToken(tt.braceBarL);
           this.state.pos += 2;
+          this.finishToken(tt.braceBarL);
         } else {
           ++this.state.pos;
           this.finishToken(tt.braceL);
@@ -804,8 +939,7 @@ export default class Tokenizer extends ParserErrors {
         return;
 
       case charCodes.graveAccent:
-        ++this.state.pos;
-        this.finishToken(tt.backQuote);
+        this.readTemplateToken();
         return;
 
       case charCodes.digit0: {
@@ -875,8 +1009,11 @@ export default class Tokenizer extends ParserErrors {
         return;
 
       case charCodes.lessThan:
+        this.readToken_lt();
+        return;
+
       case charCodes.greaterThan:
-        this.readToken_lt_gt(code);
+        this.readToken_gt();
         return;
 
       case charCodes.equalsTo:
@@ -889,8 +1026,7 @@ export default class Tokenizer extends ParserErrors {
         return;
 
       case charCodes.atSign:
-        ++this.state.pos;
-        this.finishToken(tt.at);
+        this.readToken_atSign();
         return;
 
       case charCodes.numberSign:
@@ -903,16 +1039,15 @@ export default class Tokenizer extends ParserErrors {
 
       default:
         if (isIdentifierStart(code)) {
-          this.readWord();
+          this.readWord(code);
           return;
         }
     }
 
-    throw this.raise(
-      this.state.pos,
-      Errors.InvalidOrUnexpectedToken,
-      String.fromCodePoint(code),
-    );
+    throw this.raise(Errors.InvalidOrUnexpectedToken, {
+      at: this.state.curPosition(),
+      unexpected: String.fromCodePoint(code),
+    });
   }
 
   finishOp(type: TokenType, size: number): void {
@@ -922,55 +1057,75 @@ export default class Tokenizer extends ParserErrors {
   }
 
   readRegexp(): void {
-    const start = this.state.pos;
+    const startLoc = this.state.startLoc;
+    const start = this.state.start + 1;
     let escaped, inClass;
-    for (;;) {
-      if (this.state.pos >= this.length) {
-        throw this.raise(start, Errors.UnterminatedRegExp);
+    let { pos } = this.state;
+    for (; ; ++pos) {
+      if (pos >= this.length) {
+        // FIXME: explain
+        throw this.raise(Errors.UnterminatedRegExp, {
+          at: createPositionWithColumnOffset(startLoc, 1),
+        });
       }
-      const ch = this.input.charAt(this.state.pos);
-      if (lineBreak.test(ch)) {
-        throw this.raise(start, Errors.UnterminatedRegExp);
+      const ch = this.input.charCodeAt(pos);
+      if (isNewLine(ch)) {
+        throw this.raise(Errors.UnterminatedRegExp, {
+          at: createPositionWithColumnOffset(startLoc, 1),
+        });
       }
       if (escaped) {
         escaped = false;
       } else {
-        if (ch === "[") {
+        if (ch === charCodes.leftSquareBracket) {
           inClass = true;
-        } else if (ch === "]" && inClass) {
+        } else if (ch === charCodes.rightSquareBracket && inClass) {
           inClass = false;
-        } else if (ch === "/" && !inClass) {
+        } else if (ch === charCodes.slash && !inClass) {
           break;
         }
-        escaped = ch === "\\";
+        escaped = ch === charCodes.backslash;
       }
-      ++this.state.pos;
     }
-    const content = this.input.slice(start, this.state.pos);
-    ++this.state.pos;
+    const content = this.input.slice(start, pos);
+    ++pos;
 
     let mods = "";
 
-    while (this.state.pos < this.length) {
-      const char = this.input[this.state.pos];
-      const charCode = this.input.codePointAt(this.state.pos);
+    const nextPos = () =>
+      // (pos + 1) + 1 - start
+      createPositionWithColumnOffset(startLoc, pos + 2 - start);
 
-      if (VALID_REGEX_FLAGS.has(char)) {
-        if (mods.indexOf(char) > -1) {
-          this.raise(this.state.pos + 1, Errors.DuplicateRegExpFlags);
+    while (pos < this.length) {
+      const cp = this.codePointAtPos(pos);
+      // It doesn't matter if cp > 0xffff, the loop will either throw or break because we check on cp
+      const char = String.fromCharCode(cp);
+
+      if (VALID_REGEX_FLAGS.has(cp)) {
+        if (cp === charCodes.lowercaseV) {
+          this.expectPlugin("regexpUnicodeSets", nextPos());
+
+          if (mods.includes("u")) {
+            this.raise(Errors.IncompatibleRegExpUVFlags, { at: nextPos() });
+          }
+        } else if (cp === charCodes.lowercaseU) {
+          if (mods.includes("v")) {
+            this.raise(Errors.IncompatibleRegExpUVFlags, { at: nextPos() });
+          }
         }
-      } else if (
-        isIdentifierChar(charCode) ||
-        charCode === charCodes.backslash
-      ) {
-        this.raise(this.state.pos + 1, Errors.MalformedRegExpFlags);
+        if (mods.includes(char)) {
+          this.raise(Errors.DuplicateRegExpFlags, { at: nextPos() });
+        }
+      } else if (isIdentifierChar(cp) || cp === charCodes.backslash) {
+        this.raise(Errors.MalformedRegExpFlags, { at: nextPos() });
       } else {
         break;
       }
 
-      ++this.state.pos;
+      ++pos;
       mods += char;
     }
+    this.state.pos = pos;
 
     this.finishToken(tt.regexp, {
       pattern: content,
@@ -991,21 +1146,21 @@ export default class Tokenizer extends ParserErrors {
     radix: number,
     len?: number,
     forceLen?: boolean,
-    allowNumSeparator: boolean = true,
+    allowNumSeparator: boolean | "bail" = true,
   ): number | null {
     const start = this.state.pos;
     const forbiddenSiblings =
       radix === 16
         ? forbiddenNumericSeparatorSiblings.hex
         : forbiddenNumericSeparatorSiblings.decBinOct;
-    const allowedSiblings =
+    const isAllowedSibling =
       radix === 16
-        ? allowedNumericSeparatorSiblings.hex
+        ? isAllowedNumericSeparatorSibling.hex
         : radix === 10
-        ? allowedNumericSeparatorSiblings.dec
+        ? isAllowedNumericSeparatorSibling.dec
         : radix === 8
-        ? allowedNumericSeparatorSiblings.oct
-        : allowedNumericSeparatorSiblings.bin;
+        ? isAllowedNumericSeparatorSibling.oct
+        : isAllowedNumericSeparatorSibling.bin;
 
     let invalid = false;
     let total = 0;
@@ -1014,28 +1169,28 @@ export default class Tokenizer extends ParserErrors {
       const code = this.input.charCodeAt(this.state.pos);
       let val;
 
-      if (this.hasPlugin("numericSeparator")) {
-        if (code === charCodes.underscore) {
-          const prev = this.input.charCodeAt(this.state.pos - 1);
-          const next = this.input.charCodeAt(this.state.pos + 1);
-          if (allowedSiblings.indexOf(next) === -1) {
-            this.raise(this.state.pos, Errors.UnexpectedNumericSeparator);
-          } else if (
-            forbiddenSiblings.indexOf(prev) > -1 ||
-            forbiddenSiblings.indexOf(next) > -1 ||
-            Number.isNaN(next)
-          ) {
-            this.raise(this.state.pos, Errors.UnexpectedNumericSeparator);
-          }
+      if (code === charCodes.underscore && allowNumSeparator !== "bail") {
+        const prev = this.input.charCodeAt(this.state.pos - 1);
+        const next = this.input.charCodeAt(this.state.pos + 1);
 
-          if (!allowNumSeparator) {
-            this.raise(this.state.pos, Errors.NumericSeparatorInEscapeSequence);
-          }
-
-          // Ignore this _ character
-          ++this.state.pos;
-          continue;
+        if (!allowNumSeparator) {
+          this.raise(Errors.NumericSeparatorInEscapeSequence, {
+            at: this.state.curPosition(),
+          });
+        } else if (
+          Number.isNaN(next) ||
+          !isAllowedSibling(next) ||
+          forbiddenSiblings.has(prev) ||
+          forbiddenSiblings.has(next)
+        ) {
+          this.raise(Errors.UnexpectedNumericSeparator, {
+            at: this.state.curPosition(),
+          });
         }
+
+        // Ignore this _ character
+        ++this.state.pos;
+        continue;
       }
 
       if (code >= charCodes.lowercaseA) {
@@ -1053,7 +1208,10 @@ export default class Tokenizer extends ParserErrors {
 
         if (this.options.errorRecovery && val <= 9) {
           val = 0;
-          this.raise(this.state.start + i + 2, Errors.InvalidDigit, radix);
+          this.raise(Errors.InvalidDigit, {
+            at: this.state.curPosition(),
+            radix,
+          });
         } else if (forceLen) {
           val = 0;
           invalid = true;
@@ -1076,31 +1234,37 @@ export default class Tokenizer extends ParserErrors {
   }
 
   readRadixNumber(radix: number): void {
-    const start = this.state.pos;
+    const startLoc = this.state.curPosition();
     let isBigInt = false;
 
     this.state.pos += 2; // 0x
     const val = this.readInt(radix);
     if (val == null) {
-      this.raise(this.state.start + 2, Errors.InvalidDigit, radix);
+      this.raise(Errors.InvalidDigit, {
+        // Numeric literals can't have newlines, so this is safe to do.
+        at: createPositionWithColumnOffset(startLoc, 2),
+        radix,
+      });
     }
     const next = this.input.charCodeAt(this.state.pos);
-
-    if (next === charCodes.underscore) {
-      this.expectPlugin("numericSeparator", this.state.pos);
-    }
 
     if (next === charCodes.lowercaseN) {
       ++this.state.pos;
       isBigInt = true;
+    } else if (next === charCodes.lowercaseM) {
+      throw this.raise(Errors.InvalidDecimal, { at: startLoc });
     }
 
-    if (isIdentifierStart(this.input.codePointAt(this.state.pos))) {
-      throw this.raise(this.state.pos, Errors.NumberIdentifier);
+    if (isIdentifierStart(this.codePointAtPos(this.state.pos))) {
+      throw this.raise(Errors.NumberIdentifier, {
+        at: this.state.curPosition(),
+      });
     }
 
     if (isBigInt) {
-      const str = this.input.slice(start, this.state.pos).replace(/[_n]/g, "");
+      const str = this.input
+        .slice(startLoc.index, this.state.pos)
+        .replace(/[_n]/g, "");
       this.finishToken(tt.bigint, str);
       return;
     }
@@ -1112,28 +1276,38 @@ export default class Tokenizer extends ParserErrors {
 
   readNumber(startsWithDot: boolean): void {
     const start = this.state.pos;
+    const startLoc = this.state.curPosition();
     let isFloat = false;
     let isBigInt = false;
-    let isNonOctalDecimalInt = false;
+    let isDecimal = false;
+    let hasExponent = false;
+    let isOctal = false;
 
     if (!startsWithDot && this.readInt(10) === null) {
-      this.raise(start, Errors.InvalidNumber);
+      this.raise(Errors.InvalidNumber, { at: this.state.curPosition() });
     }
-    let octal =
+    const hasLeadingZero =
       this.state.pos - start >= 2 &&
       this.input.charCodeAt(start) === charCodes.digit0;
-    if (octal) {
-      if (this.state.strict) {
-        this.raise(start, Errors.StrictOctalLiteral);
+
+    if (hasLeadingZero) {
+      const integer = this.input.slice(start, this.state.pos);
+      this.recordStrictModeErrors(Errors.StrictOctalLiteral, { at: startLoc });
+      if (!this.state.strict) {
+        // disallow numeric separators in non octal decimals and legacy octal likes
+        const underscorePos = integer.indexOf("_");
+        if (underscorePos > 0) {
+          // Numeric literals can't have newlines, so this is safe to do.
+          this.raise(Errors.ZeroDigitNumericSeparator, {
+            at: createPositionWithColumnOffset(startLoc, underscorePos),
+          });
+        }
       }
-      if (/[89]/.test(this.input.slice(start, this.state.pos))) {
-        octal = false;
-        isNonOctalDecimalInt = true;
-      }
+      isOctal = hasLeadingZero && !/[89]/.test(integer);
     }
 
     let next = this.input.charCodeAt(this.state.pos);
-    if (next === charCodes.dot && !octal) {
+    if (next === charCodes.dot && !isOctal) {
       ++this.state.pos;
       this.readInt(10);
       isFloat = true;
@@ -1142,54 +1316,59 @@ export default class Tokenizer extends ParserErrors {
 
     if (
       (next === charCodes.uppercaseE || next === charCodes.lowercaseE) &&
-      !octal
+      !isOctal
     ) {
       next = this.input.charCodeAt(++this.state.pos);
       if (next === charCodes.plusSign || next === charCodes.dash) {
         ++this.state.pos;
       }
-      if (this.readInt(10) === null) this.raise(start, "Invalid number");
-      isFloat = true;
-      next = this.input.charCodeAt(this.state.pos);
-    }
-
-    // disallow numeric separators in non octal decimals and legacy octal likes
-    if (this.hasPlugin("numericSeparator") && (octal || isNonOctalDecimalInt)) {
-      const underscorePos = this.input
-        .slice(start, this.state.pos)
-        .indexOf("_");
-      if (underscorePos > 0) {
-        this.raise(underscorePos + start, Errors.ZeroDigitNumericSeparator);
+      if (this.readInt(10) === null) {
+        this.raise(Errors.InvalidOrMissingExponent, { at: startLoc });
       }
-    }
-
-    if (next === charCodes.underscore) {
-      this.expectPlugin("numericSeparator", this.state.pos);
+      isFloat = true;
+      hasExponent = true;
+      next = this.input.charCodeAt(this.state.pos);
     }
 
     if (next === charCodes.lowercaseN) {
       // disallow floats, legacy octal syntax and non octal decimals
       // new style octal ("0o") is handled in this.readRadixNumber
-      if (isFloat || octal || isNonOctalDecimalInt) {
-        this.raise(start, "Invalid BigIntLiteral");
+      if (isFloat || hasLeadingZero) {
+        this.raise(Errors.InvalidBigIntLiteral, { at: startLoc });
       }
       ++this.state.pos;
       isBigInt = true;
     }
 
-    if (isIdentifierStart(this.input.codePointAt(this.state.pos))) {
-      throw this.raise(this.state.pos, Errors.NumberIdentifier);
+    if (next === charCodes.lowercaseM) {
+      this.expectPlugin("decimal", this.state.curPosition());
+      if (hasExponent || hasLeadingZero) {
+        this.raise(Errors.InvalidDecimal, { at: startLoc });
+      }
+      ++this.state.pos;
+      isDecimal = true;
     }
 
-    // remove "_" for numeric literal separator, and "n" for BigInts
-    const str = this.input.slice(start, this.state.pos).replace(/[_n]/g, "");
+    if (isIdentifierStart(this.codePointAtPos(this.state.pos))) {
+      throw this.raise(Errors.NumberIdentifier, {
+        at: this.state.curPosition(),
+      });
+    }
+
+    // remove "_" for numeric literal separator, and trailing `m` or `n`
+    const str = this.input.slice(start, this.state.pos).replace(/[_mn]/g, "");
 
     if (isBigInt) {
       this.finishToken(tt.bigint, str);
       return;
     }
 
-    const val = octal ? parseInt(str, 8) : parseFloat(str);
+    if (isDecimal) {
+      this.finishToken(tt.decimal, str);
+      return;
+    }
+
+    const val = isOctal ? parseInt(str, 8) : parseFloat(str);
     this.finishToken(tt.num, val);
   }
 
@@ -1200,7 +1379,7 @@ export default class Tokenizer extends ParserErrors {
     let code;
 
     if (ch === charCodes.leftCurlyBrace) {
-      const codePos = ++this.state.pos;
+      ++this.state.pos;
       code = this.readHexChar(
         this.input.indexOf("}", this.state.pos) - this.state.pos,
         true,
@@ -1209,7 +1388,7 @@ export default class Tokenizer extends ParserErrors {
       ++this.state.pos;
       if (code !== null && code > 0x10ffff) {
         if (throwOnInvalid) {
-          this.raise(codePos, Errors.InvalidCodePoint);
+          this.raise(Errors.InvalidCodePoint, { at: this.state.curPosition() });
         } else {
           return null;
         }
@@ -1225,7 +1404,9 @@ export default class Tokenizer extends ParserErrors {
       chunkStart = ++this.state.pos;
     for (;;) {
       if (this.state.pos >= this.length) {
-        throw this.raise(this.state.start, Errors.UnterminatedString);
+        throw this.raise(Errors.UnterminatedString, {
+          at: this.state.startLoc,
+        });
       }
       const ch = this.input.charCodeAt(this.state.pos);
       if (ch === quote) break;
@@ -1242,7 +1423,9 @@ export default class Tokenizer extends ParserErrors {
         ++this.state.curLine;
         this.state.lineStart = this.state.pos;
       } else if (isNewLine(ch)) {
-        throw this.raise(this.state.start, Errors.UnterminatedString);
+        throw this.raise(Errors.UnterminatedString, {
+          at: this.state.startLoc,
+        });
       } else {
         ++this.state.pos;
       }
@@ -1251,36 +1434,43 @@ export default class Tokenizer extends ParserErrors {
     this.finishToken(tt.string, out);
   }
 
-  // Reads template string tokens.
+  // Reads template continuation `}...`
+  readTemplateContinuation(): void {
+    if (!this.match(tt.braceR)) {
+      this.unexpected(null, tt.braceR);
+    }
+    // rewind pos to `}`
+    this.state.pos--;
+    this.readTemplateToken();
+  }
 
-  readTmplToken(): void {
+  // Reads template string tokens.
+  readTemplateToken(): void {
     let out = "",
       chunkStart = this.state.pos,
       containsInvalid = false;
+    ++this.state.pos; // eat '`' or `}`
     for (;;) {
       if (this.state.pos >= this.length) {
-        throw this.raise(this.state.start, Errors.UnterminatedTemplate);
+        // FIXME: explain
+        throw this.raise(Errors.UnterminatedTemplate, {
+          at: createPositionWithColumnOffset(this.state.startLoc, 1),
+        });
       }
       const ch = this.input.charCodeAt(this.state.pos);
-      if (
-        ch === charCodes.graveAccent ||
-        (ch === charCodes.dollarSign &&
-          this.input.charCodeAt(this.state.pos + 1) ===
-            charCodes.leftCurlyBrace)
-      ) {
-        if (this.state.pos === this.state.start && this.match(tt.template)) {
-          if (ch === charCodes.dollarSign) {
-            this.state.pos += 2;
-            this.finishToken(tt.dollarBraceL);
-            return;
-          } else {
-            ++this.state.pos;
-            this.finishToken(tt.backQuote);
-            return;
-          }
-        }
+      if (ch === charCodes.graveAccent) {
+        ++this.state.pos; // eat '`'
         out += this.input.slice(chunkStart, this.state.pos);
-        this.finishToken(tt.template, containsInvalid ? null : out);
+        this.finishToken(tt.templateTail, containsInvalid ? null : out);
+        return;
+      }
+      if (
+        ch === charCodes.dollarSign &&
+        this.input.charCodeAt(this.state.pos + 1) === charCodes.leftCurlyBrace
+      ) {
+        this.state.pos += 2; // eat '${'
+        out += this.input.slice(chunkStart, this.state.pos);
+        this.finishToken(tt.templateNonTail, containsInvalid ? null : out);
         return;
       }
       if (ch === charCodes.backslash) {
@@ -1317,8 +1507,20 @@ export default class Tokenizer extends ParserErrors {
     }
   }
 
-  // Used to read escaped characters
+  recordStrictModeErrors(
+    toParseError: DeferredStrictError,
+    { at }: { at: Position },
+  ) {
+    const index = at.index;
 
+    if (this.state.strict && !this.state.strictErrors.has(index)) {
+      this.raise(toParseError, { at });
+    } else {
+      this.state.strictErrors.set(index, [toParseError, at]);
+    }
+  }
+
+  // Used to read escaped characters
   readEscapedChar(inTemplate: boolean): string | null {
     const throwOnInvalid = !inTemplate;
     const ch = this.input.charCodeAt(++this.state.pos);
@@ -1360,13 +1562,24 @@ export default class Tokenizer extends ParserErrors {
       case charCodes.digit9:
         if (inTemplate) {
           return null;
+        } else {
+          this.recordStrictModeErrors(Errors.StrictNumericEscape, {
+            // We immediately follow a "\\", and we're an 8 or a 9, so we must
+            // be on the same line.
+            at: createPositionWithColumnOffset(this.state.curPosition(), -1),
+          });
         }
       // fall through
       default:
         if (ch >= charCodes.digit0 && ch <= charCodes.digit7) {
-          const codePos = this.state.pos - 1;
+          // We immediately follow a "\\", and we're something between 0 and 7,
+          // so we must be on the same line.
+          const codePos = createPositionWithColumnOffset(
+            this.state.curPosition(),
+            -1,
+          );
           const match = this.input
-            .substr(this.state.pos - 1, 3)
+            .slice(this.state.pos - 1, this.state.pos + 2)
             .match(/^[0-7]+/);
 
           // This is never null, because of the if condition above.
@@ -1387,13 +1600,10 @@ export default class Tokenizer extends ParserErrors {
           ) {
             if (inTemplate) {
               return null;
-            } else if (this.state.strict) {
-              this.raise(codePos, Errors.StrictOctalLiteral);
             } else {
-              // This property is used to throw an error for
-              // an octal literal in a directive that occurs prior
-              // to a "use strict" directive.
-              this.state.octalPositions.push(codePos);
+              this.recordStrictModeErrors(Errors.StrictNumericEscape, {
+                at: codePos,
+              });
             }
           }
 
@@ -1411,13 +1621,13 @@ export default class Tokenizer extends ParserErrors {
     forceLen: boolean,
     throwOnInvalid: boolean,
   ): number | null {
-    const codePos = this.state.pos;
+    const codeLoc = this.state.curPosition();
     const n = this.readInt(16, len, forceLen, false);
     if (n === null) {
       if (throwOnInvalid) {
-        this.raise(codePos, Errors.InvalidEscapeSequence);
+        this.raise(Errors.InvalidEscapeSequence, { at: codeLoc });
       } else {
-        this.state.pos = codePos - 1;
+        this.state.pos = codeLoc.index - 1;
       }
     }
     return n;
@@ -1428,29 +1638,36 @@ export default class Tokenizer extends ParserErrors {
   //
   // Incrementally adds only escaped chars, adding other chunks as-is
   // as a micro-optimization.
+  //
+  // When `firstCode` is given, it assumes it is always an identifier start and
+  // will skip reading start position again
 
-  readWord1(): string {
-    let word = "";
+  readWord1(firstCode: number | void): string {
     this.state.containsEsc = false;
+    let word = "";
     const start = this.state.pos;
     let chunkStart = this.state.pos;
+    if (firstCode !== undefined) {
+      this.state.pos += firstCode <= 0xffff ? 1 : 2;
+    }
 
     while (this.state.pos < this.length) {
-      const ch = this.input.codePointAt(this.state.pos);
+      const ch = this.codePointAtPos(this.state.pos);
       if (isIdentifierChar(ch)) {
         this.state.pos += ch <= 0xffff ? 1 : 2;
-      } else if (this.state.isIterator && ch === charCodes.atSign) {
-        ++this.state.pos;
       } else if (ch === charCodes.backslash) {
         this.state.containsEsc = true;
 
         word += this.input.slice(chunkStart, this.state.pos);
-        const escStart = this.state.pos;
+        const escStart = this.state.curPosition();
         const identifierCheck =
           this.state.pos === start ? isIdentifierStart : isIdentifierChar;
 
         if (this.input.charCodeAt(++this.state.pos) !== charCodes.lowercaseU) {
-          this.raise(this.state.pos, Errors.MissingUnicodeEscape);
+          this.raise(Errors.MissingUnicodeEscape, {
+            at: this.state.curPosition(),
+          });
+          chunkStart = this.state.pos - 1;
           continue;
         }
 
@@ -1458,7 +1675,7 @@ export default class Tokenizer extends ParserErrors {
         const esc = this.readCodePoint(true);
         if (esc !== null) {
           if (!identifierCheck(esc)) {
-            this.raise(escStart, Errors.EscapedCharNotAnIdentifier);
+            this.raise(Errors.EscapedCharNotAnIdentifier, { at: escStart });
           }
 
           word += String.fromCodePoint(esc);
@@ -1471,99 +1688,119 @@ export default class Tokenizer extends ParserErrors {
     return word + this.input.slice(chunkStart, this.state.pos);
   }
 
-  isIterator(word: string): boolean {
-    return word === "@@iterator" || word === "@@asyncIterator";
-  }
-
   // Read an identifier or keyword token. Will check for reserved
   // words when necessary.
 
-  readWord(): void {
-    const word = this.readWord1();
-    const type = keywordTypes.get(word) || tt.name;
-
-    // Allow @@iterator and @@asyncIterator as a identifier only inside type
-    if (
-      this.state.isIterator &&
-      (!this.isIterator(word) || !this.state.inType)
-    ) {
-      this.raise(this.state.pos, Errors.InvalidIdentifier, word);
+  readWord(firstCode: number | void): void {
+    const word = this.readWord1(firstCode);
+    const type = keywordTypes.get(word);
+    if (type !== undefined) {
+      // We don't use word as state.value here because word is a dynamic string
+      // while token label is a shared constant string
+      this.finishToken(type, tokenLabelName(type));
+    } else {
+      this.finishToken(tt.name, word);
     }
-
-    this.finishToken(type, word);
   }
 
   checkKeywordEscapes(): void {
-    const kw = this.state.type.keyword;
-    if (kw && this.state.containsEsc) {
-      this.raise(this.state.start, Errors.InvalidEscapedReservedWord, kw);
+    const { type } = this.state;
+    if (tokenIsKeyword(type) && this.state.containsEsc) {
+      this.raise(Errors.InvalidEscapedReservedWord, {
+        at: this.state.startLoc,
+        reservedWord: tokenLabelName(type),
+      });
     }
   }
 
-  braceIsBlock(prevType: TokenType): boolean {
-    const parent = this.curContext();
-    if (parent === ct.functionExpression || parent === ct.functionStatement) {
-      return true;
-    }
-    if (
-      prevType === tt.colon &&
-      (parent === ct.braceStatement || parent === ct.braceExpression)
-    ) {
-      return !parent.isExpr;
-    }
+  /**
+   * Raise a `ParseError` given the appropriate properties. If passed a
+   * `Position` for the `at` property, raises the `ParseError` at that location.
+   * Otherwise, if passed a `Node`, raises the `ParseError` at the start
+   * location of that `Node`.
+   *
+   * If `errorRecovery` is `true`, the error is pushed to the errors array and
+   * returned. If `errorRecovery` is `false`, the error is instead thrown.
+   *
+   * @param {Class<ParseError<ErrorDetails>>>} ParseErrorClass
+   * @param {RaiseProperties<ErrorDetails>} raiseProperties
+   * @returns {(ParseError<ErrorDetails> | empty)}
+   * @memberof Tokenizer
+   */
+  raise<ErrorDetails>(
+    toParseError: ParseErrorConstructor<ErrorDetails>,
+    raiseProperties: RaiseProperties<ErrorDetails>,
+  ): ParseError<ErrorDetails> {
+    const { at, ...details } = raiseProperties;
+    const loc = at instanceof Position ? at : at.loc.start;
+    const error = toParseError({ loc, details });
 
-    // The check for `tt.name && exprAllowed` detects whether we are
-    // after a `yield` or `of` construct. See the `updateContext` for
-    // `tt.name`.
-    if (
-      prevType === tt._return ||
-      (prevType === tt.name && this.state.exprAllowed)
-    ) {
-      return lineBreak.test(
-        this.input.slice(this.state.lastTokEnd, this.state.start),
-      );
-    }
+    if (!this.options.errorRecovery) throw error;
+    if (!this.isLookahead) this.state.errors.push(error);
 
-    if (
-      prevType === tt._else ||
-      prevType === tt.semi ||
-      prevType === tt.eof ||
-      prevType === tt.parenR ||
-      prevType === tt.arrow
-    ) {
-      return true;
-    }
-
-    if (prevType === tt.braceL) {
-      return parent === ct.braceStatement;
-    }
-
-    if (
-      prevType === tt._var ||
-      prevType === tt._const ||
-      prevType === tt.name
-    ) {
-      return false;
-    }
-
-    if (prevType === tt.relational) {
-      // `class C<T> { ... }`
-      return true;
-    }
-
-    return !this.state.exprAllowed;
+    return error;
   }
 
-  updateContext(prevType: TokenType): void {
-    const type = this.state.type;
-    let update;
+  /**
+   * If `errorRecovery` is `false`, this method behaves identically to `raise`.
+   * If `errorRecovery` is `true`, this method will first see if there is
+   * already an error stored at the same `Position`, and replaces it with the
+   * one generated here.
+   *
+   * @param {Class<ParseError<ErrorDetails>>>} ParseErrorClass
+   * @param {RaiseProperties<ErrorDetails>} raiseProperties
+   * @returns {(ParseError<ErrorDetails> | empty)}
+   * @memberof Tokenizer
+   */
+  raiseOverwrite<ErrorDetails>(
+    toParseError: ParseErrorConstructor<ErrorDetails>,
+    raiseProperties: RaiseProperties<ErrorDetails>,
+  ): ParseError<ErrorDetails> | empty {
+    const { at, ...details } = raiseProperties;
+    const loc = at instanceof Position ? at : at.loc.start;
+    const pos = loc.index;
+    const errors = this.state.errors;
 
-    if (type.keyword && (prevType === tt.dot || prevType === tt.questionDot)) {
-      this.state.exprAllowed = false;
-    } else if ((update = type.updateContext)) {
-      update.call(this, prevType);
-    } else {
-      this.state.exprAllowed = type.beforeExpr;
+    for (let i = errors.length - 1; i >= 0; i--) {
+      const error = errors[i];
+      if (error.loc.index === pos) {
+        return (errors[i] = toParseError({ loc, details }));
+      }
+      if (error.loc.index < pos) break;
+    }
+
+    return this.raise(toParseError, raiseProperties);
+  }
+
+  // updateContext is used by the jsx plugin
+  // eslint-disable-next-line no-unused-vars
+  updateContext(prevType: TokenType): void {}
+
+  // Raise an unexpected token error. Can take the expected token type.
+  unexpected(loc?: Position | null, type?: TokenType): void {
+    throw this.raise(Errors.UnexpectedToken, {
+      expected: type ? tokenLabelName(type) : null,
+      at: loc != null ? loc : this.state.startLoc,
+    });
+  }
+
+  expectPlugin(pluginName: string, loc?: Position): true {
+    if (this.hasPlugin(pluginName)) {
+      return true;
+    }
+
+    throw this.raise(Errors.MissingPlugin, {
+      at: loc != null ? loc : this.state.startLoc,
+      missingPlugin: [pluginName],
+    });
+  }
+
+  expectOnePlugin(pluginNames: string[]): void {
+    if (!pluginNames.some(name => this.hasPlugin(name))) {
+      throw this.raise(Errors.MissingOneOfPlugins, {
+        at: this.state.startLoc,
+        missingPlugin: pluginNames,
+      });
     }
   }
 }

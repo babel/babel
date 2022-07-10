@@ -1,2 +1,4 @@
-// Same as `generic`. Verify that JSX doesn't change things.
+// Generics without trailing comma are disallowed in JSX
 <T>(a: T): T => a;
+
+<T,>(a: T): T => a;

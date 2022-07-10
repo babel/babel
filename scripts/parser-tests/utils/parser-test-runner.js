@@ -1,8 +1,6 @@
-"use strict";
-
-const fs = require("fs").promises;
-const chalk = require("chalk");
-const { parse: parser } = require("../../../packages/babel-parser");
+import fs from "fs/promises";
+import chalk from "chalk";
+import { parse as parser } from "../../../packages/babel-parser/lib/index.js";
 
 const dot = chalk.gray(".");
 
@@ -60,10 +58,11 @@ class TestRunner {
   }
 
   parse(test, parser) {
-    parser(test.contents, {
-      sourceType: test.sourceType,
-      plugins: test.plugins,
-    });
+    const tests = typeof test.contents === "string" ? [test] : test.contents;
+
+    for (const { contents, ...options } of tests) {
+      parser(contents, options);
+    }
   }
 
   async getAllowlist() {
@@ -209,7 +208,12 @@ class TestRunner {
 
       badnews.push(desc);
       badnewsDetails.push(desc + ":");
-      badnewsDetails.push(...tests.map(test => `  ${test.id || test}`));
+      badnewsDetails.push(
+        ...tests.map(
+          test =>
+            `  ${test.id || test} ${test.expectedError} ${test.actualError}`
+        )
+      );
     });
 
     console.log(`Testing complete (${summary.count} tests).`);
@@ -234,4 +238,4 @@ class TestRunner {
   }
 }
 
-module.exports = exports = TestRunner;
+export default TestRunner;

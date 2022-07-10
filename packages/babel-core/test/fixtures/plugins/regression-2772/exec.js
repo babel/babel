@@ -1,12 +1,12 @@
-var code = multiline([
-  "(function() {",
-  "  var bar = 'lol';",
-  "  function foo(b){",
-  "    b === bar;",
-  "    foo(b);",
-  "  }",
-  "})();",
-]);
+var code = `
+  (function() {
+    var bar = 'lol';
+    function foo(b){
+      b === bar
+      foo(b);
+    }
+  })();
+`;
 
 transform(code, {
   plugins: [

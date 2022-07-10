@@ -1,0 +1,87 @@
+{
+  "type": "File",
+  "start":0,"end":79,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":18,"index":79}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":79,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":18,"index":79}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":61,"end":79,"loc":{"start":{"line":2,"column":0,"index":61},"end":{"line":2,"column":18,"index":79}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":61,"end":78,"loc":{"start":{"line":2,"column":0,"index":61},"end":{"line":2,"column":17,"index":78}},
+          "returnType": {
+            "type": "TSTypeAnnotation",
+            "start":70,"end":73,"loc":{"start":{"line":2,"column":9,"index":70},"end":{"line":2,"column":12,"index":73}},
+            "typeAnnotation": {
+              "type": "TSTypeReference",
+              "start":72,"end":73,"loc":{"start":{"line":2,"column":11,"index":72},"end":{"line":2,"column":12,"index":73}},
+              "typeName": {
+                "type": "Identifier",
+                "start":72,"end":73,"loc":{"start":{"line":2,"column":11,"index":72},"end":{"line":2,"column":12,"index":73},"identifierName":"T"},
+                "name": "T"
+              }
+            }
+          },
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "Identifier",
+              "start":65,"end":69,"loc":{"start":{"line":2,"column":4,"index":65},"end":{"line":2,"column":8,"index":69},"identifierName":"a"},
+              "name": "a",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":66,"end":69,"loc":{"start":{"line":2,"column":5,"index":66},"end":{"line":2,"column":8,"index":69}},
+                "typeAnnotation": {
+                  "type": "TSTypeReference",
+                  "start":68,"end":69,"loc":{"start":{"line":2,"column":7,"index":68},"end":{"line":2,"column":8,"index":69}},
+                  "typeName": {
+                    "type": "Identifier",
+                    "start":68,"end":69,"loc":{"start":{"line":2,"column":7,"index":68},"end":{"line":2,"column":8,"index":69},"identifierName":"T"},
+                    "name": "T"
+                  }
+                }
+              }
+            }
+          ],
+          "body": {
+            "type": "Identifier",
+            "start":77,"end":78,"loc":{"start":{"line":2,"column":16,"index":77},"end":{"line":2,"column":17,"index":78},"identifierName":"a"},
+            "name": "a"
+          },
+          "typeParameters": {
+            "type": "TSTypeParameterDeclaration",
+            "start":61,"end":64,"loc":{"start":{"line":2,"column":0,"index":61},"end":{"line":2,"column":3,"index":64}},
+            "params": [
+              {
+                "type": "TSTypeParameter",
+                "start":62,"end":63,"loc":{"start":{"line":2,"column":1,"index":62},"end":{"line":2,"column":2,"index":63}},
+                "name": "T"
+              }
+            ]
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Same as `generic`. Verify that JSX doesn't change things.",
+            "start":0,"end":60,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":60,"index":60}}
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " Same as `generic`. Verify that JSX doesn't change things.",
+      "start":0,"end":60,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":60,"index":60}}
+    }
+  ]
+}

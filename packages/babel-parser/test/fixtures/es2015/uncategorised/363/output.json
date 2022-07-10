@@ -1,21 +1,21 @@
 {
   "type": "File",
-  "start":0,"end":26,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":26}},
+  "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":26,"index":26}},
   "errors": [
-    "SyntaxError: Can not use keyword 'await' outside an async function (1:15)"
+    "SyntaxError: Unexpected reserved word 'await'. (1:15)"
   ],
   "program": {
     "type": "Program",
-    "start":0,"end":26,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":26}},
+    "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":26,"index":26}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "FunctionDeclaration",
-        "start":0,"end":26,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":26}},
+        "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":26,"index":26}},
         "id": {
           "type": "Identifier",
-          "start":9,"end":12,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":12},"identifierName":"foo"},
+          "start":9,"end":12,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":12,"index":12},"identifierName":"foo"},
           "name": "foo"
         },
         "generator": false,
@@ -23,22 +23,22 @@
         "params": [
           {
             "type": "ObjectPattern",
-            "start":13,"end":22,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":22}},
+            "start":13,"end":22,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":22,"index":22}},
             "properties": [
               {
                 "type": "ObjectProperty",
-                "start":15,"end":20,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":20}},
-                "method": false,
+                "start":15,"end":20,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":20,"index":20}},
                 "key": {
                   "type": "Identifier",
-                  "start":15,"end":20,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":20},"identifierName":"await"},
+                  "start":15,"end":20,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":20,"index":20},"identifierName":"await"},
                   "name": "await"
                 },
                 "computed": false,
+                "method": false,
                 "shorthand": true,
                 "value": {
                   "type": "Identifier",
-                  "start":15,"end":20,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":20},"identifierName":"await"},
+                  "start":15,"end":20,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":20,"index":20},"identifierName":"await"},
                   "name": "await"
                 },
                 "extra": {
@@ -50,7 +50,7 @@
         ],
         "body": {
           "type": "BlockStatement",
-          "start":24,"end":26,"loc":{"start":{"line":1,"column":24},"end":{"line":1,"column":26}},
+          "start":24,"end":26,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":26,"index":26}},
           "body": [],
           "directives": []
         }

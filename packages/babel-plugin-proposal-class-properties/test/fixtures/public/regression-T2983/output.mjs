@@ -1,12 +1,12 @@
-var _class, _temp;
+var _class;
 
-call((_temp = _class = function _class() {
+call((_class = /*#__PURE__*/babelHelpers.createClass(function _class() {
   babelHelpers.classCallCheck(this, _class);
-}, babelHelpers.defineProperty(_class, "test", true), _temp));
+}), babelHelpers.defineProperty(_class, "test", true), _class));
 
-var _default = function _default() {
+var _default = /*#__PURE__*/babelHelpers.createClass(function _default() {
   babelHelpers.classCallCheck(this, _default);
-};
+});
 
 babelHelpers.defineProperty(_default, "test", true);
 export { _default as default };

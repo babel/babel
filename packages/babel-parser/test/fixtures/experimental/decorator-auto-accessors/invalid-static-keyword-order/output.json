@@ -1,0 +1,56 @@
+{
+  "type": "File",
+  "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":36}},
+  "errors": [
+    "SyntaxError: Missing semicolon. (2:17)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":36}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":36}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":9,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":9,"index":9},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":10,"end":36,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":3,"column":1,"index":36}},
+          "body": [
+            {
+              "type": "ClassAccessorProperty",
+              "start":14,"end":29,"loc":{"start":{"line":2,"column":2,"index":14},"end":{"line":2,"column":17,"index":29}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":23,"end":29,"loc":{"start":{"line":2,"column":11,"index":23},"end":{"line":2,"column":17,"index":29},"identifierName":"static"},
+                "name": "static"
+              },
+              "computed": false,
+              "value": null
+            },
+            {
+              "type": "ClassProperty",
+              "start":30,"end":34,"loc":{"start":{"line":2,"column":18,"index":30},"end":{"line":2,"column":22,"index":34}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":30,"end":33,"loc":{"start":{"line":2,"column":18,"index":30},"end":{"line":2,"column":21,"index":33},"identifierName":"bar"},
+                "name": "bar"
+              },
+              "computed": false,
+              "value": null
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

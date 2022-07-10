@@ -2,7 +2,7 @@
 
 > Compile ES2015 template literals to ES5
 
-See our website [@babel/plugin-transform-template-literals](https://babeljs.io/docs/en/next/babel-plugin-transform-template-literals.html) for more information.
+See our website [@babel/plugin-transform-template-literals](https://babeljs.io/docs/en/babel-plugin-transform-template-literals) for more information.
 
 ## Install
 

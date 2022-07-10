@@ -1,9 +1,9 @@
-var _class, _temp, _test;
+var _class, _test;
 
-call((_temp = _class = class {}, _test = {
+call((_class = class {}, _test = {
   writable: true,
   value: true
-}, _temp));
+}, _class));
 export default class _class2 {}
 var _test2 = {
   writable: true,

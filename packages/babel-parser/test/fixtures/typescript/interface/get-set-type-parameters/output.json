@@ -1,0 +1,100 @@
+{
+  "type": "File",
+  "start":0,"end":58,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":58}},
+  "errors": [
+    "SyntaxError: An accessor cannot have type parameters. (2:10)",
+    "SyntaxError: An accessor cannot have type parameters. (3:10)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":58,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":58}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSInterfaceDeclaration",
+        "start":0,"end":58,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":58}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":13,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":13,"index":13},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "body": {
+          "type": "TSInterfaceBody",
+          "start":14,"end":58,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":4,"column":1,"index":58}},
+          "body": [
+            {
+              "type": "TSMethodSignature",
+              "start":18,"end":39,"loc":{"start":{"line":2,"column":2,"index":18},"end":{"line":2,"column":23,"index":39}},
+              "key": {
+                "type": "Identifier",
+                "start":22,"end":25,"loc":{"start":{"line":2,"column":6,"index":22},"end":{"line":2,"column":9,"index":25},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "computed": false,
+              "kind": "get",
+              "typeParameters": {
+                "type": "TSTypeParameterDeclaration",
+                "start":25,"end":28,"loc":{"start":{"line":2,"column":9,"index":25},"end":{"line":2,"column":12,"index":28}},
+                "params": [
+                  {
+                    "type": "TSTypeParameter",
+                    "start":26,"end":27,"loc":{"start":{"line":2,"column":10,"index":26},"end":{"line":2,"column":11,"index":27}},
+                    "name": {
+                      "type": "Identifier",
+                      "start":26,"end":27,"loc":{"start":{"line":2,"column":10,"index":26},"end":{"line":2,"column":11,"index":27},"identifierName":"T"},
+                      "name": "T"
+                    }
+                  }
+                ]
+              },
+              "params": [],
+              "returnType": {
+                "type": "TSTypeAnnotation",
+                "start":30,"end":38,"loc":{"start":{"line":2,"column":14,"index":30},"end":{"line":2,"column":22,"index":38}},
+                "typeAnnotation": {
+                  "type": "TSStringKeyword",
+                  "start":32,"end":38,"loc":{"start":{"line":2,"column":16,"index":32},"end":{"line":2,"column":22,"index":38}}
+                }
+              }
+            },
+            {
+              "type": "TSMethodSignature",
+              "start":42,"end":56,"loc":{"start":{"line":3,"column":2,"index":42},"end":{"line":3,"column":16,"index":56}},
+              "key": {
+                "type": "Identifier",
+                "start":46,"end":49,"loc":{"start":{"line":3,"column":6,"index":46},"end":{"line":3,"column":9,"index":49},"identifierName":"bar"},
+                "name": "bar"
+              },
+              "computed": false,
+              "kind": "set",
+              "typeParameters": {
+                "type": "TSTypeParameterDeclaration",
+                "start":49,"end":52,"loc":{"start":{"line":3,"column":9,"index":49},"end":{"line":3,"column":12,"index":52}},
+                "params": [
+                  {
+                    "type": "TSTypeParameter",
+                    "start":50,"end":51,"loc":{"start":{"line":3,"column":10,"index":50},"end":{"line":3,"column":11,"index":51}},
+                    "name": {
+                      "type": "Identifier",
+                      "start":50,"end":51,"loc":{"start":{"line":3,"column":10,"index":50},"end":{"line":3,"column":11,"index":51},"identifierName":"T"},
+                      "name": "T"
+                    }
+                  }
+                ]
+              },
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start":53,"end":54,"loc":{"start":{"line":3,"column":13,"index":53},"end":{"line":3,"column":14,"index":54},"identifierName":"v"},
+                  "name": "v"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

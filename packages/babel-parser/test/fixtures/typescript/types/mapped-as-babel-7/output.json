@@ -1,0 +1,307 @@
+{
+  "type": "File",
+  "start":0,"end":238,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":11,"column":2,"index":238}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":238,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":11,"column":2,"index":238}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":0,"end":73,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":73}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":26,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":26,"index":26},"identifierName":"MappedTypeWithNewKeys"},
+          "name": "MappedTypeWithNewKeys"
+        },
+        "typeParameters": {
+          "type": "TSTypeParameterDeclaration",
+          "start":26,"end":29,"loc":{"start":{"line":1,"column":26,"index":26},"end":{"line":1,"column":29,"index":29}},
+          "params": [
+            {
+              "type": "TSTypeParameter",
+              "start":27,"end":28,"loc":{"start":{"line":1,"column":27,"index":27},"end":{"line":1,"column":28,"index":28}},
+              "name": "T"
+            }
+          ]
+        },
+        "typeAnnotation": {
+          "type": "TSMappedType",
+          "start":32,"end":72,"loc":{"start":{"line":1,"column":32,"index":32},"end":{"line":3,"column":1,"index":72}},
+          "typeParameter": {
+            "type": "TSTypeParameter",
+            "start":37,"end":49,"loc":{"start":{"line":2,"column":3,"index":37},"end":{"line":2,"column":15,"index":49}},
+            "name": "K",
+            "constraint": {
+              "type": "TSTypeOperator",
+              "start":42,"end":49,"loc":{"start":{"line":2,"column":8,"index":42},"end":{"line":2,"column":15,"index":49}},
+              "operator": "keyof",
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":48,"end":49,"loc":{"start":{"line":2,"column":14,"index":48},"end":{"line":2,"column":15,"index":49}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":48,"end":49,"loc":{"start":{"line":2,"column":14,"index":48},"end":{"line":2,"column":15,"index":49},"identifierName":"T"},
+                  "name": "T"
+                }
+              }
+            }
+          },
+          "nameType": {
+            "type": "TSTypeReference",
+            "start":53,"end":63,"loc":{"start":{"line":2,"column":19,"index":53},"end":{"line":2,"column":29,"index":63}},
+            "typeName": {
+              "type": "Identifier",
+              "start":53,"end":63,"loc":{"start":{"line":2,"column":19,"index":53},"end":{"line":2,"column":29,"index":63},"identifierName":"NewKeyType"},
+              "name": "NewKeyType"
+            }
+          },
+          "typeAnnotation": {
+            "type": "TSIndexedAccessType",
+            "start":66,"end":70,"loc":{"start":{"line":2,"column":32,"index":66},"end":{"line":2,"column":36,"index":70}},
+            "objectType": {
+              "type": "TSTypeReference",
+              "start":66,"end":67,"loc":{"start":{"line":2,"column":32,"index":66},"end":{"line":2,"column":33,"index":67}},
+              "typeName": {
+                "type": "Identifier",
+                "start":66,"end":67,"loc":{"start":{"line":2,"column":32,"index":66},"end":{"line":2,"column":33,"index":67},"identifierName":"T"},
+                "name": "T"
+              }
+            },
+            "indexType": {
+              "type": "TSTypeReference",
+              "start":68,"end":69,"loc":{"start":{"line":2,"column":34,"index":68},"end":{"line":2,"column":35,"index":69}},
+              "typeName": {
+                "type": "Identifier",
+                "start":68,"end":69,"loc":{"start":{"line":2,"column":34,"index":68},"end":{"line":2,"column":35,"index":69},"identifierName":"K"},
+                "name": "K"
+              }
+            }
+          }
+        }
+      },
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":75,"end":150,"loc":{"start":{"line":5,"column":0,"index":75},"end":{"line":7,"column":2,"index":150}},
+        "id": {
+          "type": "Identifier",
+          "start":80,"end":95,"loc":{"start":{"line":5,"column":5,"index":80},"end":{"line":5,"column":20,"index":95},"identifierName":"RemoveKindField"},
+          "name": "RemoveKindField"
+        },
+        "typeParameters": {
+          "type": "TSTypeParameterDeclaration",
+          "start":95,"end":98,"loc":{"start":{"line":5,"column":20,"index":95},"end":{"line":5,"column":23,"index":98}},
+          "params": [
+            {
+              "type": "TSTypeParameter",
+              "start":96,"end":97,"loc":{"start":{"line":5,"column":21,"index":96},"end":{"line":5,"column":22,"index":97}},
+              "name": "T"
+            }
+          ]
+        },
+        "typeAnnotation": {
+          "type": "TSMappedType",
+          "start":101,"end":149,"loc":{"start":{"line":5,"column":26,"index":101},"end":{"line":7,"column":1,"index":149}},
+          "typeParameter": {
+            "type": "TSTypeParameter",
+            "start":106,"end":118,"loc":{"start":{"line":6,"column":3,"index":106},"end":{"line":6,"column":15,"index":118}},
+            "name": "K",
+            "constraint": {
+              "type": "TSTypeOperator",
+              "start":111,"end":118,"loc":{"start":{"line":6,"column":8,"index":111},"end":{"line":6,"column":15,"index":118}},
+              "operator": "keyof",
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":117,"end":118,"loc":{"start":{"line":6,"column":14,"index":117},"end":{"line":6,"column":15,"index":118}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":117,"end":118,"loc":{"start":{"line":6,"column":14,"index":117},"end":{"line":6,"column":15,"index":118},"identifierName":"T"},
+                  "name": "T"
+                }
+              }
+            }
+          },
+          "nameType": {
+            "type": "TSTypeReference",
+            "start":122,"end":140,"loc":{"start":{"line":6,"column":19,"index":122},"end":{"line":6,"column":37,"index":140}},
+            "typeName": {
+              "type": "Identifier",
+              "start":122,"end":129,"loc":{"start":{"line":6,"column":19,"index":122},"end":{"line":6,"column":26,"index":129},"identifierName":"Exclude"},
+              "name": "Exclude"
+            },
+            "typeParameters": {
+              "type": "TSTypeParameterInstantiation",
+              "start":129,"end":140,"loc":{"start":{"line":6,"column":26,"index":129},"end":{"line":6,"column":37,"index":140}},
+              "params": [
+                {
+                  "type": "TSTypeReference",
+                  "start":130,"end":131,"loc":{"start":{"line":6,"column":27,"index":130},"end":{"line":6,"column":28,"index":131}},
+                  "typeName": {
+                    "type": "Identifier",
+                    "start":130,"end":131,"loc":{"start":{"line":6,"column":27,"index":130},"end":{"line":6,"column":28,"index":131},"identifierName":"K"},
+                    "name": "K"
+                  }
+                },
+                {
+                  "type": "TSLiteralType",
+                  "start":133,"end":139,"loc":{"start":{"line":6,"column":30,"index":133},"end":{"line":6,"column":36,"index":139}},
+                  "literal": {
+                    "type": "StringLiteral",
+                    "start":133,"end":139,"loc":{"start":{"line":6,"column":30,"index":133},"end":{"line":6,"column":36,"index":139}},
+                    "extra": {
+                      "rawValue": "kind",
+                      "raw": "\"kind\""
+                    },
+                    "value": "kind"
+                  }
+                }
+              ]
+            }
+          },
+          "typeAnnotation": {
+            "type": "TSIndexedAccessType",
+            "start":143,"end":147,"loc":{"start":{"line":6,"column":40,"index":143},"end":{"line":6,"column":44,"index":147}},
+            "objectType": {
+              "type": "TSTypeReference",
+              "start":143,"end":144,"loc":{"start":{"line":6,"column":40,"index":143},"end":{"line":6,"column":41,"index":144}},
+              "typeName": {
+                "type": "Identifier",
+                "start":143,"end":144,"loc":{"start":{"line":6,"column":40,"index":143},"end":{"line":6,"column":41,"index":144},"identifierName":"T"},
+                "name": "T"
+              }
+            },
+            "indexType": {
+              "type": "TSTypeReference",
+              "start":145,"end":146,"loc":{"start":{"line":6,"column":42,"index":145},"end":{"line":6,"column":43,"index":146}},
+              "typeName": {
+                "type": "Identifier",
+                "start":145,"end":146,"loc":{"start":{"line":6,"column":42,"index":145},"end":{"line":6,"column":43,"index":146},"identifierName":"K"},
+                "name": "K"
+              }
+            }
+          }
+        }
+      },
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":152,"end":238,"loc":{"start":{"line":9,"column":0,"index":152},"end":{"line":11,"column":2,"index":238}},
+        "id": {
+          "type": "Identifier",
+          "start":157,"end":172,"loc":{"start":{"line":9,"column":5,"index":157},"end":{"line":9,"column":20,"index":172},"identifierName":"PickByValueType"},
+          "name": "PickByValueType"
+        },
+        "typeParameters": {
+          "type": "TSTypeParameterDeclaration",
+          "start":172,"end":178,"loc":{"start":{"line":9,"column":20,"index":172},"end":{"line":9,"column":26,"index":178}},
+          "params": [
+            {
+              "type": "TSTypeParameter",
+              "start":173,"end":174,"loc":{"start":{"line":9,"column":21,"index":173},"end":{"line":9,"column":22,"index":174}},
+              "name": "T"
+            },
+            {
+              "type": "TSTypeParameter",
+              "start":176,"end":177,"loc":{"start":{"line":9,"column":24,"index":176},"end":{"line":9,"column":25,"index":177}},
+              "name": "U"
+            }
+          ]
+        },
+        "typeAnnotation": {
+          "type": "TSMappedType",
+          "start":181,"end":237,"loc":{"start":{"line":9,"column":29,"index":181},"end":{"line":11,"column":1,"index":237}},
+          "typeParameter": {
+            "type": "TSTypeParameter",
+            "start":186,"end":198,"loc":{"start":{"line":10,"column":3,"index":186},"end":{"line":10,"column":15,"index":198}},
+            "name": "K",
+            "constraint": {
+              "type": "TSTypeOperator",
+              "start":191,"end":198,"loc":{"start":{"line":10,"column":8,"index":191},"end":{"line":10,"column":15,"index":198}},
+              "operator": "keyof",
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":197,"end":198,"loc":{"start":{"line":10,"column":14,"index":197},"end":{"line":10,"column":15,"index":198}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":197,"end":198,"loc":{"start":{"line":10,"column":14,"index":197},"end":{"line":10,"column":15,"index":198},"identifierName":"T"},
+                  "name": "T"
+                }
+              }
+            }
+          },
+          "nameType": {
+            "type": "TSConditionalType",
+            "start":202,"end":228,"loc":{"start":{"line":10,"column":19,"index":202},"end":{"line":10,"column":45,"index":228}},
+            "checkType": {
+              "type": "TSIndexedAccessType",
+              "start":202,"end":206,"loc":{"start":{"line":10,"column":19,"index":202},"end":{"line":10,"column":23,"index":206}},
+              "objectType": {
+                "type": "TSTypeReference",
+                "start":202,"end":203,"loc":{"start":{"line":10,"column":19,"index":202},"end":{"line":10,"column":20,"index":203}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":202,"end":203,"loc":{"start":{"line":10,"column":19,"index":202},"end":{"line":10,"column":20,"index":203},"identifierName":"T"},
+                  "name": "T"
+                }
+              },
+              "indexType": {
+                "type": "TSTypeReference",
+                "start":204,"end":205,"loc":{"start":{"line":10,"column":21,"index":204},"end":{"line":10,"column":22,"index":205}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":204,"end":205,"loc":{"start":{"line":10,"column":21,"index":204},"end":{"line":10,"column":22,"index":205},"identifierName":"K"},
+                  "name": "K"
+                }
+              }
+            },
+            "extendsType": {
+              "type": "TSTypeReference",
+              "start":215,"end":216,"loc":{"start":{"line":10,"column":32,"index":215},"end":{"line":10,"column":33,"index":216}},
+              "typeName": {
+                "type": "Identifier",
+                "start":215,"end":216,"loc":{"start":{"line":10,"column":32,"index":215},"end":{"line":10,"column":33,"index":216},"identifierName":"U"},
+                "name": "U"
+              }
+            },
+            "trueType": {
+              "type": "TSTypeReference",
+              "start":219,"end":220,"loc":{"start":{"line":10,"column":36,"index":219},"end":{"line":10,"column":37,"index":220}},
+              "typeName": {
+                "type": "Identifier",
+                "start":219,"end":220,"loc":{"start":{"line":10,"column":36,"index":219},"end":{"line":10,"column":37,"index":220},"identifierName":"K"},
+                "name": "K"
+              }
+            },
+            "falseType": {
+              "type": "TSNeverKeyword",
+              "start":223,"end":228,"loc":{"start":{"line":10,"column":40,"index":223},"end":{"line":10,"column":45,"index":228}}
+            }
+          },
+          "typeAnnotation": {
+            "type": "TSIndexedAccessType",
+            "start":231,"end":235,"loc":{"start":{"line":10,"column":48,"index":231},"end":{"line":10,"column":52,"index":235}},
+            "objectType": {
+              "type": "TSTypeReference",
+              "start":231,"end":232,"loc":{"start":{"line":10,"column":48,"index":231},"end":{"line":10,"column":49,"index":232}},
+              "typeName": {
+                "type": "Identifier",
+                "start":231,"end":232,"loc":{"start":{"line":10,"column":48,"index":231},"end":{"line":10,"column":49,"index":232},"identifierName":"T"},
+                "name": "T"
+              }
+            },
+            "indexType": {
+              "type": "TSTypeReference",
+              "start":233,"end":234,"loc":{"start":{"line":10,"column":50,"index":233},"end":{"line":10,"column":51,"index":234}},
+              "typeName": {
+                "type": "Identifier",
+                "start":233,"end":234,"loc":{"start":{"line":10,"column":50,"index":233},"end":{"line":10,"column":51,"index":234},"identifierName":"K"},
+                "name": "K"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

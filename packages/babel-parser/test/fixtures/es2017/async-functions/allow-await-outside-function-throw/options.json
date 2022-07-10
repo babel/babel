@@ -1,4 +1,0 @@
-{
-  "allowAwaitOutsideFunction": true,
-  "throws": "Unexpected token, expected \";\" (2:15)"
-}

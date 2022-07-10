@@ -1,0 +1,44 @@
+{
+  "type": "File",
+  "start":0,"end":24,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":24,"index":24}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":24,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":24,"index":24}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":24,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":24,"index":24}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":23,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":23,"index":23}},
+            "id": {
+              "type": "Placeholder",
+              "start":6,"end":13,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":13,"index":13}},
+              "name": {
+                "type": "Identifier",
+                "start":8,"end":11,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":11,"index":11},"identifierName":"LHS"},
+                "name": "LHS"
+              },
+              "expectedNode": "Pattern"
+            },
+            "init": {
+              "type": "Placeholder",
+              "start":16,"end":23,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":23,"index":23}},
+              "name": {
+                "type": "Identifier",
+                "start":18,"end":21,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":21,"index":21},"identifierName":"RHS"},
+                "name": "RHS"
+              },
+              "expectedNode": "Expression"
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": []
+  }
+}

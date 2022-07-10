@@ -2,10 +2,16 @@
 
 import type { Options } from "../options";
 import * as N from "../types";
+import type { CommentWhitespace } from "../parser/comments";
 import { Position } from "../util/location";
 
 import { types as ct, type TokContext } from "./context";
-import { types as tt, type TokenType } from "./types";
+import { tt, type TokenType } from "./types";
+import { Errors, type ParseError } from "../parse-error";
+
+export type DeferredStrictError =
+  | typeof Errors.StrictNumericEscape
+  | typeof Errors.StrictOctalLiteral;
 
 type TopicContextState = {
   // When a topic binding has been currently established,
@@ -23,21 +29,27 @@ type TopicContextState = {
 export default class State {
   strict: boolean;
   curLine: number;
+  lineStart: number;
 
   // And, if locations are used, the {line, column} object
   // corresponding to those offsets
   startLoc: Position;
   endLoc: Position;
 
-  init(options: Options): void {
+  init({ strictMode, sourceType, startLine, startColumn }: Options): void {
     this.strict =
-      options.strictMode === false ? false : options.sourceType === "module";
+      strictMode === false
+        ? false
+        : strictMode === true
+        ? true
+        : sourceType === "module";
 
-    this.curLine = options.startLine;
-    this.startLoc = this.endLoc = this.curPosition();
+    this.curLine = startLine;
+    this.lineStart = -startColumn;
+    this.startLoc = this.endLoc = new Position(startLine, startColumn, 0);
   }
 
-  errors: SyntaxError[] = [];
+  errors: ParseError<any>[] = [];
 
   // Used to signify the start of a potential arrow function
   potentialArrowAt: number = -1;
@@ -57,27 +69,21 @@ export default class State {
   noArrowParamsConversionAt: number[] = [];
 
   // Flags to track
-  inParameters: boolean = false;
   maybeInArrowParameters: boolean = false;
-  // This flag is used to track async arrow head across function declarations.
-  // e.g. async (foo = function (await) {}) => {}
-  // When parsing `await` in this expression, `maybeInAsyncArrowHead` is true
-  // but `maybeInArrowParameters` is false
-  maybeInAsyncArrowHead: boolean = false;
-  inPipeline: boolean = false;
   inType: boolean = false;
   noAnonFunctionType: boolean = false;
-  inPropertyName: boolean = false;
   hasFlowComment: boolean = false;
-  isIterator: boolean = false;
+  isAmbientContext: boolean = false;
+  inAbstractClass: boolean = false;
+  inDisallowConditionalTypesContext: boolean = false;
 
-  // For the smartPipelines plugin:
+  // For the Hack-style pipelines plugin
   topicContext: TopicContextState = {
     maxNumOfResolvableTopics: 0,
     maxTopicIndex: null,
   };
 
-  // For the F# plugin
+  // For the F#-style pipelines plugin
   soloAwait: boolean = false;
   inFSharpPipelineDirectBody: boolean = false;
 
@@ -93,28 +99,14 @@ export default class State {
   // where @foo belongs to the outer class and @bar to the inner
   decoratorStack: Array<Array<N.Decorator>> = [[]];
 
-  // Positions to delayed-check that yield/await does not exist in default parameters.
-  yieldPos: number = -1;
-  awaitPos: number = -1;
-
-  // Comment store.
+  // Comment store for Program.comments
   comments: Array<N.Comment> = [];
 
   // Comment attachment store
-  trailingComments: Array<N.Comment> = [];
-  leadingComments: Array<N.Comment> = [];
-  commentStack: Array<{
-    start: number,
-    leadingComments: ?Array<N.Comment>,
-    trailingComments: ?Array<N.Comment>,
-    type: string,
-  }> = [];
-  // $FlowIgnore this is initialized when the parser starts.
-  commentPreviousNode: N.Node = null;
+  commentStack: Array<CommentWhitespace> = [];
 
   // The current position of the tokenizer in the input.
   pos: number = 0;
-  lineStart: number = 0;
 
   // Properties of the current token:
   // Its type
@@ -133,33 +125,33 @@ export default class State {
   // $FlowIgnore this is initialized when generating the second token.
   lastTokStartLoc: Position = null;
   lastTokStart: number = 0;
-  lastTokEnd: number = 0;
 
-  // The context stack is used to superficially track syntactic
-  // context to predict whether a regular expression is allowed in a
-  // given position.
-  context: Array<TokContext> = [ct.braceStatement];
-  exprAllowed: boolean = true;
+  // The context stack is used to track whether the apostrophe "`" starts
+  // or ends a string template
+  context: Array<TokContext> = [ct.brace];
+  // Used to track whether a JSX element is allowed to form
+  canStartJSXElement: boolean = true;
 
   // Used to signal to callers of `readWord1` whether the word
   // contained any escape sequences. This is needed because words with
   // escape sequences must not be interpreted as keywords.
   containsEsc: boolean = false;
 
-  // This property is used to throw an error for
-  // an octal literal in a directive that occurs prior
-  // to a "use strict" directive.
-  octalPositions: number[] = [];
+  // This property is used to track the following errors
+  // - StrictNumericEscape
+  // - StrictOctalLiteral
+  //
+  // in a literal that occurs prior to/immediately after a "use strict" directive.
 
-  // Names of exports store. `default` is stored as a name for both
-  // `export default foo;` and `export { foo as default };`.
-  exportedIdentifiers: Array<string> = [];
+  // todo(JLHwung): set strictErrors to null and avoid recording string errors
+  // after a non-directive is parsed
+  strictErrors: Map<number, [DeferredStrictError, Position]> = new Map();
 
   // Tokens length in token store
   tokensLength: number = 0;
 
   curPosition(): Position {
-    return new Position(this.curLine, this.pos - this.lineStart);
+    return new Position(this.curLine, this.pos - this.lineStart, this.pos);
   }
 
   clone(skipArrays?: boolean): State {
@@ -181,3 +173,13 @@ export default class State {
     return state;
   }
 }
+
+export type LookaheadState = {
+  pos: number,
+  value: any,
+  type: TokenType,
+  start: number,
+  end: number,
+  /* Used only in readToken_mult_modulo */
+  inType: boolean,
+};

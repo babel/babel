@@ -1,4 +1,5 @@
-function _readOnlyError(name) { throw new Error("\"" + name + "\" is read-only"); }
-
 var MULTIPLIER = 5;
-MULTIPLIER = (_readOnlyError("MULTIPLIER"), "overwrite");
+"overwrite", babelHelpers.readOnlyError("MULTIPLIER");
+var a = 5;
+var b = 0;
+b++, babelHelpers.readOnlyError("a");

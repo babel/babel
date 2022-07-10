@@ -1,3 +1,7 @@
 {
-  "plugins": [["transform-typescript", { "allowDeclareFields": true }]]
+  "BABEL_8_BREAKING": true,
+  "plugins": [
+    "transform-typescript",
+    ["syntax-decorators", { "version": "legacy" }]
+  ]
 }

@@ -1,5 +1,11 @@
 import path from "path";
-import { runFixtureTests } from "./helpers/runFixtureTests";
-import { parseExpression } from "../lib";
+import runFixtureTests from "./helpers/run-fixture-tests.js";
+import { parseExpression } from "../lib/index.js";
+import { fileURLToPath } from "url";
 
-runFixtureTests(path.join(__dirname, "expressions"), parseExpression);
+const fixtures = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "expressions",
+);
+
+runFixtureTests(fixtures, parseExpression);

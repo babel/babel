@@ -1,0 +1,3 @@
+Successfully compiled 4 files with Babel (123ms).
+The watcher is ready.
+Successfully compiled 1 file with Babel (123ms).

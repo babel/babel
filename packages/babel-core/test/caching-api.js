@@ -1,6 +1,6 @@
 import gensync from "gensync";
-import { makeStrongCacheSync, makeStrongCache } from "../lib/config/caching";
-import { waitFor } from "../lib/gensync-utils/async";
+import { makeStrongCacheSync, makeStrongCache } from "../lib/config/caching.js";
+import { waitFor } from "../lib/gensync-utils/async.js";
 
 describe("caching API", () => {
   it("should allow permacaching with .forever()", () => {

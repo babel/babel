@@ -1,0 +1,79 @@
+{
+  "type": "File",
+  "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":46}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":46}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":46}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"C"},
+          "name": "C"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":46,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":3,"column":1,"index":46}},
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start":12,"end":44,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":2,"column":34,"index":44}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":12,"end":13,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":2,"column":3,"index":13},"identifierName":"p"},
+                "name": "p"
+              },
+              "computed": false,
+              "value": {
+                "type": "FunctionExpression",
+                "start":16,"end":43,"loc":{"start":{"line":2,"column":6,"index":16},"end":{"line":2,"column":33,"index":43}},
+                "id": null,
+                "generator": true,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "start":29,"end":43,"loc":{"start":{"line":2,"column":19,"index":29},"end":{"line":2,"column":33,"index":43}},
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "start":31,"end":41,"loc":{"start":{"line":2,"column":21,"index":31},"end":{"line":2,"column":31,"index":41}},
+                      "expression": {
+                        "type": "YieldExpression",
+                        "start":31,"end":41,"loc":{"start":{"line":2,"column":21,"index":31},"end":{"line":2,"column":31,"index":41}},
+                        "delegate": false,
+                        "argument": {
+                          "type": "UnaryExpression",
+                          "start":37,"end":41,"loc":{"start":{"line":2,"column":27,"index":37},"end":{"line":2,"column":31,"index":41}},
+                          "operator": "+",
+                          "prefix": true,
+                          "argument": {
+                            "type": "NumericLiteral",
+                            "start":39,"end":41,"loc":{"start":{"line":2,"column":29,"index":39},"end":{"line":2,"column":31,"index":41}},
+                            "extra": {
+                              "rawValue": 42,
+                              "raw": "42"
+                            },
+                            "value": 42
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "directives": []
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "type": "File",
+  "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":36,"index":36}},
+  "errors": [
+    "SyntaxError: Topic reference was used in a lexical context without topic binding. (1:32)",
+    "SyntaxError: Pipeline is in topic style but does not use topic reference. (1:9)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":36,"index":36}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":36,"index":36}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":36,"index":36}},
+          "left": {
+            "type": "Identifier",
+            "start":0,"end":5,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":5,"index":5},"identifierName":"value"},
+            "name": "value"
+          },
+          "operator": "|>",
+          "right": {
+            "type": "PipelineTopicExpression",
+            "start":9,"end":36,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":36,"index":36}},
+            "expression": {
+              "type": "DoExpression",
+              "start":9,"end":36,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":36,"index":36}},
+              "async": false,
+              "body": {
+                "type": "BlockStatement",
+                "start":12,"end":36,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":36,"index":36}},
+                "body": [
+                  {
+                    "type": "ForInStatement",
+                    "start":14,"end":34,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":34,"index":34}},
+                    "left": {
+                      "type": "Identifier",
+                      "start":19,"end":20,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":20,"index":20},"identifierName":"e"},
+                      "name": "e"
+                    },
+                    "right": {
+                      "type": "Identifier",
+                      "start":24,"end":30,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":30,"index":30},"identifierName":"object"},
+                      "name": "object"
+                    },
+                    "body": {
+                      "type": "ExpressionStatement",
+                      "start":32,"end":34,"loc":{"start":{"line":1,"column":32,"index":32},"end":{"line":1,"column":34,"index":34}},
+                      "expression": {
+                        "type": "PipelinePrimaryTopicReference",
+                        "start":32,"end":33,"loc":{"start":{"line":1,"column":32,"index":32},"end":{"line":1,"column":33,"index":33}}
+                      }
+                    }
+                  }
+                ],
+                "directives": []
+              }
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,10 +1,3 @@
-Warning, the following targets are using a decimal version:
-
-  electron: 0.36
-
-We recommend using a string for minor/patch versions to avoid numbers like 6.10
-getting parsed as 6.1, which can lead to unexpected behavior.
-
 @babel/preset-env: `DEBUG` option
 
 Using targets:
@@ -15,31 +8,44 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-nullish-coalescing-operator { "electron":"0.36" }
-  proposal-optional-chaining { "electron":"0.36" }
-  proposal-json-strings { "electron":"0.36" }
-  proposal-optional-catch-binding { "electron":"0.36" }
-  transform-parameters { "electron":"0.36" }
-  proposal-async-generator-functions { "electron":"0.36" }
-  proposal-object-rest-spread { "electron":"0.36" }
-  transform-dotall-regex { "electron":"0.36" }
-  proposal-unicode-property-regex { "electron":"0.36" }
-  transform-named-capturing-groups-regex { "electron":"0.36" }
-  transform-async-to-generator { "electron":"0.36" }
-  transform-exponentiation-operator { "electron":"0.36" }
-  transform-function-name { "electron":"0.36" }
-  transform-for-of { "electron":"0.36" }
-  transform-sticky-regex { "electron":"0.36" }
-  transform-unicode-regex { "electron":"0.36" }
-  transform-destructuring { "electron":"0.36" }
-  transform-block-scoping { "electron":"0.36" }
-  transform-regenerator { "electron":"0.36" }
-  transform-modules-commonjs { "electron":"0.36" }
-  proposal-dynamic-import { "electron":"0.36" }
+  proposal-class-static-block { electron < 15.0 }
+  proposal-private-property-in-object { electron < 13.0 }
+  proposal-class-properties { electron < 6.0 }
+  proposal-private-methods { electron < 10.0 }
+  proposal-numeric-separator { electron < 6.0 }
+  proposal-logical-assignment-operators { electron < 10.0 }
+  proposal-nullish-coalescing-operator { electron < 8.0 }
+  proposal-optional-chaining { electron < 8.0 }
+  proposal-json-strings { electron < 3.0 }
+  proposal-optional-catch-binding { electron < 3.0 }
+  transform-parameters { electron < 0.37 }
+  proposal-async-generator-functions { electron < 3.0 }
+  proposal-object-rest-spread { electron < 2.0 }
+  transform-dotall-regex { electron < 3.0 }
+  proposal-unicode-property-regex { electron < 3.0 }
+  transform-named-capturing-groups-regex { electron < 3.0 }
+  transform-async-to-generator { electron < 1.6 }
+  transform-exponentiation-operator { electron < 1.3 }
+  transform-function-name { electron < 1.2 }
+  transform-for-of { electron < 1.2 }
+  transform-sticky-regex { electron < 0.37 }
+  transform-unicode-regex { electron < 1.1 }
+  transform-destructuring { electron < 1.2 }
+  transform-block-scoping { electron < 0.37 }
+  transform-regenerator { electron < 1.1 }
+  proposal-export-namespace-from { electron < 5.0 }
+  transform-modules-commonjs
+  proposal-dynamic-import
+corejs3: `DEBUG` option
 
-Using polyfills with `entry` option:
+Using targets: {
+  "electron": "0.36"
+}
 
-[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-electron/input.mjs] Replaced core-js entries with the following polyfills:
+Using polyfills with `entry-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-electron/input.mjs]
+The corejs3 polyfill entry has been replaced with the following polyfills:
   es.symbol { "electron":"0.36" }
   es.symbol.description { "electron":"0.36" }
   es.symbol.async-iterator { "electron":"0.36" }
@@ -52,11 +58,9 @@ Using polyfills with `entry` option:
   es.symbol.split { "electron":"0.36" }
   es.symbol.to-string-tag { "electron":"0.36" }
   es.array.concat { "electron":"0.36" }
-  es.array.every { "electron":"0.36" }
   es.array.filter { "electron":"0.36" }
   es.array.flat { "electron":"0.36" }
   es.array.flat-map { "electron":"0.36" }
-  es.array.for-each { "electron":"0.36" }
   es.array.from { "electron":"0.36" }
   es.array.includes { "electron":"0.36" }
   es.array.index-of { "electron":"0.36" }
@@ -66,7 +70,6 @@ Using polyfills with `entry` option:
   es.array.reduce { "electron":"0.36" }
   es.array.reduce-right { "electron":"0.36" }
   es.array.slice { "electron":"0.36" }
-  es.array.some { "electron":"0.36" }
   es.array.sort { "electron":"0.36" }
   es.array.species { "electron":"0.36" }
   es.array.splice { "electron":"0.36" }
@@ -104,6 +107,7 @@ Using polyfills with `entry` option:
   es.reflect.set { "electron":"0.36" }
   es.reflect.set-prototype-of { "electron":"0.36" }
   es.regexp.constructor { "electron":"0.36" }
+  es.regexp.exec { "electron":"0.36" }
   es.regexp.flags { "electron":"0.36" }
   es.regexp.to-string { "electron":"0.36" }
   es.set { "electron":"0.36" }
@@ -130,7 +134,10 @@ Using polyfills with `entry` option:
   es.typed-array.uint32-array { "electron":"0.36" }
   es.typed-array.from { "electron":"0.36" }
   es.typed-array.includes { "electron":"0.36" }
+  es.typed-array.iterator { "electron":"0.36" }
   es.typed-array.of { "electron":"0.36" }
+  es.typed-array.set { "electron":"0.36" }
+  es.typed-array.sort { "electron":"0.36" }
   es.typed-array.to-string { "electron":"0.36" }
   es.weak-map { "electron":"0.36" }
   es.weak-set { "electron":"0.36" }

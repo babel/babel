@@ -1,7 +1,7 @@
 {
-  "presets": ["env"],
-  "plugins": [
-    ["proposal-decorators", { "legacy": true }],
-    ["proposal-class-properties", { "loose": true }]
-  ]
+  "assumptions": {
+    "setPublicClassFields": true
+  },
+  "presets": [["env", { "targets": { "browsers": "ie 6" } }]],
+  "plugins": [["proposal-decorators", { "version": "legacy" }]]
 }

@@ -1,0 +1,60 @@
+{
+  "type": "File",
+  "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":32}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":32}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TypeAlias",
+        "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":32}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":6,"index":6},"identifierName":"B"},
+          "name": "B"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "ObjectTypeAnnotation",
+          "start":9,"end":32,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":3,"column":1,"index":32}},
+          "callProperties": [],
+          "properties": [
+            {
+              "type": "ObjectTypeProperty",
+              "start":13,"end":29,"loc":{"start":{"line":2,"column":2,"index":13},"end":{"line":2,"column":18,"index":29}},
+              "key": {
+                "type": "Identifier",
+                "start":17,"end":19,"loc":{"start":{"line":2,"column":6,"index":17},"end":{"line":2,"column":8,"index":19},"identifierName":"if"},
+                "name": "if"
+              },
+              "static": false,
+              "proto": false,
+              "kind": "get",
+              "method": true,
+              "value": {
+                "type": "FunctionTypeAnnotation",
+                "start":13,"end":29,"loc":{"start":{"line":2,"column":2,"index":13},"end":{"line":2,"column":18,"index":29}},
+                "params": [],
+                "rest": null,
+                "typeParameters": null,
+                "this": null,
+                "returnType": {
+                  "type": "NumberTypeAnnotation",
+                  "start":23,"end":29,"loc":{"start":{"line":2,"column":12,"index":23},"end":{"line":2,"column":18,"index":29}}
+                }
+              },
+              "optional": false
+            }
+          ],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false,
+          "inexact": false
+        }
+      }
+    ],
+    "directives": []
+  }
+}

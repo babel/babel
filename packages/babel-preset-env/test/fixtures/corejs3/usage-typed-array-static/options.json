@@ -1,9 +1,10 @@
 {
   "presets": [
     [
-      "../../../../lib",
+      "env",
       {
         "useBuiltIns": "usage",
+        "targets": { "browsers": "ie 6" },
         "corejs": 3,
         "modules": false
       }

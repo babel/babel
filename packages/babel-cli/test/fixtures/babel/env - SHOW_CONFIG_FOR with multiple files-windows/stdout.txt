@@ -1,0 +1,32 @@
+Babel configs on "<CWD>/src/foo.js" (ascending priority):
+config <CWD>/babel.config.json
+{
+  "sourceType": "script"
+}
+
+config <CWD>/babel.config.json .overrides[0]
+{
+  "test": "src/foo.js",
+  "sourceType": "module"
+}
+
+config <CWD>/.babelrc
+{}
+
+programmatic options from @babel/cli
+{
+  "presets": [
+    "<ROOTDIR>//packages//babel-preset-react//lib//index.js"
+  ],
+  "plugins": [
+    "<ROOTDIR>//packages//babel-plugin-transform-arrow-functions//lib//index.js",
+    "<ROOTDIR>//packages//babel-plugin-transform-strict-mode//lib//index.js",
+    "<ROOTDIR>//packages//babel-plugin-transform-modules-commonjs//lib//index.js"
+  ],
+  "sourceFileName": "src/foo.js",
+  "caller": {
+    "name": "@babel/cli"
+  },
+  "filename": "src//foo.js"
+}
+-----End Babel configs-----

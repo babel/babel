@@ -1,7 +1,10 @@
-import traverse from "../lib";
 import { parse } from "@babel/parser";
-import generate from "@babel/generator";
 import * as t from "@babel/types";
+
+import _traverse from "../lib/index.js";
+import _generate from "@babel/generator";
+const traverse = _traverse.default || _traverse;
+const generate = _generate.default || _generate;
 
 describe("path/replacement", function () {
   describe("replaceWith", function () {
@@ -97,6 +100,48 @@ describe("path/replacement", function () {
         /You passed `path\.replaceWith\(\)` a falsy node, use `path\.remove\(\)` instead/,
       );
     });
+
+    it("does not revisit the replaced node if it is the node being replaced", () => {
+      const ast = parse(`var x;`);
+      let visitCounter = 0;
+      traverse(ast, {
+        VariableDeclaration(path) {
+          visitCounter++;
+          if (visitCounter > 1) {
+            return true;
+          }
+          path.replaceWith(path.node);
+        },
+      });
+      expect(visitCounter).toBe(1);
+    });
+
+    // https://github.com/babel/babel/issues/12386
+    it("updates pathCache with the replaced node", () => {
+      const ast = parse(`() => (a?.b)?.c`, {
+        createParenthesizedExpressions: true,
+      });
+      traverse(ast, {
+        OptionalMemberExpression(path) {
+          path.node.type = "MemberExpression";
+          // force `replaceWith` to replace `path.node`
+          path.replaceWith(t.cloneNode(path.node));
+          path.parentPath.ensureBlock();
+
+          const aQuestionDotBNode = path.node.object.expression;
+          // avoid traversing to a?.b
+          aQuestionDotBNode.type = "MemberExpression";
+        },
+        ParenthesizedExpression(path) {
+          path.replaceWith(path.node.expression);
+        },
+      });
+      expect(generate(ast).code).toMatchInlineSnapshot(`
+        "() => {
+          return a.b.c;
+        };"
+      `);
+    });
   });
   describe("replaceWithMultiple", () => {
     it("does not add extra parentheses for a JSXElement with a JSXElement parent", () => {
@@ -111,6 +156,36 @@ describe("path/replacement", function () {
         },
       });
       expect(generate(ast).code).toBe("<div><p></p><h></h></div>;");
+    });
+    it("does not revisit one of new nodes if it is the node being replaced and is the head of nodes", () => {
+      // packages/babel-plugin-transform-block-scoping/src/index.js relies on this behaviour
+      const ast = parse(`var x;`);
+      let visitCounter = 0;
+      traverse(ast, {
+        VariableDeclaration(path) {
+          visitCounter++;
+          if (visitCounter > 1) {
+            return true;
+          }
+          path.replaceWithMultiple([path.node, t.emptyStatement()]);
+        },
+      });
+      expect(visitCounter).toBe(1);
+    });
+    it("does not revisit one of new nodes if it is the node being replaced and is the tail of nodes", () => {
+      // packages/babel-plugin-transform-block-scoping/src/index.js relies on this behaviour
+      const ast = parse(`var x;`);
+      let visitCounter = 0;
+      traverse(ast, {
+        VariableDeclaration(path) {
+          visitCounter++;
+          if (visitCounter > 1) {
+            return true;
+          }
+          path.replaceWithMultiple([t.emptyStatement(), path.node]);
+        },
+      });
+      expect(visitCounter).toBe(1);
     });
   });
 });

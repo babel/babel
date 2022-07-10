@@ -1,0 +1,6 @@
+{
+  "plugins": ["transform-destructuring", "../../helpers/checkScopeInfo.js"],
+  "assumptions": {
+    "arrayLikeIsIterable": true
+  }
+}

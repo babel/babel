@@ -1,0 +1,61 @@
+{
+  "type": "File",
+  "start":0,"end":53,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":53}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":53,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":53}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":53,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":53}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"C"},
+          "name": "C"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":53,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":5,"column":1,"index":53}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":12,"end":27,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":2,"column":17,"index":27}},
+              "static": true,
+              "key": {
+                "type": "Identifier",
+                "start":19,"end":22,"loc":{"start":{"line":2,"column":9,"index":19},"end":{"line":2,"column":12,"index":22},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":25,"end":27,"loc":{"start":{"line":2,"column":15,"index":25},"end":{"line":2,"column":17,"index":27}},
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "StaticBlock",
+              "start":30,"end":39,"loc":{"start":{"line":3,"column":2,"index":30},"end":{"line":3,"column":11,"index":39}},
+              "body": []
+            },
+            {
+              "type": "StaticBlock",
+              "start":42,"end":51,"loc":{"start":{"line":4,"column":2,"index":42},"end":{"line":4,"column":11,"index":51}},
+              "body": []
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

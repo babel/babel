@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-runtime",
-  "version": "7.10.1",
+  "version": "7.18.6",
   "description": "Externalise references to helpers and builtins, automatically polyfilling your code without polluting globals",
   "repository": {
     "type": "git",
@@ -11,31 +11,58 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "keywords": [
     "babel-plugin"
   ],
   "browser": {
     "./lib/get-runtime-path/index.js": "./lib/get-runtime-path/browser.js",
-    "./src/get-runtime-path/index.js": "./src/get-runtime-path/browser.js"
+    "./src/get-runtime-path/index.ts": "./src/get-runtime-path/browser.ts"
   },
   "dependencies": {
-    "@babel/helper-module-imports": "^7.10.1",
-    "@babel/helper-plugin-utils": "^7.10.1",
-    "resolve": "^1.8.1",
-    "semver": "^5.5.1"
+    "@babel/helper-module-imports": "workspace:^",
+    "@babel/helper-plugin-utils": "workspace:^",
+    "babel-plugin-polyfill-corejs2": "^0.3.1",
+    "babel-plugin-polyfill-corejs3": "^0.5.2",
+    "babel-plugin-polyfill-regenerator": "^0.3.1",
+    "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.1",
-    "@babel/helper-plugin-test-runner": "^7.10.1",
-    "@babel/helpers": "^7.10.1",
-    "@babel/plugin-transform-typeof-symbol": "^7.10.1",
-    "@babel/preset-env": "^7.10.1",
-    "@babel/runtime": "^7.10.1",
-    "@babel/template": "^7.10.1",
-    "@babel/types": "^7.10.1"
-  }
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^",
+    "@babel/helpers": "workspace:^",
+    "@babel/preset-env": "workspace:^",
+    "@babel/runtime": "workspace:^",
+    "@babel/runtime-corejs3": "workspace:^",
+    "@babel/template": "workspace:^",
+    "@babel/types": "workspace:^",
+    "make-dir": "condition:BABEL_8_BREAKING ? : ^2.1.0"
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-runtime",
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)",
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      null,
+      {
+        "exports": null
+      }
+    ],
+    "USE_ESM": [
+      {
+        "type": "module"
+      },
+      null
+    ]
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
+  "type": "commonjs"
 }

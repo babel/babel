@@ -16,9 +16,9 @@
 });
 
 (function () {
-  var _class, _temp;
+  var _class;
 
-  return _temp = _class = class Bar {
+  return _class = class Bar {
     constructor() {
       var _this2 = this;
 
@@ -29,7 +29,7 @@
 
   }, babelHelpers.defineProperty(_class, "fn", function () {
     return console.log(_class);
-  }), _temp;
+  }), _class;
 });
 
 (function () {

@@ -2,18 +2,18 @@
 
 > 
 
-See our website [@babel/helper-split-export-declaration](https://babeljs.io/docs/en/next/babel-helper-split-export-declaration.html) for more information.
+See our website [@babel/helper-split-export-declaration](https://babeljs.io/docs/en/babel-helper-split-export-declaration) for more information.
 
 ## Install
 
 Using npm:
 
 ```sh
-npm install --save-dev @babel/helper-split-export-declaration
+npm install --save @babel/helper-split-export-declaration
 ```
 
 or using yarn:
 
 ```sh
-yarn add @babel/helper-split-export-declaration --dev
+yarn add @babel/helper-split-export-declaration
 ```

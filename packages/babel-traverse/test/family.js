@@ -1,5 +1,8 @@
-import traverse from "../lib";
 import { parse } from "@babel/parser";
+import * as t from "@babel/types";
+
+import _traverse from "../lib/index.js";
+const traverse = _traverse.default || _traverse;
 
 describe("path/family", function () {
   describe("getBindingIdentifiers", function () {
@@ -80,6 +83,70 @@ describe("path/family", function () {
       expect(lastSibling.getAllPrevSiblings().length).toBeTruthy();
       expect(sibling.getAllNextSiblings()).toHaveLength(2);
       expect(lastSibling.getAllPrevSiblings()).toHaveLength(2);
+    });
+
+    it("should initialize path.scope when needed", function () {
+      const ast = parse("if (0) {}");
+
+      let testHasScope = false;
+      let consequentHasScope = false;
+
+      traverse(ast, {
+        IfStatement(path) {
+          // @babel/traverse pre-traverses the whole tree to populate the initial
+          // scope. Thus, it pre-caches paths for all the original nodes.
+          // We need to introduce two new nodes to avoid using the cached paths
+          // that already have the path.scope property.
+          path.set("test", t.identifier("a"));
+          path.set("consequent", t.expressionStatement(t.identifier("b")));
+
+          const testPath = path.get("test");
+
+          testHasScope = !!testPath.scope;
+          consequentHasScope = !!testPath.getSibling("consequent").scope;
+        },
+      });
+
+      expect(testHasScope).toBe(true);
+      expect(consequentHasScope).toBe(true);
+    });
+  });
+  describe("getCompletionRecords", function () {
+    it("should skip variable declarations", function () {
+      const ast = parse("'foo' + 'bar'; var a = 10; let b = 20; const c = 30;");
+      let records = [];
+      traverse(ast, {
+        Program(path) {
+          records = path.getCompletionRecords();
+        },
+      });
+      expect(records).toHaveLength(1);
+      expect(records[0].node.type).toBe("ExpressionStatement");
+      expect(records[0].node.expression.type).toBe("BinaryExpression");
+    });
+
+    it("should skip variable declarations in a BlockStatement", function () {
+      const ast = parse("'foo' + 'bar'; { var a = 10; }");
+      let records = [];
+      traverse(ast, {
+        Program(path) {
+          records = path.getCompletionRecords();
+        },
+      });
+      expect(records).toHaveLength(1);
+      expect(records[0].node.type).toBe("ExpressionStatement");
+      expect(records[0].node.expression.type).toBe("BinaryExpression");
+    });
+
+    it("should be empty if there are only variable declarations", function () {
+      const ast = parse("var a = 10; let b = 20; const c = 30;");
+      let records = [];
+      traverse(ast, {
+        Program(path) {
+          records = path.getCompletionRecords();
+        },
+      });
+      expect(records).toHaveLength(0);
     });
   });
 });

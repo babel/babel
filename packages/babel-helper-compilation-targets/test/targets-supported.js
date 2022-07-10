@@ -1,6 +1,4 @@
-"use strict";
-
-const { targetsSupported } = require("../lib/filter-items");
+import { targetsSupported } from "../lib/filter-items.js";
 
 describe("targetsSupported", () => {
   const MAX_VERSION = `${Number.MAX_SAFE_INTEGER}.0.0`;

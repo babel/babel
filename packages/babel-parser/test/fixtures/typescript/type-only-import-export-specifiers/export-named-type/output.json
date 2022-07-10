@@ -1,0 +1,45 @@
+{
+  "type": "File",
+  "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":32,"index":32}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":32,"index":32}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":32,"index":32}},
+        "exportKind": "value",
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":9,"end":13,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":13,"index":13}},
+            "local": {
+              "type": "Identifier",
+              "start":9,"end":13,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":13,"index":13},"identifierName":"type"},
+              "name": "type"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":9,"end":13,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":13,"index":13},"identifierName":"type"},
+              "name": "type"
+            },
+            "exportKind": "value"
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":21,"end":31,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":31,"index":31}},
+          "extra": {
+            "rawValue": "./mod.js",
+            "raw": "\"./mod.js\""
+          },
+          "value": "./mod.js"
+        },
+        "declaration": null
+      }
+    ],
+    "directives": []
+  }
+}

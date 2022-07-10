@@ -1,4 +1,4 @@
-var _bar = babelHelpers.classPrivateFieldLooseKey("bar");
+var _bar = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("bar");
 
 var Foo = /*#__PURE__*/function (_Bar) {
   "use strict";
@@ -8,15 +8,15 @@ var Foo = /*#__PURE__*/function (_Bar) {
   var _super = babelHelpers.createSuper(Foo);
 
   function Foo() {
-    var _temp, _this;
+    var _this;
 
     babelHelpers.classCallCheck(this, Foo);
-    foo((_temp = _this = _super.call(this), Object.defineProperty(babelHelpers.assertThisInitialized(_this), _bar, {
+    foo((_this = _super.call(this), Object.defineProperty(babelHelpers.assertThisInitialized(_this), _bar, {
       writable: true,
       value: "foo"
-    }), _temp));
+    }), babelHelpers.assertThisInitialized(_this)));
     return _this;
   }
 
-  return Foo;
+  return babelHelpers.createClass(Foo);
 }(Bar);

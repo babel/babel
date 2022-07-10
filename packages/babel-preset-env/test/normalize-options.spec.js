@@ -1,19 +1,15 @@
-"use strict";
-
-const normalizeOptions = require("../lib/normalize-options.js");
-
-const {
+import _normalizeOptions, {
   checkDuplicateIncludeExcludes,
-  validateBoolOption,
-  validateStringOption,
   validateModulesOption,
   validateUseBuiltInsOption,
   normalizePluginName,
-} = normalizeOptions;
+} from "../lib/normalize-options.js";
+const normalizeOptions = _normalizeOptions.default || _normalizeOptions;
+
 describe("normalize-options", () => {
   describe("normalizeOptions", () => {
     it("should return normalized `include` and `exclude`", () => {
-      const normalized = normalizeOptions.default({
+      const normalized = normalizeOptions({
         include: [
           "babel-plugin-transform-spread",
           "transform-classes",
@@ -61,9 +57,9 @@ describe("normalize-options", () => {
     `(
       "should throw if with includes $include and excludes $exclude",
       ({ include, exclude }) => {
-        expect(() =>
-          normalizeOptions.default({ include, exclude }),
-        ).toThrowError(/were found in both/);
+        expect(() => normalizeOptions({ include, exclude })).toThrowError(
+          /were found in both/,
+        );
       },
     );
 
@@ -71,7 +67,7 @@ describe("normalize-options", () => {
       [2, 2.1, 3, 3.5].forEach(corejs => {
         ["entry", "usage"].forEach(useBuiltIns => {
           expect(() =>
-            normalizeOptions.default({ useBuiltIns, corejs }),
+            normalizeOptions({ useBuiltIns, corejs }),
           ).not.toThrowError();
         });
       });
@@ -80,28 +76,28 @@ describe("normalize-options", () => {
     it("should throw if corejs version is invalid", () => {
       [1, 1.2, 4, 4.5].forEach(corejs => {
         ["entry", "usage"].forEach(useBuiltIns => {
-          expect(() =>
-            normalizeOptions.default({ useBuiltIns, corejs }),
-          ).toThrowError(/The version passed to `corejs` is invalid./);
+          expect(() => normalizeOptions({ useBuiltIns, corejs })).toThrowError(
+            /The version passed to `corejs` is invalid./,
+          );
         });
       });
     });
 
     it("throws when including module plugins", () => {
       expect(() =>
-        normalizeOptions.default({ include: ["proposal-dynamic-import"] }),
+        normalizeOptions({ include: ["proposal-dynamic-import"] }),
       ).toThrow();
       expect(() =>
-        normalizeOptions.default({ include: ["transform-modules-amd"] }),
+        normalizeOptions({ include: ["transform-modules-amd"] }),
       ).toThrow();
     });
 
-    it("allows exclusion of module plugins ", () => {
+    it("allows exclusion of module plugins", () => {
       expect(() =>
-        normalizeOptions.default({ exclude: ["proposal-dynamic-import"] }),
+        normalizeOptions({ exclude: ["proposal-dynamic-import"] }),
       ).not.toThrow();
       expect(() =>
-        normalizeOptions.default({ exclude: ["transform-modules-commonjs"] }),
+        normalizeOptions({ exclude: ["transform-modules-commonjs"] }),
       ).not.toThrow();
     });
   });
@@ -118,7 +114,7 @@ describe("normalize-options", () => {
   describe("RegExp include/exclude", () => {
     it("should not allow invalid plugins in `include` and `exclude`", () => {
       const normalizeWithNonExistingPlugin = () => {
-        normalizeOptions.default({
+        normalizeOptions({
           include: ["non-existing-plugin"],
         });
       };
@@ -126,7 +122,7 @@ describe("normalize-options", () => {
     });
 
     it("should expand regular expressions in `include` and `exclude`", () => {
-      const normalized = normalizeOptions.default({
+      const normalized = normalizeOptions({
         include: ["^[a-z]*-spread", "babel-plugin-transform-classes"],
       });
       expect(normalized.include).toEqual([
@@ -136,7 +132,7 @@ describe("normalize-options", () => {
     });
 
     it("should expand regular expressions in `include` and `exclude`", () => {
-      const normalized = normalizeOptions.default({
+      const normalized = normalizeOptions({
         useBuiltIns: "entry",
         corejs: 3,
         exclude: ["es.math.log.*"],
@@ -150,7 +146,7 @@ describe("normalize-options", () => {
 
     it("should not allow the same modules in `include` and `exclude`", () => {
       const normalizeWithNonExistingPlugin = () => {
-        normalizeOptions.default({
+        normalizeOptions({
           useBuiltIns: "entry",
           corejs: 3,
           include: ["es.math.log2"],
@@ -161,7 +157,7 @@ describe("normalize-options", () => {
     });
 
     it("should not do partial match if not explicitly defined `include` and `exclude`", () => {
-      const normalized = normalizeOptions.default({
+      const normalized = normalizeOptions({
         useBuiltIns: "entry",
         corejs: 3,
         include: ["es.reflect.set-prototype-of"],
@@ -169,48 +165,6 @@ describe("normalize-options", () => {
       });
       expect(normalized.include).toEqual(["es.reflect.set-prototype-of"]);
       expect(normalized.exclude).toEqual(["es.reflect.set"]);
-    });
-  });
-
-  describe("validateBoolOption", () => {
-    it("`undefined` option returns false", () => {
-      expect(validateBoolOption("test", undefined, false)).toBe(false);
-    });
-
-    it("`false` option returns false", () => {
-      expect(validateBoolOption("test", false, false)).toBe(false);
-    });
-
-    it("`true` option returns true", () => {
-      expect(validateBoolOption("test", true, false)).toBe(true);
-    });
-
-    it("array option is invalid", () => {
-      expect(() => {
-        validateBoolOption("test", [], false);
-      }).toThrow();
-    });
-  });
-
-  describe("validateStringOption", () => {
-    it("`undefined` option default", () => {
-      expect(validateStringOption("test", undefined, "default")).toBe(
-        "default",
-      );
-    });
-
-    it("`value` option returns value", () => {
-      expect(validateStringOption("test", "value", "default")).toBe("value");
-    });
-
-    it("no default returns undefined", () => {
-      expect(validateStringOption("test", undefined)).toBe(undefined);
-    });
-
-    it("array option is invalid", () => {
-      expect(() => {
-        validateStringOption("test", [], "default");
-      }).toThrow();
     });
   });
 

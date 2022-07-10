@@ -1,0 +1,53 @@
+{
+  "type": "File",
+  "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+  "errors": [
+    "SyntaxError: Missing initializer in const declaration. (1:13)",
+    "SyntaxError: Missing semicolon. (1:13)",
+    "SyntaxError: Missing semicolon. (1:16)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ForStatement",
+        "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+        "init": {
+          "type": "VariableDeclaration",
+          "start":5,"end":13,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":13,"index":13}},
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start":11,"end":13,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":13,"index":13}},
+              "id": {
+                "type": "Identifier",
+                "start":11,"end":13,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":13,"index":13},"identifierName":"of"},
+                "name": "of"
+              },
+              "init": null
+            }
+          ],
+          "kind": "const"
+        },
+        "test": {
+          "type": "NumericLiteral",
+          "start":14,"end":16,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":16,"index":16}},
+          "extra": {
+            "rawValue": 42,
+            "raw": "42"
+          },
+          "value": 42
+        },
+        "update": null,
+        "body": {
+          "type": "EmptyStatement",
+          "start":17,"end":18,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":18,"index":18}}
+        }
+      }
+    ],
+    "directives": []
+  }
+}

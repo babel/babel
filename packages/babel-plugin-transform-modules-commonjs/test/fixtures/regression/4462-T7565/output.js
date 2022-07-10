@@ -9,5 +9,5 @@ var _yy;
 
 var yy = 0;
 exports.yy = yy;
-var zz = (_yy = +yy, exports.yy = yy = _yy + 1, _yy);
+var zz = (_yy = yy++, exports.yy = yy, _yy);
 exports.zz = zz;

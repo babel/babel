@@ -1,8 +1,8 @@
-var _bar = new WeakMap();
+var _bar = /*#__PURE__*/new WeakMap();
 
 class Foo {
   constructor() {
-    _bar.set(this, {
+    babelHelpers.classPrivateFieldInitSpec(this, _bar, {
       writable: true,
       value: "bar"
     });

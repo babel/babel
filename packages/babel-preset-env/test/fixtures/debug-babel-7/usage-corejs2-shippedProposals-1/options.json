@@ -1,0 +1,20 @@
+{
+  "validateLogs": true,
+  "ignoreOutput": true,
+  "presets": [
+    [
+      "env",
+      {
+        "debug": true,
+        "targets": {
+          "chrome": 52,
+          "firefox": 50,
+          "ie": 11
+        },
+        "shippedProposals": true,
+        "useBuiltIns": "usage",
+        "corejs": 2
+      }
+    ]
+  ]
+}

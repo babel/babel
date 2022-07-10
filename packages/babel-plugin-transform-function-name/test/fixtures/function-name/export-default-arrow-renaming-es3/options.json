@@ -1,5 +1,5 @@
 {
-  "presets": ["env"],
+  "presets": [["env", { "targets": { "browsers": "ie 6" } }]],
   "plugins": [
     "transform-member-expression-literals",
     "transform-property-literals"

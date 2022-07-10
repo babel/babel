@@ -1,1 +1,6 @@
-
+language/expressions/class/decorator/syntax/class-valid/decorator-member-expr-private-identifier.js(default)
+language/expressions/class/decorator/syntax/class-valid/decorator-member-expr-private-identifier.js(strict mode)
+language/import/json-invalid.js(default)
+language/import/json-invalid.js(strict mode)
+language/statements/class/decorator/syntax/class-valid/decorator-member-expr-private-identifier.js(default)
+language/statements/class/decorator/syntax/class-valid/decorator-member-expr-private-identifier.js(strict mode)

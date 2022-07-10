@@ -1,0 +1,13 @@
+{
+  "BABEL_8_BREAKING": false,
+  "plugins": [
+    [
+      "proposal-decorators",
+      { "decoratorsBeforeExport": false, "version": "2018-09" }
+    ]
+  ],
+  "parserOpts": {
+    "plugins": ["decoratorAutoAccessors"]
+  },
+  "throws": "Accessor properties are not supported in 2018-09 decorator transform, please specify { \"version\": \"2021-12\" } instead."
+}

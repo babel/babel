@@ -1,0 +1,102 @@
+{
+  "type": "File",
+  "start":0,"end":58,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":58,"index":58}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":58,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":58,"index":58}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":0,"end":58,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":58,"index":58}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":11,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":11,"index":11},"identifierName":"Equals"},
+          "name": "Equals"
+        },
+        "typeAnnotation": {
+          "type": "TSConditionalType",
+          "start":14,"end":57,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":57,"index":57}},
+          "checkType": {
+            "type": "TSTypeReference",
+            "start":14,"end":15,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":15,"index":15}},
+            "typeName": {
+              "type": "Identifier",
+              "start":14,"end":15,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":15,"index":15},"identifierName":"A"},
+              "name": "A"
+            }
+          },
+          "extendsType": {
+            "type": "TSFunctionType",
+            "start":24,"end":49,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":49,"index":49}},
+            "params": [],
+            "returnType": {
+              "type": "TSTypeAnnotation",
+              "start":27,"end":49,"loc":{"start":{"line":1,"column":27,"index":27},"end":{"line":1,"column":49,"index":49}},
+              "typeAnnotation": {
+                "type": "TSConditionalType",
+                "start":30,"end":49,"loc":{"start":{"line":1,"column":30,"index":30},"end":{"line":1,"column":49,"index":49}},
+                "checkType": {
+                  "type": "TSTypeReference",
+                  "start":30,"end":31,"loc":{"start":{"line":1,"column":30,"index":30},"end":{"line":1,"column":31,"index":31}},
+                  "typeName": {
+                    "type": "Identifier",
+                    "start":30,"end":31,"loc":{"start":{"line":1,"column":30,"index":30},"end":{"line":1,"column":31,"index":31},"identifierName":"B"},
+                    "name": "B"
+                  }
+                },
+                "extendsType": {
+                  "type": "TSTypeReference",
+                  "start":40,"end":41,"loc":{"start":{"line":1,"column":40,"index":40},"end":{"line":1,"column":41,"index":41}},
+                  "typeName": {
+                    "type": "Identifier",
+                    "start":40,"end":41,"loc":{"start":{"line":1,"column":40,"index":40},"end":{"line":1,"column":41,"index":41},"identifierName":"C"},
+                    "name": "C"
+                  }
+                },
+                "trueType": {
+                  "type": "TSTypeReference",
+                  "start":44,"end":45,"loc":{"start":{"line":1,"column":44,"index":44},"end":{"line":1,"column":45,"index":45}},
+                  "typeName": {
+                    "type": "Identifier",
+                    "start":44,"end":45,"loc":{"start":{"line":1,"column":44,"index":44},"end":{"line":1,"column":45,"index":45},"identifierName":"D"},
+                    "name": "D"
+                  }
+                },
+                "falseType": {
+                  "type": "TSTypeReference",
+                  "start":48,"end":49,"loc":{"start":{"line":1,"column":48,"index":48},"end":{"line":1,"column":49,"index":49}},
+                  "typeName": {
+                    "type": "Identifier",
+                    "start":48,"end":49,"loc":{"start":{"line":1,"column":48,"index":48},"end":{"line":1,"column":49,"index":49},"identifierName":"E"},
+                    "name": "E"
+                  }
+                }
+              }
+            }
+          },
+          "trueType": {
+            "type": "TSTypeReference",
+            "start":52,"end":53,"loc":{"start":{"line":1,"column":52,"index":52},"end":{"line":1,"column":53,"index":53}},
+            "typeName": {
+              "type": "Identifier",
+              "start":52,"end":53,"loc":{"start":{"line":1,"column":52,"index":52},"end":{"line":1,"column":53,"index":53},"identifierName":"F"},
+              "name": "F"
+            }
+          },
+          "falseType": {
+            "type": "TSTypeReference",
+            "start":56,"end":57,"loc":{"start":{"line":1,"column":56,"index":56},"end":{"line":1,"column":57,"index":57}},
+            "typeName": {
+              "type": "Identifier",
+              "start":56,"end":57,"loc":{"start":{"line":1,"column":56,"index":56},"end":{"line":1,"column":57,"index":57},"identifierName":"G"},
+              "name": "G"
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "type": "File",
+  "start":0,"end":116,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":57,"index":116}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":116,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":57,"index":116}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":58,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":58,"index":58}},
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start":9,"end":21,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":21,"index":21}},
+            "imported": {
+              "type": "StringLiteral",
+              "start":9,"end":14,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":14,"index":14}},
+              "extra": {
+                "rawValue": "foo",
+                "raw": "\"foo\""
+              },
+              "value": "foo"
+            },
+            "importKind": null,
+            "local": {
+              "type": "Identifier",
+              "start":18,"end":21,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":21,"index":21},"identifierName":"bar"},
+              "name": "bar"
+            }
+          },
+          {
+            "type": "ImportSpecifier",
+            "start":23,"end":39,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":39,"index":39}},
+            "imported": {
+              "type": "StringLiteral",
+              "start":23,"end":32,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":32,"index":32}},
+              "extra": {
+                "rawValue": "default",
+                "raw": "\"default\""
+              },
+              "value": "default"
+            },
+            "importKind": null,
+            "local": {
+              "type": "Identifier",
+              "start":36,"end":39,"loc":{"start":{"line":1,"column":36,"index":36},"end":{"line":1,"column":39,"index":39},"identifierName":"qux"},
+              "name": "qux"
+            }
+          }
+        ],
+        "importKind": "value",
+        "source": {
+          "type": "StringLiteral",
+          "start":47,"end":57,"loc":{"start":{"line":1,"column":47,"index":47},"end":{"line":1,"column":57,"index":57}},
+          "extra": {
+            "rawValue": "module-a",
+            "raw": "\"module-a\""
+          },
+          "value": "module-a"
+        }
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":59,"end":116,"loc":{"start":{"line":2,"column":0,"index":59},"end":{"line":2,"column":57,"index":116}},
+        "specifiers": [
+          {
+            "type": "ExportNamespaceSpecifier",
+            "start":66,"end":76,"loc":{"start":{"line":2,"column":7,"index":66},"end":{"line":2,"column":17,"index":76}},
+            "exported": {
+              "type": "StringLiteral",
+              "start":71,"end":76,"loc":{"start":{"line":2,"column":12,"index":71},"end":{"line":2,"column":17,"index":76}},
+              "extra": {
+                "rawValue": "foo",
+                "raw": "\"foo\""
+              },
+              "value": "foo"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start":80,"end":97,"loc":{"start":{"line":2,"column":21,"index":80},"end":{"line":2,"column":38,"index":97}},
+            "local": {
+              "type": "Identifier",
+              "start":80,"end":87,"loc":{"start":{"line":2,"column":21,"index":80},"end":{"line":2,"column":28,"index":87},"identifierName":"default"},
+              "name": "default"
+            },
+            "exported": {
+              "type": "StringLiteral",
+              "start":91,"end":97,"loc":{"start":{"line":2,"column":32,"index":91},"end":{"line":2,"column":38,"index":97}},
+              "extra": {
+                "rawValue": "quux",
+                "raw": "\"quux\""
+              },
+              "value": "quux"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":105,"end":115,"loc":{"start":{"line":2,"column":46,"index":105},"end":{"line":2,"column":56,"index":115}},
+          "extra": {
+            "rawValue": "module-b",
+            "raw": "\"module-b\""
+          },
+          "value": "module-b"
+        },
+        "declaration": null,
+        "exportKind": "value"
+      }
+    ],
+    "directives": []
+  }
+}

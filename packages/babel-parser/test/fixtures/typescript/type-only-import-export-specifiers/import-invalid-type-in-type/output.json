@@ -1,0 +1,47 @@
+{
+  "type": "File",
+  "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":36,"index":36}},
+  "errors": [
+    "SyntaxError: The 'type' modifier cannot be used on a named import when 'import type' is used on its import statement. (1:14)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":36,"index":36}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":36,"index":36}},
+        "importKind": "type",
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start":14,"end":22,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":22,"index":22}},
+            "imported": {
+              "type": "Identifier",
+              "start":19,"end":22,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":22,"index":22},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "local": {
+              "type": "Identifier",
+              "start":19,"end":22,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":22,"index":22},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "importKind": "type"
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":30,"end":35,"loc":{"start":{"line":1,"column":30,"index":30},"end":{"line":1,"column":35,"index":35}},
+          "extra": {
+            "rawValue": "foo",
+            "raw": "\"foo\""
+          },
+          "value": "foo"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

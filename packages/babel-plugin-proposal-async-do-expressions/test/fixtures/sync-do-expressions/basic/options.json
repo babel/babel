@@ -1,0 +1,4 @@
+{
+  "plugins": ["proposal-async-do-expressions"],
+  "minNodeVersion": "6.0.0"
+}

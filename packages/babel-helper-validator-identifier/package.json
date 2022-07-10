@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-validator-identifier",
-  "version": "7.10.1",
+  "version": "7.18.6",
   "description": "Validate identifier/keywords name",
   "repository": {
     "type": "git",
@@ -12,9 +12,25 @@
     "access": "public"
   },
   "main": "./lib/index.js",
-  "exports": "./lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
   "devDependencies": {
-    "charcodes": "^0.2.0",
-    "unicode-13.0.0": "^0.8.0"
+    "@unicode/unicode-14.0.0": "^1.2.1",
+    "charcodes": "^0.2.0"
+  },
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)",
+  "type": "commonjs",
+  "conditions": {
+    "USE_ESM": [
+      {
+        "type": "module"
+      },
+      null
+    ]
   }
 }

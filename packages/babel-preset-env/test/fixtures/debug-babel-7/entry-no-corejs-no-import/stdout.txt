@@ -1,0 +1,43 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "node": "6"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  proposal-class-static-block { node < 16.11 }
+  proposal-private-property-in-object { node < 16.9 }
+  proposal-class-properties { node < 12 }
+  proposal-private-methods { node < 14.6 }
+  proposal-numeric-separator { node < 12.5 }
+  proposal-logical-assignment-operators { node < 15 }
+  proposal-nullish-coalescing-operator { node < 14 }
+  proposal-optional-chaining { node < 16.9 }
+  proposal-json-strings { node < 10 }
+  proposal-optional-catch-binding { node < 10 }
+  proposal-async-generator-functions { node < 10 }
+  proposal-object-rest-spread { node < 8.3 }
+  transform-dotall-regex { node < 8.10 }
+  proposal-unicode-property-regex { node < 10 }
+  transform-named-capturing-groups-regex { node < 10 }
+  transform-async-to-generator { node < 7.6 }
+  transform-exponentiation-operator { node < 7 }
+  transform-function-name { node < 6.5 }
+  transform-for-of { node < 6.5 }
+  transform-destructuring { node < 6.5 }
+  proposal-export-namespace-from { node < 13.2 }
+  transform-modules-commonjs
+  proposal-dynamic-import
+corejs2: `DEBUG` option
+
+Using targets: {
+  "node": "6"
+}
+
+Using polyfills with `entry-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug-babel-7/entry-no-corejs-no-import/input.js]
+The entry point for the corejs2 polyfill has not been found.

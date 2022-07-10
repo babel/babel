@@ -1,0 +1,13 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "modules": false,
+        "useBuiltIns": "entry",
+        "corejs": 2
+      }
+    ]
+  ],
+  "BABEL_8_BREAKING": true
+}

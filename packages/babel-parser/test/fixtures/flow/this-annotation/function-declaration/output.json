@@ -1,0 +1,186 @@
+{
+  "type": "File",
+  "start":0,"end":149,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":29,"index":149}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":149,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":29,"index":149}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":46,"index":46}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":12,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":12,"index":12},"identifierName":"foo"},
+          "name": "foo"
+        },
+        "generator": false,
+        "async": false,
+        "params": [
+          {
+            "type": "Identifier",
+            "start":14,"end":27,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":27,"index":27},"identifierName":"this"},
+            "name": "this",
+            "typeAnnotation": {
+              "type": "TypeAnnotation",
+              "start":19,"end":27,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":27,"index":27}},
+              "typeAnnotation": {
+                "type": "NumberTypeAnnotation",
+                "start":21,"end":27,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":27,"index":27}}
+              }
+            }
+          },
+          {
+            "type": "Identifier",
+            "start":29,"end":39,"loc":{"start":{"line":1,"column":29,"index":29},"end":{"line":1,"column":39,"index":39},"identifierName":"a"},
+            "name": "a",
+            "typeAnnotation": {
+              "type": "TypeAnnotation",
+              "start":31,"end":39,"loc":{"start":{"line":1,"column":31,"index":31},"end":{"line":1,"column":39,"index":39}},
+              "typeAnnotation": {
+                "type": "StringTypeAnnotation",
+                "start":33,"end":39,"loc":{"start":{"line":1,"column":33,"index":33},"end":{"line":1,"column":39,"index":39}}
+              }
+            }
+          },
+          {
+            "type": "Identifier",
+            "start":41,"end":42,"loc":{"start":{"line":1,"column":41,"index":41},"end":{"line":1,"column":42,"index":42},"identifierName":"b"},
+            "name": "b"
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start":44,"end":46,"loc":{"start":{"line":1,"column":44,"index":44},"end":{"line":1,"column":46,"index":46}},
+          "body": [],
+          "directives": []
+        }
+      },
+      {
+        "type": "FunctionDeclaration",
+        "start":48,"end":79,"loc":{"start":{"line":3,"column":0,"index":48},"end":{"line":3,"column":31,"index":79}},
+        "id": {
+          "type": "Identifier",
+          "start":57,"end":60,"loc":{"start":{"line":3,"column":9,"index":57},"end":{"line":3,"column":12,"index":60},"identifierName":"bar"},
+          "name": "bar"
+        },
+        "generator": false,
+        "async": false,
+        "params": [
+          {
+            "type": "Identifier",
+            "start":62,"end":75,"loc":{"start":{"line":3,"column":14,"index":62},"end":{"line":3,"column":27,"index":75},"identifierName":"this"},
+            "name": "this",
+            "typeAnnotation": {
+              "type": "TypeAnnotation",
+              "start":67,"end":75,"loc":{"start":{"line":3,"column":19,"index":67},"end":{"line":3,"column":27,"index":75}},
+              "typeAnnotation": {
+                "type": "NumberTypeAnnotation",
+                "start":69,"end":75,"loc":{"start":{"line":3,"column":21,"index":69},"end":{"line":3,"column":27,"index":75}}
+              }
+            }
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start":77,"end":79,"loc":{"start":{"line":3,"column":29,"index":77},"end":{"line":3,"column":31,"index":79}},
+          "body": [],
+          "directives": []
+        }
+      },
+      {
+        "type": "FunctionDeclaration",
+        "start":81,"end":118,"loc":{"start":{"line":5,"column":0,"index":81},"end":{"line":5,"column":37,"index":118}},
+        "id": {
+          "type": "Identifier",
+          "start":90,"end":93,"loc":{"start":{"line":5,"column":9,"index":90},"end":{"line":5,"column":12,"index":93},"identifierName":"baz"},
+          "name": "baz"
+        },
+        "generator": false,
+        "async": false,
+        "params": [
+          {
+            "type": "Identifier",
+            "start":95,"end":108,"loc":{"start":{"line":5,"column":14,"index":95},"end":{"line":5,"column":27,"index":108},"identifierName":"this"},
+            "name": "this",
+            "typeAnnotation": {
+              "type": "TypeAnnotation",
+              "start":100,"end":108,"loc":{"start":{"line":5,"column":19,"index":100},"end":{"line":5,"column":27,"index":108}},
+              "typeAnnotation": {
+                "type": "NumberTypeAnnotation",
+                "start":102,"end":108,"loc":{"start":{"line":5,"column":21,"index":102},"end":{"line":5,"column":27,"index":108}}
+              }
+            }
+          },
+          {
+            "type": "RestElement",
+            "start":110,"end":114,"loc":{"start":{"line":5,"column":29,"index":110},"end":{"line":5,"column":33,"index":114}},
+            "argument": {
+              "type": "Identifier",
+              "start":113,"end":114,"loc":{"start":{"line":5,"column":32,"index":113},"end":{"line":5,"column":33,"index":114},"identifierName":"a"},
+              "name": "a"
+            }
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start":116,"end":118,"loc":{"start":{"line":5,"column":35,"index":116},"end":{"line":5,"column":37,"index":118}},
+          "body": [],
+          "directives": []
+        }
+      },
+      {
+        "type": "FunctionDeclaration",
+        "start":120,"end":149,"loc":{"start":{"line":7,"column":0,"index":120},"end":{"line":7,"column":29,"index":149}},
+        "id": {
+          "type": "Identifier",
+          "start":129,"end":132,"loc":{"start":{"line":7,"column":9,"index":129},"end":{"line":7,"column":12,"index":132},"identifierName":"qux"},
+          "name": "qux"
+        },
+        "generator": false,
+        "async": false,
+        "typeParameters": {
+          "type": "TypeParameterDeclaration",
+          "start":132,"end":135,"loc":{"start":{"line":7,"column":12,"index":132},"end":{"line":7,"column":15,"index":135}},
+          "params": [
+            {
+              "type": "TypeParameter",
+              "start":133,"end":134,"loc":{"start":{"line":7,"column":13,"index":133},"end":{"line":7,"column":14,"index":134}},
+              "name": "T",
+              "variance": null
+            }
+          ]
+        },
+        "params": [
+          {
+            "type": "Identifier",
+            "start":137,"end":145,"loc":{"start":{"line":7,"column":17,"index":137},"end":{"line":7,"column":25,"index":145},"identifierName":"this"},
+            "name": "this",
+            "typeAnnotation": {
+              "type": "TypeAnnotation",
+              "start":142,"end":145,"loc":{"start":{"line":7,"column":22,"index":142},"end":{"line":7,"column":25,"index":145}},
+              "typeAnnotation": {
+                "type": "GenericTypeAnnotation",
+                "start":144,"end":145,"loc":{"start":{"line":7,"column":24,"index":144},"end":{"line":7,"column":25,"index":145}},
+                "typeParameters": null,
+                "id": {
+                  "type": "Identifier",
+                  "start":144,"end":145,"loc":{"start":{"line":7,"column":24,"index":144},"end":{"line":7,"column":25,"index":145},"identifierName":"T"},
+                  "name": "T"
+                }
+              }
+            }
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start":147,"end":149,"loc":{"start":{"line":7,"column":27,"index":147},"end":{"line":7,"column":29,"index":149}},
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "type": "File",
+  "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":39}},
+  "errors": [
+    "SyntaxError: 'await' is only allowed within async functions and at the top levels of modules. (2:14)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":39}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSModuleDeclaration",
+        "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":39}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11},"identifierName":"N"},
+          "name": "N"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start":12,"end":39,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":3,"column":1,"index":39}},
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "start":18,"end":37,"loc":{"start":{"line":2,"column":4,"index":18},"end":{"line":2,"column":23,"index":37}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":24,"end":36,"loc":{"start":{"line":2,"column":10,"index":24},"end":{"line":2,"column":22,"index":36}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":24,"end":25,"loc":{"start":{"line":2,"column":10,"index":24},"end":{"line":2,"column":11,"index":25},"identifierName":"x"},
+                    "name": "x"
+                  },
+                  "init": {
+                    "type": "AwaitExpression",
+                    "start":28,"end":36,"loc":{"start":{"line":2,"column":14,"index":28},"end":{"line":2,"column":22,"index":36}},
+                    "argument": {
+                      "type": "NumericLiteral",
+                      "start":34,"end":36,"loc":{"start":{"line":2,"column":20,"index":34},"end":{"line":2,"column":22,"index":36}},
+                      "extra": {
+                        "rawValue": 42,
+                        "raw": "42"
+                      },
+                      "value": 42
+                    }
+                  }
+                }
+              ],
+              "kind": "const"
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "validateLogs": true,
+  "presets": [["env", { "modules": false }]]
+}

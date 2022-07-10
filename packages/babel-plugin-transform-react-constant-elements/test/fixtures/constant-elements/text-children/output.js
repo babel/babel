@@ -1,9 +1,9 @@
-var _ref = <div className="class-name">
-      Text
-    </div>;
+var _div;
 
 var Foo = React.createClass({
   render: function () {
-    return _ref;
+    return _div || (_div = <div className="class-name">
+      Text
+    </div>);
   }
 });

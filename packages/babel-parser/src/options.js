@@ -10,6 +10,7 @@ export type SourceType = "script" | "module" | "unambiguous";
 export type Options = {
   sourceType: SourceType,
   sourceFilename?: string,
+  startColumn: number,
   startLine: number,
   allowAwaitOutsideFunction: boolean,
   allowReturnOutsideFunction: boolean,
@@ -22,6 +23,7 @@ export type Options = {
   tokens: boolean,
   createParenthesizedExpressions: boolean,
   errorRecovery: boolean,
+  attachComment: boolean,
 };
 
 export const defaultOptions: Options = {
@@ -29,7 +31,10 @@ export const defaultOptions: Options = {
   sourceType: "script",
   // Source filename.
   sourceFilename: undefined,
-  // Line from which to start counting source. Useful for
+  // Column (0-based) from which to start counting source. Useful for
+  // integration with other tools.
+  startColumn: 0,
+  // Line (1-based) from which to start counting source. Useful for
   // integration with other tools.
   startLine: 1,
   // When enabled, await at the top level is not considered an
@@ -66,6 +71,11 @@ export const defaultOptions: Options = {
   // When enabled, errors are attached to the AST instead of being directly thrown.
   // Some errors will still throw, because @babel/parser can't always recover.
   errorRecovery: false,
+  // When enabled, comments will be attached to adjacent AST nodes as one of
+  // `leadingComments`, `trailingComments` and `innerComments`. The comment attachment
+  // is vital to preserve comments after transform. If you don't print AST back,
+  // consider set this option to `false` for performance
+  attachComment: true,
 };
 
 // Interpret and default an options object

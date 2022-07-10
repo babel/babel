@@ -1,0 +1,9 @@
+{
+  "name": "@babel-internal/runtime-integration-src",
+  "private": true,
+  "devDependencies": {
+    "@babel/runtime": "workspace:^",
+    "@babel/runtime-corejs3": "workspace:^"
+  },
+  "type": "commonjs"
+}

@@ -1,32 +1,32 @@
 {
   "type": "File",
-  "start":0,"end":34,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":20}},
+  "start":0,"end":34,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":20,"index":34}},
   "program": {
     "type": "Program",
-    "start":0,"end":34,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":20}},
+    "start":0,"end":34,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":20,"index":34}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "VariableDeclaration",
-        "start":0,"end":13,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":13}},
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
         "declarations": [
           {
             "type": "VariableDeclarator",
-            "start":4,"end":7,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":7}},
+            "start":4,"end":7,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":7,"index":7}},
             "id": {
               "type": "Identifier",
-              "start":4,"end":7,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":7},"identifierName":"foo"},
+              "start":4,"end":7,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":7,"index":7},"identifierName":"foo"},
               "name": "foo"
             },
             "init": null
           },
           {
             "type": "VariableDeclarator",
-            "start":9,"end":12,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":12}},
+            "start":9,"end":12,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":12,"index":12}},
             "id": {
               "type": "Identifier",
-              "start":9,"end":12,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":12},"identifierName":"bar"},
+              "start":9,"end":12,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":12,"index":12},"identifierName":"bar"},
               "name": "bar"
             },
             "init": null
@@ -36,19 +36,19 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start":14,"end":34,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":20}},
+        "start":14,"end":34,"loc":{"start":{"line":2,"column":0,"index":14},"end":{"line":2,"column":20,"index":34}},
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start":22,"end":32,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":18}},
+            "start":22,"end":32,"loc":{"start":{"line":2,"column":8,"index":22},"end":{"line":2,"column":18,"index":32}},
             "local": {
               "type": "Identifier",
-              "start":22,"end":25,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":11},"identifierName":"foo"},
+              "start":22,"end":25,"loc":{"start":{"line":2,"column":8,"index":22},"end":{"line":2,"column":11,"index":25},"identifierName":"foo"},
               "name": "foo"
             },
             "exported": {
               "type": "Identifier",
-              "start":29,"end":32,"loc":{"start":{"line":2,"column":15},"end":{"line":2,"column":18},"identifierName":"bar"},
+              "start":29,"end":32,"loc":{"start":{"line":2,"column":15,"index":29},"end":{"line":2,"column":18,"index":32},"identifierName":"bar"},
               "name": "bar"
             }
           }

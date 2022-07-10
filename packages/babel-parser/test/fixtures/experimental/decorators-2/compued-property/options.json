@@ -1,6 +1,0 @@
-{
-  "plugins": [
-    ["decorators", { "decoratorsBeforeExport": false }],
-    "classProperties"
-  ]
-}

@@ -1,0 +1,5 @@
+{
+  "plugins": ["decorators-legacy", "typescript"],
+  "decoratorsBeforeExport": true,
+  "retainLines": true
+}

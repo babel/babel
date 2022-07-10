@@ -1,0 +1,70 @@
+{
+  "type": "File",
+  "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":32}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":32}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":32}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":9,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":9,"index":9},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":10,"end":32,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":3,"column":1,"index":32}},
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start":14,"end":30,"loc":{"start":{"line":2,"column":2,"index":14},"end":{"line":2,"column":18,"index":30}},
+              "decorators": [
+                {
+                  "type": "Decorator",
+                  "start":14,"end":23,"loc":{"start":{"line":2,"column":2,"index":14},"end":{"line":2,"column":11,"index":23}},
+                  "expression": {
+                    "type": "MemberExpression",
+                    "start":15,"end":23,"loc":{"start":{"line":2,"column":3,"index":15},"end":{"line":2,"column":11,"index":23}},
+                    "object": {
+                      "type": "Identifier",
+                      "start":15,"end":18,"loc":{"start":{"line":2,"column":3,"index":15},"end":{"line":2,"column":6,"index":18},"identifierName":"foo"},
+                      "name": "foo"
+                    },
+                    "computed": true,
+                    "property": {
+                      "type": "Identifier",
+                      "start":19,"end":22,"loc":{"start":{"line":2,"column":7,"index":19},"end":{"line":2,"column":10,"index":22},"identifierName":"bar"},
+                      "name": "bar"
+                    }
+                  }
+                }
+              ],
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":24,"end":25,"loc":{"start":{"line":2,"column":12,"index":24},"end":{"line":2,"column":13,"index":25},"identifierName":"a"},
+                "name": "a"
+              },
+              "computed": false,
+              "value": {
+                "type": "NumericLiteral",
+                "start":28,"end":29,"loc":{"start":{"line":2,"column":16,"index":28},"end":{"line":2,"column":17,"index":29}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

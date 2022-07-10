@@ -1,0 +1,44 @@
+{
+  "type": "File",
+  "start":0,"end":16,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":16,"index":16}},
+  "errors": [
+    "SyntaxError: Unexpected trailing comma after rest element. (1:8)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":16,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":16,"index":16}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":16,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":16,"index":16}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":0,"end":16,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":16,"index":16}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "RestElement",
+              "start":1,"end":8,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":8,"index":8}},
+              "argument": {
+                "type": "Identifier",
+                "start":4,"end":8,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":8,"index":8},"identifierName":"rest"},
+                "name": "rest"
+              }
+            }
+          ],
+          "body": {
+            "type": "BlockStatement",
+            "start":14,"end":16,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":16,"index":16}},
+            "body": [],
+            "directives": []
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

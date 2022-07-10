@@ -1,18 +1,18 @@
 {
   "type": "File",
-  "start":0,"end":70,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":31}},
+  "start":0,"end":70,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":31,"index":70}},
   "program": {
     "type": "Program",
-    "start":0,"end":70,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":31}},
+    "start":0,"end":70,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":31,"index":70}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "DeclareClass",
-        "start":0,"end":38,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":38}},
+        "start":0,"end":38,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":38,"index":38}},
         "id": {
           "type": "Identifier",
-          "start":14,"end":15,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":15},"identifierName":"A"},
+          "start":14,"end":15,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":15,"index":15},"identifierName":"A"},
           "name": "A"
         },
         "typeParameters": null,
@@ -21,21 +21,22 @@
         "mixins": [],
         "body": {
           "type": "ObjectTypeAnnotation",
-          "start":16,"end":38,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":38}},
+          "start":16,"end":38,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":38,"index":38}},
           "callProperties": [
             {
               "type": "ObjectTypeCallProperty",
-              "start":18,"end":36,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":36}},
+              "start":18,"end":36,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":36,"index":36}},
               "static": true,
               "value": {
                 "type": "FunctionTypeAnnotation",
-                "start":25,"end":36,"loc":{"start":{"line":1,"column":25},"end":{"line":1,"column":36}},
+                "start":25,"end":36,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":36,"index":36}},
                 "params": [],
                 "rest": null,
                 "typeParameters": null,
+                "this": null,
                 "returnType": {
                   "type": "NumberTypeAnnotation",
-                  "start":30,"end":36,"loc":{"start":{"line":1,"column":30},"end":{"line":1,"column":36}}
+                  "start":30,"end":36,"loc":{"start":{"line":1,"column":30,"index":30},"end":{"line":1,"column":36,"index":36}}
                 }
               }
             }
@@ -48,10 +49,10 @@
       },
       {
         "type": "DeclareClass",
-        "start":39,"end":70,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":31}},
+        "start":39,"end":70,"loc":{"start":{"line":2,"column":0,"index":39},"end":{"line":2,"column":31,"index":70}},
         "id": {
           "type": "Identifier",
-          "start":53,"end":54,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":15},"identifierName":"B"},
+          "start":53,"end":54,"loc":{"start":{"line":2,"column":14,"index":53},"end":{"line":2,"column":15,"index":54},"identifierName":"B"},
           "name": "B"
         },
         "typeParameters": null,
@@ -60,21 +61,22 @@
         "mixins": [],
         "body": {
           "type": "ObjectTypeAnnotation",
-          "start":55,"end":70,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":31}},
+          "start":55,"end":70,"loc":{"start":{"line":2,"column":16,"index":55},"end":{"line":2,"column":31,"index":70}},
           "callProperties": [
             {
               "type": "ObjectTypeCallProperty",
-              "start":57,"end":68,"loc":{"start":{"line":2,"column":18},"end":{"line":2,"column":29}},
+              "start":57,"end":68,"loc":{"start":{"line":2,"column":18,"index":57},"end":{"line":2,"column":29,"index":68}},
               "static": false,
               "value": {
                 "type": "FunctionTypeAnnotation",
-                "start":57,"end":68,"loc":{"start":{"line":2,"column":18},"end":{"line":2,"column":29}},
+                "start":57,"end":68,"loc":{"start":{"line":2,"column":18,"index":57},"end":{"line":2,"column":29,"index":68}},
                 "params": [],
                 "rest": null,
                 "typeParameters": null,
+                "this": null,
                 "returnType": {
                   "type": "NumberTypeAnnotation",
-                  "start":62,"end":68,"loc":{"start":{"line":2,"column":23},"end":{"line":2,"column":29}}
+                  "start":62,"end":68,"loc":{"start":{"line":2,"column":23,"index":62},"end":{"line":2,"column":29,"index":68}}
                 }
               }
             }

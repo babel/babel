@@ -1,3 +1,6 @@
 {
-  "plugins": ["transform-react-jsx", "transform-react-constant-elements"]
+  "plugins": [
+    ["transform-react-jsx", { "runtime": "classic" }],
+    "transform-react-constant-elements"
+  ]
 }

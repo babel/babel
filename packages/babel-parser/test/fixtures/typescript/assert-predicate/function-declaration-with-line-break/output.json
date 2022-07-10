@@ -1,0 +1,60 @@
+{
+  "type": "File",
+  "start":0,"end":53,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":20,"index":53}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":53,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":20,"index":53}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":53,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":20,"index":53}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":15,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":15,"index":15},"identifierName":"assert"},
+          "name": "assert"
+        },
+        "generator": false,
+        "async": false,
+        "params": [
+          {
+            "type": "Identifier",
+            "start":16,"end":30,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":30,"index":30},"identifierName":"condition"},
+            "name": "condition",
+            "typeAnnotation": {
+              "type": "TSTypeAnnotation",
+              "start":25,"end":30,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":30,"index":30}},
+              "typeAnnotation": {
+                "type": "TSAnyKeyword",
+                "start":27,"end":30,"loc":{"start":{"line":1,"column":27,"index":27},"end":{"line":1,"column":30,"index":30}}
+              }
+            }
+          }
+        ],
+        "returnType": {
+          "type": "TSTypeAnnotation",
+          "start":31,"end":50,"loc":{"start":{"line":1,"column":31,"index":31},"end":{"line":2,"column":17,"index":50}},
+          "typeAnnotation": {
+            "type": "TSTypePredicate",
+            "start":33,"end":50,"loc":{"start":{"line":2,"column":0,"index":33},"end":{"line":2,"column":17,"index":50}},
+            "parameterName": {
+              "type": "Identifier",
+              "start":41,"end":50,"loc":{"start":{"line":2,"column":8,"index":41},"end":{"line":2,"column":17,"index":50},"identifierName":"condition"},
+              "name": "condition"
+            },
+            "asserts": true,
+            "typeAnnotation": null
+          }
+        },
+        "body": {
+          "type": "BlockStatement",
+          "start":51,"end":53,"loc":{"start":{"line":2,"column":18,"index":51},"end":{"line":2,"column":20,"index":53}},
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

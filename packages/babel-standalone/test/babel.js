@@ -1,8 +1,14 @@
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+
 // Basic smoke tests for @babel/standalone
 (process.env.TEST_TYPE === "cov" ? describe.skip : describe)(
   "@babel/standalone",
   () => {
-    const Babel = require("../babel");
+    let Babel;
+    beforeAll(() => {
+      Babel = require("../babel.js");
+    });
 
     it("handles the es2015-no-commonjs preset", () => {
       const output = Babel.transform('const getMessage = () => "Hello World"', {
@@ -55,8 +61,9 @@
         ],
         sourceType: "script",
       };
-      const output = Babel.transformFromAst(ast, "42", { presets: ["es2015"] })
-        .code;
+      const output = Babel.transformFromAst(ast, "42", {
+        presets: ["es2015"],
+      }).code;
       expect(output).toBe("42;");
     });
 
@@ -64,7 +71,7 @@
       const output = Babel.transform(
         "const someDiv = <div>{getMessage()}</div>",
         {
-          presets: ["react"],
+          presets: [["react", { runtime: "classic" }]],
         },
       ).code;
       expect(output).toBe(
@@ -114,7 +121,7 @@
       it("works w/o targets", () => {
         const output = Babel.transform("const a = 1;", {
           sourceType: "script",
-          presets: ["env"],
+          presets: [["env", { targets: { browsers: "ie 6" } }]],
         }).code;
         expect(output).toBe("var a = 1;");
       });
@@ -157,11 +164,36 @@
       it("uses transform-new-targets plugin", () => {
         const output = Babel.transform("function Foo() {new.target}", {
           sourceType: "script",
-          presets: ["env"],
+          presets: [["env", { targets: { browsers: "ie 6" } }]],
         }).code;
         expect(output).toBe(
           "function Foo() {\n  this instanceof Foo ? this.constructor : void 0;\n}",
         );
+      });
+
+      it("useBuiltIns works", () => {
+        const output = Babel.transform("[].includes(2)", {
+          sourceType: "module",
+          targets: { ie: 11 },
+          presets: [
+            ["env", { useBuiltIns: "usage", corejs: 3, modules: false }],
+          ],
+        }).code;
+
+        expect(output).toMatchInlineSnapshot(`
+          "import \\"core-js/modules/es.array.includes.js\\";
+          [].includes(2);"
+        `);
+      });
+
+      it("regenerator works", () => {
+        const output = Babel.transform("function* fn() {}", {
+          sourceType: "module",
+          targets: { ie: 11 },
+          presets: ["env"],
+        }).code;
+
+        expect(output).toMatch("regeneratorRuntime().mark(fn)");
       });
     });
 
@@ -203,12 +235,29 @@
           Babel.transform("/a*/u", { presets: ["es2015"] }),
         ).not.toThrow();
       });
-      it("#11628 - supports stage-0 passing moduleAttributesVersion to stage-1", () => {
+      it("#11628 - supports stage-0 passing importAssertionsVersion to stage-1", () => {
         expect(() =>
           Babel.transform("const getMessage = () => 'Hello World'", {
-            presets: [["stage-0", { decoratorsBeforeExport: false }]],
+            presets: [["stage-0", { decoratorsLegacy: true }]],
           }),
         ).not.toThrow();
+      });
+      it("#11897 - [...map.keys()] in Babel source should be transformed correctly", () => {
+        expect(() =>
+          Babel.transform("for (let el of []) { s => el }", {
+            plugins: ["transform-block-scoping"],
+          }),
+        ).not.toThrow();
+      });
+      it("#12815 - unicode property letter short alias should be transformed", () => {
+        expect(() =>
+          Babel.transform("/\\p{L}/u", {
+            plugins: ["proposal-unicode-property-regex"],
+          }),
+        ).not.toThrow();
+      });
+      it("#14425 - numeric separators should be parsed correctly", () => {
+        expect(() => Babel.transform("1_1", {})).not.toThrow();
       });
     });
   },

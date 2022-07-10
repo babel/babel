@@ -1,0 +1,17 @@
+{
+  "version": 3,
+  "mappings": "AAAC,KCAD;;AACA,SAASA,GAAT,CAAaC,GAAb,EAAwB;EACpB,MAAM,IAAIC,KAAJ,CAAU,cAAV,CAAN;AACH",
+  "names": [
+    "foo",
+    "bar",
+    "Error"
+  ],
+  "sources": [
+    "test.js",
+    "input.tsx"
+  ],
+  "sourcesContent": [
+    "<bar />",
+    "foo(1);\nfunction foo(bar: number): never {\n    throw new Error('Intentional.');\n}"
+  ]
+}

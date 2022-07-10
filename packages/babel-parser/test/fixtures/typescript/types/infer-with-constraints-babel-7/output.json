@@ -1,0 +1,606 @@
+{
+  "type": "File",
+  "start":0,"end":552,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":67,"index":552}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":552,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":67,"index":552}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":0,"end":74,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":74,"index":74}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":7,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":7,"index":7},"identifierName":"X3"},
+          "name": "X3"
+        },
+        "typeParameters": {
+          "type": "TSTypeParameterDeclaration",
+          "start":7,"end":10,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":10,"index":10}},
+          "params": [
+            {
+              "type": "TSTypeParameter",
+              "start":8,"end":9,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":9,"index":9}},
+              "name": "T"
+            }
+          ]
+        },
+        "typeAnnotation": {
+          "type": "TSConditionalType",
+          "start":13,"end":73,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":73,"index":73}},
+          "checkType": {
+            "type": "TSTypeReference",
+            "start":13,"end":14,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":14,"index":14}},
+            "typeName": {
+              "type": "Identifier",
+              "start":13,"end":14,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":14,"index":14},"identifierName":"T"},
+              "name": "T"
+            }
+          },
+          "extendsType": {
+            "type": "TSTupleType",
+            "start":23,"end":47,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":47,"index":47}},
+            "elementTypes": [
+              {
+                "type": "TSInferType",
+                "start":24,"end":46,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":46,"index":46}},
+                "typeParameter": {
+                  "type": "TSTypeParameter",
+                  "start":30,"end":46,"loc":{"start":{"line":1,"column":30,"index":30},"end":{"line":1,"column":46,"index":46}},
+                  "name": "U",
+                  "constraint": {
+                    "type": "TSNumberKeyword",
+                    "start":40,"end":46,"loc":{"start":{"line":1,"column":40,"index":40},"end":{"line":1,"column":46,"index":46}}
+                  }
+                }
+              }
+            ]
+          },
+          "trueType": {
+            "type": "TSTypeReference",
+            "start":50,"end":65,"loc":{"start":{"line":1,"column":50,"index":50},"end":{"line":1,"column":65,"index":65}},
+            "typeName": {
+              "type": "Identifier",
+              "start":50,"end":62,"loc":{"start":{"line":1,"column":50,"index":50},"end":{"line":1,"column":62,"index":62},"identifierName":"MustBeNumber"},
+              "name": "MustBeNumber"
+            },
+            "typeParameters": {
+              "type": "TSTypeParameterInstantiation",
+              "start":62,"end":65,"loc":{"start":{"line":1,"column":62,"index":62},"end":{"line":1,"column":65,"index":65}},
+              "params": [
+                {
+                  "type": "TSTypeReference",
+                  "start":63,"end":64,"loc":{"start":{"line":1,"column":63,"index":63},"end":{"line":1,"column":64,"index":64}},
+                  "typeName": {
+                    "type": "Identifier",
+                    "start":63,"end":64,"loc":{"start":{"line":1,"column":63,"index":63},"end":{"line":1,"column":64,"index":64},"identifierName":"U"},
+                    "name": "U"
+                  }
+                }
+              ]
+            }
+          },
+          "falseType": {
+            "type": "TSNeverKeyword",
+            "start":68,"end":73,"loc":{"start":{"line":1,"column":68,"index":68},"end":{"line":1,"column":73,"index":73}}
+          }
+        }
+      },
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":75,"end":173,"loc":{"start":{"line":2,"column":0,"index":75},"end":{"line":2,"column":98,"index":173}},
+        "id": {
+          "type": "Identifier",
+          "start":80,"end":82,"loc":{"start":{"line":2,"column":5,"index":80},"end":{"line":2,"column":7,"index":82},"identifierName":"X4"},
+          "name": "X4"
+        },
+        "typeParameters": {
+          "type": "TSTypeParameterDeclaration",
+          "start":82,"end":85,"loc":{"start":{"line":2,"column":7,"index":82},"end":{"line":2,"column":10,"index":85}},
+          "params": [
+            {
+              "type": "TSTypeParameter",
+              "start":83,"end":84,"loc":{"start":{"line":2,"column":8,"index":83},"end":{"line":2,"column":9,"index":84}},
+              "name": "T"
+            }
+          ]
+        },
+        "typeAnnotation": {
+          "type": "TSConditionalType",
+          "start":88,"end":172,"loc":{"start":{"line":2,"column":13,"index":88},"end":{"line":2,"column":97,"index":172}},
+          "checkType": {
+            "type": "TSTypeReference",
+            "start":88,"end":89,"loc":{"start":{"line":2,"column":13,"index":88},"end":{"line":2,"column":14,"index":89}},
+            "typeName": {
+              "type": "Identifier",
+              "start":88,"end":89,"loc":{"start":{"line":2,"column":13,"index":88},"end":{"line":2,"column":14,"index":89},"identifierName":"T"},
+              "name": "T"
+            }
+          },
+          "extendsType": {
+            "type": "TSTupleType",
+            "start":98,"end":146,"loc":{"start":{"line":2,"column":23,"index":98},"end":{"line":2,"column":71,"index":146}},
+            "elementTypes": [
+              {
+                "type": "TSInferType",
+                "start":99,"end":121,"loc":{"start":{"line":2,"column":24,"index":99},"end":{"line":2,"column":46,"index":121}},
+                "typeParameter": {
+                  "type": "TSTypeParameter",
+                  "start":105,"end":121,"loc":{"start":{"line":2,"column":30,"index":105},"end":{"line":2,"column":46,"index":121}},
+                  "name": "U",
+                  "constraint": {
+                    "type": "TSNumberKeyword",
+                    "start":115,"end":121,"loc":{"start":{"line":2,"column":40,"index":115},"end":{"line":2,"column":46,"index":121}}
+                  }
+                }
+              },
+              {
+                "type": "TSInferType",
+                "start":123,"end":145,"loc":{"start":{"line":2,"column":48,"index":123},"end":{"line":2,"column":70,"index":145}},
+                "typeParameter": {
+                  "type": "TSTypeParameter",
+                  "start":129,"end":145,"loc":{"start":{"line":2,"column":54,"index":129},"end":{"line":2,"column":70,"index":145}},
+                  "name": "U",
+                  "constraint": {
+                    "type": "TSNumberKeyword",
+                    "start":139,"end":145,"loc":{"start":{"line":2,"column":64,"index":139},"end":{"line":2,"column":70,"index":145}}
+                  }
+                }
+              }
+            ]
+          },
+          "trueType": {
+            "type": "TSTypeReference",
+            "start":149,"end":164,"loc":{"start":{"line":2,"column":74,"index":149},"end":{"line":2,"column":89,"index":164}},
+            "typeName": {
+              "type": "Identifier",
+              "start":149,"end":161,"loc":{"start":{"line":2,"column":74,"index":149},"end":{"line":2,"column":86,"index":161},"identifierName":"MustBeNumber"},
+              "name": "MustBeNumber"
+            },
+            "typeParameters": {
+              "type": "TSTypeParameterInstantiation",
+              "start":161,"end":164,"loc":{"start":{"line":2,"column":86,"index":161},"end":{"line":2,"column":89,"index":164}},
+              "params": [
+                {
+                  "type": "TSTypeReference",
+                  "start":162,"end":163,"loc":{"start":{"line":2,"column":87,"index":162},"end":{"line":2,"column":88,"index":163}},
+                  "typeName": {
+                    "type": "Identifier",
+                    "start":162,"end":163,"loc":{"start":{"line":2,"column":87,"index":162},"end":{"line":2,"column":88,"index":163},"identifierName":"U"},
+                    "name": "U"
+                  }
+                }
+              ]
+            }
+          },
+          "falseType": {
+            "type": "TSNeverKeyword",
+            "start":167,"end":172,"loc":{"start":{"line":2,"column":92,"index":167},"end":{"line":2,"column":97,"index":172}}
+          }
+        }
+      },
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":174,"end":257,"loc":{"start":{"line":3,"column":0,"index":174},"end":{"line":3,"column":83,"index":257}},
+        "id": {
+          "type": "Identifier",
+          "start":179,"end":181,"loc":{"start":{"line":3,"column":5,"index":179},"end":{"line":3,"column":7,"index":181},"identifierName":"X5"},
+          "name": "X5"
+        },
+        "typeParameters": {
+          "type": "TSTypeParameterDeclaration",
+          "start":181,"end":184,"loc":{"start":{"line":3,"column":7,"index":181},"end":{"line":3,"column":10,"index":184}},
+          "params": [
+            {
+              "type": "TSTypeParameter",
+              "start":182,"end":183,"loc":{"start":{"line":3,"column":8,"index":182},"end":{"line":3,"column":9,"index":183}},
+              "name": "T"
+            }
+          ]
+        },
+        "typeAnnotation": {
+          "type": "TSConditionalType",
+          "start":187,"end":256,"loc":{"start":{"line":3,"column":13,"index":187},"end":{"line":3,"column":82,"index":256}},
+          "checkType": {
+            "type": "TSTypeReference",
+            "start":187,"end":188,"loc":{"start":{"line":3,"column":13,"index":187},"end":{"line":3,"column":14,"index":188}},
+            "typeName": {
+              "type": "Identifier",
+              "start":187,"end":188,"loc":{"start":{"line":3,"column":13,"index":187},"end":{"line":3,"column":14,"index":188},"identifierName":"T"},
+              "name": "T"
+            }
+          },
+          "extendsType": {
+            "type": "TSTupleType",
+            "start":197,"end":230,"loc":{"start":{"line":3,"column":23,"index":197},"end":{"line":3,"column":56,"index":230}},
+            "elementTypes": [
+              {
+                "type": "TSInferType",
+                "start":198,"end":220,"loc":{"start":{"line":3,"column":24,"index":198},"end":{"line":3,"column":46,"index":220}},
+                "typeParameter": {
+                  "type": "TSTypeParameter",
+                  "start":204,"end":220,"loc":{"start":{"line":3,"column":30,"index":204},"end":{"line":3,"column":46,"index":220}},
+                  "name": "U",
+                  "constraint": {
+                    "type": "TSNumberKeyword",
+                    "start":214,"end":220,"loc":{"start":{"line":3,"column":40,"index":214},"end":{"line":3,"column":46,"index":220}}
+                  }
+                }
+              },
+              {
+                "type": "TSInferType",
+                "start":222,"end":229,"loc":{"start":{"line":3,"column":48,"index":222},"end":{"line":3,"column":55,"index":229}},
+                "typeParameter": {
+                  "type": "TSTypeParameter",
+                  "start":228,"end":229,"loc":{"start":{"line":3,"column":54,"index":228},"end":{"line":3,"column":55,"index":229}},
+                  "name": "U"
+                }
+              }
+            ]
+          },
+          "trueType": {
+            "type": "TSTypeReference",
+            "start":233,"end":248,"loc":{"start":{"line":3,"column":59,"index":233},"end":{"line":3,"column":74,"index":248}},
+            "typeName": {
+              "type": "Identifier",
+              "start":233,"end":245,"loc":{"start":{"line":3,"column":59,"index":233},"end":{"line":3,"column":71,"index":245},"identifierName":"MustBeNumber"},
+              "name": "MustBeNumber"
+            },
+            "typeParameters": {
+              "type": "TSTypeParameterInstantiation",
+              "start":245,"end":248,"loc":{"start":{"line":3,"column":71,"index":245},"end":{"line":3,"column":74,"index":248}},
+              "params": [
+                {
+                  "type": "TSTypeReference",
+                  "start":246,"end":247,"loc":{"start":{"line":3,"column":72,"index":246},"end":{"line":3,"column":73,"index":247}},
+                  "typeName": {
+                    "type": "Identifier",
+                    "start":246,"end":247,"loc":{"start":{"line":3,"column":72,"index":246},"end":{"line":3,"column":73,"index":247},"identifierName":"U"},
+                    "name": "U"
+                  }
+                }
+              ]
+            }
+          },
+          "falseType": {
+            "type": "TSNeverKeyword",
+            "start":251,"end":256,"loc":{"start":{"line":3,"column":77,"index":251},"end":{"line":3,"column":82,"index":256}}
+          }
+        }
+      },
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":258,"end":341,"loc":{"start":{"line":4,"column":0,"index":258},"end":{"line":4,"column":83,"index":341}},
+        "id": {
+          "type": "Identifier",
+          "start":263,"end":265,"loc":{"start":{"line":4,"column":5,"index":263},"end":{"line":4,"column":7,"index":265},"identifierName":"X6"},
+          "name": "X6"
+        },
+        "typeParameters": {
+          "type": "TSTypeParameterDeclaration",
+          "start":265,"end":268,"loc":{"start":{"line":4,"column":7,"index":265},"end":{"line":4,"column":10,"index":268}},
+          "params": [
+            {
+              "type": "TSTypeParameter",
+              "start":266,"end":267,"loc":{"start":{"line":4,"column":8,"index":266},"end":{"line":4,"column":9,"index":267}},
+              "name": "T"
+            }
+          ]
+        },
+        "typeAnnotation": {
+          "type": "TSConditionalType",
+          "start":271,"end":340,"loc":{"start":{"line":4,"column":13,"index":271},"end":{"line":4,"column":82,"index":340}},
+          "checkType": {
+            "type": "TSTypeReference",
+            "start":271,"end":272,"loc":{"start":{"line":4,"column":13,"index":271},"end":{"line":4,"column":14,"index":272}},
+            "typeName": {
+              "type": "Identifier",
+              "start":271,"end":272,"loc":{"start":{"line":4,"column":13,"index":271},"end":{"line":4,"column":14,"index":272},"identifierName":"T"},
+              "name": "T"
+            }
+          },
+          "extendsType": {
+            "type": "TSTupleType",
+            "start":281,"end":314,"loc":{"start":{"line":4,"column":23,"index":281},"end":{"line":4,"column":56,"index":314}},
+            "elementTypes": [
+              {
+                "type": "TSInferType",
+                "start":282,"end":289,"loc":{"start":{"line":4,"column":24,"index":282},"end":{"line":4,"column":31,"index":289}},
+                "typeParameter": {
+                  "type": "TSTypeParameter",
+                  "start":288,"end":289,"loc":{"start":{"line":4,"column":30,"index":288},"end":{"line":4,"column":31,"index":289}},
+                  "name": "U"
+                }
+              },
+              {
+                "type": "TSInferType",
+                "start":291,"end":313,"loc":{"start":{"line":4,"column":33,"index":291},"end":{"line":4,"column":55,"index":313}},
+                "typeParameter": {
+                  "type": "TSTypeParameter",
+                  "start":297,"end":313,"loc":{"start":{"line":4,"column":39,"index":297},"end":{"line":4,"column":55,"index":313}},
+                  "name": "U",
+                  "constraint": {
+                    "type": "TSNumberKeyword",
+                    "start":307,"end":313,"loc":{"start":{"line":4,"column":49,"index":307},"end":{"line":4,"column":55,"index":313}}
+                  }
+                }
+              }
+            ]
+          },
+          "trueType": {
+            "type": "TSTypeReference",
+            "start":317,"end":332,"loc":{"start":{"line":4,"column":59,"index":317},"end":{"line":4,"column":74,"index":332}},
+            "typeName": {
+              "type": "Identifier",
+              "start":317,"end":329,"loc":{"start":{"line":4,"column":59,"index":317},"end":{"line":4,"column":71,"index":329},"identifierName":"MustBeNumber"},
+              "name": "MustBeNumber"
+            },
+            "typeParameters": {
+              "type": "TSTypeParameterInstantiation",
+              "start":329,"end":332,"loc":{"start":{"line":4,"column":71,"index":329},"end":{"line":4,"column":74,"index":332}},
+              "params": [
+                {
+                  "type": "TSTypeReference",
+                  "start":330,"end":331,"loc":{"start":{"line":4,"column":72,"index":330},"end":{"line":4,"column":73,"index":331}},
+                  "typeName": {
+                    "type": "Identifier",
+                    "start":330,"end":331,"loc":{"start":{"line":4,"column":72,"index":330},"end":{"line":4,"column":73,"index":331},"identifierName":"U"},
+                    "name": "U"
+                  }
+                }
+              ]
+            }
+          },
+          "falseType": {
+            "type": "TSNeverKeyword",
+            "start":335,"end":340,"loc":{"start":{"line":4,"column":77,"index":335},"end":{"line":4,"column":82,"index":340}}
+          }
+        }
+      },
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":342,"end":426,"loc":{"start":{"line":5,"column":0,"index":342},"end":{"line":5,"column":84,"index":426}},
+        "id": {
+          "type": "Identifier",
+          "start":347,"end":349,"loc":{"start":{"line":5,"column":5,"index":347},"end":{"line":5,"column":7,"index":349},"identifierName":"X7"},
+          "name": "X7"
+        },
+        "typeParameters": {
+          "type": "TSTypeParameterDeclaration",
+          "start":349,"end":352,"loc":{"start":{"line":5,"column":7,"index":349},"end":{"line":5,"column":10,"index":352}},
+          "params": [
+            {
+              "type": "TSTypeParameter",
+              "start":350,"end":351,"loc":{"start":{"line":5,"column":8,"index":350},"end":{"line":5,"column":9,"index":351}},
+              "name": "T"
+            }
+          ]
+        },
+        "typeAnnotation": {
+          "type": "TSConditionalType",
+          "start":355,"end":425,"loc":{"start":{"line":5,"column":13,"index":355},"end":{"line":5,"column":83,"index":425}},
+          "checkType": {
+            "type": "TSTypeReference",
+            "start":355,"end":356,"loc":{"start":{"line":5,"column":13,"index":355},"end":{"line":5,"column":14,"index":356}},
+            "typeName": {
+              "type": "Identifier",
+              "start":355,"end":356,"loc":{"start":{"line":5,"column":13,"index":355},"end":{"line":5,"column":14,"index":356},"identifierName":"T"},
+              "name": "T"
+            }
+          },
+          "extendsType": {
+            "type": "TSTupleType",
+            "start":365,"end":413,"loc":{"start":{"line":5,"column":23,"index":365},"end":{"line":5,"column":71,"index":413}},
+            "elementTypes": [
+              {
+                "type": "TSInferType",
+                "start":366,"end":388,"loc":{"start":{"line":5,"column":24,"index":366},"end":{"line":5,"column":46,"index":388}},
+                "typeParameter": {
+                  "type": "TSTypeParameter",
+                  "start":372,"end":388,"loc":{"start":{"line":5,"column":30,"index":372},"end":{"line":5,"column":46,"index":388}},
+                  "name": "U",
+                  "constraint": {
+                    "type": "TSStringKeyword",
+                    "start":382,"end":388,"loc":{"start":{"line":5,"column":40,"index":382},"end":{"line":5,"column":46,"index":388}}
+                  }
+                }
+              },
+              {
+                "type": "TSInferType",
+                "start":390,"end":412,"loc":{"start":{"line":5,"column":48,"index":390},"end":{"line":5,"column":70,"index":412}},
+                "typeParameter": {
+                  "type": "TSTypeParameter",
+                  "start":396,"end":412,"loc":{"start":{"line":5,"column":54,"index":396},"end":{"line":5,"column":70,"index":412}},
+                  "name": "U",
+                  "constraint": {
+                    "type": "TSNumberKeyword",
+                    "start":406,"end":412,"loc":{"start":{"line":5,"column":64,"index":406},"end":{"line":5,"column":70,"index":412}}
+                  }
+                }
+              }
+            ]
+          },
+          "trueType": {
+            "type": "TSTypeReference",
+            "start":416,"end":417,"loc":{"start":{"line":5,"column":74,"index":416},"end":{"line":5,"column":75,"index":417}},
+            "typeName": {
+              "type": "Identifier",
+              "start":416,"end":417,"loc":{"start":{"line":5,"column":74,"index":416},"end":{"line":5,"column":75,"index":417},"identifierName":"U"},
+              "name": "U"
+            }
+          },
+          "falseType": {
+            "type": "TSNeverKeyword",
+            "start":420,"end":425,"loc":{"start":{"line":5,"column":78,"index":420},"end":{"line":5,"column":83,"index":425}}
+          }
+        }
+      },
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":427,"end":484,"loc":{"start":{"line":6,"column":0,"index":427},"end":{"line":6,"column":57,"index":484}},
+        "id": {
+          "type": "Identifier",
+          "start":432,"end":434,"loc":{"start":{"line":6,"column":5,"index":432},"end":{"line":6,"column":7,"index":434},"identifierName":"X8"},
+          "name": "X8"
+        },
+        "typeParameters": {
+          "type": "TSTypeParameterDeclaration",
+          "start":434,"end":440,"loc":{"start":{"line":6,"column":7,"index":434},"end":{"line":6,"column":13,"index":440}},
+          "params": [
+            {
+              "type": "TSTypeParameter",
+              "start":435,"end":436,"loc":{"start":{"line":6,"column":8,"index":435},"end":{"line":6,"column":9,"index":436}},
+              "name": "U"
+            },
+            {
+              "type": "TSTypeParameter",
+              "start":438,"end":439,"loc":{"start":{"line":6,"column":11,"index":438},"end":{"line":6,"column":12,"index":439}},
+              "name": "T"
+            }
+          ]
+        },
+        "typeAnnotation": {
+          "type": "TSConditionalType",
+          "start":443,"end":483,"loc":{"start":{"line":6,"column":16,"index":443},"end":{"line":6,"column":56,"index":483}},
+          "checkType": {
+            "type": "TSTypeReference",
+            "start":443,"end":444,"loc":{"start":{"line":6,"column":16,"index":443},"end":{"line":6,"column":17,"index":444}},
+            "typeName": {
+              "type": "Identifier",
+              "start":443,"end":444,"loc":{"start":{"line":6,"column":16,"index":443},"end":{"line":6,"column":17,"index":444},"identifierName":"T"},
+              "name": "T"
+            }
+          },
+          "extendsType": {
+            "type": "TSInferType",
+            "start":453,"end":475,"loc":{"start":{"line":6,"column":26,"index":453},"end":{"line":6,"column":48,"index":475}},
+            "typeParameter": {
+              "type": "TSTypeParameter",
+              "start":459,"end":475,"loc":{"start":{"line":6,"column":32,"index":459},"end":{"line":6,"column":48,"index":475}},
+              "name": "U",
+              "constraint": {
+                "type": "TSNumberKeyword",
+                "start":469,"end":475,"loc":{"start":{"line":6,"column":42,"index":469},"end":{"line":6,"column":48,"index":475}}
+              }
+            }
+          },
+          "trueType": {
+            "type": "TSTypeReference",
+            "start":478,"end":479,"loc":{"start":{"line":6,"column":51,"index":478},"end":{"line":6,"column":52,"index":479}},
+            "typeName": {
+              "type": "Identifier",
+              "start":478,"end":479,"loc":{"start":{"line":6,"column":51,"index":478},"end":{"line":6,"column":52,"index":479},"identifierName":"U"},
+              "name": "U"
+            }
+          },
+          "falseType": {
+            "type": "TSTypeReference",
+            "start":482,"end":483,"loc":{"start":{"line":6,"column":55,"index":482},"end":{"line":6,"column":56,"index":483}},
+            "typeName": {
+              "type": "Identifier",
+              "start":482,"end":483,"loc":{"start":{"line":6,"column":55,"index":482},"end":{"line":6,"column":56,"index":483},"identifierName":"T"},
+              "name": "T"
+            }
+          }
+        }
+      },
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":485,"end":552,"loc":{"start":{"line":7,"column":0,"index":485},"end":{"line":7,"column":67,"index":552}},
+        "id": {
+          "type": "Identifier",
+          "start":490,"end":492,"loc":{"start":{"line":7,"column":5,"index":490},"end":{"line":7,"column":7,"index":492},"identifierName":"X9"},
+          "name": "X9"
+        },
+        "typeParameters": {
+          "type": "TSTypeParameterDeclaration",
+          "start":492,"end":498,"loc":{"start":{"line":7,"column":7,"index":492},"end":{"line":7,"column":13,"index":498}},
+          "params": [
+            {
+              "type": "TSTypeParameter",
+              "start":493,"end":494,"loc":{"start":{"line":7,"column":8,"index":493},"end":{"line":7,"column":9,"index":494}},
+              "name": "U"
+            },
+            {
+              "type": "TSTypeParameter",
+              "start":496,"end":497,"loc":{"start":{"line":7,"column":11,"index":496},"end":{"line":7,"column":12,"index":497}},
+              "name": "T"
+            }
+          ]
+        },
+        "typeAnnotation": {
+          "type": "TSConditionalType",
+          "start":501,"end":551,"loc":{"start":{"line":7,"column":16,"index":501},"end":{"line":7,"column":66,"index":551}},
+          "checkType": {
+            "type": "TSTypeReference",
+            "start":501,"end":502,"loc":{"start":{"line":7,"column":16,"index":501},"end":{"line":7,"column":17,"index":502}},
+            "typeName": {
+              "type": "Identifier",
+              "start":501,"end":502,"loc":{"start":{"line":7,"column":16,"index":501},"end":{"line":7,"column":17,"index":502},"identifierName":"T"},
+              "name": "T"
+            }
+          },
+          "extendsType": {
+            "type": "TSParenthesizedType",
+            "start":511,"end":543,"loc":{"start":{"line":7,"column":26,"index":511},"end":{"line":7,"column":58,"index":543}},
+            "typeAnnotation": {
+              "type": "TSConditionalType",
+              "start":512,"end":542,"loc":{"start":{"line":7,"column":27,"index":512},"end":{"line":7,"column":57,"index":542}},
+              "checkType": {
+                "type": "TSInferType",
+                "start":512,"end":519,"loc":{"start":{"line":7,"column":27,"index":512},"end":{"line":7,"column":34,"index":519}},
+                "typeParameter": {
+                  "type": "TSTypeParameter",
+                  "start":518,"end":519,"loc":{"start":{"line":7,"column":33,"index":518},"end":{"line":7,"column":34,"index":519}},
+                  "name": "U"
+                }
+              },
+              "extendsType": {
+                "type": "TSNumberKeyword",
+                "start":528,"end":534,"loc":{"start":{"line":7,"column":43,"index":528},"end":{"line":7,"column":49,"index":534}}
+              },
+              "trueType": {
+                "type": "TSTypeReference",
+                "start":537,"end":538,"loc":{"start":{"line":7,"column":52,"index":537},"end":{"line":7,"column":53,"index":538}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":537,"end":538,"loc":{"start":{"line":7,"column":52,"index":537},"end":{"line":7,"column":53,"index":538},"identifierName":"U"},
+                  "name": "U"
+                }
+              },
+              "falseType": {
+                "type": "TSTypeReference",
+                "start":541,"end":542,"loc":{"start":{"line":7,"column":56,"index":541},"end":{"line":7,"column":57,"index":542}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":541,"end":542,"loc":{"start":{"line":7,"column":56,"index":541},"end":{"line":7,"column":57,"index":542},"identifierName":"T"},
+                  "name": "T"
+                }
+              }
+            }
+          },
+          "trueType": {
+            "type": "TSTypeReference",
+            "start":546,"end":547,"loc":{"start":{"line":7,"column":61,"index":546},"end":{"line":7,"column":62,"index":547}},
+            "typeName": {
+              "type": "Identifier",
+              "start":546,"end":547,"loc":{"start":{"line":7,"column":61,"index":546},"end":{"line":7,"column":62,"index":547},"identifierName":"U"},
+              "name": "U"
+            }
+          },
+          "falseType": {
+            "type": "TSTypeReference",
+            "start":550,"end":551,"loc":{"start":{"line":7,"column":65,"index":550},"end":{"line":7,"column":66,"index":551}},
+            "typeName": {
+              "type": "Identifier",
+              "start":550,"end":551,"loc":{"start":{"line":7,"column":65,"index":550},"end":{"line":7,"column":66,"index":551},"identifierName":"T"},
+              "name": "T"
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -18,6 +18,7 @@ const es2015Parameter = {
       "rest parameters",
       "destructuring, parameters / aliased defaults, arrow function",
       "destructuring, parameters / shorthand defaults, arrow function",
+      "destructuring, parameters / duplicate identifier",
     ],
   },
 };
@@ -33,13 +34,29 @@ const es2015 = {
     features: ['function "name" property'],
   },
   "transform-arrow-functions": {
-    features: ["arrow functions"],
+    features: [
+      "arrow functions / 0 parameters",
+      "arrow functions / 1 parameter, no brackets",
+      "arrow functions / multiple parameters",
+      'arrow functions / lexical "this" binding',
+      'arrow functions / "this" unchanged by call or apply',
+      "arrow functions / can't be bound, can be curried",
+      'arrow functions / lexical "arguments" binding',
+      "arrow functions / no line break between params and <code>=></code>",
+      "arrow functions / correct precedence",
+      'arrow functions / no "prototype" property',
+    ],
   },
   "transform-block-scoped-functions": {
     features: ["block-level function declaration"],
   },
   "transform-classes": {
-    features: ["class", "super"],
+    features: [
+      "class",
+      "super",
+      'arrow functions / lexical "super" binding in constructors',
+      'arrow functions / lexical "super" binding in methods',
+    ],
   },
   "transform-object-super": {
     features: ["super"],
@@ -72,7 +89,14 @@ const es2015 = {
     ],
   },
   "transform-spread": {
-    features: ["spread syntax for iterable objects"],
+    features: [
+      "spread syntax for iterable objects",
+      // We need to compile classes when spread is not supported, because
+      // we cannot compile super(...args) without also rewriting the
+      // "super" handling. There is a bugfix that makes it better.
+      "class",
+      "super",
+    ],
   },
   "transform-destructuring": {
     features: ["destructuring, assignment", "destructuring, declarations"],
@@ -84,7 +108,7 @@ const es2015 = {
     features: ["Symbol / typeof support"],
   },
   "transform-new-target": {
-    features: ["new.target"],
+    features: ["new.target", 'arrow functions / lexical "new.target" binding'],
   },
   "transform-regenerator": {
     features: ["generators"],
@@ -122,18 +146,36 @@ const es2020 = {
   "proposal-optional-chaining": "optional chaining operator (?.)",
 };
 
-const shippedProposal = {
-  "proposal-numeric-separator": "numeric separator",
+const es2021 = {
+  "proposal-numeric-separator": "numeric separators",
+  "proposal-logical-assignment-operators": "Logical Assignment",
+};
+
+const es2022 = {
+  "proposal-class-static-block": "Class static initialization blocks",
+  "proposal-private-property-in-object":
+    "Ergonomic brand checks for private fields",
   "proposal-class-properties": {
-    features: ["static class fields", "instance class fields"],
+    features: [
+      "static class fields / public static class fields",
+      "static class fields / private static class fields",
+      "static class fields / computed static class fields",
+      "instance class fields / public instance class fields",
+      "instance class fields / private instance class fields basic support",
+      "instance class fields / computed instance class fields",
+    ],
   },
   "proposal-private-methods": "private class methods",
 };
+
+const shippedProposal = {};
 
 // Run plugins for modern features first
 module.exports = Object.assign(
   {},
   shippedProposal,
+  es2022,
+  es2021,
   es2020,
   es2019,
   es2015Parameter,

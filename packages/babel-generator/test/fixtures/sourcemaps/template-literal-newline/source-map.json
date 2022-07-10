@@ -1,0 +1,9 @@
+{
+  "mappings": "AAAA;AACC;AACD,MADA,C,CAGA;;AACC;AACD;AACA,MAFA,C,CAIA;;AACC;AACD;AACA,MAFA,C,CAIA;;AACC;AACD,MADA,C,CAGA;;AACC;AACD;AACA,MAFA,C,CAIA;;AACC;AACD;AACA,MAFA",
+  "names": [],
+  "sources": ["fixtures/sourcemaps/template-literal-newline/input.js"],
+  "sourcesContent": [
+    "// Newline\n`before\nafter`;\n\n// Newline newline\n`before\n\nafter`;\n\n// Newline LineContinuation\n`before\n\\\nafter`;\n\n// LineContinuation\n`before\\\nafter`;\n\n// LineContinuation newline\n`before\\\n\nafter`;\n\n// LineContinuation LineContinuation\n`before\\\n\\\nafter`;"
+  ],
+  "version": 3
+}

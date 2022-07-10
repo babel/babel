@@ -2,11 +2,10 @@
 
 import * as charCodes from "charcodes";
 
-import { types as tt, TokenType } from "../tokenizer/types";
+import { tokenLabelName, tt } from "../tokenizer/types";
 import type Parser from "../parser";
 import * as N from "../types";
-
-tt.placeholder = new TokenType("%%", { startsExpr: true });
+import { ParseErrorEnum } from "../parse-error";
 
 export type PlaceholderTypes =
   | "Identifier"
@@ -47,6 +46,13 @@ type NodeOf<T: PlaceholderTypes> = $Switch<
 // the substituted nodes.
 type MaybePlaceholder<T: PlaceholderTypes> = NodeOf<T>; // | Placeholder<T>
 
+/* eslint sort-keys: "error" */
+const PlaceholderErrors = ParseErrorEnum`placeholders`(_ => ({
+  ClassNameIsRequired: _("A class name is required."),
+  UnexpectedSpace: _("Unexpected space in placeholder."),
+}));
+/* eslint-disable sort-keys */
+
 export default (superClass: Class<Parser>): Class<Parser> =>
   class extends superClass {
     parsePlaceholder<T: PlaceholderTypes>(
@@ -55,13 +61,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.match(tt.placeholder)) {
         const node = this.startNode();
         this.next();
-        this.assertNoSpace("Unexpected space in placeholder.");
+        this.assertNoSpace();
 
         // We can't use this.parseIdentifier because
         // we don't want nested placeholders.
         node.name = super.parseIdentifier(/* liberal */ true);
 
-        this.assertNoSpace("Unexpected space in placeholder.");
+        this.assertNoSpace();
         this.expect(tt.placeholder);
         return this.finishPlaceholder(node, expectedNode);
       }
@@ -130,25 +136,47 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       );
     }
 
-    checkLVal(expr: N.Expression): void {
-      if (expr.type !== "Placeholder") super.checkLVal(...arguments);
+    isValidLVal(type: string, ...rest) {
+      return type === "Placeholder" || super.isValidLVal(type, ...rest);
     }
 
-    toAssignable(node: N.Node): N.Node {
+    toAssignable(node: N.Node): void {
       if (
         node &&
         node.type === "Placeholder" &&
         node.expectedNode === "Expression"
       ) {
         node.expectedNode = "Pattern";
-        return node;
+      } else {
+        super.toAssignable(...arguments);
       }
-      return super.toAssignable(...arguments);
     }
 
     /* ============================================================ *
      * parser/statement.js                                          *
      * ============================================================ */
+
+    isLet(context: ?string): boolean {
+      if (super.isLet(context)) {
+        return true;
+      }
+
+      // Replicate the original checks that lead to looking ahead for an
+      // identifier.
+      if (!this.isContextual(tt._let)) {
+        return false;
+      }
+      if (context) return false;
+
+      // Accept "let %%" as the start of "let %%placeholder%%", as though the
+      // placeholder were an identifier.
+      const nextToken = this.lookahead();
+      if (nextToken.type === tt.placeholder) {
+        return true;
+      }
+
+      return false;
+    }
 
     verifyBreakContinue(node: N.BreakStatement | N.ContinueStatement) {
       if (node.label && node.label.type === "Placeholder") return;
@@ -203,6 +231,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       this.next();
       this.takeDecorators(node);
+      const oldStrict = this.state.strict;
 
       const placeholder = this.parsePlaceholder("Identifier");
       if (placeholder) {
@@ -217,7 +246,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           node.body = this.finishPlaceholder(placeholder, "ClassBody");
           return this.finishNode(node, type);
         } else {
-          this.unexpected(null, "A class name is required");
+          throw this.raise(PlaceholderErrors.ClassNameIsRequired, {
+            at: this.state.startLoc,
+          });
         }
       } else {
         this.parseClassId(node, isStatement, optionalId);
@@ -226,7 +257,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.parseClassSuper(node);
       node.body =
         this.parsePlaceholder("ClassBody") ||
-        this.parseClassBody(!!node.superClass);
+        this.parseClassBody(!!node.superClass, oldStrict);
       return this.finishNode(node, type);
     }
 
@@ -234,7 +265,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const placeholder = this.parsePlaceholder("Identifier");
       if (!placeholder) return super.parseExport(...arguments);
 
-      if (!this.isContextual("from") && !this.match(tt.comma)) {
+      if (!this.isContextual(tt._from) && !this.match(tt.comma)) {
         // export %%DECL%%;
         node.specifiers = [];
         node.source = null;
@@ -257,7 +288,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (this.isUnparsedContextual(next, "from")) {
           if (
             this.input.startsWith(
-              tt.placeholder.label,
+              tokenLabelName(tt.placeholder),
               this.nextTokenStartSince(next + 4),
             )
           ) {
@@ -295,7 +326,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       node.specifiers = [];
 
-      if (!this.isContextual("from") && !this.match(tt.comma)) {
+      if (!this.isContextual(tt._from) && !this.match(tt.comma)) {
         // import %%STRING%%;
         node.source = this.finishPlaceholder(placeholder, "StringLiteral");
         this.semicolon();
@@ -316,7 +347,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (!hasStarImport) this.parseNamedImportSpecifiers(node);
       }
 
-      this.expectContextual("from");
+      this.expectContextual(tt._from);
       node.source = this.parseImportSource();
       this.semicolon();
       return this.finishNode(node, "ImportDeclaration");
@@ -329,5 +360,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.parsePlaceholder("StringLiteral") ||
         super.parseImportSource(...arguments)
       );
+    }
+
+    // Throws if the current token and the prev one are separated by a space.
+    assertNoSpace(): void {
+      if (this.state.start > this.state.lastTokEndLoc.index) {
+        this.raise(PlaceholderErrors.UnexpectedSpace, {
+          at: this.state.lastTokEndLoc,
+        });
+      }
     }
   };

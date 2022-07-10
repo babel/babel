@@ -1,0 +1,59 @@
+{
+  "type": "File",
+  "start":0,"end":29,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":29,"index":29}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":29,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":29,"index":29}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":29,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":29,"index":29}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":28,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":28,"index":28}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":7,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":7,"index":7},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "init": {
+              "type": "CallExpression",
+              "start":10,"end":28,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":28,"index":28}},
+              "callee": {
+                "type": "Identifier",
+                "start":10,"end":15,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":15,"index":15},"identifierName":"async"},
+                "name": "async"
+              },
+              "arguments": [
+                {
+                  "type": "ArrayExpression",
+                  "start":17,"end":27,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":27,"index":27}},
+                  "elements": [
+                    {
+                      "type": "SpreadElement",
+                      "start":18,"end":26,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":26,"index":26}},
+                      "argument": {
+                        "type": "Identifier",
+                        "start":22,"end":25,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":25,"index":25},"identifierName":"foo"},
+                        "name": "foo",
+                        "extra": {
+                          "parenthesized": true,
+                          "parenStart": 21
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": []
+  }
+}

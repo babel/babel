@@ -1,6 +1,9 @@
-import generator from "../../babel-generator";
-import template from "../lib";
 import * as t from "@babel/types";
+
+import _generator from "../../babel-generator/lib/index.js";
+import _template from "../lib/index.js";
+const generator = _generator.default || _generator;
+const template = _template.default || _template;
 
 const comments = "// Sum two numbers\nconst add = (a, b) => a + b;";
 
@@ -215,6 +218,50 @@ describe("@babel/template", function () {
       expect(result.test.left).toBe(value);
     });
 
+    it("should return assertions in ImportDeclaration when using .ast", () => {
+      const result = template.ast(
+        `import json from "./foo.json" assert { type: "json" };`,
+        {
+          plugins: ["importAssertions"],
+        },
+      );
+
+      expect(result.assertions[0].type).toBe("ImportAttribute");
+    });
+
+    it("should return assertions in ExportNamedDeclaration when using .ast", () => {
+      const result = template.ast(
+        `export { default as foo2 } from "foo.json" assert { type: "json" };`,
+        {
+          plugins: ["importAssertions"],
+        },
+      );
+
+      expect(result.assertions[0].type).toBe("ImportAttribute");
+    });
+
+    it("should return assertions in ExportDefaultDeclaration when using .ast", () => {
+      const result = template.ast(
+        `export foo2 from "foo.json" assert { type: "json" };`,
+        {
+          plugins: ["importAssertions", "exportDefaultFrom"],
+        },
+      );
+
+      expect(result.assertions[0].type).toBe("ImportAttribute");
+    });
+
+    it("should return assertions in ExportAllDeclaration when using .ast", () => {
+      const result = template.ast(
+        `export * from "foo.json" assert { type: "json" };`,
+        {
+          plugins: ["importAssertions"],
+        },
+      );
+
+      expect(result.assertions[0].type).toBe("ImportAttribute");
+    });
+
     it("should replace JSX placeholder", () => {
       const result = template.expression(
         `
@@ -348,6 +395,30 @@ describe("@babel/template", function () {
           expect(generator(output).code).toMatchInlineSnapshot(`"FOO + 1;"`);
         });
       });
+    });
+
+    it("works in var declaration", () => {
+      const output = template("var %%LHS%% = %%RHS%%")({
+        LHS: t.identifier("x"),
+        RHS: t.numericLiteral(7),
+      });
+      expect(generator(output).code).toMatchInlineSnapshot(`"var x = 7;"`);
+    });
+
+    it("works in const declaration", () => {
+      const output = template("const %%LHS%% = %%RHS%%")({
+        LHS: t.identifier("x"),
+        RHS: t.numericLiteral(7),
+      });
+      expect(generator(output).code).toMatchInlineSnapshot(`"const x = 7;"`);
+    });
+
+    it("works in let declaration", () => {
+      const output = template("let %%LHS%% = %%RHS%%")({
+        LHS: t.identifier("x"),
+        RHS: t.numericLiteral(7),
+      });
+      expect(generator(output).code).toMatchInlineSnapshot(`"let x = 7;"`);
     });
   });
 });

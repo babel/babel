@@ -1,3 +1,6 @@
 {
-  "plugins": ["transform-react-jsx", "transform-property-literals"]
+  "plugins": [
+    ["transform-react-jsx", { "runtime": "classic" }],
+    "transform-property-literals"
+  ]
 }

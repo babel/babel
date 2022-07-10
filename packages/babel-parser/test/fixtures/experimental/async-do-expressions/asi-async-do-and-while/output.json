@@ -1,0 +1,55 @@
+{
+  "type": "File",
+  "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":14,"index":32}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":14,"index":32}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":17}},
+        "expression": {
+          "type": "DoExpression",
+          "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":17}},
+          "async": true,
+          "body": {
+            "type": "BlockStatement",
+            "start":9,"end":17,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":3,"column":1,"index":17}},
+            "body": [
+              {
+                "type": "ExpressionStatement",
+                "start":13,"end":15,"loc":{"start":{"line":2,"column":2,"index":13},"end":{"line":2,"column":4,"index":15}},
+                "expression": {
+                  "type": "NumericLiteral",
+                  "start":13,"end":15,"loc":{"start":{"line":2,"column":2,"index":13},"end":{"line":2,"column":4,"index":15}},
+                  "extra": {
+                    "rawValue": 42,
+                    "raw": "42"
+                  },
+                  "value": 42
+                }
+              }
+            ],
+            "directives": []
+          }
+        }
+      },
+      {
+        "type": "WhileStatement",
+        "start":18,"end":32,"loc":{"start":{"line":4,"column":0,"index":18},"end":{"line":4,"column":14,"index":32}},
+        "test": {
+          "type": "BooleanLiteral",
+          "start":25,"end":30,"loc":{"start":{"line":4,"column":7,"index":25},"end":{"line":4,"column":12,"index":30}},
+          "value": false
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start":31,"end":32,"loc":{"start":{"line":4,"column":13,"index":31},"end":{"line":4,"column":14,"index":32}}
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "validateLogs": true,
+  "ignoreOutput": true,
+  "targets": "chrome 80",
+  "presets": [
+    ["env", { "debug": true, "targets": "chrome 60" }]
+  ]
+}

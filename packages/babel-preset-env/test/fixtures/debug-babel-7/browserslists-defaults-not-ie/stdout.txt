@@ -1,0 +1,36 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "android": "99",
+  "chrome": "97",
+  "edge": "98",
+  "firefox": "91",
+  "ios": "12.2",
+  "opera": "82",
+  "safari": "14.1",
+  "samsung": "15"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  proposal-class-static-block { firefox < 93, ios, safari, samsung }
+  proposal-private-property-in-object { ios < 15, safari < 15, samsung }
+  proposal-class-properties { ios < 15 }
+  proposal-private-methods { ios < 15, safari < 15 }
+  proposal-numeric-separator { ios < 13 }
+  proposal-logical-assignment-operators { ios < 14 }
+  proposal-nullish-coalescing-operator { ios < 13.4 }
+  proposal-optional-chaining { ios < 13.4, samsung }
+  syntax-json-strings
+  syntax-optional-catch-binding
+  transform-parameters { ios, safari }
+  syntax-async-generators
+  syntax-object-rest-spread
+  transform-template-literals { ios < 13 }
+  proposal-export-namespace-from { ios, safari }
+  transform-modules-commonjs
+  proposal-dynamic-import
+
+Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

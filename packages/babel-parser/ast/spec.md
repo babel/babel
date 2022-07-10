@@ -11,6 +11,7 @@ These are the core @babel/parser (babylon) AST node types.
   - [BooleanLiteral](#booleanliteral)
   - [NumericLiteral](#numericliteral)
   - [BigIntLiteral](#bigintliteral)
+  - [DecimalLiteral](#decimalliteral)
 - [Programs](#programs)
 - [Functions](#functions)
 - [Statements](#statements)
@@ -77,13 +78,16 @@ These are the core @babel/parser (babylon) AST node types.
     - [SpreadElement](#spreadelement)
     - [ArgumentPlaceholder](#argumentplaceholder)
     - [MemberExpression](#memberexpression)
+    - [OptionalMemberExpression](#optionalmemberexpression)
     - [BindExpression](#bindexpression)
   - [ConditionalExpression](#conditionalexpression)
   - [CallExpression](#callexpression)
+  - [OptionalCallExpression](#optionalcallexpression)
   - [NewExpression](#newexpression)
   - [SequenceExpression](#sequenceexpression)
   - [ParenthesizedExpression](#parenthesizedexpression)
   - [DoExpression](#doexpression)
+  - [ModuleExpression](#moduleexpression)
 - [Template Literals](#template-literals)
   - [TemplateLiteral](#templateliteral)
   - [TaggedTemplateExpression](#taggedtemplateexpression)
@@ -99,6 +103,7 @@ These are the core @babel/parser (babylon) AST node types.
   - [ClassPrivateMethod](#classprivatemethod)
   - [ClassProperty](#classproperty)
   - [ClassPrivateProperty](#classprivateproperty)
+  - [StaticBlock](#staticblock)
   - [ClassDeclaration](#classdeclaration)
   - [ClassExpression](#classexpression)
   - [MetaProperty](#metaproperty)
@@ -114,6 +119,7 @@ These are the core @babel/parser (babylon) AST node types.
   - [Exports](#exports)
     - [ExportNamedDeclaration](#exportnameddeclaration)
     - [ExportSpecifier](#exportspecifier)
+    - [ExportNamespaceSpecifier](#exportnamespacespecifier)
     - [ExportDefaultDeclaration](#exportdefaultdeclaration)
     - [ExportAllDeclaration](#exportalldeclaration)
 
@@ -176,17 +182,16 @@ interface Identifier <: Expression, Pattern {
 
 An identifier. Note that an identifier may be an expression or a destructuring pattern.
 
-
 # PrivateName
 
 ```js
-interface PrivateName <: Expression, Pattern {
+interface PrivateName <: Node {
   type: "PrivateName";
   id: Identifier;
 }
 ```
-A Private Name Identifier.
 
+A Private Name Identifier.
 
 # Literals
 
@@ -251,6 +256,17 @@ interface BigIntLiteral <: Literal {
 ```
 
 The `value` property is the string representation of the `BigInt` value. It doesn't include the suffix `n`.
+
+## DecimalLiteral
+
+```js
+interface DecimalLiteral <: Literal {
+  type: "DecimalLiteral";
+  value: string;
+}
+```
+
+The `value` property is the string representation of the `BigDecimal` value. It doesn't include the suffix `m`.
 
 # Programs
 
@@ -817,12 +833,12 @@ An update (increment or decrement) operator token.
 interface BinaryExpression <: Expression {
   type: "BinaryExpression";
   operator: BinaryOperator;
-  left: Expression;
+  left: Expression | PrivateName;
   right: Expression;
 }
 ```
 
-A binary operator expression.
+A binary operator expression. When `operator` is `in`, the `left` can be a `PrivateName`.
 
 #### BinaryOperator
 
@@ -912,12 +928,26 @@ interface ArgumentPlaceholder <: Node {
 interface MemberExpression <: Expression, Pattern {
   type: "MemberExpression";
   object: Expression | Super;
-  property: Expression;
+  property: Expression | PrivateName;
   computed: boolean;
 }
 ```
 
 A member expression. If `computed` is `true`, the node corresponds to a computed (`a[b]`) member expression and `property` is an `Expression`. If `computed` is `false`, the node corresponds to a static (`a.b`) member expression and `property` is an `Identifier` or a `PrivateName`.
+
+### OptionalMemberExpression
+
+```js
+interface OptionalMemberExpression <: Expression {
+  type: "OptionalMemberExpression";
+  object: Expression;
+  property: Expression | PrivateName;
+  computed: boolean;
+  optional: boolean;
+}
+```
+
+An optional member expression is a part of the optional chain. When `optional` is `true`, it is the starting element of the optional chain. i.e. In `a?.b.c`, `?.b` is an optional member expression with `optional: true`, `.c` is an optional member expression. See this [gist](https://gist.github.com/JLHwung/567fb29fa2b82bbe164ad9067ff3290f) for more AST examples.
 
 ### BindExpression
 
@@ -930,54 +960,6 @@ interface BindExpression <: Expression {
 ```
 
 If `object` is `null`, then `callee` should be a `MemberExpression`.
-
-### Pipeline
-
-These nodes are used by the Smart Pipeline to determine the type of the expression in a Pipeline Operator Expression. The F# Pipeline uses simple `BinaryExpression`s.
-
-#### PipelineBody
-
-```js
-interface PipelineBody <: NodeBase {
-    type: "PipelineBody";
-}
-```
-
-#### PipelineBareFunctionBody
-
-```js
-interface PipelineBody <: NodeBase {
-    type: "PipelineBareFunctionBody";
-    callee: Expression;
-}
-```
-
-#### PipelineBareConstructorBody
-
-```js
-interface PipelineBareConstructorBody <: NodeBase {
-    type: "PipelineBareConstructorBody";
-    callee: Expression;
-}
-```
-
-#### PipelineBareAwaitedFunctionBody
-
-```js
-interface PipelineBareConstructorBody <: NodeBase {
-    type: "PipelineTopicBody";
-    expression: Expression;
-}
-```
-
-#### PipelineTopicBody
-
-```js
-interface PipelineBareConstructorBody <: NodeBase {
-    type: "PipelineBareAwaitedFunctionBody";
-    callee: Expression;
-}
-```
 
 ## ConditionalExpression
 
@@ -1003,6 +985,19 @@ interface CallExpression <: Expression {
 ```
 
 A function or method call expression. When the `callee` is `Import`, the `arguments` must have only one `Expression` element.
+
+## OptionalCallExpression
+
+```js
+interface OptionalCallExpression <: Expression {
+  type: "OptionalCallExpression";
+  callee: Expression;
+  arguments: [ Expression | SpreadElement ];
+  optional: boolean;
+}
+```
+
+An optional call expression is a part of the optional chain. When `optional` is `true`, it is the starting element of the optional chain. i.e. In `f?.()()`, `?.()` is an optional call expression with `optional: true`, `()` is an optional call expression with `optional: false`. See this [gist](https://gist.github.com/JLHwung/567fb29fa2b82bbe164ad9067ff3290f) for more AST examples.
 
 ## NewExpression
 
@@ -1041,9 +1036,32 @@ An expression wrapped by parentheses. By default `@babel/parser` does not create
 ```js
 interface DoExpression <: Expression {
   type: "DoExpression";
-  body: BlockStatement
+  body: BlockStatement;
+  async: boolean;
 }
 ```
+
+## ModuleExpression
+
+```js
+interface ModuleExpression <: Expression {
+  type: "ModuleExpression";
+  body: Program
+}
+```
+
+A inline module expression proposed in https://github.com/tc39/proposal-js-module-blocks.
+
+## TopicReference
+
+```js
+interface TopicReference <: Expression {
+  type: "TopicReference";
+}
+```
+
+A topic reference to be used inside the body of
+a [Hack-style pipe expression](https://github.com/js-choi/proposal-hack-pipes).
 
 # Template Literals
 
@@ -1143,7 +1161,7 @@ interface Class <: Node {
 ```js
 interface ClassBody <: Node {
   type: "ClassBody";
-  body: [ ClassMethod | ClassPrivateMethod | ClassProperty | ClassPrivateProperty ];
+  body: [ ClassMethod | ClassPrivateMethod | ClassProperty | ClassPrivateProperty | StaticBlock ];
 }
 ```
 
@@ -1194,6 +1212,29 @@ interface ClassPrivateProperty <: Node {
   static: boolean;
 }
 ```
+
+## ClassAccessorProperty
+
+```js
+interface ClassAccessorProperty <: Node {
+  type: "ClassAccessorProperty";
+  key: Expression | PrivateName;
+  value: Expression;
+  static: boolean;
+  computed: boolean;
+}
+```
+
+## StaticBlock
+
+```js
+interface StaticBlock <: Node {
+  type: "StaticBlock";
+  body: [ Statement ];
+}
+```
+
+A static block proposed in https://github.com/tc39/proposal-class-static-block.
 
 ## ClassDeclaration
 
@@ -1251,8 +1292,8 @@ interface ImportDeclaration <: ModuleDeclaration {
   type: "ImportDeclaration";
   importKind: null | "type" | "typeof" | "value";
   specifiers: [ ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier ];
-  source: Literal;
-  attributes?: [ ImportAttribute ];
+  source: StringLiteral;
+  assertions?: [ ImportAttribute ];
 }
 ```
 
@@ -1265,7 +1306,7 @@ An import declaration, e.g., `import foo from "mod";`.
 ```js
 interface ImportSpecifier <: ModuleSpecifier {
   type: "ImportSpecifier";
-  imported: Identifier;
+  imported: Identifier | StringLiteral;
 }
 ```
 
@@ -1311,26 +1352,42 @@ An attribute specified on the ImportDeclaration.
 interface ExportNamedDeclaration <: ModuleDeclaration {
   type: "ExportNamedDeclaration";
   declaration: Declaration | null;
-  specifiers: [ ExportSpecifier ];
-  source: Literal | null;
+  specifiers: [ ExportSpecifier | ExportNamespaceSpecifier ];
+  source: StringLiteral | null;
+  assertions?: [ ImportAttribute ];
 }
 ```
 
 An export named declaration, e.g., `export {foo, bar};`, `export {foo} from "mod";`, `export var foo = 1;` or `export * as foo from "bar";`.
 
-_Note: Having `declaration` populated with non-empty `specifiers` or non-null `source` results in an invalid state._
+Note:
+
+- Having `declaration` populated with non-empty `specifiers` or non-null `source` results in an invalid state.
+- If `source` is `null`, for each `specifier` of `specifiers`, `specifier.local` can not be a `StringLiteral`.
+- If `specifiers` contains `ExportNamespaceSpecifier`, it must have only one `ExportNamespaceSpecifier`.
 
 ### ExportSpecifier
 
 ```js
 interface ExportSpecifier <: ModuleSpecifier {
   type: "ExportSpecifier";
-  exported: Identifier;
-  local?: Identifier;
+  exported: Identifier | StringLiteral;
+  local?: Identifier | StringLiteral;
 }
 ```
 
 An exported variable binding, e.g., `{foo}` in `export {foo}` or `{bar as foo}` in `export {bar as foo}`. The `exported` field refers to the name exported in the module. The `local` field refers to the binding into the local module scope. If it is a basic named export, such as in `export {foo}`, both `exported` and `local` are equivalent `Identifier` nodes; in this case an `Identifier` node representing `foo`. If it is an aliased export, such as in `export {bar as foo}`, the `exported` field is an `Identifier` node representing `foo`, and the `local` field is an `Identifier` node representing `bar`.
+
+### ExportNamespaceSpecifier
+
+```js
+interface ExportNamespaceSpecifier <: ModuleSpecifier {
+  type: "ExportNamespaceSpecifier";
+  exported: Identifier;
+}
+```
+
+A namespace export specifier, e.g., `* as foo` in `export * as foo from "mod.js"`.
 
 ### ExportDefaultDeclaration
 
@@ -1356,8 +1413,59 @@ An export default declaration, e.g., `export default function () {};` or `export
 ```js
 interface ExportAllDeclaration <: ModuleDeclaration {
   type: "ExportAllDeclaration";
-  source: Literal;
+  source: StringLiteral;
+  assertions?: [ ImportAttribute ];
 }
 ```
 
 An export batch declaration, e.g., `export * from "mod";`.
+
+### Smart-mix pipelines
+
+These types are **deprecated**.
+They are used by the deprecated smart-mix pipe operator to determine
+the type of a pipe expression's the body expression.
+The Hack and F# pipe operators use simple `BinaryExpression`s.
+
+#### PipelineBody
+
+```js
+interface PipelineBody <: NodeBase {
+    type: "PipelineBody";
+}
+```
+
+#### PipelineBareFunctionBody
+
+```js
+interface PipelineBody <: NodeBase {
+    type: "PipelineBareFunctionBody";
+    callee: Expression;
+}
+```
+
+#### PipelineBareConstructorBody
+
+```js
+interface PipelineBareConstructorBody <: NodeBase {
+    type: "PipelineBareConstructorBody";
+    callee: Expression;
+}
+```
+
+#### PipelineBareAwaitedFunctionBody
+
+```js
+interface PipelineBareConstructorBody <: NodeBase {
+    type: "PipelineTopicBody";
+    expression: Expression;
+}
+```
+
+#### PipelineTopicBody
+
+```js
+interface PipelineBareConstructorBody <: NodeBase {
+    type: "PipelineBareAwaitedFunctionBody";
+    callee: Expression;
+}

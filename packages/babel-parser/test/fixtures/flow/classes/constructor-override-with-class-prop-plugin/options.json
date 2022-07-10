@@ -1,4 +1,4 @@
 {
   "sourceType": "module",
-  "plugins": ["jsx", "flow", "classProperties"]
+  "plugins": ["jsx", "flow"]
 }

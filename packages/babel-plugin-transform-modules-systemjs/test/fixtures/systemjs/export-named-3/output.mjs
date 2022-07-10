@@ -3,7 +3,7 @@ System.register([], function (_export, _context) {
 
   var foo;
 
-  _export("foo", void 0);
+  _export("bar", void 0);
 
   return {
     setters: [],

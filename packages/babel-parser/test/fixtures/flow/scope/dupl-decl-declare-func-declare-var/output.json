@@ -1,31 +1,32 @@
 {
   "type": "File",
-  "start":0,"end":50,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":22}},
+  "start":0,"end":50,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":22,"index":50}},
   "program": {
     "type": "Program",
-    "start":0,"end":50,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":22}},
+    "start":0,"end":50,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":22,"index":50}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "DeclareFunction",
-        "start":0,"end":27,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":27}},
+        "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
         "id": {
           "type": "Identifier",
-          "start":17,"end":26,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":26},"identifierName":"A"},
+          "start":17,"end":26,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":26,"index":26},"identifierName":"A"},
           "name": "A",
           "typeAnnotation": {
             "type": "TypeAnnotation",
-            "start":18,"end":26,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":26}},
+            "start":18,"end":26,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":26,"index":26}},
             "typeAnnotation": {
               "type": "FunctionTypeAnnotation",
-              "start":18,"end":26,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":26}},
+              "start":18,"end":26,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":26,"index":26}},
               "typeParameters": null,
               "params": [],
               "rest": null,
+              "this": null,
               "returnType": {
                 "type": "VoidTypeAnnotation",
-                "start":22,"end":26,"loc":{"start":{"line":1,"column":22},"end":{"line":1,"column":26}}
+                "start":22,"end":26,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":26,"index":26}}
               }
             }
           }
@@ -34,17 +35,17 @@
       },
       {
         "type": "DeclareVariable",
-        "start":28,"end":50,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":22}},
+        "start":28,"end":50,"loc":{"start":{"line":2,"column":0,"index":28},"end":{"line":2,"column":22,"index":50}},
         "id": {
           "type": "Identifier",
-          "start":40,"end":49,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":21},"identifierName":"A"},
+          "start":40,"end":49,"loc":{"start":{"line":2,"column":12,"index":40},"end":{"line":2,"column":21,"index":49},"identifierName":"A"},
           "name": "A",
           "typeAnnotation": {
             "type": "TypeAnnotation",
-            "start":41,"end":49,"loc":{"start":{"line":2,"column":13},"end":{"line":2,"column":21}},
+            "start":41,"end":49,"loc":{"start":{"line":2,"column":13,"index":41},"end":{"line":2,"column":21,"index":49}},
             "typeAnnotation": {
               "type": "NumberTypeAnnotation",
-              "start":43,"end":49,"loc":{"start":{"line":2,"column":15},"end":{"line":2,"column":21}}
+              "start":43,"end":49,"loc":{"start":{"line":2,"column":15,"index":43},"end":{"line":2,"column":21,"index":49}}
             }
           }
         }

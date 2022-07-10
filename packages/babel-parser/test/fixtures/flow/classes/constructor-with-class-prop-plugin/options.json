@@ -1,3 +1,3 @@
 {
-  "plugins": ["jsx", "flow", "classProperties"]
+  "plugins": ["jsx", "flow"]
 }

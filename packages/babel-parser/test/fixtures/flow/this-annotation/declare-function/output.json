@@ -1,0 +1,212 @@
+{
+  "type": "File",
+  "start":0,"end":210,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":41,"index":210}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":210,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":41,"index":210}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "DeclareFunction",
+        "start":0,"end":67,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":67,"index":67}},
+        "id": {
+          "type": "Identifier",
+          "start":17,"end":67,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":67,"index":67},"identifierName":"foo"},
+          "name": "foo",
+          "typeAnnotation": {
+            "type": "TypeAnnotation",
+            "start":21,"end":67,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":67,"index":67}},
+            "typeAnnotation": {
+              "type": "FunctionTypeAnnotation",
+              "start":21,"end":67,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":67,"index":67}},
+              "typeParameters": null,
+              "params": [
+                {
+                  "type": "FunctionTypeParam",
+                  "start":37,"end":47,"loc":{"start":{"line":1,"column":37,"index":37},"end":{"line":1,"column":47,"index":47}},
+                  "name": {
+                    "type": "Identifier",
+                    "start":37,"end":38,"loc":{"start":{"line":1,"column":37,"index":37},"end":{"line":1,"column":38,"index":38},"identifierName":"a"},
+                    "name": "a"
+                  },
+                  "optional": false,
+                  "typeAnnotation": {
+                    "type": "StringTypeAnnotation",
+                    "start":41,"end":47,"loc":{"start":{"line":1,"column":41,"index":41},"end":{"line":1,"column":47,"index":47}}
+                  }
+                },
+                {
+                  "type": "FunctionTypeParam",
+                  "start":49,"end":59,"loc":{"start":{"line":1,"column":49,"index":49},"end":{"line":1,"column":59,"index":59}},
+                  "name": {
+                    "type": "Identifier",
+                    "start":49,"end":50,"loc":{"start":{"line":1,"column":49,"index":49},"end":{"line":1,"column":50,"index":50},"identifierName":"b"},
+                    "name": "b"
+                  },
+                  "optional": false,
+                  "typeAnnotation": {
+                    "type": "NumberTypeAnnotation",
+                    "start":53,"end":59,"loc":{"start":{"line":1,"column":53,"index":53},"end":{"line":1,"column":59,"index":59}}
+                  }
+                }
+              ],
+              "rest": null,
+              "this": {
+                "type": "FunctionTypeParam",
+                "start":22,"end":35,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":35,"index":35}},
+                "name": null,
+                "optional": false,
+                "typeAnnotation": {
+                  "type": "NumberTypeAnnotation",
+                  "start":29,"end":35,"loc":{"start":{"line":1,"column":29,"index":29},"end":{"line":1,"column":35,"index":35}}
+                }
+              },
+              "returnType": {
+                "type": "VoidTypeAnnotation",
+                "start":63,"end":67,"loc":{"start":{"line":1,"column":63,"index":63},"end":{"line":1,"column":67,"index":67}}
+              }
+            }
+          }
+        },
+        "predicate": null
+      },
+      {
+        "type": "DeclareFunction",
+        "start":69,"end":111,"loc":{"start":{"line":3,"column":0,"index":69},"end":{"line":3,"column":42,"index":111}},
+        "id": {
+          "type": "Identifier",
+          "start":86,"end":111,"loc":{"start":{"line":3,"column":17,"index":86},"end":{"line":3,"column":42,"index":111},"identifierName":"bar"},
+          "name": "bar",
+          "typeAnnotation": {
+            "type": "TypeAnnotation",
+            "start":90,"end":111,"loc":{"start":{"line":3,"column":21,"index":90},"end":{"line":3,"column":42,"index":111}},
+            "typeAnnotation": {
+              "type": "FunctionTypeAnnotation",
+              "start":90,"end":111,"loc":{"start":{"line":3,"column":21,"index":90},"end":{"line":3,"column":42,"index":111}},
+              "typeParameters": null,
+              "params": [],
+              "rest": null,
+              "this": {
+                "type": "FunctionTypeParam",
+                "start":91,"end":104,"loc":{"start":{"line":3,"column":22,"index":91},"end":{"line":3,"column":35,"index":104}},
+                "name": null,
+                "optional": false,
+                "typeAnnotation": {
+                  "type": "NumberTypeAnnotation",
+                  "start":98,"end":104,"loc":{"start":{"line":3,"column":29,"index":98},"end":{"line":3,"column":35,"index":104}}
+                }
+              },
+              "returnType": {
+                "type": "VoidTypeAnnotation",
+                "start":107,"end":111,"loc":{"start":{"line":3,"column":38,"index":107},"end":{"line":3,"column":42,"index":111}}
+              }
+            }
+          }
+        },
+        "predicate": null
+      },
+      {
+        "type": "DeclareFunction",
+        "start":113,"end":167,"loc":{"start":{"line":5,"column":0,"index":113},"end":{"line":5,"column":54,"index":167}},
+        "id": {
+          "type": "Identifier",
+          "start":130,"end":167,"loc":{"start":{"line":5,"column":17,"index":130},"end":{"line":5,"column":54,"index":167},"identifierName":"baz"},
+          "name": "baz",
+          "typeAnnotation": {
+            "type": "TypeAnnotation",
+            "start":134,"end":167,"loc":{"start":{"line":5,"column":21,"index":134},"end":{"line":5,"column":54,"index":167}},
+            "typeAnnotation": {
+              "type": "FunctionTypeAnnotation",
+              "start":134,"end":167,"loc":{"start":{"line":5,"column":21,"index":134},"end":{"line":5,"column":54,"index":167}},
+              "typeParameters": null,
+              "params": [],
+              "rest": {
+                "type": "FunctionTypeParam",
+                "start":153,"end":160,"loc":{"start":{"line":5,"column":40,"index":153},"end":{"line":5,"column":47,"index":160}},
+                "name": {
+                  "type": "Identifier",
+                  "start":153,"end":154,"loc":{"start":{"line":5,"column":40,"index":153},"end":{"line":5,"column":41,"index":154},"identifierName":"a"},
+                  "name": "a"
+                },
+                "optional": false,
+                "typeAnnotation": {
+                  "type": "AnyTypeAnnotation",
+                  "start":157,"end":160,"loc":{"start":{"line":5,"column":44,"index":157},"end":{"line":5,"column":47,"index":160}}
+                }
+              },
+              "this": {
+                "type": "FunctionTypeParam",
+                "start":135,"end":148,"loc":{"start":{"line":5,"column":22,"index":135},"end":{"line":5,"column":35,"index":148}},
+                "name": null,
+                "optional": false,
+                "typeAnnotation": {
+                  "type": "NumberTypeAnnotation",
+                  "start":142,"end":148,"loc":{"start":{"line":5,"column":29,"index":142},"end":{"line":5,"column":35,"index":148}}
+                }
+              },
+              "returnType": {
+                "type": "VoidTypeAnnotation",
+                "start":163,"end":167,"loc":{"start":{"line":5,"column":50,"index":163},"end":{"line":5,"column":54,"index":167}}
+              }
+            }
+          }
+        },
+        "predicate": null
+      },
+      {
+        "type": "DeclareFunction",
+        "start":169,"end":210,"loc":{"start":{"line":7,"column":0,"index":169},"end":{"line":7,"column":41,"index":210}},
+        "id": {
+          "type": "Identifier",
+          "start":186,"end":210,"loc":{"start":{"line":7,"column":17,"index":186},"end":{"line":7,"column":41,"index":210},"identifierName":"qux"},
+          "name": "qux",
+          "typeAnnotation": {
+            "type": "TypeAnnotation",
+            "start":189,"end":210,"loc":{"start":{"line":7,"column":20,"index":189},"end":{"line":7,"column":41,"index":210}},
+            "typeAnnotation": {
+              "type": "FunctionTypeAnnotation",
+              "start":189,"end":210,"loc":{"start":{"line":7,"column":20,"index":189},"end":{"line":7,"column":41,"index":210}},
+              "typeParameters": {
+                "type": "TypeParameterDeclaration",
+                "start":189,"end":192,"loc":{"start":{"line":7,"column":20,"index":189},"end":{"line":7,"column":23,"index":192}},
+                "params": [
+                  {
+                    "type": "TypeParameter",
+                    "start":190,"end":191,"loc":{"start":{"line":7,"column":21,"index":190},"end":{"line":7,"column":22,"index":191}},
+                    "name": "T",
+                    "variance": null
+                  }
+                ]
+              },
+              "params": [],
+              "rest": null,
+              "this": {
+                "type": "FunctionTypeParam",
+                "start":194,"end":202,"loc":{"start":{"line":7,"column":25,"index":194},"end":{"line":7,"column":33,"index":202}},
+                "name": null,
+                "optional": false,
+                "typeAnnotation": {
+                  "type": "GenericTypeAnnotation",
+                  "start":201,"end":202,"loc":{"start":{"line":7,"column":32,"index":201},"end":{"line":7,"column":33,"index":202}},
+                  "typeParameters": null,
+                  "id": {
+                    "type": "Identifier",
+                    "start":201,"end":202,"loc":{"start":{"line":7,"column":32,"index":201},"end":{"line":7,"column":33,"index":202},"identifierName":"T"},
+                    "name": "T"
+                  }
+                }
+              },
+              "returnType": {
+                "type": "VoidTypeAnnotation",
+                "start":206,"end":210,"loc":{"start":{"line":7,"column":37,"index":206},"end":{"line":7,"column":41,"index":210}}
+              }
+            }
+          }
+        },
+        "predicate": null
+      }
+    ],
+    "directives": []
+  }
+}

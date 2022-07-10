@@ -1,7 +1,7 @@
 {
   "name": "@babel/plugin-proposal-decorators",
-  "version": "7.10.1",
-  "author": "Logan Smyth <loganfsmyth@gmail.com>",
+  "version": "7.18.6",
+  "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -12,22 +12,52 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-plugin-proposal-decorators"
   },
-  "main": "lib/index.js",
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-decorators",
+  "main": "./lib/index.js",
   "keywords": [
     "babel",
     "babel-plugin",
     "decorators"
   ],
   "dependencies": {
-    "@babel/helper-create-class-features-plugin": "^7.10.1",
-    "@babel/helper-plugin-utils": "^7.10.1",
-    "@babel/plugin-syntax-decorators": "^7.10.1"
+    "@babel/helper-create-class-features-plugin": "workspace:^",
+    "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/helper-replace-supers": "workspace:^",
+    "@babel/helper-split-export-declaration": "workspace:^",
+    "@babel/plugin-syntax-decorators": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.1",
-    "@babel/helper-plugin-test-runner": "^7.10.1"
-  }
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^",
+    "@babel/traverse": "workspace:^",
+    "@types/charcodes": "^0.2.0",
+    "babel-plugin-polyfill-es-shims": "^0.6.1",
+    "charcodes": "^0.2.0",
+    "object.getownpropertydescriptors": "^2.1.1"
+  },
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      null,
+      {
+        "exports": null
+      }
+    ],
+    "USE_ESM": [
+      {
+        "type": "module"
+      },
+      null
+    ]
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
+  "type": "commonjs"
 }

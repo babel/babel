@@ -1,5 +1,6 @@
-import * as t from "../lib";
+import * as t from "../lib/index.js";
 import { parse } from "@babel/parser";
+import { CodeGenerator } from "@babel/generator";
 
 describe("cloneNode", function () {
   it("should handle undefined", function () {
@@ -38,6 +39,14 @@ describe("cloneNode", function () {
     const program = "'use strict'; function lol() { wow();return 1; }";
     const node = parse(program);
     const cloned = t.cloneNode(node);
+    expect(node).not.toBe(cloned);
+    expect(t.isNodesEquivalent(node, cloned)).toBe(true);
+  });
+
+  it("should handle deep cloning without loc of fragments", function () {
+    const program = "foo();";
+    const node = parse(program);
+    const cloned = t.cloneNode(node, /* deep */ true, /* withoutLoc */ true);
     expect(node).not.toBe(cloned);
     expect(t.isNodesEquivalent(node, cloned)).toBe(true);
   });
@@ -112,6 +121,9 @@ describe("cloneNode", function () {
     node.declarations[0].id.loc = {};
 
     const cloned = t.cloneNode(node, /* deep */ true, /* withoutLoc */ false);
+    expect(cloned.declarations[0].id.leadingComments[0]).not.toBe(
+      node.declarations[0].id.leadingComments[0],
+    );
     expect(cloned.declarations[0].id.leadingComments[0].loc).toBe(
       node.declarations[0].id.leadingComments[0].loc,
     );
@@ -139,5 +151,25 @@ describe("cloneNode", function () {
     expect(cloned.declarations[0].id.leadingComments[0].loc).toBe(null);
     expect(cloned.declarations[0].id.innerComments[0].loc).toBe(null);
     expect(cloned.declarations[0].id.trailingComments[0].loc).toBe(null);
+  });
+
+  it("should generate same code after deep cloning", function () {
+    let code = `//test1
+    /*test2*/var/*test3*/ a = 1/*test4*/;//test5
+    //test6
+    var b;
+    `;
+    code = new CodeGenerator(parse(code), { retainLines: true }).generate()
+      .code;
+
+    const ast = t.cloneNode(
+      parse(code),
+      /* deep */ true,
+      /* withoutLoc */ false,
+    );
+    const newCode = new CodeGenerator(ast, { retainLines: true }).generate()
+      .code;
+
+    expect(newCode).toBe(code);
   });
 });

@@ -1,0 +1,69 @@
+{
+  "type": "File",
+  "start":0,"end":4,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":4,"index":4}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":4,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":4,"index":4}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":4,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":4,"index":4}},
+        "expression": {
+          "type": "RecordExpression",
+          "start":0,"end":4,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":4,"index":4}},
+          "properties": []
+        }
+      }
+    ],
+    "directives": []
+  },
+  "tokens": [
+    {
+      "type": {
+        "label": "{|",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start":0,"end":2,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":2,"index":2}}
+    },
+    {
+      "type": {
+        "label": "|}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start":2,"end":4,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":4,"index":4}}
+    },
+    {
+      "type": {
+        "label": "eof",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start":4,"end":4,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":4,"index":4}}
+    }
+  ]
+}

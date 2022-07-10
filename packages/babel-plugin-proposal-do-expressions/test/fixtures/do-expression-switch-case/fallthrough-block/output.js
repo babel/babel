@@ -16,7 +16,9 @@ const x = n => function () {
       }
 
     case 3:
-      return void 0;
+      {
+        return void 0;
+      }
 
     case 4:
       {

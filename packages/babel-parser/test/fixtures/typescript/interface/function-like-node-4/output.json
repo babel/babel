@@ -1,0 +1,70 @@
+{
+  "type": "File",
+  "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":46}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":46}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSInterfaceDeclaration",
+        "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":46}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":13,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":13,"index":13},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "body": {
+          "type": "TSInterfaceBody",
+          "start":14,"end":46,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":3,"column":1,"index":46}},
+          "body": [
+            {
+              "type": "TSConstructSignatureDeclaration",
+              "start":18,"end":44,"loc":{"start":{"line":2,"column":2,"index":18},"end":{"line":2,"column":28,"index":44}},
+              "typeParameters": {
+                "type": "TSTypeParameterDeclaration",
+                "start":21,"end":24,"loc":{"start":{"line":2,"column":5,"index":21},"end":{"line":2,"column":8,"index":24}},
+                "params": [
+                  {
+                    "type": "TSTypeParameter",
+                    "start":22,"end":23,"loc":{"start":{"line":2,"column":6,"index":22},"end":{"line":2,"column":7,"index":23}},
+                    "name": {
+                      "type": "Identifier",
+                      "start":22,"end":23,"loc":{"start":{"line":2,"column":6,"index":22},"end":{"line":2,"column":7,"index":23},"identifierName":"T"},
+                      "name": "T"
+                    }
+                  }
+                ]
+              },
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start":25,"end":34,"loc":{"start":{"line":2,"column":9,"index":25},"end":{"line":2,"column":18,"index":34},"identifierName":"a"},
+                  "name": "a",
+                  "typeAnnotation": {
+                    "type": "TSTypeAnnotation",
+                    "start":26,"end":34,"loc":{"start":{"line":2,"column":10,"index":26},"end":{"line":2,"column":18,"index":34}},
+                    "typeAnnotation": {
+                      "type": "TSStringKeyword",
+                      "start":28,"end":34,"loc":{"start":{"line":2,"column":12,"index":28},"end":{"line":2,"column":18,"index":34}}
+                    }
+                  }
+                }
+              ],
+              "returnType": {
+                "type": "TSTypeAnnotation",
+                "start":35,"end":43,"loc":{"start":{"line":2,"column":19,"index":35},"end":{"line":2,"column":27,"index":43}},
+                "typeAnnotation": {
+                  "type": "TSStringKeyword",
+                  "start":37,"end":43,"loc":{"start":{"line":2,"column":21,"index":37},"end":{"line":2,"column":27,"index":43}}
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

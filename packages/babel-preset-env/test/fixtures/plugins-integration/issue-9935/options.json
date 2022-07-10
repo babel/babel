@@ -4,7 +4,7 @@
       "env",
       {
         "targets": [
-          "Chrome >= 60",
+          "Chrome >= 54",
           "Safari >= 11",
           "iOS >= 10.3",
           "Firefox >= 55",

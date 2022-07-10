@@ -1,0 +1,247 @@
+{
+  "type": "File",
+  "start":0,"end":137,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":43,"index":137}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":137,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":43,"index":137}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":6,"end":93,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":93,"index":93}},
+        "exportKind": "value",
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":27,"end":28,"loc":{"start":{"line":1,"column":27,"index":27},"end":{"line":1,"column":28,"index":28}},
+            "local": {
+              "type": "Identifier",
+              "start":27,"end":28,"loc":{"start":{"line":1,"column":27,"index":27},"end":{"line":1,"column":28,"index":28},"identifierName":"A"},
+              "name": "A"
+            },
+            "exportKind": "value",
+            "exported": {
+              "type": "Identifier",
+              "start":27,"end":28,"loc":{"start":{"line":1,"column":27,"index":27},"end":{"line":1,"column":28,"index":28},"identifierName":"A"},
+              "name": "A"
+            },
+            "trailingComments": [
+              {
+                "type": "CommentBlock",
+                "value": "4",
+                "start":29,"end":34,"loc":{"start":{"line":1,"column":29,"index":29},"end":{"line":1,"column":34,"index":34}}
+              }
+            ],
+            "leadingComments": [
+              {
+                "type": "CommentBlock",
+                "value": "3",
+                "start":21,"end":26,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":26,"index":26}}
+              }
+            ]
+          },
+          {
+            "type": "ExportSpecifier",
+            "start":42,"end":60,"loc":{"start":{"line":1,"column":42,"index":42},"end":{"line":1,"column":60,"index":60}},
+            "local": {
+              "type": "Identifier",
+              "start":42,"end":43,"loc":{"start":{"line":1,"column":42,"index":42},"end":{"line":1,"column":43,"index":43},"identifierName":"B"},
+              "name": "B",
+              "trailingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "6",
+                  "start":44,"end":49,"loc":{"start":{"line":1,"column":44,"index":44},"end":{"line":1,"column":49,"index":49}}
+                }
+              ]
+            },
+            "exportKind": "value",
+            "exported": {
+              "type": "Identifier",
+              "start":59,"end":60,"loc":{"start":{"line":1,"column":59,"index":59},"end":{"line":1,"column":60,"index":60},"identifierName":"C"},
+              "name": "C",
+              "leadingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": "7",
+                  "start":53,"end":58,"loc":{"start":{"line":1,"column":53,"index":53},"end":{"line":1,"column":58,"index":58}}
+                }
+              ]
+            },
+            "trailingComments": [
+              {
+                "type": "CommentBlock",
+                "value": "8",
+                "start":61,"end":66,"loc":{"start":{"line":1,"column":61,"index":61},"end":{"line":1,"column":66,"index":66}}
+              }
+            ],
+            "leadingComments": [
+              {
+                "type": "CommentBlock",
+                "value": "5",
+                "start":36,"end":41,"loc":{"start":{"line":1,"column":36,"index":36},"end":{"line":1,"column":41,"index":41}}
+              }
+            ]
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":87,"end":92,"loc":{"start":{"line":1,"column":87,"index":87},"end":{"line":1,"column":92,"index":92}},
+          "extra": {
+            "rawValue": "foo",
+            "raw": "\"foo\""
+          },
+          "value": "foo",
+          "leadingComments": [
+            {
+              "type": "CommentBlock",
+              "value": "10",
+              "start":80,"end":86,"loc":{"start":{"line":1,"column":80,"index":80},"end":{"line":1,"column":86,"index":86}}
+            }
+          ]
+        },
+        "declaration": null,
+        "innerComments": [
+          {
+            "type": "CommentBlock",
+            "value": "2",
+            "start":13,"end":18,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":18,"index":18}}
+          },
+          {
+            "type": "CommentBlock",
+            "value": "9",
+            "start":69,"end":74,"loc":{"start":{"line":1,"column":69,"index":69},"end":{"line":1,"column":74,"index":74}}
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "CommentBlock",
+            "value": "1",
+            "start":94,"end":99,"loc":{"start":{"line":2,"column":0,"index":94},"end":{"line":2,"column":5,"index":99}}
+          }
+        ],
+        "leadingComments": [
+          {
+            "type": "CommentBlock",
+            "value": "1",
+            "start":0,"end":5,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":5,"index":5}}
+          }
+        ]
+      },
+      {
+        "type": "ExportAllDeclaration",
+        "start":100,"end":137,"loc":{"start":{"line":2,"column":6,"index":100},"end":{"line":2,"column":43,"index":137}},
+        "exportKind": "value",
+        "source": {
+          "type": "StringLiteral",
+          "start":132,"end":137,"loc":{"start":{"line":2,"column":38,"index":132},"end":{"line":2,"column":43,"index":137}},
+          "extra": {
+            "rawValue": "foo",
+            "raw": "\"foo\""
+          },
+          "value": "foo",
+          "leadingComments": [
+            {
+              "type": "CommentBlock",
+              "value": "4",
+              "start":126,"end":131,"loc":{"start":{"line":2,"column":32,"index":126},"end":{"line":2,"column":37,"index":131}}
+            }
+          ]
+        },
+        "innerComments": [
+          {
+            "type": "CommentBlock",
+            "value": "2",
+            "start":107,"end":112,"loc":{"start":{"line":2,"column":13,"index":107},"end":{"line":2,"column":18,"index":112}}
+          },
+          {
+            "type": "CommentBlock",
+            "value": "3",
+            "start":115,"end":120,"loc":{"start":{"line":2,"column":21,"index":115},"end":{"line":2,"column":26,"index":120}}
+          }
+        ],
+        "leadingComments": [
+          {
+            "type": "CommentBlock",
+            "value": "1",
+            "start":94,"end":99,"loc":{"start":{"line":2,"column":0,"index":94},"end":{"line":2,"column":5,"index":99}}
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentBlock",
+      "value": "1",
+      "start":0,"end":5,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":5,"index":5}}
+    },
+    {
+      "type": "CommentBlock",
+      "value": "2",
+      "start":13,"end":18,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":18,"index":18}}
+    },
+    {
+      "type": "CommentBlock",
+      "value": "3",
+      "start":21,"end":26,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":26,"index":26}}
+    },
+    {
+      "type": "CommentBlock",
+      "value": "4",
+      "start":29,"end":34,"loc":{"start":{"line":1,"column":29,"index":29},"end":{"line":1,"column":34,"index":34}}
+    },
+    {
+      "type": "CommentBlock",
+      "value": "5",
+      "start":36,"end":41,"loc":{"start":{"line":1,"column":36,"index":36},"end":{"line":1,"column":41,"index":41}}
+    },
+    {
+      "type": "CommentBlock",
+      "value": "6",
+      "start":44,"end":49,"loc":{"start":{"line":1,"column":44,"index":44},"end":{"line":1,"column":49,"index":49}}
+    },
+    {
+      "type": "CommentBlock",
+      "value": "7",
+      "start":53,"end":58,"loc":{"start":{"line":1,"column":53,"index":53},"end":{"line":1,"column":58,"index":58}}
+    },
+    {
+      "type": "CommentBlock",
+      "value": "8",
+      "start":61,"end":66,"loc":{"start":{"line":1,"column":61,"index":61},"end":{"line":1,"column":66,"index":66}}
+    },
+    {
+      "type": "CommentBlock",
+      "value": "9",
+      "start":69,"end":74,"loc":{"start":{"line":1,"column":69,"index":69},"end":{"line":1,"column":74,"index":74}}
+    },
+    {
+      "type": "CommentBlock",
+      "value": "10",
+      "start":80,"end":86,"loc":{"start":{"line":1,"column":80,"index":80},"end":{"line":1,"column":86,"index":86}}
+    },
+    {
+      "type": "CommentBlock",
+      "value": "1",
+      "start":94,"end":99,"loc":{"start":{"line":2,"column":0,"index":94},"end":{"line":2,"column":5,"index":99}}
+    },
+    {
+      "type": "CommentBlock",
+      "value": "2",
+      "start":107,"end":112,"loc":{"start":{"line":2,"column":13,"index":107},"end":{"line":2,"column":18,"index":112}}
+    },
+    {
+      "type": "CommentBlock",
+      "value": "3",
+      "start":115,"end":120,"loc":{"start":{"line":2,"column":21,"index":115},"end":{"line":2,"column":26,"index":120}}
+    },
+    {
+      "type": "CommentBlock",
+      "value": "4",
+      "start":126,"end":131,"loc":{"start":{"line":2,"column":32,"index":126},"end":{"line":2,"column":37,"index":131}}
+    }
+  ]
+}

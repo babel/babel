@@ -25,7 +25,7 @@ exports.default = function(_ref) {
               .forEach(function(decorator) {
                 resultantDecorator = types.callExpression(
                   decorator.expression,
-                  [resultantDecorator || types.Identifier(paramUidName)]
+                  [resultantDecorator || types.identifier(paramUidName)]
                 );
               });
 
@@ -40,12 +40,12 @@ exports.default = function(_ref) {
                   "body",
                   types.variableDeclaration("var", [
                     types.variableDeclarator(
-                      types.Identifier(decoratedParamUidName),
+                      types.identifier(decoratedParamUidName),
                       resultantDecorator
                     ),
                   ])
                 );
-              param.replaceWith(types.Identifier(paramUidName));
+              param.replaceWith(types.identifier(paramUidName));
             }
           });
       },

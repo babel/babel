@@ -1,4 +1,4 @@
-import * as t from "../lib";
+import * as t from "../lib/index.js";
 import { parse } from "@babel/parser";
 
 describe("validators", function () {
@@ -122,20 +122,38 @@ describe("validators", function () {
       expect(t.isReferenced(node, parent)).toBe(true);
     });
 
-    it("returns true if node is a value of ObjectProperty of an expression", function () {
-      const node = t.identifier("a");
-      const parent = t.objectProperty(t.identifier("key"), node);
-      const grandparent = t.objectExpression([parent]);
+    describe("ObjectProperty", () => {
+      it("returns true if node is a value of ObjectProperty of an expression", function () {
+        const node = t.identifier("a");
+        const parent = t.objectProperty(t.identifier("key"), node);
+        const grandparent = t.objectExpression([parent]);
 
-      expect(t.isReferenced(node, parent, grandparent)).toBe(true);
-    });
+        expect(t.isReferenced(node, parent, grandparent)).toBe(true);
+      });
 
-    it("returns false if node is a value of ObjectProperty of a pattern", function () {
-      const node = t.identifier("a");
-      const parent = t.objectProperty(t.identifier("key"), node);
-      const grandparent = t.objectPattern([parent]);
+      it("returns false if node is a value of ObjectProperty of a pattern", function () {
+        const node = t.identifier("a");
+        const parent = t.objectProperty(t.identifier("key"), node);
+        const grandparent = t.objectPattern([parent]);
 
-      expect(t.isReferenced(node, parent, grandparent)).toBe(false);
+        expect(t.isReferenced(node, parent, grandparent)).toBe(false);
+      });
+
+      it("returns true if node is computed property key of an expression", function () {
+        const node = t.identifier("a");
+        const parent = t.objectProperty(node, t.identifier("value"), true);
+        const grandparent = t.objectExpression([parent]);
+
+        expect(t.isReferenced(node, parent, grandparent)).toBe(true);
+      });
+
+      it("returns true if node is computed property key of a pattern", function () {
+        const node = t.identifier("a");
+        const parent = t.objectProperty(node, t.identifier("value"), true);
+        const grandparent = t.objectPattern([parent]);
+
+        expect(t.isReferenced(node, parent, grandparent)).toBe(true);
+      });
     });
 
     describe("TSPropertySignature", function () {
@@ -243,6 +261,51 @@ describe("validators", function () {
           [node],
           t.blockStatement([]),
         );
+
+        expect(t.isReferenced(node, parent)).toBe(false);
+      });
+    });
+
+    describe("ClassDeclaration", () => {
+      it("returns true if node is a class heritage", function () {
+        const node = t.identifier("A");
+        const parent = t.classDeclaration(
+          t.identifier("C"),
+          node,
+          t.classBody([]),
+          [],
+        );
+
+        expect(t.isReferenced(node, parent)).toBe(true);
+      });
+    });
+
+    describe("exports", function () {
+      it("returns false for re-exports", function () {
+        const node = t.identifier("foo");
+        const parent = t.exportSpecifier(node, t.identifier("bar"));
+        const grandparent = t.exportNamedDeclaration(
+          null,
+          [parent],
+          t.stringLiteral("library"),
+        );
+
+        expect(t.isReferenced(node, parent, grandparent)).toBe(false);
+      });
+
+      it("returns true for local exports", function () {
+        const node = t.identifier("foo");
+        const parent = t.exportSpecifier(node, t.identifier("bar"));
+        const grandparent = t.exportNamedDeclaration(null, [parent]);
+
+        expect(t.isReferenced(node, parent, grandparent)).toBe(true);
+      });
+    });
+
+    describe("import attributes", function () {
+      it("returns false for import attributes", function () {
+        const node = t.identifier("foo");
+        const parent = t.importAttribute(node, t.stringLiteral("bar"));
 
         expect(t.isReferenced(node, parent)).toBe(false);
       });

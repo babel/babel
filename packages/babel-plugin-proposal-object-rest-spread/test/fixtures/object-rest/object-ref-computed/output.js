@@ -2,23 +2,19 @@ var key, x, y, z; // impure
 
 key = 1;
 
-var _key = key++,
-    {
-  [_key]: {
-    y
-  }
-} = {
+var _ = {
   1: {
     a: 1,
     y: 1
   }
 },
-    x = babelHelpers.objectWithoutProperties({
-  1: {
-    a: 1,
-    y: 1
+    _key = key++,
+    {
+  [_key]: {
+    y
   }
-}[_key], ["y"]);
+} = _,
+    x = babelHelpers.objectWithoutProperties(_[_key], ["y"]);
 
 expect(x).toEqual({
   a: 1

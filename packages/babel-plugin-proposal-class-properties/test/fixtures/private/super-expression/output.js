@@ -1,4 +1,4 @@
-var _bar = new WeakMap();
+var _bar = /*#__PURE__*/new WeakMap();
 
 var Foo = /*#__PURE__*/function (_Bar) {
   "use strict";
@@ -8,15 +8,15 @@ var Foo = /*#__PURE__*/function (_Bar) {
   var _super = babelHelpers.createSuper(Foo);
 
   function Foo() {
-    var _temp, _this;
+    var _this;
 
     babelHelpers.classCallCheck(this, Foo);
-    foo((_temp = _this = _super.call(this), _bar.set(babelHelpers.assertThisInitialized(_this), {
+    foo((_this = _super.call(this), babelHelpers.classPrivateFieldInitSpec(babelHelpers.assertThisInitialized(_this), _bar, {
       writable: true,
       value: "foo"
-    }), _temp));
+    }), babelHelpers.assertThisInitialized(_this)));
     return _this;
   }
 
-  return Foo;
+  return babelHelpers.createClass(Foo);
 }(Bar);

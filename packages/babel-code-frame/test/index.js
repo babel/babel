@@ -1,6 +1,8 @@
 import chalk from "chalk";
 import stripAnsi from "strip-ansi";
-import codeFrame, { codeFrameColumns } from "..";
+
+import _codeFrame, { codeFrameColumns } from "../lib/index.js";
+const codeFrame = _codeFrame.default || _codeFrame;
 
 describe("@babel/code-frame", function () {
   test("basic usage", function () {
@@ -42,7 +44,7 @@ describe("@babel/code-frame", function () {
         "   6 |  * @returns Number",
         ">  7 |  */",
         "     |  ^",
-        "   8 | ",
+        "   8 |",
         "   9 | function sum(a, b) {",
         "  10 |   return a + b",
       ].join("\n"),
@@ -70,7 +72,7 @@ describe("@babel/code-frame", function () {
         "> 6 |  * @returns Number",
         "    |  ^",
         "  7 |  */",
-        "  8 | ",
+        "  8 |",
         "  9 | function sum(a, b) {",
       ].join("\n"),
     );
@@ -105,8 +107,8 @@ describe("@babel/code-frame", function () {
   test("opts.highlightCode with multiple columns and lines", function () {
     // prettier-ignore
     const rawLines = [
-      "function a(b, c) {", 
-      "  return b + c;", 
+      "function a(b, c) {",
+      "  return b + c;",
       "}"
     ].join("\n");
 
@@ -160,7 +162,7 @@ describe("@babel/code-frame", function () {
         "   6 |  * @returns Number",
         ">  7 |  */",
         "     |  ^",
-        "   8 | ",
+        "   8 |",
         "   9 | function sum(a, b) {",
         "  10 |   return a + b",
       ].join("\n"),
@@ -187,7 +189,7 @@ describe("@babel/code-frame", function () {
         "  6 |  * @returns Number",
         "> 7 |  */",
         "    |  ^",
-        "  8 | ",
+        "  8 |",
       ].join("\n"),
     );
   });
@@ -207,9 +209,7 @@ describe("@babel/code-frame", function () {
       "}",
     ].join("\n");
     expect(codeFrame(rawLines, 7, 2, { linesAbove: 1, linesBelow: 1 })).toEqual(
-      ["  6 |  * @returns Number", "> 7 |  */", "    |  ^", "  8 | "].join(
-        "\n",
-      ),
+      ["  6 |  * @returns Number", "> 7 |  */", "    |  ^", "  8 |"].join("\n"),
     );
   });
 
@@ -277,10 +277,40 @@ describe("@babel/code-frame", function () {
     ).toEqual(
       chalk.reset(
         [
-          " " + gutter(" 2 | "),
-          marker(">") + gutter(" 3 | "),
-          " " + gutter(" 4 | "),
+          " " + gutter(" 2 |"),
+          marker(">") + gutter(" 3 |"),
+          " " + gutter(" 4 |"),
         ].join("\n"),
+      ),
+    );
+  });
+
+  test("jsx", function () {
+    const gutter = chalk.grey;
+    const yellow = chalk.yellow;
+
+    const rawLines = ["<div />"].join("\n");
+
+    expect(
+      JSON.stringify(
+        codeFrame(rawLines, 0, null, {
+          linesAbove: 1,
+          linesBelow: 1,
+          forceColor: true,
+        }),
+      ),
+    ).toEqual(
+      JSON.stringify(
+        chalk.reset(
+          " " +
+            gutter(" 1 |") +
+            " " +
+            yellow("<") +
+            yellow("div") +
+            " " +
+            yellow("/") +
+            yellow(">"),
+        ),
       ),
     );
   });

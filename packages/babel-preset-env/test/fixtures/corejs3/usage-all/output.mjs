@@ -1,20 +1,6 @@
-import "core-js/modules/es.symbol";
-import "core-js/modules/es.symbol.description";
-import "core-js/modules/es.symbol.iterator";
-import "core-js/modules/es.symbol.match";
-import "core-js/modules/es.array.from";
-import "core-js/modules/es.array.iterator";
-import "core-js/modules/es.global-this";
-import "core-js/modules/es.map";
-import "core-js/modules/es.object.to-string";
-import "core-js/modules/es.promise";
-import "core-js/modules/es.promise.all-settled";
-import "core-js/modules/es.regexp.exec";
-import "core-js/modules/es.string.iterator";
-import "core-js/modules/es.string.match";
-import "core-js/modules/es.string.match-all";
-import "core-js/modules/web.dom-collections.iterator";
-import "core-js/modules/web.queue-microtask";
+import "core-js/modules/web.dom-collections.iterator.js";
+import "core-js/modules/es.promise.all-settled.js";
+import "core-js/modules/es.string.match-all.js";
 Array.from; // static method
 
 Map; // built-in
@@ -45,12 +31,10 @@ function H(WeakMap) {
 } // shadowed
 
 
-var foo = new Promise(function (resolve) {
+const foo = new Promise(resolve => {
   resolve(new Map());
 });
-queueMicrotask(function () {
-  return globalThis;
-});
+queueMicrotask(() => globalThis);
 Observable.from(10);
 Promise.allSettled([]);
 S.matchAll();

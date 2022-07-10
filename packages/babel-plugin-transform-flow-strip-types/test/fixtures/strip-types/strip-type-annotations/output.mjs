@@ -119,9 +119,15 @@ class Foo8 {
 
 function foo19(requiredParam, optParam) {}
 
-class Foo9 {}
+class Foo9 {
+  prop1;
+  prop2;
+}
 
-class Foo10 {}
+class Foo10 {
+  static prop1;
+  prop2;
+}
 
 class Foo11 {
   #prop1;

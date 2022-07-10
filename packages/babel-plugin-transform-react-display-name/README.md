@@ -2,7 +2,7 @@
 
 > Add displayName to React.createClass calls
 
-See our website [@babel/plugin-transform-react-display-name](https://babeljs.io/docs/en/next/babel-plugin-transform-react-display-name.html) for more information.
+See our website [@babel/plugin-transform-react-display-name](https://babeljs.io/docs/en/babel-plugin-transform-react-display-name) for more information.
 
 ## Install
 

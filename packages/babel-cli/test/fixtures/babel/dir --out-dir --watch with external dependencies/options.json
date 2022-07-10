@@ -1,0 +1,6 @@
+{
+  "args": ["src", "--out-dir", "lib", "--watch"],
+  "noBabelrc": true,
+  "noDefaultPlugins": true,
+  "minNodeVersion": 10
+}

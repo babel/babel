@@ -1,0 +1,74 @@
+{
+  "type": "File",
+  "start":0,"end":54,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":54}},
+  "errors": [
+    "SyntaxError: The left-hand side of a for-of loop may not be 'async'. (1:5)",
+    "SyntaxError: The left-hand side of a for-of loop may not be 'async'. (4:7)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":54,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":54}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ForOfStatement",
+        "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+        "await": false,
+        "left": {
+          "type": "Identifier",
+          "start":5,"end":10,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":10,"index":10},"identifierName":"async"},
+          "name": "async"
+        },
+        "right": {
+          "type": "Identifier",
+          "start":14,"end":15,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":15,"index":15},"identifierName":"x"},
+          "name": "x"
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start":16,"end":17,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":17,"index":17}}
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":19,"end":54,"loc":{"start":{"line":3,"column":0,"index":19},"end":{"line":5,"column":1,"index":54}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":19,"end":54,"loc":{"start":{"line":3,"column":0,"index":19},"end":{"line":5,"column":1,"index":54}},
+          "id": null,
+          "generator": false,
+          "async": true,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "start":31,"end":54,"loc":{"start":{"line":3,"column":12,"index":31},"end":{"line":5,"column":1,"index":54}},
+            "body": [
+              {
+                "type": "ForOfStatement",
+                "start":35,"end":52,"loc":{"start":{"line":4,"column":2,"index":35},"end":{"line":4,"column":19,"index":52}},
+                "await": false,
+                "left": {
+                  "type": "Identifier",
+                  "start":40,"end":45,"loc":{"start":{"line":4,"column":7,"index":40},"end":{"line":4,"column":12,"index":45},"identifierName":"async"},
+                  "name": "async"
+                },
+                "right": {
+                  "type": "Identifier",
+                  "start":49,"end":50,"loc":{"start":{"line":4,"column":16,"index":49},"end":{"line":4,"column":17,"index":50},"identifierName":"x"},
+                  "name": "x"
+                },
+                "body": {
+                  "type": "EmptyStatement",
+                  "start":51,"end":52,"loc":{"start":{"line":4,"column":18,"index":51},"end":{"line":4,"column":19,"index":52}}
+                }
+              }
+            ],
+            "directives": []
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,38 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "chrome": "55"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  proposal-class-static-block { chrome < 94 }
+  proposal-private-property-in-object { chrome < 91 }
+  proposal-class-properties { chrome < 74 }
+  proposal-private-methods { chrome < 84 }
+  proposal-numeric-separator { chrome < 75 }
+  proposal-logical-assignment-operators { chrome < 85 }
+  proposal-nullish-coalescing-operator { chrome < 80 }
+  proposal-optional-chaining { chrome < 91 }
+  proposal-json-strings { chrome < 66 }
+  proposal-optional-catch-binding { chrome < 66 }
+  proposal-async-generator-functions { chrome < 63 }
+  proposal-object-rest-spread { chrome < 60 }
+  transform-dotall-regex { chrome < 62 }
+  proposal-unicode-property-regex { chrome < 64 }
+  transform-named-capturing-groups-regex { chrome < 64 }
+  proposal-export-namespace-from { chrome < 72 }
+  transform-modules-commonjs
+  proposal-dynamic-import
+corejs2: `DEBUG` option
+
+Using targets: {
+  "chrome": "55"
+}
+
+Using polyfills with `usage-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug-babel-7/usage-corejs2-with-import/input.mjs]
+Based on your code and targets, the corejs2 polyfill did not add any polyfill.

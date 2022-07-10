@@ -10,7 +10,7 @@ import {
 } from "./plugin-utils";
 import Parser from "./parser";
 
-import { types as tokTypes } from "./tokenizer/types";
+import { getExportedToken, tt as internalTokenTypes } from "./tokenizer/types";
 import "./tokenizer/context";
 
 import type { Expression, File } from "./types";
@@ -67,7 +67,15 @@ export function parseExpression(input: string, options?: Options): Expression {
   return parser.getExpression();
 }
 
-export { tokTypes };
+function generateExportedTokenTypes(internalTokenTypes) {
+  const tokenTypes = {};
+  for (const typeName of Object.keys(internalTokenTypes)) {
+    tokenTypes[typeName] = getExportedToken(internalTokenTypes[typeName]);
+  }
+  return tokenTypes;
+}
+
+export const tokTypes = generateExportedTokenTypes(internalTokenTypes);
 
 function getParser(options: ?Options, input: string): Parser {
   let cls = Parser;

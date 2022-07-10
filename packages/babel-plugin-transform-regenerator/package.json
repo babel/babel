@@ -1,17 +1,18 @@
 {
   "name": "@babel/plugin-transform-regenerator",
-  "author": "Ben Newman <bn@cs.stanford.edu>",
+  "author": "The Babel Team (https://babel.dev/team)",
   "description": "Explode async and generator functions into a state machine.",
-  "version": "7.10.1",
-  "homepage": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-regenerator",
+  "version": "7.18.6",
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-regenerator",
   "repository": {
     "type": "git",
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-plugin-transform-regenerator"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "dependencies": {
-    "regenerator-transform": "^0.14.2"
+    "@babel/helper-plugin-utils": "workspace:^",
+    "regenerator-transform": "^0.15.0"
   },
   "license": "MIT",
   "publishConfig": {
@@ -21,7 +22,29 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.1",
-    "@babel/helper-plugin-test-runner": "^7.10.1"
-  }
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^"
+  },
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      null,
+      {
+        "exports": null
+      }
+    ],
+    "USE_ESM": [
+      {
+        "type": "module"
+      },
+      null
+    ]
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
+  "type": "commonjs"
 }

@@ -1,7 +1,8 @@
-import cloneDeep from "lodash/cloneDeep";
-import traverse from "../lib";
 import { parse } from "@babel/parser";
 import * as t from "@babel/types";
+
+import _traverse from "../lib/index.js";
+const traverse = _traverse.default || _traverse;
 
 describe("traverse", function () {
   const code = `
@@ -17,7 +18,7 @@ describe("traverse", function () {
       type: "StringLiteral",
       value: "foo",
     };
-    const ast2 = cloneDeep(program);
+    const ast2 = JSON.parse(JSON.stringify(program));
 
     traverse(ast2, {
       enter: function (path) {
@@ -61,7 +62,7 @@ describe("traverse", function () {
     });
   });
 
-  it("traverse blacklistTypes", function () {
+  it("traverse denylistTypes", function () {
     const expected = [
       body[0],
       body[0].declarations[0],
@@ -75,7 +76,7 @@ describe("traverse", function () {
     const actual = [];
 
     traverse(program, {
-      blacklist: ["MemberExpression"],
+      denylist: ["MemberExpression"],
       enter: function (path) {
         actual.push(path.node);
       },
@@ -215,6 +216,125 @@ describe("traverse", function () {
       });
 
       expect(visited).toBe(true);
+    });
+  });
+  describe("path.visit()", () => {
+    it("should preserve traversal context after enter hook is executed", () => {
+      const ast = parse("{;}");
+      // The test initiates a sub-traverse from program. When the `enter` hook of BlockStatement
+      // is called, the unshiftContainer will change the traversal context of the BlockStatement
+      // to the one of Program which has an EmptyStatement visitor. If the traversal context
+      // is not restored after the `enter` hook is executed, the `EmptyStatement` visitor will
+      // be run twice: one in the sub-traverse and the other in the top level traverse.
+      let emptyStatementVisitedCounter = 0;
+      traverse(ast, {
+        noScope: true,
+        Program(path) {
+          path.traverse({
+            noScope: true,
+            BlockStatement: {
+              enter(path) {
+                path.parentPath.unshiftContainer("body", [t.numericLiteral(0)]);
+              },
+            },
+          });
+        },
+        EmptyStatement() {
+          ++emptyStatementVisitedCounter;
+        },
+      });
+      expect(emptyStatementVisitedCounter).toBe(1);
+    });
+    it("should preserve traversal context after visitor is executed", () => {
+      const ast = parse("{;}");
+      // The test initiates a sub-traverse from program. During the BlockStatement is traversed,
+      // the EmptyStatement visitor will be called and the unshiftContainer will change the
+      // traversal context of the BlockStatement to that of Program which has an EmptyStatement
+      // visitor. If the traversal context is not restored after `enter` hook is executed,
+      // the `BlockStatement:exit` visitor will be run twice: one in the sub-traverse and the other
+      // in the top level traverse.
+      let blockStatementVisitedCounter = 0;
+      traverse(ast, {
+        noScope: true,
+        Program(path) {
+          path.traverse({
+            noScope: true,
+            EmptyStatement: {
+              enter(path) {
+                path.parentPath.parentPath.unshiftContainer("body", [
+                  t.numericLiteral(0),
+                ]);
+              },
+            },
+          });
+        },
+        BlockStatement: {
+          exit() {
+            ++blockStatementVisitedCounter;
+          },
+        },
+      });
+      expect(blockStatementVisitedCounter).toBe(1);
+    });
+  });
+  describe("path.stop()", () => {
+    it("should stop the traversal when a grand child is stopped", () => {
+      const ast = parse("f;g;");
+
+      let visitedCounter = 0;
+      traverse(ast, {
+        noScope: true,
+        Identifier(path) {
+          visitedCounter += 1;
+          path.stop();
+        },
+      });
+
+      expect(visitedCounter).toBe(1);
+    });
+
+    it("can be reverted in the exit listener of the parent whose child is stopped", () => {
+      const ast = parse("f;g;");
+
+      let visitedCounter = 0;
+      traverse(ast, {
+        noScope: true,
+        Identifier(path) {
+          visitedCounter += 1;
+          path.stop();
+        },
+        ExpressionStatement: {
+          exit(path) {
+            path.shouldStop = false;
+            path.shouldSkip = false;
+          },
+        },
+      });
+
+      expect(visitedCounter).toBe(2);
+    });
+
+    it("should not affect root traversal", () => {
+      const ast = parse("f;g;");
+
+      let visitedCounter = 0;
+      let programShouldStop;
+      traverse(ast, {
+        noScope: true,
+        Program(path) {
+          path.traverse({
+            noScope: true,
+            Identifier(path) {
+              visitedCounter += 1;
+              path.stop();
+            },
+          });
+          programShouldStop = path.shouldStop;
+        },
+      });
+
+      expect(visitedCounter).toBe(1);
+      expect(programShouldStop).toBe(false);
     });
   });
 });

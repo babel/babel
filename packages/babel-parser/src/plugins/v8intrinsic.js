@@ -1,16 +1,16 @@
 import type Parser from "../parser";
-import { types as tt } from "../tokenizer/types";
+import { tokenIsIdentifier, tt } from "../tokenizer/types";
 import * as N from "../types";
 
 export default (superClass: Class<Parser>): Class<Parser> =>
   class extends superClass {
     parseV8Intrinsic(): N.Expression {
       if (this.match(tt.modulo)) {
-        const v8IntrinsicStart = this.state.start;
+        const v8IntrinsicStartLoc = this.state.startLoc;
         // let the `loc` of Identifier starts from `%`
         const node = this.startNode();
-        this.eat(tt.modulo);
-        if (this.match(tt.name)) {
+        this.next(); // eat '%'
+        if (tokenIsIdentifier(this.state.type)) {
           const name = this.parseIdentifierName(this.state.start);
           const identifier = this.createIdentifier(node, name);
           identifier.type = "V8IntrinsicIdentifier";
@@ -18,7 +18,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             return identifier;
           }
         }
-        this.unexpected(v8IntrinsicStart);
+        this.unexpected(v8IntrinsicStartLoc);
       }
     }
 

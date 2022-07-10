@@ -1,3 +1,8 @@
 import runner from "@babel/helper-transform-fixture-test-runner";
+import { fileURLToPath } from "url";
+import path from "path";
 
-runner(`${__dirname}/fixtures/plugins`, "plugins");
+(runner.default || runner)(
+  path.join(path.dirname(fileURLToPath(import.meta.url)), "fixtures/plugins"),
+  "plugins",
+);

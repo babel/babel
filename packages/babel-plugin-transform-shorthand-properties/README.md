@@ -2,7 +2,7 @@
 
 > Compile ES2015 shorthand properties to ES5
 
-See our website [@babel/plugin-transform-shorthand-properties](https://babeljs.io/docs/en/next/babel-plugin-transform-shorthand-properties.html) for more information.
+See our website [@babel/plugin-transform-shorthand-properties](https://babeljs.io/docs/en/babel-plugin-transform-shorthand-properties) for more information.
 
 ## Install
 

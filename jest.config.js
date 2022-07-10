@@ -1,33 +1,25 @@
-// These packages under the @babel namespace aren't in this monorepo.
-const externalBabelPackages = [
-  "plugin-syntax-async-generators",
-  "plugin-syntax-bigint",
-  "plugin-syntax-dynamic-import",
-  "plugin-syntax-json-strings",
-  "plugin-syntax-nullish-coalescing-operator",
-  "plugin-syntax-object-rest-spread",
-  "plugin-syntax-optional-catch-binding",
-  "plugin-syntax-optional-chaining",
-  "plugin-syntax-export-namespace-from",
-];
-
-// prettier-ignore
-const monorepoPackagePattern =
-  `^@babel/(?!eslint-)(?!${externalBabelPackages.join("|")})([a-zA-Z0-9_-]+)$`;
+const semver = require("semver");
+const nodeVersion = process.versions.node;
+const supportsESMAndJestLightRunner = semver.satisfies(
+  nodeVersion,
+  // ^12.22 || >=14.17 : Node will throw "t.isIdentifier is not a function" when test is running in worker threads.
+  // ^13.7: `resolve.exports` specifies conditional exports in package.json
+  "^12.22 || ^13.7 || >=14.17"
+);
+const isPublishBundle = process.env.IS_PUBLISH;
 
 module.exports = {
+  runner: supportsESMAndJestLightRunner ? "jest-light-runner" : "jest-runner",
+
   collectCoverageFrom: [
-    "packages/*/src/**/*.mjs",
-    "packages/*/src/**/*.js",
-    "codemods/*/src/**/*.mjs",
-    "codemods/*/src/**/*.js",
-    "eslint/*/src/**/*.mjs",
-    "eslint/*/src/**/*.js",
+    "packages/*/src/**/*.{js,mjs,ts}",
+    "codemods/*/src/**/*.{js,mjs,ts}",
+    "eslint/*/src/**/*.{js,mjs,ts}",
   ],
   // The eslint/* packages use ESLint v6, which has dropped support for Node v6.
   // TODO: Remove this process.version check in Babel 8.
   testRegex: `./(packages|codemods${
-    /^v6./u.test(process.version) ? "" : "|eslint"
+    semver.satisfies(nodeVersion, "<10") ? "" : "|eslint"
   })/[^/]+/test/.+\\.m?js$`,
   testPathIgnorePatterns: [
     "/node_modules/",
@@ -39,10 +31,13 @@ module.exports = {
     "/test/helpers/",
     "<rootDir>/test/warning\\.js",
     "<rootDir>/build/",
+    "<rootDir>/.history/", // local directory for VSCode Extension - https://marketplace.visualstudio.com/items?itemName=xyz.local-history
     "_browser\\.js",
+    // Some tests require internal files of bundled packages, which are not available
+    // in production builds. They are marked using the .skip-bundled.js extension.
+    ...(isPublishBundle ? ["\\.skip-bundled\\.js$"] : []),
   ],
   testEnvironment: "node",
-  setupFilesAfterEnv: ["<rootDir>/test/testSetupFile.js"],
   transformIgnorePatterns: [
     "/node_modules/",
     "<rootDir>/packages/babel-standalone/babel(\\.min)?\\.js",
@@ -60,8 +55,8 @@ module.exports = {
     "/test/__data__/",
     "<rootDir>/build/",
   ],
-  moduleNameMapper: {
-    [monorepoPackagePattern]: "<rootDir>/packages/babel-$1/",
-    "^@babel/eslint-([a-zA-Z0-9_-]+)$": "<rootDir>/eslint/babel-eslint-$1/",
-  },
+  // We don't need module name mappers here as depedencies of workspace
+  // package should be declared explicitly in the package.json
+  // Yarn will generate correct file links so that Jest can resolve correctly
+  moduleNameMapper: null,
 };

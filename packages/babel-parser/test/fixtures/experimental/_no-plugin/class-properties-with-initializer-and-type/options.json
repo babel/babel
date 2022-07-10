@@ -1,4 +1,0 @@
-{
-  "plugins": ["flow"],
-  "throws": "This experimental syntax requires enabling the parser plugin: 'classProperties' (2:14)"
-}

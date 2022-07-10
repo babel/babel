@@ -5,7 +5,7 @@ contact_links:
     about: You may have an npm error related to proxies/caching.
   - name: 🗣 Ask a Question, Discuss
     url: https://github.com/babel/babel/discussions
-    about: How does X work 🤔? I made this! I have an idea..
+    about: How does X work 🤔? I made this! I have an idea...
   - name: 💡 Propose an RFC
     url: https://github.com/babel/rfcs
     about: To suggest a new option or substantial change.

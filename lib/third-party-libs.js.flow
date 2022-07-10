@@ -2,29 +2,24 @@
  * Basic declarations for the npm modules we use.
  */
 
-declare module "resolve" {
-  declare export default {
-    (string, {| basedir: string |}, (err: ?Error, res: string) => void): void;
-    sync: (string, {| basedir: string |}) => string;
-  };
+ declare module "module" {
+   declare export function createRequire(url: any): any;
+ }
+
+declare module "debug" {
+  declare export default (namespace: string) => (formatter: string, ...args: any[]) => void;
 }
+
+declare var require: {
+  resolve(specifier: string, opts?: {
+    paths: string[]
+  }): string,
+};
 
 declare module "json5" {
   declare export default {
     parse: (string) => mixed,
   };
-}
-
-declare module "lodash/defaults" {
-  declare export default <T: Object>(T, Object) =>  T;
-}
-
-declare module "lodash/clone" {
-  declare export default <T>(obj: T) => T;
-}
-
-declare module "lodash/merge" {
-  declare export default <T: Object>(T, Object) => T;
 }
 
 declare module "semver" {
@@ -56,115 +51,6 @@ declare module "semver" {
   }
 }
 
-declare module "source-map" {
-  declare export type SourceMap = {
-    version: 3,
-    file: ?string,
-    sourceRoot: ?string,
-    sources: [?string],
-    sourcesContent: [?string],
-    names: [?string],
-    mappings: string,
-  };
-
-  declare module.exports: {
-    SourceMapConsumer: typeof SourceMapConsumer,
-    SourceMapGenerator: typeof SourceMapGenerator,
-  }
-
-  declare class SourceMapConsumer {
-    static GENERATED_ORDER: 1;
-    static ORIGINAL_ORDER: 2;
-
-    file: string | null;
-    sourceRoot: string | null;
-    sources: Array<string>;
-
-    constructor(?SourceMap): this;
-
-    computeColumnSpans(): string;
-    originalPositionFor({
-      line: number,
-      column: number,
-    }): {|
-      source: string,
-      line: number,
-      column: number,
-      name: string | null
-    |} | {|
-      source: null,
-      line: null,
-      column: null,
-      name: null
-    |};
-
-    generatedPositionFor({
-      source: string,
-      line: number,
-      column: number,
-    }): {|
-      line: number,
-      column: number,
-      lastColumn: number | null | void,
-    |} | {|
-      line: null,
-      column: null,
-      lastColumn: null | void,
-    |};
-
-    allGeneratedPositionsFor({
-      source: string,
-      line: number,
-      column: number,
-    }): Array<{|
-      line: number,
-      column: number,
-      lastColumn: number,
-    |}>;
-
-    sourceContentFor(string, boolean | void): string | null;
-
-    eachMapping(
-      ({|
-        generatedLine: number,
-        generatedColumn: number,
-        source: string,
-        originalLine: number,
-        originalColumn: number,
-        name: string | null,
-      |} | {|
-        generatedLine: number,
-        generatedColumn: number,
-        source: null,
-        originalLine: null,
-        originalColumn: null,
-        name: null,
-      |}) => mixed,
-      context: mixed,
-      order: ?(1 | 2),
-    ): void;
-  }
-
-  declare class SourceMapGenerator {
-    constructor(?{
-      file?: string | null,
-      sourceRoot?: string | null,
-      skipValidation?: boolean | null,
-    }): this;
-
-    addMapping({
-      generated: {
-        line: number,
-        column: number,
-      }
-    }): void;
-
-    setSourceContent(string, string): void;
-
-    toJSON(): SourceMap;
-  }
-}
-
 declare module "convert-source-map" {
   import type { SourceMap, SourceMapGenerator } from "source-map";
 
@@ -192,7 +78,7 @@ declare module "convert-source-map" {
 }
 
 declare module "core-js-compat/data" {
-  declare type Target = "node" | "chrome" | "opera" | "edge" | "firefox" | "safari" | "ie" | "ios" | "android" | "electron" | "samsung";
+  declare type Target = "node" | "chrome" | "opera" | "edge" | "firefox" | "safari" | "ie" | "ios" | "android" | "electron" | "samsung" | "rhino";
 
   declare module.exports: {
     [key: string]: {

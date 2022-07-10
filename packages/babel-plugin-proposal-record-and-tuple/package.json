@@ -1,0 +1,48 @@
+{
+  "name": "@babel/plugin-proposal-record-and-tuple",
+  "version": "7.18.6",
+  "description": "A transform for Record and Tuple syntax.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-proposal-record-and-tuple"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
+  "keywords": [
+    "babel-plugin"
+  ],
+  "dependencies": {
+    "@babel/helper-module-imports": "workspace:^",
+    "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/helper-validator-option": "workspace:^",
+    "@babel/plugin-syntax-record-and-tuple": "workspace:^"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.12.0"
+  },
+  "devDependencies": {
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^"
+  },
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)",
+  "type": "commonjs",
+  "conditions": {
+    "USE_ESM": [
+      {
+        "type": "module"
+      },
+      null
+    ]
+  }
+}

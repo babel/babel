@@ -2,15 +2,16 @@
 
 // Each scope gets a bitset that may contain these flags
 // prettier-ignore
-export const SCOPE_OTHER        = 0b00000000,
-             SCOPE_PROGRAM      = 0b00000001,
-             SCOPE_FUNCTION     = 0b00000010,
-             SCOPE_ARROW        = 0b00000100,
-             SCOPE_SIMPLE_CATCH = 0b00001000,
-             SCOPE_SUPER        = 0b00010000,
-             SCOPE_DIRECT_SUPER = 0b00100000,
-             SCOPE_CLASS        = 0b01000000,
-             SCOPE_TS_MODULE    = 0b10000000,
+export const SCOPE_OTHER        = 0b000000000,
+             SCOPE_PROGRAM      = 0b000000001,
+             SCOPE_FUNCTION     = 0b000000010,
+             SCOPE_ARROW        = 0b000000100,
+             SCOPE_SIMPLE_CATCH = 0b000001000,
+             SCOPE_SUPER        = 0b000010000,
+             SCOPE_DIRECT_SUPER = 0b000100000,
+             SCOPE_CLASS        = 0b001000000,
+             SCOPE_STATIC_BLOCK = 0b010000000,
+             SCOPE_TS_MODULE    = 0b100000000,
              SCOPE_VAR = SCOPE_PROGRAM | SCOPE_FUNCTION | SCOPE_TS_MODULE;
 
 export type ScopeFlags =
@@ -22,24 +23,26 @@ export type ScopeFlags =
   | typeof SCOPE_SIMPLE_CATCH
   | typeof SCOPE_SUPER
   | typeof SCOPE_DIRECT_SUPER
-  | typeof SCOPE_CLASS;
+  | typeof SCOPE_CLASS
+  | typeof SCOPE_STATIC_BLOCK;
 
 // These flags are meant to be _only_ used inside the Scope class (or subclasses).
 // prettier-ignore
-export const BIND_KIND_VALUE           = 0b00000_0000_01,
-             BIND_KIND_TYPE            = 0b00000_0000_10,
+export const BIND_KIND_VALUE            = 0b000000_0000_01,
+             BIND_KIND_TYPE             = 0b000000_0000_10,
              // Used in checkLVal and declareName to determine the type of a binding
-             BIND_SCOPE_VAR            = 0b00000_0001_00, // Var-style binding
-             BIND_SCOPE_LEXICAL        = 0b00000_0010_00, // Let- or const-style binding
-             BIND_SCOPE_FUNCTION       = 0b00000_0100_00, // Function declaration
-             BIND_SCOPE_OUTSIDE        = 0b00000_1000_00, // Special case for function names as
+             BIND_SCOPE_VAR             = 0b000000_0001_00, // Var-style binding
+             BIND_SCOPE_LEXICAL         = 0b000000_0010_00, // Let- or const-style binding
+             BIND_SCOPE_FUNCTION        = 0b000000_0100_00, // Function declaration
+             BIND_SCOPE_OUTSIDE         = 0b000000_1000_00, // Special case for function names as
                                                    // bound inside the function
              // Misc flags
-             BIND_FLAGS_NONE           = 0b00001_0000_00,
-             BIND_FLAGS_CLASS          = 0b00010_0000_00,
-             BIND_FLAGS_TS_ENUM        = 0b00100_0000_00,
-             BIND_FLAGS_TS_CONST_ENUM  = 0b01000_0000_00,
-             BIND_FLAGS_TS_EXPORT_ONLY = 0b10000_0000_00;
+             BIND_FLAGS_NONE            = 0b000001_0000_00,
+             BIND_FLAGS_CLASS           = 0b000010_0000_00,
+             BIND_FLAGS_TS_ENUM         = 0b000100_0000_00,
+             BIND_FLAGS_TS_CONST_ENUM   = 0b001000_0000_00,
+             BIND_FLAGS_TS_EXPORT_ONLY  = 0b010000_0000_00,
+             BIND_FLAGS_FLOW_DECLARE_FN = 0b100000_0000_00;
 
 // These flags are meant to be _only_ used by Scope consumers
 // prettier-ignore
@@ -58,7 +61,9 @@ export const BIND_CLASS         = BIND_KIND_VALUE | BIND_KIND_TYPE | BIND_SCOPE_
              BIND_OUTSIDE       = BIND_KIND_VALUE | 0              | 0                   | BIND_FLAGS_NONE   ,
 
              BIND_TS_CONST_ENUM = BIND_TS_ENUM | BIND_FLAGS_TS_CONST_ENUM,
-             BIND_TS_NAMESPACE  = 0               | 0              | 0            | BIND_FLAGS_TS_EXPORT_ONLY;
+             BIND_TS_NAMESPACE  = 0               | 0              | 0            | BIND_FLAGS_TS_EXPORT_ONLY,
+
+             BIND_FLOW_DECLARE_FN = BIND_FLAGS_FLOW_DECLARE_FN;
 
 export type BindingTypes =
   | typeof BIND_NONE

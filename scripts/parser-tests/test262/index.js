@@ -1,35 +1,51 @@
-const path = require("path");
-const TestStream = require("test262-stream");
-const TestRunner = require("../utils/parser-test-runner");
+import path from "path";
+import { fileURLToPath } from "url";
+import TestStream from "test262-stream";
+import TestRunner from "../utils/parser-test-runner.js";
 
-const ignoredFeatures = [
+const dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const ignoredFeatures = new Set([
+  "__getter__",
+  "__proto__",
+  "__setter__",
   "AggregateError",
-  "Array.prototype.flat",
-  "Array.prototype.flatMap",
-  "Array.prototype.values",
   "ArrayBuffer",
+  "align-detached-buffer-semantics-with-web-reality",
+  "arbitrary-module-namespace-names",
+  "array-find-from-last",
+  "array-grouping",
   "async-functions",
   "async-iteration",
   "arrow-function",
   "Atomics",
+  "Atomics.waitAsync",
+  "BigInt",
   "caller",
   "class",
+  "class-fields-private",
+  "class-fields-private-in",
+  "class-fields-public",
+  "class-methods-private",
+  "class-static-block",
+  "class-static-fields-private",
+  "class-static-fields-public",
+  "class-static-methods-private",
+  "cleanupSome",
+  "coalesce-expression",
   "computed-property-names",
   "const",
   "cross-realm",
   "DataView",
-  "DataView.prototype.getFloat32",
-  "DataView.prototype.getFloat64",
-  "DataView.prototype.getInt8",
-  "DataView.prototype.getInt16",
-  "DataView.prototype.getInt32",
-  "DataView.prototype.getUint16",
-  "DataView.prototype.getUint32",
-  "DataView.prototype.setUint8",
   "default-parameters",
   "destructuring-assignment",
   "destructuring-binding",
+  "dynamic-import",
+  "error-cause",
+  "export-star-as-namespace-from-module",
   "FinalizationGroup",
+  "FinalizationRegistry",
+  "FinalizationRegistry.prototype.cleanupSome",
   "Float32Array",
   "Float64Array",
   "for-in-order",
@@ -39,28 +55,30 @@ const ignoredFeatures = [
   "hashbang",
   "host-gc-required",
   "Int8Array",
+  "Int16Array",
   "Int32Array",
-  "Intl.DateTimeFormat-datetimestyle",
-  "Intl.DateTimeFormat-dayPeriod",
-  "Intl.DateTimeFormat-fractionalSecondDigits",
-  "Intl.DateTimeFormat-formatRange",
-  "Intl.DisplayNames",
-  "Intl.ListFormat",
-  "Intl.Locale",
-  "Intl.NumberFormat-unified",
-  "Intl.RelativeTimeFormat",
-  "Intl.Segmenter",
+  "Intl-enumeration",
   "IsHTMLDDA",
+  "import.meta",
+  "intl-normative-optional",
+  "json-modules",
   "json-superset",
+  "legacy-regexp",
   "let",
+  "logical-assignment-operators",
   "Map",
   "new.target",
+  "numeric-separator-literal",
   "Object.fromEntries",
+  "Object.hasOwn",
   "Object.is",
   "object-rest",
   "object-spread",
   "optional-catch-binding",
+  "optional-chaining",
+  "Promise",
   "Promise.allSettled",
+  "Promise.any",
   "Promise.prototype.finally",
   "Proxy",
   "proxy-missing-checks",
@@ -72,16 +90,12 @@ const ignoredFeatures = [
   "regexp-lookbehind",
   "regexp-named-groups",
   "regexp-unicode-property-escapes",
+  "resizable-arraybuffer",
   "rest-parameters",
+  "ShadowRealm",
   "SharedArrayBuffer",
   "Set",
   "String.fromCodePoint",
-  "String.prototype.endsWith",
-  "String.prototype.includes",
-  "String.prototype.matchAll",
-  "String.prototype.replaceAll",
-  "String.prototype.trimEnd",
-  "String.prototype.trimStart",
   "string-trimming",
   "super",
   "Symbol",
@@ -101,36 +115,42 @@ const ignoredFeatures = [
   "Symbol.unscopables",
   "tail-call-optimization",
   "template",
+  "top-level-await",
+  "Temporal",
   "TypedArray",
   "u180e",
   "Uint8Array",
   "Uint8ClampedArray",
   "Uint16Array",
+  "Uint32Array",
   "WeakMap",
   "WeakSet",
   "WeakRef",
   "well-formed-json-stringify",
-];
+]);
+
+function featureShouldIgnore(feature) {
+  return (
+    ignoredFeatures.has(feature) ||
+    // All prototype method must not introduce new language syntax
+    feature.includes(".prototype.") ||
+    // Ignore Intl features
+    feature.startsWith("Intl.")
+  );
+}
 
 const ignoredTests = ["built-ins/RegExp/", "language/literals/regexp/"];
 
-const featuresToPlugins = {
-  BigInt: "bigInt",
-  "class-fields-private": "classPrivateProperties",
-  "class-fields-public": "classProperties",
-  "class-methods-private": "classPrivateMethods",
-  "class-static-fields-public": "classProperties",
-  "class-static-fields-private": "classPrivateProperties",
-  "class-static-methods-private": "classPrivateMethods",
-  "coalesce-expression": "nullishCoalescingOperator",
-  "dynamic-import": "dynamicImport",
-  "export-star-as-namespace-from-module": "exportNamespaceFrom",
-  "import.meta": "importMeta",
-  "logical-assignment-operators": "logicalAssignment",
-  "numeric-separator-literal": "numericSeparator",
-  "optional-chaining": "optionalChaining",
-  "top-level-await": "topLevelAwait",
-};
+const featuresToPlugins = new Map([
+  ["import-assertions", "importAssertions"],
+  [
+    "decorators",
+    [
+      ["decorators", { version: "2021-12", decoratorsBeforeExport: false }],
+      "decoratorAutoAccessors",
+    ],
+  ],
+]);
 
 const unmappedFeatures = new Set();
 
@@ -138,17 +158,17 @@ function* getPlugins(features) {
   if (!features) return;
 
   for (const f of features) {
-    if (featuresToPlugins[f]) {
-      yield featuresToPlugins[f];
-    } else if (!ignoredFeatures.includes(f)) {
+    if (featuresToPlugins.has(f)) {
+      yield featuresToPlugins.get(f);
+    } else if (!featureShouldIgnore(f)) {
       unmappedFeatures.add(f);
     }
   }
 }
 
 const runner = new TestRunner({
-  testDir: path.join(__dirname, "../../../build/test262"),
-  allowlist: path.join(__dirname, "allowlist.txt"),
+  testDir: path.join(dirname, "../../../build/test262"),
+  allowlist: path.join(dirname, "allowlist.txt"),
   logInterval: 500,
   shouldUpdate: process.argv.includes("--update-allowlist"),
 
@@ -159,7 +179,7 @@ const runner = new TestRunner({
 
     for await (const test of stream) {
       // strip test/
-      const fileName = test.file.substr(5);
+      const fileName = test.file.slice(5);
 
       if (ignoredTests.some(start => fileName.startsWith(start))) continue;
 
@@ -168,7 +188,7 @@ const runner = new TestRunner({
         fileName,
         id: `${fileName}(${test.scenario})`,
         sourceType: test.attrs.flags.module ? "module" : "script",
-        plugins: Array.from(getPlugins(test.attrs.features)),
+        plugins: Array.from(getPlugins(test.attrs.features)).flat(),
         expectedError:
           !!test.attrs.negative &&
           (test.attrs.negative.phase === "parse" ||
@@ -182,13 +202,15 @@ runner
   .run()
   .then(() => {
     if (unmappedFeatures.size) {
-      console.log("");
-      console.log(
+      console.warn("");
+      console.warn(
         "The following Features are not currently mapped or ignored:"
       );
-      console.log(
+      console.warn(
         Array.from(unmappedFeatures).join("\n").replace(/^/gm, "   ")
       );
+
+      process.exitCode = 1;
     }
   })
   .catch(err => {

@@ -1,0 +1,1 @@
+let [foo, bar] = baz;

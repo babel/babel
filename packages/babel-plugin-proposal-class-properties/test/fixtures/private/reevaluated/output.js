@@ -1,9 +1,9 @@
 function classFactory() {
-  var _class, _foo, _temp, _bar;
+  var _class, _foo, _bar;
 
-  return _temp = (_foo = new WeakMap(), _class = class Foo {
+  return _foo = /*#__PURE__*/new WeakMap(), (_class = class Foo {
     constructor() {
-      _foo.set(this, {
+      babelHelpers.classPrivateFieldInitSpec(this, _foo, {
         writable: true,
         value: "foo"
       });
@@ -25,8 +25,8 @@ function classFactory() {
       return babelHelpers.classStaticPrivateFieldSpecGet(Foo, _class, _bar);
     }
 
-  }), _bar = {
+  }, _bar = {
     writable: true,
     value: "bar"
-  }, _temp;
+  }, _class);
 }

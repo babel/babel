@@ -1,9 +1,9 @@
 {
   "name": "@babel/helper-plugin-utils",
-  "version": "7.10.1",
+  "version": "7.18.6",
   "description": "General utilities for plugins to use",
-  "author": "Logan Smyth <loganfsmyth@gmail.com>",
-  "homepage": "https://babeljs.io/",
+  "author": "The Babel Team (https://babel.dev/team)",
+  "homepage": "https://babel.dev/docs/en/next/babel-helper-plugin-utils",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -13,5 +13,27 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-helper-plugin-utils"
   },
-  "main": "lib/index.js"
+  "main": "./lib/index.js",
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      null,
+      {
+        "exports": null
+      }
+    ],
+    "USE_ESM": [
+      {
+        "type": "module"
+      },
+      null
+    ]
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
+  "type": "commonjs"
 }

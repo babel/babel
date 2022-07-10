@@ -2,31 +2,35 @@
 
 Using targets:
 {
-  "android": "80",
-  "chrome": "79",
-  "edge": "18",
-  "firefox": "68",
+  "android": "99",
+  "chrome": "97",
+  "edge": "98",
+  "firefox": "91",
   "ios": "12.2",
-  "opera": "67",
-  "safari": "13",
-  "samsung": "10.1"
+  "opera": "82",
+  "safari": "14.1",
+  "samsung": "15"
 }
 
 Using modules transform: auto
 
 Using plugins:
-  proposal-nullish-coalescing-operator { "chrome":"79", "edge":"18", "firefox":"68", "ios":"12.2", "safari":"13", "samsung":"10.1" }
-  proposal-optional-chaining { "chrome":"79", "edge":"18", "firefox":"68", "ios":"12.2", "safari":"13", "samsung":"10.1" }
-  proposal-json-strings { "edge":"18" }
-  proposal-optional-catch-binding { "edge":"18" }
-  proposal-async-generator-functions { "edge":"18" }
-  proposal-object-rest-spread { "edge":"18" }
-  transform-dotall-regex { "edge":"18", "firefox":"68" }
-  proposal-unicode-property-regex { "edge":"18", "firefox":"68" }
-  transform-named-capturing-groups-regex { "edge":"18", "firefox":"68" }
-  transform-template-literals { "ios":"12.2" }
-  transform-function-name { "edge":"18" }
-  transform-modules-commonjs { "android":"80", "chrome":"79", "edge":"18", "firefox":"68", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
-  proposal-dynamic-import { "android":"80", "chrome":"79", "edge":"18", "firefox":"68", "ios":"12.2", "opera":"67", "safari":"13", "samsung":"10.1" }
+  proposal-class-static-block { firefox < 93, ios, safari, samsung }
+  proposal-private-property-in-object { ios < 15, safari < 15, samsung }
+  proposal-class-properties { ios < 15 }
+  proposal-private-methods { ios < 15, safari < 15 }
+  proposal-numeric-separator { ios < 13 }
+  proposal-logical-assignment-operators { ios < 14 }
+  proposal-nullish-coalescing-operator { ios < 13.4 }
+  proposal-optional-chaining { ios < 13.4 }
+  syntax-json-strings
+  syntax-optional-catch-binding
+  syntax-async-generators
+  syntax-object-rest-spread
+  proposal-export-namespace-from { ios, safari }
+  bugfix/transform-safari-id-destructuring-collision-in-function-expression { ios, safari }
+  bugfix/transform-tagged-template-caching { ios < 13 }
+  transform-modules-commonjs
+  proposal-dynamic-import
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

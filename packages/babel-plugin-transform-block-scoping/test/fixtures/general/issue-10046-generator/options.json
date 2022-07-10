@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "transform-block-scoping",
+    "transform-block-scoped-functions",
+    "transform-regenerator"
+  ]
+}

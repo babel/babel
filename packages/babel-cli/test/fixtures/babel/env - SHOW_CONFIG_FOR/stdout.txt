@@ -1,0 +1,128 @@
+Babel configs on "<CWD>/src/index.js" (ascending priority):
+config <CWD>/my-extended.js
+{
+  "sourceMaps": false,
+  "presets": [
+    "@foo/babel-preset-1"
+  ]
+}
+
+config <CWD>/my-extended.js .env["test"]
+{
+  "presets": [
+    [
+      "@foo/babel-preset-3",
+      {
+        "noDocumentAll": true
+      },
+      "@foo/babel-preset-three"
+    ]
+  ]
+}
+
+config <CWD>/my-extended.js .overrides[0]
+{
+  "test": "src/index.js",
+  "presets": [
+    [
+      "@foo/babel-preset-2",
+      {
+        "noDocumentAll": true
+      }
+    ]
+  ]
+}
+
+config <CWD>/my-extended.js .overrides[0].env["test"]
+{
+  "presets": [
+    "@foo/babel-preset-1",
+    [
+      {
+        "plugins": [
+          {
+            "name": "@foo/inline-babel-plugin-1",
+            "visitor": {}
+          }
+        ]
+      },
+      {
+        "noDocumentAll": true
+      }
+    ]
+  ]
+}
+
+config <CWD>/my-config.js
+{
+  "sourceType": "script",
+  "plugins": [
+    "[Function: (api) => ({/n  name: /"@foo//" + __dirname,/n  visitor ... ]"
+  ],
+  "extends": "./my-extended.js"
+}
+
+config <CWD>/my-config.js .env["test"]
+{
+  "plugins": [
+    [
+      "@foo/babel-plugin-3",
+      {
+        "noDocumentAll": true
+      },
+      "@foo/babel-plugin-three"
+    ]
+  ]
+}
+
+config <CWD>/my-config.js .overrides[0]
+{
+  "test": "src/index.js",
+  "plugins": [
+    [
+      "@foo/babel-plugin-2",
+      {
+        "noDocumentAll": true
+      }
+    ]
+  ]
+}
+
+config <CWD>/my-config.js .overrides[0].env["test"]
+{
+  "plugins": [
+    "@foo/babel-plugin-1",
+    [
+      {
+        "name": "@foo/inline-babel-plugin-1",
+        "visitor": {}
+      },
+      {
+        "noDocumentAll": true
+      }
+    ]
+  ]
+}
+
+config <CWD>/.babelrc
+{}
+
+programmatic options from @babel/cli
+{
+  "presets": [
+    "<ROOTDIR>/packages/babel-preset-react/lib/index.js"
+  ],
+  "plugins": [
+    "<ROOTDIR>/packages/babel-plugin-transform-arrow-functions/lib/index.js",
+    "<ROOTDIR>/packages/babel-plugin-transform-strict-mode/lib/index.js",
+    "<ROOTDIR>/packages/babel-plugin-transform-modules-commonjs/lib/index.js"
+  ],
+  "configFile": "./my-config.js",
+  "sourceFileName": "./src/index.js",
+  "caller": {
+    "name": "@babel/cli"
+  },
+  "filename": "./src/index.js"
+}
+-----End Babel configs-----
+"use strict";

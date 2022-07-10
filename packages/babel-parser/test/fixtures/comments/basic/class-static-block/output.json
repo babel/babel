@@ -1,0 +1,110 @@
+{
+  "type": "File",
+  "start":0,"end":69,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":69,"index":69}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":69,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":69,"index":69}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":69,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":69,"index":69}},
+        "expression": {
+          "type": "ClassExpression",
+          "start":1,"end":59,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":59,"index":59}},
+          "id": null,
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start":15,"end":59,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":59,"index":59}},
+            "body": [
+              {
+                "type": "StaticBlock",
+                "start":25,"end":49,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":49,"index":49}},
+                "body": [],
+                "innerComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": " 3 ",
+                    "start":32,"end":39,"loc":{"start":{"line":1,"column":32,"index":32},"end":{"line":1,"column":39,"index":39}}
+                  },
+                  {
+                    "type": "CommentBlock",
+                    "value": " 4 ",
+                    "start":41,"end":48,"loc":{"start":{"line":1,"column":41,"index":41},"end":{"line":1,"column":48,"index":48}}
+                  }
+                ],
+                "trailingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": " 5 ",
+                    "start":50,"end":57,"loc":{"start":{"line":1,"column":50,"index":50},"end":{"line":1,"column":57,"index":57}}
+                  }
+                ],
+                "leadingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": " 2 ",
+                    "start":17,"end":24,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":24,"index":24}}
+                  }
+                ]
+              }
+            ],
+            "leadingComments": [
+              {
+                "type": "CommentBlock",
+                "value": " 1 ",
+                "start":7,"end":14,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":14,"index":14}}
+              }
+            ]
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          },
+          "trailingComments": [
+            {
+              "type": "CommentBlock",
+              "value": " 6 ",
+              "start":60,"end":67,"loc":{"start":{"line":1,"column":60,"index":60},"end":{"line":1,"column":67,"index":67}}
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentBlock",
+      "value": " 1 ",
+      "start":7,"end":14,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":14,"index":14}}
+    },
+    {
+      "type": "CommentBlock",
+      "value": " 2 ",
+      "start":17,"end":24,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":24,"index":24}}
+    },
+    {
+      "type": "CommentBlock",
+      "value": " 3 ",
+      "start":32,"end":39,"loc":{"start":{"line":1,"column":32,"index":32},"end":{"line":1,"column":39,"index":39}}
+    },
+    {
+      "type": "CommentBlock",
+      "value": " 4 ",
+      "start":41,"end":48,"loc":{"start":{"line":1,"column":41,"index":41},"end":{"line":1,"column":48,"index":48}}
+    },
+    {
+      "type": "CommentBlock",
+      "value": " 5 ",
+      "start":50,"end":57,"loc":{"start":{"line":1,"column":50,"index":50},"end":{"line":1,"column":57,"index":57}}
+    },
+    {
+      "type": "CommentBlock",
+      "value": " 6 ",
+      "start":60,"end":67,"loc":{"start":{"line":1,"column":60,"index":60},"end":{"line":1,"column":67,"index":67}}
+    }
+  ]
+}

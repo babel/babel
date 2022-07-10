@@ -1,3 +1,6 @@
 {
-  "plugins": ["transform-runtime", "transform-modules-commonjs"]
+  "plugins": [
+    ["transform-runtime", { "version": "7.100.0" }],
+    "transform-modules-commonjs"
+  ]
 }

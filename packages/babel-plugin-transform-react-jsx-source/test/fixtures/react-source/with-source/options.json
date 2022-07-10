@@ -1,3 +1,4 @@
 {
-  "os": ["linux", "darwin"]
+  "os": ["linux", "darwin"],
+  "parserOpts": { "allowReturnOutsideFunction": true }
 }

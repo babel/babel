@@ -5,11 +5,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = _callee;
 
-var _marked = /*#__PURE__*/regeneratorRuntime.mark(_callee);
+var _marked = /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(_callee);
 
 function _callee() {
   var x;
-  return regeneratorRuntime.wrap(function _callee$(_context) {
+  return babelHelpers.regeneratorRuntime().wrap(function _callee$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:

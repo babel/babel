@@ -1,13 +1,8 @@
-import rule from "../../src/rules/object-curly-spacing";
-import RuleTester from "../helpers/RuleTester";
+import rule from "../../lib/rules/object-curly-spacing.cjs";
+import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester.js";
 
 const ruleTester = new RuleTester();
 ruleTester.run("@babel/object-curly-spacing", rule, {
-  valid: [
-    {
-      code: 'export x from "mod";',
-    },
-  ],
-
+  valid: ['export x from "mod";'],
   invalid: [],
 });

@@ -1,10 +1,3 @@
-Warning, the following targets are using a decimal version:
-
-  node: 7.4
-
-We recommend using a string for minor/patch versions to avoid numbers like 6.10
-getting parsed as 6.1, which can lead to unexpected behavior.
-
 @babel/preset-env: `DEBUG` option
 
 Using targets:
@@ -16,21 +9,29 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-nullish-coalescing-operator { "firefox":"52", "node":"7.4" }
-  proposal-optional-chaining { "firefox":"52", "node":"7.4" }
-  proposal-json-strings { "firefox":"52", "node":"7.4" }
-  proposal-optional-catch-binding { "firefox":"52", "node":"7.4" }
-  proposal-async-generator-functions { "firefox":"52", "node":"7.4" }
-  proposal-object-rest-spread { "firefox":"52", "node":"7.4" }
-  transform-dotall-regex { "firefox":"52", "node":"7.4" }
-  proposal-unicode-property-regex { "firefox":"52", "node":"7.4" }
-  transform-named-capturing-groups-regex { "firefox":"52", "node":"7.4" }
-  transform-literals { "firefox":"52" }
-  transform-function-name { "firefox":"52" }
-  transform-for-of { "firefox":"52" }
-  transform-unicode-escapes { "firefox":"52" }
-  transform-destructuring { "firefox":"52" }
-  transform-modules-commonjs { "firefox":"52", "node":"7.4" }
-  proposal-dynamic-import { "firefox":"52", "node":"7.4" }
+  proposal-class-static-block { firefox < 93, node < 16.11 }
+  proposal-private-property-in-object { firefox < 90, node < 16.9 }
+  proposal-class-properties { firefox < 90, node < 12 }
+  proposal-private-methods { firefox < 90, node < 14.6 }
+  proposal-numeric-separator { firefox < 70, node < 12.5 }
+  proposal-logical-assignment-operators { firefox < 79, node < 15 }
+  proposal-nullish-coalescing-operator { firefox < 72, node < 14 }
+  proposal-optional-chaining { firefox < 74, node < 14 }
+  proposal-json-strings { firefox < 62, node < 10 }
+  proposal-optional-catch-binding { firefox < 58, node < 10 }
+  proposal-async-generator-functions { firefox < 57, node < 10 }
+  proposal-object-rest-spread { firefox < 55, node < 8.3 }
+  transform-dotall-regex { firefox < 78, node < 8.10 }
+  proposal-unicode-property-regex { firefox < 78, node < 10 }
+  transform-named-capturing-groups-regex { firefox < 78, node < 10 }
+  transform-literals { firefox < 53 }
+  transform-function-name { firefox < 53 }
+  transform-for-of { firefox < 53 }
+  transform-unicode-escapes { firefox < 53 }
+  transform-destructuring { firefox < 53 }
+  proposal-export-namespace-from { firefox < 80, node < 13.2 }
+  bugfix/transform-async-arrows-in-class { node < 7.6 }
+  transform-modules-commonjs
+  proposal-dynamic-import
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

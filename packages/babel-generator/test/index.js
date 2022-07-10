@@ -1,10 +1,15 @@
-import Printer from "../lib/printer";
-import generate, { CodeGenerator } from "../lib";
 import { parse } from "@babel/parser";
 import * as t from "@babel/types";
 import fs from "fs";
 import path from "path";
 import fixtures from "@babel/helper-fixtures";
+import { TraceMap, originalPositionFor } from "@jridgewell/trace-mapping";
+import { fileURLToPath } from "url";
+
+import _Printer from "../lib/printer.js";
+import _generate, { CodeGenerator } from "../lib/index.js";
+const Printer = _Printer.default || _Printer;
+const generate = _generate.default || _generate;
 
 describe("generation", function () {
   it("completeness", function () {
@@ -49,8 +54,7 @@ describe("generation", function () {
         version: 3,
         sources: ["a.js", "b.js"],
         mappings:
-          // eslint-disable-next-line max-len
-          "AAAA,SAASA,EAAT,CAAaC,GAAb,EAAkB;AAAEC,EAAAA,OAAO,CAACC,GAAR,CAAYF,GAAZ;AAAmB;;ACAvCD,EAAE,CAAC,OAAD,CAAF",
+          "AAAA,SAASA,EAAT,CAAaC,GAAb,EAAkB;EAAEC,OAAO,CAACC,GAAR,CAAYF,GAAZ;AAAmB;;ACAvCD,EAAE,CAAC,OAAD,CAAF",
         names: ["hi", "msg", "console", "log"],
         sourcesContent: [
           "function hi (msg) { console.log(msg); }\n",
@@ -97,12 +101,6 @@ describe("generation", function () {
           generated: { line: 1, column: 17 },
           source: "a.js",
           original: { line: 1, column: 18 },
-        },
-        {
-          name: "console",
-          generated: { line: 2, column: 0 },
-          source: "a.js",
-          original: { line: 1, column: 20 },
         },
         {
           name: "console",
@@ -214,7 +212,7 @@ describe("generation", function () {
         version: 3,
         sources: ["inline"],
         names: ["foo", "bar"],
-        mappings: "AAAA,SAASA,IAAT,GAAe;AAAEC,EAAAA,IAAG;AAAG",
+        mappings: "AAAA,SAASA,IAAT,GAAe;EAAEC,IAAG;AAAG",
         sourcesContent: ["function foo() { bar; }\n"],
       },
       "sourcemap was incorrectly generated",
@@ -248,12 +246,6 @@ describe("generation", function () {
         },
         {
           name: "bar",
-          generated: { line: 2, column: 0 },
-          source: "inline",
-          original: { line: 1, column: 17 },
-        },
-        {
-          name: "bar",
           generated: { line: 2, column: 2 },
           source: "inline",
           original: { line: 1, column: 17 },
@@ -277,6 +269,48 @@ describe("generation", function () {
     expect(generated.code).toBe("function foo2() {\n  bar2;\n}");
   });
 
+  it("newline in template literal", () => {
+    const code = "`before\n\nafter`;";
+    const ast = parse(code, { filename: "inline" }).program;
+    const generated = generate(
+      ast,
+      {
+        filename: "inline",
+        sourceFileName: "inline",
+        sourceMaps: true,
+      },
+      code,
+    );
+
+    const consumer = new TraceMap(generated.map);
+    const loc = originalPositionFor(consumer, { line: 2, column: 1 });
+    expect(loc).toMatchObject({
+      column: 0,
+      line: 2,
+    });
+  });
+
+  it("newline in string literal", () => {
+    const code = "'before\\\n\\\nafter';";
+    const ast = parse(code, { filename: "inline" }).program;
+    const generated = generate(
+      ast,
+      {
+        filename: "inline",
+        sourceFileName: "inline",
+        sourceMaps: true,
+      },
+      code,
+    );
+
+    const consumer = new TraceMap(generated.map);
+    const loc = originalPositionFor(consumer, { line: 2, column: 1 });
+    expect(loc).toMatchObject({
+      column: 0,
+      line: 2,
+    });
+  });
+
   it("lazy source map generation", function () {
     const code = "function hi (msg) { console.log(msg); }\n";
 
@@ -298,11 +332,31 @@ describe("generation", function () {
 
   it("wraps around infer inside an array type", () => {
     const type = t.tsArrayType(
-      t.tsInferType(t.tsTypeParameter(null, null, "T")),
+      t.tsInferType(
+        t.tsTypeParameter(
+          null,
+          null,
+          !process.env.BABEL_8_BREAKING ? "T" : t.identifier("T"),
+        ),
+      ),
     );
 
     const output = generate(type).code;
     expect(output).toBe("(infer T)[]");
+  });
+
+  it("should not deduplicate comments with same start index", () => {
+    const code1 = "/*#__PURE__*/ a();";
+    const code2 = "/*#__PURE__*/ b();";
+
+    const ast1 = parse(code1).program;
+    const ast2 = parse(code2).program;
+
+    const ast = t.program([...ast1.body, ...ast2.body]);
+
+    expect(generate(ast).code).toBe(
+      "/*#__PURE__*/\na();\n\n/*#__PURE__*/\nb();",
+    );
   });
 });
 
@@ -371,12 +425,9 @@ describe("programmatic generation", function () {
   });
 
   it("flow object indentation", function () {
-    const objectStatement = t.objectTypeAnnotation(
-      [t.objectTypeProperty(t.identifier("bar"), t.stringTypeAnnotation())],
-      null,
-      null,
-      null,
-    );
+    const objectStatement = t.objectTypeAnnotation([
+      t.objectTypeProperty(t.identifier("bar"), t.stringTypeAnnotation()),
+    ]);
 
     const output = generate(objectStatement).code;
     expect(output).toBe(`{
@@ -387,9 +438,9 @@ describe("programmatic generation", function () {
   it("flow object exact", function () {
     const objectStatement = t.objectTypeAnnotation(
       [t.objectTypeProperty(t.identifier("bar"), t.stringTypeAnnotation())],
-      null,
-      null,
-      null,
+      undefined,
+      undefined,
+      undefined,
       true,
     );
 
@@ -409,7 +460,6 @@ describe("programmatic generation", function () {
           t.numberTypeAnnotation(),
         ),
       ],
-      null,
     );
 
     const output = generate(objectStatement).code;
@@ -417,6 +467,28 @@ describe("programmatic generation", function () {
     expect(output).toBe(`{
   [key: any]: number
 }`);
+  });
+
+  it("flow interface with nullish extends", () => {
+    const interfaceDeclaration = t.interfaceDeclaration(
+      t.identifier("A"),
+      undefined,
+      undefined,
+      t.objectTypeAnnotation([]),
+    );
+    const output = generate(interfaceDeclaration).code;
+    expect(output).toBe("interface A {}");
+  });
+
+  it("flow function type annotation with no parent", () => {
+    const functionTypeAnnotation = t.functionTypeAnnotation(
+      null,
+      [],
+      null,
+      t.voidTypeAnnotation(),
+    );
+    const output = generate(functionTypeAnnotation).code;
+    expect(output).toBe("() => void");
   });
 
   describe("directives", function () {
@@ -459,39 +531,269 @@ describe("programmatic generation", function () {
         generate(directive);
       }).toThrow();
     });
+
+    it("preserves single quotes if not minified", function () {
+      const directive = parse("'use strict';").program.directives[0];
+      const output = generate(directive).code;
+
+      expect(output).toBe("'use strict';");
+    });
+
+    it("converts single quotes to double quotes if minified", function () {
+      const directive = parse("'use strict';").program.directives[0];
+      const output = generate(directive, { minified: true }).code;
+
+      expect(output).toBe('"use strict";');
+    });
   });
 
   describe("typescript generate parentheses if necessary", function () {
     it("wraps around union for array", () => {
-      const typeStatement = t.TSArrayType(
-        t.TSUnionType([
-          t.TSIntersectionType([t.TSNumberKeyword(), t.TSBooleanKeyword()]),
-          t.TSNullKeyword(),
+      const typeStatement = t.tsArrayType(
+        t.tsUnionType([
+          t.tsIntersectionType([t.tsNumberKeyword(), t.tsBooleanKeyword()]),
+          t.tsNullKeyword(),
         ]),
       );
       const output = generate(typeStatement).code;
       expect(output).toBe("((number & boolean) | null)[]");
     });
     it("wraps around intersection for array", () => {
-      const typeStatement = t.TSArrayType(
-        t.TSIntersectionType([t.TSNumberKeyword(), t.TSBooleanKeyword()]),
+      const typeStatement = t.tsArrayType(
+        t.tsIntersectionType([t.tsNumberKeyword(), t.tsBooleanKeyword()]),
       );
       const output = generate(typeStatement).code;
       expect(output).toBe("(number & boolean)[]");
     });
     it("wraps around rest", () => {
       const typeStatement = t.tsRestType(
-        t.TSIntersectionType([t.TSNumberKeyword(), t.TSBooleanKeyword()]),
+        t.tsIntersectionType([t.tsNumberKeyword(), t.tsBooleanKeyword()]),
       );
       const output = generate(typeStatement).code;
       expect(output).toBe("...(number & boolean)");
     });
     it("wraps around optional type", () => {
       const typeStatement = t.tsOptionalType(
-        t.TSIntersectionType([t.TSNumberKeyword(), t.TSBooleanKeyword()]),
+        t.tsIntersectionType([t.tsNumberKeyword(), t.tsBooleanKeyword()]),
       );
       const output = generate(typeStatement).code;
       expect(output).toBe("(number & boolean)?");
+    });
+  });
+
+  describe("object expressions", () => {
+    it("not wrapped in parentheses when standalone", () => {
+      const objectExpression = t.objectExpression([]);
+      const output = generate(objectExpression).code;
+      expect(output).toBe("{}");
+    });
+
+    it("wrapped in parentheses in expression statement", () => {
+      const expressionStatement = t.expressionStatement(t.objectExpression([]));
+      const output = generate(expressionStatement).code;
+      expect(output).toBe("({});");
+    });
+
+    it("wrapped in parentheses in arrow function", () => {
+      const arrowFunctionExpression = t.arrowFunctionExpression(
+        [],
+        t.objectExpression([]),
+      );
+      const output = generate(arrowFunctionExpression).code;
+      expect(output).toBe("() => ({})");
+    });
+
+    it("not wrapped in parentheses in conditional", () => {
+      const conditionalExpression = t.conditionalExpression(
+        t.objectExpression([]),
+        t.booleanLiteral(true),
+        t.booleanLiteral(false),
+      );
+      const output = generate(conditionalExpression).code;
+      expect(output).toBe("{} ? true : false");
+    });
+
+    it("wrapped in parentheses in conditional in expression statement", () => {
+      const expressionStatement = t.expressionStatement(
+        t.conditionalExpression(
+          t.objectExpression([]),
+          t.booleanLiteral(true),
+          t.booleanLiteral(false),
+        ),
+      );
+      const output = generate(expressionStatement).code;
+      expect(output).toBe("({}) ? true : false;");
+    });
+
+    it("wrapped in parentheses in conditional in arrow function", () => {
+      const arrowFunctionExpression = t.arrowFunctionExpression(
+        [],
+        t.conditionalExpression(
+          t.objectExpression([]),
+          t.booleanLiteral(true),
+          t.booleanLiteral(false),
+        ),
+      );
+      const output = generate(arrowFunctionExpression).code;
+      expect(output).toBe("() => ({}) ? true : false");
+    });
+
+    it("not wrapped in parentheses in binary expression", () => {
+      const binaryExpression = t.binaryExpression(
+        "+",
+        t.objectExpression([]),
+        t.numericLiteral(1),
+      );
+      const output = generate(binaryExpression).code;
+      expect(output).toBe("{} + 1");
+    });
+
+    it("wrapped in parentheses in binary expression in expression statement", () => {
+      const expressionStatement = t.expressionStatement(
+        t.binaryExpression("+", t.objectExpression([]), t.numericLiteral(1)),
+      );
+      const output = generate(expressionStatement).code;
+      expect(output).toBe("({}) + 1;");
+    });
+
+    it("wrapped in parentheses in binary expression in arrow function", () => {
+      const arrowFunctionExpression = t.arrowFunctionExpression(
+        [],
+        t.binaryExpression("+", t.objectExpression([]), t.numericLiteral(1)),
+      );
+      const output = generate(arrowFunctionExpression).code;
+      expect(output).toBe("() => ({}) + 1");
+    });
+
+    it("not wrapped in parentheses in sequence expression", () => {
+      const sequenceExpression = t.sequenceExpression([
+        t.objectExpression([]),
+        t.numericLiteral(1),
+      ]);
+      const output = generate(sequenceExpression).code;
+      expect(output).toBe("{}, 1");
+    });
+
+    it("wrapped in parentheses in sequence expression in expression statement", () => {
+      const expressionStatement = t.expressionStatement(
+        t.sequenceExpression([t.objectExpression([]), t.numericLiteral(1)]),
+      );
+      const output = generate(expressionStatement).code;
+      expect(output).toBe("({}), 1;");
+    });
+
+    it("wrapped in parentheses in sequence expression in arrow function", () => {
+      const arrowFunctionExpression = t.arrowFunctionExpression(
+        [],
+        t.sequenceExpression([t.objectExpression([]), t.numericLiteral(1)]),
+      );
+      const output = generate(arrowFunctionExpression).code;
+      expect(output).toBe("() => (({}), 1)");
+    });
+  });
+
+  describe("function expressions", () => {
+    it("not wrapped in parentheses when standalone", () => {
+      const functionExpression = t.functionExpression(
+        null,
+        [],
+        t.blockStatement([]),
+      );
+      const output = generate(functionExpression).code;
+      expect(output).toBe("function () {}");
+    });
+
+    it("wrapped in parentheses in expression statement", () => {
+      const expressionStatement = t.expressionStatement(
+        t.functionExpression(null, [], t.blockStatement([])),
+      );
+      const output = generate(expressionStatement).code;
+      expect(output).toBe("(function () {});");
+    });
+
+    it("wrapped in parentheses in export default declaration", () => {
+      const exportDefaultDeclaration = t.exportDefaultDeclaration(
+        t.functionExpression(null, [], t.blockStatement([])),
+      );
+      const output = generate(exportDefaultDeclaration).code;
+      expect(output).toBe("export default (function () {});");
+    });
+  });
+
+  describe("class expressions", () => {
+    it("not wrapped in parentheses when standalone", () => {
+      const classExpression = t.classExpression(null, null, t.classBody([]));
+      const output = generate(classExpression).code;
+      expect(output).toBe("class {}");
+    });
+
+    it("wrapped in parentheses in expression statement", () => {
+      const expressionStatement = t.expressionStatement(
+        t.classExpression(null, null, t.classBody([])),
+      );
+      const output = generate(expressionStatement).code;
+      expect(output).toBe("(class {});");
+    });
+
+    it("wrapped in parentheses in export default declaration", () => {
+      const exportDefaultDeclaration = t.exportDefaultDeclaration(
+        t.classExpression(null, null, t.classBody([])),
+      );
+      const output = generate(exportDefaultDeclaration).code;
+      expect(output).toBe("export default (class {});");
+    });
+  });
+
+  describe("jsescOption.minimal", () => {
+    const string = t.stringLiteral("\u8868\u683C_\u526F\u672C");
+
+    it("true", () => {
+      const output = generate(string, { jsescOption: { minimal: true } }).code;
+      expect(output).toBe(`"表格_副本"`);
+    });
+
+    it("false", () => {
+      const output = generate(string, { jsescOption: { minimal: false } }).code;
+      expect(output).toBe(`"\\u8868\\u683C_\\u526F\\u672C"`);
+    });
+
+    if (process.env.BABEL_8_BREAKING) {
+      it("default", () => {
+        const output = generate(string).code;
+
+        expect(output).toBe(`"表格_副本"`);
+      });
+    } else {
+      it("default in Babel 7", () => {
+        const output = generate(string).code;
+
+        expect(output).toBe(`"\\u8868\\u683C_\\u526F\\u672C"`);
+      });
+    }
+  });
+
+  describe("typescript interface declaration", () => {
+    it("empty extends array", () => {
+      const tsInterfaceDeclaration = t.tsInterfaceDeclaration(
+        t.identifier("A"),
+        undefined,
+        [],
+        t.tsInterfaceBody([]),
+      );
+      const output = generate(tsInterfaceDeclaration).code;
+      expect(output).toBe("interface A {}");
+    });
+  });
+
+  describe("identifier let", () => {
+    it("detects open bracket from non-optional OptionalMemberExpression", () => {
+      const ast = parse(`for (let?.[x];;);`, {
+        sourceType: "script",
+        strictMode: "false",
+      });
+      ast.program.body[0].init.optional = false;
+      const output = generate(ast).code;
+      expect(output).toBe("for ((let)[x];;);");
     });
   });
 });
@@ -504,7 +806,9 @@ describe("CodeGenerator", function () {
   });
 });
 
-const suites = fixtures(`${__dirname}/fixtures`);
+const suites = (fixtures.default || fixtures)(
+  path.join(path.dirname(fileURLToPath(import.meta.url)), "fixtures"),
+);
 
 suites.forEach(function (testSuite) {
   describe("generation/" + testSuite.title, function () {
@@ -529,7 +833,10 @@ suites.forEach(function (testSuite) {
               ...task.options.parserOpts,
             });
             const options = {
-              sourceFileName: path.relative(__dirname, actual.loc),
+              sourceFileName: path.relative(
+                path.dirname(fileURLToPath(import.meta.url)),
+                actual.loc,
+              ),
               ...task.options,
               sourceMaps: task.sourceMap ? true : task.options.sourceMaps,
             };
@@ -547,7 +854,16 @@ suites.forEach(function (testSuite) {
               const result = run();
 
               if (options.sourceMaps) {
-                expect(result.map).toEqual(task.sourceMap);
+                try {
+                  expect(result.map).toEqual(task.sourceMap);
+                } catch (e) {
+                  if (!process.env.OVERWRITE || !task.sourceMapFile) throw e;
+                  console.log(`Updated test file: ${task.sourceMapFile.loc}`);
+                  fs.writeFileSync(
+                    task.sourceMapFile.loc,
+                    JSON.stringify(result.map, null, 2),
+                  );
+                }
               }
 
               if (
@@ -559,7 +875,13 @@ suites.forEach(function (testSuite) {
                 console.log(`New test file created: ${expected.loc}`);
                 fs.writeFileSync(expected.loc, result.code);
               } else {
-                expect(result.code).toBe(expected.code);
+                try {
+                  expect(result.code).toBe(expected.code);
+                } catch (e) {
+                  if (!process.env.OVERWRITE) throw e;
+                  console.log(`Updated test file: ${expected.loc}`);
+                  fs.writeFileSync(expected.loc, result.code);
+                }
               }
             }
           }
