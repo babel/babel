@@ -24,7 +24,7 @@ ifneq ("$(BABEL_COVERAGE)", "true")
 endif
 
 build-bundle: clean clean-lib
-	./scripts/set-module-type.js
+	node ./scripts/set-module-type.js
 	$(YARN) gulp build
 	$(MAKE) build-flow-typings
 	$(MAKE) build-dist
@@ -35,7 +35,7 @@ build-no-bundle-ci: bootstrap-only
 	$(MAKE) build-dist
 
 build-no-bundle: clean clean-lib
-	./scripts/set-module-type.js
+	node ./scripts/set-module-type.js
 	BABEL_ENV=development $(YARN) gulp build-dev
 	$(MAKE) build-flow-typings
 	$(MAKE) build-dist
@@ -188,7 +188,7 @@ prepublish:
 	$(MAKE) bootstrap-only
 	$(MAKE) prepublish-build
 	IS_PUBLISH=true $(MAKE) test
-	./scripts/set-module-type.js clean
+	node ./scripts/set-module-type.js clean
 
 new-version-checklist:
 	# @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
@@ -224,7 +224,7 @@ ifneq ("$(I_AM_USING_VERDACCIO)", "I_AM_SURE")
 endif
 	$(YARN) release-tool version $(VERSION) --all --yes --tag-version-prefix="version-e2e-test-"
 	$(MAKE) prepublish-build
-	./scripts/set-module-type.js clean
+	node ./scripts/set-module-type.js clean
 	YARN_NPM_PUBLISH_REGISTRY=http://localhost:4873 $(YARN) release-tool publish --yes --tag-version-prefix="version-e2e-test-"
 	$(MAKE) clean
 
@@ -235,11 +235,11 @@ bootstrap: bootstrap-only
 	$(MAKE) generate-tsconfig build
 
 use-cjs:
-	./scripts/set-module-type.js script
+	node ./scripts/set-module-type.js script
 	$(MAKE) bootstrap
 
 use-esm:
-	./scripts/set-module-type.js module
+	node ./scripts/set-module-type.js module
 	$(MAKE) bootstrap
 
 clean-lib:
