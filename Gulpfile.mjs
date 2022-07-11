@@ -596,7 +596,11 @@ ${fs.readFileSync(path.join(path.dirname(input), "license"), "utf8")}*/
 
 gulp.task("build-cjs-bundles", () => {
   if (!USE_ESM) {
-    fancyLog(chalk.yellow("Skipping CJS-compat bundles for ESM-based builds, because not compiling to ESM"));
+    fancyLog(
+      chalk.yellow(
+        "Skipping CJS-compat bundles for ESM-based builds, because not compiling to ESM"
+      )
+    );
     return Promise.resolve();
   }
   return Promise.all(
