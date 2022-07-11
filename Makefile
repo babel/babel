@@ -24,7 +24,7 @@ ifneq ("$(BABEL_COVERAGE)", "true")
 endif
 
 build-bundle: clean clean-lib
-	$(NODE) ./scripts/set-module-type.js
+	./scripts/set-module-type.js
 	$(YARN) gulp build
 	$(MAKE) build-flow-typings
 	$(MAKE) build-dist
@@ -35,7 +35,7 @@ build-no-bundle-ci: bootstrap-only
 	$(MAKE) build-dist
 
 build-no-bundle: clean clean-lib
-	$(NODE) ./scripts/set-module-type.js
+	./scripts/set-module-type.js
 	BABEL_ENV=development $(YARN) gulp build-dev
 	$(MAKE) build-flow-typings
 	$(MAKE) build-dist
