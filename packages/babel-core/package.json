@@ -50,7 +50,7 @@
     "@babel/code-frame": "workspace:^",
     "@babel/generator": "workspace:^",
     "@babel/helper-compilation-targets": "workspace:^",
-    "@babel/helper-module-transforms": "condition:BABEL_8_BREAKING ? : workspace:^7.18.6",
+    "@babel/helper-module-transforms": "workspace:^",
     "@babel/helpers": "workspace:^",
     "@babel/parser": "workspace:^",
     "@babel/template": "workspace:^",
@@ -84,7 +84,14 @@
     ],
     "USE_ESM": [
       {
-        "type": "module"
+        "type": "module",
+        "exports": {
+          ".": {
+            "require": "./cjs-proxy.cjs",
+            "default": "./lib/index.js"
+          },
+          "./package.json": "./package.json"
+        }
       },
       null
     ]

@@ -10,8 +10,8 @@ function initialize(babel) {
   exports.createConfigItem = babel.createConfigItem;
 }
 
-if (process.env.BABEL_8_BREAKING) {
-  exports.init = import("@babel/core").then(ns => initialize(ns.default));
+if (USE_ESM) {
+  exports.init = import("@babel/core").then(initialize);
 } else {
   initialize(require("@babel/core"));
 }

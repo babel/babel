@@ -24,7 +24,7 @@ module.exports = function handleMessage(action, payload) {
         maybeParse(payload.code, options),
       );
     case "MAYBE_PARSE_SYNC":
-      if (!process.env.BABEL_8_BREAKING) {
+      if (!USE_ESM) {
         return maybeParse(
           payload.code,
           normalizeBabelParseConfigSync(payload.options),

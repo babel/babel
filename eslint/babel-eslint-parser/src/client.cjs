@@ -90,7 +90,7 @@ exports.WorkerClient = class WorkerClient extends Client {
   }
 };
 
-if (!process.env.BABEL_8_BREAKING) {
+if (!USE_ESM) {
   exports.LocalClient = class LocalClient extends Client {
     static #handleMessage;
 

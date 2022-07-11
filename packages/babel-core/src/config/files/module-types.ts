@@ -10,7 +10,7 @@ const require = createRequire(import.meta.url);
 let import_: ((specifier: string | URL) => any) | undefined;
 try {
   // Old Node.js versions don't support import() syntax.
-  import_ = require("./import").default;
+  import_ = require("./import.cjs");
 } catch {}
 
 export const supportsESM = semver.satisfies(

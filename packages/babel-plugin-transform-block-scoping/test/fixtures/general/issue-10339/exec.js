@@ -15,7 +15,7 @@ let functionPath;
 return transformAsync(code, {
   configFile: false,
   plugins: [
-    __dirname + "/../../../../lib",
+    __dirname + "/../../../../lib/index.js",
     {
       post({ path }) {
         programPath = path;

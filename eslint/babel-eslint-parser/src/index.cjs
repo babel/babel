@@ -3,9 +3,7 @@ const analyzeScope = require("./analyze-scope.cjs");
 const baseParse = require("./parse.cjs");
 
 const { LocalClient, WorkerClient } = require("./client.cjs");
-const client = new (
-  process.env.BABEL_8_BREAKING ? WorkerClient : LocalClient
-)();
+const client = new (USE_ESM ? WorkerClient : LocalClient)();
 
 exports.parse = function (code, options = {}) {
   return baseParse(code, normalizeESLintConfig(options), client);

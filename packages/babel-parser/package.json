@@ -27,7 +27,8 @@
   "files": [
     "bin",
     "lib",
-    "typings"
+    "typings",
+    "index.cjs"
   ],
   "engines": {
     "node": ">=6.0.0"
@@ -49,13 +50,23 @@
     ],
     "USE_ESM": [
       {
-        "type": "module"
+        "type": "module",
+        "exports": {
+          ".": {
+            "require": "./lib/index.cjs",
+            "default": "./lib/index.js"
+          },
+          "./package.json": "./package.json"
+        }
       },
       null
     ]
   },
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "require": "./index.cjs",
+      "default": "./lib/index.js"
+    },
     "./package.json": "./package.json"
   },
   "type": "commonjs"

@@ -6,7 +6,7 @@ const require = createRequire(import.meta.url);
 let import_;
 try {
   // Node < 13.3 doesn't support import() syntax.
-  import_ = require("./import").default;
+  import_ = require("./import.cjs");
 } catch {}
 
 // import.meta.resolve is only available in ESM, but this file is compiled to CJS.
