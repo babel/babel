@@ -1,4 +1,4 @@
-import gensync from "gensync";
+import gensync, { type Handler } from "gensync";
 
 import loadConfig from "./config";
 import type { InputOptions } from "./config";
@@ -22,9 +22,10 @@ type Parse = {
   (code: string, opts?: InputOptions | null): ParseResult | null;
 };
 
-const parseRunner = gensync<
-  (code: string, opts: InputOptions | undefined | null) => ParseResult | null
->(function* parse(code, opts) {
+const parseRunner = gensync(function* parse(
+  code: string,
+  opts: InputOptions | undefined | null,
+): Handler<ParseResult | null> {
   const config = yield* loadConfig(opts);
 
   if (config === null) {

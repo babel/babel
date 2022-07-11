@@ -1,5 +1,4 @@
-import gensync from "gensync";
-import type { Handler } from "gensync";
+import gensync, { type Handler } from "gensync";
 import { forwardAsync, maybeAsync, isThenable } from "../gensync-utils/async";
 
 import { mergeOptions } from "./util";
@@ -52,176 +51,165 @@ export type { Plugin };
 export type PluginPassList = Array<Plugin>;
 export type PluginPasses = Array<PluginPassList>;
 
-export default gensync<(inputOpts: unknown) => ResolvedConfig | null>(
-  function* loadFullConfig(inputOpts) {
-    const result = yield* loadPrivatePartialConfig(inputOpts);
-    if (!result) {
-      return null;
+export default gensync(function* loadFullConfig(
+  inputOpts: unknown,
+): Handler<ResolvedConfig | null> {
+  const result = yield* loadPrivatePartialConfig(inputOpts);
+  if (!result) {
+    return null;
+  }
+  const { options, context, fileHandling } = result;
+
+  if (fileHandling === "ignored") {
+    return null;
+  }
+
+  const optionDefaults = {};
+
+  const { plugins, presets } = options;
+
+  if (!plugins || !presets) {
+    throw new Error("Assertion failure - plugins and presets exist");
+  }
+
+  const presetContext: Context.FullPreset = {
+    ...context,
+    targets: options.targets,
+  };
+
+  const toDescriptor = (item: PluginItem) => {
+    const desc = getItemDescriptor(item);
+    if (!desc) {
+      throw new Error("Assertion failure - must be config item");
     }
-    const { options, context, fileHandling } = result;
 
-    if (fileHandling === "ignored") {
-      return null;
-    }
+    return desc;
+  };
 
-    const optionDefaults = {};
+  const presetsDescriptors = presets.map(toDescriptor);
+  const initialPluginsDescriptors = plugins.map(toDescriptor);
+  const pluginDescriptorsByPass: Array<Array<UnloadedDescriptor>> = [[]];
+  const passes: Array<Array<Plugin>> = [];
 
-    const { plugins, presets } = options;
+  const externalDependencies: DeepArray<string> = [];
 
-    if (!plugins || !presets) {
-      throw new Error("Assertion failure - plugins and presets exist");
-    }
+  const ignored = yield* enhanceError(
+    context,
+    function* recursePresetDescriptors(
+      rawPresets: Array<UnloadedDescriptor>,
+      pluginDescriptorsPass: Array<UnloadedDescriptor>,
+    ): Handler<true | void> {
+      const presets: Array<{
+        preset: ConfigChain | null;
+        pass: Array<UnloadedDescriptor>;
+      }> = [];
 
-    const presetContext: Context.FullPreset = {
-      ...context,
-      targets: options.targets,
-    };
-
-    const toDescriptor = (item: PluginItem) => {
-      const desc = getItemDescriptor(item);
-      if (!desc) {
-        throw new Error("Assertion failure - must be config item");
-      }
-
-      return desc;
-    };
-
-    const presetsDescriptors = presets.map(toDescriptor);
-    const initialPluginsDescriptors = plugins.map(toDescriptor);
-    const pluginDescriptorsByPass: Array<Array<UnloadedDescriptor>> = [[]];
-    const passes: Array<Array<Plugin>> = [];
-
-    const externalDependencies: DeepArray<string> = [];
-
-    const ignored = yield* enhanceError(
-      context,
-      function* recursePresetDescriptors(
-        rawPresets: Array<UnloadedDescriptor>,
-        pluginDescriptorsPass: Array<UnloadedDescriptor>,
-      ): Handler<true | void> {
-        const presets: Array<{
-          preset: ConfigChain | null;
-          pass: Array<UnloadedDescriptor>;
-        }> = [];
-
-        for (let i = 0; i < rawPresets.length; i++) {
-          const descriptor = rawPresets[i];
-          if (descriptor.options !== false) {
-            try {
-              // eslint-disable-next-line no-var
-              var preset = yield* loadPresetDescriptor(
-                descriptor,
-                presetContext,
-              );
-            } catch (e) {
-              if (e.code === "BABEL_UNKNOWN_OPTION") {
-                checkNoUnwrappedItemOptionPairs(rawPresets, i, "preset", e);
-              }
-              throw e;
+      for (let i = 0; i < rawPresets.length; i++) {
+        const descriptor = rawPresets[i];
+        if (descriptor.options !== false) {
+          try {
+            // eslint-disable-next-line no-var
+            var preset = yield* loadPresetDescriptor(descriptor, presetContext);
+          } catch (e) {
+            if (e.code === "BABEL_UNKNOWN_OPTION") {
+              checkNoUnwrappedItemOptionPairs(rawPresets, i, "preset", e);
             }
-
-            externalDependencies.push(preset.externalDependencies);
-
-            // Presets normally run in reverse order, but if they
-            // have their own pass they run after the presets
-            // in the previous pass.
-            if (descriptor.ownPass) {
-              presets.push({ preset: preset.chain, pass: [] });
-            } else {
-              presets.unshift({
-                preset: preset.chain,
-                pass: pluginDescriptorsPass,
-              });
-            }
+            throw e;
           }
-        }
 
-        // resolve presets
-        if (presets.length > 0) {
-          // The passes are created in the same order as the preset list, but are inserted before any
-          // existing additional passes.
-          pluginDescriptorsByPass.splice(
-            1,
-            0,
-            ...presets
-              .map(o => o.pass)
-              .filter(p => p !== pluginDescriptorsPass),
-          );
+          externalDependencies.push(preset.externalDependencies);
 
-          for (const { preset, pass } of presets) {
-            if (!preset) return true;
-
-            pass.push(...preset.plugins);
-
-            const ignored = yield* recursePresetDescriptors(
-              preset.presets,
-              pass,
-            );
-            if (ignored) return true;
-
-            preset.options.forEach(opts => {
-              mergeOptions(optionDefaults, opts);
+          // Presets normally run in reverse order, but if they
+          // have their own pass they run after the presets
+          // in the previous pass.
+          if (descriptor.ownPass) {
+            presets.push({ preset: preset.chain, pass: [] });
+          } else {
+            presets.unshift({
+              preset: preset.chain,
+              pass: pluginDescriptorsPass,
             });
           }
         }
-      },
-    )(presetsDescriptors, pluginDescriptorsByPass[0]);
+      }
 
-    if (ignored) return null;
+      // resolve presets
+      if (presets.length > 0) {
+        // The passes are created in the same order as the preset list, but are inserted before any
+        // existing additional passes.
+        pluginDescriptorsByPass.splice(
+          1,
+          0,
+          ...presets.map(o => o.pass).filter(p => p !== pluginDescriptorsPass),
+        );
 
-    const opts: any = optionDefaults;
-    mergeOptions(opts, options);
+        for (const { preset, pass } of presets) {
+          if (!preset) return true;
 
-    const pluginContext: Context.FullPlugin = {
-      ...presetContext,
-      assumptions: opts.assumptions ?? {},
-    };
+          pass.push(...preset.plugins);
 
-    yield* enhanceError(context, function* loadPluginDescriptors() {
-      pluginDescriptorsByPass[0].unshift(...initialPluginsDescriptors);
+          const ignored = yield* recursePresetDescriptors(preset.presets, pass);
+          if (ignored) return true;
 
-      for (const descs of pluginDescriptorsByPass) {
-        const pass: Plugin[] = [];
-        passes.push(pass);
-
-        for (let i = 0; i < descs.length; i++) {
-          const descriptor: UnloadedDescriptor = descs[i];
-          if (descriptor.options !== false) {
-            try {
-              // eslint-disable-next-line no-var
-              var plugin = yield* loadPluginDescriptor(
-                descriptor,
-                pluginContext,
-              );
-            } catch (e) {
-              if (e.code === "BABEL_UNKNOWN_PLUGIN_PROPERTY") {
-                // print special message for `plugins: ["@babel/foo", { foo: "option" }]`
-                checkNoUnwrappedItemOptionPairs(descs, i, "plugin", e);
-              }
-              throw e;
-            }
-            pass.push(plugin);
-
-            externalDependencies.push(plugin.externalDependencies);
-          }
+          preset.options.forEach(opts => {
+            mergeOptions(optionDefaults, opts);
+          });
         }
       }
-    })();
+    },
+  )(presetsDescriptors, pluginDescriptorsByPass[0]);
 
-    opts.plugins = passes[0];
-    opts.presets = passes
-      .slice(1)
-      .filter(plugins => plugins.length > 0)
-      .map(plugins => ({ plugins }));
-    opts.passPerPreset = opts.presets.length > 0;
+  if (ignored) return null;
 
-    return {
-      options: opts,
-      passes: passes,
-      externalDependencies: freezeDeepArray(externalDependencies),
-    };
-  },
-);
+  const opts: any = optionDefaults;
+  mergeOptions(opts, options);
+
+  const pluginContext: Context.FullPlugin = {
+    ...presetContext,
+    assumptions: opts.assumptions ?? {},
+  };
+
+  yield* enhanceError(context, function* loadPluginDescriptors() {
+    pluginDescriptorsByPass[0].unshift(...initialPluginsDescriptors);
+
+    for (const descs of pluginDescriptorsByPass) {
+      const pass: Plugin[] = [];
+      passes.push(pass);
+
+      for (let i = 0; i < descs.length; i++) {
+        const descriptor: UnloadedDescriptor = descs[i];
+        if (descriptor.options !== false) {
+          try {
+            // eslint-disable-next-line no-var
+            var plugin = yield* loadPluginDescriptor(descriptor, pluginContext);
+          } catch (e) {
+            if (e.code === "BABEL_UNKNOWN_PLUGIN_PROPERTY") {
+              // print special message for `plugins: ["@babel/foo", { foo: "option" }]`
+              checkNoUnwrappedItemOptionPairs(descs, i, "plugin", e);
+            }
+            throw e;
+          }
+          pass.push(plugin);
+
+          externalDependencies.push(plugin.externalDependencies);
+        }
+      }
+    }
+  })();
+
+  opts.plugins = passes[0];
+  opts.presets = passes
+    .slice(1)
+    .filter(plugins => plugins.length > 0)
+    .map(plugins => ({ plugins }));
+  opts.passPerPreset = opts.presets.length > 0;
+
+  return {
+    options: opts,
+    passes: passes,
+    externalDependencies: freezeDeepArray(externalDependencies),
+  };
+});
 
 function enhanceError<T extends Function>(context: ConfigContext, fn: T): T {
   return function* (arg1: unknown, arg2: unknown) {
@@ -384,10 +372,7 @@ const instantiatePlugin = makeWeakCache(function* (
       dirname,
     };
 
-    const inherits = yield* forwardAsync<
-      (d: UnloadedDescriptor, c: Context.SimplePlugin) => Plugin,
-      Plugin
-    >(loadPluginDescriptor, run => {
+    const inherits = yield* forwardAsync(loadPluginDescriptor, run => {
       // If the inherited plugin changes, reinstantiate this plugin.
       return cache.invalidate(data => run(inheritsDescriptor, data));
     });

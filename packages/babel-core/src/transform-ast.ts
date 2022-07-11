@@ -1,4 +1,4 @@
-import gensync from "gensync";
+import gensync, { type Handler } from "gensync";
 
 import loadConfig from "./config";
 import type { InputOptions, ResolvedConfig } from "./config";
@@ -19,13 +19,11 @@ type TransformFromAst = {
   (ast: AstRoot, code: string, opts?: InputOptions | null): FileResult | null;
 };
 
-const transformFromAstRunner = gensync<
-  (
-    ast: AstRoot,
-    code: string,
-    opts: InputOptions | undefined | null,
-  ) => FileResult | null
->(function* (ast, code, opts) {
+const transformFromAstRunner = gensync(function* (
+  ast: AstRoot,
+  code: string,
+  opts: InputOptions | undefined | null,
+): Handler<FileResult | null> {
   const config: ResolvedConfig | null = yield* loadConfig(opts);
   if (config === null) return null;
 

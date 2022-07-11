@@ -4,7 +4,7 @@
 
 import buildDebug from "debug";
 import path from "path";
-import gensync, { type Gensync, type Handler } from "gensync";
+import gensync, { type Handler } from "gensync";
 import { isAsync } from "../../gensync-utils/async";
 import loadCjsOrMjsDefault, { supportsESM } from "./module-types";
 import { fileURLToPath, pathToFileURL } from "url";
@@ -170,9 +170,10 @@ async function resolveStandardizedNameForImport(
   return fileURLToPath(res.value);
 }
 
-const resolveStandardizedName: Gensync<
-  (type: "plugin" | "preset", name: string, dirname?: string) => string
-> = gensync({
+const resolveStandardizedName = gensync<
+  [type: "plugin" | "preset", name: string, dirname?: string],
+  string
+>({
   sync(type, name, dirname = process.cwd()) {
     return resolveStandardizedNameForRequire(type, name, dirname);
   },
