@@ -1,4 +1,4 @@
-import gensync, { type Handler } from "gensync";
+import gensync, { type Handler, type Callback } from "gensync";
 
 export type {
   ResolvedConfig,
@@ -41,11 +41,6 @@ const loadOptionsRunner = gensync(function* (
 });
 
 const createConfigItemRunner = gensync(createConfigItemImpl);
-
-// TODO: Could the gensync type definitions export this?
-type Callback<R> = [R] extends [void]
-  ? (err: unknown) => void
-  : (err: unknown, result: R) => void;
 
 const maybeErrback =
   <Arg, Return>(runner: gensync.Gensync<[Arg], Return>) =>

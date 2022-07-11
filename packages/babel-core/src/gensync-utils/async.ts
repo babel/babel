@@ -1,13 +1,6 @@
-import gensync, { type Gensync, type Handler } from "gensync";
+import gensync, { type Gensync, type Handler, type Callback } from "gensync";
 
 type MaybePromise<T> = T | Promise<T>;
-
-// TODO: Could the gensync type definitions export this?
-type Callback<R> = [R] extends [void]
-  ? (err: unknown) => void
-  : (err: unknown, result: R) => void;
-
-const id = <T>(x: T): T => x;
 
 const runGenerator: {
   sync<Return>(gen: Handler<Return>): Return;
@@ -105,9 +98,8 @@ export const onFirstPause = gensync<
 
 // Wait for the given promise to be resolved
 export const waitFor = gensync({
-  sync: id,
-  // @ts-ignore?
-  async: id,
+  sync: x => x,
+  async: async x => x,
 }) as <T>(p: T | Promise<T>) => Handler<T>;
 
 export function isThenable<T = any>(val: any): val is PromiseLike<T> {
