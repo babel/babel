@@ -653,7 +653,7 @@ describe("scope", () => {
     describe("duplicate declaration", () => {
       it("should not throw error on duplicate class and function declaration", () => {
         const ast = [
-          t.classDeclaration(t.identifier("A"), t.super(), t.classBody([]), []),
+          t.classDeclaration(t.identifier("A"), null, t.classBody([]), []),
           t.functionDeclaration(t.identifier("A"), [], t.blockStatement([])),
         ];
 
