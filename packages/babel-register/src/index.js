@@ -4,7 +4,9 @@
  * from a compiled Babel import.
  */
 
-if (process.env.BABEL_8_BREAKING) {
+if (USE_ESM) {
+  module.exports = require("./experimental-worker");
+} else if (process.env.BABEL_8_BREAKING) {
   module.exports = require("./experimental-worker");
 } else {
   exports = module.exports = function (...args) {

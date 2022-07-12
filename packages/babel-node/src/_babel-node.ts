@@ -5,7 +5,7 @@ import path from "path";
 import repl from "repl";
 import * as babel from "@babel/core";
 import vm from "vm";
-import "core-js/stable";
+import "core-js/stable/index";
 import "regenerator-runtime/runtime";
 import register from "@babel/register";
 import { fileURLToPath } from "url";

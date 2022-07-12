@@ -36,6 +36,14 @@ function resetCache() {
 
 const OLD_JEST_MOCKS = !!jest.doMock;
 
+let USE_ESM = false;
+try {
+  const type = fs
+    .readFileSync(new URL("../../../.module-type", import.meta.url), "utf-8")
+    .trim();
+  USE_ESM = type === "module";
+} catch {}
+
 describe("@babel/register", function () {
   let currentHook, currentOptions, sourceMapSupport;
 
@@ -86,7 +94,7 @@ describe("@babel/register", function () {
     });
   }
 
-  if (!process.env.BABEL_8_BREAKING) {
+  if (!USE_ESM && !process.env.BABEL_8_BREAKING) {
     describe("babel 7", () => {
       if (!OLD_JEST_MOCKS) {
         beforeEach(() => {

@@ -31,6 +31,11 @@ if (moduleType === "clean") {
       fs.statSync(dir).isDirectory() && fs.existsSync(`${dir}/package.json`)
   )
   .forEach(dir => {
+    if (dir.endsWith("babel-register")) {
+      // This is a CJS package
+      return;
+    }
+
     if (moduleType === "clean") {
       try {
         fs.unlinkSync(`${dir}/lib/package.json`);

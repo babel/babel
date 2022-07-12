@@ -725,6 +725,8 @@ function pluginAddImportExtension() {
         if (
           source.value.startsWith("lodash/") ||
           source.value.startsWith("core-js-compat/") ||
+          source.value === "core-js/stable/index" ||
+          source.value === "regenerator-runtime/runtime" ||
           source.value === "babel-plugin-dynamic-import-node/utils"
         ) {
           source.value += ".js";

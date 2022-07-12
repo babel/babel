@@ -1,3 +1,5 @@
+const cache = require("./cache");
+
 function initialize(babel) {
   exports.init = null;
   exports.version = babel.version;
@@ -10,11 +12,13 @@ function initialize(babel) {
     exports.OptionManager = babel.OptionManager;
     exports.transformSync = babel.transformSync;
   }
+
+  cache.initializeCacheFilename();
 }
 
-if (process.env.BABEL_8_BREAKING) {
+if (USE_ESM) {
   // @ts-expect-error CJS-ESM interop.
-  exports.init = import("@babel/core").then(ns => initialize(ns.default));
+  exports.init = import("@babel/core").then(initialize);
 } else {
   initialize(require("@babel/core"));
 }
