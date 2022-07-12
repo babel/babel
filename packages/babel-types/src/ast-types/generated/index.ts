@@ -371,7 +371,7 @@ export interface BreakStatement extends BaseNode {
 
 export interface CallExpression extends BaseNode {
   type: "CallExpression";
-  callee: Expression | V8IntrinsicIdentifier;
+  callee: Expression | Super | V8IntrinsicIdentifier;
   arguments: Array<
     Expression | SpreadElement | JSXNamespacedName | ArgumentPlaceholder
   >;
@@ -544,7 +544,7 @@ export interface LogicalExpression extends BaseNode {
 
 export interface MemberExpression extends BaseNode {
   type: "MemberExpression";
-  object: Expression;
+  object: Expression | Super;
   property: Expression | Identifier | PrivateName;
   computed: boolean;
   optional?: true | false | null;
@@ -552,7 +552,7 @@ export interface MemberExpression extends BaseNode {
 
 export interface NewExpression extends BaseNode {
   type: "NewExpression";
-  callee: Expression | V8IntrinsicIdentifier;
+  callee: Expression | Super | V8IntrinsicIdentifier;
   arguments: Array<
     Expression | SpreadElement | JSXNamespacedName | ArgumentPlaceholder
   >;

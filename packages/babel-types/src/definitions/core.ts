@@ -177,7 +177,7 @@ defineType("CallExpression", {
   aliases: ["Expression"],
   fields: {
     callee: {
-      validate: assertNodeType("Expression", "V8IntrinsicIdentifier"),
+      validate: assertNodeType("Expression", "Super", "V8IntrinsicIdentifier"),
     },
     arguments: {
       validate: chain(
@@ -684,7 +684,7 @@ defineType("MemberExpression", {
   aliases: ["Expression", "LVal"],
   fields: {
     object: {
-      validate: assertNodeType("Expression"),
+      validate: assertNodeType("Expression", "Super"),
     },
     property: {
       validate: (function () {
@@ -1930,9 +1930,14 @@ defineType("SpreadElement", {
   },
 });
 
-defineType("Super", {
-  aliases: ["Expression"],
-});
+defineType(
+  "Super",
+  process.env.BABEL_8_BREAKING
+    ? undefined
+    : {
+        aliases: ["Expression"],
+      },
+);
 
 defineType("TaggedTemplateExpression", {
   visitor: ["tag", "quasi", "typeParameters"],
