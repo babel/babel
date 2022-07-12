@@ -143,7 +143,7 @@ export default declare((api, options: Options) => {
               "Please add '@babel/plugin-transform-classes' to your Babel configuration.",
           );
         }
-        let contextLiteral: t.Expression = scope.buildUndefinedNode();
+        let contextLiteral: t.Expression | t.Super = scope.buildUndefinedNode();
         node.arguments = [];
 
         let nodes: t.Expression[];
@@ -175,7 +175,12 @@ export default declare((api, options: Options) => {
         if (t.isMemberExpression(callee)) {
           const temp = scope.maybeGenerateMemoised(callee.object);
           if (temp) {
-            callee.object = t.assignmentExpression("=", temp, callee.object);
+            callee.object = t.assignmentExpression(
+              "=",
+              temp,
+              // object must not be Super when `temp` is an identifier
+              callee.object as t.Expression,
+            );
             contextLiteral = temp;
           } else {
             contextLiteral = t.cloneNode(callee.object);

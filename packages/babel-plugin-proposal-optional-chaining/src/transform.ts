@@ -9,7 +9,7 @@ import { willPathCastToBoolean, findOutermostTransparentParent } from "./util";
 const { ast } = template.expression;
 
 function isSimpleMemberExpression(
-  expression: t.Expression,
+  expression: t.Expression | t.Super,
 ): expression is t.Identifier | t.Super | t.MemberExpression {
   expression = skipTransparentExprWrapperNodes(expression);
   return (
@@ -102,6 +102,7 @@ export function transform(
     }
   }
 
+  // todo: Improve replacementPath typings
   let replacementPath: NodePath<any> = path;
   if (parentPath.isUnaryExpression({ operator: "delete" })) {
     replacementPath = parentPath;
@@ -139,8 +140,8 @@ export function transform(
           t.cloneNode(ref),
           // Here `chainWithTypes` MUST NOT be cloned because it could be
           // updated when generating the memoised context of a call
-          // expression
-          chainWithTypes,
+          // expression. It must be an Expression when `ref` is an identifier
+          chainWithTypes as t.Expression,
         );
 
         isCall ? (node.callee = ref) : (node.object = ref);
@@ -160,13 +161,17 @@ export function transform(
         // Otherwise, we need to memoize the context object, and change the call into a Function#call.
         // `a.?b.?()` translates roughly to `(_b = _a.b) != null && _b.call(_a)`
         const { object } = chain;
-        let context: t.Expression = scope.maybeGenerateMemoised(object);
-        if (context) {
-          chain.object = t.assignmentExpression("=", context, object);
-        } else if (t.isSuper(object)) {
+        let context: t.Expression;
+        if (t.isSuper(object)) {
           context = t.thisExpression();
         } else {
-          context = object;
+          const memoized = scope.maybeGenerateMemoised(object);
+          if (memoized) {
+            context = memoized;
+            chain.object = t.assignmentExpression("=", memoized, object);
+          } else {
+            context = object;
+          }
         }
 
         node.arguments.unshift(t.cloneNode(context));
@@ -181,7 +186,10 @@ export function transform(
     // i.e. `?.b` in `(a?.b.c)()`
     if (i === 0 && parentIsCall) {
       // `(a?.b)()` to `(a == null ? undefined : a.b.bind(a))()`
-      const object = skipTransparentExprWrapperNodes(replacement.object);
+      // object must not be Super as super?.foo is invalid
+      const object = skipTransparentExprWrapperNodes(
+        replacement.object,
+      ) as t.Expression;
       let baseRef;
       if (!pureGetters || !isSimpleMemberExpression(object)) {
         // memoize the context object when getters are not always pure

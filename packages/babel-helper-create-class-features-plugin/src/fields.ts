@@ -258,7 +258,7 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
   {
     memoise(member, count) {
       const { scope } = member;
-      const { object } = member.node;
+      const { object } = member.node as { object: t.Expression };
 
       const memo = scope.maybeGenerateMemoised(object);
       if (!memo) {
@@ -269,10 +269,10 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
     },
 
     receiver(member) {
-      const { object } = member.node;
+      const { object } = member.node as { object: t.Expression };
 
       if (this.memoiser.has(object)) {
-        return t.cloneNode(this.memoiser.get(object) as t.Expression);
+        return t.cloneNode(this.memoiser.get(object));
       }
 
       return t.cloneNode(object);
@@ -466,7 +466,7 @@ const privateNameHandlerLoose: Handler<PrivateNameState> = {
   boundGet(member) {
     return t.callExpression(
       t.memberExpression(this.get(member), t.identifier("bind")),
-      [t.cloneNode(member.node.object)],
+      [t.cloneNode(member.node.object as t.Expression)],
     );
   },
 

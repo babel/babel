@@ -27,7 +27,8 @@ export default declare(api => {
             (lhs as t.MemberExpression).object = t.assignmentExpression(
               "=",
               t.cloneNode(memo),
-              object,
+              // object must not be Super when `memo` is an identifier
+              object as t.Expression,
             );
           }
 

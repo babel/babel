@@ -113,7 +113,7 @@ export function Super(this: Printer) {
 }
 
 function isDecoratorMemberExpression(
-  node: t.Expression | t.V8IntrinsicIdentifier,
+  node: t.Expression | t.Super | t.V8IntrinsicIdentifier,
 ): boolean {
   switch (node.type) {
     case "Identifier":
@@ -129,7 +129,7 @@ function isDecoratorMemberExpression(
   }
 }
 function shouldParenthesizeDecoratorExpression(
-  node: t.Expression | t.V8IntrinsicIdentifier,
+  node: t.Expression | t.Super | t.V8IntrinsicIdentifier,
 ) {
   if (node.type === "CallExpression") {
     node = node.callee;

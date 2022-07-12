@@ -101,7 +101,12 @@ export default declare(api => {
           scope.push({ id: receiverLVal });
 
           sequenceParts.push(
-            t.assignmentExpression("=", t.cloneNode(receiverLVal), receiver),
+            t.assignmentExpression(
+              "=",
+              t.cloneNode(receiverLVal),
+              // @ts-ignore(Babel 7 vs Babel 8) Fixme: support `super.foo(?)`
+              receiver,
+            ),
             t.assignmentExpression(
               "=",
               t.cloneNode(functionLVal),

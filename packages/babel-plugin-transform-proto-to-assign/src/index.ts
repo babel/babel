@@ -31,7 +31,11 @@ export default declare(api => {
     file: File,
   ) {
     return t.expressionStatement(
-      t.callExpression(file.addHelper("defaults"), [ref, expr.right]),
+      t.callExpression(file.addHelper("defaults"), [
+        // @ts-ignore(Babel 7 vs Babel 8) Fixme: support `super.__proto__ = ...`
+        ref,
+        expr.right,
+      ]),
     );
   }
 
@@ -48,7 +52,14 @@ export default declare(api => {
 
         if (temp) {
           nodes.push(
-            t.expressionStatement(t.assignmentExpression("=", temp, left)),
+            t.expressionStatement(
+              t.assignmentExpression(
+                "=",
+                temp,
+                // left must not be Super when `temp` is an identifier
+                left as t.Expression,
+              ),
+            ),
           );
         }
         nodes.push(
