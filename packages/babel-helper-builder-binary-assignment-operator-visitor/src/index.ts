@@ -5,7 +5,7 @@ import type * as t from "@babel/types";
 
 export default function (opts: {
   build: (
-    left: t.Expression | t.PrivateName,
+    left: t.Expression | t.PrivateName | t.Super,
     right: t.Expression,
   ) => t.Expression;
   operator: t.BinaryExpression["operator"];

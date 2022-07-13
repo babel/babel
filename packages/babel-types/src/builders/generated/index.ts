@@ -96,7 +96,7 @@ export function breakStatement(
   });
 }
 export function callExpression(
-  callee: t.Expression | t.V8IntrinsicIdentifier,
+  callee: t.Expression | t.Super | t.V8IntrinsicIdentifier,
   _arguments: Array<
     t.Expression | t.SpreadElement | t.JSXNamespacedName | t.ArgumentPlaceholder
   >,
@@ -314,7 +314,7 @@ export function logicalExpression(
   });
 }
 export function memberExpression(
-  object: t.Expression,
+  object: t.Expression | t.Super,
   property: t.Expression | t.Identifier | t.PrivateName,
   computed: boolean = false,
   optional: true | false | null = null,
@@ -328,7 +328,7 @@ export function memberExpression(
   });
 }
 export function newExpression(
-  callee: t.Expression | t.V8IntrinsicIdentifier,
+  callee: t.Expression | t.Super | t.V8IntrinsicIdentifier,
   _arguments: Array<
     t.Expression | t.SpreadElement | t.JSXNamespacedName | t.ArgumentPlaceholder
   >,

@@ -279,7 +279,12 @@ const handle = {
         const { object } = regular;
         context = member.scope.maybeGenerateMemoised(object);
         if (context) {
-          regular.object = assignmentExpression("=", context, object);
+          regular.object = assignmentExpression(
+            "=",
+            context,
+            // object must not be Super when `context` is an identifier
+            object as t.Expression,
+          );
         }
       }
 

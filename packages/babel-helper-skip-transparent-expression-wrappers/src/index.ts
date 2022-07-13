@@ -43,8 +43,8 @@ export function skipTransparentExprWrappers(
 }
 
 export function skipTransparentExprWrapperNodes(
-  node: t.Expression,
-): t.Expression {
+  node: t.Expression | t.Super,
+): t.Expression | t.Super {
   while (isTransparentExprWrapper(node)) {
     node = node.expression;
   }
