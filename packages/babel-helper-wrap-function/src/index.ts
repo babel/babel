@@ -6,10 +6,29 @@ import {
   callExpression,
   functionExpression,
   isAssignmentPattern,
+  isArrowFunctionExpression,
+  isFunctionDeclaration,
   isRestElement,
   returnStatement,
 } from "@babel/types";
 import type * as t from "@babel/types";
+
+type ExpressionWrapperBuilder<ExtraBody extends t.Node[]> = (
+  replacements?: Parameters<ReturnType<typeof template.expression>>[0],
+) => t.CallExpression & {
+  callee: t.FunctionExpression & {
+    body: {
+      body: [
+        t.VariableDeclaration & {
+          declarations: [
+            { init: t.FunctionExpression | t.ArrowFunctionExpression },
+          ];
+        },
+        ...ExtraBody,
+      ];
+    };
+  };
+};
 
 const buildAnonymousExpressionWrapper = template.expression(`
   (function () {
@@ -18,7 +37,9 @@ const buildAnonymousExpressionWrapper = template.expression(`
       return REF.apply(this, arguments);
     };
   })()
-`);
+`) as ExpressionWrapperBuilder<
+  [t.ReturnStatement & { argument: t.FunctionExpression }]
+>;
 
 const buildNamedExpressionWrapper = template.expression(`
   (function () {
@@ -28,7 +49,9 @@ const buildNamedExpressionWrapper = template.expression(`
     }
     return NAME;
   })()
-`);
+`) as ExpressionWrapperBuilder<
+  [t.FunctionDeclaration, t.ReturnStatement & { argument: t.Identifier }]
+>;
 
 const buildDeclarationWrapper = template.statements(`
   function NAME(PARAMS) { return REF.apply(this, arguments); }
@@ -72,28 +95,21 @@ function plainFunction(
   noNewArrows: boolean,
   ignoreFunctionLength: boolean,
 ) {
-  const node = path.node;
-  const isDeclaration = path.isFunctionDeclaration();
-  // @ts-expect-error id is not in ArrowFunctionExpression
-  const functionId = node.id;
-  const wrapper = isDeclaration
-    ? buildDeclarationWrapper
-    : functionId
-    ? buildNamedExpressionWrapper
-    : buildAnonymousExpressionWrapper;
+  const { node } = path;
+  const isDeclaration = isFunctionDeclaration(node);
+  const isArrow = isArrowFunctionExpression(node);
 
-  if (path.isArrowFunctionExpression()) {
-    path.arrowFunctionToExpression({ noNewArrows });
-  }
-  // @ts-expect-error node is FunctionDeclaration|FunctionExpression
-  node.id = null;
-
-  if (isDeclaration) {
+  let functionId = null;
+  if (isArrow) {
+    (path as NodePath<typeof node>).arrowFunctionToExpression({ noNewArrows });
+  } else {
+    functionId = node.id;
+    node.id = null;
     node.type = "FunctionExpression";
   }
 
   const built = callExpression(callId, [
-    node as Exclude<t.Function, t.Method | t.FunctionDeclaration>,
+    node as Exclude<typeof node, t.FunctionDeclaration>,
   ]);
 
   const params: t.Identifier[] = [];
@@ -104,34 +120,35 @@ function plainFunction(
     params.push(path.scope.generateUidIdentifier("x"));
   }
 
-  const container = wrapper({
+  const wrapperArgs = {
     NAME: functionId || null,
     REF: path.scope.generateUidIdentifier(functionId ? functionId.name : "ref"),
     FUNCTION: built,
     PARAMS: params,
-  });
+  };
 
   if (isDeclaration) {
-    path.replaceWith((container as t.Statement[])[0]);
-    path.insertAfter((container as t.Statement[])[1]);
+    const container = buildDeclarationWrapper(wrapperArgs);
+    path.replaceWith(container[0]);
+    path.insertAfter(container[1]);
   } else {
-    // @ts-expect-error todo(flow->ts) separate `wrapper` for `isDeclaration` and `else` branches
-    const retFunction = container.callee.body.body[1].argument;
-    if (!functionId) {
+    let container;
+
+    if (functionId) {
+      container = buildNamedExpressionWrapper(wrapperArgs);
+    } else {
+      container = buildAnonymousExpressionWrapper(wrapperArgs);
+
+      const returnFn = container.callee.body.body[1].argument;
       nameFunction({
-        node: retFunction,
+        node: returnFn,
         parent: path.parent,
         scope: path.scope,
       });
+      functionId = returnFn.id;
     }
 
-    if (
-      !retFunction ||
-      retFunction.id ||
-      (!ignoreFunctionLength && params.length)
-    ) {
-      // we have an inferred function id or params so we need this wrapper
-      // @ts-expect-error todo(flow->ts) separate `wrapper` for `isDeclaration` and `else` branches
+    if (functionId || (!ignoreFunctionLength && params.length)) {
       path.replaceWith(container);
     } else {
       // we can omit this wrapper as the conditions it protects for do not apply
