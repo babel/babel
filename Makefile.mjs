@@ -125,6 +125,18 @@ target["clean-runtime-helpers"] = function () {
  * BUILD
  */
 
+target["use-cjs"] = function () {
+  node(["scripts/set-module-type.js", "script"]);
+
+  target["bootstrap"]();
+};
+
+target["use-esm"] = function () {
+  node(["scripts/set-module-type.js", "module"]);
+
+  target["bootstrap"]();
+};
+
 target["bootstrap-only"] = function () {
   target["clean-all"]();
 
@@ -151,6 +163,8 @@ target["build-standalone"] = function () {
 };
 
 target["build-bundle"] = function () {
+  node(["scripts/set-module-type.js"]);
+
   target["clean"]();
   target["clean-lib"]();
 
@@ -161,6 +175,8 @@ target["build-bundle"] = function () {
 };
 
 target["build-no-bundle"] = function () {
+  node(["scripts/set-module-type.js"]);
+
   target["clean"]();
   target["clean-lib"]();
 

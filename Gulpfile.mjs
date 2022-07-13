@@ -681,16 +681,6 @@ function watch() {
     "./packages/babel-helpers/src/helpers/*.js",
     gulp.task("generate-runtime-helpers")
   );
-}
-
-function watch() {
-  gulp.watch(defaultSourcesGlob, gulp.task("build-no-bundle-watch"));
-  gulp.watch(babelStandalonePluginConfigGlob, gulp.task("generate-standalone"));
-  gulp.watch(buildTypingsWatchGlob, gulp.task("generate-type-helpers"));
-  gulp.watch(
-    "./packages/babel-helpers/src/helpers/*.js",
-    gulp.task("generate-runtime-helpers")
-  );
   if (USE_ESM) {
     gulp.watch(
       cjsBundles.map(({ src }) => `./${src}/lib/**.js`),
