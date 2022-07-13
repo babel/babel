@@ -1,4 +1,3 @@
-const fs = require("fs");
 const semver = require("semver");
 const nodeVersion = process.versions.node;
 const supportsESMAndJestLightRunner = semver.satisfies(
@@ -8,12 +7,6 @@ const supportsESMAndJestLightRunner = semver.satisfies(
   "^12.22 || ^13.7 || >=14.17"
 );
 const isPublishBundle = process.env.IS_PUBLISH;
-
-let LIB_USE_ESM = false;
-try {
-  const type = fs.readFileSync(`${__dirname}/.module-type`, "utf-8").trim();
-  LIB_USE_ESM = type === "module";
-} catch (_) {}
 
 module.exports = {
   runner: supportsESMAndJestLightRunner ? "jest-light-runner" : "jest-runner",
@@ -43,11 +36,6 @@ module.exports = {
     // Some tests require internal files of bundled packages, which are not available
     // in production builds. They are marked using the .skip-bundled.js extension.
     ...(isPublishBundle ? ["\\.skip-bundled\\.js$"] : []),
-    ...(LIB_USE_ESM ? ["/babel-helpers/"] : []),
-    // Ignore @babel/standalone test in coverage testing because it is not built
-    ...(process.env.TEST_TYPE === "cov"
-      ? ["<rootDir>/packages/babel-standalone/"]
-      : []),
   ],
   testEnvironment: "node",
   transformIgnorePatterns: [
