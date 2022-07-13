@@ -6,7 +6,6 @@ import {
   callExpression,
   functionExpression,
   isAssignmentPattern,
-  isArrowFunctionExpression,
   isFunctionDeclaration,
   isRestElement,
   returnStatement,
@@ -95,18 +94,20 @@ function plainFunction(
   noNewArrows: boolean,
   ignoreFunctionLength: boolean,
 ) {
-  const { node } = path;
-  const isDeclaration = isFunctionDeclaration(node);
-  const isArrow = isArrowFunctionExpression(node);
-
   let functionId = null;
-  if (isArrow) {
-    (path as NodePath<typeof node>).arrowFunctionToExpression({ noNewArrows });
+  let node;
+  if (path.isArrowFunctionExpression()) {
+    path = path.arrowFunctionToExpression({ noNewArrows });
+    node = path.node as t.FunctionDeclaration | t.FunctionExpression;
   } else {
-    functionId = node.id;
-    node.id = null;
-    node.type = "FunctionExpression";
+    node = path.node as t.FunctionDeclaration | t.FunctionExpression;
   }
+
+  const isDeclaration = isFunctionDeclaration(node);
+
+  functionId = node.id;
+  node.id = null;
+  node.type = "FunctionExpression";
 
   const built = callExpression(callId, [
     node as Exclude<typeof node, t.FunctionDeclaration>,

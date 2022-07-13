@@ -4,4 +4,4 @@ var _this = this;
 babelHelpers.asyncToGenerator(function* () {
   babelHelpers.newArrowCheck(this, _this);
   return 2;
-});
+}).bind(this);
