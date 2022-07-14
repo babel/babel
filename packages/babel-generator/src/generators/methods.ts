@@ -12,9 +12,13 @@ export function _params(
   this.token(")");
 
   if (node.returnType) {
-    this._noLineTerminator = true;
-    this.print(node.returnType, node);
-    this._noLineTerminator = false;
+    if (node.type === "ArrowFunctionExpression") {
+      this._noLineTerminator = true;
+      this.print(node.returnType, node);
+      this._noLineTerminator = false;
+    } else {
+      this.print(node.returnType, node);
+    }
   }
 }
 
