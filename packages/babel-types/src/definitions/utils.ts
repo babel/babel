@@ -52,7 +52,7 @@ export type Validator = (
 
 export type FieldOptions = {
   default?: string | number | boolean | [];
-  optional?: boolean | "validateFn";
+  optional?: boolean;
   validate?: Validator;
 };
 

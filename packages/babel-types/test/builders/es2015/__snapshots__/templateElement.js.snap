@@ -42,7 +42,7 @@ Object {
   "tail": false,
   "type": "TemplateElement",
   "value": Object {
-    "cooked": undefined,
+    "cooked": null,
     "raw": "\\\\u",
   },
 }
