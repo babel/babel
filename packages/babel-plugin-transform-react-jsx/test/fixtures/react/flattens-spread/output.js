@@ -15,3 +15,13 @@ React.createElement("img", {
 React.createElement("blockquote", {
   cite
 }, items);
+
+/*#__PURE__*/
+React.createElement("pre", {
+  ["__proto__"]: null
+});
+
+/*#__PURE__*/
+React.createElement("code", {
+  [__proto__]: null
+});

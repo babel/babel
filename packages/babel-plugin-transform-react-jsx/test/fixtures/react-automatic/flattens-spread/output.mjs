@@ -22,3 +22,13 @@ _jsx("blockquote", {
   cite,
   children: items
 });
+
+/*#__PURE__*/
+_jsx("pre", {
+  ["__proto__"]: null
+});
+
+/*#__PURE__*/
+_jsx("code", {
+  [__proto__]: null
+});

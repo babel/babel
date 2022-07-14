@@ -39,6 +39,15 @@ const get = (pass: PluginPass, name: string) =>
 const set = (pass: PluginPass, name: string, v: any) =>
   pass.set(`@babel/plugin-react-jsx/${name}`, v);
 
+function hasProto(node: t.ObjectExpression) {
+  return node.properties.some(
+    value =>
+      t.isObjectProperty(value, { computed: false }) &&
+      (t.isIdentifier(value.key, { name: "__proto__" }) ||
+        t.isStringLiteral(value.key, { value: "__proto__" })),
+  );
+}
+
 export interface Options {
   filter?: (node: t.Node, pass: PluginPass) => boolean;
   importSource?: string;
@@ -422,7 +431,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       if (t.isJSXSpreadAttribute(attribute.node)) {
         const arg = attribute.node.argument;
         // Collect properties into props array if spreading object expression
-        if (t.isObjectExpression(arg)) {
+        if (t.isObjectExpression(arg) && !hasProto(arg)) {
           array.push(...arg.properties);
         } else {
           array.push(t.spreadElement(arg));
