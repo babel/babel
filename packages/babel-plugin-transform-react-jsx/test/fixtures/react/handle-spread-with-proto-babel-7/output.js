@@ -11,9 +11,8 @@ React.createElement("div", {
 }, contents);
 
 /*#__PURE__*/
-React.createElement("img", {
-  alt: "",
-  ...{
-    __proto__
-  }
-});
+React.createElement("img", babelHelpers.extends({
+  alt: ""
+}, {
+  __proto__
+}));
