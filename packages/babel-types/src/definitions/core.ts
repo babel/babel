@@ -1962,20 +1962,6 @@ defineType("TaggedTemplateExpression", {
   },
 });
 
-function templateElementCookedValidator(node: t.TemplateElement) {
-  const raw = node.value.raw;
-  if (node.value.cooked != null) {
-    return;
-  }
-
-  let cooked = null;
-  try {
-    cooked = unraw(raw);
-  } catch (error) {}
-  node.value.cooked = cooked;
-}
-templateElementCookedValidator.type = "{ raw: string; cooked?: string }"; // hack
-
 defineType("TemplateElement", {
   builder: ["value", "tail"],
   fields: {
@@ -1990,7 +1976,18 @@ defineType("TemplateElement", {
             optional: true,
           },
         }),
-        templateElementCookedValidator,
+        function templateElementCookedValidator(node: t.TemplateElement) {
+          const raw = node.value.raw;
+          if (node.value.cooked != null) {
+            return;
+          }
+
+          let cooked = null;
+          try {
+            cooked = unraw(raw);
+          } catch (error) {}
+          node.value.cooked = cooked;
+        },
       ),
     },
     tail: {
