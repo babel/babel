@@ -940,7 +940,7 @@ export interface TaggedTemplateExpression extends BaseNode {
 
 export interface TemplateElement extends BaseNode {
   type: "TemplateElement";
-  value: { raw: string; cooked?: any };
+  value: { raw: string; cooked?: string };
   tail: boolean;
 }
 

@@ -1962,6 +1962,32 @@ defineType("TaggedTemplateExpression", {
   },
 });
 
+function templateElementCookedValidator(
+  node: t.TemplateElement,
+  key: string,
+  val: string,
+) {
+  if (val != undefined) {
+    if (typeof val !== "string") {
+      throw new TypeError(
+        `Property ${key} expected type of string but got ${typeof val}`,
+      );
+    }
+    return;
+  }
+
+  if (typeof node.value !== "object" || typeof node.value.raw !== "string") {
+    return;
+  }
+
+  let cooked;
+  try {
+    cooked = unraw(node.value.raw);
+  } catch (error) {}
+  node.value.cooked = cooked;
+}
+templateElementCookedValidator.type = "string"; // hack
+
 defineType("TemplateElement", {
   builder: ["value", "tail"],
   fields: {
@@ -1971,29 +1997,7 @@ defineType("TemplateElement", {
           validate: assertValueType("string"),
         },
         cooked: {
-          validate: function (node: t.TemplateElement, key, val) {
-            if (val != undefined) {
-              if (typeof val !== "string") {
-                throw new TypeError(
-                  `Property ${key} expected type of string but got ${typeof val}`,
-                );
-              }
-              return;
-            }
-
-            if (
-              typeof node.value !== "object" ||
-              typeof node.value.raw !== "string"
-            ) {
-              return;
-            }
-
-            let cooked;
-            try {
-              cooked = unraw(node.value.raw);
-            } catch (error) {}
-            node.value.cooked = cooked;
-          },
+          validate: templateElementCookedValidator,
           optional: "validateFn",
         },
       }),
