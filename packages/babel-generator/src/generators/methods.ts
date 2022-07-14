@@ -11,7 +11,15 @@ export function _params(
   this._parameters(node.params, node);
   this.token(")");
 
-  this.print(node.returnType, node);
+  if (node.returnType) {
+    if (node.type === "ArrowFunctionExpression") {
+      this._noLineTerminator = true;
+      this.print(node.returnType, node);
+      this._noLineTerminator = false;
+    } else {
+      this.print(node.returnType, node);
+    }
+  }
 }
 
 export function _parameters(
