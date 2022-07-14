@@ -11,7 +11,11 @@ export function _params(
   this._parameters(node.params, node);
   this.token(")");
 
-  this.print(node.returnType, node);
+  if (node.returnType) {
+    this._noLineTerminator = true;
+    this.print(node.returnType, node);
+    this._noLineTerminator = false;
+  }
 }
 
 export function _parameters(
