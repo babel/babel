@@ -19,6 +19,10 @@ describe("builders", function () {
         ).toThrowErrorMatchingSnapshot();
 
         expect(() => t.templateElement("foo")).toThrowErrorMatchingSnapshot();
+
+        expect(t.templateElement({ raw: "\\u" })).toMatchSnapshot();
+
+        expect(t.templateElement({ raw: "\\x42" })).toMatchSnapshot();
       });
     });
     describe("templateLiteral", function () {

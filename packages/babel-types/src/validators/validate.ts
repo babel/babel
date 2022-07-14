@@ -27,7 +27,7 @@ export function validateField(
   field: FieldOptions | undefined | null,
 ): void {
   if (!field?.validate) return;
-  if (field.optional && val == null) return;
+  if (field.optional === true && val == null) return;
 
   field.validate(node, key, val);
 }

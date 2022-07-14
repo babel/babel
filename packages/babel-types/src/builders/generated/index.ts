@@ -796,7 +796,7 @@ export function taggedTemplateExpression(
   });
 }
 export function templateElement(
-  value: { raw: string; cooked?: string },
+  value: { raw: string; cooked?: any },
   tail: boolean = false,
 ): t.TemplateElement {
   return validateNode<t.TemplateElement>({

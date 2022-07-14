@@ -3753,6 +3753,7 @@ __metadata:
     chalk: ^4.1.0
     glob: ^7.1.7
     to-fast-properties: "condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0"
+    unraw: ^2.0.1
   languageName: unknown
   linkType: soft
 
@@ -15048,6 +15049,13 @@ fsevents@^1.2.7:
     json-stable-stringify-without-jsonify: ^1.0.1
     through2-filter: ^3.0.0
   checksum: 65e433e68e46640e9283dbb022493c8d79ed1dac47807fe751dfe3bd50586927f63ad880ce9e01c2f85911f3caca48d04731aff6f07869434d5f76ecfe478559
+  languageName: node
+  linkType: hard
+
+"unraw@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "unraw@npm:2.0.1"
+  checksum: af9a9d2f6e420cb4f52fe2f1f5982e6b0be95da640d6ae8d6d9ff631d864771793cb9fe7e2a16ef1ce631b94065f4438e7bd7f1701076fc69296edc4e704d42f
   languageName: node
   linkType: hard
 

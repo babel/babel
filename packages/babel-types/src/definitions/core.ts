@@ -2,6 +2,7 @@ import is from "../validators/is";
 import isValidIdentifier from "../validators/isValidIdentifier";
 import { isKeyword, isReservedWord } from "@babel/helper-validator-identifier";
 import type * as t from "..";
+import { unraw } from "unraw";
 
 import {
   BINARY_OPERATORS,
@@ -1970,8 +1971,30 @@ defineType("TemplateElement", {
           validate: assertValueType("string"),
         },
         cooked: {
-          validate: assertValueType("string"),
-          optional: true,
+          validate: function (node: t.TemplateElement, key, val) {
+            if (val != undefined) {
+              if (typeof val !== "string") {
+                throw new TypeError(
+                  `Property ${key} expected type of string but got ${typeof val}`,
+                );
+              }
+              return;
+            }
+
+            if (
+              typeof node.value !== "object" ||
+              typeof node.value.raw !== "string"
+            ) {
+              return;
+            }
+
+            let cooked;
+            try {
+              cooked = unraw(node.value.raw);
+            } catch (error) {}
+            node.value.cooked = cooked;
+          },
+          optional: "validateFn",
         },
       }),
     },

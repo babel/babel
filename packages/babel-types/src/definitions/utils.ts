@@ -51,8 +51,8 @@ export type Validator = (
   ((node: t.Node, key: string, val: any) => void);
 
 export type FieldOptions = {
-  default?: any;
-  optional?: boolean;
+  default?: string | number | boolean | [];
+  optional?: boolean | "validateFn";
   validate?: Validator;
 };
 
