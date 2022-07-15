@@ -89,7 +89,7 @@ describe("@babel/standalone", () => {
       plugins: ["transform-arrow-functions"],
     }).code;
     // Transforms arrow syntax but NOT "const".
-    expect(output).q(
+    expect(output).toBe(
       "const getMessage = function () {\n" + '  return "Hello World";\n' + "};",
     );
   });

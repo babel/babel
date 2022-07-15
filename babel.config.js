@@ -102,6 +102,7 @@ module.exports = function (api) {
         "packages/babel-compat-data",
         "packages/babel-runtime/regenerator"
       );
+      targets = { ie: 7 };
       break;
     case "rollup":
       convertESM = false;
