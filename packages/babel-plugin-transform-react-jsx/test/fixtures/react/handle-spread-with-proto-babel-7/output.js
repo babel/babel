@@ -1,14 +1,14 @@
 var __proto__ = null;
 
 /*#__PURE__*/
-React.createElement("p", {
+React.createElement("p", babelHelpers.extends({
   __proto__: null
-}, "text");
+}), "text");
 
 /*#__PURE__*/
-React.createElement("div", {
+React.createElement("div", babelHelpers.extends({
   "__proto__": null
-}, contents);
+}), contents);
 
 /*#__PURE__*/
 React.createElement("img", babelHelpers.extends({

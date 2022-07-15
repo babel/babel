@@ -727,7 +727,17 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
           }
 
           if (objs.length === 1) {
-            return objs[0];
+            if (
+              !(
+                t.isSpreadElement(props[0]) &&
+                // If an object expression is spread element's argument
+                // it is very likely to contain __proto__ and we should stop
+                // optimizing spread element
+                t.isObjectExpression(props[0].argument)
+              )
+            ) {
+              return objs[0];
+            }
           }
 
           // looks like we have multiple objects
@@ -764,7 +774,12 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         accumulateAttribute(props, attr);
       }
 
-      return props.length === 1 && t.isSpreadElement(props[0])
+      return props.length === 1 &&
+        t.isSpreadElement(props[0]) &&
+        // If an object expression is spread element's argument
+        // it is very likely to contain __proto__ and we should stop
+        // optimizing spread element
+        !t.isObjectExpression(props[0].argument)
         ? props[0].argument
         : props.length > 0
         ? t.objectExpression(props)
