@@ -7514,7 +7514,7 @@ function print(msg) {
 
 function exec(executable, args, cwd, inheritStdio = true) {
   print(
-    `${(executable.replaceAll(YARN_PATH), "yarn").replaceAll(
+    `${executable.replaceAll(YARN_PATH, "yarn").replaceAll(
       NODE_PATH,
       "node"
     )} ${args.join(" ")}`
