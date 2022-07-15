@@ -11,7 +11,7 @@ export function _params(
   this._parameters(node.params, node);
   this.token(")");
 
-  this.print(node.returnType, node);
+  this.print(node.returnType, node, node.type === "ArrowFunctionExpression");
 }
 
 export function _parameters(

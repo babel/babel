@@ -503,7 +503,7 @@ class Printer {
     }
   }
 
-  print(node: t.Node | null, parent?: t.Node) {
+  print(node: t.Node | null, parent?: t.Node, noLineTerminator?: boolean) {
     if (!node) return;
 
     const nodeType = node.type;
@@ -554,22 +554,18 @@ class Printer {
     }
     if (shouldPrintParens) this.token("(");
 
-    let noLineTerminator;
-    if (nodeType === "TSTypeAnnotation" || nodeType === "TypeAnnotation") {
-      noLineTerminator = this._noLineTerminator;
-      this._noLineTerminator = true;
-    }
-
     this._printLeadingComments(node);
 
     const loc = nodeType === "Program" || nodeType === "File" ? null : node.loc;
 
     this.withSource("start", loc, printMethod.bind(this, node, parent));
 
-    this._printTrailingComments(node);
-
-    if (noLineTerminator !== undefined) {
-      this._noLineTerminator = noLineTerminator;
+    if (noLineTerminator && !this._noLineTerminator) {
+      this._noLineTerminator = true;
+      this._printTrailingComments(node);
+      this._noLineTerminator = false;
+    } else {
+      this._printTrailingComments(node);
     }
 
     if (shouldPrintParens) this.token(")");
