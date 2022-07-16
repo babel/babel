@@ -114,6 +114,9 @@ jobs:
         env:
           BABEL_8_BREAKING: false
           STRIP_BABEL_8_FLAG: true
+      - name: Build Makefile.js
+        run: |
+          node ./scripts/pack-script.js
       - name: Ensure cwd does not contain uncommitted changes
         run: |
           node ./scripts/assert-dir-git-clean.js

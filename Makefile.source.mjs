@@ -16,16 +16,15 @@ const NODE_PATH = process.execPath; // `yarn node` is so slow on Windows
 
 shell.config.verbose = true;
 
-function print(msg) {
-  console.log(msg);
+function print(...msgs) {
+  console.log.apply(console, msgs);
 }
 
 function exec(executable, args, cwd, inheritStdio = true) {
   print(
-    `${(executable.replaceAll(YARN_PATH), "yarn").replaceAll(
-      NODE_PATH,
-      "node"
-    )} ${args.join(" ")}`
+    `${executable
+      .replaceAll(YARN_PATH, "yarn")
+      .replaceAll(NODE_PATH, "node")} ${args.join(" ")}`
   );
 
   try {

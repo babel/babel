@@ -3,11 +3,12 @@ import path from "path";
 import { rollup } from "rollup";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
+import { babel } from "@rollup/plugin-babel";
 import { writeFileSync } from "fs";
 
 const root = fileURLToPath(path.dirname(import.meta.url));
 
-pack("../Makefile.source.mjs", "../Makefile.mjs", [
+pack("../Makefile.source.mjs", "../Makefile.js", [
   "node_modules/shelljs/src/*.js",
 ]);
 
@@ -23,10 +24,26 @@ async function pack(inputPath, outputPath, dynamicRequireTargets) {
       commonjs({
         dynamicRequireTargets: dynamicRequireTargets,
       }),
+      babel({
+        babelrc: false,
+        babelHelpers: "bundled",
+        exclude: ["node_modules/core-js/**"],
+        parserOpts: { sourceType: "module" },
+        presets: [
+          [
+            "@babel/preset-env",
+            {
+              targets: { node: 6 },
+              useBuiltIns: "usage",
+              corejs: "3.23",
+            },
+          ],
+        ],
+      }),
     ],
   });
   const result = await bundle.generate({
-    format: "esm",
+    format: "cjs",
   });
 
   const output = `/* eslint-disable */

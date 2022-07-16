@@ -14,7 +14,7 @@ COMMA_SEPARATED_SOURCES = $(subst $(SPACE),$(COMMA),$(SOURCES))
 
 YARN := yarn
 NODE := $(YARN) node
-MAKEJS := node Makefile.mjs
+MAKEJS := node Makefile.js
 
 
 .PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap use-esm use-cjs
