@@ -90,7 +90,7 @@ prepublish-build:
 	$(MAKEJS) prepublish-build
 
 prepublish:
-	$(MAKEJS) prepublish-build
+	$(MAKEJS) prepublish
 
 bootstrap-only:
 	$(MAKEJS) bootstrap-only

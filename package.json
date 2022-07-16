@@ -98,7 +98,7 @@
     "yarn": ">=1.4.0"
   },
   "lint-staged": {
-    "*.{js,ts}": [
+    "*.{js,cjs,mjs,ts}": [
       "eslint --format=codeframe"
     ]
   },

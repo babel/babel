@@ -7,9 +7,30 @@ import { writeFileSync } from "fs";
  * @type {import("shelljs")}
  */
 const shell = global;
-const target = global.target;
-
+const target = new Proxy(global.target, {
+  // eslint-disable-next-line no-unused-vars
+  set: function (obj, prop, value) {
+    return Reflect.set(...arguments);
+  },
+  // eslint-disable-next-line no-unused-vars
+  get: function (obj, prop, receiver) {
+    print(`make ${prop}`);
+    return Reflect.get(...arguments);
+  },
+});
 const SOURCES = ["packages", "codemods", "eslint"];
+
+const EslintArgs = [
+  "eslint",
+  "scripts",
+  "benchmark",
+  ...SOURCES,
+  "*.{js,cjs,mjs,ts}",
+  "--format",
+  "codeframe",
+  "--ext",
+  ".js,.cjs,.mjs,.ts",
+];
 
 const YARN_PATH = shell.which("yarn").stdout;
 const NODE_PATH = process.execPath; // `yarn node` is so slow on Windows
@@ -150,7 +171,7 @@ target["bootstrap"] = function () {
 };
 
 target["build"] = function () {
-  target["build-bundle"]();
+  target["build-no-bundle"]();
 
   if (process.env.BABEL_COVERAGE != "true") {
     target["build-standalone"]();
@@ -162,10 +183,10 @@ target["build-standalone"] = function () {
 };
 
 target["build-bundle"] = function () {
-  node(["scripts/set-module-type.js"]);
-
   target["clean"]();
   target["clean-lib"]();
+
+  node(["scripts/set-module-type.js"]);
 
   yarn(["gulp", "build"]);
 
@@ -174,10 +195,10 @@ target["build-bundle"] = function () {
 };
 
 target["build-no-bundle"] = function () {
-  node(["scripts/set-module-type.js"]);
-
   target["clean"]();
   target["clean-lib"]();
+
+  node(["scripts/set-module-type.js"]);
 
   env(
     () => {
@@ -203,6 +224,22 @@ target["build-dist"] = function () {
 
 target["build-plugin-transform-runtime-dist"] = function () {
   node(["scripts/build-dist.js"], "packages/babel-plugin-transform-runtime");
+};
+
+target["prepublish"] = function () {
+  target["bootstrap-only"]();
+  target["prepublish-build"]();
+
+  env(
+    () => {
+      target["test"]();
+    },
+    {
+      IS_PUBLISH: "true",
+    }
+  );
+
+  node(["scripts/set-module-type.js", "clean"]);
 };
 
 target["prepublish-build"] = function () {
@@ -268,10 +305,6 @@ target["generate-type-helpers"] = function () {
   yarn(["gulp", "generate-type-helpers"]);
 };
 
-target["clone-license"] = function () {
-  node(["scripts/clone-license.js"]);
-};
-
 target["build-typescript-legacy-typings"] = function () {
   writeFileSync(
     "packages/babel-types/lib/index-legacy.d.ts",
@@ -283,6 +316,10 @@ target["build-typescript-legacy-typings"] = function () {
   );
 };
 
+target["clone-license"] = function () {
+  node(["scripts/clone-license.js"]);
+};
+
 /**
  * DEV
  */
@@ -290,17 +327,7 @@ target["build-typescript-legacy-typings"] = function () {
 target["lint"] = function () {
   env(
     () => {
-      yarn([
-        "eslint",
-        "scripts",
-        "benchmark",
-        ...SOURCES,
-        "*.{js,cjs,mjs,ts}",
-        "--format",
-        "codeframe",
-        "--ext",
-        ".js,.cjs,.mjs,.ts",
-      ]);
+      yarn(EslintArgs);
     },
     {
       BABEL_ENV: "test",
@@ -314,18 +341,7 @@ target["fix"] = function () {
 };
 
 target["fix-js"] = function () {
-  yarn([
-    "eslint",
-    "scripts",
-    "benchmark",
-    ...SOURCES,
-    "*.{js,cjs,mjs,ts}",
-    "--format",
-    "codeframe",
-    "--ext",
-    ".js,.cjs,.mjs,.ts",
-    "--fix",
-  ]);
+  yarn([...EslintArgs, "--fix"]);
 };
 
 target["fix-json"] = function () {
@@ -366,8 +382,9 @@ target["test-only"] = function (args = []) {
  */
 
 target["new-version-checklist"] = function () {
+  // eslint-disable-next-line no-constant-condition
   if (0) {
-    throw new Error(
+    console.log(
       `
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -379,6 +396,8 @@ target["new-version-checklist"] = function () {
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     `.trim()
     );
+    // eslint-disable-next-line no-process-exit
+    process.exit(1);
   }
 };
 
