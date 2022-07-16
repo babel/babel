@@ -1,0 +1,20 @@
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+import fs from "fs";
+import { parse as acornParse } from "acorn";
+
+describe("@babel/standalone", () => {
+  it("should be built into ES5", () => {
+    const babelStandloneSource = fs.readFileSync(
+      require.resolve("../babel.js"),
+      { encoding: "utf8" },
+    );
+
+    expect(() => {
+      acornParse(babelStandloneSource, {
+        ecmaVersion: 5,
+        sourceType: "script",
+      });
+    }).not.toThrow();
+  });
+});
