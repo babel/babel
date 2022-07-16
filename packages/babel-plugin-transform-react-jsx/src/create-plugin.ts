@@ -42,7 +42,7 @@ const set = (pass: PluginPass, name: string, v: any) =>
 function hasProto(node: t.ObjectExpression) {
   return node.properties.some(
     value =>
-      t.isObjectProperty(value, { computed: false }) &&
+      t.isObjectProperty(value, { computed: false, shorthand: false }) &&
       (t.isIdentifier(value.key, { name: "__proto__" }) ||
         t.isStringLiteral(value.key, { value: "__proto__" })),
   );
