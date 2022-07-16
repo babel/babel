@@ -813,7 +813,11 @@ export interface ExportAllDeclaration extends BaseNode {
 
 export interface ExportDefaultDeclaration extends BaseNode {
   type: "ExportDefaultDeclaration";
-  declaration: FunctionDeclaration | ClassDeclaration | Expression;
+  declaration:
+    | TSDeclareFunction
+    | FunctionDeclaration
+    | ClassDeclaration
+    | Expression;
   exportKind?: "value" | null;
 }
 
@@ -6722,6 +6726,7 @@ export interface ParentMaps {
   TSDeclareFunction:
     | BlockStatement
     | DoWhileStatement
+    | ExportDefaultDeclaration
     | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
