@@ -265,6 +265,10 @@ target["generate-tsconfig"] = function () {
   node(["scripts/generators/archived-libs-typings.js"]);
 };
 
+target["generate-type-helpers"] = function () {
+  yarn(["gulp", "generate-type-helpers"]);
+};
+
 target["clone-license"] = function () {
   node(["scripts/clone-license.js"]);
 };
@@ -356,4 +360,39 @@ target["test"] = function () {
 
 target["test-only"] = function (args = []) {
   yarn(["jest", ...args]);
+};
+
+/**
+ * PUBLISH
+ */
+
+target["new-version-checklist"] = function () {
+  if (0) {
+    throw new Error(
+      `
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!                                                   !!!!!!
+!!!!!!         Write any message that should             !!!!!!
+!!!!!!            block the release here                 !!!!!!
+!!!!!!                                                   !!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    `.trim()
+    );
+  }
+};
+
+target["new-version"] = function () {
+  target["new-version-checklist"]();
+
+  exec("git", ["pull", "--rebase"]);
+  yarn(["release-tool", "version", "-f", "@babel/standalone"]);
+};
+
+target["new-version"] = function () {
+  target["new-version-checklist"]();
+
+  exec("git", ["pull", "--rebase"]);
+  yarn(["release-tool", "version", "-f", "@babel/standalone"]);
 };
