@@ -1978,9 +1978,6 @@ defineType("TemplateElement", {
         }),
         function templateElementCookedValidator(node: t.TemplateElement) {
           const raw = node.value.raw;
-          if (node.value.cooked != null) {
-            return;
-          }
 
           let cooked = null;
           try {

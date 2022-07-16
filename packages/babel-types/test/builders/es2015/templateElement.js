@@ -23,6 +23,10 @@ describe("builders", function () {
         expect(t.templateElement({ raw: "\\u" })).toMatchSnapshot();
 
         expect(t.templateElement({ raw: "\\x42" })).toMatchSnapshot();
+
+        expect(
+          t.templateElement({ raw: "\\x42", cooked: "123" }),
+        ).toMatchSnapshot();
       });
     });
     describe("templateLiteral", function () {

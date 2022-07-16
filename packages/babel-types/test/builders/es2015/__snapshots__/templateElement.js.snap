@@ -59,6 +59,17 @@ Object {
 }
 `;
 
+exports[`builders es2015 templateElement should validate 8`] = `
+Object {
+  "tail": false,
+  "type": "TemplateElement",
+  "value": Object {
+    "cooked": "B",
+    "raw": "\\\\x42",
+  },
+}
+`;
+
 exports[`builders es2015 templateLiteral should validate 1`] = `
 Object {
   "expressions": Array [],
