@@ -135,6 +135,13 @@ export function unwrapFunctionEnvironment(this: NodePath) {
   hoistFunctionEnvironment(this);
 }
 
+function setType<N extends t.Node, T extends N["type"]>(
+  path: NodePath<N>,
+  type: T,
+): asserts path is NodePath<Extract<N, { type: T }>> {
+  path.node.type = type;
+}
+
 /**
  * Convert a given arrow function into a normal ES5 function expression.
  */
@@ -151,7 +158,7 @@ export function arrowFunctionToExpression(
     specCompliant?: boolean | void;
     noNewArrows?: boolean;
   } = {},
-) {
+): NodePath<Exclude<t.Function, t.Method | t.ArrowFunctionExpression>> {
   if (!this.isArrowFunctionExpression()) {
     throw (this as NodePath).buildCodeFrameError(
       "Cannot convert non-arrow function to a function expression.",
@@ -166,7 +173,8 @@ export function arrowFunctionToExpression(
 
   // @ts-expect-error TS requires explicit fn type annotation
   fn.ensureBlock();
-  fn.node.type = "FunctionExpression";
+  setType(fn, "FunctionExpression");
+
   if (!noNewArrows) {
     const checkBinding = thisBinding
       ? null
@@ -178,7 +186,7 @@ export function arrowFunctionToExpression(
       });
     }
 
-    (fn.get("body") as NodePath<t.BlockStatement>).unshiftContainer(
+    fn.get("body").unshiftContainer(
       "body",
       expressionStatement(
         callExpression(this.hub.addHelper("newArrowCheck"), [
@@ -200,7 +208,11 @@ export function arrowFunctionToExpression(
         [checkBinding ? identifier(checkBinding.name) : thisExpression()],
       ),
     );
+
+    return fn.get("callee.object");
   }
+
+  return fn;
 }
 
 const getSuperCallsVisitor = mergeVisitors<{
