@@ -36,6 +36,10 @@ module.exports = {
     // Some tests require internal files of bundled packages, which are not available
     // in production builds. They are marked using the .skip-bundled.js extension.
     ...(isPublishBundle ? ["\\.skip-bundled\\.js$"] : []),
+    // Ignore @babel/standalone test in coverage testing because it is not built
+    ...(process.env.TEST_TYPE === "cov"
+      ? ["<rootDir>/packages/babel-standalone/"]
+      : []),
   ],
   testEnvironment: "node",
   transformIgnorePatterns: [
