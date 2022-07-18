@@ -14,11 +14,22 @@ _jsx("div", { ...props,
 _jsx("img", {
   alt: "",
   src,
-  title
+  title,
+  __proto__
 });
 
 /*#__PURE__*/
 _jsx("blockquote", {
   cite,
   children: items
+});
+
+/*#__PURE__*/
+_jsx("pre", {
+  ["__proto__"]: null
+});
+
+/*#__PURE__*/
+_jsx("code", {
+  [__proto__]: null
 });

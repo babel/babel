@@ -39,6 +39,15 @@ const get = (pass: PluginPass, name: string) =>
 const set = (pass: PluginPass, name: string, v: any) =>
   pass.set(`@babel/plugin-react-jsx/${name}`, v);
 
+function hasProto(node: t.ObjectExpression) {
+  return node.properties.some(
+    value =>
+      t.isObjectProperty(value, { computed: false, shorthand: false }) &&
+      (t.isIdentifier(value.key, { name: "__proto__" }) ||
+        t.isStringLiteral(value.key, { value: "__proto__" })),
+  );
+}
+
 export interface Options {
   filter?: (node: t.Node, pass: PluginPass) => boolean;
   importSource?: string;
@@ -422,7 +431,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       if (t.isJSXSpreadAttribute(attribute.node)) {
         const arg = attribute.node.argument;
         // Collect properties into props array if spreading object expression
-        if (t.isObjectExpression(arg)) {
+        if (t.isObjectExpression(arg) && !hasProto(arg)) {
           array.push(...arg.properties);
         } else {
           array.push(t.spreadElement(arg));
@@ -718,7 +727,17 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
           }
 
           if (objs.length === 1) {
-            return objs[0];
+            if (
+              !(
+                t.isSpreadElement(props[0]) &&
+                // If an object expression is spread element's argument
+                // it is very likely to contain __proto__ and we should stop
+                // optimizing spread element
+                t.isObjectExpression(props[0].argument)
+              )
+            ) {
+              return objs[0];
+            }
           }
 
           // looks like we have multiple objects
@@ -755,7 +774,12 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         accumulateAttribute(props, attr);
       }
 
-      return props.length === 1 && t.isSpreadElement(props[0])
+      return props.length === 1 &&
+        t.isSpreadElement(props[0]) &&
+        // If an object expression is spread element's argument
+        // it is very likely to contain __proto__ and we should stop
+        // optimizing spread element
+        !t.isObjectExpression(props[0].argument)
         ? props[0].argument
         : props.length > 0
         ? t.objectExpression(props)
