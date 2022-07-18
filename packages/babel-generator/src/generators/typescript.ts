@@ -259,8 +259,8 @@ export function tsPrintFunctionOrConstructorType(
 }
 
 export function TSTypeReference(this: Printer, node: t.TSTypeReference) {
-  this.print(node.typeName, node);
-  this.print(node.typeParameters, node);
+  this.print(node.typeName, node, true);
+  this.print(node.typeParameters, node, true);
 }
 
 export function TSTypePredicate(this: Printer, node: t.TSTypePredicate) {
@@ -317,7 +317,8 @@ function tsPrintBraced(printer: Printer, members: t.Node[], node: t.Node) {
 }
 
 export function TSArrayType(this: Printer, node: t.TSArrayType) {
-  this.print(node.elementType, node);
+  this.print(node.elementType, node, true);
+
   this.token("[]");
 }
 
@@ -408,7 +409,7 @@ export function TSIndexedAccessType(
   this: Printer,
   node: t.TSIndexedAccessType,
 ) {
-  this.print(node.objectType, node);
+  this.print(node.objectType, node, true);
   this.token("[");
   this.print(node.indexType, node);
   this.token("]");

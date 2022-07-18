@@ -11,7 +11,7 @@ export function ArrayTypeAnnotation(
   this: Printer,
   node: t.ArrayTypeAnnotation,
 ) {
-  this.print(node.elementType, node);
+  this.print(node.elementType, node, true);
   this.token("[");
   this.token("]");
 }
@@ -357,7 +357,7 @@ export function FunctionTypeParam(this: Printer, node: t.FunctionTypeParam) {
 
 export function InterfaceExtends(this: Printer, node: t.InterfaceExtends) {
   this.print(node.id, node);
-  this.print(node.typeParameters, node);
+  this.print(node.typeParameters, node, true);
 }
 
 export {
@@ -758,7 +758,7 @@ export function VoidTypeAnnotation(this: Printer) {
 }
 
 export function IndexedAccessType(this: Printer, node: t.IndexedAccessType) {
-  this.print(node.objectType, node);
+  this.print(node.objectType, node, true);
   this.token("[");
   this.print(node.indexType, node);
   this.token("]");
