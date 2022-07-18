@@ -23,6 +23,27 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.18.9 (2022-07-18)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-modules-systemjs`, `babel-types`
+  * [#14763](https://github.com/babel/babel/pull/14763) fix: allow exporting `TSDeclareFunction` as default ([@zxbodya](https://github.com/zxbodya))
+* `babel-generator`
+  * [#14758](https://github.com/babel/babel/pull/14758) fix: `returnType` with comments generates incorrect code ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :nail_care: Polish
+* `babel-cli`
+  * [#14748](https://github.com/babel/babel/pull/14748) Print a message when the watcher of `babel-cli` is ready. ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :house: Internal
+* `babel-core`, `babel-helper-remap-async-to-generator`, `babel-helpers`, `babel-parser`, `babel-plugin-transform-block-scoping`, `babel-preset-env`
+  * [#13414](https://github.com/babel/babel/pull/13414) Prepare for compiling Babel to native ESM ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-create-class-features-plugin`, `babel-helper-member-expression-to-functions`, `babel-helper-remap-async-to-generator`, `babel-helper-replace-supers`, `babel-helper-wrap-function`, `babel-helpers`, `babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining`, `babel-plugin-proposal-decorators`, `babel-plugin-proposal-object-rest-spread`, `babel-plugin-proposal-optional-chaining`, `babel-plugin-transform-block-scoping`, `babel-plugin-transform-classes`, `babel-traverse`, `babel-types`
+  * [#14739](https://github.com/babel/babel/pull/14739) Provide better parentPath typings ([@JLHwung](https://github.com/JLHwung))
+
+#### :running_woman: Performance
+* `babel-generator`
+  * [#14701](https://github.com/babel/babel/pull/14701) perf: Improve generator perf ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.18.8 (2022-07-08)
 
 #### :eyeglasses: Spec Compliance
