@@ -1,11 +1,12 @@
 import { createRequire } from "module";
 import path from "path";
+import type { WatchOptions, FSWatcher } from "chokidar";
 
 const fileToDeps = new Map<string, Set<string>>();
 const depToFiles = new Map<string, Set<string>>();
 
 let isWatchMode = false;
-let watcher;
+let watcher: FSWatcher;
 const watchQueue = new Set<string>();
 let hasStarted = false;
 
@@ -22,7 +23,7 @@ export function enable({ enableGlobbing }: { enableGlobbing: boolean }) {
       stabilityThreshold: 50,
       pollInterval: 10,
     },
-  });
+  } as WatchOptions);
 
   watcher.on("unlink", unwatchFile);
 }
@@ -94,16 +95,18 @@ export function updateExternalDependencies(
     Array.from(dependencies, dep => path.resolve(dep)),
   );
 
-  if (fileToDeps.has(absFilename)) {
-    for (const dep of fileToDeps.get(absFilename)) {
+  const deps = fileToDeps.get(absFilename);
+  if (deps) {
+    for (const dep of deps) {
       if (!absDependencies.has(dep)) {
         removeFileDependency(absFilename, dep);
       }
     }
   }
   for (const dep of absDependencies) {
-    if (!depToFiles.has(dep)) {
-      depToFiles.set(dep, new Set());
+    let deps = depToFiles.get(dep);
+    if (!deps) {
+      depToFiles.set(dep, (deps = new Set()));
 
       if (!hasStarted) {
         watchQueue.add(dep);
@@ -111,16 +114,18 @@ export function updateExternalDependencies(
         watcher.add(dep);
       }
     }
-    depToFiles.get(dep).add(absFilename);
+
+    deps.add(absFilename);
   }
 
   fileToDeps.set(absFilename, absDependencies);
 }
 
 function removeFileDependency(filename: string, dep: string) {
-  depToFiles.get(dep).delete(filename);
+  const deps = depToFiles.get(dep) as Set<string>;
+  deps.delete(filename);
 
-  if (depToFiles.get(dep).size === 0) {
+  if (deps.size === 0) {
     depToFiles.delete(dep);
 
     if (!hasStarted) {
@@ -132,16 +137,16 @@ function removeFileDependency(filename: string, dep: string) {
 }
 
 function unwatchFile(filename: string) {
-  if (!fileToDeps.has(filename)) return;
+  const deps = fileToDeps.get(filename);
+  if (!deps) return;
 
-  for (const dep of fileToDeps.get(filename)) {
+  for (const dep of deps) {
     removeFileDependency(filename, dep);
   }
   fileToDeps.delete(filename);
 }
 
 function requireChokidar(): any {
-  // @ts-expect-error - TS is not configured to support import.meta.
   const require = createRequire(import.meta.url);
 
   try {

@@ -1,3 +1,4 @@
+// @ts-expect-error
 import slash from "slash";
 import path from "path";
 import fs from "fs";
@@ -129,7 +130,7 @@ export default async function ({
   }
 
   let compiledFiles = 0;
-  let startTime = null;
+  let startTime: [number, number] | null = null;
 
   const logSuccess = util.debounce(function () {
     if (startTime === null) {
@@ -178,7 +179,7 @@ export default async function ({
     // when we are sure that all the files have been compiled.
     let processing = 0;
     const { filenames } = cliOptions;
-    let getBase;
+    let getBase: (filename: string) => string | null;
     if (filenames.length === 1) {
       // fast path: If there is only one filenames, we know it must be the base
       const base = filenames[0];

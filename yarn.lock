@@ -1041,6 +1041,7 @@ __metadata:
     "@babel/helper-fixtures": "workspace:^"
     "@babel/register": "workspace:^"
     "@babel/runtime": "workspace:^"
+    "@types/v8flags": ^3.1.1
     commander: ^4.0.1
     core-js: ^3.22.1
     fs-readdir-recursive: ^1.0.0
@@ -4525,6 +4526,13 @@ __metadata:
   version: 2.0.0
   resolution: "@types/stack-utils@npm:2.0.0"
   checksum: b3fbae25b073116977ecb5c67d22f14567b51a7792403b0bf46e5de8f29bde3bd4ec1626afb22065495ca7f1c699c8bd66720050c94b8f8f9bcefbee79d161fd
+  languageName: node
+  linkType: hard
+
+"@types/v8flags@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "@types/v8flags@npm:3.1.1"
+  checksum: 5a38e85cefdf3cc6c38448425ba2c726b62da3ad454209955a780b4eb68b38f98adc95063654668c3d642418e2cf860ad3129d989994aaf7e72fbf29dca94bbc
   languageName: node
   linkType: hard
 

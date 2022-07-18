@@ -1,5 +1,7 @@
 import convertSourceMap from "convert-source-map";
 import { AnyMap, encodedMap } from "@jridgewell/trace-mapping";
+import type { Section } from "@jridgewell/trace-mapping/dist/types/types";
+// @ts-expect-error
 import slash from "slash";
 import path from "path";
 import fs from "fs";
@@ -18,7 +20,7 @@ export default async function ({
   babelOptions,
 }: CmdOptions): Promise<void> {
   function buildResult(fileResults: Array<any>): CompilationOutput {
-    const mapSections = [];
+    const mapSections: Section[] = [];
 
     let code = "";
     let offset = 0;
@@ -70,7 +72,7 @@ export default async function ({
     }
     return count;
   }
-  function emptyMap() {
+  function emptyMap(): Section["map"] {
     return {
       version: 3,
       names: [],
@@ -129,7 +131,7 @@ export default async function ({
   }
 
   async function walk(filenames: Array<string>): Promise<void> {
-    const _filenames = [];
+    const _filenames: string[] = [];
 
     filenames.forEach(function (filename) {
       if (!fs.existsSync(filename)) return;

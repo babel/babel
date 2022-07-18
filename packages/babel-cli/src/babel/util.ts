@@ -1,3 +1,4 @@
+// @ts-expect-error
 import readdirRecursive from "fs-readdir-recursive";
 import * as babel from "@babel/core";
 import path from "path";
@@ -20,15 +21,19 @@ export function readdir(
   includeDotfiles: boolean,
   filter?: ReaddirFilter,
 ): Array<string> {
-  return readdirRecursive(dirname, (filename, _index, currentDirectory) => {
-    const stat = fs.statSync(path.join(currentDirectory, filename));
+  return readdirRecursive(
+    dirname,
+    (filename: string, index: number, currentDirectory: string) => {
+      const stat = fs.statSync(path.join(currentDirectory, filename));
 
-    if (stat.isDirectory()) return true;
+      if (stat.isDirectory()) return true;
 
-    return (
-      (includeDotfiles || filename[0] !== ".") && (!filter || filter(filename))
-    );
-  });
+      return (
+        (includeDotfiles || filename[0] !== ".") &&
+        (!filter || filter(filename))
+      );
+    },
+  );
 }
 
 export function readdirForCompilable(
@@ -134,7 +139,7 @@ export function withExtension(filename: string, ext: string = ".js") {
 }
 
 export function debounce(fn: () => void, time: number) {
-  let timer;
+  let timer: NodeJS.Timeout;
   function debounced() {
     clearTimeout(timer);
     timer = setTimeout(fn, time);

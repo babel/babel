@@ -13,7 +13,7 @@ const args = [
 ];
 
 let babelArgs = process.argv.slice(2);
-let userArgs;
+let userArgs: string[];
 
 // separate node arguments from script arguments
 const argSeparator = babelArgs.indexOf("--");
@@ -27,7 +27,7 @@ if (argSeparator > -1) {
  * Also ensure that if the arg contains a value (e.g. --arg=true)
  * that only the flag is returned.
  */
-function getNormalizedV8Flag(arg) {
+function getNormalizedV8Flag(arg: string) {
   // v8 uses the "no" prefix to negate boolean flags (e.g. --nolazy),
   // but they are not listed by v8flags
   const matches = arg.match(/--(?:no)?(.+)/);
@@ -54,7 +54,7 @@ getV8Flags(async function (err, v8Flags) {
       args.push(flag);
       args.push(babelArgs[++i]);
     } else if (aliases.has(flag)) {
-      args.unshift(aliases.get(flag));
+      args.unshift(aliases.get(flag) as string);
     } else if (
       flag === "debug" || // node debug foo.js
       flag === "inspect" ||
@@ -73,6 +73,7 @@ getV8Flags(async function (err, v8Flags) {
   }
 
   try {
+    // @ts-expect-error
     const { default: kexec } = await import("kexec");
     kexec(process.argv[0], args);
   } catch (err) {
@@ -96,7 +97,7 @@ getV8Flags(async function (err, v8Flags) {
         if (signal) {
           process.kill(process.pid, signal);
         } else {
-          process.exitCode = code;
+          process.exitCode = code || undefined;
         }
       });
     });
