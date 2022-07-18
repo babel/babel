@@ -129,7 +129,7 @@ fs.writeFileSync(
               "to-fast-properties",
               ["./node_modules/to-fast-properties-BABEL_8_BREAKING-true"],
             ],
-            ["slash", ["./lib/slash.d.ts"]],
+            ["slash", ["./node_modules/slash-BABEL_8_BREAKING-true"]],
             ["fs-readdir-recursive", ["./lib/fs-readdir-recursive.d.ts"]],
             ["kexec", ["./lib/kexec.d.ts"]],
           ]),
