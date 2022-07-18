@@ -97,7 +97,7 @@ getV8Flags(async function (err, v8Flags) {
         if (signal) {
           process.kill(process.pid, signal);
         } else {
-          process.exitCode = code || undefined;
+          process.exitCode = code ?? undefined;
         }
       });
     });
