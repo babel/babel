@@ -14,7 +14,8 @@ _jsx("div", { ...props,
 _jsx("img", {
   alt: "",
   src,
-  title
+  title,
+  __proto__
 });
 
 /*#__PURE__*/

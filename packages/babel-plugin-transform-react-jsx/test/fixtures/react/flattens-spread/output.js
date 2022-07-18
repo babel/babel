@@ -8,7 +8,8 @@ React.createElement("div", props, contents);
 React.createElement("img", {
   alt: "",
   src,
-  title
+  title,
+  __proto__
 });
 
 /*#__PURE__*/
