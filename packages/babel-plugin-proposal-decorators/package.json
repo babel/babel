@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-decorators",
-  "version": "7.18.6",
+  "version": "7.18.9",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
   "publishConfig": {

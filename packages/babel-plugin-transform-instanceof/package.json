@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-instanceof",
-  "version": "7.18.6",
+  "version": "7.18.9",
   "description": "This plugin transforms all the ES2015 'instanceof' methods",
   "repository": {
     "type": "git",
