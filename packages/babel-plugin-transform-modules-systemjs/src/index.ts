@@ -436,6 +436,7 @@ export default declare<PluginState>((api, options: Options) => {
                 }
                 removedPaths.push(path);
               } else {
+                // @ts-expect-error TSDeclareFunction is not expected here
                 path.replaceWith(buildExportCall("default", declar));
               }
             } else if (path.isExportNamedDeclaration()) {

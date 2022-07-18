@@ -1521,6 +1521,7 @@ defineType("ExportDefaultDeclaration", {
   fields: {
     declaration: {
       validate: assertNodeType(
+        "TSDeclareFunction",
         "FunctionDeclaration",
         "ClassDeclaration",
         "Expression",
