@@ -1,4 +1,3 @@
-// @ts-expect-error
 import slash from "slash";
 import path from "path";
 import fs from "fs";

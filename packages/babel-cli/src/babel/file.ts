@@ -1,7 +1,6 @@
 import convertSourceMap from "convert-source-map";
 import { AnyMap, encodedMap } from "@jridgewell/trace-mapping";
 import type { Section } from "@jridgewell/trace-mapping/dist/types/types";
-// @ts-expect-error
 import slash from "slash";
 import path from "path";
 import fs from "fs";

@@ -718,6 +718,15 @@
       ],
       "to-fast-properties": [
         "./node_modules/to-fast-properties-BABEL_8_BREAKING-true"
+      ],
+      "slash": [
+        "./lib/slash.d.ts"
+      ],
+      "fs-readdir-recursive": [
+        "./lib/fs-readdir-recursive.d.ts"
+      ],
+      "kexec": [
+        "./lib/kexec.d.ts"
       ]
     }
   }

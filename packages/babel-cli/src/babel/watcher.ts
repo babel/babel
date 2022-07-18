@@ -15,7 +15,7 @@ export function enable({ enableGlobbing }: { enableGlobbing: boolean }) {
 
   const { FSWatcher } = requireChokidar();
 
-  watcher = new FSWatcher({
+  const options: WatchOptions = {
     disableGlobbing: !enableGlobbing,
     persistent: true,
     ignoreInitial: true,
@@ -23,7 +23,8 @@ export function enable({ enableGlobbing }: { enableGlobbing: boolean }) {
       stabilityThreshold: 50,
       pollInterval: 10,
     },
-  } as WatchOptions);
+  };
+  watcher = new FSWatcher(options);
 
   watcher.on("unlink", unwatchFile);
 }
