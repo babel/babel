@@ -1,15 +1,15 @@
-const defineHelper = require("../../../helpers/define-helper.cjs");
+import defineHelper from "../../../helpers/define-helper.js";
 
-const dependencyDeep = defineHelper(__dirname, "dependencyDeep", `
+const dependencyDeep = defineHelper(import.meta.url, "dependencyDeep", `
   export default function fn() {}
 `)
 
-const dependency = defineHelper(__dirname, "dependency", `
+const dependency = defineHelper(import.meta.url, "dependency", `
   import f from "${dependencyDeep}";
   export default function fn() { return f; }
 `);
 
-const main = defineHelper(__dirname, "main", `
+const main = defineHelper(import.meta.url, "main", `
   import dep from "${dependency}";
 
   export default function helper() {
@@ -17,7 +17,7 @@ const main = defineHelper(__dirname, "main", `
   }
 `);
 
-module.exports = function() {
+export default function() {
   return {
     visitor: {
       Identifier(path) {

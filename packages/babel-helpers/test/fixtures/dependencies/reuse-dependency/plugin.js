@@ -1,10 +1,10 @@
-const defineHelper = require("../../../helpers/define-helper.cjs");
+import defineHelper from "../../../helpers/define-helper.js";
 
-const dependency = defineHelper(__dirname, "dependency", `
+const dependency = defineHelper(import.meta.url, "dependency", `
   export default function fn() { 0; }
 `);
 
-const main = defineHelper(__dirname, "main", `
+const main = defineHelper(import.meta.url, "main", `
   import dep from "${dependency}";
 
   export default function helper() {
@@ -12,7 +12,7 @@ const main = defineHelper(__dirname, "main", `
   }
 `);
 
-module.exports = function() {
+export default function() {
   return {
     visitor: {
       Identifier(path) {

@@ -1,6 +1,6 @@
-const defineHelper = require("../../../helpers/define-helper.cjs");
+import defineHelper from "../../../helpers/define-helper.js";
 
-const main = defineHelper(__dirname, "main", `
+const main = defineHelper(import.meta.url, "main", `
   import dep from "(!!!)%-..a,4892 missing";
 
   export default function helper() {
@@ -8,7 +8,7 @@ const main = defineHelper(__dirname, "main", `
   }
 `);
 
-module.exports = function() {
+export default function() {
   return {
     visitor: {
       Identifier(path) {
