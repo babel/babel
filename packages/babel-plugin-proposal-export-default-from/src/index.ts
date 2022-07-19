@@ -11,33 +11,32 @@ export default declare(api => {
 
     visitor: {
       ExportNamedDeclaration(path) {
-        const { node, scope } = path;
-        const { specifiers } = node;
+        const { node } = path;
+        const { specifiers, source } = node;
         if (!t.isExportDefaultSpecifier(specifiers[0])) return;
 
-        const specifier = specifiers.shift();
-        const { exported } = specifier;
-        const uid = scope.generateUidIdentifier(
-          // @ts-expect-error Identifier ?? StringLiteral
-          exported.name ?? exported.value,
-        );
+        const { exported } = specifiers.shift();
+
+        if (specifiers.every(s => t.isExportSpecifier(s))) {
+          specifiers.unshift(
+            t.exportSpecifier(t.identifier("default"), exported),
+          );
+          return;
+        }
 
         const nodes = [
-          t.importDeclaration(
-            [t.importDefaultSpecifier(uid)],
-            t.cloneNode(node.source),
+          t.exportNamedDeclaration(
+            null,
+            [t.exportSpecifier(t.identifier("default"), exported)],
+            t.cloneNode(source),
           ),
-          t.exportNamedDeclaration(null, [
-            t.exportSpecifier(t.cloneNode(uid), exported),
-          ]),
         ];
 
         if (specifiers.length >= 1) {
           nodes.push(node);
         }
 
-        const [importDeclaration] = path.replaceWithMultiple(nodes);
-        path.scope.registerDeclaration(importDeclaration);
+        path.replaceWithMultiple(nodes);
       },
     },
   };
