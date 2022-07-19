@@ -37,13 +37,16 @@ import type { LookaheadState, DeferredStrictError } from "./state";
 
 import {
   readInt,
-  type IntErrorHandlers,
   readCodePoint,
-  type CodePointErrorHandlers,
   readEscapedChar,
-  type EscapedCharErrorHandlers,
   readStringContents,
-} from "./string-int-reader";
+  /* TODO: flow->ts
+  type IntErrorHandlers,
+  type CodePointErrorHandlers,
+  type EscapedCharErrorHandlers,
+  type StringContentsErrorHandlers,
+  */
+} from "@babel/helper-string-parser";
 
 const VALID_REGEX_FLAGS = new Set([
   charCodes.lowercaseG,
@@ -1539,7 +1542,7 @@ export default class Tokenizer extends CommentsParser {
     }
   }
 
-  errorHandlers_readInt: IntErrorHandlers = {
+  errorHandlers_readInt /*IntErrorHandlers*/ = {
     invalidDigit: (pos, radix) => {
       if (this.options.errorRecovery) {
         this.state.pos = pos;
@@ -1566,7 +1569,7 @@ export default class Tokenizer extends CommentsParser {
     },
   };
 
-  errorHandlers_readCodePoint: CodePointErrorHandlers = {
+  errorHandlers_readCodePoint /*CodePointErrorHandlers*/ = {
     ...this.errorHandlers_readInt,
     invalidEscapeSequence: (pos, startPos) => {
       this.state.pos = pos;
@@ -1583,7 +1586,7 @@ export default class Tokenizer extends CommentsParser {
     },
   };
 
-  errorHandlers_readEscapedChar: EscapedCharErrorHandlers = {
+  errorHandlers_readEscapedChar /*EscapedCharErrorHandlers*/ = {
     ...this.errorHandlers_readCodePoint,
     strictNumericEscape: pos => {
       this.state.pos = pos;
@@ -1593,7 +1596,7 @@ export default class Tokenizer extends CommentsParser {
     },
   };
 
-  errorHandlers_readStringContents_string: StringContentsErrorHandlers = {
+  errorHandlers_readStringContents_string /*StringContentsErrorHandlers*/ = {
     ...this.errorHandlers_readEscapedChar,
     unterminated: (initialPos, initialLineStart, initialCurLine) => {
       this.state.pos = initialPos - 1; // Report the error at the string quote
@@ -1605,7 +1608,7 @@ export default class Tokenizer extends CommentsParser {
     },
   };
 
-  errorHandlers_readStringContents_template: StringContentsErrorHandlers = {
+  errorHandlers_readStringContents_template /*StringContentsErrorHandlers*/ = {
     ...this.errorHandlers_readEscapedChar,
     unterminated: (initialPos, initialLineStart, initialCurLine) => {
       this.state.pos = initialPos; // TODO: For strings, we subtract 1

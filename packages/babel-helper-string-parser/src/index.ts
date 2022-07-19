@@ -3,7 +3,7 @@ import * as charCodes from "charcodes";
 // The following character codes are forbidden from being
 // an immediate sibling of NumericLiteralSeparator _
 const forbiddenNumericSeparatorSiblings = {
-  decBinOct: new Set([
+  decBinOct: new Set<number>([
     charCodes.dot,
     charCodes.uppercaseB,
     charCodes.uppercaseE,
@@ -13,7 +13,7 @@ const forbiddenNumericSeparatorSiblings = {
     charCodes.lowercaseE,
     charCodes.lowercaseO,
   ]),
-  hex: new Set([
+  hex: new Set<number>([
     charCodes.dot,
     charCodes.uppercaseX,
     charCodes.underscore, // multiple separators are not allowed
@@ -43,7 +43,7 @@ export type StringContentsErrorHandlers = EscapedCharErrorHandlers & {
     initialPos: number,
     initialLineStart: number,
     initialCurLine: number,
-  ): void,
+  ): void;
 };
 
 export function readStringContents(
@@ -141,7 +141,7 @@ function isStringEnd(
 
 export type EscapedCharErrorHandlers = HexCharErrorHandlers &
   CodePointErrorHandlers & {
-    strictNumericEscape(pos: number): void,
+    strictNumericEscape(pos: number): void;
   };
 
 export function readEscapedChar(
@@ -211,10 +211,8 @@ export function readEscapedChar(
     default:
       if (ch >= charCodes.digit0 && ch <= charCodes.digit7) {
         const startPos = pos - 1;
-        const match = input.slice(startPos, pos + 2).match(/^[0-7]+/);
+        const match = input.slice(startPos, pos + 2).match(/^[0-7]+/)!;
 
-        // This is never null, because of the if condition above.
-        /*:: invariant(match !== null) */
         let octalStr = match[0];
 
         let octal = parseInt(octalStr, 8);
@@ -244,7 +242,7 @@ export function readEscapedChar(
 }
 
 type HexCharErrorHandlers = IntErrorHandlers & {
-  invalidEscapeSequence(pos: number, startPos: number): void,
+  invalidEscapeSequence(pos: number, startPos: number): void;
 };
 
 // Used to read character escape sequences ('\x', '\u').
@@ -270,20 +268,20 @@ function readHexChar(
 }
 
 export type IntErrorHandlers = {
-  numericSeparatorInEscapeSequence(pos: number): void,
-  unexpectedNumericSeparator(pos: number): void,
+  numericSeparatorInEscapeSequence(pos: number): void;
+  unexpectedNumericSeparator(pos: number): void;
   // It can return "true" to indicate that the error was handled
   // and the int parsing should continue.
-  invalidDigit(pos: number, radix: number): boolean,
+  invalidDigit(pos: number, radix: number): boolean;
 };
 
 export function readInt(
   input: string,
   pos: number,
   radix: number,
-  len?: number,
-  forceLen?: boolean,
-  allowNumSeparator: boolean | "bail" = true,
+  len: number,
+  forceLen: boolean,
+  allowNumSeparator: boolean | "bail",
   errors: IntErrorHandlers,
 ) {
   const start = pos;
@@ -359,7 +357,7 @@ export function readInt(
 }
 
 export type CodePointErrorHandlers = HexCharErrorHandlers & {
-  invalidCodePoint(pos: number): void,
+  invalidCodePoint(pos: number): void;
 };
 
 export function readCodePoint(
