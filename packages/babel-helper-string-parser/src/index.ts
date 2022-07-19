@@ -65,11 +65,12 @@ export function readStringContents(
   for (;;) {
     if (pos >= length) {
       errors.unterminated(initialPos, initialLineStart, initialCurLine);
+      break;
     }
     const ch = input.charCodeAt(pos);
     if (isStringEnd(type, ch, input, pos)) {
       out += input.slice(chunkStart, pos);
-      return { pos, str: out, containsInvalid, lineStart, curLine };
+      break;
     }
     if (ch === charCodes.backslash) {
       out += input.slice(chunkStart, pos);
@@ -119,6 +120,7 @@ export function readStringContents(
       ++pos;
     }
   }
+  return { pos, str: out, containsInvalid, lineStart, curLine };
 }
 
 function isStringEnd(
