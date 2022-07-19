@@ -1,3 +1,2 @@
-import _v from "mod";
-export { _v as v };
+export { default as v } from "mod";
 export { x, y as w } from "mod";
