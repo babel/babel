@@ -1,2 +1,1 @@
-export { default as v } from "mod";
-export { x, y as w } from "mod";
+export { default as v, x, y as w } from "mod";

@@ -15,8 +15,14 @@ export default declare(api => {
         const { specifiers, source } = node;
         if (!t.isExportDefaultSpecifier(specifiers[0])) return;
 
-        const specifier = specifiers.shift();
-        const { exported } = specifier;
+        const { exported } = specifiers.shift();
+
+        if (specifiers.every(s => t.isExportSpecifier(s))) {
+          specifiers.unshift(
+            t.exportSpecifier(t.identifier("default"), exported),
+          );
+          return;
+        }
 
         const nodes = [
           t.exportNamedDeclaration(
