@@ -35,6 +35,16 @@ import {
 import State from "./state";
 import type { LookaheadState, DeferredStrictError } from "./state";
 
+import {
+  readInt,
+  type IntErrorHandlers,
+  readCodePoint,
+  type CodePointErrorHandlers,
+  readEscapedChar,
+  type EscapedCharErrorHandlers,
+  readStringContents,
+} from "./string-int-reader";
+
 const VALID_REGEX_FLAGS = new Set([
   charCodes.lowercaseG,
   charCodes.lowercaseM,
@@ -46,45 +56,6 @@ const VALID_REGEX_FLAGS = new Set([
   // This is only valid when using the regexpUnicodeSets plugin
   charCodes.lowercaseV,
 ]);
-
-// The following character codes are forbidden from being
-// an immediate sibling of NumericLiteralSeparator _
-
-const forbiddenNumericSeparatorSiblings = {
-  decBinOct: new Set([
-    charCodes.dot,
-    charCodes.uppercaseB,
-    charCodes.uppercaseE,
-    charCodes.uppercaseO,
-    charCodes.underscore, // multiple separators are not allowed
-    charCodes.lowercaseB,
-    charCodes.lowercaseE,
-    charCodes.lowercaseO,
-  ]),
-  hex: new Set([
-    charCodes.dot,
-    charCodes.uppercaseX,
-    charCodes.underscore, // multiple separators are not allowed
-    charCodes.lowercaseX,
-  ]),
-};
-
-const isAllowedNumericSeparatorSibling = {
-  // 0 - 1
-  bin: ch => ch === charCodes.digit0 || ch === charCodes.digit1,
-
-  // 0 - 7
-  oct: ch => ch >= charCodes.digit0 && ch <= charCodes.digit7,
-
-  // 0 - 9
-  dec: ch => ch >= charCodes.digit0 && ch <= charCodes.digit9,
-
-  // 0 - 9, A - F, a - f,
-  hex: ch =>
-    (ch >= charCodes.digit0 && ch <= charCodes.digit9) ||
-    (ch >= charCodes.uppercaseA && ch <= charCodes.uppercaseF) ||
-    (ch >= charCodes.lowercaseA && ch <= charCodes.lowercaseF),
-};
 
 // Object type used to represent tokens. Note that normally, tokens
 // simply exist as properties on the parser object. This is only
@@ -1146,91 +1117,19 @@ export default class Tokenizer extends CommentsParser {
     radix: number,
     len?: number,
     forceLen?: boolean,
-    allowNumSeparator: boolean | "bail" = true,
+    allowNumSeparator?: boolean | "bail",
   ): number | null {
-    const start = this.state.pos;
-    const forbiddenSiblings =
-      radix === 16
-        ? forbiddenNumericSeparatorSiblings.hex
-        : forbiddenNumericSeparatorSiblings.decBinOct;
-    const isAllowedSibling =
-      radix === 16
-        ? isAllowedNumericSeparatorSibling.hex
-        : radix === 10
-        ? isAllowedNumericSeparatorSibling.dec
-        : radix === 8
-        ? isAllowedNumericSeparatorSibling.oct
-        : isAllowedNumericSeparatorSibling.bin;
-
-    let invalid = false;
-    let total = 0;
-
-    for (let i = 0, e = len == null ? Infinity : len; i < e; ++i) {
-      const code = this.input.charCodeAt(this.state.pos);
-      let val;
-
-      if (code === charCodes.underscore && allowNumSeparator !== "bail") {
-        const prev = this.input.charCodeAt(this.state.pos - 1);
-        const next = this.input.charCodeAt(this.state.pos + 1);
-
-        if (!allowNumSeparator) {
-          this.raise(Errors.NumericSeparatorInEscapeSequence, {
-            at: this.state.curPosition(),
-          });
-        } else if (
-          Number.isNaN(next) ||
-          !isAllowedSibling(next) ||
-          forbiddenSiblings.has(prev) ||
-          forbiddenSiblings.has(next)
-        ) {
-          this.raise(Errors.UnexpectedNumericSeparator, {
-            at: this.state.curPosition(),
-          });
-        }
-
-        // Ignore this _ character
-        ++this.state.pos;
-        continue;
-      }
-
-      if (code >= charCodes.lowercaseA) {
-        val = code - charCodes.lowercaseA + charCodes.lineFeed;
-      } else if (code >= charCodes.uppercaseA) {
-        val = code - charCodes.uppercaseA + charCodes.lineFeed;
-      } else if (charCodes.isDigit(code)) {
-        val = code - charCodes.digit0; // 0-9
-      } else {
-        val = Infinity;
-      }
-      if (val >= radix) {
-        // If we are in "errorRecovery" mode and we found a digit which is too big,
-        // don't break the loop.
-
-        if (this.options.errorRecovery && val <= 9) {
-          val = 0;
-          this.raise(Errors.InvalidDigit, {
-            at: this.state.curPosition(),
-            radix,
-          });
-        } else if (forceLen) {
-          val = 0;
-          invalid = true;
-        } else {
-          break;
-        }
-      }
-      ++this.state.pos;
-      total = total * radix + val;
-    }
-    if (
-      this.state.pos === start ||
-      (len != null && this.state.pos - start !== len) ||
-      invalid
-    ) {
-      return null;
-    }
-
-    return total;
+    const { n, pos } = readInt(
+      this.input,
+      this.state.pos,
+      radix,
+      len,
+      forceLen,
+      allowNumSeparator,
+      this.errorHandlers_readInt,
+    );
+    this.state.pos = pos;
+    return n;
   }
 
   readRadixNumber(radix: number): void {
@@ -1375,63 +1274,29 @@ export default class Tokenizer extends CommentsParser {
   // Read a string value, interpreting backslash-escapes.
 
   readCodePoint(throwOnInvalid: boolean): number | null {
-    const ch = this.input.charCodeAt(this.state.pos);
-    let code;
-
-    if (ch === charCodes.leftCurlyBrace) {
-      ++this.state.pos;
-      code = this.readHexChar(
-        this.input.indexOf("}", this.state.pos) - this.state.pos,
-        true,
-        throwOnInvalid,
-      );
-      ++this.state.pos;
-      if (code !== null && code > 0x10ffff) {
-        if (throwOnInvalid) {
-          this.raise(Errors.InvalidCodePoint, { at: this.state.curPosition() });
-        } else {
-          return null;
-        }
-      }
-    } else {
-      code = this.readHexChar(4, false, throwOnInvalid);
-    }
+    const { code, pos } = readCodePoint(
+      this.input,
+      this.state.pos,
+      throwOnInvalid,
+      this.errorHandlers_readCodePoint,
+    );
+    this.state.pos = pos;
     return code;
   }
 
   readString(quote: number): void {
-    let out = "",
-      chunkStart = ++this.state.pos;
-    for (;;) {
-      if (this.state.pos >= this.length) {
-        throw this.raise(Errors.UnterminatedString, {
-          at: this.state.startLoc,
-        });
-      }
-      const ch = this.input.charCodeAt(this.state.pos);
-      if (ch === quote) break;
-      if (ch === charCodes.backslash) {
-        out += this.input.slice(chunkStart, this.state.pos);
-        // $FlowFixMe
-        out += this.readEscapedChar(false);
-        chunkStart = this.state.pos;
-      } else if (
-        ch === charCodes.lineSeparator ||
-        ch === charCodes.paragraphSeparator
-      ) {
-        ++this.state.pos;
-        ++this.state.curLine;
-        this.state.lineStart = this.state.pos;
-      } else if (isNewLine(ch)) {
-        throw this.raise(Errors.UnterminatedString, {
-          at: this.state.startLoc,
-        });
-      } else {
-        ++this.state.pos;
-      }
-    }
-    out += this.input.slice(chunkStart, this.state.pos++);
-    this.finishToken(tt.string, out);
+    const { str, pos, curLine, lineStart } = readStringContents(
+      quote === charCodes.quotationMark ? "double" : "single",
+      this.input,
+      this.state.pos + 1, // skip the quote
+      this.state.lineStart,
+      this.state.curLine,
+      this.errorHandlers_readStringContents_string,
+    );
+    this.state.pos = pos + 1; // skip the quote
+    this.state.lineStart = lineStart;
+    this.state.curLine = curLine;
+    this.finishToken(tt.string, str);
   }
 
   // Reads template continuation `}...`
@@ -1446,64 +1311,31 @@ export default class Tokenizer extends CommentsParser {
 
   // Reads template string tokens.
   readTemplateToken(): void {
-    let out = "",
-      chunkStart = this.state.pos,
-      containsInvalid = false;
-    ++this.state.pos; // eat '`' or `}`
-    for (;;) {
-      if (this.state.pos >= this.length) {
-        // FIXME: explain
-        throw this.raise(Errors.UnterminatedTemplate, {
-          at: createPositionWithColumnOffset(this.state.startLoc, 1),
-        });
-      }
-      const ch = this.input.charCodeAt(this.state.pos);
-      if (ch === charCodes.graveAccent) {
-        ++this.state.pos; // eat '`'
-        out += this.input.slice(chunkStart, this.state.pos);
-        this.finishToken(tt.templateTail, containsInvalid ? null : out);
-        return;
-      }
-      if (
-        ch === charCodes.dollarSign &&
-        this.input.charCodeAt(this.state.pos + 1) === charCodes.leftCurlyBrace
-      ) {
-        this.state.pos += 2; // eat '${'
-        out += this.input.slice(chunkStart, this.state.pos);
-        this.finishToken(tt.templateNonTail, containsInvalid ? null : out);
-        return;
-      }
-      if (ch === charCodes.backslash) {
-        out += this.input.slice(chunkStart, this.state.pos);
-        const escaped = this.readEscapedChar(true);
-        if (escaped === null) {
-          containsInvalid = true;
-        } else {
-          out += escaped;
-        }
-        chunkStart = this.state.pos;
-      } else if (isNewLine(ch)) {
-        out += this.input.slice(chunkStart, this.state.pos);
-        ++this.state.pos;
-        switch (ch) {
-          case charCodes.carriageReturn:
-            if (this.input.charCodeAt(this.state.pos) === charCodes.lineFeed) {
-              ++this.state.pos;
-            }
-          // fall through
-          case charCodes.lineFeed:
-            out += "\n";
-            break;
-          default:
-            out += String.fromCharCode(ch);
-            break;
-        }
-        ++this.state.curLine;
-        this.state.lineStart = this.state.pos;
-        chunkStart = this.state.pos;
-      } else {
-        ++this.state.pos;
-      }
+    const opening = this.input[this.state.pos];
+    const { str, containsInvalid, pos, curLine, lineStart } =
+      readStringContents(
+        "template",
+        this.input,
+        this.state.pos + 1, // skip '`' or `}`
+        this.state.lineStart,
+        this.state.curLine,
+        this.errorHandlers_readStringContents_template,
+      );
+    this.state.pos = pos + 1; // skip '`' or `$`
+    this.state.lineStart = lineStart;
+    this.state.curLine = curLine;
+
+    if (this.input.codePointAt(pos) === charCodes.graveAccent) {
+      this.finishToken(
+        tt.templateTail,
+        containsInvalid ? null : opening + str + "`",
+      );
+    } else {
+      this.state.pos++; // skip '{'
+      this.finishToken(
+        tt.templateNonTail,
+        containsInvalid ? null : opening + str + "${",
+      );
     }
   }
 
@@ -1522,115 +1354,18 @@ export default class Tokenizer extends CommentsParser {
 
   // Used to read escaped characters
   readEscapedChar(inTemplate: boolean): string | null {
-    const throwOnInvalid = !inTemplate;
-    const ch = this.input.charCodeAt(++this.state.pos);
-    ++this.state.pos;
-    switch (ch) {
-      case charCodes.lowercaseN:
-        return "\n";
-      case charCodes.lowercaseR:
-        return "\r";
-      case charCodes.lowercaseX: {
-        const code = this.readHexChar(2, false, throwOnInvalid);
-        return code === null ? null : String.fromCharCode(code);
-      }
-      case charCodes.lowercaseU: {
-        const code = this.readCodePoint(throwOnInvalid);
-        return code === null ? null : String.fromCodePoint(code);
-      }
-      case charCodes.lowercaseT:
-        return "\t";
-      case charCodes.lowercaseB:
-        return "\b";
-      case charCodes.lowercaseV:
-        return "\u000b";
-      case charCodes.lowercaseF:
-        return "\f";
-      case charCodes.carriageReturn:
-        if (this.input.charCodeAt(this.state.pos) === charCodes.lineFeed) {
-          ++this.state.pos;
-        }
-      // fall through
-      case charCodes.lineFeed:
-        this.state.lineStart = this.state.pos;
-        ++this.state.curLine;
-      // fall through
-      case charCodes.lineSeparator:
-      case charCodes.paragraphSeparator:
-        return "";
-      case charCodes.digit8:
-      case charCodes.digit9:
-        if (inTemplate) {
-          return null;
-        } else {
-          this.recordStrictModeErrors(Errors.StrictNumericEscape, {
-            // We immediately follow a "\\", and we're an 8 or a 9, so we must
-            // be on the same line.
-            at: createPositionWithColumnOffset(this.state.curPosition(), -1),
-          });
-        }
-      // fall through
-      default:
-        if (ch >= charCodes.digit0 && ch <= charCodes.digit7) {
-          // We immediately follow a "\\", and we're something between 0 and 7,
-          // so we must be on the same line.
-          const codePos = createPositionWithColumnOffset(
-            this.state.curPosition(),
-            -1,
-          );
-          const match = this.input
-            .slice(this.state.pos - 1, this.state.pos + 2)
-            .match(/^[0-7]+/);
-
-          // This is never null, because of the if condition above.
-          /*:: invariant(match !== null) */
-          let octalStr = match[0];
-
-          let octal = parseInt(octalStr, 8);
-          if (octal > 255) {
-            octalStr = octalStr.slice(0, -1);
-            octal = parseInt(octalStr, 8);
-          }
-          this.state.pos += octalStr.length - 1;
-          const next = this.input.charCodeAt(this.state.pos);
-          if (
-            octalStr !== "0" ||
-            next === charCodes.digit8 ||
-            next === charCodes.digit9
-          ) {
-            if (inTemplate) {
-              return null;
-            } else {
-              this.recordStrictModeErrors(Errors.StrictNumericEscape, {
-                at: codePos,
-              });
-            }
-          }
-
-          return String.fromCharCode(octal);
-        }
-
-        return String.fromCharCode(ch);
-    }
-  }
-
-  // Used to read character escape sequences ('\x', '\u').
-
-  readHexChar(
-    len: number,
-    forceLen: boolean,
-    throwOnInvalid: boolean,
-  ): number | null {
-    const codeLoc = this.state.curPosition();
-    const n = this.readInt(16, len, forceLen, false);
-    if (n === null) {
-      if (throwOnInvalid) {
-        this.raise(Errors.InvalidEscapeSequence, { at: codeLoc });
-      } else {
-        this.state.pos = codeLoc.index - 1;
-      }
-    }
-    return n;
+    const { ch, pos, lineStart, curLine } = readEscapedChar(
+      this.input,
+      this.state.pos,
+      this.state.lineStart,
+      this.state.curLine,
+      inTemplate,
+      this.errorHandlers_readEscapedChar,
+    );
+    this.state.pos = pos;
+    this.state.lineStart = lineStart;
+    this.state.curLine = curLine;
+    return ch;
   }
 
   // Read an identifier, and return it as a string. Sets `this.state.containsEsc`
@@ -1803,4 +1538,82 @@ export default class Tokenizer extends CommentsParser {
       });
     }
   }
+
+  errorHandlers_readInt: IntErrorHandlers = {
+    invalidDigit: (pos, radix) => {
+      if (this.options.errorRecovery) {
+        this.state.pos = pos;
+        this.raise(Errors.InvalidDigit, {
+          at: this.state.curPosition(),
+          radix,
+        });
+        // Continue parsing the number as if there was no invalid digit.
+        return true;
+      }
+      return false;
+    },
+    numericSeparatorInEscapeSequence: pos => {
+      this.state.pos = pos;
+      this.raise(Errors.NumericSeparatorInEscapeSequence, {
+        at: this.state.curPosition(),
+      });
+    },
+    unexpectedNumericSeparator: pos => {
+      this.state.pos = pos;
+      this.raise(Errors.UnexpectedNumericSeparator, {
+        at: this.state.curPosition(),
+      });
+    },
+  };
+
+  errorHandlers_readCodePoint: CodePointErrorHandlers = {
+    ...this.errorHandlers_readInt,
+    invalidEscapeSequence: (pos, startPos) => {
+      this.state.pos = pos;
+      this.raise(Errors.InvalidEscapeSequence, {
+        at: createPositionWithColumnOffset(
+          this.state.curPosition(),
+          startPos - pos,
+        ),
+      });
+    },
+    invalidCodePoint: pos => {
+      this.state.pos = pos;
+      this.raise(Errors.InvalidCodePoint, { at: this.state.curPosition() });
+    },
+  };
+
+  errorHandlers_readEscapedChar: EscapedCharErrorHandlers = {
+    ...this.errorHandlers_readCodePoint,
+    strictNumericEscape: pos => {
+      this.state.pos = pos;
+      this.recordStrictModeErrors(Errors.StrictNumericEscape, {
+        at: this.state.curPosition(),
+      });
+    },
+  };
+
+  errorHandlers_readStringContents_string: StringContentsErrorHandlers = {
+    ...this.errorHandlers_readEscapedChar,
+    unterminated: (initialPos, initialLineStart, initialCurLine) => {
+      this.state.pos = initialPos - 1; // Report the error at the string quote
+      this.state.lineStart = initialLineStart;
+      this.state.curLine = initialCurLine;
+      throw this.raise(Errors.UnterminatedString, {
+        at: this.state.curPosition(),
+      });
+    },
+  };
+
+  errorHandlers_readStringContents_template: StringContentsErrorHandlers = {
+    ...this.errorHandlers_readEscapedChar,
+    unterminated: (initialPos, initialLineStart, initialCurLine) => {
+      this.state.pos = initialPos; // TODO: For strings, we subtract 1
+      this.state.lineStart = initialLineStart;
+      this.state.curLine = initialCurLine;
+      throw this.raise(Errors.UnterminatedTemplate, {
+        at: this.state.curPosition(),
+      });
+    },
+  };
 }
