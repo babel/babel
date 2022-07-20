@@ -1120,7 +1120,7 @@ export default class Tokenizer extends CommentsParser {
     radix: number,
     len?: number,
     forceLen?: boolean,
-    allowNumSeparator?: boolean | "bail",
+    allowNumSeparator: boolean | "bail" = true,
   ): number | null {
     const { n, pos } = readInt(
       this.input,
