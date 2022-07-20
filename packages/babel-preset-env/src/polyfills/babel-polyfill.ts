@@ -21,7 +21,6 @@ export default function (
       ImportDeclaration(path: NodePath<t.ImportDeclaration>) {
         const src = getImportSource(path);
         if (usage && isPolyfillSource(src)) {
-          // $FlowIgnore
           console.warn(NO_DIRECT_POLYFILL_IMPORT.replace("SPECIFIER", src));
           if (!deprecated) path.remove();
         } else if (src === "@babel/polyfill") {
@@ -43,7 +42,6 @@ export default function (
         path.get("body").forEach(bodyPath => {
           const src = getRequireSource(bodyPath);
           if (usage && isPolyfillSource(src)) {
-            // $FlowIgnore
             console.warn(NO_DIRECT_POLYFILL_IMPORT.replace("SPECIFIER", src));
             if (!deprecated) bodyPath.remove();
           } else if (src === "@babel/polyfill") {
