@@ -209,6 +209,7 @@ module.exports = function (api) {
         test: [
           "packages/babel-generator",
           "packages/babel-plugin-proposal-decorators",
+          "packages/babel-helper-string-parser",
         ].map(normalize),
         plugins: ["babel-plugin-transform-charcodes"],
       },
