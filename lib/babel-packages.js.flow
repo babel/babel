@@ -220,3 +220,85 @@ declare module "@babel/plugin-transform-classes" {
 declare module "@babel/helper-compilation-targets" {
   declare module.exports: any;
 }
+
+declare module "@babel/helper-string-parser" {
+  declare export type StringContentsErrorHandlers = EscapedCharErrorHandlers & {
+    unterminated(
+      initialPos: number,
+      initialLineStart: number,
+      initialCurLine: number
+    ): void,
+  };
+  declare export function readStringContents(
+    type: "single" | "double" | "template",
+    input: string,
+    pos: number,
+    lineStart: number,
+    curLine: number,
+    errors: StringContentsErrorHandlers
+  ): {
+    pos: number,
+    str: string,
+    containsInvalid: boolean,
+    lineStart: number,
+    curLine: number,
+  };
+
+  declare export type EscapedCharErrorHandlers = HexCharErrorHandlers &
+    CodePointErrorHandlers & {
+      strictNumericEscape(pos: number): void,
+    };
+
+  declare export function readEscapedChar(
+    input: string,
+    pos: number,
+    lineStart: number,
+    curLine: number,
+    inTemplate: boolean,
+    errors: EscapedCharErrorHandlers
+  ): {
+    pos: number,
+    ch: string | null,
+    lineStart: number,
+    curLine: number,
+  };
+
+  declare type HexCharErrorHandlers = IntErrorHandlers & {
+    invalidEscapeSequence(pos: number, startPos: number): void,
+  };
+
+  declare export type IntErrorHandlers = {
+    numericSeparatorInEscapeSequence(pos: number): void,
+    unexpectedNumericSeparator(pos: number): void,
+    // It can return "true" to indicate that the error was handled
+    // and the int parsing should continue.
+    invalidDigit(pos: number, radix: number): boolean,
+  };
+
+  declare export function readInt(
+    input: string,
+    pos: number,
+    radix: number,
+    len?: number,
+    forceLen: boolean,
+    allowNumSeparator: boolean | "bail",
+    errors: IntErrorHandlers
+  ): {
+    n: null | number,
+    pos: number,
+  };
+
+  declare export type CodePointErrorHandlers = HexCharErrorHandlers & {
+    invalidCodePoint(pos: number): void,
+  };
+
+  declare export function readCodePoint(
+    input: string,
+    pos: number,
+    throwOnInvalid: boolean,
+    errors: CodePointErrorHandlers
+  ): {
+    code: any,
+    pos: number,
+  };
+}

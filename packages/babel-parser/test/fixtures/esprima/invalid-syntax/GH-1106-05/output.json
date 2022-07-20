@@ -20,7 +20,7 @@
           "extra": {
             "rawValue": "\\ux",
             "raw": "\"\\ux\"",
-            "expressionValue": "nullx"
+            "expressionValue": "x"
           },
           "value": "\\ux"
         }
