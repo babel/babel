@@ -2,7 +2,7 @@ import is from "../validators/is";
 import isValidIdentifier from "../validators/isValidIdentifier";
 import { isKeyword, isReservedWord } from "@babel/helper-validator-identifier";
 import type * as t from "..";
-import { unraw } from "unraw";
+import { readStringContents } from "@babel/helper-string-parser";
 
 import {
   BINARY_OPERATORS,
@@ -1979,11 +1979,40 @@ defineType("TemplateElement", {
         function templateElementCookedValidator(node: t.TemplateElement) {
           const raw = node.value.raw;
 
-          let cooked = null;
+          let str,
+            containsInvalid,
+            unterminatedCalled = false;
           try {
-            cooked = unraw(raw);
-          } catch (error) {}
-          node.value.cooked = cooked;
+            const error = () => {
+              throw new Error();
+            };
+            ({ str, containsInvalid } = readStringContents(
+              "template",
+              raw,
+              0,
+              0,
+              0,
+              {
+                unterminated() {
+                  unterminatedCalled = true;
+                },
+                strictNumericEscape: error,
+                invalidEscapeSequence: error,
+                numericSeparatorInEscapeSequence: error,
+                unexpectedNumericSeparator: error,
+                invalidDigit: error,
+                invalidCodePoint: error,
+              },
+            ));
+          } catch {
+            // TODO: When https://github.com/babel/babel/issues/14775 is fixed
+            // we can remove the try/catch block.
+            unterminatedCalled = true;
+            containsInvalid = true;
+          }
+          if (!unterminatedCalled) throw new Error("Invalid raw");
+
+          node.value.cooked = containsInvalid ? null : str;
         },
       ),
     },

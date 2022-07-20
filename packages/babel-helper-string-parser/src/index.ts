@@ -65,6 +65,7 @@ export function readStringContents(
   for (;;) {
     if (pos >= length) {
       errors.unterminated(initialPos, initialLineStart, initialCurLine);
+      out += input.slice(chunkStart, pos);
       break;
     }
     const ch = input.charCodeAt(pos);
