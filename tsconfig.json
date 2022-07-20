@@ -30,6 +30,7 @@
     "./packages/babel-helper-simple-access/src/**/*.ts",
     "./packages/babel-helper-skip-transparent-expression-wrappers/src/**/*.ts",
     "./packages/babel-helper-split-export-declaration/src/**/*.ts",
+    "./packages/babel-helper-string-parser/src/**/*.ts",
     "./packages/babel-helper-transform-fixture-test-runner/src/**/*.ts",
     "./packages/babel-helper-validator-identifier/src/**/*.ts",
     "./packages/babel-helper-validator-option/src/**/*.ts",
@@ -248,6 +249,9 @@
       ],
       "@babel/helper-split-export-declaration": [
         "./packages/babel-helper-split-export-declaration/src"
+      ],
+      "@babel/helper-string-parser": [
+        "./packages/babel-helper-string-parser/src"
       ],
       "@babel/helper-transform-fixture-test-runner": [
         "./packages/babel-helper-transform-fixture-test-runner/src"

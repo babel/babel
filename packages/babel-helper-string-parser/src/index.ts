@@ -23,16 +23,16 @@ const forbiddenNumericSeparatorSiblings = {
 
 const isAllowedNumericSeparatorSibling = {
   // 0 - 1
-  bin: ch => ch === charCodes.digit0 || ch === charCodes.digit1,
+  bin: (ch: number) => ch === charCodes.digit0 || ch === charCodes.digit1,
 
   // 0 - 7
-  oct: ch => ch >= charCodes.digit0 && ch <= charCodes.digit7,
+  oct: (ch: number) => ch >= charCodes.digit0 && ch <= charCodes.digit7,
 
   // 0 - 9
-  dec: ch => ch >= charCodes.digit0 && ch <= charCodes.digit9,
+  dec: (ch: number) => ch >= charCodes.digit0 && ch <= charCodes.digit9,
 
   // 0 - 9, A - F, a - f,
-  hex: ch =>
+  hex: (ch: number) =>
     (ch >= charCodes.digit0 && ch <= charCodes.digit9) ||
     (ch >= charCodes.uppercaseA && ch <= charCodes.uppercaseF) ||
     (ch >= charCodes.lowercaseA && ch <= charCodes.lowercaseF),
@@ -281,7 +281,7 @@ export function readInt(
   input: string,
   pos: number,
   radix: number,
-  len: number,
+  len: number | undefined,
   forceLen: boolean,
   allowNumSeparator: boolean | "bail",
   errors: IntErrorHandlers,
