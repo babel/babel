@@ -75,6 +75,7 @@ export function replaceWithSourceString(this: NodePath, replacement: string) {
 
   try {
     replacement = `(${replacement})`;
+    // @ts-expect-error todo: use babel-types ast typings in Babel parser
     ast = parse(replacement);
   } catch (err) {
     const loc = err.loc;

@@ -3,7 +3,7 @@ import type { PluginConfig } from "./parser/base";
 
 export type Plugin = PluginConfig;
 
-export type PluginList = ReadonlyArray<PluginConfig>;
+export type PluginList = PluginConfig[];
 
 export type MixinPlugin = (superClass: { new (...args: any): Parser }) => {
   new (...args: any): Parser;

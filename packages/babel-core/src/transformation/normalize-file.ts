@@ -39,6 +39,7 @@ export default function* normalizeFile(
       ast = cloneDeep(ast) as t.File;
     }
   } else {
+    // @ts-expect-error todo: use babel-types ast typings in Babel parser
     ast = yield* parser(pluginPasses, options, code);
   }
 
@@ -91,7 +92,7 @@ export default function* normalizeFile(
 
   return new File(options, {
     code,
-    ast,
+    ast: ast as t.File,
     inputMap,
   });
 }

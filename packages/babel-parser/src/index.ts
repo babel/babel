@@ -6,6 +6,12 @@ import {
   mixinPlugins,
   type PluginList,
 } from "./plugin-utils";
+import type {
+  PluginConfig as ParserPlugin,
+  FlowPluginOptions,
+  RecordAndTuplePluginOptions,
+  PipelineOperatorPluginOptions,
+} from "./typings";
 import Parser from "./parser";
 
 import { getExportedToken, tt as internalTokenTypes } from "./tokenizer/types";
@@ -110,3 +116,11 @@ function getParserClass(pluginsFromOptions: PluginList): {
   }
   return cls;
 }
+
+export type {
+  FlowPluginOptions,
+  ParserPlugin,
+  PipelineOperatorPluginOptions,
+  RecordAndTuplePluginOptions,
+};
+export type ParserOptions = Partial<Options>;
