@@ -1,6 +1,5 @@
 import convertSourceMap from "convert-source-map";
 import { AnyMap, encodedMap } from "@jridgewell/trace-mapping";
-import type { Section } from "@jridgewell/trace-mapping/dist/types/types";
 import slash from "slash";
 import path from "path";
 import fs from "fs";
@@ -9,9 +8,17 @@ import * as util from "./util";
 import type { CmdOptions } from "./options";
 import * as watcher from "./watcher";
 
+import type {
+  SectionedSourceMap,
+  SourceMapInput,
+  TraceMap,
+} from "@jridgewell/trace-mapping";
+
+type Section = SectionedSourceMap["sections"][0];
+
 type CompilationOutput = {
   code: string;
-  map: any;
+  map: SourceMapInput;
 };
 
 export default async function ({
@@ -90,7 +97,10 @@ export default async function ({
       if (babelOptions.sourceMaps && babelOptions.sourceMaps !== "inline") {
         const mapLoc = cliOptions.outFile + ".map";
         result.code = util.addSourceMappingUrl(result.code, mapLoc);
-        fs.writeFileSync(mapLoc, JSON.stringify(encodedMap(result.map)));
+        fs.writeFileSync(
+          mapLoc,
+          JSON.stringify(encodedMap(result.map as TraceMap)),
+        );
       }
 
       fs.writeFileSync(cliOptions.outFile, result.code);
