@@ -12,9 +12,8 @@ import type {
   SectionedSourceMap,
   SourceMapInput,
   TraceMap,
+  DecodedSourceMap,
 } from "@jridgewell/trace-mapping";
-
-type Section = SectionedSourceMap["sections"][0];
 
 type CompilationOutput = {
   code: string;
