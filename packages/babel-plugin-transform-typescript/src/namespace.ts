@@ -185,6 +185,10 @@ function handleNested(
       case "TSEnumDeclaration":
       case "FunctionDeclaration":
       case "ClassDeclaration": {
+        if (subNode.declaration.declare) {
+          continue;
+        }
+
         const itemName = subNode.declaration.id.name;
         names.add(itemName);
         namespaceTopLevel.splice(
