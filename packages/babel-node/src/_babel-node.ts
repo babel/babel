@@ -7,7 +7,7 @@ import * as babel from "@babel/core";
 import vm from "vm";
 import "core-js/stable/index";
 import "regenerator-runtime/runtime";
-// @ts-expect-error @babel/register is a js module
+// @ts-expect-error @babel/register is a CommonJS module
 import register from "@babel/register";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
