@@ -2,6 +2,7 @@
 {
   "extends": "./tsconfig.base.json",
   "include": [
+    "./packages/babel-cli/src/**/*.ts",
     "./packages/babel-code-frame/src/**/*.ts",
     "./packages/babel-compat-data/src/**/*.ts",
     "./packages/babel-core/src/**/*.ts",
@@ -36,6 +37,7 @@
     "./packages/babel-helper-wrap-function/src/**/*.ts",
     "./packages/babel-helpers/src/**/*.ts",
     "./packages/babel-highlight/src/**/*.ts",
+    "./packages/babel-node/src/**/*.ts",
     "./packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression/src/**/*.ts",
     "./packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining/src/**/*.ts",
     "./packages/babel-plugin-external-helpers/src/**/*.ts",
@@ -150,6 +152,9 @@
   ],
   "compilerOptions": {
     "paths": {
+      "@babel/cli": [
+        "./packages/babel-cli/src"
+      ],
       "@babel/code-frame": [
         "./packages/babel-code-frame/src"
       ],
@@ -266,6 +271,9 @@
       ],
       "@babel/highlight": [
         "./packages/babel-highlight/src"
+      ],
+      "@babel/node": [
+        "./packages/babel-node/src"
       ],
       "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression": [
         "./packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression/src"
@@ -710,6 +718,15 @@
       ],
       "to-fast-properties": [
         "./node_modules/to-fast-properties-BABEL_8_BREAKING-true"
+      ],
+      "slash": [
+        "./node_modules/slash-BABEL_8_BREAKING-true"
+      ],
+      "fs-readdir-recursive": [
+        "./lib/fs-readdir-recursive.d.ts"
+      ],
+      "kexec": [
+        "./lib/kexec.d.ts"
       ]
     }
   }

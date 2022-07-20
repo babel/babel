@@ -74,14 +74,20 @@ function getTsPkgs(subRoot) {
         subExports,
       };
     })
-    .filter(
-      ({ name, relative }) =>
-        // @babel/register is special-cased because its entry point is a js file
+    .filter(({ name, relative }) => {
+      const ret =
+        // They are special-cased because them dose not have a index.ts
         name === "@babel/register" ||
+        name === "@babel/cli" ||
+        name === "@babel/node" ||
         // @babel/compat-data is used by preset-env
         name === "@babel/compat-data" ||
-        fs.existsSync(new URL(relative + "/src/index.ts", root))
-    );
+        fs.existsSync(new URL(relative + "/src/index.ts", root));
+      if (!ret) {
+        console.log(`Skipping ${name} for tsconfig.json`);
+      }
+      return ret;
+    });
 }
 
 const tsPkgs = [
@@ -123,6 +129,9 @@ fs.writeFileSync(
               "to-fast-properties",
               ["./node_modules/to-fast-properties-BABEL_8_BREAKING-true"],
             ],
+            ["slash", ["./node_modules/slash-BABEL_8_BREAKING-true"]],
+            ["fs-readdir-recursive", ["./lib/fs-readdir-recursive.d.ts"]],
+            ["kexec", ["./lib/kexec.d.ts"]],
           ]),
         },
       },

@@ -4,6 +4,8 @@ import commander from "commander";
 import { version, DEFAULT_EXTENSIONS } from "@babel/core";
 import glob from "glob";
 
+import type { InputOptions } from "@babel/core";
+
 // Standard Babel input configs.
 commander.option(
   "-f, --filename [filename]",
@@ -179,17 +181,35 @@ commander.usage("[options] <files ...>");
 commander.action(() => {});
 
 export type CmdOptions = {
-  babelOptions: any;
-  cliOptions: any;
+  babelOptions: InputOptions;
+  cliOptions: {
+    filename: string;
+    filenames: string[];
+    extensions: string[];
+    keepFileExtension: boolean;
+    outFileExtension: string;
+    watch: boolean;
+    skipInitialBuild: boolean;
+    outFile: string;
+    outDir: string;
+    relative: boolean;
+    copyFiles: boolean;
+    copyIgnored: boolean;
+    includeDotfiles: boolean;
+    verbose: boolean;
+    quiet: boolean;
+    deleteDirOnStart: boolean;
+    sourceMapTarget: string;
+  };
 };
 
 export default function parseArgv(args: Array<string>): CmdOptions | null {
   //
   commander.parse(args);
 
-  const errors = [];
+  const errors: string[] = [];
 
-  let filenames = commander.args.reduce(function (globbed, input) {
+  let filenames = commander.args.reduce(function (globbed: string[], input) {
     let files = glob.sync(input);
     if (!files.length) files = [input];
     globbed.push(...files);
@@ -264,7 +284,7 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
 
   const opts = commander.opts();
 
-  const babelOptions = {
+  const babelOptions: InputOptions = {
     presets: opts.presets,
     plugins: opts.plugins,
     rootMode: opts.rootMode,
@@ -303,7 +323,9 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
   // new options for @babel/core, we'll potentially get option validation errors from
   // @babel/core. To avoid that, we delete undefined options, so @babel/core will only
   // give the error if users actually pass an unsupported CLI option.
-  for (const key of Object.keys(babelOptions)) {
+  for (const key of Object.keys(babelOptions) as Array<
+    keyof typeof babelOptions
+  >) {
     if (babelOptions[key] === undefined) {
       delete babelOptions[key];
     }

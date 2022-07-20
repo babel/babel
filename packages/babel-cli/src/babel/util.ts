@@ -20,7 +20,7 @@ export function readdir(
   includeDotfiles: boolean,
   filter?: ReaddirFilter,
 ): Array<string> {
-  return readdirRecursive(dirname, (filename, _index, currentDirectory) => {
+  return readdirRecursive(dirname, (filename, index, currentDirectory) => {
     const stat = fs.statSync(path.join(currentDirectory, filename));
 
     if (stat.isDirectory()) return true;
@@ -134,7 +134,7 @@ export function withExtension(filename: string, ext: string = ".js") {
 }
 
 export function debounce(fn: () => void, time: number) {
-  let timer;
+  let timer: NodeJS.Timeout;
   function debounced() {
     clearTimeout(timer);
     timer = setTimeout(fn, time);

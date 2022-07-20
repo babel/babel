@@ -8,9 +8,16 @@ import * as util from "./util";
 import type { CmdOptions } from "./options";
 import * as watcher from "./watcher";
 
+import type {
+  SectionedSourceMap,
+  SourceMapInput,
+  TraceMap,
+  DecodedSourceMap,
+} from "@jridgewell/trace-mapping";
+
 type CompilationOutput = {
   code: string;
-  map: any;
+  map: SourceMapInput;
 };
 
 export default async function ({
@@ -18,7 +25,7 @@ export default async function ({
   babelOptions,
 }: CmdOptions): Promise<void> {
   function buildResult(fileResults: Array<any>): CompilationOutput {
-    const mapSections = [];
+    const mapSections: SectionedSourceMap["sections"] = [];
 
     let code = "";
     let offset = 0;
@@ -70,7 +77,7 @@ export default async function ({
     }
     return count;
   }
-  function emptyMap() {
+  function emptyMap(): DecodedSourceMap {
     return {
       version: 3,
       names: [],
@@ -89,7 +96,10 @@ export default async function ({
       if (babelOptions.sourceMaps && babelOptions.sourceMaps !== "inline") {
         const mapLoc = cliOptions.outFile + ".map";
         result.code = util.addSourceMappingUrl(result.code, mapLoc);
-        fs.writeFileSync(mapLoc, JSON.stringify(encodedMap(result.map)));
+        fs.writeFileSync(
+          mapLoc,
+          JSON.stringify(encodedMap(result.map as TraceMap)),
+        );
       }
 
       fs.writeFileSync(cliOptions.outFile, result.code);
@@ -129,7 +139,7 @@ export default async function ({
   }
 
   async function walk(filenames: Array<string>): Promise<void> {
-    const _filenames = [];
+    const _filenames: string[] = [];
 
     filenames.forEach(function (filename) {
       if (!fs.existsSync(filename)) return;
