@@ -26,7 +26,7 @@ export default async function ({
   babelOptions,
 }: CmdOptions): Promise<void> {
   function buildResult(fileResults: Array<any>): CompilationOutput {
-    const mapSections: Section[] = [];
+    const mapSections: SectionedSourceMap["sections"] = [];
 
     let code = "";
     let offset = 0;
@@ -78,7 +78,7 @@ export default async function ({
     }
     return count;
   }
-  function emptyMap(): Section["map"] {
+  function emptyMap(): DecodedSourceMap {
     return {
       version: 3,
       names: [],
