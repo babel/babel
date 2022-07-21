@@ -205,6 +205,7 @@ __metadata:
     "@babel/helper-fixtures": "workspace:^"
     "@jridgewell/trace-mapping": ^0.3.8
     "@nicolo-ribaudo/chokidar-2": "condition:BABEL_8_BREAKING ? : 2.1.8-no-fsevents.3"
+    "@types/fs-readdir-recursive": ^1.1.0
     chokidar: ^3.4.0
     commander: ^4.0.1
     convert-source-map: ^1.1.0
@@ -4357,6 +4358,13 @@ __metadata:
   version: 3.0.0
   resolution: "@types/events@npm:3.0.0"
   checksum: 9a424c2da210957d5636e0763e8c9fc3aaeee35bf411284ddec62a56a6abe31de9c7c2e713dabdd8a76ff98b47db2bd52f61310be6609641d6234cc842ecbbe3
+  languageName: node
+  linkType: hard
+
+"@types/fs-readdir-recursive@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@types/fs-readdir-recursive@npm:1.1.0"
+  checksum: 9ce802ca81259fccf85e217b149e8ce05dae5f665c5bc2292280e9873d2d84f2c37fb5033ae0ca024f3c71b502fb71d5517bf4af030155523882c0c1bfc39f59
   languageName: node
   linkType: hard
 

@@ -42,6 +42,7 @@
   "devDependencies": {
     "@babel/core": "workspace:^",
     "@babel/helper-fixtures": "workspace:^",
+    "@types/fs-readdir-recursive": "^1.1.0",
     "rimraf": "^3.0.0"
   },
   "bin": {

@@ -40,6 +40,6 @@ yarn install
 
 # Only run js,jsx,misc format tests
 # Without --runInBand CircleCI hangs.
-yarn test "tests/format/(jsx?|misc)/" --update-snapshot --runInBand
+yarn test "tests/format/(jsx?|misc|typescript|flow|flow-repo)/" --update-snapshot
 
 cleanup
