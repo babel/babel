@@ -16,6 +16,7 @@ Object {
   "tail": false,
   "type": "TemplateElement",
   "value": Object {
+    "cooked": "foo",
     "raw": "foo",
   },
 }
@@ -36,6 +37,43 @@ exports[`builders es2015 templateElement should validate 5`] = `
 Property raw expected type of string but got undefined"
 `;
 
+exports[`builders es2015 templateElement should validate 6`] = `
+Object {
+  "tail": false,
+  "type": "TemplateElement",
+  "value": Object {
+    "cooked": null,
+    "raw": "\\\\u",
+  },
+}
+`;
+
+exports[`builders es2015 templateElement should validate 7`] = `
+Object {
+  "tail": false,
+  "type": "TemplateElement",
+  "value": Object {
+    "cooked": "B",
+    "raw": "\\\\x42",
+  },
+}
+`;
+
+exports[`builders es2015 templateElement should validate 8`] = `
+Object {
+  "tail": false,
+  "type": "TemplateElement",
+  "value": Object {
+    "cooked": "B",
+    "raw": "\\\\x42",
+  },
+}
+`;
+
+exports[`builders es2015 templateElement should validate 9`] = `"Invalid raw"`;
+
+exports[`builders es2015 templateElement should validate 10`] = `"Invalid raw"`;
+
 exports[`builders es2015 templateLiteral should validate 1`] = `
 Object {
   "expressions": Array [],
@@ -44,6 +82,7 @@ Object {
       "tail": false,
       "type": "TemplateElement",
       "value": Object {
+        "cooked": "foo",
         "raw": "foo",
       },
     },
@@ -65,6 +104,7 @@ Object {
       "tail": false,
       "type": "TemplateElement",
       "value": Object {
+        "cooked": "foo",
         "raw": "foo",
       },
     },
@@ -72,6 +112,7 @@ Object {
       "tail": false,
       "type": "TemplateElement",
       "value": Object {
+        "cooked": "bar",
         "raw": "bar",
       },
     },
