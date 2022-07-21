@@ -15,7 +15,6 @@ export type LValAncestor =
         | "FormalParameters"
         | "ForInStatement"
         | "ForStatement"
-        | "Identfier"
         | "ObjectPattern"
         | "RestElement"
         | "VariableDeclarator";

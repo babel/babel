@@ -45,7 +45,7 @@ export type ParseErrorConstructor<ErrorDetails> = (a: {
   details: ErrorDetails;
 }) => ParseError<ErrorDetails>;
 
-function toParseErrorConstructor<ErrorDetails extends any>({
+function toParseErrorConstructor<ErrorDetails>({
   toMessage,
   ...properties
 }: ParseErrorCredentials<ErrorDetails>): ParseErrorConstructor<ErrorDetails> {
@@ -55,7 +55,7 @@ function toParseErrorConstructor<ErrorDetails extends any>({
   };
 
   return function constructor({ loc, details }: ConstructorArgument) {
-    return instantiate<ParseError<ErrorDetails>>(
+    return instantiate<SyntaxError, ParseError<ErrorDetails>>(
       SyntaxError,
       { ...properties, loc },
       {
@@ -68,8 +68,11 @@ function toParseErrorConstructor<ErrorDetails extends any>({
           const loc = overrides.loc || {};
           return constructor({
             loc: new Position(
+              // @ts-expect-error line has been guarded
               "line" in loc ? loc.line : this.loc.line,
+              // @ts-expect-error column has been guarded
               "column" in loc ? loc.column : this.loc.column,
+              // @ts-expect-error index has been guarded
               "index" in loc ? loc.index : this.loc.index,
             ),
             details: { ...this.details, ...overrides.details },
@@ -77,7 +80,7 @@ function toParseErrorConstructor<ErrorDetails extends any>({
         },
         details: { value: details, enumerable: false },
         message: {
-          get() {
+          get(this: ConstructorArgument): string {
             return `${toMessage(this.details)} (${this.loc.line}:${
               this.loc.column
             })`;
@@ -108,9 +111,9 @@ export // This part is tricky. You'll probably notice from the name of this func
 // to the type system, avoiding the need to do so with $ObjMap (which doesn't
 // work) in `ParseErrorEnum`. This hack won't be necessary when we switch to
 // Typescript.
-function toParseErrorCredentials<T extends string>(
-  b: T,
-  a:
+function toParseErrorCredentials(
+  b: string,
+  a?:
     | {
         code?: ParseErrorCode;
         reasonCode?: string;
@@ -120,13 +123,9 @@ function toParseErrorCredentials<T extends string>(
     | boolean,
 ): ParseErrorConstructor<{}>;
 
-export // ESLint seems to erroneously think that Flow's overloading syntax is an
-// accidental redeclaration of the function:
-// https://github.com/babel/eslint-plugin-babel/issues/162
-// eslint-disable-next-line no-redeclare
-function toParseErrorCredentials<ErrorDetails>(
+export function toParseErrorCredentials<ErrorDetails>(
   b: (a: ErrorDetails) => string,
-  a:
+  a?:
     | {
         code?: ParseErrorCode;
         reasonCode?: string;
@@ -136,9 +135,10 @@ function toParseErrorCredentials<ErrorDetails>(
     | boolean,
 ): ParseErrorConstructor<ErrorDetails>;
 
-// See comment about eslint and Flow overloading above.
-// eslint-disable-next-line no-redeclare
-export function toParseErrorCredentials(toMessageOrMessage, credentials) {
+export function toParseErrorCredentials(
+  toMessageOrMessage: string | ((details: unknown) => string),
+  credentials: any,
+) {
   return {
     toMessage:
       typeof toMessageOrMessage === "string"
@@ -149,14 +149,11 @@ export function toParseErrorCredentials(toMessageOrMessage, credentials) {
 }
 
 export // This is the templated form.
-function ParseErrorEnum(a: string[]): typeof ParseErrorEnum;
+function ParseErrorEnum(a: TemplateStringsArray): typeof ParseErrorEnum;
 
-export // See comment about eslint and Flow overloading above.
-// eslint-disable-next-line no-redeclare
-function ParseErrorEnum<T>(
-  toParseErrorCredentials: (a: typeof toParseErrorCredentials) => T,
-  syntaxPlugin?: string,
-): T;
+export function ParseErrorEnum<
+  T extends (a: typeof toParseErrorCredentials) => unknown,
+>(toParseErrorCredentials: T, syntaxPlugin?: string): ReturnType<T>;
 
 // You call `ParseErrorEnum` with a mapping from `ReasonCode`'s to either error
 // messages, or `toMessage` functions that define additional necessary `details`
@@ -167,19 +164,20 @@ function ParseErrorEnum<T>(
 //   ErrorWithDynamicMessage: _<{ type: string }>(({ type }) => `${type}`),
 // });
 //
-// See comment about eslint and Flow overloading above.
-// eslint-disable-next-line no-redeclare
-export function ParseErrorEnum(argument, syntaxPlugin) {
+export function ParseErrorEnum(argument: any, syntaxPlugin?: string) {
   // If the first parameter is an array, that means we were called with a tagged
   // template literal. Extract the syntaxPlugin from this, and call again in
   // the "normalized" form.
   if (Array.isArray(argument)) {
-    return toParseErrorCredentialsMap =>
+    return (toParseErrorCredentialsMap: any) =>
       ParseErrorEnum(toParseErrorCredentialsMap, argument[0]);
   }
 
   const partialCredentials = argument(toParseErrorCredentials);
-  const ParseErrorConstructors = {};
+  const ParseErrorConstructors = {} as Record<
+    string,
+    ParseErrorConstructor<unknown>
+  >;
 
   for (const reasonCode of Object.keys(partialCredentials)) {
     ParseErrorConstructors[reasonCode] = toParseErrorConstructor({

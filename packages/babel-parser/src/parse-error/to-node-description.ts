@@ -4,6 +4,7 @@ const NodeDescriptions = {
   AssignmentPattern: "assignment expression",
   ArrowFunctionExpression: "arrow function expression",
   ConditionalExpression: "conditional expression",
+  CatchClause: "catch clause",
   ForOfStatement: "for-of statement",
   ForInStatement: "for-in statement",
   ForStatement: "for-loop",
@@ -34,10 +35,11 @@ type NodeWithDescription =
       type: NodeTypesWithDescriptions;
     };
 
+// @ts-expect-error prefix is specified only when type is UpdateExpression
 // eslint-disable-next-line no-confusing-arrow
 const toNodeDescription = ({ type, prefix }: NodeWithDescription) =>
   type === "UpdateExpression"
-    ? NodeDescriptions.UpdateExpression[String(prefix)]
+    ? NodeDescriptions.UpdateExpression[String(prefix) as "true" | "false"]
     : NodeDescriptions[type];
 
 export default toNodeDescription;

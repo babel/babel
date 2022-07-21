@@ -23,19 +23,25 @@ export type ParseErrorCredentials<ErrorDetails> = {
 };
 
 const reflect = (keys: string[], last = keys.length - 1) => ({
-  get() {
-    return keys.reduce((object, key) => object[key], this);
+  get(): unknown {
+    return keys.reduce(
+      (object, key) =>
+        // @ts-expect-error key should index object
+        object[key],
+      this,
+    );
   },
-  set(value) {
+  set(value: unknown) {
     keys.reduce(
+      // @ts-expect-error key should index item
       (item, key, i) => (i === last ? (item[key] = value) : item[key]),
       this,
     );
   },
 });
 
-const instantiate = <T>(
-  constructor: () => any,
+const instantiate = <T, U extends T>(
+  constructor: new () => T,
   properties: any,
   descriptors: any,
 ) =>
@@ -56,7 +62,7 @@ const instantiate = <T>(
           configurable: true,
           ...descriptor,
         }),
-      Object.assign(new constructor() as T, properties),
+      Object.assign(new constructor() as U, properties),
     );
 
 export { instantiate };

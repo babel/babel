@@ -1,12 +1,15 @@
 import { toParseErrorCredentials } from "../parse-error";
 import toNodeDescription from "./to-node-description";
 
-export const UnparenthesizedPipeBodyDescriptions = new Set<string>([
+const UnparenthesizedPipeBodyDescriptionsList = [
   "ArrowFunctionExpression",
   "AssignmentExpression",
   "ConditionalExpression",
   "YieldExpression",
-]);
+] as const;
+export const UnparenthesizedPipeBodyDescriptions = new Set(
+  UnparenthesizedPipeBodyDescriptionsList,
+);
 
 export default (_: typeof toParseErrorCredentials) => ({
   // This error is only used by the smart-mix proposal
@@ -29,7 +32,7 @@ export default (_: typeof toParseErrorCredentials) => ({
     "Hack-style pipe body does not contain a topic reference; Hack-style pipes must use topic at least once.",
   ),
   PipeUnparenthesizedBody: _<{
-    type: string;
+    type: typeof UnparenthesizedPipeBodyDescriptionsList[number];
   }>(
     ({ type }) =>
       `Hack-style pipe body cannot be an unparenthesized ${toNodeDescription({
