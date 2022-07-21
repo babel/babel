@@ -27,6 +27,14 @@ describe("builders", function () {
         expect(
           t.templateElement({ raw: "\\x42", cooked: "123" }),
         ).toMatchSnapshot();
+
+        expect(() =>
+          t.templateElement({ raw: "`" }),
+        ).toThrowErrorMatchingSnapshot();
+
+        expect(() =>
+          t.templateElement({ raw: "${" }),
+        ).toThrowErrorMatchingSnapshot();
       });
     });
     describe("templateLiteral", function () {
