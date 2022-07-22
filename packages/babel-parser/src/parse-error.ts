@@ -100,7 +100,7 @@ function toParseErrorConstructor<ErrorDetails>({
   };
 }
 
-export // This part is tricky. You'll probably notice from the name of this function
+// This part is tricky. You'll probably notice from the name of this function
 // that it is supposed to return `ParseErrorCredentials`, but instead these.
 // declarations seem to instead imply that they return
 // `ParseErrorConstructor<ErrorDetails>` instead. This is because in Flow we
@@ -112,7 +112,7 @@ export // This part is tricky. You'll probably notice from the name of this func
 // to the type system, avoiding the need to do so with $ObjMap (which doesn't
 // work) in `ParseErrorEnum`. This hack won't be necessary when we switch to
 // Typescript.
-function toParseErrorCredentials(
+export function toParseErrorCredentials(
   b: string,
   a?:
     | {
