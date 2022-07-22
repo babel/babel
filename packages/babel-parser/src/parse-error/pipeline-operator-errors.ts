@@ -22,9 +22,7 @@ export default (_: typeof toParseErrorCredentials) => ({
   PipeTopicUnbound: _(
     "Topic reference is unbound; it must be inside a pipe body.",
   ),
-  PipeTopicUnconfiguredToken: _<{
-    token: string;
-  }>(
+  PipeTopicUnconfiguredToken: _<{ token: string }>(
     ({ token }) =>
       `Invalid topic token ${token}. In order to use ${token} as a topic reference, the pipelineOperator plugin must be configured with { "proposal": "hack", "topicToken": "${token}" }.`,
   ),

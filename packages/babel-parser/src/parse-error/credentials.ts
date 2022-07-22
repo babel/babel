@@ -23,7 +23,7 @@ export type ParseErrorCredentials<ErrorDetails> = {
 };
 
 const reflect = (keys: string[], last = keys.length - 1) => ({
-  get(): unknown {
+  get(this: unknown): unknown {
     return keys.reduce(
       (object, key) =>
         // @ts-expect-error key should index object
@@ -31,7 +31,7 @@ const reflect = (keys: string[], last = keys.length - 1) => ({
       this,
     );
   },
-  set(value: unknown) {
+  set(this: unknown, value: unknown) {
     keys.reduce(
       // @ts-expect-error key should index item
       (item, key, i) => (i === last ? (item[key] = value) : item[key]),

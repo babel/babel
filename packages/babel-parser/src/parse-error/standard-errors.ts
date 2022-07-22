@@ -2,10 +2,7 @@ import { toParseErrorCredentials } from "../parse-error";
 import toNodeDescription from "./to-node-description";
 
 export type LValAncestor =
-  | {
-      type: "UpdateExpression";
-      prefix: boolean;
-    }
+  | { type: "UpdateExpression"; prefix: boolean }
   | {
       type:
         | "ArrayPattern"
@@ -24,9 +21,9 @@ export type LValAncestor =
     };
 
 export default (_: typeof toParseErrorCredentials) => ({
-  AccessorIsGenerator: _<{
-    kind: "get" | "set";
-  }>(({ kind }) => `A ${kind}ter cannot be a generator.`),
+  AccessorIsGenerator: _<{ kind: "get" | "set" }>(
+    ({ kind }) => `A ${kind}ter cannot be a generator.`,
+  ),
 
   ArgumentsInClass: _(
     "'arguments' is only allowed in functions and class methods.",
@@ -59,9 +56,9 @@ export default (_: typeof toParseErrorCredentials) => ({
   ConstructorIsAccessor: _("Class constructor may not be an accessor."),
   ConstructorIsAsync: _("Constructor can't be an async function."),
   ConstructorIsGenerator: _("Constructor can't be a generator."),
-  DeclarationMissingInitializer: _<{
-    kind: "const" | "destructuring";
-  }>(({ kind }) => `Missing initializer in ${kind} declaration.`),
+  DeclarationMissingInitializer: _<{ kind: "const" | "destructuring" }>(
+    ({ kind }) => `Missing initializer in ${kind} declaration.`,
+  ),
   DecoratorBeforeExport: _(
     "Decorators must be placed *before* the 'export' keyword. You can set the 'decoratorsBeforeExport' option to false to use the 'export @decorator class {}' syntax.",
   ),
@@ -79,9 +76,7 @@ export default (_: typeof toParseErrorCredentials) => ({
   ),
   DuplicateConstructor: _("Duplicate constructor in the same class."),
   DuplicateDefaultExport: _("Only one default export allowed per module."),
-  DuplicateExport: _<{
-    exportName: string;
-  }>(
+  DuplicateExport: _<{ exportName: string }>(
     ({ exportName }) =>
       `\`${exportName}\` has already been exported. Exported identifiers must be unique.`,
   ),
@@ -89,10 +84,7 @@ export default (_: typeof toParseErrorCredentials) => ({
   DuplicateRegExpFlags: _("Duplicate regular expression flag."),
   ElementAfterRest: _("Rest element must be last element."),
   EscapedCharNotAnIdentifier: _("Invalid Unicode escape."),
-  ExportBindingIsString: _<{
-    localName: string;
-    exportName: string;
-  }>(
+  ExportBindingIsString: _<{ localName: string; exportName: string }>(
     ({ localName, exportName }) =>
       `A string literal cannot be used as an exported binding without \`from\`.\n- Did you mean \`export { '${localName}' as '${exportName}' } from 'some-module'\`?`,
   ),
@@ -100,9 +92,7 @@ export default (_: typeof toParseErrorCredentials) => ({
     "'from' is not allowed as an identifier after 'export default'.",
   ),
 
-  ForInOfLoopInitializer: _<{
-    type: "ForInStatement" | "ForOfStatement";
-  }>(
+  ForInOfLoopInitializer: _<{ type: "ForInStatement" | "ForOfStatement" }>(
     ({ type }) =>
       `'${
         type === "ForInStatement" ? "for-in" : "for-of"
@@ -115,9 +105,7 @@ export default (_: typeof toParseErrorCredentials) => ({
     "Generators can only be declared at the top level or inside a block.",
   ),
 
-  IllegalBreakContinue: _<{
-    type: "BreakStatement" | "ContinueStatement";
-  }>(
+  IllegalBreakContinue: _<{ type: "BreakStatement" | "ContinueStatement" }>(
     ({ type }) =>
       `Unsyntactic ${type === "BreakStatement" ? "break" : "continue"}.`,
   ),
@@ -126,18 +114,14 @@ export default (_: typeof toParseErrorCredentials) => ({
     "Illegal 'use strict' directive in function with non-simple parameter list.",
   ),
   IllegalReturn: _("'return' outside of function."),
-  ImportBindingIsString: _<{
-    importName: string;
-  }>(
+  ImportBindingIsString: _<{ importName: string }>(
     ({ importName }) =>
       `A string literal cannot be used as an imported binding.\n- Did you mean \`import { "${importName}" as foo }\`?`,
   ),
   ImportCallArgumentTrailingComma: _(
     "Trailing comma is disallowed inside import(...) arguments.",
   ),
-  ImportCallArity: _<{
-    maxArgumentCount: 1 | 2;
-  }>(
+  ImportCallArity: _<{ maxArgumentCount: 1 | 2 }>(
     ({ maxArgumentCount }) =>
       `\`import()\` requires exactly ${
         maxArgumentCount === 1 ? "one argument" : "one or two arguments"
@@ -155,26 +139,22 @@ export default (_: typeof toParseErrorCredentials) => ({
   InvalidCodePoint: _("Code point out of bounds."),
   InvalidCoverInitializedName: _("Invalid shorthand property initializer."),
   InvalidDecimal: _("Invalid decimal."),
-  InvalidDigit: _<{
-    radix: number;
-  }>(({ radix }) => `Expected number in radix ${radix}.`),
+  InvalidDigit: _<{ radix: number }>(
+    ({ radix }) => `Expected number in radix ${radix}.`,
+  ),
   InvalidEscapeSequence: _("Bad character escape sequence."),
   InvalidEscapeSequenceTemplate: _("Invalid escape sequence in template."),
-  InvalidEscapedReservedWord: _<{
-    reservedWord: string;
-  }>(({ reservedWord }) => `Escape sequence in keyword ${reservedWord}.`),
-  InvalidIdentifier: _<{
-    identifierName: string;
-  }>(({ identifierName }) => `Invalid identifier ${identifierName}.`),
-  InvalidLhs: _<{
-    ancestor: LValAncestor;
-  }>(
+  InvalidEscapedReservedWord: _<{ reservedWord: string }>(
+    ({ reservedWord }) => `Escape sequence in keyword ${reservedWord}.`,
+  ),
+  InvalidIdentifier: _<{ identifierName: string }>(
+    ({ identifierName }) => `Invalid identifier ${identifierName}.`,
+  ),
+  InvalidLhs: _<{ ancestor: LValAncestor }>(
     ({ ancestor }) =>
       `Invalid left-hand side in ${toNodeDescription(ancestor)}.`,
   ),
-  InvalidLhsBinding: _<{
-    ancestor: LValAncestor;
-  }>(
+  InvalidLhsBinding: _<{ ancestor: LValAncestor }>(
     ({ ancestor }) =>
       `Binding invalid left-hand side in ${toNodeDescription(ancestor)}.`,
   ),
@@ -182,23 +162,23 @@ export default (_: typeof toParseErrorCredentials) => ({
   InvalidOrMissingExponent: _(
     "Floating-point numbers require a valid exponent after the 'e'.",
   ),
-  InvalidOrUnexpectedToken: _<{
-    unexpected: string;
-  }>(({ unexpected }) => `Unexpected character '${unexpected}'.`),
+  InvalidOrUnexpectedToken: _<{ unexpected: string }>(
+    ({ unexpected }) => `Unexpected character '${unexpected}'.`,
+  ),
   InvalidParenthesizedAssignment: _(
     "Invalid parenthesized assignment pattern.",
   ),
-  InvalidPrivateFieldResolution: _<{
-    identifierName: string;
-  }>(({ identifierName }) => `Private name #${identifierName} is not defined.`),
+  InvalidPrivateFieldResolution: _<{ identifierName: string }>(
+    ({ identifierName }) => `Private name #${identifierName} is not defined.`,
+  ),
   InvalidPropertyBindingPattern: _("Binding member expression."),
   InvalidRecordProperty: _(
     "Only properties and spread elements are allowed in record definitions.",
   ),
   InvalidRestAssignmentPattern: _("Invalid rest operator's argument."),
-  LabelRedeclaration: _<{
-    labelName: string;
-  }>(({ labelName }) => `Label '${labelName}' is already declared.`),
+  LabelRedeclaration: _<{ labelName: string }>(
+    ({ labelName }) => `Label '${labelName}' is already declared.`,
+  ),
   LetInLexicalBinding: _(
     "'let' is not allowed to be used as a name in 'let' or 'const' declarations.",
   ),
@@ -209,9 +189,7 @@ export default (_: typeof toParseErrorCredentials) => ({
     "Only '=' operator can be used for specifying default value.",
   ),
   MissingSemicolon: _("Missing semicolon."),
-  MissingPlugin: _<{
-    missingPlugin: [string];
-  }>(
+  MissingPlugin: _<{ missingPlugin: [string] }>(
     ({ missingPlugin }) =>
       `This experimental syntax requires enabling the parser plugin: ${missingPlugin
         .map(name => JSON.stringify(name))
@@ -219,9 +197,7 @@ export default (_: typeof toParseErrorCredentials) => ({
   ),
   // FIXME: Would be nice to make this "missingPlugins" instead.
   // Also), seems like we can drop the "(s)" from the message and just make it "s".
-  MissingOneOfPlugins: _<{
-    missingPlugin: string[];
-  }>(
+  MissingOneOfPlugins: _<{ missingPlugin: string[] }>(
     ({ missingPlugin }) =>
       `This experimental syntax requires enabling one of the following parser plugin(s): ${missingPlugin
         .map(name => JSON.stringify(name))
@@ -237,22 +213,18 @@ export default (_: typeof toParseErrorCredentials) => ({
   ModuleAttributeInvalidValue: _(
     "Only string literals are allowed as module attribute values.",
   ),
-  ModuleAttributesWithDuplicateKeys: _<{
-    key: string;
-  }>(
+  ModuleAttributesWithDuplicateKeys: _<{ key: string }>(
     ({ key }) => `Duplicate key "${key}" is not allowed in module attributes.`,
   ),
-  ModuleExportNameHasLoneSurrogate: _<{
-    surrogateCharCode: number;
-  }>(
+  ModuleExportNameHasLoneSurrogate: _<{ surrogateCharCode: number }>(
     ({ surrogateCharCode }) =>
       `An export name cannot include a lone surrogate, found '\\u${surrogateCharCode.toString(
         16,
       )}'.`,
   ),
-  ModuleExportUndefined: _<{
-    localName: string;
-  }>(({ localName }) => `Export '${localName}' is not defined.`),
+  ModuleExportUndefined: _<{ localName: string }>(
+    ({ localName }) => `Export '${localName}' is not defined.`,
+  ),
   MultipleDefaultsInSwitch: _("Multiple default clauses."),
   NewlineAfterThrow: _("Illegal newline after throw."),
   NoCatchOrFinally: _("Missing catch or finally clause."),
@@ -275,15 +247,13 @@ export default (_: typeof toParseErrorCredentials) => ({
   ParamDupe: _("Argument name clash."),
   PatternHasAccessor: _("Object pattern can't contain getter or setter."),
   PatternHasMethod: _("Object pattern can't contain methods."),
-  PrivateInExpectedIn: _<{
-    identifierName: string;
-  }>(
+  PrivateInExpectedIn: _<{ identifierName: string }>(
     ({ identifierName }) =>
       `Private names are only allowed in property accesses (\`obj.#${identifierName}\`) or in \`in\` expressions (\`#${identifierName} in obj\`).`,
   ),
-  PrivateNameRedeclaration: _<{
-    identifierName: string;
-  }>(({ identifierName }) => `Duplicate private name #${identifierName}.`),
+  PrivateNameRedeclaration: _<{ identifierName: string }>(
+    ({ identifierName }) => `Duplicate private name #${identifierName}.`,
+  ),
   RecordExpressionBarIncorrectEndSyntaxType: _(
     "Record expressions ending with '|}' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'bar'.",
   ),
@@ -321,9 +291,9 @@ export default (_: typeof toParseErrorCredentials) => ({
   UnexpectedImportExport: _(
     "'import' and 'export' may only appear at the top level.",
   ),
-  UnexpectedKeyword: _<{
-    keyword: string;
-  }>(({ keyword }) => `Unexpected keyword '${keyword}'.`),
+  UnexpectedKeyword: _<{ keyword: string }>(
+    ({ keyword }) => `Unexpected keyword '${keyword}'.`,
+  ),
   UnexpectedLeadingDecorator: _(
     "Leading decorators must be attached to a class declaration.",
   ),
@@ -337,14 +307,11 @@ export default (_: typeof toParseErrorCredentials) => ({
     "A numeric separator is only allowed between two digits.",
   ),
   UnexpectedPrivateField: _("Unexpected private name."),
-  UnexpectedReservedWord: _<{
-    reservedWord: string;
-  }>(({ reservedWord }) => `Unexpected reserved word '${reservedWord}'.`),
+  UnexpectedReservedWord: _<{ reservedWord: string }>(
+    ({ reservedWord }) => `Unexpected reserved word '${reservedWord}'.`,
+  ),
   UnexpectedSuper: _("'super' is only allowed in object methods and classes."),
-  UnexpectedToken: _<{
-    expected?: string | null;
-    unexpected?: string | null;
-  }>(
+  UnexpectedToken: _<{ expected?: string | null; unexpected?: string | null }>(
     ({ expected, unexpected }) =>
       `Unexpected token${unexpected ? ` '${unexpected}'.` : ""}${
         expected ? `, expected "${expected}"` : ""
@@ -363,10 +330,7 @@ export default (_: typeof toParseErrorCredentials) => ({
   UnsupportedImport: _(
     "`import` can only be used in `import()` or `import.meta`.",
   ),
-  UnsupportedMetaProperty: _<{
-    target: string;
-    onlyValidPropertyName: string;
-  }>(
+  UnsupportedMetaProperty: _<{ target: string; onlyValidPropertyName: string }>(
     ({ target, onlyValidPropertyName }) =>
       `The only valid meta property for ${target} is ${target}.${onlyValidPropertyName}.`,
   ),
@@ -383,9 +347,7 @@ export default (_: typeof toParseErrorCredentials) => ({
   UnterminatedRegExp: _("Unterminated regular expression."),
   UnterminatedString: _("Unterminated string constant."),
   UnterminatedTemplate: _("Unterminated template."),
-  VarRedeclaration: _<{
-    identifierName: string;
-  }>(
+  VarRedeclaration: _<{ identifierName: string }>(
     ({ identifierName }) =>
       `Identifier '${identifierName}' has already been declared.`,
   ),

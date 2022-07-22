@@ -113,32 +113,18 @@ function toParseErrorConstructor<ErrorDetails>({
 // work) in `ParseErrorEnum`. This hack won't be necessary when we switch to
 // Typescript.
 export function toParseErrorCredentials(
-  b: string,
-  a?:
-    | {
-        code?: ParseErrorCode;
-        reasonCode?: string;
-      }
-    | undefined
-    | null
-    | boolean,
+  message: string,
+  credentials?: { code?: ParseErrorCode; reasonCode?: string },
 ): ParseErrorConstructor<{}>;
 
 export function toParseErrorCredentials<ErrorDetails>(
-  b: (a: ErrorDetails) => string,
-  a?:
-    | {
-        code?: ParseErrorCode;
-        reasonCode?: string;
-      }
-    | undefined
-    | null
-    | boolean,
+  toMessage: (details: ErrorDetails) => string,
+  credentials?: { code?: ParseErrorCode; reasonCode?: string },
 ): ParseErrorConstructor<ErrorDetails>;
 
 export function toParseErrorCredentials(
   toMessageOrMessage: string | ((details: unknown) => string),
-  credentials: any,
+  credentials?: any,
 ) {
   return {
     toMessage:
@@ -149,8 +135,8 @@ export function toParseErrorCredentials(
   };
 }
 
-export // This is the templated form.
-function ParseErrorEnum(a: TemplateStringsArray): typeof ParseErrorEnum;
+// This is the templated form.
+export function ParseErrorEnum(a: TemplateStringsArray): typeof ParseErrorEnum;
 
 export function ParseErrorEnum<
   T extends (a: typeof toParseErrorCredentials) => unknown,
