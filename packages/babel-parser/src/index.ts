@@ -1,5 +1,3 @@
-// @flow
-
 import { type Options } from "./options";
 import {
   hasPlugin,
@@ -77,7 +75,7 @@ function generateExportedTokenTypes(internalTokenTypes) {
 
 export const tokTypes = generateExportedTokenTypes(internalTokenTypes);
 
-function getParser(options: ?Options, input: string): Parser {
+function getParser(options: Options | undefined | null, input: string): Parser {
   let cls = Parser;
   if (options?.plugins) {
     validatePlugins(options.plugins);
@@ -87,10 +85,16 @@ function getParser(options: ?Options, input: string): Parser {
   return new cls(options, input);
 }
 
-const parserClassCache: { [key: string]: Class<Parser> } = {};
+const parserClassCache: {
+  [key: string]: {
+    new (...args: any): Parser;
+  };
+} = {};
 
 /** Get a Parser class with plugins applied. */
-function getParserClass(pluginsFromOptions: PluginList): Class<Parser> {
+function getParserClass(pluginsFromOptions: PluginList): {
+  new (...args: any): Parser;
+} {
   const pluginList = mixinPluginNames.filter(name =>
     hasPlugin(pluginsFromOptions, name),
   );

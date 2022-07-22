@@ -1,11 +1,10 @@
-// @flow
-
 export const ParseErrorCodes = Object.freeze({
   SyntaxError: "BABEL_PARSER_SYNTAX_ERROR",
   SourceTypeModuleError: "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED",
 });
 
-export type ParseErrorCode = $Values<typeof ParseErrorCodes>;
+export type ParseErrorCode =
+  typeof ParseErrorCodes[keyof typeof ParseErrorCodes];
 
 export type SyntaxPlugin =
   | "flow"
@@ -17,11 +16,10 @@ export type SyntaxPlugin =
 export type ToMessage<ErrorDetails> = (self: ErrorDetails) => string;
 
 export type ParseErrorCredentials<ErrorDetails> = {
-  code: ParseErrorCode,
-  reasonCode: string,
-  syntaxPlugin?: SyntaxPlugin,
-
-  toMessage: ToMessage<ErrorDetails>,
+  code: ParseErrorCode;
+  reasonCode: string;
+  syntaxPlugin?: SyntaxPlugin;
+  toMessage: ToMessage<ErrorDetails>;
 };
 
 const reflect = (keys: string[], last = keys.length - 1) => ({
@@ -38,8 +36,8 @@ const reflect = (keys: string[], last = keys.length - 1) => ({
 
 const instantiate = <T>(
   constructor: () => any,
-  properties: Object,
-  descriptors: Object,
+  properties: any,
+  descriptors: any,
 ) =>
   Object.keys(descriptors)
     .map(key => [key, descriptors[key]])
@@ -58,7 +56,7 @@ const instantiate = <T>(
           configurable: true,
           ...descriptor,
         }),
-      Object.assign((new constructor(): T), properties),
+      Object.assign(new constructor() as T, properties),
     );
 
 export { instantiate };

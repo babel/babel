@@ -1,5 +1,3 @@
-// @flow
-
 import type Parser from "./index";
 import UtilParser from "./util";
 import { SourceLocation, type Position } from "../util/location";
@@ -24,7 +22,9 @@ class Node implements NodeBase {
   declare leadingComments: Array<Comment>;
   declare trailingComments: Array<Comment>;
   declare innerComments: Array<Comment>;
-  declare extra: { [key: string]: any };
+  declare extra: {
+    [key: string]: any;
+  };
 }
 const NodePrototype = Node.prototype;
 
@@ -95,30 +95,30 @@ export function cloneStringLiteral(node: any): any {
 }
 
 export class NodeUtils extends UtilParser {
-  startNode<T: NodeType>(): T {
+  startNode<T extends NodeType>(): T {
     // $FlowIgnore
     return new Node(this, this.state.start, this.state.startLoc);
   }
 
-  startNodeAt<T: NodeType>(pos: number, loc: Position): T {
+  startNodeAt<T extends NodeType>(pos: number, loc: Position): T {
     // $FlowIgnore
     return new Node(this, pos, loc);
   }
 
   /** Start a new node with a previous node's location. */
-  startNodeAtNode<T: NodeType>(type: NodeType): T {
+  startNodeAtNode<T extends NodeType>(type: NodeType): T {
     return this.startNodeAt(type.start, type.loc.start);
   }
 
   // Finish an AST node, adding `type` and `end` properties.
 
-  finishNode<T: NodeType>(node: T, type: string): T {
+  finishNode<T extends NodeType>(node: T, type: string): T {
     return this.finishNodeAt(node, type, this.state.lastTokEndLoc);
   }
 
   // Finish node at given position
 
-  finishNodeAt<T: NodeType>(node: T, type: string, endLoc: Position): T {
+  finishNodeAt<T extends NodeType>(node: T, type: string, endLoc: Position): T {
     if (process.env.NODE_ENV !== "production" && node.end > 0) {
       throw new Error(
         "Do not call finishNode*() twice on the same node." +
@@ -141,7 +141,7 @@ export class NodeUtils extends UtilParser {
 
   resetEndLocation(
     node: NodeBase,
-    endLoc?: Position = this.state.lastTokEndLoc,
+    endLoc: Position = this.state.lastTokEndLoc,
   ): void {
     node.end = endLoc.index;
     node.loc.end = endLoc;

@@ -1,5 +1,3 @@
-// @flow
-
 import { toParseErrorCredentials } from "../parse-error";
 import toNodeDescription from "./to-node-description";
 
@@ -21,14 +19,18 @@ export default (_: typeof toParseErrorCredentials) => ({
   PipeTopicUnbound: _(
     "Topic reference is unbound; it must be inside a pipe body.",
   ),
-  PipeTopicUnconfiguredToken: _<{| token: string |}>(
+  PipeTopicUnconfiguredToken: _<{
+    token: string;
+  }>(
     ({ token }) =>
       `Invalid topic token ${token}. In order to use ${token} as a topic reference, the pipelineOperator plugin must be configured with { "proposal": "hack", "topicToken": "${token}" }.`,
   ),
   PipeTopicUnused: _(
     "Hack-style pipe body does not contain a topic reference; Hack-style pipes must use topic at least once.",
   ),
-  PipeUnparenthesizedBody: _<{| type: string |}>(
+  PipeUnparenthesizedBody: _<{
+    type: string;
+  }>(
     ({ type }) =>
       `Hack-style pipe body cannot be an unparenthesized ${toNodeDescription({
         type,

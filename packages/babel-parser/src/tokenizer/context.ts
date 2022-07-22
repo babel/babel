@@ -1,5 +1,3 @@
-// @flow
-
 // The token context is used in JSX plugin to track
 // jsx tag / jsx text / normal JavaScript expression
 
@@ -14,7 +12,7 @@ export class TokContext {
 }
 
 const types: {
-  [key: string]: TokContext,
+  [key: string]: TokContext;
 } = {
   brace: new TokContext("{"), // normal JavaScript expression
   j_oTag: new TokContext("<tag"), // JSX opening tag

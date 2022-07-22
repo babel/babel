@@ -1,5 +1,3 @@
-// @flow
-
 import {
   CLASS_ELEMENT_KIND_ACCESSOR,
   CLASS_ELEMENT_FLAG_STATIC,

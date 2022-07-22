@@ -20,12 +20,19 @@ const NodeDescriptions = {
   YieldExpression: "yield expression",
 };
 
-type NodeTypesWithDescriptions = $Keys<
-  $Diff<typeof NodeDescriptions, { UpdateExpression: any }>,
+type NodeTypesWithDescriptions = keyof Omit<
+  typeof NodeDescriptions,
+  "UpdateExpression"
 >;
+
 type NodeWithDescription =
-  | { type: "UpdateExpression", prefix: boolean }
-  | { type: NodeTypesWithDescriptions };
+  | {
+      type: "UpdateExpression";
+      prefix: boolean;
+    }
+  | {
+      type: NodeTypesWithDescriptions;
+    };
 
 // eslint-disable-next-line no-confusing-arrow
 const toNodeDescription = ({ type, prefix }: NodeWithDescription) =>

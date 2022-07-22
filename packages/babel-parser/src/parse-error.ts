@@ -1,5 +1,3 @@
-// @flow
-
 import { Position } from "./util/location";
 import type { NodeBase } from "./types";
 import {
@@ -25,9 +23,7 @@ interface ParseErrorSpecification<ErrorDetails> {
   code: ParseErrorCode;
   reasonCode: string;
   syntaxPlugin?: string;
-
   missingPlugin?: string | string[];
-
   loc: Position;
   details: ErrorDetails;
 
@@ -44,22 +40,31 @@ export type ParseError<ErrorDetails> = SyntaxError &
 // separate classes from `SyntaxError`'s.
 //
 // 1. https://github.com/microsoft/TypeScript/blob/v4.5.5/lib/lib.es5.d.ts#L1027
-export type ParseErrorConstructor<ErrorDetails> = ({
-  loc: Position,
-  details: ErrorDetails,
+export type ParseErrorConstructor<ErrorDetails> = (a: {
+  loc: Position;
+  details: ErrorDetails;
 }) => ParseError<ErrorDetails>;
 
-function toParseErrorConstructor<ErrorDetails: Object>({
+function toParseErrorConstructor<ErrorDetails extends any>({
   toMessage,
   ...properties
 }: ParseErrorCredentials<ErrorDetails>): ParseErrorConstructor<ErrorDetails> {
-  type ConstructorArgument = { loc: Position, details: ErrorDetails };
+  type ConstructorArgument = {
+    loc: Position;
+    details: ErrorDetails;
+  };
+
   return function constructor({ loc, details }: ConstructorArgument) {
     return instantiate<ParseError<ErrorDetails>>(
       SyntaxError,
       { ...properties, loc },
       {
-        clone(overrides: { loc?: Position, details?: ErrorDetails } = {}) {
+        clone(
+          overrides: {
+            loc?: Position;
+            details?: ErrorDetails;
+          } = {},
+        ) {
           const loc = overrides.loc || {};
           return constructor({
             loc: new Position(
@@ -91,7 +96,7 @@ function toParseErrorConstructor<ErrorDetails: Object>({
   };
 }
 
-// This part is tricky. You'll probably notice from the name of this function
+export // This part is tricky. You'll probably notice from the name of this function
 // that it is supposed to return `ParseErrorCredentials`, but instead these.
 // declarations seem to instead imply that they return
 // `ParseErrorConstructor<ErrorDetails>` instead. This is because in Flow we
@@ -103,18 +108,32 @@ function toParseErrorConstructor<ErrorDetails: Object>({
 // to the type system, avoiding the need to do so with $ObjMap (which doesn't
 // work) in `ParseErrorEnum`. This hack won't be necessary when we switch to
 // Typescript.
-declare function toParseErrorCredentials<T: string>(
-  T,
-  ?{ code?: ParseErrorCode, reasonCode?: string } | boolean,
-): ParseErrorConstructor<{||}>;
+function toParseErrorCredentials<T extends string>(
+  b: T,
+  a:
+    | {
+        code?: ParseErrorCode;
+        reasonCode?: string;
+      }
+    | undefined
+    | null
+    | boolean,
+): ParseErrorConstructor<{}>;
 
-// ESLint seems to erroneously think that Flow's overloading syntax is an
+export // ESLint seems to erroneously think that Flow's overloading syntax is an
 // accidental redeclaration of the function:
 // https://github.com/babel/eslint-plugin-babel/issues/162
 // eslint-disable-next-line no-redeclare
-declare function toParseErrorCredentials<ErrorDetails>(
-  (ErrorDetails) => string,
-  ?{ code?: ParseErrorCode, reasonCode?: string } | boolean,
+function toParseErrorCredentials<ErrorDetails>(
+  b: (a: ErrorDetails) => string,
+  a:
+    | {
+        code?: ParseErrorCode;
+        reasonCode?: string;
+      }
+    | undefined
+    | null
+    | boolean,
 ): ParseErrorConstructor<ErrorDetails>;
 
 // See comment about eslint and Flow overloading above.
@@ -129,13 +148,13 @@ export function toParseErrorCredentials(toMessageOrMessage, credentials) {
   };
 }
 
-// This is the templated form.
-declare function ParseErrorEnum(string[]): typeof ParseErrorEnum;
+export // This is the templated form.
+function ParseErrorEnum(a: string[]): typeof ParseErrorEnum;
 
-// See comment about eslint and Flow overloading above.
+export // See comment about eslint and Flow overloading above.
 // eslint-disable-next-line no-redeclare
-declare function ParseErrorEnum<T>(
-  toParseErrorCredentials: (typeof toParseErrorCredentials) => T,
+function ParseErrorEnum<T>(
+  toParseErrorCredentials: (a: typeof toParseErrorCredentials) => T,
   syntaxPlugin?: string,
 ): T;
 
@@ -174,10 +193,9 @@ export function ParseErrorEnum(argument, syntaxPlugin) {
   return ParseErrorConstructors;
 }
 
-export type RaiseProperties<ErrorDetails> = {|
-  ...ErrorDetails,
-  at: Position | NodeBase,
-|};
+export type RaiseProperties<ErrorDetails> = {
+  at: Position | NodeBase;
+} & ErrorDetails;
 
 import ModuleErrors from "./parse-error/module-errors";
 import StandardErrors from "./parse-error/standard-errors";

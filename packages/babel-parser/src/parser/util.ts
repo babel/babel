@@ -1,5 +1,3 @@
-// @flow
-
 import { type Position } from "../util/location";
 import {
   tokenIsLiteralPropertyName,
@@ -23,16 +21,17 @@ import {
   type ParseError,
   type ParseErrorConstructor,
 } from "../parse-error";
+
 /*::
 import type ScopeHandler from "../util/scope";
 */
 
 type TryParse<Node, Error, Thrown, Aborted, FailState> = {
-  node: Node,
-  error: Error,
-  thrown: Thrown,
-  aborted: Aborted,
-  failState: FailState,
+  node: Node;
+  error: Error;
+  thrown: Thrown;
+  aborted: Aborted;
+  failState: FailState;
 };
 
 // ## Parser utilities
@@ -149,20 +148,22 @@ export default class UtilParser extends Tokenizer {
   // Expect a token of a given type. If found, consume it, otherwise,
   // raise an unexpected token error at given pos.
 
-  expect(type: TokenType, loc?: ?Position): void {
+  expect(type: TokenType, loc?: Position | null): void {
     this.eat(type) || this.unexpected(loc, type);
   }
 
   // tryParse will clone parser state.
   // It is expensive and should be used with cautions
-  tryParse<T: Node | $ReadOnlyArray<Node>>(
-    fn: (abort: (node?: T) => empty) => T,
+  tryParse<T extends Node | ReadonlyArray<Node>>(
+    fn: (abort: (node?: T) => never) => T,
     oldState: State = this.state.clone(),
   ):
     | TryParse<T, null, false, false, null>
     | TryParse<T | null, ParseError<any>, boolean, false, State>
     | TryParse<T | null, null, false, true, State> {
-    const abortSignal: { node: T | null } = { node: null };
+    const abortSignal: {
+      node: T | null;
+    } = { node: null };
     try {
       const node = fn((node = null) => {
         abortSignal.node = node;
@@ -177,7 +178,7 @@ export default class UtilParser extends Tokenizer {
         this.state.tokensLength = failState.tokensLength;
         return {
           node,
-          error: (failState.errors[oldState.errors.length]: ParseError<any>),
+          error: failState.errors[oldState.errors.length] as ParseError<any>,
           thrown: false,
           aborted: false,
           failState,
@@ -212,7 +213,7 @@ export default class UtilParser extends Tokenizer {
   }
 
   checkExpressionErrors(
-    refExpressionErrors: ?ExpressionErrors,
+    refExpressionErrors: ExpressionErrors | undefined | null,
     andThrow: boolean,
   ) {
     if (!refExpressionErrors) return false;
@@ -382,8 +383,8 @@ export default class UtilParser extends Tokenizer {
  * It's only used by typescript and flow plugins
  */
 export class ExpressionErrors {
-  shorthandAssignLoc: ?Position = null;
-  doubleProtoLoc: ?Position = null;
-  privateKeyLoc: ?Position = null;
-  optionalParametersLoc: ?Position = null;
+  shorthandAssignLoc: Position | undefined | null = null;
+  doubleProtoLoc: Position | undefined | null = null;
+  privateKeyLoc: Position | undefined | null = null;
+  optionalParametersLoc: Position | undefined | null = null;
 }

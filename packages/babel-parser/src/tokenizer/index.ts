@@ -1,5 +1,3 @@
-// @flow
-
 /*:: declare var invariant; */
 
 import type { Options } from "../options";
@@ -1342,7 +1340,11 @@ export default class Tokenizer extends CommentsParser {
 
   recordStrictModeErrors(
     toParseError: DeferredStrictError,
-    { at }: { at: Position },
+    {
+      at,
+    }: {
+      at: Position;
+    },
   ) {
     const index = at.index;
 
@@ -1491,7 +1493,7 @@ export default class Tokenizer extends CommentsParser {
   raiseOverwrite<ErrorDetails>(
     toParseError: ParseErrorConstructor<ErrorDetails>,
     raiseProperties: RaiseProperties<ErrorDetails>,
-  ): ParseError<ErrorDetails> | empty {
+  ): ParseError<ErrorDetails> | never {
     const { at, ...details } = raiseProperties;
     const loc = at instanceof Position ? at : at.loc.start;
     const pos = loc.index;

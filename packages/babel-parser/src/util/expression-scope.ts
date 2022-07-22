@@ -1,5 +1,3 @@
-// @flow
-
 import { Errors, type ParseErrorConstructor } from "../parse-error";
 import { Position } from "./location";
 import type { Node } from "../types";
@@ -79,21 +77,24 @@ class ExpressionScope {
 type ArrowHeadParsingParameterInitializerError =
   | typeof Errors.AwaitExpressionFormalParameter
   | typeof Errors.YieldInParameter;
-
 type ArrowHeadParsingDeclarationError =
   | ArrowHeadParsingParameterInitializerError
   | typeof Errors.InvalidParenthesizedAssignment
   | typeof Errors.AwaitBindingIdentifier;
 
 class ArrowHeadParsingScope extends ExpressionScope {
-  declarationErrors: Map<number, [ParseErrorConstructor<{||}>, Position]> =
+  declarationErrors: Map<number, [ParseErrorConstructor<{}>, Position]> =
     new Map();
   constructor(type: 1 | 2) {
     super(type);
   }
   recordDeclarationError(
-    ParsingErrorClass: ParseErrorConstructor<{||}>,
-    { at }: { at: Position },
+    ParsingErrorClass: ParseErrorConstructor<{}>,
+    {
+      at,
+    }: {
+      at: Position;
+    },
   ) {
     const index = at.index;
 
@@ -103,7 +104,7 @@ class ArrowHeadParsingScope extends ExpressionScope {
     this.declarationErrors.delete(index);
   }
   iterateErrors(
-    iterator: ([ArrowHeadParsingDeclarationError, Position]) => void,
+    iterator: (a: [ArrowHeadParsingDeclarationError, Position]) => void,
   ) {
     this.declarationErrors.forEach(iterator);
   }
@@ -136,7 +137,11 @@ export default class ExpressionScopeHandler {
    */
   recordParameterInitializerError(
     toParseError: ArrowHeadParsingParameterInitializerError,
-    { at: node }: { at: Node },
+    {
+      at: node,
+    }: {
+      at: Node;
+    },
   ): void {
     const origin = { at: node.loc.start };
     const { stack } = this;
@@ -180,8 +185,12 @@ export default class ExpressionScopeHandler {
    * @memberof ExpressionScopeHandler
    */
   recordArrowParemeterBindingError(
-    error: ParseErrorConstructor<{||}>,
-    { at: node }: { at: Node },
+    error: ParseErrorConstructor<{}>,
+    {
+      at: node,
+    }: {
+      at: Node;
+    },
   ): void {
     const { stack } = this;
     const scope: ExpressionScope = stack[stack.length - 1];

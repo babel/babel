@@ -1,5 +1,3 @@
-// @flow
-
 import * as charCodes from "charcodes";
 
 import XHTMLEntities from "./xhtml";
@@ -24,7 +22,9 @@ const JsxErrors = ParseErrorEnum`jsx`(_ => ({
   AttributeIsEmpty: _(
     "JSX attributes must only be assigned a non-empty expression.",
   ),
-  MissingClosingTagElement: _<{| openingTagName: string |}>(
+  MissingClosingTagElement: _<{
+    openingTagName: string;
+  }>(
     ({ openingTagName }) =>
       `Expected corresponding JSX closing tag for <${openingTagName}>.`,
   ),
@@ -35,7 +35,10 @@ const JsxErrors = ParseErrorEnum`jsx`(_ => ({
     "Sequence expressions cannot be directly nested inside JSX. Did you mean to wrap it in parentheses (...)?",
   ),
   // FIXME: Unify with Errors.UnexpectedToken
-  UnexpectedToken: _<{| unexpected: string, HTMLEntity: string |}>(
+  UnexpectedToken: _<{
+    unexpected: string;
+    HTMLEntity: string;
+  }>(
     ({ unexpected, HTMLEntity }) =>
       `Unexpected token \`${unexpected}\`. Did you mean \`${HTMLEntity}\` or \`{'${unexpected}'}\`?`,
   ),
@@ -50,7 +53,7 @@ const JsxErrors = ParseErrorEnum`jsx`(_ => ({
 
 /* eslint-disable sort-keys */
 
-function isFragment(object: ?N.JSXElement): boolean {
+function isFragment(object?: N.JSXElement | null): boolean {
   return object
     ? object.type === "JSXOpeningFragment" ||
         object.type === "JSXClosingFragment"
@@ -82,7 +85,11 @@ function getQualifiedJSXName(
   throw new Error("Node had unexpected type: " + object.type);
 }
 
-export default (superClass: Class<Parser>): Class<Parser> =>
+export default (superClass: {
+  new (...args: any): Parser;
+}): {
+  new (...args: any): Parser;
+} =>
   class extends superClass {
     // Reads inline JSX contents token.
 
@@ -567,7 +574,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // Overrides
     // ==================================
 
-    parseExprAtom(refExpressionErrors: ?ExpressionErrors): N.Expression {
+    parseExprAtom(refExpressionErrors?: ExpressionErrors | null): N.Expression {
       if (this.match(tt.jsxText)) {
         return this.parseLiteral(this.state.value, "JSXText");
       } else if (this.match(tt.jsxTagStart)) {

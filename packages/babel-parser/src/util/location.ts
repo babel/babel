@@ -1,7 +1,5 @@
-// @flow
-
 export type Pos = {
-  start: number,
+  start: number;
 };
 
 // These are used when `options.locations` is on, for the
@@ -23,7 +21,7 @@ export class SourceLocation {
   start: Position;
   end: Position;
   filename: string;
-  identifierName: ?string;
+  identifierName: string | undefined | null;
 
   constructor(start: Position, end?: Position) {
     this.start = start;

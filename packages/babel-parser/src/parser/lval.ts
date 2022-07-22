@@ -1,5 +1,3 @@
-// @flow
-
 /*:: declare var invariant; */
 import * as charCodes from "charcodes";
 import { tt, type TokenType } from "../tokenizer/types";
@@ -230,7 +228,7 @@ export default class LValParser extends NodeUtils {
 
   toAssignableList(
     exprList: Expression[],
-    trailingCommaLoc?: ?Position,
+    trailingCommaLoc: Position | undefined | null,
     isLHS: boolean,
   ): void {
     const end = exprList.length - 1;
@@ -307,14 +305,15 @@ export default class LValParser extends NodeUtils {
   // Convert list of expression atoms to a list of
 
   toReferencedList(
-    exprList: $ReadOnlyArray<?Expression>,
-    isParenthesizedExpr?: boolean, // eslint-disable-line no-unused-vars
-  ): $ReadOnlyArray<?Expression> {
+    exprList: ReadonlyArray<Expression | undefined | null>,
+    // eslint-disable-line no-unused-vars
+    isParenthesizedExpr?: boolean,
+  ): ReadonlyArray<Expression | undefined | null> {
     return exprList;
   }
 
   toReferencedListDeep(
-    exprList: $ReadOnlyArray<?Expression>,
+    exprList: ReadonlyArray<Expression | undefined | null>,
     isParenthesizedExpr?: boolean,
   ): void {
     this.toReferencedList(exprList, isParenthesizedExpr);
@@ -329,8 +328,8 @@ export default class LValParser extends NodeUtils {
   // Parses spread element.
 
   parseSpread(
-    refExpressionErrors: ?ExpressionErrors,
-    refNeedsArrowPos?: ?Pos,
+    refExpressionErrors?: ExpressionErrors | null,
+    refNeedsArrowPos?: Pos | null,
   ): SpreadElement {
     const node = this.startNode();
     this.next();
@@ -377,10 +376,10 @@ export default class LValParser extends NodeUtils {
   // https://tc39.es/ecma262/#prod-BindingElementList
   parseBindingList(
     close: TokenType,
-    closeCharCode: $Values<typeof charCodes>,
+    closeCharCode: typeof charCodes[keyof typeof charCodes],
     allowEmpty?: boolean,
     allowModifiers?: boolean,
-  ): $ReadOnlyArray<Pattern | TSParameterProperty> {
+  ): ReadonlyArray<Pattern | TSParameterProperty> {
     const elts: Array<Pattern | TSParameterProperty> = [];
     let first = true;
     while (!this.eat(close)) {
@@ -454,7 +453,7 @@ export default class LValParser extends NodeUtils {
   }
 
   parseAssignableListItem(
-    allowModifiers: ?boolean,
+    allowModifiers: boolean | undefined | null,
     decorators: Decorator[],
   ): Pattern | TSParameterProperty {
     const left = this.parseMaybeDefault();
@@ -474,9 +473,9 @@ export default class LValParser extends NodeUtils {
   // Parses assignment pattern around given atom if possible.
   // https://tc39.es/ecma262/#prod-BindingElement
   parseMaybeDefault(
-    startPos?: ?number,
-    startLoc?: ?Position,
-    left?: ?Pattern,
+    startPos?: number | null,
+    startLoc?: Position | null,
+    left?: Pattern | null,
   ): Pattern {
     startLoc = startLoc ?? this.state.startLoc;
     startPos = startPos ?? this.state.start;
@@ -579,12 +578,12 @@ export default class LValParser extends NodeUtils {
       allowingSloppyLetBinding = !(binding & BIND_SCOPE_LEXICAL),
       hasParenthesizedAncestor = false,
     }: {
-      in: LValAncestor,
-      binding?: BindingTypes,
-      checkClashes?: Set<string> | false,
-      strictModeChanged?: boolean,
-      allowingSloppyLetBinding?: boolean,
-      hasParenthesizedAncestor?: boolean,
+      in: LValAncestor;
+      binding?: BindingTypes;
+      checkClashes?: Set<string> | false;
+      strictModeChanged?: boolean;
+      allowingSloppyLetBinding?: boolean;
+      hasParenthesizedAncestor?: boolean;
     },
   ): void {
     const type = expression.type;
@@ -724,7 +723,9 @@ export default class LValParser extends NodeUtils {
     }
   }
 
-  checkCommaAfterRest(close: $Values<typeof charCodes>): boolean {
+  checkCommaAfterRest(
+    close: typeof charCodes[keyof typeof charCodes],
+  ): boolean {
     if (!this.match(tt.comma)) {
       return false;
     }

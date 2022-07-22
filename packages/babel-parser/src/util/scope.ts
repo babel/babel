@@ -1,4 +1,3 @@
-// @flow
 import {
   SCOPE_ARROW,
   SCOPE_DIRECT_SUPER,
@@ -38,7 +37,7 @@ export class Scope {
 
 // The functions in this module keep track of declared variables in the
 // current scope in order to detect duplicate variable names.
-export default class ScopeHandler<IScope: Scope = Scope> {
+export default class ScopeHandler<IScope extends Scope = Scope> {
   parser: Tokenizer;
   scopeStack: Array<IScope> = [];
   inModule: boolean;

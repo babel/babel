@@ -1,5 +1,3 @@
-// @flow
-
 import type { Options } from "../options";
 import * as N from "../types";
 import type { CommentWhitespace } from "../parser/comments";
@@ -17,13 +15,12 @@ type TopicContextState = {
   // When a topic binding has been currently established,
   // then this is 1. Otherwise, it is 0. This is forwards compatible
   // with a future plugin for multiple lexical topics.
-  maxNumOfResolvableTopics: number,
-
+  maxNumOfResolvableTopics: number;
   // When a topic binding has been currently established, and if that binding
   // has been used as a topic reference `#`, then this is 0. Otherwise, it is
   // `null`. This is forwards compatible with a future plugin for multiple
   // lexical topics.
-  maxTopicIndex: null | 0,
+  maxTopicIndex: null | 0;
 };
 
 export default class State {
@@ -89,9 +86,9 @@ export default class State {
 
   // Labels in scope.
   labels: Array<{
-    kind: ?("loop" | "switch"),
-    name?: ?string,
-    statementStart?: number,
+    kind: "loop" | "switch" | undefined | null;
+    name?: string | null;
+    statementStart?: number;
   }> = [];
 
   // Leading decorators. Last element of the stack represents the decorators in current context.
@@ -175,11 +172,11 @@ export default class State {
 }
 
 export type LookaheadState = {
-  pos: number,
-  value: any,
-  type: TokenType,
-  start: number,
-  end: number,
+  pos: number;
+  value: any;
+  type: TokenType;
+  start: number;
+  end: number;
   /* Used only in readToken_mult_modulo */
-  inType: boolean,
+  inType: boolean;
 };

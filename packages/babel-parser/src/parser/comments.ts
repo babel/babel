@@ -1,5 +1,3 @@
-// @flow
-
 /*:: declare var invariant; */
 
 import BaseParser from "./base";
@@ -19,12 +17,12 @@ import * as charCodes from "charcodes";
  *                                         with minimal size (|end - start|)
  */
 export type CommentWhitespace = {
-  start: number,
-  end: number,
-  comments: Array<Comment>,
-  leadingNode: Node | null,
-  trailingNode: Node | null,
-  containingNode: Node | null,
+  start: number;
+  end: number;
+  comments: Array<Comment>;
+  leadingNode: Node | null;
+  trailingNode: Node | null;
+  containingNode: Node | null;
 };
 
 /**

@@ -1,5 +1,3 @@
-// @flow
-
 import { ParseErrorCodes, toParseErrorCredentials } from "../parse-error";
 
 export default (_: typeof toParseErrorCredentials) => ({

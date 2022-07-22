@@ -1,5 +1,3 @@
-// @flow
-
 /*:: declare var invariant; */
 
 import type Parser from "../../parser";
@@ -62,9 +60,9 @@ const FlowErrors = ParseErrorEnum`flow`(_ => ({
   ),
   // TODO: When we get proper string enums in typescript make this ReservedType.
   // Not really worth it to do the whole $Values dance with reservedTypes set.
-  AssignReservedType: _<{| reservedType: string |}>(
-    ({ reservedType }) => `Cannot overwrite reserved type ${reservedType}.`,
-  ),
+  AssignReservedType: _<{
+    reservedType: string;
+  }>(({ reservedType }) => `Cannot overwrite reserved type ${reservedType}.`),
   DeclareClassElement: _(
     "The `declare` modifier can only appear on class fields.",
   ),
@@ -74,26 +72,36 @@ const FlowErrors = ParseErrorEnum`flow`(_ => ({
   DuplicateDeclareModuleExports: _(
     "Duplicate `declare module.exports` statement.",
   ),
-  EnumBooleanMemberNotInitialized: _<{|
-    memberName: string,
-    enumName: string,
-  |}>(
+  EnumBooleanMemberNotInitialized: _<{
+    memberName: string;
+    enumName: string;
+  }>(
     ({ memberName, enumName }) =>
       `Boolean enum members need to be initialized. Use either \`${memberName} = true,\` or \`${memberName} = false,\` in enum \`${enumName}\`.`,
   ),
-  EnumDuplicateMemberName: _<{| memberName: string, enumName: string |}>(
+  EnumDuplicateMemberName: _<{
+    memberName: string;
+    enumName: string;
+  }>(
     ({ memberName, enumName }) =>
       `Enum member names need to be unique, but the name \`${memberName}\` has already been used before in enum \`${enumName}\`.`,
   ),
-  EnumInconsistentMemberValues: _<{| enumName: string |}>(
+  EnumInconsistentMemberValues: _<{
+    enumName: string;
+  }>(
     ({ enumName }) =>
       `Enum \`${enumName}\` has inconsistent member initializers. Either use no initializers, or consistently use literals (either booleans, numbers, or strings) for all member initializers.`,
   ),
-  EnumInvalidExplicitType: _<{| invalidEnumType: string, enumName: string |}>(
+  EnumInvalidExplicitType: _<{
+    invalidEnumType: string;
+    enumName: string;
+  }>(
     ({ invalidEnumType, enumName }) =>
       `Enum type \`${invalidEnumType}\` is not valid. Use one of \`boolean\`, \`number\`, \`string\`, or \`symbol\` in enum \`${enumName}\`.`,
   ),
-  EnumInvalidExplicitTypeUnknownSupplied: _<{| enumName: string |}>(
+  EnumInvalidExplicitTypeUnknownSupplied: _<{
+    enumName: string;
+  }>(
     ({ enumName }) =>
       `Supplied enum type is not valid. Use one of \`boolean\`, \`number\`, \`string\`, or \`symbol\` in enum \`${enumName}\`.`,
   ),
@@ -109,47 +117,49 @@ const FlowErrors = ParseErrorEnum`flow`(_ => ({
   // `EnumInvalidMemberInitializer` error that can accept `EnumExplicitType`
   // without alteration, and then just have its message change based on the
   // explicitType.
-  EnumInvalidMemberInitializerPrimaryType: _<{|
-    enumName: string,
-    memberName: string,
-    explicitType: EnumExplicitType,
-  |}>(
+  EnumInvalidMemberInitializerPrimaryType: _<{
+    enumName: string;
+    memberName: string;
+    explicitType: EnumExplicitType;
+  }>(
     ({ enumName, memberName, explicitType }) =>
       // $FlowIgnore (coercing null which never actually happens)
       `Enum \`${enumName}\` has type \`${explicitType}\`, so the initializer of \`${memberName}\` needs to be a ${explicitType} literal.`,
   ),
-  EnumInvalidMemberInitializerSymbolType: _<{|
-    enumName: string,
-    memberName: string,
-    explicitType: EnumExplicitType,
-  |}>(
+  EnumInvalidMemberInitializerSymbolType: _<{
+    enumName: string;
+    memberName: string;
+    explicitType: EnumExplicitType;
+  }>(
     ({ enumName, memberName }) =>
       `Symbol enum members cannot be initialized. Use \`${memberName},\` in enum \`${enumName}\`.`,
   ),
-  EnumInvalidMemberInitializerUnknownType: _<{|
-    enumName: string,
-    memberName: string,
-    explicitType: EnumExplicitType,
-  |}>(
+  EnumInvalidMemberInitializerUnknownType: _<{
+    enumName: string;
+    memberName: string;
+    explicitType: EnumExplicitType;
+  }>(
     ({ enumName, memberName }) =>
       `The enum member initializer for \`${memberName}\` needs to be a literal (either a boolean, number, or string) in enum \`${enumName}\`.`,
   ),
-  EnumInvalidMemberName: _<{|
-    enumName: string,
-    memberName: string,
-    suggestion: string,
-  |}>(
+  EnumInvalidMemberName: _<{
+    enumName: string;
+    memberName: string;
+    suggestion: string;
+  }>(
     ({ enumName, memberName, suggestion }) =>
       `Enum member names cannot start with lowercase 'a' through 'z'. Instead of using \`${memberName}\`, consider using \`${suggestion}\`, in enum \`${enumName}\`.`,
   ),
-  EnumNumberMemberNotInitialized: _<{|
-    enumName: string,
-    memberName: string,
-  |}>(
+  EnumNumberMemberNotInitialized: _<{
+    enumName: string;
+    memberName: string;
+  }>(
     ({ enumName, memberName }) =>
       `Number enum members need to be initialized, e.g. \`${memberName} = 1\` in enum \`${enumName}\`.`,
   ),
-  EnumStringMemberInconsistentlyInitailized: _<{| enumName: string |}>(
+  EnumStringMemberInconsistentlyInitailized: _<{
+    enumName: string;
+  }>(
     ({ enumName }) =>
       `String enum members need to consistently either all use initializers, or use no initializers, in enum \`${enumName}\`.`,
   ),
@@ -205,9 +215,9 @@ const FlowErrors = ParseErrorEnum`flow`(_ => ({
   UnexpectedExplicitInexactInObject: _(
     "Explicit inexact syntax must appear at the end of an inexact object.",
   ),
-  UnexpectedReservedType: _<{| reservedType: string |}>(
-    ({ reservedType }) => `Unexpected reserved type ${reservedType}.`,
-  ),
+  UnexpectedReservedType: _<{
+    reservedType: string;
+  }>(({ reservedType }) => `Unexpected reserved type ${reservedType}.`),
   UnexpectedReservedUnderscore: _(
     "`_` is only allowed as a type argument to call or new.",
   ),
@@ -226,10 +236,10 @@ const FlowErrors = ParseErrorEnum`flow`(_ => ({
   UnexpectedTypeParameterBeforeAsyncArrowFunction: _(
     "Type parameters must come after the async keyword, e.g. instead of `<T> async () => {}`, use `async <T>() => {}`.",
   ),
-  UnsupportedDeclareExportKind: _<{|
-    unsupportedExportKind: string,
-    suggestion: string,
-  |}>(
+  UnsupportedDeclareExportKind: _<{
+    unsupportedExportKind: string;
+    suggestion: string;
+  }>(
     ({ unsupportedExportKind, suggestion }) =>
       `\`declare export ${unsupportedExportKind}\` is not supported. Use \`${suggestion}\` instead.`,
   ),
@@ -268,7 +278,7 @@ const exportSuggestions = {
 // Like Array#filter, but returns a tuple [ acceptedElements, discardedElements ]
 function partition<T>(
   list: T[],
-  test: (T, number, T[]) => ?boolean,
+  test: (c: T, b: number, a: T[]) => boolean | undefined | null,
 ): [T[], T[]] {
   const list1 = [];
   const list2 = [];
@@ -282,26 +292,52 @@ const FLOW_PRAGMA_REGEX = /\*?\s*@((?:no)?flow)\b/;
 
 // Flow enums types
 type EnumExplicitType = null | "boolean" | "number" | "string" | "symbol";
-type EnumContext = {|
-  enumName: string,
-  explicitType: EnumExplicitType,
-  memberName: string,
-|};
-type EnumMemberInit =
-  | {| type: "number", loc: Position, value: N.Node |}
-  | {| type: "string", loc: Position, value: N.Node |}
-  | {| type: "boolean", loc: Position, value: N.Node |}
-  | {| type: "invalid", loc: Position |}
-  | {| type: "none", loc: Position |};
 
-export default (superClass: Class<Parser>): Class<Parser> =>
+type EnumContext = {
+  enumName: string;
+  explicitType: EnumExplicitType;
+  memberName: string;
+};
+
+type EnumMemberInit =
+  | {
+      type: "number";
+      loc: Position;
+      value: N.Node;
+    }
+  | {
+      type: "string";
+      loc: Position;
+      value: N.Node;
+    }
+  | {
+      type: "boolean";
+      loc: Position;
+      value: N.Node;
+    }
+  | {
+      type: "invalid";
+      loc: Position;
+    }
+  | {
+      type: "none";
+      loc: Position;
+    };
+
+export default (superClass: {
+  new (...args: any): Parser;
+}): {
+  new (...args: any): Parser;
+} =>
   class extends superClass {
     // The value of the @flow/@noflow pragma. Initially undefined, transitions
     // to "@flow" or "@noflow" if we see a pragma. Transitions to null if we are
     // past the initial comment.
     flowPragma: void | null | "flow" | "noflow" = undefined;
 
-    getScopeHandler(): Class<FlowScopeHandler> {
+    getScopeHandler(): {
+      new (...args: any): FlowScopeHandler;
+    } {
       return FlowScopeHandler;
     }
 
@@ -373,7 +409,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    flowParseTypeAndPredicateInitialiser(): [?N.FlowType, ?N.FlowPredicate] {
+    flowParseTypeAndPredicateInitialiser(): [
+      N.FlowType | undefined | null,
+      N.FlowPredicate | undefined | null,
+    ] {
       const oldInType = this.state.inType;
       this.state.inType = true;
       this.expect(tt.colon);
@@ -566,7 +605,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     flowParseDeclareExportDeclaration(
       node: N.FlowDeclareExportDeclaration,
-      insideModule: ?boolean,
+      insideModule?: boolean | null,
     ): N.FlowDeclareExportDeclaration {
       this.expect(tt._export);
 
@@ -676,10 +715,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     // Interfaces
 
-    flowParseInterfaceish(
-      node: N.FlowDeclare,
-      isClass?: boolean = false,
-    ): void {
+    flowParseInterfaceish(node: N.FlowDeclare, isClass: boolean = false): void {
       node.id = this.flowParseRestrictedIdentifier(
         /* liberal */ !isClass,
         /* declaration */ true,
@@ -837,7 +873,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     // Type annotations
 
-    flowParseTypeParameter(requireDefault?: boolean = false): N.TypeParameter {
+    flowParseTypeParameter(requireDefault: boolean = false): N.TypeParameter {
       const nodeStartLoc = this.state.startLoc;
 
       const node = this.startNode();
@@ -973,7 +1009,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     flowParseObjectTypeIndexer(
       node: N.FlowObjectTypeIndexer,
       isStatic: boolean,
-      variance: ?N.FlowVariance,
+      variance?: N.FlowVariance | null,
     ): N.FlowObjectTypeIndexer {
       node.static = isStatic;
 
@@ -1071,11 +1107,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       allowProto,
       allowInexact,
     }: {
-      allowStatic: boolean,
-      allowExact: boolean,
-      allowSpread: boolean,
-      allowProto: boolean,
-      allowInexact: boolean,
+      allowStatic: boolean;
+      allowExact: boolean;
+      allowSpread: boolean;
+      allowProto: boolean;
+      allowInexact: boolean;
     }): N.FlowObjectTypeAnnotation {
       const oldInType = this.state.inType;
       this.state.inType = true;
@@ -1104,8 +1140,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       while (!this.match(endDelim)) {
         let isStatic = false;
-        let protoStartLoc: ?Position = null;
-        let inexactStartLoc: ?Position = null;
+        let protoStartLoc: Position | undefined | null = null;
+        let inexactStartLoc: Position | undefined | null = null;
         const node = this.startNode();
 
         if (allowProto && this.isContextual(tt._proto)) {
@@ -1219,12 +1255,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     flowParseObjectTypeProperty(
       node: N.FlowObjectTypeProperty | N.FlowObjectTypeSpreadProperty,
       isStatic: boolean,
-      protoStartLoc: ?Position,
-      variance: ?N.FlowVariance,
+      protoStartLoc: Position | undefined | null,
+      variance: N.FlowVariance | undefined | null,
       kind: string,
       allowSpread: boolean,
       allowInexact: boolean,
-    ): (N.FlowObjectTypeProperty | N.FlowObjectTypeSpreadProperty) | null {
+    ): N.FlowObjectTypeProperty | N.FlowObjectTypeSpreadProperty | null {
       if (this.eat(tt.ellipsis)) {
         const isInexactToken =
           this.match(tt.comma) ||
@@ -1455,12 +1491,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     flowParseFunctionTypeParams(params: N.FlowFunctionTypeParam[] = []): {
-      params: N.FlowFunctionTypeParam[],
-      rest: ?N.FlowFunctionTypeParam,
-      _this: ?N.FlowFunctionTypeParam,
+      params: N.FlowFunctionTypeParam[];
+      rest: N.FlowFunctionTypeParam | undefined | null;
+      _this: N.FlowFunctionTypeParam | undefined | null;
     } {
-      let rest: ?N.FlowFunctionTypeParam = null;
-      let _this: ?N.FlowFunctionTypeParam = null;
+      let rest: N.FlowFunctionTypeParam | undefined | null = null;
+      let _this: N.FlowFunctionTypeParam | undefined | null = null;
       if (this.match(tt._this)) {
         _this = this.flowParseFunctionTypeParam(/* first */ true);
         // match Flow parser behavior
@@ -1852,7 +1888,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return node.expression;
     }
 
-    flowParseVariance(): ?N.FlowVariance {
+    flowParseVariance(): N.FlowVariance | undefined | null {
       let variance = null;
       if (this.match(tt.plusMin)) {
         variance = this.startNode();
@@ -1873,8 +1909,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     parseFunctionBody(
       node: N.Function,
-      allowExpressionBody: ?boolean,
-      isMethod?: boolean = false,
+      allowExpressionBody?: boolean | null,
+      isMethod: boolean = false,
     ): void {
       if (allowExpressionBody) {
         return this.forwardNoArrowParamsConversionAt(node, () =>
@@ -1888,7 +1924,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseFunctionBodyAndFinish(
       node: N.BodilessFunctionOrMethodBase,
       type: string,
-      isMethod?: boolean = false,
+      isMethod: boolean = false,
     ): void {
       if (this.match(tt.colon)) {
         const typeNode = this.startNode();
@@ -1909,7 +1945,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     // interfaces and enums
-    parseStatement(context: ?string, topLevel?: boolean): N.Statement {
+    parseStatement(context?: string | null, topLevel?: boolean): N.Statement {
       // strict mode handling of `interface` since it's a reserved word
       if (this.state.strict && this.isContextual(tt._interface)) {
         const lookahead = this.lookahead();
@@ -1998,7 +2034,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       expr: N.Expression,
       startPos: number,
       startLoc: Position,
-      refExpressionErrors?: ?ExpressionErrors,
+      refExpressionErrors?: ExpressionErrors | null,
     ): N.Expression {
       if (!this.match(tt.question)) return expr;
 
@@ -2075,8 +2111,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tryParseConditionalConsequent(): {
-      consequent: N.Expression,
-      failed: boolean,
+      consequent: N.Expression;
+      failed: boolean;
     } {
       this.state.noArrowParamsConversionAt.push(this.state.start);
 
@@ -2132,7 +2168,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.toAssignableList(
         // node.params is Expression[] instead of $ReadOnlyArray<Pattern> because it
         // has not been converted yet.
-        ((node.params: any): N.Expression[]),
+        node.params as any as N.Expression[],
         node.extra?.trailingCommaLoc,
         /* isLHS */ false,
       );
@@ -2208,7 +2244,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return decl;
     }
 
-    parseExportDeclaration(node: N.ExportNamedDeclaration): ?N.Declaration {
+    parseExportDeclaration(
+      node: N.ExportNamedDeclaration,
+    ): N.Declaration | undefined | null {
       if (this.isContextual(tt._type)) {
         node.exportKind = "type";
 
@@ -2270,7 +2308,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return hasNamespace;
     }
 
-    parseClassId(node: N.Class, isStatement: boolean, optionalId: ?boolean) {
+    parseClassId(
+      node: N.Class,
+      isStatement: boolean,
+      optionalId?: boolean | null,
+    ) {
       super.parseClassId(node, isStatement, optionalId);
       if (this.match(tt.lt)) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
@@ -2376,7 +2418,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // turn type casts that we found in function parameter head into type annotated params
     toAssignableList(
       exprList: N.Expression[],
-      trailingCommaLoc?: ?Position,
+      trailingCommaLoc: Position | undefined | null,
       isLHS: boolean,
     ): void {
       for (let i = 0; i < exprList.length; i++) {
@@ -2391,9 +2433,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // this is a list of nodes, from something like a call expression, we need to filter the
     // type casts that we've found that are illegal in this context
     toReferencedList(
-      exprList: $ReadOnlyArray<?N.Expression>,
+      exprList: ReadonlyArray<N.Expression | undefined | null>,
       isParenthesizedExpr?: boolean,
-    ): $ReadOnlyArray<?N.Expression> {
+    ): ReadonlyArray<N.Expression | undefined | null> {
       for (let i = 0; i < exprList.length; i++) {
         const expr = exprList[i];
         if (
@@ -2415,7 +2457,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       close: TokenType,
       canBePattern: boolean,
       isTuple: boolean,
-      refExpressionErrors: ?ExpressionErrors,
+      refExpressionErrors?: ExpressionErrors | null,
     ): N.ArrayExpression | N.TupleExpression {
       const node = super.parseArrayLike(
         close,
@@ -2480,10 +2522,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       isConstructor: boolean,
       allowsDirectSuper: boolean,
     ): void {
-      if ((method: $FlowFixMe).variance) {
-        this.unexpected((method: $FlowFixMe).variance.loc.start);
+      if ((method as any).variance) {
+        this.unexpected((method as any).variance.loc.start);
       }
-      delete (method: $FlowFixMe).variance;
+      delete (method as any).variance;
       if (this.match(tt.lt)) {
         method.typeParameters = this.flowParseTypeParameterDeclaration();
       }
@@ -2522,10 +2564,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       isGenerator: boolean,
       isAsync: boolean,
     ): void {
-      if ((method: $FlowFixMe).variance) {
-        this.unexpected((method: $FlowFixMe).variance.loc.start);
+      if ((method as any).variance) {
+        this.unexpected((method as any).variance.loc.start);
       }
-      delete (method: $FlowFixMe).variance;
+      delete (method as any).variance;
       if (this.match(tt.lt)) {
         method.typeParameters = this.flowParseTypeParameterDeclaration();
       }
@@ -2577,18 +2619,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // parse type parameters for object method shorthand
     parseObjPropValue(
       prop: N.ObjectMember,
-      startPos: ?number,
-      startLoc: ?Position,
+      startPos: number | undefined | null,
+      startLoc: Position | undefined | null,
       isGenerator: boolean,
       isAsync: boolean,
       isPattern: boolean,
       isAccessor: boolean,
-      refExpressionErrors: ?ExpressionErrors,
+      refExpressionErrors?: ExpressionErrors | null,
     ): void {
-      if ((prop: $FlowFixMe).variance) {
-        this.unexpected((prop: $FlowFixMe).variance.loc.start);
+      if ((prop as any).variance) {
+        this.unexpected((prop as any).variance.loc.start);
       }
-      delete (prop: $FlowFixMe).variance;
+      delete (prop as any).variance;
 
       let typeParameters;
 
@@ -2624,7 +2666,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           this.raise(FlowErrors.ThisParamMayNotBeOptional, { at: param });
         }
 
-        ((param: any): N.Identifier).optional = true;
+        (param as any as N.Identifier).optional = true;
       }
       if (this.match(tt.colon)) {
         param.typeAnnotation = this.flowParseTypeAnnotation();
@@ -2641,9 +2683,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     parseMaybeDefault(
-      startPos?: ?number,
-      startLoc?: ?Position,
-      left?: ?N.Pattern,
+      startPos?: number | null,
+      startLoc?: Position | null,
+      left?: N.Pattern | null,
     ): N.Pattern {
       const node = super.parseMaybeDefault(startPos, startLoc, left);
 
@@ -2872,7 +2914,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     //    there
     // 3. This is neither. Just call the super method
     parseMaybeAssign(
-      refExpressionErrors?: ?ExpressionErrors,
+      refExpressionErrors?: ExpressionErrors | null,
       afterLeftParse?: Function,
     ): N.Expression {
       let state = null;
@@ -2943,10 +2985,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           return arrowExpression;
         }, state);
 
-        let arrowExpression: ?(
+        let arrowExpression:
           | N.ArrowFunctionExpression
           | N.TypeCastExpression
-        ) = null;
+          | undefined
+          | null = null;
 
         if (
           arrow.node &&
@@ -3000,7 +3043,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     // handle return types for arrow functions
-    parseArrow(node: N.ArrowFunctionExpression): ?N.ArrowFunctionExpression {
+    parseArrow(
+      node: N.ArrowFunctionExpression,
+    ): N.ArrowFunctionExpression | undefined | null {
       if (this.match(tt.colon)) {
         const result = this.tryParse(() => {
           const oldNoAnonFunctionType = this.state.noAnonFunctionType;
@@ -3055,7 +3100,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     checkParams(
       node: N.Function,
       allowDuplicates: boolean,
-      isArrowFunction: ?boolean,
+      isArrowFunction?: boolean | null,
     ): void {
       if (
         isArrowFunction &&
@@ -3084,7 +3129,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       base: N.Expression,
       startPos: number,
       startLoc: Position,
-      noCalls?: ?boolean,
+      noCalls?: boolean | null,
     ): N.Expression {
       if (
         base.type === "Identifier" &&
@@ -3140,7 +3185,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       base: N.Expression,
       startPos: number,
       startLoc: Position,
-      noCalls: ?boolean,
+      noCalls: boolean | undefined | null,
       subscriptState: N.ParseSubscriptState,
     ): N.Expression {
       if (this.match(tt.questionDot) && this.isLookaheadToken_lt()) {
@@ -3207,7 +3252,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseAsyncArrowWithTypeParameters(
       startPos: number,
       startLoc: Position,
-    ): ?N.ArrowFunctionExpression {
+    ): N.ArrowFunctionExpression | undefined | null {
       const node = this.startNodeAt(startPos, startLoc);
       this.parseFunctionParams(node);
       if (!this.parseArrow(node)) return;
@@ -3329,7 +3374,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     flowEnumErrorBooleanMemberNotInitialized(
       loc: Position,
-      { enumName, memberName }: { enumName: string, memberName: string },
+      {
+        enumName,
+        memberName,
+      }: {
+        enumName: string;
+        memberName: string;
+      },
     ): void {
       this.raise(FlowErrors.EnumBooleanMemberNotInitialized, {
         at: loc,
@@ -3357,7 +3408,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     flowEnumErrorNumberMemberNotInitialized(
       loc: Position,
-      { enumName, memberName }: { enumName: string, memberName: string },
+      {
+        enumName,
+        memberName,
+      }: {
+        enumName: string;
+        memberName: string;
+      },
     ): void {
       this.raise(FlowErrors.EnumNumberMemberNotInitialized, {
         at: loc,
@@ -3368,7 +3425,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     flowEnumErrorStringMemberInconsistentlyInitailized(
       node: N.Node,
-      { enumName }: { enumName: string },
+      {
+        enumName,
+      }: {
+        enumName: string;
+      },
     ): void {
       this.raise(FlowErrors.EnumStringMemberInconsistentlyInitailized, {
         at: node,
@@ -3411,7 +3472,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    flowEnumMemberRaw(): { id: N.Node, init: EnumMemberInit } {
+    flowEnumMemberRaw(): {
+      id: N.Node;
+      init: EnumMemberInit;
+    } {
       const loc = this.state.startLoc;
       const id = this.parseIdentifier(true);
       const init = this.eat(tt.eq)
@@ -3438,17 +3502,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       enumName,
       explicitType,
     }: {
-      enumName: string,
-      explicitType: EnumExplicitType,
-    }): {|
-      members: {|
-        booleanMembers: Array<N.Node>,
-        numberMembers: Array<N.Node>,
-        stringMembers: Array<N.Node>,
-        defaultedMembers: Array<N.Node>,
-      |},
-      hasUnknownMembers: boolean,
-    |} {
+      enumName: string;
+      explicitType: EnumExplicitType;
+    }): {
+      members: {
+        booleanMembers: Array<N.Node>;
+        numberMembers: Array<N.Node>;
+        stringMembers: Array<N.Node>;
+        defaultedMembers: Array<N.Node>;
+      };
+      hasUnknownMembers: boolean;
+    } {
       const seenNames = new Set();
       const members = {
         booleanMembers: [],
@@ -3547,7 +3611,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     flowEnumStringMembers(
       initializedMembers: Array<N.Node>,
       defaultedMembers: Array<N.Node>,
-      { enumName }: { enumName: string },
+      {
+        enumName,
+      }: {
+        enumName: string;
+      },
     ): Array<N.Node> {
       if (initializedMembers.length === 0) {
         return defaultedMembers;
@@ -3573,7 +3641,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     flowEnumParseExplicitType({
       enumName,
     }: {
-      enumName: string,
+      enumName: string;
     }): EnumExplicitType {
       if (!this.eatContextual(tt._of)) return null;
 

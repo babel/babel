@@ -1,5 +1,3 @@
-// @flow
-
 import { Position } from "../../util/location";
 import ScopeHandler, { Scope } from "../../util/scope";
 import {
