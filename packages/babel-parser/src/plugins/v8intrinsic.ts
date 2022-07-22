@@ -8,15 +8,16 @@ export default (superClass: {
   new (...args: any): Parser;
 } =>
   class extends superClass {
-    parseV8Intrinsic(): N.Expression {
+    parseV8Intrinsic(): N.Expression | void {
       if (this.match(tt.modulo)) {
         const v8IntrinsicStartLoc = this.state.startLoc;
         // let the `loc` of Identifier starts from `%`
-        const node = this.startNode();
+        const node = this.startNode<N.Identifier>();
         this.next(); // eat '%'
         if (tokenIsIdentifier(this.state.type)) {
           const name = this.parseIdentifierName(this.state.start);
           const identifier = this.createIdentifier(node, name);
+          // @ts-expect-error: avoid mutating AST types
           identifier.type = "V8IntrinsicIdentifier";
           if (this.match(tt.parenL)) {
             return identifier;

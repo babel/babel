@@ -25,10 +25,15 @@ import {
   SCOPE_ARROW,
   SCOPE_FUNCTION,
   SCOPE_OTHER,
+  type BindingTypes,
 } from "../../util/scopeflags";
 import type { ExpressionErrors } from "../../parser/util";
-import { Errors, ParseErrorEnum } from "../../parse-error";
-import { cloneIdentifier } from "../../parser/node";
+import {
+  Errors,
+  ParseErrorEnum,
+  toParseErrorCredentials,
+} from "../../parse-error";
+import { cloneIdentifier, type Undone } from "../../parser/node";
 
 const reservedTypes = new Set([
   "_",
@@ -51,203 +56,204 @@ const reservedTypes = new Set([
 
 /* eslint sort-keys: "error" */
 // The Errors key follows https://github.com/facebook/flow/blob/master/src/parser/parse_error.ml unless it does not exist
-const FlowErrors = ParseErrorEnum`flow`(_ => ({
-  AmbiguousConditionalArrow: _(
-    "Ambiguous expression: wrap the arrow functions in parentheses to disambiguate.",
-  ),
-  AmbiguousDeclareModuleKind: _(
-    "Found both `declare module.exports` and `declare export` in the same module. Modules can only have 1 since they are either an ES module or they are a CommonJS module.",
-  ),
-  // TODO: When we get proper string enums in typescript make this ReservedType.
-  // Not really worth it to do the whole $Values dance with reservedTypes set.
-  AssignReservedType: _<{
-    reservedType: string;
-  }>(({ reservedType }) => `Cannot overwrite reserved type ${reservedType}.`),
-  DeclareClassElement: _(
-    "The `declare` modifier can only appear on class fields.",
-  ),
-  DeclareClassFieldInitializer: _(
-    "Initializers are not allowed in fields with the `declare` modifier.",
-  ),
-  DuplicateDeclareModuleExports: _(
-    "Duplicate `declare module.exports` statement.",
-  ),
-  EnumBooleanMemberNotInitialized: _<{
-    memberName: string;
-    enumName: string;
-  }>(
-    ({ memberName, enumName }) =>
-      `Boolean enum members need to be initialized. Use either \`${memberName} = true,\` or \`${memberName} = false,\` in enum \`${enumName}\`.`,
-  ),
-  EnumDuplicateMemberName: _<{
-    memberName: string;
-    enumName: string;
-  }>(
-    ({ memberName, enumName }) =>
-      `Enum member names need to be unique, but the name \`${memberName}\` has already been used before in enum \`${enumName}\`.`,
-  ),
-  EnumInconsistentMemberValues: _<{
-    enumName: string;
-  }>(
-    ({ enumName }) =>
-      `Enum \`${enumName}\` has inconsistent member initializers. Either use no initializers, or consistently use literals (either booleans, numbers, or strings) for all member initializers.`,
-  ),
-  EnumInvalidExplicitType: _<{
-    invalidEnumType: string;
-    enumName: string;
-  }>(
-    ({ invalidEnumType, enumName }) =>
-      `Enum type \`${invalidEnumType}\` is not valid. Use one of \`boolean\`, \`number\`, \`string\`, or \`symbol\` in enum \`${enumName}\`.`,
-  ),
-  EnumInvalidExplicitTypeUnknownSupplied: _<{
-    enumName: string;
-  }>(
-    ({ enumName }) =>
-      `Supplied enum type is not valid. Use one of \`boolean\`, \`number\`, \`string\`, or \`symbol\` in enum \`${enumName}\`.`,
-  ),
+const FlowErrors = ParseErrorEnum`flow`(
+  (_: typeof toParseErrorCredentials) => ({
+    AmbiguousConditionalArrow: _(
+      "Ambiguous expression: wrap the arrow functions in parentheses to disambiguate.",
+    ),
+    AmbiguousDeclareModuleKind: _(
+      "Found both `declare module.exports` and `declare export` in the same module. Modules can only have 1 since they are either an ES module or they are a CommonJS module.",
+    ),
+    // TODO: When we get proper string enums in typescript make this ReservedType.
+    // Not really worth it to do the whole $Values dance with reservedTypes set.
+    AssignReservedType: _<{
+      reservedType: string;
+    }>(({ reservedType }) => `Cannot overwrite reserved type ${reservedType}.`),
+    DeclareClassElement: _(
+      "The `declare` modifier can only appear on class fields.",
+    ),
+    DeclareClassFieldInitializer: _(
+      "Initializers are not allowed in fields with the `declare` modifier.",
+    ),
+    DuplicateDeclareModuleExports: _(
+      "Duplicate `declare module.exports` statement.",
+    ),
+    EnumBooleanMemberNotInitialized: _<{
+      memberName: string;
+      enumName: string;
+    }>(
+      ({ memberName, enumName }) =>
+        `Boolean enum members need to be initialized. Use either \`${memberName} = true,\` or \`${memberName} = false,\` in enum \`${enumName}\`.`,
+    ),
+    EnumDuplicateMemberName: _<{
+      memberName: string;
+      enumName: string;
+    }>(
+      ({ memberName, enumName }) =>
+        `Enum member names need to be unique, but the name \`${memberName}\` has already been used before in enum \`${enumName}\`.`,
+    ),
+    EnumInconsistentMemberValues: _<{
+      enumName: string;
+    }>(
+      ({ enumName }) =>
+        `Enum \`${enumName}\` has inconsistent member initializers. Either use no initializers, or consistently use literals (either booleans, numbers, or strings) for all member initializers.`,
+    ),
+    EnumInvalidExplicitType: _<{
+      invalidEnumType: string;
+      enumName: string;
+    }>(
+      ({ invalidEnumType, enumName }) =>
+        `Enum type \`${invalidEnumType}\` is not valid. Use one of \`boolean\`, \`number\`, \`string\`, or \`symbol\` in enum \`${enumName}\`.`,
+    ),
+    EnumInvalidExplicitTypeUnknownSupplied: _<{
+      enumName: string;
+    }>(
+      ({ enumName }) =>
+        `Supplied enum type is not valid. Use one of \`boolean\`, \`number\`, \`string\`, or \`symbol\` in enum \`${enumName}\`.`,
+    ),
 
-  // TODO: When moving to typescript, we should either have each of the
-  // following errors only accept the specific strings they want:
-  //
-  // ...PrimaryType: explicitType: "string" | "number" | "boolean"
-  // ...SymbolType: explicitType: "symbol"
-  // ...UnknownType: explicitType: null
-  //
-  // Or, alternatively, merge these three errors together into one
-  // `EnumInvalidMemberInitializer` error that can accept `EnumExplicitType`
-  // without alteration, and then just have its message change based on the
-  // explicitType.
-  EnumInvalidMemberInitializerPrimaryType: _<{
-    enumName: string;
-    memberName: string;
-    explicitType: EnumExplicitType;
-  }>(
-    ({ enumName, memberName, explicitType }) =>
-      // $FlowIgnore (coercing null which never actually happens)
-      `Enum \`${enumName}\` has type \`${explicitType}\`, so the initializer of \`${memberName}\` needs to be a ${explicitType} literal.`,
-  ),
-  EnumInvalidMemberInitializerSymbolType: _<{
-    enumName: string;
-    memberName: string;
-    explicitType: EnumExplicitType;
-  }>(
-    ({ enumName, memberName }) =>
-      `Symbol enum members cannot be initialized. Use \`${memberName},\` in enum \`${enumName}\`.`,
-  ),
-  EnumInvalidMemberInitializerUnknownType: _<{
-    enumName: string;
-    memberName: string;
-    explicitType: EnumExplicitType;
-  }>(
-    ({ enumName, memberName }) =>
-      `The enum member initializer for \`${memberName}\` needs to be a literal (either a boolean, number, or string) in enum \`${enumName}\`.`,
-  ),
-  EnumInvalidMemberName: _<{
-    enumName: string;
-    memberName: string;
-    suggestion: string;
-  }>(
-    ({ enumName, memberName, suggestion }) =>
-      `Enum member names cannot start with lowercase 'a' through 'z'. Instead of using \`${memberName}\`, consider using \`${suggestion}\`, in enum \`${enumName}\`.`,
-  ),
-  EnumNumberMemberNotInitialized: _<{
-    enumName: string;
-    memberName: string;
-  }>(
-    ({ enumName, memberName }) =>
-      `Number enum members need to be initialized, e.g. \`${memberName} = 1\` in enum \`${enumName}\`.`,
-  ),
-  EnumStringMemberInconsistentlyInitailized: _<{
-    enumName: string;
-  }>(
-    ({ enumName }) =>
-      `String enum members need to consistently either all use initializers, or use no initializers, in enum \`${enumName}\`.`,
-  ),
-  GetterMayNotHaveThisParam: _("A getter cannot have a `this` parameter."),
-  ImportTypeShorthandOnlyInPureImport: _(
-    "The `type` and `typeof` keywords on named imports can only be used on regular `import` statements. It cannot be used with `import type` or `import typeof` statements.",
-  ),
-  InexactInsideExact: _(
-    "Explicit inexact syntax cannot appear inside an explicit exact object type.",
-  ),
-  InexactInsideNonObject: _(
-    "Explicit inexact syntax cannot appear in class or interface definitions.",
-  ),
-  InexactVariance: _("Explicit inexact syntax cannot have variance."),
-  InvalidNonTypeImportInDeclareModule: _(
-    "Imports within a `declare module` body must always be `import type` or `import typeof`.",
-  ),
-  MissingTypeParamDefault: _(
-    "Type parameter declaration needs a default, since a preceding type parameter declaration has a default.",
-  ),
-  NestedDeclareModule: _(
-    "`declare module` cannot be used inside another `declare module`.",
-  ),
-  NestedFlowComment: _(
-    "Cannot have a flow comment inside another flow comment.",
-  ),
-  PatternIsOptional: _(
-    "A binding pattern parameter cannot be optional in an implementation signature.",
-    // For consistency in TypeScript and Flow error codes
-    !process.env.BABEL_8_BREAKING
-      ? { reasonCode: "OptionalBindingPattern" }
-      : {},
-  ),
-  SetterMayNotHaveThisParam: _("A setter cannot have a `this` parameter."),
-  SpreadVariance: _("Spread properties cannot have variance."),
-  ThisParamAnnotationRequired: _(
-    "A type annotation is required for the `this` parameter.",
-  ),
-  ThisParamBannedInConstructor: _(
-    "Constructors cannot have a `this` parameter; constructors don't bind `this` like other functions.",
-  ),
-  ThisParamMayNotBeOptional: _("The `this` parameter cannot be optional."),
-  ThisParamMustBeFirst: _(
-    "The `this` parameter must be the first function parameter.",
-  ),
-  ThisParamNoDefault: _("The `this` parameter may not have a default value."),
-  TypeBeforeInitializer: _(
-    "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`.",
-  ),
-  TypeCastInPattern: _(
-    "The type cast expression is expected to be wrapped with parenthesis.",
-  ),
-  UnexpectedExplicitInexactInObject: _(
-    "Explicit inexact syntax must appear at the end of an inexact object.",
-  ),
-  UnexpectedReservedType: _<{
-    reservedType: string;
-  }>(({ reservedType }) => `Unexpected reserved type ${reservedType}.`),
-  UnexpectedReservedUnderscore: _(
-    "`_` is only allowed as a type argument to call or new.",
-  ),
-  UnexpectedSpaceBetweenModuloChecks: _(
-    "Spaces between `%` and `checks` are not allowed here.",
-  ),
-  UnexpectedSpreadType: _(
-    "Spread operator cannot appear in class or interface definitions.",
-  ),
-  UnexpectedSubtractionOperand: _(
-    'Unexpected token, expected "number" or "bigint".',
-  ),
-  UnexpectedTokenAfterTypeParameter: _(
-    "Expected an arrow function after this type parameter declaration.",
-  ),
-  UnexpectedTypeParameterBeforeAsyncArrowFunction: _(
-    "Type parameters must come after the async keyword, e.g. instead of `<T> async () => {}`, use `async <T>() => {}`.",
-  ),
-  UnsupportedDeclareExportKind: _<{
-    unsupportedExportKind: string;
-    suggestion: string;
-  }>(
-    ({ unsupportedExportKind, suggestion }) =>
-      `\`declare export ${unsupportedExportKind}\` is not supported. Use \`${suggestion}\` instead.`,
-  ),
-  UnsupportedStatementInDeclareModule: _(
-    "Only declares and type imports are allowed inside declare module.",
-  ),
-  UnterminatedFlowComment: _("Unterminated flow-comment."),
-}));
+    // TODO: When moving to typescript, we should either have each of the
+    // following errors only accept the specific strings they want:
+    //
+    // ...PrimaryType: explicitType: "string" | "number" | "boolean"
+    // ...SymbolType: explicitType: "symbol"
+    // ...UnknownType: explicitType: null
+    //
+    // Or, alternatively, merge these three errors together into one
+    // `EnumInvalidMemberInitializer` error that can accept `EnumExplicitType`
+    // without alteration, and then just have its message change based on the
+    // explicitType.
+    EnumInvalidMemberInitializerPrimaryType: _<{
+      enumName: string;
+      memberName: string;
+      explicitType: EnumExplicitType;
+    }>(
+      ({ enumName, memberName, explicitType }) =>
+        `Enum \`${enumName}\` has type \`${explicitType}\`, so the initializer of \`${memberName}\` needs to be a ${explicitType} literal.`,
+    ),
+    EnumInvalidMemberInitializerSymbolType: _<{
+      enumName: string;
+      memberName: string;
+      explicitType: EnumExplicitType;
+    }>(
+      ({ enumName, memberName }) =>
+        `Symbol enum members cannot be initialized. Use \`${memberName},\` in enum \`${enumName}\`.`,
+    ),
+    EnumInvalidMemberInitializerUnknownType: _<{
+      enumName: string;
+      memberName: string;
+      explicitType: EnumExplicitType;
+    }>(
+      ({ enumName, memberName }) =>
+        `The enum member initializer for \`${memberName}\` needs to be a literal (either a boolean, number, or string) in enum \`${enumName}\`.`,
+    ),
+    EnumInvalidMemberName: _<{
+      enumName: string;
+      memberName: string;
+      suggestion: string;
+    }>(
+      ({ enumName, memberName, suggestion }) =>
+        `Enum member names cannot start with lowercase 'a' through 'z'. Instead of using \`${memberName}\`, consider using \`${suggestion}\`, in enum \`${enumName}\`.`,
+    ),
+    EnumNumberMemberNotInitialized: _<{
+      enumName: string;
+      memberName: string;
+    }>(
+      ({ enumName, memberName }) =>
+        `Number enum members need to be initialized, e.g. \`${memberName} = 1\` in enum \`${enumName}\`.`,
+    ),
+    EnumStringMemberInconsistentlyInitailized: _<{
+      enumName: string;
+    }>(
+      ({ enumName }) =>
+        `String enum members need to consistently either all use initializers, or use no initializers, in enum \`${enumName}\`.`,
+    ),
+    GetterMayNotHaveThisParam: _("A getter cannot have a `this` parameter."),
+    ImportTypeShorthandOnlyInPureImport: _(
+      "The `type` and `typeof` keywords on named imports can only be used on regular `import` statements. It cannot be used with `import type` or `import typeof` statements.",
+    ),
+    InexactInsideExact: _(
+      "Explicit inexact syntax cannot appear inside an explicit exact object type.",
+    ),
+    InexactInsideNonObject: _(
+      "Explicit inexact syntax cannot appear in class or interface definitions.",
+    ),
+    InexactVariance: _("Explicit inexact syntax cannot have variance."),
+    InvalidNonTypeImportInDeclareModule: _(
+      "Imports within a `declare module` body must always be `import type` or `import typeof`.",
+    ),
+    MissingTypeParamDefault: _(
+      "Type parameter declaration needs a default, since a preceding type parameter declaration has a default.",
+    ),
+    NestedDeclareModule: _(
+      "`declare module` cannot be used inside another `declare module`.",
+    ),
+    NestedFlowComment: _(
+      "Cannot have a flow comment inside another flow comment.",
+    ),
+    PatternIsOptional: _(
+      "A binding pattern parameter cannot be optional in an implementation signature.",
+      // For consistency in TypeScript and Flow error codes
+      !process.env.BABEL_8_BREAKING
+        ? { reasonCode: "OptionalBindingPattern" }
+        : {},
+    ),
+    SetterMayNotHaveThisParam: _("A setter cannot have a `this` parameter."),
+    SpreadVariance: _("Spread properties cannot have variance."),
+    ThisParamAnnotationRequired: _(
+      "A type annotation is required for the `this` parameter.",
+    ),
+    ThisParamBannedInConstructor: _(
+      "Constructors cannot have a `this` parameter; constructors don't bind `this` like other functions.",
+    ),
+    ThisParamMayNotBeOptional: _("The `this` parameter cannot be optional."),
+    ThisParamMustBeFirst: _(
+      "The `this` parameter must be the first function parameter.",
+    ),
+    ThisParamNoDefault: _("The `this` parameter may not have a default value."),
+    TypeBeforeInitializer: _(
+      "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`.",
+    ),
+    TypeCastInPattern: _(
+      "The type cast expression is expected to be wrapped with parenthesis.",
+    ),
+    UnexpectedExplicitInexactInObject: _(
+      "Explicit inexact syntax must appear at the end of an inexact object.",
+    ),
+    UnexpectedReservedType: _<{
+      reservedType: string;
+    }>(({ reservedType }) => `Unexpected reserved type ${reservedType}.`),
+    UnexpectedReservedUnderscore: _(
+      "`_` is only allowed as a type argument to call or new.",
+    ),
+    UnexpectedSpaceBetweenModuloChecks: _(
+      "Spaces between `%` and `checks` are not allowed here.",
+    ),
+    UnexpectedSpreadType: _(
+      "Spread operator cannot appear in class or interface definitions.",
+    ),
+    UnexpectedSubtractionOperand: _(
+      'Unexpected token, expected "number" or "bigint".',
+    ),
+    UnexpectedTokenAfterTypeParameter: _(
+      "Expected an arrow function after this type parameter declaration.",
+    ),
+    UnexpectedTypeParameterBeforeAsyncArrowFunction: _(
+      "Type parameters must come after the async keyword, e.g. instead of `<T> async () => {}`, use `async <T>() => {}`.",
+    ),
+    UnsupportedDeclareExportKind: _<{
+      unsupportedExportKind: string;
+      suggestion: string;
+    }>(
+      ({ unsupportedExportKind, suggestion }) =>
+        `\`declare export ${unsupportedExportKind}\` is not supported. Use \`${suggestion}\` instead.`,
+    ),
+    UnsupportedStatementInDeclareModule: _(
+      "Only declares and type imports are allowed inside declare module.",
+    ),
+    UnterminatedFlowComment: _("Unterminated flow-comment."),
+  }),
+);
 /* eslint-disable sort-keys */
 
 function isEsModuleType(bodyElement: N.Node): boolean {
@@ -280,8 +286,8 @@ function partition<T>(
   list: T[],
   test: (c: T, b: number, a: T[]) => boolean | undefined | null,
 ): [T[], T[]] {
-  const list1 = [];
-  const list2 = [];
+  const list1: T[] = [];
+  const list2: T[] = [];
   for (let i = 0; i < list.length; i++) {
     (test(list[i], i, list) ? list1 : list2).push(list[i]);
   }
@@ -401,7 +407,7 @@ export default (superClass: {
         });
       }
       if (this.eat(tt.parenL)) {
-        node.value = this.parseExpression();
+        node.value = super.parseExpression();
         this.expect(tt.parenR);
         return this.finishNode(node, "DeclaredPredicate");
       } else {
@@ -431,21 +437,23 @@ export default (superClass: {
       return [type, predicate];
     }
 
-    flowParseDeclareClass(node: N.FlowDeclareClass): N.FlowDeclareClass {
+    flowParseDeclareClass(
+      node: Undone<N.FlowDeclareClass>,
+    ): N.FlowDeclareClass {
       this.next();
       this.flowParseInterfaceish(node, /*isClass*/ true);
       return this.finishNode(node, "DeclareClass");
     }
 
     flowParseDeclareFunction(
-      node: N.FlowDeclareFunction,
+      node: Undone<N.FlowDeclareFunction>,
     ): N.FlowDeclareFunction {
       this.next();
 
       const id = (node.id = this.parseIdentifier());
 
       const typeNode = this.startNode();
-      const typeContainer = this.startNode();
+      const typeContainer = this.startNode<N.TypeAnnotation>();
 
       if (this.match(tt.lt)) {
         typeNode.typeParameters = this.flowParseTypeParameterDeclaration();
@@ -460,12 +468,8 @@ export default (superClass: {
       typeNode.this = tmp._this;
       this.expect(tt.parenR);
 
-      [
-        // $FlowFixMe (destructuring not supported yet)
-        typeNode.returnType,
-        // $FlowFixMe (destructuring not supported yet)
-        node.predicate,
-      ] = this.flowParseTypeAndPredicateInitialiser();
+      [typeNode.returnType, node.predicate] =
+        this.flowParseTypeAndPredicateInitialiser();
 
       typeContainer.typeAnnotation = this.finishNode(
         typeNode,
@@ -487,7 +491,7 @@ export default (superClass: {
     }
 
     flowParseDeclare(
-      node: N.FlowDeclare,
+      node: Undone<N.FlowDeclare>,
       insideModule?: boolean,
     ): N.FlowDeclare {
       if (this.match(tt._class)) {
@@ -521,7 +525,7 @@ export default (superClass: {
     }
 
     flowParseDeclareVariable(
-      node: N.FlowDeclareVariable,
+      node: Undone<N.FlowDeclareVariable>,
     ): N.FlowDeclareVariable {
       this.next();
       node.id = this.flowParseTypeAnnotatableIdentifier(
@@ -532,20 +536,23 @@ export default (superClass: {
       return this.finishNode(node, "DeclareVariable");
     }
 
-    flowParseDeclareModule(node: N.FlowDeclareModule): N.FlowDeclareModule {
+    flowParseDeclareModule(
+      node: Undone<N.FlowDeclareModule>,
+    ): N.FlowDeclareModule {
       this.scope.enter(SCOPE_OTHER);
 
       if (this.match(tt.string)) {
-        node.id = this.parseExprAtom();
+        node.id = super.parseExprAtom();
       } else {
         node.id = this.parseIdentifier();
       }
 
       const bodyNode = (node.body = this.startNode());
+      // @ts-expect-error refine typings
       const body = (bodyNode.body = []);
       this.expect(tt.braceL);
       while (!this.match(tt.braceR)) {
-        let bodyNode = this.startNode();
+        let bodyNode = this.startNode<N.ImportDeclaration>();
 
         if (this.match(tt._import)) {
           this.next();
@@ -554,13 +561,13 @@ export default (superClass: {
               at: this.state.lastTokStartLoc,
             });
           }
-          this.parseImport(bodyNode);
+          super.parseImport(bodyNode);
         } else {
           this.expectContextual(
             tt._declare,
             FlowErrors.UnsupportedStatementInDeclareModule,
           );
-
+          // @ts-expect-error refine typings
           bodyNode = this.flowParseDeclare(bodyNode, true);
         }
 
@@ -573,7 +580,7 @@ export default (superClass: {
 
       this.finishNode(bodyNode, "BlockStatement");
 
-      let kind = null;
+      let kind: "CommonJS" | "ES" | null = null;
       let hasModuleExport = false;
       body.forEach(bodyElement => {
         if (isEsModuleType(bodyElement)) {
@@ -604,7 +611,7 @@ export default (superClass: {
     }
 
     flowParseDeclareExportDeclaration(
-      node: N.FlowDeclareExportDeclaration,
+      node: Undone<N.FlowDeclareExportDeclaration>,
       insideModule?: boolean | null,
     ): N.FlowDeclareExportDeclaration {
       this.expect(tt._export);
@@ -629,7 +636,11 @@ export default (superClass: {
           ((this.isContextual(tt._type) || this.isContextual(tt._interface)) &&
             !insideModule)
         ) {
-          const label = this.state.value;
+          const label = this.state.value as
+            | "const"
+            | "let"
+            | "type"
+            | "interface";
           throw this.raise(FlowErrors.UnsupportedDeclareExportKind, {
             at: this.state.startLoc,
             unsupportedExportKind: label,
@@ -654,20 +665,18 @@ export default (superClass: {
           this.isContextual(tt._type) || // declare export type ...
           this.isContextual(tt._opaque) // declare export opaque type ...
         ) {
-          node = this.parseExport(node);
+          node = this.parseExport(
+            node as Undone<N.ExportNamedDeclaration | N.ExportAllDeclaration>,
+          );
           if (node.type === "ExportNamedDeclaration") {
-            // flow does not support the ExportNamedDeclaration
-            // $FlowIgnore
             node.type = "ExportDeclaration";
-            // $FlowFixMe
             node.default = false;
             delete node.exportKind;
           }
 
-          // $FlowIgnore
           node.type = "Declare" + node.type;
 
-          return node;
+          return node as N.Node;
         }
       }
 
@@ -675,7 +684,7 @@ export default (superClass: {
     }
 
     flowParseDeclareModuleExports(
-      node: N.FlowDeclareModuleExports,
+      node: Undone<N.FlowDeclareModuleExports>,
     ): N.FlowDeclareModuleExports {
       this.next();
       this.expectContextual(tt._exports);
@@ -686,27 +695,27 @@ export default (superClass: {
     }
 
     flowParseDeclareTypeAlias(
-      node: N.FlowDeclareTypeAlias,
+      node: Undone<N.FlowDeclareTypeAlias>,
     ): N.FlowDeclareTypeAlias {
       this.next();
-      this.flowParseTypeAlias(node);
+      const finished = this.flowParseTypeAlias(node);
       // Don't do finishNode as we don't want to process comments twice
-      node.type = "DeclareTypeAlias";
-      return node;
+      finished.type = "DeclareTypeAlias";
+      return finished;
     }
 
     flowParseDeclareOpaqueType(
-      node: N.FlowDeclareOpaqueType,
+      node: Undone<N.FlowDeclareOpaqueType>,
     ): N.FlowDeclareOpaqueType {
       this.next();
-      this.flowParseOpaqueType(node, true);
+      const finished = this.flowParseOpaqueType(node, true);
       // Don't do finishNode as we don't want to process comments twice
-      node.type = "DeclareOpaqueType";
-      return node;
+      finished.type = "DeclareOpaqueType";
+      return finished;
     }
 
     flowParseDeclareInterface(
-      node: N.FlowDeclareInterface,
+      node: Undone<N.FlowDeclareInterface>,
     ): N.FlowDeclareInterface {
       this.next();
       this.flowParseInterfaceish(node);
@@ -715,7 +724,10 @@ export default (superClass: {
 
     // Interfaces
 
-    flowParseInterfaceish(node: N.FlowDeclare, isClass: boolean = false): void {
+    flowParseInterfaceish(
+      node: Undone<N.FlowDeclare>,
+      isClass: boolean = false,
+    ): void {
       node.id = this.flowParseRestrictedIdentifier(
         /* liberal */ !isClass,
         /* declaration */ true,
@@ -779,7 +791,7 @@ export default (superClass: {
       return this.finishNode(node, "InterfaceExtends");
     }
 
-    flowParseInterface(node: N.FlowInterface): N.FlowInterface {
+    flowParseInterface(node: Undone<N.FlowInterface>): N.FlowInterface {
       this.flowParseInterfaceish(node);
       return this.finishNode(node, "InterfaceDeclaration");
     }
@@ -820,7 +832,7 @@ export default (superClass: {
 
     // Type aliases
 
-    flowParseTypeAlias(node: N.FlowTypeAlias): N.FlowTypeAlias {
+    flowParseTypeAlias(node: Undone<N.FlowTypeAlias>): N.FlowTypeAlias {
       node.id = this.flowParseRestrictedIdentifier(
         /* liberal */ false,
         /* declaration */ true,
@@ -840,7 +852,7 @@ export default (superClass: {
     }
 
     flowParseOpaqueType(
-      node: N.FlowOpaqueType,
+      node: Undone<N.FlowOpaqueType>,
       declare: boolean,
     ): N.FlowOpaqueType {
       this.expectContextual(tt._type);
@@ -876,17 +888,20 @@ export default (superClass: {
     flowParseTypeParameter(requireDefault: boolean = false): N.TypeParameter {
       const nodeStartLoc = this.state.startLoc;
 
-      const node = this.startNode();
+      const node = this.startNode<N.TypeParameter>();
 
       const variance = this.flowParseVariance();
 
       const ident = this.flowParseTypeAnnotatableIdentifier();
       node.name = ident.name;
+      // @ts-expect-error migrate to Babel types
       node.variance = variance;
+      // @ts-expect-error migrate to Babel types
       node.bound = ident.typeAnnotation;
 
       if (this.match(tt.eq)) {
         this.eat(tt.eq);
+        // @ts-expect-error migrate to Babel types
         node.default = this.flowParseType();
       } else {
         if (requireDefault) {
@@ -899,7 +914,7 @@ export default (superClass: {
 
     flowParseTypeParameterDeclaration(): N.TypeParameterDeclaration {
       const oldInType = this.state.inType;
-      const node = this.startNode();
+      const node = this.startNode<N.TypeParameterDeclaration>();
       node.params = [];
 
       this.state.inType = true;
@@ -934,7 +949,7 @@ export default (superClass: {
     }
 
     flowParseTypeParameterInstantiation(): N.TypeParameterInstantiation {
-      const node = this.startNode();
+      const node = this.startNode<N.TypeParameterInstantiation>();
       const oldInType = this.state.inType;
       node.params = [];
 
@@ -958,7 +973,7 @@ export default (superClass: {
     }
 
     flowParseTypeParameterInstantiationCallOrNew(): N.TypeParameterInstantiation {
-      const node = this.startNode();
+      const node = this.startNode<N.TypeParameterInstantiation>();
       const oldInType = this.state.inType;
       node.params = [];
 
@@ -979,7 +994,7 @@ export default (superClass: {
     }
 
     flowParseInterfaceType(): N.FlowInterfaceType {
-      const node = this.startNode();
+      const node = this.startNode<N.FlowInterfaceType>();
       this.expectContextual(tt._interface);
 
       node.extends = [];
@@ -1002,12 +1017,12 @@ export default (superClass: {
 
     flowParseObjectPropertyKey(): N.Expression {
       return this.match(tt.num) || this.match(tt.string)
-        ? this.parseExprAtom()
+        ? super.parseExprAtom()
         : this.parseIdentifier(true);
     }
 
     flowParseObjectTypeIndexer(
-      node: N.FlowObjectTypeIndexer,
+      node: Undone<N.FlowObjectTypeIndexer>,
       isStatic: boolean,
       variance?: N.FlowVariance | null,
     ): N.FlowObjectTypeIndexer {
@@ -1029,7 +1044,7 @@ export default (superClass: {
     }
 
     flowParseObjectTypeInternalSlot(
-      node: N.FlowObjectTypeInternalSlot,
+      node: Undone<N.FlowObjectTypeInternalSlot>,
       isStatic: boolean,
     ): N.FlowObjectTypeInternalSlot {
       node.static = isStatic;
@@ -1054,7 +1069,7 @@ export default (superClass: {
     }
 
     flowParseObjectTypeMethodish(
-      node: N.FlowFunctionTypeAnnotation,
+      node: Undone<N.FlowFunctionTypeAnnotation>,
     ): N.FlowFunctionTypeAnnotation {
       node.params = [];
       node.rest = null;
@@ -1091,7 +1106,7 @@ export default (superClass: {
     }
 
     flowParseObjectTypeCallProperty(
-      node: N.FlowObjectTypeCallProperty,
+      node: Undone<N.FlowObjectTypeCallProperty>,
       isStatic: boolean,
     ): N.FlowObjectTypeCallProperty {
       const valueNode = this.startNode();
@@ -1253,7 +1268,7 @@ export default (superClass: {
     }
 
     flowParseObjectTypeProperty(
-      node: N.FlowObjectTypeProperty | N.FlowObjectTypeSpreadProperty,
+      node: Undone<N.FlowObjectTypeProperty | N.FlowObjectTypeSpreadProperty>,
       isStatic: boolean,
       protoStartLoc: Position | undefined | null,
       variance: N.FlowVariance | undefined | null,
@@ -1354,7 +1369,9 @@ export default (superClass: {
     // This is similar to checkGetterSetterParams, but as
     // @babel/parser uses non estree properties we cannot reuse it here
     flowCheckGetterSetterParams(
-      property: N.FlowObjectTypeProperty | N.FlowObjectTypeSpreadProperty,
+      property: Undone<
+        N.FlowObjectTypeProperty | N.FlowObjectTypeSpreadProperty
+      >,
     ): void {
       const paramCount = property.kind === "get" ? 0 : 1;
       const length =
@@ -1401,10 +1418,14 @@ export default (superClass: {
     ): N.FlowQualifiedTypeIdentifier {
       startPos = startPos || this.state.start;
       startLoc = startLoc || this.state.startLoc;
-      let node = id || this.flowParseRestrictedIdentifier(true);
+      let node: N.Identifier | N.FlowQualifiedTypeIdentifier =
+        id || this.flowParseRestrictedIdentifier(true);
 
       while (this.eat(tt.dot)) {
-        const node2 = this.startNodeAt(startPos, startLoc);
+        const node2 = this.startNodeAt<N.FlowQualifiedTypeIdentifier>(
+          startPos,
+          startLoc,
+        );
         node2.qualification = node;
         node2.id = this.flowParseRestrictedIdentifier(true);
         node = this.finishNode(node2, "QualifiedTypeIdentifier");
@@ -1455,7 +1476,7 @@ export default (superClass: {
       let name = null;
       let optional = false;
       let typeAnnotation = null;
-      const node = this.startNode();
+      const node = this.startNode<N.FlowFunctionTypeParam>();
       const lh = this.lookahead();
       const isThis = this.state.type === tt._this;
 
@@ -1520,7 +1541,7 @@ export default (superClass: {
     flowIdentToTypeAnnotation(
       startPos: number,
       startLoc: Position,
-      node: N.FlowTypeAnnotation,
+      node: Undone<N.FlowTypeAnnotation>,
       id: N.Identifier,
     ): N.FlowTypeAnnotation {
       switch (id.name) {
@@ -1670,8 +1691,8 @@ export default (superClass: {
         case tt._false:
           node.value = this.match(tt._true);
           this.next();
-          return this.finishNode<N.BooleanLiteralTypeAnnotation>(
-            node,
+          return this.finishNode(
+            node as Undone<N.BooleanLiteralTypeAnnotation>,
             "BooleanLiteralTypeAnnotation",
           );
 
@@ -1735,7 +1756,7 @@ export default (superClass: {
           if (tokenIsKeyword(this.state.type)) {
             const label = tokenLabelName(this.state.type);
             this.next();
-            return super.createIdentifier(node, label);
+            return super.createIdentifier(node as Undone<N.Identifier>, label);
           } else if (tokenIsIdentifier(this.state.type)) {
             if (this.isContextual(tt._interface)) {
               return this.flowParseInterfaceType();
@@ -1862,7 +1883,7 @@ export default (superClass: {
     }
 
     flowParseTypeAnnotation(): N.FlowTypeAnnotation {
-      const node = this.startNode();
+      const node = this.startNode<N.FlowTypeAnnotation>();
       node.typeAnnotation = this.flowParseTypeInitialiser();
       return this.finishNode(node, "TypeAnnotation");
     }
@@ -1874,6 +1895,7 @@ export default (superClass: {
         ? this.parseIdentifier()
         : this.flowParseRestrictedIdentifier();
       if (this.match(tt.colon)) {
+        // @ts-expect-error: refine typings
         ident.typeAnnotation = this.flowParseTypeAnnotation();
         this.resetEndLocation(ident);
       }
@@ -1891,14 +1913,14 @@ export default (superClass: {
     flowParseVariance(): N.FlowVariance | undefined | null {
       let variance = null;
       if (this.match(tt.plusMin)) {
-        variance = this.startNode();
+        variance = this.startNode<N.FlowVariance>();
         if (this.state.value === "+") {
           variance.kind = "plus";
         } else {
           variance.kind = "minus";
         }
         this.next();
-        this.finishNode(variance, "Variance");
+        return this.finishNode(variance, "Variance");
       }
       return variance;
     }
@@ -1921,18 +1943,19 @@ export default (superClass: {
       return super.parseFunctionBody(node, false, isMethod);
     }
 
-    parseFunctionBodyAndFinish(
-      node: N.BodilessFunctionOrMethodBase,
-      type: string,
-      isMethod: boolean = false,
-    ): void {
+    parseFunctionBodyAndFinish<
+      T extends
+        | N.Function
+        | N.TSDeclareMethod
+        | N.TSDeclareFunction
+        | N.ClassPrivateMethod,
+    >(node: Undone<T>, type: T["type"], isMethod: boolean = false): T {
       if (this.match(tt.colon)) {
-        const typeNode = this.startNode();
+        const typeNode = this.startNode<N.TypeAnnotation>();
 
         [
-          // $FlowFixMe (destructuring not supported yet)
           typeNode.typeAnnotation,
-          // $FlowFixMe (destructuring not supported yet)
+          // @ts-expect-error predicate may not exist
           node.predicate,
         ] = this.flowParseTypeAndPredicateInitialiser();
 
@@ -1941,7 +1964,7 @@ export default (superClass: {
           : null;
       }
 
-      super.parseFunctionBodyAndFinish(node, type, isMethod);
+      return super.parseFunctionBodyAndFinish(node, type, isMethod);
     }
 
     // interfaces and enums
@@ -1950,7 +1973,7 @@ export default (superClass: {
       if (this.state.strict && this.isContextual(tt._interface)) {
         const lookahead = this.lookahead();
         if (tokenIsKeywordOrIdentifier(lookahead.type)) {
-          const node = this.startNode();
+          const node = this.startNode<N.FlowInterface>();
           this.next();
           return this.flowParseInterface(node);
         }
@@ -1981,14 +2004,18 @@ export default (superClass: {
             this.match(tt._var) ||
             this.match(tt._export)
           ) {
+            // @ts-expect-error: refine typings
             return this.flowParseDeclare(node);
           }
         } else if (tokenIsIdentifier(this.state.type)) {
           if (expr.name === "interface") {
+            // @ts-expect-error: refine typings
             return this.flowParseInterface(node);
           } else if (expr.name === "type") {
+            // @ts-expect-error: refine typings
             return this.flowParseTypeAlias(node);
           } else if (expr.name === "opaque") {
+            // @ts-expect-error: refine typings
             return this.flowParseOpaqueType(node, false);
           }
         }
@@ -2143,8 +2170,10 @@ export default (superClass: {
         if (node.type === "ArrowFunctionExpression") {
           if (node.typeParameters || !node.returnType) {
             // This is an arrow expression without ambiguity, so check its parameters
+            // @ts-expect-error: refine typings
             this.finishArrowValidation(node);
           } else {
+            // @ts-expect-error: refine typings
             arrows.push(node);
           }
           stack.push(node.body);
@@ -2179,7 +2208,10 @@ export default (superClass: {
       this.scope.exit();
     }
 
-    forwardNoArrowParamsConversionAt<T>(node: N.Node, parse: () => T): T {
+    forwardNoArrowParamsConversionAt<T>(
+      node: Undone<N.Node>,
+      parse: () => T,
+    ): T {
       let result: T;
       if (this.state.noArrowParamsConversionAt.indexOf(node.start) !== -1) {
         this.state.noArrowParamsConversionAt.push(this.state.start);
@@ -2233,7 +2265,9 @@ export default (superClass: {
       super.assertModuleNodeAllowed(node);
     }
 
-    parseExport(node: N.Node): N.AnyExport {
+    parseExport(
+      node: Undone<N.ExportNamedDeclaration | N.ExportAllDeclaration>,
+    ): N.AnyExport {
       const decl = super.parseExport(node);
       if (
         decl.type === "ExportNamedDeclaration" ||
@@ -2258,10 +2292,11 @@ export default (superClass: {
           node.specifiers = this.parseExportSpecifiers(
             /* isInTypeExport */ true,
           );
-          this.parseExportFrom(node);
+          super.parseExportFrom(node);
           return null;
         } else {
           // export type Foo = Bar;
+          // @ts-expect-error: refine typings
           return this.flowParseTypeAlias(declarationNode);
         }
       } else if (this.isContextual(tt._opaque)) {
@@ -2270,16 +2305,19 @@ export default (superClass: {
         const declarationNode = this.startNode();
         this.next();
         // export opaque type Foo = Bar;
+        // @ts-expect-error: refine typings
         return this.flowParseOpaqueType(declarationNode, false);
       } else if (this.isContextual(tt._interface)) {
         node.exportKind = "type";
         const declarationNode = this.startNode();
         this.next();
+        // @ts-expect-error: refine typings
         return this.flowParseInterface(declarationNode);
       } else if (this.shouldParseEnums() && this.isContextual(tt._enum)) {
         node.exportKind = "value";
         const declarationNode = this.startNode();
         this.next();
+        // @ts-expect-error: refine typings
         return this.flowParseEnumDeclaration(declarationNode);
       } else {
         return super.parseExportDeclaration(node);
@@ -2287,7 +2325,7 @@ export default (superClass: {
     }
 
     eatExportStar(node: N.Node): boolean {
-      if (super.eatExportStar(...arguments)) return true;
+      if (super.eatExportStar(node)) return true;
 
       if (this.isContextual(tt._type) && this.lookahead().type === tt.star) {
         node.exportKind = "type";
@@ -2326,7 +2364,7 @@ export default (superClass: {
     ): void {
       const { startLoc } = this.state;
       if (this.isContextual(tt._declare)) {
-        if (this.parseClassMemberFromModifier(classBody, member)) {
+        if (super.parseClassMemberFromModifier(classBody, member)) {
           // 'declare' is a class element name
           return;
         }
@@ -2412,7 +2450,7 @@ export default (superClass: {
       ) {
         node.left = this.typeCastToParameter(node.left);
       }
-      super.toAssignable(...arguments);
+      super.toAssignable(node, isLHS);
     }
 
     // turn type casts that we found in function parameter head into type annotated params
@@ -2478,13 +2516,14 @@ export default (superClass: {
       return node;
     }
 
-    isValidLVal(type: string, ...rest) {
+    isValidLVal(type: string, ...rest: [boolean, BindingTypes]) {
       return type === "TypeCastExpression" || super.isValidLVal(type, ...rest);
     }
 
     // parse class property type annotations
     parseClassProperty(node: N.ClassProperty): N.ClassProperty {
       if (this.match(tt.colon)) {
+        // @ts-expect-error refine typings
         node.typeAnnotation = this.flowParseTypeAnnotation();
       }
       return super.parseClassProperty(node);
@@ -2494,6 +2533,7 @@ export default (superClass: {
       node: N.ClassPrivateProperty,
     ): N.ClassPrivateProperty {
       if (this.match(tt.colon)) {
+        // @ts-expect-error refine typings
         node.typeAnnotation = this.flowParseTypeAnnotation();
       }
       return super.parseClassPrivateProperty(node);
@@ -2546,11 +2586,13 @@ export default (superClass: {
         }
         // estree support
       } else if (
-        // $FlowFixMe flow does not know about the face that estree can replace ClassMethod with MethodDefinition
+        // @ts-expect-error flow does not know about the face that estree can replace ClassMethod with MethodDefinition
         method.type === "MethodDefinition" &&
         isConstructor &&
+        // @ts-expect-error estree
         method.value.params
       ) {
+        // @ts-expect-error estree
         const params = method.value.params;
         if (params.length > 0 && this.isThisParam(params[0])) {
           this.raise(FlowErrors.ThisParamBannedInConstructor, { at: method });
@@ -2618,7 +2660,7 @@ export default (superClass: {
 
     // parse type parameters for object method shorthand
     parseObjPropValue(
-      prop: N.ObjectMember,
+      prop: Undone<N.ObjectMethod | N.ObjectProperty>,
       startPos: number | undefined | null,
       startLoc: Position | undefined | null,
       isGenerator: boolean,
@@ -2626,7 +2668,7 @@ export default (superClass: {
       isPattern: boolean,
       isAccessor: boolean,
       refExpressionErrors?: ExpressionErrors | null,
-    ): void {
+    ): N.ObjectMethod | N.ObjectProperty {
       if ((prop as any).variance) {
         this.unexpected((prop as any).variance.loc.start);
       }
@@ -2640,7 +2682,7 @@ export default (superClass: {
         if (!this.match(tt.parenL)) this.unexpected();
       }
 
-      super.parseObjPropValue(
+      const result = super.parseObjPropValue(
         prop,
         startPos,
         startLoc,
@@ -2653,8 +2695,9 @@ export default (superClass: {
 
       // add typeParameters if we found them
       if (typeParameters) {
-        (prop.value || prop).typeParameters = typeParameters;
+        (result.value || result).typeParameters = typeParameters;
       }
+      return result;
     }
 
     parseAssignableListItemTypes(param: N.Pattern): N.Pattern {
@@ -2669,6 +2712,7 @@ export default (superClass: {
         (param as any as N.Identifier).optional = true;
       }
       if (this.match(tt.colon)) {
+        // @ts-expect-error: refine typings
         param.typeAnnotation = this.flowParseTypeAnnotation();
       } else if (this.isThisParam(param)) {
         this.raise(FlowErrors.ThisParamAnnotationRequired, { at: param });
@@ -2710,11 +2754,12 @@ export default (superClass: {
       return isMaybeDefaultImport(this.state.type);
     }
 
-    parseImportSpecifierLocal(
-      node: N.ImportDeclaration,
-      specifier: N.Node,
-      type: string,
-    ): void {
+    parseImportSpecifierLocal<
+      T extends
+        | N.ImportSpecifier
+        | N.ImportDefaultSpecifier
+        | N.ImportNamespaceSpecifier,
+    >(node: N.ImportDeclaration, specifier: Undone<T>, type: T["type"]): void {
       specifier.local = hasTypeImportKind(node)
         ? this.flowParseRestrictedIdentifier(
             /* liberal */ true,
@@ -2731,9 +2776,9 @@ export default (superClass: {
 
       let kind = null;
       if (this.match(tt._typeof)) {
-        kind = "typeof";
+        kind = "typeof" as const;
       } else if (this.isContextual(tt._type)) {
-        kind = "type";
+        kind = "type" as const;
       }
       if (kind) {
         const lh = this.lookahead();
@@ -2763,7 +2808,7 @@ export default (superClass: {
       specifier: any,
       importedIsString: boolean,
       isInTypeOnlyImport: boolean,
-      // eslint-disable-next-line no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       isMaybeTypeOnly: boolean,
     ): N.ImportSpecifier {
       const firstIdent = specifier.imported;
@@ -2862,8 +2907,11 @@ export default (superClass: {
     }
 
     // parse function type parameters - function foo<T>() {}
-    parseFunctionParams(node: N.Function, allowModifiers?: boolean): void {
-      // $FlowFixMe
+    parseFunctionParams(
+      node: Undone<N.Function>,
+      allowModifiers?: boolean,
+    ): void {
+      // @ts-expect-error
       const kind = node.kind;
       if (kind !== "get" && kind !== "set" && this.match(tt.lt)) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
@@ -2878,6 +2926,7 @@ export default (superClass: {
     ): void {
       super.parseVarId(decl, kind);
       if (this.match(tt.colon)) {
+        // @ts-expect-error: refine typings
         decl.id.typeAnnotation = this.flowParseTypeAnnotation();
         this.resetEndLocation(decl.id); // set end position to end of type
       }
@@ -2891,6 +2940,7 @@ export default (superClass: {
       if (this.match(tt.colon)) {
         const oldNoAnonFunctionType = this.state.noAnonFunctionType;
         this.state.noAnonFunctionType = true;
+        // @ts-expect-error refine typings
         node.returnType = this.flowParseTypeAnnotation();
         this.state.noAnonFunctionType = oldNoAnonFunctionType;
       }
@@ -2949,7 +2999,7 @@ export default (superClass: {
       if (jsx?.error || this.match(tt.lt)) {
         state = state || this.state.clone();
 
-        let typeParameters;
+        let typeParameters: N.TypeParameterDeclaration;
 
         const arrow = this.tryParse(abort => {
           typeParameters = this.flowParseTypeParameterDeclaration();
@@ -2993,11 +3043,13 @@ export default (superClass: {
 
         if (
           arrow.node &&
+          // @ts-expect-error: refine tryParse typings
           this.maybeUnwrapTypeCastExpression(arrow.node).type ===
             "ArrowFunctionExpression"
         ) {
           if (!arrow.error && !arrow.aborted) {
             // <T> async () => {}
+            // @ts-expect-error: refine tryParse typings
             if (arrow.node.async) {
               /*:: invariant(typeParameters) */
               this.raise(
@@ -3005,10 +3057,11 @@ export default (superClass: {
                 { at: typeParameters },
               );
             }
-
+            // @ts-expect-error: refine tryParse typings
             return arrow.node;
           }
 
+          // @ts-expect-error: refine typings
           arrowExpression = arrow.node;
         }
 
@@ -3044,19 +3097,18 @@ export default (superClass: {
 
     // handle return types for arrow functions
     parseArrow(
-      node: N.ArrowFunctionExpression,
-    ): N.ArrowFunctionExpression | undefined | null {
+      node: Undone<N.ArrowFunctionExpression>,
+    ): Undone<N.ArrowFunctionExpression> | undefined | null {
       if (this.match(tt.colon)) {
         const result = this.tryParse(() => {
           const oldNoAnonFunctionType = this.state.noAnonFunctionType;
           this.state.noAnonFunctionType = true;
 
-          const typeNode = this.startNode();
+          const typeNode = this.startNode<N.TypeAnnotation>();
 
           [
-            // $FlowFixMe (destructuring not supported yet)
             typeNode.typeAnnotation,
-            // $FlowFixMe (destructuring not supported yet)
+            // @ts-expect-error (destructuring not supported yet)
             node.predicate,
           ] = this.flowParseTypeAndPredicateInitialiser();
 
@@ -3088,7 +3140,7 @@ export default (superClass: {
 
     setArrowFunctionParameters(
       node: N.ArrowFunctionExpression,
-      params: N.Expression[],
+      params: N.Pattern[],
     ): void {
       if (this.state.noArrowParamsConversionAt.indexOf(node.start) !== -1) {
         node.params = params;
@@ -3116,7 +3168,7 @@ export default (superClass: {
         }
       }
 
-      return super.checkParams(...arguments);
+      return super.checkParams(node, allowDuplicates, isArrowFunction);
     }
 
     parseParenAndDistinguishExpression(canBeArrow: boolean): N.Expression {
@@ -3140,7 +3192,7 @@ export default (superClass: {
 
         const node = this.startNodeAt(startPos, startLoc);
         node.callee = base;
-        node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
+        node.arguments = super.parseCallExpressionArguments(tt.parenR, false);
         base = this.finishNode(node, "CallExpression");
       } else if (
         base.type === "Identifier" &&
@@ -3156,6 +3208,7 @@ export default (superClass: {
         );
 
         /*:: invariant(arrow.node != null) */
+        // @ts-expect-error: refine tryParse typings
         if (!arrow.error && !arrow.aborted) return arrow.node;
 
         const result = this.tryParse(
@@ -3167,6 +3220,7 @@ export default (superClass: {
 
         if (arrow.node) {
           this.state = arrow.failState;
+          // @ts-expect-error: refine tryParse typings
           return arrow.node;
         }
 
@@ -3195,27 +3249,30 @@ export default (superClass: {
           return base;
         }
         this.next();
-        const node: N.OptionalCallExpression = this.startNodeAt(
+        const node = this.startNodeAt<N.OptionalCallExpression>(
           startPos,
           startLoc,
         );
         node.callee = base;
         node.typeArguments = this.flowParseTypeParameterInstantiation();
         this.expect(tt.parenL);
-        // $FlowFixMe
         node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
         node.optional = true;
         return this.finishCallExpression(node, /* optional */ true);
       } else if (!noCalls && this.shouldParseTypes() && this.match(tt.lt)) {
-        const node = this.startNodeAt(startPos, startLoc);
+        const node = this.startNodeAt<
+          N.OptionalCallExpression | N.CallExpression
+        >(startPos, startLoc);
         node.callee = base;
 
         const result = this.tryParse(() => {
           node.typeArguments =
             this.flowParseTypeParameterInstantiationCallOrNew();
           this.expect(tt.parenL);
-          node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
-          if (subscriptState.optionalChainMember) node.optional = false;
+          node.arguments = super.parseCallExpressionArguments(tt.parenR, false);
+          if (subscriptState.optionalChainMember) {
+            (node as Undone<N.OptionalCallExpression>).optional = false;
+          }
           return this.finishCallExpression(
             node,
             subscriptState.optionalChainMember,
@@ -3253,10 +3310,13 @@ export default (superClass: {
       startPos: number,
       startLoc: Position,
     ): N.ArrowFunctionExpression | undefined | null {
-      const node = this.startNodeAt(startPos, startLoc);
+      const node = this.startNodeAt<N.ArrowFunctionExpression>(
+        startPos,
+        startLoc,
+      );
       this.parseFunctionParams(node);
       if (!this.parseArrow(node)) return;
-      return this.parseArrowExpression(
+      return super.parseArrowExpression(
         node,
         /* params */ undefined,
         /* isAsync */ true,
@@ -3311,8 +3371,11 @@ export default (superClass: {
           });
         }
         this.hasFlowCommentCompletion();
-        this.state.pos += this.skipFlowComment();
-        this.state.hasFlowComment = true;
+        const commentSkip = this.skipFlowComment();
+        if (commentSkip) {
+          this.state.pos += commentSkip;
+          this.state.hasFlowComment = true;
+        }
         return;
       }
 
@@ -3330,11 +3393,12 @@ export default (superClass: {
       return super.skipBlockComment();
     }
 
-    skipFlowComment(): number | boolean {
+    skipFlowComment(): number | false {
       const { pos } = this.state;
       let shiftToFirstNonWhiteSpace = 2;
       while (
         [charCodes.space, charCodes.tab].includes(
+          // @ts-expect-error testing whether a number is included
           this.input.charCodeAt(pos + shiftToFirstNonWhiteSpace),
         )
       ) {
@@ -3481,6 +3545,7 @@ export default (superClass: {
       const init = this.eat(tt.eq)
         ? this.flowEnumMemberInit()
         : { type: "none", loc };
+      // @ts-expect-error: fixme
       return { id, init };
     }
 
@@ -3515,9 +3580,13 @@ export default (superClass: {
     } {
       const seenNames = new Set();
       const members = {
+        // @ts-expect-error: migrate to Babel types
         booleanMembers: [],
+        // @ts-expect-error: migrate to Babel types
         numberMembers: [],
+        // @ts-expect-error: migrate to Babel types
         stringMembers: [],
+        // @ts-expect-error: migrate to Babel types
         defaultedMembers: [],
       };
       let hasUnknownMembers = false;
@@ -3671,7 +3740,7 @@ export default (superClass: {
       return value;
     }
 
-    flowEnumBody(node: N.Node, id: N.Node): N.Node {
+    flowEnumBody(node: Undone<N.Node>, id: N.Node): N.Node {
       const enumName = id.name;
       const nameLoc = id.loc.start;
       const explicitType = this.flowEnumParseExplicitType({ enumName });
@@ -3761,7 +3830,7 @@ export default (superClass: {
       }
     }
 
-    flowParseEnumDeclaration(node: N.Node): N.Node {
+    flowParseEnumDeclaration(node: Undone<N.Node>): N.Node {
       const id = this.parseIdentifier();
       node.id = id;
       node.body = this.flowEnumBody(this.startNode(), id);

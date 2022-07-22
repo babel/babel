@@ -15,10 +15,15 @@ import * as N from "../../types";
 import { isIdentifierChar, isIdentifierStart } from "../../util/identifier";
 import type { Position } from "../../util/location";
 import { isNewLine } from "../../util/whitespace";
-import { Errors, ParseErrorEnum } from "../../parse-error";
+import {
+  Errors,
+  ParseErrorEnum,
+  toParseErrorCredentials,
+} from "../../parse-error";
+import { type Undone } from "../../parser/node";
 
 /* eslint sort-keys: "error" */
-const JsxErrors = ParseErrorEnum`jsx`(_ => ({
+const JsxErrors = ParseErrorEnum`jsx`((_: typeof toParseErrorCredentials) => ({
   AttributeIsEmpty: _(
     "JSX attributes must only be assigned a non-empty expression.",
   ),
@@ -356,7 +361,7 @@ export default (superClass: {
 
     // Parse JSX spread child
 
-    jsxParseSpreadChild(node: N.JSXSpreadChild): N.JSXSpreadChild {
+    jsxParseSpreadChild(node: Undone<N.JSXSpreadChild>): N.JSXSpreadChild {
       this.next(); // ellipsis
       node.expression = this.parseExpression();
       this.setContext(tc.j_oTag);
@@ -369,7 +374,7 @@ export default (superClass: {
     // Parses JSX expression enclosed into curly brackets.
 
     jsxParseExpressionContainer(
-      node: N.JSXExpressionContainer,
+      node: Undone<N.JSXExpressionContainer>,
       previousContext: TokContext,
     ): N.JSXExpressionContainer {
       if (this.match(tt.braceR)) {
@@ -422,16 +427,22 @@ export default (superClass: {
       startPos: number,
       startLoc: Position,
     ): N.JSXOpeningElement {
-      const node = this.startNodeAt(startPos, startLoc);
+      const node = this.startNodeAt<N.JSXOpeningElement | N.JSXOpeningFragment>(
+        startPos,
+        startLoc,
+      );
       if (this.eat(tt.jsxTagEnd)) {
+        // @ts-expect-error migrate to Babel types
         return this.finishNode(node, "JSXOpeningFragment");
       }
       node.name = this.jsxParseElementName();
-      return this.jsxParseOpeningElementAfterName(node);
+      return this.jsxParseOpeningElementAfterName(
+        node as Undone<N.JSXOpeningElement>,
+      );
     }
 
     jsxParseOpeningElementAfterName(
-      node: N.JSXOpeningElement,
+      node: Undone<N.JSXOpeningElement>,
     ): N.JSXOpeningElement {
       const attributes: N.JSXAttribute[] = [];
       while (!this.match(tt.slash) && !this.match(tt.jsxTagEnd)) {
@@ -489,14 +500,21 @@ export default (superClass: {
               break;
 
             case tt.braceL: {
-              const node = this.startNode();
+              const node = this.startNode<
+                N.JSXSpreadChild | N.JSXExpressionContainer
+              >();
               this.setContext(tc.brace);
               this.next();
               if (this.match(tt.ellipsis)) {
-                children.push(this.jsxParseSpreadChild(node));
+                children.push(
+                  this.jsxParseSpreadChild(node as Undone<N.JSXSpreadChild>),
+                );
               } else {
                 children.push(
-                  this.jsxParseExpressionContainer(node, tc.j_expr),
+                  this.jsxParseExpressionContainer(
+                    node as Undone<N.JSXExpressionContainer>,
+                    tc.j_expr,
+                  ),
                 );
               }
 
@@ -518,18 +536,15 @@ export default (superClass: {
           });
         } else if (!isFragment(openingElement) && isFragment(closingElement)) {
           this.raise(JsxErrors.MissingClosingTagElement, {
-            // $FlowIgnore
             at: closingElement,
             openingTagName: getQualifiedJSXName(openingElement.name),
           });
         } else if (!isFragment(openingElement) && !isFragment(closingElement)) {
           if (
-            // $FlowIgnore
             getQualifiedJSXName(closingElement.name) !==
             getQualifiedJSXName(openingElement.name)
           ) {
             this.raise(JsxErrors.MissingClosingTagElement, {
-              // $FlowIgnore
               at: closingElement,
               openingTagName: getQualifiedJSXName(openingElement.name),
             });

@@ -5,9 +5,11 @@ import * as N from "../types";
 import type { Node as NodeType, NodeBase, File } from "../types";
 import type { Position } from "../util/location";
 import { Errors } from "../parse-error";
+import type { Undone } from "../parser/node";
+import type { BindingTypes } from "../util/scopeflags";
 
 const { defineProperty } = Object;
-const toUnenumerable = (object, key) =>
+const toUnenumerable = (object: any, key: string) =>
   defineProperty(object, key, { enumerable: false, value: object[key] });
 
 function toESTreeLocation(node: any) {
@@ -22,6 +24,7 @@ export default (superClass: {
 }): {
   new (...args: any): Parser;
 } =>
+  // @ts-expect-error plugin may override interfaces
   class extends superClass {
     parse(): File {
       const file = toESTreeLocation(super.parse());
@@ -33,8 +36,9 @@ export default (superClass: {
       return file;
     }
 
-    parseRegExpLiteral({ pattern, flags }): N.Node {
-      let regex = null;
+    // @ts-expect-error ESTree plugin changes node types
+    parseRegExpLiteral({ pattern, flags }): N.EstreeRegExpLiteral {
+      let regex: RegExp | null = null;
       try {
         regex = new RegExp(pattern, flags);
       } catch (e) {
@@ -47,11 +51,11 @@ export default (superClass: {
       return node;
     }
 
+    // @ts-expect-error ESTree plugin changes node types
     parseBigIntLiteral(value: any): N.Node {
       // https://github.com/estree/estree/blob/master/es2020.md#bigintliteral
-      let bigInt;
+      let bigInt: BigInt | null;
       try {
-        // $FlowIgnore
         bigInt = BigInt(value);
       } catch {
         bigInt = null;
@@ -62,10 +66,11 @@ export default (superClass: {
       return node;
     }
 
+    // @ts-expect-error ESTree plugin changes node types
     parseDecimalLiteral(value: any): N.Node {
       // https://github.com/estree/estree/blob/master/experimental/decimal.md
       // todo: use BigDecimal when node supports it.
-      const decimal = null;
+      const decimal: null = null;
       const node = this.estreeParseLiteral(decimal);
       node.decimal = String(node.value || value);
 
@@ -73,9 +78,11 @@ export default (superClass: {
     }
 
     estreeParseLiteral<T extends N.Node>(value: any) {
+      // @ts-expect-error ESTree plugin changes node types
       return this.parseLiteral<T>(value, "Literal");
     }
 
+    // @ts-expect-error ESTree plugin changes node types
     parseStringLiteral(value: any): N.Node {
       return this.estreeParseLiteral(value);
     }
@@ -84,6 +91,7 @@ export default (superClass: {
       return this.estreeParseLiteral(value);
     }
 
+    // @ts-expect-error ESTree plugin changes node types
     parseNullLiteral(): N.Node {
       return this.estreeParseLiteral(null);
     }
@@ -95,20 +103,29 @@ export default (superClass: {
     directiveToStmt(directive: N.Directive): N.ExpressionStatement {
       const directiveLiteral = directive.value;
 
-      const stmt = this.startNodeAt(directive.start, directive.loc.start);
-      const expression = this.startNodeAt(
+      const stmt = this.startNodeAt<N.ExpressionStatement>(
+        directive.start,
+        directive.loc.start,
+      );
+      const expression = this.startNodeAt<N.EstreeLiteral>(
+        // @ts-expect-error N.Directive.value is not defined
         directiveLiteral.start,
+        // @ts-expect-error N.Directive.value is not defined
         directiveLiteral.loc.start,
       );
 
+      // @ts-expect-error N.Directive.value is not defined
       expression.value = directiveLiteral.extra.expressionValue;
+      // @ts-expect-error N.Directive.value is not defined
       expression.raw = directiveLiteral.extra.raw;
 
       stmt.expression = this.finishNodeAt(
         expression,
         "Literal",
+        // @ts-expect-error N.Directive.value is not defined
         directiveLiteral.loc.end,
       );
+      // @ts-expect-error N.Directive.value is not defined
       stmt.directive = directiveLiteral.extra.raw.slice(1, -1);
 
       return this.finishNodeAt(stmt, "ExpressionStatement", directive.loc.end);
@@ -128,7 +145,8 @@ export default (superClass: {
 
     checkDeclaration(node: N.Pattern | N.ObjectProperty): void {
       if (node != null && this.isObjectProperty(node)) {
-        this.checkDeclaration((node as any as N.EstreeProperty).value);
+        // @ts-expect-error plugin typings
+        this.checkDeclaration((node as unknown as N.EstreeProperty).value);
       } else {
         super.checkDeclaration(node);
       }
@@ -157,13 +175,14 @@ export default (superClass: {
         void | ((a: boolean) => void),
       ]
     ): void {
+      // @ts-expect-error figure out args typings
       super.parseBlockBody(node, ...args);
 
       const directiveStatements = node.directives.map(d =>
         this.directiveToStmt(d),
       );
+      // @ts-expect-error estree plugin typings
       node.body = directiveStatements.concat(node.body);
-      // $FlowIgnore - directives isn't optional in the type definition
       delete node.directives;
     }
 
@@ -185,7 +204,7 @@ export default (superClass: {
         true,
       );
       if (method.typeParameters) {
-        // $FlowIgnore
+        // @ts-expect-error
         method.value.typeParameters = method.typeParameters;
         delete method.typeParameters;
       }
@@ -208,9 +227,11 @@ export default (superClass: {
       const name = super.getPrivateNameSV(node);
       node = node as any;
       delete node.id;
+      // @ts-expect-error mutate AST types
       node.name = name;
+      // @ts-expect-error mutate AST types
       node.type = "PrivateIdentifier";
-      return node;
+      return node as unknown as N.EstreePrivateIdentifier;
     }
 
     isPrivateName(node: N.Node): boolean {
@@ -231,8 +252,10 @@ export default (superClass: {
       return node.name;
     }
 
-    parseLiteral<T extends N.Node>(value: any, type: T["type"]): T {
+    // @ts-expect-error plugin may override interfaces
+    parseLiteral<T extends N.Literal>(value: any, type: T["type"]): T {
       const node = super.parseLiteral<T>(value, type);
+      // @ts-expect-error mutating AST types
       node.raw = node.extra.raw;
       delete node.extra;
 
@@ -248,16 +271,19 @@ export default (superClass: {
       node.expression = node.body.type !== "BlockStatement";
     }
 
-    parseMethod<T extends N.MethodLike>(
-      node: T,
+    // @ts-expect-error plugin may override interfaces
+    parseMethod<
+      T extends N.ClassPrivateMethod | N.ObjectMethod | N.ClassMethod,
+    >(
+      node: Undone<T>,
       isGenerator: boolean,
       isAsync: boolean,
       isConstructor: boolean,
       allowDirectSuper: boolean,
-      type: string,
+      type: T["type"],
       inClassScope: boolean = false,
-    ): T {
-      let funcNode = this.startNode();
+    ): N.EstreeMethodDefinition {
+      let funcNode = this.startNode<N.MethodLike>();
       funcNode.kind = node.kind; // provide kind, so super method correctly sets state
       funcNode = super.parseMethod(
         funcNode,
@@ -268,16 +294,19 @@ export default (superClass: {
         type,
         inClassScope,
       );
+      // @ts-expect-error mutate AST types
       funcNode.type = "FunctionExpression";
       delete funcNode.kind;
-      // $FlowIgnore
+      // @ts-expect-error
       node.value = funcNode;
       if (type === "ClassPrivateMethod") {
-        // $FlowIgnore
         node.computed = false;
       }
-      type = "MethodDefinition";
-      return this.finishNode(node, type);
+      return this.finishNode(
+        // @ts-expect-error cast methods to estree types
+        node as Undone<N.EstreeMethodDefinition>,
+        "MethodDefinition",
+      );
     }
 
     parseClassProperty(...args: [N.ClassProperty]): any {
@@ -352,8 +381,14 @@ export default (superClass: {
       return node as any;
     }
 
-    isValidLVal(type: string, ...rest) {
-      return type === "Property" ? "value" : super.isValidLVal(type, ...rest);
+    isValidLVal(
+      type: string,
+      isUnparenthesizedInAssign: boolean,
+      binding: BindingTypes,
+    ) {
+      return type === "Property"
+        ? "value"
+        : super.isValidLVal(type, isUnparenthesizedInAssign, binding);
     }
 
     isAssignable(node: N.Node, isBinding?: boolean): boolean {
@@ -378,21 +413,25 @@ export default (superClass: {
       }
     }
 
-    toAssignableObjectExpressionProp(prop: N.Node) {
+    toAssignableObjectExpressionProp(
+      prop: N.Node,
+      isLast: boolean,
+      isLHS: boolean,
+    ) {
       if (prop.kind === "get" || prop.kind === "set") {
         this.raise(Errors.PatternHasAccessor, { at: prop.key });
       } else if (prop.method) {
         this.raise(Errors.PatternHasMethod, { at: prop.key });
       } else {
-        super.toAssignableObjectExpressionProp(...arguments);
+        super.toAssignableObjectExpressionProp(prop, isLast, isLHS);
       }
     }
 
     finishCallExpression<T extends N.CallExpression | N.OptionalCallExpression>(
-      node: T,
+      unfinished: Undone<T>,
       optional: boolean,
-    ): N.Expression {
-      super.finishCallExpression(node, optional);
+    ): T {
+      const node = super.finishCallExpression(unfinished, optional);
 
       if (node.callee.type === "Import") {
         (node as N.Node as N.EstreeImportExpression).type = "ImportExpression";
@@ -401,9 +440,9 @@ export default (superClass: {
           (node as N.Node as N.EstreeImportExpression).attributes =
             node.arguments[1] ?? null;
         }
-        // $FlowIgnore - arguments isn't optional in the type definition
+        // arguments isn't optional in the type definition
         delete node.arguments;
-        // $FlowIgnore - callee isn't optional in the type definition
+        // callee isn't optional in the type definition
         delete node.callee;
       }
 
@@ -425,20 +464,24 @@ export default (superClass: {
       super.toReferencedArguments(node);
     }
 
-    parseExport(node: N.Node) {
-      super.parseExport(node);
+    parseExport(unfinished: Undone<N.AnyExport>) {
+      const node = super.parseExport(unfinished);
 
       switch (node.type) {
         case "ExportAllDeclaration":
+          // @ts-expect-error mutating AST types
           node.exported = null;
           break;
 
         case "ExportNamedDeclaration":
           if (
             node.specifiers.length === 1 &&
+            // @ts-expect-error mutating AST types
             node.specifiers[0].type === "ExportNamespaceSpecifier"
           ) {
+            // @ts-expect-error mutating AST types
             node.type = "ExportAllDeclaration";
+            // @ts-expect-error mutating AST types
             node.exported = node.specifiers[0].exported;
             delete node.specifiers;
           }
@@ -498,6 +541,7 @@ export default (superClass: {
       return node.type === "ChainExpression";
     }
 
+    // @ts-expect-error override interfaces
     isObjectProperty(node: N.Node): boolean {
       return node.type === "Property" && node.kind === "init" && !node.method;
     }
@@ -507,8 +551,8 @@ export default (superClass: {
     }
 
     finishNodeAt<T extends NodeType>(
-      node: T,
-      type: string,
+      node: Undone<T>,
+      type: T["type"],
       endLoc: Position,
     ): T {
       return toESTreeLocation(super.finishNodeAt(node, type, endLoc));

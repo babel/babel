@@ -3,7 +3,9 @@ import * as charCodes from "charcodes";
 import { tokenLabelName, tt } from "../tokenizer/types";
 import type Parser from "../parser";
 import * as N from "../types";
-import { ParseErrorEnum } from "../parse-error";
+import { ParseErrorEnum, toParseErrorCredentials } from "../parse-error";
+import type { Undone } from "../parser/node";
+import type { Position } from "../util/location";
 
 type $Call1<F extends (...args: any) => any, A> = F extends (
   a: A,
@@ -26,6 +28,7 @@ export type PlaceholderTypes =
 //type MaybePlaceholder<T: PlaceholderTypes> = $PropertyType<N, T> | N.Placeholder<T>;
 
 type _Switch<Value, Cases, Index> = $Call1<
+  // @ts-expect-error Fixme broken fake switch
   (a: Cases[Index][0]) => Cases[Index][1],
   Value
 >;
@@ -50,10 +53,12 @@ type NodeOf<T extends PlaceholderTypes> = $Switch<
 type MaybePlaceholder<T extends PlaceholderTypes> = NodeOf<T>; // | Placeholder<T>
 
 /* eslint sort-keys: "error" */
-const PlaceholderErrors = ParseErrorEnum`placeholders`(_ => ({
-  ClassNameIsRequired: _("A class name is required."),
-  UnexpectedSpace: _("Unexpected space in placeholder."),
-}));
+const PlaceholderErrors = ParseErrorEnum`placeholders`(
+  (_: typeof toParseErrorCredentials) => ({
+    ClassNameIsRequired: _("A class name is required."),
+    UnexpectedSpace: _("Unexpected space in placeholder."),
+  }),
+);
 /* eslint-disable sort-keys */
 
 export default (superClass: {
@@ -61,6 +66,7 @@ export default (superClass: {
 }): {
   new (...args: any): Parser;
 } =>
+  // @ts-expect-error Plugin will override parser interface
   class extends superClass {
     parsePlaceholder<T extends PlaceholderTypes>(
       expectedNode: T,
@@ -76,6 +82,7 @@ export default (superClass: {
 
         this.assertNoSpace();
         this.expect(tt.placeholder);
+        // @ts-expect-error placeholder typings
         return this.finishPlaceholder(node, expectedNode);
       }
     }
@@ -101,7 +108,7 @@ export default (superClass: {
       ) {
         return this.finishOp(tt.placeholder, 2);
       }
-
+      // @ts-expect-error placeholder typings
       return super.getTokenFromCode(...arguments);
     }
 
@@ -115,6 +122,7 @@ export default (superClass: {
       );
     }
 
+    // @ts-expect-error Plugin will override parser interface
     parseIdentifier(): MaybePlaceholder<"Identifier"> {
       // NOTE: This function only handles identifiers outside of
       // expressions and binding patterns, since they are already
@@ -126,28 +134,35 @@ export default (superClass: {
       );
     }
 
-    checkReservedWord(word: string): void {
+    checkReservedWord(
+      word: string,
+      startLoc: Position,
+      checkKeywords: boolean,
+      isBinding: boolean,
+    ): void {
       // Sometimes we call #checkReservedWord(node.name), expecting
       // that node is an Identifier. If it is a Placeholder, name
       // will be undefined.
-      if (word !== undefined) super.checkReservedWord(...arguments);
+      if (word !== undefined) {
+        super.checkReservedWord(word, startLoc, checkKeywords, isBinding);
+      }
     }
 
     /* ============================================================ *
      * parser/lval.js                                               *
      * ============================================================ */
 
+    // @ts-expect-error Plugin will override parser interface
     parseBindingAtom(): MaybePlaceholder<"Pattern"> {
-      return (
-        this.parsePlaceholder("Pattern") || super.parseBindingAtom(...arguments)
-      );
+      return this.parsePlaceholder("Pattern") || super.parseBindingAtom();
     }
 
-    isValidLVal(type: string, ...rest) {
+    // @ts-expect-error Plugin will override parser interface
+    isValidLVal(type: string, ...rest: [boolean, BindingTypes]) {
       return type === "Placeholder" || super.isValidLVal(type, ...rest);
     }
 
-    toAssignable(node: N.Node): void {
+    toAssignable(node: N.Node, isLHS: boolean): void {
       if (
         node &&
         node.type === "Placeholder" &&
@@ -155,7 +170,7 @@ export default (superClass: {
       ) {
         node.expectedNode = "Pattern";
       } else {
-        super.toAssignable(...arguments);
+        super.toAssignable(node, isLHS);
       }
     }
 
@@ -185,11 +200,16 @@ export default (superClass: {
       return false;
     }
 
-    verifyBreakContinue(node: N.BreakStatement | N.ContinueStatement) {
+    verifyBreakContinue(
+      node: N.BreakStatement | N.ContinueStatement,
+      isBreak: boolean,
+    ) {
+      // @ts-expect-error: node.label could be Placeholder
       if (node.label && node.label.type === "Placeholder") return;
-      super.verifyBreakContinue(...arguments);
+      super.verifyBreakContinue(node, isBreak);
     }
 
+    // @ts-expect-error Plugin will override parser interface
     parseExpressionStatement(
       node: MaybePlaceholder<"Statement">,
       expr: N.Expression,
@@ -198,37 +218,40 @@ export default (superClass: {
         expr.type !== "Placeholder" ||
         (expr.extra && expr.extra.parenthesized)
       ) {
-        return super.parseExpressionStatement(...arguments);
+        // @ts-expect-error placeholder typings
+        return super.parseExpressionStatement(node, expr);
       }
 
       if (this.match(tt.colon)) {
+        // @ts-expect-error
         const stmt: N.LabeledStatement = node;
+        // @ts-expect-error: Fixme: placeholder typings
         stmt.label = this.finishPlaceholder(expr, "Identifier");
         this.next();
-        stmt.body = this.parseStatement("label");
+        stmt.body = super.parseStatement("label");
         return this.finishNode(stmt, "LabeledStatement");
       }
 
       this.semicolon();
-
+      // @ts-expect-error: Fixme: placeholder typings
       node.name = expr.name;
       return this.finishPlaceholder(node, "Statement");
     }
-
+    // @ts-expect-error Plugin will override parser interface
     parseBlock(): MaybePlaceholder<"BlockStatement"> {
       return (
         this.parsePlaceholder("BlockStatement") ||
         super.parseBlock(...arguments)
       );
     }
-
+    // @ts-expect-error Plugin will override parser interface
     parseFunctionId(): MaybePlaceholder<"Identifier"> | undefined | null {
       return (
         this.parsePlaceholder("Identifier") ||
         super.parseFunctionId(...arguments)
       );
     }
-
+    // @ts-expect-error Plugin will override parser interface
     parseClass<T extends N.Class>(
       node: T,
       isStatement: /* T === ClassDeclaration */ boolean,
@@ -247,9 +270,11 @@ export default (superClass: {
           this.match(tt.placeholder) ||
           this.match(tt.braceL)
         ) {
+          // @ts-expect-error: placeholder typings
           node.id = placeholder;
         } else if (optionalId || !isStatement) {
           node.id = null;
+          // @ts-expect-error: placeholder typings
           node.body = this.finishPlaceholder(placeholder, "ClassBody");
           return this.finishNode(node, type);
         } else {
@@ -261,15 +286,17 @@ export default (superClass: {
         this.parseClassId(node, isStatement, optionalId);
       }
 
-      this.parseClassSuper(node);
+      super.parseClassSuper(node);
+      // @ts-expect-error placeholder typings
       node.body =
         this.parsePlaceholder("ClassBody") ||
-        this.parseClassBody(!!node.superClass, oldStrict);
+        super.parseClassBody(!!node.superClass, oldStrict);
       return this.finishNode(node, type);
     }
-
+    // @ts-expect-error Plugin will override parser interface
     parseExport(node: N.Node): N.Node {
       const placeholder = this.parsePlaceholder("Identifier");
+      // @ts-expect-error placeholder typings
       if (!placeholder) return super.parseExport(...arguments);
 
       if (!this.isContextual(tt._from) && !this.match(tt.comma)) {
@@ -311,13 +338,14 @@ export default (superClass: {
         // "export %%NAME%%" has already been parsed by #parseExport.
         return true;
       }
-      return super.maybeParseExportDefaultSpecifier(...arguments);
+      return super.maybeParseExportDefaultSpecifier(node);
     }
 
     checkExport(node: N.ExportNamedDeclaration): void {
       const { specifiers } = node;
       if (specifiers?.length) {
         node.specifiers = specifiers.filter(
+          // @ts-expect-error placeholder typings
           node => node.exported.type === "Placeholder",
         );
       }
@@ -326,25 +354,30 @@ export default (superClass: {
     }
 
     parseImport(
-      node: N.Node,
+      node: Undone<N.ImportDeclaration>,
     ): N.ImportDeclaration | N.TsImportEqualsDeclaration {
       const placeholder = this.parsePlaceholder("Identifier");
+      // @ts-expect-error placeholder typings
       if (!placeholder) return super.parseImport(...arguments);
 
       node.specifiers = [];
 
       if (!this.isContextual(tt._from) && !this.match(tt.comma)) {
         // import %%STRING%%;
+        // @ts-expect-error placeholder typings
         node.source = this.finishPlaceholder(placeholder, "StringLiteral");
         this.semicolon();
         return this.finishNode(node, "ImportDeclaration");
       }
 
       // import %%DEFAULT%% ...
-      const specifier = this.startNodeAtNode(placeholder);
+      const specifier =
+        this.startNodeAtNode<N.ImportDefaultSpecifier>(placeholder);
+      // @ts-expect-error placeholder typings
       specifier.local = placeholder;
-      this.finishNode(specifier, "ImportDefaultSpecifier");
-      node.specifiers.push(specifier);
+      node.specifiers.push(
+        this.finishNode(specifier, "ImportDefaultSpecifier"),
+      );
 
       if (this.eat(tt.comma)) {
         // import %%DEFAULT%%, * as ...
@@ -355,16 +388,19 @@ export default (superClass: {
       }
 
       this.expectContextual(tt._from);
+      // @ts-expect-error placeholder typings
       node.source = this.parseImportSource();
       this.semicolon();
       return this.finishNode(node, "ImportDeclaration");
     }
 
+    // @ts-expect-error placeholder typings
     parseImportSource(): MaybePlaceholder<"StringLiteral"> {
       // import ... from %%STRING%%;
 
       return (
         this.parsePlaceholder("StringLiteral") ||
+        // @ts-expect-error placeholder typings
         super.parseImportSource(...arguments)
       );
     }

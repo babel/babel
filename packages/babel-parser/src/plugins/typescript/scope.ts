@@ -47,7 +47,7 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
       return;
     }
 
-    super.declareName(...arguments);
+    super.declareName(name, bindingType, loc);
 
     if (bindingType & BIND_KIND_TYPE) {
       if (!(bindingType & BIND_KIND_VALUE)) {
@@ -90,7 +90,7 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
       return true;
     }
 
-    return super.isRedeclaredInScope(...arguments);
+    return super.isRedeclaredInScope(scope, name, bindingType);
   }
 
   checkLocalExport(id: N.Identifier) {
