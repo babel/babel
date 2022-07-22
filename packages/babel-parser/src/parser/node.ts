@@ -29,9 +29,9 @@ class Node implements NodeBase {
 const NodePrototype = Node.prototype;
 
 if (!process.env.BABEL_8_BREAKING) {
-  // $FlowIgnore
+  // @ts-expect-error
   NodePrototype.__clone = function (): Node {
-    // $FlowIgnore
+    // @ts-expect-error
     const newNode: any = new Node();
     const keys = Object.keys(this);
     for (let i = 0, length = keys.length; i < length; i++) {
@@ -42,7 +42,9 @@ if (!process.env.BABEL_8_BREAKING) {
         key !== "trailingComments" &&
         key !== "innerComments"
       ) {
-        newNode[key] = this[key];
+        newNode[key] =
+          // @ts-expect-error: key must present in this
+          this[key];
       }
     }
 
@@ -94,43 +96,51 @@ export function cloneStringLiteral(node: any): any {
   return cloned;
 }
 
+export type Undone<T extends NodeType> = Omit<T, "type">;
+
 export class NodeUtils extends UtilParser {
-  startNode<T extends NodeType>(): T {
-    // $FlowIgnore
+  startNode<T extends NodeType>(): Undone<T> {
+    // @ts-expect-error
     return new Node(this, this.state.start, this.state.startLoc);
   }
 
-  startNodeAt<T extends NodeType>(pos: number, loc: Position): T {
-    // $FlowIgnore
+  startNodeAt<T extends NodeType>(pos: number, loc: Position): Undone<T> {
+    // @ts-expect-error
     return new Node(this, pos, loc);
   }
 
   /** Start a new node with a previous node's location. */
-  startNodeAtNode<T extends NodeType>(type: NodeType): T {
+  startNodeAtNode<T extends NodeType>(type: Undone<NodeType>): Undone<T> {
     return this.startNodeAt(type.start, type.loc.start);
   }
 
   // Finish an AST node, adding `type` and `end` properties.
 
-  finishNode<T extends NodeType>(node: T, type: string): T {
+  finishNode<T extends NodeType>(node: Undone<T>, type: T["type"]): T {
     return this.finishNodeAt(node, type, this.state.lastTokEndLoc);
   }
 
   // Finish node at given position
 
-  finishNodeAt<T extends NodeType>(node: T, type: string, endLoc: Position): T {
+  finishNodeAt<T extends NodeType>(
+    node: Omit<T, "type">,
+    type: T["type"],
+    endLoc: Position,
+  ): T {
     if (process.env.NODE_ENV !== "production" && node.end > 0) {
       throw new Error(
         "Do not call finishNode*() twice on the same node." +
           " Instead use resetEndLocation() or change type directly.",
       );
     }
+    // @ts-expect-error migrate to Babel types AST typings
     node.type = type;
+    // @ts-expect-error migrate to Babel types AST typings
     node.end = endLoc.index;
     node.loc.end = endLoc;
     if (this.options.ranges) node.range[1] = endLoc.index;
-    if (this.options.attachComment) this.processComment(node);
-    return node;
+    if (this.options.attachComment) this.processComment(node as T);
+    return node as T;
   }
 
   resetStartLocation(node: NodeBase, start: number, startLoc: Position): void {

@@ -86,10 +86,10 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
   createScope(flags: ScopeFlags): Scope {
     return new Scope(flags);
   }
-  // This method will be overwritten by subclasses
-  /*:: +createScope: (flags: ScopeFlags) => IScope; */
 
   enter(flags: ScopeFlags) {
+    /*:: +createScope: (flags: ScopeFlags) => IScope; */
+    // @ts-expect-error This method will be overwritten by subclasses
     this.scopeStack.push(this.createScope(flags));
   }
 
@@ -207,7 +207,6 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
     return this.scopeStack[this.scopeStack.length - 1];
   }
 
-  // $FlowIgnore
   currentVarScopeFlags(): ScopeFlags {
     for (let i = this.scopeStack.length - 1; ; i--) {
       const { flags } = this.scopeStack[i];
@@ -218,7 +217,6 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
   }
 
   // Could be useful for `arguments`, `this`, `new.target`, `super()`, `super.property`, and `super[property]`.
-  // $FlowIgnore
   currentThisScopeFlags(): ScopeFlags {
     for (let i = this.scopeStack.length - 1; ; i--) {
       const { flags } = this.scopeStack[i];

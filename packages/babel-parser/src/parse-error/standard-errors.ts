@@ -15,6 +15,9 @@ export type LValAncestor =
         | "FormalParameters"
         | "ForInStatement"
         | "ForStatement"
+        | "ImportSpecifier"
+        | "ImportNamespaceSpecifier"
+        | "ImportDefaultSpecifier"
         | "ObjectPattern"
         | "RestElement"
         | "VariableDeclarator";

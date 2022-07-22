@@ -3,7 +3,6 @@ import { Position } from "./location";
 import type { Node } from "../types";
 import Tokenizer from "../tokenizer";
 
-/*:: declare var invariant; */
 /**
  * @module util/expression-scope
 
@@ -62,7 +61,7 @@ class ExpressionScope {
     this.type = type;
   }
 
-  canBeArrowParameterDeclaration() {
+  canBeArrowParameterDeclaration(): this is ArrowHeadParsingScope {
     return (
       this.type === kMaybeAsyncArrowParameterDeclaration ||
       this.type === kMaybeArrowParameterDeclaration
@@ -149,7 +148,6 @@ export default class ExpressionScopeHandler {
     let scope: ExpressionScope = stack[i];
     while (!scope.isCertainlyParameterDeclaration()) {
       if (scope.canBeArrowParameterDeclaration()) {
-        /*:: invariant(scope instanceof ArrowHeadParsingScope) */
         scope.recordDeclarationError(toParseError, origin);
       } else {
         /*:: invariant(scope.type == kExpression) */
@@ -198,7 +196,6 @@ export default class ExpressionScopeHandler {
     if (scope.isCertainlyParameterDeclaration()) {
       this.parser.raise(error, origin);
     } else if (scope.canBeArrowParameterDeclaration()) {
-      /*:: invariant(scope instanceof ArrowHeadParsingScope) */
       scope.recordDeclarationError(error, origin);
     } else {
       return;
@@ -220,7 +217,6 @@ export default class ExpressionScopeHandler {
     let scope: ExpressionScope = stack[i];
     while (scope.canBeArrowParameterDeclaration()) {
       if (scope.type === kMaybeAsyncArrowParameterDeclaration) {
-        /*:: invariant(scope instanceof ArrowHeadParsingScope) */
         scope.recordDeclarationError(Errors.AwaitBindingIdentifier, { at });
       }
       scope = stack[--i];
@@ -231,14 +227,12 @@ export default class ExpressionScopeHandler {
     const { stack } = this;
     const currentScope = stack[stack.length - 1];
     if (!currentScope.canBeArrowParameterDeclaration()) return;
-    /*:: invariant(currentScope instanceof ArrowHeadParsingScope) */
     currentScope.iterateErrors(([toParseError, loc]) => {
       this.parser.raise(toParseError, { at: loc });
       // iterate from parent scope
       let i = stack.length - 2;
       let scope = stack[i];
       while (scope.canBeArrowParameterDeclaration()) {
-        /*:: invariant(scope instanceof ArrowHeadParsingScope) */
         scope.clearDeclarationError(loc.index);
         scope = stack[--i];
       }

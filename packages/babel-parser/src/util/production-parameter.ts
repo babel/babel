@@ -37,8 +37,8 @@ export type ParamKind =
   | typeof PARAM_YIELD;
 
 export default class ProductionParameterHandler {
-  stacks: Array<ParamKind> = [];
-  enter(flags: ParamKind) {
+  stacks: Array<number> = [];
+  enter(flags: number) {
     this.stacks.push(flags);
   }
 
@@ -46,7 +46,7 @@ export default class ProductionParameterHandler {
     this.stacks.pop();
   }
 
-  currentFlags(): ParamKind {
+  currentFlags(): number {
     return this.stacks[this.stacks.length - 1];
   }
 
@@ -71,5 +71,6 @@ export function functionFlags(
   isAsync: boolean,
   isGenerator: boolean,
 ): ParamKind {
-  return (isAsync ? PARAM_AWAIT : 0) | (isGenerator ? PARAM_YIELD : 0);
+  return ((isAsync ? PARAM_AWAIT : 0) |
+    (isGenerator ? PARAM_YIELD : 0)) as ParamKind;
 }

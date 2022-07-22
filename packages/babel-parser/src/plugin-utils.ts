@@ -1,5 +1,5 @@
 import type Parser from "./parser";
-import type { PluginConfig } from "./parser/base";
+import type { PluginConfig } from "./typings";
 
 export type Plugin = PluginConfig;
 
@@ -37,6 +37,7 @@ export function hasPlugin(
         return false;
       }
       for (const key of expectedKeys) {
+        // @ts-expect-error key may not exist in plugin options
         if (pluginOptions[key] !== expectedOptions[key]) {
           return false;
         }
@@ -60,6 +61,7 @@ export function getPluginOption(
   });
 
   if (plugin && Array.isArray(plugin)) {
+    // @ts-expect-error Fixme: should check whether option is defined
     return plugin[1][option];
   }
 
@@ -202,7 +204,7 @@ export function validatePlugins(plugins: PluginList) {
     const error = new Error(
       "'asyncDoExpressions' requires 'doExpressions', please add 'doExpressions' to parser plugins.",
     );
-    // $FlowIgnore
+    // @ts-expect-error
     error.missingPlugins = "doExpressions"; // so @babel/core can provide better error message
     throw error;
   }
@@ -229,5 +231,6 @@ export const mixinPlugins: {
   placeholders,
 };
 
-export const mixinPluginNames: ReadonlyArray<string> =
-  Object.keys(mixinPlugins);
+export const mixinPluginNames = Object.keys(mixinPlugins) as ReadonlyArray<
+  "estree" | "jsx" | "flow" | "typescript" | "v8intrinsic" | "placeholders"
+>;

@@ -117,9 +117,9 @@ export default class State {
   end: number = 0;
 
   // Position information for the previous token
-  // $FlowIgnore this is initialized when generating the second token.
+  // this is initialized when generating the second token.
   lastTokEndLoc: Position = null;
-  // $FlowIgnore this is initialized when generating the second token.
+  // this is initialized when generating the second token.
   lastTokStartLoc: Position = null;
   lastTokStart: number = 0;
 
@@ -153,17 +153,16 @@ export default class State {
 
   clone(skipArrays?: boolean): State {
     const state = new State();
-    const keys = Object.keys(this);
+    const keys = Object.keys(this) as (keyof State)[];
     for (let i = 0, length = keys.length; i < length; i++) {
       const key = keys[i];
-      // $FlowIgnore
       let val = this[key];
 
       if (!skipArrays && Array.isArray(val)) {
         val = val.slice();
       }
 
-      // $FlowIgnore
+      // @ts-expect-error
       state[key] = val;
     }
 
@@ -177,6 +176,12 @@ export type LookaheadState = {
   type: TokenType;
   start: number;
   end: number;
+  context: TokContext[];
+  startLoc: Position;
+  lastTokEndLoc: Position;
+  curLine: number;
+  lineStart: number;
+  curPosition: () => Position;
   /* Used only in readToken_mult_modulo */
   inType: boolean;
 };

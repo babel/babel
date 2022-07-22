@@ -14,7 +14,12 @@ import type {
 } from "./typings";
 import Parser from "./parser";
 
-import { getExportedToken, tt as internalTokenTypes } from "./tokenizer/types";
+import {
+  ExportedTokenType,
+  getExportedToken,
+  tt as internalTokenTypes,
+  type InternalTokenTypes,
+} from "./tokenizer/types";
 import "./tokenizer/context";
 
 import type { Expression, File } from "./types";
@@ -71,8 +76,10 @@ export function parseExpression(input: string, options?: Options): Expression {
   return parser.getExpression();
 }
 
-function generateExportedTokenTypes(internalTokenTypes) {
-  const tokenTypes = {};
+function generateExportedTokenTypes(
+  internalTokenTypes: InternalTokenTypes,
+): Record<string, ExportedTokenType> {
+  const tokenTypes: Record<string, ExportedTokenType> = {};
   for (const typeName of Object.keys(internalTokenTypes)) {
     tokenTypes[typeName] = getExportedToken(internalTokenTypes[typeName]);
   }

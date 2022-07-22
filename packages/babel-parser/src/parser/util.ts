@@ -6,7 +6,7 @@ import {
 } from "../tokenizer/types";
 import Tokenizer from "../tokenizer";
 import State from "../tokenizer/state";
-import type { Node } from "../types";
+import type { EstreePropertyDefinition, Node, ObjectProperty } from "../types";
 import { lineBreak, skipWhiteSpaceToLineBreak } from "../util/whitespace";
 import { isIdentifierChar } from "../util/identifier";
 import ClassScopeHandler from "../util/class-scope";
@@ -21,6 +21,7 @@ import {
   type ParseError,
   type ParseErrorConstructor,
 } from "../parse-error";
+import type Parser from ".";
 
 /*::
 import type ScopeHandler from "../util/scope";
@@ -196,6 +197,7 @@ export default class UtilParser extends Tokenizer {
       const failState = this.state;
       this.state = oldState;
       if (error instanceof SyntaxError) {
+        // @ts-expect-error casting general syntax error to parse error
         return { node: null, error, thrown: true, aborted: false, failState };
       }
       if (error === abortSignal) {
@@ -303,7 +305,9 @@ export default class UtilParser extends Tokenizer {
     );
   }
 
-  isObjectProperty(node: Node): boolean {
+  isObjectProperty(
+    node: Node,
+  ): node is ObjectProperty | EstreePropertyDefinition {
     return node.type === "ObjectProperty";
   }
 
@@ -312,6 +316,7 @@ export default class UtilParser extends Tokenizer {
   }
 
   initializeScopes(
+    this: Parser,
     inModule: boolean = this.options.sourceType === "module",
   ): () => void {
     // Initialize state

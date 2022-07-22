@@ -1,5 +1,5 @@
 import type { Options } from "../options";
-import type { File /*::, JSXOpeningElement */ } from "../types";
+import type { File, Program /*::, JSXOpeningElement */ } from "../types";
 import type { PluginList } from "../plugin-utils";
 import { getOptions } from "../options";
 import StatementParser from "./statement";
@@ -39,8 +39,8 @@ export default class Parser extends StatementParser {
 
   parse(): File {
     this.enterInitialScopes();
-    const file = this.startNode();
-    const program = this.startNode();
+    const file = this.startNode() as File;
+    const program = this.startNode() as Program;
     this.nextToken();
     file.errors = null;
     this.parseTopLevel(file, program);

@@ -6,6 +6,7 @@ import {
   ParseErrorCodes,
   type ParseErrorCredentials,
 } from "./parse-error/credentials";
+import type { Undone } from "../src/parser/node";
 
 // Babel uses "normal" SyntaxErrors for it's errors, but adds some extra
 // functionality. This functionality is defined in the
@@ -192,7 +193,7 @@ export function ParseErrorEnum(argument: any, syntaxPlugin?: string) {
 }
 
 export type RaiseProperties<ErrorDetails> = {
-  at: Position | NodeBase;
+  at: Position | Undone<NodeBase>;
 } & ErrorDetails;
 
 import ModuleErrors from "./parse-error/module-errors";

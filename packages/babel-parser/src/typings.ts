@@ -1,4 +1,4 @@
-export type PluginConfig =
+export type Plugin =
   | "asyncDoExpressions"
   | "asyncGenerators"
   | "bigInt"
@@ -24,6 +24,8 @@ export type PluginConfig =
   | "jsx"
   | "logicalAssignment"
   | "importAssertions"
+  // @deprecated
+  | "moduleAttributes"
   | "moduleBlocks"
   | "moduleStringNames"
   | "nullishCoalescingOperator"
@@ -35,12 +37,14 @@ export type PluginConfig =
   | "pipelineOperator"
   | "placeholders"
   | "privateIn" // Enabled by default
+  | "recordAndTuple"
   | "regexpUnicodeSets"
   | "throwExpressions"
   | "topLevelAwait"
   | "typescript"
-  | "v8intrinsic"
-  | ParserPluginWithOptions;
+  | "v8intrinsic";
+
+export type PluginConfig = Plugin | ParserPluginWithOptions;
 
 export type ParserPluginWithOptions =
   | ["decorators", DecoratorsPluginOptions]

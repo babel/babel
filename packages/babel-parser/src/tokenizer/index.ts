@@ -6,7 +6,7 @@ import {
   SourceLocation,
   createPositionWithColumnOffset,
 } from "../util/location";
-import CommentsParser from "../parser/comments";
+import CommentsParser, { type CommentWhitespace } from "../parser/comments";
 import * as N from "../types";
 import * as charCodes from "charcodes";
 import { isIdentifierStart, isIdentifierChar } from "../util/identifier";
@@ -43,6 +43,8 @@ import {
   type EscapedCharErrorHandlers,
   type StringContentsErrorHandlers,
 } from "@babel/helper-string-parser";
+
+import type { Plugin } from "../typings";
 
 const VALID_REGEX_FLAGS = new Set([
   charCodes.lowercaseG,
@@ -180,7 +182,7 @@ export default class Tokenizer extends CommentsParser {
   lookahead(): LookaheadState {
     const old = this.state;
     // For performance we use a simplified tokenizer state structure
-    // $FlowIgnore
+    // @ts-expect-error
     this.state = this.createLookaheadState(old);
 
     this.isLookahead = true;
@@ -282,7 +284,7 @@ export default class Tokenizer extends CommentsParser {
     if (this.isLookahead) return;
     /*:: invariant(startLoc) */
 
-    const comment = {
+    const comment: N.CommentBlock = {
       type: "CommentBlock",
       value: this.input.slice(start + 2, end),
       start,
@@ -312,7 +314,7 @@ export default class Tokenizer extends CommentsParser {
     const end = this.state.pos;
     const value = this.input.slice(start + startSkip, end);
 
-    const comment = {
+    const comment: N.CommentLine = {
       type: "CommentLine",
       value,
       start,
@@ -357,6 +359,7 @@ export default class Tokenizer extends CommentsParser {
             case charCodes.asterisk: {
               const comment = this.skipBlockComment();
               if (comment !== undefined) {
+                // @ts-expect-error strictNullCheck is not enabled
                 this.addComment(comment);
                 if (this.options.attachComment) comments.push(comment);
               }
@@ -366,6 +369,7 @@ export default class Tokenizer extends CommentsParser {
             case charCodes.slash: {
               const comment = this.skipLineComment(2);
               if (comment !== undefined) {
+                // @ts-expect-error strictNullCheck is not enabled
                 this.addComment(comment);
                 if (this.options.attachComment) comments.push(comment);
               }
@@ -390,6 +394,7 @@ export default class Tokenizer extends CommentsParser {
               // A `-->` line comment
               const comment = this.skipLineComment(3);
               if (comment !== undefined) {
+                // @ts-expect-error strictNullCheck is not enabled
                 this.addComment(comment);
                 if (this.options.attachComment) comments.push(comment);
               }
@@ -406,6 +411,7 @@ export default class Tokenizer extends CommentsParser {
               // `<!--`, an XML-style comment that should be interpreted as a line comment
               const comment = this.skipLineComment(4);
               if (comment !== undefined) {
+                // @ts-expect-error strictNullCheck is not enabled
                 this.addComment(comment);
                 if (this.options.attachComment) comments.push(comment);
               }
@@ -420,15 +426,16 @@ export default class Tokenizer extends CommentsParser {
 
     if (comments.length > 0) {
       const end = this.state.pos;
-      const CommentWhitespace = {
+      const commentWhitespace: CommentWhitespace = {
         start: spaceStart,
         end,
+        // @ts-expect-error strictNullCheck is not enabled
         comments,
         leadingNode: null,
         trailingNode: null,
         containingNode: null,
       };
-      this.state.commentStack.push(CommentWhitespace);
+      this.state.commentStack.push(commentWhitespace);
     }
   }
 
@@ -437,7 +444,7 @@ export default class Tokenizer extends CommentsParser {
   // the token, so that the next one's `start` will point at the
   // right position.
 
-  finishToken(type: TokenType, val: any): void {
+  finishToken(type: TokenType, val?: any): void {
     this.state.end = this.state.pos;
     this.state.endLoc = this.state.curPosition();
     const prevType = this.state.type;
@@ -453,7 +460,7 @@ export default class Tokenizer extends CommentsParser {
     this.state.type = type;
     // the prevType of updateContext is required
     // only when the new type is tt.slash/tt.jsxTagEnd
-    // $FlowIgnore
+    // @ts-expect-error
     this.updateContext();
   }
 
@@ -1071,6 +1078,7 @@ export default class Tokenizer extends CommentsParser {
       // It doesn't matter if cp > 0xffff, the loop will either throw or break because we check on cp
       const char = String.fromCharCode(cp);
 
+      // @ts-expect-error VALID_REGEX_FLAGS.has should accept expanded type: number
       if (VALID_REGEX_FLAGS.has(cp)) {
         if (cp === charCodes.lowercaseV) {
           this.expectPlugin("regexpUnicodeSets", nextPos());
@@ -1471,6 +1479,7 @@ export default class Tokenizer extends CommentsParser {
   ): ParseError<ErrorDetails> {
     const { at, ...details } = raiseProperties;
     const loc = at instanceof Position ? at : at.loc.start;
+    // @ts-expect-error: refine details typing
     const error = toParseError({ loc, details });
 
     if (!this.options.errorRecovery) throw error;
@@ -1502,6 +1511,7 @@ export default class Tokenizer extends CommentsParser {
     for (let i = errors.length - 1; i >= 0; i--) {
       const error = errors[i];
       if (error.loc.index === pos) {
+        // @ts-expect-error: refine details typing
         return (errors[i] = toParseError({ loc, details }));
       }
       if (error.loc.index < pos) break;
@@ -1511,7 +1521,7 @@ export default class Tokenizer extends CommentsParser {
   }
 
   // updateContext is used by the jsx plugin
-  // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   updateContext(prevType: TokenType): void {}
 
   // Raise an unexpected token error. Can take the expected token type.
@@ -1522,7 +1532,7 @@ export default class Tokenizer extends CommentsParser {
     });
   }
 
-  expectPlugin(pluginName: string, loc?: Position): true {
+  expectPlugin(pluginName: Plugin, loc?: Position): true {
     if (this.hasPlugin(pluginName)) {
       return true;
     }
@@ -1533,7 +1543,7 @@ export default class Tokenizer extends CommentsParser {
     });
   }
 
-  expectOnePlugin(pluginNames: string[]): void {
+  expectOnePlugin(pluginNames: Plugin[]): void {
     if (!pluginNames.some(name => this.hasPlugin(name))) {
       throw this.raise(Errors.MissingOneOfPlugins, {
         at: this.state.startLoc,
@@ -1586,7 +1596,6 @@ export default class Tokenizer extends CommentsParser {
     },
   };
 
-  // $FlowIgnore - flow doesn't like introducing required methods with ...
   errorHandlers_readEscapedChar: EscapedCharErrorHandlers = {
     ...this.errorHandlers_readCodePoint,
     strictNumericEscape: pos => {
@@ -1597,7 +1606,6 @@ export default class Tokenizer extends CommentsParser {
     },
   };
 
-  // $FlowIgnore - flow doesn't like introducing required methods with ...
   errorHandlers_readStringContents_string: StringContentsErrorHandlers = {
     ...this.errorHandlers_readEscapedChar,
     unterminated: (initialPos, initialLineStart, initialCurLine) => {
@@ -1610,7 +1618,6 @@ export default class Tokenizer extends CommentsParser {
     },
   };
 
-  // $FlowIgnore - flow doesn't like introducing required methods with ...
   errorHandlers_readStringContents_template: StringContentsErrorHandlers = {
     ...this.errorHandlers_readEscapedChar,
     unterminated: (initialPos, initialLineStart, initialCurLine) => {

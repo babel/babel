@@ -81,6 +81,7 @@ export const defaultOptions: Options = {
 export function getOptions(opts?: Options | null): Options {
   const options: any = {};
   for (const key of Object.keys(defaultOptions)) {
+    // @ts-expect-error key may not exist in opts
     options[key] = opts && opts[key] != null ? opts[key] : defaultOptions[key];
   }
   return options;

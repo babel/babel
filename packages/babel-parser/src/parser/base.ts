@@ -43,7 +43,9 @@ export default class BaseParser {
         return false;
       }
       const actualOptions = this.plugins.get(pluginName);
-      for (const key of Object.keys(pluginOptions)) {
+      for (const key of Object.keys(
+        pluginOptions,
+      ) as (keyof typeof pluginOptions)[]) {
         if (actualOptions?.[key] !== pluginOptions[key]) {
           return false;
         }

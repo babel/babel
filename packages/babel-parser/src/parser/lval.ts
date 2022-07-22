@@ -2,6 +2,7 @@
 import * as charCodes from "charcodes";
 import { tt, type TokenType } from "../tokenizer/types";
 import type {
+  AssignmentPattern,
   TSParameterProperty,
   Decorator,
   Expression,
@@ -13,17 +14,20 @@ import type {
   /*:: ObjectOrClassMember, */
   /*:: ClassMember, */
   ObjectMember,
+  ObjectExpression,
+  ArrayExpression,
+  ArrayPattern,
   /*:: TsNamedTypeElementBase, */
   /*:: PrivateName, */
   /*:: ObjectExpression, */
   /*:: ObjectPattern, */
 } from "../types";
-import type { Pos, Position } from "../util/location";
+import type { Position } from "../util/location";
 import {
   isStrictBindOnlyReservedWord,
   isStrictBindReservedWord,
 } from "../util/identifier";
-import { NodeUtils } from "./node";
+import { NodeUtils, type Undone } from "./node";
 import {
   type BindingTypes,
   BIND_NONE,
@@ -31,8 +35,9 @@ import {
 } from "../util/scopeflags";
 import { ExpressionErrors } from "./util";
 import { Errors, type LValAncestor } from "../parse-error";
+import type Parser from "./index";
 
-const getOwn = (object, key) =>
+const getOwn = <T extends {}>(object: T, key: keyof T) =>
   Object.hasOwnProperty.call(object, key) && object[key];
 
 const unwrapParenthesizedExpression = (node: Node): Node => {
@@ -48,7 +53,6 @@ export default class LValParser extends NodeUtils {
   +parseMaybeAssignAllowIn: (
     refExpressionErrors?: ?ExpressionErrors,
     afterLeftParse?: Function,
-    refNeedsArrowPos?: ?Pos,
   ) => Expression;
   +parseObjectLike: <T: ObjectPattern | ObjectExpression>(
     close: TokenType,
@@ -267,13 +271,15 @@ export default class LValParser extends NodeUtils {
 
       case "ObjectExpression": {
         const last = node.properties.length - 1;
-        return node.properties.every((prop, i) => {
-          return (
-            prop.type !== "ObjectMethod" &&
-            (i === last || prop.type !== "SpreadElement") &&
-            this.isAssignable(prop)
-          );
-        });
+        return (node.properties as ObjectExpression["properties"]).every(
+          (prop, i) => {
+            return (
+              prop.type !== "ObjectMethod" &&
+              (i === last || prop.type !== "SpreadElement") &&
+              this.isAssignable(prop)
+            );
+          },
+        );
       }
 
       case "ObjectProperty":
@@ -283,7 +289,7 @@ export default class LValParser extends NodeUtils {
         return this.isAssignable(node.argument);
 
       case "ArrayExpression":
-        return node.elements.every(
+        return (node as ArrayExpression).elements.every(
           element => element === null || this.isAssignable(element),
         );
 
@@ -306,7 +312,7 @@ export default class LValParser extends NodeUtils {
 
   toReferencedList(
     exprList: ReadonlyArray<Expression | undefined | null>,
-    // eslint-disable-line no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     isParenthesizedExpr?: boolean,
   ): ReadonlyArray<Expression | undefined | null> {
     return exprList;
@@ -328,35 +334,35 @@ export default class LValParser extends NodeUtils {
   // Parses spread element.
 
   parseSpread(
+    this: Parser,
     refExpressionErrors?: ExpressionErrors | null,
-    refNeedsArrowPos?: Pos | null,
   ): SpreadElement {
-    const node = this.startNode();
+    const node = this.startNode<SpreadElement>();
     this.next();
     node.argument = this.parseMaybeAssignAllowIn(
       refExpressionErrors,
       undefined,
-      refNeedsArrowPos,
     );
     return this.finishNode(node, "SpreadElement");
   }
 
   // https://tc39.es/ecma262/#prod-BindingRestProperty
   // https://tc39.es/ecma262/#prod-BindingRestElement
-  parseRestBinding(): RestElement {
-    const node = this.startNode();
+  parseRestBinding(this: Parser): RestElement {
+    const node = this.startNode<RestElement>();
     this.next(); // eat `...`
     node.argument = this.parseBindingAtom();
     return this.finishNode(node, "RestElement");
   }
 
   // Parses lvalue (assignable) atom.
-  parseBindingAtom(): Pattern {
+  parseBindingAtom(this: Parser): Pattern {
     // https://tc39.es/ecma262/#prod-BindingPattern
     switch (this.state.type) {
       case tt.bracketL: {
-        const node = this.startNode();
+        const node = this.startNode<ArrayPattern>();
         this.next();
+        // @ts-expect-error: Fixme: TSParameterProperty can not be assigned to node.elements
         node.elements = this.parseBindingList(
           tt.bracketR,
           charCodes.rightSquareBracket,
@@ -375,11 +381,12 @@ export default class LValParser extends NodeUtils {
 
   // https://tc39.es/ecma262/#prod-BindingElementList
   parseBindingList(
+    this: Parser,
     close: TokenType,
     closeCharCode: typeof charCodes[keyof typeof charCodes],
     allowEmpty?: boolean,
     allowModifiers?: boolean,
-  ): ReadonlyArray<Pattern | TSParameterProperty> {
+  ): Array<Pattern | TSParameterProperty> {
     const elts: Array<Pattern | TSParameterProperty> = [];
     let first = true;
     while (!this.eat(close)) {
@@ -389,7 +396,6 @@ export default class LValParser extends NodeUtils {
         this.expect(tt.comma);
       }
       if (allowEmpty && this.match(tt.comma)) {
-        // $FlowFixMe This method returns `$ReadOnlyArray<?Pattern>` if `allowEmpty` is set.
         elts.push(null);
       } else if (this.eat(close)) {
         break;
@@ -417,7 +423,10 @@ export default class LValParser extends NodeUtils {
   }
 
   // https://tc39.es/ecma262/#prod-BindingRestProperty
-  parseBindingRestProperty(prop: RestElement): RestElement {
+  parseBindingRestProperty(
+    this: Parser,
+    prop: Undone<RestElement>,
+  ): RestElement {
     this.next(); // eat '...'
     // Don't use parseRestBinding() as we only allow Identifier here.
     prop.argument = this.parseIdentifier();
@@ -426,21 +435,21 @@ export default class LValParser extends NodeUtils {
   }
 
   // https://tc39.es/ecma262/#prod-BindingProperty
-  parseBindingProperty(): ObjectMember | RestElement {
-    const prop = this.startNode();
+  parseBindingProperty(this: Parser): ObjectMember | RestElement {
+    const prop = this.startNode<ObjectMember | RestElement>();
     const { type, start: startPos, startLoc } = this.state;
     if (type === tt.ellipsis) {
-      return this.parseBindingRestProperty(prop);
+      return this.parseBindingRestProperty(prop as Undone<RestElement>);
     } else if (type === tt.privateName) {
       this.expectPlugin("destructuringPrivate", startLoc);
       this.classScope.usePrivateName(this.state.value, startLoc);
-      prop.key = this.parsePrivateName();
+      (prop as Undone<ObjectMember>).key = this.parsePrivateName();
     } else {
-      this.parsePropertyName(prop);
+      this.parsePropertyName(prop as Undone<ObjectMember>);
     }
-    prop.method = false;
-    this.parseObjPropValue(
-      prop,
+    (prop as Undone<ObjectMember>).method = false;
+    return this.parseObjPropValue(
+      prop as Undone<ObjectMember>,
       startPos,
       startLoc,
       false /* isGenerator */,
@@ -448,11 +457,10 @@ export default class LValParser extends NodeUtils {
       true /* isPattern */,
       false /* isAccessor */,
     );
-
-    return prop;
   }
 
   parseAssignableListItem(
+    this: Parser,
     allowModifiers: boolean | undefined | null,
     decorators: Decorator[],
   ): Pattern | TSParameterProperty {
@@ -473,17 +481,17 @@ export default class LValParser extends NodeUtils {
   // Parses assignment pattern around given atom if possible.
   // https://tc39.es/ecma262/#prod-BindingElement
   parseMaybeDefault(
+    this: Parser,
     startPos?: number | null,
     startLoc?: Position | null,
     left?: Pattern | null,
   ): Pattern {
     startLoc = startLoc ?? this.state.startLoc;
     startPos = startPos ?? this.state.start;
-    // $FlowIgnore
     left = left ?? this.parseBindingAtom();
     if (!this.eat(tt.eq)) return left;
 
-    const node = this.startNodeAt(startPos, startLoc);
+    const node = this.startNodeAt<AssignmentPattern>(startPos, startLoc);
     node.left = left;
     node.right = this.parseMaybeAssignAllowIn();
     return this.finishNode(node, "AssignmentPattern");
@@ -520,11 +528,11 @@ export default class LValParser extends NodeUtils {
    */
   isValidLVal(
     type: string,
-    // eslint-disable-next-line no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     isUnparenthesizedInAssign: boolean,
-    // eslint-disable-next-line no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     binding: BindingTypes,
-  ) {
+  ): string | boolean {
     return getOwn(
       {
         AssignmentPattern: "left",
@@ -534,6 +542,7 @@ export default class LValParser extends NodeUtils {
         ArrayPattern: "elements",
         ObjectPattern: "properties",
       },
+      // @ts-expect-error refine string to enum
       type,
     );
   }
@@ -602,13 +611,13 @@ export default class LValParser extends NodeUtils {
 
     if (expression.type === "Identifier") {
       this.checkIdentifier(
-        expression,
+        expression as Identifier,
         binding,
         strictModeChanged,
         allowingSloppyLetBinding,
       );
 
-      const { name } = expression;
+      const { name } = expression as Identifier;
 
       if (checkClashes) {
         if (checkClashes.has(name)) {
@@ -629,7 +638,6 @@ export default class LValParser extends NodeUtils {
     );
 
     if (validity === true) return;
-
     if (validity === false) {
       const ParseErrorClass =
         binding === BIND_NONE ? Errors.InvalidLhs : Errors.InvalidLhsBinding;
@@ -656,10 +664,11 @@ export default class LValParser extends NodeUtils {
 
     // Flow has difficulty tracking `key` and `expression`, but only if we use
     // null-proto objects. If we use normal objects, everything works fine.
-    // $FlowIgnore
+    // @ts-expect-error
     for (const child of [].concat(expression[key])) {
       if (child) {
         this.checkLVal(child, {
+          // @ts-expect-error: refine types
           in: nextAncestor,
           binding,
           checkClashes,
