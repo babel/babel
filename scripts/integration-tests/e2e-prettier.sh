@@ -15,7 +15,7 @@ source utils/cleanup.sh
 set -x
 
 # Clone prettier
-git clone --depth=1 https://github.com/prettier/prettier tmp/prettier
+git clone --depth=1 --single-branch --branch next https://github.com/prettier/prettier tmp/prettier
 cd tmp/prettier || exit
 
 # Update @babel/* dependencies
@@ -38,8 +38,7 @@ export YARN_IGNORE_PATH=1
 startLocalRegistry "$root"/verdaccio-config.yml
 yarn install
 
-# Only run js,jsx,misc format tests
 # Without --runInBand CircleCI hangs.
-yarn test "tests/format/(jsx?|misc|typescript|flow|flow-repo)/" --update-snapshot
+yarn test "tests/format/(jsx?|misc|typescript|flow|flow-repo)/" --update-snapshot --runInBand
 
 cleanup
