@@ -1,9 +1,0 @@
-declare module "babel-plugin-polyfill-regenerator" {
-  declare module.exports: { default: Function };
-}
-declare module "babel-plugin-polyfill-corejs2" {
-  declare module.exports: { default: Function };
-}
-declare module "babel-plugin-polyfill-corejs3" {
-  declare module.exports: { default: Function };
-}

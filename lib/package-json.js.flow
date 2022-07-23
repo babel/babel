@@ -1,4 +1,0 @@
-declare var PACKAGE_JSON: {
-  name: string;
-  version: string;
-};
