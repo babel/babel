@@ -1306,7 +1306,10 @@ export default (superClass: {
       node.typeAnnotation = this.tsParseTypeOperatorOrHigher();
 
       if (operator === "readonly") {
-        this.tsCheckTypeAnnotationForReadOnly(node);
+        this.tsCheckTypeAnnotationForReadOnly(
+          // @ts-expect-error todo(flow->ts)
+          node,
+        );
       }
 
       return this.finishNode(node, "TSTypeOperator");
@@ -1974,7 +1977,11 @@ export default (superClass: {
     tsTryParseAndCatch<T extends N.NodeBase | undefined | null>(
       f: () => T,
     ): T | undefined | null {
-      const result = this.tryParse(abort => f() || abort());
+      const result = this.tryParse(
+        abort =>
+          // @ts-expect-error todo(flow->ts)
+          f() || abort(),
+      );
 
       if (result.aborted || !result.node) return undefined;
       if (result.error) this.state = result.failState;
@@ -2537,9 +2544,7 @@ export default (superClass: {
         callee.type === "TSInstantiationExpression" &&
         !callee.extra?.parenthesized
       ) {
-        // @ts-expect-error migrate to Babel types
         node.typeParameters = callee.typeParameters;
-        // @ts-expect-error migrate to Babel types
         node.callee = callee.expression;
       }
     }
@@ -2569,7 +2574,13 @@ export default (superClass: {
         this.finishNode(node, "TSAsExpression");
         // rescan `<`, `>` because they were scanned when this.state.inType was true
         this.reScan_lt_gt();
-        return this.parseExprOp(node, leftStartPos, leftStartLoc, minPrec);
+        return this.parseExprOp(
+          // @ts-expect-error todo(flow->ts)
+          node,
+          leftStartPos,
+          leftStartLoc,
+          minPrec,
+        );
       }
 
       return super.parseExprOp(left, leftStartPos, leftStartLoc, minPrec);

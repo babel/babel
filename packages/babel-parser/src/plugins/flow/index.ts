@@ -1772,11 +1772,13 @@ export default (superClass: {
           if (seenOptionalIndexedAccess) {
             node.optional = optional;
             type = this.finishNode<N.FlowOptionalIndexedAccessType>(
+              // @ts-expect-error todo(flow->ts)
               node,
               "OptionalIndexedAccessType",
             );
           } else {
             type = this.finishNode<N.FlowIndexedAccessType>(
+              // @ts-expect-error todo(flow->ts)
               node,
               "IndexedAccessType",
             );
@@ -3074,6 +3076,7 @@ export default (superClass: {
       node: Undone<N.ArrowFunctionExpression>,
     ): Undone<N.ArrowFunctionExpression> | undefined | null {
       if (this.match(tt.colon)) {
+        // @ts-expect-error todo(flow->ts)
         const result = this.tryParse(() => {
           const oldNoAnonFunctionType = this.state.noAnonFunctionType;
           this.state.noAnonFunctionType = true;
@@ -3100,6 +3103,7 @@ export default (superClass: {
         if (result.error) this.state = result.failState;
 
         // assign after it is clear it is an arrow
+        // @ts-expect-error todo(flow->ts)
         node.returnType = result.node.typeAnnotation
           ? this.finishNode(result.node, "TypeAnnotation")
           : null;

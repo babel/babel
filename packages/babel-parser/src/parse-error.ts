@@ -201,7 +201,7 @@ export function ParseErrorEnum(
 }
 
 export type RaiseProperties<ErrorDetails> = {
-  at: Position | Undone<NodeBase>;
+  at: Position | NodeBase | Undone<any>;
 } & ErrorDetails;
 
 import ModuleErrors from "./parse-error/module-errors";

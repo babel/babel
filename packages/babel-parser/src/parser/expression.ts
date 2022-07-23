@@ -343,6 +343,7 @@ export default class ExpressionParser extends LValParser {
       this.checkLVal(left, {
         in: this.finishNode(node, "AssignmentExpression"),
       });
+      // @ts-expect-error todo(flow->ts) improve node types
       return node;
     } else if (ownExpressionErrors) {
       this.checkExpressionErrors(refExpressionErrors, true);
@@ -589,6 +590,7 @@ export default class ExpressionParser extends LValParser {
     const { startLoc } = this.state;
     const body = this.parseMaybeAssign();
     const requiredParentheses = UnparenthesizedPipeBodyDescriptions.has(
+      // @ts-expect-error TS2345: Argument of type 'string' is not assignable to parameter of type '"ArrowFunctionExpression" | "YieldExpression" | "AssignmentExpression" | "ConditionalExpression"'.
       body.type,
     );
 
@@ -596,6 +598,7 @@ export default class ExpressionParser extends LValParser {
     if (requiredParentheses && !body.extra?.parenthesized) {
       this.raise(Errors.PipeUnparenthesizedBody, {
         at: startLoc,
+        // @ts-expect-error TS2322: Type 'string' is not assignable to type '"AssignmentExpression" | "ArrowFunctionExpression" | "ConditionalExpression" | "YieldExpression"'.
         type: body.type,
       });
     }
@@ -668,7 +671,12 @@ export default class ExpressionParser extends LValParser {
       }
     }
 
-    const expr = this.parseUpdate(node, update, refExpressionErrors);
+    const expr = this.parseUpdate(
+      // @ts-expect-error using "Undone" node as "done"
+      node,
+      update,
+      refExpressionErrors,
+    );
 
     if (isAwait) {
       const { type } = this.state;
@@ -692,11 +700,10 @@ export default class ExpressionParser extends LValParser {
     refExpressionErrors?: ExpressionErrors | null,
   ): N.Expression {
     if (update) {
-      this.checkLVal((node as Undone<N.UpdateExpression>).argument, {
-        in: this.finishNode(
-          node as Undone<N.UpdateExpression>,
-          "UpdateExpression",
-        ),
+      // @ts-expect-error Type 'Node' is missing the following properties from type 'Undone<UpdateExpression>': prefix, operator, argument
+      const updateExpressionNode = node as Undone<N.UpdateExpression>;
+      this.checkLVal(updateExpressionNode.argument, {
+        in: this.finishNode(updateExpressionNode, "UpdateExpression"),
       });
       return node;
     }
@@ -922,6 +929,7 @@ export default class ExpressionParser extends LValParser {
         tt.parenR,
         base.type === "Import",
         base.type !== "Super",
+        // @ts-expect-error todo(flow->ts)
         node,
         refExpressionErrors,
       );
@@ -1099,11 +1107,19 @@ export default class ExpressionParser extends LValParser {
     );
     // mark inner comments of `async()` as inner comments of `async () =>`
     if (call.innerComments) {
-      setInnerComments(node, call.innerComments);
+      setInnerComments(
+        // @ts-expect-error using "Undone" node as "done"
+        node,
+        call.innerComments,
+      );
     }
     // mark trailing comments of `async` to be inner comments
     if (call.callee.trailingComments) {
-      setInnerComments(node, call.callee.trailingComments);
+      setInnerComments(
+        // @ts-expect-error using "Undone" node as "done"
+        node,
+        call.callee.trailingComments,
+      );
     }
     return node as N.ArrowFunctionExpression;
   }
@@ -1435,7 +1451,13 @@ export default class ExpressionParser extends LValParser {
     // If the pipe-operator plugin’s configuration matches the current token’s type,
     // then this will return `node`, will have been finished as a topic reference.
     // Otherwise, this will throw a `PipeTopicUnconfiguredToken` error.
-    return this.finishTopicReference(node, startLoc, pipeProposal, tokenType);
+    return this.finishTopicReference(
+      // @ts-expect-error using "Undone" node as "done"
+      node,
+      startLoc,
+      pipeProposal,
+      tokenType,
+    );
   }
 
   // This helper method attempts to finish the given `node`
@@ -1650,7 +1672,12 @@ export default class ExpressionParser extends LValParser {
         // The code wasn't `function.sent` but just `function.`, so a simple error is less confusing.
         this.unexpected();
       }
-      return this.parseMetaProperty(node, meta, "sent");
+      return this.parseMetaProperty(
+        // @ts-expect-error todo(flow->ts) improve node types
+        node,
+        meta,
+        "sent",
+      );
     }
     return this.parseFunction(node as Undone<N.FunctionExpression>);
   }
@@ -1840,6 +1867,7 @@ export default class ExpressionParser extends LValParser {
       this.expressionScope.validateAsPattern();
       this.expressionScope.exit();
       this.parseArrowExpression(arrowNode, exprList, false);
+      // @ts-expect-error todo(flow->ts) improve node types
       return arrowNode;
     }
     this.expressionScope.exit();
@@ -1865,7 +1893,12 @@ export default class ExpressionParser extends LValParser {
       val = exprList[0];
     }
 
-    return this.wrapParenthesis(startPos, startLoc, val);
+    return this.wrapParenthesis(
+      startPos,
+      startLoc,
+      // @ts-expect-error todo(flow->ts)
+      val,
+    );
   }
 
   wrapParenthesis(
@@ -2080,7 +2113,10 @@ export default class ExpressionParser extends LValParser {
       } else {
         this.expect(tt.comma);
         if (this.match(close)) {
-          this.addTrailingCommaExtraToNode(node);
+          this.addTrailingCommaExtraToNode(
+            // @ts-expect-error todo(flow->ts) improve node types
+            node,
+          );
           break;
         }
       }
@@ -2397,6 +2433,7 @@ export default class ExpressionParser extends LValParser {
   parsePropertyName(
     this: Parser,
     prop: Undone<
+      // @ts-expect-error todo(flow->ts) Property 'type' is missing in type 'TsNamedTypeElementBase' but required in type 'Node'.
       N.ObjectOrClassMember | N.ClassMember | N.TsNamedTypeElementBase
     >,
     refExpressionErrors?: ExpressionErrors | null,
@@ -2517,6 +2554,7 @@ export default class ExpressionParser extends LValParser {
       close,
       /* allowEmpty */ !isTuple,
       refExpressionErrors,
+      // @ts-expect-error todo(flow->ts)
       node,
     );
     this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
@@ -2595,7 +2633,6 @@ export default class ExpressionParser extends LValParser {
 
     if (isExpression) {
       // https://tc39.es/ecma262/#prod-ExpressionBody
-      // @ts-expect-error Fixme: refine typings
       (node as Undone<N.ArrowFunctionExpression>).body =
         this.parseMaybeAssign();
       this.checkParams(node, false, allowExpression, false);
@@ -2915,7 +2952,10 @@ export default class ExpressionParser extends LValParser {
 
     this.expressionScope.recordParameterInitializerError(
       Errors.AwaitExpressionFormalParameter,
-      { at: node },
+      {
+        // @ts-expect-error todo(flow->ts)
+        at: node,
+      },
     );
 
     if (this.eat(tt.star)) {
@@ -2964,7 +3004,10 @@ export default class ExpressionParser extends LValParser {
 
     this.expressionScope.recordParameterInitializerError(
       Errors.YieldInParameter,
-      { at: node },
+      {
+        // @ts-expect-error todo(flow->ts)
+        at: node,
+      },
     );
 
     this.next();

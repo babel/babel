@@ -108,21 +108,17 @@ export default (superClass: {
         directive.loc.start,
       );
       const expression = this.startNodeAt<N.EstreeLiteral>(
-        // @ts-expect-error N.Directive.value is not defined
         directiveLiteral.start,
-        // @ts-expect-error N.Directive.value is not defined
         directiveLiteral.loc.start,
       );
 
-      // @ts-expect-error N.Directive.value is not defined
       expression.value = directiveLiteral.extra.expressionValue;
-      // @ts-expect-error N.Directive.value is not defined
+      // @ts-expect-error TS2339: Property 'raw' does not exist on type 'Undone '.
       expression.raw = directiveLiteral.extra.raw;
 
       stmt.expression = this.finishNodeAt(
         expression,
         "Literal",
-        // @ts-expect-error N.Directive.value is not defined
         directiveLiteral.loc.end,
       );
       // @ts-expect-error N.Directive.value is not defined
@@ -286,6 +282,7 @@ export default (superClass: {
       let funcNode = this.startNode<N.MethodLike>();
       funcNode.kind = node.kind; // provide kind, so super method correctly sets state
       funcNode = super.parseMethod(
+        // @ts-expect-error todo(flow->ts)
         funcNode,
         isGenerator,
         isAsync,

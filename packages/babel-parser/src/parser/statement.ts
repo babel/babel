@@ -1160,7 +1160,6 @@ export default class StatementParser extends ExpressionParser {
 
           if (
             !hasStrictModeDirective &&
-            // @ts-expect-error migrate to Babel types
             directive.value.value === "use strict"
           ) {
             hasStrictModeDirective = true;
@@ -1381,7 +1380,6 @@ export default class StatementParser extends ExpressionParser {
       // Parse the function body.
       this.parseFunctionBodyAndFinish(
         node,
-        // @ts-expect-error node must be one of types
         isStatement ? "FunctionDeclaration" : "FunctionExpression",
       );
     });
@@ -2086,11 +2084,23 @@ export default class StatementParser extends ExpressionParser {
       | N.ExportNamedDeclaration
     >,
   ): N.AnyExport {
-    const hasDefault = this.maybeParseExportDefaultSpecifier(node);
+    const hasDefault = this.maybeParseExportDefaultSpecifier(
+      // @ts-expect-error todo(flow->ts)
+      node,
+    );
     const parseAfterDefault = !hasDefault || this.eat(tt.comma);
-    const hasStar = parseAfterDefault && this.eatExportStar(node);
+    const hasStar =
+      parseAfterDefault &&
+      this.eatExportStar(
+        // @ts-expect-error todo(flow->ts)
+        node,
+      );
     const hasNamespace =
-      hasStar && this.maybeParseExportNamespaceSpecifier(node);
+      hasStar &&
+      this.maybeParseExportNamespaceSpecifier(
+        // @ts-expect-error todo(flow->ts)
+        node,
+      );
     const parseAfterNamespace =
       parseAfterDefault && (!hasNamespace || this.eat(tt.comma));
     const isFromRequired = hasDefault || hasStar;
@@ -2102,7 +2112,10 @@ export default class StatementParser extends ExpressionParser {
       return this.finishNode(node, "ExportAllDeclaration");
     }
 
-    const hasSpecifiers = this.maybeParseExportNamedSpecifiers(node);
+    const hasSpecifiers = this.maybeParseExportNamedSpecifiers(
+      // @ts-expect-error todo(flow->ts)
+      node,
+    );
 
     if (
       (hasDefault && parseAfterDefault && !hasStar && !hasSpecifiers) ||
@@ -2386,7 +2399,6 @@ export default class StatementParser extends ExpressionParser {
             .declaration;
           if (
             declaration.type === "Identifier" &&
-            // @ts-expect-error migrate to Babel types
             declaration.name === "from" &&
             declaration.end - declaration.start === 4 && // does not contain escape
             !declaration.extra?.parenthesized
@@ -2427,13 +2439,11 @@ export default class StatementParser extends ExpressionParser {
           node.declaration.type === "FunctionDeclaration" ||
           node.declaration.type === "ClassDeclaration"
         ) {
-          // @ts-expect-error migrate to Babel types
           const id = node.declaration.id;
           if (!id) throw new Error("Assertion failure");
 
           this.checkDuplicateExports(node, id.name);
         } else if (node.declaration.type === "VariableDeclaration") {
-          // @ts-expect-error migrate to Babel types
           for (const declaration of node.declaration.declarations) {
             this.checkDeclaration(declaration.id);
           }
