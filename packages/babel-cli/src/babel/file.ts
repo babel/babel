@@ -116,7 +116,6 @@ export default async function ({
 
       process.stdin.on("readable", function () {
         const chunk = process.stdin.read();
-        // $FlowIgnore
         if (chunk !== null) code += chunk;
       });
 

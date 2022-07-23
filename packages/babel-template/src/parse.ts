@@ -221,6 +221,7 @@ function parseWithCodeFrame(
   };
 
   try {
+    // @ts-expect-error todo: use babel-types ast typings in Babel parser
     return parse(code, parserOpts);
   } catch (err) {
     const loc = err.loc;

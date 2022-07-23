@@ -49,7 +49,6 @@ export default declare(api => {
       if (!generatorOpts.jsescOption) {
         generatorOpts.jsescOption = {};
       }
-      // $FlowIgnore: Flow does not support logical assignment
       generatorOpts.jsescOption.minimal ??= false;
     },
     visitor: {

@@ -311,7 +311,6 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
   };
 
   if (!process.env.BABEL_8_BREAKING) {
-    // $FlowIgnore
     Object.assign(babelOptions, {
       moduleRoot: opts.moduleRoot,
       moduleIds: opts.moduleIds,
