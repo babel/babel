@@ -32,11 +32,9 @@ yarn --version
 #                                   TEST                                       #
 #==============================================================================#
 
-# Don't use Yarn 2
-export YARN_IGNORE_PATH=1
-
 startLocalRegistry "$root"/verdaccio-config.yml
-yarn install
+yarn install --no-immutable
+yarn info
 
 # Without --runInBand CircleCI hangs.
 yarn test "tests/format/(jsx?|misc|typescript|flow|flow-repo)/" --update-snapshot --runInBand
