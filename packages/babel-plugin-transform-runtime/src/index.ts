@@ -196,7 +196,7 @@ export default declare((api, options: Options, dirname) => {
 
   const modulePath = getRuntimePath(moduleName, dirname, absoluteRuntime);
 
-  function createCorejsPlgin<Options extends {}>(
+  function createCorejsPlugin<Options extends {}>(
     plugin: (
       api: PluginAPI,
       options: Options,
@@ -235,7 +235,7 @@ export default declare((api, options: Options, dirname) => {
     name: "transform-runtime",
 
     inherits: injectCoreJS2
-      ? createCorejsPlgin<CoreJS2PluginOptions>(
+      ? createCorejsPlugin<CoreJS2PluginOptions>(
           pluginCorejs2,
           {
             method: "usage-pure",
@@ -253,7 +253,7 @@ export default declare((api, options: Options, dirname) => {
           }),
         )
       : injectCoreJS3
-      ? createCorejsPlgin<CoreJS3PluginOptions>(
+      ? createCorejsPlugin<CoreJS3PluginOptions>(
           pluginCorejs3,
           {
             method: "usage-pure",
