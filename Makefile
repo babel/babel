@@ -74,7 +74,7 @@ build-plugin-transform-runtime-dist:
 watch: build-no-bundle
 	BABEL_ENV=development $(YARN) gulp watch
 
-code-quality: tscheck flow lint
+code-quality: tscheck lint
 
 tscheck: generate-tsconfig
 	rm -rf dts
