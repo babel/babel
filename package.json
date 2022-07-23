@@ -54,7 +54,6 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
     "fancy-log": "^2.0.0",
-    "flow-bin": "^0.123.0",
     "glob": "^7.1.7",
     "gulp": "^4.0.2",
     "gulp-filter": "^7.0.0",

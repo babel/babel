@@ -2586,7 +2586,7 @@ export default (superClass: {
         }
         // estree support
       } else if (
-        // @ts-expect-error flow does not know about the face that estree can replace ClassMethod with MethodDefinition
+        // @ts-expect-error TS does not know about the face that estree can replace ClassMethod with MethodDefinition
         method.type === "MethodDefinition" &&
         isConstructor &&
         // @ts-expect-error estree

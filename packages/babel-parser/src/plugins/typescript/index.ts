@@ -1140,9 +1140,7 @@ export default (superClass: {
           });
         }
 
-        // Flow doesn't support ||=
-        seenOptionalElement =
-          seenOptionalElement ||
+        seenOptionalElement ||=
           (type === "TSNamedTupleMember" && elementNode.optional) ||
           type === "TSOptionalType";
 
@@ -1154,8 +1152,7 @@ export default (superClass: {
         }
 
         const isLabeled = checkType === "TSNamedTupleMember";
-        // Flow doesn't support ??=
-        labeledElements = labeledElements ?? isLabeled;
+        labeledElements ??= isLabeled;
         if (labeledElements !== isLabeled) {
           this.raise(TSErrors.MixedLabeledAndUnlabeledElements, {
             at: elementNode,

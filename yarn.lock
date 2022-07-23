@@ -5884,7 +5884,6 @@ __metadata:
     eslint-plugin-node: ^11.1.0
     eslint-plugin-prettier: ^4.0.0
     fancy-log: ^2.0.0
-    flow-bin: ^0.123.0
     glob: ^7.1.7
     gulp: ^4.0.2
     gulp-filter: ^7.0.0
@@ -8669,15 +8668,6 @@ __metadata:
   version: 3.1.1
   resolution: "flatted@npm:3.1.1"
   checksum: 508935e3366d95444131f0aaa801a4301f24ea5bcb900d12764e7335b46b910730cc1b5bcfcfb8eccb7c8db261ba0671c6a7ca30d10870ff7a7756dc7e731a7a
-  languageName: node
-  linkType: hard
-
-"flow-bin@npm:^0.123.0":
-  version: 0.123.0
-  resolution: "flow-bin@npm:0.123.0"
-  bin:
-    flow: cli.js
-  checksum: ba359e35a9c0d6a11f8881eb658118abe45e5201d57d4ec6ce24135b3ba9bc3118a4fb6a44ec6244a58a050c6843ccc03926014729502c019927aad1a1205048
   languageName: node
   linkType: hard
 
