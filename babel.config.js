@@ -181,7 +181,6 @@ module.exports = function (api) {
         },
       ],
       ["@babel/env", envOpts],
-      ["@babel/preset-flow", { allowDeclareFields: true }],
     ],
     plugins: [
       ["@babel/proposal-object-rest-spread", { useBuiltIns: true }],

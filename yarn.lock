@@ -1876,17 +1876,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-flow@npm:^7.17.12":
-  version: 7.17.12
-  resolution: "@babel/plugin-syntax-flow@npm:7.17.12"
-  dependencies:
-    "@babel/helper-plugin-utils": ^7.17.12
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  checksum: f92f18c9414478a3f408866c8a3d3f6b83f5369c8b76880245ba05d7ab9166d47c7d4ab1e0ac8b7a69d1d1b448bea836d1b340f823b1e548fec62a563cc9d0ec
-  languageName: node
-  linkType: hard
-
 "@babel/plugin-syntax-flow@workspace:^, @babel/plugin-syntax-flow@workspace:packages/babel-plugin-syntax-flow":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-flow@workspace:packages/babel-plugin-syntax-flow"
@@ -2423,18 +2412,6 @@ __metadata:
     "@babel/core": ^7.0.0-0
   languageName: unknown
   linkType: soft
-
-"@babel/plugin-transform-flow-strip-types@npm:^7.17.12":
-  version: 7.17.12
-  resolution: "@babel/plugin-transform-flow-strip-types@npm:7.17.12"
-  dependencies:
-    "@babel/helper-plugin-utils": ^7.17.12
-    "@babel/plugin-syntax-flow": ^7.17.12
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  checksum: c37d3cc00aaec2036d1046f5376820f5c6098df493bd9a4d9013c47e0f5ef9c213eb4567ba1ce466269d9771f5cdc76613309c310b696a0489a20e593c8967e2
-  languageName: node
-  linkType: hard
 
 "@babel/plugin-transform-flow-strip-types@workspace:^, @babel/plugin-transform-flow-strip-types@workspace:packages/babel-plugin-transform-flow-strip-types":
   version: 0.0.0-use.local
@@ -3444,19 +3421,6 @@ __metadata:
     "@babel/core": ^7.0.0-0
   languageName: unknown
   linkType: soft
-
-"@babel/preset-flow@npm:^7.17.12":
-  version: 7.17.12
-  resolution: "@babel/preset-flow@npm:7.17.12"
-  dependencies:
-    "@babel/helper-plugin-utils": ^7.17.12
-    "@babel/helper-validator-option": ^7.16.7
-    "@babel/plugin-transform-flow-strip-types": ^7.17.12
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  checksum: 21b123c21133eb0998f7b847176da392d49e894671c96785c2471d34845bb50cf4d376e1b4ea3edeafb8b258cc884cd3bed5882fe7ba8d7b0522f3829dea39c5
-  languageName: node
-  linkType: hard
 
 "@babel/preset-flow@workspace:^, @babel/preset-flow@workspace:packages/babel-preset-flow":
   version: 0.0.0-use.local
@@ -5861,7 +5825,6 @@ __metadata:
     "@babel/plugin-transform-modules-commonjs": ^7.18.0
     "@babel/plugin-transform-runtime": ^7.18.0
     "@babel/preset-env": ^7.18.0
-    "@babel/preset-flow": ^7.17.12
     "@babel/preset-typescript": ^7.17.12
     "@babel/runtime": ^7.18.0
     "@rollup/plugin-babel": ^5.3.1
