@@ -47,7 +47,6 @@
     "eslint": "^8.9.0",
     "eslint-formatter-codeframe": "^7.32.1",
     "eslint-import-resolver-node": "^0.3.6",
-    "eslint-plugin-flowtype": "^8.0.3",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jest": "^26.1.0",
     "eslint-plugin-node": "^11.1.0",

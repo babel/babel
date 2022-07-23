@@ -358,7 +358,6 @@ __metadata:
   resolution: "@babel/eslint-config-internal@workspace:eslint/babel-eslint-config-internal"
   peerDependencies:
     "@babel/eslint-parser": ^7.16.0
-    eslint-plugin-flowtype: ^8.0.3
   languageName: unknown
   linkType: soft
 
@@ -5841,7 +5840,6 @@ __metadata:
     eslint: ^8.9.0
     eslint-formatter-codeframe: ^7.32.1
     eslint-import-resolver-node: ^0.3.6
-    eslint-plugin-flowtype: ^8.0.3
     eslint-plugin-import: ^2.25.4
     eslint-plugin-jest: ^26.1.0
     eslint-plugin-node: ^11.1.0
@@ -7775,20 +7773,6 @@ __metadata:
   peerDependencies:
     eslint: ">=4.19.1"
   checksum: e57592c52301ee8ddc296ae44216df007f3a870bcb3be8d1fbdb909a1d3a3efe3fa3785de02066f9eba1d6466b722d3eb3cc3f8b75b3cf6a1cbded31ac6298e4
-  languageName: node
-  linkType: hard
-
-"eslint-plugin-flowtype@npm:^8.0.3":
-  version: 8.0.3
-  resolution: "eslint-plugin-flowtype@npm:8.0.3"
-  dependencies:
-    lodash: ^4.17.21
-    string-natural-compare: ^3.0.1
-  peerDependencies:
-    "@babel/plugin-syntax-flow": ^7.14.5
-    "@babel/plugin-transform-react-jsx": ^7.14.9
-    eslint: ^8.1.0
-  checksum: 30e63c5357b0b5571f39afed51e59c140084f4aa53c106b1fd04f26da42b268908466daa6020b92943e71409bdaee1c67202515ed9012404d027cc92cb03cefa
   languageName: node
   linkType: hard
 
@@ -11228,7 +11212,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.17.14, lodash@npm:^4.17.19, lodash@npm:^4.17.21, lodash@npm:^4.17.4":
+"lodash@npm:^4.17.14, lodash@npm:^4.17.19, lodash@npm:^4.17.4":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: eb835a2e51d381e561e508ce932ea50a8e5a68f4ebdd771ea240d3048244a8d13658acbd502cd4829768c56f2e16bdd4340b9ea141297d472517b83868e677f7
@@ -14096,13 +14080,6 @@ fsevents@^1.2.7:
     char-regex: ^1.0.2
     strip-ansi: ^6.0.0
   checksum: 7bd3191668ddafa6f574a8b17a1bd1b085737d64ceefa51f72cdd19c45a730422cd70d984eee7584d6e5b5c84b6318633c6d6a720a4bfd7c58769985fa77573e
-  languageName: node
-  linkType: hard
-
-"string-natural-compare@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "string-natural-compare@npm:3.0.1"
-  checksum: 65910d9995074086e769a68728395effbba9b7186be5b4c16a7fad4f4ef50cae95ca16e3e9086e019cbb636ae8daac9c7b8fe91b5f21865c5c0f26e3c0725406
   languageName: node
   linkType: hard
 
