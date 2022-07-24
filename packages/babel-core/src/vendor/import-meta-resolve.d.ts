@@ -1,1 +1,1 @@
-export function resolve(specifier: stirng, parent: string): Promise<string>;
+export function resolve(specifier: string, parent: string): Promise<string>;
