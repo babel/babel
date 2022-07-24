@@ -12,6 +12,6 @@ declare module "regexpu-core" {
     flags: string,
     options: RegexpuOptions
   ): string;
-  export = rewritePattern;
+  export default rewritePattern;
   export { RegexpuOptions };
 }
