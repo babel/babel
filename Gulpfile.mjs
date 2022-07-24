@@ -590,7 +590,7 @@ ${fs.readFileSync(path.join(path.dirname(input), "license"), "utf8")}*/
 
   fs.writeFileSync(
     output.replace(".js", ".d.ts"),
-    `export function resolve(specifier: stirng, parent: string): Promise<string>;`
+    `export function resolve(specifier: string, parent: string): Promise<string>;`
   );
 });
 
