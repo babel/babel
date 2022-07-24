@@ -171,7 +171,7 @@ jobs:
         with:
           name: babel-artifact
       - name: Lint
-        run: make -j tscheck flowcheck-ci lint-ci
+        run: make -j tscheck lint-ci
 
   test:
     name: Test on Node.js # GitHub will add ${{ matrix.node-version }} to this title
@@ -244,7 +244,7 @@ jobs:
           BABEL_8_BREAKING: true
           STRIP_BABEL_8_FLAG: true
       - name: Lint
-        run: make -j tscheck flowcheck-ci lint-ci
+        run: make -j tscheck lint-ci
         env:
           BABEL_ENV: test
           BABEL_8_BREAKING: true

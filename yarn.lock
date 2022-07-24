@@ -358,7 +358,6 @@ __metadata:
   resolution: "@babel/eslint-config-internal@workspace:eslint/babel-eslint-config-internal"
   peerDependencies:
     "@babel/eslint-parser": ^7.16.0
-    eslint-plugin-flowtype: ^8.0.3
   languageName: unknown
   linkType: soft
 
@@ -1876,17 +1875,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-flow@npm:^7.17.12":
-  version: 7.17.12
-  resolution: "@babel/plugin-syntax-flow@npm:7.17.12"
-  dependencies:
-    "@babel/helper-plugin-utils": ^7.17.12
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  checksum: f92f18c9414478a3f408866c8a3d3f6b83f5369c8b76880245ba05d7ab9166d47c7d4ab1e0ac8b7a69d1d1b448bea836d1b340f823b1e548fec62a563cc9d0ec
-  languageName: node
-  linkType: hard
-
 "@babel/plugin-syntax-flow@workspace:^, @babel/plugin-syntax-flow@workspace:packages/babel-plugin-syntax-flow":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-flow@workspace:packages/babel-plugin-syntax-flow"
@@ -2423,18 +2411,6 @@ __metadata:
     "@babel/core": ^7.0.0-0
   languageName: unknown
   linkType: soft
-
-"@babel/plugin-transform-flow-strip-types@npm:^7.17.12":
-  version: 7.17.12
-  resolution: "@babel/plugin-transform-flow-strip-types@npm:7.17.12"
-  dependencies:
-    "@babel/helper-plugin-utils": ^7.17.12
-    "@babel/plugin-syntax-flow": ^7.17.12
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  checksum: c37d3cc00aaec2036d1046f5376820f5c6098df493bd9a4d9013c47e0f5ef9c213eb4567ba1ce466269d9771f5cdc76613309c310b696a0489a20e593c8967e2
-  languageName: node
-  linkType: hard
 
 "@babel/plugin-transform-flow-strip-types@workspace:^, @babel/plugin-transform-flow-strip-types@workspace:packages/babel-plugin-transform-flow-strip-types":
   version: 0.0.0-use.local
@@ -3444,19 +3420,6 @@ __metadata:
     "@babel/core": ^7.0.0-0
   languageName: unknown
   linkType: soft
-
-"@babel/preset-flow@npm:^7.17.12":
-  version: 7.17.12
-  resolution: "@babel/preset-flow@npm:7.17.12"
-  dependencies:
-    "@babel/helper-plugin-utils": ^7.17.12
-    "@babel/helper-validator-option": ^7.16.7
-    "@babel/plugin-transform-flow-strip-types": ^7.17.12
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  checksum: 21b123c21133eb0998f7b847176da392d49e894671c96785c2471d34845bb50cf4d376e1b4ea3edeafb8b258cc884cd3bed5882fe7ba8d7b0522f3829dea39c5
-  languageName: node
-  linkType: hard
 
 "@babel/preset-flow@workspace:^, @babel/preset-flow@workspace:packages/babel-preset-flow":
   version: 0.0.0-use.local
@@ -5861,7 +5824,6 @@ __metadata:
     "@babel/plugin-transform-modules-commonjs": ^7.18.0
     "@babel/plugin-transform-runtime": ^7.18.0
     "@babel/preset-env": ^7.18.0
-    "@babel/preset-flow": ^7.17.12
     "@babel/preset-typescript": ^7.17.12
     "@babel/runtime": ^7.18.0
     "@rollup/plugin-babel": ^5.3.1
@@ -5878,13 +5840,11 @@ __metadata:
     eslint: ^8.9.0
     eslint-formatter-codeframe: ^7.32.1
     eslint-import-resolver-node: ^0.3.6
-    eslint-plugin-flowtype: ^8.0.3
     eslint-plugin-import: ^2.25.4
     eslint-plugin-jest: ^26.1.0
     eslint-plugin-node: ^11.1.0
     eslint-plugin-prettier: ^4.0.0
     fancy-log: ^2.0.0
-    flow-bin: ^0.123.0
     glob: ^7.1.7
     gulp: ^4.0.2
     gulp-filter: ^7.0.0
@@ -7816,20 +7776,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-flowtype@npm:^8.0.3":
-  version: 8.0.3
-  resolution: "eslint-plugin-flowtype@npm:8.0.3"
-  dependencies:
-    lodash: ^4.17.21
-    string-natural-compare: ^3.0.1
-  peerDependencies:
-    "@babel/plugin-syntax-flow": ^7.14.5
-    "@babel/plugin-transform-react-jsx": ^7.14.9
-    eslint: ^8.1.0
-  checksum: 30e63c5357b0b5571f39afed51e59c140084f4aa53c106b1fd04f26da42b268908466daa6020b92943e71409bdaee1c67202515ed9012404d027cc92cb03cefa
-  languageName: node
-  linkType: hard
-
 "eslint-plugin-import@npm:^2.25.4":
   version: 2.25.4
   resolution: "eslint-plugin-import@npm:2.25.4"
@@ -8669,15 +8615,6 @@ __metadata:
   version: 3.1.1
   resolution: "flatted@npm:3.1.1"
   checksum: 508935e3366d95444131f0aaa801a4301f24ea5bcb900d12764e7335b46b910730cc1b5bcfcfb8eccb7c8db261ba0671c6a7ca30d10870ff7a7756dc7e731a7a
-  languageName: node
-  linkType: hard
-
-"flow-bin@npm:^0.123.0":
-  version: 0.123.0
-  resolution: "flow-bin@npm:0.123.0"
-  bin:
-    flow: cli.js
-  checksum: ba359e35a9c0d6a11f8881eb658118abe45e5201d57d4ec6ce24135b3ba9bc3118a4fb6a44ec6244a58a050c6843ccc03926014729502c019927aad1a1205048
   languageName: node
   linkType: hard
 
@@ -11275,7 +11212,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.17.14, lodash@npm:^4.17.19, lodash@npm:^4.17.21, lodash@npm:^4.17.4":
+"lodash@npm:^4.17.14, lodash@npm:^4.17.19, lodash@npm:^4.17.4":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: eb835a2e51d381e561e508ce932ea50a8e5a68f4ebdd771ea240d3048244a8d13658acbd502cd4829768c56f2e16bdd4340b9ea141297d472517b83868e677f7
@@ -14143,13 +14080,6 @@ fsevents@^1.2.7:
     char-regex: ^1.0.2
     strip-ansi: ^6.0.0
   checksum: 7bd3191668ddafa6f574a8b17a1bd1b085737d64ceefa51f72cdd19c45a730422cd70d984eee7584d6e5b5c84b6318633c6d6a720a4bfd7c58769985fa77573e
-  languageName: node
-  linkType: hard
-
-"string-natural-compare@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "string-natural-compare@npm:3.0.1"
-  checksum: 65910d9995074086e769a68728395effbba9b7186be5b4c16a7fad4f4ef50cae95ca16e3e9086e019cbb636ae8daac9c7b8fe91b5f21865c5c0f26e3c0725406
   languageName: node
   linkType: hard
 

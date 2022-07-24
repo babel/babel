@@ -172,6 +172,8 @@ module.exports = function (api) {
       .filter(Boolean)
       .map(normalize),
     presets: [
+      // presets are applied from right to left
+      ["@babel/env", envOpts],
       [
         "@babel/preset-typescript",
         {
@@ -180,8 +182,6 @@ module.exports = function (api) {
           optimizeConstEnums: true,
         },
       ],
-      ["@babel/env", envOpts],
-      ["@babel/preset-flow", { allowDeclareFields: true }],
     ],
     plugins: [
       ["@babel/proposal-object-rest-spread", { useBuiltIns: true }],

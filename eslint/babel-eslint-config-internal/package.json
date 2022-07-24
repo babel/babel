@@ -10,7 +10,6 @@
     "./package.json": "./package.json"
   },
   "peerDependencies": {
-    "@babel/eslint-parser": "^7.16.0",
-    "eslint-plugin-flowtype": "^8.0.3"
+    "@babel/eslint-parser": "^7.16.0"
   }
 }
