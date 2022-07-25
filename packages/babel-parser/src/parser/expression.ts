@@ -1451,13 +1451,7 @@ export default class ExpressionParser extends LValParser {
     // If the pipe-operator plugin’s configuration matches the current token’s type,
     // then this will return `node`, will have been finished as a topic reference.
     // Otherwise, this will throw a `PipeTopicUnconfiguredToken` error.
-    return this.finishTopicReference(
-      // @ts-expect-error using "Undone" node as "done"
-      node,
-      startLoc,
-      pipeProposal,
-      tokenType,
-    );
+    return this.finishTopicReference(node, startLoc, pipeProposal, tokenType);
   }
 
   // This helper method attempts to finish the given `node`
@@ -1474,7 +1468,7 @@ export default class ExpressionParser extends LValParser {
   // but if the given `tokenType` does not match the plugin’s configuration,
   // then this method will throw a `PipeTopicUnconfiguredToken` error.
   finishTopicReference(
-    node: N.Node,
+    node: Undone<N.Node>,
     startLoc: Position,
     pipeProposal: string,
     tokenType: TokenType,
@@ -1673,8 +1667,7 @@ export default class ExpressionParser extends LValParser {
         this.unexpected();
       }
       return this.parseMetaProperty(
-        // @ts-expect-error todo(flow->ts) improve node types
-        node,
+        node as Undone<N.MetaProperty>,
         meta,
         "sent",
       );
