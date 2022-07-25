@@ -1,4 +1,4 @@
-export enum ParseErrorCode {
+export const enum ParseErrorCode {
   SyntaxError = "BABEL_PARSER_SYNTAX_ERROR",
   SourceTypeModuleError = "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED",
 }
