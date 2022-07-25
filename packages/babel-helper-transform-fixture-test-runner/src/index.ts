@@ -151,6 +151,8 @@ function runCacheableScriptInTestContext(
     id: filename,
     exports: {},
   };
+  moduleCache[filename] = module;
+
   const req = (id: string) =>
     runModuleInTestContext(id, filename, context, moduleCache);
   const dirname = path.dirname(filename);
@@ -184,15 +186,12 @@ function runModuleInTestContext(
   // stronger cache guarantee than the LRU's Script cache.
   if (moduleCache[filename]) return moduleCache[filename].exports;
 
-  const module = runCacheableScriptInTestContext(
+  return runCacheableScriptInTestContext(
     filename,
     () => fs.readFileSync(filename, "utf8"),
     context,
     moduleCache,
-  );
-  moduleCache[filename] = module;
-
-  return module.exports;
+  ).exports;
 }
 
 /**
