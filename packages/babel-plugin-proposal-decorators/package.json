@@ -34,7 +34,8 @@
     "@babel/helper-plugin-test-runner": "workspace:^",
     "@babel/traverse": "workspace:^",
     "@types/charcodes": "^0.2.0",
-    "babel-plugin-polyfill-es-shims": "^0.6.1",
+    "array.prototype.concat": "^1.0.2",
+    "babel-plugin-polyfill-es-shims": "^0.7.0",
     "charcodes": "^0.2.0",
     "object.getownpropertydescriptors": "^2.1.1"
   },

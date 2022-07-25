@@ -312,27 +312,29 @@ function buildRollup(packages, targetBrowsers) {
           input,
           external,
           onwarn(warning, warn) {
-            if (warning.code === "CIRCULAR_DEPENDENCY") return;
-            if (warning.code === "UNUSED_EXTERNAL_IMPORT") {
-              warn(warning);
-              return;
-            }
-
-            // Rollup warns about using babel.default at
-            // https://github.com/babel/babel-polyfills/blob/4ac92be5b70b13e3d8a34614d8ecd900eb3f40e4/packages/babel-helper-define-polyfill-provider/src/types.js#L5
-            // We can safely ignore this warning, and let Rollup replace it with undefined.
-            if (
-              warning.code === "MISSING_EXPORT" &&
-              warning.exporter === "packages/babel-core/src/index.ts" &&
-              warning.missing === "default" &&
-              [
-                "@babel/helper-define-polyfill-provider",
-                "babel-plugin-polyfill-corejs2",
-                "babel-plugin-polyfill-corejs3",
-                "babel-plugin-polyfill-regenerator",
-              ].some(pkg => warning.importer.includes(pkg))
-            ) {
-              return;
+            switch (warning.code) {
+              case "CIRCULAR_DEPENDENCY":
+              case "SOURCEMAP_ERROR": // Rollup warns about the babel-polyfills source maps
+                return;
+              case "UNUSED_EXTERNAL_IMPORT":
+                warn(warning);
+                return;
+              case "MISSING_EXPORT":
+                // Rollup warns about using babel.default at
+                // https://github.com/babel/babel-polyfills/blob/4ac92be5b70b13e3d8a34614d8ecd900eb3f40e4/packages/babel-helper-define-polyfill-provider/src/types.js#L5
+                // We can safely ignore this warning, and let Rollup replace it with undefined.
+                if (
+                  warning.exporter === "packages/babel-core/src/index.ts" &&
+                  warning.missing === "default" &&
+                  [
+                    "@babel/helper-define-polyfill-provider",
+                    "babel-plugin-polyfill-corejs2",
+                    "babel-plugin-polyfill-corejs3",
+                    "babel-plugin-polyfill-regenerator",
+                  ].some(pkg => warning.importer.includes(pkg))
+                ) {
+                  return;
+                }
             }
 
             // We use console.warn here since it prints more info than just "warn",
