@@ -101,7 +101,10 @@ function toParseErrorConstructor<ErrorDetails>({
   };
 }
 
-type ParseErrorTemplate = string | ToMessage<any> | { message: string | ToMessage<any> };
+type ParseErrorTemplate =
+  | string
+  | ToMessage<any>
+  | { message: string | ToMessage<any> };
 
 type ParseErrorTemplates = { [reasonCode: string]: ParseErrorTemplate };
 
