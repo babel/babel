@@ -1,10 +1,11 @@
 import { fileURLToPath } from "url";
 import path from "path";
+import { writeFileSync } from "fs";
 import { rollup } from "rollup";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import { babel } from "@rollup/plugin-babel";
-import { writeFileSync } from "fs";
+import { terser } from "rollup-plugin-terser";
 
 const root = fileURLToPath(path.dirname(import.meta.url));
 
@@ -40,6 +41,7 @@ async function pack(inputPath, outputPath, dynamicRequireTargets) {
           ],
         ],
       }),
+      terser(),
     ],
   });
   const result = await bundle.generate({
