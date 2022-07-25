@@ -1,10 +1,7 @@
-export const ParseErrorCodes = Object.freeze({
-  SyntaxError: "BABEL_PARSER_SYNTAX_ERROR",
-  SourceTypeModuleError: "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED",
-});
-
-export type ParseErrorCode =
-  typeof ParseErrorCodes[keyof typeof ParseErrorCodes];
+export const enum ParseErrorCode {
+  SyntaxError = "BABEL_PARSER_SYNTAX_ERROR",
+  SourceTypeModuleError = "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED",
+}
 
 export type SyntaxPlugin =
   | "flow"
@@ -40,7 +37,7 @@ const reflect = (keys: string[], last = keys.length - 1) => ({
   },
 });
 
-const instantiate = <T, U extends T>(
+const instantiate = <T>(
   constructor: new () => T,
   properties: any,
   descriptors: any,
@@ -62,7 +59,7 @@ const instantiate = <T, U extends T>(
           configurable: true,
           ...descriptor,
         }),
-      Object.assign(new constructor() as U, properties),
+      Object.assign(new constructor(), properties),
     );
 
 export { instantiate };

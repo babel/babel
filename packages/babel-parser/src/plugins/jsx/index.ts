@@ -15,46 +15,33 @@ import * as N from "../../types";
 import { isIdentifierChar, isIdentifierStart } from "../../util/identifier";
 import type { Position } from "../../util/location";
 import { isNewLine } from "../../util/whitespace";
-import {
-  Errors,
-  ParseErrorEnum,
-  toParseErrorCredentials,
-} from "../../parse-error";
+import { Errors, ParseErrorEnum } from "../../parse-error";
 import { type Undone } from "../../parser/node";
 
 /* eslint sort-keys: "error" */
-const JsxErrors = ParseErrorEnum`jsx`((_: typeof toParseErrorCredentials) => ({
-  AttributeIsEmpty: _(
+const JsxErrors = ParseErrorEnum`jsx`({
+  AttributeIsEmpty:
     "JSX attributes must only be assigned a non-empty expression.",
-  ),
-  MissingClosingTagElement: _<{
-    openingTagName: string;
-  }>(
-    ({ openingTagName }) =>
-      `Expected corresponding JSX closing tag for <${openingTagName}>.`,
-  ),
-  MissingClosingTagFragment: _(
-    "Expected corresponding JSX closing tag for <>.",
-  ),
-  UnexpectedSequenceExpression: _(
+  MissingClosingTagElement: ({ openingTagName }: { openingTagName: string }) =>
+    `Expected corresponding JSX closing tag for <${openingTagName}>.`,
+  MissingClosingTagFragment: "Expected corresponding JSX closing tag for <>.",
+  UnexpectedSequenceExpression:
     "Sequence expressions cannot be directly nested inside JSX. Did you mean to wrap it in parentheses (...)?",
-  ),
   // FIXME: Unify with Errors.UnexpectedToken
-  UnexpectedToken: _<{
+  UnexpectedToken: ({
+    unexpected,
+    HTMLEntity,
+  }: {
     unexpected: string;
     HTMLEntity: string;
-  }>(
-    ({ unexpected, HTMLEntity }) =>
-      `Unexpected token \`${unexpected}\`. Did you mean \`${HTMLEntity}\` or \`{'${unexpected}'}\`?`,
-  ),
-  UnsupportedJsxValue: _(
+  }) =>
+    `Unexpected token \`${unexpected}\`. Did you mean \`${HTMLEntity}\` or \`{'${unexpected}'}\`?`,
+  UnsupportedJsxValue:
     "JSX value should be either an expression or a quoted JSX text.",
-  ),
-  UnterminatedJsxContent: _("Unterminated JSX contents."),
-  UnwrappedAdjacentJSXElements: _(
+  UnterminatedJsxContent: "Unterminated JSX contents.",
+  UnwrappedAdjacentJSXElements:
     "Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>?",
-  ),
-}));
+});
 
 /* eslint-disable sort-keys */
 
