@@ -24,7 +24,7 @@ interface ParseErrorSpecification<ErrorDetails> {
   // as readonly, so let's just not worry about it for now.
   code: ParseErrorCode;
   reasonCode: string;
-  syntaxPlugin?: string;
+  syntaxPlugin?: SyntaxPlugin;
   missingPlugin?: string | string[];
   loc: Position;
   details: ErrorDetails;
@@ -130,7 +130,7 @@ export function ParseErrorEnum(a: TemplateStringsArray): <
 
 export function ParseErrorEnum<T extends ParseErrorTemplates>(
   parseErrorTemplates: T,
-  syntaxPlugin?: string,
+  syntaxPlugin?: SyntaxPlugin,
 ): {
   [K in keyof T]: ParseErrorConstructor<
     T[K] extends { message: string | ToMessage<any> }
