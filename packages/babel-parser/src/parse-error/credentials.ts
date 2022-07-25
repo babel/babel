@@ -37,8 +37,8 @@ const reflect = (keys: string[], last = keys.length - 1) => ({
   },
 });
 
-const instantiate = (
-  constructor: new () => unknown,
+const instantiate = <T>(
+  constructor: new () => T,
   properties: any,
   descriptors: any,
 ) =>
