@@ -108,6 +108,13 @@ type ParseErrorTemplate =
 
 type ParseErrorTemplates = { [reasonCode: string]: ParseErrorTemplate };
 
+// This is the templated form of `ParseErrorEnum`.
+//
+// Note: We could factor out the return type calculation into something like
+// `ParseErrorConstructor<T extends ParseErrorTemplates>`, and then we could
+// reuse it in the non-templated form of `ParseErrorEnum`, but TypeScript
+// doesn't seem to drill down that far when showing you the computed type of
+// an object in an editor, so we'll leave it inlined for now.
 export function ParseErrorEnum(a: TemplateStringsArray): <
   T extends ParseErrorTemplates,
 >(
