@@ -57,7 +57,7 @@ function toParseErrorConstructor<ErrorDetails>({
   };
 
   return function constructor({ loc, details }: ConstructorArgument) {
-    return instantiate<SyntaxError, ParseError<ErrorDetails>>(
+    return instantiate(
       SyntaxError,
       { ...properties, loc },
       {
@@ -97,7 +97,7 @@ function toParseErrorConstructor<ErrorDetails>({
           enumerable: true,
         },
       },
-    );
+    ) as ParseError<ErrorDetails>;
   };
 }
 

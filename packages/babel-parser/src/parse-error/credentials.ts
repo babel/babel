@@ -37,8 +37,8 @@ const reflect = (keys: string[], last = keys.length - 1) => ({
   },
 });
 
-const instantiate = <T, U extends T>(
-  constructor: new () => T,
+const instantiate = (
+  constructor: new () => unknown,
   properties: any,
   descriptors: any,
 ) =>
@@ -59,7 +59,7 @@ const instantiate = <T, U extends T>(
           configurable: true,
           ...descriptor,
         }),
-      Object.assign(new constructor() as U, properties),
+      Object.assign(new constructor(), properties),
     );
 
 export { instantiate };
