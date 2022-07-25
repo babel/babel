@@ -67,14 +67,11 @@ function toParseErrorConstructor<ErrorDetails>({
             details?: ErrorDetails;
           } = {},
         ) {
-          const loc = overrides.loc || {};
+          const loc = (overrides.loc || {}) as Partial<Position>;
           return constructor({
             loc: new Position(
-              // @ts-expect-error line has been guarded
               "line" in loc ? loc.line : this.loc.line,
-              // @ts-expect-error column has been guarded
               "column" in loc ? loc.column : this.loc.column,
-              // @ts-expect-error index has been guarded
               "index" in loc ? loc.index : this.loc.index,
             ),
             details: { ...this.details, ...overrides.details },
@@ -146,14 +143,18 @@ export function ParseErrorEnum<T extends ParseErrorTemplates>(
   >;
 };
 
-// You call `ParseErrorEnum` with a mapping from `ReasonCode`'s to either 1) a
-// static error message, or 2) `toMessage` functions that define additional
-// necessary `details` needed by the `ParseError`:
+// You call `ParseErrorEnum` with a mapping from `ReasonCode`'s to either:
+//
+// 1. a static error message,
+// 2. `toMessage` functions that define additional necessary `details` needed by
+//    the `ParseError`, or
+// 3. Objects that contain a `message` of one of the above and overridden `code`
+//    and/or `reasonCode`:
 //
 // ParseErrorEnum `optionalSyntaxPlugin` ({
 //   ErrorWithStaticMessage: "message",
 //   ErrorWithDynamicMessage: ({ type } : { type: string }) => `${type}`),
-//   ErrorWithOverriddenProperties: {
+//   ErrorWithOverriddenCodeAndOrReasonCode: {
 //     message: ({ type }: { type: string }) => `${type}`),
 //     code: ParseErrorCode.SourceTypeModuleError,
 //     ...(BABEL_8_BREAKING ? { } : { reasonCode: "CustomErrorReasonCode" })
