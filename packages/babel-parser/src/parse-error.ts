@@ -2,9 +2,10 @@ import { Position } from "./util/location";
 import type { NodeBase } from "./types";
 import {
   instantiate,
-  type ParseErrorCode,
-  ParseErrorCodes,
+  ParseErrorCode,
   type ParseErrorCredentials,
+  type ToMessage,
+  type SyntaxPlugin,
 } from "./parse-error/credentials";
 import type { Undone } from "../src/parser/node";
 
@@ -100,78 +101,88 @@ function toParseErrorConstructor<ErrorDetails>({
   };
 }
 
-// This part is tricky. You'll probably notice from the name of this function
-// that it is supposed to return `ParseErrorCredentials`, but instead these.
-// declarations seem to instead imply that they return
-// `ParseErrorConstructor<ErrorDetails>` instead. This is because in Flow we
-// can't easily extract parameter types (either from functions, like with
-// Typescript's Parameters<f> utility type, or from generic types either). As
-// such, this function does double duty: packaging up the credentials during
-// its actual runtime operation, but pretending to return the
-// `ParseErrorConstructor<ErrorDetails>` that we won't actually have until later
-// to the type system, avoiding the need to do so with $ObjMap (which doesn't
-// work) in `ParseErrorEnum`. This hack won't be necessary when we switch to
-// Typescript.
-export function toParseErrorCredentials(
-  message: string,
-  credentials?: { code?: ParseErrorCode; reasonCode?: string },
-): ParseErrorConstructor<{}>;
+type ParseErrorTemplate = string | ToMessage<any> | { message: string | ToMessage<any> };
 
-export function toParseErrorCredentials<ErrorDetails>(
-  toMessage: (details: ErrorDetails) => string,
-  credentials?: { code?: ParseErrorCode; reasonCode?: string },
-): ParseErrorConstructor<ErrorDetails>;
+type ParseErrorTemplates = { [reasonCode: string]: ParseErrorTemplate };
 
-export function toParseErrorCredentials(
-  toMessageOrMessage: string | ((details: unknown) => string),
-  credentials?: any,
-) {
-  return {
-    toMessage:
-      typeof toMessageOrMessage === "string"
-        ? () => toMessageOrMessage
-        : toMessageOrMessage,
-    ...credentials,
-  };
-}
+export function ParseErrorEnum(a: TemplateStringsArray): <
+  T extends ParseErrorTemplates,
+>(
+  parseErrorTemplates: T,
+) => {
+  [K in keyof T]: ParseErrorConstructor<
+    T[K] extends { message: string | ToMessage<any> }
+      ? T[K]["message"] extends ToMessage<any>
+        ? Parameters<T[K]["message"]>[0]
+        : {}
+      : T[K] extends ToMessage<any>
+      ? Parameters<T[K]>[0]
+      : {}
+  >;
+};
 
-// This is the templated form.
-export function ParseErrorEnum(a: TemplateStringsArray): typeof ParseErrorEnum;
+export function ParseErrorEnum<T extends ParseErrorTemplates>(
+  parseErrorTemplates: T,
+  syntaxPlugin?: string,
+): {
+  [K in keyof T]: ParseErrorConstructor<
+    T[K] extends { message: string | ToMessage<any> }
+      ? T[K]["message"] extends ToMessage<any>
+        ? Parameters<T[K]["message"]>[0]
+        : {}
+      : T[K] extends ToMessage<any>
+      ? Parameters<T[K]>[0]
+      : {}
+  >;
+};
 
-export function ParseErrorEnum<
-  T extends (a: typeof toParseErrorCredentials) => unknown,
->(toParseErrorCredentials: T, syntaxPlugin?: string): ReturnType<T>;
-
-// You call `ParseErrorEnum` with a mapping from `ReasonCode`'s to either error
-// messages, or `toMessage` functions that define additional necessary `details`
-// needed by the `ParseError`:
+// You call `ParseErrorEnum` with a mapping from `ReasonCode`'s to either 1) a
+// static error message, or 2) `toMessage` functions that define additional
+// necessary `details` needed by the `ParseError`:
 //
-// ParseErrorEnum`optionalSyntaxPlugin` (_ => ({
-//   ErrorWithStaticMessage: _("message"),
-//   ErrorWithDynamicMessage: _<{ type: string }>(({ type }) => `${type}`),
+// ParseErrorEnum `optionalSyntaxPlugin` ({
+//   ErrorWithStaticMessage: "message",
+//   ErrorWithDynamicMessage: ({ type } : { type: string }) => `${type}`),
+//   ErrorWithOverriddenProperties: {
+//     message: ({ type }: { type: string }) => `${type}`),
+//     code: ParseErrorCode.SourceTypeModuleError,
+//     ...(BABEL_8_BREAKING ? { } : { reasonCode: "CustomErrorReasonCode" })
+//   }
 // });
 //
-export function ParseErrorEnum(argument: any, syntaxPlugin?: string) {
+export function ParseErrorEnum(
+  argument: TemplateStringsArray | ParseErrorTemplates,
+  syntaxPlugin?: SyntaxPlugin,
+) {
   // If the first parameter is an array, that means we were called with a tagged
   // template literal. Extract the syntaxPlugin from this, and call again in
   // the "normalized" form.
   if (Array.isArray(argument)) {
-    return (toParseErrorCredentialsMap: any) =>
-      ParseErrorEnum(toParseErrorCredentialsMap, argument[0]);
+    return (parseErrorTemplates: ParseErrorTemplates) =>
+      ParseErrorEnum(parseErrorTemplates, argument[0]);
   }
 
-  const partialCredentials = argument(toParseErrorCredentials);
   const ParseErrorConstructors = {} as Record<
     string,
     ParseErrorConstructor<unknown>
   >;
 
-  for (const reasonCode of Object.keys(partialCredentials)) {
+  for (const reasonCode of Object.keys(argument)) {
+    const template = (argument as ParseErrorTemplates)[reasonCode];
+    const { message, ...rest } =
+      typeof template === "string"
+        ? { message: () => template }
+        : typeof template === "function"
+        ? { message: template }
+        : template;
+    const toMessage = typeof message === "string" ? () => message : message;
+
     ParseErrorConstructors[reasonCode] = toParseErrorConstructor({
-      code: ParseErrorCodes.SyntaxError,
+      code: ParseErrorCode.SyntaxError,
       reasonCode,
+      toMessage,
       ...(syntaxPlugin ? { syntaxPlugin } : {}),
-      ...partialCredentials[reasonCode],
+      ...rest,
     });
   }
 

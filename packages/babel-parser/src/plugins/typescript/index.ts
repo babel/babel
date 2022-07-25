@@ -34,11 +34,7 @@ import TypeScriptScopeHandler from "./scope";
 import * as charCodes from "charcodes";
 import type { ExpressionErrors } from "../../parser/util";
 import { PARAM } from "../../util/production-parameter";
-import {
-  Errors,
-  ParseErrorEnum,
-  toParseErrorCredentials,
-} from "../../parse-error";
+import { Errors, ParseErrorEnum } from "../../parse-error";
 import { cloneIdentifier, type Undone } from "../../parser/node";
 
 const getOwn = <T extends {}>(object: T, key: keyof T) =>
@@ -80,222 +76,153 @@ type ModifierBase = {
 };
 
 /* eslint sort-keys: "error" */
-const TSErrors = ParseErrorEnum`typescript`(
-  (_: typeof toParseErrorCredentials) => ({
-    AbstractMethodHasImplementation: _<{
-      methodName: string;
-    }>(
-      ({ methodName }) =>
-        `Method '${methodName}' cannot have an implementation because it is marked abstract.`,
-    ),
-    AbstractPropertyHasInitializer: _<{
-      propertyName: string;
-    }>(
-      ({ propertyName }) =>
-        `Property '${propertyName}' cannot have an initializer because it is marked abstract.`,
-    ),
-    AccesorCannotDeclareThisParameter: _(
-      "'get' and 'set' accessors cannot declare 'this' parameters.",
-    ),
-    AccesorCannotHaveTypeParameters: _(
-      "An accessor cannot have type parameters.",
-    ),
-    CannotFindName: _<{
-      name: string;
-    }>(({ name }) => `Cannot find name '${name}'.`),
-    ClassMethodHasDeclare: _(
-      "Class methods cannot have the 'declare' modifier.",
-    ),
-    ClassMethodHasReadonly: _(
-      "Class methods cannot have the 'readonly' modifier.",
-    ),
-    ConstInitiailizerMustBeStringOrNumericLiteralOrLiteralEnumReference: _(
-      "A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.",
-    ),
-    ConstructorHasTypeParameters: _(
-      "Type parameters cannot appear on a constructor declaration.",
-    ),
-    DeclareAccessor: _<{
-      kind: "get" | "set";
-    }>(({ kind }) => `'declare' is not allowed in ${kind}ters.`),
-    DeclareClassFieldHasInitializer: _(
-      "Initializers are not allowed in ambient contexts.",
-    ),
-    DeclareFunctionHasImplementation: _(
-      "An implementation cannot be declared in ambient contexts.",
-    ),
-    DuplicateAccessibilityModifier: _<{
-      modifier: N.Accessibility;
-    }>(
-      // `Accessibility modifier already seen: ${modifier}` would be more helpful.
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      ({ modifier }) => `Accessibility modifier already seen.`,
-    ),
-    DuplicateModifier: _<{
-      modifier: TsModifier;
-    }>(({ modifier }) => `Duplicate modifier: '${modifier}'.`),
-    // `token` matches the terminology used by typescript:
-    // https://github.com/microsoft/TypeScript/blob/main/src/compiler/types.ts#L2915
-    EmptyHeritageClauseType: _<{
-      token: "extends" | "implements";
-    }>(({ token }) => `'${token}' list cannot be empty.`),
-    EmptyTypeArguments: _("Type argument list cannot be empty."),
-    EmptyTypeParameters: _("Type parameter list cannot be empty."),
-    ExpectedAmbientAfterExportDeclare: _(
-      "'export declare' must be followed by an ambient declaration.",
-    ),
-    ImportAliasHasImportType: _("An import alias can not use 'import type'."),
-    IncompatibleModifiers: _<{
-      modifiers: [TsModifier, TsModifier];
-    }>(
-      ({ modifiers }) =>
-        `'${modifiers[0]}' modifier cannot be used with '${modifiers[1]}' modifier.`,
-    ),
-    IndexSignatureHasAbstract: _(
-      "Index signatures cannot have the 'abstract' modifier.",
-    ),
-    IndexSignatureHasAccessibility: _<{
-      modifier: N.Accessibility;
-    }>(
-      ({ modifier }) =>
-        `Index signatures cannot have an accessibility modifier ('${modifier}').`,
-    ),
-    IndexSignatureHasDeclare: _(
-      "Index signatures cannot have the 'declare' modifier.",
-    ),
-    IndexSignatureHasOverride: _(
-      "'override' modifier cannot appear on an index signature.",
-    ),
-    IndexSignatureHasStatic: _(
-      "Index signatures cannot have the 'static' modifier.",
-    ),
-    InitializerNotAllowedInAmbientContext: _(
-      "Initializers are not allowed in ambient contexts.",
-    ),
-    InvalidModifierOnTypeMember: _<{
-      modifier: TsModifier;
-    }>(
-      ({ modifier }) =>
-        `'${modifier}' modifier cannot appear on a type member.`,
-    ),
-    InvalidModifierOnTypeParameter: _<{
-      modifier: TsModifier;
-    }>(
-      ({ modifier }) =>
-        `'${modifier}' modifier cannot appear on a type parameter.`,
-    ),
-    InvalidModifierOnTypeParameterPositions: _<{
-      modifier: TsModifier;
-    }>(
-      ({ modifier }) =>
-        `'${modifier}' modifier can only appear on a type parameter of a class, interface or type alias.`,
-    ),
-    InvalidModifiersOrder: _<{
-      orderedModifiers: [TsModifier, TsModifier];
-    }>(
-      ({ orderedModifiers }) =>
-        `'${orderedModifiers[0]}' modifier must precede '${orderedModifiers[1]}' modifier.`,
-    ),
-    InvalidPropertyAccessAfterInstantiationExpression: _(
-      "Invalid property access after an instantiation expression. " +
-        "You can either wrap the instantiation expression in parentheses, or delete the type arguments.",
-    ),
-    InvalidTupleMemberLabel: _(
-      "Tuple members must be labeled with a simple identifier.",
-    ),
-    MissingInterfaceName: _(
-      "'interface' declarations must be followed by an identifier.",
-    ),
-    MixedLabeledAndUnlabeledElements: _(
-      "Tuple members must all have names or all not have names.",
-    ),
-    NonAbstractClassHasAbstractMethod: _(
-      "Abstract methods can only appear within an abstract class.",
-    ),
-    NonClassMethodPropertyHasAbstractModifer: _(
-      "'abstract' modifier can only appear on a class, method, or property declaration.",
-    ),
-    OptionalTypeBeforeRequired: _(
-      "A required element cannot follow an optional element.",
-    ),
-    OverrideNotInSubClass: _(
-      "This member cannot have an 'override' modifier because its containing class does not extend another class.",
-    ),
-    PatternIsOptional: _(
-      "A binding pattern parameter cannot be optional in an implementation signature.",
-    ),
-    PrivateElementHasAbstract: _(
-      "Private elements cannot have the 'abstract' modifier.",
-    ),
-    PrivateElementHasAccessibility: _<{
-      modifier: N.Accessibility;
-    }>(
-      ({ modifier }) =>
-        `Private elements cannot have an accessibility modifier ('${modifier}').`,
-    ),
-    ReadonlyForMethodSignature: _(
-      "'readonly' modifier can only appear on a property declaration or index signature.",
-    ),
-    ReservedArrowTypeParam: _(
-      "This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma, as in `<T,>() => ...`.",
-    ),
-    ReservedTypeAssertion: _(
-      "This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.",
-    ),
-    SetAccesorCannotHaveOptionalParameter: _(
-      "A 'set' accessor cannot have an optional parameter.",
-    ),
-    SetAccesorCannotHaveRestParameter: _(
-      "A 'set' accessor cannot have rest parameter.",
-    ),
-    SetAccesorCannotHaveReturnType: _(
-      "A 'set' accessor cannot have a return type annotation.",
-    ),
-    SingleTypeParameterWithoutTrailingComma: _<{
-      typeParameterName: string;
-    }>(
-      ({ typeParameterName }) =>
-        `Single type parameter ${typeParameterName} should have a trailing comma. Example usage: <${typeParameterName},>.`,
-    ),
-    StaticBlockCannotHaveModifier: _(
-      "Static class blocks cannot have any modifier.",
-    ),
-    TypeAnnotationAfterAssign: _(
-      "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`.",
-    ),
-    TypeImportCannotSpecifyDefaultAndNamed: _(
-      "A type-only import can specify a default import or named bindings, but not both.",
-    ),
-    TypeModifierIsUsedInTypeExports: _(
-      "The 'type' modifier cannot be used on a named export when 'export type' is used on its export statement.",
-    ),
-    TypeModifierIsUsedInTypeImports: _(
-      "The 'type' modifier cannot be used on a named import when 'import type' is used on its import statement.",
-    ),
-    UnexpectedParameterModifier: _(
-      "A parameter property is only allowed in a constructor implementation.",
-    ),
-    UnexpectedReadonly: _(
-      "'readonly' type modifier is only permitted on array and tuple literal types.",
-    ),
-    UnexpectedTypeAnnotation: _("Did not expect a type annotation here."),
-    UnexpectedTypeCastInParameter: _(
-      "Unexpected type cast in parameter position.",
-    ),
-    UnsupportedImportTypeArgument: _(
-      "Argument in a type import must be a string literal.",
-    ),
-    UnsupportedParameterPropertyKind: _(
-      "A parameter property may not be declared using a binding pattern.",
-    ),
-    UnsupportedSignatureParameterKind: _<{
-      type: string;
-    }>(
-      ({ type }) =>
-        `Name in a signature must be an Identifier, ObjectPattern or ArrayPattern, instead got ${type}.`,
-    ),
-  }),
-);
+const TSErrors = ParseErrorEnum`typescript`({
+  AbstractMethodHasImplementation: ({ methodName }: { methodName: string }) =>
+    `Method '${methodName}' cannot have an implementation because it is marked abstract.`,
+  AbstractPropertyHasInitializer: ({
+    propertyName,
+  }: {
+    propertyName: string;
+  }) =>
+    `Property '${propertyName}' cannot have an initializer because it is marked abstract.`,
+  AccesorCannotDeclareThisParameter:
+    "'get' and 'set' accessors cannot declare 'this' parameters.",
+  AccesorCannotHaveTypeParameters: "An accessor cannot have type parameters.",
+  CannotFindName: ({ name }: { name: string }) => `Cannot find name '${name}'.`,
+  ClassMethodHasDeclare: "Class methods cannot have the 'declare' modifier.",
+  ClassMethodHasReadonly: "Class methods cannot have the 'readonly' modifier.",
+  ConstInitiailizerMustBeStringOrNumericLiteralOrLiteralEnumReference:
+    "A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.",
+  ConstructorHasTypeParameters:
+    "Type parameters cannot appear on a constructor declaration.",
+  DeclareAccessor: ({ kind }: { kind: "get" | "set" }) =>
+    `'declare' is not allowed in ${kind}ters.`,
+  DeclareClassFieldHasInitializer:
+    "Initializers are not allowed in ambient contexts.",
+  DeclareFunctionHasImplementation:
+    "An implementation cannot be declared in ambient contexts.",
+  DuplicateAccessibilityModifier:
+    // `Accessibility modifier already seen: ${modifier}` would be more helpful.
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    ({ modifier }: { modifier: N.Accessibility }) =>
+      `Accessibility modifier already seen.`,
+  DuplicateModifier: ({ modifier }: { modifier: TsModifier }) =>
+    `Duplicate modifier: '${modifier}'.`,
+  // `token` matches the terminology used by typescript:
+  // https://github.com/microsoft/TypeScript/blob/main/src/compiler/types.ts#L2915
+  EmptyHeritageClauseType: ({ token }: { token: "extends" | "implements" }) =>
+    `'${token}' list cannot be empty.`,
+  EmptyTypeArguments: "Type argument list cannot be empty.",
+  EmptyTypeParameters: "Type parameter list cannot be empty.",
+  ExpectedAmbientAfterExportDeclare:
+    "'export declare' must be followed by an ambient declaration.",
+  ImportAliasHasImportType: "An import alias can not use 'import type'.",
+  IncompatibleModifiers: ({
+    modifiers,
+  }: {
+    modifiers: [TsModifier, TsModifier];
+  }) =>
+    `'${modifiers[0]}' modifier cannot be used with '${modifiers[1]}' modifier.`,
+  IndexSignatureHasAbstract:
+    "Index signatures cannot have the 'abstract' modifier.",
+  IndexSignatureHasAccessibility: ({
+    modifier,
+  }: {
+    modifier: N.Accessibility;
+  }) =>
+    `Index signatures cannot have an accessibility modifier ('${modifier}').`,
+  IndexSignatureHasDeclare:
+    "Index signatures cannot have the 'declare' modifier.",
+  IndexSignatureHasOverride:
+    "'override' modifier cannot appear on an index signature.",
+  IndexSignatureHasStatic:
+    "Index signatures cannot have the 'static' modifier.",
+  InitializerNotAllowedInAmbientContext:
+    "Initializers are not allowed in ambient contexts.",
+  InvalidModifierOnTypeMember: ({ modifier }: { modifier: TsModifier }) =>
+    `'${modifier}' modifier cannot appear on a type member.`,
+  InvalidModifierOnTypeParameter: ({ modifier }: { modifier: TsModifier }) =>
+    `'${modifier}' modifier cannot appear on a type parameter.`,
+  InvalidModifierOnTypeParameterPositions: ({
+    modifier,
+  }: {
+    modifier: TsModifier;
+  }) =>
+    `'${modifier}' modifier can only appear on a type parameter of a class, interface or type alias.`,
+  InvalidModifiersOrder: ({
+    orderedModifiers,
+  }: {
+    orderedModifiers: [TsModifier, TsModifier];
+  }) =>
+    `'${orderedModifiers[0]}' modifier must precede '${orderedModifiers[1]}' modifier.`,
+  InvalidPropertyAccessAfterInstantiationExpression:
+    "Invalid property access after an instantiation expression. " +
+    "You can either wrap the instantiation expression in parentheses, or delete the type arguments.",
+  InvalidTupleMemberLabel:
+    "Tuple members must be labeled with a simple identifier.",
+  MissingInterfaceName:
+    "'interface' declarations must be followed by an identifier.",
+  MixedLabeledAndUnlabeledElements:
+    "Tuple members must all have names or all not have names.",
+  NonAbstractClassHasAbstractMethod:
+    "Abstract methods can only appear within an abstract class.",
+  NonClassMethodPropertyHasAbstractModifer:
+    "'abstract' modifier can only appear on a class, method, or property declaration.",
+  OptionalTypeBeforeRequired:
+    "A required element cannot follow an optional element.",
+  OverrideNotInSubClass:
+    "This member cannot have an 'override' modifier because its containing class does not extend another class.",
+  PatternIsOptional:
+    "A binding pattern parameter cannot be optional in an implementation signature.",
+  PrivateElementHasAbstract:
+    "Private elements cannot have the 'abstract' modifier.",
+  PrivateElementHasAccessibility: ({
+    modifier,
+  }: {
+    modifier: N.Accessibility;
+  }) =>
+    `Private elements cannot have an accessibility modifier ('${modifier}').`,
+  ReadonlyForMethodSignature:
+    "'readonly' modifier can only appear on a property declaration or index signature.",
+  ReservedArrowTypeParam:
+    "This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma, as in `<T,>() => ...`.",
+  ReservedTypeAssertion:
+    "This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.",
+  SetAccesorCannotHaveOptionalParameter:
+    "A 'set' accessor cannot have an optional parameter.",
+  SetAccesorCannotHaveRestParameter:
+    "A 'set' accessor cannot have rest parameter.",
+  SetAccesorCannotHaveReturnType:
+    "A 'set' accessor cannot have a return type annotation.",
+  SingleTypeParameterWithoutTrailingComma: ({
+    typeParameterName,
+  }: {
+    typeParameterName: string;
+  }) =>
+    `Single type parameter ${typeParameterName} should have a trailing comma. Example usage: <${typeParameterName},>.`,
+  StaticBlockCannotHaveModifier:
+    "Static class blocks cannot have any modifier.",
+  TypeAnnotationAfterAssign:
+    "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`.",
+  TypeImportCannotSpecifyDefaultAndNamed:
+    "A type-only import can specify a default import or named bindings, but not both.",
+  TypeModifierIsUsedInTypeExports:
+    "The 'type' modifier cannot be used on a named export when 'export type' is used on its export statement.",
+  TypeModifierIsUsedInTypeImports:
+    "The 'type' modifier cannot be used on a named import when 'import type' is used on its import statement.",
+  UnexpectedParameterModifier:
+    "A parameter property is only allowed in a constructor implementation.",
+  UnexpectedReadonly:
+    "'readonly' type modifier is only permitted on array and tuple literal types.",
+  UnexpectedTypeAnnotation: "Did not expect a type annotation here.",
+  UnexpectedTypeCastInParameter: "Unexpected type cast in parameter position.",
+  UnsupportedImportTypeArgument:
+    "Argument in a type import must be a string literal.",
+  UnsupportedParameterPropertyKind:
+    "A parameter property may not be declared using a binding pattern.",
+  UnsupportedSignatureParameterKind: ({ type }: { type: string }) =>
+    `Name in a signature must be an Identifier, ObjectPattern or ArrayPattern, instead got ${type}.`,
+});
 
 /* eslint-disable sort-keys */
 
