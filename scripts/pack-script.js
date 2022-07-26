@@ -49,7 +49,7 @@ async function pack(inputPath, outputPath, dynamicRequireTargets) {
   });
 
   const output = `/* eslint-disable */
-  //prettier-ignore
-  ${result.output[0].code}`;
+// prettier-ignore
+${result.output[0].code}`;
   writeFileSync(outputPath, output);
 }

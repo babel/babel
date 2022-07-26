@@ -211,7 +211,7 @@ __metadata:
     commander: ^4.0.1
     convert-source-map: ^1.1.0
     fs-readdir-recursive: ^1.1.0
-    glob: 7
+    glob: ^7.2.0
     make-dir: "condition:BABEL_8_BREAKING ? : ^2.1.0"
     rimraf: ^3.0.0
     slash: "condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0"
@@ -9009,7 +9009,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"glob@npm:7, glob@npm:^7.0.0, glob@npm:^7.1.0, glob@npm:^7.1.1, glob@npm:^7.1.3, glob@npm:^7.1.4, glob@npm:^7.1.6, glob@npm:^7.2.0":
+"glob@npm:^7.0.0, glob@npm:^7.1.0, glob@npm:^7.1.1, glob@npm:^7.1.3, glob@npm:^7.1.4, glob@npm:^7.1.6, glob@npm:^7.2.0":
   version: 7.2.3
   resolution: "glob@npm:7.2.3"
   dependencies:
