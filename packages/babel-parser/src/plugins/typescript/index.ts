@@ -28,6 +28,7 @@ import {
   BIND_TS_NAMESPACE,
   BIND_CLASS,
   BIND_LEXICAL,
+  BIND_NONE,
 } from "../../util/scopeflags";
 import TypeScriptScopeHandler from "./scope";
 import * as charCodes from "charcodes";

@@ -361,7 +361,6 @@ export default abstract class Tokenizer extends CommentsParser {
             case charCodes.asterisk: {
               const comment = this.skipBlockComment();
               if (comment !== undefined) {
-                // @ts-expect-error strictNullCheck is not enabled
                 this.addComment(comment);
                 if (this.options.attachComment) comments.push(comment);
               }
@@ -371,7 +370,6 @@ export default abstract class Tokenizer extends CommentsParser {
             case charCodes.slash: {
               const comment = this.skipLineComment(2);
               if (comment !== undefined) {
-                // @ts-expect-error strictNullCheck is not enabled
                 this.addComment(comment);
                 if (this.options.attachComment) comments.push(comment);
               }
@@ -396,7 +394,6 @@ export default abstract class Tokenizer extends CommentsParser {
               // A `-->` line comment
               const comment = this.skipLineComment(3);
               if (comment !== undefined) {
-                // @ts-expect-error strictNullCheck is not enabled
                 this.addComment(comment);
                 if (this.options.attachComment) comments.push(comment);
               }
@@ -413,7 +410,6 @@ export default abstract class Tokenizer extends CommentsParser {
               // `<!--`, an XML-style comment that should be interpreted as a line comment
               const comment = this.skipLineComment(4);
               if (comment !== undefined) {
-                // @ts-expect-error strictNullCheck is not enabled
                 this.addComment(comment);
                 if (this.options.attachComment) comments.push(comment);
               }
@@ -431,7 +427,6 @@ export default abstract class Tokenizer extends CommentsParser {
       const commentWhitespace: CommentWhitespace = {
         start: spaceStart,
         end,
-        // @ts-expect-error strictNullCheck is not enabled
         comments,
         leadingNode: null,
         trailingNode: null,

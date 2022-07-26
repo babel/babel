@@ -5,9 +5,9 @@ import type Parser from "../parser";
 import * as N from "../types";
 import { ParseErrorEnum } from "../parse-error";
 import type { Undone } from "../parser/node";
-import { ExpressionErrors } from "../parser/util";
-import { BindingTypes } from "../util/scopeflags";
-import { Position } from "../util/location";
+import type { ExpressionErrors } from "../parser/util";
+import type { BindingTypes } from "../util/scopeflags";
+import type { Position } from "../util/location";
 
 type PossiblePlaceholedrs = {
   Identifier: N.Identifier;
