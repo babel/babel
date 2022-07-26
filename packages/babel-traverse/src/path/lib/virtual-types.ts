@@ -1,3 +1,5 @@
+import type * as t from "@babel/types";
+
 export interface VirtualTypeAliases {
   BindingIdentifier: t.Identifier;
   BlockScoped: t.Node;

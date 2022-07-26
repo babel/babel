@@ -24,10 +24,40 @@ import type * as t from "@babel/types";
 const { isCompatTag } = react;
 import type { VirtualTypeAliases } from "./virtual-types";
 
-export function isReferencedIdentifier(
-  this: NodePath,
-  opts?: any,
-): this is NodePath<VirtualTypeAliases["ReferencedIdentifier"]> {
+export interface VirtualTypeNodePathValidators {
+  isBindingIdentifier(
+    opts?: object,
+  ): this is NodePath<VirtualTypeAliases["BindingIdentifier"]>;
+  isBlockScoped(opts?: object): boolean;
+  isExistentialTypeParam(
+    opts?: object,
+  ): this is NodePath<VirtualTypeAliases["ExistentialTypeParam"]>;
+  isExpression(opts?: object): this is NodePath<t.Expression>;
+  isFlow(opts?: object): this is NodePath<t.Flow>;
+  isForAwaitStatement(
+    opts?: object,
+  ): this is NodePath<VirtualTypeAliases["ForAwaitStatement"]>;
+  isGenerated(opts?: object): boolean;
+  isNumericLiteralTypeAnnotation(
+    opts?: object,
+  ): this is NodePath<VirtualTypeAliases["NumericLiteralTypeAnnotation"]>;
+  isPure(opts?: object): boolean;
+  isReferenced(opts?: object): boolean;
+  isReferencedIdentifier(
+    opts?: object,
+  ): this is NodePath<VirtualTypeAliases["ReferencedIdentifier"]>;
+  isReferencedMemberExpression(
+    opts?: object,
+  ): this is NodePath<VirtualTypeAliases["ReferencedMemberExpression"]>;
+  isRestProperty(opts?: object): this is NodePath<t.RestProperty>;
+  isScope(opts?: object): this is NodePath<VirtualTypeAliases["Scope"]>;
+  isSpreadProperty(opts?: object): this is NodePath<t.SpreadProperty>;
+  isStatement(opts?: object): this is NodePath<t.Statement>;
+  isUser(opts?: object): boolean;
+  isVar(opts?: object): this is NodePath<VirtualTypeAliases["Var"]>;
+}
+
+export function isReferencedIdentifier(this: NodePath, opts?: any): boolean {
   const { node, parent } = this;
   if (!isIdentifier(node, opts) && !isJSXMemberExpression(parent, opts)) {
     if (isJSXIdentifier(node, opts)) {
@@ -42,22 +72,18 @@ export function isReferencedIdentifier(
   return nodeIsReferenced(node, parent, this.parentPath.parent);
 }
 
-export function isReferencedMemberExpression(
-  this: NodePath,
-): this is NodePath<VirtualTypeAliases["ReferencedMemberExpression"]> {
+export function isReferencedMemberExpression(this: NodePath): boolean {
   const { node, parent } = this;
   return isMemberExpression(node) && nodeIsReferenced(node, parent);
 }
 
-export function isBindingIdentifier(
-  this: NodePath,
-): this is NodePath<VirtualTypeAliases["BindingIdentifier"]> {
+export function isBindingIdentifier(this: NodePath): boolean {
   const { node, parent } = this;
   const grandparent = this.parentPath.parent;
   return isIdentifier(node) && isBinding(node, parent, grandparent);
 }
 
-export function isStatement(this: NodePath): this is NodePath<t.Statement> {
+export function isStatement(this: NodePath): boolean {
   const { node, parent } = this;
   if (nodeIsStatement(node)) {
     if (isVariableDeclaration(node)) {
@@ -71,7 +97,7 @@ export function isStatement(this: NodePath): this is NodePath<t.Statement> {
   }
 }
 
-export function isExpression(this: NodePath): this is NodePath<t.Expression> {
+export function isExpression(this: NodePath): boolean {
   if (this.isIdentifier()) {
     return this.isReferencedIdentifier();
   } else {
@@ -79,9 +105,7 @@ export function isExpression(this: NodePath): this is NodePath<t.Expression> {
   }
 }
 
-export function isScope(
-  this: NodePath,
-): this is NodePath<VirtualTypeAliases["Scope"]> {
+export function isScope(this: NodePath): boolean {
   return nodeIsScope(this.node, this.parent);
 }
 
@@ -93,9 +117,7 @@ export function isBlockScoped(this: NodePath): boolean {
   return nodeIsBlockScoped(this.node, this.parent);
 }
 
-export function isVar(
-  this: NodePath,
-): this is NodePath<VirtualTypeAliases["Var"]> {
+export function isVar(this: NodePath): boolean {
   return nodeIsVar(this.node);
 }
 
@@ -111,9 +133,7 @@ export function isPure(this: NodePath, opts?): boolean {
   return this.scope.isPure(this.node, opts);
 }
 
-export function isFlow(
-  this: NodePath,
-): this is NodePath<VirtualTypeAliases["Flow"]> {
+export function isFlow(this: NodePath): boolean {
   const { node } = this;
   if (nodeIsFlow(node)) {
     return true;
@@ -130,22 +150,16 @@ export function isFlow(
 
 // TODO: 7.0 Backwards Compat
 // todo: we should check RestProperty first
-export function isRestProperty(
-  this: NodePath,
-): this is NodePath<t.RestProperty> {
+export function isRestProperty(this: NodePath): boolean {
   return this.parentPath && this.parentPath.isObjectPattern();
 }
 
 // todo: we should check RestProperty first
-export function isSpreadProperty(
-  this: NodePath,
-): this is NodePath<t.RestProperty> {
+export function isSpreadProperty(this: NodePath): boolean {
   return this.parentPath && this.parentPath.isObjectExpression();
 }
 
 // todo: we should check isForOfStatement first
-export function isForAwaitStatement(
-  this: NodePath<t.ForOfStatement>,
-): this is NodePath<VirtualTypeAliases["ForAwaitStatement"]> {
+export function isForAwaitStatement(this: NodePath<t.ForOfStatement>): boolean {
   return this.node.await === true;
 }

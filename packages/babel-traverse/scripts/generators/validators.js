@@ -7,8 +7,9 @@ export default function generateValidators() {
  */
 import type * as t from "@babel/types";
 import type NodePath from "../index";
+import type { VirtualTypeNodePathValidators } from "../lib/virtual-types-validator";
 
-export interface NodePathValidators {
+interface BaseNodePathValidators {
 `;
 
   for (const type of [...t.TYPES].sort()) {
@@ -17,6 +18,9 @@ export interface NodePathValidators {
 
   output += `
 }
+
+export interface NodePathValidators
+  extends BaseNodePathValidators, VirtualTypeNodePathValidators {}
 `;
 
   return output;

@@ -283,8 +283,7 @@ type NodePathMixins = typeof NodePath_ancestry &
   typeof NodePath_removal &
   typeof NodePath_modification &
   typeof NodePath_family &
-  typeof NodePath_comments &
-  typeof NodePath_virtual_types_validator;
+  typeof NodePath_comments;
 
 // @ts-expect-error TS throws because ensureBlock returns the body node path
 // however, we don't use the return value and treat it as a transform and

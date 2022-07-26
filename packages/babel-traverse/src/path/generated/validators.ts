@@ -4,8 +4,9 @@
  */
 import type * as t from "@babel/types";
 import type NodePath from "../index";
+import type { VirtualTypeNodePathValidators } from "../lib/virtual-types-validator";
 
-export interface NodePathValidators {
+interface BaseNodePathValidators {
   isAccessor<T extends t.Node>(
     this: NodePath<T>,
     opts?: object,
@@ -1211,3 +1212,7 @@ export interface NodePathValidators {
     opts?: object,
   ): this is NodePath<T & t.YieldExpression>;
 }
+
+export interface NodePathValidators
+  extends BaseNodePathValidators,
+    VirtualTypeNodePathValidators {}
