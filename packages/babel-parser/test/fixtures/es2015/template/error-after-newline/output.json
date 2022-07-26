@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":14}},
   "errors": [
-    "SyntaxError: Numeric separators are not allowed inside unicode escape sequences or hex escape sequences. (1:7)"
+    "SyntaxError: Numeric separators are not allowed inside unicode escape sequences or hex escape sequences. (2:5)"
   ],
   "program": {
     "type": "Program",

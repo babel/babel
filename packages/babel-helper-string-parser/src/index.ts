@@ -142,12 +142,12 @@ function isStringEnd(
   );
 }
 
-export type EscapedCharErrorHandlers = HexCharErrorHandlers &
+type EscapedCharErrorHandlers = HexCharErrorHandlers &
   CodePointErrorHandlers & {
-    strictNumericEscape(pos: number): void;
+    strictNumericEscape(pos: number, lineStart: number, curLine: number): void;
   };
 
-export function readEscapedChar(
+function readEscapedChar(
   input: string,
   pos: number,
   lineStart: number,
@@ -171,6 +171,8 @@ export function readEscapedChar(
       ({ code, pos } = readHexChar(
         input,
         pos,
+        lineStart,
+        curLine,
         2,
         false,
         throwOnInvalid,
@@ -180,7 +182,14 @@ export function readEscapedChar(
     }
     case charCodes.lowercaseU: {
       let code;
-      ({ code, pos } = readCodePoint(input, pos, throwOnInvalid, errors));
+      ({ code, pos } = readCodePoint(
+        input,
+        pos,
+        lineStart,
+        curLine,
+        throwOnInvalid,
+        errors,
+      ));
       return res(code === null ? null : String.fromCodePoint(code));
     }
     case charCodes.lowercaseT:
@@ -208,7 +217,7 @@ export function readEscapedChar(
       if (inTemplate) {
         return res(null);
       } else {
-        errors.strictNumericEscape(pos - 1);
+        errors.strictNumericEscape(pos - 1, lineStart, curLine);
       }
     // fall through
     default:
@@ -233,7 +242,7 @@ export function readEscapedChar(
           if (inTemplate) {
             return res(null);
           } else {
-            errors.strictNumericEscape(startPos);
+            errors.strictNumericEscape(startPos, lineStart, curLine);
           }
         }
 
@@ -245,13 +254,15 @@ export function readEscapedChar(
 }
 
 type HexCharErrorHandlers = IntErrorHandlers & {
-  invalidEscapeSequence(pos: number, startPos: number): void;
+  invalidEscapeSequence(pos: number, lineStart: number, curLine: number): void;
 };
 
 // Used to read character escape sequences ('\x', '\u').
 function readHexChar(
   input: string,
   pos: number,
+  lineStart: number,
+  curLine: number,
   len: number,
   forceLen: boolean,
   throwOnInvalid: boolean,
@@ -259,10 +270,20 @@ function readHexChar(
 ) {
   const initialPos = pos;
   let n;
-  ({ n, pos } = readInt(input, pos, 16, len, forceLen, false, errors));
+  ({ n, pos } = readInt(
+    input,
+    pos,
+    lineStart,
+    curLine,
+    16,
+    len,
+    forceLen,
+    false,
+    errors,
+  ));
   if (n === null) {
     if (throwOnInvalid) {
-      errors.invalidEscapeSequence(pos, initialPos);
+      errors.invalidEscapeSequence(initialPos, lineStart, curLine);
     } else {
       pos = initialPos - 1;
     }
@@ -271,16 +292,31 @@ function readHexChar(
 }
 
 export type IntErrorHandlers = {
-  numericSeparatorInEscapeSequence(pos: number): void;
-  unexpectedNumericSeparator(pos: number): void;
+  numericSeparatorInEscapeSequence(
+    pos: number,
+    lineStart: number,
+    curLine: number,
+  ): void;
+  unexpectedNumericSeparator(
+    pos: number,
+    lineStart: number,
+    curLine: number,
+  ): void;
   // It can return "true" to indicate that the error was handled
   // and the int parsing should continue.
-  invalidDigit(pos: number, radix: number): boolean;
+  invalidDigit(
+    pos: number,
+    lineStart: number,
+    curLine: number,
+    radix: number,
+  ): boolean;
 };
 
 export function readInt(
   input: string,
   pos: number,
+  lineStart: number,
+  curLine: number,
   radix: number,
   len: number | undefined,
   forceLen: boolean,
@@ -313,14 +349,14 @@ export function readInt(
       const next = input.charCodeAt(pos + 1);
 
       if (!allowNumSeparator) {
-        errors.numericSeparatorInEscapeSequence(pos);
+        errors.numericSeparatorInEscapeSequence(pos, lineStart, curLine);
       } else if (
         Number.isNaN(next) ||
         !isAllowedSibling(next) ||
         forbiddenSiblings.has(prev) ||
         forbiddenSiblings.has(next)
       ) {
-        errors.unexpectedNumericSeparator(pos);
+        errors.unexpectedNumericSeparator(pos, lineStart, curLine);
       }
 
       // Ignore this _ character
@@ -340,7 +376,7 @@ export function readInt(
     if (val >= radix) {
       // If we found a digit which is too big, errors.invalidDigit can return true to avoid
       // breaking the loop (this is used for error recovery).
-      if (val <= 9 && errors.invalidDigit(pos, radix)) {
+      if (val <= 9 && errors.invalidDigit(pos, lineStart, curLine, radix)) {
         val = 0;
       } else if (forceLen) {
         val = 0;
@@ -360,12 +396,14 @@ export function readInt(
 }
 
 export type CodePointErrorHandlers = HexCharErrorHandlers & {
-  invalidCodePoint(pos: number): void;
+  invalidCodePoint(pos: number, lineStart: number, curLine: number): void;
 };
 
 export function readCodePoint(
   input: string,
   pos: number,
+  lineStart: number,
+  curLine: number,
   throwOnInvalid: boolean,
   errors: CodePointErrorHandlers,
 ) {
@@ -377,6 +415,8 @@ export function readCodePoint(
     ({ code, pos } = readHexChar(
       input,
       pos,
+      lineStart,
+      curLine,
       input.indexOf("}", pos) - pos,
       true,
       throwOnInvalid,
@@ -385,13 +425,22 @@ export function readCodePoint(
     ++pos;
     if (code !== null && code > 0x10ffff) {
       if (throwOnInvalid) {
-        errors.invalidCodePoint(pos);
+        errors.invalidCodePoint(pos, lineStart, curLine);
       } else {
         return { code: null, pos };
       }
     }
   } else {
-    ({ code, pos } = readHexChar(input, pos, 4, false, throwOnInvalid, errors));
+    ({ code, pos } = readHexChar(
+      input,
+      pos,
+      lineStart,
+      curLine,
+      4,
+      false,
+      throwOnInvalid,
+      errors,
+    ));
   }
   return { code, pos };
 }

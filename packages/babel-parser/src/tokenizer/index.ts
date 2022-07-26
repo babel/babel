@@ -36,15 +36,17 @@ import type { LookaheadState, DeferredStrictError } from "./state";
 import {
   readInt,
   readCodePoint,
-  readEscapedChar,
   readStringContents,
   type IntErrorHandlers,
   type CodePointErrorHandlers,
-  type EscapedCharErrorHandlers,
   type StringContentsErrorHandlers,
 } from "@babel/helper-string-parser";
 
 import type { Plugin } from "../typings";
+
+function buildPosition(pos: number, lineStart: number, curLine: number) {
+  return new Position(curLine, pos - lineStart, pos);
+}
 
 const VALID_REGEX_FLAGS = new Set([
   charCodes.lowercaseG,
@@ -1129,6 +1131,8 @@ export default class Tokenizer extends CommentsParser {
     const { n, pos } = readInt(
       this.input,
       this.state.pos,
+      this.state.lineStart,
+      this.state.curLine,
       radix,
       len,
       forceLen,
@@ -1284,6 +1288,8 @@ export default class Tokenizer extends CommentsParser {
     const { code, pos } = readCodePoint(
       this.input,
       this.state.pos,
+      this.state.lineStart,
+      this.state.curLine,
       throwOnInvalid,
       this.errorHandlers_readCodePoint,
     );
@@ -1348,11 +1354,7 @@ export default class Tokenizer extends CommentsParser {
 
   recordStrictModeErrors(
     toParseError: DeferredStrictError,
-    {
-      at,
-    }: {
-      at: Position;
-    },
+    { at }: { at: Position },
   ) {
     const index = at.index;
 
@@ -1361,22 +1363,6 @@ export default class Tokenizer extends CommentsParser {
     } else {
       this.state.strictErrors.set(index, [toParseError, at]);
     }
-  }
-
-  // Used to read escaped characters
-  readEscapedChar(inTemplate: boolean): string | null {
-    const { ch, pos, lineStart, curLine } = readEscapedChar(
-      this.input,
-      this.state.pos,
-      this.state.lineStart,
-      this.state.curLine,
-      inTemplate,
-      this.errorHandlers_readEscapedChar,
-    );
-    this.state.pos = pos;
-    this.state.lineStart = lineStart;
-    this.state.curLine = curLine;
-    return ch;
   }
 
   // Read an identifier, and return it as a string. Sets `this.state.containsEsc`
@@ -1552,80 +1538,60 @@ export default class Tokenizer extends CommentsParser {
     }
   }
 
+  errorBuilder(error: ParseErrorConstructor<{}>) {
+    return (pos: number, lineStart: number, curLine: number) => {
+      this.raise(error, {
+        at: buildPosition(pos, lineStart, curLine),
+      });
+    };
+  }
+
   errorHandlers_readInt: IntErrorHandlers = {
-    invalidDigit: (pos, radix) => {
-      if (this.options.errorRecovery) {
-        this.state.pos = pos;
-        this.raise(Errors.InvalidDigit, {
-          at: this.state.curPosition(),
-          radix,
-        });
-        // Continue parsing the number as if there was no invalid digit.
-        return true;
-      }
-      return false;
-    },
-    numericSeparatorInEscapeSequence: pos => {
-      this.state.pos = pos;
-      this.raise(Errors.NumericSeparatorInEscapeSequence, {
-        at: this.state.curPosition(),
+    invalidDigit: (pos, lineStart, curLine, radix) => {
+      if (!this.options.errorRecovery) return false;
+
+      this.raise(Errors.InvalidDigit, {
+        at: buildPosition(pos, lineStart, curLine),
+        radix,
       });
+      // Continue parsing the number as if there was no invalid digit.
+      return true;
     },
-    unexpectedNumericSeparator: pos => {
-      this.state.pos = pos;
-      this.raise(Errors.UnexpectedNumericSeparator, {
-        at: this.state.curPosition(),
-      });
-    },
+    numericSeparatorInEscapeSequence: this.errorBuilder(
+      Errors.NumericSeparatorInEscapeSequence,
+    ),
+    unexpectedNumericSeparator: this.errorBuilder(
+      Errors.UnexpectedNumericSeparator,
+    ),
   };
 
   errorHandlers_readCodePoint: CodePointErrorHandlers = {
     ...this.errorHandlers_readInt,
-    invalidEscapeSequence: (pos, startPos) => {
-      this.state.pos = pos;
-      this.raise(Errors.InvalidEscapeSequence, {
-        at: createPositionWithColumnOffset(
-          this.state.curPosition(),
-          startPos - pos,
-        ),
-      });
-    },
-    invalidCodePoint: pos => {
-      this.state.pos = pos;
-      this.raise(Errors.InvalidCodePoint, { at: this.state.curPosition() });
-    },
-  };
-
-  errorHandlers_readEscapedChar: EscapedCharErrorHandlers = {
-    ...this.errorHandlers_readCodePoint,
-    strictNumericEscape: pos => {
-      this.state.pos = pos;
-      this.recordStrictModeErrors(Errors.StrictNumericEscape, {
-        at: this.state.curPosition(),
-      });
-    },
+    invalidEscapeSequence: this.errorBuilder(Errors.InvalidEscapeSequence),
+    invalidCodePoint: this.errorBuilder(Errors.InvalidCodePoint),
   };
 
   errorHandlers_readStringContents_string: StringContentsErrorHandlers = {
-    ...this.errorHandlers_readEscapedChar,
-    unterminated: (initialPos, initialLineStart, initialCurLine) => {
-      this.state.pos = initialPos - 1; // Report the error at the string quote
-      this.state.lineStart = initialLineStart;
-      this.state.curLine = initialCurLine;
+    ...this.errorHandlers_readCodePoint,
+    strictNumericEscape: (pos, lineStart, curLine) => {
+      this.recordStrictModeErrors(Errors.StrictNumericEscape, {
+        at: buildPosition(pos, lineStart, curLine),
+      });
+    },
+    unterminated: (pos, lineStart, curLine) => {
       throw this.raise(Errors.UnterminatedString, {
-        at: this.state.curPosition(),
+        // Report the error at the string quote
+        at: buildPosition(pos - 1, lineStart, curLine),
       });
     },
   };
 
   errorHandlers_readStringContents_template: StringContentsErrorHandlers = {
-    ...this.errorHandlers_readEscapedChar,
-    unterminated: (initialPos, initialLineStart, initialCurLine) => {
-      this.state.pos = initialPos; // TODO: For strings, we subtract 1
-      this.state.lineStart = initialLineStart;
-      this.state.curLine = initialCurLine;
+    ...this.errorHandlers_readCodePoint,
+    strictNumericEscape: this.errorBuilder(Errors.StrictNumericEscape),
+    unterminated: (pos, lineStart, curLine) => {
       throw this.raise(Errors.UnterminatedTemplate, {
-        at: this.state.curPosition(),
+        at: buildPosition(pos, lineStart, curLine),
       });
     },
   };
