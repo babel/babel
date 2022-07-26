@@ -142,7 +142,7 @@ async function generateTypeHelpers(helperKind, filename = "index.ts") {
 
 /**
  *
- * @typedef {("asserts" | "validators" | "virtual-types")} TraverseHelperKind
+ * @typedef {("asserts" | "validators")} TraverseHelperKind
  * @param {TraverseHelperKind} helperKind
  */
 function generateTraverseHelpers(helperKind) {
