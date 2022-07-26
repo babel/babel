@@ -20,16 +20,6 @@ type PossiblePlaceholedrs = {
   Pattern: N.Pattern;
 };
 export type PlaceholderTypes = keyof PossiblePlaceholedrs;
-// todo:
-// export type PlaceholderTypes =
-//   | "Identifier"
-//   | "StringLiteral"
-//   | "Expression"
-//   | "Statement"
-//   | "Declaration"
-//   | "BlockStatement"
-//   | "ClassBody"
-//   | "Pattern";
 
 type NodeOf<T extends keyof PossiblePlaceholedrs> = PossiblePlaceholedrs[T];
 // todo: when there  is proper union type for Node
