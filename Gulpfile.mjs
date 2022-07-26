@@ -495,7 +495,7 @@ const libBundles = [
 }));
 
 const cjsBundles = [
-  // This is used by Prettier, @babel/register and @babel/eslint-parser
+  // This is used by @babel/register and @babel/eslint-parser
   { src: "packages/babel-parser" },
 ];
 

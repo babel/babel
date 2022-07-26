@@ -6,23 +6,25 @@ const packageJSONPath = path.resolve(cwd, "./package.json");
 const content = JSON.parse(fs.readFileSync(packageJSONPath));
 
 let bumped = false;
-function bumpBabelDependency(dependencies, version) {
+function bumpBabelDependency(type, version) {
+  const dependencies = content[type];
   for (const dep of Object.keys(dependencies)) {
     if (dep.startsWith("@babel/") && !dependencies[dep].includes(":")) {
       dependencies[dep] = version;
+      console.log(`Bumped ${type}:${dep} to ${version}`);
       bumped = true;
     }
   }
 }
 
 if ("peerDependencies" in content) {
-  bumpBabelDependency(content.peerDependencies, "*");
+  bumpBabelDependency("peerDependencies", "*");
 }
 if ("devDependencies" in content) {
-  bumpBabelDependency(content.devDependencies, "latest");
+  bumpBabelDependency("devDependencies", "latest");
 }
 if ("dependencies" in content) {
-  bumpBabelDependency(content.dependencies, "latest");
+  bumpBabelDependency("dependencies", "latest");
 }
 
 if (bumped) {
