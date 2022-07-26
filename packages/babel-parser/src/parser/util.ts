@@ -46,7 +46,7 @@ export default class UtilParser extends Tokenizer {
   // TODO
 
   addExtra(
-    node: Node,
+    node: Partial<Node>,
     key: string,
     value: any,
     enumerable: boolean = true,

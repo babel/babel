@@ -1,5 +1,4 @@
 import { Position } from "./util/location";
-import type { NodeBase } from "./types";
 import {
   instantiate,
   ParseErrorCode,
@@ -7,7 +6,8 @@ import {
   type ToMessage,
   type SyntaxPlugin,
 } from "./parse-error/credentials";
-import type { Undone } from "../src/parser/node";
+import type { Undone } from "./parser/node";
+import type { Node } from "./types";
 
 // Babel uses "normal" SyntaxErrors for it's errors, but adds some extra
 // functionality. This functionality is defined in the
@@ -201,7 +201,7 @@ export function ParseErrorEnum(
 }
 
 export type RaiseProperties<ErrorDetails> = {
-  at: Position | Undone<NodeBase>;
+  at: Position | Undone<Node>;
 } & ErrorDetails;
 
 import ModuleErrors from "./parse-error/module-errors";
