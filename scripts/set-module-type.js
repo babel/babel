@@ -1,8 +1,11 @@
 #!/usr/bin/env node
 
 import fs from "fs";
+import { fileURLToPath } from "url";
+import path from "path";
 
-const root = rel => new URL(`../${rel}`, import.meta.url).pathname;
+const root = rel =>
+  path.join(fileURLToPath(path.dirname(import.meta.url)), "../", rel);
 
 // prettier-ignore
 let moduleType;
