@@ -235,7 +235,6 @@ Object.assign(
   NodePath_modification,
   NodePath_family,
   NodePath_comments,
-  NodePath_virtual_types_validator,
 );
 
 if (!process.env.BABEL_8_BREAKING) {
@@ -267,6 +266,9 @@ for (const type of t.TYPES) {
     }
   };
 }
+
+// Register virtual types validators after base types validators
+Object.assign(NodePath.prototype, NodePath_virtual_types_validator);
 
 for (const type of Object.keys(virtualTypes) as (keyof typeof virtualTypes)[]) {
   if (type[0] === "_") continue;
