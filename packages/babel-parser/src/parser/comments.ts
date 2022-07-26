@@ -3,6 +3,7 @@
 import BaseParser from "./base";
 import type { Comment, Node } from "../types";
 import * as charCodes from "charcodes";
+import type { Undone } from "./node";
 
 /**
  * A whitespace token containing comments
@@ -30,10 +31,10 @@ export type CommentWhitespace = {
  * trailingComments. New comments will be placed before old comments
  * because the commentStack is enumerated reversely.
  *
- * @param {Node} node
+ * @param {Undone<Node>} node
  * @param {Array<Comment>} comments
  */
-function setTrailingComments(node: Node, comments: Array<Comment>) {
+function setTrailingComments(node: Undone<Node>, comments: Array<Comment>) {
   if (node.trailingComments === undefined) {
     node.trailingComments = comments;
   } else {
@@ -46,10 +47,10 @@ function setTrailingComments(node: Node, comments: Array<Comment>) {
  * leadingComments. New comments will be placed before old comments
  * because the commentStack is enumerated reversely.
  *
- * @param {Node} node
+ * @param {Undone<Node>} node
  * @param {Array<Comment>} comments
  */
-function setLeadingComments(node: Node, comments: Array<Comment>) {
+function setLeadingComments(node: Undone<Node>, comments: Array<Comment>) {
   if (node.leadingComments === undefined) {
     node.leadingComments = comments;
   } else {
@@ -62,10 +63,10 @@ function setLeadingComments(node: Node, comments: Array<Comment>) {
  * innerComments. New comments will be placed before old comments
  * because the commentStack is enumerated reversely.
  *
- * @param {Node} node
+ * @param {Undone<Node>} node
  * @param {Array<Comment>} comments
  */
-export function setInnerComments(node: Node, comments: Array<Comment>) {
+export function setInnerComments(node: Undone<Node>, comments: Array<Comment>) {
   if (node.innerComments === undefined) {
     node.innerComments = comments;
   } else {
@@ -78,12 +79,12 @@ export function setInnerComments(node: Node, comments: Array<Comment>) {
  * merge comments to its trailingComments, otherwise merge comments
  * to node's innerComments
  *
- * @param {Node} node
+ * @param {Undone<Node>} node
  * @param {Array<Node>} elements
  * @param {Array<Comment>} comments
  */
 function adjustInnerComments(
-  node: Node,
+  node: Undone<Node>,
   elements: Array<Node>,
   commentWS: CommentWhitespace,
 ) {

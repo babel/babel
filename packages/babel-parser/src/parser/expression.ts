@@ -1107,19 +1107,11 @@ export default class ExpressionParser extends LValParser {
     );
     // mark inner comments of `async()` as inner comments of `async () =>`
     if (call.innerComments) {
-      setInnerComments(
-        // @ts-expect-error using "Undone" node as "done"
-        node,
-        call.innerComments,
-      );
+      setInnerComments(node, call.innerComments);
     }
     // mark trailing comments of `async` to be inner comments
     if (call.callee.trailingComments) {
-      setInnerComments(
-        // @ts-expect-error using "Undone" node as "done"
-        node,
-        call.callee.trailingComments,
-      );
+      setInnerComments(node, call.callee.trailingComments);
     }
     return node as N.ArrowFunctionExpression;
   }
