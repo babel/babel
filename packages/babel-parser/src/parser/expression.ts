@@ -2425,10 +2425,9 @@ export default class ExpressionParser extends LValParser {
   // and record the position of the first private name
   parsePropertyName(
     this: Parser,
-    prop: Undone<
-      // @ts-expect-error todo(flow->ts) Property 'type' is missing in type 'TsNamedTypeElementBase' but required in type 'Node'.
-      N.ObjectOrClassMember | N.ClassMember | N.TsNamedTypeElementBase
-    >,
+    prop:
+      | Undone<N.ObjectOrClassMember | N.ClassMember>
+      | N.TsNamedTypeElementBase,
     refExpressionErrors?: ExpressionErrors | null,
   ): N.Expression | N.Identifier {
     if (this.eat(tt.bracketL)) {
