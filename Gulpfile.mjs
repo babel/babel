@@ -448,7 +448,7 @@ function buildRollup(packages, buildStandalone) {
             buildStandalone &&
               rollupPolyfillNode({
                 sourceMap: sourcemap,
-                include: "**/*.{js,cjs,ts}",
+                include: "**/*.{js,mjs,cjs,ts}",
               }),
           ].filter(Boolean),
           acorn: {
