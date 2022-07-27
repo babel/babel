@@ -596,8 +596,7 @@ function* libBundlesIterator() {
       if (pkgJSON.main) {
         yield {
           src,
-          // todo: output es format when we generate type: "module" on Babel 8 build
-          format: "cjs",
+          format: USE_ESM ? "esm" : "cjs",
           dest: "lib",
           input: getIndexFromPackage(src),
         };
@@ -610,8 +609,7 @@ function* libBundlesIterator() {
               : `${src}/src/${filename.slice(0, -3) + ".ts"}`;
           yield {
             src,
-            // todo: output es format when we generate type: "module" on Babel 8 build
-            format: "cjs",
+            format: USE_ESM ? "esm" : "cjs",
             dest: "lib",
             filename,
             input,
