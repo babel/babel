@@ -413,7 +413,7 @@ function buildRollup(packages, buildStandalone) {
                 // Rollup doesn't read export maps, so it loads the cjs fallback
                 "packages/babel-compat-data/*.js",
                 "packages/*/src/**/*.cjs",
-              ].filter(Boolean),
+              ],
               dynamicRequireTargets: [
                 // https://github.com/mathiasbynens/regexpu-core/blob/ffd8fff2e31f4597f6fdfee75d5ac1c5c8111ec3/rewrite-pattern.js#L48
                 resolveChain(
@@ -557,23 +557,25 @@ function* libBundlesIterator() {
   for (const packageDir of ["packages", "codemods"]) {
     for (const dir of fs.readdirSync(new URL(packageDir, import.meta.url))) {
       if (
-        // @rollup/plugin-commonjs will mess up with babel-helper-fixtures
-        dir === "babel-helper-fixtures" ||
-        // babel-standalone is handled by rollup-babel-standalone task
-        dir === "babel-standalone" ||
-        // todo: Rollup hangs on allowHashBang: true with babel-cli/src/babel/index.ts hashbang
-        dir === "babel-cli" ||
-        // todo: @rollup/node-resolve 'browsers' option does not work when package.json contains `exports`
-        // https://github.com/rollup/plugins/tree/master/packages/node-resolve#browser
-        dir === "babel-register" ||
-        dir === "babel-core" ||
-        dir === "babel-plugin-transform-runtime" ||
-        // @babel/node invokes internal lib/_babel-node.js
-        dir === "babel-node" ||
-        // todo: test/helpers/define-helper requires internal lib/helpers access
-        dir === "babel-helpers" ||
-        // multiple exports
-        dir === "babel-plugin-transform-react-jsx"
+        [
+          // @rollup/plugin-commonjs will mess up with babel-helper-fixtures
+          "babel-helper-fixtures",
+          // babel-standalone is handled by rollup-babel-standalone task
+          "babel-standalone",
+          // todo: Rollup hangs on allowHashBang: true with babel-cli/src/babel/index.ts hashbang
+          "babel-cli",
+          // todo: @rollup/node-resolve 'browsers' option does not work when package.json contains `exports`
+          // https://github.com/rollup/plugins/tree/master/packages/node-resolve#browser
+          "babel-register",
+          "babel-core",
+          "babel-plugin-transform-runtime",
+          // @babel/node invokes internal lib/_babel-node.js
+          "babel-node",
+          // todo: test/helpers/define-helper requires internal lib/helpers access
+          "babel-helpers",
+          // multiple exports
+          "babel-plugin-transform-react-jsx",
+        ].includes(dir)
       ) {
         continue;
       }
