@@ -12,10 +12,22 @@ module.exports = {
   runner: supportsESMAndJestLightRunner ? "jest-light-runner" : "jest-runner",
 
   collectCoverageFrom: [
-    "packages/*/src/**/*.{js,mjs,ts}",
-    "codemods/*/src/**/*.{js,mjs,ts}",
-    "eslint/*/src/**/*.{js,mjs,ts}",
+    "packages/*/src/**/*.{js,cjs,mjs,ts}",
+    "codemods/*/src/**/*.{js,cjs,mjs,ts}",
+    "eslint/*/src/**/*.{js,cjs,mjs,ts}",
   ],
+  // coveragePathIgnorePatterns Doesn't work
+  coveragePathIgnorePatterns: [
+    "/node_modules/",
+    "<rootDir>/packages/babel-standalone/",
+    "/test/(fixtures|tmp|__data__)/",
+    ".*\\.d\\.ts",
+    "<rootDir>/packages/babel-standalone/.*",
+    "<rootDir>/packages/babel-types/src/.*/generated/.*",
+    "<rootDir>/packages/babel-helpers/src/helpers/.*",
+    "<rootDir>/packages/babel-core/src/vendor/.*",
+  ],
+
   // The eslint/* packages use ESLint v6, which has dropped support for Node v6.
   // TODO: Remove this process.version check in Babel 8.
   testRegex: `./(packages|codemods${
@@ -47,11 +59,6 @@ module.exports = {
     "<rootDir>/packages/babel-standalone/babel(\\.min)?\\.js",
     "/test/(fixtures|tmp|__data__)/",
     "<rootDir>/(packages|codemods|eslint)/[^/]+/lib/",
-  ],
-  coveragePathIgnorePatterns: [
-    "/node_modules/",
-    "<rootDir>/packages/babel-standalone/babel(\\.min)?\\.js",
-    "/test/(fixtures|tmp|__data__)/",
   ],
   modulePathIgnorePatterns: [
     "/test/fixtures/",
