@@ -1,6 +1,6 @@
 import * as t from "@babel/types";
 import _Printer from "../lib/printer.js";
-const Printer = _Printer.default;
+const Printer = _Printer.default || _Printer;
 
 describe("Printer", () => {
   it("completeness", function () {
