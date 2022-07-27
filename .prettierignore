@@ -9,3 +9,5 @@ packages/*/test/fixtures/**/output.*
 
 CHANGELOG.md
 .github/*.md
+
+Makefile.js

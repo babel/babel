@@ -30,3 +30,5 @@ eslint/*/test/fixtures
 
 test/runtime-integration/*/output.js
 test/runtime-integration/*/output-absolute.js
+
+Makefile.js

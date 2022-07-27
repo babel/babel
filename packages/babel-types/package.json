@@ -32,7 +32,7 @@
     "@babel/generator": "workspace:^",
     "@babel/parser": "workspace:^",
     "chalk": "^4.1.0",
-    "glob": "^7.1.7"
+    "glob": "^7.2.0"
   },
   "engines": {
     "node": ">=6.9.0"
