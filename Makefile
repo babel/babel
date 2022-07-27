@@ -81,6 +81,9 @@ fix-json:
 clean:
 	$(MAKEJS) clean
 
+test-cov:
+	$(MAKEJS) test-cov
+
 test: lint test-only
 
 clone-license:
@@ -137,14 +140,12 @@ update-env-corejs-fixture:
 	OVERWRITE=true $(YARN) jest packages/babel-preset-env
 
 test-ci: build-standalone-ci
-	BABEL_ENV=test $(YARN) jest --maxWorkers=4 --ci
+	BABEL_ENV=test $(YARN) jest --maxWorkers=100% --ci
 	$(MAKE) test-clean
 
-# Does not work on Windows
-test-ci-coverage: SHELL:=/bin/bash
 test-ci-coverage:
-	BABEL_COVERAGE=true BABEL_ENV=test $(MAKE) bootstrap
-	BABEL_ENV=test TEST_TYPE=cov ./scripts/test-cov.sh
+	BABEL_ENV=test BABEL_COVERAGE=true $(MAKE) bootstrap
+	BABEL_ENV=test BABEL_COVERAGE=true $(YARN) jest --maxWorkers=100% --ci
 
 bootstrap-flow:
 	rm -rf build/flow
