@@ -2,11 +2,11 @@
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'make build'
  */
-import * as t from "@babel/types";
-import NodePath from "../index";
-import type { VirtualTypeAliases } from "./virtual-types";
+import type * as t from "@babel/types";
+import type NodePath from "../index";
+import type { VirtualTypeNodePathValidators } from "../lib/virtual-types-validator";
 
-export interface NodePathValidators {
+interface BaseNodePathValidators {
   isAccessor<T extends t.Node>(
     this: NodePath<T>,
     opts?: object,
@@ -1211,61 +1211,8 @@ export interface NodePathValidators {
     this: NodePath<T>,
     opts?: object,
   ): this is NodePath<T & t.YieldExpression>;
-  isBindingIdentifier<T extends t.Node>(
-    this: NodePath<T>,
-    opts?: object,
-  ): this is NodePath<T & VirtualTypeAliases["BindingIdentifier"]>;
-  isBlockScoped(opts?: object): boolean;
-  isExistentialTypeParam<T extends t.Node>(
-    this: NodePath<T>,
-    opts?: object,
-  ): this is NodePath<T & VirtualTypeAliases["ExistentialTypeParam"]>;
-  isExpression<T extends t.Node>(
-    this: NodePath<T>,
-    opts?: object,
-  ): this is NodePath<T & t.Expression>;
-  isFlow<T extends t.Node>(
-    this: NodePath<T>,
-    opts?: object,
-  ): this is NodePath<T & t.Flow>;
-  isForAwaitStatement<T extends t.Node>(
-    this: NodePath<T>,
-    opts?: object,
-  ): this is NodePath<T & VirtualTypeAliases["ForAwaitStatement"]>;
-  isGenerated(opts?: object): boolean;
-  isNumericLiteralTypeAnnotation<T extends t.Node>(
-    this: NodePath<T>,
-    opts?: object,
-  ): this is NodePath<T & VirtualTypeAliases["NumericLiteralTypeAnnotation"]>;
-  isPure(constantsOnly?: boolean): boolean;
-  isReferenced(opts?: object): boolean;
-  isReferencedIdentifier<T extends t.Node>(
-    this: NodePath<T>,
-    opts?: object,
-  ): this is NodePath<T & VirtualTypeAliases["ReferencedIdentifier"]>;
-  isReferencedMemberExpression<T extends t.Node>(
-    this: NodePath<T>,
-    opts?: object,
-  ): this is NodePath<T & VirtualTypeAliases["ReferencedMemberExpression"]>;
-  isRestProperty<T extends t.Node>(
-    this: NodePath<T>,
-    opts?: object,
-  ): this is NodePath<T & VirtualTypeAliases["RestProperty"]>;
-  isScope<T extends t.Node>(
-    this: NodePath<T>,
-    opts?: object,
-  ): this is NodePath<T & VirtualTypeAliases["Scope"]>;
-  isSpreadProperty<T extends t.Node>(
-    this: NodePath<T>,
-    opts?: object,
-  ): this is NodePath<T & VirtualTypeAliases["SpreadProperty"]>;
-  isStatement<T extends t.Node>(
-    this: NodePath<T>,
-    opts?: object,
-  ): this is NodePath<T & t.Statement>;
-  isUser(opts?: object): boolean;
-  isVar<T extends t.Node>(
-    this: NodePath<T>,
-    opts?: object,
-  ): this is NodePath<T & VirtualTypeAliases["Var"]>;
 }
+
+export interface NodePathValidators
+  extends BaseNodePathValidators,
+    VirtualTypeNodePathValidators {}

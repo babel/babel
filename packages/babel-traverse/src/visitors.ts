@@ -1,7 +1,11 @@
 import * as virtualTypes from "./path/lib/virtual-types";
-import type { Wrapper } from "./path/lib/virtual-types";
 import { DEPRECATED_KEYS, FLIPPED_ALIAS_KEYS, TYPES } from "@babel/types";
 import type { NodePath, Visitor } from "./index";
+
+type VIRTUAL_TYPES = keyof typeof virtualTypes;
+function isVirtualType(type: string): type is VIRTUAL_TYPES {
+  return type in virtualTypes;
+}
 
 /**
  * explode() will take a visitor object with all of the various shorthands
@@ -55,26 +59,26 @@ export function explode(visitor: Visitor) {
   for (const nodeType of Object.keys(visitor)) {
     if (shouldIgnoreKey(nodeType)) continue;
 
-    // @ts-expect-error Fixme: nodeType could index virtualTypes
-    const wrapper = virtualTypes[nodeType];
-    if (!wrapper) continue;
+    if (!isVirtualType(nodeType)) continue;
 
     // wrap all the functions
     const fns = visitor[nodeType];
     for (const type of Object.keys(fns)) {
       // @ts-expect-error manipulating visitors
-      fns[type] = wrapCheck(wrapper, fns[type]);
+      fns[type] = wrapCheck(nodeType, fns[type]);
     }
 
     // clear it from the visitor
     delete visitor[nodeType];
 
-    if (wrapper.types) {
-      for (const type of wrapper.types) {
+    const types = virtualTypes[nodeType];
+    if (types !== null) {
+      for (const type of types) {
         // merge the visitor if necessary or just put it back in
         if (visitor[type]) {
           mergePair(visitor[type], fns);
         } else {
+          // @ts-expect-error Expression produces too complex union
           visitor[type] = fns;
         }
       }
@@ -280,9 +284,9 @@ function ensureCallbackArrays(obj: Visitor) {
   if (obj.exit && !Array.isArray(obj.exit)) obj.exit = [obj.exit];
 }
 
-function wrapCheck(wrapper: Wrapper, fn: Function) {
+function wrapCheck(nodeType: VIRTUAL_TYPES, fn: Function) {
   const newFn = function (this: unknown, path: NodePath) {
-    if (wrapper.checkPath(path)) {
+    if (path[`is${nodeType}`]()) {
       return fn.apply(this, arguments);
     }
   };
