@@ -13,8 +13,8 @@ export default declare((api, options: Options) => {
   }
 
   return createRegExpFeaturePlugin({
-    name: "transform-named-capturing-groups-regex",
-    feature: "namedCaptureGroups",
+    name: "proposal-duplicate-named-capturing-groups-regex",
+    feature: "duplicateNamedCaptureGroups",
     options: { runtime },
   });
 });

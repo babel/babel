@@ -20,7 +20,8 @@ export function generateRegexpuOptions(toTransform: number): RegexpuOptions {
       feat<Experimental>("unicodeSetsFlag_syntax", "parse"),
     dotAllFlag: feat("dotAllFlag"),
     unicodePropertyEscapes: feat("unicodePropertyEscape"),
-    namedGroups: feat("namedCaptureGroups"),
+    namedGroups:
+      feat("namedCaptureGroups") || feat("duplicateNamedCaptureGroups"),
     onNamedGroup: () => {},
   };
 }
