@@ -1,4 +1,3 @@
-import type NodePath from "../index";
 import type * as t from "@babel/types";
 
 export interface VirtualTypeAliases {
@@ -24,92 +23,57 @@ export interface VirtualTypeAliases {
 
 type NodeTypes = t.Node["type"] | t.Comment["type"] | keyof t.Aliases;
 
-export type Wrapper = {
-  types?: NodeTypes[];
-  checkPath?(path: NodePath): boolean;
-};
+type VirtualTypeMapping = readonly NodeTypes[] | null;
 
-export const ReferencedIdentifier: Wrapper = {
-  types: ["Identifier", "JSXIdentifier"],
-  checkPath: path => path.isReferencedIdentifier(),
-};
+export const ReferencedIdentifier: VirtualTypeMapping = [
+  "Identifier",
+  "JSXIdentifier",
+] as const;
 
-export const ReferencedMemberExpression: Wrapper = {
-  types: ["MemberExpression"],
-  checkPath: path => path.isReferencedMemberExpression(),
-};
+export const ReferencedMemberExpression: VirtualTypeMapping = [
+  "MemberExpression",
+] as const;
 
-export const BindingIdentifier: Wrapper = {
-  types: ["Identifier"],
-  checkPath: path => path.isBindingIdentifier(),
-};
+export const BindingIdentifier: VirtualTypeMapping = ["Identifier"] as const;
 
-export const Statement: Wrapper = {
-  types: ["Statement"],
-  checkPath: path => path.isStatement(),
-};
+export const Statement: VirtualTypeMapping = ["Statement"] as const;
 
-export const Expression: Wrapper = {
-  types: ["Expression"],
-  checkPath: path => path.isExpression(),
-};
+export const Expression: VirtualTypeMapping = ["Expression"] as const;
 
-export const Scope: Wrapper = {
-  // When pattern is inside the function params, it is a scope
-  types: ["Scopable", "Pattern"],
-  checkPath: path => path.isScope(),
-};
+export const Scope: VirtualTypeMapping = ["Scopable", "Pattern"] as const;
 
-export const Referenced: Wrapper = {
-  checkPath: path => path.isReferenced(),
-};
+export const Referenced: VirtualTypeMapping = null as null;
 
-export const BlockScoped: Wrapper = {
-  checkPath: path => path.isBlockScoped(),
-};
+export const BlockScoped: VirtualTypeMapping = null as null;
 
-export const Var: Wrapper = {
-  types: ["VariableDeclaration"],
-  checkPath: path => path.isVar(),
-};
+export const Var: VirtualTypeMapping = ["VariableDeclaration"];
 
-export const User: Wrapper = {
-  checkPath: path => path.isUser(),
-};
+export const User: VirtualTypeMapping = null as null;
 
-export const Generated: Wrapper = {
-  checkPath: path => path.isGenerated(),
-};
+export const Generated: VirtualTypeMapping = null as null;
 
-export const Pure: Wrapper = {
-  checkPath: path => path.isPure(),
-};
+export const Pure: VirtualTypeMapping = null as null;
 
-export const Flow: Wrapper = {
-  types: ["Flow", "ImportDeclaration", "ExportDeclaration", "ImportSpecifier"],
-  checkPath: path => path.isFlow(),
-};
+export const Flow: VirtualTypeMapping = [
+  "Flow",
+  "ImportDeclaration",
+  "ExportDeclaration",
+  "ImportSpecifier",
+] as const;
 
 // TODO: 7.0 Backwards Compat
-export const RestProperty: Wrapper = {
-  types: ["RestElement"],
-  checkPath: path => path.isRestProperty(),
-};
+export const RestProperty: VirtualTypeMapping = ["RestElement"] as const;
 
-export const SpreadProperty: Wrapper = {
-  types: ["RestElement"],
-  checkPath: path => path.isSpreadProperty(),
-};
+export const SpreadProperty: VirtualTypeMapping = ["RestElement"] as const;
 
-export const ExistentialTypeParam: Wrapper = {
-  types: ["ExistsTypeAnnotation"],
-};
+export const ExistentialTypeParam: VirtualTypeMapping = [
+  "ExistsTypeAnnotation",
+] as const;
 
-export const NumericLiteralTypeAnnotation: Wrapper = {
-  types: ["NumberLiteralTypeAnnotation"],
-};
+export const NumericLiteralTypeAnnotation: VirtualTypeMapping = [
+  "NumberLiteralTypeAnnotation",
+] as const;
 
-export const ForAwaitStatement: Wrapper = {
-  types: ["ForOfStatement"],
-  checkPath: path => path.isForAwaitStatement(),
-};
+export const ForAwaitStatement: VirtualTypeMapping = [
+  "ForOfStatement",
+] as const;
