@@ -468,21 +468,18 @@ function buildRollup(packages, buildStandalone) {
             // We have manually applied commonjs-esm interop to the source
             // for library not in this monorepo
             // https://github.com/babel/babel/pull/12795
-            if (id.startsWith("@babel/")) {
-              // Some syntax plugins have been archived
-              if (id.includes("plugin-syntax")) {
-                const srcPath = id.replace("@babel/", "babel-");
-                if (
-                  !fs.existsSync(
-                    new URL("./packages/" + srcPath, import.meta.url)
-                  )
-                ) {
-                  return false;
-                }
-              }
-              return true;
+            if (!id.startsWith("@babel/")) return false;
+
+            // Some syntax plugins have been archived
+            if (id.includes("plugin-syntax")) {
+              const srcPath = new URL(
+                "./packages/" + id.replace("@babel/", "babel-"),
+                import.meta.url
+              );
+              if (!fs.existsSync(srcPath)) return false;
             }
-            return false;
+
+            return true;
           },
         });
 
