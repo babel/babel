@@ -784,7 +784,6 @@ class Printer {
     }
 
     let val;
-    let maybeNewline = false;
     if (isBlockComment) {
       val = `/*${comment.value}*/`;
       if (this.format.indent.adjustMultilineComment) {
@@ -799,22 +798,17 @@ class Printer {
           this.format.retainLines ? 0 : this._buf.getCurrentColumn(),
         );
         val = val.replace(/\n(?!$)/g, `\n${" ".repeat(indentSize)}`);
-
-        maybeNewline = true;
       }
     } else if (!this._noLineTerminator) {
       val = `//${comment.value}\n`;
-      maybeNewline = true;
+    } else {
+      val = `/*${comment.value}*/`;
     }
 
     // Avoid creating //* comments
     if (this.endsWith(charCodes.slash)) this._space();
 
-    this.withSource(
-      "start",
-      comment.loc,
-      this._append.bind(this, val, maybeNewline),
-    );
+    this.withSource("start", comment.loc, this._append.bind(this, val, true));
 
     if (printNewLines) this.newline(1);
   }
