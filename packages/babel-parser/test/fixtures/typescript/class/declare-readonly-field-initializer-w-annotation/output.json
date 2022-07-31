@@ -1,0 +1,92 @@
+{
+  "type": "File",
+  "start":0,"end":84,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":84}},
+  "errors": [
+    "SyntaxError: Initializers are not allowed in ambient contexts. (2:31)",
+    "SyntaxError: Initializers are not allowed in ambient contexts. (3:22)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":84,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":84}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":84,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":84}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":84,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":4,"column":1,"index":84}},
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start":12,"end":50,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":2,"column":40,"index":50}},
+              "declare": true,
+              "readonly": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":29,"end":32,"loc":{"start":{"line":2,"column":19,"index":29},"end":{"line":2,"column":22,"index":32},"identifierName":"bar"},
+                "name": "bar"
+              },
+              "computed": false,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":32,"end":40,"loc":{"start":{"line":2,"column":22,"index":32},"end":{"line":2,"column":30,"index":40}},
+                "typeAnnotation": {
+                  "type": "TSStringKeyword",
+                  "start":34,"end":40,"loc":{"start":{"line":2,"column":24,"index":34},"end":{"line":2,"column":30,"index":40}}
+                }
+              },
+              "value": {
+                "type": "StringLiteral",
+                "start":43,"end":49,"loc":{"start":{"line":2,"column":33,"index":43},"end":{"line":2,"column":39,"index":49}},
+                "extra": {
+                  "rawValue": "test",
+                  "raw": "\"test\""
+                },
+                "value": "test"
+              }
+            },
+            {
+              "type": "ClassProperty",
+              "start":53,"end":82,"loc":{"start":{"line":3,"column":2,"index":53},"end":{"line":3,"column":31,"index":82}},
+              "declare": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":61,"end":64,"loc":{"start":{"line":3,"column":10,"index":61},"end":{"line":3,"column":13,"index":64},"identifierName":"baz"},
+                "name": "baz"
+              },
+              "computed": false,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":64,"end":72,"loc":{"start":{"line":3,"column":13,"index":64},"end":{"line":3,"column":21,"index":72}},
+                "typeAnnotation": {
+                  "type": "TSStringKeyword",
+                  "start":66,"end":72,"loc":{"start":{"line":3,"column":15,"index":66},"end":{"line":3,"column":21,"index":72}}
+                }
+              },
+              "value": {
+                "type": "StringLiteral",
+                "start":75,"end":81,"loc":{"start":{"line":3,"column":24,"index":75},"end":{"line":3,"column":30,"index":81}},
+                "extra": {
+                  "rawValue": "test",
+                  "raw": "\"test\""
+                },
+                "value": "test"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

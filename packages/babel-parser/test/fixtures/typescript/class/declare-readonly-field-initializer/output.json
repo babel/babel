@@ -1,0 +1,101 @@
+{
+  "type": "File",
+  "start":0,"end":102,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":102}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":102,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":102}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":102,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":102}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":102,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":5,"column":1,"index":102}},
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start":12,"end":42,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":2,"column":32,"index":42}},
+              "declare": true,
+              "readonly": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":29,"end":32,"loc":{"start":{"line":2,"column":19,"index":29},"end":{"line":2,"column":22,"index":32},"identifierName":"bar"},
+                "name": "bar"
+              },
+              "computed": false,
+              "value": {
+                "type": "StringLiteral",
+                "start":35,"end":41,"loc":{"start":{"line":2,"column":25,"index":35},"end":{"line":2,"column":31,"index":41}},
+                "extra": {
+                  "rawValue": "test",
+                  "raw": "\"test\""
+                },
+                "value": "test"
+              }
+            },
+            {
+              "type": "ClassProperty",
+              "start":45,"end":70,"loc":{"start":{"line":3,"column":2,"index":45},"end":{"line":3,"column":27,"index":70}},
+              "declare": true,
+              "readonly": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":62,"end":65,"loc":{"start":{"line":3,"column":19,"index":62},"end":{"line":3,"column":22,"index":65},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "computed": false,
+              "value": {
+                "type": "NumericLiteral",
+                "start":68,"end":69,"loc":{"start":{"line":3,"column":25,"index":68},"end":{"line":3,"column":26,"index":69}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              }
+            },
+            {
+              "type": "ClassProperty",
+              "start":73,"end":100,"loc":{"start":{"line":4,"column":2,"index":73},"end":{"line":4,"column":29,"index":100}},
+              "declare": true,
+              "readonly": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":90,"end":93,"loc":{"start":{"line":4,"column":19,"index":90},"end":{"line":4,"column":22,"index":93},"identifierName":"baz"},
+                "name": "baz"
+              },
+              "computed": false,
+              "value": {
+                "type": "MemberExpression",
+                "start":96,"end":99,"loc":{"start":{"line":4,"column":25,"index":96},"end":{"line":4,"column":28,"index":99}},
+                "object": {
+                  "type": "Identifier",
+                  "start":96,"end":97,"loc":{"start":{"line":4,"column":25,"index":96},"end":{"line":4,"column":26,"index":97},"identifierName":"a"},
+                  "name": "a"
+                },
+                "computed": false,
+                "property": {
+                  "type": "Identifier",
+                  "start":98,"end":99,"loc":{"start":{"line":4,"column":27,"index":98},"end":{"line":4,"column":28,"index":99},"identifierName":"b"},
+                  "name": "b"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}
