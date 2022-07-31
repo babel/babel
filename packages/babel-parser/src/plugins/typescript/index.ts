@@ -3118,7 +3118,11 @@ export default (superClass: {
     parseClassProperty(node: N.ClassProperty): N.ClassProperty {
       this.parseClassPropertyAnnotation(node);
 
-      if (this.state.isAmbientContext && this.match(tt.eq)) {
+      if (
+        this.state.isAmbientContext &&
+        !(node.readonly && !node.typeAnnotation) &&
+        this.match(tt.eq)
+      ) {
         this.raise(TSErrors.DeclareClassFieldHasInitializer, {
           at: this.state.startLoc,
         });
