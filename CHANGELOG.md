@@ -23,6 +23,50 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.18.10 (2022-08-01)
+
+#### :rocket: New Feature
+* `babel-helper-string-parser`, `babel-types`
+  * [#14757](https://github.com/babel/babel/pull/14757) feat: Automatically generate `cooked` for `templateElement` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#14817](https://github.com/babel/babel/pull/14817) fix(parser): allow TS declare readonly fields with initializers ([@Josh-Cena](https://github.com/Josh-Cena))
+* `babel-helper-string-parser`, `babel-parser`
+  * [#14798](https://github.com/babel/babel/pull/14798) Fix position of errors in template literals after newlines ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-typescript`
+  * [#14774](https://github.com/babel/babel/pull/14774) fix: TS `declare class` in namespace should be removed ([@yimingjfe](https://github.com/yimingjfe))
+* `babel-plugin-transform-react-jsx`
+  * [#14759](https://github.com/babel/babel/pull/14759) fix: skip flattening spread object with __proto__ ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`
+  * [#14762](https://github.com/babel/babel/pull/14762) fix: Types containing comments generate invalid code ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helper-wrap-function`, `babel-plugin-transform-async-to-generator`, `babel-traverse`
+  * [#14752](https://github.com/babel/babel/pull/14752) Fix compiling async arrows in uncompiled class fields ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* Other
+  * [#14800](https://github.com/babel/babel/pull/14800) chore: Remove `.yarnrc` file ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+  * [#14802](https://github.com/babel/babel/pull/14802) chore: Fix coverage test ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+  * [#14671](https://github.com/babel/babel/pull/14671) feat: Make most `make` commands cross-platform ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+  * [#14790](https://github.com/babel/babel/pull/14790) enable typescript incremental builds ([@zxbodya](https://github.com/zxbodya))
+* `babel-traverse`
+  * [#14799](https://github.com/babel/babel/pull/14799) Restructure virtual types validator ([@JLHwung](https://github.com/JLHwung))
+* `babel-cli`
+  * [#14779](https://github.com/babel/babel/pull/14779) chore: expand prettier-e2e test and update typings/deps ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-parser`
+  * [#14796](https://github.com/babel/babel/pull/14796) Make ParseError Much Simpler now that we can use TypeScript ([@tolmasky](https://github.com/tolmasky))
+* `babel-core`, `babel-parser`
+  * [#14785](https://github.com/babel/babel/pull/14785) chore: remove flow check scripts ([@JLHwung](https://github.com/JLHwung))
+* `babel-cli`, `babel-core`, `babel-parser`, `babel-plugin-transform-unicode-escapes`, `babel-preset-env`, `babel-template`, `babel-traverse`
+  * [#14783](https://github.com/babel/babel/pull/14783) Convert `@babel/parser` to TypeScript ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-string-parser`, `babel-parser`
+  * [#14772](https://github.com/babel/babel/pull/14772) Extract string parsing to a separate package ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-cli`, `babel-node`
+  * [#14765](https://github.com/babel/babel/pull/14765) Enforce type checking on `babel-{cli,node}` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :microscope: Output optimization
+* `babel-plugin-proposal-export-default-from`
+  * [#14768](https://github.com/babel/babel/pull/14768) optimize: Simplify the `export-default-from` transform ([@magic-akari](https://github.com/magic-akari))
 ## v7.18.9 (2022-07-18)
 
 #### :bug: Bug Fix
