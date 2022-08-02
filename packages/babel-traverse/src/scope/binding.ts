@@ -79,7 +79,7 @@ export default class Binding {
    * Register a constant violation with the provided `path`.
    */
 
-  reassign(path: any) {
+  reassign(path: NodePath) {
     this.constant = false;
     if (this.constantViolations.indexOf(path) !== -1) {
       return;
