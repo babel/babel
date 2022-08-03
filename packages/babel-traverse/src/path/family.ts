@@ -498,17 +498,26 @@ function getOuterBindingIdentifiers(
 
 export { getOuterBindingIdentifiers };
 
+function getBindingIdentifierPaths(
+  duplicates: true,
+  outerOnly?: boolean,
+): Record<string, NodePath<t.Identifier>[]>;
+function getBindingIdentifierPaths(
+  duplicates: false,
+  outerOnly?: boolean,
+): Record<string, NodePath<t.Identifier>>;
+function getBindingIdentifierPaths(
+  duplicates?: boolean,
+  outerOnly?: boolean,
+): Record<string, NodePath<t.Identifier> | NodePath<t.Identifier>[]>;
+
 // original source - https://github.com/babel/babel/blob/main/packages/babel-types/src/retrievers/getBindingIdentifiers.js
-// path.getBindingIdentifiers returns nodes where the following re-implementation
-// returns paths
-export function getBindingIdentifierPaths(
+// path.getBindingIdentifiers returns nodes where the following re-implementation returns paths
+function getBindingIdentifierPaths(
   this: NodePath,
   duplicates: boolean = false,
   outerOnly: boolean = false,
-): {
-  // todo: returns NodePath<t.Identifier>[] when duplicates is true
-  [x: string]: NodePath<t.Identifier>;
-} {
+): Record<string, NodePath<t.Identifier> | NodePath<t.Identifier>[]> {
   const path = this;
   const search = [path];
   const ids = Object.create(null);
@@ -563,13 +572,26 @@ export function getBindingIdentifierPaths(
     }
   }
 
-  // $FlowIssue Object.create() is object type
   return ids;
 }
 
-export function getOuterBindingIdentifierPaths(
-  this: NodePath,
+export { getBindingIdentifierPaths };
+
+function getOuterBindingIdentifierPaths(
+  duplicates: true,
+): Record<string, NodePath<t.Identifier>[]>;
+function getOuterBindingIdentifierPaths(
+  duplicates?: false,
+): Record<string, NodePath<t.Identifier>>;
+function getOuterBindingIdentifierPaths(
   duplicates?: boolean,
+): Record<string, NodePath<t.Identifier> | NodePath<t.Identifier>[]>;
+
+function getOuterBindingIdentifierPaths(
+  this: NodePath,
+  duplicates: boolean = false,
 ) {
   return this.getBindingIdentifierPaths(duplicates, true);
 }
+
+export { getOuterBindingIdentifierPaths };
