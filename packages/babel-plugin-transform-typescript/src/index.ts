@@ -36,7 +36,7 @@ const PARSED_PARAMS = new WeakSet();
 
 function isGlobalType(path: NodePath, name: string) {
   const program = path.find(path => path.isProgram()).node;
-  if (path.scope.hasOwnBinding(name)) return false;
+  if (path.scope.hasBinding(name)) return false;
   if (GLOBAL_TYPES.get(program).has(name)) return true;
 
   console.warn(
