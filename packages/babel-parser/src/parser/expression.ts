@@ -60,6 +60,7 @@ import {
   PARAM_RETURN,
   functionFlags,
 } from "../util/production-parameter";
+import type { ParamKind } from "../util/production-parameter";
 import {
   newArrowHeadScope,
   newAsyncArrowScope,
@@ -71,44 +72,44 @@ import { setInnerComments } from "./comments";
 import { cloneIdentifier, type Undone } from "./node";
 import type Parser from ".";
 
-/*::
 import type { SourceType } from "../options";
-declare var invariant;
-*/
 
-export default class ExpressionParser extends LValParser {
+export default abstract class ExpressionParser extends LValParser {
   // Forward-declaration: defined in statement.js
-  /*::
-  +parseBlock: (
+  abstract parseBlock(
     allowDirectives?: boolean,
     createNewLexicalScope?: boolean,
     afterBlockParse?: (hasStrictModeDirective: boolean) => void,
-  ) => N.BlockStatement;
-  +parseClass: (
+  ): N.BlockStatement;
+  abstract parseClass(
     node: N.Class,
     isStatement: boolean,
     optionalId?: boolean,
-  ) => N.Class;
-  +parseDecorators: (allowExport?: boolean) => void;
-  +parseFunction: <T: N.NormalFunction>(
+  ): N.Class;
+  abstract parseDecorators(allowExport?: boolean): void;
+  abstract parseFunction<T extends N.NormalFunction>(
     node: T,
     statement?: number,
     allowExpressionBody?: boolean,
     isAsync?: boolean,
-  ) => T;
-  +parseFunctionParams: (node: N.Function, allowModifiers?: boolean) => void;
-  +takeDecorators: (node: N.HasDecorators) => void;
-  +parseBlockOrModuleBlockBody: (
+  ): T;
+  abstract parseFunctionParams(
+    node: N.Function,
+    allowModifiers?: boolean,
+  ): void;
+  abstract takeDecorators(node: N.HasDecorators): void;
+  abstract parseBlockOrModuleBlockBody(
     body: N.Statement[],
-    directives: ?(N.Directive[]),
+    directives: N.Directive[] | null | undefined,
     topLevel: boolean,
     end: TokenType,
-    afterBlockParse?: (hasStrictModeDirective: boolean) => void
-  ) => void
-  +parseProgram: (
-    program: N.Program, end: TokenType, sourceType?: SourceType
-  ) => N.Program
-  */
+    afterBlockParse?: (hasStrictModeDirective: boolean) => void,
+  ): void;
+  abstract parseProgram(
+    program: N.Program,
+    end: TokenType,
+    sourceType?: SourceType,
+  ): N.Program;
 
   // For object literal, check if property __proto__ has been used more than once.
   // If the expression is a destructuring assignment, then __proto__ may appear
@@ -2629,7 +2630,9 @@ export default class ExpressionParser extends LValParser {
 
       // FunctionBody[Yield, Await]:
       //   StatementList[?Yield, ?Await, +Return] opt
-      this.prodParam.enter(this.prodParam.currentFlags() | PARAM_RETURN);
+      this.prodParam.enter(
+        (this.prodParam.currentFlags() | PARAM_RETURN) as ParamKind,
+      );
       node.body = this.parseBlock(
         true,
         false,

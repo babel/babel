@@ -184,7 +184,7 @@ function babel7CompatTokens(tokens: (Token | N.Comment)[], input: string) {
   }
   return tokens;
 }
-export default class StatementParser extends ExpressionParser {
+export default abstract class StatementParser extends ExpressionParser {
   // ### Statement parsing
 
   // Parse a program. Initializes the parser, reads any number of
@@ -1627,16 +1627,11 @@ export default class StatementParser extends ExpressionParser {
     state: N.ParseClassMemberState,
     isStatic: boolean,
   ) {
-    // @ts-expect-error: Fixme: convert $FlowSubtype to TS
-    const publicMethod: $FlowSubtype<N.ClassMethod> = member;
-    // @ts-expect-error: Fixme: convert $FlowSubtype to TS
-    const privateMethod: $FlowSubtype<N.ClassPrivateMethod> = member;
-    // @ts-expect-error: Fixme: convert $FlowSubtype to TS
-    const publicProp: $FlowSubtype<N.ClassProperty> = member;
-    // @ts-expect-error: Fixme: convert $FlowSubtype to TS
-    const privateProp: $FlowSubtype<N.ClassPrivateProperty> = member;
-    // @ts-expect-error: Fixme: convert $FlowSubtype to TS
-    const accessorProp: $FlowSubtype<N.ClassAccessorProperty> = member;
+    const publicMethod = member as N.ClassMethod;
+    const privateMethod = member as N.ClassPrivateMethod;
+    const publicProp = member as N.ClassProperty;
+    const privateProp = member as N.ClassPrivateProperty;
+    const accessorProp = member as N.ClassAccessorProperty;
 
     const method: typeof publicMethod | typeof privateMethod = publicMethod;
     const publicMember: typeof publicMethod | typeof publicProp = publicMethod;

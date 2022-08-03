@@ -304,12 +304,8 @@ type EnumMemberInit =
       loc: Position;
     };
 
-export default (superClass: {
-  new (...args: any): Parser;
-}): {
-  new (...args: any): Parser;
-} =>
-  class extends superClass {
+export default (superClass: typeof Parser) =>
+  class FlowParserMixin extends superClass implements Parser {
     // The value of the @flow/@noflow pragma. Initially undefined, transitions
     // to "@flow" or "@noflow" if we see a pragma. Transitions to null if we are
     // past the initial comment.
@@ -2492,8 +2488,11 @@ export default (superClass: {
       return node;
     }
 
-    isValidLVal(type: string, ...rest: [boolean, BindingTypes]) {
-      return type === "TypeCastExpression" || super.isValidLVal(type, ...rest);
+    isValidLVal(type: string, isParenthesized: boolean, binding: BindingTypes) {
+      return (
+        type === "TypeCastExpression" ||
+        super.isValidLVal(type, isParenthesized, binding)
+      );
     }
 
     // parse class property type annotations
@@ -3131,6 +3130,7 @@ export default (superClass: {
       node: N.Function,
       allowDuplicates: boolean,
       isArrowFunction?: boolean | null,
+      strictModeChanged: boolean = true,
     ): void {
       if (
         isArrowFunction &&
@@ -3146,7 +3146,12 @@ export default (superClass: {
         }
       }
 
-      return super.checkParams(node, allowDuplicates, isArrowFunction);
+      return super.checkParams(
+        node,
+        allowDuplicates,
+        isArrowFunction,
+        strictModeChanged,
+      );
     }
 
     parseParenAndDistinguishExpression(canBeArrow: boolean): N.Expression {
@@ -3341,7 +3346,7 @@ export default (superClass: {
       return fileNode;
     }
 
-    skipBlockComment(): N.CommentBlock | void {
+    skipBlockComment(): N.CommentBlock | undefined {
       if (this.hasPlugin("flowComments") && this.skipFlowComment()) {
         if (this.state.hasFlowComment) {
           throw this.raise(FlowErrors.NestedFlowComment, {
@@ -3522,8 +3527,7 @@ export default (superClass: {
       const id = this.parseIdentifier(true);
       const init = this.eat(tt.eq)
         ? this.flowEnumMemberInit()
-        : { type: "none", loc };
-      // @ts-expect-error: fixme
+        : { type: "none" as const, loc };
       return { id, init };
     }
 

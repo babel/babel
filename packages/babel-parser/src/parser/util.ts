@@ -23,9 +23,7 @@ import {
 } from "../parse-error";
 import type Parser from ".";
 
-/*::
 import type ScopeHandler from "../util/scope";
-*/
 
 type TryParse<Node, Error, Thrown, Aborted, FailState> = {
   node: Node;
@@ -37,11 +35,9 @@ type TryParse<Node, Error, Thrown, Aborted, FailState> = {
 
 // ## Parser utilities
 
-export default class UtilParser extends Tokenizer {
+export default abstract class UtilParser extends Tokenizer {
   // Forward-declaration: defined in parser/index.js
-  /*::
-  +getScopeHandler: () => Class<ScopeHandler<*>>;
-  */
+  abstract getScopeHandler(): { new (...args: any): ScopeHandler };
 
   // TODO
 

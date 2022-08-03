@@ -36,6 +36,9 @@ import type { ExpressionErrors } from "../../parser/util";
 import { PARAM } from "../../util/production-parameter";
 import { Errors, ParseErrorEnum } from "../../parse-error";
 import { cloneIdentifier, type Undone } from "../../parser/node";
+import type { Pattern } from "../../types";
+import type { Expression } from "../../types";
+import type { IJSXParserMixin } from "../jsx";
 
 const getOwn = <T extends {}>(object: T, key: keyof T) =>
   Object.hasOwnProperty.call(object, key) && object[key];
@@ -269,13 +272,15 @@ function tsIsVarianceAnnotations(
   return modifier === "in" || modifier === "out";
 }
 
-export default (superClass: {
-  new (...args: any): Parser;
-}): {
-  new (...args: any): Parser;
-} =>
-  // @ts-expect-error plugin may override interfaces
-  class extends superClass {
+type ClassWithMixin<
+  T extends new (...args: any) => any,
+  M extends object,
+> = T extends new (...args: infer P) => infer I
+  ? new (...args: P) => I & M
+  : never;
+
+export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
+  class TypeScriptParserMixin extends superClass implements Parser {
     getScopeHandler(): {
       new (...args: any): TypeScriptScopeHandler;
     } {
@@ -2385,9 +2390,17 @@ export default (superClass: {
     }
 
     parseArrayLike(
-      ...args: [TokenType, boolean, boolean, ExpressionErrors | null]
+      close: TokenType,
+      canBePattern: boolean,
+      isTuple: boolean,
+      refExpressionErrors?: ExpressionErrors | null,
     ): N.ArrayExpression | N.TupleExpression {
-      const node = super.parseArrayLike(...args);
+      const node = super.parseArrayLike(
+        close,
+        canBePattern,
+        isTuple,
+        refExpressionErrors,
+      );
 
       if (node.type === "ArrayExpression") {
         this.tsCheckForInvalidTypeCasts(node.elements);
@@ -3087,6 +3100,8 @@ export default (superClass: {
       node: N.Class,
       isStatement: boolean,
       optionalId?: boolean | null,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      bindingType?: BindingTypes,
     ): void {
       if ((!isStatement || optionalId) && this.isContextual(tt._implements)) {
         return;
@@ -3229,21 +3244,28 @@ export default (superClass: {
     }
 
     parseObjPropValue(
-      prop: Undone<N.ObjectMember>,
-      ...args: [
-        number | undefined | null,
-        Position | undefined | null,
-        boolean,
-        boolean,
-        boolean,
-        boolean,
-        ExpressionErrors | null,
-      ]
-    ): N.ObjectMethod | N.ObjectProperty {
+      prop: Undone<N.ObjectMethod | N.ObjectProperty>,
+      startPos: number | undefined | null,
+      startLoc: Position | undefined | null,
+      isGenerator: boolean,
+      isAsync: boolean,
+      isPattern: boolean,
+      isAccessor: boolean,
+      refExpressionErrors?: ExpressionErrors | null,
+    ) {
       const typeParameters = this.tsTryParseTypeParameters();
       if (typeParameters) prop.typeParameters = typeParameters;
 
-      return super.parseObjPropValue(prop, ...args);
+      return super.parseObjPropValue(
+        prop,
+        startPos,
+        startLoc,
+        isGenerator,
+        isAsync,
+        isPattern,
+        isAccessor,
+        refExpressionErrors,
+      );
     }
 
     parseFunctionParams(node: N.Function, allowModifiers?: boolean): void {
@@ -3285,7 +3307,8 @@ export default (superClass: {
     }
 
     parseMaybeAssign(
-      ...args: [ExpressionErrors | null, Function]
+      refExpressionErrors?: ExpressionErrors | null,
+      afterLeftParse?: Function,
     ): N.Expression {
       // Note: When the JSX plugin is on, type assertions (`<T> x`) aren't valid syntax.
 
@@ -3300,7 +3323,10 @@ export default (superClass: {
         // Prefer to parse JSX if possible. But may be an arrow fn.
         state = this.state.clone();
 
-        jsx = this.tryParse(() => super.parseMaybeAssign(...args), state);
+        jsx = this.tryParse(
+          () => super.parseMaybeAssign(refExpressionErrors, afterLeftParse),
+          state,
+        );
 
         /*:: invariant(!jsx.aborted) */
         /*:: invariant(jsx.node != null) */
@@ -3317,7 +3343,7 @@ export default (superClass: {
       }
 
       if (!jsx?.error && !this.match(tt.lt)) {
-        return super.parseMaybeAssign(...args);
+        return super.parseMaybeAssign(refExpressionErrors, afterLeftParse);
       }
 
       // Either way, we're looking at a '<': tt.jsxTagStart or relational.
@@ -3331,7 +3357,10 @@ export default (superClass: {
       const arrow = this.tryParse(abort => {
         // This is similar to TypeScript's `tryParseParenthesizedArrowFunctionExpression`.
         typeParameters = this.tsParseTypeParameters();
-        const expr = super.parseMaybeAssign(...args);
+        const expr = super.parseMaybeAssign(
+          refExpressionErrors,
+          afterLeftParse,
+        );
 
         if (
           expr.type !== "ArrowFunctionExpression" ||
@@ -3386,7 +3415,10 @@ export default (superClass: {
 
         // This will start with a type assertion (via parseMaybeUnary).
         // But don't directly call `this.tsParseTypeAssertion` because we want to handle any binary after it.
-        typeCast = this.tryParse(() => super.parseMaybeAssign(...args), state);
+        typeCast = this.tryParse(
+          () => super.parseMaybeAssign(refExpressionErrors, afterLeftParse),
+          state,
+        );
         /*:: invariant(!typeCast.aborted) */
         /*:: invariant(typeCast.node != null) */
         if (!typeCast.error) return typeCast.node;
@@ -3432,11 +3464,12 @@ export default (superClass: {
     // Handle type assertions
     parseMaybeUnary(
       refExpressionErrors?: ExpressionErrors | null,
+      sawUnary?: boolean,
     ): N.Expression {
       if (!this.hasPlugin("jsx") && this.match(tt.lt)) {
         return this.tsParseTypeAssertion();
       } else {
-        return super.parseMaybeUnary(refExpressionErrors);
+        return super.parseMaybeUnary(refExpressionErrors, sawUnary);
       }
     }
 
@@ -3639,13 +3672,11 @@ export default (superClass: {
     }
 
     parseMaybeDefault(
-      ...args: [
-        startPos?: number | null,
-        startLoc?: Position | null,
-        left?: N.Pattern | null,
-      ]
+      startPos?: number | null,
+      startLoc?: Position | null,
+      left?: Pattern | null,
     ): N.Pattern {
-      const node = super.parseMaybeDefault(...args);
+      const node = super.parseMaybeDefault(startPos, startLoc, left);
 
       if (
         node.type === "AssignmentPattern" &&
@@ -3696,8 +3727,9 @@ export default (superClass: {
     }
 
     toAssignableList(
-      exprList: N.Expression[],
-      ...args: [Position | undefined | null, boolean]
+      exprList: Expression[],
+      trailingCommaLoc: Position | undefined | null,
+      isLHS: boolean,
     ): void {
       for (let i = 0; i < exprList.length; i++) {
         const expr = exprList[i];
@@ -3707,7 +3739,7 @@ export default (superClass: {
           );
         }
       }
-      super.toAssignableList(exprList, ...args);
+      super.toAssignableList(exprList, trailingCommaLoc, isLHS);
     }
 
     typeCastToParameter(node: N.TsTypeCastExpression): N.Node {
@@ -3746,7 +3778,6 @@ export default (superClass: {
         // @ts-expect-error: refine typings
         if (typeArguments) node.typeParameters = typeArguments;
       }
-      // @ts-expect-error calling JSX methods
       return super.jsxParseOpeningElementAfterName(node);
     }
 
@@ -3785,12 +3816,13 @@ export default (superClass: {
 
     parseClass<T extends N.Class>(
       node: Undone<T>,
-      ...args: [boolean, boolean]
+      isStatement: boolean,
+      optionalId?: boolean,
     ): T {
       const oldInAbstractClass = this.state.inAbstractClass;
       this.state.inAbstractClass = !!(node as any).abstract;
       try {
-        return super.parseClass(node, ...args);
+        return super.parseClass(node, isStatement, optionalId);
       } finally {
         this.state.inAbstractClass = oldInAbstractClass;
       }
@@ -3829,18 +3861,24 @@ export default (superClass: {
     parseMethod<
       T extends N.ObjectMethod | N.ClassMethod | N.ClassPrivateMethod,
     >(
-      ...args: [
-        Undone<T>,
-        boolean,
-        boolean,
-        boolean,
-        boolean,
-        T["type"],
-        boolean,
-      ]
+      node: Undone<T>,
+      isGenerator: boolean,
+      isAsync: boolean,
+      isConstructor: boolean,
+      allowDirectSuper: boolean,
+      type: T["type"],
+      inClassScope?: boolean,
     ) {
-      const method = super.parseMethod(...args);
-      // @ts-expect-error abstract is not in ObjectMethod
+      const method = super.parseMethod<T>(
+        node,
+        isGenerator,
+        isAsync,
+        isConstructor,
+        allowDirectSuper,
+        type,
+        inClassScope,
+      );
+      // @ts-expect-error todo(flow->ts) property not defined for all types in union
       if (method.abstract) {
         const hasBody = this.hasPlugin("estree")
           ? // @ts-expect-error estree typings

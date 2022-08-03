@@ -19,13 +19,8 @@ function toESTreeLocation(node: any) {
   return node;
 }
 
-export default (superClass: {
-  new (...args: any): Parser;
-}): {
-  new (...args: any): Parser;
-} =>
-  // @ts-expect-error plugin may override interfaces
-  class extends superClass {
+export default (superClass: typeof Parser) =>
+  class ESTreeParserMixin extends superClass implements Parser {
     parse(): File {
       const file = toESTreeLocation(super.parse());
 
@@ -124,7 +119,11 @@ export default (superClass: {
       // @ts-expect-error N.Directive.value is not defined
       stmt.directive = directiveLiteral.extra.raw.slice(1, -1);
 
-      return this.finishNodeAt(stmt, "ExpressionStatement", directive.loc.end);
+      return this.finishNodeAt(
+        stmt,
+        "ExpressionStatement",
+        directive.loc.end,
+      ) as N.ExpressionStatement;
     }
 
     // ==================================
@@ -164,15 +163,18 @@ export default (superClass: {
 
     parseBlockBody(
       node: N.BlockStatementLike,
-      ...args: [
-        boolean | undefined | null,
-        boolean,
-        TokenType,
-        void | ((a: boolean) => void),
-      ]
+      allowDirectives: boolean | undefined | null,
+      topLevel: boolean,
+      end: TokenType,
+      afterBlockParse?: (hasStrictModeDirective: boolean) => void,
     ): void {
-      // @ts-expect-error figure out args typings
-      super.parseBlockBody(node, ...args);
+      super.parseBlockBody(
+        node,
+        allowDirectives,
+        topLevel,
+        end,
+        afterBlockParse,
+      );
 
       const directiveStatements = node.directives.map(d =>
         this.directiveToStmt(d),
@@ -486,7 +488,7 @@ export default (superClass: {
           break;
       }
 
-      return node;
+      return node as N.AnyExport;
     }
 
     parseSubscript(
