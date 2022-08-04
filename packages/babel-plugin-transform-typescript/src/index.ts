@@ -2,7 +2,7 @@ import { declare } from "@babel/helper-plugin-utils";
 import syntaxTypeScript from "@babel/plugin-syntax-typescript";
 import { types as t, template } from "@babel/core";
 import { injectInitialization } from "@babel/helper-create-class-features-plugin";
-import type { Binding, NodePath } from "@babel/traverse";
+import type { Binding, NodePath, Scope } from "@babel/traverse";
 import type { Options as SyntaxOptions } from "@babel/plugin-syntax-typescript";
 
 import transpileConstEnum from "./const-enum";
@@ -27,17 +27,16 @@ function isInType(path: NodePath) {
   }
 }
 
-const GLOBAL_TYPES = new WeakMap();
+const GLOBAL_TYPES = new WeakMap<Scope, Set<string>>();
 // Track programs which contain imports/exports of values, so that we can include
 // empty exports for programs that do not, but were parsed as modules. This allows
 // tools to infer unamibiguously that results are ESM.
 const NEEDS_EXPLICIT_ESM = new WeakMap();
 const PARSED_PARAMS = new WeakSet();
 
-function isGlobalType(path: NodePath, name: string) {
-  const program = path.find(path => path.isProgram()).node;
-  if (path.scope.hasOwnBinding(name)) return false;
-  if (GLOBAL_TYPES.get(program).has(name)) return true;
+function isGlobalType({ scope }: NodePath, name: string) {
+  if (scope.hasBinding(name)) return false;
+  if (GLOBAL_TYPES.get(scope).has(name)) return true;
 
   console.warn(
     `The exported identifier "${name}" is not declared in Babel's scope tracker\n` +
@@ -52,8 +51,8 @@ function isGlobalType(path: NodePath, name: string) {
   return false;
 }
 
-function registerGlobalType(programNode: t.Program, name: string) {
-  GLOBAL_TYPES.get(programNode).add(name);
+function registerGlobalType(programScope: Scope, name: string) {
+  GLOBAL_TYPES.get(programScope).add(name);
 }
 export interface Options extends SyntaxOptions {
   /** @default true */
@@ -213,10 +212,10 @@ export default declare((api, opts: Options) => {
           const { file } = state;
           let fileJsxPragma = null;
           let fileJsxPragmaFrag = null;
-          const programNode = path.node;
+          const programScope = path.scope;
 
-          if (!GLOBAL_TYPES.has(programNode)) {
-            GLOBAL_TYPES.set(programNode, new Set());
+          if (!GLOBAL_TYPES.has(programScope)) {
+            GLOBAL_TYPES.set(programScope, new Set());
           }
 
           if (file.ast.comments) {
@@ -252,7 +251,7 @@ export default declare((api, opts: Options) => {
 
               if (stmt.node.importKind === "type") {
                 for (const specifier of stmt.node.specifiers) {
-                  registerGlobalType(programNode, specifier.local.name);
+                  registerGlobalType(programScope, specifier.local.name);
                 }
                 stmt.remove();
                 continue;
@@ -269,7 +268,7 @@ export default declare((api, opts: Options) => {
                   specifier.type === "ImportSpecifier" &&
                   specifier.importKind === "type"
                 ) {
-                  registerGlobalType(programNode, specifier.local.name);
+                  registerGlobalType(programScope, specifier.local.name);
                   const binding = stmt.scope.getBinding(specifier.local.name);
                   if (binding) {
                     importsToRemove.add(binding.path);
@@ -332,7 +331,7 @@ export default declare((api, opts: Options) => {
 
             if (stmt.isVariableDeclaration({ declare: true })) {
               for (const name of Object.keys(stmt.getBindingIdentifiers())) {
-                registerGlobalType(programNode, name);
+                registerGlobalType(programScope, name);
               }
             } else if (
               stmt.isTSTypeAliasDeclaration() ||
@@ -344,7 +343,7 @@ export default declare((api, opts: Options) => {
                 stmt.get("id").isIdentifier())
             ) {
               registerGlobalType(
-                programNode,
+                programScope,
                 //@ts-expect-error
                 stmt.node.id.name,
               );

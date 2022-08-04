@@ -1,22 +1,7 @@
 "use strict";
 
-module.exports = function({ template, types: t }) {
-  const warnings = [];
-  let consoleWarn;
-
+module.exports = function ({ template, types: t }) {
   return {
-    pre() {
-      consoleWarn = console.warn;
-      console.warn = msg => warnings.push(msg);
-    },
-
-    post({ path }) {
-      console.warn = consoleWarn;
-
-      const stmt = t.expressionStatement(t.valueToNode(warnings));
-      path.pushContainer("body", stmt);
-    },
-
     visitor: {
       ExportDefaultDeclaration(path) {
         path.insertBefore(template.statement.ast`
