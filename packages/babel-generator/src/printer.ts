@@ -805,6 +805,8 @@ class Printer {
     } else if (!this._noLineTerminator) {
       val = `//${comment.value}\n`;
       maybeNewline = true;
+    } else {
+      val = `/*${comment.value}*/`;
     }
 
     // Avoid creating //* comments
