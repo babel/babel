@@ -1,6 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { types as t, template } from "@babel/core";
-import type { Visitor, Scope } from "@babel/traverse";
+import type { Visitor, Scope, NodePath } from "@babel/traverse";
 
 export interface Options {
   allowMutablePropsOnTags?: null | string[];
@@ -165,8 +165,6 @@ export default declare((api, options: Options) => {
     visitor: {
       JSXElement(path) {
         if (HOISTED.has(path.node)) return;
-        HOISTED.set(path.node, path.scope);
-
         const name = path.node.openingElement.name;
 
         // This transform takes the option `allowMutablePropsOnTags`, which is an array
@@ -191,13 +189,15 @@ export default declare((api, options: Options) => {
         // current element has already been hoisted, we can consider its target
         // scope as the base scope for the current element.
         let jsxScope;
-        let current = path;
+        let current: NodePath<t.JSX> = path;
         while (!jsxScope && current.parentPath.isJSX()) {
-          // @ts-expect-error current is a search pointer
           current = current.parentPath;
           jsxScope = HOISTED.get(current.node);
         }
         jsxScope ??= path.scope;
+        // The initial HOISTED is set to jsxScope, s.t.
+        // if the element's JSX ancestor has been hoisted, it will be skipped
+        HOISTED.set(path.node, jsxScope);
 
         const visitorState: VisitorState = {
           isImmutable: true,
@@ -209,8 +209,6 @@ export default declare((api, options: Options) => {
         if (!visitorState.isImmutable) return;
 
         const { targetScope } = visitorState;
-        HOISTED.set(path.node, targetScope);
-
         // Only hoist if it would give us an advantage.
         for (let currentScope = jsxScope; ; ) {
           if (targetScope === currentScope) return;
@@ -228,6 +226,8 @@ export default declare((api, options: Options) => {
 
         const id = path.scope.generateUidBasedOnNode(name);
         targetScope.push({ id: t.identifier(id) });
+        // If the element is to be hoisted, update HOISTED to be the target scope
+        HOISTED.set(path.node, targetScope);
 
         let replacement: t.Expression | t.JSXExpressionContainer = template
           .expression.ast`
