@@ -97,7 +97,12 @@ function plainFunction(
   let functionId = null;
   let node;
   if (path.isArrowFunctionExpression()) {
-    path = path.arrowFunctionToExpression({ noNewArrows });
+    if (process.env.BABEL_8_BREAKING) {
+      path = path.arrowFunctionToExpression({ noNewArrows });
+    } else {
+      // arrowFunctionToExpression returns undefined in @babel/traverse < 7.18.10
+      path = path.arrowFunctionToExpression({ noNewArrows }) ?? path;
+    }
     node = path.node as t.FunctionDeclaration | t.FunctionExpression;
   } else {
     node = path.node as t.FunctionDeclaration | t.FunctionExpression;
