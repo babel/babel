@@ -23,6 +23,17 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.18.11 (2022-08-04)
+
+#### :bug: Bug Fix
+* `babel-helper-wrap-function`
+  * [#14825](https://github.com/babel/babel/pull/14825) fix: helper-wrap-function compat with old traverse ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* `babel-traverse`
+  * [#14821](https://github.com/babel/babel/pull/14821) chore(traverse): fix some internal typescript types ([@danez](https://github.com/danez))
+* `babel-parser`
+  * [#14801](https://github.com/babel/babel/pull/14801) babel parser type improvements ([@zxbodya](https://github.com/zxbodya))
 ## v7.18.10 (2022-08-01)
 
 #### :rocket: New Feature
