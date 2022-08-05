@@ -23,6 +23,15 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.18.12 (2022-08-05)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-react-constant-elements`
+  * [#14828](https://github.com/babel/babel/pull/14828) fix: react-cons-elem should not hoist router comp ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`
+  * [#14810](https://github.com/babel/babel/pull/14810) fix: Certain comments cause `generator` exceptions ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-plugin-transform-typescript`
+  * [#14827](https://github.com/babel/babel/pull/14827) Fix: do not report global variables as injected binding  ([@JLHwung](https://github.com/JLHwung))
 ## v7.18.11 (2022-08-04)
 
 #### :bug: Bug Fix
