@@ -4,7 +4,7 @@ const dec = () => {};
 
 class A extends B {
   static {
-    [_initProto] = babelHelpers.applyDecs(this, [[dec, 2, "method"]], []);
+    [_initProto] = babelHelpers.applyDecs2203(this, [[dec, 2, "method"]], []);
   }
 
   constructor() {

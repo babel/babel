@@ -50,16 +50,16 @@ expect(Foo.getA()).toBe(458);
 
 expect(a_getterContext.name).toBe('#a');
 expect(a_getterContext.kind).toBe('getter');
-expect(a_getterContext.isStatic).toBe(true);
-expect(a_getterContext.isPrivate).toBe(true);
+expect(a_getterContext.static).toBe(true);
+expect(a_getterContext.private).toBe(true);
 expect(typeof a_getterContext.addInitializer).toBe('function');
 expect(typeof a_getterContext.setMetadata).toBe('function');
 expect(typeof a_getterContext.getMetadata).toBe('function');
 
 expect(a_setterContext.name).toBe('#a');
 expect(a_setterContext.kind).toBe('setter');
-expect(a_setterContext.isStatic).toBe(true);
-expect(a_setterContext.isPrivate).toBe(true);
+expect(a_setterContext.static).toBe(true);
+expect(a_setterContext.private).toBe(true);
 expect(typeof a_setterContext.addInitializer).toBe('function');
 expect(typeof a_setterContext.setMetadata).toBe('function');
 expect(typeof a_setterContext.getMetadata).toBe('function');

@@ -4,7 +4,7 @@ const dec = () => {};
 
 class Foo {}
 
-[_init_a, _init_b] = babelHelpers.applyDecs(Foo, [[dec, 5, "a", function () {
+[_init_a, _init_b] = babelHelpers.applyDecs2203(Foo, [[dec, 5, "a", function () {
   return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _a);
 }, function (value) {
   babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _a, value);

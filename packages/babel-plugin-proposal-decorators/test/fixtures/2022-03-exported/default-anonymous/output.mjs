@@ -6,7 +6,7 @@ _dec = dec;
 
 class A {
   static {
-    [_A, _initClass] = babelHelpers.applyDecs(this, [], [_dec]);
+    [_A, _initClass] = babelHelpers.applyDecs2203(this, [], [_dec]);
   }
   static {
     _initClass();

@@ -164,8 +164,8 @@ function memberDec(
   var ctx = {
     kind: kindStr,
     name: isPrivate ? "#" + name : name,
-    isStatic: isStatic,
-    isPrivate: isPrivate,
+    static: isStatic,
+    private: isPrivate,
   };
 
   var decoratorFinishedRef = { v: false };

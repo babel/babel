@@ -6,7 +6,7 @@ _dec = deco;
 
 class A extends B {
   static {
-    [_initProto] = babelHelpers.applyDecs(this, [[_dec, 2, "method"]], []);
+    [_initProto] = babelHelpers.applyDecs2203(this, [[_dec, 2, "method"]], []);
   }
 
   constructor() {
@@ -25,7 +25,7 @@ _dec2 = deco;
 
 class C extends B {
   static {
-    [_initProto2] = babelHelpers.applyDecs(this, [[_dec2, 2, "method"]], []);
+    [_initProto2] = babelHelpers.applyDecs2203(this, [[_dec2, 2, "method"]], []);
   }
 
   constructor() {

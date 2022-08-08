@@ -8,7 +8,7 @@ _dec = dec1;
 
 class Bar {
   static {
-    [_Bar, _initClass] = babelHelpers.applyDecs(this, [], [_dec]);
+    [_Bar, _initClass] = babelHelpers.applyDecs2203(this, [], [_dec]);
   }
   static {
     _initClass();
@@ -22,7 +22,7 @@ _dec2 = dec2;
 
 class Foo extends _Bar {
   static {
-    [_Foo, _initClass2] = babelHelpers.applyDecs(this, [], [_dec2]);
+    [_Foo, _initClass2] = babelHelpers.applyDecs2203(this, [], [_dec2]);
   }
   static {
     _initClass2();

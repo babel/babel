@@ -57,32 +57,32 @@ expect(foo.b).toBe(458);
 
 expect(a_getterContext.name).toBe('a');
 expect(a_getterContext.kind).toBe('getter');
-expect(a_getterContext.isStatic).toBe(false);
-expect(a_getterContext.isPrivate).toBe(false);
+expect(a_getterContext.static).toBe(false);
+expect(a_getterContext.private).toBe(false);
 expect(typeof a_getterContext.addInitializer).toBe('function');
 expect(typeof a_getterContext.setMetadata).toBe('function');
 expect(typeof a_getterContext.getMetadata).toBe('function');
 
 expect(a_setterContext.name).toBe('a');
 expect(a_setterContext.kind).toBe('setter');
-expect(a_setterContext.isStatic).toBe(false);
-expect(a_setterContext.isPrivate).toBe(false);
+expect(a_setterContext.static).toBe(false);
+expect(a_setterContext.private).toBe(false);
 expect(typeof a_setterContext.addInitializer).toBe('function');
 expect(typeof a_setterContext.setMetadata).toBe('function');
 expect(typeof a_setterContext.getMetadata).toBe('function');
 
 expect(b_getterContext.name).toBe('b');
 expect(b_getterContext.kind).toBe('getter');
-expect(b_getterContext.isStatic).toBe(false);
-expect(b_getterContext.isPrivate).toBe(false);
+expect(b_getterContext.static).toBe(false);
+expect(b_getterContext.private).toBe(false);
 expect(typeof b_getterContext.addInitializer).toBe('function');
 expect(typeof b_getterContext.setMetadata).toBe('function');
 expect(typeof b_getterContext.getMetadata).toBe('function');
 
 expect(b_setterContext.name).toBe('b');
 expect(b_setterContext.kind).toBe('setter');
-expect(b_setterContext.isStatic).toBe(false);
-expect(b_setterContext.isPrivate).toBe(false);
+expect(b_setterContext.static).toBe(false);
+expect(b_setterContext.private).toBe(false);
 expect(typeof b_setterContext.addInitializer).toBe('function');
 expect(typeof b_setterContext.setMetadata).toBe('function');
 expect(typeof b_setterContext.getMetadata).toBe('function');

@@ -6,7 +6,7 @@ _computedKey = 'c';
 
 class Foo {
   static {
-    [_init_a, _init_b, _init_computedKey, _initStatic] = babelHelpers.applyDecs(this, [[dec, 6, "a"], [dec, 6, "b"], [dec, 6, _computedKey]], []);
+    [_init_a, _init_b, _init_computedKey, _initStatic] = babelHelpers.applyDecs2203(this, [[dec, 6, "a"], [dec, 6, "b"], [dec, 6, _computedKey]], []);
 
     _initStatic(this);
 

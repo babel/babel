@@ -35,16 +35,16 @@ expect(foo.value).toBe(457);
 
 expect(aContext.name).toBe('a');
 expect(aContext.kind).toBe('setter');
-expect(aContext.isStatic).toBe(false);
-expect(aContext.isPrivate).toBe(false);
+expect(aContext.static).toBe(false);
+expect(aContext.private).toBe(false);
 expect(typeof aContext.addInitializer).toBe('function');
 expect(typeof aContext.setMetadata).toBe('function');
 expect(typeof aContext.getMetadata).toBe('function');
 
 expect(bContext.name).toBe('b');
 expect(bContext.kind).toBe('setter');
-expect(bContext.isStatic).toBe(false);
-expect(bContext.isPrivate).toBe(false);
+expect(bContext.static).toBe(false);
+expect(bContext.private).toBe(false);
 expect(typeof bContext.addInitializer).toBe('function');
 expect(typeof bContext.setMetadata).toBe('function');
 expect(typeof bContext.getMetadata).toBe('function');

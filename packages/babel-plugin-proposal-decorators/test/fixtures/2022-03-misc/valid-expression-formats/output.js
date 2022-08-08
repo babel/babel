@@ -15,7 +15,7 @@ _dec8 = array[expr];
 
 class Foo {
   static {
-    [_initProto, _Foo, _initClass] = babelHelpers.applyDecs(this, [[[dec, _dec5, _dec6, _dec7, _dec8], 2, "method"]], [dec, _dec, _dec2, _dec3, _dec4]);
+    [_initProto, _Foo, _initClass] = babelHelpers.applyDecs2203(this, [[[dec, _dec5, _dec6, _dec7, _dec8], 2, "method"]], [dec, _dec, _dec2, _dec3, _dec4]);
   }
 
   constructor(...args) {
@@ -31,7 +31,7 @@ class Foo {
 
     return _dec9 = this.#a, class Nested {
       static {
-        [_init_bar] = babelHelpers.applyDecs(this, [[_dec9, 0, "bar"]], []);
+        [_init_bar] = babelHelpers.applyDecs2203(this, [[_dec9, 0, "bar"]], []);
       }
       bar = _init_bar(this);
     };

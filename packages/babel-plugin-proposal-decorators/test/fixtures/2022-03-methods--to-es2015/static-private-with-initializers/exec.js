@@ -32,8 +32,8 @@ expect(Foo.callA()).toBe(124);
 
 expect(aContext.name).toBe('#a');
 expect(aContext.kind).toBe('method');
-expect(aContext.isStatic).toBe(true);
-expect(aContext.isPrivate).toBe(true);
+expect(aContext.static).toBe(true);
+expect(aContext.private).toBe(true);
 expect(typeof aContext.addInitializer).toBe('function');
 expect(typeof aContext.setMetadata).toBe('function');
 expect(typeof aContext.getMetadata).toBe('function');

@@ -21,6 +21,6 @@ class Foo {
 
 }
 
-[_call_a, _initProto] = babelHelpers.applyDecs(Foo, [[dec, 2, "a", function () {
+[_call_a, _initProto] = babelHelpers.applyDecs2203(Foo, [[dec, 2, "a", function () {
   return this.value;
 }]], []);

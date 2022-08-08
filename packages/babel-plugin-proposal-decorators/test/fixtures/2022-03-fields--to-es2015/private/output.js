@@ -20,7 +20,7 @@ class Foo {
 
 }
 
-[_init_a, _init_b] = babelHelpers.applyDecs(Foo, [[dec, 0, "a", function () {
+[_init_a, _init_b] = babelHelpers.applyDecs2203(Foo, [[dec, 0, "a", function () {
   return babelHelpers.classPrivateFieldGet(this, _a);
 }, function (value) {
   babelHelpers.classPrivateFieldSet(this, _a, value);

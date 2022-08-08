@@ -12,6 +12,6 @@ new (_temp = class extends babelHelpers.identity {
 }, (() => {
   class Foo {}
 
-  [_Foo, _initClass] = babelHelpers.applyDecs(Foo, [], [dec]);
+  [_Foo, _initClass] = babelHelpers.applyDecs2203(Foo, [], [dec]);
 })(), _temp)();
 const foo = new _Foo();

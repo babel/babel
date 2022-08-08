@@ -4,7 +4,7 @@ const dec = () => {};
 
 const Foo = (class Bar {
   static {
-    [_Bar, _initClass] = babelHelpers.applyDecs(this, [], [dec]);
+    [_Bar, _initClass] = babelHelpers.applyDecs2203(this, [], [dec]);
   }
   bar = new _Bar();
   static {
