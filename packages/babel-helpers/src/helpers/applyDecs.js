@@ -1,6 +1,11 @@
 /* @minVersion 7.17.8 */
 
 /**
+ * NOTE: This is an old version of the helper, used for 2021-12 decorators.
+ * Updates should be done in applyDecs2203.js.
+ */
+
+/**
   Enums are used in this file, but not assigned to vars to avoid non-hoistable values
 
   CONSTRUCTOR = 0;

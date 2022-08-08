@@ -7,7 +7,7 @@ import {
   FEATURES,
 } from "@babel/helper-create-class-features-plugin";
 import legacyVisitor from "./transformer-legacy";
-import transformer2021_12 from "./transformer-2021-12";
+import transformer2022_03 from "./transformer-2022-03";
 import type { Options as SyntaxOptions } from "@babel/plugin-syntax-decorators";
 
 interface Options extends SyntaxOptions {
@@ -37,8 +37,8 @@ export default declare((api, options: Options) => {
       inherits: syntaxDecorators,
       visitor: legacyVisitor,
     };
-  } else if (version === "2021-12") {
-    return transformer2021_12(api, options);
+  } else if (version === "2021-12" || version === "2022-03") {
+    return transformer2022_03(api, options, version);
   } else if (!process.env.BABEL_8_BREAKING) {
     return createClassFeaturePlugin({
       name: "proposal-decorators",
@@ -50,7 +50,7 @@ export default declare((api, options: Options) => {
     });
   } else {
     throw new Error(
-      "The '.version' option must be one of 'legacy' or '2021-12'",
+      "The '.version' option must be one of 'legacy', '2021-12' or '2022-03'.",
     );
   }
 });
