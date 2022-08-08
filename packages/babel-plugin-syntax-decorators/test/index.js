@@ -67,6 +67,15 @@ babel7describe("'decoratorsBeforeExport' option", function () {
     ).not.toThrow();
   });
 
+  test("is incompatible with 2022-03 decorators", function () {
+    expect(
+      makeParser("", { decoratorsBeforeExport: false, version: "2022-03" }),
+    ).toThrow();
+    expect(
+      makeParser("", { decoratorsBeforeExport: true, version: "2022-03" }),
+    ).toThrow();
+  });
+
   const BEFORE = "@dec export class Foo {}";
   const AFTER = "export @dec class Foo {}";
 

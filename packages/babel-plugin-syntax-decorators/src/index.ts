@@ -75,9 +75,9 @@ export default declare((api, options: Options) => {
         );
       }
     } else {
-      if (version === "legacy") {
+      if (version === "legacy" || version === "2022-03") {
         throw new Error(
-          "'decoratorsBeforeExport' can't be used with legacy decorators.",
+          `'decoratorsBeforeExport' can't be used with ${version} decorators.`,
         );
       }
       if (typeof decoratorsBeforeExport !== "boolean") {
@@ -105,11 +105,10 @@ export default declare((api, options: Options) => {
           parserOpts.plugins.push(
             [
               "decorators",
-              { decoratorsBeforeExport, allowCallParenthesized: false },
+              { decoratorsBeforeExport: false, allowCallParenthesized: false },
             ],
             "decoratorAutoAccessors",
           );
-          generatorOpts.decoratorsBeforeExport = decoratorsBeforeExport;
         } else if (version === "2021-12") {
           parserOpts.plugins.push(
             ["decorators", { decoratorsBeforeExport }],
