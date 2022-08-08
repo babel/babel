@@ -94,11 +94,23 @@ export default declare((api, options: Options) => {
         parserOpts.plugins.push("decorators-legacy");
       } else if (process.env.BABEL_8_BREAKING) {
         parserOpts.plugins.push(
-          ["decorators", { decoratorsBeforeExport: false }],
+          [
+            "decorators",
+            { decoratorsBeforeExport: false, allowCallParenthesized: false },
+          ],
           "decoratorAutoAccessors",
         );
       } else {
-        if (version === "2022-03" || version === "2021-12") {
+        if (version === "2022-03") {
+          parserOpts.plugins.push(
+            [
+              "decorators",
+              { decoratorsBeforeExport, allowCallParenthesized: false },
+            ],
+            "decoratorAutoAccessors",
+          );
+          generatorOpts.decoratorsBeforeExport = decoratorsBeforeExport;
+        } else if (version === "2021-12") {
           parserOpts.plugins.push(
             ["decorators", { decoratorsBeforeExport }],
             "decoratorAutoAccessors",

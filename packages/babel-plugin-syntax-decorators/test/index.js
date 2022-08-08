@@ -112,6 +112,13 @@ describe("'version' option", function () {
     ).toThrow();
   });
 
+  test("'2022-03' disallows @(...)()", function () {
+    expect(makeParser("@(foo)() class A {}", { version: "2022-03" })).toThrow();
+    expect(
+      makeParser("@(foo()) class A {}", { version: "2022-03" }),
+    ).not.toThrow();
+  });
+
   babel8("is required", function () {
     expect(makeParser("", {})).toThrow();
   });
