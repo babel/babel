@@ -27,6 +27,15 @@
       "./helpers/applyDecs.js"
     ],
     "./helpers/esm/applyDecs": "./helpers/esm/applyDecs.js",
+    "./helpers/applyDecs2203": [
+      {
+        "node": "./helpers/applyDecs2203.js",
+        "import": "./helpers/esm/applyDecs2203.js",
+        "default": "./helpers/applyDecs2203.js"
+      },
+      "./helpers/applyDecs2203.js"
+    ],
+    "./helpers/esm/applyDecs2203": "./helpers/esm/applyDecs2203.js",
     "./helpers/asyncIterator": [
       {
         "node": "./helpers/asyncIterator.js",
