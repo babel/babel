@@ -269,9 +269,6 @@ function assertValidReturnValue(kind, value) {
     if (value.init !== undefined) {
       assertCallable(value.init, "accessor.init");
     }
-    if (value.initializer !== undefined) {
-      assertCallable(value.initializer, "accessor.initializer");
-    }
   } else if (type !== "function") {
     var hint;
     if (kind === 0 /* FIELD */) {
@@ -283,18 +280,6 @@ function assertValidReturnValue(kind, value) {
     }
     throw new TypeError(hint + " decorators must return a function or void 0");
   }
-}
-
-function getInit(desc) {
-  var initializer;
-  if (
-    (initializer = desc.init) == null &&
-    (initializer = desc.initializer) &&
-    typeof console !== "undefined"
-  ) {
-    console.warn(".initializer has been renamed to .init as of March 2022");
-  }
-  return initializer;
 }
 
 function applyMemberDec(
@@ -310,7 +295,7 @@ function applyMemberDec(
 ) {
   var decs = decInfo[0];
 
-  var desc, initializer, value;
+  var desc, init, value;
 
   if (isPrivate) {
     if (kind === 0 /* FIELD */ || kind === 1 /* ACCESSOR */) {
@@ -367,9 +352,9 @@ function applyMemberDec(
       assertValidReturnValue(kind, newValue);
 
       if (kind === 0 /* FIELD */) {
-        initializer = newValue;
+        init = newValue;
       } else if (kind === 1 /* ACCESSOR */) {
-        initializer = getInit(newValue);
+        init = newValue.init;
         get = newValue.get || value.get;
         set = newValue.set || value.set;
 
@@ -401,7 +386,7 @@ function applyMemberDec(
         if (kind === 0 /* FIELD */) {
           newInit = newValue;
         } else if (kind === 1 /* ACCESSOR */) {
-          newInit = getInit(newValue);
+          newInit = newValue.init;
           get = newValue.get || value.get;
           set = newValue.set || value.set;
 
@@ -411,12 +396,12 @@ function applyMemberDec(
         }
 
         if (newInit !== void 0) {
-          if (initializer === void 0) {
-            initializer = newInit;
-          } else if (typeof initializer === "function") {
-            initializer = [initializer, newInit];
+          if (init === void 0) {
+            init = newInit;
+          } else if (typeof init === "function") {
+            init = [init, newInit];
           } else {
-            initializer.push(newInit);
+            init.push(newInit);
           }
         }
       }
@@ -424,15 +409,15 @@ function applyMemberDec(
   }
 
   if (kind === 0 /* FIELD */ || kind === 1 /* ACCESSOR */) {
-    if (initializer === void 0) {
+    if (init === void 0) {
       // If the initializer was void 0, sub in a dummy initializer
-      initializer = function (instance, init) {
+      init = function (instance, init) {
         return init;
       };
-    } else if (typeof initializer !== "function") {
-      var ownInitializers = initializer;
+    } else if (typeof init !== "function") {
+      var ownInitializers = init;
 
-      initializer = function (instance, init) {
+      init = function (instance, init) {
         var value = init;
 
         for (var i = 0; i < ownInitializers.length; i++) {
@@ -442,14 +427,14 @@ function applyMemberDec(
         return value;
       };
     } else {
-      var originalInitializer = initializer;
+      var originalInitializer = init;
 
-      initializer = function (instance, init) {
+      init = function (instance, init) {
         return originalInitializer.call(instance, init);
       };
     }
 
-    ret.push(initializer);
+    ret.push(init);
   }
 
   if (kind !== 0 /* FIELD */) {
