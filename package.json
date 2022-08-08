@@ -60,7 +60,7 @@
     "husky": "^7.0.4",
     "import-meta-resolve": "^1.1.1",
     "jest": "^28.0.3",
-    "jest-light-runner": "^0.2.1",
+    "jest-light-runner": "^0.3.0",
     "jest-worker": "^27.4.0",
     "lint-staged": "^13.0.3",
     "mergeiterator": "^1.4.4",
