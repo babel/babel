@@ -21,8 +21,13 @@ const bContext = Foo['bContext'];
 const cContext = Foo['cContext'];
 
 expect(Foo.a).toBe(2);
+expect(aContext.access.get.call(Foo)).toBe(2);
 Foo.a = 123;
 expect(Foo.a).toBe(123);
+expect(aContext.access.get.call(Foo)).toBe(123);
+aContext.access.set.call(Foo, 456);
+expect(Foo.a).toBe(456);
+expect(aContext.access.get.call(Foo)).toBe(456);
 expect(aContext.name).toBe('a');
 expect(aContext.kind).toBe('field');
 expect(aContext.static).toBe(true);

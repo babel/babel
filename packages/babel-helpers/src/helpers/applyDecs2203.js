@@ -182,36 +182,44 @@ function memberDec(
   if (isPrivate) {
     metadataKind = 2 /* PRIVATE */;
     metadataName = Symbol(name);
-
-    var access = {};
-
-    if (kind === 0 /* FIELD */) {
-      access.get = desc.get;
-      access.set = desc.set;
-    } else if (kind === 2 /* METHOD */) {
-      access.get = function () {
-        return desc.value;
-      };
-    } else {
-      // replace with values that will go through the final getter and setter
-      if (kind === 1 /* ACCESSOR */ || kind === 3 /* GETTER */) {
-        access.get = function () {
-          return desc.get.call(this);
-        };
-      }
-
-      if (kind === 1 /* ACCESSOR */ || kind === 4 /* SETTER */) {
-        access.set = function (v) {
-          desc.set.call(this, v);
-        };
-      }
-    }
-
-    ctx.access = access;
   } else {
     metadataKind = 1 /* PUBLIC */;
     metadataName = name;
   }
+
+  var get, set;
+  if (kind === 0 /* FIELD */) {
+    if (isPrivate) {
+      get = desc.get;
+      set = desc.set;
+    } else {
+      get = function () {
+        return this[name];
+      };
+      set = function (v) {
+        this[name] = v;
+      };
+    }
+  } else if (kind === 2 /* METHOD */) {
+    get = function () {
+      return desc.value;
+    };
+  } else {
+    // replace with values that will go through the final getter and setter
+    if (kind === 1 /* ACCESSOR */ || kind === 3 /* GETTER */) {
+      get = function () {
+        return desc.get.call(this);
+      };
+    }
+
+    if (kind === 1 /* ACCESSOR */ || kind === 4 /* SETTER */) {
+      set = function (v) {
+        desc.set.call(this, v);
+      };
+    }
+  }
+  ctx.access =
+    get && set ? { get: get, set: set } : get ? { get: get } : { set: set };
 
   try {
     return dec(

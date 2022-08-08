@@ -46,12 +46,23 @@ const b_setterContext = Foo['b_setterContext'];
 
 expect(Foo.a).toBe(2);
 expect(Foo.b).toBe(2);
+expect(a_getterContext.access.get.call(Foo)).toBe(2);
+expect(b_getterContext.access.get.call(Foo)).toBe(2);
 Foo.a = 123;
 expect(Foo.a).toBe(125);
 expect(Foo.b).toBe(125);
+expect(a_getterContext.access.get.call(Foo)).toBe(125);
+expect(b_getterContext.access.get.call(Foo)).toBe(125);
 Foo.b = 456;
 expect(Foo.a).toBe(458);
 expect(Foo.b).toBe(458);
+expect(a_getterContext.access.get.call(Foo)).toBe(458);
+expect(b_getterContext.access.get.call(Foo)).toBe(458);
+a_setterContext.access.set.call(Foo, 789);
+expect(Foo.a).toBe(791);
+expect(Foo.b).toBe(791);
+expect(a_getterContext.access.get.call(Foo)).toBe(791);
+expect(b_getterContext.access.get.call(Foo)).toBe(791);
 
 expect(a_getterContext.name).toBe('a');
 expect(a_getterContext.kind).toBe('getter');

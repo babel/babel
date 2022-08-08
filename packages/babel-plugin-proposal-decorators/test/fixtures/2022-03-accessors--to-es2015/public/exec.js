@@ -36,8 +36,13 @@ const bContext = foo['bContext'];
 const cContext = foo['cContext'];
 
 expect(foo.a).toBe(2);
+expect(aContext.access.get.call(foo)).toBe(2);
 foo.a = 123;
 expect(foo.a).toBe(125);
+expect(aContext.access.get.call(foo)).toBe(125);
+aContext.access.set.call(foo, 456);
+expect(foo.a).toBe(458);
+expect(aContext.access.get.call(foo)).toBe(458);
 expect(aContext.name).toBe('a');
 expect(aContext.kind).toBe('accessor');
 expect(aContext.static).toBe(false);
