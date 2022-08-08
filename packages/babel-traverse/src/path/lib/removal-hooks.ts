@@ -62,8 +62,7 @@ export const hooks = [
 
   function (self: NodePath, parent: NodePath) {
     if (
-      (parent.isIfStatement() &&
-        (self.key === "consequent" || self.key === "alternate")) ||
+      (parent.isIfStatement() && self.key === "consequent") ||
       (self.key === "body" &&
         (parent.isLoop() || parent.isArrowFunctionExpression()))
     ) {
