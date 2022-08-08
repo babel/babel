@@ -309,6 +309,11 @@ function _evaluate(path: NodePath, state: State): any {
         if (!state.confident) return;
 
         return left && right;
+      case "??":
+        state.confident = leftConfident && (left != null || rightConfident);
+        if (!state.confident) return;
+
+        return left ?? right;
     }
   }
 
