@@ -1,14 +1,13 @@
-import _loadConfigRunner, {
-  loadPartialConfig,
-  createConfigItem,
-} from "../lib/config/index.js";
+import {
+  loadOptionsSync,
+  loadPartialConfigSync,
+  createConfigItemSync,
+} from "../lib/index.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
 
 const require = createRequire(import.meta.url);
-
-const loadConfig = (_loadConfigRunner.default || _loadConfigRunner).sync;
 
 describe("@babel/core config loading", () => {
   const FILEPATH = path.join(
@@ -45,7 +44,7 @@ describe("@babel/core config loading", () => {
     };
   }
 
-  describe("createConfigItem", () => {
+  describe("createConfigItemSync", () => {
     // Windows uses different file paths
     const noWin = process.platform === "win32" ? it.skip : it;
 
@@ -54,7 +53,7 @@ describe("@babel/core config loading", () => {
         return {};
       }
 
-      expect(createConfigItem(myPlugin)).toEqual({
+      expect(createConfigItemSync(myPlugin)).toEqual({
         dirname: process.cwd(),
         file: undefined,
         name: undefined,
@@ -69,7 +68,7 @@ describe("@babel/core config loading", () => {
       }
 
       expect(
-        createConfigItem(myPlugin, { dirname: "/foo", type: "plugin" }),
+        createConfigItemSync(myPlugin, { dirname: "/foo", type: "plugin" }),
       ).toEqual({
         dirname: "/foo",
         file: undefined,
@@ -80,13 +79,13 @@ describe("@babel/core config loading", () => {
     });
   });
 
-  describe("loadPartialConfig", () => {
+  describe("loadPartialConfigSync", () => {
     it("should preserve disabled plugins in the partial config", () => {
       const plugin = function () {
         return {};
       };
 
-      const opts = loadPartialConfig({
+      const opts = loadPartialConfigSync({
         ...makeOpts(true),
         babelrc: false,
         configFile: false,
@@ -105,7 +104,7 @@ describe("@babel/core config loading", () => {
         return {};
       };
 
-      const opts = loadPartialConfig({
+      const opts = loadPartialConfigSync({
         ...makeOpts(true),
         babelrc: false,
         configFile: false,
@@ -128,7 +127,7 @@ describe("@babel/core config loading", () => {
         "nested",
       );
 
-      const { options } = await loadPartialConfig({
+      const { options } = await loadPartialConfigSync({
         cwd,
         filename: path.join(cwd, "file.js"),
         rootMode: "upward",
@@ -139,11 +138,11 @@ describe("@babel/core config loading", () => {
     });
   });
 
-  describe("config file", () => {
+  describe("loadOptionsSync", () => {
     it("should load and cache the config with plugins and presets", () => {
       const opts = makeOpts();
 
-      const options1 = loadConfig(opts).options;
+      const options1 = loadOptionsSync(opts);
       expect(options1.plugins.map(p => p.key)).toEqual([
         "plugin1",
         "plugin2",
@@ -153,7 +152,7 @@ describe("@babel/core config loading", () => {
         "plugin3",
       ]);
 
-      const options2 = loadConfig(opts).options;
+      const options2 = loadOptionsSync(opts);
       expect(options2.plugins.length).toBe(options1.plugins.length);
 
       for (let i = 0; i < options2.plugins.length; i++) {
@@ -162,7 +161,7 @@ describe("@babel/core config loading", () => {
     });
 
     it("should load and cache the config for unique opts objects", () => {
-      const options1 = loadConfig(makeOpts(true)).options;
+      const options1 = loadOptionsSync(makeOpts(true));
       expect(options1.plugins.map(p => p.key)).toEqual([
         "plugin1",
         "plugin2",
@@ -170,7 +169,7 @@ describe("@babel/core config loading", () => {
         "plugin3",
       ]);
 
-      const options2 = loadConfig(makeOpts(true)).options;
+      const options2 = loadOptionsSync(makeOpts(true));
       expect(options2.plugins.length).toBe(options1.plugins.length);
 
       for (let i = 0; i < options2.plugins.length; i++) {
@@ -181,11 +180,11 @@ describe("@babel/core config loading", () => {
     it("should invalidate config file plugins", () => {
       const opts = makeOpts();
 
-      const options1 = loadConfig(opts).options;
+      const options1 = loadOptionsSync(opts);
 
       process.env.INVALIDATE_PLUGIN1 = true;
 
-      const options2 = loadConfig(opts).options;
+      const options2 = loadOptionsSync(opts);
       expect(options2.plugins.length).toBe(options1.plugins.length);
 
       expect(options2.plugins[0]).not.toBe(options1.plugins[0]);
@@ -195,7 +194,7 @@ describe("@babel/core config loading", () => {
 
       process.env.INVALIDATE_PLUGIN3 = true;
 
-      const options3 = loadConfig(opts).options;
+      const options3 = loadOptionsSync(opts);
       expect(options3.plugins.length).toBe(options1.plugins.length);
       expect(options3.plugins.length).toBe(6);
       expect(options3.plugins[0]).not.toBe(options1.plugins[0]);
@@ -208,11 +207,11 @@ describe("@babel/core config loading", () => {
     it("should invalidate config file presets and their children", () => {
       const opts = makeOpts();
 
-      const options1 = loadConfig(opts).options;
+      const options1 = loadOptionsSync(opts);
 
       process.env.INVALIDATE_PRESET1 = true;
 
-      const options2 = loadConfig(opts).options;
+      const options2 = loadOptionsSync(opts);
       expect(options2.plugins.length).toBe(options1.plugins.length);
       expect(options2.plugins.length).toBe(6);
       expect(options2.plugins[5]).not.toBe(options1.plugins[5]);
@@ -222,7 +221,7 @@ describe("@babel/core config loading", () => {
 
       process.env.INVALIDATE_PRESET2 = true;
 
-      const options3 = loadConfig(opts).options;
+      const options3 = loadOptionsSync(opts);
       expect(options3.plugins.length).toBe(options1.plugins.length);
       expect(options3.plugins.length).toBe(6);
       expect(options3.plugins[4]).not.toBe(options1.plugins[4]);
@@ -235,11 +234,11 @@ describe("@babel/core config loading", () => {
     it("should invalidate the config file and its plugins/presets", () => {
       const opts = makeOpts();
 
-      const options1 = loadConfig(opts).options;
+      const options1 = loadOptionsSync(opts);
 
       process.env.INVALIDATE_BABELRC = true;
 
-      const options2 = loadConfig(opts).options;
+      const options2 = loadOptionsSync(opts);
       expect(options2.plugins.length).toBe(options1.plugins.length);
       expect(options2.plugins.length).toBe(6);
       expect(options2.plugins[0]).not.toBe(options1.plugins[0]);
@@ -256,9 +255,9 @@ describe("@babel/core config loading", () => {
     it("should not invalidate the plugins when given a fresh object", () => {
       const opts = makeOpts();
 
-      const options1 = loadConfig(opts).options;
+      const options1 = loadOptionsSync(opts);
 
-      const options2 = loadConfig(Object.assign({}, opts)).options;
+      const options2 = loadOptionsSync(Object.assign({}, opts));
       expect(options2.plugins.length).toBe(options1.plugins.length);
 
       for (let i = 0; i < options2.plugins.length; i++) {
@@ -269,12 +268,12 @@ describe("@babel/core config loading", () => {
     it("should not invalidate the plugins when given a fresh arrays", () => {
       const opts = makeOpts();
 
-      const options1 = loadConfig(opts).options;
+      const options1 = loadOptionsSync(opts);
 
-      const options2 = loadConfig({
+      const options2 = loadOptionsSync({
         ...opts,
         plugins: opts.plugins.slice(),
-      }).options;
+      });
       expect(options2.plugins.length).toBe(options1.plugins.length);
 
       for (let i = 0; i < options2.plugins.length; i++) {
@@ -285,12 +284,12 @@ describe("@babel/core config loading", () => {
     it("should not invalidate the presets when given a fresh arrays", () => {
       const opts = makeOpts();
 
-      const options1 = loadConfig(opts).options;
+      const options1 = loadOptionsSync(opts);
 
-      const options2 = loadConfig({
+      const options2 = loadOptionsSync({
         ...opts,
         presets: opts.presets.slice(),
-      }).options;
+      });
       expect(options2.plugins.length).toBe(options1.plugins.length);
 
       for (let i = 0; i < options2.plugins.length; i++) {
@@ -301,12 +300,12 @@ describe("@babel/core config loading", () => {
     it("should invalidate the plugins when given a fresh options", () => {
       const opts = makeOpts();
 
-      const options1 = loadConfig(opts).options;
+      const options1 = loadOptionsSync(opts);
 
-      const options2 = loadConfig({
+      const options2 = loadOptionsSync({
         ...opts,
         plugins: opts.plugins.map(([plg, opt]) => [plg, { ...opt }]),
-      }).options;
+      });
       expect(options2.plugins.length).toBe(options1.plugins.length);
       expect(options2.plugins.length).toBe(6);
 
@@ -322,12 +321,12 @@ describe("@babel/core config loading", () => {
     it("should invalidate the presets when given a fresh options", () => {
       const opts = makeOpts();
 
-      const options1 = loadConfig(opts).options;
+      const options1 = loadOptionsSync(opts);
 
-      const options2 = loadConfig({
+      const options2 = loadOptionsSync({
         ...opts,
         presets: opts.presets.map(([plg, opt]) => [plg, { ...opt }]),
-      }).options;
+      });
       expect(options2.plugins.length).toBe(options1.plugins.length);
       expect(options2.plugins.length).toBe(6);
 
@@ -343,11 +342,11 @@ describe("@babel/core config loading", () => {
     it("should invalidate the programmatic plugins", () => {
       const opts = makeOpts();
 
-      const options1 = loadConfig(opts).options;
+      const options1 = loadOptionsSync(opts);
 
       process.env.INVALIDATE_PLUGIN6 = true;
 
-      const options2 = loadConfig(opts).options;
+      const options2 = loadOptionsSync(opts);
       expect(options2.plugins.length).toBe(options1.plugins.length);
       expect(options2.plugins.length).toBe(6);
 
@@ -363,11 +362,11 @@ describe("@babel/core config loading", () => {
     it("should invalidate the programmatic presets and their children", () => {
       const opts = makeOpts();
 
-      const options1 = loadConfig(opts).options;
+      const options1 = loadOptionsSync(opts);
 
       process.env.INVALIDATE_PRESET3 = true;
 
-      const options2 = loadConfig(opts).options;
+      const options2 = loadOptionsSync(opts);
       expect(options2.plugins.length).toBe(options1.plugins.length);
       expect(options2.plugins.length).toBe(6);
 
@@ -390,7 +389,7 @@ describe("@babel/core config loading", () => {
         plugins: [fooPlugin],
       };
 
-      expect(() => loadConfig(opts)).toThrow(
+      expect(() => loadOptionsSync(opts)).toThrow(
         /\.inherits must be a function, or undefined/,
       );
     });
@@ -407,7 +406,7 @@ describe("@babel/core config loading", () => {
         plugins: [fooPlugin],
       };
 
-      expect(() => loadConfig(opts)).toThrow(
+      expect(() => loadOptionsSync(opts)).toThrow(
         /\.visitor cannot contain catch-all "enter" or "exit" handlers\. Please target individual nodes\./,
       );
     });
@@ -415,29 +414,29 @@ describe("@babel/core config loading", () => {
 
   describe("caller metadata", () => {
     it("should pass caller data through", () => {
-      const options1 = loadConfig({
+      const options1 = loadOptionsSync({
         ...makeOpts(),
         caller: {
           name: "babel-test",
           someFlag: true,
         },
-      }).options;
+      });
 
       expect(options1.caller.name).toBe("babel-test");
       expect(options1.caller.someFlag).toBe(true);
     });
 
     it("should pass unknown caller data through", () => {
-      const options1 = loadConfig({
+      const options1 = loadOptionsSync({
         ...makeOpts(),
         caller: undefined,
-      }).options;
+      });
 
       expect(options1.caller).toBeUndefined();
     });
 
     it("should pass caller data to test functions", () => {
-      const options1 = loadConfig({
+      const options1 = loadOptionsSync({
         ...makeOpts(),
         caller: {
           name: "babel-test",
@@ -453,7 +452,7 @@ describe("@babel/core config loading", () => {
             ast: false,
           },
         ],
-      }).options;
+      });
 
       expect(options1.comments).toBe(false);
       expect(options1.ast).not.toBe(false);
