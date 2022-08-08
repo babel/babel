@@ -37,5 +37,3 @@ expect(aContext.kind).toBe('method');
 expect(aContext.static).toBe(false);
 expect(aContext.private).toBe(true);
 expect(typeof aContext.addInitializer).toBe('function');
-expect(typeof aContext.setMetadata).toBe('function');
-expect(typeof aContext.getMetadata).toBe('function');

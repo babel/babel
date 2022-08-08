@@ -18,111 +18,6 @@
   CLASS = 10; // only used in assertValidReturnValue
 */
 
-function createMetadataMethodsForProperty(
-  metadataMap,
-  kind,
-  property,
-  decoratorFinishedRef
-) {
-  return {
-    getMetadata: function (key) {
-      assertNotFinished(decoratorFinishedRef, "getMetadata");
-      assertMetadataKey(key);
-
-      var metadataForKey = metadataMap[key];
-
-      if (metadataForKey === void 0) return void 0;
-
-      if (kind === 1 /* PUBLIC */) {
-        var pub = metadataForKey.public;
-        if (pub !== void 0) {
-          return pub[property];
-        }
-      } else if (kind === 2 /* PRIVATE */) {
-        var priv = metadataForKey.private;
-        if (priv !== void 0) {
-          return priv.get(property);
-        }
-      } else if (Object.hasOwnProperty.call(metadataForKey, "constructor")) {
-        return metadataForKey.constructor;
-      }
-    },
-    setMetadata: function (key, value) {
-      assertNotFinished(decoratorFinishedRef, "setMetadata");
-      assertMetadataKey(key);
-
-      var metadataForKey = metadataMap[key];
-
-      if (metadataForKey === void 0) {
-        metadataForKey = metadataMap[key] = {};
-      }
-
-      if (kind === 1 /* PUBLIC */) {
-        var pub = metadataForKey.public;
-
-        if (pub === void 0) {
-          pub = metadataForKey.public = {};
-        }
-
-        pub[property] = value;
-      } else if (kind === 2 /* PRIVATE */) {
-        var priv = metadataForKey.priv;
-
-        if (priv === void 0) {
-          priv = metadataForKey.private = new Map();
-        }
-
-        priv.set(property, value);
-      } else {
-        metadataForKey.constructor = value;
-      }
-    },
-  };
-}
-
-function convertMetadataMapToFinal(obj, metadataMap) {
-  var parentMetadataMap = obj[Symbol.metadata || Symbol.for("Symbol.metadata")];
-  var metadataKeys = Object.getOwnPropertySymbols(metadataMap);
-
-  if (metadataKeys.length === 0) return;
-
-  for (var i = 0; i < metadataKeys.length; i++) {
-    var key = metadataKeys[i];
-    var metaForKey = metadataMap[key];
-    var parentMetaForKey = parentMetadataMap ? parentMetadataMap[key] : null;
-
-    var pub = metaForKey.public;
-    var parentPub = parentMetaForKey ? parentMetaForKey.public : null;
-
-    if (pub && parentPub) {
-      Object.setPrototypeOf(pub, parentPub);
-    }
-
-    var priv = metaForKey.private;
-
-    if (priv) {
-      var privArr = Array.from(priv.values());
-      var parentPriv = parentMetaForKey ? parentMetaForKey.private : null;
-
-      if (parentPriv) {
-        privArr = privArr.concat(parentPriv);
-      }
-
-      metaForKey.private = privArr;
-    }
-
-    if (parentMetaForKey) {
-      Object.setPrototypeOf(metaForKey, parentMetaForKey);
-    }
-  }
-
-  if (parentMetadataMap) {
-    Object.setPrototypeOf(metadataMap, parentMetadataMap);
-  }
-
-  obj[Symbol.metadata || Symbol.for("Symbol.metadata")] = metadataMap;
-}
-
 function createAddInitializerMethod(initializers, decoratorFinishedRef) {
   return function addInitializer(initializer) {
     assertNotFinished(decoratorFinishedRef, "addInitializer");
@@ -135,7 +30,6 @@ function memberDec(
   dec,
   name,
   desc,
-  metadataMap,
   initializers,
   kind,
   isStatic,
@@ -177,16 +71,6 @@ function memberDec(
     );
   }
 
-  var metadataKind, metadataName;
-
-  if (isPrivate) {
-    metadataKind = 2 /* PRIVATE */;
-    metadataName = Symbol(name);
-  } else {
-    metadataKind = 1 /* PUBLIC */;
-    metadataName = name;
-  }
-
   var get, set;
   if (kind === 0 /* FIELD */) {
     if (isPrivate) {
@@ -222,18 +106,7 @@ function memberDec(
     get && set ? { get: get, set: set } : get ? { get: get } : { set: set };
 
   try {
-    return dec(
-      value,
-      Object.assign(
-        ctx,
-        createMetadataMethodsForProperty(
-          metadataMap,
-          metadataKind,
-          metadataName,
-          decoratorFinishedRef
-        )
-      )
-    );
+    return dec(value, ctx);
   } finally {
     decoratorFinishedRef.v = true;
   }
@@ -244,12 +117,6 @@ function assertNotFinished(decoratorFinishedRef, fnName) {
     throw new Error(
       "attempted to call " + fnName + " after decoration was finished"
     );
-  }
-}
-
-function assertMetadataKey(key) {
-  if (typeof key !== "symbol") {
-    throw new TypeError("Metadata keys must be symbols, received: " + key);
   }
 }
 
@@ -298,7 +165,6 @@ function applyMemberDec(
   kind,
   isStatic,
   isPrivate,
-  metadataMap,
   initializers
 ) {
   var decs = decInfo[0];
@@ -348,7 +214,6 @@ function applyMemberDec(
       decs,
       name,
       desc,
-      metadataMap,
       initializers,
       kind,
       isStatic,
@@ -379,7 +244,6 @@ function applyMemberDec(
         dec,
         name,
         desc,
-        metadataMap,
         initializers,
         kind,
         isStatic,
@@ -478,13 +342,7 @@ function applyMemberDec(
   }
 }
 
-function applyMemberDecs(
-  ret,
-  Class,
-  protoMetadataMap,
-  staticMetadataMap,
-  decInfos
-) {
+function applyMemberDecs(ret, Class, decInfos) {
   var protoInitializers;
   var staticInitializers;
 
@@ -503,12 +361,10 @@ function applyMemberDecs(
 
     var isStatic = kind >= 5; /* STATIC */
     var base;
-    var metadataMap;
     var initializers;
 
     if (isStatic) {
       base = Class;
-      metadataMap = staticMetadataMap;
       kind = kind - 5 /* STATIC */;
       // initialize staticInitializers when we see a non-field static member
       if (kind !== 0 /* FIELD */) {
@@ -517,7 +373,6 @@ function applyMemberDecs(
       }
     } else {
       base = Class.prototype;
-      metadataMap = protoMetadataMap;
       // initialize protoInitializers when we see a non-field member
       if (kind !== 0 /* FIELD */) {
         protoInitializers = protoInitializers || [];
@@ -556,7 +411,6 @@ function applyMemberDecs(
       kind,
       isStatic,
       isPrivate,
-      metadataMap,
       initializers
     );
   }
@@ -576,7 +430,7 @@ function pushInitializers(ret, initializers) {
   }
 }
 
-function applyClassDecs(ret, targetClass, metadataMap, classDecs) {
+function applyClassDecs(ret, targetClass, classDecs) {
   if (classDecs.length > 0) {
     var initializers = [];
     var newClass = targetClass;
@@ -586,23 +440,14 @@ function applyClassDecs(ret, targetClass, metadataMap, classDecs) {
       var decoratorFinishedRef = { v: false };
 
       try {
-        var ctx = Object.assign(
-          {
-            kind: "class",
-            name: name,
-            addInitializer: createAddInitializerMethod(
-              initializers,
-              decoratorFinishedRef
-            ),
-          },
-          createMetadataMethodsForProperty(
-            metadataMap,
-            0 /* CONSTRUCTOR */,
-            name,
+        var nextNewClass = classDecs[i](newClass, {
+          kind: "class",
+          name: name,
+          addInitializer: createAddInitializerMethod(
+            initializers,
             decoratorFinishedRef
-          )
-        );
-        var nextNewClass = classDecs[i](newClass, ctx);
+          ),
+        });
       } finally {
         decoratorFinishedRef.v = true;
       }
@@ -768,23 +613,7 @@ function applyClassDecs(ret, targetClass, metadataMap, classDecs) {
  */
 export default function applyDecs2203(targetClass, memberDecs, classDecs) {
   var ret = [];
-  var staticMetadataMap = {};
-
-  var protoMetadataMap = {};
-
-  applyMemberDecs(
-    ret,
-    targetClass,
-    protoMetadataMap,
-    staticMetadataMap,
-    memberDecs
-  );
-
-  convertMetadataMapToFinal(targetClass.prototype, protoMetadataMap);
-
-  applyClassDecs(ret, targetClass, staticMetadataMap, classDecs);
-
-  convertMetadataMapToFinal(targetClass, staticMetadataMap);
-
+  applyMemberDecs(ret, targetClass, memberDecs);
+  applyClassDecs(ret, targetClass, classDecs);
   return ret;
 }

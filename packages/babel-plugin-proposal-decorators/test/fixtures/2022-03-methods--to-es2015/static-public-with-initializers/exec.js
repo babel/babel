@@ -40,13 +40,9 @@ expect(aContext.kind).toBe('method');
 expect(aContext.static).toBe(true);
 expect(aContext.private).toBe(false);
 expect(typeof aContext.addInitializer).toBe('function');
-expect(typeof aContext.setMetadata).toBe('function');
-expect(typeof aContext.getMetadata).toBe('function');
 
 expect(bContext.name).toBe('b');
 expect(bContext.kind).toBe('method');
 expect(bContext.static).toBe(true);
 expect(bContext.private).toBe(false);
 expect(typeof bContext.addInitializer).toBe('function');
-expect(typeof bContext.setMetadata).toBe('function');
-expect(typeof bContext.getMetadata).toBe('function');

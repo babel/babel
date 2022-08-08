@@ -48,8 +48,6 @@ expect(aContext.kind).toBe('accessor');
 expect(aContext.static).toBe(false);
 expect(aContext.private).toBe(false);
 expect(typeof aContext.addInitializer).toBe('function');
-expect(typeof aContext.setMetadata).toBe('function');
-expect(typeof aContext.getMetadata).toBe('function');
 expect(foo.hasOwnProperty('a')).toBe(false);
 expect(Foo.prototype.hasOwnProperty('a')).toBe(true);
 
@@ -61,8 +59,6 @@ expect(bContext.kind).toBe('accessor');
 expect(bContext.static).toBe(false);
 expect(bContext.private).toBe(false);
 expect(typeof bContext.addInitializer).toBe('function');
-expect(typeof bContext.setMetadata).toBe('function');
-expect(typeof bContext.getMetadata).toBe('function');
 expect(foo.hasOwnProperty('b')).toBe(false);
 expect(Foo.prototype.hasOwnProperty('b')).toBe(true);
 
@@ -74,7 +70,5 @@ expect(cContext.kind).toBe('accessor');
 expect(cContext.static).toBe(false);
 expect(cContext.private).toBe(false);
 expect(typeof cContext.addInitializer).toBe('function');
-expect(typeof cContext.setMetadata).toBe('function');
-expect(typeof cContext.getMetadata).toBe('function');
 expect(foo.hasOwnProperty('c')).toBe(false);
 expect(Foo.prototype.hasOwnProperty('c')).toBe(true);
