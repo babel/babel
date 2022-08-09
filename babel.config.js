@@ -132,7 +132,6 @@ module.exports = function (api) {
       break;
     case "development":
       envOpts.debug = true;
-
       targets = { node: "current" };
       dynamicESLintVersionCheck = true;
       break;
