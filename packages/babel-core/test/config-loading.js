@@ -1,5 +1,6 @@
 import {
   loadOptionsSync,
+  loadOptionsAsync,
   loadPartialConfigSync,
   createConfigItemSync,
 } from "../lib/index.js";
@@ -248,6 +249,31 @@ describe("@babel/core config loading", () => {
 
       expect(options2.plugins[2]).toBe(options1.plugins[2]);
       expect(options2.plugins[3]).toBe(options1.plugins[3]);
+    });
+  });
+
+  describe("loadOptionsAsync", () => {
+    it("should load and cache the config with plugins and presets when executed in parallel", async () => {
+      const opts = makeOpts();
+
+      const [options1, options2] = await Promise.all([
+        loadOptionsAsync(opts),
+        loadOptionsAsync(opts),
+      ]);
+      expect(options1.plugins.map(p => p.key)).toEqual([
+        "plugin1",
+        "plugin2",
+        "plugin6",
+        "plugin5",
+        "plugin4",
+        "plugin3",
+      ]);
+
+      expect(options2.plugins.length).toBe(options1.plugins.length);
+
+      for (let i = 0; i < options2.plugins.length; i++) {
+        expect(options2.plugins[i]).toBe(options1.plugins[i]);
+      }
     });
   });
 
