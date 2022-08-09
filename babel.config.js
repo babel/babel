@@ -3,7 +3,6 @@
 const pathUtils = require("path");
 const fs = require("fs");
 const { parseSync } = require("@babel/core");
-const semver = require("semver");
 
 function normalize(src) {
   return src.replace(/\//, pathUtils.sep);
@@ -132,14 +131,7 @@ module.exports = function (api) {
       dynamicESLintVersionCheck = true;
       break;
     case "development":
-      // Otherwise, tens of thousands of lines of logs will be output.
-      if (semver.gte(process.version, "16.0.0")) {
-        envOpts.debug = true;
-      } else {
-        console.warn(
-          `Disabling debug mode for @babel/env on node ${process.version}, because it will cause a lot of logs.`
-        );
-      }
+      envOpts.debug = true;
 
       targets = { node: "current" };
       dynamicESLintVersionCheck = true;
