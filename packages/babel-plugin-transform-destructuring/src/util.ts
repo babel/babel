@@ -617,7 +617,7 @@ export function convertVariableDeclaration(
     }
   }
 
-  const mustVarOrExpr = t.isForStatement(path.parent) && path.key !== "body";
+  const inForInit = t.isForStatement(path.parent, { init: node });
 
   let tail: t.VariableDeclaration | null = null;
   const nodesOut = [];
