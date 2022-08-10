@@ -133,22 +133,26 @@ export function createUncachedDescriptors(
     options: optionsWithResolvedBrowserslistConfigFile(options, dirname),
     *plugins() {
       if (!plugins) {
-        plugins = yield* createPluginDescriptors(
+        const _plugins = yield* createPluginDescriptors(
           options.plugins || [],
           dirname,
           alias,
         );
+        // check plugins again to avoid race conditions
+        plugins ??= _plugins;
       }
       return plugins;
     },
     *presets() {
       if (!presets) {
-        presets = yield* createPresetDescriptors(
+        const _presets = yield* createPresetDescriptors(
           options.presets || [],
           dirname,
           alias,
           !!options.passPerPreset,
         );
+        // check presets again to avoid race conditions
+        presets ??= _presets;
       }
       return presets;
     },
