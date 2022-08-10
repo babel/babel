@@ -640,9 +640,7 @@ export function convertVariableDeclaration(
       node.loc = nodeLoc;
     }
     nodesOut.push(
-      node.type === "ExpressionStatement" && mustVarOrExpr
-        ? node.expression
-        : node,
+      inForInit && node.type === "ExpressionStatement" ? node.expression : node,
     );
   }
 

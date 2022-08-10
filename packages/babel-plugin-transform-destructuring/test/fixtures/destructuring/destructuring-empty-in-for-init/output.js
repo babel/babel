@@ -1,4 +1,4 @@
-for (var x in a) {
+for (var x in y) {
   for (babelHelpers.objectDestructuringEmpty(x);;) {
     ;
   }
