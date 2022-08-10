@@ -327,7 +327,6 @@ export class DestructuringTransformer {
         }
       }
     }
-    //
 
     for (let i = 0; i < pattern.properties.length; i++) {
       const prop = pattern.properties[i];
@@ -484,8 +483,6 @@ export class DestructuringTransformer {
       }
     }
 
-    //
-
     this.push(pattern, ref);
 
     return this.nodes;
@@ -620,6 +617,8 @@ export function convertVariableDeclaration(
     }
   }
 
+  const inForInit = t.isForStatement(path.parent, { init: node });
+
   let tail: t.VariableDeclaration | null = null;
   const nodesOut = [];
   for (const node of nodes) {
@@ -640,7 +639,9 @@ export function convertVariableDeclaration(
     if (!node.loc) {
       node.loc = nodeLoc;
     }
-    nodesOut.push(node);
+    nodesOut.push(
+      inForInit && node.type === "ExpressionStatement" ? node.expression : node,
+    );
   }
 
   if (nodesOut.length === 1) {
