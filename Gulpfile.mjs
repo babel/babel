@@ -20,10 +20,10 @@ import rollupDts from "rollup-plugin-dts";
 import { Worker as JestWorker } from "jest-worker";
 import glob from "glob";
 import { resolve as importMetaResolve } from "import-meta-resolve";
-import { log } from "./utils.js";
 
 import rollupBabelSource from "./scripts/rollup-plugin-babel-source.js";
 import formatCode from "./scripts/utils/formatCode.js";
+import { log } from "./scripts/utils/logger.cjs";
 
 let USE_ESM = false;
 try {

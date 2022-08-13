@@ -1,7 +1,7 @@
 const { transformSync } = require("@babel/core");
 const { mkdirSync, statSync, readFileSync, writeFileSync } = require("fs");
 const { dirname } = require("path");
-const { log } = require("./utils.js");
+const { log } = require("./scripts/utils/logger.cjs");
 
 let chalk;
 const chalkP = import("chalk").then(ns => {
