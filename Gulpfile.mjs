@@ -6,7 +6,6 @@ import { fileURLToPath } from "url";
 import plumber from "gulp-plumber";
 import through from "through2";
 import chalk from "chalk";
-import fancyLog from "fancy-log";
 import filter from "gulp-filter";
 import gulp from "gulp";
 import { rollup } from "rollup";
@@ -24,6 +23,7 @@ import { resolve as importMetaResolve } from "import-meta-resolve";
 
 import rollupBabelSource from "./scripts/rollup-plugin-babel-source.js";
 import formatCode from "./scripts/utils/formatCode.js";
+import { log } from "./scripts/utils/logger.cjs";
 
 let USE_ESM = false;
 try {
@@ -86,7 +86,7 @@ function getIndexFromPackage(name) {
 function errorsLogger() {
   return plumber({
     errorHandler(err) {
-      fancyLog(err.stack);
+      log(err.stack);
     },
   });
 }
@@ -116,7 +116,7 @@ function generateHelpers(generator, dest, filename, message) {
         file.contents = Buffer.from(
           formatCode(await generateCode(filename), dest + file.path)
         );
-        fancyLog(`${chalk.green("✔")} Generated ${message}`);
+        log(`${chalk.green("✔")} Generated ${message}`);
         callback(null, file);
       })
     )
@@ -176,7 +176,7 @@ function generateStandalone() {
     .src(babelStandalonePluginConfigGlob, { base: monorepoRoot })
     .pipe(
       through.obj((file, enc, callback) => {
-        fancyLog("Generating @babel/standalone files");
+        log("Generating @babel/standalone files");
         const pluginConfig = JSON.parse(file.contents);
         let imports = "";
         let list = "";
@@ -307,7 +307,7 @@ function buildRollup(packages, targetBrowsers) {
         );
 
         const input = getIndexFromPackage(src);
-        fancyLog(`Compiling '${chalk.cyan(input)}' with rollup ...`);
+        log(`Compiling '${chalk.cyan(input)}' with rollup ...`);
         const bundle = await rollup({
           input,
           external,
@@ -413,7 +413,7 @@ function buildRollup(packages, targetBrowsers) {
         });
 
         if (!process.env.IS_PUBLISH) {
-          fancyLog(
+          log(
             chalk.yellow(
               `Skipped minification of '${chalk.cyan(
                 outputFile
@@ -422,7 +422,7 @@ function buildRollup(packages, targetBrowsers) {
           );
           return undefined;
         }
-        fancyLog(`Minifying '${chalk.cyan(outputFile)}'...`);
+        log(`Minifying '${chalk.cyan(outputFile)}'...`);
 
         await bundle.write({
           file: outputFile.replace(/\.js$/, ".min.js"),
@@ -451,7 +451,7 @@ function buildRollupDts(packages) {
     packages.map(async packageName => {
       const input = `${mapToDts(packageName)}/src/index.d.ts`;
       const output = `${packageName}/lib/index.d.ts`;
-      fancyLog(`Bundling '${chalk.cyan(output)}' with rollup ...`);
+      log(`Bundling '${chalk.cyan(output)}' with rollup ...`);
 
       const bundle = await rollup({
         input,
@@ -514,7 +514,7 @@ const standaloneBundle = [
 ];
 
 gulp.task("generate-type-helpers", () => {
-  fancyLog("Generating @babel/types and @babel/traverse dynamic functions");
+  log("Generating @babel/types and @babel/traverse dynamic functions");
 
   return Promise.all([
     generateTypeHelpers("asserts"),
@@ -529,7 +529,7 @@ gulp.task("generate-type-helpers", () => {
 });
 
 gulp.task("generate-runtime-helpers", () => {
-  fancyLog("Generating @babel/helpers runtime helpers");
+  log("Generating @babel/helpers runtime helpers");
 
   return generateRuntimeHelpers();
 });
@@ -597,7 +597,7 @@ ${fs.readFileSync(path.join(path.dirname(input), "license"), "utf8")}*/
 
 gulp.task("build-cjs-bundles", () => {
   if (!USE_ESM) {
-    fancyLog(
+    log(
       chalk.yellow(
         "Skipping CJS-compat bundles for ESM-based builds, because not compiling to ESM"
       )
