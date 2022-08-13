@@ -18,7 +18,7 @@
   CLASS = 10; // only used in assertValidReturnValue
 */
 
-function createMetadataMethodsForProperty(
+function old_createMetadataMethodsForProperty(
   metadataMap,
   kind,
   property,
@@ -26,8 +26,8 @@ function createMetadataMethodsForProperty(
 ) {
   return {
     getMetadata: function (key) {
-      assertNotFinished(decoratorFinishedRef, "getMetadata");
-      assertMetadataKey(key);
+      old_assertNotFinished(decoratorFinishedRef, "getMetadata");
+      old_assertMetadataKey(key);
 
       var metadataForKey = metadataMap[key];
 
@@ -48,8 +48,8 @@ function createMetadataMethodsForProperty(
       }
     },
     setMetadata: function (key, value) {
-      assertNotFinished(decoratorFinishedRef, "setMetadata");
-      assertMetadataKey(key);
+      old_assertNotFinished(decoratorFinishedRef, "setMetadata");
+      old_assertMetadataKey(key);
 
       var metadataForKey = metadataMap[key];
 
@@ -80,7 +80,7 @@ function createMetadataMethodsForProperty(
   };
 }
 
-function convertMetadataMapToFinal(obj, metadataMap) {
+function old_convertMetadataMapToFinal(obj, metadataMap) {
   var parentMetadataMap = obj[Symbol.metadata || Symbol.for("Symbol.metadata")];
   var metadataKeys = Object.getOwnPropertySymbols(metadataMap);
 
@@ -123,15 +123,15 @@ function convertMetadataMapToFinal(obj, metadataMap) {
   obj[Symbol.metadata || Symbol.for("Symbol.metadata")] = metadataMap;
 }
 
-function createAddInitializerMethod(initializers, decoratorFinishedRef) {
+function old_createAddInitializerMethod(initializers, decoratorFinishedRef) {
   return function addInitializer(initializer) {
-    assertNotFinished(decoratorFinishedRef, "addInitializer");
-    assertCallable(initializer, "An initializer");
+    old_assertNotFinished(decoratorFinishedRef, "addInitializer");
+    old_assertCallable(initializer, "An initializer");
     initializers.push(initializer);
   };
 }
 
-function memberDec(
+function old_memberDec(
   dec,
   name,
   desc,
@@ -171,7 +171,7 @@ function memberDec(
   var decoratorFinishedRef = { v: false };
 
   if (kind !== 0 /* FIELD */) {
-    ctx.addInitializer = createAddInitializerMethod(
+    ctx.addInitializer = old_createAddInitializerMethod(
       initializers,
       decoratorFinishedRef
     );
@@ -218,7 +218,7 @@ function memberDec(
       value,
       Object.assign(
         ctx,
-        createMetadataMethodsForProperty(
+        old_createMetadataMethodsForProperty(
           metadataMap,
           metadataKind,
           metadataName,
@@ -231,7 +231,7 @@ function memberDec(
   }
 }
 
-function assertNotFinished(decoratorFinishedRef, fnName) {
+function old_assertNotFinished(decoratorFinishedRef, fnName) {
   if (decoratorFinishedRef.v) {
     throw new Error(
       "attempted to call " + fnName + " after decoration was finished"
@@ -239,19 +239,19 @@ function assertNotFinished(decoratorFinishedRef, fnName) {
   }
 }
 
-function assertMetadataKey(key) {
+function old_assertMetadataKey(key) {
   if (typeof key !== "symbol") {
     throw new TypeError("Metadata keys must be symbols, received: " + key);
   }
 }
 
-function assertCallable(fn, hint) {
+function old_assertCallable(fn, hint) {
   if (typeof fn !== "function") {
     throw new TypeError(hint + " must be a function");
   }
 }
 
-function assertValidReturnValue(kind, value) {
+function old_assertValidReturnValue(kind, value) {
   var type = typeof value;
 
   if (kind === 1 /* ACCESSOR */) {
@@ -261,16 +261,16 @@ function assertValidReturnValue(kind, value) {
       );
     }
     if (value.get !== undefined) {
-      assertCallable(value.get, "accessor.get");
+      old_assertCallable(value.get, "accessor.get");
     }
     if (value.set !== undefined) {
-      assertCallable(value.set, "accessor.set");
+      old_assertCallable(value.set, "accessor.set");
     }
     if (value.init !== undefined) {
-      assertCallable(value.init, "accessor.init");
+      old_assertCallable(value.init, "accessor.init");
     }
     if (value.initializer !== undefined) {
-      assertCallable(value.initializer, "accessor.initializer");
+      old_assertCallable(value.initializer, "accessor.initializer");
     }
   } else if (type !== "function") {
     var hint;
@@ -285,7 +285,7 @@ function assertValidReturnValue(kind, value) {
   }
 }
 
-function getInit(desc) {
+function old_getInit(desc) {
   var initializer;
   if (
     (initializer = desc.init) == null &&
@@ -297,7 +297,7 @@ function getInit(desc) {
   return initializer;
 }
 
-function applyMemberDec(
+function old_applyMemberDec(
   ret,
   base,
   decInfo,
@@ -351,7 +351,7 @@ function applyMemberDec(
   var newValue, get, set;
 
   if (typeof decs === "function") {
-    newValue = memberDec(
+    newValue = old_memberDec(
       decs,
       name,
       desc,
@@ -364,12 +364,12 @@ function applyMemberDec(
     );
 
     if (newValue !== void 0) {
-      assertValidReturnValue(kind, newValue);
+      old_assertValidReturnValue(kind, newValue);
 
       if (kind === 0 /* FIELD */) {
         initializer = newValue;
       } else if (kind === 1 /* ACCESSOR */) {
-        initializer = getInit(newValue);
+        initializer = old_getInit(newValue);
         get = newValue.get || value.get;
         set = newValue.set || value.set;
 
@@ -382,7 +382,7 @@ function applyMemberDec(
     for (var i = decs.length - 1; i >= 0; i--) {
       var dec = decs[i];
 
-      newValue = memberDec(
+      newValue = old_memberDec(
         dec,
         name,
         desc,
@@ -395,13 +395,13 @@ function applyMemberDec(
       );
 
       if (newValue !== void 0) {
-        assertValidReturnValue(kind, newValue);
+        old_assertValidReturnValue(kind, newValue);
         var newInit;
 
         if (kind === 0 /* FIELD */) {
           newInit = newValue;
         } else if (kind === 1 /* ACCESSOR */) {
-          newInit = getInit(newValue);
+          newInit = old_getInit(newValue);
           get = newValue.get || value.get;
           set = newValue.set || value.set;
 
@@ -485,7 +485,7 @@ function applyMemberDec(
   }
 }
 
-function applyMemberDecs(
+function old_applyMemberDecs(
   ret,
   Class,
   protoMetadataMap,
@@ -555,7 +555,7 @@ function applyMemberDecs(
       }
     }
 
-    applyMemberDec(
+    old_applyMemberDec(
       ret,
       base,
       decInfo,
@@ -568,11 +568,11 @@ function applyMemberDecs(
     );
   }
 
-  pushInitializers(ret, protoInitializers);
-  pushInitializers(ret, staticInitializers);
+  old_pushInitializers(ret, protoInitializers);
+  old_pushInitializers(ret, staticInitializers);
 }
 
-function pushInitializers(ret, initializers) {
+function old_pushInitializers(ret, initializers) {
   if (initializers) {
     ret.push(function (instance) {
       for (var i = 0; i < initializers.length; i++) {
@@ -583,7 +583,7 @@ function pushInitializers(ret, initializers) {
   }
 }
 
-function applyClassDecs(ret, targetClass, metadataMap, classDecs) {
+function old_applyClassDecs(ret, targetClass, metadataMap, classDecs) {
   if (classDecs.length > 0) {
     var initializers = [];
     var newClass = targetClass;
@@ -597,12 +597,12 @@ function applyClassDecs(ret, targetClass, metadataMap, classDecs) {
           {
             kind: "class",
             name: name,
-            addInitializer: createAddInitializerMethod(
+            addInitializer: old_createAddInitializerMethod(
               initializers,
               decoratorFinishedRef
             ),
           },
-          createMetadataMethodsForProperty(
+          old_createMetadataMethodsForProperty(
             metadataMap,
             0 /* CONSTRUCTOR */,
             name,
@@ -615,7 +615,7 @@ function applyClassDecs(ret, targetClass, metadataMap, classDecs) {
       }
 
       if (nextNewClass !== undefined) {
-        assertValidReturnValue(10 /* CLASS */, nextNewClass);
+        old_assertValidReturnValue(10 /* CLASS */, nextNewClass);
         newClass = nextNewClass;
       }
     }
@@ -779,7 +779,7 @@ export default function applyDecs(targetClass, memberDecs, classDecs) {
 
   var protoMetadataMap = {};
 
-  applyMemberDecs(
+  old_applyMemberDecs(
     ret,
     targetClass,
     protoMetadataMap,
@@ -787,11 +787,11 @@ export default function applyDecs(targetClass, memberDecs, classDecs) {
     memberDecs
   );
 
-  convertMetadataMapToFinal(targetClass.prototype, protoMetadataMap);
+  old_convertMetadataMapToFinal(targetClass.prototype, protoMetadataMap);
 
-  applyClassDecs(ret, targetClass, staticMetadataMap, classDecs);
+  old_applyClassDecs(ret, targetClass, staticMetadataMap, classDecs);
 
-  convertMetadataMapToFinal(targetClass, staticMetadataMap);
+  old_convertMetadataMapToFinal(targetClass, staticMetadataMap);
 
   return ret;
 }
