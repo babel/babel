@@ -52,7 +52,7 @@ describe("removal", function () {
       const ifPath = rootPath.get("body.0");
       ifPath.get("consequent").remove();
 
-      expect(ifPath.get("consequent").node).not.toBeNull();
+      expect(ifPath.get("consequent").type).toBe("BlockStatement");
     });
 
     it("completely removes alternate", function () {
