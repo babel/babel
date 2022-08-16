@@ -1,5 +1,9 @@
 import type Parser from "./parser";
-import type { PluginConfig } from "./typings";
+import type {
+  PluginConfig,
+  ParserPluginWithOptions,
+  PluginOptions,
+} from "./typings";
 
 export type Plugin = PluginConfig;
 
@@ -47,11 +51,14 @@ export function hasPlugin(
   });
 }
 
-export function getPluginOption(
+export function getPluginOption<
+  PluginName extends ParserPluginWithOptions[0],
+  OptionName extends keyof PluginOptions<PluginName>,
+>(
   plugins: PluginList,
-  name: string,
-  option: string,
-) {
+  name: PluginName,
+  option: OptionName,
+): PluginOptions<PluginName>[OptionName] | null {
   const plugin = plugins.find(plugin => {
     if (Array.isArray(plugin)) {
       return plugin[0] === name;
@@ -60,9 +67,8 @@ export function getPluginOption(
     }
   });
 
-  if (plugin && Array.isArray(plugin)) {
-    // @ts-expect-error Fixme: should check whether option is defined
-    return plugin[1][option];
+  if (plugin && Array.isArray(plugin) && plugin.length >= 2) {
+    return (plugin[1] as PluginOptions<PluginName>)[option];
   }
 
   return null;
@@ -85,14 +91,10 @@ export function validatePlugins(plugins: PluginList) {
       "decorators",
       "decoratorsBeforeExport",
     );
-    if (decoratorsBeforeExport == null) {
-      throw new Error(
-        "The 'decorators' plugin requires a 'decoratorsBeforeExport' option," +
-          " whose value must be a boolean. If you are migrating from" +
-          " Babylon/Babel 6 or want to use the old decorators proposal, you" +
-          " should use the 'decorators-legacy' plugin instead of 'decorators'.",
-      );
-    } else if (typeof decoratorsBeforeExport !== "boolean") {
+    if (
+      decoratorsBeforeExport != null &&
+      typeof decoratorsBeforeExport !== "boolean"
+    ) {
       throw new Error("'decoratorsBeforeExport' must be a boolean.");
     }
   }
@@ -172,6 +174,7 @@ export function validatePlugins(plugins: PluginList) {
       }
       const moduleAttributesVersionPluginOption = getPluginOption(
         plugins,
+        // @ts-expect-error TODO: moduleAttributes's type definitions don't have options
         "moduleAttributes",
         "version",
       );
