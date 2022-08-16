@@ -1,6 +1,5 @@
-import gensync from "gensync";
-
-import type { Handler } from "gensync";
+import gensync, { type Handler } from "gensync";
+import { once } from "../gensync-utils/functional";
 
 import { loadPlugin, loadPreset } from "./files";
 
@@ -123,39 +122,22 @@ export function createUncachedDescriptors(
   options: ValidatedOptions,
   alias: string,
 ): OptionsAndDescriptors {
-  // The returned result here is cached to represent a config object in
-  // memory, so we build and memoize the descriptors to ensure the same
-  // values are returned consistently.
-  let plugins: UnloadedDescriptor[];
-  let presets: UnloadedDescriptor[];
-
   return {
     options: optionsWithResolvedBrowserslistConfigFile(options, dirname),
-    *plugins() {
-      if (!plugins) {
-        const _plugins = yield* createPluginDescriptors(
-          options.plugins || [],
-          dirname,
-          alias,
-        );
-        // check plugins again to avoid race conditions
-        plugins ??= _plugins;
-      }
-      return plugins;
-    },
-    *presets() {
-      if (!presets) {
-        const _presets = yield* createPresetDescriptors(
-          options.presets || [],
-          dirname,
-          alias,
-          !!options.passPerPreset,
-        );
-        // check presets again to avoid race conditions
-        presets ??= _presets;
-      }
-      return presets;
-    },
+    // The returned result here is cached to represent a config object in
+    // memory, so we build and memoize the descriptors to ensure the same
+    // values are returned consistently.
+    plugins: once(() =>
+      createPluginDescriptors(options.plugins || [], dirname, alias),
+    ),
+    presets: once(() =>
+      createPresetDescriptors(
+        options.presets || [],
+        dirname,
+        alias,
+        !!options.passPerPreset,
+      ),
+    ),
   };
 }
 
