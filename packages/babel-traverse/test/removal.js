@@ -45,4 +45,22 @@ describe("removal", function () {
 
     expect(generate(ast).code).toBe("");
   });
+
+  describe("within an IfStatement", function () {
+    it("does not make consequent null", function () {
+      const rootPath = getPath("if (x) foo(); else bar();");
+      const ifPath = rootPath.get("body.0");
+      ifPath.get("consequent").remove();
+
+      expect(ifPath.get("consequent").type).toBe("BlockStatement");
+    });
+
+    it("completely removes alternate", function () {
+      const rootPath = getPath("if (x) foo(); else bar();");
+      const ifPath = rootPath.get("body.0");
+      ifPath.get("alternate").remove();
+
+      expect(ifPath.get("alternate").node).toBeNull();
+    });
+  });
 });
