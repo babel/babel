@@ -1064,7 +1064,7 @@ describe("buildConfigChain", function () {
         "babel.config.mjs",
       ])("should load %s asynchronously", async name => {
         const esm = isMJS(name);
-        if (skipUnsupportedESM(esm, `should load ${name} asynchronously`)) {
+        if (esm && skipUnsupportedESM(`should load ${name} asynchronously`)) {
           return;
         }
 
@@ -1096,8 +1096,8 @@ describe("buildConfigChain", function () {
       )("should throw if both %s and %s are used", async (name1, name2) => {
         const esm = isMJS(name1) || isMJS(name2);
         if (
+          esm &&
           skipUnsupportedESM(
-            esm,
             `should throw if both ${name1} and ${name2} are used`,
           )
         ) {
@@ -1163,7 +1163,7 @@ describe("buildConfigChain", function () {
         ].filter(Boolean),
       )("should load %s asynchronously", async name => {
         const esm = isMJS(name);
-        if (skipUnsupportedESM(esm, `should load ${name} asynchronously`)) {
+        if (esm && skipUnsupportedESM(`should load ${name} asynchronously`)) {
           return;
         }
 
@@ -1205,8 +1205,8 @@ describe("buildConfigChain", function () {
       )("should throw if both %s and %s are used", async (name1, name2) => {
         const esm = isMJS(name1) || isMJS(name2);
         if (
+          esm &&
           skipUnsupportedESM(
-            esm,
             `should throw if both ${name1} and ${name2} are used`,
           )
         ) {
@@ -1249,7 +1249,8 @@ describe("buildConfigChain", function () {
         async ({ config, dir, error }) => {
           const esm = isMJS(config);
           if (
-            skipUnsupportedESM(esm, `should show helpful errors for ${config}`)
+            esm &&
+            skipUnsupportedESM(`should show helpful errors for ${config}`)
           ) {
             return;
           }
