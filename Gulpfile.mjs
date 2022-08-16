@@ -265,7 +265,7 @@ async function buildBabel(useWorker, ignore = []) {
     const dest = "./" + mapSrcToLib(file.slice(2));
     promises.push(worker.transform(file, dest));
   }
-  return Promise.all(promises).finally(() => {
+  return Promise.allSettled(promises).finally(() => {
     if (worker.end !== undefined) {
       worker.end();
     }

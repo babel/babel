@@ -1,4 +1,4 @@
-const { transformSync } = require("@babel/core");
+const { transformAsync } = require("@babel/core");
 const { mkdirSync, statSync, readFileSync, writeFileSync } = require("fs");
 const { dirname } = require("path");
 const { log } = require("./scripts/utils/logger.cjs");
@@ -32,7 +32,7 @@ exports.transform = async function transform(src, dest) {
   }
   log(`Compiling '${chalk.cyan(src)}'...`);
   const content = readFileSync(src, { encoding: "utf8" });
-  const { code } = transformSync(content, {
+  const { code } = await transformAsync(content, {
     filename: src,
     caller: {
       // We have wrapped packages/babel-core/src/config/files/configuration.js with feature detection
