@@ -16,7 +16,7 @@ module.exports = {
     "codemods/*/src/**/*.{js,cjs,mjs,ts}",
     "eslint/*/src/**/*.{js,cjs,mjs,ts}",
   ],
-  // coveragePathIgnorePatterns Doesn't work
+  // coveragePathIgnorePatterns Doesn't work on windows
   coveragePathIgnorePatterns: [
     "/node_modules/",
     "<rootDir>/packages/babel-standalone/",
