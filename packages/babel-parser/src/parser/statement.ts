@@ -586,7 +586,15 @@ export default abstract class StatementParser extends ExpressionParser {
         while (this.eat(tt.dot)) {
           const node = this.startNodeAt(startPos, startLoc);
           node.object = expr;
-          node.property = this.parseIdentifier(true);
+          if (this.match(tt.privateName)) {
+            this.classScope.usePrivateName(
+              this.state.value,
+              this.state.startLoc,
+            );
+            node.property = this.parsePrivateName();
+          } else {
+            node.property = this.parseIdentifier(true);
+          }
           node.computed = false;
           expr = this.finishNode(node, "MemberExpression");
         }
