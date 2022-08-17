@@ -104,9 +104,9 @@ __metadata:
   resolution: "@babel-internal/runtime-integration-rollup@workspace:test/runtime-integration/rollup"
   dependencies:
     "@babel/runtime": "workspace:^"
-    "@rollup/plugin-commonjs": 22.0.0
-    "@rollup/plugin-node-resolve": ^13.2.1
-    rollup: ^2.70.2
+    "@rollup/plugin-commonjs": ^22.0.2
+    "@rollup/plugin-node-resolve": ^13.3.0
+    rollup: ^2.78.0
   languageName: unknown
   linkType: soft
 
@@ -4222,9 +4222,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-commonjs@npm:22.0.0":
-  version: 22.0.0
-  resolution: "@rollup/plugin-commonjs@npm:22.0.0"
+"@rollup/plugin-commonjs@npm:^22.0.2":
+  version: 22.0.2
+  resolution: "@rollup/plugin-commonjs@npm:22.0.2"
   dependencies:
     "@rollup/pluginutils": ^3.1.0
     commondir: ^1.0.1
@@ -4235,7 +4235,7 @@ __metadata:
     resolve: ^1.17.0
   peerDependencies:
     rollup: ^2.68.0
-  checksum: fdcce2bf58875fde0e06f001544c0d9a0509a12929393862f72dcef8fcbf4d5d0ba0d5db6cf10ba4351335caf67a3dbdb95000678c468585e3972994f92e2ce9
+  checksum: 70098a4b91afe3f164f5d27cba65edf148c5ed146ee0e07a964b66940681553ac77391083114cdcf9427e7f2706bf0d61eab310b3a2caeab83b7452c0292fcae
   languageName: node
   linkType: hard
 
@@ -4263,19 +4263,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-node-resolve@npm:^13.2.1":
-  version: 13.2.1
-  resolution: "@rollup/plugin-node-resolve@npm:13.2.1"
+"@rollup/plugin-node-resolve@npm:^13.3.0":
+  version: 13.3.0
+  resolution: "@rollup/plugin-node-resolve@npm:13.3.0"
   dependencies:
     "@rollup/pluginutils": ^3.1.0
     "@types/resolve": 1.17.1
-    builtin-modules: ^3.1.0
     deepmerge: ^4.2.2
+    is-builtin-module: ^3.1.0
     is-module: ^1.0.0
     resolve: ^1.19.0
   peerDependencies:
     rollup: ^2.42.0
-  checksum: d0ba3b6f35440b5ebc203a4f62a6c0d2c565491aed9746448288b71d0cd603d1d12fdd9d1381c1be0a4b192f167412e53c34b89fd25413db4ba7d1fa910a29a2
+  checksum: ec5418e6b3c23a9e30683056b3010e9d325316dcfae93fbc673ae64dad8e56a2ce761c15c48f5e2dcfe0c822fdc4a4905ee6346e3dcf90603ba2260afef5a5e6
   languageName: node
   linkType: hard
 
@@ -5908,9 +5908,9 @@ __metadata:
     "@babel/preset-typescript": ^7.17.12
     "@babel/runtime": ^7.18.0
     "@rollup/plugin-babel": ^5.3.1
-    "@rollup/plugin-commonjs": 22.0.0
+    "@rollup/plugin-commonjs": ^22.0.2
     "@rollup/plugin-json": ^4.1.0
-    "@rollup/plugin-node-resolve": ^13.2.1
+    "@rollup/plugin-node-resolve": ^13.3.0
     "@rollup/plugin-replace": ^4.0.0
     "@types/node": ^16.7.13
     "@typescript-eslint/eslint-plugin": ^5.30.0
@@ -5938,9 +5938,9 @@ __metadata:
     lint-staged: ^13.0.3
     mergeiterator: ^1.4.4
     prettier: ^2.7.1
-    rollup: ^2.70.2
-    rollup-plugin-dts: ^4.2.1
-    rollup-plugin-polyfill-node: ^0.9.0
+    rollup: ^2.78.0
+    rollup-plugin-dts: ^4.2.2
+    rollup-plugin-polyfill-node: ^0.10.2
     rollup-plugin-terser: ^7.0.2
     semver: ^6.3.0
     shelljs: ^0.8.5
@@ -6328,10 +6328,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"builtin-modules@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "builtin-modules@npm:3.1.0"
-  checksum: 954d8004f21961c92218eab15a02d3cea1c6c19312a8228546cdd8feae1dafc1aaa4746c2a8f9be9df15255756cc622fde702ce0ef8a319abfe1a505ca99f38d
+"builtin-modules@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "builtin-modules@npm:3.3.0"
+  checksum: db021755d7ed8be048f25668fe2117620861ef6703ea2c65ed2779c9e3636d5c3b82325bd912244293959ff3ae303afa3471f6a15bf5060c103e4cc3a839749d
   languageName: node
   linkType: hard
 
@@ -9688,6 +9688,15 @@ fsevents@^1.2.7:
   version: 1.1.6
   resolution: "is-buffer@npm:1.1.6"
   checksum: 4a186d995d8bbf9153b4bd9ff9fd04ae75068fe695d29025d25e592d9488911eeece84eefbd8fa41b8ddcc0711058a71d4c466dcf6f1f6e1d83830052d8ca707
+  languageName: node
+  linkType: hard
+
+"is-builtin-module@npm:^3.1.0":
+  version: 3.2.0
+  resolution: "is-builtin-module@npm:3.2.0"
+  dependencies:
+    builtin-modules: ^3.3.0
+  checksum: 0315751b898feff0646511c896e88b608a755c5025d0ce9a3ad25783de50be870e47dafb838cebbb06fbb2a948b209ea55348eee267836c9dd40d3a11ec717d3
   languageName: node
   linkType: hard
 
@@ -13278,30 +13287,30 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"rollup-plugin-dts@npm:^4.2.1":
-  version: 4.2.1
-  resolution: "rollup-plugin-dts@npm:4.2.1"
+"rollup-plugin-dts@npm:^4.2.2":
+  version: 4.2.2
+  resolution: "rollup-plugin-dts@npm:4.2.2"
   dependencies:
     "@babel/code-frame": ^7.16.7
     magic-string: ^0.26.1
   peerDependencies:
-    rollup: ^2.70
-    typescript: ^4.6
+    rollup: ^2.55
+    typescript: ^4.1
   dependenciesMeta:
     "@babel/code-frame":
       optional: true
-  checksum: 70a593db76007159a7bbc06c26824c3275ab1d8d4d6b6e8bc06d1345f337d9d118aa8d4ec175155bc072a66b78da4242a915c3516a3270006b9758004eadeb43
+  checksum: cf4b45f6cca442a5f44af0f0fb567c8fc540ecb792c763571d1bcda9bf495803bcc8d4eaef451a2dd32f7f391eb822e2b96cc6b86b096db54a4d3935236fd8da
   languageName: node
   linkType: hard
 
-"rollup-plugin-polyfill-node@npm:^0.9.0":
-  version: 0.9.0
-  resolution: "rollup-plugin-polyfill-node@npm:0.9.0"
+"rollup-plugin-polyfill-node@npm:^0.10.2":
+  version: 0.10.2
+  resolution: "rollup-plugin-polyfill-node@npm:0.10.2"
   dependencies:
     "@rollup/plugin-inject": ^4.0.0
   peerDependencies:
     rollup: ^1.20.0 || ^2.0.0
-  checksum: a7531a850cf5c8a8d8705aacdad449c14f25368d98cf1f06f22b5f300fde45ac9b1eda533d61e7377366b3ce4ade2075b2deb7c55b9f823d9e609d1d6c23d925
+  checksum: 10806925ddf17d9a49bea885fa30296dec20ac59c43986c6f1eca892dd260cc75cc2f77b098dbcb8bbf503c10c7aa4d3078f441c1e2384ba475c105273132c99
   languageName: node
   linkType: hard
 
@@ -13319,9 +13328,9 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"rollup@npm:^2.70.2":
-  version: 2.70.2
-  resolution: "rollup@npm:2.70.2"
+"rollup@npm:^2.78.0":
+  version: 2.78.0
+  resolution: "rollup@npm:2.78.0"
   dependencies:
     fsevents: ~2.3.2
   dependenciesMeta:
@@ -13329,7 +13338,7 @@ fsevents@^1.2.7:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: eb04eb9b87b30517308cb41018d57a23976f42b269c3229e4124746d3136a77aa16ba8b891a3fa571931dd72419eea40642a334835fe4f33161fea30d0b803f7
+  checksum: 01b5a7ae082d2a14201c973ee973099f0899cc87b65063d5ca5a77c05eeefb3b51e14b1346cf1a0fc879ac2cbb87239d4f960917bfc30b7c52f5dce50a7f56e7
   languageName: node
   linkType: hard
 
