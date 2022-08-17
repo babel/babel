@@ -1,5 +1,9 @@
 import type Parser from "./parser";
-import type { PluginConfig } from "./typings";
+import type {
+  ParserPluginWithOptions,
+  PluginConfig,
+  PluginOptions,
+} from "./typings";
 
 export type Plugin = PluginConfig;
 
@@ -47,11 +51,10 @@ export function hasPlugin(
   });
 }
 
-export function getPluginOption(
-  plugins: PluginList,
-  name: string,
-  option: string,
-) {
+export function getPluginOption<
+  PluginName extends ParserPluginWithOptions[0],
+  OptionName extends keyof PluginOptions<PluginName>,
+>(plugins: PluginList, name: PluginName, option: OptionName) {
   const plugin = plugins.find(plugin => {
     if (Array.isArray(plugin)) {
       return plugin[0] === name;
@@ -60,9 +63,8 @@ export function getPluginOption(
     }
   });
 
-  if (plugin && Array.isArray(plugin)) {
-    // @ts-expect-error Fixme: should check whether option is defined
-    return plugin[1][option];
+  if (plugin && Array.isArray(plugin) && plugin.length > 1) {
+    return (plugin[1] as PluginOptions<PluginName>)[option];
   }
 
   return null;
