@@ -107,7 +107,6 @@ interface PrivateNameVisitorState {
 function privateNameVisitorFactory<S>(
   visitor: Visitor<PrivateNameVisitorState & S>,
 ) {
-  // @ts-expect-error Fixme: TS complains _exploded: boolean does not satisfy visitor functions
   const privateNameVisitor: Visitor<PrivateNameVisitorState & S> = {
     ...visitor,
 

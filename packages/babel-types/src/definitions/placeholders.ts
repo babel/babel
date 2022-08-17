@@ -9,7 +9,7 @@ export const PLACEHOLDERS = [
   "BlockStatement",
   "ClassBody",
   "Pattern",
-];
+] as const;
 
 export const PLACEHOLDERS_ALIAS: Record<string, string[]> = {
   Declaration: ["Statement"],

@@ -21,9 +21,7 @@ export interface VirtualTypeAliases {
   Var: t.VariableDeclaration;
 }
 
-type NodeTypes = t.Node["type"] | t.Comment["type"] | keyof t.Aliases;
-
-type VirtualTypeMapping = readonly NodeTypes[] | null;
+type VirtualTypeMapping = readonly (t.Node["type"] | keyof t.Aliases)[] | null;
 
 export const ReferencedIdentifier: VirtualTypeMapping = [
   "Identifier",

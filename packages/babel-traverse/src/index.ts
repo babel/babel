@@ -20,18 +20,11 @@ export type { HubInterface } from "./hub";
 
 export { visitors };
 
-// fixme: The TraverseOptions should have been { scope ... } & Visitor<S>
-// however TS does not support excluding certain string literals from general string
-// type. If we change here to { scope ... } & Visitor<S>, TS will throw
-// noScope: boolean because it matched `noScope` to the [k in string]: VisitNode<> catch-all
-// in Visitor
-export type TraverseOptions<S = t.Node> =
-  | {
-      scope?: Scope;
-      noScope?: boolean;
-      denylist?: string[];
-    }
-  | Visitor<S>;
+export type TraverseOptions<S = t.Node> = {
+  scope?: Scope;
+  noScope?: boolean;
+  denylist?: string[];
+} & Visitor<S>;
 
 function traverse<S>(
   parent: t.Node,

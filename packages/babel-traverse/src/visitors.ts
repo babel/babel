@@ -28,7 +28,7 @@ export function explode(visitor: Visitor) {
   visitor._exploded = true;
 
   // normalise pipes
-  for (const nodeType of Object.keys(visitor)) {
+  for (const nodeType of Object.keys(visitor) as (keyof Visitor)[]) {
     if (shouldIgnoreKey(nodeType)) continue;
 
     const parts: Array<string> = nodeType.split("|");
@@ -38,6 +38,7 @@ export function explode(visitor: Visitor) {
     delete visitor[nodeType];
 
     for (const part of parts) {
+      // @ts-expect-error part will be verified by `verify` later
       visitor[part] = fns;
     }
   }
@@ -47,6 +48,7 @@ export function explode(visitor: Visitor) {
 
   // make sure there's no __esModule type since this is because we're using loose mode
   // and it sets __esModule to be enumerable on all modules :(
+  // @ts-expect-error ESModule interop
   delete visitor.__esModule;
 
   // ensure visitors are objects
@@ -88,12 +90,12 @@ export function explode(visitor: Visitor) {
   }
 
   // add aliases
-  for (const nodeType of Object.keys(visitor)) {
+  for (const nodeType of Object.keys(visitor) as (keyof Visitor)[]) {
     if (shouldIgnoreKey(nodeType)) continue;
 
     const fns = visitor[nodeType];
 
-    let aliases: Array<string> | undefined = FLIPPED_ALIAS_KEYS[nodeType];
+    let aliases = FLIPPED_ALIAS_KEYS[nodeType];
 
     const deprecatedKey = DEPRECATED_KEYS[nodeType];
     if (deprecatedKey) {
@@ -113,6 +115,7 @@ export function explode(visitor: Visitor) {
       if (existing) {
         mergePair(existing, fns);
       } else {
+        // @ts-expect-error Expression produces a union type that is too complex to represent.
         visitor[alias] = { ...fns };
       }
     }
@@ -140,7 +143,7 @@ export function verify(visitor: Visitor) {
     );
   }
 
-  for (const nodeType of Object.keys(visitor)) {
+  for (const nodeType of Object.keys(visitor) as (keyof Visitor)[]) {
     if (nodeType === "enter" || nodeType === "exit") {
       validateVisitorMethods(nodeType, visitor[nodeType]);
     }
@@ -208,7 +211,7 @@ export function merge(
 
     explode(visitor);
 
-    for (const type of Object.keys(visitor)) {
+    for (const type of Object.keys(visitor) as (keyof Visitor)[]) {
       let visitorType = visitor[type];
 
       // if we have state or wrapper then overload the callbacks to take it
@@ -216,7 +219,8 @@ export function merge(
         visitorType = wrapWithStateOrWrapper(visitorType, state, wrapper);
       }
 
-      const nodeVisitor = (rootVisitor[type] = rootVisitor[type] || {});
+      // @ts-expect-error: Expression produces a union type that is too complex to represent.
+      const nodeVisitor = (rootVisitor[type] ||= {});
       mergePair(nodeVisitor, visitorType);
     }
   }
@@ -231,7 +235,7 @@ function wrapWithStateOrWrapper<State>(
 ) {
   const newVisitor: Visitor = {};
 
-  for (const key of Object.keys(oldVisitor)) {
+  for (const key of Object.keys(oldVisitor) as (keyof Visitor<State>)[]) {
     let fns = oldVisitor[key];
 
     // not an enter/exit array of callbacks
@@ -260,6 +264,7 @@ function wrapWithStateOrWrapper<State>(
       return newFn;
     });
 
+    // @ts-expect-error: Expression produces a union type that is too complex to represent.
     newVisitor[key] = fns;
   }
 
@@ -267,11 +272,12 @@ function wrapWithStateOrWrapper<State>(
 }
 
 function ensureEntranceObjects(obj: Visitor) {
-  for (const key of Object.keys(obj)) {
+  for (const key of Object.keys(obj) as (keyof Visitor)[]) {
     if (shouldIgnoreKey(key)) continue;
 
     const fns = obj[key];
     if (typeof fns === "function") {
+      // @ts-expect-error: Expression produces a union type that is too complex to represent.
       obj[key] = { enter: fns };
     }
   }
@@ -294,7 +300,16 @@ function wrapCheck(nodeType: VIRTUAL_TYPES, fn: Function) {
   return newFn;
 }
 
-function shouldIgnoreKey(key: string) {
+function shouldIgnoreKey(
+  key: string,
+): key is
+  | "enter"
+  | "exit"
+  | "shouldSkip"
+  | "denylist"
+  | "noScope"
+  | "skipKeys"
+  | "blacklist" {
   // internal/hidden key
   if (key[0] === "_") return true;
 
