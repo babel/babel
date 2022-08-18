@@ -5,7 +5,9 @@
   "main": "./babel.js",
   "files": [
     "babel.js",
-    "babel.min.js"
+    "babel.js.map",
+    "babel.min.js",
+    "babel.min.js.map"
   ],
   "devDependencies": {
     "@babel/core": "workspace:^",
