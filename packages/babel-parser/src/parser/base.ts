@@ -5,7 +5,11 @@ import type ScopeHandler from "../util/scope";
 import type ExpressionScopeHandler from "../util/expression-scope";
 import type ClassScopeHandler from "../util/class-scope";
 import type ProductionParameterHandler from "../util/production-parameter";
-import type { PluginConfig } from "../typings";
+import type {
+  ParserPluginWithOptions,
+  PluginConfig,
+  PluginOptions,
+} from "../typings";
 
 export default class BaseParser {
   // Properties set by constructor in index.js
@@ -54,7 +58,12 @@ export default class BaseParser {
     }
   }
 
-  getPluginOption(plugin: string, name: string) {
-    return this.plugins.get(plugin)?.[name];
+  getPluginOption<
+    PluginName extends ParserPluginWithOptions[0],
+    OptionName extends keyof PluginOptions<PluginName>,
+  >(plugin: PluginName, name: OptionName) {
+    return (this.plugins.get(plugin) as null | PluginOptions<PluginName>)?.[
+      name
+    ];
   }
 }

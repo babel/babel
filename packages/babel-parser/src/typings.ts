@@ -7,13 +7,11 @@ export type Plugin =
   | "classProperties"
   | "classStaticBlock" // Enabled by default
   | "decimal"
-  | "decorators"
   | "decorators-legacy"
   | "decoratorAutoAccessors"
   | "destructuringPrivate"
   | "doExpressions"
   | "dynamicImport"
-  | "estree"
   | "exportDefaultFrom"
   | "exportNamespaceFrom" // deprecated
   | "flow"
@@ -24,8 +22,6 @@ export type Plugin =
   | "jsx"
   | "logicalAssignment"
   | "importAssertions"
-  // @deprecated
-  | "moduleAttributes"
   | "moduleBlocks"
   | "moduleStringNames"
   | "nullishCoalescingOperator"
@@ -34,24 +30,28 @@ export type Plugin =
   | "optionalCatchBinding"
   | "optionalChaining"
   | "partialApplication"
-  | "pipelineOperator"
   | "placeholders"
   | "privateIn" // Enabled by default
-  | "recordAndTuple"
   | "regexpUnicodeSets"
   | "throwExpressions"
   | "topLevelAwait"
-  | "typescript"
-  | "v8intrinsic";
-
-export type PluginConfig = Plugin | ParserPluginWithOptions;
+  | "v8intrinsic"
+  | ParserPluginWithOptions[0];
 
 export type ParserPluginWithOptions =
   | ["decorators", DecoratorsPluginOptions]
+  | ["estree", { classFeatures?: boolean }]
+  // @deprecated
+  | ["moduleAttributes", { version: "may-2020" }]
   | ["pipelineOperator", PipelineOperatorPluginOptions]
   | ["recordAndTuple", RecordAndTuplePluginOptions]
   | ["flow", FlowPluginOptions]
   | ["typescript", TypeScriptPluginOptions];
+
+export type PluginConfig = Plugin | ParserPluginWithOptions;
+
+export type PluginOptions<PluginName extends ParserPluginWithOptions[0]> =
+  Extract<ParserPluginWithOptions, [PluginName, any]>[1];
 
 export interface DecoratorsPluginOptions {
   decoratorsBeforeExport?: boolean;
