@@ -12,8 +12,14 @@ aliases:
   - &artifact_babel
     path: ~/babel/packages/babel-standalone/babel.js
 
+  - &artifact_babel_sourcemap
+    path: ~/babel/packages/babel-standalone/babel.js.map
+
   - &artifact_babel_min
     path: ~/babel/packages/babel-standalone/babel.min.js
+
+  - &artifact_babel_min_sourcemap
+    path: ~/babel/packages/babel-standalone/babel.js.min.map
 
   - &test262_workdir
     working_directory: ~/babel/babel-test262-runner
@@ -46,7 +52,9 @@ jobs:
         # we just run the babel-standalone test separately.
       - run: yarn jest "\-standalone/test"
       - store_artifacts: *artifact_babel
+      - store_artifacts: *artifact_babel_sourcemap
       - store_artifacts: *artifact_babel_min
+      - store_artifacts: *artifact_babel_min_sourcemap
       - save_cache: *save-yarn-cache
 
   test262:
