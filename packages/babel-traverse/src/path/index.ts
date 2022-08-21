@@ -62,7 +62,7 @@ class NodePath<T extends t.Node = t.Node> {
   listKey: string | null = null;
   key: string | number | null = null;
   node: T = null;
-  type: string | null = null;
+  type: T["type"] | null = null;
 
   static get({
     hub,

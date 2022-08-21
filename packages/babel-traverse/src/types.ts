@@ -11,7 +11,10 @@ export type Visitor<S = {}> = VisitNodeObject<S, t.Node> & {
 } & {
   [K in keyof InternalVisitorFlags]?: InternalVisitorFlags[K];
 } & {
-  [k: string]: VisitNode<S, t.Node>;
+  // Babel supports `NodeTypesWithoutComment | NodeTypesWithoutComment | ... ` but it is
+  // too complex for TS. So we type it as a general visitor only if the key contains `|`
+  // this is good enough for non-visitor traverse options e.g. `noScope`
+  [k: `${string}|${string}`]: VisitNode<S, t.Node>;
 };
 
 /** @internal */

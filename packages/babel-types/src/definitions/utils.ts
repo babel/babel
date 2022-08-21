@@ -3,11 +3,12 @@ import { validateField, validateChild } from "../validators/validate";
 import type * as t from "..";
 
 export const VISITOR_KEYS: Record<string, string[]> = {};
-export const ALIAS_KEYS: Record<string, string[]> = {};
-export const FLIPPED_ALIAS_KEYS: Record<string, string[]> = {};
+export const ALIAS_KEYS: Partial<Record<NodeTypesWithoutComment, string[]>> =
+  {};
+export const FLIPPED_ALIAS_KEYS: Record<string, NodeTypesWithoutComment[]> = {};
 export const NODE_FIELDS: Record<string, FieldDefinitions> = {};
 export const BUILDER_KEYS: Record<string, string[]> = {};
-export const DEPRECATED_KEYS: Record<string, string> = {};
+export const DEPRECATED_KEYS: Record<string, NodeTypesWithoutComment> = {};
 export const NODE_PARENT_VALIDATIONS: Record<string, Validator> = {};
 
 function getType(val: any) {
@@ -20,7 +21,9 @@ function getType(val: any) {
   }
 }
 
-type NodeTypes = t.Node["type"] | t.Comment["type"] | keyof t.Aliases;
+type NodeTypesWithoutComment = t.Node["type"] | keyof t.Aliases;
+
+type NodeTypes = NodeTypesWithoutComment | t.Comment["type"];
 
 type PrimitiveTypes = ReturnType<typeof getType>;
 
@@ -330,7 +333,7 @@ export default function defineType(type: string, opts: DefineTypeOpts = {}) {
   }
 
   if (opts.deprecatedAlias) {
-    DEPRECATED_KEYS[opts.deprecatedAlias] = type;
+    DEPRECATED_KEYS[opts.deprecatedAlias] = type as NodeTypesWithoutComment;
   }
 
   // ensure all field keys are represented in `fields`
@@ -360,10 +363,10 @@ export default function defineType(type: string, opts: DefineTypeOpts = {}) {
   VISITOR_KEYS[type] = opts.visitor = visitor;
   BUILDER_KEYS[type] = opts.builder = builder;
   NODE_FIELDS[type] = opts.fields = fields;
-  ALIAS_KEYS[type] = opts.aliases = aliases;
+  ALIAS_KEYS[type as NodeTypesWithoutComment] = opts.aliases = aliases;
   aliases.forEach(alias => {
     FLIPPED_ALIAS_KEYS[alias] = FLIPPED_ALIAS_KEYS[alias] || [];
-    FLIPPED_ALIAS_KEYS[alias].push(type);
+    FLIPPED_ALIAS_KEYS[alias].push(type as NodeTypesWithoutComment);
   });
 
   if (opts.validate) {
