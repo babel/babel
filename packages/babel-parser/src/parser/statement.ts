@@ -581,12 +581,16 @@ export default abstract class StatementParser extends ExpressionParser {
         this.expect(tt.parenR);
         expr = this.wrapParenthesis(startPos, startLoc, expr);
 
+        const paramsStartLoc = this.state.startLoc;
+        node.expression = this.parseMaybeDecoratorArguments(expr);
         if (
-          this.getPluginOption("decorators", "allowCallParenthesized") !== false
+          this.getPluginOption("decorators", "allowCallParenthesized") ===
+            false &&
+          node.expression !== expr
         ) {
-          node.expression = this.parseMaybeDecoratorArguments(expr);
-        } else {
-          node.expression = expr;
+          this.raise(Errors.DecoratorArgumentsOutsideParentheses, {
+            at: paramsStartLoc,
+          });
         }
       } else {
         expr = this.parseIdentifier(false);
