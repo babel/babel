@@ -73,8 +73,7 @@ describe("@babel/core errors", function () {
           at Module.require (node:internal/modules/cjs/loader:1022:19)
           at require (node:internal/modules/cjs/helpers:102:18)
           at Module.parseSync (<CWD>/packages/babel-core/lib/parse.js:58:72)
-          ... frames from this test file ...
-          ... internal jest frames ..."
+          ... frames from this test file ..."
     `);
   });
 
@@ -94,10 +93,36 @@ describe("@babel/core errors", function () {
           at Module._load (node:internal/modules/cjs/loader:839:12)
           at Module.require (node:internal/modules/cjs/loader:1022:19)
           at require (node:internal/modules/cjs/helpers:102:18)
-          at Module.parseSync (<CWD>/packages/babel-core/lib/parse.js:58:72)
-          ... frames from this test file ...
-          ... internal jest frames ..."
+          at Module.parseSync (<CWD>/packages/babel-core/lib/parse.js:58:72)"
     `);
+  });
+
+  it("error inside config file with more frames and increased Error.stackTraceLimit", function () {
+    const INC = 10;
+    Error.stackTraceLimit += INC;
+    try {
+      expectError(() => {
+        babel.parseSync("foo;", {
+          root: fixture("error-config-file-more-frames"),
+        });
+      }).toMatchInlineSnapshot(`
+        "Error: Error inside config!
+            at f (<CWD>/packages/babel-core/test/fixtures/errors/error-config-file-more-frames/babel.config.js:7:9)
+            at g (<CWD>/packages/babel-core/test/fixtures/errors/error-config-file-more-frames/babel.config.js:11:3)
+            at Object.<anonymous> (<CWD>/packages/babel-core/test/fixtures/errors/error-config-file-more-frames/babel.config.js:1:1)
+            at Module._compile (node:internal/modules/cjs/loader:1120:14)
+            at Module._extensions..js (node:internal/modules/cjs/loader:1174:10)
+            at Module.load (node:internal/modules/cjs/loader:998:32)
+            at Module._load (node:internal/modules/cjs/loader:839:12)
+            at Module.require (node:internal/modules/cjs/loader:1022:19)
+            at require (node:internal/modules/cjs/helpers:102:18)
+            at Module.parseSync (<CWD>/packages/babel-core/lib/parse.js:58:72)
+            ... frames from this test file ...
+            ... internal jest frames ..."
+      `);
+    } finally {
+      Error.stackTraceLimit -= INC;
+    }
   });
 
   it("invalid JSON config file", function () {
