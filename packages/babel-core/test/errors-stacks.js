@@ -211,4 +211,32 @@ describe("@babel/core errors", function () {
           ... internal jest frames ..."
     `);
   });
+
+  it("internal errors have the full stack trace", function () {
+    expectError(() => {
+      const { map } = Array.prototype;
+      try {
+        Array.prototype.map = () => {
+          throw new Error("Internal error! This is a fake bug :)");
+        };
+        babel.parseSync("foo;", {
+          root: fixture("valid"),
+        });
+      } finally {
+        Array.prototype.map = map;
+      }
+    }).toMatchInlineSnapshot(`
+      "Error: Internal error! This is a fake bug :)
+          ... frames from this test file ...
+          at loadOneConfig (<CWD>/packages/babel-core/lib/config/files/configuration.js:148:47)
+          at loadOneConfig.next (<anonymous>)
+          at buildRootChain (<CWD>/packages/babel-core/lib/config/config-chain.js:86:51)
+          at buildRootChain.next (<anonymous>)
+          at loadPrivatePartialConfig (<CWD>/packages/babel-core/lib/config/partial.js:103:62)
+          at loadPrivatePartialConfig.next (<anonymous>)
+          at loadFullConfig (<CWD>/packages/babel-core/lib/config/full.js:57:46)
+          at loadFullConfig.next (<anonymous>)
+          at parse (<CWD>/packages/babel-core/lib/parse.js:29:45)"
+    `);
+  });
 });
