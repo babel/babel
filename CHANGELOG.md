@@ -23,6 +23,23 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.18.13 (2022-08-22)
+
+#### :bug: Bug Fix
+* `babel-generator`
+  * [#14869](https://github.com/babel/babel/pull/14869) fix: jsx with `retainLines` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-core`
+  * [#14843](https://github.com/babel/babel/pull/14843) Fix a race condition in `@babel/core` ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-destructuring`
+  * [#14841](https://github.com/babel/babel/pull/14841) fix: Destructuring exceptions in nested `for` expressions ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :nail_care: Polish
+* `babel-traverse`
+  * [#14833](https://github.com/babel/babel/pull/14833) Let `path.remove()` remove `IfStatement.alternate` ([@djpohly](https://github.com/djpohly))
+  * [#14837](https://github.com/babel/babel/pull/14837) Add support for static evaluation of ?? operator ([@djpohly](https://github.com/djpohly))
+
+#### :house: Internal
+* [#14846](https://github.com/babel/babel/pull/14846) fix: Print build logs correctly ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.18.12 (2022-08-05)
 
 #### :bug: Bug Fix
