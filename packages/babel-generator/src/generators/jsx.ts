@@ -55,9 +55,9 @@ export function JSXText(this: Printer, node: t.JSXText) {
   const raw = this.getPossibleRaw(node);
 
   if (raw !== undefined) {
-    this.token(raw);
+    this.token(raw, true);
   } else {
-    this.token(node.value);
+    this.token(node.value, true);
   }
 }
 
