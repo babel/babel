@@ -1,7 +1,13 @@
 const escope = require("eslint-scope");
-const { Definition } = require("eslint-scope/lib/definition");
-const OriginalPatternVisitor = require("eslint-scope/lib/pattern-visitor");
-const OriginalReferencer = require("eslint-scope/lib/referencer");
+const { Definition } = process.env.BABEL_8_BREAKING
+  ? escope
+  : require("eslint-scope/lib/definition");
+const OriginalPatternVisitor = process.env.BABEL_8_BREAKING
+  ? escope.PatternVisitor
+  : require("eslint-scope/lib/pattern-visitor");
+const OriginalReferencer = process.env.BABEL_8_BREAKING
+  ? escope.Referencer
+  : require("eslint-scope/lib/referencer");
 const { getKeys: fallback } = require("eslint-visitor-keys");
 
 let visitorKeysMap;

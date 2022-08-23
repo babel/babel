@@ -31,8 +31,8 @@
     "eslint": "^7.5.0 || ^8.0.0"
   },
   "dependencies": {
-    "eslint-scope": "^5.1.1",
-    "eslint-visitor-keys": "^2.1.0",
+    "eslint-scope": "condition:BABEL_8_BREAKING ? ^7.1.1 : ^5.1.1",
+    "eslint-visitor-keys": "condition:BABEL_8_BREAKING ? ^3.3.0 : ^2.1.0",
     "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   },
   "devDependencies": {
