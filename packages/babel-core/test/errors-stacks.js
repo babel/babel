@@ -1,5 +1,8 @@
 import * as babel from "../lib/index.js";
 
+// TODO: Remove this in Babel 8, once we drop Node.js 8
+import { URL } from "url";
+
 const replaceAll = "".replaceAll
   ? Function.call.bind("".replaceAll)
   : (str, find, replace) => str.split(find).join(replace);
@@ -33,6 +36,7 @@ function expectError(run) {
     // are quite different from newer stack traces.
     // TODO(Babel 8): Delete this code
     {
+      // Node.js <= 10
       stack = replaceAll(stack, "Object.parseSync", "Module.parseSync");
       stack = stack.replace(
         /(?:run|Object\.<anonymous>) \((<CWD>[^)]+)\)/g,
@@ -47,6 +51,13 @@ function expectError(run) {
         stack,
         "\n    at ... internal jest frames ...\n    at new Promise (<anonymous>)",
         "",
+      );
+      // Node.js 8
+      stack = stack.replace(/\n\s*at <anonymous>$/g, "");
+      // Node.js 6
+      stack = stack.replace(
+        /(at (\w+) \([^)]+\)\n\s*at) next \(native\)/g,
+        "$1 $2.next (<anonymous>)",
       );
     }
 
