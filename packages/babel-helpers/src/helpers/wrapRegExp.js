@@ -60,7 +60,7 @@ export default function _wrapRegExp() {
       if (typeof i === "number") groups[name] = result[i];
       else {
         // i is an array of indexes
-        let k = 0;
+        var k = 0;
         // if no group matched, we stop at k = i.length - 1 and then
         // we store result[i[i.length - 1]] which is undefined.
         while (result[i[k]] === undefined && k + 1 < i.length) k++;
