@@ -9,19 +9,25 @@ function expectError(run) {
     run();
   } catch (e) {
     let { stack } = e;
-    stack = replaceAll(stack, import.meta.url, "<URL PLACEHOLDER>").replace(
-      /(?:\n\s*at[^\n]+?<URL PLACEHOLDER>[^\n]+)+/g,
-      "\n    ... frames from this test file ...",
-    );
-    // Remove jest-related stack frames
-    stack = stack.replace(
-      /(?:\n\s*at[^\n]+?node_modules\/(?:jest|piscina)[^\n]+)+/g,
-      "\n    ... internal jest frames ...",
-    );
+    // Remove absolute URLs
     stack = replaceAll(stack, process.cwd(), "<CWD>");
+    stack = replaceAll(stack, "file://<CWD>", "<CWD>");
+    // Remove jest-related stack frames.
+    // The `at async Promise.all` frame comes from inside jest-light-runner and is only
+    // visible when using --run-in-band, comes from inside jest but doesn't have an
+    // associated file path.
+    stack = stack.replace(
+      /(?:\n\s*at [^\n]+?node_modules\/(?:@?jest|piscina)[^\n]+|\n\s*at async Promise.all[^\n]+)+/g,
+      "\n    at ... internal jest frames ...",
+    );
+    // Remove node internal frames, since they change by version
+    stack = stack.replace(
+      /(?:\n\s*at ((?:async )?[\w.]+)? ?\((?:node:)?internal\/[^\n]+)+/g,
+      "\n    at $1 (... internal node frames ...)",
+    );
     // Replace line/column numbers, since they are affected by how
     // the code is compiled.
-    stack = stack.replace(/:\d+:\d+\)$/gm, ":_:_)");
+    stack = stack.replace(/\d*:\d+:\d+(\)?)$/gm, ":_:_$1");
     return expect(stack);
   }
   throw new Error("It should have thrown an error.");
@@ -31,6 +37,13 @@ const fixture = name =>
   new URL(`./fixtures/errors/${name}`, import.meta.url).pathname;
 
 describe("@babel/core errors", function () {
+  beforeAll(() => {
+    Error.stackTraceLimit += 100;
+  });
+  afterAll(() => {
+    Error.stackTraceLimit -= 100;
+  });
+
   it("error inside config function", function () {
     expectError(() => {
       babel.parseSync("foo;", {
@@ -40,8 +53,10 @@ describe("@babel/core errors", function () {
       "Error: Error inside config!
           at myConfig (<CWD>/packages/babel-core/test/fixtures/errors/error-config-function/babel.config.js:_:_)
           at Module.parseSync (<CWD>/packages/babel-core/lib/parse.js:_:_)
-          ... frames from this test file ...
-          ... internal jest frames ..."
+          at <CWD>/packages/babel-core/test/errors-stacks.js?:_:_
+          at expectError (<CWD>/packages/babel-core/test/errors-stacks.js?:_:_)
+          at <CWD>/packages/babel-core/test/errors-stacks.js?:_:_
+          at ... internal jest frames ..."
     `);
   });
 
@@ -56,8 +71,10 @@ describe("@babel/core errors", function () {
           at g (<CWD>/packages/babel-core/test/fixtures/errors/error-config-function-more-frames/babel.config.js:_:_)
           at myConfig (<CWD>/packages/babel-core/test/fixtures/errors/error-config-function-more-frames/babel.config.js:_:_)
           at Module.parseSync (<CWD>/packages/babel-core/lib/parse.js:_:_)
-          ... frames from this test file ...
-          ... internal jest frames ..."
+          at <CWD>/packages/babel-core/test/errors-stacks.js?:_:_
+          at expectError (<CWD>/packages/babel-core/test/errors-stacks.js?:_:_)
+          at <CWD>/packages/babel-core/test/errors-stacks.js?:_:_
+          at ... internal jest frames ..."
     `);
   });
 
@@ -69,14 +86,12 @@ describe("@babel/core errors", function () {
     }).toMatchInlineSnapshot(`
       "Error: Error inside config!
           at Object.<anonymous> (<CWD>/packages/babel-core/test/fixtures/errors/error-config-file/babel.config.js:_:_)
-          at Module._compile (node:internal/modules/cjs/loader:_:_)
-          at Module._extensions..js (node:internal/modules/cjs/loader:_:_)
-          at Module.load (node:internal/modules/cjs/loader:_:_)
-          at Module._load (node:internal/modules/cjs/loader:_:_)
-          at Module.require (node:internal/modules/cjs/loader:_:_)
-          at require (node:internal/modules/cjs/helpers:_:_)
+          at require (... internal node frames ...)
           at Module.parseSync (<CWD>/packages/babel-core/lib/parse.js:_:_)
-          ... frames from this test file ..."
+          at <CWD>/packages/babel-core/test/errors-stacks.js?:_:_
+          at expectError (<CWD>/packages/babel-core/test/errors-stacks.js?:_:_)
+          at <CWD>/packages/babel-core/test/errors-stacks.js?:_:_
+          at ... internal jest frames ..."
     `);
   });
 
@@ -90,42 +105,13 @@ describe("@babel/core errors", function () {
           at f (<CWD>/packages/babel-core/test/fixtures/errors/error-config-file-more-frames/babel.config.js:_:_)
           at g (<CWD>/packages/babel-core/test/fixtures/errors/error-config-file-more-frames/babel.config.js:_:_)
           at Object.<anonymous> (<CWD>/packages/babel-core/test/fixtures/errors/error-config-file-more-frames/babel.config.js:_:_)
-          at Module._compile (node:internal/modules/cjs/loader:_:_)
-          at Module._extensions..js (node:internal/modules/cjs/loader:_:_)
-          at Module.load (node:internal/modules/cjs/loader:_:_)
-          at Module._load (node:internal/modules/cjs/loader:_:_)
-          at Module.require (node:internal/modules/cjs/loader:_:_)
-          at require (node:internal/modules/cjs/helpers:_:_)
-          at Module.parseSync (<CWD>/packages/babel-core/lib/parse.js:_:_)"
+          at require (... internal node frames ...)
+          at Module.parseSync (<CWD>/packages/babel-core/lib/parse.js:_:_)
+          at <CWD>/packages/babel-core/test/errors-stacks.js?:_:_
+          at expectError (<CWD>/packages/babel-core/test/errors-stacks.js?:_:_)
+          at <CWD>/packages/babel-core/test/errors-stacks.js?:_:_
+          at ... internal jest frames ..."
     `);
-  });
-
-  it("error inside config file with more frames and increased Error.stackTraceLimit", function () {
-    const INC = 10;
-    Error.stackTraceLimit += INC;
-    try {
-      expectError(() => {
-        babel.parseSync("foo;", {
-          root: fixture("error-config-file-more-frames"),
-        });
-      }).toMatchInlineSnapshot(`
-        "Error: Error inside config!
-            at f (<CWD>/packages/babel-core/test/fixtures/errors/error-config-file-more-frames/babel.config.js:_:_)
-            at g (<CWD>/packages/babel-core/test/fixtures/errors/error-config-file-more-frames/babel.config.js:_:_)
-            at Object.<anonymous> (<CWD>/packages/babel-core/test/fixtures/errors/error-config-file-more-frames/babel.config.js:_:_)
-            at Module._compile (node:internal/modules/cjs/loader:_:_)
-            at Module._extensions..js (node:internal/modules/cjs/loader:_:_)
-            at Module.load (node:internal/modules/cjs/loader:_:_)
-            at Module._load (node:internal/modules/cjs/loader:_:_)
-            at Module.require (node:internal/modules/cjs/loader:_:_)
-            at require (node:internal/modules/cjs/helpers:_:_)
-            at Module.parseSync (<CWD>/packages/babel-core/lib/parse.js:_:_)
-            ... frames from this test file ...
-            ... internal jest frames ..."
-      `);
-    } finally {
-      Error.stackTraceLimit -= INC;
-    }
   });
 
   it("invalid JSON config file", function () {
@@ -137,8 +123,10 @@ describe("@babel/core errors", function () {
       "Error: Error while parsing config - JSON5: invalid character '}' at 3:1
           at <CWD>/packages/babel-core/test/fixtures/errors/invalid-json/babel.config.json
           at Module.parseSync (<CWD>/packages/babel-core/lib/parse.js:_:_)
-          ... frames from this test file ...
-          ... internal jest frames ..."
+          at <CWD>/packages/babel-core/test/errors-stacks.js?:_:_
+          at expectError (<CWD>/packages/babel-core/test/errors-stacks.js?:_:_)
+          at <CWD>/packages/babel-core/test/errors-stacks.js?:_:_
+          at ... internal jest frames ..."
     `);
   });
 
@@ -151,8 +139,10 @@ describe("@babel/core errors", function () {
       "Error: Configuration contains string/RegExp pattern, but no filename was passed to Babel
           at <CWD>/packages/babel-core/test/fixtures/errors/use-exclude/babel.config.js
           at Module.parseSync (<CWD>/packages/babel-core/lib/parse.js:_:_)
-          ... frames from this test file ...
-          ... internal jest frames ..."
+          at <CWD>/packages/babel-core/test/errors-stacks.js?:_:_
+          at expectError (<CWD>/packages/babel-core/test/errors-stacks.js?:_:_)
+          at <CWD>/packages/babel-core/test/errors-stacks.js?:_:_
+          at ... internal jest frames ..."
     `);
   });
 
@@ -165,8 +155,10 @@ describe("@babel/core errors", function () {
     }).toMatchInlineSnapshot(`
       "Error: Configuration contains string/RegExp pattern, but no filename was passed to Babel
           at Module.parseSync (<CWD>/packages/babel-core/lib/parse.js:_:_)
-          ... frames from this test file ...
-          ... internal jest frames ..."
+          at <CWD>/packages/babel-core/test/errors-stacks.js?:_:_
+          at expectError (<CWD>/packages/babel-core/test/errors-stacks.js?:_:_)
+          at <CWD>/packages/babel-core/test/errors-stacks.js?:_:_
+          at ... internal jest frames ..."
     `);
   });
 
@@ -182,8 +174,10 @@ describe("@babel/core errors", function () {
       \`\`\`
       See https://babeljs.io/docs/en/options#filename for more information.
           at Module.parseSync (<CWD>/packages/babel-core/lib/parse.js:_:_)
-          ... frames from this test file ...
-          ... internal jest frames ..."
+          at <CWD>/packages/babel-core/test/errors-stacks.js?:_:_
+          at expectError (<CWD>/packages/babel-core/test/errors-stacks.js?:_:_)
+          at <CWD>/packages/babel-core/test/errors-stacks.js?:_:_
+          at ... internal jest frames ..."
     `);
   });
 
@@ -196,8 +190,10 @@ describe("@babel/core errors", function () {
       "Error: .sourceType must be \\"module\\", \\"script\\", \\"unambiguous\\", or undefined
           at <CWD>/packages/babel-core/test/fixtures/errors/invalid-option/babel.config.json
           at Module.parseSync (<CWD>/packages/babel-core/lib/parse.js:_:_)
-          ... frames from this test file ...
-          ... internal jest frames ..."
+          at <CWD>/packages/babel-core/test/errors-stacks.js?:_:_
+          at expectError (<CWD>/packages/babel-core/test/errors-stacks.js?:_:_)
+          at <CWD>/packages/babel-core/test/errors-stacks.js?:_:_
+          at ... internal jest frames ..."
     `);
   });
 
@@ -210,8 +206,10 @@ describe("@babel/core errors", function () {
     ).toMatchInlineSnapshot(`
       "Error: .sourceType must be \\"module\\", \\"script\\", \\"unambiguous\\", or undefined
           at Module.parseSync (<CWD>/packages/babel-core/lib/parse.js:_:_)
-          ... frames from this test file ...
-          ... internal jest frames ..."
+          at <CWD>/packages/babel-core/test/errors-stacks.js?:_:_
+          at expectError (<CWD>/packages/babel-core/test/errors-stacks.js?:_:_)
+          at <CWD>/packages/babel-core/test/errors-stacks.js?:_:_
+          at ... internal jest frames ..."
     `);
   });
 
@@ -230,7 +228,7 @@ describe("@babel/core errors", function () {
       }
     }).toMatchInlineSnapshot(`
       "Error: Internal error! This is a fake bug :)
-          ... frames from this test file ...
+          at Array.map (<CWD>/packages/babel-core/test/errors-stacks.js?:_:_)
           at loadOneConfig (<CWD>/packages/babel-core/lib/config/files/configuration.js:_:_)
           at loadOneConfig.next (<anonymous>)
           at buildRootChain (<CWD>/packages/babel-core/lib/config/config-chain.js:_:_)
@@ -239,7 +237,16 @@ describe("@babel/core errors", function () {
           at loadPrivatePartialConfig.next (<anonymous>)
           at loadFullConfig (<CWD>/packages/babel-core/lib/config/full.js:_:_)
           at loadFullConfig.next (<anonymous>)
-          at parse (<CWD>/packages/babel-core/lib/parse.js:_:_)"
+          at parse (<CWD>/packages/babel-core/lib/parse.js:_:_)
+          at parse.next (<anonymous>)
+          at evaluateSync (<CWD>/node_modules/gensync/index.js:_:_)
+          at sync (<CWD>/node_modules/gensync/index.js:_:_)
+          at stopHiding - secret - don't use this - v1 (<CWD>/packages/babel-core/lib/errors/rewrite-stack-trace.js:_:_)
+          at Module.parseSync (<CWD>/packages/babel-core/lib/parse.js:_:_)
+          at <CWD>/packages/babel-core/test/errors-stacks.js?:_:_
+          at expectError (<CWD>/packages/babel-core/test/errors-stacks.js?:_:_)
+          at <CWD>/packages/babel-core/test/errors-stacks.js?:_:_
+          at ... internal jest frames ..."
     `);
   });
 });
