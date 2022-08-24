@@ -1,7 +1,8 @@
 import * as babel from "../lib/index.js";
 
 // TODO: Remove this in Babel 8, once we drop Node.js 8
-import { URL } from "url";
+import { fileURLToPath } from "url";
+import path from "path";
 
 const replaceAll = "".replaceAll
   ? Function.call.bind("".replaceAll)
@@ -69,7 +70,11 @@ function expectError(run) {
 }
 
 const fixture = name =>
-  new URL(`./fixtures/errors/${name}`, import.meta.url).pathname;
+  path.join(
+    path.dirname(fileURLToPath(import.meta.url)),
+    "fixtures/errors",
+    name,
+  );
 
 describe("@babel/core errors", function () {
   beforeAll(() => {
