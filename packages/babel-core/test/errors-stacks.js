@@ -12,9 +12,11 @@ function expectError(run) {
     run();
   } catch (e) {
     let { stack } = e;
+    // Normalize windows paths
+    stack = stack.replace(/\\/g, "/");
     // Remove absolute URLs
-    stack = replaceAll(stack, process.cwd(), "<CWD>");
-    stack = replaceAll(stack, "file://<CWD>", "<CWD>");
+    stack = replaceAll(stack, process.cwd().replace(/\\/g, "/"), "<CWD>");
+    stack = stack.replace(/file:\/\/\/?<CWD>/g, "<CWD>");
     // Remove jest-related stack frames.
     // The `at async Promise.all` frame comes from inside jest-light-runner and is only
     // visible when using --run-in-band, comes from inside jest but doesn't have an
