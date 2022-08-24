@@ -95,18 +95,18 @@ export function createRegExpFeaturePlugin({
         const features = file.get(featuresKey);
         const runtime = file.get(runtimeKey) ?? true;
 
-        const regexpuOptions = generateRegexpuOptions(features);
-        if (canSkipRegexpu(node, regexpuOptions)) return;
+        const regexpuOptions = generateRegexpuOptions(node.pattern, features);
+        if (canSkipRegexpu(node, regexpuOptions)) {
+          return;
+        }
 
         const namedCaptureGroups: Record<string, number | number[]> = {
           __proto__: null,
         };
-        let hasDuplicateNamedCaptureGroups = false;
         if (regexpuOptions.namedGroups === "transform") {
           regexpuOptions.onNamedGroup = (name, index) => {
             const prev = namedCaptureGroups[name];
             if (typeof prev === "number") {
-              hasDuplicateNamedCaptureGroups = true;
               namedCaptureGroups[name] = [prev, index];
             } else if (Array.isArray(prev)) {
               prev.push(index);
@@ -116,20 +116,7 @@ export function createRegExpFeaturePlugin({
           };
         }
 
-        let pattern = rewritePattern(node.pattern, node.flags, regexpuOptions);
-        if (
-          !hasDuplicateNamedCaptureGroups &&
-          hasFeature(features, FEATURES.duplicateNamedCaptureGroups) &&
-          !hasFeature(features, FEATURES.namedCaptureGroups)
-        ) {
-          // If we only transformed named groups because we want to transform duplicates
-          // but there are no duplicates, re-transform the regexp without transforming
-          // named groups.
-          regexpuOptions.namedGroups = false;
-          if (canSkipRegexpu(node, regexpuOptions)) return;
-          pattern = rewritePattern(node.pattern, node.flags, regexpuOptions);
-        }
-        node.pattern = pattern;
+        node.pattern = rewritePattern(node.pattern, node.flags, regexpuOptions);
 
         if (
           regexpuOptions.namedGroups === "transform" &&

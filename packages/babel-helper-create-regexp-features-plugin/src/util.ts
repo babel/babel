@@ -3,7 +3,10 @@ import { FEATURES, hasFeature } from "./features";
 
 import type { RegexpuOptions } from "regexpu-core";
 
-export function generateRegexpuOptions(toTransform: number): RegexpuOptions {
+export function generateRegexpuOptions(
+  pattern: string,
+  toTransform: number,
+): RegexpuOptions {
   type Experimental = 1;
 
   const feat = <Stability extends 0 | 1 = 0>(
@@ -13,6 +16,21 @@ export function generateRegexpuOptions(toTransform: number): RegexpuOptions {
     return hasFeature(toTransform, FEATURES[name]) ? ok : false;
   };
 
+  const featDuplicateNamedGroups = (): "transform" | false => {
+    if (!feat("duplicateNamedCaptureGroups")) return false;
+
+    // This can return false positive, for example for /\(?<a>\)/.
+    // However, it's such a rare occurrence that it's ok to compile
+    // the regexp even if we only need to compile regexps with
+    // duplicate named capturing groups.
+    const regex = /\(\?<([^>]+)>/g;
+    const seen = new Set();
+    for (let match; (match = regex.exec(pattern)); seen.add(match[1])) {
+      if (seen.has(match[1])) return "transform";
+    }
+    return false;
+  };
+
   return {
     unicodeFlag: feat("unicodeFlag"),
     unicodeSetsFlag:
@@ -20,8 +38,7 @@ export function generateRegexpuOptions(toTransform: number): RegexpuOptions {
       feat<Experimental>("unicodeSetsFlag_syntax", "parse"),
     dotAllFlag: feat("dotAllFlag"),
     unicodePropertyEscapes: feat("unicodePropertyEscape"),
-    namedGroups:
-      feat("namedCaptureGroups") || feat("duplicateNamedCaptureGroups"),
+    namedGroups: feat("namedCaptureGroups") || featDuplicateNamedGroups(),
     onNamedGroup: () => {},
   };
 }
