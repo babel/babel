@@ -5,6 +5,7 @@ export default (_: any, { loose = false } = {}) => {
   const plugins: any[] = [
     babelPlugins.syntaxImportAssertions,
     babelPlugins.proposalUnicodeSetsRegex,
+    babelPlugins.proposalDuplicateNamedCapturingGroupsRegex,
   ];
 
   if (!process.env.BABEL_8_BREAKING) {

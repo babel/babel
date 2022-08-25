@@ -27,6 +27,7 @@
   "proposal-decorators",
   "proposal-destructuring-private",
   "proposal-do-expressions",
+  "proposal-duplicate-named-capturing-groups-regex",
   "proposal-dynamic-import",
   "proposal-export-default-from",
   "proposal-export-namespace-from",
