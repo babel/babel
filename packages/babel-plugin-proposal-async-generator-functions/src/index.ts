@@ -17,11 +17,15 @@ export default declare(api => {
 
       YieldExpression({ node }, state) {
         if (!node.delegate) return;
-        const callee = state.addHelper("asyncGeneratorDelegate");
-        node.argument = t.callExpression(callee, [
-          t.callExpression(state.addHelper("asyncIterator"), [node.argument]),
-          state.addHelper("awaitAsyncGenerator"),
+        const asyncIter = t.callExpression(state.addHelper("asyncIterator"), [
+          node.argument,
         ]);
+        node.argument = t.callExpression(
+          state.addHelper("asyncGeneratorDelegate"),
+          process.env.BABEL_8_BREAKING
+            ? [asyncIter]
+            : [asyncIter, state.addHelper("awaitAsyncGenerator")],
+        );
       },
     },
     environmentVisitor,
