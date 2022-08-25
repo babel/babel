@@ -27,8 +27,25 @@ function getTsPkgs(subRoot) {
   return fs
     .readdirSync(new URL(subRoot, root))
     .filter(name => name.startsWith("babel-"))
-    .map(name => {
-      const relative = `./${subRoot}/${name}`;
+    .map(name => ({
+      name: name.replace(/^babel-/, "@babel/"),
+      relative: `./${subRoot}/${name}`,
+    }))
+    .filter(({ name, relative }) => {
+      const ret =
+        // They are special-cased because them dose not have a index.ts
+        name === "@babel/register" ||
+        name === "@babel/cli" ||
+        name === "@babel/node" ||
+        // @babel/compat-data is used by preset-env
+        name === "@babel/compat-data" ||
+        fs.existsSync(new URL(relative + "/src/index.ts", root));
+      if (!ret) {
+        console.log(`Skipping ${name} for tsconfig.json`);
+      }
+      return ret;
+    })
+    .map(({ name, relative }) => {
       const packageJSON = importJSON(new URL(relative + "/package.json", root));
       // Babel 8 exports > Babel 7 exports > {}
       const exports =
@@ -38,10 +55,10 @@ function getTsPkgs(subRoot) {
       const subExports = Object.entries(exports).flatMap(
         ([_export, exportPath]) => {
           // The @babel/standalone has babel.js as exports, but we don't have src/babel.ts
-          if (name === "babel-standalone") {
+          if (name === "@babel/standalone") {
             return [["", "/src"]];
           }
-          if (name === "babel-compat-data") {
+          if (name === "@babel/compat-data") {
             // map ./plugins to ./data/plugins.json
             const subExport = _export.slice(1);
             const subExportPath = exportPath
@@ -68,25 +85,7 @@ function getTsPkgs(subRoot) {
           return [];
         }
       );
-      return {
-        name: name.replace(/^babel-/, "@babel/"),
-        relative,
-        subExports,
-      };
-    })
-    .filter(({ name, relative }) => {
-      const ret =
-        // They are special-cased because them dose not have a index.ts
-        name === "@babel/register" ||
-        name === "@babel/cli" ||
-        name === "@babel/node" ||
-        // @babel/compat-data is used by preset-env
-        name === "@babel/compat-data" ||
-        fs.existsSync(new URL(relative + "/src/index.ts", root));
-      if (!ret) {
-        console.log(`Skipping ${name} for tsconfig.json`);
-      }
-      return ret;
+      return { name, relative, subExports };
     });
 }
 
