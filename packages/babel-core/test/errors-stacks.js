@@ -1,6 +1,5 @@
 import * as babel from "../lib/index.js";
 
-// TODO: Remove this in Babel 8, once we drop Node.js 8
 import { fileURLToPath } from "url";
 import path from "path";
 
