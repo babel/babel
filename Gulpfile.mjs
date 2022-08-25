@@ -245,6 +245,8 @@ function createWorker(useWorker) {
 }
 
 async function buildBabel(useWorker, ignore = []) {
+  const enableSourceMap = !process.env.IS_PUBLISH;
+
   const worker = createWorker(useWorker);
   const files = await new Promise((resolve, reject) => {
     glob(
@@ -263,9 +265,11 @@ async function buildBabel(useWorker, ignore = []) {
   for (const file of files) {
     // @example ./packages/babel-parser/src/index.js
     const dest = "./" + mapSrcToLib(file.slice(2));
-    promises.push(worker.transform(file, dest));
+    promises.push(
+      worker.transform(file, dest, { sourceMaps: enableSourceMap })
+    );
   }
-  return Promise.allSettled(promises).finally(() => {
+  return Promise.all(promises).finally(() => {
     if (worker.end !== undefined) {
       worker.end();
     }

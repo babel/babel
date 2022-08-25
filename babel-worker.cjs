@@ -1,6 +1,6 @@
 const { transformAsync } = require("@babel/core");
 const { mkdirSync, statSync, readFileSync, writeFileSync } = require("fs");
-const { dirname } = require("path");
+const path = require("path");
 const { log } = require("./scripts/utils/logger.cjs");
 
 let chalk;
@@ -20,26 +20,40 @@ function needCompile(src, dest) {
     }
   }
   const srcStat = statSync(src);
-  return srcStat.mtimeMs > destStat.mtimeMs;
+  return srcStat.mtimeMs >= destStat.mtimeMs;
 }
 
-exports.transform = async function transform(src, dest) {
+exports.transform = async function transform(src, dest, opts = {}) {
   if (!chalk) await chalkP;
 
-  mkdirSync(dirname(dest), { recursive: true });
+  mkdirSync(path.dirname(dest), { recursive: true });
   if (!needCompile(src, dest)) {
     return;
   }
   log(`Compiling '${chalk.cyan(src)}'...`);
   const content = readFileSync(src, { encoding: "utf8" });
-  const { code } = await transformAsync(content, {
+  const { code, map } = await transformAsync(content, {
     filename: src,
+    sourceFileName: `../src/${path.basename(src)}`,
     caller: {
       // We have wrapped packages/babel-core/src/config/files/configuration.js with feature detection
       supportsDynamicImport: true,
       name: "babel-worker",
     },
+    ...opts,
   });
 
-  writeFileSync(dest, code, "utf8");
+  if (map) {
+    writeFileSync(
+      dest,
+      `${code}
+
+//# sourceMappingURL=${path.basename(dest)}.map
+`,
+      "utf8"
+    );
+    writeFileSync(dest + ".map", JSON.stringify(map), "utf8");
+  } else {
+    writeFileSync(dest, code, "utf8");
+  }
 };
