@@ -16,11 +16,13 @@ const helper = (minVersion: string) => (tpl: TemplateStringsArray) => ({
   ast: () => template.program.ast(tpl),
 });
 
-helpers.AwaitValue = helper("7.0.0-beta.0")`
-  export default function _AwaitValue(value) {
-    this.wrapped = value;
-  }
-`;
+if (!process.env.BABEL_8_BREAKING) {
+  helpers.AwaitValue = helper("7.0.0-beta.0")`
+    export default function _AwaitValue(value) {
+      this.wrapped = value;
+    }
+  `;
+}
 
 helpers.wrapAsyncGenerator = helper("7.0.0-beta.0")`
   import AsyncGenerator from "AsyncGenerator";

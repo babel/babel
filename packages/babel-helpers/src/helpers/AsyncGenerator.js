@@ -1,6 +1,6 @@
 /* @minVersion 7.0.0-beta.0 */
 
-import AwaitValue from "AwaitValue";
+import OverloadYield from "OverloadYield";
 
 export default function AsyncGenerator(gen) {
   var front, back;
@@ -28,13 +28,31 @@ export default function AsyncGenerator(gen) {
     try {
       var result = gen[key](arg);
       var value = result.value;
-      var wrappedAwait = value instanceof AwaitValue;
+      var overloaded = value instanceof OverloadYield;
 
-      Promise.resolve(wrappedAwait ? value.wrapped : value).then(
+      Promise.resolve(overloaded ? value.v : value).then(
         function (arg) {
-          if (wrappedAwait) {
-            resume(key === "return" ? "return" : "next", arg);
-            return;
+          if (overloaded) {
+            // Overloaded yield requires calling into the generator twice:
+            //  - first we get the iterator result wrapped in a promise
+            //    (the gen[key](arg) call above)
+            //  - then we await it (the Promise.resolve call above)
+            //  - then we give the result back to the iterator, so that it can:
+            //    * if it was an await, use its result
+            //    * if it was a yield*, possibly return the `done: true` signal
+            //      so that yield* knows that the iterator is finished.
+            //      This needs to happen in the second call, because in the
+            //      first one `done: true` was hidden in the promise and thus
+            //      not visible to the (sync) yield*.
+            //      The other part of this implementation is in asyncGeneratorDelegate.
+            var nextKey = key === "return" ? "return" : "next";
+            if (!value.k || arg.done) {
+              // await or end of yield*
+              return resume(nextKey, arg);
+            } else {
+              // yield*, not done
+              arg = gen[nextKey](arg).value;
+            }
           }
 
           settle(result.done ? "return" : "normal", arg);

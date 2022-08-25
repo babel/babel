@@ -1,7 +1,10 @@
 /* @minVersion 7.0.0-beta.0 */
 
-export default function _asyncGeneratorDelegate(inner, awaitWrap) {
+import OverloadYield from "OverloadYield";
+
+export default function _asyncGeneratorDelegate(inner) {
   var iter = {},
+    // See the comment in AsyncGenerator to understand what this is.
     waiting = false;
 
   function pump(key, value) {
@@ -9,7 +12,10 @@ export default function _asyncGeneratorDelegate(inner, awaitWrap) {
     value = new Promise(function (resolve) {
       resolve(inner[key](value));
     });
-    return { done: false, value: awaitWrap(value) };
+    return {
+      done: false,
+      value: new OverloadYield(value, /* kind: delegate */ 1),
+    };
   }
 
   iter[(typeof Symbol !== "undefined" && Symbol.iterator) || "@@iterator"] =

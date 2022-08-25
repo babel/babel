@@ -15,7 +15,11 @@ function helper(minVersion: string, source: string) {
 export default Object.freeze({
   AsyncGenerator: helper(
     "7.0.0-beta.0",
-    'import AwaitValue from"AwaitValue";export default function AsyncGenerator(gen){var front,back;function resume(key,arg){try{var result=gen[key](arg),value=result.value,wrappedAwait=value instanceof AwaitValue;Promise.resolve(wrappedAwait?value.wrapped:value).then((function(arg){wrappedAwait?resume("return"===key?"return":"next",arg):settle(result.done?"return":"normal",arg)}),(function(err){resume("throw",err)}))}catch(err){settle("throw",err)}}function settle(type,value){switch(type){case"return":front.resolve({value:value,done:!0});break;case"throw":front.reject(value);break;default:front.resolve({value:value,done:!1})}(front=front.next)?resume(front.key,front.arg):back=null}this._invoke=function(key,arg){return new Promise((function(resolve,reject){var request={key:key,arg:arg,resolve:resolve,reject:reject,next:null};back?back=back.next=request:(front=back=request,resume(key,arg))}))},"function"!=typeof gen.return&&(this.return=void 0)}AsyncGenerator.prototype["function"==typeof Symbol&&Symbol.asyncIterator||"@@asyncIterator"]=function(){return this},AsyncGenerator.prototype.next=function(arg){return this._invoke("next",arg)},AsyncGenerator.prototype.throw=function(arg){return this._invoke("throw",arg)},AsyncGenerator.prototype.return=function(arg){return this._invoke("return",arg)};',
+    'import OverloadYield from"OverloadYield";export default function AsyncGenerator(gen){var front,back;function resume(key,arg){try{var result=gen[key](arg),value=result.value,overloaded=value instanceof OverloadYield;Promise.resolve(overloaded?value.v:value).then((function(arg){if(overloaded){var nextKey="return"===key?"return":"next";if(!value.k||arg.done)return resume(nextKey,arg);arg=gen[nextKey](arg).value}settle(result.done?"return":"normal",arg)}),(function(err){resume("throw",err)}))}catch(err){settle("throw",err)}}function settle(type,value){switch(type){case"return":front.resolve({value:value,done:!0});break;case"throw":front.reject(value);break;default:front.resolve({value:value,done:!1})}(front=front.next)?resume(front.key,front.arg):back=null}this._invoke=function(key,arg){return new Promise((function(resolve,reject){var request={key:key,arg:arg,resolve:resolve,reject:reject,next:null};back?back=back.next=request:(front=back=request,resume(key,arg))}))},"function"!=typeof gen.return&&(this.return=void 0)}AsyncGenerator.prototype["function"==typeof Symbol&&Symbol.asyncIterator||"@@asyncIterator"]=function(){return this},AsyncGenerator.prototype.next=function(arg){return this._invoke("next",arg)},AsyncGenerator.prototype.throw=function(arg){return this._invoke("throw",arg)},AsyncGenerator.prototype.return=function(arg){return this._invoke("return",arg)};',
+  ),
+  OverloadYield: helper(
+    "7.18.14",
+    "export default function _OverloadYield(value,kind){this.v=value,this.k=kind}",
   ),
   applyDecs: helper(
     "7.17.8",
@@ -23,7 +27,7 @@ export default Object.freeze({
   ),
   asyncGeneratorDelegate: helper(
     "7.0.0-beta.0",
-    'export default function _asyncGeneratorDelegate(inner,awaitWrap){var iter={},waiting=!1;function pump(key,value){return waiting=!0,value=new Promise((function(resolve){resolve(inner[key](value))})),{done:!1,value:awaitWrap(value)}}return iter["undefined"!=typeof Symbol&&Symbol.iterator||"@@iterator"]=function(){return this},iter.next=function(value){return waiting?(waiting=!1,value):pump("next",value)},"function"==typeof inner.throw&&(iter.throw=function(value){if(waiting)throw waiting=!1,value;return pump("throw",value)}),"function"==typeof inner.return&&(iter.return=function(value){return waiting?(waiting=!1,value):pump("return",value)}),iter}',
+    'import OverloadYield from"OverloadYield";export default function _asyncGeneratorDelegate(inner){var iter={},waiting=!1;function pump(key,value){return waiting=!0,value=new Promise((function(resolve){resolve(inner[key](value))})),{done:!1,value:new OverloadYield(value,1)}}return iter["undefined"!=typeof Symbol&&Symbol.iterator||"@@iterator"]=function(){return this},iter.next=function(value){return waiting?(waiting=!1,value):pump("next",value)},"function"==typeof inner.throw&&(iter.throw=function(value){if(waiting)throw waiting=!1,value;return pump("throw",value)}),"function"==typeof inner.return&&(iter.return=function(value){return waiting?(waiting=!1,value):pump("return",value)}),iter}',
   ),
   asyncIterator: helper(
     "7.15.9",
@@ -31,7 +35,7 @@ export default Object.freeze({
   ),
   awaitAsyncGenerator: helper(
     "7.0.0-beta.0",
-    'import AwaitValue from"AwaitValue";export default function _awaitAsyncGenerator(value){return new AwaitValue(value)}',
+    'import OverloadYield from"OverloadYield";export default function _awaitAsyncGenerator(value){return new OverloadYield(value,0)}',
   ),
   jsx: helper(
     "7.0.0-beta.0",
