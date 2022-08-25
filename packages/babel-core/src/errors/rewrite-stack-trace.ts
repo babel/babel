@@ -94,26 +94,30 @@ export function expectedError(error: Error) {
   return error;
 }
 
-export function beginHiddenCallStack<Fn extends Function>(fn: Fn): Fn {
+export function beginHiddenCallStack<A extends unknown[], R>(
+  fn: (...args: A) => R,
+) {
   if (!SUPPORTED) return fn;
 
   return Object.defineProperty(
-    function (this: any) {
+    function (...args: A) {
       setupPrepareStackTrace();
-      return fn.apply(this, arguments);
-    } as any as Fn,
+      return fn(...args);
+    },
     "name",
     { value: STOP_HIDNG },
   );
 }
 
-export function endHiddenCallStack<Fn extends Function>(fn: Fn): Fn {
+export function endHiddenCallStack<A extends unknown[], R>(
+  fn: (...args: A) => R,
+) {
   if (!SUPPORTED) return fn;
 
   return Object.defineProperty(
-    function (this: any) {
-      return fn.apply(this, arguments);
-    } as any as Fn,
+    function (...args: A) {
+      return fn(...args);
+    },
     "name",
     { value: START_HIDNG },
   );

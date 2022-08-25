@@ -54,7 +54,7 @@ export type PresetInstance = {
 };
 
 export type ConfigContext = {
-  filename: string | void;
+  filename: string | undefined;
   cwd: string;
   root: string;
   envName: string;
@@ -899,7 +899,7 @@ function matchesPatterns(
 function matchPattern(
   pattern: IgnoreItem,
   dirname: string,
-  pathToTest: unknown,
+  pathToTest: string | undefined,
   context: ConfigContext,
   configName?: string,
 ): boolean {

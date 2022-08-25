@@ -201,7 +201,13 @@ export type CallerMetadata = {
 export type EnvSet<T> = {
   [x: string]: T;
 };
-export type IgnoreItem = string | Function | RegExp;
+export type IgnoreItem =
+  | string
+  | RegExp
+  | ((
+      path: string | undefined,
+      context: { dirname: string; caller: CallerMetadata; envName: string },
+    ) => unknown);
 export type IgnoreList = ReadonlyArray<IgnoreItem>;
 
 export type PluginOptions = object | void | false;

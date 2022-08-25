@@ -256,7 +256,7 @@ function assertIgnoreItem(loc: GeneralPath, value: unknown): IgnoreItem {
       )} must be an array of string/Function/RegExp values, or undefined`,
     );
   }
-  return value;
+  return value as IgnoreItem;
 }
 
 export function assertConfigApplicableTest(
@@ -278,7 +278,7 @@ export function assertConfigApplicableTest(
       `${msg(loc)} must be a string/Function/RegExp, or an array of those`,
     );
   }
-  return value;
+  return value as ConfigApplicableTest;
 }
 
 function checkValidTest(value: unknown): value is string | Function | RegExp {
@@ -327,7 +327,7 @@ export function assertBabelrcSearch(
         `or an array of those, got ${JSON.stringify(value as any)}`,
     );
   }
-  return value;
+  return value as BabelrcSearch;
 }
 
 export function assertPluginList(
