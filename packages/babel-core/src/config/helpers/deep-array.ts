@@ -10,7 +10,9 @@ export function finalize<T>(deepArr: DeepArray<T>): ReadonlyDeepArray<T> {
   return Object.freeze(deepArr) as ReadonlyDeepArray<T>;
 }
 
-export function flattenToSet<T>(arr: ReadonlyDeepArray<T>): Set<T> {
+export function flattenToSet<T extends string>(
+  arr: ReadonlyDeepArray<T>,
+): Set<T> {
   const result = new Set<T>();
   const stack = [arr];
   while (stack.length > 0) {
