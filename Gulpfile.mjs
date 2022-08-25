@@ -269,11 +269,23 @@ async function buildBabel(useWorker, ignore = []) {
       worker.transform(file, dest, { sourceMaps: enableSourceMap })
     );
   }
-  return Promise.all(promises).finally(() => {
-    if (worker.end !== undefined) {
-      worker.end();
-    }
-  });
+  return Promise.allSettled(promises)
+    .then(results => {
+      results.forEach(result => {
+        if (result.status == "rejected") {
+          if (process.env.WATCH_SKIP_BUILD) {
+            console.error(result.reason);
+          } else {
+            throw result.reason;
+          }
+        }
+      });
+    })
+    .finally(() => {
+      if (worker.end !== undefined) {
+        worker.end();
+      }
+    });
 }
 
 /**
