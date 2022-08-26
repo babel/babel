@@ -511,6 +511,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-builder-react-jsx@workspace:packages/babel-helper-builder-react-jsx"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/helper-annotate-as-pure": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
