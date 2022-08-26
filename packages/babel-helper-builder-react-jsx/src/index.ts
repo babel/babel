@@ -24,7 +24,7 @@ import {
 } from "@babel/types";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 import type { NodePath, Visitor } from "@babel/traverse";
-import type { PluginPass, File } from "@babel/core";
+import type { PluginPass } from "@babel/core";
 import type * as t from "@babel/types";
 
 type ElementState = {
@@ -37,9 +37,9 @@ type ElementState = {
 };
 
 export interface Options {
-  filter?: (node: t.Node, file: File) => boolean;
-  pre?: (state: ElementState, file: File) => void;
-  post?: (state: ElementState, file: File) => void;
+  filter?: (node: t.Node, pass: PluginPass) => boolean;
+  pre?: (state: ElementState, pass: PluginPass) => void;
+  post?: (state: ElementState, pass: PluginPass) => void;
   compat?: boolean;
   pure?: string;
   throwIfNamespace?: boolean;
@@ -65,7 +65,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
 
   visitor.JSXElement = {
     exit(path, state) {
-      const callExpr = buildElementCall(path, state.file);
+      const callExpr = buildElementCall(path, state);
       if (callExpr) {
         path.replaceWith(inherits(callExpr, path.node));
       }
@@ -79,7 +79,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
           "Fragment tags are only supported in React 16 and up.",
         );
       }
-      const callExpr = buildFragmentCall(path, state.file);
+      const callExpr = buildFragmentCall(path, state);
       if (callExpr) {
         path.replaceWith(inherits(callExpr, path.node));
       }
@@ -164,8 +164,8 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     );
   }
 
-  function buildElementCall(path: NodePath<t.JSXElement>, file: File) {
-    if (opts.filter && !opts.filter(path.node, file)) return;
+  function buildElementCall(path: NodePath<t.JSXElement>, pass: PluginPass) {
+    if (opts.filter && !opts.filter(path.node, pass)) return;
 
     const openingPath = path.get("openingElement");
     // @ts-expect-error mutating AST nodes
@@ -192,7 +192,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     };
 
     if (opts.pre) {
-      opts.pre(state, file);
+      opts.pre(state, pass);
     }
 
     const attribs = openingPath.node.attributes;
@@ -201,7 +201,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       if (process.env.BABEL_8_BREAKING) {
         convertedAttributes = objectExpression(attribs.map(convertAttribute));
       } else {
-        convertedAttributes = buildOpeningElementAttributes(attribs, file);
+        convertedAttributes = buildOpeningElementAttributes(attribs, pass);
       }
     } else {
       convertedAttributes = nullLiteral();
@@ -214,7 +214,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     );
 
     if (opts.post) {
-      opts.post(state, file);
+      opts.post(state, pass);
     }
 
     const call = state.call || callExpression(state.callee, args);
@@ -242,12 +242,12 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
 
   function buildOpeningElementAttributes(
     attribs: (t.JSXAttribute | t.JSXSpreadAttribute)[],
-    file: File,
+    pass: PluginPass,
   ): t.Expression {
     let _props: (t.ObjectProperty | t.SpreadElement)[] = [];
     const objs: t.Expression[] = [];
 
-    const { useSpread = false } = file.opts;
+    const { useSpread = false } = pass.opts;
     if (typeof useSpread !== "boolean") {
       throw new Error(
         "transform-react-jsx currently only accepts a boolean option for " +
@@ -255,7 +255,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       );
     }
 
-    const useBuiltIns = file.opts.useBuiltIns || false;
+    const useBuiltIns = pass.opts.useBuiltIns || false;
     if (typeof useBuiltIns !== "boolean") {
       throw new Error(
         "transform-react-jsx currently only accepts a boolean option for " +
@@ -299,7 +299,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
 
       const helper = useBuiltIns
         ? memberExpression(identifier("Object"), identifier("assign"))
-        : file.addHelper("extends");
+        : pass.addHelper("extends");
 
       // spread it
       convertedAttribs = callExpression(helper, objs);
@@ -308,15 +308,15 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     return convertedAttribs;
   }
 
-  function buildFragmentCall(path: NodePath<t.JSXFragment>, file: File) {
-    if (opts.filter && !opts.filter(path.node, file)) return;
+  function buildFragmentCall(path: NodePath<t.JSXFragment>, pass: PluginPass) {
+    if (opts.filter && !opts.filter(path.node, pass)) return;
 
     // @ts-expect-error mutating AST nodes
     path.node.children = react.buildChildren(path.node);
 
     const args: t.Expression[] = [];
     const tagName: null = null;
-    const tagExpr = file.get("jsxFragIdentifier")();
+    const tagExpr = pass.get("jsxFragIdentifier")();
 
     const state: ElementState = {
       tagExpr: tagExpr,
@@ -326,7 +326,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     };
 
     if (opts.pre) {
-      opts.pre(state, file);
+      opts.pre(state, pass);
     }
 
     // no attributes are allowed with <> syntax
@@ -337,10 +337,10 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     );
 
     if (opts.post) {
-      opts.post(state, file);
+      opts.post(state, pass);
     }
 
-    file.set("usedFragment", true);
+    pass.set("usedFragment", true);
 
     const call = state.call || callExpression(state.callee, args);
     if (state.pure) annotateAsPure(call);
