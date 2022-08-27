@@ -109,7 +109,7 @@ class NodePath<T extends t.Node = t.Node> {
   }
 
   getScope(scope: Scope): Scope {
-    return this.isScope() ? new Scope(this) : scope;
+    return this.isScope() ? new Scope(this as any) : scope;
   }
 
   setData(key: string | symbol, val: any): any {
