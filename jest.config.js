@@ -11,6 +11,7 @@ const isPublishBundle = process.env.IS_PUBLISH;
 module.exports = {
   runner: supportsESMAndJestLightRunner ? "jest-light-runner" : "jest-runner",
 
+  snapshotFormat: { escapeString: true, printBasicPrototype: true },
   collectCoverageFrom: [
     "packages/*/src/**/*.{js,cjs,mjs,ts}",
     "codemods/*/src/**/*.{js,cjs,mjs,ts}",

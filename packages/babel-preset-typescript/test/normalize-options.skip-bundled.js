@@ -32,17 +32,17 @@ describe("normalize options", () => {
     });
     it("default values", () => {
       expect(normalizeOptions({})).toMatchInlineSnapshot(`
-Object {
-  "allExtensions": false,
-  "allowNamespaces": true,
-  "disallowAmbiguousJSXLike": false,
-  "isTSX": false,
-  "jsxPragma": "React",
-  "jsxPragmaFrag": "React.Fragment",
-  "onlyRemoveTypeImports": true,
-  "optimizeConstEnums": false,
-}
-`);
+        Object {
+          "allExtensions": false,
+          "allowNamespaces": true,
+          "disallowAmbiguousJSXLike": false,
+          "isTSX": false,
+          "jsxPragma": "React",
+          "jsxPragmaFrag": "React.Fragment",
+          "onlyRemoveTypeImports": true,
+          "optimizeConstEnums": false,
+        }
+      `);
     });
   });
   (process.env.BABEL_8_BREAKING ? describe.skip : describe)("Babel 7", () => {
@@ -81,17 +81,17 @@ Object {
     );
     it("default values", () => {
       expect(normalizeOptions({})).toMatchInlineSnapshot(`
-Object {
-  "allExtensions": false,
-  "allowNamespaces": true,
-  "disallowAmbiguousJSXLike": false,
-  "isTSX": false,
-  "jsxPragma": undefined,
-  "jsxPragmaFrag": "React.Fragment",
-  "onlyRemoveTypeImports": undefined,
-  "optimizeConstEnums": false,
-}
-`);
+        Object {
+          "allExtensions": false,
+          "allowNamespaces": true,
+          "disallowAmbiguousJSXLike": false,
+          "isTSX": false,
+          "jsxPragma": undefined,
+          "jsxPragmaFrag": "React.Fragment",
+          "onlyRemoveTypeImports": undefined,
+          "optimizeConstEnums": false,
+        }
+      `);
     });
   });
 });

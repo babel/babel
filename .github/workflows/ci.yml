@@ -202,6 +202,16 @@ jobs:
           # Deduplicate dependencies, because duplicate copies of graceful-fs cause
           # problems with the "path" module: https://github.com/facebook/jest/issues/9656
           yarn dedupe
+      - name: Downgrade Jest for node == 12
+        if: matrix.node-version == '12'
+        run: |
+          yarn remove jest
+          yarn remove jest-light-runner
+          yarn add --dev jest@28
+          yarn add --dev jest-light-runner@0.3.0
+          # Deduplicate dependencies, because duplicate copies of graceful-fs cause
+          # problems with the "path" module: https://github.com/facebook/jest/issues/9656
+          yarn dedupe
       - uses: actions/download-artifact@v3
         with:
           name: babel-artifact
