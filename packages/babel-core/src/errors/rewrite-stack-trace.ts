@@ -33,10 +33,11 @@
  * - If e() throws an error, then its shown call stack will be "e, f"
  *
  * Additionally, an error can inject additional "virtual" stack frames using the
- * injcectVirtualStackFrame(error, filename) function: those are added on the top
- * of the existig stack, after hiding the possibly hidden frames.
- * In the example above, if we called injcectVirtualStackFrame(error, "h") on the
- * expected error thrown by c(), it's shown call stack would have been "h, e, f".
+ * injcectVirtualStackFrame(error, filename) function: those are injected as a
+ * replacement of the hidden frames.
+ * In the example above, if we called injcectVirtualStackFrame(err, "h") and
+ * injcectVirtualStackFrame(err, "i") on the expected error thrown by c(), its
+ * shown call stack would have been "h, i, e, f".
  * This can be useful, for example, to report config validation errors as if they
  * were directly thrown in the config file.
  */
@@ -137,7 +138,9 @@ function setupPrepareStackTrace() {
     let newTrace = [];
 
     const isExpected = expectedErrors.has(err);
-    let status = isExpected ? "hiding" : "unknown";
+    let status: "showing" | "hiding" | "unknown" = isExpected
+      ? "hiding"
+      : "unknown";
     for (let i = 0; i < trace.length; i++) {
       const name = trace[i].getFunctionName();
       if (name === START_HIDNG) {
