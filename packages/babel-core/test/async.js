@@ -123,7 +123,7 @@ describe("asynchronicity", () => {
         process.chdir("plugin");
 
         expect(() => babel.transformSync("")).toThrow(
-          `[BABEL] unknown: You appear to be using an async plugin/preset, but Babel` +
+          `[BABEL] unknown file: You appear to be using an async plugin/preset, but Babel` +
             ` has been called synchronously`,
         );
       });
@@ -144,7 +144,7 @@ describe("asynchronicity", () => {
         expect(() =>
           babel.transformSync(""),
         ).toThrowErrorMatchingInlineSnapshot(
-          `"unknown: You appear to be using an plugin with an async .pre, which your current version` +
+          `"unknown file: You appear to be using an plugin with an async .pre, which your current version` +
             ` of Babel does not support. If you're using a published plugin, you may need to upgrade your` +
             ` @babel/core version."`,
         );
@@ -156,7 +156,7 @@ describe("asynchronicity", () => {
         await expect(
           babel.transformAsync(""),
         ).rejects.toThrowErrorMatchingInlineSnapshot(
-          `"unknown: You appear to be using an plugin with an async .pre, which your current version` +
+          `"unknown file: You appear to be using an plugin with an async .pre, which your current version` +
             ` of Babel does not support. If you're using a published plugin, you may need to upgrade your` +
             ` @babel/core version."`,
         );
@@ -170,7 +170,7 @@ describe("asynchronicity", () => {
         expect(() =>
           babel.transformSync(""),
         ).toThrowErrorMatchingInlineSnapshot(
-          `"unknown: You appear to be using an plugin with an async .post, which your current version` +
+          `"unknown file: You appear to be using an plugin with an async .post, which your current version` +
             ` of Babel does not support. If you're using a published plugin, you may need to upgrade your` +
             ` @babel/core version."`,
         );
@@ -182,7 +182,7 @@ describe("asynchronicity", () => {
         await expect(
           babel.transformAsync(""),
         ).rejects.toThrowErrorMatchingInlineSnapshot(
-          `"unknown: You appear to be using an plugin with an async .post, which your current version` +
+          `"unknown file: You appear to be using an plugin with an async .post, which your current version` +
             ` of Babel does not support. If you're using a published plugin, you may need to upgrade your` +
             ` @babel/core version."`,
         );
@@ -194,7 +194,7 @@ describe("asynchronicity", () => {
         process.chdir("plugin-inherits");
 
         expect(() => babel.transformSync("")).toThrow(
-          `[BABEL] unknown: You appear to be using an async plugin/preset, but Babel has been` +
+          `[BABEL] unknown file: You appear to be using an async plugin/preset, but Babel has been` +
             ` called synchronously`,
         );
       });
@@ -234,7 +234,7 @@ describe("asynchronicity", () => {
         process.chdir("preset");
 
         expect(() => babel.transformSync("")).toThrow(
-          `[BABEL] unknown: You appear to be using an async plugin/preset, ` +
+          `[BABEL] unknown file: You appear to be using an async plugin/preset, ` +
             `but Babel has been called synchronously`,
         );
       });
@@ -253,7 +253,7 @@ describe("asynchronicity", () => {
         process.chdir("preset-plugin-promise");
 
         expect(() => babel.transformSync("")).toThrow(
-          `[BABEL] unknown: You appear to be using a promise as a plugin, which your` +
+          `[BABEL] unknown file: You appear to be using a promise as a plugin, which your` +
             ` current version of Babel does not support. If you're using a published` +
             ` plugin, you may need to upgrade your @babel/core version. As an` +
             ` alternative, you can prefix the promise with "await".`,
@@ -264,7 +264,7 @@ describe("asynchronicity", () => {
         process.chdir("preset-plugin-promise");
 
         await expect(babel.transformAsync("")).rejects.toThrow(
-          `[BABEL] unknown: You appear to be using a promise as a plugin, which your` +
+          `[BABEL] unknown file: You appear to be using a promise as a plugin, which your` +
             ` current version of Babel does not support. If you're using a published` +
             ` plugin, you may need to upgrade your @babel/core version. As an` +
             ` alternative, you can prefix the promise with "await".`,
