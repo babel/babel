@@ -2508,6 +2508,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           if (
             // a<b>>c is not (a<b>)>c, but a<(b>>c)
             tokenType === tt.gt ||
+            // a<b>>>c is not (a<b>)>>c, but a<(b>>>c)
+            tokenType === tt.bitShiftR ||
             // a<b>c is (a<b)>c
             (tokenType !== tt.parenL &&
               tokenCanStartExpression(tokenType) &&
