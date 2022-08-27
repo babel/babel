@@ -18,6 +18,7 @@
     "@babel/types": "workspace:^"
   },
   "devDependencies": {
+    "@babel/core": "workspace:^",
     "@babel/traverse": "workspace:^"
   },
   "engines": {
