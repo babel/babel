@@ -30,6 +30,7 @@ import loadPrivatePartialConfig from "./partial";
 import type { ValidatedOptions } from "./validation/options";
 
 import * as Context from "./cache-contexts";
+import ConfigError from "../errors/config-error";
 
 type LoadedDescriptor = {
   value: {};
@@ -411,7 +412,7 @@ const validateIfOptionNeedsFilename = (
     const formattedPresetName = descriptor.name
       ? `"${descriptor.name}"`
       : "/* your preset */";
-    throw new Error(
+    throw new ConfigError(
       [
         `Preset ${formattedPresetName} requires a filename to be set when babel is called directly,`,
         `\`\`\``,

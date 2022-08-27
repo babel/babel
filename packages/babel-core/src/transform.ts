@@ -5,6 +5,7 @@ import type { InputOptions, ResolvedConfig } from "./config";
 import { run } from "./transformation";
 
 import type { FileResult, FileResultCallback } from "./transformation";
+import { beginHiddenCallStack } from "./errors/rewrite-stack-trace";
 
 export type { FileResult } from "./transformation";
 
@@ -52,12 +53,20 @@ export const transform: Transform = function transform(
       // console.warn(
       //   "Starting from Babel 8.0.0, the 'transform' function will expect a callback. If you need to call it synchronously, please use 'transformSync'.",
       // );
-      return transformRunner.sync(code, opts);
+      return beginHiddenCallStack(transformRunner.sync)(code, opts);
     }
   }
 
-  transformRunner.errback(code, opts, callback);
+  beginHiddenCallStack(transformRunner.errback)(code, opts, callback);
 };
 
-export const transformSync = transformRunner.sync;
-export const transformAsync = transformRunner.async;
+export function transformSync(
+  ...args: Parameters<typeof transformRunner.sync>
+) {
+  return beginHiddenCallStack(transformRunner.sync)(...args);
+}
+export function transformAsync(
+  ...args: Parameters<typeof transformRunner.async>
+) {
+  return beginHiddenCallStack(transformRunner.async)(...args);
+}

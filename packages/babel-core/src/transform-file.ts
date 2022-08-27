@@ -14,15 +14,6 @@ type transformFileType = typeof import("./transform-file");
 // transform-file-browser.
 ({} as any as transformFileBrowserType as transformFileType);
 
-type TransformFile = {
-  (filename: string, callback: FileResultCallback): void;
-  (
-    filename: string,
-    opts: InputOptions | undefined | null,
-    callback: FileResultCallback,
-  ): void;
-};
-
 const transformFileRunner = gensync(function* (
   filename: string,
   opts?: InputOptions,
@@ -36,6 +27,29 @@ const transformFileRunner = gensync(function* (
   return yield* run(config, code);
 });
 
-export const transformFile = transformFileRunner.errback as TransformFile;
-export const transformFileSync = transformFileRunner.sync;
-export const transformFileAsync = transformFileRunner.async;
+// @ts-expect-error TS doesn't detect that this signature is compatible
+export function transformFile(
+  filename: string,
+  callback: FileResultCallback,
+): void;
+export function transformFile(
+  filename: string,
+  opts: InputOptions | undefined | null,
+  callback: FileResultCallback,
+): void;
+export function transformFile(
+  ...args: Parameters<typeof transformFileRunner.errback>
+) {
+  return transformFileRunner.errback(...args);
+}
+
+export function transformFileSync(
+  ...args: Parameters<typeof transformFileRunner.sync>
+) {
+  return transformFileRunner.sync(...args);
+}
+export function transformFileAsync(
+  ...args: Parameters<typeof transformFileRunner.async>
+) {
+  return transformFileRunner.async(...args);
+}

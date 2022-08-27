@@ -14,6 +14,9 @@ import pathPatternToRegex from "./pattern-to-regex";
 import { ConfigPrinter, ChainFormatter } from "./printer";
 import type { ReadonlyDeepArray } from "./helpers/deep-array";
 
+import { endHiddenCallStack } from "../errors/rewrite-stack-trace";
+import ConfigError from "../errors/config-error";
+
 const debug = buildDebug("babel:config:config-chain");
 
 import {
@@ -51,7 +54,7 @@ export type PresetInstance = {
 };
 
 export type ConfigContext = {
-  filename: string | void;
+  filename: string | undefined;
   cwd: string;
   root: string;
   envName: string;
@@ -329,7 +332,7 @@ const validateConfigFile = makeWeakCacheSync(
   (file: ConfigFile): ValidatedFile => ({
     filepath: file.filepath,
     dirname: file.dirname,
-    options: validate("configfile", file.options),
+    options: validate("configfile", file.options, file.filepath),
   }),
 );
 
@@ -337,7 +340,7 @@ const validateBabelrcFile = makeWeakCacheSync(
   (file: ConfigFile): ValidatedFile => ({
     filepath: file.filepath,
     dirname: file.dirname,
-    options: validate("babelrcfile", file.options),
+    options: validate("babelrcfile", file.options, file.filepath),
   }),
 );
 
@@ -345,7 +348,7 @@ const validateExtendFile = makeWeakCacheSync(
   (file: ConfigFile): ValidatedFile => ({
     filepath: file.filepath,
     dirname: file.dirname,
-    options: validate("extendsfile", file.options),
+    options: validate("extendsfile", file.options, file.filepath),
   }),
 );
 
@@ -528,7 +531,11 @@ function buildOverrideEnvDescriptors(
 }
 
 function makeChainWalker<
-  ArgT extends { options: ValidatedOptions; dirname: string },
+  ArgT extends {
+    options: ValidatedOptions;
+    dirname: string;
+    filepath?: string;
+  },
 >({
   root,
   env,
@@ -559,7 +566,7 @@ function makeChainWalker<
   files?: Set<ConfigFile>,
   baseLogger?: ConfigPrinter,
 ) => Handler<ConfigChain | null> {
-  return function* (input, context, files = new Set(), baseLogger) {
+  return function* chainWalker(input, context, files = new Set(), baseLogger) {
     const { dirname } = input;
 
     const flattenedConfigs: Array<{
@@ -569,7 +576,7 @@ function makeChainWalker<
     }> = [];
 
     const rootOpts = root(input);
-    if (configIsApplicable(rootOpts, dirname, context)) {
+    if (configIsApplicable(rootOpts, dirname, context, input.filepath)) {
       flattenedConfigs.push({
         config: rootOpts,
         envName: undefined,
@@ -577,7 +584,10 @@ function makeChainWalker<
       });
 
       const envOpts = env(input, context.envName);
-      if (envOpts && configIsApplicable(envOpts, dirname, context)) {
+      if (
+        envOpts &&
+        configIsApplicable(envOpts, dirname, context, input.filepath)
+      ) {
         flattenedConfigs.push({
           config: envOpts,
           envName: context.envName,
@@ -587,7 +597,7 @@ function makeChainWalker<
 
       (rootOpts.options.overrides || []).forEach((_, index) => {
         const overrideOps = overrides(input, index);
-        if (configIsApplicable(overrideOps, dirname, context)) {
+        if (configIsApplicable(overrideOps, dirname, context, input.filepath)) {
           flattenedConfigs.push({
             config: overrideOps,
             index,
@@ -597,7 +607,12 @@ function makeChainWalker<
           const overrideEnvOpts = overridesEnv(input, index, context.envName);
           if (
             overrideEnvOpts &&
-            configIsApplicable(overrideEnvOpts, dirname, context)
+            configIsApplicable(
+              overrideEnvOpts,
+              dirname,
+              context,
+              input.filepath,
+            )
           ) {
             flattenedConfigs.push({
               config: overrideEnvOpts,
@@ -789,14 +804,15 @@ function configIsApplicable(
   { options }: OptionsAndDescriptors,
   dirname: string,
   context: ConfigContext,
+  configName: string,
 ): boolean {
   return (
     (options.test === undefined ||
-      configFieldIsApplicable(context, options.test, dirname)) &&
+      configFieldIsApplicable(context, options.test, dirname, configName)) &&
     (options.include === undefined ||
-      configFieldIsApplicable(context, options.include, dirname)) &&
+      configFieldIsApplicable(context, options.include, dirname, configName)) &&
     (options.exclude === undefined ||
-      !configFieldIsApplicable(context, options.exclude, dirname))
+      !configFieldIsApplicable(context, options.exclude, dirname, configName))
   );
 }
 
@@ -804,10 +820,11 @@ function configFieldIsApplicable(
   context: ConfigContext,
   test: ConfigApplicableTest,
   dirname: string,
+  configName: string,
 ): boolean {
   const patterns = Array.isArray(test) ? test : [test];
 
-  return matchesPatterns(context, patterns, dirname);
+  return matchesPatterns(context, patterns, dirname, configName);
 }
 
 /**
@@ -872,20 +889,22 @@ function matchesPatterns(
   context: ConfigContext,
   patterns: IgnoreList,
   dirname: string,
+  configName?: string,
 ): boolean {
   return patterns.some(pattern =>
-    matchPattern(pattern, dirname, context.filename, context),
+    matchPattern(pattern, dirname, context.filename, context, configName),
   );
 }
 
 function matchPattern(
   pattern: IgnoreItem,
   dirname: string,
-  pathToTest: unknown,
+  pathToTest: string | undefined,
   context: ConfigContext,
+  configName?: string,
 ): boolean {
   if (typeof pattern === "function") {
-    return !!pattern(pathToTest, {
+    return !!endHiddenCallStack(pattern)(pathToTest, {
       dirname,
       envName: context.envName,
       caller: context.caller,
@@ -893,8 +912,9 @@ function matchPattern(
   }
 
   if (typeof pathToTest !== "string") {
-    throw new Error(
+    throw new ConfigError(
       `Configuration contains string/RegExp pattern, but no filename was passed to Babel`,
+      configName,
     );
   }
 

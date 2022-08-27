@@ -5,6 +5,8 @@ import type { InputOptions, ResolvedConfig } from "./config";
 import { run } from "./transformation";
 import type * as t from "@babel/types";
 
+import { beginHiddenCallStack } from "./errors/rewrite-stack-trace";
+
 import type { FileResult, FileResultCallback } from "./transformation";
 type AstRoot = t.File | t.Program;
 
@@ -57,12 +59,26 @@ export const transformFromAst: TransformFromAst = function transformFromAst(
       // console.warn(
       //   "Starting from Babel 8.0.0, the 'transformFromAst' function will expect a callback. If you need to call it synchronously, please use 'transformFromAstSync'.",
       // );
-      return transformFromAstRunner.sync(ast, code, opts);
+      return beginHiddenCallStack(transformFromAstRunner.sync)(ast, code, opts);
     }
   }
 
-  transformFromAstRunner.errback(ast, code, opts, callback);
+  beginHiddenCallStack(transformFromAstRunner.errback)(
+    ast,
+    code,
+    opts,
+    callback,
+  );
 };
 
-export const transformFromAstSync = transformFromAstRunner.sync;
-export const transformFromAstAsync = transformFromAstRunner.async;
+export function transformFromAstSync(
+  ...args: Parameters<typeof transformFromAstRunner.sync>
+) {
+  return beginHiddenCallStack(transformFromAstRunner.sync)(...args);
+}
+
+export function transformFromAstAsync(
+  ...args: Parameters<typeof transformFromAstRunner.async>
+) {
+  return beginHiddenCallStack(transformFromAstRunner.async)(...args);
+}
