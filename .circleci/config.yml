@@ -19,7 +19,7 @@ aliases:
     path: ~/babel/packages/babel-standalone/babel.min.js
 
   - &artifact_babel_min_sourcemap
-    path: ~/babel/packages/babel-standalone/babel.js.min.map
+    path: ~/babel/packages/babel-standalone/babel.min.js.map
 
   - &test262_workdir
     working_directory: ~/babel/babel-test262-runner
@@ -47,7 +47,7 @@ jobs:
       - restore_cache: *restore-yarn-cache
         # Builds babel-standalone with the regular Babel config
         # test-ci-coverage doesn't test babel-standalone, as trying to gather coverage
-      - run: NODE_ENV=publish IS_PUBLISH=true make -j build-standalone-ci
+      - run: NODE_ENV=production IS_PUBLISH=true make -j build-standalone-ci
         # data for a JS file that's several megabytes large is bound to fail. Here,
         # we just run the babel-standalone test separately.
       - run: yarn jest "\-standalone/test"
