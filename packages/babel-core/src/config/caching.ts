@@ -395,6 +395,8 @@ export function assertSimpleType(value: unknown): SimpleType {
       "Cache keys must be either string, boolean, number, null, or undefined.",
     );
   }
+  // @ts-expect-error Type 'unknown' is not assignable to type 'SimpleType'. This can be removed
+  // when strictNullCheck is enabled
   return value;
 }
 

@@ -72,7 +72,7 @@
     "shelljs": "^0.8.5",
     "test262-stream": "^1.4.0",
     "through2": "^4.0.0",
-    "typescript": "~4.7.4"
+    "typescript": "~4.8.2"
   },
   "workspaces": [
     "codemods/*",
