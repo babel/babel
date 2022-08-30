@@ -10,7 +10,6 @@ class C extends class {} {
       @(this.dec)
       @(super.dec)
       @(new DecFactory())
-      @(decs[three])()
       p;
     }
 
@@ -18,6 +17,11 @@ class C extends class {} {
       @decs
       @decs.one
       @decs.two()
+      p;
+    }
+
+    class ShouldAddParens {
+      @((decs[three])())
       p;
     }
 

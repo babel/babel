@@ -487,6 +487,7 @@ function transformClass(
   path: NodePath<t.ClassExpression | t.ClassDeclaration>,
   state: PluginPass,
   constantSuper: boolean,
+  version: "2022-03" | "2021-12",
 ): NodePath {
   const body = path.get("body.body");
 
@@ -981,11 +982,12 @@ function transformClass(
           t.assignmentExpression(
             "=",
             t.arrayPattern(locals),
-            t.callExpression(state.addHelper("applyDecs"), [
-              t.thisExpression(),
-              elementDecorations,
-              classDecorations,
-            ]),
+            t.callExpression(
+              state.addHelper(
+                version === "2021-12" ? "applyDecs" : "applyDecs2203",
+              ),
+              [t.thisExpression(), elementDecorations, classDecorations],
+            ),
           ),
         ),
         requiresStaticInit &&
@@ -1011,6 +1013,7 @@ function transformClass(
 export default function (
   { assertVersion, assumption }: PluginAPI,
   { loose }: Options,
+  version: "2022-03" | "2021-12",
 ): PluginObject {
   assertVersion("^7.16.0");
 
@@ -1039,7 +1042,7 @@ export default function (
       Class(path, state) {
         if (VISITED.has(path)) return;
 
-        const newPath = transformClass(path, state, constantSuper);
+        const newPath = transformClass(path, state, constantSuper, version);
         if (newPath) VISITED.add(newPath);
       },
     },

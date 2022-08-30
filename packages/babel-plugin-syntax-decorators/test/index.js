@@ -67,6 +67,15 @@ babel7describe("'decoratorsBeforeExport' option", function () {
     ).not.toThrow();
   });
 
+  test("is incompatible with 2022-03 decorators", function () {
+    expect(
+      makeParser("", { decoratorsBeforeExport: false, version: "2022-03" }),
+    ).toThrow();
+    expect(
+      makeParser("", { decoratorsBeforeExport: true, version: "2022-03" }),
+    ).toThrow();
+  });
+
   const BEFORE = "@dec export class Foo {}";
   const AFTER = "export @dec class Foo {}";
 
@@ -110,6 +119,13 @@ describe("'version' option", function () {
     expect(
       makeParser("", { version: "2015-02", decoratorsBeforeExport: true }),
     ).toThrow();
+  });
+
+  test("'2022-03' disallows @(...)()", function () {
+    expect(makeParser("@(foo)() class A {}", { version: "2022-03" })).toThrow();
+    expect(
+      makeParser("@(foo()) class A {}", { version: "2022-03" }),
+    ).not.toThrow();
   });
 
   babel8("is required", function () {

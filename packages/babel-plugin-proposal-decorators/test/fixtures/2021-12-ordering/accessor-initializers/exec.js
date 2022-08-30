@@ -11,7 +11,7 @@ function logClassDecoratorRun(a, b, c) {
   };
 }
 
-function logAccessorDecoratorRun(a, b, c, d) {
+function decorator(a, b, c, d) {
   push(a);
   return function (el, { addInitializer }) {
     push(b);
@@ -25,20 +25,20 @@ function logAccessorDecoratorRun(a, b, c, d) {
 @logClassDecoratorRun(0, 19, 29)
 @logClassDecoratorRun(1, 18, 28)
 class A {
-  @logAccessorDecoratorRun(2, 15, 31, 35)
-  @logAccessorDecoratorRun(3, 14, 30, 34)
+  @decorator(2, 15, 31, 35)
+  @decorator(3, 14, 30, 34)
   accessor a;
 
-  @logAccessorDecoratorRun(4, 11, 21, 25)
-  @logAccessorDecoratorRun(5, 10, 20, 24)
+  @decorator(4, 11, 21, 25)
+  @decorator(5, 10, 20, 24)
   static accessor b;
 
-  @logAccessorDecoratorRun(6, 13, 23, 27)
-  @logAccessorDecoratorRun(7, 12, 22, 26)
+  @decorator(6, 13, 23, 27)
+  @decorator(7, 12, 22, 26)
   static accessor #c;
 
-  @logAccessorDecoratorRun(8, 17, 33, 37)
-  @logAccessorDecoratorRun(9, 16, 32, 36)
+  @decorator(8, 17, 33, 37)
+  @decorator(9, 16, 32, 36)
   accessor #d;
 }
 

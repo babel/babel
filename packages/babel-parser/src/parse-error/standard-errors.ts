@@ -50,6 +50,8 @@ export default {
   }: {
     kind: "const" | "destructuring";
   }) => `Missing initializer in ${kind} declaration.`,
+  DecoratorArgumentsOutsideParentheses:
+    "Decorator arguments must be moved inside parentheses: use '@(decorator(args))' instead of '@(decorator)(args)'.",
   DecoratorBeforeExport:
     "Decorators must be placed *before* the 'export' keyword. You can set the 'decoratorsBeforeExport' option to false to use the 'export @decorator class {}' syntax.",
   DecoratorConstructor:

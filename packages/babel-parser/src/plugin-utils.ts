@@ -93,6 +93,18 @@ export function validatePlugins(plugins: PluginList) {
     ) {
       throw new Error("'decoratorsBeforeExport' must be a boolean.");
     }
+
+    const allowCallParenthesized = getPluginOption(
+      plugins,
+      "decorators",
+      "allowCallParenthesized",
+    );
+    if (
+      allowCallParenthesized != null &&
+      typeof allowCallParenthesized !== "boolean"
+    ) {
+      throw new Error("'allowCallParenthesized' must be a boolean.");
+    }
   }
 
   if (hasPlugin(plugins, "flow") && hasPlugin(plugins, "typescript")) {
