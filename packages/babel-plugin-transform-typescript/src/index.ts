@@ -124,7 +124,11 @@ export default declare((api, opts: Options) => {
         if (!process.env.BABEL_8_BREAKING) {
           // keep the definitely assigned fields only when `allowDeclareFields` (equivalent of
           // Typescript's `useDefineForClassFields`) is true
-          if (!allowDeclareFields && !node.decorators) {
+          if (
+            !allowDeclareFields &&
+            !node.decorators &&
+            !t.isClassPrivateProperty(node)
+          ) {
             path.remove();
           }
         }
