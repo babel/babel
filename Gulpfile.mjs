@@ -266,7 +266,9 @@ async function buildBabel(useWorker, ignore = []) {
     // @example ./packages/babel-parser/src/index.js
     const dest = "./" + mapSrcToLib(file.slice(2));
     promises.push(
-      worker.transform(file, dest, { sourceMaps: enableSourceMap })
+      worker.transform(file, dest, {
+        sourceMaps: enableSourceMap && !file.endsWith(".d.ts"),
+      })
     );
   }
   return Promise.allSettled(promises)
