@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    [
+      "decorators",
+      { "allowCallParenthesized": true, "decoratorsBeforeExport": false }
+    ]
+  ]
+}

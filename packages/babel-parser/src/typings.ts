@@ -55,6 +55,7 @@ export type PluginOptions<PluginName extends ParserPluginWithOptions[0]> =
 
 export interface DecoratorsPluginOptions {
   decoratorsBeforeExport?: boolean;
+  allowCallParenthesized?: boolean;
 }
 
 export interface PipelineOperatorPluginOptions {

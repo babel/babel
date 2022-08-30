@@ -581,6 +581,18 @@ export default abstract class StatementParser extends ExpressionParser {
         expr = this.parseExpression();
         this.expect(tt.parenR);
         expr = this.wrapParenthesis(startPos, startLoc, expr);
+
+        const paramsStartLoc = this.state.startLoc;
+        node.expression = this.parseMaybeDecoratorArguments(expr);
+        if (
+          this.getPluginOption("decorators", "allowCallParenthesized") ===
+            false &&
+          node.expression !== expr
+        ) {
+          this.raise(Errors.DecoratorArgumentsOutsideParentheses, {
+            at: paramsStartLoc,
+          });
+        }
       } else {
         expr = this.parseIdentifier(false);
 
@@ -599,9 +611,10 @@ export default abstract class StatementParser extends ExpressionParser {
           node.computed = false;
           expr = this.finishNode(node, "MemberExpression");
         }
+
+        node.expression = this.parseMaybeDecoratorArguments(expr);
       }
 
-      node.expression = this.parseMaybeDecoratorArguments(expr);
       this.state.decoratorStack.pop();
     } else {
       node.expression = this.parseExprSubscripts();
