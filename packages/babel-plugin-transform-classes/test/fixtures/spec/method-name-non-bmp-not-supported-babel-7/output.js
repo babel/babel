@@ -6,7 +6,7 @@ var o = /*#__PURE__*/function () {
   }
 
   babelHelpers.createClass(o, [{
-    key: "𠮷野家",
+    key: "\uD842\uDFB7\u91CE\u5BB6",
     value: function () {}
   }]);
   return o;

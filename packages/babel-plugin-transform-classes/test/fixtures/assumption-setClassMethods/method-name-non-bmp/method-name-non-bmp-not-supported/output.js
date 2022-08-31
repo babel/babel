@@ -5,9 +5,9 @@ var o = /*#__PURE__*/function () {
     babelHelpers.classCallCheck(this, o);
   }
 
-  babelHelpers.createClass(o, [{
-    key: "𠮷野家",
-    value: function () {}
-  }]);
-  return o;
+  var _proto = o.prototype;
+
+  _proto.𠮷野家 = function () {};
+
+  return babelHelpers.createClass(o);
 }();
