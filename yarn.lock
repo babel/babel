@@ -2315,6 +2315,7 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/helper-annotate-as-pure": "workspace:^"
+    "@babel/helper-compilation-targets": "workspace:^"
     "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-function-name": "workspace:^"
     "@babel/helper-optimise-call-expression": "workspace:^"
