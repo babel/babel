@@ -88,9 +88,7 @@ function env(fun, env) {
  */
 
 target["clean-all"] = function () {
-  ["node_modules", "package-lock.json", ".changelog"].forEach(path => {
-    shell.rm("-rf", path);
-  });
+  shell.rm("-rf", ["node_modules", "package-lock.json", ".changelog"]);
 
   SOURCES.forEach(source => {
     shell.rm("-rf", `${source}/*/test/tmp`);
@@ -104,14 +102,12 @@ target["clean-all"] = function () {
 target["clean"] = function () {
   target["test-clean"]();
 
-  [
+  shell.rm("-rf", [
     ".npmrc",
     "coverage",
     "packages/*/npm-debug*",
     "node_modules/.cache",
-  ].forEach(path => {
-    shell.rm("-rf", path);
-  });
+  ]);
 };
 
 target["test-clean"] = function () {
@@ -122,13 +118,14 @@ target["test-clean"] = function () {
 };
 
 target["clean-lib"] = function () {
-  SOURCES.forEach(source => {
-    shell.rm("-rf", `${source}/*/lib`);
-  });
+  shell.rm(
+    "-rf",
+    SOURCES.map(source => `${source}/*/lib`)
+  );
 };
 
 target["clean-runtime-helpers"] = function () {
-  [
+  shell.rm("-rf", [
     "packages/babel-runtime/helpers/**/*.js",
     "packages/babel-runtime-corejs2/helpers/**/*.js",
     "packages/babel-runtime-corejs3/helpers/**/*.js",
@@ -136,9 +133,7 @@ target["clean-runtime-helpers"] = function () {
     "packages/babel-runtime-corejs2/helpers/**/*.mjs",
     "packages/babel-runtime-corejs3/helpers/**/*.mjs",
     "packages/babel-runtime-corejs2/core-js",
-  ].forEach(path => {
-    shell.rm("-rf", path);
-  });
+  ]);
 };
 
 /**

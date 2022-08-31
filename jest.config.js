@@ -1,4 +1,6 @@
 const semver = require("semver");
+const shell = require("shelljs");
+
 const nodeVersion = process.versions.node;
 const supportsESMAndJestLightRunner = semver.satisfies(
   nodeVersion,
@@ -7,6 +9,11 @@ const supportsESMAndJestLightRunner = semver.satisfies(
   "^12.22 || ^13.7 || >=14.17"
 );
 const isPublishBundle = process.env.IS_PUBLISH;
+
+if (!supportsESMAndJestLightRunner) {
+  //Avoid source maps from breaking stack tests.
+  shell.rm("-rf", "packages/babel-core/lib/**/*.js.map");
+}
 
 module.exports = {
   runner: supportsESMAndJestLightRunner ? "jest-light-runner" : "jest-runner",

@@ -34,7 +34,7 @@ exports.transform = async function transform(src, dest, opts = {}) {
   const content = readFileSync(src, { encoding: "utf8" });
   const { code, map } = await transformAsync(content, {
     filename: src,
-    sourceFileName: `../src/${path.basename(src)}`,
+    sourceFileName: path.relative(path.dirname(dest), src),
     caller: {
       // We have wrapped packages/babel-core/src/config/files/configuration.js with feature detection
       supportsDynamicImport: true,
