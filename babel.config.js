@@ -304,13 +304,32 @@ module.exports = function (api) {
     config.plugins.push("babel-plugin-istanbul");
   }
 
+  let caller;
+  api.caller(data => {
+    caller = data;
+  });
+
+  if (caller.name == "@babel/eslint-parser") {
+    return {
+      ...config,
+      plugins: undefined,
+      presets: undefined,
+      overrides: config.overrides.map(v => {
+        return { ...v, plugins: undefined };
+      }),
+    };
+  }
+
   return config;
 };
 
-const monorepoPackages = ["codemods", "eslint", "packages"]
-  .map(folder => fs.readdirSync(__dirname + "/" + folder))
-  .reduce((a, b) => a.concat(b))
-  .map(name => name.replace(/^babel-/, "@babel/"));
+let monorepoPackages;
+function getMonorepoPackages() {
+  return (monorepoPackages ??= ["codemods", "eslint", "packages"]
+    .map(folder => fs.readdirSync(__dirname + "/" + folder))
+    .reduce((a, b) => a.concat(b))
+    .map(name => name.replace(/^babel-/, "@babel/")));
+}
 
 function importInteropSrc(source, filename) {
   if (
@@ -325,7 +344,7 @@ function importInteropSrc(source, filename) {
   }
   if (
     source[0] === "." ||
-    monorepoPackages.some(name => source.startsWith(name))
+    getMonorepoPackages().some(name => source.startsWith(name))
   ) {
     // We don't need to worry about interop for internal files, since we know
     // for sure that they are ESM modules compiled to CJS
@@ -744,6 +763,45 @@ function pluginAddImportExtension() {
 const tokenTypesMapping = new Map();
 const tokenTypeSourcePath = "./packages/babel-parser/src/tokenizer/types.ts";
 
+function getTokenTypesMapping() {
+  if (tokenTypesMapping.size === 0) {
+    const tokenTypesAst = parseSync(
+      fs.readFileSync(tokenTypeSourcePath, {
+        encoding: "utf-8",
+      }),
+      {
+        configFile: false,
+        parserOpts: { attachComments: false, plugins: ["typescript"] },
+      }
+    );
+
+    let typesDeclaration;
+    for (const n of tokenTypesAst.program.body) {
+      if (n.type === "ExportNamedDeclaration" && n.exportKind === "value") {
+        const declarations = n.declaration.declarations;
+        if (declarations !== undefined) typesDeclaration = declarations[0];
+        if (
+          typesDeclaration !== undefined &&
+          typesDeclaration.id.name === "types"
+        ) {
+          break;
+        }
+      }
+    }
+    if (typesDeclaration === undefined) {
+      throw new Error(
+        "The plugin can not find TokenType definition in " + tokenTypeSourcePath
+      );
+    }
+
+    const tokenTypesDefinition = typesDeclaration.init.properties;
+    for (let i = 0; i < tokenTypesDefinition.length; i++) {
+      tokenTypesMapping.set(tokenTypesDefinition[i].key.name, i);
+    }
+  }
+  return tokenTypesMapping;
+}
+
 function pluginBabelParserTokenType({
   types: { isIdentifier, numericLiteral },
 }) {
@@ -757,7 +815,7 @@ function pluginBabelParserTokenType({
           !node.computed
         ) {
           const tokenName = node.property.name;
-          const tokenType = tokenTypesMapping.get(node.property.name);
+          const tokenType = getTokenTypesMapping().get(node.property.name);
           if (tokenType === undefined) {
             throw path.buildCodeFrameError(
               `${tokenName} is not defined in ${tokenTypeSourcePath}`
@@ -769,42 +827,6 @@ function pluginBabelParserTokenType({
     },
   };
 }
-
-(function generateTokenTypesMapping() {
-  const tokenTypesAst = parseSync(
-    fs.readFileSync(tokenTypeSourcePath, {
-      encoding: "utf-8",
-    }),
-    {
-      configFile: false,
-      parserOpts: { attachComments: false, plugins: ["typescript"] },
-    }
-  );
-
-  let typesDeclaration;
-  for (const n of tokenTypesAst.program.body) {
-    if (n.type === "ExportNamedDeclaration" && n.exportKind === "value") {
-      const declarations = n.declaration.declarations;
-      if (declarations !== undefined) typesDeclaration = declarations[0];
-      if (
-        typesDeclaration !== undefined &&
-        typesDeclaration.id.name === "types"
-      ) {
-        break;
-      }
-    }
-  }
-  if (typesDeclaration === undefined) {
-    throw new Error(
-      "The plugin can not find TokenType definition in " + tokenTypeSourcePath
-    );
-  }
-
-  const tokenTypesDefinition = typesDeclaration.init.properties;
-  for (let i = 0; i < tokenTypesDefinition.length; i++) {
-    tokenTypesMapping.set(tokenTypesDefinition[i].key.name, i);
-  }
-})();
 
 // Transforms
 //    ESLINT_VERSION

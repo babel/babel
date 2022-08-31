@@ -98,7 +98,7 @@
   },
   "lint-staged": {
     "*.{js,cjs,mjs,ts}": [
-      "eslint --format=codeframe"
+      "eslint --format=codeframe --cache --cache-strategy=content"
     ]
   },
   "dependenciesMeta": {

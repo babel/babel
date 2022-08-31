@@ -1,4 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-yarn lint-staged
+./node_modules/.bin/lint-staged --config package.json --no-stash
