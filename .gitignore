@@ -71,6 +71,7 @@ package-lock.json
 packages/babel-standalone/babel.js
 packages/babel-standalone/babel.js.map
 packages/babel-standalone/babel.min.js
+packages/babel-standalone/babel.min.js.map
 /codemods/*/lib
 /packages/babel-parser/build
 .idea/

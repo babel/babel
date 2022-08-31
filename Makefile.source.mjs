@@ -259,6 +259,7 @@ target["prepublish-build"] = function () {
       target["prepublish-prepare-dts"]();
     },
     {
+      NODE_ENV: "production",
       STRIP_BABEL_8_FLAG: "true",
     }
   );
