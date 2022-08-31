@@ -309,7 +309,8 @@ module.exports = function (api) {
     caller = data;
   });
 
-  if (caller && caller.name == "@babel/eslint-parser") {
+  if (api.caller(caller => caller.name == "@babel/eslint-parser")) {
+    // We disable all the plugins and presets, since we are only interested in parsing JS.
     Object.assign(config, {
       plugins: undefined,
       presets: undefined,
