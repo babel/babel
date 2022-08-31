@@ -516,7 +516,7 @@ export default function transformClass(
             { id: key, node: node, scope },
             undefined,
             supportUnicodeId,
-          ) || fn;
+          ) ?? fn;
       }
     } else {
       // todo(flow->ts) find a way to avoid "key as t.StringLiteral" below which relies on this assignment
@@ -578,6 +578,7 @@ export default function transformClass(
 
       const key = t.toComputedKey(node, node.key);
       if (t.isStringLiteral(key)) {
+        // @ts-expect-error: requires strictNullCheck
         func =
           nameFunction(
             {
@@ -587,7 +588,7 @@ export default function transformClass(
             },
             undefined,
             supportUnicodeId,
-          ) || func;
+          ) ?? func;
       }
 
       const expr = t.expressionStatement(
