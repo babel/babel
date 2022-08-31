@@ -12,7 +12,7 @@ A monorepo, muhahahahahaha. See the [monorepo design doc](/doc/design/monorepo.m
 ### Core Packages
 
 | Package | Version |
-|--------|-------|------------|
+|---------|---------|
 | [`@babel/core`](/packages/babel-core) | [![npm](https://img.shields.io/npm/v/@babel/core.svg?maxAge=3600)](https://www.npmjs.com/package/@babel/core) |
 | [`@babel/parser`](/packages/babel-parser) | [![npm](https://img.shields.io/npm/v/@babel/parser.svg?maxAge=3600)](https://www.npmjs.com/package/@babel/parser) |
 | [`@babel/traverse`](/packages/babel-traverse) | [![npm](https://img.shields.io/npm/v/@babel/traverse.svg?maxAge=3600)](https://www.npmjs.com/package/@babel/traverse) |
@@ -35,7 +35,7 @@ Check out the [`babel-handbook`](https://github.com/thejameskyle/babel-handbook/
 #### Other
 
 | Package | Version |
-|--------|-------|------------|
+|---------|---------|
 | [`@babel/cli`](/packages/babel-cli) | [![npm](https://img.shields.io/npm/v/@babel/cli.svg?maxAge=3600)](https://www.npmjs.com/package/@babel/cli) |
 | [`@babel/types`](/packages/babel-types) | [![npm](https://img.shields.io/npm/v/@babel/types.svg?maxAge=3600)](https://www.npmjs.com/package/@babel/types) |
 | [`@babel/runtime`](/packages/babel-runtime) | [![npm](https://img.shields.io/npm/v/@babel/runtime.svg?maxAge=3600)](https://www.npmjs.com/package/@babel/runtime) |
@@ -59,7 +59,7 @@ After Babel 6, the default transforms were removed; if you don't specify any plu
 The transformer[s] used in Babel are the independent pieces of code that transform specific things. For example: the [`es2015-arrow-functions`](/packages/babel-plugin-transform-arrow-functions) transform specifically changes arrow functions into regular functions. A preset is simply an array of plugins that make it easier to run a whole a set of transforms without specifying each one manually.
 
 | Package | Version | Description |
-|--------|-------|------------|---|
+|---------|---------|-------------|
 | [`@babel/preset-env`](/packages/babel-preset-env) | [![npm](https://img.shields.io/npm/v/@babel/preset-env.svg?maxAge=?maxAge=3600)](https://www.npmjs.com/package/@babel/preset-env) | automatically determines plugins and polyfills you need based on your supported environments |
 
 > You can find community maintained presets on [npm](https://www.npmjs.com/search?q=babel-preset)
