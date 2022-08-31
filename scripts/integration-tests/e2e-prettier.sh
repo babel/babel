@@ -36,7 +36,7 @@ startLocalRegistry "$root"/verdaccio-config.yml
 yarn install --no-immutable
 yarn info
 
-# Without --runInBand CircleCI hangs.
-yarn test "tests/format/(jsx?|misc|typescript|flow|flow-repo)/" --update-snapshot --runInBand
+# https://github.com/babel/babel/pull/14892
+NODE_ENV=production yarn test "tests/format/(jsx?|misc|typescript|flow|flow-repo)/" --update-snapshot --runInBand
 
 cleanup
