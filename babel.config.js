@@ -309,15 +309,14 @@ module.exports = function (api) {
     caller = data;
   });
 
-  if (caller.name == "@babel/eslint-parser") {
-    return {
-      ...config,
+  if (caller && caller.name == "@babel/eslint-parser") {
+    Object.assign(config, {
       plugins: undefined,
       presets: undefined,
-      overrides: config.overrides.map(v => {
-        return { ...v, plugins: undefined };
+      overrides: config.overrides.forEach(v => {
+        v.plugins = undefined;
       }),
-    };
+    });
   }
 
   return config;
@@ -325,10 +324,13 @@ module.exports = function (api) {
 
 let monorepoPackages;
 function getMonorepoPackages() {
-  return (monorepoPackages ??= ["codemods", "eslint", "packages"]
-    .map(folder => fs.readdirSync(__dirname + "/" + folder))
-    .reduce((a, b) => a.concat(b))
-    .map(name => name.replace(/^babel-/, "@babel/")));
+  if (!monorepoPackages) {
+    monorepoPackages = ["codemods", "eslint", "packages"]
+      .map(folder => fs.readdirSync(__dirname + "/" + folder))
+      .reduce((a, b) => a.concat(b))
+      .map(name => name.replace(/^babel-/, "@babel/"));
+  }
+  return monorepoPackages;
 }
 
 function importInteropSrc(source, filename) {
