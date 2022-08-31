@@ -37,7 +37,7 @@ yarn install --no-immutable
 yarn info
 
 # https://github.com/babel/babel/pull/14892
-sed -i 's/process.env.NODE_ENV === "production"/true/g' src/main/create-print-pre-check-function.js
+echo "export default () => () => {}" > src/main/create-print-pre-check-function.js
 
 yarn test "tests/format/(jsx?|misc|typescript|flow|flow-repo)/" --update-snapshot --runInBand
 
