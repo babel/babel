@@ -304,11 +304,6 @@ module.exports = function (api) {
     config.plugins.push("babel-plugin-istanbul");
   }
 
-  let caller;
-  api.caller(data => {
-    caller = data;
-  });
-
   if (api.caller(caller => caller.name == "@babel/eslint-parser")) {
     // We disable all the plugins and presets, since we are only interested in parsing JS.
     Object.assign(config, {
