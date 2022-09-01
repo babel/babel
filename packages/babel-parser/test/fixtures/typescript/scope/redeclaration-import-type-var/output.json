@@ -1,0 +1,119 @@
+{
+  "type": "File",
+  "start":0,"end":97,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":51,"index":97}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":97,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":51,"index":97}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":44,"index":44}},
+        "importKind": "value",
+        "specifiers": [
+          {
+            "type": "ImportDefaultSpecifier",
+            "start":7,"end":12,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":12,"index":12}},
+            "local": {
+              "type": "Identifier",
+              "start":7,"end":12,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":12,"index":12},"identifierName":"React"},
+              "name": "React"
+            }
+          },
+          {
+            "type": "ImportSpecifier",
+            "start":16,"end":28,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":28,"index":28}},
+            "imported": {
+              "type": "Identifier",
+              "start":21,"end":28,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":28,"index":28},"identifierName":"Context"},
+              "name": "Context"
+            },
+            "local": {
+              "type": "Identifier",
+              "start":21,"end":28,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":28,"index":28},"identifierName":"Context"},
+              "name": "Context"
+            },
+            "importKind": "type"
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":36,"end":43,"loc":{"start":{"line":1,"column":36,"index":36},"end":{"line":1,"column":43,"index":43}},
+          "extra": {
+            "rawValue": "react",
+            "raw": "'react'"
+          },
+          "value": "react"
+        }
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":46,"end":97,"loc":{"start":{"line":3,"column":0,"index":46},"end":{"line":3,"column":51,"index":97}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":50,"end":96,"loc":{"start":{"line":3,"column":4,"index":50},"end":{"line":3,"column":50,"index":96}},
+            "id": {
+              "type": "Identifier",
+              "start":50,"end":70,"loc":{"start":{"line":3,"column":4,"index":50},"end":{"line":3,"column":24,"index":70},"identifierName":"Context"},
+              "name": "Context",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":57,"end":70,"loc":{"start":{"line":3,"column":11,"index":57},"end":{"line":3,"column":24,"index":70}},
+                "typeAnnotation": {
+                  "type": "TSTypeReference",
+                  "start":59,"end":70,"loc":{"start":{"line":3,"column":13,"index":59},"end":{"line":3,"column":24,"index":70}},
+                  "typeName": {
+                    "type": "Identifier",
+                    "start":59,"end":66,"loc":{"start":{"line":3,"column":13,"index":59},"end":{"line":3,"column":20,"index":66},"identifierName":"Context"},
+                    "name": "Context"
+                  },
+                  "typeParameters": {
+                    "type": "TSTypeParameterInstantiation",
+                    "start":66,"end":70,"loc":{"start":{"line":3,"column":20,"index":66},"end":{"line":3,"column":24,"index":70}},
+                    "params": [
+                      {
+                        "type": "TSTypeLiteral",
+                        "start":67,"end":69,"loc":{"start":{"line":3,"column":21,"index":67},"end":{"line":3,"column":23,"index":69}},
+                        "members": []
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "init": {
+              "type": "CallExpression",
+              "start":73,"end":96,"loc":{"start":{"line":3,"column":27,"index":73},"end":{"line":3,"column":50,"index":96}},
+              "callee": {
+                "type": "MemberExpression",
+                "start":73,"end":92,"loc":{"start":{"line":3,"column":27,"index":73},"end":{"line":3,"column":46,"index":92}},
+                "object": {
+                  "type": "Identifier",
+                  "start":73,"end":78,"loc":{"start":{"line":3,"column":27,"index":73},"end":{"line":3,"column":32,"index":78},"identifierName":"React"},
+                  "name": "React"
+                },
+                "computed": false,
+                "property": {
+                  "type": "Identifier",
+                  "start":79,"end":92,"loc":{"start":{"line":3,"column":33,"index":79},"end":{"line":3,"column":46,"index":92},"identifierName":"createContext"},
+                  "name": "createContext"
+                }
+              },
+              "arguments": [
+                {
+                  "type": "ObjectExpression",
+                  "start":93,"end":95,"loc":{"start":{"line":3,"column":47,"index":93},"end":{"line":3,"column":49,"index":95}},
+                  "properties": []
+                }
+              ]
+            }
+          }
+        ],
+        "kind": "let"
+      }
+    ],
+    "directives": []
+  }
+}

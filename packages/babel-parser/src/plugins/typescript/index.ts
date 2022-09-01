@@ -3922,7 +3922,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     parseExportSpecifier(
-      node: any,
+      node: Undone<N.ExportSpecifier>,
       isString: boolean,
       isInTypeExport: boolean,
       isMaybeTypeOnly: boolean,
@@ -3945,7 +3945,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     parseImportSpecifier(
-      specifier: any,
+      specifier: Undone<N.ImportSpecifier>,
       importedIsString: boolean,
       isInTypeOnlyImport: boolean,
       isMaybeTypeOnly: boolean,
@@ -4059,7 +4059,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         node[rightOfAsKey] = cloneIdentifier(node[leftOfAsKey]);
       }
       if (isImport) {
-        this.checkIdentifier(node[rightOfAsKey], BIND_LEXICAL);
+        this.checkIdentifier(
+          node[rightOfAsKey],
+          hasTypeSpecifier ? BIND_TS_TYPE : BIND_LEXICAL,
+        );
       }
     }
   };
