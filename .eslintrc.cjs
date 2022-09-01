@@ -44,6 +44,10 @@ module.exports = {
         "no-undef": "off",
         "no-redeclare": "off",
         "@babel/development-internal/disallow-ts-ignore": "error",
+        "@typescript-eslint/consistent-type-imports": [
+          "error",
+          { disallowTypeAnnotations: false },
+        ],
       },
     },
     {
