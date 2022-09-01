@@ -39,8 +39,8 @@
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@rollup/plugin-replace": "^4.0.0",
     "@types/node": "^16.7.13",
-    "@typescript-eslint/eslint-plugin": "^5.30.0",
-    "@typescript-eslint/parser": "^5.30.0",
+    "@typescript-eslint/eslint-plugin": "^5.36.1",
+    "@typescript-eslint/parser": "^5.36.1",
     "babel-plugin-transform-charcodes": "^0.2.0",
     "chalk": "^5.0.0",
     "charcodes": "^0.2.0",
@@ -98,7 +98,7 @@
   },
   "lint-staged": {
     "*.{js,cjs,mjs,ts}": [
-      "eslint --format=codeframe"
+      "eslint --format=codeframe --cache --cache-strategy=content"
     ]
   },
   "dependenciesMeta": {

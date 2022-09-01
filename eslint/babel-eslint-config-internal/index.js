@@ -5,6 +5,11 @@ module.exports = {
   extends: "eslint:recommended",
   parserOptions: {
     sourceType: "module",
+    requireConfigFile: false,
+    babelOptions: {
+      babelrc: false,
+      configFile: false,
+    },
   },
   globals: {
     // Flow
