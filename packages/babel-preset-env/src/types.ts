@@ -1,4 +1,4 @@
-import { ModulesOption, UseBuiltInsOption } from "./options";
+import type { ModulesOption, UseBuiltInsOption } from "./options";
 import type { NormalizedCorejsOption } from "./normalize-options";
 import type { Targets, InputTargets } from "@babel/helper-compilation-targets";
 

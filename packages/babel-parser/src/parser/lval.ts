@@ -31,7 +31,7 @@ import {
   BIND_NONE,
   BIND_SCOPE_LEXICAL,
 } from "../util/scopeflags";
-import { ExpressionErrors } from "./util";
+import type { ExpressionErrors } from "./util";
 import { Errors, type LValAncestor } from "../parse-error";
 import type Parser from "./index";
 

@@ -2,7 +2,8 @@
 
 import { hooks } from "./lib/removal-hooks";
 import { path as pathCache } from "../cache";
-import NodePath, { REMOVED, SHOULD_SKIP } from "./index";
+import type NodePath from "./index";
+import { REMOVED, SHOULD_SKIP } from "./index";
 
 export function remove(this: NodePath) {
   this._assertUnremoved();

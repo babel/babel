@@ -13,8 +13,9 @@ import {
   tokenCanStartExpression,
 } from "../../tokenizer/types";
 import { types as tc } from "../../tokenizer/context";
-import * as N from "../../types";
-import { Position, createPositionWithColumnOffset } from "../../util/location";
+import type * as N from "../../types";
+import type { Position } from "../../util/location";
+import { createPositionWithColumnOffset } from "../../util/location";
 import type Parser from "../../parser";
 import {
   type BindingTypes,

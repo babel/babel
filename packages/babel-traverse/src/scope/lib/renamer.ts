@@ -1,4 +1,4 @@
-import Binding from "../binding";
+import type Binding from "../binding";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import * as t from "@babel/types";
 import type { NodePath, Visitor } from "../..";

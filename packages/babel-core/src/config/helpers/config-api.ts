@@ -11,7 +11,7 @@ import type {
 
 import type { AssumptionName, CallerMetadata } from "../validation/options";
 
-import * as Context from "../cache-contexts";
+import type * as Context from "../cache-contexts";
 
 type EnvFunction = {
   (): string;

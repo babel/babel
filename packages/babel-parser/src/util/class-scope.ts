@@ -3,9 +3,9 @@ import {
   CLASS_ELEMENT_FLAG_STATIC,
   type ClassElementTypes,
 } from "./scopeflags";
-import { Position } from "./location";
+import type { Position } from "./location";
 import { Errors } from "../parse-error";
-import Tokenizer from "../tokenizer";
+import type Tokenizer from "../tokenizer";
 
 export class ClassScope {
   // A list of private named declared in the current class

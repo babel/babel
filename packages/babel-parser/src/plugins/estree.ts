@@ -1,7 +1,7 @@
 import { type TokenType } from "../tokenizer/types";
 import type Parser from "../parser";
 import type { ExpressionErrors } from "../parser/util";
-import * as N from "../types";
+import type * as N from "../types";
 import type { Node as NodeType, NodeBase, File } from "../types";
 import type { Position } from "../util/location";
 import { Errors } from "../parse-error";

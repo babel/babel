@@ -1,4 +1,4 @@
-import { Position } from "../../util/location";
+import type { Position } from "../../util/location";
 import ScopeHandler, { Scope } from "../../util/scope";
 import {
   BIND_KIND_TYPE,
@@ -10,7 +10,7 @@ import {
   type ScopeFlags,
   type BindingTypes,
 } from "../../util/scopeflags";
-import * as N from "../../types";
+import type * as N from "../../types";
 
 class TypeScriptScope extends Scope {
   types: Set<string> = new Set();

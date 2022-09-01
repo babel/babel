@@ -32,7 +32,7 @@ import {
   tt,
   type TokenType,
 } from "../tokenizer/types";
-import * as N from "../types";
+import type * as N from "../types";
 import LValParser from "./lval";
 import {
   isKeyword,

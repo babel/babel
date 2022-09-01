@@ -1,7 +1,7 @@
 import type { InputTargets, Targets } from "@babel/helper-compilation-targets";
 
 import type { ConfigItem } from "../item";
-import Plugin from "../plugin";
+import type Plugin from "../plugin";
 
 import removed from "./removed";
 import {
