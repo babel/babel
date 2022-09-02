@@ -43,7 +43,12 @@ module.exports = {
         "@typescript-eslint/no-dupe-class-members": "error",
         "no-undef": "off",
         "no-redeclare": "off",
-        "@babel/development-internal/disallow-ts-ignore": "error",
+        "@typescript-eslint/ban-ts-comment": [
+          "error",
+          {
+            "ts-ignore": { descriptionFormat: "^\\(Babel 7 vs Babel 8\\) .+$" },
+          },
+        ],
         "@typescript-eslint/consistent-type-imports": [
           "error",
           { disallowTypeAnnotations: false },
