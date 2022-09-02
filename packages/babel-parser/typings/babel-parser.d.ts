@@ -162,6 +162,7 @@ export type ParserPlugin =
   | "pipelineOperator"
   | "placeholders"
   | "privateIn" // Enabled by default
+  | "recordAndTuple"
   | "regexpUnicodeSets"
   | "throwExpressions"
   | "topLevelAwait"
@@ -186,7 +187,7 @@ export interface PipelineOperatorPluginOptions {
 }
 
 export interface RecordAndTuplePluginOptions {
-  syntaxType: "bar" | "hash";
+  syntaxType?: "bar" | "hash";
 }
 
 export interface FlowPluginOptions {
