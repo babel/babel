@@ -224,12 +224,12 @@ export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
 
   this.printAssertions(node);
   if (!process.env.BABEL_8_BREAKING) {
-    // @ts-expect-error
+    // @ts-ignore(Babel 7 vs Babel 8) Babel 7 supports module attributes
     if (node.attributes?.length) {
       this.space();
       this.word("with");
       this.space();
-      // @ts-expect-error
+      // @ts-ignore(Babel 7 vs Babel 8) Babel 7 supports module attributes
       this.printList(node.attributes, node);
     }
   }

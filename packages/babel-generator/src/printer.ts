@@ -862,7 +862,7 @@ class Printer {
 Object.assign(Printer.prototype, generatorFunctions);
 
 if (!process.env.BABEL_8_BREAKING) {
-  // @ts-ignore(Babel 7 vs Babel 8)
+  // @ts-ignore(Babel 7 vs Babel 8) Babel 7 has Noop print method
   Printer.prototype.Noop = function Noop(this: Printer) {};
 }
 

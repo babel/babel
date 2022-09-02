@@ -31,7 +31,7 @@ export function declare<State = {}, Option = {}>(
       clonedApi[name] = apiPolyfills[name](clonedApi);
     }
 
-    // @ts-expect-error
+    // @ts-expect-error options || {} may not be assigned to Options
     return builder(clonedApi ?? api, options || {}, dirname);
   };
 }

@@ -392,8 +392,9 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         if (node.name === "this" && t.isReferenced(node, parent)) {
           return t.thisExpression();
         } else if (t.isValidIdentifier(node.name, false)) {
-          // @ts-expect-error todo(flow->ts)
+          // @ts-expect-error cast AST type to Identifier
           node.type = "Identifier";
+          return node as unknown as t.Identifier;
         } else {
           return t.stringLiteral(node.name);
         }
@@ -410,7 +411,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         return t.stringLiteral(`${node.namespace.name}:${node.name.name}`);
       }
 
-      // @ts-expect-error
+      // todo: this branch should be unreachable
       return node;
     }
 

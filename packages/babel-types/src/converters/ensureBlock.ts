@@ -13,7 +13,7 @@ export default function ensureBlock(
 ): t.BlockStatement {
   // @ts-expect-error Fixme: key may not exist in node, consider remove key = "body"
   const result = toBlock(node[key], node);
-  // @ts-expect-error
+  // @ts-expect-error Fixme: key may not exist in node, consider remove key = "body"
   node[key] = result;
   return result;
 }

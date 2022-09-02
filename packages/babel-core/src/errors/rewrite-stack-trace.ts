@@ -125,8 +125,7 @@ export function endHiddenCallStack<A extends unknown[], R>(
 }
 
 function setupPrepareStackTrace() {
-  // This function is a singleton
-  // @ts-expect-error
+  // @ts-expect-error This function is a singleton
   // eslint-disable-next-line no-func-assign
   setupPrepareStackTrace = () => {};
 

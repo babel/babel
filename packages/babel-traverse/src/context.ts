@@ -101,7 +101,7 @@ export default class TraversalContext<S = unknown> {
   visitSingle(node: t.Node, key: string): boolean {
     if (
       this.shouldVisit(
-        // @ts-expect-error
+        // @ts-expect-error key may not index node
         node[key],
       )
     ) {
@@ -166,7 +166,7 @@ export default class TraversalContext<S = unknown> {
   }
 
   visit(node: t.Node, key: string) {
-    // @ts-expect-error
+    // @ts-expect-error key may not index node
     const nodes = node[key] as t.Node | t.Node[] | null;
     if (!nodes) return false;
 

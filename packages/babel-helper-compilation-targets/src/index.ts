@@ -21,7 +21,7 @@ import type {
   TargetsTuple,
 } from "./types";
 
-export type { Targets, InputTargets };
+export type { Target, Targets, InputTargets };
 
 export { prettifyTargets } from "./pretty";
 export { getInclusionReasons } from "./debug";

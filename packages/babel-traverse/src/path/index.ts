@@ -244,10 +244,8 @@ Object.assign(
 );
 
 if (!process.env.BABEL_8_BREAKING) {
-  // The original _guessExecutionStatusRelativeToDifferentFunctions only worked for paths in
+  // @ts-expect-error The original _guessExecutionStatusRelativeToDifferentFunctions only worked for paths in
   // different functions, but _guessExecutionStatusRelativeTo works as a replacement in those cases.
-
-  // @ts-expect-error
   NodePath.prototype._guessExecutionStatusRelativeToDifferentFunctions =
     NodePath_introspection._guessExecutionStatusRelativeTo;
 }

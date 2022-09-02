@@ -8,14 +8,14 @@ const INVALID_METHODS = ["random"] as const;
 
 function isValidCallee(val: string): val is typeof VALID_CALLEES[number] {
   return VALID_CALLEES.includes(
-    // @ts-expect-error
+    // @ts-expect-error val is a string
     val,
   );
 }
 
 function isInvalidMethod(val: string): val is typeof INVALID_METHODS[number] {
   return INVALID_METHODS.includes(
-    // @ts-expect-error
+    // @ts-expect-error val is a string
     val,
   );
 }
@@ -259,28 +259,29 @@ function _evaluate(path: NodePath, state: State): any {
       if (prop.isObjectMethod() || prop.isSpreadElement()) {
         return deopt(prop, state);
       }
-      const keyPath: any = prop.get("key");
-      let key = keyPath;
+      const keyPath = (prop as NodePath<t.ObjectProperty>).get("key");
+      let key;
       // @ts-expect-error todo(flow->ts): type refinement issues ObjectMethod and SpreadElement somehow not excluded
       if (prop.node.computed) {
-        key = key.evaluate();
+        key = keyPath.evaluate();
         if (!key.confident) {
           return deopt(key.deopt, state);
         }
         key = key.value;
-      } else if (key.isIdentifier()) {
-        key = key.node.name;
+      } else if (keyPath.isIdentifier()) {
+        key = keyPath.node.name;
       } else {
-        key = key.node.value;
+        key = (
+          keyPath.node as t.StringLiteral | t.NumericLiteral | t.BigIntLiteral
+        ).value;
       }
-      // todo(flow->ts): remove typecast
-      const valuePath = prop.get("value") as NodePath;
+      const valuePath = (prop as NodePath<t.ObjectProperty>).get("value");
       let value = valuePath.evaluate();
       if (!value.confident) {
         return deopt(value.deopt, state);
       }
       value = value.value;
-      // @ts-expect-error
+      // @ts-expect-error key is any type
       obj[key] = value;
     }
     return obj;

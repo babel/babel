@@ -96,8 +96,9 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       if (node.name === "this" && isReferenced(node, parent)) {
         return thisExpression();
       } else if (isValidIdentifier(node.name, false)) {
-        // @ts-expect-error todo(flow->ts) avoid type unsafe mutations
+        // @ts-expect-error casting JSXIdentifier to Identifier
         node.type = "Identifier";
+        return node as unknown as t.Identifier;
       } else {
         return stringLiteral(node.name);
       }
@@ -114,7 +115,6 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       return stringLiteral(`${node.namespace.name}:${node.name.name}`);
     }
 
-    // @ts-expect-error
     return node;
   }
 

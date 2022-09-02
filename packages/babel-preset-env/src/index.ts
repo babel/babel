@@ -57,7 +57,7 @@ function filterStageFromList(
 ) {
   return Object.keys(list).reduce((result, item) => {
     if (!stageList.has(item)) {
-      // @ts-expect-error
+      // @ts-expect-error todo: refine result types
       result[item] = list[item];
     }
 

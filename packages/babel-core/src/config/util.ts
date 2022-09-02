@@ -13,9 +13,9 @@ export function mergeOptions(
       const targetObj = target[k] || (target[k] = {});
       mergeDefaultFields(targetObj, parserOpts);
     } else {
-      //@ts-expect-error
+      //@ts-expect-error k must index source
       const val = source[k];
-      //@ts-expect-error
+      //@ts-expect-error assigning source to target
       if (val !== undefined) target[k] = val as any;
     }
   }

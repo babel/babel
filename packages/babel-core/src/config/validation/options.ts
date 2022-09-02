@@ -456,8 +456,7 @@ function assertOverridesList(
       validateNested(overridesLoc, env);
     }
   }
-  // @ts-expect-error
-  return arr;
+  return arr as OverridesList;
 }
 
 export function checkNoUnwrappedItemOptionPairs(

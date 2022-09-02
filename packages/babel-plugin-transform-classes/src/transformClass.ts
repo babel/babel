@@ -168,6 +168,7 @@ export default function transformClass(
     let hasConstructor = false;
     const paths = classState.path.get("body.body");
     for (const path of paths) {
+      // @ts-expect-error: StaticBlock does not have `kind` property
       hasConstructor = path.equals("kind", "constructor");
       if (hasConstructor) break;
     }

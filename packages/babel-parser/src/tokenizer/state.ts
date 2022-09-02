@@ -163,7 +163,7 @@ export default class State {
         val = val.slice();
       }
 
-      // @ts-expect-error
+      // @ts-expect-error val must conform to S[key]
       state[key] = val;
     }
 

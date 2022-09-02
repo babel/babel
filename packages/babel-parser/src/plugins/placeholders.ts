@@ -197,7 +197,7 @@ export default (superClass: typeof Parser) =>
       }
 
       if (this.match(tt.colon)) {
-        // @ts-expect-error
+        // @ts-expect-error placeholder typings
         const stmt: N.LabeledStatement = node;
         stmt.label = this.finishPlaceholder(expr, "Identifier");
         this.next();

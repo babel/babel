@@ -68,14 +68,20 @@ export default declare(api => {
     }
   }
 
-  function wrapInFlowComment(path: NodePath) {
+  function wrapInFlowComment<
+    N extends
+      | t.ClassProperty
+      | t.ExportNamedDeclaration
+      | t.Flow
+      | t.ImportDeclaration
+      | t.ExportDeclaration
+      | t.ImportSpecifier
+      | t.ImportDeclaration,
+  >(path: NodePath<N>) {
     attachComment({
       ofPath: path,
-      comments: generateComment(
-        path,
-        // @ts-expect-error
-        path.parent.optional,
-      ),
+      // @ts-expect-error optional may not exist in path.parent
+      comments: generateComment(path, path.parent.optional),
     });
   }
 

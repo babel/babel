@@ -348,8 +348,7 @@ export default declare((api, opts: Options) => {
             ) {
               registerGlobalType(
                 programScope,
-                //@ts-expect-error
-                stmt.node.id.name,
+                (stmt.node.id as t.Identifier).name,
               );
             }
           }
