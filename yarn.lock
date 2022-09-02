@@ -1733,7 +1733,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-proposal-record-and-tuple@workspace:packages/babel-plugin-proposal-record-and-tuple":
+"@babel/plugin-proposal-record-and-tuple@workspace:^, @babel/plugin-proposal-record-and-tuple@workspace:packages/babel-plugin-proposal-record-and-tuple":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-record-and-tuple@workspace:packages/babel-plugin-proposal-record-and-tuple"
   dependencies:
@@ -3640,6 +3640,7 @@ __metadata:
     "@babel/plugin-proposal-pipeline-operator": "workspace:^"
     "@babel/plugin-proposal-private-methods": "workspace:^"
     "@babel/plugin-proposal-private-property-in-object": "workspace:^"
+    "@babel/plugin-proposal-record-and-tuple": "workspace:^"
     "@babel/plugin-proposal-throw-expressions": "workspace:^"
     "@babel/plugin-proposal-unicode-property-regex": "workspace:^"
     "@babel/plugin-proposal-unicode-sets-regex": "workspace:^"

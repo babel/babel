@@ -34,6 +34,7 @@
     "@babel/plugin-proposal-pipeline-operator": "workspace:^",
     "@babel/plugin-proposal-private-methods": "workspace:^",
     "@babel/plugin-proposal-private-property-in-object": "workspace:^",
+    "@babel/plugin-proposal-record-and-tuple": "workspace:^",
     "@babel/plugin-proposal-throw-expressions": "workspace:^",
     "@babel/plugin-proposal-unicode-property-regex": "workspace:^",
     "@babel/plugin-proposal-unicode-sets-regex": "workspace:^",

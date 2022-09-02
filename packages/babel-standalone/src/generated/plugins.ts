@@ -46,6 +46,7 @@ import proposalOptionalChaining from "@babel/plugin-proposal-optional-chaining";
 import proposalPipelineOperator from "@babel/plugin-proposal-pipeline-operator";
 import proposalPrivateMethods from "@babel/plugin-proposal-private-methods";
 import proposalPrivatePropertyInObject from "@babel/plugin-proposal-private-property-in-object";
+import proposalRecordAndTuple from "@babel/plugin-proposal-record-and-tuple";
 import proposalThrowExpressions from "@babel/plugin-proposal-throw-expressions";
 import proposalUnicodePropertyRegex from "@babel/plugin-proposal-unicode-property-regex";
 import proposalUnicodeSetsRegex from "@babel/plugin-proposal-unicode-sets-regex";
@@ -145,6 +146,7 @@ export {
   proposalPipelineOperator,
   proposalPrivateMethods,
   proposalPrivatePropertyInObject,
+  proposalRecordAndTuple,
   proposalThrowExpressions,
   proposalUnicodePropertyRegex,
   proposalUnicodeSetsRegex,
@@ -246,6 +248,7 @@ export const all: { [k: string]: any } = {
   "proposal-pipeline-operator": proposalPipelineOperator,
   "proposal-private-methods": proposalPrivateMethods,
   "proposal-private-property-in-object": proposalPrivatePropertyInObject,
+  "proposal-record-and-tuple": proposalRecordAndTuple,
   "proposal-throw-expressions": proposalThrowExpressions,
   "proposal-unicode-property-regex": proposalUnicodePropertyRegex,
   "proposal-unicode-sets-regex": proposalUnicodeSetsRegex,
