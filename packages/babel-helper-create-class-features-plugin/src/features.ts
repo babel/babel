@@ -49,14 +49,14 @@ export function enableFeature(file: File, feature: number, loose: boolean) {
   if (!hasFeature(file, feature) || canIgnoreLoose(file, feature)) {
     file.set(featuresKey, file.get(featuresKey) | feature);
     if (
-      // @ts-expect-error
+      // @ts-expect-error comparing loose with internal private magic string
       loose ===
       "#__internal__@babel/preset-env__prefer-true-but-false-is-ok-if-it-prevents-an-error"
     ) {
       setLoose(file, feature, true);
       file.set(looseLowPriorityKey, file.get(looseLowPriorityKey) | feature);
     } else if (
-      // @ts-expect-error
+      // @ts-expect-error comparing loose with internal private magic string
       loose ===
       "#__internal__@babel/preset-env__prefer-false-but-true-is-ok-if-it-prevents-an-error"
     ) {

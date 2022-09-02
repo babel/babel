@@ -295,9 +295,8 @@ export function createClassFeaturePlugin({
               // class Foo {} export { Foo as default }
               splitExportDeclaration(path);
             } else {
-              // Annyms class declarations can be
+              // @ts-expect-error Anonymous class declarations can be
               // transformed as if they were expressions
-              // @ts-expect-error
               decl.node.type = "ClassExpression";
             }
           }

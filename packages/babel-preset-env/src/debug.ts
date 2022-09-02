@@ -1,6 +1,6 @@
 import { getInclusionReasons } from "@babel/helper-compilation-targets";
 
-import type { Targets } from "@babel/helper-compilation-targets";
+import type { Targets, Target } from "@babel/helper-compilation-targets";
 
 // Outputs a message that shows which target(s) caused an item to be included:
 // transform-foo { "edge":"13", "firefox":"49", "ie":"10" }
@@ -20,11 +20,10 @@ export const logPlugin = (
 
   let formattedTargets = `{`;
   let first = true;
-  for (const target of Object.keys(filteredList)) {
+  for (const target of Object.keys(filteredList) as Target[]) {
     if (!first) formattedTargets += `,`;
     first = false;
     formattedTargets += ` ${target}`;
-    // @ts-expect-error
     if (support[target]) formattedTargets += ` < ${support[target]}`;
   }
   formattedTargets += ` }`;

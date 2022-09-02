@@ -398,6 +398,7 @@ function get<T extends t.Node>(
   const parts = key.split(".");
   if (parts.length === 1) {
     // "foo"
+    // @ts-expect-error key may not index T
     return this._getKey(key, context);
   } else {
     // "foo.bar"
@@ -409,13 +410,11 @@ export { get };
 
 export function _getKey<T extends t.Node>(
   this: NodePath<T>,
-  key: string,
+  key: keyof T & string,
   context?: TraversalContext,
 ): NodePath | NodePath[] {
   const node = this.node;
-  const container =
-    // @ts-expect-error
-    node[key];
+  const container = node[key];
 
   if (Array.isArray(container)) {
     // requested a container so give them all the paths
@@ -450,7 +449,7 @@ export function _getPattern(
       path = path.parentPath;
     } else {
       if (Array.isArray(path)) {
-        // @ts-expect-error
+        // @ts-expect-error part may not index path
         path = path[part];
       } else {
         path = path.get(part, context);
@@ -528,7 +527,7 @@ function getBindingIdentifierPaths(
     if (!id.node) continue;
 
     const keys =
-      // @ts-expect-error
+      // @ts-expect-error _getBindingIdentifiers.keys do not cover all node types
       _getBindingIdentifiers.keys[id.node.type];
 
     if (id.isIdentifier()) {

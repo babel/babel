@@ -75,9 +75,9 @@ export function _getTypeAnnotation(this: NodePath): any {
     }
   }
 
-  // @ts-expect-error
+  // @ts-expect-error typeAnnotation may not index node
   if (node.typeAnnotation) {
-    // @ts-expect-error
+    // @ts-expect-error typeAnnotation may not index node
     return node.typeAnnotation;
   }
 

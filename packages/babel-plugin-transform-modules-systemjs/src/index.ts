@@ -227,7 +227,7 @@ export default declare<PluginState>((api, options: Options) => {
       });
       if (isPostUpdateExpression) {
         node = t.binaryExpression(
-          // @ts-expect-error
+          // @ts-expect-error The operator of a post-update expression must be "++" | "--"
           node.operator[0],
           t.unaryExpression(
             "+",

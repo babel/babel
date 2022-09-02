@@ -1118,9 +1118,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           labeledNode.label = type.typeName as N.Identifier;
         } else {
           this.raise(TSErrors.InvalidTupleMemberLabel, { at: type });
-          // This produces an invalid AST, but at least we don't drop
+          // @ts-expect-error This produces an invalid AST, but at least we don't drop
           // nodes representing the invalid source.
-          // @ts-expect-error
           labeledNode.label = type;
         }
 
@@ -1157,8 +1156,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         N.TsFunctionOrConstructorType | N.TsConstructorType
       >();
       if (type === "TSConstructorType") {
-        // @ts-expect-error
-        node.abstract = !!abstract;
+        (node as Undone<N.TsConstructorType>).abstract = !!abstract;
         if (abstract) this.next();
         this.next(); // eat `new`
       }
@@ -2346,10 +2344,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
       if (bodilessType === "TSDeclareFunction" && this.state.isAmbientContext) {
         this.raise(TSErrors.DeclareFunctionHasImplementation, { at: node });
-        if (
-          // @ts-expect-error
-          node.declare
-        ) {
+        if ((node as Undone<N.FunctionDeclaration>).declare) {
           return super.parseFunctionBodyAndFinish(node, bodilessType, isMethod);
         }
       }
@@ -2484,7 +2479,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           }
 
           if (!noCalls && this.eat(tt.parenL)) {
-            const node = this.startNodeAt<N.CallExpression>(startPos, startLoc);
+            const node = this.startNodeAt<
+              N.CallExpression | N.OptionalCallExpression
+            >(startPos, startLoc);
             node.callee = base;
             // possibleAsync always false here, because we would have handled it above.
             // @ts-expect-error (won't be any undefined arguments)
@@ -2498,8 +2495,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
             node.typeParameters = typeArguments;
             if (state.optionalChainMember) {
-              // @ts-expect-error
-              node.optional = isOptionalCall;
+              (node as Undone<N.OptionalCallExpression>).optional =
+                isOptionalCall;
             }
 
             return this.finishCallExpression(node, state.optionalChainMember);
@@ -3162,12 +3159,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     parseClassPrivateProperty(
       node: N.ClassPrivateProperty,
     ): N.ClassPrivateProperty {
-      // @ts-expect-error
+      // @ts-expect-error abstract may not index node
       if (node.abstract) {
         this.raise(TSErrors.PrivateElementHasAbstract, { at: node });
       }
 
-      // @ts-expect-error
+      // @ts-expect-error accessibility may not index node
       if (node.accessibility) {
         this.raise(TSErrors.PrivateElementHasAccessibility, {
           at: node,
@@ -3195,7 +3192,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         });
       }
 
-      // @ts-expect-error
+      // @ts-expect-error declare does not exist in ClassMethod
       const { declare = false, kind } = method;
 
       if (declare && (kind === "get" || kind === "set")) {

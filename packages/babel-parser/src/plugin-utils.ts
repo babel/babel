@@ -207,8 +207,8 @@ export function validatePlugins(plugins: PluginList) {
     const error = new Error(
       "'asyncDoExpressions' requires 'doExpressions', please add 'doExpressions' to parser plugins.",
     );
-    // @ts-expect-error
-    error.missingPlugins = "doExpressions"; // so @babel/core can provide better error message
+    // @ts-expect-error so @babel/core can provide better error message
+    error.missingPlugins = "doExpressions";
     throw error;
   }
 }

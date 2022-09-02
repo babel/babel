@@ -34,11 +34,11 @@ export function matchesPattern(
  * if the array has any items, otherwise we just check if it's falsy.
  */
 
-export function has(this: NodePath, key: string): boolean {
-  const val =
-    this.node &&
-    // @ts-expect-error
-    this.node[key];
+export function has<N extends t.Node>(
+  this: NodePath<N>,
+  key: keyof N,
+): boolean {
+  const val = this.node && this.node[key];
   if (val && Array.isArray(val)) {
     return !!val.length;
   } else {
@@ -64,7 +64,10 @@ export const is = has;
  * Opposite of `has`.
  */
 
-export function isnt(this: NodePath, key: string): boolean {
+export function isnt<N extends t.Node>(
+  this: NodePath<N>,
+  key: keyof N,
+): boolean {
   return !this.has(key);
 }
 
@@ -72,8 +75,11 @@ export function isnt(this: NodePath, key: string): boolean {
  * Check whether the path node `key` strict equals `value`.
  */
 
-export function equals(this: NodePath, key: string, value: any): boolean {
-  // @ts-expect-error
+export function equals<N extends t.Node>(
+  this: NodePath<N>,
+  key: keyof N,
+  value: any,
+): boolean {
   return this.node[key] === value;
 }
 

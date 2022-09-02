@@ -202,7 +202,7 @@ export default (superClass: typeof Parser) =>
         true,
       );
       if (method.typeParameters) {
-        // @ts-expect-error
+        // @ts-expect-error mutate AST types
         method.value.typeParameters = method.typeParameters;
         delete method.typeParameters;
       }
@@ -296,7 +296,7 @@ export default (superClass: typeof Parser) =>
       // @ts-expect-error mutate AST types
       funcNode.type = "FunctionExpression";
       delete funcNode.kind;
-      // @ts-expect-error
+      // @ts-expect-error mutate AST types
       node.value = funcNode;
       if (type === "ClassPrivateMethod") {
         node.computed = false;

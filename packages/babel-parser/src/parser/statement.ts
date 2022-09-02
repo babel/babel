@@ -2591,10 +2591,9 @@ export default abstract class StatementParser extends ExpressionParser {
   ) {
     // @ts-expect-error Fixme: node.type must be undefined because they are undone
     if (this.isJSONModuleImport(node) && node.type !== "ExportAllDeclaration") {
-      // @ts-expect-error
+      // @ts-expect-error specifiers may not index node
       const { specifiers } = node;
-      // @ts-expect-error
-      if (node.specifiers != null) {
+      if (specifiers != null) {
         // @ts-expect-error refine specifier types
         const nonDefaultNamedSpecifier = specifiers.find(specifier => {
           let imported;

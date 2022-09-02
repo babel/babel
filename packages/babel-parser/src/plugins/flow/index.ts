@@ -2886,7 +2886,7 @@ export default (superClass: typeof Parser) =>
       node: Undone<N.Function>,
       allowModifiers?: boolean,
     ): void {
-      // @ts-expect-error
+      // @ts-expect-error kind may not index node
       const kind = node.kind;
       if (kind !== "get" && kind !== "set" && this.match(tt.lt)) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();

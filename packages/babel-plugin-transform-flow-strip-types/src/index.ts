@@ -155,7 +155,8 @@ export default declare((api, opts: Options) => {
         for (let i = 0; i < node.params.length; i++) {
           let param = node.params[i];
           if (param.type === "AssignmentPattern") {
-            // @ts-expect-error
+            // @ts-expect-error: refine AST types, the left of an assignment pattern as a binding
+            // must not be a MemberExpression
             param = param.left;
           }
           // @ts-expect-error optional is not in ObjectPattern

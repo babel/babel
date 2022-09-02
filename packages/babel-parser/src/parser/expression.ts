@@ -129,7 +129,7 @@ export default abstract class ExpressionParser extends LValParser {
       prop.type === "SpreadElement" ||
       this.isObjectMethod(prop) ||
       prop.computed ||
-      // @ts-expect-error
+      // @ts-expect-error prop must be an ObjectProperty
       prop.shorthand
     ) {
       return;
@@ -2123,7 +2123,7 @@ export default abstract class ExpressionParser extends LValParser {
         this.raise(Errors.InvalidRecordProperty, { at: prop });
       }
 
-      // @ts-expect-error
+      // @ts-expect-error shorthand may not index prop
       if (prop.shorthand) {
         this.addExtra(prop, "shorthand", true);
       }
@@ -2644,9 +2644,9 @@ export default abstract class ExpressionParser extends LValParser {
             // This logic is here to align the error location with the ESTree plugin.
             this.raise(Errors.IllegalLanguageModeDirective, {
               at:
-                // @ts-expect-error
+                // @ts-expect-error kind may not index node
                 (node.kind === "method" || node.kind === "constructor") &&
-                // @ts-expect-error
+                // @ts-expect-error key may not index node
                 !!node.key
                   ? // @ts-expect-error node.key has been gaurded
                     node.key.loc.end

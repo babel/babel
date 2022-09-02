@@ -28,12 +28,12 @@ export default function removeProperties(
 ): void {
   const map = opts.preserveComments ? CLEAR_KEYS : CLEAR_KEYS_PLUS_COMMENTS;
   for (const key of map) {
-    // @ts-expect-error
+    // @ts-expect-error tokens only exist in t.File
     if (node[key] != null) node[key] = undefined;
   }
 
   for (const key of Object.keys(node)) {
-    // @ts-expect-error
+    // @ts-expect-error string can not index node
     if (key[0] === "_" && node[key] != null) node[key] = undefined;
   }
 

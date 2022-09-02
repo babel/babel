@@ -29,11 +29,10 @@ class Node implements NodeBase {
 const NodePrototype = Node.prototype;
 
 if (!process.env.BABEL_8_BREAKING) {
-  // @ts-expect-error
+  // @ts-expect-error __clone is not defined in Node prototype
   NodePrototype.__clone = function (): Node {
-    // @ts-expect-error
-    const newNode: any = new Node();
-    const keys = Object.keys(this);
+    const newNode = new Node(undefined, this.start, this.loc.start);
+    const keys = Object.keys(this) as (keyof Node)[];
     for (let i = 0, length = keys.length; i < length; i++) {
       const key = keys[i];
       // Do not clone comments that are already attached to the node
@@ -42,9 +41,8 @@ if (!process.env.BABEL_8_BREAKING) {
         key !== "trailingComments" &&
         key !== "innerComments"
       ) {
-        newNode[key] =
-          // @ts-expect-error: key must present in this
-          this[key];
+        // @ts-expect-error cloning this to newNode
+        newNode[key] = this[key];
       }
     }
 
@@ -100,12 +98,12 @@ export type Undone<T extends NodeType> = Omit<T, "type">;
 
 export abstract class NodeUtils extends UtilParser {
   startNode<T extends NodeType>(): Undone<T> {
-    // @ts-expect-error
+    // @ts-expect-error cast Node as Undone<T>
     return new Node(this, this.state.start, this.state.startLoc);
   }
 
   startNodeAt<T extends NodeType>(pos: number, loc: Position): Undone<T> {
-    // @ts-expect-error
+    // @ts-expect-error cast Node as Undone<T>
     return new Node(this, pos, loc);
   }
 

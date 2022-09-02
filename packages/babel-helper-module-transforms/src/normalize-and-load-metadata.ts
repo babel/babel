@@ -434,13 +434,12 @@ function getLocalExportMetadata(
 ): Map<string, LocalExportMetadata> {
   const bindingKindLookup = new Map();
 
-  programPath.get("body").forEach(child => {
+  programPath.get("body").forEach((child: NodePath) => {
     let kind: ModuleBindingKind;
     if (child.isImportDeclaration()) {
       kind = "import";
     } else {
       if (child.isExportDefaultDeclaration()) {
-        // @ts-expect-error
         child = child.get("declaration");
       }
       if (child.isExportNamedDeclaration()) {
