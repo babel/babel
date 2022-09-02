@@ -7,7 +7,7 @@ import {
   createPositionWithColumnOffset,
 } from "../util/location";
 import CommentsParser, { type CommentWhitespace } from "../parser/comments";
-import * as N from "../types";
+import type * as N from "../types";
 import * as charCodes from "charcodes";
 import { isIdentifierStart, isIdentifierChar } from "../util/identifier";
 import {

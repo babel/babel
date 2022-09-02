@@ -1,6 +1,6 @@
 import type Parser from "../parser";
 import { tokenIsIdentifier, tt } from "../tokenizer/types";
-import * as N from "../types";
+import type * as N from "../types";
 import type { ExpressionErrors } from "../parser/util";
 
 export default (superClass: typeof Parser) =>

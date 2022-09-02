@@ -10,8 +10,9 @@ import {
   type TokenType,
   tt,
 } from "../../tokenizer/types";
-import { TokContext, types as tc } from "../../tokenizer/context";
-import * as N from "../../types";
+import type { TokContext } from "../../tokenizer/context";
+import { types as tc } from "../../tokenizer/context";
+import type * as N from "../../types";
 import { isIdentifierChar, isIdentifierStart } from "../../util/identifier";
 import type { Position } from "../../util/location";
 import { isNewLine } from "../../util/whitespace";

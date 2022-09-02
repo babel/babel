@@ -29,7 +29,7 @@ import type { PluginAPI, PresetAPI } from "./helpers/config-api";
 import loadPrivatePartialConfig from "./partial";
 import type { ValidatedOptions } from "./validation/options";
 
-import * as Context from "./cache-contexts";
+import type * as Context from "./cache-contexts";
 import ConfigError from "../errors/config-error";
 
 type LoadedDescriptor = {

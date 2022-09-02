@@ -1,6 +1,7 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { skipTransparentExprWrappers } from "@babel/helper-skip-transparent-expression-wrappers";
-import { types as t, File } from "@babel/core";
+import type { File } from "@babel/core";
+import { types as t } from "@babel/core";
 import type { NodePath, Scope } from "@babel/traverse";
 
 type ListElement = t.SpreadElement | t.Expression;

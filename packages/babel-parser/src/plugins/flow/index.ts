@@ -11,8 +11,8 @@ import {
   type TokenType,
   tokenIsFlowInterfaceOrTypeOrOpaque,
 } from "../../tokenizer/types";
-import * as N from "../../types";
-import { Position } from "../../util/location";
+import type * as N from "../../types";
+import type { Position } from "../../util/location";
 import { types as tc } from "../../tokenizer/context";
 import * as charCodes from "charcodes";
 import { isIteratorStart } from "../../util/identifier";

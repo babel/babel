@@ -1,4 +1,4 @@
-import * as N from "../types";
+import type * as N from "../types";
 import {
   tokenIsIdentifier,
   tokenIsLoop,
@@ -38,7 +38,8 @@ import {
 } from "../util/expression-scope";
 import type { SourceType } from "../options";
 import { Token } from "../tokenizer";
-import { Position, createPositionWithColumnOffset } from "../util/location";
+import type { Position } from "../util/location";
+import { createPositionWithColumnOffset } from "../util/location";
 import { cloneStringLiteral, cloneIdentifier, type Undone } from "./node";
 import type Parser from "./index";
 

@@ -5,7 +5,7 @@ import {
   type TokenType,
 } from "../tokenizer/types";
 import Tokenizer from "../tokenizer";
-import State from "../tokenizer/state";
+import type State from "../tokenizer/state";
 import type { EstreePropertyDefinition, Node, ObjectProperty } from "../types";
 import { lineBreak, skipWhiteSpaceToLineBreak } from "../util/whitespace";
 import { isIdentifierChar } from "../util/identifier";

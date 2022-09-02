@@ -8,7 +8,7 @@
 
 const scriptTypes = ["text/jsx", "text/babel"];
 
-import { transform } from "./index";
+import type { transform } from "./index";
 import type { InputOptions } from "@babel/core";
 
 let headEl: HTMLHeadElement;

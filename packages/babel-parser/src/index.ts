@@ -14,8 +14,8 @@ import type {
 } from "./typings";
 import Parser from "./parser";
 
+import type { ExportedTokenType } from "./tokenizer/types";
 import {
-  ExportedTokenType,
   getExportedToken,
   tt as internalTokenTypes,
   type InternalTokenTypes,
