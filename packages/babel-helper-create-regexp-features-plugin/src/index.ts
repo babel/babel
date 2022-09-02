@@ -1,5 +1,11 @@
 import rewritePattern from "regexpu-core";
-import { featuresKey, FEATURES, enableFeature, runtimeKey } from "./features";
+import {
+  featuresKey,
+  FEATURES,
+  enableFeature,
+  runtimeKey,
+  hasFeature,
+} from "./features";
 import { generateRegexpuOptions, canSkipRegexpu, transformFlags } from "./util";
 import type { NodePath } from "@babel/traverse";
 
@@ -44,7 +50,7 @@ export function createRegExpFeaturePlugin({
       const features = file.get(featuresKey) ?? 0;
       let newFeatures = enableFeature(features, FEATURES[feature]);
 
-      const { useUnicodeFlag, runtime = true } = options;
+      const { useUnicodeFlag, runtime } = options;
       if (useUnicodeFlag === false) {
         newFeatures = enableFeature(newFeatures, FEATURES.unicodeFlag);
       }
@@ -52,8 +58,29 @@ export function createRegExpFeaturePlugin({
         file.set(featuresKey, newFeatures);
       }
 
-      if (!runtime) {
-        file.set(runtimeKey, false);
+      if (runtime !== undefined) {
+        if (
+          file.has(runtimeKey) &&
+          file.get(runtimeKey) !== runtime &&
+          // TODO(Babel 8): Remove this check. It's necessary because in Babel 7
+          // we allow multiple copies of transform-named-capturing-groups-regex
+          // with conflicting 'runtime' options.
+          hasFeature(newFeatures, FEATURES.duplicateNamedCaptureGroups)
+        ) {
+          throw new Error(
+            `The 'runtime' option must be the same for ` +
+              `'@babel/plugin-transform-named-capturing-groups-regex' and ` +
+              `'@babel/plugin-proposal-duplicate-named-capturing-groups-regex'.`,
+          );
+        }
+        // TODO(Babel 8): Remove this check and always set it.
+        // It's necessary because in Babel 7 we allow multiple copies of
+        // transform-named-capturing-groups-regex with conflicting 'runtime' options.
+        if (feature === "namedCaptureGroups") {
+          if (!runtime || !file.has(runtimeKey)) file.set(runtimeKey, runtime);
+        } else {
+          file.set(runtimeKey, runtime);
+        }
       }
 
       if (!file.has(versionKey) || file.get(versionKey) < version) {
@@ -68,13 +95,24 @@ export function createRegExpFeaturePlugin({
         const features = file.get(featuresKey);
         const runtime = file.get(runtimeKey) ?? true;
 
-        const regexpuOptions = generateRegexpuOptions(features);
-        if (canSkipRegexpu(node, regexpuOptions)) return;
+        const regexpuOptions = generateRegexpuOptions(node.pattern, features);
+        if (canSkipRegexpu(node, regexpuOptions)) {
+          return;
+        }
 
-        const namedCaptureGroups: Record<string, number> = {};
+        const namedCaptureGroups: Record<string, number | number[]> = {
+          __proto__: null,
+        };
         if (regexpuOptions.namedGroups === "transform") {
           regexpuOptions.onNamedGroup = (name, index) => {
-            namedCaptureGroups[name] = index;
+            const prev = namedCaptureGroups[name];
+            if (typeof prev === "number") {
+              namedCaptureGroups[name] = [prev, index];
+            } else if (Array.isArray(prev)) {
+              prev.push(index);
+            } else {
+              namedCaptureGroups[name] = index;
+            }
           };
         }
 

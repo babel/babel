@@ -56,7 +56,16 @@ export default function _wrapRegExp() {
 
     var g = _groups.get(re);
     return Object.keys(g).reduce(function (groups, name) {
-      groups[name] = result[g[name]];
+      var i = g[name];
+      if (typeof i === "number") groups[name] = result[i];
+      else {
+        // i is an array of indexes
+        var k = 0;
+        // if no group matched, we stop at k = i.length - 1 and then
+        // we store result[i[i.length - 1]] which is undefined.
+        while (result[i[k]] === undefined && k + 1 < i.length) k++;
+        groups[name] = result[i[k]];
+      }
       return groups;
     }, Object.create(null));
   }

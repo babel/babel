@@ -5,6 +5,7 @@ export const FEATURES = Object.freeze({
   namedCaptureGroups: 1 << 3,
   unicodeSetsFlag_syntax: 1 << 4,
   unicodeSetsFlag: 1 << 5,
+  duplicateNamedCaptureGroups: 1 << 6,
 });
 
 // We can't use a symbol because this needs to always be the same, even if

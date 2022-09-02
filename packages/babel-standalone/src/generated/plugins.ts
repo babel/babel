@@ -30,6 +30,7 @@ import proposalClassStaticBlock from "@babel/plugin-proposal-class-static-block"
 import proposalDecorators from "@babel/plugin-proposal-decorators";
 import proposalDestructuringPrivate from "@babel/plugin-proposal-destructuring-private";
 import proposalDoExpressions from "@babel/plugin-proposal-do-expressions";
+import proposalDuplicateNamedCapturingGroupsRegex from "@babel/plugin-proposal-duplicate-named-capturing-groups-regex";
 import proposalDynamicImport from "@babel/plugin-proposal-dynamic-import";
 import proposalExportDefaultFrom from "@babel/plugin-proposal-export-default-from";
 import proposalExportNamespaceFrom from "@babel/plugin-proposal-export-namespace-from";
@@ -128,6 +129,7 @@ export {
   proposalDecorators,
   proposalDestructuringPrivate,
   proposalDoExpressions,
+  proposalDuplicateNamedCapturingGroupsRegex,
   proposalDynamicImport,
   proposalExportDefaultFrom,
   proposalExportNamespaceFrom,
@@ -227,6 +229,8 @@ export const all: { [k: string]: any } = {
   "proposal-decorators": proposalDecorators,
   "proposal-destructuring-private": proposalDestructuringPrivate,
   "proposal-do-expressions": proposalDoExpressions,
+  "proposal-duplicate-named-capturing-groups-regex":
+    proposalDuplicateNamedCapturingGroupsRegex,
   "proposal-dynamic-import": proposalDynamicImport,
   "proposal-export-default-from": proposalExportDefaultFrom,
   "proposal-export-namespace-from": proposalExportNamespaceFrom,

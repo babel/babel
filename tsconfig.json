@@ -50,6 +50,7 @@
     "./packages/babel-plugin-proposal-decorators/src/**/*.ts",
     "./packages/babel-plugin-proposal-destructuring-private/src/**/*.ts",
     "./packages/babel-plugin-proposal-do-expressions/src/**/*.ts",
+    "./packages/babel-plugin-proposal-duplicate-named-capturing-groups-regex/src/**/*.ts",
     "./packages/babel-plugin-proposal-dynamic-import/src/**/*.ts",
     "./packages/babel-plugin-proposal-export-default-from/src/**/*.ts",
     "./packages/babel-plugin-proposal-export-namespace-from/src/**/*.ts",
@@ -312,6 +313,9 @@
       ],
       "@babel/plugin-proposal-do-expressions": [
         "./packages/babel-plugin-proposal-do-expressions/src"
+      ],
+      "@babel/plugin-proposal-duplicate-named-capturing-groups-regex": [
+        "./packages/babel-plugin-proposal-duplicate-named-capturing-groups-regex/src"
       ],
       "@babel/plugin-proposal-dynamic-import": [
         "./packages/babel-plugin-proposal-dynamic-import/src"

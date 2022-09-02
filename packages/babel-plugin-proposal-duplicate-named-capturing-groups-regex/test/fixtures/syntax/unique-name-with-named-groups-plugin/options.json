@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    ["proposal-duplicate-named-capturing-groups-regex", { "runtime": false }],
+    ["transform-named-capturing-groups-regex", { "runtime": false }]
+  ]
+}
