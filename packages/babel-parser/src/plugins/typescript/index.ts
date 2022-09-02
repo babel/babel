@@ -20,7 +20,7 @@ import type Parser from "../../parser";
 import {
   type BindingTypes,
   SCOPE_TS_MODULE,
-  SCOPE_TS_TOP_LEVEL,
+  SCOPE_OTHER,
   BIND_TS_ENUM,
   BIND_TS_CONST_ENUM,
   BIND_TS_TYPE,
@@ -1860,7 +1860,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     tsParseModuleBlock(): N.TsModuleBlock {
       const node = this.startNode<N.TsModuleBlock>();
-      this.scope.enter(SCOPE_TS_TOP_LEVEL);
+      this.scope.enter(SCOPE_OTHER);
 
       this.expect(tt.braceL);
       // Inside of a module block is considered "top-level", meaning it can have imports and exports.

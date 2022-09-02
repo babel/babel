@@ -10,8 +10,7 @@ export const SCOPE_OTHER        = 0b000000000,
              SCOPE_CLASS        = 0b001000000,
              SCOPE_STATIC_BLOCK = 0b010000000,
              SCOPE_TS_MODULE    = 0b100000000,
-             SCOPE_VAR = SCOPE_PROGRAM | SCOPE_FUNCTION | SCOPE_TS_MODULE,
-             SCOPE_TS_TOP_LEVEL = 0b1000000000;
+             SCOPE_VAR = SCOPE_PROGRAM | SCOPE_FUNCTION | SCOPE_TS_MODULE;
 
 export type ScopeFlags =
   | typeof SCOPE_OTHER

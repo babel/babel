@@ -11,7 +11,6 @@ import {
   type BindingTypes,
   BIND_FLAGS_TS_IMPORT,
   SCOPE_TS_MODULE,
-  SCOPE_TS_TOP_LEVEL,
 } from "../../util/scopeflags";
 import type * as N from "../../types";
 import { Errors } from "../../parse-error";
@@ -48,30 +47,27 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
   }
 
   enter(flags: number): void {
-    if (flags == SCOPE_TS_MODULE || flags == SCOPE_TS_TOP_LEVEL) {
+    if (flags == SCOPE_TS_MODULE) {
       this.importsStack.push(new Set());
     }
 
     super.enter(flags);
   }
 
-  exit(): ScopeFlags {
+  exit() {
     const flags = super.exit();
 
-    if (flags == SCOPE_TS_MODULE || flags == SCOPE_TS_TOP_LEVEL) {
+    if (flags == SCOPE_TS_MODULE) {
       this.importsStack.pop();
     }
-
-    return flags;
   }
 
   hasImport(name: string, allowShadow?: boolean) {
     const len = this.importsStack.length;
-    if (!this.importsStack[len - 1].has(name)) {
-      return !allowShadow && len > 2 && this.importsStack[0].has(name);
+    if (this.importsStack[len - 1].has(name)) {
+      return true;
     }
-
-    return true;
+    return !allowShadow && len > 1 && this.importsStack[0].has(name);
   }
 
   declareName(name: string, bindingType: BindingTypes, loc: Position) {
