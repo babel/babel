@@ -20,16 +20,18 @@ import type Parser from "../../parser";
 import {
   type BindingTypes,
   SCOPE_TS_MODULE,
-  SCOPE_OTHER,
+  SCOPE_TS_TOP_LEVEL,
   BIND_TS_ENUM,
   BIND_TS_CONST_ENUM,
   BIND_TS_TYPE,
   BIND_TS_INTERFACE,
   BIND_TS_AMBIENT,
   BIND_TS_NAMESPACE,
+  BIND_TS_TYPE_IMPORT,
   BIND_CLASS,
   BIND_LEXICAL,
   BIND_NONE,
+  BIND_FLAGS_TS_IMPORT,
 } from "../../util/scopeflags";
 import TypeScriptScopeHandler from "./scope";
 import * as charCodes from "charcodes";
@@ -1858,7 +1860,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     tsParseModuleBlock(): N.TsModuleBlock {
       const node = this.startNode<N.TsModuleBlock>();
-      this.scope.enter(SCOPE_OTHER);
+      this.scope.enter(SCOPE_TS_TOP_LEVEL);
 
       this.expect(tt.braceL);
       // Inside of a module block is considered "top-level", meaning it can have imports and exports.
@@ -3964,6 +3966,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         importedIsString,
         isInTypeOnlyImport,
         isMaybeTypeOnly,
+        isInTypeOnlyImport ? BIND_TS_TYPE_IMPORT : BIND_FLAGS_TS_IMPORT,
       );
     }
 
@@ -4061,7 +4064,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       if (isImport) {
         this.checkIdentifier(
           node[rightOfAsKey],
-          hasTypeSpecifier ? BIND_TS_TYPE : BIND_LEXICAL,
+          hasTypeSpecifier ? BIND_TS_TYPE_IMPORT : BIND_FLAGS_TS_IMPORT,
         );
       }
     }

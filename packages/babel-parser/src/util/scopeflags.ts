@@ -10,7 +10,8 @@ export const SCOPE_OTHER        = 0b000000000,
              SCOPE_CLASS        = 0b001000000,
              SCOPE_STATIC_BLOCK = 0b010000000,
              SCOPE_TS_MODULE    = 0b100000000,
-             SCOPE_VAR = SCOPE_PROGRAM | SCOPE_FUNCTION | SCOPE_TS_MODULE;
+             SCOPE_VAR = SCOPE_PROGRAM | SCOPE_FUNCTION | SCOPE_TS_MODULE,
+             SCOPE_TS_TOP_LEVEL = 0b1000000000;
 
 export type ScopeFlags =
   | typeof SCOPE_OTHER
@@ -40,7 +41,8 @@ export const BIND_KIND_VALUE            = 0b000000_0000_01,
              BIND_FLAGS_TS_ENUM         = 0b000100_0000_00,
              BIND_FLAGS_TS_CONST_ENUM   = 0b001000_0000_00,
              BIND_FLAGS_TS_EXPORT_ONLY  = 0b010000_0000_00,
-             BIND_FLAGS_FLOW_DECLARE_FN = 0b100000_0000_00;
+             BIND_FLAGS_FLOW_DECLARE_FN = 0b100000_0000_00,
+             BIND_FLAGS_TS_IMPORT       = 0b1_000000_0000_00;
 
 // These flags are meant to be _only_ used by Scope consumers
 // prettier-ignore
@@ -58,8 +60,9 @@ export const BIND_CLASS         = BIND_KIND_VALUE | BIND_KIND_TYPE | BIND_SCOPE_
              BIND_NONE          = 0               | 0              | 0                   | BIND_FLAGS_NONE   ,
              BIND_OUTSIDE       = BIND_KIND_VALUE | 0              | 0                   | BIND_FLAGS_NONE   ,
 
-             BIND_TS_CONST_ENUM = BIND_TS_ENUM | BIND_FLAGS_TS_CONST_ENUM,
-             BIND_TS_NAMESPACE  = 0               | 0              | 0            | BIND_FLAGS_TS_EXPORT_ONLY,
+             BIND_TS_CONST_ENUM = BIND_TS_ENUM    | BIND_FLAGS_TS_CONST_ENUM                                 ,
+             BIND_TS_NAMESPACE  = 0               | 0              | 0                   | BIND_FLAGS_TS_EXPORT_ONLY,
+             BIND_TS_TYPE_IMPORT= 0               | BIND_KIND_TYPE | 0                   | BIND_FLAGS_TS_IMPORT,
 
              BIND_FLOW_DECLARE_FN = BIND_FLAGS_FLOW_DECLARE_FN;
 

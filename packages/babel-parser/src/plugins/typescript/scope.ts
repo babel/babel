@@ -9,8 +9,12 @@ import {
   BIND_FLAGS_CLASS,
   type ScopeFlags,
   type BindingTypes,
+  BIND_FLAGS_TS_IMPORT,
+  SCOPE_TS_MODULE,
+  SCOPE_TS_TOP_LEVEL,
 } from "../../util/scopeflags";
 import type * as N from "../../types";
+import { Errors } from "../../parse-error";
 
 class TypeScriptScope extends Scope {
   types: Set<string> = new Set();
@@ -35,11 +39,53 @@ class TypeScriptScope extends Scope {
 // explanation of how typescript handles scope.
 
 export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope> {
+  importsStack: Set<string>[] = [];
+
   createScope(flags: ScopeFlags): TypeScriptScope {
+    this.importsStack.push(new Set()); // SCOPE_TS_TOP_LEVEL should be kept
+
     return new TypeScriptScope(flags);
   }
 
+  enter(flags: number): void {
+    if (flags == SCOPE_TS_MODULE || flags == SCOPE_TS_TOP_LEVEL) {
+      this.importsStack.push(new Set());
+    }
+
+    super.enter(flags);
+  }
+
+  exit(): ScopeFlags {
+    const flags = super.exit();
+
+    if (flags == SCOPE_TS_MODULE || flags == SCOPE_TS_TOP_LEVEL) {
+      this.importsStack.pop();
+    }
+
+    return flags;
+  }
+
+  hasImport(name: string, allowShadow?: boolean) {
+    const len = this.importsStack.length;
+    if (!this.importsStack[len - 1].has(name)) {
+      return !allowShadow && len > 2 && this.importsStack[0].has(name);
+    }
+
+    return true;
+  }
+
   declareName(name: string, bindingType: BindingTypes, loc: Position) {
+    if (bindingType & BIND_FLAGS_TS_IMPORT) {
+      if (this.hasImport(name, true)) {
+        this.parser.raise(Errors.VarRedeclaration, {
+          at: loc,
+          identifierName: name,
+        });
+      }
+      this.importsStack[this.importsStack.length - 1].add(name);
+      return;
+    }
+
     const scope = this.currentScope();
     if (bindingType & BIND_FLAGS_TS_EXPORT_ONLY) {
       this.maybeExportDefined(scope, name);
@@ -98,7 +144,8 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
     const { name } = id;
     if (
       !topLevelScope.types.has(name) &&
-      !topLevelScope.exportOnlyBindings.has(name)
+      !topLevelScope.exportOnlyBindings.has(name) &&
+      !this.hasImport(name)
     ) {
       super.checkLocalExport(id);
     }

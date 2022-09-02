@@ -17,7 +17,6 @@ import {
   BIND_LEXICAL,
   BIND_VAR,
   BIND_FUNCTION,
-  BIND_KIND_TYPE,
   SCOPE_CLASS,
   SCOPE_FUNCTION,
   SCOPE_OTHER,
@@ -2713,11 +2712,11 @@ export default abstract class StatementParser extends ExpressionParser {
       | N.ImportSpecifier
       | N.ImportDefaultSpecifier
       | N.ImportNamespaceSpecifier,
-  >(specifier: Undone<T>, type: T["type"], binding = BIND_LEXICAL) {
+  >(specifier: Undone<T>, type: T["type"], bindingType = BIND_LEXICAL) {
     this.checkLVal(specifier.local, {
       // @ts-expect-error refine types
       in: specifier,
-      binding: binding,
+      binding: bindingType,
     });
     return this.finishNode(specifier, type);
   }
@@ -2903,6 +2902,7 @@ export default abstract class StatementParser extends ExpressionParser {
     /* eslint-disable @typescript-eslint/no-unused-vars -- used in TypeScript and Flow parser */
     isInTypeOnlyImport: boolean,
     isMaybeTypeOnly: boolean,
+    bindingType?: BindingTypes,
     /* eslint-enable @typescript-eslint/no-unused-vars */
   ): N.ImportSpecifier {
     if (this.eatContextual(tt._as)) {
@@ -2928,7 +2928,7 @@ export default abstract class StatementParser extends ExpressionParser {
     return this.finishImportSpecifier(
       specifier,
       "ImportSpecifier",
-      isInTypeOnlyImport ? BIND_KIND_TYPE : undefined,
+      bindingType,
     );
   }
 
