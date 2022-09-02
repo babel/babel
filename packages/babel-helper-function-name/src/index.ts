@@ -201,17 +201,11 @@ function visit(
  *
  * @export
  * @template N The unamed expression type
- * @param {({
- *     node: N;
- *     parent?: NodePath<N>["parent"];
- *     scope: Scope;
- *     id?: t.LVal | t.StringLiteral | t.NumericLiteral | t.BigIntLiteral;
- *   })} {
- *     node,
- *     parent,
- *     scope,
- *     id,
- *   } `node`, `parent` and `scope` are generally extracted from a given NodePath. `id` is the fallback naming source when the helper
+ * @param {Object} nodePathLike The NodePath-like input
+ * @param {N} nodePathLike.node an AST node
+ * @param {NodePath<N>["parent"]} [nodePathLike.parent] The parent of the AST node
+ * @param {Scope} nodePathLike.scope The scope associated to the AST node
+ * @param {t.LVal | t.StringLiteral | t.NumericLiteral | t.BigIntLiteral} [nodePathLike.id] the fallback naming source when the helper
  * can not infer the function name from the AST
  * @param {boolean} [localBinding=false] whether a name could shadow a self-reference (e.g. converting arrow function)
  * @param {boolean} [supportUnicodeId=false] whether the compilation target supports unicodeId (non-BMP characters) or not
