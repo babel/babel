@@ -148,7 +148,7 @@ function plainFunction(
       const returnFn = container.callee.body.body[1].argument;
       nameFunction({
         node: returnFn,
-        parent: path.parent,
+        parent: (path as NodePath<t.FunctionExpression>).parent,
         scope: path.scope,
       });
       functionId = returnFn.id;

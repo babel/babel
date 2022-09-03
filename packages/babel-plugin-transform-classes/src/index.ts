@@ -1,4 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
+import { isRequired } from "@babel/helper-compilation-targets";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 import nameFunction from "@babel/helper-function-name";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
@@ -30,6 +31,10 @@ export default declare((api, options: Options) => {
     "superIsCallableConstructor",
   ) ?? loose) as boolean;
   const noClassCalls = (api.assumption("noClassCalls") ?? loose) as boolean;
+  const supportUnicodeId = !isRequired(
+    "transform-unicode-escapes",
+    api.targets(),
+  );
 
   // todo: investigate traversal requeueing
   const VISITED = new WeakSet();
@@ -59,7 +64,7 @@ export default declare((api, options: Options) => {
         const { node } = path;
         if (VISITED.has(node)) return;
 
-        const inferred = nameFunction(path);
+        const inferred = nameFunction(path, undefined, supportUnicodeId);
         if (inferred && inferred !== node) {
           path.replaceWith(inferred);
           return;
@@ -68,12 +73,19 @@ export default declare((api, options: Options) => {
         VISITED.add(node);
 
         const [replacedPath] = path.replaceWith(
-          transformClass(path, state.file, builtinClasses, loose, {
-            setClassMethods,
-            constantSuper,
-            superIsCallableConstructor,
-            noClassCalls,
-          }),
+          transformClass(
+            path,
+            state.file,
+            builtinClasses,
+            loose,
+            {
+              setClassMethods,
+              constantSuper,
+              superIsCallableConstructor,
+              noClassCalls,
+            },
+            supportUnicodeId,
+          ),
         );
 
         if (replacedPath.isCallExpression()) {

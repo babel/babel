@@ -197,9 +197,22 @@ function visit(
 }
 
 /**
- * @param {NodePath} param0
- * @param {Boolean} localBinding whether a name could shadow a self-reference (e.g. converting arrow function)
- * @param {Boolean} supportUnicodeId whether a target support unicodeId or not
+ * Add id to function/class expression inferred from the AST
+ *
+ * @export
+ * @template N The unamed expression type
+ * @param {Object} nodePathLike The NodePath-like input
+ * @param {N} nodePathLike.node an AST node
+ * @param {NodePath<N>["parent"]} [nodePathLike.parent] The parent of the AST node
+ * @param {Scope} nodePathLike.scope The scope associated to the AST node
+ * @param {t.LVal | t.StringLiteral | t.NumericLiteral | t.BigIntLiteral} [nodePathLike.id] the fallback naming source when the helper
+ * can not infer the function name from the AST
+ * @param {boolean} [localBinding=false] whether a name could shadow a self-reference (e.g. converting arrow function)
+ * @param {boolean} [supportUnicodeId=false] whether the compilation target supports unicodeId (non-BMP characters) or not
+ * @returns {(N | t.CallExpression | void)}
+ * - modified node when name can be inferred,
+ * - an IIFE when `node` contains a binding shadowing the inferred function name (e.g. `let f = function (f) {}`),
+ * - `void` when `node` has `id` property or the helper can not inferred the name or the inferred name contains non-BMP characters that is not supported by current target
  */
 export default function <N extends t.FunctionExpression | t.Class>(
   {
@@ -209,13 +222,13 @@ export default function <N extends t.FunctionExpression | t.Class>(
     id,
   }: {
     node: N;
-    parent?: t.Node;
+    parent?: NodePath<N>["parent"];
     scope: Scope;
     id?: t.LVal | t.StringLiteral | t.NumericLiteral | t.BigIntLiteral;
   },
   localBinding = false,
   supportUnicodeId = false,
-): t.CallExpression | N {
+): N | t.CallExpression | void {
   // has an `id` so we don't need to infer one
   if (node.id) return;
 

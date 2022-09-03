@@ -98,6 +98,7 @@ export default function transformClass(
   builtinClasses: ReadonlySet<string>,
   isLoose: boolean,
   assumptions: ClassAssumptions,
+  supportUnicodeId: boolean,
 ) {
   const classState: State = {
     parent: undefined,
@@ -509,7 +510,14 @@ export default function transformClass(
       if (node.kind === "method") {
         // @ts-expect-error Fixme: we are passing a ClassMethod to nameFunction, but nameFunction
         // does not seem to support it
-        fn = nameFunction({ id: key, node: node, scope });
+        fn =
+          nameFunction(
+            // @ts-expect-error Fixme: we are passing a ClassMethod to nameFunction, but nameFunction
+            // does not seem to support it
+            { id: key, node: node, scope },
+            undefined,
+            supportUnicodeId,
+          ) ?? fn;
       }
     } else {
       // todo(flow->ts) find a way to avoid "key as t.StringLiteral" below which relies on this assignment
@@ -571,11 +579,17 @@ export default function transformClass(
 
       const key = t.toComputedKey(node, node.key);
       if (t.isStringLiteral(key)) {
-        func = nameFunction({
-          node: func,
-          id: key,
-          scope,
-        });
+        // @ts-expect-error: requires strictNullCheck
+        func =
+          nameFunction(
+            {
+              node: func,
+              id: key,
+              scope,
+            },
+            undefined,
+            supportUnicodeId,
+          ) ?? func;
       }
 
       const expr = t.expressionStatement(
