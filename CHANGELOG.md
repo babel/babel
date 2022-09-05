@@ -23,6 +23,49 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.19.0 (2022-09-05)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#14666](https://github.com/babel/babel/pull/14666) Support private name in decorator member expression ([@JLHwung](https://github.com/JLHwung))
+* `babel-helpers`, `babel-plugin-proposal-async-generator-functions`, `babel-preset-env`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#14877](https://github.com/babel/babel/pull/14877)  Remove one promise tick in yield* (tc39/ecma262#2819)  ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :rocket: New Feature
+* `babel-generator`, `babel-helpers`, `babel-parser`, `babel-plugin-proposal-decorators`, `babel-plugin-syntax-decorators`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#14836](https://github.com/babel/babel/pull/14836) Add 2022-03 decorators version (stage 3) ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#14695](https://github.com/babel/babel/pull/14695) [parser] Make `decoratorsBeforeExport` default to `false` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`, `babel-parser`
+  * [#14744](https://github.com/babel/babel/pull/14744) Default to hash syntax for Record&Tuple ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-standalone`
+  * [#14867](https://github.com/babel/babel/pull/14867) feat: add proposal-record-and-tuple to standalone ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-create-regexp-features-plugin`, `babel-helpers`, `babel-plugin-proposal-duplicate-named-capturing-groups-regex`, `babel-plugin-transform-named-capturing-groups-regex`, `babel-standalone`
+  * [#14805](https://github.com/babel/babel/pull/14805) Add support for the duplicate named capturing groups proposal ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :bug: Bug Fix
+* `babel-helper-function-name`, `babel-helper-wrap-function`, `babel-plugin-transform-classes`
+  * [#14897](https://github.com/babel/babel/pull/14897) Fix: class transform should not drop method definition when key contains non-BMP characters ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-typescript`
+  * [#14890](https://github.com/babel/babel/pull/14890) fix: TS plugin shouldn't remove `#privateField!` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-parser`
+  * [#14819](https://github.com/babel/babel/pull/14819) fix: parse a<b>>>c as a<(b>>>c) ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-builder-react-jsx`
+  * [#14886](https://github.com/babel/babel/pull/14886) Fix helper-builder-react-jsx compat with Babel 7.9 ([@JLHwung](https://github.com/JLHwung))
+
+#### :nail_care: Polish
+* `babel-core`
+  * [#11612](https://github.com/babel/babel/pull/11612) Make error message prefixes more descriptive ([@eps1lon](https://github.com/eps1lon))
+  * [#11554](https://github.com/babel/babel/pull/11554) Hide internal `@babel/core` functions in config errors ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :memo: Documentation
+* [#14895](https://github.com/babel/babel/pull/14895) docs: remove david-dm from README ([@SukkaW](https://github.com/SukkaW))
+
+#### :house: Internal
+* `babel-standalone`
+  * [#14863](https://github.com/babel/babel/pull/14863) ship @babel/standalone source maps ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`, `babel-parser`, `babel-traverse`
+  * [#14880](https://github.com/babel/babel/pull/14880) Update typescript to 4.8 ([@JLHwung](https://github.com/JLHwung))
 ## v7.18.13 (2022-08-22)
 
 #### :bug: Bug Fix
