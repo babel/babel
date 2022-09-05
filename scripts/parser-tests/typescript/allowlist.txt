@@ -1,3 +1,18 @@
+# 9 invalid programs did not produce a parsing error
+
+bigintIndex.ts
+classExpressionWithDecorator1.ts
+collisionArgumentsArrowFunctions.ts # TypeScript doesn't allow a parameter to be named arguments even in non-strict mode, which we don't catch.
+collisionArgumentsFunction.ts # TypeScript doesn't allow a parameter to be named arguments even in non-strict mode, which we don't catch.
+collisionArgumentsFunctionExpressions.ts # TypeScript doesn't allow a parameter to be named arguments even in non-strict mode, which we don't catch.
+dynamicImportTrailingComma.ts
+es3-oldStyleOctalLiteralInEnums.ts # We don't support ES3-style octal literal errors.
+exportDeclarationsInAmbientNamespaces2.ts
+multipleExports.ts
+
+
+# 143 valid programs produced a parsing error
+
 ArrowFunctionExpression1.ts
 MemberAccessorDeclaration15.ts
 ParameterList13.ts
@@ -17,15 +32,10 @@ augmentedTypesEnum2.ts
 augmentedTypesFunction.ts
 augmentedTypesInterface.ts
 augmentedTypesVar.ts
-bigintIndex.ts
 classCannotExtendVar.ts
-classExpressionWithDecorator1.ts
 classExtendsMultipleBaseClasses.ts
 classOverloadForFunction.ts
 classWithEmptyTypeParameter.ts
-collisionArgumentsArrowFunctions.ts # TypeScript doesn't allow a parameter to be named arguments even in non-strict mode, which we don't catch.
-collisionArgumentsFunction.ts # TypeScript doesn't allow a parameter to be named arguments even in non-strict mode, which we don't catch.
-collisionArgumentsFunctionExpressions.ts # TypeScript doesn't allow a parameter to be named arguments even in non-strict mode, which we don't catch.
 constDeclarations-invalidContexts.ts
 constDeclarations-scopes.ts
 constDeclarations-validContexts.ts
@@ -49,12 +59,10 @@ duplicateLabel2.ts
 duplicatePackage_withErrors.ts
 duplicateVarAndImport.ts
 duplicateVarAndImport2.ts
-dynamicImportTrailingComma.ts
 emptyGenericParamList.ts
 emptyTypeArgumentList.ts
 emptyTypeArgumentListWithNew.ts
 enumGenericTypeClash.ts
-es3-oldStyleOctalLiteralInEnums.ts # We don't support ES3-style octal literal errors.
 es3-oldStyleOctalLiteralTypes.ts
 es6ImportDefaultBindingFollowedWithNamedImport1InEs5.ts
 es6ImportDefaultBindingMergeErrors.ts
@@ -67,7 +75,6 @@ exportAssignmentWithDeclareModifier.ts
 exportAssignmentWithExportModifier.ts
 exportClassWithoutName.ts
 exportDeclarationsInAmbientNamespaces.ts
-exportDeclarationsInAmbientNamespaces2.ts
 exportDefaultAsyncFunction2.ts
 exportEqualsOfModule.ts
 exportInterfaceClassAndValue.ts
@@ -124,7 +131,6 @@ moduleDuplicateIdentifiers.ts
 moduleSharesNameWithImportDeclarationInsideIt3.ts
 moduleSharesNameWithImportDeclarationInsideIt5.ts
 multipleClassPropertyModifiersErrors.ts
-multipleExports.ts
 multipleInheritance.ts
 nameCollisions.ts
 noImplicitAnyDestructuringVarDeclaration.ts
