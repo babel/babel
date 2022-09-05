@@ -162,7 +162,8 @@ test-flow-update-allowlist:
 bootstrap-typescript:
 	rm -rf ./build/typescript
 	mkdir -p ./build
-	git clone --single-branch --shallow-since=2022-04-01 https://github.com/microsoft/TypeScript.git ./build/typescript
+	git clone --filter=blob:none --sparse --shallow-since=2022-04-01 https://github.com/microsoft/TypeScript.git ./build/typescript
+	cd build/typescript && git sparse-checkout set "tests"
 	cd build/typescript && git checkout -q $(TYPESCRIPT_COMMIT)
 
 test-typescript:
