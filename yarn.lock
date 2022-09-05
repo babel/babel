@@ -368,10 +368,11 @@ __metadata:
   resolution: "@babel/eslint-parser@workspace:eslint/babel-eslint-parser"
   dependencies:
     "@babel/core": "workspace:^"
+    "@nicolo-ribaudo/eslint-scope-5-internals": "condition:BABEL_8_BREAKING ? : 5.1.1-v1"
     dedent: ^0.7.0
     eslint: ^7.27.0
     eslint-8: "npm:eslint@^8.0.0"
-    eslint-scope: "condition:BABEL_8_BREAKING ? ^7.1.1 : ^5.1.1"
+    eslint-scope: "condition:BABEL_8_BREAKING ? ^7.1.1 : "
     eslint-visitor-keys: "condition:BABEL_8_BREAKING ? ^3.3.0 : ^2.1.0"
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   peerDependencies:
@@ -4217,6 +4218,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nicolo-ribaudo/eslint-scope-5-internals-BABEL_8_BREAKING-false@npm:@nicolo-ribaudo/eslint-scope-5-internals@5.1.1-v1":
+  version: 5.1.1-v1
+  resolution: "@nicolo-ribaudo/eslint-scope-5-internals@npm:5.1.1-v1"
+  dependencies:
+    eslint-scope: 5.1.1
+  checksum: f2e3b2d6a6e2d9f163ca22105910c9f850dc4897af0aea3ef0a5886b63d8e1ba6505b71c99cb78a3bba24a09557d601eb21c8dede3f3213753fcfef364eb0e57
+  languageName: node
+  linkType: hard
+
+"@nicolo-ribaudo/eslint-scope-5-internals@condition:BABEL_8_BREAKING ? : 5.1.1-v1":
+  version: 0.0.0-condition-a67dfe
+  resolution: "@nicolo-ribaudo/eslint-scope-5-internals@condition:BABEL_8_BREAKING?:5.1.1-v1#a67dfe"
+  dependencies:
+    "@nicolo-ribaudo/eslint-scope-5-internals-BABEL_8_BREAKING-false": "npm:@nicolo-ribaudo/eslint-scope-5-internals@5.1.1-v1"
+  checksum: 35c6c2d0fe2e6ff24708b60835fe4f53e8bcdc0dcda98f81ce04849d27e51f6039b213e08d8440d8ee14aa5b8d94654314b1a2ba4d64bb09bd16feb01db74631
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.3":
   version: 2.1.3
   resolution: "@nodelib/fs.scandir@npm:2.1.3"
@@ -7944,16 +7963,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-scope-BABEL_8_BREAKING-false@npm:eslint-scope@^5.1.1, eslint-scope@npm:^5.1.1":
-  version: 5.1.1
-  resolution: "eslint-scope@npm:5.1.1"
-  dependencies:
-    esrecurse: ^4.3.0
-    estraverse: ^4.1.1
-  checksum: 47e4b6a3f0cc29c7feedee6c67b225a2da7e155802c6ea13bbef4ac6b9e10c66cd2dcb987867ef176292bf4e64eccc680a49e35e9e9c669f4a02bac17e86abdb
-  languageName: node
-  linkType: hard
-
 "eslint-scope-BABEL_8_BREAKING-true@npm:eslint-scope@^7.1.1, eslint-scope@npm:^7.1.1":
   version: 7.1.1
   resolution: "eslint-scope@npm:7.1.1"
@@ -7964,13 +7973,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-scope@condition:BABEL_8_BREAKING ? ^7.1.1 : ^5.1.1":
-  version: 0.0.0-condition-8f021b
-  resolution: "eslint-scope@condition:BABEL_8_BREAKING?^7.1.1:^5.1.1#8f021b"
+"eslint-scope@condition:BABEL_8_BREAKING ? ^7.1.1 : ":
+  version: 0.0.0-condition-10b8c2
+  resolution: "eslint-scope@condition:BABEL_8_BREAKING?^7.1.1:#10b8c2"
   dependencies:
-    eslint-scope-BABEL_8_BREAKING-false: "npm:eslint-scope@^5.1.1"
     eslint-scope-BABEL_8_BREAKING-true: "npm:eslint-scope@^7.1.1"
-  checksum: 600efff5322843a5c87c44b7a2854799a0b451f9dc03d0b7f463d3d774e0a173c0d98e37d9f34086003707f2014f2f6fb70ef63bd2b97b87aeacef668dfff21e
+  checksum: a059b6e5cdef7c711e44a3ba007355c2282e4a7bb04e59c4b7e1f537f4a7911144beff36b7f52b53098b4bd57ddfb6756f3c09c059d76ca598554465fe07b375
+  languageName: node
+  linkType: hard
+
+"eslint-scope@npm:5.1.1, eslint-scope@npm:^5.1.1":
+  version: 5.1.1
+  resolution: "eslint-scope@npm:5.1.1"
+  dependencies:
+    esrecurse: ^4.3.0
+    estraverse: ^4.1.1
+  checksum: 47e4b6a3f0cc29c7feedee6c67b225a2da7e155802c6ea13bbef4ac6b9e10c66cd2dcb987867ef176292bf4e64eccc680a49e35e9e9c669f4a02bac17e86abdb
   languageName: node
   linkType: hard
 

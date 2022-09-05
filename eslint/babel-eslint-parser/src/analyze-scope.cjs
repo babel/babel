@@ -1,13 +1,12 @@
-const escope = require("eslint-scope");
-const { Definition } = process.env.BABEL_8_BREAKING
-  ? escope
-  : require("eslint-scope/lib/definition");
-const OriginalPatternVisitor = process.env.BABEL_8_BREAKING
-  ? escope.PatternVisitor
-  : require("eslint-scope/lib/pattern-visitor");
-const OriginalReferencer = process.env.BABEL_8_BREAKING
-  ? escope.Referencer
-  : require("eslint-scope/lib/referencer");
+const {
+  Definition,
+  PatternVisitor: OriginalPatternVisitor,
+  Referencer: OriginalReferencer,
+  Scope,
+  ScopeManager,
+} = process.env.BABEL_8_BREAKING
+  ? require("eslint-scope")
+  : require("@nicolo-ribaudo/eslint-scope-5-internals");
 const { getKeys: fallback } = require("eslint-visitor-keys");
 
 let visitorKeysMap;
@@ -242,7 +241,7 @@ class Referencer extends OriginalReferencer {
     }
 
     const parentScope = this.scopeManager.__currentScope;
-    const scope = new escope.Scope(
+    const scope = new Scope(
       this.scopeManager,
       "type-parameters",
       parentScope,
@@ -355,7 +354,7 @@ module.exports = function analyzeScope(ast, parserOptions, client) {
 
   options.childVisitorKeys = client.getVisitorKeys();
 
-  const scopeManager = new escope.ScopeManager(options);
+  const scopeManager = new ScopeManager(options);
   const referencer = new Referencer(options, scopeManager, client);
 
   referencer.visit(ast);
