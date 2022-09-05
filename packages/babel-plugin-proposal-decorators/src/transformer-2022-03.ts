@@ -1015,7 +1015,7 @@ export default function (
   { loose }: Options,
   version: "2022-03" | "2021-12",
 ): PluginObject {
-  assertVersion("^7.16.0");
+  assertVersion(version === "2021-12" ? "^7.16.0" : "^7.19.0");
 
   const VISITED = new WeakSet<NodePath>();
   const constantSuper = assumption("constantSuper") ?? loose;

@@ -7,6 +7,8 @@ export interface Options {
 }
 
 export default declare((api, options: Options) => {
+  api.assertVersion("^7.19.0");
+
   const { runtime } = options;
   if (runtime !== undefined && typeof runtime !== "boolean") {
     throw new Error("The 'runtime' option must be boolean");

@@ -1,4 +1,4 @@
-/* @minVersion 7.2.6 */
+/* @minVersion 7.19.0 */
 
 import setPrototypeOf from "setPrototypeOf";
 import inherits from "inherits";

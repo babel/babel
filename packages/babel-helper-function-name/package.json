@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-function-name",
-  "version": "7.18.9",
+  "version": "7.19.0",
   "description": "Helper function to change the property 'name' of every function",
   "repository": {
     "type": "git",
