@@ -13,13 +13,19 @@ import transpileNamespace from "./namespace";
 function isInType(path: NodePath) {
   switch (path.parent.type) {
     case "TSTypeReference":
-    case "TSQualifiedName":
     case "TSExpressionWithTypeArguments":
     case "TSTypeQuery":
       return true;
+    case "TSQualifiedName":
+      return (
+        // `import foo = ns.bar` is transformed to `var foo = ns.bar` and should not be removed
+        path.parentPath.findParent(path => path.type !== "TSQualifiedName")
+          .type !== "TSImportEqualsDeclaration"
+      );
     case "ExportSpecifier":
       return (
-        (path.parentPath.parent as t.ExportNamedDeclaration).exportKind ===
+        // @ts-expect-error: DeclareExportDeclaration does not have `exportKind`
+        (path.parentPath as NodePath<t.ExportSpecifier>).parent.exportKind ===
         "type"
       );
     default:
