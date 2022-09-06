@@ -24,7 +24,8 @@ function isInType(path: NodePath) {
       );
     case "ExportSpecifier":
       return (
-        (path.parentPath.parent as t.ExportNamedDeclaration).exportKind ===
+        // @ts-expect-error: DeclareExportDeclaration does not have `exportKind`
+        (path.parentPath as NodePath<t.ExportSpecifier>).parent.exportKind ===
         "type"
       );
     default:
