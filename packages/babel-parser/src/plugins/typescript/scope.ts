@@ -41,7 +41,7 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
   importsStack: Set<string>[] = [];
 
   createScope(flags: ScopeFlags): TypeScriptScope {
-    this.importsStack.push(new Set()); // SCOPE_TS_TOP_LEVEL should be kept
+    this.importsStack.push(new Set()); // Always keep the top-level scope for export checks.
 
     return new TypeScriptScope(flags);
   }
@@ -60,6 +60,8 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
     if (flags == SCOPE_TS_MODULE) {
       this.importsStack.pop();
     }
+
+    return flags;
   }
 
   hasImport(name: string, allowShadow?: boolean) {
@@ -67,7 +69,12 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
     if (this.importsStack[len - 1].has(name)) {
       return true;
     }
-    return !allowShadow && len > 1 && this.importsStack[0].has(name);
+    if (!allowShadow && len > 1) {
+      for (let i = 0; i < len - 1; i++) {
+        if (this.importsStack[i].has(name)) return true;
+      }
+    }
+    return false;
   }
 
   declareName(name: string, bindingType: BindingTypes, loc: Position) {

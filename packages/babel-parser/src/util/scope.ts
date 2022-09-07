@@ -93,7 +93,7 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
     this.scopeStack.push(this.createScope(flags));
   }
 
-  exit(): ScopeFlags | void {
+  exit(): ScopeFlags {
     const scope = this.scopeStack.pop();
     return scope.flags;
   }
