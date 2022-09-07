@@ -15,6 +15,16 @@ function parseForESLint8(code, options) {
   }
 }
 
+function parseForESLint7(code, options) {
+  const { ESLINT_VERSION_FOR_BABEL } = process.env;
+  process.env.ESLINT_VERSION_FOR_BABEL = "7";
+  try {
+    return parseForESLint(code, options);
+  } finally {
+    process.env.ESLINT_VERSION_FOR_BABEL = ESLINT_VERSION_FOR_BABEL;
+  }
+}
+
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const BABEL_OPTIONS = {
@@ -89,7 +99,7 @@ describe("Babel and Espree", () => {
         ...espreeOptions,
         ecmaVersion: 2021,
       });
-      const babelAST = parseForESLint(code, {
+      const babelAST = parseForESLint7(code, {
         eslintVisitorKeys: true,
         eslintScopeManager: true,
         babelOptions: BABEL_OPTIONS,
