@@ -1,6 +1,12 @@
-language/expressions/class/decorator/syntax/class-valid/decorator-member-expr-private-identifier.js(default)
-language/expressions/class/decorator/syntax/class-valid/decorator-member-expr-private-identifier.js(strict mode)
+# 2 invalid programs did not produce a parsing error
+
 language/import/json-invalid.js(default)
 language/import/json-invalid.js(strict mode)
+
+
+# 4 valid programs produced a parsing error
+
+language/expressions/class/decorator/syntax/class-valid/decorator-member-expr-private-identifier.js(default)
+language/expressions/class/decorator/syntax/class-valid/decorator-member-expr-private-identifier.js(strict mode)
 language/statements/class/decorator/syntax/class-valid/decorator-member-expr-private-identifier.js(default)
 language/statements/class/decorator/syntax/class-valid/decorator-member-expr-private-identifier.js(strict mode)

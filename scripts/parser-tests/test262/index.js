@@ -167,7 +167,7 @@ function* getPlugins(features) {
 }
 
 const runner = new TestRunner({
-  testDir: path.join(dirname, "../../../build/test262"),
+  testDir: path.join(dirname, "../../../build/test262").replace(/\\/g, "/"),
   allowlist: path.join(dirname, "allowlist.txt"),
   logInterval: 500,
   shouldUpdate: process.argv.includes("--update-allowlist"),
@@ -179,7 +179,7 @@ const runner = new TestRunner({
 
     for await (const test of stream) {
       // strip test/
-      const fileName = test.file.slice(5);
+      const fileName = test.file.slice(5).replace(/\\/g, "/");
 
       if (ignoredTests.some(start => fileName.startsWith(start))) continue;
 

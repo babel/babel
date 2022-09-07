@@ -50,6 +50,7 @@ class TestRunner {
       test.actualError = false;
     } catch (err) {
       test.actualError = true;
+      test.actualErrorObject = err;
     }
 
     test.result = test.expectedError !== test.actualError ? "fail" : "pass";
@@ -85,20 +86,61 @@ class TestRunner {
       .map(test => test.id)
       .concat(summary.unrecognized);
 
-    const updated = summary.disallowed.falsePositive
-      .concat(summary.disallowed.falseNegative)
-      .map(test => test.id);
+    const allowedFalsePositiveIds = summary.allowed.falsePositive.map(
+      test => test.id
+    );
+
+    let invalidWithoutError = [];
+    let validWithError = [];
 
     for (const line of contents.split("\n")) {
       const testId = line.replace(/#.*$/, "").trim();
-      if (!toRemove.includes(testId) && line) {
-        updated.push(line);
+      if (testId && !toRemove.includes(testId)) {
+        if (allowedFalsePositiveIds.includes(testId)) {
+          invalidWithoutError.push(line);
+        } else {
+          validWithError.push(line);
+        }
       }
     }
 
-    updated.sort();
+    invalidWithoutError = invalidWithoutError.concat(
+      summary.disallowed.falsePositive.map(test => test.id)
+    );
+    validWithError = validWithError.concat(
+      summary.disallowed.falseNegative.map(test => test.id)
+    );
 
-    await fs.writeFile(this.allowlist, updated.join("\n") + "\n", "utf8");
+    invalidWithoutError.sort();
+    validWithError.sort();
+
+    const errorsMap = new Map();
+    summary.allowed.falseNegative
+      .concat(summary.disallowed.falseNegative)
+      .forEach(test => {
+        errorsMap.set(test.id, test.actualErrorObject);
+      });
+
+    const updated = [
+      `# ${invalidWithoutError.length} invalid programs did not produce a parsing error\n`,
+      "\n",
+      invalidWithoutError.join("\n"),
+      "\n",
+      "\n",
+      "\n",
+      `# ${validWithError.length} valid programs produced a parsing error\n`,
+      "\n",
+      ...validWithError
+        // .map(
+        //   v =>
+        //     `${v}\n# ${JSON.stringify(errorsMap.get(v), null, 2)
+        //       .trimEnd()
+        //       .replace(/\n/g, "\n#")}\n`
+        // )
+        .join("\n"),
+    ];
+
+    await fs.writeFile(this.allowlist, updated.join("") + "\n", "utf8");
   }
 
   interpret(results, allowlist) {
