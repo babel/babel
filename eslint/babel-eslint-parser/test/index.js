@@ -130,20 +130,20 @@ describe("Babel and Espree", () => {
     // Use the version of Espree that is a dependency of
     // the version of ESLint we are testing against.
     const espree7Path = require.resolve("espree", {
-      paths: [path.dirname(require.resolve("eslint"))],
+      paths: [path.dirname(require.resolve("eslint-7"))],
     });
     const espree8Path = require.resolve("espree", {
-      paths: [path.dirname(require.resolve("eslint-8"))],
+      paths: [path.dirname(require.resolve("eslint"))],
     });
 
     espree7 = require(espree7Path);
     espree8 = require(espree8Path);
 
     const espree7pkg = require(require.resolve("espree/package.json", {
-      paths: [path.dirname(require.resolve("eslint"))],
+      paths: [path.dirname(require.resolve("eslint-7"))],
     }));
     const espree8pkg = require(require.resolve("espree/package.json", {
-      paths: [path.dirname(require.resolve("eslint-8"))],
+      paths: [path.dirname(require.resolve("eslint"))],
     }));
     if (!espree7pkg.version.startsWith("7.")) {
       throw new Error(`Expected espree 7, but found ${espree7pkg.version}`);
