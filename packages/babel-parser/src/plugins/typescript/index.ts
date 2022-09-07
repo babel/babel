@@ -3951,6 +3951,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       importedIsString: boolean,
       isInTypeOnlyImport: boolean,
       isMaybeTypeOnly: boolean,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      bindingType: BindingTypes | undefined,
     ): N.ImportSpecifier {
       if (!importedIsString && isMaybeTypeOnly) {
         this.parseTypeOnlyImportExportSpecifier(
