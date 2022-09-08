@@ -109,13 +109,7 @@ class NodePath<T extends t.Node = t.Node> {
   }
 
   getScope(scope: Scope): Scope {
-    // TODO: Remove this when TS is fixed.
-    // A regression was introduced in ts4.8 that would cause OOM.
-    // Avoid it by manually casting the types.
-    // https://github.com/babel/babel/pull/14880
-    return this.isScope()
-      ? new Scope(this as NodePath<t.Pattern | t.Scopable>)
-      : scope;
+    return this.isScope() ? new Scope(this) : scope;
   }
 
   setData(key: string | symbol, val: any): any {
