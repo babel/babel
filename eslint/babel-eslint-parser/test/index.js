@@ -72,14 +72,7 @@ describe("Babel and Espree", () => {
     sourceType: "module",
   };
 
-  function parseAndAssertSame(
-    code,
-    eslintVersion = undefined,
-    babelEcmaFeatures = null,
-  ) {
-    if (eslintVersion !== undefined) {
-      throw new Error("eslintVersion is not undefined");
-    }
+  function parseAndAssertSame(code, babelEcmaFeatures = null) {
     code = unpad(code);
 
     if (isESLint7) {
@@ -888,7 +881,7 @@ describe("Babel and Espree", () => {
 
     if (process.env.BABEL_8_BREAKING) {
       it("return outside function with ecmaFeatures.globalReturn: true", () => {
-        parseAndAssertSame("return;", /* version */ undefined, {
+        parseAndAssertSame("return;", {
           globalReturn: true,
         });
       });
