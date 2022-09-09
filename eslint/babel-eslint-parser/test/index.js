@@ -76,10 +76,6 @@ describe("Babel and Espree", () => {
     code = unpad(code);
 
     if (isESLint7) {
-      if (process.env.IS_PUBLISH) {
-        console.warn("Skipping ESLint 7 test because using a release build.");
-        return;
-      }
       // ESLint 7
       const espreeAST = espree.parse(code, {
         ...espreeOptions,
