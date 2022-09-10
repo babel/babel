@@ -57,7 +57,7 @@ module.exports = {
     // in production builds. They are marked using the .skip-bundled.js extension.
     ...(isPublishBundle ? ["\\.skip-bundled\\.js$"] : []),
     // Ignore @babel/standalone test in coverage testing because it is not built
-    ...(process.env.BABEL_COVERAGE === "true"
+    ...(process.env.BABEL_COVERAGE === "test"
       ? ["<rootDir>/packages/babel-standalone/"]
       : []),
   ],

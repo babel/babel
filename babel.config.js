@@ -21,7 +21,7 @@ module.exports = function (api) {
 
   const sources = ["packages/*/src", "codemods/*/src", "eslint/*/src"];
 
-  const includeCoverage = process.env.BABEL_COVERAGE === "true";
+  const includeCoverage = process.env.BABEL_COVERAGE === "build";
 
   const envOpts = {
     shippedProposals: true,

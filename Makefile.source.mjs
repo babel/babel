@@ -168,7 +168,7 @@ target["bootstrap"] = function () {
 target["build"] = function () {
   target["build-no-bundle"]();
 
-  if (process.env.BABEL_COVERAGE != "true") {
+  if (process.env.BABEL_COVERAGE !== "build") {
     target["build-standalone"]();
   }
 };
@@ -380,7 +380,7 @@ target["test-cov"] = function () {
     },
     {
       BABEL_ENV: "test",
-      BABEL_COVERAGE: "true",
+      BABEL_COVERAGE: "build",
     }
   );
 
@@ -390,6 +390,7 @@ target["test-cov"] = function () {
     },
     {
       BABEL_ENV: "test",
+      BABEL_COVERAGE: "test",
     }
   );
 };
