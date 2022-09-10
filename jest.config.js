@@ -27,7 +27,6 @@ module.exports = {
   // coveragePathIgnorePatterns Doesn't work on windows
   coveragePathIgnorePatterns: [
     "/node_modules/",
-    "<rootDir>/packages/babel-standalone/",
     "/test/(fixtures|tmp|__data__)/",
     ".*\\.d\\.ts",
     "<rootDir>/packages/babel-standalone/.*",

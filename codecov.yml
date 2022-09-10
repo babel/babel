@@ -9,5 +9,8 @@ coverage:
     patch:
       enabled: false
 ignore:
+  - "*.d.ts"
   - packages/babel-types/src/*/generated/*
   - packages/babel-helpers/src/helpers/*
+  - packages/babel-standalone/**
+  - packages/babel-core/src/vendor/*
