@@ -1,0 +1,37 @@
+{
+  "type": "File",
+  "start":0,"end":35,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":20}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":35,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":20}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":13}},
+        "trailingComments": [
+          {
+            "type": "CommentBlock",
+            "value": "* @external foo ",
+            "start":15,"end":35,"loc":{"start":{"line":3,"column":0,"index":15},"end":{"line":3,"column":20,"index":35}}
+          }
+        ],
+        "expression": {
+          "type": "Literal",
+          "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":12}},
+          "value": "use strict",
+          "raw": "\"use strict\""
+        },
+        "directive": "use strict"
+      }
+    ]
+  },
+  "comments": [
+    {
+      "type": "CommentBlock",
+      "value": "* @external foo ",
+      "start":15,"end":35,"loc":{"start":{"line":3,"column":0,"index":15},"end":{"line":3,"column":20,"index":35}}
+    }
+  ]
+}

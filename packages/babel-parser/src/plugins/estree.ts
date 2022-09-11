@@ -111,6 +111,9 @@ export default (superClass: typeof Parser) =>
       // @ts-expect-error TS2339: Property 'raw' does not exist on type 'Undone '.
       expression.raw = directiveLiteral.extra.raw;
 
+      stmt.leadingComments = directive.leadingComments?.slice();
+      stmt.trailingComments = directive.trailingComments?.slice();
+
       stmt.expression = this.finishNodeAt(
         expression,
         "Literal",
@@ -175,6 +178,9 @@ export default (superClass: typeof Parser) =>
         end,
         afterBlockParse,
       );
+      if (node.directives.length) {
+        this.processComment(node);
+      }
 
       const directiveStatements = node.directives.map(d =>
         this.directiveToStmt(d),
