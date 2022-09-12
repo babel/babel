@@ -18,38 +18,41 @@ function removePlugin(plugins: ParserPlugin[], name: string) {
 
 export interface Options {
   disallowAmbiguousJSXLike?: boolean;
+  dts?: boolean;
   isTSX?: boolean;
 }
 
-export default declare((api, { isTSX, disallowAmbiguousJSXLike }: Options) => {
-  api.assertVersion(7);
+export default declare(
+  (api, { disallowAmbiguousJSXLike, dts, isTSX }: Options) => {
+    api.assertVersion(7);
 
-  return {
-    name: "syntax-typescript",
+    return {
+      name: "syntax-typescript",
 
-    manipulateOptions(opts, parserOpts) {
-      const { plugins } = parserOpts;
-      // If the Flow syntax plugin already ran, remove it since Typescript
-      // takes priority.
-      removePlugin(plugins, "flow");
+      manipulateOptions(opts, parserOpts) {
+        const { plugins } = parserOpts;
+        // If the Flow syntax plugin already ran, remove it since Typescript
+        // takes priority.
+        removePlugin(plugins, "flow");
 
-      // If the JSX syntax plugin already ran, remove it because JSX handling
-      // in TS depends on the extensions, and is purely dependent on 'isTSX'.
-      removePlugin(plugins, "jsx");
+        // If the JSX syntax plugin already ran, remove it because JSX handling
+        // in TS depends on the extensions, and is purely dependent on 'isTSX'.
+        removePlugin(plugins, "jsx");
 
-      plugins.push(
-        ["typescript", { disallowAmbiguousJSXLike }],
-        "classProperties",
-      );
+        plugins.push(
+          ["typescript", { disallowAmbiguousJSXLike, dts }],
+          "classProperties",
+        );
 
-      if (!process.env.BABEL_8_BREAKING) {
-        // This is enabled by default since @babel/parser 7.1.5
-        plugins.push("objectRestSpread");
-      }
+        if (!process.env.BABEL_8_BREAKING) {
+          // This is enabled by default since @babel/parser 7.1.5
+          plugins.push("objectRestSpread");
+        }
 
-      if (isTSX) {
-        plugins.push("jsx");
-      }
-    },
-  };
-});
+        if (isTSX) {
+          plugins.push("jsx");
+        }
+      },
+    };
+  },
+);
