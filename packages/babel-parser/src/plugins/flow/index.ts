@@ -2715,6 +2715,15 @@ export default (superClass: typeof Parser) =>
       return isMaybeDefaultImport(this.state.type);
     }
 
+    checkImportReflection(node: Undone<N.ImportDeclaration>) {
+      super.checkImportReflection(node);
+      if (node.reflection === "module" && node.importKind !== "value") {
+        this.raise(Errors.ImportReflectionNotBinding, {
+          at: node.specifiers[0].loc.start,
+        });
+      }
+    }
+
     parseImportSpecifierLocal<
       T extends
         | N.ImportSpecifier

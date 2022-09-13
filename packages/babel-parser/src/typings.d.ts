@@ -22,6 +22,7 @@ export type Plugin =
   | "jsx"
   | "logicalAssignment"
   | "importAssertions"
+  | "importReflection"
   | "moduleBlocks"
   | "moduleStringNames"
   | "nullishCoalescingOperator"

@@ -2596,6 +2596,15 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
     }
 
+    checkImportReflection(node: Undone<N.ImportDeclaration>) {
+      super.checkImportReflection(node);
+      if (node.reflection === "module" && node.importKind !== "value") {
+        this.raise(Errors.ImportReflectionNotBinding, {
+          at: node.specifiers[0].loc.start,
+        });
+      }
+    }
+
     /*
     Don't bother doing this check in TypeScript code because:
     1. We may have a nested export statement with the same name:

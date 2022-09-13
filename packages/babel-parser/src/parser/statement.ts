@@ -2612,6 +2612,19 @@ export default abstract class StatementParser extends ExpressionParser {
     return false;
   }
 
+  checkImportReflection(node: Undone<N.ImportDeclaration>) {
+    if (node.reflection === "module") {
+      if (
+        node.specifiers.length !== 1 ||
+        node.specifiers[0].type !== "ImportDefaultSpecifier"
+      ) {
+        this.raise(Errors.ImportReflectionNotBinding, {
+          at: node.specifiers[0].loc.start,
+        });
+      }
+    }
+  }
+
   checkJSONModuleImport(
     node: Undone<
       N.ExportAllDeclaration | N.ExportNamedDeclaration | N.ImportDeclaration
@@ -2645,6 +2658,16 @@ export default abstract class StatementParser extends ExpressionParser {
     }
   }
 
+  parseMaybeImportReflection(node: Undone<N.ImportDeclaration>) {
+    if (this.match(tt._module)) {
+      this.expectPlugin("importReflection");
+      this.next(); // eat tt._module;
+      node.reflection = "module";
+    } else if (this.hasPlugin("importReflection")) {
+      node.reflection = null;
+    }
+  }
+
   // Parses import declaration.
   // https://tc39.es/ecma262/#prod-ImportDeclaration
 
@@ -2652,6 +2675,7 @@ export default abstract class StatementParser extends ExpressionParser {
     // import '...'
     node.specifiers = [];
     if (!this.match(tt.string)) {
+      this.parseMaybeImportReflection(node);
       // check if we have a default import like
       // import React from "react";
       const hasDefault = this.maybeParseDefaultImportSpecifier(node);
@@ -2684,6 +2708,7 @@ export default abstract class StatementParser extends ExpressionParser {
         node.attributes = attributes;
       }
     }
+    this.checkImportReflection(node);
     this.checkJSONModuleImport(node);
 
     this.semicolon();

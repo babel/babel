@@ -1689,6 +1689,10 @@ defineType("ImportDeclaration", {
         assertEach(assertNodeType("ImportAttribute")),
       ),
     },
+    reflection: {
+      optional: true,
+      validate: assertOneOf("module"),
+    },
     specifiers: {
       validate: chain(
         assertValueType("array"),
