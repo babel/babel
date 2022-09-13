@@ -44,7 +44,7 @@
     "babel-plugin-transform-charcodes": "^0.2.0",
     "chalk": "^5.0.0",
     "charcodes": "^0.2.0",
-    "core-js": "^3.23.4",
+    "core-js": "^3.25.1",
     "eslint": "^8.20.0",
     "eslint-formatter-codeframe": "^7.32.1",
     "eslint-import-resolver-node": "^0.3.6",
@@ -83,10 +83,10 @@
     "benchmark"
   ],
   "resolutions": {
-    "browserslist": "npm:4.20.2",
-    "caniuse-lite": "npm:1.0.30001332",
-    "core-js-compat": "npm:3.22.1",
-    "electron-to-chromium": "npm:1.4.113",
+    "browserslist": "npm:4.21.3",
+    "caniuse-lite": "npm:1.0.30001397",
+    "core-js-compat": "npm:3.25.1",
+    "electron-to-chromium": "npm:1.4.248",
     "glob-watcher/chokidar": "npm:^3.4.0",
     "@types/babel__core": "link:./nope",
     "@types/babel__traverse": "link:./nope",

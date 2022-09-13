@@ -63,25 +63,25 @@ Using polyfills with `usage-global` method:
 regenerator: `DEBUG` option
 
 Using targets: {
-  "android": "99",
-  "chrome": "97",
-  "edge": "98",
+  "android": "104",
+  "chrome": "103",
+  "edge": "103",
   "firefox": "91",
-  "ios": "12.2",
-  "opera": "82",
-  "safari": "14.1",
-  "samsung": "15"
+  "ios": "14.5",
+  "opera": "89",
+  "safari": "15.5",
+  "samsung": "17"
 }
 
 Using polyfills with `usage-global` method:
 
 [<CWD>/packages/babel-preset-env/test/fixtures/debug/usage-corejs3-shippedProposals-1/input.js]
 The corejs3 polyfill added the following polyfills:
-  es.object.to-string { "chrome":"52", "firefox":"50", "ie":"11" }
+  es.object.to-string { "firefox":"50", "ie":"11" }
   es.promise { "chrome":"52", "firefox":"50", "ie":"11" }
   es.array.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
-  es.map { "chrome":"52", "firefox":"50", "ie":"11" }
-  es.string.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
+  es.map { "firefox":"50", "ie":"11" }
+  es.string.iterator { "ie":"11" }
   web.dom-collections.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
   web.queue-microtask { "chrome":"52", "firefox":"50", "ie":"11" }
   esnext.global-this { "chrome":"52", "firefox":"50", "ie":"11" }

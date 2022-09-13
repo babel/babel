@@ -30,7 +30,7 @@
   "devDependencies": {
     "@babel/core": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
-    "core-js": "^3.22.1"
+    "core-js": "^3.25.1"
   },
   "engines": {
     "node": ">=6.9.0"
