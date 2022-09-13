@@ -97,18 +97,23 @@ export default (superClass: typeof Parser) =>
 
     // Cast a Directive to an ExpressionStatement. Mutates the input Directive.
     directiveToStmt(directive: N.Directive): N.ExpressionStatement {
-      const stmt = directive as any;
+      const expression = directive.value as any as N.EstreeLiteral;
+      delete directive.value;
+
+      expression.type = "Literal";
+      // @ts-expect-error N.EstreeLiteral.raw is not defined.
+      expression.raw = expression.extra.raw;
+      expression.value = expression.extra.expressionValue;
+
+      const stmt = directive as any as N.ExpressionStatement;
       stmt.type = "ExpressionStatement";
-      stmt.directive = stmt.value.extra.rawValue;
-      stmt.expression = stmt.value;
-      delete stmt.value;
+      stmt.expression = expression;
+      // @ts-expect-error N.ExpressionStatement.directive is not defined
+      stmt.directive = expression.extra.rawValue;
 
-      stmt.expression.type = "Literal";
-      stmt.expression.raw = stmt.expression.extra.raw;
-      stmt.expression.value = stmt.expression.extra.expressionValue;
-      delete stmt.expression.extra;
+      delete expression.extra;
 
-      return stmt as N.ExpressionStatement;
+      return stmt;
     }
 
     // ==================================
