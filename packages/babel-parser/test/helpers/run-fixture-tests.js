@@ -134,7 +134,11 @@ function runParseTest(parse, test, onlyCompareErrors) {
     existsSync(extendedLocation);
 
   if (CI || (!OVERWRITE && shouldThrow)) {
-    throw FixtureError.fromDifference(difference, actual);
+    const err = new Error();
+    err.message = `Test Failed: ${testLocation}\nFixtureError.fromDifference: ${
+      FixtureError.fromDifference(difference, actual).message
+    }`;
+    throw err;
   }
 
   // Store (or overwrite) the options file if there's anything to record,

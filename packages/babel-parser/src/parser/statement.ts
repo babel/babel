@@ -2712,11 +2712,11 @@ export default abstract class StatementParser extends ExpressionParser {
       | N.ImportSpecifier
       | N.ImportDefaultSpecifier
       | N.ImportNamespaceSpecifier,
-  >(specifier: Undone<T>, type: T["type"]) {
+  >(specifier: Undone<T>, type: T["type"], bindingType = BIND_LEXICAL) {
     this.checkLVal(specifier.local, {
       // @ts-expect-error refine types
       in: specifier,
-      binding: BIND_LEXICAL,
+      binding: bindingType,
     });
     return this.finishNode(specifier, type);
   }
@@ -2890,6 +2890,7 @@ export default abstract class StatementParser extends ExpressionParser {
         importedIsString,
         node.importKind === "type" || node.importKind === "typeof",
         isMaybeTypeOnly,
+        undefined,
       );
       node.specifiers.push(importSpecifier);
     }
@@ -2902,6 +2903,7 @@ export default abstract class StatementParser extends ExpressionParser {
     /* eslint-disable @typescript-eslint/no-unused-vars -- used in TypeScript and Flow parser */
     isInTypeOnlyImport: boolean,
     isMaybeTypeOnly: boolean,
+    bindingType: BindingTypes | undefined,
     /* eslint-enable @typescript-eslint/no-unused-vars */
   ): N.ImportSpecifier {
     if (this.eatContextual(tt._as)) {
@@ -2924,7 +2926,11 @@ export default abstract class StatementParser extends ExpressionParser {
         specifier.local = cloneIdentifier(imported);
       }
     }
-    return this.finishImportSpecifier(specifier, "ImportSpecifier");
+    return this.finishImportSpecifier(
+      specifier,
+      "ImportSpecifier",
+      bindingType,
+    );
   }
 
   // This is used in flow and typescript plugin

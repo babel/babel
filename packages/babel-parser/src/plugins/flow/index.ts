@@ -2785,6 +2785,8 @@ export default (superClass: typeof Parser) =>
       isInTypeOnlyImport: boolean,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       isMaybeTypeOnly: boolean,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      bindingType: BindingTypes | undefined,
     ): N.ImportSpecifier {
       const firstIdent = specifier.imported;
 

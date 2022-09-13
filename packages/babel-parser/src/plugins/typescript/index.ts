@@ -27,9 +27,11 @@ import {
   BIND_TS_INTERFACE,
   BIND_TS_AMBIENT,
   BIND_TS_NAMESPACE,
+  BIND_TS_TYPE_IMPORT,
   BIND_CLASS,
   BIND_LEXICAL,
   BIND_NONE,
+  BIND_FLAGS_TS_IMPORT,
 } from "../../util/scopeflags";
 import TypeScriptScopeHandler from "./scope";
 import * as charCodes from "charcodes";
@@ -3922,7 +3924,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     parseExportSpecifier(
-      node: any,
+      node: Undone<N.ExportSpecifier>,
       isString: boolean,
       isInTypeExport: boolean,
       isMaybeTypeOnly: boolean,
@@ -3945,10 +3947,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     parseImportSpecifier(
-      specifier: any,
+      specifier: Undone<N.ImportSpecifier>,
       importedIsString: boolean,
       isInTypeOnlyImport: boolean,
       isMaybeTypeOnly: boolean,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      bindingType: BindingTypes | undefined,
     ): N.ImportSpecifier {
       if (!importedIsString && isMaybeTypeOnly) {
         this.parseTypeOnlyImportExportSpecifier(
@@ -3964,6 +3968,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         importedIsString,
         isInTypeOnlyImport,
         isMaybeTypeOnly,
+        isInTypeOnlyImport ? BIND_TS_TYPE_IMPORT : BIND_FLAGS_TS_IMPORT,
       );
     }
 
@@ -4059,7 +4064,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         node[rightOfAsKey] = cloneIdentifier(node[leftOfAsKey]);
       }
       if (isImport) {
-        this.checkIdentifier(node[rightOfAsKey], BIND_LEXICAL);
+        this.checkIdentifier(
+          node[rightOfAsKey],
+          hasTypeSpecifier ? BIND_TS_TYPE_IMPORT : BIND_FLAGS_TS_IMPORT,
+        );
       }
     }
   };
