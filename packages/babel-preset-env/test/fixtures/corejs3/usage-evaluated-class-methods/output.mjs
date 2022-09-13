@@ -1,4 +1,3 @@
-import "core-js/modules/web.dom-collections.iterator.js";
 var objectClass = Object;
 var arrayInstance = [];
 var assignStr = "assign";

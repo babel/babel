@@ -2,58 +2,33 @@
 
 Using targets:
 {
-  "android": "99",
-  "chrome": "97",
-  "edge": "98",
+  "android": "104",
+  "chrome": "103",
+  "edge": "103",
   "firefox": "91",
-  "ie": "11",
-  "ios": "12.2",
-  "opera": "82",
-  "safari": "14.1",
-  "samsung": "15"
+  "ios": "14.5",
+  "opera": "89",
+  "safari": "15.5",
+  "samsung": "17"
 }
 
 Using modules transform: auto
 
 Using plugins:
-  proposal-class-static-block { firefox < 93, ie, ios, safari, samsung }
-  proposal-private-property-in-object { ie, ios < 15, safari < 15, samsung }
-  proposal-class-properties { ie, ios < 15 }
-  proposal-private-methods { ie, ios < 15, safari < 15 }
-  proposal-numeric-separator { ie, ios < 13 }
-  proposal-logical-assignment-operators { ie, ios < 14 }
-  proposal-nullish-coalescing-operator { ie, ios < 13.4 }
-  proposal-optional-chaining { ie, ios < 13.4 }
-  proposal-json-strings { ie }
-  proposal-optional-catch-binding { ie }
-  transform-parameters { ie }
-  proposal-async-generator-functions { ie }
-  proposal-object-rest-spread { ie }
-  transform-dotall-regex { ie }
-  proposal-unicode-property-regex { ie }
-  transform-named-capturing-groups-regex { ie }
-  transform-async-to-generator { ie }
-  transform-exponentiation-operator { ie }
-  transform-template-literals { ie }
-  transform-literals { ie }
-  transform-function-name { ie }
-  transform-arrow-functions { ie }
-  transform-classes { ie }
-  transform-object-super { ie }
-  transform-shorthand-properties { ie }
-  transform-duplicate-keys { ie }
-  transform-computed-properties { ie }
-  transform-for-of { ie }
-  transform-sticky-regex { ie }
-  transform-unicode-escapes { ie }
-  transform-unicode-regex { ie }
-  transform-spread { ie }
-  transform-destructuring { ie }
-  transform-block-scoping { ie }
-  transform-typeof-symbol { ie }
-  transform-new-target { ie }
-  transform-regenerator { ie }
-  proposal-export-namespace-from { ie, ios, safari }
+  proposal-class-static-block { firefox < 93, ios, safari, samsung }
+  proposal-private-property-in-object { ios < 15, samsung }
+  proposal-class-properties { ios < 15 }
+  proposal-private-methods { ios < 15 }
+  syntax-numeric-separator
+  syntax-nullish-coalescing-operator
+  syntax-optional-chaining
+  syntax-json-strings
+  syntax-optional-catch-binding
+  syntax-async-generators
+  syntax-object-rest-spread
+  proposal-export-namespace-from { ios, safari }
+  bugfix/transform-safari-id-destructuring-collision-in-function-expression { ios, safari }
+  bugfix/transform-v8-spread-parameters-in-optional-chaining { samsung }
   transform-modules-commonjs
   proposal-dynamic-import
 
