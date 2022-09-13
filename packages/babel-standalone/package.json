@@ -47,6 +47,7 @@
     "@babel/plugin-syntax-function-bind": "workspace:^",
     "@babel/plugin-syntax-function-sent": "workspace:^",
     "@babel/plugin-syntax-import-assertions": "workspace:^",
+    "@babel/plugin-syntax-import-reflection": "workspace:^",
     "@babel/plugin-syntax-jsx": "workspace:^",
     "@babel/plugin-syntax-module-blocks": "workspace:^",
     "@babel/plugin-syntax-pipeline-operator": "workspace:^",

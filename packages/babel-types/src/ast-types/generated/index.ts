@@ -855,7 +855,7 @@ export interface ImportDeclaration extends BaseNode {
   source: StringLiteral;
   assertions?: Array<ImportAttribute> | null;
   importKind?: "type" | "typeof" | "value" | null;
-  reflection?: "module" | null;
+  module?: boolean | null;
 }
 
 export interface ImportDefaultSpecifier extends BaseNode {
@@ -2337,8 +2337,7 @@ export type FunctionParent =
   | ArrowFunctionExpression
   | ClassMethod
   | ClassPrivateMethod
-  | StaticBlock
-  | TSModuleBlock;
+  | StaticBlock;
 export type Pureish =
   | FunctionDeclaration
   | FunctionExpression
