@@ -772,7 +772,7 @@ function getTokenTypesMapping() {
       );
     }
 
-    const tokenTypesDefinition = typesDeclaration.init.properties;
+    const tokenTypesDefinition = typesDeclaration.init.expression.properties;
     for (let i = 0; i < tokenTypesDefinition.length; i++) {
       tokenTypesMapping.set(tokenTypesDefinition[i].key.name, i);
     }

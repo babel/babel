@@ -134,11 +134,9 @@ function createKeywordLike(
 // For performance the token type helpers depend on the following declarations order.
 // When adding new token types, please also check if the token helpers need update.
 
-export type InternalTokenTypes = {
-  [name: string]: TokenType;
-};
+export type InternalTokenTypes = typeof tt;
 
-export const tt: InternalTokenTypes = {
+export const tt = {
   // Punctuation token types.
   bracketL: createToken("[", { beforeExpr, startsExpr }),
   bracketHashL: createToken("#[", { beforeExpr, startsExpr }),
@@ -345,7 +343,7 @@ export const tt: InternalTokenTypes = {
 
   // placeholder plugin
   placeholder: createToken("%%", { startsExpr: true }),
-};
+} as const;
 
 export function tokenIsIdentifier(token: TokenType): boolean {
   return token >= tt._as && token <= tt.name;
