@@ -270,7 +270,7 @@ __metadata:
   dependencies:
     "@mdn/browser-compat-data": ^4.0.10
     core-js-compat: ^3.25.1
-    electron-to-chromium: ^1.4.113
+    electron-to-chromium: ^1.4.248
   languageName: unknown
   linkType: soft
 
@@ -7472,10 +7472,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron-to-chromium@npm:1.4.113":
-  version: 1.4.113
-  resolution: "electron-to-chromium@npm:1.4.113"
-  checksum: ce3ef4090a8088f399bc8c3443248711c82edbcc0c91f4c63d0f6bdc557ca12cb08e9e1e89743be9f48563cf701d6863c62c8250e4a5f297aa614c0c26da46ea
+"electron-to-chromium@npm:1.4.248":
+  version: 1.4.248
+  resolution: "electron-to-chromium@npm:1.4.248"
+  checksum: b90e572aef4ccae6c69a9e0e5bf8e93c6d53d229c478c3f39e094a4792bb48f0ce56322f379f35bbc649d61d58135cbd78d3c68c93e5c6f9f707d31fa8632ef3
   languageName: node
   linkType: hard
 

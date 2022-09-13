@@ -86,7 +86,7 @@
     "browserslist": "npm:4.21.3",
     "caniuse-lite": "npm:1.0.30001397",
     "core-js-compat": "npm:3.25.1",
-    "electron-to-chromium": "npm:1.4.113",
+    "electron-to-chromium": "npm:1.4.248",
     "glob-watcher/chokidar": "npm:^3.4.0",
     "@types/babel__core": "link:./nope",
     "@types/babel__traverse": "link:./nope",
