@@ -35,13 +35,13 @@ export const BIND_KIND_VALUE            = 0b000000_0000_01,
              BIND_SCOPE_OUTSIDE         = 0b000000_1000_00, // Special case for function names as
                                                    // bound inside the function
              // Misc flags
-             BIND_FLAGS_NONE            = 0b000001_0000_00,
-             BIND_FLAGS_CLASS           = 0b000010_0000_00,
-             BIND_FLAGS_TS_ENUM         = 0b000100_0000_00,
-             BIND_FLAGS_TS_CONST_ENUM   = 0b001000_0000_00,
-             BIND_FLAGS_TS_EXPORT_ONLY  = 0b010000_0000_00,
-             BIND_FLAGS_FLOW_DECLARE_FN = 0b100000_0000_00,
-             BIND_FLAGS_TS_IMPORT       = 0b1_000000_0000_00;
+             BIND_FLAGS_NONE            = 0b0000001_0000_00,
+             BIND_FLAGS_CLASS           = 0b0000010_0000_00,
+             BIND_FLAGS_TS_ENUM         = 0b0000100_0000_00,
+             BIND_FLAGS_TS_CONST_ENUM   = 0b0001000_0000_00,
+             BIND_FLAGS_TS_EXPORT_ONLY  = 0b0010000_0000_00,
+             BIND_FLAGS_FLOW_DECLARE_FN = 0b0100000_0000_00,
+             BIND_FLAGS_TS_IMPORT       = 0b1000000_0000_00;
 
 // These flags are meant to be _only_ used by Scope consumers
 // prettier-ignore
