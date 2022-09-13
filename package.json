@@ -45,7 +45,7 @@
     "chalk": "^5.0.0",
     "charcodes": "^0.2.0",
     "core-js": "^3.25.1",
-    "eslint": "^8.20.0",
+    "eslint": "^8.22.0",
     "eslint-formatter-codeframe": "^7.32.1",
     "eslint-import-resolver-node": "^0.3.6",
     "eslint-plugin-import": "^2.26.0",

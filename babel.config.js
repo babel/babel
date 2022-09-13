@@ -67,7 +67,6 @@ module.exports = function (api) {
   let ignoreLib = true;
   let includeRegeneratorRuntime = false;
   let needsPolyfillsForOldNode = false;
-  let dynamicESLintVersionCheck = false;
 
   let transformRuntimeOptions;
 
@@ -118,7 +117,6 @@ module.exports = function (api) {
       needsPolyfillsForOldNode = true;
       break;
     case "test-legacy": // In test-legacy environment, we build babel on latest node but test on minimum supported legacy versions
-      dynamicESLintVersionCheck = true;
     // fall through
     case "production":
       // Config during builds before publish.
@@ -128,12 +126,10 @@ module.exports = function (api) {
     case "test":
       targets = { node: "current" };
       needsPolyfillsForOldNode = true;
-      dynamicESLintVersionCheck = true;
       break;
     case "development":
       envOpts.debug = true;
       targets = { node: "current" };
-      dynamicESLintVersionCheck = true;
       break;
   }
 
@@ -290,10 +286,6 @@ module.exports = function (api) {
       includeRegeneratorRuntime && {
         exclude: /regenerator-runtime/,
         plugins: [["@babel/transform-runtime", transformRuntimeOptions]],
-      },
-      dynamicESLintVersionCheck && {
-        test: ["./eslint/*/src"].map(normalize),
-        plugins: [pluginDynamicESLintVersionCheck],
       },
     ].filter(Boolean),
   };
@@ -810,33 +802,6 @@ function pluginBabelParserTokenType({
           }
           path.replaceWith(numericLiteral(tokenType));
         }
-      },
-    },
-  };
-}
-
-// Transforms
-//    ESLINT_VERSION
-// to
-//    process.env.ESLINT_VERSION_FOR_BABEL
-//      ? parseInt(process.env.ESLINT_VERSION_FOR_BABEL, 10)
-//      : ESLINT_VERSION
-function pluginDynamicESLintVersionCheck({ template }) {
-  const transformed = new WeakSet();
-
-  return {
-    visitor: {
-      ReferencedIdentifier(path) {
-        if (path.node.name !== "ESLINT_VERSION") return;
-
-        if (transformed.has(path.node)) return;
-        transformed.add(path.node);
-
-        path.replaceWith(template.expression.ast`
-          process.env.ESLINT_VERSION_FOR_BABEL
-            ? parseInt(process.env.ESLINT_VERSION_FOR_BABEL, 10)
-            : ${path.node}
-        `);
       },
     },
   };

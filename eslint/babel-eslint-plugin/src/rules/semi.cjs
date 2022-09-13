@@ -1,5 +1,6 @@
 const ruleComposer = require("eslint-rule-composer");
 const eslint = require("eslint");
+const eslintVersion = eslint.ESLint.version;
 
 const OPT_OUT_PATTERN = /^[-[(/+`]/; // One of [(/+-`
 
@@ -76,30 +77,37 @@ function report(context, node, missing) {
   });
 }
 
-module.exports = ruleComposer.joinReports([
-  rule,
-  context => ({
-    "ClassProperty, ClassPrivateProperty, PropertyDefinition"(node) {
-      const options = context.options[1];
-      const exceptOneLine = options && options.omitLastInOneLineBlock === true;
-      const sourceCode = context.getSourceCode();
-      const lastToken = sourceCode.getLastToken(node);
+if (parseInt(eslintVersion, 10) >= 8) {
+  // ESLint 8 supports class properties / private methods natively
+  // so we simply forward the original rule
+  module.exports = rule;
+} else {
+  module.exports = ruleComposer.joinReports([
+    rule,
+    context => ({
+      "ClassProperty, ClassPrivateProperty, PropertyDefinition"(node) {
+        const options = context.options[1];
+        const exceptOneLine =
+          options && options.omitLastInOneLineBlock === true;
+        const sourceCode = context.getSourceCode();
+        const lastToken = sourceCode.getLastToken(node);
 
-      if (context.options[0] === "never") {
-        if (isUnnecessarySemicolon(context, lastToken)) {
-          report(context, node, true);
-        }
-      } else {
-        if (!isSemicolon(lastToken)) {
-          if (!exceptOneLine || !isOneLinerBlock(context, node)) {
-            report(context, node);
-          }
-        } else {
-          if (exceptOneLine && isOneLinerBlock(context, node)) {
+        if (context.options[0] === "never") {
+          if (isUnnecessarySemicolon(context, lastToken)) {
             report(context, node, true);
           }
+        } else {
+          if (!isSemicolon(lastToken)) {
+            if (!exceptOneLine || !isOneLinerBlock(context, node)) {
+              report(context, node);
+            }
+          } else {
+            if (exceptOneLine && isOneLinerBlock(context, node)) {
+              report(context, node, true);
+            }
+          }
         }
-      }
-    },
-  }),
-]);
+      },
+    }),
+  ]);
+}

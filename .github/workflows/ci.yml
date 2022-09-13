@@ -197,18 +197,15 @@ jobs:
       - name: Downgrade Jest for node <= 10
         if: matrix.node-version == '6' || matrix.node-version == '8' || matrix.node-version == '10'
         run: |
-          yarn remove jest
-          yarn add --dev jest@24
+          yarn up jest@24
           # Deduplicate dependencies, because duplicate copies of graceful-fs cause
           # problems with the "path" module: https://github.com/facebook/jest/issues/9656
           yarn dedupe
-      - name: Downgrade Jest for node == 12
+      - name: Downgrade Jest and jest-light-runner for node == 12
         if: matrix.node-version == '12'
         run: |
-          yarn remove jest
-          yarn remove jest-light-runner
-          yarn add --dev jest@28
-          yarn add --dev jest-light-runner@0.3.0
+          yarn up jest@28
+          yarn up jest-light-runner@0.3.0
           # Deduplicate dependencies, because duplicate copies of graceful-fs cause
           # problems with the "path" module: https://github.com/facebook/jest/issues/9656
           yarn dedupe
@@ -430,3 +427,25 @@ jobs:
           node-version: 16.6
       - name: Test Node.js 16.6
         run: yarn test:runtime:node
+
+  eslint7-test:
+    name: Test @babel/eslint-* with ESLint 7.5.0
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Use Node.js latest
+        uses: actions/setup-node@v3
+        with:
+          node-version: "*"
+          cache: "yarn"
+      - name: Install
+        run: yarn install
+      - uses: actions/download-artifact@v3
+        with:
+          name: babel-artifact
+      - name: Downgrade ESLint to 7.5.0
+        run: yarn up eslint@7.5.0
+      - name: Run babel/eslint tests
+        run: node ./node_modules/.bin/jest eslint

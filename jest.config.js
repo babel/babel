@@ -36,10 +36,10 @@ module.exports = {
     "<rootDir>/packages/babel-core/src/vendor/.*",
   ],
 
-  // The eslint/* packages use ESLint v6, which has dropped support for Node v6.
+  // The eslint/* packages is tested against ESLint v8, which has dropped support for Node v10.
   // TODO: Remove this process.version check in Babel 8.
   testRegex: `./(packages|codemods${
-    semver.satisfies(nodeVersion, "<10") ? "" : "|eslint"
+    semver.satisfies(nodeVersion, "<12") ? "" : "|eslint"
   })/[^/]+/test/.+\\.m?js$`,
   testPathIgnorePatterns: [
     "/node_modules/",

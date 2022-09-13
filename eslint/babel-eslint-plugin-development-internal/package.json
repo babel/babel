@@ -20,7 +20,7 @@
     "eslint": ">=7.5.0"
   },
   "devDependencies": {
-    "eslint": "^7.27.0"
+    "eslint": "^8.22.0"
   },
   "type": "commonjs"
 }
