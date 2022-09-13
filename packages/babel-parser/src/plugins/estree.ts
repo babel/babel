@@ -95,38 +95,20 @@ export default (superClass: typeof Parser) =>
       return this.estreeParseLiteral(value);
     }
 
+    // Cast a Directive to an ExpressionStatement. Mutates the input Directive.
     directiveToStmt(directive: N.Directive): N.ExpressionStatement {
-      const directiveLiteral = directive.value;
+      const stmt = directive as any;
+      stmt.type = "ExpressionStatement";
+      stmt.directive = stmt.value.extra.rawValue;
+      stmt.expression = stmt.value;
+      delete stmt.value;
 
-      const stmt = this.startNodeAt<N.ExpressionStatement>(
-        directive.start,
-        directive.loc.start,
-      );
-      const expression = this.startNodeAt<N.EstreeLiteral>(
-        directiveLiteral.start,
-        directiveLiteral.loc.start,
-      );
+      stmt.expression.type = "Literal";
+      stmt.expression.raw = stmt.expression.extra.raw;
+      stmt.expression.value = stmt.expression.extra.expressionValue;
+      delete stmt.expression.extra;
 
-      expression.value = directiveLiteral.extra.expressionValue;
-      // @ts-expect-error TS2339: Property 'raw' does not exist on type 'Undone '.
-      expression.raw = directiveLiteral.extra.raw;
-
-      stmt.leadingComments = directive.leadingComments?.slice();
-      stmt.trailingComments = directive.trailingComments?.slice();
-
-      stmt.expression = this.finishNodeAt(
-        expression,
-        "Literal",
-        directiveLiteral.loc.end,
-      );
-      // @ts-expect-error N.Directive.value is not defined
-      stmt.directive = directiveLiteral.extra.raw.slice(1, -1);
-
-      return this.finishNodeAt(
-        stmt,
-        "ExpressionStatement",
-        directive.loc.end,
-      ) as N.ExpressionStatement;
+      return stmt as N.ExpressionStatement;
     }
 
     // ==================================
@@ -178,9 +160,6 @@ export default (superClass: typeof Parser) =>
         end,
         afterBlockParse,
       );
-      if (node.directives.length) {
-        this.processComment(node);
-      }
 
       const directiveStatements = node.directives.map(d =>
         this.directiveToStmt(d),
