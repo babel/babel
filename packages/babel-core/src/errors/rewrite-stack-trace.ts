@@ -128,8 +128,9 @@ function setupPrepareStackTrace() {
   // of internal frames, and not too big because capturing the stack trace
   // is slow (this is why Error.stackTraceLimit does not default to Infinity!).
   // Increase it if needed.
+  // However, we only do it if the user did not explicitly set it to 0.
   const MIN_STACK_TRACE_LIMIT = 50;
-  Error.stackTraceLimit = Math.max(
+  Error.stackTraceLimit &&= Math.max(
     Error.stackTraceLimit,
     MIN_STACK_TRACE_LIMIT,
   );
