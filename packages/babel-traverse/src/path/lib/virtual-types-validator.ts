@@ -20,6 +20,7 @@ import {
   isVar as nodeIsVar,
   isVariableDeclaration,
   react,
+  isForOfStatement,
 } from "@babel/types";
 import type * as t from "@babel/types";
 const { isCompatTag } = react;
@@ -197,7 +198,7 @@ export function isSpreadProperty(this: NodePath): boolean {
 }
 
 export function isForAwaitStatement(this: NodePath): boolean {
-  return isForStatement(this.node, { await: true });
+  return isForOfStatement(this.node, { await: true });
 }
 
 export function isExistentialTypeParam(this: NodePath): void {
