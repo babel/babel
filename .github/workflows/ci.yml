@@ -274,7 +274,10 @@ jobs:
   test-babel-8-breaking:
     name: Test Babel 8 breaking changes
     needs: build-babel8
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
