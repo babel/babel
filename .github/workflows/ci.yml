@@ -284,8 +284,7 @@ jobs:
           node-version: "14.17" # Node.js 14.17 is the first LTS supported by Babel 8
           cache: "yarn"
       - name: Install
-        run: |
-          yarn install
+        run: yarn install
       - uses: actions/download-artifact@v3
         with:
           name: babel8-test-artifact
@@ -294,7 +293,9 @@ jobs:
       - name: Test
         # Hack: --color has supports-color@5 returned true for GitHub CI
         # Remove once `chalk` is bumped to 4.0.
+        # Remove babel7 deps https://github.com/babel/babel/pull/14928#issuecomment-1246375719
         run: |
+          find . -type d -path "*/node_modules/*-BABEL_8_BREAKING-false" -exec rm -rf {} +
           yarn jest --ci --color
           yarn test:esm
         env:
