@@ -76,13 +76,6 @@ const fixture = name =>
   );
 
 describe("@babel/core errors", function () {
-  beforeAll(() => {
-    Error.stackTraceLimit += 100;
-  });
-  afterAll(() => {
-    Error.stackTraceLimit -= 100;
-  });
-
   it("error inside config function", function () {
     expectError(() => {
       babel.parseSync("foo;", {
