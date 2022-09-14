@@ -46,15 +46,6 @@ const ErrorToString = Function.call.bind(Error.prototype.toString);
 
 const SUPPORTED = !!Error.captureStackTrace;
 
-// We add some extra frames to Error.stackTraceLimit, so that we can respect
-// the original Error.stackTraceLimit even after removing all our internal
-// frames.
-// STACK_TRACE_LIMIT_DELTA should be bigger than the expected number of internal
-// frames, but not too big because capturing the stack trace is slow (this is
-// why Error.stackTraceLimit does not default to Infinity!).
-// Increase it if needed.
-const STACK_TRACE_LIMIT_DELTA = 100;
-
 const START_HIDNG = "startHiding - secret - don't use this - v1";
 const STOP_HIDNG = "stopHiding - secret - don't use this - v1";
 
@@ -131,7 +122,18 @@ function setupPrepareStackTrace() {
 
   const { prepareStackTrace = defaultPrepareStackTrace } = Error;
 
-  Error.stackTraceLimit += STACK_TRACE_LIMIT_DELTA;
+  // We add some extra frames to Error.stackTraceLimit, so that we can
+  // always show some useful frames even after deleting ours.
+  // STACK_TRACE_LIMIT_DELTA should be around the maximum expected number
+  // of internal frames, and not too big because capturing the stack trace
+  // is slow (this is why Error.stackTraceLimit does not default to Infinity!).
+  // Increase it if needed.
+  // However, we only do it if the user did not explicitly set it to 0.
+  const MIN_STACK_TRACE_LIMIT = 50;
+  Error.stackTraceLimit &&= Math.max(
+    Error.stackTraceLimit,
+    MIN_STACK_TRACE_LIMIT,
+  );
 
   Error.prepareStackTrace = function stackTraceRewriter(err, trace) {
     let newTrace = [];
@@ -160,10 +162,7 @@ function setupPrepareStackTrace() {
       }
     }
 
-    return prepareStackTrace(
-      err,
-      newTrace.slice(0, Error.stackTraceLimit - STACK_TRACE_LIMIT_DELTA),
-    );
+    return prepareStackTrace(err, newTrace);
   };
 }
 
