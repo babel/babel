@@ -23,6 +23,20 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.19.1 (2022-09-14)
+
+#### :bug: Bug Fix
+* `babel-core`
+  * [#14930](https://github.com/babel/babel/pull/14930) Avoid fancy stack traces size computation ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-traverse`
+  * [#14932](https://github.com/babel/babel/pull/14932) fix: isForAwaitStatement is broken ([@JLHwung](https://github.com/JLHwung))
+* Other
+  * [#14872](https://github.com/babel/babel/pull/14872) Use the built-in class fields and private methods rules in ESLint 8 ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`
+  * [#14920](https://github.com/babel/babel/pull/14920) [estree] attach comments after directives at the end of file ([@hegemonic](https://github.com/hegemonic))
+  * [#14900](https://github.com/babel/babel/pull/14900) [ts] allow redeclaring a var/type with the same name as import ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-plugin-transform-typescript`
+  * [#14913](https://github.com/babel/babel/pull/14913) fix: do not remove type import used in TS import= ([@JLHwung](https://github.com/JLHwung))
 ## v7.19.0 (2022-09-05)
 
 #### :eyeglasses: Spec Compliance
