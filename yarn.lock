@@ -979,7 +979,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-validator-identifier@workspace:packages/babel-helper-validator-identifier"
   dependencies:
-    "@unicode/unicode-14.0.0": ^1.2.1
+    "@unicode/unicode-15.0.0": ^1.3.1
     charcodes: ^0.2.0
   languageName: unknown
   linkType: soft
@@ -4729,10 +4729,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@unicode/unicode-14.0.0@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "@unicode/unicode-14.0.0@npm:1.2.1"
-  checksum: b43ed4e1295f806f23867228af0939b335194888c1b751f7b0b1aa3b44eef21e7f0dc232dc3f8ab1533b4abb6fdfdba7097f879efc389402ab93adde85401f5e
+"@unicode/unicode-15.0.0@npm:^1.3.1":
+  version: 1.3.1
+  resolution: "@unicode/unicode-15.0.0@npm:1.3.1"
+  checksum: 6760808fbabc1f5805dff798099db7448c81887c95191ef20d6c714b93ce8243004038ec2cce93f89fc1e957bca14dc6c3c4015675d6075eb236952e0be1541e
   languageName: node
   linkType: hard
 
@@ -12844,11 +12844,11 @@ fsevents@^1.2.7:
   linkType: hard
 
 "regenerate-unicode-properties@npm:^10.0.1":
-  version: 10.0.1
-  resolution: "regenerate-unicode-properties@npm:10.0.1"
+  version: 10.1.0
+  resolution: "regenerate-unicode-properties@npm:10.1.0"
   dependencies:
     regenerate: ^1.4.2
-  checksum: 1b638b7087d8143e5be3e20e2cda197ea0440fa0bc2cc49646b2f50c5a2b1acdc54b21e4215805a5a2dd487c686b2291accd5ad00619534098d2667e76247754
+  checksum: b1a8929588433ab8b9dc1a34cf3665b3b472f79f2af6ceae00d905fc496b332b9af09c6718fb28c730918f19a00dc1d7310adbaa9b72a2ec7ad2f435da8ace17
   languageName: node
   linkType: hard
 
