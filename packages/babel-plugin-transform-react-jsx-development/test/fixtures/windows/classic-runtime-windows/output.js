@@ -12,7 +12,7 @@ var x = /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/Reac
   __source: {
     fileName: _jsxFileName,
     lineNumber: 4,
-    columnNumber: 9
+    columnNumber: 7
   }
 }), /*#__PURE__*/React.createElement("div", {
   key: "2",
@@ -21,7 +21,7 @@ var x = /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/Reac
   __source: {
     fileName: _jsxFileName,
     lineNumber: 5,
-    columnNumber: 9
+    columnNumber: 7
   }
 }), /*#__PURE__*/React.createElement("div", {
   key: "3",
@@ -29,7 +29,7 @@ var x = /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/Reac
   __source: {
     fileName: _jsxFileName,
     lineNumber: 6,
-    columnNumber: 9
+    columnNumber: 7
   }
 }), /*#__PURE__*/React.createElement("div", { ...props,
   key: "4",
@@ -37,6 +37,6 @@ var x = /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/Reac
   __source: {
     fileName: _jsxFileName,
     lineNumber: 7,
-    columnNumber: 9
+    columnNumber: 7
   }
 })));

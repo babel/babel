@@ -234,10 +234,13 @@ jobs:
         with:
           node-version: "*"
 
-  test-babel-8-breaking:
-    name: Test Babel 8 breaking changes
+  build-babel8:
+    name: Build Babel 8 Artifacts for tests
     needs: prepare-yarn-cache
     runs-on: ubuntu-latest
+    # Yarn PnP does not support native ESM yet (https://github.com/yarnpkg/berry/issues/638)
+    # env:
+    #    YARN_NODE_LINKER: pnp # use pnp linker for better linking performance and stricter checks
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -258,6 +261,39 @@ jobs:
           BABEL_ENV: test
           BABEL_8_BREAKING: true
           BABEL_TYPES_8_BREAKING: true
+      - uses: actions/upload-artifact@v3
+        with:
+          name: babel8-test-artifact
+          path: |
+            codemods/*/lib/**/*
+            eslint/*/lib/**/*
+            packages/*/lib/**/*
+            packages/babel-standalone/*.js
+            !**/node_modules/**
+
+  test-babel-8-breaking:
+    name: Test Babel 8 breaking changes on Node.js
+    needs: build-babel8
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Use Node.js 14.17
+        uses: actions/setup-node@v3
+        with:
+          node-version: "14.17" # Node.js 14.17 is the first LTS supported by Babel 8
+          cache: "yarn"
+      - name: Install
+        run: |
+          yarn install
+      - uses: actions/download-artifact@v3
+        with:
+          name: babel8-test-artifact
+      - name: Generate runtime helpers
+        run: make build-plugin-transform-runtime-dist
       - name: Test
         # Hack: --color has supports-color@5 returned true for GitHub CI
         # Remove once `chalk` is bumped to 4.0.
@@ -287,8 +323,7 @@ jobs:
         with:
           name: babel-artifact
       - name: Generate runtime helpers
-        run: |
-          make build-plugin-transform-runtime-dist
+        run: make build-plugin-transform-runtime-dist
       - name: Test on Windows
         # Hack: --color has supports-color@5 returned true for GitHub CI
         # Remove once `chalk` is bumped to 4.0.

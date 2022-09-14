@@ -20,5 +20,6 @@
         "absoluteRuntime": true
       }
     ]
-  ]
+  ],
+  "BABEL_8_BREAKING": false
 }
