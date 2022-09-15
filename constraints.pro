@@ -92,7 +92,7 @@ gen_enforced_field(WorkspaceCwd, 'exports', '{ ".": "./lib/index.js", "./package
 gen_enforced_field(WorkspaceCwd, 'type', 'commonjs') :-
   \+ workspace_field(WorkspaceCwd, 'type', 'module').
 
-% Enforce a default 'conditions', unless it's already specified
+% Enforces a default 'conditions', unless it's already specified
 gen_enforced_field(WorkspaceCwd, 'conditions', '{ "USE_ESM": [{ "type": "module" }, null] }') :-
   \+ workspace_field(WorkspaceCwd, 'private', true),
   \+ workspace_field(WorkspaceCwd, 'conditions', _),
@@ -100,3 +100,12 @@ gen_enforced_field(WorkspaceCwd, 'conditions', '{ "USE_ESM": [{ "type": "module"
   % Exclude some packages
   workspace_ident(WorkspaceCwd, WorkspaceIdent),
   WorkspaceIdent \= '@babel/compat-data'.
+
+% Enforces that @babel/runtime-corejs2 must depend on core-js 2
+gen_enforced_dependency(WorkspaceCwd, 'core-js', '^2.6.12', DependencyType) :-
+  % Get the workspace name
+  workspace_ident(WorkspaceCwd, WorkspaceIdent),
+  % Only consider 'dependencies'
+  (DependencyType = 'dependencies'),
+  % The rule works for @babel/runtime-corejs2 only
+  (WorkspaceIdent = '@babel/runtime-corejs2').

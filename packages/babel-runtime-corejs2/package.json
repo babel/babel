@@ -14,7 +14,7 @@
   "homepage": "https://babel.dev/docs/en/next/babel-runtime-corejs2",
   "author": "The Babel Team (https://babel.dev/team)",
   "dependencies": {
-    "core-js": "^3.25.1",
+    "core-js": "^2.6.12",
     "regenerator-runtime": "^0.13.4"
   },
   "exports": {
