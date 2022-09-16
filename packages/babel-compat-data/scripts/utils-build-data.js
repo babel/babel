@@ -26,6 +26,7 @@ exports.environments = [
   "firefox",
   "safari",
   "node",
+  "deno",
   "ie",
   "android",
   "ios",

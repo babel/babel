@@ -13,6 +13,7 @@
     "edge": "94",
     "firefox": "93",
     "node": "16.11",
+    "deno": "1.14",
     "electron": "15.0"
   },
   "transform-private-property-in-object": {
@@ -32,6 +33,7 @@
     "firefox": "90",
     "safari": "15",
     "node": "16.9",
+    "deno": "1.9",
     "ios": "15",
     "electron": "13.0"
   },
@@ -53,6 +55,7 @@
     "firefox": "90",
     "safari": "14.1",
     "node": "12",
+    "deno": "1",
     "ios": "15",
     "samsung": "11",
     "electron": "6.0"
@@ -75,6 +78,7 @@
     "firefox": "90",
     "safari": "15",
     "node": "14.6",
+    "deno": "1",
     "ios": "15",
     "samsung": "14",
     "electron": "10.0"
@@ -98,6 +102,7 @@
     "firefox": "70",
     "safari": "13",
     "node": "12.5",
+    "deno": "1",
     "ios": "13",
     "samsung": "11",
     "rhino": "1.7.14",
@@ -121,6 +126,7 @@
     "firefox": "79",
     "safari": "14",
     "node": "15",
+    "deno": "1.2",
     "ios": "14",
     "samsung": "14",
     "electron": "10.0"
@@ -143,6 +149,7 @@
     "firefox": "72",
     "safari": "13.1",
     "node": "14",
+    "deno": "1",
     "ios": "13.4",
     "samsung": "13",
     "electron": "8.0"
@@ -164,6 +171,7 @@
     "firefox": "74",
     "safari": "13.1",
     "node": "16.9",
+    "deno": "1.9",
     "ios": "13.4",
     "electron": "13.0"
   },
@@ -186,6 +194,7 @@
     "firefox": "62",
     "safari": "12",
     "node": "10",
+    "deno": "1",
     "ios": "12",
     "samsung": "9",
     "rhino": "1.7.14",
@@ -209,6 +218,7 @@
     "firefox": "58",
     "safari": "11.1",
     "node": "10",
+    "deno": "1",
     "ios": "11.3",
     "samsung": "9",
     "electron": "3.0"
@@ -219,6 +229,7 @@
     "edge": "18",
     "firefox": "53",
     "node": "6",
+    "deno": "1",
     "samsung": "5",
     "electron": "0.37"
   },
@@ -240,6 +251,7 @@
     "firefox": "57",
     "safari": "12",
     "node": "10",
+    "deno": "1",
     "ios": "12",
     "samsung": "8",
     "electron": "3.0"
@@ -262,6 +274,7 @@
     "firefox": "55",
     "safari": "11.1",
     "node": "8.3",
+    "deno": "1",
     "ios": "11.3",
     "samsung": "8",
     "electron": "2.0"
@@ -273,6 +286,7 @@
     "firefox": "78",
     "safari": "11.1",
     "node": "8.10",
+    "deno": "1",
     "ios": "11.3",
     "samsung": "8",
     "electron": "3.0"
@@ -295,6 +309,7 @@
     "firefox": "78",
     "safari": "11.1",
     "node": "10",
+    "deno": "1",
     "ios": "11.3",
     "samsung": "9",
     "electron": "3.0"
@@ -306,6 +321,7 @@
     "firefox": "78",
     "safari": "11.1",
     "node": "10",
+    "deno": "1",
     "ios": "11.3",
     "samsung": "9",
     "electron": "3.0"
@@ -317,6 +333,7 @@
     "firefox": "52",
     "safari": "11",
     "node": "7.6",
+    "deno": "1",
     "ios": "11",
     "samsung": "6",
     "electron": "1.6"
@@ -328,6 +345,7 @@
     "firefox": "52",
     "safari": "10.1",
     "node": "7",
+    "deno": "1",
     "ios": "10.3",
     "samsung": "6",
     "rhino": "1.7.14",
@@ -340,6 +358,7 @@
     "firefox": "34",
     "safari": "13",
     "node": "4",
+    "deno": "1",
     "ios": "13",
     "samsung": "3.4",
     "electron": "0.21"
@@ -351,6 +370,7 @@
     "firefox": "53",
     "safari": "9",
     "node": "4",
+    "deno": "1",
     "ios": "9",
     "samsung": "4",
     "electron": "0.30"
@@ -362,6 +382,7 @@
     "firefox": "53",
     "safari": "10",
     "node": "6.5",
+    "deno": "1",
     "ios": "10",
     "samsung": "5",
     "electron": "1.2"
@@ -373,6 +394,7 @@
     "firefox": "43",
     "safari": "10",
     "node": "6",
+    "deno": "1",
     "ios": "10",
     "samsung": "5",
     "rhino": "1.7.13",
@@ -385,6 +407,7 @@
     "firefox": "46",
     "safari": "10",
     "node": "4",
+    "deno": "1",
     "ie": "11",
     "ios": "10",
     "samsung": "3.4",
@@ -397,6 +420,7 @@
     "firefox": "45",
     "safari": "10",
     "node": "5",
+    "deno": "1",
     "ios": "10",
     "samsung": "5",
     "electron": "0.36"
@@ -408,6 +432,7 @@
     "firefox": "45",
     "safari": "10",
     "node": "5",
+    "deno": "1",
     "ios": "10",
     "samsung": "5",
     "electron": "0.36"
@@ -419,6 +444,7 @@
     "firefox": "33",
     "safari": "9",
     "node": "4",
+    "deno": "1",
     "ios": "9",
     "samsung": "4",
     "rhino": "1.7.14",
@@ -431,6 +457,7 @@
     "firefox": "34",
     "safari": "9",
     "node": "4",
+    "deno": "1",
     "ios": "9",
     "samsung": "3.4",
     "electron": "0.25"
@@ -442,6 +469,7 @@
     "firefox": "34",
     "safari": "7.1",
     "node": "4",
+    "deno": "1",
     "ios": "8",
     "samsung": "4",
     "electron": "0.30"
@@ -453,6 +481,7 @@
     "firefox": "53",
     "safari": "10",
     "node": "6.5",
+    "deno": "1",
     "ios": "10",
     "samsung": "5",
     "electron": "1.2"
@@ -464,6 +493,7 @@
     "firefox": "3",
     "safari": "10",
     "node": "6",
+    "deno": "1",
     "ios": "10",
     "samsung": "5",
     "electron": "0.37"
@@ -475,6 +505,7 @@
     "firefox": "53",
     "safari": "9",
     "node": "4",
+    "deno": "1",
     "ios": "9",
     "samsung": "4",
     "electron": "0.30"
@@ -486,6 +517,7 @@
     "firefox": "46",
     "safari": "12",
     "node": "6",
+    "deno": "1",
     "ios": "12",
     "samsung": "5",
     "electron": "1.1"
@@ -497,6 +529,7 @@
     "firefox": "45",
     "safari": "10",
     "node": "5",
+    "deno": "1",
     "ios": "10",
     "samsung": "5",
     "electron": "0.36"
@@ -508,6 +541,7 @@
     "firefox": "53",
     "safari": "10",
     "node": "6.5",
+    "deno": "1",
     "ios": "10",
     "samsung": "5",
     "electron": "1.2"
@@ -519,6 +553,7 @@
     "firefox": "51",
     "safari": "11",
     "node": "6",
+    "deno": "1",
     "ios": "11",
     "samsung": "5",
     "electron": "0.37"
@@ -530,6 +565,7 @@
     "firefox": "36",
     "safari": "9",
     "node": "0.12",
+    "deno": "1",
     "ios": "9",
     "samsung": "3",
     "rhino": "1.7.13",
@@ -542,6 +578,7 @@
     "firefox": "41",
     "safari": "10",
     "node": "5",
+    "deno": "1",
     "ios": "10",
     "samsung": "5",
     "electron": "0.36"
@@ -553,6 +590,7 @@
     "firefox": "53",
     "safari": "10",
     "node": "6",
+    "deno": "1",
     "ios": "10",
     "samsung": "5",
     "electron": "1.1"
@@ -564,6 +602,7 @@
     "firefox": "2",
     "safari": "5.1",
     "node": "0.4",
+    "deno": "1",
     "ie": "9",
     "android": "4",
     "ios": "6",
@@ -579,6 +618,7 @@
     "firefox": "2",
     "safari": "5.1",
     "node": "0.4",
+    "deno": "1",
     "ie": "9",
     "android": "4",
     "ios": "6",
@@ -594,6 +634,7 @@
     "firefox": "2",
     "safari": "3.1",
     "node": "0.6",
+    "deno": "1",
     "ie": "9",
     "android": "4.4",
     "ios": "6",
