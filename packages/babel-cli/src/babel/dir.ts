@@ -49,16 +49,22 @@ export default async function ({
 
       if (!res) return FILE_TYPE.IGNORED;
 
-      // we've requested explicit sourcemaps to be written to disk
-      if (
-        res.map &&
-        babelOptions.sourceMaps &&
-        babelOptions.sourceMaps !== "inline"
-      ) {
-        const mapLoc = dest + ".map";
-        res.code = util.addSourceMappingUrl(res.code, mapLoc);
-        res.map.file = path.basename(relative);
-        outputFileSync(mapLoc, JSON.stringify(res.map));
+      if (res.map) {
+        let outputMap: true | false | "both" = false;
+        if (babelOptions.sourceMaps && babelOptions.sourceMaps !== "inline") {
+          outputMap = true;
+        } else if (babelOptions.sourceMaps == undefined) {
+          outputMap = util.hasDataSourcemap(res.code) ? true : "both";
+        }
+
+        if (outputMap) {
+          const mapLoc = dest + ".map";
+          if (outputMap === true) {
+            res.code = util.addSourceMappingUrl(res.code, mapLoc);
+          }
+          res.map.file = path.basename(relative);
+          outputFileSync(mapLoc, JSON.stringify(res.map));
+        }
       }
 
       outputFileSync(dest, res.code);

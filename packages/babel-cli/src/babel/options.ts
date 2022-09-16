@@ -84,7 +84,12 @@ commander.option(
 );
 
 // General source map formatting.
-commander.option("-s, --source-maps [true|false|inline|both]", "", booleanify);
+commander.option(
+  "-s, --source-maps [true|false|inline|both]",
+  "",
+  booleanify,
+  undefined,
+);
 commander.option(
   "--source-map-target [string]",
   "Set `file` on returned source map.",
@@ -355,6 +360,8 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
 }
 
 function booleanify(val: any): boolean | any {
+  if (val === undefined) return undefined;
+
   if (val === "true" || val == 1) {
     return true;
   }

@@ -5,6 +5,8 @@ import fs from "fs";
 
 import * as watcher from "./watcher";
 
+import type { FileResult, InputOptions } from "@babel/core";
+
 export function chmod(src: string, dest: string): void {
   try {
     fs.chmodSync(dest, fs.statSync(src).mode);
@@ -57,22 +59,23 @@ export function addSourceMappingUrl(code: string, loc: string): string {
   return code + "\n//# sourceMappingURL=" + path.basename(loc);
 }
 
+export function hasDataSourcemap(code: string): boolean {
+  const pos = code.lastIndexOf("\n", code.length - 2);
+  return pos != -1 && code.lastIndexOf("//# sourceMappingURL") < pos;
+}
+
 const CALLER = {
   name: "@babel/cli",
 };
 
-export function transformRepl(
-  filename: string,
-  code: string,
-  opts: any,
-): Promise<any> {
+export function transformRepl(filename: string, code: string, opts: any) {
   opts = {
     ...opts,
     caller: CALLER,
     filename,
   };
 
-  return new Promise((resolve, reject) => {
+  return new Promise<FileResult>((resolve, reject) => {
     babel.transform(code, opts, (err, result) => {
       if (err) reject(err);
       else resolve(result);
@@ -80,17 +83,14 @@ export function transformRepl(
   });
 }
 
-export async function compile(
-  filename: string,
-  opts: any | Function,
-): Promise<any> {
+export async function compile(filename: string, opts: InputOptions) {
   opts = {
     ...opts,
     caller: CALLER,
   };
 
   // TODO (Babel 8): Use `babel.transformFileAsync`
-  const result: any = await new Promise((resolve, reject) => {
+  const result = await new Promise<FileResult>((resolve, reject) => {
     babel.transformFile(filename, opts, (err, result) => {
       if (err) reject(err);
       else resolve(result);
