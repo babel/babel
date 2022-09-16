@@ -64,9 +64,22 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
     return flags;
   }
 
+  hasImport(name: string, allowShadow?: boolean) {
+    const len = this.importsStack.length;
+    if (this.importsStack[len - 1].has(name)) {
+      return true;
+    }
+    if (!allowShadow && len > 1) {
+      for (let i = 0; i < len - 1; i++) {
+        if (this.importsStack[i].has(name)) return true;
+      }
+    }
+    return false;
+  }
+
   declareName(name: string, bindingType: BindingTypes, loc: Position) {
     if (bindingType & BIND_FLAGS_TS_IMPORT) {
-      if (this.importsStack[this.importsStack.length - 1].has(name)) {
+      if (this.hasImport(name, true)) {
         this.parser.raise(Errors.VarRedeclaration, {
           at: loc,
           identifierName: name,
@@ -132,19 +145,12 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
   checkLocalExport(id: N.Identifier) {
     const { name } = id;
 
+    if (this.hasImport(name)) return;
+
     const len = this.scopeStack.length;
-
-    if (this.importsStack[len].has(name)) return;
-
     for (let i = 0; i < len; i++) {
       const stack = this.scopeStack[i];
-      if (
-        stack.types.has(name) ||
-        stack.exportOnlyBindings.has(name) ||
-        this.importsStack[i].has(name)
-      ) {
-        return;
-      }
+      if (stack.types.has(name) || stack.exportOnlyBindings.has(name)) return;
     }
 
     super.checkLocalExport(id);
