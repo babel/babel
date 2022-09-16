@@ -47,6 +47,11 @@ const buildTypingsWatchGlob = [
   "./packages/babel-types/scripts/generators/*.js",
 ];
 
+// env vars from the cli are always strings, so !!ENV_VAR returns true for "false"
+function bool(value) {
+  return value && value !== "false" && value !== "0";
+}
+
 /**
  * map source code path to the generated artifacts path
  * @example
@@ -312,23 +317,49 @@ if (process.env.CIRCLE_PR_NUMBER) {
 
 const babelVersion =
   require("./packages/babel-core/package.json").version + versionSuffix;
-function buildRollup(packages, targetBrowsers) {
+function buildRollup(packages, buildStandalone) {
   const sourcemap = process.env.NODE_ENV === "production";
   return Promise.all(
     packages.map(
-      async ({ src, format, dest, name, filename, envName = "rollup" }) => {
+      async ({
+        src,
+        format,
+        input,
+        dest,
+        name,
+        filename,
+        envName = "rollup",
+      }) => {
         const pkgJSON = require("./" + src + "/package.json");
         const version = pkgJSON.version + versionSuffix;
         const { dependencies = {}, peerDependencies = {} } = pkgJSON;
-        const external = Object.keys(dependencies).concat(
-          Object.keys(peerDependencies)
-        );
+        const external = [
+          ...Object.keys(dependencies),
+          ...Object.keys(peerDependencies),
+          // @babel/compat-data sub exports
+          "@babel/compat-data/overlapping-plugins",
+          "@babel/compat-data/plugins",
+          "@babel/compat-data/plugin-bugfixes",
+          "@babel/compat-data/native-modules",
+          "@babel/compat-data/corejs2-built-ins",
+          // Ideally they should be constructed from package.json exports
+          // required by modules-commonjs
+          "babel-plugin-dynamic-import-node/utils",
+          // required by preset-env
+          "@babel/preset-modules/lib/plugins/transform-async-arrows-in-class",
+          "@babel/preset-modules/lib/plugins/transform-edge-default-parameters",
+          "@babel/preset-modules/lib/plugins/transform-edge-function-name",
+          "@babel/preset-modules/lib/plugins/transform-tagged-template-caching",
+          "@babel/preset-modules/lib/plugins/transform-safari-block-shadowing",
+          "@babel/preset-modules/lib/plugins/transform-safari-for-shadowing",
+        ];
 
-        const input = getIndexFromPackage(src);
         log(`Compiling '${chalk.cyan(input)}' with rollup ...`);
         const bundle = await rollup({
           input,
-          external,
+          external: buildStandalone ? [] : external,
+          // all node modules are resolved as if they were placed in the n_m folder of package root
+          preserveSymlinks: true,
           onwarn(warning, warn) {
             switch (warning.code) {
               case "CIRCULAR_DEPENDENCY":
@@ -374,7 +405,8 @@ function buildRollup(packages, targetBrowsers) {
             }),
             rollupCommonJs({
               include: [
-                /node_modules/,
+                // Bundle node_modules only when building standalone
+                buildStandalone ? /node_modules/ : "./node_modules/*/*.js",
                 "packages/babel-runtime/regenerator/**",
                 "packages/babel-runtime/helpers/*.js",
                 "packages/babel-preset-env/data/*.js",
@@ -406,19 +438,23 @@ function buildRollup(packages, targetBrowsers) {
             }),
             rollupNodeResolve({
               extensions: [".ts", ".js", ".mjs", ".cjs", ".json"],
-              browser: targetBrowsers,
-              exportConditions: targetBrowsers ? ["browser"] : [],
+              browser: buildStandalone,
+              exportConditions: buildStandalone ? ["browser"] : [],
               // It needs to be set to 'false' when using rollupNodePolyfills
               // https://github.com/rollup/plugins/issues/772
-              preferBuiltins: !targetBrowsers,
+              preferBuiltins: !buildStandalone,
             }),
             rollupJson(),
-            targetBrowsers &&
+            buildStandalone &&
               rollupPolyfillNode({
                 sourceMap: sourcemap,
-                include: "**/*.{js,cjs,ts}",
+                include: "**/*.{js,mjs,cjs,ts}",
               }),
           ].filter(Boolean),
+          acorn: {
+            // babel-cli/src/babel/index.ts has shebang
+            allowHashBang: true,
+          },
         });
 
         const outputFile = path.join(src, dest, filename || "index.js");
@@ -428,7 +464,29 @@ function buildRollup(packages, targetBrowsers) {
           name,
           sourcemap: sourcemap,
           exports: "named",
+          interop(id) {
+            // We have manually applied commonjs-esm interop to the source
+            // for library not in this monorepo
+            // https://github.com/babel/babel/pull/12795
+            if (!id.startsWith("@babel/")) return false;
+
+            // Some syntax plugins have been archived
+            if (id.includes("plugin-syntax")) {
+              const srcPath = new URL(
+                "./packages/" + id.replace("@babel/", "babel-"),
+                import.meta.url
+              );
+              if (!fs.existsSync(srcPath)) return false;
+            }
+
+            return true;
+          },
         });
+
+        // Only minify @babel/standalone
+        if (!buildStandalone) {
+          return;
+        }
 
         if (!process.env.IS_PUBLISH) {
           log(
@@ -495,22 +553,90 @@ function copyDts(packages) {
     .pipe(gulp.dest(monorepoRoot));
 }
 
-const libBundles = [
-  "packages/babel-parser",
-  "packages/babel-plugin-proposal-destructuring-private",
-  "packages/babel-plugin-proposal-object-rest-spread",
-  "packages/babel-plugin-proposal-optional-chaining",
-  "packages/babel-preset-react",
-  "packages/babel-plugin-transform-destructuring",
-  "packages/babel-preset-typescript",
-  "packages/babel-helper-member-expression-to-functions",
-  "packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining",
-  "packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression",
-].map(src => ({
-  src,
-  format: USE_ESM ? "esm" : "cjs",
-  dest: "lib",
-}));
+function* libBundlesIterator() {
+  const noBundle = new Set([
+    // @rollup/plugin-commonjs will mess up with babel-helper-fixtures
+    "babel-helper-fixtures",
+    // babel-standalone is handled by rollup-babel-standalone task
+    "babel-standalone",
+    // todo: Rollup hangs on allowHashBang: true with babel-cli/src/babel/index.ts hashbang
+    "babel-cli",
+    // todo: @rollup/node-resolve 'browsers' option does not work when package.json contains `exports`
+    // https://github.com/rollup/plugins/tree/master/packages/node-resolve#browser
+    "babel-register",
+    "babel-core",
+    "babel-plugin-transform-runtime",
+    // @babel/node invokes internal lib/_babel-node.js
+    "babel-node",
+    // todo: test/helpers/define-helper requires internal lib/helpers access
+    "babel-helpers",
+    // multiple exports
+    "babel-plugin-transform-react-jsx",
+  ]);
+  for (const packageDir of ["packages", "codemods"]) {
+    for (const dir of fs.readdirSync(new URL(packageDir, import.meta.url))) {
+      if (noBundle.has(dir)) continue;
+
+      const src = `${packageDir}/${dir}`;
+
+      let pkgJSON;
+      try {
+        pkgJSON = JSON.parse(
+          fs.readFileSync(new URL(`${src}/package.json`, import.meta.url))
+        );
+      } catch (err) {
+        if (err.code !== "ENOENT" && err.code !== "ENOTDIR") throw err;
+        continue;
+      }
+      if (pkgJSON.main) {
+        yield {
+          src,
+          format: USE_ESM ? "esm" : "cjs",
+          dest: "lib",
+          input: getIndexFromPackage(src),
+        };
+      } else if (pkgJSON.bin) {
+        for (const binPath of Object.values(pkgJSON.bin)) {
+          const filename = binPath.slice(binPath.lastIndexOf("/") + 1);
+          const input =
+            dir === "babel-cli" && filename === "babel.js"
+              ? `${src}/src/babel/index.ts`
+              : `${src}/src/${filename.slice(0, -3) + ".ts"}`;
+          yield {
+            src,
+            format: USE_ESM ? "esm" : "cjs",
+            dest: "lib",
+            filename,
+            input,
+          };
+        }
+      }
+    }
+  }
+}
+
+let libBundles;
+if (bool(process.env.BABEL_8_BREAKING)) {
+  libBundles = Array.from(libBundlesIterator());
+} else {
+  libBundles = [
+    "packages/babel-parser",
+    "packages/babel-plugin-proposal-destructuring-private",
+    "packages/babel-plugin-proposal-object-rest-spread",
+    "packages/babel-plugin-proposal-optional-chaining",
+    "packages/babel-preset-react",
+    "packages/babel-plugin-transform-destructuring",
+    "packages/babel-preset-typescript",
+    "packages/babel-helper-member-expression-to-functions",
+    "packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining",
+    "packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression",
+  ].map(src => ({
+    src,
+    format: USE_ESM ? "esm" : "cjs",
+    dest: "lib",
+    input: getIndexFromPackage(src),
+  }));
+}
 
 const cjsBundles = [
   // This is used by @babel/register and @babel/eslint-parser
@@ -528,6 +654,7 @@ const standaloneBundle = [
     dest: "",
     version: babelVersion,
     envName: "standalone",
+    input: getIndexFromPackage("packages/babel-standalone"),
   },
 ];
 

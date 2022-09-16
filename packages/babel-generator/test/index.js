@@ -6,23 +6,10 @@ import fixtures from "@babel/helper-fixtures";
 import { TraceMap, originalPositionFor } from "@jridgewell/trace-mapping";
 import { fileURLToPath } from "url";
 
-import _Printer from "../lib/printer.js";
 import _generate, { CodeGenerator } from "../lib/index.js";
-const Printer = _Printer.default || _Printer;
 const generate = _generate.default || _generate;
 
 describe("generation", function () {
-  it("completeness", function () {
-    Object.keys(t.VISITOR_KEYS).forEach(function (type) {
-      expect(Printer.prototype[type]).toBeTruthy();
-    });
-
-    Object.keys(Printer.prototype).forEach(function (type) {
-      if (!/[A-Z]/.test(type[0])) return;
-      expect(t.VISITOR_KEYS[type]).toBeTruthy();
-    });
-  });
-
   it("multiple sources", function () {
     const sources = {
       "a.js": "function hi (msg) { console.log(msg); }\n",
