@@ -133,6 +133,9 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
     const { name } = id;
 
     const len = this.scopeStack.length;
+
+    if (this.importsStack[len].has(name)) return;
+
     for (let i = 0; i < len; i++) {
       const stack = this.scopeStack[i];
       if (
