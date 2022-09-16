@@ -29,7 +29,6 @@ import {
   BIND_TS_NAMESPACE,
   BIND_TS_TYPE_IMPORT,
   BIND_CLASS,
-  BIND_LEXICAL,
   BIND_NONE,
   BIND_FLAGS_TS_IMPORT,
 } from "../../util/scopeflags";
@@ -1929,7 +1928,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     ): N.TsImportEqualsDeclaration {
       node.isExport = isExport || false;
       node.id = this.parseIdentifier();
-      this.checkIdentifier(node.id, BIND_LEXICAL);
+      this.checkIdentifier(node.id, BIND_FLAGS_TS_IMPORT);
       this.expect(tt.eq);
       const moduleReference = this.tsParseModuleReference();
       if (
