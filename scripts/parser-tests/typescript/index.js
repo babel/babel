@@ -2,14 +2,11 @@ import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import TestRunner from "../utils/parser-test-runner.js";
-import ErrorCodes from "./error-codes.js";
 
 const getEncoding = path =>
   ({ fffe: "utf-16le", feff: "utf-16be" }[
     fs.readFileSync(path).slice(0, 2).toString("hex")
   ] || "utf-8");
-
-const ErrorCodeRegExp = new RegExp(ErrorCodes.join("|"));
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -30,23 +27,14 @@ const TSTestsPath = path.join(dirname, "../../../build/typescript/tests");
 
 // Check if the baseline errors contain the codes that should also be thrown from babel-parser
 function baselineContainsParserErrorCodes(testName) {
-  try {
-    return ErrorCodeRegExp.test(
-      fs.readFileSync(
-        path.join(
-          TSTestsPath,
-          "baselines/reference",
-          testName.replace(/\.tsx?$/, ".errors.txt")
-        ),
-        "utf8"
-      )
-    );
-  } catch (e) {
-    if (e.code !== "ENOENT") {
-      throw e;
-    }
-    return false;
-  }
+  return fs.existsSync(
+    path.join(
+      TSTestsPath,
+      "baselines/reference",
+      testName.replace(/\.tsx?$/, ".errors.txt")
+    ),
+    "utf8"
+  );
 }
 
 const IgnoreRegExp = /@noTypesAndSymbols|ts-ignore|\n#!/;
@@ -96,7 +84,7 @@ function toFiles(strictMode, contents, name) {
         "decorators-legacy",
         "importAssertions",
         /\.(t|j)sx$/.test(sourceFilename) && "jsx",
-      ].filter(plugin => !!plugin),
+      ].filter(Boolean),
     }));
 }
 
