@@ -405,7 +405,7 @@ function buildRollup(packages, buildStandalone) {
             }),
             rollupCommonJs({
               include: [
-                // Only bundle node modules when building standalone
+                // Bundle node_modules only when building standalone
                 buildStandalone ? /node_modules/ : "./node_modules/*/*.js",
                 "packages/babel-runtime/regenerator/**",
                 "packages/babel-runtime/helpers/*.js",
@@ -554,44 +554,40 @@ function copyDts(packages) {
 }
 
 function* libBundlesIterator() {
+  const noBundle = new Set([
+    // @rollup/plugin-commonjs will mess up with babel-helper-fixtures
+    "babel-helper-fixtures",
+    // babel-standalone is handled by rollup-babel-standalone task
+    "babel-standalone",
+    // todo: Rollup hangs on allowHashBang: true with babel-cli/src/babel/index.ts hashbang
+    "babel-cli",
+    // todo: @rollup/node-resolve 'browsers' option does not work when package.json contains `exports`
+    // https://github.com/rollup/plugins/tree/master/packages/node-resolve#browser
+    "babel-register",
+    "babel-core",
+    "babel-plugin-transform-runtime",
+    // @babel/node invokes internal lib/_babel-node.js
+    "babel-node",
+    // todo: test/helpers/define-helper requires internal lib/helpers access
+    "babel-helpers",
+    // multiple exports
+    "babel-plugin-transform-react-jsx",
+  ]);
   for (const packageDir of ["packages", "codemods"]) {
     for (const dir of fs.readdirSync(new URL(packageDir, import.meta.url))) {
-      if (
-        [
-          // @rollup/plugin-commonjs will mess up with babel-helper-fixtures
-          "babel-helper-fixtures",
-          // babel-standalone is handled by rollup-babel-standalone task
-          "babel-standalone",
-          // todo: Rollup hangs on allowHashBang: true with babel-cli/src/babel/index.ts hashbang
-          "babel-cli",
-          // todo: @rollup/node-resolve 'browsers' option does not work when package.json contains `exports`
-          // https://github.com/rollup/plugins/tree/master/packages/node-resolve#browser
-          "babel-register",
-          "babel-core",
-          "babel-plugin-transform-runtime",
-          // @babel/node invokes internal lib/_babel-node.js
-          "babel-node",
-          // todo: test/helpers/define-helper requires internal lib/helpers access
-          "babel-helpers",
-          // multiple exports
-          "babel-plugin-transform-react-jsx",
-        ].includes(dir)
-      ) {
-        continue;
-      }
+      if (noBundle.has(dir)) continue;
+
+      const src = `${packageDir}/${dir}`;
 
       let pkgJSON;
       try {
         pkgJSON = JSON.parse(
-          fs.readFileSync(
-            new URL(`${packageDir}/${dir}/package.json`, import.meta.url)
-          )
+          fs.readFileSync(new URL(`${src}/package.json`, import.meta.url))
         );
       } catch (err) {
         if (err.code !== "ENOENT" && err.code !== "ENOTDIR") throw err;
+        continue;
       }
-      if (pkgJSON === undefined) continue;
-      const src = packageDir + "/" + dir;
       if (pkgJSON.main) {
         yield {
           src,
@@ -621,7 +617,7 @@ function* libBundlesIterator() {
 
 let libBundles;
 if (bool(process.env.BABEL_8_BREAKING)) {
-  libBundles = [...libBundlesIterator()];
+  libBundles = Array.from(libBundlesIterator());
 } else {
   libBundles = [
     "packages/babel-parser",
