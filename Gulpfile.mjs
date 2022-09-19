@@ -337,21 +337,12 @@ function buildRollup(packages, buildStandalone) {
           ...Object.keys(dependencies),
           ...Object.keys(peerDependencies),
           // @babel/compat-data sub exports
-          "@babel/compat-data/overlapping-plugins",
-          "@babel/compat-data/plugins",
-          "@babel/compat-data/plugin-bugfixes",
-          "@babel/compat-data/native-modules",
-          "@babel/compat-data/corejs2-built-ins",
+          /@babel\/compat-data\/.*/,
           // Ideally they should be constructed from package.json exports
           // required by modules-commonjs
-          "babel-plugin-dynamic-import-node/utils",
+          /babel-plugin-dynamic-import-node\/utils/,
           // required by preset-env
-          "@babel/preset-modules/lib/plugins/transform-async-arrows-in-class",
-          "@babel/preset-modules/lib/plugins/transform-edge-default-parameters",
-          "@babel/preset-modules/lib/plugins/transform-edge-function-name",
-          "@babel/preset-modules/lib/plugins/transform-tagged-template-caching",
-          "@babel/preset-modules/lib/plugins/transform-safari-block-shadowing",
-          "@babel/preset-modules/lib/plugins/transform-safari-for-shadowing",
+          /@babel\/preset-modules\/.*/,
         ];
 
         log(`Compiling '${chalk.cyan(input)}' with rollup ...`);
@@ -477,6 +468,10 @@ function buildRollup(packages, buildStandalone) {
                 import.meta.url
               );
               if (!fs.existsSync(srcPath)) return false;
+            }
+
+            if (id.includes("@babel/preset-modules")) {
+              return false;
             }
 
             return true;

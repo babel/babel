@@ -63,7 +63,8 @@ module.exports = function (api) {
 
   let targets = {};
   let convertESM = outputType === "script";
-  let addImportExtension = !convertESM;
+  /** @type {false | "externals" | "always"} */
+  let addImportExtension = convertESM ? false : "always";
   let ignoreLib = true;
   let includeRegeneratorRuntime = false;
   let needsPolyfillsForOldNode = false;
@@ -105,7 +106,7 @@ module.exports = function (api) {
       break;
     case "rollup":
       convertESM = false;
-      addImportExtension = false;
+      addImportExtension = "externals";
       ignoreLib = false;
       // rollup-commonjs will converts node_modules to ESM
       unambiguousSources.push(
@@ -223,7 +224,9 @@ module.exports = function (api) {
         assumptions: sourceAssumptions,
         plugins: [
           transformNamedBabelTypesImportToDestructuring,
-          addImportExtension ? pluginAddImportExtension : null,
+          addImportExtension
+            ? [pluginAddImportExtension, { when: addImportExtension }]
+            : null,
 
           [
             pluginToggleBooleanFlag,
@@ -687,14 +690,18 @@ function pluginImportMetaUrl({ types: t, template }) {
   };
 }
 
-function pluginAddImportExtension() {
+function pluginAddImportExtension(api, { when }) {
   return {
     visitor: {
       "ImportDeclaration|ExportDeclaration"({ node }) {
         const { source } = node;
         if (!source) return;
 
-        if (source.value.startsWith(".") && !/\.[a-z]+$/.test(source.value)) {
+        if (
+          when === "always" &&
+          source.value.startsWith(".") &&
+          !/\.[a-z]+$/.test(source.value)
+        ) {
           const dir = pathUtils.dirname(this.filename);
 
           try {
