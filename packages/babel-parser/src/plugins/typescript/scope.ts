@@ -149,8 +149,8 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
 
     const len = this.scopeStack.length;
     for (let i = len - 1; i >= 0; i--) {
-      const stack = this.scopeStack[i];
-      if (stack.types.has(name) || stack.exportOnlyBindings.has(name)) return;
+      const scope = this.scopeStack[i];
+      if (scope.types.has(name) || scope.exportOnlyBindings.has(name)) return;
     }
 
     super.checkLocalExport(id);
