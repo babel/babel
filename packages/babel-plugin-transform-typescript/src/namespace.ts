@@ -81,14 +81,11 @@ function handleVariableDeclaration(
     // `export const a = 1` transforms to `const a = N.a = 1`, the output
     // is smaller than `const a = 1; N.a = a`;
     for (const declarator of declarations) {
-      // `export declare const a`,the declarator.init would be null,
-      if (declarator.init) {
-        declarator.init = t.assignmentExpression(
-          "=",
-          getMemberExpression(name, declarator.id.name),
-          declarator.init,
-        );
-      }
+      declarator.init = t.assignmentExpression(
+        "=",
+        getMemberExpression(name, declarator.id.name),
+        declarator.init,
+      );
     }
     return [node];
   }
@@ -183,15 +180,15 @@ function handleNested(
       // Export declarations get parsed using the next switch.
     }
 
+    if ("declare" in subNode.declaration && subNode.declaration.declare) {
+      continue;
+    }
+
     // Transform the export declarations that occur inside of a namespace.
     switch (subNode.declaration.type) {
       case "TSEnumDeclaration":
       case "FunctionDeclaration":
       case "ClassDeclaration": {
-        if (subNode.declaration.declare) {
-          continue;
-        }
-
         const itemName = subNode.declaration.id.name;
         names.add(itemName);
         namespaceTopLevel.splice(
