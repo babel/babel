@@ -11,7 +11,7 @@ exportDeclarationsInAmbientNamespaces2.ts
 multipleExports.ts
 
 
-# 139 valid programs produced a parsing error
+# 134 valid programs produced a parsing error
 
 ArrowFunctionExpression1.ts
 MemberAccessorDeclaration15.ts
@@ -57,8 +57,6 @@ duplicateIdentifierInCatchBlock.ts
 duplicateLabel1.ts
 duplicateLabel2.ts
 duplicatePackage_withErrors.ts
-duplicateVarAndImport.ts
-duplicateVarAndImport2.ts
 emptyGenericParamList.ts
 emptyTypeArgumentList.ts
 emptyTypeArgumentListWithNew.ts
@@ -91,13 +89,10 @@ gettersAndSettersErrors.ts
 giant.ts
 implementClausePrecedingExtends.ts
 implementsClauseAlreadySeen.ts
-importAndVariableDeclarationConflict1.ts
 importAndVariableDeclarationConflict3.ts
-importAndVariableDeclarationConflict4.ts
 importAssertionNonstring.ts
 importDeclWithClassModifiers.ts
 importDeclWithDeclareModifierInAmbientContext.ts
-importedModuleClassNameClash.ts
 indexSignatureWithAccessibilityModifier.ts
 indexSignatureWithInitializer1.ts
 indexSignatureWithTrailingComma.ts
