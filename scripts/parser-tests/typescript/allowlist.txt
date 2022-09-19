@@ -11,7 +11,7 @@ exportDeclarationsInAmbientNamespaces2.ts
 multipleExports.ts
 
 
-# 134 valid programs produced a parsing error
+# 131 valid programs produced a parsing error
 
 ArrowFunctionExpression1.ts
 MemberAccessorDeclaration15.ts
@@ -71,12 +71,9 @@ exportAssignmentWithDeclareAndExportModifiers.ts
 exportAssignmentWithDeclareModifier.ts
 exportAssignmentWithExportModifier.ts
 exportClassWithoutName.ts
-exportDeclarationsInAmbientNamespaces.ts
 exportDefaultAsyncFunction2.ts
 exportInterfaceClassAndValue.ts
 exportSameNameFuncVar.ts
-exportSpecifierAndExportedMemberDeclaration.ts
-exportSpecifierAndLocalMemberDeclaration.ts
 exportSpecifierForAGlobal.ts # We handle this fine, but it doesn't consider the different files together
 exportSpecifierReferencingOuterDeclaration2.ts # We handle this fine, but it doesn't consider the different files together
 expressionsForbiddenInParameterInitializers.ts

@@ -1,0 +1,193 @@
+{
+  "type": "File",
+  "start":0,"end":188,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":12,"column":1,"index":188}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":188,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":12,"column":1,"index":188}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSModuleDeclaration",
+        "start":0,"end":139,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":1,"index":139}},
+        "id": {
+          "type": "StringLiteral",
+          "start":15,"end":19,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":19,"index":19}},
+          "extra": {
+            "rawValue": "m2",
+            "raw": "\"m2\""
+          },
+          "value": "m2"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start":20,"end":139,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":8,"column":1,"index":139}},
+          "body": [
+            {
+              "type": "ExportNamedDeclaration",
+              "start":26,"end":73,"loc":{"start":{"line":2,"column":4,"index":26},"end":{"line":4,"column":5,"index":73}},
+              "exportKind": "value",
+              "specifiers": [],
+              "source": null,
+              "declaration": {
+                "type": "TSModuleDeclaration",
+                "start":33,"end":73,"loc":{"start":{"line":2,"column":11,"index":33},"end":{"line":4,"column":5,"index":73}},
+                "id": {
+                  "type": "Identifier",
+                  "start":40,"end":41,"loc":{"start":{"line":2,"column":18,"index":40},"end":{"line":2,"column":19,"index":41},"identifierName":"X"},
+                  "name": "X"
+                },
+                "body": {
+                  "type": "TSModuleBlock",
+                  "start":42,"end":73,"loc":{"start":{"line":2,"column":20,"index":42},"end":{"line":4,"column":5,"index":73}},
+                  "body": [
+                    {
+                      "type": "TSInterfaceDeclaration",
+                      "start":52,"end":67,"loc":{"start":{"line":3,"column":8,"index":52},"end":{"line":3,"column":23,"index":67}},
+                      "id": {
+                        "type": "Identifier",
+                        "start":62,"end":63,"loc":{"start":{"line":3,"column":18,"index":62},"end":{"line":3,"column":19,"index":63},"identifierName":"I"},
+                        "name": "I"
+                      },
+                      "body": {
+                        "type": "TSInterfaceBody",
+                        "start":64,"end":67,"loc":{"start":{"line":3,"column":20,"index":64},"end":{"line":3,"column":23,"index":67}},
+                        "body": []
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "TSDeclareFunction",
+              "start":78,"end":91,"loc":{"start":{"line":5,"column":4,"index":78},"end":{"line":5,"column":17,"index":91}},
+              "id": {
+                "type": "Identifier",
+                "start":87,"end":88,"loc":{"start":{"line":5,"column":13,"index":87},"end":{"line":5,"column":14,"index":88},"identifierName":"Y"},
+                "name": "Y"
+              },
+              "generator": false,
+              "async": false,
+              "params": []
+            },
+            {
+              "type": "ExportNamedDeclaration",
+              "start":96,"end":114,"loc":{"start":{"line":6,"column":4,"index":96},"end":{"line":6,"column":22,"index":114}},
+              "exportKind": "value",
+              "specifiers": [
+                {
+                  "type": "ExportSpecifier",
+                  "start":105,"end":111,"loc":{"start":{"line":6,"column":13,"index":105},"end":{"line":6,"column":19,"index":111}},
+                  "local": {
+                    "type": "Identifier",
+                    "start":105,"end":106,"loc":{"start":{"line":6,"column":13,"index":105},"end":{"line":6,"column":14,"index":106},"identifierName":"Y"},
+                    "name": "Y"
+                  },
+                  "exportKind": "value",
+                  "exported": {
+                    "type": "Identifier",
+                    "start":110,"end":111,"loc":{"start":{"line":6,"column":18,"index":110},"end":{"line":6,"column":19,"index":111},"identifierName":"X"},
+                    "name": "X"
+                  }
+                }
+              ],
+              "source": null,
+              "declaration": null
+            },
+            {
+              "type": "TSDeclareFunction",
+              "start":119,"end":137,"loc":{"start":{"line":7,"column":4,"index":119},"end":{"line":7,"column":22,"index":137}},
+              "id": {
+                "type": "Identifier",
+                "start":128,"end":129,"loc":{"start":{"line":7,"column":13,"index":128},"end":{"line":7,"column":14,"index":129},"identifierName":"Z"},
+                "name": "Z"
+              },
+              "generator": false,
+              "async": false,
+              "params": [],
+              "returnType": {
+                "type": "TSTypeAnnotation",
+                "start":131,"end":136,"loc":{"start":{"line":7,"column":16,"index":131},"end":{"line":7,"column":21,"index":136}},
+                "typeAnnotation": {
+                  "type": "TSTypeReference",
+                  "start":133,"end":136,"loc":{"start":{"line":7,"column":18,"index":133},"end":{"line":7,"column":21,"index":136}},
+                  "typeName": {
+                    "type": "TSQualifiedName",
+                    "start":133,"end":136,"loc":{"start":{"line":7,"column":18,"index":133},"end":{"line":7,"column":21,"index":136}},
+                    "left": {
+                      "type": "Identifier",
+                      "start":133,"end":134,"loc":{"start":{"line":7,"column":18,"index":133},"end":{"line":7,"column":19,"index":134},"identifierName":"X"},
+                      "name": "X"
+                    },
+                    "right": {
+                      "type": "Identifier",
+                      "start":135,"end":136,"loc":{"start":{"line":7,"column":20,"index":135},"end":{"line":7,"column":21,"index":136},"identifierName":"I"},
+                      "name": "I"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "declare": true
+      },
+      {
+        "type": "TSModuleDeclaration",
+        "start":141,"end":188,"loc":{"start":{"line":10,"column":0,"index":141},"end":{"line":12,"column":1,"index":188}},
+        "id": {
+          "type": "StringLiteral",
+          "start":156,"end":160,"loc":{"start":{"line":10,"column":15,"index":156},"end":{"line":10,"column":19,"index":160}},
+          "extra": {
+            "rawValue": "m2",
+            "raw": "\"m2\""
+          },
+          "value": "m2"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start":161,"end":188,"loc":{"start":{"line":10,"column":20,"index":161},"end":{"line":12,"column":1,"index":188}},
+          "body": [
+            {
+              "type": "TSDeclareFunction",
+              "start":167,"end":186,"loc":{"start":{"line":11,"column":4,"index":167},"end":{"line":11,"column":23,"index":186}},
+              "id": {
+                "type": "Identifier",
+                "start":176,"end":178,"loc":{"start":{"line":11,"column":13,"index":176},"end":{"line":11,"column":15,"index":178},"identifierName":"Z2"},
+                "name": "Z2"
+              },
+              "generator": false,
+              "async": false,
+              "params": [],
+              "returnType": {
+                "type": "TSTypeAnnotation",
+                "start":180,"end":185,"loc":{"start":{"line":11,"column":17,"index":180},"end":{"line":11,"column":22,"index":185}},
+                "typeAnnotation": {
+                  "type": "TSTypeReference",
+                  "start":182,"end":185,"loc":{"start":{"line":11,"column":19,"index":182},"end":{"line":11,"column":22,"index":185}},
+                  "typeName": {
+                    "type": "TSQualifiedName",
+                    "start":182,"end":185,"loc":{"start":{"line":11,"column":19,"index":182},"end":{"line":11,"column":22,"index":185}},
+                    "left": {
+                      "type": "Identifier",
+                      "start":182,"end":183,"loc":{"start":{"line":11,"column":19,"index":182},"end":{"line":11,"column":20,"index":183},"identifierName":"X"},
+                      "name": "X"
+                    },
+                    "right": {
+                      "type": "Identifier",
+                      "start":184,"end":185,"loc":{"start":{"line":11,"column":21,"index":184},"end":{"line":11,"column":22,"index":185},"identifierName":"I"},
+                      "name": "I"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "declare": true
+      }
+    ],
+    "directives": []
+  }
+}
