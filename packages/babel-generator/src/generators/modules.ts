@@ -197,6 +197,7 @@ export function ExportDefaultDeclaration(
 export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
   this.word("import");
   this.space();
+  this.printInnerComments(node);
 
   const isTypeKind = node.importKind === "type" || node.importKind === "typeof";
   if (isTypeKind) {
