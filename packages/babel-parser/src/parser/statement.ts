@@ -2659,7 +2659,30 @@ export default abstract class StatementParser extends ExpressionParser {
   }
 
   parseMaybeImportReflection(node: Undone<N.ImportDeclaration>) {
-    if (this.match(tt._module)) {
+    let isImportReflection = false;
+    if (this.match(tt._module) && !this.state.containsEsc) {
+      const lookahead = this.lookahead();
+      if (tokenIsIdentifier(lookahead.type)) {
+        if (lookahead.type !== tt._from) {
+          // import module x
+          isImportReflection = true;
+        } else {
+          const nextNextTokenFirstChar = this.input.charCodeAt(
+            this.nextTokenStartSince(lookahead.end),
+          );
+          if (nextNextTokenFirstChar === charCodes.lowercaseF) {
+            // import module from from ...
+            isImportReflection = true;
+          }
+        }
+      } else {
+        // import module { x } ...
+        // This is invalid, we will continue parsing and throw
+        // recoverable errors later
+        isImportReflection = true;
+      }
+    }
+    if (isImportReflection) {
       this.expectPlugin("importReflection");
       this.next(); // eat tt._module;
       node.module = true;
