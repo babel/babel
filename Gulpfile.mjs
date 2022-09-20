@@ -154,7 +154,7 @@ function generateTraverseHelpers(helperKind) {
   return generateHelpers(
     `./packages/babel-traverse/scripts/generators/${helperKind}.js`,
     `./packages/babel-traverse/src/path/generated/`,
-    `${helperKind}.ts`,
+    `${helperKind}.d.ts`,
     `@babel/traverse -> ${helperKind}`
   );
 }

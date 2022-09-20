@@ -21,8 +21,6 @@ module.exports = function (api) {
 
   const sources = ["packages/*/src", "codemods/*/src", "eslint/*/src"];
 
-  const includeCoverage = process.env.BABEL_COVERAGE === "true";
-
   const envOpts = {
     shippedProposals: true,
     modules: false,
@@ -289,12 +287,6 @@ module.exports = function (api) {
       },
     ].filter(Boolean),
   };
-
-  // we need to do this as long as we do not test everything from source
-  if (includeCoverage) {
-    config.auxiliaryCommentBefore = "istanbul ignore next";
-    config.plugins.push("babel-plugin-istanbul");
-  }
 
   return config;
 };
