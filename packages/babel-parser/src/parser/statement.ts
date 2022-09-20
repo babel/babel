@@ -2660,7 +2660,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
   parseMaybeImportReflection(node: Undone<N.ImportDeclaration>) {
     let isImportReflection = false;
-    if (this.match(tt._module) && !this.state.containsEsc) {
+    if (this.isContextual(tt._module)) {
       const lookahead = this.lookahead();
       if (tokenIsIdentifier(lookahead.type)) {
         if (lookahead.type !== tt._from) {
@@ -2678,7 +2678,7 @@ export default abstract class StatementParser extends ExpressionParser {
       } else {
         // import module { x } ...
         // This is invalid, we will continue parsing and throw
-        // recoverable errors later
+        // a recoverable error later
         isImportReflection = true;
       }
     }
