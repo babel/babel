@@ -236,6 +236,96 @@ describe("buildConfigChain", function () {
         expect(opts.comments).toBeUndefined();
       });
     });
+
+    describe("filename requirement", () => {
+      const BASE_OPTS = {
+        cwd: fixture("nonexistant-fake"),
+        babelrc: false,
+        configFile: false,
+      };
+
+      describe("in config", () => {
+        it("requires filename if string", () => {
+          expect(() =>
+            loadOptions({
+              ...BASE_OPTS,
+              test: fixture("nonexistant-fake"),
+            }),
+          ).toThrow(/no filename was passed/);
+        });
+
+        it("requires filename if RegExp", () => {
+          expect(() =>
+            loadOptions({
+              ...BASE_OPTS,
+              test: /file/,
+            }),
+          ).toThrow(/no filename was passed/);
+        });
+
+        it("does not require filename if function", () => {
+          const mock = jest.fn().mockReturnValue(true);
+
+          expect(() =>
+            loadOptions({
+              ...BASE_OPTS,
+              test: mock,
+            }),
+          ).not.toThrow();
+          expect(mock).toHaveBeenCalledWith(undefined, expect.anything());
+
+          expect(() =>
+            loadOptions({
+              ...BASE_OPTS,
+              filename: "some-filename",
+              test: mock,
+            }),
+          ).not.toThrow();
+          expect(mock.mock.calls[1][0].endsWith("some-filename")).toBe(true);
+        });
+      });
+
+      describe("in preset", () => {
+        it("requires filename if string", () => {
+          expect(() =>
+            loadOptions({
+              ...BASE_OPTS,
+              presets: [() => ({ test: fixture("nonexistant-fake") })],
+            }),
+          ).toThrow(/requires a filename/);
+        });
+
+        it("requires filename if RegExp", () => {
+          expect(() =>
+            loadOptions({
+              ...BASE_OPTS,
+              presets: [() => ({ test: /file/ })],
+            }),
+          ).toThrow(/requires a filename/);
+        });
+
+        it("does not require filename if function", () => {
+          const mock = jest.fn().mockReturnValue(true);
+
+          expect(() =>
+            loadOptions({
+              ...BASE_OPTS,
+              presets: [() => ({ test: mock })],
+            }),
+          ).not.toThrow();
+          expect(mock).toHaveBeenCalledWith(undefined, expect.anything());
+
+          expect(() =>
+            loadOptions({
+              ...BASE_OPTS,
+              filename: "some-filename",
+              presets: [() => ({ test: mock })],
+            }),
+          ).not.toThrow();
+          expect(mock.mock.calls[1][0].endsWith("some-filename")).toBe(true);
+        });
+      });
+    });
   });
 
   describe("include", () => {
