@@ -64,7 +64,6 @@ function normalizeOptions(
     indent: {
       adjustMultilineComment: true,
       style: "  ",
-      base: 0,
     },
     jsescOption: {
       quotes: "double",
