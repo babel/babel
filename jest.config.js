@@ -20,7 +20,7 @@ module.exports = {
 
   snapshotFormat: { escapeString: true, printBasicPrototype: true },
   coverageProvider: "v8",
-  coverageReporters: ["clover", "text"],
+  coverageReporters: ["lcov", "text"],
   collectCoverageFrom: [
     "packages/*/lib/**/*.{js,cjs,mjs,ts}",
     "codemods/*/lib/**/*.{js,cjs,mjs,ts}",
