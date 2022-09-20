@@ -2598,7 +2598,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     checkImportReflection(node: Undone<N.ImportDeclaration>) {
       super.checkImportReflection(node);
-      if (node.reflection === "module" && node.importKind !== "value") {
+      if (node.module && node.importKind !== "value") {
         this.raise(Errors.ImportReflectionNotBinding, {
           at: node.specifiers[0].loc.start,
         });

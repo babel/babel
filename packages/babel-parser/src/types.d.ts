@@ -922,7 +922,7 @@ export interface ImportDeclaration extends NodeBase {
   source: Literal;
   importKind?: "type" | "typeof" | "value"; // TODO: Not in spec,
   assertions?: ImportAttribute[];
-  reflection?: "module";
+  module?: boolean;
 }
 
 export interface ImportSpecifier extends ModuleSpecifier {

@@ -21,7 +21,7 @@
             }
           }
         ],
-        "reflection": "module",
+        "module": true,
         "importKind": "value",
         "source": {
           "type": "StringLiteral",
@@ -47,7 +47,7 @@
             }
           }
         ],
-        "reflection": null,
+        "module": false,
         "importKind": "value",
         "source": {
           "type": "StringLiteral",

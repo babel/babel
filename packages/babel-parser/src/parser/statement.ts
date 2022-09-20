@@ -2613,7 +2613,7 @@ export default abstract class StatementParser extends ExpressionParser {
   }
 
   checkImportReflection(node: Undone<N.ImportDeclaration>) {
-    if (node.reflection === "module") {
+    if (node.module) {
       if (
         node.specifiers.length !== 1 ||
         node.specifiers[0].type !== "ImportDefaultSpecifier"
@@ -2662,9 +2662,9 @@ export default abstract class StatementParser extends ExpressionParser {
     if (this.match(tt._module)) {
       this.expectPlugin("importReflection");
       this.next(); // eat tt._module;
-      node.reflection = "module";
+      node.module = true;
     } else if (this.hasPlugin("importReflection")) {
-      node.reflection = null;
+      node.module = false;
     }
   }
 

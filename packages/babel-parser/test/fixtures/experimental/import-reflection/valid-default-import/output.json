@@ -21,7 +21,7 @@
             }
           }
         ],
-        "reflection": "module",
+        "module": true,
         "source": {
           "type": "StringLiteral",
           "start":23,"end":38,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":38,"index":38}},
@@ -46,7 +46,7 @@
             }
           }
         ],
-        "reflection": null,
+        "module": false,
         "source": {
           "type": "StringLiteral",
           "start":56,"end":71,"loc":{"start":{"line":2,"column":16,"index":56},"end":{"line":2,"column":31,"index":71}},

@@ -202,8 +202,8 @@ export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
   if (isTypeKind) {
     this.word(node.importKind);
     this.space();
-  } else if (node.reflection != null) {
-    this.word(node.reflection);
+  } else if (node.module) {
+    this.word("module");
     this.space();
   }
 

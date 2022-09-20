@@ -38,7 +38,7 @@
             }
           }
         ],
-        "reflection": "module",
+        "module": true,
         "source": {
           "type": "StringLiteral",
           "start":30,"end":45,"loc":{"start":{"line":1,"column":30,"index":30},"end":{"line":1,"column":45,"index":45}},

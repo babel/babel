@@ -24,7 +24,7 @@
             }
           }
         ],
-        "reflection": "module",
+        "module": true,
         "importKind": "type",
         "source": {
           "type": "StringLiteral",
