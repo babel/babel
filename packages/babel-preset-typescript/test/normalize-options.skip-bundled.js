@@ -9,9 +9,8 @@ describe("normalize options", () => {
       );
     });
     it.each([
-      "allExtensions",
       "allowNamespaces",
-      "isTSX",
+      "ignoreExtensions",
       "onlyRemoveTypeImports",
       "optimizeConstEnums",
     ])("should throw when `%p` is not a boolean", optionName => {
@@ -27,16 +26,23 @@ describe("normalize options", () => {
         );
       },
     );
+    it.each(["isTSX", "allExtensions"])(
+      "should throw when `%p` is used",
+      optionName => {
+        expect(() => normalizeOptions({ [optionName]: true })).toThrow(
+          `@babel/preset-typescript: The .allExtensions and .isTSX options have been removed.`,
+        );
+      },
+    );
     it("should not throw when options is not defined", () => {
       expect(() => normalizeOptions()).not.toThrow();
     });
     it("default values", () => {
       expect(normalizeOptions({})).toMatchInlineSnapshot(`
         Object {
-          "allExtensions": false,
           "allowNamespaces": true,
           "disallowAmbiguousJSXLike": false,
-          "isTSX": false,
+          "ignoreExtensions": false,
           "jsxPragma": "React",
           "jsxPragmaFrag": "React.Fragment",
           "onlyRemoveTypeImports": true,
@@ -83,6 +89,7 @@ describe("normalize options", () => {
           "allExtensions": false,
           "allowNamespaces": true,
           "disallowAmbiguousJSXLike": false,
+          "ignoreExtensions": false,
           "isTSX": false,
           "jsxPragma": undefined,
           "jsxPragmaFrag": "React.Fragment",
