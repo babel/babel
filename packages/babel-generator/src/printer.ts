@@ -32,7 +32,6 @@ export type Format = {
   indent: {
     adjustMultilineComment: boolean;
     style: string;
-    base: number;
   };
   recordAndTupleSyntaxType: RecordAndTuplePluginOptions["syntaxType"];
   jsescOption: jsescOptions;
