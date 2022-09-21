@@ -281,7 +281,7 @@ export default abstract class StatementParser extends ExpressionParser {
     if (!this.isContextual(tt._let)) {
       return false;
     }
-    return this.isLetKeyword(context);
+    return this.hasFollowingIdentifier(context);
   }
 
   /**
@@ -293,7 +293,7 @@ export default abstract class StatementParser extends ExpressionParser {
    * @returns {boolean}
    * @memberof StatementParser
    */
-  isLetKeyword(context?: string | null): boolean {
+  hasFollowingIdentifier(context?: string | null): boolean {
     const next = this.nextTokenStart();
     const nextCh = this.codePointAtPos(next);
     // For ambiguous cases, determine if a LexicalDeclaration (or only a
@@ -351,14 +351,8 @@ export default abstract class StatementParser extends ExpressionParser {
     context?: string | null,
     topLevel?: boolean | null,
   ): N.Statement {
-    let starttype = this.state.type;
+    const starttype = this.state.type;
     const node = this.startNode();
-    let kind;
-
-    if (this.isLet(context)) {
-      starttype = tt._var;
-      kind = "let";
-    }
 
     // Most types of statements are recognized by the keyword they
     // start with. Many are trivial to parse, some require a bit of
@@ -405,9 +399,14 @@ export default abstract class StatementParser extends ExpressionParser {
       case tt._try:
         return this.parseTryStatement(node as Undone<N.TryStatement>);
 
+      case tt._let:
+        if (this.state.containsEsc || !this.hasFollowingIdentifier(context)) {
+          break;
+        }
+      // fall through
       case tt._const:
-      case tt._var:
-        kind = kind || this.state.value;
+      case tt._var: {
+        const kind = this.state.value;
         if (context && kind !== "var") {
           this.raise(Errors.UnexpectedLexicalDeclaration, {
             at: this.state.startLoc,
@@ -417,7 +416,7 @@ export default abstract class StatementParser extends ExpressionParser {
           node as Undone<N.VariableDeclaration>,
           kind,
         );
-
+      }
       case tt._while:
         return this.parseWhileStatement(node as Undone<N.WhileStatement>);
       case tt._with:
@@ -762,7 +761,7 @@ export default abstract class StatementParser extends ExpressionParser {
     }
 
     const startsWithLet = this.isContextual(tt._let);
-    const isLet = startsWithLet && this.isLetKeyword();
+    const isLet = startsWithLet && this.hasFollowingIdentifier();
     if (this.match(tt._var) || this.match(tt._const) || isLet) {
       const initNode = this.startNode<N.VariableDeclaration>();
       const kind = isLet ? "let" : this.state.value;
