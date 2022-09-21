@@ -118,7 +118,7 @@ export default {
   ImportJSONBindingNotDefault:
     "A JSON module can only be imported with `default`.",
   ImportReflectionNotBinding:
-    'Only `import module x from "./module"` is supported.',
+    'Only `import module x from "./module"` is valid.',
   IncompatibleRegExpUVFlags:
     "The 'u' and 'v' regular expression flags cannot be enabled at the same time.",
   InvalidBigIntLiteral: "Invalid BigIntLiteral.",
