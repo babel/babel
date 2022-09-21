@@ -59,7 +59,7 @@ export function readStringContents(
   const initialCurLine = curLine;
 
   let out = "";
-  let containsInvalid = false;
+  let firstInvalidLoc = null;
   let chunkStart = pos;
   const { length } = input;
   for (;;) {
@@ -75,25 +75,20 @@ export function readStringContents(
     }
     if (ch === charCodes.backslash) {
       out += input.slice(chunkStart, pos);
-      let escaped;
-      ({
-        ch: escaped,
-        pos,
-        lineStart,
-        curLine,
-      } = readEscapedChar(
+      const res = readEscapedChar(
         input,
         pos,
         lineStart,
         curLine,
         type === "template",
         errors,
-      ));
-      if (escaped === null) {
-        containsInvalid = true;
+      );
+      if (res.ch === null && !firstInvalidLoc) {
+        firstInvalidLoc = { pos, lineStart, curLine };
       } else {
-        out += escaped;
+        out += res.ch;
       }
+      ({ pos, lineStart, curLine } = res);
       chunkStart = pos;
     } else if (
       ch === charCodes.lineSeparator ||
@@ -121,7 +116,17 @@ export function readStringContents(
       ++pos;
     }
   }
-  return { pos, str: out, containsInvalid, lineStart, curLine };
+  return {
+    pos,
+    str: out,
+    firstInvalidLoc,
+    lineStart,
+    curLine,
+
+    // TODO(Babel 8): This is only needed for backwards compatibility,
+    // we can remove it.
+    containsInvalid: !!firstInvalidLoc,
+  };
 }
 
 function isStringEnd(
@@ -280,6 +285,7 @@ function readHexChar(
     forceLen,
     false,
     errors,
+    /* bailOnError */ !throwOnInvalid,
   ));
   if (n === null) {
     if (throwOnInvalid) {
@@ -322,6 +328,7 @@ export function readInt(
   forceLen: boolean,
   allowNumSeparator: boolean | "bail",
   errors: IntErrorHandlers,
+  bailOnError: boolean,
 ) {
   const start = pos;
   const forbiddenSiblings =
@@ -349,6 +356,7 @@ export function readInt(
       const next = input.charCodeAt(pos + 1);
 
       if (!allowNumSeparator) {
+        if (bailOnError) return { n: null, pos };
         errors.numericSeparatorInEscapeSequence(pos, lineStart, curLine);
       } else if (
         Number.isNaN(next) ||
@@ -356,6 +364,7 @@ export function readInt(
         forbiddenSiblings.has(prev) ||
         forbiddenSiblings.has(next)
       ) {
+        if (bailOnError) return { n: null, pos };
         errors.unexpectedNumericSeparator(pos, lineStart, curLine);
       }
 
@@ -376,7 +385,12 @@ export function readInt(
     if (val >= radix) {
       // If we found a digit which is too big, errors.invalidDigit can return true to avoid
       // breaking the loop (this is used for error recovery).
-      if (val <= 9 && errors.invalidDigit(pos, lineStart, curLine, radix)) {
+      if (val <= 9 && bailOnError) {
+        return { n: null, pos };
+      } else if (
+        val <= 9 &&
+        errors.invalidDigit(pos, lineStart, curLine, radix)
+      ) {
         val = 0;
       } else if (forceLen) {
         val = 0;

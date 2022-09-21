@@ -2010,8 +2010,11 @@ export default abstract class ExpressionParser extends LValParser {
     if (value === null) {
       if (!isTagged) {
         this.raise(Errors.InvalidEscapeSequenceTemplate, {
-          // FIXME: explain
-          at: createPositionWithColumnOffset(startLoc, 2),
+          // FIXME: Adding 1 is probably wrong.
+          at: createPositionWithColumnOffset(
+            this.state.firstInvalidTemplateEscapePos,
+            1,
+          ),
         });
       }
     }

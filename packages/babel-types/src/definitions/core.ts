@@ -1979,40 +1979,33 @@ defineType("TemplateElement", {
         function templateElementCookedValidator(node: t.TemplateElement) {
           const raw = node.value.raw;
 
-          let str,
-            containsInvalid,
-            unterminatedCalled = false;
-          try {
-            const error = () => {
-              throw new Error();
-            };
-            ({ str, containsInvalid } = readStringContents(
-              "template",
-              raw,
-              0,
-              0,
-              0,
-              {
-                unterminated() {
-                  unterminatedCalled = true;
-                },
-                strictNumericEscape: error,
-                invalidEscapeSequence: error,
-                numericSeparatorInEscapeSequence: error,
-                unexpectedNumericSeparator: error,
-                invalidDigit: error,
-                invalidCodePoint: error,
+          let unterminatedCalled = false;
+
+          const error = () => {
+            // unreachable
+            throw new Error("Internal @babel/types error.");
+          };
+          const { str, firstInvalidLoc } = readStringContents(
+            "template",
+            raw,
+            0,
+            0,
+            0,
+            {
+              unterminated() {
+                unterminatedCalled = true;
               },
-            ));
-          } catch {
-            // TODO: When https://github.com/babel/babel/issues/14775 is fixed
-            // we can remove the try/catch block.
-            unterminatedCalled = true;
-            containsInvalid = true;
-          }
+              strictNumericEscape: error,
+              invalidEscapeSequence: error,
+              numericSeparatorInEscapeSequence: error,
+              unexpectedNumericSeparator: error,
+              invalidDigit: error,
+              invalidCodePoint: error,
+            },
+          );
           if (!unterminatedCalled) throw new Error("Invalid raw");
 
-          node.value.cooked = containsInvalid ? null : str;
+          node.value.cooked = firstInvalidLoc ? null : str;
         },
       ),
     },
