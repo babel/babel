@@ -687,7 +687,7 @@ export interface UpdateExpression extends BaseNode {
 
 export interface VariableDeclaration extends BaseNode {
   type: "VariableDeclaration";
-  kind: "var" | "let" | "const";
+  kind: "var" | "let" | "const" | "using";
   declarations: Array<VariableDeclarator>;
   declare?: boolean | null;
 }
