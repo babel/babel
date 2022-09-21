@@ -36,7 +36,7 @@ function isInType(path: NodePath) {
 const GLOBAL_TYPES = new WeakMap<Scope, Set<string>>();
 // Track programs which contain imports/exports of values, so that we can include
 // empty exports for programs that do not, but were parsed as modules. This allows
-// tools to infer unamibiguously that results are ESM.
+// tools to infer unambiguously that results are ESM.
 const NEEDS_EXPLICIT_ESM = new WeakMap();
 const PARSED_PARAMS = new WeakSet();
 
@@ -60,6 +60,21 @@ function isGlobalType({ scope }: NodePath, name: string) {
 function registerGlobalType(programScope: Scope, name: string) {
   GLOBAL_TYPES.get(programScope).add(name);
 }
+
+// A hack to avoid removing the impl Binding when we remove the declare NodePath
+function safeRemove(path: NodePath) {
+  const ids = path.getBindingIdentifiers();
+  for (const name of Object.keys(ids)) {
+    const binding = path.scope.getBinding(name);
+    if (binding && binding.identifier === ids[name]) {
+      binding.scope.removeBinding(name);
+    }
+  }
+  path.opts.noScope = true;
+  path.remove();
+  path.opts.noScope = false;
+}
+
 export interface Options extends SyntaxOptions {
   /** @default true */
   allowNamespaces?: boolean;
@@ -71,6 +86,7 @@ export interface Options extends SyntaxOptions {
   optimizeConstEnums?: boolean;
   allowDeclareFields?: boolean;
 }
+
 type ExtraNodeProps = {
   declare?: unknown;
   accessibility?: unknown;
@@ -78,6 +94,7 @@ type ExtraNodeProps = {
   optional?: unknown;
   override?: unknown;
 };
+
 export default declare((api, opts: Options) => {
   api.assertVersion(7);
 
@@ -451,16 +468,16 @@ export default declare((api, opts: Options) => {
       },
 
       TSDeclareFunction(path) {
-        path.remove();
+        safeRemove(path);
       },
 
       TSDeclareMethod(path) {
-        path.remove();
+        safeRemove(path);
       },
 
       VariableDeclaration(path) {
         if (path.node.declare) {
-          path.remove();
+          safeRemove(path);
         }
       },
 
@@ -475,8 +492,7 @@ export default declare((api, opts: Options) => {
       ClassDeclaration(path) {
         const { node } = path;
         if (node.declare) {
-          path.remove();
-          return;
+          safeRemove(path);
         }
       },
 
