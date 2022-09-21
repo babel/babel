@@ -2622,6 +2622,11 @@ export default abstract class StatementParser extends ExpressionParser {
           at: node.specifiers[0].loc.start,
         });
       }
+      if (node.assertions?.length > 0) {
+        this.raise(Errors.ImportReflectionHasAssertion, {
+          at: node.specifiers[0].loc.start,
+        });
+      }
     }
   }
 
