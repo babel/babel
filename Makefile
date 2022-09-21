@@ -144,8 +144,8 @@ test-ci: build-standalone-ci
 	$(MAKE) test-clean
 
 test-ci-coverage:
-	BABEL_ENV=test BABEL_COVERAGE=true $(MAKE) bootstrap
-	BABEL_ENV=test BABEL_COVERAGE=true $(YARN) jest --maxWorkers=100% --ci --coverage
+	BABEL_ENV=test $(MAKE) bootstrap
+	BABEL_ENV=test BABEL_COVERAGE=true $(YARN) c8 jest --maxWorkers=100% --ci
 
 bootstrap-flow:
 	rm -rf build/flow
