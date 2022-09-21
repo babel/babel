@@ -19,21 +19,22 @@ module.exports = {
   runner: supportsESMAndJestLightRunner ? "jest-light-runner" : "jest-runner",
 
   snapshotFormat: { escapeString: true, printBasicPrototype: true },
+  coverageProvider: "v8",
+  coverageReporters: ["lcov", "text"],
   collectCoverageFrom: [
-    "packages/*/src/**/*.{js,cjs,mjs,ts}",
-    "codemods/*/src/**/*.{js,cjs,mjs,ts}",
-    "eslint/*/src/**/*.{js,cjs,mjs,ts}",
+    "packages/*/lib/**/*.{js,cjs,mjs,ts}",
+    "codemods/*/lib/**/*.{js,cjs,mjs,ts}",
+    "eslint/*/lib/**/*.{js,cjs,mjs,ts}",
   ],
-  // coveragePathIgnorePatterns Doesn't work on windows
   coveragePathIgnorePatterns: [
     "/node_modules/",
     "<rootDir>/packages/babel-standalone/",
     "/test/(fixtures|tmp|__data__)/",
     ".*\\.d\\.ts",
     "<rootDir>/packages/babel-standalone/.*",
-    "<rootDir>/packages/babel-types/src/.*/generated/.*",
-    "<rootDir>/packages/babel-helpers/src/helpers/.*",
-    "<rootDir>/packages/babel-core/src/vendor/.*",
+    "<rootDir>/packages/babel-types/.*/generated/.*",
+    "<rootDir>/packages/babel-helpers/.*/helpers/.*",
+    "<rootDir>/packages/babel-core/.*/vendor/.*",
   ],
 
   // The eslint/* packages is tested against ESLint v8, which has dropped support for Node v10.

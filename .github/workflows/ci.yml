@@ -67,7 +67,7 @@ jobs:
           make -j test-ci-coverage
           yarn test:esm
       - name: Upload coverage report
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v3
 
   test-esm:
     name: Test ESM version

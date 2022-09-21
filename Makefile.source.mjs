@@ -374,10 +374,11 @@ target["test-only"] = function (args = []) {
 };
 
 target["test-cov"] = function () {
+  target["build"]();
+
   env(
     () => {
-      target["build"]();
-      yarn(["jest", "--coverage"]);
+      yarn(["c8", "jest"]);
     },
     {
       BABEL_ENV: "test",
