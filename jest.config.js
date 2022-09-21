@@ -35,9 +35,6 @@ module.exports = {
     "<rootDir>/packages/babel-types/.*/generated/.*",
     "<rootDir>/packages/babel-helpers/.*/helpers/.*",
     "<rootDir>/packages/babel-core/.*/vendor/.*",
-
-    // For v8 coverage provider
-    "<rootDir>/packages/babel-helpers/.*/helpers/.*",
   ],
 
   // The eslint/* packages is tested against ESLint v8, which has dropped support for Node v10.
