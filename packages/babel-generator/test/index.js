@@ -833,7 +833,7 @@ suites.forEach(function (testSuite) {
               return generate(actualAst, options, actualCode);
             };
 
-            const throwMsg = task.options.throws;
+            const throwMsg = options.throws;
             if (throwMsg) {
               expect(() => run()).toThrow(
                 throwMsg === true ? undefined : throwMsg,
@@ -865,9 +865,11 @@ suites.forEach(function (testSuite) {
               } else {
                 try {
                   expect(result.code).toBe(expected.code);
-                  expect(() => {
-                    parse(result.code, parserOpts);
-                  }).not.toThrow();
+                  if (!options.expectedReParseError) {
+                    expect(() => {
+                      parse(result.code, parserOpts);
+                    }).not.toThrow();
+                  }
                 } catch (e) {
                   if (!process.env.OVERWRITE) throw e;
                   console.log(`Updated test file: ${expected.loc}`);

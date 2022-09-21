@@ -1,1 +1,1 @@
-{ "plugins": ["decorators-legacy"] }
+{ "plugins": ["decorators-legacy"], "decoratorsBeforeExport": true }

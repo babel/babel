@@ -16,6 +16,6 @@ new C<T>();
 o.m<T>();
 f < T > .0;
 o?.m<T>(e);
-o.m<T>?.(e);
+o.m?.<T>(e);
 async<T>();
-f<T>?.(e);
+f?.<T>(e);

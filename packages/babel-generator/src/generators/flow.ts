@@ -332,6 +332,7 @@ export function FunctionTypeAnnotation(
   if (
     parent &&
     (parent.type === "ObjectTypeCallProperty" ||
+      parent.type === "ObjectTypeInternalSlot" ||
       parent.type === "DeclareFunction" ||
       (parent.type === "ObjectTypeProperty" && parent.method))
   ) {
