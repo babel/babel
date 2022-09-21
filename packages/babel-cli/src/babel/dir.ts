@@ -50,16 +50,16 @@ export default async function ({
       if (!res) return FILE_TYPE.IGNORED;
 
       if (res.map) {
-        let outputMap: true | false | "both" = false;
+        let outputMap: "both" | "external" | false = false;
         if (babelOptions.sourceMaps && babelOptions.sourceMaps !== "inline") {
-          outputMap = true;
+          outputMap = "external";
         } else if (babelOptions.sourceMaps == undefined) {
-          outputMap = util.hasDataSourcemap(res.code) ? true : "both";
+          outputMap = util.hasDataSourcemap(res.code) ? "external" : "both";
         }
 
         if (outputMap) {
           const mapLoc = dest + ".map";
-          if (outputMap === true) {
+          if (outputMap === "external") {
             res.code = util.addSourceMappingUrl(res.code, mapLoc);
           }
           res.map.file = path.basename(relative);

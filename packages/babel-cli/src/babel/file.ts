@@ -96,16 +96,16 @@ export default async function ({
     if (cliOptions.outFile) {
       fs.mkdirSync(path.dirname(cliOptions.outFile), { recursive: true });
 
-      let outputMap: true | false | "both" = false;
+      let outputMap: "both" | "external" | false = false;
       if (babelOptions.sourceMaps && babelOptions.sourceMaps !== "inline") {
-        outputMap = true;
+        outputMap = "external";
       } else if (babelOptions.sourceMaps == undefined && result.hasRawMap) {
-        outputMap = util.hasDataSourcemap(result.code) ? true : "both";
+        outputMap = util.hasDataSourcemap(result.code) ? "external" : "both";
       }
 
       if (outputMap) {
         const mapLoc = cliOptions.outFile + ".map";
-        if (outputMap === true) {
+        if (outputMap === "external") {
           result.code = util.addSourceMappingUrl(result.code, mapLoc);
         }
         fs.writeFileSync(
