@@ -1908,6 +1908,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/plugin-syntax-explicit-resource-management@workspace:packages/babel-plugin-syntax-explicit-resource-management":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-syntax-explicit-resource-management@workspace:packages/babel-plugin-syntax-explicit-resource-management"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-syntax-export-default-from@workspace:^, @babel/plugin-syntax-export-default-from@workspace:packages/babel-plugin-syntax-export-default-from":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-export-default-from@workspace:packages/babel-plugin-syntax-export-default-from"
