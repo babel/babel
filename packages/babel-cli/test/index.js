@@ -1,6 +1,7 @@
 import readdir from "fs-readdir-recursive";
 import * as helper from "@babel/helper-fixtures";
 import rimraf from "rimraf";
+import semver from "semver";
 import child from "child_process";
 import path from "path";
 import fs from "fs";
@@ -150,13 +151,17 @@ const assertTest = function (stdout, stderr, opts, cwd) {
   }
 };
 
+const nodeGte8 = semver.gte(process.version, "8.0.0");
+
 const buildTest = function (binName, testName, opts) {
   const binLoc = path.join(dirname, "../lib", binName);
 
   return function (callback) {
     saveInFiles(opts.inFiles);
 
-    let args = ["--require", path.join(dirname, "./exit-loader.cjs"), binLoc];
+    let args = nodeGte8
+      ? [("--require", path.join(dirname, "./exit-loader.cjs"), binLoc)]
+      : [binLoc];
 
     if (binName !== "babel-external-helpers" && !opts.noDefaultPlugins) {
       args.push("--presets", presetLocs, "--plugins", pluginLocs);
@@ -215,7 +220,11 @@ const buildTest = function (binName, testName, opts) {
       spawn.stderr.pipe(executor.stdin);
 
       executor.on("close", function () {
-        spawn.send("exit");
+        if (nodeGte8) {
+          spawn.send("exit");
+        } else {
+          spawn.kill("SIGKILL");
+        }
       });
 
       captureOutput(executor);
