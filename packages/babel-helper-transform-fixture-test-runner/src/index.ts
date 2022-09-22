@@ -376,7 +376,7 @@ async function run(task: Test) {
     try {
       expect(result.map).toEqual(task.sourceMap);
     } catch (e) {
-      if (!process.env.OVERWRITE || !task.sourceMapFile) throw e;
+      if (!process.env.OVERWRITE && task.sourceMapFile) throw e;
 
       console.log(`Updated test file: ${task.sourceMapFile.loc}`);
       fs.writeFileSync(

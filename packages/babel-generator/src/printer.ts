@@ -294,6 +294,17 @@ class Printer {
     this._buf.source(prop, loc);
   }
 
+  sourceWithOffset(
+    prop: "start" | "end",
+    loc: Loc | undefined,
+    lineOffset: number,
+    columnOffset: number,
+  ): void {
+    this._catchUp(prop, loc);
+
+    this._buf.sourceWithOffset(prop, loc, lineOffset, columnOffset);
+  }
+
   withSource(
     prop: "start" | "end",
     loc: Loc | undefined,
@@ -557,7 +568,7 @@ class Printer {
 
     const loc = nodeType === "Program" || nodeType === "File" ? null : node.loc;
 
-    this.withSource("start", loc, printMethod.bind(this, node, parent));
+    this.exactSource(loc, printMethod.bind(this, node, parent));
 
     if (noLineTerminator && !this._noLineTerminator) {
       this._noLineTerminator = true;
