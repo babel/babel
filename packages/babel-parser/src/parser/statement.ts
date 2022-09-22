@@ -326,6 +326,42 @@ export default abstract class StatementParser extends ExpressionParser {
     return false;
   }
 
+  startsUsingForOf(): boolean {
+    const lookahead = this.lookahead();
+    if (lookahead.type === tt._of && lookahead.end - lookahead.start === 2) {
+      // using of ...
+      const originalState = this.state;
+      // @ts-expect-error: Second lookahead
+      this.state = lookahead;
+      const lookaheadAhead = this.lookahead();
+      this.state = originalState;
+      if (
+        lookaheadAhead.type === tt._of &&
+        lookaheadAhead.end - lookaheadAhead.start === 2
+      ) {
+        // using of of ...
+        const nextNextNextTokenStart = this.nextTokenStartSince(
+          lookaheadAhead.end,
+        );
+        if (
+          this.input.charCodeAt(nextNextNextTokenStart) ===
+          charCodes.rightParenthesis
+        ) {
+          // using of of)
+          return false;
+        } else {
+          this.expectPlugin("explicitResourceManagement");
+          return true;
+        }
+      } else {
+        return false;
+      }
+    } else {
+      this.expectPlugin("explicitResourceManagement");
+      return true;
+    }
+  }
+
   // Parse a single statement.
   //
   // If expecting a statement and finding a slash operator, parse a
@@ -399,6 +435,12 @@ export default abstract class StatementParser extends ExpressionParser {
       case tt._try:
         return this.parseTryStatement(node as Undone<N.TryStatement>);
 
+      case tt._using:
+        // using [no LineTerminator here] BindingList[+Using]
+        if (this.hasFollowingLineBreak()) {
+          break;
+        }
+      // fall through
       case tt._let:
         if (this.state.containsEsc || !this.hasFollowingIdentifier(context)) {
           break;
@@ -407,6 +449,14 @@ export default abstract class StatementParser extends ExpressionParser {
       case tt._const:
       case tt._var: {
         const kind = this.state.value;
+        if (kind === "using") {
+          this.expectPlugin("explicitResourceManagement");
+          if (!this.scope.inModule && this.scope.inTopLevel) {
+            this.raise(Errors.UnexpectedUsingDeclaration, {
+              at: this.state.startLoc,
+            });
+          }
+        }
         if (context && kind !== "var") {
           this.raise(Errors.UnexpectedLexicalDeclaration, {
             at: this.state.startLoc,
@@ -761,16 +811,26 @@ export default abstract class StatementParser extends ExpressionParser {
     }
 
     const startsWithLet = this.isContextual(tt._let);
-    const isLet = startsWithLet && this.hasFollowingIdentifier();
-    if (this.match(tt._var) || this.match(tt._const) || isLet) {
+    const startsWithUsing =
+      this.isContextual(tt._using) && !this.hasFollowingLineBreak();
+    const isLetOrUsing =
+      (startsWithLet && this.hasFollowingIdentifier()) ||
+      (startsWithUsing &&
+        this.hasFollowingIdentifier() &&
+        this.startsUsingForOf());
+    if (this.match(tt._var) || this.match(tt._const) || isLetOrUsing) {
       const initNode = this.startNode<N.VariableDeclaration>();
-      const kind = isLet ? "let" : this.state.value;
+      const kind = this.state.value;
       this.next();
       this.parseVar(initNode, true, kind);
       const init = this.finishNode(initNode, "VariableDeclaration");
 
+      const isForIn = this.match(tt._in);
+      if (isForIn && startsWithUsing) {
+        this.raise(Errors.ForInUsing, { at: init });
+      }
       if (
-        (this.match(tt._in) || this.isContextual(tt._of)) &&
+        (isForIn || this.isContextual(tt._of)) &&
         init.declarations.length === 1
       ) {
         return this.parseForIn(node as Undone<N.ForInOf>, init, awaitAt);
@@ -988,7 +1048,7 @@ export default abstract class StatementParser extends ExpressionParser {
   parseVarStatement(
     this: Parser,
     node: Undone<N.VariableDeclaration>,
-    kind: "var" | "let" | "const",
+    kind: "var" | "let" | "const" | "using",
     allowMissingInitializer: boolean = false,
   ): N.VariableDeclaration {
     this.next();
@@ -1316,7 +1376,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this: Parser,
     node: Undone<N.VariableDeclaration>,
     isFor: boolean,
-    kind: "var" | "let" | "const",
+    kind: "var" | "let" | "const" | "using",
     allowMissingInitializer: boolean = false,
   ): Undone<N.VariableDeclaration> {
     const declarations: N.VariableDeclarator[] = (node.declarations = []);
@@ -1358,13 +1418,17 @@ export default abstract class StatementParser extends ExpressionParser {
   parseVarId(
     this: Parser,
     decl: Undone<N.VariableDeclarator>,
-    kind: "var" | "let" | "const",
+    kind: "var" | "let" | "const" | "using",
   ): void {
-    decl.id = this.parseBindingAtom();
-    this.checkLVal(decl.id, {
+    const id = this.parseBindingAtom();
+    if (kind === "using" && id.type !== "Identifier") {
+      this.raise(Errors.UsingDeclarationHasBindingPattern, { at: id });
+    }
+    this.checkLVal(id, {
       in: { type: "VariableDeclarator" },
       binding: kind === "var" ? BIND_VAR : BIND_LEXICAL,
     });
+    decl.id = id;
   }
 
   // Parse a function declaration or literal (depending on the

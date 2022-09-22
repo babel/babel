@@ -12,6 +12,7 @@ export type Plugin =
   | "destructuringPrivate"
   | "doExpressions"
   | "dynamicImport"
+  | "explicitResourceManagement"
   | "exportDefaultFrom"
   | "exportNamespaceFrom" // deprecated
   | "flow"
