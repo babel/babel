@@ -32,6 +32,8 @@ import type { ValidatedOptions } from "./validation/options";
 import type * as Context from "./cache-contexts";
 import ConfigError from "../errors/config-error";
 
+import { getInternal } from "../transformation/internal-plugins";
+
 type LoadedDescriptor = {
   value: {};
   options: {};
@@ -238,6 +240,11 @@ const makeDescriptorLoader = <Context, API>(
     cache: CacheConfigurator<Context>,
     externalDependencies: Array<string>,
   ) => API,
+  getInternal: (
+    name: string,
+  ) => ReturnType<
+    typeof import("../transformation/internal-plugins").getInternal
+  >,
 ) =>
   makeWeakCache(function* (
     { value, options, dirname, alias }: UnloadedDescriptor,
@@ -251,6 +258,17 @@ const makeDescriptorLoader = <Context, API>(
     const externalDependencies: Array<string> = [];
 
     let item = value;
+    if (typeof value === "string") {
+      value = getInternal(value);
+      if (!value) {
+        throw new Error(
+          "Internal @babel/core error: at this point internal" +
+            " plugins/presets should have already been validated, but" +
+            ` ${item} is not recognized.`,
+        );
+      }
+    }
+
     if (typeof value === "function") {
       const factory = maybeAsync(
         value,
@@ -322,11 +340,11 @@ const makeDescriptorLoader = <Context, API>(
 const pluginDescriptorLoader = makeDescriptorLoader<
   Context.SimplePlugin,
   PluginAPI
->(makePluginAPI);
+>(makePluginAPI, getInternal.bind(null, "plugin"));
 const presetDescriptorLoader = makeDescriptorLoader<
   Context.SimplePreset,
   PresetAPI
->(makePresetAPI);
+>(makePresetAPI, getInternal.bind(null, "preset"));
 
 const instantiatePlugin = makeWeakCache(function* (
   { value, options, dirname, alias, externalDependencies }: LoadedDescriptor,

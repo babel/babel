@@ -53,6 +53,7 @@
     "@babel/helper-module-transforms": "workspace:^",
     "@babel/helpers": "workspace:^",
     "@babel/parser": "workspace:^",
+    "@babel/plugin-transform-arrow-functions": "workspace:^",
     "@babel/template": "workspace:^",
     "@babel/traverse": "workspace:^",
     "@babel/types": "workspace:^",

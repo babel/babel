@@ -351,6 +351,7 @@ __metadata:
     "@babel/helpers": "workspace:^"
     "@babel/parser": "workspace:^"
     "@babel/plugin-syntax-flow": "workspace:^"
+    "@babel/plugin-transform-arrow-functions": "workspace:^"
     "@babel/plugin-transform-flow-strip-types": "workspace:^"
     "@babel/plugin-transform-modules-commonjs": "workspace:^"
     "@babel/preset-env": "workspace:^"
