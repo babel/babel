@@ -160,7 +160,7 @@ const buildTest = function (binName, testName, opts) {
     saveInFiles(opts.inFiles);
 
     let args = nodeGte8
-      ? [("--require", path.join(dirname, "./exit-loader.cjs"), binLoc)]
+      ? ["--require", path.join(dirname, "./exit-loader.cjs"), binLoc]
       : [binLoc];
 
     if (binName !== "babel-external-helpers" && !opts.noDefaultPlugins) {
