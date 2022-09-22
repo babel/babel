@@ -38,6 +38,21 @@ import transformTemplateLiterals from "@babel/plugin-transform-template-literals
 import transformTypeofSymbol from "@babel/plugin-transform-typeof-symbol";
 import transformUnicodeEscapes from "@babel/plugin-transform-unicode-escapes";
 import transformUnicodeRegex from "@babel/plugin-transform-unicode-regex";
+import proposalAsyncGeneratorFunctions from "@babel/plugin-proposal-async-generator-functions";
+import proposalClassProperties from "@babel/plugin-proposal-class-properties";
+import proposalClassStaticBlock from "@babel/plugin-proposal-class-static-block";
+import proposalDynamicImport from "@babel/plugin-proposal-dynamic-import";
+import proposalExportNamespaceFrom from "@babel/plugin-proposal-export-namespace-from";
+import proposalJsonStrings from "@babel/plugin-proposal-json-strings";
+import proposalLogicalAssignmentOperators from "@babel/plugin-proposal-logical-assignment-operators";
+import proposalNullishCoalescingOperator from "@babel/plugin-proposal-nullish-coalescing-operator";
+import proposalNumericSeparator from "@babel/plugin-proposal-numeric-separator";
+import proposalObjectRestSpread from "@babel/plugin-proposal-object-rest-spread";
+import proposalOptionalCatchBinding from "@babel/plugin-proposal-optional-catch-binding";
+import proposalOptionalChaining from "@babel/plugin-proposal-optional-chaining";
+import proposalPrivateMethods from "@babel/plugin-proposal-private-methods";
+import proposalPrivatePropertyInObject from "@babel/plugin-proposal-private-property-in-object";
+import proposalUnicodePropertyRegex from "@babel/plugin-proposal-unicode-property-regex";
 
 // We use functions here so that the `lazy` CJS transform avoids loading the
 // plugins until they are needed.
@@ -74,9 +89,32 @@ const plugins = {
   "exponentiation-operator": () => transformExponentiationOperator,
 
   // ES2017
-  "async-to-generator": () => transformAsyncToGenerator,
+  "async-to-generator": () => transformAsyncToGenerator, // RENAME: async-functions
 
   // ES2018
+  "async-generator-functions": () => proposalAsyncGeneratorFunctions,
   "dotall-regex": () => transformDotallRegex, // RENAME: regex-dotall
   "named-capturing-groups-regex": () => transformNamedCapturingGroupsRegex, // RENAME: regex-...
+  "object-rest-spread": () => proposalObjectRestSpread,
+  "unicode-property-regex": () => proposalUnicodePropertyRegex, // RENAME: regex-...
+
+  // ES2019
+  "json-strings": () => proposalJsonStrings,
+  "optional-catch-binding": () => proposalOptionalCatchBinding,
+
+  // ES2020
+  "dynamic-import": () => proposalDynamicImport,
+  "export-namespace-from": () => proposalExportNamespaceFrom,
+  "nullish-coalescing-operator": () => proposalNullishCoalescingOperator,
+  "optional-chaining": () => proposalOptionalChaining,
+
+  // ES2021
+  "logical-assignment-operators": () => proposalLogicalAssignmentOperators,
+  "numeric-separator": () => proposalNumericSeparator, // RENAME: numeric-separators
+
+  // ES2022
+  "class-properties": () => proposalClassProperties,
+  "class-static-block": () => proposalClassStaticBlock, // RENAME: class-static-blocks
+  "private-methods": () => proposalPrivateMethods,
+  "private-property-in-object": () => proposalPrivatePropertyInObject,
 };

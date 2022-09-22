@@ -22,6 +22,18 @@ describe("internal plugins", () => {
       ).toMatchInlineSnapshot(`"(function () {});"`);
     });
 
+    it("@babel/plugin-proposal-... renamed to transform-", () => {
+      expect(
+        transformSync("a?.b", {
+          plugins: ["internal:transform-optional-chaining"],
+        }).code,
+      ).toMatchInlineSnapshot(`
+        "var _a;
+
+        (_a = a) === null || _a === void 0 ? void 0 : _a.b;"
+      `);
+    });
+
     it("unknown internal plugins throw an error", () => {
       expect(() =>
         transformSync("() => {}", {
