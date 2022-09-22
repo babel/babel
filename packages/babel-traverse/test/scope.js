@@ -662,6 +662,12 @@ describe("scope", () => {
         expect(() => getPath(ast)).toThrowErrorMatchingSnapshot();
       });
 
+      it("using", () => {
+        const ast = createTryCatch("using");
+
+        expect(() => getPath(ast)).toThrowErrorMatchingSnapshot();
+      });
+
       it("var", () => {
         const ast = createTryCatch("var");
 

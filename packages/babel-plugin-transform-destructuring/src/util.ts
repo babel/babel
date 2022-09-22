@@ -148,7 +148,7 @@ export class DestructuringTransformer {
     } else {
       let nodeInit: t.Expression;
 
-      if (this.kind === "const" && init === null) {
+      if ((this.kind === "const" || this.kind === "using") && init === null) {
         nodeInit = this.scope.buildUndefinedNode();
       } else {
         nodeInit = t.cloneNode(init);
@@ -231,7 +231,11 @@ export class DestructuringTransformer {
       let patternId;
       let node;
 
-      if (this.kind === "const" || this.kind === "let") {
+      if (
+        this.kind === "const" ||
+        this.kind === "let" ||
+        this.kind === "using"
+      ) {
         patternId = this.scope.generateUidIdentifier(tempId.name);
         node = this.buildVariableDeclaration(patternId, tempConditional);
       } else {
