@@ -1,1 +1,5 @@
-{ "plugins": ["decorators-legacy"], "decoratorsBeforeExport": true }
+{
+  "plugins": ["decorators-legacy"],
+  "decoratorsBeforeExport": true,
+  "BABEL_8_BREAKING": false
+}
