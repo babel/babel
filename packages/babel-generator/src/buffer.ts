@@ -373,7 +373,7 @@ export default class Buffer {
 
     // Since this is called extremely often, we re-use the same _sourcePosition
     // object for the whole lifetime of the buffer.
-    this._normalizePosition(prop, loc, this._sourcePosition);
+    this._normalizePosition(prop, loc, this._sourcePosition, 0, 0);
   }
 
   sourceWithOffset(
@@ -384,21 +384,13 @@ export default class Buffer {
   ): void {
     if (!loc) return;
 
-    const pos = loc[prop];
-
-    const sourcePosition = this._sourcePosition;
-
-    sourcePosition.identifierName =
-      (prop === "start" && loc.identifierName) || undefined;
-    if (pos) {
-      sourcePosition.line = pos.line + lineOffset;
-      sourcePosition.column = pos.column + columnOffset;
-      sourcePosition.filename = loc.filename;
-    } else {
-      sourcePosition.line = null;
-      sourcePosition.column = null;
-      sourcePosition.filename = null;
-    }
+    this._normalizePosition(
+      prop,
+      loc,
+      this._sourcePosition,
+      lineOffset,
+      columnOffset,
+    );
   }
 
   /**
@@ -413,14 +405,20 @@ export default class Buffer {
     cb();
   }
 
-  _normalizePosition(prop: "start" | "end", loc: Loc, targetObj: SourcePos) {
+  _normalizePosition(
+    prop: "start" | "end",
+    loc: Loc,
+    targetObj: SourcePos,
+    lineOffset: number,
+    columnOffset: number,
+  ) {
     const pos = loc[prop];
 
     targetObj.identifierName =
       (prop === "start" && loc.identifierName) || undefined;
     if (pos) {
-      targetObj.line = pos.line;
-      targetObj.column = pos.column;
+      targetObj.line = pos.line + lineOffset;
+      targetObj.column = pos.column + columnOffset;
       targetObj.filename = loc.filename;
     } else {
       targetObj.line = null;
