@@ -41,7 +41,7 @@ describe("generation", function () {
         version: 3,
         sources: ["a.js", "b.js"],
         mappings:
-          "AAAA,SAASA,EAAT,CAAaC,GAAb,EAAkB;EAAEC,OAAO,CAACC,GAAR,CAAYF,GAAZ;AAAmB;;ACAvCD,EAAE,CAAC,OAAD,CAAF",
+          "AAAA,SAASA,EAAE,CAAEC,GAAG,EAAE;EAAEC,OAAO,CAACC,GAAG,CAACF,GAAG,CAAC;AAAE;;ACAtCD,EAAE,CAAC,OAAO,CAAC",
         names: ["hi", "msg", "console", "log"],
         sourcesContent: [
           "function hi (msg) { console.log(msg); }\n",
@@ -69,7 +69,7 @@ describe("generation", function () {
           name: undefined,
           generated: { line: 1, column: 11 },
           source: "a.js",
-          original: { line: 1, column: 0 },
+          original: { line: 1, column: 11 },
         },
         {
           name: "msg",
@@ -81,7 +81,7 @@ describe("generation", function () {
           name: undefined,
           generated: { line: 1, column: 15 },
           source: "a.js",
-          original: { line: 1, column: 0 },
+          original: { line: 1, column: 16 },
         },
         {
           name: undefined,
@@ -111,7 +111,7 @@ describe("generation", function () {
           name: undefined,
           generated: { line: 2, column: 13 },
           source: "a.js",
-          original: { line: 1, column: 20 },
+          original: { line: 1, column: 31 },
         },
         {
           name: "msg",
@@ -123,13 +123,19 @@ describe("generation", function () {
           name: undefined,
           generated: { line: 2, column: 17 },
           source: "a.js",
-          original: { line: 1, column: 20 },
+          original: { line: 1, column: 35 },
+        },
+        {
+          name: undefined,
+          generated: { line: 2, column: 18 },
+          source: "a.js",
+          original: { line: 1, column: 36 },
         },
         {
           name: undefined,
           generated: { line: 3, column: 0 },
           source: "a.js",
-          original: { line: 1, column: 39 },
+          original: { line: 1, column: 38 },
         },
         {
           name: "hi",
@@ -153,13 +159,13 @@ describe("generation", function () {
           name: undefined,
           generated: { line: 5, column: 10 },
           source: "b.js",
-          original: { line: 1, column: 2 },
+          original: { line: 1, column: 10 },
         },
         {
           name: undefined,
           generated: { line: 5, column: 11 },
           source: "b.js",
-          original: { line: 1, column: 0 },
+          original: { line: 1, column: 11 },
         },
       ],
       "raw mappings were incorrectly generated",
@@ -199,7 +205,7 @@ describe("generation", function () {
         version: 3,
         sources: ["inline"],
         names: ["foo", "bar"],
-        mappings: "AAAA,SAASA,IAAT,GAAe;EAAEC,IAAG;AAAG",
+        mappings: "AAAA,SAASA,IAAG,GAAG;EAAEC,IAAG;AAAE",
         sourcesContent: ["function foo() { bar; }\n"],
       },
       "sourcemap was incorrectly generated",
@@ -223,7 +229,7 @@ describe("generation", function () {
           name: undefined,
           generated: { line: 1, column: 13 },
           source: "inline",
-          original: { line: 1, column: 0 },
+          original: { line: 1, column: 12 },
         },
         {
           name: undefined,
@@ -247,7 +253,7 @@ describe("generation", function () {
           name: undefined,
           generated: { line: 3, column: 0 },
           source: "inline",
-          original: { line: 1, column: 23 },
+          original: { line: 1, column: 22 },
         },
       ],
       "raw mappings were incorrectly generated",
@@ -845,7 +851,7 @@ suites.forEach(function (testSuite) {
                 try {
                   expect(result.map).toEqual(task.sourceMap);
                 } catch (e) {
-                  if (!process.env.OVERWRITE || !task.sourceMapFile) throw e;
+                  if (!process.env.OVERWRITE && task.sourceMap) throw e;
                   console.log(`Updated test file: ${task.sourceMapFile.loc}`);
                   fs.writeFileSync(
                     task.sourceMapFile.loc,

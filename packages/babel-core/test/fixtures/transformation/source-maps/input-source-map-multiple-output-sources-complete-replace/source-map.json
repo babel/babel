@@ -1,15 +1,13 @@
 {
   "version": 3,
-  "mappings": "AAAC,KCAD;ACAA,K",
+  "mappings": "AAAC,KAAG;ACAJ,KAAG",
   "names": [],
   "sources": [
     "bar.js",
-    "input.tsx",
     "baz.js"
   ],
   "sourcesContent": [
     "<bar />",
-    "foo(1);\nfunction foo(bar: number): never {\n    throw new Error('Intentional.');\n}",
     "baz();"
   ]
 }
