@@ -272,7 +272,7 @@ jobs:
             !**/node_modules/**
 
   test-babel-8-breaking:
-    name: Test Babel 8 breaking changes on Node.js
+    name: Test Babel 8 breaking changes on
     needs: build-babel8
     strategy:
       matrix:

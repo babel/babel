@@ -811,14 +811,15 @@ suites.forEach(function (testSuite) {
           const actualCode = actual.code;
 
           if (actualCode) {
-            const actualAst = parse(actualCode, {
+            const parserOpts = {
               filename: actual.loc,
               plugins: task.options.plugins || [],
               strictMode: task.options.strictMode === false ? false : true,
               sourceType: "module",
               sourceMaps: !!task.sourceMap,
               ...task.options.parserOpts,
-            });
+            };
+            const actualAst = parse(actualCode, parserOpts);
             const options = {
               sourceFileName: path.relative(
                 path.dirname(fileURLToPath(import.meta.url)),
@@ -832,7 +833,7 @@ suites.forEach(function (testSuite) {
               return generate(actualAst, options, actualCode);
             };
 
-            const throwMsg = task.options.throws;
+            const throwMsg = options.throws;
             if (throwMsg) {
               expect(() => run()).toThrow(
                 throwMsg === true ? undefined : throwMsg,
@@ -864,6 +865,11 @@ suites.forEach(function (testSuite) {
               } else {
                 try {
                   expect(result.code).toBe(expected.code);
+                  if (!options.expectedReParseError) {
+                    expect(() => {
+                      parse(result.code, parserOpts);
+                    }).not.toThrow();
+                  }
                 } catch (e) {
                   if (!process.env.OVERWRITE) throw e;
                   console.log(`Updated test file: ${expected.loc}`);

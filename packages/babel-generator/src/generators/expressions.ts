@@ -190,12 +190,14 @@ export function OptionalCallExpression(
 ) {
   this.print(node.callee, node);
 
-  this.print(node.typeArguments, node); // Flow
   this.print(node.typeParameters, node); // TS
 
   if (node.optional) {
     this.token("?.");
   }
+
+  this.print(node.typeArguments, node); // Flow
+
   this.token("(");
   this.printList(node.arguments, node);
   this.token(")");
