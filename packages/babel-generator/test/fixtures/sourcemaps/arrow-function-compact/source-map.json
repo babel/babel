@@ -1,0 +1,11 @@
+{
+  "version": 3,
+  "names": [],
+  "sources": [
+    "fixtures/sourcemaps/arrow-function-compact/input.js"
+  ],
+  "sourcesContent": [
+    "(() => { return 42; })"
+  ],
+  "mappings": "AAAC,IAAM,CAAE,MAAO,GAAE,CAAE,CAAC"
+}
