@@ -354,7 +354,7 @@ export default (superClass: typeof Parser) =>
     jsxParseSpreadChild(node: Undone<N.JSXSpreadChild>): N.JSXSpreadChild {
       this.next(); // ellipsis
       node.expression = this.parseExpression();
-      this.setContext(tc.j_oTag);
+      this.setContext(tc.j_expr);
       this.state.canStartJSXElement = true;
       this.expect(tt.braceR);
 
