@@ -1,22 +1,42 @@
-import plugins from "@babel/compat-data/plugins";
-import bugfixPlugins from "@babel/compat-data/plugin-bugfixes";
+import originalPlugins from "@babel/compat-data/plugins";
+import originalPluginsBugfixes from "@babel/compat-data/plugin-bugfixes";
+import originalOverlappingPlugins from "@babel/compat-data/overlapping-plugins";
 import availablePlugins from "./available-plugins";
 
-const pluginsFiltered = {};
-const bugfixPluginsFiltered = {};
+const keys: <O extends object>(o: O) => (keyof O)[] = Object.keys;
 
-for (const plugin of Object.keys(plugins)) {
-  if (Object.hasOwnProperty.call(availablePlugins, plugin)) {
-    // @ts-expect-error fixme: refine pluginsFiltered types
-    pluginsFiltered[plugin] = plugins[plugin];
+export const plugins = filterAvailable(proposalToTransform(originalPlugins));
+export const pluginsBugfixes = filterAvailable(
+  proposalToTransform(originalPluginsBugfixes),
+);
+export const overlappingPlugins = proposalToTransform(
+  originalOverlappingPlugins,
+);
+
+function filterAvailable<Data extends { [name: string]: unknown }>(
+  data: Data,
+): { [Name in keyof Data & keyof typeof availablePlugins]: Data[Name] } {
+  const result = {} as any;
+  for (const plugin of keys(data)) {
+    if (Object.hasOwnProperty.call(availablePlugins, plugin)) {
+      result[plugin] = data[plugin];
+    }
   }
+  return result;
 }
 
-for (const plugin of Object.keys(bugfixPlugins)) {
-  if (Object.hasOwnProperty.call(availablePlugins, plugin)) {
-    // @ts-expect-error fixme: refine bugfixPluginsFiltered types
-    bugfixPluginsFiltered[plugin] = bugfixPlugins[plugin];
+// TODO(Babel 8): Store the plugins directly as transform- in @babel/compat-data
+function proposalToTransform<Data extends { [name: string]: unknown }>(
+  plugins: Data,
+): {
+  [Name in keyof Data as Name extends `proposal-${infer Feat}`
+    ? `transform-${Feat}`
+    : Name]: Data[Name];
+} {
+  const result = {} as any;
+  for (const plugin of keys(plugins)) {
+    result[(plugin as string).replace(/^proposal-/, "transform-")] =
+      plugins[plugin];
   }
+  return result;
 }
-
-export { pluginsFiltered as plugins, bugfixPluginsFiltered as pluginsBugfixes };

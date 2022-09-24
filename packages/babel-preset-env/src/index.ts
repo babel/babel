@@ -16,8 +16,8 @@ import {
 import {
   plugins as pluginsList,
   pluginsBugfixes as pluginsBugfixesList,
+  overlappingPlugins,
 } from "./plugins-compat-data";
-import overlappingPlugins from "@babel/compat-data/overlapping-plugins";
 
 import removeRegeneratorEntryPlugin from "./polyfills/regenerator";
 import legacyBabelPolyfillPlugin from "./polyfills/babel-polyfill";
@@ -146,7 +146,7 @@ export const getModulesPluginNames = ({
       shouldTransformESM &&
       modules !== "umd"
     ) {
-      modulesPluginNames.push("proposal-dynamic-import");
+      modulesPluginNames.push("transform-dynamic-import");
     } else {
       if (shouldTransformDynamicImport) {
         console.warn(
@@ -161,7 +161,7 @@ export const getModulesPluginNames = ({
   }
 
   if (shouldTransformExportNamespaceFrom) {
-    modulesPluginNames.push("proposal-export-namespace-from");
+    modulesPluginNames.push("transform-export-namespace-from");
   } else {
     modulesPluginNames.push("syntax-export-namespace-from");
   }
@@ -362,7 +362,7 @@ option \`forceAllTransforms: true\` instead.
   const shouldSkipExportNamespaceFrom =
     (modules === "auto" && api.caller?.(supportsExportNamespaceFrom)) ||
     (modules === false &&
-      !isRequired("proposal-export-namespace-from", transformTargets, {
+      !isRequired("transform-export-namespace-from", transformTargets, {
         compatData,
         includes: include.plugins,
         excludes: exclude.plugins,
@@ -411,9 +411,9 @@ option \`forceAllTransforms: true\` instead.
   const plugins = Array.from(pluginNames)
     .map(pluginName => {
       if (
-        pluginName === "proposal-class-properties" ||
-        pluginName === "proposal-private-methods" ||
-        pluginName === "proposal-private-property-in-object"
+        pluginName === "transform-class-properties" ||
+        pluginName === "transform-private-methods" ||
+        pluginName === "transform-private-property-in-object"
       ) {
         return [
           getPlugin(pluginName),
