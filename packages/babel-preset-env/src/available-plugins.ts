@@ -72,39 +72,127 @@ import bugfixSafariForShadowing from "@babel/preset-modules/lib/plugins/transfor
 import bugfixSafariIdDestructuringCollisionInFunctionExpression from "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression";
 import bugfixV8SpreadParametersInOptionalChaining from "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining";
 
-export default {
-  "bugfix/transform-async-arrows-in-class": () => bugfixAsyncArrowsInClass,
-  "bugfix/transform-edge-default-parameters": () => bugfixEdgeDefaultParameters,
-  "bugfix/transform-edge-function-name": () => bugfixEdgeFunctionName,
-  "bugfix/transform-safari-block-shadowing": () => bugfixSafariBlockShadowing,
-  "bugfix/transform-safari-for-shadowing": () => bugfixSafariForShadowing,
-  "bugfix/transform-safari-id-destructuring-collision-in-function-expression":
-    () => bugfixSafariIdDestructuringCollisionInFunctionExpression,
-  "bugfix/transform-tagged-template-caching": () => bugfixTaggedTemplateCaching,
-  "bugfix/transform-v8-spread-parameters-in-optional-chaining": () =>
-    bugfixV8SpreadParametersInOptionalChaining,
-  "syntax-async-generators": () => syntaxAsyncGenerators,
-  "syntax-class-properties": () => syntaxClassProperties,
-  "syntax-class-static-block": () => syntaxClassStaticBlock,
-  "syntax-dynamic-import": () => syntaxDynamicImport,
-  "syntax-export-namespace-from": () => syntaxExportNamespaceFrom,
-  "syntax-import-assertions": () => syntaxImportAssertions,
-  "syntax-json-strings": () => syntaxJsonStrings,
-  "syntax-logical-assignment-operators": () => syntaxLogicalAssignmentOperators,
-  "syntax-nullish-coalescing-operator": () => syntaxNullishCoalescingOperator,
-  "syntax-numeric-separator": () => syntaxNumericSeparator,
-  "syntax-object-rest-spread": () => syntaxObjectRestSpread,
-  "syntax-optional-catch-binding": () => syntaxOptionalCatchBinding,
-  "syntax-optional-chaining": () => syntaxOptionalChaining,
-  "syntax-private-property-in-object": () => syntaxPrivatePropertyInObject,
-  "syntax-top-level-await": () => syntaxTopLevelAwait,
+import semver from "semver";
+
+const hasOwn: <O extends object>(obj: O, key: PropertyKey) => key is keyof O =
+  Function.call.bind(Object.prototype.hasOwnProperty) as any;
+
+// Different shapes of plugins
+type External = () =>
+  | typeof transformArrowFunctions
+  | typeof bugfixAsyncArrowsInClass
+  | typeof transformModulesCommonjs;
+
+type Desc = {
+  external: External;
+  externalMinVersion?: string;
+  internal?: boolean;
+  internalMinVersion?: string;
+};
+
+export function getMinVersion(plugin: string): string | null {
+  if (!hasOwn(plugins, plugin)) return null;
+  const desc: Desc | External = plugins[plugin] as any;
+  if (typeof desc === "function") return null;
+  return desc.externalMinVersion ?? null;
+}
+
+export function hasPlugin(plugin: string): plugin is keyof typeof plugins {
+  return hasOwn(plugins, plugin);
+}
+
+export function getPlugin(name: string, version?: string) {
+  if (!hasOwn(plugins, name)) {
+    throw new Error(
+      `Could not find plugin "${name}". Ensure there is an entry in ./available-plugins.js for it.`,
+    );
+  }
+
+  const desc: Desc =
+    typeof plugins[name] === "function"
+      ? { external: plugins[name] as External }
+      : (plugins[name] as Desc);
+
+  if (
+    desc.internal !== false &&
+    // TODO: Change 7.19.0 to the first version supporting internal plugins
+    semver.gte(version, desc.internalMinVersion ?? "7.19.0")
+  ) {
+    return `internal:${name}`;
+  }
+
+  if (
+    desc.external &&
+    (!desc.externalMinVersion || semver.gte(version, desc.externalMinVersion))
+  ) {
+    return desc.external();
+  }
+
+  return null;
+}
+
+export { plugins as default };
+
+function extOnly(fn: External): Desc {
+  return { external: fn, internal: false };
+}
+
+const plugins = {
+  "bugfix/transform-async-arrows-in-class": extOnly(
+    () => bugfixAsyncArrowsInClass,
+  ),
+  "bugfix/transform-edge-default-parameters": extOnly(
+    () => bugfixEdgeDefaultParameters,
+  ),
+  "bugfix/transform-edge-function-name": extOnly(() => bugfixEdgeFunctionName),
+  "bugfix/transform-safari-block-shadowing": extOnly(
+    () => bugfixSafariBlockShadowing,
+  ),
+  "bugfix/transform-safari-for-shadowing": extOnly(
+    () => bugfixSafariForShadowing,
+  ),
+  "bugfix/transform-safari-id-destructuring-collision-in-function-expression": {
+    external: () => bugfixSafariIdDestructuringCollisionInFunctionExpression,
+    externalMinVersion: "7.16.0",
+    internal: false,
+  },
+  "bugfix/transform-tagged-template-caching": extOnly(
+    () => bugfixTaggedTemplateCaching,
+  ),
+  "bugfix/transform-v8-spread-parameters-in-optional-chaining": extOnly(
+    () => bugfixV8SpreadParametersInOptionalChaining,
+  ),
+  "syntax-async-generators": extOnly(() => syntaxAsyncGenerators),
+  "syntax-class-properties": extOnly(() => syntaxClassProperties),
+  "syntax-class-static-block": extOnly(() => syntaxClassStaticBlock),
+  "syntax-dynamic-import": extOnly(() => syntaxDynamicImport),
+  "syntax-export-namespace-from": extOnly(() => syntaxExportNamespaceFrom),
+  "syntax-import-assertions": extOnly(() => syntaxImportAssertions),
+  "syntax-json-strings": extOnly(() => syntaxJsonStrings),
+  "syntax-logical-assignment-operators": extOnly(
+    () => syntaxLogicalAssignmentOperators,
+  ),
+  "syntax-nullish-coalescing-operator": extOnly(
+    () => syntaxNullishCoalescingOperator,
+  ),
+  "syntax-numeric-separator": extOnly(() => syntaxNumericSeparator),
+  "syntax-object-rest-spread": extOnly(() => syntaxObjectRestSpread),
+  "syntax-optional-catch-binding": extOnly(() => syntaxOptionalCatchBinding),
+  "syntax-optional-chaining": extOnly(() => syntaxOptionalChaining),
+  "syntax-private-property-in-object": extOnly(
+    () => syntaxPrivatePropertyInObject,
+  ),
+  "syntax-top-level-await": extOnly(() => syntaxTopLevelAwait),
   "transform-arrow-functions": () => transformArrowFunctions,
   "transform-async-generator-functions": () => proposalAsyncGeneratorFunctions,
   "transform-async-to-generator": () => transformAsyncToGenerator,
   "transform-block-scoped-functions": () => transformBlockScopedFunctions,
   "transform-block-scoping": () => transformBlockScoping,
   "transform-class-properties": () => proposalClassProperties,
-  "transform-class-static-block": () => proposalClassStaticBlock,
+  "transform-class-static-block": {
+    external: () => proposalClassStaticBlock,
+    externalMinVersion: "7.12.0",
+  },
   "transform-classes": () => transformClasses,
   "transform-computed-properties": () => transformComputedProperties,
   "transform-destructuring": () => transformDestructuring,
@@ -121,10 +209,10 @@ export default {
     proposalLogicalAssignmentOperators,
   "transform-member-expression-literals": () =>
     transformMemberExpressionLiterals,
-  "transform-modules-amd": () => transformModulesAmd,
-  "transform-modules-commonjs": () => transformModulesCommonjs,
-  "transform-modules-systemjs": () => transformModulesSystemjs,
-  "transform-modules-umd": () => transformModulesUmd,
+  "transform-modules-amd": extOnly(() => transformModulesAmd),
+  "transform-modules-commonjs": extOnly(() => transformModulesCommonjs),
+  "transform-modules-systemjs": extOnly(() => transformModulesSystemjs),
+  "transform-modules-umd": extOnly(() => transformModulesUmd),
   "transform-named-capturing-groups-regex": () =>
     transformNamedCapturingGroupsRegex,
   "transform-new-target": () => transformNewTarget,
@@ -137,7 +225,10 @@ export default {
   "transform-optional-chaining": () => proposalOptionalChaining,
   "transform-parameters": () => transformParameters,
   "transform-private-methods": () => proposalPrivateMethods,
-  "transform-private-property-in-object": () => proposalPrivatePropertyInObject,
+  "transform-private-property-in-object": {
+    external: () => proposalPrivatePropertyInObject,
+    externalMinVersion: "7.10.0",
+  },
   "transform-property-literals": () => transformPropertyLiterals,
   "transform-regenerator": () => transformRegenerator,
   "transform-reserved-words": () => transformReservedWords,
@@ -149,11 +240,4 @@ export default {
   "transform-unicode-escapes": () => transformUnicodeEscapes,
   "transform-unicode-property-regex": () => proposalUnicodePropertyRegex,
   "transform-unicode-regex": () => transformUnicodeRegex,
-};
-
-export const minVersions = {
-  "bugfix/transform-safari-id-destructuring-collision-in-function-expression":
-    "7.16.0",
-  "transform-class-static-block": "7.12.0",
-  "transform-private-property-in-object": "7.10.0",
 };
