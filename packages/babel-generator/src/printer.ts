@@ -454,6 +454,17 @@ class Printer {
     parenPushNewlineState.printed = true;
   }
 
+  catchUp(line: number) {
+    if (!this.format.retainLines) return;
+
+    // catch up to this nodes newline if we're behind
+    const count = line - this._buf.getCurrentLine();
+
+    for (let i = 0; i < count; i++) {
+      this._newline();
+    }
+  }
+
   _catchUp(prop: "start" | "end", loc?: Loc) {
     if (!this.format.retainLines) return;
 
