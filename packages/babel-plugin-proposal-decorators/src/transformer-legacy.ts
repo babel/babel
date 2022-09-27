@@ -324,7 +324,15 @@ const visitor: Visitor<PluginPass> = {
   ClassDeclaration(path) {
     const replacement = decoratedClassToExpression(path);
     if (replacement) {
-      path.replaceWith(replacement);
+      const [newPath] = path.replaceWith(replacement);
+
+      const decl = newPath.get("declarations.0");
+      const id = decl.node.id as t.Identifier;
+
+      // TODO: Maybe add this logic to @babel/traverse
+      const binding = path.scope.getOwnBinding(id.name);
+      binding.identifier = id;
+      binding.path = decl;
     }
   },
   ClassExpression(path, state) {
