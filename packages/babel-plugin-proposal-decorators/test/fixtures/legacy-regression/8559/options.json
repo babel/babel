@@ -1,12 +1,7 @@
 {
+  "targets": { "node": 8 },
   "plugins": [
-    ["proposal-decorators", { "legacy": true }]
+    ["proposal-decorators", { "version": "legacy" }]
   ],
-  "presets": [
-    ["env", {
-      "targets": {
-        "node": 8
-      }
-    }]
-  ]
+  "presets": ["env"]
 }
