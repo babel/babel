@@ -23,6 +23,33 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.19.3 (2022-09-27)
+
+#### :bug: Bug Fix
+* `babel-plugin-proposal-decorators`
+  * [#8566](https://github.com/babel/babel/pull/8566) Correctly update bindings of decorated class declarations ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#14974](https://github.com/babel/babel/pull/14974) fix: Normal parsing of `JSXText` following `JSXSpreadChild` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+  * [#14941](https://github.com/babel/babel/pull/14941) fix: Support local exports in TS `declare module`s ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+  * [#14940](https://github.com/babel/babel/pull/14940) fix: allow ts redeclaration with `import =` and `var` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-generator`
+  * [#14962](https://github.com/babel/babel/pull/14962) Fix printing of Flow internal slot functions ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-cli`
+  * [#14950](https://github.com/babel/babel/pull/14950) Emit `@babel/cli` source maps based on configuration files ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-plugin-transform-typescript`
+  * [#14946](https://github.com/babel/babel/pull/14946) fix: ts exported vars are shadowed by `declare` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :nail_care: Polish
+* `babel-core`
+  * [#14954](https://github.com/babel/babel/pull/14954) Optional filename when preset uses fn test/include/exclude ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-helper-compilation-targets`, `babel-helper-transform-fixture-test-runner`, `babel-parser`, `babel-preset-env`, `babel-traverse`
+  * [#14961](https://github.com/babel/babel/pull/14961) chore: use `c8` for coverage testing ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :microscope: Output optimization
+* `babel-plugin-transform-typescript`
+  * [#14952](https://github.com/babel/babel/pull/14952) [ts] remove nested `declare namespace` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.19.2 (2022-09-15)
 
 #### :bug: Bug Fix
