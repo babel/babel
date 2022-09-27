@@ -5,7 +5,7 @@ for await
 /*3*/
 (
 /*4*/
-using /*5*/of
+using /*5*/fo
 /*6*/
 of
 /*7*/
