@@ -329,33 +329,8 @@ export default abstract class StatementParser extends ExpressionParser {
   startsUsingForOf(): boolean {
     const lookahead = this.lookahead();
     if (lookahead.type === tt._of && lookahead.end - lookahead.start === 2) {
-      // using of ...
-      const originalState = this.state;
-      // @ts-expect-error: Second lookahead
-      this.state = lookahead;
-      const lookaheadAhead = this.lookahead();
-      this.state = originalState;
-      if (
-        lookaheadAhead.type === tt._of &&
-        lookaheadAhead.end - lookaheadAhead.start === 2
-      ) {
-        // using of of ...
-        const nextNextNextTokenStart = this.nextTokenStartSince(
-          lookaheadAhead.end,
-        );
-        if (
-          this.input.charCodeAt(nextNextNextTokenStart) ===
-          charCodes.rightParenthesis
-        ) {
-          // using of of)
-          return false;
-        } else {
-          this.expectPlugin("explicitResourceManagement");
-          return true;
-        }
-      } else {
-        return false;
-      }
+      // `using of` must start a for-lhs-of statement
+      return false;
     } else {
       this.expectPlugin("explicitResourceManagement");
       return true;
