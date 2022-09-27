@@ -847,7 +847,7 @@ suites.forEach(function (testSuite) {
             } else {
               const result = run();
 
-              if (options.sourceMaps || options.sourceMap) {
+              if (options.sourceMaps) {
                 try {
                   expect(result.map).toEqual(task.sourceMap);
                 } catch (e) {

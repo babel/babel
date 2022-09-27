@@ -372,7 +372,7 @@ async function run(task: Test) {
     }
   }
 
-  if ((opts.sourceMaps || opts.sourceMap) === true) {
+  if (opts.sourceMaps === true) {
     try {
       expect(result.map).toEqual(task.sourceMap);
     } catch (e) {
@@ -526,9 +526,7 @@ export default function (
           async function () {
             const runTask = () => run(task);
             if ("sourceMap" in task.options === false) {
-              task.options.sourceMap = !!(
-                task.sourceMappings || task.sourceMap
-              );
+              task.options.sourceMap = !!task.sourceMap;
             }
 
             Object.assign(task.options, taskOpts);
