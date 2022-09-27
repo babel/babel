@@ -19,4 +19,5 @@ class A {
 
   private [cm]()
 
-  {}}
+  {}
+}
