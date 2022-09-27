@@ -5,13 +5,9 @@ import availablePlugins from "./available-plugins";
 
 const keys: <O extends object>(o: O) => (keyof O)[] = Object.keys;
 
-export const plugins = filterAvailable(proposalToTransform(originalPlugins));
-export const pluginsBugfixes = filterAvailable(
-  proposalToTransform(originalPluginsBugfixes),
-);
-export const overlappingPlugins = proposalToTransform(
-  originalOverlappingPlugins,
-);
+export const plugins = filterAvailable(originalPlugins);
+export const pluginsBugfixes = filterAvailable(originalPluginsBugfixes);
+export const overlappingPlugins = filterAvailable(originalOverlappingPlugins);
 
 function filterAvailable<Data extends { [name: string]: unknown }>(
   data: Data,
@@ -21,22 +17,6 @@ function filterAvailable<Data extends { [name: string]: unknown }>(
     if (Object.hasOwnProperty.call(availablePlugins, plugin)) {
       result[plugin] = data[plugin];
     }
-  }
-  return result;
-}
-
-// TODO(Babel 8): Store the plugins directly as transform- in @babel/compat-data
-function proposalToTransform<Data extends { [name: string]: unknown }>(
-  plugins: Data,
-): {
-  [Name in keyof Data as Name extends `proposal-${infer Feat}`
-    ? `transform-${Feat}`
-    : Name]: Data[Name];
-} {
-  const result = {} as any;
-  for (const plugin of keys(plugins)) {
-    result[(plugin as string).replace(/^proposal-/, "transform-")] =
-      plugins[plugin];
   }
   return result;
 }
