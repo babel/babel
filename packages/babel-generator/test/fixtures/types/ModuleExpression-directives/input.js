@@ -1,0 +1,4 @@
+module {
+  "hide source";
+  secret;
+}
