@@ -28,7 +28,10 @@ export function UnaryExpression(this: Printer, node: t.UnaryExpression) {
 export function DoExpression(this: Printer, node: t.DoExpression) {
   if (node.async) {
     this.word("async");
-    this.space();
+    this.ensureNoLineTerminator(() => {
+      this.printInnerComments(node);
+      this.space();
+    });
   }
   this.word("do");
   this.space();
