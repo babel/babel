@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    "moduleBlocks",
+    [
+      "recordAndTuple",
+      {
+        "syntaxType": "bar"
+      }
+    ]
+  ],
+  "throws": "Unexpected token, expected \"{\" (1:6)"
+}

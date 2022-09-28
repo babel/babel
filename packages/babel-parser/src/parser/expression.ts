@@ -3233,7 +3233,7 @@ export default abstract class ExpressionParser extends LValParser {
     this.expectPlugin("moduleBlocks");
     const node = this.startNode<N.ModuleExpression>();
     this.next(); // eat "module"
-    this.eat(tt.braceL);
+    this.expect(tt.braceL);
 
     const revertScopes = this.initializeScopes(/** inModule */ true);
     this.enterInitialScopes();
