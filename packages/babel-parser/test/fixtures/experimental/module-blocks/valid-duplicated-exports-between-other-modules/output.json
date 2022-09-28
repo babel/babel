@@ -55,7 +55,7 @@
               "start":37,"end":72,"loc":{"start":{"line":2,"column":11,"index":37},"end":{"line":2,"column":46,"index":72}},
               "body": {
                 "type": "Program",
-                "start":46,"end":72,"loc":{"start":{"line":2,"column":20,"index":46},"end":{"line":2,"column":46,"index":72}},
+                "start":46,"end":70,"loc":{"start":{"line":2,"column":20,"index":46},"end":{"line":2,"column":44,"index":70}},
                 "sourceType": "module",
                 "interpreter": null,
                 "body": [
@@ -115,7 +115,7 @@
               "start":85,"end":120,"loc":{"start":{"line":3,"column":11,"index":85},"end":{"line":3,"column":46,"index":120}},
               "body": {
                 "type": "Program",
-                "start":94,"end":120,"loc":{"start":{"line":3,"column":20,"index":94},"end":{"line":3,"column":46,"index":120}},
+                "start":94,"end":118,"loc":{"start":{"line":3,"column":20,"index":94},"end":{"line":3,"column":44,"index":118}},
                 "sourceType": "module",
                 "interpreter": null,
                 "body": [

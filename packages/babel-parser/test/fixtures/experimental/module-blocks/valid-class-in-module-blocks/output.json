@@ -50,7 +50,7 @@
                       "start":23,"end":96,"loc":{"start":{"line":3,"column":4,"index":23},"end":{"line":8,"column":5,"index":96}},
                       "body": {
                         "type": "Program",
-                        "start":38,"end":96,"loc":{"start":{"line":4,"column":6,"index":38},"end":{"line":8,"column":5,"index":96}},
+                        "start":38,"end":90,"loc":{"start":{"line":4,"column":6,"index":38},"end":{"line":7,"column":7,"index":90}},
                         "sourceType": "module",
                         "interpreter": null,
                         "body": [

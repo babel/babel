@@ -53,7 +53,7 @@
                       "start":23,"end":66,"loc":{"start":{"line":3,"column":4,"index":23},"end":{"line":5,"column":5,"index":66}},
                       "body": {
                         "type": "Program",
-                        "start":38,"end":66,"loc":{"start":{"line":4,"column":6,"index":38},"end":{"line":5,"column":5,"index":66}},
+                        "start":38,"end":60,"loc":{"start":{"line":4,"column":6,"index":38},"end":{"line":4,"column":28,"index":60}},
                         "sourceType": "module",
                         "interpreter": null,
                         "body": [

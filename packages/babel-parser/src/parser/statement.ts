@@ -222,6 +222,7 @@ export default abstract class StatementParser extends ExpressionParser {
         this.raise(Errors.ModuleExportUndefined, { at, localName });
       }
     }
+    this.eat(tt.eof); // stop before } when parsing a module expression
     return this.finishNode(program, "Program");
   }
 
@@ -1123,6 +1124,7 @@ export default abstract class StatementParser extends ExpressionParser {
       tt.braceR,
       afterBlockParse,
     );
+    this.next(); // eat tt.braceR
     if (createNewLexicalScope) {
       this.scope.exit();
     }
@@ -1204,8 +1206,6 @@ export default abstract class StatementParser extends ExpressionParser {
     if (!oldStrict) {
       this.setStrict(false);
     }
-
-    this.next();
   }
 
   // Parse a regular `for` loop. The disambiguation code in
@@ -1881,6 +1881,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this.prodParam.enter(PARAM);
     const body: N.Node[] = (member.body = []);
     this.parseBlockOrModuleBlockBody(body, undefined, false, tt.braceR);
+    this.next(); // eat tt.braceR
     this.prodParam.exit();
     this.scope.exit();
     this.state.labels = oldLabels;
