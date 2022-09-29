@@ -283,12 +283,16 @@ class Printer {
   }
 
   exactSource(loc: Loc | undefined, cb: () => void) {
+    if (!loc) return cb();
+
     this._catchUp("start", loc);
 
     this._buf.exactSource(loc, cb);
   }
 
   source(prop: "start" | "end", loc: Loc | undefined): void {
+    if (!loc) return;
+
     this._catchUp(prop, loc);
 
     this._buf.source(prop, loc);
@@ -300,6 +304,8 @@ class Printer {
     lineOffset: number,
     columnOffset: number,
   ): void {
+    if (!loc) return;
+
     this._catchUp(prop, loc);
 
     this._buf.sourceWithOffset(prop, loc, lineOffset, columnOffset);
@@ -310,6 +316,8 @@ class Printer {
     loc: Loc | undefined,
     cb: () => void,
   ): void {
+    if (!loc) return cb();
+
     this._catchUp(prop, loc);
 
     this._buf.withSource(prop, loc, cb);
@@ -833,11 +841,8 @@ class Printer {
     // Avoid creating //* comments
     if (this.endsWith(charCodes.slash)) this._space();
 
-    this.withSource(
-      "start",
-      comment.loc,
-      this._append.bind(this, val, maybeNewline),
-    );
+    this.source("start", comment.loc);
+    this._append(val, maybeNewline);
 
     if (printNewLines) this.newline(1);
   }
