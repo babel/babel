@@ -495,6 +495,16 @@ class Printer {
     return this._indentRepeat * this._indent;
   }
 
+  ensureNoLineTerminator(fn: () => void) {
+    const { _noLineTerminator } = this;
+    this._noLineTerminator = true;
+    try {
+      fn();
+    } finally {
+      this._noLineTerminator = _noLineTerminator;
+    }
+  }
+
   printTerminatorless(node: t.Node, parent: t.Node, isLabel: boolean) {
     /**
      * Set some state that will be modified if a newline has been inserted before any
@@ -512,9 +522,9 @@ class Printer {
      *  `undefined` will be returned and not `foo` due to the terminator.
      */
     if (isLabel) {
-      this._noLineTerminator = true;
-      this.print(node, parent);
-      this._noLineTerminator = false;
+      this.ensureNoLineTerminator(() => {
+        this.print(node, parent);
+      });
     } else {
       const terminatorState = {
         printed: false,
