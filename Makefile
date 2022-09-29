@@ -178,7 +178,7 @@ bootstrap-test262:
 	rm -rf build/test262
 	mkdir -p build
 	git clone --filter=blob:none --sparse --single-branch --shallow-since=2021-05-01 https://github.com/tc39/test262.git build/test262
-	cd build/test262 && git sparse-checkout set "test"
+	cd build/test262 && git sparse-checkout set "test" "harness"
 	cd build/test262 && git checkout -q $(TEST262_COMMIT)
 
 test-test262:

@@ -484,3 +484,55 @@ jobs:
         run: yarn up eslint@7.5.0
       - name: Run babel/eslint tests
         run: node ./node_modules/.bin/jest eslint
+
+  test262:
+    name: test262
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout Babel
+        uses: actions/checkout@v3
+      - name: Use Node.js latest
+        uses: actions/setup-node@v3
+        with:
+          node-version: "*"
+          cache: "yarn"
+      - name: Install
+        run: yarn install
+      - uses: actions/download-artifact@v3
+        with:
+          name: babel-artifact
+      - name: Checkout test runner
+        uses: actions/checkout@v3
+        with:
+          repository: babel/babel-test262-runner
+          path: babel-test262-runner
+      - name: Install test runner
+        run: |
+          cd babel-test262-runner
+          npm ci
+          node lib/download-node
+      - name: Download test262
+        run: make bootstrap-test262
+      - name: Run test262
+        run: |
+          cd babel-test262-runner
+          node lib/run-tests I_AM_SURE | tee ~/test262.tap
+        env:
+          BABEL_PATH: ".."
+          TEST262_PATH: ../build/test262
+      - name: Create artifact with report results
+        uses: actions/upload-artifact@v3
+        with:
+          name: test262-result
+          path: ~/test262.tap
+      - name: Download previous results
+        run: |
+          cd babel-test262-runner
+          node lib/download-main-artifact/index.mjs ~/test262-main.tap
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Compare previous main branch & current results
+        run: |
+          cd babel-test262-runner
+          node lib/compare-results ~/test262-main.tap ~/test262.tap | tee ~/diff.tap
