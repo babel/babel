@@ -1,3 +1,3 @@
 expect(function () {
   var {} = null;
-}).toThrow("Cannot destructure undefined");
+}).toThrow("Cannot destructure null");

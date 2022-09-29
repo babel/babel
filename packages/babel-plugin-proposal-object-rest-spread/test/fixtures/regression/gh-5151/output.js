@@ -3,7 +3,7 @@ const {
 } = a,
       y = babelHelpers.objectWithoutProperties(a, ["x"]),
       z = foo(y);
-const s = babelHelpers.extends({}, r),
+const s = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(r), r)),
       t = foo(s); // ordering is preserved
 
 var l = foo(),

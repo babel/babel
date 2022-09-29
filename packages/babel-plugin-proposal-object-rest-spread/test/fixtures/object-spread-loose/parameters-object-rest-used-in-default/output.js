@@ -1,5 +1,5 @@
 (_ref, a) => {
-  let R = babelHelpers.extends({}, _ref);
+  let R = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_ref), _ref));
 
   if (a === void 0) {
     a = R;
@@ -7,7 +7,7 @@
 };
 
 (_ref2, e, c = 2, a, f) => {
-  let R = babelHelpers.extends({}, _ref2);
+  let R = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_ref2), _ref2));
 
   if (a === void 0) {
     a = R;
@@ -23,7 +23,7 @@
 };
 
 (_ref3, a) => {
-  let R = babelHelpers.extends({}, _ref3);
+  let R = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_ref3), _ref3));
 
   if (a === void 0) {
     a = f(R);
