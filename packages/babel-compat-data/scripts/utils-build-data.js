@@ -7,6 +7,7 @@ const envs = require("../build/compat-table/environments");
 const parseEnvsVersions = require("../build/compat-table/build-utils/parse-envs-versions");
 const interpolateAllResults = require("../build/compat-table/build-utils/interpolate-all-results");
 const compareVersions = require("../build/compat-table/build-utils/compare-versions");
+const legacyPluginAliases = require("./data/legacy-plugin-aliases");
 
 const envsVersions = parseEnvsVersions(envs);
 
@@ -164,4 +165,18 @@ exports.writeFile = function (data, dataPath, name) {
     fs.writeFileSync(dataPath, stringified);
   }
   return true;
+};
+
+// TODO(Babel 8): Remove this.
+exports.defineLegacyPluginAliases = function (data) {
+  // We create a new object to inject legacy aliases in the correct
+  // order, rather than all at the end.
+  const result = {};
+  for (const key in data) {
+    result[key] = data[key];
+    if (key in legacyPluginAliases) {
+      result[legacyPluginAliases[key]] = data[key];
+    }
+  }
+  return result;
 };

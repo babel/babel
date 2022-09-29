@@ -1,22 +1,22 @@
-import plugins from "@babel/compat-data/plugins";
-import bugfixPlugins from "@babel/compat-data/plugin-bugfixes";
+import originalPlugins from "@babel/compat-data/plugins";
+import originalPluginsBugfixes from "@babel/compat-data/plugin-bugfixes";
+import originalOverlappingPlugins from "@babel/compat-data/overlapping-plugins";
 import availablePlugins from "./available-plugins";
 
-const pluginsFiltered = {};
-const bugfixPluginsFiltered = {};
+const keys: <O extends object>(o: O) => (keyof O)[] = Object.keys;
 
-for (const plugin of Object.keys(plugins)) {
-  if (Object.hasOwnProperty.call(availablePlugins, plugin)) {
-    // @ts-expect-error fixme: refine pluginsFiltered types
-    pluginsFiltered[plugin] = plugins[plugin];
+export const plugins = filterAvailable(originalPlugins);
+export const pluginsBugfixes = filterAvailable(originalPluginsBugfixes);
+export const overlappingPlugins = filterAvailable(originalOverlappingPlugins);
+
+function filterAvailable<Data extends { [name: string]: unknown }>(
+  data: Data,
+): { [Name in keyof Data & keyof typeof availablePlugins]: Data[Name] } {
+  const result = {} as any;
+  for (const plugin of keys(data)) {
+    if (Object.hasOwnProperty.call(availablePlugins, plugin)) {
+      result[plugin] = data[plugin];
+    }
   }
+  return result;
 }
-
-for (const plugin of Object.keys(bugfixPlugins)) {
-  if (Object.hasOwnProperty.call(availablePlugins, plugin)) {
-    // @ts-expect-error fixme: refine bugfixPluginsFiltered types
-    bugfixPluginsFiltered[plugin] = bugfixPlugins[plugin];
-  }
-}
-
-export { pluginsFiltered as plugins, bugfixPluginsFiltered as pluginsBugfixes };

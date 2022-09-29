@@ -1,7 +1,7 @@
 import semver, { type SemVer } from "semver";
 import corejs2Polyfills from "@babel/compat-data/corejs2-built-ins";
 // @ts-expect-error Fixme: TS can not infer types from ../data/core-js-compat.js
-// but we can't import core-js-compat/data.json because JSON imports does
+// but we can't import core-js-compat/data.json because JSON imports do
 // not work on Node 14
 import corejs3Polyfills from "../data/core-js-compat";
 import { plugins as pluginsList } from "./plugins-compat-data";
@@ -20,7 +20,6 @@ import type {
   CorejsOption,
   ModuleOption,
   Options,
-  PluginListItem,
   PluginListOption,
 } from "./types";
 
@@ -34,7 +33,7 @@ const allPluginsList = Object.keys(pluginsList);
 // should only be possible to exclude and not include module plugins, otherwise it's possible that preset-env
 // will add a module plugin twice.
 const modulePlugins = [
-  "proposal-dynamic-import",
+  "transform-dynamic-import",
   ...Object.keys(moduleTransformations).map(m => moduleTransformations[m]),
 ];
 
@@ -42,59 +41,65 @@ const getValidIncludesAndExcludes = (
   type: "include" | "exclude",
   corejs: number | false,
 ) =>
-  new Set([
-    ...allPluginsList,
-    ...(type === "exclude" ? modulePlugins : []),
-    ...(corejs
-      ? corejs == 2
-        ? [...Object.keys(corejs2Polyfills), ...corejs2DefaultWebIncludes]
-        : Object.keys(corejs3Polyfills)
-      : []),
-  ]);
-
-const pluginToRegExp = (plugin: PluginListItem) => {
-  if (plugin instanceof RegExp) return plugin;
-  try {
-    return new RegExp(`^${normalizePluginName(plugin)}$`);
-  } catch (e) {
-    return null;
-  }
-};
-
-const selectPlugins = (
-  regexp: RegExp | null,
-  type: "include" | "exclude",
-  corejs: number | false,
-) =>
-  Array.from(getValidIncludesAndExcludes(type, corejs)).filter(
-    item => regexp instanceof RegExp && regexp.test(item),
+  Array.from(
+    new Set([
+      ...allPluginsList,
+      ...(type === "exclude" ? modulePlugins : []),
+      ...(corejs
+        ? corejs == 2
+          ? [...Object.keys(corejs2Polyfills), ...corejs2DefaultWebIncludes]
+          : Object.keys(corejs3Polyfills)
+        : []),
+    ]),
   );
 
-const flatten = <T>(array: Array<Array<T>>): Array<T> => [].concat(...array);
+function flatMap<T, U>(array: Array<T>, fn: (item: T) => Array<U>): Array<U> {
+  return Array.prototype.concat.apply([], array.map(fn));
+}
 
 const expandIncludesAndExcludes = (
-  plugins: PluginListOption = [],
+  filterList: PluginListOption = [],
   type: "include" | "exclude",
   corejs: number | false,
 ) => {
-  if (plugins.length === 0) return [];
+  if (filterList.length === 0) return [];
 
-  const selectedPlugins = plugins.map(plugin =>
-    selectPlugins(pluginToRegExp(plugin), type, corejs),
-  );
-  const invalidRegExpList = plugins.filter(
-    (p, i) => selectedPlugins[i].length === 0,
-  );
+  const filterableItems = getValidIncludesAndExcludes(type, corejs);
+
+  const invalidFilters: PluginListOption = [];
+  const selectedPlugins = flatMap(filterList, filter => {
+    let re: RegExp;
+    if (typeof filter === "string") {
+      try {
+        re = new RegExp(`^${normalizePluginName(filter)}$`);
+      } catch (e) {
+        invalidFilters.push(filter);
+        return [];
+      }
+    } else {
+      re = filter;
+    }
+    const items = filterableItems.filter(
+      item =>
+        re.test(item) ||
+        // For backwards compatibility, we also support matching against the
+        // proposal- name.
+        // TODO(Babel 8): Remove this.
+        re.test(item.replace(/^transform-/, "proposal-")),
+    );
+    if (items.length === 0) invalidFilters.push(filter);
+    return items;
+  });
 
   v.invariant(
-    invalidRegExpList.length === 0,
-    `The plugins/built-ins '${invalidRegExpList.join(
+    invalidFilters.length === 0,
+    `The plugins/built-ins '${invalidFilters.join(
       ", ",
     )}' passed to the '${type}' option are not
     valid. Please check data/[plugin-features|built-in-features].js in babel-preset-env`,
   );
 
-  return flatten<string>(selectedPlugins);
+  return selectedPlugins;
 };
 
 export const normalizePluginName = (plugin: string) =>

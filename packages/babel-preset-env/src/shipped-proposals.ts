@@ -11,19 +11,19 @@ const proposalSyntaxPlugins = ["syntax-import-assertions"] as const;
 
 // use intermediary object to enforce alphabetical key order
 const pluginSyntaxObject = {
-  "proposal-async-generator-functions": "syntax-async-generators",
-  "proposal-class-properties": "syntax-class-properties",
-  "proposal-class-static-block": "syntax-class-static-block",
-  "proposal-json-strings": "syntax-json-strings",
-  "proposal-nullish-coalescing-operator": "syntax-nullish-coalescing-operator",
-  "proposal-numeric-separator": "syntax-numeric-separator",
-  "proposal-object-rest-spread": "syntax-object-rest-spread",
-  "proposal-optional-catch-binding": "syntax-optional-catch-binding",
-  "proposal-optional-chaining": "syntax-optional-chaining",
+  "transform-async-generator-functions": "syntax-async-generators",
+  "transform-class-properties": "syntax-class-properties",
+  "transform-class-static-block": "syntax-class-static-block",
+  "transform-json-strings": "syntax-json-strings",
+  "transform-nullish-coalescing-operator": "syntax-nullish-coalescing-operator",
+  "transform-numeric-separator": "syntax-numeric-separator",
+  "transform-object-rest-spread": "syntax-object-rest-spread",
+  "transform-optional-catch-binding": "syntax-optional-catch-binding",
+  "transform-optional-chaining": "syntax-optional-chaining",
   // note: we don't have syntax-private-methods
-  "proposal-private-methods": "syntax-class-properties",
-  "proposal-private-property-in-object": "syntax-private-property-in-object",
-  "proposal-unicode-property-regex": null as null,
+  "transform-private-methods": "syntax-class-properties",
+  "transform-private-property-in-object": "syntax-private-property-in-object",
+  "transform-unicode-property-regex": null as null,
 } as const;
 
 const pluginSyntaxEntries = Object.keys(pluginSyntaxObject).map<

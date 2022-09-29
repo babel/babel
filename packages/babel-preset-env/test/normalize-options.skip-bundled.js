@@ -144,6 +144,28 @@ describe("normalize-options", () => {
       ]);
     });
 
+    it("should work both with proposal-* and transform-*", () => {
+      expect(
+        normalizeOptions({ include: ["proposal-.*-regex"] }).include,
+      ).toEqual([
+        "transform-dotall-regex",
+        "transform-unicode-property-regex",
+        "transform-named-capturing-groups-regex",
+        "transform-sticky-regex",
+        "transform-unicode-regex",
+      ]);
+
+      expect(
+        normalizeOptions({ include: ["transform-.*-regex"] }).include,
+      ).toEqual([
+        "transform-dotall-regex",
+        "transform-unicode-property-regex",
+        "transform-named-capturing-groups-regex",
+        "transform-sticky-regex",
+        "transform-unicode-regex",
+      ]);
+    });
+
     it("should not allow the same modules in `include` and `exclude`", () => {
       const normalizeWithNonExistingPlugin = () => {
         normalizeOptions({

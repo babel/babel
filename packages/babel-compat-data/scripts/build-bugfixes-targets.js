@@ -4,7 +4,12 @@
 
 const path = require("path");
 
-const { generateData, environments, writeFile } = require("./utils-build-data");
+const {
+  generateData,
+  environments,
+  writeFile,
+  defineLegacyPluginAliases,
+} = require("./utils-build-data");
 
 const pluginBugfixes = require("./data/plugin-bugfixes");
 const pluginFeatures = require("./data/plugin-features");
@@ -34,7 +39,7 @@ for (const [filename, data] of [
 ]) {
   const dataPath = path.join(__dirname, `../data/${filename}.json`);
 
-  if (!writeFile(data, dataPath, filename)) {
+  if (!writeFile(defineLegacyPluginAliases(data), dataPath, filename)) {
     process.exitCode = 1;
     break;
   }

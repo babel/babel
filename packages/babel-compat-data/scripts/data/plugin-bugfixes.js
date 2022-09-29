@@ -43,6 +43,6 @@ module.exports = {
     features: [
       "optional chaining operator (?.) / spread parameters after optional chaining",
     ],
-    replaces: "proposal-optional-chaining",
+    replaces: "transform-optional-chaining",
   },
 };

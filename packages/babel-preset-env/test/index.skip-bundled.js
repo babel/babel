@@ -103,7 +103,7 @@ describe("babel-preset-env", () => {
           });
         });
         describe("dynamic imports should be transformed", () => {
-          it("returns specified modules transform and proposal-dynamic-import", () => {
+          it("returns specified modules transform and transform-dynamic-import", () => {
             expect(
               babelPresetEnv.getModulesPluginNames({
                 modules: "systemjs",
@@ -114,7 +114,7 @@ describe("babel-preset-env", () => {
               }),
             ).toEqual([
               "transform-modules-systemjs",
-              "proposal-dynamic-import",
+              "transform-dynamic-import",
               "syntax-export-namespace-from",
             ]);
           });
@@ -130,8 +130,8 @@ describe("babel-preset-env", () => {
                 }),
               ).toEqual([
                 "transform-modules-systemjs",
-                "proposal-dynamic-import",
-                "proposal-export-namespace-from",
+                "transform-dynamic-import",
+                "transform-export-namespace-from",
               ]);
             });
           });
@@ -302,7 +302,10 @@ describe("babel-preset-env", () => {
 
   it("available-plugins is in sync with @babel/compat-data", () => {
     const arrAvailablePlugins = Object.keys(availablePlugins).sort();
-    const arrCompatData = Object.keys(compatData).sort();
+    const arrCompatData = Object.keys(compatData)
+      // TODO(Babel 8): Remove this .map
+      .map(name => name.replace("proposal-", "transform-"))
+      .sort();
 
     expect(arrAvailablePlugins).toEqual(expect.arrayContaining(arrCompatData));
   });
