@@ -3,6 +3,14 @@ import type { File } from "@babel/core";
 import type { Scope, NodePath } from "@babel/traverse";
 import type { TraversalAncestors } from "@babel/types";
 
+function isPureVoid(node: t.Node) {
+  return (
+    t.isUnaryExpression(node) &&
+    node.operator === "void" &&
+    t.isPureish(node.argument)
+  );
+}
+
 export function unshiftForXStatementBody(
   statementPath: NodePath<t.ForXStatement>,
   newStatements: t.Statement[],
@@ -194,10 +202,11 @@ export class DestructuringTransformer {
     { left, right }: t.AssignmentPattern,
     valueRef: t.Expression | null,
   ) {
-    // handle array init hole
-    // const [x = 42] = [,];
+    // handle array init with void 0. This also happens when
+    // the value was originally a hole.
+    // const [x = 42] = [void 0,];
     // -> const x = 42;
-    if (valueRef === null) {
+    if (isPureVoid(valueRef)) {
       this.push(left, right);
       return;
     }
@@ -274,15 +283,15 @@ export class DestructuringTransformer {
     }
   }
 
-  pushObjectPattern(pattern: t.ObjectPattern, objRef: t.Expression | null) {
+  pushObjectPattern(pattern: t.ObjectPattern, objRef: t.Expression) {
     // https://github.com/babel/babel/issues/681
 
-    if (!pattern.properties.length || objRef === null) {
+    if (!pattern.properties.length) {
       this.nodes.push(
         t.expressionStatement(
           t.callExpression(
             this.addHelper("objectDestructuringEmpty"),
-            objRef !== null ? [objRef] : [],
+            isPureVoid(objRef) ? [] : [objRef],
           ),
         ),
       );
@@ -391,12 +400,18 @@ export class DestructuringTransformer {
     pattern: t.ArrayPattern,
     arr: UnpackableArrayExpression,
   ) {
+    const holeToUndefined = (el: t.Expression) =>
+      el ?? this.scope.buildUndefinedNode();
+
     for (let i = 0; i < pattern.elements.length; i++) {
       const elem = pattern.elements[i];
       if (t.isRestElement(elem)) {
-        this.push(elem.argument, t.arrayExpression(arr.elements.slice(i)));
+        this.push(
+          elem.argument,
+          t.arrayExpression(arr.elements.slice(i).map(holeToUndefined)),
+        );
       } else {
-        this.push(elem, arr.elements[i]);
+        this.push(elem, holeToUndefined(arr.elements[i]));
       }
     }
   }

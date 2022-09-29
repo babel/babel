@@ -21,7 +21,7 @@ expect(a).toEqual(2);
 expect(b).toEqual(1);
 const arr = (_ref2 = [,], _ref2$ = _ref2[0], c = _ref2$ === void 0 ? 42 : _ref2$, _ref2);
 expect(c).toEqual(42);
-expect(arr).toEqual([,]);
+expect(arr).toStrictEqual([,]);
 var iterCount = 0;
 
 for (const x = 23; iterCount < 1;) {
@@ -31,13 +31,13 @@ for (const x = 23; iterCount < 1;) {
 }
 
 expect(iterCount).toEqual(1);
-const d = [,];
-const e = [,][0];
-expect(d).toEqual([,]);
+const d = [void 0];
+const e = [void 0][0];
+expect(d).toStrictEqual([,]);
 expect(e).toEqual(undefined);
 const f = void 0;
 expect(f).toEqual(undefined);
-let g;
+let g = void 0;
 expect(g).toEqual(undefined);
 let thrown;
 
@@ -52,7 +52,8 @@ expect(thrown).toEqual(true);
 
 try {
   thrown = false;
-  babelHelpers.objectDestructuringEmpty();
+
+  var _ = babelHelpers.toArray(void 0);
 } catch (e) {
   thrown = true;
 }
