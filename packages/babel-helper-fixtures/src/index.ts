@@ -257,12 +257,12 @@ function pushTask(
   const sourceMapLoc = taskDir + "/source-map.json";
   if (fs.existsSync(sourceMapLoc)) {
     test.sourceMap = JSON.parse(readFile(sourceMapLoc));
-    test.sourceMapFile = {
-      loc: sourceMapLoc,
-      code: test.sourceMap,
-      filename: "",
-    };
   }
+  test.sourceMapFile = {
+    loc: sourceMapLoc,
+    code: test.sourceMap,
+    filename: "",
+  };
 
   const inputMapLoc = taskDir + "/input-source-map.json";
   if (fs.existsSync(inputMapLoc)) {

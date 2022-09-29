@@ -1,0 +1,16 @@
+{
+  "version": 3,
+  "names": [
+    "fn",
+    "arg",
+    "x",
+    "y"
+  ],
+  "sources": [
+    "sourcemap/declaration-loc/input.js"
+  ],
+  "sourcesContent": [
+    "const fn = (arg) => {\n  var [x, y] = arg;\n}"
+  ],
+  "mappings": "AAAA,MAAMA,EAAE,GAAIC,GAAG,IAAK;EAClB,sCAAaA,GAAG;EAAA,IAAXC,CAAC;EAAA,IAAEC,CAAC;AACX,CAAC"
+}

@@ -27,15 +27,6 @@ type QueueItem = {
   filename: string | undefined;
 };
 
-function SourcePos(): SourcePos {
-  return {
-    identifierName: undefined,
-    line: undefined,
-    column: undefined,
-    filename: undefined,
-  };
-}
-
 export default class Buffer {
   constructor(map?: SourceMap | null) {
     this._map = map;
@@ -55,13 +46,11 @@ export default class Buffer {
     line: 1,
     column: 0,
   };
-  _sourcePosition = SourcePos();
-  _disallowedPop: SourcePos & { objectReusable: boolean } = {
+  _sourcePosition: SourcePos = {
     identifierName: undefined,
     line: undefined,
     column: undefined,
     filename: undefined,
-    objectReusable: true, // To avoid deleting and re-creating objects, we reuse existing objects when they are not needed anymore.
   };
 
   _allocQueue() {
@@ -230,6 +219,7 @@ export default class Buffer {
 
   _append(str: string, sourcePos: SourcePos, maybeNewline: boolean): void {
     const len = str.length;
+    const position = this._position;
 
     this._last = str.charCodeAt(len - 1);
 
@@ -243,7 +233,7 @@ export default class Buffer {
     }
 
     if (!maybeNewline && !this._map) {
-      this._position.column += len;
+      position.column += len;
       return;
     }
 
@@ -265,18 +255,18 @@ export default class Buffer {
 
     // Now, find each reamining newline char in the string.
     while (i !== -1) {
-      this._position.line++;
-      this._position.column = 0;
+      position.line++;
+      position.column = 0;
       last = i + 1;
 
       // We mark the start of each line, which happens directly after this newline char
       // unless this is the last char.
-      if (last < str.length) {
+      if (last < len) {
         this._mark(++line, 0, identifierName, filename);
       }
       i = str.indexOf("\n", last);
     }
-    this._position.column += str.length - last;
+    position.column += len - last;
   }
 
   _mark(
@@ -370,15 +360,7 @@ export default class Buffer {
 
     cb();
 
-    // In cases where tokens are printed after this item, we want to
-    // ensure that they get the location of the _end_ of the identifier.
-    // To accomplish this, we assign the location and explicitly disable
-    // the standard Buffer withSource previous-position "reactivation"
-    // logic. This means that if another item calls '.source()' to set
-    // the location after the identifier, it is fine, but the position won't
-    // be automatically replaced with the previous value.
     this.source("end", loc);
-    this._disallowPop("start", loc);
   }
 
   /**
@@ -387,75 +369,51 @@ export default class Buffer {
    */
 
   source(prop: "start" | "end", loc: Loc | undefined): void {
-    if (!loc) return;
+    if (!this._map) return;
 
     // Since this is called extremely often, we re-use the same _sourcePosition
     // object for the whole lifetime of the buffer.
-    this._normalizePosition(prop, loc, this._sourcePosition);
+    this._normalizePosition(prop, loc, 0, 0);
+  }
+
+  sourceWithOffset(
+    prop: "start" | "end",
+    loc: Loc | undefined,
+    lineOffset: number,
+    columnOffset: number,
+  ): void {
+    if (!this._map) return;
+
+    this._normalizePosition(prop, loc, lineOffset, columnOffset);
   }
 
   /**
-   * Call a callback with a specific source location and restore on completion.
+   * Call a callback with a specific source location
    */
 
   withSource(prop: "start" | "end", loc: Loc, cb: () => void): void {
     if (!this._map) return cb();
 
-    // Use the call stack to manage a stack of "source location" data because
-    // the _sourcePosition object is mutated over the course of code generation,
-    // and constantly copying it would be slower.
-    const originalLine = this._sourcePosition.line;
-    const originalColumn = this._sourcePosition.column;
-    const originalFilename = this._sourcePosition.filename;
-    const originalIdentifierName = this._sourcePosition.identifierName;
-
     this.source(prop, loc);
 
     cb();
-
-    if (
-      // Verify if reactivating this specific position has been disallowed.
-      this._disallowedPop.objectReusable ||
-      this._disallowedPop.line !== originalLine ||
-      this._disallowedPop.column !== originalColumn ||
-      this._disallowedPop.filename !== originalFilename
-    ) {
-      this._sourcePosition.line = originalLine;
-      this._sourcePosition.column = originalColumn;
-      this._sourcePosition.filename = originalFilename;
-      this._sourcePosition.identifierName = originalIdentifierName;
-      this._disallowedPop.objectReusable = true;
-    }
   }
 
-  /**
-   * Allow printers to disable the default location-reset behavior of the
-   * sourcemap output, so that certain printers can be sure that the
-   * "end" location that they set is actually treated as the end position.
-   */
-  _disallowPop(prop: "start" | "end", loc: Loc) {
-    if (!loc) return;
-
-    const disallowedPop = this._disallowedPop;
-
-    this._normalizePosition(prop, loc, disallowedPop);
-
-    disallowedPop.objectReusable = false;
-  }
-
-  _normalizePosition(prop: "start" | "end", loc: Loc, targetObj: SourcePos) {
+  _normalizePosition(
+    prop: "start" | "end",
+    loc: Loc,
+    lineOffset: number,
+    columnOffset: number,
+  ) {
     const pos = loc[prop];
+    const target = this._sourcePosition;
 
-    targetObj.identifierName =
+    target.identifierName =
       (prop === "start" && loc.identifierName) || undefined;
     if (pos) {
-      targetObj.line = pos.line;
-      targetObj.column = pos.column;
-      targetObj.filename = loc.filename;
-    } else {
-      targetObj.line = null;
-      targetObj.column = null;
-      targetObj.filename = null;
+      target.line = pos.line + lineOffset;
+      target.column = pos.column + columnOffset;
+      target.filename = loc.filename;
     }
   }
 

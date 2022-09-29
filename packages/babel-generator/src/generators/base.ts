@@ -36,15 +36,11 @@ export function BlockStatement(this: Printer, node: t.BlockStatement) {
     this.printSequence(node.body, node, { indent: true });
     this.removeTrailingNewline();
 
-    this.source("end", node.loc);
-
     if (!this.endsWith(charCodes.lineFeed)) this.newline();
-
-    this.rightBrace();
-  } else {
-    this.source("end", node.loc);
-    this.token("}");
   }
+
+  this.sourceWithOffset("end", node.loc, 0, -1);
+  this.rightBrace();
 }
 
 export function Directive(this: Printer, node: t.Directive) {

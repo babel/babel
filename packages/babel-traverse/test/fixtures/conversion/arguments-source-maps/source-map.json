@@ -1,0 +1,17 @@
+{
+  "version": 3,
+  "names": [
+    "fn",
+    "inner",
+    "console",
+    "log",
+    "arguments"
+  ],
+  "sources": [
+    "conversion/arguments-source-maps/input.js"
+  ],
+  "sourcesContent": [
+    "function fn() {\n  var inner = () => {\n    console.log(arguments);\n  };\n}"
+  ],
+  "mappings": "AAAA,SAASA,EAAE,GAAG;EAAA;;EACZ,IAAIC,KAAK,GAAG,YAAM;IAChBC,OAAO,CAACC,GAAG,CAACC,UAAS,CAAC;EACxB,CAAC;AACH"
+}

@@ -1,3 +1,4 @@
 class Test {
   @TestDecorator
-  async decorateMe() {}}
+  async decorateMe() {}
+}

@@ -372,11 +372,11 @@ async function run(task: Test) {
     }
   }
 
-  if (task.sourceMap) {
+  if (opts.sourceMaps === true) {
     try {
       expect(result.map).toEqual(task.sourceMap);
     } catch (e) {
-      if (!process.env.OVERWRITE || !task.sourceMapFile) throw e;
+      if (!process.env.OVERWRITE && task.sourceMap) throw e;
 
       console.log(`Updated test file: ${task.sourceMapFile.loc}`);
       fs.writeFileSync(
@@ -526,9 +526,7 @@ export default function (
           async function () {
             const runTask = () => run(task);
             if ("sourceMap" in task.options === false) {
-              task.options.sourceMap = !!(
-                task.sourceMappings || task.sourceMap
-              );
+              task.options.sourceMap = !!task.sourceMap;
             }
 
             Object.assign(task.options, taskOpts);

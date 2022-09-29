@@ -4,9 +4,7 @@ import type * as t from "@babel/types";
 import jsesc from "jsesc";
 
 export function Identifier(this: Printer, node: t.Identifier) {
-  this.exactSource(node.loc, () => {
-    this.word(node.name);
-  });
+  this.word(node.name);
 }
 
 export function ArgumentPlaceholder(this: Printer) {
@@ -31,6 +29,8 @@ export function ObjectExpression(this: Printer, node: t.ObjectExpression) {
     this.printList(props, node, { indent: true, statement: true });
     this.space();
   }
+
+  this.sourceWithOffset("end", node.loc, 0, -1);
 
   this.token("}");
 }

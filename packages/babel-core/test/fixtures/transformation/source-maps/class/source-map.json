@@ -1,0 +1,16 @@
+{
+  "version": 3,
+  "names": [
+    "Test",
+    "Error",
+    "test",
+    "bar"
+  ],
+  "sources": [
+    "source-maps/class/input.js"
+  ],
+  "sourcesContent": [
+    "class Test {\n  get bar() {\n    throw new Error(\"wow\");\n  }\n}\n\nvar test = new Test;\ntest.bar;"
+  ],
+  "mappings": "IAAMA,IAAI;EAAA;;EAAA;IAAA;EAAA;;EAAA;IAAA;IAAA,KACR,YAAU;MACR,MAAM,IAAIC,KAAK,CAAC,KAAK,CAAC;IACxB;EAAC;EAAA;AAAA;;AAGH,IAAIC,IAAI,GAAG,IAAIF,IAAI;AACnBE,IAAI,CAACC,GAAG"
+}

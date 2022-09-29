@@ -358,6 +358,9 @@ export function ModuleExpression(this: Printer, node: t.ModuleExpression) {
   } else {
     this.newline();
     this.printSequence(node.body.body, node, { indent: true });
+
+    this.sourceWithOffset("end", node.loc, 0, -1);
+
     this.rightBrace();
   }
 }

@@ -283,15 +283,32 @@ class Printer {
   }
 
   exactSource(loc: Loc | undefined, cb: () => void) {
+    if (!loc) return cb();
+
     this._catchUp("start", loc);
 
     this._buf.exactSource(loc, cb);
   }
 
   source(prop: "start" | "end", loc: Loc | undefined): void {
+    if (!loc) return;
+
     this._catchUp(prop, loc);
 
     this._buf.source(prop, loc);
+  }
+
+  sourceWithOffset(
+    prop: "start" | "end",
+    loc: Loc | undefined,
+    lineOffset: number,
+    columnOffset: number,
+  ): void {
+    if (!loc) return;
+
+    this._catchUp(prop, loc);
+
+    this._buf.sourceWithOffset(prop, loc, lineOffset, columnOffset);
   }
 
   withSource(
@@ -299,6 +316,8 @@ class Printer {
     loc: Loc | undefined,
     cb: () => void,
   ): void {
+    if (!loc) return cb();
+
     this._catchUp(prop, loc);
 
     this._buf.withSource(prop, loc, cb);
@@ -443,6 +462,17 @@ class Printer {
     parenPushNewlineState.printed = true;
   }
 
+  catchUp(line: number) {
+    if (!this.format.retainLines) return;
+
+    // catch up to this nodes newline if we're behind
+    const count = line - this._buf.getCurrentLine();
+
+    for (let i = 0; i < count; i++) {
+      this._newline();
+    }
+  }
+
   _catchUp(prop: "start" | "end", loc?: Loc) {
     if (!this.format.retainLines) return;
 
@@ -557,7 +587,7 @@ class Printer {
 
     const loc = nodeType === "Program" || nodeType === "File" ? null : node.loc;
 
-    this.withSource("start", loc, printMethod.bind(this, node, parent));
+    this.exactSource(loc, printMethod.bind(this, node, parent));
 
     if (noLineTerminator && !this._noLineTerminator) {
       this._noLineTerminator = true;
@@ -811,11 +841,8 @@ class Printer {
     // Avoid creating //* comments
     if (this.endsWith(charCodes.slash)) this._space();
 
-    this.withSource(
-      "start",
-      comment.loc,
-      this._append.bind(this, val, maybeNewline),
-    );
+    this.source("start", comment.loc);
+    this._append(val, maybeNewline);
 
     if (printNewLines) this.newline(1);
   }

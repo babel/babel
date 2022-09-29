@@ -79,6 +79,8 @@ export function ClassBody(this: Printer, node: t.ClassBody) {
 
     if (!this.endsWith(charCodes.lineFeed)) this.newline();
 
+    this.sourceWithOffset("end", node.loc, 0, -1);
+
     this.rightBrace();
   }
 }
@@ -88,7 +90,8 @@ export function ClassProperty(this: Printer, node: t.ClassProperty) {
 
   // catch up to property key, avoid line break
   // between member modifiers and the property key.
-  this.source("end", node.key.loc);
+  const endLine = node.key.loc?.end?.line;
+  if (endLine) this.catchUp(endLine);
 
   this.tsPrintClassMemberModifiers(node);
 
@@ -127,7 +130,8 @@ export function ClassAccessorProperty(
 
   // catch up to property key, avoid line break
   // between member modifiers and the property key.
-  this.source("end", node.key.loc);
+  const endLine = node.key.loc?.end?.line;
+  if (endLine) this.catchUp(endLine);
 
   // TS does not support class accessor property yet
   this.tsPrintClassMemberModifiers(node);
@@ -201,9 +205,12 @@ export function _classMethodHead(
   node: t.ClassMethod | t.ClassPrivateMethod | t.TSDeclareMethod,
 ) {
   this.printJoin(node.decorators, node);
+
   // catch up to method key, avoid line break
   // between member modifiers/method heads and the method key.
-  this.source("end", node.key.loc);
+  const endLine = node.key.loc?.end?.line;
+  if (endLine) this.catchUp(endLine);
+
   this.tsPrintClassMemberModifiers(node);
   this._methodHead(node);
 }
@@ -219,6 +226,9 @@ export function StaticBlock(this: Printer, node: t.StaticBlock) {
     this.printSequence(node.body, node, {
       indent: true,
     });
+
+    this.sourceWithOffset("end", node.loc, 0, -1);
+
     this.rightBrace();
   }
 }
