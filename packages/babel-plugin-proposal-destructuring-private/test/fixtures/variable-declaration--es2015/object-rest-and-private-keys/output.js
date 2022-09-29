@@ -17,7 +17,7 @@ babelHelpers.defineProperty(C, "c", "c");
 (() => {
   var x = babelHelpers.classStaticPrivateFieldSpecGet(C, C, _x),
       y = babelHelpers.classStaticPrivateFieldSpecGet(C, C, _y),
-      z = Object.assign({}, C);
+      z = Object.assign({}, (babelHelpers.objectDestructuringEmpty(C), C));
   result = {
     x,
     y,

@@ -199,7 +199,12 @@ export default declare((api, opts: Options) => {
         restElement.argument,
         t.callExpression(getExtendsHelper(file), [
           t.objectExpression([]),
-          t.cloneNode(objRef),
+          t.sequenceExpression([
+            t.callExpression(file.addHelper("objectDestructuringEmpty"), [
+              t.cloneNode(objRef),
+            ]),
+            t.cloneNode(objRef),
+          ]),
         ]),
       ];
     }

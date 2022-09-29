@@ -533,7 +533,12 @@ export function buildObjectExcludingKeys<T extends ExcludingKey>(
       : addHelper("extends");
     value = t.callExpression(extendsHelper, [
       t.objectExpression([]),
-      t.cloneNode(objRef),
+      t.sequenceExpression([
+        t.callExpression(addHelper("objectDestructuringEmpty"), [
+          t.cloneNode(objRef),
+        ]),
+        t.cloneNode(objRef),
+      ]),
     ]);
   } else {
     let keyExpression: t.Expression = t.arrayExpression(keys);
