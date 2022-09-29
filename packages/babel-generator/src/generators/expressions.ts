@@ -350,14 +350,13 @@ export function V8IntrinsicIdentifier(
 }
 
 export function ModuleExpression(this: Printer, node: t.ModuleExpression) {
-  // ensure no line terminator between `module` and `{`
-  const { _noLineTerminator } = this;
-  this._noLineTerminator = true;
   this.word("module");
-  this.printInnerComments(node);
-  this.space();
+  // ensure no line terminator between `module` and `{`
+  this.ensureNoLineTerminator(() => {
+    this.printInnerComments(node);
+    this.space();
+  });
   this.token("{");
-  this._noLineTerminator = _noLineTerminator;
   this.indent();
   const { body } = node;
   if (body.body.length || body.directives.length) {
