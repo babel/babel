@@ -25,13 +25,17 @@ export function _parameters(
     | t.TSFunctionType
     | t.TSConstructorType,
 ) {
-  for (let i = 0; i < parameters.length; i++) {
+  const paramLength = parameters.length;
+  for (let i = 0; i < paramLength; i++) {
     this._param(parameters[i], parent);
 
     if (i < parameters.length - 1) {
       this.token(",");
       this.space();
     }
+  }
+  if (paramLength === 0) {
+    this.printInnerComments(parent);
   }
 }
 
@@ -71,9 +75,10 @@ export function _methodHead(this: Printer, node: t.Method | t.TSDeclareMethod) {
     this.space();
   }
 
+  const { _noLineTerminator } = this;
   if (node.async) {
-    // ensure `async` is in the same line with property name
-    this._catchUp("start", key.loc);
+    // ensure no line terminator between async and class element name / *
+    this._noLineTerminator = true;
     this.word("async");
     this.space();
   }
@@ -84,16 +89,23 @@ export function _methodHead(this: Printer, node: t.Method | t.TSDeclareMethod) {
     kind === "init"
   ) {
     if (node.generator) {
+      if (node.async) {
+        this.printInnerComments(node);
+      }
       this.token("*");
+      this._noLineTerminator = _noLineTerminator;
     }
   }
 
   if (node.computed) {
     this.token("[");
+    this._noLineTerminator = _noLineTerminator;
     this.print(key, node);
     this.token("]");
+    this.printInnerComments(node);
   } else {
     this.print(key, node);
+    this._noLineTerminator = _noLineTerminator;
   }
 
   if (
