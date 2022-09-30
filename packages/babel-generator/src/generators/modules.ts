@@ -239,8 +239,8 @@ export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
   }
 
   if (node.assertions?.length) {
+    this.print(node.source, node, true);
     this.ensureNoLineTerminator(() => {
-      this.print(node.source, node);
       this.space();
       this.word("assert");
     });
