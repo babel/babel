@@ -222,7 +222,9 @@ export default abstract class StatementParser extends ExpressionParser {
         this.raise(Errors.ModuleExportUndefined, { at, localName });
       }
     }
-    this.eat(tt.eof); // stop before } when parsing a module expression
+    if (end === tt.eof) {
+      this.next(); // consume eof for the top level program
+    }
     return this.finishNode(program, "Program");
   }
 
