@@ -170,26 +170,26 @@ export function ArrowFunctionExpression(
   this: Printer,
   node: t.ArrowFunctionExpression,
 ) {
+  const { _noLineTerminator } = this;
   if (node.async) {
+    this._noLineTerminator = true;
     this.word("async");
     this.space();
   }
 
-  const firstParam = node.params[0];
-
   // Try to avoid printing parens in simple cases, but only if we're pretty
   // sure that they aren't needed by type annotations or potential newlines.
+  let firstParam;
   if (
     !this.format.retainLines &&
-    // Auxiliary comments can introduce unexpected newlines
-    !this.format.auxiliaryCommentBefore &&
-    !this.format.auxiliaryCommentAfter &&
     node.params.length === 1 &&
-    isIdentifier(firstParam) &&
-    !hasTypesOrComments(node, firstParam)
+    isIdentifier((firstParam = node.params[0])) &&
+    !hasTypes(node, firstParam)
   ) {
     this.print(firstParam, node);
+    this._noLineTerminator = _noLineTerminator;
   } else {
+    this._noLineTerminator = _noLineTerminator;
     this._params(node);
   }
 
@@ -205,7 +205,7 @@ export function ArrowFunctionExpression(
   this.print(node.body, node);
 }
 
-function hasTypesOrComments(
+function hasTypes(
   node: t.ArrowFunctionExpression,
   param: t.Identifier,
 ): boolean {
@@ -214,8 +214,6 @@ function hasTypesOrComments(
     node.returnType ||
     node.predicate ||
     param.typeAnnotation ||
-    param.optional ||
-    param.leadingComments?.length ||
-    param.trailingComments?.length
+    param.optional
   );
 }
