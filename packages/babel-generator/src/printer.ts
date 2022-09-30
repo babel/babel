@@ -498,11 +498,8 @@ class Printer {
   ensureNoLineTerminator(fn: () => void) {
     const { _noLineTerminator } = this;
     this._noLineTerminator = true;
-    try {
-      fn();
-    } finally {
-      this._noLineTerminator = _noLineTerminator;
-    }
+    fn();
+    this._noLineTerminator = _noLineTerminator;
   }
 
   printTerminatorless(node: t.Node, parent: t.Node, isLabel: boolean) {
