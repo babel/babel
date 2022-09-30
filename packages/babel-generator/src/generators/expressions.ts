@@ -351,16 +351,19 @@ export function V8IntrinsicIdentifier(
 
 export function ModuleExpression(this: Printer, node: t.ModuleExpression) {
   this.word("module");
-  this.space();
+  // ensure no line terminator between `module` and `{`
+  this.ensureNoLineTerminator(() => {
+    this.printInnerComments(node);
+    this.space();
+  });
   this.token("{");
-  if (node.body.body.length === 0) {
-    this.token("}");
-  } else {
+  this.indent();
+  const { body } = node;
+  if (body.body.length || body.directives.length) {
     this.newline();
-    this.printSequence(node.body.body, node, { indent: true });
-
-    this.sourceWithOffset("end", node.loc, 0, -1);
-
-    this.rightBrace();
   }
+  this.print(body, node);
+  this.dedent();
+  this.sourceWithOffset("end", node.loc, 0, -1);
+  this.rightBrace();
 }

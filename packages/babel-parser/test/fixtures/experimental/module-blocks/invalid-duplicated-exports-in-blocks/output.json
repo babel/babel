@@ -27,7 +27,7 @@
               "start":10,"end":66,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":4,"column":1,"index":66}},
               "body": {
                 "type": "Program",
-                "start":21,"end":66,"loc":{"start":{"line":2,"column":2,"index":21},"end":{"line":4,"column":1,"index":66}},
+                "start":21,"end":64,"loc":{"start":{"line":2,"column":2,"index":21},"end":{"line":3,"column":17,"index":64}},
                 "sourceType": "module",
                 "interpreter": null,
                 "body": [
