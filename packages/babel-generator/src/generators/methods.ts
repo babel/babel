@@ -194,9 +194,12 @@ export function ArrowFunctionExpression(
   }
 
   this._predicate(node);
+  this.ensureNoLineTerminator(() => {
+    this.space();
+    this.printInnerComments(node);
+    this.token("=>");
+  });
 
-  this.space();
-  this.token("=>");
   this.space();
 
   this.print(node.body, node);
