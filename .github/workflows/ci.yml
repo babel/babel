@@ -521,6 +521,7 @@ jobs:
         env:
           BABEL_PATH: ".."
           TEST262_PATH: ../build/test262
+          THREADS: 4
       - name: Create artifact with report results
         uses: actions/upload-artifact@v3
         with:
