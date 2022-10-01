@@ -485,10 +485,41 @@ jobs:
       - name: Run babel/eslint tests
         run: node ./node_modules/.bin/jest eslint
 
+  test262-prepare:
+    name: test262 - Prepare for running in parallel
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Babel
+        uses: actions/checkout@v3
+      - name: Use Node.js latest
+        uses: actions/setup-node@v3
+      - name: Checkout test runner
+        uses: actions/checkout@v3
+        with:
+          repository: babel/babel-test262-runner
+          path: babel-test262-runner
+      - name: Download test262
+        run: make bootstrap-test262
+      - name: Prepare test262 chunks
+        run: |
+          cd babel-test262-runner
+          npm ci
+          node lib/prepare-chunks 4 > ~/test262-chunks.json
+        env:
+          TEST262_PATH: ../build/test262
+      - name: Upload chunks artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: test262-chunks
+          path: ~/test262-chunks.json
+
   test262:
     name: test262
+    strategy:
+      matrix:
+        chunk: [0, 1, 2, 3]
     runs-on: ubuntu-latest
-    needs: build
+    needs: [build, test262-prepare]
     steps:
       - name: Checkout Babel
         uses: actions/checkout@v3
@@ -514,14 +545,51 @@ jobs:
           node lib/download-node
       - name: Download test262
         run: make bootstrap-test262
+      - name: Download chunks file
+        uses: actions/download-artifact@v3
+        with:
+          name: test262-chunks
       - name: Run test262
         run: |
           cd babel-test262-runner
-          node lib/run-tests I_AM_SURE | tee ~/test262.tap
+          node lib/run-tests I_AM_SURE | tee ~/test262-${{ matrix.chunk }}.tap
         env:
           BABEL_PATH: ".."
           TEST262_PATH: ../build/test262
           THREADS: 4
+          CHUNKS_FILE: ../test262-chunks.json
+          CHUNK: ${{ matrix.chunk }}
+      - name: Create artifact with report results
+        uses: actions/upload-artifact@v3
+        with:
+          name: test262-result-${{ matrix.chunk }}
+          path: ~/test262-${{ matrix.chunk }}.tap
+
+  test262-finish:
+    name: test262 - Analyze results
+    runs-on: ubuntu-latest
+    needs: test262
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: test262-result-0
+      - uses: actions/download-artifact@v3
+        with:
+          name: test262-result-1
+      - uses: actions/download-artifact@v3
+        with:
+          name: test262-result-2
+      - uses: actions/download-artifact@v3
+        with:
+          name: test262-result-3
+      - name: Merge chunk results
+        run: |
+          cat <(test262-0.tap)
+              <(test262-1.tap)
+              <(test262-2.tap)
+              <(test262-3.tap)
+            | npx tap-merge
+            > ~/test262.tap
       - name: Create artifact with report results
         uses: actions/upload-artifact@v3
         with:
