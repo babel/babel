@@ -155,7 +155,7 @@ describe("modification", function () {
       expect(result).toHaveLength(1);
       expect(result[result.length - 1].node).toEqual(t.identifier("b"));
       expect(generateCode(rootPath)).toBe(
-        "if (x) {\n  b\n\n  for (var i = 0; i < 0; i++) {}\n}",
+        "if (x) {\n  b\n  for (var i = 0; i < 0; i++) {}\n}",
       );
     });
 
@@ -168,7 +168,7 @@ describe("modification", function () {
       expect(result).toHaveLength(1);
       expect(result[result.length - 1].node).toEqual(t.identifier("b"));
       expect(generateCode(rootPath)).toBe(
-        "if (x) {\n  b\n\n  for (var i = 0; i < 0; i++) {}\n}",
+        "if (x) {\n  b\n  for (var i = 0; i < 0; i++) {}\n}",
       );
     });
 
@@ -265,7 +265,7 @@ describe("modification", function () {
       expect(result).toHaveLength(1);
       expect(result[result.length - 1].node).toEqual(t.identifier("b"));
       expect(generateCode(rootPath)).toBe(
-        "if (x) {\n  for (var i = 0; i < 0; i++) {}\n\n  b\n}",
+        "if (x) {\n  for (var i = 0; i < 0; i++) {}\n  b\n}",
       );
     });
 
@@ -278,7 +278,7 @@ describe("modification", function () {
       expect(result).toHaveLength(1);
       expect(result[result.length - 1].node).toEqual(t.identifier("b"));
       expect(generateCode(rootPath)).toBe(
-        "if (x) {\n  for (var i = 0; i < 0; i++) {}\n\n  b\n}",
+        "if (x) {\n  for (var i = 0; i < 0; i++) {}\n  b\n}",
       );
     });
 
@@ -343,7 +343,7 @@ describe("modification", function () {
         path.insertAfter(t.identifier("x"));
 
         expect(generateCode({ parentPath: bodyPath })).toBe(
-          "var _temp;\n\nexport default (_temp = fn(), x, _temp);",
+          "var _temp;\nexport default (_temp = fn(), x, _temp);",
         );
       });
     });

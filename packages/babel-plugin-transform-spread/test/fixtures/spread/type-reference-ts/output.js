@@ -3,11 +3,9 @@ function foo() {
   const y = a() || b();
   return [].concat(x, y);
 }
-
 function a() {
   return [];
 }
-
 function b() {
   return [];
 }

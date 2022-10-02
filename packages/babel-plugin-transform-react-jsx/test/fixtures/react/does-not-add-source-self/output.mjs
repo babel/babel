@@ -5,6 +5,7 @@ var x = /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/Reac
   meow: "wolf"
 }), /*#__PURE__*/React.createElement("div", {
   key: "3"
-}), /*#__PURE__*/React.createElement("div", { ...props,
+}), /*#__PURE__*/React.createElement("div", {
+  ...props,
   key: "4"
 })));

@@ -1,7 +1,6 @@
 "use strict";
 
 var _obj;
-
 const Hello = {
   toString: function () {
     return 'hello';

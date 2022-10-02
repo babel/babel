@@ -1,5 +1,4 @@
 let _x$x;
-
 _x$x = {
   x: (babelHelpers.classNameTDZError("A"), A) || 0
 }.x;

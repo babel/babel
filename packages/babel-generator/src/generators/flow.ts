@@ -596,6 +596,8 @@ export function ObjectTypeAnnotation(
   ];
 
   if (props.length) {
+    this.newline();
+
     this.space();
 
     this.printJoin(props, node, {

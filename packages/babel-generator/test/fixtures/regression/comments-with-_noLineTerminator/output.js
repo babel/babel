@@ -6,5 +6,4 @@ const test = (): {
     foo: "bar"
   };
 };
-
 export default test;

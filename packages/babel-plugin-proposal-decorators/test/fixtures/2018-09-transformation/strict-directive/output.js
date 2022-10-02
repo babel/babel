@@ -6,9 +6,7 @@
       constructor() {
         _initialize(this);
       }
-
     }
-
     return {
       F: Foo,
       d: [{
@@ -19,7 +17,6 @@
     };
   });
 };
-
 () => {
   let Foo = babelHelpers.decorate([dec], function (_initialize2) {
     "use strict";
@@ -28,9 +25,7 @@
       constructor() {
         _initialize2(this);
       }
-
     }
-
     return {
       F: Foo,
       d: [{

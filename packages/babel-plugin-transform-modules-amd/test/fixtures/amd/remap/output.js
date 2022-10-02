@@ -5,20 +5,16 @@ define(["exports"], function (_exports) {
     value: true
   });
   _exports.test = _exports.f = _exports.e = _exports.c = _exports.a = void 0;
-
   var _test;
-
   var test = 2;
   _exports.test = test;
   _exports.test = test = 5;
   _test = test++, _exports.test = test, _test;
-
   (function () {
     var test = 2;
     test = 3;
     test++;
   })();
-
   var a = 2;
   _exports.a = a;
   _exports.a = a = 3;

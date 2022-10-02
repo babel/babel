@@ -17,7 +17,20 @@ const ZERO_DECIMAL_INTEGER = /\.0+$/;
 const NON_DECIMAL_LITERAL = /^0[box]/;
 const PURE_ANNOTATION_RE = /^\s*[@#]__PURE__\s*$/;
 
-const { needsParens, needsWhitespaceAfter, needsWhitespaceBefore } = n;
+const { needsParens } = n;
+
+const enum COMMENT_TYPE {
+  LEADING,
+  INNER,
+  TRAILING,
+}
+
+const enum COMMENT_SKIP_NEWLINE {
+  DEFAULT,
+  SKIP_ALL,
+  SKIP_LEADING,
+  SKIP_TRAILING,
+}
 
 export type Format = {
   shouldPrintComment: (comment: string) => boolean;
@@ -49,11 +62,13 @@ export type Format = {
 
 interface AddNewlinesOptions {
   addNewlines(leading: boolean, node: t.Node): number;
+  nextNodeStartLine: number;
 }
 
 interface PrintSequenceOptions extends Partial<AddNewlinesOptions> {
   statement?: boolean;
   indent?: boolean;
+  trailingCommentsLineOffset?: number;
 }
 
 interface PrintListOptions {
@@ -90,6 +105,7 @@ class Printer {
   _printedComments = new Set<t.Comment>();
   _endsWithInteger = false;
   _endsWithWord = false;
+  _lastCommentLine = 0;
 
   generate(ast: t.Node) {
     this.print(ast);
@@ -239,31 +255,31 @@ class Printer {
 
   /**
    * Add a newline (or many newlines), maintaining formatting.
+   * This function checks the number of newlines in the queue and subtracts them.
+   * It currently has some limitations.
+   * @see {Buffer#getNewlineCount}
    */
-
-  newline(i: number = 1): void {
-    if (this.format.retainLines || this.format.compact) return;
-
-    if (this.format.concise) {
-      this.space();
-      return;
-    }
-
-    const charBeforeNewline = this.endsWithCharAndNewline();
-    // never allow more than two lines
-    if (charBeforeNewline === charCodes.lineFeed) return;
-
-    if (
-      charBeforeNewline === charCodes.leftCurlyBrace ||
-      charBeforeNewline === charCodes.colon
-    ) {
-      i--;
-    }
+  newline(i: number = 1, force?: boolean): void {
     if (i <= 0) return;
+
+    if (!force) {
+      if (this.format.retainLines || this.format.compact) return;
+
+      if (this.format.concise) {
+        this.space();
+        return;
+      }
+    }
+
+    if (i > 2) i = 2; // Max two lines
+
+    i -= this._buf.getNewlineCount();
 
     for (let j = 0; j < i; j++) {
       this._newline();
     }
+
+    return;
   }
 
   endsWith(char: number): boolean {
@@ -369,6 +385,17 @@ class Printer {
       this.endsWith(charCodes.lineFeed)
     ) {
       this._buf.queueIndentation(this._indentChar, this._getIndent());
+    }
+  }
+
+  _shouldIndent(firstChar: number) {
+    // we've got a newline before us so prepend on the indentation
+    if (
+      this._indent &&
+      firstChar !== charCodes.lineFeed &&
+      this.endsWith(charCodes.lineFeed)
+    ) {
+      return true;
     }
   }
 
@@ -539,7 +566,14 @@ class Printer {
     }
   }
 
-  print(node: t.Node | null, parent?: t.Node, noLineTerminator?: boolean) {
+  print(
+    node: t.Node | null,
+    parent?: t.Node,
+    noLineTerminator?: boolean,
+    // trailingCommentsLineOffset also used to check if called from printJoin
+    // it will be ignored if `noLineTerminator||this._noLineTerminator`
+    trailingCommentsLineOffset?: number,
+  ) {
     if (!node) return;
 
     const nodeType = node.type;
@@ -577,7 +611,7 @@ class Printer {
     this._insideAux = node.loc == undefined;
     this._maybeAddAuxComment(this._insideAux && !oldInAux);
 
-    let shouldPrintParens: boolean;
+    let shouldPrintParens = false;
     if (
       format.retainFunctionParens &&
       nodeType === "FunctionExpression" &&
@@ -590,6 +624,8 @@ class Printer {
     }
     if (shouldPrintParens) this.token("(");
 
+    this._lastCommentLine = 0;
+
     this._printLeadingComments(node);
 
     const loc = nodeType === "Program" || nodeType === "File" ? null : node.loc;
@@ -601,7 +637,7 @@ class Printer {
       this._printTrailingComments(node);
       this._noLineTerminator = false;
     } else {
-      this._printTrailingComments(node);
+      this._printTrailingComments(node, trailingCommentsLineOffset);
     }
 
     if (shouldPrintParens) this.token(")");
@@ -624,10 +660,13 @@ class Printer {
 
     const comment = this.format.auxiliaryCommentBefore;
     if (comment) {
-      this._printComment({
-        type: "CommentBlock",
-        value: comment,
-      });
+      this._printComment(
+        {
+          type: "CommentBlock",
+          value: comment,
+        },
+        COMMENT_SKIP_NEWLINE.DEFAULT,
+      );
     }
   }
 
@@ -637,10 +676,13 @@ class Printer {
 
     const comment = this.format.auxiliaryCommentAfter;
     if (comment) {
-      this._printComment({
-        type: "CommentBlock",
-        value: comment,
-      });
+      this._printComment(
+        {
+          type: "CommentBlock",
+          value: comment,
+        },
+        COMMENT_SKIP_NEWLINE.DEFAULT,
+      );
     }
   }
 
@@ -676,26 +718,34 @@ class Printer {
 
     const newlineOpts: AddNewlinesOptions = {
       addNewlines: opts.addNewlines,
+      nextNodeStartLine: 0,
     };
+
+    const separator = opts.separator ? opts.separator.bind(this) : null;
 
     const len = nodes.length;
     for (let i = 0; i < len; i++) {
       const node = nodes[i];
       if (!node) continue;
 
-      if (opts.statement) this._printNewline(true, node, parent, newlineOpts);
+      if (opts.statement) this._printNewline(i === 0, newlineOpts);
 
-      this.print(node, parent);
+      this.print(node, parent, undefined, opts.trailingCommentsLineOffset || 0);
 
-      if (opts.iterator) {
-        opts.iterator(node, i);
+      opts.iterator?.(node, i);
+
+      if (i < len - 1) separator?.();
+
+      if (opts.statement) {
+        if (i + 1 === len) {
+          this.newline(1);
+        } else {
+          const nextNode = nodes[i + 1];
+          newlineOpts.nextNodeStartLine = nextNode.loc?.start.line || 0;
+
+          this._printNewline(true, newlineOpts);
+        }
       }
-
-      if (opts.separator && i < len - 1) {
-        opts.separator.call(this);
-      }
-
-      if (opts.statement) this._printNewline(false, node, parent, newlineOpts);
     }
 
     if (opts.indent) this.dedent();
@@ -718,22 +768,22 @@ class Printer {
     this.print(node, parent);
   }
 
-  _printTrailingComments(node: t.Node) {
-    this._printComments(this._getComments(false, node));
+  _printTrailingComments(node: t.Node, lineOffset?: number) {
+    const comments = this._getComments(false, node);
+    if (!comments?.length) return;
+    this._printComments(COMMENT_TYPE.TRAILING, comments, node, lineOffset);
   }
 
   _printLeadingComments(node: t.Node) {
-    this._printComments(
-      this._getComments(true, node),
-      // Don't add leading/trailing new lines to #__PURE__ annotations
-      true,
-    );
+    const comments = this._getComments(true, node);
+    if (!comments?.length) return;
+    this._printComments(COMMENT_TYPE.LEADING, comments, node);
   }
 
   printInnerComments(node: t.Node, indent = true) {
     if (!node.innerComments?.length) return;
     if (indent) this.indent();
-    this._printComments(node.innerComments);
+    this._printComments(COMMENT_TYPE.INNER, node.innerComments, node);
     if (indent) this.dedent();
   }
 
@@ -754,12 +804,7 @@ class Printer {
     return this.printJoin(items, parent, opts);
   }
 
-  _printNewline(
-    leading: boolean,
-    node: t.Node,
-    parent: t.Node,
-    opts: AddNewlinesOptions,
-  ) {
+  _printNewline(newLine: boolean, opts: AddNewlinesOptions) {
     // Fast path since 'this.newline' does nothing when not tracking lines.
     if (this.format.retainLines || this.format.compact) return;
 
@@ -770,17 +815,36 @@ class Printer {
       return;
     }
 
-    let lines = 0;
-    // don't add newlines at the beginning of the file
-    if (this._buf.hasContent()) {
-      if (!leading) lines++; // always include at least a single line after
-      if (opts.addNewlines) lines += opts.addNewlines(leading, node) || 0;
-
-      const needs = leading ? needsWhitespaceBefore : needsWhitespaceAfter;
-      if (needs(node, parent)) lines++;
+    if (!newLine) {
+      return;
     }
 
-    this.newline(Math.min(2, lines));
+    const startLine = opts.nextNodeStartLine;
+    const lastCommentLine = this._lastCommentLine;
+    if (startLine > 0 && lastCommentLine > 0) {
+      const offset = startLine - lastCommentLine;
+      if (offset >= 0) {
+        this.newline(offset || 1);
+        return;
+      }
+    }
+
+    // don't add newlines at the beginning of the file
+    if (this._buf.hasContent()) {
+      // Here is the logic of the original line wrapping according to the node layout, we are not using it now.
+      // We currently add at most one newline to each node in the list, ignoring `opts.addNewlines`.
+
+      // let lines = 0;
+      // if (!leading) lines++; // always include at least a single line after
+      // if (opts.addNewlines) lines += opts.addNewlines(leading, node) || 0;
+
+      // const needs = leading ? needsWhitespaceBefore : needsWhitespaceAfter;
+      // if (needs(node, parent)) lines++;
+
+      // this.newline(Math.min(2, lines));
+
+      this.newline(1);
+    }
   }
 
   _getComments(leading: boolean, node: t.Node) {
@@ -791,7 +855,7 @@ class Printer {
     );
   }
 
-  _printComment(comment: t.Comment, skipNewLines?: boolean) {
+  _printComment(comment: t.Comment, skipNewLines: COMMENT_SKIP_NEWLINE) {
     // Some plugins (such as flow-strip-types) use this to mark comments as removed using the AST-root 'comments' property,
     // where they can't manually mutate the AST node comment lists.
     if (comment.ignore) return;
@@ -807,9 +871,17 @@ class Printer {
     // Add a newline before and after a block comment, unless explicitly
     // disallowed
     const printNewLines =
-      isBlockComment && !skipNewLines && !this._noLineTerminator;
+      isBlockComment &&
+      skipNewLines !== COMMENT_SKIP_NEWLINE.SKIP_ALL &&
+      !this._noLineTerminator;
 
-    if (printNewLines && this._buf.hasContent()) this.newline(1);
+    if (
+      printNewLines &&
+      this._buf.hasContent() &&
+      skipNewLines !== COMMENT_SKIP_NEWLINE.SKIP_LEADING
+    ) {
+      this.newline(1);
+    }
 
     const lastCharCode = this.getLastChar();
     if (
@@ -820,7 +892,6 @@ class Printer {
     }
 
     let val;
-    let maybeNewline = false;
     if (isBlockComment) {
       val = `/*${comment.value}*/`;
       if (this.format.indent.adjustMultilineComment) {
@@ -830,17 +901,18 @@ class Printer {
           val = val.replace(newlineRegex, "\n");
         }
 
-        const indentSize = Math.max(
-          this._getIndent(),
-          this.format.retainLines ? 0 : this._buf.getCurrentColumn(),
-        );
-        val = val.replace(/\n(?!$)/g, `\n${" ".repeat(indentSize)}`);
+        let indentSize = this.format.retainLines
+          ? 0
+          : this._buf.getCurrentColumn();
 
-        maybeNewline = true;
+        if (this._shouldIndent(charCodes.slash) || this.format.retainLines) {
+          indentSize += this._getIndent();
+        }
+
+        val = val.replace(/\n(?!$)/g, `\n${" ".repeat(indentSize)}`);
       }
     } else if (!this._noLineTerminator) {
-      val = `//${comment.value}\n`;
-      maybeNewline = true;
+      val = `//${comment.value}`;
     } else {
       val = `/*${comment.value}*/`;
     }
@@ -849,30 +921,116 @@ class Printer {
     if (this.endsWith(charCodes.slash)) this._space();
 
     this.source("start", comment.loc);
-    this._append(val, maybeNewline);
+    this._append(val, isBlockComment);
 
-    if (printNewLines) this.newline(1);
+    if (!isBlockComment && !this._noLineTerminator) {
+      this.newline(1, true);
+    }
+
+    if (printNewLines && skipNewLines !== COMMENT_SKIP_NEWLINE.SKIP_TRAILING) {
+      this.newline(1);
+    }
   }
 
   _printComments(
-    comments?: readonly t.Comment[],
-    inlinePureAnnotation?: boolean,
+    type: COMMENT_TYPE,
+    comments: readonly t.Comment[],
+    node: t.Node,
+    lineOffset: number = 0,
   ) {
-    if (!comments?.length) return;
+    {
+      const nodeLoc = node.loc;
+      const len = comments.length;
+      let hasLoc = !!nodeLoc;
+      const nodeStartLine = hasLoc ? nodeLoc.start.line : 0;
+      const nodeEndLine = hasLoc ? nodeLoc.end.line : 0;
+      let lastLine = 0;
+      let leadingCommentNewline = 0;
 
-    if (
-      inlinePureAnnotation &&
-      comments.length === 1 &&
-      PURE_ANNOTATION_RE.test(comments[0].value)
-    ) {
-      this._printComment(
-        comments[0],
-        // Keep newlines if the comment marks a standalone call
-        this._buf.hasContent() && !this.endsWith(charCodes.lineFeed),
-      );
-    } else {
-      for (const comment of comments) {
-        this._printComment(comment);
+      for (let i = 0; i < len; i++) {
+        const comment = comments[i];
+
+        if (hasLoc && "loc" in comment && !this._printedComments.has(comment)) {
+          const commentStartLine = comment.loc.start.line;
+          const commentEndLine = comment.loc.end.line;
+          if (type === COMMENT_TYPE.LEADING) {
+            let offset = 0;
+            if (i === 0) {
+              // Because currently we cannot handle blank lines before leading comments,
+              // we always wrap before and after multi-line comments.
+              if (
+                this._buf.hasContent() &&
+                (comment.type === "CommentLine" ||
+                  commentStartLine != commentEndLine)
+              ) {
+                offset = leadingCommentNewline = 1;
+              }
+            } else {
+              offset = commentStartLine - lastLine;
+            }
+            lastLine = commentEndLine;
+
+            this.newline(offset);
+            this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL);
+
+            if (i + 1 === len) {
+              this.newline(
+                Math.max(nodeStartLine - lastLine, leadingCommentNewline),
+              );
+              lastLine = nodeStartLine;
+            }
+          } else if (type === COMMENT_TYPE.INNER) {
+            const offset =
+              commentStartLine - (i === 0 ? nodeStartLine : lastLine);
+            lastLine = commentEndLine;
+
+            this.newline(offset);
+            this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL);
+
+            if (i + 1 === len) {
+              this.newline(Math.min(1, nodeEndLine - lastLine)); // TODO: Improve here when inner comments processing is stronger
+              lastLine = nodeEndLine;
+            }
+          } else {
+            const offset =
+              commentStartLine -
+              (i === 0 ? nodeEndLine - lineOffset : lastLine);
+            lastLine = commentEndLine;
+
+            this.newline(offset);
+            this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL);
+          }
+        } else {
+          hasLoc = false;
+
+          if (len === 1) {
+            this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL);
+          } else if (
+            type === COMMENT_TYPE.INNER &&
+            !(node.type === "ObjectExpression" && node.properties.length > 1) &&
+            node.type !== "ClassBody"
+          ) {
+            // class X {
+            //   /*:: a: number*/
+            //   /*:: b: ?string*/
+            // }
+
+            this._printComment(
+              comment,
+              i === 0
+                ? COMMENT_SKIP_NEWLINE.SKIP_LEADING
+                : i === len - 1
+                ? COMMENT_SKIP_NEWLINE.SKIP_TRAILING
+                : COMMENT_SKIP_NEWLINE.DEFAULT,
+            );
+          } else {
+            this._printComment(comment, COMMENT_SKIP_NEWLINE.DEFAULT);
+          }
+        }
+      }
+
+      if (type === COMMENT_TYPE.TRAILING && hasLoc && lastLine) {
+        this._lastCommentLine = lastLine;
       }
     }
   }

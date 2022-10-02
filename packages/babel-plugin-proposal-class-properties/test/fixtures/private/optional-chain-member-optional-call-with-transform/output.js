@@ -2,10 +2,8 @@ class Foo {
   static getSelf() {
     return this;
   }
-
   static test() {
     var _o$Foo, _o$Foo2, _o$Foo3, _deep$very$o, _deep$very$o$Foo, _deep$very$o2, _deep$very$o2$Foo, _deep$very$o3, _deep$very$o3$Foo, _babelHelpers$classSt, _babelHelpers$classSt2, _ref, _ref$self, _ref2, _ref2$self, _self2, _self2$self, _babelHelpers$classSt3, _babelHelpers$classSt4, _ref3, _ref3$call, _ref4, _ref4$getSelf, _getSelf, _ref5, _getSelf$call, _ref6, _ref6$self, _babelHelpers$classSt5, _call, _call$self, _getSelf2, _getSelf2$self, _getSelf3, _getSelf3$self, _fn$Foo, _fn$Foo2, _fn$Foo3, _fnDeep$very$o, _fnDeep$very$o$Foo, _fnDeep$very$o2, _fnDeep$very$o2$Foo, _fnDeep$very$o3, _fnDeep$very$o3$Foo, _babelHelpers$classSt6, _babelHelpers$classSt7, _ref7, _ref7$self, _ref8, _ref8$self, _self3, _self3$self, _babelHelpers$classSt8, _babelHelpers$classSt9, _ref9, _ref9$call, _ref10, _ref10$getSelf, _getSelf4, _ref11, _getSelf4$call, _ref12, _ref12$self, _babelHelpers$classSt10, _call2, _call2$self, _getSelf5, _getSelf5$self, _getSelf6, _getSelf6$self, _babelHelpers$classSt11, _babelHelpers$classSt12, _babelHelpers$classSt13, _babelHelpers$classSt14, _babelHelpers$classSt15, _babelHelpers$classSt16, _babelHelpers$classSt17, _babelHelpers$classSt18, _babelHelpers$classSt19, _ref13, _ref14, _babelHelpers$classSt20, _babelHelpers$classSt21, _ref15, _babelHelpers$classSt22, _ref16, _babelHelpers$classSt23, _babelHelpers$classSt24, _ref17, _babelHelpers$classSt25, _babelHelpers$classSt26, _ref18, _babelHelpers$classSt27, _ref19, _babelHelpers$classSt28, _ref20, _ref20$getSelf, _babelHelpers$classSt29, _babelHelpers$classSt30, _babelHelpers$classSt31, _babelHelpers$classSt32, _babelHelpers$classSt33, _babelHelpers$classSt34, _babelHelpers$classSt35, _ref21, _ref22, _babelHelpers$classSt36, _babelHelpers$classSt37, _ref23, _babelHelpers$classSt38, _ref24, _babelHelpers$classSt39, _babelHelpers$classSt40, _ref25, _babelHelpers$classSt41, _babelHelpers$classSt42, _ref26, _babelHelpers$classSt43, _ref27, _babelHelpers$classSt44, _ref28, _ref28$getSelf, _babelHelpers$classSt45;
-
     const o = {
       Foo: Foo
     };
@@ -14,15 +12,12 @@ class Foo {
         o
       }
     };
-
     function fn() {
       return o;
     }
-
     function fnDeep() {
       return deep;
     }
-
     (_babelHelpers$classSt11 = babelHelpers.classStaticPrivateFieldSpecGet(Foo, Foo, _m)) === null || _babelHelpers$classSt11 === void 0 ? void 0 : _babelHelpers$classSt11.call(Foo);
     (_babelHelpers$classSt12 = babelHelpers.classStaticPrivateFieldSpecGet(Foo, Foo, _m)) === null || _babelHelpers$classSt12 === void 0 ? void 0 : _babelHelpers$classSt12.call(Foo).toString;
     (_babelHelpers$classSt13 = babelHelpers.classStaticPrivateFieldSpecGet(Foo, Foo, _m)) === null || _babelHelpers$classSt13 === void 0 ? void 0 : _babelHelpers$classSt13.call(Foo).toString();
@@ -65,9 +60,7 @@ class Foo {
     (_getSelf5 = (_ref27 = fn === null || fn === void 0 ? void 0 : babelHelpers.classStaticPrivateFieldSpecGet(fn().Foo, Foo, _self)) === null || _ref27 === void 0 ? void 0 : _ref27.getSelf()) === null || _getSelf5 === void 0 ? void 0 : (_babelHelpers$classSt44 = babelHelpers.classStaticPrivateFieldSpecGet(_getSelf5$self = _getSelf5.self, Foo, _m)) === null || _babelHelpers$classSt44 === void 0 ? void 0 : _babelHelpers$classSt44.call(_getSelf5$self);
     (_getSelf6 = (_ref28 = fn === null || fn === void 0 ? void 0 : babelHelpers.classStaticPrivateFieldSpecGet(fn().Foo, Foo, _self)) === null || _ref28 === void 0 ? void 0 : (_ref28$getSelf = _ref28.getSelf) === null || _ref28$getSelf === void 0 ? void 0 : _ref28$getSelf.call(_ref28)) === null || _getSelf6 === void 0 ? void 0 : (_babelHelpers$classSt45 = babelHelpers.classStaticPrivateFieldSpecGet(_getSelf6$self = _getSelf6.self, Foo, _m)) === null || _babelHelpers$classSt45 === void 0 ? void 0 : _babelHelpers$classSt45.call(_getSelf6$self);
   }
-
 }
-
 var _x = {
   writable: true,
   value: 1

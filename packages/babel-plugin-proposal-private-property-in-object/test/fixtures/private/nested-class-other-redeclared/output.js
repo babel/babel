@@ -1,7 +1,5 @@
 var _foo = /*#__PURE__*/new WeakMap();
-
 var _bar = /*#__PURE__*/new WeakMap();
-
 let Foo = /*#__PURE__*/function () {
   "use strict";
 
@@ -16,12 +14,10 @@ let Foo = /*#__PURE__*/function () {
       value: 1
     });
   }
-
   babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test() {
       var _bar2 = /*#__PURE__*/new WeakMap();
-
       let Nested = /*#__PURE__*/function () {
         function Nested() {
           babelHelpers.classCallCheck(this, Nested);
@@ -30,20 +26,16 @@ let Foo = /*#__PURE__*/function () {
             value: 2
           });
         }
-
         babelHelpers.createClass(Nested, [{
           key: "test",
           value: function test() {
             _foo.has(this);
-
             _bar2.has(this);
           }
         }]);
         return Nested;
       }();
-
       _foo.has(this);
-
       _bar.has(this);
     }
   }]);

@@ -4,7 +4,6 @@ if (x) {
 }`;
 
 var expected = `var foo = 1;
-
 if (x) {
   var bar = 1;
 }`;

@@ -1,2 +1,1 @@
-/*#__PURE__*/
-React.createElement(Namespace.DeepNamespace.Component, null);
+/*#__PURE__*/React.createElement(Namespace.DeepNamespace.Component, null);

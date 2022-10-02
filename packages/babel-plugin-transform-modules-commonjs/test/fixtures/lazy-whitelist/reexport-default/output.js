@@ -9,13 +9,10 @@ Object.defineProperty(exports, "default", {
     return _white().default;
   }
 });
-
 function _white() {
   const data = babelHelpers.interopRequireDefault(require("white"));
-
   _white = function () {
     return data;
   };
-
   return data;
 }

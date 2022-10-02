@@ -1,9 +1,9 @@
 // Edge
 ({
   x: _x = 2
-}) => {}; // Safari
+}) => {};
 
-
+// Safari
 {
   let x;
   {

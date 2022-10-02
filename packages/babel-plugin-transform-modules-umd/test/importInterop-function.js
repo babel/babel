@@ -51,9 +51,7 @@ describe("'importInterop'", () => {
 
         _a = babelHelpers.interopRequireDefault(_a);
         (0, _a.default)();
-
         _b();
-
         (0, _c.default)();
       });"
     `);

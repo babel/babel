@@ -5,7 +5,6 @@ for (var _iterator = babelHelpers.createForOfIteratorHelperLoose(y), _step; !(_s
     let y = 2;
   }
 }
-
 for (var _i = 0, _arr = []; _i < _arr.length; _i++) {
   let x = _arr[_i];
   {

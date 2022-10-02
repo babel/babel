@@ -625,7 +625,6 @@ describe("api", function () {
         '    throw new TypeError("Cannot call a class as a function");',
         "  }",
         "}",
-        "",
         "let Foo = function Foo() {",
         "  _classCallCheck(this, Foo);",
         "};",
@@ -636,7 +635,7 @@ describe("api", function () {
 
     expect(
       originalPositionFor(consumer, {
-        line: 7,
+        line: 6,
         column: 4,
       }),
     ).toEqual({
@@ -710,7 +709,7 @@ describe("api", function () {
       ],
     }).then(function (result) {
       expect(result.code).toBe(
-        "/*before*/\nstart;\n\n/*after*/\nclass Foo {}\n\n/*before*/\nend;\n\n/*after*/",
+        "/*before*/\nstart;\n/*after*/\nclass Foo {}\n/*before*/\nend;\n/*after*/",
       );
     });
   });

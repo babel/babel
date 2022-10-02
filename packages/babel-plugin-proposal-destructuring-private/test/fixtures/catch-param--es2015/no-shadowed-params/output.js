@@ -1,7 +1,5 @@
 var x;
-
 var _x = /*#__PURE__*/new WeakMap();
-
 class C {
   constructor() {
     babelHelpers.classPrivateFieldInitSpec(this, _x, {
@@ -9,12 +7,9 @@ class C {
       value: void 0
     });
   }
-
 }
-
 (() => {
   x = "x";
-
   try {
     throw new C();
   } catch (_e) {

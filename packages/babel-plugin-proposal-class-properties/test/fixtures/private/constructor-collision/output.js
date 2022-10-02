@@ -1,7 +1,5 @@
 var foo = "bar";
-
 var _bar = /*#__PURE__*/new WeakMap();
-
 var Foo = /*#__PURE__*/babelHelpers.createClass(function Foo() {
   "use strict";
 

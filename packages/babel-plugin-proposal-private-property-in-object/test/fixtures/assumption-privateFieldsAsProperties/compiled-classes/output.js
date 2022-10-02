@@ -1,7 +1,5 @@
 var _foo = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("foo");
-
 var _bar = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("bar");
-
 let Foo = /*#__PURE__*/function () {
   "use strict";
 
@@ -12,7 +10,6 @@ let Foo = /*#__PURE__*/function () {
       value: "bar"
     });
   }
-
   babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test() {
@@ -26,7 +23,6 @@ let Foo = /*#__PURE__*/function () {
   }]);
   return Foo;
 }();
-
 Object.defineProperty(Foo, _foo, {
   writable: true,
   value: "foo"

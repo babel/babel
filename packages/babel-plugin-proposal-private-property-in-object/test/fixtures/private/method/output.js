@@ -1,5 +1,4 @@
 var _foo = /*#__PURE__*/new WeakSet();
-
 let Foo = /*#__PURE__*/function () {
   "use strict";
 
@@ -7,7 +6,6 @@ let Foo = /*#__PURE__*/function () {
     babelHelpers.classCallCheck(this, Foo);
     babelHelpers.classPrivateMethodInitSpec(this, _foo);
   }
-
   babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test(other) {
@@ -16,5 +14,4 @@ let Foo = /*#__PURE__*/function () {
   }]);
   return Foo;
 }();
-
 function _foo2() {}

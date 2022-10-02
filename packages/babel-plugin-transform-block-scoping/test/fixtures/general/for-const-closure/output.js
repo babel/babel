@@ -4,7 +4,6 @@ var _loop = function (i) {
     console.log(l);
   }, 1);
 };
-
 for (var i = 0; i < 5; i++) {
   _loop(i);
 }

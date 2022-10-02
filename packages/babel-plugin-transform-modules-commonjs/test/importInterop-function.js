@@ -37,15 +37,10 @@ describe("'importInterop'", () => {
       "\\"use strict\\";
 
       var _a = babelHelpers.interopRequireDefault(require(\\"a\\"));
-
       var _b = require(\\"b\\");
-
       var _c = require(\\"c\\");
-
       (0, _a.default)();
-
       _b();
-
       (0, _c.default)();"
     `);
   });

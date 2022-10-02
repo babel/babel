@@ -1,4 +1,3 @@
-/*#__PURE__*/
-babelHelpers.jsx("foo", {
+/*#__PURE__*/babelHelpers.jsx("foo", {
   bar: "foo"
 });

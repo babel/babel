@@ -3,5 +3,4 @@ class A extends B {
     super(...args);
     babelHelpers.defineProperty(this, "foo", super.bar);
   }
-
 }

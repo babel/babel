@@ -1,7 +1,6 @@
 e => {
   for (let _e of []);
 };
-
 {
   let a;
   {

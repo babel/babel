@@ -4,7 +4,6 @@ let Hello = /*#__PURE__*/function () {
   function Hello() {
     babelHelpers.classCallCheck(this, Hello);
   }
-
   babelHelpers.createClass(Hello, [{
     key: "toString",
     value: function toString() {
@@ -13,25 +12,17 @@ let Hello = /*#__PURE__*/function () {
   }]);
   return Hello;
 }();
-
 let Outer = /*#__PURE__*/function (_Hello) {
   babelHelpers.inherits(Outer, _Hello);
-
   var _super = babelHelpers.createSuper(Outer);
-
   function Outer() {
     let _babelHelpers$get$cal, _babelHelpers$get$cal2;
-
     var _thisSuper, _this;
-
     babelHelpers.classCallCheck(this, Outer);
     _this = _super.call(this);
-
     var _A = /*#__PURE__*/new WeakMap();
-
     _babelHelpers$get$cal = babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Outer.prototype)), "toString", _thisSuper).call(_thisSuper);
     _babelHelpers$get$cal2 = babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Outer.prototype)), "toString", _thisSuper).call(_thisSuper);
-
     let Inner = /*#__PURE__*/function () {
       function Inner() {
         babelHelpers.classCallCheck(this, Inner);
@@ -40,7 +31,6 @@ let Outer = /*#__PURE__*/function (_Hello) {
           value: 'hello'
         });
       }
-
       babelHelpers.createClass(Inner, [{
         key: _babelHelpers$get$cal,
         get: function () {
@@ -54,11 +44,8 @@ let Outer = /*#__PURE__*/function (_Hello) {
       }]);
       return Inner;
     }();
-
     return babelHelpers.possibleConstructorReturn(_this, new Inner());
   }
-
   return babelHelpers.createClass(Outer);
 }(Hello);
-
 expect(new Outer().hello).toBe('hello');

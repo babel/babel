@@ -4,7 +4,5 @@ class Base {
       static #_ = this.foo = new.target;
     };
   }
-
 }
-
 expect(new Base().Foo.foo).toBe(undefined);

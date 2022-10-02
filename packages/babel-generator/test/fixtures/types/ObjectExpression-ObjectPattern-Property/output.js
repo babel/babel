@@ -13,17 +13,10 @@ var foo = {
 };
 var foo = {
   ["bar"]: "foo",
-
   ["foo"]() {},
-
   foo() {},
-
   async foo() {},
-
   *foo() {},
-
   get foo() {},
-
   set foo(foo) {}
-
 };

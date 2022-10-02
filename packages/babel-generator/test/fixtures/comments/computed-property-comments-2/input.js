@@ -6,5 +6,8 @@ var test = {
     [/*
       * Inside bracket init
       */
-    "b"]:"2"
+    "b"]:"2",
+    [/**
+      * Multi-line
+      */"c"]:"3",
   }, ok = 42;

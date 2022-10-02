@@ -1,6 +1,5 @@
 var _iterator = babelHelpers.createForOfIteratorHelper(results),
-    _step;
-
+  _step;
 try {
   var _loop = function () {
     var result = _step.value;
@@ -9,7 +8,6 @@ try {
       result;
     });
   };
-
   for (_iterator.s(); !(_step = _iterator.n()).done;) {
     _loop();
   }

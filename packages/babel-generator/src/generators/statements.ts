@@ -248,24 +248,6 @@ export function DebuggerStatement(this: Printer) {
   this.semicolon();
 }
 
-function variableDeclarationIndent(this: Printer) {
-  // "let " or "var " indentation.
-  this.token(",");
-  this.newline();
-  if (this.endsWith(charCodes.lineFeed)) {
-    for (let i = 0; i < 4; i++) this.space(true);
-  }
-}
-
-function constDeclarationIndent(this: Printer) {
-  // "const " indentation.
-  this.token(",");
-  this.newline();
-  if (this.endsWith(charCodes.lineFeed)) {
-    for (let i = 0; i < 6; i++) this.space(true);
-  }
-}
-
 export function VariableDeclaration(
   this: Printer,
   node: t.VariableDeclaration,
@@ -303,17 +285,15 @@ export function VariableDeclaration(
   //       bar = "foo";
   //
 
-  let separator;
-  if (hasInits) {
-    separator =
-      node.kind === "const"
-        ? constDeclarationIndent
-        : variableDeclarationIndent;
-  }
-
-  //
-
-  this.printList(node.declarations, node, { separator });
+  this.printList(node.declarations, node, {
+    separator: hasInits
+      ? function (this: Printer) {
+          this.token(",");
+          this.newline();
+        }
+      : undefined,
+    indent: node.declarations.length > 1 ? true : false,
+  });
 
   if (isFor(parent)) {
     // don't give semicolons to these nodes since they'll be inserted in the parent generator

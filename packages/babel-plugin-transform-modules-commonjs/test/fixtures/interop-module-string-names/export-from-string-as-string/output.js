@@ -9,5 +9,4 @@ Object.defineProperty(exports, "some exports", {
     return _foo["some imports"];
   }
 });
-
 var _foo = require("foo");

@@ -3,7 +3,6 @@ const x = () => function () {
     case 0:
       get();
       return 1 + 1;
-
     default:
       return "weekday 🚴";
   }

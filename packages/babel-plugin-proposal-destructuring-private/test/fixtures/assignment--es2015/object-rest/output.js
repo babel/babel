@@ -1,7 +1,5 @@
 let result;
-
 class C {}
-
 var _x = {
   writable: true,
   value: "#x"
@@ -13,10 +11,8 @@ var _y = {
 babelHelpers.defineProperty(C, "a", "a");
 babelHelpers.defineProperty(C, "b", "b");
 babelHelpers.defineProperty(C, "c", "c");
-
 (() => {
   var _m, _m2;
-
   var a, b, x, y, z;
   ({
     [_m = C.a]: a

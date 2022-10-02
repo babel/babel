@@ -9,7 +9,6 @@ function foo() {
                 v: void 0
               };
             }
-
             var stuff = new Map();
             var data = 0;
             stuff.forEach(function () {
@@ -17,7 +16,6 @@ function foo() {
             });
             return "break";
           }();
-
           if (_ret === "break") break;
           if (typeof _ret === "object") return _ret.v;
         }

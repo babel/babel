@@ -1,7 +1,6 @@
 "use strict";
 
 var _obj$a, _obj$b;
-
 const obj = {
   a: {
     b: 0

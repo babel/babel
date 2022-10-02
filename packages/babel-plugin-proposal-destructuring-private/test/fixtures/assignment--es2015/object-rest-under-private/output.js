@@ -1,8 +1,6 @@
 const _excluded = ["y"];
 let result;
-
 class C {}
-
 babelHelpers.defineProperty(C, "x", "x");
 babelHelpers.defineProperty(C, "y", "y");
 babelHelpers.defineProperty(C, "z", "z");
@@ -10,10 +8,8 @@ var _x = {
   writable: true,
   value: C
 };
-
 (() => {
   var _babelHelpers$classSt;
-
   var x, y, z;
   ({
     x

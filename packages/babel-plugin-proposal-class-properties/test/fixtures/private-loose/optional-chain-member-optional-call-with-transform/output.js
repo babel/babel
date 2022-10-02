@@ -1,17 +1,12 @@
 var _x = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("x");
-
 var _m = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("m");
-
 var _self = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("self");
-
 class Foo {
   static getSelf() {
     return this;
   }
-
   static test() {
     var _deep$very$o, _deep$very$o2, _deep$very$o3, _babelHelpers$classPr, _babelHelpers$classPr2, _ref, _ref2, _self2, _babelHelpers$classPr3, _babelHelpers$classPr4, _ref3, _ref4, _getSelf, _ref5, _ref6, _babelHelpers$classPr5, _call, _getSelf2, _getSelf3, _fnDeep$very$o, _fnDeep$very$o2, _fnDeep$very$o3, _babelHelpers$classPr6, _babelHelpers$classPr7, _ref7, _ref8, _self3, _babelHelpers$classPr8, _babelHelpers$classPr9, _ref9, _ref10, _getSelf4, _ref11, _ref12, _babelHelpers$classPr10, _call2, _getSelf5, _getSelf6, _babelHelpers$classPr11, _babelHelpers$classPr12, _babelHelpers$classPr13, _babelHelpers$classPr14, _babelHelpers$classPr15, _babelHelpers$classPr16, _babelHelpers$classPr17, _babelHelpers$classPr18, _babelHelpers$classPr19, _babelHelpers$classPr20, _babelHelpers$classPr21, _babelHelpers$classPr22, _babelHelpers$classPr23, _babelHelpers$classPr24, _babelHelpers$classPr25, _babelHelpers$classPr26, _babelHelpers$classPr27, _babelHelpers$classPr28, _ref13, _ref14, _babelHelpers$classPr29, _babelHelpers$classPr30, _babelHelpers$classPr31, _babelHelpers$classPr32, _ref15, _babelHelpers$classPr33, _babelHelpers$classPr34, _ref16, _babelHelpers$classPr35, _babelHelpers$classPr36, _babelHelpers$classPr37, _babelHelpers$classPr38, _ref17, _babelHelpers$classPr39, _babelHelpers$classPr40, _babelHelpers$classPr41, _babelHelpers$classPr42, _ref18, _babelHelpers$classPr43, _babelHelpers$classPr44, _ref19, _babelHelpers$classPr45, _babelHelpers$classPr46, _ref20, _babelHelpers$classPr47, _babelHelpers$classPr48, _babelHelpers$classPr49, _babelHelpers$classPr50, _babelHelpers$classPr51, _babelHelpers$classPr52, _babelHelpers$classPr53, _babelHelpers$classPr54, _babelHelpers$classPr55, _babelHelpers$classPr56, _babelHelpers$classPr57, _babelHelpers$classPr58, _babelHelpers$classPr59, _babelHelpers$classPr60, _ref21, _ref22, _babelHelpers$classPr61, _babelHelpers$classPr62, _babelHelpers$classPr63, _babelHelpers$classPr64, _ref23, _babelHelpers$classPr65, _babelHelpers$classPr66, _ref24, _babelHelpers$classPr67, _babelHelpers$classPr68, _babelHelpers$classPr69, _babelHelpers$classPr70, _ref25, _babelHelpers$classPr71, _babelHelpers$classPr72, _babelHelpers$classPr73, _babelHelpers$classPr74, _ref26, _babelHelpers$classPr75, _babelHelpers$classPr76, _ref27, _babelHelpers$classPr77, _babelHelpers$classPr78, _ref28, _babelHelpers$classPr79, _babelHelpers$classPr80;
-
     const o = {
       Foo: Foo
     };
@@ -20,15 +15,12 @@ class Foo {
         o
       }
     };
-
     function fn() {
       return o;
     }
-
     function fnDeep() {
       return deep;
     }
-
     (_babelHelpers$classPr11 = (_babelHelpers$classPr12 = babelHelpers.classPrivateFieldLooseBase(Foo, _m))[_m]) == null ? void 0 : _babelHelpers$classPr11.call(_babelHelpers$classPr12);
     (_babelHelpers$classPr13 = (_babelHelpers$classPr14 = babelHelpers.classPrivateFieldLooseBase(Foo, _m))[_m]) == null ? void 0 : _babelHelpers$classPr13.call(_babelHelpers$classPr14).toString;
     (_babelHelpers$classPr15 = (_babelHelpers$classPr16 = babelHelpers.classPrivateFieldLooseBase(Foo, _m))[_m]) == null ? void 0 : _babelHelpers$classPr15.call(_babelHelpers$classPr16).toString();
@@ -71,9 +63,7 @@ class Foo {
     (_getSelf5 = (_ref27 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self]) == null ? void 0 : _ref27.getSelf()) === null || _getSelf5 === void 0 ? void 0 : (_babelHelpers$classPr77 = (_babelHelpers$classPr78 = babelHelpers.classPrivateFieldLooseBase(_getSelf5.self, _m))[_m]) == null ? void 0 : _babelHelpers$classPr77.call(_babelHelpers$classPr78);
     (_getSelf6 = (_ref28 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self]) == null ? void 0 : _ref28.getSelf == null ? void 0 : _ref28.getSelf()) === null || _getSelf6 === void 0 ? void 0 : (_babelHelpers$classPr79 = (_babelHelpers$classPr80 = babelHelpers.classPrivateFieldLooseBase(_getSelf6.self, _m))[_m]) == null ? void 0 : _babelHelpers$classPr79.call(_babelHelpers$classPr80);
   }
-
 }
-
 Object.defineProperty(Foo, _x, {
   writable: true,
   value: 1

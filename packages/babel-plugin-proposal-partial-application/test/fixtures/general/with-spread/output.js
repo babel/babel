@@ -1,7 +1,6 @@
 "use strict";
 
 var _a, _b, _foo, _x, _y, _bar, _d, _obj$baz, _obj;
-
 const q = (_foo = foo, _a = a, _b = [...b], function foo(_argPlaceholder) {
   return _foo(_a, ..._b, _argPlaceholder);
 });

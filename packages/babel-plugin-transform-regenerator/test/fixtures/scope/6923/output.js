@@ -8,14 +8,12 @@ function foo() {
             while (1) switch (_context.prev = _context.next) {
               case 0:
                 tmp = number;
-
               case 1:
               case "end":
                 return _context.stop();
             }
           }, null, null, null, Promise);
         });
-
       case 1:
       case "end":
         return _context2.stop();

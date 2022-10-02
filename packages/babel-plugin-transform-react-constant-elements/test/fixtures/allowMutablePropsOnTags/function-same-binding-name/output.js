@@ -1,5 +1,4 @@
 var _Counter;
-
 function Component({
   value
 }) {

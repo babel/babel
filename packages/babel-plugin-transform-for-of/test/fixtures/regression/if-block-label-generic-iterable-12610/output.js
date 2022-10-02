@@ -1,7 +1,6 @@
 if (true) {
   var _iterator = babelHelpers.createForOfIteratorHelper(y),
-      _step;
-
+    _step;
   try {
     actions: for (_iterator.s(); !(_step = _iterator.n()).done;) {
       let x = _step.value;

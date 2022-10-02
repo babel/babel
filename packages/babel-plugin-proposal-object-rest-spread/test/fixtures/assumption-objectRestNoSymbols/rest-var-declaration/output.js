@@ -1,5 +1,5 @@
 var {
-  a,
-  b
-} = obj,
-    c = babelHelpers.objectWithoutPropertiesLoose(obj, ["a", "b"]);
+    a,
+    b
+  } = obj,
+  c = babelHelpers.objectWithoutPropertiesLoose(obj, ["a", "b"]);

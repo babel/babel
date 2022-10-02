@@ -17,6 +17,5 @@
     value: true
   });
   _exports.default = foo;
-
   function foo() {}
 });

@@ -1,4 +1,5 @@
 // @flow
+
 type T = string;
 declare module 'test' {
   import type { JSONSchema7 } from 'json-schema';

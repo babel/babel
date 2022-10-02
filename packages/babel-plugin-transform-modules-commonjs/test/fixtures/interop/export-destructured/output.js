@@ -12,7 +12,6 @@ let x = 0;
 exports.x = x;
 let y = 0;
 exports.y = y;
-
 function f1() {
   ({
     x
@@ -21,7 +20,6 @@ function f1() {
   });
   exports.x = x;
 }
-
 function f2() {
   ({
     x,
@@ -32,12 +30,10 @@ function f2() {
   });
   exports.x = x, exports.y = y;
 }
-
 function f3() {
   [x, y, z] = [3, 4, 5];
   exports.x = x, exports.y = y;
 }
-
 function f4() {
   [x,, y] = [3, 4, 5];
   exports.x = x, exports.y = y;

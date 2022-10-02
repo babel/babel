@@ -4,12 +4,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.Test = void 0;
-
 var Test = /*#__PURE__*/function () {
   function Test() {
     babelHelpers.classCallCheck(this, Test);
   }
-
   babelHelpers.createClass(Test, [{
     key: "invite",
     value: function invite() {
@@ -20,5 +18,4 @@ var Test = /*#__PURE__*/function () {
   }]);
   return Test;
 }();
-
 exports.Test = Test;

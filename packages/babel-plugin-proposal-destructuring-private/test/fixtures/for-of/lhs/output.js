@@ -5,6 +5,5 @@ class C {
       x = _ref.#x;
       ;
     }
-
   }
 }

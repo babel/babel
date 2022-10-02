@@ -5,11 +5,8 @@ new C<T>();
 f<T>(e);
 o[e]<T>();
 f<T>(x)<U>(y);
-
 async <T>() => {};
-
 async <T>(): T => {};
-
 new C<T>(e);
 f < T > [e];
 new C<T>();

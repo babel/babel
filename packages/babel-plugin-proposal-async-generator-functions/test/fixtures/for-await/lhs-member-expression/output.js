@@ -1,9 +1,7 @@
 babelHelpers.asyncToGenerator(function* () {
   var _iteratorAbruptCompletion = false;
   var _didIteratorError = false;
-
   var _iteratorError;
-
   try {
     for (var _iterator = babelHelpers.asyncIterator(y), _step; _iteratorAbruptCompletion = !(_step = yield _iterator.next()).done; _iteratorAbruptCompletion = false) {
       obj.x = _step.value;

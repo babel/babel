@@ -1,7 +1,5 @@
 var _class, _descriptor, _descriptor2;
-
 function dec() {}
-
 let A = (_class = /*#__PURE__*/babelHelpers.createClass(function A() {
   "use strict";
 

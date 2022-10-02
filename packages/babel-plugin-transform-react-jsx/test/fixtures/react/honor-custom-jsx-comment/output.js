@@ -1,4 +1,5 @@
 /** @jsx dom */
+
 dom(Foo, null);
 var profile = dom("div", null, dom("img", {
   src: "avatar.png",

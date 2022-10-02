@@ -4,7 +4,6 @@
 new function (foo, {
   from
 }) {}({}, Array);
-
 (({
   includes
 }) => {})('42');

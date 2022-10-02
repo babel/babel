@@ -1,5 +1,4 @@
 var _foo = /*#__PURE__*/new WeakMap();
-
 var Foo = /*#__PURE__*/function () {
   "use strict";
 
@@ -10,12 +9,10 @@ var Foo = /*#__PURE__*/function () {
       value: 0
     });
   }
-
   babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test(other) {
       var _other$obj;
-
       babelHelpers.classPrivateFieldSet(this, _foo, babelHelpers.classPrivateFieldGet(this, _foo) + 1);
       babelHelpers.classPrivateFieldSet(this, _foo, 2);
       babelHelpers.classPrivateFieldSet(_other$obj = other.obj, _foo, babelHelpers.classPrivateFieldGet(_other$obj, _foo) + 1);

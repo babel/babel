@@ -1,7 +1,5 @@
 import _regeneratorRuntime from "@babel/runtime-corejs3/regenerator";
-
 var _marked = /*#__PURE__*/_regeneratorRuntime.mark(giveWord);
-
 import _Symbol from "@babel/runtime-corejs3/core-js-stable/symbol";
 import foo, * as bar from "someModule";
 export const myWord = _Symbol("abc");
@@ -11,7 +9,6 @@ export function giveWord() {
       case 0:
         _context.next = 2;
         return myWord;
-
       case 2:
       case "end":
         return _context.stop();

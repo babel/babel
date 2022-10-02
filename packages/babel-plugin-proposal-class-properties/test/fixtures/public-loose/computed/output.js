@@ -1,9 +1,6 @@
 var _one, _ref, _undefined, _computed, _computed2, _ref2, _ref3, _baz, _ref4;
-
 var foo = "foo";
-
 var bar = () => {};
-
 var four = 4;
 _one = one();
 _ref = 2 * four + seven;
@@ -14,7 +11,6 @@ _ref2 = "test" + one;
 _ref3 = /regex/;
 _baz = baz;
 _ref4 = `template${expression}`;
-
 var MyClass = /*#__PURE__*/function () {
   "use strict";
 
@@ -30,7 +26,6 @@ var MyClass = /*#__PURE__*/function () {
     this[`template`] = "template";
     this[_ref4] = "template-with-expression";
   }
-
   babelHelpers.createClass(MyClass, [{
     key: "whatever",
     get: function () {},
@@ -50,7 +45,6 @@ var MyClass = /*#__PURE__*/function () {
   }]);
   return MyClass;
 }();
-
 MyClass[_one] = "test";
 MyClass[2 * 4 + 7] = "247";
 MyClass[2 * four + 7] = "247";

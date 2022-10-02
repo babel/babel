@@ -1,7 +1,6 @@
 function agf() {
   return _agf.apply(this, arguments);
 }
-
 function _agf() {
   _agf = babelHelpers.wrapAsyncGenerator(function* () {
     this;

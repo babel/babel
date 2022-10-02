@@ -6,6 +6,5 @@ export default function _possibleConstructorReturn(self, call) {
   } else if (call !== void 0) {
     throw new TypeError("Derived constructors may only return object or undefined");
   }
-
   return assertThisInitialized(self);
 }

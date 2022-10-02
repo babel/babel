@@ -1,5 +1,4 @@
 var _arr = /*#__PURE__*/new WeakMap();
-
 var D = /*#__PURE__*/function () {
   "use strict";
 
@@ -10,7 +9,6 @@ var D = /*#__PURE__*/function () {
       value: void 0
     });
   }
-
   babelHelpers.createClass(D, [{
     key: "f",
     value: function f() {
@@ -21,9 +19,7 @@ var D = /*#__PURE__*/function () {
   }]);
   return D;
 }();
-
 var _p = /*#__PURE__*/new WeakMap();
-
 var C = /*#__PURE__*/function () {
   "use strict";
 
@@ -34,7 +30,6 @@ var C = /*#__PURE__*/function () {
       value: void 0
     });
   }
-
   babelHelpers.createClass(C, [{
     key: "m",
     value: function m() {
@@ -45,9 +40,7 @@ var C = /*#__PURE__*/function () {
   }]);
   return C;
 }();
-
 var _arr2 = /*#__PURE__*/new WeakMap();
-
 var E = /*#__PURE__*/function () {
   "use strict";
 
@@ -58,7 +51,6 @@ var E = /*#__PURE__*/function () {
       value: void 0
     });
   }
-
   babelHelpers.createClass(E, [{
     key: "f",
     value: function f() {
@@ -69,9 +61,7 @@ var E = /*#__PURE__*/function () {
   }]);
   return E;
 }();
-
 var _ar = /*#__PURE__*/new WeakMap();
-
 var F = /*#__PURE__*/function () {
   "use strict";
 
@@ -82,7 +72,6 @@ var F = /*#__PURE__*/function () {
       value: void 0
     });
   }
-
   babelHelpers.createClass(F, [{
     key: "g",
     value: function g() {

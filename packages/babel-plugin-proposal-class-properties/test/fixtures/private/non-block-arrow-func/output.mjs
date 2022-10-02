@@ -1,11 +1,9 @@
 export default (param => {
   var _class, _props;
-
   return _class = class App {
     getParam() {
       return param;
     }
-
   }, _props = {
     writable: true,
     value: {

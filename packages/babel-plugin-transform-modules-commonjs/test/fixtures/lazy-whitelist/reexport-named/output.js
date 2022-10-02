@@ -15,15 +15,11 @@ Object.defineProperty(exports, "named2", {
     return _black.named2;
   }
 });
-
 function _white() {
   const data = require("white");
-
   _white = function () {
     return data;
   };
-
   return data;
 }
-
 var _black = require("black");

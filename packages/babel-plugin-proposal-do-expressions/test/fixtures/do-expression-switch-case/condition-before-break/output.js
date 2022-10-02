@@ -4,6 +4,5 @@ const x = n => function () {
       if (true) {
         return void 0;
       }
-
   }
 }();

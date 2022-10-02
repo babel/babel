@@ -4,7 +4,6 @@ var A = /*#__PURE__*/function () {
   function A() {
     babelHelpers.classCallCheck(this, A);
   }
-
   babelHelpers.createClass(A, [{
     key: "foo",
     value: function foo() {
@@ -13,19 +12,14 @@ var A = /*#__PURE__*/function () {
   }]);
   return A;
 }();
-
 var _foo = /*#__PURE__*/new WeakMap();
-
 var B = /*#__PURE__*/function (_A) {
   "use strict";
 
   babelHelpers.inherits(B, _A);
-
   var _super = babelHelpers.createSuper(B);
-
   function B(...args) {
     var _thisSuper, _this;
-
     babelHelpers.classCallCheck(this, B);
     _this = _super.call(this, ...args);
     babelHelpers.classPrivateFieldInitSpec(babelHelpers.assertThisInitialized(_this), _foo, {
@@ -34,6 +28,5 @@ var B = /*#__PURE__*/function (_A) {
     });
     return _this;
   }
-
   return babelHelpers.createClass(B);
 }(A);

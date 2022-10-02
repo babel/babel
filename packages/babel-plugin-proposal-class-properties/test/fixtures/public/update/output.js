@@ -5,7 +5,6 @@ var Foo = /*#__PURE__*/function () {
     babelHelpers.classCallCheck(this, Foo);
     babelHelpers.defineProperty(this, "foo", 0);
   }
-
   babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test(other) {

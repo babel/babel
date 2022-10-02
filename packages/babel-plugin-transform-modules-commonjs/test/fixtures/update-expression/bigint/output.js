@@ -4,9 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.foofoo = exports.foo = exports.bazbaz = exports.baz = exports.barbar = exports.bar = void 0;
-
 var _foo, _bar, _baz;
-
 let foo = 1n;
 exports.foofoo = exports.foo = foo;
 let bar = (_foo = foo++, exports.foofoo = exports.foo = foo, _foo);

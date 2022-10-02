@@ -1,13 +1,10 @@
 function t1({
   responseText: responseText
 }) {}
-
 function t2({
   responseText
 }) {}
-
 function t3([a, b]) {}
-
 var [i1, j1, k1] = array;
 var {
   i2,

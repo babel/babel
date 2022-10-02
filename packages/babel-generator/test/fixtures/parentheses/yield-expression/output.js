@@ -7,14 +7,12 @@ function* foo() {
   yield 1 ? 2 : 3;
   yield yield 1;
 }
-
 function* a(b) {
   (yield xhr({
     url: "views/test.html"
   })).data;
   (yield replay())?.data;
 }
-
 (async function* () {
   await (yield 1);
 });

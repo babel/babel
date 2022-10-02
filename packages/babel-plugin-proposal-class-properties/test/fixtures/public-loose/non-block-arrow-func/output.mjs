@@ -1,11 +1,9 @@
 export default (param => {
   var _class;
-
   return _class = /*#__PURE__*/function () {
     function App() {
       babelHelpers.classCallCheck(this, App);
     }
-
     babelHelpers.createClass(App, [{
       key: "getParam",
       value: function getParam() {

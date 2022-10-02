@@ -9,7 +9,6 @@ var bar = {
     _get(arg, "baz");
   }
 };
-
 var f = function f({
   foo: _foo = "bar"
 }) {

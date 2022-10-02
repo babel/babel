@@ -6,9 +6,7 @@ async function* f() {
       constructor() {
         _initialize(this);
       }
-
     }
-
     return {
       F: A,
       d: []

@@ -1,6 +1,5 @@
 function test(foo) {
   var _foo$bar, _foo$get, _foo$bar2, _foo$bar3, _foo$bar$baz, _foo$bar4, _foo$bar$baz2, _foo$bar5, _foo$bar6, _foo$bar7, _foo$bar8, _foo$bar9;
-
   foo == null ? void 0 : foo.bar;
   foo == null ? void 0 : (_foo$bar = foo.bar) == null ? void 0 : _foo$bar.baz;
   foo == null ? void 0 : foo(foo);

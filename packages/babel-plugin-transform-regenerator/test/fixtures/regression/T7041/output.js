@@ -1,7 +1,5 @@
 var _marked = /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(fn);
-
 Object.keys({});
-
 function fn() {
   return babelHelpers.regeneratorRuntime().wrap(function fn$(_context) {
     while (1) {

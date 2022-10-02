@@ -1,11 +1,7 @@
 var _init_a, _get_a, _set_a, _init_b, _get_b, _set_b, _initStatic;
-
 const dec = () => {};
-
 var _a = /*#__PURE__*/new WeakMap();
-
 var _b = /*#__PURE__*/new WeakMap();
-
 class Foo {
   constructor() {
     babelHelpers.classPrivateFieldInitSpec(this, _b, {
@@ -17,25 +13,19 @@ class Foo {
       set: _set_a2
     });
   }
-
 }
-
 function _set_a2(v) {
   _set_a(this, v);
 }
-
 function _get_a2() {
   return _get_a(this);
 }
-
 function _set_b2(v) {
   _set_b(this, v);
 }
-
 function _get_b2() {
   return _get_b(this);
 }
-
 (() => {
   [_init_a, _get_a, _set_a, _init_b, _get_b, _set_b, _initStatic] = babelHelpers.applyDecs(Foo, [[dec, 6, "a", function () {
     return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _A);
@@ -46,10 +36,8 @@ function _get_b2() {
   }, function (value) {
     babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _B, value);
   }]], []);
-
   _initStatic(Foo);
 })();
-
 var _A = {
   writable: true,
   value: _init_a(Foo)

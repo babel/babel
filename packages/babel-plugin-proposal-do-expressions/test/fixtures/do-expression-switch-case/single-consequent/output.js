@@ -3,7 +3,6 @@ const x = n => function () {
     case 0:
     case 6:
       return "weekend 🚵";
-
     default:
       return "weekday 🚴";
   }

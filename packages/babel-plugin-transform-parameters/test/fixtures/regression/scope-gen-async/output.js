@@ -5,7 +5,6 @@ function f() {
     return a;
   }(a);
 }
-
 async function g() {
   let a = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
   return async function (a) {
@@ -13,7 +12,6 @@ async function g() {
     return a;
   }(a);
 }
-
 async function h() {
   let a = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
   return async function* (a) {

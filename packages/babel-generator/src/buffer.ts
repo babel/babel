@@ -304,6 +304,25 @@ export default class Buffer {
   }
 
   /**
+   * This will only detect at most 1 newline after a call to `flush()`,
+   * but this has not been found so far, and an accurate count can be achieved if needed later.
+   */
+  getNewlineCount(): number {
+    const queueCursor = this._queueCursor;
+    let count = 0;
+    if (queueCursor === 0) return this._last === charcodes.lineFeed ? 1 : 0;
+    for (let i = queueCursor - 1; i >= 0; i--) {
+      if (this._queue[i].char !== charcodes.lineFeed) {
+        break;
+      }
+      count++;
+    }
+    return count === queueCursor && this._last === charcodes.lineFeed
+      ? count + 1
+      : count;
+  }
+
+  /**
    * check if current _last + queue ends with newline, return the character before newline
    *
    * @param {*} ch
@@ -419,15 +438,16 @@ export default class Buffer {
 
   getCurrentColumn(): number {
     const queue = this._queue;
+    const queueCursor = this._queueCursor;
 
     let lastIndex = -1;
     let len = 0;
-    for (let i = 0; i < this._queueCursor; i++) {
+    for (let i = 0; i < queueCursor; i++) {
       const item = queue[i];
       if (item.char === charcodes.lineFeed) {
-        lastIndex = i;
-        len += item.repeat;
+        lastIndex = len;
       }
+      len += item.repeat;
     }
 
     return lastIndex === -1 ? this._position.column + len : len - 1 - lastIndex;

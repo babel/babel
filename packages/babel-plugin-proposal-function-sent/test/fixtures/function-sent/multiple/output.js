@@ -1,6 +1,5 @@
 babelHelpers.skipFirstGeneratorNext(function* () {
   let _functionSent = yield;
-
   const a = _functionSent;
   const b = _functionSent;
   _functionSent = yield 4;

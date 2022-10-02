@@ -3,9 +3,9 @@ const a = {
   "foo": "bar"
 };
 const {
-  [3]: omit
-} = a,
-      rest = babelHelpers.objectWithoutProperties(a, ["3"]);
+    [3]: omit
+  } = a,
+  rest = babelHelpers.objectWithoutProperties(a, ["3"]);
 expect(rest).toEqual({
   "foo": "bar"
 });
@@ -14,7 +14,6 @@ const [k1, k2, k3, k4, k5] = [null, undefined, true, false, {
   toString() {
     return "warrior";
   }
-
 }];
 const c = {
   [k1]: "1",
@@ -24,20 +23,21 @@ const c = {
   [k5]: "5"
 };
 const {
-  [k1]: v1,
-  [k2]: v2,
-  [k3]: v3,
-  [k4]: v4,
-  [k5]: v5
-} = c,
-      vrest = babelHelpers.objectWithoutProperties(c, [k1, k2, k3, k4, k5].map(babelHelpers.toPropertyKey));
+    [k1]: v1,
+    [k2]: v2,
+    [k3]: v3,
+    [k4]: v4,
+    [k5]: v5
+  } = c,
+  vrest = babelHelpers.objectWithoutProperties(c, [k1, k2, k3, k4, k5].map(babelHelpers.toPropertyKey));
 expect(v1).toBe("1");
 expect(v2).toBe("2");
 expect(v3).toBe("3");
 expect(v4).toBe("4");
 expect(v5).toBe("5");
-expect(vrest).toEqual({}); // shouldn't convert symbols to strings
+expect(vrest).toEqual({});
 
+// shouldn't convert symbols to strings
 const sx = Symbol();
 const sy = Symbol();
 const d = {

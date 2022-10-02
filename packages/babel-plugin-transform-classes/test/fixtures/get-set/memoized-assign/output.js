@@ -18,37 +18,29 @@ const proper = {
   get prop() {
     return i++;
   }
-
 };
-
 let Obj = /*#__PURE__*/function (_Base) {
   babelHelpers.inherits(Obj, _Base);
-
   var _super = babelHelpers.createSuper(Obj);
-
   function Obj() {
     babelHelpers.classCallCheck(this, Obj);
     return _super.apply(this, arguments);
   }
-
   babelHelpers.createClass(Obj, [{
     key: "assign",
     value: function assign() {
       var _proper$prop;
-
       babelHelpers.set(babelHelpers.getPrototypeOf(Obj.prototype), _proper$prop = proper.prop, babelHelpers.get(babelHelpers.getPrototypeOf(Obj.prototype), _proper$prop, this) + 1, this, true);
     }
   }, {
     key: "assign2",
     value: function assign2() {
       var _i;
-
       babelHelpers.set(babelHelpers.getPrototypeOf(Obj.prototype), _i = i, babelHelpers.get(babelHelpers.getPrototypeOf(Obj.prototype), _i, this) + 1, this, true);
     }
   }]);
   return Obj;
 }(Base);
-
 const obj = new Obj();
 obj.assign();
 expect(i).toBe(1);

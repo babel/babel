@@ -1,17 +1,14 @@
 var _deep$obj, _deep$obj2, _deep$obj3, _deep$obj4, _key, _key2, _key3, _key4, _deep$obj5, _key5, _deep$obj6, _key6, _deep$obj7, _key7, _deep$obj8, _key8;
-
 var x = 0;
 var sets = 0;
 var obj = {
   get x() {
     return x;
   },
-
   set x(value) {
     sets++;
     x = value;
   }
-
 };
 expect(obj.x || (obj.x = 1)).toBe(1);
 expect(sets).toBe(1);
@@ -27,7 +24,6 @@ var deep = {
     gets++;
     return obj;
   }
-
 };
 expect((_deep$obj = deep.obj).x || (_deep$obj.x = 1)).toBe(1);
 expect(gets).toBe(1);

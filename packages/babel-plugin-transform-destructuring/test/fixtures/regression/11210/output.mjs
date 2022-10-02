@@ -5,5 +5,4 @@ export default class A {
       value = _ref.value;
     });
   }
-
 }

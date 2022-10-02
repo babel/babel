@@ -1,14 +1,11 @@
 function fn() {
   return _fn.apply(this, arguments);
 }
-
 function _fn() {
   _fn = babelHelpers.wrapAsyncGenerator(function* () {
     var _iteratorAbruptCompletion = false;
     var _didIteratorError = false;
-
     var _iteratorError;
-
     try {
       for (var _iterator = babelHelpers.asyncIterator([Promise.resolve("ok")]), _step; _iteratorAbruptCompletion = !(_step = yield babelHelpers.awaitAsyncGenerator(_iterator.next())).done; _iteratorAbruptCompletion = false) {
         const result = _step.value;

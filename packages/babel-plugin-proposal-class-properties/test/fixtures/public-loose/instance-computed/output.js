@@ -1,6 +1,5 @@
 function test(x) {
   var _x;
-
   _x = x;
   var F = /*#__PURE__*/babelHelpers.createClass(function F() {
     "use strict";
@@ -13,5 +12,4 @@ function test(x) {
   x = 'wrong';
   expect(new F().foo).toBe(1);
 }
-
 test('foo');

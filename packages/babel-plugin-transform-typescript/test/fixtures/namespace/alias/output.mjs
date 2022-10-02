@@ -1,6 +1,6 @@
 import * as babel from '@babel/core';
-/** type only */
 
+/** type only */
 var b = babel;
 var AliasModule = LongNameModule;
 const some = 3;

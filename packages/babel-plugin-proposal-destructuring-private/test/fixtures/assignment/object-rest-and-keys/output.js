@@ -1,5 +1,4 @@
 let result;
-
 class C {
   static #x = "#x";
   static y = "y";

@@ -1,2 +1,1 @@
-/*#__PURE__*/
-React.createElement(Foo, bar);
+/*#__PURE__*/React.createElement(Foo, bar);

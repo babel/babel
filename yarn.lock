@@ -963,7 +963,6 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-check-duplicate-nodes": "workspace:^"
     "@babel/helper-fixtures": "workspace:^"
-    "@jridgewell/trace-mapping": ^0.3.8
     "@types/jest": ^27.4.1
     quick-lru: 5.1.0
   languageName: unknown

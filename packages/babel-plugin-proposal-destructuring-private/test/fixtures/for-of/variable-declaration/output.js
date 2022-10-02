@@ -5,6 +5,5 @@ class C {
       const x = _ref.#x;
       ;
     }
-
   }
 }

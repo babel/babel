@@ -1,5 +1,4 @@
 var _div;
-
 import React from "react";
 import OtherComponent from "./components/other-component";
 export default function App() {

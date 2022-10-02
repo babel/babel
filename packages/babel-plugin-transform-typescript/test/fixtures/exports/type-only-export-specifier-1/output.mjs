@@ -1,3 +1,2 @@
 class Foo {}
-
 export {};

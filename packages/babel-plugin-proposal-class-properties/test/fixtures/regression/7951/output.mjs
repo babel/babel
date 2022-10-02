@@ -3,6 +3,5 @@ export class Foo extends Bar {
     super(..._args);
     babelHelpers.defineProperty(this, "test", args);
   }
-
 }
 babelHelpers.defineProperty(Foo, "foo", {});

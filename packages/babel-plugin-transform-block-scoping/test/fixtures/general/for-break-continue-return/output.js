@@ -3,7 +3,6 @@
     fns.push(function () {
       return i;
     });
-
     if (i === 1) {
       return "continue";
     } else if (i === 2) {
@@ -14,10 +13,8 @@
       };
     }
   };
-
   for (var i in nums) {
     var _ret = _loop(i);
-
     if (_ret === "continue") continue;
     if (_ret === "break") break;
     if (typeof _ret === "object") return _ret.v;

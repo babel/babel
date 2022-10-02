@@ -1,5 +1,4 @@
 var _foo = /*#__PURE__*/new WeakMap();
-
 let Foo = /*#__PURE__*/function () {
   "use strict";
 
@@ -10,7 +9,6 @@ let Foo = /*#__PURE__*/function () {
       value: 1
     });
   }
-
   babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test(other) {

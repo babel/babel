@@ -1,7 +1,6 @@
 "use strict";
 
 var _x, _o$f, _o, _y, _x2, _p$b, _p, _a$b$c$d$e$foo, _a$b$c$d$e;
-
 const g = (_o = o, _o$f = _o.f, _x = x, function f(_argPlaceholder) {
   return _o$f.call(_o, _argPlaceholder, _x, 1);
 });

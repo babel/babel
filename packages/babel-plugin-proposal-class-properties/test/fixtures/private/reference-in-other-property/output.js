@@ -1,9 +1,6 @@
 var _two = /*#__PURE__*/new WeakMap();
-
 var _private = /*#__PURE__*/new WeakMap();
-
 var _four = /*#__PURE__*/new WeakMap();
-
 var Foo = /*#__PURE__*/babelHelpers.createClass(function Foo() {
   "use strict";
 

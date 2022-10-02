@@ -1,5 +1,4 @@
 var _marked = /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(gen);
-
 function gen() {
   var a;
   return babelHelpers.regeneratorRuntime().wrap(function gen$(_context) {
@@ -8,7 +7,6 @@ function gen() {
         a = () => {
           return 1;
         };
-
       case 1:
       case "end":
         return _context.stop();
