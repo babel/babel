@@ -584,17 +584,12 @@ jobs:
           name: test262-result-3
       - name: Merge chunk results
         run: |
-          cat <(test262-0.tap)
-              <(test262-1.tap)
-              <(test262-2.tap)
-              <(test262-3.tap)
-            | npx tap-merge
-            > ~/test262.tap
+          cat test262-0.tap test262-1.tap test262-2.tap test262-3.tap | npx tap-merge > test262.tap
       - name: Create artifact with report results
         uses: actions/upload-artifact@v3
         with:
           name: test262-result
-          path: ~/test262.tap
+          path: test262.tap
       - name: Download previous results
         run: |
           cd babel-test262-runner
