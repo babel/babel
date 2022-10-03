@@ -25,6 +25,7 @@ const DEFAULT = {
   runtime: "automatic",
   pragma: "React.createElement",
   pragmaFrag: "React.Fragment",
+  pragmaInterpolation: "",
 };
 
 const JSX_SOURCE_ANNOTATION_REGEX =
@@ -33,6 +34,7 @@ const JSX_RUNTIME_ANNOTATION_REGEX = /^\s*\*?\s*@jsxRuntime\s+([^\s]+)\s*$/m;
 
 const JSX_ANNOTATION_REGEX = /^\s*\*?\s*@jsx\s+([^\s]+)\s*$/m;
 const JSX_FRAG_ANNOTATION_REGEX = /^\s*\*?\s*@jsxFrag\s+([^\s]+)\s*$/m;
+const JSX_INTERPOLATION_ANNOTATION_REGEX = /^\s*\*?\s*@jsxInterpolation\s+([^\s]+)\s*$/m;
 
 const get = (pass: PluginPass, name: string) =>
   pass.get(`@babel/plugin-react-jsx/${name}`);
@@ -53,6 +55,7 @@ export interface Options {
   importSource?: string;
   pragma?: string;
   pragmaFrag?: string;
+  pragmaInterpolation?: string;
   pure?: string;
   runtime?: "automatic" | "classic";
   throwIfNamespace?: boolean;
@@ -84,6 +87,7 @@ export default function createPlugin({
       importSource: IMPORT_SOURCE_DEFAULT = DEFAULT.importSource,
       pragma: PRAGMA_DEFAULT = DEFAULT.pragma,
       pragmaFrag: PRAGMA_FRAG_DEFAULT = DEFAULT.pragmaFrag,
+      pragmaInterpolation: PRAGMA_INTERPOLATION_DEFAULT = DEFAULT.pragmaInterpolation,
     } = options;
 
     if (process.env.BABEL_8_BREAKING) {
@@ -183,10 +187,12 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
             let source: string = IMPORT_SOURCE_DEFAULT;
             let pragma: string = PRAGMA_DEFAULT;
             let pragmaFrag: string = PRAGMA_FRAG_DEFAULT;
+            let pragmaInterpolation: string = PRAGMA_INTERPOLATION_DEFAULT;
 
             let sourceSet = !!options.importSource;
             let pragmaSet = !!options.pragma;
             let pragmaFragSet = !!options.pragmaFrag;
+            let pragmaInterpolationSet = !!options.pragmaInterpolation;
 
             if (file.ast.comments) {
               for (const comment of file.ast.comments) {
@@ -217,6 +223,13 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
                   pragmaFrag = jsxFragMatches[1];
                   pragmaFragSet = true;
                 }
+                const jsxInterpolationMatches = JSX_INTERPOLATION_ANNOTATION_REGEX.exec(
+                  comment.value,
+                );
+                if (jsxInterpolationMatches) {
+                  pragmaInterpolation = jsxInterpolationMatches[1];
+                  pragmaInterpolationSet = true;
+                }
               }
             }
 
@@ -230,13 +243,15 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
 
               const createElement = toMemberExpression(pragma);
               const fragment = toMemberExpression(pragmaFrag);
+              const interpolation = toMemberExpression(pragmaInterpolation);
 
               set(state, "id/createElement", () => t.cloneNode(createElement));
               set(state, "id/fragment", () => t.cloneNode(fragment));
+              set(state, "id/interpolation", () => t.cloneNode(interpolation));
 
               set(state, "defaultPure", pragma === DEFAULT.pragma);
             } else if (runtime === "automatic") {
-              if (pragmaSet || pragmaFragSet) {
+              if (pragmaSet || pragmaFragSet || pragmaInterpolationSet) {
                 throw path.buildCodeFrameError(
                   `pragma and pragmaFrag cannot be set when runtime is automatic.`,
                 );
@@ -249,6 +264,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
               define("id/jsxs", development ? "jsxDEV" : "jsxs");
               define("id/createElement", "createElement");
               define("id/fragment", "Fragment");
+              define("id/interpolation", "");
 
               set(state, "defaultPure", source === DEFAULT.importSource);
             } else {
