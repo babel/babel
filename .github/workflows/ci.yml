@@ -590,6 +590,11 @@ jobs:
         with:
           name: test262-result
           path: test262.tap
+      - name: Checkout test runner
+        uses: actions/checkout@v3
+        with:
+          repository: babel/babel-test262-runner
+          path: babel-test262-runner
       - name: Download previous results
         run: |
           cd babel-test262-runner
