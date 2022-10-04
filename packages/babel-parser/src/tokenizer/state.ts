@@ -135,6 +135,10 @@ export default class State {
   // escape sequences must not be interpreted as keywords.
   containsEsc: boolean = false;
 
+  // Used to track invalid escape sequences in template literals,
+  // that must be reported if the template is not tagged.
+  firstInvalidTemplateEscapePos: null | Position = null;
+
   // This property is used to track the following errors
   // - StrictNumericEscape
   // - StrictOctalLiteral

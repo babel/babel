@@ -1131,6 +1131,7 @@ export default abstract class Tokenizer extends CommentsParser {
       forceLen,
       allowNumSeparator,
       this.errorHandlers_readInt,
+      /* bailOnError */ false,
     );
     this.state.pos = pos;
     return n;
@@ -1318,7 +1319,7 @@ export default abstract class Tokenizer extends CommentsParser {
   // Reads template string tokens.
   readTemplateToken(): void {
     const opening = this.input[this.state.pos];
-    const { str, containsInvalid, pos, curLine, lineStart } =
+    const { str, firstInvalidLoc, pos, curLine, lineStart } =
       readStringContents(
         "template",
         this.input,
@@ -1331,16 +1332,24 @@ export default abstract class Tokenizer extends CommentsParser {
     this.state.lineStart = lineStart;
     this.state.curLine = curLine;
 
+    if (firstInvalidLoc) {
+      this.state.firstInvalidTemplateEscapePos = new Position(
+        firstInvalidLoc.curLine,
+        firstInvalidLoc.pos - firstInvalidLoc.lineStart,
+        firstInvalidLoc.pos,
+      );
+    }
+
     if (this.input.codePointAt(pos) === charCodes.graveAccent) {
       this.finishToken(
         tt.templateTail,
-        containsInvalid ? null : opening + str + "`",
+        firstInvalidLoc ? null : opening + str + "`",
       );
     } else {
       this.state.pos++; // skip '{'
       this.finishToken(
         tt.templateNonTail,
-        containsInvalid ? null : opening + str + "${",
+        firstInvalidLoc ? null : opening + str + "${",
       );
     }
   }
