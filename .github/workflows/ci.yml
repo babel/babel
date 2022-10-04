@@ -603,13 +603,13 @@ jobs:
         with:
           repository: babel/babel-test262-runner
           path: babel-test262-runner
-      - name: Download previous results
-        run: |
-          cd babel-test262-runner
-          npm ci
-          node lib/download-main-artifact/index.mjs ~/test262-main.tap
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Download previous results
+      #   run: |
+      #     cd babel-test262-runner
+      #     npm ci
+      #     node lib/download-main-artifact/index.mjs ~/test262-main.tap
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # - name: Compare previous main branch & current results
       #   run: |
       #     cd babel-test262-runner
