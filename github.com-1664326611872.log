@@ -1,0 +1,764 @@
+msgport.js:70 {"notify":"init_tab"}
+content-script.js:994 
+        
+       Uncaught TypeError: Cannot destructure property 'injectEthereumChain' of 'e' as it is undefined.
+    at f (content-script.js:994:20891)
+    at content-script.js:994:97204
+f @ content-script.js:994
+(anonymous) @ content-script.js:994
+inpage.js:1 
+        
+       ObjectMultiplex - malformed chunk without name "ACK"
+_write @ inpage.js:1
+w @ inpage.js:17
+(anonymous) @ inpage.js:17
+y.write @ inpage.js:17
+g @ inpage.js:1
+f @ inpage.js:8
+o.emit @ inpage.js:8
+_ @ inpage.js:1
+v @ inpage.js:1
+w.push @ inpage.js:1
+_onData @ inpage.js:1
+_onMessage @ inpage.js:1
+postMessage (async)
+_postMessage @ contentscript.js:1
+_write @ contentscript.js:1
+_onData @ contentscript.js:1
+_onMessage @ contentscript.js:1
+postMessage (async)
+_postMessage @ inpage.js:1
+_write @ inpage.js:1
+_handshake @ inpage.js:1
+i @ inpage.js:1
+(anonymous) @ inpage.js:1
+(anonymous) @ inpage.js:1
+1.@babel/runtime/helpers/interopRequireDefault @ inpage.js:1
+i @ inpage.js:1
+e @ inpage.js:1
+(anonymous) @ inpage.js:1
+(anonymous) @ contentscript.js:1
+1.../../shared/modules/mv3.utils @ contentscript.js:1
+i @ contentscript.js:1
+e @ contentscript.js:1
+(anonymous) @ contentscript.js:1
+inpage.js:1 
+        
+       ObjectMultiplex - malformed chunk without name "ACK"
+_write @ inpage.js:1
+w @ inpage.js:17
+(anonymous) @ inpage.js:17
+y.write @ inpage.js:17
+g @ inpage.js:1
+f @ inpage.js:8
+o.emit @ inpage.js:8
+_ @ inpage.js:1
+v @ inpage.js:1
+w.push @ inpage.js:1
+_onData @ inpage.js:1
+_onMessage @ inpage.js:1
+postMessage (async)
+_postMessage @ contentscript.js:1
+_write @ contentscript.js:1
+_onData @ contentscript.js:1
+_onMessage @ contentscript.js:1
+postMessage (async)
+_postMessage @ inpage.js:1
+_write @ inpage.js:1
+_handshake @ inpage.js:1
+i @ inpage.js:1
+(anonymous) @ inpage.js:1
+(anonymous) @ inpage.js:1
+1.@babel/runtime/helpers/interopRequireDefault @ inpage.js:1
+i @ inpage.js:1
+e @ inpage.js:1
+(anonymous) @ inpage.js:1
+(anonymous) @ contentscript.js:1
+1.../../shared/modules/mv3.utils @ contentscript.js:1
+i @ contentscript.js:1
+e @ contentscript.js:1
+(anonymous) @ contentscript.js:1
+inpage.js:1 
+        
+       ObjectMultiplex - malformed chunk without name "ACK"
+_write @ contentscript.js:17
+w @ contentscript.js:17
+(anonymous) @ contentscript.js:17
+y.write @ contentscript.js:17
+g @ contentscript.js:1
+d @ contentscript.js:8
+o.emit @ contentscript.js:8
+_ @ contentscript.js:1
+v @ contentscript.js:1
+w.push @ contentscript.js:1
+_onData @ contentscript.js:1
+_onMessage @ contentscript.js:1
+postMessage (async)
+_postMessage @ inpage.js:1
+_write @ inpage.js:1
+_onData @ inpage.js:1
+_onMessage @ inpage.js:1
+postMessage (async)
+_postMessage @ contentscript.js:1
+_write @ contentscript.js:1
+_handshake @ contentscript.js:1
+i @ contentscript.js:1
+(anonymous) @ contentscript.js:1
+1.../../shared/modules/mv3.utils @ contentscript.js:1
+i @ contentscript.js:1
+e @ contentscript.js:1
+(anonymous) @ contentscript.js:1
+inpage.js:1 
+        
+       ObjectMultiplex - malformed chunk without name "ACK"
+_write @ contentscript.js:17
+w @ contentscript.js:17
+(anonymous) @ contentscript.js:17
+y.write @ contentscript.js:17
+g @ contentscript.js:1
+d @ contentscript.js:8
+o.emit @ contentscript.js:8
+_ @ contentscript.js:1
+v @ contentscript.js:1
+w.push @ contentscript.js:1
+_onData @ contentscript.js:1
+_onMessage @ contentscript.js:1
+postMessage (async)
+_postMessage @ inpage.js:1
+_write @ inpage.js:1
+_onData @ inpage.js:1
+_onMessage @ inpage.js:1
+postMessage (async)
+_postMessage @ contentscript.js:1
+_write @ contentscript.js:1
+_handshake @ contentscript.js:1
+i @ contentscript.js:1
+(anonymous) @ contentscript.js:1
+1.../../shared/modules/mv3.utils @ contentscript.js:1
+i @ contentscript.js:1
+e @ contentscript.js:1
+(anonymous) @ contentscript.js:1
+inpage.js:1 
+        
+       ObjectMultiplex - malformed chunk without name "ACK"
+_write @ inpage.js:1
+w @ inpage.js:17
+(anonymous) @ inpage.js:17
+y.write @ inpage.js:17
+g @ inpage.js:1
+f @ inpage.js:8
+o.emit @ inpage.js:8
+_ @ inpage.js:1
+v @ inpage.js:1
+w.push @ inpage.js:1
+_onData @ inpage.js:1
+_onMessage @ inpage.js:1
+postMessage (async)
+_postMessage @ contentscript.js:1
+_write @ contentscript.js:1
+_onData @ contentscript.js:1
+_onMessage @ contentscript.js:1
+postMessage (async)
+_postMessage @ inpage.js:1
+_write @ inpage.js:1
+_handshake @ inpage.js:1
+i @ inpage.js:1
+(anonymous) @ inpage.js:1
+(anonymous) @ inpage.js:1
+1.@babel/runtime/helpers/interopRequireDefault @ inpage.js:1
+i @ inpage.js:1
+e @ inpage.js:1
+(anonymous) @ inpage.js:1
+(anonymous) @ contentscript.js:1
+1.../../shared/modules/mv3.utils @ contentscript.js:1
+i @ contentscript.js:1
+e @ contentscript.js:1
+(anonymous) @ contentscript.js:1
+inpage.js:1 
+        
+       ObjectMultiplex - malformed chunk without name "ACK"
+_write @ inpage.js:1
+w @ inpage.js:17
+(anonymous) @ inpage.js:17
+y.write @ inpage.js:17
+g @ inpage.js:1
+f @ inpage.js:8
+o.emit @ inpage.js:8
+_ @ inpage.js:1
+v @ inpage.js:1
+w.push @ inpage.js:1
+_onData @ inpage.js:1
+_onMessage @ inpage.js:1
+postMessage (async)
+_postMessage @ contentscript.js:1
+_write @ contentscript.js:1
+_onData @ contentscript.js:1
+_onMessage @ contentscript.js:1
+postMessage (async)
+_postMessage @ inpage.js:1
+_write @ inpage.js:1
+_handshake @ inpage.js:1
+i @ inpage.js:1
+(anonymous) @ inpage.js:1
+(anonymous) @ inpage.js:1
+1.@babel/runtime/helpers/interopRequireDefault @ inpage.js:1
+i @ inpage.js:1
+e @ inpage.js:1
+(anonymous) @ inpage.js:1
+(anonymous) @ contentscript.js:1
+1.../../shared/modules/mv3.utils @ contentscript.js:1
+i @ contentscript.js:1
+e @ contentscript.js:1
+(anonymous) @ contentscript.js:1
+inpage.js:1 
+        
+       ObjectMultiplex - malformed chunk without name "ACK"
+_write @ inpage.js:1
+w @ inpage.js:17
+(anonymous) @ inpage.js:17
+y.write @ inpage.js:17
+g @ inpage.js:1
+f @ inpage.js:8
+o.emit @ inpage.js:8
+_ @ inpage.js:1
+v @ inpage.js:1
+w.push @ inpage.js:1
+_onData @ inpage.js:1
+_onMessage @ inpage.js:1
+postMessage (async)
+_postMessage @ contentscript.js:1
+_write @ contentscript.js:1
+_onData @ contentscript.js:1
+_onMessage @ contentscript.js:1
+postMessage (async)
+_postMessage @ inpage.js:1
+_write @ inpage.js:1
+_handshake @ inpage.js:1
+i @ inpage.js:1
+(anonymous) @ inpage.js:1
+(anonymous) @ inpage.js:1
+1.@babel/runtime/helpers/interopRequireDefault @ inpage.js:1
+i @ inpage.js:1
+e @ inpage.js:1
+(anonymous) @ inpage.js:1
+(anonymous) @ contentscript.js:1
+1.../../shared/modules/mv3.utils @ contentscript.js:1
+i @ contentscript.js:1
+e @ contentscript.js:1
+(anonymous) @ contentscript.js:1
+inpage.js:1 
+        
+       ObjectMultiplex - malformed chunk without name "ACK"
+_write @ inpage.js:1
+w @ inpage.js:17
+(anonymous) @ inpage.js:17
+y.write @ inpage.js:17
+g @ inpage.js:1
+f @ inpage.js:8
+o.emit @ inpage.js:8
+_ @ inpage.js:1
+v @ inpage.js:1
+w.push @ inpage.js:1
+_onData @ inpage.js:1
+_onMessage @ inpage.js:1
+postMessage (async)
+_postMessage @ contentscript.js:1
+_write @ contentscript.js:1
+_onData @ contentscript.js:1
+_onMessage @ contentscript.js:1
+postMessage (async)
+_postMessage @ inpage.js:1
+_write @ inpage.js:1
+_handshake @ inpage.js:1
+i @ inpage.js:1
+(anonymous) @ inpage.js:1
+(anonymous) @ inpage.js:1
+1.@babel/runtime/helpers/interopRequireDefault @ inpage.js:1
+i @ inpage.js:1
+e @ inpage.js:1
+(anonymous) @ inpage.js:1
+(anonymous) @ contentscript.js:1
+1.../../shared/modules/mv3.utils @ contentscript.js:1
+i @ contentscript.js:1
+e @ contentscript.js:1
+(anonymous) @ contentscript.js:1
+inpage.js:1 
+        
+       ObjectMultiplex - malformed chunk without name "ACK"
+_write @ contentscript.js:17
+w @ contentscript.js:17
+(anonymous) @ contentscript.js:17
+y.write @ contentscript.js:17
+g @ contentscript.js:1
+d @ contentscript.js:8
+o.emit @ contentscript.js:8
+_ @ contentscript.js:1
+v @ contentscript.js:1
+w.push @ contentscript.js:1
+_onData @ contentscript.js:1
+_onMessage @ contentscript.js:1
+postMessage (async)
+_postMessage @ inpage.js:1
+_write @ inpage.js:1
+_onData @ inpage.js:1
+_onMessage @ inpage.js:1
+postMessage (async)
+_postMessage @ contentscript.js:1
+_write @ contentscript.js:1
+_handshake @ contentscript.js:1
+i @ contentscript.js:1
+(anonymous) @ contentscript.js:1
+1.../../shared/modules/mv3.utils @ contentscript.js:1
+i @ contentscript.js:1
+e @ contentscript.js:1
+(anonymous) @ contentscript.js:1
+inpage.js:1 
+        
+       ObjectMultiplex - malformed chunk without name "ACK"
+_write @ contentscript.js:17
+w @ contentscript.js:17
+(anonymous) @ contentscript.js:17
+y.write @ contentscript.js:17
+g @ contentscript.js:1
+d @ contentscript.js:8
+o.emit @ contentscript.js:8
+_ @ contentscript.js:1
+v @ contentscript.js:1
+w.push @ contentscript.js:1
+_onData @ contentscript.js:1
+_onMessage @ contentscript.js:1
+postMessage (async)
+_postMessage @ inpage.js:1
+_write @ inpage.js:1
+_onData @ inpage.js:1
+_onMessage @ inpage.js:1
+postMessage (async)
+_postMessage @ contentscript.js:1
+_write @ contentscript.js:1
+_handshake @ contentscript.js:1
+i @ contentscript.js:1
+(anonymous) @ contentscript.js:1
+1.../../shared/modules/mv3.utils @ contentscript.js:1
+i @ contentscript.js:1
+e @ contentscript.js:1
+(anonymous) @ contentscript.js:1
+inpage.js:1 
+        
+       ObjectMultiplex - malformed chunk without name "ACK"
+_write @ contentscript.js:17
+w @ contentscript.js:17
+(anonymous) @ contentscript.js:17
+y.write @ contentscript.js:17
+g @ contentscript.js:1
+d @ contentscript.js:8
+o.emit @ contentscript.js:8
+_ @ contentscript.js:1
+v @ contentscript.js:1
+w.push @ contentscript.js:1
+_onData @ contentscript.js:1
+_onMessage @ contentscript.js:1
+postMessage (async)
+_postMessage @ inpage.js:1
+_write @ inpage.js:1
+_onData @ inpage.js:1
+_onMessage @ inpage.js:1
+postMessage (async)
+_postMessage @ contentscript.js:1
+_write @ contentscript.js:1
+_handshake @ contentscript.js:1
+i @ contentscript.js:1
+(anonymous) @ contentscript.js:1
+1.../../shared/modules/mv3.utils @ contentscript.js:1
+i @ contentscript.js:1
+e @ contentscript.js:1
+(anonymous) @ contentscript.js:1
+inpage.js:1 
+        
+       ObjectMultiplex - malformed chunk without name "ACK"
+_write @ contentscript.js:17
+w @ contentscript.js:17
+(anonymous) @ contentscript.js:17
+y.write @ contentscript.js:17
+g @ contentscript.js:1
+d @ contentscript.js:8
+o.emit @ contentscript.js:8
+_ @ contentscript.js:1
+v @ contentscript.js:1
+w.push @ contentscript.js:1
+_onData @ contentscript.js:1
+_onMessage @ contentscript.js:1
+postMessage (async)
+_postMessage @ inpage.js:1
+_write @ inpage.js:1
+_onData @ inpage.js:1
+_onMessage @ inpage.js:1
+postMessage (async)
+_postMessage @ contentscript.js:1
+_write @ contentscript.js:1
+_handshake @ contentscript.js:1
+i @ contentscript.js:1
+(anonymous) @ contentscript.js:1
+1.../../shared/modules/mv3.utils @ contentscript.js:1
+i @ contentscript.js:1
+e @ contentscript.js:1
+(anonymous) @ contentscript.js:1
+inject.js?settings=%7B%22evm%22%3A%7B%22inject%22%3A%7B%22disabled%22%3Afalse%2C%22timestamp%22%3A0%7D%7D%2C%22substrate%22%3A%7B%22injectPolkadotjs%22%3Atrue%7D%7D:1 hello from injected code
+contentscript.js:1 Hello from the content-script
+inpage.js:1 
+        
+       MetaMask: Lost connection to "MetaMask RpcProvider".
+Error: StreamMiddleware - Unknown response id "193542939"
+    at chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/inpage.js:1:55198
+    at d.write [as _write] (chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/inpage.js:1:55316)
+    at w (chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/inpage.js:17:29867)
+    at chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/inpage.js:17:33045
+    at y.write (chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/inpage.js:17:33072)
+    at i.g (chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/inpage.js:17:22073)
+    at f (chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/inpage.js:8:21088)
+    at o.emit (chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/inpage.js:8:24074)
+    at _ (chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/inpage.js:17:16876)
+    at v (chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn/inpage.js:17:16691)
+_handleStreamDisconnect @ inpage.js:1
+(anonymous) @ inpage.js:17
+t @ inpage.js:17
+(anonymous) @ inpage.js:17
+t @ inpage.js:17
+h @ inpage.js:8
+d @ inpage.js:8
+o.emit @ inpage.js:8
+M @ inpage.js:17
+(anonymous) @ inpage.js:17
+y.end @ inpage.js:17
+d._destroy @ inpage.js:17
+destroy @ inpage.js:17
+(anonymous) @ inpage.js:17
+c @ inpage.js:17
+(anonymous) @ inpage.js:17
+t @ inpage.js:17
+(anonymous) @ inpage.js:17
+t @ inpage.js:17
+m @ inpage.js:8
+f @ inpage.js:8
+o.emit @ inpage.js:8
+(anonymous) @ inpage.js:17
+(anonymous) @ inpage.js:17
+onwrite @ inpage.js:17
+write @ inpage.js:1
+w @ inpage.js:17
+(anonymous) @ inpage.js:17
+y.write @ inpage.js:17
+g @ inpage.js:17
+f @ inpage.js:8
+o.emit @ inpage.js:8
+_ @ inpage.js:17
+v @ inpage.js:17
+w.push @ inpage.js:17
+_write @ inpage.js:1
+w @ inpage.js:17
+(anonymous) @ inpage.js:17
+y.write @ inpage.js:17
+g @ inpage.js:1
+f @ inpage.js:8
+o.emit @ inpage.js:8
+_ @ inpage.js:1
+v @ inpage.js:1
+w.push @ inpage.js:1
+_onData @ inpage.js:1
+_onMessage @ inpage.js:1
+postMessage (async)
+_postMessage @ contentscript.js:1
+_write @ contentscript.js:1
+w @ contentscript.js:1
+(anonymous) @ contentscript.js:1
+y.write @ contentscript.js:1
+g @ contentscript.js:17
+d @ contentscript.js:8
+o.emit @ contentscript.js:8
+_ @ contentscript.js:17
+v @ contentscript.js:17
+w.push @ contentscript.js:17
+_write @ contentscript.js:17
+w @ contentscript.js:17
+(anonymous) @ contentscript.js:17
+y.write @ contentscript.js:17
+g @ contentscript.js:17
+d @ contentscript.js:8
+o.emit @ contentscript.js:8
+_ @ contentscript.js:17
+v @ contentscript.js:17
+w.push @ contentscript.js:17
+_write @ contentscript.js:17
+w @ contentscript.js:17
+(anonymous) @ contentscript.js:17
+y.write @ contentscript.js:17
+g @ contentscript.js:17
+d @ contentscript.js:8
+o.emit @ contentscript.js:8
+_ @ contentscript.js:17
+v @ contentscript.js:17
+w.push @ contentscript.js:17
+_onMessage @ contentscript.js:8
+(anonymous) @ contentscript.js:8
+Show 50 more frames
+inpage.js:1 
+        
+       Error: StreamMiddleware - Unknown response id "193542939"
+    at l._handleDisconnect (inpage.js:1:38747)
+    at l._handleDisconnect (inpage.js:1:42344)
+    at l._handleStreamDisconnect (inpage.js:1:46473)
+    at inpage.js:17:12354
+    at t (inpage.js:17:8407)
+    at d.<anonymous> (inpage.js:17:11676)
+    at d.t (inpage.js:17:8407)
+    at d.h (inpage.js:8:27815)
+    at d (inpage.js:8:21053)
+    at o.emit (inpage.js:8:24049)
+_handleDisconnect @ inpage.js:1
+_handleDisconnect @ inpage.js:1
+_handleStreamDisconnect @ inpage.js:1
+(anonymous) @ inpage.js:17
+t @ inpage.js:17
+(anonymous) @ inpage.js:17
+t @ inpage.js:17
+h @ inpage.js:8
+d @ inpage.js:8
+o.emit @ inpage.js:8
+M @ inpage.js:17
+(anonymous) @ inpage.js:17
+y.end @ inpage.js:17
+d._destroy @ inpage.js:17
+destroy @ inpage.js:17
+(anonymous) @ inpage.js:17
+c @ inpage.js:17
+(anonymous) @ inpage.js:17
+t @ inpage.js:17
+(anonymous) @ inpage.js:17
+t @ inpage.js:17
+m @ inpage.js:8
+f @ inpage.js:8
+o.emit @ inpage.js:8
+(anonymous) @ inpage.js:17
+(anonymous) @ inpage.js:17
+onwrite @ inpage.js:17
+write @ inpage.js:1
+w @ inpage.js:17
+(anonymous) @ inpage.js:17
+y.write @ inpage.js:17
+g @ inpage.js:17
+f @ inpage.js:8
+o.emit @ inpage.js:8
+_ @ inpage.js:17
+v @ inpage.js:17
+w.push @ inpage.js:17
+_write @ inpage.js:1
+w @ inpage.js:17
+(anonymous) @ inpage.js:17
+y.write @ inpage.js:17
+g @ inpage.js:1
+f @ inpage.js:8
+o.emit @ inpage.js:8
+_ @ inpage.js:1
+v @ inpage.js:1
+w.push @ inpage.js:1
+_onData @ inpage.js:1
+_onMessage @ inpage.js:1
+postMessage (async)
+_postMessage @ contentscript.js:1
+_write @ contentscript.js:1
+w @ contentscript.js:1
+(anonymous) @ contentscript.js:1
+y.write @ contentscript.js:1
+g @ contentscript.js:17
+d @ contentscript.js:8
+o.emit @ contentscript.js:8
+_ @ contentscript.js:17
+v @ contentscript.js:17
+w.push @ contentscript.js:17
+_write @ contentscript.js:17
+w @ contentscript.js:17
+(anonymous) @ contentscript.js:17
+y.write @ contentscript.js:17
+g @ contentscript.js:17
+d @ contentscript.js:8
+o.emit @ contentscript.js:8
+_ @ contentscript.js:17
+v @ contentscript.js:17
+w.push @ contentscript.js:17
+_write @ contentscript.js:17
+w @ contentscript.js:17
+(anonymous) @ contentscript.js:17
+y.write @ contentscript.js:17
+g @ contentscript.js:17
+d @ contentscript.js:8
+o.emit @ contentscript.js:8
+_ @ contentscript.js:17
+v @ contentscript.js:17
+w.push @ contentscript.js:17
+_onMessage @ contentscript.js:8
+(anonymous) @ contentscript.js:8
+Show 52 more frames
+inpage.js:1 
+        
+       MetaMask: Lost connection to "MetaMask RpcProvider".
+Error: StreamMiddleware - Unknown response id "421257651"
+    at chrome-extension://ejbalbakoplchlghecdalmeeeajnimhm/inpage.js:1:55198
+    at d.write [as _write] (chrome-extension://ejbalbakoplchlghecdalmeeeajnimhm/inpage.js:1:55316)
+    at w (chrome-extension://ejbalbakoplchlghecdalmeeeajnimhm/inpage.js:17:29867)
+    at chrome-extension://ejbalbakoplchlghecdalmeeeajnimhm/inpage.js:17:33045
+    at y.write (chrome-extension://ejbalbakoplchlghecdalmeeeajnimhm/inpage.js:17:33072)
+    at i.g (chrome-extension://ejbalbakoplchlghecdalmeeeajnimhm/inpage.js:17:22073)
+    at f (chrome-extension://ejbalbakoplchlghecdalmeeeajnimhm/inpage.js:8:21088)
+    at o.emit (chrome-extension://ejbalbakoplchlghecdalmeeeajnimhm/inpage.js:8:24074)
+    at _ (chrome-extension://ejbalbakoplchlghecdalmeeeajnimhm/inpage.js:17:16876)
+    at v (chrome-extension://ejbalbakoplchlghecdalmeeeajnimhm/inpage.js:17:16691)
+_handleStreamDisconnect @ inpage.js:1
+(anonymous) @ inpage.js:17
+t @ inpage.js:17
+(anonymous) @ inpage.js:17
+t @ inpage.js:17
+m @ inpage.js:8
+f @ inpage.js:8
+o.emit @ inpage.js:8
+(anonymous) @ inpage.js:17
+(anonymous) @ inpage.js:17
+onwrite @ inpage.js:17
+write @ inpage.js:1
+w @ inpage.js:17
+(anonymous) @ inpage.js:17
+y.write @ inpage.js:17
+g @ inpage.js:17
+f @ inpage.js:8
+o.emit @ inpage.js:8
+_ @ inpage.js:17
+v @ inpage.js:17
+w.push @ inpage.js:17
+_write @ inpage.js:1
+w @ inpage.js:17
+(anonymous) @ inpage.js:17
+y.write @ inpage.js:17
+g @ inpage.js:1
+f @ inpage.js:8
+o.emit @ inpage.js:8
+_ @ inpage.js:1
+v @ inpage.js:1
+w.push @ inpage.js:1
+_onData @ inpage.js:1
+_onMessage @ inpage.js:1
+postMessage (async)
+_postMessage @ contentscript.js:1
+_write @ contentscript.js:1
+w @ contentscript.js:1
+(anonymous) @ contentscript.js:1
+y.write @ contentscript.js:1
+g @ contentscript.js:17
+d @ contentscript.js:8
+o.emit @ contentscript.js:8
+_ @ contentscript.js:17
+v @ contentscript.js:17
+w.push @ contentscript.js:17
+_write @ contentscript.js:17
+w @ contentscript.js:17
+(anonymous) @ contentscript.js:17
+y.write @ contentscript.js:17
+g @ contentscript.js:17
+d @ contentscript.js:8
+o.emit @ contentscript.js:8
+_ @ contentscript.js:17
+v @ contentscript.js:17
+w.push @ contentscript.js:17
+_write @ contentscript.js:17
+w @ contentscript.js:17
+(anonymous) @ contentscript.js:17
+y.write @ contentscript.js:17
+g @ contentscript.js:17
+d @ contentscript.js:8
+o.emit @ contentscript.js:8
+_ @ contentscript.js:17
+v @ contentscript.js:17
+w.push @ contentscript.js:17
+_onMessage @ contentscript.js:8
+(anonymous) @ contentscript.js:8
+Show 36 more frames
+inpage.js:1 
+        
+       Error: StreamMiddleware - Unknown response id "421257651"
+    at l._handleDisconnect (inpage.js:1:38747)
+    at l._handleDisconnect (inpage.js:1:42344)
+    at l._handleStreamDisconnect (inpage.js:1:46473)
+    at inpage.js:17:12354
+    at t (inpage.js:17:8407)
+    at d.<anonymous> (inpage.js:17:11666)
+    at d.t (inpage.js:17:8407)
+    at d.m (inpage.js:8:27944)
+    at f (inpage.js:8:21148)
+    at o.emit (inpage.js:8:24074)
+_handleDisconnect @ inpage.js:1
+_handleDisconnect @ inpage.js:1
+_handleStreamDisconnect @ inpage.js:1
+(anonymous) @ inpage.js:17
+t @ inpage.js:17
+(anonymous) @ inpage.js:17
+t @ inpage.js:17
+m @ inpage.js:8
+f @ inpage.js:8
+o.emit @ inpage.js:8
+(anonymous) @ inpage.js:17
+(anonymous) @ inpage.js:17
+onwrite @ inpage.js:17
+write @ inpage.js:1
+w @ inpage.js:17
+(anonymous) @ inpage.js:17
+y.write @ inpage.js:17
+g @ inpage.js:17
+f @ inpage.js:8
+o.emit @ inpage.js:8
+_ @ inpage.js:17
+v @ inpage.js:17
+w.push @ inpage.js:17
+_write @ inpage.js:1
+w @ inpage.js:17
+(anonymous) @ inpage.js:17
+y.write @ inpage.js:17
+g @ inpage.js:1
+f @ inpage.js:8
+o.emit @ inpage.js:8
+_ @ inpage.js:1
+v @ inpage.js:1
+w.push @ inpage.js:1
+_onData @ inpage.js:1
+_onMessage @ inpage.js:1
+postMessage (async)
+_postMessage @ contentscript.js:1
+_write @ contentscript.js:1
+w @ contentscript.js:1
+(anonymous) @ contentscript.js:1
+y.write @ contentscript.js:1
+g @ contentscript.js:17
+d @ contentscript.js:8
+o.emit @ contentscript.js:8
+_ @ contentscript.js:17
+v @ contentscript.js:17
+w.push @ contentscript.js:17
+_write @ contentscript.js:17
+w @ contentscript.js:17
+(anonymous) @ contentscript.js:17
+y.write @ contentscript.js:17
+g @ contentscript.js:17
+d @ contentscript.js:8
+o.emit @ contentscript.js:8
+_ @ contentscript.js:17
+v @ contentscript.js:17
+w.push @ contentscript.js:17
+_write @ contentscript.js:17
+w @ contentscript.js:17
+(anonymous) @ contentscript.js:17
+y.write @ contentscript.js:17
+g @ contentscript.js:17
+d @ contentscript.js:8
+o.emit @ contentscript.js:8
+_ @ contentscript.js:17
+v @ contentscript.js:17
+w.push @ contentscript.js:17
+_onMessage @ contentscript.js:8
+(anonymous) @ contentscript.js:8
+Show 38 more frames
