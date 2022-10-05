@@ -364,6 +364,13 @@ class Printer {
     this._buf.withSource(prop, loc, cb);
   }
 
+  withIdentifierName(identifierName: string, cb: () => void): void {
+    const pos = this._buf._sourcePosition;
+    pos.identifierName = identifierName;
+    cb();
+    pos.identifierName = undefined;
+  }
+
   _space(): void {
     this._queue(charCodes.space);
   }

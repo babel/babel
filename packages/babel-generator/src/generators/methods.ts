@@ -5,9 +5,18 @@ import type * as t from "@babel/types";
 export function _params(
   this: Printer,
   node: t.Function | t.TSDeclareMethod | t.TSDeclareFunction,
+  id: t.Expression | t.PrivateName,
 ) {
   this.print(node.typeParameters, node);
-  this.token("(");
+  if (isIdentifier(id)) {
+    // @ts-expect-error Undocumented property identifierName
+    this.withIdentifierName(id.loc?.identifierName || id.name, () => {
+      this.token("(");
+    });
+  } else {
+    this.token("(");
+  }
+
   this._parameters(node.params, node);
   this.token(")");
 
@@ -106,7 +115,7 @@ export function _methodHead(this: Printer, node: t.Method | t.TSDeclareMethod) {
     this.token("?");
   }
 
-  this._params(node);
+  this._params(node, key);
 }
 
 export function _predicate(
@@ -152,7 +161,7 @@ export function _functionHead(
     this.print(node.id, node);
   }
 
-  this._params(node);
+  this._params(node, node.id);
   if (node.type !== "TSDeclareFunction") {
     this._predicate(node);
   }
@@ -186,7 +195,7 @@ export function ArrowFunctionExpression(
   ) {
     this.print(firstParam, node, true);
   } else {
-    this._params(node);
+    this._params(node, undefined);
   }
 
   this._predicate(node, true);

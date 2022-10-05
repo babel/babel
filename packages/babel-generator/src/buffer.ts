@@ -8,13 +8,12 @@ export type Pos = {
 export type Loc = {
   start?: Pos;
   end?: Pos;
-  identifierName?: string;
   filename?: string;
 };
 type SourcePos = {
-  identifierName: string | undefined;
   line: number | undefined;
   column: number | undefined;
+  identifierName: string | undefined;
   filename: string | undefined;
 };
 
@@ -23,7 +22,7 @@ type QueueItem = {
   repeat: number;
   line: number | undefined;
   column: number | undefined;
-  identifierName: string | undefined;
+  identifierName: undefined; // Not used, it always undefined.
   filename: string | undefined;
 };
 
@@ -73,7 +72,6 @@ export default class Buffer {
     repeat: number,
     line: number | undefined,
     column: number | undefined,
-    identifierName: string | undefined,
     filename: string | undefined,
   ) {
     const cursor = this._queueCursor;
@@ -85,7 +83,6 @@ export default class Buffer {
     item.repeat = repeat;
     item.line = line;
     item.column = column;
-    item.identifierName = identifierName;
     item.filename = filename;
 
     this._queueCursor++;
@@ -173,7 +170,6 @@ export default class Buffer {
       1,
       sourcePosition.line,
       sourcePosition.column,
-      sourcePosition.identifierName,
       sourcePosition.filename,
     );
   }
@@ -182,7 +178,7 @@ export default class Buffer {
    * Same as queue, but this indentation will never have a sourcmap marker.
    */
   queueIndentation(char: number, repeat: number): void {
-    this._pushQueue(char, repeat, undefined, undefined, undefined, undefined);
+    this._pushQueue(char, repeat, undefined, undefined, undefined);
   }
 
   _flush(): void {
@@ -428,8 +424,6 @@ export default class Buffer {
     const pos = loc[prop];
     const target = this._sourcePosition;
 
-    target.identifierName =
-      (prop === "start" && loc.identifierName) || undefined;
     if (pos) {
       target.line = pos.line + lineOffset;
       target.column = pos.column + columnOffset;
