@@ -8,15 +8,13 @@ export function _params(
   id: t.Expression | t.PrivateName,
 ) {
   this.print(node.typeParameters, node);
+
   if (isIdentifier(id)) {
     // @ts-expect-error Undocumented property identifierName
-    this.withIdentifierName(id.loc?.identifierName || id.name, () => {
-      this.token("(");
-    });
-  } else {
-    this.token("(");
+    this.sourceIdentifierName(id.loc?.identifierName || id.name);
   }
 
+  this.token("(");
   this._parameters(node.params, node);
   this.token(")");
 

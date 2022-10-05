@@ -211,6 +211,8 @@ export default class Buffer {
       this._position.line++;
       this._position.column = 0;
     }
+
+    sourcePos.identifierName = undefined;
   }
 
   _append(str: string, sourcePos: SourcePos, maybeNewline: boolean): void {
@@ -235,6 +237,8 @@ export default class Buffer {
 
     const { column, identifierName, filename } = sourcePos;
     let line = sourcePos.line;
+
+    if (identifierName) sourcePos.identifierName = undefined;
 
     // Search for newline chars. We search only for `\n`, since both `\r` and
     // `\r\n` are normalized to `\n` during parse. We exclude `\u2028` and

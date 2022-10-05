@@ -1,0 +1,17 @@
+{
+  "version": 3,
+  "names": [
+    "fn",
+    "a",
+    "x",
+    "y",
+    "z"
+  ],
+  "sources": [
+    "fixtures/sourcemaps/function-identifier-name/input.js"
+  ],
+  "sourcesContent": [
+    "function fn() {}\n\nexport default function () {}\n\nvar a = {\n  fn() {},\n  fn:function() {},\n  [fn]:function() {},\n  [\"fn\"]:function() {},\n  [function() {}]:function() {},\n  [()=> {}]:function() {},\n}\n\nvar x = function fn() {};\nvar y = function fn() {};\n\n() => {};\nx => {};\n(x) => {};\n(x, y, z) => {};"
+  ],
+  "mappings": "AAAA,SAASA,EAAEA,CAAA,EAAG,CAAC;;AAEf,eAAe,YAAY,CAAC;AAE5B,IAAIC,CAAC,GAAG;EACND,EAAEA,CAAA,EAAG,CAAC,CAAC;;EACPA,EAAE,EAAC,YAAW,CAAC,CAAC;EAChB,CAACA,EAAE,GAAE,YAAW,CAAC,CAAC;EAClB,CAAC,IAAI,GAAE,YAAW,CAAC,CAAC;EACpB,CAAC,YAAW,CAAC,CAAC,GAAE,YAAW,CAAC,CAAC;EAC7B,CAAC,MAAK,CAAC,CAAC,GAAE,YAAW,CAAC;AACxB,CAAC;;AAED,IAAIE,CAAC,GAAG,SAASF,EAAEA,CAAA,EAAG,CAAC,CAAC;;AACxB,IAAIG,CAAC,GAAG,SAASH,EAAEA,CAAA,EAAG,CAAC,CAAC;;AAExB,MAAM,CAAC,CAAC;;AACRE,CAAC,IAAI,CAAC,CAAC;;AACNA,CAAC,IAAK,CAAC,CAAC;;AACT,CAACA,CAAC,EAAEC,CAAC,EAAEC,CAAC,KAAK,CAAC,CAAC"
+}
