@@ -1985,7 +1985,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-syntax-import-meta@npm:^7.10.4, @babel/plugin-syntax-import-meta@npm:^7.8.3":
+"@babel/plugin-syntax-import-meta@npm:^7.8.3":
   version: 7.10.4
   resolution: "@babel/plugin-syntax-import-meta@npm:7.10.4"
   dependencies:
@@ -3646,9 +3646,6 @@ __metadata:
     "@babel/plugin-proposal-throw-expressions": "workspace:^"
     "@babel/plugin-proposal-unicode-property-regex": "workspace:^"
     "@babel/plugin-proposal-unicode-sets-regex": "workspace:^"
-    "@babel/plugin-syntax-async-generators": ^7.8.4
-    "@babel/plugin-syntax-class-properties": ^7.12.13
-    "@babel/plugin-syntax-class-static-block": ^7.14.5
     "@babel/plugin-syntax-decimal": "workspace:^"
     "@babel/plugin-syntax-decorators": "workspace:^"
     "@babel/plugin-syntax-destructuring-private": "workspace:^"
@@ -3658,14 +3655,10 @@ __metadata:
     "@babel/plugin-syntax-function-bind": "workspace:^"
     "@babel/plugin-syntax-function-sent": "workspace:^"
     "@babel/plugin-syntax-import-assertions": "workspace:^"
-    "@babel/plugin-syntax-import-meta": ^7.10.4
     "@babel/plugin-syntax-jsx": "workspace:^"
     "@babel/plugin-syntax-module-blocks": "workspace:^"
-    "@babel/plugin-syntax-object-rest-spread": ^7.8.3
-    "@babel/plugin-syntax-optional-catch-binding": ^7.8.3
     "@babel/plugin-syntax-pipeline-operator": "workspace:^"
     "@babel/plugin-syntax-record-and-tuple": "workspace:^"
-    "@babel/plugin-syntax-top-level-await": ^7.14.5
     "@babel/plugin-syntax-typescript": "workspace:^"
     "@babel/plugin-transform-arrow-functions": "workspace:^"
     "@babel/plugin-transform-async-to-generator": "workspace:^"

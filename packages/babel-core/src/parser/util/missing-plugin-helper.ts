@@ -8,46 +8,6 @@ const pluginNameMap: Record<
       url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-async-do-expressions",
     },
   },
-  classProperties: {
-    syntax: {
-      name: "@babel/plugin-syntax-class-properties",
-      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-class-properties",
-    },
-    transform: {
-      name: "@babel/plugin-proposal-class-properties",
-      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-class-properties",
-    },
-  },
-  classPrivateProperties: {
-    syntax: {
-      name: "@babel/plugin-syntax-class-properties",
-      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-class-properties",
-    },
-    transform: {
-      name: "@babel/plugin-proposal-class-properties",
-      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-class-properties",
-    },
-  },
-  classPrivateMethods: {
-    syntax: {
-      name: "@babel/plugin-syntax-class-properties",
-      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-class-properties",
-    },
-    transform: {
-      name: "@babel/plugin-proposal-private-methods",
-      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-private-methods",
-    },
-  },
-  classStaticBlock: {
-    syntax: {
-      name: "@babel/plugin-syntax-class-static-block",
-      url: "https://github.com/babel/babel/tree/HEAD/packages/babel-plugin-syntax-class-static-block",
-    },
-    transform: {
-      name: "@babel/plugin-proposal-class-static-block",
-      url: "https://github.com/babel/babel/tree/HEAD/packages/babel-plugin-proposal-class-static-block",
-    },
-  },
   decimal: {
     syntax: {
       name: "@babel/plugin-syntax-decimal",
@@ -74,12 +34,6 @@ const pluginNameMap: Record<
       url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-do-expressions",
     },
   },
-  dynamicImport: {
-    syntax: {
-      name: "@babel/plugin-syntax-dynamic-import",
-      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-dynamic-import",
-    },
-  },
   exportDefaultFrom: {
     syntax: {
       name: "@babel/plugin-syntax-export-default-from",
@@ -88,16 +42,6 @@ const pluginNameMap: Record<
     transform: {
       name: "@babel/plugin-proposal-export-default-from",
       url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-export-default-from",
-    },
-  },
-  exportNamespaceFrom: {
-    syntax: {
-      name: "@babel/plugin-syntax-export-namespace-from",
-      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-export-namespace-from",
-    },
-    transform: {
-      name: "@babel/plugin-proposal-export-namespace-from",
-      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-export-namespace-from",
     },
   },
   flow: {
@@ -130,12 +74,6 @@ const pluginNameMap: Record<
       url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-function-sent",
     },
   },
-  importMeta: {
-    syntax: {
-      name: "@babel/plugin-syntax-import-meta",
-      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-import-meta",
-    },
-  },
   jsx: {
     syntax: {
       name: "@babel/plugin-syntax-jsx",
@@ -152,32 +90,6 @@ const pluginNameMap: Record<
       url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-import-assertions",
     },
   },
-  moduleStringNames: {
-    syntax: {
-      name: "@babel/plugin-syntax-module-string-names",
-      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-module-string-names",
-    },
-  },
-  numericSeparator: {
-    syntax: {
-      name: "@babel/plugin-syntax-numeric-separator",
-      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-numeric-separator",
-    },
-    transform: {
-      name: "@babel/plugin-proposal-numeric-separator",
-      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-numeric-separator",
-    },
-  },
-  optionalChaining: {
-    syntax: {
-      name: "@babel/plugin-syntax-optional-chaining",
-      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-optional-chaining",
-    },
-    transform: {
-      name: "@babel/plugin-proposal-optional-chaining",
-      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-optional-chaining",
-    },
-  },
   pipelineOperator: {
     syntax: {
       name: "@babel/plugin-syntax-pipeline-operator",
@@ -186,16 +98,6 @@ const pluginNameMap: Record<
     transform: {
       name: "@babel/plugin-proposal-pipeline-operator",
       url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-pipeline-operator",
-    },
-  },
-  privateIn: {
-    syntax: {
-      name: "@babel/plugin-syntax-private-property-in-object",
-      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-private-property-in-object",
-    },
-    transform: {
-      name: "@babel/plugin-proposal-private-property-in-object",
-      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-private-property-in-object",
     },
   },
   recordAndTuple: {
@@ -249,6 +151,68 @@ const pluginNameMap: Record<
       url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-async-generator-functions",
     },
   },
+  classProperties: {
+    syntax: {
+      name: "@babel/plugin-syntax-class-properties",
+      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-class-properties",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-class-properties",
+      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-class-properties",
+    },
+  },
+  classPrivateProperties: {
+    syntax: {
+      name: "@babel/plugin-syntax-class-properties",
+      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-class-properties",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-class-properties",
+      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-class-properties",
+    },
+  },
+  classPrivateMethods: {
+    syntax: {
+      name: "@babel/plugin-syntax-class-properties",
+      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-class-properties",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-private-methods",
+      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-private-methods",
+    },
+  },
+  classStaticBlock: {
+    syntax: {
+      name: "@babel/plugin-syntax-class-static-block",
+      url: "https://github.com/babel/babel/tree/HEAD/packages/babel-plugin-syntax-class-static-block",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-class-static-block",
+      url: "https://github.com/babel/babel/tree/HEAD/packages/babel-plugin-proposal-class-static-block",
+    },
+  },
+  dynamicImport: {
+    syntax: {
+      name: "@babel/plugin-syntax-dynamic-import",
+      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-dynamic-import",
+    },
+  },
+  exportNamespaceFrom: {
+    syntax: {
+      name: "@babel/plugin-syntax-export-namespace-from",
+      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-export-namespace-from",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-export-namespace-from",
+      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-export-namespace-from",
+    },
+  },
+  importMeta: {
+    syntax: {
+      name: "@babel/plugin-syntax-import-meta",
+      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-import-meta",
+    },
+  },
   logicalAssignment: {
     syntax: {
       name: "@babel/plugin-syntax-logical-assignment-operators",
@@ -257,6 +221,22 @@ const pluginNameMap: Record<
     transform: {
       name: "@babel/plugin-proposal-logical-assignment-operators",
       url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-logical-assignment-operators",
+    },
+  },
+  moduleStringNames: {
+    syntax: {
+      name: "@babel/plugin-syntax-module-string-names",
+      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-module-string-names",
+    },
+  },
+  numericSeparator: {
+    syntax: {
+      name: "@babel/plugin-syntax-numeric-separator",
+      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-numeric-separator",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-numeric-separator",
+      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-numeric-separator",
     },
   },
   nullishCoalescingOperator: {
@@ -287,6 +267,26 @@ const pluginNameMap: Record<
     transform: {
       name: "@babel/plugin-proposal-optional-catch-binding",
       url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-optional-catch-binding",
+    },
+  },
+  optionalChaining: {
+    syntax: {
+      name: "@babel/plugin-syntax-optional-chaining",
+      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-optional-chaining",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-optional-chaining",
+      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-optional-chaining",
+    },
+  },
+  privateIn: {
+    syntax: {
+      name: "@babel/plugin-syntax-private-property-in-object",
+      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-private-property-in-object",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-private-property-in-object",
+      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-private-property-in-object",
     },
   },
 };
