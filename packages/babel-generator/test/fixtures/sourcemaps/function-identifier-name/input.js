@@ -9,12 +9,47 @@ var a = {
   ["fn"]:function() {},
   [function() {}]:function() {},
   [()=> {}]:function() {},
+  [fn]() { },
+  ["fn"]() { },
+  [function() {}]() { },
+  [()=> {}]() { }
+}
+
+class b {
+  fn() {};
+  fn=function() {};
+  [fn]=function() {};
+  ["fn"]=function() {};
+  [function() {}]=function() {};
+  [()=> {}]=function() {};
+  [fn]() { };
+  ["fn"]() { };
+  [function() {}]() { };
+  [()=> {}]() { };
+}
+
+var aa = {
+  fn:function a() {},
+  [fn]:function a() {},
+  ["fn"]:function a() {},
+  [function() {}]:function a() {},
+  [()=> {}]:function a() {},
+}
+
+class bb {
+  fn=function a() {};
+  [fn]=function a() {};
+  ["fn"]=function a() {};
+  [function() {}]=function a() {};
+  [()=> {}]=function a() {};
 }
 
 var x = function fn() {};
-var y = function fn() {};
+var x = function () {};
 
-() => {};
-x => {};
-(x) => {};
-(x, y, z) => {};
+(function fn() {});
+
+var z = () => {};
+var z = x => {};
+var z = (x) => {};
+var z = (x, y, z) => {};

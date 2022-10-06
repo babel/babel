@@ -3,15 +3,18 @@
   "names": [
     "fn",
     "a",
+    "b",
+    "aa",
+    "bb",
     "x",
-    "y",
-    "z"
+    "z",
+    "y"
   ],
   "sources": [
     "fixtures/sourcemaps/function-identifier-name/input.js"
   ],
   "sourcesContent": [
-    "function fn() {}\n\nexport default function () {}\n\nvar a = {\n  fn() {},\n  fn:function() {},\n  [fn]:function() {},\n  [\"fn\"]:function() {},\n  [function() {}]:function() {},\n  [()=> {}]:function() {},\n}\n\nvar x = function fn() {};\nvar y = function fn() {};\n\n() => {};\nx => {};\n(x) => {};\n(x, y, z) => {};"
+    "function fn() {}\n\nexport default function () {}\n\nvar a = {\n  fn() {},\n  fn:function() {},\n  [fn]:function() {},\n  [\"fn\"]:function() {},\n  [function() {}]:function() {},\n  [()=> {}]:function() {},\n  [fn]() { },\n  [\"fn\"]() { },\n  [function() {}]() { },\n  [()=> {}]() { }\n}\n\nclass b {\n  fn() {};\n  fn=function() {};\n  [fn]=function() {};\n  [\"fn\"]=function() {};\n  [function() {}]=function() {};\n  [()=> {}]=function() {};\n  [fn]() { };\n  [\"fn\"]() { };\n  [function() {}]() { };\n  [()=> {}]() { };\n}\n\nvar aa = {\n  fn:function a() {},\n  [fn]:function a() {},\n  [\"fn\"]:function a() {},\n  [function() {}]:function a() {},\n  [()=> {}]:function a() {},\n}\n\nclass bb {\n  fn=function a() {};\n  [fn]=function a() {};\n  [\"fn\"]=function a() {};\n  [function() {}]=function a() {};\n  [()=> {}]=function a() {};\n}\n\nvar x = function fn() {};\nvar x = function () {};\n\n(function fn() {});\n\nvar z = () => {};\nvar z = x => {};\nvar z = (x) => {};\nvar z = (x, y, z) => {};"
   ],
-  "mappings": "AAAA,SAASA,EAAEA,CAAA,EAAG,CAAC;;AAEf,eAAe,YAAY,CAAC;AAE5B,IAAIC,CAAC,GAAG;EACND,EAAEA,CAAA,EAAG,CAAC,CAAC;;EACPA,EAAE,EAAC,YAAW,CAAC,CAAC;EAChB,CAACA,EAAE,GAAE,YAAW,CAAC,CAAC;EAClB,CAAC,IAAI,GAAE,YAAW,CAAC,CAAC;EACpB,CAAC,YAAW,CAAC,CAAC,GAAE,YAAW,CAAC,CAAC;EAC7B,CAAC,MAAK,CAAC,CAAC,GAAE,YAAW,CAAC;AACxB,CAAC;;AAED,IAAIE,CAAC,GAAG,SAASF,EAAEA,CAAA,EAAG,CAAC,CAAC;;AACxB,IAAIG,CAAC,GAAG,SAASH,EAAEA,CAAA,EAAG,CAAC,CAAC;;AAExB,MAAM,CAAC,CAAC;;AACRE,CAAC,IAAI,CAAC,CAAC;;AACNA,CAAC,IAAK,CAAC,CAAC;;AACT,CAACA,CAAC,EAAEC,CAAC,EAAEC,CAAC,KAAK,CAAC,CAAC"
+  "mappings": "AAAA,SAASA,EAAEA,CAAA,EAAG,CAAC;;AAEf,eAAe,YAAY,CAAC;AAE5B,IAAIC,CAAC,GAAG;EACND,EAAEA,CAAA,EAAG,CAAC,CAAC;;EACPA,EAAE,EAAC,SAAAA,CAAA,EAAW,CAAC,CAAC;EAChB,CAACA,EAAE,GAAE,YAAW,CAAC,CAAC;EAClB,CAAC,IAAI,GAAE,SAAAA,CAAA,EAAW,CAAC,CAAC;EACpB,CAAC,YAAW,CAAC,CAAC,GAAE,YAAW,CAAC,CAAC;EAC7B,CAAC,MAAK,CAAC,CAAC,GAAE,YAAW,CAAC,CAAC;;EACvB,CAACA,EAAE,IAAI,CAAE,CAAC;;EACV,CAAC,IAAI,CAAAA,CAAA,EAAI,CAAE,CAAC;;EACZ,CAAC,YAAW,CAAC,CAAC,IAAI,CAAE,CAAC;;EACrB,CAAC,MAAK,CAAC,CAAC,IAAI,CAAE;;AAChB,CAAC;;AAED,MAAME,CAAC,CAAC;EACNF,EAAEA,CAAA,EAAG,CAAC;;EACNA,EAAE,GAAC,SAAAA,CAAA,EAAW,CAAC,CAAC;EAChB,CAACA,EAAE,IAAE,YAAW,CAAC,CAAC;EAClB,CAAC,IAAI,IAAE,SAAAA,CAAA,EAAW,CAAC,CAAC;EACpB,CAAC,YAAW,CAAC,CAAC,IAAE,YAAW,CAAC,CAAC;EAC7B,CAAC,MAAK,CAAC,CAAC,IAAE,YAAW,CAAC,CAAC;;EACvB,CAACA,EAAE,IAAI,CAAE;;EACT,CAAC,IAAI,CAAAA,CAAA,EAAI,CAAE;;EACX,CAAC,YAAW,CAAC,CAAC,IAAI,CAAE;;EACpB,CAAC,MAAK,CAAC,CAAC,IAAI,CAAE;;AAChB;;AAEA,IAAIG,EAAE,GAAG;EACPH,EAAE,EAAC,SAASC,CAACA,CAAA,EAAG,CAAC,CAAC;EAClB,CAACD,EAAE,GAAE,SAASC,CAACA,CAAA,EAAG,CAAC,CAAC;EACpB,CAAC,IAAI,GAAE,SAASA,CAACA,CAAA,EAAG,CAAC,CAAC;EACtB,CAAC,YAAW,CAAC,CAAC,GAAE,SAASA,CAACA,CAAA,EAAG,CAAC,CAAC;EAC/B,CAAC,MAAK,CAAC,CAAC,GAAE,SAASA,CAACA,CAAA,EAAG,CAAC;AAC1B,CAAC;;AAED,MAAMG,EAAE,CAAC;EACPJ,EAAE,GAAC,SAASC,CAACA,CAAA,EAAG,CAAC,CAAC;EAClB,CAACD,EAAE,IAAE,SAASC,CAACA,CAAA,EAAG,CAAC,CAAC;EACpB,CAAC,IAAI,IAAE,SAASA,CAACA,CAAA,EAAG,CAAC,CAAC;EACtB,CAAC,YAAW,CAAC,CAAC,IAAE,SAASA,CAACA,CAAA,EAAG,CAAC,CAAC;EAC/B,CAAC,MAAK,CAAC,CAAC,IAAE,SAASA,CAACA,CAAA,EAAG,CAAC,CAAC;AAC3B;;AAEA,IAAII,CAAC,GAAG,SAASL,EAAEA,CAAA,EAAG,CAAC,CAAC;;AACxB,IAAIK,CAAC,GAAG,SAAAA,CAAA,EAAY,CAAC,CAAC;;AAEtB,CAAC,SAASL,EAAEA,CAAA,EAAG,CAAC,CAAC;;AAEjB,IAAIM,CAAC,GAAGA,CAAA,KAAM,CAAC,CAAC;;AAChB,IAAIA,CAAC,GAAGD,CAAC,IAAI,CAAC,CAAC;;AACf,IAAIC,CAAC,GAAID,CAAC,IAAK,CAAC,CAAC;;AACjB,IAAIC,CAAC,GAAGA,CAACD,CAAC,EAAEE,CAAC,EAAED,CAAC,KAAK,CAAC,CAAC"
 }

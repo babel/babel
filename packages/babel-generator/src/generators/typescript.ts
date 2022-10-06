@@ -73,12 +73,16 @@ export function TSParameterProperty(
   this._param(node.parameter);
 }
 
-export function TSDeclareFunction(this: Printer, node: t.TSDeclareFunction) {
+export function TSDeclareFunction(
+  this: Printer,
+  node: t.TSDeclareFunction,
+  parent: t.Node,
+) {
   if (node.declare) {
     this.word("declare");
     this.space();
   }
-  this._functionHead(node);
+  this._functionHead(node, parent);
   this.token(";");
 }
 
