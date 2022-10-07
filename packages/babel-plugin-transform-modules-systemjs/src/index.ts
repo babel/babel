@@ -1,8 +1,11 @@
 import { declare } from "@babel/helper-plugin-utils";
 import hoistVariables from "@babel/helper-hoist-variables";
 import { template, types as t } from "@babel/core";
-import { getImportSource } from "babel-plugin-dynamic-import-node/utils";
-import { rewriteThis, getModuleName } from "@babel/helper-module-transforms";
+import {
+  rewriteThis,
+  getModuleName,
+  getDynamicImportSource,
+} from "@babel/helper-module-transforms";
 import type { PluginOptions } from "@babel/helper-module-transforms";
 import { isIdentifierName } from "@babel/helper-validator-identifier";
 import type { NodePath, Scope, Visitor } from "@babel/traverse";
@@ -276,7 +279,7 @@ export default declare<PluginState>((api, options: Options) => {
                 t.identifier(state.contextIdent),
                 t.identifier("import"),
               ),
-              [getImportSource(t, path.node)],
+              [getDynamicImportSource(path.node)],
             ),
           );
         }
