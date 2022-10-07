@@ -613,4 +613,4 @@ jobs:
       - name: Compare previous main branch & current results
         run: |
           cd babel-test262-runner
-          node lib/compare-results ~/test262-main.tap ~/test262.tap | tee ~/diff.tap
+          node lib/compare-results ~/test262-main.tap ../test262.tap | tee ~/diff.tap
