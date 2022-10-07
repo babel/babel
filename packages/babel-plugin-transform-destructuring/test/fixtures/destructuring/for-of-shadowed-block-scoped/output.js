@@ -13,7 +13,8 @@ for (const _ref of [O]) {
 var _;
 
 for (var _ref2 of [O]) {
-  _ = _ref2[a];
+  var _ref3 = _ref2;
+  _ = _ref3[a];
   {
     const a = "A";
   }

@@ -5,7 +5,8 @@ for (var _ref in obj) {
 }
 
 for (var _ref2 in obj) {
-  name = _ref2[0];
-  value = _ref2[1];
+  var _ref3 = _ref2;
+  name = _ref3[0];
+  value = _ref3[1];
   print("Name: " + name + ", Value: " + value);
 }

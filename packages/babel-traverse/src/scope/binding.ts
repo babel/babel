@@ -44,11 +44,8 @@ export default class Binding {
     this.path = path;
     this.kind = kind;
 
-    for (let node of path.getAncestry()) {
-      if (node.isLoop()) {
-        debugger;
-        this.constant = false;
-      }
+    if ((kind === "var" || kind === "hoisted") && isDeclaredInLoop(path)) {
+      this.reassign(path);
     }
 
     this.clearValue();
@@ -115,4 +112,22 @@ export default class Binding {
     this.references--;
     this.referenced = !!this.references;
   }
+}
+
+function isDeclaredInLoop(path: NodePath) {
+  for (
+    let { parentPath, key } = path;
+    parentPath;
+    { parentPath, key } = parentPath
+  ) {
+    if (parentPath.isFunctionParent()) return false;
+    if (
+      parentPath.isWhile() ||
+      parentPath.isForXStatement() ||
+      (parentPath.isForStatement() && key === "body")
+    ) {
+      return true;
+    }
+  }
+  return false;
 }

@@ -389,29 +389,44 @@ describe("scope", () => {
       expect(
         getPath("var a = 1; var a = 2;").scope.getBinding("a").constant,
       ).toBe(false);
-      expect(
-        getPath("for (var n of ns) { var a = 1; }").scope.getBinding("a")
-          .constant,
-      ).toBe(false);
-      expect(
-        getPath("for (var n in ns) { var a = 1; }").scope.getBinding("a")
-          .constant,
-      ).toBe(false);
-      expect(
-        getPath("for (var i = 0; i < n; i++) { var a = 1; }").scope.getBinding(
-          "a",
-        ).constant,
-      ).toBe(false);
-      expect(
-        getPath("var i = 0; while (i != 1) { var a = 1; }").scope.getBinding(
-          "a",
-        ).constant,
-      ).toBe(false);
-      expect(
-        getPath("var i = 0; do { var a = 1; } while (i != 1)").scope.getBinding(
-          "a",
-        ).constant,
-      ).toBe(false);
+    });
+
+    it("variable constantness in loops", () => {
+      let scopePath = null;
+      const isAConstant = code => {
+        let path = getPath(code);
+        if (scopePath) path = path.get(scopePath);
+        return path.scope.getBinding("a").constant;
+      };
+
+      expect(isAConstant("for (_ of ns) { var a = 1; }")).toBe(false);
+      expect(isAConstant("for (_ in ns) { var a = 1; }")).toBe(false);
+      expect(isAConstant("for (;;) { var a = 1; }")).toBe(false);
+      expect(isAConstant("while (1) { var a = 1; }")).toBe(false);
+      expect(isAConstant("do { var a = 1; } while (1)")).toBe(false);
+
+      expect(isAConstant("for (var a of ns) {}")).toBe(false);
+      expect(isAConstant("for (var a in ns) {}")).toBe(false);
+      expect(isAConstant("for (var a;;) {}")).toBe(true);
+
+      scopePath = "body.0.body.expression";
+      expect(isAConstant("for (_ of ns) () => { var a = 1; }")).toBe(true);
+      expect(isAConstant("for (_ in ns) () => { var a = 1; }")).toBe(true);
+      expect(isAConstant("for (;;) () => { var a = 1; }")).toBe(true);
+      expect(isAConstant("while (1) () => { var a = 1; }")).toBe(true);
+      expect(isAConstant("do () => { var a = 1; }; while (1)")).toBe(true);
+
+      scopePath = "body.0.body";
+      expect(isAConstant("for (_ of ns) { let a = 1; }")).toBe(true);
+      expect(isAConstant("for (_ in ns) { let a = 1; }")).toBe(true);
+      expect(isAConstant("for (;;) { let a = 1; }")).toBe(true);
+      expect(isAConstant("while (1) { let a = 1; }")).toBe(true);
+      expect(isAConstant("do { let a = 1; } while (1)")).toBe(true);
+
+      scopePath = "body.0";
+      expect(isAConstant("for (let a of ns) {}")).toBe(true);
+      expect(isAConstant("for (let a in ns) {}")).toBe(true);
+      expect(isAConstant("for (let a;;) {}")).toBe(true);
     });
 
     test("label", function () {
