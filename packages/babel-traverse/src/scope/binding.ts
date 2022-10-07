@@ -44,7 +44,21 @@ export default class Binding {
     this.path = path;
     this.kind = kind;
 
-    if ((kind === "var" || kind === "hoisted") && isDeclaredInLoop(path)) {
+    if (
+      (kind === "var" || kind === "hoisted") &&
+      // https://github.com/rollup/rollup/issues/4654
+      // Rollup removes the path argument from this call. Add an
+      // unreachable IIFE (that rollup doesn't know is unreachable)
+      // with side effects, to prevent it from messing up with arguments.
+      // You can reproduce this with
+      //   BABEL_8_BREAKING=true make prepublish-build
+      isDeclaredInLoop(
+        path ||
+          (() => {
+            throw new Error("Internal Babel error: unreachable ");
+          })(),
+      )
+    ) {
       this.reassign(path);
     }
 
