@@ -7,9 +7,11 @@ for (var _ref in obj) {
 }
 
 for (var _ref3 in obj) {
-  var _ref4 = babelHelpers.slicedToArray(_ref3, 2);
+  var _ref4 = _ref3;
 
-  name = _ref4[0];
-  value = _ref4[1];
+  var _ref5 = babelHelpers.slicedToArray(_ref4, 2);
+
+  name = _ref5[0];
+  value = _ref5[1];
   print("Name: " + name + ", Value: " + value);
 }
