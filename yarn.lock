@@ -900,6 +900,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-simple-access@workspace:packages/babel-helper-simple-access"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
   languageName: unknown

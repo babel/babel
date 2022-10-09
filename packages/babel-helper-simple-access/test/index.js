@@ -62,7 +62,6 @@ it("simplifyAccess with default config", function () {
 
   expect(output).toMatchInlineSnapshot(`
     "var _foo, _bar;
-
     let a = (_foo = +foo, foo = _foo + 1, _foo);
     a = foo = +foo + 1;
     foo = foo + 1;
@@ -82,7 +81,6 @@ it("simplifyAccess with default config", function () {
     let c = baz = baz + 1;
     baz = baz + 1;
     c += 1;
-
     function f() {
       let foo = 1;
       let a = foo++;
@@ -165,7 +163,6 @@ it("simplifyAccess with includeUpdateExpression=false", function () {
     let c = baz = baz + 1;
     baz = baz + 1;
     c += 1;
-
     function f() {
       let foo = 1;
       let a = foo++;
@@ -177,5 +174,5 @@ it("simplifyAccess with includeUpdateExpression=false", function () {
       foo = a++;
       foo = ++a;
     }"
-`);
+  `);
 });
