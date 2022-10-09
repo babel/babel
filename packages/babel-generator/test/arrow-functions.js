@@ -28,23 +28,18 @@ describe("parameter parentheses", () => {
     const output = generate(ast, { auxiliaryCommentBefore: "BEFORE" }).code;
     expect(output).toMatchInlineSnapshot(`
       "() => {};
-
       (
       /*BEFORE*/
       a) => {};
-
       (
       /*BEFORE*/
       a,
       /*BEFORE*/
       b) => {};
-
       async () => {};
-
       async (
       /*BEFORE*/
       a) => {};
-
       async (
       /*BEFORE*/
       a,
@@ -58,23 +53,18 @@ describe("parameter parentheses", () => {
     const output = generate(ast, { auxiliaryCommentAfter: "AFTER" }).code;
     expect(output).toMatchInlineSnapshot(`
       "() => {};
-
       (a
       /*AFTER*/
       ) => {};
-
       (a
       /*AFTER*/
       , b
       /*AFTER*/
       ) => {};
-
       async () => {};
-
       async (a
       /*AFTER*/
       ) => {};
-
       async (a
       /*AFTER*/
       , b
@@ -88,15 +78,10 @@ describe("parameter parentheses", () => {
     const output = generate(ast).code;
     expect(output).toMatchInlineSnapshot(`
       "() => {};
-
       a => {};
-
       (a, b) => {};
-
       async () => {};
-
       async a => {};
-
       async (a, b) => {};"
     `);
   });
@@ -106,15 +91,10 @@ describe("parameter parentheses", () => {
     const output = generate(ast).code;
     expect(output).toMatchInlineSnapshot(`
       "() => {};
-
       a => {};
-
       (a, b) => {};
-
       async () => {};
-
       async a => {};
-
       async (a, b) => {};"
     `);
   });

@@ -15,7 +15,6 @@ System.register(["./x.js"], function (_export, _context) {
         };
         console.log(x);
       }
-
       new class extends x {}();
     }
   };

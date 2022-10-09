@@ -4,6 +4,5 @@ class C {
     for (let x = C.#x;;) {
       break;
     }
-
   }
 }

@@ -1,5 +1,4 @@
 var _foo, _foo2, _foo3, _foo$bar, _foo4, _foo5, _foo5$bar;
-
 foo === null || foo === void 0 ? void 0 : foo(foo);
 (_foo = foo) === null || _foo === void 0 ? void 0 : _foo.bar();
 foo.bar === null || foo.bar === void 0 ? void 0 : foo.bar(foo.bar, false);

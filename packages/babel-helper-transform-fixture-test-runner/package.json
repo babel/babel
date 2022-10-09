@@ -19,7 +19,6 @@
     "@babel/core": "workspace:^",
     "@babel/helper-check-duplicate-nodes": "workspace:^",
     "@babel/helper-fixtures": "workspace:^",
-    "@jridgewell/trace-mapping": "^0.3.8",
     "quick-lru": "5.1.0"
   },
   "devDependencies": {

@@ -1,5 +1,4 @@
 var _class, _descriptor;
-
 import { observable } from 'mobx';
 let Foo = (_class = class Foo {
   id = babelHelpers.initializerWarningHelper(_descriptor, this);

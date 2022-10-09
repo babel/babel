@@ -1,87 +1,53 @@
 function foo1(numVal: any) {}
-
 function foo2(numVal: number) {}
-
 function foo3(numVal: number, strVal: string) {}
-
 function foo4(numVal: number, untypedVal) {}
-
 function foo5(untypedVal, numVal: number) {}
-
 function foo6(nullableNum: ?number) {}
-
 function foo7(callback: () => void) {}
-
 function foo8(callback: () => number) {}
-
 function foo9(callback: (_: boolean) => number) {}
-
 function foo10(callback: (_1: boolean, _2: string) => number) {}
-
 function foo11(callback: (_1: boolean, ...foo: Array<number>) => number) {}
-
 function foo12(): number {}
-
 function foo13(): () => void {}
-
 function foo14(): (_: boolean) => number {}
-
 function foo15(): (_?: boolean) => number {}
-
 function foo16(): {} {}
-
 function foo17<T>() {}
-
 function foo18<T, S>() {}
-
 function foo19<T: F>() {}
-
 a1 = function <T, S>() {};
-
 a2 = {
   set fooProp(value: number) {}
-
 };
 a3 = {
   set fooProp(value: number): void {}
-
 };
 a4 = {
   get fooProp(): number {}
-
 };
 a5 = {
   id<T>(x: T): T {}
-
 };
 a6 = {
   *id<T>(x: T): T {}
-
 };
 a7 = {
   async id<T>(x: T): T {}
-
 };
 a8 = {
   123<T>(x: T): T {}
-
 };
-
 class Foo1 {
   set fooProp(value: number) {}
-
 }
-
 class Foo2 {
   set fooProp(value: number): void {}
-
 }
-
 class Foo3 {
   get fooProp(): number {}
-
 }
-
 var numVal1: number;
 var numVal2: empty;
 var numVal3: mixed;
@@ -137,49 +103,34 @@ var a13: {
 var a14: Array<number> = [1, 2, 3];
 a13 = class Foo<T> {};
 a14 = class Foo<T> extends Bar<T> {};
-
 class Foo4<T> {}
-
 class Foo5<T> extends Bar<T> {}
-
 class Foo6<T> extends mixin(Bar) {}
-
 class Foo7<T> {
   bar<U>(): number {
     return 42;
   }
-
 }
-
 class Foo8 {
   "bar"<T>() {}
-
 }
-
 function foo20(requiredParam, optParam?) {}
-
 class Foo9 {
   prop1: string;
   prop2: number;
 }
-
 class Foo10 {
   static prop1: string;
   prop2: number;
 }
-
 class Foo11 {
   #prop1: string;
   prop2: number;
 }
-
 var x1: number | string = 4;
-
 class Array {
   concat(items: number | string) {}
-
 }
-
 var x2: () => number | (() => string) = fn;
 var x3: typeof Y = Y;
 var x4: typeof Y | number = Y;
@@ -198,21 +149,15 @@ var {
   x6: "hello"
 };
 var [x7]: Array<string> = ["hello"];
-
 function foo21({
   x
 }: {
   x: string
 }) {}
-
 function foo22([x]: Array<string>) {}
-
 function foo23(...rest: Array<number>) {}
-
 (function (...rest: Array<number>) {});
-
 (...rest: Array<number>) => rest;
-
 var a15: Map<string, Array<string>>;
 var a16: Map<string, Array<string>>;
 var a17: number[];
@@ -288,10 +233,7 @@ var a33: {|
 var a34: {|
   id<T>(x: T): T
 |};
-
 function foo27(numVal: number = 2) {}
-
 function foo28(numVal?: number = 2) {}
-
 export type * from "foo";
 const foo29: symbol = Symbol();

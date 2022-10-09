@@ -1,7 +1,6 @@
 function decorate(value) {
   return function (target, propertyKey, descriptor) {};
 }
-
 let A = babelHelpers.decorate(null, function (_initialize) {
   "use strict";
 
@@ -9,9 +8,7 @@ let A = babelHelpers.decorate(null, function (_initialize) {
     constructor() {
       _initialize(this);
     }
-
   }
-
   return {
     F: A,
     d: [{
@@ -22,14 +19,10 @@ let A = babelHelpers.decorate(null, function (_initialize) {
     }]
   };
 });
-
 class B extends A {
   constructor() {
     super();
   }
-
   myMethod() {}
-
 }
-
 const b = new B();

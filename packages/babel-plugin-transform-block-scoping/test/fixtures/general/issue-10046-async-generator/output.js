@@ -4,12 +4,12 @@
 // runs it has already been transpiled to a plain function.
 // The functions is thus visible to the outer scope.
 // This is a bug.
+
 if (true) {
   var _run = async function* () {
     return true;
   };
 }
-
 function test() {
   return run();
 }

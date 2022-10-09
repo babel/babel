@@ -1,5 +1,4 @@
 var _foo = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("foo");
-
 let Foo = /*#__PURE__*/function () {
   "use strict";
 
@@ -10,7 +9,6 @@ let Foo = /*#__PURE__*/function () {
       set: void 0
     });
   }
-
   babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test(other) {
@@ -19,5 +17,4 @@ let Foo = /*#__PURE__*/function () {
   }]);
   return Foo;
 }();
-
 function _get_foo() {}

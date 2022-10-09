@@ -1,6 +1,5 @@
 import type Printer from "../printer";
 import type * as t from "@babel/types";
-import * as charCodes from "charcodes";
 
 export function File(this: Printer, node: t.File) {
   if (node.program) {
@@ -15,8 +14,16 @@ export function File(this: Printer, node: t.File) {
 export function Program(this: Printer, node: t.Program) {
   this.printInnerComments(node, false);
 
-  this.printSequence(node.directives, node);
-  if (node.directives && node.directives.length) this.newline();
+  const directivesLen = node.directives?.length;
+  if (directivesLen) {
+    const newline = node.body.length ? 2 : 1;
+    this.printSequence(node.directives, node, {
+      trailingCommentsLineOffset: newline,
+    });
+    if (!node.directives[directivesLen - 1].trailingComments?.length) {
+      this.newline(newline);
+    }
+  }
 
   this.printSequence(node.body, node);
 }
@@ -25,21 +32,22 @@ export function BlockStatement(this: Printer, node: t.BlockStatement) {
   this.token("{");
   this.printInnerComments(node);
 
-  const hasDirectives = node.directives?.length;
-
-  if (node.body.length || hasDirectives) {
-    this.newline();
-
-    this.printSequence(node.directives, node, { indent: true });
-    if (hasDirectives) this.newline();
-
-    this.printSequence(node.body, node, { indent: true });
-    this.removeTrailingNewline();
-
-    if (!this.endsWith(charCodes.lineFeed)) this.newline();
+  const directivesLen = node.directives?.length;
+  if (directivesLen) {
+    const newline = node.body.length ? 2 : 1;
+    this.printSequence(node.directives, node, {
+      indent: true,
+      trailingCommentsLineOffset: newline,
+    });
+    if (!node.directives[directivesLen - 1].trailingComments?.length) {
+      this.newline(newline);
+    }
   }
 
+  this.printSequence(node.body, node, { indent: true });
+
   this.sourceWithOffset("end", node.loc, 0, -1);
+
   this.rightBrace();
 }
 
@@ -81,7 +89,8 @@ export function InterpreterDirective(
   this: Printer,
   node: t.InterpreterDirective,
 ) {
-  this.token(`#!${node.value}\n`, true);
+  this.token(`#!${node.value}`);
+  this.newline(1, true);
 }
 
 export function Placeholder(this: Printer, node: t.Placeholder) {

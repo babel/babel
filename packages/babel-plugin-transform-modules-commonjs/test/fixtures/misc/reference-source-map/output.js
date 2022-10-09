@@ -1,11 +1,8 @@
 "use strict";
 
 var _one = babelHelpers.interopRequireDefault(require("one"));
-
 var _two = require("two");
-
 var _three = require("three");
-
 var aNamespace = babelHelpers.interopRequireWildcard(require("four"));
 console.log(_one.default);
 console.log(_two.aNamed);

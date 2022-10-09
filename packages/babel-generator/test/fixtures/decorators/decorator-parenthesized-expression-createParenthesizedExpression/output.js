@@ -1,6 +1,5 @@
 class C extends class {} {
   #x;
-
   constructor() {
     class ShouldPreserveParens {
       @(decs[0])
@@ -12,19 +11,16 @@ class C extends class {} {
       @(new DecFactory())
       p;
     }
-
     class ShouldNotAddParens {
       @decs
       @decs.one
       @decs.two()
       p;
     }
-
     class ShouldAddParens {
       @((decs[three])())
       p;
     }
-
     class WillPreserveParens {
       @(decs)
       @(decs.one)
@@ -32,5 +28,4 @@ class C extends class {} {
       p;
     }
   }
-
 }

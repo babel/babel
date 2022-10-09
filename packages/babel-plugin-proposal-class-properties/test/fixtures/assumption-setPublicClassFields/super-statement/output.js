@@ -3,5 +3,4 @@ class Foo extends Bar {
     super();
     this.bar = "foo";
   }
-
 }

@@ -1,7 +1,6 @@
 "use strict";
 
 require("foo");
-
 console.log(function () {
   throw new Error("The CommonJS '" + "exports" + "' variable is not available in ES6 modules." + "Consider setting setting sourceType:script or sourceType:unambiguous in your " + "Babel config for this file.");
 }());

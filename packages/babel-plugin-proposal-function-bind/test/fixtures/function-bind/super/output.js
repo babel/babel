@@ -3,5 +3,4 @@ class C {
     super.bar.bind(this);
     super.baz.call(this, 123);
   }
-
 }

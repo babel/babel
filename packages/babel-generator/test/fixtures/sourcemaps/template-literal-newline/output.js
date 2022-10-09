@@ -1,22 +1,27 @@
 // Newline
 `before
-after`; // Newline newline
+after`;
 
+// Newline newline
 `before
 
-after`; // Newline LineContinuation
+after`;
 
+// Newline LineContinuation
 `before
 \
-after`; // LineContinuation
+after`;
 
+// LineContinuation
 `before\
-after`; // LineContinuation newline
+after`;
 
+// LineContinuation newline
 `before\
 
-after`; // LineContinuation LineContinuation
+after`;
 
+// LineContinuation LineContinuation
 `before\
 \
 after`;

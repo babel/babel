@@ -1,5 +1,4 @@
 var _user$address, _user$address2, _a, _a2, _a3;
-
 var street = (_user$address = user.address) === null || _user$address === void 0 ? void 0 : _user$address.street;
 street = (_user$address2 = user.address) === null || _user$address2 === void 0 ? void 0 : _user$address2.street;
 test((_a = a) === null || _a === void 0 ? void 0 : _a.b, 1);

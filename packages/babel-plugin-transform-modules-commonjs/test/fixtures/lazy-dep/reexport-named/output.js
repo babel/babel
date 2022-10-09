@@ -9,13 +9,10 @@ Object.defineProperty(exports, "named", {
     return _foo().named;
   }
 });
-
 function _foo() {
   const data = require("foo");
-
   _foo = function () {
     return data;
   };
-
   return data;
 }

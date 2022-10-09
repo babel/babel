@@ -6,10 +6,8 @@ const x = n => function () {
       'c';
       break;
       'd';
-
     case 6:
       'e';
-
     default:
       return 'f';
   }

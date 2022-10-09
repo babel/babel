@@ -1,17 +1,12 @@
 var _x = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("x");
-
 var _m = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("m");
-
 var _self = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("self");
-
 class Foo {
   static getSelf() {
     return this;
   }
-
   static test() {
     var _deep$very$o, _deep$very$o2, _deep$very$o3, _babelHelpers$classPr, _babelHelpers$classPr2, _ref, _ref2, _self2, _babelHelpers$classPr3, _babelHelpers$classPr4, _ref3, _ref4, _getSelf, _ref5, _ref6, _babelHelpers$classPr5, _call, _getSelf2, _getSelf3, _fnDeep$very$o, _fnDeep$very$o2, _fnDeep$very$o3, _babelHelpers$classPr6, _babelHelpers$classPr7, _ref7, _ref8, _self3, _babelHelpers$classPr8, _babelHelpers$classPr9, _ref9, _ref10, _getSelf4, _ref11, _ref12, _babelHelpers$classPr10, _call2, _getSelf5, _getSelf6;
-
     const o = {
       Foo: Foo
     };
@@ -20,15 +15,12 @@ class Foo {
         o
       }
     };
-
     function fn() {
       return o;
     }
-
     function fnDeep() {
       return deep;
     }
-
     babelHelpers.classPrivateFieldLooseBase(Foo, _m)[_m]?.();
     babelHelpers.classPrivateFieldLooseBase(Foo, _m)[_m]?.().toString;
     babelHelpers.classPrivateFieldLooseBase(Foo, _m)[_m]?.().toString();
@@ -71,9 +63,7 @@ class Foo {
     (_getSelf5 = (fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self])?.getSelf()) === null || _getSelf5 === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(_getSelf5.self, _m)[_m]?.();
     (_getSelf6 = (fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self])?.getSelf?.()) === null || _getSelf6 === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(_getSelf6.self, _m)[_m]?.();
   }
-
 }
-
 Object.defineProperty(Foo, _x, {
   writable: true,
   value: 1

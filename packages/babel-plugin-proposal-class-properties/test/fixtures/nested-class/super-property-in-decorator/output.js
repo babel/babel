@@ -4,7 +4,6 @@ let Hello = /*#__PURE__*/function () {
   function Hello() {
     babelHelpers.classCallCheck(this, Hello);
   }
-
   babelHelpers.createClass(Hello, [{
     key: "dec",
     value: function dec() {
@@ -13,17 +12,12 @@ let Hello = /*#__PURE__*/function () {
   }]);
   return Hello;
 }();
-
 let Outer = /*#__PURE__*/function (_Hello) {
   babelHelpers.inherits(Outer, _Hello);
-
   var _super = babelHelpers.createSuper(Outer);
-
   function Outer() {
     var _dec, _init_hello;
-
     var _thisSuper, _this;
-
     babelHelpers.classCallCheck(this, Outer);
     _this = _super.call(this);
     _dec = babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Outer.prototype)), "dec", _thisSuper);
@@ -34,8 +28,6 @@ let Outer = /*#__PURE__*/function (_Hello) {
     [_init_hello] = babelHelpers.applyDecs(Inner, [[_dec, 0, "hello"]], []);
     return babelHelpers.possibleConstructorReturn(_this, new Inner());
   }
-
   return babelHelpers.createClass(Outer);
 }(Hello);
-
 expect(new Outer().hello).toBe('hello');

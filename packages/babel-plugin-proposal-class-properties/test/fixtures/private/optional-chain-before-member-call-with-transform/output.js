@@ -2,10 +2,8 @@ class Foo {
   static getSelf() {
     return this;
   }
-
   static test() {
     var _o$Foo, _o$Foo2, _o$Foo3, _deep$very$o, _deep$very$o$Foo, _deep$very$o2, _deep$very$o2$Foo, _deep$very$o3, _deep$very$o3$Foo, _babelHelpers$classSt, _babelHelpers$classSt2, _ref, _ref$self, _ref2, _ref2$self, _self2, _self2$self, _babelHelpers$classSt3, _babelHelpers$classSt4, _ref3, _ref3$call, _ref4, _ref4$getSelf, _getSelf, _ref5, _getSelf$call, _ref6, _ref6$self, _babelHelpers$classSt5, _call, _call$self, _getSelf2, _getSelf2$self, _getSelf3, _getSelf3$self, _fn$Foo, _fn$Foo2, _fn$Foo3, _fnDeep$very$o, _fnDeep$very$o$Foo, _fnDeep$very$o2, _fnDeep$very$o2$Foo, _fnDeep$very$o3, _fnDeep$very$o3$Foo, _babelHelpers$classSt6, _babelHelpers$classSt7, _ref7, _ref7$self, _ref8, _ref8$self, _self3, _self3$self, _babelHelpers$classSt8, _babelHelpers$classSt9, _ref9, _ref9$call, _ref10, _ref10$getSelf, _getSelf4, _ref11, _getSelf4$call, _ref12, _ref12$self, _babelHelpers$classSt10, _call2, _call2$self, _getSelf5, _getSelf5$self, _getSelf6, _getSelf6$self, _ref13, _ref14, _ref15, _ref16, _ref17, _ref17$getSelf, _ref18, _ref19, _ref20, _ref21, _ref22, _ref22$getSelf;
-
     const o = {
       Foo: Foo
     };
@@ -14,15 +12,12 @@ class Foo {
         o
       }
     };
-
     function fn() {
       return o;
     }
-
     function fnDeep() {
       return deep;
     }
-
     o === null || o === void 0 ? void 0 : babelHelpers.classStaticPrivateFieldSpecGet(_o$Foo = o.Foo, Foo, _m).call(_o$Foo);
     o === null || o === void 0 ? void 0 : babelHelpers.classStaticPrivateFieldSpecGet(_o$Foo2 = o.Foo, Foo, _m).call(_o$Foo2).toString;
     o === null || o === void 0 ? void 0 : babelHelpers.classStaticPrivateFieldSpecGet(_o$Foo3 = o.Foo, Foo, _m).call(_o$Foo3).toString();
@@ -62,9 +57,7 @@ class Foo {
     (_getSelf5 = (_ref21 = fn === null || fn === void 0 ? void 0 : babelHelpers.classStaticPrivateFieldSpecGet(fn().Foo, Foo, _self)) === null || _ref21 === void 0 ? void 0 : _ref21.getSelf()) === null || _getSelf5 === void 0 ? void 0 : babelHelpers.classStaticPrivateFieldSpecGet(_getSelf5$self = _getSelf5.self, Foo, _m).call(_getSelf5$self);
     (_getSelf6 = (_ref22 = fn === null || fn === void 0 ? void 0 : babelHelpers.classStaticPrivateFieldSpecGet(fn().Foo, Foo, _self)) === null || _ref22 === void 0 ? void 0 : (_ref22$getSelf = _ref22.getSelf) === null || _ref22$getSelf === void 0 ? void 0 : _ref22$getSelf.call(_ref22)) === null || _getSelf6 === void 0 ? void 0 : babelHelpers.classStaticPrivateFieldSpecGet(_getSelf6$self = _getSelf6.self, Foo, _m).call(_getSelf6$self);
   }
-
 }
-
 var _x = {
   writable: true,
   value: 1

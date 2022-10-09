@@ -3,5 +3,4 @@ class A {
     this.force = force;
     this.foo = super.method();
   }
-
 }

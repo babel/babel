@@ -5,7 +5,6 @@ var _loop = function () {
     result;
   });
 };
-
 for (var _iterator = babelHelpers.createForOfIteratorHelperLoose(results), _step; !(_step = _iterator()).done;) {
   _loop();
 }

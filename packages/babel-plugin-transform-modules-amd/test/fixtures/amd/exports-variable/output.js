@@ -10,12 +10,10 @@ define(["exports"], function (_exports) {
   var foo = 1;
   _exports.foo = foo;
   var foo2 = 1,
-      bar = 2;
+    bar = 2;
   _exports.bar = bar;
   _exports.foo2 = foo2;
-
   var foo3 = function () {};
-
   _exports.foo3 = foo3;
   var foo4;
   _exports.foo4 = foo4;
@@ -25,10 +23,7 @@ define(["exports"], function (_exports) {
   _exports.foo6 = foo6;
   const foo7 = 3;
   _exports.foo7 = foo7;
-
   function foo8() {}
-
   class foo9 {}
-
   _exports.foo9 = foo9;
 });

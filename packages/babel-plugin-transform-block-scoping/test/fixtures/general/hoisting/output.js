@@ -9,16 +9,13 @@ var _loop = function (i) {
     return i * x;
   });
 };
-
 var _iterator = babelHelpers.createForOfIteratorHelper(nums),
-    _step;
-
+  _step;
 try {
   for (_iterator.s(); !(_step = _iterator.n()).done;) {
     var i = _step.value;
     var x;
     var f;
-
     _loop(i);
   }
 } catch (err) {

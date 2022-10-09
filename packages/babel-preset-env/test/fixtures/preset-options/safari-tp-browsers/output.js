@@ -3,7 +3,6 @@ let n = {
   y,
   ...z
 };
-
 try {
   throw 0;
 } catch {}

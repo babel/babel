@@ -1,7 +1,5 @@
 var _x = /*#__PURE__*/new WeakMap();
-
 var _y = /*#__PURE__*/new WeakMap();
-
 var Point = /*#__PURE__*/function () {
   "use strict";
 
@@ -18,7 +16,6 @@ var Point = /*#__PURE__*/function () {
     babelHelpers.classPrivateFieldSet(this, _x, +x);
     babelHelpers.classPrivateFieldSet(this, _y, +y);
   }
-
   babelHelpers.createClass(Point, [{
     key: "x",
     get: function () {

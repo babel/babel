@@ -4,9 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = _callee;
-
 var _marked = /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(_callee);
-
 function _callee() {
   var x;
   return babelHelpers.regeneratorRuntime().wrap(function _callee$(_context) {
@@ -15,11 +13,9 @@ function _callee() {
         case 0:
           _context.next = 2;
           return 5;
-
         case 2:
           x = _context.sent;
           return _context.abrupt("return", 5);
-
         case 4:
         case "end":
           return _context.stop();

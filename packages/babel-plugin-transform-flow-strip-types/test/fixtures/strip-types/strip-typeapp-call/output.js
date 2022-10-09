@@ -4,11 +4,8 @@ new C();
 f(e);
 o[e]();
 f(x)(y);
-
 async () => {};
-
 async () => {};
-
 new C(e);
 f < T > [e];
 new C();

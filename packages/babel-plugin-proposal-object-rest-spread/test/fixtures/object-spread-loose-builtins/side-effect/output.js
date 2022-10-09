@@ -12,16 +12,12 @@ var pureB = {};
 var pureC = {};
 var pureD = {};
 var pureE = {};
-
 function impureFunc() {
   console.log('hello');
 }
-
 var output = Object.assign({}, pureA, {
   get foo() {},
-
   get bar() {}
-
 }, pureB, pureC, impureFunc(), pureD, {
   pureD
 });

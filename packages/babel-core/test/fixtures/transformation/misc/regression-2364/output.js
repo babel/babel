@@ -1,7 +1,6 @@
 function wrapper(fn) {
   return function () {
     var _arguments = arguments;
-
     var _loop = function () {
       var val = fn(..._arguments);
       return {
@@ -10,10 +9,8 @@ function wrapper(fn) {
         })
       };
     };
-
     while (someCondition) {
       var _ret = _loop();
-
       if (typeof _ret === "object") return _ret.v;
     }
   };

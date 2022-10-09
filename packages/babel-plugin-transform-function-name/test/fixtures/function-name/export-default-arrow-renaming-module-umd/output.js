@@ -17,7 +17,6 @@
     value: true
   });
   _exports.default = void 0;
-
   var _default = function _default(_a) {
     return {
       a: function a() {
@@ -25,6 +24,5 @@
       }
     };
   };
-
   _exports.default = _default;
 });

@@ -1,15 +1,11 @@
 var _x = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("x");
-
 var _self = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("self");
-
 class Foo {
   static getSelf() {
     return this;
   }
-
   static test() {
     var _o$Foo, _o$Foo2, _o$Foo3, _deep$very$o$Foo, _deep$very$o$Foo2, _deep$very$o$Foo3, _ref, _ref2, _self2, _self3, _self$self, _ref3, _babelHelpers$classPr, _call, _getSelf, _getSelf2, _self4, _babelHelpers$classPr2, _call$self, _getSelf$self, _getSelf$self2, _fn$Foo, _fn$Foo2, _fn$Foo3, _fnDeep$very$o$Foo, _fnDeep$very$o$Foo2, _fnDeep$very$o$Foo3, _ref4, _ref5, _self5, _self6, _self$self2, _ref6, _babelHelpers$classPr3, _call2, _getSelf3, _getSelf4, _self7, _babelHelpers$classPr4, _call$self2, _getSelf$self3, _getSelf$self4;
-
     const o = {
       Foo: Foo
     };
@@ -18,15 +14,12 @@ class Foo {
         o
       }
     };
-
     function fn() {
       return o;
     }
-
     function fnDeep() {
       return deep;
     }
-
     Foo === null || Foo === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(Foo, _x)[_x];
     Foo === null || Foo === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(Foo, _x)[_x].toString;
     Foo === null || Foo === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(Foo, _x)[_x].toString();
@@ -69,9 +62,7 @@ class Foo {
     (_getSelf$self3 = (fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self])?.getSelf()?.self) === null || _getSelf$self3 === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(_getSelf$self3, _x)[_x];
     (_getSelf$self4 = (fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self])?.getSelf?.()?.self) === null || _getSelf$self4 === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(_getSelf$self4, _x)[_x];
   }
-
 }
-
 Object.defineProperty(Foo, _x, {
   writable: true,
   value: 1

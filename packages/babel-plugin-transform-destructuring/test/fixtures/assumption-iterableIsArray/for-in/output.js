@@ -3,7 +3,6 @@ for (var _ref in obj) {
   var value = _ref[1];
   print("Name: " + name + ", Value: " + value);
 }
-
 for (var _ref2 in obj) {
   var _ref3 = _ref2;
   name = _ref3[0];

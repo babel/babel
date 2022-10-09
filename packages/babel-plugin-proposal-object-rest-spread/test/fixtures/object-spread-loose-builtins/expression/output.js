@@ -24,5 +24,4 @@ Object.assign({}, {
   get foo() {
     return 'foo';
   }
-
 });

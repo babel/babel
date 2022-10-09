@@ -1,5 +1,4 @@
 var _foobar, _foobar2, _test, _test2, _obj, _mutatorMap;
-
 var obj = (_obj = {}, _foobar = foobar, _mutatorMap = {}, _mutatorMap[_foobar] = _mutatorMap[_foobar] || {}, _mutatorMap[_foobar].get = function () {
   return "foobar";
 }, _foobar2 = foobar, _mutatorMap[_foobar2] = _mutatorMap[_foobar2] || {}, _mutatorMap[_foobar2].set = function (x) {

@@ -1,9 +1,6 @@
 let _Symbol$search;
-
 var _class, _descriptor;
-
 function dec() {}
-
 let A = (_class = (_Symbol$search = Symbol.search, /*#__PURE__*/function () {
   "use strict";
 
@@ -11,7 +8,6 @@ let A = (_class = (_Symbol$search = Symbol.search, /*#__PURE__*/function () {
     babelHelpers.classCallCheck(this, A);
     babelHelpers.initializerDefineProperty(this, "a", _descriptor, this);
   }
-
   babelHelpers.createClass(A, [{
     key: _Symbol$search,
     value: function () {}

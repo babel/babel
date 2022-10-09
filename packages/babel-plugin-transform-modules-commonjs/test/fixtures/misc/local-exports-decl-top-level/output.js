@@ -1,7 +1,6 @@
 "use strict";
 
 require("foo");
-
 var _exports = "local exports";
 var _module = "local module";
 console.log(_exports);

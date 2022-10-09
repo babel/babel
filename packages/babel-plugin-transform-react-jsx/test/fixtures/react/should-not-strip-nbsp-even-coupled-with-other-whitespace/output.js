@@ -1,2 +1,1 @@
-/*#__PURE__*/
-React.createElement("div", null, "\xA0 ");
+/*#__PURE__*/React.createElement("div", null, "\xA0 ");

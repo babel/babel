@@ -1,5 +1,4 @@
 var _class, _test;
-
 call((_class = class {}, _test = {
   writable: true,
   value: true

@@ -1,13 +1,10 @@
 var socketType;
-
 (function (socketType) {
   socketType[socketType["SOCKET"] = 0] = "SOCKET";
   socketType[socketType["SERVER"] = 1] = "SERVER";
   socketType[socketType["IPC"] = 2] = "IPC";
 })(socketType || (socketType = {}));
-
 var constants;
-
 (function (constants) {
   constants[constants["SOCKET"] = socketType.SOCKET] = "SOCKET";
   constants[constants["SERVER"] = socketType.SERVER] = "SERVER";

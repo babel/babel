@@ -1,2 +1,1 @@
-/*#__PURE__*/
-babelHelpers.jsx(Baz, {});
+/*#__PURE__*/babelHelpers.jsx(Baz, {});

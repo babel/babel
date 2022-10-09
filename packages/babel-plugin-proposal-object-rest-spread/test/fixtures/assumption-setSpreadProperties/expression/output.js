@@ -24,5 +24,4 @@ babelHelpers.extends({}, {
   get foo() {
     return 'foo';
   }
-
 });

@@ -1,7 +1,6 @@
 "use strict";
 
 var _ber, _x, _bar;
-
 const baz = (_ber = ber, function ber(_argPlaceholder, _argPlaceholder2) {
   return _ber(2, 4, _argPlaceholder, _argPlaceholder2, 1);
 });

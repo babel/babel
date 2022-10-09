@@ -1,5 +1,4 @@
 var _obj;
-
 var obj = (_obj = {}, babelHelpers.defineProperty(_obj, foobar, function () {
   return "foobar";
 }), babelHelpers.defineProperty(_obj, "test", function () {

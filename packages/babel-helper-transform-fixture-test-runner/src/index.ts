@@ -13,7 +13,6 @@ import {
   type TaskOptions,
 } from "@babel/helper-fixtures";
 import { codeFrameColumns } from "@babel/code-frame";
-import { TraceMap, originalPositionFor } from "@jridgewell/trace-mapping";
 import * as helpers from "./helpers";
 import assert from "assert";
 import fs from "fs";
@@ -384,17 +383,6 @@ async function run(task: Test) {
         JSON.stringify(result.map, null, 2),
       );
     }
-  }
-
-  if (task.sourceMappings) {
-    const consumer = new TraceMap(result.map);
-
-    task.sourceMappings.forEach(function (mapping) {
-      const actual = mapping.original;
-
-      const expected = originalPositionFor(consumer, mapping.generated);
-      expect({ line: expected.line, column: expected.column }).toEqual(actual);
-    });
   }
 
   if (execCode && resultExec) {

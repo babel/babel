@@ -1,5 +1,4 @@
 var _foo, _a, _a$b$c, _a$b, _a$b$c$d, _a$b$c2, _a$b$c2$d, _orders, _orders2, _orders2$, _client, _orders$client$key, _a2, _c, _a3;
-
 (_foo = foo) === null || _foo === void 0 ? void 0 : _foo.bar;
 (_a = a) === null || _a === void 0 ? void 0 : (_a$b$c = _a.b.c) === null || _a$b$c === void 0 ? void 0 : _a$b$c.d.e;
 (_a$b = a.b) === null || _a$b === void 0 ? void 0 : (_a$b$c$d = _a$b.c.d) === null || _a$b$c$d === void 0 ? void 0 : _a$b$c$d.e;

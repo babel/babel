@@ -8,7 +8,6 @@ const x = n => function () {
         "b";
       }
       ;
-
     case 1:
       {
         return "c";
@@ -17,17 +16,14 @@ const x = n => function () {
         "d";
       }
       ;
-
     case 2:
       "a";
       "b";
-
     case 3:
       {}
       {
         return void 0;
       }
-
     case 4:
       {
         "a";
@@ -35,13 +31,10 @@ const x = n => function () {
       {
         "b";
       }
-
     case 5:
       return "c";
-
     case 6:
       {}
-
     case 7:
   }
 }();

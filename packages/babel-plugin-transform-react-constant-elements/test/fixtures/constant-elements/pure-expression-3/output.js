@@ -1,5 +1,4 @@
 var _div;
-
 const OFFSET = 3;
 var Foo = React.createClass({
   render: function () {

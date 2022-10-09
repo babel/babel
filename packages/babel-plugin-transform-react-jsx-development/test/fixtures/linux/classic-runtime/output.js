@@ -31,7 +31,8 @@ var x = /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/Reac
     lineNumber: 6,
     columnNumber: 9
   }
-}), /*#__PURE__*/React.createElement("div", { ...props,
+}), /*#__PURE__*/React.createElement("div", {
+  ...props,
   key: "4",
   __self: this,
   __source: {

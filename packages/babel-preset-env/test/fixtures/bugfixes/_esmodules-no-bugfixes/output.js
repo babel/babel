@@ -3,9 +3,9 @@ _ref => {
   var {
     x = 2
   } = _ref;
-}; // Safari
+};
 
-
+// Safari
 {
   var x;
   {

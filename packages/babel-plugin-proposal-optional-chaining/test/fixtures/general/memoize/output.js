@@ -1,6 +1,5 @@
 function test(foo) {
   var _foo$bar, _foo$bar2, _foo$bar3, _foo$bar4, _foo$bar5, _foo$bar6, _foo$bar6$baz, _foo$bar7, _foo$bar7$baz;
-
   foo === null || foo === void 0 ? void 0 : foo.bar;
   foo === null || foo === void 0 ? void 0 : (_foo$bar = foo.bar) === null || _foo$bar === void 0 ? void 0 : _foo$bar.baz;
   foo === null || foo === void 0 ? void 0 : foo(foo);

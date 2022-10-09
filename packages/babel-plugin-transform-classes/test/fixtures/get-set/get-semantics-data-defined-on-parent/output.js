@@ -4,17 +4,13 @@ let Base = /*#__PURE__*/babelHelpers.createClass(function Base() {
   babelHelpers.classCallCheck(this, Base);
 });
 Base.prototype.test = 1;
-
 let Obj = /*#__PURE__*/function (_Base) {
   babelHelpers.inherits(Obj, _Base);
-
   var _super = babelHelpers.createSuper(Obj);
-
   function Obj() {
     babelHelpers.classCallCheck(this, Obj);
     return _super.apply(this, arguments);
   }
-
   babelHelpers.createClass(Obj, [{
     key: "get",
     value: function get() {
@@ -23,7 +19,6 @@ let Obj = /*#__PURE__*/function (_Base) {
   }]);
   return Obj;
 }(Base);
-
 Obj.prototype.test = 2;
 const obj = new Obj();
 expect(obj.test).toBe(2);

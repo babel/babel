@@ -2,18 +2,14 @@ class Foo {
   static getSelf() {
     return Foo;
   }
-
   test() {
     var _o$Foo, _o$Foo2, _o$Foo3, _o$Foo$self$getSelf, _o$Foo$self$getSelf2, _fn$Foo$self$getSelf, _fn$Foo$self$getSelf2;
-
     const o = {
       Foo: Foo
     };
-
     const fn = function () {
       return o;
     };
-
     (Foo === null || Foo === void 0 ? void 0 : babelHelpers.classStaticPrivateFieldSpecGet(Foo, Foo, _m).bind(Foo))();
     (Foo === null || Foo === void 0 ? void 0 : babelHelpers.classStaticPrivateFieldSpecGet(Foo, Foo, _m).bind(Foo))().toString;
     (Foo === null || Foo === void 0 ? void 0 : babelHelpers.classStaticPrivateFieldSpecGet(Foo, Foo, _m).bind(Foo))().toString();
@@ -25,9 +21,7 @@ class Foo {
     ((_fn$Foo$self$getSelf = (fn()?.Foo?.self.getSelf)()) === null || _fn$Foo$self$getSelf === void 0 ? void 0 : babelHelpers.classStaticPrivateFieldSpecGet(_fn$Foo$self$getSelf, Foo, _m).bind(_fn$Foo$self$getSelf))();
     ((_fn$Foo$self$getSelf2 = (fn?.().Foo.self?.getSelf)()) === null || _fn$Foo$self$getSelf2 === void 0 ? void 0 : babelHelpers.classStaticPrivateFieldSpecGet(_fn$Foo$self$getSelf2, Foo, _m).bind(_fn$Foo$self$getSelf2))();
   }
-
 }
-
 var _x = {
   writable: true,
   value: 1

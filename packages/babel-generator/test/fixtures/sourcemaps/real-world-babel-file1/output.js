@@ -1,4 +1,5 @@
 // From packages\babel-cli\src\babel\watcher.ts
+
 import { createRequire } from "module";
 import path from "path";
 import type { WatchOptions, FSWatcher } from "chokidar";
@@ -31,11 +32,9 @@ export function enable({
 }
 export function startWatcher() {
   hasStarted = true;
-
   for (const dep of watchQueue) {
     watcher.add(dep);
   }
-
   watchQueue.clear();
   watcher.on("ready", () => {
     console.log("The watcher is ready.");
@@ -45,13 +44,13 @@ export function watch(filename: string): void {
   if (!isWatchMode) {
     throw new Error("Internal Babel error: .watch called when not in watch mode.");
   }
-
   if (!hasStarted) {
     watchQueue.add(path.resolve(filename));
   } else {
     watcher.add(path.resolve(filename));
   }
 }
+
 /**
  * Call @param callback whenever a dependency (source file)/
  * external dependency (non-source file) changes.
@@ -59,12 +58,10 @@ export function watch(filename: string): void {
  * Handles mapping external dependencies to their corresponding
  * dependencies.
  */
-
 export function onFilesChange(callback: (filenames: string[], event: string, cause: string) => void): void {
   if (!isWatchMode) {
     throw new Error("Internal Babel error: .onFilesChange called when not in watch mode.");
   }
-
   watcher.on("all", (event, filename) => {
     if (event !== "change" && event !== "add") return;
     const absoluteFile = path.resolve(filename);
@@ -72,12 +69,12 @@ export function onFilesChange(callback: (filenames: string[], event: string, cau
   });
 }
 export function updateExternalDependencies(filename: string, dependencies: Set<string>) {
-  if (!isWatchMode) return; // Use absolute paths
+  if (!isWatchMode) return;
 
+  // Use absolute paths
   const absFilename = path.resolve(filename);
   const absDependencies = new Set(Array.from(dependencies, dep => path.resolve(dep)));
   const deps = fileToDeps.get(absFilename);
-
   if (deps) {
     for (const dep of deps) {
       if (!absDependencies.has(dep)) {
@@ -85,33 +82,25 @@ export function updateExternalDependencies(filename: string, dependencies: Set<s
       }
     }
   }
-
   for (const dep of absDependencies) {
     let deps = depToFiles.get(dep);
-
     if (!deps) {
       depToFiles.set(dep, deps = new Set());
-
       if (!hasStarted) {
         watchQueue.add(dep);
       } else {
         watcher.add(dep);
       }
     }
-
     deps.add(absFilename);
   }
-
   fileToDeps.set(absFilename, absDependencies);
 }
-
 function removeFileDependency(filename: string, dep: string) {
   const deps = (depToFiles.get(dep) as Set<string>);
   deps.delete(filename);
-
   if (deps.size === 0) {
     depToFiles.delete(dep);
-
     if (!hasStarted) {
       watchQueue.delete(dep);
     } else {
@@ -119,21 +108,16 @@ function removeFileDependency(filename: string, dep: string) {
     }
   }
 }
-
 function unwatchFile(filename: string) {
   const deps = fileToDeps.get(filename);
   if (!deps) return;
-
   for (const dep of deps) {
     removeFileDependency(filename, dep);
   }
-
   fileToDeps.delete(filename);
 }
-
 function requireChokidar(): any {
   const require = createRequire(import.meta.url);
-
   try {
     return process.env.BABEL_8_BREAKING ? require("chokidar") : parseInt(process.versions.node) >= 8 ? require("chokidar") : require("@nicolo-ribaudo/chokidar-2");
   } catch (err) {

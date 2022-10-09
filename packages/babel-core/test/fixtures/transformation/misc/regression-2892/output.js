@@ -4,12 +4,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-
 var Foo = /*#__PURE__*/function () {
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
   }
-
   babelHelpers.createClass(Foo, [{
     key: "bar",
     value: function () {
@@ -20,7 +18,6 @@ var Foo = /*#__PURE__*/function () {
             switch (_context.prev = _context.next) {
               case 0:
                 baz = 0;
-
               case 1:
               case "end":
                 return _context.stop();
@@ -28,27 +25,21 @@ var Foo = /*#__PURE__*/function () {
           }
         }, _callee);
       }));
-
       function bar() {
         return _bar.apply(this, arguments);
       }
-
       return bar;
     }()
   }]);
   return Foo;
 }();
-
 exports["default"] = Foo;
-
 function foo() {
   return _foo.apply(this, arguments);
 }
-
 function _foo() {
   _foo = babelHelpers.asyncToGenerator( /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee3() {
     var bar, _bar2;
-
     return babelHelpers.regeneratorRuntime().wrap(function _callee3$(_context3) {
       while (1) {
         switch (_context3.prev = _context3.next) {
@@ -61,7 +52,6 @@ function _foo() {
                     switch (_context2.prev = _context2.next) {
                       case 0:
                         baz = {};
-
                       case 1:
                       case "end":
                         return _context2.stop();
@@ -71,11 +61,9 @@ function _foo() {
               }));
               return _bar2.apply(this, arguments);
             };
-
             bar = function _bar3() {
               return _bar2.apply(this, arguments);
             };
-
           case 2:
           case "end":
             return _context3.stop();

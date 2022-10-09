@@ -1,5 +1,4 @@
 var _ref, _ref2;
-
 let x = 0;
 let fnA = (_ref = x++, () => _ref);
 let fnB = (_ref2 = x++, (0, () => _ref2));

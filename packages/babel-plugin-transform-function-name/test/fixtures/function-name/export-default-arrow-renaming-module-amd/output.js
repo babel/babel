@@ -5,7 +5,6 @@ define(["exports"], function (_exports) {
     value: true
   });
   _exports.default = void 0;
-
   var _default = function _default(_a) {
     return {
       a: function a() {
@@ -13,6 +12,5 @@ define(["exports"], function (_exports) {
       }
     };
   };
-
   _exports.default = _default;
 });

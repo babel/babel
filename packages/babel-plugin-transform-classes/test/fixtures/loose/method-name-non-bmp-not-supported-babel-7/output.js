@@ -4,7 +4,6 @@ var o = /*#__PURE__*/function () {
   function o() {
     babelHelpers.classCallCheck(this, o);
   }
-
   babelHelpers.createClass(o, [{
     key: "\uD842\uDFB7\u91CE\u5BB6",
     value: function () {}

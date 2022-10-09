@@ -1,11 +1,7 @@
 var _init_a, _init_b;
-
 const dec = () => {};
-
 var _a = /*#__PURE__*/new WeakMap();
-
 var _b = /*#__PURE__*/new WeakMap();
-
 class Foo {
   constructor() {
     babelHelpers.classPrivateFieldInitSpec(this, _a, {
@@ -17,9 +13,7 @@ class Foo {
       value: _init_b(this, 123)
     });
   }
-
 }
-
 [_init_a, _init_b] = babelHelpers.applyDecs2203(Foo, [[dec, 0, "a", function () {
   return babelHelpers.classPrivateFieldGet(this, _a);
 }, function (value) {

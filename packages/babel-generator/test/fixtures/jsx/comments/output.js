@@ -3,15 +3,11 @@ class Demo extends React.Component {
     super(props);
     this.state = {};
   }
-
   render() {
     return <div>
       <Dialog>
-        {
-          /*<div>I am a jsx comment!!</div>*/
-        }
+        {/*<div>I am a jsx comment!!</div>*/}
       </Dialog>
     </div>;
   }
-
 }

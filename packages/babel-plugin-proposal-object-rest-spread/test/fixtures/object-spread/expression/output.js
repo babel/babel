@@ -24,5 +24,4 @@ babelHelpers.objectSpread2({}, {
   get foo() {
     return 'foo';
   }
-
 });

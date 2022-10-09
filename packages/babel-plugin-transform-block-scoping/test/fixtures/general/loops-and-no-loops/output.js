@@ -8,11 +8,9 @@ function foo() {
     }, 0);
   }
 }
-
 function bar() {
   var x = 5;
   console.log(x);
-
   for (var i = 0; i < 7; i++) {
     {
       (function () {
@@ -24,11 +22,9 @@ function bar() {
     }
   }
 }
-
 function baz() {
   var x = 5;
   console.log(x);
-
   for (var i = 0; i < 7; i++) {
     var qux = function qux(y) {
       var x = y;
@@ -36,7 +32,6 @@ function baz() {
         return x;
       }, 0);
     };
-
     qux(i);
   }
 }

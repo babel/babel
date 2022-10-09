@@ -5,12 +5,9 @@ async function g() {
     class A extends _await$B {
       constructor(...args) {
         super(...args);
-
         _initialize(this);
       }
-
     }
-
     return {
       F: A,
       d: []

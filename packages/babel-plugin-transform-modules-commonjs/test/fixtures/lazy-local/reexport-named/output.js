@@ -9,5 +9,4 @@ Object.defineProperty(exports, "named", {
     return _foo.named;
   }
 });
-
 var _foo = require("./foo");

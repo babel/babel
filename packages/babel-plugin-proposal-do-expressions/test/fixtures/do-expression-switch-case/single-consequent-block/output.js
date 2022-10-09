@@ -5,7 +5,6 @@ const x = n => function () {
       {
         return "weekend 🚵";
       }
-
     default:
       return "weekday 🚴";
   }

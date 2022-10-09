@@ -22,7 +22,6 @@ describe("#12880", () => {
 
     expect(out.code).toMatchInlineSnapshot(`
       "Math.pow(a, b);
-
       a => b;"
     `);
   });

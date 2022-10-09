@@ -2,7 +2,9 @@
 
 (function () {
   return 42;
-}); // some comments
+});
+
+// some comments
 "use strict";
 
 arr.map(function (x) {

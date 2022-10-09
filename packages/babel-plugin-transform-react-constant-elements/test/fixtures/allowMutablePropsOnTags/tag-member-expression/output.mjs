@@ -1,5 +1,4 @@
 var _Intl$FormattedMessag;
-
 import Intl from 'react-intl';
 var Foo = React.createClass({
   render: function () {

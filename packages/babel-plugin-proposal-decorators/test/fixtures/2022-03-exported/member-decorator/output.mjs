@@ -1,5 +1,4 @@
 var _dec, _init_x;
-
 _dec = dec;
 export class A {
   static {

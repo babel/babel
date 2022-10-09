@@ -4,7 +4,7 @@ import fs from "fs";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
 import type { InputOptions } from "@babel/core";
-import type { EncodedSourceMap, Mapping } from "@jridgewell/gen-mapping";
+import type { EncodedSourceMap } from "@jridgewell/gen-mapping";
 
 const require = createRequire(import.meta.url);
 
@@ -39,7 +39,6 @@ export interface Test {
   actual: TestFile;
   expect: TestFile;
   inputSourceMap?: EncodedSourceMap;
-  sourceMappings?: Mapping[];
   sourceMap: string;
   sourceMapFile: TestFile;
   validateLogs: boolean;
@@ -194,7 +193,6 @@ function pushTask(
       code: readFile(expectLoc),
       filename: expectLocAlias,
     },
-    sourceMappings: undefined,
     sourceMap: undefined,
     sourceMapFile: undefined,
     inputSourceMap: undefined,
@@ -249,11 +247,6 @@ function pushTask(
 
   suite.tests.push(test);
 
-  const sourceMappingsLoc = taskDir + "/source-mappings.json";
-  if (fs.existsSync(sourceMappingsLoc)) {
-    test.sourceMappings = JSON.parse(readFile(sourceMappingsLoc));
-  }
-
   const sourceMapLoc = taskDir + "/source-map.json";
   if (fs.existsSync(sourceMapLoc)) {
     test.sourceMap = JSON.parse(readFile(sourceMapLoc));
@@ -273,12 +266,6 @@ function pushTask(
     if (test.expect.code) {
       throw new Error(
         "Test cannot throw and also return output code: " + expectLoc,
-      );
-    }
-    if (test.sourceMappings) {
-      throw new Error(
-        "Test cannot throw and also return sourcemappings: " +
-          sourceMappingsLoc,
       );
     }
     if (test.sourceMap) {

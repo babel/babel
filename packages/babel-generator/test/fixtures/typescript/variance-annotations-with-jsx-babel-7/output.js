@@ -14,7 +14,6 @@ type Contravariant<in T> = {
 declare let super_contravariant: Contravariant<unknown>;
 declare let sub_contravariant: Contravariant<string>;
 super_contravariant = sub_contravariant; // Error
-
 sub_contravariant = super_contravariant;
 type Invariant<in out T> = {
   f: (x: T) => T;
@@ -22,14 +21,16 @@ type Invariant<in out T> = {
 declare let super_invariant: Invariant<unknown>;
 declare let sub_invariant: Invariant<string>;
 super_invariant = sub_invariant; // Error
-
 sub_invariant = super_invariant; // Error
+
 // Variance of various type constructors
 
 type T10<out T> = T;
 type T11<in T> = keyof T;
 type T12<out T, out K extends keyof T> = T[K];
-type T13<in out T> = T[keyof T]; // Variance annotation errors
+type T13<in out T> = T[keyof T];
+
+// Variance annotation errors
 
 type Covariant1<in T> = {
   // Error
@@ -48,7 +49,9 @@ type Invariant1<in T> = {
 type Invariant2<out T> = {
   // Error
   f: (x: T) => T;
-}; // Variance in circular types
+};
+
+// Variance in circular types
 
 type Foo1<in T> = {
   // Error

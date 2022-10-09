@@ -15,5 +15,4 @@ Object.defineProperty(exports, "name", {
     return _dep.name;
   }
 });
-
 var _dep = babelHelpers.interopRequireWildcard(require("dep"), true);

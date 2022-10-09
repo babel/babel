@@ -4,6 +4,5 @@ var Test = /*#__PURE__*/babelHelpers.createClass(function () {
 
     babelHelpers.classCallCheck(this, Test);
   }
-
   return Test;
 }());

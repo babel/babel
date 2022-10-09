@@ -36,143 +36,266 @@ describe("generation", function () {
 
     const generated = generate(combinedAst, { sourceMaps: true }, sources);
 
-    expect(generated.map).toEqual(
-      {
-        version: 3,
-        sources: ["a.js", "b.js"],
-        mappings:
-          "AAAA,SAASA,EAAE,CAAEC,GAAG,EAAE;EAAEC,OAAO,CAACC,GAAG,CAACF,GAAG,CAAC;AAAE;;ACAtCD,EAAE,CAAC,OAAO,CAAC",
-        names: ["hi", "msg", "console", "log"],
-        sourcesContent: [
-          "function hi (msg) { console.log(msg); }\n",
-          "hi('hello');\n",
+    expect(generated.map).toMatchInlineSnapshot(`
+      Object {
+        "file": undefined,
+        "mappings": "AAAA,SAASA,EAAE,CAAEC,GAAG,EAAE;EAAEC,OAAO,CAACC,GAAG,CAACF,GAAG,CAAC;AAAE;ACAtCD,EAAE,CAAC,OAAO,CAAC",
+        "names": Array [
+          "hi",
+          "msg",
+          "console",
+          "log",
         ],
-      },
-      "sourcemap was incorrectly generated",
-    );
+        "sourceRoot": undefined,
+        "sources": Array [
+          "a.js",
+          "b.js",
+        ],
+        "sourcesContent": Array [
+          "function hi (msg) { console.log(msg); }
+      ",
+          "hi('hello');
+      ",
+        ],
+        "version": 3,
+      }
+    `);
 
-    expect(generated.rawMappings).toEqual(
-      [
-        {
-          name: undefined,
-          generated: { line: 1, column: 0 },
-          source: "a.js",
-          original: { line: 1, column: 0 },
+    expect(generated.rawMappings).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "generated": Object {
+            "column": 0,
+            "line": 1,
+          },
+          "name": undefined,
+          "original": Object {
+            "column": 0,
+            "line": 1,
+          },
+          "source": "a.js",
         },
-        {
-          name: "hi",
-          generated: { line: 1, column: 9 },
-          source: "a.js",
-          original: { line: 1, column: 9 },
+        Object {
+          "generated": Object {
+            "column": 9,
+            "line": 1,
+          },
+          "name": "hi",
+          "original": Object {
+            "column": 9,
+            "line": 1,
+          },
+          "source": "a.js",
         },
-        {
-          name: undefined,
-          generated: { line: 1, column: 11 },
-          source: "a.js",
-          original: { line: 1, column: 11 },
+        Object {
+          "generated": Object {
+            "column": 11,
+            "line": 1,
+          },
+          "name": undefined,
+          "original": Object {
+            "column": 11,
+            "line": 1,
+          },
+          "source": "a.js",
         },
-        {
-          name: "msg",
-          generated: { line: 1, column: 12 },
-          source: "a.js",
-          original: { line: 1, column: 13 },
+        Object {
+          "generated": Object {
+            "column": 12,
+            "line": 1,
+          },
+          "name": "msg",
+          "original": Object {
+            "column": 13,
+            "line": 1,
+          },
+          "source": "a.js",
         },
-        {
-          name: undefined,
-          generated: { line: 1, column: 15 },
-          source: "a.js",
-          original: { line: 1, column: 16 },
+        Object {
+          "generated": Object {
+            "column": 15,
+            "line": 1,
+          },
+          "name": undefined,
+          "original": Object {
+            "column": 16,
+            "line": 1,
+          },
+          "source": "a.js",
         },
-        {
-          name: undefined,
-          generated: { line: 1, column: 17 },
-          source: "a.js",
-          original: { line: 1, column: 18 },
+        Object {
+          "generated": Object {
+            "column": 17,
+            "line": 1,
+          },
+          "name": undefined,
+          "original": Object {
+            "column": 18,
+            "line": 1,
+          },
+          "source": "a.js",
         },
-        {
-          name: "console",
-          generated: { line: 2, column: 2 },
-          source: "a.js",
-          original: { line: 1, column: 20 },
+        Object {
+          "generated": Object {
+            "column": 2,
+            "line": 2,
+          },
+          "name": "console",
+          "original": Object {
+            "column": 20,
+            "line": 1,
+          },
+          "source": "a.js",
         },
-        {
-          name: undefined,
-          generated: { line: 2, column: 9 },
-          source: "a.js",
-          original: { line: 1, column: 27 },
+        Object {
+          "generated": Object {
+            "column": 9,
+            "line": 2,
+          },
+          "name": undefined,
+          "original": Object {
+            "column": 27,
+            "line": 1,
+          },
+          "source": "a.js",
         },
-        {
-          name: "log",
-          generated: { line: 2, column: 10 },
-          source: "a.js",
-          original: { line: 1, column: 28 },
+        Object {
+          "generated": Object {
+            "column": 10,
+            "line": 2,
+          },
+          "name": "log",
+          "original": Object {
+            "column": 28,
+            "line": 1,
+          },
+          "source": "a.js",
         },
-        {
-          name: undefined,
-          generated: { line: 2, column: 13 },
-          source: "a.js",
-          original: { line: 1, column: 31 },
+        Object {
+          "generated": Object {
+            "column": 13,
+            "line": 2,
+          },
+          "name": undefined,
+          "original": Object {
+            "column": 31,
+            "line": 1,
+          },
+          "source": "a.js",
         },
-        {
-          name: "msg",
-          generated: { line: 2, column: 14 },
-          source: "a.js",
-          original: { line: 1, column: 32 },
+        Object {
+          "generated": Object {
+            "column": 14,
+            "line": 2,
+          },
+          "name": "msg",
+          "original": Object {
+            "column": 32,
+            "line": 1,
+          },
+          "source": "a.js",
         },
-        {
-          name: undefined,
-          generated: { line: 2, column: 17 },
-          source: "a.js",
-          original: { line: 1, column: 35 },
+        Object {
+          "generated": Object {
+            "column": 17,
+            "line": 2,
+          },
+          "name": undefined,
+          "original": Object {
+            "column": 35,
+            "line": 1,
+          },
+          "source": "a.js",
         },
-        {
-          name: undefined,
-          generated: { line: 2, column: 18 },
-          source: "a.js",
-          original: { line: 1, column: 36 },
+        Object {
+          "generated": Object {
+            "column": 18,
+            "line": 2,
+          },
+          "name": undefined,
+          "original": Object {
+            "column": 36,
+            "line": 1,
+          },
+          "source": "a.js",
         },
-        {
-          name: undefined,
-          generated: { line: 3, column: 0 },
-          source: "a.js",
-          original: { line: 1, column: 38 },
+        Object {
+          "generated": Object {
+            "column": 0,
+            "line": 3,
+          },
+          "name": undefined,
+          "original": Object {
+            "column": 38,
+            "line": 1,
+          },
+          "source": "a.js",
         },
-        {
-          name: "hi",
-          generated: { line: 5, column: 0 },
-          source: "b.js",
-          original: { line: 1, column: 0 },
+        Object {
+          "generated": Object {
+            "column": 0,
+            "line": 4,
+          },
+          "name": "hi",
+          "original": Object {
+            "column": 0,
+            "line": 1,
+          },
+          "source": "b.js",
         },
-        {
-          name: undefined,
-          generated: { line: 5, column: 2 },
-          source: "b.js",
-          original: { line: 1, column: 2 },
+        Object {
+          "generated": Object {
+            "column": 2,
+            "line": 4,
+          },
+          "name": undefined,
+          "original": Object {
+            "column": 2,
+            "line": 1,
+          },
+          "source": "b.js",
         },
-        {
-          name: undefined,
-          generated: { line: 5, column: 3 },
-          source: "b.js",
-          original: { line: 1, column: 3 },
+        Object {
+          "generated": Object {
+            "column": 3,
+            "line": 4,
+          },
+          "name": undefined,
+          "original": Object {
+            "column": 3,
+            "line": 1,
+          },
+          "source": "b.js",
         },
-        {
-          name: undefined,
-          generated: { line: 5, column: 10 },
-          source: "b.js",
-          original: { line: 1, column: 10 },
+        Object {
+          "generated": Object {
+            "column": 10,
+            "line": 4,
+          },
+          "name": undefined,
+          "original": Object {
+            "column": 10,
+            "line": 1,
+          },
+          "source": "b.js",
         },
-        {
-          name: undefined,
-          generated: { line: 5, column: 11 },
-          source: "b.js",
-          original: { line: 1, column: 11 },
+        Object {
+          "generated": Object {
+            "column": 11,
+            "line": 4,
+          },
+          "name": undefined,
+          "original": Object {
+            "column": 11,
+            "line": 1,
+          },
+          "source": "b.js",
         },
-      ],
-      "raw mappings were incorrectly generated",
-    );
+      ]
+    `);
 
     expect(generated.code).toBe(
-      "function hi(msg) {\n  console.log(msg);\n}\n\nhi('hello');",
+      "function hi(msg) {\n  console.log(msg);\n}\nhi('hello');",
     );
   });
 
@@ -347,9 +470,7 @@ describe("generation", function () {
 
     const ast = t.program([...ast1.body, ...ast2.body]);
 
-    expect(generate(ast).code).toBe(
-      "/*#__PURE__*/\na();\n\n/*#__PURE__*/\nb();",
-    );
+    expect(generate(ast).code).toBe("/*#__PURE__*/a();\n/*#__PURE__*/b();");
   });
 });
 

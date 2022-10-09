@@ -3,9 +3,7 @@ let Foo = babelHelpers.decorate([dec()], function (_initialize) {
     constructor() {
       _initialize(this);
     }
-
   }
-
   return {
     F: Foo,
     d: []

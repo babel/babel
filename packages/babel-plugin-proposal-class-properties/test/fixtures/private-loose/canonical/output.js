@@ -1,7 +1,5 @@
 var _x = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("x");
-
 var _y = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("y");
-
 var Point = /*#__PURE__*/function () {
   "use strict";
 
@@ -18,7 +16,6 @@ var Point = /*#__PURE__*/function () {
     babelHelpers.classPrivateFieldLooseBase(this, _x)[_x] = +x;
     babelHelpers.classPrivateFieldLooseBase(this, _y)[_y] = +y;
   }
-
   babelHelpers.createClass(Point, [{
     key: "x",
     get: function () {

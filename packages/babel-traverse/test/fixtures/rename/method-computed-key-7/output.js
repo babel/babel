@@ -5,10 +5,8 @@ const obj = {
       let a = "inside";
       return a;
     }
-
   }.outside]() {
     let a = "middle";
     return a;
   }
-
 };

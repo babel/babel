@@ -5,9 +5,7 @@ let Sub = babelHelpers.decorate([decorator(parameter)], function (_initialize, _
     constructor() {
       (super(), _initialize(this), this).method();
     }
-
   }
-
   return {
     F: Sub,
     d: []

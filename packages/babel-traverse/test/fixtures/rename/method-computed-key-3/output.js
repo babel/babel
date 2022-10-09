@@ -3,5 +3,4 @@ const obj = {
   [z](a = "inside") {
     return a;
   }
-
 };

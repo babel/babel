@@ -1,5 +1,4 @@
 let result;
-
 class C {
   static #x = "#x";
   static #y = "#y";
@@ -8,9 +7,10 @@ class C {
   static c = "c";
   static {
     var x = C.#x,
-        y = C.#y,
-        { ...z
-    } = C;
+      y = C.#y,
+      {
+        ...z
+      } = C;
     result = {
       x,
       y,

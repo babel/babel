@@ -4,5 +4,4 @@ const obj = {
     let a = "inside";
     return a;
   }
-
 };

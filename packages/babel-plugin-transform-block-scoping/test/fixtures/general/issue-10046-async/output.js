@@ -3,13 +3,11 @@ if (true) {
     var _ref = babelHelpers.asyncToGenerator(function* () {
       return true;
     });
-
     return function _run() {
       return _ref.apply(this, arguments);
     };
   }();
 }
-
 function test() {
   return run();
 }

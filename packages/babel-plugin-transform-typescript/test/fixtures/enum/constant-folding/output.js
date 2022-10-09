@@ -1,5 +1,4 @@
 var E;
-
 (function (E) {
   E[E["a"] = 0] = "a";
   E[E["b"] = 5] = "b";

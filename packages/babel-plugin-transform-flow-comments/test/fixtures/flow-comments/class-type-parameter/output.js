@@ -1,3 +1,1 @@
-class Foo
-/*:: <T>*/
-{}
+class Foo /*:: <T>*/{}
