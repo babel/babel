@@ -23,6 +23,11 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.19.5 (2022-10-10)
+
+#### :bug: Bug Fix
+* `babel-generator`
+  * [#15031](https://github.com/babel/babel/pull/15031) Fix "Cannot read properties of undefined" regression ([@farewell-zy](https://github.com/farewell-zy))
 ## v7.19.4 (2022-10-10)
 
 #### :eyeglasses: Spec Compliance
