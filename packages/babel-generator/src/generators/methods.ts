@@ -5,12 +5,14 @@ import { isIdentifier } from "@babel/types";
 export function _params(
   this: Printer,
   node: t.Function | t.TSDeclareMethod | t.TSDeclareFunction,
-  identifierName: string,
+  idNode: t.Node,
+  parentNode: t.Node,
 ) {
   this.print(node.typeParameters, node);
 
-  if (identifierName) {
-    this.sourceIdentifierName(identifierName);
+  const name = _getFuncIdName.call(this, idNode, parentNode);
+  if (name) {
+    this.sourceIdentifierName(name);
   }
 
   this.token("(");
@@ -114,10 +116,8 @@ export function _methodHead(this: Printer, node: t.Method | t.TSDeclareMethod) {
 
   this._params(
     node,
-    _getFuncId(
-      node.computed && node.key.type !== "StringLiteral" ? undefined : node.key,
-      undefined,
-    ),
+    node.computed && node.key.type !== "StringLiteral" ? undefined : node.key,
+    undefined,
   );
 }
 
@@ -165,7 +165,7 @@ export function _functionHead(
     this.print(node.id, node);
   }
 
-  this._params(node, _getFuncId(node.id, parent));
+  this._params(node, node.id, parent);
   if (node.type !== "TSDeclareFunction") {
     this._predicate(node);
   }
@@ -204,7 +204,7 @@ export function ArrowFunctionExpression(
   ) {
     this.print(firstParam, node, true);
   } else {
-    this._params(node, _getFuncId(undefined, parent));
+    this._params(node, undefined, parent);
   }
 
   this._predicate(node, true);
@@ -236,7 +236,7 @@ function hasTypesOrComments(
   );
 }
 
-function _getFuncId(nodeId: t.Node, parent: t.Node) {
+function _getFuncIdName(this: Printer, nodeId: t.Node, parent: t.Node) {
   let id = nodeId;
 
   if (!id && parent) {
@@ -257,12 +257,15 @@ function _getFuncId(nodeId: t.Node, parent: t.Node) {
   let name;
   if (id) {
     if (id.type === "Identifier") {
-      // @ts-expect-error Undocumented property identifierName
-      name = id.loc?.identifierName || id.name;
+      name =
+        this.getIdentifierName(id.loc?.start) ||
+        // @ts-expect-error Undocumented property identifierName
+        id.loc?.identifierName ||
+        id.name;
     } else if (id.type === "PrivateName") {
-      name = id.id.name;
+      name = this.getIdentifierName(id.id.loc?.start) || id.id.name;
     } else if (id.type === "StringLiteral") {
-      name = id.value;
+      name = this.getIdentifierName(id.loc?.start) || id.value;
     }
   }
 

@@ -30,7 +30,11 @@ export default function generateCode(
 
   let result;
   if (results.length === 0) {
-    result = generate(ast, generatorOpts, code);
+    result = generate(
+      ast,
+      { ...generatorOpts, inputSourceMap: inputMap?.toObject() },
+      code,
+    );
   } else if (results.length === 1) {
     result = results[0];
 
@@ -51,18 +55,26 @@ export default function generateCode(
   // back to the encoded map.
   let { code: outputCode, decodedMap: outputMap = result.map } = result;
 
-  if (outputMap) {
-    if (inputMap) {
-      // mergeSourceMap returns an encoded map
-      outputMap = mergeSourceMap(
-        inputMap.toObject(),
-        outputMap,
-        generatorOpts.sourceFileName,
-      );
-    } else {
-      // We cannot output a decoded map, so retrieve the encoded form. Because
-      // the decoded form is free, it's fine to prioritize decoded first.
-      outputMap = result.map;
+  // For backwards compat.
+  if (result.__mergedMap) {
+    /**
+     * @see mergeSourceMap
+     */
+    outputMap = { ...result.map };
+  } else {
+    if (outputMap) {
+      if (inputMap) {
+        // mergeSourceMap returns an encoded map
+        outputMap = mergeSourceMap(
+          inputMap.toObject(),
+          outputMap,
+          generatorOpts.sourceFileName,
+        );
+      } else {
+        // We cannot output a decoded map, so retrieve the encoded form. Because
+        // the decoded form is free, it's fine to prioritize decoded first.
+        outputMap = result.map;
+      }
     }
   }
 

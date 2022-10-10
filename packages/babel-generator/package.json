@@ -21,12 +21,12 @@
   "dependencies": {
     "@babel/types": "workspace:^",
     "@jridgewell/gen-mapping": "^0.3.2",
+    "@jridgewell/trace-mapping": "^0.3.16",
     "jsesc": "condition: BABEL_8_BREAKING ? ^3.0.2 : ^2.5.1"
   },
   "devDependencies": {
     "@babel/helper-fixtures": "workspace:^",
     "@babel/parser": "workspace:^",
-    "@jridgewell/trace-mapping": "^0.3.8",
     "@types/jsesc": "^2.5.0",
     "charcodes": "^0.2.0"
   },

@@ -13,6 +13,12 @@ import type {
   Mapping,
 } from "@jridgewell/gen-mapping";
 
+import {
+  type SourceMapInput,
+  originalPositionFor,
+  TraceMap,
+} from "@jridgewell/trace-mapping";
+
 /**
  * Build a sourcemap.
  */
@@ -30,24 +36,44 @@ export default class SourceMap {
   // inits to an impossible value. So init to 0 is fine.
   private _lastSourceColumn = 0;
 
+  public _inputMap: TraceMap;
+
   constructor(
-    opts: { sourceFileName?: string; sourceRoot?: string },
+    opts: {
+      sourceFileName?: string;
+      sourceRoot?: string;
+      inputSourceMap?: SourceMapInput;
+    },
     code: string | { [sourceFileName: string]: string },
   ) {
     const map = (this._map = new GenMapping({ sourceRoot: opts.sourceRoot }));
     this._sourceFileName = opts.sourceFileName?.replace(/\\/g, "/");
     this._rawMappings = undefined;
 
+    if (opts.inputSourceMap) {
+      this._inputMap = new TraceMap(opts.inputSourceMap);
+      const resolvedSources = this._inputMap.resolvedSources;
+      if (resolvedSources.length) {
+        for (let i = 0; i < resolvedSources.length; i++) {
+          setSourceContent(
+            map,
+            resolvedSources[i],
+            this._inputMap.sourcesContent[i],
+          );
+        }
+      }
+    }
+
     if (typeof code === "string") {
       setSourceContent(map, this._sourceFileName, code);
     } else if (typeof code === "object") {
-      Object.keys(code).forEach(sourceFileName => {
+      for (const sourceFileName of Object.keys(code)) {
         setSourceContent(
           map,
           sourceFileName.replace(/\\/g, "/"),
           code[sourceFileName],
         );
-      });
+      }
     }
   }
 
@@ -80,20 +106,46 @@ export default class SourceMap {
   ) {
     this._rawMappings = undefined;
 
+    let original;
+    let source;
+
+    if (line != null) {
+      if (this._inputMap) {
+        const originalMapping = originalPositionFor(this._inputMap, {
+          line,
+          column,
+        });
+
+        source =
+          originalMapping.source ||
+          filename?.replace(/\\/g, "/") ||
+          this._sourceFileName;
+
+        if (originalMapping.line != null) {
+          original = {
+            line: originalMapping.line,
+            column: originalMapping.column,
+          };
+          if (originalMapping.name) {
+            identifierName = originalMapping.name;
+          }
+        }
+      } else {
+        source = filename?.replace(/\\/g, "/") || this._sourceFileName;
+      }
+      if (!original) {
+        original = {
+          line: line,
+          column: column,
+        };
+      }
+    }
+
     maybeAddMapping(this._map, {
       name: identifierName,
       generated,
-      source:
-        line == null
-          ? undefined
-          : filename?.replace(/\\/g, "/") || this._sourceFileName,
-      original:
-        line == null
-          ? undefined
-          : {
-              line: line,
-              column: column,
-            },
+      source: line == null ? undefined : source,
+      original: original,
     });
   }
 }

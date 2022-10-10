@@ -482,7 +482,7 @@ __metadata:
     "@babel/parser": "workspace:^"
     "@babel/types": "workspace:^"
     "@jridgewell/gen-mapping": ^0.3.2
-    "@jridgewell/trace-mapping": ^0.3.8
+    "@jridgewell/trace-mapping": ^0.3.16
     "@types/jsesc": ^2.5.0
     charcodes: ^0.2.0
     jsesc: "condition: BABEL_8_BREAKING ? ^3.0.2 : ^2.5.1"
@@ -4227,6 +4227,16 @@ __metadata:
     "@jridgewell/resolve-uri": 3.1.0
     "@jridgewell/sourcemap-codec": 1.4.14
   checksum: 9d703b859cff5cd83b7308fd457a431387db5db96bd781a63bf48e183418dd9d3d44e76b9e4ae13237f6abeeb25d739ec9215c1d5bfdd08f66f750a50074a339
+  languageName: node
+  linkType: hard
+
+"@jridgewell/trace-mapping@npm:^0.3.16":
+  version: 0.3.16
+  resolution: "@jridgewell/trace-mapping@npm:0.3.16"
+  dependencies:
+    "@jridgewell/resolve-uri": 3.1.0
+    "@jridgewell/sourcemap-codec": 1.4.14
+  checksum: 881fa21ce066ab5e9c23991ac435dfae2ac8ffa74510379a028b0d002437b48a50464369436c5d242b6e648eec17f77003c73c1f54325cfcd8824967c2356910
   languageName: node
   linkType: hard
 

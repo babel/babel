@@ -109,7 +109,10 @@ export default class Buffer {
       code: (this._buf + this._str).trimRight(),
       // Decoded sourcemap is free to generate.
       decodedMap: map?.getDecoded(),
-
+      // Just for backwards compatibility.
+      get __mergedMap() {
+        return this.map;
+      },
       // Encoding the sourcemap is moderately CPU expensive.
       get map() {
         const resultMap = map ? map.get() : null;
