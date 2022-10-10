@@ -951,8 +951,8 @@ class Printer {
         const comment = comments[i];
 
         if (hasLoc && "loc" in comment && !this._printedComments.has(comment)) {
-          const commentStartLine = comment.loc.start.line;
-          const commentEndLine = comment.loc.end.line;
+          const commentStartLine = comment.loc?.start.line;
+          const commentEndLine = comment.loc?.end.line;
           if (type === COMMENT_TYPE.LEADING) {
             let offset = 0;
             if (i === 0) {
