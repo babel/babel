@@ -1,0 +1,4 @@
+{
+  "plugins": ["decorators-legacy"],
+  "decoratorsBeforeExport": true
+}
