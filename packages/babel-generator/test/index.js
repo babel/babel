@@ -472,6 +472,17 @@ describe("generation", function () {
 
     expect(generate(ast).code).toBe("/*#__PURE__*/a();\n/*#__PURE__*/b();");
   });
+
+  it("comments with null or undefined loc", () => {
+    const code = "/*#__PURE__*/ /*#__PURE__*/";
+
+    const ast = parse(code);
+
+    ast.comments[0].loc = null;
+    ast.comments[1].loc = undefined;
+
+    expect(generate(ast).code).toBe("/*#__PURE__*/\n/*#__PURE__*/");
+  });
 });
 
 describe("programmatic generation", function () {
