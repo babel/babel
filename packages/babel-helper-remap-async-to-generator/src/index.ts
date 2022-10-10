@@ -1,18 +1,16 @@
-/* @noflow */
-
 import type { NodePath } from "@babel/traverse";
 import wrapFunction from "@babel/helper-wrap-function";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 import environmentVisitor from "@babel/helper-environment-visitor";
-import { traverse } from "@babel/core";
-import {
+import { traverse, types as t } from "@babel/core";
+
+const {
   callExpression,
   cloneNode,
   isIdentifier,
   isThisExpression,
   yieldExpression,
-} from "@babel/types";
-import type * as t from "@babel/types";
+} = t;
 
 const awaitVisitor = traverse.visitors.merge<{ wrapAwait: t.Expression }>([
   {

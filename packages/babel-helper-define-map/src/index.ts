@@ -1,5 +1,8 @@
 import nameFunction from "@babel/helper-function-name";
-import {
+import { types as t, type File } from "@babel/core";
+import type { Scope } from "@babel/traverse";
+
+const {
   arrayExpression,
   booleanLiteral,
   functionExpression,
@@ -16,10 +19,7 @@ import {
   removeComments,
   toComputedKey,
   toKeyAlias,
-} from "@babel/types";
-import type { File } from "@babel/core";
-import type * as t from "@babel/types";
-import type { Scope } from "@babel/traverse";
+} = t;
 
 function toKind(node: t.Property | t.Method) {
   if (isClassMethod(node) || isObjectMethod(node)) {

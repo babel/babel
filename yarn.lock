@@ -485,7 +485,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-annotate-as-pure@workspace:packages/babel-helper-annotate-as-pure"
   dependencies:
-    "@babel/types": "workspace:^"
+    "@babel/core": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
   languageName: unknown
   linkType: soft
 
@@ -503,8 +505,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-builder-binary-assignment-operator-visitor@workspace:packages/babel-helper-builder-binary-assignment-operator-visitor"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/helper-explode-assignable-expression": "workspace:^"
-    "@babel/types": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
   languageName: unknown
   linkType: soft
 
@@ -515,7 +519,8 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-annotate-as-pure": "workspace:^"
     "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
   languageName: unknown
   linkType: soft
 
@@ -524,7 +529,8 @@ __metadata:
   resolution: "@babel/helper-check-duplicate-nodes@workspace:packages/babel-helper-check-duplicate-nodes"
   dependencies:
     "@babel/core": "workspace:^"
-    "@babel/types": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
   languageName: unknown
   linkType: soft
 
@@ -624,8 +630,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-define-map@workspace:packages/babel-helper-define-map"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/helper-function-name": "workspace:^"
-    "@babel/types": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
   languageName: unknown
   linkType: soft
 
@@ -656,8 +664,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-environment-visitor@workspace:packages/babel-helper-environment-visitor"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
   languageName: unknown
   linkType: soft
 
@@ -674,8 +685,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-explode-assignable-expression@workspace:packages/babel-helper-explode-assignable-expression"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
   languageName: unknown
   linkType: soft
 
@@ -702,8 +715,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-function-name@workspace:packages/babel-helper-function-name"
   dependencies:
-    "@babel/template": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/core": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
   languageName: unknown
   linkType: soft
 
@@ -720,8 +734,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-hoist-variables@workspace:packages/babel-helper-hoist-variables"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
   languageName: unknown
   linkType: soft
 
@@ -738,8 +754,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-member-expression-to-functions@workspace:packages/babel-helper-member-expression-to-functions"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
   languageName: unknown
   linkType: soft
 
@@ -758,7 +776,8 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
   languageName: unknown
   linkType: soft
 
@@ -782,14 +801,14 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-module-transforms@workspace:packages/babel-helper-module-transforms"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-module-imports": "workspace:^"
     "@babel/helper-simple-access": "workspace:^"
     "@babel/helper-split-export-declaration": "workspace:^"
     "@babel/helper-validator-identifier": "workspace:^"
-    "@babel/template": "workspace:^"
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
   languageName: unknown
   linkType: soft
 
@@ -806,9 +825,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-optimise-call-expression@workspace:packages/babel-helper-optimise-call-expression"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/generator": "workspace:^"
     "@babel/parser": "workspace:^"
-    "@babel/types": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
   languageName: unknown
   linkType: soft
 
@@ -856,7 +877,6 @@ __metadata:
     "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-wrap-function": "workspace:^"
     "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.0.0
   languageName: unknown
@@ -879,11 +899,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-replace-supers@workspace:packages/babel-helper-replace-supers"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-member-expression-to-functions": "workspace:^"
     "@babel/helper-optimise-call-expression": "workspace:^"
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
   languageName: unknown
   linkType: soft
 
@@ -902,7 +923,8 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
   languageName: unknown
   linkType: soft
 
@@ -919,8 +941,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-skip-transparent-expression-wrappers@workspace:packages/babel-helper-skip-transparent-expression-wrappers"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
   languageName: unknown
   linkType: soft
 
@@ -937,7 +961,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-split-export-declaration@workspace:packages/babel-helper-split-export-declaration"
   dependencies:
-    "@babel/types": "workspace:^"
+    "@babel/core": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
   languageName: unknown
   linkType: soft
 
@@ -1014,10 +1040,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-wrap-function@workspace:packages/babel-helper-wrap-function"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/helper-function-name": "workspace:^"
-    "@babel/template": "workspace:^"
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
   languageName: unknown
   linkType: soft
 
@@ -1036,6 +1062,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helpers@workspace:packages/babel-helpers"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/generator": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/parser": "workspace:^"
@@ -1044,6 +1071,8 @@ __metadata:
     "@babel/types": "workspace:^"
     regenerator-runtime: ^0.13.9
     terser: ^5.9.0
+  peerDependencies:
+    "@babel/core": ^7.0.0
   languageName: unknown
   linkType: soft
 
@@ -1859,6 +1888,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-decimal@workspace:packages/babel-plugin-syntax-decimal"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.0.0-0
@@ -1880,6 +1910,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-destructuring-private@workspace:packages/babel-plugin-syntax-destructuring-private"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.0.0-0
@@ -2044,6 +2075,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-module-blocks@workspace:packages/babel-plugin-syntax-module-blocks"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.0.0-0
@@ -2999,7 +3031,6 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-syntax-jsx": "workspace:^"
     "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -3780,6 +3811,7 @@ __metadata:
   resolution: "@babel/traverse@workspace:packages/babel-traverse"
   dependencies:
     "@babel/code-frame": "workspace:^"
+    "@babel/core": "workspace:^"
     "@babel/generator": "workspace:^"
     "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-function-name": "workspace:^"
@@ -3790,6 +3822,8 @@ __metadata:
     "@babel/types": "workspace:^"
     debug: ^4.1.0
     globals: "condition:BABEL_8_BREAKING ? ^13.5.0 : ^11.1.0"
+  peerDependencies:
+    "@babel/core": ^7.0.0
   languageName: unknown
   linkType: soft
 

@@ -1,4 +1,5 @@
-import {
+import { types as t } from "@babel/core";
+const {
   callExpression,
   identifier,
   isIdentifier,
@@ -6,12 +7,7 @@ import {
   memberExpression,
   optionalCallExpression,
   optionalMemberExpression,
-} from "@babel/types";
-import type {
-  CallExpression,
-  Expression,
-  OptionalCallExpression,
-} from "@babel/types";
+} = t;
 
 /**
  * A helper function that generates a new call expression with given thisNode.
@@ -25,11 +21,11 @@ import type {
  * @returns {CallExpression | OptionalCallExpression} The generated new call expression
  */
 export default function optimiseCallExpression(
-  callee: Expression,
-  thisNode: Expression,
-  args: Readonly<CallExpression["arguments"]>,
+  callee: t.Expression,
+  thisNode: t.Expression,
+  args: Readonly<t.CallExpression["arguments"]>,
   optional: boolean,
-): CallExpression | OptionalCallExpression {
+): t.CallExpression | t.OptionalCallExpression {
   if (
     args.length === 1 &&
     isSpreadElement(args[0]) &&

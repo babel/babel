@@ -1,11 +1,11 @@
 import assert from "assert";
-import { numericLiteral, sequenceExpression } from "@babel/types";
-import type * as t from "@babel/types";
+import { types as t, type File } from "@babel/core";
 import type { NodePath, Scope } from "@babel/traverse";
-import type { File } from "@babel/core";
 
 import ImportBuilder from "./import-builder";
 import isModule from "./is-module";
+
+const { numericLiteral, sequenceExpression } = t;
 
 export type ImportOptions = {
   /**

@@ -1,5 +1,7 @@
 import type { Scope } from "@babel/traverse";
-import {
+import { types as t } from "@babel/core";
+
+const {
   assignmentExpression,
   cloneNode,
   isIdentifier,
@@ -10,8 +12,7 @@ import {
   isSuper,
   memberExpression,
   toComputedKey,
-} from "@babel/types";
-import type * as t from "@babel/types";
+} = t;
 
 function getObjRef(
   node: t.Identifier | t.MemberExpression,

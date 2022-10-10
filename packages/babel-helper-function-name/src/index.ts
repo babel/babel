@@ -1,5 +1,7 @@
-import template from "@babel/template";
-import {
+import { types as t, template } from "@babel/core";
+import type { NodePath, Scope, Visitor } from "@babel/traverse";
+
+const {
   NOT_LOCAL_BINDING,
   cloneNode,
   identifier,
@@ -16,9 +18,7 @@ import {
   isTemplateLiteral,
   isVariableDeclarator,
   toBindingIdentifierName,
-} from "@babel/types";
-import type * as t from "@babel/types";
-import type { NodePath, Scope, Visitor } from "@babel/traverse";
+} = t;
 
 function getFunctionArity(node: t.Function): number {
   const count = node.params.findIndex(

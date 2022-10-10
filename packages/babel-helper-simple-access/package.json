@@ -14,12 +14,12 @@
     "directory": "packages/babel-helper-simple-access"
   },
   "main": "./lib/index.js",
-  "dependencies": {
-    "@babel/types": "workspace:^"
-  },
   "devDependencies": {
     "@babel/core": "workspace:^",
     "@babel/traverse": "workspace:^"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0"
   },
   "engines": {
     "node": ">=6.9.0"

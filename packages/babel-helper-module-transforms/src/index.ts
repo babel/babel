@@ -1,5 +1,7 @@
 import assert from "assert";
-import {
+import { types as t, template } from "@babel/core";
+
+const {
   booleanLiteral,
   callExpression,
   cloneNode,
@@ -13,9 +15,7 @@ import {
   valueToNode,
   variableDeclaration,
   variableDeclarator,
-} from "@babel/types";
-import type * as t from "@babel/types";
-import template from "@babel/template";
+} = t;
 
 import { isModule } from "@babel/helper-module-imports";
 

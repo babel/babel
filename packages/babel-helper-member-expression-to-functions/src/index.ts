@@ -1,5 +1,8 @@
+import { types as t } from "@babel/core";
 import type { NodePath, Visitor } from "@babel/traverse";
-import {
+import { willPathCastToBoolean } from "./util";
+
+const {
   LOGICAL_OPERATORS,
   arrowFunctionExpression,
   assignmentExpression,
@@ -20,10 +23,7 @@ import {
   optionalMemberExpression,
   sequenceExpression,
   updateExpression,
-} from "@babel/types";
-import type * as t from "@babel/types";
-import { willPathCastToBoolean } from "./util";
-
+} = t;
 class AssignmentMemoiser {
   private _map: WeakMap<t.Expression, { count: number; value: t.Identifier }>;
   constructor() {

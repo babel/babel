@@ -1,5 +1,8 @@
 import assert from "assert";
-import {
+import { types as t, type File } from "@babel/core";
+import type { Scope } from "@babel/traverse";
+
+const {
   callExpression,
   cloneNode,
   expressionStatement,
@@ -12,10 +15,7 @@ import {
   stringLiteral,
   variableDeclaration,
   variableDeclarator,
-} from "@babel/types";
-import type * as t from "@babel/types";
-import type { Scope } from "@babel/traverse";
-import type { File } from "@babel/core";
+} = t;
 
 /**
  * A class to track and accumulate mutations to the AST that will eventually

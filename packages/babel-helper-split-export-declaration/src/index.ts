@@ -1,13 +1,14 @@
-import {
+import { types as t } from "@babel/core";
+import type { NodePath } from "@babel/traverse";
+
+const {
   cloneNode,
   exportNamedDeclaration,
   exportSpecifier,
   identifier,
   variableDeclaration,
   variableDeclarator,
-} from "@babel/types";
-import type * as t from "@babel/types";
-import type { NodePath } from "@babel/traverse";
+} = t;
 
 export default function splitExportDeclaration(
   exportDeclaration: NodePath<

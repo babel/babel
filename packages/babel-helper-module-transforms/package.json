@@ -19,10 +19,10 @@
     "@babel/helper-module-imports": "workspace:^",
     "@babel/helper-simple-access": "workspace:^",
     "@babel/helper-split-export-declaration": "workspace:^",
-    "@babel/helper-validator-identifier": "workspace:^",
-    "@babel/template": "workspace:^",
-    "@babel/traverse": "workspace:^",
-    "@babel/types": "workspace:^"
+    "@babel/helper-validator-identifier": "workspace:^"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0"
   },
   "engines": {
     "node": ">=6.9.0"
@@ -45,5 +45,8 @@
     ".": "./lib/index.js",
     "./package.json": "./package.json"
   },
-  "type": "commonjs"
+  "type": "commonjs",
+  "devDependencies": {
+    "@babel/core": "workspace:^"
+  }
 }

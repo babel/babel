@@ -1,18 +1,18 @@
-import { addComment, type Node } from "@babel/types";
+import { types as t } from "@babel/core";
 import type { NodePath } from "@babel/traverse";
 
 const PURE_ANNOTATION = "#__PURE__";
 
-const isPureAnnotated = ({ leadingComments }: Node): boolean =>
+const isPureAnnotated = ({ leadingComments }: t.Node): boolean =>
   !!leadingComments &&
   leadingComments.some(comment => /[@#]__PURE__/.test(comment.value));
 
-export default function annotateAsPure(pathOrNode: Node | NodePath): void {
+export default function annotateAsPure(pathOrNode: t.Node | NodePath): void {
   const node =
     // @ts-expect-error Node will not have `node` property
-    (pathOrNode["node"] || pathOrNode) as Node;
+    (pathOrNode["node"] || pathOrNode) as t.Node;
   if (isPureAnnotated(node)) {
     return;
   }
-  addComment(node, "leading", PURE_ANNOTATION);
+  t.addComment(node, "leading", PURE_ANNOTATION);
 }
