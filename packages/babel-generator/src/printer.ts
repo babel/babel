@@ -2,13 +2,7 @@ import Buffer from "./buffer";
 import type { Loc } from "./buffer";
 import * as n from "./node";
 import type * as t from "@babel/types";
-import {
-  isExpression,
-  isFunction,
-  isStatement,
-  isTypeAnnotation,
-  isTypeofTypeAnnotation,
-} from "@babel/types";
+import { isFunction, isStatement } from "@babel/types";
 import type {
   RecordAndTuplePluginOptions,
   PipelineOperatorPluginOptions,
@@ -1020,7 +1014,7 @@ class Printer {
           if (len === 1) {
             this._printComment(
               comment,
-              !isStatement(node)
+              !isStatement(node) || isFunction(parent, { body: node })
                 ? COMMENT_SKIP_NEWLINE.SKIP_ALL
                 : COMMENT_SKIP_NEWLINE.DEFAULT,
             );

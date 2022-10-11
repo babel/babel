@@ -7,9 +7,7 @@ var C = /*#__PURE__*/function () {
   }
   babelHelpers.createClass(C, [{
     key: "m",
-    value: function m(x /*: number*/)
-    /*: string*/
-    {
+    value: function m(x /*: number*/) /*: string*/{
       return 'a';
     }
   }]);
