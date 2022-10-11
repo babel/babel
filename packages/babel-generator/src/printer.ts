@@ -2,6 +2,13 @@ import Buffer from "./buffer";
 import type { Loc } from "./buffer";
 import * as n from "./node";
 import type * as t from "@babel/types";
+import {
+  isExpression,
+  isFunction,
+  isStatement,
+  isTypeAnnotation,
+  isTypeofTypeAnnotation,
+} from "@babel/types";
 import type {
   RecordAndTuplePluginOptions,
   PipelineOperatorPluginOptions,
@@ -626,7 +633,7 @@ class Printer {
 
     this._lastCommentLine = 0;
 
-    this._printLeadingComments(node);
+    this._printLeadingComments(node, parent);
 
     const loc = nodeType === "Program" || nodeType === "File" ? null : node.loc;
 
@@ -774,10 +781,16 @@ class Printer {
     this._printComments(COMMENT_TYPE.TRAILING, comments, node, lineOffset);
   }
 
-  _printLeadingComments(node: t.Node) {
+  _printLeadingComments(node: t.Node, parent: t.Node) {
     const comments = this._getComments(true, node);
     if (!comments?.length) return;
-    this._printComments(COMMENT_TYPE.LEADING, comments, node);
+    this._printComments(
+      COMMENT_TYPE.LEADING,
+      comments,
+      node,
+      undefined,
+      parent,
+    );
   }
 
   printInnerComments(node: t.Node, indent = true) {
@@ -937,6 +950,7 @@ class Printer {
     comments: readonly t.Comment[],
     node: t.Node,
     lineOffset: number = 0,
+    parent?: t.Node,
   ) {
     {
       const nodeLoc = node.loc;
@@ -1004,7 +1018,12 @@ class Printer {
           hasLoc = false;
 
           if (len === 1) {
-            this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL);
+            this._printComment(
+              comment,
+              !isStatement(node)
+                ? COMMENT_SKIP_NEWLINE.SKIP_ALL
+                : COMMENT_SKIP_NEWLINE.DEFAULT,
+            );
           } else if (
             type === COMMENT_TYPE.INNER &&
             !(node.type === "ObjectExpression" && node.properties.length > 1) &&
