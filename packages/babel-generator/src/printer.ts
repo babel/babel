@@ -2,7 +2,7 @@ import Buffer from "./buffer";
 import type { Loc } from "./buffer";
 import * as n from "./node";
 import type * as t from "@babel/types";
-import { isFunction, isStatement } from "@babel/types";
+import { isProperty, isFunction, isStatement } from "@babel/types";
 import type {
   RecordAndTuplePluginOptions,
   PipelineOperatorPluginOptions,
@@ -635,10 +635,10 @@ class Printer {
 
     if (noLineTerminator && !this._noLineTerminator) {
       this._noLineTerminator = true;
-      this._printTrailingComments(node);
+      this._printTrailingComments(node, parent, trailingCommentsLineOffset);
       this._noLineTerminator = false;
     } else {
-      this._printTrailingComments(node, trailingCommentsLineOffset);
+      this._printTrailingComments(node, parent, trailingCommentsLineOffset);
     }
 
     if (shouldPrintParens) this.token(")");
@@ -769,22 +769,22 @@ class Printer {
     this.print(node, parent);
   }
 
-  _printTrailingComments(node: t.Node, lineOffset?: number) {
+  _printTrailingComments(node: t.Node, parent?: t.Node, lineOffset?: number) {
     const comments = this._getComments(false, node);
     if (!comments?.length) return;
-    this._printComments(COMMENT_TYPE.TRAILING, comments, node, lineOffset);
+    this._printComments(
+      COMMENT_TYPE.TRAILING,
+      comments,
+      node,
+      parent,
+      lineOffset,
+    );
   }
 
   _printLeadingComments(node: t.Node, parent: t.Node) {
     const comments = this._getComments(true, node);
     if (!comments?.length) return;
-    this._printComments(
-      COMMENT_TYPE.LEADING,
-      comments,
-      node,
-      undefined,
-      parent,
-    );
+    this._printComments(COMMENT_TYPE.LEADING, comments, node, parent);
   }
 
   printInnerComments(node: t.Node, indent = true) {
@@ -943,8 +943,8 @@ class Printer {
     type: COMMENT_TYPE,
     comments: readonly t.Comment[],
     node: t.Node,
-    lineOffset: number = 0,
     parent?: t.Node,
+    lineOffset: number = 0,
   ) {
     {
       const nodeLoc = node.loc;
@@ -1011,10 +1011,11 @@ class Printer {
         } else {
           hasLoc = false;
 
-          if (len === 1) {
+          if (len === 1 && type === COMMENT_TYPE.LEADING) {
             this._printComment(
               comment,
-              !isStatement(node) || isFunction(parent, { body: node })
+              (!isStatement(node) && !isProperty(node)) ||
+                isFunction(parent, { body: node })
                 ? COMMENT_SKIP_NEWLINE.SKIP_ALL
                 : COMMENT_SKIP_NEWLINE.DEFAULT,
             );
