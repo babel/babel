@@ -71,7 +71,7 @@
     "lint-staged": "^13.2.3",
     "mergeiterator": "^1.4.4",
     "prettier": "^3.0.0",
-    "rollup": "^2.79.1",
+    "rollup": "^3.0.0",
     "rollup-plugin-dts": "^5.3.1",
     "rollup-plugin-polyfill-node": "^0.12.0",
     "semver": "^6.3.1",
