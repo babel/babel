@@ -1039,7 +1039,8 @@ class Printer {
           } else if (
             type === COMMENT_TYPE.INNER &&
             !(node.type === "ObjectExpression" && node.properties.length > 1) &&
-            node.type !== "ClassBody"
+            node.type !== "ClassBody" &&
+            node.type !== "TSInterfaceBody"
           ) {
             // class X {
             //   /*:: a: number*/

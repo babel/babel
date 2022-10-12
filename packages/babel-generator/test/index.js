@@ -481,7 +481,7 @@ describe("generation", function () {
     ast.comments[0].loc = null;
     ast.comments[1].loc = undefined;
 
-    expect(generate(ast).code).toBe("/*#__PURE__*/ /*#__PURE__*/");
+    expect(generate(ast).code).toBe("/*#__PURE__*/\n/*#__PURE__*/");
   });
 
   it("leading comments without loc", () => {
