@@ -3,7 +3,6 @@ import type { Loc } from "./buffer";
 import * as n from "./node";
 import type * as t from "@babel/types";
 import {
-  isProperty,
   isFunction,
   isStatement,
   isClassBody,
@@ -1018,20 +1017,19 @@ class Printer {
           hasLoc = false;
 
           if (len === 1) {
+            const shouldSkipNewline =
+              !isStatement(node) &&
+              !isClassBody(parent) &&
+              !isTSInterfaceBody(parent);
+
             if (type === COMMENT_TYPE.LEADING) {
               this._printComment(
                 comment,
-                (!isStatement(node) && !isProperty(node)) ||
-                  isFunction(parent, { body: node })
+                shouldSkipNewline || isFunction(parent, { body: node })
                   ? COMMENT_SKIP_NEWLINE.SKIP_ALL
                   : COMMENT_SKIP_NEWLINE.DEFAULT,
               );
-            } else if (
-              type === COMMENT_TYPE.TRAILING &&
-              !isStatement(node) &&
-              !isClassBody(parent) &&
-              !isTSInterfaceBody(parent)
-            ) {
+            } else if (type === COMMENT_TYPE.TRAILING && shouldSkipNewline) {
               this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL);
             } else {
               this._printComment(comment, COMMENT_SKIP_NEWLINE.DEFAULT);
