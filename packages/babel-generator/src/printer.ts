@@ -2,7 +2,13 @@ import Buffer from "./buffer";
 import type { Loc } from "./buffer";
 import * as n from "./node";
 import type * as t from "@babel/types";
-import { isProperty, isFunction, isStatement, isLVal } from "@babel/types";
+import {
+  isProperty,
+  isFunction,
+  isStatement,
+  isClassBody,
+  isTSInterfaceBody,
+} from "@babel/types";
 import type {
   RecordAndTuplePluginOptions,
   PipelineOperatorPluginOptions,
@@ -1020,7 +1026,12 @@ class Printer {
                   ? COMMENT_SKIP_NEWLINE.SKIP_ALL
                   : COMMENT_SKIP_NEWLINE.DEFAULT,
               );
-            } else if (type === COMMENT_TYPE.TRAILING && isLVal(node)) {
+            } else if (
+              type === COMMENT_TYPE.TRAILING &&
+              !isStatement(node) &&
+              !isClassBody(parent) &&
+              !isTSInterfaceBody(parent)
+            ) {
               this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL);
             } else {
               this._printComment(comment, COMMENT_SKIP_NEWLINE.DEFAULT);
