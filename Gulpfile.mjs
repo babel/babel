@@ -817,7 +817,10 @@ function watch() {
   gulp.watch(babelStandalonePluginConfigGlob, gulp.task("generate-standalone"));
   gulp.watch(buildTypingsWatchGlob, gulp.task("generate-type-helpers"));
   gulp.watch(
-    "./packages/babel-helpers/src/helpers/*.js",
+    [
+      "./packages/babel-helpers/src/helpers/*.js",
+      "!./packages/babel-helpers/src/helpers/regeneratorRuntime.js",
+    ],
     gulp.task("generate-runtime-helpers")
   );
   if (USE_ESM) {
