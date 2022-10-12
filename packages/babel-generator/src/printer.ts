@@ -641,7 +641,7 @@ class Printer {
 
     if (noLineTerminator && !this._noLineTerminator) {
       this._noLineTerminator = true;
-      this._printTrailingComments(node, parent, trailingCommentsLineOffset);
+      this._printTrailingComments(node, parent);
       this._noLineTerminator = false;
     } else {
       this._printTrailingComments(node, parent, trailingCommentsLineOffset);
