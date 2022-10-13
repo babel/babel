@@ -885,6 +885,14 @@ describe("for-in loop generator", function() {
       "c"
     ]);
   });
+
+  it("should work with primitives", function () {
+    function *gen() {
+      for (var key in "abc") yield key;
+    }
+
+    check(gen(), [0, 1, 2]);
+  })
 });
 
 describe("yield chain", function() {
