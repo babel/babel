@@ -328,7 +328,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
   startsUsingForOf(): boolean {
     const lookahead = this.lookahead();
-    if (lookahead.type === tt._of && lookahead.end - lookahead.start === 2) {
+    if (lookahead.type === tt._of && !lookahead.containsEsc) {
       // `using of` must start a for-lhs-of statement
       return false;
     } else {
