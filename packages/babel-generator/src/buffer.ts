@@ -1,5 +1,6 @@
 import type SourceMap from "./source-map";
 import * as charcodes from "charcodes";
+import { originalPositionFor } from "@jridgewell/trace-mapping";
 
 export type Pos = {
   line: number;
@@ -16,6 +17,7 @@ type SourcePos = {
   identifierName: string | undefined;
   filename: string | undefined;
 };
+type InternalSourcePos = SourcePos & { identifierNamePos: Pos };
 
 type QueueItem = {
   char: number;
@@ -23,6 +25,7 @@ type QueueItem = {
   line: number | undefined;
   column: number | undefined;
   identifierName: undefined; // Not used, it always undefined.
+  identifierNamePos: undefined; // Not used, it always undefined.
   filename: string | undefined;
 };
 
@@ -45,8 +48,9 @@ export default class Buffer {
     line: 1,
     column: 0,
   };
-  _sourcePosition: SourcePos = {
+  _sourcePosition: InternalSourcePos = {
     identifierName: undefined,
+    identifierNamePos: undefined,
     line: undefined,
     column: undefined,
     filename: undefined,
@@ -62,6 +66,7 @@ export default class Buffer {
         line: undefined,
         column: undefined,
         identifierName: undefined,
+        identifierNamePos: undefined,
         filename: "",
       });
     }
@@ -194,7 +199,11 @@ export default class Buffer {
     this._queueCursor = 0;
   }
 
-  _appendChar(char: number, repeat: number, sourcePos: SourcePos): void {
+  _appendChar(
+    char: number,
+    repeat: number,
+    sourcePos: InternalSourcePos,
+  ): void {
     this._last = char;
 
     this._str +=
@@ -207,6 +216,7 @@ export default class Buffer {
         sourcePos.line,
         sourcePos.column,
         sourcePos.identifierName,
+        sourcePos.identifierNamePos,
         sourcePos.filename,
       );
       this._position.column += repeat;
@@ -216,9 +226,14 @@ export default class Buffer {
     }
 
     sourcePos.identifierName = undefined;
+    sourcePos.identifierNamePos = undefined;
   }
 
-  _append(str: string, sourcePos: SourcePos, maybeNewline: boolean): void {
+  _append(
+    str: string,
+    sourcePos: InternalSourcePos,
+    maybeNewline: boolean,
+  ): void {
     const len = str.length;
     const position = this._position;
 
@@ -238,10 +253,25 @@ export default class Buffer {
       return;
     }
 
-    const { column, identifierName, filename } = sourcePos;
+    let { column, identifierName, identifierNamePos, filename } = sourcePos;
     let line = sourcePos.line;
 
-    if (identifierName) sourcePos.identifierName = undefined;
+    if (identifierName != null || identifierNamePos != null) {
+      sourcePos.identifierName = undefined;
+      sourcePos.identifierNamePos = undefined;
+    }
+
+    // Fast path for multi-line
+    if (maybeNewline && identifierNamePos && this._map?._inputMap) {
+      const name = originalPositionFor(
+        this._map._inputMap,
+        identifierNamePos,
+      ).name;
+      if (name) {
+        identifierName = name;
+      }
+      identifierNamePos = undefined;
+    }
 
     // Search for newline chars. We search only for `\n`, since both `\r` and
     // `\r\n` are normalized to `\n` during parse. We exclude `\u2028` and
@@ -253,7 +283,7 @@ export default class Buffer {
     // If the string starts with a newline char, then adding a mark is redundant.
     // This catches both "no newlines" and "newline after several chars".
     if (i !== 0) {
-      this._mark(line, column, identifierName, filename);
+      this._mark(line, column, identifierName, identifierNamePos, filename);
     }
 
     // Now, find each reamining newline char in the string.
@@ -266,7 +296,7 @@ export default class Buffer {
       // unless this is the last char.
       // When manually adding multi-line content (such as a comment), `line` will be `undefined`.
       if (last < len && line !== undefined) {
-        this._mark(++line, 0, identifierName, filename);
+        this._mark(++line, 0, identifierName, identifierNamePos, filename);
       }
       i = str.indexOf("\n", last);
     }
@@ -277,9 +307,17 @@ export default class Buffer {
     line: number | undefined,
     column: number | undefined,
     identifierName: string | undefined,
+    identifierNamePos: Pos | undefined,
     filename: string | undefined,
   ): void {
-    this._map?.mark(this._position, line, column, identifierName, filename);
+    this._map?.mark(
+      this._position,
+      line,
+      column,
+      identifierName,
+      identifierNamePos,
+      filename,
+    );
   }
 
   removeTrailingNewline(): void {

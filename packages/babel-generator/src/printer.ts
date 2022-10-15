@@ -368,14 +368,10 @@ class Printer {
     this._buf.withSource(prop, loc, cb);
   }
 
-  sourceIdentifierName(identifierName: string): void {
-    this._buf._sourcePosition.identifierName = identifierName;
-  }
-
-  getIdentifierName(pos: Pos): string | null {
-    if (this._inputMap && pos) {
-      return originalPositionFor(this._inputMap, pos).name;
-    }
+  sourceIdentifierName(identifierName: string, pos?: Pos): void {
+    const sourcePosition = this._buf._sourcePosition;
+    sourcePosition.identifierNamePos = pos;
+    sourcePosition.identifierName = identifierName;
   }
 
   _space(): void {

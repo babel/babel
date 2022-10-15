@@ -10,9 +10,9 @@ export function _params(
 ) {
   this.print(node.typeParameters, node);
 
-  const name = _getFuncIdName.call(this, idNode, parentNode);
-  if (name) {
-    this.sourceIdentifierName(name);
+  const nameInfo = _getFuncIdName.call(this, idNode, parentNode);
+  if (nameInfo) {
+    this.sourceIdentifierName(nameInfo.name, nameInfo.pos);
   }
 
   this.token("(");
@@ -236,8 +236,8 @@ function hasTypesOrComments(
   );
 }
 
-function _getFuncIdName(this: Printer, nodeId: t.Node, parent: t.Node) {
-  let id = nodeId;
+function _getFuncIdName(this: Printer, idNode: t.Node, parent: t.Node) {
+  let id = idNode;
 
   if (!id && parent) {
     const parentType = parent.type;
@@ -254,20 +254,27 @@ function _getFuncIdName(this: Printer, nodeId: t.Node, parent: t.Node) {
     }
   }
 
-  let name;
+  let nameInfo;
   if (id) {
     if (id.type === "Identifier") {
-      name =
-        this.getIdentifierName(id.loc?.start) ||
-        // @ts-expect-error Undocumented property identifierName
-        id.loc?.identifierName ||
-        id.name;
+      nameInfo = {
+        pos: id.loc?.start,
+        name:
+          // @ts-expect-error Undocumented property identifierName
+          id.loc?.identifierName || id.name,
+      };
     } else if (id.type === "PrivateName") {
-      name = this.getIdentifierName(id.id.loc?.start) || id.id.name;
+      nameInfo = {
+        pos: id.id.loc?.start,
+        name: id.id.name,
+      };
     } else if (id.type === "StringLiteral") {
-      name = this.getIdentifierName(id.loc?.start) || id.value;
+      nameInfo = {
+        pos: id.loc?.start,
+        name: id.value,
+      };
     }
   }
 
-  return name;
+  return nameInfo;
 }

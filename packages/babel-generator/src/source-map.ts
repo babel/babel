@@ -64,7 +64,7 @@ export default class SourceMap {
       }
     }
 
-    if (typeof code === "string") {
+    if (typeof code === "string" && !opts.inputSourceMap) {
       setSourceContent(map, this._sourceFileName, code);
     } else if (typeof code === "object") {
       for (const sourceFileName of Object.keys(code)) {
@@ -102,6 +102,7 @@ export default class SourceMap {
     line: number,
     column: number,
     identifierName?: string | null,
+    identifierNamePos?: { line: number; column: number },
     filename?: string | null,
   ) {
     this._rawMappings = undefined;
@@ -111,17 +112,24 @@ export default class SourceMap {
 
     if (line != null) {
       if (this._inputMap) {
+        if (identifierNamePos) {
+          const name = originalPositionFor(this._inputMap, {
+            line,
+            column,
+          }).name;
+          if (name) {
+            identifierName = name;
+          }
+        }
+
         const originalMapping = originalPositionFor(this._inputMap, {
           line,
           column,
         });
 
-        source =
-          originalMapping.source ||
-          filename?.replace(/\\/g, "/") ||
-          this._sourceFileName;
+        source = originalMapping.source;
 
-        if (originalMapping.line != null) {
+        if (source && originalMapping.line != null) {
           original = {
             line: originalMapping.line,
             column: originalMapping.column,
@@ -132,8 +140,6 @@ export default class SourceMap {
         }
       } else {
         source = filename?.replace(/\\/g, "/") || this._sourceFileName;
-      }
-      if (!original) {
         original = {
           line: line,
           column: column,
@@ -144,7 +150,7 @@ export default class SourceMap {
     maybeAddMapping(this._map, {
       name: identifierName,
       generated,
-      source: line == null ? undefined : source,
+      source: original == null ? undefined : source,
       original: original,
     });
   }
