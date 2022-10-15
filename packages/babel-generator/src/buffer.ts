@@ -1,6 +1,5 @@
 import type SourceMap from "./source-map";
 import * as charcodes from "charcodes";
-import { originalPositionFor } from "@jridgewell/trace-mapping";
 
 export type Pos = {
   line: number;
@@ -255,7 +254,7 @@ export default class Buffer {
       return;
     }
 
-    let { column, identifierName, identifierNamePos, filename } = sourcePos;
+    const { column, identifierName, identifierNamePos, filename } = sourcePos;
     let line = sourcePos.line;
 
     if (identifierName != null || identifierNamePos != null) {
