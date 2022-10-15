@@ -263,18 +263,6 @@ export default class Buffer {
       sourcePos.identifierNamePos = undefined;
     }
 
-    // Fast path for multi-line
-    if (maybeNewline && identifierNamePos && this._map?._inputMap) {
-      const name = originalPositionFor(
-        this._map._inputMap,
-        identifierNamePos,
-      ).name;
-      if (name) {
-        identifierName = name;
-      }
-      identifierNamePos = undefined;
-    }
-
     // Search for newline chars. We search only for `\n`, since both `\r` and
     // `\r\n` are normalized to `\n` during parse. We exclude `\u2028` and
     // `\u2029` for performance reasons, they're so uncommon that it's probably
@@ -298,7 +286,7 @@ export default class Buffer {
       // unless this is the last char.
       // When manually adding multi-line content (such as a comment), `line` will be `undefined`.
       if (last < len && line !== undefined) {
-        this._mark(++line, 0, identifierName, identifierNamePos, filename);
+        this._mark(++line, 0, null, null, filename);
       }
       i = str.indexOf("\n", last);
     }

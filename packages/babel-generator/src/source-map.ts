@@ -107,40 +107,40 @@ export default class SourceMap {
   ) {
     this._rawMappings = undefined;
 
-    let original;
-    let source;
+    let originalMapping: {
+      source: string | null;
+      name?: string | null;
+      line: number | null;
+      column: number | null;
+    };
 
     if (line != null) {
       if (this._inputMap) {
-        if (identifierNamePos) {
-          const name = originalPositionFor(this._inputMap, {
-            line,
-            column,
-          }).name;
-          if (name) {
-            identifierName = name;
-          }
-        }
-
-        const originalMapping = originalPositionFor(this._inputMap, {
+        // This is the lookup for this mark
+        originalMapping = originalPositionFor(this._inputMap, {
           line,
           column,
         });
 
-        source = originalMapping.source;
-
-        if (source && originalMapping.line != null) {
-          original = {
-            line: originalMapping.line,
-            column: originalMapping.column,
-          };
-          if (originalMapping.name) {
-            identifierName = originalMapping.name;
+        // If the we found a name, nothing else needs to be done
+        // Maybe we're marking a `(` and the input map already had a name attached there,
+        // or we're marking a `(` and the sourcemap spanned a `foo(`,
+        // or we're marking an identifier, etc.
+        if (!originalMapping.name && identifierNamePos) {
+          // We're trying to mark a `(` (as that's the only thing that provides
+          // an identifierNamePos currently), and we the AST had an identifier attached.
+          // Lookup it's original name.
+          const originalIdentifierMapping = originalPositionFor(
+            this._inputMap,
+            identifierNamePos,
+          );
+          if (originalIdentifierMapping.name) {
+            identifierName = originalIdentifierMapping.name;
           }
         }
       } else {
-        source = filename?.replace(/\\/g, "/") || this._sourceFileName;
-        original = {
+        originalMapping = {
+          source: filename?.replace(/\\/g, "/") || this._sourceFileName,
           line: line,
           column: column,
         };
@@ -150,8 +150,8 @@ export default class SourceMap {
     maybeAddMapping(this._map, {
       name: identifierName,
       generated,
-      source: original == null ? undefined : source,
-      original: original,
+      source: originalMapping?.source,
+      original: originalMapping,
     });
   }
 }
