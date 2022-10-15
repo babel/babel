@@ -114,7 +114,9 @@ export default class Buffer {
       code: (this._buf + this._str).trimRight(),
       // Decoded sourcemap is free to generate.
       decodedMap: map?.getDecoded(),
-      // Just for backwards compatibility.
+      // Used as a marker for backwards compatibility. We moved input map merging
+      // into the generator. We cannot merge the input map a second time, so the
+      // presence of this field tells us we've already done the work.
       get __mergedMap() {
         return this.map;
       },
