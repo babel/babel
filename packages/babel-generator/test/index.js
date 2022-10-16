@@ -573,6 +573,128 @@ describe("generation", function () {
       }"
     `);
   });
+
+  it("comments without loc2", () => {
+    const ast = parse(
+      `
+        (function (_templateFactory) {
+            "use strict";
+
+            const template = (0, _templateFactory.createTemplateFactory)(
+            /*{{somevalue}}*/
+            {
+                "id": null,
+                "block": "[[[1,[34,0]]],[],false,[\\"somevalue\\"]]",
+                "moduleName": "(unknown template module)",
+                "isStrictMode": false
+            });
+        });
+
+        const template = (0, _templateFactory.createTemplateFactory)(
+        /*
+          {{somevalue}}
+        */
+        {
+            "id": null,
+            "block": "[[[1,[34,0]]],[],false,[\\"somevalue\\"]]",
+            "moduleName": "(unknown template module)",
+            "isStrictMode": false
+        });
+      `,
+      { sourceType: "module" },
+    );
+
+    for (const comment of ast.comments) {
+      comment.loc = undefined;
+    }
+
+    expect(generate(ast).code).toMatchInlineSnapshot(`
+      "(function (_templateFactory) {
+        \\"use strict\\";
+
+        const template = (0, _templateFactory.createTemplateFactory)(
+        /*{{somevalue}}*/
+        {
+          \\"id\\": null,
+          \\"block\\": \\"[[[1,[34,0]]],[],false,[\\\\\\"somevalue\\\\\\"]]\\",
+          \\"moduleName\\": \\"(unknown template module)\\",
+          \\"isStrictMode\\": false
+        });
+      });
+      const template = (0, _templateFactory.createTemplateFactory)(
+      /*
+                {{somevalue}}
+              */
+      {
+        \\"id\\": null,
+        \\"block\\": \\"[[[1,[34,0]]],[],false,[\\\\\\"somevalue\\\\\\"]]\\",
+        \\"moduleName\\": \\"(unknown template module)\\",
+        \\"isStrictMode\\": false
+      });"
+    `);
+  });
+
+  it("comments without node.loc", () => {
+    const ast = parse(
+      `
+        (function (_templateFactory) {
+            "use strict";
+
+            const template = (0, _templateFactory.createTemplateFactory)(
+            /*{{somevalue}}*/
+            {
+                "id": null,
+                "block": "[[[1,[34,0]]],[],false,[\\"somevalue\\"]]",
+                "moduleName": "(unknown template module)",
+                "isStrictMode": false
+            });
+        });
+
+        const template = (0, _templateFactory.createTemplateFactory)(
+        /*
+          {{somevalue}}
+        */
+        {
+            "id": null,
+            "block": "[[[1,[34,0]]],[],false,[\\"somevalue\\"]]",
+            "moduleName": "(unknown template module)",
+            "isStrictMode": false
+        });
+      `,
+      { sourceType: "module" },
+    );
+
+    const ast2 = t.cloneNode(ast, true, true);
+
+    for (let i = 0; i < ast.comments.length; i++) {
+      ast2.comments[i].loc = ast.comments[i].loc;
+    }
+
+    expect(generate(ast2).code).toMatchInlineSnapshot(`
+      "(function (_templateFactory) {
+        \\"use strict\\";
+
+        const template = (0, _templateFactory.createTemplateFactory)(
+        /*{{somevalue}}*/
+        {
+          \\"id\\": null,
+          \\"block\\": \\"[[[1,[34,0]]],[],false,[\\\\\\"somevalue\\\\\\"]]\\",
+          \\"moduleName\\": \\"(unknown template module)\\",
+          \\"isStrictMode\\": false
+        });
+      });
+      const template = (0, _templateFactory.createTemplateFactory)(
+      /*
+        {{somevalue}}
+      */
+      {
+        \\"id\\": null,
+        \\"block\\": \\"[[[1,[34,0]]],[],false,[\\\\\\"somevalue\\\\\\"]]\\",
+        \\"moduleName\\": \\"(unknown template module)\\",
+        \\"isStrictMode\\": false
+      });"
+    `);
+  });
 });
 
 describe("programmatic generation", function () {

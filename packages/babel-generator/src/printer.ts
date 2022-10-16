@@ -1017,7 +1017,12 @@ class Printer {
           hasLoc = false;
 
           if (len === 1) {
+            const singleLine = comment.loc
+              ? comment.loc.start.line === comment.loc.end.line
+              : !comment.value.includes("\n");
+
             const shouldSkipNewline =
+              singleLine &&
               !isStatement(node) &&
               !isClassBody(parent) &&
               !isTSInterfaceBody(parent);
@@ -1025,11 +1030,12 @@ class Printer {
             if (type === COMMENT_TYPE.LEADING) {
               this._printComment(
                 comment,
-                shouldSkipNewline || isFunction(parent, { body: node })
+                (shouldSkipNewline && node.type !== "ObjectExpression") ||
+                  (singleLine && isFunction(parent, { body: node }))
                   ? COMMENT_SKIP_NEWLINE.SKIP_ALL
                   : COMMENT_SKIP_NEWLINE.DEFAULT,
               );
-            } else if (type === COMMENT_TYPE.TRAILING && shouldSkipNewline) {
+            } else if (shouldSkipNewline && type === COMMENT_TYPE.TRAILING) {
               this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL);
             } else {
               this._printComment(comment, COMMENT_SKIP_NEWLINE.DEFAULT);
