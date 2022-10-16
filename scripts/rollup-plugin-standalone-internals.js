@@ -13,7 +13,7 @@ const generatedPluginsPath = inStandalone("./src/generated/plugins.ts");
 const makeNoopPluginPath = inStandalone("./src/make-noop-plugin.ts");
 const pluginUtilsShimPath = inStandalone("./src/plugin-utils-shim.ts");
 
-const toCamel = str => str.replace(/-[a-z]/g, c => c[1].toUpperCase());
+const toCamel = str => str.replaceAll(/-[a-z]/g, c => c[1].toUpperCase());
 
 const internalPlugins = new Map([
   ...noopPlugins.map(plugin => [
