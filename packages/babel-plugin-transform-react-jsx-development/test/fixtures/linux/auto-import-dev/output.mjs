@@ -1,7 +1,7 @@
 var _jsxFileName = "<CWD>/packages/babel-plugin-transform-react-jsx-development/test/fixtures/linux/auto-import-dev/input.js";
+import { Fragment as _Fragment } from "react/jsx-dev-runtime";
 import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";
 import { createElement as _createElement } from "react";
-import { Fragment as _Fragment } from "react/jsx-dev-runtime";
 var x = /*#__PURE__*/_jsxDEV(_Fragment, {
   children: /*#__PURE__*/_jsxDEV("div", {
     children: [/*#__PURE__*/_jsxDEV("div", {}, "1", false, {
@@ -33,4 +33,4 @@ var x = /*#__PURE__*/_jsxDEV(_Fragment, {
     lineNumber: 3,
     columnNumber: 5
   }, this)
-}, void 0, false);
+}, void 0, false, void 0, void 0);
