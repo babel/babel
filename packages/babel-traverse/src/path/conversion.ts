@@ -368,6 +368,9 @@ function hoistFunctionEnvironment(
       const isCall = superParentPath.isCallExpression({
         callee: superProp.node,
       });
+      const isTaggedTemplate = superParentPath.isTaggedTemplateExpression({
+        tag: superProp.node,
+      });
       const superBinding = getSuperPropBinding(thisEnvFn, isAssignment, key);
 
       const args: t.Expression[] = [];
@@ -393,6 +396,16 @@ function hoistFunctionEnvironment(
       } else if (isAssignment) {
         // Replace not only the super.prop, but the whole assignment
         superParentPath.replaceWith(call);
+      } else if (isTaggedTemplate) {
+        superProp.replaceWith(
+          callExpression(memberExpression(call, identifier("bind"), false), [
+            thisExpression(),
+          ]),
+        );
+
+        thisPaths.push(
+          superProp.get("arguments.0") as NodePath<t.ThisExpression>,
+        );
       } else {
         superProp.replaceWith(call);
       }
