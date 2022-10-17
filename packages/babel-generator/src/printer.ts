@@ -2,6 +2,12 @@ import Buffer from "./buffer";
 import type { Loc } from "./buffer";
 import * as n from "./node";
 import type * as t from "@babel/types";
+import {
+  isFunction,
+  isStatement,
+  isClassBody,
+  isTSInterfaceBody,
+} from "@babel/types";
 import type {
   RecordAndTuplePluginOptions,
   PipelineOperatorPluginOptions,
@@ -626,7 +632,7 @@ class Printer {
 
     this._lastCommentLine = 0;
 
-    this._printLeadingComments(node);
+    this._printLeadingComments(node, parent);
 
     const loc = nodeType === "Program" || nodeType === "File" ? null : node.loc;
 
@@ -634,10 +640,10 @@ class Printer {
 
     if (noLineTerminator && !this._noLineTerminator) {
       this._noLineTerminator = true;
-      this._printTrailingComments(node);
+      this._printTrailingComments(node, parent);
       this._noLineTerminator = false;
     } else {
-      this._printTrailingComments(node, trailingCommentsLineOffset);
+      this._printTrailingComments(node, parent, trailingCommentsLineOffset);
     }
 
     if (shouldPrintParens) this.token(")");
@@ -768,16 +774,22 @@ class Printer {
     this.print(node, parent);
   }
 
-  _printTrailingComments(node: t.Node, lineOffset?: number) {
+  _printTrailingComments(node: t.Node, parent?: t.Node, lineOffset?: number) {
     const comments = this._getComments(false, node);
     if (!comments?.length) return;
-    this._printComments(COMMENT_TYPE.TRAILING, comments, node, lineOffset);
+    this._printComments(
+      COMMENT_TYPE.TRAILING,
+      comments,
+      node,
+      parent,
+      lineOffset,
+    );
   }
 
-  _printLeadingComments(node: t.Node) {
+  _printLeadingComments(node: t.Node, parent: t.Node) {
     const comments = this._getComments(true, node);
     if (!comments?.length) return;
-    this._printComments(COMMENT_TYPE.LEADING, comments, node);
+    this._printComments(COMMENT_TYPE.LEADING, comments, node, parent);
   }
 
   printInnerComments(node: t.Node, indent = true) {
@@ -936,6 +948,7 @@ class Printer {
     type: COMMENT_TYPE,
     comments: readonly t.Comment[],
     node: t.Node,
+    parent?: t.Node,
     lineOffset: number = 0,
   ) {
     {
@@ -1004,11 +1017,34 @@ class Printer {
           hasLoc = false;
 
           if (len === 1) {
-            this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL);
+            const singleLine = comment.loc
+              ? comment.loc.start.line === comment.loc.end.line
+              : !comment.value.includes("\n");
+
+            const shouldSkipNewline =
+              singleLine &&
+              !isStatement(node) &&
+              !isClassBody(parent) &&
+              !isTSInterfaceBody(parent);
+
+            if (type === COMMENT_TYPE.LEADING) {
+              this._printComment(
+                comment,
+                (shouldSkipNewline && node.type !== "ObjectExpression") ||
+                  (singleLine && isFunction(parent, { body: node }))
+                  ? COMMENT_SKIP_NEWLINE.SKIP_ALL
+                  : COMMENT_SKIP_NEWLINE.DEFAULT,
+              );
+            } else if (shouldSkipNewline && type === COMMENT_TYPE.TRAILING) {
+              this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL);
+            } else {
+              this._printComment(comment, COMMENT_SKIP_NEWLINE.DEFAULT);
+            }
           } else if (
             type === COMMENT_TYPE.INNER &&
             !(node.type === "ObjectExpression" && node.properties.length > 1) &&
-            node.type !== "ClassBody"
+            node.type !== "ClassBody" &&
+            node.type !== "TSInterfaceBody"
           ) {
             // class X {
             //   /*:: a: number*/

@@ -483,6 +483,218 @@ describe("generation", function () {
 
     expect(generate(ast).code).toBe("/*#__PURE__*/\n/*#__PURE__*/");
   });
+
+  it("comments without loc", () => {
+    const ast = parse(
+      `
+        import {
+            Attribute,
+            AttributeSDKType
+        }
+        from "../../base/v1beta1/attribute";
+        import {
+            Rpc
+        }
+        from "../../../helpers";
+        import * as _m0 from "protobufjs/minimal";
+        import {
+            MsgSignProviderAttributes,
+            MsgSignProviderAttributesSDKType,
+            MsgSignProviderAttributesResponse,
+            MsgSignProviderAttributesResponseSDKType,
+            MsgDeleteProviderAttributes,
+            MsgDeleteProviderAttributesSDKType,
+            MsgDeleteProviderAttributesResponse,
+            MsgDeleteProviderAttributesResponseSDKType
+        }
+        from "./audit";
+        /** Msg defines the provider Msg service */
+        export interface Msg {
+            /** SignProviderAttributes defines a method that signs provider attributes */
+            signProviderAttributes(request: MsgSignProviderAttributes): Promise < MsgSignProviderAttributesResponse > ;
+            /** DeleteProviderAttributes defines a method that deletes provider attributes */
+            deleteProviderAttributes(request: MsgDeleteProviderAttributes): Promise < MsgDeleteProviderAttributesResponse > ;
+        }
+        export class MsgClientImpl implements Msg {
+            private readonly rpc: Rpc;
+            constructor(rpc: Rpc) {
+                this.rpc = rpc;
+            }
+            /* SignProviderAttributes defines a method that signs provider attributes */
+            signProviderAttributes = async(request: MsgSignProviderAttributes): Promise < MsgSignProviderAttributesResponse >  => {
+                const data = MsgSignProviderAttributes.encode(request).finish();
+                const promise = this.rpc.request("akash.audit.v1beta1.Msg", "SignProviderAttributes", data);
+                return promise.then(data => MsgSignProviderAttributesResponse.decode(new _m0.Reader(data)));
+            };
+            /* DeleteProviderAttributes defines a method that deletes provider attributes */
+            deleteProviderAttributes = async(request: MsgDeleteProviderAttributes): Promise < MsgDeleteProviderAttributesResponse >  => {
+                const data = MsgDeleteProviderAttributes.encode(request).finish();
+                const promise = this.rpc.request("akash.audit.v1beta1.Msg", "DeleteProviderAttributes", data);
+                return promise.then(data => MsgDeleteProviderAttributesResponse.decode(new _m0.Reader(data)));
+            };
+        }
+    `,
+      { sourceType: "module", plugins: ["typescript"] },
+    );
+
+    for (const comment of ast.comments) {
+      comment.loc = undefined;
+    }
+
+    expect(generate(ast).code).toMatchInlineSnapshot(`
+      "import { Attribute, AttributeSDKType } from \\"../../base/v1beta1/attribute\\";
+      import { Rpc } from \\"../../../helpers\\";
+      import * as _m0 from \\"protobufjs/minimal\\";
+      import { MsgSignProviderAttributes, MsgSignProviderAttributesSDKType, MsgSignProviderAttributesResponse, MsgSignProviderAttributesResponseSDKType, MsgDeleteProviderAttributes, MsgDeleteProviderAttributesSDKType, MsgDeleteProviderAttributesResponse, MsgDeleteProviderAttributesResponseSDKType } from \\"./audit\\";
+      /** Msg defines the provider Msg service */
+      export interface Msg {
+        /** SignProviderAttributes defines a method that signs provider attributes */
+        signProviderAttributes(request: MsgSignProviderAttributes): Promise<MsgSignProviderAttributesResponse>;
+        /** DeleteProviderAttributes defines a method that deletes provider attributes */
+        deleteProviderAttributes(request: MsgDeleteProviderAttributes): Promise<MsgDeleteProviderAttributesResponse>;
+      }
+      export class MsgClientImpl implements Msg {
+        private readonly rpc: Rpc;
+        constructor(rpc: Rpc) {
+          this.rpc = rpc;
+        }
+        /* SignProviderAttributes defines a method that signs provider attributes */
+        signProviderAttributes = async (request: MsgSignProviderAttributes): Promise<MsgSignProviderAttributesResponse> => {
+          const data = MsgSignProviderAttributes.encode(request).finish();
+          const promise = this.rpc.request(\\"akash.audit.v1beta1.Msg\\", \\"SignProviderAttributes\\", data);
+          return promise.then(data => MsgSignProviderAttributesResponse.decode(new _m0.Reader(data)));
+        };
+        /* DeleteProviderAttributes defines a method that deletes provider attributes */
+        deleteProviderAttributes = async (request: MsgDeleteProviderAttributes): Promise<MsgDeleteProviderAttributesResponse> => {
+          const data = MsgDeleteProviderAttributes.encode(request).finish();
+          const promise = this.rpc.request(\\"akash.audit.v1beta1.Msg\\", \\"DeleteProviderAttributes\\", data);
+          return promise.then(data => MsgDeleteProviderAttributesResponse.decode(new _m0.Reader(data)));
+        };
+      }"
+    `);
+  });
+
+  it("comments without loc2", () => {
+    const ast = parse(
+      `
+        (function (_templateFactory) {
+            "use strict";
+
+            const template = (0, _templateFactory.createTemplateFactory)(
+            /*{{somevalue}}*/
+            {
+                "id": null,
+                "block": "[[[1,[34,0]]],[],false,[\\"somevalue\\"]]",
+                "moduleName": "(unknown template module)",
+                "isStrictMode": false
+            });
+        });
+
+        const template = (0, _templateFactory.createTemplateFactory)(
+        /*
+          {{somevalue}}
+        */
+        {
+            "id": null,
+            "block": "[[[1,[34,0]]],[],false,[\\"somevalue\\"]]",
+            "moduleName": "(unknown template module)",
+            "isStrictMode": false
+        });
+      `,
+      { sourceType: "module" },
+    );
+
+    for (const comment of ast.comments) {
+      comment.loc = undefined;
+    }
+
+    expect(generate(ast).code).toMatchInlineSnapshot(`
+      "(function (_templateFactory) {
+        \\"use strict\\";
+
+        const template = (0, _templateFactory.createTemplateFactory)(
+        /*{{somevalue}}*/
+        {
+          \\"id\\": null,
+          \\"block\\": \\"[[[1,[34,0]]],[],false,[\\\\\\"somevalue\\\\\\"]]\\",
+          \\"moduleName\\": \\"(unknown template module)\\",
+          \\"isStrictMode\\": false
+        });
+      });
+      const template = (0, _templateFactory.createTemplateFactory)(
+      /*
+                {{somevalue}}
+              */
+      {
+        \\"id\\": null,
+        \\"block\\": \\"[[[1,[34,0]]],[],false,[\\\\\\"somevalue\\\\\\"]]\\",
+        \\"moduleName\\": \\"(unknown template module)\\",
+        \\"isStrictMode\\": false
+      });"
+    `);
+  });
+
+  it("comments without node.loc", () => {
+    const ast = parse(
+      `
+        (function (_templateFactory) {
+            "use strict";
+
+            const template = (0, _templateFactory.createTemplateFactory)(
+            /*{{somevalue}}*/
+            {
+                "id": null,
+                "block": "[[[1,[34,0]]],[],false,[\\"somevalue\\"]]",
+                "moduleName": "(unknown template module)",
+                "isStrictMode": false
+            });
+        });
+
+        const template = (0, _templateFactory.createTemplateFactory)(
+        /*
+          {{somevalue}}
+        */
+        {
+            "id": null,
+            "block": "[[[1,[34,0]]],[],false,[\\"somevalue\\"]]",
+            "moduleName": "(unknown template module)",
+            "isStrictMode": false
+        });
+      `,
+      { sourceType: "module" },
+    );
+
+    const ast2 = t.cloneNode(ast, true, true);
+
+    for (let i = 0; i < ast.comments.length; i++) {
+      ast2.comments[i].loc = ast.comments[i].loc;
+    }
+
+    expect(generate(ast2).code).toMatchInlineSnapshot(`
+      "(function (_templateFactory) {
+        \\"use strict\\";
+
+        const template = (0, _templateFactory.createTemplateFactory)(
+        /*{{somevalue}}*/
+        {
+          \\"id\\": null,
+          \\"block\\": \\"[[[1,[34,0]]],[],false,[\\\\\\"somevalue\\\\\\"]]\\",
+          \\"moduleName\\": \\"(unknown template module)\\",
+          \\"isStrictMode\\": false
+        });
+      });
+      const template = (0, _templateFactory.createTemplateFactory)(
+      /*
+        {{somevalue}}
+      */
+      {
+        \\"id\\": null,
+        \\"block\\": \\"[[[1,[34,0]]],[],false,[\\\\\\"somevalue\\\\\\"]]\\",
+        \\"moduleName\\": \\"(unknown template module)\\",
+        \\"isStrictMode\\": false
+      });"
+    `);
+  });
 });
 
 describe("programmatic generation", function () {
