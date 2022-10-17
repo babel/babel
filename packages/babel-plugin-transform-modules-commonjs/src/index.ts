@@ -14,7 +14,7 @@ import { template, types as t } from "@babel/core";
 import type { PluginOptions } from "@babel/helper-module-transforms";
 import type { Visitor, Scope } from "@babel/traverse";
 
-import { createDynamicImportTransform } from "babel-plugin-dynamic-import-node/utils";
+import { transformDynamicImport } from "./dynamic-import";
 
 export interface Options extends PluginOptions {
   allowCommonJSExports?: boolean;
@@ -31,8 +31,6 @@ export interface Options extends PluginOptions {
 
 export default declare((api, options: Options) => {
   api.assertVersion(7);
-
-  const transformImportCall = createDynamicImportTransform(api);
 
   const {
     // 'true' for imports to strictly have .default, instead of having
@@ -174,14 +172,14 @@ export default declare((api, options: Options) => {
     visitor: {
       CallExpression(path) {
         if (!this.file.has("@babel/plugin-proposal-dynamic-import")) return;
-        if (!path.get("callee").isImport()) return;
+        if (!t.isImport(path.node.callee)) return;
 
         let { scope } = path;
         do {
           scope.rename("require");
         } while ((scope = scope.parent));
 
-        transformImportCall(this, path.get("callee"));
+        transformDynamicImport(path, noInterop, this.file);
       },
 
       Program: {

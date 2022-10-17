@@ -9,9 +9,9 @@ import {
   ensureStatementsHoisted,
   wrapInterop,
   getModuleName,
+  getDynamicImportSource,
 } from "@babel/helper-module-transforms";
 import { template, types as t } from "@babel/core";
-import { getImportSource } from "babel-plugin-dynamic-import-node/utils";
 import type { PluginOptions } from "@babel/helper-module-transforms";
 import type { NodePath } from "@babel/traverse";
 
@@ -102,7 +102,7 @@ export default declare<State>((api, options: Options) => {
           template.expression.ast`
             new Promise((${resolveId}, ${rejectId}) =>
               ${requireId}(
-                [${getImportSource(t, path.node)}],
+                [${getDynamicImportSource(path.node)}],
                 imported => ${t.cloneNode(resolveId)}(${result}),
                 ${t.cloneNode(rejectId)}
               )

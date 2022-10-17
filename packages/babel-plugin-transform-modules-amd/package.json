@@ -15,8 +15,7 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/helper-module-transforms": "workspace:^",
-    "@babel/helper-plugin-utils": "workspace:^",
-    "babel-plugin-dynamic-import-node": "^2.3.3"
+    "@babel/helper-plugin-utils": "workspace:^"
   },
   "keywords": [
     "babel-plugin"

@@ -35,6 +35,8 @@ import type {
 } from "./normalize-and-load-metadata";
 import type { NodePath } from "@babel/traverse";
 
+export { getDynamicImportSource } from "./dynamic-import";
+
 export { default as getModuleName } from "./get-module-name";
 export type { PluginOptions } from "./get-module-name";
 
