@@ -521,9 +521,9 @@ function buildRollup(packages, buildStandalone) {
 
             // Some syntax plugins have been archived
             if (id.includes("plugin-syntax")) {
-              const srcPath = new URL(
-                "./packages/" + id.replace("@babel/", "babel-"),
-                import.meta.url
+              const srcPath = path.join(
+                path.dirname(fileURLToPath(import.meta.url)),
+                "/packages/" + id.replace("@babel/", "babel-")
               );
               if (!fs.existsSync(srcPath)) return "compat";
             }
@@ -532,7 +532,7 @@ function buildRollup(packages, buildStandalone) {
               return "compat";
             }
 
-            return "esModule";
+            return "auto";
           },
         });
 
