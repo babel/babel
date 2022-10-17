@@ -347,6 +347,7 @@ function buildRollup(packages, buildStandalone) {
 
         log(`Compiling '${chalk.cyan(input)}' with rollup ...`);
         const bundle = await rollup({
+          treeshake: false,
           input,
           external: buildStandalone ? [] : external,
           // all node modules are resolved as if they were placed in the n_m folder of package root
