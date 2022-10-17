@@ -364,14 +364,16 @@ function buildRollup(packages, buildStandalone) {
                 // https://github.com/babel/babel-polyfills/blob/4ac92be5b70b13e3d8a34614d8ecd900eb3f40e4/packages/babel-helper-define-polyfill-provider/src/types.js#L5
                 // We can safely ignore this warning, and let Rollup replace it with undefined.
                 if (
-                  warning.exporter.endsWith("babel-core/src/index.ts") &&
+                  warning.exporter
+                    .replace(/\\/g, "/")
+                    .endsWith("packages/babel-core/src/index.ts") &&
                   warning.binding === "default" &&
                   [
                     "@babel/helper-define-polyfill-provider",
                     "babel-plugin-polyfill-corejs2",
                     "babel-plugin-polyfill-corejs3",
                     "babel-plugin-polyfill-regenerator",
-                  ].some(pkg => warning.id.includes(pkg))
+                  ].some(pkg => warning.id.replace(/\\/g, "/").includes(pkg))
                 ) {
                   return;
                 }
@@ -417,7 +419,7 @@ function buildRollup(packages, buildStandalone) {
                   "./packages/babel-helper-create-regexp-features-plugin",
                   "regexpu-core",
                   "regenerate-unicode-properties"
-                ) + "/**/*.js",
+                ).replace(/\\/g, "/") + "/**/*.js", // Must be posix path in rollup 3
               ],
               // Never delegate to the native require()
               ignoreDynamicRequires: false,
