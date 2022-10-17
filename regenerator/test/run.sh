@@ -18,10 +18,14 @@ install() {
     popd
 }
 
+PKG=$(<package.json)
+
 # Link local packages into node_modules.
 install runtime
 install transform
 install preset
+
+echo "$PKG" > package.json
 
 # We need to use the symlink paths rather than the real paths, so that the
 # regenerator-* packages appear to reside in node_modules.
