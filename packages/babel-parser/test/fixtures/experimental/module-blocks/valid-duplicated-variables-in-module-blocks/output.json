@@ -49,7 +49,7 @@
               "start":29,"end":60,"loc":{"start":{"line":2,"column":10,"index":29},"end":{"line":4,"column":1,"index":60}},
               "body": {
                 "type": "Program",
-                "start":40,"end":58,"loc":{"start":{"line":3,"column":2,"index":40},"end":{"line":3,"column":20,"index":58}},
+                "start":37,"end":59,"loc":{"start":{"line":2,"column":18,"index":37},"end":{"line":4,"column":0,"index":59}},
                 "sourceType": "module",
                 "interpreter": null,
                 "body": [

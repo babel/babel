@@ -1869,7 +1869,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         /* topLevel */ true,
         /* end */ tt.braceR,
       );
-      this.next(); // eat tt.braceR
       this.scope.exit();
       return this.finishNode(node, "TSModuleBlock");
     }
