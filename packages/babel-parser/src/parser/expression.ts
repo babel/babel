@@ -3146,10 +3146,7 @@ export default abstract class ExpressionParser extends LValParser {
       this.unexpected(null, tt.braceL);
     }
     // start program node immediately after `{`
-    const program = this.startNodeAt<N.Program>(
-      this.state.end,
-      this.state.endLoc,
-    );
+    const program = this.startNodeAt<N.Program>(this.state.endLoc);
     this.next(); // eat `{`
 
     const revertScopes = this.initializeScopes(/** inModule */ true);
