@@ -102,14 +102,14 @@ export abstract class NodeUtils extends UtilParser {
     return new Node(this, this.state.start, this.state.startLoc);
   }
 
-  startNodeAt<T extends NodeType>(pos: number, loc: Position): Undone<T> {
+  startNodeAt<T extends NodeType>(loc: Position): Undone<T> {
     // @ts-expect-error cast Node as Undone<T>
-    return new Node(this, pos, loc);
+    return new Node(this, loc.index, loc);
   }
 
   /** Start a new node with a previous node's location. */
   startNodeAtNode<T extends NodeType>(type: Undone<NodeType>): Undone<T> {
-    return this.startNodeAt(type.start, type.loc.start);
+    return this.startNodeAt(type.loc.start);
   }
 
   // Finish an AST node, adding `type` and `end` properties.
@@ -141,10 +141,10 @@ export abstract class NodeUtils extends UtilParser {
     return node as T;
   }
 
-  resetStartLocation(node: NodeBase, start: number, startLoc: Position): void {
-    node.start = start;
+  resetStartLocation(node: NodeBase, startLoc: Position): void {
+    node.start = startLoc.index;
     node.loc.start = startLoc;
-    if (this.options.ranges) node.range[0] = start;
+    if (this.options.ranges) node.range[0] = startLoc.index;
   }
 
   resetEndLocation(
@@ -160,6 +160,6 @@ export abstract class NodeUtils extends UtilParser {
    * Reset the start location of node to the start location of locationNode
    */
   resetStartLocationFromNode(node: NodeBase, locationNode: NodeBase): void {
-    this.resetStartLocation(node, locationNode.start, locationNode.loc.start);
+    this.resetStartLocation(node, locationNode.loc.start);
   }
 }

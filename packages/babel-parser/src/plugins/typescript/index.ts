@@ -1100,7 +1100,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     tsParseTupleElementType(): N.TsType | N.TsNamedTupleMember {
       // parses `...TsType[]`
 
-      const { start: startPos, startLoc } = this.state;
+      const { startLoc } = this.state;
 
       const rest = this.eat(tt.ellipsis);
       let type: N.TsType | N.TsNamedTupleMember = this.tsParseType();
@@ -1133,7 +1133,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
 
       if (rest) {
-        const restNode = this.startNodeAt<N.TsRestType>(startPos, startLoc);
+        const restNode = this.startNodeAt<N.TsRestType>(startLoc);
         restNode.typeAnnotation = type;
         type = this.finishNode(restNode, "TSRestType");
       }
@@ -1241,12 +1241,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         case tt.parenL:
           if (process.env.BABEL_8_BREAKING) {
             if (!this.options.createParenthesizedExpressions) {
-              const startPos = this.state.start;
+              const startLoc = this.state.startLoc;
               this.next();
               const type = this.tsParseType();
               this.expect(tt.parenR);
               this.addExtra(type, "parenthesized", true);
-              this.addExtra(type, "parenStart", startPos);
+              this.addExtra(type, "parenStart", startLoc.index);
               return type;
             }
           }
@@ -2179,7 +2179,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     tsTryParseGenericAsyncArrowFunction(
-      startPos: number,
       startLoc: Position,
     ): N.ArrowFunctionExpression | undefined | null {
       if (!this.match(tt.lt)) {
@@ -2191,10 +2190,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
       const res: Undone<N.ArrowFunctionExpression> | undefined | null =
         this.tsTryParseAndCatch(() => {
-          const node = this.startNodeAt<N.ArrowFunctionExpression>(
-            startPos,
-            startLoc,
-          );
+          const node = this.startNodeAt<N.ArrowFunctionExpression>(startLoc);
           node.typeParameters = this.tsParseTypeParameters();
           // Don't use overloaded parseFunctionParams which would look for "<" again.
           super.parseFunctionParams(node);
@@ -2261,8 +2257,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       allowModifiers: boolean | undefined | null,
       decorators: N.Decorator[],
     ): N.Pattern | N.TSParameterProperty {
-      // Store original location/position to include modifiers in range
-      const startPos = this.state.start;
+      // Store original location to include modifiers in range
       const startLoc = this.state.startLoc;
 
       let accessibility: N.Accessibility | undefined | null;
@@ -2293,9 +2288,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
       const left = this.parseMaybeDefault();
       this.parseAssignableListItemTypes(left);
-      const elt = this.parseMaybeDefault(left.start, left.loc.start, left);
+      const elt = this.parseMaybeDefault(left.loc.start, left);
       if (accessibility || readonly || override) {
-        const pp = this.startNodeAt<N.TSParameterProperty>(startPos, startLoc);
+        const pp = this.startNodeAt<N.TSParameterProperty>(startLoc);
         if (decorators.length) {
           pp.decorators = decorators;
         }
@@ -2409,7 +2404,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     parseSubscript(
       base: N.Expression,
-      startPos: number,
+
       startLoc: Position,
       noCalls: boolean | undefined | null,
       state: N.ParseSubscriptState,
@@ -2421,10 +2416,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         this.state.canStartJSXElement = false;
         this.next();
 
-        const nonNullExpression = this.startNodeAt<N.TsNonNullExpression>(
-          startPos,
-          startLoc,
-        );
+        const nonNullExpression =
+          this.startNodeAt<N.TsNonNullExpression>(startLoc);
         nonNullExpression.expression = base;
         return this.finishNode(nonNullExpression, "TSNonNullExpression");
       }
@@ -2452,10 +2445,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           if (!noCalls && this.atPossibleAsyncArrow(base)) {
             // Almost certainly this is a generic async function `async <T>() => ...
             // But it might be a call with a type argument `async<T>();`
-            const asyncArrowFn = this.tsTryParseGenericAsyncArrowFunction(
-              startPos,
-              startLoc,
-            );
+            const asyncArrowFn =
+              this.tsTryParseGenericAsyncArrowFunction(startLoc);
             if (asyncArrowFn) {
               return asyncArrowFn;
             }
@@ -2472,7 +2463,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           if (tokenIsTemplate(this.state.type)) {
             const result = super.parseTaggedTemplateExpression(
               base,
-              startPos,
+
               startLoc,
               state,
             );
@@ -2483,7 +2474,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           if (!noCalls && this.eat(tt.parenL)) {
             const node = this.startNodeAt<
               N.CallExpression | N.OptionalCallExpression
-            >(startPos, startLoc);
+            >(startLoc);
             node.callee = base;
             // possibleAsync always false here, because we would have handled it above.
             // @ts-expect-error (won't be any undefined arguments)
@@ -2519,10 +2510,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             return;
           }
 
-          const node = this.startNodeAt<N.TsInstantiationExpression>(
-            startPos,
-            startLoc,
-          );
+          const node = this.startNodeAt<N.TsInstantiationExpression>(startLoc);
           node.expression = base;
           node.typeParameters = typeArguments;
           return this.finishNode(node, "TSInstantiationExpression");
@@ -2548,7 +2536,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         }
       }
 
-      return super.parseSubscript(base, startPos, startLoc, noCalls, state);
+      return super.parseSubscript(base, startLoc, noCalls, state);
     }
 
     parseNewCallee(node: N.NewExpression): void {
@@ -2566,7 +2554,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     parseExprOp(
       left: N.Expression,
-      leftStartPos: number,
       leftStartLoc: Position,
       minPrec: number,
     ): N.Expression {
@@ -2575,10 +2562,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         !this.hasPrecedingLineBreak() &&
         this.isContextual(tt._as)
       ) {
-        const node = this.startNodeAt<N.TsAsExpression>(
-          leftStartPos,
-          leftStartLoc,
-        );
+        const node = this.startNodeAt<N.TsAsExpression>(leftStartLoc);
         node.expression = left;
         const _const = this.tsTryNextParseConstantContext();
         if (_const) {
@@ -2592,13 +2576,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         return this.parseExprOp(
           // @ts-expect-error todo(flow->ts)
           node,
-          leftStartPos,
           leftStartLoc,
           minPrec,
         );
       }
 
-      return super.parseExprOp(left, leftStartPos, leftStartLoc, minPrec);
+      return super.parseExprOp(left, leftStartLoc, minPrec);
     }
 
     checkReservedWord(
@@ -2990,7 +2973,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     // An apparent conditional expression could actually be an optional parameter in an arrow function.
     parseConditional(
       expr: N.Expression,
-      startPos: number,
+
       startLoc: Position,
       refExpressionErrors?: ExpressionErrors | null,
     ): N.Expression {
@@ -2999,14 +2982,14 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       if (!this.state.maybeInArrowParameters || !this.match(tt.question)) {
         return super.parseConditional(
           expr,
-          startPos,
+
           startLoc,
           refExpressionErrors,
         );
       }
 
       const result = this.tryParse(() =>
-        super.parseConditional(expr, startPos, startLoc),
+        super.parseConditional(expr, startLoc),
       );
 
       if (!result.node) {
@@ -3025,10 +3008,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     // But we parse them here and change them when completing the arrow function.
     parseParenItem(
       node: N.Expression,
-      startPos: number,
+
       startLoc: Position,
     ): N.Expression {
-      node = super.parseParenItem(node, startPos, startLoc);
+      node = super.parseParenItem(node, startLoc);
       if (this.eat(tt.question)) {
         node.optional = true;
         // Include questionmark in location of node
@@ -3038,10 +3021,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
 
       if (this.match(tt.colon)) {
-        const typeCastNode = this.startNodeAt<N.TsTypeCastExpression>(
-          startPos,
-          startLoc,
-        );
+        const typeCastNode = this.startNodeAt<N.TsTypeCastExpression>(startLoc);
         typeCastNode.expression = node;
         typeCastNode.typeAnnotation = this.tsParseTypeAnnotation();
 
@@ -3058,8 +3038,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         return this.tsInAmbientContext(() => this.parseExportDeclaration(node));
       }
 
-      // Store original location/position
-      const startPos = this.state.start;
+      // Store original location
       const startLoc = this.state.startLoc;
 
       const isDeclare = this.eatContextual(tt._declare);
@@ -3090,7 +3069,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
       if (isDeclare) {
         // Reset location to include `declare` in range
-        this.resetStartLocation(declaration, startPos, startLoc);
+        this.resetStartLocation(declaration, startLoc);
 
         declaration.declare = true;
       }
@@ -3247,7 +3226,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     parseObjPropValue(
       prop: Undone<N.ObjectMethod | N.ObjectProperty>,
-      startPos: number | undefined | null,
       startLoc: Position | undefined | null,
       isGenerator: boolean,
       isAsync: boolean,
@@ -3260,7 +3238,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
       return super.parseObjPropValue(
         prop,
-        startPos,
+
         startLoc,
         isGenerator,
         isAsync,
@@ -3674,11 +3652,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     parseMaybeDefault(
-      startPos?: number | null,
       startLoc?: Position | null,
       left?: Pattern | null,
     ): N.Pattern {
-      const node = super.parseMaybeDefault(startPos, startLoc, left);
+      const node = super.parseMaybeDefault(startLoc, left);
 
       if (
         node.type === "AssignmentPattern" &&

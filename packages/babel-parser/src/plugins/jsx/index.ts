@@ -278,12 +278,11 @@ export default (superClass: typeof Parser) =>
     // Parse namespaced identifier.
 
     jsxParseNamespacedName(): N.JSXNamespacedName {
-      const startPos = this.state.start;
       const startLoc = this.state.startLoc;
       const name = this.jsxParseIdentifier();
       if (!this.eat(tt.colon)) return name;
 
-      const node = this.startNodeAt(startPos, startLoc);
+      const node = this.startNodeAt(startLoc);
       node.namespace = name;
       node.name = this.jsxParseIdentifier();
       return this.finishNode(node, "JSXNamespacedName");
@@ -296,14 +295,13 @@ export default (superClass: typeof Parser) =>
       | N.JSXIdentifier
       | N.JSXNamespacedName
       | N.JSXMemberExpression {
-      const startPos = this.state.start;
       const startLoc = this.state.startLoc;
       let node = this.jsxParseNamespacedName();
       if (node.type === "JSXNamespacedName") {
         return node;
       }
       while (this.eat(tt.dot)) {
-        const newNode = this.startNodeAt(startPos, startLoc);
+        const newNode = this.startNodeAt(startLoc);
         newNode.object = node;
         newNode.property = this.jsxParseIdentifier();
         node = this.finishNode(newNode, "JSXMemberExpression");
@@ -342,10 +340,7 @@ export default (superClass: typeof Parser) =>
     // at the beginning of the next one (right brace).
 
     jsxParseEmptyExpression(): N.JSXEmptyExpression {
-      const node = this.startNodeAt(
-        this.state.lastTokEndLoc.index,
-        this.state.lastTokEndLoc,
-      );
+      const node = this.startNodeAt(this.state.lastTokEndLoc);
       return this.finishNodeAt(node, "JSXEmptyExpression", this.state.startLoc);
     }
 
@@ -413,12 +408,8 @@ export default (superClass: typeof Parser) =>
 
     // Parses JSX opening tag starting after "<".
 
-    jsxParseOpeningElementAt(
-      startPos: number,
-      startLoc: Position,
-    ): N.JSXOpeningElement {
+    jsxParseOpeningElementAt(startLoc: Position): N.JSXOpeningElement {
       const node = this.startNodeAt<N.JSXOpeningElement | N.JSXOpeningFragment>(
-        startPos,
         startLoc,
       );
       if (this.eat(tt.jsxTagEnd)) {
@@ -446,11 +437,8 @@ export default (superClass: typeof Parser) =>
 
     // Parses JSX closing tag starting after "</".
 
-    jsxParseClosingElementAt(
-      startPos: number,
-      startLoc: Position,
-    ): N.JSXClosingElement {
-      const node = this.startNodeAt(startPos, startLoc);
+    jsxParseClosingElementAt(startLoc: Position): N.JSXClosingElement {
+      const node = this.startNodeAt(startLoc);
       if (this.eat(tt.jsxTagEnd)) {
         return this.finishNode(node, "JSXClosingFragment");
       }
@@ -462,27 +450,23 @@ export default (superClass: typeof Parser) =>
     // Parses entire JSX element, including it"s opening tag
     // (starting after "<"), attributes, contents and closing tag.
 
-    jsxParseElementAt(startPos: number, startLoc: Position): N.JSXElement {
-      const node = this.startNodeAt(startPos, startLoc);
+    jsxParseElementAt(startLoc: Position): N.JSXElement {
+      const node = this.startNodeAt(startLoc);
       const children = [];
-      const openingElement = this.jsxParseOpeningElementAt(startPos, startLoc);
+      const openingElement = this.jsxParseOpeningElementAt(startLoc);
       let closingElement = null;
 
       if (!openingElement.selfClosing) {
         contents: for (;;) {
           switch (this.state.type) {
             case tt.jsxTagStart:
-              startPos = this.state.start;
               startLoc = this.state.startLoc;
               this.next();
               if (this.eat(tt.slash)) {
-                closingElement = this.jsxParseClosingElementAt(
-                  startPos,
-                  startLoc,
-                );
+                closingElement = this.jsxParseClosingElementAt(startLoc);
                 break contents;
               }
-              children.push(this.jsxParseElementAt(startPos, startLoc));
+              children.push(this.jsxParseElementAt(startLoc));
               break;
 
             case tt.jsxText:
@@ -564,10 +548,9 @@ export default (superClass: typeof Parser) =>
     // Parses entire JSX element from current position.
 
     jsxParseElement(): N.JSXElement {
-      const startPos = this.state.start;
       const startLoc = this.state.startLoc;
       this.next();
-      return this.jsxParseElementAt(startPos, startLoc);
+      return this.jsxParseElementAt(startLoc);
     }
 
     setContext(newContext: TokContext) {
