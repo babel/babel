@@ -12,7 +12,7 @@ export default (superClass: typeof Parser) =>
         const node = this.startNode<N.Identifier>();
         this.next(); // eat '%'
         if (tokenIsIdentifier(this.state.type)) {
-          const name = this.parseIdentifierName(this.state.start);
+          const name = this.parseIdentifierName();
           const identifier = this.createIdentifier(node, name);
           // @ts-expect-error: avoid mutating AST types
           identifier.type = "V8IntrinsicIdentifier";

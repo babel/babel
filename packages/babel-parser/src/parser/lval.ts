@@ -67,7 +67,6 @@ export default abstract class LValParser extends NodeUtils {
   ): T;
   abstract parseObjPropValue(
     prop: any,
-    startPos: number | null,
     startLoc: Position | null,
     isGenerator: boolean,
     isAsync: boolean,
@@ -439,7 +438,7 @@ export default abstract class LValParser extends NodeUtils {
   // https://tc39.es/ecma262/#prod-BindingProperty
   parseBindingProperty(this: Parser): ObjectMember | RestElement {
     const prop = this.startNode<ObjectMember | RestElement>();
-    const { type, start: startPos, startLoc } = this.state;
+    const { type, startLoc } = this.state;
     if (type === tt.ellipsis) {
       return this.parseBindingRestProperty(prop as Undone<RestElement>);
     } else if (type === tt.privateName) {
@@ -452,7 +451,6 @@ export default abstract class LValParser extends NodeUtils {
     (prop as Undone<ObjectMember>).method = false;
     return this.parseObjPropValue(
       prop as Undone<ObjectMember>,
-      startPos,
       startLoc,
       false /* isGenerator */,
       false /* isAsync */,
@@ -468,7 +466,7 @@ export default abstract class LValParser extends NodeUtils {
   ): Pattern | TSParameterProperty {
     const left = this.parseMaybeDefault();
     this.parseAssignableListItemTypes(left);
-    const elt = this.parseMaybeDefault(left.start, left.loc.start, left);
+    const elt = this.parseMaybeDefault(left.loc.start, left);
     if (decorators.length) {
       left.decorators = decorators;
     }
@@ -484,16 +482,14 @@ export default abstract class LValParser extends NodeUtils {
   // https://tc39.es/ecma262/#prod-BindingElement
   parseMaybeDefault(
     this: Parser,
-    startPos?: number | null,
     startLoc?: Position | null,
     left?: Pattern | null,
   ): Pattern {
-    startLoc = startLoc ?? this.state.startLoc;
-    startPos = startPos ?? this.state.start;
+    startLoc ??= this.state.startLoc;
     left = left ?? this.parseBindingAtom();
     if (!this.eat(tt.eq)) return left;
 
-    const node = this.startNodeAt<AssignmentPattern>(startPos, startLoc);
+    const node = this.startNodeAt<AssignmentPattern>(startLoc);
     node.left = left;
     node.right = this.parseMaybeAssignAllowIn();
     return this.finishNode(node, "AssignmentPattern");

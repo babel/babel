@@ -573,17 +573,15 @@ export default abstract class StatementParser extends ExpressionParser {
       // So that the decorators of any nested class expressions will be dealt with separately
       this.state.decoratorStack.push([]);
 
-      const startPos = this.state.start;
       const startLoc = this.state.startLoc;
       let expr: N.Expression;
 
       if (this.match(tt.parenL)) {
-        const startPos = this.state.start;
         const startLoc = this.state.startLoc;
         this.next(); // eat '('
         expr = this.parseExpression();
         this.expect(tt.parenR);
-        expr = this.wrapParenthesis(startPos, startLoc, expr);
+        expr = this.wrapParenthesis(startLoc, expr);
 
         const paramsStartLoc = this.state.startLoc;
         node.expression = this.parseMaybeDecoratorArguments(expr);
@@ -600,7 +598,7 @@ export default abstract class StatementParser extends ExpressionParser {
         expr = this.parseIdentifier(false);
 
         while (this.eat(tt.dot)) {
-          const node = this.startNodeAt(startPos, startLoc);
+          const node = this.startNodeAt(startLoc);
           node.object = expr;
           if (this.match(tt.privateName)) {
             this.classScope.usePrivateName(
@@ -2200,10 +2198,7 @@ export default abstract class StatementParser extends ExpressionParser {
     if (this.isContextual(tt._as)) {
       if (!node.specifiers) node.specifiers = [];
 
-      const specifier = this.startNodeAt(
-        this.state.lastTokStart,
-        this.state.lastTokStartLoc,
-      );
+      const specifier = this.startNodeAt(this.state.lastTokStartLoc);
 
       this.next();
 

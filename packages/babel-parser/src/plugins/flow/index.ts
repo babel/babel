@@ -1026,7 +1026,7 @@ export default (superClass: typeof Parser) =>
         node.method = true;
         node.optional = false;
         node.value = this.flowParseObjectTypeMethodish(
-          this.startNodeAt(node.start, node.loc.start),
+          this.startNodeAt(node.loc.start),
         );
       } else {
         node.method = false;
@@ -1303,7 +1303,7 @@ export default (superClass: typeof Parser) =>
           }
 
           node.value = this.flowParseObjectTypeMethodish(
-            this.startNodeAt(node.start, node.loc.start),
+            this.startNodeAt(node.loc.start),
           );
           if (kind === "get" || kind === "set") {
             this.flowCheckGetterSetterParams(node);
@@ -1382,20 +1382,15 @@ export default (superClass: typeof Parser) =>
     }
 
     flowParseQualifiedTypeIdentifier(
-      startPos?: number,
       startLoc?: Position,
       id?: N.Identifier,
     ): N.FlowQualifiedTypeIdentifier {
-      startPos = startPos || this.state.start;
-      startLoc = startLoc || this.state.startLoc;
+      startLoc ??= this.state.startLoc;
       let node: N.Identifier | N.FlowQualifiedTypeIdentifier =
         id || this.flowParseRestrictedIdentifier(true);
 
       while (this.eat(tt.dot)) {
-        const node2 = this.startNodeAt<N.FlowQualifiedTypeIdentifier>(
-          startPos,
-          startLoc,
-        );
+        const node2 = this.startNodeAt<N.FlowQualifiedTypeIdentifier>(startLoc);
         node2.qualification = node;
         node2.id = this.flowParseRestrictedIdentifier(true);
         node = this.finishNode(node2, "QualifiedTypeIdentifier");
@@ -1405,14 +1400,13 @@ export default (superClass: typeof Parser) =>
     }
 
     flowParseGenericType(
-      startPos: number,
       startLoc: Position,
       id: N.Identifier,
     ): N.FlowGenericTypeAnnotation {
-      const node = this.startNodeAt(startPos, startLoc);
+      const node = this.startNodeAt(startLoc);
 
       node.typeParameters = null;
-      node.id = this.flowParseQualifiedTypeIdentifier(startPos, startLoc, id);
+      node.id = this.flowParseQualifiedTypeIdentifier(startLoc, id);
 
       if (this.match(tt.lt)) {
         node.typeParameters = this.flowParseTypeParameterInstantiation();
@@ -1474,7 +1468,7 @@ export default (superClass: typeof Parser) =>
     reinterpretTypeAsFunctionTypeParam(
       type: N.FlowType,
     ): N.FlowFunctionTypeParam {
-      const node = this.startNodeAt(type.start, type.loc.start);
+      const node = this.startNodeAt(type.loc.start);
       node.name = null;
       node.optional = false;
       node.typeAnnotation = type;
@@ -1509,7 +1503,6 @@ export default (superClass: typeof Parser) =>
     }
 
     flowIdentToTypeAnnotation(
-      startPos: number,
       startLoc: Position,
       node: Undone<N.FlowTypeAnnotation>,
       id: N.Identifier,
@@ -1539,7 +1532,7 @@ export default (superClass: typeof Parser) =>
 
         default:
           this.checkNotUnderscore(id.name);
-          return this.flowParseGenericType(startPos, startLoc, id);
+          return this.flowParseGenericType(startLoc, id);
       }
     }
 
@@ -1547,7 +1540,6 @@ export default (superClass: typeof Parser) =>
     // primary types are kind of like primary expressions...they're the
     // primitives with which other types are constructed.
     flowParsePrimaryType(): N.FlowTypeAnnotation {
-      const startPos = this.state.start;
       const startLoc = this.state.startLoc;
       const node = this.startNode();
       let tmp;
@@ -1733,7 +1725,6 @@ export default (superClass: typeof Parser) =>
             }
 
             return this.flowIdentToTypeAnnotation(
-              startPos,
               startLoc,
               node,
               this.parseIdentifier(),
@@ -1745,7 +1736,6 @@ export default (superClass: typeof Parser) =>
     }
 
     flowParsePostfixType(): N.FlowTypeAnnotation {
-      const startPos = this.state.start;
       const startLoc = this.state.startLoc;
       let type = this.flowParsePrimaryType();
       let seenOptionalIndexedAccess = false;
@@ -1753,7 +1743,7 @@ export default (superClass: typeof Parser) =>
         (this.match(tt.bracketL) || this.match(tt.questionDot)) &&
         !this.canInsertSemicolon()
       ) {
-        const node = this.startNodeAt(startPos, startLoc);
+        const node = this.startNodeAt(startLoc);
         const optional = this.eat(tt.questionDot);
         seenOptionalIndexedAccess = seenOptionalIndexedAccess || optional;
         this.expect(tt.bracketL);
@@ -1798,7 +1788,7 @@ export default (superClass: typeof Parser) =>
       const param = this.flowParsePrefixType();
       if (!this.state.noAnonFunctionType && this.eat(tt.arrow)) {
         // TODO: This should be a type error. Passing in a SourceLocation, and it expects a Position.
-        const node = this.startNodeAt(param.start, param.loc.start);
+        const node = this.startNodeAt(param.loc.start);
         node.params = [this.reinterpretTypeAsFunctionTypeParam(param)];
         node.rest = null;
         node.this = null;
@@ -1845,10 +1835,9 @@ export default (superClass: typeof Parser) =>
 
     flowParseTypeOrImplicitInstantiation(): N.FlowTypeAnnotation {
       if (this.state.type === tt.name && this.state.value === "_") {
-        const startPos = this.state.start;
         const startLoc = this.state.startLoc;
         const node = this.parseIdentifier();
-        return this.flowParseGenericType(startPos, startLoc, node);
+        return this.flowParseGenericType(startLoc, node);
       } else {
         return this.flowParseType();
       }
@@ -2031,7 +2020,7 @@ export default (superClass: typeof Parser) =>
 
     parseConditional(
       expr: N.Expression,
-      startPos: number,
+
       startLoc: Position,
       refExpressionErrors?: ExpressionErrors | null,
     ): N.Expression {
@@ -2057,7 +2046,7 @@ export default (superClass: typeof Parser) =>
       this.expect(tt.question);
       const state = this.state.clone();
       const originalNoArrowAt = this.state.noArrowAt;
-      const node = this.startNodeAt(startPos, startLoc);
+      const node = this.startNodeAt(startLoc);
       let { consequent, failed } = this.tryParseConditionalConsequent();
       let [valid, invalid] = this.getArrowLikeExpressions(consequent);
 
@@ -2198,10 +2187,10 @@ export default (superClass: typeof Parser) =>
 
     parseParenItem(
       node: N.Expression,
-      startPos: number,
+
       startLoc: Position,
     ): N.Expression {
-      node = super.parseParenItem(node, startPos, startLoc);
+      node = super.parseParenItem(node, startLoc);
       if (this.eat(tt.question)) {
         node.optional = true;
         // Include questionmark in location of node
@@ -2211,7 +2200,7 @@ export default (superClass: typeof Parser) =>
       }
 
       if (this.match(tt.colon)) {
-        const typeCastNode = this.startNodeAt(startPos, startLoc);
+        const typeCastNode = this.startNodeAt(startLoc);
         typeCastNode.expression = node;
         typeCastNode.typeAnnotation = this.flowParseTypeAnnotation();
 
@@ -2636,7 +2625,6 @@ export default (superClass: typeof Parser) =>
     // parse type parameters for object method shorthand
     parseObjPropValue(
       prop: Undone<N.ObjectMethod | N.ObjectProperty>,
-      startPos: number | undefined | null,
       startLoc: Position | undefined | null,
       isGenerator: boolean,
       isAsync: boolean,
@@ -2659,7 +2647,6 @@ export default (superClass: typeof Parser) =>
 
       const result = super.parseObjPropValue(
         prop,
-        startPos,
         startLoc,
         isGenerator,
         isAsync,
@@ -2702,11 +2689,10 @@ export default (superClass: typeof Parser) =>
     }
 
     parseMaybeDefault(
-      startPos?: number | null,
       startLoc?: Position | null,
       left?: N.Pattern | null,
     ): N.Pattern {
-      const node = super.parseMaybeDefault(startPos, startLoc, left);
+      const node = super.parseMaybeDefault(startLoc, left);
 
       if (
         node.type === "AssignmentPattern" &&
@@ -3164,18 +3150,18 @@ export default (superClass: typeof Parser) =>
 
     parseSubscripts(
       base: N.Expression,
-      startPos: number,
+
       startLoc: Position,
       noCalls?: boolean | null,
     ): N.Expression {
       if (
         base.type === "Identifier" &&
         base.name === "async" &&
-        this.state.noArrowAt.indexOf(startPos) !== -1
+        this.state.noArrowAt.indexOf(startLoc.index) !== -1
       ) {
         this.next();
 
-        const node = this.startNodeAt(startPos, startLoc);
+        const node = this.startNodeAt(startLoc);
         node.callee = base;
         node.arguments = super.parseCallExpressionArguments(tt.parenR, false);
         base = this.finishNode(node, "CallExpression");
@@ -3186,9 +3172,7 @@ export default (superClass: typeof Parser) =>
       ) {
         const state = this.state.clone();
         const arrow = this.tryParse(
-          abort =>
-            this.parseAsyncArrowWithTypeParameters(startPos, startLoc) ||
-            abort(),
+          abort => this.parseAsyncArrowWithTypeParameters(startLoc) || abort(),
           state,
         );
 
@@ -3197,7 +3181,7 @@ export default (superClass: typeof Parser) =>
         if (!arrow.error && !arrow.aborted) return arrow.node;
 
         const result = this.tryParse(
-          () => super.parseSubscripts(base, startPos, startLoc, noCalls),
+          () => super.parseSubscripts(base, startLoc, noCalls),
           state,
         );
 
@@ -3217,12 +3201,12 @@ export default (superClass: typeof Parser) =>
         throw arrow.error || result.error;
       }
 
-      return super.parseSubscripts(base, startPos, startLoc, noCalls);
+      return super.parseSubscripts(base, startLoc, noCalls);
     }
 
     parseSubscript(
       base: N.Expression,
-      startPos: number,
+
       startLoc: Position,
       noCalls: boolean | undefined | null,
       subscriptState: N.ParseSubscriptState,
@@ -3234,10 +3218,7 @@ export default (superClass: typeof Parser) =>
           return base;
         }
         this.next();
-        const node = this.startNodeAt<N.OptionalCallExpression>(
-          startPos,
-          startLoc,
-        );
+        const node = this.startNodeAt<N.OptionalCallExpression>(startLoc);
         node.callee = base;
         node.typeArguments = this.flowParseTypeParameterInstantiation();
         this.expect(tt.parenL);
@@ -3247,7 +3228,7 @@ export default (superClass: typeof Parser) =>
       } else if (!noCalls && this.shouldParseTypes() && this.match(tt.lt)) {
         const node = this.startNodeAt<
           N.OptionalCallExpression | N.CallExpression
-        >(startPos, startLoc);
+        >(startLoc);
         node.callee = base;
 
         const result = this.tryParse(() => {
@@ -3272,7 +3253,7 @@ export default (superClass: typeof Parser) =>
 
       return super.parseSubscript(
         base,
-        startPos,
+
         startLoc,
         noCalls,
         subscriptState,
@@ -3292,13 +3273,9 @@ export default (superClass: typeof Parser) =>
     }
 
     parseAsyncArrowWithTypeParameters(
-      startPos: number,
       startLoc: Position,
     ): N.ArrowFunctionExpression | undefined | null {
-      const node = this.startNodeAt<N.ArrowFunctionExpression>(
-        startPos,
-        startLoc,
-      );
+      const node = this.startNodeAt<N.ArrowFunctionExpression>(startLoc);
       this.parseFunctionParams(node);
       if (!this.parseArrow(node)) return;
       return super.parseArrowExpression(

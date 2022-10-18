@@ -349,14 +349,12 @@ export default (superClass: typeof Parser) =>
 
     parseObjectProperty(
       prop: N.ObjectProperty,
-      startPos: number | undefined | null,
       startLoc: Position | undefined | null,
       isPattern: boolean,
       refExpressionErrors?: ExpressionErrors | null,
     ): N.ObjectProperty | undefined | null {
       const node: N.EstreeProperty = super.parseObjectProperty(
         prop,
-        startPos,
         startLoc,
         isPattern,
         refExpressionErrors,
@@ -483,18 +481,11 @@ export default (superClass: typeof Parser) =>
 
     parseSubscript(
       base: N.Expression,
-      startPos: number,
       startLoc: Position,
       noCalls: boolean | undefined | null,
       state: N.ParseSubscriptState,
     ) {
-      const node = super.parseSubscript(
-        base,
-        startPos,
-        startLoc,
-        noCalls,
-        state,
-      );
+      const node = super.parseSubscript(base, startLoc, noCalls, state);
 
       if (state.optionalChainMember) {
         // https://github.com/estree/estree/blob/master/es2020.md#chainexpression
@@ -547,8 +538,8 @@ export default (superClass: typeof Parser) =>
       return toESTreeLocation(super.finishNodeAt(node, type, endLoc));
     }
 
-    resetStartLocation(node: N.Node, start: number, startLoc: Position) {
-      super.resetStartLocation(node, start, startLoc);
+    resetStartLocation(node: N.Node, startLoc: Position) {
+      super.resetStartLocation(node, startLoc);
       toESTreeLocation(node);
     }
 

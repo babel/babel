@@ -42,7 +42,10 @@ import {
   isIdentifierStart,
   canBeReservedWord,
 } from "../util/identifier";
-import { Position, createPositionWithColumnOffset } from "../util/location";
+import {
+  type Position,
+  createPositionWithColumnOffset,
+} from "../util/location";
 import * as charCodes from "charcodes";
 import {
   BIND_OUTSIDE,
@@ -223,11 +226,10 @@ export default abstract class ExpressionParser extends LValParser {
     this: Parser,
     refExpressionErrors?: ExpressionErrors,
   ): N.Expression {
-    const startPos = this.state.start;
     const startLoc = this.state.startLoc;
     const expr = this.parseMaybeAssign(refExpressionErrors);
     if (this.match(tt.comma)) {
-      const node = this.startNodeAt(startPos, startLoc);
+      const node = this.startNodeAt(startLoc);
       node.expressions = [expr];
       while (this.eat(tt.comma)) {
         node.expressions.push(this.parseMaybeAssign(refExpressionErrors));
@@ -278,13 +280,12 @@ export default abstract class ExpressionParser extends LValParser {
     refExpressionErrors?: ExpressionErrors | null,
     afterLeftParse?: Function,
   ): N.Expression {
-    const startPos = this.state.start;
     const startLoc = this.state.startLoc;
     if (this.isContextual(tt._yield)) {
       if (this.prodParam.hasYield) {
         let left = this.parseYield();
         if (afterLeftParse) {
-          left = afterLeftParse.call(this, left, startPos, startLoc);
+          left = afterLeftParse.call(this, left, startLoc);
         }
         return left;
       }
@@ -305,10 +306,10 @@ export default abstract class ExpressionParser extends LValParser {
 
     let left = this.parseMaybeConditional(refExpressionErrors);
     if (afterLeftParse) {
-      left = afterLeftParse.call(this, left, startPos, startLoc);
+      left = afterLeftParse.call(this, left, startLoc);
     }
     if (tokenIsAssignment(this.state.type)) {
-      const node = this.startNodeAt<N.AssignmentExpression>(startPos, startLoc);
+      const node = this.startNodeAt<N.AssignmentExpression>(startLoc);
       const operator = this.state.value;
       node.operator = operator;
 
@@ -316,21 +317,22 @@ export default abstract class ExpressionParser extends LValParser {
         this.toAssignable(left, /* isLHS */ true);
         node.left = left;
 
+        const startIndex = startLoc.index;
         if (
           refExpressionErrors.doubleProtoLoc != null &&
-          refExpressionErrors.doubleProtoLoc.index >= startPos
+          refExpressionErrors.doubleProtoLoc.index >= startIndex
         ) {
           refExpressionErrors.doubleProtoLoc = null; // reset because double __proto__ is valid in assignment expression
         }
         if (
           refExpressionErrors.shorthandAssignLoc != null &&
-          refExpressionErrors.shorthandAssignLoc.index >= startPos
+          refExpressionErrors.shorthandAssignLoc.index >= startIndex
         ) {
           refExpressionErrors.shorthandAssignLoc = null; // reset because shorthand default was used correctly
         }
         if (
           refExpressionErrors.privateKeyLoc != null &&
-          refExpressionErrors.privateKeyLoc.index >= startPos
+          refExpressionErrors.privateKeyLoc.index >= startIndex
         ) {
           this.checkDestructuringPrivate(refExpressionErrors);
           refExpressionErrors.privateKeyLoc = null; // reset because `({ #x: x })` is an assignable pattern
@@ -360,7 +362,6 @@ export default abstract class ExpressionParser extends LValParser {
     this: Parser,
     refExpressionErrors: ExpressionErrors,
   ): N.Expression {
-    const startPos = this.state.start;
     const startLoc = this.state.startLoc;
     const potentialArrowAt = this.state.potentialArrowAt;
     const expr = this.parseExprOps(refExpressionErrors);
@@ -369,19 +370,18 @@ export default abstract class ExpressionParser extends LValParser {
       return expr;
     }
 
-    return this.parseConditional(expr, startPos, startLoc, refExpressionErrors);
+    return this.parseConditional(expr, startLoc, refExpressionErrors);
   }
 
   parseConditional(
     this: Parser,
     expr: N.Expression,
-    startPos: number,
     startLoc: Position,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     refExpressionErrors?: ExpressionErrors | null,
   ): N.Expression {
     if (this.eat(tt.question)) {
-      const node = this.startNodeAt(startPos, startLoc);
+      const node = this.startNodeAt(startLoc);
       node.test = expr;
       node.consequent = this.parseMaybeAssignAllowIn();
       this.expect(tt.colon);
@@ -407,7 +407,6 @@ export default abstract class ExpressionParser extends LValParser {
     this: Parser,
     refExpressionErrors: ExpressionErrors,
   ): N.Expression {
-    const startPos = this.state.start;
     const startLoc = this.state.startLoc;
     const potentialArrowAt = this.state.potentialArrowAt;
     const expr = this.parseMaybeUnaryOrPrivate(refExpressionErrors);
@@ -416,7 +415,7 @@ export default abstract class ExpressionParser extends LValParser {
       return expr;
     }
 
-    return this.parseExprOp(expr, startPos, startLoc, -1);
+    return this.parseExprOp(expr, startLoc, -1);
   }
 
   // Parse binary operators with the operator precedence parsing
@@ -428,7 +427,6 @@ export default abstract class ExpressionParser extends LValParser {
   parseExprOp(
     this: Parser,
     left: N.Expression | N.PrivateName,
-    leftStartPos: number,
     leftStartLoc: Position,
     minPrec: number,
   ): N.Expression {
@@ -465,7 +463,6 @@ export default abstract class ExpressionParser extends LValParser {
           this.checkPipelineAtInfixOperator(left, leftStartLoc);
         }
         const node = this.startNodeAt<N.LogicalExpression | N.BinaryExpression>(
-          leftStartPos,
           leftStartLoc,
         );
         node.left = left;
@@ -513,12 +510,7 @@ export default abstract class ExpressionParser extends LValParser {
           });
         }
 
-        return this.parseExprOp(
-          finishedNode,
-          leftStartPos,
-          leftStartLoc,
-          minPrec,
-        );
+        return this.parseExprOp(finishedNode, leftStartLoc, minPrec);
       }
     }
     return left;
@@ -532,7 +524,6 @@ export default abstract class ExpressionParser extends LValParser {
     op: TokenType,
     prec: number,
   ): N.Expression {
-    const startPos = this.state.start;
     const startLoc = this.state.startLoc;
     switch (op) {
       case tt.pipeline:
@@ -551,7 +542,6 @@ export default abstract class ExpressionParser extends LValParser {
               }
               return this.parseSmartPipelineBodyInStyle(
                 this.parseExprOpBaseRightExpr(op, prec),
-                startPos,
                 startLoc,
               );
             });
@@ -576,12 +566,10 @@ export default abstract class ExpressionParser extends LValParser {
     op: TokenType,
     prec: number,
   ): N.Expression {
-    const startPos = this.state.start;
     const startLoc = this.state.startLoc;
 
     return this.parseExprOp(
       this.parseMaybeUnaryOrPrivate(),
-      startPos,
       startLoc,
       tokenIsRightAssociative(op) ? prec - 1 : prec,
     );
@@ -628,13 +616,12 @@ export default abstract class ExpressionParser extends LValParser {
     refExpressionErrors?: ExpressionErrors | null,
     sawUnary?: boolean,
   ): N.Expression {
-    const startPos = this.state.start;
     const startLoc = this.state.startLoc;
     const isAwait = this.isContextual(tt._await);
 
     if (isAwait && this.isAwaitAllowed()) {
       this.next();
-      const expr = this.parseAwait(startPos, startLoc);
+      const expr = this.parseAwait(startLoc);
       if (!sawUnary) this.checkExponentialAfterUnary(expr);
       return expr;
     }
@@ -686,7 +673,7 @@ export default abstract class ExpressionParser extends LValParser {
         : tokenCanStartExpression(type) && !this.match(tt.modulo);
       if (startsExpr && !this.isAmbiguousAwait()) {
         this.raiseOverwrite(Errors.AwaitNotInAsyncContext, { at: startLoc });
-        return this.parseAwait(startPos, startLoc);
+        return this.parseAwait(startLoc);
       }
     }
 
@@ -709,12 +696,11 @@ export default abstract class ExpressionParser extends LValParser {
       return node;
     }
 
-    const startPos = this.state.start;
     const startLoc = this.state.startLoc;
     let expr = this.parseExprSubscripts(refExpressionErrors);
     if (this.checkExpressionErrors(refExpressionErrors, false)) return expr;
     while (tokenIsPostfix(this.state.type) && !this.canInsertSemicolon()) {
-      const node = this.startNodeAt<N.UpdateExpression>(startPos, startLoc);
+      const node = this.startNodeAt<N.UpdateExpression>(startLoc);
       node.operator = this.state.value;
       node.prefix = false;
       node.argument = expr;
@@ -732,7 +718,6 @@ export default abstract class ExpressionParser extends LValParser {
     this: Parser,
     refExpressionErrors?: ExpressionErrors | null,
   ): N.Expression {
-    const startPos = this.state.start;
     const startLoc = this.state.startLoc;
     const potentialArrowAt = this.state.potentialArrowAt;
     const expr = this.parseExprAtom(refExpressionErrors);
@@ -741,13 +726,12 @@ export default abstract class ExpressionParser extends LValParser {
       return expr;
     }
 
-    return this.parseSubscripts(expr, startPos, startLoc);
+    return this.parseSubscripts(expr, startLoc);
   }
 
   parseSubscripts(
     this: Parser,
     base: N.Expression,
-    startPos: number,
     startLoc: Position,
     noCalls?: boolean | null,
   ): N.Expression {
@@ -757,7 +741,7 @@ export default abstract class ExpressionParser extends LValParser {
       stop: false,
     };
     do {
-      base = this.parseSubscript(base, startPos, startLoc, noCalls, state);
+      base = this.parseSubscript(base, startLoc, noCalls, state);
 
       // After parsing a subscript, this isn't "async" for sure.
       state.maybeAsyncArrow = false;
@@ -772,21 +756,15 @@ export default abstract class ExpressionParser extends LValParser {
   parseSubscript(
     this: Parser,
     base: N.Expression,
-    startPos: number,
     startLoc: Position,
     noCalls: boolean | undefined | null,
     state: N.ParseSubscriptState,
   ): N.Expression {
     const { type } = this.state;
     if (!noCalls && type === tt.doubleColon) {
-      return this.parseBind(base, startPos, startLoc, noCalls, state);
+      return this.parseBind(base, startLoc, noCalls, state);
     } else if (tokenIsTemplate(type)) {
-      return this.parseTaggedTemplateExpression(
-        base,
-        startPos,
-        startLoc,
-        state,
-      );
+      return this.parseTaggedTemplateExpression(base, startLoc, state);
     }
 
     let optional = false;
@@ -804,7 +782,6 @@ export default abstract class ExpressionParser extends LValParser {
     if (!noCalls && this.match(tt.parenL)) {
       return this.parseCoverCallAndAsyncArrowHead(
         base,
-        startPos,
         startLoc,
         state,
         optional,
@@ -812,14 +789,7 @@ export default abstract class ExpressionParser extends LValParser {
     } else {
       const computed = this.eat(tt.bracketL);
       if (computed || optional || this.eat(tt.dot)) {
-        return this.parseMember(
-          base,
-          startPos,
-          startLoc,
-          state,
-          computed,
-          optional,
-        );
+        return this.parseMember(base, startLoc, state, computed, optional);
       } else {
         state.stop = true;
         return base;
@@ -834,7 +804,6 @@ export default abstract class ExpressionParser extends LValParser {
   parseMember(
     this: Parser,
     base: N.Expression,
-    startPos: number,
     startLoc: Position,
     state: N.ParseSubscriptState,
     computed: boolean,
@@ -842,7 +811,7 @@ export default abstract class ExpressionParser extends LValParser {
   ): N.OptionalMemberExpression | N.MemberExpression {
     const node = this.startNodeAt<
       N.OptionalMemberExpression | N.MemberExpression
-    >(startPos, startLoc);
+    >(startLoc);
     node.object = base;
     node.computed = computed;
     if (computed) {
@@ -870,19 +839,17 @@ export default abstract class ExpressionParser extends LValParser {
   parseBind(
     this: Parser,
     base: N.Expression,
-    startPos: number,
     startLoc: Position,
     noCalls: boolean | undefined | null,
     state: N.ParseSubscriptState,
   ): N.Expression {
-    const node = this.startNodeAt(startPos, startLoc);
+    const node = this.startNodeAt(startLoc);
     node.object = base;
     this.next(); // eat '::'
     node.callee = this.parseNoCallExpr();
     state.stop = true;
     return this.parseSubscripts(
       this.finishNode(node, "BindExpression"),
-      startPos,
       startLoc,
       noCalls,
     );
@@ -895,7 +862,6 @@ export default abstract class ExpressionParser extends LValParser {
   parseCoverCallAndAsyncArrowHead(
     this: Parser,
     base: N.Expression,
-    startPos: number,
     startLoc: Position,
     state: N.ParseSubscriptState,
     optional: boolean,
@@ -907,7 +873,6 @@ export default abstract class ExpressionParser extends LValParser {
     this.next(); // eat `(`
 
     const node = this.startNodeAt<N.CallExpression | N.OptionalCallExpression>(
-      startPos,
       startLoc,
     );
     node.callee = base;
@@ -950,7 +915,7 @@ export default abstract class ExpressionParser extends LValParser {
       this.expressionScope.validateAsPattern();
       this.expressionScope.exit();
       finishedNode = this.parseAsyncArrowFromCallExpression(
-        this.startNodeAt<N.ArrowFunctionExpression>(startPos, startLoc),
+        this.startNodeAt<N.ArrowFunctionExpression>(startLoc),
         finishedNode as N.CallExpression,
       );
     } else {
@@ -978,14 +943,10 @@ export default abstract class ExpressionParser extends LValParser {
   parseTaggedTemplateExpression(
     this: Parser,
     base: N.Expression,
-    startPos: number,
     startLoc: Position,
     state: N.ParseSubscriptState,
   ): N.TaggedTemplateExpression {
-    const node = this.startNodeAt<N.TaggedTemplateExpression>(
-      startPos,
-      startLoc,
-    );
+    const node = this.startNodeAt<N.TaggedTemplateExpression>(startLoc);
     node.tag = base;
     node.quasi = this.parseTemplate(true);
     if (state.optionalChainMember) {
@@ -1120,9 +1081,8 @@ export default abstract class ExpressionParser extends LValParser {
   // Parse a no-call expression (like argument of `new` or `::` operators).
   // https://tc39.es/ecma262/#prod-MemberExpression
   parseNoCallExpr(this: Parser): N.Expression {
-    const startPos = this.state.start;
     const startLoc = this.state.startLoc;
-    return this.parseSubscripts(this.parseExprAtom(), startPos, startLoc, true);
+    return this.parseSubscripts(this.parseExprAtom(), startLoc, true);
   }
 
   // Parse an atomic expression — either a single token that is an
@@ -1619,14 +1579,9 @@ export default abstract class ExpressionParser extends LValParser {
   parsePrivateName(): N.PrivateName {
     const node = this.startNode<N.PrivateName>();
     const id = this.startNodeAt<N.Identifier>(
-      this.state.start + 1,
       // The position is hardcoded because we merge `#` and name into a single
       // tt.privateName token
-      new Position(
-        this.state.curLine,
-        this.state.start + 1 - this.state.lineStart,
-        this.state.start + 1,
-      ),
+      createPositionWithColumnOffset(this.state.startLoc, 1),
     );
     const name = this.state.value;
     this.next(); // eat #name;
@@ -1773,7 +1728,6 @@ export default abstract class ExpressionParser extends LValParser {
     this: Parser,
     canBeArrow: boolean,
   ): N.Expression {
-    const startPos = this.state.start;
     const startLoc = this.state.startLoc;
 
     let val;
@@ -1785,7 +1739,6 @@ export default abstract class ExpressionParser extends LValParser {
     this.state.maybeInArrowParameters = true;
     this.state.inFSharpPipelineDirectBody = false;
 
-    const innerStartPos = this.state.start;
     const innerStartLoc = this.state.startLoc;
     const exprList: N.Expression[] = [];
     const refExpressionErrors = new ExpressionErrors();
@@ -1810,15 +1763,10 @@ export default abstract class ExpressionParser extends LValParser {
       }
 
       if (this.match(tt.ellipsis)) {
-        const spreadNodeStartPos = this.state.start;
         const spreadNodeStartLoc = this.state.startLoc;
         spreadStartLoc = this.state.startLoc;
         exprList.push(
-          this.parseParenItem(
-            this.parseRestBinding(),
-            spreadNodeStartPos,
-            spreadNodeStartLoc,
-          ),
+          this.parseParenItem(this.parseRestBinding(), spreadNodeStartLoc),
         );
 
         if (!this.checkCommaAfterRest(charCodes.rightParenthesis)) {
@@ -1840,10 +1788,7 @@ export default abstract class ExpressionParser extends LValParser {
     this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
     this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
 
-    let arrowNode = this.startNodeAt<N.ArrowFunctionExpression>(
-      startPos,
-      startLoc,
-    );
+    let arrowNode = this.startNodeAt<N.ArrowFunctionExpression>(startLoc);
     if (
       canBeArrow &&
       this.shouldParseArrow(exprList) &&
@@ -1867,10 +1812,7 @@ export default abstract class ExpressionParser extends LValParser {
 
     this.toReferencedListDeep(exprList, /* isParenthesizedExpr */ true);
     if (exprList.length > 1) {
-      val = this.startNodeAt<N.SequenceExpression>(
-        innerStartPos,
-        innerStartLoc,
-      );
+      val = this.startNodeAt<N.SequenceExpression>(innerStartLoc);
       val.expressions = exprList;
       // finish node at current location so it can pick up comments after `)`
       this.finishNode(val, "SequenceExpression");
@@ -1880,35 +1822,28 @@ export default abstract class ExpressionParser extends LValParser {
     }
 
     return this.wrapParenthesis(
-      startPos,
       startLoc,
       // @ts-expect-error todo(flow->ts)
       val,
     );
   }
 
-  wrapParenthesis(
-    startPos: number,
-    startLoc: Position,
-    expression: N.Expression,
-  ): N.Expression {
+  wrapParenthesis(startLoc: Position, expression: N.Expression): N.Expression {
     if (!this.options.createParenthesizedExpressions) {
       this.addExtra(expression, "parenthesized", true);
-      this.addExtra(expression, "parenStart", startPos);
+      this.addExtra(expression, "parenStart", startLoc.index);
 
       this.takeSurroundingComments(
         expression,
-        startPos,
+        startLoc.index,
         this.state.lastTokEndLoc.index,
       );
 
       return expression;
     }
 
-    const parenExpression = this.startNodeAt<N.ParenthesizedExpression>(
-      startPos,
-      startLoc,
-    );
+    const parenExpression =
+      this.startNodeAt<N.ParenthesizedExpression>(startLoc);
     parenExpression.expression = expression;
     return this.finishNode(parenExpression, "ParenthesizedExpression");
   }
@@ -1928,8 +1863,6 @@ export default abstract class ExpressionParser extends LValParser {
 
   parseParenItem(
     node: N.Expression,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    startPos: number,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     startLoc: Position,
   ): N.Expression {
@@ -2004,7 +1937,6 @@ export default abstract class ExpressionParser extends LValParser {
     const { start, startLoc, end, value } = this.state;
     const elemStart = start + 1;
     const elem = this.startNodeAt<N.TemplateElement>(
-      elemStart,
       createPositionWithColumnOffset(startLoc, 1),
     );
     if (value === null) {
@@ -2189,7 +2121,6 @@ export default abstract class ExpressionParser extends LValParser {
     const prop = this.startNode<N.ObjectProperty>();
     let isAsync = false;
     let isAccessor = false;
-    let startPos;
     let startLoc;
 
     if (this.match(tt.ellipsis)) {
@@ -2205,7 +2136,6 @@ export default abstract class ExpressionParser extends LValParser {
     prop.method = false;
 
     if (refExpressionErrors) {
-      startPos = this.state.start;
       startLoc = this.state.startLoc;
     }
 
@@ -2244,7 +2174,6 @@ export default abstract class ExpressionParser extends LValParser {
 
     return this.parseObjPropValue(
       prop,
-      startPos,
       startLoc,
       isGenerator,
       isAsync,
@@ -2331,7 +2260,6 @@ export default abstract class ExpressionParser extends LValParser {
   parseObjectProperty(
     this: Parser,
     prop: Undone<N.ObjectProperty>,
-    startPos: number | undefined | null,
     startLoc: Position | undefined | null,
     isPattern: boolean,
     refExpressionErrors?: ExpressionErrors | null,
@@ -2340,7 +2268,7 @@ export default abstract class ExpressionParser extends LValParser {
 
     if (this.eat(tt.colon)) {
       prop.value = isPattern
-        ? this.parseMaybeDefault(this.state.start, this.state.startLoc)
+        ? this.parseMaybeDefault(this.state.startLoc)
         : this.parseMaybeAssignAllowIn(refExpressionErrors);
 
       return this.finishNode(prop, "ObjectProperty");
@@ -2355,7 +2283,6 @@ export default abstract class ExpressionParser extends LValParser {
 
       if (isPattern) {
         prop.value = this.parseMaybeDefault(
-          startPos,
           startLoc,
           cloneIdentifier(prop.key),
         );
@@ -2371,7 +2298,6 @@ export default abstract class ExpressionParser extends LValParser {
           });
         }
         prop.value = this.parseMaybeDefault(
-          startPos,
           startLoc,
           cloneIdentifier(prop.key),
         );
@@ -2387,7 +2313,6 @@ export default abstract class ExpressionParser extends LValParser {
   parseObjPropValue(
     this: Parser,
     prop: Undone<N.ObjectMethod | N.ObjectProperty>,
-    startPos: number | undefined | null,
     startLoc: Position | undefined | null,
     isGenerator: boolean,
     isAsync: boolean,
@@ -2405,7 +2330,6 @@ export default abstract class ExpressionParser extends LValParser {
       ) ||
       this.parseObjectProperty(
         prop as Undone<N.ObjectProperty>,
-        startPos,
         startLoc,
         isPattern,
         refExpressionErrors,
@@ -2781,12 +2705,10 @@ export default abstract class ExpressionParser extends LValParser {
       }
       elt = null;
     } else if (this.match(tt.ellipsis)) {
-      const spreadNodeStartPos = this.state.start;
       const spreadNodeStartLoc = this.state.startLoc;
 
       elt = this.parseParenItem(
         this.parseSpread(refExpressionErrors),
-        spreadNodeStartPos,
         spreadNodeStartLoc,
       );
     } else if (this.match(tt.question)) {
@@ -2816,7 +2738,7 @@ export default abstract class ExpressionParser extends LValParser {
 
   parseIdentifier(liberal?: boolean): N.Identifier {
     const node = this.startNode<N.Identifier>();
-    const name = this.parseIdentifierName(node.start, liberal);
+    const name = this.parseIdentifierName(liberal);
 
     return this.createIdentifier(node, name);
   }
@@ -2831,7 +2753,7 @@ export default abstract class ExpressionParser extends LValParser {
     return this.finishNode(node, "Identifier");
   }
 
-  parseIdentifierName(pos: number, liberal?: boolean): string {
+  parseIdentifierName(liberal?: boolean): string {
     let name: string;
 
     const { startLoc, type } = this.state;
@@ -2933,12 +2855,8 @@ export default abstract class ExpressionParser extends LValParser {
 
   // Parses await expression inside async function.
 
-  parseAwait(
-    this: Parser,
-    startPos: number,
-    startLoc: Position,
-  ): N.AwaitExpression {
-    const node = this.startNodeAt<N.AwaitExpression>(startPos, startLoc);
+  parseAwait(this: Parser, startLoc: Position): N.AwaitExpression {
+    const node = this.startNodeAt<N.AwaitExpression>(startLoc);
 
     this.expressionScope.recordParameterInitializerError(
       Errors.AwaitExpressionFormalParameter,
@@ -3043,23 +2961,13 @@ export default abstract class ExpressionParser extends LValParser {
     }
   }
 
-  parseSmartPipelineBodyInStyle(
-    childExpr: N.Expression,
-    startPos: number,
-    startLoc: Position,
-  ) {
+  parseSmartPipelineBodyInStyle(childExpr: N.Expression, startLoc: Position) {
     if (this.isSimpleReference(childExpr)) {
-      const bodyNode = this.startNodeAt<N.PipelineBareFunction>(
-        startPos,
-        startLoc,
-      );
+      const bodyNode = this.startNodeAt<N.PipelineBareFunction>(startLoc);
       bodyNode.callee = childExpr;
       return this.finishNode(bodyNode, "PipelineBareFunction");
     } else {
-      const bodyNode = this.startNodeAt<N.PipelineTopicExpression>(
-        startPos,
-        startLoc,
-      );
+      const bodyNode = this.startNodeAt<N.PipelineTopicExpression>(startLoc);
       this.checkSmartPipeTopicBodyEarlyErrors(startLoc);
       bodyNode.expression = childExpr;
       return this.finishNode(bodyNode, "PipelineTopicExpression");
@@ -3212,7 +3120,6 @@ export default abstract class ExpressionParser extends LValParser {
   }
 
   parseFSharpPipelineBody(this: Parser, prec: number): N.Expression {
-    const startPos = this.state.start;
     const startLoc = this.state.startLoc;
 
     this.state.potentialArrowAt = this.state.start;
@@ -3221,7 +3128,6 @@ export default abstract class ExpressionParser extends LValParser {
 
     const ret = this.parseExprOp(
       this.parseMaybeUnaryOrPrivate(),
-      startPos,
       startLoc,
       prec,
     );
