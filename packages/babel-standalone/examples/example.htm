@@ -25,7 +25,7 @@ const someDiv = <div>{getMessage()}</div>;
 
     function transform() {
       try {
-        outputEl.innerHTML = Babel.transformSync(inputEl.value, {
+        outputEl.innerHTML = Babel.transform(inputEl.value, {
           presets: [
             "es2015",
             "react",
