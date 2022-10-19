@@ -411,7 +411,7 @@ jobs:
         run: yarn test:runtime:generate-absolute-runtime
       - name: Test bundlers
         run: yarn test:runtime:bundlers
-      - name: Test Node.js
+      - name: Test Node.js latest
         run: node test/runtime-integration/node.cjs
       - name: Use Node.js 10
         uses: actions/setup-node@v3
