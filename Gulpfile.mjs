@@ -176,7 +176,7 @@ async function generateRuntimeHelpers() {
   );
 }
 
-const kebabToCamel = str => str.replaceAll(/-[a-z]/g, c => c[1].toUpperCase());
+const kebabToCamel = str => str.replace(/-[a-z]/g, c => c[1].toUpperCase());
 
 function generateStandalone() {
   const dest = "./packages/babel-standalone/src/generated/";
