@@ -101,7 +101,10 @@ function writeCorejsExports(pkgDirname, runtimeRoot, paths) {
   const pkgJson = require(pkgJsonPath);
   const exports = pkgJson.exports;
   // Export `./core-js/` so `import "@babel/runtime-corejs3/core-js/some-feature.js"` works
+  // Node < 17
   exports[`./${runtimeRoot}/`] = `./${runtimeRoot}/`;
+  // Node >= 17
+  exports[`./${runtimeRoot}/*.js`] = `./${runtimeRoot}/*.js`;
   for (const corejsPath of paths) {
     // Export `./core-js/some-feature` so `import "@babel/runtime-corejs3/core-js/some-feature"` also works
     const corejsExportPath = `./${runtimeRoot}/${corejsPath}`;
@@ -188,6 +191,7 @@ function writeHelperExports(runtimeName, helperSubExports) {
     // These patterns are deprecated, but since patterns
     // containing * are not supported in every Node.js
     // version we keep them for better compatibility.
+    // For node < 17
     "./regenerator/": "./regenerator/",
   };
   const pkgDirname = getRuntimeRoot(runtimeName);
