@@ -508,7 +508,6 @@ jobs:
         with:
           node-version: latest
           check-latest: true
-          cache: "yarn"
       - name: Checkout test runner
         uses: actions/checkout@v3
         with:
@@ -545,7 +544,6 @@ jobs:
         with:
           node-version: latest
           check-latest: true
-          cache: "yarn"
       - name: Install
         run: yarn install
       - uses: actions/download-artifact@v3
