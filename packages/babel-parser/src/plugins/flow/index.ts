@@ -3348,7 +3348,7 @@ export default (superClass: typeof Parser) =>
             at: this.state.curPosition(),
           });
         }
-        this.state.pos = end + 2 + 3;
+        this.state.pos = end + 3;
         return;
       }
 
