@@ -3142,18 +3142,21 @@ export default abstract class ExpressionParser extends LValParser {
     this.expectPlugin("moduleBlocks");
     const node = this.startNode<N.ModuleExpression>();
     this.next(); // eat "module"
-    this.expect(tt.braceL);
+    if (!this.match(tt.braceL)) {
+      this.unexpected(null, tt.braceL);
+    }
+    // start program node immediately after `{`
+    const program = this.startNodeAt<N.Program>(this.state.endLoc);
+    this.next(); // eat `{`
 
     const revertScopes = this.initializeScopes(/** inModule */ true);
     this.enterInitialScopes();
 
-    const program = this.startNode<N.Program>();
     try {
       node.body = this.parseProgram(program, tt.braceR, "module");
     } finally {
       revertScopes();
     }
-    this.eat(tt.braceR);
     return this.finishNode<N.ModuleExpression>(node, "ModuleExpression");
   }
 
