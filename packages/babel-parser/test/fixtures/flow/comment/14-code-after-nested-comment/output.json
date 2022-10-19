@@ -29,7 +29,14 @@
                     "type": "Identifier",
                     "start":27,"end":28,"loc":{"start":{"line":1,"column":27,"index":27},"end":{"line":1,"column":28,"index":28},"identifierName":"T"},
                     "name": "T"
-                  }
+                  },
+                  "leadingComments": [
+                    {
+                      "type": "CommentBlock",
+                      "value": " comment ",
+                      "start":13,"end":27,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":27,"index":27}}
+                    }
+                  ]
                 }
               }
             },
@@ -72,7 +79,14 @@
                         "type": "Identifier",
                         "start":78,"end":84,"loc":{"start":{"line":3,"column":44,"index":78},"end":{"line":3,"column":50,"index":84},"identifierName":"Object"},
                         "name": "Object"
-                      }
+                      },
+                      "leadingComments": [
+                        {
+                          "type": "CommentBlock",
+                          "value": " this is an object ",
+                          "start":53,"end":77,"loc":{"start":{"line":3,"column":19,"index":53},"end":{"line":3,"column":43,"index":77}}
+                        }
+                      ]
                     }
                   }
                 }
@@ -90,5 +104,17 @@
       }
     ],
     "directives": []
-  }
+  },
+  "comments": [
+    {
+      "type": "CommentBlock",
+      "value": " comment ",
+      "start":13,"end":27,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":27,"index":27}}
+    },
+    {
+      "type": "CommentBlock",
+      "value": " this is an object ",
+      "start":53,"end":77,"loc":{"start":{"line":3,"column":19,"index":53},"end":{"line":3,"column":43,"index":77}}
+    }
+  ]
 }

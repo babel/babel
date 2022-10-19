@@ -3341,18 +3341,7 @@ export default (superClass: typeof Parser) =>
         return;
       }
 
-      if (this.state.hasFlowComment) {
-        const end = this.input.indexOf("*-/", this.state.pos + 2);
-        if (end === -1) {
-          throw this.raise(Errors.UnterminatedComment, {
-            at: this.state.curPosition(),
-          });
-        }
-        this.state.pos = end + 3;
-        return;
-      }
-
-      return super.skipBlockComment();
+      return super.skipBlockComment(this.state.hasFlowComment ? "*-/" : "*/");
     }
 
     skipFlowComment(): number | false {
