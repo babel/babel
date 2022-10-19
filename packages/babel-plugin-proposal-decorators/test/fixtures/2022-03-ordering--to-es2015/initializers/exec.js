@@ -47,6 +47,9 @@ class A {
   accessor #h;
 }
 
+var nums = Array.from({ length: 46 }, (_, i) => i);
+expect(log).toEqual(nums);
+
 new A();
 
 var nums = Array.from({ length: 54 }, (_, i) => i);

@@ -524,6 +524,7 @@ function transformClass(
 
   const elementDecoratorInfo: (DecoratorInfo | ComputedPropInfo)[] = [];
 
+  // The initializer of the first non-static field will be injected with the protoInit call
   let firstFieldPath:
     | NodePath<t.ClassProperty | t.ClassPrivateProperty>
     | undefined;
@@ -767,7 +768,11 @@ function transformClass(
           element.node.decorators = null;
         }
 
-        if (!firstFieldPath && (kind === FIELD || kind === ACCESSOR)) {
+        if (
+          !firstFieldPath &&
+          !isStatic &&
+          (kind === FIELD || kind === ACCESSOR)
+        ) {
           firstFieldPath = element as NodePath<
             t.ClassProperty | t.ClassPrivateProperty
           >;
