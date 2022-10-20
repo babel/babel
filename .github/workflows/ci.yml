@@ -19,7 +19,8 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v3
         with:
-          node-version: "*"
+          node-version: latest
+          check-latest: true
           cache: "yarn"
       - name: 'Check or update Yarn cache (fix w/ "yarn install")'
         env:
@@ -38,7 +39,8 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v3
         with:
-          node-version: "*"
+          node-version: latest
+          check-latest: true
           cache: "yarn"
       - name: 'Check for unmet constraints (fix w/ "yarn constraints --fix")'
         run: |
@@ -60,7 +62,8 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: latest
+          check-latest: true
           cache: "yarn"
       - name: Generate coverage report
         run: |
@@ -79,7 +82,8 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v3
         with:
-          node-version: "*"
+          node-version: latest
+          check-latest: true
           cache: "yarn"
       - name: Use ESM and build
         run: make use-esm
@@ -106,7 +110,8 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v3
         with:
-          node-version: "*"
+          node-version: latest
+          check-latest: true
           cache: "yarn"
       - name: Build babel artifacts
         run: |
@@ -142,7 +147,8 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v3
         with:
-          node-version: "*"
+          node-version: latest
+          check-latest: true
           cache: "yarn"
       - name: Build babel artifacts
         shell: bash
@@ -165,7 +171,8 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v3
         with:
-          node-version: "*"
+          node-version: latest
+          check-latest: true
           cache: "yarn"
       - name: Install
         run: yarn install
@@ -182,14 +189,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [16, 14, 12, 10, 8, 6]
+        node-version: [18, 16, 14, 12, 10, 8, 6]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Use Node.js latest # Run yarn on latest node
         uses: actions/setup-node@v3
         with:
-          node-version: "*" # Build Babel on latest node LTS versions
+          node-version: latest
+          check-latest: true
           cache: "yarn"
       - name: Install
         run: |
@@ -232,7 +240,7 @@ jobs:
         if: matrix.node-version == '6' || matrix.node-version == '8' || matrix.node-version == '10'
         uses: actions/setup-node@v3
         with:
-          node-version: "*"
+          node-version: latest
 
   build-babel8:
     name: Build Babel 8 Artifacts for tests
@@ -315,7 +323,8 @@ jobs:
       - name: Use Node.js 18
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: latest
+          check-latest: true
           cache: "yarn"
       - name: Install
         run: yarn install
@@ -341,7 +350,8 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v3
         with:
-          node-version: "*"
+          node-version: latest
+          check-latest: true
           cache: "yarn"
       - name: Install
         run: yarn install
@@ -367,7 +377,8 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v3
         with:
-          node-version: "*"
+          node-version: latest
+          check-latest: true
           cache: "yarn"
       # See https://github.com/babel/babel/pull/12906
       - name: Support self-references on old Node.js
@@ -400,8 +411,8 @@ jobs:
         run: yarn test:runtime:generate-absolute-runtime
       - name: Test bundlers
         run: yarn test:runtime:bundlers
-      - name: Test Node.js
-        run: yarn test:runtime:node
+      - name: Test Node.js latest
+        run: node test/runtime-integration/node.cjs
       - name: Use Node.js 10
         uses: actions/setup-node@v3
         with:
@@ -413,55 +424,55 @@ jobs:
         with:
           node-version: "12.0" # quoted, otherwise it's just 13
       - name: Test Node.js 12.0
-        run: yarn test:runtime:node
+        run: node test/runtime-integration/node.cjs
       - name: Use Node.js 12.17
         uses: actions/setup-node@v3
         with:
           node-version: 12.17
       - name: Test Node.js  12.17
-        run: yarn test:runtime:node
+        run: node test/runtime-integration/node.cjs
       - name: Use Node.js 13.0
         uses: actions/setup-node@v3
         with:
           node-version: "13.0" # quoted, otherwise it's just 13
       - name: Test Node.js 13.0
-        run: yarn test:runtime:node
+        run: node test/runtime-integration/node.cjs
       - name: Use Node.js 13.2
         uses: actions/setup-node@v3
         with:
           node-version: 13.2
       - name: Test Node.js 13.2
-        run: yarn test:runtime:node
+        run: node test/runtime-integration/node.cjs
       - name: Use Node.js 13.6
         uses: actions/setup-node@v3
         with:
           node-version: 13.6
       - name: Test Node.js 13.6
-        run: yarn test:runtime:node
+        run: node test/runtime-integration/node.cjs
       - name: Use Node.js 13.7
         uses: actions/setup-node@v3
         with:
           node-version: 13.7
       - name: Test Node.js 13.7
-        run: yarn test:runtime:node
+        run: node test/runtime-integration/node.cjs
       - name: Use Node.js 14.2
         uses: actions/setup-node@v3
         with:
           node-version: 14.2
       - name: Test Node.js 14.2
-        run: yarn test:runtime:node
+        run: node test/runtime-integration/node.cjs
       - name: Use Node.js 16.5
         uses: actions/setup-node@v3
         with:
           node-version: 16.5
       - name: Test Node.js 16.5
-        run: yarn test:runtime:node
+        run: node test/runtime-integration/node.cjs
       - name: Use Node.js 16.6
         uses: actions/setup-node@v3
         with:
           node-version: 16.6
       - name: Test Node.js 16.6
-        run: yarn test:runtime:node
+        run: node test/runtime-integration/node.cjs
 
   eslint7-test:
     name: Test @babel/eslint-* with ESLint 7.5.0
@@ -473,7 +484,8 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v3
         with:
-          node-version: "*"
+          node-version: latest
+          check-latest: true
           cache: "yarn"
       - name: Install
         run: yarn install
@@ -493,6 +505,9 @@ jobs:
         uses: actions/checkout@v3
       - name: Use Node.js latest
         uses: actions/setup-node@v3
+        with:
+          node-version: latest
+          check-latest: true
       - name: Checkout test runner
         uses: actions/checkout@v3
         with:
@@ -527,8 +542,8 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v3
         with:
-          node-version: "*"
-          cache: "yarn"
+          node-version: latest
+          check-latest: true
       - name: Install
         run: yarn install
       - uses: actions/download-artifact@v3

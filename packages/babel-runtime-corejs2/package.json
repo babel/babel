@@ -888,6 +888,7 @@
     "./regenerator/*.js": "./regenerator/*.js",
     "./regenerator/": "./regenerator/",
     "./core-js/": "./core-js/",
+    "./core-js/*.js": "./core-js/*.js",
     "./core-js/is-iterable": "./core-js/is-iterable.js",
     "./core-js/get-iterator": "./core-js/get-iterator.js",
     "./core-js/symbol/async-iterator": "./core-js/symbol/async-iterator.js",

@@ -7,6 +7,7 @@ module.exports = {
   output: {
     path: __dirname,
     filename: "output-absolute.js",
+    hashFunction: "sha256",
   },
 
   devtool: false,
