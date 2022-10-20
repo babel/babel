@@ -1,8 +1,9 @@
 import fs from "fs";
+import { fileURLToPath } from "url";
 
 const standaloneURL = new URL("../packages/babel-standalone/", import.meta.url);
-const inStandalone = path => new URL(path, standaloneURL).pathname;
-
+const inStandalone = path =>
+  fileURLToPath(new URL(path, standaloneURL)).replace(/\\/g, "/");
 const { noopPlugins, unexposedNoopPlugins } = JSON.parse(
   fs.readFileSync(new URL("./scripts/pluginConfig.json", standaloneURL), "utf8")
 );
