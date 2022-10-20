@@ -2,10 +2,8 @@
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'yarn gulp generate-standalone'
  */
+import makeNoopPlugin from "../make-noop-plugin";
 import externalHelpers from "@babel/plugin-external-helpers";
-import syntaxAsyncGenerators from "@babel/plugin-syntax-async-generators";
-import syntaxClassProperties from "@babel/plugin-syntax-class-properties";
-import syntaxClassStaticBlock from "@babel/plugin-syntax-class-static-block";
 import syntaxDecimal from "@babel/plugin-syntax-decimal";
 import syntaxDecorators from "@babel/plugin-syntax-decorators";
 import syntaxDestructuringPrivate from "@babel/plugin-syntax-destructuring-private";
@@ -15,14 +13,10 @@ import syntaxFlow from "@babel/plugin-syntax-flow";
 import syntaxFunctionBind from "@babel/plugin-syntax-function-bind";
 import syntaxFunctionSent from "@babel/plugin-syntax-function-sent";
 import syntaxModuleBlocks from "@babel/plugin-syntax-module-blocks";
-import syntaxImportMeta from "@babel/plugin-syntax-import-meta";
 import syntaxJsx from "@babel/plugin-syntax-jsx";
 import syntaxImportAssertions from "@babel/plugin-syntax-import-assertions";
-import syntaxObjectRestSpread from "@babel/plugin-syntax-object-rest-spread";
-import syntaxOptionalCatchBinding from "@babel/plugin-syntax-optional-catch-binding";
 import syntaxPipelineOperator from "@babel/plugin-syntax-pipeline-operator";
 import syntaxRecordAndTuple from "@babel/plugin-syntax-record-and-tuple";
-import syntaxTopLevelAwait from "@babel/plugin-syntax-top-level-await";
 import syntaxTypescript from "@babel/plugin-syntax-typescript";
 import proposalAsyncGeneratorFunctions from "@babel/plugin-proposal-async-generator-functions";
 import proposalClassProperties from "@babel/plugin-proposal-class-properties";
@@ -101,11 +95,15 @@ import transformTypeofSymbol from "@babel/plugin-transform-typeof-symbol";
 import transformTypescript from "@babel/plugin-transform-typescript";
 import transformUnicodeEscapes from "@babel/plugin-transform-unicode-escapes";
 import transformUnicodeRegex from "@babel/plugin-transform-unicode-regex";
+export const syntaxAsyncGenerators = makeNoopPlugin(),
+  syntaxClassProperties = makeNoopPlugin(),
+  syntaxClassStaticBlock = makeNoopPlugin(),
+  syntaxImportMeta = makeNoopPlugin(),
+  syntaxObjectRestSpread = makeNoopPlugin(),
+  syntaxOptionalCatchBinding = makeNoopPlugin(),
+  syntaxTopLevelAwait = makeNoopPlugin();
 export {
   externalHelpers,
-  syntaxAsyncGenerators,
-  syntaxClassProperties,
-  syntaxClassStaticBlock,
   syntaxDecimal,
   syntaxDecorators,
   syntaxDestructuringPrivate,
@@ -115,14 +113,10 @@ export {
   syntaxFunctionBind,
   syntaxFunctionSent,
   syntaxModuleBlocks,
-  syntaxImportMeta,
   syntaxJsx,
   syntaxImportAssertions,
-  syntaxObjectRestSpread,
-  syntaxOptionalCatchBinding,
   syntaxPipelineOperator,
   syntaxRecordAndTuple,
-  syntaxTopLevelAwait,
   syntaxTypescript,
   proposalAsyncGeneratorFunctions,
   proposalClassProperties,
@@ -203,10 +197,14 @@ export {
   transformUnicodeRegex,
 };
 export const all: { [k: string]: any } = {
-  "external-helpers": externalHelpers,
   "syntax-async-generators": syntaxAsyncGenerators,
   "syntax-class-properties": syntaxClassProperties,
   "syntax-class-static-block": syntaxClassStaticBlock,
+  "syntax-import-meta": syntaxImportMeta,
+  "syntax-object-rest-spread": syntaxObjectRestSpread,
+  "syntax-optional-catch-binding": syntaxOptionalCatchBinding,
+  "syntax-top-level-await": syntaxTopLevelAwait,
+  "external-helpers": externalHelpers,
   "syntax-decimal": syntaxDecimal,
   "syntax-decorators": syntaxDecorators,
   "syntax-destructuring-private": syntaxDestructuringPrivate,
@@ -216,14 +214,10 @@ export const all: { [k: string]: any } = {
   "syntax-function-bind": syntaxFunctionBind,
   "syntax-function-sent": syntaxFunctionSent,
   "syntax-module-blocks": syntaxModuleBlocks,
-  "syntax-import-meta": syntaxImportMeta,
   "syntax-jsx": syntaxJsx,
   "syntax-import-assertions": syntaxImportAssertions,
-  "syntax-object-rest-spread": syntaxObjectRestSpread,
-  "syntax-optional-catch-binding": syntaxOptionalCatchBinding,
   "syntax-pipeline-operator": syntaxPipelineOperator,
   "syntax-record-and-tuple": syntaxRecordAndTuple,
-  "syntax-top-level-await": syntaxTopLevelAwait,
   "syntax-typescript": syntaxTypescript,
   "proposal-async-generator-functions": proposalAsyncGeneratorFunctions,
   "proposal-class-properties": proposalClassProperties,

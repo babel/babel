@@ -22,6 +22,7 @@ import glob from "glob";
 import { resolve as importMetaResolve } from "import-meta-resolve";
 
 import rollupBabelSource from "./scripts/rollup-plugin-babel-source.js";
+import rollupStandaloneInternals from "./scripts/rollup-plugin-standalone-internals.js";
 import formatCode from "./scripts/utils/formatCode.js";
 import { log } from "./scripts/utils/logger.cjs";
 
@@ -175,6 +176,8 @@ async function generateRuntimeHelpers() {
   );
 }
 
+const kebabToCamel = str => str.replace(/-[a-z]/g, c => c[1].toUpperCase());
+
 function generateStandalone() {
   const dest = "./packages/babel-standalone/src/generated/";
   return gulp
@@ -183,16 +186,21 @@ function generateStandalone() {
       through.obj((file, enc, callback) => {
         log("Generating @babel/standalone files");
         const pluginConfig = JSON.parse(file.contents);
-        let imports = "";
-        let list = "";
+        let imports = `import makeNoopPlugin from "../make-noop-plugin";`;
+        let exportDecls = "";
+        let exportsList = "";
         let allList = "";
 
-        for (const plugin of pluginConfig) {
-          const camelPlugin = plugin.replace(/-[a-z]/g, c =>
-            c[1].toUpperCase()
-          );
+        for (const plugin of pluginConfig.noopPlugins) {
+          const camelPlugin = kebabToCamel(plugin);
+          exportDecls += `${camelPlugin} = makeNoopPlugin(),`;
+          allList += `"${plugin}": ${camelPlugin},`;
+        }
+
+        for (const plugin of pluginConfig.externalPlugins) {
+          const camelPlugin = kebabToCamel(plugin);
           imports += `import ${camelPlugin} from "@babel/plugin-${plugin}";`;
-          list += `${camelPlugin},`;
+          exportsList += `${camelPlugin},`;
           allList += `"${plugin}": ${camelPlugin},`;
         }
 
@@ -201,7 +209,8 @@ function generateStandalone() {
  * To re-generate run 'yarn gulp generate-standalone'
  */
 ${imports}
-export {${list}};
+export const ${exportDecls.slice(0, -1)};
+export {${exportsList}};
 export const all: { [k: string]: any } = {${allList}};`;
         file.path = "plugins.ts";
         file.contents = Buffer.from(formatCode(fileContents, dest));
@@ -385,6 +394,7 @@ function buildRollup(packages, buildStandalone) {
             throw new Error("Rollup aborted due to warnings above");
           },
           plugins: [
+            buildStandalone && rollupStandaloneInternals(),
             rollupBabelSource(),
             rollupReplace({
               preventAssignment: true,

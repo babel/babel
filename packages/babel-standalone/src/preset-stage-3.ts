@@ -11,8 +11,6 @@ export default (_: any, { loose = false } = {}) => {
   if (!process.env.BABEL_8_BREAKING) {
     // These are Stage 4
     plugins.push(
-      babelPlugins.syntaxImportMeta,
-      babelPlugins.syntaxTopLevelAwait,
       babelPlugins.proposalExportNamespaceFrom,
       babelPlugins.proposalLogicalAssignmentOperators,
       [babelPlugins.proposalOptionalChaining, { loose }],
