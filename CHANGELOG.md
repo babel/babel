@@ -23,6 +23,38 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.19.6 (2022-10-20)
+
+#### :eyeglasses: Spec Compliance
+* `babel-plugin-proposal-decorators`
+  * [#15059](https://github.com/babel/babel/pull/15059) Ensure non-static decorators are applied when a class is instantiated. ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#15062](https://github.com/babel/babel/pull/15062) Fix parsing of block comments nested in flow comments ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#15052](https://github.com/babel/babel/pull/15052) fix: improve module block program location tracking ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-runtime`, `babel-runtime-corejs2`, `babel-runtime-corejs3`
+  * [#15060](https://github.com/babel/babel/pull/15060) Ensure `@babel/runtime-corejs3/core-js/*.js` can be imported on Node.js 17+ ([@JLHwung](https://github.com/JLHwung))
+* `babel-preset-env`, `babel-traverse`
+  * [#15043](https://github.com/babel/babel/pull/15043) fix: preserve this for `super.*` template tags ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :nail_care: Polish
+* `babel-generator`, `babel-plugin-transform-flow-comments`
+  * [#15037](https://github.com/babel/babel/pull/15037) Improve generation of comments without location ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :memo: Documentation
+* `babel-standalone`
+  * [#15055](https://github.com/babel/babel/pull/15055) Fix missing `transformSync` function name ([@lomirus](https://github.com/lomirus))
+
+#### :house: Internal
+* `babel-parser`
+  * [#15056](https://github.com/babel/babel/pull/15056) Use `startLoc.index` instead of carrying around `start` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* Other
+  * [#15035](https://github.com/babel/babel/pull/15035) chore: Update yarn 3.2.4 ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :running_woman: Performance
+* `babel-core`, `babel-standalone`
+  * [#15023](https://github.com/babel/babel/pull/15023) Don't bundle unnecessary plugins in `@babel/standalone` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.19.5 (2022-10-10)
 
 #### :bug: Bug Fix
