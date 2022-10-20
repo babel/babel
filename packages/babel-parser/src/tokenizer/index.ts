@@ -259,11 +259,14 @@ export default abstract class Tokenizer extends CommentsParser {
     this.getTokenFromCode(this.codePointAtPos(this.state.pos));
   }
 
-  skipBlockComment(): N.CommentBlock | undefined {
+  // Skips a block comment, whose end is marked by commentEnd.
+  // *-/ is used by the Flow plugin, when parsing block comments nested
+  // inside Flow comments.
+  skipBlockComment(commentEnd: "*/" | "*-/"): N.CommentBlock | undefined {
     let startLoc;
     if (!this.isLookahead) startLoc = this.state.curPosition();
     const start = this.state.pos;
-    const end = this.input.indexOf("*/", start + 2);
+    const end = this.input.indexOf(commentEnd, start + 2);
     if (end === -1) {
       // We have to call this again here because startLoc may not be set...
       // This seems to be for performance reasons:
@@ -273,7 +276,7 @@ export default abstract class Tokenizer extends CommentsParser {
       });
     }
 
-    this.state.pos = end + 2;
+    this.state.pos = end + commentEnd.length;
     lineBreakG.lastIndex = start + 2;
     while (lineBreakG.test(this.input) && lineBreakG.lastIndex <= end) {
       ++this.state.curLine;
@@ -289,7 +292,7 @@ export default abstract class Tokenizer extends CommentsParser {
       type: "CommentBlock",
       value: this.input.slice(start + 2, end),
       start,
-      end: end + 2,
+      end: end + commentEnd.length,
       loc: new SourceLocation(startLoc, this.state.curPosition()),
     };
     if (this.options.tokens) this.pushToken(comment);
@@ -358,7 +361,7 @@ export default abstract class Tokenizer extends CommentsParser {
         case charCodes.slash:
           switch (this.input.charCodeAt(this.state.pos + 1)) {
             case charCodes.asterisk: {
-              const comment = this.skipBlockComment();
+              const comment = this.skipBlockComment("*/");
               if (comment !== undefined) {
                 this.addComment(comment);
                 if (this.options.attachComment) comments.push(comment);
