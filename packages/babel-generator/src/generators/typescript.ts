@@ -527,7 +527,8 @@ function TSTypeExpression(
   node: t.TSAsExpression | t.TSSatisfiesExpression,
 ) {
   const { type, expression, typeAnnotation } = node;
-  this.print(expression, node);
+  const forceParens = !!expression.trailingComments?.length;
+  this.print(expression, node, true, undefined, forceParens);
   this.space();
   this.word(type === "TSAsExpression" ? "as" : "satisfies");
   this.space();

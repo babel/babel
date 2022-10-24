@@ -579,6 +579,7 @@ class Printer {
     // trailingCommentsLineOffset also used to check if called from printJoin
     // it will be ignored if `noLineTerminator||this._noLineTerminator`
     trailingCommentsLineOffset?: number,
+    forceParens?: boolean,
   ) {
     if (!node) return;
 
@@ -618,7 +619,9 @@ class Printer {
     this._maybeAddAuxComment(this._insideAux && !oldInAux);
 
     let shouldPrintParens = false;
-    if (
+    if (forceParens) {
+      shouldPrintParens = true;
+    } else if (
       format.retainFunctionParens &&
       nodeType === "FunctionExpression" &&
       node.extra &&
