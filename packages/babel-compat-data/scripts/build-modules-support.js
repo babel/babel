@@ -61,9 +61,10 @@ function process(source) {
 
 const dataPath = path.join(__dirname, "../data/native-modules.json");
 const processed = process(compatData.statements.export);
-// Todo(Babel 8): remove `ios_saf` as it is identical to ios
-if (processed.ios) {
-  processed.ios_saf = processed.ios;
+if (!process.env.BABEL_8_BREAKING) {
+  if (processed.ios) {
+    processed.ios_saf = processed.ios;
+  }
 }
 const data = {
   "es6.module": processed,
