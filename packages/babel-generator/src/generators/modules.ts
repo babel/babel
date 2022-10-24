@@ -80,9 +80,19 @@ export function ExportAllDeclaration(
   this.space();
   this.word("from");
   this.space();
-  this.print(node.source, node);
   // @ts-expect-error Fixme: assertions is not defined in DeclareExportAllDeclaration
-  this.printAssertions(node);
+  if (node.assertions?.length) {
+    this.ensureNoLineTerminator(() => {
+      this.print(node.source, node);
+      this.space();
+      this.word("assert");
+    });
+    // @ts-expect-error Fixme: assertions is not defined in DeclareExportAllDeclaration
+    this.printAssertions(node);
+  } else {
+    this.print(node.source, node);
+  }
+
   this.semicolon();
 }
 
@@ -146,8 +156,16 @@ export function ExportNamedDeclaration(
       this.space();
       this.word("from");
       this.space();
-      this.print(node.source, node);
-      this.printAssertions(node);
+      if (node.assertions?.length) {
+        this.ensureNoLineTerminator(() => {
+          this.print(node.source, node);
+          this.space();
+          this.word("assert");
+        });
+        this.printAssertions(node);
+      } else {
+        this.print(node.source, node);
+      }
     }
 
     this.semicolon();
@@ -220,9 +238,16 @@ export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
     this.space();
   }
 
-  this.print(node.source, node);
-
-  this.printAssertions(node);
+  if (node.assertions?.length) {
+    this.print(node.source, node, true);
+    this.ensureNoLineTerminator(() => {
+      this.space();
+      this.word("assert");
+    });
+    this.printAssertions(node);
+  } else {
+    this.print(node.source, node);
+  }
   if (!process.env.BABEL_8_BREAKING) {
     // @ts-ignore(Babel 7 vs Babel 8) Babel 7 supports module attributes
     if (node.attributes?.length) {

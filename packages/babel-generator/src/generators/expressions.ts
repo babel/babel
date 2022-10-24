@@ -28,7 +28,10 @@ export function UnaryExpression(this: Printer, node: t.UnaryExpression) {
 export function DoExpression(this: Printer, node: t.DoExpression) {
   if (node.async) {
     this.word("async");
-    this.space();
+    this.ensureNoLineTerminator(() => {
+      this.printInnerComments(node);
+      this.space();
+    });
   }
   this.word("do");
   this.space();
@@ -230,12 +233,20 @@ export function YieldExpression(this: Printer, node: t.YieldExpression) {
   this.word("yield");
 
   if (node.delegate) {
+    this.ensureNoLineTerminator(() => {
+      this.printInnerComments(node);
+    });
     this.token("*");
-  }
-
-  if (node.argument) {
-    this.space();
-    this.printTerminatorless(node.argument, node, false);
+    if (node.argument) {
+      this.space();
+      // line terminators are allowed after yield*
+      this.print(node.argument, node);
+    }
+  } else {
+    if (node.argument) {
+      this.space();
+      this.printTerminatorless(node.argument, node, false);
+    }
   }
 }
 

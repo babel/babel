@@ -25,13 +25,17 @@ export function _parameters(
     | t.TSFunctionType
     | t.TSConstructorType,
 ) {
-  for (let i = 0; i < parameters.length; i++) {
+  const paramLength = parameters.length;
+  for (let i = 0; i < paramLength; i++) {
     this._param(parameters[i], parent);
 
     if (i < parameters.length - 1) {
       this.token(",");
       this.space();
     }
+  }
+  if (paramLength === 0) {
+    this.printInnerComments(parent);
   }
 }
 
@@ -71,9 +75,10 @@ export function _methodHead(this: Printer, node: t.Method | t.TSDeclareMethod) {
     this.space();
   }
 
+  const { _noLineTerminator } = this;
   if (node.async) {
-    // ensure `async` is in the same line with property name
-    this._catchUp("start", key.loc);
+    // ensure no line terminator between async and class element name / *
+    this._noLineTerminator = true;
     this.word("async");
     this.space();
   }
@@ -84,16 +89,23 @@ export function _methodHead(this: Printer, node: t.Method | t.TSDeclareMethod) {
     kind === "init"
   ) {
     if (node.generator) {
+      if (node.async) {
+        this.printInnerComments(node);
+      }
       this.token("*");
+      this._noLineTerminator = _noLineTerminator;
     }
   }
 
   if (node.computed) {
     this.token("[");
+    this._noLineTerminator = _noLineTerminator;
     this.print(key, node);
     this.token("]");
+    this.printInnerComments(node);
   } else {
     this.print(key, node);
+    this._noLineTerminator = _noLineTerminator;
   }
 
   if (
@@ -158,33 +170,36 @@ export function ArrowFunctionExpression(
   this: Printer,
   node: t.ArrowFunctionExpression,
 ) {
+  const { _noLineTerminator } = this;
   if (node.async) {
+    this._noLineTerminator = true;
     this.word("async");
     this.space();
   }
 
-  const firstParam = node.params[0];
-
   // Try to avoid printing parens in simple cases, but only if we're pretty
   // sure that they aren't needed by type annotations or potential newlines.
+  let firstParam;
   if (
     !this.format.retainLines &&
-    // Auxiliary comments can introduce unexpected newlines
-    !this.format.auxiliaryCommentBefore &&
-    !this.format.auxiliaryCommentAfter &&
     node.params.length === 1 &&
-    isIdentifier(firstParam) &&
+    isIdentifier((firstParam = node.params[0])) &&
     !hasTypesOrComments(node, firstParam)
   ) {
     this.print(firstParam, node);
+    this._noLineTerminator = _noLineTerminator;
   } else {
+    this._noLineTerminator = _noLineTerminator;
     this._params(node);
   }
 
   this._predicate(node);
+  this.ensureNoLineTerminator(() => {
+    this.space();
+    this.printInnerComments(node);
+    this.token("=>");
+  });
 
-  this.space();
-  this.token("=>");
   this.space();
 
   this.print(node.body, node);
@@ -200,6 +215,7 @@ function hasTypesOrComments(
     node.predicate ||
     param.typeAnnotation ||
     param.optional ||
+    // Flow does not support `foo /*: string*/ => {};`
     param.leadingComments?.length ||
     param.trailingComments?.length
   );

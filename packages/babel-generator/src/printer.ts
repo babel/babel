@@ -1070,18 +1070,14 @@ class Printer {
       }
     }
   }
-  // todo(flow->ts): was Node
   printAssertions(node: Extract<t.Node, { assertions?: t.ImportAttribute[] }>) {
-    if (node.assertions?.length) {
-      this.space();
-      this.word("assert");
-      this.space();
-      this.token("{");
-      this.space();
-      this.printList(node.assertions, node);
-      this.space();
-      this.token("}");
-    }
+    this.space();
+    this.printInnerComments(node);
+    this.token("{");
+    this.space();
+    this.printList(node.assertions, node);
+    this.space();
+    this.token("}");
   }
 }
 
