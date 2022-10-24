@@ -54,11 +54,10 @@ const getLowestImplementedVersion = (
   exclude = () => false
 ) => {
   const tests = compatibilityTests.filter(test => {
-    // TODO (Babel 9): Use ||=, &&=
     let ok = features.includes(test.name);
-    ok = ok || (test.group && features.includes(test.group));
-    ok = ok || (features.length === 1 && test.name.startsWith(features[0]));
-    ok = ok && !exclude(test.name);
+    ok ||= test.group && features.includes(test.group);
+    ok ||= features.length === 1 && test.name.startsWith(features[0]);
+    ok &&= !exclude(test.name);
     return ok;
   });
 
