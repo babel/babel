@@ -2,7 +2,7 @@
 
 const path = require("path");
 const compatData = require("@mdn/browser-compat-data").javascript;
-const { process: processData } = require("./build-modules-support");
+const { generateModuleSupport } = require("./build-modules-support");
 const {
   generateData,
   environments,
@@ -24,7 +24,7 @@ for (const target of ["plugin", "corejs2-built-in"]) {
   );
   if (target === "plugin") {
     // add export-namespace-from from @mdn/browser-compat-data
-    const exportNamespaceFromCompatData = processData(
+    const exportNamespaceFromCompatData = generateModuleSupport(
       compatData.statements.export.namespace
     );
     // the node.js compat data is 12.0, the first node version ships `export *` behind a flag

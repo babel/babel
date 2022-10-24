@@ -31,7 +31,7 @@ function browserVersion(browser, version_added) {
   return version_added;
 }
 
-function process(source) {
+function generateModuleSupport(source) {
   const stats = source.__compat.support;
   const allowedBrowsers = {};
 
@@ -60,7 +60,7 @@ function process(source) {
 }
 
 const dataPath = path.join(__dirname, "../data/native-modules.json");
-const processed = process(compatData.statements.export);
+const processed = generateModuleSupport(compatData.statements.export);
 if (!process.env.BABEL_8_BREAKING) {
   if (processed.ios) {
     processed.ios_saf = processed.ios;
@@ -70,4 +70,4 @@ const data = {
   "es6.module": processed,
 };
 fs.writeFileSync(dataPath, `${JSON.stringify(data, null, 2)}\n`);
-exports.process = process;
+exports.generateModuleSupport = generateModuleSupport;
