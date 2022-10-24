@@ -93,7 +93,6 @@ const TSErrors = ParseErrorEnum`typescript`({
   AccesorCannotDeclareThisParameter:
     "'get' and 'set' accessors cannot declare 'this' parameters.",
   AccesorCannotHaveTypeParameters: "An accessor cannot have type parameters.",
-  CannotFindName: ({ name }: { name: string }) => `Cannot find name '${name}'.`,
   ClassMethodHasDeclare: "Class methods cannot have the 'declare' modifier.",
   ClassMethodHasReadonly: "Class methods cannot have the 'readonly' modifier.",
   ConstInitiailizerMustBeStringOrNumericLiteralOrLiteralEnumReference:
