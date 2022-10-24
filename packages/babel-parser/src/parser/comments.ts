@@ -289,4 +289,65 @@ export default class CommentsParser extends BaseParser {
       }
     }
   }
+
+  /*
+   * Used to finalize the leading comments of a node, even if they could
+   * be attached as leading comments to a parent node.
+   *
+   * In case of comments followed by a decorator followed by `export`,
+   * we manually attach them to the decorator node rather than to the
+   * class declaration node. This is because the class location range
+   * overlaps with `export`, and this causes confusing comments behavior:
+   *
+   */ //   /* comment */ @dec export class Foo {}
+  /*
+   * See [takeLeadingCommentsAfterLastToken] for the hanling of comments
+   * after `export`.
+   */
+  forceFinalizeLeadingComments(node: Node): void {
+    const { commentStack } = this.state;
+    for (let i = commentStack.length - 1; i >= 0; i--) {
+      const commentWS = commentStack[i];
+      if (commentWS.trailingNode === node) {
+        this.finalizeComment(commentWS);
+        commentStack.splice(i, 1);
+      } else if (commentWS.end < node.start) {
+        break;
+      }
+    }
+  }
+
+  /*
+   * Used to take the comments after the last token as leading
+   * comments of the given node, even if their start position
+   * is after the start position of the node.
+   *
+   * In case of decorators followed by `export`, we manually mark the
+   * comments between `export` and `class` as leading comments of the
+   * class declaration node.
+   * This is needed because the class location range overlaps with
+   * `export`, and thus they would be marked as inner comments of
+   * the class declaration:
+   *
+   */ //   @dec export /* comment */ class Foo {}
+  /*
+   * See [forceFinalizeLeadingComments] for the handling of comments
+   * before decorators.
+   */
+  takeLeadingCommentsAfterLastToken(node: Undone<Node>): void {
+    const {
+      start,
+      lastTokEndLoc: { index: lastTokEnd },
+    } = this.state;
+
+    const { commentStack } = this.state;
+    for (let i = commentStack.length - 1; i >= 0; i--) {
+      const commentWS = commentStack[i];
+      if (commentWS.start >= lastTokEnd && commentWS.end <= start) {
+        commentWS.trailingNode = node as Node;
+      } else if (commentWS.end < lastTokEnd) {
+        break;
+      }
+    }
+  }
 }

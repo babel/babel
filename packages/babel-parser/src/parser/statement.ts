@@ -547,32 +547,14 @@ export default abstract class StatementParser extends ExpressionParser {
       this.resetStartLocationFromNode(node, decorators[0]);
       this.state.decoratorStack[this.state.decoratorStack.length - 1] = [];
 
-      // In case of decorators followed by `export`, we manually mark the
-      // comments between `export` and `class` as leading comments of the
-      // class declaration node.
-      // This is needed because the class location range overlaps with
-      // `export`, and thus they would me marked as inner comments of
-      // the class declaration.
-      //   @dec export /* comment */ class Foo {}
-      // See [parseDecorators] for the hanling of comments before decorators
-      if (this.decoratorsEnabledBeforeExport()) {
-        const {
-          start,
-          lastTokStart,
-          lastTokEndLoc: { index: lastTokEnd },
-        } = this.state;
-
-        if (this.input.slice(lastTokStart, lastTokEnd) === "export") {
-          const { commentStack } = this.state;
-          for (let i = commentStack.length - 1; i >= 0; i--) {
-            const commentWS = commentStack[i];
-            if (commentWS.start >= lastTokEnd && commentWS.end <= start) {
-              commentWS.trailingNode = node as N.Node;
-            } else if (commentWS.end < lastTokEnd) {
-              break;
-            }
-          }
-        }
+      if (
+        this.decoratorsEnabledBeforeExport() &&
+        this.input.slice(
+          this.state.lastTokStart,
+          this.state.lastTokEndLoc.index,
+        ) === "export"
+      ) {
+        this.takeLeadingCommentsAfterLastToken(node);
       }
     }
   }
@@ -599,23 +581,8 @@ export default abstract class StatementParser extends ExpressionParser {
         this.raise(Errors.DecoratorExportClass, { at: this.state.startLoc });
       }
 
-      // In case of comments followed by a decorator followed by `export`,
-      // we manually attach them to the decorator node rather than to the
-      // class declaration node. This is because the class location range
-      // overlaps with `export`, and this causes confusing comments behavior:
-      //   /* comment */ @dec export class Foo {}
-      // See [takeDecorators] for the hanling of comments after `export`
       const firstDecorator = decoratorStack[decoratorStack.length - 1][0];
-      const { commentStack } = this.state;
-      for (let i = commentStack.length - 1; i >= 0; i--) {
-        const commentWS = commentStack[i];
-        if (commentWS.trailingNode === firstDecorator) {
-          this.finalizeComment(commentWS);
-          commentStack.splice(i, 1);
-        } else if (commentWS.end < firstDecorator.start) {
-          break;
-        }
-      }
+      this.forceFinalizeLeadingComments(firstDecorator);
     } else if (!this.canHaveLeadingDecorator()) {
       throw this.raise(Errors.UnexpectedLeadingDecorator, {
         at: this.state.startLoc,
