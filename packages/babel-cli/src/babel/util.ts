@@ -89,13 +89,14 @@ export async function compile(filename: string, opts: InputOptions) {
     caller: CALLER,
   };
 
-  // TODO (Babel 8): Use `babel.transformFileAsync`
-  const result = await new Promise<FileResult>((resolve, reject) => {
-    babel.transformFile(filename, opts, (err, result) => {
-      if (err) reject(err);
-      else resolve(result);
-    });
-  });
+  const result = process.env.BABEL_8_BREAKING
+    ? await babel.transformFileAsync(filename, opts)
+    : await new Promise<FileResult>((resolve, reject) => {
+        babel.transformFile(filename, opts, (err, result) => {
+          if (err) reject(err);
+          else resolve(result);
+        });
+      });
 
   if (result) {
     if (!process.env.BABEL_8_BREAKING) {
