@@ -184,7 +184,7 @@ export function ArrowFunctionExpression(
     !this.format.retainLines &&
     node.params.length === 1 &&
     isIdentifier((firstParam = node.params[0])) &&
-    !hasTypes(node, firstParam)
+    !hasTypesOrComments(node, firstParam)
   ) {
     this.print(firstParam, node);
     this._noLineTerminator = _noLineTerminator;
@@ -205,7 +205,7 @@ export function ArrowFunctionExpression(
   this.print(node.body, node);
 }
 
-function hasTypes(
+function hasTypesOrComments(
   node: t.ArrowFunctionExpression,
   param: t.Identifier,
 ): boolean {
@@ -214,6 +214,9 @@ function hasTypes(
     node.returnType ||
     node.predicate ||
     param.typeAnnotation ||
-    param.optional
+    param.optional ||
+    // Flow does not support `foo /*: string*/ => {};`
+    param.leadingComments?.length ||
+    param.trailingComments?.length
   );
 }
