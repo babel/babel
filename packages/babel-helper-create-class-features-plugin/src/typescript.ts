@@ -4,7 +4,7 @@ import type * as t from "@babel/types";
 export function assertFieldTransformed(
   path: NodePath<t.ClassProperty | t.ClassDeclaration>,
 ) {
-  // TODO (Babel 8): Also check path.node.definite
+  // TODO(Babel 8): Also check path.node.definite
 
   if (path.node.declare) {
     throw path.buildCodeFrameError(

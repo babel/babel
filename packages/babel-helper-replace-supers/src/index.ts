@@ -19,7 +19,7 @@ import {
 } from "@babel/types";
 import type * as t from "@babel/types";
 
-// TODO (Babel 8): Don't export this.
+// TODO(Babel 8): Don't export this.
 export {
   default as environmentVisitor,
   skipAllButComputedKey,

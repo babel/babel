@@ -267,7 +267,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
             }
           },
 
-          // TODO (Babel 8): Decide if this should be removed or brought back.
+          // TODO(Babel 8): Decide if this should be removed or brought back.
           // see: https://github.com/babel/babel/pull/12253#discussion_r513086528
           //
           // exit(path, state) {

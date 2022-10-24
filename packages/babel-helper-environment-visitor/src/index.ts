@@ -1,7 +1,7 @@
 import type { NodePath, Visitor } from "@babel/traverse";
 import type * as t from "@babel/types";
 
-// TODO (Babel 8): Don't export this function.
+// TODO(Babel 8): Don't export this function.
 export function skipAllButComputedKey(
   path: NodePath<t.Method | t.ClassProperty>,
 ) {

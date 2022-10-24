@@ -33,7 +33,7 @@ for (const target of ["plugin", "corejs2-built-in"]) {
     newData["transform-export-namespace-from"] = exportNamespaceFromCompatData;
 
     // Add proposal-* aliases for backward compatibility.
-    // TODO(Babel 7): This won't be needed anymore.
+    // TODO(Babel 8): This won't be needed anymore.
     newData = defineLegacyPluginAliases(newData);
   }
   const dataPath = path.join(__dirname, `../data/${target}s.json`);
