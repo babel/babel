@@ -250,10 +250,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Use Node.js 14.17
+      - name: Use Node.js latest
         uses: actions/setup-node@v3
         with:
-          node-version: "14.17" # Node.js 14.17 is the first LTS supported by Babel 8
+          node-version: latest
+          check-latest: true
           cache: "yarn"
       - name: Install and build
         run: make -j bootstrap
