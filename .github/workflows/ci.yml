@@ -500,6 +500,7 @@ jobs:
   test262-prepare:
     name: test262 - Prepare for running in parallel
     runs-on: ubuntu-latest
+    if: github.repository == 'babel/babel'
     steps:
       - name: Checkout Babel
         uses: actions/checkout@v3
