@@ -632,22 +632,32 @@ export default class Scope {
     }
   }
 
-  dump() {
-    const sep = "-".repeat(60);
-    console.log(sep);
+  dump(level?: number) {
+    level = level || 1 / 0;
+    const sep = "*" + "-".repeat(80) + "*";
     let scope: Scope = this;
+    const stack = [];
     do {
-      console.log("#", scope.block.type);
+      stack.unshift(scope);
+      scope = scope.parent;
+      level--;
+    } while (scope && level);
+
+    let esp = "";
+    console.log(sep);
+    stack.forEach(scope => {
+      console.log(esp + "#", scope.block.type);
       for (const name of Object.keys(scope.bindings)) {
         const binding = scope.bindings[name];
-        console.log(" -", name, {
+        console.log(esp + "-", name, {
           constant: binding.constant,
           references: binding.references,
           violations: binding.constantViolations.length,
           kind: binding.kind,
         });
       }
-    } while ((scope = scope.parent));
+      esp += "  ";
+    });
     console.log(sep);
   }
 
