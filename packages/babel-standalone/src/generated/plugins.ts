@@ -8,6 +8,7 @@ import syntaxDecimal from "@babel/plugin-syntax-decimal";
 import syntaxDecorators from "@babel/plugin-syntax-decorators";
 import syntaxDestructuringPrivate from "@babel/plugin-syntax-destructuring-private";
 import syntaxDoExpressions from "@babel/plugin-syntax-do-expressions";
+import syntaxExplicitResourceManagement from "@babel/plugin-syntax-explicit-resource-management";
 import syntaxExportDefaultFrom from "@babel/plugin-syntax-export-default-from";
 import syntaxFlow from "@babel/plugin-syntax-flow";
 import syntaxFunctionBind from "@babel/plugin-syntax-function-bind";
@@ -108,6 +109,7 @@ export {
   syntaxDecorators,
   syntaxDestructuringPrivate,
   syntaxDoExpressions,
+  syntaxExplicitResourceManagement,
   syntaxExportDefaultFrom,
   syntaxFlow,
   syntaxFunctionBind,
@@ -209,6 +211,7 @@ export const all: { [k: string]: any } = {
   "syntax-decorators": syntaxDecorators,
   "syntax-destructuring-private": syntaxDestructuringPrivate,
   "syntax-do-expressions": syntaxDoExpressions,
+  "syntax-explicit-resource-management": syntaxExplicitResourceManagement,
   "syntax-export-default-from": syntaxExportDefaultFrom,
   "syntax-flow": syntaxFlow,
   "syntax-function-bind": syntaxFunctionBind,

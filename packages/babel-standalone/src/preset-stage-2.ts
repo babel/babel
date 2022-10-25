@@ -34,6 +34,7 @@ export default (_: any, opts: any = {}) => {
         babelPlugins.proposalRecordAndTuple,
         { syntaxType: recordAndTupleSyntax },
       ],
+      babelPlugins.syntaxExplicitResourceManagement,
       babelPlugins.syntaxModuleBlocks,
     ],
   };

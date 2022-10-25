@@ -1908,7 +1908,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-explicit-resource-management@workspace:packages/babel-plugin-syntax-explicit-resource-management":
+"@babel/plugin-syntax-explicit-resource-management@workspace:^, @babel/plugin-syntax-explicit-resource-management@workspace:packages/babel-plugin-syntax-explicit-resource-management":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-explicit-resource-management@workspace:packages/babel-plugin-syntax-explicit-resource-management"
   dependencies:
@@ -3658,6 +3658,7 @@ __metadata:
     "@babel/plugin-syntax-decorators": "workspace:^"
     "@babel/plugin-syntax-destructuring-private": "workspace:^"
     "@babel/plugin-syntax-do-expressions": "workspace:^"
+    "@babel/plugin-syntax-explicit-resource-management": "workspace:^"
     "@babel/plugin-syntax-export-default-from": "workspace:^"
     "@babel/plugin-syntax-flow": "workspace:^"
     "@babel/plugin-syntax-function-bind": "workspace:^"
