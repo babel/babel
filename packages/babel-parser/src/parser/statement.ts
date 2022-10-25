@@ -393,13 +393,12 @@ export default abstract class StatementParser extends ExpressionParser {
           !context,
         );
 
-      case tt._class: {
+      case tt._class:
         if (context) this.unexpected();
         return this.maybeTakeDecorators(
           decorators,
           this.parseClass(node as Undone<N.ClassDeclaration>, true),
         );
-      }
 
       case tt._if:
         return this.parseIfStatement(node as Undone<N.IfStatement>);
@@ -2182,33 +2181,21 @@ export default abstract class StatementParser extends ExpressionParser {
     }
 
     if (isFromRequired || hasSpecifiers || hasDeclaration) {
-      this.checkExport(
-        node as Undone<N.ExportNamedDeclaration>,
-        true,
-        false,
-        !!(node as Undone<N.ExportNamedDeclaration>).source,
-      );
-      const finished = this.finishNode(
-        node as Undone<N.ExportNamedDeclaration>,
-        "ExportNamedDeclaration",
-      );
-      if (finished.declaration?.type === "ClassDeclaration") {
-        this.maybeTakeDecorators(decorators, finished.declaration);
+      const node2 = node as Undone<N.ExportNamedDeclaration>;
+      this.checkExport(node2, true, false, !!node2.source);
+      if (node2.declaration?.type === "ClassDeclaration") {
+        this.maybeTakeDecorators(decorators, node2.declaration);
       } else if (decorators) {
         throw this.raise(Errors.UnsupportedDecoratorExport, { at: node });
       }
-      return finished;
+      return this.finishNode(node2, "ExportNamedDeclaration");
     }
 
     if (this.eat(tt._default)) {
+      const node2 = node as Undone<N.ExportDefaultDeclaration>;
       // export default ...
       const decl = this.parseExportDefaultExpression();
-      (node as Undone<N.ExportDefaultDeclaration>).declaration = decl;
-
-      const finished = this.finishNode(
-        node as Undone<N.ExportDefaultDeclaration>,
-        "ExportDefaultDeclaration",
-      );
+      node2.declaration = decl;
 
       if (decl.type === "ClassDeclaration") {
         this.maybeTakeDecorators(decorators, decl as N.ClassDeclaration);
@@ -2216,9 +2203,9 @@ export default abstract class StatementParser extends ExpressionParser {
         throw this.raise(Errors.UnsupportedDecoratorExport, { at: node });
       }
 
-      this.checkExport(finished, true, true);
+      this.checkExport(node2, true, true);
 
-      return finished;
+      return this.finishNode(node2, "ExportDefaultDeclaration");
     }
 
     throw this.unexpected(null, tt.braceL);
