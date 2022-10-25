@@ -100,7 +100,6 @@ export default abstract class ExpressionParser extends LValParser {
     node: N.Function,
     allowModifiers?: boolean,
   ): void;
-  abstract takeDecorators(node: N.HasDecorators): void;
   abstract parseBlockOrModuleBlockBody(
     body: N.Statement[],
     directives: N.Directive[] | null | undefined,
@@ -1102,6 +1101,7 @@ export default abstract class ExpressionParser extends LValParser {
     refExpressionErrors?: ExpressionErrors | null,
   ): N.Expression {
     let node;
+    let decorators: N.Decorator[] | null = null;
 
     const { type } = this.state;
     switch (type) {
@@ -1198,12 +1198,13 @@ export default abstract class ExpressionParser extends LValParser {
         return this.parseFunctionOrFunctionSent();
 
       case tt.at:
-        this.parseDecorators();
+        decorators = this.parseDecorators();
       // fall through
       case tt._class:
-        node = this.startNode<N.Class>();
-        this.takeDecorators(node);
-        return this.parseClass(node, false);
+        return this.parseClass(
+          this.maybeTakeDecorators(decorators, this.startNode()),
+          false,
+        );
 
       case tt._new:
         return this.parseNewOrNewTarget();

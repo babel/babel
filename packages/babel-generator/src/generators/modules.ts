@@ -186,6 +186,7 @@ export function ExportDefaultDeclaration(
   }
 
   this.word("export");
+  this.printInnerComments(node);
   this.space();
   this.word("default");
   this.space();

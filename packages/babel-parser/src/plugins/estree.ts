@@ -451,8 +451,11 @@ export default (superClass: typeof Parser) =>
       super.toReferencedArguments(node);
     }
 
-    parseExport(unfinished: Undone<N.AnyExport>) {
-      const node = super.parseExport(unfinished);
+    parseExport(
+      unfinished: Undone<N.AnyExport>,
+      decorators: N.Decorator[] | null,
+    ) {
+      const node = super.parseExport(unfinished, decorators);
 
       switch (node.type) {
         case "ExportAllDeclaration":
