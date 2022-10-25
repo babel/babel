@@ -549,13 +549,15 @@ export default abstract class StatementParser extends ExpressionParser {
 
   maybeTakeDecorators<T extends N.Class>(
     maybeDecorators: N.Decorator[] | null,
-    node: T,
+    classNode: T,
+    exportNode?: Undone<N.ExportDefaultDeclaration | N.ExportNamedDeclaration>,
   ): T {
     if (maybeDecorators) {
-      node.decorators = maybeDecorators;
-      this.resetStartLocationFromNode(node, maybeDecorators[0]);
+      classNode.decorators = maybeDecorators;
+      this.resetStartLocationFromNode(classNode, maybeDecorators[0]);
+      if (exportNode) this.resetStartLocationFromNode(exportNode, classNode);
     }
-    return node;
+    return classNode;
   }
 
   canHaveLeadingDecorator(): boolean {
@@ -2184,7 +2186,7 @@ export default abstract class StatementParser extends ExpressionParser {
       const node2 = node as Undone<N.ExportNamedDeclaration>;
       this.checkExport(node2, true, false, !!node2.source);
       if (node2.declaration?.type === "ClassDeclaration") {
-        this.maybeTakeDecorators(decorators, node2.declaration);
+        this.maybeTakeDecorators(decorators, node2.declaration, node2);
       } else if (decorators) {
         throw this.raise(Errors.UnsupportedDecoratorExport, { at: node });
       }
@@ -2198,7 +2200,7 @@ export default abstract class StatementParser extends ExpressionParser {
       node2.declaration = decl;
 
       if (decl.type === "ClassDeclaration") {
-        this.maybeTakeDecorators(decorators, decl as N.ClassDeclaration);
+        this.maybeTakeDecorators(decorators, decl as N.ClassDeclaration, node2);
       } else if (decorators) {
         throw this.raise(Errors.UnsupportedDecoratorExport, { at: node });
       }

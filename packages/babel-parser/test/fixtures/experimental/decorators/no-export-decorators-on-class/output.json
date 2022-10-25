@@ -12,10 +12,17 @@
     "body": [
       {
         "type": "ExportDefaultDeclaration",
-        "start":5,"end":28,"loc":{"start":{"line":2,"column":0,"index":5},"end":{"line":2,"column":23,"index":28}},
+        "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":23,"index":28}},
         "declaration": {
           "type": "ClassDeclaration",
           "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":23,"index":28}},
+          "id": null,
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start":26,"end":28,"loc":{"start":{"line":2,"column":21,"index":26},"end":{"line":2,"column":23,"index":28}},
+            "body": []
+          },
           "decorators": [
             {
               "type": "Decorator",
@@ -26,14 +33,7 @@
                 "name": "foo"
               }
             }
-          ],
-          "id": null,
-          "superClass": null,
-          "body": {
-            "type": "ClassBody",
-            "start":26,"end":28,"loc":{"start":{"line":2,"column":21,"index":26},"end":{"line":2,"column":23,"index":28}},
-            "body": []
-          }
+          ]
         }
       }
     ],
