@@ -395,9 +395,12 @@ export default abstract class StatementParser extends ExpressionParser {
 
       case tt._class:
         if (context) this.unexpected();
-        return this.maybeTakeDecorators(
-          decorators,
-          this.parseClass(node as Undone<N.ClassDeclaration>, true),
+        return this.parseClass(
+          this.maybeTakeDecorators(
+            decorators,
+            node as Undone<N.ClassDeclaration>,
+          ),
+          true,
         );
 
       case tt._if:
@@ -547,7 +550,13 @@ export default abstract class StatementParser extends ExpressionParser {
     );
   }
 
-  maybeTakeDecorators<T extends N.Class>(
+  // Attach the decorators to the given class.
+  // NOTE: This method changes the .start location of the class, and thus
+  // can affect comment attachment. Calling it before or after finalizing
+  // the class node (and thus finalizing its comments) changes how comments
+  // before the `class` keyword or before the final .start location of the
+  // class are attached.
+  maybeTakeDecorators<T extends Undone<N.Class>>(
     maybeDecorators: N.Decorator[] | null,
     classNode: T,
     exportNode?: Undone<N.ExportDefaultDeclaration | N.ExportNamedDeclaration>,
@@ -2318,9 +2327,13 @@ export default abstract class StatementParser extends ExpressionParser {
       ) {
         this.raise(Errors.DecoratorBeforeExport, { at: this.state.startLoc });
       }
-      return this.maybeTakeDecorators(
-        this.parseDecorators(false),
-        this.parseClass(this.startNode<N.ClassDeclaration>(), true, true),
+      return this.parseClass(
+        this.maybeTakeDecorators(
+          this.parseDecorators(false),
+          this.startNode<N.ClassDeclaration>(),
+        ),
+        true,
+        true,
       );
     }
 

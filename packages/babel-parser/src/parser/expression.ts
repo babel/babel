@@ -1201,9 +1201,9 @@ export default abstract class ExpressionParser extends LValParser {
         decorators = this.parseDecorators();
       // fall through
       case tt._class:
-        return this.maybeTakeDecorators(
-          decorators,
-          this.parseClass(this.startNode(), false),
+        return this.parseClass(
+          this.maybeTakeDecorators(decorators, this.startNode()),
+          false,
         );
 
       case tt._new:

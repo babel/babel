@@ -15,6 +15,47 @@
         "declaration": {
           "type": "ClassDeclaration",
           "start":23,"end":86,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":2,"column":43,"index":86}},
+          "decorators": [
+            {
+              "type": "Decorator",
+              "start":23,"end":28,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":28,"index":28}},
+              "expression": {
+                "type": "Identifier",
+                "start":24,"end":28,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":28,"index":28},"identifierName":"dec1"},
+                "name": "dec1"
+              },
+              "trailingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": " 3 ",
+                  "start":29,"end":36,"loc":{"start":{"line":1,"column":29,"index":29},"end":{"line":1,"column":36,"index":36}}
+                }
+              ]
+            },
+            {
+              "type": "Decorator",
+              "start":37,"end":42,"loc":{"start":{"line":1,"column":37,"index":37},"end":{"line":1,"column":42,"index":42}},
+              "expression": {
+                "type": "Identifier",
+                "start":38,"end":42,"loc":{"start":{"line":1,"column":38,"index":38},"end":{"line":1,"column":42,"index":42},"identifierName":"dec2"},
+                "name": "dec2"
+              },
+              "trailingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": " 4 ",
+                  "start":43,"end":50,"loc":{"start":{"line":2,"column":0,"index":43},"end":{"line":2,"column":7,"index":50}}
+                }
+              ],
+              "leadingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": " 3 ",
+                  "start":29,"end":36,"loc":{"start":{"line":1,"column":29,"index":29},"end":{"line":1,"column":36,"index":36}}
+                }
+              ]
+            }
+          ],
           "id": {
             "type": "Identifier",
             "start":65,"end":66,"loc":{"start":{"line":2,"column":22,"index":65},"end":{"line":2,"column":23,"index":66},"identifierName":"C"},
@@ -54,59 +95,11 @@
               }
             ]
           },
-          "decorators": [
-            {
-              "type": "Decorator",
-              "start":23,"end":28,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":28,"index":28}},
-              "expression": {
-                "type": "Identifier",
-                "start":24,"end":28,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":28,"index":28},"identifierName":"dec1"},
-                "name": "dec1"
-              },
-              "trailingComments": [
-                {
-                  "type": "CommentBlock",
-                  "value": " 3 ",
-                  "start":29,"end":36,"loc":{"start":{"line":1,"column":29,"index":29},"end":{"line":1,"column":36,"index":36}}
-                }
-              ],
-              "leadingComments": [
-                {
-                  "type": "CommentBlock",
-                  "value": " 2 ",
-                  "start":15,"end":22,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":22,"index":22}}
-                }
-              ]
-            },
-            {
-              "type": "Decorator",
-              "start":37,"end":42,"loc":{"start":{"line":1,"column":37,"index":37},"end":{"line":1,"column":42,"index":42}},
-              "expression": {
-                "type": "Identifier",
-                "start":38,"end":42,"loc":{"start":{"line":1,"column":38,"index":38},"end":{"line":1,"column":42,"index":42},"identifierName":"dec2"},
-                "name": "dec2"
-              },
-              "trailingComments": [
-                {
-                  "type": "CommentBlock",
-                  "value": " 4 ",
-                  "start":43,"end":50,"loc":{"start":{"line":2,"column":0,"index":43},"end":{"line":2,"column":7,"index":50}}
-                }
-              ],
-              "leadingComments": [
-                {
-                  "type": "CommentBlock",
-                  "value": " 3 ",
-                  "start":29,"end":36,"loc":{"start":{"line":1,"column":29,"index":29},"end":{"line":1,"column":36,"index":36}}
-                }
-              ]
-            }
-          ],
           "leadingComments": [
             {
               "type": "CommentBlock",
-              "value": " 4 ",
-              "start":43,"end":50,"loc":{"start":{"line":2,"column":0,"index":43},"end":{"line":2,"column":7,"index":50}}
+              "value": " 2 ",
+              "start":15,"end":22,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":22,"index":22}}
             }
           ]
         },
@@ -136,27 +129,6 @@
         "declaration": {
           "type": "ClassDeclaration",
           "start":135,"end":188,"loc":{"start":{"line":4,"column":39,"index":135},"end":{"line":5,"column":33,"index":188}},
-          "id": null,
-          "superClass": null,
-          "body": {
-            "type": "ClassBody",
-            "start":177,"end":188,"loc":{"start":{"line":5,"column":22,"index":177},"end":{"line":5,"column":33,"index":188}},
-            "body": [],
-            "innerComments": [
-              {
-                "type": "CommentBlock",
-                "value": " G ",
-                "start":179,"end":186,"loc":{"start":{"line":5,"column":24,"index":179},"end":{"line":5,"column":31,"index":186}}
-              }
-            ],
-            "leadingComments": [
-              {
-                "type": "CommentBlock",
-                "value": " F ",
-                "start":169,"end":176,"loc":{"start":{"line":5,"column":14,"index":169},"end":{"line":5,"column":21,"index":176}}
-              }
-            ]
-          },
           "decorators": [
             {
               "type": "Decorator",
@@ -171,13 +143,6 @@
                   "type": "CommentBlock",
                   "value": " D ",
                   "start":141,"end":148,"loc":{"start":{"line":4,"column":45,"index":141},"end":{"line":4,"column":52,"index":148}}
-                }
-              ],
-              "leadingComments": [
-                {
-                  "type": "CommentBlock",
-                  "value": " C ",
-                  "start":127,"end":134,"loc":{"start":{"line":4,"column":31,"index":127},"end":{"line":4,"column":38,"index":134}}
                 }
               ]
             },
@@ -205,11 +170,32 @@
               ]
             }
           ],
+          "id": null,
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start":177,"end":188,"loc":{"start":{"line":5,"column":22,"index":177},"end":{"line":5,"column":33,"index":188}},
+            "body": [],
+            "innerComments": [
+              {
+                "type": "CommentBlock",
+                "value": " G ",
+                "start":179,"end":186,"loc":{"start":{"line":5,"column":24,"index":179},"end":{"line":5,"column":31,"index":186}}
+              }
+            ],
+            "leadingComments": [
+              {
+                "type": "CommentBlock",
+                "value": " F ",
+                "start":169,"end":176,"loc":{"start":{"line":5,"column":14,"index":169},"end":{"line":5,"column":21,"index":176}}
+              }
+            ]
+          },
           "leadingComments": [
             {
               "type": "CommentBlock",
-              "value": " E ",
-              "start":155,"end":162,"loc":{"start":{"line":5,"column":0,"index":155},"end":{"line":5,"column":7,"index":162}}
+              "value": " C ",
+              "start":127,"end":134,"loc":{"start":{"line":4,"column":31,"index":127},"end":{"line":4,"column":38,"index":134}}
             }
           ]
         },
