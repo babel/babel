@@ -1121,7 +1121,7 @@ export default abstract class StatementParser extends ExpressionParser {
   parseExpressionStatement(
     node: Undone<N.ExpressionStatement>,
     expr: N.Expression,
-    /* eslint-disable @typescript-eslint/no-unused-vars -- used in TypeScript parser */
+    /* eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in TypeScript parser */
     decorators: N.Decorator[] | null,
   ) {
     node.expression = expr;
