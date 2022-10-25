@@ -2337,7 +2337,8 @@ export type FunctionParent =
   | ArrowFunctionExpression
   | ClassMethod
   | ClassPrivateMethod
-  | StaticBlock;
+  | StaticBlock
+  | TSModuleBlock;
 export type Pureish =
   | FunctionDeclaration
   | FunctionExpression
