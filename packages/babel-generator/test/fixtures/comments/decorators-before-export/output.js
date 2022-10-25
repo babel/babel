@@ -5,4 +5,5 @@
 /* A */
 @dec1
 /* B */@dec2
-/* C */export default /* E */class /* F */{/* G */} /* H */
+/* C */export
+  /* D */ default /* E */class /* F */{/* G */} /* H */

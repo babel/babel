@@ -3,6 +3,7 @@
 class /* 5 */C /* 6 */ {/* 7 */} /* 8 */
 
 /* A */
-export default /* E */ /* C */@dec1
+export /* B */
+default /* E */ /* C */@dec1
 /* D */@dec2
 class /* F */{/* G */} /* H */
