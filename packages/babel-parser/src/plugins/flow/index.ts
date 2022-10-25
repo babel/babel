@@ -637,6 +637,7 @@ export default (superClass: typeof Parser) =>
         ) {
           node = this.parseExport(
             node as Undone<N.ExportNamedDeclaration | N.ExportAllDeclaration>,
+            /* decorators */ null,
           );
           if (node.type === "ExportNamedDeclaration") {
             node.type = "ExportDeclaration";
@@ -1955,6 +1956,7 @@ export default (superClass: typeof Parser) =>
     parseExpressionStatement(
       node: N.ExpressionStatement,
       expr: N.Expression,
+      decorators: N.Decorator[] | null,
     ): N.ExpressionStatement {
       if (expr.type === "Identifier") {
         if (expr.name === "declare") {
@@ -1982,7 +1984,7 @@ export default (superClass: typeof Parser) =>
         }
       }
 
-      return super.parseExpressionStatement(node, expr);
+      return super.parseExpressionStatement(node, expr, decorators);
     }
 
     // export type
@@ -2228,8 +2230,9 @@ export default (superClass: typeof Parser) =>
 
     parseExport(
       node: Undone<N.ExportNamedDeclaration | N.ExportAllDeclaration>,
+      decorators: N.Decorator[] | null,
     ): N.AnyExport {
-      const decl = super.parseExport(node);
+      const decl = super.parseExport(node, decorators);
       if (
         decl.type === "ExportNamedDeclaration" ||
         decl.type === "ExportAllDeclaration"

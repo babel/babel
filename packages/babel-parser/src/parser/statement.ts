@@ -340,16 +340,19 @@ export default abstract class StatementParser extends ExpressionParser {
     context?: string | null,
     topLevel?: boolean,
   ): N.Statement {
+    let decorators: N.Decorator[] | null = null;
+
     if (this.match(tt.at)) {
-      this.parseDecorators(true);
+      decorators = this.parseDecorators(true);
     }
-    return this.parseStatementContent(context, topLevel);
+    return this.parseStatementContent(context, topLevel, decorators);
   }
 
   parseStatementContent(
     this: Parser,
     context?: string | null,
     topLevel?: boolean | null,
+    decorators?: N.Decorator[] | null,
   ): N.Statement {
     let starttype = this.state.type;
     const node = this.startNode();
@@ -390,9 +393,13 @@ export default abstract class StatementParser extends ExpressionParser {
           !context,
         );
 
-      case tt._class:
+      case tt._class: {
         if (context) this.unexpected();
-        return this.parseClass(node as Undone<N.ClassDeclaration>, true);
+        return this.maybeTakeDecorators(
+          decorators,
+          this.parseClass(node as Undone<N.ClassDeclaration>, true),
+        );
+      }
 
       case tt._if:
         return this.parseIfStatement(node as Undone<N.IfStatement>);
@@ -462,6 +469,7 @@ export default abstract class StatementParser extends ExpressionParser {
               | N.ExportDefaultDeclaration
               | N.ExportDefaultDeclaration
             >,
+            decorators,
           );
 
           if (
@@ -521,6 +529,7 @@ export default abstract class StatementParser extends ExpressionParser {
       return this.parseExpressionStatement(
         node as Undone<N.ExpressionStatement>,
         expr,
+        decorators,
       );
     }
   }
@@ -539,38 +548,26 @@ export default abstract class StatementParser extends ExpressionParser {
     );
   }
 
-  takeDecorators(node: N.HasDecorators): void {
-    const decorators =
-      this.state.decoratorStack[this.state.decoratorStack.length - 1];
-    if (decorators.length) {
-      node.decorators = decorators;
-      this.resetStartLocationFromNode(node, decorators[0]);
-      this.state.decoratorStack[this.state.decoratorStack.length - 1] = [];
-
-      if (
-        this.decoratorsEnabledBeforeExport() &&
-        this.input.slice(
-          this.state.lastTokStart,
-          this.state.lastTokEndLoc.index,
-        ) === "export"
-      ) {
-        this.takeLeadingCommentsAfterLastToken(node);
-      }
+  maybeTakeDecorators<T extends N.Class>(
+    maybeDecorators: N.Decorator[] | null,
+    node: T,
+  ): T {
+    if (maybeDecorators) {
+      node.decorators = maybeDecorators;
+      this.resetStartLocationFromNode(node, maybeDecorators[0]);
     }
+    return node;
   }
 
   canHaveLeadingDecorator(): boolean {
     return this.match(tt._class);
   }
 
-  parseDecorators(this: Parser, allowExport?: boolean): void {
-    const { decoratorStack } = this.state;
-    const currentContextDecorators = decoratorStack[decoratorStack.length - 1];
-
-    while (this.match(tt.at)) {
-      const decorator = this.parseDecorator();
-      currentContextDecorators.push(decorator);
-    }
+  parseDecorators(this: Parser, allowExport?: boolean): N.Decorator[] {
+    const decorators = [];
+    do {
+      decorators.push(this.parseDecorator());
+    } while (this.match(tt.at));
 
     if (this.match(tt._export)) {
       if (!allowExport) {
@@ -580,14 +577,13 @@ export default abstract class StatementParser extends ExpressionParser {
       if (!this.decoratorsEnabledBeforeExport()) {
         this.raise(Errors.DecoratorExportClass, { at: this.state.startLoc });
       }
-
-      const firstDecorator = decoratorStack[decoratorStack.length - 1][0];
-      this.forceFinalizeLeadingComments(firstDecorator);
     } else if (!this.canHaveLeadingDecorator()) {
       throw this.raise(Errors.UnexpectedLeadingDecorator, {
         at: this.state.startLoc,
       });
     }
+
+    return decorators;
   }
 
   parseDecorator(this: Parser): N.Decorator {
@@ -597,10 +593,6 @@ export default abstract class StatementParser extends ExpressionParser {
     this.next();
 
     if (this.hasPlugin("decorators")) {
-      // Every time a decorator class expression is evaluated, a new empty array is pushed onto the stack
-      // So that the decorators of any nested class expressions will be dealt with separately
-      this.state.decoratorStack.push([]);
-
       const startLoc = this.state.startLoc;
       let expr: N.Expression;
 
@@ -643,8 +635,6 @@ export default abstract class StatementParser extends ExpressionParser {
 
         node.expression = this.parseMaybeDecoratorArguments(expr);
       }
-
-      this.state.decoratorStack.pop();
     } else {
       node.expression = this.parseExprSubscripts();
     }
@@ -1121,6 +1111,8 @@ export default abstract class StatementParser extends ExpressionParser {
   parseExpressionStatement(
     node: Undone<N.ExpressionStatement>,
     expr: N.Expression,
+    /* eslint-disable @typescript-eslint/no-unused-vars -- used in TypeScript parser */
+    decorators: N.Decorator[] | null,
   ) {
     node.expression = expr;
     this.semicolon();
@@ -1499,8 +1491,6 @@ export default abstract class StatementParser extends ExpressionParser {
     isStatement: /* T === ClassDeclaration */ boolean,
     optionalId?: boolean,
   ): T {
-    this.takeDecorators(node);
-
     this.next(); // 'class'
 
     // A class definition is always strict mode code.
@@ -2130,6 +2120,7 @@ export default abstract class StatementParser extends ExpressionParser {
       | N.ExportAllDeclaration
       | N.ExportNamedDeclaration
     >,
+    decorators: N.Decorator[] | null,
   ): N.AnyExport {
     const hasDefault = this.maybeParseExportDefaultSpecifier(
       // @ts-expect-error todo(flow->ts)
@@ -2154,6 +2145,9 @@ export default abstract class StatementParser extends ExpressionParser {
 
     if (hasStar && !hasNamespace) {
       if (hasDefault) this.unexpected();
+      if (decorators) {
+        throw this.raise(Errors.UnsupportedDecoratorExport, { at: node });
+      }
       this.parseExportFrom(node as Undone<N.ExportNamedDeclaration>, true);
 
       return this.finishNode(node, "ExportAllDeclaration");
@@ -2174,6 +2168,9 @@ export default abstract class StatementParser extends ExpressionParser {
     let hasDeclaration;
     if (isFromRequired || hasSpecifiers) {
       hasDeclaration = false;
+      if (decorators) {
+        throw this.raise(Errors.UnsupportedDecoratorExport, { at: node });
+      }
       this.parseExportFrom(
         node as Undone<N.ExportNamedDeclaration>,
         isFromRequired,
@@ -2191,16 +2188,37 @@ export default abstract class StatementParser extends ExpressionParser {
         false,
         !!(node as Undone<N.ExportNamedDeclaration>).source,
       );
-      return this.finishNode(node, "ExportNamedDeclaration");
+      const finished = this.finishNode(
+        node as Undone<N.ExportNamedDeclaration>,
+        "ExportNamedDeclaration",
+      );
+      if (finished.declaration?.type === "ClassDeclaration") {
+        this.maybeTakeDecorators(decorators, finished.declaration);
+      } else if (decorators) {
+        throw this.raise(Errors.UnsupportedDecoratorExport, { at: node });
+      }
+      return finished;
     }
 
     if (this.eat(tt._default)) {
       // export default ...
-      (node as Undone<N.ExportDefaultDeclaration>).declaration =
-        this.parseExportDefaultExpression();
-      this.checkExport(node as Undone<N.ExportDefaultDeclaration>, true, true);
+      const decl = this.parseExportDefaultExpression();
+      (node as Undone<N.ExportDefaultDeclaration>).declaration = decl;
 
-      return this.finishNode(node, "ExportDefaultDeclaration");
+      const finished = this.finishNode(
+        node as Undone<N.ExportDefaultDeclaration>,
+        "ExportDefaultDeclaration",
+      );
+
+      if (decl.type === "ClassDeclaration") {
+        this.maybeTakeDecorators(decorators, decl as N.ClassDeclaration);
+      } else if (decorators) {
+        throw this.raise(Errors.UnsupportedDecoratorExport, { at: node });
+      }
+
+      this.checkExport(finished, true, true);
+
+      return finished;
     }
 
     throw this.unexpected(null, tt.braceL);
@@ -2311,8 +2329,10 @@ export default abstract class StatementParser extends ExpressionParser {
       ) {
         this.raise(Errors.DecoratorBeforeExport, { at: this.state.startLoc });
       }
-      this.parseDecorators(false);
-      return this.parseClass(expr as Undone<N.ClassExpression>, true, true);
+      return this.maybeTakeDecorators(
+        this.parseDecorators(false),
+        this.parseClass(this.startNode<N.ClassDeclaration>(), true, true),
+      );
     }
 
     if (this.match(tt._const) || this.match(tt._var) || this.isLet()) {
@@ -2331,6 +2351,14 @@ export default abstract class StatementParser extends ExpressionParser {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     node: Undone<N.ExportNamedDeclaration>,
   ): N.Declaration | undefined | null {
+    if (this.match(tt._class)) {
+      const node = this.parseClass(
+        this.startNode<N.ClassDeclaration>(),
+        true,
+        false,
+      );
+      return node;
+    }
     return this.parseStatement(null) as N.Declaration;
   }
 
@@ -2493,14 +2521,6 @@ export default abstract class StatementParser extends ExpressionParser {
           }
         }
       }
-    }
-
-    const currentContextDecorators =
-      this.state.decoratorStack[this.state.decoratorStack.length - 1];
-    // If node.declaration is a class, it will take all decorators in the current context.
-    // Thus we should throw if we see non-empty decorators here.
-    if (currentContextDecorators.length) {
-      throw this.raise(Errors.UnsupportedDecoratorExport, { at: node });
     }
   }
 

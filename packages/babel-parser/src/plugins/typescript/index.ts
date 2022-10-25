@@ -2073,6 +2073,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             nany,
             this.state.value,
             /* next */ true,
+            /* decorators */ null,
           );
         }
       });
@@ -2084,12 +2085,14 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         this.startNode(),
         this.state.value,
         /* next */ true,
+        /* decorators */ null,
       );
     }
 
     tsParseExpressionStatement(
       node: Undone<N.TsModuleDeclaration>,
       expr: N.Identifier,
+      decorators: N.Decorator[] | null,
     ): N.Declaration | undefined | null {
       switch (expr.name) {
         case "declare": {
@@ -2117,7 +2120,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           break;
 
         default:
-          return this.tsParseDeclaration(node, expr.name, /* next */ false);
+          return this.tsParseDeclaration(
+            node,
+            expr.name,
+            /* next */ false,
+            decorators,
+          );
       }
     }
 
@@ -2126,6 +2134,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       node: any,
       value: string,
       next: boolean,
+      decorators: N.Decorator[] | null,
     ): N.Declaration | undefined | null {
       // no declaration apart from enum can be followed by a line break.
       switch (value) {
@@ -2134,7 +2143,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             this.tsCheckLineTerminator(next) &&
             (this.match(tt._class) || tokenIsIdentifier(this.state.type))
           ) {
-            return this.tsParseAbstractDeclaration(node);
+            return this.tsParseAbstractDeclaration(node, decorators);
           }
           break;
 
@@ -2659,7 +2668,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return importNode;
     }
 
-    parseExport(node: Undone<N.Node>): N.AnyExport {
+    parseExport(
+      node: Undone<N.Node>,
+      decorators: N.Decorator[] | null,
+    ): N.AnyExport {
       if (this.match(tt._import)) {
         // `export import A = B;`
         this.next(); // eat `tt._import`
@@ -2703,6 +2715,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
         return super.parseExport(
           node as Undone<N.ExportAllDeclaration | N.ExportDefaultDeclaration>,
+          decorators,
         );
       }
     }
@@ -2784,6 +2797,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     parseStatementContent(
       context?: string | null,
       topLevel?: boolean | null,
+      decorators?: N.Decorator[] | null,
     ): N.Statement {
       if (this.match(tt._const) && this.isLookaheadContextual("enum")) {
         const node = this.startNode<N.TsEnumDeclaration>();
@@ -2802,7 +2816,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         if (result) return result;
       }
 
-      return super.parseStatementContent(context, topLevel);
+      return super.parseStatementContent(context, topLevel, decorators);
     }
 
     parseAccessModifier(): N.Accessibility | undefined | null {
@@ -2953,13 +2967,14 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     parseExpressionStatement(
       node: Undone<N.ExpressionStatement>,
       expr: N.Expression,
+      decorators: N.Decorator[] | null,
     ): N.Statement {
       const decl =
         expr.type === "Identifier"
           ? // @ts-expect-error refine typings
-            this.tsParseExpressionStatement(node, expr)
+            this.tsParseExpressionStatement(node, expr, decorators)
           : undefined;
-      return decl || super.parseExpressionStatement(node, expr);
+      return decl || super.parseExpressionStatement(node, expr, decorators);
     }
 
     // export type
@@ -3808,13 +3823,17 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     tsParseAbstractDeclaration(
       node: any,
+      decorators: N.Decorator[] | null,
     ): N.ClassDeclaration | N.TsInterfaceDeclaration | undefined | null {
       if (this.match(tt._class)) {
         node.abstract = true;
-        return this.parseClass<N.ClassDeclaration>(
-          node as N.ClassDeclaration,
-          /* isStatement */ true,
-          /* optionalId */ false,
+        return this.maybeTakeDecorators(
+          decorators,
+          this.parseClass<N.ClassDeclaration>(
+            node as N.ClassDeclaration,
+            /* isStatement */ true,
+            /* optionalId */ false,
+          ),
         );
       } else if (this.isContextual(tt._interface)) {
         // for invalid abstract interface

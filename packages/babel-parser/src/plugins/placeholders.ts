@@ -241,7 +241,6 @@ export default (superClass: typeof Parser) =>
       const type = isStatement ? "ClassDeclaration" : "ClassExpression";
 
       this.next();
-      this.takeDecorators(node);
       const oldStrict = this.state.strict;
 
       const placeholder = this.parsePlaceholder("Identifier");
@@ -272,9 +271,9 @@ export default (superClass: typeof Parser) =>
       return this.finishNode(node, type);
     }
 
-    parseExport(node: N.Node): N.AnyExport {
+    parseExport(node: N.Node, decorators: N.Decorator[] | null): N.AnyExport {
       const placeholder = this.parsePlaceholder("Identifier");
-      if (!placeholder) return super.parseExport(node);
+      if (!placeholder) return super.parseExport(node, decorators);
 
       if (!this.isContextual(tt._from) && !this.match(tt.comma)) {
         // export %%DECL%%;
@@ -290,7 +289,7 @@ export default (superClass: typeof Parser) =>
       specifier.exported = placeholder;
       node.specifiers = [this.finishNode(specifier, "ExportDefaultSpecifier")];
 
-      return super.parseExport(node);
+      return super.parseExport(node, decorators);
     }
 
     isExportDefaultSpecifier(): boolean {

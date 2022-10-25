@@ -92,11 +92,6 @@ export default class State {
     statementStart?: number;
   }> = [];
 
-  // Leading decorators. Last element of the stack represents the decorators in current context.
-  // Supports nesting of decorators, e.g. @foo(@bar class inner {}) class outer {}
-  // where @foo belongs to the outer class and @bar to the inner
-  decoratorStack: Array<Array<N.Decorator>> = [[]];
-
   // Comment store for Program.comments
   comments: Array<N.Comment> = [];
 
