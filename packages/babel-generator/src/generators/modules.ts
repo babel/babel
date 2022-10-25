@@ -197,13 +197,14 @@ export function ExportDefaultDeclaration(
 export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
   this.word("import");
   this.space();
-  this.printInnerComments(node, false);
 
   const isTypeKind = node.importKind === "type" || node.importKind === "typeof";
   if (isTypeKind) {
+    this.printInnerComments(node, false);
     this.word(node.importKind);
     this.space();
   } else if (node.module) {
+    this.printInnerComments(node, false);
     this.word("module");
     this.space();
   }
