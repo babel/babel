@@ -16,6 +16,11 @@ export default function _regeneratorRuntime() {
   var exports = {};
   var Op = Object.prototype;
   var hasOwn = Op.hasOwnProperty;
+  var defineProperty =
+    Object.defineProperty ||
+    function (obj, key, desc) {
+      obj[key] = desc.value;
+    };
   var undefined; // More compressible than void 0.
   var $Symbol = typeof Symbol === "function" ? Symbol : {};
   var iteratorSymbol = $Symbol.iterator || "@@iterator";
@@ -47,7 +52,9 @@ export default function _regeneratorRuntime() {
 
     // The ._invoke method unifies the implementations of the .next,
     // .throw, and .return methods.
-    generator._invoke = makeInvokeMethod(innerFn, self, context);
+    defineProperty(generator, "_invoke", {
+      value: makeInvokeMethod(innerFn, self, context),
+    });
     return generator;
   }
   exports.wrap = wrap;
@@ -114,8 +121,14 @@ export default function _regeneratorRuntime() {
     Generator.prototype =
       Object.create(IteratorPrototype));
   GeneratorFunction.prototype = GeneratorFunctionPrototype;
-  define(Gp, "constructor", GeneratorFunctionPrototype);
-  define(GeneratorFunctionPrototype, "constructor", GeneratorFunction);
+  defineProperty(Gp, "constructor", {
+    value: GeneratorFunctionPrototype,
+    configurable: true,
+  });
+  defineProperty(GeneratorFunctionPrototype, "constructor", {
+    value: GeneratorFunction,
+    configurable: true,
+  });
   GeneratorFunction.displayName = define(
     GeneratorFunctionPrototype,
     toStringTagSymbol,
@@ -230,7 +243,9 @@ export default function _regeneratorRuntime() {
 
     // Define the unified helper method that is used to implement .next,
     // .throw, and .return (see defineIteratorMethods).
-    this._invoke = enqueue;
+    defineProperty(this, "_invoke", {
+      value: enqueue,
+    });
   }
   defineIteratorMethods(AsyncIterator.prototype);
   define(AsyncIterator.prototype, asyncIteratorSymbol, function () {
@@ -437,7 +452,8 @@ export default function _regeneratorRuntime() {
     tryLocsList.forEach(pushTryEntry, this);
     this.reset(true);
   }
-  exports.keys = function (object) {
+  exports.keys = function (val) {
+    var object = Object(val);
     var keys = [];
     for (var key in object) {
       keys.push(key);
