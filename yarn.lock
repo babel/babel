@@ -1042,7 +1042,7 @@ __metadata:
     "@babel/template": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
-    regenerator-runtime: ^0.13.9
+    regenerator-runtime: ^0.13.10
     terser: ^5.9.0
   languageName: unknown
   linkType: soft
@@ -1084,7 +1084,7 @@ __metadata:
     fs-readdir-recursive: ^1.0.0
     make-dir: "condition:BABEL_8_BREAKING ? : ^2.1.0"
     node-environment-flags: ^1.0.5
-    regenerator-runtime: ^0.13.4
+    regenerator-runtime: ^0.13.10
     rimraf: ^3.0.0
     v8flags: ^3.1.1
   peerDependencies:
@@ -3581,7 +3581,7 @@ __metadata:
   resolution: "@babel/runtime-corejs2@workspace:packages/babel-runtime-corejs2"
   dependencies:
     core-js: ^2.6.12
-    regenerator-runtime: ^0.13.4
+    regenerator-runtime: ^0.13.10
   languageName: unknown
   linkType: soft
 
@@ -3590,7 +3590,7 @@ __metadata:
   resolution: "@babel/runtime-corejs3@workspace:packages/babel-runtime-corejs3"
   dependencies:
     core-js-pure: ^3.25.1
-    regenerator-runtime: ^0.13.4
+    regenerator-runtime: ^0.13.10
   languageName: unknown
   linkType: soft
 
@@ -3607,7 +3607,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/runtime@workspace:packages/babel-runtime"
   dependencies:
-    regenerator-runtime: ^0.13.4
+    regenerator-runtime: ^0.13.10
   languageName: unknown
   linkType: soft
 
@@ -12897,10 +12897,10 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"regenerator-runtime@npm:^0.13.4, regenerator-runtime@npm:^0.13.9":
-  version: 0.13.9
-  resolution: "regenerator-runtime@npm:0.13.9"
-  checksum: 65ed455fe5afd799e2897baf691ca21c2772e1a969d19bb0c4695757c2d96249eb74ee3553ea34a91062b2a676beedf630b4c1551cc6299afb937be1426ec55e
+"regenerator-runtime@npm:^0.13.10, regenerator-runtime@npm:^0.13.4":
+  version: 0.13.10
+  resolution: "regenerator-runtime@npm:0.13.10"
+  checksum: 09893f5a9e82932642d9a999716b6c626dc53ef2a01307c952ebbf8e011802360163a37c304c18a6c358548be5a72b448e37209954a18696f21e438c81cbb4b9
   languageName: node
   linkType: hard
 

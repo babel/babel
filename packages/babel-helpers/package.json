@@ -23,7 +23,7 @@
     "@babel/generator": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
     "@babel/parser": "workspace:^",
-    "regenerator-runtime": "^0.13.9",
+    "regenerator-runtime": "^0.13.10",
     "terser": "^5.9.0"
   },
   "engines": {
