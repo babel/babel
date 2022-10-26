@@ -1,7 +1,6 @@
 "use strict";
 
 var _selfBrandCheck = /*#__PURE__*/new WeakSet();
-
 // These syntaxes should be transpiled:
 // static {} / ??= / #self in / C?.#self
 // The class declaration and the static private property should not be transpiled

@@ -5,6 +5,7 @@
     "edge": "94",
     "firefox": "93",
     "node": "16.11",
+    "deno": "1.14",
     "electron": "15.0"
   },
   "proposal-class-static-block": {
@@ -23,6 +24,7 @@
     "firefox": "90",
     "safari": "15",
     "node": "16.9",
+    "deno": "1.9",
     "ios": "15",
     "electron": "13.0"
   },
@@ -44,6 +46,7 @@
     "firefox": "90",
     "safari": "14.1",
     "node": "12",
+    "deno": "1",
     "ios": "15",
     "samsung": "11",
     "electron": "6.0"
@@ -67,6 +70,7 @@
     "firefox": "90",
     "safari": "15",
     "node": "14.6",
+    "deno": "1",
     "ios": "15",
     "samsung": "14",
     "electron": "10.0"
@@ -90,6 +94,7 @@
     "firefox": "70",
     "safari": "13",
     "node": "12.5",
+    "deno": "1",
     "ios": "13",
     "samsung": "11",
     "rhino": "1.7.14",
@@ -115,6 +120,7 @@
     "firefox": "79",
     "safari": "14",
     "node": "15",
+    "deno": "1.2",
     "ios": "14",
     "samsung": "14",
     "electron": "10.0"
@@ -138,6 +144,7 @@
     "firefox": "72",
     "safari": "13.1",
     "node": "14",
+    "deno": "1",
     "ios": "13.4",
     "samsung": "13",
     "electron": "8.0"
@@ -161,6 +168,7 @@
     "firefox": "74",
     "safari": "13.1",
     "node": "16.9",
+    "deno": "1.9",
     "ios": "13.4",
     "electron": "13.0"
   },
@@ -182,6 +190,7 @@
     "firefox": "62",
     "safari": "12",
     "node": "10",
+    "deno": "1",
     "ios": "12",
     "samsung": "9",
     "rhino": "1.7.14",
@@ -207,6 +216,7 @@
     "firefox": "58",
     "safari": "11.1",
     "node": "10",
+    "deno": "1",
     "ios": "11.3",
     "samsung": "9",
     "electron": "3.0"
@@ -240,6 +250,7 @@
     "firefox": "57",
     "safari": "12",
     "node": "10",
+    "deno": "1",
     "ios": "12",
     "samsung": "8",
     "electron": "3.0"
@@ -263,6 +274,7 @@
     "firefox": "55",
     "safari": "11.1",
     "node": "8.3",
+    "deno": "1",
     "ios": "11.3",
     "samsung": "8",
     "electron": "2.0"
@@ -298,6 +310,7 @@
     "firefox": "78",
     "safari": "11.1",
     "node": "10",
+    "deno": "1",
     "ios": "11.3",
     "samsung": "9",
     "electron": "3.0"
