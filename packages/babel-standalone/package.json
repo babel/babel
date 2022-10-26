@@ -42,6 +42,7 @@
     "@babel/plugin-syntax-decorators": "workspace:^",
     "@babel/plugin-syntax-destructuring-private": "workspace:^",
     "@babel/plugin-syntax-do-expressions": "workspace:^",
+    "@babel/plugin-syntax-explicit-resource-management": "workspace:^",
     "@babel/plugin-syntax-export-default-from": "workspace:^",
     "@babel/plugin-syntax-flow": "workspace:^",
     "@babel/plugin-syntax-function-bind": "workspace:^",

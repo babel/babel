@@ -1,0 +1,204 @@
+{
+  "type": "File",
+  "start":0,"end":110,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":110}},
+  "errors": [
+    "SyntaxError: Using declaration cannot have destructuring patterns. (2:8)",
+    "SyntaxError: Using declaration cannot have destructuring patterns. (3:8)",
+    "SyntaxError: Using declaration cannot have destructuring patterns. (4:13)",
+    "SyntaxError: Using declaration cannot have destructuring patterns. (5:13)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":110,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":110}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "BlockStatement",
+        "start":0,"end":110,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":110}},
+        "body": [
+          {
+            "type": "VariableDeclaration",
+            "start":4,"end":24,"loc":{"start":{"line":2,"column":2,"index":4},"end":{"line":2,"column":22,"index":24}},
+            "declarations": [
+              {
+                "type": "VariableDeclarator",
+                "start":10,"end":23,"loc":{"start":{"line":2,"column":8,"index":10},"end":{"line":2,"column":21,"index":23}},
+                "id": {
+                  "type": "ObjectPattern",
+                  "start":10,"end":17,"loc":{"start":{"line":2,"column":8,"index":10},"end":{"line":2,"column":15,"index":17}},
+                  "properties": [
+                    {
+                      "type": "ObjectProperty",
+                      "start":12,"end":15,"loc":{"start":{"line":2,"column":10,"index":12},"end":{"line":2,"column":13,"index":15}},
+                      "key": {
+                        "type": "Identifier",
+                        "start":12,"end":15,"loc":{"start":{"line":2,"column":10,"index":12},"end":{"line":2,"column":13,"index":15},"identifierName":"foo"},
+                        "name": "foo"
+                      },
+                      "computed": false,
+                      "method": false,
+                      "shorthand": true,
+                      "value": {
+                        "type": "Identifier",
+                        "start":12,"end":15,"loc":{"start":{"line":2,"column":10,"index":12},"end":{"line":2,"column":13,"index":15},"identifierName":"foo"},
+                        "name": "foo"
+                      },
+                      "extra": {
+                        "shorthand": true
+                      }
+                    }
+                  ]
+                },
+                "init": {
+                  "type": "CallExpression",
+                  "start":20,"end":23,"loc":{"start":{"line":2,"column":18,"index":20},"end":{"line":2,"column":21,"index":23}},
+                  "callee": {
+                    "type": "Identifier",
+                    "start":20,"end":21,"loc":{"start":{"line":2,"column":18,"index":20},"end":{"line":2,"column":19,"index":21},"identifierName":"f"},
+                    "name": "f"
+                  },
+                  "arguments": []
+                }
+              }
+            ],
+            "kind": "using"
+          },
+          {
+            "type": "VariableDeclaration",
+            "start":27,"end":47,"loc":{"start":{"line":3,"column":2,"index":27},"end":{"line":3,"column":22,"index":47}},
+            "declarations": [
+              {
+                "type": "VariableDeclarator",
+                "start":33,"end":46,"loc":{"start":{"line":3,"column":8,"index":33},"end":{"line":3,"column":21,"index":46}},
+                "id": {
+                  "type": "ArrayPattern",
+                  "start":33,"end":40,"loc":{"start":{"line":3,"column":8,"index":33},"end":{"line":3,"column":15,"index":40}},
+                  "elements": [
+                    {
+                      "type": "Identifier",
+                      "start":35,"end":38,"loc":{"start":{"line":3,"column":10,"index":35},"end":{"line":3,"column":13,"index":38},"identifierName":"bar"},
+                      "name": "bar"
+                    }
+                  ]
+                },
+                "init": {
+                  "type": "CallExpression",
+                  "start":43,"end":46,"loc":{"start":{"line":3,"column":18,"index":43},"end":{"line":3,"column":21,"index":46}},
+                  "callee": {
+                    "type": "Identifier",
+                    "start":43,"end":44,"loc":{"start":{"line":3,"column":18,"index":43},"end":{"line":3,"column":19,"index":44},"identifierName":"g"},
+                    "name": "g"
+                  },
+                  "arguments": []
+                }
+              }
+            ],
+            "kind": "using"
+          },
+          {
+            "type": "ForOfStatement",
+            "start":50,"end":77,"loc":{"start":{"line":4,"column":2,"index":50},"end":{"line":4,"column":29,"index":77}},
+            "await": false,
+            "left": {
+              "type": "VariableDeclaration",
+              "start":55,"end":68,"loc":{"start":{"line":4,"column":7,"index":55},"end":{"line":4,"column":20,"index":68}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":61,"end":68,"loc":{"start":{"line":4,"column":13,"index":61},"end":{"line":4,"column":20,"index":68}},
+                  "id": {
+                    "type": "ObjectPattern",
+                    "start":61,"end":68,"loc":{"start":{"line":4,"column":13,"index":61},"end":{"line":4,"column":20,"index":68}},
+                    "properties": [
+                      {
+                        "type": "ObjectProperty",
+                        "start":63,"end":66,"loc":{"start":{"line":4,"column":15,"index":63},"end":{"line":4,"column":18,"index":66}},
+                        "key": {
+                          "type": "Identifier",
+                          "start":63,"end":66,"loc":{"start":{"line":4,"column":15,"index":63},"end":{"line":4,"column":18,"index":66},"identifierName":"qux"},
+                          "name": "qux"
+                        },
+                        "computed": false,
+                        "method": false,
+                        "shorthand": true,
+                        "value": {
+                          "type": "Identifier",
+                          "start":63,"end":66,"loc":{"start":{"line":4,"column":15,"index":63},"end":{"line":4,"column":18,"index":66},"identifierName":"qux"},
+                          "name": "qux"
+                        },
+                        "extra": {
+                          "shorthand": true
+                        }
+                      }
+                    ]
+                  },
+                  "init": null
+                }
+              ],
+              "kind": "using"
+            },
+            "right": {
+              "type": "CallExpression",
+              "start":72,"end":75,"loc":{"start":{"line":4,"column":24,"index":72},"end":{"line":4,"column":27,"index":75}},
+              "callee": {
+                "type": "Identifier",
+                "start":72,"end":73,"loc":{"start":{"line":4,"column":24,"index":72},"end":{"line":4,"column":25,"index":73},"identifierName":"h"},
+                "name": "h"
+              },
+              "arguments": []
+            },
+            "body": {
+              "type": "EmptyStatement",
+              "start":76,"end":77,"loc":{"start":{"line":4,"column":28,"index":76},"end":{"line":4,"column":29,"index":77}}
+            }
+          },
+          {
+            "type": "ForOfStatement",
+            "start":80,"end":108,"loc":{"start":{"line":5,"column":2,"index":80},"end":{"line":5,"column":30,"index":108}},
+            "await": false,
+            "left": {
+              "type": "VariableDeclaration",
+              "start":85,"end":99,"loc":{"start":{"line":5,"column":7,"index":85},"end":{"line":5,"column":21,"index":99}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":91,"end":99,"loc":{"start":{"line":5,"column":13,"index":91},"end":{"line":5,"column":21,"index":99}},
+                  "id": {
+                    "type": "ArrayPattern",
+                    "start":91,"end":99,"loc":{"start":{"line":5,"column":13,"index":91},"end":{"line":5,"column":21,"index":99}},
+                    "elements": [
+                      {
+                        "type": "Identifier",
+                        "start":93,"end":97,"loc":{"start":{"line":5,"column":15,"index":93},"end":{"line":5,"column":19,"index":97},"identifierName":"quux"},
+                        "name": "quux"
+                      }
+                    ]
+                  },
+                  "init": null
+                }
+              ],
+              "kind": "using"
+            },
+            "right": {
+              "type": "CallExpression",
+              "start":103,"end":106,"loc":{"start":{"line":5,"column":25,"index":103},"end":{"line":5,"column":28,"index":106}},
+              "callee": {
+                "type": "Identifier",
+                "start":103,"end":104,"loc":{"start":{"line":5,"column":25,"index":103},"end":{"line":5,"column":26,"index":104},"identifierName":"i"},
+                "name": "i"
+              },
+              "arguments": []
+            },
+            "body": {
+              "type": "EmptyStatement",
+              "start":107,"end":108,"loc":{"start":{"line":5,"column":29,"index":107},"end":{"line":5,"column":30,"index":108}}
+            }
+          }
+        ],
+        "directives": []
+      }
+    ],
+    "directives": []
+  }
+}

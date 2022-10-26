@@ -4,6 +4,8 @@ exports[`scope duplicate bindings catch const 1`] = `"Duplicate declaration \\"e
 
 exports[`scope duplicate bindings catch let 1`] = `"Duplicate declaration \\"e\\""`;
 
+exports[`scope duplicate bindings catch using 1`] = `"Duplicate declaration \\"e\\""`;
+
 exports[`scope duplicate bindings global class/class should fail 1`] = `"Duplicate declaration \\"foo\\""`;
 
 exports[`scope duplicate bindings global class/const should fail 1`] = `"Duplicate declaration \\"foo\\""`;

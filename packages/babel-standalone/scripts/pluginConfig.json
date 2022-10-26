@@ -24,6 +24,7 @@
     "syntax-decorators",
     "syntax-destructuring-private",
     "syntax-do-expressions",
+    "syntax-explicit-resource-management",
     "syntax-export-default-from",
     "syntax-flow",
     "syntax-function-bind",

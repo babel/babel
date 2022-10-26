@@ -1154,7 +1154,13 @@ defineType("VariableDeclaration", {
       optional: true,
     },
     kind: {
-      validate: assertOneOf("var", "let", "const"),
+      validate: assertOneOf(
+        "var",
+        "let",
+        "const",
+        // https://github.com/tc39/proposal-explicit-resource-management
+        "using",
+      ),
     },
     declarations: {
       validate: chain(

@@ -292,6 +292,7 @@ export const tt = {
   _sent: createKeywordLike("sent", { startsExpr }),
   _set: createKeywordLike("set", { startsExpr }),
   _static: createKeywordLike("static", { startsExpr }),
+  _using: createKeywordLike("using", { startsExpr }),
   _yield: createKeywordLike("yield", { startsExpr }),
 
   // Flow and TypeScript Keywordlike

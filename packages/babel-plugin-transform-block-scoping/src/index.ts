@@ -132,7 +132,10 @@ function isBlockScoped(node: t.Node): node is t.VariableDeclaration {
     return true;
   }
 
-  if (node.kind !== "let" && node.kind !== "const") return false;
+  if (node.kind !== "let" && node.kind !== "const" && node.kind !== "using") {
+    return false;
+  }
+
   return true;
 }
 

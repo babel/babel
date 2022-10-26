@@ -48,6 +48,9 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
     this.inModule = inModule;
   }
 
+  get inTopLevel() {
+    return (this.currentScope().flags & SCOPE_PROGRAM) > 0;
+  }
   get inFunction() {
     return (this.currentVarScopeFlags() & SCOPE_FUNCTION) > 0;
   }

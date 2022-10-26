@@ -79,14 +79,12 @@ interface PrintSequenceOptions extends Partial<AddNewlinesOptions> {
 
 interface PrintListOptions {
   separator?: (this: Printer) => void;
+  iterator?: (node: t.Node, index: number) => void;
   statement?: boolean;
   indent?: boolean;
 }
 
-type PrintJoinOptions = PrintListOptions &
-  PrintSequenceOptions & {
-    iterator?: (node: t.Node, index: number) => void;
-  };
+export type PrintJoinOptions = PrintListOptions & PrintSequenceOptions;
 class Printer {
   constructor(format: Format, map: SourceMap) {
     this.format = format;

@@ -90,6 +90,7 @@ export default {
     `'${
       type === "ForInStatement" ? "for-in" : "for-of"
     }' loop variable declaration may not have an initializer.`,
+  ForInUsing: "For-in loop may not start with 'using' declaration.",
 
   ForOfAsync: "The left-hand side of a for-of loop may not be 'async'.",
   ForOfLet: "The left-hand side of a for-of loop may not start with 'let'.",
@@ -266,6 +267,8 @@ export default {
     }`,
   UnexpectedTokenUnaryExponentiation:
     "Illegal expression. Wrap left hand side or entire exponentiation in parentheses.",
+  UnexpectedUsingDeclaration:
+    "Using declaration cannot appear in the top level when source type is `script`.",
   UnsupportedBind: "Binding should be performed on object property.",
   UnsupportedDecoratorExport:
     "A decorated export must export a class declaration.",
@@ -291,6 +294,8 @@ export default {
   UnterminatedRegExp: "Unterminated regular expression.",
   UnterminatedString: "Unterminated string constant.",
   UnterminatedTemplate: "Unterminated template.",
+  UsingDeclarationHasBindingPattern:
+    "Using declaration cannot have destructuring patterns.",
   VarRedeclaration: ({ identifierName }: { identifierName: string }) =>
     `Identifier '${identifierName}' has already been declared.`,
   YieldBindingIdentifier:

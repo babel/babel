@@ -152,16 +152,11 @@ export default (superClass: typeof Parser) =>
      * parser/statement.js                                          *
      * ============================================================ */
 
-    isLet(context?: string | null): boolean {
-      if (super.isLet(context)) {
+    hasFollowingIdentifier(context?: string | null): boolean {
+      if (super.hasFollowingIdentifier(context)) {
         return true;
       }
 
-      // Replicate the original checks that lead to looking ahead for an
-      // identifier.
-      if (!this.isContextual(tt._let)) {
-        return false;
-      }
       if (context) return false;
 
       // Accept "let %%" as the start of "let %%placeholder%%", as though the

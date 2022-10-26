@@ -5,7 +5,7 @@ import type Scope from "./index";
 export type BindingKind =
   | "var" /* var declarator */
   | "let" /* let declarator, class declaration id, catch clause parameters */
-  | "const" /* const declarator */
+  | "const" /* const/using declarator */
   | "module" /* import specifiers */
   | "hoisted" /* function declaration id */
   | "param" /* function declaration parameters */
