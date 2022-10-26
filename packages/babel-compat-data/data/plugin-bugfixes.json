@@ -103,6 +103,7 @@
     "firefox": "74",
     "safari": "13.1",
     "node": "14",
+    "deno": "1",
     "ios": "13.4",
     "samsung": "13",
     "electron": "8.0"
