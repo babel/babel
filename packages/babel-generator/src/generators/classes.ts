@@ -35,7 +35,6 @@ export function ClassDeclaration(
   }
 
   this.word("class");
-  this.printInnerComments(node);
 
   if (node.id) {
     this.space();
@@ -67,7 +66,6 @@ export { ClassDeclaration as ClassExpression };
 
 export function ClassBody(this: Printer, node: t.ClassBody) {
   this.token("{");
-  this.printInnerComments(node);
   if (node.body.length === 0) {
     this.token("}");
   } else {
@@ -137,7 +135,6 @@ export function ClassAccessorProperty(
   this.tsPrintClassMemberModifiers(node);
 
   this.word("accessor");
-  this.printInnerComments(node);
   this.space();
 
   if (node.computed) {

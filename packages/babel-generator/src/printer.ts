@@ -110,6 +110,8 @@ class Printer {
   _endsWithInteger = false;
   _endsWithWord = false;
   _lastCommentLine = 0;
+  _endsWithInnerRaw: boolean = false;
+  _indentInnerComments: boolean = true;
 
   generate(ast: t.Node) {
     this.print(ast);
@@ -184,6 +186,8 @@ class Printer {
    */
 
   word(str: string): void {
+    this._maybePrintInnerComments();
+
     // prevent concatenating words and creating // comment out of division and regex
     if (
       this._endsWithWord ||
@@ -220,6 +224,8 @@ class Printer {
    */
 
   token(str: string, maybeNewline = false): void {
+    this._maybePrintInnerComments();
+
     // space is mandatory to avoid outputting <!--
     // http://javascript.spec.whatwg.org/#comment-syntax
     const lastChar = this.getLastChar();
@@ -240,6 +246,8 @@ class Printer {
   }
 
   tokenChar(char: number): void {
+    this._maybePrintInnerComments();
+
     // space is mandatory to avoid outputting <!--
     // http://javascript.spec.whatwg.org/#comment-syntax
     const lastChar = this.getLastChar();
@@ -581,6 +589,8 @@ class Printer {
   ) {
     if (!node) return;
 
+    this._endsWithInnerRaw = false;
+
     const nodeType = node.type;
     const format = this.format;
 
@@ -654,6 +664,8 @@ class Printer {
 
     format.concise = oldConcise;
     this._insideAux = oldInAux;
+
+    this._endsWithInnerRaw = false;
   }
 
   _maybeAddAuxComment(enteredPositionlessNode?: boolean) {
@@ -776,7 +788,7 @@ class Printer {
   }
 
   _printTrailingComments(node: t.Node, parent?: t.Node, lineOffset?: number) {
-    const comments = this._getComments(false, node);
+    const comments = node.trailingComments;
     if (!comments?.length) return;
     this._printComments(
       COMMENT_TYPE.TRAILING,
@@ -788,16 +800,35 @@ class Printer {
   }
 
   _printLeadingComments(node: t.Node, parent: t.Node) {
-    const comments = this._getComments(true, node);
+    const comments = node.leadingComments;
     if (!comments?.length) return;
     this._printComments(COMMENT_TYPE.LEADING, comments, node, parent);
   }
 
-  printInnerComments(node: t.Node, indent = true) {
-    if (!node.innerComments?.length) return;
+  _maybePrintInnerComments() {
+    if (this._endsWithInnerRaw) this.printInnerComments();
+    this._endsWithInnerRaw = true;
+    this._indentInnerComments = true;
+  }
+
+  printInnerComments() {
+    const node = this._printStack[this._printStack.length - 1];
+    const comments = node.innerComments;
+    if (!comments?.length) return;
+
+    const hasSpace = this.endsWith(charCodes.space);
+    const indent = this._indentInnerComments;
+    const printedCommentsCount = this._printedComments.size;
     if (indent) this.indent();
-    this._printComments(COMMENT_TYPE.INNER, node.innerComments, node);
+    this._printComments(COMMENT_TYPE.INNER, comments, node);
+    if (hasSpace && printedCommentsCount !== this._printedComments.size) {
+      this.space();
+    }
     if (indent) this.dedent();
+  }
+
+  noIndentInnerCommentsHere() {
+    this._indentInnerComments = false;
   }
 
   printSequence(
@@ -860,15 +891,7 @@ class Printer {
     }
   }
 
-  _getComments(leading: boolean, node: t.Node) {
-    // Note, we use a boolean flag here instead of passing in the attribute name as it is faster
-    // because this is called extremely frequently.
-    return (
-      (node && (leading ? node.leadingComments : node.trailingComments)) || null
-    );
-  }
-
-  _printComment(comment: t.Comment, skipNewLines: COMMENT_SKIP_NEWLINE) {
+  _printComment(comment: t.Comment, skipNewLines: COMMENT_SKIP_NEWLINE): void {
     // Some plugins (such as flow-strip-types) use this to mark comments as removed using the AST-root 'comments' property,
     // where they can't manually mutate the AST node comment lists.
     if (comment.ignore) return;
@@ -1070,15 +1093,6 @@ class Printer {
         this._lastCommentLine = lastLine;
       }
     }
-  }
-  printAssertions(node: Extract<t.Node, { assertions?: t.ImportAttribute[] }>) {
-    this.space();
-    this.printInnerComments(node);
-    this.token("{");
-    this.space();
-    this.printList(node.assertions, node);
-    this.space();
-    this.token("}");
   }
 }
 

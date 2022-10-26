@@ -22,7 +22,6 @@ export function ObjectExpression(this: Printer, node: t.ObjectExpression) {
   const props = node.properties;
 
   this.token("{");
-  this.printInnerComments(node);
 
   if (props.length) {
     this.space();
@@ -86,7 +85,6 @@ export function ArrayExpression(this: Printer, node: t.ArrayExpression) {
   const len = elems.length;
 
   this.token("[");
-  this.printInnerComments(node);
 
   for (let i = 0; i < elems.length; i++) {
     const elem = elems[i];
@@ -132,7 +130,6 @@ export function RecordExpression(this: Printer, node: t.RecordExpression) {
   }
 
   this.token(startToken);
-  this.printInnerComments(node);
 
   if (props.length) {
     this.space();
@@ -161,7 +158,6 @@ export function TupleExpression(this: Printer, node: t.TupleExpression) {
   }
 
   this.token(startToken);
-  this.printInnerComments(node);
 
   for (let i = 0; i < elems.length; i++) {
     const elem = elems[i];
