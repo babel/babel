@@ -1996,6 +1996,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/plugin-syntax-import-reflection@workspace:^, @babel/plugin-syntax-import-reflection@workspace:packages/babel-plugin-syntax-import-reflection":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-syntax-import-reflection@workspace:packages/babel-plugin-syntax-import-reflection"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-syntax-json-strings@npm:^7.8.3":
   version: 7.8.3
   resolution: "@babel/plugin-syntax-json-strings@npm:7.8.3"
@@ -3652,6 +3663,7 @@ __metadata:
     "@babel/plugin-syntax-function-bind": "workspace:^"
     "@babel/plugin-syntax-function-sent": "workspace:^"
     "@babel/plugin-syntax-import-assertions": "workspace:^"
+    "@babel/plugin-syntax-import-reflection": "workspace:^"
     "@babel/plugin-syntax-jsx": "workspace:^"
     "@babel/plugin-syntax-module-blocks": "workspace:^"
     "@babel/plugin-syntax-pipeline-operator": "workspace:^"

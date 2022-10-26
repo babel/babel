@@ -117,6 +117,9 @@ export default {
   ImportCallSpreadArgument: "`...` is not allowed in `import()`.",
   ImportJSONBindingNotDefault:
     "A JSON module can only be imported with `default`.",
+  ImportReflectionHasAssertion: "`import module x` cannot have assertions.",
+  ImportReflectionNotBinding:
+    'Only `import module x from "./module"` is valid.',
   IncompatibleRegExpUVFlags:
     "The 'u' and 'v' regular expression flags cannot be enabled at the same time.",
   InvalidBigIntLiteral: "Invalid BigIntLiteral.",

@@ -1,0 +1,63 @@
+{
+  "type": "File",
+  "start":0,"end":72,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":32,"index":72}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":72,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":32,"index":72}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":39,"index":39}},
+        "specifiers": [
+          {
+            "type": "ImportDefaultSpecifier",
+            "start":14,"end":17,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":17,"index":17}},
+            "local": {
+              "type": "Identifier",
+              "start":14,"end":17,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":17,"index":17},"identifierName":"foo"},
+              "name": "foo"
+            }
+          }
+        ],
+        "module": true,
+        "source": {
+          "type": "StringLiteral",
+          "start":23,"end":38,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":38,"index":38}},
+          "extra": {
+            "rawValue": "./module.wasm",
+            "raw": "\"./module.wasm\""
+          },
+          "value": "./module.wasm"
+        }
+      },
+      {
+        "type": "ImportDeclaration",
+        "start":40,"end":72,"loc":{"start":{"line":2,"column":0,"index":40},"end":{"line":2,"column":32,"index":72}},
+        "specifiers": [
+          {
+            "type": "ImportDefaultSpecifier",
+            "start":47,"end":50,"loc":{"start":{"line":2,"column":7,"index":47},"end":{"line":2,"column":10,"index":50}},
+            "local": {
+              "type": "Identifier",
+              "start":47,"end":50,"loc":{"start":{"line":2,"column":7,"index":47},"end":{"line":2,"column":10,"index":50},"identifierName":"bar"},
+              "name": "bar"
+            }
+          }
+        ],
+        "module": false,
+        "source": {
+          "type": "StringLiteral",
+          "start":56,"end":71,"loc":{"start":{"line":2,"column":16,"index":56},"end":{"line":2,"column":31,"index":71}},
+          "extra": {
+            "rawValue": "./module.wasm",
+            "raw": "\"./module.wasm\""
+          },
+          "value": "./module.wasm"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

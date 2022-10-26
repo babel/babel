@@ -142,6 +142,7 @@
               "functionSent",
               "importAssertions",
               "importMeta",
+              "importReflection",
               "jsx",
               "logicalAssignment",
               "moduleStringNames",

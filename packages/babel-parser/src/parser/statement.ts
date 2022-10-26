@@ -2654,6 +2654,24 @@ export default abstract class StatementParser extends ExpressionParser {
     return false;
   }
 
+  checkImportReflection(node: Undone<N.ImportDeclaration>) {
+    if (node.module) {
+      if (
+        node.specifiers.length !== 1 ||
+        node.specifiers[0].type !== "ImportDefaultSpecifier"
+      ) {
+        this.raise(Errors.ImportReflectionNotBinding, {
+          at: node.specifiers[0].loc.start,
+        });
+      }
+      if (node.assertions?.length > 0) {
+        this.raise(Errors.ImportReflectionHasAssertion, {
+          at: node.specifiers[0].loc.start,
+        });
+      }
+    }
+  }
+
   checkJSONModuleImport(
     node: Undone<
       N.ExportAllDeclaration | N.ExportNamedDeclaration | N.ImportDeclaration
@@ -2687,6 +2705,39 @@ export default abstract class StatementParser extends ExpressionParser {
     }
   }
 
+  parseMaybeImportReflection(node: Undone<N.ImportDeclaration>) {
+    let isImportReflection = false;
+    if (this.isContextual(tt._module)) {
+      const lookahead = this.lookahead();
+      if (tokenIsIdentifier(lookahead.type)) {
+        if (lookahead.type !== tt._from) {
+          // import module x
+          isImportReflection = true;
+        } else {
+          const nextNextTokenFirstChar = this.input.charCodeAt(
+            this.nextTokenStartSince(lookahead.end),
+          );
+          if (nextNextTokenFirstChar === charCodes.lowercaseF) {
+            // import module from from ...
+            isImportReflection = true;
+          }
+        }
+      } else {
+        // import module { x } ...
+        // This is invalid, we will continue parsing and throw
+        // a recoverable error later
+        isImportReflection = true;
+      }
+    }
+    if (isImportReflection) {
+      this.expectPlugin("importReflection");
+      this.next(); // eat tt._module;
+      node.module = true;
+    } else if (this.hasPlugin("importReflection")) {
+      node.module = false;
+    }
+  }
+
   // Parses import declaration.
   // https://tc39.es/ecma262/#prod-ImportDeclaration
 
@@ -2694,6 +2745,7 @@ export default abstract class StatementParser extends ExpressionParser {
     // import '...'
     node.specifiers = [];
     if (!this.match(tt.string)) {
+      this.parseMaybeImportReflection(node);
       // check if we have a default import like
       // import React from "react";
       const hasDefault = this.maybeParseDefaultImportSpecifier(node);
@@ -2726,6 +2778,7 @@ export default abstract class StatementParser extends ExpressionParser {
         node.attributes = attributes;
       }
     }
+    this.checkImportReflection(node);
     this.checkJSONModuleImport(node);
 
     this.semicolon();

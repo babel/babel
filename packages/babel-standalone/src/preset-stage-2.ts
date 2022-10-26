@@ -35,6 +35,7 @@ export default (_: any, opts: any = {}) => {
         { syntaxType: recordAndTupleSyntax },
       ],
       babelPlugins.syntaxModuleBlocks,
+      babelPlugins.syntaxImportReflection,
     ],
   };
 };

@@ -1,0 +1,4 @@
+{
+  "plugins": ["importReflection", "flow"],
+  "sourceType": "module"
+}

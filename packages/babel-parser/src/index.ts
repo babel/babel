@@ -80,7 +80,9 @@ function generateExportedTokenTypes(
   internalTokenTypes: InternalTokenTypes,
 ): Record<string, ExportedTokenType> {
   const tokenTypes: Record<string, ExportedTokenType> = {};
-  for (const typeName of Object.keys(internalTokenTypes)) {
+  for (const typeName of Object.keys(
+    internalTokenTypes,
+  ) as (keyof InternalTokenTypes)[]) {
     tokenTypes[typeName] = getExportedToken(internalTokenTypes[typeName]);
   }
   return tokenTypes;

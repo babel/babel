@@ -12,9 +12,10 @@ import syntaxExportDefaultFrom from "@babel/plugin-syntax-export-default-from";
 import syntaxFlow from "@babel/plugin-syntax-flow";
 import syntaxFunctionBind from "@babel/plugin-syntax-function-bind";
 import syntaxFunctionSent from "@babel/plugin-syntax-function-sent";
+import syntaxImportAssertions from "@babel/plugin-syntax-import-assertions";
+import syntaxImportReflection from "@babel/plugin-syntax-import-reflection";
 import syntaxModuleBlocks from "@babel/plugin-syntax-module-blocks";
 import syntaxJsx from "@babel/plugin-syntax-jsx";
-import syntaxImportAssertions from "@babel/plugin-syntax-import-assertions";
 import syntaxPipelineOperator from "@babel/plugin-syntax-pipeline-operator";
 import syntaxRecordAndTuple from "@babel/plugin-syntax-record-and-tuple";
 import syntaxTypescript from "@babel/plugin-syntax-typescript";
@@ -112,9 +113,10 @@ export {
   syntaxFlow,
   syntaxFunctionBind,
   syntaxFunctionSent,
+  syntaxImportAssertions,
+  syntaxImportReflection,
   syntaxModuleBlocks,
   syntaxJsx,
-  syntaxImportAssertions,
   syntaxPipelineOperator,
   syntaxRecordAndTuple,
   syntaxTypescript,
@@ -213,9 +215,10 @@ export const all: { [k: string]: any } = {
   "syntax-flow": syntaxFlow,
   "syntax-function-bind": syntaxFunctionBind,
   "syntax-function-sent": syntaxFunctionSent,
+  "syntax-import-assertions": syntaxImportAssertions,
+  "syntax-import-reflection": syntaxImportReflection,
   "syntax-module-blocks": syntaxModuleBlocks,
   "syntax-jsx": syntaxJsx,
-  "syntax-import-assertions": syntaxImportAssertions,
   "syntax-pipeline-operator": syntaxPipelineOperator,
   "syntax-record-and-tuple": syntaxRecordAndTuple,
   "syntax-typescript": syntaxTypescript,

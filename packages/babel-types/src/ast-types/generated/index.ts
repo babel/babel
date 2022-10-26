@@ -857,6 +857,7 @@ export interface ImportDeclaration extends BaseNode {
   source: StringLiteral;
   assertions?: Array<ImportAttribute> | null;
   importKind?: "type" | "typeof" | "value" | null;
+  module?: boolean | null;
 }
 
 export interface ImportDefaultSpecifier extends BaseNode {

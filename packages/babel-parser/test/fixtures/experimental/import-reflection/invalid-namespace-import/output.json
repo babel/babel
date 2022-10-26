@@ -1,0 +1,41 @@
+{
+  "type": "File",
+  "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":44,"index":44}},
+  "errors": [
+    "SyntaxError: Only `import module x from \"./module\"` is valid. (1:14)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":44,"index":44}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":44,"index":44}},
+        "specifiers": [
+          {
+            "type": "ImportNamespaceSpecifier",
+            "start":14,"end":22,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":22,"index":22}},
+            "local": {
+              "type": "Identifier",
+              "start":19,"end":22,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":22,"index":22},"identifierName":"foo"},
+              "name": "foo"
+            }
+          }
+        ],
+        "module": true,
+        "source": {
+          "type": "StringLiteral",
+          "start":28,"end":43,"loc":{"start":{"line":1,"column":28,"index":28},"end":{"line":1,"column":43,"index":43}},
+          "extra": {
+            "rawValue": "./module.wasm",
+            "raw": "\"./module.wasm\""
+          },
+          "value": "./module.wasm"
+        }
+      }
+    ],
+    "directives": []
+  }
+}
