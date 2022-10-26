@@ -154,7 +154,7 @@ export default function convertFunctionParams(
   // ensure it's a block, useful for arrow functions
   path.ensureBlock();
 
-  if (state.needsOuterBinding || shadowedParams.size > 0) {
+  if (state.needsOuterBinding || shadowedParams.size > 0 || node.generator) {
     body.push(buildScopeIIFE(shadowedParams, path.node.body));
 
     path.set("body", t.blockStatement(body as t.Statement[]));
