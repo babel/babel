@@ -16,6 +16,7 @@ export const browserNameMap: Record<string, Target> = {
   ie_mob: "ie",
   ios_saf: "ios",
   node: "node",
+  deno: "deno",
   op_mob: "opera",
   opera: "opera",
   safari: "safari",

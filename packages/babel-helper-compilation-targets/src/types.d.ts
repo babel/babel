@@ -1,6 +1,7 @@
 // Targets, engine names defined in compat-tables
 export type Target =
   | "node"
+  | "deno"
   | "chrome"
   | "opera"
   | "edge"
