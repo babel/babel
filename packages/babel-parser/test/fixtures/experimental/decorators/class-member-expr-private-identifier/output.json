@@ -1,0 +1,424 @@
+{
+  "type": "File",
+  "start":0,"end":1316,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":53,"column":2,"index":1316}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":1316,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":53,"column":2,"index":1316}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":987,"end":1316,"loc":{"start":{"line":33,"column":0,"index":987},"end":{"line":53,"column":2,"index":1316}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":991,"end":1315,"loc":{"start":{"line":33,"column":4,"index":991},"end":{"line":53,"column":1,"index":1315}},
+            "id": {
+              "type": "Identifier",
+              "start":991,"end":992,"loc":{"start":{"line":33,"column":4,"index":991},"end":{"line":33,"column":5,"index":992},"identifierName":"C"},
+              "name": "C"
+            },
+            "init": {
+              "type": "ClassExpression",
+              "start":995,"end":1315,"loc":{"start":{"line":33,"column":8,"index":995},"end":{"line":53,"column":1,"index":1315}},
+              "id": null,
+              "superClass": null,
+              "body": {
+                "type": "ClassBody",
+                "start":1001,"end":1315,"loc":{"start":{"line":33,"column":14,"index":1001},"end":{"line":53,"column":1,"index":1315}},
+                "body": [
+                  {
+                    "type": "ClassPrivateMethod",
+                    "start":1005,"end":1019,"loc":{"start":{"line":34,"column":2,"index":1005},"end":{"line":34,"column":16,"index":1019}},
+                    "static": true,
+                    "key": {
+                      "type": "PrivateName",
+                      "start":1012,"end":1014,"loc":{"start":{"line":34,"column":9,"index":1012},"end":{"line":34,"column":11,"index":1014}},
+                      "id": {
+                        "type": "Identifier",
+                        "start":1013,"end":1014,"loc":{"start":{"line":34,"column":10,"index":1013},"end":{"line":34,"column":11,"index":1014},"identifierName":"$"},
+                        "name": "$"
+                      }
+                    },
+                    "kind": "method",
+                    "id": null,
+                    "generator": false,
+                    "async": false,
+                    "params": [],
+                    "body": {
+                      "type": "BlockStatement",
+                      "start":1017,"end":1019,"loc":{"start":{"line":34,"column":14,"index":1017},"end":{"line":34,"column":16,"index":1019}},
+                      "body": [],
+                      "directives": []
+                    }
+                  },
+                  {
+                    "type": "ClassPrivateMethod",
+                    "start":1022,"end":1036,"loc":{"start":{"line":35,"column":2,"index":1022},"end":{"line":35,"column":16,"index":1036}},
+                    "static": true,
+                    "key": {
+                      "type": "PrivateName",
+                      "start":1029,"end":1031,"loc":{"start":{"line":35,"column":9,"index":1029},"end":{"line":35,"column":11,"index":1031}},
+                      "id": {
+                        "type": "Identifier",
+                        "start":1030,"end":1031,"loc":{"start":{"line":35,"column":10,"index":1030},"end":{"line":35,"column":11,"index":1031},"identifierName":"_"},
+                        "name": "_"
+                      }
+                    },
+                    "kind": "method",
+                    "id": null,
+                    "generator": false,
+                    "async": false,
+                    "params": [],
+                    "body": {
+                      "type": "BlockStatement",
+                      "start":1034,"end":1036,"loc":{"start":{"line":35,"column":14,"index":1034},"end":{"line":35,"column":16,"index":1036}},
+                      "body": [],
+                      "directives": []
+                    }
+                  },
+                  {
+                    "type": "ClassPrivateMethod",
+                    "start":1039,"end":1058,"loc":{"start":{"line":36,"column":2,"index":1039},"end":{"line":36,"column":21,"index":1058}},
+                    "static": true,
+                    "key": {
+                      "type": "PrivateName",
+                      "start":1046,"end":1053,"loc":{"start":{"line":36,"column":9,"index":1046},"end":{"line":36,"column":16,"index":1053}},
+                      "id": {
+                        "type": "Identifier",
+                        "start":1047,"end":1053,"loc":{"start":{"line":36,"column":10,"index":1047},"end":{"line":36,"column":16,"index":1053},"identifierName":"o"},
+                        "name": "o"
+                      }
+                    },
+                    "kind": "method",
+                    "id": null,
+                    "generator": false,
+                    "async": false,
+                    "params": [],
+                    "body": {
+                      "type": "BlockStatement",
+                      "start":1056,"end":1058,"loc":{"start":{"line":36,"column":19,"index":1056},"end":{"line":36,"column":21,"index":1058}},
+                      "body": [],
+                      "directives": []
+                    }
+                  },
+                  {
+                    "type": "ClassPrivateMethod",
+                    "start":1061,"end":1080,"loc":{"start":{"line":37,"column":2,"index":1061},"end":{"line":37,"column":21,"index":1080}},
+                    "static": true,
+                    "key": {
+                      "type": "PrivateName",
+                      "start":1068,"end":1075,"loc":{"start":{"line":37,"column":9,"index":1068},"end":{"line":37,"column":16,"index":1075}},
+                      "id": {
+                        "type": "Identifier",
+                        "start":1069,"end":1075,"loc":{"start":{"line":37,"column":10,"index":1069},"end":{"line":37,"column":16,"index":1075},"identifierName":"℘"},
+                        "name": "℘"
+                      }
+                    },
+                    "kind": "method",
+                    "id": null,
+                    "generator": false,
+                    "async": false,
+                    "params": [],
+                    "body": {
+                      "type": "BlockStatement",
+                      "start":1078,"end":1080,"loc":{"start":{"line":37,"column":19,"index":1078},"end":{"line":37,"column":21,"index":1080}},
+                      "body": [],
+                      "directives": []
+                    }
+                  },
+                  {
+                    "type": "ClassPrivateMethod",
+                    "start":1083,"end":1108,"loc":{"start":{"line":38,"column":2,"index":1083},"end":{"line":38,"column":27,"index":1108}},
+                    "static": true,
+                    "key": {
+                      "type": "PrivateName",
+                      "start":1090,"end":1103,"loc":{"start":{"line":38,"column":9,"index":1090},"end":{"line":38,"column":22,"index":1103}},
+                      "id": {
+                        "type": "Identifier",
+                        "start":1091,"end":1103,"loc":{"start":{"line":38,"column":10,"index":1091},"end":{"line":38,"column":22,"index":1103},"identifierName":"ZW_‌_NJ"},
+                        "name": "ZW_‌_NJ"
+                      }
+                    },
+                    "kind": "method",
+                    "id": null,
+                    "generator": false,
+                    "async": false,
+                    "params": [],
+                    "body": {
+                      "type": "BlockStatement",
+                      "start":1106,"end":1108,"loc":{"start":{"line":38,"column":25,"index":1106},"end":{"line":38,"column":27,"index":1108}},
+                      "body": [],
+                      "directives": []
+                    }
+                  },
+                  {
+                    "type": "ClassPrivateMethod",
+                    "start":1111,"end":1135,"loc":{"start":{"line":39,"column":2,"index":1111},"end":{"line":39,"column":26,"index":1135}},
+                    "static": true,
+                    "key": {
+                      "type": "PrivateName",
+                      "start":1118,"end":1130,"loc":{"start":{"line":39,"column":9,"index":1118},"end":{"line":39,"column":21,"index":1130}},
+                      "id": {
+                        "type": "Identifier",
+                        "start":1119,"end":1130,"loc":{"start":{"line":39,"column":10,"index":1119},"end":{"line":39,"column":21,"index":1130},"identifierName":"ZW_‍_J"},
+                        "name": "ZW_‍_J"
+                      }
+                    },
+                    "kind": "method",
+                    "id": null,
+                    "generator": false,
+                    "async": false,
+                    "params": [],
+                    "body": {
+                      "type": "BlockStatement",
+                      "start":1133,"end":1135,"loc":{"start":{"line":39,"column":24,"index":1133},"end":{"line":39,"column":26,"index":1135}},
+                      "body": [],
+                      "directives": []
+                    }
+                  },
+                  {
+                    "type": "ClassPrivateMethod",
+                    "start":1138,"end":1156,"loc":{"start":{"line":40,"column":2,"index":1138},"end":{"line":40,"column":20,"index":1156}},
+                    "static": true,
+                    "key": {
+                      "type": "PrivateName",
+                      "start":1145,"end":1151,"loc":{"start":{"line":40,"column":9,"index":1145},"end":{"line":40,"column":15,"index":1151}},
+                      "id": {
+                        "type": "Identifier",
+                        "start":1146,"end":1151,"loc":{"start":{"line":40,"column":10,"index":1146},"end":{"line":40,"column":15,"index":1151},"identifierName":"yield"},
+                        "name": "yield"
+                      }
+                    },
+                    "kind": "method",
+                    "id": null,
+                    "generator": false,
+                    "async": false,
+                    "params": [],
+                    "body": {
+                      "type": "BlockStatement",
+                      "start":1154,"end":1156,"loc":{"start":{"line":40,"column":18,"index":1154},"end":{"line":40,"column":20,"index":1156}},
+                      "body": [],
+                      "directives": []
+                    }
+                  },
+                  {
+                    "type": "ClassPrivateMethod",
+                    "start":1159,"end":1177,"loc":{"start":{"line":41,"column":2,"index":1159},"end":{"line":41,"column":20,"index":1177}},
+                    "static": true,
+                    "key": {
+                      "type": "PrivateName",
+                      "start":1166,"end":1172,"loc":{"start":{"line":41,"column":9,"index":1166},"end":{"line":41,"column":15,"index":1172}},
+                      "id": {
+                        "type": "Identifier",
+                        "start":1167,"end":1172,"loc":{"start":{"line":41,"column":10,"index":1167},"end":{"line":41,"column":15,"index":1172},"identifierName":"await"},
+                        "name": "await"
+                      }
+                    },
+                    "kind": "method",
+                    "id": null,
+                    "generator": false,
+                    "async": false,
+                    "params": [],
+                    "body": {
+                      "type": "BlockStatement",
+                      "start":1175,"end":1177,"loc":{"start":{"line":41,"column":18,"index":1175},"end":{"line":41,"column":20,"index":1177}},
+                      "body": [],
+                      "directives": []
+                    }
+                  },
+                  {
+                    "type": "StaticBlock",
+                    "start":1181,"end":1313,"loc":{"start":{"line":43,"column":2,"index":1181},"end":{"line":52,"column":3,"index":1313}},
+                    "body": [
+                      {
+                        "type": "VariableDeclaration",
+                        "start":1194,"end":1309,"loc":{"start":{"line":44,"column":4,"index":1194},"end":{"line":51,"column":20,"index":1309}},
+                        "declarations": [
+                          {
+                            "type": "VariableDeclarator",
+                            "start":1198,"end":1309,"loc":{"start":{"line":44,"column":8,"index":1198},"end":{"line":51,"column":20,"index":1309}},
+                            "id": {
+                              "type": "Identifier",
+                              "start":1198,"end":1199,"loc":{"start":{"line":44,"column":8,"index":1198},"end":{"line":44,"column":9,"index":1199},"identifierName":"C"},
+                              "name": "C"
+                            },
+                            "init": {
+                              "type": "ClassExpression",
+                              "start":1202,"end":1309,"loc":{"start":{"line":44,"column":12,"index":1202},"end":{"line":51,"column":20,"index":1309}},
+                              "decorators": [
+                                {
+                                  "type": "Decorator",
+                                  "start":1202,"end":1205,"loc":{"start":{"line":44,"column":12,"index":1202},"end":{"line":44,"column":15,"index":1205}},
+                                  "expression": {
+                                    "type": "PrivateName",
+                                    "start":1203,"end":1205,"loc":{"start":{"line":44,"column":13,"index":1203},"end":{"line":44,"column":15,"index":1205}},
+                                    "id": {
+                                      "type": "Identifier",
+                                      "start":1204,"end":1205,"loc":{"start":{"line":44,"column":14,"index":1204},"end":{"line":44,"column":15,"index":1205},"identifierName":"$"},
+                                      "name": "$"
+                                    }
+                                  }
+                                },
+                                {
+                                  "type": "Decorator",
+                                  "start":1210,"end":1213,"loc":{"start":{"line":45,"column":4,"index":1210},"end":{"line":45,"column":7,"index":1213}},
+                                  "expression": {
+                                    "type": "PrivateName",
+                                    "start":1211,"end":1213,"loc":{"start":{"line":45,"column":5,"index":1211},"end":{"line":45,"column":7,"index":1213}},
+                                    "id": {
+                                      "type": "Identifier",
+                                      "start":1212,"end":1213,"loc":{"start":{"line":45,"column":6,"index":1212},"end":{"line":45,"column":7,"index":1213},"identifierName":"_"},
+                                      "name": "_"
+                                    }
+                                  }
+                                },
+                                {
+                                  "type": "Decorator",
+                                  "start":1218,"end":1226,"loc":{"start":{"line":46,"column":4,"index":1218},"end":{"line":46,"column":12,"index":1226}},
+                                  "expression": {
+                                    "type": "PrivateName",
+                                    "start":1219,"end":1226,"loc":{"start":{"line":46,"column":5,"index":1219},"end":{"line":46,"column":12,"index":1226}},
+                                    "id": {
+                                      "type": "Identifier",
+                                      "start":1220,"end":1226,"loc":{"start":{"line":46,"column":6,"index":1220},"end":{"line":46,"column":12,"index":1226},"identifierName":"o"},
+                                      "name": "o"
+                                    }
+                                  }
+                                },
+                                {
+                                  "type": "Decorator",
+                                  "start":1231,"end":1239,"loc":{"start":{"line":47,"column":4,"index":1231},"end":{"line":47,"column":12,"index":1239}},
+                                  "expression": {
+                                    "type": "PrivateName",
+                                    "start":1232,"end":1239,"loc":{"start":{"line":47,"column":5,"index":1232},"end":{"line":47,"column":12,"index":1239}},
+                                    "id": {
+                                      "type": "Identifier",
+                                      "start":1233,"end":1239,"loc":{"start":{"line":47,"column":6,"index":1233},"end":{"line":47,"column":12,"index":1239},"identifierName":"℘"},
+                                      "name": "℘"
+                                    }
+                                  }
+                                },
+                                {
+                                  "type": "Decorator",
+                                  "start":1244,"end":1258,"loc":{"start":{"line":48,"column":4,"index":1244},"end":{"line":48,"column":18,"index":1258}},
+                                  "expression": {
+                                    "type": "PrivateName",
+                                    "start":1245,"end":1258,"loc":{"start":{"line":48,"column":5,"index":1245},"end":{"line":48,"column":18,"index":1258}},
+                                    "id": {
+                                      "type": "Identifier",
+                                      "start":1246,"end":1258,"loc":{"start":{"line":48,"column":6,"index":1246},"end":{"line":48,"column":18,"index":1258},"identifierName":"ZW_‌_NJ"},
+                                      "name": "ZW_‌_NJ"
+                                    }
+                                  }
+                                },
+                                {
+                                  "type": "Decorator",
+                                  "start":1263,"end":1276,"loc":{"start":{"line":49,"column":4,"index":1263},"end":{"line":49,"column":17,"index":1276}},
+                                  "expression": {
+                                    "type": "PrivateName",
+                                    "start":1264,"end":1276,"loc":{"start":{"line":49,"column":5,"index":1264},"end":{"line":49,"column":17,"index":1276}},
+                                    "id": {
+                                      "type": "Identifier",
+                                      "start":1265,"end":1276,"loc":{"start":{"line":49,"column":6,"index":1265},"end":{"line":49,"column":17,"index":1276},"identifierName":"ZW_‍_J"},
+                                      "name": "ZW_‍_J"
+                                    }
+                                  }
+                                },
+                                {
+                                  "type": "Decorator",
+                                  "start":1281,"end":1288,"loc":{"start":{"line":50,"column":4,"index":1281},"end":{"line":50,"column":11,"index":1288}},
+                                  "expression": {
+                                    "type": "PrivateName",
+                                    "start":1282,"end":1288,"loc":{"start":{"line":50,"column":5,"index":1282},"end":{"line":50,"column":11,"index":1288}},
+                                    "id": {
+                                      "type": "Identifier",
+                                      "start":1283,"end":1288,"loc":{"start":{"line":50,"column":6,"index":1283},"end":{"line":50,"column":11,"index":1288},"identifierName":"yield"},
+                                      "name": "yield"
+                                    }
+                                  }
+                                },
+                                {
+                                  "type": "Decorator",
+                                  "start":1293,"end":1300,"loc":{"start":{"line":51,"column":4,"index":1293},"end":{"line":51,"column":11,"index":1300}},
+                                  "expression": {
+                                    "type": "PrivateName",
+                                    "start":1294,"end":1300,"loc":{"start":{"line":51,"column":5,"index":1294},"end":{"line":51,"column":11,"index":1300}},
+                                    "id": {
+                                      "type": "Identifier",
+                                      "start":1295,"end":1300,"loc":{"start":{"line":51,"column":6,"index":1295},"end":{"line":51,"column":11,"index":1300},"identifierName":"await"},
+                                      "name": "await"
+                                    }
+                                  }
+                                }
+                              ],
+                              "id": null,
+                              "superClass": null,
+                              "body": {
+                                "type": "ClassBody",
+                                "start":1307,"end":1309,"loc":{"start":{"line":51,"column":18,"index":1307},"end":{"line":51,"column":20,"index":1309}},
+                                "body": []
+                              }
+                            }
+                          }
+                        ],
+                        "kind": "var"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "kind": "var",
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " This file was procedurally generated from the following sources:",
+            "start":0,"end":67,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":67,"index":67}}
+          },
+          {
+            "type": "CommentLine",
+            "value": " - src/decorator/decorator-member-expr-private-identifier.case",
+            "start":68,"end":132,"loc":{"start":{"line":2,"column":0,"index":68},"end":{"line":2,"column":64,"index":132}}
+          },
+          {
+            "type": "CommentLine",
+            "value": " - src/decorator/syntax/class-valid/cls-expr-decorators-valid-syntax.template",
+            "start":133,"end":212,"loc":{"start":{"line":3,"column":0,"index":133},"end":{"line":3,"column":79,"index":212}}
+          },
+          {
+            "type": "CommentBlock",
+            "value": "---\ndescription: Decorator @ DecoratorMemberExpression (Valid syntax for decorator on class expression in class body.)\nesid: prod-ClassExpression\nfeatures: [class, decorators]\nflags: [generated]\ninfo: |\n    ClassExpression[Yield, Await] :\n      DecoratorList[?Yield, ?Await]opt class BindingIdentifier[?Yield, ?Await]opt ClassTail[?Yield, ?Await]\n\n    DecoratorList[Yield, Await] :\n      DecoratorList[?Yield, ?Await]opt Decorator[?Yield, ?Await]\n\n    Decorator[Yield, Await] :\n      @ DecoratorMemberExpression[?Yield, ?Await]\n      @ DecoratorParenthesizedExpression[?Yield, ?Await]\n      @ DecoratorCallExpression[?Yield, ?Await]\n\n    ...\n\n\n    DecoratorMemberExpression[Yield, Await] :\n      PrivateIdentifier\n\n    PrivateIdentifier ::\n      # IdentifierName\n\n---",
+            "start":213,"end":984,"loc":{"start":{"line":4,"column":0,"index":213},"end":{"line":30,"column":5,"index":984}}
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " This file was procedurally generated from the following sources:",
+      "start":0,"end":67,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":67,"index":67}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " - src/decorator/decorator-member-expr-private-identifier.case",
+      "start":68,"end":132,"loc":{"start":{"line":2,"column":0,"index":68},"end":{"line":2,"column":64,"index":132}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " - src/decorator/syntax/class-valid/cls-expr-decorators-valid-syntax.template",
+      "start":133,"end":212,"loc":{"start":{"line":3,"column":0,"index":133},"end":{"line":3,"column":79,"index":212}}
+    },
+    {
+      "type": "CommentBlock",
+      "value": "---\ndescription: Decorator @ DecoratorMemberExpression (Valid syntax for decorator on class expression in class body.)\nesid: prod-ClassExpression\nfeatures: [class, decorators]\nflags: [generated]\ninfo: |\n    ClassExpression[Yield, Await] :\n      DecoratorList[?Yield, ?Await]opt class BindingIdentifier[?Yield, ?Await]opt ClassTail[?Yield, ?Await]\n\n    DecoratorList[Yield, Await] :\n      DecoratorList[?Yield, ?Await]opt Decorator[?Yield, ?Await]\n\n    Decorator[Yield, Await] :\n      @ DecoratorMemberExpression[?Yield, ?Await]\n      @ DecoratorParenthesizedExpression[?Yield, ?Await]\n      @ DecoratorCallExpression[?Yield, ?Await]\n\n    ...\n\n\n    DecoratorMemberExpression[Yield, Await] :\n      PrivateIdentifier\n\n    PrivateIdentifier ::\n      # IdentifierName\n\n---",
+      "start":213,"end":984,"loc":{"start":{"line":4,"column":0,"index":213},"end":{"line":30,"column":5,"index":984}}
+    }
+  ]
+}

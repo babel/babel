@@ -625,23 +625,27 @@ export default abstract class StatementParser extends ExpressionParser {
           });
         }
       } else {
-        expr = this.parseIdentifier(false);
-
-        while (this.eat(tt.dot)) {
-          const node = this.startNodeAt(startLoc);
-          node.object = expr;
+        do {
+          let id;
           if (this.match(tt.privateName)) {
             this.classScope.usePrivateName(
               this.state.value,
               this.state.startLoc,
             );
-            node.property = this.parsePrivateName();
+            id = this.parsePrivateName();
           } else {
-            node.property = this.parseIdentifier(true);
+            id = this.parseIdentifier(true);
           }
-          node.computed = false;
-          expr = this.finishNode(node, "MemberExpression");
-        }
+          if (expr) {
+            const node = this.startNodeAt(startLoc);
+            node.object = expr;
+            node.property = id;
+            node.computed = false;
+            expr = this.finishNode(node, "MemberExpression");
+          } else {
+            expr = id;
+          }
+        } while (!expr || this.eat(tt.dot));
 
         node.expression = this.parseMaybeDecoratorArguments(expr);
       }
