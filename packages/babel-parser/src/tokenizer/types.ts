@@ -308,6 +308,7 @@ export const tt: InternalTokenTypes = {
   _mixins: createKeywordLike("mixins", { startsExpr }),
   _proto: createKeywordLike("proto", { startsExpr }),
   _require: createKeywordLike("require", { startsExpr }),
+  _satisfies: createKeywordLike("satisfies", { startsExpr }),
   // start: isTSTypeOperator
   _keyof: createKeywordLike("keyof", { startsExpr }),
   _readonly: createKeywordLike("readonly", { startsExpr }),

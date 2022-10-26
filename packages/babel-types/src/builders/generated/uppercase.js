@@ -242,6 +242,7 @@ export {
   tsTypeAliasDeclaration as TSTypeAliasDeclaration,
   tsInstantiationExpression as TSInstantiationExpression,
   tsAsExpression as TSAsExpression,
+  tsSatisfiesExpression as TSSatisfiesExpression,
   tsTypeAssertion as TSTypeAssertion,
   tsEnumDeclaration as TSEnumDeclaration,
   tsEnumMember as TSEnumMember,

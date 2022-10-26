@@ -1639,6 +1639,10 @@ export interface TsTypeAssertion extends TsTypeAssertionLikeBase {
   type: "TSTypeAssertion";
 }
 
+export type TsSatisfiesExpression = TsTypeAssertionLikeBase & {
+  type: "TSSatisfiesExpression";
+};
+
 export interface TsNonNullExpression extends NodeBase {
   type: "TSNonNullExpression";
   expression: Expression;

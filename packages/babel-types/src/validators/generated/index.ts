@@ -3966,6 +3966,23 @@ export function isTSAsExpression(
 
   return false;
 }
+export function isTSSatisfiesExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.TSSatisfiesExpression {
+  if (!node) return false;
+
+  const nodeType = (node as t.Node).type;
+  if (nodeType === "TSSatisfiesExpression") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isTSTypeAssertion(
   node: object | null | undefined,
   opts?: object | null,
@@ -4387,6 +4404,7 @@ export function isExpression(
     "PipelinePrimaryTopicReference" === nodeType ||
     "TSInstantiationExpression" === nodeType ||
     "TSAsExpression" === nodeType ||
+    "TSSatisfiesExpression" === nodeType ||
     "TSTypeAssertion" === nodeType ||
     "TSNonNullExpression" === nodeType ||
     (nodeType === "Placeholder" &&
@@ -4890,6 +4908,7 @@ export function isPatternLike(
     "ArrayPattern" === nodeType ||
     "ObjectPattern" === nodeType ||
     "TSAsExpression" === nodeType ||
+    "TSSatisfiesExpression" === nodeType ||
     "TSTypeAssertion" === nodeType ||
     "TSNonNullExpression" === nodeType ||
     (nodeType === "Placeholder" &&
@@ -4921,6 +4940,7 @@ export function isLVal(
     "ObjectPattern" === nodeType ||
     "TSParameterProperty" === nodeType ||
     "TSAsExpression" === nodeType ||
+    "TSSatisfiesExpression" === nodeType ||
     "TSTypeAssertion" === nodeType ||
     "TSNonNullExpression" === nodeType ||
     (nodeType === "Placeholder" &&
@@ -5627,6 +5647,7 @@ export function isTypeScript(
     "TSTypeAliasDeclaration" === nodeType ||
     "TSInstantiationExpression" === nodeType ||
     "TSAsExpression" === nodeType ||
+    "TSSatisfiesExpression" === nodeType ||
     "TSTypeAssertion" === nodeType ||
     "TSEnumDeclaration" === nodeType ||
     "TSEnumMember" === nodeType ||

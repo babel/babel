@@ -554,6 +554,7 @@ export function assignmentPattern(
     | t.ArrayPattern
     | t.MemberExpression
     | t.TSAsExpression
+    | t.TSSatisfiesExpression
     | t.TSTypeAssertion
     | t.TSNonNullExpression,
   right: t.Expression,
@@ -2351,6 +2352,17 @@ export function tsAsExpression(
   });
 }
 export { tsAsExpression as tSAsExpression };
+export function tsSatisfiesExpression(
+  expression: t.Expression,
+  typeAnnotation: t.TSType,
+): t.TSSatisfiesExpression {
+  return validateNode<t.TSSatisfiesExpression>({
+    type: "TSSatisfiesExpression",
+    expression,
+    typeAnnotation,
+  });
+}
+export { tsSatisfiesExpression as tSSatisfiesExpression };
 export function tsTypeAssertion(
   typeAnnotation: t.TSType,
   expression: t.Expression,

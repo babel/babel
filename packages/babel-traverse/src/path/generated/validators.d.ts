@@ -995,6 +995,10 @@ interface BaseNodePathValidators {
     this: NodePath<T>,
     opts?: object,
   ): this is NodePath<T & t.TSRestType>;
+  isTSSatisfiesExpression<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.TSSatisfiesExpression>;
   isTSStringKeyword<T extends t.Node>(
     this: NodePath<T>,
     opts?: object,

@@ -522,14 +522,23 @@ export function TSTypeAliasDeclaration(
   this.token(";");
 }
 
-export function TSAsExpression(this: Printer, node: t.TSAsExpression) {
-  const { expression, typeAnnotation } = node;
-  this.print(expression, node);
+function TSTypeExpression(
+  this: Printer,
+  node: t.TSAsExpression | t.TSSatisfiesExpression,
+) {
+  const { type, expression, typeAnnotation } = node;
+  const forceParens = !!expression.trailingComments?.length;
+  this.print(expression, node, true, undefined, forceParens);
   this.space();
-  this.word("as");
+  this.word(type === "TSAsExpression" ? "as" : "satisfies");
   this.space();
   this.print(typeAnnotation, node);
 }
+
+export {
+  TSTypeExpression as TSAsExpression,
+  TSTypeExpression as TSSatisfiesExpression,
+};
 
 export function TSTypeAssertion(this: Printer, node: t.TSTypeAssertion) {
   const { typeAnnotation, expression } = node;

@@ -2,6 +2,7 @@ import {
   isParenthesizedExpression,
   isTSAsExpression,
   isTSNonNullExpression,
+  isTSSatisfiesExpression,
   isTSTypeAssertion,
   isTypeCastExpression,
 } from "@babel/types";
@@ -11,6 +12,7 @@ import type { NodePath } from "@babel/traverse";
 
 export type TransparentExprWrapper =
   | t.TSAsExpression
+  | t.TSSatisfiesExpression
   | t.TSTypeAssertion
   | t.TSNonNullExpression
   | t.TypeCastExpression
@@ -26,6 +28,7 @@ export function isTransparentExprWrapper(
 ): node is TransparentExprWrapper {
   return (
     isTSAsExpression(node) ||
+    isTSSatisfiesExpression(node) ||
     isTSTypeAssertion(node) ||
     isTSNonNullExpression(node) ||
     isTypeCastExpression(node) ||

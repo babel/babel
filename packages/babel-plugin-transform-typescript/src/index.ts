@@ -593,11 +593,14 @@ export default declare((api, opts: Options) => {
         path.replaceWith(path.node.expression);
       },
 
-      TSAsExpression(path) {
+      [`TSAsExpression${
+        // Added in Babel 7.20.0
+        t.tsSatisfiesExpression ? "|TSSatisfiesExpression" : ""
+      }`](path: NodePath<t.TSAsExpression | t.TSSatisfiesExpression>) {
         let { node }: { node: t.Expression } = path;
         do {
           node = node.expression;
-        } while (t.isTSAsExpression(node));
+        } while (t.isTSAsExpression(node) || t.isTSSatisfiesExpression?.(node));
         path.replaceWith(node);
       },
 

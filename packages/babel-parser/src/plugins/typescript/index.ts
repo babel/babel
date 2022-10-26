@@ -93,7 +93,6 @@ const TSErrors = ParseErrorEnum`typescript`({
   AccesorCannotDeclareThisParameter:
     "'get' and 'set' accessors cannot declare 'this' parameters.",
   AccesorCannotHaveTypeParameters: "An accessor cannot have type parameters.",
-  CannotFindName: ({ name }: { name: string }) => `Cannot find name '${name}'.`,
   ClassMethodHasDeclare: "Class methods cannot have the 'declare' modifier.",
   ClassMethodHasReadonly: "Class methods cannot have the 'readonly' modifier.",
   ConstInitiailizerMustBeStringOrNumericLiteralOrLiteralEnumReference:
@@ -719,26 +718,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         this.addExtra(node, "trailingComma", refTrailingCommaPos.value);
       }
       return this.finishNode(node, "TSTypeParameterDeclaration");
-    }
-
-    tsTryNextParseConstantContext(): N.TsTypeReference | undefined | null {
-      if (this.lookahead().type !== tt._const) return null;
-
-      this.next();
-      const typeReference = this.tsParseTypeReference();
-
-      // If the type reference has type parameters, then you are using it as a
-      // type and not as a const signifier. We'll *never* be able to find this
-      // name, since const isn't allowed as a type name. So in this instance we
-      // get to pretend we're the type checker.
-      if (typeReference.typeParameters) {
-        this.raise(TSErrors.CannotFindName, {
-          at: typeReference.typeName,
-          name: "const",
-        });
-      }
-
-      return typeReference;
     }
 
     // Note: In TypeScript implementation we must provide `yieldContext` and `awaitContext`,
@@ -1659,8 +1638,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
 
       const node = this.startNode<N.TsTypeAssertion>();
-      const _const = this.tsTryNextParseConstantContext();
-      node.typeAnnotation = _const || this.tsNextThenParseType();
+      node.typeAnnotation = this.tsInType(() => {
+        this.next(); // "<"
+        return this.match(tt._const)
+          ? this.tsParseTypeReference()
+          : this.tsParseType();
+      });
       this.expect(tt.gt);
       node.expression = this.parseMaybeUnary();
       return this.finishNode(node, "TSTypeAssertion");
@@ -2565,20 +2548,35 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       leftStartLoc: Position,
       minPrec: number,
     ): N.Expression {
+      let isSatisfies: boolean;
       if (
         tokenOperatorPrecedence(tt._in) > minPrec &&
         !this.hasPrecedingLineBreak() &&
-        this.isContextual(tt._as)
+        (this.isContextual(tt._as) ||
+          (isSatisfies = this.isContextual(tt._satisfies)))
       ) {
-        const node = this.startNodeAt<N.TsAsExpression>(leftStartLoc);
+        const node = this.startNodeAt<
+          N.TsAsExpression | N.TsSatisfiesExpression
+        >(leftStartLoc);
         node.expression = left;
-        const _const = this.tsTryNextParseConstantContext();
-        if (_const) {
-          node.typeAnnotation = _const;
-        } else {
-          node.typeAnnotation = this.tsNextThenParseType();
-        }
-        this.finishNode(node, "TSAsExpression");
+        node.typeAnnotation = this.tsInType(() => {
+          this.next(); // "as" or "satisfies"
+          if (this.match(tt._const)) {
+            if (isSatisfies) {
+              this.raise(Errors.UnexpectedKeyword, {
+                at: this.state.startLoc,
+                keyword: "const",
+              });
+            }
+            return this.tsParseTypeReference();
+          }
+
+          return this.tsParseType();
+        });
+        this.finishNode(
+          node,
+          isSatisfies ? "TSSatisfiesExpression" : "TSAsExpression",
+        );
         // rescan `<`, `>` because they were scanned when this.state.inType was true
         this.reScan_lt_gt();
         return this.parseExprOp(
