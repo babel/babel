@@ -36,7 +36,7 @@ jobs:
 
   git-version:
     permissions:
-      contents: write  # for Git to git push
+      contents: write # for Git to git push
     name: Create git tag and commit
     runs-on: ubuntu-latest
     needs: log-updates
@@ -63,7 +63,7 @@ jobs:
         run: |
           branch="release/temp/$(git describe --abbrev=0)"
           echo $branch
-          echo "::set-output name=branch::$branch"
+          echo "branch::$branch" >> $GITHUB_OUTPUT
 
           git push "https://babel-bot:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" HEAD:"$branch" --follow-tags
 
@@ -141,7 +141,7 @@ jobs:
 
   github-push:
     permissions:
-      contents: write  # for Git to git push
+      contents: write # for Git to git push
     name: Push release commit to "main"
     runs-on: ubuntu-latest
     needs: [npm-release, github-release, git-version]
