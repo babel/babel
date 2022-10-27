@@ -76,6 +76,7 @@
     "./packages/babel-plugin-syntax-decorators/src/**/*.ts",
     "./packages/babel-plugin-syntax-destructuring-private/src/**/*.ts",
     "./packages/babel-plugin-syntax-do-expressions/src/**/*.ts",
+    "./packages/babel-plugin-syntax-explicit-resource-management/src/**/*.ts",
     "./packages/babel-plugin-syntax-export-default-from/src/**/*.ts",
     "./packages/babel-plugin-syntax-flow/src/**/*.ts",
     "./packages/babel-plugin-syntax-function-bind/src/**/*.ts",
@@ -392,6 +393,9 @@
       ],
       "@babel/plugin-syntax-do-expressions": [
         "./packages/babel-plugin-syntax-do-expressions/src"
+      ],
+      "@babel/plugin-syntax-explicit-resource-management": [
+        "./packages/babel-plugin-syntax-explicit-resource-management/src"
       ],
       "@babel/plugin-syntax-export-default-from": [
         "./packages/babel-plugin-syntax-export-default-from/src"
