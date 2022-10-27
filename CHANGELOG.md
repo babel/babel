@@ -23,6 +23,29 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.20.0 (2022-10-27)
+
+#### :rocket: New Feature
+* `babel-compat-data`, `babel-helper-compilation-targets`, `babel-preset-env`
+  * [#14944](https://github.com/babel/babel/pull/14944) Add `deno` compilation target ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-syntax-typescript`
+  * [#14923](https://github.com/babel/babel/pull/14923) Expose `dts` option in `@babel/plugin-syntax-typescript` ([@oceandrama](https://github.com/oceandrama))
+* `babel-generator`, `babel-parser`, `babel-plugin-syntax-explicit-resource-management`, `babel-plugin-transform-block-scoping`, `babel-plugin-transform-destructuring`, `babel-standalone`, `babel-traverse`, `babel-types`
+  * [#14968](https://github.com/babel/babel/pull/14968) Parse `using` declaration (explicit resource management) ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`, `babel-parser`, `babel-plugin-syntax-import-reflection`, `babel-standalone`, `babel-types`
+  * [#14926](https://github.com/babel/babel/pull/14926) Parse import reflection ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`, `babel-helper-skip-transparent-expression-wrappers`, `babel-parser`, `babel-plugin-transform-typescript`, `babel-traverse`, `babel-types`
+  * [#14211](https://github.com/babel/babel/pull/14211) [ts] Add support for `expr satisfies Type` expressions ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :bug: Bug Fix
+* `babel-generator`, `babel-parser`
+  * [#15032](https://github.com/babel/babel/pull/15032) Fix handling of comments with decorators before `export` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`
+  * [#15008](https://github.com/babel/babel/pull/15008) Support more inner comments ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* `babel-helpers`, `babel-node`, `babel-plugin-proposal-async-generator-functions`, `babel-plugin-transform-regenerator`, `babel-preset-env`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#15078](https://github.com/babel/babel/pull/15078) Update `regenerator-runtime` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.19.6 (2022-10-20)
 
 #### :eyeglasses: Spec Compliance
