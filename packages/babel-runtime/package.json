@@ -1,6 +1,6 @@
 {
   "name": "@babel/runtime",
-  "version": "7.19.4",
+  "version": "7.20.0",
   "description": "babel's modular runtime helpers",
   "license": "MIT",
   "publishConfig": {
