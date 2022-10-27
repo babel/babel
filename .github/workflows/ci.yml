@@ -183,7 +183,7 @@ jobs:
         run: make -j tscheck lint-ci
       - name: Ensure cwd does not contain uncommitted changes
         run: |
-          node ./scripts/assert-dir-git-clean.js lint
+          node ./scripts/assert-dir-git-clean.js code-quality
 
   test:
     name: Test on Node.js # GitHub will add ${{ matrix.node-version }} to this title
