@@ -63,7 +63,7 @@ jobs:
         run: |
           branch="release/temp/$(git describe --abbrev=0)"
           echo $branch
-          echo "branch::$branch" >> $GITHUB_OUTPUT
+          echo "branch=$branch" >> $GITHUB_OUTPUT
 
           git push "https://babel-bot:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" HEAD:"$branch" --follow-tags
 

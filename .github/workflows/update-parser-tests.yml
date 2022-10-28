@@ -29,7 +29,7 @@ jobs:
           cache: "yarn"
       - name: Get latest test262 version
         id: test262
-        run: echo "sha1::$(sh ./scripts/parser-tests/get-test262-version.sh)" >> $GITHUB_OUTPUT
+        run: echo "sha1=$(sh ./scripts/parser-tests/get-test262-version.sh)" >> $GITHUB_OUTPUT
       - name: Update test262 commit
         run: |
           echo ${{ steps.test262.outputs.sha1 }} | ./scripts/parser-tests/bump-test262-version.sh

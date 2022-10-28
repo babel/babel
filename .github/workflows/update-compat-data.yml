@@ -25,14 +25,14 @@ jobs:
           node-version: "*"
       - name: Get latest kangax/compat-table commit
         id: lastCommit
-        run: echo "sha1::$(./scripts/update-compat-table/get-last-commit.sh)" >> $GITHUB_OUTPUT
+        run: echo "sha1=$(./scripts/update-compat-table/get-last-commit.sh)" >> $GITHUB_OUTPUT
       - name: Update compat-table commit
         run: echo ${{ steps.lastCommit.outputs.sha1 }} | ./scripts/update-compat-table/bump-compat-table-commit.sh
       - name: Check if it has been updated
         run: |
           [[ -z $(git status -s) ]] &&
-            echo "updated::false" >> $GITHUB_OUTPUT ||
-            echo "updated::true" >> $GITHUB_OUTPUT
+            echo "updated=false" >> $GITHUB_OUTPUT ||
+            echo "updated=true" >> $GITHUB_OUTPUT
         id: updated
       - name: Bootstrap
         if: steps.updated.outputs.updated == 'true'

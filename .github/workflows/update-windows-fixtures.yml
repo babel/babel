@@ -36,8 +36,8 @@ jobs:
 
             const fs = require("fs");
             const { GITHUB_OUTPUT } = process.env;
-            fs.appendFileSync(GITHUB_OUTPUT, `branch::${branch}\n`);
-            fs.appendFileSync(GITHUB_OUTPUT, `repository::${repository}\n`);
+            fs.appendFileSync(GITHUB_OUTPUT, `branch=${branch}\n`);
+            fs.appendFileSync(GITHUB_OUTPUT, `repository=${repository}\n`);
 
       - name: Checkout code
         uses: actions/checkout@v3
