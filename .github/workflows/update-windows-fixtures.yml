@@ -14,16 +14,16 @@ jobs:
   update-windows-fixtures:
     permissions:
       contents: read # to fetch code
-      pull-requests: read  # to get PR metadata
+      pull-requests: read # to get PR metadata
     runs-on: windows-latest
     steps:
       - name: Get Pull Request branch
-        uses: actions/github-script@v4
+        uses: actions/github-script@v6
         id: pr-meta
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const { data: pullRequest } = await github.pulls.get({
+            const { data: pullRequest } = await github.rest.pulls.get({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: ${{ github.event.inputs.pull_request }},
@@ -34,8 +34,10 @@ jobs:
               repo: { full_name: repository }
             } = pullRequest.head;
 
-            console.log(`::set-output name=branch::${branch}`);
-            console.log(`::set-output name=repository::${repository}`);
+            const fs = require("fs");
+            const { GITHUB_OUTPUT } = process.env;
+            fs.appendFileSync(GITHUB_OUTPUT, `branch=${branch}\n`);
+            fs.appendFileSync(GITHUB_OUTPUT, `repository=${repository}\n`);
 
       - name: Checkout code
         uses: actions/checkout@v3

@@ -50,7 +50,7 @@ jobs:
     steps:
       - name: Get yarn1 cache directory path
         id: yarn1-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
+        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Use Node.js latest
@@ -59,7 +59,7 @@ jobs:
           node-version: "*"
       - name: Get yarn3 cache directory path
         id: yarn3-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
       - name: Use yarn1 cache
         uses: actions/cache@v3
         id: yarn1-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
