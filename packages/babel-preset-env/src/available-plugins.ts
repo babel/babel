@@ -115,8 +115,7 @@ export function getPlugin(name: string, version?: string) {
 
   if (
     desc.internal !== false &&
-    // TODO: Change 7.19.0 to the first version supporting internal plugins
-    semver.gte(version, desc.internalMinVersion ?? "7.19.0")
+    semver.gte(version, desc.internalMinVersion ?? "7.20.0")
   ) {
     return `internal:${name}`;
   }
