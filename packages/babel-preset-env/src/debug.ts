@@ -27,6 +27,11 @@ export const logPlugin = (
       item = proposalName;
     }
   }
+  // TODO(Babel 8): Remove this. It's needed to keep outputting bugfix/
+  // in the debug log.
+  if (item.startsWith("bugfix-")) {
+    item = `bugfix/transform-${item.slice(7)}`;
+  }
 
   if (!support) {
     console.log(`  ${item}`);

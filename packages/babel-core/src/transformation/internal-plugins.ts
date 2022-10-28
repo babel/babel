@@ -2,9 +2,13 @@ const hasOwn: <O extends object>(obj: O, key: unknown) => key is keyof O =
   Function.call.bind(Object.prototype.hasOwnProperty) as any;
 
 export function getInternal(type: "plugin" | "preset", name: string) {
-  const match = name.match(/^internal:transform-(.+)/);
-  if (type === "plugin" && match && hasOwn(plugins, match[1])) {
-    return plugins[match[1]]();
+  const match = name.match(/^internal:(transform|bugfix)-(.+)/);
+  if (type === "plugin" && match) {
+    const plugins = match[1][0] === "t" ? transformPlugins : bugfixPlugins;
+    if (hasOwn(plugins, match[2])) {
+      // @ts-expect-error: The hasOwn check guarantees that plugins[match[2]] exists.
+      return plugins[match[2]]();
+    }
   }
 
   return null;
@@ -56,7 +60,7 @@ import proposalUnicodePropertyRegex from "@babel/plugin-proposal-unicode-propert
 
 // We use functions here so that the `lazy` CJS transform avoids loading the
 // plugins until they are needed.
-const plugins = {
+const transformPlugins = {
   "block-scoped-functions": () => transformBlockScopedFunctions,
   "function-name": () => transformFunctionName,
   // Merge these three plugins in a single reserved-words one?
@@ -117,4 +121,14 @@ const plugins = {
   "class-static-block": () => proposalClassStaticBlock, // RENAME: class-static-blocks
   "private-methods": () => proposalPrivateMethods,
   "private-property-in-object": () => proposalPrivatePropertyInObject,
+};
+
+import bugfixSafariIdDestructuringCollisionInFunctionExpression from "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression";
+import bugfixV8SpreadParametersInOptionalChaining from "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining";
+
+const bugfixPlugins = {
+  "safari-id-destructuring-collision-in-function-expression": () =>
+    bugfixSafariIdDestructuringCollisionInFunctionExpression,
+  "v8-spread-parameters-in-optional-chaining": () =>
+    bugfixV8SpreadParametersInOptionalChaining,
 };

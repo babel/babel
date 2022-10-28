@@ -88,7 +88,11 @@ const expandIncludesAndExcludes = (
         // For backwards compatibility, we also support matching against the
         // proposal- name.
         // TODO(Babel 8): Remove this.
-        re.test(item.replace(/^transform-/, "proposal-")),
+        re.test(item.replace(/^transform-/, "proposal-")) ||
+        // For backwards compatibility, we also support bugfix plugins using
+        // the bugfix/ prefix, instead of bugfix-.
+        // TODO(Babel 8): Remove this.
+        re.test(item.replace(/^bugfix\/transform-/, "bugfix-")),
     );
     if (items.length === 0) invalidFilters.push(filter);
     return items;

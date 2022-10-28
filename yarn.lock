@@ -350,6 +350,8 @@ __metadata:
     "@babel/helper-transform-fixture-test-runner": "workspace:^"
     "@babel/helpers": "workspace:^"
     "@babel/parser": "workspace:^"
+    "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression": "workspace:^"
+    "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining": "workspace:^"
     "@babel/plugin-proposal-async-generator-functions": "workspace:^"
     "@babel/plugin-proposal-class-properties": "workspace:^"
     "@babel/plugin-proposal-class-static-block": "workspace:^"

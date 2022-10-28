@@ -115,7 +115,7 @@ export function getPlugin(name: string, version?: string) {
 
   if (
     desc.internal !== false &&
-    semver.gte(version, desc.internalMinVersion ?? "7.20.0")
+    semver.gte(version, desc.internalMinVersion ?? "7.19.0")
   ) {
     return `internal:${name}`;
   }
@@ -137,30 +137,18 @@ function extOnly(fn: External): Desc {
 }
 
 const plugins = {
-  "bugfix/transform-async-arrows-in-class": extOnly(
-    () => bugfixAsyncArrowsInClass,
-  ),
-  "bugfix/transform-edge-default-parameters": extOnly(
-    () => bugfixEdgeDefaultParameters,
-  ),
-  "bugfix/transform-edge-function-name": extOnly(() => bugfixEdgeFunctionName),
-  "bugfix/transform-safari-block-shadowing": extOnly(
-    () => bugfixSafariBlockShadowing,
-  ),
-  "bugfix/transform-safari-for-shadowing": extOnly(
-    () => bugfixSafariForShadowing,
-  ),
-  "bugfix/transform-safari-id-destructuring-collision-in-function-expression": {
+  "bugfix-async-arrows-in-class": extOnly(() => bugfixAsyncArrowsInClass),
+  "bugfix-edge-default-parameters": extOnly(() => bugfixEdgeDefaultParameters),
+  "bugfix-edge-function-name": extOnly(() => bugfixEdgeFunctionName),
+  "bugfix-safari-block-shadowing": extOnly(() => bugfixSafariBlockShadowing),
+  "bugfix-safari-for-shadowing": extOnly(() => bugfixSafariForShadowing),
+  "bugfix-safari-id-destructuring-collision-in-function-expression": {
     external: () => bugfixSafariIdDestructuringCollisionInFunctionExpression,
     externalMinVersion: "7.16.0",
-    internal: false,
   },
-  "bugfix/transform-tagged-template-caching": extOnly(
-    () => bugfixTaggedTemplateCaching,
-  ),
-  "bugfix/transform-v8-spread-parameters-in-optional-chaining": extOnly(
-    () => bugfixV8SpreadParametersInOptionalChaining,
-  ),
+  "bugfix-tagged-template-caching": extOnly(() => bugfixTaggedTemplateCaching),
+  "bugfix-v8-spread-parameters-in-optional-chaining": () =>
+    bugfixV8SpreadParametersInOptionalChaining,
   "syntax-async-generators": extOnly(() => syntaxAsyncGenerators),
   "syntax-class-properties": extOnly(() => syntaxClassProperties),
   "syntax-class-static-block": extOnly(() => syntaxClassStaticBlock),

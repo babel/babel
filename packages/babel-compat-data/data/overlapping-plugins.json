@@ -1,25 +1,34 @@
 {
   "transform-async-to-generator": [
+    "bugfix-async-arrows-in-class",
     "bugfix/transform-async-arrows-in-class"
   ],
   "transform-parameters": [
+    "bugfix-edge-default-parameters",
     "bugfix/transform-edge-default-parameters",
+    "bugfix-safari-id-destructuring-collision-in-function-expression",
     "bugfix/transform-safari-id-destructuring-collision-in-function-expression"
   ],
   "transform-function-name": [
+    "bugfix-edge-function-name",
     "bugfix/transform-edge-function-name"
   ],
   "transform-block-scoping": [
+    "bugfix-safari-block-shadowing",
     "bugfix/transform-safari-block-shadowing",
+    "bugfix-safari-for-shadowing",
     "bugfix/transform-safari-for-shadowing"
   ],
   "transform-template-literals": [
+    "bugfix-tagged-template-caching",
     "bugfix/transform-tagged-template-caching"
   ],
   "transform-optional-chaining": [
+    "bugfix-v8-spread-parameters-in-optional-chaining",
     "bugfix/transform-v8-spread-parameters-in-optional-chaining"
   ],
   "proposal-optional-chaining": [
+    "bugfix-v8-spread-parameters-in-optional-chaining",
     "bugfix/transform-v8-spread-parameters-in-optional-chaining"
   ]
 }

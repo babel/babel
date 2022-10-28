@@ -1,4 +1,16 @@
 {
+  "bugfix-async-arrows-in-class": {
+    "chrome": "55",
+    "opera": "42",
+    "edge": "15",
+    "firefox": "52",
+    "safari": "11",
+    "node": "7.6",
+    "deno": "1",
+    "ios": "11",
+    "samsung": "6",
+    "electron": "1.6"
+  },
   "bugfix/transform-async-arrows-in-class": {
     "chrome": "55",
     "opera": "42",
@@ -10,6 +22,18 @@
     "ios": "11",
     "samsung": "6",
     "electron": "1.6"
+  },
+  "bugfix-edge-default-parameters": {
+    "chrome": "49",
+    "opera": "36",
+    "edge": "18",
+    "firefox": "52",
+    "safari": "10",
+    "node": "6",
+    "deno": "1",
+    "ios": "10",
+    "samsung": "5",
+    "electron": "0.37"
   },
   "bugfix/transform-edge-default-parameters": {
     "chrome": "49",
@@ -23,6 +47,18 @@
     "samsung": "5",
     "electron": "0.37"
   },
+  "bugfix-edge-function-name": {
+    "chrome": "51",
+    "opera": "38",
+    "edge": "79",
+    "firefox": "53",
+    "safari": "10",
+    "node": "6.5",
+    "deno": "1",
+    "ios": "10",
+    "samsung": "5",
+    "electron": "1.2"
+  },
   "bugfix/transform-edge-function-name": {
     "chrome": "51",
     "opera": "38",
@@ -35,6 +71,19 @@
     "samsung": "5",
     "electron": "1.2"
   },
+  "bugfix-safari-block-shadowing": {
+    "chrome": "49",
+    "opera": "36",
+    "edge": "12",
+    "firefox": "44",
+    "safari": "11",
+    "node": "6",
+    "deno": "1",
+    "ie": "11",
+    "ios": "11",
+    "samsung": "5",
+    "electron": "0.37"
+  },
   "bugfix/transform-safari-block-shadowing": {
     "chrome": "49",
     "opera": "36",
@@ -46,6 +95,20 @@
     "ie": "11",
     "ios": "11",
     "samsung": "5",
+    "electron": "0.37"
+  },
+  "bugfix-safari-for-shadowing": {
+    "chrome": "49",
+    "opera": "36",
+    "edge": "12",
+    "firefox": "4",
+    "safari": "11",
+    "node": "6",
+    "deno": "1",
+    "ie": "11",
+    "ios": "11",
+    "samsung": "5",
+    "rhino": "1.7.13",
     "electron": "0.37"
   },
   "bugfix/transform-safari-for-shadowing": {
@@ -62,6 +125,16 @@
     "rhino": "1.7.13",
     "electron": "0.37"
   },
+  "bugfix-safari-id-destructuring-collision-in-function-expression": {
+    "chrome": "49",
+    "opera": "36",
+    "edge": "14",
+    "firefox": "2",
+    "node": "6",
+    "deno": "1",
+    "samsung": "5",
+    "electron": "0.37"
+  },
   "bugfix/transform-safari-id-destructuring-collision-in-function-expression": {
     "chrome": "49",
     "opera": "36",
@@ -71,6 +144,19 @@
     "deno": "1",
     "samsung": "5",
     "electron": "0.37"
+  },
+  "bugfix-tagged-template-caching": {
+    "chrome": "41",
+    "opera": "28",
+    "edge": "12",
+    "firefox": "34",
+    "safari": "13",
+    "node": "4",
+    "deno": "1",
+    "ios": "13",
+    "samsung": "3.4",
+    "rhino": "1.7.14",
+    "electron": "0.21"
   },
   "bugfix/transform-tagged-template-caching": {
     "chrome": "41",
@@ -84,6 +170,17 @@
     "samsung": "3.4",
     "rhino": "1.7.14",
     "electron": "0.21"
+  },
+  "bugfix-v8-spread-parameters-in-optional-chaining": {
+    "chrome": "91",
+    "opera": "77",
+    "edge": "91",
+    "firefox": "74",
+    "safari": "13.1",
+    "node": "16.9",
+    "deno": "1.9",
+    "ios": "13.4",
+    "electron": "13.0"
   },
   "bugfix/transform-v8-spread-parameters-in-optional-chaining": {
     "chrome": "91",
