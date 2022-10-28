@@ -12,7 +12,10 @@ export function File(this: Printer, node: t.File) {
 }
 
 export function Program(this: Printer, node: t.Program) {
-  this.printInnerComments(node, false);
+  // An empty Program doesn't have any inner tokens, so
+  // we must explicitly print its inner comments.
+  this.noIndentInnerCommentsHere();
+  this.printInnerComments();
 
   const directivesLen = node.directives?.length;
   if (directivesLen) {
@@ -30,7 +33,6 @@ export function Program(this: Printer, node: t.Program) {
 
 export function BlockStatement(this: Printer, node: t.BlockStatement) {
   this.token("{");
-  this.printInnerComments(node);
 
   const directivesLen = node.directives?.length;
   if (directivesLen) {

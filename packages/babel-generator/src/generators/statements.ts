@@ -103,7 +103,7 @@ function ForXStatement(this: Printer, node: t.ForXStatement) {
     this.word("await");
     this.space();
   }
-  this.printInnerComments(node, false);
+  this.noIndentInnerCommentsHere();
   this.token("(");
   this.print(node.left, node);
   this.space();

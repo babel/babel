@@ -34,9 +34,6 @@ export function _parameters(
       this.space();
     }
   }
-  if (paramLength === 0) {
-    this.printInnerComments(parent);
-  }
 }
 
 export function _param(
@@ -89,9 +86,6 @@ export function _methodHead(this: Printer, node: t.Method | t.TSDeclareMethod) {
     kind === "init"
   ) {
     if (node.generator) {
-      if (node.async) {
-        this.printInnerComments(node);
-      }
       this.token("*");
       this._noLineTerminator = _noLineTerminator;
     }
@@ -102,7 +96,6 @@ export function _methodHead(this: Printer, node: t.Method | t.TSDeclareMethod) {
     this._noLineTerminator = _noLineTerminator;
     this.print(key, node);
     this.token("]");
-    this.printInnerComments(node);
   } else {
     this.print(key, node);
     this._noLineTerminator = _noLineTerminator;
@@ -141,11 +134,20 @@ export function _functionHead(
 ) {
   if (node.async) {
     this.word("async");
+    // We prevent inner comments from being printed here,
+    // so that they are always consistently printed in the
+    // same place regardless of the function type.
+    this._endsWithInnerRaw = false;
     this.space();
   }
   this.word("function");
-  if (node.generator) this.token("*");
-  this.printInnerComments(node);
+  if (node.generator) {
+    // We prevent inner comments from being printed here,
+    // so that they are always consistently printed in the
+    // same place regardless of the function type.
+    this._endsWithInnerRaw = false;
+    this.token("*");
+  }
 
   this.space();
   if (node.id) {
@@ -196,7 +198,10 @@ export function ArrowFunctionExpression(
   this._predicate(node);
   this.ensureNoLineTerminator(() => {
     this.space();
-    this.printInnerComments(node);
+    // When printing (x)/*1*/=>{}, we remove the parentheses
+    // and thus there aren't two contiguous inner tokens.
+    // We forcefully print inner comments here.
+    this.printInnerComments();
     this.token("=>");
   });
 

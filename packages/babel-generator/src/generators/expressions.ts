@@ -26,14 +26,14 @@ export function UnaryExpression(this: Printer, node: t.UnaryExpression) {
 }
 
 export function DoExpression(this: Printer, node: t.DoExpression) {
-  if (node.async) {
-    this.word("async");
-    this.ensureNoLineTerminator(() => {
-      this.printInnerComments(node);
+  // ensure no line terminator between `async` and `do`
+  this.ensureNoLineTerminator(() => {
+    if (node.async) {
+      this.word("async");
       this.space();
-    });
-  }
-  this.word("do");
+    }
+    this.word("do");
+  });
   this.space();
   this.print(node.body, node);
 }
@@ -234,9 +234,8 @@ export function YieldExpression(this: Printer, node: t.YieldExpression) {
 
   if (node.delegate) {
     this.ensureNoLineTerminator(() => {
-      this.printInnerComments(node);
+      this.token("*");
     });
-    this.token("*");
     if (node.argument) {
       this.space();
       // line terminators are allowed after yield*
@@ -362,12 +361,11 @@ export function V8IntrinsicIdentifier(
 
 export function ModuleExpression(this: Printer, node: t.ModuleExpression) {
   this.word("module");
+  this.space();
   // ensure no line terminator between `module` and `{`
   this.ensureNoLineTerminator(() => {
-    this.printInnerComments(node);
-    this.space();
+    this.token("{");
   });
-  this.token("{");
   this.indent();
   const { body } = node;
   if (body.body.length || body.directives.length) {

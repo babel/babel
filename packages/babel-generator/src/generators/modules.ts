@@ -66,6 +66,18 @@ export function ExportNamespaceSpecifier(
   this.print(node.exported, node);
 }
 
+export function _printAssertions(
+  this: Printer,
+  node: Extract<t.Node, { assertions?: t.ImportAttribute[] }>,
+) {
+  this.space();
+  this.token("{");
+  this.space();
+  this.printList(node.assertions, node);
+  this.space();
+  this.token("}");
+}
+
 export function ExportAllDeclaration(
   this: Printer,
   node: t.ExportAllDeclaration | t.DeclareExportAllDeclaration,
@@ -88,7 +100,7 @@ export function ExportAllDeclaration(
       this.word("assert");
     });
     // @ts-expect-error Fixme: assertions is not defined in DeclareExportAllDeclaration
-    this.printAssertions(node);
+    this._printAssertions(node);
   } else {
     this.print(node.source, node);
   }
@@ -162,7 +174,7 @@ export function ExportNamedDeclaration(
           this.space();
           this.word("assert");
         });
-        this.printAssertions(node);
+        this._printAssertions(node);
       } else {
         this.print(node.source, node);
       }
@@ -186,7 +198,7 @@ export function ExportDefaultDeclaration(
   }
 
   this.word("export");
-  this.printInnerComments(node);
+  this.noIndentInnerCommentsHere();
   this.space();
   this.word("default");
   this.space();
@@ -201,11 +213,11 @@ export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
 
   const isTypeKind = node.importKind === "type" || node.importKind === "typeof";
   if (isTypeKind) {
-    this.printInnerComments(node, false);
+    this.noIndentInnerCommentsHere();
     this.word(node.importKind);
     this.space();
   } else if (node.module) {
-    this.printInnerComments(node, false);
+    this.noIndentInnerCommentsHere();
     this.word("module");
     this.space();
   }
@@ -250,7 +262,7 @@ export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
       this.space();
       this.word("assert");
     });
-    this.printAssertions(node);
+    this._printAssertions(node);
   } else {
     this.print(node.source, node);
   }
