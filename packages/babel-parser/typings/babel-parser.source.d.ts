@@ -1,83 +1,3 @@
-import * as _babel_types from '@babel/types';
-
-type Plugin =
-  | "asyncDoExpressions"
-  | "asyncGenerators"
-  | "bigInt"
-  | "classPrivateMethods"
-  | "classPrivateProperties"
-  | "classProperties"
-  | "classStaticBlock" // Enabled by default
-  | "decimal"
-  | "decorators-legacy"
-  | "decoratorAutoAccessors"
-  | "destructuringPrivate"
-  | "doExpressions"
-  | "dynamicImport"
-  | "explicitResourceManagement"
-  | "exportDefaultFrom"
-  | "exportNamespaceFrom" // deprecated
-  | "flow"
-  | "flowComments"
-  | "functionBind"
-  | "functionSent"
-  | "importMeta"
-  | "jsx"
-  | "logicalAssignment"
-  | "importAssertions"
-  | "importReflection"
-  | "moduleBlocks"
-  | "moduleStringNames"
-  | "nullishCoalescingOperator"
-  | "numericSeparator"
-  | "objectRestSpread"
-  | "optionalCatchBinding"
-  | "optionalChaining"
-  | "partialApplication"
-  | "placeholders"
-  | "privateIn" // Enabled by default
-  | "regexpUnicodeSets"
-  | "throwExpressions"
-  | "topLevelAwait"
-  | "v8intrinsic"
-  | ParserPluginWithOptions$1[0];
-
-type ParserPluginWithOptions$1 =
-  | ["decorators", DecoratorsPluginOptions]
-  | ["estree", { classFeatures?: boolean }]
-  // @deprecated
-  | ["moduleAttributes", { version: "may-2020" }]
-  | ["pipelineOperator", PipelineOperatorPluginOptions]
-  | ["recordAndTuple", RecordAndTuplePluginOptions]
-  | ["flow", FlowPluginOptions]
-  | ["typescript", TypeScriptPluginOptions];
-
-type PluginConfig = Plugin | ParserPluginWithOptions$1;
-
-interface DecoratorsPluginOptions {
-  decoratorsBeforeExport?: boolean;
-  allowCallParenthesized?: boolean;
-}
-
-interface PipelineOperatorPluginOptions {
-  proposal: "minimal" | "fsharp" | "hack" | "smart";
-  topicToken?: "%" | "#" | "@@" | "^^" | "^";
-}
-
-interface RecordAndTuplePluginOptions {
-  syntaxType: "bar" | "hash";
-}
-
-interface FlowPluginOptions {
-  all?: boolean;
-  enums?: boolean;
-}
-
-interface TypeScriptPluginOptions {
-  dts?: boolean;
-  disallowAmbiguousJSXLike?: boolean;
-}
-
 // Type definitions for @babel/parser
 // Project: https://github.com/babel/babel/tree/main/packages/babel-parser
 // Definitions by: Troy Gerwien <https://github.com/yortus>
@@ -88,20 +8,20 @@ interface TypeScriptPluginOptions {
 /**
  * Parse the provided code as an entire ECMAScript program.
  */
-declare function parse(
+export function parse(
   input: string,
   options?: ParserOptions
-): ParseResult<_babel_types.File>;
+): ParseResult<import("@babel/types").File>;
 
 /**
  * Parse the provided code as a single expression.
  */
-declare function parseExpression(
+export function parseExpression(
   input: string,
   options?: ParserOptions
-): ParseResult<_babel_types.Expression>;
+): ParseResult<import("@babel/types").Expression>;
 
-interface ParserOptions {
+export interface ParserOptions {
   /**
    * By default, import and export declarations can only appear at a program's top level.
    * Setting this option to true allows them anywhere where a statement is allowed.
@@ -205,18 +125,25 @@ interface ParserOptions {
   createParenthesizedExpressions?: boolean;
 }
 
-type ParserPluginWithOptions =
-  ParserPluginWithOptions$1;
+export type ParserPluginWithOptions =
+  import("../src/typings").ParserPluginWithOptions;
 
-type ParserPlugin = PluginConfig;
+export type ParserPlugin = import("../src/typings").PluginConfig;
 
+export type {
+  DecoratorsPluginOptions,
+  PipelineOperatorPluginOptions,
+  RecordAndTuplePluginOptions,
+  FlowPluginOptions,
+  TypeScriptPluginOptions,
+} from "../src/typings";
 
-declare const tokTypes: {
+export const tokTypes: {
   // todo(flow->ts) real token type
   [name: string]: any;
 };
 
-interface ParseError {
+export interface ParseError {
   code: string;
   reasonCode: string;
 }
@@ -224,5 +151,3 @@ interface ParseError {
 type ParseResult<Result> = Result & {
   errors: ParseError[];
 };
-
-export { DecoratorsPluginOptions, FlowPluginOptions, ParseError, ParserOptions, ParserPlugin, ParserPluginWithOptions, PipelineOperatorPluginOptions, RecordAndTuplePluginOptions, TypeScriptPluginOptions, parse, parseExpression, tokTypes };

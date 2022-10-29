@@ -527,29 +527,35 @@ function buildRollup(packages, buildStandalone) {
 }
 
 function buildRollupDts(packages) {
-  const sourcemap = process.env.NODE_ENV === "production";
-  return Promise.all(
-    packages.map(async packageName => {
-      const input = `${mapToDts(packageName)}/src/index.d.ts`;
-      const output = `${packageName}/lib/index.d.ts`;
-      log(`Bundling '${chalk.cyan(output)}' with rollup ...`);
+  async function build(input, output) {
+    log(`Bundling '${chalk.cyan(output)}' with rollup ...`);
 
-      const bundle = await rollup({
-        input,
-        plugins: [rollupDts()],
-        onwarn(warning, warn) {
-          if (warning.code !== "CIRCULAR_DEPENDENCY") warn(warning);
-        },
-      });
+    const bundle = await rollup({
+      input,
+      plugins: [rollupDts()],
+    });
 
-      await bundle.write({
-        file: output,
-        format: "es",
-        sourcemap: sourcemap,
-        exports: "named",
-      });
-    })
+    await bundle.write({
+      file: output,
+      format: "es",
+    });
+  }
+
+  const tasks = packages.map(async packageName => {
+    const input = `${mapToDts(packageName)}/src/index.d.ts`;
+    const output = `${packageName}/lib/index.d.ts`;
+
+    await build(input, output);
+  });
+
+  tasks.push(
+    build(
+      "packages/babel-parser/typings/babel-parser.source.d.ts",
+      "packages/babel-parser/typings/babel-parser.d.ts"
+    )
   );
+
+  return Promise.all(tasks);
 }
 
 function copyDts(packages) {
