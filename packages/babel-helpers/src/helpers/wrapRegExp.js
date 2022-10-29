@@ -31,7 +31,8 @@ export default function _wrapRegExp() {
         this,
         str,
         substitution.replace(/\$<([^>]+)>/g, function (_, name) {
-          return "$" + groups[name];
+          var group = groups[name];
+          return "$" + (Array.isArray(group) ? group.join("$") : group);
         })
       );
     } else if (typeof substitution === "function") {
