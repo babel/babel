@@ -633,7 +633,6 @@ jobs:
         run: |
           cd babel-test262-runner
           node lib/compare-results ~/test262-main.tap ../test262.tap | tee ~/diff.tap
-          exit 1 | tee test
         # Specify bash to enable pipefail, so that "| tee" does not suppress the failure exit code.
         # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsshell
         shell: bash
