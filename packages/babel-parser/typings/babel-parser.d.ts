@@ -141,6 +141,7 @@ export type ParserPlugin =
   | "doExpressions"
   | "dynamicImport"
   | "estree"
+  | "explicitResourceManagement"
   | "exportDefaultFrom"
   | "exportNamespaceFrom" // deprecated
   | "flow"
@@ -151,6 +152,7 @@ export type ParserPlugin =
   | "jsx"
   | "logicalAssignment"
   | "importAssertions"
+  | "importReflection"
   | "moduleBlocks"
   | "moduleStringNames"
   | "nullishCoalescingOperator"
