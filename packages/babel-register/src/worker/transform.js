@@ -16,12 +16,22 @@ function escapeRegExp(string) {
 let cache;
 let transformOpts;
 exports.setOptions = function (opts) {
-  if (opts.cache === false && cache) {
-    registerCache.clear();
-    cache = null;
-  } else if (opts.cache !== false && !cache) {
-    registerCache.load();
-    cache = registerCache.get();
+  if (registerCache.enable) {
+    if (opts.cache === false) {
+      registerCache.disable();
+    } else if (opts.cache !== false) {
+      registerCache.enable();
+    }
+    // eslint-disable-next-line no-func-assign
+    cacheLookup = registerCache.get;
+  } else {
+    if (opts.cache === false && cache) {
+      registerCache.clear();
+      cache = null;
+    } else if (opts.cache !== false && !cache) {
+      registerCache.load();
+      cache = registerCache.get();
+    }
   }
 
   delete opts.cache;

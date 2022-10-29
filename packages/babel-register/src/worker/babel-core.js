@@ -1,4 +1,11 @@
-const cache = require("./cache");
+let cache;
+if (process.env.BABEL_8_BREAKING) {
+  cache = require("./cache");
+} else if (global.TEST_USE_NEW_CACHE ?? !process.env.BABEL_CACHE_PATH) {
+  cache = require("./cache");
+} else {
+  cache = require("./cache-legacy");
+}
 
 function initialize(babel) {
   exports.init = null;

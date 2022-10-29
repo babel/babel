@@ -3590,8 +3590,10 @@ __metadata:
     browserify: ^16.5.2
     clone-deep: ^4.0.1
     find-cache-dir: "condition:BABEL_8_BREAKING ? ^3.3.1 : ^2.0.0"
+    lru-cache: "condition:BABEL_8_BREAKING ? ^7.14.0 : ^5.1.1"
     make-dir: "condition:BABEL_8_BREAKING ? : ^2.1.0"
     pirates: ^4.0.5
+    rimraf: ^3.0.0
     source-map-support: ^0.5.16
   peerDependencies:
     "@babel/core": ^7.0.0-0
@@ -11158,6 +11160,32 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"lru-cache-BABEL_8_BREAKING-false@npm:lru-cache@^5.1.1, lru-cache@npm:^5.1.1":
+  version: 5.1.1
+  resolution: "lru-cache@npm:5.1.1"
+  dependencies:
+    yallist: ^3.0.2
+  checksum: c154ae1cbb0c2206d1501a0e94df349653c92c8cbb25236d7e85190bcaf4567a03ac6eb43166fabfa36fd35623694da7233e88d9601fbf411a9a481d85dbd2cb
+  languageName: node
+  linkType: hard
+
+"lru-cache-BABEL_8_BREAKING-true@npm:lru-cache@^7.14.0":
+  version: 7.14.0
+  resolution: "lru-cache@npm:7.14.0"
+  checksum: efdd329f2c1bb790b71d497c6c59272e6bc2d7dd060ba55fc136becd3dd31fc8346edb446275504d94cb60d3c8385dbf5267b79b23789e409b2bdf302d13f0d7
+  languageName: node
+  linkType: hard
+
+"lru-cache@condition:BABEL_8_BREAKING ? ^7.14.0 : ^5.1.1":
+  version: 0.0.0-condition-3beea6
+  resolution: "lru-cache@condition:BABEL_8_BREAKING?^7.14.0:^5.1.1#3beea6"
+  dependencies:
+    lru-cache-BABEL_8_BREAKING-false: "npm:lru-cache@^5.1.1"
+    lru-cache-BABEL_8_BREAKING-true: "npm:lru-cache@^7.14.0"
+  checksum: 98731c35aeb5d215f8936d30c8c14879d84ed1c4415a232dc9a0093c3b936a585a9219a772a073d333b92cd496622f6bca813a28b8b9849fc16117d2c6aabdeb
+  languageName: node
+  linkType: hard
+
 "lru-cache@npm:^4.0.1":
   version: 4.1.5
   resolution: "lru-cache@npm:4.1.5"
@@ -11165,15 +11193,6 @@ fsevents@^1.2.7:
     pseudomap: ^1.0.2
     yallist: ^2.1.2
   checksum: 4bb4b58a36cd7dc4dcec74cbe6a8f766a38b7426f1ff59d4cf7d82a2aa9b9565cd1cb98f6ff60ce5cd174524868d7bc9b7b1c294371851356066ca9ac4cf135a
-  languageName: node
-  linkType: hard
-
-"lru-cache@npm:^5.1.1":
-  version: 5.1.1
-  resolution: "lru-cache@npm:5.1.1"
-  dependencies:
-    yallist: ^3.0.2
-  checksum: c154ae1cbb0c2206d1501a0e94df349653c92c8cbb25236d7e85190bcaf4567a03ac6eb43166fabfa36fd35623694da7233e88d9601fbf411a9a481d85dbd2cb
   languageName: node
   linkType: hard
 
