@@ -41,9 +41,9 @@ type Plugin =
   | "throwExpressions"
   | "topLevelAwait"
   | "v8intrinsic"
-  | ParserPluginWithOptions$1[0];
+  | ParserPluginWithOptions[0];
 
-type ParserPluginWithOptions$1 =
+type ParserPluginWithOptions =
   | ["decorators", DecoratorsPluginOptions]
   | ["estree", { classFeatures?: boolean }]
   // @deprecated
@@ -53,7 +53,7 @@ type ParserPluginWithOptions$1 =
   | ["flow", FlowPluginOptions]
   | ["typescript", TypeScriptPluginOptions];
 
-type PluginConfig = Plugin | ParserPluginWithOptions$1;
+type PluginConfig = Plugin | ParserPluginWithOptions;
 
 interface DecoratorsPluginOptions {
   decoratorsBeforeExport?: boolean;
@@ -206,11 +206,6 @@ interface ParserOptions {
   createParenthesizedExpressions?: boolean;
 }
 
-type ParserPluginWithOptions =
-  ParserPluginWithOptions$1;
-
-type ParserPlugin = PluginConfig;
-
 
 declare const tokTypes: {
   // todo(flow->ts) real token type
@@ -226,4 +221,4 @@ type ParseResult<Result> = Result & {
   errors: ParseError[];
 };
 
-export { DecoratorsPluginOptions, FlowPluginOptions, ParseError, ParserOptions, ParserPlugin, ParserPluginWithOptions, PipelineOperatorPluginOptions, RecordAndTuplePluginOptions, TypeScriptPluginOptions, parse, parseExpression, tokTypes };
+export { DecoratorsPluginOptions, FlowPluginOptions, ParseError, ParserOptions, PluginConfig as ParserPlugin, ParserPluginWithOptions, PipelineOperatorPluginOptions, RecordAndTuplePluginOptions, TypeScriptPluginOptions, parse, parseExpression, tokTypes };

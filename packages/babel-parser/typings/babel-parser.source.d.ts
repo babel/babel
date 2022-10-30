@@ -125,12 +125,9 @@ export interface ParserOptions {
   createParenthesizedExpressions?: boolean;
 }
 
-export type ParserPluginWithOptions =
-  import("../src/typings").ParserPluginWithOptions;
-
-export type ParserPlugin = import("../src/typings").PluginConfig;
-
 export type {
+  PluginConfig as ParserPlugin,
+  ParserPluginWithOptions,
   DecoratorsPluginOptions,
   PipelineOperatorPluginOptions,
   RecordAndTuplePluginOptions,
