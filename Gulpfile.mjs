@@ -527,7 +527,7 @@ function buildRollup(packages, buildStandalone) {
 }
 
 function buildRollupDts(packages) {
-  async function build(input, output) {
+  async function build(input, output, banner) {
     log(`Bundling '${chalk.cyan(output)}' with rollup ...`);
 
     const bundle = await rollup({
@@ -538,6 +538,7 @@ function buildRollupDts(packages) {
     await bundle.write({
       file: output,
       format: "es",
+      banner,
     });
   }
 
@@ -551,7 +552,8 @@ function buildRollupDts(packages) {
   tasks.push(
     build(
       "packages/babel-parser/typings/babel-parser.source.d.ts",
-      "packages/babel-parser/typings/babel-parser.d.ts"
+      "packages/babel-parser/typings/babel-parser.d.ts",
+      "/* eslint-disable import/no-extraneous-dependencies, @typescript-eslint/consistent-type-imports, prettier/prettier */"
     )
   );
 
