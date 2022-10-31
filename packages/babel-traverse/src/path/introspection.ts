@@ -634,7 +634,10 @@ export function isConstantExpression(this: NodePath): boolean {
   }
 
   if (this.isBinaryExpression()) {
+    const { operator } = this.node;
     return (
+      operator !== "in" &&
+      operator !== "instanceof" &&
       this.get("left").isConstantExpression() &&
       this.get("right").isConstantExpression()
     );
