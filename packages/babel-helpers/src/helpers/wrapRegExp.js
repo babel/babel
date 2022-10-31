@@ -21,7 +21,11 @@ export default function _wrapRegExp() {
 
   BabelRegExp.prototype.exec = function (str) {
     var result = _super.exec.call(this, str);
-    if (result) result.groups = buildGroups(result, this);
+    if (result) {
+      result.groups = buildGroups(result, this);
+      var indices = result.indices;
+      if (indices) indices.groups = buildGroups(indices, this);
+    }
     return result;
   };
   BabelRegExp.prototype[Symbol.replace] = function (str, substitution) {
