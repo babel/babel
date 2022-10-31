@@ -463,8 +463,6 @@ export class DestructuringTransformer {
       this.nodes.push(this.buildVariableDeclaration(arrayRef, toArray));
     }
 
-    //
-
     for (let i = 0; i < pattern.elements.length; i++) {
       const elem = pattern.elements[i];
 
@@ -641,8 +639,6 @@ export function convertVariableDeclaration(
     }
   }
 
-  const inForInit = t.isForStatement(path.parent, { init: node });
-
   let tail: t.VariableDeclaration | null = null;
   const nodesOut = [];
   for (const node of nodes) {
@@ -663,9 +659,20 @@ export function convertVariableDeclaration(
     if (!node.loc) {
       node.loc = nodeLoc;
     }
-    nodesOut.push(
-      inForInit && node.type === "ExpressionStatement" ? node.expression : node,
-    );
+    nodesOut.push(node);
+  }
+
+  // We must keep nodes all are expressions or statements, so `replaceWithMultiple` can work.
+  if (
+    t.isForStatement(path.parent, { init: node }) &&
+    !nodesOut.some(v => t.isVariableDeclaration(v))
+  ) {
+    for (let i = 0; i < nodesOut.length; i++) {
+      const node: t.Node = nodesOut[i];
+      if (t.isExpressionStatement(node)) {
+        nodesOut[i] = node.expression;
+      }
+    }
   }
 
   if (nodesOut.length === 1) {
