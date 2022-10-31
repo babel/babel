@@ -1,9 +1,9 @@
 {
   "type": "File",
-  "start":0,"end":69,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":54,"index":69}},
+  "start":0,"end":120,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":24,"index":120}},
   "program": {
     "type": "Program",
-    "start":0,"end":69,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":54,"index":69}},
+    "start":0,"end":120,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":24,"index":120}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
@@ -62,6 +62,80 @@
             "start":40,"end":69,"loc":{"start":{"line":2,"column":25,"index":40},"end":{"line":2,"column":54,"index":69}}
           }
         ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":70,"end":95,"loc":{"start":{"line":3,"column":0,"index":70},"end":{"line":3,"column":25,"index":95}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":70,"end":94,"loc":{"start":{"line":3,"column":0,"index":70},"end":{"line":3,"column":24,"index":94}},
+          "operator": "=",
+          "left": {
+            "type": "TSSatisfiesExpression",
+            "start":71,"end":86,"loc":{"start":{"line":3,"column":1,"index":71},"end":{"line":3,"column":16,"index":86}},
+            "expression": {
+              "type": "Identifier",
+              "start":71,"end":72,"loc":{"start":{"line":3,"column":1,"index":71},"end":{"line":3,"column":2,"index":72},"identifierName":"a"},
+              "name": "a"
+            },
+            "typeAnnotation": {
+              "type": "TSAnyKeyword",
+              "start":83,"end":86,"loc":{"start":{"line":3,"column":13,"index":83},"end":{"line":3,"column":16,"index":86}}
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 70
+            }
+          },
+          "right": {
+            "type": "NullLiteral",
+            "start":90,"end":94,"loc":{"start":{"line":3,"column":20,"index":90},"end":{"line":3,"column":24,"index":94}}
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " (x < y) satisfies boolean;",
+            "start":40,"end":69,"loc":{"start":{"line":2,"column":25,"index":40},"end":{"line":2,"column":54,"index":69}}
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":96,"end":120,"loc":{"start":{"line":4,"column":0,"index":96},"end":{"line":4,"column":24,"index":120}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":96,"end":119,"loc":{"start":{"line":4,"column":0,"index":96},"end":{"line":4,"column":23,"index":119}},
+          "operator": "=",
+          "left": {
+            "type": "ArrayPattern",
+            "start":96,"end":115,"loc":{"start":{"line":4,"column":0,"index":96},"end":{"line":4,"column":19,"index":115}},
+            "elements": [
+              {
+                "type": "TSSatisfiesExpression",
+                "start":98,"end":113,"loc":{"start":{"line":4,"column":2,"index":98},"end":{"line":4,"column":17,"index":113}},
+                "expression": {
+                  "type": "Identifier",
+                  "start":98,"end":99,"loc":{"start":{"line":4,"column":2,"index":98},"end":{"line":4,"column":3,"index":99},"identifierName":"a"},
+                  "name": "a"
+                },
+                "typeAnnotation": {
+                  "type": "TSAnyKeyword",
+                  "start":110,"end":113,"loc":{"start":{"line":4,"column":14,"index":110},"end":{"line":4,"column":17,"index":113}}
+                },
+                "extra": {
+                  "parenthesized": true,
+                  "parenStart": 97
+                }
+              }
+            ]
+          },
+          "right": {
+            "type": "Identifier",
+            "start":118,"end":119,"loc":{"start":{"line":4,"column":22,"index":118},"end":{"line":4,"column":23,"index":119},"identifierName":"b"},
+            "name": "b"
+          }
+        }
       }
     ],
     "directives": []

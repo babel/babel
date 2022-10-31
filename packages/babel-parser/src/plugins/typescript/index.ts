@@ -3540,6 +3540,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           this.toAssignableParenthesizedExpression(node, isLHS);
           break;
         case "TSAsExpression":
+        case "TSSatisfiesExpression":
         case "TSNonNullExpression":
         case "TSTypeAssertion":
           if (isLHS) {
@@ -3565,6 +3566,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     toAssignableParenthesizedExpression(node: N.Node, isLHS: boolean): void {
       switch (node.expression.type) {
         case "TSAsExpression":
+        case "TSSatisfiesExpression":
         case "TSNonNullExpression":
         case "TSTypeAssertion":
         case "ParenthesizedExpression":
@@ -3578,6 +3580,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     checkToRestConversion(node: N.Node, allowPattern: boolean): void {
       switch (node.type) {
         case "TSAsExpression":
+        case "TSSatisfiesExpression":
         case "TSTypeAssertion":
         case "TSNonNullExpression":
           this.checkToRestConversion(node.expression, false);
@@ -3594,6 +3597,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         | "TSParameterProperty"
         | "TSNonNullExpression"
         | "TSAsExpression"
+        | "TSSatisfiesExpression"
         | "TSTypeAssertion",
       isUnparenthesizedInAssign: boolean,
       binding: BindingTypes,
@@ -3608,6 +3612,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             TSParameterProperty: "parameter",
             TSNonNullExpression: "expression",
             TSAsExpression: (binding !== BIND_NONE ||
+              !isUnparenthesizedInAssign) && ["expression", true],
+            TSSatisfiesExpression: (binding !== BIND_NONE ||
               !isUnparenthesizedInAssign) && ["expression", true],
             TSTypeAssertion: (binding !== BIND_NONE ||
               !isUnparenthesizedInAssign) && ["expression", true],
