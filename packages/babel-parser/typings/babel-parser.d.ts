@@ -206,6 +206,8 @@ interface ParserOptions {
   createParenthesizedExpressions?: boolean;
 }
 
+type ParserPlugin = PluginConfig;
+
 
 declare const tokTypes: {
   // todo(flow->ts) real token type
@@ -221,4 +223,4 @@ type ParseResult<Result> = Result & {
   errors: ParseError[];
 };
 
-export { DecoratorsPluginOptions, FlowPluginOptions, ParseError, ParserOptions, PluginConfig as ParserPlugin, ParserPluginWithOptions, PipelineOperatorPluginOptions, RecordAndTuplePluginOptions, TypeScriptPluginOptions, parse, parseExpression, tokTypes };
+export { DecoratorsPluginOptions, FlowPluginOptions, ParseError, ParserOptions, ParserPlugin, ParserPluginWithOptions, PipelineOperatorPluginOptions, RecordAndTuplePluginOptions, TypeScriptPluginOptions, parse, parseExpression, tokTypes };
