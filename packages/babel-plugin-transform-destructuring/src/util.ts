@@ -640,7 +640,7 @@ export function convertVariableDeclaration(
   }
 
   let tail: t.VariableDeclaration | null = null;
-  const nodesOut = [];
+  let nodesOut = [];
   for (const node of nodes) {
     if (t.isVariableDeclaration(node)) {
       if (tail !== null) {
@@ -662,15 +662,27 @@ export function convertVariableDeclaration(
     nodesOut.push(node);
   }
 
-  // We must keep nodes all are expressions or statements, so `replaceWithMultiple` can work.
   if (
-    t.isForStatement(path.parent, { init: node }) &&
-    !nodesOut.some(v => t.isVariableDeclaration(v))
+    nodesOut.length === 2 &&
+    t.isVariableDeclaration(nodesOut[0]) &&
+    t.isExpressionStatement(nodesOut[1]) &&
+    t.isCallExpression(nodesOut[1].expression) &&
+    nodesOut[0].declarations.length === 1
   ) {
-    for (let i = 0; i < nodesOut.length; i++) {
-      const node: t.Node = nodesOut[i];
-      if (t.isExpressionStatement(node)) {
-        nodesOut[i] = node.expression;
+    const expr = nodesOut[1].expression;
+    expr.arguments = [nodesOut[0].declarations[0].init];
+    nodesOut = [expr];
+  } else {
+    // We must keep nodes all are expressions or statements, so `replaceWithMultiple` can work.
+    if (
+      t.isForStatement(path.parent, { init: node }) &&
+      !nodesOut.some(v => t.isVariableDeclaration(v))
+    ) {
+      for (let i = 0; i < nodesOut.length; i++) {
+        const node: t.Node = nodesOut[i];
+        if (t.isExpressionStatement(node)) {
+          nodesOut[i] = node.expression;
+        }
       }
     }
   }
