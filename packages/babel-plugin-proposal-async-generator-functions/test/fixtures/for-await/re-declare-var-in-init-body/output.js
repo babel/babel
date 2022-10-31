@@ -3,10 +3,10 @@
   var _didIteratorError = false;
   var _iteratorError;
   try {
-    for (var _iterator = babelHelpers.asyncIterator(y), _step; _iteratorAbruptCompletion = !(_step = yield _iterator.next()).done; _iteratorAbruptCompletion = false) {
+    for (var _iterator = babelHelpers.asyncIterator([]), _step; _iteratorAbruptCompletion = !(_step = yield _iterator.next()).done; _iteratorAbruptCompletion = false) {
       let x = _step.value;
       {
-        f(x);
+        let x;
       }
     }
   } catch (err) {
