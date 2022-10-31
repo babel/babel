@@ -455,6 +455,7 @@ export default (superClass: typeof Parser) =>
       unfinished: Undone<N.AnyExport>,
       decorators: N.Decorator[] | null,
     ) {
+      const exportStartLoc = this.state.lastTokStartLoc;
       const node = super.parseExport(unfinished, decorators);
 
       switch (node.type) {
@@ -474,6 +475,27 @@ export default (superClass: typeof Parser) =>
             // @ts-expect-error mutating AST types
             node.exported = node.specifiers[0].exported;
             delete node.specifiers;
+          }
+
+        // fallthrough
+        case "ExportDefaultDeclaration":
+          {
+            const { declaration } = node;
+            if (
+              declaration?.type === "ClassDeclaration" &&
+              declaration.decorators?.length > 0 &&
+              // decorator comes before export
+              declaration.start === node.start
+            ) {
+              this.resetStartLocation(
+                node,
+                // For compatibility with ESLint's keyword-spacing rule, which assumes that an
+                // export declaration must start with export.
+                // https://github.com/babel/babel/issues/15085
+                // Here we reset export declaration's start to be the start of the export token
+                exportStartLoc,
+              );
+            }
           }
 
           break;
