@@ -669,6 +669,12 @@ export function convertVariableDeclaration(
     t.isCallExpression(nodesOut[1].expression) &&
     nodesOut[0].declarations.length === 1
   ) {
+    // This can only happen when we generate this code:
+    //    var _ref = DESTRUCTURED_VALUE;
+    //     babelHelpers.objectDestructuringEmpty(_ref);
+    // Since pushing those two statements to the for loop .init will require an IIFE,
+    // we can optimize them to
+    //     babelHelpers.objectDestructuringEmpty(DESTRUCTURED_VALUE);
     const expr = nodesOut[1].expression;
     expr.arguments = [nodesOut[0].declarations[0].init];
     nodesOut = [expr];
