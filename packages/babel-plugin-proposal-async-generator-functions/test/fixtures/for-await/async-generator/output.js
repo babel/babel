@@ -9,7 +9,9 @@ function _g() {
     try {
       for (var _iterator = babelHelpers.asyncIterator(y), _step; _iteratorAbruptCompletion = !(_step = yield babelHelpers.awaitAsyncGenerator(_iterator.next())).done; _iteratorAbruptCompletion = false) {
         let x = _step.value;
-        f(x);
+        {
+          f(x);
+        }
       }
     } catch (err) {
       _didIteratorError = true;

@@ -54,10 +54,12 @@ export default declare(api => {
         // add the value declaration to the new loop body
         if (declar) {
           block.body.push(declar);
+          if (path.node.body.body.length) {
+            block.body.push(t.blockStatement(path.node.body.body));
+          }
+        } else {
+          block.body.push(...path.node.body.body);
         }
-
-        // push the rest of the original loop body onto our new body
-        block.body.push(...path.node.body.body);
 
         t.inherits(loop, node);
         t.inherits(loop.body, node.body);

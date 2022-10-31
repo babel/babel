@@ -12,7 +12,9 @@ function _f() {
           x,
           y: [z]
         } = _step.value;
-        g(x, z);
+        {
+          g(x, z);
+        }
       }
     } catch (err) {
       _didIteratorError = true;
