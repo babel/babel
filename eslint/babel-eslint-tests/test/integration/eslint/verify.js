@@ -2,6 +2,32 @@ import verifyAndAssertMessages from "../../helpers/verifyAndAssertMessages.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
+function verifyDecoratorsLegacyAndAssertMessages(
+  code,
+  rules,
+  expectedMessages,
+  sourceType,
+) {
+  const overrideConfig = {
+    parserOptions: {
+      sourceType,
+      babelOptions: {
+        configFile: path.resolve(
+          path.dirname(fileURLToPath(import.meta.url)),
+          "../../../../babel-eslint-shared-fixtures/config/babel.config.decorators-legacy.js",
+        ),
+      },
+    },
+  };
+  return verifyAndAssertMessages(
+    code,
+    rules,
+    expectedMessages,
+    sourceType,
+    overrideConfig,
+  );
+}
+
 describe("verify", () => {
   it("arrow function support (issue #1)", () => {
     verifyAndAssertMessages("describe('stuff', () => {});");
@@ -1073,32 +1099,6 @@ describe("verify", () => {
   });
 
   describe("decorators #72 (legacy)", () => {
-    function verifyDecoratorsLegacyAndAssertMessages(
-      code,
-      rules,
-      expectedMessages,
-      sourceType,
-    ) {
-      const overrideConfig = {
-        parserOptions: {
-          sourceType,
-          babelOptions: {
-            configFile: path.resolve(
-              path.dirname(fileURLToPath(import.meta.url)),
-              "../../../../babel-eslint-shared-fixtures/config/babel.config.decorators-legacy.js",
-            ),
-          },
-        },
-      };
-      return verifyAndAssertMessages(
-        code,
-        rules,
-        expectedMessages,
-        sourceType,
-        overrideConfig,
-      );
-    }
-
     it("class declaration", () => {
       verifyDecoratorsLegacyAndAssertMessages(
         `
@@ -1243,6 +1243,16 @@ describe("verify", () => {
           }
         `,
         { "no-unused-vars": 1 },
+      );
+    });
+  });
+
+  describe("decorators #15085 (legacy)", () => {
+    it("works with keyword-spacing rule", () => {
+      verifyDecoratorsLegacyAndAssertMessages(
+        "@dec export class C {}; @dec export default class {}",
+        { "keyword-spacing": 1 },
+        [],
       );
     });
   });
