@@ -937,7 +937,12 @@ function transformClass(
         class extends ${state.addHelper("identity")} {}
       ` as t.ClassExpression;
       staticsClass.body.body = [
-        t.staticBlock([t.toStatement(path.node, false)]),
+        t.staticBlock([
+          t.toStatement(originalClass, true) ||
+            // If toStatement returns false, originalClass must be an anonymous ClassExpression,
+            // because `export default @dec ...` has been handled in the export visitor before.
+            t.expressionStatement(originalClass as t.ClassExpression),
+        ]),
         ...statics,
       ];
 
