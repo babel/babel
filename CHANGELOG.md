@@ -23,6 +23,26 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.20.1 (2022-11-01)
+
+#### :bug: Bug Fix
+* `babel-plugin-proposal-async-generator-functions`
+  * [#15103](https://github.com/babel/babel/pull/15103) fix: Compile re-declare var in `init` and `body` of `for await` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-plugin-proposal-class-properties`, `babel-traverse`
+  * [#15106](https://github.com/babel/babel/pull/15106) Do not mark `in` and `instanceof` as constant expressions ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helpers`, `babel-plugin-proposal-duplicate-named-capturing-groups-regex`, `babel-plugin-transform-named-capturing-groups-regex`
+  * [#15092](https://github.com/babel/babel/pull/15092) Support `indices.groups` when compiling named groups in regexps ([@ptomato](https://github.com/ptomato))
+* `babel-parser`
+  * [#15102](https://github.com/babel/babel/pull/15102) fix: Parse re-declare var in class static body  ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+  * [#15096](https://github.com/babel/babel/pull/15096) fix: `a satisfies b` as lval ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helpers`, `babel-plugin-proposal-duplicate-named-capturing-groups-regex`
+  * [#15090](https://github.com/babel/babel/pull/15090) Handle multiple named groups in wrapRegExp replace() ([@ptomato](https://github.com/ptomato))
+* `babel-plugin-transform-async-to-generator`, `babel-plugin-transform-parameters`, `babel-preset-env`
+  * [#15081](https://github.com/babel/babel/pull/15081) Move the generator body to a gen IIFE when compiling its params ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-generator`
+  * [#15080](https://github.com/babel/babel/pull/15080) Automatically print inner comments ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.20.0 (2022-10-27)
 
 #### :rocket: New Feature
