@@ -186,7 +186,7 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 * `babel-plugin-transform-typescript`
   * [#14890](https://github.com/babel/babel/pull/14890) fix: TS plugin shouldn't remove `#privateField!` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 * `babel-parser`
-  * [#14819](https://github.com/babel/babel/pull/14819) fix: parse a<b>>>c as a<(b>>>c) ([@JLHwung](https://github.com/JLHwung))
+  * [#14819](https://github.com/babel/babel/pull/14819) fix: parse a&lt;b>>>c as a<(b>>>c) ([@JLHwung](https://github.com/JLHwung))
 * `babel-helper-builder-react-jsx`
   * [#14886](https://github.com/babel/babel/pull/14886) Fix helper-builder-react-jsx compat with Babel 7.9 ([@JLHwung](https://github.com/JLHwung))
 
