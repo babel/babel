@@ -463,8 +463,6 @@ export class DestructuringTransformer {
       this.nodes.push(this.buildVariableDeclaration(arrayRef, toArray));
     }
 
-    //
-
     for (let i = 0; i < pattern.elements.length; i++) {
       const elem = pattern.elements[i];
 
@@ -641,10 +639,8 @@ export function convertVariableDeclaration(
     }
   }
 
-  const inForInit = t.isForStatement(path.parent, { init: node });
-
   let tail: t.VariableDeclaration | null = null;
-  const nodesOut = [];
+  let nodesOut = [];
   for (const node of nodes) {
     if (t.isVariableDeclaration(node)) {
       if (tail !== null) {
@@ -663,9 +659,38 @@ export function convertVariableDeclaration(
     if (!node.loc) {
       node.loc = nodeLoc;
     }
-    nodesOut.push(
-      inForInit && node.type === "ExpressionStatement" ? node.expression : node,
-    );
+    nodesOut.push(node);
+  }
+
+  if (
+    nodesOut.length === 2 &&
+    t.isVariableDeclaration(nodesOut[0]) &&
+    t.isExpressionStatement(nodesOut[1]) &&
+    t.isCallExpression(nodesOut[1].expression) &&
+    nodesOut[0].declarations.length === 1
+  ) {
+    // This can only happen when we generate this code:
+    //    var _ref = DESTRUCTURED_VALUE;
+    //     babelHelpers.objectDestructuringEmpty(_ref);
+    // Since pushing those two statements to the for loop .init will require an IIFE,
+    // we can optimize them to
+    //     babelHelpers.objectDestructuringEmpty(DESTRUCTURED_VALUE);
+    const expr = nodesOut[1].expression;
+    expr.arguments = [nodesOut[0].declarations[0].init];
+    nodesOut = [expr];
+  } else {
+    // We must keep nodes all are expressions or statements, so `replaceWithMultiple` can work.
+    if (
+      t.isForStatement(path.parent, { init: node }) &&
+      !nodesOut.some(v => t.isVariableDeclaration(v))
+    ) {
+      for (let i = 0; i < nodesOut.length; i++) {
+        const node: t.Node = nodesOut[i];
+        if (t.isExpressionStatement(node)) {
+          nodesOut[i] = node.expression;
+        }
+      }
+    }
   }
 
   if (nodesOut.length === 1) {

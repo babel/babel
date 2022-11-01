@@ -14,3 +14,6 @@ for (var _x2 in y) {
     babelHelpers.objectDestructuringEmpty(_x2);
   }
 }
+for (babelHelpers.objectDestructuringEmpty(0); 0;) {
+  ;
+}
