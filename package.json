@@ -19,7 +19,6 @@
   },
   "packageManager": "yarn@3.2.4",
   "devDependencies": {
-    "@actions/github": "^5.1.1",
     "@babel/cli": "^7.19.3",
     "@babel/core": "^7.19.6",
     "@babel/eslint-config-internal": "workspace:^",

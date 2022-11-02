@@ -1,9 +1,6 @@
 /* eslint-disable no-process-exit */
 import fs from "fs";
 import fetch from "node-fetch";
-import github from "@actions/github";
-
-const { repo } = github.context;
 
 const resp = await fetch(
   "https://raw.githubusercontent.com/babel/babel/main/package.json"
