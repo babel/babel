@@ -7,3 +7,8 @@ async ( /*
          * 6 with newline
          */
 ) => {};
+
+async /* 7 */ ( /*
+                 * 8 with newline
+                 */
+) /* 9 */ => {};

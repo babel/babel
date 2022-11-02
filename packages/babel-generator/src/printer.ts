@@ -889,18 +889,26 @@ class Printer {
     }
   }
 
-  _printComment(comment: t.Comment, skipNewLines: COMMENT_SKIP_NEWLINE): void {
+  // Returns `true` if the comment cannot be printed in this position due to
+  // line terminators, signaling that the print comments loop can stop and
+  // resume printing comments at the next posisble position. This happens when
+  // printing inner comments, since if we have an inner comment with a multiline
+  // there is at least one inner position where line terminators are allowed.
+  _printComment(
+    comment: t.Comment,
+    skipNewLines: COMMENT_SKIP_NEWLINE,
+  ): boolean {
     // Some plugins (such as flow-strip-types) use this to mark comments as removed using the AST-root 'comments' property,
     // where they can't manually mutate the AST node comment lists.
-    if (comment.ignore) return;
+    if (comment.ignore) return false;
 
-    if (this._printedComments.has(comment)) return;
+    if (this._printedComments.has(comment)) return false;
 
     if (this._noLineTerminator && HAS_NEWLINE.test(comment.value)) {
-      return;
+      return true;
     }
 
-    if (!this.format.shouldPrintComment(comment.value)) return;
+    if (!this.format.shouldPrintComment(comment.value)) return false;
 
     this._printedComments.add(comment);
 
@@ -971,6 +979,8 @@ class Printer {
     if (printNewLines && skipNewLines !== COMMENT_SKIP_NEWLINE.SKIP_TRAILING) {
       this.newline(1);
     }
+
+    return false;
   }
 
   _printComments(
@@ -980,124 +990,124 @@ class Printer {
     parent?: t.Node,
     lineOffset: number = 0,
   ) {
-    {
-      const nodeLoc = node.loc;
-      const len = comments.length;
-      let hasLoc = !!nodeLoc;
-      const nodeStartLine = hasLoc ? nodeLoc.start.line : 0;
-      const nodeEndLine = hasLoc ? nodeLoc.end.line : 0;
-      let lastLine = 0;
-      let leadingCommentNewline = 0;
-      const { _noLineTerminator } = this;
+    const nodeLoc = node.loc;
+    const len = comments.length;
+    let hasLoc = !!nodeLoc;
+    const nodeStartLine = hasLoc ? nodeLoc.start.line : 0;
+    const nodeEndLine = hasLoc ? nodeLoc.end.line : 0;
+    let lastLine = 0;
+    let leadingCommentNewline = 0;
+    const { _noLineTerminator } = this;
 
-      for (let i = 0; i < len; i++) {
-        const comment = comments[i];
+    for (let i = 0; i < len; i++) {
+      const comment = comments[i];
 
-        if (hasLoc && comment.loc && !this._printedComments.has(comment)) {
-          const commentStartLine = comment.loc.start.line;
-          const commentEndLine = comment.loc.end.line;
-          if (type === COMMENT_TYPE.LEADING) {
-            let offset = 0;
-            if (i === 0) {
-              // Because currently we cannot handle blank lines before leading comments,
-              // we always wrap before and after multi-line comments.
-              if (
-                this._buf.hasContent() &&
-                (comment.type === "CommentLine" ||
-                  commentStartLine != commentEndLine)
-              ) {
-                offset = leadingCommentNewline = 1;
-              }
-            } else {
-              offset = commentStartLine - lastLine;
-            }
-            lastLine = commentEndLine;
-
-            if (!_noLineTerminator) this.newline(offset);
-            this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL);
-
-            if (!_noLineTerminator && i + 1 === len) {
-              this.newline(
-                Math.max(nodeStartLine - lastLine, leadingCommentNewline),
-              );
-              lastLine = nodeStartLine;
-            }
-          } else if (type === COMMENT_TYPE.INNER) {
-            const offset =
-              commentStartLine - (i === 0 ? nodeStartLine : lastLine);
-            lastLine = commentEndLine;
-
-            if (!_noLineTerminator) this.newline(offset);
-            this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL);
-
-            if (!_noLineTerminator && i + 1 === len) {
-              this.newline(Math.min(1, nodeEndLine - lastLine)); // TODO: Improve here when inner comments processing is stronger
-              lastLine = nodeEndLine;
+      if (hasLoc && comment.loc && !this._printedComments.has(comment)) {
+        const commentStartLine = comment.loc.start.line;
+        const commentEndLine = comment.loc.end.line;
+        if (type === COMMENT_TYPE.LEADING) {
+          let offset = 0;
+          if (i === 0) {
+            // Because currently we cannot handle blank lines before leading comments,
+            // we always wrap before and after multi-line comments.
+            if (
+              this._buf.hasContent() &&
+              (comment.type === "CommentLine" ||
+                commentStartLine != commentEndLine)
+            ) {
+              offset = leadingCommentNewline = 1;
             }
           } else {
-            const offset =
-              commentStartLine -
-              (i === 0 ? nodeEndLine - lineOffset : lastLine);
-            lastLine = commentEndLine;
+            offset = commentStartLine - lastLine;
+          }
+          lastLine = commentEndLine;
 
-            if (!_noLineTerminator) this.newline(offset);
-            this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL);
+          if (!_noLineTerminator) this.newline(offset);
+          this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL);
+
+          if (!_noLineTerminator && i + 1 === len) {
+            this.newline(
+              Math.max(nodeStartLine - lastLine, leadingCommentNewline),
+            );
+            lastLine = nodeStartLine;
+          }
+        } else if (type === COMMENT_TYPE.INNER) {
+          const offset =
+            commentStartLine - (i === 0 ? nodeStartLine : lastLine);
+          lastLine = commentEndLine;
+
+          if (!_noLineTerminator) this.newline(offset);
+          if (this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL)) break;
+
+          if (!_noLineTerminator && i + 1 === len) {
+            this.newline(Math.min(1, nodeEndLine - lastLine)); // TODO: Improve here when inner comments processing is stronger
+            lastLine = nodeEndLine;
           }
         } else {
-          hasLoc = false;
+          const offset =
+            commentStartLine - (i === 0 ? nodeEndLine - lineOffset : lastLine);
+          lastLine = commentEndLine;
 
-          if (len === 1) {
-            const singleLine = comment.loc
-              ? comment.loc.start.line === comment.loc.end.line
-              : !comment.value.includes("\n");
+          if (!_noLineTerminator) this.newline(offset);
+          this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL);
+        }
+      } else {
+        hasLoc = false;
 
-            const shouldSkipNewline =
-              singleLine &&
-              !isStatement(node) &&
-              !isClassBody(parent) &&
-              !isTSInterfaceBody(parent);
+        if (len === 1) {
+          const singleLine = comment.loc
+            ? comment.loc.start.line === comment.loc.end.line
+            : !comment.value.includes("\n");
 
-            if (type === COMMENT_TYPE.LEADING) {
-              this._printComment(
-                comment,
-                (shouldSkipNewline && node.type !== "ObjectExpression") ||
-                  (singleLine && isFunction(parent, { body: node }))
-                  ? COMMENT_SKIP_NEWLINE.SKIP_ALL
-                  : COMMENT_SKIP_NEWLINE.DEFAULT,
-              );
-            } else if (shouldSkipNewline && type === COMMENT_TYPE.TRAILING) {
-              this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL);
-            } else {
-              this._printComment(comment, COMMENT_SKIP_NEWLINE.DEFAULT);
-            }
-          } else if (
-            type === COMMENT_TYPE.INNER &&
-            !(node.type === "ObjectExpression" && node.properties.length > 1) &&
-            node.type !== "ClassBody" &&
-            node.type !== "TSInterfaceBody"
-          ) {
-            // class X {
-            //   /*:: a: number*/
-            //   /*:: b: ?string*/
-            // }
+          const shouldSkipNewline =
+            singleLine &&
+            !isStatement(node) &&
+            !isClassBody(parent) &&
+            !isTSInterfaceBody(parent);
 
+          if (type === COMMENT_TYPE.LEADING) {
             this._printComment(
               comment,
-              i === 0
-                ? COMMENT_SKIP_NEWLINE.SKIP_LEADING
-                : i === len - 1
-                ? COMMENT_SKIP_NEWLINE.SKIP_TRAILING
+              (shouldSkipNewline && node.type !== "ObjectExpression") ||
+                (singleLine && isFunction(parent, { body: node }))
+                ? COMMENT_SKIP_NEWLINE.SKIP_ALL
                 : COMMENT_SKIP_NEWLINE.DEFAULT,
             );
+          } else if (shouldSkipNewline && type === COMMENT_TYPE.TRAILING) {
+            if (this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL)) {
+              break;
+            }
           } else {
             this._printComment(comment, COMMENT_SKIP_NEWLINE.DEFAULT);
           }
+        } else if (
+          type === COMMENT_TYPE.INNER &&
+          !(node.type === "ObjectExpression" && node.properties.length > 1) &&
+          node.type !== "ClassBody" &&
+          node.type !== "TSInterfaceBody"
+        ) {
+          // class X {
+          //   /*:: a: number*/
+          //   /*:: b: ?string*/
+          // }
+
+          const skippedDueToNewlie = this._printComment(
+            comment,
+            i === 0
+              ? COMMENT_SKIP_NEWLINE.SKIP_LEADING
+              : i === len - 1
+              ? COMMENT_SKIP_NEWLINE.SKIP_TRAILING
+              : COMMENT_SKIP_NEWLINE.DEFAULT,
+          );
+          if (skippedDueToNewlie) break;
+        } else {
+          this._printComment(comment, COMMENT_SKIP_NEWLINE.DEFAULT);
         }
       }
+    }
 
-      if (type === COMMENT_TYPE.TRAILING && hasLoc && lastLine) {
-        this._lastCommentLine = lastLine;
-      }
+    if (type === COMMENT_TYPE.TRAILING && hasLoc && lastLine) {
+      this._lastCommentLine = lastLine;
     }
   }
 }
