@@ -26,14 +26,11 @@ export function UnaryExpression(this: Printer, node: t.UnaryExpression) {
 }
 
 export function DoExpression(this: Printer, node: t.DoExpression) {
-  // ensure no line terminator between `async` and `do`
-  this.ensureNoLineTerminator(() => {
-    if (node.async) {
-      this.word("async");
-      this.space();
-    }
-    this.word("do");
-  });
+  if (node.async) {
+    this.word("async", true);
+    this.space();
+  }
+  this.word("do");
   this.space();
   this.print(node.body, node);
 }
@@ -230,12 +227,10 @@ export function AwaitExpression(this: Printer, node: t.AwaitExpression) {
 }
 
 export function YieldExpression(this: Printer, node: t.YieldExpression) {
-  this.word("yield");
+  this.word("yield", true);
 
   if (node.delegate) {
-    this.ensureNoLineTerminator(() => {
-      this.token("*");
-    });
+    this.token("*");
     if (node.argument) {
       this.space();
       // line terminators are allowed after yield*
@@ -360,12 +355,9 @@ export function V8IntrinsicIdentifier(
 }
 
 export function ModuleExpression(this: Printer, node: t.ModuleExpression) {
-  this.word("module");
+  this.word("module", true);
   this.space();
-  // ensure no line terminator between `module` and `{`
-  this.ensureNoLineTerminator(() => {
-    this.token("{");
-  });
+  this.token("{");
   this.indent();
   const { body } = node;
   if (body.body.length || body.directives.length) {

@@ -22,6 +22,7 @@ const SCIENTIFIC_NOTATION = /e/i;
 const ZERO_DECIMAL_INTEGER = /\.0+$/;
 const NON_DECIMAL_LITERAL = /^0[box]/;
 const PURE_ANNOTATION_RE = /^\s*[@#]__PURE__\s*$/;
+const NEWLINE = /\r\n|[\n\r\u2028\u2029]/;
 
 const { needsParens } = n;
 
@@ -151,6 +152,7 @@ class Printer {
     } else {
       this._queue(charCodes.semicolon);
     }
+    this._noLineTerminator = false;
   }
 
   /**
@@ -185,7 +187,7 @@ class Printer {
    * Writes a token that can't be safely parsed without taking whitespace into account.
    */
 
-  word(str: string): void {
+  word(str: string, noLineTerminatorAfter: boolean = false): void {
     this._maybePrintInnerComments();
 
     // prevent concatenating words and creating // comment out of division and regex
@@ -200,6 +202,7 @@ class Printer {
     this._append(str, false);
 
     this._endsWithWord = true;
+    this._noLineTerminator = noLineTerminatorAfter;
   }
 
   /**
@@ -243,6 +246,7 @@ class Printer {
 
     this._maybeAddAuxComment();
     this._append(str, maybeNewline);
+    this._noLineTerminator = false;
   }
 
   tokenChar(char: number): void {
@@ -263,6 +267,7 @@ class Printer {
 
     this._maybeAddAuxComment();
     this._appendChar(char);
+    this._noLineTerminator = false;
   }
 
   /**
@@ -534,13 +539,6 @@ class Printer {
     return this._indentRepeat * this._indent;
   }
 
-  ensureNoLineTerminator(fn: () => void) {
-    const { _noLineTerminator } = this;
-    this._noLineTerminator = true;
-    fn();
-    this._noLineTerminator = _noLineTerminator;
-  }
-
   printTerminatorless(node: t.Node, parent: t.Node, isLabel: boolean) {
     /**
      * Set some state that will be modified if a newline has been inserted before any
@@ -558,9 +556,8 @@ class Printer {
      *  `undefined` will be returned and not `foo` due to the terminator.
      */
     if (isLabel) {
-      this.ensureNoLineTerminator(() => {
-        this.print(node, parent);
-      });
+      this._noLineTerminator = true;
+      this.print(node, parent);
     } else {
       const terminatorState = {
         printed: false,
@@ -581,9 +578,9 @@ class Printer {
   print(
     node: t.Node | null,
     parent?: t.Node,
-    noLineTerminator?: boolean,
+    noLineTerminatorAfter?: boolean,
     // trailingCommentsLineOffset also used to check if called from printJoin
-    // it will be ignored if `noLineTerminator||this._noLineTerminator`
+    // it will be ignored if `noLineTerminatorAfter||this._noLineTerminator`
     trailingCommentsLineOffset?: number,
     forceParens?: boolean,
   ) {
@@ -649,15 +646,16 @@ class Printer {
 
     this.exactSource(loc, printMethod.bind(this, node, parent));
 
-    if (noLineTerminator && !this._noLineTerminator) {
+    if (shouldPrintParens) {
+      this._printTrailingComments(node, parent);
+      this.token(")");
+      this._noLineTerminator = noLineTerminatorAfter;
+    } else if (noLineTerminatorAfter && !this._noLineTerminator) {
       this._noLineTerminator = true;
       this._printTrailingComments(node, parent);
-      this._noLineTerminator = false;
     } else {
       this._printTrailingComments(node, parent, trailingCommentsLineOffset);
     }
-
-    if (shouldPrintParens) this.token(")");
 
     // end
     this._printStack.pop();
@@ -929,6 +927,11 @@ class Printer {
 
     let val;
     if (isBlockComment) {
+      if (this._noLineTerminator && NEWLINE.test(comment.value)) {
+        this._printedComments.delete(comment);
+        return;
+      }
+
       val = `/*${comment.value}*/`;
       if (this.format.indent.adjustMultilineComment) {
         const offset = comment.loc?.start.column;
@@ -950,6 +953,9 @@ class Printer {
     } else if (!this._noLineTerminator) {
       val = `//${comment.value}`;
     } else {
+      // It was a single-line comment, so it's guaranteed to not
+      // contain newlines and it can be safely printed as a block
+      // comment.
       val = `/*${comment.value}*/`;
     }
 
@@ -983,6 +989,7 @@ class Printer {
       const nodeEndLine = hasLoc ? nodeLoc.end.line : 0;
       let lastLine = 0;
       let leadingCommentNewline = 0;
+      const { _noLineTerminator } = this;
 
       for (let i = 0; i < len; i++) {
         const comment = comments[i];
@@ -1007,10 +1014,10 @@ class Printer {
             }
             lastLine = commentEndLine;
 
-            this.newline(offset);
+            if (!_noLineTerminator) this.newline(offset);
             this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL);
 
-            if (i + 1 === len) {
+            if (!_noLineTerminator && i + 1 === len) {
               this.newline(
                 Math.max(nodeStartLine - lastLine, leadingCommentNewline),
               );
@@ -1021,10 +1028,10 @@ class Printer {
               commentStartLine - (i === 0 ? nodeStartLine : lastLine);
             lastLine = commentEndLine;
 
-            this.newline(offset);
+            if (!_noLineTerminator) this.newline(offset);
             this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL);
 
-            if (i + 1 === len) {
+            if (!_noLineTerminator && i + 1 === len) {
               this.newline(Math.min(1, nodeEndLine - lastLine)); // TODO: Improve here when inner comments processing is stronger
               lastLine = nodeEndLine;
             }
@@ -1034,7 +1041,7 @@ class Printer {
               (i === 0 ? nodeEndLine - lineOffset : lastLine);
             lastLine = commentEndLine;
 
-            this.newline(offset);
+            if (!_noLineTerminator) this.newline(offset);
             this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL);
           }
         } else {
