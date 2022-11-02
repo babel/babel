@@ -49,6 +49,10 @@
       "description": "By default, a return statement at the top level raises an error.\nSet this to true to accept such code.",
       "type": "boolean"
     },
+    "allowNewTargetOutsideFunction": {
+      "description": "By default, new.target use is not allowed outside of a function or class.\nSet this to true to accept such code.",
+      "type": "boolean"
+    },
     "allowSuperOutsideMethod": {
       "type": "boolean"
     },

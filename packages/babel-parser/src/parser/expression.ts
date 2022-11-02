@@ -1880,7 +1880,11 @@ export default abstract class ExpressionParser extends LValParser {
         "target",
       );
 
-      if (!this.scope.inNonArrowFunction && !this.scope.inClass) {
+      if (
+        !this.scope.inNonArrowFunction &&
+        !this.scope.inClass &&
+        !this.options.allowNewTargetOutsideFunction
+      ) {
         this.raise(Errors.UnexpectedNewTarget, { at: metaProp });
       }
 
