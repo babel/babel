@@ -52,7 +52,10 @@
     ]
   },
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "default": "./lib/index.js",
+      "types": "./lib/index-legacy.d.ts"
+    },
     "./package.json": "./package.json"
   },
   "type": "commonjs"

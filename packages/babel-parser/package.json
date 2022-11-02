@@ -55,7 +55,8 @@
         "exports": {
           ".": {
             "require": "./lib/index.cjs",
-            "default": "./lib/index.js"
+            "default": "./lib/index.js",
+            "types": "./typings/babel-parser.d.ts"
           },
           "./package.json": "./package.json"
         }
@@ -66,7 +67,8 @@
   "exports": {
     ".": {
       "require": "./index.cjs",
-      "default": "./lib/index.js"
+      "default": "./lib/index.js",
+      "types": "./typings/babel-parser.d.ts"
     },
     "./package.json": "./package.json"
   },
