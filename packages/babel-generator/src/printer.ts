@@ -22,7 +22,7 @@ const SCIENTIFIC_NOTATION = /e/i;
 const ZERO_DECIMAL_INTEGER = /\.0+$/;
 const NON_DECIMAL_LITERAL = /^0[box]/;
 const PURE_ANNOTATION_RE = /^\s*[@#]__PURE__\s*$/;
-const NEWLINE = /\r\n|[\n\r\u2028\u2029]/;
+const HAS_NEWLINE = /[\n\r\u2028\u2029]/;
 
 const { needsParens } = n;
 
@@ -896,6 +896,10 @@ class Printer {
 
     if (this._printedComments.has(comment)) return;
 
+    if (this._noLineTerminator && HAS_NEWLINE.test(comment.value)) {
+      return;
+    }
+
     if (!this.format.shouldPrintComment(comment.value)) return;
 
     this._printedComments.add(comment);
@@ -927,11 +931,6 @@ class Printer {
 
     let val;
     if (isBlockComment) {
-      if (this._noLineTerminator && NEWLINE.test(comment.value)) {
-        this._printedComments.delete(comment);
-        return;
-      }
-
       val = `/*${comment.value}*/`;
       if (this.format.indent.adjustMultilineComment) {
         const offset = comment.loc?.start.column;
