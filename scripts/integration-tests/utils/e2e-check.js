@@ -14,7 +14,7 @@ if (
   mainRepoPackageJson.version !==
   JSON.parse(fs.readFileSync("package.json")).version
 ) {
-  if (repo.owner === "babel" && repo.repo === "babel") {
+  if (process.env.GITHUB_REPOSITORY === "babel/babel") {
     console.error("The branch is not up to date with main, please rebase");
     process.exit(1);
   } else {
