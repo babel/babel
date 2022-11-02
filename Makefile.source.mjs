@@ -288,6 +288,8 @@ target["prepublish-prepare-dts"] = function () {
 target["tscheck"] = function () {
   target["generate-tsconfig"]();
 
+  // ts doesn't generate declaration files after we remove the output directory by manually when incremental==true
+  shell.rm("-rf", "tsconfig.tsbuildinfo");
   shell.rm("-rf", "dts");
   yarn(["tsc", "-b", "."]);
 };
