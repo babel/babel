@@ -27,7 +27,7 @@
   "files": [
     "bin",
     "lib",
-    "typings",
+    "typings/babel-parser.d.ts",
     "index.cjs"
   ],
   "engines": {
