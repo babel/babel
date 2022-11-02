@@ -553,7 +553,7 @@ function buildRollupDts(packages) {
     build(
       "packages/babel-parser/typings/babel-parser.source.d.ts",
       "packages/babel-parser/typings/babel-parser.d.ts",
-      "/* eslint-disable import/no-extraneous-dependencies, @typescript-eslint/consistent-type-imports, prettier/prettier */"
+      "// This file is auto-generated! Do not modify it directly.\n/* eslint-disable import/no-extraneous-dependencies, @typescript-eslint/consistent-type-imports, prettier/prettier */"
     )
   );
 

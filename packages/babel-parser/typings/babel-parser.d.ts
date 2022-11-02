@@ -1,3 +1,4 @@
+// This file is auto-generated! Do not modify it directly.
 /* eslint-disable import/no-extraneous-dependencies, @typescript-eslint/consistent-type-imports, prettier/prettier */
 import * as _babel_types from '@babel/types';
 
