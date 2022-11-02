@@ -1,4 +1,4 @@
-import type { NodePath, Scope } from "@babel/traverse";
+import type { NodePath, Scope, Visitor } from "@babel/traverse";
 import { types as t, template } from "@babel/core";
 import syntaxDecorators from "@babel/plugin-syntax-decorators";
 import ReplaceSupers from "@babel/helper-replace-supers";
@@ -6,6 +6,7 @@ import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import * as charCodes from "charcodes";
 import type { PluginAPI, PluginObject, PluginPass } from "@babel/core";
 import type { Options } from "./index";
+import { skipTransparentExprWrappers } from "@babel/helper-skip-transparent-expression-wrappers";
 
 type ClassDecoratableElement =
   | t.ClassMethod
@@ -101,12 +102,13 @@ function createLazyPrivateUidGeneratorForClass(
  */
 function replaceClassWithVar(
   path: NodePath<t.ClassDeclaration | t.ClassExpression>,
+  className: string | undefined,
 ): [t.Identifier, NodePath<t.ClassDeclaration | t.ClassExpression>] {
   if (path.type === "ClassDeclaration") {
     const varId = path.scope.generateUidIdentifierBasedOnNode(path.node.id);
-    const classId = t.identifier(path.node.id.name);
+    const classId = t.identifier(className);
 
-    path.scope.rename(classId.name, varId.name);
+    path.scope.rename(className, varId.name);
 
     path.insertBefore(
       t.variableDeclaration("let", [t.variableDeclarator(varId)]),
@@ -115,22 +117,16 @@ function replaceClassWithVar(
 
     return [t.cloneNode(varId), path];
   } else {
-    let className: string;
     let varId: t.Identifier;
 
     if (path.node.id) {
       className = path.node.id.name;
       varId = path.scope.parent.generateDeclaredUidIdentifier(className);
       path.scope.rename(className, varId.name);
-    } else if (
-      path.parentPath.node.type === "VariableDeclarator" &&
-      path.parentPath.node.id.type === "Identifier"
-    ) {
-      className = path.parentPath.node.id.name;
-      varId = path.scope.parent.generateDeclaredUidIdentifier(className);
     } else {
-      varId =
-        path.scope.parent.generateDeclaredUidIdentifier("decorated_class");
+      varId = path.scope.parent.generateDeclaredUidIdentifier(
+        className ?? "decorated_class",
+      );
     }
 
     const newClassExpr = t.classExpression(
@@ -488,6 +484,7 @@ function transformClass(
   state: PluginPass,
   constantSuper: boolean,
   version: "2022-03" | "2021-12",
+  className: string | undefined,
 ): NodePath {
   const body = path.get("body.body");
 
@@ -549,7 +546,7 @@ function transformClass(
   if (classDecorators) {
     classInitLocal = scopeParent.generateDeclaredUidIdentifier("initClass");
 
-    const [localId, classPath] = replaceClassWithVar(path);
+    const [localId, classPath] = replaceClassWithVar(path, className);
     path = classPath;
     classLocal = localId;
 
@@ -1020,6 +1017,24 @@ function transformClass(
   return path;
 }
 
+function NamedEvaluationVisitoryFactory(
+  isAnonymous: (path: NodePath) => boolean,
+  visitor: (path: NodePath, state: PluginPass, name: string) => void,
+) {
+  return {
+    VariableDeclarator(path, state) {
+      const id = path.node.id;
+      if (id.type === "Identifier") {
+        const initializer = skipTransparentExprWrappers(path.get("init"));
+        if (isAnonymous(initializer)) {
+          const name = id.name;
+          visitor(initializer, state, name);
+        }
+      }
+    },
+  } as Visitor<PluginPass>;
+}
+
 export default function (
   { assertVersion, assumption }: PluginAPI,
   { loose }: Options,
@@ -1029,6 +1044,28 @@ export default function (
 
   const VISITED = new WeakSet<NodePath>();
   const constantSuper = assumption("constantSuper") ?? loose;
+
+  function visitClass(
+    path: NodePath<t.Class>,
+    state: PluginPass,
+    className: string | undefined,
+  ) {
+    if (VISITED.has(path)) return;
+    const { node } = path;
+    className ??= node.id?.name;
+    const newPath = transformClass(
+      path,
+      state,
+      constantSuper,
+      version,
+      className,
+    );
+    if (newPath) {
+      VISITED.add(newPath);
+      return;
+    }
+    VISITED.add(path);
+  }
 
   return {
     name: "proposal-decorators",
@@ -1050,11 +1087,13 @@ export default function (
       },
 
       Class(path, state) {
-        if (VISITED.has(path)) return;
-
-        const newPath = transformClass(path, state, constantSuper, version);
-        if (newPath) VISITED.add(newPath);
+        visitClass(path, state, undefined);
       },
+
+      ...NamedEvaluationVisitoryFactory(
+        path => path.isClassExpression({ id: null }),
+        visitClass,
+      ),
     },
   };
 }

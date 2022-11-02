@@ -23,6 +23,8 @@ export type TransparentExprWrapper =
 // includes expressions used for types, and extra parenthesis. For example, in
 // (a as any)(), this helper can be used to skip the TSAsExpression when
 // determining the callee.
+// @see `isOuterExpression` in
+// https://github.com/microsoft/TypeScript/blob/c1e9afd5428fd04c1555bac065e5a4d21d49dc7d/src/compiler/factory/utilities.ts#L431
 export function isTransparentExprWrapper(
   node: t.Node,
 ): node is TransparentExprWrapper {
@@ -45,6 +47,8 @@ export function skipTransparentExprWrappers(
   return path;
 }
 
+// @see `skipOuterExpression` in
+// https://github.com/microsoft/TypeScript/blob/c1e9afd5428fd04c1555bac065e5a4d21d49dc7d/src/compiler/factory/utilities.ts#L452
 export function skipTransparentExprWrapperNodes(
   node: t.Expression | t.Super,
 ): t.Expression | t.Super {
