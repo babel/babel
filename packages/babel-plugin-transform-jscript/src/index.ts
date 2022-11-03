@@ -19,7 +19,7 @@ export default declare(api => {
                 null,
                 [],
                 t.blockStatement([
-                  // @ts-expect-error fixme: t.toStatement may return false
+                  // @ts-expect-error t.toStatement must return a FunctionDeclaration if node.id is defined
                   t.toStatement(node),
                   t.returnStatement(t.cloneNode(node.id)),
                 ]),

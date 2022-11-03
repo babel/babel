@@ -531,7 +531,7 @@ export default declare((api, opts: Options) => {
           nodeWithoutSpread.right = t.identifier(refName);
           nodes.push(t.expressionStatement(nodeWithoutSpread));
           nodes.push(
-            t.toStatement(
+            t.expressionStatement(
               t.assignmentExpression("=", argument, callExpression),
             ),
           );
