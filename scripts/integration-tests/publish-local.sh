@@ -26,7 +26,7 @@ initializeE2Egit
 yarn
 
 # Does not trap on error
-node scripts/integration-tests/utils/e2e-check.js && :; ret=$?
+node --experimental-fetch scripts/integration-tests/utils/e2e-check.js && :; ret=$?
 
 if [ $ret -eq 10 ]; then
   cleanup
