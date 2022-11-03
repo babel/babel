@@ -96,7 +96,7 @@ type ExtraNodeProps = {
 };
 
 export default declare((api, opts: Options) => {
-  // Some downstream bundled `@babel/core` and `@babel/types`.
+  // `@babel/core` and `@babel/types` are bundled in some downstream libraries.
   // Ref: https://github.com/babel/babel/issues/15089
   const { types: t, template } = api;
 
