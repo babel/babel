@@ -134,7 +134,7 @@ export function ClassAccessorProperty(
   // TS does not support class accessor property yet
   this.tsPrintClassMemberModifiers(node);
 
-  this.word("accessor");
+  this.word("accessor", true);
   this.space();
 
   if (node.computed) {

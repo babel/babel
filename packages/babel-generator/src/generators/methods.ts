@@ -10,6 +10,7 @@ export function _params(
   this.token("(");
   this._parameters(node.params, node);
   this.token(")");
+  this._noLineTerminator = true;
 
   this.print(node.returnType, node, node.type === "ArrowFunctionExpression");
 }
@@ -72,11 +73,8 @@ export function _methodHead(this: Printer, node: t.Method | t.TSDeclareMethod) {
     this.space();
   }
 
-  const { _noLineTerminator } = this;
   if (node.async) {
-    // ensure no line terminator between async and class element name / *
-    this._noLineTerminator = true;
-    this.word("async");
+    this.word("async", true);
     this.space();
   }
 
@@ -87,18 +85,15 @@ export function _methodHead(this: Printer, node: t.Method | t.TSDeclareMethod) {
   ) {
     if (node.generator) {
       this.token("*");
-      this._noLineTerminator = _noLineTerminator;
     }
   }
 
   if (node.computed) {
     this.token("[");
-    this._noLineTerminator = _noLineTerminator;
     this.print(key, node);
     this.token("]");
   } else {
     this.print(key, node);
-    this._noLineTerminator = _noLineTerminator;
   }
 
   if (
@@ -118,13 +113,14 @@ export function _predicate(
     | t.FunctionDeclaration
     | t.FunctionExpression
     | t.ArrowFunctionExpression,
+  noLineTerminatorAfter?: boolean,
 ) {
   if (node.predicate) {
     if (!node.returnType) {
       this.token(":");
     }
     this.space();
-    this.print(node.predicate, node);
+    this.print(node.predicate, node, noLineTerminatorAfter);
   }
 }
 
@@ -172,10 +168,8 @@ export function ArrowFunctionExpression(
   this: Printer,
   node: t.ArrowFunctionExpression,
 ) {
-  const { _noLineTerminator } = this;
   if (node.async) {
-    this._noLineTerminator = true;
-    this.word("async");
+    this.word("async", true);
     this.space();
   }
 
@@ -188,22 +182,18 @@ export function ArrowFunctionExpression(
     isIdentifier((firstParam = node.params[0])) &&
     !hasTypesOrComments(node, firstParam)
   ) {
-    this.print(firstParam, node);
-    this._noLineTerminator = _noLineTerminator;
+    this.print(firstParam, node, true);
   } else {
-    this._noLineTerminator = _noLineTerminator;
     this._params(node);
   }
 
-  this._predicate(node);
-  this.ensureNoLineTerminator(() => {
-    this.space();
-    // When printing (x)/*1*/=>{}, we remove the parentheses
-    // and thus there aren't two contiguous inner tokens.
-    // We forcefully print inner comments here.
-    this.printInnerComments();
-    this.token("=>");
-  });
+  this._predicate(node, true);
+  this.space();
+  // When printing (x)/*1*/=>{}, we remove the parentheses
+  // and thus there aren't two contiguous inner tokens.
+  // We forcefully print inner comments here.
+  this.printInnerComments();
+  this.token("=>");
 
   this.space();
 

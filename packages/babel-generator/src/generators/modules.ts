@@ -70,6 +70,7 @@ export function _printAssertions(
   this: Printer,
   node: Extract<t.Node, { assertions?: t.ImportAttribute[] }>,
 ) {
+  this.word("assert");
   this.space();
   this.token("{");
   this.space();
@@ -94,11 +95,8 @@ export function ExportAllDeclaration(
   this.space();
   // @ts-expect-error Fixme: assertions is not defined in DeclareExportAllDeclaration
   if (node.assertions?.length) {
-    this.ensureNoLineTerminator(() => {
-      this.print(node.source, node);
-      this.space();
-      this.word("assert");
-    });
+    this.print(node.source, node, true);
+    this.space();
     // @ts-expect-error Fixme: assertions is not defined in DeclareExportAllDeclaration
     this._printAssertions(node);
   } else {
@@ -169,11 +167,8 @@ export function ExportNamedDeclaration(
       this.word("from");
       this.space();
       if (node.assertions?.length) {
-        this.ensureNoLineTerminator(() => {
-          this.print(node.source, node);
-          this.space();
-          this.word("assert");
-        });
+        this.print(node.source, node, true);
+        this.space();
         this._printAssertions(node);
       } else {
         this.print(node.source, node);
@@ -258,10 +253,7 @@ export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
 
   if (node.assertions?.length) {
     this.print(node.source, node, true);
-    this.ensureNoLineTerminator(() => {
-      this.space();
-      this.word("assert");
-    });
+    this.space();
     this._printAssertions(node);
   } else {
     this.print(node.source, node);

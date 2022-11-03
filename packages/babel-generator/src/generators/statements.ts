@@ -1,5 +1,4 @@
 import type Printer from "../printer";
-import type { PrintJoinOptions } from "../printer";
 import {
   isFor,
   isForStatement,
@@ -262,12 +261,7 @@ export function VariableDeclaration(
   }
 
   const { kind } = node;
-  this.word(kind);
-  const { _noLineTerminator } = this;
-  if (kind === "using") {
-    // ensure no line break after `using`
-    this._noLineTerminator = true;
-  }
+  this.word(kind, kind === "using");
   this.space();
 
   let hasInits = false;
@@ -293,16 +287,6 @@ export function VariableDeclaration(
   //       bar = "foo";
   //
 
-  let iterator: PrintJoinOptions["iterator"] | undefined;
-  if (kind === "using") {
-    // Ensure no line break between `using` and the first declarator
-    iterator = (_, i: number) => {
-      if (i === 0) {
-        this._noLineTerminator = _noLineTerminator;
-      }
-    };
-  }
-
   this.printList(node.declarations, node, {
     separator: hasInits
       ? function (this: Printer) {
@@ -310,7 +294,6 @@ export function VariableDeclaration(
           this.newline();
         }
       : undefined,
-    iterator,
     indent: node.declarations.length > 1 ? true : false,
   });
 
