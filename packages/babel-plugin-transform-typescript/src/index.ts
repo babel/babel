@@ -595,7 +595,9 @@ export default declare((api, opts: Options) => {
 
       [`TSAsExpression${
         // Added in Babel 7.20.0
-        t.tsSatisfiesExpression ? "|TSSatisfiesExpression" : ""
+        // Some downstream bundled `@babel/core` and `@babel/types`.
+        // Ref: https://github.com/babel/babel/issues/15089
+        api.types.tsSatisfiesExpression ? "|TSSatisfiesExpression" : ""
       }`](path: NodePath<t.TSAsExpression | t.TSSatisfiesExpression>) {
         let { node }: { node: t.Expression } = path;
         do {
