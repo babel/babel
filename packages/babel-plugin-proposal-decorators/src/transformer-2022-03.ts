@@ -102,9 +102,11 @@ function createLazyPrivateUidGeneratorForClass(
  */
 function replaceClassWithVar(
   path: NodePath<t.ClassDeclaration | t.ClassExpression>,
-  className: string | undefined,
+  className: string | t.Identifier | t.StringLiteral | undefined,
 ): [t.Identifier, NodePath<t.ClassDeclaration | t.ClassExpression>] {
   if (path.type === "ClassDeclaration") {
+    const id = path.node.id;
+    const className = id.name;
     const varId = path.scope.generateUidIdentifierBasedOnNode(path.node.id);
     const classId = t.identifier(className);
 
@@ -125,12 +127,12 @@ function replaceClassWithVar(
       path.scope.rename(className, varId.name);
     } else {
       varId = path.scope.parent.generateDeclaredUidIdentifier(
-        className ?? "decorated_class",
+        typeof className === "string" ? className : "decorated_class",
       );
     }
 
     const newClassExpr = t.classExpression(
-      className && t.identifier(className),
+      typeof className === "string" ? t.identifier(className) : null,
       path.node.superClass,
       path.node.body,
     );
@@ -479,12 +481,24 @@ function maybeSequenceExpression(exprs: t.Expression[]) {
   return t.sequenceExpression(exprs);
 }
 
+function injectSetFunctionName(
+  state: PluginPass,
+  className: t.Identifier | t.StringLiteral,
+) {
+  return t.expressionStatement(
+    t.callExpression(state.addHelper("setFunctionName"), [
+      t.thisExpression(),
+      className,
+    ]),
+  );
+}
+
 function transformClass(
   path: NodePath<t.ClassExpression | t.ClassDeclaration>,
   state: PluginPass,
   constantSuper: boolean,
   version: "2022-03" | "2021-12",
-  className: string | undefined,
+  className: string | t.Identifier | t.StringLiteral | undefined,
 ): NodePath {
   const body = path.get("body.body");
 
@@ -741,7 +755,10 @@ function transformClass(
         } else if (key.type === "Identifier") {
           nameExpr = t.stringLiteral(key.name);
         } else {
-          nameExpr = t.cloneNode(key as t.Expression);
+          nameExpr = t.stringLiteral(
+            (key as t.StringLiteral | t.NumericLiteral | t.BigIntLiteral)
+              .value + "",
+          );
         }
 
         elementDecoratorInfo.push({
@@ -982,9 +999,12 @@ function transformClass(
     );
   }
 
+  const requiresSetFunctionName = typeof className === "object";
+
   originalClass.body.body.unshift(
     t.staticBlock(
       [
+        requiresSetFunctionName && injectSetFunctionName(state, className),
         t.expressionStatement(
           t.assignmentExpression(
             "=",
@@ -1017,9 +1037,47 @@ function transformClass(
   return path;
 }
 
+function isProtoSetter(
+  node: t.Identifier | t.StringLiteral | t.BigIntLiteral | t.NumericLiteral,
+) {
+  return node.type === "Identifier"
+    ? node.name === "__proto__"
+    : node.value === "__proto__";
+}
+
+function isDecorated(node: t.Class | ClassDecoratableElement) {
+  return node.decorators && node.decorators.length > 0;
+}
+
+function shouldTransformElement(node: ClassElement) {
+  switch (node.type) {
+    case "ClassAccessorProperty":
+      return true;
+    case "ClassMethod":
+    case "ClassProperty":
+    case "ClassPrivateMethod":
+    case "ClassPrivateProperty":
+      return isDecorated(node);
+    default:
+      return false;
+  }
+}
+
+function shouldTransformClass(node: t.Class) {
+  return (
+    isDecorated(node) ||
+    node.body.body.some(node => shouldTransformElement(node))
+  );
+}
+
+// Todo: unify name references logic with helper-function-name
 function NamedEvaluationVisitoryFactory(
   isAnonymous: (path: NodePath) => boolean,
-  visitor: (path: NodePath, state: PluginPass, name: string) => void,
+  visitor: (
+    path: NodePath,
+    state: PluginPass,
+    name: string | t.Identifier | t.StringLiteral,
+  ) => void,
 ) {
   return {
     VariableDeclarator(path, state) {
@@ -1032,7 +1090,131 @@ function NamedEvaluationVisitoryFactory(
         }
       }
     },
+    AssignmentExpression(path, state) {
+      const id = path.node.left;
+      if (id.type === "Identifier") {
+        const initializer = skipTransparentExprWrappers(path.get("right"));
+        if (isAnonymous(initializer)) {
+          switch (path.node.operator) {
+            case "=":
+            case "&&=":
+            case "||=":
+            case "??=":
+              visitor(initializer, state, id.name);
+          }
+        }
+      }
+    },
+    AssignmentPattern(path, state) {
+      const id = path.node.left;
+      if (id.type === "Identifier") {
+        const initializer = skipTransparentExprWrappers(path.get("right"));
+        if (isAnonymous(initializer)) {
+          const name = id.name;
+          visitor(initializer, state, name);
+        }
+      }
+    },
+    // We listen on ObjectExpression so that we don't have to visit
+    // the object properties under object patterns
+    ObjectExpression(path, state) {
+      for (const propertyPath of path.get("properties")) {
+        const { node } = propertyPath;
+        if (node.type !== "ObjectProperty") continue;
+        const id = node.key;
+        const initializer = skipTransparentExprWrappers(
+          propertyPath.get("value"),
+        );
+        if (isAnonymous(initializer)) {
+          if (!node.computed) {
+            // 13.2.5.5 RS: PropertyDefinitionEvaluation
+            if (!isProtoSetter(id as t.StringLiteral | t.Identifier)) {
+              if (id.type === "Identifier") {
+                visitor(initializer, state, id.name);
+              } else {
+                const className = t.stringLiteral(
+                  (id as t.StringLiteral | t.NumericLiteral | t.BigIntLiteral)
+                    .value + "",
+                );
+                visitor(initializer, state, className);
+              }
+            }
+          } else {
+            const ref = propertyPath.scope.maybeGenerateMemoised(id);
+            (propertyPath as NodePath<t.ObjectProperty>).get("key").replaceWith(
+              // ObjectProperty under ObjectExpression must not be a private name
+              t.assignmentExpression("=", ref, id as t.Expression),
+            );
+            visitor(initializer, state, t.cloneNode(ref));
+          }
+        }
+      }
+    },
+    ClassPrivateProperty(path, state) {
+      const { node } = path;
+      const initializer = skipTransparentExprWrappers(path.get("value"));
+      if (isAnonymous(initializer)) {
+        const className = t.stringLiteral("#" + node.key.id.name);
+        visitor(initializer, state, className);
+      }
+    },
+    // Fixme: This visitor is not active because we transpiled accessor property before the visitor is executed
+    ClassAccessorProperty(path, state) {
+      const { node } = path;
+      const id = node.key;
+      const initializer = skipTransparentExprWrappers(path.get("value"));
+      if (isAnonymous(initializer)) {
+        if (!node.computed) {
+          if (id.type === "Identifier") {
+            visitor(initializer, state, id.name);
+          } else if (id.type === "PrivateName") {
+            const className = t.stringLiteral("#" + id.id.name);
+            visitor(initializer, state, className);
+          } else {
+            const className = t.stringLiteral(
+              (id as t.StringLiteral | t.NumericLiteral | t.BigIntLiteral)
+                .value + "",
+            );
+            visitor(initializer, state, className);
+          }
+        } else {
+          const ref = path.scope.maybeGenerateMemoised(id);
+          path
+            .get("key")
+            .replaceWith(t.assignmentExpression("=", ref, id as t.Expression));
+          visitor(initializer, state, t.cloneNode(ref));
+        }
+      }
+    },
+    ClassProperty(path, state) {
+      const { node } = path;
+      const id = node.key;
+      const initializer = skipTransparentExprWrappers(path.get("value"));
+      if (isAnonymous(initializer)) {
+        if (!node.computed) {
+          if (id.type === "Identifier") {
+            visitor(initializer, state, id.name);
+          } else {
+            const className = t.stringLiteral(
+              (id as t.StringLiteral | t.NumericLiteral | t.BigIntLiteral)
+                .value + "",
+            );
+            visitor(initializer, state, className);
+          }
+        } else {
+          const ref = path.scope.maybeGenerateMemoised(id);
+          path.get("key").replaceWith(t.assignmentExpression("=", ref, id));
+          visitor(initializer, state, t.cloneNode(ref));
+        }
+      }
+    },
   } as Visitor<PluginPass>;
+}
+
+function isDecoratedAnonymousClassExpression(path: NodePath) {
+  return (
+    path.isClassExpression({ id: null }) && shouldTransformClass(path.node)
+  );
 }
 
 export default function (
@@ -1045,10 +1227,15 @@ export default function (
   const VISITED = new WeakSet<NodePath>();
   const constantSuper = assumption("constantSuper") ?? loose;
 
+  const namedEvaluationVisitor = NamedEvaluationVisitoryFactory(
+    isDecoratedAnonymousClassExpression,
+    visitClass,
+  );
+
   function visitClass(
     path: NodePath<t.Class>,
     state: PluginPass,
-    className: string | undefined,
+    className: string | t.Identifier | t.StringLiteral | undefined,
   ) {
     if (VISITED.has(path)) return;
     const { node } = path;
@@ -1072,15 +1259,34 @@ export default function (
     inherits: syntaxDecorators,
 
     visitor: {
-      "ExportNamedDeclaration|ExportDefaultDeclaration"(
-        path: NodePath<t.ExportNamedDeclaration | t.ExportDefaultDeclaration>,
-      ) {
+      ExportDefaultDeclaration(path, state) {
         const { declaration } = path.node;
         if (
           declaration?.type === "ClassDeclaration" &&
           // When compiling class decorators we need to replace the class
           // binding, so we must split it in two separate declarations.
-          declaration.decorators?.length > 0
+          isDecorated(declaration)
+        ) {
+          const isAnonymous = !declaration.id;
+          const updatedVarDeclarationPath = splitExportDeclaration(
+            path,
+          ) as unknown as NodePath<t.ClassDeclaration>;
+          if (isAnonymous) {
+            visitClass(
+              updatedVarDeclarationPath,
+              state,
+              t.stringLiteral("default"),
+            );
+          }
+        }
+      },
+      ExportNamedDeclaration(path) {
+        const { declaration } = path.node;
+        if (
+          declaration?.type === "ClassDeclaration" &&
+          // When compiling class decorators we need to replace the class
+          // binding, so we must split it in two separate declarations.
+          isDecorated(declaration)
         ) {
           splitExportDeclaration(path);
         }
@@ -1090,10 +1296,7 @@ export default function (
         visitClass(path, state, undefined);
       },
 
-      ...NamedEvaluationVisitoryFactory(
-        path => path.isClassExpression({ id: null }),
-        visitClass,
-      ),
+      ...namedEvaluationVisitor,
     },
   };
 }

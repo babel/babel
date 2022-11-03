@@ -168,7 +168,7 @@ function old_memberDec(
 
   var ctx = {
     kind: kindStr,
-    name: isPrivate ? "#" + name : name,
+    name: isPrivate ? "#" + name : typeof name === "symbol" ? name : name + "",
     isStatic: isStatic,
     isPrivate: isPrivate,
   };

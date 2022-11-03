@@ -57,7 +57,7 @@ function memberDec(
 
   var ctx = {
     kind: kindStr,
-    name: isPrivate ? "#" + name : name,
+    name: isPrivate ? "#" + name : typeof name === "symbol" ? name : name + "",
     static: isStatic,
     private: isPrivate,
   };

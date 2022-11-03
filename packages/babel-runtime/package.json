@@ -890,6 +890,15 @@
       "./helpers/identity.js"
     ],
     "./helpers/esm/identity": "./helpers/esm/identity.js",
+    "./helpers/setFunctionName": [
+      {
+        "node": "./helpers/setFunctionName.js",
+        "import": "./helpers/esm/setFunctionName.js",
+        "default": "./helpers/setFunctionName.js"
+      },
+      "./helpers/setFunctionName.js"
+    ],
+    "./helpers/esm/setFunctionName": "./helpers/esm/setFunctionName.js",
     "./package": "./package.json",
     "./package.json": "./package.json",
     "./regenerator": "./regenerator/index.js",
