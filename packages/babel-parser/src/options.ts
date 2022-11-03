@@ -43,8 +43,8 @@ export const defaultOptions: Options = {
   // When enabled, a return at the top level is not considered an
   // error.
   allowReturnOutsideFunction: false,
-  // When enabled, new.target at the top level is not considered an
-  // error.
+  // When enabled, new.target outside a function or class is not
+  // considered an error.
   allowNewTargetOutsideFunction: false,
   // When enabled, import/export statements are not constrained to
   // appearing at the top of the program.
