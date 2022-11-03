@@ -13,11 +13,11 @@ if (
 ) {
   if (process.env.GITHUB_REPOSITORY === "babel/babel") {
     console.error("The branch is not up to date with main, please rebase");
-    process.exitCode = 1
+    process.exitCode = 1;
   } else {
     console.error(
       "The branch is not up to date with main of babel/babel, skipping"
     );
-    process.exit(10);
+    process.exitCode = 10;
   }
 }
