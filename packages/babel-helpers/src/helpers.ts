@@ -1935,3 +1935,10 @@ helpers.identity = helper("7.17.0")`
     return x;
   }
 `;
+
+helpers.setFunctionName = helper("7.20.1")`
+  export default function _setFunctionName(f, n) {
+    if (typeof n === "symbol") n = n.description ? "[" + n.description + "]" : "";
+    return Object.defineProperty(f, "name", { configurable: true, value: n + "" });
+  }
+`;
