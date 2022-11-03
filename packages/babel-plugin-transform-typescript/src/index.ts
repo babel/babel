@@ -1,6 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxTypeScript from "@babel/plugin-syntax-typescript";
-import { types as t, template } from "@babel/core";
+import type { types as t } from "@babel/core";
 import { injectInitialization } from "@babel/helper-create-class-features-plugin";
 import type { Binding, NodePath, Scope } from "@babel/traverse";
 import type { Options as SyntaxOptions } from "@babel/plugin-syntax-typescript";
@@ -96,6 +96,10 @@ type ExtraNodeProps = {
 };
 
 export default declare((api, opts: Options) => {
+  // Some downstream bundled `@babel/core` and `@babel/types`.
+  // Ref: https://github.com/babel/babel/issues/15089
+  const { types: t, template } = api;
+
   api.assertVersion(7);
 
   const JSX_PRAGMA_REGEX = /\*?\s*@jsx((?:Frag)?)\s+([^\s]+)/;
@@ -595,9 +599,7 @@ export default declare((api, opts: Options) => {
 
       [`TSAsExpression${
         // Added in Babel 7.20.0
-        // Some downstream bundled `@babel/core` and `@babel/types`.
-        // Ref: https://github.com/babel/babel/issues/15089
-        api.types.tsSatisfiesExpression ? "|TSSatisfiesExpression" : ""
+        t.tsSatisfiesExpression ? "|TSSatisfiesExpression" : ""
       }`](path: NodePath<t.TSAsExpression | t.TSSatisfiesExpression>) {
         let { node }: { node: t.Expression } = path;
         do {
