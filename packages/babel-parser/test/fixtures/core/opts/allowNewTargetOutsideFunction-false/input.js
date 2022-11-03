@@ -1,1 +1,1 @@
-new.target
+const x = new.target;
