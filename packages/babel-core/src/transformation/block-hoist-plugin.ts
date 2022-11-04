@@ -5,57 +5,6 @@ import Plugin from "../config/plugin";
 
 let LOADED_PLUGIN: Plugin | void;
 
-export default function loadBlockHoistPlugin(): Plugin {
-  if (!LOADED_PLUGIN) {
-    // cache the loaded blockHoist plugin plugin
-    LOADED_PLUGIN = new Plugin(
-      {
-        ...blockHoistPlugin,
-        visitor: traverse.explode(blockHoistPlugin.visitor),
-      },
-      {},
-    );
-  }
-
-  return LOADED_PLUGIN;
-}
-function priority(bodyNode: Statement & { _blockHoist?: number | true }) {
-  const priority = bodyNode?._blockHoist;
-  if (priority == null) return 1;
-  if (priority === true) return 2;
-  return priority;
-}
-
-function stableSort(body: Statement[]) {
-  // By default, we use priorities of 0-4.
-  const buckets = Object.create(null);
-
-  // By collecting into buckets, we can guarantee a stable sort.
-  for (let i = 0; i < body.length; i++) {
-    const n = body[i];
-    const p = priority(n);
-
-    // In case some plugin is setting an unexpected priority.
-    const bucket = buckets[p] || (buckets[p] = []);
-    bucket.push(n);
-  }
-
-  // Sort our keys in descending order. Keys are unique, so we don't have to
-  // worry about stability.
-  const keys = Object.keys(buckets)
-    .map(k => +k)
-    .sort((a, b) => b - a);
-
-  let index = 0;
-  for (const key of keys) {
-    const bucket = buckets[key];
-    for (const n of bucket) {
-      body[index++] = n;
-    }
-  }
-  return body;
-}
-
 const blockHoistPlugin: PluginObject = {
   /**
    * [Please add a description.]
@@ -96,3 +45,55 @@ const blockHoistPlugin: PluginObject = {
     },
   },
 };
+
+export default function loadBlockHoistPlugin(): Plugin {
+  if (!LOADED_PLUGIN) {
+    // cache the loaded blockHoist plugin plugin
+    LOADED_PLUGIN = new Plugin(
+      {
+        ...blockHoistPlugin,
+        visitor: traverse.explode(blockHoistPlugin.visitor),
+      },
+      {},
+    );
+  }
+
+  return LOADED_PLUGIN;
+}
+
+function priority(bodyNode: Statement & { _blockHoist?: number | true }) {
+  const priority = bodyNode?._blockHoist;
+  if (priority == null) return 1;
+  if (priority === true) return 2;
+  return priority;
+}
+
+function stableSort(body: Statement[]) {
+  // By default, we use priorities of 0-4.
+  const buckets = Object.create(null);
+
+  // By collecting into buckets, we can guarantee a stable sort.
+  for (let i = 0; i < body.length; i++) {
+    const n = body[i];
+    const p = priority(n);
+
+    // In case some plugin is setting an unexpected priority.
+    const bucket = buckets[p] || (buckets[p] = []);
+    bucket.push(n);
+  }
+
+  // Sort our keys in descending order. Keys are unique, so we don't have to
+  // worry about stability.
+  const keys = Object.keys(buckets)
+    .map(k => +k)
+    .sort((a, b) => b - a);
+
+  let index = 0;
+  for (const key of keys) {
+    const bucket = buckets[key];
+    for (const n of bucket) {
+      body[index++] = n;
+    }
+  }
+  return body;
+}

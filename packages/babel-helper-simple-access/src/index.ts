@@ -18,19 +18,6 @@ type State = {
   seen: WeakSet<t.Node>;
   includeUpdateExpression: boolean;
 };
-export default function simplifyAccess(
-  path: NodePath,
-  bindingNames: Set<string>,
-  // TODO(Babel 8): Remove this
-  includeUpdateExpression: boolean = true,
-) {
-  path.traverse(simpleAssignmentVisitor, {
-    scope: path.scope,
-    bindingNames,
-    seen: new WeakSet(),
-    includeUpdateExpression,
-  });
-}
 
 const simpleAssignmentVisitor: Visitor<State> = {
   // TODO(Babel 8): Remove UpdateExpression
@@ -158,3 +145,17 @@ const simpleAssignmentVisitor: Visitor<State> = {
     },
   },
 };
+
+export default function simplifyAccess(
+  path: NodePath,
+  bindingNames: Set<string>,
+  // TODO(Babel 8): Remove this
+  includeUpdateExpression: boolean = true,
+) {
+  path.traverse(simpleAssignmentVisitor, {
+    scope: path.scope,
+    bindingNames,
+    seen: new WeakSet(),
+    includeUpdateExpression,
+  });
+}

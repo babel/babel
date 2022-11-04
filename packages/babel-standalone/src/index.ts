@@ -30,6 +30,45 @@ import type { InputOptions } from "@babel/core";
 
 import { runScripts } from "./transformScriptTags";
 
+export const availablePlugins: typeof all = {};
+
+// All the plugins we should bundle
+// Want to get rid of this long list of allowed plugins?
+// Wait! Please read https://github.com/babel/babel/pull/6177 first.
+registerPlugins(all);
+
+// All the presets we should bundle
+// Want to get rid of this list of allowed presets?
+// Wait! Please read https://github.com/babel/babel/pull/6177 first.
+export const availablePresets = {
+  env: presetEnv,
+  es2015: preset2015,
+  es2016: () => {
+    return {
+      plugins: [availablePlugins["transform-exponentiation-operator"]],
+    };
+  },
+  es2017: () => {
+    return {
+      plugins: [availablePlugins["transform-async-to-generator"]],
+    };
+  },
+  react: presetReact,
+  "stage-0": presetStage0,
+  "stage-1": presetStage1,
+  "stage-2": presetStage2,
+  "stage-3": presetStage3,
+  "es2015-loose": {
+    presets: [[preset2015, { loose: true }]],
+  },
+  // ES2015 preset with es2015-modules-commonjs removed
+  "es2015-no-commonjs": {
+    presets: [[preset2015, { modules: false }]],
+  },
+  typescript: presetTypescript,
+  flow: presetFlow,
+};
+
 const isArray =
   Array.isArray ||
   (arg => Object.prototype.toString.call(arg) === "[object Array]");
@@ -112,7 +151,6 @@ export function transformFromAst(
 ) {
   return babelTransformFromAstSync(ast, code, processOptions(options));
 }
-export const availablePlugins: typeof all = {};
 
 export const buildExternalHelpers = babelBuildExternalHelpers;
 /**
@@ -156,6 +194,7 @@ export function registerPreset(name: string, preset: any | Function): void {
   // @ts-expect-error mutating available presets
   availablePresets[name] = preset;
 }
+
 /**
  * Registers multiple presets for use with Babel. `newPresets` should be an object where the key
  * is the name of the preset, and the value is the preset itself.
@@ -167,43 +206,6 @@ export function registerPresets(newPresets: {
     registerPreset(name, newPresets[name]),
   );
 }
-
-// All the plugins we should bundle
-// Want to get rid of this long list of allowed plugins?
-// Wait! Please read https://github.com/babel/babel/pull/6177 first.
-registerPlugins(all);
-
-// All the presets we should bundle
-// Want to get rid of this list of allowed presets?
-// Wait! Please read https://github.com/babel/babel/pull/6177 first.
-export const availablePresets = {
-  env: presetEnv,
-  es2015: preset2015,
-  es2016: () => {
-    return {
-      plugins: [availablePlugins["transform-exponentiation-operator"]],
-    };
-  },
-  es2017: () => {
-    return {
-      plugins: [availablePlugins["transform-async-to-generator"]],
-    };
-  },
-  react: presetReact,
-  "stage-0": presetStage0,
-  "stage-1": presetStage1,
-  "stage-2": presetStage2,
-  "stage-3": presetStage3,
-  "es2015-loose": {
-    presets: [[preset2015, { loose: true }]],
-  },
-  // ES2015 preset with es2015-modules-commonjs removed
-  "es2015-no-commonjs": {
-    presets: [[preset2015, { modules: false }]],
-  },
-  typescript: presetTypescript,
-  flow: presetFlow,
-};
 
 // @ts-expect-error VERSION is to be replaced by rollup
 export const version: string = VERSION;

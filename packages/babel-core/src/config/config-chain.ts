@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
+
 import path from "path";
 import buildDebug from "debug";
 import type { Handler } from "gensync";

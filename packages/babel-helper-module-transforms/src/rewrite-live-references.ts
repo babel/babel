@@ -110,6 +110,7 @@ export default function rewriteLiveReferences(
     exported, // local name => exported name list
   };
   programPath.traverse(
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     rewriteBindingInitVisitor,
     rewriteBindingInitVisitorState,
   );
@@ -159,6 +160,7 @@ export default function rewriteLiveReferences(
       );
     },
   };
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
   programPath.traverse(rewriteReferencesVisitor, rewriteReferencesVisitorState);
 }
 
@@ -179,6 +181,7 @@ const rewriteBindingInitVisitor: Visitor<RewriteBindingInitVisitorState> = {
     const exportNames = exported.get(localName) || [];
     if (exportNames.length > 0) {
       const statement = expressionStatement(
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
         buildBindingExportAssignmentExpression(
           metadata,
           exportNames,
@@ -200,6 +203,7 @@ const rewriteBindingInitVisitor: Visitor<RewriteBindingInitVisitorState> = {
 
       if (exportNames.length > 0) {
         const statement = expressionStatement(
+          // eslint-disable-next-line @typescript-eslint/no-use-before-define
           buildBindingExportAssignmentExpression(
             metadata,
             exportNames,

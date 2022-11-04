@@ -194,6 +194,25 @@ interface LetReferenceVisitorState extends TDZVisitorState {
   closurify: boolean;
 }
 
+const letReferenceFunctionVisitor = traverse.visitors.merge([
+  {
+    ReferencedIdentifier(path, state) {
+      const ref = state.letReferences.get(path.node.name);
+
+      // not a part of our scope
+      if (!ref) return;
+
+      // this scope has a variable with the same name so it couldn't belong
+      // to our let scope
+      const localBinding = path.scope.getBindingIdentifier(path.node.name);
+      if (localBinding && localBinding !== ref) return;
+
+      state.closurify = true;
+    },
+  },
+  tdzVisitor,
+] as Visitor<LetReferenceVisitorState>[]);
+
 const letReferenceBlockVisitor = traverse.visitors.merge([
   {
     Loop: {
@@ -214,25 +233,6 @@ const letReferenceBlockVisitor = traverse.visitors.merge([
         path.traverse(tdzVisitor, state);
       }
       return path.skip();
-    },
-  },
-  tdzVisitor,
-] as Visitor<LetReferenceVisitorState>[]);
-
-const letReferenceFunctionVisitor = traverse.visitors.merge([
-  {
-    ReferencedIdentifier(path, state) {
-      const ref = state.letReferences.get(path.node.name);
-
-      // not a part of our scope
-      if (!ref) return;
-
-      // this scope has a variable with the same name so it couldn't belong
-      // to our let scope
-      const localBinding = path.scope.getBindingIdentifier(path.node.name);
-      if (localBinding && localBinding !== ref) return;
-
-      state.closurify = true;
     },
   },
   tdzVisitor,

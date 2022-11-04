@@ -39,133 +39,6 @@ const RELATIVE_CONFIG_FILENAMES = [
 
 const BABELIGNORE_FILENAME = ".babelignore";
 
-export function findConfigUpwards(rootDir: string): string | null {
-  let dirname = rootDir;
-  for (;;) {
-    for (const filename of ROOT_CONFIG_FILENAMES) {
-      if (nodeFs.existsSync(path.join(dirname, filename))) {
-        return dirname;
-      }
-    }
-
-    const nextDir = path.dirname(dirname);
-    if (dirname === nextDir) break;
-    dirname = nextDir;
-  }
-
-  return null;
-}
-
-export function* findRelativeConfig(
-  packageData: FilePackageData,
-  envName: string,
-  caller: CallerMetadata | undefined,
-): Handler<RelativeConfig> {
-  let config = null;
-  let ignore = null;
-
-  const dirname = path.dirname(packageData.filepath);
-
-  for (const loc of packageData.directories) {
-    if (!config) {
-      config = yield* loadOneConfig(
-        RELATIVE_CONFIG_FILENAMES,
-        loc,
-        envName,
-        caller,
-        packageData.pkg?.dirname === loc
-          ? packageToBabelConfig(packageData.pkg as ConfigFile)
-          : null,
-      );
-    }
-
-    if (!ignore) {
-      const ignoreLoc = path.join(loc, BABELIGNORE_FILENAME);
-      ignore = yield* readIgnoreConfig(ignoreLoc);
-
-      if (ignore) {
-        debug("Found ignore %o from %o.", ignore.filepath, dirname);
-      }
-    }
-  }
-
-  return { config, ignore };
-}
-
-export function findRootConfig(
-  dirname: string,
-  envName: string,
-  caller: CallerMetadata | undefined,
-): Handler<ConfigFile | null> {
-  return loadOneConfig(ROOT_CONFIG_FILENAMES, dirname, envName, caller);
-}
-
-function* loadOneConfig(
-  names: string[],
-  dirname: string,
-  envName: string,
-  caller: CallerMetadata | undefined,
-  previousConfig: ConfigFile | null = null,
-): Handler<ConfigFile | null> {
-  const configs = yield* gensync.all(
-    names.map(filename =>
-      readConfig(path.join(dirname, filename), envName, caller),
-    ),
-  );
-  const config = configs.reduce((previousConfig: ConfigFile | null, config) => {
-    if (config && previousConfig) {
-      throw new ConfigError(
-        `Multiple configuration files found. Please remove one:\n` +
-          ` - ${path.basename(previousConfig.filepath)}\n` +
-          ` - ${config.filepath}\n` +
-          `from ${dirname}`,
-      );
-    }
-
-    return config || previousConfig;
-  }, previousConfig);
-
-  if (config) {
-    debug("Found configuration %o from %o.", config.filepath, dirname);
-  }
-  return config;
-}
-
-export function* loadConfig(
-  name: string,
-  dirname: string,
-  envName: string,
-  caller: CallerMetadata | undefined,
-): Handler<ConfigFile> {
-  const filepath = require.resolve(name, { paths: [dirname] });
-
-  const conf = yield* readConfig(filepath, envName, caller);
-  if (!conf) {
-    throw new ConfigError(
-      `Config file contains no configuration data`,
-      filepath,
-    );
-  }
-
-  debug("Loaded config %o from %o.", name, dirname);
-  return conf;
-}
-
-/**
- * Read the given config file, returning the result. Returns null if no config was found, but will
- * throw if there are parsing errors while loading a config.
- */
-function readConfig(
-  filepath: string,
-  envName: string,
-  caller: CallerMetadata | undefined,
-): Handler<ConfigFile | null> {
-  const ext = path.extname(filepath);
-  return ext === ".js" || ext === ".cjs" || ext === ".mjs"
-    ? readConfigJS(filepath, { envName, caller })
-    : readConfigJSON5(filepath);
-}
-
 const LOADING_CONFIGS = new Set();
 
 const readConfigJS = makeStrongCache(function* readConfigJS(
@@ -317,6 +190,133 @@ const readIgnoreConfig = makeStaticFileCache((filepath, content) => {
     ),
   };
 });
+
+export function findConfigUpwards(rootDir: string): string | null {
+  let dirname = rootDir;
+  for (;;) {
+    for (const filename of ROOT_CONFIG_FILENAMES) {
+      if (nodeFs.existsSync(path.join(dirname, filename))) {
+        return dirname;
+      }
+    }
+
+    const nextDir = path.dirname(dirname);
+    if (dirname === nextDir) break;
+    dirname = nextDir;
+  }
+
+  return null;
+}
+
+export function* findRelativeConfig(
+  packageData: FilePackageData,
+  envName: string,
+  caller: CallerMetadata | undefined,
+): Handler<RelativeConfig> {
+  let config = null;
+  let ignore = null;
+
+  const dirname = path.dirname(packageData.filepath);
+
+  for (const loc of packageData.directories) {
+    if (!config) {
+      config = yield* loadOneConfig(
+        RELATIVE_CONFIG_FILENAMES,
+        loc,
+        envName,
+        caller,
+        packageData.pkg?.dirname === loc
+          ? packageToBabelConfig(packageData.pkg as ConfigFile)
+          : null,
+      );
+    }
+
+    if (!ignore) {
+      const ignoreLoc = path.join(loc, BABELIGNORE_FILENAME);
+      ignore = yield* readIgnoreConfig(ignoreLoc);
+
+      if (ignore) {
+        debug("Found ignore %o from %o.", ignore.filepath, dirname);
+      }
+    }
+  }
+
+  return { config, ignore };
+}
+
+export function findRootConfig(
+  dirname: string,
+  envName: string,
+  caller: CallerMetadata | undefined,
+): Handler<ConfigFile | null> {
+  return loadOneConfig(ROOT_CONFIG_FILENAMES, dirname, envName, caller);
+}
+
+function* loadOneConfig(
+  names: string[],
+  dirname: string,
+  envName: string,
+  caller: CallerMetadata | undefined,
+  previousConfig: ConfigFile | null = null,
+): Handler<ConfigFile | null> {
+  const configs = yield* gensync.all(
+    names.map(filename =>
+      readConfig(path.join(dirname, filename), envName, caller),
+    ),
+  );
+  const config = configs.reduce((previousConfig: ConfigFile | null, config) => {
+    if (config && previousConfig) {
+      throw new ConfigError(
+        `Multiple configuration files found. Please remove one:\n` +
+          ` - ${path.basename(previousConfig.filepath)}\n` +
+          ` - ${config.filepath}\n` +
+          `from ${dirname}`,
+      );
+    }
+
+    return config || previousConfig;
+  }, previousConfig);
+
+  if (config) {
+    debug("Found configuration %o from %o.", config.filepath, dirname);
+  }
+  return config;
+}
+
+export function* loadConfig(
+  name: string,
+  dirname: string,
+  envName: string,
+  caller: CallerMetadata | undefined,
+): Handler<ConfigFile> {
+  const filepath = require.resolve(name, { paths: [dirname] });
+
+  const conf = yield* readConfig(filepath, envName, caller);
+  if (!conf) {
+    throw new ConfigError(
+      `Config file contains no configuration data`,
+      filepath,
+    );
+  }
+
+  debug("Loaded config %o from %o.", name, dirname);
+  return conf;
+}
+
+/**
+ * Read the given config file, returning the result. Returns null if no config was found, but will
+ * throw if there are parsing errors while loading a config.
+ */
+function readConfig(
+  filepath: string,
+  envName: string,
+  caller: CallerMetadata | undefined,
+): Handler<ConfigFile | null> {
+  const ext = path.extname(filepath);
+  return ext === ".js" || ext === ".cjs" || ext === ".mjs"
+    ? readConfigJS(filepath, { envName, caller })
+    : readConfigJSON5(filepath);
+}
 
 export function* resolveShowConfigPath(
   dirname: string,
