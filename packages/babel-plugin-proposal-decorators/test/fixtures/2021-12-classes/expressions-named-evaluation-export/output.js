@@ -15,7 +15,7 @@ exports.default = _default2;
 class _default {
   static {
     babelHelpers.setFunctionName(this, "default");
-    [_default2, _initClass] = babelHelpers.applyDecs2203(this, [], [dec]);
+    [_default2, _initClass] = babelHelpers.applyDecs(this, [], [dec]);
     exports.default = _default2;
   }
   static {
@@ -24,7 +24,7 @@ class _default {
 }
 const atypical = (class atypical {
   static {
-    [_atypical, _initClass2] = babelHelpers.applyDecs2203(this, [], [dec]);
+    [_atypical, _initClass2] = babelHelpers.applyDecs(this, [], [dec]);
   }
   static {
     _initClass2();
