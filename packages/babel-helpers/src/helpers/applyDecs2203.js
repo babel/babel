@@ -18,6 +18,8 @@
   CLASS = 10; // only used in assertValidReturnValue
 */
 
+import toPropertyKey from "toPropertyKey";
+
 function createAddInitializerMethod(initializers, decoratorFinishedRef) {
   return function addInitializer(initializer) {
     assertNotFinished(decoratorFinishedRef, "addInitializer");
@@ -57,7 +59,7 @@ function memberDec(
 
   var ctx = {
     kind: kindStr,
-    name: isPrivate ? "#" + name : typeof name === "symbol" ? name : name + "",
+    name: isPrivate ? "#" + name : toPropertyKey(name),
     static: isStatic,
     private: isPrivate,
   };

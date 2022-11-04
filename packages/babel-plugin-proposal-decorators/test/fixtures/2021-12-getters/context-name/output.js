@@ -5,7 +5,9 @@ const dec = (value, context) => {
 };
 const f = () => {
   logs.push("computing f");
-  return "f()";
+  return {
+    [Symbol.toPrimitive]: () => "f()"
+  };
 };
 _computedKey = "c";
 _computedKey2 = 1;

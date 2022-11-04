@@ -1,6 +1,6 @@
 const logs = [];
 const dec = (value, context) => { logs.push(context.name) };
-const f = () => { logs.push("computing f"); return "f()" };
+const f = () => { logs.push("computing f"); return { [Symbol.toPrimitive]: () => "f()" } };
 class Foo {
   @dec static a;
   @dec static #a;

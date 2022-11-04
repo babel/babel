@@ -23,6 +23,8 @@
   CLASS = 10; // only used in assertValidReturnValue
 */
 
+import toPropertyKey from "toPropertyKey";
+
 function old_createMetadataMethodsForProperty(
   metadataMap,
   kind,
@@ -168,7 +170,7 @@ function old_memberDec(
 
   var ctx = {
     kind: kindStr,
-    name: isPrivate ? "#" + name : typeof name === "symbol" ? name : name + "",
+    name: isPrivate ? "#" + name : toPropertyKey(name),
     isStatic: isStatic,
     isPrivate: isPrivate,
   };
