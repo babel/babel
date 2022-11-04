@@ -25,6 +25,17 @@ initializeE2Egit
 
 yarn
 
+# Does not trap on error
+node --experimental-fetch scripts/integration-tests/utils/e2e-check.js && :; ret=$?
+
+if [ $ret -eq 10 ]; then
+  cleanup
+  exit 0
+elif [ $ret -ne 0 ]; then
+  cleanup
+  exit 1
+fi
+
 startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml
 loginLocalRegistry
 
