@@ -23,6 +23,21 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.20.2 (2022-11-04)
+
+#### :bug: Bug Fix
+* `babel-core`, `babel-helper-create-class-features-plugin`, `babel-helper-module-transforms`, `babel-helper-plugin-utils`, `babel-helper-simple-access`, `babel-node`, `babel-plugin-transform-block-scoping`, `babel-plugin-transform-classes`, `babel-plugin-transform-react-constant-elements`, `babel-preset-env`, `babel-standalone`, `babel-types`
+  * [#15124](https://github.com/babel/babel/pull/15124) fix: `@babel/node` repl and enable `no-use-before-define` rule ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-plugin-transform-typescript`
+  * [#15121](https://github.com/babel/babel/pull/15121) fix: `tsSatisfiesExpression` check with different duplicated `@babel/types` versions ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-parser`
+  * [#15094](https://github.com/babel/babel/pull/15094) fix: `parser` typings for plugins ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-generator`
+  * [#15118](https://github.com/babel/babel/pull/15118) Improve printing of [no LineTerminator here] with comments ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-proposal-decorators`, `babel-plugin-proposal-object-rest-spread`, `babel-plugin-transform-jscript`
+  * [#15113](https://github.com/babel/babel/pull/15113) fix: wrap anonymous class expression within statement ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-destructuring`
+  * [#15104](https://github.com/babel/babel/pull/15104) fix: Destructuring exceptions `for ( let { } = 0 ; 0 ; ) ` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.20.1 (2022-11-01)
 
 #### :bug: Bug Fix
