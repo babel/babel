@@ -13,7 +13,6 @@ import { fileURLToPath } from "url";
 import { createRequire } from "module";
 
 import type { PluginAPI, PluginObject } from "@babel/core";
-import type { REPLEval } from "repl";
 
 const require = createRequire(import.meta.url);
 
@@ -227,8 +226,13 @@ function requireArgs() {
     }));
   }
 }
-
-const replEval: REPLEval = function (code, context, filename, callback) {
+function replEval(
+  this: repl.REPLServer,
+  code: string,
+  context: vm.Context,
+  filename: string,
+  callback: (err: Error | null, result: any) => void,
+) {
   let err;
   let result;
 
@@ -243,7 +247,7 @@ const replEval: REPLEval = function (code, context, filename, callback) {
   }
 
   callback(err, result);
-};
+}
 
 function replStart() {
   const replServer = repl.start({
