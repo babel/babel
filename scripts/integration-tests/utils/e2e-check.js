@@ -1,4 +1,3 @@
-/* eslint-disable no-process-exit */
 import fs from "fs";
 
 const resp = await fetch(
