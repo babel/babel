@@ -2891,11 +2891,12 @@ export default abstract class ExpressionParser extends LValParser {
     const { type } = this.state;
     return (
       // All the following expressions are ambiguous:
-      //   await + 0, await - 0, await ( 0 ), await [ 0 ], await / 0 /u, await ``
+      //   await + 0, await - 0, await ( 0 ), await [ 0 ], await / 0 /u, await ``, await of []
       type === tt.plusMin ||
       type === tt.parenL ||
       type === tt.bracketL ||
       tokenIsTemplate(type) ||
+      (type === tt._of && !this.state.containsEsc) ||
       // Sometimes the tokenizer generates tt.slash for regexps, and this is
       // handler by parseExprAtom
       type === tt.regexp ||
