@@ -54,9 +54,9 @@
         "type": "module",
         "exports": {
           ".": {
+            "types": "./typings/babel-parser.d.ts",
             "require": "./lib/index.cjs",
-            "default": "./lib/index.js",
-            "types": "./typings/babel-parser.d.ts"
+            "default": "./lib/index.js"
           },
           "./package.json": "./package.json"
         }
@@ -66,9 +66,9 @@
   },
   "exports": {
     ".": {
+      "types": "./typings/babel-parser.d.ts",
       "require": "./index.cjs",
-      "default": "./lib/index.js",
-      "types": "./typings/babel-parser.d.ts"
+      "default": "./lib/index.js"
     },
     "./package.json": "./package.json"
   },

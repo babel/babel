@@ -53,8 +53,8 @@
   },
   "exports": {
     ".": {
-      "default": "./lib/index.js",
-      "types": "./lib/index-legacy.d.ts"
+      "types": "./lib/index-legacy.d.ts",
+      "default": "./lib/index.js"
     },
     "./package.json": "./package.json"
   },
