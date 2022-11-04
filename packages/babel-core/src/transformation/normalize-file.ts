@@ -14,6 +14,15 @@ import cloneDeep from "./util/clone-deep";
 const debug = buildDebug("babel:transform:file");
 const LARGE_INPUT_SOURCEMAP_THRESHOLD = 3_000_000;
 
+// These regexps are copied from the convert-source-map package,
+// but without // or /* at the beginning of the comment.
+
+// eslint-disable-next-line max-len
+const INLINE_SOURCEMAP_REGEX =
+  /^[@#]\s+sourceMappingURL=data:(?:application|text)\/json;(?:charset[:=]\S+?;)?base64,(?:.*)$/;
+const EXTERNAL_SOURCEMAP_REGEX =
+  /^[@#][ \t]+sourceMappingURL=([^\s'"`]+)[ \t]*$/;
+
 export type NormalizedFile = {
   code: string;
   ast: t.File;
@@ -96,15 +105,6 @@ export default function* normalizeFile(
     inputMap,
   });
 }
-
-// These regexps are copied from the convert-source-map package,
-// but without // or /* at the beginning of the comment.
-
-// eslint-disable-next-line max-len
-const INLINE_SOURCEMAP_REGEX =
-  /^[@#]\s+sourceMappingURL=data:(?:application|text)\/json;(?:charset[:=]\S+?;)?base64,(?:.*)$/;
-const EXTERNAL_SOURCEMAP_REGEX =
-  /^[@#][ \t]+sourceMappingURL=([^\s'"`]+)[ \t]*$/;
 
 function extractCommentsFromList(
   regex: RegExp,

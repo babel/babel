@@ -6,6 +6,35 @@ import type {
   PresetObject,
 } from "@babel/core";
 
+type APIPolyfillFactory<T extends keyof PluginAPI> = (
+  api: PluginAPI,
+) => PluginAPI[T];
+
+type APIPolyfills = {
+  assertVersion: APIPolyfillFactory<"assertVersion">;
+  targets: APIPolyfillFactory<"targets">;
+  assumption: APIPolyfillFactory<"assumption">;
+};
+
+const apiPolyfills: APIPolyfills = {
+  // Not supported by Babel 7 and early versions of Babel 7 beta.
+  // It's important that this is polyfilled for older Babel versions
+  // since it's needed to report the version mismatch.
+  assertVersion: (api: PluginAPI) => (range: number | string) => {
+    throwVersionError(range, api.version);
+  },
+  // This is supported starting from Babel 7.13
+  // TODO(Babel 8): Remove this polyfill
+  targets: () => () => {
+    return {};
+  },
+  // This is supported starting from Babel 7.13
+  // TODO(Babel 8): Remove this polyfill
+  assumption: () => () => {
+    return undefined;
+  },
+};
+
 export function declare<State = {}, Option = {}>(
   builder: (
     api: PluginAPI,
@@ -39,35 +68,6 @@ export function declare<State = {}, Option = {}>(
 export const declarePreset = declare as <Option = {}>(
   builder: (api: PresetAPI, options: Option, dirname: string) => PresetObject,
 ) => (api: PresetAPI, options: Option, dirname: string) => PresetObject;
-
-type APIPolyfillFactory<T extends keyof PluginAPI> = (
-  api: PluginAPI,
-) => PluginAPI[T];
-
-type APIPolyfills = {
-  assertVersion: APIPolyfillFactory<"assertVersion">;
-  targets: APIPolyfillFactory<"targets">;
-  assumption: APIPolyfillFactory<"assumption">;
-};
-
-const apiPolyfills: APIPolyfills = {
-  // Not supported by Babel 7 and early versions of Babel 7 beta.
-  // It's important that this is polyfilled for older Babel versions
-  // since it's needed to report the version mismatch.
-  assertVersion: (api: PluginAPI) => (range: number | string) => {
-    throwVersionError(range, api.version);
-  },
-  // This is supported starting from Babel 7.13
-  // TODO(Babel 8): Remove this polyfill
-  targets: () => () => {
-    return {};
-  },
-  // This is supported starting from Babel 7.13
-  // TODO(Babel 8): Remove this polyfill
-  assumption: () => () => {
-    return undefined;
-  },
-};
 
 function copyApiObject(api: PluginAPI): PluginAPI {
   // Babel >= 7 <= beta.41 passed the API as a new object that had

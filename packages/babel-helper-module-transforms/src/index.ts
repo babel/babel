@@ -262,11 +262,11 @@ const ReexportTemplate = {
     `,
 };
 
-const buildReexportsFromMeta = (
+function buildReexportsFromMeta(
   meta: ModuleMetadata,
   metadata: SourceModuleMetadata,
   constantReexports: boolean,
-) => {
+) {
   const namespace = metadata.lazy
     ? callExpression(identifier(metadata.name), [])
     : identifier(metadata.name);
@@ -303,7 +303,7 @@ const buildReexportsFromMeta = (
       return ReexportTemplate.spec(astNodes);
     }
   });
-};
+}
 
 /**
  * Build an "__esModule" header statement setting the property on a given object.

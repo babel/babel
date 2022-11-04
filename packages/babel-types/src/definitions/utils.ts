@@ -279,6 +279,8 @@ const validTypeOpts = [
 ];
 const validFieldKeys = ["default", "optional", "validate"];
 
+const store = {} as Record<string, DefineTypeOpts>;
+
 // Wraps defineType to ensure these aliases are included.
 export function defineAliasedType(...aliases: string[]) {
   return (type: string, opts: DefineTypeOpts = {}) => {
@@ -375,5 +377,3 @@ export default function defineType(type: string, opts: DefineTypeOpts = {}) {
 
   store[type] = opts;
 }
-
-const store = {} as Record<string, DefineTypeOpts>;

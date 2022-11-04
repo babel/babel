@@ -57,6 +57,9 @@ function flatMap<T, U>(array: Array<T>, fn: (item: T) => Array<U>): Array<U> {
   return Array.prototype.concat.apply([], array.map(fn));
 }
 
+export const normalizePluginName = (plugin: string) =>
+  plugin.replace(/^(@babel\/|babel-)(plugin-)?/, "");
+
 const expandIncludesAndExcludes = (
   filterList: PluginListOption = [],
   type: "include" | "exclude",
@@ -101,9 +104,6 @@ const expandIncludesAndExcludes = (
 
   return selectedPlugins;
 };
-
-export const normalizePluginName = (plugin: string) =>
-  plugin.replace(/^(@babel\/|babel-)(plugin-)?/, "");
 
 export const checkDuplicateIncludeExcludes = (
   include: Array<string> = [],

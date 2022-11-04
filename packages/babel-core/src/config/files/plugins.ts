@@ -28,10 +28,12 @@ const OTHER_PRESET_ORG_RE =
 const OTHER_ORG_DEFAULT_RE = /^(@(?!babel$)[^/]+)$/;
 
 export function* resolvePlugin(name: string, dirname: string): Handler<string> {
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
   return yield* resolveStandardizedName("plugin", name, dirname);
 }
 
 export function* resolvePreset(name: string, dirname: string): Handler<string> {
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
   return yield* resolveStandardizedName("preset", name, dirname);
 }
 

@@ -1,35 +1,5 @@
 import { template, types as t, type File } from "@babel/core";
 
-const helperIDs = new WeakMap();
-
-export default function addCreateSuperHelper(file: File) {
-  if (helperIDs.has(file)) {
-    // TODO: Only use t.cloneNode in Babel 8
-    // t.cloneNode isn't supported in every version
-    return (t.cloneNode || t.clone)(helperIDs.get(file));
-  }
-
-  try {
-    return file.addHelper("createSuper");
-  } catch {
-    // Babel <7.9.0 doesn't support the helper.
-  }
-
-  const id = file.scope.generateUidIdentifier("createSuper");
-  helperIDs.set(file, id);
-
-  const fn = helper({
-    CREATE_SUPER: id,
-    GET_PROTOTYPE_OF: file.addHelper("getPrototypeOf"),
-    POSSIBLE_CONSTRUCTOR_RETURN: file.addHelper("possibleConstructorReturn"),
-  });
-
-  file.path.unshiftContainer("body", [fn]);
-  file.scope.registerDeclaration(file.path.get("body.0"));
-
-  return t.cloneNode(id);
-}
-
 const helper = template.statement`
   function CREATE_SUPER(Derived) {
     function isNativeReflectConstruct() {
@@ -70,3 +40,33 @@ const helper = template.statement`
     }
   }
 `;
+
+const helperIDs = new WeakMap();
+
+export default function addCreateSuperHelper(file: File) {
+  if (helperIDs.has(file)) {
+    // TODO: Only use t.cloneNode in Babel 8
+    // t.cloneNode isn't supported in every version
+    return (t.cloneNode || t.clone)(helperIDs.get(file));
+  }
+
+  try {
+    return file.addHelper("createSuper");
+  } catch {
+    // Babel <7.9.0 doesn't support the helper.
+  }
+
+  const id = file.scope.generateUidIdentifier("createSuper");
+  helperIDs.set(file, id);
+
+  const fn = helper({
+    CREATE_SUPER: id,
+    GET_PROTOTYPE_OF: file.addHelper("getPrototypeOf"),
+    POSSIBLE_CONSTRUCTOR_RETURN: file.addHelper("possibleConstructorReturn"),
+  });
+
+  file.path.unshiftContainer("body", [fn]);
+  file.scope.registerDeclaration(file.path.get("body.0"));
+
+  return t.cloneNode(id);
+}

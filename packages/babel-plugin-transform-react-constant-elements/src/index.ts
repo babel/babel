@@ -52,6 +52,35 @@ export default declare((api, options: Options) => {
     return scope;
   }
 
+  const targetScopeVisitor: Visitor<VisitorState> = {
+    ReferencedIdentifier(path, state) {
+      const { node } = path;
+      let { scope } = path;
+
+      while (scope !== state.jsxScope) {
+        // If a binding is declared in an inner function, it doesn't affect hoisting.
+        if (declares(node, scope)) return;
+
+        scope = scope.parent;
+      }
+
+      while (scope) {
+        // We cannot hoist outside of the previous hoisting target
+        // scope, so we return early and we don't update it.
+        if (scope === state.targetScope) return;
+
+        // If the scope declares this identifier (or we're at the function
+        // providing the lexical env binding), we can't hoist the var any
+        // higher.
+        if (declares(node, scope)) break;
+
+        scope = scope.parent;
+      }
+
+      state.targetScope = getHoistingScope(scope);
+    },
+  };
+
   const immutabilityVisitor: Visitor<VisitorState> = {
     enter(path, state) {
       const stop = () => {
@@ -122,35 +151,6 @@ export default declare((api, options: Options) => {
       }
 
       stop();
-    },
-  };
-
-  const targetScopeVisitor: Visitor<VisitorState> = {
-    ReferencedIdentifier(path, state) {
-      const { node } = path;
-      let { scope } = path;
-
-      while (scope !== state.jsxScope) {
-        // If a binding is declared in an inner function, it doesn't affect hoisting.
-        if (declares(node, scope)) return;
-
-        scope = scope.parent;
-      }
-
-      while (scope) {
-        // We cannot hoist outside of the previous hoisting target
-        // scope, so we return early and we don't update it.
-        if (scope === state.targetScope) return;
-
-        // If the scope declares this identifier (or we're at the function
-        // providing the lexical env binding), we can't hoist the var any
-        // higher.
-        if (declares(node, scope)) break;
-
-        scope = scope.parent;
-      }
-
-      state.targetScope = getHoistingScope(scope);
     },
   };
 

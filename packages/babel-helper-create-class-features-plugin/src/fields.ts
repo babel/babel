@@ -107,6 +107,15 @@ interface PrivateNameVisitorState {
 function privateNameVisitorFactory<S>(
   visitor: Visitor<PrivateNameVisitorState & S>,
 ) {
+  // Traverses the outer portion of a class, without touching the class's inner
+  // scope, for private names.
+  const nestedVisitor = traverse.visitors.merge([
+    {
+      ...visitor,
+    },
+    environmentVisitor,
+  ]);
+
   const privateNameVisitor: Visitor<PrivateNameVisitorState & S> = {
     ...visitor,
 
@@ -146,15 +155,6 @@ function privateNameVisitorFactory<S>(
       path.skipKey("body");
     },
   };
-
-  // Traverses the outer portion of a class, without touching the class's inner
-  // scope, for private names.
-  const nestedVisitor = traverse.visitors.merge([
-    {
-      ...visitor,
-    },
-    environmentVisitor,
-  ]);
 
   return privateNameVisitor;
 }
