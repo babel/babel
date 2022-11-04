@@ -211,7 +211,7 @@ const privateInVisitor = privateNameVisitorFactory<{
   file: File;
   innerBinding?: t.Identifier;
 }>({
-  BinaryExpression(path) {
+  BinaryExpression(path, { file }) {
     const { operator, left, right } = path.node;
     if (operator !== "in") return;
     if (!t.isPrivateName(left)) return;
@@ -230,7 +230,9 @@ const privateInVisitor = privateNameVisitorFactory<{
     if (privateFieldsAsProperties) {
       const { id } = privateNamesMap.get(name);
       path.replaceWith(template.expression.ast`
-        Object.prototype.hasOwnProperty.call(${right}, ${t.cloneNode(id)})
+        Object.prototype.hasOwnProperty.call(${file.addHelper(
+          "checkInRHS",
+        )}(${right}), ${t.cloneNode(id)})
       `);
       return;
     }
@@ -238,11 +240,19 @@ const privateInVisitor = privateNameVisitorFactory<{
     const { id, static: isStatic } = privateNamesMap.get(name);
 
     if (isStatic) {
-      path.replaceWith(template.expression.ast`${right} === ${this.classRef}`);
+      path.replaceWith(
+        template.expression.ast`${file.addHelper(
+          "checkInRHS",
+        )}(${right}) === ${t.cloneNode(this.classRef)}`,
+      );
       return;
     }
 
-    path.replaceWith(template.expression.ast`${t.cloneNode(id)}.has(${right})`);
+    path.replaceWith(
+      template.expression.ast`${t.cloneNode(id)}.has(${file.addHelper(
+        "checkInRHS",
+      )}(${right}))`,
+    );
   },
 });
 

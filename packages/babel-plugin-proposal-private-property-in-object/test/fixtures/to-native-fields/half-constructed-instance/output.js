@@ -4,10 +4,10 @@ var _xBrandCheck = /*#__PURE__*/new WeakSet();
 var _yBrandCheck = /*#__PURE__*/new WeakSet();
 class F {
   m() {
-    _FBrandCheck.has(this);
-    _xBrandCheck.has(this);
-    _yBrandCheck.has(this);
-    _FBrandCheck.has(this);
+    _FBrandCheck.has(babelHelpers.checkInRHS(this));
+    _xBrandCheck.has(babelHelpers.checkInRHS(this));
+    _yBrandCheck.has(babelHelpers.checkInRHS(this));
+    _FBrandCheck.has(babelHelpers.checkInRHS(this));
   }
   get #w() {}
   #x = (_FBrandCheck.add(this), (_xBrandCheck.add(this), 0));

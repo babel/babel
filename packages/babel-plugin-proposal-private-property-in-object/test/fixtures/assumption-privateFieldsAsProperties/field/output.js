@@ -7,6 +7,6 @@ class Foo {
     });
   }
   test(other) {
-    return Object.prototype.hasOwnProperty.call(other, _foo);
+    return Object.prototype.hasOwnProperty.call(babelHelpers.checkInRHS(other), _foo);
   }
 }

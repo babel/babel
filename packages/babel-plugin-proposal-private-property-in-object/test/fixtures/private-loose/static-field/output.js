@@ -8,7 +8,7 @@ let Foo = /*#__PURE__*/function () {
   babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test(other) {
-      return Object.prototype.hasOwnProperty.call(other, _foo);
+      return Object.prototype.hasOwnProperty.call(babelHelpers.checkInRHS(other), _foo);
     }
   }]);
   return Foo;
