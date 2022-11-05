@@ -88,7 +88,7 @@
         "type": "module",
         "exports": {
           ".": {
-            "require": "./cjs-proxy.cjs",
+            "require": "./cjs-proxy/index.cjs",
             "default": "./lib/index.js"
           },
           "./package.json": "./package.json"
