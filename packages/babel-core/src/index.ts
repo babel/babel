@@ -1,5 +1,5 @@
 declare const PACKAGE_JSON: { name: string; version: string };
-declare const USE_ESM: boolean;
+declare const USE_ESM: boolean, IS_STANDALONE: boolean;
 
 export const version = PACKAGE_JSON.version;
 
@@ -89,11 +89,12 @@ export function Plugin(alias: string) {
   );
 }
 
-import * as module from "module";
+import Module from "module";
 import * as thisFile from "./index";
 if (USE_ESM) {
-  // Pass this module to the CJS proxy, so that it
-  // can be synchronously accessed.
-  const cjsProxy = module.createRequire(import.meta.url)("../cjs-proxy.cjs");
-  cjsProxy["__ initialize @babel/core cjs proxy __"] = thisFile;
+  if (!IS_STANDALONE) {
+    // Pass this module to the CJS proxy, so that it can be synchronously accessed.
+    const cjsProxy = Module.createRequire(import.meta.url)("../cjs-proxy.cjs");
+    cjsProxy["__ initialize @babel/core cjs proxy __"] = thisFile;
+  }
 }
