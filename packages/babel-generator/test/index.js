@@ -1055,6 +1055,27 @@ describe("programmatic generation", function () {
       const output = generate(exportDefaultDeclaration).code;
       expect(output).toBe("export default (function () {});");
     });
+
+    it("inner comments are not printed after leading parenthesis", () => {
+      const functionExpression = t.functionExpression(
+        null,
+        [],
+        t.blockStatement([]),
+      );
+      functionExpression.innerComments = [
+        {
+          type: "CommentBlock",
+          value: "foo",
+        },
+      ];
+      const stmt = t.expressionStatement(functionExpression);
+      const output = generate(stmt).code;
+      expect(output).toMatchInlineSnapshot(`
+        "(function
+          /*foo*/
+        () {});"
+      `);
+    });
   });
 
   describe("class expressions", () => {

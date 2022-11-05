@@ -587,8 +587,6 @@ class Printer {
   ) {
     if (!node) return;
 
-    this._endsWithInnerRaw = false;
-
     const nodeType = node.type;
     const format = this.format;
 
@@ -639,6 +637,7 @@ class Printer {
     }
     if (shouldPrintParens) this.token("(");
 
+    this._endsWithInnerRaw = false;
     this._lastCommentLine = 0;
 
     this._printLeadingComments(node, parent);
