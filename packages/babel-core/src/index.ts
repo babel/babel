@@ -89,11 +89,11 @@ export function Plugin(alias: string) {
   );
 }
 
-import { createRequire } from "module";
+import * as module from "module";
 import * as thisFile from "./index";
 if (USE_ESM) {
   // Pass this module to the CJS proxy, so that it
   // can be synchronously accessed.
-  const cjsProxy = createRequire(import.meta.url)("../cjs-proxy.cjs");
+  const cjsProxy = module.createRequire(import.meta.url)("../cjs-proxy.cjs");
   cjsProxy["__ initialize @babel/core cjs proxy __"] = thisFile;
 }

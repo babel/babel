@@ -385,17 +385,6 @@ function buildRollup(packages, buildStandalone) {
                   return;
                 }
                 break;
-              case "NON_EXISTENT_EXPORT":
-                // babel-core/src/index.ts imports createRequire, but it's only
-                // used in the ESM build. We can safely ignore this warning.
-                if (
-                  warning.id.endsWith("babel-core/src/index.ts") &&
-                  warning.source === "\x00polyfill-node.module.js" &&
-                  warning.name === "createRequire"
-                ) {
-                  return;
-                }
-                break;
             }
 
             // We use console.warn here since it prints more info than just "warn",
