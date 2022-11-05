@@ -23,6 +23,7 @@ const ZERO_DECIMAL_INTEGER = /\.0+$/;
 const NON_DECIMAL_LITERAL = /^0[box]/;
 const PURE_ANNOTATION_RE = /^\s*[@#]__PURE__\s*$/;
 const HAS_NEWLINE = /[\n\r\u2028\u2029]/;
+const HAS_BlOCK_COMMENT_END = /\*\//;
 
 const { needsParens } = n;
 
@@ -904,7 +905,13 @@ class Printer {
 
     if (this._printedComments.has(comment)) return false;
 
-    if (this._noLineTerminator && HAS_NEWLINE.test(comment.value)) {
+    const noLineTerminator = this._noLineTerminator;
+
+    if (
+      noLineTerminator &&
+      (HAS_NEWLINE.test(comment.value) ||
+        HAS_BlOCK_COMMENT_END.test(comment.value))
+    ) {
       return true;
     }
 
@@ -957,7 +964,7 @@ class Printer {
 
         val = val.replace(/\n(?!$)/g, `\n${" ".repeat(indentSize)}`);
       }
-    } else if (!this._noLineTerminator) {
+    } else if (!noLineTerminator) {
       val = `//${comment.value}`;
     } else {
       // It was a single-line comment, so it's guaranteed to not
@@ -972,7 +979,7 @@ class Printer {
     this.source("start", comment.loc);
     this._append(val, isBlockComment);
 
-    if (!isBlockComment && !this._noLineTerminator) {
+    if (!isBlockComment && !noLineTerminator) {
       this.newline(1, true);
     }
 
@@ -997,12 +1004,16 @@ class Printer {
     const nodeEndLine = hasLoc ? nodeLoc.end.line : 0;
     let lastLine = 0;
     let leadingCommentNewline = 0;
-    const { _noLineTerminator } = this;
+
+    const maybeNewline = this._noLineTerminator
+      ? function () {}
+      : this.newline.bind(this);
 
     for (let i = 0; i < len; i++) {
       const comment = comments[i];
 
-      if (hasLoc && comment.loc && !this._printedComments.has(comment)) {
+      const printed = this._printedComments.has(comment);
+      if (hasLoc && comment.loc && !printed) {
         const commentStartLine = comment.loc.start.line;
         const commentEndLine = comment.loc.end.line;
         if (type === COMMENT_TYPE.LEADING) {
@@ -1022,11 +1033,11 @@ class Printer {
           }
           lastLine = commentEndLine;
 
-          if (!_noLineTerminator) this.newline(offset);
+          maybeNewline(offset);
           this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL);
 
-          if (!_noLineTerminator && i + 1 === len) {
-            this.newline(
+          if (i + 1 === len) {
+            maybeNewline(
               Math.max(nodeStartLine - lastLine, leadingCommentNewline),
             );
             lastLine = nodeStartLine;
@@ -1036,11 +1047,11 @@ class Printer {
             commentStartLine - (i === 0 ? nodeStartLine : lastLine);
           lastLine = commentEndLine;
 
-          if (!_noLineTerminator) this.newline(offset);
+          maybeNewline(offset);
           if (this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL)) break;
 
-          if (!_noLineTerminator && i + 1 === len) {
-            this.newline(Math.min(1, nodeEndLine - lastLine)); // TODO: Improve here when inner comments processing is stronger
+          if (i + 1 === len) {
+            maybeNewline(Math.min(1, nodeEndLine - lastLine)); // TODO: Improve here when inner comments processing is stronger
             lastLine = nodeEndLine;
           }
         } else {
@@ -1048,16 +1059,18 @@ class Printer {
             commentStartLine - (i === 0 ? nodeEndLine - lineOffset : lastLine);
           lastLine = commentEndLine;
 
-          if (!_noLineTerminator) this.newline(offset);
+          maybeNewline(offset);
           this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL);
         }
       } else {
         hasLoc = false;
 
+        if (printed) continue;
+
         if (len === 1) {
           const singleLine = comment.loc
             ? comment.loc.start.line === comment.loc.end.line
-            : !comment.value.includes("\n");
+            : !HAS_NEWLINE.test(comment.value);
 
           const shouldSkipNewline =
             singleLine &&
@@ -1091,7 +1104,7 @@ class Printer {
           //   /*:: b: ?string*/
           // }
 
-          const skippedDueToNewlie = this._printComment(
+          const skippedDueToNewline = this._printComment(
             comment,
             i === 0
               ? COMMENT_SKIP_NEWLINE.SKIP_LEADING
@@ -1099,7 +1112,7 @@ class Printer {
               ? COMMENT_SKIP_NEWLINE.SKIP_TRAILING
               : COMMENT_SKIP_NEWLINE.DEFAULT,
           );
-          if (skippedDueToNewlie) break;
+          if (skippedDueToNewline) break;
         } else {
           this._printComment(comment, COMMENT_SKIP_NEWLINE.DEFAULT);
         }
