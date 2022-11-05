@@ -1133,6 +1133,40 @@ describe("programmatic generation", function () {
       expect(output).toBe("for ((let)[x];;);");
     });
   });
+
+  describe("should print inner comments even if there are no suitable inner locations", () => {
+    it("atomic node", () => {
+      const id = t.identifier("foo");
+      id.innerComments = [{ type: "CommentBlock", value: "foo" }];
+      expect(generate(id).code).toMatchInlineSnapshot(`"foo /*foo*/"`);
+    });
+
+    it("node without inner locations", () => {
+      const expr = t.binaryExpression(
+        "+",
+        t.numericLiteral(1),
+        t.numericLiteral(2),
+      );
+      expr.innerComments = [{ type: "CommentBlock", value: "foo" }];
+      expect(generate(expr).code).toMatchInlineSnapshot(`"1 + 2 /*foo*/"`);
+    });
+
+    it("comment skipped because of newlines", () => {
+      const arrow = t.arrowFunctionExpression(
+        [t.identifier("x"), t.identifier("y")],
+        t.identifier("z"),
+      );
+      arrow.innerComments = [
+        { type: "CommentBlock", value: "foo" },
+        { type: "CommentBlock", value: "new\nline" },
+      ];
+      expect(generate(arrow).code).toMatchInlineSnapshot(`
+        "(x, y) /*foo*/ => z
+        /*new
+        line*/"
+      `);
+    });
+  });
 });
 
 describe("CodeGenerator", function () {
