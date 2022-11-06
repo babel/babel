@@ -3,7 +3,6 @@ import { isRequired } from "@babel/helper-compilation-targets";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 import nameFunction from "@babel/helper-function-name";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
-import { types as t } from "@babel/core";
 import globals from "globals";
 import transformClass from "./transformClass";
 
@@ -20,6 +19,9 @@ export interface Options {
 }
 
 export default declare((api, options: Options) => {
+  // `@babel/core` and `@babel/types` are bundled in some downstream libraries.
+  // Ref: https://github.com/babel/babel/issues/15089
+  const { types: t } = api;
   api.assertVersion(7);
 
   const { loose = false } = options;
