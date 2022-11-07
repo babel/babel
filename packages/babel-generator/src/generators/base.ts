@@ -73,7 +73,7 @@ export function DirectiveLiteral(this: Printer, node: t.DirectiveLiteral) {
 
   // NOTE: In directives we can't change escapings,
   // because they change the behavior.
-  // e.g. "us\x65 string" (\x65 is e) is not a "use strict" directive.
+  // e.g. "us\x65 strict" (\x65 is e) is not a "use strict" directive.
 
   if (!unescapedDoubleQuoteRE.test(value)) {
     this.token(`"${value}"`);
