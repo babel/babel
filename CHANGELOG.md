@@ -23,6 +23,15 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.20.3 (2022-11-07)
+
+#### :bug: Bug Fix
+* `babel-generator`
+  * [#15135](https://github.com/babel/babel/pull/15135) Don't convert line comments containing `*/` to block comments ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-plugin-transform-parameters`
+  * [#15146](https://github.com/babel/babel/pull/15146) Fix compilation of parameters in async generators ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#15134](https://github.com/babel/babel/pull/15134) fix: support await as for-of-lhs ([@JLHwung](https://github.com/JLHwung))
 ## v7.20.2 (2022-11-04)
 
 #### :bug: Bug Fix
