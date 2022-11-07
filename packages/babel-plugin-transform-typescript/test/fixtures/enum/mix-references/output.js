@@ -18,7 +18,7 @@ var Baz;
   Baz[Baz["b"] = 1] = "b";
   Baz[Baz["x"] = Baz.a.toString()] = "x";
 })(Baz || (Baz = {}));
-var A;
+var A; // a refers to A.a
 (function (A) {
   A[A["a"] = 0] = "a";
   A[A["b"] = (() => {

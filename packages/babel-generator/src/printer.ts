@@ -787,15 +787,28 @@ class Printer {
   }
 
   _printTrailingComments(node: t.Node, parent?: t.Node, lineOffset?: number) {
-    const comments = node.trailingComments;
-    if (!comments?.length) return;
-    this._printComments(
-      COMMENT_TYPE.TRAILING,
-      comments,
-      node,
-      parent,
-      lineOffset,
-    );
+    const { innerComments, trailingComments } = node;
+    // We print inner comments here, so that if for some reason they couldn't
+    // be printed in earlier locations they are still printed *somehwere*,
+    // even if at the end of the node.
+    if (innerComments?.length) {
+      this._printComments(
+        COMMENT_TYPE.TRAILING,
+        innerComments,
+        node,
+        parent,
+        lineOffset,
+      );
+    }
+    if (trailingComments?.length) {
+      this._printComments(
+        COMMENT_TYPE.TRAILING,
+        trailingComments,
+        node,
+        parent,
+        lineOffset,
+      );
+    }
   }
 
   _printLeadingComments(node: t.Node, parent: t.Node) {
