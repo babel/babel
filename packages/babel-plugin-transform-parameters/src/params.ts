@@ -154,7 +154,8 @@ export default function convertFunctionParams(
   // ensure it's a block, useful for arrow functions
   path.ensureBlock();
 
-  if (state.needsOuterBinding || shadowedParams.size > 0 || node.generator) {
+  const { async, generator } = node;
+  if (generator || state.needsOuterBinding || shadowedParams.size > 0) {
     body.push(buildScopeIIFE(shadowedParams, path.node.body));
 
     path.set("body", t.blockStatement(body as t.Statement[]));
@@ -169,12 +170,21 @@ export default function convertFunctionParams(
     // This is an IIFE, so we don't need to worry about the noNewArrows assumption
     arrowPath.arrowFunctionToExpression();
 
-    arrowPath.node.generator = path.node.generator;
-    arrowPath.node.async = path.node.async;
+    arrowPath.node.generator = generator;
+    arrowPath.node.async = async;
 
-    // We don't reset "async" because if the default value of a parameter
-    // throws, it must reject asynchronously.
-    path.node.generator = false;
+    node.generator = false;
+    node.async = false;
+    if (async) {
+      // If the default value of a parameter throws, it must reject asynchronously.
+      path.node.body = template.statement.ast`{
+        try {
+          ${path.node.body.body}
+        } catch (e) {
+          return Promise.reject(e);
+        }
+      }` as t.BlockStatement;
+    }
   } else {
     path.get("body").unshiftContainer("body", body);
   }
