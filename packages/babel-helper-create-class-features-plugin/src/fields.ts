@@ -206,6 +206,24 @@ function unshadow(
   }
 }
 
+export function buildCheckInRHS(
+  rhs: t.Expression,
+  file: File,
+  inRHSIsObject?: boolean,
+) {
+  let helperRef;
+  try {
+    helperRef = file.addHelper("checkInRHS");
+  } catch (err) {
+    if (err.code !== "BABEL_HELPER_UNKNOWN") {
+      throw err;
+    }
+  }
+  return helperRef !== undefined && inRHSIsObject !== true
+    ? t.callExpression(helperRef, [rhs])
+    : rhs;
+}
+
 const privateInVisitor = privateNameVisitorFactory<{
   classRef: t.Identifier;
   file: File;
@@ -230,9 +248,10 @@ const privateInVisitor = privateNameVisitorFactory<{
     if (privateFieldsAsProperties) {
       const { id } = privateNamesMap.get(name);
       path.replaceWith(template.expression.ast`
-        Object.prototype.hasOwnProperty.call(${file.addHelper(
-          "checkInRHS",
-        )}(${right}), ${t.cloneNode(id)})
+        Object.prototype.hasOwnProperty.call(${buildCheckInRHS(
+          right,
+          file,
+        )}, ${t.cloneNode(id)})
       `);
       return;
     }
@@ -241,17 +260,19 @@ const privateInVisitor = privateNameVisitorFactory<{
 
     if (isStatic) {
       path.replaceWith(
-        template.expression.ast`${file.addHelper(
-          "checkInRHS",
-        )}(${right}) === ${t.cloneNode(this.classRef)}`,
+        template.expression.ast`${buildCheckInRHS(
+          right,
+          file,
+        )} === ${t.cloneNode(this.classRef)}`,
       );
       return;
     }
 
     path.replaceWith(
-      template.expression.ast`${t.cloneNode(id)}.has(${file.addHelper(
-        "checkInRHS",
-      )}(${right}))`,
+      template.expression.ast`${t.cloneNode(id)}.has(${buildCheckInRHS(
+        right,
+        file,
+      )})`,
     );
   },
 });

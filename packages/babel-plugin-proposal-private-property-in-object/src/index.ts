@@ -4,6 +4,7 @@ import {
   enableFeature,
   FEATURES,
   injectInitialization as injectConstructorInit,
+  buildCheckInRHS,
 } from "@babel/helper-create-class-features-plugin";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 import type * as t from "@babel/types";
@@ -121,6 +122,7 @@ export default declare((api, opt: Options) => {
     visitor: {
       BinaryExpression(path, state) {
         const { node } = path;
+        const { file } = state;
         if (node.operator !== "in") return;
         if (!t.isPrivateName(node.left)) return;
 
@@ -158,9 +160,10 @@ export default declare((api, opt: Options) => {
             }
             path.replaceWith(
               template.expression.ast`
-                ${t.cloneNode(outerClass.node.id)} === ${state.addHelper(
-                "checkInRHS",
-              )}(${node.right})
+                ${t.cloneNode(outerClass.node.id)} === ${buildCheckInRHS(
+                node.right,
+                file,
+              )}
               `,
             );
           } else {
@@ -173,9 +176,10 @@ export default declare((api, opt: Options) => {
             );
 
             path.replaceWith(
-              template.expression.ast`${id}.has(${state.addHelper(
-                "checkInRHS",
-              )}(${node.right}))`,
+              template.expression.ast`${id}.has(${buildCheckInRHS(
+                node.right,
+                file,
+              )})`,
             );
           }
         } else {
@@ -191,9 +195,10 @@ export default declare((api, opt: Options) => {
           );
 
           path.replaceWith(
-            template.expression.ast`${id}.has(${state.addHelper(
-              "checkInRHS",
-            )}(${node.right}))`,
+            template.expression.ast`${id}.has(${buildCheckInRHS(
+              node.right,
+              file,
+            )})`,
           );
         }
       },
