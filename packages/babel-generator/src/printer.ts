@@ -908,9 +908,9 @@ class Printer {
       return true;
     }
 
-    if (!this.format.shouldPrintComment(comment.value)) return false;
-
     this._printedComments.add(comment);
+
+    if (!this.format.shouldPrintComment(comment.value)) return false;
 
     const isBlockComment = comment.type === "CommentBlock";
 

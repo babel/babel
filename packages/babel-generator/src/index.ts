@@ -46,7 +46,7 @@ class Generator extends Printer {
       let num = 0;
       let last;
       for (const v of comments) {
-        if (!this._printedComments.has(v)) {
+        if (!this._printedComments.has(v) && !v.ignore) {
           last = v;
           num++;
         }
