@@ -1151,7 +1151,7 @@ describe("programmatic generation", function () {
       expect(generate(expr).code).toMatchInlineSnapshot(`"1 + 2 /*foo*/"`);
     });
 
-    it("comment skipped because of newlines", () => {
+    it("comment skipped in arrow function because of newlines", () => {
       const arrow = t.arrowFunctionExpression(
         [t.identifier("x"), t.identifier("y")],
         t.identifier("z"),
@@ -1165,6 +1165,23 @@ describe("programmatic generation", function () {
         /*new
         line*/"
       `);
+    });
+
+    it("comment in arrow function with return type", () => {
+      const arrow = t.arrowFunctionExpression(
+        [t.identifier("x"), t.identifier("y")],
+        t.identifier("z"),
+      );
+      arrow.returnType = t.tsTypeAnnotation(t.tsAnyKeyword());
+      arrow.returnType.trailingComments = [
+        { type: "CommentBlock", value: "foo" },
+        // This comment is dropped. There is no way to safely print it
+        // as a trailingComment of the return type.
+        { type: "CommentBlock", value: "new\nline" },
+      ];
+      expect(generate(arrow).code).toMatchInlineSnapshot(
+        `"(x, y): any /*foo*/ => z"`,
+      );
     });
   });
 });
