@@ -24,8 +24,11 @@ class Generator extends Printer {
     const map = opts.sourceMaps ? new SourceMap(opts, code) : null;
     super(format, map);
 
+    this.opts = opts;
     this.ast = ast;
   }
+
+  opts: GeneratorOptions;
 
   ast: t.Node;
 
@@ -36,7 +39,30 @@ class Generator extends Printer {
    */
 
   generate() {
-    return super.generate(this.ast);
+    const code = super.generate(this.ast);
+
+    const comments = (this.ast as { comments?: t.Comment[] }).comments;
+    if (comments?.length) {
+      let num = 0;
+      let last;
+      for (const v of comments) {
+        if (!this._printedComments.has(v)) {
+          last = v;
+          num++;
+        }
+      }
+      if (num > 0) {
+        console.error(
+          `[@babel/generator] Error: There are ${num} comments that were not printed normally, please open an issue on babel repo.\nThe last is \`${
+            last.value
+          }\` at ${
+            this.opts.filename || this.opts.sourceFileName || "unknown file"
+          }:${last.loc?.start.line}:${last.loc?.start.column}`,
+        );
+      }
+    }
+
+    return code;
   }
 }
 
