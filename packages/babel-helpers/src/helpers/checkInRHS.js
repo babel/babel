@@ -2,6 +2,9 @@
 
 export default function _checkInRHS(value) {
   if (Object(value) !== value) {
-    throw TypeError("right-hand side of 'in' should be an object, got " + typeof type);
+    throw TypeError(
+      "right-hand side of 'in' should be an object, got " + typeof value
+    );
+  }
   return value;
 }
