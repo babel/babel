@@ -43,7 +43,7 @@ export default Object.freeze({
   ),
   checkInRHS: helper(
     "7.20.1",
-    "export default function _checkInRHS(value){if(Object(value)!==value)throw TypeError(\"right-hand side of 'in' should be an object, got \"+typeof value);return value}",
+    'export default function _checkInRHS(value){if(Object(value)!==value)throw TypeError("right-hand side of \'in\' should be an object, got "+(null!==value?typeof value:"null"));return value}',
   ),
   jsx: helper(
     "7.0.0-beta.0",
