@@ -13,7 +13,7 @@ function getTDZStatus(refPath: NodePath, bindingPath: NodePath) {
   }
 }
 
-const skipTDZChecks = new WeakSet();
+export const skipTDZChecks = new WeakSet();
 
 function buildTDZAssert(
   status: "maybe" | "inside",
@@ -106,10 +106,8 @@ export const visitor: Visitor<TDZVisitorState> = {
     if (!state.tdzEnabled) return;
 
     const { node } = path;
-    // @ts-expect-error todo(flow->ts): avoid node mutations
-    if (node._ignoreBlockScopingTDZ) return;
-    // @ts-expect-error todo(flow->ts): avoid mutations
-    node._ignoreBlockScopingTDZ = true;
+    if (skipTDZChecks.has(node)) return;
+    skipTDZChecks.add(node);
 
     const arg = path.get("argument");
     if (!arg.isIdentifier()) return;
@@ -128,10 +126,8 @@ export const visitor: Visitor<TDZVisitorState> = {
     if (!state.tdzEnabled) return;
 
     const { node } = path;
-    // @ts-expect-error todo(flow->ts): avoid node mutations
-    if (node._ignoreBlockScopingTDZ) return;
-    // @ts-expect-error todo(flow->ts): avoid mutations
-    node._ignoreBlockScopingTDZ = true;
+    if (skipTDZChecks.has(node)) return;
+    skipTDZChecks.add(node);
 
     const nodes = [];
     const ids = path.getBindingIdentifiers();
