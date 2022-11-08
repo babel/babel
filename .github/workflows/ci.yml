@@ -301,7 +301,7 @@ jobs:
           yarn install
       - uses: actions/download-artifact@v3
         with:
-          name: babel8-test-artifact
+          name: babel8-artifact
       - name: Extract artifacts
         run: tar -xf babel-artifact.tar; rm babel-artifact.tar
       - name: Generate runtime helpers
