@@ -211,17 +211,8 @@ export function buildCheckInRHS(
   file: File,
   inRHSIsObject?: boolean,
 ) {
-  let helperRef;
-  try {
-    helperRef = file.addHelper("checkInRHS");
-  } catch (err) {
-    if (err.code !== "BABEL_HELPER_UNKNOWN") {
-      throw err;
-    }
-  }
-  return helperRef !== undefined && inRHSIsObject !== true
-    ? t.callExpression(helperRef, [rhs])
-    : rhs;
+  if (inRHSIsObject || !file.availableHelper?.("checkInRHS")) return rhs;
+  return t.callExpression(file.addHelper("checkInRHS"), [rhs]);
 }
 
 const privateInVisitor = privateNameVisitorFactory<{
