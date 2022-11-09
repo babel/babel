@@ -1,4 +1,4 @@
-var _initClass, _A, _initClass2, _A2, _initClass3, _A3, _initClass4, _A4, _initClass5, _A5, _initClass6, _A6;
+var _initClass, _A, _initClass2, _A2, _initClass3, _A3, _initClass4, _A4, _initClass5, _A5, _initClass6, _A6, _initClass7, _A7;
 const logs = [];
 const dec = (value, context) => {
   logs.push(context.name);
@@ -71,4 +71,12 @@ let A3, A4;
     }
   }, _A6)
 });
-expect(logs).toEqual(["A0", "A1", "A2", "A3", "A4", "A5"]);
+((A6 = (class A6 {
+  static {
+    [_A7, _initClass7] = babelHelpers.applyDecs(this, [], [dec]);
+  }
+  static {
+    _initClass7();
+  }
+}, _A7)) => {})();
+expect(logs).toEqual(["A0", "A1", "A2", "A3", "A4", "A5", "A6"]);
