@@ -1,10 +1,7 @@
-import { types as t, template, type PluginPass } from "@babel/core";
+import { types as t, type PluginPass } from "@babel/core";
 import type { NodePath, Scope, Visitor } from "@babel/traverse";
 
-function getTDZStatus(
-  refPath: NodePath<t.Identifier | t.JSXIdentifier>,
-  bindingPath: NodePath,
-) {
+function getTDZStatus(refPath: NodePath, bindingPath: NodePath) {
   const executionStatus = bindingPath._guessExecutionStatusRelativeTo(refPath);
 
   if (executionStatus === "before") {
@@ -16,15 +13,26 @@ function getTDZStatus(
   }
 }
 
+export const skipTDZChecks = new WeakSet();
+
 function buildTDZAssert(
+  status: "maybe" | "inside",
   node: t.Identifier | t.JSXIdentifier,
   state: TDZVisitorState,
 ) {
-  return t.callExpression(state.addHelper("temporalRef"), [
-    // @ts-expect-error Fixme: we may need to handle JSXIdentifier
-    node,
-    t.stringLiteral(node.name),
-  ]);
+  if (status === "maybe") {
+    const clone = t.cloneNode(node);
+    skipTDZChecks.add(clone);
+    return t.callExpression(state.addHelper("temporalRef"), [
+      // @ts-expect-error Fixme: we may need to handle JSXIdentifier
+      clone,
+      t.stringLiteral(node.name),
+    ]);
+  } else {
+    return t.callExpression(state.addHelper("tdz"), [
+      t.stringLiteral(node.name),
+    ]);
+  }
 }
 
 function isReference(
@@ -39,7 +47,41 @@ function isReference(
   return scope.getBindingIdentifier(node.name) === declared;
 }
 
-const visitedMaybeTDZNodes = new WeakSet();
+type TDZReplacement = { status: "maybe" | "inside"; node: t.Expression };
+function getTDZReplacement(
+  path: NodePath<t.Identifier | t.JSXIdentifier>,
+  state: TDZVisitorState,
+): TDZReplacement | undefined;
+function getTDZReplacement(
+  path: NodePath,
+  state: TDZVisitorState,
+  id: t.Identifier | t.JSXIdentifier,
+): TDZReplacement | undefined;
+function getTDZReplacement(
+  path: NodePath,
+  state: TDZVisitorState,
+  id: t.Identifier | t.JSXIdentifier = path.node as any,
+): TDZReplacement | undefined {
+  if (!isReference(id, path.scope, state)) return;
+
+  if (skipTDZChecks.has(id)) return;
+  skipTDZChecks.add(id);
+
+  const bindingPath = path.scope.getBinding(id.name).path;
+
+  if (bindingPath.isFunctionDeclaration()) return;
+
+  const status = getTDZStatus(path, bindingPath);
+  if (status === "outside") return;
+
+  if (status === "maybe") {
+    // add tdzThis to parent variable declarator so it's exploded
+    // @ts-expect-error todo(flow->ts): avoid mutations
+    bindingPath.parent._tdzThis = true;
+  }
+
+  return { status, node: buildTDZAssert(status, id, state) };
+}
 
 export interface TDZVisitorState {
   tdzEnabled: boolean;
@@ -50,72 +92,54 @@ export interface TDZVisitorState {
 export const visitor: Visitor<TDZVisitorState> = {
   ReferencedIdentifier(path, state) {
     if (!state.tdzEnabled) return;
+    if (path.parentPath.isUpdateExpression()) return;
+    // It will be handled after transforming the loop
+    if (path.parentPath.isFor({ left: path.node })) return;
 
-    const { node, parent, scope } = path;
+    const replacement = getTDZReplacement(path, state);
+    if (!replacement) return;
 
-    if (path.parentPath.isFor({ left: node })) return;
-    if (!isReference(node, scope, state)) return;
+    path.replaceWith(replacement.node);
+  },
 
-    const bindingPath = scope.getBinding(node.name).path;
+  UpdateExpression(path, state) {
+    if (!state.tdzEnabled) return;
 
-    if (bindingPath.isFunctionDeclaration()) return;
+    const { node } = path;
+    if (skipTDZChecks.has(node)) return;
+    skipTDZChecks.add(node);
 
-    const status = getTDZStatus(path, bindingPath);
-    if (status === "outside") return;
+    const arg = path.get("argument");
+    if (!arg.isIdentifier()) return;
 
-    if (status === "maybe") {
-      if (visitedMaybeTDZNodes.has(node)) {
-        return;
-      }
-      visitedMaybeTDZNodes.add(node);
-      const assert = buildTDZAssert(node, state);
+    const replacement = getTDZReplacement(path, state, arg.node);
+    if (!replacement) return;
 
-      // add tdzThis to parent variable declarator so it's exploded
-      // @ts-expect-error todo(flow->ts): avoid mutations
-      bindingPath.parent._tdzThis = true;
-
-      if (path.parentPath.isUpdateExpression()) {
-        // @ts-expect-error todo(flow->ts): avoid node mutations
-        if (parent._ignoreBlockScopingTDZ) return;
-        path.parentPath.replaceWith(
-          t.sequenceExpression([assert, parent as t.UpdateExpression]),
-        );
-      } else {
-        path.replaceWith(assert);
-      }
-    } else if (status === "inside") {
-      path.replaceWith(
-        template.ast`${state.addHelper("tdz")}("${node.name}")` as t.Statement,
-      );
+    if (replacement.status === "maybe") {
+      path.insertBefore(replacement.node);
+    } else {
+      path.replaceWith(replacement.node);
     }
   },
 
-  AssignmentExpression: {
-    exit(path, state) {
-      if (!state.tdzEnabled) return;
+  AssignmentExpression(path, state) {
+    if (!state.tdzEnabled) return;
 
-      const { node } = path;
+    const { node } = path;
+    if (skipTDZChecks.has(node)) return;
+    skipTDZChecks.add(node);
 
-      // @ts-expect-error todo(flow->ts): avoid node mutations
-      if (node._ignoreBlockScopingTDZ) return;
+    const nodes = [];
+    const ids = path.getBindingIdentifiers();
 
-      const nodes = [];
-      const ids = path.getBindingIdentifiers();
-
-      for (const name of Object.keys(ids)) {
-        const id = ids[name];
-
-        if (isReference(id, path.scope, state)) {
-          nodes.push(id);
-        }
+    for (const name of Object.keys(ids)) {
+      const replacement = getTDZReplacement(path, state, ids[name]);
+      if (replacement) {
+        nodes.push(t.expressionStatement(replacement.node));
+        if (replacement.status === "inside") break;
       }
+    }
 
-      if (nodes.length) {
-        // @ts-expect-error todo(flow->ts): avoid mutations
-        node._ignoreBlockScopingTDZ = true;
-        nodes.push(node);
-        path.replaceWithMultiple(nodes.map(n => t.expressionStatement(n)));
-      }
-    },
+    if (nodes.length > 0) path.insertBefore(nodes);
   },
 };
