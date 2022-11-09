@@ -1161,9 +1161,9 @@ describe("programmatic generation", function () {
         { type: "CommentBlock", value: "new\nline" },
       ];
       expect(generate(arrow).code).toMatchInlineSnapshot(`
-        "(x, y) /*foo*/ => z
-        /*new
-        line*/"
+        "(x, y) /*foo*/ =>
+          /*new
+          line*/ z"
       `);
     });
 

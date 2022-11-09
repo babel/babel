@@ -196,6 +196,8 @@ export function ArrowFunctionExpression(
   // We forcefully print inner comments here.
   this.printInnerComments();
   this.token("=>");
+  // For multiline comments
+  this.printInnerComments();
 
   this.space();
 
