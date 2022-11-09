@@ -259,8 +259,6 @@ function createWorker(useWorker) {
 }
 
 async function buildBabel(useWorker, ignore = []) {
-  const enableSourceMap = !process.env.IS_PUBLISH;
-
   const worker = createWorker(useWorker);
   const files = await new Promise((resolve, reject) => {
     glob(
@@ -281,7 +279,7 @@ async function buildBabel(useWorker, ignore = []) {
     const dest = "./" + mapSrcToLib(file.slice(2));
     promises.push(
       worker.transform(file, dest, {
-        sourceMaps: enableSourceMap && !file.endsWith(".d.ts"),
+        sourceMaps: !file.endsWith(".d.ts"),
       })
     );
   }
