@@ -109,6 +109,16 @@ function normalizeOptions(
     format.indent.adjustMultilineComment = false;
   }
 
+  const { auxiliaryCommentBefore, auxiliaryCommentAfter, shouldPrintComment } =
+    format;
+
+  if (auxiliaryCommentBefore && !shouldPrintComment(auxiliaryCommentBefore)) {
+    format.auxiliaryCommentBefore = undefined;
+  }
+  if (auxiliaryCommentAfter && !shouldPrintComment(auxiliaryCommentAfter)) {
+    format.auxiliaryCommentAfter = undefined;
+  }
+
   return format;
 }
 

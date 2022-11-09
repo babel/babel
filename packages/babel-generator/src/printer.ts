@@ -903,35 +903,35 @@ class Printer {
     }
   }
 
-  // Returns `true` if the comment cannot be printed in this position due to
+  // Returns `-1` if the comment cannot be printed in this position due to
   // line terminators, signaling that the print comments loop can stop and
-  // resume printing comments at the next posisble position. This happens when
+  // resume printing comments at the next possible position. This happens when
   // printing inner comments, since if we have an inner comment with a multiline
   // there is at least one inner position where line terminators are allowed.
-  _printComment(
-    comment: t.Comment,
-    skipNewLines: COMMENT_SKIP_NEWLINE,
-  ): boolean {
+  _shouldPrintComment(comment: t.Comment): -1 | 0 | 1 {
     // Some plugins (such as flow-strip-types) use this to mark comments as removed using the AST-root 'comments' property,
     // where they can't manually mutate the AST node comment lists.
-    if (comment.ignore) return false;
+    if (comment.ignore) return 0;
 
-    if (this._printedComments.has(comment)) return false;
-
-    const noLineTerminator = this._noLineTerminator;
+    if (this._printedComments.has(comment)) return 0;
 
     if (
-      noLineTerminator &&
+      this._noLineTerminator &&
       (HAS_NEWLINE.test(comment.value) ||
         HAS_BlOCK_COMMENT_END.test(comment.value))
     ) {
-      return true;
+      return -1;
     }
-
-    if (!this.format.shouldPrintComment(comment.value)) return false;
 
     this._printedComments.add(comment);
 
+    if (!this.format.shouldPrintComment(comment.value)) return 0;
+
+    return 1;
+  }
+
+  _printComment(comment: t.Comment, skipNewLines: COMMENT_SKIP_NEWLINE) {
+    const noLineTerminator = this._noLineTerminator;
     const isBlockComment = comment.type === "CommentBlock";
 
     // Add a newline before and after a block comment, unless explicitly
@@ -999,8 +999,6 @@ class Printer {
     if (printNewLines && skipNewLines !== COMMENT_SKIP_NEWLINE.SKIP_TRAILING) {
       this.newline(1);
     }
-
-    return false;
   }
 
   _printComments(
@@ -1025,8 +1023,12 @@ class Printer {
     for (let i = 0; i < len; i++) {
       const comment = comments[i];
 
-      const printed = this._printedComments.has(comment);
-      if (hasLoc && comment.loc && !printed) {
+      const shouldPrint = this._shouldPrintComment(comment);
+      if (shouldPrint === -1) {
+        hasLoc = false;
+        break;
+      }
+      if (hasLoc && comment.loc && shouldPrint === 1) {
         const commentStartLine = comment.loc.start.line;
         const commentEndLine = comment.loc.end.line;
         if (type === COMMENT_TYPE.LEADING) {
@@ -1061,7 +1063,7 @@ class Printer {
           lastLine = commentEndLine;
 
           maybeNewline(offset);
-          if (this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL)) break;
+          this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL);
 
           if (i + 1 === len) {
             maybeNewline(Math.min(1, nodeEndLine - lastLine)); // TODO: Improve here when inner comments processing is stronger
@@ -1077,8 +1079,9 @@ class Printer {
         }
       } else {
         hasLoc = false;
-
-        if (printed) continue;
+        if (shouldPrint !== 1) {
+          continue;
+        }
 
         if (len === 1) {
           const singleLine = comment.loc
@@ -1100,9 +1103,7 @@ class Printer {
                 : COMMENT_SKIP_NEWLINE.DEFAULT,
             );
           } else if (shouldSkipNewline && type === COMMENT_TYPE.TRAILING) {
-            if (this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL)) {
-              break;
-            }
+            this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL);
           } else {
             this._printComment(comment, COMMENT_SKIP_NEWLINE.DEFAULT);
           }
@@ -1117,7 +1118,7 @@ class Printer {
           //   /*:: b: ?string*/
           // }
 
-          const skippedDueToNewline = this._printComment(
+          this._printComment(
             comment,
             i === 0
               ? COMMENT_SKIP_NEWLINE.SKIP_LEADING
@@ -1125,7 +1126,6 @@ class Printer {
               ? COMMENT_SKIP_NEWLINE.SKIP_TRAILING
               : COMMENT_SKIP_NEWLINE.DEFAULT,
           );
-          if (skippedDueToNewline) break;
         } else {
           this._printComment(comment, COMMENT_SKIP_NEWLINE.DEFAULT);
         }
