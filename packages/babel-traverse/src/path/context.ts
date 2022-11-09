@@ -133,10 +133,12 @@ export function setScope(this: NodePath) {
 
   let path = this.parentPath;
 
-  // Skip method scope if is computed method key or decorator expression
   if (
-    (this.key === "key" || this.listKey === "decorators") &&
-    path.isMethod()
+    // Skip method scope if is computed method key or decorator expression
+    ((this.key === "key" || this.listKey === "decorators") &&
+      path.isMethod()) ||
+    // Skip switch scope if for discriminant (`x` in `switch (x) {}`).
+    (this.key === "discriminant" && path.isSwitchStatement())
   ) {
     path = path.parentPath;
   }

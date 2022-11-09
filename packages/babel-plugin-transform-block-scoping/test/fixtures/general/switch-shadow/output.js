@@ -1,4 +1,4 @@
 switch (x) {
   default:
-    var x;
+    var _x;
 }

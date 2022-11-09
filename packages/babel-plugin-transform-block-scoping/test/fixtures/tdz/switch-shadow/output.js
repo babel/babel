@@ -1,5 +1,5 @@
 var x;
-switch (babelHelpers.tdz("x")) {
+switch (x) {
   default:
     var _x;
 }
