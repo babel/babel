@@ -787,12 +787,13 @@ helpers.iterableToArrayLimit = helper("7.0.0-beta.0")`
     var _n = true;
     var _d = false;
     var _s, _e;
-    _i = _i.call(arr);
-    if (i === 0) {
-      if (typeof _i !== "object" && typeof _i !== "function") return;
-      return _arr;
-    }
     try {
+      _i = _i.call(arr);
+      if (i === 0) {
+        if (typeof _i !== "object" && typeof _i !== "function") return;
+        _n = false;
+        return _arr;
+      }
       for (; !(_n = (_s = _i.next()).done); _n = true) {
         _arr.push(_s.value);
         if (i && _arr.length === i) break;

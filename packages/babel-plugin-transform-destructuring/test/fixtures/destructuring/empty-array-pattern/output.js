@@ -51,3 +51,15 @@ var _Symbol$iterator7 = {
     })
   },
   _Symbol$iterator8 = babelHelpers.slicedToArray(_Symbol$iterator7, 0);
+var returnCalled = false;
+var _Symbol$iterator9 = {
+    [Symbol.iterator]: function () {
+      return {
+        return: function () {
+          returnCalled = true;
+          return {};
+        }
+      };
+    }
+  },
+  _Symbol$iterator10 = babelHelpers.slicedToArray(_Symbol$iterator9, 0);

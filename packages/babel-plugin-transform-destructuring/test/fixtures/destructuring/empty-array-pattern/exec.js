@@ -1,17 +1,17 @@
 expect(function () {
-    var [] = null;
+  var [] = null;
 }).toThrow("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 
 expect(function () {
-    var [] = 42;
+  var [] = 42;
 }).toThrow("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 
 expect(function () {
-    var [] = {};
+  var [] = {};
 }).toThrow("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 
 expect(function () {
-    var [] = { [Symbol.iterator]: function() {} };
+  var [] = { [Symbol.iterator]: function() {} };
 }).toThrow("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 
 var [] = [];
@@ -21,3 +21,16 @@ var [] = (function*() { throw new Error("Should not throw"); })();
 var [] = { [Symbol.iterator]: function() { return {}; } }
 var [] = { [Symbol.iterator]: function() { return function() {}; } }
 var [] = { [Symbol.iterator]: async function*() {} }
+
+var returnCalled = false;
+var [] = {
+  [Symbol.iterator]: function() {
+    return {
+      return: function() {
+        returnCalled = true;
+        return {};
+      }
+    };
+  }
+};
+expect(returnCalled).toStrictEqual(true);
