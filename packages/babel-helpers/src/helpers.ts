@@ -788,15 +788,12 @@ helpers.iterableToArrayLimit = helper("7.0.0-beta.0")`
     var _d = false;
     var _s, _e;
     try {
-      _i = _i.call(arr);
-      if (i === 0) {
-        if (typeof _i !== "object" && typeof _i !== "function") return;
-        _n = false;
-        return _arr;
-      }
-      for (; !(_n = (_s = _i.next()).done); _n = true) {
+      for (_i = _i.call(arr); i < _arr.length && !(_n = (_s = _i.next()).done); _n = true) {
         _arr.push(_s.value);
-        if (i && _arr.length === i) break;
+      }
+      if (i === 0) {
+        if (Object(_i) !== _i) return;
+        _n = false;
       }
     } catch (err) {
       _d = true;
@@ -820,7 +817,7 @@ helpers.iterableToArrayLimitLoose = helper("7.0.0-beta.0")`
     var _arr = [];
     _i = _i.call(arr);
     if (i === 0) {
-      if (typeof _i !== "object" && typeof _i !== "function") return;
+      if (Object(_i) !== _i) return;
       return _arr;
     }
     for (var _s; !(_s = _i.next()).done;) {
