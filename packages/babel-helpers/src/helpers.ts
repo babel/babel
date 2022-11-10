@@ -822,8 +822,8 @@ helpers.iterableToArrayLimitLoose = helper("7.0.0-beta.0")`
       if (typeof _i !== "object" && typeof _i !== "function") return;
       return _arr;
     }
-    for (_step; !(_step = _i.next()).done;) {
-      _arr.push(_step.value);
+    for (var _s; !(_s = _i.next()).done;) {
+      _arr.push(_s.value);
       if (i && _arr.length === i) break;
     }
     return _arr;
