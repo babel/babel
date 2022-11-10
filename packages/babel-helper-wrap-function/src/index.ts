@@ -9,6 +9,7 @@ import {
   isFunctionDeclaration,
   isRestElement,
   returnStatement,
+  isCallExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
 
@@ -89,37 +90,50 @@ function classOrObjectMethod(
 }
 
 function plainFunction(
-  path: NodePath<Exclude<t.Function, t.Method>>,
+  inPath: NodePath<Exclude<t.Function, t.Method>>,
   callId: t.Expression,
   noNewArrows: boolean,
   ignoreFunctionLength: boolean,
 ) {
-  let functionId = null;
+  let path: NodePath<
+    | t.FunctionDeclaration
+    | t.FunctionExpression
+    | t.CallExpression
+    | t.ArrowFunctionExpression
+  > = inPath;
   let node;
-  if (path.isArrowFunctionExpression()) {
+  let functionId = null;
+  const nodeParams = inPath.node.params;
+
+  if (inPath.isArrowFunctionExpression()) {
     if (process.env.BABEL_8_BREAKING) {
-      path = path.arrowFunctionToExpression({ noNewArrows });
+      path = inPath.arrowFunctionToExpression({ noNewArrows });
     } else {
       // arrowFunctionToExpression returns undefined in @babel/traverse < 7.18.10
-      path = path.arrowFunctionToExpression({ noNewArrows }) ?? path;
+      path = inPath.arrowFunctionToExpression({ noNewArrows }) ?? inPath;
     }
-    node = path.node as t.FunctionDeclaration | t.FunctionExpression;
+    node = path.node as
+      | t.FunctionDeclaration
+      | t.FunctionExpression
+      | t.CallExpression;
   } else {
     node = path.node as t.FunctionDeclaration | t.FunctionExpression;
   }
 
   const isDeclaration = isFunctionDeclaration(node);
 
-  functionId = node.id;
-  node.id = null;
-  node.type = "FunctionExpression";
-
-  const built = callExpression(callId, [
-    node as Exclude<typeof node, t.FunctionDeclaration>,
-  ]);
+  let built = node;
+  if (!isCallExpression(node)) {
+    functionId = node.id;
+    node.id = null;
+    node.type = "FunctionExpression";
+    built = callExpression(callId, [
+      node as Exclude<typeof node, t.FunctionDeclaration>,
+    ]);
+  }
 
   const params: t.Identifier[] = [];
-  for (const param of node.params) {
+  for (const param of nodeParams) {
     if (isAssignmentPattern(param) || isRestElement(param)) {
       break;
     }
