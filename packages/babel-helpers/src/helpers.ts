@@ -788,7 +788,7 @@ helpers.iterableToArrayLimit = helper("7.0.0-beta.0")`
     var _d = false;
     var _s, _e;
     try {
-      for (_i = _i.call(arr); i < _arr.length && !(_n = (_s = _i.next()).done); _n = true) {
+      for (_i = _i.call(arr); _arr.length < i && !(_n = (_s = _i.next()).done); _n = true) {
         _arr.push(_s.value);
       }
       if (i === 0) {
