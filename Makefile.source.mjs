@@ -223,10 +223,10 @@ target["build-plugin-transform-runtime-dist"] = function () {
 
 target["prepublish"] = function () {
   target["bootstrap-only"]();
-  target["prepublish-build"]();
 
   env(
     () => {
+      target["prepublish-build"]();
       target["test"]();
     },
     {
