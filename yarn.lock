@@ -1080,7 +1080,7 @@ __metadata:
     "@babel/runtime": "workspace:^"
     "@types/v8flags": ^3.1.1
     commander: ^4.0.1
-    core-js: ^3.25.1
+    core-js: ^3.26.0
     fs-readdir-recursive: ^1.0.0
     make-dir: "condition:BABEL_8_BREAKING ? : ^2.1.0"
     node-environment-flags: ^1.0.5
@@ -1368,7 +1368,7 @@ __metadata:
     "@babel/helper-create-regexp-features-plugin": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
-    core-js: ^3.25.1
+    core-js: ^3.26.0
   peerDependencies:
     "@babel/core": ^7.0.0
   languageName: unknown
@@ -2767,7 +2767,7 @@ __metadata:
     "@babel/helper-create-regexp-features-plugin": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
-    core-js: ^3.25.1
+    core-js: ^3.26.0
   peerDependencies:
     "@babel/core": ^7.0.0
   languageName: unknown
@@ -5943,7 +5943,7 @@ __metadata:
     c8: ^7.12.0
     chalk: ^5.0.0
     charcodes: ^0.2.0
-    core-js: ^3.25.1
+    core-js: ^3.26.0
     eslint: ^8.22.0
     eslint-formatter-codeframe: ^7.32.1
     eslint-import-resolver-node: ^0.3.6
@@ -7051,10 +7051,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:^3.25.1":
-  version: 3.25.1
-  resolution: "core-js@npm:3.25.1"
-  checksum: bfacb078e790913841e2d5008b9b6705ae56ed23f83c7f0ae08d330d874561012611089d53b71520105234ed0abba36f28d91b391514a16541a8c8d98c464239
+"core-js@npm:^3.26.0":
+  version: 3.26.0
+  resolution: "core-js@npm:3.26.0"
+  checksum: 0149eb9d3909fde9c17626af3a6e625c326e8598d0bb5e6c5b48a18e5fcd4eaf48d4964d873667d8148542ff590fb98eb3f93618da114ca54999d6bc0349734b
   languageName: node
   linkType: hard
 
