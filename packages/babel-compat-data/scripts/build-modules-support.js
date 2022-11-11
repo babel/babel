@@ -1,8 +1,8 @@
 const path = require("path");
-const fs = require("fs");
 
 const compatData = require("@mdn/browser-compat-data").javascript;
 const { addElectronSupportFromChromium } = require("./chromium-to-electron");
+const { writeFile } = require("./utils-build-data");
 
 // Map mdn-browser-compat-data to browserslist browser names
 const browserNameMap = {
@@ -69,5 +69,5 @@ if (!process.env.BABEL_8_BREAKING) {
 const data = {
   "es6.module": processed,
 };
-fs.writeFileSync(dataPath, `${JSON.stringify(data, null, 2)}\n`);
+writeFile(data, dataPath, "native-modules");
 exports.generateModuleSupport = generateModuleSupport;

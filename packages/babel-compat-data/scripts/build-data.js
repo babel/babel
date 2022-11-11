@@ -37,6 +37,9 @@ for (const target of ["plugin", "corejs2-built-in"]) {
       newData = defineLegacyPluginAliases(newData);
     }
   }
+  if (target === "corejs2-built-in" && process.env.BABEL_8_BREAKING) {
+    continue;
+  }
   const dataPath = path.join(__dirname, `../data/${target}s.json`);
 
   if (!writeFile(newData, dataPath, target)) {

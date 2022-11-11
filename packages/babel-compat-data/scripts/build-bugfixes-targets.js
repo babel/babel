@@ -39,7 +39,13 @@ for (const [filename, data] of [
 ]) {
   const dataPath = path.join(__dirname, `../data/${filename}.json`);
 
-  if (!writeFile(defineLegacyPluginAliases(data), dataPath, filename)) {
+  // Add proposal-* aliases for backward compatibility.
+  let newData = data;
+  if (!process.env.BABEL_8_BREAKING) {
+    newData = defineLegacyPluginAliases(data);
+  }
+
+  if (!writeFile(newData, dataPath, filename)) {
     process.exitCode = 1;
     break;
   }

@@ -148,6 +148,9 @@ exports.generateData = (environments, features) => {
 };
 
 exports.writeFile = function (data, dataPath, name) {
+  dataPath = process.env.BABEL_8_BREAKING
+    ? dataPath.replace(".json", "-next.json")
+    : dataPath;
   const stringified = JSON.stringify(data, null, 2) + "\n";
   if (process.env.CHECK_COMPAT_DATA) {
     const currentData = fs.readFileSync(dataPath, "utf8");
@@ -155,8 +158,9 @@ exports.writeFile = function (data, dataPath, name) {
     // Compare as JSON strings to also check keys ordering
     if (currentData !== stringified) {
       console.error(
-        `The newly generated ${name} data does not match the current ` +
-          "files. Re-run `make build-compat-data`."
+        `The newly generated ${name} data does not match the current files. Re-run \`${
+          process.env.BABEL_8_BREAKING ? "BABEL_8_BREAKING=1 " : ""
+        }make build-compat-data\`.`
       );
 
       return false;
