@@ -3,7 +3,7 @@ class A {
   static #foo = void _fooBrandCheck.add(this);
   test() {
     let A = function fn(A) {
-      return _fooBrandCheck.has(A);
+      return _fooBrandCheck.has(babelHelpers.checkInRHS(A));
     };
   }
 }

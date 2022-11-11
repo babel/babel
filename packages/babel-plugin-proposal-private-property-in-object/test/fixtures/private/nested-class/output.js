@@ -19,12 +19,12 @@ let Foo = /*#__PURE__*/function () {
         babelHelpers.createClass(Nested, [{
           key: "test",
           value: function test() {
-            _foo.has(this);
+            _foo.has(babelHelpers.checkInRHS(this));
           }
         }]);
         return Nested;
       }();
-      _foo.has(this);
+      _foo.has(babelHelpers.checkInRHS(this));
     }
   }]);
   return Foo;

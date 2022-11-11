@@ -4,9 +4,9 @@ class Foo {
   test() {
     class Nested {
       test() {
-        _fooBrandCheck.has(this);
+        _fooBrandCheck.has(babelHelpers.checkInRHS(this));
       }
     }
-    _fooBrandCheck.has(this);
+    _fooBrandCheck.has(babelHelpers.checkInRHS(this));
   }
 }

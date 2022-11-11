@@ -142,17 +142,7 @@ function extractElementDescriptor(
 }
 
 function addDecorateHelper(file: File) {
-  try {
-    return file.addHelper("decorate");
-  } catch (err) {
-    if (err.code === "BABEL_HELPER_UNKNOWN") {
-      err.message +=
-        "\n  '@babel/plugin-transform-decorators' in non-legacy mode" +
-        " requires '@babel/core' version ^7.0.2 and you appear to be using" +
-        " an older version.";
-    }
-    throw err;
-  }
+  return file.addHelper("decorate");
 }
 
 type ClassElement = t.Class["body"]["body"][number];

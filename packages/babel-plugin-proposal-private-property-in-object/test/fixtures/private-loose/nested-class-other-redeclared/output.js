@@ -29,14 +29,14 @@ let Foo = /*#__PURE__*/function () {
         babelHelpers.createClass(Nested, [{
           key: "test",
           value: function test() {
-            Object.prototype.hasOwnProperty.call(this, _foo);
-            Object.prototype.hasOwnProperty.call(this, _bar2);
+            Object.prototype.hasOwnProperty.call(babelHelpers.checkInRHS(this), _foo);
+            Object.prototype.hasOwnProperty.call(babelHelpers.checkInRHS(this), _bar2);
           }
         }]);
         return Nested;
       }();
-      Object.prototype.hasOwnProperty.call(this, _foo);
-      Object.prototype.hasOwnProperty.call(this, _bar);
+      Object.prototype.hasOwnProperty.call(babelHelpers.checkInRHS(this), _foo);
+      Object.prototype.hasOwnProperty.call(babelHelpers.checkInRHS(this), _bar);
     }
   }]);
   return Foo;

@@ -40,6 +40,7 @@ export default declare((api, options: Options) => {
   } else if (version === "2021-12" || version === "2022-03") {
     return transformer2022_03(api, options, version);
   } else if (!process.env.BABEL_8_BREAKING) {
+    api.assertVersion("^7.0.2");
     return createClassFeaturePlugin({
       name: "proposal-decorators",
 

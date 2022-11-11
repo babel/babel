@@ -8,6 +8,7 @@ import {
   buildPrivateNamesMap,
   transformPrivateNamesUsage,
   buildFieldsInitNodes,
+  buildCheckInRHS,
 } from "./fields";
 import type { PropPath } from "./fields";
 import { buildDecoratedClass, hasDecorators } from "./decorators";
@@ -15,7 +16,7 @@ import { injectInitialization, extractComputedKeys } from "./misc";
 import { enableFeature, FEATURES, isLoose, shouldTransform } from "./features";
 import { assertFieldTransformed } from "./typescript";
 
-export { FEATURES, enableFeature, injectInitialization };
+export { FEATURES, enableFeature, injectInitialization, buildCheckInRHS };
 
 declare const PACKAGE_JSON: { name: string; version: string };
 

@@ -12,7 +12,7 @@ let Foo = /*#__PURE__*/function () {
   babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test(other) {
-      return _foo.has(other);
+      return _foo.has(babelHelpers.checkInRHS(other));
     }
   }]);
   return Foo;
