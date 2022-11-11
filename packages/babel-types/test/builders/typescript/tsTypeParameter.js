@@ -11,7 +11,31 @@ describe("builders", function () {
             t.tsTypeReference(t.identifier("baz")),
             t.identifier("foo"),
           );
-          expect(tsTypeParameter).toMatchSnapshot();
+          expect(tsTypeParameter).toMatchInlineSnapshot(`
+            Object {
+              "constraint": Object {
+                "type": "TSTypeReference",
+                "typeName": Object {
+                  "name": "bar",
+                  "type": "Identifier",
+                },
+                "typeParameters": null,
+              },
+              "default": Object {
+                "type": "TSTypeReference",
+                "typeName": Object {
+                  "name": "baz",
+                  "type": "Identifier",
+                },
+                "typeParameters": null,
+              },
+              "name": Object {
+                "name": "foo",
+                "type": "Identifier",
+              },
+              "type": "TSTypeParameter",
+            }
+          `);
         });
         it("throws when name is missing", function () {
           expect(() => {
@@ -34,7 +58,28 @@ describe("builders", function () {
             t.tsTypeReference(t.identifier("baz")),
             "foo",
           );
-          expect(tsTypeParameter).toMatchSnapshot();
+          expect(tsTypeParameter).toMatchInlineSnapshot(`
+            Object {
+              "constraint": Object {
+                "type": "TSTypeReference",
+                "typeName": Object {
+                  "name": "bar",
+                  "type": "Identifier",
+                },
+                "typeParameters": null,
+              },
+              "default": Object {
+                "type": "TSTypeReference",
+                "typeName": Object {
+                  "name": "baz",
+                  "type": "Identifier",
+                },
+                "typeParameters": null,
+              },
+              "name": "foo",
+              "type": "TSTypeParameter",
+            }
+          `);
         });
         it("throws when name is missing", function () {
           expect(() => {
