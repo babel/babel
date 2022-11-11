@@ -779,6 +779,8 @@ helpers.iterableToArrayLimit = helper("7.0.0-beta.0")`
     // _e = _iteratorError
     // _i = _iterator
     // _s = _step
+    // _x = _next
+    // _r = _return
 
     var _i = arr == null ? null : (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]);
     if (_i == null) return;
@@ -786,14 +788,14 @@ helpers.iterableToArrayLimit = helper("7.0.0-beta.0")`
     var _arr = [];
     var _n = true;
     var _d = false;
-    var _s, _e, _r;
+    var _s, _e, _x, _r;
     try {
-      _i = _i.call(arr);
+      _x = (_i = _i.call(arr)).next;
       if (i === 0) {
         if (Object(_i) !== _i) return;
         _n = false;
       } else {
-        for (; !(_n = (_s = _i.next()).done); _n = true) {
+        for (; !(_n = (_s = _x.call(_i)).done); _n = true) {
           _arr.push(_s.value);
           if(_arr.length === i) break;
         }
