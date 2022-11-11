@@ -786,7 +786,7 @@ helpers.iterableToArrayLimit = helper("7.0.0-beta.0")`
     var _arr = [];
     var _n = true;
     var _d = false;
-    var _s, _e;
+    var _s, _e, _r;
     try {
       _i = _i.call(arr);
       if (i === 0) {
@@ -803,7 +803,10 @@ helpers.iterableToArrayLimit = helper("7.0.0-beta.0")`
       _e = err;
     } finally {
       try {
-        if (!_n && _i["return"] != null) _i["return"]();
+        if (!_n && _i["return"] != null) {
+          _r = _i["return"]();
+          if (Object(_r) !== _r) return;
+        }
       } finally {
         if (_d) throw _e;
       }

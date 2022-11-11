@@ -5,7 +5,7 @@ var _ = 42,
 var _ref4 = {},
   _ref5 = babelHelpers.slicedToArray(_ref4, 0);
 var _Symbol$iterator = {
-    [Symbol.iterator]: function () {}
+    [Symbol.iterator]: () => {}
   },
   _Symbol$iterator2 = babelHelpers.slicedToArray(_Symbol$iterator, 0);
 var _ref6 = [0, 1, 2];
@@ -26,15 +26,11 @@ var _ref7 = /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee
   })(),
   _ref8 = babelHelpers.slicedToArray(_ref7, 0);
 var _Symbol$iterator3 = {
-    [Symbol.iterator]: function () {
-      return {};
-    }
+    [Symbol.iterator]: () => ({})
   },
   _Symbol$iterator4 = babelHelpers.slicedToArray(_Symbol$iterator3, 0);
 var _Symbol$iterator5 = {
-    [Symbol.iterator]: function () {
-      return function () {};
-    }
+    [Symbol.iterator]: () => () => {}
   },
   _Symbol$iterator6 = babelHelpers.slicedToArray(_Symbol$iterator5, 0);
 var _Symbol$iterator7 = {
@@ -53,9 +49,9 @@ var _Symbol$iterator7 = {
   _Symbol$iterator8 = babelHelpers.slicedToArray(_Symbol$iterator7, 0);
 var returnCalled = false;
 var _Symbol$iterator9 = {
-    [Symbol.iterator]: function () {
+    [Symbol.iterator]: () => {
       return {
-        return: function () {
+        return: () => {
           returnCalled = true;
           return {};
         }
