@@ -20,7 +20,7 @@
   "packageManager": "yarn@3.2.4",
   "devDependencies": {
     "@babel/cli": "^7.19.3",
-    "@babel/core": "^7.19.6",
+    "@babel/core": "^7.20.2",
     "@babel/eslint-config-internal": "workspace:^",
     "@babel/eslint-parser": "workspace:^",
     "@babel/eslint-plugin-development": "workspace:^",

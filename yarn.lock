@@ -299,7 +299,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:^7.11.6, @babel/core@npm:^7.12.3, @babel/core@npm:^7.19.6":
+"@babel/core@npm:^7.11.6, @babel/core@npm:^7.12.3, @babel/core@npm:^7.20.2":
   version: 7.20.2
   resolution: "@babel/core@npm:7.20.2"
   dependencies:
@@ -5918,7 +5918,7 @@ __metadata:
   resolution: "babel@workspace:."
   dependencies:
     "@babel/cli": ^7.19.3
-    "@babel/core": ^7.19.6
+    "@babel/core": ^7.20.2
     "@babel/eslint-config-internal": "workspace:^"
     "@babel/eslint-parser": "workspace:^"
     "@babel/eslint-plugin-development": "workspace:^"
