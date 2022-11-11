@@ -68,7 +68,7 @@ expect(() => {
 
     babelHelpers.classCallCheck(this, _class7);
   }), babelHelpers.defineProperty(_class7, arrayLike, 0), _class7;
-}).toThrowError("@@toPrimitive must return a primitive value.");
+}).toThrow("@@toPrimitive must return a primitive value.");
 expect(() => /*#__PURE__*/function () {
   "use strict";
 
@@ -82,7 +82,7 @@ expect(() => /*#__PURE__*/function () {
     }
   }]);
   return _class8;
-}()).toThrowError("@@toPrimitive must return a primitive value.");
+}()).toThrow("@@toPrimitive must return a primitive value.");
 expect(() => /*#__PURE__*/function () {
   "use strict";
 
@@ -96,7 +96,7 @@ expect(() => /*#__PURE__*/function () {
     }
   }]);
   return _class9;
-}()).toThrowError("@@toPrimitive must return a primitive value.");
+}()).toThrow("@@toPrimitive must return a primitive value.");
 expect(() => /*#__PURE__*/function () {
   "use strict";
 
@@ -110,7 +110,7 @@ expect(() => /*#__PURE__*/function () {
     }
   }]);
   return _class10;
-}()).toThrowError("@@toPrimitive must return a primitive value.");
+}()).toThrow("@@toPrimitive must return a primitive value.");
 expect(() => new ( /*#__PURE__*/function () {
   "use strict";
 
@@ -119,4 +119,4 @@ expect(() => new ( /*#__PURE__*/function () {
     babelHelpers.defineProperty(this, arrayLike, 0);
   }
   return babelHelpers.createClass(_class12);
-}())()).toThrowError("@@toPrimitive must return a primitive value.");
+}())()).toThrow("@@toPrimitive must return a primitive value.");

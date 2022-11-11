@@ -1,5 +1,51 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`builders typescript tsTypeParameter - Babel 7 accept name as argument for tsTypeParameter 1`] = `
+Object {
+  "constraint": Object {
+    "type": "TSTypeReference",
+    "typeName": Object {
+      "name": "bar",
+      "type": "Identifier",
+    },
+    "typeParameters": null,
+  },
+  "default": Object {
+    "type": "TSTypeReference",
+    "typeName": Object {
+      "name": "baz",
+      "type": "Identifier",
+    },
+    "typeParameters": null,
+  },
+  "name": "foo",
+  "type": "TSTypeParameter",
+}
+`;
+
+exports[`builders typescript tsTypeParameter - Babel 7 accept name as argument for tsTypeParameter 2`] = `
+Object {
+  "constraint": Object {
+    "type": "TSTypeReference",
+    "typeName": Object {
+      "name": "bar",
+      "type": "Identifier",
+    },
+    "typeParameters": null,
+  },
+  "default": Object {
+    "type": "TSTypeReference",
+    "typeName": Object {
+      "name": "baz",
+      "type": "Identifier",
+    },
+    "typeParameters": null,
+  },
+  "name": "foo",
+  "type": "TSTypeParameter",
+}
+`;
+
 exports[`builders typescript tsTypeParameter accept name as argument for tsTypeParameter 1`] = `
 Object {
   "constraint": Object {
@@ -18,7 +64,36 @@ Object {
     },
     "typeParameters": null,
   },
-  "name": Anything,
+  "name": Object {
+    "name": "foo",
+    "type": "Identifier",
+  },
+  "type": "TSTypeParameter",
+}
+`;
+
+exports[`builders typescript tsTypeParameter accept name as argument for tsTypeParameter 2`] = `
+Object {
+  "constraint": Object {
+    "type": "TSTypeReference",
+    "typeName": Object {
+      "name": "bar",
+      "type": "Identifier",
+    },
+    "typeParameters": null,
+  },
+  "default": Object {
+    "type": "TSTypeReference",
+    "typeName": Object {
+      "name": "baz",
+      "type": "Identifier",
+    },
+    "typeParameters": null,
+  },
+  "name": Object {
+    "name": "foo",
+    "type": "Identifier",
+  },
   "type": "TSTypeParameter",
 }
 `;

@@ -63,6 +63,8 @@ function expectError(run) {
       );
     }
 
+    // expectError is a customized expect wrapper
+    // eslint-disable-next-line jest/valid-expect
     return expect(stack);
   }
   throw new Error("It should have thrown an error.");
