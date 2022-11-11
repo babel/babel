@@ -1,0 +1,1 @@
+var [] = { [Symbol.iterator]: () => [] };
