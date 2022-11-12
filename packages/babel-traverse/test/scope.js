@@ -710,7 +710,7 @@ describe("scope", () => {
         ];
 
         ast[0].declare = true;
-        expect(() => getPath(ast)).not.toThrowError();
+        expect(() => getPath(ast)).not.toThrow();
       });
     });
 

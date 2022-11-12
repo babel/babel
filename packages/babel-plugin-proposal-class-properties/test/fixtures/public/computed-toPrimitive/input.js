@@ -9,9 +9,9 @@ expect((new class { [foo] = 0 }).foo).toBe(0);
 
 const arrayLike = { [Symbol.toPrimitive] : () => [] };
 
-expect(() => class { static [arrayLike] = 0 }).toThrowError("@@toPrimitive must return a primitive value.");
-expect(() => class { static [arrayLike](){ return 0; } }).toThrowError("@@toPrimitive must return a primitive value.");
-expect(() => class { static get [arrayLike](){ return 0; } }).toThrowError("@@toPrimitive must return a primitive value.");
-expect(() => class { static set [arrayLike](v){ return v; } }).toThrowError("@@toPrimitive must return a primitive value.");
+expect(() => class { static [arrayLike] = 0 }).toThrow("@@toPrimitive must return a primitive value.");
+expect(() => class { static [arrayLike](){ return 0; } }).toThrow("@@toPrimitive must return a primitive value.");
+expect(() => class { static get [arrayLike](){ return 0; } }).toThrow("@@toPrimitive must return a primitive value.");
+expect(() => class { static set [arrayLike](v){ return v; } }).toThrow("@@toPrimitive must return a primitive value.");
 
-expect(() => new class { [arrayLike] = 0 }).toThrowError("@@toPrimitive must return a primitive value.");
+expect(() => new class { [arrayLike] = 0 }).toThrow("@@toPrimitive must return a primitive value.");

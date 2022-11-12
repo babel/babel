@@ -25,7 +25,7 @@ describe("@babel/helper-builder-react-jsx", () => {
       plugins: [plugin],
       parserOpts: { plugins: ["jsx"] },
     });
-    expect(fn).toBeCalledTimes(1);
+    expect(fn).toHaveBeenCalledTimes(1);
   });
 
   it("shuold pass pre with plugin pass", () => {
@@ -46,7 +46,7 @@ describe("@babel/helper-builder-react-jsx", () => {
       plugins: [plugin],
       parserOpts: { plugins: ["jsx"] },
     });
-    expect(fn).toBeCalledTimes(1);
+    expect(fn).toHaveBeenCalledTimes(1);
   });
 
   it("shuold pass filter with plugin pass", () => {
@@ -67,6 +67,6 @@ describe("@babel/helper-builder-react-jsx", () => {
       plugins: [plugin],
       parserOpts: { plugins: ["jsx"] },
     });
-    expect(fn).toBeCalledTimes(1);
+    expect(fn).toHaveBeenCalledTimes(1);
   });
 });

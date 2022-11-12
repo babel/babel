@@ -57,7 +57,7 @@ describe("normalize-options", () => {
     `(
       "should throw if with includes $include and excludes $exclude",
       ({ include, exclude }) => {
-        expect(() => normalizeOptions({ include, exclude })).toThrowError(
+        expect(() => normalizeOptions({ include, exclude })).toThrow(
           /were found in both/,
         );
       },
@@ -66,9 +66,7 @@ describe("normalize-options", () => {
     it("should not throw if corejs version is valid", () => {
       [2, 2.1, 3, 3.5].forEach(corejs => {
         ["entry", "usage"].forEach(useBuiltIns => {
-          expect(() =>
-            normalizeOptions({ useBuiltIns, corejs }),
-          ).not.toThrowError();
+          expect(() => normalizeOptions({ useBuiltIns, corejs })).not.toThrow();
         });
       });
     });
@@ -76,7 +74,7 @@ describe("normalize-options", () => {
     it("should throw if corejs version is invalid", () => {
       [1, 1.2, 4, 4.5].forEach(corejs => {
         ["entry", "usage"].forEach(useBuiltIns => {
-          expect(() => normalizeOptions({ useBuiltIns, corejs })).toThrowError(
+          expect(() => normalizeOptions({ useBuiltIns, corejs })).toThrow(
             /The version passed to `corejs` is invalid./,
           );
         });

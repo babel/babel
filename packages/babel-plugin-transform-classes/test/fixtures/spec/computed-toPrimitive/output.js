@@ -59,7 +59,7 @@ expect(() => new ( /*#__PURE__*/function () {
     }
   }]);
   return _class4;
-}())()).toThrowError("@@toPrimitive must return a primitive value.");
+}())()).toThrow("@@toPrimitive must return a primitive value.");
 expect(() => new ( /*#__PURE__*/function () {
   "use strict";
 
@@ -73,7 +73,7 @@ expect(() => new ( /*#__PURE__*/function () {
     }
   }]);
   return _class5;
-}())()).toThrowError("@@toPrimitive must return a primitive value.");
+}())()).toThrow("@@toPrimitive must return a primitive value.");
 expect(() => new ( /*#__PURE__*/function () {
   "use strict";
 
@@ -87,4 +87,4 @@ expect(() => new ( /*#__PURE__*/function () {
     }
   }]);
   return _class6;
-}())()).toThrowError("@@toPrimitive must return a primitive value.");
+}())()).toThrow("@@toPrimitive must return a primitive value.");
