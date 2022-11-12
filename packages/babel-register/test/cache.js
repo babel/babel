@@ -32,8 +32,17 @@ describe("@babel/register - caching", () => {
       rimraf.sync(tmpPath);
     });
 
-    it("should cache data", () => {
+    it("should cache data", async () => {
       const Cache = require("../lib/cache.js").Cache;
+
+      if (process.env.USE_ESM) {
+        // We must wait for the @babel/core used by @babel/register to be loaded
+        // eslint-disable-next-line no-unused-vars
+        await new Promise(resolve =>
+          eval("import('@babel/core').then(resolve)"),
+        );
+      }
+
       cache = new Cache();
       cache.enable();
 
@@ -79,8 +88,16 @@ describe("@babel/register - caching", () => {
       expect(cache.get({ id: 4 }, file2).cached).toBeNull();
     });
 
-    it("should work with broken data", () => {
+    it("should work with broken data", async () => {
       const Cache = require("../lib/cache.js").Cache;
+
+      if (process.env.USE_ESM) {
+        // We must wait for the @babel/core used by @babel/register to be loaded
+        // eslint-disable-next-line no-unused-vars
+        await new Promise(resolve =>
+          eval("import('@babel/core').then(resolve)"),
+        );
+      }
 
       process.env.BABEL_CACHE_PATH = path.join(
         __dirname,

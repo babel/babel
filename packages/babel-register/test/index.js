@@ -3,6 +3,7 @@ import path from "path";
 import fs from "fs";
 import child from "child_process";
 import { fileURLToPath } from "url";
+import rimraf from "rimraf";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
@@ -24,7 +25,7 @@ const defaultOptions = {
 
 function cleanCache() {
   try {
-    fs.unlinkSync(testCacheFilename);
+    rimraf.sync(testCacheFilename);
   } catch (e) {
     // It is convenient to always try to clear
   }
@@ -409,9 +410,14 @@ describe("@babel/register", function () {
 });
 
 function spawnNodeAsync(args, cwd = dirname, env = {}) {
+  const newEnv = { ...env };
+  if (process.env.BABEL_8_BREAKING) {
+    newEnv.BABEL_8_BREAKING = process.env.BABEL_8_BREAKING;
+  }
+
   const spawn = child.spawn(process.execPath, args, {
     cwd,
-    env: { ...env, BABEL_8_BREAKING: process.env.BABEL_8_BREAKING },
+    env: newEnv,
   });
 
   let output = "";
