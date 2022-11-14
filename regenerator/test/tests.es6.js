@@ -1503,6 +1503,18 @@ describe("delegated yield", function() {
 
     check(gen(iterator), [], "1foo");
   });
+
+  it("should throw if the delegated iterable's iterator doesn't have .next", function() {
+    var it = function* () {
+      yield* {
+        [Symbol.iterator]: x => [],
+      };
+    }();
+
+    assert.throws(() => {
+      it.next();
+    }, TypeError);
+  });
 });
 
 (fullCompatibility
