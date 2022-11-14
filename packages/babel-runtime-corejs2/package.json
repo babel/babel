@@ -15,7 +15,7 @@
   "author": "The Babel Team (https://babel.dev/team)",
   "dependencies": {
     "core-js": "^2.6.12",
-    "regenerator-runtime": "^0.13.10"
+    "regenerator-runtime": "^0.13.11"
   },
   "exports": {
     "./helpers/AsyncGenerator": [
