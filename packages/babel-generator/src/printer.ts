@@ -35,9 +35,15 @@ const enum COMMENT_TYPE {
 
 const enum COMMENT_SKIP_NEWLINE {
   DEFAULT,
-  SKIP_ALL,
-  SKIP_LEADING,
-  SKIP_TRAILING,
+  ALL,
+  LEADING,
+  TRAILING,
+}
+
+const enum PRINT_COMMENT_HINT {
+  SKIP,
+  ALLOW,
+  DEFER,
 }
 
 export type Format = {
@@ -903,31 +909,33 @@ class Printer {
     }
   }
 
-  // Returns `-1` if the comment cannot be printed in this position due to
+  // Returns `PRINT_COMMENT_HINT.DEFER` if the comment cannot be printed in this position due to
   // line terminators, signaling that the print comments loop can stop and
   // resume printing comments at the next possible position. This happens when
   // printing inner comments, since if we have an inner comment with a multiline
   // there is at least one inner position where line terminators are allowed.
-  _shouldPrintComment(comment: t.Comment): -1 | 0 | 1 {
+  _shouldPrintComment(comment: t.Comment): PRINT_COMMENT_HINT {
     // Some plugins (such as flow-strip-types) use this to mark comments as removed using the AST-root 'comments' property,
     // where they can't manually mutate the AST node comment lists.
-    if (comment.ignore) return 0;
+    if (comment.ignore) return PRINT_COMMENT_HINT.SKIP;
 
-    if (this._printedComments.has(comment)) return 0;
+    if (this._printedComments.has(comment)) return PRINT_COMMENT_HINT.SKIP;
 
     if (
       this._noLineTerminator &&
       (HAS_NEWLINE.test(comment.value) ||
         HAS_BlOCK_COMMENT_END.test(comment.value))
     ) {
-      return -1;
+      return PRINT_COMMENT_HINT.DEFER;
     }
 
     this._printedComments.add(comment);
 
-    if (!this.format.shouldPrintComment(comment.value)) return 0;
+    if (!this.format.shouldPrintComment(comment.value)) {
+      return PRINT_COMMENT_HINT.SKIP;
+    }
 
-    return 1;
+    return PRINT_COMMENT_HINT.ALLOW;
   }
 
   _printComment(comment: t.Comment, skipNewLines: COMMENT_SKIP_NEWLINE) {
@@ -938,13 +946,13 @@ class Printer {
     // disallowed
     const printNewLines =
       isBlockComment &&
-      skipNewLines !== COMMENT_SKIP_NEWLINE.SKIP_ALL &&
+      skipNewLines !== COMMENT_SKIP_NEWLINE.ALL &&
       !this._noLineTerminator;
 
     if (
       printNewLines &&
       this._buf.hasContent() &&
-      skipNewLines !== COMMENT_SKIP_NEWLINE.SKIP_LEADING
+      skipNewLines !== COMMENT_SKIP_NEWLINE.LEADING
     ) {
       this.newline(1);
     }
@@ -996,7 +1004,7 @@ class Printer {
       this.newline(1, true);
     }
 
-    if (printNewLines && skipNewLines !== COMMENT_SKIP_NEWLINE.SKIP_TRAILING) {
+    if (printNewLines && skipNewLines !== COMMENT_SKIP_NEWLINE.TRAILING) {
       this.newline(1);
     }
   }
@@ -1024,11 +1032,11 @@ class Printer {
       const comment = comments[i];
 
       const shouldPrint = this._shouldPrintComment(comment);
-      if (shouldPrint === -1) {
+      if (shouldPrint === PRINT_COMMENT_HINT.DEFER) {
         hasLoc = false;
         break;
       }
-      if (hasLoc && comment.loc && shouldPrint === 1) {
+      if (hasLoc && comment.loc && shouldPrint === PRINT_COMMENT_HINT.ALLOW) {
         const commentStartLine = comment.loc.start.line;
         const commentEndLine = comment.loc.end.line;
         if (type === COMMENT_TYPE.LEADING) {
@@ -1049,7 +1057,7 @@ class Printer {
           lastLine = commentEndLine;
 
           maybeNewline(offset);
-          this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL);
+          this._printComment(comment, COMMENT_SKIP_NEWLINE.ALL);
 
           if (i + 1 === len) {
             maybeNewline(
@@ -1063,7 +1071,7 @@ class Printer {
           lastLine = commentEndLine;
 
           maybeNewline(offset);
-          this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL);
+          this._printComment(comment, COMMENT_SKIP_NEWLINE.ALL);
 
           if (i + 1 === len) {
             maybeNewline(Math.min(1, nodeEndLine - lastLine)); // TODO: Improve here when inner comments processing is stronger
@@ -1075,11 +1083,11 @@ class Printer {
           lastLine = commentEndLine;
 
           maybeNewline(offset);
-          this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL);
+          this._printComment(comment, COMMENT_SKIP_NEWLINE.ALL);
         }
       } else {
         hasLoc = false;
-        if (shouldPrint !== 1) {
+        if (shouldPrint !== PRINT_COMMENT_HINT.ALLOW) {
           continue;
         }
 
@@ -1099,11 +1107,11 @@ class Printer {
               comment,
               (shouldSkipNewline && node.type !== "ObjectExpression") ||
                 (singleLine && isFunction(parent, { body: node }))
-                ? COMMENT_SKIP_NEWLINE.SKIP_ALL
+                ? COMMENT_SKIP_NEWLINE.ALL
                 : COMMENT_SKIP_NEWLINE.DEFAULT,
             );
           } else if (shouldSkipNewline && type === COMMENT_TYPE.TRAILING) {
-            this._printComment(comment, COMMENT_SKIP_NEWLINE.SKIP_ALL);
+            this._printComment(comment, COMMENT_SKIP_NEWLINE.ALL);
           } else {
             this._printComment(comment, COMMENT_SKIP_NEWLINE.DEFAULT);
           }
@@ -1121,9 +1129,9 @@ class Printer {
           this._printComment(
             comment,
             i === 0
-              ? COMMENT_SKIP_NEWLINE.SKIP_LEADING
+              ? COMMENT_SKIP_NEWLINE.LEADING
               : i === len - 1
-              ? COMMENT_SKIP_NEWLINE.SKIP_TRAILING
+              ? COMMENT_SKIP_NEWLINE.TRAILING
               : COMMENT_SKIP_NEWLINE.DEFAULT,
           );
         } else {
