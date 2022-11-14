@@ -1100,7 +1100,9 @@ Ep.explodeExpression = function(path, ignoreResult) {
   case "ArrayExpression":
     return finish(t.arrayExpression(
       path.get("elements").map(function(elemPath) {
-        if (elemPath.isSpreadElement()) {
+        if (!elemPath.node) {
+          return null;
+        } if (elemPath.isSpreadElement()) {
           return t.spreadElement(
             self.explodeViaTempVar(null, elemPath.get("argument"), hasLeapingChildren)
           );
