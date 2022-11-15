@@ -525,9 +525,32 @@ function transformClass(
     }
 
     if (element.node.decorators && element.node.decorators.length > 0) {
+      switch (element.node.type) {
+        case "ClassProperty":
+          // @ts-expect-error todo: propertyVisitor.ClassProperty should be callable. Improve typings.
+          propertyVisitor.ClassProperty(
+            element as NodePath<t.ClassProperty>,
+            state,
+          );
+          break;
+        case "ClassPrivateProperty":
+          // @ts-expect-error todo: propertyVisitor.ClassPrivateProperty should be callable. Improve typings.
+          propertyVisitor.ClassPrivateProperty(
+            element as NodePath<t.ClassPrivateProperty>,
+            state,
+          );
+          break;
+        case "ClassAccessorProperty":
+          // @ts-expect-error todo: propertyVisitor.ClassAccessorProperty should be callable. Improve typings.
+          propertyVisitor.ClassAccessorProperty(
+            element as NodePath<t.ClassAccessorProperty>,
+            state,
+          );
+          break;
+      }
       hasElementDecorators = true;
     } else if (element.node.type === "ClassAccessorProperty") {
-      // @ts-expect-error todo: propertyVisitor.ClassAccessorProperty should be callable improve typings
+      // @ts-expect-error todo: propertyVisitor.ClassAccessorProperty should be callable. Improve typings.
       propertyVisitor.ClassAccessorProperty(
         element as NodePath<t.ClassAccessorProperty>,
         state,
