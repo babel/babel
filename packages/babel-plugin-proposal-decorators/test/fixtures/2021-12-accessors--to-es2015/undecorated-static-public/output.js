@@ -1,4 +1,6 @@
+var _computedKey;
 const dec = () => {};
+_computedKey = 'c';
 class Foo {
   static get a() {
     return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _A);
@@ -12,10 +14,10 @@ class Foo {
   static set b(v) {
     babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _B, v);
   }
-  static get ['c']() {
+  static get [_computedKey]() {
     return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _C);
   }
-  static set ['c'](v) {
+  static set [_computedKey](v) {
     babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _C, v);
   }
 }

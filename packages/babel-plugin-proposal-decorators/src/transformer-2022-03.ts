@@ -499,6 +499,7 @@ function transformClass(
   constantSuper: boolean,
   version: "2022-03" | "2021-12",
   className: string | t.Identifier | t.StringLiteral | undefined,
+  propertyVisitor: Visitor<PluginPass>,
 ): NodePath {
   const body = path.get("body.body");
 
@@ -506,6 +507,15 @@ function transformClass(
   let hasElementDecorators = false;
 
   const generateClassPrivateUid = createLazyPrivateUidGeneratorForClass(path);
+
+  const assignments: t.AssignmentExpression[] = [];
+  const scopeParent: Scope = path.scope.parent;
+
+  const memoiseExpression = (expression: t.Expression, hint: string) => {
+    const localEvaluatedId = scopeParent.generateDeclaredUidIdentifier(hint);
+    assignments.push(t.assignmentExpression("=", localEvaluatedId, expression));
+    return t.cloneNode(localEvaluatedId);
+  };
 
   // Iterate over the class to see if we need to decorate it, and also to
   // transform simple auto accessors which are not decorated
@@ -517,21 +527,37 @@ function transformClass(
     if (element.node.decorators && element.node.decorators.length > 0) {
       hasElementDecorators = true;
     } else if (element.node.type === "ClassAccessorProperty") {
+      // @ts-expect-error todo: propertyVisitor.ClassAccessorProperty should be callable improve typings
+      propertyVisitor.ClassAccessorProperty(
+        element as NodePath<t.ClassAccessorProperty>,
+        state,
+      );
       const { key, value, static: isStatic, computed } = element.node;
 
       const newId = generateClassPrivateUid();
 
-      const valueNode = value ? t.cloneNode(value) : undefined;
-
-      const newField = generateClassProperty(newId, valueNode, isStatic);
+      const newField = generateClassProperty(newId, value, isStatic);
 
       const [newPath] = element.replaceWith(newField);
-      addProxyAccessorsFor(newPath, key, newId, computed);
+
+      let newKey = key;
+      if (computed && !scopeParent.isStatic(key)) {
+        newKey = memoiseExpression(key as t.Expression, "computedKey");
+      }
+      addProxyAccessorsFor(newPath, newKey, newId, computed);
     }
   }
 
-  // If nothing is decorated, return
-  if (!classDecorators && !hasElementDecorators) return;
+  // If nothing is decorated and no assignments inserted, return
+  if (!classDecorators && !hasElementDecorators) {
+    if (assignments.length > 0) {
+      path.insertBefore(assignments.map(expr => t.expressionStatement(expr)));
+
+      // Recrawl the scope to make sure new identifiers are properly synced
+      path.scope.crawl();
+    }
+    return;
+  }
 
   const elementDecoratorInfo: (DecoratorInfo | ComputedPropInfo)[] = [];
 
@@ -548,14 +574,6 @@ function transformClass(
     staticInitLocal: t.Identifier,
     classInitLocal: t.Identifier,
     classLocal: t.Identifier;
-  const assignments: t.AssignmentExpression[] = [];
-  const scopeParent: Scope = path.scope.parent;
-
-  const memoiseExpression = (expression: t.Expression, hint: string) => {
-    const localEvaluatedId = scopeParent.generateDeclaredUidIdentifier(hint);
-    assignments.push(t.assignmentExpression("=", localEvaluatedId, expression));
-    return t.cloneNode(localEvaluatedId);
-  };
 
   if (classDecorators) {
     classInitLocal = scopeParent.generateDeclaredUidIdentifier("initClass");
@@ -1246,6 +1264,7 @@ export default function (
       constantSuper,
       version,
       className,
+      namedEvaluationVisitor,
     );
     if (newPath) {
       VISITED.add(newPath);
