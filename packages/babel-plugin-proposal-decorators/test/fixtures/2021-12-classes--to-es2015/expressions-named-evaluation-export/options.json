@@ -1,0 +1,10 @@
+{
+  "sourceType": "module",
+  "plugins": [
+    "transform-modules-commonjs",
+    ["proposal-decorators", { "version": "2021-12" }],
+    "proposal-class-properties",
+    "proposal-private-methods",
+    "proposal-class-static-block"
+  ]
+}
