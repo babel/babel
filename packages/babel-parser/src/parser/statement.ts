@@ -2747,8 +2747,9 @@ export default abstract class StatementParser extends ExpressionParser {
     let isImportReflection = false;
     if (this.isContextual(tt._module)) {
       const lookahead = this.lookahead();
-      if (tokenIsIdentifier(lookahead.type)) {
-        if (lookahead.type !== tt._from) {
+      const nextType = lookahead.type;
+      if (tokenIsIdentifier(nextType)) {
+        if (nextType !== tt._from) {
           // import module x
           isImportReflection = true;
         } else {
@@ -2760,9 +2761,10 @@ export default abstract class StatementParser extends ExpressionParser {
             isImportReflection = true;
           }
         }
-      } else {
+      } else if (nextType !== tt.comma) {
         // import module { x } ...
-        // This is invalid, we will continue parsing and throw
+        // import module "foo"
+        // They are invalid, we will continue parsing and throw
         // a recoverable error later
         isImportReflection = true;
       }
