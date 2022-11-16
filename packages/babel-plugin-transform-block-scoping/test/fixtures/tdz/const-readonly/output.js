@@ -3,5 +3,5 @@ maybeCallLater(function () {
   babelHelpers.temporalRef(x, "x");
   2, babelHelpers.readOnlyError("x");
 });
-x = 0;
+var x = 0;
 1, babelHelpers.readOnlyError("x");

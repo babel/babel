@@ -14,8 +14,7 @@ var _iterator = babelHelpers.createForOfIteratorHelper(nums),
 try {
   for (_iterator.s(); !(_step = _iterator.n()).done;) {
     var i = _step.value;
-    var x;
-    var f;
+    var x, f;
     _loop(i);
   }
 } catch (err) {
