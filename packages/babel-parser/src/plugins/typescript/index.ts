@@ -3224,6 +3224,16 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       super.pushClassPrivateMethod(classBody, method, isGenerator, isAsync);
     }
 
+    pushClassAccessorProperty(
+      classBody: Undone<N.ClassBody>,
+      prop: N.ClassAccessorProperty,
+      isPrivate: boolean,
+    ) {
+      const typeAnnotation = this.tsTryParseTypeAnnotation();
+      if (typeAnnotation) prop.typeAnnotation = typeAnnotation;
+      super.pushClassAccessorProperty(classBody, prop, isPrivate);
+    }
+
     declareClassPrivateMethodInScope(
       node: N.ClassPrivateMethod | N.EstreeMethodDefinition | N.TSDeclareMethod,
       kind: number,
