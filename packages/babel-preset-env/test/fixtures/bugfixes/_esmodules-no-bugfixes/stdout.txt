@@ -16,14 +16,14 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-class-static-block { android, chrome < 94, edge < 94, firefox < 93, ios, node < 16.11, opera < 80, safari, samsung }
-  proposal-private-property-in-object { android, chrome < 91, edge < 91, firefox < 90, ios < 15, node < 16.9, opera < 77, safari < 15, samsung }
+  proposal-class-static-block { android, chrome < 94, edge < 94, firefox < 93, ios, node < 16.11, opera < 80, safari, samsung < 17 }
+  proposal-private-property-in-object { android, chrome < 91, edge < 91, firefox < 90, ios < 15, node < 16.9, opera < 77, safari < 15, samsung < 16 }
   proposal-class-properties { android, chrome < 74, edge < 79, firefox < 90, ios < 15, opera < 62, safari < 14.1, samsung < 11 }
   proposal-private-methods { android, chrome < 84, edge < 84, firefox < 90, ios < 15, node < 14.6, opera < 70, safari < 15, samsung < 14 }
   proposal-numeric-separator { android, chrome < 75, edge < 79, firefox < 70, ios < 13, opera < 62, safari < 13, samsung < 11 }
   proposal-logical-assignment-operators { android, chrome < 85, edge < 85, firefox < 79, ios < 14, node < 15, opera < 71, safari < 14, samsung < 14 }
   proposal-nullish-coalescing-operator { android, chrome < 80, edge < 80, firefox < 72, ios < 13.4, node < 14, opera < 67, safari < 13.1, samsung < 13 }
-  proposal-optional-chaining { android, chrome < 91, edge < 91, firefox < 74, ios < 13.4, node < 16.9, opera < 77, safari < 13.1, samsung }
+  proposal-optional-chaining { android, chrome < 91, edge < 91, firefox < 74, ios < 13.4, node < 16.9, opera < 77, safari < 13.1, samsung < 16 }
   proposal-json-strings { android, chrome < 66, edge < 79, firefox < 62, ios < 12, opera < 53, safari < 12, samsung < 9 }
   proposal-optional-catch-binding { android, chrome < 66, edge < 79, ios < 11.3, opera < 53, safari < 11.1, samsung < 9 }
   transform-parameters { edge < 18, ios, safari }
