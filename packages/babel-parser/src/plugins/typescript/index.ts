@@ -90,12 +90,14 @@ const TSErrors = ParseErrorEnum`typescript`({
     propertyName: string;
   }) =>
     `Property '${propertyName}' cannot have an initializer because it is marked abstract.`,
-  AccesorCannotDeclareThisParameter:
+  AccessorCannotBeOptional:
+    "An 'accessor' property cannot be declared optional.",
+  AccessorCannotDeclareThisParameter:
     "'get' and 'set' accessors cannot declare 'this' parameters.",
-  AccesorCannotHaveTypeParameters: "An accessor cannot have type parameters.",
+  AccessorCannotHaveTypeParameters: "An accessor cannot have type parameters.",
   ClassMethodHasDeclare: "Class methods cannot have the 'declare' modifier.",
   ClassMethodHasReadonly: "Class methods cannot have the 'readonly' modifier.",
-  ConstInitiailizerMustBeStringOrNumericLiteralOrLiteralEnumReference:
+  ConstInitializerMustBeStringOrNumericLiteralOrLiteralEnumReference:
     "A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.",
   ConstructorHasTypeParameters:
     "Type parameters cannot appear on a constructor declaration.",
@@ -194,11 +196,11 @@ const TSErrors = ParseErrorEnum`typescript`({
     "This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma, as in `<T,>() => ...`.",
   ReservedTypeAssertion:
     "This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.",
-  SetAccesorCannotHaveOptionalParameter:
+  SetAccessorCannotHaveOptionalParameter:
     "A 'set' accessor cannot have an optional parameter.",
-  SetAccesorCannotHaveRestParameter:
+  SetAccessorCannotHaveRestParameter:
     "A 'set' accessor cannot have rest parameter.",
-  SetAccesorCannotHaveReturnType:
+  SetAccessorCannotHaveReturnType:
     "A 'set' accessor cannot have a return type annotation.",
   SingleTypeParameterWithoutTrailingComma: ({
     typeParameterName,
@@ -835,7 +837,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         }
         const method: N.TsMethodSignature = nodeAny;
         if (method.kind && this.match(tt.lt)) {
-          this.raise(TSErrors.AccesorCannotHaveTypeParameters, {
+          this.raise(TSErrors.AccessorCannotHaveTypeParameters, {
             at: this.state.curPosition(),
           });
         }
@@ -851,7 +853,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           if (method[paramsKey].length > 0) {
             this.raise(Errors.BadGetterArity, { at: this.state.curPosition() });
             if (this.isThisParam(method[paramsKey][0])) {
-              this.raise(TSErrors.AccesorCannotDeclareThisParameter, {
+              this.raise(TSErrors.AccessorCannotDeclareThisParameter, {
                 at: this.state.curPosition(),
               });
             }
@@ -862,7 +864,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           } else {
             const firstParameter = method[paramsKey][0];
             if (this.isThisParam(firstParameter)) {
-              this.raise(TSErrors.AccesorCannotDeclareThisParameter, {
+              this.raise(TSErrors.AccessorCannotDeclareThisParameter, {
                 at: this.state.curPosition(),
               });
             }
@@ -870,18 +872,18 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
               firstParameter.type === "Identifier" &&
               firstParameter.optional
             ) {
-              this.raise(TSErrors.SetAccesorCannotHaveOptionalParameter, {
+              this.raise(TSErrors.SetAccessorCannotHaveOptionalParameter, {
                 at: this.state.curPosition(),
               });
             }
             if (firstParameter.type === "RestElement") {
-              this.raise(TSErrors.SetAccesorCannotHaveRestParameter, {
+              this.raise(TSErrors.SetAccessorCannotHaveRestParameter, {
                 at: this.state.curPosition(),
               });
             }
           }
           if (method[returnTypeKey]) {
-            this.raise(TSErrors.SetAccesorCannotHaveReturnType, {
+            this.raise(TSErrors.SetAccessorCannotHaveReturnType, {
               at: method[returnTypeKey],
             });
           }
@@ -2794,7 +2796,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           !isPossiblyLiteralEnum(init)
         ) {
           this.raise(
-            TSErrors.ConstInitiailizerMustBeStringOrNumericLiteralOrLiteralEnumReference,
+            TSErrors.ConstInitializerMustBeStringOrNumericLiteralOrLiteralEnumReference,
             { at: init },
           );
         }
@@ -3124,10 +3126,14 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     parseClassPropertyAnnotation(
-      node: N.ClassProperty | N.ClassPrivateProperty,
+      node: N.ClassProperty | N.ClassPrivateProperty | N.ClassAccessorProperty,
     ): void {
-      if (!node.optional && this.eat(tt.bang)) {
-        node.definite = true;
+      if (!node.optional) {
+        if (this.eat(tt.bang)) {
+          node.definite = true;
+        } else if (this.eat(tt.question)) {
+          node.optional = true;
+        }
       }
 
       const type = this.tsTryParseTypeAnnotation();
@@ -3181,6 +3187,16 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return super.parseClassPrivateProperty(node);
     }
 
+    parseClassAccessorProperty(
+      node: N.ClassAccessorProperty,
+    ): N.ClassAccessorProperty {
+      this.parseClassPropertyAnnotation(node);
+      if (node.optional) {
+        this.raise(TSErrors.AccessorCannotBeOptional, { at: node });
+      }
+      return super.parseClassAccessorProperty(node);
+    }
+
     pushClassMethod(
       classBody: N.ClassBody,
       method: N.ClassMethod,
@@ -3222,16 +3238,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       const typeParameters = this.tsTryParseTypeParameters();
       if (typeParameters) method.typeParameters = typeParameters;
       super.pushClassPrivateMethod(classBody, method, isGenerator, isAsync);
-    }
-
-    pushClassAccessorProperty(
-      classBody: Undone<N.ClassBody>,
-      prop: N.ClassAccessorProperty,
-      isPrivate: boolean,
-    ) {
-      const typeAnnotation = this.tsTryParseTypeAnnotation();
-      if (typeAnnotation) prop.typeAnnotation = typeAnnotation;
-      super.pushClassAccessorProperty(classBody, prop, isPrivate);
     }
 
     declareClassPrivateMethodInScope(

@@ -35,6 +35,7 @@ export default {
   AwaitNotInAsyncContext:
     "'await' is only allowed within async functions and at the top levels of modules.",
   AwaitNotInAsyncFunction: "'await' is only allowed within async functions.",
+  // TODO: Accesor -> Accessor
   BadGetterArity: "A 'get' accesor must not have any formal parameters.",
   BadSetterArity: "A 'set' accesor must have exactly one formal parameter.",
   BadSetterRestParameter:

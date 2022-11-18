@@ -5,4 +5,10 @@ class Foo {
   accessor [prop4] = 1;
   accessor prop5 = 1;
   accessor prop6;
+  accessor #p;
+  accessor a;
+  accessor aa;
+  accessor #s;
+  accessor f = 1;
+  accessor g;
 }
