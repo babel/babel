@@ -146,6 +146,6 @@ export interface ParseError {
   reasonCode: string;
 }
 
-type ParseResult<Result> = Result & {
+export type ParseResult<Result> = Result & {
   errors: ParseError[];
 };
