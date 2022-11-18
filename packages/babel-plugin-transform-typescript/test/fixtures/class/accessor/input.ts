@@ -5,5 +5,5 @@ abstract class Foo {
   accessor [prop4]: number = 1;
   private accessor prop5: number = 1;
   abstract accessor prop6: number;
-  declare accessor prop7: number;
+  declare accessor prop7: number
 }
