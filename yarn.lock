@@ -2862,7 +2862,6 @@ __metadata:
   resolution: "@babel/plugin-transform-parameters@workspace:packages/babel-plugin-transform-parameters"
   dependencies:
     "@babel/core": "workspace:^"
-    "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
