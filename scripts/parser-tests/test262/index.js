@@ -127,6 +127,10 @@ const ignoredFeatures = new Set([
   "WeakSet",
   "WeakRef",
   "well-formed-json-stringify",
+  "symbols-as-weakmap-keys",
+  "change-array-by-copy",
+  "regexp-duplicate-named-groups",
+  "regexp-match-indices",
 ]);
 
 function featureShouldIgnore(feature) {

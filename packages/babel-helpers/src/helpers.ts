@@ -78,13 +78,14 @@ helpers.classCallCheck = helper("7.0.0-beta.0")`
 `;
 
 helpers.createClass = helper("7.0.0-beta.0")`
+  import toPropertyKey from "toPropertyKey";
   function _defineProperties(target, props) {
     for (var i = 0; i < props.length; i ++) {
       var descriptor = props[i];
       descriptor.enumerable = descriptor.enumerable || false;
       descriptor.configurable = true;
       if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
+      Object.defineProperty(target, toPropertyKey(descriptor.key), descriptor);
     }
   }
 
@@ -137,7 +138,9 @@ helpers.defaults = helper("7.0.0-beta.0")`
 `;
 
 helpers.defineProperty = helper("7.0.0-beta.0")`
+  import toPropertyKey from "toPropertyKey";
   export default function _defineProperty(obj, key, value) {
+    key = toPropertyKey(key);
     // Shortcircuit the slow defineProperty path when possible.
     // We are trying to avoid issues where setters defined on the
     // prototype cause side effects under the fast path of simple

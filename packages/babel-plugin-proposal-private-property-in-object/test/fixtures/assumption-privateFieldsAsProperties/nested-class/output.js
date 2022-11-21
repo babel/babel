@@ -9,9 +9,9 @@ class Foo {
   test() {
     class Nested {
       test() {
-        Object.prototype.hasOwnProperty.call(this, _foo);
+        Object.prototype.hasOwnProperty.call(babelHelpers.checkInRHS(this), _foo);
       }
     }
-    Object.prototype.hasOwnProperty.call(this, _foo);
+    Object.prototype.hasOwnProperty.call(babelHelpers.checkInRHS(this), _foo);
   }
 }

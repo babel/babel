@@ -8,11 +8,11 @@ class Foo {
     class Nested {
       #bar = (_barBrandCheck.add(this), 2);
       test() {
-        _fooBrandCheck.has(this);
-        _barBrandCheck.has(this);
+        _fooBrandCheck.has(babelHelpers.checkInRHS(this));
+        _barBrandCheck.has(babelHelpers.checkInRHS(this));
       }
     }
-    _fooBrandCheck.has(this);
-    _barBrandCheck2.has(this);
+    _fooBrandCheck.has(babelHelpers.checkInRHS(this));
+    _barBrandCheck2.has(babelHelpers.checkInRHS(this));
   }
 }

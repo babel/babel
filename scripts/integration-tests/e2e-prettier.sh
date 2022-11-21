@@ -36,6 +36,9 @@ startLocalRegistry "$root"/verdaccio-config.yml
 yarn install --no-immutable
 yarn info
 
+# Test typings for @babel/parser
+yarn lint:typecheck
+
 # https://github.com/babel/babel/pull/14892#issuecomment-1233180626
 echo "export default () => () => {}" > src/main/create-print-pre-check-function.js
 

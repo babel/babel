@@ -7,10 +7,10 @@ class Foo {
     });
   }
   static test() {
-    return Foo === Foo;
+    return babelHelpers.checkInRHS(Foo) === Foo;
   }
   test() {
-    return _bar.has(this);
+    return _bar.has(babelHelpers.checkInRHS(this));
   }
 }
 var _foo = {

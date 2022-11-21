@@ -24,4 +24,4 @@ expect(() => {
 
   // Asser that this throws, but that it's not
   // a gobbledygook error that is thrown
-}).toThrowError(TypeError)
+}).toThrow(TypeError)

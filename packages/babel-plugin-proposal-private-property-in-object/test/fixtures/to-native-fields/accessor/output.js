@@ -5,6 +5,6 @@ class Foo {
   }
   get #foo() {}
   test(other) {
-    return _FooBrandCheck.has(other);
+    return _FooBrandCheck.has(babelHelpers.checkInRHS(other));
   }
 }

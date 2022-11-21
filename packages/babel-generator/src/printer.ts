@@ -637,7 +637,10 @@ class Printer {
     } else {
       shouldPrintParens = needsParens(node, parent, this._printStack);
     }
-    if (shouldPrintParens) this.token("(");
+    if (shouldPrintParens) {
+      this.token("(");
+      this._endsWithInnerRaw = false;
+    }
 
     this._lastCommentLine = 0;
 

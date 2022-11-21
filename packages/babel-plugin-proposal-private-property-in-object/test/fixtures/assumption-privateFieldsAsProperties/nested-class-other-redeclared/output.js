@@ -21,11 +21,11 @@ class Foo {
         });
       }
       test() {
-        Object.prototype.hasOwnProperty.call(this, _foo);
-        Object.prototype.hasOwnProperty.call(this, _bar2);
+        Object.prototype.hasOwnProperty.call(babelHelpers.checkInRHS(this), _foo);
+        Object.prototype.hasOwnProperty.call(babelHelpers.checkInRHS(this), _bar2);
       }
     }
-    Object.prototype.hasOwnProperty.call(this, _foo);
-    Object.prototype.hasOwnProperty.call(this, _bar);
+    Object.prototype.hasOwnProperty.call(babelHelpers.checkInRHS(this), _foo);
+    Object.prototype.hasOwnProperty.call(babelHelpers.checkInRHS(this), _bar);
   }
 }

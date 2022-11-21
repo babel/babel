@@ -47,7 +47,7 @@ export type ParseErrorConstructor<ErrorDetails> = (a: {
   details: ErrorDetails;
 }) => ParseError<ErrorDetails>;
 
-function toParseErrorConstructor<ErrorDetails>({
+function toParseErrorConstructor<ErrorDetails extends object>({
   toMessage,
   ...properties
 }: ParseErrorCredentials<ErrorDetails>): ParseErrorConstructor<ErrorDetails> {
