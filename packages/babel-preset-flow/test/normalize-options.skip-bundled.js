@@ -23,7 +23,7 @@ describe("normalize options", () => {
       );
     });
     it("should not throw when options is not defined", () => {
-      expect(() => normalizeOptions()).not.toThrowError();
+      expect(() => normalizeOptions()).not.toThrow();
     });
     it("default values", () => {
       expect(normalizeOptions({})).toMatchInlineSnapshot(`
@@ -35,14 +35,12 @@ describe("normalize options", () => {
   });
   (process.env.BABEL_8_BREAKING ? describe.skip : describe)("Babel 7", () => {
     it("should not throw on unknown options", () => {
-      expect(() =>
-        normalizeOptions({ allDeclareField: true }),
-      ).not.toThrowError();
+      expect(() => normalizeOptions({ allDeclareField: true })).not.toThrow();
     });
     it.each(["all", "allowDeclareFields"])(
       "should not throw when `%p` is not a boolean",
       optionName => {
-        expect(() => normalizeOptions({ [optionName]: 0 })).not.toThrowError();
+        expect(() => normalizeOptions({ [optionName]: 0 })).not.toThrow();
       },
     );
     it("default values", () => {

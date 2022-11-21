@@ -15,7 +15,7 @@
   "author": "The Babel Team (https://babel.dev/team)",
   "dependencies": {
     "core-js": "^2.6.12",
-    "regenerator-runtime": "^0.13.10"
+    "regenerator-runtime": "^0.13.11"
   },
   "exports": {
     "./helpers/AsyncGenerator": [
@@ -81,6 +81,15 @@
       "./helpers/awaitAsyncGenerator.js"
     ],
     "./helpers/esm/awaitAsyncGenerator": "./helpers/esm/awaitAsyncGenerator.js",
+    "./helpers/checkInRHS": [
+      {
+        "node": "./helpers/checkInRHS.js",
+        "import": "./helpers/esm/checkInRHS.js",
+        "default": "./helpers/checkInRHS.js"
+      },
+      "./helpers/checkInRHS.js"
+    ],
+    "./helpers/esm/checkInRHS": "./helpers/esm/checkInRHS.js",
     "./helpers/jsx": [
       {
         "node": "./helpers/jsx.js",

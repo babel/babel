@@ -1,5 +1,5 @@
 FLOW_COMMIT = 92bbb5e9dacb8185aa73ea343954d0434b42c40b
-TEST262_COMMIT = eb67a7689f422cf14776f78191650d0d78c2d2e4
+TEST262_COMMIT = ec752ebaaba706d6b388ea2c2b8df729d419b1c4
 TYPESCRIPT_COMMIT = ce85d647ef88183c019588bcf398320ce29b625a
 
 # Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
@@ -192,8 +192,8 @@ new-version-checklist:
 	# @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 	# @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 	# @echo "!!!!!!                                                   !!!!!!"
-	# @echo "!!!!!!         Write any message that should             !!!!!!"
-	# @echo "!!!!!!            block the release here                 !!!!!!"
+	# @echo "!!!!!! Update the minVersion of packages/babel-helpers/src/helpers/checkInRHS.js"
+	# @echo "!!!!!!                                                   !!!!!!"
 	# @echo "!!!!!!                                                   !!!!!!"
 	# @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 	# @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"

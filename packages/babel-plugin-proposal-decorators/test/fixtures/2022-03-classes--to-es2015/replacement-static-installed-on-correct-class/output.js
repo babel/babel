@@ -8,8 +8,8 @@ new (_x = /*#__PURE__*/new WeakMap(), _m = /*#__PURE__*/new WeakSet(), (_temp = 
       writable: true,
       value: void 0
     }), babelHelpers.defineProperty(this, "x", void 0)), (() => {
-      hasX = o => _x.has(o);
-      hasM = o => _m.has(o);
+      hasX = o => _x.has(babelHelpers.checkInRHS(o));
+      hasM = o => _m.has(babelHelpers.checkInRHS(o));
     })(), _initClass();
   }
 }, (() => {

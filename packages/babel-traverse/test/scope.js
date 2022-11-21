@@ -282,6 +282,14 @@ describe("scope", () => {
       });
     });
 
+    it("switch discriminant scope", () => {
+      expect(
+        getPath(`let a = "outside"; switch (a) { default: let a = "inside" }`)
+          .get("body.1.discriminant")
+          .scope.getBinding("a").path.node.init.value,
+      ).toBe("outside");
+    });
+
     it("variable declaration", function () {
       expect(getPath("var foo = null;").scope.getBinding("foo").path.type).toBe(
         "VariableDeclarator",
@@ -702,7 +710,7 @@ describe("scope", () => {
         ];
 
         ast[0].declare = true;
-        expect(() => getPath(ast)).not.toThrowError();
+        expect(() => getPath(ast)).not.toThrow();
       });
     });
 

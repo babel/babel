@@ -1,6 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import type { NodePath, Visitor, Scope, Binding } from "@babel/traverse";
-import { visitor as tdzVisitor } from "./tdz";
+import { skipTDZChecks, visitor as tdzVisitor } from "./tdz";
 import type { TDZVisitorState } from "./tdz";
 import { traverse, template, types as t } from "@babel/core";
 import type { PluginPass } from "@babel/core";
@@ -43,8 +43,7 @@ export default declare((api, opts: Options) => {
               t.cloneNode(decl.id),
               decl.init || scope.buildUndefinedNode(),
             );
-            // @ts-expect-error todo(flow->ts): avoid mutations
-            assign._ignoreBlockScopingTDZ = true;
+            skipTDZChecks.add(assign);
             nodes.push(t.expressionStatement(assign));
             decl.init = this.addHelper("temporalUndefined");
           }

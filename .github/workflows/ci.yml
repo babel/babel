@@ -125,15 +125,14 @@ jobs:
       - name: Ensure cwd does not contain uncommitted changes
         run: |
           node ./scripts/assert-dir-git-clean.js build
+      - name: Prepare artifacts
+        run: |
+          ./scripts/get-artifact-files.sh | tar --null -cvf babel-artifact.tar --files-from=-
       - uses: actions/upload-artifact@v3
         with:
           name: babel-artifact
-          path: |
-            codemods/*/lib/**/*
-            eslint/*/lib/**/*
-            packages/*/lib/**/*
-            packages/babel-standalone/*.js
-            !**/node_modules/**
+          path: babel-artifact.tar
+          retention-days: 5
 
   build-windows:
     name: Build Babel Artifacts On Windows
@@ -179,6 +178,8 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: babel-artifact
+      - name: Extract artifacts
+        run: tar -xf babel-artifact.tar; rm babel-artifact.tar
       - name: Lint
         run: make -j tscheck lint-ci
       - name: Ensure cwd does not contain uncommitted changes
@@ -223,9 +224,8 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: babel-artifact
-      - name: Generate runtime helpers
-        run: |
-          make build-plugin-transform-runtime-dist
+      - name: Extract artifacts
+        run: tar -xf babel-artifact.tar; rm babel-artifact.tar
       - name: Use Node.js ${{ matrix.node-version }} # Checkout node version for test executor
         uses: actions/setup-node@v3
         with:
@@ -272,15 +272,14 @@ jobs:
           BABEL_ENV: test
           BABEL_8_BREAKING: true
           BABEL_TYPES_8_BREAKING: true
+      - name: Prepare artifacts
+        run: |
+          ./scripts/get-artifact-files.sh | tar --null -cvf babel-artifact.tar --files-from=-
       - uses: actions/upload-artifact@v3
         with:
-          name: babel8-test-artifact
-          path: |
-            codemods/*/lib/**/*
-            eslint/*/lib/**/*
-            packages/*/lib/**/*
-            packages/babel-standalone/*.js
-            !**/node_modules/**
+          name: babel8-artifact
+          path: babel-artifact.tar
+          retention-days: 5
 
   test-babel-8-breaking:
     name: Test Babel 8 breaking changes on
@@ -302,7 +301,9 @@ jobs:
           yarn install
       - uses: actions/download-artifact@v3
         with:
-          name: babel8-test-artifact
+          name: babel8-artifact
+      - name: Extract artifacts
+        run: tar -xf babel-artifact.tar; rm babel-artifact.tar
       - name: Generate runtime helpers
         run: make build-plugin-transform-runtime-dist
       - name: Test
@@ -334,8 +335,8 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: babel-artifact
-      - name: Generate runtime helpers
-        run: make build-plugin-transform-runtime-dist
+      - name: Extract artifacts
+        run: tar -xf babel-artifact.tar; rm babel-artifact.tar
       - name: Test on Windows
         # Hack: --color has supports-color@5 returned true for GitHub CI
         # Remove once `chalk` is bumped to 4.0.
@@ -361,6 +362,8 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: babel-artifact
+      - name: Extract artifacts
+        run: tar -xf babel-artifact.tar; rm babel-artifact.tar
       - name: Download tests
         run: make -j bootstrap-flow bootstrap-typescript bootstrap-test262
       - name: Run Test262 Tests
@@ -407,9 +410,8 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: babel-artifact
-      - name: Generate runtime helpers
-        run: |
-          make build-plugin-transform-runtime-dist
+      - name: Extract artifacts
+        run: tar -xf babel-artifact.tar; rm babel-artifact.tar
       - name: Generate absoluteRuntime tests
         run: yarn test:runtime:generate-absolute-runtime
       - name: Test bundlers
@@ -495,6 +497,8 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: babel-artifact
+      - name: Extract artifacts
+        run: tar -xf babel-artifact.tar; rm babel-artifact.tar
       - name: Downgrade ESLint to 7.5.0
         run: yarn up eslint@7.5.0
       - name: Run babel/eslint tests
@@ -553,6 +557,8 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: babel-artifact
+      - name: Extract artifacts
+        run: tar -xf babel-artifact.tar; rm babel-artifact.tar
       - name: Checkout test runner
         uses: actions/checkout@v3
         with:

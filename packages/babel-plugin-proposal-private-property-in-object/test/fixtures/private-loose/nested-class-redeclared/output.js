@@ -24,12 +24,12 @@ let Foo = /*#__PURE__*/function () {
         babelHelpers.createClass(Nested, [{
           key: "test",
           value: function test() {
-            Object.prototype.hasOwnProperty.call(this, _foo2);
+            Object.prototype.hasOwnProperty.call(babelHelpers.checkInRHS(this), _foo2);
           }
         }]);
         return Nested;
       }();
-      Object.prototype.hasOwnProperty.call(this, _foo);
+      Object.prototype.hasOwnProperty.call(babelHelpers.checkInRHS(this), _foo);
     }
   }]);
   return Foo;

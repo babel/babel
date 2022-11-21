@@ -15,13 +15,13 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-class-static-block { firefox < 93, ios, safari, samsung }
-  proposal-private-property-in-object { ios < 15, samsung }
+  proposal-class-static-block { firefox < 93, ios, safari }
+  proposal-private-property-in-object { ios < 15 }
   proposal-class-properties { ios < 15 }
   proposal-private-methods { ios < 15 }
   syntax-numeric-separator
   syntax-nullish-coalescing-operator
-  proposal-optional-chaining { samsung }
+  syntax-optional-chaining
   syntax-json-strings
   syntax-optional-catch-binding
   transform-parameters { ios, safari }

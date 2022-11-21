@@ -85,6 +85,7 @@ export function assertRootMode(
       `${msg(loc)} must be a "root", "upward", "upward-optional" or undefined`,
     );
   }
+  // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
   return value;
 }
 
@@ -102,6 +103,7 @@ export function assertSourceMaps(
       `${msg(loc)} must be a boolean, "inline", "both", or undefined`,
     );
   }
+  // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
   return value;
 }
 
@@ -112,6 +114,7 @@ export function assertCompact(
   if (value !== undefined && typeof value !== "boolean" && value !== "auto") {
     throw new Error(`${msg(loc)} must be a boolean, "auto", or undefined`);
   }
+  // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
   return value;
 }
 
@@ -129,6 +132,7 @@ export function assertSourceType(
       `${msg(loc)} must be "module", "script", "unambiguous", or undefined`,
     );
   }
+  // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
   return value;
 }
 
@@ -186,6 +190,7 @@ export function assertString(loc: GeneralPath, value: unknown): string | void {
   if (value !== undefined && typeof value !== "string") {
     throw new Error(`${msg(loc)} must be a string, or undefined`);
   }
+  // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
   return value;
 }
 
@@ -196,6 +201,7 @@ export function assertFunction(
   if (value !== undefined && typeof value !== "function") {
     throw new Error(`${msg(loc)} must be a function, or undefined`);
   }
+  // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
   return value;
 }
 
@@ -206,6 +212,7 @@ export function assertBoolean(
   if (value !== undefined && typeof value !== "boolean") {
     throw new Error(`${msg(loc)} must be a boolean, or undefined`);
   }
+  // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
   return value;
 }
 
@@ -263,7 +270,10 @@ export function assertConfigApplicableTest(
   loc: OptionPath,
   value: unknown,
 ): ConfigApplicableTest | void {
-  if (value === undefined) return value;
+  if (value === undefined) {
+    // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
+    return value;
+  }
 
   if (Array.isArray(value)) {
     value.forEach((item, i) => {
@@ -303,7 +313,7 @@ export function assertConfigFileSearch(
         `got ${JSON.stringify(value)}`,
     );
   }
-
+  // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
   return value;
 }
 
@@ -311,7 +321,10 @@ export function assertBabelrcSearch(
   loc: OptionPath,
   value: unknown,
 ): BabelrcSearch | void {
-  if (value === undefined || typeof value === "boolean") return value;
+  if (value === undefined || typeof value === "boolean") {
+    // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
+    return value;
+  }
 
   if (Array.isArray(value)) {
     value.forEach((item, i) => {

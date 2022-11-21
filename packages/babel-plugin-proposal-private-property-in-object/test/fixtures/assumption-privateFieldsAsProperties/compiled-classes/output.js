@@ -13,12 +13,12 @@ let Foo = /*#__PURE__*/function () {
   babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test() {
-      return Object.prototype.hasOwnProperty.call(this, _bar);
+      return Object.prototype.hasOwnProperty.call(babelHelpers.checkInRHS(this), _bar);
     }
   }], [{
     key: "test",
     value: function test() {
-      return Object.prototype.hasOwnProperty.call(Foo, _foo);
+      return Object.prototype.hasOwnProperty.call(babelHelpers.checkInRHS(Foo), _foo);
     }
   }]);
   return Foo;

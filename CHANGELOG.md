@@ -23,6 +23,13 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.20.4 (2022-11-08)
+
+#### :bug: Bug Fix
+* `babel-generator`
+  * [#15160](https://github.com/babel/babel/pull/15160) Fix printing of comments before `=>` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`, `babel-plugin-transform-typescript`
+  * [#15144](https://github.com/babel/babel/pull/15144) Falback to printing inner comments as trailing ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.20.3 (2022-11-07)
 
 #### :bug: Bug Fix
