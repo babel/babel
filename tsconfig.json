@@ -72,6 +72,7 @@
     "./packages/babel-plugin-proposal-unicode-property-regex/src/**/*.ts",
     "./packages/babel-plugin-proposal-unicode-sets-regex/src/**/*.ts",
     "./packages/babel-plugin-syntax-async-do-expressions/src/**/*.ts",
+    "./packages/babel-plugin-syntax-await-ops/src/**/*.ts",
     "./packages/babel-plugin-syntax-decimal/src/**/*.ts",
     "./packages/babel-plugin-syntax-decorators/src/**/*.ts",
     "./packages/babel-plugin-syntax-destructuring-private/src/**/*.ts",
@@ -381,6 +382,9 @@
       ],
       "@babel/plugin-syntax-async-do-expressions": [
         "./packages/babel-plugin-syntax-async-do-expressions/src"
+      ],
+      "@babel/plugin-syntax-await-ops": [
+        "./packages/babel-plugin-syntax-await-ops/src"
       ],
       "@babel/plugin-syntax-decimal": [
         "./packages/babel-plugin-syntax-decimal/src"

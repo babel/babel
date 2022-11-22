@@ -1822,6 +1822,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/plugin-syntax-await-ops@workspace:packages/babel-plugin-syntax-await-ops":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-syntax-await-ops@workspace:packages/babel-plugin-syntax-await-ops"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-syntax-bigint@npm:^7.8.3":
   version: 7.8.3
   resolution: "@babel/plugin-syntax-bigint@npm:7.8.3"
