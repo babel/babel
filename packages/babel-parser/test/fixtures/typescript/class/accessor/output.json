@@ -1,18 +1,15 @@
 {
   "type": "File",
-  "start":0,"end":441,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":21,"column":1,"index":441}},
-  "errors": [
-    "SyntaxError: An 'accessor' property cannot be declared optional. (13:2)"
-  ],
+  "start":0,"end":224,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":1,"index":224}},
   "program": {
     "type": "Program",
-    "start":0,"end":441,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":21,"column":1,"index":441}},
+    "start":0,"end":224,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":1,"index":224}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "ClassDeclaration",
-        "start":0,"end":392,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":16,"column":1,"index":392}},
+        "start":0,"end":224,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":1,"index":224}},
         "abstract": true,
         "id": {
           "type": "Identifier",
@@ -22,7 +19,7 @@
         "superClass": null,
         "body": {
           "type": "ClassBody",
-          "start":19,"end":392,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":16,"column":1,"index":392}},
+          "start":19,"end":224,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":8,"column":1,"index":224}},
           "body": [
             {
               "type": "ClassAccessorProperty",
@@ -189,193 +186,6 @@
                 }
               },
               "value": null
-            },
-            {
-              "type": "ClassAccessorProperty",
-              "start":225,"end":256,"loc":{"start":{"line":8,"column":2,"index":225},"end":{"line":8,"column":33,"index":256}},
-              "declare": true,
-              "static": false,
-              "key": {
-                "type": "Identifier",
-                "start":242,"end":247,"loc":{"start":{"line":8,"column":19,"index":242},"end":{"line":8,"column":24,"index":247},"identifierName":"prop7"},
-                "name": "prop7"
-              },
-              "computed": false,
-              "typeAnnotation": {
-                "type": "TSTypeAnnotation",
-                "start":247,"end":255,"loc":{"start":{"line":8,"column":24,"index":247},"end":{"line":8,"column":32,"index":255}},
-                "typeAnnotation": {
-                  "type": "TSNumberKeyword",
-                  "start":249,"end":255,"loc":{"start":{"line":8,"column":26,"index":249},"end":{"line":8,"column":32,"index":255}}
-                }
-              },
-              "value": null
-            },
-            {
-              "type": "ClassAccessorProperty",
-              "start":259,"end":284,"loc":{"start":{"line":9,"column":2,"index":259},"end":{"line":9,"column":27,"index":284}},
-              "accessibility": "private",
-              "static": false,
-              "key": {
-                "type": "PrivateName",
-                "start":276,"end":278,"loc":{"start":{"line":9,"column":19,"index":276},"end":{"line":9,"column":21,"index":278}},
-                "id": {
-                  "type": "Identifier",
-                  "start":277,"end":278,"loc":{"start":{"line":9,"column":20,"index":277},"end":{"line":9,"column":21,"index":278},"identifierName":"p"},
-                  "name": "p"
-                }
-              },
-              "computed": false,
-              "typeAnnotation": {
-                "type": "TSTypeAnnotation",
-                "start":278,"end":283,"loc":{"start":{"line":9,"column":21,"index":278},"end":{"line":9,"column":26,"index":283}},
-                "typeAnnotation": {
-                  "type": "TSAnyKeyword",
-                  "start":280,"end":283,"loc":{"start":{"line":9,"column":23,"index":280},"end":{"line":9,"column":26,"index":283}}
-                }
-              },
-              "value": null
-            },
-            {
-              "type": "ClassAccessorProperty",
-              "start":288,"end":300,"loc":{"start":{"line":11,"column":2,"index":288},"end":{"line":11,"column":14,"index":300}},
-              "static": false,
-              "key": {
-                "type": "Identifier",
-                "start":297,"end":298,"loc":{"start":{"line":11,"column":11,"index":297},"end":{"line":11,"column":12,"index":298},"identifierName":"a"},
-                "name": "a"
-              },
-              "computed": false,
-              "definite": true,
-              "value": null
-            },
-            {
-              "type": "ClassAccessorProperty",
-              "start":303,"end":324,"loc":{"start":{"line":12,"column":2,"index":303},"end":{"line":12,"column":23,"index":324}},
-              "abstract": true,
-              "static": false,
-              "key": {
-                "type": "PrivateName",
-                "start":321,"end":323,"loc":{"start":{"line":12,"column":20,"index":321},"end":{"line":12,"column":22,"index":323}},
-                "id": {
-                  "type": "Identifier",
-                  "start":322,"end":323,"loc":{"start":{"line":12,"column":21,"index":322},"end":{"line":12,"column":22,"index":323},"identifierName":"s"},
-                  "name": "s"
-                }
-              },
-              "computed": false,
-              "value": null
-            },
-            {
-              "type": "ClassAccessorProperty",
-              "start":327,"end":340,"loc":{"start":{"line":13,"column":2,"index":327},"end":{"line":13,"column":15,"index":340}},
-              "static": false,
-              "key": {
-                "type": "PrivateName",
-                "start":336,"end":338,"loc":{"start":{"line":13,"column":11,"index":336},"end":{"line":13,"column":13,"index":338}},
-                "id": {
-                  "type": "Identifier",
-                  "start":337,"end":338,"loc":{"start":{"line":13,"column":12,"index":337},"end":{"line":13,"column":13,"index":338},"identifierName":"d"},
-                  "name": "d"
-                }
-              },
-              "computed": false,
-              "optional": true,
-              "value": null
-            },
-            {
-              "type": "ClassAccessorProperty",
-              "start":343,"end":367,"loc":{"start":{"line":14,"column":2,"index":343},"end":{"line":14,"column":26,"index":367}},
-              "abstract": true,
-              "static": false,
-              "key": {
-                "type": "Identifier",
-                "start":361,"end":362,"loc":{"start":{"line":14,"column":20,"index":361},"end":{"line":14,"column":21,"index":362},"identifierName":"f"},
-                "name": "f"
-              },
-              "computed": false,
-              "value": {
-                "type": "NumericLiteral",
-                "start":365,"end":366,"loc":{"start":{"line":14,"column":24,"index":365},"end":{"line":14,"column":25,"index":366}},
-                "extra": {
-                  "rawValue": 1,
-                  "raw": "1"
-                },
-                "value": 1
-              }
-            },
-            {
-              "type": "ClassAccessorProperty",
-              "start":370,"end":390,"loc":{"start":{"line":15,"column":2,"index":370},"end":{"line":15,"column":22,"index":390}},
-              "readonly": true,
-              "static": false,
-              "key": {
-                "type": "Identifier",
-                "start":388,"end":389,"loc":{"start":{"line":15,"column":20,"index":388},"end":{"line":15,"column":21,"index":389},"identifierName":"g"},
-                "name": "g"
-              },
-              "computed": false,
-              "value": null
-            }
-          ]
-        }
-      },
-      {
-        "type": "ClassDeclaration",
-        "start":394,"end":441,"loc":{"start":{"line":18,"column":0,"index":394},"end":{"line":21,"column":1,"index":441}},
-        "declare": true,
-        "id": {
-          "type": "Identifier",
-          "start":408,"end":409,"loc":{"start":{"line":18,"column":14,"index":408},"end":{"line":18,"column":15,"index":409},"identifierName":"C"},
-          "name": "C"
-        },
-        "superClass": null,
-        "body": {
-          "type": "ClassBody",
-          "start":410,"end":441,"loc":{"start":{"line":18,"column":16,"index":410},"end":{"line":21,"column":1,"index":441}},
-          "body": [
-            {
-              "type": "ClassAccessorProperty",
-              "start":414,"end":429,"loc":{"start":{"line":19,"column":2,"index":414},"end":{"line":19,"column":17,"index":429}},
-              "static": false,
-              "key": {
-                "type": "Identifier",
-                "start":423,"end":424,"loc":{"start":{"line":19,"column":11,"index":423},"end":{"line":19,"column":12,"index":424},"identifierName":"x"},
-                "name": "x"
-              },
-              "computed": false,
-              "value": {
-                "type": "NumericLiteral",
-                "start":427,"end":428,"loc":{"start":{"line":19,"column":15,"index":427},"end":{"line":19,"column":16,"index":428}},
-                "extra": {
-                  "rawValue": 1,
-                  "raw": "1"
-                },
-                "value": 1
-              }
-            },
-            {
-              "type": "ClassPrivateProperty",
-              "start":432,"end":439,"loc":{"start":{"line":20,"column":2,"index":432},"end":{"line":20,"column":9,"index":439}},
-              "static": false,
-              "key": {
-                "type": "PrivateName",
-                "start":432,"end":434,"loc":{"start":{"line":20,"column":2,"index":432},"end":{"line":20,"column":4,"index":434}},
-                "id": {
-                  "type": "Identifier",
-                  "start":433,"end":434,"loc":{"start":{"line":20,"column":3,"index":433},"end":{"line":20,"column":4,"index":434},"identifierName":"y"},
-                  "name": "y"
-                }
-              },
-              "value": {
-                "type": "NumericLiteral",
-                "start":437,"end":438,"loc":{"start":{"line":20,"column":7,"index":437},"end":{"line":20,"column":8,"index":438}},
-                "extra": {
-                  "rawValue": 1,
-                  "raw": "1"
-                },
-                "value": 1
-              }
             }
           ]
         }
