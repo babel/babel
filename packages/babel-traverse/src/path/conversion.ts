@@ -296,7 +296,7 @@ function hoistFunctionEnvironment(
       );
     }
     if (!allowInsertArrowWithRest) {
-      // NOTE: This may happen in `@babel/preset-env` with target `since 2017`, or in the default setting of `create-react-app`.
+      // preset-env with target `since 2017` enables `transform-parameters` without `transform-classes`.
       throw superCalls[0].buildCodeFrameError(
         "When using '@babel/plugin-transform-parameters', " +
           "it's not possible to compile `super()` in an arrow function with default or rest parameters without compiling classes.\n" +
