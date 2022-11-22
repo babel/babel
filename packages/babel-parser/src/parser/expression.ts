@@ -19,6 +19,7 @@
 import {
   tokenCanStartExpression,
   tokenIsAssignment,
+  tokenIsAwaitOperation,
   tokenIsIdentifier,
   tokenIsKeywordOrIdentifier,
   tokenIsOperator,
@@ -2872,6 +2873,21 @@ export default abstract class ExpressionParser extends LValParser {
       } else {
         this.sawUnambiguousESM = true;
       }
+    }
+
+    if (this.eat(tt.dot)) {
+      this.expectPlugin("awaitOps");
+      const { containsEsc, type } = this.state;
+      const operationNode = this.parseIdentifier(true);
+      if (containsEsc || !tokenIsAwaitOperation(type)) {
+        this.raise(Errors.UnsupportedAwaitOperation, {
+          at: node,
+          operation: this.input.slice(operationNode.start, operationNode.end),
+        });
+      }
+      node.operation = operationNode;
+    } else if (this.hasPlugin("awaitOps")) {
+      node.operation = null;
     }
 
     if (!this.state.soloAwait) {

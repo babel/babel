@@ -1,0 +1,4 @@
+{
+  "plugins": [],
+  "throws": "This experimental syntax requires enabling the parser plugin: \"awaitOps\". (2:8)"
+}

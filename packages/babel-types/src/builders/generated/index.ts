@@ -826,10 +826,14 @@ export function yieldExpression(
     delegate,
   });
 }
-export function awaitExpression(argument: t.Expression): t.AwaitExpression {
+export function awaitExpression(
+  argument: t.Expression,
+  operation: t.Identifier | null = null,
+): t.AwaitExpression {
   return validateNode<t.AwaitExpression>({
     type: "AwaitExpression",
     argument,
+    operation,
   });
 }
 function _import(): t.Import {

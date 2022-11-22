@@ -10,6 +10,7 @@ import {
   ASSIGNMENT_OPERATORS,
   UNARY_OPERATORS,
   UPDATE_OPERATORS,
+  AWAIT_OPERATIONS,
 } from "../constants";
 
 import {
@@ -2099,12 +2100,31 @@ defineType("YieldExpression", {
 
 // --- ES2017 ---
 defineType("AwaitExpression", {
-  builder: ["argument"],
-  visitor: ["argument"],
+  builder: ["argument", "operation"],
+  visitor: ["argument", "operation"],
   aliases: ["Expression", "Terminatorless"],
   fields: {
     argument: {
       validate: assertNodeType("Expression"),
+    },
+    // https://github.com/tc39/proposal-await.ops
+    operation: {
+      validate: chain(assertNodeType("Identifier"), function (
+        node: t.AwaitExpression,
+        key,
+        val: t.Identifier,
+      ) {
+        if (
+          !AWAIT_OPERATIONS.includes(
+            val.name as typeof AWAIT_OPERATIONS[number],
+          )
+        ) {
+          throw new TypeError(
+            `The only valid await operation is one of "all", "allSettled", "any" and "race", currently got "${val.name}"`,
+          );
+        }
+      } as Validator),
+      optional: true,
     },
   },
 });
