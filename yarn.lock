@@ -1254,6 +1254,22 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-proposal-await-ops@workspace:packages/babel-plugin-proposal-await-ops":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-proposal-await-ops@workspace:packages/babel-plugin-proposal-await-ops"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/plugin-syntax-await-ops": "workspace:^"
+    "@babel/plugin-transform-async-to-generator": "workspace:^"
+    "@babel/plugin-transform-regenerator": "workspace:^"
+    babel-plugin-polyfill-corejs3: ^0.6.0
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-proposal-class-properties@npm:^7.18.6":
   version: 7.18.6
   resolution: "@babel/plugin-proposal-class-properties@npm:7.18.6"
@@ -1822,7 +1838,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-await-ops@workspace:packages/babel-plugin-syntax-await-ops":
+"@babel/plugin-syntax-await-ops@workspace:^, @babel/plugin-syntax-await-ops@workspace:packages/babel-plugin-syntax-await-ops":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-await-ops@workspace:packages/babel-plugin-syntax-await-ops"
   dependencies:

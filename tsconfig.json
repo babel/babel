@@ -45,6 +45,7 @@
     "./packages/babel-plugin-external-helpers/src/**/*.ts",
     "./packages/babel-plugin-proposal-async-do-expressions/src/**/*.ts",
     "./packages/babel-plugin-proposal-async-generator-functions/src/**/*.ts",
+    "./packages/babel-plugin-proposal-await-ops/src/**/*.ts",
     "./packages/babel-plugin-proposal-class-properties/src/**/*.ts",
     "./packages/babel-plugin-proposal-class-static-block/src/**/*.ts",
     "./packages/babel-plugin-proposal-decorators/src/**/*.ts",
@@ -301,6 +302,9 @@
       ],
       "@babel/plugin-proposal-async-generator-functions": [
         "./packages/babel-plugin-proposal-async-generator-functions/src"
+      ],
+      "@babel/plugin-proposal-await-ops": [
+        "./packages/babel-plugin-proposal-await-ops/src"
       ],
       "@babel/plugin-proposal-class-properties": [
         "./packages/babel-plugin-proposal-class-properties/src"
