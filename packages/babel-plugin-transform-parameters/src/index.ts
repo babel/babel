@@ -27,7 +27,10 @@ export default declare((api, options: Options) => {
             .some(param => param.isRestElement() || param.isAssignmentPattern())
         ) {
           // default/rest visitors require access to `arguments`, so it cannot be an arrow
-          path.arrowFunctionToExpression({ noNewArrows });
+          path.arrowFunctionToExpression({
+            allowInsertArrowWithRest: false,
+            noNewArrows,
+          });
 
           // In some cases arrowFunctionToExpression replaces the function with a wrapper.
           // Return early; the wrapped function will be visited later in the AST traversal.
