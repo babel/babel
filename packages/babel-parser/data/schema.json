@@ -122,8 +122,8 @@
           },
           {
             "enum": [
-              "awaitOps",
               "asyncGenerators",
+              "awaitOps",
               "bigInt",
               "classPrivateMethods",
               "classPrivateProperties",
