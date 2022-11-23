@@ -1,4 +1,5 @@
 {
+  "targets": "safari 6",
   "plugins": [
     "proposal-await-ops",
     "transform-async-to-generator",
