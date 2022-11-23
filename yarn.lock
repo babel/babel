@@ -1254,7 +1254,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-proposal-await-ops@workspace:packages/babel-plugin-proposal-await-ops":
+"@babel/plugin-proposal-await-ops@workspace:^, @babel/plugin-proposal-await-ops@workspace:packages/babel-plugin-proposal-await-ops":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-await-ops@workspace:packages/babel-plugin-proposal-await-ops"
   dependencies:
@@ -3665,6 +3665,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/plugin-external-helpers": "workspace:^"
     "@babel/plugin-proposal-async-generator-functions": "workspace:^"
+    "@babel/plugin-proposal-await-ops": "workspace:^"
     "@babel/plugin-proposal-class-properties": "workspace:^"
     "@babel/plugin-proposal-class-static-block": "workspace:^"
     "@babel/plugin-proposal-decorators": "workspace:^"
@@ -3690,6 +3691,7 @@ __metadata:
     "@babel/plugin-proposal-throw-expressions": "workspace:^"
     "@babel/plugin-proposal-unicode-property-regex": "workspace:^"
     "@babel/plugin-proposal-unicode-sets-regex": "workspace:^"
+    "@babel/plugin-syntax-await-ops": "workspace:^"
     "@babel/plugin-syntax-decimal": "workspace:^"
     "@babel/plugin-syntax-decorators": "workspace:^"
     "@babel/plugin-syntax-destructuring-private": "workspace:^"
