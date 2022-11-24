@@ -3134,11 +3134,7 @@ export default abstract class ExpressionParser extends LValParser {
     return ret;
   }
 
-  // https://github.com/tc39/proposal-js-module-blocks
-  parseModuleExpression(this: Parser): N.ModuleExpression {
-    this.expectPlugin("moduleBlocks");
-    const node = this.startNode<N.ModuleExpression>();
-    this.next(); // eat "module"
+  parseModuleBody(this: Parser, node: Undone<N.ModuleExpression>) {
     if (!this.match(tt.braceL)) {
       this.unexpected(null, tt.braceL);
     }
@@ -3154,6 +3150,14 @@ export default abstract class ExpressionParser extends LValParser {
     } finally {
       revertScopes();
     }
+  }
+
+  // https://github.com/tc39/proposal-module-expressions
+  parseModuleExpression(this: Parser): N.ModuleExpression {
+    this.expectPlugin("moduleBlocks");
+    const node = this.startNode<N.ModuleExpression>();
+    this.next(); // eat "module"
+    this.parseModuleBody(node);
     return this.finishNode<N.ModuleExpression>(node, "ModuleExpression");
   }
 

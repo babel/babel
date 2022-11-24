@@ -1050,7 +1050,7 @@ interface ModuleExpression <: Expression {
 }
 ```
 
-A inline module expression proposed in https://github.com/tc39/proposal-js-module-blocks.
+An inline module expression proposed in https://github.com/tc39/proposal-module-expressions.
 
 ## TopicReference
 
