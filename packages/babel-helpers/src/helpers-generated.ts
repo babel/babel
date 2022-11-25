@@ -45,6 +45,14 @@ export default Object.freeze({
     "7.20.1",
     'export default function _checkInRHS(value){if(Object(value)!==value)throw TypeError("right-hand side of \'in\' should be an object, got "+(null!==value?typeof value:"null"));return value}',
   ),
+  iterableToArrayLimit: helper(
+    "7.0.0-beta.0",
+    'export default function _iterableToArrayLimit(arr,i){var _i=null==arr?null:"undefined"!=typeof Symbol&&arr[Symbol.iterator]||arr["@@iterator"];if(null!=_i){var _s,_e,_x,_r,_arr=[],_n=!0,_d=!1;try{if(_x=(_i=_i.call(arr)).next,0===i){if(Object(_i)!==_i)return;_n=!1}else for(;!(_n=(_s=_x.call(_i)).done)&&(_arr.push(_s.value),_arr.length!==i);_n=!0);}catch(err){_d=!0,_e=err}finally{try{if(!_n&&null!=_i.return&&(_r=_i.return(),Object(_r)!==_r))return}finally{if(_d)throw _e}}return _arr}}',
+  ),
+  iterableToArrayLimitLoose: helper(
+    "7.0.0-beta.0",
+    'export default function _iterableToArrayLimitLoose(arr,i){var _i=arr&&("undefined"!=typeof Symbol&&arr[Symbol.iterator]||arr["@@iterator"]);if(null!=_i){var _s,_arr=[];for(_i=_i.call(arr);arr.length<i&&!(_s=_i.next()).done;)_arr.push(_s.value);return _arr}}',
+  ),
   jsx: helper(
     "7.0.0-beta.0",
     'var REACT_ELEMENT_TYPE;export default function _createRawReactElement(type,props,key,children){REACT_ELEMENT_TYPE||(REACT_ELEMENT_TYPE="function"==typeof Symbol&&Symbol.for&&Symbol.for("react.element")||60103);var defaultProps=type&&type.defaultProps,childrenLength=arguments.length-3;if(props||0===childrenLength||(props={children:void 0}),1===childrenLength)props.children=children;else if(childrenLength>1){for(var childArray=new Array(childrenLength),i=0;i<childrenLength;i++)childArray[i]=arguments[i+3];props.children=childArray}if(props&&defaultProps)for(var propName in defaultProps)void 0===props[propName]&&(props[propName]=defaultProps[propName]);else props||(props=defaultProps||{});return{$$typeof:REACT_ELEMENT_TYPE,type:type,key:void 0===key?null:""+key,ref:null,props:props,_owner:null}}',
