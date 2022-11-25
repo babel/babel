@@ -160,7 +160,9 @@ export function arrowFunctionToExpression(
     specCompliant?: boolean | void;
     noNewArrows?: boolean;
   } = {},
-): NodePath<Exclude<t.Function, t.Method | t.ArrowFunctionExpression>> {
+): NodePath<
+  Exclude<t.Function, t.Method | t.ArrowFunctionExpression> | t.CallExpression
+> {
   if (!this.isArrowFunctionExpression()) {
     throw (this as NodePath).buildCodeFrameError(
       "Cannot convert non-arrow function to a function expression.",
