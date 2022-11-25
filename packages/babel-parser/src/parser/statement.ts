@@ -335,6 +335,19 @@ export default abstract class StatementParser extends ExpressionParser {
     );
   }
 
+  /**
+   * Assuming we have seen a contextual `using` and declaration is allowed, check if it
+   * starts a variable declaration so that it should be interpreted as a keyword.
+   *
+   * @returns {boolean}
+   * @memberof StatementParser
+   */
+  hasFollowingBindingIdentifier(): boolean {
+    const next = this.nextTokenStart();
+    const nextCh = this.codePointAtPos(next);
+    return this.chStartsBindingIdentifier(nextCh, next);
+  }
+
   startsUsingForOf(): boolean {
     const lookahead = this.lookahead();
     if (lookahead.type === tt._of && !lookahead.containsEsc) {
@@ -466,7 +479,7 @@ export default abstract class StatementParser extends ExpressionParser {
         if (
           this.hasFollowingLineBreak() ||
           this.state.containsEsc ||
-          !this.hasFollowingBindingAtom()
+          !this.hasFollowingBindingIdentifier()
         ) {
           break;
         }
@@ -869,7 +882,7 @@ export default abstract class StatementParser extends ExpressionParser {
     const isLetOrUsing =
       (startsWithLet && this.hasFollowingBindingAtom()) ||
       (startsWithUsing &&
-        this.hasFollowingBindingAtom() &&
+        this.hasFollowingBindingIdentifier() &&
         this.startsUsingForOf());
     if (this.match(tt._var) || this.match(tt._const) || isLetOrUsing) {
       const initNode = this.startNode<N.VariableDeclaration>();
