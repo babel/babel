@@ -1,9 +1,11 @@
-import type { NodePath, Scope } from "@babel/traverse";
-import traverse from "@babel/traverse";
+import { template } from "@babel/core";
+import type { File } from "@babel/core";
+import environmentVisitor from "@babel/helper-environment-visitor";
 import memberExpressionToFunctions from "@babel/helper-member-expression-to-functions";
 import type { HandlerState } from "@babel/helper-member-expression-to-functions";
 import optimiseCall from "@babel/helper-optimise-call-expression";
-import environmentVisitor from "@babel/helper-environment-visitor";
+import traverse from "@babel/traverse";
+import type { NodePath, Scope } from "@babel/traverse";
 import {
   assignmentExpression,
   booleanLiteral,
@@ -16,7 +18,6 @@ import {
   thisExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
-import type { File } from "@babel/core";
 
 // TODO (Babel 8): Don't export this.
 export {
@@ -64,6 +65,26 @@ const visitor = traverse.visitors.merge<
     Super(path, state) {
       const { node, parentPath } = path;
       if (!parentPath.isMemberExpression({ object: node })) return;
+      if (parentPath.parentPath.isUnaryExpression({ operator: "delete" })) {
+        const deletePath = parentPath.parentPath;
+        if (parentPath.node.computed) {
+          deletePath.replaceWith(
+            sequenceExpression([
+              callExpression(this.file.addHelper("toPropertyKey"), [
+                cloneNode(parentPath.node.property as t.Expression),
+              ]),
+              template.expression.ast`
+                function () { throw new ReferenceError("'delete super[expr]' is invalid"); }()
+              `,
+            ]),
+          );
+        } else {
+          deletePath.replaceWith(template.expression.ast`
+            function () { throw new ReferenceError("'delete super.prop' is invalid"); }()
+          `);
+        }
+        return;
+      }
       state.handle(parentPath);
     },
   },
