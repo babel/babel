@@ -430,7 +430,11 @@ function evaluateQuasis(
   let str = "";
 
   let i = 0;
-  const exprs = path.get("expressions");
+  const exprs: Array<NodePath<t.Node>> = path.isTemplateLiteral()
+    ? path.get('expressions')
+    : (path as NodePath<t.TaggedTemplateExpression>)
+        .get('quasi')
+        .get('expressions');
 
   for (const elem of quasis) {
     // not confident, evaluated an expression we don't like
