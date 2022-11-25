@@ -202,6 +202,7 @@ function transformBlockScopedVariable(
         // a nested scope and thus we don't need to assume that it
         // may be declared (but not registered yet) in an upper one.
         blockScope.parent.hasBinding(name, { noUids: true }) ||
+        blockScope.parent.hasGlobal(name) ||
         (isProgramScope && varScope.hasGlobal(name))
       ) {
         newName = blockScope.generateUid(name);
