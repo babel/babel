@@ -28,7 +28,11 @@
     "globals": "condition:BABEL_8_BREAKING ? ^13.5.0 : ^11.1.0"
   },
   "devDependencies": {
+    "@babel/core": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0"
   },
   "engines": {
     "node": ">=6.9.0"

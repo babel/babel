@@ -13,9 +13,8 @@
     "access": "public"
   },
   "main": "./lib/index.js",
-  "dependencies": {
-    "@babel/template": "workspace:^",
-    "@babel/types": "workspace:^"
+  "peerDependencies": {
+    "@babel/core": "^7.0.0"
   },
   "engines": {
     "node": ">=6.9.0"
@@ -39,5 +38,8 @@
     ".": "./lib/index.js",
     "./package.json": "./package.json"
   },
-  "type": "commonjs"
+  "type": "commonjs",
+  "devDependencies": {
+    "@babel/core": "workspace:^"
+  }
 }

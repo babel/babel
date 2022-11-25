@@ -1,14 +1,14 @@
-import {
+import { types as t } from "@babel/core";
+import type { NodePath } from "@babel/traverse";
+
+const {
   isParenthesizedExpression,
   isTSAsExpression,
   isTSNonNullExpression,
   isTSSatisfiesExpression,
   isTSTypeAssertion,
   isTypeCastExpression,
-} from "@babel/types";
-
-import type * as t from "@babel/types";
-import type { NodePath } from "@babel/traverse";
+} = t;
 
 export type TransparentExprWrapper =
   | t.TSAsExpression

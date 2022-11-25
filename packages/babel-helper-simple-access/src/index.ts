@@ -1,4 +1,7 @@
-import {
+import { types as t } from "@babel/core";
+import type { NodePath, Scope, Visitor } from "@babel/traverse";
+
+const {
   LOGICAL_OPERATORS,
   assignmentExpression,
   binaryExpression,
@@ -8,9 +11,7 @@ import {
   numericLiteral,
   sequenceExpression,
   unaryExpression,
-} from "@babel/types";
-import type * as t from "@babel/types";
-import type { NodePath, Scope, Visitor } from "@babel/traverse";
+} = t;
 
 type State = {
   scope: Scope;

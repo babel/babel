@@ -110,3 +110,17 @@ gen_enforced_dependency(WorkspaceCwd, 'core-js', '^2.6.12', DependencyType) :-
   (DependencyType = 'dependencies'),
   % The rule works for @babel/runtime-corejs2 only
   (WorkspaceIdent = '@babel/runtime-corejs2').
+
+% Plugins and helper packages should have a peerDependency on @babel/core,
+% rather than depending directly on @babel/types, @babel/traverse and @babel/template.
+gen_enforced_dependency(WorkspaceCwd, DependencyName, null, 'dependencies') :-
+  workspace_ident(WorkspaceCwd, WorkspaceIdent),
+  (atom_concat('@babel/helper-', _, WorkspaceIdent); atom_concat('@babel/plugin-', _, WorkspaceIdent)),
+  (DependencyName = '@babel/types'; DependencyName = '@babel/traverse'; DependencyName = '@babel/template').
+
+% Every package that has a peerDependency on @babel/core should also list it as a devDependency,
+% so that it's guaranteed to be available during development.
+gen_enforced_dependency(WorkspaceCwd, '@babel/core', 'workspace:^', 'devDependencies') :-
+  workspace_has_dependency(WorkspaceCwd, '@babel/core', _, 'peerDependencies').
+
+

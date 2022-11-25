@@ -1,5 +1,4 @@
-import { VISITOR_KEYS } from "@babel/types";
-import type * as t from "@babel/types";
+import { types as t } from "@babel/core";
 
 type StackItem = {
   node: t.Node;
@@ -26,7 +25,7 @@ export default function checkDuplicateNodes(ast: t.Node) {
     const { node, parent } = item;
     if (!node) continue;
 
-    const keys = VISITOR_KEYS[node.type];
+    const keys = t.VISITOR_KEYS[node.type];
     if (!keys) continue;
 
     if (parentsMap.has(node)) {

@@ -1,4 +1,8 @@
-import {
+import { types as t, type PluginPass } from "@babel/core";
+import annotateAsPure from "@babel/helper-annotate-as-pure";
+import type { NodePath, Visitor } from "@babel/traverse";
+
+const {
   booleanLiteral,
   callExpression,
   identifier,
@@ -21,11 +25,7 @@ import {
   spreadElement,
   stringLiteral,
   thisExpression,
-} from "@babel/types";
-import annotateAsPure from "@babel/helper-annotate-as-pure";
-import type { NodePath, Visitor } from "@babel/traverse";
-import type { PluginPass } from "@babel/core";
-import type * as t from "@babel/types";
+} = t;
 
 type ElementState = {
   tagExpr: t.Expression; // tag node,

@@ -1,10 +1,7 @@
-import {
-  assignmentExpression,
-  expressionStatement,
-  identifier,
-} from "@babel/types";
-import type * as t from "@babel/types";
+import { types as t } from "@babel/core";
 import type { NodePath, Visitor } from "@babel/traverse";
+
+const { assignmentExpression, expressionStatement, identifier } = t;
 
 export type EmitFunction = (
   id: t.Identifier,

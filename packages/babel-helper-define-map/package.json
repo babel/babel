@@ -14,8 +14,10 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/helper-function-name": "workspace:^",
-    "@babel/types": "workspace:^"
+    "@babel/helper-function-name": "workspace:^"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0"
   },
   "engines": {
     "node": ">=6.9.0"
@@ -39,5 +41,8 @@
     ".": "./lib/index.js",
     "./package.json": "./package.json"
   },
-  "type": "commonjs"
+  "type": "commonjs",
+  "devDependencies": {
+    "@babel/core": "workspace:^"
+  }
 }

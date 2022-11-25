@@ -1,7 +1,8 @@
 import type { NodePath } from "@babel/traverse";
 import nameFunction from "@babel/helper-function-name";
-import template from "@babel/template";
-import {
+import { types as t, template } from "@babel/core";
+
+const {
   blockStatement,
   callExpression,
   functionExpression,
@@ -9,8 +10,7 @@ import {
   isFunctionDeclaration,
   isRestElement,
   returnStatement,
-} from "@babel/types";
-import type * as t from "@babel/types";
+} = t;
 
 type ExpressionWrapperBuilder<ExtraBody extends t.Node[]> = (
   replacements?: Parameters<ReturnType<typeof template.expression>>[0],
