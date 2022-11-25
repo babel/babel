@@ -686,7 +686,7 @@ export default class Scope {
     if (i === true) {
       // Used in array-spread to create an array.
       helperName = "toConsumableArray";
-    } else if (i) {
+    } else if (typeof i === "number") {
       args.push(numericLiteral(i));
 
       // Used in array-rest to create an array from a subset of an iterable.
