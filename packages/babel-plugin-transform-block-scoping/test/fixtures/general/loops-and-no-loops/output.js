@@ -13,9 +13,9 @@ function bar() {
   console.log(x);
   var _loop = function () {
     {
-      var x = i;
+      var _x2 = i;
       setTimeout(function () {
-        return x;
+        return _x2;
       }, 0);
     }
   };
