@@ -498,14 +498,24 @@ export default abstract class StatementParser extends ExpressionParser {
           node as Undone<N.VariableDeclaration>,
           "using",
         );
-      case tt._let:
-        if (
-          this.state.containsEsc ||
-          !allowDeclaration ||
-          !this.hasFollowingBindingAtom()
-        ) {
+      case tt._let: {
+        if (this.state.containsEsc) {
           break;
         }
+        // `let [` is an explicit negative lookahead for
+        // ExpressionStatement, so special-case it first.
+        const next = this.nextTokenStart();
+        const nextCh = this.codePointAtPos(next);
+        if (nextCh !== charCodes.leftSquareBracket) {
+          if (!allowDeclaration) break;
+          if (
+            !this.chStartsBindingIdentifier(nextCh, next) &&
+            nextCh !== charCodes.leftCurlyBrace
+          ) {
+            break;
+          }
+        }
+      }
       // fall through
       case tt._const: {
         if (!allowDeclaration) {
