@@ -1501,9 +1501,6 @@ export default abstract class StatementParser extends ExpressionParser {
     kind: "var" | "let" | "const" | "using",
   ): void {
     const id = this.parseBindingAtom();
-    if (kind === "using" && id.type !== "Identifier") {
-      this.raise(Errors.UsingDeclarationHasBindingPattern, { at: id });
-    }
     this.checkLVal(id, {
       in: { type: "VariableDeclarator" },
       binding: kind === "var" ? BIND_VAR : BIND_LEXICAL,
