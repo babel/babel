@@ -129,16 +129,13 @@ export default declare((api, opts: Options) => {
           const { id } = path.node;
           if (!id) return;
 
-          let { scope } = path.parentPath;
-          if (isVarScope(scope)) return;
-
-          do {
-            scope = scope.parent;
-            if (scope.hasOwnBinding(id.name)) {
-              path.scope.rename(id.name);
-              return;
-            }
-          } while (!isVarScope(scope));
+          const { scope } = path.parentPath;
+          if (
+            !isVarScope(scope) &&
+            scope.parent.hasBinding(id.name, { noUids: true })
+          ) {
+            path.scope.rename(id.name);
+          }
         },
       },
     ]),
@@ -198,20 +195,20 @@ function transformBlockScopedVariable(
 
   if (varScope !== blockScope) {
     for (const name of bindingNames) {
-      let scope = blockScope;
-      do {
-        scope = scope.parent;
-        if (scope.hasOwnBinding(name)) {
-          blockScope.rename(name);
-          break;
-        }
-      } while (scope !== varScope);
-
-      if (isProgramScope && scope.hasGlobal(name)) {
-        blockScope.rename(name);
+      let newName = name;
+      if (
+        // We pass `noUids` true because, if `name` was a generated
+        // UID, it has been used to declare the current variable in
+        // a nested scope and thus we don't need to assume that it
+        // may be declared (but not registered yet) in an upper one.
+        blockScope.parent.hasBinding(name, { noUids: true }) ||
+        (isProgramScope && varScope.hasGlobal(name))
+      ) {
+        newName = blockScope.generateUid(name);
+        blockScope.rename(name, newName);
       }
 
-      blockScope.moveBindingTo(name, varScope);
+      blockScope.moveBindingTo(newName, varScope);
     }
   }
 
