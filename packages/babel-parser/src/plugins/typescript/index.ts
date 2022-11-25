@@ -2009,7 +2009,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           return super.parseFunctionStatement(
             nany,
             /* async */ false,
-            /* declarationPosition */ true,
+            /* isHangingDeclaration */ false,
           );
         }
 

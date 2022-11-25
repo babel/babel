@@ -2407,13 +2407,10 @@ export default abstract class ExpressionParser extends LValParser {
 
   // Initialize empty function node.
 
-  initFunction(
-    node: N.BodilessFunctionOrMethodBase,
-    isAsync?: boolean | null,
-  ): void {
+  initFunction(node: N.BodilessFunctionOrMethodBase, isAsync: boolean): void {
     node.id = null;
     node.generator = false;
-    node.async = !!isAsync;
+    node.async = isAsync;
   }
 
   // Parse object or class method.
@@ -2429,7 +2426,7 @@ export default abstract class ExpressionParser extends LValParser {
     inClassScope: boolean = false,
   ): T {
     this.initFunction(node, isAsync);
-    node.generator = !!isGenerator;
+    node.generator = isGenerator;
     const allowModifiers = isConstructor; // For TypeScript parameter properties
     this.scope.enter(
       SCOPE_FUNCTION |

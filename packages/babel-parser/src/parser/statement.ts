@@ -46,10 +46,12 @@ import type Parser from "./index";
 const loopLabel = { kind: "loop" } as const,
   switchLabel = { kind: "switch" } as const;
 
-const FUNC_NO_FLAGS = 0b000,
-  FUNC_STATEMENT = 0b001,
-  FUNC_HANGING_STATEMENT = 0b010,
-  FUNC_NULLABLE_ID = 0b100;
+export const enum ParseFunctionFlag {
+  Expression = 0b000,
+  Declaration = 0b001,
+  HangingDeclaration = 0b010,
+  NullableId = 0b100,
+}
 
 export const enum ParseStatementFlag {
   StatementOnly = 0b000,
@@ -404,6 +406,9 @@ export default abstract class StatementParser extends ExpressionParser {
     const starttype = this.state.type;
     const node = this.startNode();
     const allowDeclaration = !!(flags & ParseStatementFlag.AllowDeclaration);
+    const allowFunctionDeclaration = !!(
+      flags & ParseStatementFlag.AllowFunctionDeclaration
+    );
     const topLevel = flags & ParseStatementFlag.AllowImportExport;
 
     // Most types of statements are recognized by the keyword they
@@ -426,16 +431,15 @@ export default abstract class StatementParser extends ExpressionParser {
         if (!allowDeclaration) {
           if (this.state.strict) {
             this.raise(Errors.StrictFunction, { at: this.state.startLoc });
-          } else if (!(flags & ParseStatementFlag.AllowFunctionDeclaration)) {
+          } else if (!allowFunctionDeclaration) {
             this.raise(Errors.SloppyFunction, { at: this.state.startLoc });
           }
         }
         return this.parseFunctionStatement(
           node as Undone<N.FunctionDeclaration>,
           false,
-          allowDeclaration,
+          !allowDeclaration,
         );
-
       case tt._class:
         if (!allowDeclaration) this.unexpected();
         return this.parseClass(
@@ -564,11 +568,11 @@ export default abstract class StatementParser extends ExpressionParser {
               at: this.state.startLoc,
             });
           }
-          this.next();
+          this.next(); // eat 'async'
           return this.parseFunctionStatement(
             node as Undone<N.FunctionDeclaration>,
             true,
-            allowDeclaration,
+            !allowDeclaration,
           );
         }
       }
@@ -929,13 +933,14 @@ export default abstract class StatementParser extends ExpressionParser {
   parseFunctionStatement(
     this: Parser,
     node: Undone<N.FunctionDeclaration>,
-    isAsync?: boolean,
-    declarationPosition?: boolean,
+    isAsync: boolean,
+    isHangingDeclaration: boolean,
   ): N.FunctionDeclaration {
-    this.next();
+    this.next(); // eat 'function'
     return this.parseFunction(
       node,
-      FUNC_STATEMENT | (declarationPosition ? 0 : FUNC_HANGING_STATEMENT),
+      ParseFunctionFlag.Declaration |
+        (isHangingDeclaration ? ParseFunctionFlag.HangingDeclaration : 0),
       isAsync,
     );
   }
@@ -1482,29 +1487,33 @@ export default abstract class StatementParser extends ExpressionParser {
     decl.id = id;
   }
 
-  // Parse a function declaration or literal (depending on the
-  // `isStatement` parameter).
+  // Parse a function declaration or expression (depending on the
+  // ParseFunctionFlag.Declaration flag).
 
   parseFunction<T extends N.NormalFunction>(
     this: Parser,
     node: Undone<T>,
-    statement: number = FUNC_NO_FLAGS,
+    flags: ParseFunctionFlag = ParseFunctionFlag.Expression,
     isAsync: boolean = false,
   ): T {
-    const isStatement = statement & FUNC_STATEMENT;
-    const isHangingStatement = statement & FUNC_HANGING_STATEMENT;
-    const requireId = !!isStatement && !(statement & FUNC_NULLABLE_ID);
+    const hangingDeclaration = flags & ParseFunctionFlag.HangingDeclaration;
+    const isDeclaration = flags & ParseFunctionFlag.Declaration;
+    const requireId =
+      !!isDeclaration && !(flags & ParseFunctionFlag.NullableId);
 
     this.initFunction(node, isAsync);
 
-    if (this.match(tt.star) && isHangingStatement) {
-      this.raise(Errors.GeneratorInSingleStatementContext, {
-        at: this.state.startLoc,
-      });
+    if (this.match(tt.star)) {
+      if (hangingDeclaration) {
+        this.raise(Errors.GeneratorInSingleStatementContext, {
+          at: this.state.startLoc,
+        });
+      }
+      this.next(); // eat *
+      node.generator = true;
     }
-    node.generator = this.eat(tt.star);
 
-    if (isStatement) {
+    if (isDeclaration) {
       node.id = this.parseFunctionId(requireId);
     }
 
@@ -1513,7 +1522,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this.scope.enter(SCOPE_FUNCTION);
     this.prodParam.enter(functionFlags(isAsync, node.generator));
 
-    if (!isStatement) {
+    if (!isDeclaration) {
       node.id = this.parseFunctionId();
     }
 
@@ -1526,14 +1535,14 @@ export default abstract class StatementParser extends ExpressionParser {
       // Parse the function body.
       this.parseFunctionBodyAndFinish(
         node,
-        isStatement ? "FunctionDeclaration" : "FunctionExpression",
+        isDeclaration ? "FunctionDeclaration" : "FunctionExpression",
       );
     });
 
     this.prodParam.exit();
     this.scope.exit();
 
-    if (isStatement && !isHangingStatement) {
+    if (isDeclaration && !hangingDeclaration) {
       // We need to register this _after_ parsing the function body
       // because of TypeScript body-less function declarations,
       // which shouldn't be added to the scope.
@@ -2404,7 +2413,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
       return this.parseFunction(
         expr as Undone<N.FunctionExpression>,
-        FUNC_STATEMENT | FUNC_NULLABLE_ID,
+        ParseFunctionFlag.Declaration | ParseFunctionFlag.NullableId,
         isAsync,
       );
     }
