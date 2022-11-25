@@ -105,12 +105,12 @@ function plainFunction(
   let functionId = null;
   const nodeParams = inPath.node.params;
 
-  if (inPath.isArrowFunctionExpression()) {
+  if (path.isArrowFunctionExpression()) {
     if (process.env.BABEL_8_BREAKING) {
-      path = inPath.arrowFunctionToExpression({ noNewArrows });
+      path = path.arrowFunctionToExpression({ noNewArrows });
     } else {
       // arrowFunctionToExpression returns undefined in @babel/traverse < 7.18.10
-      path = inPath.arrowFunctionToExpression({ noNewArrows }) ?? inPath;
+      path = path.arrowFunctionToExpression({ noNewArrows }) ?? path;
     }
     node = path.node as
       | t.FunctionDeclaration
