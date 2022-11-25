@@ -47,10 +47,11 @@ const loopLabel = { kind: "loop" } as const,
   switchLabel = { kind: "switch" } as const;
 
 export const enum ParseFunctionFlag {
-  Expression = 0b000,
-  Declaration = 0b001,
-  HangingDeclaration = 0b010,
-  NullableId = 0b100,
+  Expression = 0b0000,
+  Declaration = 0b0001,
+  HangingDeclaration = 0b0010,
+  NullableId = 0b0100,
+  Async = 0b1000,
 }
 
 export const enum ParseStatementFlag {
@@ -940,8 +941,8 @@ export default abstract class StatementParser extends ExpressionParser {
     return this.parseFunction(
       node,
       ParseFunctionFlag.Declaration |
-        (isHangingDeclaration ? ParseFunctionFlag.HangingDeclaration : 0),
-      isAsync,
+        (isHangingDeclaration ? ParseFunctionFlag.HangingDeclaration : 0) |
+        (isAsync ? ParseFunctionFlag.Async : 0),
     );
   }
 
@@ -1487,6 +1488,14 @@ export default abstract class StatementParser extends ExpressionParser {
     decl.id = id;
   }
 
+  // https://tc39.es/ecma262/#prod-AsyncFunctionExpression
+  parseAsyncFunctionExpression(
+    this: Parser,
+    node: Undone<N.FunctionExpression>,
+  ): N.FunctionExpression {
+    return this.parseFunction(node, ParseFunctionFlag.Async);
+  }
+
   // Parse a function declaration or expression (depending on the
   // ParseFunctionFlag.Declaration flag).
 
@@ -1494,12 +1503,11 @@ export default abstract class StatementParser extends ExpressionParser {
     this: Parser,
     node: Undone<T>,
     flags: ParseFunctionFlag = ParseFunctionFlag.Expression,
-    isAsync: boolean = false,
   ): T {
     const hangingDeclaration = flags & ParseFunctionFlag.HangingDeclaration;
-    const isDeclaration = flags & ParseFunctionFlag.Declaration;
-    const requireId =
-      !!isDeclaration && !(flags & ParseFunctionFlag.NullableId);
+    const isDeclaration = !!(flags & ParseFunctionFlag.Declaration);
+    const requireId = isDeclaration && !(flags & ParseFunctionFlag.NullableId);
+    const isAsync = !!(flags & ParseFunctionFlag.Async);
 
     this.initFunction(node, isAsync);
 
@@ -2403,18 +2411,20 @@ export default abstract class StatementParser extends ExpressionParser {
   parseExportDefaultExpression(this: Parser): N.Expression | N.Declaration {
     const expr = this.startNode();
 
-    const isAsync = this.isAsyncFunction();
-
-    if (this.match(tt._function) || isAsync) {
+    if (this.match(tt._function)) {
       this.next();
-      if (isAsync) {
-        this.next();
-      }
-
       return this.parseFunction(
-        expr as Undone<N.FunctionExpression>,
+        expr as Undone<N.FunctionDeclaration>,
         ParseFunctionFlag.Declaration | ParseFunctionFlag.NullableId,
-        isAsync,
+      );
+    } else if (this.isAsyncFunction()) {
+      this.next(); // eat 'async'
+      this.next(); // eat 'function'
+      return this.parseFunction(
+        expr as Undone<N.FunctionDeclaration>,
+        ParseFunctionFlag.Declaration |
+          ParseFunctionFlag.NullableId |
+          ParseFunctionFlag.Async,
       );
     }
 

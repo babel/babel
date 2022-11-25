@@ -1304,10 +1304,8 @@ export default abstract class ExpressionParser extends LValParser {
             if (type === tt._function) {
               this.resetPreviousNodeTrailingComments(id);
               this.next();
-              return this.parseFunction(
+              return this.parseAsyncFunctionExpression(
                 this.startNodeAtNode(id),
-                undefined,
-                true,
               );
             } else if (tokenIsIdentifier(type)) {
               // If the next token begins with "=", commit to parsing an async
