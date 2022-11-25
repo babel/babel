@@ -152,12 +152,10 @@ export default (superClass: typeof Parser) =>
      * parser/statement.js                                          *
      * ============================================================ */
 
-    hasFollowingIdentifier(allowDeclaration: boolean): boolean {
-      if (super.hasFollowingIdentifier(allowDeclaration)) {
+    chStartsBindingIdentifier(ch: number, pos: number): boolean {
+      if (super.chStartsBindingIdentifier(ch, pos)) {
         return true;
       }
-
-      if (!allowDeclaration) return false;
 
       // Accept "let %%" as the start of "let %%placeholder%%", as though the
       // placeholder were an identifier.

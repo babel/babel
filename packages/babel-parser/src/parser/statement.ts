@@ -291,38 +291,12 @@ export default abstract class StatementParser extends ExpressionParser {
     if (!this.isContextual(tt._let)) {
       return false;
     }
-    return this.hasFollowingIdentifier(true);
+    return this.hasFollowingBindingAtom();
   }
 
-  /**
-   * Assuming we have seen a contextual `let` / `using`, check if it starts a variable declaration
-   so that it should be interpreted as a keyword.
-   *
-   * @param {number} allowDeclaration When `allowDeclaration` is false, it will return early and _skip_ checking
-                              if the next token after `let` is `{` or a keyword relational operator
-   * @returns {boolean}
-   * @memberof StatementParser
-   */
-  hasFollowingIdentifier(allowDeclaration: boolean): boolean {
-    const next = this.nextTokenStart();
-    const nextCh = this.codePointAtPos(next);
-    // For ambiguous cases, determine if a LexicalDeclaration (or only a
-    // Statement) is allowed here. If context is not empty then only a Statement
-    // is allowed. However, `let [` is an explicit negative lookahead for
-    // ExpressionStatement, so special-case it first.
-    // Also, `let \` is never valid as an expression so this must be a keyword.
-    if (
-      nextCh === charCodes.backslash ||
-      nextCh === charCodes.leftSquareBracket
-    ) {
-      return true;
-    }
-    if (!allowDeclaration) return false;
-
-    if (nextCh === charCodes.leftCurlyBrace) return true;
-
-    if (isIdentifierStart(nextCh)) {
-      keywordRelationalOperator.lastIndex = next;
+  chStartsBindingIdentifier(ch: number, pos: number) {
+    if (isIdentifierStart(ch)) {
+      keywordRelationalOperator.lastIndex = pos;
       if (keywordRelationalOperator.test(this.input)) {
         // We have seen `in` or `instanceof` so far, now check if the identfier
         // ends here
@@ -332,8 +306,33 @@ export default abstract class StatementParser extends ExpressionParser {
         }
       }
       return true;
+    } else if (ch === charCodes.backslash) {
+      return true;
+    } else {
+      return false;
     }
-    return false;
+  }
+
+  chStartsBindingPattern(ch: number) {
+    return (
+      ch === charCodes.leftSquareBracket || ch === charCodes.leftCurlyBrace
+    );
+  }
+
+  /**
+   * Assuming we have seen a contextual `let` and declaration is allowed, check if it
+   * starts a variable declaration so that it should be interpreted as a keyword.
+   *
+   * @returns {boolean}
+   * @memberof StatementParser
+   */
+  hasFollowingBindingAtom(): boolean {
+    const next = this.nextTokenStart();
+    const nextCh = this.codePointAtPos(next);
+    return (
+      this.chStartsBindingPattern(nextCh) ||
+      this.chStartsBindingIdentifier(nextCh, next)
+    );
   }
 
   startsUsingForOf(): boolean {
@@ -464,14 +463,33 @@ export default abstract class StatementParser extends ExpressionParser {
 
       case tt._using:
         // using [no LineTerminator here] BindingList[+Using]
-        if (this.hasFollowingLineBreak()) {
+        if (
+          this.hasFollowingLineBreak() ||
+          this.state.containsEsc ||
+          !this.hasFollowingBindingAtom()
+        ) {
           break;
         }
-      // fall through
+        this.expectPlugin("explicitResourceManagement");
+        if (!allowDeclaration) {
+          this.raise(Errors.UnexpectedLexicalDeclaration, {
+            at: this.state.startLoc,
+          });
+        }
+        if (!this.scope.inModule && this.scope.inTopLevel) {
+          this.raise(Errors.UnexpectedUsingDeclaration, {
+            at: this.state.startLoc,
+          });
+        }
+        return this.parseVarStatement(
+          node as Undone<N.VariableDeclaration>,
+          "using",
+        );
       case tt._let:
         if (
           this.state.containsEsc ||
-          !this.hasFollowingIdentifier(allowDeclaration)
+          !allowDeclaration ||
+          !this.hasFollowingBindingAtom()
         ) {
           break;
         }
@@ -486,14 +504,6 @@ export default abstract class StatementParser extends ExpressionParser {
       // fall through
       case tt._var: {
         const kind = this.state.value;
-        if (kind === "using") {
-          this.expectPlugin("explicitResourceManagement");
-          if (!this.scope.inModule && this.scope.inTopLevel) {
-            this.raise(Errors.UnexpectedUsingDeclaration, {
-              at: this.state.startLoc,
-            });
-          }
-        }
         return this.parseVarStatement(
           node as Undone<N.VariableDeclaration>,
           kind,
@@ -857,9 +867,9 @@ export default abstract class StatementParser extends ExpressionParser {
     const startsWithUsing =
       this.isContextual(tt._using) && !this.hasFollowingLineBreak();
     const isLetOrUsing =
-      (startsWithLet && this.hasFollowingIdentifier(true)) ||
+      (startsWithLet && this.hasFollowingBindingAtom()) ||
       (startsWithUsing &&
-        this.hasFollowingIdentifier(true) &&
+        this.hasFollowingBindingAtom() &&
         this.startsUsingForOf());
     if (this.match(tt._var) || this.match(tt._const) || isLetOrUsing) {
       const initNode = this.startNode<N.VariableDeclaration>();
