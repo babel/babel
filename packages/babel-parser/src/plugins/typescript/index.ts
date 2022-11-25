@@ -35,6 +35,7 @@ import {
 import TypeScriptScopeHandler from "./scope";
 import * as charCodes from "charcodes";
 import type { ExpressionErrors } from "../../parser/util";
+import type { ParseStatementFlag } from "../../parser/statement";
 import { PARAM } from "../../util/production-parameter";
 import { Errors, ParseErrorEnum } from "../../parse-error";
 import { cloneIdentifier, type Undone } from "../../parser/node";
@@ -2804,7 +2805,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     parseStatementContent(
-      flags: number,
+      flags: ParseStatementFlag,
       decorators?: N.Decorator[] | null,
     ): N.Statement {
       if (this.match(tt._const) && this.isLookaheadContextual("enum")) {
