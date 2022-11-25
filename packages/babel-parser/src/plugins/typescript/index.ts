@@ -2757,7 +2757,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     parseVarStatement(
       node: N.VariableDeclaration,
-      kind: "var" | "let" | "const",
+      kind: "var" | "let" | "const" | "using",
       allowMissingInitializer: boolean = false,
     ) {
       const { isAmbientContext } = this.state;
@@ -2804,8 +2804,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     parseStatementContent(
-      context?: string | null,
-      topLevel?: boolean | null,
+      flags: number,
       decorators?: N.Decorator[] | null,
     ): N.Statement {
       if (this.match(tt._const) && this.isLookaheadContextual("enum")) {
@@ -2825,7 +2824,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         if (result) return result;
       }
 
-      return super.parseStatementContent(context, topLevel, decorators);
+      return super.parseStatementContent(flags, decorators);
     }
 
     parseAccessModifier(): N.Accessibility | undefined | null {
@@ -3280,7 +3279,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     // `let x: number;`
     parseVarId(
       decl: N.VariableDeclarator,
-      kind: "var" | "let" | "const",
+      kind: "var" | "let" | "const" | "using",
     ): void {
       super.parseVarId(decl, kind);
       if (

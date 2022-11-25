@@ -51,6 +51,13 @@ const FUNC_NO_FLAGS = 0b000,
   FUNC_HANGING_STATEMENT = 0b010,
   FUNC_NULLABLE_ID = 0b100;
 
+export const enum ParseStatementFlag {
+  StatementOnly = 0b000,
+  AllowImportExport = 0b001,
+  AllowDeclaration = 0b010,
+  AllowFunctionDeclaration = 0b100,
+}
+
 const loneSurrogate = /[\uD800-\uDFFF]/u;
 
 const keywordRelationalOperator = /in(?:stanceof)?/y;
@@ -277,23 +284,23 @@ export default abstract class StatementParser extends ExpressionParser {
     return this.finishNode(node, "InterpreterDirective");
   }
 
-  isLet(context?: string | null): boolean {
+  isLet(): boolean {
     if (!this.isContextual(tt._let)) {
       return false;
     }
-    return this.hasFollowingIdentifier(context);
+    return this.hasFollowingIdentifier(true);
   }
 
   /**
-   * Assuming we have seen a contextual `let`, check if it starts a variable declaration
-   so that `left` should be interpreted as a `let` keyword.
+   * Assuming we have seen a contextual `let` / `using`, check if it starts a variable declaration
+   so that it should be interpreted as a keyword.
    *
-   * @param {?string} context When `context` is non nullish, it will return early and _skip_ checking
+   * @param {number} allowDeclaration When `allowDeclaration` is false, it will return early and _skip_ checking
                               if the next token after `let` is `{` or a keyword relational operator
    * @returns {boolean}
    * @memberof StatementParser
    */
-  hasFollowingIdentifier(context?: string | null): boolean {
+  hasFollowingIdentifier(allowDeclaration: boolean): boolean {
     const next = this.nextTokenStart();
     const nextCh = this.codePointAtPos(next);
     // For ambiguous cases, determine if a LexicalDeclaration (or only a
@@ -307,7 +314,7 @@ export default abstract class StatementParser extends ExpressionParser {
     ) {
       return true;
     }
-    if (context) return false;
+    if (!allowDeclaration) return false;
 
     if (nextCh === charCodes.leftCurlyBrace) return true;
 
@@ -337,6 +344,27 @@ export default abstract class StatementParser extends ExpressionParser {
     }
   }
 
+  // https://tc39.es/ecma262/#prod-ModuleItem
+  parseModuleItem(this: Parser) {
+    return this.parseStatementLike(
+      ParseStatementFlag.AllowImportExport |
+        ParseStatementFlag.AllowDeclaration |
+        ParseStatementFlag.AllowFunctionDeclaration,
+    );
+  }
+
+  // https://tc39.es/ecma262/#prod-StatementListItem
+  parseStatementListItem(this: Parser) {
+    return this.parseStatementLike(
+      ParseStatementFlag.AllowDeclaration |
+        ParseStatementFlag.AllowFunctionDeclaration,
+    );
+  }
+
+  parseStatementOrFunctionDeclaration(this: Parser) {
+    return this.parseStatementLike(ParseStatementFlag.AllowFunctionDeclaration);
+  }
+
   // Parse a single statement.
   //
   // If expecting a statement and finding a slash operator, parse a
@@ -344,29 +372,39 @@ export default abstract class StatementParser extends ExpressionParser {
   // `if (foo) /blah/.exec(foo)`, where looking at the previous token
   // does not help.
   // https://tc39.es/ecma262/#prod-Statement
+  parseStatement(this: Parser) {
+    return this.parseStatementLike(ParseStatementFlag.StatementOnly);
+  }
+
   // ImportDeclaration and ExportDeclaration are also handled here so we can throw recoverable errors
   // when they are not at the top level
-  parseStatement(
+  parseStatementLike(
     this: Parser,
-    context?: string | null,
-    topLevel?: boolean,
-  ): N.Statement {
+    flags: ParseStatementFlag,
+  ):
+    | N.Statement
+    | N.Declaration
+    | N.ImportDeclaration
+    | N.ExportDefaultDeclaration
+    | N.ExportNamedDeclaration
+    | N.ExportAllDeclaration {
     let decorators: N.Decorator[] | null = null;
 
     if (this.match(tt.at)) {
       decorators = this.parseDecorators(true);
     }
-    return this.parseStatementContent(context, topLevel, decorators);
+    return this.parseStatementContent(flags, decorators);
   }
 
   parseStatementContent(
     this: Parser,
-    context?: string | null,
-    topLevel?: boolean | null,
+    flags: ParseStatementFlag,
     decorators?: N.Decorator[] | null,
   ): N.Statement {
     const starttype = this.state.type;
     const node = this.startNode();
+    const allowDeclaration = !!(flags & ParseStatementFlag.AllowDeclaration);
+    const topLevel = flags & ParseStatementFlag.AllowImportExport;
 
     // Most types of statements are recognized by the keyword they
     // start with. Many are trivial to parse, some require a bit of
@@ -380,26 +418,26 @@ export default abstract class StatementParser extends ExpressionParser {
       case tt._debugger:
         return this.parseDebuggerStatement(node as Undone<N.DebuggerStatement>);
       case tt._do:
-        return this.parseDoStatement(node as Undone<N.DoWhileStatement>);
+        return this.parseDoWhileStatement(node as Undone<N.DoWhileStatement>);
       case tt._for:
         return this.parseForStatement(node as Undone<N.ForStatement>);
       case tt._function:
         if (this.lookaheadCharCode() === charCodes.dot) break;
-        if (context) {
+        if (!allowDeclaration) {
           if (this.state.strict) {
             this.raise(Errors.StrictFunction, { at: this.state.startLoc });
-          } else if (context !== "if" && context !== "label") {
+          } else if (!(flags & ParseStatementFlag.AllowFunctionDeclaration)) {
             this.raise(Errors.SloppyFunction, { at: this.state.startLoc });
           }
         }
         return this.parseFunctionStatement(
           node as Undone<N.FunctionDeclaration>,
           false,
-          !context,
+          allowDeclaration,
         );
 
       case tt._class:
-        if (context) this.unexpected();
+        if (!allowDeclaration) this.unexpected();
         return this.parseClass(
           this.maybeTakeDecorators(
             decorators,
@@ -426,11 +464,21 @@ export default abstract class StatementParser extends ExpressionParser {
         }
       // fall through
       case tt._let:
-        if (this.state.containsEsc || !this.hasFollowingIdentifier(context)) {
+        if (
+          this.state.containsEsc ||
+          !this.hasFollowingIdentifier(allowDeclaration)
+        ) {
           break;
         }
       // fall through
-      case tt._const:
+      case tt._const: {
+        if (!allowDeclaration) {
+          this.raise(Errors.UnexpectedLexicalDeclaration, {
+            at: this.state.startLoc,
+          });
+        }
+      }
+      // fall through
       case tt._var: {
         const kind = this.state.value;
         if (kind === "using") {
@@ -440,11 +488,6 @@ export default abstract class StatementParser extends ExpressionParser {
               at: this.state.startLoc,
             });
           }
-        }
-        if (context && kind !== "var") {
-          this.raise(Errors.UnexpectedLexicalDeclaration, {
-            at: this.state.startLoc,
-          });
         }
         return this.parseVarStatement(
           node as Undone<N.VariableDeclaration>,
@@ -516,7 +559,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
       default: {
         if (this.isAsyncFunction()) {
-          if (context) {
+          if (!allowDeclaration) {
             this.raise(Errors.AsyncFunctionInSingleStatementContext, {
               at: this.state.startLoc,
             });
@@ -525,7 +568,7 @@ export default abstract class StatementParser extends ExpressionParser {
           return this.parseFunctionStatement(
             node as Undone<N.FunctionDeclaration>,
             true,
-            !context,
+            allowDeclaration,
           );
         }
       }
@@ -549,7 +592,7 @@ export default abstract class StatementParser extends ExpressionParser {
         maybeName,
         // @ts-expect-error migrate to Babel types
         expr,
-        context,
+        flags,
       );
     } else {
       return this.parseExpressionStatement(
@@ -749,7 +792,8 @@ export default abstract class StatementParser extends ExpressionParser {
     return val;
   }
 
-  parseDoStatement(
+  // https://tc39.es/ecma262/#prod-DoWhileStatement
+  parseDoWhileStatement(
     this: Parser,
     node: Undone<N.DoWhileStatement>,
   ): N.DoWhileStatement {
@@ -763,7 +807,7 @@ export default abstract class StatementParser extends ExpressionParser {
       // outside of the loop body.
       this.withSmartMixTopicForbiddingContext(() =>
         // Parse the loop body's body.
-        this.parseStatement("do"),
+        this.parseStatement(),
       );
 
     this.state.labels.pop();
@@ -808,9 +852,9 @@ export default abstract class StatementParser extends ExpressionParser {
     const startsWithUsing =
       this.isContextual(tt._using) && !this.hasFollowingLineBreak();
     const isLetOrUsing =
-      (startsWithLet && this.hasFollowingIdentifier()) ||
+      (startsWithLet && this.hasFollowingIdentifier(true)) ||
       (startsWithUsing &&
-        this.hasFollowingIdentifier() &&
+        this.hasFollowingIdentifier(true) &&
         this.startsUsingForOf());
     if (this.match(tt._var) || this.match(tt._const) || isLetOrUsing) {
       const initNode = this.startNode<N.VariableDeclaration>();
@@ -881,6 +925,7 @@ export default abstract class StatementParser extends ExpressionParser {
     return this.parseFor(node as Undone<N.ForStatement>, init);
   }
 
+  // https://tc39.es/ecma262/#prod-HoistableDeclaration
   parseFunctionStatement(
     this: Parser,
     node: Undone<N.FunctionDeclaration>,
@@ -895,11 +940,16 @@ export default abstract class StatementParser extends ExpressionParser {
     );
   }
 
+  // https://tc39.es/ecma262/#prod-IfStatement
   parseIfStatement(this: Parser, node: Undone<N.IfStatement>) {
     this.next();
     node.test = this.parseHeaderExpression();
-    node.consequent = this.parseStatement("if");
-    node.alternate = this.eat(tt._else) ? this.parseStatement("if") : null;
+    // Annex B.3.3
+    // https://tc39.es/ecma262/#sec-functiondeclarations-in-ifstatement-statement-clauses
+    node.consequent = this.parseStatementOrFunctionDeclaration();
+    node.alternate = this.eat(tt._else)
+      ? this.parseStatementOrFunctionDeclaration()
+      : null;
     return this.finishNode(node, "IfStatement");
   }
 
@@ -924,6 +974,7 @@ export default abstract class StatementParser extends ExpressionParser {
     return this.finishNode(node, "ReturnStatement");
   }
 
+  // https://tc39.es/ecma262/#prod-SwitchStatement
   parseSwitchStatement(this: Parser, node: Undone<N.SwitchStatement>) {
     this.next();
     node.discriminant = this.parseHeaderExpression();
@@ -959,7 +1010,7 @@ export default abstract class StatementParser extends ExpressionParser {
         this.expect(tt.colon);
       } else {
         if (cur) {
-          cur.consequent.push(this.parseStatement(null));
+          cur.consequent.push(this.parseStatementListItem());
         } else {
           this.unexpected();
         }
@@ -1039,6 +1090,8 @@ export default abstract class StatementParser extends ExpressionParser {
     return this.finishNode(node, "TryStatement");
   }
 
+  // https://tc39.es/ecma262/#prod-VariableStatement
+  // https://tc39.es/ecma262/#prod-LexicalDeclaration
   parseVarStatement(
     this: Parser,
     node: Undone<N.VariableDeclaration>,
@@ -1051,6 +1104,7 @@ export default abstract class StatementParser extends ExpressionParser {
     return this.finishNode(node, "VariableDeclaration");
   }
 
+  // https://tc39.es/ecma262/#prod-WhileStatement
   parseWhileStatement(
     this: Parser,
     node: Undone<N.WhileStatement>,
@@ -1066,7 +1120,7 @@ export default abstract class StatementParser extends ExpressionParser {
       // They are permitted in test expressions, outside of the loop body.
       this.withSmartMixTopicForbiddingContext(() =>
         // Parse loop body.
-        this.parseStatement("while"),
+        this.parseStatement(),
       );
 
     this.state.labels.pop();
@@ -1092,7 +1146,7 @@ export default abstract class StatementParser extends ExpressionParser {
       // part of the outer context, outside of the with statement's body.
       this.withSmartMixTopicForbiddingContext(() =>
         // Parse the statement body.
-        this.parseStatement("with"),
+        this.parseStatement(),
       );
 
     return this.finishNode(node, "WithStatement");
@@ -1103,12 +1157,13 @@ export default abstract class StatementParser extends ExpressionParser {
     return this.finishNode(node, "EmptyStatement");
   }
 
+  // https://tc39.es/ecma262/#prod-LabelledStatement
   parseLabeledStatement(
     this: Parser,
     node: Undone<N.LabeledStatement>,
     maybeName: string,
     expr: N.Identifier,
-    context?: string | null,
+    flags: ParseStatementFlag,
   ): N.LabeledStatement {
     for (const label of this.state.labels) {
       if (label.name === maybeName) {
@@ -1139,13 +1194,11 @@ export default abstract class StatementParser extends ExpressionParser {
       kind: kind,
       statementStart: this.state.start,
     });
-    node.body = this.parseStatement(
-      context
-        ? context.indexOf("label") === -1
-          ? context + "label"
-          : context
-        : "label",
-    );
+    // https://tc39.es/ecma262/#prod-LabelledItem
+    node.body =
+      flags & ParseStatementFlag.AllowFunctionDeclaration
+        ? this.parseStatementOrFunctionDeclaration()
+        : this.parseStatement();
 
     this.state.labels.pop();
     node.label = expr;
@@ -1238,7 +1291,9 @@ export default abstract class StatementParser extends ExpressionParser {
     let parsedNonDirective = false;
 
     while (!this.match(end)) {
-      const stmt = this.parseStatement(null, topLevel);
+      const stmt = topLevel
+        ? this.parseModuleItem()
+        : this.parseStatementListItem();
 
       if (directives && !parsedNonDirective) {
         if (this.isValidDirective(stmt)) {
@@ -1296,7 +1351,7 @@ export default abstract class StatementParser extends ExpressionParser {
       // outside of the loop body.
       this.withSmartMixTopicForbiddingContext(() =>
         // Parse the loop body.
-        this.parseStatement("for"),
+        this.parseStatement(),
       );
 
     this.scope.exit();
@@ -1357,7 +1412,7 @@ export default abstract class StatementParser extends ExpressionParser {
       // They are permitted in test expressions, outside of the loop body.
       this.withSmartMixTopicForbiddingContext(() =>
         // Parse loop body.
-        this.parseStatement("for"),
+        this.parseStatement(),
       );
 
     this.scope.exit();
@@ -2386,6 +2441,7 @@ export default abstract class StatementParser extends ExpressionParser {
     return res;
   }
 
+  // https://tc39.es/ecma262/#prod-ExportDeclaration
   parseExportDeclaration(
     this: Parser,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -2399,7 +2455,7 @@ export default abstract class StatementParser extends ExpressionParser {
       );
       return node;
     }
-    return this.parseStatement(null) as N.Declaration;
+    return this.parseStatementListItem() as N.Declaration;
   }
 
   isExportDefaultSpecifier(): boolean {

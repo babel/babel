@@ -152,12 +152,12 @@ export default (superClass: typeof Parser) =>
      * parser/statement.js                                          *
      * ============================================================ */
 
-    hasFollowingIdentifier(context?: string | null): boolean {
-      if (super.hasFollowingIdentifier(context)) {
+    hasFollowingIdentifier(allowDeclaration: boolean): boolean {
+      if (super.hasFollowingIdentifier(allowDeclaration)) {
         return true;
       }
 
-      if (context) return false;
+      if (!allowDeclaration) return false;
 
       // Accept "let %%" as the start of "let %%placeholder%%", as though the
       // placeholder were an identifier.
@@ -196,7 +196,7 @@ export default (superClass: typeof Parser) =>
         const stmt: N.LabeledStatement = node;
         stmt.label = this.finishPlaceholder(expr, "Identifier");
         this.next();
-        stmt.body = super.parseStatement("label");
+        stmt.body = super.parseStatementOrFunctionDeclaration();
         return this.finishNode(stmt, "LabeledStatement");
       }
 
