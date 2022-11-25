@@ -438,7 +438,7 @@ export default abstract class StatementParser extends ExpressionParser {
         return this.parseFunctionStatement(
           node as Undone<N.FunctionDeclaration>,
           false,
-          !allowDeclaration,
+          !allowDeclaration && allowFunctionDeclaration,
         );
       case tt._class:
         if (!allowDeclaration) this.unexpected();
@@ -572,7 +572,7 @@ export default abstract class StatementParser extends ExpressionParser {
           return this.parseFunctionStatement(
             node as Undone<N.FunctionDeclaration>,
             true,
-            !allowDeclaration,
+            !allowDeclaration && allowFunctionDeclaration,
           );
         }
       }
