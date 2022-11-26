@@ -26,7 +26,7 @@ const awaitVisitor = traverse.visitors.merge<{ wrapAwait: t.Expression }>([
       const { node } = path;
       if (node.operation != null) {
         node.argument = callExpression(
-          memberExpression(identifier("Promise"), node.operation, false, false),
+          memberExpression(identifier("Promise"), node.operation),
           [node.argument],
         );
         node.operation = null;

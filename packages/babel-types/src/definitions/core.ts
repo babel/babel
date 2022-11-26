@@ -2115,9 +2115,7 @@ defineType("AwaitExpression", {
         val: t.Identifier,
       ) {
         if (
-          !AWAIT_OPERATIONS.includes(
-            val.name as typeof AWAIT_OPERATIONS[number],
-          )
+          !(AWAIT_OPERATIONS as string[]).includes(val.name)
         ) {
           throw new TypeError(
             `The only valid await operation is one of "all", "allSettled", "any" and "race", currently got "${val.name}"`,
