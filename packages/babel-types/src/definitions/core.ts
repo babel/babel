@@ -2114,11 +2114,9 @@ defineType("AwaitExpression", {
         key,
         val: t.Identifier,
       ) {
-        if (
-          !(AWAIT_OPERATIONS as string[]).includes(val.name)
-        ) {
+        if (!(AWAIT_OPERATIONS as readonly string[]).includes(val.name)) {
           throw new TypeError(
-            `The only valid await operation is one of "all", "allSettled", "any" and "race", currently got "${val.name}"`,
+            `The only valid await operations are "all", "allSettled", "any" and "race", but got "${val.name}"`,
           );
         }
       } as Validator),

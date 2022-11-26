@@ -35,7 +35,7 @@ describe("builders", function () {
         expect(() =>
           t.awaitExpression(t.numericLiteral(0), t.identifier("resolve")),
         ).toThrowErrorMatchingInlineSnapshot(
-          `"The only valid await operation is one of \\"all\\", \\"allSettled\\", \\"any\\" and \\"race\\", currently got \\"resolve\\""`,
+          `"The only valid await operations are \\"all\\", \\"allSettled\\", \\"any\\" and \\"race\\", but got \\"resolve\\""`,
         );
       });
     });
