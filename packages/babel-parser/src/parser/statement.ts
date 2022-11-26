@@ -56,9 +56,10 @@ export const enum ParseFunctionFlag {
 
 export const enum ParseStatementFlag {
   StatementOnly = 0b000,
-  AllowImportExport = 0b001,
-  AllowDeclaration = 0b010,
-  AllowFunctionDeclaration = 0b100,
+  AllowImportExport = 0b0001,
+  AllowDeclaration = 0b0010,
+  AllowFunctionDeclaration = 0b0100,
+  AllowLabeledFunction = 0b1000,
 }
 
 const loneSurrogate = /[\uD800-\uDFFF]/u;
@@ -364,7 +365,8 @@ export default abstract class StatementParser extends ExpressionParser {
     return this.parseStatementLike(
       ParseStatementFlag.AllowImportExport |
         ParseStatementFlag.AllowDeclaration |
-        ParseStatementFlag.AllowFunctionDeclaration,
+        ParseStatementFlag.AllowFunctionDeclaration |
+        ParseStatementFlag.AllowLabeledFunction,
     );
   }
 
@@ -372,12 +374,19 @@ export default abstract class StatementParser extends ExpressionParser {
   parseStatementListItem(this: Parser) {
     return this.parseStatementLike(
       ParseStatementFlag.AllowDeclaration |
-        ParseStatementFlag.AllowFunctionDeclaration,
+        ParseStatementFlag.AllowFunctionDeclaration |
+        ParseStatementFlag.AllowLabeledFunction,
     );
   }
 
-  parseStatementOrFunctionDeclaration(this: Parser) {
-    return this.parseStatementLike(ParseStatementFlag.AllowFunctionDeclaration);
+  parseStatementOrFunctionDeclaration(
+    this: Parser,
+    disallowLabeledFunction: boolean = false,
+  ) {
+    return this.parseStatementLike(
+      ParseStatementFlag.AllowFunctionDeclaration |
+        (disallowLabeledFunction ? 0 : ParseStatementFlag.AllowLabeledFunction),
+    );
   }
 
   // Parse a single statement.
@@ -985,9 +994,12 @@ export default abstract class StatementParser extends ExpressionParser {
     node.test = this.parseHeaderExpression();
     // Annex B.3.3
     // https://tc39.es/ecma262/#sec-functiondeclarations-in-ifstatement-statement-clauses
-    node.consequent = this.parseStatementOrFunctionDeclaration();
+    node.consequent = this.parseStatementOrFunctionDeclaration(
+      // https://tc39.es/ecma262/#sec-if-statement-static-semantics-early-errors
+      true,
+    );
     node.alternate = this.eat(tt._else)
-      ? this.parseStatementOrFunctionDeclaration()
+      ? this.parseStatementOrFunctionDeclaration(true)
       : null;
     return this.finishNode(node, "IfStatement");
   }
@@ -1235,7 +1247,7 @@ export default abstract class StatementParser extends ExpressionParser {
     });
     // https://tc39.es/ecma262/#prod-LabelledItem
     node.body =
-      flags & ParseStatementFlag.AllowFunctionDeclaration
+      flags & ParseStatementFlag.AllowLabeledFunction
         ? this.parseStatementOrFunctionDeclaration()
         : this.parseStatement();
 
