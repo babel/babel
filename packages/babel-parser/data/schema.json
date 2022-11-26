@@ -122,6 +122,7 @@
           },
           {
             "enum": [
+              "asyncDoExpressions",
               "asyncGenerators",
               "awaitOps",
               "bigInt",
