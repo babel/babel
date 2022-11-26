@@ -381,7 +381,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
   parseStatementOrFunctionDeclaration(
     this: Parser,
-    disallowLabeledFunction: boolean = false,
+    disallowLabeledFunction: boolean,
   ) {
     return this.parseStatementLike(
       ParseStatementFlag.AllowFunctionDeclaration |
@@ -1248,7 +1248,7 @@ export default abstract class StatementParser extends ExpressionParser {
     // https://tc39.es/ecma262/#prod-LabelledItem
     node.body =
       flags & ParseStatementFlag.AllowLabeledFunction
-        ? this.parseStatementOrFunctionDeclaration()
+        ? this.parseStatementOrFunctionDeclaration(false)
         : this.parseStatement();
 
     this.state.labels.pop();
