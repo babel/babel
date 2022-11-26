@@ -2,10 +2,10 @@
   "type": "File",
   "start":0,"end":171,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":1,"index":171}},
   "errors": [
-    "SyntaxError: The only valid await operation is one of \"all\", \"allSettled\", \"any\" and \"race\", currently got \"\\u0061ll\". (3:2)",
-    "SyntaxError: The only valid await operation is one of \"all\", \"allSettled\", \"any\" and \"race\", currently got \"\\u0061llSettled\". (4:2)",
-    "SyntaxError: The only valid await operation is one of \"all\", \"allSettled\", \"any\" and \"race\", currently got \"\\u0061ny\". (5:2)",
-    "SyntaxError: The only valid await operation is one of \"all\", \"allSettled\", \"any\" and \"race\", currently got \"r\\u0061ce\". (6:2)"
+    "SyntaxError: The only valid await operations are \"all\", \"allSettled\", \"any\" and \"race\", but got \"\\u0061ll\". (3:2)",
+    "SyntaxError: The only valid await operations are \"all\", \"allSettled\", \"any\" and \"race\", but got \"\\u0061llSettled\". (4:2)",
+    "SyntaxError: The only valid await operations are \"all\", \"allSettled\", \"any\" and \"race\", but got \"\\u0061ny\". (5:2)",
+    "SyntaxError: The only valid await operations are \"all\", \"allSettled\", \"any\" and \"race\", but got \"r\\u0061ce\". (6:2)"
   ],
   "program": {
     "type": "Program",

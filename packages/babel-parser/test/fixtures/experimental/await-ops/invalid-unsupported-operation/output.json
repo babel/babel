@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":81,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":81}},
   "errors": [
-    "SyntaxError: The only valid await operation is one of \"all\", \"allSettled\", \"any\" and \"race\", currently got \"resolve\". (3:2)"
+    "SyntaxError: The only valid await operations are \"all\", \"allSettled\", \"any\" and \"race\", but got \"resolve\". (3:2)"
   ],
   "program": {
     "type": "Program",
