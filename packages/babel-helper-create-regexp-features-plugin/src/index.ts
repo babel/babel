@@ -116,6 +116,13 @@ export function createRegExpFeaturePlugin({
           };
         }
 
+        let newFlags;
+        if (regexpuOptions.modifiers === "transform") {
+          regexpuOptions.onNewFlags = flags => {
+            newFlags = flags;
+          };
+        }
+
         node.pattern = rewritePattern(node.pattern, node.flags, regexpuOptions);
 
         if (
@@ -133,7 +140,7 @@ export function createRegExpFeaturePlugin({
           path.replaceWith(call);
         }
 
-        node.flags = transformFlags(regexpuOptions, node.flags);
+        node.flags = transformFlags(regexpuOptions, newFlags ?? node.flags);
       },
     },
   };

@@ -636,7 +636,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-annotate-as-pure": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
-    regexpu-core: ^5.2.1
+    regexpu-core: "https://github.com/liuxingbaoyu/regexpu-core#head=modifiers"
   peerDependencies:
     "@babel/core": ^7.0.0
   languageName: unknown
@@ -1761,6 +1761,18 @@ __metadata:
     "@babel/plugin-syntax-record-and-tuple": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.12.0
+  languageName: unknown
+  linkType: soft
+
+"@babel/plugin-proposal-regexp-modifiers@workspace:^, @babel/plugin-proposal-regexp-modifiers@workspace:packages/babel-plugin-proposal-regexp-modifiers":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-proposal-regexp-modifiers@workspace:packages/babel-plugin-proposal-regexp-modifiers"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-create-regexp-features-plugin": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
   languageName: unknown
   linkType: soft
 
@@ -3683,6 +3695,7 @@ __metadata:
     "@babel/plugin-proposal-private-methods": "workspace:^"
     "@babel/plugin-proposal-private-property-in-object": "workspace:^"
     "@babel/plugin-proposal-record-and-tuple": "workspace:^"
+    "@babel/plugin-proposal-regexp-modifiers": "workspace:^"
     "@babel/plugin-proposal-throw-expressions": "workspace:^"
     "@babel/plugin-proposal-unicode-property-regex": "workspace:^"
     "@babel/plugin-proposal-unicode-sets-regex": "workspace:^"

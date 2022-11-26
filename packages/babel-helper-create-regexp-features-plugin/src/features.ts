@@ -6,6 +6,7 @@ export const FEATURES = Object.freeze({
   unicodeSetsFlag_syntax: 1 << 4,
   unicodeSetsFlag: 1 << 5,
   duplicateNamedCaptureGroups: 1 << 6,
+  modifiers: 1 << 7,
 });
 
 // We can't use a symbol because this needs to always be the same, even if

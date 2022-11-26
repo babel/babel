@@ -13,13 +13,7 @@ export default (_: any, opts: any = {}) => {
     babelPlugins.syntaxImportAssertions,
     babelPlugins.proposalUnicodeSetsRegex,
     babelPlugins.proposalDuplicateNamedCapturingGroupsRegex,
-    [
-      babelPlugins.proposalDecorators,
-      {
-        version: decoratorsLegacy ? "legacy" : decoratorsVersion,
-        decoratorsBeforeExport,
-      },
-    ],
+    babelPlugins.proposalRegexpModifiers,
   ];
 
   if (!process.env.BABEL_8_BREAKING) {

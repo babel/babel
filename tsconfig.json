@@ -67,6 +67,7 @@
     "./packages/babel-plugin-proposal-private-methods/src/**/*.ts",
     "./packages/babel-plugin-proposal-private-property-in-object/src/**/*.ts",
     "./packages/babel-plugin-proposal-record-and-tuple/src/**/*.ts",
+    "./packages/babel-plugin-proposal-regexp-modifiers/src/**/*.ts",
     "./packages/babel-plugin-proposal-throw-expressions/src/**/*.ts",
     "./packages/babel-plugin-proposal-unicode-property-regex/src/**/*.ts",
     "./packages/babel-plugin-proposal-unicode-sets-regex/src/**/*.ts",
@@ -366,6 +367,9 @@
       ],
       "@babel/plugin-proposal-record-and-tuple": [
         "./packages/babel-plugin-proposal-record-and-tuple/src"
+      ],
+      "@babel/plugin-proposal-regexp-modifiers": [
+        "./packages/babel-plugin-proposal-regexp-modifiers/src"
       ],
       "@babel/plugin-proposal-throw-expressions": [
         "./packages/babel-plugin-proposal-throw-expressions/src"

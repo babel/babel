@@ -40,6 +40,7 @@ export function generateRegexpuOptions(
     unicodePropertyEscapes: feat("unicodePropertyEscape"),
     namedGroups: feat("namedCaptureGroups") || featDuplicateNamedGroups(),
     onNamedGroup: () => {},
+    modifiers: feat("modifiers"),
   };
 }
 
@@ -68,6 +69,10 @@ export function canSkipRegexpu(
   }
 
   if (options.namedGroups === "transform" && /\(\?<(?![=!])/.test(pattern)) {
+    return false;
+  }
+
+  if (options.modifiers === "transform" && /\(\?.{1,10}:/.test(pattern)) {
     return false;
   }
 
