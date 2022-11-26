@@ -516,7 +516,7 @@ export default abstract class StatementParser extends ExpressionParser {
         const next = this.nextTokenStart();
         const nextCh = this.codePointAtPos(next);
         if (nextCh !== charCodes.leftSquareBracket) {
-          if (!allowDeclaration) break;
+          if (!allowDeclaration && this.hasFollowingLineBreak()) break;
           if (
             !this.chStartsBindingIdentifier(nextCh, next) &&
             nextCh !== charCodes.leftCurlyBrace
