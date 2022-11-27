@@ -1,6 +1,7 @@
 import browserslist from "browserslist";
 import { findSuggestion } from "@babel/helper-validator-option";
 import browserModulesData from "@babel/compat-data/native-modules";
+import LruCache from "lru-cache";
 
 import {
   semverify,
@@ -70,7 +71,7 @@ function getLowestVersions(browsers: Array<string>): Targets {
       BrowserslistBrowserName,
       string,
     ];
-    const target: Target = browserNameMap[browserName];
+    const target = browserNameMap[browserName];
 
     if (!target) {
       return all;
@@ -108,7 +109,7 @@ function getLowestVersions(browsers: Array<string>): Targets {
 
 function outputDecimalWarning(
   decimalTargets: Array<{ target: string; value: number }>,
-): void {
+) {
   if (!decimalTargets.length) {
     return;
   }
@@ -123,7 +124,7 @@ getting parsed as 6.1, which can lead to unexpected behavior.
 `);
 }
 
-function semverifyTarget(target: keyof Targets, value: string) {
+function semverifyTarget(target: Target, value: string) {
   try {
     return semverify(value);
   } catch (error) {
@@ -141,7 +142,7 @@ function nodeTargetParser(value: true | string) {
     value === true || value === "current"
       ? process.versions.node
       : semverifyTarget("node", value);
-  return ["node" as const, parsed] as const;
+  return ["node", parsed] as const;
 }
 
 function defaultTargetParser(
@@ -158,7 +159,7 @@ function generateTargets(inputTargets: InputTargets): Targets {
   const input = { ...inputTargets };
   delete input.esmodules;
   delete input.browsers;
-  return input as any as Targets;
+  return input;
 }
 
 function resolveTargets(queries: Browsers, env?: string): Targets {
@@ -167,6 +168,18 @@ function resolveTargets(queries: Browsers, env?: string): Targets {
     env,
   });
   return getLowestVersions(resolved);
+}
+
+const targetsCache = new LruCache(64);
+
+function resolveTargetsCached(queries: Browsers, env?: string): Targets {
+  const cacheKey = JSON.stringify(queries) + env;
+  let cached = targetsCache.get(cacheKey);
+  if (!cached) {
+    cached = resolveTargets(queries, env);
+    targetsCache.set(cacheKey, cached);
+  }
+  return cached;
 }
 
 type GetTargetsOption = {
@@ -181,7 +194,7 @@ type GetTargetsOption = {
 };
 
 export default function getTargets(
-  inputTargets: InputTargets = {} as InputTargets,
+  inputTargets: InputTargets = {},
   options: GetTargetsOption = {},
 ): Targets {
   let { browsers, esmodules } = inputTargets;
@@ -190,7 +203,7 @@ export default function getTargets(
   validateBrowsers(browsers);
 
   const input = generateTargets(inputTargets);
-  let targets: TargetsTuple = validateTargetNames(input);
+  let targets = validateTargetNames(input);
 
   const shouldParseBrowsers = !!browsers;
   const hasTargets = shouldParseBrowsers || Object.keys(targets).length > 0;
@@ -233,7 +246,10 @@ export default function getTargets(
   // or an empty array (without any user config, use default config),
   // we don't need to call `resolveTargets` to execute the related methods of `browserslist` library.
   if (browsers?.length) {
-    const queryBrowsers = resolveTargets(browsers, options.browserslistEnv);
+    const queryBrowsers = resolveTargetsCached(
+      browsers,
+      options.browserslistEnv,
+    );
 
     if (esmodules === "intersect") {
       for (const browser of Object.keys(queryBrowsers) as Target[]) {
@@ -258,7 +274,7 @@ export default function getTargets(
   }
 
   // Parse remaining targets
-  const result: Targets = {} as Targets;
+  const result: Targets = {};
   const decimalWarnings = [];
   for (const target of Object.keys(targets).sort() as Target[]) {
     const value = targets[target];
