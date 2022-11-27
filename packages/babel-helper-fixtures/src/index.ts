@@ -10,14 +10,14 @@ const require = createRequire(import.meta.url);
 
 const nodeVersion = semver.clean(process.version.slice(1));
 
-function humanize(val: string, noext?: boolean) {
-  if (noext) val = path.basename(val, path.extname(val));
+function humanize(val: string, noExt?: boolean) {
+  if (noExt) val = path.basename(val, path.extname(val));
   return val.replace(/-/g, " ");
 }
 
 interface TestIO {
   loc: string;
-  code: string;
+  code: string | null;
 }
 
 export interface TestFile extends TestIO {
@@ -241,7 +241,7 @@ function pushTask(
 
   // traceur checks
 
-  if (test.exec.code.indexOf("// Async.") >= 0) {
+  if (test.exec.code?.indexOf("// Async.") >= 0) {
     return;
   }
 
@@ -352,14 +352,11 @@ function wrapPackagesArray(
  * Resolve plugins/presets defined in options.json
  *
  * @export
- * @param {{}} options the imported options.json
- * @param {string} optionsDir the direcotry where options.json is placed
- * @returns {{}} options whose plugins/presets are resolved
+ * @param options the imported options.json
+ * @param optionsDir the dictionary where options.json is placed
+ * @returns options whose plugins/presets are resolved
  */
-export function resolveOptionPluginOrPreset(
-  options: any,
-  optionsDir: string,
-): {} {
+export function resolveOptionPluginOrPreset(options: any, optionsDir: string) {
   if (options.plugins) {
     options.plugins = wrapPackagesArray("plugin", options.plugins, optionsDir);
   }
@@ -435,11 +432,6 @@ export function multiple(entryLoc: string, ignore?: Array<string>) {
 }
 
 export function readFile(filename: string) {
-  if (fs.existsSync(filename)) {
-    let file = fs.readFileSync(filename, "utf8").trimRight();
-    file = file.replace(/\r\n/g, "\n");
-    return file;
-  } else {
-    return "";
-  }
+  if (!fs.existsSync(filename)) return null;
+  return fs.readFileSync(filename, "utf8").replace(/\r\n/g, "\n").trimRight();
 }
