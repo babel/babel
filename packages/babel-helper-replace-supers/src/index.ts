@@ -1,9 +1,9 @@
-import { template } from "@babel/core";
 import type { File } from "@babel/core";
 import environmentVisitor from "@babel/helper-environment-visitor";
 import memberExpressionToFunctions from "@babel/helper-member-expression-to-functions";
 import type { HandlerState } from "@babel/helper-member-expression-to-functions";
 import optimiseCall from "@babel/helper-optimise-call-expression";
+import template from "@babel/template";
 import traverse from "@babel/traverse";
 import type { NodePath, Scope } from "@babel/traverse";
 import {

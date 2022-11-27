@@ -879,14 +879,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-replace-supers@workspace:packages/babel-helper-replace-supers"
   dependencies:
-    "@babel/core": "workspace:^"
     "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-member-expression-to-functions": "workspace:^"
     "@babel/helper-optimise-call-expression": "workspace:^"
+    "@babel/template": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
   languageName: unknown
   linkType: soft
 
