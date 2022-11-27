@@ -55,7 +55,7 @@ export const enum ParseFunctionFlag {
 }
 
 export const enum ParseStatementFlag {
-  StatementOnly = 0b000,
+  StatementOnly = 0b0000,
   AllowImportExport = 0b0001,
   AllowDeclaration = 0b0010,
   AllowFunctionDeclaration = 0b0100,
@@ -493,13 +493,12 @@ export default abstract class StatementParser extends ExpressionParser {
           break;
         }
         this.expectPlugin("explicitResourceManagement");
-        if (!allowDeclaration) {
-          this.raise(Errors.UnexpectedLexicalDeclaration, {
-            at: this.state.startLoc,
-          });
-        }
         if (!this.scope.inModule && this.scope.inTopLevel) {
           this.raise(Errors.UnexpectedUsingDeclaration, {
+            at: this.state.startLoc,
+          });
+        } else if (!allowDeclaration) {
+          this.raise(Errors.UnexpectedLexicalDeclaration, {
             at: this.state.startLoc,
           });
         }
