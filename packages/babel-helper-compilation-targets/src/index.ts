@@ -173,13 +173,13 @@ function resolveTargets(queries: Browsers, env?: string): Targets {
 const targetsCache = new LruCache(64);
 
 function resolveTargetsCached(queries: Browsers, env?: string): Targets {
-  const cacheKey = JSON.stringify(queries) + env;
-  let cached = targetsCache.get(cacheKey);
+  const cacheKey = typeof queries === "string" ? queries : queries.join() + env;
+  let cached = targetsCache.get(cacheKey) as Targets | undefined;
   if (!cached) {
     cached = resolveTargets(queries, env);
     targetsCache.set(cacheKey, cached);
   }
-  return cached;
+  return { ...cached };
 }
 
 type GetTargetsOption = {
