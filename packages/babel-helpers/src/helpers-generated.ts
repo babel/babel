@@ -42,7 +42,7 @@ export default Object.freeze({
     'import OverloadYield from"OverloadYield";export default function _awaitAsyncGenerator(value){return new OverloadYield(value,0)}',
   ),
   checkInRHS: helper(
-    "7.20.1",
+    "7.20.5",
     'export default function _checkInRHS(value){if(Object(value)!==value)throw TypeError("right-hand side of \'in\' should be an object, got "+(null!==value?typeof value:"null"));return value}',
   ),
   iterableToArrayLimit: helper(

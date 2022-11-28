@@ -1,4 +1,4 @@
-/* @minVersion 7.20.1 */
+/* @minVersion 7.20.5 */
 
 export default function _checkInRHS(value) {
   if (Object(value) !== value) {

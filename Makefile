@@ -192,7 +192,7 @@ new-version-checklist:
 	# @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 	# @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 	# @echo "!!!!!!                                                   !!!!!!"
-	# @echo "!!!!!! Update the minVersion of packages/babel-helpers/src/helpers/checkInRHS.js"
+	# @echo "!!!!!! Add any message here, and UNCOMMENT THESE LINES!  !!!!!!"
 	# @echo "!!!!!!                                                   !!!!!!"
 	# @echo "!!!!!!                                                   !!!!!!"
 	# @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"

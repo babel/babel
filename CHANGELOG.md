@@ -23,6 +23,50 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.20.6 (2022-11-28)
+
+#### :bug: Bug Fix
+* `babel-helpers`
+  * [#15231](https://github.com/babel/babel/pull/15231) Update `checkInRHS` helper min version ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+## v7.20.5 (2022-11-28)
+
+#### :eyeglasses: Spec Compliance
+* `babel-helpers`, `babel-plugin-transform-destructuring`, `babel-plugin-transform-modules-commonjs`, `babel-preset-env`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`, `babel-traverse`
+  * [#15183](https://github.com/babel/babel/pull/15183) Improve array destructuring spec compliance ([@SuperSodaSea](https://github.com/SuperSodaSea))
+* `babel-cli`, `babel-helpers`, `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-class-static-block`, `babel-plugin-transform-classes`, `babel-plugin-transform-runtime`, `babel-preset-env`
+  * [#15182](https://github.com/babel/babel/pull/15182) fix: apply toPropertyKey when defining class members ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-create-class-features-plugin`, `babel-helpers`, `babel-plugin-proposal-decorators`, `babel-plugin-proposal-private-property-in-object`, `babel-preset-env`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#15133](https://github.com/babel/babel/pull/15133) fix: validate rhs of `in` when transpiling `#p in C` ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#15225](https://github.com/babel/babel/pull/15225) Parse `using[foo]` as computed member expression ([@JLHwung](https://github.com/JLHwung))
+  * [#15207](https://github.com/babel/babel/pull/15207) Export `ParseResult` type ([@davydof](https://github.com/davydof))
+  * [#15198](https://github.com/babel/babel/pull/15198) fix: parse `import module, ...` ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-wrap-function`, `babel-preset-env`, `babel-traverse`
+  * [#15181](https://github.com/babel/babel/pull/15181) fix: Edge cases for async functions and `noNewArrow` assumption ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-plugin-transform-arrow-functions`, `babel-plugin-transform-parameters`, `babel-traverse`
+  * [#15163](https://github.com/babel/babel/pull/15163) fix: Throw error when compiling `super()` in arrow functions with default / rest parameters ([@SuperSodaSea](https://github.com/SuperSodaSea))
+* `babel-helpers`, `babel-node`, `babel-plugin-proposal-async-generator-functions`, `babel-plugin-transform-regenerator`, `babel-preset-env`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#15194](https://github.com/babel/babel/pull/15194) fix: Bump `regenerator` and add tests ([@SuperSodaSea](https://github.com/SuperSodaSea))
+* `babel-helper-create-regexp-features-plugin`
+  * [#15192](https://github.com/babel/babel/pull/15192) fix: Update `regjsparser` for `@babel/standalone` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-parser`, `babel-types`
+  * [#15109](https://github.com/babel/babel/pull/15109) fix: Babel 8 types ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-generator`
+  * [#15143](https://github.com/babel/babel/pull/15143) Don't print inner comments as leading when wrapping in `(``)` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-block-scoping`, `babel-traverse`
+  * [#15167](https://github.com/babel/babel/pull/15167) Register `switch`'s `discriminant` in the outer scope ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :nail_care: Polish
+* `babel-generator`
+  * [#15173](https://github.com/babel/babel/pull/15173) Improve generator behavior when `comments:false` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-plugin-transform-block-scoping`
+  * [#15164](https://github.com/babel/babel/pull/15164) Only extract IDs for TDZ checks in assign when necessary ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-core`, `babel-parser`
+  * [#15202](https://github.com/babel/babel/pull/15202) Bump typescript to 4.9.3 ([@JLHwung](https://github.com/JLHwung))
 ## v7.20.4 (2022-11-08)
 
 #### :bug: Bug Fix
