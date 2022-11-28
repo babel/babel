@@ -33,7 +33,7 @@ export default (_: any, opts: any = {}) => {
       babelPlugins.syntaxDecimal,
       babelPlugins.proposalExportDefaultFrom,
       babelPlugins.proposalDoExpressions,
-      babelPlugins.proposalAwaitOps,
+      babelPlugins.proposalAwaitOperations,
     ],
   };
 };

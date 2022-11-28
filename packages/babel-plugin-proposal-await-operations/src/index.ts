@@ -1,12 +1,12 @@
 import { declare } from "@babel/helper-plugin-utils";
-import syntaxAwaitOps from "@babel/plugin-syntax-await-ops";
+import syntaxAwaitOps from "@babel/plugin-syntax-await-operations";
 
 export default declare(api => {
   api.assertVersion(7);
   const { types: t } = api;
 
   return {
-    name: "proposal-await-ops",
+    name: "proposal-await-operations",
     inherits: syntaxAwaitOps,
     visitor: {
       AwaitExpression({ node }) {

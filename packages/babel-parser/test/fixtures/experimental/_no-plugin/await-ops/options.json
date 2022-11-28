@@ -1,4 +1,4 @@
 {
   "plugins": [],
-  "throws": "This experimental syntax requires enabling the parser plugin: \"awaitOps\". (2:8)"
+  "throws": "This experimental syntax requires enabling the parser plugin: \"awaitOperations\". (2:8)"
 }

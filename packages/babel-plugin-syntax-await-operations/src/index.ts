@@ -4,10 +4,10 @@ export default declare(api => {
   api.assertVersion(7);
 
   return {
-    name: "syntax-await-ops",
+    name: "syntax-await-operations",
 
     manipulateOptions(opts, parserOpts) {
-      parserOpts.plugins.push("awaitOps");
+      parserOpts.plugins.push("awaitOperations");
     },
   };
 });

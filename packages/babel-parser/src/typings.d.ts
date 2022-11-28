@@ -1,7 +1,7 @@
 export type Plugin =
   | "asyncDoExpressions"
   | "asyncGenerators"
-  | "awaitOps"
+  | "awaitOperations"
   | "bigInt"
   | "classPrivateMethods"
   | "classPrivateProperties"

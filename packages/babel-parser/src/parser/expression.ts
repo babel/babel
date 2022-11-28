@@ -2876,7 +2876,7 @@ export default abstract class ExpressionParser extends LValParser {
     }
 
     if (this.eat(tt.dot)) {
-      this.expectPlugin("awaitOps");
+      this.expectPlugin("awaitOperations");
       const { containsEsc, type } = this.state;
       const operationNode = this.parseIdentifier(true);
       if (containsEsc || !tokenIsAwaitOperation(type)) {
@@ -2886,7 +2886,7 @@ export default abstract class ExpressionParser extends LValParser {
         });
       }
       node.operation = operationNode;
-    } else if (this.hasPlugin("awaitOps")) {
+    } else if (this.hasPlugin("awaitOperations")) {
       node.operation = null;
     }
 

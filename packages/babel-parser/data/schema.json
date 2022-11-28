@@ -124,7 +124,7 @@
             "enum": [
               "asyncDoExpressions",
               "asyncGenerators",
-              "awaitOps",
+              "awaitOperations",
               "bigInt",
               "classPrivateMethods",
               "classPrivateProperties",

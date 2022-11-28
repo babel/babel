@@ -4,7 +4,7 @@
  */
 import makeNoopPlugin from "../make-noop-plugin";
 import externalHelpers from "@babel/plugin-external-helpers";
-import syntaxAwaitOps from "@babel/plugin-syntax-await-ops";
+import syntaxAwaitOperations from "@babel/plugin-syntax-await-operations";
 import syntaxDecimal from "@babel/plugin-syntax-decimal";
 import syntaxDecorators from "@babel/plugin-syntax-decorators";
 import syntaxDestructuringPrivate from "@babel/plugin-syntax-destructuring-private";
@@ -22,7 +22,7 @@ import syntaxPipelineOperator from "@babel/plugin-syntax-pipeline-operator";
 import syntaxRecordAndTuple from "@babel/plugin-syntax-record-and-tuple";
 import syntaxTypescript from "@babel/plugin-syntax-typescript";
 import proposalAsyncGeneratorFunctions from "@babel/plugin-proposal-async-generator-functions";
-import proposalAwaitOps from "@babel/plugin-proposal-await-ops";
+import proposalAwaitOperations from "@babel/plugin-proposal-await-operations";
 import proposalClassProperties from "@babel/plugin-proposal-class-properties";
 import proposalClassStaticBlock from "@babel/plugin-proposal-class-static-block";
 import proposalDecorators from "@babel/plugin-proposal-decorators";
@@ -108,7 +108,7 @@ export const syntaxAsyncGenerators = makeNoopPlugin(),
   syntaxTopLevelAwait = makeNoopPlugin();
 export {
   externalHelpers,
-  syntaxAwaitOps,
+  syntaxAwaitOperations,
   syntaxDecimal,
   syntaxDecorators,
   syntaxDestructuringPrivate,
@@ -126,7 +126,7 @@ export {
   syntaxRecordAndTuple,
   syntaxTypescript,
   proposalAsyncGeneratorFunctions,
-  proposalAwaitOps,
+  proposalAwaitOperations,
   proposalClassProperties,
   proposalClassStaticBlock,
   proposalDecorators,
@@ -213,7 +213,7 @@ export const all: { [k: string]: any } = {
   "syntax-optional-catch-binding": syntaxOptionalCatchBinding,
   "syntax-top-level-await": syntaxTopLevelAwait,
   "external-helpers": externalHelpers,
-  "syntax-await-ops": syntaxAwaitOps,
+  "syntax-await-operations": syntaxAwaitOperations,
   "syntax-decimal": syntaxDecimal,
   "syntax-decorators": syntaxDecorators,
   "syntax-destructuring-private": syntaxDestructuringPrivate,
@@ -231,7 +231,7 @@ export const all: { [k: string]: any } = {
   "syntax-record-and-tuple": syntaxRecordAndTuple,
   "syntax-typescript": syntaxTypescript,
   "proposal-async-generator-functions": proposalAsyncGeneratorFunctions,
-  "proposal-await-ops": proposalAwaitOps,
+  "proposal-await-operations": proposalAwaitOperations,
   "proposal-class-properties": proposalClassProperties,
   "proposal-class-static-block": proposalClassStaticBlock,
   "proposal-decorators": proposalDecorators,
