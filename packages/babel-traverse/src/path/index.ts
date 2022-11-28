@@ -23,7 +23,7 @@ import * as NodePath_modification from "./modification";
 import * as NodePath_family from "./family";
 import * as NodePath_comments from "./comments";
 import * as NodePath_virtual_types_validator from "./lib/virtual-types-validator";
-import type { NodePathAssetions } from "./generated/asserts";
+import type { NodePathAssertions } from "./generated/asserts";
 import type { NodePathValidators } from "./generated/validators";
 
 const debug = buildDebug("babel");
@@ -291,7 +291,7 @@ type NodePathMixins = typeof NodePath_ancestry &
 // assertion method
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface NodePath<T>
-  extends NodePathAssetions,
+  extends NodePathAssertions,
     NodePathValidators,
     NodePathMixins {
   /**
