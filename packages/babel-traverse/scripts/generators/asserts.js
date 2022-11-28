@@ -9,7 +9,7 @@ import type * as t from "@babel/types";
 import type NodePath from "../index";
 
 
-export interface NodePathAssetions {`;
+export interface NodePathAssertions {`;
 
   for (const type of [...t.TYPES].sort()) {
     output += `
