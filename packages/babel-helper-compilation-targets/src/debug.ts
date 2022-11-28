@@ -12,7 +12,7 @@ export function getInclusionReasons(
   targetVersions: Targets,
   list: { [key: string]: Targets },
 ) {
-  const minVersions = list[item] || ({} as Targets);
+  const minVersions = list[item] || {};
 
   return (Object.keys(targetVersions) as Target[]).reduce((result, env) => {
     const minVersion = getLowestImplementedVersion(minVersions, env);

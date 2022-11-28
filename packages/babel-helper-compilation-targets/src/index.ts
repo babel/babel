@@ -46,7 +46,7 @@ function validateTargetNames(targets: Targets): TargetsTuple {
     }
   }
 
-  return targets as any;
+  return targets;
 }
 
 export function isBrowsersQueryValid(browsers: unknown): boolean {
