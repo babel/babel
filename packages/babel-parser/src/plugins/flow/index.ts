@@ -28,6 +28,7 @@ import {
   type BindingTypes,
 } from "../../util/scopeflags";
 import type { ExpressionErrors } from "../../parser/util";
+import type { ParseStatementFlag } from "../../parser/statement";
 import { Errors, ParseErrorEnum } from "../../parse-error";
 import { cloneIdentifier, type Undone } from "../../parser/node";
 
@@ -1932,7 +1933,7 @@ export default (superClass: typeof Parser) =>
     }
 
     // interfaces and enums
-    parseStatement(context?: string | null, topLevel?: boolean): N.Statement {
+    parseStatementLike(flags: ParseStatementFlag): N.Statement {
       // strict mode handling of `interface` since it's a reserved word
       if (this.state.strict && this.isContextual(tt._interface)) {
         const lookahead = this.lookahead();
@@ -1946,7 +1947,7 @@ export default (superClass: typeof Parser) =>
         this.next();
         return this.flowParseEnumDeclaration(node);
       }
-      const stmt = super.parseStatement(context, topLevel);
+      const stmt = super.parseStatementLike(flags);
       // We will parse a flow pragma in any comment before the first statement.
       if (this.flowPragma === undefined && !this.isValidDirective(stmt)) {
         this.flowPragma = null;
