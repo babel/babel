@@ -23,6 +23,11 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.20.6 (2022-11-28)
+
+#### :bug: Bug Fix
+* `babel-helpers`
+  * [#15231](https://github.com/babel/babel/pull/15231) Update `checkInRHS` helper min version ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.20.5 (2022-11-28)
 
 #### :eyeglasses: Spec Compliance
