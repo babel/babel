@@ -4,6 +4,7 @@ const hasOwn: <O extends object>(obj: O, key: unknown) => key is keyof O =
 export function getInternal(type: "plugin" | "preset", name: string) {
   const match = name.match(/^internal:(transform|bugfix)-(.+)/);
   if (type === "plugin" && match) {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     const plugins = match[1][0] === "t" ? transformPlugins : bugfixPlugins;
     if (hasOwn(plugins, match[2])) {
       // @ts-expect-error: The hasOwn check guarantees that plugins[match[2]] exists.

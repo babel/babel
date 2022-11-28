@@ -1,4 +1,5 @@
 /* eslint sort-keys: "error" */
+/* eslint-disable @typescript-eslint/no-use-before-define */
 
 import syntaxAsyncGenerators from "@babel/plugin-syntax-async-generators";
 import syntaxClassProperties from "@babel/plugin-syntax-class-properties";
@@ -227,4 +228,4 @@ const plugins = {
   "transform-unicode-escapes": () => transformUnicodeEscapes,
   "transform-unicode-property-regex": () => proposalUnicodePropertyRegex,
   "transform-unicode-regex": () => transformUnicodeRegex,
-};
+} as const;
