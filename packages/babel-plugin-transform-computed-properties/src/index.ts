@@ -1,5 +1,6 @@
+import { types as t } from "@babel/core";
+import type { PluginPass } from "@babel/core";
 import { declare } from "@babel/helper-plugin-utils";
-import { template, types as t, type PluginPass } from "@babel/core";
 import type { Scope } from "@babel/traverse";
 
 export interface Options {
@@ -12,7 +13,6 @@ type PropertyInfo = {
   body: t.Statement[];
   computedProps: t.ObjectMember[];
   initPropExpression: t.ObjectExpression;
-  getMutatorId: () => t.Identifier;
   state: PluginPass;
 };
 
@@ -25,11 +25,6 @@ export default declare((api, options: Options) => {
   const pushComputedProps = setComputedProperties
     ? pushComputedPropsLoose
     : pushComputedPropsSpec;
-
-  const buildMutatorMapAssign = template.statements(`
-    MUTATOR_MAP_REF[KEY] = MUTATOR_MAP_REF[KEY] || {};
-    MUTATOR_MAP_REF[KEY].KIND = VALUE;
-  `);
 
   /**
    * Get value of an object member under object expression.
@@ -72,31 +67,34 @@ export default declare((api, options: Options) => {
     );
   }
 
-  function pushMutatorDefine(
-    { body, getMutatorId, scope }: PropertyInfo,
+  function pushAccessorDefine(
+    { body, computedProps, initPropExpression, objId, state }: PropertyInfo,
     prop: t.ObjectMethod,
   ) {
-    let key =
+    const key =
       !prop.computed && t.isIdentifier(prop.key)
         ? t.stringLiteral(prop.key.name)
         : prop.key;
 
-    const maybeMemoise = scope.maybeGenerateMemoised(key);
-    if (maybeMemoise) {
+    if (computedProps.length === 1) {
+      return t.callExpression(state.addHelper("defineAccessor"), [
+        initPropExpression,
+        key,
+        t.stringLiteral(prop.kind),
+        getValue(prop),
+      ]);
+    } else {
       body.push(
-        t.expressionStatement(t.assignmentExpression("=", maybeMemoise, key)),
+        t.expressionStatement(
+          t.callExpression(state.addHelper("defineAccessor"), [
+            t.cloneNode(objId),
+            key,
+            t.stringLiteral(prop.kind),
+            getValue(prop),
+          ]),
+        ),
       );
-      key = maybeMemoise;
     }
-
-    body.push(
-      ...buildMutatorMapAssign({
-        MUTATOR_MAP_REF: getMutatorId(),
-        KEY: t.cloneNode(key),
-        VALUE: getValue(prop),
-        KIND: t.identifier(prop.kind),
-      }),
-    );
   }
 
   function pushComputedPropsLoose(info: PropertyInfo) {
@@ -105,7 +103,8 @@ export default declare((api, options: Options) => {
         t.isObjectMethod(prop) &&
         (prop.kind === "get" || prop.kind === "set")
       ) {
-        pushMutatorDefine(info, prop);
+        const single = pushAccessorDefine(info, prop);
+        if (single) return single;
       } else {
         pushAssign(t.cloneNode(info.objId), prop, info.body);
       }
@@ -123,7 +122,8 @@ export default declare((api, options: Options) => {
         t.isObjectMethod(prop) &&
         (prop.kind === "get" || prop.kind === "set")
       ) {
-        pushMutatorDefine(info, prop);
+        const single = pushAccessorDefine(info, prop);
+        if (single) return single;
       } else {
         // the value of ObjectProperty in ObjectExpression must be an expression
         const value = getValue(prop) as t.Expression;
@@ -195,44 +195,15 @@ export default declare((api, options: Options) => {
             ]),
           );
 
-          let mutatorRef: t.Identifier;
-
-          const getMutatorId = function () {
-            if (!mutatorRef) {
-              mutatorRef = scope.generateUidIdentifier("mutatorMap");
-
-              body.push(
-                t.variableDeclaration("var", [
-                  t.variableDeclarator(mutatorRef, t.objectExpression([])),
-                ]),
-              );
-            }
-
-            return t.cloneNode(mutatorRef);
-          };
-
           const single = pushComputedProps({
             scope,
             objId,
             body,
             computedProps,
             initPropExpression,
-            getMutatorId,
             state,
           });
 
-          if (mutatorRef) {
-            body.push(
-              t.expressionStatement(
-                t.callExpression(
-                  state.addHelper("defineEnumerableProperties"),
-                  [t.cloneNode(objId), t.cloneNode(mutatorRef)],
-                ),
-              ),
-            );
-          }
-
-          // @ts-expect-error todo(flow->ts) `void` should not be used as variable
           if (single) {
             path.replaceWith(single);
           } else {

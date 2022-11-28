@@ -89,6 +89,15 @@
       "./helpers/checkInRHS.js"
     ],
     "./helpers/esm/checkInRHS": "./helpers/esm/checkInRHS.js",
+    "./helpers/defineAccessor": [
+      {
+        "node": "./helpers/defineAccessor.js",
+        "import": "./helpers/esm/defineAccessor.js",
+        "default": "./helpers/defineAccessor.js"
+      },
+      "./helpers/defineAccessor.js"
+    ],
+    "./helpers/esm/defineAccessor": "./helpers/esm/defineAccessor.js",
     "./helpers/iterableToArrayLimit": [
       {
         "node": "./helpers/iterableToArrayLimit.js",
