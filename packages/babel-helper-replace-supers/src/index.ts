@@ -65,26 +65,6 @@ const visitor = traverse.visitors.merge<
     Super(path, state) {
       const { node, parentPath } = path;
       if (!parentPath.isMemberExpression({ object: node })) return;
-      if (parentPath.parentPath.isUnaryExpression({ operator: "delete" })) {
-        const deletePath = parentPath.parentPath;
-        if (parentPath.node.computed) {
-          deletePath.replaceWith(
-            sequenceExpression([
-              callExpression(this.file.addHelper("toPropertyKey"), [
-                cloneNode(parentPath.node.property as t.Expression),
-              ]),
-              template.expression.ast`
-                function () { throw new ReferenceError("'delete super[expr]' is invalid"); }()
-              `,
-            ]),
-          );
-        } else {
-          deletePath.replaceWith(template.expression.ast`
-            function () { throw new ReferenceError("'delete super.prop' is invalid"); }()
-          `);
-        }
-        return;
-      }
       state.handle(parentPath);
     },
   },
@@ -128,7 +108,13 @@ type SuperMember = NodePath<
 interface SpecHandler
   extends Pick<
     Handler,
-    "get" | "set" | "destructureSet" | "call" | "optionalCall" | "memoise"
+    | "memoise"
+    | "get"
+    | "set"
+    | "destructureSet"
+    | "call"
+    | "optionalCall"
+    | "delete"
   > {
   _get(
     this: Handler & SpecHandler,
@@ -260,6 +246,23 @@ const specHandlers: SpecHandler = {
       args,
       true,
     );
+  },
+
+  delete(this: Handler & SpecHandler, superMember: SuperMember) {
+    if (superMember.node.computed) {
+      return sequenceExpression([
+        callExpression(this.file.addHelper("toPropertyKey"), [
+          cloneNode(superMember.node.property),
+        ]),
+        template.expression.ast`
+          function () { throw new ReferenceError("'delete super[expr]' is invalid"); }()
+        `,
+      ]);
+    } else {
+      return template.expression.ast`
+        function () { throw new ReferenceError("'delete super.prop' is invalid"); }()
+      `;
+    }
   },
 };
 
