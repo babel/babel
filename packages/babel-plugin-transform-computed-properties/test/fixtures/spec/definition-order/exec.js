@@ -10,7 +10,8 @@ var b = {
 };
 expect(b.x).toBe(1);
 
-var x = { x, get x() { return 0; }, x };
-expect(x.x).toBe(undefined);
-x.x = 1;
-expect(x.x).toBe(1);
+var x = 1;
+var y = { x, get x() { return 0; }, x };
+expect(y.x).toBe(1);
+y.x = 2;
+expect(y.x).toBe(2);

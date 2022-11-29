@@ -8,5 +8,6 @@ var b = {
   ["x"]: 1,
 };
 
-var x = { x, get x() { return 0; }, x };
-x.x = 1;
+var x = 1;
+var y = { x, get x() { return 0; }, x };
+y.x = 2;
