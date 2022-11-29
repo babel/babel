@@ -11,36 +11,71 @@ export default declare(api => {
     visitor: {
       ObjectExpression(path, { file }) {
         const { node } = path;
-        let mutatorMap: defineMap.MutatorMap | void;
-        const newProperties = node.properties.filter(function (prop) {
-          if (t.isObjectMethod(prop)) {
-            if (prop.kind === "get" || prop.kind === "set") {
-              if (prop.computed && !path.scope.isStatic(prop.key)) {
-                return true;
+        const mutatorMap: defineMap.MutatorMap = {};
+
+        let hasSideEffect = false;
+        let hasMutators = false;
+
+        const computedKeys = new Map<
+          t.ObjectMethod | t.ObjectProperty,
+          t.Identifier
+        >();
+        const computedKeysInits = [];
+
+        for (const prop of node.properties) {
+          if (t.isObjectMethod(prop) || t.isObjectProperty(prop)) {
+            if (t.isObjectMethod(prop)) {
+              if (prop.kind === "get" || prop.kind === "set") {
+                hasMutators = true;
               }
-              mutatorMap ??= {};
-              defineMap.push(mutatorMap, prop, null, file);
-              return false;
+            }
+
+            if (prop.computed && !path.scope.isStatic(prop.key)) {
+              hasSideEffect = true;
+
+              const id =
+                path.scope.generateDeclaredUidIdentifier("computedKey");
+              computedKeys.set(prop, id);
+              computedKeysInits.push(
+                t.assignmentExpression("=", id, prop.key as t.Expression),
+              );
             }
           }
-          return true;
-        });
-
-        if (mutatorMap === undefined) {
-          return;
         }
 
-        node.properties = newProperties;
+        if (!hasMutators) return;
 
-        path.replaceWith(
-          t.callExpression(
-            t.memberExpression(
-              t.identifier("Object"),
-              t.identifier("defineProperties"),
+        if (hasSideEffect) {
+          for (const [propNode, id] of computedKeys) {
+            propNode.key = t.cloneNode(id);
+          }
+          path.replaceWithMultiple([
+            t.sequenceExpression(computedKeysInits),
+            node,
+          ]);
+        } else {
+          const newProperties = node.properties.filter(function (prop) {
+            if (t.isObjectMethod(prop)) {
+              if (prop.kind === "get" || prop.kind === "set") {
+                defineMap.push(mutatorMap, prop, null, file);
+                return false;
+              }
+            }
+            return true;
+          });
+
+          node.properties = newProperties;
+
+          path.replaceWith(
+            t.callExpression(
+              t.memberExpression(
+                t.identifier("Object"),
+                t.identifier("defineProperties"),
+              ),
+              [node, defineMap.toDefineObject(mutatorMap)],
             ),
-            [node, defineMap.toDefineObject(mutatorMap)],
-          ),
-        );
+          );
+        }
       },
     },
   };
