@@ -115,9 +115,10 @@ const replPlugin = ({ types: t }: PluginAPI): PluginObject => ({
     },
 
     Program(path) {
+      let hasExpressionStatement: boolean;
       for (const bodyPath of path.get("body")) {
         if (bodyPath.isExpressionStatement()) {
-          return;
+          hasExpressionStatement = true;
         } else if (
           bodyPath.isExportDeclaration() ||
           bodyPath.isImportDeclaration()
@@ -127,6 +128,7 @@ const replPlugin = ({ types: t }: PluginAPI): PluginObject => ({
           );
         }
       }
+      if (hasExpressionStatement) return;
 
       // If the executed code doesn't evaluate to a value,
       // prevent implicit strict mode from printing 'use strict'.
