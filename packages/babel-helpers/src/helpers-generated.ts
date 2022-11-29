@@ -47,7 +47,7 @@ export default Object.freeze({
   ),
   defineAccessor: helper(
     "7.20.6",
-    "export default function _defineAccessor(obj,key,type,fn){var desc={configurable:!0,enumerable:!0};return desc[type]=fn,Object.defineProperty(obj,key,desc)}",
+    "export default function _defineAccessor(type,obj,key,fn){var desc={configurable:!0,enumerable:!0};return desc[type]=fn,Object.defineProperty(obj,key,desc)}",
   ),
   iterableToArrayLimit: helper(
     "7.0.0-beta.0",

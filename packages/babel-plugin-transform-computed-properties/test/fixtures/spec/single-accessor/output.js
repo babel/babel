@@ -1,3 +1,3 @@
-var obj = babelHelpers.defineAccessor({}, "x" + foo, "get", function () {
+var obj = babelHelpers.defineAccessor("get", {}, "x" + foo, function () {
   return "heh";
 });

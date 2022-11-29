@@ -78,18 +78,18 @@ export default declare((api, options: Options) => {
 
     if (computedProps.length === 1) {
       return t.callExpression(state.addHelper("defineAccessor"), [
+        t.stringLiteral(prop.kind),
         initPropExpression,
         key,
-        t.stringLiteral(prop.kind),
         getValue(prop),
       ]);
     } else {
       body.push(
         t.expressionStatement(
           t.callExpression(state.addHelper("defineAccessor"), [
+            t.stringLiteral(prop.kind),
             t.cloneNode(objId),
             key,
-            t.stringLiteral(prop.kind),
             getValue(prop),
           ]),
         ),
