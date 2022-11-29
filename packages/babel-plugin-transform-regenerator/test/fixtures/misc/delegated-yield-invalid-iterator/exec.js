@@ -1,3 +1,4 @@
+// #15177
 expect(() => {
   var [x] = {
     [Symbol.iterator]: function* () {
