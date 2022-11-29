@@ -142,7 +142,7 @@ export default function normalizeModuleAndLoadMetadata(
     stringSpecifiers,
   );
 
-  removeModuleDeclarations(programPath);
+  removeImportExportDeclarations(programPath);
 
   // Reuse the imported namespace name if there is one.
   for (const [, metadata] of source) {
@@ -558,7 +558,7 @@ function nameAnonymousExports(programPath: NodePath<t.Program>) {
   });
 }
 
-function removeModuleDeclarations(programPath: NodePath<t.Program>) {
+function removeImportExportDeclarations(programPath: NodePath<t.Program>) {
   programPath.get("body").forEach(child => {
     if (child.isImportDeclaration()) {
       child.remove();
