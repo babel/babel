@@ -15,6 +15,9 @@ export default declare(api => {
         const newProperties = node.properties.filter(function (prop) {
           if (t.isObjectMethod(prop)) {
             if (prop.kind === "get" || prop.kind === "set") {
+              if (prop.computed && !path.scope.isStatic(prop.key)) {
+                return true;
+              }
               mutatorMap ??= {};
               defineMap.push(mutatorMap, prop, null, file);
               return false;
