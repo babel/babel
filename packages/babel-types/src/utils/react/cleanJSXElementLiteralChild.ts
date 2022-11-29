@@ -1,10 +1,9 @@
 import { stringLiteral } from "../../builders/generated";
 import type * as t from "../..";
+import { inherits } from "../..";
 
 export default function cleanJSXElementLiteralChild(
-  child: {
-    value: string;
-  },
+  child: t.JSXText,
   args: Array<t.Node>,
 ) {
   const lines = child.value.split(/\r\n|\n|\r/);
@@ -48,5 +47,5 @@ export default function cleanJSXElementLiteralChild(
     }
   }
 
-  if (str) args.push(stringLiteral(str));
+  if (str) args.push(inherits(stringLiteral(str), child));
 }
