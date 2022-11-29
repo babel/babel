@@ -16,10 +16,8 @@ export default declare(api => {
           if (t.isObjectMethod(prop)) {
             if (prop.kind === "get" || prop.kind === "set") {
               mutatorMap ??= {};
-              if (!prop.computed) {
-                defineMap.push(mutatorMap, prop, null, file);
-                return false;
-              }
+              defineMap.push(mutatorMap, prop, null, file);
+              return false;
             }
           }
           return true;
