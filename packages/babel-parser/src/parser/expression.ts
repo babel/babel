@@ -2851,7 +2851,7 @@ export default abstract class ExpressionParser extends LValParser {
   }
 
   // Parses await expression inside async function.
-
+  // https://tc39.es/ecma262/#prod-AwaitExpression
   parseAwait(this: Parser, startLoc: Position): N.AwaitExpression {
     const node = this.startNodeAt<N.AwaitExpression>(startLoc);
 
@@ -2876,6 +2876,7 @@ export default abstract class ExpressionParser extends LValParser {
     }
 
     if (this.eat(tt.dot)) {
+      // https://tc39.es/proposal-await.ops/
       this.expectPlugin("awaitOperations");
       const { containsEsc, type } = this.state;
       const operationNode = this.parseIdentifier(true);
