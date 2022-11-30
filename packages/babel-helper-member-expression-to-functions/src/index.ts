@@ -573,6 +573,8 @@ export interface Handler<State> {
     member: Member,
     args: t.OptionalCallExpression["arguments"],
   ): t.Expression;
+  // TODO(Babel 8): Consider making this required, since `.get` doesn't
+  // really work as a fallback for `.delete`
   delete?(this: HandlerState<State> & State, member: Member): t.Expression;
 }
 
