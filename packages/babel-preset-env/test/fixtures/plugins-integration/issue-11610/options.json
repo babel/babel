@@ -1,12 +1,5 @@
 {
-  "presets": [
-    [
-      "env",
-      {
-        "targets": "node 4"
-      }
-    ]
-  ],
+  "plugins": ["transform-parameters", "proposal-async-generator-functions"],
   "parserOpts": {
     "allowReturnOutsideFunction": true
   }
