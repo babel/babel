@@ -24,6 +24,7 @@ expect(() => {
   var [] = { [Symbol.iterator]: async function*() {} };
 }).not.toThrow();
 
+// iterator.return should be called
 var returnCalled = false;
 var [] = {
   [Symbol.iterator]: () => {
@@ -36,3 +37,13 @@ var [] = {
   },
 };
 expect(returnCalled).toStrictEqual(true);
+
+// #15154
+expect(() => {
+  var [] = { [Symbol.iterator]: () => [] };
+}).not.toThrow();
+
+// #15168
+expect(() => {
+  var [] = { [Symbol.iterator]: () => async function* () {} };
+}).not.toThrow();

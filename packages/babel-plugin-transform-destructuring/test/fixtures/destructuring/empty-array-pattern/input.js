@@ -11,6 +11,7 @@ var [] = { [Symbol.iterator]: () => ({}) };
 var [] = { [Symbol.iterator]: () => () => {} };
 var [] = { [Symbol.iterator]: async function*() {} };
 
+// iterator.return should be called
 var returnCalled = false;
 var [] = {
   [Symbol.iterator]: () => {
@@ -22,3 +23,9 @@ var [] = {
     };
   },
 };
+
+// #15154
+var [] = { [Symbol.iterator]: () => [] };
+
+// #15168
+var [] = { [Symbol.iterator]: () => async function* () {} };
