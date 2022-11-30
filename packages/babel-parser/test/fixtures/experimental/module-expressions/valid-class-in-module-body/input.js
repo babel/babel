@@ -1,6 +1,6 @@
 class B {
   #p() {
-    module {
+    const m = module {
       class C {
         [this.#p];
         #p = 3;
@@ -8,4 +8,3 @@ class B {
     };
   }
 }
-  

@@ -603,6 +603,24 @@ export default abstract class StatementParser extends ExpressionParser {
         return result;
       }
 
+      case tt._module:
+        // "module [NLTH] {" is an explicit negative lookahead for
+        // ExpressionStatement
+        if (
+          !this.state.containsEsc &&
+          !this.hasFollowingLineBreak() &&
+          this.lookaheadCharCode() === charCodes.leftCurlyBrace
+        ) {
+          // todo: support module declarations here. Currently
+          // we parse module as an identifier.
+          return this.parseExpressionStatement(
+            node as Undone<N.ExpressionStatement>,
+            this.parseIdentifier(),
+            decorators,
+          );
+        }
+        break;
+
       default: {
         if (this.isAsyncFunction()) {
           if (!allowDeclaration) {

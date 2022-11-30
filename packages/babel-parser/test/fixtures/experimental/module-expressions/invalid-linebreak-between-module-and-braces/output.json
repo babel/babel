@@ -1,9 +1,9 @@
 {
   "type": "File",
-  "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":2,"index":19}},
+  "start":0,"end":30,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":2,"index":30}},
   "program": {
     "type": "Program",
-    "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":2,"index":19}},
+    "start":0,"end":30,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":2,"index":30}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
@@ -31,6 +31,21 @@
       {
         "type": "BlockStatement",
         "start":17,"end":19,"loc":{"start":{"line":2,"column":0,"index":17},"end":{"line":2,"column":2,"index":19}},
+        "body": [],
+        "directives": []
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":21,"end":27,"loc":{"start":{"line":4,"column":0,"index":21},"end":{"line":4,"column":6,"index":27}},
+        "expression": {
+          "type": "Identifier",
+          "start":21,"end":27,"loc":{"start":{"line":4,"column":0,"index":21},"end":{"line":4,"column":6,"index":27},"identifierName":"module"},
+          "name": "module"
+        }
+      },
+      {
+        "type": "BlockStatement",
+        "start":28,"end":30,"loc":{"start":{"line":5,"column":0,"index":28},"end":{"line":5,"column":2,"index":30}},
         "body": [],
         "directives": []
       }

@@ -3,13 +3,14 @@
   "names": [
     "m",
     "foo",
+    "m2",
     "bar"
   ],
   "sources": [
     "fixtures/sourcemaps/ModuleExpression/input.js"
   ],
   "sourcesContent": [
-    "const m = module { export const foo = \"foo\" };\nmodule {\n  foo;\n  bar;\n};\nfoo(module {});"
+    "const m = module { export const foo = \"foo\" };\nconst m2= module {\n  foo;\n  bar;\n};\nfoo(module {});"
   ],
-  "mappings": "AAAA,MAAMA,CAAC,GAAG;EAAS,OAAO,MAAMC,GAAG,GAAG,KAAK;AAAC,CAAC;AAC7C;EACEA,GAAG;EACHC,GAAG;AACL,CAAC;AACDD,GAAG,CAAC,QAAQ,CAAC,CAAC"
+  "mappings": "AAAA,MAAMA,CAAC,GAAG;EAAS,OAAO,MAAMC,GAAG,GAAG,KAAK;AAAC,CAAC;AAC7C,MAAMC,EAAE,GAAE;EACRD,GAAG;EACHE,GAAG;AACL,CAAC;AACDF,GAAG,CAAC,QAAQ,CAAC,CAAC"
 }

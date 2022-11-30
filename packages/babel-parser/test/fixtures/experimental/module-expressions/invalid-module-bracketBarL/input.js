@@ -1,1 +1,1 @@
-module{|foo:42|}}
+0, module{|foo:42|}}

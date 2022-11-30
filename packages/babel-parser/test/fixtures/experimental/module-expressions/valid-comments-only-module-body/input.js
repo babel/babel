@@ -1,1 +1,1 @@
-module {/* comment */}
+const m = module {/* comment */}

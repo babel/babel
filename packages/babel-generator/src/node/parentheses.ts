@@ -324,6 +324,17 @@ export function ClassExpression(
   );
 }
 
+export function ModuleExpression(
+  node: t.ModuleExpression,
+  parent: t.Node,
+  printStack: Array<t.Node>,
+): boolean {
+  return isFirstInContext(
+    printStack,
+    CheckParam.expressionStatement | CheckParam.exportDefault,
+  );
+}
+
 export function UnaryLike(
   node:
     | t.UnaryLike

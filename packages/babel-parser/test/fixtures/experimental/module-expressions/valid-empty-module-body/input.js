@@ -1,1 +1,1 @@
-module {};
+const m = module {};

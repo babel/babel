@@ -8,5 +8,5 @@
       }
     ]
   ],
-  "throws": "Unexpected token, expected \"{\" (1:6)"
+  "throws": "Unexpected token, expected \"{\" (1:9)"
 }

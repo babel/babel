@@ -1,27 +1,39 @@
 {
   "type": "File",
-  "start":0,"end":10,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":10,"index":10}},
+  "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
   "program": {
     "type": "Program",
-    "start":0,"end":10,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":10,"index":10}},
+    "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
-        "type": "ExpressionStatement",
-        "start":0,"end":10,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":10,"index":10}},
-        "expression": {
-          "type": "ModuleExpression",
-          "start":0,"end":9,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":9,"index":9}},
-          "body": {
-            "type": "Program",
-            "start":8,"end":8,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":8,"index":8}},
-            "sourceType": "module",
-            "interpreter": null,
-            "body": [],
-            "directives": []
+        "type": "VariableDeclaration",
+        "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":19,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":19,"index":19}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"m"},
+              "name": "m"
+            },
+            "init": {
+              "type": "ModuleExpression",
+              "start":10,"end":19,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":19,"index":19}},
+              "body": {
+                "type": "Program",
+                "start":18,"end":18,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":18,"index":18}},
+                "sourceType": "module",
+                "interpreter": null,
+                "body": [],
+                "directives": []
+              }
+            }
           }
-        }
+        ],
+        "kind": "const"
       }
     ],
     "directives": []

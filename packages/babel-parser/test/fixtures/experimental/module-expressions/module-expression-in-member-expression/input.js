@@ -1,1 +1,1 @@
-module {}.foo
+const m = module {}.foo
