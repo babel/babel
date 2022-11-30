@@ -634,6 +634,37 @@ describe("generation", function () {
     `);
   });
 
+  it("comments without loc3", () => {
+    const ast = parse(
+      `
+        /** This describes how the endpoint is implemented when the lease is deployed */
+        export enum Endpoint_Kind {
+          /** SHARED_HTTP - Describes an endpoint that becomes a Kubernetes Ingress */
+          SHARED_HTTP = 0,
+          /** RANDOM_PORT - Describes an endpoint that becomes a Kubernetes NodePort */
+          RANDOM_PORT = 1,
+          UNRECOGNIZED = -1,
+        }
+      `,
+      { sourceType: "module", plugins: ["typescript"] },
+    );
+
+    for (const comment of ast.comments) {
+      comment.loc = undefined;
+    }
+
+    expect(generate(ast).code).toMatchInlineSnapshot(`
+      "/** This describes how the endpoint is implemented when the lease is deployed */
+      export enum Endpoint_Kind {
+        /** SHARED_HTTP - Describes an endpoint that becomes a Kubernetes Ingress */
+        SHARED_HTTP = 0,
+        /** RANDOM_PORT - Describes an endpoint that becomes a Kubernetes NodePort */
+        RANDOM_PORT = 1,
+        UNRECOGNIZED = -1,
+      }"
+    `);
+  });
+
   it("comments without node.loc", () => {
     const ast = parse(
       `

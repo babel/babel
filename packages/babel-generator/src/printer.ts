@@ -7,6 +7,7 @@ import {
   isStatement,
   isClassBody,
   isTSInterfaceBody,
+  isTSEnumDeclaration,
 } from "@babel/types";
 import type {
   RecordAndTuplePluginOptions,
@@ -1103,7 +1104,8 @@ class Printer {
             singleLine &&
             !isStatement(node) &&
             !isClassBody(parent) &&
-            !isTSInterfaceBody(parent);
+            !isTSInterfaceBody(parent) &&
+            !isTSEnumDeclaration(parent);
 
           if (type === COMMENT_TYPE.LEADING) {
             this._printComment(
