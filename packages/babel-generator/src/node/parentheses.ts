@@ -476,6 +476,19 @@ export function ClassExpression(
   );
 }
 
+export function ModuleExpression(
+  node: t.ModuleExpression,
+  parent: any,
+  parentId: number,
+  tokenContext: number,
+): boolean {
+  return (
+    (tokenContext &
+      (TokenContext.expressionStatement | TokenContext.exportDefault)) >
+    0
+  );
+}
+
 function UnaryLike(
   node:
     | t.UnaryLike

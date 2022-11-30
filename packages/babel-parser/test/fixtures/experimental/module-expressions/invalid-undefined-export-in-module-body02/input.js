@@ -1,4 +1,4 @@
 let foo;
-module {
+const m = module {
   export { foo };
 }

@@ -1,5 +1,5 @@
 let m = module {
-  module {
+  const m = module {
     export let foo = "foo";
   };
 };

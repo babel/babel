@@ -1,2 +1,5 @@
 const m = module
 {}
+
+module
+{}

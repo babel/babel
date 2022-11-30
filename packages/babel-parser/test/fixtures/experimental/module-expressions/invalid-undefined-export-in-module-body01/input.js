@@ -1,3 +1,3 @@
-module {
+const m = module {
   export { foo }
 }
