@@ -1,1 +1,1 @@
-module { await: 3 };
+const m = module { await: 3 };

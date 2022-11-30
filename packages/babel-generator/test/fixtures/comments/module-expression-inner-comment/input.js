@@ -1,1 +1,1 @@
-module /* 1 */ { /* 2 */ }
+const m = module /* 1 */ { /* 2 */ }

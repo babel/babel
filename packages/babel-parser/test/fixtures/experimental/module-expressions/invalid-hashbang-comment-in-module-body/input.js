@@ -1,1 +1,1 @@
-module { #!/usr/bin/env node };
+const m = module { #!/usr/bin/env node };

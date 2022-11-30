@@ -5,8 +5,8 @@
     "fixtures/sourcemaps/ModuleExpression/input.js"
   ],
   "sourcesContent": [
-    "const m = module { export const foo = \"foo\" };\nmodule {\n  foo;\n  bar;\n};\nfoo(module {});"
+    "const m = module { export const foo = \"foo\" };\nconst m2= module {\n  foo;\n  bar;\n};\nfoo(module {});"
   ],
-  "mappings": "AAAA,MAAM,CAAC,GAAG;EAAS,OAAO,MAAM,GAAG,GAAG,KAAK;AAAC,CAAC;AAC7C;EACE,GAAG;EACH,GAAG;AACL,CAAC;AACD,GAAG,CAAC,QAAQ,CAAC,CAAC",
+  "mappings": "AAAA,MAAM,CAAC,GAAG;EAAS,OAAO,MAAM,GAAG,GAAG,KAAK;AAAC,CAAC;AAC7C,MAAM,EAAE,GAAE;EACR,GAAG;EACH,GAAG;AACL,CAAC;AACD,GAAG,CAAC,QAAQ,CAAC,CAAC",
   "ignoreList": []
 }
