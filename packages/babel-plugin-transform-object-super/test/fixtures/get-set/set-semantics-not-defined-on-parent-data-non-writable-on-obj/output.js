@@ -16,7 +16,7 @@ Object.defineProperty(obj, 'test', {
 Object.setPrototypeOf(obj, Base);
 expect(() => {
   obj.set();
-}).toThrow();
+}).toThrow(TypeError);
 expect(Base.test).toBeUndefined();
 expect(obj.test).toBe(2);
 const desc = Object.getOwnPropertyDescriptor(obj, 'test');

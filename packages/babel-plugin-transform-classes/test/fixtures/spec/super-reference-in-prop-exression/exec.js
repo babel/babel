@@ -14,5 +14,5 @@ class B extends A {
 
 expect(() => {
   new B();
-}).toThrow();
+}).toThrow(ReferenceError);
 expect(called).toBe(false);

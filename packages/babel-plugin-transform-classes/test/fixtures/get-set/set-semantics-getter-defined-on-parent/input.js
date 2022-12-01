@@ -21,7 +21,7 @@ expect(() => {
   // this requires helpers to be in file (not external), so they
   // are in "strict" mode code.
   obj.set();
-}).toThrow();
+}).toThrow(TypeError);
 expect(Base.prototype.test).toBe(1);
 expect(Obj.prototype.test).toBe(2);
 expect(obj.test).toBe(2);
