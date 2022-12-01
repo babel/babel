@@ -170,7 +170,7 @@ function resolveTargets(queries: Browsers, env?: string): Targets {
   return getLowestVersions(resolved);
 }
 
-const targetsCache = new LruCache(64);
+const targetsCache = new LruCache({ max: 64 });
 
 function resolveTargetsCached(queries: Browsers, env?: string): Targets {
   const cacheKey = typeof queries === "string" ? queries : queries.join() + env;
