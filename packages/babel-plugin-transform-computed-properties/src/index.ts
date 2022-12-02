@@ -1,6 +1,7 @@
 import { types as t } from "@babel/core";
 import type { PluginPass } from "@babel/core";
 import { declare } from "@babel/helper-plugin-utils";
+import template from "@babel/template";
 import type { Scope } from "@babel/traverse";
 
 export interface Options {
@@ -25,6 +26,44 @@ export default declare((api, options: Options) => {
   const pushComputedProps = setComputedProperties
     ? pushComputedPropsLoose
     : pushComputedPropsSpec;
+
+  function buildDefineAccessor(
+    state: PluginPass,
+    type: "get" | "set",
+    obj: t.Expression,
+    key: t.Expression,
+    fn: t.Expression,
+  ) {
+    let helper: t.Identifier;
+    if (state.availableHelper("defineAccessor")) {
+      helper = state.addHelper("defineAccessor");
+    } else {
+      // Fallback for @babel/helpers <= 7.20.6, manually add helper function
+      const file = state.file;
+      helper = file.declarations["defineAccessor"];
+      if (!helper) {
+        helper = file.declarations["defineAccessor"] =
+          file.scope.generateUidIdentifier("defineAccessor");
+
+        const helperDeclaration = template.statement.ast`
+          function ${helper}(type, obj, key, fn) {
+            var desc = { configurable: true, enumerable: true };
+            desc[type] = fn;
+            return Object.defineProperty(obj, key, desc);
+          }      
+        `;
+        const helperPath = file.path.unshiftContainer(
+          "body",
+          helperDeclaration,
+        )[0];
+        // TODO: NodePath#unshiftContainer should automatically register new bindings.
+        file.scope.registerDeclaration(helperPath);
+      }
+      helper = t.cloneNode(helper);
+    }
+
+    return t.callExpression(helper, [t.stringLiteral(type), obj, key, fn]);
+  }
 
   /**
    * Get value of an object member under object expression.
@@ -71,27 +110,19 @@ export default declare((api, options: Options) => {
     { body, computedProps, initPropExpression, objId, state }: PropertyInfo,
     prop: t.ObjectMethod,
   ) {
+    const kind = prop.kind as "get" | "set";
     const key =
       !prop.computed && t.isIdentifier(prop.key)
         ? t.stringLiteral(prop.key.name)
         : prop.key;
+    const value = getValue(prop);
 
     if (computedProps.length === 1) {
-      return t.callExpression(state.addHelper("defineAccessor"), [
-        t.stringLiteral(prop.kind),
-        initPropExpression,
-        key,
-        getValue(prop),
-      ]);
+      return buildDefineAccessor(state, kind, initPropExpression, key, value);
     } else {
       body.push(
         t.expressionStatement(
-          t.callExpression(state.addHelper("defineAccessor"), [
-            t.stringLiteral(prop.kind),
-            t.cloneNode(objId),
-            key,
-            getValue(prop),
-          ]),
+          buildDefineAccessor(state, kind, t.cloneNode(objId), key, value),
         ),
       );
     }
