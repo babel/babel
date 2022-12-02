@@ -1719,7 +1719,11 @@ export default abstract class StatementParser extends ExpressionParser {
         }
 
         if (this.match(tt.at)) {
+          // All parts of a ClassDeclaration or a ClassExpression are strict mode code,
+          // except for the DecoratorList at the top level of a ClassDeclaration or ClassExpression which is contained in non - strict mode code.
+          this.state.strict = oldStrict;
           decorators.push(this.parseDecorator());
+          this.state.strict = true;
           continue;
         }
 

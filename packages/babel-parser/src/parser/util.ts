@@ -380,7 +380,7 @@ export default abstract class UtilParser extends Tokenizer {
  * - **shorthandAssignLoc**: track initializer `=` position
  * - **doubleProtoLoc**: track the duplicate `__proto__` key position
  * - **privateKey**: track private key `#p` position
- * - **optionalParametersLoc**: track the optional paramter (`?`).
+ * - **optionalParametersLoc**: track the optional parameter (`?`).
  * It's only used by typescript and flow plugins
  */
 export class ExpressionErrors {
