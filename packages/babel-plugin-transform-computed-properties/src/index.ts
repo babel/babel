@@ -17,6 +17,15 @@ type PropertyInfo = {
   state: PluginPass;
 };
 
+const DefineAccessorHelper = template.expression.ast`
+function (type, obj, key, fn) {
+  var desc = { configurable: true, enumerable: true };
+  desc[type] = fn;
+  return Object.defineProperty(obj, key, desc);
+}`;
+// @ts-expect-error undocumented _compact node property
+DefineAccessorHelper._compact = true;
+
 export default declare((api, options: Options) => {
   api.assertVersion(7);
 
@@ -40,24 +49,14 @@ export default declare((api, options: Options) => {
     } else {
       // Fallback for @babel/helpers <= 7.20.6, manually add helper function
       const file = state.file;
-      helper = file.declarations["defineAccessor"];
+      helper = file.get("fallbackDefineAccessorHelper");
       if (!helper) {
-        helper = file.declarations["defineAccessor"] =
-          file.scope.generateUidIdentifier("defineAccessor");
-
-        const helperDeclaration = template.statement.ast`
-          function ${helper}(type, obj, key, fn) {
-            var desc = { configurable: true, enumerable: true };
-            desc[type] = fn;
-            return Object.defineProperty(obj, key, desc);
-          }      
-        `;
-        const helperPath = file.path.unshiftContainer(
-          "body",
-          helperDeclaration,
-        )[0];
-        // TODO: NodePath#unshiftContainer should automatically register new bindings.
-        file.scope.registerDeclaration(helperPath);
+        const id = file.scope.generateUidIdentifier("defineAccessor");
+        file.scope.push({
+          id,
+          init: DefineAccessorHelper,
+        });
+        file.set("fallbackDefineAccessorHelper", (helper = id));
       }
       helper = t.cloneNode(helper);
     }
