@@ -55,6 +55,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel-baseline/helper-compilation-targets@npm:@babel/helper-compilation-targets@7.20.0, @babel/helper-compilation-targets@npm:^7.17.7, @babel/helper-compilation-targets@npm:^7.18.2, @babel/helper-compilation-targets@npm:^7.18.9, @babel/helper-compilation-targets@npm:^7.20.0":
+  version: 7.20.0
+  resolution: "@babel/helper-compilation-targets@npm:7.20.0"
+  dependencies:
+    "@babel/compat-data": ^7.20.0
+    "@babel/helper-validator-option": ^7.18.6
+    browserslist: ^4.21.3
+    semver: ^6.3.0
+  peerDependencies:
+    "@babel/core": ^7.0.0
+  checksum: bc183f2109648849c8fde0b3c5cf08adf2f7ad6dc617b546fd20f34c8ef574ee5ee293c8d1bd0ed0221212e8f5907cdc2c42097870f1dcc769a654107d82c95b
+  languageName: node
+  linkType: hard
+
 "@babel-baseline/helper-validator-identifier@npm:@babel/helper-validator-identifier@7.16.7":
   version: 7.16.7
   resolution: "@babel/helper-validator-identifier@npm:7.16.7"
@@ -154,12 +168,14 @@ __metadata:
   dependencies:
     "@babel-baseline/core": "npm:@babel/core@7.18.5"
     "@babel-baseline/generator": "npm:@babel/generator@7.18.2"
+    "@babel-baseline/helper-compilation-targets": "npm:@babel/helper-compilation-targets@7.20.0"
     "@babel-baseline/helper-validator-identifier": "npm:@babel/helper-validator-identifier@7.16.7"
     "@babel-baseline/parser": "npm:@babel/parser@7.18.5"
     "@babel-baseline/traverse": "npm:@babel/traverse@7.18.5"
     "@babel-baseline/types": "npm:@babel/types@7.18.4"
     "@babel/core": "workspace:^"
     "@babel/generator": "workspace:^"
+    "@babel/helper-compilation-targets": "workspace:^"
     "@babel/helper-validator-identifier": "workspace:^"
     "@babel/parser": "workspace:^"
     "@babel/preset-env": "workspace:^"
@@ -528,20 +544,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/helper-compilation-targets@npm:^7.17.7, @babel/helper-compilation-targets@npm:^7.18.2, @babel/helper-compilation-targets@npm:^7.18.9, @babel/helper-compilation-targets@npm:^7.20.0":
-  version: 7.20.0
-  resolution: "@babel/helper-compilation-targets@npm:7.20.0"
-  dependencies:
-    "@babel/compat-data": ^7.20.0
-    "@babel/helper-validator-option": ^7.18.6
-    browserslist: ^4.21.3
-    semver: ^6.3.0
-  peerDependencies:
-    "@babel/core": ^7.0.0
-  checksum: bc183f2109648849c8fde0b3c5cf08adf2f7ad6dc617b546fd20f34c8ef574ee5ee293c8d1bd0ed0221212e8f5907cdc2c42097870f1dcc769a654107d82c95b
-  languageName: node
-  linkType: hard
-
 "@babel/helper-compilation-targets@workspace:^, @babel/helper-compilation-targets@workspace:packages/babel-helper-compilation-targets":
   version: 0.0.0-use.local
   resolution: "@babel/helper-compilation-targets@workspace:packages/babel-helper-compilation-targets"
@@ -550,8 +552,10 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-validator-option": "workspace:^"
+    "@types/lru-cache": ^5.1.1
     "@types/semver": ^5.5.0
     browserslist: ^4.21.3
+    lru-cache: "condition:BABEL_8_BREAKING ? ^7.14.1 : ^5.1.1"
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   peerDependencies:
     "@babel/core": ^7.0.0
@@ -4550,6 +4554,13 @@ __metadata:
   version: 0.0.29
   resolution: "@types/json5@npm:0.0.29"
   checksum: e60b153664572116dfea673c5bda7778dbff150498f44f998e34b5886d8afc47f16799280e4b6e241c0472aef1bc36add771c569c68fc5125fc2ae519a3eb9ac
+  languageName: node
+  linkType: hard
+
+"@types/lru-cache@npm:^5.1.1":
+  version: 5.1.1
+  resolution: "@types/lru-cache@npm:5.1.1"
+  checksum: e1d6c0085f61b16ec5b3073ec76ad1be4844ea036561c3f145fc19f71f084b58a6eb600b14128aa95809d057d28f1d147c910186ae51219f58366ffd2ff2e118
   languageName: node
   linkType: hard
 
@@ -11157,6 +11168,32 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"lru-cache-BABEL_8_BREAKING-false@npm:lru-cache@^5.1.1, lru-cache@npm:^5.1.1":
+  version: 5.1.1
+  resolution: "lru-cache@npm:5.1.1"
+  dependencies:
+    yallist: ^3.0.2
+  checksum: c154ae1cbb0c2206d1501a0e94df349653c92c8cbb25236d7e85190bcaf4567a03ac6eb43166fabfa36fd35623694da7233e88d9601fbf411a9a481d85dbd2cb
+  languageName: node
+  linkType: hard
+
+"lru-cache-BABEL_8_BREAKING-true@npm:lru-cache@^7.14.1":
+  version: 7.14.1
+  resolution: "lru-cache@npm:7.14.1"
+  checksum: d72c6713c6a6d86836a7a6523b3f1ac6764768cca47ec99341c3e76db06aacd4764620e5e2cda719a36848785a52a70e531822dc2b33fb071fa709683746c104
+  languageName: node
+  linkType: hard
+
+"lru-cache@condition:BABEL_8_BREAKING ? ^7.14.1 : ^5.1.1":
+  version: 0.0.0-condition-86c673
+  resolution: "lru-cache@condition:BABEL_8_BREAKING?^7.14.1:^5.1.1#86c673"
+  dependencies:
+    lru-cache-BABEL_8_BREAKING-false: "npm:lru-cache@^5.1.1"
+    lru-cache-BABEL_8_BREAKING-true: "npm:lru-cache@^7.14.1"
+  checksum: 9a90e9b7fff14a71bd363ac5e40cea193f2da3380ca92d012589d3da49cc6af9c9a8399fc59b57b206e62753347ff4d77769a1e3bc0dd5550f3a8225a1a78a9a
+  languageName: node
+  linkType: hard
+
 "lru-cache@npm:^4.0.1":
   version: 4.1.5
   resolution: "lru-cache@npm:4.1.5"
@@ -11164,15 +11201,6 @@ fsevents@^1.2.7:
     pseudomap: ^1.0.2
     yallist: ^2.1.2
   checksum: 4bb4b58a36cd7dc4dcec74cbe6a8f766a38b7426f1ff59d4cf7d82a2aa9b9565cd1cb98f6ff60ce5cd174524868d7bc9b7b1c294371851356066ca9ac4cf135a
-  languageName: node
-  linkType: hard
-
-"lru-cache@npm:^5.1.1":
-  version: 5.1.1
-  resolution: "lru-cache@npm:5.1.1"
-  dependencies:
-    yallist: ^3.0.2
-  checksum: c154ae1cbb0c2206d1501a0e94df349653c92c8cbb25236d7e85190bcaf4567a03ac6eb43166fabfa36fd35623694da7233e88d9601fbf411a9a481d85dbd2cb
   languageName: node
   linkType: hard
 

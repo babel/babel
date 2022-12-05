@@ -29,11 +29,14 @@ export function semverify(version: number | string): string {
     `'${version}' is not a valid version`,
   );
 
-  const split = version.toString().split(".");
-  while (split.length < 3) {
-    split.push("0");
+  version = version.toString();
+
+  let pos = 0;
+  let num = 0;
+  while ((pos = version.indexOf(".", pos + 1)) > 0) {
+    num++;
   }
-  return split.join(".");
+  return version + ".0".repeat(2 - num);
 }
 
 export function isUnreleasedVersion(
