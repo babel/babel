@@ -1346,10 +1346,7 @@ export default abstract class ExpressionParser extends LValParser {
 
       default:
         if (tokenIsIdentifier(type)) {
-          if (
-            this.isContextual(tt._module) &&
-            this.lookaheadInLineCharCode() === charCodes.leftCurlyBrace
-          ) {
+          if (this.isModuleExpression()) {
             return this.parseModuleExpression();
           }
           const { canStartArrow, containsEsc } = this.state;
@@ -3258,4 +3255,11 @@ export default abstract class ExpressionParser extends LValParser {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     prop: Undone<N.ObjectOrClassMember | N.ClassMember>,
   ): void {}
+
+  isModuleExpression(): boolean {
+    return (
+      this.isContextual(tt._module) &&
+      this.lookaheadInLineCharCode() === charCodes.leftCurlyBrace
+    );
+  }
 }

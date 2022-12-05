@@ -2570,6 +2570,11 @@ export default abstract class StatementParser extends ExpressionParser {
       throw this.raise(Errors.UnsupportedDefaultExport, this.state.startLoc);
     }
 
+    if (this.isModuleExpression()) {
+      // todo: parse module declaration instead
+      return this.parseModuleExpression();
+    }
+
     const res = this.parseMaybeAssignAllowIn();
     this.semicolon();
     return res;
