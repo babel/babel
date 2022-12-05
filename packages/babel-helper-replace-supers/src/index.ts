@@ -1,9 +1,11 @@
-import type { NodePath, Scope } from "@babel/traverse";
-import traverse from "@babel/traverse";
+import type { File } from "@babel/core";
+import environmentVisitor from "@babel/helper-environment-visitor";
 import memberExpressionToFunctions from "@babel/helper-member-expression-to-functions";
 import type { HandlerState } from "@babel/helper-member-expression-to-functions";
 import optimiseCall from "@babel/helper-optimise-call-expression";
-import environmentVisitor from "@babel/helper-environment-visitor";
+import template from "@babel/template";
+import traverse from "@babel/traverse";
+import type { NodePath, Scope } from "@babel/traverse";
 import {
   assignmentExpression,
   booleanLiteral,
@@ -16,7 +18,6 @@ import {
   thisExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
-import type { File } from "@babel/core";
 
 // TODO (Babel 8): Don't export this.
 export {
@@ -107,7 +108,13 @@ type SuperMember = NodePath<
 interface SpecHandler
   extends Pick<
     Handler,
-    "get" | "set" | "destructureSet" | "call" | "optionalCall" | "memoise"
+    | "memoise"
+    | "get"
+    | "set"
+    | "destructureSet"
+    | "call"
+    | "optionalCall"
+    | "delete"
   > {
   _get(
     this: Handler & SpecHandler,
@@ -239,6 +246,23 @@ const specHandlers: SpecHandler = {
       args,
       true,
     );
+  },
+
+  delete(this: Handler & SpecHandler, superMember: SuperMember) {
+    if (superMember.node.computed) {
+      return sequenceExpression([
+        callExpression(this.file.addHelper("toPropertyKey"), [
+          cloneNode(superMember.node.property),
+        ]),
+        template.expression.ast`
+          function () { throw new ReferenceError("'delete super[expr]' is invalid"); }()
+        `,
+      ]);
+    } else {
+      return template.expression.ast`
+        function () { throw new ReferenceError("'delete super.prop' is invalid"); }()
+      `;
+    }
   },
 };
 

@@ -886,6 +886,7 @@ __metadata:
     "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-member-expression-to-functions": "workspace:^"
     "@babel/helper-optimise-call-expression": "workspace:^"
+    "@babel/template": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
   languageName: unknown
