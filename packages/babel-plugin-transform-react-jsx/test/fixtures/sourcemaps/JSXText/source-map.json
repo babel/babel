@@ -1,0 +1,14 @@
+{
+  "version": 3,
+  "names": [
+    "React",
+    "App"
+  ],
+  "sources": [
+    "sourcemaps/JSXText/input.js"
+  ],
+  "sourcesContent": [
+    "import React from 'react';\n\nexport default function App() {\n  return (\n    <div className=\"App\">\n      <h1>Welcome to my application!</h1>\n      This is my app!\n      <strong>MINE.</strong>\n    </div>\n  )\n}"
+  ],
+  "mappings": "AAAA,OAAOA,KAAK,MAAM,OAAO;AAEzB,eAAe,SAASC,GAAG,GAAG;EAC5B,oBACE;IAAK,SAAS,EAAC;EAAK,gBAClB,gCAAI,4BAA0B,CAAK,mBAEnC,mDAAQ,OAAK,CAAS,CAClB;AAEV"
+}
