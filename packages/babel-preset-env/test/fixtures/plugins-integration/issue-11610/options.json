@@ -3,5 +3,5 @@
   "parserOpts": {
     "allowReturnOutsideFunction": true
   },
-  "minNodeVersion": 8
+  "minNodeVersion": "8.0.0"
 }
