@@ -17,6 +17,7 @@ type PropertyInfo = {
   state: PluginPass;
 };
 
+// TODO(Babel 8): Remove this.
 const DefineAccessorHelper = template.expression.ast`
 function (type, obj, key, fn) {
   var desc = { configurable: true, enumerable: true };
@@ -48,6 +49,7 @@ export default declare((api, options: Options) => {
       helper = state.addHelper("defineAccessor");
     } else {
       // Fallback for @babel/helpers <= 7.20.6, manually add helper function
+      // TODO(Babel 8): Remove this
       const file = state.file;
       helper = file.get("fallbackDefineAccessorHelper");
       if (!helper) {
