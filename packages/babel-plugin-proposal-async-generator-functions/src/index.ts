@@ -65,7 +65,7 @@ export default declare(api => {
         t.inherits(loop.body, node.body);
 
         const p = build.replaceParent ? path.parentPath : path;
-        p.replaceWithMultiple(build.node)[0];
+        p.replaceWithMultiple(build.node);
 
         // TODO: Avoid crawl
         p.scope.parent.crawl();
