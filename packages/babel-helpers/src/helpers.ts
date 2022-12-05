@@ -612,7 +612,7 @@ helpers.set = helper("7.0.0-beta.0")`
   export default function _set(target, property, value, receiver, isStrict) {
     var s = set(target, property, value, receiver || target);
     if (!s && isStrict) {
-      throw new Error('failed to set property');
+      throw new TypeError('failed to set property');
     }
 
     return value;
@@ -650,7 +650,7 @@ helpers.writeOnlyError = helper("7.12.13")`
 
 helpers.classNameTDZError = helper("7.0.0-beta.0")`
   export default function _classNameTDZError(name) {
-    throw new Error("Class \\"" + name + "\\" cannot be referenced in computed property keys.");
+    throw new ReferenceError("Class \\"" + name + "\\" cannot be referenced in computed property keys.");
   }
 `;
 

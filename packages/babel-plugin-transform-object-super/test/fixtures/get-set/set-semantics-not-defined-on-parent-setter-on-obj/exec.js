@@ -16,7 +16,7 @@ Object.setPrototypeOf(obj, Base);
 
 expect(() => {
   obj.set();
-}).toThrow();
+}).toThrow(TypeError);
 expect(value).toBe(2);
 expect(Base.test).toBeUndefined();
 expect(obj.test).toBeUndefined();

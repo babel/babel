@@ -24,7 +24,7 @@ const obj = new Obj();
 // but close enough for loose.
 // expect(() => {
   expect(obj.set()).toBe(3);
-// }).toThrow();
+// }).toThrow(TypeError);
 
 expect(called).toBe(false);
 expect(Base.prototype.test).toBe(1);
