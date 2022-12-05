@@ -142,8 +142,6 @@ export default function normalizeModuleAndLoadMetadata(
     stringSpecifiers,
   );
 
-  removeModuleDeclarations(programPath);
-
   // Reuse the imported namespace name if there is one.
   for (const [, metadata] of source) {
     if (metadata.importsNamespace.size > 0) {
@@ -558,11 +556,9 @@ function nameAnonymousExports(programPath: NodePath<t.Program>) {
   });
 }
 
-function removeModuleDeclarations(programPath: NodePath<t.Program>) {
+export function removeExportDeclarations(programPath: NodePath<t.Program>) {
   programPath.get("body").forEach(child => {
-    if (child.isImportDeclaration()) {
-      child.remove();
-    } else if (child.isExportNamedDeclaration()) {
+    if (child.isExportNamedDeclaration()) {
       if (child.node.declaration) {
         // @ts-expect-error todo(flow->ts): avoid mutations
         child.node.declaration._blockHoist = child.node._blockHoist;
@@ -589,6 +585,14 @@ function removeModuleDeclarations(programPath: NodePath<t.Program>) {
         );
       }
     } else if (child.isExportAllDeclaration()) {
+      child.remove();
+    }
+  });
+}
+
+export function removeImportDeclarations(programPath: NodePath<t.Program>) {
+  programPath.get("body").forEach(child => {
+    if (child.isImportDeclaration()) {
       child.remove();
     }
   });

@@ -280,11 +280,14 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
         );
       }
 
-      const localBinding = path.scope.getBinding(localName);
-      const rootBinding = scope.getBinding(localName);
-
       // redeclared in this scope
-      if (rootBinding !== localBinding) return;
+      if (process.env.BABEL_8_BREAKING) {
+        if (!scope.isSameBinding(path.scope, localName)) return;
+      } else {
+        if (path.scope.getBinding(localName) !== scope.getBinding(localName)) {
+          return;
+        }
+      }
 
       const ref = buildImportReference(importData, path.node);
 
@@ -422,8 +425,14 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
         const localName = left.node.name;
 
         // redeclared in this scope
-        if (scope.getBinding(localName) !== path.scope.getBinding(localName)) {
-          return;
+        if (process.env.BABEL_8_BREAKING) {
+          if (!scope.isSameBinding(path.scope, localName)) return;
+        } else {
+          if (
+            scope.getBinding(localName) !== path.scope.getBinding(localName)
+          ) {
+            return;
+          }
         }
 
         const exportedNames = exported.get(localName);
@@ -455,8 +464,11 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
       } else {
         const ids = left.getOuterBindingIdentifiers();
         const programScopeIds = Object.keys(ids).filter(
-          localName =>
-            scope.getBinding(localName) === path.scope.getBinding(localName),
+          process.env.BABEL_8_BREAKING
+            ? localName => scope.isSameBinding(path.scope, localName)
+            : localName =>
+                scope.getBinding(localName) ===
+                path.scope.getBinding(localName),
         );
         const id = programScopeIds.find(localName => imported.has(localName));
 
