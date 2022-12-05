@@ -24,7 +24,6 @@ import {
   isImportDeclaration,
   isLiteral,
   isMethod,
-  isModuleDeclaration,
   isModuleSpecifier,
   isNullLiteral,
   isObjectExpression,
@@ -50,6 +49,7 @@ import {
   isTopicReference,
   isMetaProperty,
   isPrivateName,
+  isExportDeclaration,
 } from "@babel/types";
 import type * as t from "@babel/types";
 import { scope as scopeCache } from "../cache";
@@ -60,7 +60,7 @@ type NodePart = string | number | boolean;
 function gatherNodeParts(node: t.Node, parts: NodePart[]) {
   switch (node?.type) {
     default:
-      if (isModuleDeclaration(node)) {
+      if (isImportDeclaration(node) || isExportDeclaration(node)) {
         if (
           (isExportAllDeclaration(node) ||
             isExportNamedDeclaration(node) ||

@@ -106,10 +106,6 @@ register(babelOptions);
 
 const replPlugin = ({ types: t }: PluginAPI): PluginObject => ({
   visitor: {
-    ModuleDeclaration(path) {
-      throw path.buildCodeFrameError("Modules aren't supported in the REPL");
-    },
-
     VariableDeclaration(path) {
       if (path.node.kind !== "var") {
         throw path.buildCodeFrameError(
@@ -119,7 +115,20 @@ const replPlugin = ({ types: t }: PluginAPI): PluginObject => ({
     },
 
     Program(path) {
-      if (path.get("body").some(child => child.isExpressionStatement())) return;
+      let hasExpressionStatement: boolean;
+      for (const bodyPath of path.get("body")) {
+        if (bodyPath.isExpressionStatement()) {
+          hasExpressionStatement = true;
+        } else if (
+          bodyPath.isExportDeclaration() ||
+          bodyPath.isImportDeclaration()
+        ) {
+          throw bodyPath.buildCodeFrameError(
+            "Modules aren't supported in the REPL",
+          );
+        }
+      }
+      if (hasExpressionStatement) return;
 
       // If the executed code doesn't evaluate to a value,
       // prevent implicit strict mode from printing 'use strict'.
