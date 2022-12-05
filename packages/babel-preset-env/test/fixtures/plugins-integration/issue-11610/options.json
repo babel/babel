@@ -2,5 +2,6 @@
   "plugins": ["transform-parameters", "proposal-async-generator-functions"],
   "parserOpts": {
     "allowReturnOutsideFunction": true
-  }
+  },
+  "minNodeVersion": 8
 }
