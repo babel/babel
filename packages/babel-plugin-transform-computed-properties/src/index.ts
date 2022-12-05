@@ -17,7 +17,7 @@ type PropertyInfo = {
   state: PluginPass;
 };
 
-// TODO(Babel 8): Remove this.
+// TODO(Babel 8): Remove this
 const DefineAccessorHelper = template.expression.ast`
 function (type, obj, key, fn) {
   var desc = { configurable: true, enumerable: true };
