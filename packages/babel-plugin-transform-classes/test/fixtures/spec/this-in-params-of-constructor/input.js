@@ -3,10 +3,12 @@ class Root {}
 class Foo extends Root {
   constructor(
     cb = () => {
-      console.log("this is", this);
+      return this;
     }
   ) {
     super();
     this.cb = cb;
   }
 }
+
+expect(new Foo().cb().constructor.name).toBe("Foo");
