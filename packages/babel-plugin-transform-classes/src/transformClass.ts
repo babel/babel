@@ -380,7 +380,7 @@ export default function transformClass(
     const path = classState.userConstructorPath;
     const body = path.get("body");
 
-    path.traverse(findThisesVisitor);
+    body.traverse(findThisesVisitor);
 
     let thisRef = function () {
       const ref = path.scope.generateDeclaredUidIdentifier("this");
