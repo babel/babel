@@ -16,7 +16,7 @@ jobs:
     name: Publish to local Verdaccio registry
     runs-on: ubuntu-latest
     outputs:
-      publish_status: ${{ steps.publish.outputs.publish_status }}
+      skip_e2e: ${{ steps.publish.outputs.skip_e2e }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -33,7 +33,7 @@ jobs:
         id: publish
         run: |
           ./scripts/integration-tests/publish-local.sh
-          if [ -d "/tmp/verdaccio-workspace" ]; then echo "publish_status=true" >> $GITHUB_OUTPUT; fi
+          if [ -e "/tmp/babel_skip_e2e" ]; then echo "skip_e2e=true" >> $GITHUB_OUTPUT; fi
         env:
           USE_ESM: true
       - uses: actions/upload-artifact@v3
@@ -44,7 +44,7 @@ jobs:
   e2e-tests:
     name: Test
     needs: e2e-publish
-    if: ${{ contains(needs.e2e-publish.outputs.publish_status, 'true') }}
+    if: ${{ contains(needs.e2e-publish.outputs.skip_e2e, 'true') }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

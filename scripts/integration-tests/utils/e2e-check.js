@@ -13,6 +13,7 @@ if (
     console.error("The branch is not up to date with main, please rebase");
     process.exitCode = 1;
   } else {
+    fs.writeFileSync("/tmp/babel_skip_e2e", "true");
     console.error(
       "The branch is not up to date with main of babel/babel, skipping"
     );
