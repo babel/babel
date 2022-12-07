@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import buildDebug from "debug";
 import type { Handler } from "gensync";
-import { file, isImportDeclaration, traverseFast } from "@babel/types";
+import { file, traverseFast } from "@babel/types";
 import type * as t from "@babel/types";
 import type { PluginPasses } from "../config";
 import convertSourceMap from "convert-source-map";
@@ -10,6 +10,7 @@ import type { SourceMapConverter as Converter } from "convert-source-map";
 import File from "./file/file";
 import parser from "../parser";
 import cloneDeep from "./util/clone-deep";
+import { processCommentsBefore } from "./file/comments";
 
 const debug = buildDebug("babel:transform:file");
 const LARGE_INPUT_SOURCEMAP_THRESHOLD = 3_000_000;
@@ -52,7 +53,7 @@ export default function* normalizeFile(
     ast = yield* parser(pluginPasses, options, code);
   }
 
-  detachCommentsFromLastImport((ast as t.File).program.body);
+  processCommentsBefore((ast as t.File).program);
 
   let inputMap = null;
   if (options.inputSourceMap !== false) {
@@ -106,33 +107,6 @@ export default function* normalizeFile(
     ast: ast as t.File,
     inputMap,
   });
-}
-
-function detachCommentsFromLastImport(body: t.Node[]) {
-  let lastNode;
-  for (const node of body) {
-    if (!lastNode) {
-      lastNode = node;
-      continue;
-    }
-    if (
-      !isImportDeclaration(node) &&
-      isImportDeclaration(lastNode) &&
-      lastNode.trailingComments?.length &&
-      lastNode.trailingComments === node.leadingComments // This is a hack, because the comments are the same array
-    ) {
-      const trailingComments = lastNode.trailingComments;
-      const commentLoc = trailingComments[0].loc;
-      if (
-        lastNode.loc &&
-        node.loc &&
-        commentLoc.start.line - lastNode.loc.end.line >=
-          node.loc.start.line - commentLoc.end.line
-      ) {
-        lastNode.trailingComments = [];
-      }
-    }
-  }
 }
 
 function extractCommentsFromList(

@@ -1,6 +1,6 @@
+// should not remove when destructuring into existing bindings
 const _excluded = ["excluded", "excluded2", "used", "used2"],
   _excluded2 = ["unused"];
-// should not remove when destructuring into existing bindings
 var _c = c2;
 ({
   a2

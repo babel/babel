@@ -1,7 +1,7 @@
+// ForXStatement
 const _excluded = ["a"],
   _excluded2 = ["a"],
   _excluded3 = ["a"];
-// ForXStatement
 for (var _ref of []) {
   var {
       a
