@@ -15,6 +15,8 @@ jobs:
   e2e-publish:
     name: Publish to local Verdaccio registry
     runs-on: ubuntu-latest
+    outputs:
+      publish_status: ${{ steps.Publish.outputs.publish_status }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -28,7 +30,10 @@ jobs:
       - name: Use ESM
         run: make use-esm
       - name: Publish
-        run: ./scripts/integration-tests/publish-local.sh
+        run: |
+          ./scripts/integration-tests/publish-local.sh
+          [ -d "/tmp/verdaccio-workspace" ] && echo "publish_status=true" >> $GITHUB_OUTPUT
+          exit 0
         env:
           USE_ESM: true
       - uses: actions/upload-artifact@v3
@@ -39,6 +44,7 @@ jobs:
   e2e-tests:
     name: Test
     needs: e2e-publish
+    if: ${{ contains(needs.e2e-publish.outputs.publish_status, 'true') }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
