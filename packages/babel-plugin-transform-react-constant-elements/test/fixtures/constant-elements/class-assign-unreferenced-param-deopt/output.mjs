@@ -1,6 +1,5 @@
 var _div2;
 import React from 'react';
-
 // Regression test for https://github.com/babel/babel/issues/5552
 class BugReport extends React.Component {
   constructor(...args) {

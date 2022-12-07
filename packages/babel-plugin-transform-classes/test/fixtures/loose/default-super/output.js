@@ -8,7 +8,8 @@ var Test = /*#__PURE__*/function () {
     return Function.prototype.constructor;
   };
   return Test;
-}(); // Instances
+}();
+// Instances
 expect(Object.getPrototypeOf(Test.prototype)).toBe(Object.prototype);
 expect(new Test()).toBe(Object);
 

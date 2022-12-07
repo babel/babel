@@ -11,7 +11,8 @@ class Foo {
     this.Bar = (_class = class {
       constructor() {
         babelHelpers.defineProperty(this, "q", this.constructor);
-      } // should not replace
+      }
+      // should not replace
     }, babelHelpers.defineProperty(_class, "p", void 0), babelHelpers.defineProperty(_class, "p1", class {
       constructor() {
         this.constructor;
