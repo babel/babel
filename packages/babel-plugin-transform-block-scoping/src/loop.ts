@@ -75,7 +75,7 @@ function relativeLoopLocation(path: NodePath, loopPath: NodePath<t.Loop>) {
   let inClosure = false;
 
   for (let currPath = path; currPath; currPath = currPath.parentPath) {
-    if (currPath.isFunction()) inClosure = true;
+    if (currPath.isFunction() || currPath.isClass()) inClosure = true;
     if (currPath === bodyPath) {
       return { inBody: true, inClosure };
     } else if (currPath === loopPath) {

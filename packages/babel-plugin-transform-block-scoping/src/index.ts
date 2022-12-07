@@ -93,7 +93,7 @@ export default declare((api, opts: Options) => {
 
             if (headPath?.isVariableDeclaration<t.Node>()) {
               // If we wrap the loop body, we transform the var
-              // declaration in the loop head now, to avoid having
+              // declaration in the loop head now, to avoid
               // invalid references that break other plugins:
               //
               //  for (let head of x) {

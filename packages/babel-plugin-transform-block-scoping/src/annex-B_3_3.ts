@@ -51,6 +51,8 @@ export const annexB33FunctionsVisitor: Visitor = {
 function transformStatementList(paths: NodePath<t.Statement>[]) {
   outer: for (const path of paths) {
     if (!path.isFunctionDeclaration()) continue;
+    // Annex B.3.3 only applies to plain functions.
+    if (path.node.async || path.node.generator) return;
 
     const { scope } = path.parentPath;
     if (isVarScope(scope)) return;
@@ -73,9 +75,6 @@ function maybeTransformBlockScopedFunction(
     node,
     parentPath: { scope },
   } = path;
-
-  // Annex B.3.3 only applies to plain functions.
-  if (node.async || node.generator) return;
 
   const { id } = node;
   scope.removeOwnBinding(id.name);
@@ -115,7 +114,11 @@ function isStrict(path: NodePath) {
   return !!path.find(({ node }) => {
     if (t.isProgram(node)) {
       if (node.sourceType === "module") return true;
-    } else if (!t.isBlockStatement(node)) return false;
+    } else if (t.isClass(node)) {
+      return true;
+    } else if (!t.isBlockStatement(node)) {
+      return false;
+    }
 
     return node.directives?.some(
       directive => directive.value.value === "use strict",
