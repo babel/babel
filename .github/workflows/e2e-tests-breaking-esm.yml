@@ -16,7 +16,7 @@ jobs:
     name: Publish to local Verdaccio registry
     runs-on: ubuntu-latest
     outputs:
-      publish_status: ${{ steps.Publish.outputs.publish_status }}
+      publish_status: ${{ steps.publish.outputs.publish_status }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -30,10 +30,10 @@ jobs:
       - name: Use ESM
         run: make use-esm
       - name: Publish
+        id: publish
         run: |
           ./scripts/integration-tests/publish-local.sh
-          [ -d "/tmp/verdaccio-workspace" ] && echo "publish_status=true" >> $GITHUB_OUTPUT
-          exit 0
+          if [ -d "/tmp/verdaccio-workspace" ]; then echo "publish_status=true" >> $GITHUB_OUTPUT; fi
         env:
           BABEL_8_BREAKING: true
           USE_ESM: true
