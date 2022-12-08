@@ -283,7 +283,8 @@ const handle = {
             "=",
             context,
             // object must not be Super when `context` is an identifier
-            object,
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+            object as t.Expression,
           );
         }
       }

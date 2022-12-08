@@ -487,7 +487,8 @@ const privateNameHandlerLoose: Handler<PrivateNameState> = {
   boundGet(member) {
     return t.callExpression(
       t.memberExpression(this.get(member), t.identifier("bind")),
-      [t.cloneNode(member.node.object)],
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+      [t.cloneNode(member.node.object as t.Expression)],
     );
   },
 

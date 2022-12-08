@@ -57,7 +57,8 @@ export default declare(api => {
                 "=",
                 temp,
                 // left must not be Super when `temp` is an identifier
-                left,
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+                left as t.Expression,
               ),
             ),
           );
