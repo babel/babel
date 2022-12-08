@@ -15,7 +15,10 @@ export function processCommentsBefore(program: t.Program) {
    *
    * var _react = _interopRequireDefault(require("react"));
    */
-  if (program.body[0]?.leadingComments?.length) {
+  if (
+    program.directives.length === 0 &&
+    program.body[0]?.leadingComments?.length
+  ) {
     program.innerComments = program.body[0].leadingComments;
   }
 
