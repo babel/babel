@@ -32,6 +32,3 @@ test/runtime-integration/*/output.js
 test/runtime-integration/*/output-absolute.js
 
 Makefile.js
-
-# TODO: Enable this
-packages/babel-parser/typings
