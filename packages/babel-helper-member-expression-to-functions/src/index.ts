@@ -283,7 +283,7 @@ const handle = {
             "=",
             context,
             // object must not be Super when `context` is an identifier
-            object as t.Expression,
+            object,
           );
         }
       }

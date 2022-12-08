@@ -40,7 +40,7 @@ function injectWrapper(
     amdFactoryCallArgs[
       amdFactoryCallArgs.length - 1
     ] as NodePath<t.FunctionExpression>
-  ).get("body") as NodePath<t.BlockStatement>;
+  ).get("body");
   amdFactory.pushContainer("directives", directives);
   amdFactory.pushContainer("body", body);
 }

@@ -141,7 +141,7 @@ export function transform(
           // Here `chainWithTypes` MUST NOT be cloned because it could be
           // updated when generating the memoised context of a call
           // expression. It must be an Expression when `ref` is an identifier
-          chainWithTypes as t.Expression,
+          chainWithTypes,
         );
 
         isCall ? (node.callee = ref) : (node.object = ref);
@@ -187,9 +187,7 @@ export function transform(
     if (i === 0 && parentIsCall) {
       // `(a?.b)()` to `(a == null ? undefined : a.b.bind(a))()`
       // object must not be Super as super?.foo is invalid
-      const object = skipTransparentExprWrapperNodes(
-        replacement.object,
-      ) as t.Expression;
+      const object = skipTransparentExprWrapperNodes(replacement.object);
       let baseRef;
       if (!pureGetters || !isSimpleMemberExpression(object)) {
         // memoize the context object when getters are not always pure

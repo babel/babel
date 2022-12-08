@@ -33,7 +33,7 @@ export default function traverse<T>(
     handlers = { enter: handlers };
   }
 
-  const { enter, exit } = handlers as TraversalHandlers<T>;
+  const { enter, exit } = handlers;
 
   traverseSimpleImpl(node, enter, exit, state, []);
 }

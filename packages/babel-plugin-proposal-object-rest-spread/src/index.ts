@@ -412,8 +412,7 @@ export default declare((api, opts: Options) => {
             if (path.isObjectProperty()) {
               refPropertyPath.unshift(path);
             } else if (path.isVariableDeclarator()) {
-              kind = (path.parentPath as NodePath<t.VariableDeclaration>).node
-                .kind;
+              kind = path.parentPath.node.kind;
               return true;
             }
           });

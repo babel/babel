@@ -1097,7 +1097,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           !type.typeParameters &&
           type.typeName.type === "Identifier"
         ) {
-          labeledNode.label = type.typeName as N.Identifier;
+          labeledNode.label = type.typeName;
         } else {
           this.raise(TSErrors.InvalidTupleMemberLabel, { at: type });
           // @ts-expect-error This produces an invalid AST, but at least we don't drop
@@ -1482,13 +1482,13 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           // if it turns out to be a `TSThisType`, wrap it with `TSTypePredicate`
           // : asserts this
           if (thisTypePredicate.type === "TSThisType") {
-            node.parameterName = thisTypePredicate as N.TsThisType;
+            node.parameterName = thisTypePredicate;
             node.asserts = true;
             (node as N.TsTypePredicate).typeAnnotation = null;
             thisTypePredicate = this.finishNode(node, "TSTypePredicate");
           } else {
             this.resetStartLocationFromNode(thisTypePredicate, node);
-            (thisTypePredicate as N.TsTypePredicate).asserts = true;
+            thisTypePredicate.asserts = true;
           }
           t.typeAnnotation = thisTypePredicate;
           return this.finishNode(t, "TSTypeAnnotation");
@@ -2094,7 +2094,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           if (this.match(tt.braceL)) {
             this.scope.enter(SCOPE_TS_MODULE);
             this.prodParam.enter(PARAM);
-            const mod = node as Undone<N.TsModuleDeclaration>;
+            const mod = node;
             mod.global = true;
             mod.id = expr;
             mod.body = this.tsParseModuleBlock();
@@ -2880,10 +2880,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
               at: this.state.curPosition(),
             });
           }
-          super.parseClassStaticBlock(
-            classBody,
-            member as any as N.StaticBlock,
-          );
+          super.parseClassStaticBlock(classBody, member as N.StaticBlock);
         } else {
           this.parseClassMemberWithIsStatic(
             classBody,

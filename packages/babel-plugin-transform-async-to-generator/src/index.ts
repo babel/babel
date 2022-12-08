@@ -17,9 +17,8 @@ export default declare<State>((api, options: Options) => {
 
   const { method, module } = options;
   // Todo(BABEL 8): Consider default it to false
-  const noNewArrows = (api.assumption("noNewArrows") ?? true) as boolean;
-  const ignoreFunctionLength = (api.assumption("ignoreFunctionLength") ??
-    false) as boolean;
+  const noNewArrows = api.assumption("noNewArrows") ?? true;
+  const ignoreFunctionLength = api.assumption("ignoreFunctionLength") ?? false;
 
   if (method && module) {
     return {

@@ -162,7 +162,7 @@ export default function convertFunctionParams(
 
     // We inject an arrow and then transform it to a normal function, to be
     // sure that we correctly handle this and arguments.
-    const bodyPath = path.get("body.body") as NodePath<t.Statement>[];
+    const bodyPath = path.get("body.body");
     const arrowPath = bodyPath[bodyPath.length - 1].get(
       "argument.callee",
     ) as NodePath<t.ArrowFunctionExpression>;

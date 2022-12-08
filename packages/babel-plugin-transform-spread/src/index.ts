@@ -180,7 +180,7 @@ export default declare((api, options: Options) => {
               "=",
               temp,
               // object must not be Super when `temp` is an identifier
-              callee.object as t.Expression,
+              callee.object,
             );
             contextLiteral = temp;
           } else {

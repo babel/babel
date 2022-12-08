@@ -28,7 +28,7 @@ export default declare(api => {
               "=",
               t.cloneNode(memo),
               // object must not be Super when `memo` is an identifier
-              object as t.Expression,
+              object,
             );
           }
 

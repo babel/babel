@@ -190,7 +190,7 @@ export function createClassFeaturePlugin({
         const privateNamesMap = buildPrivateNamesMap(props);
         const privateNamesNodes = buildPrivateNamesNodes(
           privateNamesMap,
-          (privateFieldsAsProperties ?? loose) as boolean,
+          privateFieldsAsProperties ?? loose,
           file,
         );
 
@@ -230,9 +230,9 @@ export function createClassFeaturePlugin({
                 props,
                 privateNamesMap,
                 file,
-                (setPublicClassFields ?? loose) as boolean,
-                (privateFieldsAsProperties ?? loose) as boolean,
-                (constantSuper ?? loose) as boolean,
+                setPublicClassFields ?? loose,
+                privateFieldsAsProperties ?? loose,
+                constantSuper ?? loose,
                 innerBinding,
               ));
           }
@@ -245,9 +245,9 @@ export function createClassFeaturePlugin({
               props,
               privateNamesMap,
               file,
-              (setPublicClassFields ?? loose) as boolean,
-              (privateFieldsAsProperties ?? loose) as boolean,
-              (constantSuper ?? loose) as boolean,
+              setPublicClassFields ?? loose,
+              privateFieldsAsProperties ?? loose,
+              constantSuper ?? loose,
               innerBinding,
             ));
         }

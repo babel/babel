@@ -57,7 +57,7 @@ export default declare(api => {
                 "=",
                 temp,
                 // left must not be Super when `temp` is an identifier
-                left as t.Expression,
+                left,
               ),
             ),
           );
