@@ -13,6 +13,16 @@ import annotateAsPure from "@babel/helper-annotate-as-pure";
 
 import * as ts from "./typescript";
 
+function inheritsWithoutTrailingComments<T extends t.Node>(
+  node: T,
+  parent: t.Node,
+): T {
+  const oldComments = node.trailingComments;
+  t.inherits(node, parent);
+  node.trailingComments = oldComments;
+  return node;
+}
+
 interface PrivateNameMetadata {
   id: t.Identifier;
   static: boolean;
@@ -766,7 +776,7 @@ function buildPublicFieldInitLoose(
   const { key, computed } = prop.node;
   const value = prop.node.value || prop.scope.buildUndefinedNode();
 
-  return t.inherits(
+  return inheritsWithoutTrailingComments(
     t.expressionStatement(
       t.assignmentExpression(
         "=",
@@ -786,7 +796,7 @@ function buildPublicFieldInitSpec(
   const { key, computed } = prop.node;
   const value = prop.node.value || prop.scope.buildUndefinedNode();
 
-  return t.inherits(
+  return inheritsWithoutTrailingComments(
     t.expressionStatement(
       t.callExpression(state.addHelper("defineProperty"), [
         ref,
@@ -818,7 +828,7 @@ function buildPrivateStaticMethodInitLoose(
       initAdded: true,
     });
 
-    return t.inherits(
+    return inheritsWithoutTrailingComments(
       template.statement.ast`
       Object.defineProperty(${ref}, ${id}, {
         // configurable is false by default
@@ -832,7 +842,7 @@ function buildPrivateStaticMethodInitLoose(
     );
   }
 
-  return t.inherits(
+  return inheritsWithoutTrailingComments(
     template.statement.ast`
     Object.defineProperty(${ref}, ${id}, {
       // configurable is false by default
@@ -882,7 +892,7 @@ function buildPrivateMethodDeclaration(
     declId = id;
   }
 
-  return t.inherits(
+  return inheritsWithoutTrailingComments(
     t.functionDeclaration(
       t.cloneNode(declId),
       // @ts-expect-error params for ClassMethod has TSParameterProperty

@@ -24,7 +24,6 @@ class Polygon {
     babelHelpers.defineProperty(this, "sayName", () => {
       console.log('Hi, I am a ', this.name + '.');
     });
-
     /**
      * @name sayHistory
      * @function
