@@ -4,9 +4,12 @@ language/import/json-invalid.js(default)
 language/import/json-invalid.js(strict mode)
 
 
-# 4 valid programs produced a parsing error
+# 7 valid programs produced a parsing error
 
 language/expressions/class/decorator/syntax/class-valid/decorator-member-expr-private-identifier.js(default)
 language/expressions/class/decorator/syntax/class-valid/decorator-member-expr-private-identifier.js(strict mode)
 language/statements/class/decorator/syntax/class-valid/decorator-member-expr-private-identifier.js(default)
 language/statements/class/decorator/syntax/class-valid/decorator-member-expr-private-identifier.js(strict mode)
+language/statements/class/decorator/syntax/valid/class-element-decorator-call-expr-identifier-reference-yield.js(default)
+language/statements/class/decorator/syntax/valid/class-element-decorator-member-expr-identifier-reference-yield.js(default)
+language/statements/class/decorator/syntax/valid/class-element-decorator-parenthesized-expr-identifier-reference-yield.js(default)
