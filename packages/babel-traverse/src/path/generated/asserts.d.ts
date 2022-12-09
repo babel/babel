@@ -339,6 +339,9 @@ export interface NodePathAssertions {
   assertMixedTypeAnnotation(
     opts?: object,
   ): asserts this is NodePath<t.MixedTypeAnnotation>;
+  assertModuleDeclaration(
+    opts?: object,
+  ): asserts this is NodePath<t.ModuleDeclaration>;
   assertModuleExpression(
     opts?: object,
   ): asserts this is NodePath<t.ModuleExpression>;

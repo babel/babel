@@ -1,5 +1,10 @@
 import * as virtualTypes from "./path/lib/virtual-types";
-import { DEPRECATED_KEYS, FLIPPED_ALIAS_KEYS, TYPES } from "@babel/types";
+import {
+  DEPRECATED_KEYS,
+  DEPRECATED_ALIASES,
+  FLIPPED_ALIAS_KEYS,
+  TYPES,
+} from "@babel/types";
 import type { NodePath, Visitor } from "./index";
 
 type VIRTUAL_TYPES = keyof typeof virtualTypes;
@@ -93,20 +98,26 @@ export function explode(visitor: Visitor) {
   for (const nodeType of Object.keys(visitor) as (keyof Visitor)[]) {
     if (shouldIgnoreKey(nodeType)) continue;
 
-    const fns = visitor[nodeType];
-
     let aliases = FLIPPED_ALIAS_KEYS[nodeType];
 
-    const deprecatedKey = DEPRECATED_KEYS[nodeType];
-    if (deprecatedKey) {
+    if (nodeType in DEPRECATED_KEYS) {
+      const deprecatedKey = DEPRECATED_KEYS[nodeType];
       console.trace(
         `Visitor defined for ${nodeType} but it has been renamed to ${deprecatedKey}`,
       );
       aliases = [deprecatedKey];
+    } else if (nodeType in DEPRECATED_ALIASES) {
+      const deprecatedAlias =
+        DEPRECATED_ALIASES[nodeType as keyof typeof DEPRECATED_ALIASES];
+      console.trace(
+        `Visitor defined for ${nodeType} but it has been renamed to ${deprecatedAlias}`,
+      );
+      aliases = FLIPPED_ALIAS_KEYS[deprecatedAlias];
     }
 
     if (!aliases) continue;
 
+    const fns = visitor[nodeType];
     // clear it from the visitor
     delete visitor[nodeType];
 

@@ -337,4 +337,40 @@ describe("traverse", function () {
       expect(programShouldStop).toBe(false);
     });
   });
+  describe("traverse.explode", () => {
+    describe("deprecated types and aliases", () => {
+      beforeAll(() => {
+        jest.spyOn(console, "trace").mockImplementation(() => {});
+      });
+      afterAll(() => {
+        console.trace.mockClear();
+      });
+      it("should warn for deprecated node types", () => {
+        const visitNumericLiteral = () => {};
+        const visitor = {
+          NumberLiteral: visitNumericLiteral,
+        };
+        traverse.explode(visitor);
+        expect(console.trace).toHaveBeenCalledWith(
+          "Visitor defined for NumberLiteral but it has been renamed to NumericLiteral",
+        );
+        expect(visitor).toHaveProperty("NumericLiteral.enter", [
+          visitNumericLiteral,
+        ]);
+      });
+      it("should warn for deprecated aliases", () => {
+        const visitImportOrExportDeclaration = () => {};
+        const visitor = {
+          ModuleDeclaration: visitImportOrExportDeclaration,
+        };
+        traverse.explode(visitor);
+        expect(console.trace).toHaveBeenCalledWith(
+          "Visitor defined for ModuleDeclaration but it has been renamed to ImportOrExportDeclaration",
+        );
+        expect(visitor).toHaveProperty("ImportDeclaration.enter", [
+          visitImportOrExportDeclaration,
+        ]);
+      });
+    });
+  });
 });
