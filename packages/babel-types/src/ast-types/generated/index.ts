@@ -159,6 +159,7 @@ export type Node =
   | MemberExpression
   | MetaProperty
   | MixedTypeAnnotation
+  | ModuleDeclaration
   | ModuleExpression
   | NewExpression
   | Noop
@@ -2453,7 +2454,7 @@ export type Property =
 export type UnaryLike = UnaryExpression | SpreadElement;
 export type Pattern = AssignmentPattern | ArrayPattern | ObjectPattern;
 export type Class = ClassExpression | ClassDeclaration;
-export type ModuleDeclaration =
+export type ImportOrExportDeclaration =
   | ExportAllDeclaration
   | ExportDefaultDeclaration
   | ExportNamedDeclaration
@@ -2774,7 +2775,7 @@ export interface Aliases {
   UnaryLike: UnaryLike;
   Pattern: Pattern;
   Class: Class;
-  ModuleDeclaration: ModuleDeclaration;
+  ImportOrExportDeclaration: ImportOrExportDeclaration;
   ExportDeclaration: ExportDeclaration;
   ModuleSpecifier: ModuleSpecifier;
   Accessor: Accessor;

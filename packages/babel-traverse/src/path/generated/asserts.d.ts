@@ -258,6 +258,9 @@ export interface NodePathAssertions {
   assertImportNamespaceSpecifier(
     opts?: object,
   ): asserts this is NodePath<t.ImportNamespaceSpecifier>;
+  assertImportOrExportDeclaration(
+    opts?: object,
+  ): asserts this is NodePath<t.ImportOrExportDeclaration>;
   assertImportSpecifier(
     opts?: object,
   ): asserts this is NodePath<t.ImportSpecifier>;
@@ -336,9 +339,6 @@ export interface NodePathAssertions {
   assertMixedTypeAnnotation(
     opts?: object,
   ): asserts this is NodePath<t.MixedTypeAnnotation>;
-  assertModuleDeclaration(
-    opts?: object,
-  ): asserts this is NodePath<t.ModuleDeclaration>;
   assertModuleExpression(
     opts?: object,
   ): asserts this is NodePath<t.ModuleExpression>;

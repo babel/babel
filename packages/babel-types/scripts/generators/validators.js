@@ -1,4 +1,5 @@
 import {
+  DEPRECATED_ALIASES,
   DEPRECATED_KEYS,
   FLIPPED_ALIAS_KEYS,
   NODE_FIELDS,
@@ -83,8 +84,18 @@ import type * as t from "../..";\n\n`;
 
   Object.keys(DEPRECATED_KEYS).forEach(type => {
     const newType = DEPRECATED_KEYS[type];
-    const deprecated = `console.trace("The node type ${type} has been renamed to ${newType}");`;
+    const deprecated = `console.trace("\`is${type}\` has been deprecated, please migrate to \`is${newType}\`.");`;
     output += addIsHelper(type, null, deprecated);
+  });
+
+  Object.keys(DEPRECATED_ALIASES).forEach(type => {
+    const newType = DEPRECATED_ALIASES[type];
+    const deprecated = `console.trace("\`is${type}\` has been deprecated, please migrate to \`is${newType}\`.");`;
+    output += `export function is${type}(node: object | null | undefined, opts?: object | null): node is t.${newType} {
+  ${deprecated}
+  return is${newType}(node, opts);
+}
+`;
   });
 
   return output;

@@ -1504,7 +1504,7 @@ defineType("ExportAllDeclaration", {
   aliases: [
     "Statement",
     "Declaration",
-    "ModuleDeclaration",
+    "ImportOrExportDeclaration",
     "ExportDeclaration",
   ],
   fields: {
@@ -1527,7 +1527,7 @@ defineType("ExportDefaultDeclaration", {
   aliases: [
     "Statement",
     "Declaration",
-    "ModuleDeclaration",
+    "ImportOrExportDeclaration",
     "ExportDeclaration",
   ],
   fields: {
@@ -1548,7 +1548,7 @@ defineType("ExportNamedDeclaration", {
   aliases: [
     "Statement",
     "Declaration",
-    "ModuleDeclaration",
+    "ImportOrExportDeclaration",
     "ExportDeclaration",
   ],
   fields: {
@@ -1692,7 +1692,7 @@ defineType("ForOfStatement", {
 
 defineType("ImportDeclaration", {
   visitor: ["specifiers", "source"],
-  aliases: ["Statement", "Declaration", "ModuleDeclaration"],
+  aliases: ["Statement", "Declaration", "ImportOrExportDeclaration"],
   fields: {
     assertions: {
       optional: true,

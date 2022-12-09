@@ -1694,11 +1694,11 @@ export function assertClass(
 ): asserts node is t.Class {
   assert("Class", node, opts);
 }
-export function assertModuleDeclaration(
+export function assertImportOrExportDeclaration(
   node: object | null | undefined,
   opts?: object | null,
-): asserts node is t.ModuleDeclaration {
-  assert("ModuleDeclaration", node, opts);
+): asserts node is t.ImportOrExportDeclaration {
+  assert("ImportOrExportDeclaration", node, opts);
 }
 export function assertExportDeclaration(
   node: object | null | undefined,
@@ -1804,21 +1804,31 @@ export function assertTSBaseType(
 }
 export function assertNumberLiteral(node: any, opts: any): void {
   console.trace(
-    "The node type NumberLiteral has been renamed to NumericLiteral",
+    "`assertsNumberLiteral` has been deprecated, please migrate to `assertsNumericLiteral`.",
   );
   assert("NumberLiteral", node, opts);
 }
 export function assertRegexLiteral(node: any, opts: any): void {
-  console.trace("The node type RegexLiteral has been renamed to RegExpLiteral");
+  console.trace(
+    "`assertsRegexLiteral` has been deprecated, please migrate to `assertsRegExpLiteral`.",
+  );
   assert("RegexLiteral", node, opts);
 }
 export function assertRestProperty(node: any, opts: any): void {
-  console.trace("The node type RestProperty has been renamed to RestElement");
+  console.trace(
+    "`assertsRestProperty` has been deprecated, please migrate to `assertsRestElement`.",
+  );
   assert("RestProperty", node, opts);
 }
 export function assertSpreadProperty(node: any, opts: any): void {
   console.trace(
-    "The node type SpreadProperty has been renamed to SpreadElement",
+    "`assertsSpreadProperty` has been deprecated, please migrate to `assertsSpreadElement`.",
   );
   assert("SpreadProperty", node, opts);
+}
+export function assertModuleDeclaration(node: any, opts: any): void {
+  console.trace(
+    "`assertsModuleDeclaration` has been deprecated, please migrate to `assertsImportOrExportDeclaration`.",
+  );
+  assert("ModuleDeclaration", node, opts);
 }
