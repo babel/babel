@@ -7,17 +7,17 @@ class B extends A {
       fileName: _jsxFileName,
       lineNumber: 5,
       columnNumber: 5
-    }, void 0);
+    });
     super( /*#__PURE__*/_reactJsxDevRuntime.jsxDEV("sometag2", {}, void 0, false, {
       fileName: _jsxFileName,
       lineNumber: 6,
       columnNumber: 11
-    }, void 0));
+    }));
     /*#__PURE__*/_reactJsxDevRuntime.jsxDEV("sometag3", {}, void 0, false, {
       fileName: _jsxFileName,
       lineNumber: 7,
       columnNumber: 5
-    }, void 0);
+    });
   }
 }
 class C {
@@ -46,7 +46,7 @@ class E extends A {
         fileName: _jsxFileName,
         lineNumber: 29,
         columnNumber: 20
-      }, void 0);
+      });
     };
     this.y = function () {
       return /*#__PURE__*/_reactJsxDevRuntime.jsxDEV("sometag6", {}, void 0, false, {
@@ -67,7 +67,7 @@ class E extends A {
         fileName: _jsxFileName,
         lineNumber: 36,
         columnNumber: 7
-      }, void 0);
+      });
     }
     super();
   }
@@ -87,6 +87,6 @@ class G extends A {
       fileName: _jsxFileName,
       lineNumber: 49,
       columnNumber: 12
-    }, void 0);
+    });
   }
 }

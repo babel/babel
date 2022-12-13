@@ -1,6 +1,6 @@
 import jsx from "@babel/plugin-syntax-jsx";
 import { declare } from "@babel/helper-plugin-utils";
-import { types as t } from "@babel/core";
+import { template, types as t } from "@babel/core";
 import type { PluginPass } from "@babel/core";
 import type { NodePath, Scope, Visitor } from "@babel/traverse";
 import { addNamed, addNamespace, isModule } from "@babel/helper-module-imports";
@@ -12,7 +12,6 @@ import type {
   Identifier,
   JSXAttribute,
   JSXElement,
-  JSXFragment,
   JSXOpeningElement,
   JSXSpreadAttribute,
   MemberExpression,
@@ -71,9 +70,6 @@ export default function createPlugin({
       pure: PURE_ANNOTATION,
 
       throwIfNamespace = true,
-
-      // TODO (Babel 8): It should throw if this option is used with the automatic runtime
-      filter,
 
       runtime: RUNTIME_DEFAULT = process.env.BABEL_8_BREAKING
         ? "automatic"
@@ -280,6 +276,26 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
           // },
         },
 
+        JSXFragment(path, file) {
+          // <>...</>  ->  <React.Fragment>...</React.Fragment>
+
+          const frag = memberExpressionToJSX(get(file, "id/fragment")());
+
+          path.replaceWith(
+            t.inherits(
+              t.jsxElement(
+                t.inherits(
+                  t.jsxOpeningElement(frag, []),
+                  path.node.openingFragment,
+                ),
+                t.jsxClosingElement(t.cloneNode(frag)),
+                path.node.children,
+              ),
+              path.node,
+            ),
+          );
+        },
+
         JSXElement: {
           exit(path, file) {
             let callExpr;
@@ -296,25 +312,12 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
           },
         },
 
-        JSXFragment: {
-          exit(path, file) {
-            let callExpr;
-            if (get(file, "runtime") === "classic") {
-              callExpr = buildCreateElementFragmentCall(path, file);
-            } else {
-              callExpr = buildJSXFragmentCall(path, file);
-            }
-
-            path.replaceWith(t.inherits(callExpr, path.node));
-          },
-        },
-
         JSXAttribute(path) {
           if (t.isJSXElement(path.node.value)) {
             path.node.value = t.jsxExpressionContainer(path.node.value);
           }
         },
-      } as Visitor<PluginPass>,
+      },
     };
 
     // Returns whether the class has specified a superclass.
@@ -569,9 +572,13 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         args.push(
           extracted.key ?? path.scope.buildUndefinedNode(),
           t.booleanLiteral(children.length > 1),
-          extracted.__source ?? path.scope.buildUndefinedNode(),
-          extracted.__self ?? path.scope.buildUndefinedNode(),
         );
+        if (extracted.__source) {
+          args.push(extracted.__source);
+          if (extracted.__self) args.push(extracted.__self);
+        } else if (extracted.__self) {
+          args.push(path.scope.buildUndefinedNode(), extracted.__self);
+        }
       } else if (extracted.key !== undefined) {
         args.push(extracted.key);
       }
@@ -594,56 +601,6 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       }
 
       return t.objectExpression(props);
-    }
-
-    // Builds JSX Fragment <></> into
-    // Production: React.jsx(type, arguments)
-    // Development: React.jsxDEV(type, { children })
-    function buildJSXFragmentCall(
-      path: NodePath<JSXFragment>,
-      file: PluginPass,
-    ) {
-      const args = [get(file, "id/fragment")()];
-
-      const children = t.react.buildChildren(path.node);
-
-      args.push(
-        t.objectExpression(
-          children.length > 0
-            ? [
-                buildChildrenProperty(
-                  //@ts-expect-error The children here contains JSXSpreadChild,
-                  // which will be thrown later
-                  children,
-                ),
-              ]
-            : [],
-        ),
-      );
-
-      if (development) {
-        args.push(
-          path.scope.buildUndefinedNode(),
-          t.booleanLiteral(children.length > 1),
-        );
-      }
-
-      return call(file, children.length > 1 ? "jsxs" : "jsx", args);
-    }
-
-    // Builds JSX Fragment <></> into
-    // React.createElement(React.Fragment, null, ...children)
-    function buildCreateElementFragmentCall(
-      path: NodePath<JSXFragment>,
-      file: PluginPass,
-    ) {
-      if (filter && !filter(path.node, file)) return;
-
-      return call(file, "createElement", [
-        get(file, "id/fragment")(),
-        t.nullLiteral(),
-        ...t.react.buildChildren(path.node),
-      ]);
     }
 
     // Builds JSX into:
@@ -849,6 +806,22 @@ function toMemberExpression(id: string): Identifier | MemberExpression {
   );
 }
 
+function memberExpressionToJSX(
+  expr: t.Node,
+): t.JSXMemberExpression | t.JSXIdentifier {
+  switch (expr.type) {
+    case "Identifier":
+      return t.jsxIdentifier(expr.name);
+    case "MemberExpression":
+      return t.jsxMemberExpression(
+        memberExpressionToJSX(expr.object),
+        memberExpressionToJSX(expr.property) as t.JSXIdentifier,
+      );
+    default:
+      throw new Error("Internal error: unknown member expression type");
+  }
+}
+
 function makeSource(path: NodePath, state: PluginPass) {
   const location = path.node.loc;
   if (!location) {
@@ -861,13 +834,10 @@ function makeSource(path: NodePath, state: PluginPass) {
     const { filename = "" } = state;
 
     const fileNameIdentifier = path.scope.generateUidIdentifier("_jsxFileName");
-    const scope = path.hub.getScope();
-    if (scope) {
-      scope.push({
-        id: fileNameIdentifier,
-        init: t.stringLiteral(filename),
-      });
-    }
+    path.scope.getProgramParent().push({
+      id: fileNameIdentifier,
+      init: t.stringLiteral(filename),
+    });
     // @ts-expect-error todo: avoid mutating PluginPass
     state.fileNameIdentifier = fileNameIdentifier;
   }
@@ -893,23 +863,11 @@ function makeTrace(
   const fileColumnLiteral =
     column0Based != null ? t.numericLiteral(column0Based + 1) : t.nullLiteral();
 
-  const fileNameProperty = t.objectProperty(
-    t.identifier("fileName"),
-    fileNameIdentifier,
-  );
-  const lineNumberProperty = t.objectProperty(
-    t.identifier("lineNumber"),
-    fileLineLiteral,
-  );
-  const columnNumberProperty = t.objectProperty(
-    t.identifier("columnNumber"),
-    fileColumnLiteral,
-  );
-  return t.objectExpression([
-    fileNameProperty,
-    lineNumberProperty,
-    columnNumberProperty,
-  ]);
+  return template.expression.ast`{
+    fileName: ${fileNameIdentifier},
+    lineNumber: ${fileLineLiteral},
+    columnNumber: ${fileColumnLiteral},
+  }`;
 }
 
 function sourceSelfError(path: NodePath, name: string) {
