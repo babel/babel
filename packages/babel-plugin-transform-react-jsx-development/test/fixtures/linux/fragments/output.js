@@ -6,4 +6,4 @@ var x = /*#__PURE__*/_reactJsxDevRuntime.jsxDEV(_reactJsxDevRuntime.Fragment, {
     lineNumber: 1,
     columnNumber: 11
   }, this)
-}, void 0, false, void 0, void 0);
+}, void 0, false);

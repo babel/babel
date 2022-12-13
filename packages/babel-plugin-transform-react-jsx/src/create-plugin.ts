@@ -572,9 +572,13 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         args.push(
           extracted.key ?? path.scope.buildUndefinedNode(),
           t.booleanLiteral(children.length > 1),
-          extracted.__source ?? path.scope.buildUndefinedNode(),
-          extracted.__self ?? path.scope.buildUndefinedNode(),
         );
+        if (extracted.__source) {
+          args.push(extracted.__source);
+          if (extracted.__self) args.push(extracted.__self);
+        } else if (extracted.__self) {
+          args.push(path.scope.buildUndefinedNode(), extracted.__self);
+        }
       } else if (extracted.key !== undefined) {
         args.push(extracted.key);
       }
