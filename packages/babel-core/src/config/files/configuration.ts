@@ -226,7 +226,7 @@ export function* findRelativeConfig(
         envName,
         caller,
         packageData.pkg?.dirname === loc
-          ? packageToBabelConfig(packageData.pkg as ConfigFile)
+          ? packageToBabelConfig(packageData.pkg)
           : null,
       );
     }

@@ -63,7 +63,6 @@ import {
   PARAM_RETURN,
   functionFlags,
 } from "../util/production-parameter";
-import type { ParamKind } from "../util/production-parameter";
 import {
   newArrowHeadScope,
   newAsyncArrowScope,
@@ -2553,9 +2552,7 @@ export default abstract class ExpressionParser extends LValParser {
 
       // FunctionBody[Yield, Await]:
       //   StatementList[?Yield, ?Await, +Return] opt
-      this.prodParam.enter(
-        (this.prodParam.currentFlags() | PARAM_RETURN) as ParamKind,
-      );
+      this.prodParam.enter(this.prodParam.currentFlags() | PARAM_RETURN);
       node.body = this.parseBlock(
         true,
         false,

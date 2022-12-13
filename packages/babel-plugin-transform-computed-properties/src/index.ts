@@ -158,7 +158,7 @@ export default declare((api, options: Options) => {
         if (single) return single;
       } else {
         // the value of ObjectProperty in ObjectExpression must be an expression
-        const value = getValue(prop) as t.Expression;
+        const value = getValue(prop);
         if (computedProps.length === 1) {
           return t.callExpression(state.addHelper("defineProperty"), [
             info.initPropExpression,

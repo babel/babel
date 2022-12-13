@@ -101,7 +101,9 @@ fs.writeFileSync(
     JSON.stringify(
       {
         extends: "./tsconfig.base.json",
-        include: tsPkgs.map(({ relative }) => `${relative}/src/**/*.ts`),
+        include: tsPkgs
+          .map(({ relative }) => `${relative}/src/**/*.ts`)
+          .concat(["./packages/babel-parser/typings/*.d.ts"]),
         compilerOptions: {
           paths: Object.fromEntries([
             ...tsPkgs.flatMap(({ name, relative, subExports }) => {

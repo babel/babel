@@ -498,7 +498,7 @@ export default (superClass: typeof Parser) =>
           break;
       }
 
-      return node as N.AnyExport;
+      return node;
     }
 
     parseSubscript(

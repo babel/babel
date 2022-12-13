@@ -428,8 +428,8 @@ function _guessExecutionStatusRelativeToCached(
   // otherwise we're associated by a parent node, check which key comes before the other
   const keys = VISITOR_KEYS[commonPath.type];
   const keyPosition = {
-    this: keys.indexOf(divergence.this.parentKey as string),
-    target: keys.indexOf(divergence.target.parentKey as string),
+    this: keys.indexOf(divergence.this.parentKey),
+    target: keys.indexOf(divergence.target.parentKey),
   };
   return keyPosition.target > keyPosition.this ? "before" : "after";
 }

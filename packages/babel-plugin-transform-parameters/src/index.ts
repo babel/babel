@@ -13,7 +13,7 @@ export default declare((api, options: Options) => {
   const ignoreFunctionLength =
     api.assumption("ignoreFunctionLength") ?? options.loose;
   // Todo(BABEL 8): Consider default it to false
-  const noNewArrows = (api.assumption("noNewArrows") ?? true) as boolean;
+  const noNewArrows = api.assumption("noNewArrows") ?? true;
 
   return {
     name: "transform-parameters",

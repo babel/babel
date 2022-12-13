@@ -175,7 +175,7 @@ export default abstract class UtilParser extends Tokenizer {
         this.state.tokensLength = failState.tokensLength;
         return {
           node,
-          error: failState.errors[oldState.errors.length] as ParseError<any>,
+          error: failState.errors[oldState.errors.length],
           thrown: false,
           aborted: false,
           failState,

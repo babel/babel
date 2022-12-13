@@ -487,6 +487,7 @@ const privateNameHandlerLoose: Handler<PrivateNameState> = {
   boundGet(member) {
     return t.callExpression(
       t.memberExpression(this.get(member), t.identifier("bind")),
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       [t.cloneNode(member.node.object as t.Expression)],
     );
   },
@@ -1045,7 +1046,7 @@ export function buildFieldsInitNodes(
         // We special-case the single expression case to avoid the iife, since
         // it's common.
         if (blockBody.length === 1 && t.isExpressionStatement(blockBody[0])) {
-          staticNodes.push(blockBody[0] as t.ExpressionStatement);
+          staticNodes.push(blockBody[0]);
         } else {
           staticNodes.push(template.statement.ast`(() => { ${blockBody} })()`);
         }

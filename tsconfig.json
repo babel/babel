@@ -153,7 +153,8 @@
     "./packages/babel-traverse/src/**/*.ts",
     "./packages/babel-types/src/**/*.ts",
     "./codemods/babel-plugin-codemod-object-assign-to-object-spread/src/**/*.ts",
-    "./codemods/babel-plugin-codemod-optional-catch-binding/src/**/*.ts"
+    "./codemods/babel-plugin-codemod-optional-catch-binding/src/**/*.ts",
+    "./packages/babel-parser/typings/*.d.ts"
   ],
   "compilerOptions": {
     "paths": {

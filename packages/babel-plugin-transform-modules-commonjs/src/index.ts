@@ -54,9 +54,8 @@ export default declare((api, options: Options) => {
 
   const constantReexports = api.assumption("constantReexports") ?? loose;
   const enumerableModuleMeta = api.assumption("enumerableModuleMeta") ?? loose;
-  const noIncompleteNsImportDetection = (api.assumption(
-    "noIncompleteNsImportDetection",
-  ) ?? false) as boolean;
+  const noIncompleteNsImportDetection =
+    api.assumption("noIncompleteNsImportDetection") ?? false;
 
   if (
     typeof lazy !== "boolean" &&

@@ -54,7 +54,7 @@ getV8Flags(async function (err, v8Flags) {
       args.push(flag);
       args.push(babelArgs[++i]);
     } else if (aliases.has(flag)) {
-      args.unshift(aliases.get(flag) as string);
+      args.unshift(aliases.get(flag));
     } else if (
       flag === "debug" || // node debug foo.js
       flag === "inspect" ||

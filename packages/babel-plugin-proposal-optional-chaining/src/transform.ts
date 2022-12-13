@@ -141,6 +141,7 @@ export function transform(
           // Here `chainWithTypes` MUST NOT be cloned because it could be
           // updated when generating the memoised context of a call
           // expression. It must be an Expression when `ref` is an identifier
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
           chainWithTypes as t.Expression,
         );
 
@@ -189,7 +190,8 @@ export function transform(
       // object must not be Super as super?.foo is invalid
       const object = skipTransparentExprWrapperNodes(
         replacement.object,
-      ) as t.Expression;
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+      ) as any as t.Expression;
       let baseRef;
       if (!pureGetters || !isSimpleMemberExpression(object)) {
         // memoize the context object when getters are not always pure

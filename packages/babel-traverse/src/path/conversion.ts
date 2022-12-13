@@ -544,7 +544,7 @@ function standardizeSuperProperty(
         logicalExpression(
           op,
           assignmentPath.node.left as t.MemberExpression,
-          assignmentPath.node.right as t.Expression,
+          assignmentPath.node.right,
         ),
       );
     } else {

@@ -34,15 +34,12 @@ export default declare((api, options: Options) => {
 
   const { useBuiltIns = false } = options;
 
-  const iterableIsArray = (api.assumption("iterableIsArray") ??
-    options.loose ??
-    false) as boolean;
-  const arrayLikeIsIterable = (options.allowArrayLike ??
-    api.assumption("arrayLikeIsIterable") ??
-    false) as boolean;
-  const objectRestNoSymbols = (api.assumption("objectRestNoSymbols") ??
-    options.loose ??
-    false) as boolean;
+  const iterableIsArray =
+    api.assumption("iterableIsArray") ?? options.loose ?? false;
+  const arrayLikeIsIterable =
+    options.allowArrayLike ?? api.assumption("arrayLikeIsIterable") ?? false;
+  const objectRestNoSymbols =
+    api.assumption("objectRestNoSymbols") ?? options.loose ?? false;
 
   return {
     name: "transform-destructuring",
