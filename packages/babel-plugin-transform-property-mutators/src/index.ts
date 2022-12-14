@@ -1,5 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import * as defineMap from "@babel/helper-define-map";
+import { type MutatorMap, pushProperty, toDefineObject } from "./define-map";
 import { types as t } from "@babel/core";
 
 export default declare(api => {
@@ -11,13 +11,13 @@ export default declare(api => {
     visitor: {
       ObjectExpression(path, { file }) {
         const { node } = path;
-        let mutatorMap: defineMap.MutatorMap | void;
+        let mutatorMap: MutatorMap | void;
         const newProperties = node.properties.filter(function (prop) {
           if (t.isObjectMethod(prop)) {
             if (prop.kind === "get" || prop.kind === "set") {
               mutatorMap ??= {};
               if (!prop.computed) {
-                defineMap.push(mutatorMap, prop, null, file);
+                pushProperty(mutatorMap, prop, null, file);
                 return false;
               }
             }
@@ -37,7 +37,7 @@ export default declare(api => {
               t.identifier("Object"),
               t.identifier("defineProperties"),
             ),
-            [node, defineMap.toDefineObject(mutatorMap)],
+            [node, toDefineObject(mutatorMap)],
           ),
         );
       },

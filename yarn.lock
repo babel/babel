@@ -624,7 +624,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/helper-define-map@workspace:^, @babel/helper-define-map@workspace:packages/babel-helper-define-map":
+"@babel/helper-define-map@workspace:packages/babel-helper-define-map":
   version: 0.0.0-use.local
   resolution: "@babel/helper-define-map@workspace:packages/babel-helper-define-map"
   dependencies:
@@ -2903,7 +2903,7 @@ __metadata:
   resolution: "@babel/plugin-transform-property-mutators@workspace:packages/babel-plugin-transform-property-mutators"
   dependencies:
     "@babel/core": "workspace:^"
-    "@babel/helper-define-map": "workspace:^"
+    "@babel/helper-function-name": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
