@@ -17,7 +17,6 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-define-map": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^"
   },
   "peerDependencies": {
