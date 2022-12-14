@@ -624,15 +624,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/helper-define-map@workspace:packages/babel-helper-define-map":
-  version: 0.0.0-use.local
-  resolution: "@babel/helper-define-map@workspace:packages/babel-helper-define-map"
-  dependencies:
-    "@babel/helper-function-name": "workspace:^"
-    "@babel/types": "workspace:^"
-  languageName: unknown
-  linkType: soft
-
 "@babel/helper-define-polyfill-provider@npm:^0.3.3":
   version: 0.3.3
   resolution: "@babel/helper-define-polyfill-provider@npm:0.3.3"
