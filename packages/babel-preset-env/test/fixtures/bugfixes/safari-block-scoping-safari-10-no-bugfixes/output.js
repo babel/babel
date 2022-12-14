@@ -1,7 +1,5 @@
 e => {
-  for (var _e of []) {
-    ;
-  }
+  for (var _e of []);
 };
 {
   var a;

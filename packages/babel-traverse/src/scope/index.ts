@@ -1235,18 +1235,34 @@ export default class Scope {
     return !!this.getOwnBinding(name);
   }
 
-  hasBinding(name: string, noGlobals?: boolean) {
+  // By default, we consider generated UIDs as bindings.
+  // This is because they are almost always used to declare variables,
+  // and since the scope isn't always up-to-date it's better to assume that
+  // there is a variable with that name. The `noUids` option can be used to
+  // turn off this behavior, for example if you know that the generate UID
+  // was used to declare a variable in a different scope.
+  hasBinding(
+    name: string,
+    opts?: boolean | { noGlobals?: boolean; noUids?: boolean },
+  ) {
     if (!name) return false;
     if (this.hasOwnBinding(name)) return true;
-    if (this.parentHasBinding(name, noGlobals)) return true;
-    if (this.hasUid(name)) return true;
-    if (!noGlobals && Scope.globals.includes(name)) return true;
-    if (!noGlobals && Scope.contextVariables.includes(name)) return true;
+    {
+      // TODO: Only accept the object form.
+      if (typeof opts === "boolean") opts = { noGlobals: opts };
+    }
+    if (this.parentHasBinding(name, opts)) return true;
+    if (!opts?.noUids && this.hasUid(name)) return true;
+    if (!opts?.noGlobals && Scope.globals.includes(name)) return true;
+    if (!opts?.noGlobals && Scope.contextVariables.includes(name)) return true;
     return false;
   }
 
-  parentHasBinding(name: string, noGlobals?: boolean) {
-    return this.parent?.hasBinding(name, noGlobals);
+  parentHasBinding(
+    name: string,
+    opts?: { noGlobals?: boolean; noUids?: boolean },
+  ) {
+    return this.parent?.hasBinding(name, opts);
   }
 
   /**
