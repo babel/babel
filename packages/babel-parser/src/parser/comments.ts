@@ -199,6 +199,7 @@ export default class CommentsParser extends BaseParser {
     this.state.commentStack = [];
   }
 
+  /* eslint-disable no-irregular-whitespace */
   /**
    * Reset previous node trailing comments. Used in object / class
    * property parsing. We parse `async`, `static`, `set` and `get`
@@ -206,16 +207,17 @@ export default class CommentsParser extends BaseParser {
    * method later. In this case the identifier is not part of the AST and we
    * should sync the knowledge to commentStacks
    *
-   * ↓↓↓ We had escaped "\/" to "\\/" for comments
-   * For example, when parsing *\/
-   * // async /* 1 *\/ function f() {}
-   * /*
-   * the comment whitespace "* 1 *" has leading node Identifier(async). When
-   * we see the function token, we create a Function node and mark "* 1 *" as
-   * inner comments. So "* 1 *" should be detached from the Identifier node.
+   * For example, when parsing
+   * ```
+   * async /* 1 *​/ function f() {}
+   * ```
+   * the comment whitespace `/* 1 *​/` has leading node Identifier(async). When
+   * we see the function token, we create a Function node and mark `/* 1 *​/` as
+   * inner comments. So `/* 1 *​/` should be detached from the Identifier node.
    *
    * @param node the last finished AST node _before_ current token
    */
+  /* eslint-enable no-irregular-whitespace */
   resetPreviousNodeTrailingComments(node: Node) {
     const { commentStack } = this.state;
     const { length } = commentStack;
