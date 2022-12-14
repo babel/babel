@@ -2903,7 +2903,6 @@ __metadata:
   resolution: "@babel/plugin-transform-property-mutators@workspace:packages/babel-plugin-transform-property-mutators"
   dependencies:
     "@babel/core": "workspace:^"
-    "@babel/helper-function-name": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:

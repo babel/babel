@@ -1,5 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import { type MutatorMap, pushProperty, toDefineObject } from "./define-map";
+import { type MutatorMap, pushAccessor, toDefineObject } from "./define-map";
 import { types as t } from "@babel/core";
 
 export default declare(api => {
@@ -9,18 +9,20 @@ export default declare(api => {
     name: "transform-property-mutators",
 
     visitor: {
-      ObjectExpression(path, { file }) {
+      ObjectExpression(path) {
         const { node } = path;
-        let mutatorMap: MutatorMap | void;
+        let mutatorMap: MutatorMap | undefined;
         const newProperties = node.properties.filter(function (prop) {
-          if (t.isObjectMethod(prop)) {
-            if (prop.kind === "get" || prop.kind === "set") {
-              mutatorMap ??= {};
-              if (!prop.computed) {
-                pushProperty(mutatorMap, prop, null, file);
-                return false;
-              }
-            }
+          if (
+            t.isObjectMethod(prop) &&
+            !prop.computed &&
+            (prop.kind === "get" || prop.kind === "set")
+          ) {
+            pushAccessor(
+              (mutatorMap ??= {}),
+              prop as t.ObjectMethod & { kind: "get" | "set"; computed: false },
+            );
+            return false;
           }
           return true;
         });
