@@ -159,7 +159,6 @@ export type Node =
   | MemberExpression
   | MetaProperty
   | MixedTypeAnnotation
-  | ModuleDeclaration
   | ModuleExpression
   | NewExpression
   | Noop
@@ -2742,6 +2741,11 @@ export type TSBaseType =
   | TSVoidKeyword
   | TSThisType
   | TSLiteralType;
+export type ModuleDeclaration =
+  | ExportAllDeclaration
+  | ExportDefaultDeclaration
+  | ExportNamedDeclaration
+  | ImportDeclaration;
 
 export interface Aliases {
   Standardized: Standardized;
@@ -2793,6 +2797,7 @@ export interface Aliases {
   TSTypeElement: TSTypeElement;
   TSType: TSType;
   TSBaseType: TSBaseType;
+  ModuleDeclaration: ModuleDeclaration;
 }
 
 export type DeprecatedAliases =

@@ -78,9 +78,11 @@ import type * as t from "../..";\n\n`;
     output += addIsHelper(type);
   });
 
-  Object.keys(FLIPPED_ALIAS_KEYS).forEach(type => {
-    output += addIsHelper(type, FLIPPED_ALIAS_KEYS[type]);
-  });
+  Object.keys(FLIPPED_ALIAS_KEYS)
+    .filter(type => !Object.hasOwn(DEPRECATED_ALIASES, type))
+    .forEach(type => {
+      output += addIsHelper(type, FLIPPED_ALIAS_KEYS[type]);
+    });
 
   Object.keys(DEPRECATED_KEYS).forEach(type => {
     const newType = DEPRECATED_KEYS[type];

@@ -40,9 +40,11 @@ function assert(type: string, node: any, opts?: any): void {
     output += addAssertHelper(type);
   });
 
-  Object.keys(FLIPPED_ALIAS_KEYS).forEach(type => {
-    output += addAssertHelper(type);
-  });
+  Object.keys(FLIPPED_ALIAS_KEYS)
+    .filter(type => !Object.hasOwn(DEPRECATED_ALIASES, type))
+    .forEach(type => {
+      output += addAssertHelper(type);
+    });
 
   const deprecatedNodeTypesAndAliases = {
     ...DEPRECATED_KEYS,
@@ -52,7 +54,7 @@ function assert(type: string, node: any, opts?: any): void {
   Object.keys(deprecatedNodeTypesAndAliases).forEach(type => {
     const newType = deprecatedNodeTypesAndAliases[type];
     output += `export function assert${type}(node: any, opts: any): void {
-  console.trace("\`asserts${type}\` has been deprecated, please migrate to \`asserts${newType}\`.");
+  console.trace("\`assert${type}\` has been deprecated, please migrate to \`assert${newType}\`.");
   assert("${type}", node, opts);
 }\n`;
   });

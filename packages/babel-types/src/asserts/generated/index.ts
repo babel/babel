@@ -1804,31 +1804,31 @@ export function assertTSBaseType(
 }
 export function assertNumberLiteral(node: any, opts: any): void {
   console.trace(
-    "`assertsNumberLiteral` has been deprecated, please migrate to `assertsNumericLiteral`.",
+    "`assertNumberLiteral` has been deprecated, please migrate to `assertNumericLiteral`.",
   );
   assert("NumberLiteral", node, opts);
 }
 export function assertRegexLiteral(node: any, opts: any): void {
   console.trace(
-    "`assertsRegexLiteral` has been deprecated, please migrate to `assertsRegExpLiteral`.",
+    "`assertRegexLiteral` has been deprecated, please migrate to `assertRegExpLiteral`.",
   );
   assert("RegexLiteral", node, opts);
 }
 export function assertRestProperty(node: any, opts: any): void {
   console.trace(
-    "`assertsRestProperty` has been deprecated, please migrate to `assertsRestElement`.",
+    "`assertRestProperty` has been deprecated, please migrate to `assertRestElement`.",
   );
   assert("RestProperty", node, opts);
 }
 export function assertSpreadProperty(node: any, opts: any): void {
   console.trace(
-    "`assertsSpreadProperty` has been deprecated, please migrate to `assertsSpreadElement`.",
+    "`assertSpreadProperty` has been deprecated, please migrate to `assertSpreadElement`.",
   );
   assert("SpreadProperty", node, opts);
 }
 export function assertModuleDeclaration(node: any, opts: any): void {
   console.trace(
-    "`assertsModuleDeclaration` has been deprecated, please migrate to `assertsImportOrExportDeclaration`.",
+    "`assertModuleDeclaration` has been deprecated, please migrate to `assertImportOrExportDeclaration`.",
   );
   assert("ModuleDeclaration", node, opts);
 }

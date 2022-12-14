@@ -21,6 +21,13 @@ import {
 } from "./placeholders";
 import { DEPRECATED_ALIASES } from "./deprecated-aliases";
 
+(
+  Object.keys(DEPRECATED_ALIASES) as (keyof typeof DEPRECATED_ALIASES)[]
+).forEach(deprecatedAlias => {
+  FLIPPED_ALIAS_KEYS[deprecatedAlias] =
+    FLIPPED_ALIAS_KEYS[DEPRECATED_ALIASES[deprecatedAlias]];
+});
+
 // We do this here, because at this point the visitor keys should be ready and setup
 toFastProperties(VISITOR_KEYS);
 toFastProperties(ALIAS_KEYS);
@@ -36,7 +43,6 @@ const TYPES: Array<string> = [].concat(
   Object.keys(VISITOR_KEYS),
   Object.keys(FLIPPED_ALIAS_KEYS),
   Object.keys(DEPRECATED_KEYS),
-  Object.keys(DEPRECATED_ALIASES),
 );
 
 export {
