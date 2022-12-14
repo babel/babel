@@ -41,7 +41,9 @@ function assert(type: string, node: any, opts?: any): void {
   });
 
   Object.keys(FLIPPED_ALIAS_KEYS)
-    .filter(type => !Object.hasOwn(DEPRECATED_ALIASES, type))
+    .filter(
+      type => !Object.prototype.hasOwnProperty.call(DEPRECATED_ALIASES, type)
+    )
     .forEach(type => {
       output += addAssertHelper(type);
     });

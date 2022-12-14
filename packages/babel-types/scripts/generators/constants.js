@@ -8,7 +8,9 @@ export default function generateConstants() {
 import { FLIPPED_ALIAS_KEYS } from "../../definitions";\n\n`;
 
   Object.keys(FLIPPED_ALIAS_KEYS)
-    .filter(type => !Object.hasOwn(DEPRECATED_ALIASES, type))
+    .filter(
+      type => !Object.prototype.hasOwnProperty.call(DEPRECATED_ALIASES, type)
+    )
     .forEach(type => {
       output += `export const ${type.toUpperCase()}_TYPES = FLIPPED_ALIAS_KEYS["${type}"];\n`;
     });
