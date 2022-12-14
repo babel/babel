@@ -49,12 +49,7 @@ export default declare(api => {
           for (const [propNode, id] of computedKeys) {
             propNode.key = t.cloneNode(id);
           }
-          path.replaceWith(
-            t.sequenceExpression([
-              ...computedKeysInits,
-              node,
-            ])
-          );
+          path.replaceWith(t.sequenceExpression([...computedKeysInits, node]));
         } else {
           const newProperties = node.properties.filter(function (prop) {
             if (t.isObjectMethod(prop)) {
