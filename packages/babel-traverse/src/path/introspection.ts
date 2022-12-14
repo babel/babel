@@ -267,7 +267,10 @@ export function willIMaybeExecuteBefore(
 }
 
 function getOuterFunction(path: NodePath) {
-  return (path.scope.getFunctionParent() || path.scope.getProgramParent()).path;
+  return (
+    path.parentPath.scope.getFunctionParent() ||
+    path.parentPath.scope.getProgramParent()
+  ).path;
 }
 
 function isExecutionUncertain(type: t.Node["type"], key: string) {
@@ -445,10 +448,12 @@ function _guessExecutionStatusRelativeToDifferentFunctionsInternal(
   target: NodePath,
   cache: ExecutionStatusCache,
 ): RelativeExecutionStatus {
-  if (
-    !target.isFunctionDeclaration() ||
-    target.parentPath.isExportDeclaration()
-  ) {
+  if (!target.isFunctionDeclaration()) {
+    if (base._guessExecutionStatusRelativeTo(target) === "before") {
+      return "before";
+    }
+    return "unknown";
+  } else if (target.parentPath.isExportDeclaration()) {
     return "unknown";
   }
 
