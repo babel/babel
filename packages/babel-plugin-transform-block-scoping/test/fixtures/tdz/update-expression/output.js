@@ -11,5 +11,4 @@ babelHelpers.tdz("x");
 babelHelpers.tdz("x");
 babelHelpers.tdz("x").p++;
 ++babelHelpers.tdz("x").p;
-x = void 0;
-void 0;
+var x = void 0;

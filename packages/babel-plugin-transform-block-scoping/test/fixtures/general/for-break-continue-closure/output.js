@@ -1,21 +1,21 @@
-for (var a of [1]) {
+var _loop = function () {
   switch (true) {
     case true:
       {
-        var _ret = function () {
-          var b = 1;
-          (function () {
-            return b;
-          });
-          if (true) return "break";
-          return "continue";
-        }();
-        if (_ret === "break") break;
-        if (_ret === "continue") continue;
+        var b = 1;
+        (function () {
+          return b;
+        });
+        if (true) break;
+        return "continue";
       }
     case false:
       {
         throw new Error("unreachable");
       }
   }
+};
+for (var a of [1]) {
+  var _ret = _loop();
+  if (_ret === "continue") continue;
 }

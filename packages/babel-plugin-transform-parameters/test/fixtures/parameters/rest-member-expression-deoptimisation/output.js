@@ -122,7 +122,6 @@ function forOf() {
   try {
     for (_iterator.s(); !(_step = _iterator.n()).done;) {
       rest[0] = _step.value;
-      ;
     }
   } catch (err) {
     _iterator.e(err);

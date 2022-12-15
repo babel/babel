@@ -34,5 +34,5 @@ return transformAsync(code, {
   // The body should be wrapped into closure
   expect(forOfPath.get("body").scope.bindings).toEqual({});
 
-  expect(Object.keys(functionPath.scope.bindings)).toEqual(["foo", "bar", "qux", "quux"]);
+  expect(Object.keys(functionPath.scope.bindings)).toEqual(["foo", "qux", "quux"]);
 });
