@@ -9,12 +9,30 @@ import type { Undone } from "./node";
  * A whitespace token containing comments
  */
 export type CommentWhitespace = {
-  start: number; // the start of the whitespace token.
-  end: number; // the end of the whitespace token.
-  comments: Array<Comment>; // the containing comments
-  leadingNode: Node | null; // the immediately preceding AST node of the whitespace token
-  trailingNode: Node | null; // the immediately following AST node of the whitespace token
-  containingNode: Node | null; // the innermost AST node containing the whitespace with minimal size (|end - start|)
+  /**
+   * the start of the whitespace token.
+   */
+  start: number;
+  /**
+   * the end of the whitespace token.
+   */
+  end: number;
+  /**
+   * the containing comments
+   */
+  comments: Array<Comment>;
+  /**
+   * the immediately preceding AST node of the whitespace token
+   */
+  leadingNode: Node | null;
+  /**
+   * the immediately following AST node of the whitespace token
+   */
+  trailingNode: Node | null;
+  /**
+   * the innermost AST node containing the whitespace with minimal size (|end - start|)
+   */
+  containingNode: Node | null;
 };
 
 /**
