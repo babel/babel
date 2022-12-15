@@ -213,4 +213,20 @@ describe("path/introspection", function () {
       expect(reference.referencesImport("source", "*")).toBe(false);
     });
   });
+
+  describe("_guessExecutionStatusRelativeTo", function () {
+    it("works withs paths in function expressions", () => {
+      const program = getPath(`
+        a;
+        f(() => b);
+        c;
+      `);
+      const a = program.get("body.0.expression");
+      const b = program.get("body.1.expression.arguments.0.body");
+      const c = program.get("body.2.expression");
+
+      expect(a._guessExecutionStatusRelativeTo(b)).toBe("before");
+      expect(c._guessExecutionStatusRelativeTo(b)).toBe("unknown");
+    });
+  });
 });
