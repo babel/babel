@@ -131,9 +131,9 @@ function getTDZReplacement(
   if (skipTDZChecks.has(id)) return;
   skipTDZChecks.add(id);
 
-  const bindingPath = path.scope.getBinding(id.name).path;
+  const bindingPath = path.scope.getBinding(id.name)?.path;
 
-  if (bindingPath.isFunctionDeclaration()) return;
+  if (!bindingPath || bindingPath.isFunctionDeclaration()) return;
 
   const status = getTDZStatus(path, bindingPath);
   if (status === "outside") return;
