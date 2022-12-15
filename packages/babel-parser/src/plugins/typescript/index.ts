@@ -3541,7 +3541,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         case "TSNonNullExpression":
         case "TSTypeAssertion":
           if (isLHS) {
-            this.expressionScope.recordArrowParemeterBindingError(
+            this.expressionScope.recordArrowParameterBindingError(
               TSErrors.UnexpectedTypeCastInParameter,
               { at: node },
             );

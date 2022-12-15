@@ -119,8 +119,6 @@ export default abstract class Tokenizer extends CommentsParser {
     this.nextToken();
   }
 
-  // TODO
-
   eat(type: TokenType): boolean {
     if (this.match(type)) {
       this.next();
@@ -132,10 +130,6 @@ export default abstract class Tokenizer extends CommentsParser {
 
   /**
    * Whether current token matches given type
-   *
-   * @param {TokenType} type
-   * @returns {boolean}
-   * @memberof Tokenizer
    */
   match(type: TokenType): boolean {
     return this.state.type === type;
@@ -143,10 +137,6 @@ export default abstract class Tokenizer extends CommentsParser {
 
   /**
    * Create a LookaheadState from current parser state
-   *
-   * @param {State} state
-   * @returns {LookaheadState}
-   * @memberof Tokenizer
    */
   createLookaheadState(state: State): LookaheadState {
     return {
@@ -177,9 +167,6 @@ export default abstract class Tokenizer extends CommentsParser {
    *
    * The tokenizer should make best efforts to avoid using any parser state
    * other than those defined in LookaheadState
-   *
-   * @returns {LookaheadState}
-   * @memberof Tokenizer
    */
   lookahead(): LookaheadState {
     const old = this.state;
@@ -1458,11 +1445,6 @@ export default abstract class Tokenizer extends CommentsParser {
    *
    * If `errorRecovery` is `true`, the error is pushed to the errors array and
    * returned. If `errorRecovery` is `false`, the error is instead thrown.
-   *
-   * @param {Class<ParseError<ErrorDetails>>>} ParseErrorClass
-   * @param {RaiseProperties<ErrorDetails>} raiseProperties
-   * @returns {(ParseError<ErrorDetails> | empty)}
-   * @memberof Tokenizer
    */
   raise<ErrorDetails>(
     toParseError: ParseErrorConstructor<ErrorDetails>,
@@ -1484,11 +1466,6 @@ export default abstract class Tokenizer extends CommentsParser {
    * If `errorRecovery` is `true`, this method will first see if there is
    * already an error stored at the same `Position`, and replaces it with the
    * one generated here.
-   *
-   * @param {Class<ParseError<ErrorDetails>>>} ParseErrorClass
-   * @param {RaiseProperties<ErrorDetails>} raiseProperties
-   * @returns {(ParseError<ErrorDetails> | empty)}
-   * @memberof Tokenizer
    */
   raiseOverwrite<ErrorDetails>(
     toParseError: ParseErrorConstructor<ErrorDetails>,

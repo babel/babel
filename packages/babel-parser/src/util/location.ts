@@ -35,11 +35,6 @@ export class SourceLocation {
  * This function should be only be used when we create AST node out of the token
  * boundaries, such as TemplateElement ends before tt.templateNonTail. This
  * function does not skip whitespaces.
- *
- * @export
- * @param {Position} position
- * @param {number} columnOffset
- * @returns {Position}
  */
 export function createPositionWithColumnOffset(
   position: Position,

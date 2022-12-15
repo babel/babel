@@ -73,8 +73,6 @@ const keywordRelationalOperator = /in(?:stanceof)?/y;
  * tt.templateNonTail => tt.backquote/tt.braceR + tt.template + tt.dollarBraceL
  * For performance reasons this routine mutates `tokens`, it is okay
  * here since we execute `parseTopLevel` once for every file.
- * @param {*} tokens
- * @returns
  */
 function babel7CompatTokens(tokens: (Token | N.Comment)[], input: string) {
   for (let i = 0; i < tokens.length; i++) {
@@ -248,14 +246,8 @@ export default abstract class StatementParser extends ExpressionParser {
     return finishedProgram;
   }
 
-  // TODO
-
   /**
    * cast a Statement to a Directive. This method mutates input statement.
-   *
-   * @param {N.Statement} stmt
-   * @returns {N.Directive}
-   * @memberof StatementParser
    */
   stmtToDirective(stmt: N.Statement): N.Directive {
     const directive = stmt as any;
@@ -323,9 +315,6 @@ export default abstract class StatementParser extends ExpressionParser {
   /**
    * Assuming we have seen a contextual `let` and declaration is allowed, check if it
    * starts a variable declaration so that it should be interpreted as a keyword.
-   *
-   * @returns {boolean}
-   * @memberof StatementParser
    */
   hasFollowingBindingAtom(): boolean {
     const next = this.nextTokenStart();
@@ -339,9 +328,6 @@ export default abstract class StatementParser extends ExpressionParser {
   /**
    * Assuming we have seen a contextual `using` and declaration is allowed, check if it
    * starts a variable declaration so that it should be interpreted as a keyword.
-   *
-   * @returns {boolean}
-   * @memberof StatementParser
    */
   hasFollowingBindingIdentifier(): boolean {
     const next = this.nextTokenStart();
@@ -2982,9 +2968,7 @@ export default abstract class StatementParser extends ExpressionParser {
   /**
    * parse assert entries
    *
-   * @see {@link https://tc39.es/proposal-import-assertions/#prod-AssertEntries |AssertEntries}
-   * @returns {N.ImportAttribute[]}
-   * @memberof StatementParser
+   * @see {@link https://tc39.es/proposal-import-assertions/#prod-AssertEntries AssertEntries}
    */
   parseAssertEntries(): N.ImportAttribute[] {
     const attrs = [];
@@ -3031,8 +3015,6 @@ export default abstract class StatementParser extends ExpressionParser {
   /**
    * parse module attributes
    * @deprecated It will be removed in Babel 8
-   * @returns
-   * @memberof StatementParser
    */
   maybeParseModuleAttributes() {
     if (this.match(tt._with) && !this.hasPrecedingLineBreak()) {

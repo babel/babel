@@ -9,7 +9,7 @@ import type { ExpressionErrors } from "../parser/util";
 import type { BindingTypes } from "../util/scopeflags";
 import type { Position } from "../util/location";
 
-type PossiblePlaceholedrs = {
+type PossiblePlaceholders = {
   Identifier: N.Identifier;
   StringLiteral: N.StringLiteral;
   Expression: N.Expression;
@@ -19,9 +19,9 @@ type PossiblePlaceholedrs = {
   ClassBody: N.ClassBody;
   Pattern: N.Pattern;
 };
-export type PlaceholderTypes = keyof PossiblePlaceholedrs;
+export type PlaceholderTypes = keyof PossiblePlaceholders;
 
-type NodeOf<T extends keyof PossiblePlaceholedrs> = PossiblePlaceholedrs[T];
+type NodeOf<T extends keyof PossiblePlaceholders> = PossiblePlaceholders[T];
 // todo: when there  is proper union type for Node
 // type NodeOf<T extends PlaceholderTypes> = Extract<N.Node, { type: T }>;
 
