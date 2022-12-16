@@ -6,7 +6,7 @@ import buildDebug from "debug";
 import path from "path";
 import gensync, { type Handler } from "gensync";
 import { isAsync } from "../../gensync-utils/async";
-import loadCjsOrMjsDefault, { supportsESM } from "./module-types";
+import loadCodeDefault, { supportsESM } from "./module-types";
 import { fileURLToPath, pathToFileURL } from "url";
 
 import importMetaResolve from "./import-meta-resolve";
@@ -217,7 +217,7 @@ function* requireModule(type: string, name: string): Handler<unknown> {
     if (!process.env.BABEL_8_BREAKING) {
       LOADING_MODULES.add(name);
     }
-    return yield* loadCjsOrMjsDefault(
+    return yield* loadCodeDefault(
       name,
       `You appear to be using a native ECMAScript module ${type}, ` +
         "which is only supported when running Babel asynchronously.",

@@ -3,10 +3,14 @@ import type { Handler } from "gensync";
 import path from "path";
 import { pathToFileURL } from "url";
 import { createRequire } from "module";
+import fs from "fs";
 import semver from "semver";
 
 import { endHiddenCallStack } from "../../errors/rewrite-stack-trace";
 import ConfigError from "../../errors/config-error";
+
+import { transformSync } from "../../transform";
+import type { InputOptions } from "..";
 
 const require = createRequire(import.meta.url);
 
@@ -23,38 +27,64 @@ export const supportsESM = semver.satisfies(
   "^12.17 || >=13.2",
 );
 
-export default function* loadCjsOrMjsDefault(
+export default function* loadCodeDefault(
   filepath: string,
   asyncError: string,
   // TODO(Babel 8): Remove this
   fallbackToTranspiledModule: boolean = false,
 ): Handler<unknown> {
-  switch (guessJSModuleType(filepath)) {
-    case "cjs":
+  switch (path.extname(filepath)) {
+    case ".cjs":
       return loadCjsDefault(filepath, fallbackToTranspiledModule);
-    case "unknown":
+    case ".mjs":
+      break;
+    case ".cts":
+      return loadCtsDefault(filepath);
+    default:
       try {
         return loadCjsDefault(filepath, fallbackToTranspiledModule);
       } catch (e) {
         if (e.code !== "ERR_REQUIRE_ESM") throw e;
       }
-    // fall through
-    case "mjs":
-      if (yield* isAsync()) {
-        return yield* waitFor(loadMjsDefault(filepath));
-      }
-      throw new ConfigError(asyncError, filepath);
   }
+  if (yield* isAsync()) {
+    return yield* waitFor(loadMjsDefault(filepath));
+  }
+  throw new ConfigError(asyncError, filepath);
 }
 
-function guessJSModuleType(filename: string): "cjs" | "mjs" | "unknown" {
-  switch (path.extname(filename)) {
-    case ".cjs":
-      return "cjs";
-    case ".mjs":
-      return "mjs";
-    default:
-      return "unknown";
+function loadCtsDefault(filepath: string) {
+  const ext = ".cts";
+  const hasTsSupport = !!(
+    require.extensions[".ts"] ||
+    require.extensions[".cts"] ||
+    require.extensions[".mts"]
+  );
+  if (!hasTsSupport) {
+    const code = fs.readFileSync(filepath, "utf8");
+    const opts: InputOptions = {
+      babelrc: false,
+      configFile: false,
+      filename: path.basename(filepath),
+      sourceType: "script",
+      sourceMaps: "inline",
+      presets: ["@babel/preset-typescript"],
+    };
+    const result = transformSync(code, opts);
+    require.extensions[ext] = function (m, filename) {
+      if (filename === filepath) {
+        // @ts-expect-error Undocumented API
+        return m._compile(result.code, filename);
+      }
+      return require.extensions[".js"](m, filename);
+    };
+  }
+  try {
+    return endHiddenCallStack(require)(filepath);
+  } finally {
+    if (!hasTsSupport) {
+      delete require.extensions[ext];
+    }
   }
 }
 
@@ -69,8 +99,7 @@ function loadCjsDefault(filepath: string, fallbackToTranspiledModule: boolean) {
 async function loadMjsDefault(filepath: string) {
   if (!import_) {
     throw new ConfigError(
-      "Internal error: Native ECMAScript modules aren't supported" +
-        " by this platform.\n",
+      "Internal error: Native ECMAScript modules aren't supported by this platform.\n",
       filepath,
     );
   }
