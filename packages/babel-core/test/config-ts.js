@@ -34,7 +34,7 @@ describe("@babel/core config with ts", () => {
           "fixtures/config-ts/invalid-cts-register/babel.config.cts",
         ),
       });
-    }).toThrowErrorMatchingInlineSnapshot(`"Unexpected identifier 'config'"`);
+    }).toThrow(/Unexpected identifier.*/);
     delete require.extensions[".ts"];
   });
 
