@@ -619,11 +619,20 @@ export default class Scope {
     }
   }
 
-  rename(oldName: string, newName?: string, block?: t.Pattern | t.Scopable) {
+  rename(
+    oldName: string,
+    newName?: string,
+    // prettier-ignore
+    /* Babel 7 - block?: t.Pattern | t.Scopable */
+  ) {
     const binding = this.getBinding(oldName);
     if (binding) {
-      newName = newName || this.generateUidIdentifier(oldName).name;
-      return new Renamer(binding, oldName, newName).rename(block);
+      newName ||= this.generateUidIdentifier(oldName).name;
+      const renamer = new Renamer(binding, oldName, newName);
+      return process.env.BABEL_8_BREAKING
+        ? renamer.rename()
+        : // @ts-expect-error: babel 7->8
+          renamer.rename(arguments[2]);
     }
   }
 
