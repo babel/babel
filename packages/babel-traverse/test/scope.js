@@ -1002,4 +1002,24 @@ describe("scope", () => {
       expect(program.scope.hasOwnBinding("ref")).toBe(true);
     });
   });
+
+  describe("rename", () => {
+    it(".parentPath after renaming variable in switch", () => {
+      const program = getPath(`
+        switch (x) {
+          case y:
+            let a;
+        }
+      `);
+      program.traverse({
+        VariableDeclaration(path) {
+          if (path.node.declarations[0].id.name !== "a") return;
+
+          expect(path.parentPath.type).toBe("SwitchCase");
+          path.scope.rename("a");
+          expect(path.parentPath.type).toBe("SwitchCase");
+        },
+      });
+    });
+  });
 });
