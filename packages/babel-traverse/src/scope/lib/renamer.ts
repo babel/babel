@@ -3,6 +3,8 @@ import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import * as t from "@babel/types";
 import type { NodePath, Visitor } from "../..";
 import { requeueComputedKeyAndDecorators } from "@babel/helper-environment-visitor";
+import { traverseNode } from "../../traverse-node";
+import { explode } from "../../visitors";
 
 const renameVisitor: Visitor<Renamer> = {
   ReferencedIdentifier({ node }, state) {
@@ -111,6 +113,7 @@ export default class Renamer {
     // );
   }
 
+  // TODO(Babel 8): Rename this `block` parameter. It's not needed anywhere.
   rename(block?: t.Pattern | t.Scopable) {
     const { binding, oldName, newName } = this;
     const { scope, path } = binding;
@@ -130,15 +133,16 @@ export default class Renamer {
       }
     }
 
-    const blockToTraverse = block || scope.block;
-    if (blockToTraverse?.type === "SwitchStatement") {
-      // discriminant is not part of current scope, should be skipped.
-      blockToTraverse.cases.forEach(c => {
-        scope.traverse(c, renameVisitor, this);
-      });
-    } else {
-      scope.traverse(blockToTraverse, renameVisitor, this);
-    }
+    traverseNode(
+      block || scope.block,
+      explode(renameVisitor),
+      scope,
+      this,
+      scope.path,
+      // When blockToTraverse is a SwitchStatement, the discriminant
+      // is not part of the current scope and thus should be skipped.
+      { discriminant: true },
+    );
 
     if (!block) {
       scope.removeOwnBinding(oldName);
