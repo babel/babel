@@ -8,7 +8,7 @@ import {
   isVarInLoopHead,
   wrapLoopBody,
 } from "./loop";
-import { validateUsage } from "./validation";
+import { validateUsage, getTdzOption, type TDZ_CHECKS } from "./validation";
 import { annexB33FunctionsVisitor, isVarScope } from "./annex-B_3_3";
 
 export interface Options {
@@ -19,13 +19,14 @@ export interface Options {
 export default declare((api, opts: Options) => {
   api.assertVersion(7);
 
-  const { throwIfClosureRequired = false, tdz: tdzEnabled = false } = opts;
+  const { throwIfClosureRequired = false, tdz: tdzOption } = opts;
   if (typeof throwIfClosureRequired !== "boolean") {
     throw new Error(`.throwIfClosureRequired must be a boolean, or undefined`);
   }
-  if (typeof tdzEnabled !== "boolean") {
+  if (typeof tdzOption !== "boolean" && tdzOption !== undefined) {
     throw new Error(`.tdz must be a boolean, or undefined`);
   }
+  const tdzChecks = getTdzOption(tdzOption);
 
   return {
     name: "transform-block-scoping",
@@ -110,7 +111,7 @@ export default declare((api, opts: Options) => {
               //  for (let head of x) _loop();
               //
               // which references `head` in a scope where it's not visible.
-              transformBlockScopedVariable(headPath, state, tdzEnabled);
+              transformBlockScopedVariable(headPath, state, tdzChecks);
             }
 
             varPath.get("declarations.0.init").unwrapFunctionEnvironment();
@@ -118,7 +119,7 @@ export default declare((api, opts: Options) => {
         },
 
         VariableDeclaration(path, state) {
-          transformBlockScopedVariable(path, state, tdzEnabled);
+          transformBlockScopedVariable(path, state, tdzChecks);
         },
 
         // Class declarations are block-scoped: if there is
@@ -159,11 +160,11 @@ const conflictingFunctionsVisitor: Visitor<{ names: string[] }> = {
 function transformBlockScopedVariable(
   path: NodePath<t.VariableDeclaration>,
   state: PluginPass,
-  tdzEnabled: boolean,
+  tdzChecks: TDZ_CHECKS,
 ) {
   if (!isBlockScoped(path.node)) return;
 
-  const dynamicTDZNames = validateUsage(path, state, tdzEnabled);
+  const dynamicTDZNames = validateUsage(path, state, tdzChecks);
 
   path.node.kind = "var";
 
