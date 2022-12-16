@@ -473,5 +473,14 @@ describe("@babel/template", function () {
       });
       expect(generator(output).code).toMatchInlineSnapshot(`"let x = 7;"`);
     });
+
+    it("should keep node props", () => {
+      const output = template({ plugins: ["typescript"] }).ast`
+        const ${t.identifier("greeting")}: string = 'Hello';
+      `;
+      expect(generator(output).code).toMatchInlineSnapshot(
+        `"const greeting: string = 'Hello';"`,
+      );
+    });
   });
 });

@@ -121,10 +121,23 @@ function applyReplacement(
     }
   }
 
+  function assignOrSet(parent: any, key: any, value: any) {
+    const node = parent[key];
+    if (
+      typeof value === "object" &&
+      value !== null &&
+      node?.type === value.type
+    ) {
+      Object.assign(node, value);
+    } else {
+      parent[key] = value;
+    }
+  }
+
   if (index === undefined) {
     validate(parent, key, replacement);
 
-    (parent as any)[key] = replacement;
+    assignOrSet(parent, key, replacement);
   } else {
     const items: Array<t.Node> = (parent as any)[key].slice();
 
@@ -134,10 +147,10 @@ function applyReplacement(
       } else if (Array.isArray(replacement)) {
         items.splice(index, 1, ...replacement);
       } else {
-        items[index] = replacement;
+        assignOrSet(items, index, replacement);
       }
     } else {
-      items[index] = replacement;
+      assignOrSet(items, index, replacement);
     }
 
     validate(parent, key, items);
