@@ -113,7 +113,7 @@ export default class Renamer {
     // );
   }
 
-  // TODO(Babel 8): Rename this `block` parameter. It's not needed anywhere.
+  // TODO(Babel 8): Remove this `block` parameter. It's not needed anywhere.
   rename(block?: t.Pattern | t.Scopable) {
     const { binding, oldName, newName } = this;
     const { scope, path } = binding;
