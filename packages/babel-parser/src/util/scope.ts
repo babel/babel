@@ -184,6 +184,8 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
 
     return (
       (scope.lexical.has(name) &&
+        // Annex B.3.4
+        // https://tc39.es/ecma262/#sec-variablestatements-in-catch-blocks
         !(
           scope.flags & SCOPE_SIMPLE_CATCH &&
           scope.lexical.values().next().value === name

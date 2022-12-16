@@ -2,8 +2,7 @@
   "type": "File",
   "start":0,"end":51,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":31,"index":51}},
   "errors": [
-    "SyntaxError: In strict mode code, functions can only be declared at top level or inside a block. (2:10)",
-    "SyntaxError: Export 'encrypt' is not defined. (1:9)"
+    "SyntaxError: In strict mode code, functions can only be declared at top level or inside a block. (2:10)"
   ],
   "program": {
     "type": "Program",
