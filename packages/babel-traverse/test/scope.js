@@ -386,6 +386,23 @@ describe("scope", () => {
       ).toBe("ImportSpecifier");
     });
 
+    it("import type and func with duplicate name", function () {
+      expect(() => {
+        getPath(
+          `
+            import type {Foo} from 'foo';
+            import {type Foo2} from 'foo';
+            function Foo(){}
+            function Foo2(){}
+          `,
+          {
+            plugins: ["typescript"],
+            sourceType: "module",
+          },
+        );
+      }).not.toThrow();
+    });
+
     it("variable constantness", function () {
       expect(getPath("var a = 1;").scope.getBinding("a").constant).toBe(true);
       expect(getPath("var a = 1; a = 2;").scope.getBinding("a").constant).toBe(
