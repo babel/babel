@@ -733,9 +733,17 @@ export default class Scope {
       if (path.node.declare) return;
       this.registerBinding("let", path);
     } else if (path.isImportDeclaration()) {
+      const isTypeDeclaration =
+        path.node.importKind === "type" || path.node.importKind === "typeof";
       const specifiers = path.get("specifiers");
       for (const specifier of specifiers) {
-        this.registerBinding("module", specifier);
+        const isTypeSpecifier =
+          isTypeDeclaration ||
+          (specifier.isImportSpecifier() &&
+            (specifier.node.importKind === "type" ||
+              specifier.node.importKind === "typeof"));
+
+        this.registerBinding(isTypeSpecifier ? "unknown" : "module", specifier);
       }
     } else if (path.isExportDeclaration()) {
       // todo: improve babel-types
