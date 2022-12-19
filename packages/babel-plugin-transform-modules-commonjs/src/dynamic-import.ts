@@ -29,9 +29,8 @@ export function transformDynamicImport(
         Promise.resolve().then(() => ${buildRequire(source, file)})
       `
       : template.expression.ast`
-        Promise.resolve(${source}).then(
-          s => ${buildRequire(t.identifier("s"), file)}
-        )
+        new Promise(r => r(${source}))
+          .then(s => ${buildRequire(t.identifier("s"), file)})
       `;
 
   path.replaceWith(replacement);

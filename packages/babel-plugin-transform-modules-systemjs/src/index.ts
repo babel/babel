@@ -273,14 +273,23 @@ export default declare<PluginState>((api, options: Options) => {
             }
           }
 
+          const source = getDynamicImportSource(path.node);
+          const context = t.identifier(state.contextIdent);
+
           path.replaceWith(
-            t.callExpression(
-              t.memberExpression(
-                t.identifier(state.contextIdent),
-                t.identifier("import"),
-              ),
-              [getDynamicImportSource(path.node)],
-            ),
+            t.isStringLiteral(source) ||
+              (t.isTemplateLiteral(source) && source.quasis.length === 0)
+              ? t.callExpression(
+                  t.memberExpression(
+                    t.identifier(state.contextIdent),
+                    t.identifier("import"),
+                  ),
+                  [source],
+                )
+              : template.expression.ast`
+                new Promise(r => r(${source}))
+                  .then(s => ${context}.import(s))
+              `,
           );
         }
       },

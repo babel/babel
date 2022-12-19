@@ -98,15 +98,31 @@ export default declare<State>((api, options: Options) => {
         let result: t.Node = t.identifier("imported");
         if (!noInterop) result = wrapInterop(path, result, "namespace");
 
+        const source = getDynamicImportSource(path.node);
+
         path.replaceWith(
-          template.expression.ast`
-            new Promise((${resolveId}, ${rejectId}) =>
-              ${requireId}(
-                [${getDynamicImportSource(path.node)}],
-                imported => ${t.cloneNode(resolveId)}(${result}),
-                ${t.cloneNode(rejectId)}
-              )
-            )`,
+          t.isStringLiteral(source) ||
+            (t.isTemplateLiteral(source) && source.quasis.length === 0)
+            ? template.expression.ast`
+              Promise.resolve()
+                .then(() => new Promise((${resolveId}, ${rejectId}) =>
+                  ${requireId}(
+                    [${source}],
+                    imported => ${t.cloneNode(resolveId)}(${result}),
+                    ${t.cloneNode(rejectId)}
+                  )
+                ))
+            `
+            : template.expression.ast`
+              new Promise(r => r(${source}))
+                .then(s => new Promise((${resolveId}, ${rejectId}) =>
+                  ${requireId}(
+                    [s],
+                    imported => ${t.cloneNode(resolveId)}(${result}),
+                    ${t.cloneNode(rejectId)}
+                  )
+                ))
+            `,
         );
       },
 
