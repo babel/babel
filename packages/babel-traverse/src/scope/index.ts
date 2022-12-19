@@ -457,6 +457,14 @@ export default class Scope {
   traverse(node: t.Node | t.Node[], opts?: TraverseOptions, state?: any): void;
   /**
    * Traverse node with current scope and path.
+   *
+   * !!! WARNING !!!
+   * This method assumes that `this.path` is the NodePath representing `node`.
+   * After running the traversal, the `.parentPath` of the NodePaths
+   * corresponding to `node`'s children will be set to `this.path`.
+   *
+   * There is no good reason to use this method, since the only safe way to use
+   * it is equivalent to `scope.path.traverse(opts, state)`.
    */
   traverse<S>(node: any, opts: any, state?: S) {
     traverse(node, opts, this, state, this.path);
