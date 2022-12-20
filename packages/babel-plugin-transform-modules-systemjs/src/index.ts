@@ -1,11 +1,7 @@
 import { declare } from "@babel/helper-plugin-utils";
 import hoistVariables from "@babel/helper-hoist-variables";
 import { template, types as t } from "@babel/core";
-import {
-  rewriteThis,
-  getModuleName,
-  getDynamicImportSource,
-} from "@babel/helper-module-transforms";
+import { rewriteThis, getModuleName } from "@babel/helper-module-transforms";
 import type { PluginOptions } from "@babel/helper-module-transforms";
 import { isIdentifierName } from "@babel/helper-validator-identifier";
 import type { NodePath, Scope, Visitor } from "@babel/traverse";
@@ -273,7 +269,7 @@ export default declare<PluginState>((api, options: Options) => {
             }
           }
 
-          const source = getDynamicImportSource(path.node);
+          const [source] = path.node.arguments;
           const context = t.identifier(state.contextIdent);
 
           path.replaceWith(
@@ -287,8 +283,10 @@ export default declare<PluginState>((api, options: Options) => {
                   [source],
                 )
               : template.expression.ast`
-                new Promise(r => r(${source}))
-                  .then(s => ${context}.import(s))
+                (source =>
+                  new Promise(r => r("" + source))
+                    .then(s => ${context}.import(s))
+                )(${source})
               `,
           );
         }

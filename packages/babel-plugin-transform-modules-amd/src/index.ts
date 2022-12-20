@@ -9,7 +9,6 @@ import {
   ensureStatementsHoisted,
   wrapInterop,
   getModuleName,
-  getDynamicImportSource,
 } from "@babel/helper-module-transforms";
 import { template, types as t } from "@babel/core";
 import type { PluginOptions } from "@babel/helper-module-transforms";
@@ -98,7 +97,7 @@ export default declare<State>((api, options: Options) => {
         let result: t.Node = t.identifier("imported");
         if (!noInterop) result = wrapInterop(path, result, "namespace");
 
-        const source = getDynamicImportSource(path.node);
+        const [source] = path.node.arguments;
 
         path.replaceWith(
           t.isStringLiteral(source) ||
@@ -114,14 +113,16 @@ export default declare<State>((api, options: Options) => {
                 ))
             `
             : template.expression.ast`
-              new Promise(r => r(${source}))
-                .then(s => new Promise((${resolveId}, ${rejectId}) =>
-                  ${requireId}(
-                    [s],
-                    imported => ${t.cloneNode(resolveId)}(${result}),
-                    ${t.cloneNode(rejectId)}
-                  )
-                ))
+              (source =>
+                new Promise(r => r("" + source))
+                  .then(s => new Promise((${resolveId}, ${rejectId}) =>
+                    ${requireId}(
+                      [s],
+                      imported => ${t.cloneNode(resolveId)}(${result}),
+                      ${t.cloneNode(rejectId)}
+                    )
+                  ))
+              )(${source})
             `,
         );
       },

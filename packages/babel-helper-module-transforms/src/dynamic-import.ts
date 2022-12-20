@@ -4,6 +4,7 @@
 import * as t from "@babel/types";
 import template from "@babel/template";
 
+// TODO(Babel 8): Remove this
 export function getDynamicImportSource(
   node: t.CallExpression,
 ): t.StringLiteral | t.TemplateLiteral {

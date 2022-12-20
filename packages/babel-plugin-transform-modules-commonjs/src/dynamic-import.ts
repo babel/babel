@@ -3,7 +3,6 @@
 
 import type { NodePath } from "@babel/traverse";
 import { types as t, template, type File } from "@babel/core";
-import { getDynamicImportSource } from "@babel/helper-module-transforms";
 
 const requireNoInterop = (source: t.Expression) =>
   template.expression.ast`require(${source})`;
@@ -20,7 +19,7 @@ export function transformDynamicImport(
 ) {
   const buildRequire = noInterop ? requireNoInterop : requireInterop;
 
-  const source = getDynamicImportSource(path.node);
+  const [source] = path.node.arguments;
 
   const replacement =
     t.isStringLiteral(source) ||
@@ -29,8 +28,10 @@ export function transformDynamicImport(
         Promise.resolve().then(() => ${buildRequire(source, file)})
       `
       : template.expression.ast`
-        new Promise(r => r(${source}))
-          .then(s => ${buildRequire(t.identifier("s"), file)})
+        (source =>
+          new Promise(r => r("" + source))
+            .then(s => ${buildRequire(t.identifier("s"), file)})
+        )(${source})
       `;
 
   path.replaceWith(replacement);

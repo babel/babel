@@ -4,7 +4,7 @@ System.register([], function (_export, _context) {
   return {
     setters: [],
     execute: function () {
-      new Promise(r => r(`${2}`)).then(s => _context.import(s));
+      (source => new Promise(r => r("" + source)).then(s => _context.import(s)))(2);
     }
   };
 });
