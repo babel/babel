@@ -1,5 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import {
+  buildDynamicImport,
   isModule,
   rewriteModuleStatementsAndPrepareHeader,
   type RewriteModuleStatementsAndPrepareHeaderOptions,
@@ -97,33 +98,20 @@ export default declare<State>((api, options: Options) => {
         let result: t.Node = t.identifier("imported");
         if (!noInterop) result = wrapInterop(path, result, "namespace");
 
-        const [source] = path.node.arguments;
-
         path.replaceWith(
-          t.isStringLiteral(source) ||
-            (t.isTemplateLiteral(source) && source.quasis.length === 0)
-            ? template.expression.ast`
-              Promise.resolve()
-                .then(() => new Promise((${resolveId}, ${rejectId}) =>
-                  ${requireId}(
-                    [${source}],
-                    imported => ${t.cloneNode(resolveId)}(${result}),
-                    ${t.cloneNode(rejectId)}
-                  )
-                ))
-            `
-            : template.expression.ast`
-              (source =>
-                new Promise(r => r("" + source))
-                  .then(s => new Promise((${resolveId}, ${rejectId}) =>
-                    ${requireId}(
-                      [s],
-                      imported => ${t.cloneNode(resolveId)}(${result}),
-                      ${t.cloneNode(rejectId)}
-                    )
-                  ))
-              )(${source})
+          buildDynamicImport(
+            path.node,
+            true,
+            specifier => template.expression.ast`
+              new Promise((${resolveId}, ${rejectId}) =>
+                ${requireId}(
+                  [${specifier}],
+                  imported => ${t.cloneNode(resolveId)}(${result}),
+                  ${t.cloneNode(rejectId)}
+                )
+              )
             `,
+          ),
         );
       },
 

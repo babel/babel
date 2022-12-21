@@ -1,1 +1,1 @@
-(source => new Promise(r => r("" + source)).then(s => babelHelpers.interopRequireWildcard(require(s))))(2);
+(specifier => new Promise(r => r(`${specifier}`)).then(s => babelHelpers.interopRequireWildcard(require(s))))(2);

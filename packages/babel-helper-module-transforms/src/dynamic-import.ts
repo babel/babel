@@ -14,3 +14,35 @@ export function getDynamicImportSource(
     ? source
     : (template.expression.ast`\`\${${source}}\`` as t.TemplateLiteral);
 }
+
+export function buildDynamicImport(
+  node: t.CallExpression,
+  runInThen: boolean,
+  builder: (specifier: t.Expression) => t.Expression,
+): t.Expression {
+  const [specifier] = node.arguments;
+  if (
+    t.isStringLiteral(specifier) ||
+    (t.isTemplateLiteral(specifier) && specifier.quasis.length === 0)
+  ) {
+    if (runInThen) {
+      return template.expression.ast`
+        Promise.resolve().then(() => ${builder(specifier)})
+      `;
+    } else return builder(specifier);
+  }
+
+  return template.expression.ast`
+    (specifier =>
+      new Promise(r => r(${
+        t.isTemplateLiteral(specifier)
+          ? t.identifier("specifier")
+          : t.templateLiteral(
+              [t.templateElement({ raw: "" }), t.templateElement({ raw: "" })],
+              [t.identifier("specifier")],
+            )
+      }))
+      .then(s => ${builder(t.identifier("s"))})
+    )(${specifier})
+  `;
+}
