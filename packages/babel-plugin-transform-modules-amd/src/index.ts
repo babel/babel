@@ -101,7 +101,7 @@ export default declare<State>((api, options: Options) => {
         path.replaceWith(
           buildDynamicImport(
             path.node,
-            true,
+            false,
             specifier => template.expression.ast`
               new Promise((${resolveId}, ${rejectId}) =>
                 ${requireId}(
