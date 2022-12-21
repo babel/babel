@@ -17,7 +17,7 @@ export function getDynamicImportSource(
 
 export function buildDynamicImport(
   node: t.CallExpression,
-  deferedToThen: boolean,
+  deferToThen: boolean,
   wrapWithPromise: boolean,
   builder: (specifier: t.Expression) => t.Expression,
 ): t.Expression {
@@ -27,7 +27,7 @@ export function buildDynamicImport(
     t.isStringLiteral(specifier) ||
     (t.isTemplateLiteral(specifier) && specifier.quasis.length === 0)
   ) {
-    if (deferedToThen) {
+    if (deferToThen) {
       return template.expression.ast`
         Promise.resolve().then(() => ${builder(specifier)})
       `;
@@ -41,7 +41,7 @@ export function buildDynamicImport(
         [t.identifier("specifier")],
       );
 
-  if (deferedToThen) {
+  if (deferToThen) {
     return template.expression.ast`
       (specifier =>
         new Promise(r => r(${specifierToString}))
