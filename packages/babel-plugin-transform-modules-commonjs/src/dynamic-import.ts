@@ -21,7 +21,7 @@ export function transformDynamicImport(
   const buildRequire = noInterop ? requireNoInterop : requireInterop;
 
   path.replaceWith(
-    buildDynamicImport(path.node, true, specifier =>
+    buildDynamicImport(path.node, true, false, specifier =>
       buildRequire(specifier, file),
     ),
   );

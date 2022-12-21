@@ -274,7 +274,7 @@ export default declare<PluginState>((api, options: Options) => {
           }
 
           path.replaceWith(
-            buildDynamicImport(path.node, false, specifier =>
+            buildDynamicImport(path.node, false, true, specifier =>
               t.callExpression(
                 t.memberExpression(
                   t.identifier(state.contextIdent),
