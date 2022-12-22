@@ -1,17 +1,35 @@
 import { types as t, type PluginPass } from "@babel/core";
 import type { Binding, NodePath } from "@babel/traverse";
 
+const enum TDZ_CHECKS {
+  DISABLED,
+  STATIC_ONLY,
+  FULL,
+}
+type EnabledTdzChecks = TDZ_CHECKS.STATIC_ONLY | TDZ_CHECKS.FULL;
+
+// We export this function instead of TDZ_CHECKS, so that the const enum
+// is only used in this file and Babel can inline it.
+export function getTdzOption(tdz: boolean | undefined): TDZ_CHECKS {
+  return tdz === false
+    ? TDZ_CHECKS.DISABLED
+    : tdz === true
+    ? TDZ_CHECKS.FULL
+    : TDZ_CHECKS.STATIC_ONLY;
+}
+export type { TDZ_CHECKS };
+
 export function validateUsage(
   path: NodePath<t.VariableDeclaration>,
   state: PluginPass,
-  tdzEnabled: boolean,
+  tdzChecks: TDZ_CHECKS,
 ) {
   const dynamicTDZNames = [];
 
   for (const name of Object.keys(path.getBindingIdentifiers())) {
     const binding = path.scope.getBinding(name);
-    if (tdzEnabled) {
-      if (injectTDZChecks(binding, state)) dynamicTDZNames.push(name);
+    if (maybeInjectTDZChecks(tdzChecks, binding, state)) {
+      dynamicTDZNames.push(name);
     }
     if (path.node.kind === "const") {
       disallowConstantViolations(name, binding, state);
@@ -115,15 +133,18 @@ function buildTDZAssert(
 
 type TDZReplacement = { status: "maybe" | "inside"; node: t.Expression };
 function getTDZReplacement(
+  tdzChecks: EnabledTdzChecks,
   path: NodePath<t.Identifier | t.JSXIdentifier>,
   state: PluginPass,
 ): TDZReplacement | undefined;
 function getTDZReplacement(
+  tdzChecks: EnabledTdzChecks,
   path: NodePath,
   state: PluginPass,
   id: t.Identifier | t.JSXIdentifier,
 ): TDZReplacement | undefined;
 function getTDZReplacement(
+  tdzChecks: EnabledTdzChecks,
   path: NodePath,
   state: PluginPass,
   id: t.Identifier | t.JSXIdentifier = path.node as any,
@@ -139,6 +160,8 @@ function getTDZReplacement(
   if (status === "outside") return;
 
   if (status === "maybe") {
+    if (tdzChecks === TDZ_CHECKS.STATIC_ONLY) return;
+
     // add tdzThis to parent variable declarator so it's exploded
     // @ts-expect-error todo(flow->ts): avoid mutations
     bindingPath.parent._tdzThis = true;
@@ -147,7 +170,13 @@ function getTDZReplacement(
   return { status, node: buildTDZAssert(status, id, state) };
 }
 
-function injectTDZChecks(binding: Binding, state: PluginPass) {
+function maybeInjectTDZChecks(
+  tdzChecks: TDZ_CHECKS,
+  binding: Binding,
+  state: PluginPass,
+): /* injectedDynamicCheck */ boolean {
+  if (tdzChecks === TDZ_CHECKS.DISABLED) return false;
+
   const allUsages = new Set(binding.referencePaths);
   binding.constantViolations.forEach(allUsages.add, allUsages);
 
@@ -162,7 +191,7 @@ function injectTDZChecks(binding: Binding, state: PluginPass) {
       // arg is an identifier referencing the current binding
       const arg = path.get("argument") as NodePath<t.Identifier>;
 
-      const replacement = getTDZReplacement(path, state, arg.node);
+      const replacement = getTDZReplacement(tdzChecks, path, state, arg.node);
       if (!replacement) continue;
 
       if (replacement.status === "maybe") {
@@ -176,7 +205,12 @@ function injectTDZChecks(binding: Binding, state: PluginPass) {
       const ids = path.getBindingIdentifiers();
 
       for (const name of Object.keys(ids)) {
-        const replacement = getTDZReplacement(path, state, ids[name]);
+        const replacement = getTDZReplacement(
+          tdzChecks,
+          path,
+          state,
+          ids[name],
+        );
         if (replacement) {
           nodes.push(t.expressionStatement(replacement.node));
           if (replacement.status === "inside") break;
@@ -193,7 +227,7 @@ function injectTDZChecks(binding: Binding, state: PluginPass) {
     // It will be handled after transforming the loop
     if (path.parentPath.isFor({ left: path.node })) continue;
 
-    const replacement = getTDZReplacement(path, state);
+    const replacement = getTDZReplacement(tdzChecks, path, state);
     if (!replacement) continue;
     if (replacement.status === "maybe") dynamicTdz = true;
 
