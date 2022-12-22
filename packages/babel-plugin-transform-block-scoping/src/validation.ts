@@ -10,6 +10,8 @@ export function validateUsage(
 
   for (const name of Object.keys(path.getBindingIdentifiers())) {
     const binding = path.scope.getBinding(name);
+    // binding may be null. ref: https://github.com/babel/babel/issues/15300
+    if (!binding) continue;
     if (tdzEnabled) {
       if (injectTDZChecks(binding, state)) dynamicTDZNames.push(name);
     }
