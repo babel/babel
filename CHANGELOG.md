@@ -23,6 +23,13 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.20.8 (2022-12-22)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-block-scoping`
+  * [#15301](https://github.com/babel/babel/pull/15301) fix: `transform-block-scoping` accesses properties of `null` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-plugin-proposal-class-properties`, `babel-traverse`
+  * [#15294](https://github.com/babel/babel/pull/15294) Properly transpile exported classes that shadowed builtins ([@JLHwung](https://github.com/JLHwung))
 ## v7.20.7 (2022-12-22)
 
 #### :eyeglasses: Spec Compliance
