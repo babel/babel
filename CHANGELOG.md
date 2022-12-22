@@ -23,6 +23,49 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.20.7 (2022-12-22)
+
+#### :eyeglasses: Spec Compliance
+* `babel-helper-member-expression-to-functions`, `babel-helper-replace-supers`, `babel-plugin-proposal-class-properties`, `babel-plugin-transform-classes`
+  * [#15223](https://github.com/babel/babel/pull/15223) fix: Deleting super property should throw ([@SuperSodaSea](https://github.com/SuperSodaSea))
+* `babel-helpers`, `babel-plugin-proposal-class-properties`, `babel-plugin-transform-classes`, `babel-plugin-transform-object-super`
+  * [#15241](https://github.com/babel/babel/pull/15241) fix: Throw correct error types from sed ant class TDZ helpers ([@SuperSodaSea](https://github.com/SuperSodaSea))
+
+#### :bug: Bug Fix
+* `babel-parser`, `babel-plugin-transform-typescript`
+  * [#15209](https://github.com/babel/babel/pull/15209) fix: Support auto accessors with TypeScript annotations ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-traverse`
+  * [#15287](https://github.com/babel/babel/pull/15287) Fix `.parentPath` after rename in `SwitchCase` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-typescript`, `babel-traverse`
+  * [#15284](https://github.com/babel/babel/pull/15284) fix: Ts import type and func with duplicate name ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-plugin-transform-block-scoping`
+  * [#15278](https://github.com/babel/babel/pull/15278) Fix tdz analysis for reassigned captured for bindings ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-proposal-async-generator-functions`, `babel-preset-env`
+  * [#15235](https://github.com/babel/babel/pull/15235) fix: Transform `for await` with shadowed variables ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-generator`, `babel-plugin-proposal-optional-chaining`
+  * [#15258](https://github.com/babel/babel/pull/15258) fix: Correctly generate `(a ?? b) as T` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-plugin-transform-react-jsx`, `babel-types`
+  * [#15233](https://github.com/babel/babel/pull/15233) fix: Emit correct sourcemap ranges for `JSXText` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-core`, `babel-helpers`, `babel-plugin-transform-computed-properties`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#15232](https://github.com/babel/babel/pull/15232) fix: Computed properties should keep original definition order ([@SuperSodaSea](https://github.com/SuperSodaSea))
+* `babel-helper-member-expression-to-functions`, `babel-helper-replace-supers`, `babel-plugin-proposal-class-properties`, `babel-plugin-transform-classes`
+  * [#15223](https://github.com/babel/babel/pull/15223) fix: Deleting super property should throw ([@SuperSodaSea](https://github.com/SuperSodaSea))
+* `babel-generator`
+  * [#15216](https://github.com/babel/babel/pull/15216) fix: Print newlines for leading Comments of `TSEnumMember` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :nail_care: Polish
+* `babel-plugin-transform-block-scoping`, `babel-traverse`
+  * [#15275](https://github.com/babel/babel/pull/15275) Improve relative execution tracking in fn exprs ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-helper-define-map`, `babel-plugin-transform-property-mutators`
+  * [#15274](https://github.com/babel/babel/pull/15274) Inline & simplify `@babel/helper-define-map` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`, `babel-plugin-proposal-class-properties`, `babel-plugin-transform-block-scoping`, `babel-plugin-transform-classes`, `babel-plugin-transform-destructuring`, `babel-plugin-transform-parameters`, `babel-plugin-transform-regenerator`, `babel-plugin-transform-runtime`, `babel-preset-env`, `babel-traverse`
+  * [#15200](https://github.com/babel/babel/pull/15200) Rewrite `transform-block-scoping` plugin ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :running_woman: Performance
+* `babel-helper-compilation-targets`
+  * [#15228](https://github.com/babel/babel/pull/15228) perf: Speed up `getTargets` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.20.6 (2022-11-28)
 
 #### :bug: Bug Fix
