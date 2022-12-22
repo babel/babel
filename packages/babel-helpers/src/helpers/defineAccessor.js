@@ -1,4 +1,4 @@
-/* @minVersion 7.20.6 */
+/* @minVersion 7.20.7 */
 
 export default function _defineAccessor(type, obj, key, fn) {
   var desc = { configurable: true, enumerable: true };

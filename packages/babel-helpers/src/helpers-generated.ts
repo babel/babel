@@ -46,7 +46,7 @@ export default Object.freeze({
     'export default function _checkInRHS(value){if(Object(value)!==value)throw TypeError("right-hand side of \'in\' should be an object, got "+(null!==value?typeof value:"null"));return value}',
   ),
   defineAccessor: helper(
-    "7.20.6",
+    "7.20.7",
     "export default function _defineAccessor(type,obj,key,fn){var desc={configurable:!0,enumerable:!0};return desc[type]=fn,Object.defineProperty(obj,key,desc)}",
   ),
   iterableToArrayLimit: helper(
