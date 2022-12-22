@@ -68,7 +68,17 @@ function loadCtsDefault(filepath: string) {
       filename: path.basename(filepath),
       sourceType: "script",
       sourceMaps: "inline",
-      presets: ["@babel/preset-typescript"],
+      presets: [
+        [
+          "@babel/preset-typescript",
+          {
+            allowDeclareFields: true,
+            disallowAmbiguousJSXLike: true,
+            onlyRemoveTypeImports: true,
+            optimizeConstEnums: true,
+          },
+        ],
+      ],
     };
     const result = transformSync(code, opts);
     require.extensions[ext] = function (m, filename) {
