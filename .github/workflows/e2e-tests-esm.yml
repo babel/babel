@@ -44,7 +44,7 @@ jobs:
   e2e-tests:
     name: Test
     needs: e2e-publish
-    if: ${{ !contains(needs.e2e-publish.outputs.skip_e2e, 'true') }}
+    if: needs.e2e-publish.outputs.skip_e2e != 'true'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
