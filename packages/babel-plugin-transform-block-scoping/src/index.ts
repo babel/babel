@@ -75,8 +75,13 @@ export default declare((api, opts: Options) => {
             for (const name of names) {
               if (bodyScope?.hasOwnBinding(name)) continue; // shadowed
 
+              let binding = headPath.scope.getOwnBinding(name);
+              if (!binding) {
+                headPath.scope.crawl();
+                binding = headPath.scope.getOwnBinding(name);
+              }
               const { usages, capturedInClosure, hasConstantViolations } =
-                getUsageInBody(headPath.scope.getOwnBinding(name), path);
+                getUsageInBody(binding, path);
 
               if (capturedInClosure) {
                 markNeedsBodyWrap();
@@ -169,7 +174,9 @@ function transformBlockScopedVariable(
 
   const bindingNames = Object.keys(path.getBindingIdentifiers());
   for (const name of bindingNames) {
-    path.scope.getOwnBinding(name).kind = "var";
+    const binding = path.scope.getOwnBinding(name);
+    if (!binding) continue;
+    binding.kind = "var";
   }
 
   if (
