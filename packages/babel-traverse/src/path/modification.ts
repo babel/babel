@@ -13,6 +13,7 @@ import {
   expressionStatement,
   isAssignmentExpression,
   isCallExpression,
+  isExportNamedDeclaration,
   isExpression,
   isIdentifier,
   isSequenceExpression,
@@ -34,12 +35,19 @@ export function insertBefore(
 
   const nodes = this._verifyNodeList(nodes_);
 
-  const { parentPath } = this;
+  const { parentPath, parent } = this;
 
   if (
     parentPath.isExpressionStatement() ||
     parentPath.isLabeledStatement() ||
-    parentPath.isExportNamedDeclaration() ||
+    // https://github.com/babel/babel/issues/15293
+    // When Babel transforms `export class String { field }`, the class properties plugin will inject the defineProperty
+    // helper, which depends on the builtins e.g. String, Number, Symbol, etc. To prevent them from being shadowed by local
+    // exports, the helper injector replaces the named export into `class _String { field }; export { _String as String }`,
+    // with `parentPath` here changed to the moved ClassDeclaration, causing rare inconsistency between `parent` and `parentPath`.
+    // Here we retrieve the parent type from the `parent` property. This is a temporary fix and we should revisit when
+    // helpers should get injected.
+    isExportNamedDeclaration(parent) ||
     (parentPath.isExportDefaultDeclaration() && this.isDeclaration())
   ) {
     return parentPath.insertBefore(nodes);
@@ -169,11 +177,12 @@ export function insertAfter(
 
   const nodes = this._verifyNodeList(nodes_);
 
-  const { parentPath } = this;
+  const { parentPath, parent } = this;
   if (
     parentPath.isExpressionStatement() ||
     parentPath.isLabeledStatement() ||
-    parentPath.isExportNamedDeclaration() ||
+    // see insertBefore
+    isExportNamedDeclaration(parent) ||
     (parentPath.isExportDefaultDeclaration() && this.isDeclaration())
   ) {
     return parentPath.insertAfter(
