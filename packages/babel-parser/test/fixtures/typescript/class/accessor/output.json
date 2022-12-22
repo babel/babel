@@ -1,0 +1,196 @@
+{
+  "type": "File",
+  "start":0,"end":224,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":1,"index":224}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":224,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":1,"index":224}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":224,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":1,"index":224}},
+        "abstract": true,
+        "id": {
+          "type": "Identifier",
+          "start":15,"end":18,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":18,"index":18},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":19,"end":224,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":8,"column":1,"index":224}},
+          "body": [
+            {
+              "type": "ClassAccessorProperty",
+              "start":23,"end":49,"loc":{"start":{"line":2,"column":2,"index":23},"end":{"line":2,"column":28,"index":49}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":32,"end":36,"loc":{"start":{"line":2,"column":11,"index":32},"end":{"line":2,"column":15,"index":36},"identifierName":"prop"},
+                "name": "prop"
+              },
+              "computed": false,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":36,"end":44,"loc":{"start":{"line":2,"column":15,"index":36},"end":{"line":2,"column":23,"index":44}},
+                "typeAnnotation": {
+                  "type": "TSNumberKeyword",
+                  "start":38,"end":44,"loc":{"start":{"line":2,"column":17,"index":38},"end":{"line":2,"column":23,"index":44}}
+                }
+              },
+              "value": {
+                "type": "NumericLiteral",
+                "start":47,"end":48,"loc":{"start":{"line":2,"column":26,"index":47},"end":{"line":2,"column":27,"index":48}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              }
+            },
+            {
+              "type": "ClassAccessorProperty",
+              "start":52,"end":86,"loc":{"start":{"line":3,"column":2,"index":52},"end":{"line":3,"column":36,"index":86}},
+              "static": true,
+              "key": {
+                "type": "Identifier",
+                "start":68,"end":73,"loc":{"start":{"line":3,"column":18,"index":68},"end":{"line":3,"column":23,"index":73},"identifierName":"prop2"},
+                "name": "prop2"
+              },
+              "computed": false,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":73,"end":81,"loc":{"start":{"line":3,"column":23,"index":73},"end":{"line":3,"column":31,"index":81}},
+                "typeAnnotation": {
+                  "type": "TSNumberKeyword",
+                  "start":75,"end":81,"loc":{"start":{"line":3,"column":25,"index":75},"end":{"line":3,"column":31,"index":81}}
+                }
+              },
+              "value": {
+                "type": "NumericLiteral",
+                "start":84,"end":85,"loc":{"start":{"line":3,"column":34,"index":84},"end":{"line":3,"column":35,"index":85}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              }
+            },
+            {
+              "type": "ClassAccessorProperty",
+              "start":89,"end":117,"loc":{"start":{"line":4,"column":2,"index":89},"end":{"line":4,"column":30,"index":117}},
+              "static": false,
+              "key": {
+                "type": "PrivateName",
+                "start":98,"end":104,"loc":{"start":{"line":4,"column":11,"index":98},"end":{"line":4,"column":17,"index":104}},
+                "id": {
+                  "type": "Identifier",
+                  "start":99,"end":104,"loc":{"start":{"line":4,"column":12,"index":99},"end":{"line":4,"column":17,"index":104},"identifierName":"prop3"},
+                  "name": "prop3"
+                }
+              },
+              "computed": false,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":104,"end":112,"loc":{"start":{"line":4,"column":17,"index":104},"end":{"line":4,"column":25,"index":112}},
+                "typeAnnotation": {
+                  "type": "TSNumberKeyword",
+                  "start":106,"end":112,"loc":{"start":{"line":4,"column":19,"index":106},"end":{"line":4,"column":25,"index":112}}
+                }
+              },
+              "value": {
+                "type": "NumericLiteral",
+                "start":115,"end":116,"loc":{"start":{"line":4,"column":28,"index":115},"end":{"line":4,"column":29,"index":116}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              }
+            },
+            {
+              "type": "ClassAccessorProperty",
+              "start":120,"end":149,"loc":{"start":{"line":5,"column":2,"index":120},"end":{"line":5,"column":31,"index":149}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":130,"end":135,"loc":{"start":{"line":5,"column":12,"index":130},"end":{"line":5,"column":17,"index":135},"identifierName":"prop4"},
+                "name": "prop4"
+              },
+              "computed": true,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":136,"end":144,"loc":{"start":{"line":5,"column":18,"index":136},"end":{"line":5,"column":26,"index":144}},
+                "typeAnnotation": {
+                  "type": "TSNumberKeyword",
+                  "start":138,"end":144,"loc":{"start":{"line":5,"column":20,"index":138},"end":{"line":5,"column":26,"index":144}}
+                }
+              },
+              "value": {
+                "type": "NumericLiteral",
+                "start":147,"end":148,"loc":{"start":{"line":5,"column":29,"index":147},"end":{"line":5,"column":30,"index":148}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              }
+            },
+            {
+              "type": "ClassAccessorProperty",
+              "start":152,"end":187,"loc":{"start":{"line":6,"column":2,"index":152},"end":{"line":6,"column":37,"index":187}},
+              "accessibility": "private",
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":169,"end":174,"loc":{"start":{"line":6,"column":19,"index":169},"end":{"line":6,"column":24,"index":174},"identifierName":"prop5"},
+                "name": "prop5"
+              },
+              "computed": false,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":174,"end":182,"loc":{"start":{"line":6,"column":24,"index":174},"end":{"line":6,"column":32,"index":182}},
+                "typeAnnotation": {
+                  "type": "TSNumberKeyword",
+                  "start":176,"end":182,"loc":{"start":{"line":6,"column":26,"index":176},"end":{"line":6,"column":32,"index":182}}
+                }
+              },
+              "value": {
+                "type": "NumericLiteral",
+                "start":185,"end":186,"loc":{"start":{"line":6,"column":35,"index":185},"end":{"line":6,"column":36,"index":186}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              }
+            },
+            {
+              "type": "ClassAccessorProperty",
+              "start":190,"end":222,"loc":{"start":{"line":7,"column":2,"index":190},"end":{"line":7,"column":34,"index":222}},
+              "abstract": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":208,"end":213,"loc":{"start":{"line":7,"column":20,"index":208},"end":{"line":7,"column":25,"index":213},"identifierName":"prop6"},
+                "name": "prop6"
+              },
+              "computed": false,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":213,"end":221,"loc":{"start":{"line":7,"column":25,"index":213},"end":{"line":7,"column":33,"index":221}},
+                "typeAnnotation": {
+                  "type": "TSNumberKeyword",
+                  "start":215,"end":221,"loc":{"start":{"line":7,"column":27,"index":215},"end":{"line":7,"column":33,"index":221}}
+                }
+              },
+              "value": null
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

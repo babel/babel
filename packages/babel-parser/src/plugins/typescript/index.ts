@@ -94,6 +94,8 @@ const TSErrors = ParseErrorEnum`typescript`({
   AccesorCannotDeclareThisParameter:
     "'get' and 'set' accessors cannot declare 'this' parameters.",
   AccesorCannotHaveTypeParameters: "An accessor cannot have type parameters.",
+  AccessorCannotBeOptional:
+    "An 'accessor' property cannot be declared optional.",
   ClassMethodHasDeclare: "Class methods cannot have the 'declare' modifier.",
   ClassMethodHasReadonly: "Class methods cannot have the 'readonly' modifier.",
   ConstInitiailizerMustBeStringOrNumericLiteralOrLiteralEnumReference:
@@ -195,6 +197,7 @@ const TSErrors = ParseErrorEnum`typescript`({
     "This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma, as in `<T,>() => ...`.",
   ReservedTypeAssertion:
     "This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.",
+  // TODO: Accesor -> Accessor
   SetAccesorCannotHaveOptionalParameter:
     "A 'set' accessor cannot have an optional parameter.",
   SetAccesorCannotHaveRestParameter:
@@ -3121,10 +3124,14 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     parseClassPropertyAnnotation(
-      node: N.ClassProperty | N.ClassPrivateProperty,
+      node: N.ClassProperty | N.ClassPrivateProperty | N.ClassAccessorProperty,
     ): void {
-      if (!node.optional && this.eat(tt.bang)) {
-        node.definite = true;
+      if (!node.optional) {
+        if (this.eat(tt.bang)) {
+          node.definite = true;
+        } else if (this.eat(tt.question)) {
+          node.optional = true;
+        }
       }
 
       const type = this.tsTryParseTypeAnnotation();
@@ -3176,6 +3183,16 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
       this.parseClassPropertyAnnotation(node);
       return super.parseClassPrivateProperty(node);
+    }
+
+    parseClassAccessorProperty(
+      node: N.ClassAccessorProperty,
+    ): N.ClassAccessorProperty {
+      this.parseClassPropertyAnnotation(node);
+      if (node.optional) {
+        this.raise(TSErrors.AccessorCannotBeOptional, { at: node });
+      }
+      return super.parseClassAccessorProperty(node);
     }
 
     pushClassMethod(
