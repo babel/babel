@@ -1,1 +1,1 @@
-Promise.resolve(`${2}`).then(s => babelHelpers.interopRequireWildcard(require(s)));
+(specifier => new Promise(r => r(`${specifier}`)).then(s => babelHelpers.interopRequireWildcard(require(s))))(2);

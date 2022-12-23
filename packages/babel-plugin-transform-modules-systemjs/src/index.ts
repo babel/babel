@@ -2,9 +2,9 @@ import { declare } from "@babel/helper-plugin-utils";
 import hoistVariables from "@babel/helper-hoist-variables";
 import { template, types as t } from "@babel/core";
 import {
-  rewriteThis,
+  buildDynamicImport,
   getModuleName,
-  getDynamicImportSource,
+  rewriteThis,
 } from "@babel/helper-module-transforms";
 import type { PluginOptions } from "@babel/helper-module-transforms";
 import { isIdentifierName } from "@babel/helper-validator-identifier";
@@ -274,12 +274,14 @@ export default declare<PluginState>((api, options: Options) => {
           }
 
           path.replaceWith(
-            t.callExpression(
-              t.memberExpression(
-                t.identifier(state.contextIdent),
-                t.identifier("import"),
+            buildDynamicImport(path.node, false, true, specifier =>
+              t.callExpression(
+                t.memberExpression(
+                  t.identifier(state.contextIdent),
+                  t.identifier("import"),
+                ),
+                [specifier],
               ),
-              [getDynamicImportSource(path.node)],
             ),
           );
         }
