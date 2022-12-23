@@ -177,15 +177,8 @@ export function wrapLoopBody(
   const callArgs = [];
   const closureParams = [];
   const updater = [];
-  for (const name of captured) {
+  for (const [name, updatedUsage] of updatedBindingsUsages) {
     callArgs.push(t.identifier(name));
-
-    const updatedUsage = updatedBindingsUsages.get(name);
-    if (!updatedUsage) {
-      // Not updated, re-use the same name
-      closureParams.push(t.identifier(name));
-      continue;
-    }
 
     const innerName = loopPath.scope.generateUid(name);
     closureParams.push(t.identifier(innerName));
@@ -193,6 +186,11 @@ export function wrapLoopBody(
       t.assignmentExpression("=", t.identifier(name), t.identifier(innerName)),
     );
     for (const path of updatedUsage) path.replaceWith(t.identifier(innerName));
+  }
+  for (const name of captured) {
+    if (updatedBindingsUsages.has(name)) continue; // already injected
+    callArgs.push(t.identifier(name));
+    closureParams.push(t.identifier(name));
   }
 
   const id = loopPath.scope.generateUid("loop");

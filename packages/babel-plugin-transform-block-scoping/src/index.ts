@@ -71,14 +71,15 @@ export default declare((api, opts: Options) => {
 
           if (headPath && isBlockScoped(headPath.node)) {
             const names = Object.keys(headPath.getBindingIdentifiers());
+            const headScope = headPath.scope;
 
-            for (const name of names) {
+            for (let name of names) {
               if (bodyScope?.hasOwnBinding(name)) continue; // shadowed
 
-              let binding = headPath.scope.getOwnBinding(name);
+              let binding = headScope.getOwnBinding(name);
               if (!binding) {
-                headPath.scope.crawl();
-                binding = headPath.scope.getOwnBinding(name);
+                headScope.crawl();
+                binding = headScope.getOwnBinding(name);
               }
               const { usages, capturedInClosure, hasConstantViolations } =
                 getUsageInBody(binding, path);
@@ -86,7 +87,16 @@ export default declare((api, opts: Options) => {
               if (capturedInClosure) {
                 markNeedsBodyWrap();
                 captured.push(name);
+              } else if (headScope.parent.hasBinding(name)) {
+                // If the binding is not captured, there is no need
+                // of adding it to the closure param. However, rename
+                // it if it shadows an outer binding, because the
+                // closure will be moved to an outer level.
+                const newName = headScope.generateUid(name);
+                headPath.scope.rename(name, newName);
+                name = newName;
               }
+
               if (isForStatement && hasConstantViolations) {
                 updatedBindingsUsages.set(name, usages);
               }
