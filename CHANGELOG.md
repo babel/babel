@@ -23,6 +23,11 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.20.9 (2022-12-23)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-block-scoping`
+  * [#15303](https://github.com/babel/babel/pull/15303) fix: Do not throw exceptions when scope information is corrupted ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.20.8 (2022-12-22)
 
 #### :bug: Bug Fix
