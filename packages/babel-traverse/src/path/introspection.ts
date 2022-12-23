@@ -267,10 +267,12 @@ export function willIMaybeExecuteBefore(
 }
 
 function getOuterFunction(path: NodePath) {
-  return (
-    path.parentPath.scope.getFunctionParent() ||
-    path.parentPath.scope.getProgramParent()
-  ).path;
+  return path.isProgram()
+    ? path
+    : (
+        path.parentPath.scope.getFunctionParent() ||
+        path.parentPath.scope.getProgramParent()
+      ).path;
 }
 
 function isExecutionUncertain(type: t.Node["type"], key: string) {
@@ -338,7 +340,16 @@ function isExecutionUncertainInList(paths: NodePath[], maxIndex: number) {
 // is both before and unknown/after like if it were before.
 type RelativeExecutionStatus = "before" | "after" | "unknown";
 
-type ExecutionStatusCache = Map<t.Node, Map<t.Node, RelativeExecutionStatus>>;
+// Used to avoid infinite recursion in cases like
+//   function f() { if (false) f(); }
+//   f();
+// It also works with indirect recursion.
+const SYMBOL_CHECKING = Symbol();
+
+type ExecutionStatusCache = Map<
+  t.Node,
+  Map<t.Node, RelativeExecutionStatus | typeof SYMBOL_CHECKING>
+>;
 
 /**
  * Given a `target` check the execution status of it relative to the current path.
@@ -437,19 +448,15 @@ function _guessExecutionStatusRelativeToCached(
   return keyPosition.target > keyPosition.this ? "before" : "after";
 }
 
-// Used to avoid infinite recursion in cases like
-//   function f() { if (false) f(); }
-//   f();
-// It also works with indirect recursion.
-const executionOrderCheckedNodes = new Set();
-
 function _guessExecutionStatusRelativeToDifferentFunctionsInternal(
   base: NodePath,
   target: NodePath,
   cache: ExecutionStatusCache,
 ): RelativeExecutionStatus {
   if (!target.isFunctionDeclaration()) {
-    if (base._guessExecutionStatusRelativeTo(target) === "before") {
+    if (
+      _guessExecutionStatusRelativeToCached(base, target, cache) === "before"
+    ) {
       return "before";
     }
     return "unknown";
@@ -483,19 +490,12 @@ function _guessExecutionStatusRelativeToDifferentFunctionsInternal(
       return "unknown";
     }
 
-    // Prevent infinite loops in recursive functions
-    if (executionOrderCheckedNodes.has(path.node)) continue;
-    executionOrderCheckedNodes.add(path.node);
-    try {
-      const status = _guessExecutionStatusRelativeToCached(base, path, cache);
+    const status = _guessExecutionStatusRelativeToCached(base, path, cache);
 
-      if (allStatus && allStatus !== status) {
-        return "unknown";
-      } else {
-        allStatus = status;
-      }
-    } finally {
-      executionOrderCheckedNodes.delete(path.node);
+    if (allStatus && allStatus !== status) {
+      return "unknown";
+    } else {
+      allStatus = status;
     }
   }
 
@@ -508,11 +508,18 @@ function _guessExecutionStatusRelativeToDifferentFunctionsCached(
   cache: ExecutionStatusCache,
 ): RelativeExecutionStatus {
   let nodeMap = cache.get(base.node);
+  let cached;
+
   if (!nodeMap) {
     cache.set(base.node, (nodeMap = new Map()));
-  } else if (nodeMap.has(target.node)) {
-    return nodeMap.get(target.node);
+  } else if ((cached = nodeMap.get(target.node))) {
+    if (cached === SYMBOL_CHECKING) {
+      return "unknown";
+    }
+    return cached;
   }
+
+  nodeMap.set(target.node, SYMBOL_CHECKING);
 
   const result = _guessExecutionStatusRelativeToDifferentFunctionsInternal(
     base,
