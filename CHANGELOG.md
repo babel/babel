@@ -23,6 +23,15 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.20.11 (2022-12-23)
+
+#### :eyeglasses: Spec Compliance
+* `babel-helper-module-transforms`, `babel-plugin-proposal-dynamic-import`, `babel-plugin-transform-modules-amd`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-systemjs`
+  * [#15290](https://github.com/babel/babel/pull/15290) Return rejected promise when stringify import specifier throws ([@SuperSodaSea](https://github.com/SuperSodaSea))
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-block-scoping`
+  * [#15309](https://github.com/babel/babel/pull/15309) Fix for binding shadowing outer var with loop closure ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.20.10 (2022-12-23)
 
 #### :bug: Bug Fix
