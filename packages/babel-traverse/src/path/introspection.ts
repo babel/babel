@@ -451,8 +451,15 @@ function _guessExecutionStatusRelativeToDifferentFunctionsInternal(
   cache: ExecutionStatusCache,
 ): RelativeExecutionStatus {
   if (!target.isFunctionDeclaration()) {
-    if (base._guessExecutionStatusRelativeTo(target) === "before") {
-      return "before";
+    if (!executionOrderCheckedNodes.has(target.node)) {
+      executionOrderCheckedNodes.add(target.node);
+      if (
+        _guessExecutionStatusRelativeToCached(base, target, cache) === "before"
+      ) {
+        executionOrderCheckedNodes.delete(target.node);
+        return "before";
+      }
+      executionOrderCheckedNodes.delete(target.node);
     }
     return "unknown";
   } else if (target.parentPath.isExportDeclaration()) {
