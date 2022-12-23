@@ -23,6 +23,11 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.20.10 (2022-12-23)
+
+#### :bug: Bug Fix
+* `babel-traverse`
+  * [#15305](https://github.com/babel/babel/pull/15305) fix: `guessExecutionStatusRelativeTo` exception ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.20.9 (2022-12-23)
 
 #### :bug: Bug Fix
