@@ -267,10 +267,12 @@ export function willIMaybeExecuteBefore(
 }
 
 function getOuterFunction(path: NodePath) {
-  return (
-    path.parentPath.scope.getFunctionParent() ||
-    path.parentPath.scope.getProgramParent()
-  ).path;
+  return path.isProgram()
+    ? path
+    : (
+        path.parentPath.scope.getFunctionParent() ||
+        path.parentPath.scope.getProgramParent()
+      ).path;
 }
 
 function isExecutionUncertain(type: t.Node["type"], key: string) {
