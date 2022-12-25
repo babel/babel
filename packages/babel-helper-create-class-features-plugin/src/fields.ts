@@ -891,6 +891,7 @@ const thisContextVisitor = traverse.visitors.merge<ReplaceThisState>([
   {
     ThisExpression(path, state) {
       if (t.isUnaryExpression(path.parent, { operator: "delete" })) {
+        path.parentPath.replaceWith(t.booleanLiteral(true));
         return;
       }
       state.needsClassRef = true;
