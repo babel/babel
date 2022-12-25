@@ -10,6 +10,7 @@ import type {
 } from "@babel/helper-member-expression-to-functions";
 import optimiseCall from "@babel/helper-optimise-call-expression";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
+import { isTransparentExprWrapper } from "@babel/helper-skip-transparent-expression-wrappers";
 
 import * as ts from "./typescript";
 
@@ -890,10 +891,15 @@ type ReplaceThisState = {
 const thisContextVisitor = traverse.visitors.merge<ReplaceThisState>([
   {
     ThisExpression(path, state) {
-      if (t.isUnaryExpression(path.parent, { operator: "delete" })) {
+      // Replace `delete this` with `true`
+      const parent = path.findParent(
+        path => !isTransparentExprWrapper(path.node),
+      );
+      if (t.isUnaryExpression(parent.node, { operator: "delete" })) {
         path.parentPath.replaceWith(t.booleanLiteral(true));
         return;
       }
+
       state.needsClassRef = true;
       path.replaceWith(t.cloneNode(state.classRef));
     },

@@ -591,6 +591,7 @@ __metadata:
     "@babel/helper-optimise-call-expression": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-replace-supers": "workspace:^"
+    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^"
     "@babel/helper-split-export-declaration": "workspace:^"
     "@babel/plugin-syntax-class-static-block": ^7.14.5
     "@babel/preset-env": "workspace:^"
