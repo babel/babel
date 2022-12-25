@@ -890,6 +890,9 @@ type ReplaceThisState = {
 const thisContextVisitor = traverse.visitors.merge<ReplaceThisState>([
   {
     ThisExpression(path, state) {
+      if (t.isUnaryExpression(path.parent, { operator: "delete" })) {
+        return;
+      }
       state.needsClassRef = true;
       path.replaceWith(t.cloneNode(state.classRef));
     },
