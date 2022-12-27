@@ -158,7 +158,7 @@ function _evaluate(path: NodePath, state: State): any {
     return evaluateCached(path.get("expression"), state);
   }
 
-  // "foo".length
+  // "foo".length, "foo"[0]
   if (
     path.isMemberExpression() &&
     !path.parentPath.isCallExpression({ callee: path.node })
@@ -166,12 +166,24 @@ function _evaluate(path: NodePath, state: State): any {
     const property = path.get("property");
     const object = path.get("object");
 
-    if (object.isLiteral() && property.isIdentifier()) {
+    if (object.isLiteral()) {
       // @ts-expect-error todo(flow->ts): instead of typeof - would it be better to check type of ast node?
       const value = object.node.value;
       const type = typeof value;
-      if (type === "number" || type === "string") {
-        return value[property.node.name];
+
+      let key = null;
+      if (property.isIdentifier()) {
+        key = property.node.name;
+      } else if (path.node.computed) {
+        key = evaluateCached(property, state);
+        if (!state.confident) return;
+      }
+      if (
+        (type === "number" || type === "string") &&
+        key != null &&
+        (typeof key === "number" || typeof key === "string")
+      ) {
+        return value[key];
       }
     }
   }
