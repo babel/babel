@@ -366,7 +366,7 @@ __metadata:
     convert-source-map: ^1.7.0
     debug: ^4.1.0
     gensync: ^1.0.0-beta.2
-    json5: ^2.2.1
+    json5: ^2.2.2
     rimraf: ^3.0.0
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   languageName: unknown
@@ -10784,12 +10784,12 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"json5@npm:^2.1.2, json5@npm:^2.2.1":
-  version: 2.2.1
-  resolution: "json5@npm:2.2.1"
+"json5@npm:^2.1.2, json5@npm:^2.2.1, json5@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "json5@npm:2.2.2"
   bin:
     json5: lib/cli.js
-  checksum: 74b8a23b102a6f2bf2d224797ae553a75488b5adbaee9c9b6e5ab8b510a2fc6e38f876d4c77dea672d4014a44b2399e15f2051ac2b37b87f74c0c7602003543b
+  checksum: 9a878d66b72157b073cf0017f3e5d93ec209fa5943abcb38d37a54b208917c166bd473c26a24695e67a016ce65759aeb89946592991f8f9174fb96c8e2492683
   languageName: node
   linkType: hard
 
