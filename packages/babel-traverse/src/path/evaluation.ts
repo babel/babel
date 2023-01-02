@@ -172,11 +172,11 @@ function _evaluate(path: NodePath, state: State): any {
       const type = typeof value;
 
       let key = null;
-      if (property.isIdentifier()) {
-        key = property.node.name;
-      } else if (path.node.computed) {
+      if (path.node.computed) {
         key = evaluateCached(property, state);
         if (!state.confident) return;
+      } else if (property.isIdentifier()) {
+        key = property.node.name;
       }
       if (
         (type === "number" || type === "string") &&

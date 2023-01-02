@@ -119,6 +119,11 @@ describe("evaluation", function () {
         .get("body.0.declarations.0.init")
         .evaluate().value,
     ).toBe("w");
+    expect(
+      getPath("var length = 1; var x = 'abc'[length];")
+        .get("body.1.declarations.0.init")
+        .evaluate().value,
+    ).toBe("b");
     const member_expr = getPath(
       "var x = Math.min(2,Math.max(3,4));var y = Math.random();",
     );
