@@ -369,10 +369,16 @@ export default abstract class StatementParser extends ExpressionParser {
     );
   }
 
-  parseStatementOrSloppyAnnexBFunctionDeclaration(this: Parser) {
+  parseStatementOrSloppyAnnexBFunctionDeclaration(
+    this: Parser,
+    allowLabeledFunction: boolean = false,
+  ) {
     let flags: ParseStatementFlag = ParseStatementFlag.StatementOnly;
     if (this.options.annexB && !this.state.strict) {
       flags |= ParseStatementFlag.AllowFunctionDeclaration;
+      if (allowLabeledFunction) {
+        flags |= ParseStatementFlag.AllowLabeledFunction;
+      }
     }
     return this.parseStatementLike(flags);
   }
@@ -1238,7 +1244,7 @@ export default abstract class StatementParser extends ExpressionParser {
     // https://tc39.es/ecma262/#prod-LabelledItem
     node.body =
       flags & ParseStatementFlag.AllowLabeledFunction
-        ? this.parseStatementOrSloppyAnnexBFunctionDeclaration()
+        ? this.parseStatementOrSloppyAnnexBFunctionDeclaration(true)
         : this.parseStatement();
 
     this.state.labels.pop();
