@@ -74,6 +74,7 @@ function loadCtsDefault(filepath: string) {
           {
             allowDeclareFields: true,
             disallowAmbiguousJSXLike: true,
+            allExtensions: true,
             onlyRemoveTypeImports: true,
             optimizeConstEnums: true,
           },
