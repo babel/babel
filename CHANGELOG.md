@@ -23,6 +23,17 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.20.12 (2023-01-04)
+
+#### :bug: Bug Fix
+* `babel-traverse`
+  * [#15224](https://github.com/babel/babel/pull/15224) Fix `TaggedTemplateLiteral` evaluation ([@nmn](https://github.com/nmn))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-class-properties`
+  * [#15312](https://github.com/babel/babel/pull/15312) fix: `delete this` in static class properties initialization ([@SuperSodaSea](https://github.com/SuperSodaSea))
+
+#### :nail_care: Polish
+* `babel-traverse`
+  * [#15313](https://github.com/babel/babel/pull/15313) Implement support for evaluating computed properties. ([@JBYoshi](https://github.com/JBYoshi))
 ## v7.20.11 (2022-12-23)
 
 #### :eyeglasses: Spec Compliance
