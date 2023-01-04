@@ -2,7 +2,7 @@ import { loadPartialConfigSync } from "../lib/index.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
-import { register } from "ts-node";
+import semver from "semver";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
@@ -38,33 +38,35 @@ describe("@babel/core config with ts", () => {
     delete require.extensions[".ts"];
   });
 
-  it("should work with ts-node", () => {
-    const service = register({
-      experimentalResolver: true,
-      compilerOptions: {
-        module: "CommonJS",
-      },
-    });
-    service.enabled(true);
+  semver.gte(process.version, "12.0.0")
+    ? it
+    : it.skip("should work with ts-node", async () => {
+        const service = import("ts-node").register({
+          experimentalResolver: true,
+          compilerOptions: {
+            module: "CommonJS",
+          },
+        });
+        service.enabled(true);
 
-    require(path.join(
-      __dirname,
-      "fixtures/config-ts/simple-cts-with-ts-node/babel.config.cts",
-    ));
+        require(path.join(
+          __dirname,
+          "fixtures/config-ts/simple-cts-with-ts-node/babel.config.cts",
+        ));
 
-    const config = loadPartialConfigSync({
-      configFile: path.join(
-        __dirname,
-        "fixtures/config-ts/simple-cts-with-ts-node/babel.config.cts",
-      ),
-    });
+        const config = loadPartialConfigSync({
+          configFile: path.join(
+            __dirname,
+            "fixtures/config-ts/simple-cts-with-ts-node/babel.config.cts",
+          ),
+        });
 
-    service.enabled(false);
+        service.enabled(false);
 
-    expect(config.options.targets).toMatchInlineSnapshot(`
+        expect(config.options.targets).toMatchInlineSnapshot(`
       Object {
         "node": "12.0.0",
       }
     `);
-  });
+      });
 });

@@ -71,13 +71,20 @@ function loadCtsDefault(filepath: string) {
       presets: [
         [
           "@babel/preset-typescript",
-          {
-            allowDeclareFields: true,
-            disallowAmbiguousJSXLike: true,
-            allExtensions: true,
-            onlyRemoveTypeImports: true,
-            optimizeConstEnums: true,
-          },
+          process.env.BABEL_8_BREAKING
+            ? {
+                disallowAmbiguousJSXLike: true,
+                allExtensions: true,
+                onlyRemoveTypeImports: true,
+                optimizeConstEnums: true,
+              }
+            : {
+                allowDeclareFields: true,
+                disallowAmbiguousJSXLike: true,
+                allExtensions: true,
+                onlyRemoveTypeImports: true,
+                optimizeConstEnums: true,
+              },
         ],
       ],
     };
