@@ -1,141 +1,26 @@
 import path from "path";
 import { fileURLToPath } from "url";
+import fs from "node:fs";
 import TestStream from "test262-stream";
 import TestRunner from "../utils/parser-test-runner.js";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const ignoredFeatures = new Set([
-  "__getter__",
-  "__proto__",
-  "__setter__",
-  "AggregateError",
-  "ArrayBuffer",
-  "align-detached-buffer-semantics-with-web-reality",
-  "arbitrary-module-namespace-names",
-  "array-find-from-last",
-  "array-grouping",
-  "async-functions",
-  "async-iteration",
-  "arrow-function",
-  "Atomics",
-  "Atomics.waitAsync",
-  "BigInt",
-  "caller",
-  "class",
-  "class-fields-private",
-  "class-fields-private-in",
-  "class-fields-public",
-  "class-methods-private",
-  "class-static-block",
-  "class-static-fields-private",
-  "class-static-fields-public",
-  "class-static-methods-private",
-  "cleanupSome",
-  "coalesce-expression",
-  "computed-property-names",
-  "const",
-  "cross-realm",
-  "DataView",
-  "default-parameters",
-  "destructuring-assignment",
-  "destructuring-binding",
-  "dynamic-import",
-  "error-cause",
-  "export-star-as-namespace-from-module",
-  "FinalizationGroup",
-  "FinalizationRegistry",
-  "FinalizationRegistry.prototype.cleanupSome",
-  "Float32Array",
-  "Float64Array",
-  "for-in-order",
-  "for-of",
-  "generators",
-  "globalThis",
-  "hashbang",
-  "host-gc-required",
-  "Int8Array",
-  "Int16Array",
-  "Int32Array",
-  "Intl-enumeration",
-  "IsHTMLDDA",
-  "import.meta",
-  "intl-normative-optional",
-  "json-modules",
-  "json-superset",
-  "legacy-regexp",
-  "let",
-  "logical-assignment-operators",
-  "Map",
-  "new.target",
-  "numeric-separator-literal",
-  "Object.fromEntries",
-  "Object.hasOwn",
-  "Object.is",
-  "object-rest",
-  "object-spread",
-  "optional-catch-binding",
-  "optional-chaining",
-  "Promise",
-  "Promise.allSettled",
-  "Promise.any",
-  "Promise.prototype.finally",
-  "Proxy",
-  "proxy-missing-checks",
-  "Reflect",
-  "Reflect.construct",
-  "Reflect.set",
-  "Reflect.setPrototypeOf",
-  "regexp-dotall",
-  "regexp-lookbehind",
-  "regexp-named-groups",
-  "regexp-unicode-property-escapes",
-  "resizable-arraybuffer",
-  "rest-parameters",
-  "ShadowRealm",
-  "SharedArrayBuffer",
-  "Set",
-  "String.fromCodePoint",
-  "string-trimming",
-  "super",
-  "Symbol",
-  "Symbol.asyncIterator",
-  "Symbol.hasInstance",
-  "Symbol.isConcatSpreadable",
-  "Symbol.iterator",
-  "Symbol.match",
-  "Symbol.matchAll",
-  "Symbol.prototype.description",
-  "Symbol.replace",
-  "Symbol.search",
-  "Symbol.split",
-  "Symbol.species",
-  "Symbol.toPrimitive",
-  "Symbol.toStringTag",
-  "Symbol.unscopables",
-  "tail-call-optimization",
-  "template",
-  "top-level-await",
-  "Temporal",
-  "TypedArray",
-  "u180e",
-  "Uint8Array",
-  "Uint8ClampedArray",
-  "Uint16Array",
-  "Uint32Array",
-  "WeakMap",
-  "WeakSet",
-  "WeakRef",
-  "well-formed-json-stringify",
-  "symbols-as-weakmap-keys",
-  "change-array-by-copy",
-  "regexp-duplicate-named-groups",
-  "regexp-match-indices",
-]);
+const ignoredFeaturesJsonPath = new URL(
+  "./ignored-features.json",
+  import.meta.url
+);
+const ignoredFeatures = (
+  await import(ignoredFeaturesJsonPath, {
+    assert: { type: "json" },
+  })
+).default;
+
+const ignoredFeaturesSet = new Set(ignoredFeatures);
 
 function featureShouldIgnore(feature) {
   return (
-    ignoredFeatures.has(feature) ||
+    ignoredFeaturesSet.has(feature) ||
     // All prototype method must not introduce new language syntax
     feature.includes(".prototype.") ||
     // Ignore Intl features
@@ -170,11 +55,23 @@ function* getPlugins(features) {
   }
 }
 
+function updateIgnoredFeatures(unmappedFeatures) {
+  ignoredFeatures.push(...unmappedFeatures);
+  ignoredFeatures.sort();
+  fs.writeFileSync(
+    ignoredFeaturesJsonPath,
+    // editorconfig enables insert_final_newline
+    JSON.stringify(ignoredFeatures, undefined, 2) + "\n"
+  );
+}
+
+const shouldUpdate = process.argv.includes("--update-allowlist");
+
 const runner = new TestRunner({
   testDir: path.join(dirname, "../../../build/test262").replace(/\\/g, "/"),
   allowlist: path.join(dirname, "allowlist.txt"),
   logInterval: 500,
-  shouldUpdate: process.argv.includes("--update-allowlist"),
+  shouldUpdate: shouldUpdate,
 
   async *getTests() {
     const stream = new TestStream(this.testDir, {
@@ -214,7 +111,11 @@ runner
         Array.from(unmappedFeatures).join("\n").replace(/^/gm, "   ")
       );
 
-      process.exitCode = 1;
+      if (shouldUpdate) {
+        updateIgnoredFeatures(unmappedFeatures);
+      } else {
+        process.exitCode = 1;
+      }
     }
   })
   .catch(err => {
