@@ -35,7 +35,7 @@ const featuresToPlugins = new Map([
   [
     "decorators",
     [
-      ["decorators", { version: "2021-12", decoratorsBeforeExport: false }],
+      ["decorators", { version: "2022-03", decoratorsBeforeExport: false }],
       "decoratorAutoAccessors",
     ],
   ],
