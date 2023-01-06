@@ -247,6 +247,11 @@ const handle = {
       } else if (parentIsCall) {
         // `(a?.#b)()` to `(a == null ? void 0 : a.#b.bind(a))()`
         member.replaceWith(this.boundGet(member));
+      } else if (
+        this.delete &&
+        parentPath.isUnaryExpression({ operator: "delete" })
+      ) {
+        parentPath.replaceWith(this.delete(member));
       } else {
         member.replaceWith(this.get(member));
       }
@@ -283,6 +288,7 @@ const handle = {
             "=",
             context,
             // object must not be Super when `context` is an identifier
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
             object as t.Expression,
           );
         }
@@ -491,6 +497,12 @@ const handle = {
       return;
     }
 
+    // delete MEMBER -> _delete(MEMBER)
+    if (this.delete && parentPath.isUnaryExpression({ operator: "delete" })) {
+      parentPath.replaceWith(this.delete(member));
+      return;
+    }
+
     // for (MEMBER of ARR)
     // for (MEMBER in ARR)
     // { KEY: MEMBER } = OBJ -> { KEY: _destructureSet(MEMBER) } = OBJ
@@ -562,6 +574,9 @@ export interface Handler<State> {
     member: Member,
     args: t.OptionalCallExpression["arguments"],
   ): t.Expression;
+  // TODO(Babel 8): Consider making this required, since `.get` doesn't
+  // really work as a fallback for `.delete`
+  delete?(this: HandlerState<State> & State, member: Member): t.Expression;
 }
 
 export interface HandlerState<State = {}> extends Handler<State> {

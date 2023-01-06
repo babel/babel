@@ -282,6 +282,14 @@ describe("scope", () => {
       });
     });
 
+    it("switch discriminant scope", () => {
+      expect(
+        getPath(`let a = "outside"; switch (a) { default: let a = "inside" }`)
+          .get("body.1.discriminant")
+          .scope.getBinding("a").path.node.init.value,
+      ).toBe("outside");
+    });
+
     it("variable declaration", function () {
       expect(getPath("var foo = null;").scope.getBinding("foo").path.type).toBe(
         "VariableDeclarator",
@@ -376,6 +384,23 @@ describe("scope", () => {
           plugins: ["flow"],
         }).scope.getBinding("Foo").path.type,
       ).toBe("ImportSpecifier");
+    });
+
+    it("import type and func with duplicate name", function () {
+      expect(() => {
+        getPath(
+          `
+            import type {Foo} from 'foo';
+            import {type Foo2} from 'foo';
+            function Foo(){}
+            function Foo2(){}
+          `,
+          {
+            plugins: ["typescript"],
+            sourceType: "module",
+          },
+        );
+      }).not.toThrow();
     });
 
     it("variable constantness", function () {
@@ -702,7 +727,7 @@ describe("scope", () => {
         ];
 
         ast[0].declare = true;
-        expect(() => getPath(ast)).not.toThrowError();
+        expect(() => getPath(ast)).not.toThrow();
       });
     });
 
@@ -992,6 +1017,26 @@ describe("scope", () => {
         }"
       `);
       expect(program.scope.hasOwnBinding("ref")).toBe(true);
+    });
+  });
+
+  describe("rename", () => {
+    it(".parentPath after renaming variable in switch", () => {
+      const program = getPath(`
+        switch (x) {
+          case y:
+            let a;
+        }
+      `);
+      program.traverse({
+        VariableDeclaration(path) {
+          if (path.node.declarations[0].id.name !== "a") return;
+
+          expect(path.parentPath.type).toBe("SwitchCase");
+          path.scope.rename("a");
+          expect(path.parentPath.type).toBe("SwitchCase");
+        },
+      });
     });
   });
 });

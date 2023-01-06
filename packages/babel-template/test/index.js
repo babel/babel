@@ -31,11 +31,6 @@ describe("@babel/template", function () {
     expect(generator(output).code).toBe(comments);
   });
 
-  it("should preserve comments with a flag", function () {
-    const output = template(comments, { preserveComments: true })();
-    expect(generator(output).code).toBe(comments);
-  });
-
   it("should preserve comments with a flag when using .ast", function () {
     const output1 = template.ast(comments, { preserveComments: true });
     const output2 = template({ preserveComments: true }).ast(comments);

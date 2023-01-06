@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-create-class-features-plugin",
-  "version": "7.20.2",
+  "version": "7.20.12",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
   "description": "Compile class public and private fields, private methods and decorators to ES6",
@@ -24,6 +24,7 @@
     "@babel/helper-member-expression-to-functions": "workspace:^",
     "@babel/helper-optimise-call-expression": "workspace:^",
     "@babel/helper-replace-supers": "workspace:^",
+    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^",
     "@babel/helper-split-export-declaration": "workspace:^"
   },
   "peerDependencies": {

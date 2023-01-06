@@ -45,7 +45,7 @@ export default function* normalizeFile(
     }
 
     if (options.cloneInputAst) {
-      ast = cloneDeep(ast) as t.File;
+      ast = cloneDeep(ast);
     }
   } else {
     // @ts-expect-error todo: use babel-types ast typings in Babel parser

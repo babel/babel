@@ -17,10 +17,8 @@ export type Targets = {
   [target in Target]?: string;
 };
 
-export type TargetsTuple = {
-  [target in Exclude<Target, "node">]: string;
-} & {
-  node: string | true;
+export type TargetsTuple = Omit<Targets, "node"> & {
+  node?: string | true;
 };
 
 export type Browsers = string | ReadonlyArray<string>;

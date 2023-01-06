@@ -15,8 +15,8 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-class-static-block { firefox < 93, ios, safari, samsung }
-  proposal-private-property-in-object { ios < 15, samsung }
+  proposal-class-static-block { firefox < 93, ios, safari }
+  proposal-private-property-in-object { ios < 15 }
   proposal-class-properties { ios < 15 }
   proposal-private-methods { ios < 15 }
   syntax-numeric-separator
@@ -28,7 +28,6 @@ Using plugins:
   syntax-object-rest-spread
   proposal-export-namespace-from { ios, safari }
   bugfix/transform-safari-id-destructuring-collision-in-function-expression { ios, safari }
-  bugfix/transform-v8-spread-parameters-in-optional-chaining { samsung }
   transform-modules-commonjs
   proposal-dynamic-import
 

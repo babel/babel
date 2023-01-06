@@ -64,11 +64,11 @@ export default declare(api => {
         t.inherits(loop, node);
         t.inherits(loop.body, node.body);
 
-        if (build.replaceParent) {
-          path.parentPath.replaceWithMultiple(build.node);
-        } else {
-          path.replaceWithMultiple(build.node);
-        }
+        const p = build.replaceParent ? path.parentPath : path;
+        p.replaceWithMultiple(build.node);
+
+        // TODO: Avoid crawl
+        p.scope.parent.crawl();
       },
     },
     environmentVisitor,

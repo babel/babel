@@ -28,6 +28,7 @@ export default declare(api => {
               "=",
               t.cloneNode(memo),
               // object must not be Super when `memo` is an identifier
+              // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
               object as t.Expression,
             );
           }

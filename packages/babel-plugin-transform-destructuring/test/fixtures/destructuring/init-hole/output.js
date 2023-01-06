@@ -45,7 +45,7 @@ try {
 expect(thrown).toEqual(true);
 try {
   thrown = false;
-  var _ = babelHelpers.toArray(void 0);
+  var _ = babelHelpers.slicedToArray(void 0, 0);
 } catch (e) {
   thrown = true;
 }

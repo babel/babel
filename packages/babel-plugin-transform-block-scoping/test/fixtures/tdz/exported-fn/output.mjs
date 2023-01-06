@@ -4,7 +4,7 @@ import { foo } from "somewhere";
 // foo might call "bar"
 foo();
 babelHelpers.tdz("a");
-a = void 0;
+var a = void 0;
 a;
 export function bar() {
   return babelHelpers.temporalRef(a, "a");

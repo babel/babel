@@ -10,9 +10,11 @@ export function _params(
   this.token("(");
   this._parameters(node.params, node);
   this.token(")");
-  this._noLineTerminator = true;
 
-  this.print(node.returnType, node, node.type === "ArrowFunctionExpression");
+  const noLineTerminator = node.type === "ArrowFunctionExpression";
+  this.print(node.returnType, node, noLineTerminator);
+
+  this._noLineTerminator = noLineTerminator;
 }
 
 export function _parameters(

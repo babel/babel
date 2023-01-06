@@ -5,7 +5,7 @@
 import type * as t from "@babel/types";
 import type NodePath from "../index";
 
-export interface NodePathAssetions {
+export interface NodePathAssertions {
   assertAccessor(opts?: object): asserts this is NodePath<t.Accessor>;
   assertAnyTypeAnnotation(
     opts?: object,

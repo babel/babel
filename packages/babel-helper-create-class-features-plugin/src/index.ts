@@ -8,6 +8,7 @@ import {
   buildPrivateNamesMap,
   transformPrivateNamesUsage,
   buildFieldsInitNodes,
+  buildCheckInRHS,
 } from "./fields";
 import type { PropPath } from "./fields";
 import { buildDecoratedClass, hasDecorators } from "./decorators";
@@ -15,7 +16,7 @@ import { injectInitialization, extractComputedKeys } from "./misc";
 import { enableFeature, FEATURES, isLoose, shouldTransform } from "./features";
 import { assertFieldTransformed } from "./typescript";
 
-export { FEATURES, enableFeature, injectInitialization };
+export { FEATURES, enableFeature, injectInitialization, buildCheckInRHS };
 
 declare const PACKAGE_JSON: { name: string; version: string };
 
@@ -189,7 +190,7 @@ export function createClassFeaturePlugin({
         const privateNamesMap = buildPrivateNamesMap(props);
         const privateNamesNodes = buildPrivateNamesNodes(
           privateNamesMap,
-          (privateFieldsAsProperties ?? loose) as boolean,
+          privateFieldsAsProperties ?? loose,
           file,
         );
 
@@ -229,9 +230,9 @@ export function createClassFeaturePlugin({
                 props,
                 privateNamesMap,
                 file,
-                (setPublicClassFields ?? loose) as boolean,
-                (privateFieldsAsProperties ?? loose) as boolean,
-                (constantSuper ?? loose) as boolean,
+                setPublicClassFields ?? loose,
+                privateFieldsAsProperties ?? loose,
+                constantSuper ?? loose,
                 innerBinding,
               ));
           }
@@ -244,9 +245,9 @@ export function createClassFeaturePlugin({
               props,
               privateNamesMap,
               file,
-              (setPublicClassFields ?? loose) as boolean,
-              (privateFieldsAsProperties ?? loose) as boolean,
-              (constantSuper ?? loose) as boolean,
+              setPublicClassFields ?? loose,
+              privateFieldsAsProperties ?? loose,
+              constantSuper ?? loose,
               innerBinding,
             ));
         }

@@ -120,7 +120,8 @@ export default declare((api, opts: Options) => {
   const classMemberVisitors = {
     field(
       path: NodePath<
-        (t.ClassPrivateProperty | t.ClassProperty) & ExtraNodeProps
+        (t.ClassPrivateProperty | t.ClassProperty | t.ClassAccessorProperty) &
+          ExtraNodeProps
       >,
     ) {
       const { node } = path;
@@ -525,7 +526,8 @@ export default declare((api, opts: Options) => {
             }
           } else if (
             child.isClassProperty() ||
-            child.isClassPrivateProperty()
+            child.isClassPrivateProperty() ||
+            child.isClassAccessorProperty()
           ) {
             classMemberVisitors.field(child);
           }

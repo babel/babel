@@ -24,7 +24,6 @@ import {
   isImportDeclaration,
   isLiteral,
   isMethod,
-  isModuleDeclaration,
   isModuleSpecifier,
   isNullLiteral,
   isObjectExpression,
@@ -50,6 +49,7 @@ import {
   isTopicReference,
   isMetaProperty,
   isPrivateName,
+  isExportDeclaration,
 } from "@babel/types";
 import type * as t from "@babel/types";
 import { scope as scopeCache } from "../cache";
@@ -60,7 +60,7 @@ type NodePart = string | number | boolean;
 function gatherNodeParts(node: t.Node, parts: NodePart[]) {
   switch (node?.type) {
     default:
-      if (isModuleDeclaration(node)) {
+      if (isImportDeclaration(node) || isExportDeclaration(node)) {
         if (
           (isExportAllDeclaration(node) ||
             isExportNamedDeclaration(node) ||
@@ -457,6 +457,14 @@ export default class Scope {
   traverse(node: t.Node | t.Node[], opts?: TraverseOptions, state?: any): void;
   /**
    * Traverse node with current scope and path.
+   *
+   * !!! WARNING !!!
+   * This method assumes that `this.path` is the NodePath representing `node`.
+   * After running the traversal, the `.parentPath` of the NodePaths
+   * corresponding to `node`'s children will be set to `this.path`.
+   *
+   * There is no good reason to use this method, since the only safe way to use
+   * it is equivalent to `scope.path.traverse(opts, state)`.
    */
   traverse<S>(node: any, opts: any, state?: S) {
     traverse(node, opts, this, state, this.path);
@@ -686,7 +694,7 @@ export default class Scope {
     if (i === true) {
       // Used in array-spread to create an array.
       helperName = "toConsumableArray";
-    } else if (i) {
+    } else if (typeof i === "number") {
       args.push(numericLiteral(i));
 
       // Used in array-rest to create an array from a subset of an iterable.
@@ -733,9 +741,17 @@ export default class Scope {
       if (path.node.declare) return;
       this.registerBinding("let", path);
     } else if (path.isImportDeclaration()) {
+      const isTypeDeclaration =
+        path.node.importKind === "type" || path.node.importKind === "typeof";
       const specifiers = path.get("specifiers");
       for (const specifier of specifiers) {
-        this.registerBinding("module", specifier);
+        const isTypeSpecifier =
+          isTypeDeclaration ||
+          (specifier.isImportSpecifier() &&
+            (specifier.node.importKind === "type" ||
+              specifier.node.importKind === "typeof"));
+
+        this.registerBinding(isTypeSpecifier ? "unknown" : "module", specifier);
       }
     } else if (path.isExportDeclaration()) {
       // todo: improve babel-types
@@ -1235,18 +1251,34 @@ export default class Scope {
     return !!this.getOwnBinding(name);
   }
 
-  hasBinding(name: string, noGlobals?: boolean) {
+  // By default, we consider generated UIDs as bindings.
+  // This is because they are almost always used to declare variables,
+  // and since the scope isn't always up-to-date it's better to assume that
+  // there is a variable with that name. The `noUids` option can be used to
+  // turn off this behavior, for example if you know that the generate UID
+  // was used to declare a variable in a different scope.
+  hasBinding(
+    name: string,
+    opts?: boolean | { noGlobals?: boolean; noUids?: boolean },
+  ) {
     if (!name) return false;
     if (this.hasOwnBinding(name)) return true;
-    if (this.parentHasBinding(name, noGlobals)) return true;
-    if (this.hasUid(name)) return true;
-    if (!noGlobals && Scope.globals.includes(name)) return true;
-    if (!noGlobals && Scope.contextVariables.includes(name)) return true;
+    {
+      // TODO: Only accept the object form.
+      if (typeof opts === "boolean") opts = { noGlobals: opts };
+    }
+    if (this.parentHasBinding(name, opts)) return true;
+    if (!opts?.noUids && this.hasUid(name)) return true;
+    if (!opts?.noGlobals && Scope.globals.includes(name)) return true;
+    if (!opts?.noGlobals && Scope.contextVariables.includes(name)) return true;
     return false;
   }
 
-  parentHasBinding(name: string, noGlobals?: boolean) {
-    return this.parent?.hasBinding(name, noGlobals);
+  parentHasBinding(
+    name: string,
+    opts?: { noGlobals?: boolean; noUids?: boolean },
+  ) {
+    return this.parent?.hasBinding(name, opts);
   }
 
   /**

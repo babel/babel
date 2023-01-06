@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "transform-duplicate-keys",
+    "transform-computed-properties"
+  ]
+}

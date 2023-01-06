@@ -480,15 +480,10 @@ export default (superClass: typeof Parser) =>
               this.setContext(tc.brace);
               this.next();
               if (this.match(tt.ellipsis)) {
-                children.push(
-                  this.jsxParseSpreadChild(node as Undone<N.JSXSpreadChild>),
-                );
+                children.push(this.jsxParseSpreadChild(node));
               } else {
                 children.push(
-                  this.jsxParseExpressionContainer(
-                    node as Undone<N.JSXExpressionContainer>,
-                    tc.j_expr,
-                  ),
+                  this.jsxParseExpressionContainer(node, tc.j_expr),
                 );
               }
 

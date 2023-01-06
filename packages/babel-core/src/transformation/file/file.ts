@@ -210,7 +210,7 @@ export default class File {
     });
 
     nodes.forEach(node => {
-      // @ts-expect-error Fixeme: document _compact node property
+      // @ts-expect-error Fixme: document _compact node property
       node._compact = true;
     });
 

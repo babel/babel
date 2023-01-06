@@ -14,7 +14,6 @@
     "./packages/babel-helper-compilation-targets/src/**/*.ts",
     "./packages/babel-helper-create-class-features-plugin/src/**/*.ts",
     "./packages/babel-helper-create-regexp-features-plugin/src/**/*.ts",
-    "./packages/babel-helper-define-map/src/**/*.ts",
     "./packages/babel-helper-environment-visitor/src/**/*.ts",
     "./packages/babel-helper-explode-assignable-expression/src/**/*.ts",
     "./packages/babel-helper-fixtures/src/**/*.ts",
@@ -153,7 +152,8 @@
     "./packages/babel-traverse/src/**/*.ts",
     "./packages/babel-types/src/**/*.ts",
     "./codemods/babel-plugin-codemod-object-assign-to-object-spread/src/**/*.ts",
-    "./codemods/babel-plugin-codemod-optional-catch-binding/src/**/*.ts"
+    "./codemods/babel-plugin-codemod-optional-catch-binding/src/**/*.ts",
+    "./packages/babel-parser/typings/*.d.ts"
   ],
   "compilerOptions": {
     "paths": {
@@ -207,9 +207,6 @@
       ],
       "@babel/helper-create-regexp-features-plugin": [
         "./packages/babel-helper-create-regexp-features-plugin/src"
-      ],
-      "@babel/helper-define-map": [
-        "./packages/babel-helper-define-map/src"
       ],
       "@babel/helper-environment-visitor": [
         "./packages/babel-helper-environment-visitor/src"

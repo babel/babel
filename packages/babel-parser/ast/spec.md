@@ -108,7 +108,6 @@ These are the core @babel/parser (babylon) AST node types.
   - [ClassExpression](#classexpression)
   - [MetaProperty](#metaproperty)
 - [Modules](#modules)
-  - [ModuleDeclaration](#moduledeclaration)
   - [ModuleSpecifier](#modulespecifier)
   - [Imports](#imports)
     - [ImportDeclaration](#importdeclaration)
@@ -117,6 +116,7 @@ These are the core @babel/parser (babylon) AST node types.
     - [ImportNamespaceSpecifier](#importnamespacespecifier)
     - [ImportAttribute](#importattribute)
   - [Exports](#exports)
+    - [ExportDeclaration](#exportdeclaration)
     - [ExportNamedDeclaration](#exportnameddeclaration)
     - [ExportSpecifier](#exportspecifier)
     - [ExportNamespaceSpecifier](#exportnamespacespecifier)
@@ -275,7 +275,7 @@ interface Program <: Node {
   type: "Program";
   interpreter: InterpreterDirective | null;
   sourceType: "script" | "module";
-  body: [ Statement | ModuleDeclaration ];
+  body: [ Statement | ImportDeclaration | ExportDeclaration ];
   directives: [ Directive ];
 }
 ```
@@ -1265,14 +1265,6 @@ interface MetaProperty <: Expression {
 
 # Modules
 
-## ModuleDeclaration
-
-```js
-interface ModuleDeclaration <: Node { }
-```
-
-A module `import` or `export` declaration.
-
 ## ModuleSpecifier
 
 ```js
@@ -1288,7 +1280,7 @@ A specifier in an import or export declaration.
 ### ImportDeclaration
 
 ```js
-interface ImportDeclaration <: ModuleDeclaration {
+interface ImportDeclaration <: Node {
   type: "ImportDeclaration";
   importKind: null | "type" | "typeof" | "value";
   specifiers: [ ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier ];
@@ -1346,10 +1338,18 @@ An attribute specified on the ImportDeclaration.
 
 ## Exports
 
+### ExportDeclaration
+
+```js
+interface ExportDeclaration <: Node {}
+```
+
+An `export` declaration.
+
 ### ExportNamedDeclaration
 
 ```js
-interface ExportNamedDeclaration <: ModuleDeclaration {
+interface ExportNamedDeclaration <: ExportDeclaration {
   type: "ExportNamedDeclaration";
   declaration: Declaration | null;
   specifiers: [ ExportSpecifier | ExportNamespaceSpecifier ];
@@ -1400,7 +1400,7 @@ interface OptClassDeclaration <: ClassDeclaration {
   id: Identifier | null;
 }
 
-interface ExportDefaultDeclaration <: ModuleDeclaration {
+interface ExportDefaultDeclaration <: ExportDeclaration {
   type: "ExportDefaultDeclaration";
   declaration: OptFunctionDeclaration | OptClassDeclaration | Expression;
 }
@@ -1411,7 +1411,7 @@ An export default declaration, e.g., `export default function () {};` or `export
 ### ExportAllDeclaration
 
 ```js
-interface ExportAllDeclaration <: ModuleDeclaration {
+interface ExportAllDeclaration <: ExportDeclaration {
   type: "ExportAllDeclaration";
   source: StringLiteral;
   assertions?: [ ImportAttribute ];

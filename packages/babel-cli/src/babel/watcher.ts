@@ -123,7 +123,7 @@ export function updateExternalDependencies(
 }
 
 function removeFileDependency(filename: string, dep: string) {
-  const deps = depToFiles.get(dep) as Set<string>;
+  const deps = depToFiles.get(dep);
   deps.delete(filename);
 
   if (deps.size === 0) {

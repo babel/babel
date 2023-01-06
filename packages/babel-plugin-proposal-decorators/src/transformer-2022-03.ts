@@ -610,7 +610,7 @@ function transformClass(
       let name = "computedKey";
 
       if (isPrivate) {
-        name = (key as t.PrivateName).id.name;
+        name = key.id.name;
       } else if (!isComputed && key.type === "Identifier") {
         name = key.name;
       }
@@ -653,7 +653,7 @@ function transformClass(
               `set_${name}`,
             );
 
-            addCallAccessorsFor(newPath, key as t.PrivateName, getId, setId);
+            addCallAccessorsFor(newPath, key, getId, setId);
 
             locals = [newFieldInitId, getId, setId];
           } else {
@@ -678,12 +678,12 @@ function transformClass(
           locals = initId;
 
           if (isPrivate) {
-            privateMethods = extractProxyAccessorsFor(key as t.PrivateName);
+            privateMethods = extractProxyAccessorsFor(key);
           }
         } else if (isPrivate) {
           locals = element.scope.parent.generateDeclaredUidIdentifier(
             `call_${name}`,
-          ) as t.Identifier;
+          );
 
           const replaceSupers = new ReplaceSupers({
             constantSuper,
@@ -712,7 +712,7 @@ function transformClass(
           if (kind === GETTER || kind === SETTER) {
             movePrivateAccessor(
               element as NodePath<t.ClassPrivateMethod>,
-              t.cloneNode(key as t.PrivateName),
+              t.cloneNode(key),
               t.cloneNode(locals),
               isStatic,
             );
@@ -721,15 +721,10 @@ function transformClass(
 
             // Unshift
             path.node.body.body.unshift(
-              t.classPrivateProperty(
-                key as t.PrivateName,
-                t.cloneNode(locals),
-                [],
-                node.static,
-              ),
+              t.classPrivateProperty(key, t.cloneNode(locals), [], node.static),
             );
 
-            decoratedPrivateMethods.add((key as t.PrivateName).id.name);
+            decoratedPrivateMethods.add(key.id.name);
 
             element.remove();
           }

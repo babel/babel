@@ -59,7 +59,7 @@ function guessJSModuleType(filename: string): "cjs" | "mjs" | "unknown" {
 }
 
 function loadCjsDefault(filepath: string, fallbackToTranspiledModule: boolean) {
-  const module = endHiddenCallStack(require)(filepath) as any;
+  const module = endHiddenCallStack(require)(filepath);
   return module?.__esModule
     ? // TODO (Babel 8): Remove "module" and "undefined" fallback
       module.default || (fallbackToTranspiledModule ? module : undefined)

@@ -9,7 +9,7 @@ import type { ExpressionErrors } from "../parser/util";
 import type { BindingTypes } from "../util/scopeflags";
 import type { Position } from "../util/location";
 
-type PossiblePlaceholedrs = {
+type PossiblePlaceholders = {
   Identifier: N.Identifier;
   StringLiteral: N.StringLiteral;
   Expression: N.Expression;
@@ -19,9 +19,9 @@ type PossiblePlaceholedrs = {
   ClassBody: N.ClassBody;
   Pattern: N.Pattern;
 };
-export type PlaceholderTypes = keyof PossiblePlaceholedrs;
+export type PlaceholderTypes = keyof PossiblePlaceholders;
 
-type NodeOf<T extends keyof PossiblePlaceholedrs> = PossiblePlaceholedrs[T];
+type NodeOf<T extends keyof PossiblePlaceholders> = PossiblePlaceholders[T];
 // todo: when there  is proper union type for Node
 // type NodeOf<T extends PlaceholderTypes> = Extract<N.Node, { type: T }>;
 
@@ -152,12 +152,10 @@ export default (superClass: typeof Parser) =>
      * parser/statement.js                                          *
      * ============================================================ */
 
-    hasFollowingIdentifier(context?: string | null): boolean {
-      if (super.hasFollowingIdentifier(context)) {
+    chStartsBindingIdentifier(ch: number, pos: number): boolean {
+      if (super.chStartsBindingIdentifier(ch, pos)) {
         return true;
       }
-
-      if (context) return false;
 
       // Accept "let %%" as the start of "let %%placeholder%%", as though the
       // placeholder were an identifier.
@@ -196,7 +194,7 @@ export default (superClass: typeof Parser) =>
         const stmt: N.LabeledStatement = node;
         stmt.label = this.finishPlaceholder(expr, "Identifier");
         this.next();
-        stmt.body = super.parseStatement("label");
+        stmt.body = super.parseStatementOrFunctionDeclaration(false);
         return this.finishNode(stmt, "LabeledStatement");
       }
 

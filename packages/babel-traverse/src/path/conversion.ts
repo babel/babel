@@ -149,16 +149,20 @@ export function arrowFunctionToExpression(
   this: NodePath<t.ArrowFunctionExpression>,
   {
     allowInsertArrow = true,
+    allowInsertArrowWithRest = allowInsertArrow,
     /** @deprecated Use `noNewArrows` instead */
     specCompliant = false,
     // TODO(Babel 8): Consider defaulting to `false` for spec compliancy
     noNewArrows = !specCompliant,
   }: {
     allowInsertArrow?: boolean | void;
+    allowInsertArrowWithRest?: boolean | void;
     specCompliant?: boolean | void;
     noNewArrows?: boolean;
   } = {},
-): NodePath<Exclude<t.Function, t.Method | t.ArrowFunctionExpression>> {
+): NodePath<
+  Exclude<t.Function, t.Method | t.ArrowFunctionExpression> | t.CallExpression
+> {
   if (!this.isArrowFunctionExpression()) {
     throw (this as NodePath).buildCodeFrameError(
       "Cannot convert non-arrow function to a function expression.",
@@ -169,6 +173,7 @@ export function arrowFunctionToExpression(
     this,
     noNewArrows,
     allowInsertArrow,
+    allowInsertArrowWithRest,
   );
 
   // @ts-expect-error TS requires explicit fn type annotation
@@ -240,6 +245,7 @@ function hoistFunctionEnvironment(
   // TODO(Babel 8): Consider defaulting to `false` for spec compliancy
   noNewArrows: boolean | void = true,
   allowInsertArrow: boolean | void = true,
+  allowInsertArrowWithRest: boolean | void = true,
 ): { thisBinding: string; fnPath: NodePath<t.Function> } {
   let arrowParent;
   let thisEnvFn: NodePath<t.Function> = fnPath.findParent(p => {
@@ -286,7 +292,17 @@ function hoistFunctionEnvironment(
   if (inConstructor && superCalls.length > 0) {
     if (!allowInsertArrow) {
       throw superCalls[0].buildCodeFrameError(
-        "Unable to handle nested super() usage in arrow",
+        "When using '@babel/plugin-transform-arrow-functions', " +
+          "it's not possible to compile `super()` in an arrow function without compiling classes.\n" +
+          "Please add '@babel/plugin-transform-classes' to your Babel configuration.",
+      );
+    }
+    if (!allowInsertArrowWithRest) {
+      // preset-env with target `since 2017` enables `transform-parameters` without `transform-classes`.
+      throw superCalls[0].buildCodeFrameError(
+        "When using '@babel/plugin-transform-parameters', " +
+          "it's not possible to compile `super()` in an arrow function with default or rest parameters without compiling classes.\n" +
+          "Please add '@babel/plugin-transform-classes' to your Babel configuration.",
       );
     }
     const allSuperCalls: NodePath<t.CallExpression>[] = [];
@@ -345,7 +361,9 @@ function hoistFunctionEnvironment(
   if (superProps.length > 0) {
     if (!allowInsertArrow) {
       throw superProps[0].buildCodeFrameError(
-        "Unable to handle nested super.prop usage",
+        "When using '@babel/plugin-transform-arrow-functions', " +
+          "it's not possible to compile `super.prop` in an arrow function without compiling classes.\n" +
+          "Please add '@babel/plugin-transform-classes' to your Babel configuration.",
       );
     }
 
@@ -526,7 +544,7 @@ function standardizeSuperProperty(
         logicalExpression(
           op,
           assignmentPath.node.left as t.MemberExpression,
-          assignmentPath.node.right as t.Expression,
+          assignmentPath.node.right,
         ),
       );
     } else {

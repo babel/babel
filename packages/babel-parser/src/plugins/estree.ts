@@ -120,10 +120,7 @@ export default (superClass: typeof Parser) =>
     // Overrides
     // ==================================
 
-    initFunction(
-      node: N.BodilessFunctionOrMethodBase,
-      isAsync?: boolean | null,
-    ): void {
+    initFunction(node: N.BodilessFunctionOrMethodBase, isAsync: boolean): void {
       super.initFunction(node, isAsync);
       node.expression = false;
     }
@@ -501,7 +498,7 @@ export default (superClass: typeof Parser) =>
           break;
       }
 
-      return node as N.AnyExport;
+      return node;
     }
 
     parseSubscript(

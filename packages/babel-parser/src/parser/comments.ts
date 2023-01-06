@@ -7,22 +7,31 @@ import type { Undone } from "./node";
 
 /**
  * A whitespace token containing comments
- * @typedef CommentWhitespace
- * @type {object}
- * @property {number} start - the start of the whitespace token.
- * @property {number} end - the end of the whitespace token.
- * @property {Array<Comment>} comments - the containing comments
- * @property {Node | null} leadingNode - the immediately preceding AST node of the whitespace token
- * @property {Node | null} trailingNode - the immediately following AST node of the whitespace token
- * @property {Node | null} containingNode - the innermost AST node containing the whitespace
- *                                         with minimal size (|end - start|)
  */
 export type CommentWhitespace = {
+  /**
+   * the start of the whitespace token.
+   */
   start: number;
+  /**
+   * the end of the whitespace token.
+   */
   end: number;
+  /**
+   * the containing comments
+   */
   comments: Array<Comment>;
+  /**
+   * the immediately preceding AST node of the whitespace token
+   */
   leadingNode: Node | null;
+  /**
+   * the immediately following AST node of the whitespace token
+   */
   trailingNode: Node | null;
+  /**
+   * the innermost AST node containing the whitespace with minimal size (|end - start|)
+   */
   containingNode: Node | null;
 };
 
@@ -30,9 +39,6 @@ export type CommentWhitespace = {
  * Merge comments with node's trailingComments or assign comments to be
  * trailingComments. New comments will be placed before old comments
  * because the commentStack is enumerated reversely.
- *
- * @param {Undone<Node>} node
- * @param {Array<Comment>} comments
  */
 function setTrailingComments(node: Undone<Node>, comments: Array<Comment>) {
   if (node.trailingComments === undefined) {
@@ -46,9 +52,6 @@ function setTrailingComments(node: Undone<Node>, comments: Array<Comment>) {
  * Merge comments with node's leadingComments or assign comments to be
  * leadingComments. New comments will be placed before old comments
  * because the commentStack is enumerated reversely.
- *
- * @param {Undone<Node>} node
- * @param {Array<Comment>} comments
  */
 function setLeadingComments(node: Undone<Node>, comments: Array<Comment>) {
   if (node.leadingComments === undefined) {
@@ -62,9 +65,6 @@ function setLeadingComments(node: Undone<Node>, comments: Array<Comment>) {
  * Merge comments with node's innerComments or assign comments to be
  * innerComments. New comments will be placed before old comments
  * because the commentStack is enumerated reversely.
- *
- * @param {Undone<Node>} node
- * @param {Array<Comment>} comments
  */
 export function setInnerComments(
   node: Undone<Node>,
@@ -81,10 +81,6 @@ export function setInnerComments(
  * Given node and elements array, if elements has non-null element,
  * merge comments to its trailingComments, otherwise merge comments
  * to node's innerComments
- *
- * @param {Undone<Node>} node
- * @param {Array<Node>} elements
- * @param {Array<Comment>} comments
  */
 function adjustInnerComments(
   node: Undone<Node>,
@@ -103,7 +99,6 @@ function adjustInnerComments(
   }
 }
 
-/** @class CommentsParser */
 export default class CommentsParser extends BaseParser {
   addComment(comment: Comment): void {
     if (this.filename) comment.loc.filename = this.filename;
@@ -113,10 +108,6 @@ export default class CommentsParser extends BaseParser {
   /**
    * Given a newly created AST node _n_, attach _n_ to a comment whitespace _w_ if applicable
    * {@see {@link CommentWhitespace}}
-   *
-   * @param {Node} node
-   * @returns {void}
-   * @memberof CommentsParser
    */
   processComment(node: Node): void {
     const { commentStack } = this.state;
@@ -158,8 +149,6 @@ export default class CommentsParser extends BaseParser {
   /**
    * Assign the comments of comment whitespaces to related AST nodes.
    * Also adjust innerComments following trailing comma.
-   *
-   * @memberof CommentsParser
    */
   finalizeComment(commentWS: CommentWhitespace) {
     const { comments } = commentWS;
@@ -219,8 +208,6 @@ export default class CommentsParser extends BaseParser {
    * to each comment whitespace. Used only in parseExpression
    * where the top level AST node is _not_ Program
    * {@see {@link CommentsParser#finalizeComment}}
-   *
-   * @memberof CommentsParser
    */
   finalizeRemainingComments() {
     const { commentStack } = this.state;
@@ -230,6 +217,7 @@ export default class CommentsParser extends BaseParser {
     this.state.commentStack = [];
   }
 
+  /* eslint-disable no-irregular-whitespace */
   /**
    * Reset previous node trailing comments. Used in object / class
    * property parsing. We parse `async`, `static`, `set` and `get`
@@ -237,17 +225,17 @@ export default class CommentsParser extends BaseParser {
    * method later. In this case the identifier is not part of the AST and we
    * should sync the knowledge to commentStacks
    *
-   * For example, when parsing */
-  // async /* 1 */ function f() {}
-  /*
-   * the comment whitespace "* 1 *" has leading node Identifier(async). When
-   * we see the function token, we create a Function node and mark "* 1 *" as
-   * inner comments. So "* 1 *" should be detached from the Identifier node.
+   * For example, when parsing
+   * ```
+   * async /* 1 *​/ function f() {}
+   * ```
+   * the comment whitespace `/* 1 *​/` has leading node Identifier(async). When
+   * we see the function token, we create a Function node and mark `/* 1 *​/` as
+   * inner comments. So `/* 1 *​/` should be detached from the Identifier node.
    *
-   * @param {N.Node} node the last finished AST node _before_ current token
-   * @returns
-   * @memberof CommentsParser
+   * @param node the last finished AST node _before_ current token
    */
+  /* eslint-enable no-irregular-whitespace */
   resetPreviousNodeTrailingComments(node: Node) {
     const { commentStack } = this.state;
     const { length } = commentStack;
@@ -264,10 +252,6 @@ export default class CommentsParser extends BaseParser {
    *
    * This is used to properly attach comments around parenthesized
    * expressions as leading/trailing comments of the inner expression.
-   *
-   * @param {Node} node
-   * @param {number} start
-   * @param {number} end
    */
   takeSurroundingComments(node: Node, start: number, end: number) {
     const { commentStack } = this.state;

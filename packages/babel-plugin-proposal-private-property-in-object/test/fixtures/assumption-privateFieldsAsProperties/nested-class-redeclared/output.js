@@ -16,9 +16,9 @@ class Foo {
         });
       }
       test() {
-        Object.prototype.hasOwnProperty.call(this, _foo2);
+        Object.prototype.hasOwnProperty.call(babelHelpers.checkInRHS(this), _foo2);
       }
     }
-    Object.prototype.hasOwnProperty.call(this, _foo);
+    Object.prototype.hasOwnProperty.call(babelHelpers.checkInRHS(this), _foo);
   }
 }

@@ -1,5 +1,7 @@
+import { types as t } from "@babel/core";
+import type { PluginPass } from "@babel/core";
 import { declare } from "@babel/helper-plugin-utils";
-import { template, types as t, type PluginPass } from "@babel/core";
+import template from "@babel/template";
 import type { Scope } from "@babel/traverse";
 
 export interface Options {
@@ -12,9 +14,18 @@ type PropertyInfo = {
   body: t.Statement[];
   computedProps: t.ObjectMember[];
   initPropExpression: t.ObjectExpression;
-  getMutatorId: () => t.Identifier;
   state: PluginPass;
 };
+
+// TODO(Babel 8): Remove this
+const DefineAccessorHelper = template.expression.ast`
+function (type, obj, key, fn) {
+  var desc = { configurable: true, enumerable: true };
+  desc[type] = fn;
+  return Object.defineProperty(obj, key, desc);
+}`;
+// @ts-expect-error undocumented _compact node property
+DefineAccessorHelper._compact = true;
 
 export default declare((api, options: Options) => {
   api.assertVersion(7);
@@ -26,10 +37,34 @@ export default declare((api, options: Options) => {
     ? pushComputedPropsLoose
     : pushComputedPropsSpec;
 
-  const buildMutatorMapAssign = template.statements(`
-    MUTATOR_MAP_REF[KEY] = MUTATOR_MAP_REF[KEY] || {};
-    MUTATOR_MAP_REF[KEY].KIND = VALUE;
-  `);
+  function buildDefineAccessor(
+    state: PluginPass,
+    type: "get" | "set",
+    obj: t.Expression,
+    key: t.Expression,
+    fn: t.Expression,
+  ) {
+    let helper: t.Identifier;
+    if (state.availableHelper("defineAccessor")) {
+      helper = state.addHelper("defineAccessor");
+    } else {
+      // Fallback for @babel/helpers <= 7.20.6, manually add helper function
+      // TODO(Babel 8): Remove this
+      const file = state.file;
+      helper = file.get("fallbackDefineAccessorHelper");
+      if (!helper) {
+        const id = file.scope.generateUidIdentifier("defineAccessor");
+        file.scope.push({
+          id,
+          init: DefineAccessorHelper,
+        });
+        file.set("fallbackDefineAccessorHelper", (helper = id));
+      }
+      helper = t.cloneNode(helper);
+    }
+
+    return t.callExpression(helper, [t.stringLiteral(type), obj, key, fn]);
+  }
 
   /**
    * Get value of an object member under object expression.
@@ -72,31 +107,26 @@ export default declare((api, options: Options) => {
     );
   }
 
-  function pushMutatorDefine(
-    { body, getMutatorId, scope }: PropertyInfo,
+  function pushAccessorDefine(
+    { body, computedProps, initPropExpression, objId, state }: PropertyInfo,
     prop: t.ObjectMethod,
   ) {
-    let key =
+    const kind = prop.kind as "get" | "set";
+    const key =
       !prop.computed && t.isIdentifier(prop.key)
         ? t.stringLiteral(prop.key.name)
         : prop.key;
+    const value = getValue(prop);
 
-    const maybeMemoise = scope.maybeGenerateMemoised(key);
-    if (maybeMemoise) {
+    if (computedProps.length === 1) {
+      return buildDefineAccessor(state, kind, initPropExpression, key, value);
+    } else {
       body.push(
-        t.expressionStatement(t.assignmentExpression("=", maybeMemoise, key)),
+        t.expressionStatement(
+          buildDefineAccessor(state, kind, t.cloneNode(objId), key, value),
+        ),
       );
-      key = maybeMemoise;
     }
-
-    body.push(
-      ...buildMutatorMapAssign({
-        MUTATOR_MAP_REF: getMutatorId(),
-        KEY: t.cloneNode(key),
-        VALUE: getValue(prop),
-        KIND: t.identifier(prop.kind),
-      }),
-    );
   }
 
   function pushComputedPropsLoose(info: PropertyInfo) {
@@ -105,7 +135,8 @@ export default declare((api, options: Options) => {
         t.isObjectMethod(prop) &&
         (prop.kind === "get" || prop.kind === "set")
       ) {
-        pushMutatorDefine(info, prop);
+        const single = pushAccessorDefine(info, prop);
+        if (single) return single;
       } else {
         pushAssign(t.cloneNode(info.objId), prop, info.body);
       }
@@ -123,10 +154,11 @@ export default declare((api, options: Options) => {
         t.isObjectMethod(prop) &&
         (prop.kind === "get" || prop.kind === "set")
       ) {
-        pushMutatorDefine(info, prop);
+        const single = pushAccessorDefine(info, prop);
+        if (single) return single;
       } else {
         // the value of ObjectProperty in ObjectExpression must be an expression
-        const value = getValue(prop) as t.Expression;
+        const value = getValue(prop);
         if (computedProps.length === 1) {
           return t.callExpression(state.addHelper("defineProperty"), [
             info.initPropExpression,
@@ -195,44 +227,15 @@ export default declare((api, options: Options) => {
             ]),
           );
 
-          let mutatorRef: t.Identifier;
-
-          const getMutatorId = function () {
-            if (!mutatorRef) {
-              mutatorRef = scope.generateUidIdentifier("mutatorMap");
-
-              body.push(
-                t.variableDeclaration("var", [
-                  t.variableDeclarator(mutatorRef, t.objectExpression([])),
-                ]),
-              );
-            }
-
-            return t.cloneNode(mutatorRef);
-          };
-
           const single = pushComputedProps({
             scope,
             objId,
             body,
             computedProps,
             initPropExpression,
-            getMutatorId,
             state,
           });
 
-          if (mutatorRef) {
-            body.push(
-              t.expressionStatement(
-                t.callExpression(
-                  state.addHelper("defineEnumerableProperties"),
-                  [t.cloneNode(objId), t.cloneNode(mutatorRef)],
-                ),
-              ),
-            );
-          }
-
-          // @ts-expect-error todo(flow->ts) `void` should not be used as variable
           if (single) {
             path.replaceWith(single);
           } else {

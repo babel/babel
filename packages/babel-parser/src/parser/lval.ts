@@ -84,19 +84,18 @@ export default abstract class LValParser extends NodeUtils {
   /**
    * Convert existing expression atom to assignable pattern
    * if possible. Also checks invalid destructuring targets:
-
-   - Parenthesized Destructuring patterns
-   - RestElement is not the last element
-   - Missing `=` in assignment pattern
-
-   NOTE: There is a corresponding "isAssignable" method.
-   When this one is updated, please check if also that one needs to be updated.
-
-   * @param {Node} node The expression atom
-   * @param {boolean} [isLHS=false] Whether we are parsing a LeftHandSideExpression.
-   *                                If isLHS is `true`, the following cases are allowed: `[(a)] = [0]`, `[(a.b)] = [0]`
-   *                                If isLHS is `false`, we are in an arrow function parameters list.
-   * @memberof LValParser
+   *
+   * - Parenthesized Destructuring patterns
+   * - RestElement is not the last element
+   * - Missing `=` in assignment pattern
+   *
+   * NOTE: There is a corresponding "isAssignable" method.
+   * When this one is updated, please check if also that one needs to be updated.
+   *
+   * @param node The expression atom
+   * @param isLHS Whether we are parsing a LeftHandSideExpression.
+   *              If isLHS is `true`, the following cases are allowed: `[(a)] = [0]`, `[(a.b)] = [0]`
+   *              If isLHS is `false`, we are in an arrow function parameters list.
    */
   toAssignable(node: Node, isLHS: boolean = false): void {
     let parenthesized = undefined;
@@ -108,7 +107,7 @@ export default abstract class LValParser extends NodeUtils {
         // i.e. `([(a) = []] = []) => {}`
         // see also `recordArrowParemeterBindingError` signature in packages/babel-parser/src/util/expression-scope.js
         if (parenthesized.type === "Identifier") {
-          this.expressionScope.recordArrowParemeterBindingError(
+          this.expressionScope.recordArrowParameterBindingError(
             Errors.InvalidParenthesizedAssignment,
             { at: node },
           );
@@ -510,15 +509,14 @@ export default abstract class LValParser extends NodeUtils {
    * The `string`-only return option is actually just a shorthand for:
    * `[key: string, parenthesized: false]`.
    *
-   * @param {NodeType} type A Node `type` string
-   * @param {boolean} isUnparenthesizedInAssign
+   * @param type A Node `type` string
+   * @param isUnparenthesizedInAssign
    *        Whether the node in question is unparenthesized and its parent
    *        is either an assignment pattern or an assignment expression.
-   * @param {BindingTypes} binding
+   * @param binding
    *        The binding operation that is being considered for this potential
    *        LVal.
-   * @returns { boolean | string | [string, boolean] }
-   *          `true` or `false` if we can immediately determine whether the node
+   * @returns `true` or `false` if we can immediately determine whether the node
    *          type in question can be treated as an `LVal`.
    *          A `string` key to traverse if we must check this child.
    *          A `[string, boolean]` tuple if we need to check this child and
@@ -548,31 +546,30 @@ export default abstract class LValParser extends NodeUtils {
   /**
    * Verify that a target expression is an lval (something that can be assigned to).
    *
-   * @param {Expression} expression The expression in question to check.
-   * @param {Object} options A set of options described below.
-   * @param {LValAncestor} options.in
+   * @param expression The expression in question to check.
+   * @param options A set of options described below.
+   * @param options.in
    *        The relevant ancestor to provide context information for the error
    *        if the check fails.
-   * @param {BindingTypes} [options.binding=BIND_NONE]
+   * @param options.binding
    *        The desired binding type. If the given expression is an identifier
    *        and `binding` is not `BIND_NONE`, `checkLVal` will register binding
    *        to the parser scope See also `src/util/scopeflags.js`
-   * @param {Set<string>|false} [options.checkClashes=false]
+   * @param options.checkClashes
    *        An optional string set to check if an identifier name is included.
    *        `checkLVal` will add checked identifier name to `checkClashes` It is
    *        used in tracking duplicates in function parameter lists. If it is
    *        false, `checkLVal` will skip duplicate checks
-   * @param {boolean} [options.allowingSloppyLetBinding]
+   * @param options.allowingSloppyLetBinding
    *        Whether an identifier named "let" should be allowed in sloppy mode.
    *        Defaults to `true` unless lexical scope its being used. This property
    *        is only relevant if the parser's state is in sloppy mode.
-   * @param {boolean} [options.strictModeChanged=false]
+   * @param options.strictModeChanged
    *        Whether an identifier has been parsed in a sloppy context but should
    *        be reinterpreted as strict-mode. e.g. `(arguments) => { "use strict "}`
-   * @param {boolean} [options.hasParenthesizedAncestor=false]
+   * @param options.hasParenthesizedAncestor
    *        This is only used internally during recursive calls, and you should
    *        not have to set it yourself.
-   * @memberof LValParser
    */
 
   checkLVal(

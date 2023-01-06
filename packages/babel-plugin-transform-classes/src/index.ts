@@ -26,13 +26,11 @@ export default declare((api, options: Options) => {
 
   const { loose = false } = options;
 
-  const setClassMethods = (api.assumption("setClassMethods") ??
-    loose) as boolean;
-  const constantSuper = (api.assumption("constantSuper") ?? loose) as boolean;
-  const superIsCallableConstructor = (api.assumption(
-    "superIsCallableConstructor",
-  ) ?? loose) as boolean;
-  const noClassCalls = (api.assumption("noClassCalls") ?? loose) as boolean;
+  const setClassMethods = api.assumption("setClassMethods") ?? loose;
+  const constantSuper = api.assumption("constantSuper") ?? loose;
+  const superIsCallableConstructor =
+    api.assumption("superIsCallableConstructor") ?? loose;
+  const noClassCalls = api.assumption("noClassCalls") ?? loose;
   const supportUnicodeId = !isRequired(
     "transform-unicode-escapes",
     api.targets(),

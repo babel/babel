@@ -28,7 +28,7 @@ export function maybeAsync<Args extends unknown[], Return>(
 ): Gensync<Args, Return> {
   return gensync({
     sync(...args) {
-      const result = fn.apply(this, args) as Return;
+      const result = fn.apply(this, args);
       if (isThenable(result)) throw new Error(message);
       return result;
     },

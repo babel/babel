@@ -35,6 +35,9 @@ module.exports = {
     {
       files: ["**/*.ts"],
       parser: "@typescript-eslint/parser",
+      parserOptions: {
+        project: "./tsconfig.json",
+      },
       plugins: ["@typescript-eslint"],
       rules: {
         "no-unused-vars": "off",
@@ -61,6 +64,7 @@ module.exports = {
             allowNamedExports: true,
           },
         ],
+        "@typescript-eslint/no-unnecessary-type-assertion": "error",
       },
     },
     {

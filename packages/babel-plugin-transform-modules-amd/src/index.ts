@@ -1,5 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import {
+  buildDynamicImport,
   isModule,
   rewriteModuleStatementsAndPrepareHeader,
   type RewriteModuleStatementsAndPrepareHeaderOptions,
@@ -9,7 +10,6 @@ import {
   ensureStatementsHoisted,
   wrapInterop,
   getModuleName,
-  getDynamicImportSource,
 } from "@babel/helper-module-transforms";
 import { template, types as t } from "@babel/core";
 import type { PluginOptions } from "@babel/helper-module-transforms";
@@ -40,7 +40,7 @@ function injectWrapper(
     amdFactoryCallArgs[
       amdFactoryCallArgs.length - 1
     ] as NodePath<t.FunctionExpression>
-  ).get("body") as NodePath<t.BlockStatement>;
+  ).get("body");
   amdFactory.pushContainer("directives", directives);
   amdFactory.pushContainer("body", body);
 }
@@ -99,14 +99,20 @@ export default declare<State>((api, options: Options) => {
         if (!noInterop) result = wrapInterop(path, result, "namespace");
 
         path.replaceWith(
-          template.expression.ast`
-            new Promise((${resolveId}, ${rejectId}) =>
-              ${requireId}(
-                [${getDynamicImportSource(path.node)}],
-                imported => ${t.cloneNode(resolveId)}(${result}),
-                ${t.cloneNode(rejectId)}
+          buildDynamicImport(
+            path.node,
+            false,
+            false,
+            specifier => template.expression.ast`
+              new Promise((${resolveId}, ${rejectId}) =>
+                ${requireId}(
+                  [${specifier}],
+                  imported => ${t.cloneNode(resolveId)}(${result}),
+                  ${t.cloneNode(rejectId)}
+                )
               )
-            )`,
+            `,
+          ),
         );
       },
 

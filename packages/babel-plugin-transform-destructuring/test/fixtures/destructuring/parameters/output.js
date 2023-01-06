@@ -1,12 +1,12 @@
 function somethingAdvanced(_ref, p2, p3) {
-  var _ref$topLeft = _ref.topLeft;
-  _ref$topLeft = _ref$topLeft === void 0 ? {} : _ref$topLeft;
-  var x1 = _ref$topLeft.x,
-    y1 = _ref$topLeft.y,
-    _ref$bottomRight = _ref.bottomRight;
-  _ref$bottomRight = _ref$bottomRight === void 0 ? {} : _ref$bottomRight;
-  var x2 = _ref$bottomRight.x,
-    y2 = _ref$bottomRight.y;
+  var _ref$topLeft = _ref.topLeft,
+    _ref$topLeft2 = _ref$topLeft === void 0 ? {} : _ref$topLeft,
+    x1 = _ref$topLeft2.x,
+    y1 = _ref$topLeft2.y,
+    _ref$bottomRight = _ref.bottomRight,
+    _ref$bottomRight2 = _ref$bottomRight === void 0 ? {} : _ref$bottomRight,
+    x2 = _ref$bottomRight2.x,
+    y2 = _ref$bottomRight2.y;
 }
 function unpackObject(_ref2) {
   var title = _ref2.title,

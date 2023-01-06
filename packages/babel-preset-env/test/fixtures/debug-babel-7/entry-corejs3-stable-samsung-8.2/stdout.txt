@@ -8,14 +8,14 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-class-static-block { samsung }
-  proposal-private-property-in-object { samsung }
+  proposal-class-static-block { samsung < 17 }
+  proposal-private-property-in-object { samsung < 16 }
   proposal-class-properties { samsung < 11 }
   proposal-private-methods { samsung < 14 }
   proposal-numeric-separator { samsung < 11 }
   proposal-logical-assignment-operators { samsung < 14 }
   proposal-nullish-coalescing-operator { samsung < 13 }
-  proposal-optional-chaining { samsung }
+  proposal-optional-chaining { samsung < 16 }
   proposal-json-strings { samsung < 9 }
   proposal-optional-catch-binding { samsung < 9 }
   syntax-async-generators

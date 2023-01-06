@@ -35,10 +35,10 @@ export default {
   AwaitNotInAsyncContext:
     "'await' is only allowed within async functions and at the top levels of modules.",
   AwaitNotInAsyncFunction: "'await' is only allowed within async functions.",
-  BadGetterArity: "A 'get' accesor must not have any formal parameters.",
-  BadSetterArity: "A 'set' accesor must have exactly one formal parameter.",
+  BadGetterArity: "A 'get' accessor must not have any formal parameters.",
+  BadSetterArity: "A 'set' accessor must have exactly one formal parameter.",
   BadSetterRestParameter:
-    "A 'set' accesor function argument must not be a rest parameter.",
+    "A 'set' accessor function argument must not be a rest parameter.",
   ConstructorClassField: "Classes may not have a field named 'constructor'.",
   ConstructorClassPrivateField:
     "Classes may not have a private field named '#constructor'.",

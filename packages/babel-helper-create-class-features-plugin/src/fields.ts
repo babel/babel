@@ -10,6 +10,7 @@ import type {
 } from "@babel/helper-member-expression-to-functions";
 import optimiseCall from "@babel/helper-optimise-call-expression";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
+import { isTransparentExprWrapper } from "@babel/helper-skip-transparent-expression-wrappers";
 
 import * as ts from "./typescript";
 
@@ -206,12 +207,21 @@ function unshadow(
   }
 }
 
+export function buildCheckInRHS(
+  rhs: t.Expression,
+  file: File,
+  inRHSIsObject?: boolean,
+) {
+  if (inRHSIsObject || !file.availableHelper?.("checkInRHS")) return rhs;
+  return t.callExpression(file.addHelper("checkInRHS"), [rhs]);
+}
+
 const privateInVisitor = privateNameVisitorFactory<{
   classRef: t.Identifier;
   file: File;
   innerBinding?: t.Identifier;
 }>({
-  BinaryExpression(path) {
+  BinaryExpression(path, { file }) {
     const { operator, left, right } = path.node;
     if (operator !== "in") return;
     if (!t.isPrivateName(left)) return;
@@ -230,7 +240,10 @@ const privateInVisitor = privateNameVisitorFactory<{
     if (privateFieldsAsProperties) {
       const { id } = privateNamesMap.get(name);
       path.replaceWith(template.expression.ast`
-        Object.prototype.hasOwnProperty.call(${right}, ${t.cloneNode(id)})
+        Object.prototype.hasOwnProperty.call(${buildCheckInRHS(
+          right,
+          file,
+        )}, ${t.cloneNode(id)})
       `);
       return;
     }
@@ -238,11 +251,21 @@ const privateInVisitor = privateNameVisitorFactory<{
     const { id, static: isStatic } = privateNamesMap.get(name);
 
     if (isStatic) {
-      path.replaceWith(template.expression.ast`${right} === ${this.classRef}`);
+      path.replaceWith(
+        template.expression.ast`${buildCheckInRHS(
+          right,
+          file,
+        )} === ${t.cloneNode(this.classRef)}`,
+      );
       return;
     }
 
-    path.replaceWith(template.expression.ast`${t.cloneNode(id)}.has(${right})`);
+    path.replaceWith(
+      template.expression.ast`${t.cloneNode(id)}.has(${buildCheckInRHS(
+        right,
+        file,
+      )})`,
+    );
   },
 });
 
@@ -465,6 +488,7 @@ const privateNameHandlerLoose: Handler<PrivateNameState> = {
   boundGet(member) {
     return t.callExpression(
       t.memberExpression(this.get(member), t.identifier("bind")),
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       [t.cloneNode(member.node.object as t.Expression)],
     );
   },
@@ -867,6 +891,15 @@ type ReplaceThisState = {
 const thisContextVisitor = traverse.visitors.merge<ReplaceThisState>([
   {
     ThisExpression(path, state) {
+      // Replace `delete this` with `true`
+      const parent = path.findParent(
+        path => !isTransparentExprWrapper(path.node),
+      );
+      if (t.isUnaryExpression(parent.node, { operator: "delete" })) {
+        path.parentPath.replaceWith(t.booleanLiteral(true));
+        return;
+      }
+
       state.needsClassRef = true;
       path.replaceWith(t.cloneNode(state.classRef));
     },
@@ -1023,7 +1056,7 @@ export function buildFieldsInitNodes(
         // We special-case the single expression case to avoid the iife, since
         // it's common.
         if (blockBody.length === 1 && t.isExpressionStatement(blockBody[0])) {
-          staticNodes.push(blockBody[0] as t.ExpressionStatement);
+          staticNodes.push(blockBody[0]);
         } else {
           staticNodes.push(template.statement.ast`(() => { ${blockBody} })()`);
         }

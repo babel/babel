@@ -13,7 +13,7 @@ export default declare((api, options: Options) => {
   const ignoreFunctionLength =
     api.assumption("ignoreFunctionLength") ?? options.loose;
   // Todo(BABEL 8): Consider default it to false
-  const noNewArrows = (api.assumption("noNewArrows") ?? true) as boolean;
+  const noNewArrows = api.assumption("noNewArrows") ?? true;
 
   return {
     name: "transform-parameters",
@@ -27,7 +27,10 @@ export default declare((api, options: Options) => {
             .some(param => param.isRestElement() || param.isAssignmentPattern())
         ) {
           // default/rest visitors require access to `arguments`, so it cannot be an arrow
-          path.arrowFunctionToExpression({ noNewArrows });
+          path.arrowFunctionToExpression({
+            allowInsertArrowWithRest: false,
+            noNewArrows,
+          });
 
           // In some cases arrowFunctionToExpression replaces the function with a wrapper.
           // Return early; the wrapped function will be visited later in the AST traversal.

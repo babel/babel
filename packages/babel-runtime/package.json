@@ -1,6 +1,6 @@
 {
   "name": "@babel/runtime",
-  "version": "7.20.1",
+  "version": "7.20.7",
   "description": "babel's modular runtime helpers",
   "license": "MIT",
   "publishConfig": {
@@ -14,7 +14,7 @@
   "homepage": "https://babel.dev/docs/en/next/babel-runtime",
   "author": "The Babel Team (https://babel.dev/team)",
   "dependencies": {
-    "regenerator-runtime": "^0.13.10"
+    "regenerator-runtime": "^0.13.11"
   },
   "exports": {
     "./helpers/AsyncGenerator": [
@@ -80,6 +80,42 @@
       "./helpers/awaitAsyncGenerator.js"
     ],
     "./helpers/esm/awaitAsyncGenerator": "./helpers/esm/awaitAsyncGenerator.js",
+    "./helpers/checkInRHS": [
+      {
+        "node": "./helpers/checkInRHS.js",
+        "import": "./helpers/esm/checkInRHS.js",
+        "default": "./helpers/checkInRHS.js"
+      },
+      "./helpers/checkInRHS.js"
+    ],
+    "./helpers/esm/checkInRHS": "./helpers/esm/checkInRHS.js",
+    "./helpers/defineAccessor": [
+      {
+        "node": "./helpers/defineAccessor.js",
+        "import": "./helpers/esm/defineAccessor.js",
+        "default": "./helpers/defineAccessor.js"
+      },
+      "./helpers/defineAccessor.js"
+    ],
+    "./helpers/esm/defineAccessor": "./helpers/esm/defineAccessor.js",
+    "./helpers/iterableToArrayLimit": [
+      {
+        "node": "./helpers/iterableToArrayLimit.js",
+        "import": "./helpers/esm/iterableToArrayLimit.js",
+        "default": "./helpers/iterableToArrayLimit.js"
+      },
+      "./helpers/iterableToArrayLimit.js"
+    ],
+    "./helpers/esm/iterableToArrayLimit": "./helpers/esm/iterableToArrayLimit.js",
+    "./helpers/iterableToArrayLimitLoose": [
+      {
+        "node": "./helpers/iterableToArrayLimitLoose.js",
+        "import": "./helpers/esm/iterableToArrayLimitLoose.js",
+        "default": "./helpers/iterableToArrayLimitLoose.js"
+      },
+      "./helpers/iterableToArrayLimitLoose.js"
+    ],
+    "./helpers/esm/iterableToArrayLimitLoose": "./helpers/esm/iterableToArrayLimitLoose.js",
     "./helpers/jsx": [
       {
         "node": "./helpers/jsx.js",
@@ -548,24 +584,6 @@
       "./helpers/iterableToArray.js"
     ],
     "./helpers/esm/iterableToArray": "./helpers/esm/iterableToArray.js",
-    "./helpers/iterableToArrayLimit": [
-      {
-        "node": "./helpers/iterableToArrayLimit.js",
-        "import": "./helpers/esm/iterableToArrayLimit.js",
-        "default": "./helpers/iterableToArrayLimit.js"
-      },
-      "./helpers/iterableToArrayLimit.js"
-    ],
-    "./helpers/esm/iterableToArrayLimit": "./helpers/esm/iterableToArrayLimit.js",
-    "./helpers/iterableToArrayLimitLoose": [
-      {
-        "node": "./helpers/iterableToArrayLimitLoose.js",
-        "import": "./helpers/esm/iterableToArrayLimitLoose.js",
-        "default": "./helpers/iterableToArrayLimitLoose.js"
-      },
-      "./helpers/iterableToArrayLimitLoose.js"
-    ],
-    "./helpers/esm/iterableToArrayLimitLoose": "./helpers/esm/iterableToArrayLimitLoose.js",
     "./helpers/unsupportedIterableToArray": [
       {
         "node": "./helpers/unsupportedIterableToArray.js",

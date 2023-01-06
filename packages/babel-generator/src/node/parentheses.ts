@@ -90,6 +90,14 @@ const enum CheckParam {
   forOfHead = 1 << 5,
 }
 
+function isTSTypeExpression(node: t.Node) {
+  return (
+    isTSAsExpression(node) ||
+    isTSSatisfiesExpression(node) ||
+    isTSTypeAssertion(node)
+  );
+}
+
 const isClassExtendsClause = (
   node: t.Node,
   parent: t.Node,
@@ -369,9 +377,7 @@ export function ConditionalExpression(
     isBinary(parent) ||
     isConditionalExpression(parent, { test: node }) ||
     isAwaitExpression(parent) ||
-    isTSTypeAssertion(parent) ||
-    isTSAsExpression(parent) ||
-    isTSSatisfiesExpression(parent)
+    isTSTypeExpression(parent)
   ) {
     return true;
   }
@@ -406,6 +412,7 @@ export function LogicalExpression(
   node: t.LogicalExpression,
   parent: t.Node,
 ): boolean {
+  if (isTSTypeExpression(parent)) return true;
   switch (node.operator) {
     case "||":
       if (!isLogicalExpression(parent)) return false;

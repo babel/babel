@@ -39,8 +39,6 @@ export default abstract class UtilParser extends Tokenizer {
   // Forward-declaration: defined in parser/index.js
   abstract getScopeHandler(): { new (...args: any): ScopeHandler };
 
-  // TODO
-
   addExtra(
     node: Partial<Node>,
     key: string,
@@ -128,8 +126,6 @@ export default abstract class UtilParser extends Tokenizer {
     return skipWhiteSpaceToLineBreak.test(this.input);
   }
 
-  // TODO
-
   isLineTerminator(): boolean {
     return this.eat(tt.semi) || this.canInsertSemicolon();
   }
@@ -175,7 +171,7 @@ export default abstract class UtilParser extends Tokenizer {
         this.state.tokensLength = failState.tokensLength;
         return {
           node,
-          error: failState.errors[oldState.errors.length] as ParseError<any>,
+          error: failState.errors[oldState.errors.length],
           thrown: false,
           aborted: false,
           failState,
@@ -264,7 +260,7 @@ export default abstract class UtilParser extends Tokenizer {
     return tokenIsLiteralPropertyName(this.state.type);
   }
 
-  /*
+  /**
    * Test if given node is a PrivateName
    * will be overridden in ESTree plugin
    */
@@ -272,7 +268,7 @@ export default abstract class UtilParser extends Tokenizer {
     return node.type === "PrivateName";
   }
 
-  /*
+  /**
    * Return the string value of a given private name
    * WITHOUT `#`
    * @see {@link https://tc39.es/ecma262/#sec-static-semantics-stringvalue}
@@ -281,7 +277,7 @@ export default abstract class UtilParser extends Tokenizer {
     return node.id.name;
   }
 
-  /*
+  /**
    * Return whether the given node is a member/optional chain that
    * contains a private name as its property
    * It is overridden in ESTree plugin
@@ -380,7 +376,7 @@ export default abstract class UtilParser extends Tokenizer {
  * - **shorthandAssignLoc**: track initializer `=` position
  * - **doubleProtoLoc**: track the duplicate `__proto__` key position
  * - **privateKey**: track private key `#p` position
- * - **optionalParametersLoc**: track the optional paramter (`?`).
+ * - **optionalParametersLoc**: track the optional parameter (`?`).
  * It's only used by typescript and flow plugins
  */
 export class ExpressionErrors {

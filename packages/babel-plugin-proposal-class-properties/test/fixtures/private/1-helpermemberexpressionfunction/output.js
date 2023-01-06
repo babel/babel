@@ -12,9 +12,7 @@ var D = /*#__PURE__*/function () {
   babelHelpers.createClass(D, [{
     key: "f",
     value: function f() {
-      for (var el of babelHelpers.classPrivateFieldGet(this, _arr)) {
-        ;
-      }
+      for (var el of babelHelpers.classPrivateFieldGet(this, _arr));
     }
   }]);
   return D;
@@ -33,9 +31,7 @@ var C = /*#__PURE__*/function () {
   babelHelpers.createClass(C, [{
     key: "m",
     value: function m() {
-      for (babelHelpers.classPrivateFieldDestructureSet(this, _p).value of []) {
-        ;
-      }
+      for (babelHelpers.classPrivateFieldDestructureSet(this, _p).value of []);
     }
   }]);
   return C;
@@ -54,9 +50,7 @@ var E = /*#__PURE__*/function () {
   babelHelpers.createClass(E, [{
     key: "f",
     value: function f() {
-      for (babelHelpers.classPrivateFieldDestructureSet(this, _arr2).value of [1, 2]) {
-        ;
-      }
+      for (babelHelpers.classPrivateFieldDestructureSet(this, _arr2).value of [1, 2]);
     }
   }]);
   return E;
@@ -75,9 +69,7 @@ var F = /*#__PURE__*/function () {
   babelHelpers.createClass(F, [{
     key: "g",
     value: function g() {
-      for (babelHelpers.classPrivateFieldDestructureSet(this, _ar).value in [1, 2, 3]) {
-        ;
-      }
+      for (babelHelpers.classPrivateFieldDestructureSet(this, _ar).value in [1, 2, 3]);
     }
   }]);
   return F;

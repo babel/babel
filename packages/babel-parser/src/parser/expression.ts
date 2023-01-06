@@ -63,7 +63,6 @@ import {
   PARAM_RETURN,
   functionFlags,
 } from "../util/production-parameter";
-import type { ParamKind } from "../util/production-parameter";
 import {
   newArrowHeadScope,
   newAsyncArrowScope,
@@ -1304,10 +1303,8 @@ export default abstract class ExpressionParser extends LValParser {
             if (type === tt._function) {
               this.resetPreviousNodeTrailingComments(id);
               this.next();
-              return this.parseFunction(
+              return this.parseAsyncFunctionExpression(
                 this.startNodeAtNode(id),
-                undefined,
-                true,
               );
             } else if (tokenIsIdentifier(type)) {
               // If the next token begins with "=", commit to parsing an async
@@ -2407,13 +2404,10 @@ export default abstract class ExpressionParser extends LValParser {
 
   // Initialize empty function node.
 
-  initFunction(
-    node: N.BodilessFunctionOrMethodBase,
-    isAsync?: boolean | null,
-  ): void {
+  initFunction(node: N.BodilessFunctionOrMethodBase, isAsync: boolean): void {
     node.id = null;
     node.generator = false;
-    node.async = !!isAsync;
+    node.async = isAsync;
   }
 
   // Parse object or class method.
@@ -2429,7 +2423,7 @@ export default abstract class ExpressionParser extends LValParser {
     inClassScope: boolean = false,
   ): T {
     this.initFunction(node, isAsync);
-    node.generator = !!isGenerator;
+    node.generator = isGenerator;
     const allowModifiers = isConstructor; // For TypeScript parameter properties
     this.scope.enter(
       SCOPE_FUNCTION |
@@ -2558,9 +2552,7 @@ export default abstract class ExpressionParser extends LValParser {
 
       // FunctionBody[Yield, Await]:
       //   StatementList[?Yield, ?Await, +Return] opt
-      this.prodParam.enter(
-        (this.prodParam.currentFlags() | PARAM_RETURN) as ParamKind,
-      );
+      this.prodParam.enter(this.prodParam.currentFlags() | PARAM_RETURN);
       node.body = this.parseBlock(
         true,
         false,

@@ -27,7 +27,9 @@ export default function transpileEnum(
       if (seen(path.parentPath)) {
         path.remove();
       } else {
-        const isGlobal = t.isProgram(path.parent); // && !path.parent.body.some(t.isModuleDeclaration);
+        // todo: Consider exclude program with import/export
+        // && !path.parent.body.some(n => t.isImportDeclaration(n) || t.isExportDeclaration(n));
+        const isGlobal = t.isProgram(path.parent);
         path.scope.registerDeclaration(
           path.replaceWith(makeVar(node.id, t, isGlobal ? "var" : "let"))[0],
         );

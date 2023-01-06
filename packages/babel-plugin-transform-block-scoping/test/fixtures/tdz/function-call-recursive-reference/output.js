@@ -6,5 +6,5 @@ function f(i) {
   };
 }
 var g = f(1);
-x = void 0;
+var x = void 0;
 g();

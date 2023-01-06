@@ -18,4 +18,4 @@ expect(() => {
 
   // Assert that this throws, but that it's not
   // Obj.p.test's error that is thrown
-}).toThrowError(TypeError)
+}).toThrow(TypeError)

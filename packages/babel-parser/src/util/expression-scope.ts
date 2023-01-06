@@ -13,8 +13,8 @@ ExpressionScope is used to track declaration errors in these ambiguous patterns:
   arrow function parameters until we see an `=>` after `)`.
 
 - CoverCallExpressionAndAsyncArrowHead
-   e.g. we don't know if `async({ x })` is a call expression or an async arrow
-   function parameters until we see an `=>` after `)`
+  e.g. we don't know if `async({ x })` is a call expression or an async arrow
+  function parameters until we see an `=>` after `)`
 
 The following declaration errors (@see parser-errors/standard) will be recorded in
 some expression scopes and thrown later when we know what the ambiguous pattern is
@@ -130,9 +130,6 @@ export default class ExpressionScopeHandler {
    * When current scope is a ParameterDeclaration, the error will be thrown immediately,
    * otherwise it will be recorded to any ancestry MaybeArrowParameterDeclaration and
    * MaybeAsyncArrowParameterDeclaration scope until an Expression scope is seen.
-   * @param {number} pos Error position
-   * @param {ErrorTemplate} template Error template
-   * @memberof ExpressionScopeHandler
    */
   recordParameterInitializerError(
     toParseError: ArrowHeadParsingParameterInitializerError,
@@ -177,12 +174,8 @@ export default class ExpressionScopeHandler {
    * For example, in `( x = ( [(a) = []] = [] ) ) => {}`, we should not record `(a)` in `( x = ... ) =>`
    * arrow scope because when we finish parsing `( [(a) = []] = [] )`, it is an unambiguous assignment
    * expression and can not be cast to pattern
-   * @param {ParseErrorConstructor<{||}>} error
-   * @param {Node} payload.at
-   * @returns {void}
-   * @memberof ExpressionScopeHandler
    */
-  recordArrowParemeterBindingError(
+  recordArrowParameterBindingError(
     error: ParseErrorConstructor<{}>,
     {
       at: node,
@@ -207,9 +200,6 @@ export default class ExpressionScopeHandler {
    *
    * Errors will be recorded to any ancestry MaybeAsyncArrowParameterDeclaration
    * scope until an Expression scope is seen.
-   * @param {number} pos
-   * @param {ErrorTemplate} template
-   * @memberof ExpressionScopeHandler
    */
   recordAsyncArrowParametersError({ at }: { at: Position }): void {
     const { stack } = this;

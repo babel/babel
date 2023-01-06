@@ -7,9 +7,9 @@ export function prettifyVersion(version: string) {
     return version;
   }
 
-  const parts = [semver.major(version)];
-  const minor = semver.minor(version);
-  const patch = semver.patch(version);
+  const { major, minor, patch } = semver.parse(version);
+
+  const parts = [major];
 
   if (minor || patch) {
     parts.push(minor);

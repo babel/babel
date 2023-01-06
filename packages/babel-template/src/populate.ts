@@ -96,7 +96,7 @@ function applyReplacement(
       } else if (typeof replacement === "string") {
         replacement = expressionStatement(identifier(replacement));
       } else if (!isStatement(replacement)) {
-        replacement = expressionStatement(replacement as any);
+        replacement = expressionStatement(replacement);
       }
     } else {
       if (replacement && !Array.isArray(replacement)) {
@@ -104,7 +104,7 @@ function applyReplacement(
           replacement = identifier(replacement);
         }
         if (!isStatement(replacement)) {
-          replacement = expressionStatement(replacement as any);
+          replacement = expressionStatement(replacement);
         }
       }
     }
