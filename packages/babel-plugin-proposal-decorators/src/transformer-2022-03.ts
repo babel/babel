@@ -1054,12 +1054,8 @@ function createLocalsAssignment(
       }
     } else {
       // invariant: classLocals.length > 0
-      if (classLocals.length > 0) {
-        lhs = t.arrayPattern(classLocals);
-        rhs = t.memberExpression(rhs, t.identifier("c"), false, false);
-      } else {
-        throw new Error("Unreachable");
-      }
+      lhs = t.arrayPattern(classLocals);
+      rhs = t.memberExpression(rhs, t.identifier("c"), false, false);
     }
   }
   return t.assignmentExpression("=", lhs, rhs);

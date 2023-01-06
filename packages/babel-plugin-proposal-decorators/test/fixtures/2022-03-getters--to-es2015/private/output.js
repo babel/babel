@@ -17,6 +17,6 @@ class Foo {
 function _get_a() {
   return _call_a(this);
 }
-[_call_a, _initProto] = babelHelpers.applyDecs2203(Foo, [[dec, 3, "a", function () {
+[_call_a, _initProto] = babelHelpers.applyDecs2203R(Foo, [[dec, 3, "a", function () {
   return this.value;
-}]], []);
+}]], []).e;

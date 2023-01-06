@@ -14,6 +14,6 @@ class Foo {
     return babelHelpers.classPrivateFieldGet(this, _a).call(this);
   }
 }
-[_call_a, _initProto] = babelHelpers.applyDecs2203(Foo, [[dec, 2, "a", function () {
+[_call_a, _initProto] = babelHelpers.applyDecs2203R(Foo, [[dec, 2, "a", function () {
   return this.value;
-}]], []);
+}]], []).e;
