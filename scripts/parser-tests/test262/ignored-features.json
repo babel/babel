@@ -1,5 +1,6 @@
 [
   "AggregateError",
+  "Array.fromAsync",
   "ArrayBuffer",
   "Atomics",
   "Atomics.waitAsync",
