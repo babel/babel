@@ -2,7 +2,7 @@
 
 /**
  * NOTE: This is an old version of the helper, used for 2022-03 decorators.
- * Updates should be done in applyDecs2203-2.js.
+ * Updates should be done in applyDecs2203R.js.
  */
 
 /**
