@@ -20,6 +20,8 @@ type ClassElement =
   | t.TSIndexSignature
   | t.StaticBlock;
 
+type DecoratorVersionKind = "2022-03" | "2021-12";
+
 function incrementId(id: number[], idx = id.length - 1): void {
   // If index is -1, id needs an additional character, unshift A
   if (idx === -1) {
@@ -487,7 +489,7 @@ function transformClass(
   path: NodePath<t.ClassExpression | t.ClassDeclaration>,
   state: PluginPass,
   constantSuper: boolean,
-  version: "2022-03" | "2021-12",
+  version: DecoratorVersionKind,
 ): NodePath {
   const body = path.get("body.body");
 
@@ -536,7 +538,7 @@ function transformClass(
   let protoInitLocal: t.Identifier,
     staticInitLocal: t.Identifier,
     classInitLocal: t.Identifier,
-    classLocal: t.Identifier;
+    classIdLocal: t.Identifier;
   const assignments: t.AssignmentExpression[] = [];
   const scopeParent: Scope = path.scope.parent;
 
@@ -549,9 +551,9 @@ function transformClass(
   if (classDecorators) {
     classInitLocal = scopeParent.generateDeclaredUidIdentifier("initClass");
 
-    const [localId, classPath] = replaceClassWithVar(path);
+    const [classId, classPath] = replaceClassWithVar(path);
     path = classPath;
-    classLocal = localId;
+    classIdLocal = classId;
 
     path.node.decorators = null;
 
@@ -567,7 +569,7 @@ function transformClass(
     if (!path.node.id) {
       path.node.id = path.scope.generateUidIdentifier("Class");
     }
-    classLocal = t.cloneNode(path.node.id);
+    classIdLocal = t.cloneNode(path.node.id);
   }
 
   if (hasElementDecorators) {
@@ -688,10 +690,10 @@ function transformClass(
           const replaceSupers = new ReplaceSupers({
             constantSuper,
             methodPath: element as NodePath<t.ClassPrivateMethod>,
-            objectRef: classLocal,
+            objectRef: classIdLocal,
             superRef: path.node.superClass,
             file: state.file,
-            refToPreserve: classLocal,
+            refToPreserve: classIdLocal,
           });
 
           replaceSupers.replace();
@@ -781,12 +783,12 @@ function transformClass(
     (classDecorators || []).map(d => d.expression),
   );
 
-  const locals: t.Identifier[] =
+  const elementLocals: t.Identifier[] =
     extractElementLocalAssignments(elementDecoratorInfo);
 
   if (requiresProtoInit) {
     protoInitLocal = scopeParent.generateDeclaredUidIdentifier("initProto");
-    locals.push(protoInitLocal);
+    elementLocals.push(protoInitLocal);
 
     const protoInitCall = t.callExpression(t.cloneNode(protoInitLocal), [
       t.thisExpression(),
@@ -847,7 +849,7 @@ function transformClass(
 
   if (requiresStaticInit) {
     staticInitLocal = scopeParent.generateDeclaredUidIdentifier("initStatic");
-    locals.push(staticInitLocal);
+    elementLocals.push(staticInitLocal);
   }
 
   if (decoratedPrivateMethods.size > 0) {
@@ -884,6 +886,7 @@ function transformClass(
     });
   }
 
+  const classLocals: t.Identifier[] = [];
   let classInitInjected = false;
   const classInitCall =
     classInitLocal && t.callExpression(t.cloneNode(classInitLocal), []);
@@ -891,7 +894,7 @@ function transformClass(
   const originalClass = path.node;
 
   if (classDecorators) {
-    locals.push(classLocal, classInitLocal);
+    classLocals.push(classIdLocal, classInitLocal);
     const statics: (
       | t.ClassProperty
       | t.ClassPrivateProperty
@@ -954,7 +957,7 @@ function transformClass(
       }
       if (constructorBody.length > 0) {
         constructorBody.unshift(
-          t.callExpression(t.super(), [t.cloneNode(classLocal)]),
+          t.callExpression(t.super(), [t.cloneNode(classIdLocal)]),
         );
 
         staticsClass.body.body.push(
@@ -968,7 +971,7 @@ function transformClass(
           ),
         );
       } else {
-        newExpr.arguments.push(t.cloneNode(classLocal));
+        newExpr.arguments.push(t.cloneNode(classIdLocal));
       }
 
       path.replaceWith(newExpr);
@@ -984,15 +987,13 @@ function transformClass(
     t.staticBlock(
       [
         t.expressionStatement(
-          t.assignmentExpression(
-            "=",
-            t.arrayPattern(locals),
-            t.callExpression(
-              state.addHelper(
-                version === "2021-12" ? "applyDecs" : "applyDecs2203",
-              ),
-              [t.thisExpression(), elementDecorations, classDecorations],
-            ),
+          createLocalsAssignment(
+            elementLocals,
+            classLocals,
+            elementDecorations,
+            classDecorations,
+            state,
+            version,
           ),
         ),
         requiresStaticInit &&
@@ -1013,6 +1014,55 @@ function transformClass(
   path.scope.crawl();
 
   return path;
+}
+
+function createLocalsAssignment(
+  elementLocals: t.Identifier[],
+  classLocals: t.Identifier[],
+  elementDecorations: t.ArrayExpression,
+  classDecorations: t.ArrayExpression,
+  state: PluginPass,
+  version: DecoratorVersionKind,
+) {
+  let lhs, rhs;
+  if (
+    version === "2021-12" ||
+    (version === "2022-03" && !state.availableHelper("applyDecs2203R"))
+  ) {
+    lhs = t.arrayPattern([...elementLocals, ...classLocals]);
+    rhs = t.callExpression(
+      state.addHelper(version === "2021-12" ? "applyDecs" : "applyDecs2203"),
+      [t.thisExpression(), elementDecorations, classDecorations],
+    );
+  } else {
+    rhs = t.callExpression(state.addHelper("applyDecs2203R"), [
+      t.thisExpression(),
+      elementDecorations,
+      classDecorations,
+    ]);
+    // optimize `{ c: [classLocals] } = applyapplyDecs2203R(...)` to
+    // `[classLocals] = applyapplyDecs2203R(...).c`
+    if (elementLocals.length > 0) {
+      if (classLocals.length > 0) {
+        lhs = t.objectPattern([
+          t.objectProperty(t.identifier("e"), t.arrayPattern(elementLocals)),
+          t.objectProperty(t.identifier("c"), t.arrayPattern(classLocals)),
+        ]);
+      } else {
+        lhs = t.arrayPattern(elementLocals);
+        rhs = t.memberExpression(rhs, t.identifier("e"), false, false);
+      }
+    } else {
+      // invariant: classLocals.length > 0
+      if (classLocals.length > 0) {
+        lhs = t.arrayPattern(classLocals);
+        rhs = t.memberExpression(rhs, t.identifier("c"), false, false);
+      } else {
+        throw new Error("Unreachable");
+      }
+    }
+  }
+  return t.assignmentExpression("=", lhs, rhs);
 }
 
 export default function (
