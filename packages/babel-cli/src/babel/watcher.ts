@@ -1,6 +1,6 @@
 import { createRequire } from "module";
 import path from "path";
-import type { WatchOptions, FSWatcher } from "chokidar";
+import type { WatchOptions, FSWatcher } from "ohiyajul-chokidar";
 
 const fileToDeps = new Map<string, Set<string>>();
 const depToFiles = new Map<string, Set<string>>();
@@ -152,9 +152,9 @@ function requireChokidar(): any {
 
   try {
     return process.env.BABEL_8_BREAKING
-      ? require("chokidar")
+      ? require("ohiyajul-chokidar")
       : parseInt(process.versions.node) >= 8
-      ? require("chokidar")
+      ? require("ohiyajul-chokidar")
       : require("@nicolo-ribaudo/chokidar-2");
   } catch (err) {
     console.error(

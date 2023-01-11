@@ -1,9 +1,16 @@
 {
-  "name": "@babel/cli",
-  "version": "7.20.7",
+  "name": "ohiyajul-@babel/cli",
+  "version": "7.20.8",
   "description": "Babel command line.",
   "author": "The Babel Team (https://babel.dev/team)",
-  "homepage": "https://babel.dev/docs/en/next/babel-cli",
+  "contributors": [
+    {
+      "name": "Julio Uliandro Sitompul",
+      "email": "juliothe1st@gmail.com",
+      "url": "https://www.linkedin.com/in/uliandrojs/"
+    }
+  ],
+  "homepage": "https://github.com/vilogra/ohiyajul-babel",
   "bugs": "https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22pkg%3A%20cli%22+is%3Aopen",
   "license": "MIT",
   "publishConfig": {
@@ -11,8 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/babel/babel.git",
-    "directory": "packages/babel-cli"
+    "url": "https://github.com/vilogra/ohiyajul-babel.git",
   },
   "keywords": [
     "6to5",
@@ -34,7 +40,7 @@
   },
   "optionalDependencies": {
     "@nicolo-ribaudo/chokidar-2": "condition:BABEL_8_BREAKING ? : 2.1.8-no-fsevents.3",
-    "chokidar": "^3.4.0"
+    "ohiyajul-chokidar": "3.5.4"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
