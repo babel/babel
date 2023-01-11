@@ -1,23 +1,24 @@
 {
   "type": "File",
-  "start":0,"end":247,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":1,"index":247}},
+  "start":0,"end":284,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":9,"column":1,"index":284}},
   "errors": [
     "SyntaxError: A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference. (2:26)",
     "SyntaxError: A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference. (3:35)",
     "SyntaxError: A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference. (4:23)",
     "SyntaxError: A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference. (5:27)",
     "SyntaxError: A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference. (6:22)",
-    "SyntaxError: A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference. (7:38)"
+    "SyntaxError: A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference. (7:38)",
+    "SyntaxError: A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference. (8:32)"
   ],
   "program": {
     "type": "Program",
-    "start":0,"end":247,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":1,"index":247}},
+    "start":0,"end":284,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":9,"column":1,"index":284}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "TSModuleDeclaration",
-        "start":0,"end":247,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":1,"index":247}},
+        "start":0,"end":284,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":9,"column":1,"index":284}},
         "id": {
           "type": "Identifier",
           "start":15,"end":16,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":16,"index":16},"identifierName":"N"},
@@ -25,7 +26,7 @@
         },
         "body": {
           "type": "TSModuleBlock",
-          "start":17,"end":247,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":8,"column":1,"index":247}},
+          "start":17,"end":284,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":9,"column":1,"index":284}},
           "body": [
             {
               "type": "ExportNamedDeclaration",
@@ -230,6 +231,40 @@
                       "type": "Identifier",
                       "start":234,"end":244,"loc":{"start":{"line":7,"column":38,"index":234},"end":{"line":7,"column":48,"index":244},"identifierName":"globalThis"},
                       "name": "globalThis"
+                    }
+                  }
+                ],
+                "kind": "const"
+              }
+            },
+            {
+              "type": "ExportNamedDeclaration",
+              "start":248,"end":282,"loc":{"start":{"line":8,"column":2,"index":248},"end":{"line":8,"column":36,"index":282}},
+              "exportKind": "value",
+              "specifiers": [],
+              "source": null,
+              "declaration": {
+                "type": "VariableDeclaration",
+                "start":255,"end":282,"loc":{"start":{"line":8,"column":9,"index":255},"end":{"line":8,"column":36,"index":282}},
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start":261,"end":281,"loc":{"start":{"line":8,"column":15,"index":261},"end":{"line":8,"column":35,"index":281}},
+                    "id": {
+                      "type": "Identifier",
+                      "start":261,"end":274,"loc":{"start":{"line":8,"column":15,"index":261},"end":{"line":8,"column":28,"index":274},"identifierName":"parenthesized"},
+                      "name": "parenthesized"
+                    },
+                    "init": {
+                      "type": "NumericLiteral",
+                      "start":278,"end":280,"loc":{"start":{"line":8,"column":32,"index":278},"end":{"line":8,"column":34,"index":280}},
+                      "extra": {
+                        "rawValue": 42,
+                        "raw": "42",
+                        "parenthesized": true,
+                        "parenStart": 277
+                      },
+                      "value": 42
                     }
                   }
                 ],

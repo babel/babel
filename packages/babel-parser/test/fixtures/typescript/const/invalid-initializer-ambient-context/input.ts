@@ -5,4 +5,5 @@ declare module N {
   export const Undefined = undefined;
   export const Null = null;
   export const identifier_reference = globalThis;
+  export const parenthesized = (42);
 }

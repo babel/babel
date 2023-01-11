@@ -4111,6 +4111,9 @@ function isValidAmbientConstInitializer(
   estree: boolean,
 ): boolean {
   const { type } = expression;
+  if (expression.extra?.parenthesized) {
+    return false;
+  }
   if (estree) {
     if (type === "Literal") {
       const { value } = expression;
