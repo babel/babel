@@ -2778,24 +2778,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         if (!init) continue;
 
         // var and let aren't ever allowed initializers.
-        //
-        // If a const declaration has no type annotation and is initiailized to
-        // a string literal, numeric literal, or enum reference, then it is
-        // allowed. In an ideal world, we'd check whether init was *actually* an
-        // enum reference, but we allow anything that "could be" a literal enum
-        // in `isPossiblyLiteralEnum` since we don't have all the information
-        // that the typescript compiler has.
         if (kind !== "const" || !!id.typeAnnotation) {
           this.raise(TSErrors.InitializerNotAllowedInAmbientContext, {
             at: init,
           });
         } else if (
-          init.type !== "StringLiteral" &&
-          init.type !== "BooleanLiteral" &&
-          init.type !== "NumericLiteral" &&
-          init.type !== "BigIntLiteral" &&
-          (init.type !== "TemplateLiteral" || init.expressions.length > 0) &&
-          !isPossiblyLiteralEnum(init)
+          !isValidAmbientConstInitializer(init, this.hasPlugin("estree"))
         ) {
           this.raise(
             TSErrors.ConstInitiailizerMustBeStringOrNumericLiteralOrLiteralEnumReference,
@@ -4110,6 +4098,68 @@ function isPossiblyLiteralEnum(expression: N.Expression): boolean {
   }
 
   return isUncomputedMemberExpressionChain(expression.object);
+}
+
+// If a const declaration has no type annotation and is initiailized to
+// a string literal, numeric literal, or enum reference, then it is
+// allowed. In an ideal world, we'd check whether init was *actually* an
+// enum reference, but we allow anything that "could be" a literal enum
+// in `isPossiblyLiteralEnum` since we don't have all the information
+// that the typescript compiler has.
+function isValidAmbientConstInitializer(
+  expression: N.Expression,
+  estree: boolean,
+): boolean {
+  const { type } = expression;
+  if (expression.extra?.parenthesized) {
+    return false;
+  }
+  if (estree) {
+    if (type === "Literal") {
+      const { value } = expression;
+      if (typeof value === "string" || typeof value === "boolean") {
+        return true;
+      }
+    }
+  } else {
+    if (type === "StringLiteral" || type === "BooleanLiteral") {
+      return true;
+    }
+  }
+  if (isNumber(expression, estree) || isNegativeNumber(expression, estree)) {
+    return true;
+  }
+  if (type === "TemplateLiteral" && expression.expressions.length === 0) {
+    return true;
+  }
+  if (isPossiblyLiteralEnum(expression)) {
+    return true;
+  }
+  return false;
+}
+
+function isNumber(expression: N.Expression, estree: boolean): boolean {
+  if (estree) {
+    return (
+      expression.type === "Literal" &&
+      (typeof expression.value === "number" || "bigint" in expression)
+    );
+  } else {
+    return (
+      expression.type === "NumericLiteral" ||
+      expression.type === "BigIntLiteral"
+    );
+  }
+}
+
+function isNegativeNumber(expression: N.Expression, estree: boolean): boolean {
+  if (expression.type === "UnaryExpression") {
+    const { operator, argument } = expression as N.UnaryExpression;
+    if (operator === "-" && isNumber(argument, estree)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 function isUncomputedMemberExpressionChain(expression: N.Expression): boolean {
