@@ -1025,6 +1025,7 @@ function createLocalsAssignment(
   version: DecoratorVersionKind,
 ) {
   let lhs, rhs;
+  // TODO(Babel 8): Only keep the else branch
   if (
     version === "2021-12" ||
     (version === "2022-03" && !state.availableHelper("applyDecs2203R"))
