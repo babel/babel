@@ -160,6 +160,8 @@ export default declare((api, opts: Options) => {
             path.remove();
           }
         }
+      } else if (node.abstract) {
+        path.remove();
       } else if (!process.env.BABEL_8_BREAKING) {
         if (
           !allowDeclareFields &&
