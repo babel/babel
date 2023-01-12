@@ -4,5 +4,4 @@ class Foo {
   accessor #prop3 = 1;
   accessor [prop4] = 1;
   accessor prop5 = 1;
-  accessor f = 1;
 }
