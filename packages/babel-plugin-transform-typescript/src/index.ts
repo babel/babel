@@ -346,7 +346,7 @@ export default declare((api, opts: Options) => {
                 }
               }
 
-              if (isAllSpecifiersElided()) {
+              if (isAllSpecifiersElided() && !onlyRemoveTypeImports) {
                 stmt.remove();
               } else {
                 for (const importPath of importsToRemove) {
