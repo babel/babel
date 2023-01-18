@@ -10,7 +10,7 @@ class Foo {
   }
 }
 (() => {
-  [_initStatic] = babelHelpers.applyDecs2203(Foo, [[dec, 7, "a"], [dec, 7, _computedKey]], []);
+  [_initStatic] = babelHelpers.applyDecs2203R(Foo, [[dec, 7, "a"], [dec, 7, _computedKey]], []).e;
   _initStatic(Foo);
 })();
 babelHelpers.defineProperty(Foo, "value", 1);
