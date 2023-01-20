@@ -12,6 +12,7 @@ import type {
   Identifier,
   JSXAttribute,
   JSXElement,
+  JSXFragment,
   JSXOpeningElement,
   JSXSpreadAttribute,
   MemberExpression,
@@ -70,6 +71,9 @@ export default function createPlugin({
       pure: PURE_ANNOTATION,
 
       throwIfNamespace = true,
+
+      // TODO (Babel 8): It should throw if this option is used with the automatic runtime
+      filter,
 
       runtime: RUNTIME_DEFAULT = process.env.BABEL_8_BREAKING
         ? "automatic"
@@ -276,24 +280,17 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
           // },
         },
 
-        JSXFragment(path, file) {
-          // <>...</>  ->  <React.Fragment>...</React.Fragment>
+        JSXFragment: {
+          exit(path, file) {
+            let callExpr;
+            if (get(file, "runtime") === "classic") {
+              callExpr = buildCreateElementFragmentCall(path, file);
+            } else {
+              callExpr = buildJSXFragmentCall(path, file);
+            }
 
-          const frag = memberExpressionToJSX(get(file, "id/fragment")());
-
-          path.replaceWith(
-            t.inherits(
-              t.jsxElement(
-                t.inherits(
-                  t.jsxOpeningElement(frag, []),
-                  path.node.openingFragment,
-                ),
-                t.jsxClosingElement(t.cloneNode(frag)),
-                path.node.children,
-              ),
-              path.node,
-            ),
-          );
+            path.replaceWith(t.inherits(callExpr, path.node));
+          },
         },
 
         JSXElement: {
@@ -603,6 +600,56 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       return t.objectExpression(props);
     }
 
+    // Builds JSX Fragment <></> into
+    // Production: React.jsx(type, arguments)
+    // Development: React.jsxDEV(type, { children })
+    function buildJSXFragmentCall(
+      path: NodePath<JSXFragment>,
+      file: PluginPass,
+    ) {
+      const args = [get(file, "id/fragment")()];
+
+      const children = t.react.buildChildren(path.node);
+
+      args.push(
+        t.objectExpression(
+          children.length > 0
+            ? [
+                buildChildrenProperty(
+                  //@ts-expect-error The children here contains JSXSpreadChild,
+                  // which will be thrown later
+                  children,
+                ),
+              ]
+            : [],
+        ),
+      );
+
+      if (development) {
+        args.push(
+          path.scope.buildUndefinedNode(),
+          t.booleanLiteral(children.length > 1),
+        );
+      }
+
+      return call(file, children.length > 1 ? "jsxs" : "jsx", args);
+    }
+
+    // Builds JSX Fragment <></> into
+    // React.createElement(React.Fragment, null, ...children)
+    function buildCreateElementFragmentCall(
+      path: NodePath<JSXFragment>,
+      file: PluginPass,
+    ) {
+      if (filter && !filter(path.node, file)) return;
+
+      return call(file, "createElement", [
+        get(file, "id/fragment")(),
+        t.nullLiteral(),
+        ...t.react.buildChildren(path.node),
+      ]);
+    }
+
     // Builds JSX into:
     // Production: React.createElement(type, arguments, children)
     // Development: React.createElement(type, arguments, children, source, self)
@@ -804,22 +851,6 @@ function toMemberExpression(id: string): Identifier | MemberExpression {
       // where the type of initialial value differs from callback return type
       .reduce((object, property) => t.memberExpression(object, property))
   );
-}
-
-function memberExpressionToJSX(
-  expr: t.Node,
-): t.JSXMemberExpression | t.JSXIdentifier {
-  switch (expr.type) {
-    case "Identifier":
-      return t.jsxIdentifier(expr.name);
-    case "MemberExpression":
-      return t.jsxMemberExpression(
-        memberExpressionToJSX(expr.object),
-        memberExpressionToJSX(expr.property) as t.JSXIdentifier,
-      );
-    default:
-      throw new Error("Internal error: unknown member expression type");
-  }
 }
 
 function makeSource(path: NodePath, state: PluginPass) {
