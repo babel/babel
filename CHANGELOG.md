@@ -23,6 +23,20 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.20.13 (2023-01-21)
+
+#### :bug: Bug Fix
+* `babel-helpers`, `babel-plugin-proposal-decorators`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#15332](https://github.com/babel/babel/pull/15332) Ensure class decorators can access decorated non-static members ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-typescript`
+  * [#15349](https://github.com/babel/babel/pull/15349) fix: Preserve `import {type T} from 'x'` when `onlyRemoveTypeImports:true` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+  * [#15344](https://github.com/babel/babel/pull/15344) fix: Properties that are `abstract` should not be initialized. ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-parser`
+  * [#15338](https://github.com/babel/babel/pull/15338) Allow negative number in ambient const initializer ([@JLHwung](https://github.com/JLHwung))
+
+#### :leftwards_arrow_with_hook: Revert
+* `babel-plugin-transform-react-inline-elements`, `babel-plugin-transform-react-jsx-development`, `babel-plugin-transform-react-jsx`
+  * [#15355](https://github.com/babel/babel/pull/15355) Reverts "Re-use common JSX element transform for <>...</>" ([@JLHwung](https://github.com/JLHwung))
 ## v7.20.12 (2023-01-04)
 
 #### :bug: Bug Fix
