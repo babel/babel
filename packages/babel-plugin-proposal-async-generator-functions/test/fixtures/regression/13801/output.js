@@ -65,7 +65,8 @@ function main() {
             }
           }, null, null, [[2, 14, 18, 28], [19,, 23, 27]], Promise);
         };
-        one = 1; // array destructuring: required for babel to crash
+        one = 1;
+        // array destructuring: required for babel to crash
       case 2:
       case "end":
         return _context2.stop();

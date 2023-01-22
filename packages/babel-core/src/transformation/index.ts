@@ -14,6 +14,7 @@ import generateCode from "./file/generate";
 import type File from "./file/file";
 
 import { flattenToSet } from "../config/helpers/deep-array";
+import { processCommentsAfter } from "./file/comments";
 
 export type FileResultCallback = {
   (err: Error, file: null): void;
@@ -52,6 +53,8 @@ export function* run(
     }
     throw e;
   }
+
+  processCommentsAfter(file.ast.program);
 
   let outputCode, outputMap;
   try {

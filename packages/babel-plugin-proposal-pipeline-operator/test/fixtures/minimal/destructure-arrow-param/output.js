@@ -1,5 +1,5 @@
-var _ref, _y$z;
 // Array destructing
+var _ref, _y$z;
 const result = (_ref = [0], (([x]) => x)(_ref));
 expect(result).toBe(0);
 

@@ -1,6 +1,5 @@
 var a = babelHelpers.temporalUndefined;
 import { foo } from "somewhere";
-
 // foo might call "bar"
 foo();
 babelHelpers.tdz("a");

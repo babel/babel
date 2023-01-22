@@ -949,9 +949,7 @@ class Printer {
     // Add a newline before and after a block comment, unless explicitly
     // disallowed
     const printNewLines =
-      isBlockComment &&
-      skipNewLines !== COMMENT_SKIP_NEWLINE.ALL &&
-      !this._noLineTerminator;
+      skipNewLines !== COMMENT_SKIP_NEWLINE.ALL && !this._noLineTerminator;
 
     if (
       printNewLines &&

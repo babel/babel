@@ -14,6 +14,16 @@ import { isTransparentExprWrapper } from "@babel/helper-skip-transparent-express
 
 import * as ts from "./typescript";
 
+function inheritsWithoutTrailingComments<T extends t.Node>(
+  node: T,
+  parent: t.Node,
+): T {
+  const oldComments = node.trailingComments;
+  t.inherits(node, parent);
+  node.trailingComments = oldComments;
+  return node;
+}
+
 interface PrivateNameMetadata {
   id: t.Identifier;
   static: boolean;
@@ -768,12 +778,15 @@ function buildPublicFieldInitLoose(
   const { key, computed } = prop.node;
   const value = prop.node.value || prop.scope.buildUndefinedNode();
 
-  return t.expressionStatement(
-    t.assignmentExpression(
-      "=",
-      t.memberExpression(ref, key, computed || t.isLiteral(key)),
-      value,
+  return inheritsWithoutTrailingComments(
+    t.expressionStatement(
+      t.assignmentExpression(
+        "=",
+        t.memberExpression(ref, key, computed || t.isLiteral(key)),
+        value,
+      ),
     ),
+    prop.node,
   );
 }
 
@@ -785,14 +798,17 @@ function buildPublicFieldInitSpec(
   const { key, computed } = prop.node;
   const value = prop.node.value || prop.scope.buildUndefinedNode();
 
-  return t.expressionStatement(
-    t.callExpression(state.addHelper("defineProperty"), [
-      ref,
-      computed || t.isLiteral(key)
-        ? key
-        : t.stringLiteral((key as t.Identifier).name),
-      value,
-    ]),
+  return inheritsWithoutTrailingComments(
+    t.expressionStatement(
+      t.callExpression(state.addHelper("defineProperty"), [
+        ref,
+        computed || t.isLiteral(key)
+          ? key
+          : t.stringLiteral((key as t.Identifier).name),
+        value,
+      ]),
+    ),
+    prop.node,
   );
 }
 
@@ -814,7 +830,8 @@ function buildPrivateStaticMethodInitLoose(
       initAdded: true,
     });
 
-    return template.statement.ast`
+    return inheritsWithoutTrailingComments(
+      template.statement.ast`
       Object.defineProperty(${ref}, ${id}, {
         // configurable is false by default
         // enumerable is false by default
@@ -822,17 +839,22 @@ function buildPrivateStaticMethodInitLoose(
         get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
         set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
       })
-    `;
+    `,
+      prop.node,
+    );
   }
 
-  return template.statement.ast`
+  return inheritsWithoutTrailingComments(
+    template.statement.ast`
     Object.defineProperty(${ref}, ${id}, {
       // configurable is false by default
       // enumerable is false by default
       // writable is false by default
       value: ${methodId.name}
     });
-  `;
+  `,
+    prop.node,
+  );
 }
 
 function buildPrivateMethodDeclaration(
@@ -872,13 +894,16 @@ function buildPrivateMethodDeclaration(
     declId = id;
   }
 
-  return t.functionDeclaration(
-    t.cloneNode(declId),
-    // @ts-expect-error params for ClassMethod has TSParameterProperty
-    params,
-    body,
-    generator,
-    async,
+  return inheritsWithoutTrailingComments(
+    t.functionDeclaration(
+      t.cloneNode(declId),
+      // @ts-expect-error params for ClassMethod has TSParameterProperty
+      params,
+      body,
+      generator,
+      async,
+    ),
+    prop.node,
   );
 }
 

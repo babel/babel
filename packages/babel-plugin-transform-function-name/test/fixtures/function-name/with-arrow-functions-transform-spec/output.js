@@ -1,5 +1,5 @@
-var _this = this;
 // These are actually handled by transform-arrow-functions
+var _this = this;
 const _x = function x() {
   babelHelpers.newArrowCheck(this, _this);
   return _x;

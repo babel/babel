@@ -10,6 +10,7 @@ import type { SourceMapConverter as Converter } from "convert-source-map";
 import File from "./file/file";
 import parser from "../parser";
 import cloneDeep from "./util/clone-deep";
+import { processCommentsBefore } from "./file/comments";
 
 const debug = buildDebug("babel:transform:file");
 const LARGE_INPUT_SOURCEMAP_THRESHOLD = 3_000_000;
@@ -51,6 +52,8 @@ export default function* normalizeFile(
     // @ts-expect-error todo: use babel-types ast typings in Babel parser
     ast = yield* parser(pluginPasses, options, code);
   }
+
+  processCommentsBefore((ast as t.File).program);
 
   let inputMap = null;
   if (options.inputSourceMap !== false) {

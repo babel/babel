@@ -1,6 +1,5 @@
-var _reactJsxRuntime = require("react/jsx-runtime");
 // https://github.com/babel/babel/issues/12522
-
+var _reactJsxRuntime = require("react/jsx-runtime");
 require('react-app-polyfill/ie11');
 require('react-app-polyfill/stable');
 const ReactDOM = require('react-dom');

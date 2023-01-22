@@ -10,8 +10,10 @@ class Foo {
     };
     this.Bar = (_class = class {
       constructor() {
+        // should not replace
         this.q = this.constructor;
-      } // should not replace
+      }
+      // should not replace
     }, _class.p = void 0, _class.p1 = class {
       constructor() {
         this.constructor;

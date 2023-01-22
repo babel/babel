@@ -1,4 +1,3 @@
 {
-  "plugins": ["transform-modules-commonjs"],
-  "sourceMap": true
+  "plugins": ["transform-modules-commonjs"]
 }
