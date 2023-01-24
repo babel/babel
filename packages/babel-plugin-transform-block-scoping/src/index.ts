@@ -84,10 +84,22 @@ export default declare((api, opts: Options) => {
               const { usages, capturedInClosure, hasConstantViolations } =
                 getUsageInBody(binding, path);
 
+              const blockScope = headPath.scope;
+              let varScope = blockScope.getFunctionParent();
+              let isProgramScope = false;
+              if (!varScope) {
+                varScope = blockScope.getProgramParent();
+                isProgramScope = true;
+              }
+
               if (capturedInClosure) {
                 markNeedsBodyWrap();
                 captured.push(name);
-              } else if (headScope.parent.hasBinding(name)) {
+              } else if (
+                headScope.parent.hasBinding(name) ||
+                blockScope.parent.hasGlobal(name) ||
+                (isProgramScope && varScope.hasGlobal(name))
+              ) {
                 // If the binding is not captured, there is no need
                 // of adding it to the closure param. However, rename
                 // it if it shadows an outer binding, because the
