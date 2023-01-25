@@ -371,7 +371,7 @@ async function run(task: Test) {
     }
   }
 
-  if (opts.sourceMaps === true) {
+  if (opts.sourceMaps === true || opts.sourceMap === true) {
     try {
       expect(result.map).toEqual(task.sourceMap);
     } catch (e) {

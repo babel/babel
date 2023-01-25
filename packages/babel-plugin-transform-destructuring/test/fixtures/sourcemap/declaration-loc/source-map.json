@@ -12,5 +12,5 @@
   "sourcesContent": [
     "const fn = (arg) => {\n  var [x, y] = arg;\n}"
   ],
-  "mappings": "AAAA,MAAMA,EAAE,GAAIC,GAAG,IAAK;EAClB,sCAAaA,GAAG;EAAA,IAAXC,CAAC;EAAA,IAAEC,CAAC;AACX,CAAC"
+  "mappings": "AAAA,MAAMA,EAAE,GAAIC,GAAG,IAAK;EAClB,sCAAaA,GAAG;IAAXC,CAAC;IAAEC,CAAC;AACX,CAAC"
 }

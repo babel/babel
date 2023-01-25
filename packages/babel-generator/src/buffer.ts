@@ -262,7 +262,13 @@ export default class Buffer {
       // We mark the start of each line, which happens directly after this newline char
       // unless this is the last char.
       if (last < len) {
-        this._mark(++line, 0, identifierName, filename);
+        this._mark(
+          // When manually adding multi-line content (such as a comment), `line` will be `undefined`.
+          line != undefined ? ++line : line,
+          0,
+          identifierName,
+          filename,
+        );
       }
       i = str.indexOf("\n", last);
     }

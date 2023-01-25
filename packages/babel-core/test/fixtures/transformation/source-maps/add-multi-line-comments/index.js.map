@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "index.js",
+  "names": ["myConst"],
+  "sources": ["../src/index.js"],
+  "sourcesContent": [
+    "const myConst = 'ANY CODE OR NO CODE AT ALL';\n\nexport {myConst};\n"
+  ],
+  "mappings": ";AAAA;AAAA;AAAA;AAAA,MAAMA,OAAO,GAAG,4BAA4B;AAE5C,SAAQA,OAAO"
+}

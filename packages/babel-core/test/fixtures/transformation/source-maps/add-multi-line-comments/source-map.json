@@ -1,0 +1,13 @@
+{
+  "version": 3,
+  "names": [
+    "myConst"
+  ],
+  "sources": [
+    "source-maps/add-multi-line-comments/input.js"
+  ],
+  "sourcesContent": [
+    "/*\nline1\nline2\n*/\nconst myConst = 'ANY CODE OR NO CODE AT ALL';\nexport { myConst };"
+  ],
+  "mappings": ";;AAAA;AACA;AACA;AACA;AACA,MAAMA,OAAO,GAAG,4BAA4B;AAC5C,SAASA,OAAO"
+}
