@@ -89,14 +89,14 @@ export default declare((api, opts: Options) => {
                 captured.push(name);
               } else if (
                 headScope.parent.hasBinding(name) ||
-                headPath.scope.parent.hasGlobal(name)
+                headScope.parent.hasGlobal(name)
               ) {
                 // If the binding is not captured, there is no need
                 // of adding it to the closure param. However, rename
                 // it if it shadows an outer binding, because the
                 // closure will be moved to an outer level.
                 const newName = headScope.generateUid(name);
-                headPath.scope.rename(name, newName);
+                headScope.rename(name, newName);
                 name = newName;
               }
 
