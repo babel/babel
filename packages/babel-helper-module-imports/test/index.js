@@ -40,7 +40,15 @@ function test(sourceType, opts, initializer, inputCode, expectedCode) {
               const manager = new ImportInjector(path, opts);
 
               const ref = initializer(manager);
-              if (ref) path.pushContainer("body", t.expressionStatement(ref));
+              if (ref) {
+                if (Array.isArray(ref)) {
+                  for (const el of ref) {
+                    path.pushContainer("body", t.expressionStatement(el));
+                  }
+                } else {
+                  path.pushContainer("body", t.expressionStatement(ref));
+                }
+              }
             },
           },
         };
@@ -1142,6 +1150,82 @@ describe("@babel/helper-module-imports", () => {
           m.addNamed("read", "source"),
         ),
       ).toThrow(`"importPosition": "after" is only supported in modules`);
+    });
+  });
+
+  describe("multiple imports", () => {
+    describe("loading an ES6 module", () => {
+      const importedType = "es6";
+
+      describe("using Node's interop", () => {
+        const importingInterop = "node";
+
+        it("should combine multiple named imports", () => {
+          testModule(
+            { importingInterop, importedType },
+            m => [
+              m.addNamed("read", "source"),
+              m.addNamed("write", "source"),
+              m.addNamed("execute", "source"),
+            ],
+            `
+              import { read as _read, write as _write, execute as _execute } from "source";
+              _read;
+              _write;
+              _execute;
+            `,
+          );
+        });
+        it("should combine named and default import", () => {
+          testModule(
+            { importingInterop, importedType },
+            m => [m.addDefault("source"), m.addNamed("read", "source")],
+            `
+              import _default, { read as _read } from "source";
+              _default;
+              _read;
+            `,
+          );
+        });
+        it("should combine default and namespace import", () => {
+          testModule(
+            { importingInterop, importedType },
+            m => [m.addDefault("source"), m.addNamespace("source")],
+            `
+              import _default, * as _source from "source";
+              _default;
+              _source;
+            `,
+          );
+        });
+        it("should combine named and namespace import", () => {
+          testModule(
+            { importingInterop, importedType },
+            m => [m.addNamed("read", "source"), m.addNamespace("source")],
+            `
+              import { read as _read, * as _source } from "source";
+              _read;
+              _source;
+            `,
+          );
+        });
+        it("should combine default, named and namespace import", () => {
+          testModule(
+            { importingInterop, importedType },
+            m => [
+              m.addDefault("source"),
+              m.addNamed("read", "source"),
+              m.addNamespace("source"),
+            ],
+            `
+              import _default, { read as _read, * as _source } from "source";
+              _default;
+              _read;
+              _source;
+            `,
+          );
+        });
+      });
     });
   });
 });
