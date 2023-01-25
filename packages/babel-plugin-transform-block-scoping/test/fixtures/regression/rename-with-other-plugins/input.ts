@@ -1,7 +1,4 @@
-// `index` will be registered into `scope.globals`
-type SomeLookup = {
-  [index: number]: any[];
-};
+// https://github.com/babel/babel/pull/15361
 
 function fooBar(arrayOfThings) {
     for (let index = 0; index < arrayOfThings.length; index++) {

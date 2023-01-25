@@ -1,4 +1,4 @@
-// `index` will be registered into `scope.globals`
+// https://github.com/babel/babel/pull/15361
 
 function fooBar(arrayOfThings) {
   var _loop = function () {
