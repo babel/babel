@@ -7,7 +7,7 @@ const require = createRequire(import.meta.url);
 async function run(name) {
   return new Promise((res, rej) => {
     execFile(
-      "node",
+      process.execPath,
       [require.resolve(`./fixtures/esm-cjs-integration/${name}`)],
       { env: process.env },
       (error, stdout, stderr) => {
