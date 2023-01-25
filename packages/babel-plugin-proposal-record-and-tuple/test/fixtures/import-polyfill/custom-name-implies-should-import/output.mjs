@@ -1,5 +1,4 @@
-import { Tuple as _Tuple } from "my-polyfill";
-import { Record as _Record } from "my-polyfill";
+import { Record as _Record, Tuple as _Tuple } from "my-polyfill";
 const r2 = _Record({
   a: _Record({
     b: 456
