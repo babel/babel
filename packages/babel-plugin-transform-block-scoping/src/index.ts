@@ -206,10 +206,8 @@ function transformBlockScopedVariable(
   }
 
   const blockScope = path.scope;
-  let varScope = blockScope.getFunctionParent();
-  if (!varScope) {
-    varScope = blockScope.getProgramParent();
-  }
+  const varScope =
+    blockScope.getFunctionParent() || blockScope.getProgramParent();
 
   if (varScope !== blockScope) {
     for (const name of bindingNames) {
