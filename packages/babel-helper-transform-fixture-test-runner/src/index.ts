@@ -513,8 +513,15 @@ export default function (
 
           async function () {
             const runTask = () => run(task);
-            if ("sourceMap" in task.options === false) {
-              task.options.sourceMap = !!task.sourceMap;
+
+            if ("sourceMap" in task.options) {
+              throw new Error(
+                "`sourceMap` option is deprecated. Use `sourceMaps` instead.",
+              );
+            }
+
+            if ("sourceMaps" in task.options === false) {
+              task.options.sourceMaps = !!task.sourceMap;
             }
 
             Object.assign(task.options, taskOpts);

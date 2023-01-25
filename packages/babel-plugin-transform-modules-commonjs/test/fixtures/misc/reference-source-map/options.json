@@ -1,5 +1,5 @@
 {
   "externalHelpers": true,
   "plugins": ["transform-modules-commonjs"],
-  "sourceMap": true
+  "sourceMaps": true
 }

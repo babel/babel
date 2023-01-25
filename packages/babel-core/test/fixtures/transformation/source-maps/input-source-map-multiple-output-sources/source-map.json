@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "mappings": "AAAC,KAAG;;ACCJ,SAASA,GAAG,CAACC,GAAW;EACpB,MAAM,IAAIC,KAAK,CAAC,cAAc,CAAC;AACnC",
+  "mappings": "AAAC,KAAG;ACCJ,SAASA,GAAG,CAACC,GAAW;EACpB,MAAM,IAAIC,KAAK,CAAC,cAAc,CAAC;AACnC",
   "names": [
     "foo",
     "bar",
