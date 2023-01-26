@@ -384,7 +384,6 @@ function buildRollup(packages, buildStandalone) {
                 ) {
                   return;
                 }
-                break;
             }
 
             // We use console.warn here since it prints more info than just "warn",
