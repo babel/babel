@@ -23,6 +23,13 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.20.14 (2023-01-27)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-block-scoping`
+  * [#15361](https://github.com/babel/babel/pull/15361) fix: Identifiers in the loop are not renamed ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-cli`, `babel-core`, `babel-generator`, `babel-helper-transform-fixture-test-runner`, `babel-plugin-transform-destructuring`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-react-jsx`, `babel-traverse`
+  * [#15365](https://github.com/babel/babel/pull/15365) fix: Properly generate source maps for manually added multi-line content ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.20.13 (2023-01-21)
 
 #### :bug: Bug Fix
