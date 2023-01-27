@@ -64,6 +64,7 @@
   "arbitrary-module-namespace-names",
   "array-find-from-last",
   "array-grouping",
+  "arraybuffer-transfer",
   "arrow-function",
   "async-functions",
   "async-iteration",
