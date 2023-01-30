@@ -2305,11 +2305,12 @@ export default abstract class StatementParser extends ExpressionParser {
       node,
     );
 
-    if (
-      (hasDefault && parseAfterDefault && !hasStar && !hasSpecifiers) ||
-      (hasNamespace && parseAfterNamespace && !hasSpecifiers)
-    ) {
+    if (hasDefault && parseAfterDefault && !hasStar && !hasSpecifiers) {
       throw this.unexpected(null, tt.braceL);
+    }
+
+    if (hasNamespace && parseAfterNamespace) {
+      throw this.unexpected(null, tt._from);
     }
 
     let hasDeclaration;
