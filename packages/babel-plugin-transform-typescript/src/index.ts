@@ -444,6 +444,10 @@ export default declare((api, opts: Options) => {
         NEEDS_EXPLICIT_ESM.set(state.file.ast.program, false);
       },
 
+      ExportAllDeclaration(path) {
+        if (path.node.exportKind === "type") path.remove();
+      },
+
       ExportSpecifier(path) {
         // remove type exports
         type Parent = t.ExportDeclaration & { source?: t.StringLiteral };
