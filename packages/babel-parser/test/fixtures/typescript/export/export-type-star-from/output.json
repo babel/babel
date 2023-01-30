@@ -1,9 +1,9 @@
 {
   "type": "File",
-  "start":0,"end":207,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":36,"index":207}},
+  "start":0,"end":209,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":36,"index":209}},
   "program": {
     "type": "Program",
-    "start":0,"end":207,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":36,"index":207}},
+    "start":0,"end":209,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":36,"index":209}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
@@ -53,22 +53,22 @@
           },
           {
             "type": "CommentLine",
-            "value": " but it's easier for us to support it that not.",
-            "start":121,"end":170,"loc":{"start":{"line":4,"column":0,"index":121},"end":{"line":4,"column":49,"index":170}}
+            "value": " but it's easier for us to support them than not.",
+            "start":121,"end":172,"loc":{"start":{"line":4,"column":0,"index":121},"end":{"line":4,"column":51,"index":172}}
           }
         ]
       },
       {
         "type": "ExportNamedDeclaration",
-        "start":171,"end":207,"loc":{"start":{"line":5,"column":0,"index":171},"end":{"line":5,"column":36,"index":207}},
+        "start":173,"end":209,"loc":{"start":{"line":5,"column":0,"index":173},"end":{"line":5,"column":36,"index":209}},
         "exportKind": "type",
         "specifiers": [
           {
             "type": "ExportNamespaceSpecifier",
-            "start":183,"end":193,"loc":{"start":{"line":5,"column":12,"index":183},"end":{"line":5,"column":22,"index":193}},
+            "start":185,"end":195,"loc":{"start":{"line":5,"column":12,"index":185},"end":{"line":5,"column":22,"index":195}},
             "exported": {
               "type": "StringLiteral",
-              "start":188,"end":193,"loc":{"start":{"line":5,"column":17,"index":188},"end":{"line":5,"column":22,"index":193}},
+              "start":190,"end":195,"loc":{"start":{"line":5,"column":17,"index":190},"end":{"line":5,"column":22,"index":195}},
               "extra": {
                 "rawValue": "ns2",
                 "raw": "\"ns2\""
@@ -79,7 +79,7 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start":199,"end":206,"loc":{"start":{"line":5,"column":28,"index":199},"end":{"line":5,"column":35,"index":206}},
+          "start":201,"end":208,"loc":{"start":{"line":5,"column":28,"index":201},"end":{"line":5,"column":35,"index":208}},
           "extra": {
             "rawValue": "./mod",
             "raw": "'./mod'"
@@ -94,8 +94,8 @@
           },
           {
             "type": "CommentLine",
-            "value": " but it's easier for us to support it that not.",
-            "start":121,"end":170,"loc":{"start":{"line":4,"column":0,"index":121},"end":{"line":4,"column":49,"index":170}}
+            "value": " but it's easier for us to support them than not.",
+            "start":121,"end":172,"loc":{"start":{"line":4,"column":0,"index":121},"end":{"line":4,"column":51,"index":172}}
           }
         ]
       }
@@ -110,8 +110,8 @@
     },
     {
       "type": "CommentLine",
-      "value": " but it's easier for us to support it that not.",
-      "start":121,"end":170,"loc":{"start":{"line":4,"column":0,"index":121},"end":{"line":4,"column":49,"index":170}}
+      "value": " but it's easier for us to support them than not.",
+      "start":121,"end":172,"loc":{"start":{"line":4,"column":0,"index":121},"end":{"line":4,"column":51,"index":172}}
     }
   ]
 }
