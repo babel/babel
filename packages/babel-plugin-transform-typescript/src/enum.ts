@@ -143,10 +143,11 @@ export function translateEnumValues(
   return path.get("members").map(memberPath => {
     const member = memberPath.node;
     const name = t.isIdentifier(member.id) ? member.id.name : member.id.value;
+    const initializerPath = memberPath.get("initializer");
     const initializer = member.initializer;
     let value: t.Expression;
     if (initializer) {
-      constValue = computeConstantValue(initializer, seen);
+      constValue = computeConstantValue(initializerPath, seen);
       if (constValue !== undefined) {
         seen.set(name, constValue);
         if (typeof constValue === "number") {
@@ -156,8 +157,6 @@ export function translateEnumValues(
           value = t.stringLiteral(constValue);
         }
       } else {
-        const initializerPath = memberPath.get("initializer");
-
         if (initializerPath.isReferencedIdentifier()) {
           ReferencedIdentifier(initializerPath, {
             t,
@@ -195,45 +194,83 @@ export function translateEnumValues(
 
 // Based on the TypeScript repository's `computeConstantValue` in `checker.ts`.
 function computeConstantValue(
-  expr: t.Node,
+  path: NodePath,
   seen: PreviousEnumMembers,
-): number | string | typeof undefined {
-  return evaluate(expr);
+): number | string | undefined {
+  return computeConstantValue(path);
 
-  function evaluate(expr: t.Node): number | typeof undefined {
+  function computeConstantValue(path: NodePath): number | string | undefined {
+    const expr = path.node;
     switch (expr.type) {
       case "StringLiteral":
         return expr.value;
       case "UnaryExpression":
-        return evalUnaryExpression(expr);
+        return evalUnaryExpression(path as NodePath<t.UnaryExpression>);
       case "BinaryExpression":
-        return evalBinaryExpression(expr);
+        return evalBinaryExpression(path as NodePath<t.BinaryExpression>);
       case "NumericLiteral":
         return expr.value;
       case "ParenthesizedExpression":
-        return evaluate(expr.expression);
-      case "Identifier":
-        return seen.get(expr.name);
-      case "TemplateLiteral":
+        return computeConstantValue(path.get("expression"));
+      case "Identifier": {
+        let value = seen.get(expr.name);
+        if (value === undefined) {
+          value = evalIdentifier(path);
+          if (value !== undefined) {
+            seen.set(expr.name, value);
+          }
+        }
+        return value;
+      }
+      case "TemplateLiteral": {
         if (expr.quasis.length === 1) {
           return expr.quasis[0].value.cooked;
         }
-      /* falls through */
+
+        const paths = (path as NodePath<t.TemplateLiteral>).get("expressions");
+        const quasis = expr.quasis;
+        let str = "";
+
+        for (let i = 0; i < quasis.length; i++) {
+          str += quasis[i].value.cooked;
+
+          if (i + 1 < quasis.length) {
+            const value = evalIdentifier(paths[i]);
+            if (value === undefined) return undefined;
+            str += value;
+          }
+        }
+        return str;
+      }
       default:
         return undefined;
     }
   }
 
-  function evalUnaryExpression({
-    argument,
-    operator,
-  }: t.UnaryExpression): number | typeof undefined {
-    const value = evaluate(argument);
+  function evalIdentifier(path: NodePath) {
+    if (path.isIdentifier()) {
+      const binding = path.scope.getBinding(path.node.name);
+      if (binding?.kind === "const") {
+        const result = path.evaluate();
+        if (
+          result.confident &&
+          (typeof result.value === "number" || typeof result.value === "string")
+        ) {
+          return result.value;
+        }
+      }
+    }
+  }
+
+  function evalUnaryExpression(
+    path: NodePath<t.UnaryExpression>,
+  ): number | string | undefined {
+    const value = computeConstantValue(path.get("argument"));
     if (value === undefined) {
       return undefined;
     }
 
-    switch (operator) {
+    switch (path.node.operator) {
       case "+":
         return value;
       case "-":
@@ -245,17 +282,19 @@ function computeConstantValue(
     }
   }
 
-  function evalBinaryExpression(expr: t.BinaryExpression): number | undefined {
-    const left = evaluate(expr.left);
+  function evalBinaryExpression(
+    path: NodePath<t.BinaryExpression>,
+  ): number | string | undefined {
+    const left = computeConstantValue(path.get("left")) as any;
     if (left === undefined) {
       return undefined;
     }
-    const right = evaluate(expr.right);
+    const right = computeConstantValue(path.get("right")) as any;
     if (right === undefined) {
       return undefined;
     }
 
-    switch (expr.operator) {
+    switch (path.node.operator) {
       case "|":
         return left | right;
       case "&":
