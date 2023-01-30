@@ -1918,7 +1918,10 @@ export default abstract class ExpressionParser extends LValParser {
     node.callee = this.parseNoCallExpr();
     if (node.callee.type === "Import") {
       this.raise(Errors.ImportCallNotNewExpression, { at: node.callee });
-    } else if (this.isOptionalChain(node.callee)) {
+    } else if (
+      this.isOptionalChain(node.callee) &&
+      !node.callee.extra?.parenthesized
+    ) {
       this.raise(Errors.OptionalChainingNoNew, {
         at: this.state.lastTokEndLoc,
       });
