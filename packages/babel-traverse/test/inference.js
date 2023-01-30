@@ -701,5 +701,12 @@ describe("inference with TypeScript", function () {
       const path = tsGetPath(input).get("body.0.expression");
       expect(path.isGenericType("Array")).toBe(true);
     });
+    it("should not throw both flow and ts types", () => {
+      const path = tsGetPath(
+        `const bar = 0 ? mkList() : [];function mkList(): any[] {return [];}`,
+      ).get("body.0.declarations.0");
+      // TODO: This should be true
+      expect(path.isGenericType("Array")).toBe(false);
+    });
   });
 });
