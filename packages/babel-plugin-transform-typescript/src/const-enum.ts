@@ -27,7 +27,7 @@ export default function transpileConstEnum(
     );
   }
 
-  const entries = translateEnumValues(path, t);
+  const { nodes: entries } = translateEnumValues(path, t);
 
   if (isExported) {
     const obj = t.objectExpression(

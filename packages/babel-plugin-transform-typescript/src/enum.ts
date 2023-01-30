@@ -1,9 +1,12 @@
 import { template } from "@babel/core";
 import type { NodePath } from "@babel/traverse";
 import type * as t from "@babel/types";
+import { isIdentifier, isStringLiteral } from "@babel/types";
 import assert from "assert";
 
 type t = typeof t;
+
+const ENUMS = new WeakMap<t.Identifier, PreviousEnumMembers>();
 
 export default function transpileEnum(
   path: NodePath<t.TSEnumDeclaration>,
@@ -17,7 +20,7 @@ export default function transpileEnum(
   }
 
   const name = node.id.name;
-  const fill = enumFill(path, t, node.id);
+  const { wrapper: fill, data } = enumFill(path, t, node.id);
 
   switch (path.parent.type) {
     case "BlockStatement":
@@ -33,6 +36,7 @@ export default function transpileEnum(
         path.scope.registerDeclaration(
           path.replaceWith(makeVar(node.id, t, isGlobal ? "var" : "let"))[0],
         );
+        ENUMS.set(path.scope.getBindingIdentifier(name), data);
       }
       break;
     }
@@ -81,7 +85,7 @@ const buildEnumMember = (isString: boolean, options: Record<string, unknown>) =>
  * `(function (E) { ... assignments ... })(E || (E = {}));`
  */
 function enumFill(path: NodePath<t.TSEnumDeclaration>, t: t, id: t.Identifier) {
-  const x = translateEnumValues(path, t);
+  const { nodes: x, data } = translateEnumValues(path, t);
   const assignments = x.map(([memberName, memberValue]) =>
     buildEnumMember(t.isStringLiteral(memberValue), {
       ENUM: t.cloneNode(id),
@@ -90,10 +94,13 @@ function enumFill(path: NodePath<t.TSEnumDeclaration>, t: t, id: t.Identifier) {
     }),
   );
 
-  return buildEnumWrapper({
-    ID: t.cloneNode(id),
-    ASSIGNMENTS: assignments,
-  });
+  return {
+    wrapper: buildEnumWrapper({
+      ID: t.cloneNode(id),
+      ASSIGNMENTS: assignments,
+    }),
+    data: data,
+  };
 }
 
 /**
@@ -131,65 +138,69 @@ const enumSelfReferenceVisitor = {
   ReferencedIdentifier,
 };
 
-export function translateEnumValues(
-  path: NodePath<t.TSEnumDeclaration>,
-  t: t,
-): Array<[name: string, value: t.Expression]> {
+export function translateEnumValues(path: NodePath<t.TSEnumDeclaration>, t: t) {
   const seen: PreviousEnumMembers = new Map();
   // Start at -1 so the first enum member is its increment, 0.
   let constValue: number | string | undefined = -1;
   let lastName: string;
 
-  return path.get("members").map(memberPath => {
-    const member = memberPath.node;
-    const name = t.isIdentifier(member.id) ? member.id.name : member.id.value;
-    const initializerPath = memberPath.get("initializer");
-    const initializer = member.initializer;
-    let value: t.Expression;
-    if (initializer) {
-      constValue = computeConstantValue(initializerPath, seen);
-      if (constValue !== undefined) {
-        seen.set(name, constValue);
-        if (typeof constValue === "number") {
-          value = t.numericLiteral(constValue);
+  return {
+    data: seen,
+    nodes: path.get("members").map(memberPath => {
+      const member = memberPath.node;
+      const name = t.isIdentifier(member.id) ? member.id.name : member.id.value;
+      const initializerPath = memberPath.get("initializer");
+      const initializer = member.initializer;
+      let value: t.Expression;
+      if (initializer) {
+        constValue = computeConstantValue(initializerPath, seen);
+        if (constValue !== undefined) {
+          seen.set(name, constValue);
+          if (typeof constValue === "number") {
+            value = t.numericLiteral(constValue);
+          } else {
+            assert(typeof constValue === "string");
+            value = t.stringLiteral(constValue);
+          }
         } else {
-          assert(typeof constValue === "string");
-          value = t.stringLiteral(constValue);
-        }
-      } else {
-        if (initializerPath.isReferencedIdentifier()) {
-          ReferencedIdentifier(initializerPath, {
-            t,
-            seen,
-            path,
-          });
-        } else {
-          initializerPath.traverse(enumSelfReferenceVisitor, { t, seen, path });
-        }
+          if (initializerPath.isReferencedIdentifier()) {
+            ReferencedIdentifier(initializerPath, {
+              t,
+              seen,
+              path,
+            });
+          } else {
+            initializerPath.traverse(enumSelfReferenceVisitor, {
+              t,
+              seen,
+              path,
+            });
+          }
 
-        value = initializerPath.node;
+          value = initializerPath.node;
+          seen.set(name, undefined);
+        }
+      } else if (typeof constValue === "number") {
+        constValue += 1;
+        value = t.numericLiteral(constValue);
+        seen.set(name, constValue);
+      } else if (typeof constValue === "string") {
+        throw path.buildCodeFrameError("Enum member must have initializer.");
+      } else {
+        // create dynamic initializer: 1 + ENUM["PREVIOUS"]
+        const lastRef = t.memberExpression(
+          t.cloneNode(path.node.id),
+          t.stringLiteral(lastName),
+          true,
+        );
+        value = t.binaryExpression("+", t.numericLiteral(1), lastRef);
         seen.set(name, undefined);
       }
-    } else if (typeof constValue === "number") {
-      constValue += 1;
-      value = t.numericLiteral(constValue);
-      seen.set(name, constValue);
-    } else if (typeof constValue === "string") {
-      throw path.buildCodeFrameError("Enum member must have initializer.");
-    } else {
-      // create dynamic initializer: 1 + ENUM["PREVIOUS"]
-      const lastRef = t.memberExpression(
-        t.cloneNode(path.node.id),
-        t.stringLiteral(lastName),
-        true,
-      );
-      value = t.binaryExpression("+", t.numericLiteral(1), lastRef);
-      seen.set(name, undefined);
-    }
 
-    lastName = name;
-    return [name, value];
-  });
+      lastName = name;
+      return [name, value];
+    }) as Array<[name: string, value: t.Expression]>,
+  };
 }
 
 // Based on the TypeScript repository's `computeConstantValue` in `checker.ts`.
@@ -202,6 +213,22 @@ function computeConstantValue(
   function computeConstantValue(path: NodePath): number | string | undefined {
     const expr = path.node;
     switch (expr.type) {
+      case "MemberExpression": {
+        const obj = expr.object;
+        const prop = expr.property;
+        if (
+          !isIdentifier(obj) ||
+          (expr.computed ? !isStringLiteral(prop) : !isIdentifier(prop))
+        ) {
+          return;
+        }
+        const bindingIdentifier = path.scope.getBindingIdentifier(obj.name);
+        const data = ENUMS.get(bindingIdentifier);
+        if (!data) return;
+        // @ts-expect-error checked above
+        return data.get(prop.computed ? prop.value : prop.name);
+      }
+
       case "StringLiteral":
         return expr.value;
       case "UnaryExpression":

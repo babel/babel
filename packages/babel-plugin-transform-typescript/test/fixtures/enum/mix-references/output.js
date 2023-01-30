@@ -7,8 +7,8 @@ var Foo;
 })(Foo || (Foo = {}));
 var Bar;
 (function (Bar) {
-  Bar[Bar["D"] = Foo.a] = "D";
-  Bar[Bar["E"] = Bar.D] = "E";
+  Bar[Bar["D"] = 10] = "D";
+  Bar[Bar["E"] = 10] = "E";
   Bar[Bar["F"] = Math.E] = "F";
   Bar[Bar["G"] = Bar.E + Foo.c] = "G";
 })(Bar || (Bar = {}));
