@@ -1053,6 +1053,7 @@ export interface TsTypeParameter extends NodeBase {
   name: string | Identifier;
   in?: boolean;
   out?: boolean;
+  const?: boolean;
   constraint?: TsType;
   default?: TsType;
 }
