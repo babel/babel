@@ -1,7 +1,6 @@
-import { template } from "@babel/core";
+import { template, types } from "@babel/core";
 import type { NodePath } from "@babel/traverse";
 import type * as t from "@babel/types";
-import { isIdentifier, isStringLiteral } from "@babel/types";
 import assert from "assert";
 
 type t = typeof t;
@@ -217,8 +216,10 @@ function computeConstantValue(
         const obj = expr.object;
         const prop = expr.property;
         if (
-          !isIdentifier(obj) ||
-          (expr.computed ? !isStringLiteral(prop) : !isIdentifier(prop))
+          !types.isIdentifier(obj) ||
+          (expr.computed
+            ? !types.isStringLiteral(prop)
+            : !types.isIdentifier(prop))
         ) {
           return;
         }
