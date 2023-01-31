@@ -45,6 +45,7 @@ echo "export default () => () => {}" > src/main/create-print-pre-check-function.
 # https://github.com/babel/babel/pull/15385#issuecomment-1409840781
 # Ignore this test until prettier update the snapshot
 rm tests/format/js/exports/jsfmt.spec.js
+rm tests/format/js/export-extension/jsfmt.spec.js
 
 yarn test "tests/format/(jsx?|misc|typescript|flow|flow-repo)/" --update-snapshot --runInBand
 
