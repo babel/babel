@@ -1,6 +1,6 @@
 const ruleComposer = require("eslint-rule-composer");
 const eslint = require("eslint");
-const eslintVersion = eslint?.ESLint.version;
+const eslintVersion = eslint?.ESLint.version ?? "7";
 
 const OPT_OUT_PATTERN = /^[-[(/+`]/; // One of [(/+-`
 
