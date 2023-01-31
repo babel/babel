@@ -29,6 +29,7 @@ import {
   CLASS_ELEMENT_STATIC_GETTER,
   CLASS_ELEMENT_STATIC_SETTER,
   type BindingTypes,
+  BIND_CATCH_PARAM,
 } from "../util/scopeflags";
 import { ExpressionErrors } from "./util";
 import { PARAM, functionFlags } from "../util/production-parameter";
@@ -1076,8 +1077,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this.scope.enter(simple ? SCOPE_SIMPLE_CATCH : 0);
     this.checkLVal(param, {
       in: { type: "CatchClause" },
-      binding: BIND_LEXICAL,
-      allowingSloppyLetBinding: true,
+      binding: BIND_CATCH_PARAM,
     });
 
     return param;

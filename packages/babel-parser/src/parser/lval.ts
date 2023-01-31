@@ -29,7 +29,7 @@ import { NodeUtils, type Undone } from "./node";
 import {
   type BindingTypes,
   BIND_NONE,
-  BIND_SCOPE_LEXICAL,
+  BIND_FLAGS_NO_LET_IN_LEXICAL,
 } from "../util/scopeflags";
 import type { ExpressionErrors } from "./util";
 import { Errors, type LValAncestor } from "../parse-error";
@@ -560,10 +560,6 @@ export default abstract class LValParser extends NodeUtils {
    *        `checkLVal` will add checked identifier name to `checkClashes` It is
    *        used in tracking duplicates in function parameter lists. If it is
    *        false, `checkLVal` will skip duplicate checks
-   * @param options.allowingSloppyLetBinding
-   *        Whether an identifier named "let" should be allowed in sloppy mode.
-   *        Defaults to `true` unless lexical scope its being used. This property
-   *        is only relevant if the parser's state is in sloppy mode.
    * @param options.strictModeChanged
    *        Whether an identifier has been parsed in a sloppy context but should
    *        be reinterpreted as strict-mode. e.g. `(arguments) => { "use strict "}`
@@ -579,14 +575,12 @@ export default abstract class LValParser extends NodeUtils {
       binding = BIND_NONE,
       checkClashes = false,
       strictModeChanged = false,
-      allowingSloppyLetBinding = !(binding & BIND_SCOPE_LEXICAL),
       hasParenthesizedAncestor = false,
     }: {
       in: LValAncestor;
       binding?: BindingTypes;
       checkClashes?: Set<string> | false;
       strictModeChanged?: boolean;
-      allowingSloppyLetBinding?: boolean;
       hasParenthesizedAncestor?: boolean;
     },
   ): void {
@@ -609,7 +603,6 @@ export default abstract class LValParser extends NodeUtils {
         expression as Identifier,
         binding,
         strictModeChanged,
-        allowingSloppyLetBinding,
       );
 
       const { name } = expression as Identifier;
@@ -658,7 +651,6 @@ export default abstract class LValParser extends NodeUtils {
           in: nextAncestor,
           binding,
           checkClashes,
-          allowingSloppyLetBinding,
           strictModeChanged,
           hasParenthesizedAncestor: isParenthesizedExpression,
         });
@@ -670,7 +662,6 @@ export default abstract class LValParser extends NodeUtils {
     at: Identifier,
     bindingType: BindingTypes,
     strictModeChanged: boolean = false,
-    allowLetBinding: boolean = !(bindingType & BIND_SCOPE_LEXICAL),
   ) {
     if (
       this.state.strict &&
@@ -688,7 +679,7 @@ export default abstract class LValParser extends NodeUtils {
       }
     }
 
-    if (!allowLetBinding && at.name === "let") {
+    if (bindingType & BIND_FLAGS_NO_LET_IN_LEXICAL && at.name === "let") {
       this.raise(Errors.LetInLexicalBinding, { at });
     }
 
