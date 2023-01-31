@@ -2958,8 +2958,7 @@ export default abstract class StatementParser extends ExpressionParser {
       | N.ImportNamespaceSpecifier,
   >(specifier: Undone<T>, type: T["type"], bindingType = BIND_LEXICAL) {
     this.checkLVal(specifier.local, {
-      // @ts-expect-error refine types
-      in: specifier,
+      in: { type },
       binding: bindingType,
     });
     return this.finishNode(specifier, type);

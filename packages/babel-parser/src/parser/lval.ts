@@ -604,7 +604,7 @@ export default abstract class LValParser extends NodeUtils {
       return;
     }
 
-    if (expression.type === "Identifier") {
+    if (type === "Identifier") {
       this.checkIdentifier(
         expression as Identifier,
         binding,
@@ -626,7 +626,7 @@ export default abstract class LValParser extends NodeUtils {
     }
 
     const validity = this.isValidLVal(
-      expression.type,
+      type,
       !(hasParenthesizedAncestor || expression.extra?.parenthesized) &&
         ancestor.type === "AssignmentExpression",
       binding,
@@ -637,13 +637,7 @@ export default abstract class LValParser extends NodeUtils {
       const ParseErrorClass =
         binding === BIND_NONE ? Errors.InvalidLhs : Errors.InvalidLhsBinding;
 
-      this.raise(ParseErrorClass, {
-        at: expression,
-        ancestor:
-          ancestor.type === "UpdateExpression"
-            ? { type: "UpdateExpression", prefix: ancestor.prefix }
-            : { type: ancestor.type },
-      });
+      this.raise(ParseErrorClass, { at: expression, ancestor });
       return;
     }
 
@@ -651,17 +645,16 @@ export default abstract class LValParser extends NodeUtils {
       ? validity
       : [validity, type === "ParenthesizedExpression"];
     const nextAncestor =
-      expression.type === "ArrayPattern" ||
-      expression.type === "ObjectPattern" ||
-      expression.type === "ParenthesizedExpression"
-        ? expression
+      type === "ArrayPattern" ||
+      type === "ObjectPattern" ||
+      type === "ParenthesizedExpression"
+        ? ({ type } as const)
         : ancestor;
 
     // @ts-expect-error key may not index expression.
     for (const child of [].concat(expression[key])) {
       if (child) {
         this.checkLVal(child, {
-          // @ts-expect-error: refine types
           in: nextAncestor,
           binding,
           checkClashes,
