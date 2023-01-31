@@ -1,6 +1,6 @@
 const ruleComposer = require("eslint-rule-composer");
 const eslint = require("eslint");
-const eslintVersion = eslint.ESLint.version;
+const eslintVersion = eslint?.ESLint.version;
 
 const noInvalidThisRule = new eslint.Linter().getRules().get("no-invalid-this");
 
