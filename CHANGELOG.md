@@ -23,6 +23,19 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.20.15 (2023-02-02)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#15391](https://github.com/babel/babel/pull/15391) Disallow await as bound name in using declaration ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`, `babel-parser`, `babel-plugin-proposal-export-namespace-from`
+  * [#15385](https://github.com/babel/babel/pull/15385) Disallows specifiers after export * as ns ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-block-scoping`
+  * [#15398](https://github.com/babel/babel/pull/15398) fix: Loop was converted wrong ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-parser`
+  * [#15377](https://github.com/babel/babel/pull/15377) fix: `new (foo?.bar)()` incorrectly throws exception `OptionalChainingNoNew` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.20.14 (2023-01-27)
 
 #### :bug: Bug Fix
