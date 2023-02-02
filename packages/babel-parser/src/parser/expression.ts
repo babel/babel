@@ -2812,6 +2812,7 @@ export default abstract class ExpressionParser extends LValParser {
         at: startLoc,
         reservedWord: word,
       });
+      return;
     } else if (word === "yield") {
       if (this.prodParam.hasYield) {
         this.raise(Errors.YieldBindingIdentifier, { at: startLoc });
