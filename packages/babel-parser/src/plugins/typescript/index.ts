@@ -238,9 +238,7 @@ const TSErrors = ParseErrorEnum`typescript`({
 
 // Doesn't handle "void" or "null" because those are keywords, not identifiers.
 // It also doesn't handle "intrinsic", since usually it's not a keyword.
-function keywordTypeFromName(
-  value: string,
-): N.TsKeywordTypeType | typeof undefined {
+function keywordTypeFromName(value: string): N.TsKeywordTypeType | undefined {
   switch (value) {
     case "any":
       return "TSAnyKeyword";
@@ -1790,7 +1788,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
     }
 
-    tsEatThenParseType(token: TokenType): N.TsType | typeof undefined {
+    tsEatThenParseType(token: TokenType): N.TsType | undefined {
       return !this.match(token) ? undefined : this.tsNextThenParseType();
     }
 
