@@ -2,10 +2,10 @@
   "type": "File",
   "start":0,"end":113,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":12,"column":1,"index":113}},
   "errors": [
-    "SyntaxError: Can not use 'await' as identifier inside an async function. (2:8)",
-    "SyntaxError: Can not use 'await' as identifier inside an async function. (5:8)",
-    "SyntaxError: Can not use 'await' as identifier inside an async function. (8:11)",
-    "SyntaxError: Can not use 'await' as identifier inside an async function. (11:13)"
+    "SyntaxError: Unexpected reserved word 'await'. (2:8)",
+    "SyntaxError: Unexpected reserved word 'await'. (5:8)",
+    "SyntaxError: Unexpected reserved word 'await'. (8:11)",
+    "SyntaxError: Unexpected reserved word 'await'. (11:13)"
   ],
   "program": {
     "type": "Program",
