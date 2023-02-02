@@ -84,10 +84,7 @@ export default declare((api, opts: Options) => {
               const { usages, capturedInClosure, hasConstantViolations } =
                 getUsageInBody(binding, path);
 
-              if (capturedInClosure) {
-                markNeedsBodyWrap();
-                captured.push(name);
-              } else if (
+              if (
                 headScope.parent.hasBinding(name) ||
                 headScope.parent.hasGlobal(name)
               ) {
@@ -98,6 +95,11 @@ export default declare((api, opts: Options) => {
                 const newName = headScope.generateUid(name);
                 headScope.rename(name, newName);
                 name = newName;
+              }
+
+              if (capturedInClosure) {
+                markNeedsBodyWrap();
+                captured.push(name);
               }
 
               if (isForStatement && hasConstantViolations) {

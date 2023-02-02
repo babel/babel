@@ -1,3 +1,0 @@
-{
-  "plugins": ["./plugin.cjs", "transform-typescript", "transform-block-scoping"]
-}

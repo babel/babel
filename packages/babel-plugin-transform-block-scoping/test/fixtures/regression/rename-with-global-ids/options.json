@@ -1,0 +1,3 @@
+{
+  "plugins": ["./plugin.cjs", "transform-block-scoping"]
+}
