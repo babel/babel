@@ -29,6 +29,7 @@ import {
   CLASS_ELEMENT_STATIC_GETTER,
   CLASS_ELEMENT_STATIC_SETTER,
   type BindingTypes,
+  BIND_CATCH_PARAM,
 } from "../util/scopeflags";
 import { ExpressionErrors } from "./util";
 import { PARAM, functionFlags } from "../util/production-parameter";
@@ -470,7 +471,7 @@ export default abstract class StatementParser extends ExpressionParser {
         return this.parseTryStatement(node as Undone<N.TryStatement>);
 
       case tt._using:
-        // using [no LineTerminator here] BindingList[+Using]
+        // using [no LineTerminator here][lookahead != `await`] BindingList[+Using]
         if (
           this.hasFollowingLineBreak() ||
           this.state.containsEsc ||
@@ -1076,8 +1077,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this.scope.enter(simple ? SCOPE_SIMPLE_CATCH : 0);
     this.checkLVal(param, {
       in: { type: "CatchClause" },
-      binding: BIND_LEXICAL,
-      allowingSloppyLetBinding: true,
+      binding: BIND_CATCH_PARAM,
     });
 
     return param;
@@ -1507,6 +1507,11 @@ export default abstract class StatementParser extends ExpressionParser {
     decl: Undone<N.VariableDeclarator>,
     kind: "var" | "let" | "const" | "using",
   ): void {
+    // Unlike "let" which must be handled in checkLVal, it suffices to check
+    // await here because `using` must not precede binding patterns.
+    if (kind === "using" && !this.inModule && this.match(tt._await)) {
+      this.raise(Errors.AwaitInUsingBinding, { at: this.state.startLoc });
+    }
     const id = this.parseBindingAtom();
     this.checkLVal(id, {
       in: { type: "VariableDeclarator" },
@@ -2959,8 +2964,7 @@ export default abstract class StatementParser extends ExpressionParser {
       | N.ImportNamespaceSpecifier,
   >(specifier: Undone<T>, type: T["type"], bindingType = BIND_LEXICAL) {
     this.checkLVal(specifier.local, {
-      // @ts-expect-error refine types
-      in: specifier,
+      in: { type },
       binding: bindingType,
     });
     return this.finishNode(specifier, type);
