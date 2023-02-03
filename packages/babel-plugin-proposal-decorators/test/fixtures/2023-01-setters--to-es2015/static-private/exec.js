@@ -30,6 +30,8 @@ expect(aContext.access.has(Object.create(Foo))).toBe(false);
 expect(Foo.value).toBe(1);
 aContext.access.set(Foo, 123);
 expect(Foo.value).toBe(124);
+expect(() => aContext.access.set({}, 456)).toThrow(TypeError);
+expect(Foo.value).toBe(124);
 Foo.setA(456);
 expect(Foo.value).toBe(457);
 

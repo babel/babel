@@ -29,6 +29,7 @@ expect(aContext.access.has(Object.create(Foo))).toBe(false);
 
 // First call gets the method, second call calls the method with correct `this`
 expect(aContext.access.get(Foo).call(Foo)).toBe(2);
+expect(() => aContext.access.get({})).toThrow(TypeError);
 expect(Foo.callA()).toBe(2);
 Foo.value = 123;
 expect(aContext.access.get(Foo).call(Foo)).toBe(124);

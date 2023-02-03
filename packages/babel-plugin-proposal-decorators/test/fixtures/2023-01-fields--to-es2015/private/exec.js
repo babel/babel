@@ -23,7 +23,10 @@ expect(aContext.access.has({})).toBe(false);
 expect(aContext.access.has(Object.create(foo))).toBe(false);
 
 expect(aContext.access.get(foo)).toBe(2);
+expect(() => aContext.access.get({})).toThrow(TypeError);
 aContext.access.set(foo, 123);
+expect(aContext.access.get(foo)).toBe(123);
+expect(() => aContext.access.set({}, 456)).toThrow(TypeError);
 expect(aContext.access.get(foo)).toBe(123);
 expect(aContext.name).toBe('#a');
 expect(aContext.kind).toBe('field');

@@ -48,8 +48,11 @@ expect(a_setterContext.access.has(Object.create(Foo))).toBe(false);
 expect(a_getterContext.access.has).not.toBe(a_setterContext.access.has);
 
 expect(a_getterContext.access.get(Foo)).toBe(2);
+expect(() => a_getterContext.access.get({})).toThrow(TypeError);
 expect(Foo.getA()).toBe(2);
 a_setterContext.access.set(Foo, 123);
+expect(a_getterContext.access.get(Foo)).toBe(125);
+expect(() => a_setterContext.access.set({}, 456)).toThrow(TypeError);
 expect(a_getterContext.access.get(Foo)).toBe(125);
 expect(Foo.getA()).toBe(125);
 Foo.setA(456);

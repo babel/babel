@@ -26,6 +26,12 @@ function createAddInitializerMethod(initializers, decoratorFinishedRef) {
   };
 }
 
+function assertInstanceIfPrivate(has, target) {
+  if (has && !has(target)) {
+    throw new TypeError("Attempted to access private element on non-instance");
+  }
+}
+
 function memberDec(
   dec,
   name,
@@ -75,23 +81,23 @@ function memberDec(
   var get, set, has;
   if (isPrivate) has = privateHas;
   else {
-    has = function (receiver) {
-      return name in receiver;
+    has = function (target) {
+      return name in target;
     };
   }
   if (!isPrivate && (kind === 0 /* FIELD */ || kind === 2) /* METHOD */) {
-    get = function (receiver) {
-      return receiver[name];
+    get = function (target) {
+      return target[name];
     };
     if (kind === 0 /* FIELD */) {
-      set = function (receiver, v) {
-        receiver[name] = v;
+      set = function (target, v) {
+        target[name] = v;
       };
     }
   } else if (kind === 2 /* METHOD */) {
     // Assert: isPrivate is true.
-    get = function () {
-      // TODO: Throw if !Has(receiver, name).
+    get = function (target) {
+      assertInstanceIfPrivate(privateHas, target);
       return desc.value;
     };
   } else {
@@ -99,11 +105,13 @@ function memberDec(
     var t = kind === 0 /* FIELD */ || kind === 1; /* ACCESSOR */
     if (t || kind === 3 /* GETTER */) {
       get = function (target) {
+        assertInstanceIfPrivate(privateHas, target);
         return desc.get.call(target);
       };
     }
     if (t || kind === 4 /* SETTER */) {
       set = function (target, value) {
+        assertInstanceIfPrivate(privateHas, target);
         desc.set.call(target, value);
       };
     }
