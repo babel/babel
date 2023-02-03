@@ -100,10 +100,7 @@ export default declare((api, options: Options) => {
         parserOpts.plugins.push("decorators-legacy");
       } else if (process.env.BABEL_8_BREAKING) {
         parserOpts.plugins.push(
-          [
-            "decorators",
-            { decoratorsBeforeExport: false, allowCallParenthesized: false },
-          ],
+          ["decorators", { allowCallParenthesized: false }],
           "decoratorAutoAccessors",
         );
       } else {
