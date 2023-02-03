@@ -29,7 +29,7 @@ const bContext = Foo['bContext'];
 expect(Foo.value).toBe(1);
 Foo.a = 123;
 expect(Foo.value).toBe(124);
-aContext.access.set.call(Foo, 456);
+aContext.access.set(Foo, 456);
 expect(Foo.value).toBe(457);
 
 expect(aContext.name).toBe('a');

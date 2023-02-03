@@ -24,7 +24,7 @@ class Foo {
 const aContext = Foo['#aContext'];
 
 expect(Foo.value).toBe(1);
-aContext.access.set.call(Foo, 123);
+aContext.access.set(Foo, 123);
 expect(Foo.value).toBe(124);
 Foo.setA(456);
 expect(Foo.value).toBe(457);

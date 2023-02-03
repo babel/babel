@@ -26,13 +26,13 @@ const aContext = Foo['aContext'];
 const bContext = Foo['bContext'];
 
 expect(Foo.a()).toBe(2);
-expect(aContext.access.get.call(Foo).call(Foo)).toBe(2);
+expect(aContext.access.get(Foo).call(Foo)).toBe(2);
 expect(Foo.b()).toBe(2);
-expect(bContext.access.get.call(Foo).call(Foo)).toBe(2);
+expect(bContext.access.get(Foo).call(Foo)).toBe(2);
 Foo.value = 123;
-expect(aContext.access.get.call(Foo).call(Foo)).toBe(124);
+expect(aContext.access.get(Foo).call(Foo)).toBe(124);
 expect(Foo.a()).toBe(124);
-expect(bContext.access.get.call(Foo).call(Foo)).toBe(124);
+expect(bContext.access.get(Foo).call(Foo)).toBe(124);
 expect(Foo.b()).toBe(124);
 
 expect(aContext.name).toBe('a');

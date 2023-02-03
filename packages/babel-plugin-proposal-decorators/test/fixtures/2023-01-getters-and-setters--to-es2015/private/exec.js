@@ -41,13 +41,13 @@ let foo = new Foo();
 const a_getterContext = foo['#a_getterContext'];
 const a_setterContext = foo['#a_setterContext'];
 
-expect(a_getterContext.access.get.call(foo)).toBe(2);
+expect(a_getterContext.access.get(foo)).toBe(2);
 expect(foo.getA()).toBe(2);
-a_setterContext.access.set.call(foo, 123);
-expect(a_getterContext.access.get.call(foo)).toBe(125);
+a_setterContext.access.set(foo, 123);
+expect(a_getterContext.access.get(foo)).toBe(125);
 expect(foo.getA()).toBe(125);
 foo.setA(456);
-expect(a_getterContext.access.get.call(foo)).toBe(458);
+expect(a_getterContext.access.get(foo)).toBe(458);
 expect(foo.getA()).toBe(458);
 
 expect(a_getterContext.name).toBe('#a');

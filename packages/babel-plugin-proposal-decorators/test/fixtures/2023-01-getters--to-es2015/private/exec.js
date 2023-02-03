@@ -25,10 +25,10 @@ let foo = new Foo();
 
 const aContext = foo['#aContext'];
 
-expect(aContext.access.get.call(foo)).toBe(2);
+expect(aContext.access.get(foo)).toBe(2);
 expect(foo.getA()).toBe(2);
 foo.value = 123;
-expect(aContext.access.get.call(foo)).toBe(124);
+expect(aContext.access.get(foo)).toBe(124);
 expect(foo.getA()).toBe(124);
 expect(aContext.name).toBe('#a');
 expect(aContext.kind).toBe('getter');

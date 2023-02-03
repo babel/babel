@@ -39,13 +39,13 @@ class Foo {
 const a_getterContext = Foo['#a_getterContext'];
 const a_setterContext = Foo['#a_setterContext'];
 
-expect(a_getterContext.access.get.call(Foo)).toBe(2);
+expect(a_getterContext.access.get(Foo)).toBe(2);
 expect(Foo.getA()).toBe(2);
-a_setterContext.access.set.call(Foo, 123);
-expect(a_getterContext.access.get.call(Foo)).toBe(125);
+a_setterContext.access.set(Foo, 123);
+expect(a_getterContext.access.get(Foo)).toBe(125);
 expect(Foo.getA()).toBe(125);
 Foo.setA(456);
-expect(a_getterContext.access.get.call(Foo)).toBe(458);
+expect(a_getterContext.access.get(Foo)).toBe(458);
 expect(Foo.getA()).toBe(458);
 
 expect(a_getterContext.name).toBe('#a');

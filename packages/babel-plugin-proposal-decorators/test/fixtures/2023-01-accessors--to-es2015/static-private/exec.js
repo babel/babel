@@ -29,18 +29,18 @@ class Foo {
 const aContext = Foo['#aContext'];
 const bContext = Foo['#bContext'];
 
-expect(aContext.access.get.call(Foo)).toBe(2);
-aContext.access.set.call(Foo, 123);
-expect(aContext.access.get.call(Foo)).toBe(125);
+expect(aContext.access.get(Foo)).toBe(2);
+aContext.access.set(Foo, 123);
+expect(aContext.access.get(Foo)).toBe(125);
 expect(aContext.name).toBe('#a');
 expect(aContext.kind).toBe('accessor');
 expect(aContext.static).toBe(true);
 expect(aContext.private).toBe(true);
 expect(typeof aContext.addInitializer).toBe('function');
 
-expect(bContext.access.get.call(Foo)).toBe(124);
-bContext.access.set.call(Foo, 123);
-expect(bContext.access.get.call(Foo)).toBe(125);
+expect(bContext.access.get(Foo)).toBe(124);
+bContext.access.set(Foo, 123);
+expect(bContext.access.get(Foo)).toBe(125);
 expect(bContext.name).toBe('#b');
 expect(bContext.kind).toBe('accessor');
 expect(bContext.static).toBe(true);

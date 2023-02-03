@@ -72,33 +72,32 @@ function memberDec(
   }
 
   var get, set;
-  if (kind === 0 /* FIELD */) {
-    if (isPrivate) {
-      get = desc.get;
-      set = desc.set;
-    } else {
-      get = function () {
-        return this[name];
-      };
-      set = function (v) {
-        this[name] = v;
+  if (!isPrivate && (kind === 0 /* FIELD */ || kind === 2) /* METHOD */) {
+    get = function (receiver) {
+      return receiver[name];
+    };
+    if (kind === 0 /* FIELD */) {
+      set = function (receiver, v) {
+        receiver[name] = v;
       };
     }
   } else if (kind === 2 /* METHOD */) {
+    // Assert: isPrivate is true.
     get = function () {
+      // TODO: Throw if !Has(receiver, name).
       return desc.value;
     };
   } else {
-    // replace with values that will go through the final getter and setter
-    if (kind === 1 /* ACCESSOR */ || kind === 3 /* GETTER */) {
-      get = function () {
-        return desc.get.call(this);
+    // Assert: If kind === 0, then isPrivate is true.
+    var t = kind === 0 /* FIELD */ || kind === 1; /* ACCESSOR */
+    if (t || kind === 3 /* GETTER */) {
+      get = function (target) {
+        return desc.get.call(target);
       };
     }
-
-    if (kind === 1 /* ACCESSOR */ || kind === 4 /* SETTER */) {
-      set = function (v) {
-        desc.set.call(this, v);
+    if (t || kind === 4 /* SETTER */) {
+      set = function (target, value) {
+        desc.set.call(target, value);
       };
     }
   }

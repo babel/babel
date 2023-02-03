@@ -24,10 +24,10 @@ class Foo {
 const aContext = Foo['#aContext'];
 
 // First call gets the method, second call calls the method with correct `this`
-expect(aContext.access.get.call(Foo).call(Foo)).toBe(2);
+expect(aContext.access.get(Foo).call(Foo)).toBe(2);
 expect(Foo.callA()).toBe(2);
 Foo.value = 123;
-expect(aContext.access.get.call(Foo).call(Foo)).toBe(124);
+expect(aContext.access.get(Foo).call(Foo)).toBe(124);
 expect(Foo.callA()).toBe(124);
 
 expect(aContext.name).toBe('#a');
