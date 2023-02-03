@@ -20,7 +20,7 @@ type ClassElement =
   | t.TSIndexSignature
   | t.StaticBlock;
 
-type DecoratorVersionKind = "2022-03" | "2021-12";
+type DecoratorVersionKind = "2023-01" | "2022-03" | "2021-12";
 
 function incrementId(id: number[], idx = id.length - 1): void {
   // If index is -1, id needs an additional character, unshift A
@@ -1065,9 +1065,15 @@ function createLocalsAssignment(
 export default function (
   { assertVersion, assumption }: PluginAPI,
   { loose }: Options,
-  version: "2022-03" | "2021-12",
+  version: "2023-01" | "2022-03" | "2021-12",
 ): PluginObject {
-  assertVersion(version === "2021-12" ? "^7.16.0" : "^7.19.0");
+  if (version === "2023-01") {
+    assertVersion("^7.20.0");
+  } else if (version === "2021-12") {
+    assertVersion("^7.16.0");
+  } else {
+    assertVersion("^7.19.0");
+  }
 
   const VISITED = new WeakSet<NodePath>();
   const constantSuper = assumption("constantSuper") ?? loose;
