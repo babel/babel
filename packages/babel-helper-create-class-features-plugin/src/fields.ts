@@ -1113,9 +1113,9 @@ export function buildFieldsInitNodes(
           staticNodes.push(inheritPropComments(blockBody[0], prop));
         } else {
           staticNodes.push(
-            inheritPropComments(
+            t.inheritsComments(
               template.statement.ast`(() => { ${blockBody} })()`,
-              prop,
+              prop.node,
             ),
           );
         }
