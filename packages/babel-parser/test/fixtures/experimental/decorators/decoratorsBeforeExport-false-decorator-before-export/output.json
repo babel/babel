@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":23,"index":28}},
   "errors": [
-    "SyntaxError: Using the export keyword between a decorator and a class is not allowed. Please use `export @dec class` instead. (2:0)"
+    "SyntaxError: Decorators must be placed *after* the 'export' keyword. Remove the 'decoratorsBeforeExport: false' option to use the '@decorator export class {}' syntax. (2:0)"
   ],
   "program": {
     "type": "Program",

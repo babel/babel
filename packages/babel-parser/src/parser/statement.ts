@@ -658,7 +658,7 @@ export default abstract class StatementParser extends ExpressionParser {
     if (this.hasPlugin("decorators-legacy")) return true;
     return (
       this.hasPlugin("decorators") &&
-      !!this.getPluginOption("decorators", "decoratorsBeforeExport")
+      this.getPluginOption("decorators", "decoratorsBeforeExport") !== false
     );
   }
 
@@ -674,7 +674,26 @@ export default abstract class StatementParser extends ExpressionParser {
     exportNode?: Undone<N.ExportDefaultDeclaration | N.ExportNamedDeclaration>,
   ): T {
     if (maybeDecorators) {
-      classNode.decorators = maybeDecorators;
+      if (classNode.decorators && classNode.decorators.length > 0) {
+        // Note: decorators attachment is only attempred multiple times
+        // when the class is part of an export declaration.
+        if (
+          typeof this.getPluginOption(
+            "decorators",
+            "decoratorsBeforeExport",
+          ) !== "boolean"
+        ) {
+          // If `decoratorsBeforeExport` was set to `true` or `false`, we
+          // already threw an error about decorators not being in a valid
+          // position.
+          this.raise(Errors.DecoratorsBeforeAfterExport, {
+            at: classNode.decorators[0],
+          });
+        }
+        classNode.decorators.unshift(...maybeDecorators);
+      } else {
+        classNode.decorators = maybeDecorators;
+      }
       this.resetStartLocationFromNode(classNode, maybeDecorators[0]);
       if (exportNode) this.resetStartLocationFromNode(exportNode, classNode);
     }
@@ -2481,7 +2500,7 @@ export default abstract class StatementParser extends ExpressionParser {
     if (this.match(tt.at)) {
       if (
         this.hasPlugin("decorators") &&
-        this.getPluginOption("decorators", "decoratorsBeforeExport")
+        this.getPluginOption("decorators", "decoratorsBeforeExport") === true
       ) {
         this.raise(Errors.DecoratorBeforeExport, { at: this.state.startLoc });
       }
@@ -2596,8 +2615,10 @@ export default abstract class StatementParser extends ExpressionParser {
     if (type === tt.at) {
       this.expectOnePlugin(["decorators", "decorators-legacy"]);
       if (this.hasPlugin("decorators")) {
-        if (this.getPluginOption("decorators", "decoratorsBeforeExport")) {
-          throw this.raise(Errors.DecoratorBeforeExport, {
+        if (
+          this.getPluginOption("decorators", "decoratorsBeforeExport") === true
+        ) {
+          this.raise(Errors.DecoratorBeforeExport, {
             at: this.state.startLoc,
           });
         }
