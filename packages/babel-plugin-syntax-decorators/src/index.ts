@@ -68,11 +68,7 @@ export default declare((api, options: Options) => {
     // eslint-disable-next-line no-var
     var { decoratorsBeforeExport } = options;
     if (decoratorsBeforeExport === undefined) {
-      if (
-        version === "2023-01" ||
-        version === "2021-12" ||
-        version === "2022-03"
-      ) {
+      if (version === "2021-12" || version === "2022-03") {
         decoratorsBeforeExport = false;
       } else if (version === "2018-09") {
         throw new Error(
@@ -81,7 +77,11 @@ export default declare((api, options: Options) => {
         );
       }
     } else {
-      if (version === "legacy" || version === "2022-03") {
+      if (
+        version === "legacy" ||
+        version === "2022-03" ||
+        version === "2023-01"
+      ) {
         throw new Error(
           `'decoratorsBeforeExport' can't be used with ${version} decorators.`,
         );
@@ -109,10 +109,7 @@ export default declare((api, options: Options) => {
       } else {
         if (version === "2023-01") {
           parserOpts.plugins.push(
-            [
-              "decorators",
-              { decoratorsBeforeExport: false, allowCallParenthesized: false },
-            ],
+            ["decorators", { allowCallParenthesized: false }],
             "decoratorAutoAccessors",
           );
         } else if (version === "2022-03") {
