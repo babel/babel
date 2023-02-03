@@ -47,6 +47,11 @@ echo "export default () => () => {}" > src/main/create-print-pre-check-function.
 rm tests/format/js/exports/jsfmt.spec.js
 rm tests/format/js/export-extension/jsfmt.spec.js
 
+# https://github.com/babel/babel/pull/15400#issuecomment-1414539133
+# Ignore this test until prettier update the snapshot
+# because prettier has ignored UnexpectedReservedWord error
+rm tests/format/flow-repo/async/await_parse.js
+
 yarn test "tests/format/(jsx?|misc|typescript|flow|flow-repo)/" --update-snapshot --runInBand
 
 cleanup
