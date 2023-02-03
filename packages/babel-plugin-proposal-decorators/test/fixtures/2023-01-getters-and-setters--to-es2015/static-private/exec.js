@@ -39,6 +39,14 @@ class Foo {
 const a_getterContext = Foo['#a_getterContext'];
 const a_setterContext = Foo['#a_setterContext'];
 
+expect(a_getterContext.access.has(Foo)).toBe(true);
+expect(a_getterContext.access.has({})).toBe(false);
+expect(a_getterContext.access.has(Object.create(Foo))).toBe(false);
+expect(a_setterContext.access.has(Foo)).toBe(true);
+expect(a_setterContext.access.has({})).toBe(false);
+expect(a_setterContext.access.has(Object.create(Foo))).toBe(false);
+expect(a_getterContext.access.has).not.toBe(a_setterContext.access.has);
+
 expect(a_getterContext.access.get(Foo)).toBe(2);
 expect(Foo.getA()).toBe(2);
 a_setterContext.access.set(Foo, 123);

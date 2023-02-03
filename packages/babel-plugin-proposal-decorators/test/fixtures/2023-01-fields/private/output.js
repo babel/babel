@@ -6,11 +6,11 @@ class Foo {
       return this.#a;
     }, function (value) {
       this.#a = value;
-    }], [dec, 0, "b", function () {
+    }, _ => #a in _], [dec, 0, "b", function () {
       return this.#b;
     }, function (value) {
       this.#b = value;
-    }]], []).e;
+    }, _ => #b in _]], []).e;
   }
   #a = _init_a(this);
   #b = _init_b(this, 123);

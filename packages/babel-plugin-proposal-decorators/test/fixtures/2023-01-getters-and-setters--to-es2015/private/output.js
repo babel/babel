@@ -25,6 +25,6 @@ function _set_a(v) {
 }
 [_call_a, _call_a2, _initProto] = babelHelpers.applyDecs2301(Foo, [[dec, 3, "a", function () {
   return this.value;
-}], [dec, 4, "a", function (v) {
+}, _ => _a.has(babelHelpers.checkInRHS(_))], [dec, 4, "a", function (v) {
   this.value = v;
-}]], []).e;
+}, _ => _a.has(babelHelpers.checkInRHS(_))]], []).e;

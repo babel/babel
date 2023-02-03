@@ -231,31 +231,24 @@ function addProxyAccessorsFor(
 
 function extractProxyAccessorsFor(
   targetKey: t.PrivateName,
-): t.FunctionExpression[] {
+  injectHas: boolean,
+): (t.FunctionExpression | t.ArrowFunctionExpression)[] {
   return [
-    t.functionExpression(
-      undefined,
-      [],
-      t.blockStatement([
-        t.returnStatement(
-          t.memberExpression(t.thisExpression(), t.cloneNode(targetKey)),
-        ),
-      ]),
-    ),
-    t.functionExpression(
-      undefined,
-      [t.identifier("value")],
-      t.blockStatement([
-        t.expressionStatement(
-          t.assignmentExpression(
-            "=",
-            t.memberExpression(t.thisExpression(), t.cloneNode(targetKey)),
-            t.identifier("value"),
-          ),
-        ),
-      ]),
-    ),
-  ];
+    template.expression.ast`
+      function () {
+        return this.${t.cloneNode(targetKey)};
+      }
+    ` as t.FunctionExpression,
+    template.expression.ast`
+      function (value) {
+        this.${t.cloneNode(targetKey)} = value;
+      }
+    ` as t.FunctionExpression,
+    injectHas &&
+      (template.expression.ast`
+        _ => ${t.cloneNode(targetKey)} in _
+      ` as t.ArrowFunctionExpression),
+  ].filter(Boolean);
 }
 
 const FIELD = 0;
@@ -299,7 +292,9 @@ interface DecoratorInfo {
   // The name of the decorator
   name: t.StringLiteral | t.Expression;
 
-  privateMethods: t.FunctionExpression | t.FunctionExpression[] | undefined;
+  privateMethods:
+    | (t.FunctionExpression | t.ArrowFunctionExpression)[]
+    | undefined;
 
   // The names of local variables that will be used/returned from the decoration
   locals: t.Identifier | t.Identifier[] | undefined;
@@ -496,6 +491,8 @@ function transformClass(
   const classDecorators = path.node.decorators;
   let hasElementDecorators = false;
 
+  const injectHasChecks = version === "2023-01";
+
   const generateClassPrivateUid = createLazyPrivateUidGeneratorForClass(path);
 
   // Iterate over the class to see if we need to decorate it, and also to
@@ -623,7 +620,9 @@ function transformClass(
 
       if (hasDecorators) {
         let locals: t.Identifier | t.Identifier[];
-        let privateMethods: t.FunctionExpression | t.FunctionExpression[];
+        let privateMethods: Array<
+          t.FunctionExpression | t.ArrowFunctionExpression
+        >;
 
         if (kind === ACCESSOR) {
           const { value } = element.node as t.ClassAccessorProperty;
@@ -646,7 +645,7 @@ function transformClass(
           const [newPath] = element.replaceWith(newField);
 
           if (isPrivate) {
-            privateMethods = extractProxyAccessorsFor(newId);
+            privateMethods = extractProxyAccessorsFor(newId, injectHasChecks);
 
             const getId = newPath.scope.parent.generateDeclaredUidIdentifier(
               `get_${name}`,
@@ -680,7 +679,7 @@ function transformClass(
           locals = initId;
 
           if (isPrivate) {
-            privateMethods = extractProxyAccessorsFor(key);
+            privateMethods = extractProxyAccessorsFor(key, injectHasChecks);
           }
         } else if (isPrivate) {
           locals = element.scope.parent.generateDeclaredUidIdentifier(
@@ -704,12 +703,18 @@ function transformClass(
             async: isAsync,
           } = element.node as t.ClassPrivateMethod;
 
-          privateMethods = t.functionExpression(
-            undefined,
-            params.filter(isNotTsParameter),
-            body,
-            isAsync,
-          );
+          privateMethods = [
+            t.functionExpression(
+              undefined,
+              params.filter(isNotTsParameter),
+              body,
+              isAsync,
+            ),
+            injectHasChecks &&
+              (template.expression.ast`
+                _ => ${t.cloneNode(key)} in _
+              ` as t.ArrowFunctionExpression),
+          ].filter(Boolean);
 
           if (kind === GETTER || kind === SETTER) {
             movePrivateAccessor(

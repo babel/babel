@@ -23,6 +23,10 @@ class Foo {
 
 const aContext = Foo['#aContext'];
 
+expect(aContext.access.has(Foo)).toBe(true);
+expect(aContext.access.has({})).toBe(false);
+expect(aContext.access.has(Object.create(Foo))).toBe(false);
+
 expect(Foo.value).toBe(1);
 aContext.access.set(Foo, 123);
 expect(Foo.value).toBe(124);

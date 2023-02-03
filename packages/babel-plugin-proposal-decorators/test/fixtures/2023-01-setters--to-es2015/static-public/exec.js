@@ -25,6 +25,11 @@ class Foo {
 const aContext = Foo['aContext'];
 const bContext = Foo['bContext'];
 
+expect(aContext.access.has(Foo)).toBe(true);
+expect(aContext.access.has({})).toBe(false);
+expect(aContext.access.has(Object.create(Foo))).toBe(true);
+expect(aContext.access.has({ a: 1 })).toBe(true);
+expect(aContext.access.has(Object.create({ a: 1 }))).toBe(true);
 
 expect(Foo.value).toBe(1);
 Foo.a = 123;

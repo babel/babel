@@ -25,6 +25,10 @@ let foo = new Foo();
 
 const aContext = foo['#aContext'];
 
+expect(aContext.access.has(foo)).toBe(true);
+expect(aContext.access.has({})).toBe(false);
+expect(aContext.access.has(Object.create(foo))).toBe(false);
+
 // First call gets the method, second call calls the method with correct `this`
 expect(aContext.access.get(foo).call(foo)).toBe(2);
 expect(foo.callA()).toBe(2);

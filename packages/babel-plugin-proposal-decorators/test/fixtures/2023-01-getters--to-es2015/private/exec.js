@@ -25,6 +25,10 @@ let foo = new Foo();
 
 const aContext = foo['#aContext'];
 
+expect(aContext.access.has(foo)).toBe(true);
+expect(aContext.access.has({})).toBe(false);
+expect(aContext.access.has(Object.create(foo))).toBe(false);
+
 expect(aContext.access.get(foo)).toBe(2);
 expect(foo.getA()).toBe(2);
 foo.value = 123;

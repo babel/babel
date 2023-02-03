@@ -34,7 +34,8 @@ function memberDec(
   kind,
   isStatic,
   isPrivate,
-  value
+  value,
+  privateHas
 ) {
   var kindStr;
 
@@ -71,7 +72,13 @@ function memberDec(
     );
   }
 
-  var get, set;
+  var get, set, has;
+  if (isPrivate) has = privateHas;
+  else {
+    has = function (receiver) {
+      return name in receiver;
+    };
+  }
   if (!isPrivate && (kind === 0 /* FIELD */ || kind === 2) /* METHOD */) {
     get = function (receiver) {
       return receiver[name];
@@ -102,7 +109,11 @@ function memberDec(
     }
   }
   ctx.access =
-    get && set ? { get: get, set: set } : get ? { get: get } : { set: set };
+    get && set
+      ? { get: get, set: set, has: has }
+      : get
+      ? { get: get, has: has }
+      : { set: set, has: has };
 
   try {
     return dec(value, ctx);
@@ -168,7 +179,7 @@ function applyMemberDec(
 ) {
   var decs = decInfo[0];
 
-  var desc, init, value;
+  var desc, init, value, has;
 
   if (isPrivate) {
     if (kind === 0 /* FIELD */ || kind === 1 /* ACCESSOR */) {
@@ -176,18 +187,22 @@ function applyMemberDec(
         get: decInfo[3],
         set: decInfo[4],
       };
-    } else if (kind === 3 /* GETTER */) {
-      desc = {
-        get: decInfo[3],
-      };
-    } else if (kind === 4 /* SETTER */) {
-      desc = {
-        set: decInfo[3],
-      };
+      has = decInfo[5];
     } else {
-      desc = {
-        value: decInfo[3],
-      };
+      if (kind === 3 /* GETTER */) {
+        desc = {
+          get: decInfo[3],
+        };
+      } else if (kind === 4 /* SETTER */) {
+        desc = {
+          set: decInfo[3],
+        };
+      } else {
+        desc = {
+          value: decInfo[3],
+        };
+      }
+      has = decInfo[4];
     }
   } else if (kind !== 0 /* FIELD */) {
     desc = Object.getOwnPropertyDescriptor(base, name);
@@ -217,7 +232,8 @@ function applyMemberDec(
       kind,
       isStatic,
       isPrivate,
-      value
+      value,
+      has
     );
 
     if (newValue !== void 0) {
@@ -247,7 +263,8 @@ function applyMemberDec(
         kind,
         isStatic,
         isPrivate,
-        value
+        value,
+        has
       );
 
       if (newValue !== void 0) {

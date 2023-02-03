@@ -21,9 +21,9 @@ var _a = {
 (() => {
   [_call_a, _call_a2, _initStatic] = babelHelpers.applyDecs2301(Foo, [[dec, 8, "a", function () {
     return this.value;
-  }], [dec, 9, "a", function (v) {
+  }, _ => babelHelpers.checkInRHS(_) === Foo], [dec, 9, "a", function (v) {
     this.value = v;
-  }]], []).e;
+  }, _ => babelHelpers.checkInRHS(_) === Foo]], []).e;
   _initStatic(Foo);
 })();
 babelHelpers.defineProperty(Foo, "value", 1);

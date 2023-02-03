@@ -35,6 +35,12 @@ const aContext = foo['aContext'];
 const bContext = foo['bContext'];
 const cContext = foo['cContext'];
 
+expect(aContext.access.has(foo)).toBe(true);
+expect(aContext.access.has({})).toBe(false);
+expect(aContext.access.has(Object.create(foo))).toBe(true);
+expect(aContext.access.has({ a: 1 })).toBe(true);
+expect(aContext.access.has(Object.create({ a: 1 }))).toBe(true);
+
 expect(foo.a).toBe(2);
 expect(aContext.access.get(foo)).toBe(2);
 foo.a = 123;

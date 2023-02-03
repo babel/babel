@@ -44,6 +44,18 @@ const a_setterContext = Foo['a_setterContext'];
 const b_getterContext = Foo['b_getterContext'];
 const b_setterContext = Foo['b_setterContext'];
 
+expect(a_getterContext.access.has(Foo)).toBe(true);
+expect(a_getterContext.access.has({})).toBe(false);
+expect(a_getterContext.access.has(Object.create(Foo))).toBe(true);
+expect(a_getterContext.access.has({ a: 1 })).toBe(true);
+expect(a_getterContext.access.has(Object.create({ a: 1 }))).toBe(true);
+expect(a_setterContext.access.has(Foo)).toBe(true);
+expect(a_setterContext.access.has({})).toBe(false);
+expect(a_setterContext.access.has(Object.create(Foo))).toBe(true);
+expect(a_setterContext.access.has({ a: 1 })).toBe(true);
+expect(a_setterContext.access.has(Object.create({ a: 1 }))).toBe(true);
+expect(a_getterContext.access.has).not.toBe(a_setterContext.access.has);
+
 expect(Foo.a).toBe(2);
 expect(Foo.b).toBe(2);
 expect(a_getterContext.access.get(Foo)).toBe(2);

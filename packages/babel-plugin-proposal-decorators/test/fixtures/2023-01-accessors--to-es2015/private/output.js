@@ -40,8 +40,8 @@ function _get_b2() {
   return babelHelpers.classPrivateFieldGet(this, _A);
 }, function (value) {
   babelHelpers.classPrivateFieldSet(this, _A, value);
-}], [dec, 1, "b", function () {
+}, _ => _A.has(babelHelpers.checkInRHS(_))], [dec, 1, "b", function () {
   return babelHelpers.classPrivateFieldGet(this, _B);
 }, function (value) {
   babelHelpers.classPrivateFieldSet(this, _B, value);
-}]], []).e;
+}, _ => _B.has(babelHelpers.checkInRHS(_))]], []).e;

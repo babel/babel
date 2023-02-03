@@ -27,6 +27,12 @@ let foo = new Foo();
 const aContext = foo['aContext'];
 const bContext = foo['bContext'];
 
+expect(aContext.access.has(foo)).toBe(true);
+expect(aContext.access.has({})).toBe(false);
+expect(aContext.access.has(Object.create(foo))).toBe(true);
+expect(aContext.access.has({ a: 1 })).toBe(true);
+expect(aContext.access.has(Object.create({ a: 1 }))).toBe(true);
+
 expect(foo.a()).toBe(2);
 expect(aContext.access.get(foo).call(foo)).toBe(2);
 expect(foo.b()).toBe(2);
