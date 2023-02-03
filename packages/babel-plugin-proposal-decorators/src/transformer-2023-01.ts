@@ -1036,11 +1036,12 @@ function createLocalsAssignment(
       [t.thisExpression(), elementDecorations, classDecorations],
     );
   } else {
-    rhs = t.callExpression(state.addHelper("applyDecs2203R"), [
-      t.thisExpression(),
-      elementDecorations,
-      classDecorations,
-    ]);
+    rhs = t.callExpression(
+      state.addHelper(
+        version === "2023-01" ? "applyDecs2301" : "applyDecs2203R",
+      ),
+      [t.thisExpression(), elementDecorations, classDecorations],
+    );
     // optimize `{ c: [classLocals] } = applyapplyDecs2203R(...)` to
     // `[classLocals] = applyapplyDecs2203R(...).c`
     if (elementLocals.length > 0) {

@@ -11,5 +11,5 @@ new (_temp = class extends babelHelpers.identity {
   }
 }, (() => {
   class Foo {}
-  [_Foo, _initClass] = babelHelpers.applyDecs2203R(Foo, [], [dec]).c;
+  [_Foo, _initClass] = babelHelpers.applyDecs2301(Foo, [], [dec]).c;
 })(), _temp)();

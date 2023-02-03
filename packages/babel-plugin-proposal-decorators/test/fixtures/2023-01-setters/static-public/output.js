@@ -3,7 +3,7 @@ const dec = () => {};
 _computedKey = 'b';
 class Foo {
   static {
-    [_initStatic] = babelHelpers.applyDecs2203R(this, [[dec, 9, "a"], [dec, 9, _computedKey]], []).e;
+    [_initStatic] = babelHelpers.applyDecs2301(this, [[dec, 9, "a"], [dec, 9, _computedKey]], []).e;
     _initStatic(this);
   }
   static value = 1;
