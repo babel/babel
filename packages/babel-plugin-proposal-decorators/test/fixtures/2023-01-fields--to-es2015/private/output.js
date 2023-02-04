@@ -18,8 +18,8 @@ class Foo {
   return babelHelpers.classPrivateFieldGet(this, _a);
 }, function (value) {
   babelHelpers.classPrivateFieldSet(this, _a, value);
-}, _ => _a.has(babelHelpers.checkInRHS(_))], [dec, 0, "b", function () {
+}], [dec, 0, "b", function () {
   return babelHelpers.classPrivateFieldGet(this, _b);
 }, function (value) {
   babelHelpers.classPrivateFieldSet(this, _b, value);
-}, _ => _b.has(babelHelpers.checkInRHS(_))]], []).e;
+}]], [], _ => _b.has(babelHelpers.checkInRHS(_))).e;

@@ -5,11 +5,11 @@ class Foo {}
   return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _a);
 }, function (value) {
   babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _a, value);
-}, _ => babelHelpers.checkInRHS(_) === Foo], [dec, 5, "b", function () {
+}], [dec, 5, "b", function () {
   return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _b);
 }, function (value) {
   babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _b, value);
-}, _ => babelHelpers.checkInRHS(_) === Foo]], []).e;
+}]], []).e;
 var _a = {
   writable: true,
   value: _init_a(Foo)

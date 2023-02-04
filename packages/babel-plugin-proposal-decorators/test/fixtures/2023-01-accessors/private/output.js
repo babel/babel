@@ -6,11 +6,11 @@ class Foo {
       return this.#A;
     }, function (value) {
       this.#A = value;
-    }, _ => #A in _], [dec, 1, "b", function () {
+    }], [dec, 1, "b", function () {
       return this.#B;
     }, function (value) {
       this.#B = value;
-    }, _ => #B in _]], []).e;
+    }]], [], _ => #a in _).e;
   }
   #A = (_initProto(this), _init_a(this));
   set #a(v) {

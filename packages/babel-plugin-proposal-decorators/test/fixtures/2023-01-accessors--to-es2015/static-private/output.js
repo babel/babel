@@ -31,11 +31,11 @@ function _get_b2() {
     return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _A);
   }, function (value) {
     babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _A, value);
-  }, _ => babelHelpers.checkInRHS(_) === Foo], [dec, 6, "b", function () {
+  }], [dec, 6, "b", function () {
     return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _B);
   }, function (value) {
     babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _B, value);
-  }, _ => babelHelpers.checkInRHS(_) === Foo]], []).e;
+  }]], []).e;
   _initStatic(Foo);
 })();
 var _A = {

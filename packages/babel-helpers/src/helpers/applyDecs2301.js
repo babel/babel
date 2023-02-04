@@ -1,5 +1,7 @@
 /* @minVersion 7.20.0 */
 
+import checkInRHS from "checkInRHS";
+
 /**
   Enums are used in this file, but not assigned to vars to avoid non-hoistable values
 
@@ -27,7 +29,7 @@ function createAddInitializerMethod(initializers, decoratorFinishedRef) {
 }
 
 function assertInstanceIfPrivate(has, target) {
-  if (has && !has(target)) {
+  if (!has(target)) {
     throw new TypeError("Attempted to access private element on non-instance");
   }
 }
@@ -41,7 +43,7 @@ function memberDec(
   isStatic,
   isPrivate,
   value,
-  privateHas
+  hasPrivateBrand
 ) {
   var kindStr;
 
@@ -78,13 +80,7 @@ function memberDec(
     );
   }
 
-  var get, set, has;
-  if (isPrivate) has = privateHas;
-  else {
-    has = function (target) {
-      return name in target;
-    };
-  }
+  var get, set;
   if (!isPrivate && (kind === 0 /* FIELD */ || kind === 2) /* METHOD */) {
     get = function (target) {
       return target[name];
@@ -97,7 +93,7 @@ function memberDec(
   } else if (kind === 2 /* METHOD */) {
     // Assert: isPrivate is true.
     get = function (target) {
-      assertInstanceIfPrivate(privateHas, target);
+      assertInstanceIfPrivate(hasPrivateBrand, target);
       return desc.value;
     };
   } else {
@@ -105,17 +101,22 @@ function memberDec(
     var t = kind === 0 /* FIELD */ || kind === 1; /* ACCESSOR */
     if (t || kind === 3 /* GETTER */) {
       get = function (target) {
-        assertInstanceIfPrivate(privateHas, target);
+        if (isPrivate) assertInstanceIfPrivate(hasPrivateBrand, target);
         return desc.get.call(target);
       };
     }
     if (t || kind === 4 /* SETTER */) {
       set = function (target, value) {
-        assertInstanceIfPrivate(privateHas, target);
+        if (isPrivate) assertInstanceIfPrivate(hasPrivateBrand, target);
         desc.set.call(target, value);
       };
     }
   }
+  var has = isPrivate
+    ? hasPrivateBrand.bind()
+    : function (target) {
+        return name in target;
+      };
   ctx.access =
     get && set
       ? { get: get, set: set, has: has }
@@ -183,11 +184,12 @@ function applyMemberDec(
   kind,
   isStatic,
   isPrivate,
-  initializers
+  initializers,
+  hasPrivateBrand
 ) {
   var decs = decInfo[0];
 
-  var desc, init, value, has;
+  var desc, init, value;
 
   if (isPrivate) {
     if (kind === 0 /* FIELD */ || kind === 1 /* ACCESSOR */) {
@@ -195,7 +197,6 @@ function applyMemberDec(
         get: decInfo[3],
         set: decInfo[4],
       };
-      has = decInfo[5];
     } else {
       if (kind === 3 /* GETTER */) {
         desc = {
@@ -210,7 +211,6 @@ function applyMemberDec(
           value: decInfo[3],
         };
       }
-      has = decInfo[4];
     }
   } else if (kind !== 0 /* FIELD */) {
     desc = Object.getOwnPropertyDescriptor(base, name);
@@ -241,7 +241,7 @@ function applyMemberDec(
       isStatic,
       isPrivate,
       value,
-      has
+      hasPrivateBrand
     );
 
     if (newValue !== void 0) {
@@ -272,7 +272,7 @@ function applyMemberDec(
         isStatic,
         isPrivate,
         value,
-        has
+        hasPrivateBrand
       );
 
       if (newValue !== void 0) {
@@ -366,10 +366,11 @@ function applyMemberDec(
   }
 }
 
-function applyMemberDecs(Class, decInfos) {
+function applyMemberDecs(Class, decInfos, instanceBrand) {
   var ret = [];
   var protoInitializers;
   var staticInitializers;
+  var staticBrand;
 
   var existingProtoNonFields = new Map();
   var existingStaticNonFields = new Map();
@@ -387,6 +388,7 @@ function applyMemberDecs(Class, decInfos) {
     var isStatic = kind >= 5; /* STATIC */
     var base;
     var initializers;
+    var hasPrivateBrand = instanceBrand;
 
     if (isStatic) {
       base = Class;
@@ -396,6 +398,12 @@ function applyMemberDecs(Class, decInfos) {
         staticInitializers = staticInitializers || [];
         initializers = staticInitializers;
       }
+      if (!staticBrand) {
+        staticBrand = function (_) {
+          return checkInRHS(_) === Class;
+        };
+      }
+      hasPrivateBrand = staticBrand;
     } else {
       base = Class.prototype;
       // initialize protoInitializers when we see a non-field member
@@ -436,7 +444,8 @@ function applyMemberDecs(Class, decInfos) {
       kind,
       isStatic,
       isPrivate,
-      initializers
+      initializers,
+      hasPrivateBrand
     );
   }
 
@@ -643,9 +652,14 @@ function applyClassDecs(targetClass, classDecs) {
   initializeClass(Class);
  */
 
-export default function applyDecs2301(targetClass, memberDecs, classDecs) {
+export default function applyDecs2301(
+  targetClass,
+  memberDecs,
+  classDecs,
+  instanceBrand
+) {
   return {
-    e: applyMemberDecs(targetClass, memberDecs),
+    e: applyMemberDecs(targetClass, memberDecs, instanceBrand),
     // Lazily apply class decorations so that member init locals can be properly bound.
     get c() {
       return applyClassDecs(targetClass, classDecs);

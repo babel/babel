@@ -4,7 +4,7 @@ class Foo {
   static {
     [_call_a, _initStatic] = babelHelpers.applyDecs2301(this, [[dec, 7, "a", function () {
       return this.value;
-    }, _ => #a in _]], []).e;
+    }]], []).e;
     _initStatic(this);
   }
   static #a = _call_a;

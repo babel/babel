@@ -4,9 +4,9 @@ class Foo {
   static {
     [_call_a, _call_a2, _initProto] = babelHelpers.applyDecs2301(this, [[dec, 3, "a", function () {
       return this.value;
-    }, _ => #a in _], [dec, 4, "a", function (v) {
+    }], [dec, 4, "a", function (v) {
       this.value = v;
-    }, _ => #a in _]], []).e;
+    }]], [], _ => #a in _).e;
   }
   constructor(...args) {
     _initProto(this);

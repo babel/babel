@@ -231,7 +231,6 @@ function addProxyAccessorsFor(
 
 function extractProxyAccessorsFor(
   targetKey: t.PrivateName,
-  injectHas: boolean,
 ): (t.FunctionExpression | t.ArrowFunctionExpression)[] {
   return [
     template.expression.ast`
@@ -244,10 +243,6 @@ function extractProxyAccessorsFor(
         this.${t.cloneNode(targetKey)} = value;
       }
     ` as t.FunctionExpression,
-    injectHas &&
-      (template.expression.ast`
-        _ => ${t.cloneNode(targetKey)} in _
-      ` as t.ArrowFunctionExpression),
   ].filter(Boolean);
 }
 
@@ -343,17 +338,12 @@ function generateDecorationExprs(
 
       const kind = el.isStatic ? el.kind + STATIC : el.kind;
 
-      const decInfo = [decs, t.numericLiteral(kind), el.name];
-
-      const { privateMethods } = el;
-
-      if (Array.isArray(privateMethods)) {
-        decInfo.push(...privateMethods);
-      } else if (privateMethods) {
-        decInfo.push(privateMethods);
-      }
-
-      return t.arrayExpression(decInfo);
+      return t.arrayExpression([
+        decs,
+        t.numericLiteral(kind),
+        el.name,
+        ...el.privateMethods,
+      ]);
     }),
   );
 }
@@ -491,8 +481,6 @@ function transformClass(
   const classDecorators = path.node.decorators;
   let hasElementDecorators = false;
 
-  const injectHasChecks = version === "2023-01";
-
   const generateClassPrivateUid = createLazyPrivateUidGeneratorForClass(path);
 
   // Iterate over the class to see if we need to decorate it, and also to
@@ -569,6 +557,9 @@ function transformClass(
     classIdLocal = t.cloneNode(path.node.id);
   }
 
+  let lastInstancePrivateName: t.PrivateName;
+  let needsInstancePrivateBrandCheck = false;
+
   if (hasElementDecorators) {
     for (const element of body) {
       if (!isClassDecoratableElementPath(element)) {
@@ -614,6 +605,15 @@ function transformClass(
         name = key.name;
       }
 
+      if (isPrivate && !isStatic) {
+        if (hasDecorators) {
+          needsInstancePrivateBrandCheck = true;
+        }
+        if (t.isClassPrivateProperty(node) || !lastInstancePrivateName) {
+          lastInstancePrivateName = key;
+        }
+      }
+
       if (element.isClassMethod({ kind: "constructor" })) {
         constructorPath = element;
       }
@@ -645,7 +645,7 @@ function transformClass(
           const [newPath] = element.replaceWith(newField);
 
           if (isPrivate) {
-            privateMethods = extractProxyAccessorsFor(newId, injectHasChecks);
+            privateMethods = extractProxyAccessorsFor(newId);
 
             const getId = newPath.scope.parent.generateDeclaredUidIdentifier(
               `get_${name}`,
@@ -679,7 +679,7 @@ function transformClass(
           locals = initId;
 
           if (isPrivate) {
-            privateMethods = extractProxyAccessorsFor(key, injectHasChecks);
+            privateMethods = extractProxyAccessorsFor(key);
           }
         } else if (isPrivate) {
           locals = element.scope.parent.generateDeclaredUidIdentifier(
@@ -710,11 +710,7 @@ function transformClass(
               body,
               isAsync,
             ),
-            injectHasChecks &&
-              (template.expression.ast`
-                _ => ${t.cloneNode(key)} in _
-              ` as t.ArrowFunctionExpression),
-          ].filter(Boolean);
+          ];
 
           if (kind === GETTER || kind === SETTER) {
             movePrivateAccessor(
@@ -997,6 +993,7 @@ function transformClass(
             classLocals,
             elementDecorations,
             classDecorations,
+            needsInstancePrivateBrandCheck ? lastInstancePrivateName : null,
             state,
             version,
           ),
@@ -1026,11 +1023,17 @@ function createLocalsAssignment(
   classLocals: t.Identifier[],
   elementDecorations: t.ArrayExpression,
   classDecorations: t.ArrayExpression,
+  maybePrivateBranName: t.PrivateName | null,
   state: PluginPass,
   version: DecoratorVersionKind,
 ) {
   let lhs, rhs;
   // TODO(Babel 8): Only keep the else branch
+  const args: t.Expression[] = [
+    t.thisExpression(),
+    elementDecorations,
+    classDecorations,
+  ];
   if (
     version === "2021-12" ||
     (version === "2022-03" && !state.availableHelper("applyDecs2203R"))
@@ -1038,15 +1041,21 @@ function createLocalsAssignment(
     lhs = t.arrayPattern([...elementLocals, ...classLocals]);
     rhs = t.callExpression(
       state.addHelper(version === "2021-12" ? "applyDecs" : "applyDecs2203"),
-      [t.thisExpression(), elementDecorations, classDecorations],
+      args,
     );
   } else {
-    rhs = t.callExpression(
-      state.addHelper(
-        version === "2023-01" ? "applyDecs2301" : "applyDecs2203R",
-      ),
-      [t.thisExpression(), elementDecorations, classDecorations],
-    );
+    if (version === "2023-01") {
+      if (maybePrivateBranName) {
+        args.push(
+          template.expression.ast`
+            _ => ${t.cloneNode(maybePrivateBranName)} in _
+          ` as t.ArrowFunctionExpression,
+        );
+      }
+      rhs = t.callExpression(state.addHelper("applyDecs2301"), args);
+    } else {
+      rhs = t.callExpression(state.addHelper("applyDecs2203R"), args);
+    }
     // optimize `{ c: [classLocals] } = applyapplyDecs2203R(...)` to
     // `[classLocals] = applyapplyDecs2203R(...).c`
     if (elementLocals.length > 0) {
