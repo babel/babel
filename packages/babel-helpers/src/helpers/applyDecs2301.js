@@ -176,6 +176,17 @@ function assertValidReturnValue(kind, value) {
   }
 }
 
+function curryThis1(fn) {
+  return function () {
+    return fn(this);
+  };
+}
+function curryThis2(fn) {
+  return function (value) {
+    fn(this, value);
+  };
+}
+
 function applyMemberDec(
   ret,
   base,
@@ -194,8 +205,8 @@ function applyMemberDec(
   if (isPrivate) {
     if (kind === 0 /* FIELD */ || kind === 1 /* ACCESSOR */) {
       desc = {
-        get: decInfo[3],
-        set: decInfo[4],
+        get: curryThis1(decInfo[3]),
+        set: curryThis2(decInfo[4]),
       };
     } else {
       if (kind === 3 /* GETTER */) {

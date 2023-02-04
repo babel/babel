@@ -231,19 +231,30 @@ function addProxyAccessorsFor(
 
 function extractProxyAccessorsFor(
   targetKey: t.PrivateName,
+  version: DecoratorVersionKind,
 ): (t.FunctionExpression | t.ArrowFunctionExpression)[] {
+  if (version !== "2023-01") {
+    return [
+      template.expression.ast`
+        function () {
+          return this.${t.cloneNode(targetKey)};
+        }
+      ` as t.FunctionExpression,
+      template.expression.ast`
+        function (value) {
+          this.${t.cloneNode(targetKey)} = value;
+        }
+      ` as t.FunctionExpression,
+    ];
+  }
   return [
     template.expression.ast`
-      function () {
-        return this.${t.cloneNode(targetKey)};
-      }
-    ` as t.FunctionExpression,
+      o => o.${t.cloneNode(targetKey)}
+    ` as t.ArrowFunctionExpression,
     template.expression.ast`
-      function (value) {
-        this.${t.cloneNode(targetKey)} = value;
-      }
-    ` as t.FunctionExpression,
-  ].filter(Boolean);
+      (o, v) => o.${t.cloneNode(targetKey)} = v
+    ` as t.ArrowFunctionExpression,
+  ];
 }
 
 const FIELD = 0;
@@ -342,7 +353,7 @@ function generateDecorationExprs(
         decs,
         t.numericLiteral(kind),
         el.name,
-        ...el.privateMethods,
+        ...(el.privateMethods || []),
       ]);
     }),
   );
@@ -645,7 +656,7 @@ function transformClass(
           const [newPath] = element.replaceWith(newField);
 
           if (isPrivate) {
-            privateMethods = extractProxyAccessorsFor(newId);
+            privateMethods = extractProxyAccessorsFor(newId, version);
 
             const getId = newPath.scope.parent.generateDeclaredUidIdentifier(
               `get_${name}`,
@@ -679,7 +690,7 @@ function transformClass(
           locals = initId;
 
           if (isPrivate) {
-            privateMethods = extractProxyAccessorsFor(key);
+            privateMethods = extractProxyAccessorsFor(key, version);
           }
         } else if (isPrivate) {
           locals = element.scope.parent.generateDeclaredUidIdentifier(
@@ -1028,12 +1039,12 @@ function createLocalsAssignment(
   version: DecoratorVersionKind,
 ) {
   let lhs, rhs;
-  // TODO(Babel 8): Only keep the else branch
   const args: t.Expression[] = [
     t.thisExpression(),
     elementDecorations,
     classDecorations,
   ];
+  // TODO(Babel 8): Only keep the else branch
   if (
     version === "2021-12" ||
     (version === "2022-03" && !state.availableHelper("applyDecs2203R"))
@@ -1044,6 +1055,7 @@ function createLocalsAssignment(
       args,
     );
   } else {
+    // TODO(Babel 8): Only keep the if branch
     if (version === "2023-01") {
       if (maybePrivateBranName) {
         args.push(

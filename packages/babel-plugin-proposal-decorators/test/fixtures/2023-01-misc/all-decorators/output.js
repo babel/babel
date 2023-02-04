@@ -8,23 +8,7 @@ new class extends babelHelpers.identity {
         ({
           e: [_init_m, _call_o, _call_p, _call_q, _init_r, _get_r, _set_r, _init_d, _call_f, _call_g, _call_g2, _init_h, _get_h, _set_h, _init_i, _init_n, _init_a, _init_e, _initProto, _initStatic],
           c: [_Class, _initClass]
-        } = babelHelpers.applyDecs2301(this, [[dec, 7, "j"], [dec, 8, "k"], [dec, 9, "l"], [dec, 6, "m"], [dec, 7, "o", function () {}], [dec, 8, "p", function () {}], [dec, 9, "q", function (v) {}], [dec, 6, "r", function () {
-          return this.#D;
-        }, function (value) {
-          this.#D = value;
-        }], [dec, 2, "b"], [dec, 3, "c"], [dec, 4, "c"], [dec, 1, "d"], [dec, 2, "f", function () {}], [dec, 3, "g", function () {}], [dec, 4, "g", function (v) {}], [dec, 1, "h", function () {
-          return this.#B;
-        }, function (value) {
-          this.#B = value;
-        }], [dec, 5, "i"], [dec, 5, "n", function () {
-          return this.#n;
-        }, function (value) {
-          this.#n = value;
-        }], [dec, 0, "a"], [dec, 0, "e", function () {
-          return this.#e;
-        }, function (value) {
-          this.#e = value;
-        }]], [dec], _ => #e in _));
+        } = babelHelpers.applyDecs2301(this, [[dec, 7, "j"], [dec, 8, "k"], [dec, 9, "l"], [dec, 6, "m"], [dec, 7, "o", function () {}], [dec, 8, "p", function () {}], [dec, 9, "q", function (v) {}], [dec, 6, "r", o => o.#D, (o, v) => o.#D = v], [dec, 2, "b"], [dec, 3, "c"], [dec, 4, "c"], [dec, 1, "d"], [dec, 2, "f", function () {}], [dec, 3, "g", function () {}], [dec, 4, "g", function (v) {}], [dec, 1, "h", o => o.#B, (o, v) => o.#B = v], [dec, 5, "i"], [dec, 5, "n", o => o.#n, (o, v) => o.#n = v], [dec, 0, "a"], [dec, 0, "e", o => o.#e, (o, v) => o.#e = v]], [dec], _ => #e in _));
         _initStatic(this);
       }
       #f = _call_f;
