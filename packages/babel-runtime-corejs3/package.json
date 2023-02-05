@@ -912,7 +912,7 @@
     "./package.json": "./package.json",
     "./regenerator": "./regenerator/index.js",
     "./regenerator/*.js": "./regenerator/*.js",
-    "./regenerator/": "./regenerator/",
+    "./regenerator/": "./regenerator/*",
     "./core-js-stable/": "./core-js-stable/",
     "./core-js-stable/*.js": "./core-js-stable/*.js",
     "./core-js-stable/map": "./core-js-stable/map.js",
