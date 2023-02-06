@@ -42,10 +42,8 @@ yarn lint:typecheck
 # https://github.com/babel/babel/pull/14892#issuecomment-1233180626
 echo "export default () => () => {}" > src/main/create-print-pre-check-function.js
 
+# Temporarily ignore tests, use `rm -f path/to/jsfmt.spec.js`
 # https://github.com/babel/babel/pull/15385#issuecomment-1409840781
-# Ignore this test until prettier update the snapshot
-rm tests/format/js/exports/jsfmt.spec.js
-rm tests/format/js/export-extension/jsfmt.spec.js
 
 yarn test "tests/format/(jsx?|misc|typescript|flow|flow-repo)/" --update-snapshot --runInBand
 
