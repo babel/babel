@@ -43,12 +43,11 @@ yarn lint:typecheck
 echo "export default () => () => {}" > src/main/create-print-pre-check-function.js
 
 # Temporarily ignore tests, use `rm -f path/to/jsfmt.spec.js`
-# https://github.com/babel/babel/pull/15385#issuecomment-1409840781
-
 # https://github.com/babel/babel/pull/15400#issuecomment-1414539133
 # Ignore this test until prettier update the snapshot
 # because prettier has ignored UnexpectedReservedWord error
-rm tests/format/flow-repo/async/await_parse.js
+rm -f tests/format/flow-repo/async/await_parse.js
+rm -f tests/format/misc/errors/js/explicit-resource-management/invalid-using-binding-await.js
 
 yarn test "tests/format/(jsx?|misc|typescript|flow|flow-repo)/" --update-snapshot --runInBand
 
