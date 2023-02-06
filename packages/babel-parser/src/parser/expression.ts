@@ -2793,7 +2793,27 @@ export default abstract class ExpressionParser extends LValParser {
       return;
     }
 
-    if (word === "yield") {
+    if (checkKeywords && isKeyword(word)) {
+      this.raise(Errors.UnexpectedKeyword, {
+        at: startLoc,
+        keyword: word,
+      });
+      return;
+    }
+
+    const reservedTest = !this.state.strict
+      ? isReservedWord
+      : isBinding
+      ? isStrictBindReservedWord
+      : isStrictReservedWord;
+
+    if (reservedTest(word, this.inModule)) {
+      this.raise(Errors.UnexpectedReservedWord, {
+        at: startLoc,
+        reservedWord: word,
+      });
+      return;
+    } else if (word === "yield") {
       if (this.prodParam.hasYield) {
         this.raise(Errors.YieldBindingIdentifier, { at: startLoc });
         return;
@@ -2817,27 +2837,6 @@ export default abstract class ExpressionParser extends LValParser {
         this.raise(Errors.ArgumentsInClass, { at: startLoc });
         return;
       }
-    }
-
-    if (checkKeywords && isKeyword(word)) {
-      this.raise(Errors.UnexpectedKeyword, {
-        at: startLoc,
-        keyword: word,
-      });
-      return;
-    }
-
-    const reservedTest = !this.state.strict
-      ? isReservedWord
-      : isBinding
-      ? isStrictBindReservedWord
-      : isStrictReservedWord;
-
-    if (reservedTest(word, this.inModule)) {
-      this.raise(Errors.UnexpectedReservedWord, {
-        at: startLoc,
-        reservedWord: word,
-      });
     }
   }
 
