@@ -100,16 +100,28 @@ function memberDec(
     // Assert: If kind === 0, then isPrivate is true.
     var t = kind === 0 /* FIELD */ || kind === 1; /* ACCESSOR */
     if (t || kind === 3 /* GETTER */) {
-      get = function (target) {
-        if (isPrivate) assertInstanceIfPrivate(hasPrivateBrand, target);
-        return desc.get.call(target);
-      };
+      if (isPrivate) {
+        get = function (target) {
+          assertInstanceIfPrivate(hasPrivateBrand, target);
+          return desc.get.call(target);
+        };
+      } else {
+        get = function (target) {
+          return desc.get.call(target);
+        };
+      }
     }
     if (t || kind === 4 /* SETTER */) {
-      set = function (target, value) {
-        if (isPrivate) assertInstanceIfPrivate(hasPrivateBrand, target);
-        desc.set.call(target, value);
-      };
+      if (isPrivate) {
+        set = function (target, value) {
+          assertInstanceIfPrivate(hasPrivateBrand, target);
+          desc.set.call(target, value);
+        };
+      } else {
+        set = function (target, value) {
+          desc.set.call(target, value);
+        };
+      }
     }
   }
   var has = isPrivate
@@ -409,7 +421,7 @@ function applyMemberDecs(Class, decInfos, instanceBrand) {
         staticInitializers = staticInitializers || [];
         initializers = staticInitializers;
       }
-      if (!staticBrand) {
+      if (isPrivate && !staticBrand) {
         staticBrand = function (_) {
           return checkInRHS(_) === Class;
         };
