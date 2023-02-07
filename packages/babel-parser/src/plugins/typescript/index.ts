@@ -667,7 +667,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     tsParseConstModifier = this.tsParseModifiers.bind(this, {
       allowedModifiers: ["const"],
-      // for better error recover
+      // for better error recovery
       disallowedModifiers: ["in", "out"],
       errorTemplate: TSErrors.InvalidModifierOnTypeParameterPositions,
     });

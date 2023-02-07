@@ -4,12 +4,20 @@ function c<T, const U>() {}
 declare function d<const T>();
 <const T>() => {};
 <const T extends U>() => {};
+(function <const T>() {});
+(function <const T extends U>() {});
+(function <T, const U>() {});
 
 class A<const T> {}
 class B<const T extends U> {}
 class C<T, const U> {}
 class D<in const T> {}
 class E<const in T> {}
+(class <const T> {});
+(class <const T extends U> {});
+(class <T, const U> {});
+(class <in const T> {});
+(class <const in T> {});
 
 interface I<const T> {}
 interface J<const T extends U> {}
