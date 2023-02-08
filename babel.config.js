@@ -464,17 +464,30 @@ function pluginPolyfillsOldNode({ template, types: t }) {
     },
   };
 }
+
+/**
+ * @param {import("@babel/core")} pluginAPI
+ * @returns {import("@babel/core").PluginObj}
+ */
 function pluginToggleBooleanFlag({ types: t }, { name, value }) {
+  function check(test) {
+    let keepConsequent = value;
+
+    if (test.isUnaryExpression({ operator: "!" })) {
+      test = test.get("argument");
+      keepConsequent = !keepConsequent;
+    }
+    return {
+      test,
+      keepConsequent,
+    };
+  }
+
   return {
     visitor: {
       "IfStatement|ConditionalExpression"(path) {
-        let test = path.get("test");
-        let keepConsequent = value;
-
-        if (test.isUnaryExpression({ operator: "!" })) {
-          test = test.get("argument");
-          keepConsequent = !keepConsequent;
-        }
+        // eslint-disable-next-line prefer-const
+        let { test, keepConsequent } = check(path.get("test"));
 
         // yarn-plugin-conditions injects bool(process.env.BABEL_8_BREAKING)
         // tests, to properly cast the env variable to a boolean.
@@ -493,6 +506,26 @@ function pluginToggleBooleanFlag({ types: t }, { name, value }) {
             ? path.node.consequent
             : path.node.alternate || t.emptyStatement()
         );
+      },
+      LogicalExpression(path) {
+        const { test, keepConsequent } = check(path.get("left"));
+
+        if (!test.matchesPattern(name)) return;
+
+        switch (path.node.operator) {
+          case "&&":
+            path.replaceWith(
+              keepConsequent ? path.node.right : t.booleanLiteral(false)
+            );
+            break;
+          case "||":
+            path.replaceWith(
+              keepConsequent ? t.booleanLiteral(true) : path.node.right
+            );
+            break;
+          default:
+            throw path.buildCodeFrameError("This check could not be stripped.");
+        }
       },
       MemberExpression(path) {
         if (path.matchesPattern(name)) {
