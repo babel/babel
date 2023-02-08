@@ -755,7 +755,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       N.Identifier | N.RestElement | N.ObjectPattern | N.ArrayPattern
     > {
       return super
-        .parseBindingList(tt.parenR, charCodes.rightParenthesis)
+        .parseBindingList(tt.parenR, charCodes.rightParenthesis, {
+          isFunctionParams: true,
+        })
         .map(pattern => {
           if (
             pattern.type !== "Identifier" &&
@@ -1419,11 +1421,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         const { errors } = this.state;
         const previousErrorCount = errors.length;
         try {
-          super.parseBindingList(
-            tt.bracketR,
-            charCodes.rightSquareBracket,
-            true,
-          );
+          super.parseBindingList(tt.bracketR, charCodes.rightSquareBracket, {
+            allowEmpty: true,
+          });
           return errors.length === previousErrorCount;
         } catch {
           return false;
@@ -2251,6 +2251,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     parseAssignableListItem(
       allowModifiers: boolean | undefined | null,
       decorators: N.Decorator[],
+      isFunctionParam: boolean,
     ): N.Pattern | N.TSParameterProperty {
       // Store original location to include modifiers in range
       const startLoc = this.state.startLoc;
@@ -2282,7 +2283,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
 
       const left = this.parseMaybeDefault();
-      this.parseAssignableListItemTypes(left);
+      this.parseAssignableListItemTypes(left, isFunctionParam);
       const elt = this.parseMaybeDefault(left.loc.start, left);
       if (accessibility || readonly || override) {
         const pp = this.startNodeAt<N.TSParameterProperty>(startLoc);
@@ -2314,6 +2315,27 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       );
     }
 
+    tsDisallowOptionalPattern(node: Undone<N.Function>) {
+      for (const param of node.params) {
+        if (
+          param.type !== "Identifier" &&
+          (param as any).optional &&
+          !this.state.isAmbientContext
+        ) {
+          this.raise(TSErrors.PatternIsOptional, { at: param });
+        }
+      }
+    }
+
+    setArrowFunctionParameters(
+      node: Undone<N.ArrowFunctionExpression>,
+      params: N.Expression[],
+      trailingCommaLoc?: Position | null,
+    ): void {
+      super.setArrowFunctionParameters(node, params, trailingCommaLoc);
+      this.tsDisallowOptionalPattern(node);
+    }
+
     parseFunctionBodyAndFinish<
       T extends
         | N.Function
@@ -2340,6 +2362,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           return super.parseFunctionBodyAndFinish(node, bodilessType, isMethod);
         }
       }
+      this.tsDisallowOptionalPattern(node);
 
       return super.parseFunctionBodyAndFinish(node, type, isMethod);
     }
@@ -3504,16 +3527,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     // Allow type annotations inside of a parameter list.
-    parseAssignableListItemTypes(param: N.Pattern) {
-      if (this.eat(tt.question)) {
-        if (
-          param.type !== "Identifier" &&
-          !this.state.isAmbientContext &&
-          !this.state.inType
-        ) {
-          this.raise(TSErrors.PatternIsOptional, { at: param });
-        }
+    parseAssignableListItemTypes(param: N.Pattern, isFunctionParam: boolean) {
+      if (!isFunctionParam) return param;
 
+      if (this.eat(tt.question)) {
         (param as any as N.Identifier).optional = true;
       }
       const type = this.tsTryParseTypeAnnotation();

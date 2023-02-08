@@ -366,7 +366,7 @@ export default abstract class LValParser extends NodeUtils {
         node.elements = this.parseBindingList(
           tt.bracketR,
           charCodes.rightSquareBracket,
-          true,
+          { allowEmpty: true },
         );
         return this.finishNode(node, "ArrayPattern");
       }
@@ -384,8 +384,15 @@ export default abstract class LValParser extends NodeUtils {
     this: Parser,
     close: TokenType,
     closeCharCode: typeof charCodes[keyof typeof charCodes],
-    allowEmpty?: boolean,
-    allowModifiers?: boolean,
+    {
+      allowEmpty = false,
+      allowModifiers = false,
+      isFunctionParams = false,
+    }: {
+      allowEmpty?: boolean;
+      allowModifiers?: boolean;
+      isFunctionParams?: boolean;
+    } = {},
   ): Array<Pattern | TSParameterProperty> {
     const elts: Array<Pattern | TSParameterProperty> = [];
     let first = true;
@@ -400,7 +407,12 @@ export default abstract class LValParser extends NodeUtils {
       } else if (this.eat(close)) {
         break;
       } else if (this.match(tt.ellipsis)) {
-        elts.push(this.parseAssignableListItemTypes(this.parseRestBinding()));
+        elts.push(
+          this.parseAssignableListItemTypes(
+            this.parseRestBinding(),
+            isFunctionParams,
+          ),
+        );
         if (!this.checkCommaAfterRest(closeCharCode)) {
           this.expect(close);
           break;
@@ -416,7 +428,13 @@ export default abstract class LValParser extends NodeUtils {
         while (this.match(tt.at)) {
           decorators.push(this.parseDecorator());
         }
-        elts.push(this.parseAssignableListItem(allowModifiers, decorators));
+        elts.push(
+          this.parseAssignableListItem(
+            allowModifiers,
+            decorators,
+            isFunctionParams,
+          ),
+        );
       }
     }
     return elts;
@@ -462,9 +480,10 @@ export default abstract class LValParser extends NodeUtils {
     this: Parser,
     allowModifiers: boolean | undefined | null,
     decorators: Decorator[],
+    isFunctionParam: boolean = false,
   ): Pattern | TSParameterProperty {
     const left = this.parseMaybeDefault();
-    this.parseAssignableListItemTypes(left);
+    this.parseAssignableListItemTypes(left, isFunctionParam);
     const elt = this.parseMaybeDefault(left.loc.start, left);
     if (decorators.length) {
       left.decorators = decorators;
@@ -473,7 +492,11 @@ export default abstract class LValParser extends NodeUtils {
   }
 
   // Used by flow/typescript plugin to add type annotations to binding elements
-  parseAssignableListItemTypes(param: Pattern): Pattern {
+  parseAssignableListItemTypes(
+    param: Pattern,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    isFunctionParam: boolean,
+  ): Pattern {
     return param;
   }
 

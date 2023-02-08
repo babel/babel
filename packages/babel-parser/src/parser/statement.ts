@@ -1606,12 +1606,10 @@ export default abstract class StatementParser extends ExpressionParser {
   ): void {
     this.expect(tt.parenL);
     this.expressionScope.enter(newParameterDeclarationScope());
-    node.params = this.parseBindingList(
-      tt.parenR,
-      charCodes.rightParenthesis,
-      /* allowEmpty */ false,
+    node.params = this.parseBindingList(tt.parenR, charCodes.rightParenthesis, {
       allowModifiers,
-    );
+      isFunctionParams: true,
+    });
 
     this.expressionScope.exit();
   }
