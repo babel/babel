@@ -3,14 +3,13 @@ import type { Handler } from "gensync";
 import path from "path";
 import { pathToFileURL } from "url";
 import { createRequire } from "module";
-import fs from "fs";
 import semver from "semver";
 
 import { endHiddenCallStack } from "../../errors/rewrite-stack-trace";
 import ConfigError from "../../errors/config-error";
 
-import { transformSync } from "../../transform";
 import type { InputOptions } from "..";
+import { transformFileSync } from "../../transform-file";
 
 const require = createRequire(import.meta.url);
 
@@ -60,48 +59,62 @@ function loadCtsDefault(filepath: string) {
     require.extensions[".cts"] ||
     require.extensions[".mts"]
   );
+
+  let handler: NodeJS.RequireExtensions[""];
+
   if (!hasTsSupport) {
-    const code = fs.readFileSync(filepath, "utf8");
+    const preset = require("@babel/preset-typescript");
+
+    if (!preset) {
+      throw new ConfigError(
+        "You appear to be using a .cts file as Babel configuration, but the `@babel/preset-typescript` package was not found, please install it!",
+        filepath,
+      );
+    }
+
     const opts: InputOptions = {
       babelrc: false,
       configFile: false,
-      filename: path.basename(filepath),
       sourceType: "script",
       sourceMaps: "inline",
       presets: [
         [
-          "@babel/preset-typescript",
-          process.env.BABEL_8_BREAKING
-            ? {
-                disallowAmbiguousJSXLike: true,
-                allExtensions: true,
-                onlyRemoveTypeImports: true,
-                optimizeConstEnums: true,
-              }
-            : {
-                allowDeclareFields: true,
-                disallowAmbiguousJSXLike: true,
-                allExtensions: true,
-                onlyRemoveTypeImports: true,
-                optimizeConstEnums: true,
-              },
+          preset,
+          {
+            disallowAmbiguousJSXLike: true,
+            allExtensions: true,
+            onlyRemoveTypeImports: true,
+            optimizeConstEnums: true,
+            ...(process.env.BABEL_8_BREAKING && {
+              allowDeclareFields: true,
+            }),
+          },
         ],
       ],
     };
-    const result = transformSync(code, opts);
-    require.extensions[ext] = function (m, filename) {
-      if (filename === filepath) {
+
+    handler = function (m, filename) {
+      // If we want to support `.ts`, `.d.ts` must be handled specially.
+      if (handler && filename.endsWith(ext)) {
         // @ts-expect-error Undocumented API
-        return m._compile(result.code, filename);
+        return m._compile(
+          transformFileSync(filename, {
+            ...opts,
+            filename,
+          }).code,
+          filename,
+        );
       }
       return require.extensions[".js"](m, filename);
     };
+    require.extensions[ext] = handler;
   }
   try {
     return endHiddenCallStack(require)(filepath);
   } finally {
     if (!hasTsSupport) {
-      delete require.extensions[ext];
+      if (require.extensions[ext] === handler) delete require.extensions[ext];
+      handler = undefined;
     }
   }
 }
