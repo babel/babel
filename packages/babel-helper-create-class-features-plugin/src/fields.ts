@@ -58,7 +58,6 @@ export function buildPrivateNamesMap(props: PropPath[]) {
 export function buildPrivateNamesNodes(
   privateNamesMap: PrivateNamesMap,
   privateFieldsAsProperties: boolean,
-  state: File,
 ) {
   const initNodes: t.Statement[] = [];
 
@@ -66,7 +65,7 @@ export function buildPrivateNamesNodes(
     // When the privateFieldsAsProperties assumption is enabled,
     // both static and instance fields are transpiled using a
     // secret non-enumerable property. Hence, we also need to generate that
-    // key (using the classPrivateFieldLooseKey helper).
+    // key, using a Symbol.
     // In spec mode, only instance fields need a "private name" initializer
     // because static fields are directly assigned to a variable in the
     // buildPrivateStaticFieldInitSpec function.
@@ -77,9 +76,7 @@ export function buildPrivateNamesNodes(
     let init: t.Expression;
 
     if (privateFieldsAsProperties) {
-      init = t.callExpression(state.addHelper("classPrivateFieldLooseKey"), [
-        t.stringLiteral(name),
-      ]);
+      init = t.callExpression(t.identifier("Symbol"), [t.stringLiteral(name)]);
     } else if (!isStatic) {
       init = t.newExpression(
         t.identifier(!isMethod || isAccessor ? "WeakMap" : "WeakSet"),

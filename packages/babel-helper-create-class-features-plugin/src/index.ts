@@ -191,7 +191,6 @@ export function createClassFeaturePlugin({
         const privateNamesNodes = buildPrivateNamesNodes(
           privateNamesMap,
           privateFieldsAsProperties ?? loose,
-          file,
         );
 
         transformPrivateNamesUsage(
