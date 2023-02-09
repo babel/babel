@@ -1,5 +1,5 @@
-var _x = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("x");
-var _y = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("y");
+var _x = /*#__PURE__*/Symbol("x");
+var _y = /*#__PURE__*/Symbol("y");
 var Point = /*#__PURE__*/function () {
   "use strict";
 

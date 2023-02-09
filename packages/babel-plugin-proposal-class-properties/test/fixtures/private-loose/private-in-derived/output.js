@@ -1,4 +1,4 @@
-var _outer = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("outer");
+var _outer = /*#__PURE__*/Symbol("outer");
 var Outer = /*#__PURE__*/babelHelpers.createClass(function Outer() {
   "use strict";
 

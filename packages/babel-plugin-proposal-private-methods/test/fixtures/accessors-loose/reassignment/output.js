@@ -1,5 +1,5 @@
 var counter = 0;
-var _privateFieldValue = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("privateFieldValue");
+var _privateFieldValue = /*#__PURE__*/Symbol("privateFieldValue");
 class Foo {
   constructor() {
     Object.defineProperty(this, _privateFieldValue, {

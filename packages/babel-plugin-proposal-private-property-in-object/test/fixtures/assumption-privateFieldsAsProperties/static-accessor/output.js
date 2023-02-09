@@ -1,4 +1,4 @@
-var _foo = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("foo");
+var _foo = /*#__PURE__*/Symbol("foo");
 class Foo {
   test(other) {
     return Object.prototype.hasOwnProperty.call(babelHelpers.checkInRHS(other), _foo);

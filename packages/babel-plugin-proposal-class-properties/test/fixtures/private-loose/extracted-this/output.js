@@ -1,6 +1,6 @@
 var foo = "bar";
-var _bar = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("bar");
-var _baz = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("baz");
+var _bar = /*#__PURE__*/Symbol("bar");
+var _baz = /*#__PURE__*/Symbol("baz");
 var Foo = /*#__PURE__*/babelHelpers.createClass(function Foo(_foo) {
   "use strict";
 

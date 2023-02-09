@@ -1,4 +1,4 @@
-var _scopedFunctionWithThis = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("scopedFunctionWithThis");
+var _scopedFunctionWithThis = /*#__PURE__*/Symbol("scopedFunctionWithThis");
 let Child = /*#__PURE__*/function (_Parent) {
   "use strict";
 

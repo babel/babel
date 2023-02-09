@@ -1,5 +1,5 @@
-var _priv = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("priv");
-var _method = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("method");
+var _priv = /*#__PURE__*/Symbol("priv");
+var _method = /*#__PURE__*/Symbol("method");
 class Cl {
   constructor() {
     Object.defineProperty(this, _method, {

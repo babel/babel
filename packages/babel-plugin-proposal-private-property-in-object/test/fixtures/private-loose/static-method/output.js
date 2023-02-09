@@ -1,4 +1,4 @@
-var _foo = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("foo");
+var _foo = /*#__PURE__*/Symbol("foo");
 let Foo = /*#__PURE__*/function () {
   "use strict";
 

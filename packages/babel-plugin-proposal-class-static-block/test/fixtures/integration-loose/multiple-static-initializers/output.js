@@ -1,4 +1,4 @@
-var _bar = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("bar");
+var _bar = /*#__PURE__*/Symbol("bar");
 class Foo {}
 Object.defineProperty(Foo, _bar, {
   writable: true,

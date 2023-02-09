@@ -1,5 +1,5 @@
-var _p = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("p");
-var _q = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("q");
+var _p = /*#__PURE__*/Symbol("p");
+var _q = /*#__PURE__*/Symbol("q");
 class C {
   constructor() {
     [babelHelpers.classPrivateFieldLooseBase(C, _p)[_p]] = [0];

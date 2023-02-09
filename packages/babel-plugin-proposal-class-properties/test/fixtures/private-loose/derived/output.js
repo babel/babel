@@ -1,4 +1,4 @@
-var _prop = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("prop");
+var _prop = /*#__PURE__*/Symbol("prop");
 var Foo = /*#__PURE__*/babelHelpers.createClass(function Foo() {
   "use strict";
 
@@ -8,7 +8,7 @@ var Foo = /*#__PURE__*/babelHelpers.createClass(function Foo() {
     value: "foo"
   });
 });
-var _prop2 = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("prop");
+var _prop2 = /*#__PURE__*/Symbol("prop");
 var Bar = /*#__PURE__*/function (_Foo) {
   "use strict";
 

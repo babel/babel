@@ -1,6 +1,6 @@
 export default (param => {
   var _class, _props;
-  return _props = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("props"), (_class = class App {
+  return _props = /*#__PURE__*/Symbol("props"), (_class = class App {
     getParam() {
       return param;
     }

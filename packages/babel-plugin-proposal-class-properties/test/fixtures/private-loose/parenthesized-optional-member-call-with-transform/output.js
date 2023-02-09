@@ -1,5 +1,5 @@
-var _x = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("x");
-var _m = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("m");
+var _x = /*#__PURE__*/Symbol("x");
+var _m = /*#__PURE__*/Symbol("m");
 class Foo {
   static getSelf() {
     return Foo;

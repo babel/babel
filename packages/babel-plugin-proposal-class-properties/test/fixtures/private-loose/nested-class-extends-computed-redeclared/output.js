@@ -1,4 +1,4 @@
-var _foo = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("foo");
+var _foo = /*#__PURE__*/Symbol("foo");
 var Foo = /*#__PURE__*/function () {
   "use strict";
 
@@ -14,7 +14,7 @@ var Foo = /*#__PURE__*/function () {
     value: function test() {
       var _foo3;
       var _babelHelpers$classPr;
-      var _foo2 = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("foo");
+      var _foo2 = /*#__PURE__*/Symbol("foo");
       var Nested = /*#__PURE__*/function (_ref) {
         babelHelpers.inherits(Nested, _ref);
         var _super = babelHelpers.createSuper(Nested);
@@ -29,7 +29,7 @@ var Foo = /*#__PURE__*/function () {
           return _this;
         }
         return babelHelpers.createClass(Nested);
-      }((_foo3 = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("foo"), _babelHelpers$classPr = babelHelpers.classPrivateFieldLooseBase(this, _foo3)[_foo3], /*#__PURE__*/function () {
+      }((_foo3 = /*#__PURE__*/Symbol("foo"), _babelHelpers$classPr = babelHelpers.classPrivateFieldLooseBase(this, _foo3)[_foo3], /*#__PURE__*/function () {
         function _class2() {
           babelHelpers.classCallCheck(this, _class2);
           Object.defineProperty(this, _foo3, {

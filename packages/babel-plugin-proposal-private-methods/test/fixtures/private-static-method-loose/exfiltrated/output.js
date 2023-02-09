@@ -1,5 +1,5 @@
 var exfiltrated;
-var _privateStaticMethod = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("privateStaticMethod");
+var _privateStaticMethod = /*#__PURE__*/Symbol("privateStaticMethod");
 class Cl {
   constructor() {
     if (exfiltrated === undefined) {
