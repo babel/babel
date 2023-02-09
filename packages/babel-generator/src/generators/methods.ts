@@ -1,12 +1,15 @@
 import type Printer from "../printer";
 import type * as t from "@babel/types";
 import { isIdentifier } from "@babel/types";
+import type { NodePath } from "@babel/traverse";
 
 export function _params(
   this: Printer,
   node: t.Function | t.TSDeclareMethod | t.TSDeclareFunction,
-  idNode: t.Node,
-  parentNode: t.Node,
+  idNode: t.Expression | t.PrivateName,
+  parentNode: NodePath<
+    t.Function | t.TSDeclareMethod | t.TSDeclareFunction
+  >["parent"],
 ) {
   this.print(node.typeParameters, node);
 
@@ -141,7 +144,9 @@ export function _predicate(
 export function _functionHead(
   this: Printer,
   node: t.FunctionDeclaration | t.FunctionExpression | t.TSDeclareFunction,
-  parent: t.Node,
+  parent: NodePath<
+    t.FunctionDeclaration | t.FunctionExpression | t.TSDeclareFunction
+  >["parent"],
 ) {
   if (node.async) {
     this.word("async");
@@ -174,7 +179,7 @@ export function _functionHead(
 export function FunctionExpression(
   this: Printer,
   node: t.FunctionExpression,
-  parent: t.Node,
+  parent: NodePath<t.FunctionExpression>["parent"],
 ) {
   this._functionHead(node, parent);
   this.space();
@@ -186,7 +191,7 @@ export { FunctionExpression as FunctionDeclaration };
 export function ArrowFunctionExpression(
   this: Printer,
   node: t.ArrowFunctionExpression,
-  parent: t.Node,
+  parent: NodePath<t.ArrowFunctionExpression>["parent"],
 ) {
   if (node.async) {
     this.word("async", true);
@@ -236,8 +241,14 @@ function hasTypesOrComments(
   );
 }
 
-function _getFuncIdName(this: Printer, idNode: t.Node, parent: t.Node) {
-  let id = idNode;
+function _getFuncIdName(
+  this: Printer,
+  idNode: t.Expression | t.PrivateName,
+  parent: NodePath<
+    t.Function | t.TSDeclareMethod | t.TSDeclareFunction
+  >["parent"],
+) {
+  let id: t.Expression | t.PrivateName | t.LVal = idNode;
 
   if (!id && parent) {
     const parentType = parent.type;
@@ -245,35 +256,46 @@ function _getFuncIdName(this: Printer, idNode: t.Node, parent: t.Node) {
     if (parentType === "VariableDeclarator") {
       id = parent.id;
     } else if (
+      parentType === "AssignmentExpression" ||
+      parentType === "AssignmentPattern"
+    ) {
+      id = parent.left;
+    } else if (
       parentType === "ObjectProperty" ||
       parentType === "ClassProperty"
     ) {
       if (!parent.computed || parent.key.type === "StringLiteral") {
         id = parent.key;
       }
+    } else if (
+      parentType === "ClassPrivateProperty" ||
+      parentType === "ClassAccessorProperty"
+    ) {
+      id = parent.key;
     }
   }
 
+  if (!id) return;
+
   let nameInfo;
-  if (id) {
-    if (id.type === "Identifier") {
-      nameInfo = {
-        pos: id.loc?.start,
-        name:
-          // @ts-expect-error Undocumented property identifierName
-          id.loc?.identifierName || id.name,
-      };
-    } else if (id.type === "PrivateName") {
-      nameInfo = {
-        pos: id.id.loc?.start,
-        name: id.id.name,
-      };
-    } else if (id.type === "StringLiteral") {
-      nameInfo = {
-        pos: id.loc?.start,
-        name: id.value,
-      };
-    }
+
+  if (id.type === "Identifier") {
+    nameInfo = {
+      pos: id.loc?.start,
+      name:
+        // @ts-expect-error Undocumented property identifierName
+        id.loc?.identifierName || id.name,
+    };
+  } else if (id.type === "PrivateName") {
+    nameInfo = {
+      pos: id.loc?.start,
+      name: "#" + id.id.name,
+    };
+  } else if (id.type === "StringLiteral") {
+    nameInfo = {
+      pos: id.loc?.start,
+      name: id.value,
+    };
   }
 
   return nameInfo;

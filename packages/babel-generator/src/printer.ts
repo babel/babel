@@ -369,6 +369,8 @@ class Printer {
   }
 
   sourceIdentifierName(identifierName: string, pos?: Pos): void {
+    if (!this._buf._canMarkIdName) return;
+
     const sourcePosition = this._buf._sourcePosition;
     sourcePosition.identifierNamePos = pos;
     sourcePosition.identifierName = identifierName;

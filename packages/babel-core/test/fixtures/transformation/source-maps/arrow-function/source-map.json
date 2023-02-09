@@ -10,5 +10,5 @@
   "sourcesContent": [
     "var t = x => x * x;"
   ],
-  "mappings": "AAAA,IAAIA,CAAC,GAAG,SAAJA,CAAC,CAAGC,CAAC;EAAA,OAAIA,CAAC,GAAGA,CAAC;AAAA"
+  "mappings": "AAAA,IAAIA,CAAC,GAAG,SAAJA,CAACA,CAAGC,CAAC;EAAA,OAAIA,CAAC,GAAGA,CAAC;AAAA"
 }

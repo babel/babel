@@ -42,6 +42,7 @@ export default class Buffer {
   _last = 0;
   _queue: QueueItem[] = [];
   _queueCursor = 0;
+  _canMarkIdName = true;
 
   _position = {
     line: 1,
@@ -226,8 +227,10 @@ export default class Buffer {
       this._position.column = 0;
     }
 
-    sourcePos.identifierName = undefined;
-    sourcePos.identifierNamePos = undefined;
+    if (this._canMarkIdName) {
+      sourcePos.identifierName = undefined;
+      sourcePos.identifierNamePos = undefined;
+    }
   }
 
   _append(
@@ -257,7 +260,10 @@ export default class Buffer {
     const { column, identifierName, identifierNamePos, filename } = sourcePos;
     let line = sourcePos.line;
 
-    if (identifierName != null || identifierNamePos != null) {
+    if (
+      (identifierName != null || identifierNamePos != null) &&
+      this._canMarkIdName
+    ) {
       sourcePos.identifierName = undefined;
       sourcePos.identifierNamePos = undefined;
     }
@@ -407,9 +413,20 @@ export default class Buffer {
     if (!this._map) return cb();
 
     this.source("start", loc);
-
+    // @ts-expect-error identifierName is not defined
+    const identifierName = loc.identifierName;
+    const sourcePos = this._sourcePosition;
+    if (identifierName) {
+      this._canMarkIdName = false;
+      sourcePos.identifierName = identifierName;
+    }
     cb();
 
+    if (identifierName) {
+      this._canMarkIdName = true;
+      sourcePos.identifierName = undefined;
+      sourcePos.identifierNamePos = undefined;
+    }
     this.source("end", loc);
   }
 

@@ -16,6 +16,8 @@ export default function generateCode(
   const { opts, ast, code, inputMap } = file;
   const { generatorOpts } = opts;
 
+  generatorOpts.inputSourceMap = inputMap?.toObject();
+
   const results = [];
   for (const plugins of pluginPasses) {
     for (const plugin of plugins) {
@@ -30,11 +32,7 @@ export default function generateCode(
 
   let result;
   if (results.length === 0) {
-    result = generate(
-      ast,
-      { ...generatorOpts, inputSourceMap: inputMap?.toObject() },
-      code,
-    );
+    result = generate(ast, generatorOpts, code);
   } else if (results.length === 1) {
     result = results[0];
 

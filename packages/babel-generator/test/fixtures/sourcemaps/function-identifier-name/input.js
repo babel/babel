@@ -26,6 +26,8 @@ class b {
   ["fn"]() { };
   [function() {}]() { };
   [()=> {}]() { };
+  #x = function() {};
+  accessor y = function() {}
 }
 
 var aa = {
@@ -53,3 +55,7 @@ var z = () => {};
 var z = x => {};
 var z = (x) => {};
 var z = (x, y, z) => {};
+
+x = function() {};
+
+( { x = function() {} } = {});

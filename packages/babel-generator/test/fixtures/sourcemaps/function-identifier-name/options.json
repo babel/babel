@@ -1,3 +1,4 @@
 {
-  "sourceMaps": true
+  "sourceMaps": true,
+  "plugins": ["decoratorAutoAccessors"]
 }

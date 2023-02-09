@@ -23,6 +23,8 @@ class b {
   ["fn"]() {}
   [function () {}]() {}
   [() => {}]() {}
+  #x = function () {};
+  accessor y = function () {};
 }
 var aa = {
   fn: function a() {},
@@ -45,3 +47,7 @@ var z = () => {};
 var z = x => {};
 var z = x => {};
 var z = (x, y, z) => {};
+x = function () {};
+({
+  x = function () {}
+} = {});
