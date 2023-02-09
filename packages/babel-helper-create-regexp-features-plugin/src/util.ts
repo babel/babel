@@ -72,7 +72,7 @@ export function canSkipRegexpu(
     return false;
   }
 
-  if (options.modifiers === "transform" && /\(\?.{1,10}:/.test(pattern)) {
+  if (options.modifiers === "transform" && /\(\?[\w-]+:/.test(pattern)) {
     return false;
   }
 

@@ -1,7 +1,7 @@
 {
   "name": "@babel/plugin-proposal-regexp-modifiers",
   "version": "7.19.1",
-  "description": "TODO",
+  "description": "Compile inline regular expression modifiers",
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-regexp-modifiers",
   "license": "MIT",
   "publishConfig": {
