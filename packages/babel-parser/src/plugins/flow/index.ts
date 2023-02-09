@@ -2887,14 +2887,14 @@ export default (superClass: typeof Parser) =>
     // parse function type parameters - function foo<T>() {}
     parseFunctionParams(
       node: Undone<N.Function>,
-      allowModifiers?: boolean,
+      isConstructor: boolean,
     ): void {
       // @ts-expect-error kind may not index node
       const kind = node.kind;
       if (kind !== "get" && kind !== "set" && this.match(tt.lt)) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
       }
-      super.parseFunctionParams(node, allowModifiers);
+      super.parseFunctionParams(node, isConstructor);
     }
 
     // parse flow type annotations on variable declarator heads - let foo: string = bar
@@ -3291,7 +3291,7 @@ export default (superClass: typeof Parser) =>
       startLoc: Position,
     ): N.ArrowFunctionExpression | undefined | null {
       const node = this.startNodeAt<N.ArrowFunctionExpression>(startLoc);
-      this.parseFunctionParams(node);
+      this.parseFunctionParams(node, false);
       if (!this.parseArrow(node)) return;
       return super.parseArrowExpression(
         node,
