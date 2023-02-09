@@ -42,6 +42,7 @@ import { cloneIdentifier, type Undone } from "../../parser/node";
 import type { Pattern } from "../../types";
 import type { Expression } from "../../types";
 import type { IJSXParserMixin } from "../jsx";
+import { ParseBindingListFlags } from "../../parser/lval";
 
 const getOwn = <T extends {}>(object: T, key: keyof T) =>
   Object.hasOwnProperty.call(object, key) && object[key];
@@ -755,9 +756,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       N.Identifier | N.RestElement | N.ObjectPattern | N.ArrayPattern
     > {
       return super
-        .parseBindingList(tt.parenR, charCodes.rightParenthesis, {
-          isFunctionParams: true,
-        })
+        .parseBindingList(
+          tt.parenR,
+          charCodes.rightParenthesis,
+          ParseBindingListFlags.IS_FUNCTION_PARAMS,
+        )
         .map(pattern => {
           if (
             pattern.type !== "Identifier" &&
@@ -1421,9 +1424,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         const { errors } = this.state;
         const previousErrorCount = errors.length;
         try {
-          super.parseBindingList(tt.bracketR, charCodes.rightSquareBracket, {
-            allowEmpty: true,
-          });
+          super.parseBindingList(
+            tt.bracketR,
+            charCodes.rightSquareBracket,
+            ParseBindingListFlags.ALLOW_EMPTY,
+          );
           return errors.length === previousErrorCount;
         } catch {
           return false;
@@ -2249,41 +2254,35 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     parseAssignableListItem(
-      allowModifiers: boolean | undefined | null,
+      flags: ParseBindingListFlags,
       decorators: N.Decorator[],
-      isFunctionParam: boolean,
     ): N.Pattern | N.TSParameterProperty {
       // Store original location to include modifiers in range
       const startLoc = this.state.startLoc;
 
-      let accessibility: N.Accessibility | undefined | null;
-      let readonly = false;
-      let override = false;
-      if (allowModifiers !== undefined) {
-        const modified: ModifierBase = {};
-        this.tsParseModifiers({
-          modified,
-          allowedModifiers: [
-            "public",
-            "private",
-            "protected",
-            "override",
-            "readonly",
-          ],
-        });
-        accessibility = modified.accessibility;
-        override = modified.override;
-        readonly = modified.readonly;
-        if (
-          allowModifiers === false &&
-          (accessibility || readonly || override)
-        ) {
-          this.raise(TSErrors.UnexpectedParameterModifier, { at: startLoc });
-        }
+      const modified: ModifierBase = {};
+      this.tsParseModifiers({
+        modified,
+        allowedModifiers: [
+          "public",
+          "private",
+          "protected",
+          "override",
+          "readonly",
+        ],
+      });
+      const accessibility = modified.accessibility;
+      const override = modified.override;
+      const readonly = modified.readonly;
+      if (
+        !(flags & ParseBindingListFlags.IS_CONSTRUCTOR_PARAMS) &&
+        (accessibility || readonly || override)
+      ) {
+        this.raise(TSErrors.UnexpectedParameterModifier, { at: startLoc });
       }
 
       const left = this.parseMaybeDefault();
-      this.parseAssignableListItemTypes(left, isFunctionParam);
+      this.parseAssignableListItemTypes(left, flags);
       const elt = this.parseMaybeDefault(left.loc.start, left);
       if (accessibility || readonly || override) {
         const pp = this.startNodeAt<N.TSParameterProperty>(startLoc);
@@ -3294,10 +3293,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       );
     }
 
-    parseFunctionParams(node: N.Function, allowModifiers?: boolean): void {
+    parseFunctionParams(node: N.Function, isConstructor: boolean): void {
       const typeParameters = this.tsTryParseTypeParameters();
       if (typeParameters) node.typeParameters = typeParameters;
-      super.parseFunctionParams(node, allowModifiers);
+      super.parseFunctionParams(node, isConstructor);
     }
 
     // `let x: number;`
@@ -3527,8 +3526,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     // Allow type annotations inside of a parameter list.
-    parseAssignableListItemTypes(param: N.Pattern, isFunctionParam: boolean) {
-      if (!isFunctionParam) return param;
+    parseAssignableListItemTypes(
+      param: N.Pattern,
+      flags: ParseBindingListFlags,
+    ) {
+      if (!(flags & ParseBindingListFlags.IS_FUNCTION_PARAMS)) return param;
 
       if (this.eat(tt.question)) {
         (param as any as N.Identifier).optional = true;

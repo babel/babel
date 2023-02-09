@@ -43,6 +43,7 @@ import type { Position } from "../util/location";
 import { createPositionWithColumnOffset } from "../util/location";
 import { cloneStringLiteral, cloneIdentifier, type Undone } from "./node";
 import type Parser from "./index";
+import { ParseBindingListFlags } from "./lval";
 
 const loopLabel = { kind: "loop" } as const,
   switchLabel = { kind: "switch" } as const;
@@ -1566,7 +1567,7 @@ export default abstract class StatementParser extends ExpressionParser {
       node.id = this.parseFunctionId();
     }
 
-    this.parseFunctionParams(node, /* allowModifiers */ false);
+    this.parseFunctionParams(node, /* isConstructor */ false);
 
     // For the smartPipelines plugin: Disable topic references from outer
     // contexts within the function body. They are permitted in function
@@ -1602,14 +1603,16 @@ export default abstract class StatementParser extends ExpressionParser {
   parseFunctionParams(
     this: Parser,
     node: Undone<N.Function>,
-    allowModifiers?: boolean,
+    isConstructor?: boolean,
   ): void {
     this.expect(tt.parenL);
     this.expressionScope.enter(newParameterDeclarationScope());
-    node.params = this.parseBindingList(tt.parenR, charCodes.rightParenthesis, {
-      allowModifiers,
-      isFunctionParams: true,
-    });
+    node.params = this.parseBindingList(
+      tt.parenR,
+      charCodes.rightParenthesis,
+      ParseBindingListFlags.IS_FUNCTION_PARAMS |
+        (isConstructor ? ParseBindingListFlags.IS_CONSTRUCTOR_PARAMS : 0),
+    );
 
     this.expressionScope.exit();
   }

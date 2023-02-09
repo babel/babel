@@ -44,6 +44,12 @@ const unwrapParenthesizedExpression = (node: Node): Node => {
     : node;
 };
 
+export const enum ParseBindingListFlags {
+  ALLOW_EMPTY = 1 << 0,
+  IS_FUNCTION_PARAMS = 1 << 1,
+  IS_CONSTRUCTOR_PARAMS = 1 << 2,
+}
+
 export default abstract class LValParser extends NodeUtils {
   // Forward-declaration: defined in expression.js
   abstract parseIdentifier(liberal?: boolean): Identifier;
@@ -366,7 +372,7 @@ export default abstract class LValParser extends NodeUtils {
         node.elements = this.parseBindingList(
           tt.bracketR,
           charCodes.rightSquareBracket,
-          { allowEmpty: true },
+          ParseBindingListFlags.ALLOW_EMPTY,
         );
         return this.finishNode(node, "ArrayPattern");
       }
@@ -384,16 +390,10 @@ export default abstract class LValParser extends NodeUtils {
     this: Parser,
     close: TokenType,
     closeCharCode: typeof charCodes[keyof typeof charCodes],
-    {
-      allowEmpty = false,
-      allowModifiers = false,
-      isFunctionParams = false,
-    }: {
-      allowEmpty?: boolean;
-      allowModifiers?: boolean;
-      isFunctionParams?: boolean;
-    } = {},
+    flags: ParseBindingListFlags,
   ): Array<Pattern | TSParameterProperty> {
+    const allowEmpty = flags & ParseBindingListFlags.ALLOW_EMPTY;
+
     const elts: Array<Pattern | TSParameterProperty> = [];
     let first = true;
     while (!this.eat(close)) {
@@ -408,10 +408,7 @@ export default abstract class LValParser extends NodeUtils {
         break;
       } else if (this.match(tt.ellipsis)) {
         elts.push(
-          this.parseAssignableListItemTypes(
-            this.parseRestBinding(),
-            isFunctionParams,
-          ),
+          this.parseAssignableListItemTypes(this.parseRestBinding(), flags),
         );
         if (!this.checkCommaAfterRest(closeCharCode)) {
           this.expect(close);
@@ -428,13 +425,7 @@ export default abstract class LValParser extends NodeUtils {
         while (this.match(tt.at)) {
           decorators.push(this.parseDecorator());
         }
-        elts.push(
-          this.parseAssignableListItem(
-            allowModifiers,
-            decorators,
-            isFunctionParams,
-          ),
-        );
+        elts.push(this.parseAssignableListItem(flags, decorators));
       }
     }
     return elts;
@@ -478,12 +469,11 @@ export default abstract class LValParser extends NodeUtils {
 
   parseAssignableListItem(
     this: Parser,
-    allowModifiers: boolean | undefined | null,
+    flags: ParseBindingListFlags,
     decorators: Decorator[],
-    isFunctionParam: boolean = false,
   ): Pattern | TSParameterProperty {
     const left = this.parseMaybeDefault();
-    this.parseAssignableListItemTypes(left, isFunctionParam);
+    this.parseAssignableListItemTypes(left, flags);
     const elt = this.parseMaybeDefault(left.loc.start, left);
     if (decorators.length) {
       left.decorators = decorators;
@@ -495,7 +485,7 @@ export default abstract class LValParser extends NodeUtils {
   parseAssignableListItemTypes(
     param: Pattern,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    isFunctionParam: boolean,
+    flags: ParseBindingListFlags,
   ): Pattern {
     return param;
   }

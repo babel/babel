@@ -95,10 +95,7 @@ export default abstract class ExpressionParser extends LValParser {
     allowExpressionBody?: boolean,
     isAsync?: boolean,
   ): T;
-  abstract parseFunctionParams(
-    node: N.Function,
-    allowModifiers?: boolean,
-  ): void;
+  abstract parseFunctionParams(node: N.Function, isConstructor?: boolean): void;
   abstract parseBlockOrModuleBlockBody(
     body: N.Statement[],
     directives: N.Directive[] | null | undefined,
@@ -2427,7 +2424,6 @@ export default abstract class ExpressionParser extends LValParser {
   ): T {
     this.initFunction(node, isAsync);
     node.generator = isGenerator;
-    const allowModifiers = isConstructor; // For TypeScript parameter properties
     this.scope.enter(
       SCOPE_FUNCTION |
         SCOPE_SUPER |
@@ -2435,7 +2431,7 @@ export default abstract class ExpressionParser extends LValParser {
         (allowDirectSuper ? SCOPE_DIRECT_SUPER : 0),
     );
     this.prodParam.enter(functionFlags(isAsync, node.generator));
-    this.parseFunctionParams(node, allowModifiers);
+    this.parseFunctionParams(node, isConstructor);
     const finishedNode = this.parseFunctionBodyAndFinish(node, type, true);
     this.prodParam.exit();
     this.scope.exit();
