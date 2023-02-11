@@ -636,7 +636,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-annotate-as-pure": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
-    regexpu-core: "https://github.com/liuxingbaoyu/regexpu-core#head=modifiers"
+    regexpu-core: ^5.3.0
   peerDependencies:
     "@babel/core": ^7.0.0
   languageName: unknown
@@ -13134,7 +13134,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"regexpu-core@npm:^5.2.1":
+"regexpu-core@npm:^5.2.1, regexpu-core@npm:^5.3.0":
   version: 5.3.0
   resolution: "regexpu-core@npm:5.3.0"
   dependencies:
