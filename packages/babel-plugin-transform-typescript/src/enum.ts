@@ -278,6 +278,8 @@ function computeConstantValue(
         return left - right;
       case "%":
         return left % right;
+      case "**":
+        return left ** right;
       default:
         return undefined;
     }
