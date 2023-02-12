@@ -146,7 +146,7 @@ export function translateEnumValues(
     const initializer = member.initializer;
     let value: t.Expression;
     if (initializer) {
-      constValue = evaluate(initializer, seen);
+      constValue = computeConstantValue(initializer, seen);
       if (constValue !== undefined) {
         seen.set(name, constValue);
         if (typeof constValue === "number") {
@@ -193,14 +193,14 @@ export function translateEnumValues(
   });
 }
 
-// Based on the TypeScript repository's `evalConstant` in `checker.ts`.
-function evaluate(
+// Based on the TypeScript repository's `computeConstantValue` in `checker.ts`.
+function computeConstantValue(
   expr: t.Node,
   seen: PreviousEnumMembers,
 ): number | string | typeof undefined {
-  return evalConstant(expr);
+  return evaluate(expr);
 
-  function evalConstant(expr: t.Node): number | typeof undefined {
+  function evaluate(expr: t.Node): number | typeof undefined {
     switch (expr.type) {
       case "StringLiteral":
         return expr.value;
@@ -211,7 +211,7 @@ function evaluate(
       case "NumericLiteral":
         return expr.value;
       case "ParenthesizedExpression":
-        return evalConstant(expr.expression);
+        return evaluate(expr.expression);
       case "Identifier":
         return seen.get(expr.name);
       case "TemplateLiteral":
@@ -228,7 +228,7 @@ function evaluate(
     argument,
     operator,
   }: t.UnaryExpression): number | typeof undefined {
-    const value = evalConstant(argument);
+    const value = evaluate(argument);
     if (value === undefined) {
       return undefined;
     }
@@ -246,11 +246,11 @@ function evaluate(
   }
 
   function evalBinaryExpression(expr: t.BinaryExpression): number | undefined {
-    const left = evalConstant(expr.left);
+    const left = evaluate(expr.left);
     if (left === undefined) {
       return undefined;
     }
-    const right = evalConstant(expr.right);
+    const right = evaluate(expr.right);
     if (right === undefined) {
       return undefined;
     }
@@ -278,6 +278,8 @@ function evaluate(
         return left - right;
       case "%":
         return left % right;
+      case "**":
+        return left ** right;
       default:
         return undefined;
     }
