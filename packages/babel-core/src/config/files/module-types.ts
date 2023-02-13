@@ -63,15 +63,6 @@ function loadCtsDefault(filepath: string) {
   let handler: NodeJS.RequireExtensions[""];
 
   if (!hasTsSupport) {
-    const preset = require("@babel/preset-typescript");
-
-    if (!preset) {
-      throw new ConfigError(
-        "You appear to be using a .cts file as Babel configuration, but the `@babel/preset-typescript` package was not found, please install it!",
-        filepath,
-      );
-    }
-
     const opts: InputOptions = {
       babelrc: false,
       configFile: false,
@@ -79,7 +70,7 @@ function loadCtsDefault(filepath: string) {
       sourceMaps: "inline",
       presets: [
         [
-          preset,
+          getTSPreset(filepath),
           {
             disallowAmbiguousJSXLike: true,
             allExtensions: true,
@@ -139,4 +130,33 @@ async function loadMjsDefault(filepath: string) {
   // https://github.com/nodejs/node/issues/31710
   const module = await endHiddenCallStack(import_)(pathToFileURL(filepath));
   return module.default;
+}
+
+function getTSPreset(filepath: string) {
+  try {
+    // eslint-disable-next-line import/no-extraneous-dependencies
+    return require("@babel/preset-typescript");
+  } catch (error) {
+    if (error.code !== "MODULE_NOT_FOUND") throw error;
+
+    let message =
+      "You appear to be using a .cts file as Babel configuration, but the `@babel/preset-typescript` package was not found: please install it!";
+
+    if (process.versions.pnp) {
+      // Using Yarn PnP, which doesn't allow requiring packages that are not
+      // explicitly specified as dependencies.
+      // TODO(Babel 8): Explicitly add `@babel/preset-typescript` as an
+      // optional peer dependency of `@babel/core`.
+      message += `
+If you are using Yarn Plug'n'Play, you may also need to add the following configuration to your .yarnrc.yml file:
+
+packageExtensions:
+\t"@babel/core@*":
+\t\tpeerDependencies:
+\t\t\t"@babel/preset-typescript": "*"
+`;
+    }
+
+    throw new ConfigError(message, filepath);
+  }
 }

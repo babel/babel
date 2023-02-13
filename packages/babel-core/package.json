@@ -77,14 +77,6 @@
     "rimraf": "^3.0.0",
     "ts-node": "^10.9.1"
   },
-  "peerDependencies": {
-    "@babel/preset-typescript": "^7.0.0"
-  },
-  "peerDependenciesMeta": {
-    "@babel/preset-typescript": {
-      "optional": true
-    }
-  },
   "conditions": {
     "BABEL_8_BREAKING": [
       null,
