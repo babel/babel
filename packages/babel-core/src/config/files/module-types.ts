@@ -85,7 +85,7 @@ function loadCtsDefault(filepath: string) {
             allExtensions: true,
             onlyRemoveTypeImports: true,
             optimizeConstEnums: true,
-            ...(process.env.BABEL_8_BREAKING && {
+            ...(!process.env.BABEL_8_BREAKING && {
               allowDeclareFields: true,
             }),
           },
