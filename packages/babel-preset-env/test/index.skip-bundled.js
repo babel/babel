@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/extensions
 import compatData from "@babel/compat-data/plugins";
+import * as babel from "@babel/core";
 
 import * as babelPresetEnv from "../lib/index.js";
 
@@ -308,5 +309,38 @@ describe("babel-preset-env", () => {
       .sort();
 
     expect(arrAvailablePlugins).toEqual(expect.arrayContaining(arrCompatData));
+  });
+
+  function withPresetArguments(fn) {
+    let result;
+    babel.transformSync("", {
+      configFile: false,
+      presets: [(...xs) => ((result = fn(...xs)), {})],
+    });
+    return result;
+  }
+
+  it("uses internal plugins", () => {
+    const preset = babelPresetEnv.default.default || babelPresetEnv.default;
+
+    const { plugins } = withPresetArguments(preset);
+    expect(plugins).toEqual(
+      expect.arrayContaining([
+        expect.arrayContaining([expect.stringContaining("internal:")]),
+      ]),
+    );
+  });
+
+  it("does not use internal plugins with old versions", () => {
+    const preset = babelPresetEnv.default.default || babelPresetEnv.default;
+
+    const { plugins } = withPresetArguments((api, options, dirname) =>
+      preset({ ...api, version: "7.10.0" }, options, dirname),
+    );
+    expect(plugins).not.toEqual(
+      expect.arrayContaining([
+        expect.arrayContaining([expect.stringContaining("internal:")]),
+      ]),
+    );
   });
 });

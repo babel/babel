@@ -129,6 +129,8 @@ exports.generateData = (environments, features) => {
 
       if (!overlapping[replaces]) overlapping[replaces] = [];
       overlapping[replaces].push(key);
+      const alias = legacyPluginAliases[key];
+      if (alias) overlapping[replaces].push(alias);
     }
   }
 

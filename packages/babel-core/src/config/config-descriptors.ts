@@ -19,6 +19,10 @@ import type {
 } from "./validation/options";
 
 import { resolveBrowserslistConfigFile } from "./resolve-targets";
+import { getInternal } from "../transformation/internal-plugins";
+
+import OptimisticallyWeakMap from "../util/optimistically-weak-map";
+import ConfigError from "../errors/config-error";
 
 // Represents a config object and functions to lazily load the descriptors
 // for the plugins and presets so we don't load the plugins/presets unless
@@ -34,7 +38,7 @@ export type OptionsAndDescriptors = {
 // but have not yet been executed to call functions with options.
 export type UnloadedDescriptor = {
   name: string | undefined;
-  value: any | Function;
+  value: any | `internal:${string}` | Function;
   options: {} | undefined | false;
   dirname: string;
   alias: string;
@@ -168,7 +172,12 @@ const createCachedPresetDescriptors = makeWeakCacheSync(
   },
 );
 
-const PLUGIN_DESCRIPTOR_CACHE = new WeakMap();
+// We don't use a WeakMap because internal plugins are represented
+// as strings. This does not cause more memory leaks, because the
+// plugin functions live as long as `@babel/core` is reachable, and
+// thus as long as this Map is reachable.
+const PLUGIN_DESCRIPTOR_CACHE = new OptimisticallyWeakMap();
+
 const createCachedPluginDescriptors = makeWeakCacheSync(
   (items: PluginList, cache: CacheConfigurator<string>) => {
     const dirname = cache.using(dir => dir);
@@ -310,53 +319,63 @@ export function* createDescriptor(
 
   let file = undefined;
   let filepath = null;
-  if (typeof value === "string") {
-    if (typeof type !== "string") {
-      throw new Error(
-        "To resolve a string-based item, the type of item must be given",
+
+  const isInternal = typeof value === "string" && value.startsWith("internal:");
+  if (isInternal) {
+    if (!getInternal(type, value)) {
+      throw new ConfigError(
+        `Unknown internal ${type}: ${value.slice("internal:".length)}`,
       );
     }
-    const resolver = type === "plugin" ? loadPlugin : loadPreset;
-    const request = value;
+  } else {
+    if (typeof value === "string") {
+      if (typeof type !== "string") {
+        throw new Error(
+          "To resolve a string-based item, the type of item must be given",
+        );
+      }
+      const resolver = type === "plugin" ? loadPlugin : loadPreset;
+      const request = value;
 
-    ({ filepath, value } = yield* resolver(value, dirname));
+      ({ filepath, value } = yield* resolver(value, dirname));
 
-    file = {
-      request,
-      resolved: filepath,
-    };
-  }
-
-  if (!value) {
-    throw new Error(`Unexpected falsy value: ${String(value)}`);
-  }
-
-  if (typeof value === "object" && value.__esModule) {
-    if (value.default) {
-      value = value.default;
-    } else {
-      throw new Error("Must export a default export when using ES6 modules.");
+      file = {
+        request,
+        resolved: filepath,
+      };
     }
-  }
 
-  if (typeof value !== "object" && typeof value !== "function") {
-    throw new Error(
-      `Unsupported format: ${typeof value}. Expected an object or a function.`,
-    );
-  }
+    if (!value) {
+      throw new Error(`Unexpected falsy value: ${String(value)}`);
+    }
 
-  if (filepath !== null && typeof value === "object" && value) {
-    // We allow object values for plugins/presets nested directly within a
-    // config object, because it can be useful to define them in nested
-    // configuration contexts.
-    throw new Error(
-      `Plugin/Preset files are not allowed to export objects, only functions. In ${filepath}`,
-    );
+    if (typeof value === "object" && value.__esModule) {
+      if (value.default) {
+        value = value.default;
+      } else {
+        throw new Error("Must export a default export when using ES6 modules.");
+      }
+    }
+
+    if (typeof value !== "object" && typeof value !== "function") {
+      throw new Error(
+        `Unsupported format: ${typeof value}. Expected an object or a function.`,
+      );
+    }
+
+    if (filepath !== null && typeof value === "object" && value) {
+      // We allow object values for plugins/presets nested directly within a
+      // config object, because it can be useful to define them in nested
+      // configuration contexts.
+      throw new Error(
+        `Plugin/Preset files are not allowed to export objects, only functions. In ${filepath}`,
+      );
+    }
   }
 
   return {
     name,
-    alias: filepath || alias,
+    alias: isInternal ? value : filepath || alias,
     value,
     options,
     dirname,

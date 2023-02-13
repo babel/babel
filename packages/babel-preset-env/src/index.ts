@@ -37,7 +37,7 @@ import getTargets, {
   isRequired,
 } from "@babel/helper-compilation-targets";
 import type { Targets, InputTargets } from "@babel/helper-compilation-targets";
-import availablePlugins from "./available-plugins";
+import { getPlugin } from "./available-plugins";
 import { declarePreset } from "@babel/helper-plugin-utils";
 
 type ModuleTransformationsType =
@@ -88,20 +88,6 @@ function getPluginList(proposals: boolean, bugfixes: boolean) {
     else return pluginLists.withoutProposals.withoutBugfixes;
   }
 }
-
-const getPlugin = (pluginName: string) => {
-  const plugin =
-    // @ts-expect-error plugin name is constructed from available plugin list
-    availablePlugins[pluginName]();
-
-  if (!plugin) {
-    throw new Error(
-      `Could not find plugin "${pluginName}". Ensure there is an entry in ./available-plugins.js for it.`,
-    );
-  }
-
-  return plugin;
-};
 
 export const transformIncludesAndExcludes = (opts: Array<string>): any => {
   return opts.reduce(
@@ -416,17 +402,17 @@ option \`forceAllTransforms: true\` instead.
         pluginName === "transform-private-property-in-object"
       ) {
         return [
-          getPlugin(pluginName),
+          getPlugin(pluginName, api.version) as Function | string,
           {
             loose: loose
               ? "#__internal__@babel/preset-env__prefer-true-but-false-is-ok-if-it-prevents-an-error"
               : "#__internal__@babel/preset-env__prefer-false-but-true-is-ok-if-it-prevents-an-error",
-          },
+          } as object,
         ];
       }
       return [
-        getPlugin(pluginName),
-        { spec, loose, useBuiltIns: pluginUseBuiltIns },
+        getPlugin(pluginName, api.version) as Function | string,
+        { spec, loose, useBuiltIns: pluginUseBuiltIns } as object,
       ];
     })
     .concat(polyfillPlugins);

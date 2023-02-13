@@ -9,7 +9,7 @@ import convertSourceMap from "convert-source-map";
 import type { SourceMapConverter as Converter } from "convert-source-map";
 import File from "./file/file";
 import parser from "../parser";
-import cloneDeep from "./util/clone-deep";
+import cloneDeep from "../util/clone-deep";
 
 const debug = buildDebug("babel:transform:file");
 const LARGE_INPUT_SOURCEMAP_THRESHOLD = 3_000_000;
