@@ -30,6 +30,11 @@ export interface Options {
   regenerator?: boolean;
   useESModules?: boolean | "auto";
   version?: string;
+  moduleName?:
+    | "@babel/runtime"
+    | "@babel/runtime-corejs2"
+    | "@babel/runtime-corejs3"
+    | string;
 }
 
 interface CoreJS2PluginOptions {
@@ -71,6 +76,7 @@ export default declare((api, options: Options, dirname) => {
     useESModules = false,
     version: runtimeVersion = "7.0.0-beta.0",
     absoluteRuntime = false,
+    /* moduleName = ... default valued defined later */
   } = options;
 
   let proposals = false;
@@ -84,6 +90,14 @@ export default declare((api, options: Options, dirname) => {
   }
 
   const corejsVersion = rawVersion ? Number(rawVersion) : false;
+
+  const {
+    moduleName = corejsVersion === 3
+      ? "@babel/runtime-corejs3"
+      : corejsVersion === 2
+      ? "@babel/runtime-corejs2"
+      : "@babel/runtime",
+  } = options;
 
   if (![false, 2, 3].includes(corejsVersion)) {
     throw new Error(
@@ -171,26 +185,11 @@ export default declare((api, options: Options, dirname) => {
     }
   }
 
-  if (has(options, "moduleName")) {
-    throw new Error(
-      "The 'moduleName' option has been removed. @babel/transform-runtime " +
-        "no longer supports arbitrary runtimes. If you were using this to " +
-        "set an absolute path for Babel's standard runtimes, please use the " +
-        "'absoluteRuntime' option.",
-    );
-  }
-
   const esModules =
     useESModules === "auto" ? api.caller(supportsStaticESM) : useESModules;
 
   const injectCoreJS2 = corejsVersion === 2;
   const injectCoreJS3 = corejsVersion === 3;
-
-  const moduleName = injectCoreJS3
-    ? "@babel/runtime-corejs3"
-    : injectCoreJS2
-    ? "@babel/runtime-corejs2"
-    : "@babel/runtime";
 
   const HEADER_HELPERS = ["interopRequireWildcard", "interopRequireDefault"];
 
