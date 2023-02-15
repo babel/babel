@@ -225,6 +225,8 @@ function assertExportSpecifier(
   }
 }
 
+const last = <T>(list: T[]): T => list[list.length - 1];
+
 /**
  * Get metadata about the imports and exports present in this module.
  */
@@ -247,18 +249,18 @@ function getModuleMetadata(
   );
 
   const sourceData = new Map();
-  const getData = ({
-    source: sourceNode,
-    loc,
-    leadingComments,
-    trailingComments,
-  }: {
+  const getData = (node: {
     source: t.StringLiteral;
     loc?: t.SourceLocation;
     leadingComments?: t.Comment[];
     trailingComments?: t.Comment[];
   }) => {
-    const source = sourceNode.value;
+    const {
+      source: { value: source },
+      loc,
+      leadingComments,
+      trailingComments,
+    } = node;
 
     let data = sourceData.get(source);
     if (!data) {
@@ -292,7 +294,9 @@ function getModuleMetadata(
     if (leadingComments) {
       (data.leadingComments ||= []).push(...leadingComments);
     }
-    if (trailingComments) {
+    if (trailingComments && node === last(programPath.node.body)) {
+      // We only take trailing comments of the last node, so that we don't
+      // steal leading comments from the next node.
       (data.trailingComments ||= []).push(...trailingComments);
     }
     return data;
