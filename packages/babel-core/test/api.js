@@ -300,6 +300,16 @@ describe("api", function () {
     expect(code).toBe(code2);
   });
 
+  it("transformFromAstSync should not cause infinite recursion with circular objects", () => {
+    const program = "const identifier = 1";
+    const node = parseSync(program);
+    node.program.body[0].extra = { parent: node.program };
+
+    expect(transformFromAstSync(node, program, {}).code).toBe(
+      "const identifier = 1;",
+    );
+  });
+
   it("transformFromAst should not mutate the AST", function () {
     const program = "const identifier = 1";
     const node = parseSync(program);
