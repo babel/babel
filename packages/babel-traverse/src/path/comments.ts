@@ -26,14 +26,6 @@ export function shareCommentsWithSiblings(this: NodePath) {
   const hasPrev = Boolean(prev.node);
   const hasNext = Boolean(next.node);
 
-  /*if (hasPrev) {
-    if (leading) prev.addComments("trailing", leading);
-    if (trailing) prev.addComments("trailing", trailing);
-  } else if (hasNext) {
-    if (trailing) next.addComments("leading", trailing);
-    if (leading) next.addComments("leading", leading);
-  }*/
-
   if (hasPrev) {
     if (leading) {
       prev.addComments(
