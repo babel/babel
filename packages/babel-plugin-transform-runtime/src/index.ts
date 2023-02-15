@@ -14,6 +14,12 @@ export interface Options {
   corejs?: string | number | { version: string | number; proposals?: boolean };
   helpers?: boolean;
   version?: string;
+  moduleName?:
+    | null
+    | "@babel/runtime"
+    | "@babel/runtime-corejs2"
+    | "@babel/runtime-corejs3"
+    | string;
 }
 
 export default declare((api, options: Options, dirname) => {
@@ -27,6 +33,7 @@ export default declare((api, options: Options, dirname) => {
     helpers: useRuntimeHelpers = true,
     version: runtimeVersion = "7.0.0-beta.0",
     absoluteRuntime = false,
+    moduleName = null,
   } = options;
 
   if (typeof useRuntimeHelpers !== "boolean") {
@@ -44,6 +51,10 @@ export default declare((api, options: Options, dirname) => {
 
   if (typeof runtimeVersion !== "string") {
     throw new Error(`The 'version' option must be a version string.`);
+  }
+
+  if (moduleName !== null && typeof moduleName !== "string") {
+    throw new Error("The 'moduleName' option must be null or a string.");
   }
 
   if (!process.env.BABEL_8_BREAKING) {
@@ -83,15 +94,6 @@ export default declare((api, options: Options, dirname) => {
           "option to polyfill with `core-js` via @babel/runtime.",
       );
     }
-  }
-
-  if (Object.hasOwn(options, "moduleName")) {
-    throw new Error(
-      "The 'moduleName' option has been removed. @babel/transform-runtime " +
-        "no longer supports arbitrary runtimes. If you were using this to " +
-        "set an absolute path for Babel's standard runtimes, please use the " +
-        "'absoluteRuntime' option.",
-    );
   }
 
   if (process.env.BABEL_8_BREAKING) {
