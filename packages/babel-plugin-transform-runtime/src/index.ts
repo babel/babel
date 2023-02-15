@@ -90,11 +90,13 @@ export default declare((api, options: Options, dirname) => {
   }
 
   const corejsVersion = rawVersion ? Number(rawVersion) : false;
+  const injectCoreJS2 = corejsVersion === 2;
+  const injectCoreJS3 = corejsVersion === 3;
 
   const {
-    moduleName = corejsVersion === 3
+    moduleName = injectCoreJS3
       ? "@babel/runtime-corejs3"
-      : corejsVersion === 2
+      : injectCoreJS2
       ? "@babel/runtime-corejs2"
       : "@babel/runtime",
   } = options;
@@ -187,9 +189,6 @@ export default declare((api, options: Options, dirname) => {
 
   const esModules =
     useESModules === "auto" ? api.caller(supportsStaticESM) : useESModules;
-
-  const injectCoreJS2 = corejsVersion === 2;
-  const injectCoreJS3 = corejsVersion === 3;
 
   const HEADER_HELPERS = ["interopRequireWildcard", "interopRequireDefault"];
 
