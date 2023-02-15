@@ -54,6 +54,8 @@ export interface SourceModuleMetadata {
     loc: t.SourceLocation | undefined | null;
   };
   lazy?: Lazy;
+  leadingComments?: t.Comment[];
+  trailingComments?: t.Comment[];
 }
 
 export interface LocalExportMetadata {
@@ -245,7 +247,17 @@ function getModuleMetadata(
   );
 
   const sourceData = new Map();
-  const getData = (sourceNode: t.StringLiteral) => {
+  const getData = ({
+    source: sourceNode,
+    loc,
+    leadingComments,
+    trailingComments,
+  }: {
+    source: t.StringLiteral;
+    loc?: t.SourceLocation;
+    leadingComments?: t.Comment[];
+    trailingComments?: t.Comment[];
+  }) => {
     const source = sourceNode.value;
 
     let data = sourceData.get(source);
@@ -271,16 +283,24 @@ function getModuleMetadata(
         lazy: false,
 
         source,
+
+        leadingComments: null,
       };
       sourceData.set(source, data);
+    }
+    if (!data.loc) data.loc = loc;
+    if (leadingComments) {
+      (data.leadingComments ||= []).push(...leadingComments);
+    }
+    if (trailingComments) {
+      (data.trailingComments ||= []).push(...trailingComments);
     }
     return data;
   };
   let hasExports = false;
   programPath.get("body").forEach(child => {
     if (child.isImportDeclaration()) {
-      const data = getData(child.node.source);
-      if (!data.loc) data.loc = child.node.loc;
+      const data = getData(child.node);
 
       child.get("specifiers").forEach(spec => {
         if (spec.isImportDefaultSpecifier()) {
@@ -329,16 +349,16 @@ function getModuleMetadata(
       });
     } else if (child.isExportAllDeclaration()) {
       hasExports = true;
-      const data = getData(child.node.source);
-      if (!data.loc) data.loc = child.node.loc;
+      const data = getData(child.node);
 
       data.reexportAll = {
         loc: child.node.loc,
       };
     } else if (child.isExportNamedDeclaration() && child.node.source) {
       hasExports = true;
-      const data = getData(child.node.source);
-      if (!data.loc) data.loc = child.node.loc;
+      const data = getData(
+        child.node as t.ExportNamedDeclaration & { source: t.StringLiteral },
+      );
 
       child.get("specifiers").forEach(spec => {
         assertExportSpecifier(spec);
