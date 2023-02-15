@@ -8,11 +8,9 @@ var C = /*#__PURE__*/babelHelpers.createClass(function C() {
     writable: true,
     value: void 0
   });
-}
+} /* after b */);
 /* after a */
 /* before b */
-/* after b */
-);
 var _b = {
   writable: true,
   value: void 0

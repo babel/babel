@@ -3,8 +3,8 @@ class C {
     /* before a */
     babelHelpers.defineProperty(this, "a", void 0);
   }
-  /* after a */
-  /* before b */
   /* after b */
 }
+/* after a */
+/* before b */
 babelHelpers.defineProperty(C, "b", void 0);
