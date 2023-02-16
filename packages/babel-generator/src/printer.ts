@@ -799,7 +799,7 @@ class Printer {
   _printTrailingComments(node: t.Node, parent?: t.Node, lineOffset?: number) {
     const { innerComments, trailingComments } = node;
     // We print inner comments here, so that if for some reason they couldn't
-    // be printed in earlier locations they are still printed *somehwere*,
+    // be printed in earlier locations they are still printed *somewhere*,
     // even if at the end of the node.
     if (innerComments?.length) {
       this._printComments(

@@ -1,5 +1,5 @@
 /**
- * This file uses the iternal V8 Stack Trace API (https://v8.dev/docs/stack-trace-api)
+ * This file uses the internal V8 Stack Trace API (https://v8.dev/docs/stack-trace-api)
  * to provide utilities to rewrite the stack trace.
  * When this API is not present, all the functions in this file become noops.
  *
@@ -33,10 +33,10 @@
  * - If e() throws an error, then its shown call stack will be "e, f"
  *
  * Additionally, an error can inject additional "virtual" stack frames using the
- * injcectVirtualStackFrame(error, filename) function: those are injected as a
+ * injectVirtualStackFrame(error, filename) function: those are injected as a
  * replacement of the hidden frames.
- * In the example above, if we called injcectVirtualStackFrame(err, "h") and
- * injcectVirtualStackFrame(err, "i") on the expected error thrown by c(), its
+ * In the example above, if we called injectVirtualStackFrame(err, "h") and
+ * injectVirtualStackFrame(err, "i") on the expected error thrown by c(), its
  * shown call stack would have been "h, i, e, f".
  * This can be useful, for example, to report config validation errors as if they
  * were directly thrown in the config file.
@@ -46,8 +46,8 @@ const ErrorToString = Function.call.bind(Error.prototype.toString);
 
 const SUPPORTED = !!Error.captureStackTrace;
 
-const START_HIDNG = "startHiding - secret - don't use this - v1";
-const STOP_HIDNG = "stopHiding - secret - don't use this - v1";
+const START_HIDING = "startHiding - secret - don't use this - v1";
+const STOP_HIDING = "stopHiding - secret - don't use this - v1";
 
 type CallSite = Parameters<typeof Error.prepareStackTrace>[1][number];
 
@@ -70,7 +70,7 @@ function CallSite(filename: string): CallSite {
   } as CallSite);
 }
 
-export function injcectVirtualStackFrame(error: Error, filename: string) {
+export function injectVirtualStackFrame(error: Error, filename: string) {
   if (!SUPPORTED) return;
 
   let frames = virtualFrames.get(error);
@@ -97,7 +97,7 @@ export function beginHiddenCallStack<A extends unknown[], R>(
       return fn(...args);
     },
     "name",
-    { value: STOP_HIDNG },
+    { value: STOP_HIDING },
   );
 }
 
@@ -111,7 +111,7 @@ export function endHiddenCallStack<A extends unknown[], R>(
       return fn(...args);
     },
     "name",
-    { value: START_HIDNG },
+    { value: START_HIDING },
   );
 }
 
@@ -144,9 +144,9 @@ function setupPrepareStackTrace() {
       : "unknown";
     for (let i = 0; i < trace.length; i++) {
       const name = trace[i].getFunctionName();
-      if (name === START_HIDNG) {
+      if (name === START_HIDING) {
         status = "hiding";
-      } else if (name === STOP_HIDNG) {
+      } else if (name === STOP_HIDING) {
         if (status === "hiding") {
           status = "showing";
           if (virtualFrames.has(err)) {

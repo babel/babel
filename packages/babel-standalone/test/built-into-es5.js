@@ -5,13 +5,13 @@ import { parse as acornParse } from "acorn";
 
 describe("@babel/standalone", () => {
   it("should be built into ES5", () => {
-    const babelStandloneSource = fs.readFileSync(
+    const babelStandaloneSource = fs.readFileSync(
       require.resolve("../babel.js"),
       { encoding: "utf8" },
     );
 
     expect(() => {
-      acornParse(babelStandloneSource, {
+      acornParse(babelStandaloneSource, {
         ecmaVersion: 5,
         sourceType: "script",
       });

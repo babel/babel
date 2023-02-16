@@ -353,7 +353,7 @@ function wrapPackagesArray(
  *
  * @export
  * @param {{}} options the imported options.json
- * @param {string} optionsDir the direcotry where options.json is placed
+ * @param {string} optionsDir the directory where options.json is placed
  * @returns {{}} options whose plugins/presets are resolved
  */
 export function resolveOptionPluginOrPreset(

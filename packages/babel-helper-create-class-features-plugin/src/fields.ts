@@ -716,7 +716,7 @@ function buildPrivateInstanceMethodInitSpec(
     );
   }
 
-  return buildPrivateInstanceMethodInitalization(
+  return buildPrivateInstanceMethodInitialization(
     ref,
     prop,
     privateNamesMap,
@@ -766,7 +766,7 @@ function buildPrivateAccessorInitialization(
   );
 }
 
-function buildPrivateInstanceMethodInitalization(
+function buildPrivateInstanceMethodInitialization(
   ref: t.Expression,
   prop: NodePath<t.ClassPrivateMethod>,
   privateNamesMap: PrivateNamesMap,
@@ -1046,7 +1046,7 @@ function isNameOrLength({ key, computed }: t.ClassProperty) {
  * Inherit comments from class members. This is a reduced version of
  * t.inheritsComments: the trailing comments are not inherited because
  * for most class members except the last one, their trailing comments are
- * the next sibiling's leading comments.
+ * the next sibling's leading comments.
  *
  * @template T transformed class member type
  * @param {T} node transformed class member

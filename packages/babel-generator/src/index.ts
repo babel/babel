@@ -135,7 +135,7 @@ export interface GeneratorOptions {
 
   /**
    * Function that takes a comment (as a string) and returns true if the comment should be included in the output.
-   * By default, comments are included if `opts.comments` is `true` or if `opts.minifed` is `false` and the comment
+   * By default, comments are included if `opts.comments` is `true` or if `opts.minified` is `false` and the comment
    * contains `@preserve` or `@license`.
    */
   shouldPrintComment?(comment: string): boolean;

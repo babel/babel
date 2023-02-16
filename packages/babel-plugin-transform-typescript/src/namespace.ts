@@ -52,7 +52,7 @@ function getMemberExpression(name: string, itemName: string) {
 }
 
 /**
- * Convert export const foo = 1 to Namepsace.foo = 1;
+ * Convert export const foo = 1 to Namespace.foo = 1;
  *
  * @param {t.VariableDeclaration} node given variable declaration, e.g. `const foo = 1`
  * @param {string} name the generated unique namespace member name
@@ -107,7 +107,7 @@ function handleVariableDeclaration(
   return [node, t.expressionStatement(t.sequenceExpression(assignments))];
 }
 
-function buildNestedAmbiendModuleError(path: NodePath, node: t.Node) {
+function buildNestedAmbientModuleError(path: NodePath, node: t.Node) {
   throw path.hub.buildError(
     node,
     "Ambient modules cannot be nested in other modules or namespaces.",
@@ -142,7 +142,7 @@ function handleNested(
     switch (subNode.type) {
       case "TSModuleDeclaration": {
         if (!t.isIdentifier(subNode.id)) {
-          throw buildNestedAmbiendModuleError(path, subNode);
+          throw buildNestedAmbientModuleError(path, subNode);
         }
 
         const transformed = handleNested(path, subNode);
@@ -217,7 +217,7 @@ function handleNested(
       }
       case "TSModuleDeclaration": {
         if (!t.isIdentifier(subNode.declaration.id)) {
-          throw buildNestedAmbiendModuleError(path, subNode.declaration);
+          throw buildNestedAmbientModuleError(path, subNode.declaration);
         }
 
         const transformed = handleNested(

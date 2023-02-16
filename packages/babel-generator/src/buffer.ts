@@ -179,7 +179,7 @@ export default class Buffer {
   }
 
   /**
-   * Same as queue, but this indentation will never have a sourcmap marker.
+   * Same as queue, but this indentation will never have a sourcemap marker.
    */
   queueIndentation(char: number, repeat: number): void {
     this._pushQueue(char, repeat, undefined, undefined, undefined, undefined);
@@ -253,7 +253,7 @@ export default class Buffer {
       this._mark(line, column, identifierName, filename);
     }
 
-    // Now, find each reamining newline char in the string.
+    // Now, find each remaining newline char in the string.
     while (i !== -1) {
       position.line++;
       position.column = 0;

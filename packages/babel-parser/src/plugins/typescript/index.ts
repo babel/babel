@@ -92,14 +92,14 @@ const TSErrors = ParseErrorEnum`typescript`({
     propertyName: string;
   }) =>
     `Property '${propertyName}' cannot have an initializer because it is marked abstract.`,
-  AccesorCannotDeclareThisParameter:
-    "'get' and 'set' accessors cannot declare 'this' parameters.",
-  AccesorCannotHaveTypeParameters: "An accessor cannot have type parameters.",
   AccessorCannotBeOptional:
     "An 'accessor' property cannot be declared optional.",
+  AccessorCannotDeclareThisParameter:
+    "'get' and 'set' accessors cannot declare 'this' parameters.",
+  AccessorCannotHaveTypeParameters: "An accessor cannot have type parameters.",
   ClassMethodHasDeclare: "Class methods cannot have the 'declare' modifier.",
   ClassMethodHasReadonly: "Class methods cannot have the 'readonly' modifier.",
-  ConstInitiailizerMustBeStringOrNumericLiteralOrLiteralEnumReference:
+  ConstInitializerMustBeStringOrNumericLiteralOrLiteralEnumReference:
     "A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.",
   ConstructorHasTypeParameters:
     "Type parameters cannot appear on a constructor declaration.",
@@ -176,7 +176,7 @@ const TSErrors = ParseErrorEnum`typescript`({
     "Tuple members must all have names or all not have names.",
   NonAbstractClassHasAbstractMethod:
     "Abstract methods can only appear within an abstract class.",
-  NonClassMethodPropertyHasAbstractModifer:
+  NonClassMethodPropertyHasAbstractModifier:
     "'abstract' modifier can only appear on a class, method, or property declaration.",
   OptionalTypeBeforeRequired:
     "A required element cannot follow an optional element.",
@@ -198,12 +198,12 @@ const TSErrors = ParseErrorEnum`typescript`({
     "This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma, as in `<T,>() => ...`.",
   ReservedTypeAssertion:
     "This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.",
-  // TODO: Accesor -> Accessor
-  SetAccesorCannotHaveOptionalParameter:
+  // TODO: Accessor -> Accessor
+  SetAccessorCannotHaveOptionalParameter:
     "A 'set' accessor cannot have an optional parameter.",
-  SetAccesorCannotHaveRestParameter:
+  SetAccessorCannotHaveRestParameter:
     "A 'set' accessor cannot have rest parameter.",
-  SetAccesorCannotHaveReturnType:
+  SetAccessorCannotHaveReturnType:
     "A 'set' accessor cannot have a return type annotation.",
   SingleTypeParameterWithoutTrailingComma: ({
     typeParameterName,
@@ -842,7 +842,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         }
         const method: N.TsMethodSignature = nodeAny;
         if (method.kind && this.match(tt.lt)) {
-          this.raise(TSErrors.AccesorCannotHaveTypeParameters, {
+          this.raise(TSErrors.AccessorCannotHaveTypeParameters, {
             at: this.state.curPosition(),
           });
         }
@@ -858,7 +858,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           if (method[paramsKey].length > 0) {
             this.raise(Errors.BadGetterArity, { at: this.state.curPosition() });
             if (this.isThisParam(method[paramsKey][0])) {
-              this.raise(TSErrors.AccesorCannotDeclareThisParameter, {
+              this.raise(TSErrors.AccessorCannotDeclareThisParameter, {
                 at: this.state.curPosition(),
               });
             }
@@ -869,7 +869,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           } else {
             const firstParameter = method[paramsKey][0];
             if (this.isThisParam(firstParameter)) {
-              this.raise(TSErrors.AccesorCannotDeclareThisParameter, {
+              this.raise(TSErrors.AccessorCannotDeclareThisParameter, {
                 at: this.state.curPosition(),
               });
             }
@@ -877,18 +877,18 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
               firstParameter.type === "Identifier" &&
               firstParameter.optional
             ) {
-              this.raise(TSErrors.SetAccesorCannotHaveOptionalParameter, {
+              this.raise(TSErrors.SetAccessorCannotHaveOptionalParameter, {
                 at: this.state.curPosition(),
               });
             }
             if (firstParameter.type === "RestElement") {
-              this.raise(TSErrors.SetAccesorCannotHaveRestParameter, {
+              this.raise(TSErrors.SetAccessorCannotHaveRestParameter, {
                 at: this.state.curPosition(),
               });
             }
           }
           if (method[returnTypeKey]) {
-            this.raise(TSErrors.SetAccesorCannotHaveReturnType, {
+            this.raise(TSErrors.SetAccessorCannotHaveReturnType, {
               at: method[returnTypeKey],
             });
           }
@@ -2369,7 +2369,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     registerFunctionStatementId(node: N.Function): void {
       if (!node.body && node.id) {
         // Function ids are validated after parsing their body.
-        // For bodyless function, we need to do it here.
+        // For bodiless function, we need to do it here.
         this.checkIdentifier(node.id, BIND_TS_AMBIENT);
       } else {
         super.registerFunctionStatementId(node);
@@ -2806,7 +2806,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           !isValidAmbientConstInitializer(init, this.hasPlugin("estree"))
         ) {
           this.raise(
-            TSErrors.ConstInitiailizerMustBeStringOrNumericLiteralOrLiteralEnumReference,
+            TSErrors.ConstInitializerMustBeStringOrNumericLiteralOrLiteralEnumReference,
             { at: init },
           );
         }
@@ -3877,7 +3877,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         //   Foo {}
         if (!this.hasFollowingLineBreak()) {
           node.abstract = true;
-          this.raise(TSErrors.NonClassMethodPropertyHasAbstractModifer, {
+          this.raise(TSErrors.NonClassMethodPropertyHasAbstractModifier, {
             at: node,
           });
           return this.tsParseInterfaceDeclaration(
@@ -4117,7 +4117,7 @@ function isPossiblyLiteralEnum(expression: N.Expression): boolean {
   return isUncomputedMemberExpressionChain(expression.object);
 }
 
-// If a const declaration has no type annotation and is initiailized to
+// If a const declaration has no type annotation and is initialized to
 // a string literal, numeric literal, or enum reference, then it is
 // allowed. In an ideal world, we'd check whether init was *actually* an
 // enum reference, but we allow anything that "could be" a literal enum

@@ -1,4 +1,4 @@
-// Angular needs to alwys compile async functions, even if
+// Angular needs to always compile async functions, even if
 // the targets support class fields.
 // https://github.com/babel/babel/issues/14749
 

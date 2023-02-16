@@ -245,7 +245,7 @@ export function hasPrivateClassElement(node: t.ClassBody): boolean {
 
 /**
  * Traverse the given pattern and report the private key path.
- * A private key path is analagous to an array of `key` from the pattern NodePath
+ * A private key path is analogous to an array of `key` from the pattern NodePath
  * to the private key NodePath. See also test/util.skip-bundled.js for an example output
  *
  * @export
@@ -298,7 +298,7 @@ function rightWillBeReferencedOnce(left: LHS) {
  * @param {LHS} left The root pattern
  * @param {t.Expression} right The initializer or the RHS of pattern
  * @param {Scope} scope The scope where memoized id should be registered
- * @param {boolean} isAssignment Whether we are transforming from an AssignmengExpression of VariableDeclaration
+ * @param {boolean} isAssignment Whether we are transforming from an AssignmentExpression of VariableDeclaration
  * @returns {Generator<Transformed, void, void>}
  */
 export function* transformPrivateKeyDestructuring(
@@ -435,7 +435,7 @@ export function* transformPrivateKeyDestructuring(
           }
           case "ArrayPattern": {
             // todo: the transform here assumes that any expression within
-            // the array pattern, when evluated, do not interfere with the iterable
+            // the array pattern, when evaluated, do not interfere with the iterable
             // in RHS. Otherwise we have to pause the iterable and interleave
             // the expressions.
             // See also https://gist.github.com/nicolo-ribaudo/f8ac7916f89450f2ead77d99855b2098

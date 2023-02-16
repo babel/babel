@@ -1,3 +1,3 @@
-export default new Cachier()
+export default new Cacher()
 
-export function Cachier(databaseName) {}
+export function Cacher(databaseName) {}

@@ -109,7 +109,7 @@ describe("evaluation", function () {
       ).toBe("value is 4");
     });
 
-    it("shold evaluate String.raw tags", function () {
+    it("should evaluate String.raw tags", function () {
       expect(
         getPath("String.raw`a\\n${1}\\u`;").get("body.0.expression").evaluate()
           .value,

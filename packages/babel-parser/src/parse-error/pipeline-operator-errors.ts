@@ -11,7 +11,7 @@ type GetSetMemberType<T extends Set<any>> = T extends Set<infer M>
   ? M
   : unknown;
 
-type UnparanthesizedPipeBodyTypes = GetSetMemberType<
+type UnparenthesizedPipeBodyTypes = GetSetMemberType<
   typeof UnparenthesizedPipeBodyDescriptions
 >;
 
@@ -27,7 +27,7 @@ export default {
     `Invalid topic token ${token}. In order to use ${token} as a topic reference, the pipelineOperator plugin must be configured with { "proposal": "hack", "topicToken": "${token}" }.`,
   PipeTopicUnused:
     "Hack-style pipe body does not contain a topic reference; Hack-style pipes must use topic at least once.",
-  PipeUnparenthesizedBody: ({ type }: { type: UnparanthesizedPipeBodyTypes }) =>
+  PipeUnparenthesizedBody: ({ type }: { type: UnparenthesizedPipeBodyTypes }) =>
     `Hack-style pipe body cannot be an unparenthesized ${toNodeDescription({
       type,
     })}; please wrap it in parentheses.`,

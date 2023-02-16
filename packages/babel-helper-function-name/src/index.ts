@@ -200,7 +200,7 @@ function visit(
  * Add id to function/class expression inferred from the AST
  *
  * @export
- * @template N The unamed expression type
+ * @template N The unnamed expression type
  * @param {Object} nodePathLike The NodePath-like input
  * @param {N} nodePathLike.node an AST node
  * @param {NodePath<N>["parent"]} [nodePathLike.parent] The parent of the AST node

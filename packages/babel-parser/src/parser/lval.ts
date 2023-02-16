@@ -111,7 +111,7 @@ export default abstract class LValParser extends NodeUtils {
         // an LHS can be reinterpreted to a binding pattern but not vice versa.
         // therefore a parenthesized identifier is ambiguous until we are sure it is an assignment expression
         // i.e. `([(a) = []] = []) => {}`
-        // see also `recordArrowParemeterBindingError` signature in packages/babel-parser/src/util/expression-scope.js
+        // see also `recordArrowParameterBindingError` signature in packages/babel-parser/src/util/expression-scope.js
         if (parenthesized.type === "Identifier") {
           this.expressionScope.recordArrowParameterBindingError(
             Errors.InvalidParenthesizedAssignment,
@@ -514,7 +514,7 @@ export default abstract class LValParser extends NodeUtils {
    * responsibilities. If we can definitively determine with the information
    * provided that this either *is* or *isn't* a valid `LVal`, then the return
    * value is easy: just return `true` or `false`. However, if it is a valid
-   * LVal *ancestor*, and thus it's descendents must be subsquently visited to
+   * LVal *ancestor*, and thus it's descendants must be subsequently visited to
    * continue the "investigation", then this method should return the relevant
    * child key as a `string`. In some special cases, you additionally want to
    * convey that this node should be treated as if it were parenthesized. In

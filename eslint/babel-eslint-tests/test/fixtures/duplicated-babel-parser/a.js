@@ -1,4 +1,4 @@
-import { func1 } from "./iodex.js";
+import { func1 } from "./index.js";
 
 export function five() {
   return { five: `number(${5})` };

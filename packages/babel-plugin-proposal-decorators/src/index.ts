@@ -11,7 +11,7 @@ import transformer2022_03 from "./transformer-2022-03";
 import type { Options as SyntaxOptions } from "@babel/plugin-syntax-decorators";
 
 interface Options extends SyntaxOptions {
-  /** @depreated use `constantSuper` assumption instead. Only supported in 2021-12 version. */
+  /** @deprecated use `constantSuper` assumption instead. Only supported in 2021-12 version. */
   loose?: boolean;
 }
 

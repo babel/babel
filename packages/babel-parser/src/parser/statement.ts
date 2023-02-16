@@ -293,7 +293,7 @@ export default abstract class StatementParser extends ExpressionParser {
     if (isIdentifierStart(ch)) {
       keywordRelationalOperator.lastIndex = pos;
       if (keywordRelationalOperator.test(this.input)) {
-        // We have seen `in` or `instanceof` so far, now check if the identfier
+        // We have seen `in` or `instanceof` so far, now check if the identifier
         // ends here
         const endCh = this.codePointAtPos(keywordRelationalOperator.lastIndex);
         if (!isIdentifierChar(endCh) && endCh !== charCodes.backslash) {

@@ -157,7 +157,7 @@ const handle = {
 
       // Replace `function (a, x = a.b?.#c) {}` to `function (a, x = (() => a.b?.#c)() ){}`
       // so the temporary variable can be injected in correct scope
-      // This can be further optimized to avoid unecessary IIFE
+      // This can be further optimized to avoid unnecessary IIFE
       if (scope.path.isPattern()) {
         endPath.replaceWith(
           // The injected member will be queued and eventually transformed when visited
@@ -483,7 +483,7 @@ const handle = {
     if (parentPath.isOptionalCallExpression({ callee: node })) {
       // Replace `function (a, x = a.b.#c?.()) {}` to `function (a, x = (() => a.b.#c?.())() ){}`
       // so the temporary variable can be injected in correct scope
-      // This can be further optimized to avoid unecessary IIFE
+      // This can be further optimized to avoid unnecessary IIFE
       if (scope.path.isPattern()) {
         parentPath.replaceWith(
           // The injected member will be queued and eventually transformed when visited

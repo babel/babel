@@ -59,7 +59,7 @@ export default declare((api, opt: Options) => {
     init: t.Expression,
   ) {
     let firstFieldPath;
-    let consturctorPath;
+    let constructorPath;
 
     for (const el of classPath.get("body.body")) {
       if (
@@ -69,15 +69,15 @@ export default declare((api, opt: Options) => {
         firstFieldPath = el;
         break;
       }
-      if (!consturctorPath && el.isClassMethod({ kind: "constructor" })) {
-        consturctorPath = el;
+      if (!constructorPath && el.isClassMethod({ kind: "constructor" })) {
+        constructorPath = el;
       }
     }
 
     if (firstFieldPath) {
       injectToFieldInit(firstFieldPath, init, true);
     } else {
-      injectConstructorInit(classPath, consturctorPath, [
+      injectConstructorInit(classPath, constructorPath, [
         t.expressionStatement(init),
       ]);
     }

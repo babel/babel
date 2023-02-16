@@ -67,7 +67,7 @@ export default declare((api, options: Options) => {
   const arrayLikeIsIterable =
     options.allowArrayLike ?? api.assumption("arrayLikeIsIterable");
 
-  const skipteratorClosing =
+  const skipIteratorClosing =
     api.assumption("skipForOfIteratorClosing") ?? options.loose;
 
   if (iterableIsArray && arrayLikeIsIterable) {
@@ -150,7 +150,7 @@ export default declare((api, options: Options) => {
     }
   `;
 
-  const builder = skipteratorClosing
+  const builder = skipIteratorClosing
     ? {
         build: buildForOfNoIteratorClosing,
         helper: "createForOfIteratorHelperLoose",
@@ -219,7 +219,7 @@ export default declare((api, options: Options) => {
 
         if (!state.availableHelper(builder.helper)) {
           // Babel <7.9.0 doesn't support this helper
-          transformWithoutHelper(skipteratorClosing, path, state);
+          transformWithoutHelper(skipIteratorClosing, path, state);
           return;
         }
 
@@ -266,7 +266,7 @@ export default declare((api, options: Options) => {
 
           path.parentPath.replaceWithMultiple(nodes);
 
-          // The parent has been replaced, prevent Babel from traversing a detatched path
+          // The parent has been replaced, prevent Babel from traversing a detached path
           path.skip();
         } else {
           path.replaceWithMultiple(nodes);
