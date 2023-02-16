@@ -13134,21 +13134,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"regexpu-core@npm:^5.2.1":
-  version: 5.3.0
-  resolution: "regexpu-core@npm:5.3.0"
-  dependencies:
-    "@babel/regjsgen": ^0.8.0
-    regenerate: ^1.4.2
-    regenerate-unicode-properties: ^10.1.0
-    regjsparser: ^0.9.1
-    unicode-match-property-ecmascript: ^2.0.0
-    unicode-match-property-value-ecmascript: ^2.1.0
-  checksum: f3c7921543ebda919c53fdbbf3a9cebbecbf8ad65b30e423d7eaef35484e08cbc919f9e8334f4693a72206f583d4f2b48d4415483f6e6e8c81f0046e3a23c66f
-  languageName: node
-  linkType: hard
-
-"regexpu-core@npm:^5.3.1":
+"regexpu-core@npm:^5.2.1, regexpu-core@npm:^5.3.1":
   version: 5.3.1
   resolution: "regexpu-core@npm:5.3.1"
   dependencies:
