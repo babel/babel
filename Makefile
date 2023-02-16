@@ -149,11 +149,7 @@ test-ci-coverage:
 	rm -rf coverage/tmp
 
 bootstrap-flow:
-	rm -rf build/flow
-	mkdir -p build
-	git clone --filter=blob:none --sparse --single-branch --shallow-since=2021-05-01 https://github.com/facebook/flow.git build/flow
-	cd build/flow && git sparse-checkout set "src/parser/test/flow"
-	cd build/flow && git checkout -q $(FLOW_COMMIT)
+	$(MAKEJS) bootstrap-flow
 
 test-flow:
 	$(NODE) scripts/parser-tests/flow
@@ -162,11 +158,7 @@ test-flow-update-allowlist:
 	$(NODE) scripts/parser-tests/flow --update-allowlist
 
 bootstrap-typescript:
-	rm -rf ./build/typescript
-	mkdir -p ./build
-	git clone --filter=blob:none --sparse --single-branch --shallow-since=2022-04-01 https://github.com/microsoft/TypeScript.git ./build/typescript
-	cd build/typescript && git sparse-checkout set "tests"
-	cd build/typescript && git checkout -q $(TYPESCRIPT_COMMIT)
+	$(MAKEJS) bootstrap-typescript
 
 test-typescript:
 	$(NODE) scripts/parser-tests/typescript
@@ -175,11 +167,7 @@ test-typescript-update-allowlist:
 	$(NODE) scripts/parser-tests/typescript --update-allowlist
 
 bootstrap-test262:
-	rm -rf build/test262
-	mkdir -p build
-	git clone --filter=blob:none --sparse --single-branch --shallow-since=2021-05-01 https://github.com/tc39/test262.git build/test262
-	cd build/test262 && git sparse-checkout set "test" "harness"
-	cd build/test262 && git checkout -q $(TEST262_COMMIT)
+	$(MAKEJS) bootstrap-test262
 
 test-test262:
 	$(NODE) scripts/parser-tests/test262

@@ -1,7 +1,7 @@
 import "shelljs/make.js";
 import path from "path";
 import { execFileSync } from "child_process";
-import { writeFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 
 /**
  * @type {import("shelljs")}
@@ -387,6 +387,73 @@ target["test-cov"] = function () {
       BABEL_COVERAGE: "true",
     }
   );
+};
+
+function getParserTestsCommit(id) {
+  const content = readFileSync("./Makefile", "utf8");
+  const commit = content.match(new RegExp(`${id}_COMMIT = (\\w{40})`))[1];
+  if (!commit) throw new Error(`Could not find ${id}_COMMIT in Makefile`);
+  return commit;
+}
+
+target["bootstrap-test262"] = function () {
+  const dir = "./build/test262";
+
+  shell.rm("-rf", dir);
+  shell.mkdir("-p", "build");
+
+  exec("git", [
+    "clone",
+    "--filter=blob:none",
+    "--sparse",
+    "--single-branch",
+    "--shallow-since=2021-05-01",
+    "https://github.com/tc39/test262.git",
+    dir,
+  ]);
+
+  exec("git", ["sparse-checkout", "set", "test", "harness"], dir);
+  exec("git", ["checkout", "-q", getParserTestsCommit("TEST262")], dir);
+};
+
+target["bootstrap-typescript"] = function () {
+  const dir = "./build/typescript";
+
+  shell.rm("-rf", dir);
+  shell.mkdir("-p", "build");
+
+  exec("git", [
+    "clone",
+    "--filter=blob:none",
+    "--sparse",
+    "--single-branch",
+    "--shallow-since=2022-04-01",
+    "https://github.com/microsoft/TypeScript.git",
+    dir,
+  ]);
+
+  exec("git", ["sparse-checkout", "set", "tests"], dir);
+  exec("git", ["checkout", "-q", getParserTestsCommit("TYPESCRIPT")], dir);
+};
+
+target["bootstrap-flow"] = function () {
+  const dir = "./build/flow";
+
+  shell.rm("-rf", dir);
+  shell.mkdir("-p", "build");
+
+  exec("git", [
+    "clone",
+    "--filter=blob:none",
+    "--sparse",
+    "--single-branch",
+    "--shallow-since=2021-05-01",
+    "https://github.com/facebook/flow.git",
+    dir,
+  ]);
+
+  exec("git", ["sparse-checkout", "set", "src/parser/test/flow"], dir);
+  exec("git", ["checkout", "-q", getParserTestsCommit("FLOW")], dir);
 };
 
 /**
