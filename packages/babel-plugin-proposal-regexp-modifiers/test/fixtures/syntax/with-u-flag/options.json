@@ -1,3 +1,4 @@
 {
-  "plugins": ["proposal-regexp-modifiers", "transform-unicode-regex"]
+  "plugins": ["proposal-regexp-modifiers", "transform-unicode-regex"],
+  "minNodeVersion": "8.0.0"
 }

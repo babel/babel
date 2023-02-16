@@ -1,3 +1,4 @@
 {
-  "plugins": ["proposal-regexp-modifiers"]
+  "plugins": ["proposal-regexp-modifiers"],
+  "minNodeVersion": "8.0.0"
 }
