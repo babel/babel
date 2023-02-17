@@ -158,7 +158,7 @@ const FlowErrors = ParseErrorEnum`flow`({
     memberName: string;
   }) =>
     `Number enum members need to be initialized, e.g. \`${memberName} = 1\` in enum \`${enumName}\`.`,
-  EnumStringMemberInconsistentlyInitialized: ({
+  EnumStringMemberInconsistentlyInitailized: ({
     enumName,
   }: {
     enumName: string;
@@ -3453,7 +3453,7 @@ export default (superClass: typeof Parser) =>
       });
     }
 
-    flowEnumErrorStringMemberInconsistentlyInitialized(
+    flowEnumErrorStringMemberInconsistentlyInitailized(
       node: N.Node,
       {
         enumName,
@@ -3461,7 +3461,7 @@ export default (superClass: typeof Parser) =>
         enumName: string;
       },
     ): void {
-      this.raise(FlowErrors.EnumStringMemberInconsistentlyInitialized, {
+      this.raise(FlowErrors.EnumStringMemberInconsistentlyInitailized, {
         at: node,
         enumName,
       });
@@ -3657,14 +3657,14 @@ export default (superClass: typeof Parser) =>
         return initializedMembers;
       } else if (defaultedMembers.length > initializedMembers.length) {
         for (const member of initializedMembers) {
-          this.flowEnumErrorStringMemberInconsistentlyInitialized(member, {
+          this.flowEnumErrorStringMemberInconsistentlyInitailized(member, {
             enumName,
           });
         }
         return defaultedMembers;
       } else {
         for (const member of defaultedMembers) {
-          this.flowEnumErrorStringMemberInconsistentlyInitialized(member, {
+          this.flowEnumErrorStringMemberInconsistentlyInitailized(member, {
             enumName,
           });
         }
