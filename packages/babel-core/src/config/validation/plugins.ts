@@ -112,7 +112,7 @@ export function validatePluginObject(obj: {
       const invalidPluginPropertyError = new Error(
         `.${key} is not a valid Plugin property`,
       );
-      // @ts-expect-error todo(flow->ts) consider auditing BabelConfigError with code field
+      // @ts-expect-error todo(flow->ts) consider adding BabelConfigError with code field
       invalidPluginPropertyError.code = "BABEL_UNKNOWN_PLUGIN_PROPERTY";
       throw invalidPluginPropertyError;
     }
