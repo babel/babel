@@ -407,7 +407,7 @@ function bootstrapParserTests(name, repoURL, subPaths) {
     "--filter=blob:none",
     "--sparse",
     "--single-branch",
-    "--shallow-since=2021-05-01",
+    "--shallow-since='2 years ago'",
     repoURL,
     dir,
   ]);
