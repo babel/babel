@@ -554,14 +554,17 @@ function buildPrivateFieldInitLoose(
   const { id } = privateNamesMap.get(prop.node.key.id.name);
   const value = prop.node.value || prop.scope.buildUndefinedNode();
 
-  return template.statement.ast`
-    Object.defineProperty(${ref}, ${t.cloneNode(id)}, {
-      // configurable is false by default
-      // enumerable is false by default
-      writable: true,
-      value: ${value}
-    });
-  `;
+  return inheritPropComments(
+    template.statement.ast`
+      Object.defineProperty(${ref}, ${t.cloneNode(id)}, {
+        // configurable is false by default
+        // enumerable is false by default
+        writable: true,
+        value: ${value}
+      });
+    `,
+    prop,
+  );
 }
 
 function buildPrivateInstanceFieldInitSpec(
@@ -575,24 +578,30 @@ function buildPrivateInstanceFieldInitSpec(
 
   if (!process.env.BABEL_8_BREAKING) {
     if (!state.availableHelper("classPrivateFieldInitSpec")) {
-      return template.statement.ast`${t.cloneNode(id)}.set(${ref}, {
-        // configurable is always false for private elements
-        // enumerable is always false for private elements
-        writable: true,
-        value: ${value},
-      })`;
+      return inheritPropComments(
+        template.statement.ast`${t.cloneNode(id)}.set(${ref}, {
+          // configurable is always false for private elements
+          // enumerable is always false for private elements
+          writable: true,
+          value: ${value},
+        })`,
+        prop,
+      );
     }
   }
 
   const helper = state.addHelper("classPrivateFieldInitSpec");
-  return template.statement.ast`${helper}(
-    ${t.thisExpression()},
-    ${t.cloneNode(id)},
-    {
-      writable: true,
-      value: ${value}
-    },
-  )`;
+  return inheritPropComments(
+    template.statement.ast`${helper}(
+      ${t.thisExpression()},
+      ${t.cloneNode(id)},
+      {
+        writable: true,
+        value: ${value}
+      },
+    )`,
+    prop,
+  );
 }
 
 function buildPrivateStaticFieldInitSpec(
@@ -611,26 +620,32 @@ function buildPrivateStaticFieldInitSpec(
       initAdded: true,
     });
 
-    return template.statement.ast`
-      var ${t.cloneNode(id)} = {
-        // configurable is false by default
-        // enumerable is false by default
-        // writable is false by default
-        get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
-        set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
-      }
-    `;
+    return inheritPropComments(
+      template.statement.ast`
+        var ${t.cloneNode(id)} = {
+          // configurable is false by default
+          // enumerable is false by default
+          // writable is false by default
+          get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
+          set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
+        }
+      `,
+      prop,
+    );
   }
 
   const value = prop.node.value || prop.scope.buildUndefinedNode();
-  return template.statement.ast`
-    var ${t.cloneNode(id)} = {
-      // configurable is false by default
-      // enumerable is false by default
-      writable: true,
-      value: ${value}
-    };
-  `;
+  return inheritPropComments(
+    template.statement.ast`
+      var ${t.cloneNode(id)} = {
+        // configurable is false by default
+        // enumerable is false by default
+        writable: true,
+        value: ${value}
+      };
+    `,
+    prop,
+  );
 }
 
 function buildPrivateMethodInitLoose(
@@ -643,14 +658,17 @@ function buildPrivateMethodInitLoose(
   if (initAdded) return;
 
   if (methodId) {
-    return template.statement.ast`
+    return inheritPropComments(
+      template.statement.ast`
         Object.defineProperty(${ref}, ${id}, {
           // configurable is false by default
           // enumerable is false by default
           // writable is false by default
           value: ${methodId.name}
         });
-      `;
+      `,
+      prop,
+    );
   }
   const isAccessor = getId || setId;
   if (isAccessor) {
@@ -659,15 +677,18 @@ function buildPrivateMethodInitLoose(
       initAdded: true,
     });
 
-    return template.statement.ast`
-      Object.defineProperty(${ref}, ${id}, {
-        // configurable is false by default
-        // enumerable is false by default
-        // writable is false by default
-        get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
-        set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
-      });
-    `;
+    return inheritPropComments(
+      template.statement.ast`
+        Object.defineProperty(${ref}, ${id}, {
+          // configurable is false by default
+          // enumerable is false by default
+          // writable is false by default
+          get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
+          set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
+        });
+      `,
+      prop,
+    );
   }
 }
 
@@ -716,24 +737,30 @@ function buildPrivateAccessorInitialization(
 
   if (!process.env.BABEL_8_BREAKING) {
     if (!state.availableHelper("classPrivateFieldInitSpec")) {
-      return template.statement.ast`
-      ${id}.set(${ref}, {
-        get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
-        set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
-      });
-    `;
+      return inheritPropComments(
+        template.statement.ast`
+          ${id}.set(${ref}, {
+            get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
+            set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
+          });
+        `,
+        prop,
+      );
     }
   }
 
   const helper = state.addHelper("classPrivateFieldInitSpec");
-  return template.statement.ast`${helper}(
-    ${t.thisExpression()},
-    ${t.cloneNode(id)},
-    {
-      get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
-      set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
-    },
-  )`;
+  return inheritPropComments(
+    template.statement.ast`${helper}(
+      ${t.thisExpression()},
+      ${t.cloneNode(id)},
+      {
+        get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
+        set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
+      },
+    )`,
+    prop,
+  );
 }
 
 function buildPrivateInstanceMethodInitalization(
@@ -747,15 +774,21 @@ function buildPrivateInstanceMethodInitalization(
 
   if (!process.env.BABEL_8_BREAKING) {
     if (!state.availableHelper("classPrivateMethodInitSpec")) {
-      return template.statement.ast`${id}.add(${ref})`;
+      return inheritPropComments(
+        template.statement.ast`${id}.add(${ref})`,
+        prop,
+      );
     }
   }
 
   const helper = state.addHelper("classPrivateMethodInitSpec");
-  return template.statement.ast`${helper}(
-    ${t.thisExpression()},
-    ${t.cloneNode(id)}
-  )`;
+  return inheritPropComments(
+    template.statement.ast`${helper}(
+      ${t.thisExpression()},
+      ${t.cloneNode(id)}
+    )`,
+    prop,
+  );
 }
 
 function buildPublicFieldInitLoose(
@@ -765,12 +798,15 @@ function buildPublicFieldInitLoose(
   const { key, computed } = prop.node;
   const value = prop.node.value || prop.scope.buildUndefinedNode();
 
-  return t.expressionStatement(
-    t.assignmentExpression(
-      "=",
-      t.memberExpression(ref, key, computed || t.isLiteral(key)),
-      value,
+  return inheritPropComments(
+    t.expressionStatement(
+      t.assignmentExpression(
+        "=",
+        t.memberExpression(ref, key, computed || t.isLiteral(key)),
+        value,
+      ),
     ),
+    prop,
   );
 }
 
@@ -782,14 +818,17 @@ function buildPublicFieldInitSpec(
   const { key, computed } = prop.node;
   const value = prop.node.value || prop.scope.buildUndefinedNode();
 
-  return t.expressionStatement(
-    t.callExpression(state.addHelper("defineProperty"), [
-      ref,
-      computed || t.isLiteral(key)
-        ? key
-        : t.stringLiteral((key as t.Identifier).name),
-      value,
-    ]),
+  return inheritPropComments(
+    t.expressionStatement(
+      t.callExpression(state.addHelper("defineProperty"), [
+        ref,
+        computed || t.isLiteral(key)
+          ? key
+          : t.stringLiteral((key as t.Identifier).name),
+        value,
+      ]),
+    ),
+    prop,
   );
 }
 
@@ -811,25 +850,31 @@ function buildPrivateStaticMethodInitLoose(
       initAdded: true,
     });
 
-    return template.statement.ast`
+    return inheritPropComments(
+      template.statement.ast`
+        Object.defineProperty(${ref}, ${id}, {
+          // configurable is false by default
+          // enumerable is false by default
+          // writable is false by default
+          get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
+          set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
+        })
+      `,
+      prop,
+    );
+  }
+
+  return inheritPropComments(
+    template.statement.ast`
       Object.defineProperty(${ref}, ${id}, {
         // configurable is false by default
         // enumerable is false by default
         // writable is false by default
-        get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
-        set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
-      })
-    `;
-  }
-
-  return template.statement.ast`
-    Object.defineProperty(${ref}, ${id}, {
-      // configurable is false by default
-      // enumerable is false by default
-      // writable is false by default
-      value: ${methodId.name}
-    });
-  `;
+        value: ${methodId.name}
+      });
+    `,
+    prop,
+  );
 }
 
 function buildPrivateMethodDeclaration(
@@ -869,13 +914,16 @@ function buildPrivateMethodDeclaration(
     declId = id;
   }
 
-  return t.functionDeclaration(
-    t.cloneNode(declId),
-    // @ts-expect-error params for ClassMethod has TSParameterProperty
-    params,
-    body,
-    generator,
-    async,
+  return inheritPropComments(
+    t.functionDeclaration(
+      t.cloneNode(declId),
+      // @ts-expect-error params for ClassMethod has TSParameterProperty
+      params,
+      body,
+      generator,
+      async,
+    ),
+    prop,
   );
 }
 
@@ -991,6 +1039,23 @@ function isNameOrLength({ key, computed }: t.ClassProperty) {
   return false;
 }
 
+/**
+ * Inherit comments from class members. This is a reduced version of
+ * t.inheritsComments: the trailing comments are not inherited because
+ * for most class members except the last one, their trailing comments are
+ * the next sibiling's leading comments.
+ *
+ * @template T transformed class member type
+ * @param {T} node transformed class member
+ * @param {PropPath} prop class member
+ * @returns transformed class member type with comments inherited
+ */
+function inheritPropComments<T extends t.Node>(node: T, prop: PropPath) {
+  t.inheritLeadingComments(node, prop.node);
+  t.inheritInnerComments(node, prop.node);
+  return node;
+}
+
 export function buildFieldsInitNodes(
   ref: t.Identifier,
   superRef: t.Expression | undefined,
@@ -1053,9 +1118,14 @@ export function buildFieldsInitNodes(
         // We special-case the single expression case to avoid the iife, since
         // it's common.
         if (blockBody.length === 1 && t.isExpressionStatement(blockBody[0])) {
-          staticNodes.push(blockBody[0]);
+          staticNodes.push(inheritPropComments(blockBody[0], prop));
         } else {
-          staticNodes.push(template.statement.ast`(() => { ${blockBody} })()`);
+          staticNodes.push(
+            t.inheritsComments(
+              template.statement.ast`(() => { ${blockBody} })()`,
+              prop.node,
+            ),
+          );
         }
         break;
       }
