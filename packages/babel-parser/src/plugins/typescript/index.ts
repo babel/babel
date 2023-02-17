@@ -198,8 +198,8 @@ const TSErrors = ParseErrorEnum`typescript`({
     "This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma, as in `<T,>() => ...`.",
   ReservedTypeAssertion:
     "This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.",
-  // TODO: Accessor -> Accessor
-  SetAccessorCannotHaveOptionalParameter:
+  // TODO: Accesor -> Accessor
+  SetAccesorCannotHaveOptionalParameter:
     "A 'set' accessor cannot have an optional parameter.",
   SetAccessorCannotHaveRestParameter:
     "A 'set' accessor cannot have rest parameter.",
@@ -877,7 +877,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
               firstParameter.type === "Identifier" &&
               firstParameter.optional
             ) {
-              this.raise(TSErrors.SetAccessorCannotHaveOptionalParameter, {
+              this.raise(TSErrors.SetAccesorCannotHaveOptionalParameter, {
                 at: this.state.curPosition(),
               });
             }
