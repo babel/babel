@@ -1,6 +1,5 @@
 import { types as t } from "@babel/core";
 import type { PluginAPI, PluginObject } from "@babel/core";
-import type { AssumptionName } from "@babel/core/src/config/validation/options";
 import type { NodePath } from "@babel/traverse";
 import nameFunction from "@babel/helper-function-name";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
@@ -57,23 +56,21 @@ export function createClassFeaturePlugin({
   const noDocumentAll = api.assumption("noDocumentAll");
 
   if (loose === true) {
-    const explicit: AssumptionName[] = [];
+    const explicit = [];
 
     if (setPublicClassFields !== undefined) {
-      explicit.push("setPublicClassFields");
+      explicit.push(`"setPublicClassFields"`);
     }
     if (privateFieldsAsProperties !== undefined) {
-      explicit.push("privateFieldsAsProperties");
+      explicit.push(`"privateFieldsAsProperties"`);
     }
     if (privateFieldsAsSymbols !== undefined) {
-      explicit.push("privateFieldsAsSymbols");
+      explicit.push(`"privateFieldsAsSymbols"`);
     }
     if (explicit.length !== 0) {
       console.warn(
         `[${name}]: You are using the "loose: true" option and you are` +
-          ` explicitly setting a value for the ${explicit
-            .map(assumptionName => `"${assumptionName}"`)
-            .join(" and ")}` +
+          ` explicitly setting a value for the ${explicit.join(" and ")}` +
           ` assumption${explicit.length > 1 ? "s" : ""}. The "loose" option` +
           ` can cause incompatibilities with the other class features` +
           ` plugins, so it's recommended that you replace it with the` +
