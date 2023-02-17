@@ -1,5 +1,6 @@
 import { types as t } from "@babel/core";
 import type { PluginAPI, PluginObject } from "@babel/core";
+import type { AssumptionName } from "@babel/core/src/config/validation/options";
 import type { NodePath } from "@babel/traverse";
 import nameFunction from "@babel/helper-function-name";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
@@ -48,30 +49,38 @@ export function createClassFeaturePlugin({
   inherits,
 }: Options): PluginObject {
   const setPublicClassFields = api.assumption("setPublicClassFields");
+  const privateFieldsAsSymbols = api.assumption("privateFieldsAsSymbols");
   const privateFieldsAsProperties = api.assumption("privateFieldsAsProperties");
+  const privateFieldsAsSymbolsOrProperties =
+    privateFieldsAsProperties || privateFieldsAsSymbols;
   const constantSuper = api.assumption("constantSuper");
   const noDocumentAll = api.assumption("noDocumentAll");
 
   if (loose === true) {
-    const explicit = [];
+    const explicit: AssumptionName[] = [];
 
     if (setPublicClassFields !== undefined) {
-      explicit.push(`"setPublicClassFields"`);
+      explicit.push("setPublicClassFields");
     }
     if (privateFieldsAsProperties !== undefined) {
-      explicit.push(`"privateFieldsAsProperties"`);
+      explicit.push("privateFieldsAsProperties");
+    }
+    if (privateFieldsAsSymbols !== undefined) {
+      explicit.push("privateFieldsAsSymbols");
     }
     if (explicit.length !== 0) {
       console.warn(
         `[${name}]: You are using the "loose: true" option and you are` +
-          ` explicitly setting a value for the ${explicit.join(" and ")}` +
+          ` explicitly setting a value for the ${explicit
+            .map(assumptionName => `"${assumptionName}"`)
+            .join(" and ")}` +
           ` assumption${explicit.length > 1 ? "s" : ""}. The "loose" option` +
           ` can cause incompatibilities with the other class features` +
           ` plugins, so it's recommended that you replace it with the` +
           ` following top-level option:\n` +
           `\t"assumptions": {\n` +
           `\t\t"setPublicClassFields": true,\n` +
-          `\t\t"privateFieldsAsProperties": true\n` +
+          `\t\t"privateFieldsAsSymbols": true\n` +
           `\t}`,
       );
     }
@@ -191,6 +200,7 @@ export function createClassFeaturePlugin({
         const privateNamesNodes = buildPrivateNamesNodes(
           privateNamesMap,
           privateFieldsAsProperties ?? loose,
+          privateFieldsAsSymbols ?? false,
           file,
         );
 
@@ -199,7 +209,8 @@ export function createClassFeaturePlugin({
           path,
           privateNamesMap,
           {
-            privateFieldsAsProperties: privateFieldsAsProperties ?? loose,
+            privateFieldsAsProperties:
+              privateFieldsAsSymbolsOrProperties ?? loose,
             noDocumentAll,
             innerBinding,
           },
@@ -231,7 +242,7 @@ export function createClassFeaturePlugin({
                 privateNamesMap,
                 file,
                 setPublicClassFields ?? loose,
-                privateFieldsAsProperties ?? loose,
+                privateFieldsAsSymbolsOrProperties ?? loose,
                 constantSuper ?? loose,
                 innerBinding,
               ));
@@ -246,7 +257,7 @@ export function createClassFeaturePlugin({
               privateNamesMap,
               file,
               setPublicClassFields ?? loose,
-              privateFieldsAsProperties ?? loose,
+              privateFieldsAsSymbolsOrProperties ?? loose,
               constantSuper ?? loose,
               innerBinding,
             ));

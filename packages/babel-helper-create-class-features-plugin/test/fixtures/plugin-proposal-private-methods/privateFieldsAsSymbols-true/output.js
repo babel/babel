@@ -1,0 +1,11 @@
+var _privateMethod = Symbol("privateMethod");
+class X {
+  constructor() {
+    Object.defineProperty(this, _privateMethod, {
+      value: _privateMethod2
+    });
+  }
+}
+function _privateMethod2() {
+  return 42;
+}
