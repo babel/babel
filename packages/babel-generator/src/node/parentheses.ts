@@ -284,7 +284,7 @@ export function SequenceExpression(
   parent: t.Node,
 ): boolean {
   if (
-    // Although parentheses wouldn"t hurt around sequence
+    // Although parentheses wouldn't hurt around sequence
     // expressions in the head of for loops, traditional style
     // dictates that e.g. i++, j++ should not be wrapped with
     // parentheses.

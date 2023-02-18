@@ -238,7 +238,7 @@ export function insertAfter(
         nodes.unshift(
           expressionStatement(
             // @ts-expect-error todo(flow->ts): This can be a variable
-            // declaraion in the "init" of a for statement, but that's
+            // declaration in the "init" of a for statement, but that's
             // invalid here.
             assignmentExpression("=", cloneNode(temp), node),
           ),

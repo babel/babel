@@ -2571,7 +2571,7 @@ export default abstract class ExpressionParser extends LValParser {
                 (node.kind === "method" || node.kind === "constructor") &&
                 // @ts-expect-error key may not index node
                 !!node.key
-                  ? // @ts-expect-error node.key has been gaurded
+                  ? // @ts-expect-error node.key has been guarded
                     node.key.loc.end
                   : node,
             });

@@ -81,14 +81,14 @@ const CompactRegExp = new RegExp(
 
 export function serialize(value) {
   let extended = false;
-  const toExended = (name, data) => (
+  const toExtended = (name, data) => (
     (extended = true), { [SerializationKey]: name, ...data }
   );
   const encode = (key, value) =>
     typeof value === "bigint"
-      ? toExended("bigint", { value: value + "" })
+      ? toExtended("bigint", { value: value + "" })
       : value instanceof RegExp
-      ? toExended("RegExp", { source: value.source, flags: value.flags })
+      ? toExtended("RegExp", { source: value.source, flags: value.flags })
       : value instanceof Error
       ? value + ""
       : value;

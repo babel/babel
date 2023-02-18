@@ -211,7 +211,7 @@ export function transform(
     if (willReplacementCastToBoolean) {
       // `if (a?.b) {}` transformed to `if (a != null && a.b) {}`
       // we don't need to return `void 0` because the returned value will
-      // eveutally cast to boolean.
+      // eventually cast to boolean.
       const nonNullishCheck = noDocumentAll
         ? ast`${t.cloneNode(check)} != null`
         : ast`

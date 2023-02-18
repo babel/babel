@@ -2387,7 +2387,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     registerFunctionStatementId(node: N.Function): void {
       if (!node.body && node.id) {
         // Function ids are validated after parsing their body.
-        // For bodyless function, we need to do it here.
+        // For bodiless function, we need to do it here.
         this.checkIdentifier(node.id, BIND_TS_AMBIENT);
       } else {
         super.registerFunctionStatementId(node);
@@ -4146,7 +4146,7 @@ function isPossiblyLiteralEnum(expression: N.Expression): boolean {
   return isUncomputedMemberExpressionChain(expression.object);
 }
 
-// If a const declaration has no type annotation and is initiailized to
+// If a const declaration has no type annotation and is initialized to
 // a string literal, numeric literal, or enum reference, then it is
 // allowed. In an ideal world, we'd check whether init was *actually* an
 // enum reference, but we allow anything that "could be" a literal enum

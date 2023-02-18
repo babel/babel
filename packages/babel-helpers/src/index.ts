@@ -291,7 +291,7 @@ function loadHelper(name: string) {
 
     // We compute the helper metadata lazily, so that we skip that
     // work if we only need the `.minVersion` (for example because
-    // of a call to `.availableHelper` when `@babel/rutime`).
+    // of a call to `.availableHelper` when `@babel/runtime`).
     let metadata: HelperMetadata | null = null;
 
     helperData[name] = {

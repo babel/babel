@@ -40,7 +40,7 @@ export default declare(({ types: t, template, assertVersion }) => {
 
     visitor: {
       // Run on ClassBody and not on class so that if @babel/helper-create-class-features-plugin
-      // is enabled it can generte optimized output without passing from the intermediate
+      // is enabled it can generate optimized output without passing from the intermediate
       // private fields representation.
       ClassBody(classBody) {
         const { scope } = classBody;

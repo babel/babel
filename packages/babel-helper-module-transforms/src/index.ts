@@ -349,7 +349,7 @@ function buildNamespaceReexport(
         // namespace re-exports that would cause a binding to be exported
         // multiple times. However, multiple bindings of the same name that
         // export the same primitive value are silently skipped
-        // (the spec requires an "ambigous bindings" early error here).
+        // (the spec requires an "ambiguous bindings" early error here).
         template.statement`
         Object.keys(NAMESPACE).forEach(function(key) {
           if (key === "default" || key === "__esModule") return;

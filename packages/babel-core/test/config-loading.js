@@ -407,7 +407,7 @@ describe("@babel/core config loading", () => {
 
     it("should thrown when plugin is not valid", () => {
       const fooPlugin = {
-        inherits: "inhertis-should-not-be-string",
+        inherits: "inherits-should-not-be-string",
       };
       const opts = {
         cwd: path.dirname(FILEPATH),

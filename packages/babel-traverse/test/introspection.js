@@ -215,7 +215,7 @@ describe("path/introspection", function () {
   });
 
   describe("_guessExecutionStatusRelativeTo", function () {
-    it("works withs paths in function expressions", () => {
+    it("works with paths in function expressions", () => {
       const program = getPath(`
         a;
         f(() => b);

@@ -92,10 +92,10 @@ describe("buildConfigChain", function () {
     describe("single", () => {
       it("should process matching string values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          test: fixture("nonexistant-fake"),
+          test: fixture("nonexistent-fake"),
           comments: true,
         });
 
@@ -104,10 +104,10 @@ describe("buildConfigChain", function () {
 
       it("should process matching RegExp values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          test: new RegExp(escapeRegExp(fixture("nonexistant-fake"))),
+          test: new RegExp(escapeRegExp(fixture("nonexistent-fake"))),
           comments: true,
         });
 
@@ -116,10 +116,10 @@ describe("buildConfigChain", function () {
 
       it("should process matching function values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          test: p => p.indexOf(fixture("nonexistant-fake")) === 0,
+          test: p => p.indexOf(fixture("nonexistent-fake")) === 0,
           comments: true,
         });
 
@@ -128,10 +128,10 @@ describe("buildConfigChain", function () {
 
       it("should process non-matching string values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          test: fixture("nonexistant-fake-unknown"),
+          test: fixture("nonexistent-fake-unknown"),
           comments: true,
         });
 
@@ -140,10 +140,10 @@ describe("buildConfigChain", function () {
 
       it("should process non-matching RegExp values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          test: new RegExp(escapeRegExp(fixture("nonexistant-unknown"))),
+          test: new RegExp(escapeRegExp(fixture("nonexistent-unknown"))),
           comments: true,
         });
 
@@ -152,10 +152,10 @@ describe("buildConfigChain", function () {
 
       it("should process non-matching function values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          test: p => p.indexOf(fixture("nonexistant-unknown")) === 0,
+          test: p => p.indexOf(fixture("nonexistent-unknown")) === 0,
           comments: true,
         });
 
@@ -166,10 +166,10 @@ describe("buildConfigChain", function () {
     describe("array", () => {
       it("should process matching string values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          test: [fixture("nonexistant-fake")],
+          test: [fixture("nonexistent-fake")],
           comments: true,
         });
 
@@ -178,10 +178,10 @@ describe("buildConfigChain", function () {
 
       it("should process matching RegExp values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          test: [new RegExp(escapeRegExp(fixture("nonexistant-fake")))],
+          test: [new RegExp(escapeRegExp(fixture("nonexistent-fake")))],
           comments: true,
         });
 
@@ -190,10 +190,10 @@ describe("buildConfigChain", function () {
 
       it("should process matching function values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          test: [p => p.indexOf(fixture("nonexistant-fake")) === 0],
+          test: [p => p.indexOf(fixture("nonexistent-fake")) === 0],
           comments: true,
         });
 
@@ -202,10 +202,10 @@ describe("buildConfigChain", function () {
 
       it("should process non-matching string values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          test: [fixture("nonexistant-fake-unknown")],
+          test: [fixture("nonexistent-fake-unknown")],
           comments: true,
         });
 
@@ -214,10 +214,10 @@ describe("buildConfigChain", function () {
 
       it("should process non-matching RegExp values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          test: [new RegExp(escapeRegExp(fixture("nonexistant-unknown")))],
+          test: [new RegExp(escapeRegExp(fixture("nonexistent-unknown")))],
           comments: true,
         });
 
@@ -226,10 +226,10 @@ describe("buildConfigChain", function () {
 
       it("should process non-matching function values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          test: [p => p.indexOf(fixture("nonexistant-unknown")) === 0],
+          test: [p => p.indexOf(fixture("nonexistent-unknown")) === 0],
           comments: true,
         });
 
@@ -239,7 +239,7 @@ describe("buildConfigChain", function () {
 
     describe("filename requirement", () => {
       const BASE_OPTS = {
-        cwd: fixture("nonexistant-fake"),
+        cwd: fixture("nonexistent-fake"),
         babelrc: false,
         configFile: false,
       };
@@ -249,7 +249,7 @@ describe("buildConfigChain", function () {
           expect(() =>
             loadOptions({
               ...BASE_OPTS,
-              test: fixture("nonexistant-fake"),
+              test: fixture("nonexistent-fake"),
             }),
           ).toThrow(/no filename was passed/);
         });
@@ -290,7 +290,7 @@ describe("buildConfigChain", function () {
           expect(() =>
             loadOptions({
               ...BASE_OPTS,
-              presets: [() => ({ test: fixture("nonexistant-fake") })],
+              presets: [() => ({ test: fixture("nonexistent-fake") })],
             }),
           ).toThrow(/requires a filename/);
         });
@@ -332,10 +332,10 @@ describe("buildConfigChain", function () {
     describe("single", () => {
       it("should process matching string values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          include: fixture("nonexistant-fake"),
+          include: fixture("nonexistent-fake"),
           comments: true,
         });
 
@@ -344,10 +344,10 @@ describe("buildConfigChain", function () {
 
       it("should process matching RegExp values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          include: new RegExp(escapeRegExp(fixture("nonexistant-fake"))),
+          include: new RegExp(escapeRegExp(fixture("nonexistent-fake"))),
           comments: true,
         });
 
@@ -356,10 +356,10 @@ describe("buildConfigChain", function () {
 
       it("should process matching function values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          include: p => p.indexOf(fixture("nonexistant-fake")) === 0,
+          include: p => p.indexOf(fixture("nonexistent-fake")) === 0,
           comments: true,
         });
 
@@ -368,10 +368,10 @@ describe("buildConfigChain", function () {
 
       it("should process non-matching string values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          include: fixture("nonexistant-fake-unknown"),
+          include: fixture("nonexistent-fake-unknown"),
           comments: true,
         });
 
@@ -380,10 +380,10 @@ describe("buildConfigChain", function () {
 
       it("should process non-matching RegExp values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          include: new RegExp(escapeRegExp(fixture("nonexistant-unknown"))),
+          include: new RegExp(escapeRegExp(fixture("nonexistent-unknown"))),
           comments: true,
         });
 
@@ -392,10 +392,10 @@ describe("buildConfigChain", function () {
 
       it("should process non-matching function values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          include: p => p.indexOf(fixture("nonexistant-unknown")) === 0,
+          include: p => p.indexOf(fixture("nonexistent-unknown")) === 0,
           comments: true,
         });
 
@@ -406,10 +406,10 @@ describe("buildConfigChain", function () {
     describe("array", () => {
       it("should process matching string values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          include: [fixture("nonexistant-fake")],
+          include: [fixture("nonexistent-fake")],
           comments: true,
         });
 
@@ -418,10 +418,10 @@ describe("buildConfigChain", function () {
 
       it("should process matching RegExp values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          include: [new RegExp(escapeRegExp(fixture("nonexistant-fake")))],
+          include: [new RegExp(escapeRegExp(fixture("nonexistent-fake")))],
           comments: true,
         });
 
@@ -430,10 +430,10 @@ describe("buildConfigChain", function () {
 
       it("should process matching function values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          include: [p => p.indexOf(fixture("nonexistant-fake")) === 0],
+          include: [p => p.indexOf(fixture("nonexistent-fake")) === 0],
           comments: true,
         });
 
@@ -442,10 +442,10 @@ describe("buildConfigChain", function () {
 
       it("should process non-matching string values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          include: [fixture("nonexistant-fake-unknown")],
+          include: [fixture("nonexistent-fake-unknown")],
           comments: true,
         });
 
@@ -454,10 +454,10 @@ describe("buildConfigChain", function () {
 
       it("should process non-matching RegExp values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          include: [new RegExp(escapeRegExp(fixture("nonexistant-unknown")))],
+          include: [new RegExp(escapeRegExp(fixture("nonexistent-unknown")))],
           comments: true,
         });
 
@@ -466,10 +466,10 @@ describe("buildConfigChain", function () {
 
       it("should process non-matching function values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          include: [p => p.indexOf(fixture("nonexistant-unknown")) === 0],
+          include: [p => p.indexOf(fixture("nonexistent-unknown")) === 0],
           comments: true,
         });
 
@@ -482,10 +482,10 @@ describe("buildConfigChain", function () {
     describe("single", () => {
       it("should process matching string values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          exclude: fixture("nonexistant-fake"),
+          exclude: fixture("nonexistent-fake"),
           comments: true,
         });
 
@@ -494,10 +494,10 @@ describe("buildConfigChain", function () {
 
       it("should process matching RegExp values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          exclude: new RegExp(escapeRegExp(fixture("nonexistant-fake"))),
+          exclude: new RegExp(escapeRegExp(fixture("nonexistent-fake"))),
           comments: true,
         });
 
@@ -506,10 +506,10 @@ describe("buildConfigChain", function () {
 
       it("should process matching function values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          exclude: p => p.indexOf(fixture("nonexistant-fake")) === 0,
+          exclude: p => p.indexOf(fixture("nonexistent-fake")) === 0,
           comments: true,
         });
 
@@ -518,10 +518,10 @@ describe("buildConfigChain", function () {
 
       it("should process non-matching string values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          exclude: fixture("nonexistant-fake-unknown"),
+          exclude: fixture("nonexistent-fake-unknown"),
           comments: true,
         });
 
@@ -530,10 +530,10 @@ describe("buildConfigChain", function () {
 
       it("should process non-matching RegExp values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          exclude: new RegExp(escapeRegExp(fixture("nonexistant-unknown"))),
+          exclude: new RegExp(escapeRegExp(fixture("nonexistent-unknown"))),
           comments: true,
         });
 
@@ -542,10 +542,10 @@ describe("buildConfigChain", function () {
 
       it("should process non-matching function values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          exclude: p => p.indexOf(fixture("nonexistant-unknown")) === 0,
+          exclude: p => p.indexOf(fixture("nonexistent-unknown")) === 0,
           comments: true,
         });
 
@@ -556,10 +556,10 @@ describe("buildConfigChain", function () {
     describe("array", () => {
       it("should process matching string values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          exclude: [fixture("nonexistant-fake")],
+          exclude: [fixture("nonexistent-fake")],
           comments: true,
         });
 
@@ -568,10 +568,10 @@ describe("buildConfigChain", function () {
 
       it("should process matching RegExp values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          exclude: [new RegExp(escapeRegExp(fixture("nonexistant-fake")))],
+          exclude: [new RegExp(escapeRegExp(fixture("nonexistent-fake")))],
           comments: true,
         });
 
@@ -580,10 +580,10 @@ describe("buildConfigChain", function () {
 
       it("should process matching function values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          exclude: [p => p.indexOf(fixture("nonexistant-fake")) === 0],
+          exclude: [p => p.indexOf(fixture("nonexistent-fake")) === 0],
           comments: true,
         });
 
@@ -592,10 +592,10 @@ describe("buildConfigChain", function () {
 
       it("should process non-matching string values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          exclude: [fixture("nonexistant-fake-unknown")],
+          exclude: [fixture("nonexistent-fake-unknown")],
           comments: true,
         });
 
@@ -604,10 +604,10 @@ describe("buildConfigChain", function () {
 
       it("should process non-matching RegExp values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          exclude: [new RegExp(escapeRegExp(fixture("nonexistant-unknown")))],
+          exclude: [new RegExp(escapeRegExp(fixture("nonexistent-unknown")))],
           comments: true,
         });
 
@@ -616,10 +616,10 @@ describe("buildConfigChain", function () {
 
       it("should process non-matching function values", () => {
         const opts = loadOptions({
-          cwd: fixture("nonexistant-fake"),
-          filename: fixture("nonexistant-fake", "src.js"),
+          cwd: fixture("nonexistent-fake"),
+          filename: fixture("nonexistent-fake", "src.js"),
           babelrc: false,
-          exclude: [p => p.indexOf(fixture("nonexistant-unknown")) === 0],
+          exclude: [p => p.indexOf(fixture("nonexistent-unknown")) === 0],
           comments: true,
         });
 
@@ -631,16 +631,16 @@ describe("buildConfigChain", function () {
   describe("ignore", () => {
     it("should ignore files that match", () => {
       const opts = loadOptions({
-        cwd: fixture("nonexistant-fake"),
-        filename: fixture("nonexistant-fake", "src.js"),
+        cwd: fixture("nonexistent-fake"),
+        filename: fixture("nonexistent-fake", "src.js"),
         babelrc: false,
         ignore: [
-          fixture("nonexistant-fake", "src.js"),
+          fixture("nonexistent-fake", "src.js"),
 
           // We had a regression where multiple ignore patterns broke things, so
           // we keep some extra random items in here.
-          fixture("nonexistant-fake", "other.js"),
-          fixture("nonexistant-fake", "misc.js"),
+          fixture("nonexistent-fake", "other.js"),
+          fixture("nonexistent-fake", "misc.js"),
         ],
       });
 
@@ -649,12 +649,12 @@ describe("buildConfigChain", function () {
 
     it("should not ignore files that don't match", () => {
       const opts = loadOptions({
-        cwd: fixture("nonexistant-fake"),
-        filename: fixture("nonexistant-fake", "src.js"),
+        cwd: fixture("nonexistent-fake"),
+        filename: fixture("nonexistent-fake", "src.js"),
         babelrc: false,
         ignore: [
-          fixture("nonexistant-fake", "other.js"),
-          fixture("nonexistant-fake", "misc.js"),
+          fixture("nonexistent-fake", "other.js"),
+          fixture("nonexistent-fake", "misc.js"),
         ],
       });
 
@@ -665,12 +665,12 @@ describe("buildConfigChain", function () {
   describe("only", () => {
     it("should ignore files that don't match", () => {
       const opts = loadOptions({
-        cwd: fixture("nonexistant-fake"),
-        filename: fixture("nonexistant-fake", "src.js"),
+        cwd: fixture("nonexistent-fake"),
+        filename: fixture("nonexistent-fake", "src.js"),
         babelrc: false,
         only: [
-          fixture("nonexistant-fake", "other.js"),
-          fixture("nonexistant-fake", "misc.js"),
+          fixture("nonexistent-fake", "other.js"),
+          fixture("nonexistent-fake", "misc.js"),
         ],
       });
 
@@ -679,12 +679,12 @@ describe("buildConfigChain", function () {
 
     it("should not ignore files that match", () => {
       const opts = loadOptions({
-        cwd: fixture("nonexistant-fake"),
-        filename: fixture("nonexistant-fake", "src.js"),
+        cwd: fixture("nonexistent-fake"),
+        filename: fixture("nonexistent-fake", "src.js"),
         babelrc: false,
         only: [
-          fixture("nonexistant-fake", "src.js"),
-          fixture("nonexistant-fake", "misc.js"),
+          fixture("nonexistent-fake", "src.js"),
+          fixture("nonexistent-fake", "misc.js"),
         ],
       });
 
@@ -695,10 +695,10 @@ describe("buildConfigChain", function () {
   describe("ignore/only", () => {
     it("should ignore files that match ignore and don't match only", () => {
       const opts = loadOptions({
-        cwd: fixture("nonexistant-fake"),
-        filename: fixture("nonexistant-fake", "src.js"),
+        cwd: fixture("nonexistent-fake"),
+        filename: fixture("nonexistent-fake", "src.js"),
         babelrc: false,
-        ignore: [fixture("nonexistant-fake", "src.js")],
+        ignore: [fixture("nonexistent-fake", "src.js")],
         only: [],
       });
 
@@ -707,11 +707,11 @@ describe("buildConfigChain", function () {
 
     it("should ignore files that match ignore and also only", () => {
       const opts = loadOptions({
-        cwd: fixture("nonexistant-fake"),
-        filename: fixture("nonexistant-fake", "src.js"),
+        cwd: fixture("nonexistent-fake"),
+        filename: fixture("nonexistent-fake", "src.js"),
         babelrc: false,
-        ignore: [fixture("nonexistant-fake", "src.js")],
-        only: [fixture("nonexistant-fake", "src.js")],
+        ignore: [fixture("nonexistent-fake", "src.js")],
+        only: [fixture("nonexistent-fake", "src.js")],
       });
 
       expect(opts).toBeNull();
@@ -719,10 +719,10 @@ describe("buildConfigChain", function () {
 
     it("should not ignore files that match only and not ignore", () => {
       const opts = loadOptions({
-        cwd: fixture("nonexistant-fake"),
-        filename: fixture("nonexistant-fake", "src.js"),
+        cwd: fixture("nonexistent-fake"),
+        filename: fixture("nonexistent-fake", "src.js"),
         babelrc: false,
-        only: [fixture("nonexistant-fake", "src.js")],
+        only: [fixture("nonexistent-fake", "src.js")],
       });
 
       expect(opts).not.toBeNull();
@@ -730,8 +730,8 @@ describe("buildConfigChain", function () {
 
     it("should not ignore files when no ignore/only are specified", () => {
       const opts = loadOptions({
-        cwd: fixture("nonexistant-fake"),
-        filename: fixture("nonexistant-fake", "src.js"),
+        cwd: fixture("nonexistent-fake"),
+        filename: fixture("nonexistent-fake", "src.js"),
         babelrc: false,
       });
 
@@ -740,34 +740,34 @@ describe("buildConfigChain", function () {
 
     it("should allow negation of only", () => {
       const opts1 = loadOptions({
-        cwd: fixture("nonexistant-fake"),
-        filename: fixture("nonexistant-fake", "src.js"),
+        cwd: fixture("nonexistent-fake"),
+        filename: fixture("nonexistent-fake", "src.js"),
         babelrc: false,
         only: [
-          "!" + fixture("nonexistant-fake"),
-          fixture("nonexistant-fake", "other.js"),
+          "!" + fixture("nonexistent-fake"),
+          fixture("nonexistent-fake", "other.js"),
         ],
       });
       expect(opts1).toBeNull();
 
       const opts2 = loadOptions({
-        cwd: fixture("nonexistant-fake"),
-        filename: fixture("nonexistant-fake", "src.js"),
+        cwd: fixture("nonexistent-fake"),
+        filename: fixture("nonexistent-fake", "src.js"),
         babelrc: false,
         only: [
-          "!" + fixture("nonexistant-fake"),
-          fixture("nonexistant-fake", "src.js"),
+          "!" + fixture("nonexistent-fake"),
+          fixture("nonexistent-fake", "src.js"),
         ],
       });
       expect(opts2).not.toBeNull();
 
       const opts3 = loadOptions({
-        cwd: fixture("nonexistant-fake"),
-        filename: fixture("nonexistant-fake", "folder", "src.js"),
+        cwd: fixture("nonexistent-fake"),
+        filename: fixture("nonexistent-fake", "folder", "src.js"),
         babelrc: false,
         only: [
-          "!" + fixture("nonexistant-fake"),
-          fixture("nonexistant-fake", "folder"),
+          "!" + fixture("nonexistent-fake"),
+          fixture("nonexistent-fake", "folder"),
         ],
       });
       expect(opts3).not.toBeNull();
@@ -775,35 +775,35 @@ describe("buildConfigChain", function () {
 
     it("should allow negation of ignore", () => {
       const opts1 = loadOptions({
-        cwd: fixture("nonexistant-fake"),
-        filename: fixture("nonexistant-fake", "src.js"),
+        cwd: fixture("nonexistent-fake"),
+        filename: fixture("nonexistent-fake", "src.js"),
         babelrc: false,
         ignore: [
-          "!" + fixture("nonexistant-fake", "other.js"),
-          fixture("nonexistant-fake"),
+          "!" + fixture("nonexistent-fake", "other.js"),
+          fixture("nonexistent-fake"),
         ],
       });
       expect(opts1).toBeNull();
 
       // Tests disabled pending https://github.com/babel/babel/issues/6907
       // const opts2 = loadOptions({
-      //   cwd: fixture("nonexistant-fake"),
-      //   filename: fixture("nonexistant-fake", "src.js"),
+      //   cwd: fixture("nonexistent-fake"),
+      //   filename: fixture("nonexistent-fake", "src.js"),
       //   babelrc: false,
       //   ignore: [
-      //     "!" + fixture("nonexistant-fake", "src.js"),
-      //     fixture("nonexistant-fake"),
+      //     "!" + fixture("nonexistent-fake", "src.js"),
+      //     fixture("nonexistent-fake"),
       //   ],
       // });
       // expect(opts2).not.toBeNull();
       //
       // const opts3 = loadOptions({
-      //   cwd: fixture("nonexistant-fake"),
-      //   filename: fixture("nonexistant-fake", "folder", "src.js"),
+      //   cwd: fixture("nonexistent-fake"),
+      //   filename: fixture("nonexistent-fake", "folder", "src.js"),
       //   babelrc: false,
       //   ignore: [
-      //     "!" + fixture("nonexistant-fake", "folder"),
-      //     fixture("nonexistant-fake"),
+      //     "!" + fixture("nonexistent-fake", "folder"),
+      //     fixture("nonexistent-fake"),
       //   ],
       // });
       // expect(opts3).not.toBeNull();
@@ -1032,13 +1032,13 @@ describe("buildConfigChain", function () {
   describe("overrides merging", () => {
     it("should apply matching overrides over base configs", () => {
       const opts = loadOptions({
-        cwd: fixture("nonexistant-fake"),
-        filename: fixture("nonexistant-fake", "src.js"),
+        cwd: fixture("nonexistent-fake"),
+        filename: fixture("nonexistent-fake", "src.js"),
         babelrc: false,
         comments: true,
         overrides: [
           {
-            test: fixture("nonexistant-fake"),
+            test: fixture("nonexistent-fake"),
             comments: false,
           },
         ],
@@ -1049,13 +1049,13 @@ describe("buildConfigChain", function () {
 
     it("should not apply non-matching overrides over base configs", () => {
       const opts = loadOptions({
-        cwd: fixture("nonexistant-fake"),
-        filename: fixture("nonexistant-fake", "src.js"),
+        cwd: fixture("nonexistent-fake"),
+        filename: fixture("nonexistent-fake", "src.js"),
         babelrc: false,
         comments: true,
         overrides: [
           {
-            test: fixture("nonexistant-unknown"),
+            test: fixture("nonexistent-unknown"),
             comments: false,
           },
         ],
@@ -1066,8 +1066,8 @@ describe("buildConfigChain", function () {
 
     it("should remove the overrides and filtering fields from the options", () => {
       const opts = loadOptions({
-        cwd: fixture("nonexistant-fake"),
-        filename: fixture("nonexistant-fake", "src.js"),
+        cwd: fixture("nonexistent-fake"),
+        filename: fixture("nonexistent-fake", "src.js"),
         babelrc: false,
         overrides: [],
         test: /^/,

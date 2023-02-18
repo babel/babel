@@ -651,7 +651,7 @@ export default function transformClass(
     classState.pushedConstructor = true;
 
     // we haven't pushed any descriptors yet
-    // @ts-expect-error todo(flow->ts) maybe remove this block - properties from condition are not used anywhere esle
+    // @ts-expect-error todo(flow->ts) maybe remove this block - properties from condition are not used anywhere else
     if (classState.hasInstanceDescriptors || classState.hasStaticDescriptors) {
       pushDescriptors();
     }
@@ -704,7 +704,7 @@ export default function transformClass(
 
     for (const elem of node.body.body) {
       if (!t.isClassMethod(elem) || !elem.computed) continue;
-      if (scope.isPure(elem.key, /* constatns only*/ true)) continue;
+      if (scope.isPure(elem.key, /* constants only*/ true)) continue;
 
       const id = scope.generateUidIdentifierBasedOnNode(elem.key);
       dynamicKeys.set(id.name, elem.key);

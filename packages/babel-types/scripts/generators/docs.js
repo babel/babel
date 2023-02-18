@@ -191,7 +191,7 @@ const aliasDescriptions = {
   Declaration:
     "A cover of any [Declaration](https://tc39.es/ecma262/#prod-Declaration)s.",
   EnumBody: "A cover of Flow enum bodies.",
-  EnumMember: "A cover of Flow enum membors.",
+  EnumMember: "A cover of Flow enum members.",
   ExportDeclaration:
     "A cover of any [ExportDeclaration](https://tc39.es/ecma262/#prod-ExportDeclaration)s.",
   Expression:

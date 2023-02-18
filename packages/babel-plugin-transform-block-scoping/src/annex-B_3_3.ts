@@ -10,7 +10,7 @@ import type { NodePath, Visitor, Scope } from "@babel/traverse";
 // TODO(Babel 8): Figure out how this should interact with
 // the transform-block-scoped functions plugin (it feels
 // wrong to handle this transform here), and what we want
-// to do with Anned B behavior in general.
+// to do with Annex B behavior in general.
 
 // To avoid confusing block-scoped variables transformed to
 // var with original vars, this transformation happens in two

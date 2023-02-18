@@ -654,7 +654,7 @@ function pluginImportMetaUrl({ types: t, template }) {
   return {
     visitor: {
       Program(programPath) {
-        // We must be sure to run this before the instanbul plugins, because its
+        // We must be sure to run this before the istanbul plugins, because its
         // instrumentation breaks our detection.
         programPath.traverse({
           // fileURLToPath(import.meta.url)

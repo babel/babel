@@ -341,7 +341,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
           return !isDerivedClass(path.parentPath.parentPath as NodePath<Class>);
         }
         if (path.isTSModuleBlock()) {
-          // If the closeset parent is a TS Module block, `this` will not be allowed.
+          // If the closest parent is a TS Module block, `this` will not be allowed.
           return false;
         }
       } while ((scope = scope.parent));
@@ -848,7 +848,7 @@ function toMemberExpression(id: string): Identifier | MemberExpression {
       .split(".")
       .map(name => t.identifier(name))
       // @ts-expect-error - The Array#reduce does not have a signature
-      // where the type of initialial value differs from callback return type
+      // where the type of initial value differs from callback return type
       .reduce((object, property) => t.memberExpression(object, property))
   );
 }

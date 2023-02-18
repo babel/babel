@@ -1,2 +1,2 @@
-const testVarible = 'test.js';
-import(testVarible).then(() => {});
+const testVariable = 'test.js';
+import(testVariable).then(() => {});

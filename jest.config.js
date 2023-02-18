@@ -75,7 +75,7 @@ module.exports = {
     "/test/__data__/",
     "<rootDir>/build/",
   ],
-  // We don't need module name mappers here as depedencies of workspace
+  // We don't need module name mappers here as dependencies of workspace
   // package should be declared explicitly in the package.json
   // Yarn will generate correct file links so that Jest can resolve correctly
   moduleNameMapper: null,

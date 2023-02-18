@@ -303,7 +303,7 @@ describe("inference with Flow", function () {
       const type = path.getTypeAnnotation();
       expect(t.isAnyTypeAnnotation(type)).toBeTruthy();
     });
-    it("should not cause a stack overflow when two variable depend on eachother", function () {
+    it("should not cause a stack overflow when two variable depend on each other", function () {
       const path = flowGetPath(`
         var b, c;
         while (0) {
@@ -648,7 +648,7 @@ describe("inference with TypeScript", function () {
       const type = path.getTypeAnnotation();
       expect(t.isAnyTypeAnnotation(type)).toBeTruthy();
     });
-    it("should not cause a stack overflow when two variable depend on eachother", function () {
+    it("should not cause a stack overflow when two variable depend on each other", function () {
       const path = tsGetPath(`
         var b, c;
         while (0) {

@@ -25,7 +25,7 @@ const importMetaResolveP: Promise<ImportMeta["resolve"]> =
   // - we will move to ESM, so that we have direct access to import.meta.resolve, or
   // - the V8 bug will be fixed so that we can safely use dynamic import by default.
   //
-  // I (@nicolo-ribaudo) am really anoyed by this bug, because there is no known
+  // I (@nicolo-ribaudo) am really annoyed by this bug, because there is no known
   // work-around other than "don't use dynamic import if you are running in a `vm` context",
   // but there is no reliable way to detect it (you cannot try/catch segfaults).
   //
