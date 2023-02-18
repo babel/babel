@@ -3,26 +3,14 @@ import * as babelPlugins from "./generated/plugins";
 
 export default (_: any, opts: any = {}) => {
   const {
-    loose = false,
-    useBuiltIns = false,
-    decoratorsLegacy = false,
-    decoratorsVersion = "2018-09",
-    decoratorsBeforeExport,
     pipelineProposal = "minimal",
     pipelineTopicToken = "%",
     recordAndTupleSyntax = "hash",
   } = opts;
 
   return {
-    presets: [[presetStage3, { loose, useBuiltIns }]],
+    presets: [[presetStage3, opts]],
     plugins: [
-      [
-        babelPlugins.proposalDecorators,
-        {
-          version: decoratorsLegacy ? "legacy" : decoratorsVersion,
-          decoratorsBeforeExport,
-        },
-      ],
       babelPlugins.proposalDestructuringPrivate,
       [
         babelPlugins.proposalPipelineOperator,
