@@ -1,6 +1,6 @@
-FLOW_COMMIT = 92bbb5e9dacb8185aa73ea343954d0434b42c40b
-TEST262_COMMIT = a29788dd5d4d7664478985928e82f2a1cd7fb37d
-TYPESCRIPT_COMMIT = ce85d647ef88183c019588bcf398320ce29b625a
+FLOW_COMMIT = 105ad30f566f401db9cafcb49cd2831fb29e87c5
+TEST262_COMMIT = 76a14bf659be962dd0efa694c4f9fc12f159f774
+TYPESCRIPT_COMMIT = d87d0adcd30ac285393bf3bfbbb4d94d50c4f3c9
 
 # Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
 export FORCE_COLOR = true
@@ -177,15 +177,16 @@ test-test262-update-allowlist:
 
 
 new-version-checklist:
-       # @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-       # @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-       # @echo "!!!!!!                                                   !!!!!!"
-       # @echo "!!!!!! Add any message here, and UNCOMMENT THESE LINES!  !!!!!!"
-       # @echo "!!!!!!                                                   !!!!!!"
-       # @echo "!!!!!!                                                   !!!!!!"
-       # @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-       # @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-       # @exit 1
+	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	@echo "!!!!!!                                                   !!!!!!"
+	@echo "!!!!!! Update the version to 7.21.0 in the applyDecs2301 !!!!!!"
+	@echo "!!!!!! helper, and in the assertVersion call for 2023-01 !!!!!!"
+	@echo "!!!!!! in transformer-2023-01.ts                         !!!!!!"
+	@echo "!!!!!!                                                   !!!!!!"
+	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	@echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+	@exit 1
 
 new-version:
 	$(MAKE) new-version-checklist

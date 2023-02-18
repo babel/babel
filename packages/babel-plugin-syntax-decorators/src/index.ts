@@ -3,8 +3,8 @@ import { declare } from "@babel/helper-plugin-utils";
 export interface Options {
   // TODO(Babel 8): Remove
   legacy?: boolean;
-  // TODO(Babel 8): Remove "2018-09" and "2021-12"
-  version?: "legacy" | "2018-09" | "2021-12" | "2022-03";
+  // TODO(Babel 8): Remove "2018-09", "2021-12", and '2022-03'
+  version?: "legacy" | "2018-09" | "2021-12" | "2022-03" | "2023-01";
   // TODO(Babel 8): Remove
   decoratorsBeforeExport?: boolean;
 }
@@ -18,10 +18,11 @@ export default declare((api, options: Options) => {
     if (version === undefined) {
       throw new Error(
         "The decorators plugin requires a 'version' option, whose value must be one of: " +
-          "'2022-03', '2021-12', '2018-09', or 'legacy'.",
+          "'2023-01', '2022-03', '2021-12', '2018-09', or 'legacy'.",
       );
     }
     if (
+      version !== "2023-01" &&
       version !== "2022-03" &&
       version !== "2021-12" &&
       version !== "legacy"
@@ -55,6 +56,7 @@ export default declare((api, options: Options) => {
     if (version === undefined) {
       version = legacy ? "legacy" : "2018-09";
     } else if (
+      version !== "2023-01" &&
       version !== "2022-03" &&
       version !== "2021-12" &&
       version !== "2018-09" &&
@@ -75,7 +77,11 @@ export default declare((api, options: Options) => {
         );
       }
     } else {
-      if (version === "legacy" || version === "2022-03") {
+      if (
+        version === "legacy" ||
+        version === "2022-03" ||
+        version === "2023-01"
+      ) {
         throw new Error(
           `'decoratorsBeforeExport' can't be used with ${version} decorators.`,
         );
@@ -94,14 +100,16 @@ export default declare((api, options: Options) => {
         parserOpts.plugins.push("decorators-legacy");
       } else if (process.env.BABEL_8_BREAKING) {
         parserOpts.plugins.push(
-          [
-            "decorators",
-            { decoratorsBeforeExport: false, allowCallParenthesized: false },
-          ],
+          ["decorators", { allowCallParenthesized: false }],
           "decoratorAutoAccessors",
         );
       } else {
-        if (version === "2022-03") {
+        if (version === "2023-01") {
+          parserOpts.plugins.push(
+            ["decorators", { allowCallParenthesized: false }],
+            "decoratorAutoAccessors",
+          );
+        } else if (version === "2022-03") {
           parserOpts.plugins.push(
             [
               "decorators",

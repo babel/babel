@@ -140,6 +140,18 @@ function shouldParenthesizeDecoratorExpression(
   );
 }
 
+export function _shouldPrintDecoratorsBeforeExport(
+  this: Printer,
+  node: t.ExportDeclaration & { declaration: t.ClassDeclaration },
+) {
+  if (typeof this.format.decoratorsBeforeExport === "boolean") {
+    return this.format.decoratorsBeforeExport;
+  }
+  return (
+    typeof node.start === "number" && node.start === node.declaration.start
+  );
+}
+
 export function Decorator(this: Printer, node: t.Decorator) {
   this.token("@");
   const { expression } = node;

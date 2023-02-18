@@ -91,7 +91,9 @@ export function validatePlugins(plugins: PluginList) {
       decoratorsBeforeExport != null &&
       typeof decoratorsBeforeExport !== "boolean"
     ) {
-      throw new Error("'decoratorsBeforeExport' must be a boolean.");
+      throw new Error(
+        "'decoratorsBeforeExport' must be a boolean, if specified.",
+      );
     }
 
     const allowCallParenthesized = getPluginOption(

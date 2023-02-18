@@ -106,18 +106,25 @@ export function ExportAllDeclaration(
   this.semicolon();
 }
 
+function maybePrintDecoratorsBeforeExport(
+  printer: Printer,
+  node: t.ExportNamedDeclaration | t.ExportDefaultDeclaration,
+) {
+  if (
+    isClassDeclaration(node.declaration) &&
+    printer._shouldPrintDecoratorsBeforeExport(
+      node as t.ExportNamedDeclaration & { declaration: t.ClassDeclaration },
+    )
+  ) {
+    printer.printJoin(node.declaration.decorators, node);
+  }
+}
+
 export function ExportNamedDeclaration(
   this: Printer,
   node: t.ExportNamedDeclaration,
 ) {
-  if (!process.env.BABEL_8_BREAKING) {
-    if (
-      this.format.decoratorsBeforeExport &&
-      isClassDeclaration(node.declaration)
-    ) {
-      this.printJoin(node.declaration.decorators, node);
-    }
-  }
+  maybePrintDecoratorsBeforeExport(this, node);
 
   this.word("export");
   this.space();
@@ -183,14 +190,7 @@ export function ExportDefaultDeclaration(
   this: Printer,
   node: t.ExportDefaultDeclaration,
 ) {
-  if (!process.env.BABEL_8_BREAKING) {
-    if (
-      this.format.decoratorsBeforeExport &&
-      isClassDeclaration(node.declaration)
-    ) {
-      this.printJoin(node.declaration.decorators, node);
-    }
-  }
+  maybePrintDecoratorsBeforeExport(this, node);
 
   this.word("export");
   this.noIndentInnerCommentsHere();

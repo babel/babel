@@ -11,15 +11,16 @@ export function ClassDeclaration(
   node: t.ClassDeclaration,
   parent: t.Node,
 ) {
-  if (process.env.BABEL_8_BREAKING) {
+  const inExport =
+    isExportDefaultDeclaration(parent) || isExportNamedDeclaration(parent);
+
+  if (
+    !inExport ||
+    !this._shouldPrintDecoratorsBeforeExport(
+      parent as t.ExportDeclaration & { declaration: t.ClassDeclaration },
+    )
+  ) {
     this.printJoin(node.decorators, node);
-  } else {
-    if (
-      !this.format.decoratorsBeforeExport ||
-      (!isExportDefaultDeclaration(parent) && !isExportNamedDeclaration(parent))
-    ) {
-      this.printJoin(node.decorators, node);
-    }
   }
 
   if (node.declare) {

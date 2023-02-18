@@ -76,7 +76,7 @@ function normalizeOptions(
   };
 
   if (!process.env.BABEL_8_BREAKING) {
-    format.decoratorsBeforeExport = !!opts.decoratorsBeforeExport;
+    format.decoratorsBeforeExport = opts.decoratorsBeforeExport;
     format.jsonCompatibleStrings = opts.jsonCompatibleStrings;
   }
 
@@ -200,8 +200,9 @@ export interface GeneratorOptions {
   jsonCompatibleStrings?: boolean;
 
   /**
-   * Set to true to enable support for experimental decorators syntax before module exports.
-   * Defaults to `false`.
+   * Set to true to enable support for experimental decorators syntax before
+   * module exports. If not specified, decorators will be printed in the same
+   * position as they were in the input source code.
    * @deprecated Removed in Babel 8
    */
   decoratorsBeforeExport?: boolean;
