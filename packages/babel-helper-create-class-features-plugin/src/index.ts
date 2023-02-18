@@ -63,7 +63,8 @@ export function createClassFeaturePlugin({
     privateFieldsAsProperties || privateFieldsAsSymbols;
 
   if (loose === true) {
-    const explicit = [];
+    type AssumptionName = Parameters<PluginAPI["assumption"]>[0];
+    const explicit: `"${AssumptionName}"`[] = [];
 
     if (setPublicClassFields !== undefined) {
       explicit.push(`"setPublicClassFields"`);
