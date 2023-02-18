@@ -1,0 +1,19 @@
+{
+  "version": 3,
+  "names": [
+    "Foo",
+    "bar",
+    "super.a",
+    "a",
+    "this",
+    "new.target",
+    "arguments"
+  ],
+  "sources": [
+    "sourcemaps/this-super-arguments/input.js"
+  ],
+  "sourcesContent": [
+    "class Foo {\n  async bar() {\n    super.a();\n    super.a;\n    super['a'];\n    super[a];\n    this.a;\n    new.target;\n    arguments[0];\n  }\n}"
+  ],
+  "mappings": "AAAA,MAAMA,GAAG,CAAC;EACFC,GAAG,GAAG;IAAA;MAAA;MAAA;MAAA;MAAA;IAAA;MACV,6BAAS;MACTC,iBAAO;MACP,eAAM,GAAG,CAAC;MACV,eAAMC,CAAC,CAAC;MACRC,KAAI,CAACD,CAAC;MACNE,UAAU;MACVC,UAAS,CAAC,CAAC,CAAC;IAAC;EACf;AACF"
+}

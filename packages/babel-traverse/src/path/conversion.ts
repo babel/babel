@@ -247,6 +247,18 @@ function hoistFunctionEnvironment(
   allowInsertArrow: boolean | void = true,
   allowInsertArrowWithRest: boolean | void = true,
 ): { thisBinding: string; fnPath: NodePath<t.Function> } {
+  function replaceWithIdentifierName(
+    path: NodePath,
+    name: string | t.Node,
+    originalName?: string,
+  ) {
+    const id = typeof name === "string" ? identifier(name) : name;
+    id.loc = path.node.loc;
+    // @ts-expect-error loc.identifierName
+    if (originalName && id.loc) id.loc.identifierName = originalName;
+    path.replaceWith(id);
+  }
+
   let arrowParent;
   let thisEnvFn: NodePath<t.Function> = fnPath.findParent(p => {
     if (p.isArrowFunctionExpression()) {
@@ -309,10 +321,7 @@ function hoistFunctionEnvironment(
     thisEnvFn.traverse(getSuperCallsVisitor, { allSuperCalls });
     const superBinding = getSuperBinding(thisEnvFn);
     allSuperCalls.forEach(superCall => {
-      const callee = identifier(superBinding);
-      callee.loc = superCall.node.callee.loc;
-
-      superCall.get("callee").replaceWith(callee);
+      replaceWithIdentifierName(superCall.get("callee"), superBinding);
     });
   }
 
@@ -336,10 +345,7 @@ function hoistFunctionEnvironment(
     });
 
     argumentsPaths.forEach(argumentsChild => {
-      const argsRef = identifier(argumentsBinding);
-      argsRef.loc = argumentsChild.node.loc;
-
-      argumentsChild.replaceWith(argsRef);
+      replaceWithIdentifierName(argumentsChild, argumentsBinding, "arguments");
     });
   }
 
@@ -350,10 +356,7 @@ function hoistFunctionEnvironment(
     );
 
     newTargetPaths.forEach(targetChild => {
-      const targetRef = identifier(newTargetBinding);
-      targetRef.loc = targetChild.node.loc;
-
-      targetChild.replaceWith(targetRef);
+      replaceWithIdentifierName(targetChild, newTargetBinding, "new.target");
     });
   }
 
@@ -373,7 +376,9 @@ function hoistFunctionEnvironment(
     );
 
     flatSuperProps.forEach(superProp => {
-      const key = superProp.node.computed
+      const propNode = superProp.node;
+
+      const key = propNode.computed
         ? ""
         : // @ts-expect-error super property must not contain private name
           superProp.get("property").node.name;
@@ -381,18 +386,18 @@ function hoistFunctionEnvironment(
       const superParentPath = superProp.parentPath;
 
       const isAssignment = superParentPath.isAssignmentExpression({
-        left: superProp.node,
+        left: propNode,
       });
       const isCall = superParentPath.isCallExpression({
-        callee: superProp.node,
+        callee: propNode,
       });
       const isTaggedTemplate = superParentPath.isTaggedTemplateExpression({
-        tag: superProp.node,
+        tag: propNode,
       });
       const superBinding = getSuperPropBinding(thisEnvFn, isAssignment, key);
 
       const args: t.Expression[] = [];
-      if (superProp.node.computed) {
+      if (propNode.computed) {
         // SuperProperty must not be a private name
         args.push(superProp.get("property").node as t.Expression);
       }
@@ -425,7 +430,11 @@ function hoistFunctionEnvironment(
           superProp.get("arguments.0") as NodePath<t.ThisExpression>,
         );
       } else {
-        superProp.replaceWith(call);
+        replaceWithIdentifierName(
+          superProp,
+          call,
+          key ? "super." + key : undefined,
+        );
       }
     });
   }
@@ -442,12 +451,13 @@ function hoistFunctionEnvironment(
       (inConstructor && hasSuperClass(thisEnvFn))
     ) {
       thisPaths.forEach(thisChild => {
-        const thisRef = thisChild.isJSX()
-          ? jsxIdentifier(thisBinding)
-          : identifier(thisBinding);
-
-        thisRef.loc = thisChild.node.loc;
-        thisChild.replaceWith(thisRef);
+        replaceWithIdentifierName(
+          thisChild,
+          thisChild.isJSX()
+            ? jsxIdentifier(thisBinding)
+            : identifier(thisBinding),
+          "this",
+        );
       });
 
       if (!noNewArrows) thisBinding = null;
