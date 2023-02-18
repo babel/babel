@@ -2076,6 +2076,7 @@ export interface TSTypeParameter extends BaseNode {
   constraint?: TSType | null;
   default?: TSType | null;
   name: string;
+  const?: boolean | null;
   in?: boolean | null;
   out?: boolean | null;
 }

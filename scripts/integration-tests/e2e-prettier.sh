@@ -48,6 +48,8 @@ echo "export default () => () => {}" > src/main/create-print-pre-check-function.
 # because prettier has ignored UnexpectedReservedWord error
 rm -f tests/format/flow-repo/async/await_parse.js
 rm -f tests/format/misc/errors/js/explicit-resource-management/invalid-using-binding-await.js
+# https://github.com/babel/babel/pull/15384
+rm -f tests/format/misc/errors/typescript/modifiers/jsfmt.spec.js
 
 yarn test "tests/format/(jsx?|misc|typescript|flow|flow-repo)/" --update-snapshot --runInBand
 
