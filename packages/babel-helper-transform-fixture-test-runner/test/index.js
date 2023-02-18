@@ -1,5 +1,7 @@
-import { runCodeInTestContext } from "../lib/index.js";
 import { fileURLToPath } from "url";
+
+import runner from "@babel/helper-plugin-test-runner";
+import { runCodeInTestContext } from "../lib/index.js";
 
 const filename = fileURLToPath(import.meta.url);
 
@@ -52,3 +54,5 @@ describe("helper-transform-fixture-test-runner", function () {
     expect(opts.stack).toContain(opts.filename + ":1:13");
   });
 });
+
+runner(import.meta.url);

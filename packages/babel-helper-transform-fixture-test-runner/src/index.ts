@@ -56,7 +56,7 @@ const EXTERNAL_HELPERS_VERSION = "7.100.0";
 const cachedScripts = new QuickLRU<
   string,
   { code: string; cachedData?: Buffer }
->({ maxSize: 10 });
+>({ maxSize: 64 });
 const contextModuleCache = new WeakMap();
 const sharedTestContext = createContext();
 
@@ -286,11 +286,23 @@ async function run(task: Test) {
     return resolveOptionPluginOrPreset(newOpts, optionsDir);
   }
 
+  const inputCode = actual.code;
+  const expectedCode = expected.code;
+
   let execCode = exec.code;
   let result: FileResult;
   let resultExec;
+  let execWithOutput = false;
+  let execError;
 
-  if (execCode) {
+  if (/@babel-test-output/.test(execCode)) {
+    if (inputCode != null) {
+      throw new Error("cannot have both input and exec-with-output");
+    }
+    execWithOutput = true;
+  }
+
+  if (execCode != null) {
     const context = createContext();
     const execOpts = getOpts(exec);
 
@@ -309,67 +321,75 @@ async function run(task: Test) {
       // Pass empty location to include the whole file in the output.
       err.message =
         `${exec.loc}: ${err.message}\n` + codeFrameColumns(execCode, {} as any);
-      throw err;
+      if (execWithOutput) {
+        // This allows us to view the output.
+        execError = err;
+      } else {
+        throw err;
+      }
     }
   }
 
-  const inputCode = actual.code;
-  const expectedCode = expected.code;
-  if (!execCode || inputCode) {
+  let outputCode = null;
+
+  if (inputCode != null) {
     let actualLogs;
 
     ({ result, actualLogs } = await maybeMockConsole(validateLogs, () =>
       babel.transformAsync(inputCode, getOpts(actual)),
     ));
 
-    const outputCode = normalizeOutput(result.code);
+    outputCode = normalizeOutput(result.code);
 
     checkDuplicateNodes(result.ast);
-    if (!ignoreOutput) {
-      if (
-        !expected.code &&
-        outputCode &&
-        !opts.throws &&
-        fs.statSync(path.dirname(expected.loc)).isDirectory() &&
-        !process.env.CI
-      ) {
-        const expectedFile = expected.loc.replace(
-          /\.m?js$/,
-          result.sourceType === "module" ? ".mjs" : ".js",
-        );
-
-        console.log(`New test file created: ${expectedFile}`);
-        fs.writeFileSync(expectedFile, `${outputCode}\n`);
-
-        if (expected.loc !== expectedFile) {
-          try {
-            fs.unlinkSync(expected.loc);
-          } catch (e) {}
-        }
-      } else {
-        validateFile(outputCode, expected.loc, expectedCode);
-
-        if (inputCode) {
-          expect(expected.loc).toMatch(
-            result.sourceType === "module" ? /\.mjs$/ : /\.js$/,
-          );
-        }
-      }
-    }
 
     if (validateLogs) {
       validateFile(
         normalizeOutput(actualLogs.stdout, /* normalizePathSeparator */ true),
         stdout.loc,
-        stdout.code,
+        stdout.code || "",
       );
       validateFile(
         normalizeOutput(actualLogs.stderr, /* normalizePathSeparator */ true),
         stderr.loc,
-        stderr.code,
+        stderr.code || "",
       );
     }
   }
+
+  if (execWithOutput) outputCode = execCode;
+  if (!ignoreOutput && !(outputCode == "")) {
+    // For empty input
+    if (
+      !expectedCode &&
+      outputCode &&
+      !opts.throws &&
+      fs.statSync(path.dirname(expected.loc)).isDirectory() &&
+      !process.env.CI
+    ) {
+      const expectedFile = expected.loc.replace(
+        /\.m?js$/,
+        result.sourceType === "module" ? ".mjs" : ".js",
+      );
+
+      console.log(`New test file created: ${expectedFile}`);
+      fs.writeFileSync(expectedFile, `${outputCode}\n`);
+
+      if (expected.loc !== expectedFile) {
+        try {
+          fs.unlinkSync(expected.loc);
+        } catch (e) {}
+      }
+    } else {
+      validateFile(outputCode, expected.loc, expectedCode);
+
+      expect(expected.loc).toMatch(
+        result.sourceType === "module" ? /\.mjs$/ : /\.js$/,
+      );
+    }
+  }
+
+  if (execError) throw execError;
 
   if (opts.sourceMaps === true) {
     try {
@@ -418,23 +438,28 @@ function normalizeOutput(code: string, normalizePathSeparator?: boolean) {
     "../../../",
   );
   const cwdSymbol = "<CWD>";
-  let result = code
-    .trim()
+
+  const replaceWithCwd = (text: string, ...patterns: string[]) => {
+    for (const pattern of patterns) {
+      text = text.replace(new RegExp(escapeRegExp(pattern), "g"), cwdSymbol);
+    }
+    return text;
+  };
+
+  let result = replaceWithCwd(
+    code.trim(),
     // (non-win32) /foo/babel/packages -> <CWD>/packages
     // (win32) C:\foo\babel\packages -> <CWD>\packages
-    .replace(new RegExp(escapeRegExp(projectRoot), "g"), cwdSymbol);
+    projectRoot,
+  );
   if (process.platform === "win32") {
-    result = result
+    result = replaceWithCwd(
+      result,
       // C:/foo/babel/packages -> <CWD>/packages
-      .replace(
-        new RegExp(escapeRegExp(projectRoot.replace(/\\/g, "/")), "g"),
-        cwdSymbol,
-      )
+      projectRoot.replace(/\\/g, "/"),
       // C:\\foo\\babel\\packages -> <CWD>\\packages (in js string literal)
-      .replace(
-        new RegExp(escapeRegExp(projectRoot.replace(/\\/g, "\\\\")), "g"),
-        cwdSymbol,
-      );
+      projectRoot.replace(/\\/g, "\\\\"),
+    );
     if (normalizePathSeparator) {
       result = result.replace(/<CWD>[\w\\/.-]+/g, path =>
         path.replace(/\\\\?/g, "/"),
