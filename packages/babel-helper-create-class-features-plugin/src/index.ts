@@ -50,10 +50,17 @@ export function createClassFeaturePlugin({
   const setPublicClassFields = api.assumption("setPublicClassFields");
   const privateFieldsAsSymbols = api.assumption("privateFieldsAsSymbols");
   const privateFieldsAsProperties = api.assumption("privateFieldsAsProperties");
-  const privateFieldsAsSymbolsOrProperties =
-    privateFieldsAsProperties || privateFieldsAsSymbols;
   const constantSuper = api.assumption("constantSuper");
   const noDocumentAll = api.assumption("noDocumentAll");
+
+  if (privateFieldsAsProperties && privateFieldsAsSymbols) {
+    throw new Error(
+      `Cannot enable both the "privateFieldsAsProperties" and ` +
+        `"privateFieldsAsSymbols" assumptions as the same time.`,
+    );
+  }
+  const privateFieldsAsSymbolsOrProperties =
+    privateFieldsAsProperties || privateFieldsAsSymbols;
 
   if (loose === true) {
     const explicit = [];
