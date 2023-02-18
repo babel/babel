@@ -1,7 +1,0 @@
-{
-  "plugins": [["proposal-private-methods", { "loose": false }]],
-  "assumptions": {
-    "setPublicClassFields": true,
-    "privateFieldsAsSymbols": true
-  }
-}
