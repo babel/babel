@@ -2736,14 +2736,14 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         this.semicolon();
         return this.finishNode(decl, "TSNamespaceExportDeclaration");
       } else {
-        if (
-          this.isContextual(tt._type) &&
-          this.lookahead().type === tt.braceL
-        ) {
-          this.next();
-          node.exportKind = "type";
-        } else {
-          node.exportKind = "value";
+        node.exportKind = "value";
+
+        if (this.isContextual(tt._type)) {
+          const ch = this.lookaheadCharCode();
+          if (ch === charCodes.leftCurlyBrace || ch === charCodes.asterisk) {
+            this.next();
+            node.exportKind = "type";
+          }
         }
 
         return super.parseExport(
