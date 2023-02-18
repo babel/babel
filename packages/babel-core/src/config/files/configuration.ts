@@ -9,7 +9,7 @@ import type { CacheConfigurator } from "../caching";
 import { makeConfigAPI } from "../helpers/config-api";
 import type { ConfigAPI } from "../helpers/config-api";
 import { makeStaticFileCache } from "./utils";
-import loadCjsOrMjsDefault from "./module-types";
+import loadCodeDefault from "./module-types";
 import pathPatternToRegex from "../pattern-to-regex";
 import type { FilePackageData, RelativeConfig, ConfigFile } from "./types";
 import type { CallerMetadata } from "../validation/options";
@@ -28,6 +28,7 @@ export const ROOT_CONFIG_FILENAMES = [
   "babel.config.cjs",
   "babel.config.mjs",
   "babel.config.json",
+  "babel.config.cts",
 ];
 const RELATIVE_CONFIG_FILENAMES = [
   ".babelrc",
@@ -35,13 +36,14 @@ const RELATIVE_CONFIG_FILENAMES = [
   ".babelrc.cjs",
   ".babelrc.mjs",
   ".babelrc.json",
+  ".babelrc.cts",
 ];
 
 const BABELIGNORE_FILENAME = ".babelignore";
 
 const LOADING_CONFIGS = new Set();
 
-const readConfigJS = makeStrongCache(function* readConfigJS(
+const readConfigCode = makeStrongCache(function* readConfigCode(
   filepath: string,
   cache: CacheConfigurator<{
     envName: string;
@@ -70,7 +72,7 @@ const readConfigJS = makeStrongCache(function* readConfigJS(
   let options: unknown;
   try {
     LOADING_CONFIGS.add(filepath);
-    options = yield* loadCjsOrMjsDefault(
+    options = yield* loadCodeDefault(
       filepath,
       "You appear to be using a native ECMAScript module configuration " +
         "file, which is only supported when running Babel asynchronously.",
@@ -313,9 +315,15 @@ function readConfig(
   caller: CallerMetadata | undefined,
 ): Handler<ConfigFile | null> {
   const ext = path.extname(filepath);
-  return ext === ".js" || ext === ".cjs" || ext === ".mjs"
-    ? readConfigJS(filepath, { envName, caller })
-    : readConfigJSON5(filepath);
+  switch (ext) {
+    case ".js":
+    case ".cjs":
+    case ".mjs":
+    case ".cts":
+      return readConfigCode(filepath, { envName, caller });
+    default:
+      return readConfigJSON5(filepath);
+  }
 }
 
 export function* resolveShowConfigPath(
