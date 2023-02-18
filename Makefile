@@ -2,9 +2,6 @@ FLOW_COMMIT = 105ad30f566f401db9cafcb49cd2831fb29e87c5
 TEST262_COMMIT = 76a14bf659be962dd0efa694c4f9fc12f159f774
 TYPESCRIPT_COMMIT = d87d0adcd30ac285393bf3bfbbb4d94d50c4f3c9
 
-# Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
-export FORCE_COLOR = true
-
 SOURCES = packages codemods eslint
 
 COMMA := ,
