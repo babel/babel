@@ -10,7 +10,7 @@ exportDeclarationsInAmbientNamespaces2.ts
 multipleExports.ts
 
 
-# 135 valid programs produced a parsing error
+# 136 valid programs produced a parsing error
 
 ArrowFunctionExpression1.ts
 MemberAccessorDeclaration15.ts
@@ -35,6 +35,8 @@ classCannotExtendVar.ts
 classExtendsMultipleBaseClasses.ts
 classOverloadForFunction.ts
 classWithEmptyTypeParameter.ts
+conflictingDeclarationsImportFromNamespace1.ts
+conflictingDeclarationsImportFromNamespace2.ts
 constDeclarations-invalidContexts.ts
 constDeclarations-scopes.ts
 constDeclarations-validContexts.ts
