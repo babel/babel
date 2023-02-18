@@ -12,7 +12,6 @@ import parser from "../parser";
 import cloneDeep from "./util/clone-deep";
 
 const debug = buildDebug("babel:transform:file");
-const LARGE_INPUT_SOURCEMAP_THRESHOLD = 3_000_000;
 
 // These regexps are copied from the convert-source-map package,
 // but without // or /* at the beginning of the comment.
@@ -81,15 +80,9 @@ export default function* normalizeFile(
           ) as any;
           const inputMapContent = fs.readFileSync(
             path.resolve(path.dirname(options.filename), match[1]),
+            "utf8",
           );
-          if (inputMapContent.length > LARGE_INPUT_SOURCEMAP_THRESHOLD) {
-            debug("skip merging input map > 1 MB");
-          } else {
-            inputMap = convertSourceMap.fromJSON(
-              // todo:
-              inputMapContent as unknown as string,
-            );
-          }
+          inputMap = convertSourceMap.fromJSON(inputMapContent);
         } catch (err) {
           debug("discarding unknown file input sourcemap", err);
         }

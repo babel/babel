@@ -39,7 +39,7 @@ describe("generation", function () {
     expect(generated.map).toMatchInlineSnapshot(`
       Object {
         "file": undefined,
-        "mappings": "AAAA,SAASA,EAAE,CAAEC,GAAG,EAAE;EAAEC,OAAO,CAACC,GAAG,CAACF,GAAG,CAAC;AAAE;ACAtCD,EAAE,CAAC,OAAO,CAAC",
+        "mappings": "AAAA,SAASA,EAAEA,CAAEC,GAAG,EAAE;EAAEC,OAAO,CAACC,GAAG,CAACF,GAAG,CAAC;AAAE;ACAtCD,EAAE,CAAC,OAAO,CAAC",
         "names": Array [
           "hi",
           "msg",
@@ -92,7 +92,7 @@ describe("generation", function () {
             "column": 11,
             "line": 1,
           },
-          "name": undefined,
+          "name": "hi",
           "original": Object {
             "column": 11,
             "line": 1,
@@ -323,66 +323,220 @@ describe("generation", function () {
       code,
     );
 
-    expect(generated.map).toEqual(
-      {
-        version: 3,
-        sources: ["inline"],
-        names: ["foo", "bar"],
-        mappings: "AAAA,SAASA,IAAG,GAAG;EAAEC,IAAG;AAAE",
-        sourcesContent: ["function foo() { bar; }\n"],
-      },
-      "sourcemap was incorrectly generated",
-    );
-
-    expect(generated.rawMappings).toEqual(
-      [
-        {
-          name: undefined,
-          generated: { line: 1, column: 0 },
-          source: "inline",
-          original: { line: 1, column: 0 },
+    expect(generated).toMatchInlineSnapshot(`
+      Object {
+        "__mergedMap": Object {
+          "file": undefined,
+          "mappings": "AAAA,SAASA,IAAGA,CAAA,EAAG;EAAEC,IAAG;AAAE",
+          "names": Array [
+            "foo",
+            "bar",
+          ],
+          "sourceRoot": undefined,
+          "sources": Array [
+            "inline",
+          ],
+          "sourcesContent": Array [
+            "function foo() { bar; }
+      ",
+          ],
+          "version": 3,
         },
-        {
-          name: "foo",
-          generated: { line: 1, column: 9 },
-          source: "inline",
-          original: { line: 1, column: 9 },
+        "code": "function foo2() {
+        bar2;
+      }",
+        "decodedMap": Object {
+          "file": undefined,
+          "mappings": Array [
+            Array [
+              Array [
+                0,
+                0,
+                0,
+                0,
+              ],
+              Array [
+                9,
+                0,
+                0,
+                9,
+                0,
+              ],
+              Array [
+                13,
+                0,
+                0,
+                12,
+                0,
+              ],
+              Array [
+                14,
+                0,
+                0,
+                12,
+              ],
+              Array [
+                16,
+                0,
+                0,
+                15,
+              ],
+            ],
+            Array [
+              Array [
+                2,
+                0,
+                0,
+                17,
+                1,
+              ],
+              Array [
+                6,
+                0,
+                0,
+                20,
+              ],
+            ],
+            Array [
+              Array [
+                0,
+                0,
+                0,
+                22,
+              ],
+            ],
+          ],
+          "names": Array [
+            "foo",
+            "bar",
+          ],
+          "sourceRoot": undefined,
+          "sources": Array [
+            "inline",
+          ],
+          "sourcesContent": Array [
+            "function foo() { bar; }
+      ",
+          ],
+          "version": 3,
         },
-        {
-          name: undefined,
-          generated: { line: 1, column: 13 },
-          source: "inline",
-          original: { line: 1, column: 12 },
+        "map": Object {
+          "file": undefined,
+          "mappings": "AAAA,SAASA,IAAGA,CAAA,EAAG;EAAEC,IAAG;AAAE",
+          "names": Array [
+            "foo",
+            "bar",
+          ],
+          "sourceRoot": undefined,
+          "sources": Array [
+            "inline",
+          ],
+          "sourcesContent": Array [
+            "function foo() { bar; }
+      ",
+          ],
+          "version": 3,
         },
-        {
-          name: undefined,
-          generated: { line: 1, column: 16 },
-          source: "inline",
-          original: { line: 1, column: 15 },
-        },
-        {
-          name: "bar",
-          generated: { line: 2, column: 2 },
-          source: "inline",
-          original: { line: 1, column: 17 },
-        },
-        {
-          name: undefined,
-          generated: { line: 2, column: 6 },
-          source: "inline",
-          original: { line: 1, column: 20 },
-        },
-        {
-          name: undefined,
-          generated: { line: 3, column: 0 },
-          source: "inline",
-          original: { line: 1, column: 22 },
-        },
-      ],
-      "raw mappings were incorrectly generated",
-    );
-
-    expect(generated.code).toBe("function foo2() {\n  bar2;\n}");
+        "rawMappings": Array [
+          Object {
+            "generated": Object {
+              "column": 0,
+              "line": 1,
+            },
+            "name": undefined,
+            "original": Object {
+              "column": 0,
+              "line": 1,
+            },
+            "source": "inline",
+          },
+          Object {
+            "generated": Object {
+              "column": 9,
+              "line": 1,
+            },
+            "name": "foo",
+            "original": Object {
+              "column": 9,
+              "line": 1,
+            },
+            "source": "inline",
+          },
+          Object {
+            "generated": Object {
+              "column": 13,
+              "line": 1,
+            },
+            "name": "foo",
+            "original": Object {
+              "column": 12,
+              "line": 1,
+            },
+            "source": "inline",
+          },
+          Object {
+            "generated": Object {
+              "column": 14,
+              "line": 1,
+            },
+            "name": undefined,
+            "original": Object {
+              "column": 12,
+              "line": 1,
+            },
+            "source": "inline",
+          },
+          Object {
+            "generated": Object {
+              "column": 16,
+              "line": 1,
+            },
+            "name": undefined,
+            "original": Object {
+              "column": 15,
+              "line": 1,
+            },
+            "source": "inline",
+          },
+          Object {
+            "generated": Object {
+              "column": 2,
+              "line": 2,
+            },
+            "name": "bar",
+            "original": Object {
+              "column": 17,
+              "line": 1,
+            },
+            "source": "inline",
+          },
+          Object {
+            "generated": Object {
+              "column": 6,
+              "line": 2,
+            },
+            "name": undefined,
+            "original": Object {
+              "column": 20,
+              "line": 1,
+            },
+            "source": "inline",
+          },
+          Object {
+            "generated": Object {
+              "column": 0,
+              "line": 3,
+            },
+            "name": undefined,
+            "original": Object {
+              "column": 22,
+              "line": 1,
+            },
+            "source": "inline",
+          },
+        ],
+      }
+    `);
   });
 
   it("newline in template literal", () => {

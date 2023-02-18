@@ -16,6 +16,8 @@ export default function generateCode(
   const { opts, ast, code, inputMap } = file;
   const { generatorOpts } = opts;
 
+  generatorOpts.inputSourceMap = inputMap?.toObject();
+
   const results = [];
   for (const plugins of pluginPasses) {
     for (const plugin of plugins) {
@@ -51,18 +53,26 @@ export default function generateCode(
   // back to the encoded map.
   let { code: outputCode, decodedMap: outputMap = result.map } = result;
 
-  if (outputMap) {
-    if (inputMap) {
-      // mergeSourceMap returns an encoded map
-      outputMap = mergeSourceMap(
-        inputMap.toObject(),
-        outputMap,
-        generatorOpts.sourceFileName,
-      );
-    } else {
-      // We cannot output a decoded map, so retrieve the encoded form. Because
-      // the decoded form is free, it's fine to prioritize decoded first.
-      outputMap = result.map;
+  // For backwards compat.
+  if (result.__mergedMap) {
+    /**
+     * @see mergeSourceMap
+     */
+    outputMap = { ...result.map };
+  } else {
+    if (outputMap) {
+      if (inputMap) {
+        // mergeSourceMap returns an encoded map
+        outputMap = mergeSourceMap(
+          inputMap.toObject(),
+          outputMap,
+          generatorOpts.sourceFileName,
+        );
+      } else {
+        // We cannot output a decoded map, so retrieve the encoded form. Because
+        // the decoded form is free, it's fine to prioritize decoded first.
+        outputMap = result.map;
+      }
     }
   }
 
