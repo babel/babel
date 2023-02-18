@@ -521,6 +521,7 @@ jobs:
         with:
           repository: babel/babel-test262-runner
           path: babel-test262-runner
+          ref: main
       - name: Download test262
         run: make bootstrap-test262
       - name: Prepare test262 chunks
@@ -564,6 +565,7 @@ jobs:
         with:
           repository: babel/babel-test262-runner
           path: babel-test262-runner
+          ref: main
       - name: Install test runner
         run: |
           cd babel-test262-runner
@@ -628,6 +630,7 @@ jobs:
         with:
           repository: babel/babel-test262-runner
           path: babel-test262-runner
+          ref: main
       - name: Download previous results
         run: |
           cd babel-test262-runner
