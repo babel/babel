@@ -5184,10 +5184,10 @@ export function isClass(
 
   return false;
 }
-export function isModuleDeclaration(
+export function isImportOrExportDeclaration(
   node: object | null | undefined,
   opts?: object | null,
-): node is t.ModuleDeclaration {
+): node is t.ImportOrExportDeclaration {
   if (!node) return false;
 
   const nodeType = (node as t.Node).type;
@@ -5787,7 +5787,7 @@ export function isNumberLiteral(
   opts?: object | null,
 ): boolean {
   console.trace(
-    "The node type NumberLiteral has been renamed to NumericLiteral",
+    "`isNumberLiteral` has been deprecated, please migrate to `isNumericLiteral`.",
   );
   if (!node) return false;
 
@@ -5806,7 +5806,9 @@ export function isRegexLiteral(
   node: object | null | undefined,
   opts?: object | null,
 ): boolean {
-  console.trace("The node type RegexLiteral has been renamed to RegExpLiteral");
+  console.trace(
+    "`isRegexLiteral` has been deprecated, please migrate to `isRegExpLiteral`.",
+  );
   if (!node) return false;
 
   const nodeType = (node as t.Node).type;
@@ -5824,7 +5826,9 @@ export function isRestProperty(
   node: object | null | undefined,
   opts?: object | null,
 ): boolean {
-  console.trace("The node type RestProperty has been renamed to RestElement");
+  console.trace(
+    "`isRestProperty` has been deprecated, please migrate to `isRestElement`.",
+  );
   if (!node) return false;
 
   const nodeType = (node as t.Node).type;
@@ -5843,7 +5847,7 @@ export function isSpreadProperty(
   opts?: object | null,
 ): boolean {
   console.trace(
-    "The node type SpreadProperty has been renamed to SpreadElement",
+    "`isSpreadProperty` has been deprecated, please migrate to `isSpreadElement`.",
   );
   if (!node) return false;
 
@@ -5857,4 +5861,13 @@ export function isSpreadProperty(
   }
 
   return false;
+}
+export function isModuleDeclaration(
+  node: object | null | undefined,
+  opts?: object | null,
+): node is t.ImportOrExportDeclaration {
+  console.trace(
+    "`isModuleDeclaration` has been deprecated, please migrate to `isImportOrExportDeclaration`.",
+  );
+  return isImportOrExportDeclaration(node, opts);
 }

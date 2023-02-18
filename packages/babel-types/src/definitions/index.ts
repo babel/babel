@@ -19,6 +19,14 @@ import {
   PLACEHOLDERS_ALIAS,
   PLACEHOLDERS_FLIPPED_ALIAS,
 } from "./placeholders";
+import { DEPRECATED_ALIASES } from "./deprecated-aliases";
+
+(
+  Object.keys(DEPRECATED_ALIASES) as (keyof typeof DEPRECATED_ALIASES)[]
+).forEach(deprecatedAlias => {
+  FLIPPED_ALIAS_KEYS[deprecatedAlias] =
+    FLIPPED_ALIAS_KEYS[DEPRECATED_ALIASES[deprecatedAlias]];
+});
 
 // We do this here, because at this point the visitor keys should be ready and setup
 toFastProperties(VISITOR_KEYS);
@@ -43,6 +51,7 @@ export {
   FLIPPED_ALIAS_KEYS,
   NODE_FIELDS,
   BUILDER_KEYS,
+  DEPRECATED_ALIASES,
   DEPRECATED_KEYS,
   NODE_PARENT_VALIDATIONS,
   PLACEHOLDERS,

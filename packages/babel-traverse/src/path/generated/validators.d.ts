@@ -431,6 +431,10 @@ interface BaseNodePathValidators {
     this: NodePath<T>,
     opts?: object,
   ): this is NodePath<T & t.ImportNamespaceSpecifier>;
+  isImportOrExportDeclaration<T extends t.Node>(
+    this: NodePath<T>,
+    opts?: object,
+  ): this is NodePath<T & t.ImportOrExportDeclaration>;
   isImportSpecifier<T extends t.Node>(
     this: NodePath<T>,
     opts?: object,
