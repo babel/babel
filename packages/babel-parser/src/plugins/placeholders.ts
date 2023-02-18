@@ -194,7 +194,7 @@ export default (superClass: typeof Parser) =>
         const stmt: N.LabeledStatement = node;
         stmt.label = this.finishPlaceholder(expr, "Identifier");
         this.next();
-        stmt.body = super.parseStatementOrFunctionDeclaration(false);
+        stmt.body = super.parseStatementOrSloppyAnnexBFunctionDeclaration();
         return this.finishNode(stmt, "LabeledStatement");
       }
 

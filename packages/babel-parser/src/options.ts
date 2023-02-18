@@ -22,6 +22,7 @@ export type Options = {
   createParenthesizedExpressions: boolean;
   errorRecovery: boolean;
   attachComment: boolean;
+  annexB: boolean;
 };
 
 export const defaultOptions: Options = {
@@ -74,11 +75,18 @@ export const defaultOptions: Options = {
   // is vital to preserve comments after transform. If you don't print AST back,
   // consider set this option to `false` for performance
   attachComment: true,
+  // When enabled, the parser will support Annex B syntax.
+  // https://tc39.es/ecma262/#sec-additional-ecmascript-features-for-web-browsers
+  annexB: true,
 };
 
 // Interpret and default an options object
 
 export function getOptions(opts?: Options | null): Options {
+  if (opts && opts.annexB != null && opts.annexB !== false) {
+    throw new Error("The `annexB` option can only be set to `false`.");
+  }
+
   const options: any = {};
   for (const key of Object.keys(defaultOptions)) {
     // @ts-expect-error key may not exist in opts

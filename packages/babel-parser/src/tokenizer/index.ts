@@ -373,7 +373,11 @@ export default abstract class Tokenizer extends CommentsParser {
         default:
           if (isWhitespace(ch)) {
             ++this.state.pos;
-          } else if (ch === charCodes.dash && !this.inModule) {
+          } else if (
+            ch === charCodes.dash &&
+            !this.inModule &&
+            this.options.annexB
+          ) {
             const pos = this.state.pos;
             if (
               this.input.charCodeAt(pos + 1) === charCodes.dash &&
@@ -389,7 +393,11 @@ export default abstract class Tokenizer extends CommentsParser {
             } else {
               break loop;
             }
-          } else if (ch === charCodes.lessThan && !this.inModule) {
+          } else if (
+            ch === charCodes.lessThan &&
+            !this.inModule &&
+            this.options.annexB
+          ) {
             const pos = this.state.pos;
             if (
               this.input.charCodeAt(pos + 1) === charCodes.exclamationMark &&

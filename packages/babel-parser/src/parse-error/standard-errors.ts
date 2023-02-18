@@ -226,6 +226,8 @@ export default {
   RecordNoProto: "'__proto__' is not allowed in Record expressions.",
   RestTrailingComma: "Unexpected trailing comma after rest element.",
   SloppyFunction:
+    "In non-strict mode code, functions can only be declared at top level or inside a block.",
+  SloppyFunctionAnnexB:
     "In non-strict mode code, functions can only be declared at top level, inside a block, or as the body of an if statement.",
   StaticPrototype: "Classes may not have static property named prototype.",
   SuperNotAllowed:
