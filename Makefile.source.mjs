@@ -1,7 +1,7 @@
 import "shelljs/make.js";
 import path from "path";
 import { execFileSync } from "child_process";
-import { writeFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 
 /**
  * @type {import("shelljs")}
@@ -387,6 +387,54 @@ target["test-cov"] = function () {
       BABEL_COVERAGE: "true",
     }
   );
+};
+
+function bootstrapParserTests(name, repoURL, subPaths) {
+  function getParserTestsCommit(id) {
+    const content = readFileSync("./Makefile", "utf8");
+    const commit = content.match(new RegExp(`${id}_COMMIT = (\\w{40})`))[1];
+    if (!commit) throw new Error(`Could not find ${id}_COMMIT in Makefile`);
+    return commit;
+  }
+
+  const dir = "./build/" + name.toLowerCase();
+
+  shell.rm("-rf", dir);
+  shell.mkdir("-p", "build");
+
+  exec("git", [
+    "clone",
+    "--filter=blob:none",
+    "--sparse",
+    "--single-branch",
+    "--shallow-since='2 years ago'",
+    repoURL,
+    dir,
+  ]);
+
+  exec("git", ["sparse-checkout", "set", ...subPaths], dir);
+  exec("git", ["checkout", "-q", getParserTestsCommit(name)], dir);
+}
+
+target["bootstrap-test262"] = function () {
+  bootstrapParserTests("TEST262", "https://github.com/tc39/test262.git", [
+    "test",
+    "harness",
+  ]);
+};
+
+target["bootstrap-typescript"] = function () {
+  bootstrapParserTests(
+    "TYPESCRIPT",
+    "https://github.com/microsoft/TypeScript.git",
+    ["tests"]
+  );
+};
+
+target["bootstrap-flow"] = function () {
+  bootstrapParserTests("FLOW", "https://github.com/facebook/flow.git", [
+    "src/parser/test/flow",
+  ]);
 };
 
 /**
