@@ -3479,6 +3479,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     reportReservedArrowTypeParam(node: any) {
       if (
         node.params.length === 1 &&
+        !node.params[0].constraint &&
         !node.extra?.trailingComma &&
         this.getPluginOption("typescript", "disallowAmbiguousJSXLike")
       ) {
