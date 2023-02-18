@@ -3,14 +3,14 @@ var Foo;
 (function (Foo) {
   Foo[Foo["a"] = 10] = "a";
   Foo[Foo["b"] = 10] = "b";
-  Foo[Foo["c"] = Foo.b + x] = "c";
+  Foo[Foo["c"] = 20] = "c";
 })(Foo || (Foo = {}));
 var Bar;
 (function (Bar) {
   Bar[Bar["D"] = 10] = "D";
   Bar[Bar["E"] = 10] = "E";
   Bar[Bar["F"] = Math.E] = "F";
-  Bar[Bar["G"] = Bar.E + Foo.c] = "G";
+  Bar[Bar["G"] = 30] = "G";
 })(Bar || (Bar = {}));
 var Baz;
 (function (Baz) {

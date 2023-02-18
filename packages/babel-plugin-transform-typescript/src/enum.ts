@@ -1,6 +1,5 @@
-import { template, types } from "@babel/core";
+import { template, types as t } from "@babel/core";
 import type { NodePath } from "@babel/traverse";
-import type * as t from "@babel/types";
 import assert from "assert";
 
 type t = typeof t;
@@ -84,7 +83,7 @@ const buildEnumMember = (isString: boolean, options: Record<string, unknown>) =>
  * `(function (E) { ... assignments ... })(E || (E = {}));`
  */
 function enumFill(path: NodePath<t.TSEnumDeclaration>, t: t, id: t.Identifier) {
-  const { nodes: x, data } = translateEnumValues(path, t);
+  const { enumValues: x, data } = translateEnumValues(path, t);
   const assignments = x.map(([memberName, memberValue]) =>
     buildEnumMember(t.isStringLiteral(memberValue), {
       ENUM: t.cloneNode(id),
@@ -145,7 +144,7 @@ export function translateEnumValues(path: NodePath<t.TSEnumDeclaration>, t: t) {
 
   return {
     data: seen,
-    nodes: path.get("members").map(memberPath => {
+    enumValues: path.get("members").map(memberPath => {
       const member = memberPath.node;
       const name = t.isIdentifier(member.id) ? member.id.name : member.id.value;
       const initializerPath = memberPath.get("initializer");
@@ -205,31 +204,16 @@ export function translateEnumValues(path: NodePath<t.TSEnumDeclaration>, t: t) {
 // Based on the TypeScript repository's `computeConstantValue` in `checker.ts`.
 function computeConstantValue(
   path: NodePath,
-  seen: PreviousEnumMembers,
+  prevMembers?: PreviousEnumMembers,
+  seen: Set<t.Identifier> = new Set(),
 ): number | string | undefined {
-  return computeConstantValue(path);
+  return evaluate(path);
 
-  function computeConstantValue(path: NodePath): number | string | undefined {
+  function evaluate(path: NodePath): number | string | undefined {
     const expr = path.node;
     switch (expr.type) {
-      case "MemberExpression": {
-        const obj = expr.object;
-        const prop = expr.property;
-        if (
-          !types.isIdentifier(obj) ||
-          (expr.computed
-            ? !types.isStringLiteral(prop)
-            : !types.isIdentifier(prop))
-        ) {
-          return;
-        }
-        const bindingIdentifier = path.scope.getBindingIdentifier(obj.name);
-        const data = ENUMS.get(bindingIdentifier);
-        if (!data) return;
-        // @ts-expect-error checked above
-        return data.get(prop.computed ? prop.value : prop.name);
-      }
-
+      case "MemberExpression":
+        return evaluateRef(path, prevMembers, seen);
       case "StringLiteral":
         return expr.value;
       case "UnaryExpression":
@@ -239,17 +223,9 @@ function computeConstantValue(
       case "NumericLiteral":
         return expr.value;
       case "ParenthesizedExpression":
-        return computeConstantValue(path.get("expression"));
-      case "Identifier": {
-        let value = seen.get(expr.name);
-        if (value === undefined) {
-          value = evalIdentifier(path);
-          if (value !== undefined) {
-            seen.set(expr.name, value);
-          }
-        }
-        return value;
-      }
+        return evaluate(path.get("expression"));
+      case "Identifier":
+        return evaluateRef(path, prevMembers, seen);
       case "TemplateLiteral": {
         if (expr.quasis.length === 1) {
           return expr.quasis[0].value.cooked;
@@ -263,7 +239,7 @@ function computeConstantValue(
           str += quasis[i].value.cooked;
 
           if (i + 1 < quasis.length) {
-            const value = evalIdentifier(paths[i]);
+            const value = evaluateRef(paths[i], prevMembers, seen);
             if (value === undefined) return undefined;
             str += value;
           }
@@ -275,17 +251,44 @@ function computeConstantValue(
     }
   }
 
-  function evalIdentifier(path: NodePath) {
-    if (path.isIdentifier()) {
-      const binding = path.scope.getBinding(path.node.name);
-      if (binding?.kind === "const") {
-        const result = path.evaluate();
-        if (
-          result.confident &&
-          (typeof result.value === "number" || typeof result.value === "string")
-        ) {
-          return result.value;
-        }
+  function evaluateRef(
+    path: NodePath,
+    prevMembers: PreviousEnumMembers,
+    seen: Set<t.Identifier>,
+  ): number | string | undefined {
+    if (path.isMemberExpression()) {
+      const expr = path.node;
+
+      const obj = expr.object;
+      const prop = expr.property;
+      if (
+        !t.isIdentifier(obj) ||
+        (expr.computed ? !t.isStringLiteral(prop) : !t.isIdentifier(prop))
+      ) {
+        return;
+      }
+      const bindingIdentifier = path.scope.getBindingIdentifier(obj.name);
+      const data = ENUMS.get(bindingIdentifier);
+      if (!data) return;
+      // @ts-expect-error checked above
+      return data.get(prop.computed ? prop.value : prop.name);
+    } else if (path.isIdentifier()) {
+      const name = path.node.name;
+
+      let value = prevMembers?.get(name);
+      if (value !== undefined) {
+        return value;
+      }
+
+      if (seen.has(path.node)) return;
+
+      const bindingInitPath = path.resolve(); // It only resolves constant bindings
+      if (bindingInitPath) {
+        seen.add(path.node);
+
+        value = computeConstantValue(bindingInitPath, undefined, seen);
+        prevMembers?.set(name, value);
+        return value;
       }
     }
   }
@@ -293,7 +296,7 @@ function computeConstantValue(
   function evalUnaryExpression(
     path: NodePath<t.UnaryExpression>,
   ): number | string | undefined {
-    const value = computeConstantValue(path.get("argument"));
+    const value = evaluate(path.get("argument"));
     if (value === undefined) {
       return undefined;
     }
@@ -313,11 +316,11 @@ function computeConstantValue(
   function evalBinaryExpression(
     path: NodePath<t.BinaryExpression>,
   ): number | string | undefined {
-    const left = computeConstantValue(path.get("left")) as any;
+    const left = evaluate(path.get("left")) as any;
     if (left === undefined) {
       return undefined;
     }
-    const right = computeConstantValue(path.get("right")) as any;
+    const right = evaluate(path.get("right")) as any;
     if (right === undefined) {
       return undefined;
     }

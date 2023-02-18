@@ -7,7 +7,13 @@ const enum Values {
   Second, // 11
   Third, // 12
 }
+
+const xxx = 100 + Values.First;
+const yyy = xxx;
+
 const enum Routes {
   Parts = `${Prefix}/parts`, // "/data/parts"
   Invoices = `${Prefix}/invoices`, // "/data/invoices"
+  x = `${Values.First}/x`,
+  y = `${yyy}/y`,
 }
