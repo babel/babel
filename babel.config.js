@@ -231,6 +231,11 @@ module.exports = function (api) {
             { name: "USE_ESM", value: outputType === "module" },
             "flag-USE_ESM",
           ],
+          [
+            pluginToggleBooleanFlag,
+            { name: "IS_STANDALONE", value: env === "standalone" },
+            "flag-IS_STANDALONE",
+          ],
 
           process.env.STRIP_BABEL_8_FLAG && [
             pluginToggleBooleanFlag,

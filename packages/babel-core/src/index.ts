@@ -1,4 +1,6 @@
 declare const PACKAGE_JSON: { name: string; version: string };
+declare const USE_ESM: boolean, IS_STANDALONE: boolean;
+
 export const version = PACKAGE_JSON.version;
 
 export { default as File } from "./transformation/file/file";
@@ -72,6 +74,7 @@ export const DEFAULT_EXTENSIONS = Object.freeze([
 ] as const);
 
 // For easier backward-compatibility, provide an API like the one we exposed in Babel 6.
+// TODO(Babel 8): Remove this.
 import { loadOptionsSync } from "./config";
 export class OptionManager {
   init(opts: {}) {
@@ -79,8 +82,19 @@ export class OptionManager {
   }
 }
 
+// TODO(Babel 8): Remove this.
 export function Plugin(alias: string) {
   throw new Error(
     `The (${alias}) Babel 5 plugin is being run with an unsupported Babel version.`,
   );
+}
+
+import Module from "module";
+import * as thisFile from "./index";
+if (USE_ESM) {
+  if (!IS_STANDALONE) {
+    // Pass this module to the CJS proxy, so that it can be synchronously accessed.
+    const cjsProxy = Module.createRequire(import.meta.url)("../cjs-proxy.cjs");
+    cjsProxy["__ initialize @babel/core cjs proxy __"] = thisFile;
+  }
 }

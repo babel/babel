@@ -1,6 +1,7 @@
 import cp from "child_process";
 import util from "util";
 import path from "path";
+import fs from "fs";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
 
@@ -11,6 +12,19 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // "minNodeVersion": "10.0.0" <-- For Ctrl+F when dropping node 10
 export const supportsESM = parseInt(process.versions.node) >= 12;
+
+export const outputType = (() => {
+  try {
+    return fs
+      .readFileSync(
+        new URL("../../../../.module-type", import.meta.url),
+        "utf-8",
+      )
+      .trim();
+  } catch (_) {
+    return "script";
+  }
+})();
 
 export const isMJS = file => path.extname(file) === ".mjs";
 
