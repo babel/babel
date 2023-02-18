@@ -725,6 +725,7 @@ export interface AssignmentPattern extends BaseNode {
     | TSNonNullExpression;
   right: Expression;
   decorators?: Array<Decorator> | null;
+  optional?: boolean | null;
   typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
 }
 
@@ -911,6 +912,7 @@ export interface ObjectPattern extends BaseNode {
   type: "ObjectPattern";
   properties: Array<RestElement | ObjectProperty>;
   decorators?: Array<Decorator> | null;
+  optional?: boolean | null;
   typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
 }
 
