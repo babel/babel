@@ -1,13 +1,14 @@
 {
   "type": "File",
-  "start":0,"end":51,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":17,"index":51}},
+  "start":0,"end":48,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":15,"index":48}},
   "errors": [
     "SyntaxError: Constructors in/after an Optional Chain are not allowed. (1:7)",
-    "SyntaxError: Constructors in/after an Optional Chain are not allowed. (2:11)"
+    "SyntaxError: Constructors in/after an Optional Chain are not allowed. (2:11)",
+    "SyntaxError: Constructors in/after an Optional Chain are not allowed. (3:7)"
   ],
   "program": {
     "type": "Program",
-    "start":0,"end":51,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":17,"index":51}},
+    "start":0,"end":48,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":15,"index":48}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
@@ -68,25 +69,25 @@
       },
       {
         "type": "ExpressionStatement",
-        "start":34,"end":51,"loc":{"start":{"line":4,"column":0,"index":34},"end":{"line":4,"column":17,"index":51}},
+        "start":33,"end":48,"loc":{"start":{"line":3,"column":0,"index":33},"end":{"line":3,"column":15,"index":48}},
         "expression": {
           "type": "NewExpression",
-          "start":34,"end":50,"loc":{"start":{"line":4,"column":0,"index":34},"end":{"line":4,"column":16,"index":50}},
+          "start":33,"end":48,"loc":{"start":{"line":3,"column":0,"index":33},"end":{"line":3,"column":15,"index":48}},
           "callee": {
-            "type": "ParenthesizedExpression",
-            "start":38,"end":48,"loc":{"start":{"line":4,"column":4,"index":38},"end":{"line":4,"column":14,"index":48}},
+            "type": "TSNonNullExpression",
+            "start":37,"end":46,"loc":{"start":{"line":3,"column":4,"index":37},"end":{"line":3,"column":13,"index":46}},
             "expression": {
               "type": "OptionalMemberExpression",
-              "start":39,"end":47,"loc":{"start":{"line":4,"column":5,"index":39},"end":{"line":4,"column":13,"index":47}},
+              "start":37,"end":45,"loc":{"start":{"line":3,"column":4,"index":37},"end":{"line":3,"column":12,"index":45}},
               "object": {
                 "type": "Identifier",
-                "start":39,"end":42,"loc":{"start":{"line":4,"column":5,"index":39},"end":{"line":4,"column":8,"index":42},"identifierName":"foo"},
+                "start":37,"end":40,"loc":{"start":{"line":3,"column":4,"index":37},"end":{"line":3,"column":7,"index":40},"identifierName":"foo"},
                 "name": "foo"
               },
               "computed": false,
               "property": {
                 "type": "Identifier",
-                "start":44,"end":47,"loc":{"start":{"line":4,"column":10,"index":44},"end":{"line":4,"column":13,"index":47},"identifierName":"bar"},
+                "start":42,"end":45,"loc":{"start":{"line":3,"column":9,"index":42},"end":{"line":3,"column":12,"index":45},"identifierName":"bar"},
                 "name": "bar"
               },
               "optional": true
