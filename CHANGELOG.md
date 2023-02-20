@@ -23,6 +23,49 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.21.0 (2023-02-20)
+
+#### :rocket: New Feature
+* `babel-core`, `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-private-methods`, `babel-plugin-proposal-private-property-in-object`
+  * [#15435](https://github.com/babel/babel/pull/15435) feat: Implement `privateFieldsAsSymbols` assumption for classes ([@fwienber](https://github.com/fwienber))
+* `babel-helper-create-regexp-features-plugin`, `babel-plugin-proposal-regexp-modifiers`, `babel-standalone`
+  * [#15226](https://github.com/babel/babel/pull/15226) feat: Support regexp modifiers proposal ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-cli`, `babel-core`, `babel-generator`, `babel-plugin-transform-destructuring`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-react-jsx`, `babel-traverse`
+  * [#15022](https://github.com/babel/babel/pull/15022) feat: Generate sourcemaps of friendly call frames ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-parser`, `babel-types`
+  * [#15384](https://github.com/babel/babel/pull/15384) [ts] Support `const` modifier in type parameters ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`, `babel-helpers`, `babel-parser`, `babel-plugin-proposal-decorators`, `babel-plugin-syntax-decorators`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#15405](https://github.com/babel/babel/pull/15405) Implement decorators as presented at `2023-01` TC39 meeting ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#15114](https://github.com/babel/babel/pull/15114) Parser option to allow `new.target` outside functions ([@overlookmotel](https://github.com/overlookmotel))
+  * [#15320](https://github.com/babel/babel/pull/15320) Add `annexb: false` parser option to disable Annex B ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`
+  * [#15283](https://github.com/babel/babel/pull/15283) feat: Support `.cts` as configuration file ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-generator`, `babel-parser`, `babel-plugin-transform-typescript`
+  * [#15381](https://github.com/babel/babel/pull/15381) [ts] Support `export type * from` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-typescript`
+  * [#15379](https://github.com/babel/babel/pull/15379) [ts5.0] Better inlining of constants in enums ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-core`
+  * [#15366](https://github.com/babel/babel/pull/15366) handling circular/shared structures in deep-clone ([@azizghuloum](https://github.com/azizghuloum))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-class-static-block`, `babel-plugin-proposal-private-methods`, `babel-plugin-transform-classes`, `babel-plugin-transform-new-target`
+  * [#15406](https://github.com/babel/babel/pull/15406) Preserve class elements comments in class transform ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`, `babel-plugin-transform-flow-comments`, `babel-plugin-transform-flow-strip-types`, `babel-types`
+  * [#15414](https://github.com/babel/babel/pull/15414) [ts] Fix restrictions for optional parameters ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :nail_care: Polish
+* `babel-parser`
+  * [#15400](https://github.com/babel/babel/pull/15400) polish: improve "`await` as identifier" error in modules ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* `babel-core`
+  * [#15137](https://github.com/babel/babel/pull/15137) Improve CJS compat with ESM-based `@babel/core` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :microscope: Output optimization
+* `babel-plugin-transform-typescript`
+  * [#15418](https://github.com/babel/babel/pull/15418) [ts] Handle exponentiation operator in constant folding ([@ehoogeveen-medweb](https://github.com/ehoogeveen-medweb))
+
 ## v7.20.15 (2023-02-02)
 
 #### :eyeglasses: Spec Compliance
