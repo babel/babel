@@ -1,13 +1,13 @@
 {
   "type": "File",
-  "start":0,"end":51,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":17,"index":51}},
+  "start":0,"end":61,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":9,"index":61}},
   "errors": [
     "SyntaxError: Constructors in/after an Optional Chain are not allowed. (1:7)",
     "SyntaxError: Constructors in/after an Optional Chain are not allowed. (2:11)"
   ],
   "program": {
     "type": "Program",
-    "start":0,"end":51,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":17,"index":51}},
+    "start":0,"end":61,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":9,"index":61}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
@@ -93,6 +93,30 @@
             }
           },
           "arguments": []
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":52,"end":61,"loc":{"start":{"line":5,"column":0,"index":52},"end":{"line":5,"column":9,"index":61}},
+        "expression": {
+          "type": "OptionalMemberExpression",
+          "start":52,"end":60,"loc":{"start":{"line":5,"column":0,"index":52},"end":{"line":5,"column":8,"index":60}},
+          "object": {
+            "type": "Identifier",
+            "start":52,"end":55,"loc":{"start":{"line":5,"column":0,"index":52},"end":{"line":5,"column":3,"index":55},"identifierName":"foo"},
+            "name": "foo"
+          },
+          "computed": true,
+          "property": {
+            "type": "NumericLiteral",
+            "start":58,"end":59,"loc":{"start":{"line":5,"column":6,"index":58},"end":{"line":5,"column":7,"index":59}},
+            "extra": {
+              "rawValue": 0,
+              "raw": "0"
+            },
+            "value": 0
+          },
+          "optional": true
         }
       }
     ],
