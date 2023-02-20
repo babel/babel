@@ -58,18 +58,22 @@ export function buildPrivateNamesMap(props: PropPath[]) {
 export function buildPrivateNamesNodes(
   privateNamesMap: PrivateNamesMap,
   privateFieldsAsProperties: boolean,
+  privateFieldsAsSymbols: boolean,
   state: File,
 ) {
   const initNodes: t.Statement[] = [];
 
   for (const [name, value] of privateNamesMap) {
-    // When the privateFieldsAsProperties assumption is enabled,
-    // both static and instance fields are transpiled using a
-    // secret non-enumerable property. Hence, we also need to generate that
-    // key (using the classPrivateFieldLooseKey helper).
-    // In spec mode, only instance fields need a "private name" initializer
-    // because static fields are directly assigned to a variable in the
-    // buildPrivateStaticFieldInitSpec function.
+    // - When the privateFieldsAsProperties assumption is enabled,
+    //   both static and instance fields are transpiled using a
+    //   secret non-enumerable property. Hence, we also need to generate that
+    //   key (using the classPrivateFieldLooseKey helper).
+    // - When the privateFieldsAsSymbols assumption is enabled,
+    //   both static and instance fields are transpiled using a
+    //   unique Symbol to define a non-enumerable property.
+    // - In spec mode, only instance fields need a "private name" initializer
+    //   because static fields are directly assigned to a variable in the
+    //   buildPrivateStaticFieldInitSpec function.
     const { static: isStatic, method: isMethod, getId, setId } = value;
     const isAccessor = getId || setId;
     const id = t.cloneNode(value.id);
@@ -80,6 +84,8 @@ export function buildPrivateNamesNodes(
       init = t.callExpression(state.addHelper("classPrivateFieldLooseKey"), [
         t.stringLiteral(name),
       ]);
+    } else if (privateFieldsAsSymbols) {
+      init = t.callExpression(t.identifier("Symbol"), [t.stringLiteral(name)]);
     } else if (!isStatic) {
       init = t.newExpression(
         t.identifier(!isMethod || isAccessor ? "WeakMap" : "WeakSet"),

@@ -48,18 +48,32 @@ export function createClassFeaturePlugin({
   inherits,
 }: Options): PluginObject {
   const setPublicClassFields = api.assumption("setPublicClassFields");
+  const privateFieldsAsSymbols = api.assumption("privateFieldsAsSymbols");
   const privateFieldsAsProperties = api.assumption("privateFieldsAsProperties");
   const constantSuper = api.assumption("constantSuper");
   const noDocumentAll = api.assumption("noDocumentAll");
 
+  if (privateFieldsAsProperties && privateFieldsAsSymbols) {
+    throw new Error(
+      `Cannot enable both the "privateFieldsAsProperties" and ` +
+        `"privateFieldsAsSymbols" assumptions as the same time.`,
+    );
+  }
+  const privateFieldsAsSymbolsOrProperties =
+    privateFieldsAsProperties || privateFieldsAsSymbols;
+
   if (loose === true) {
-    const explicit = [];
+    type AssumptionName = Parameters<PluginAPI["assumption"]>[0];
+    const explicit: `"${AssumptionName}"`[] = [];
 
     if (setPublicClassFields !== undefined) {
       explicit.push(`"setPublicClassFields"`);
     }
     if (privateFieldsAsProperties !== undefined) {
       explicit.push(`"privateFieldsAsProperties"`);
+    }
+    if (privateFieldsAsSymbols !== undefined) {
+      explicit.push(`"privateFieldsAsSymbols"`);
     }
     if (explicit.length !== 0) {
       console.warn(
@@ -71,7 +85,7 @@ export function createClassFeaturePlugin({
           ` following top-level option:\n` +
           `\t"assumptions": {\n` +
           `\t\t"setPublicClassFields": true,\n` +
-          `\t\t"privateFieldsAsProperties": true\n` +
+          `\t\t"privateFieldsAsSymbols": true\n` +
           `\t}`,
       );
     }
@@ -191,6 +205,7 @@ export function createClassFeaturePlugin({
         const privateNamesNodes = buildPrivateNamesNodes(
           privateNamesMap,
           privateFieldsAsProperties ?? loose,
+          privateFieldsAsSymbols ?? false,
           file,
         );
 
@@ -199,7 +214,8 @@ export function createClassFeaturePlugin({
           path,
           privateNamesMap,
           {
-            privateFieldsAsProperties: privateFieldsAsProperties ?? loose,
+            privateFieldsAsProperties:
+              privateFieldsAsSymbolsOrProperties ?? loose,
             noDocumentAll,
             innerBinding,
           },
@@ -231,7 +247,7 @@ export function createClassFeaturePlugin({
                 privateNamesMap,
                 file,
                 setPublicClassFields ?? loose,
-                privateFieldsAsProperties ?? loose,
+                privateFieldsAsSymbolsOrProperties ?? loose,
                 constantSuper ?? loose,
                 innerBinding,
               ));
@@ -246,7 +262,7 @@ export function createClassFeaturePlugin({
               privateNamesMap,
               file,
               setPublicClassFields ?? loose,
-              privateFieldsAsProperties ?? loose,
+              privateFieldsAsSymbolsOrProperties ?? loose,
               constantSuper ?? loose,
               innerBinding,
             ));

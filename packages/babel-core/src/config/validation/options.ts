@@ -277,6 +277,7 @@ const knownAssumptions = [
   "noIncompleteNsImportDetection",
   "noNewArrows",
   "objectRestNoSymbols",
+  "privateFieldsAsSymbols",
   "privateFieldsAsProperties",
   "pureGetters",
   "setClassMethods",
