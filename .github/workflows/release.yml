@@ -86,6 +86,10 @@ jobs:
 
       - name: Build and Test
         run: make prepublish
+        env:
+          # Hack: use FORCE_COLOR so that supports-color@5 returnes true for GitHub CI
+          # Remove once `chalk` is bumped to 4.0.
+          FORCE_COLOR: true
 
       - name: Publish to npm
         run: yarn release-tool publish --yes
