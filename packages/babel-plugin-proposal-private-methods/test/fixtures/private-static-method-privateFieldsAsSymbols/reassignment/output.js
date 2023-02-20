@@ -1,4 +1,4 @@
-var _privateStaticMethod = Symbol("privateStaticMethod");
+var _privateStaticMethod = /*#__PURE__*/Symbol("privateStaticMethod");
 class Cl {
   constructor() {
     babelHelpers.classPrivateFieldLooseBase(Cl, _privateStaticMethod)[_privateStaticMethod] = null;

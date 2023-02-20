@@ -1,4 +1,4 @@
-var _foo = Symbol("foo");
+var _foo = /*#__PURE__*/Symbol("foo");
 class Foo {
   constructor() {
     Object.defineProperty(this, _foo, {

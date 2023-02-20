@@ -1,5 +1,5 @@
 let exfiltrated;
-var _privateMethod = Symbol("privateMethod");
+var _privateMethod = /*#__PURE__*/Symbol("privateMethod");
 class Foo {
   constructor() {
     Object.defineProperty(this, _privateMethod, {

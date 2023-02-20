@@ -1,4 +1,4 @@
-var _getStatus = Symbol("getStatus");
+var _getStatus = /*#__PURE__*/Symbol("getStatus");
 class Foo {
   constructor(status) {
     Object.defineProperty(this, _getStatus, {

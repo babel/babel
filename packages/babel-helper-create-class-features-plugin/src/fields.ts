@@ -84,7 +84,6 @@ export function buildPrivateNamesNodes(
       init = t.callExpression(state.addHelper("classPrivateFieldLooseKey"), [
         t.stringLiteral(name),
       ]);
-      annotateAsPure(init);
     } else if (privateFieldsAsSymbols) {
       init = t.callExpression(t.identifier("Symbol"), [t.stringLiteral(name)]);
     } else if (!isStatic) {
@@ -92,10 +91,10 @@ export function buildPrivateNamesNodes(
         t.identifier(!isMethod || isAccessor ? "WeakMap" : "WeakSet"),
         [],
       );
-      annotateAsPure(init);
     }
 
     if (init) {
+      annotateAsPure(init);
       initNodes.push(template.statement.ast`var ${id} = ${init}`);
     }
   }

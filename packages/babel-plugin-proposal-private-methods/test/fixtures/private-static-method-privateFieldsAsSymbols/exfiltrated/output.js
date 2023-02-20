@@ -1,5 +1,5 @@
 let exfiltrated;
-var _privateStaticMethod = Symbol("privateStaticMethod");
+var _privateStaticMethod = /*#__PURE__*/Symbol("privateStaticMethod");
 class Cl {
   constructor() {
     if (exfiltrated === undefined) {
