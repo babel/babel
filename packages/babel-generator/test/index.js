@@ -908,7 +908,7 @@ describe("generation", function () {
           "source-maps/arrow-function/input.js",
         ],
         "sourcesContent": Array [
-          null,
+          undefined,
         ],
         "version": 3,
       }

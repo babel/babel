@@ -53,12 +53,12 @@ export default class SourceMap {
     if (opts.inputSourceMap) {
       this._inputMap = new TraceMap(opts.inputSourceMap);
       const resolvedSources = this._inputMap.resolvedSources;
-      if (resolvedSources.length && this._inputMap.sourcesContent) {
+      if (resolvedSources.length) {
         for (let i = 0; i < resolvedSources.length; i++) {
           setSourceContent(
             map,
             resolvedSources[i],
-            this._inputMap.sourcesContent[i],
+            this._inputMap.sourcesContent?.[i],
           );
         }
       }
