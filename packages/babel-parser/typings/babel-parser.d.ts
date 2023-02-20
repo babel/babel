@@ -137,6 +137,12 @@ interface ParserOptions {
   allowUndeclaredExports?: boolean;
 
   /**
+   * By default, Babel parser JavaScript code according to Annex B syntax.
+   * Set this to `false` to disable such behavior.
+   */
+  annexB?: boolean;
+
+  /**
    * By default, Babel attaches comments to adjacent AST nodes.
    * When this option is set to false, comments are not attached.
    * It can provide up to 30% performance improvement when the input code has many comments.
@@ -230,4 +236,4 @@ type ParseResult<Result> = Result & {
   errors: ParseError[];
 };
 
-export { DecoratorsPluginOptions, FlowPluginOptions, ParseError, ParserOptions, ParserPlugin, ParserPluginWithOptions, PipelineOperatorPluginOptions, RecordAndTuplePluginOptions, TypeScriptPluginOptions, parse, parseExpression, tokTypes };
+export { DecoratorsPluginOptions, FlowPluginOptions, ParseError, ParseResult, ParserOptions, ParserPlugin, ParserPluginWithOptions, PipelineOperatorPluginOptions, RecordAndTuplePluginOptions, TypeScriptPluginOptions, parse, parseExpression, tokTypes };

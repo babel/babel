@@ -40,6 +40,12 @@ export interface ParserOptions {
    */
   allowReturnOutsideFunction?: boolean;
 
+  /**
+   * By default, new.target use is not allowed outside of a function or class.
+   * Set this to true to accept such code.
+   */
+  allowNewTargetOutsideFunction?: boolean;
+
   allowSuperOutsideMethod?: boolean;
 
   /**
@@ -47,6 +53,12 @@ export interface ParserOptions {
    * Set this to true to allow export statements to reference undeclared variables.
    */
   allowUndeclaredExports?: boolean;
+
+  /**
+   * By default, Babel parser JavaScript code according to Annex B syntax.
+   * Set this to `false` to disable such behavior.
+   */
+  annexB?: boolean;
 
   /**
    * By default, Babel attaches comments to adjacent AST nodes.
