@@ -26,7 +26,7 @@ Then, load the plugin in your `.eslintrc` configuration file. You can omit the `
 
 ## Supported Rules
 
-> Note: Rules marked with :wrench: are autofixable.
+> **Note** Rules marked with :wrench: are autofixable.
 
 * `@babel/development/no-deprecated-clone` (:wrench:): Disallows using the deprecated
   `t.clone(node)` and `t.cloneDeep(node)` methods from `@babel/types`. Those
