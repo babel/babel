@@ -40,6 +40,12 @@ export interface ParserOptions {
    */
   allowReturnOutsideFunction?: boolean;
 
+  /**
+   * By default, new.target use is not allowed outside of a function or class.
+   * Set this to true to accept such code.
+   */
+  allowNewTargetOutsideFunction?: boolean;
+
   allowSuperOutsideMethod?: boolean;
 
   /**
