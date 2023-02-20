@@ -1095,7 +1095,7 @@ export default function (
   version: "2023-01" | "2022-03" | "2021-12",
 ): PluginObject {
   if (version === "2023-01") {
-    assertVersion("^7.20.0");
+    assertVersion("^7.21.0");
   } else if (version === "2021-12") {
     assertVersion("^7.16.0");
   } else {

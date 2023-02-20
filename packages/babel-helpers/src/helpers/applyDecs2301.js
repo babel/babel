@@ -1,4 +1,4 @@
-/* @minVersion 7.20.0 */
+/* @minVersion 7.21.0 */
 
 import checkInRHS from "checkInRHS";
 
