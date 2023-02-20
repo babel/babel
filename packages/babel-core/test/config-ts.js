@@ -13,7 +13,7 @@ const require = createRequire(import.meta.url);
 
 const lessThanNode12 = semver.lt(process.version, "12.0.0");
 
-(!lessThanNode12 ? describe : describe.skip)(
+(lessThanNode12 ? describe : describe.skip)(
   "@babel/core config with ts [dummy]",
   () => {
     it("dummy", () => {
@@ -22,7 +22,7 @@ const lessThanNode12 = semver.lt(process.version, "12.0.0");
   },
 );
 
-(lessThanNode12 ? describe : describe.skip)(
+(lessThanNode12 ? describe.skip : describe)(
   "@babel/core config with ts",
   () => {
     it("should work with simple .cts", () => {

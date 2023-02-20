@@ -1,8 +1,10 @@
-import chalk from "chalk";
+import Chalk from "chalk";
 import stripAnsi from "strip-ansi";
 
 import _codeFrame, { codeFrameColumns } from "../lib/index.js";
 const codeFrame = _codeFrame.default || _codeFrame;
+
+const chalk = new Chalk.constructor({ enabled: true });
 
 describe("@babel/code-frame", function () {
   test("basic usage", function () {
@@ -95,13 +97,20 @@ describe("@babel/code-frame", function () {
   });
 
   test("opts.highlightCode", function () {
-    const rawLines = "console.log('babel')";
-    const result = codeFrame(rawLines, 1, 9, { highlightCode: true });
-    const stripped = stripAnsi(result);
-    expect(result.length).toBeGreaterThan(stripped.length);
-    expect(stripped).toEqual(
-      ["> 1 | console.log('babel')", "    |         ^"].join("\n"),
-    );
+    const { FORCE_COLOR } = process.env;
+    process.env.FORCE_COLOR = "true";
+
+    try {
+      const rawLines = "console.log('babel')";
+      const result = codeFrame(rawLines, 1, 9, { highlightCode: true });
+      const stripped = stripAnsi(result);
+      expect(result.length).toBeGreaterThan(stripped.length);
+      expect(stripped).toEqual(
+        ["> 1 | console.log('babel')", "    |         ^"].join("\n"),
+      );
+    } finally {
+      process.env.FORCE_COLOR = FORCE_COLOR;
+    }
   });
 
   test("opts.highlightCode with multiple columns and lines", function () {
