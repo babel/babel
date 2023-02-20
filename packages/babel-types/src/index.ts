@@ -101,7 +101,7 @@ export const react = {
   buildChildren,
 };
 
-export * from "./ast-types/generated";
+export type * from "./ast-types/generated";
 
 // this is used by @babel/traverse to warn about deprecated visitors
 export { default as __internal__deprecationWarning } from "./utils/deprecationWarning";
