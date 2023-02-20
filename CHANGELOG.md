@@ -23,6 +23,16 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.21.1 (2023-02-20)
+
+#### :bug: Bug Fix
+* `babel-core`, `babel-parser`
+  * [#15440](https://github.com/babel/babel/pull/15440) Fix problems found while publishing 7.21.0 ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`
+  * [#15445](https://github.com/babel/babel/pull/15445) fix: Handling source maps without `sourcesContent` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :house: Internal
+* [#15443](https://github.com/babel/babel/pull/15443) Use native GitHub markdown `Note` admonition ([@yardenshoham](https://github.com/yardenshoham))
 ## v7.21.0 (2023-02-20)
 
 #### :rocket: New Feature
