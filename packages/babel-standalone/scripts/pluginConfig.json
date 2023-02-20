@@ -59,6 +59,7 @@
     "proposal-private-methods",
     "proposal-private-property-in-object",
     "proposal-record-and-tuple",
+    "proposal-regexp-modifiers",
     "proposal-throw-expressions",
     "proposal-unicode-property-regex",
     "proposal-unicode-sets-regex",

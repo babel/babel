@@ -636,7 +636,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-annotate-as-pure": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
-    regexpu-core: ^5.2.1
+    regexpu-core: ^5.3.1
   peerDependencies:
     "@babel/core": ^7.0.0
   languageName: unknown
@@ -1761,6 +1761,18 @@ __metadata:
     "@babel/plugin-syntax-record-and-tuple": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.12.0
+  languageName: unknown
+  linkType: soft
+
+"@babel/plugin-proposal-regexp-modifiers@workspace:^, @babel/plugin-proposal-regexp-modifiers@workspace:packages/babel-plugin-proposal-regexp-modifiers":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-proposal-regexp-modifiers@workspace:packages/babel-plugin-proposal-regexp-modifiers"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-create-regexp-features-plugin": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
   languageName: unknown
   linkType: soft
 
@@ -3683,6 +3695,7 @@ __metadata:
     "@babel/plugin-proposal-private-methods": "workspace:^"
     "@babel/plugin-proposal-private-property-in-object": "workspace:^"
     "@babel/plugin-proposal-record-and-tuple": "workspace:^"
+    "@babel/plugin-proposal-regexp-modifiers": "workspace:^"
     "@babel/plugin-proposal-throw-expressions": "workspace:^"
     "@babel/plugin-proposal-unicode-property-regex": "workspace:^"
     "@babel/plugin-proposal-unicode-sets-regex": "workspace:^"
@@ -13121,9 +13134,9 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"regexpu-core@npm:^5.2.1":
-  version: 5.3.0
-  resolution: "regexpu-core@npm:5.3.0"
+"regexpu-core@npm:^5.2.1, regexpu-core@npm:^5.3.1":
+  version: 5.3.1
+  resolution: "regexpu-core@npm:5.3.1"
   dependencies:
     "@babel/regjsgen": ^0.8.0
     regenerate: ^1.4.2
@@ -13131,7 +13144,7 @@ fsevents@^1.2.7:
     regjsparser: ^0.9.1
     unicode-match-property-ecmascript: ^2.0.0
     unicode-match-property-value-ecmascript: ^2.1.0
-  checksum: f3c7921543ebda919c53fdbbf3a9cebbecbf8ad65b30e423d7eaef35484e08cbc919f9e8334f4693a72206f583d4f2b48d4415483f6e6e8c81f0046e3a23c66f
+  checksum: 446fbbb79059afcd64d11ea573276e2df97ee7ad45aa452834d3b2aef7edf7bfe206c310f57f9345d8c95bfedbf9c16a9529f9219a05ae6a6b0d6f0dbe523b33
   languageName: node
   linkType: hard
 
