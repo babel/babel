@@ -880,6 +880,40 @@ describe("generation", function () {
       });"
     `);
   });
+
+  it("inputSourceMap without sourcesContent", () => {
+    const ast = parse("var t = x => x * x;");
+
+    expect(
+      generate(ast, {
+        sourceMaps: true,
+        inputSourceMap: {
+          version: 3,
+          names: ["t", "x"],
+          sources: ["source-maps/arrow-function/input.js"],
+          mappings:
+            "AAAA,IAAIA,CAAC,GAAG,SAAJA,CAACA,CAAGC,CAAC;EAAA,OAAIA,CAAC,GAAGA,CAAC;AAAA",
+        },
+      }).map,
+    ).toMatchInlineSnapshot(`
+      Object {
+        "file": undefined,
+        "mappings": "AAAA,IAAIA,CAAC,GAAGC,CAAA,IAAAA,CAAA,GAAJA,CAAC",
+        "names": Array [
+          "t",
+          "x",
+        ],
+        "sourceRoot": undefined,
+        "sources": Array [
+          "source-maps/arrow-function/input.js",
+        ],
+        "sourcesContent": Array [
+          null,
+        ],
+        "version": 3,
+      }
+    `);
+  });
 });
 
 describe("programmatic generation", function () {
