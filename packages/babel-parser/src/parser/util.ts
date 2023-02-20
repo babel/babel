@@ -290,13 +290,6 @@ export default abstract class UtilParser extends Tokenizer {
     );
   }
 
-  isOptionalChain(node: Node): boolean {
-    return (
-      node.type === "OptionalMemberExpression" ||
-      node.type === "OptionalCallExpression"
-    );
-  }
-
   isObjectProperty(
     node: Node,
   ): node is ObjectProperty | EstreePropertyDefinition {

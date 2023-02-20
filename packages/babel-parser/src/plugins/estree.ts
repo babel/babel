@@ -539,10 +539,6 @@ export default (superClass: typeof Parser) =>
       return super.hasPropertyAsPrivateName(node);
     }
 
-    isOptionalChain(node: N.Node): boolean {
-      return node.type === "ChainExpression";
-    }
-
     // @ts-expect-error override interfaces
     isObjectProperty(node: N.Node): boolean {
       return node.type === "Property" && node.kind === "init" && !node.method;
