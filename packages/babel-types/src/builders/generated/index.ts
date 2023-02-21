@@ -4,6 +4,7 @@
  */
 import validateNode from "../validateNode";
 import type * as t from "../..";
+import deprecationWarning from "../../utils/deprecationWarning";
 export function arrayExpression(
   elements: Array<null | t.Expression | t.SpreadElement> = [],
 ): t.ArrayExpression {
@@ -2515,29 +2516,25 @@ export function tsTypeParameter(
 export { tsTypeParameter as tSTypeParameter };
 /** @deprecated */
 function NumberLiteral(value: number) {
-  console.trace(
-    "The node type NumberLiteral has been renamed to NumericLiteral",
-  );
+  deprecationWarning("NumberLiteral", "NumericLiteral", "The node type ");
   return numericLiteral(value);
 }
 export { NumberLiteral as numberLiteral };
 /** @deprecated */
 function RegexLiteral(pattern: string, flags: string = "") {
-  console.trace("The node type RegexLiteral has been renamed to RegExpLiteral");
+  deprecationWarning("RegexLiteral", "RegExpLiteral", "The node type ");
   return regExpLiteral(pattern, flags);
 }
 export { RegexLiteral as regexLiteral };
 /** @deprecated */
 function RestProperty(argument: t.LVal) {
-  console.trace("The node type RestProperty has been renamed to RestElement");
+  deprecationWarning("RestProperty", "RestElement", "The node type ");
   return restElement(argument);
 }
 export { RestProperty as restProperty };
 /** @deprecated */
 function SpreadProperty(argument: t.Expression) {
-  console.trace(
-    "The node type SpreadProperty has been renamed to SpreadElement",
-  );
+  deprecationWarning("SpreadProperty", "SpreadElement", "The node type ");
   return spreadElement(argument);
 }
 export { SpreadProperty as spreadProperty };

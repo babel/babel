@@ -26,6 +26,7 @@ export default function generateAsserts() {
  */
 import is from "../../validators/is";
 import type * as t from "../..";
+import deprecationWarning from "../../utils/deprecationWarning";
 
 function assert(type: string, node: any, opts?: any): void {
   if (!is(type, node, opts)) {
@@ -56,7 +57,7 @@ function assert(type: string, node: any, opts?: any): void {
   Object.keys(deprecatedNodeTypesAndAliases).forEach(type => {
     const newType = deprecatedNodeTypesAndAliases[type];
     output += `export function assert${type}(node: any, opts: any): void {
-  console.trace("\`assert${type}\` has been deprecated, please migrate to \`assert${newType}\`.");
+      deprecationWarning("assert${type}", "assert${newType}");
   assert("${type}", node, opts);
 }\n`;
   });

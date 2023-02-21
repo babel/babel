@@ -4,6 +4,7 @@
  */
 import shallowEqual from "../../utils/shallowEqual";
 import type * as t from "../..";
+import deprecationWarning from "../../utils/deprecationWarning";
 
 export function isArrayExpression(
   node: object | null | undefined,
@@ -5786,9 +5787,7 @@ export function isNumberLiteral(
   node: object | null | undefined,
   opts?: object | null,
 ): boolean {
-  console.trace(
-    "`isNumberLiteral` has been deprecated, please migrate to `isNumericLiteral`.",
-  );
+  deprecationWarning("isNumberLiteral", "isNumericLiteral");
   if (!node) return false;
 
   const nodeType = (node as t.Node).type;
@@ -5806,9 +5805,7 @@ export function isRegexLiteral(
   node: object | null | undefined,
   opts?: object | null,
 ): boolean {
-  console.trace(
-    "`isRegexLiteral` has been deprecated, please migrate to `isRegExpLiteral`.",
-  );
+  deprecationWarning("isRegexLiteral", "isRegExpLiteral");
   if (!node) return false;
 
   const nodeType = (node as t.Node).type;
@@ -5826,9 +5823,7 @@ export function isRestProperty(
   node: object | null | undefined,
   opts?: object | null,
 ): boolean {
-  console.trace(
-    "`isRestProperty` has been deprecated, please migrate to `isRestElement`.",
-  );
+  deprecationWarning("isRestProperty", "isRestElement");
   if (!node) return false;
 
   const nodeType = (node as t.Node).type;
@@ -5846,9 +5841,7 @@ export function isSpreadProperty(
   node: object | null | undefined,
   opts?: object | null,
 ): boolean {
-  console.trace(
-    "`isSpreadProperty` has been deprecated, please migrate to `isSpreadElement`.",
-  );
+  deprecationWarning("isSpreadProperty", "isSpreadElement");
   if (!node) return false;
 
   const nodeType = (node as t.Node).type;
@@ -5866,8 +5859,6 @@ export function isModuleDeclaration(
   node: object | null | undefined,
   opts?: object | null,
 ): node is t.ImportOrExportDeclaration {
-  console.trace(
-    "`isModuleDeclaration` has been deprecated, please migrate to `isImportOrExportDeclaration`.",
-  );
+  deprecationWarning("isModuleDeclaration", "isImportOrExportDeclaration");
   return isImportOrExportDeclaration(node, opts);
 }

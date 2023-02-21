@@ -4,6 +4,7 @@
  */
 import is from "../../validators/is";
 import type * as t from "../..";
+import deprecationWarning from "../../utils/deprecationWarning";
 
 function assert(type: string, node: any, opts?: any): void {
   if (!is(type, node, opts)) {
@@ -1803,32 +1804,25 @@ export function assertTSBaseType(
   assert("TSBaseType", node, opts);
 }
 export function assertNumberLiteral(node: any, opts: any): void {
-  console.trace(
-    "`assertNumberLiteral` has been deprecated, please migrate to `assertNumericLiteral`.",
-  );
+  deprecationWarning("assertNumberLiteral", "assertNumericLiteral");
   assert("NumberLiteral", node, opts);
 }
 export function assertRegexLiteral(node: any, opts: any): void {
-  console.trace(
-    "`assertRegexLiteral` has been deprecated, please migrate to `assertRegExpLiteral`.",
-  );
+  deprecationWarning("assertRegexLiteral", "assertRegExpLiteral");
   assert("RegexLiteral", node, opts);
 }
 export function assertRestProperty(node: any, opts: any): void {
-  console.trace(
-    "`assertRestProperty` has been deprecated, please migrate to `assertRestElement`.",
-  );
+  deprecationWarning("assertRestProperty", "assertRestElement");
   assert("RestProperty", node, opts);
 }
 export function assertSpreadProperty(node: any, opts: any): void {
-  console.trace(
-    "`assertSpreadProperty` has been deprecated, please migrate to `assertSpreadElement`.",
-  );
+  deprecationWarning("assertSpreadProperty", "assertSpreadElement");
   assert("SpreadProperty", node, opts);
 }
 export function assertModuleDeclaration(node: any, opts: any): void {
-  console.trace(
-    "`assertModuleDeclaration` has been deprecated, please migrate to `assertImportOrExportDeclaration`.",
+  deprecationWarning(
+    "assertModuleDeclaration",
+    "assertImportOrExportDeclaration",
   );
   assert("ModuleDeclaration", node, opts);
 }

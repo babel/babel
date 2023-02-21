@@ -340,32 +340,36 @@ describe("traverse", function () {
   describe("traverse.explode", () => {
     describe("deprecated types and aliases", () => {
       beforeAll(() => {
-        jest.spyOn(console, "trace").mockImplementation(() => {});
+        jest.spyOn(console, "warn").mockImplementation(() => {});
       });
       afterAll(() => {
-        console.trace.mockClear();
+        console.warn.mockClear();
       });
-      it("should warn for deprecated node types", () => {
+      it("should warn for deprecated node types", function testFn1() {
         const visitNumericLiteral = () => {};
         const visitor = {
           NumberLiteral: visitNumericLiteral,
         };
         traverse.explode(visitor);
-        expect(console.trace).toHaveBeenCalledWith(
-          "Visitor defined for NumberLiteral but it has been renamed to NumericLiteral",
+        expect(console.warn).toHaveBeenCalledWith(
+          expect.stringMatching(
+            /Visitor `NumberLiteral` has been deprecated, please migrate to `NumericLiteral`[^]+at.+testFn1/,
+          ),
         );
         expect(visitor).toHaveProperty("NumericLiteral.enter", [
           visitNumericLiteral,
         ]);
       });
-      it("should warn for deprecated aliases", () => {
+      it("should warn for deprecated aliases", function testFn2() {
         const visitImportOrExportDeclaration = () => {};
         const visitor = {
           ModuleDeclaration: visitImportOrExportDeclaration,
         };
         traverse.explode(visitor);
-        expect(console.trace).toHaveBeenCalledWith(
-          "Visitor defined for ModuleDeclaration but it has been renamed to ImportOrExportDeclaration",
+        expect(console.warn).toHaveBeenCalledWith(
+          expect.stringMatching(
+            /Visitor `ModuleDeclaration` has been deprecated, please migrate to `ImportOrExportDeclaration`[^]+at.+testFn2/,
+          ),
         );
         expect(visitor).toHaveProperty("ImportDeclaration.enter", [
           visitImportOrExportDeclaration,

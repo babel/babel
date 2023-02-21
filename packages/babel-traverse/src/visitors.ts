@@ -4,6 +4,7 @@ import {
   DEPRECATED_ALIASES,
   FLIPPED_ALIAS_KEYS,
   TYPES,
+  __internal__deprecationWarning as deprecationWarning,
 } from "@babel/types";
 import type { NodePath, Visitor } from "./index";
 
@@ -102,16 +103,12 @@ export function explode(visitor: Visitor) {
 
     if (nodeType in DEPRECATED_KEYS) {
       const deprecatedKey = DEPRECATED_KEYS[nodeType];
-      console.trace(
-        `Visitor defined for ${nodeType} but it has been renamed to ${deprecatedKey}`,
-      );
+      deprecationWarning(nodeType, deprecatedKey, "Visitor ");
       aliases = [deprecatedKey];
     } else if (nodeType in DEPRECATED_ALIASES) {
       const deprecatedAlias =
         DEPRECATED_ALIASES[nodeType as keyof typeof DEPRECATED_ALIASES];
-      console.trace(
-        `Visitor defined for ${nodeType} but it has been renamed to ${deprecatedAlias}`,
-      );
+      deprecationWarning(nodeType, deprecatedAlias, "Visitor ");
       aliases = FLIPPED_ALIAS_KEYS[deprecatedAlias];
     }
 
