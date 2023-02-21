@@ -240,6 +240,12 @@ export default declare((api, options: Options) => {
 
               header = t.expressionStatement(loadExpr);
             } else {
+              // A lazy import that is never referenced can be safely
+              // omitted, since it wouldn't be executed anyway.
+              if (metadata.lazy && !metadata.referenced) {
+                continue;
+              }
+
               const init =
                 wrapInterop(path, loadExpr, metadata.interop) || loadExpr;
 

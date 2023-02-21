@@ -54,6 +54,7 @@ export interface SourceModuleMetadata {
     loc: t.SourceLocation | undefined | null;
   };
   lazy?: Lazy;
+  referenced: boolean;
 }
 
 export interface LocalExportMetadata {
@@ -136,7 +137,7 @@ export default function normalizeModuleAndLoadMetadata(
 
   nameAnonymousExports(programPath);
 
-  const { local, source, hasExports } = getModuleMetadata(
+  const { local, sources, hasExports } = getModuleMetadata(
     programPath,
     { initializeReexports, lazy },
     stringSpecifiers,
@@ -145,7 +146,7 @@ export default function normalizeModuleAndLoadMetadata(
   removeImportExportDeclarations(programPath);
 
   // Reuse the imported namespace name if there is one.
-  for (const [, metadata] of source) {
+  for (const [source, metadata] of sources) {
     if (metadata.importsNamespace.size > 0) {
       // This is kind of gross. If we stop using `loose: true` we should
       // just make this destructuring assignment.
@@ -154,7 +155,7 @@ export default function normalizeModuleAndLoadMetadata(
 
     const resolvedInterop = resolveImportInterop(
       importInterop,
-      metadata.source,
+      source,
       filename,
     );
 
@@ -179,7 +180,7 @@ export default function normalizeModuleAndLoadMetadata(
     exportNameListName: null,
     hasExports,
     local,
-    source,
+    source: sources,
     stringSpecifiers,
   };
 }
@@ -244,7 +245,7 @@ function getModuleMetadata(
     stringSpecifiers,
   );
 
-  const sourceData = new Map();
+  const sourceData = new Map<string, SourceModuleMetadata>();
   const getData = (sourceNode: t.StringLiteral) => {
     const source = sourceNode.value;
 
@@ -270,7 +271,7 @@ function getModuleMetadata(
 
         lazy: false,
 
-        source,
+        referenced: false,
       };
       sourceData.set(source, data);
     }
@@ -295,6 +296,7 @@ function getModuleMetadata(
             reexport.names.forEach(name => {
               data.reexports.set(name, "default");
             });
+            data.referenced = true;
           }
         } else if (spec.isImportNamespaceSpecifier()) {
           const localName = spec.get("local").node.name;
@@ -307,6 +309,7 @@ function getModuleMetadata(
             reexport.names.forEach(name => {
               data.reexportNamespace.add(name);
             });
+            data.referenced = true;
           }
         } else if (spec.isImportSpecifier()) {
           const importName = getExportSpecifierName(
@@ -324,6 +327,7 @@ function getModuleMetadata(
             reexport.names.forEach(name => {
               data.reexports.set(name, importName);
             });
+            data.referenced = true;
           }
         }
       });
@@ -335,6 +339,7 @@ function getModuleMetadata(
       data.reexportAll = {
         loc: child.node.loc,
       };
+      data.referenced = true;
     } else if (child.isExportNamedDeclaration() && child.node.source) {
       hasExports = true;
       const data = getData(child.node.source);
@@ -352,6 +357,7 @@ function getModuleMetadata(
         );
 
         data.reexports.set(exportName, importName);
+        data.referenced = true;
 
         if (exportName === "__esModule") {
           throw spec
@@ -419,7 +425,7 @@ function getModuleMetadata(
   return {
     hasExports,
     local: localData,
-    source: sourceData,
+    sources: sourceData,
   };
 }
 

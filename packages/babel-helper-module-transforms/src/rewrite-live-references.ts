@@ -132,6 +132,7 @@ export default function rewriteLiveReferences(
     exported, // local name => exported name list
     buildImportReference: ([source, importName, localName], identNode) => {
       const meta = metadata.source.get(source);
+      meta.referenced = true;
 
       if (localName) {
         if (meta.lazy) {
