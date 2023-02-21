@@ -91,6 +91,7 @@ function generateLowercaseBuilders() {
  */
 import validateNode from "../validateNode";
 import type * as t from "../..";
+import deprecationWarning from "../../utils/deprecationWarning";
 `;
 
   const reservedNames = new Set(["super", "import"]);
@@ -150,7 +151,7 @@ import type * as t from "../..";
     const formattedNewBuilderName = formatBuilderName(newType);
     output += `/** @deprecated */
 function ${type}(${generateBuilderArgs(newType).join(", ")}) {
-  console.trace("The node type ${type} has been renamed to ${newType}");
+  deprecationWarning("${type}", "${newType}", "The node type ");
   return ${formattedNewBuilderName}(${BUILDER_KEYS[newType].join(", ")});
 }
 export { ${type} as ${formattedBuilderName} };\n`;
