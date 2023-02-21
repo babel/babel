@@ -765,10 +765,15 @@ export default abstract class ExpressionParser extends LValParser {
     let optional = false;
 
     if (type === tt.questionDot) {
-      if (noCalls && this.lookaheadCharCode() === charCodes.leftParenthesis) {
-        // stop at `?.` when parsing `new a?.()`
-        state.stop = true;
-        return base;
+      if (noCalls) {
+        this.raise(Errors.OptionalChainingNoNew, {
+          at: this.state.startLoc,
+        });
+        if (this.lookaheadCharCode() === charCodes.leftParenthesis) {
+          // stop at `?.` when parsing `new a?.()`
+          state.stop = true;
+          return base;
+        }
       }
       state.optionalChainMember = optional = true;
       this.next();
@@ -1919,17 +1924,6 @@ export default abstract class ExpressionParser extends LValParser {
     node.callee = this.parseNoCallExpr();
     if (node.callee.type === "Import") {
       this.raise(Errors.ImportCallNotNewExpression, { at: node.callee });
-    } else if (
-      this.isOptionalChain(node.callee) &&
-      !node.callee.extra?.parenthesized
-    ) {
-      this.raise(Errors.OptionalChainingNoNew, {
-        at: this.state.lastTokEndLoc,
-      });
-    } else if (this.eat(tt.questionDot)) {
-      this.raise(Errors.OptionalChainingNoNew, {
-        at: this.state.startLoc,
-      });
     }
   }
 
