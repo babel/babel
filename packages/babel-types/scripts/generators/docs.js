@@ -49,6 +49,7 @@ const customTypes = {
 const APIHistory = {
   ClassProperty: [["v7.6.0", "Supports `static`"]],
   ImportDeclaration: [["v7.20.0", "Supports `module`"]],
+  ImportOrExportDeclaration: [["v7.21.0", "Introduced"]],
   ModuleDeclaration: [["v7.21.0", "Deprecated"]],
   TSSatisfiesExpression: [["v7.20.0", "Introduced"]],
   TSTypeParameter: [["v7.21.0", "Supports `const`"]],
