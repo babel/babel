@@ -93,7 +93,7 @@ const aliasDescriptions = {
   Immutable:
     "A cover of immutable objects and JSX elements. An object is [immutable](https://tc39.es/ecma262/#immutable-prototype-exotic-object) if no other properties can be defined once created.",
   ImportOrExportDeclaration:
-    "A cover of ImportDeclaration and [ExportDeclaration](#exportdeclaration)",
+    "A cover of ImportDeclaration and [ExportDeclaration](#exportdeclaration).",
   JSX: "A cover of AST nodes defined for [JSX](https://facebook.github.io/jsx/).",
   LVal: "A cover of left hand side expressions used in the `left` of assignment expressions and [ForXStatement](#forxstatement)s.",
   Literal:
