@@ -258,6 +258,8 @@ export default declare((api, options: Options) => {
               }
             }
             header.loc = metadata.loc;
+            header.leadingComments = metadata.leadingComments;
+            header.trailingComments = metadata.trailingComments;
 
             headers.push(header);
             headers.push(
