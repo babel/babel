@@ -17,10 +17,10 @@ function runTest(fixture, args, output) {
     },
   );
 
-  expect(String(out.output[2]).split("\n").slice(2).join("\n")).toEqual("");
+  expect(String(out.stderr).split("\n").slice(2).join("\n")).toEqual("");
   expect(out.error).toBeUndefined();
   expect(out.signal).toBeNull();
-  expect(String(out.output[1])).toEqual(output);
+  expect(String(out.stdout)).toEqual(output);
 }
 
 describe("experimental-loader", () => {
