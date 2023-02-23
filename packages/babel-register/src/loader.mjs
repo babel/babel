@@ -3,7 +3,8 @@
 /* eslint-disable import/extensions */
 
 // this is a workarround to make sure global._BABEL_ESM_REGISTER is set to true before anything else gets loaded
-import { readFile, access, constants } from "node:fs/promises";
+import { readFile, access } from "node:fs/promises";
+import { constants } from "node:fs";
 import { dirname, extname, resolve as resolvePath } from "node:path";
 import { env } from "node:process";
 import { fileURLToPath, pathToFileURL } from "node:url";
