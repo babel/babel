@@ -9,15 +9,15 @@ function runTest(fixture, args, output) {
     "node",
     ["--experimental-loader", join(__dirname, "..", "loader.mjs"), ...args],
     {
+      stdio: "pipe",
       env: {
-        ...process.env,
         BABEL_REGISTER: join(__dirname, "fixtures", fixture, "register.mjs"),
       },
-      stdio: ["pipe", "pipe", "inherit"],
       cwd: join(__dirname, "fixtures", fixture),
     },
   );
 
+  expect(String(out.output[2]).split("\n").slice(2).join("\n")).toEqual("");
   expect(out.error).toBeUndefined();
   expect(out.signal).toBeNull();
   expect(String(out.output[1])).toEqual(output);

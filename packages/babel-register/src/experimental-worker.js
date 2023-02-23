@@ -10,7 +10,7 @@ if (major < 12 || (major === 12 && minor < 3)) {
   );
 }
 
-const hook = require("./hook-cjs");
+const hook = require("./hook");
 const { WorkerClient } = require("./worker-client");
 
 let client;

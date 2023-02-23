@@ -2,36 +2,53 @@
 
 /* eslint-disable import/extensions */
 
+// this is a workarround to make sure global._BABEL_ESM_REGISTER is set to true before anything else gets loaded
 import { readFile, access, constants } from "node:fs/promises";
-import { dirname, extname, join, resolve as resolvePath } from "node:path";
-import { cwd, env } from "node:process";
+import { dirname, extname, resolve as resolvePath } from "node:path";
+import { env } from "node:process";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import Module from "module";
-
-const { default: opts } = await import(
-  env.BABEL_REGISTER || join(cwd(), "register.mjs")
-);
 
 import { addHook } from "pirates";
 import { getCompileFunction } from "./hook-common.js";
 import { isInRegisterWorker } from "./is-in-register-worker.js";
-import { WorkerClient } from "./worker-client.js";
 
 let JS_EXTENSIONS;
 let compile;
-const flag = {};
+let flag = {};
+let piratesRevert;
 
-if (!isInRegisterWorker) {
-  const client = new WorkerClient();
-  client.setOptions(opts);
-  compile = getCompileFunction(client);
-  JS_EXTENSIONS = new Set(opts.extensions ?? client.getDefaultExtensions());
+global._BABEL_ESM_REGISTER = {
+  register(client, opts) {
+    if (!isInRegisterWorker) {
+      flag = {};
+      client.setOptions(opts);
 
-  // handle CJS
-  addHook(compile, {
-    exts: opts.extensions ?? client.getDefaultExtensions(),
-    ignoreNodeModules: false,
-  });
+      compile = getCompileFunction(client);
+
+      // handle CJS
+      piratesRevert = addHook(compile, {
+        exts: opts.extensions ?? client.getDefaultExtensions(),
+        ignoreNodeModules: false,
+      });
+
+      JS_EXTENSIONS = new Set(opts.extensions ?? client.getDefaultExtensions());
+
+      return () => {
+        if (piratesRevert) piratesRevert();
+        else return;
+        piratesRevert = null;
+        compile = null;
+        flag = {};
+      };
+    }
+  },
+};
+
+if (env.BABEL_REGISTER) {
+  const { default: opts } = await import(env.BABEL_REGISTER);
+  const { default: register } = await import("./experimental-worker.js");
+  register(opts);
 }
 
 function tryCJSResolve(specifier, context) {
@@ -80,11 +97,7 @@ async function exists(path) {
 }
 
 export async function resolve(specifier, context, nextResolve) {
-  // don't recurse ourselves to death
-  // CONTEXT: some people like to specify the options in execArgv as well
-  // so all children inherit them
-  // it's nice to handle that
-  if (isInRegisterWorker) {
+  if (!compile) {
     return nextResolve(specifier, context);
   }
 
@@ -171,7 +184,7 @@ export async function load(url, context, nextLoad) {
       format,
     });
 
-    const file = fileURLToPath(responseURL);
+    const file = fileURLToPath(responseURL || url);
     const result = compile(rawSource.toString(), file, true);
 
     if (result !== null) {
@@ -181,6 +194,21 @@ export async function load(url, context, nextLoad) {
 
   // Let Node.js handle all other URLs.
   return nextLoad(url);
+}
+
+// backwards compat
+export async function getSource(url, context, next) {
+  return load(url, context, next);
+}
+
+export async function getFormat(url, context, next) {
+  if (flag[url]) {
+    const format = await getPackageType(url);
+    return {
+      format,
+    };
+  }
+  return next(url, context, next);
 }
 
 async function getPackageType(url) {
