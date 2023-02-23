@@ -84,6 +84,7 @@ gen_enforced_field(WorkspaceCwd, 'exports', '{ ".": "./lib/index.js", "./package
   WorkspaceIdent \= '@babel/helper-plugin-test-runner', % TODO: Remove in Babel 8
   WorkspaceIdent \= '@babel/parser',
   WorkspaceIdent \= '@babel/plugin-transform-react-jsx', % TODO: Remove in Babel 8
+  WorkspaceIdent \= '@babel/register',
   WorkspaceIdent \= '@babel/standalone',
   WorkspaceIdent \= '@babel/types', % @babel/types has types exports
   \+ atom_concat('@babel/eslint-', _, WorkspaceIdent),
