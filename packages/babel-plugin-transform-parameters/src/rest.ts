@@ -120,7 +120,10 @@ const memberExpressionOptimisationVisitor: Visitor<State> = {
       const { parentPath } = path;
 
       // Is this identifier the right hand side of a default parameter?
-      if (parentPath.listKey === "params" && parentPath.key < state.offset) {
+      if (
+        parentPath.listKey === "params" &&
+        (parentPath.key as number) < state.offset
+      ) {
         return;
       }
 

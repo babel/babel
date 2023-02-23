@@ -95,7 +95,7 @@ function normalizeOptions(
   }
 
   if (format.compact === "auto") {
-    format.compact = code.length > 500_000; // 500KB
+    format.compact = typeof code === "string" && code.length > 500_000; // 500KB
 
     if (format.compact) {
       console.error(
