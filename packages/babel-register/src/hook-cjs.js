@@ -7,7 +7,10 @@ let piratesRevert;
 exports.register = function register(client, opts = {}) {
   if (piratesRevert) piratesRevert();
 
-  piratesRevert = addHook(getCompileFunction(client));
+  piratesRevert = addHook(getCompileFunction(client), {
+    exts: opts.extensions ?? client.getDefaultExtensions(),
+    ignoreNodeModules: false,
+  });
 
   client.setOptions(opts);
 };

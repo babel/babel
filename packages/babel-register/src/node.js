@@ -2,7 +2,7 @@
 
 "use strict";
 
-const hook = require("./hook");
+const hook = require("./hook-cjs");
 const { LocalClient } = require("./worker-client");
 
 const client = new LocalClient();
