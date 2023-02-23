@@ -34,8 +34,8 @@ if (!process.env.BABEL_8_BREAKING) {
   const internalModuleCache = Module._cache;
 
   // eslint-disable-next-line no-var
-  var compileBabel7 = function compileBabel7(client, code, filename) {
-    if (!client.isLocalClient) return compile(client, code, filename);
+  var compileBabel7 = function compileBabel7(client, code, filename, esm) {
+    if (!client.isLocalClient) return compile(client, code, filename, esm);
 
     if (compiling) return code;
 
@@ -54,7 +54,7 @@ if (!process.env.BABEL_8_BREAKING) {
 function compile(client, inputCode, filename, esm) {
   const result = client.transform(inputCode, filename);
 
-  if (result === null) return inputCode;
+  if (result === null) return esm ? null : inputCode;
 
   const { code, map, sourceType } = result;
   if (map) {

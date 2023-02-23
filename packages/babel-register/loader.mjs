@@ -117,6 +117,7 @@ export async function resolve(specifier, context, nextResolve) {
     (await exists(resolvedPath))
   ) {
     const result = compile(
+      // FIXME: we're calling it with the "correct" source from nextLoad later, but this will get cached
       String(await readFile(resolvedPath)),
       resolvedPath,
       true
@@ -187,7 +188,10 @@ async function getPackageType(url) {
   // this simple truthy check for whether `url` contains a file extension will
   // work for most projects but does not cover some edge-cases (such as
   // extensionless files or a url ending in a trailing space)
-  const isFilePath = !!extname(url);
+  const ext = extname(url);
+  if (ext === "cjs") return "commonjs";
+  if (ext === "mjs") return "module";
+  const isFilePath = !!ext;
   // If it is a file path, get the directory it's in
   const dir = isFilePath ? dirname(fileURLToPath(url)) : url;
   // Compose a file path to a package.json in the same directory,
