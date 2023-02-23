@@ -11,6 +11,7 @@ function runTest(fixture, args, output) {
     {
       stdio: "pipe",
       env: {
+        ...process.env,
         BABEL_REGISTER: join(__dirname, "fixtures", fixture, "register.mjs"),
       },
       cwd: join(__dirname, "fixtures", fixture),
