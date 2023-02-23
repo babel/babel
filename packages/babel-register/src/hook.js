@@ -78,6 +78,9 @@ exports.register = function register(client, opts = {}) {
   );
 
   client.setOptions(opts);
+
+  // HACK: this shouldn't be here, but we need to get it somehow
+  return () => ({ client, maps, installSourceMapSupport });
 };
 
 exports.revert = function revert() {
