@@ -1,9 +1,7 @@
 "use strict";
 
-const { addHook } = require("pirates");
 const sourceMapSupport = require("source-map-support");
 
-let piratesRevert;
 const maps = Object.create(null);
 
 function installSourceMapSupport() {
@@ -53,36 +51,31 @@ if (!process.env.BABEL_8_BREAKING) {
   };
 }
 
-function compile(client, inputCode, filename) {
+function compile(client, inputCode, filename, esm) {
   const result = client.transform(inputCode, filename);
 
   if (result === null) return inputCode;
 
-  const { code, map } = result;
+  const { code, map, sourceType } = result;
   if (map) {
     maps[filename] = map;
     installSourceMapSupport();
   }
+
+  if (esm) {
+    return {
+      source: code,
+      format: sourceType,
+      shortCircuit: true,
+    };
+  }
+
   return code;
 }
 
-exports.register = function register(client, opts = {}) {
-  if (piratesRevert) piratesRevert();
-
-  piratesRevert = addHook(
-    (process.env.BABEL_8_BREAKING ? compile : compileBabel7).bind(null, client),
-    {
-      exts: opts.extensions ?? client.getDefaultExtensions(),
-      ignoreNodeModules: false,
-    },
+exports.getCompileFunction = function getCompileFunction(client) {
+  return (process.env.BABEL_8_BREAKING ? compile : compileBabel7).bind(
+    null,
+    client,
   );
-
-  client.setOptions(opts);
-
-  // HACK: this shouldn't be here, but we need to get it somehow
-  return () => ({ client, maps, installSourceMapSupport });
-};
-
-exports.revert = function revert() {
-  if (piratesRevert) piratesRevert();
 };

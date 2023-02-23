@@ -5,9 +5,9 @@ import { dirname, extname, join, resolve as resolvePath } from "node:path";
 import { cwd, env } from "node:process";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import Module from "module";
+import { addHook } from "pirates";
+import { getCompileFunction } from "./src/hook-common.js";
 
-// TODO: make this work without that flag aswell
-env.BABEL_8_BREAKING = true;
 global.BABEL_FLAG = {};
 
 const { default: opts } = await import(
@@ -15,15 +15,19 @@ const { default: opts } = await import(
 );
 
 import { isInRegisterWorker } from "./src/is-in-register-worker.js";
+import { WorkerClient } from "./src/worker-client.js";
 
 let JS_EXTENSIONS;
-let magic;
-let client;
+let compile;
 
 if (!isInRegisterWorker) {
-  const { default: BabelWorker } = await import("./src/experimental-worker.js");
-  magic = BabelWorker(opts);
-  client = magic().client;
+  const client = new WorkerClient();
+  client.setOptions(opts);
+  compile = getCompileFunction(client);
+  addHook(compile, {
+    exts: opts.extensions ?? client.getDefaultExtensions(),
+    ignoreNodeModules: false,
+  });
   JS_EXTENSIONS = new Set(opts.extensions ?? client.getDefaultExtensions());
 }
 
@@ -112,9 +116,10 @@ export async function resolve(specifier, context, nextResolve) {
     JS_EXTENSIONS.has(ext) &&
     (await exists(resolvedPath))
   ) {
-    const result = client.transform(
+    const result = compile(
       String(await readFile(resolvedPath)),
-      resolvedPath
+      resolvedPath,
+      true
     );
 
     if (result === null) {
@@ -163,20 +168,10 @@ export async function load(url, context, nextLoad) {
     });
 
     const file = fileURLToPath(responseURL);
-    const result = client.transform(rawSource.toString(), file);
+    const result = compile(rawSource.toString(), file, true);
 
     if (result !== null) {
-      // console.log(file, result.sourceType)
-      if (result.map) {
-        const { maps, installSourceMapSupport } = magic();
-        maps[file] = result.map;
-        installSourceMapSupport();
-      }
-      return {
-        format: result.sourceType,
-        shortCircuit: true,
-        source: result.code,
-      };
+      return result;
     }
   }
 
