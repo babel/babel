@@ -112,7 +112,7 @@ export function getEarliestCommonAncestorFrom(
 
         // handle keys
         const earliestKeyIndex = keys.indexOf(earliest.parentKey);
-        const currentKeyIndex = keys.indexOf(path.parentKey as string);
+        const currentKeyIndex = keys.indexOf(path.parentKey);
         if (earliestKeyIndex > currentKeyIndex) {
           // key appears before so it's earlier
           earliest = path;
