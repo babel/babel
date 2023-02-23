@@ -23,6 +23,23 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.21.2 (2023-02-23)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#15439](https://github.com/babel/babel/pull/15439) fix: Throws on `new foo?.bar!()` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :nail_care: Polish
+* `babel-traverse`, `babel-types`
+  * [#15448](https://github.com/babel/babel/pull/15448) Reduce warnings for deprecated node aliases ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-types`
+  * [#15451](https://github.com/babel/babel/pull/15451) Update babel-types docs generator ([@JLHwung](https://github.com/JLHwung))
+
+#### :microscope: Output optimization
+* `babel-helper-module-transforms`, `babel-plugin-transform-modules-commonjs`
+  * [#15449](https://github.com/babel/babel/pull/15449) Avoid unnecessary code for unused lazy imports ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.21.1 (2023-02-20)
 
 #### :bug: Bug Fix
