@@ -11,7 +11,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import Module from "module";
 
 import { addHook } from "pirates";
-import { getCompileFunction } from "./hook-common.js";
+import setup from "./hook-common.js";
 import { isInRegisterWorker } from "./is-in-register-worker.js";
 
 let JS_EXTENSIONS;
@@ -20,12 +20,12 @@ let flag = {};
 let piratesRevert;
 
 global._BABEL_ESM_REGISTER = {
-  register(client, opts) {
+  register(clientType, opts) {
     if (!isInRegisterWorker) {
-      flag = {};
-      client.setOptions(opts);
+      const { client, compile: _compile } = setup(clientType, opts);
 
-      compile = getCompileFunction(client);
+      flag = {};
+      compile = _compile;
 
       // handle CJS
       piratesRevert = addHook(compile, {
@@ -34,15 +34,14 @@ global._BABEL_ESM_REGISTER = {
       });
 
       JS_EXTENSIONS = new Set(opts.extensions ?? client.getDefaultExtensions());
-
-      return () => {
-        if (piratesRevert) piratesRevert();
-        else return;
-        piratesRevert = null;
-        compile = null;
-        flag = {};
-      };
     }
+  },
+  revert() {
+    if (piratesRevert) piratesRevert();
+    else return;
+    piratesRevert = null;
+    compile = null;
+    flag = {};
   },
 };
 
@@ -195,6 +194,48 @@ export async function load(url, context, nextLoad) {
 
   // Let Node.js handle all other URLs.
   return nextLoad(url);
+}
+
+export function globalPreload({ port }) {
+  port.onmessage = evt => {
+    if (evt.data.opts) {
+      global._BABEL_ESM_REGISTER.register(evt.data.client, evt.data.opts);
+    } else if (evt.data.revert) {
+      global._BABEL_ESM_REGISTER.revert();
+    }
+  };
+  port.unref();
+
+  const fnc = {
+    register(client, opts) {
+      port.postMessage({ client, opts });
+    },
+    revert() {
+      port.postMessage({ revert: true });
+    },
+  };
+  return `\
+    globalThis._BABEL_ESM_REGISTER = { ${fnc.register.toString()}, ${fnc.revert.toString()} };
+    port.unref();
+  `;
+}
+
+export function getGlobalPreloadCode() {
+  const fnc = {
+    register() {
+      throw new Error(
+        "Modyfing @babel/register on-demand is not supported in this version of node"
+      );
+    },
+    revert() {
+      throw new Error(
+        "Modyfing @babel/register on-demand is not supported in this version of node"
+      );
+    },
+  };
+  return `\
+    globalThis._BABEL_ESM_REGISTER = { ${fnc.register.toString()}, ${fnc.revert.toString()} };
+  `;
 }
 
 // backwards compat

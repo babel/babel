@@ -1,6 +1,7 @@
 "use strict";
 
 const sourceMapSupport = require("source-map-support");
+const clients = require("./worker-client");
 
 const maps = Object.create(null);
 
@@ -73,9 +74,23 @@ function compile(client, inputCode, filename, esm) {
   return code;
 }
 
-exports.getCompileFunction = function getCompileFunction(client) {
-  return (process.env.BABEL_8_BREAKING ? compile : compileBabel7).bind(
-    null,
-    client,
-  );
+let clientType;
+let clientInstance;
+
+module.exports = function setup(client, opts) {
+  if (clientType !== client) {
+    const Class = clients[client];
+    clientInstance = new Class();
+    clientType = client;
+  }
+
+  clientInstance.setOptions(opts);
+
+  return {
+    compile: (process.env.BABEL_8_BREAKING ? compile : compileBabel7).bind(
+      null,
+      clientInstance,
+    ),
+    client: clientInstance,
+  };
 };

@@ -1,18 +1,18 @@
 "use strict";
 
-const { getCompileFunction } = require("./hook-common");
+const setup = require("./hook-common");
 const { addHook } = require("pirates");
 let piratesRevert;
 
-exports.register = function register(client, opts = {}) {
+exports.register = function register(clientType, opts = {}) {
+  const { client, compile } = setup(clientType, opts);
+
   if (piratesRevert) piratesRevert();
 
-  piratesRevert = addHook(getCompileFunction(client), {
+  piratesRevert = addHook(compile, {
     exts: opts.extensions ?? client.getDefaultExtensions(),
     ignoreNodeModules: false,
   });
-
-  client.setOptions(opts);
 };
 
 exports.revert = function revert() {

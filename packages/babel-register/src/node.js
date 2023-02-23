@@ -3,11 +3,9 @@
 "use strict";
 
 const hook = require("./hook-cjs");
-const { LocalClient } = require("./worker-client");
 
-const client = new LocalClient();
 function register(opts = {}) {
-  return hook.register(client, { ...opts });
+  return hook.register("LocalClient", { ...opts });
 }
 
 module.exports = Object.assign(register, {

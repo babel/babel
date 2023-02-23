@@ -11,12 +11,9 @@ if (major < 12 || (major === 12 && minor < 3)) {
 }
 
 const hook = require("./hook");
-const { WorkerClient } = require("./worker-client");
 
-let client;
 function register(opts) {
-  client ||= new WorkerClient();
-  return hook.register(client, opts);
+  return hook.register("WorkerClient", opts);
 }
 
 module.exports = Object.assign(register, {
