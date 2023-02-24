@@ -1,12 +1,12 @@
 {
   "type": "File",
-  "start":0,"end":237,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":9,"column":1,"index":237}},
+  "start":0,"end":84,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":84}},
   "errors": [
     "SyntaxError: Tuple members must be labeled with a simple identifier. (3:2)"
   ],
   "program": {
     "type": "Program",
-    "start":0,"end":237,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":9,"column":1,"index":237}},
+    "start":0,"end":84,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":84}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
@@ -34,7 +34,7 @@
               "elementType": {
                 "type": "TSFunctionType",
                 "start":41,"end":64,"loc":{"start":{"line":2,"column":12,"index":41},"end":{"line":2,"column":35,"index":64}},
-                "parameters": [
+                "params": [
                   {
                     "type": "RestElement",
                     "start":42,"end":56,"loc":{"start":{"line":2,"column":13,"index":42},"end":{"line":2,"column":27,"index":56}},
@@ -57,7 +57,7 @@
                     }
                   }
                 ],
-                "typeAnnotation": {
+                "returnType": {
                   "type": "TSTypeAnnotation",
                   "start":58,"end":64,"loc":{"start":{"line":2,"column":29,"index":58},"end":{"line":2,"column":35,"index":64}},
                   "typeAnnotation": {
@@ -82,152 +82,6 @@
             }
           ]
         }
-      },
-      {
-        "type": "VariableDeclaration",
-        "start":86,"end":237,"loc":{"start":{"line":6,"column":0,"index":86},"end":{"line":9,"column":1,"index":237}},
-        "declarations": [
-          {
-            "type": "VariableDeclarator",
-            "start":92,"end":237,"loc":{"start":{"line":6,"column":6,"index":92},"end":{"line":9,"column":1,"index":237}},
-            "id": {
-              "type": "Identifier",
-              "start":92,"end":133,"loc":{"start":{"line":6,"column":6,"index":92},"end":{"line":6,"column":47,"index":133},"identifierName":"fnWithDescriptions"},
-              "name": "fnWithDescriptions",
-              "typeAnnotation": {
-                "type": "TSTypeAnnotation",
-                "start":110,"end":133,"loc":{"start":{"line":6,"column":24,"index":110},"end":{"line":6,"column":47,"index":133}},
-                "typeAnnotation": {
-                  "type": "TSArrayType",
-                  "start":112,"end":133,"loc":{"start":{"line":6,"column":26,"index":112},"end":{"line":6,"column":47,"index":133}},
-                  "elementType": {
-                    "type": "TSTypeReference",
-                    "start":112,"end":131,"loc":{"start":{"line":6,"column":26,"index":112},"end":{"line":6,"column":45,"index":131}},
-                    "typeName": {
-                      "type": "Identifier",
-                      "start":112,"end":131,"loc":{"start":{"line":6,"column":26,"index":112},"end":{"line":6,"column":45,"index":131},"identifierName":"FuncWithDescription"},
-                      "name": "FuncWithDescription"
-                    }
-                  }
-                }
-              }
-            },
-            "init": {
-              "type": "ArrayExpression",
-              "start":136,"end":237,"loc":{"start":{"line":6,"column":50,"index":136},"end":{"line":9,"column":1,"index":237}},
-              "elements": [
-                {
-                  "type": "ArrayExpression",
-                  "start":140,"end":178,"loc":{"start":{"line":7,"column":2,"index":140},"end":{"line":7,"column":40,"index":178}},
-                  "elements": [
-                    {
-                      "type": "ArrowFunctionExpression",
-                      "start":141,"end":156,"loc":{"start":{"line":7,"column":3,"index":141},"end":{"line":7,"column":18,"index":156}},
-                      "id": null,
-                      "generator": false,
-                      "async": false,
-                      "params": [
-                        {
-                          "type": "Identifier",
-                          "start":142,"end":150,"loc":{"start":{"line":7,"column":4,"index":142},"end":{"line":7,"column":12,"index":150},"identifierName":"x"},
-                          "name": "x",
-                          "typeAnnotation": {
-                            "type": "TSTypeAnnotation",
-                            "start":143,"end":150,"loc":{"start":{"line":7,"column":5,"index":143},"end":{"line":7,"column":12,"index":150}},
-                            "typeAnnotation": {
-                              "type": "TSNumberKeyword",
-                              "start":144,"end":150,"loc":{"start":{"line":7,"column":6,"index":144},"end":{"line":7,"column":12,"index":150}}
-                            }
-                          }
-                        }
-                      ],
-                      "body": {
-                        "type": "Identifier",
-                        "start":155,"end":156,"loc":{"start":{"line":7,"column":17,"index":155},"end":{"line":7,"column":18,"index":156},"identifierName":"x"},
-                        "name": "x"
-                      }
-                    },
-                    {
-                      "type": "StringLiteral",
-                      "start":158,"end":177,"loc":{"start":{"line":7,"column":20,"index":158},"end":{"line":7,"column":39,"index":177}},
-                      "extra": {
-                        "rawValue": "return the number",
-                        "raw": "\"return the number\""
-                      },
-                      "value": "return the number"
-                    }
-                  ]
-                },
-                {
-                  "type": "ArrayExpression",
-                  "start":182,"end":235,"loc":{"start":{"line":8,"column":2,"index":182},"end":{"line":8,"column":55,"index":235}},
-                  "elements": [
-                    {
-                      "type": "ArrowFunctionExpression",
-                      "start":183,"end":210,"loc":{"start":{"line":8,"column":3,"index":183},"end":{"line":8,"column":30,"index":210}},
-                      "id": null,
-                      "generator": false,
-                      "async": false,
-                      "params": [
-                        {
-                          "type": "Identifier",
-                          "start":184,"end":192,"loc":{"start":{"line":8,"column":4,"index":184},"end":{"line":8,"column":12,"index":192},"identifierName":"x"},
-                          "name": "x",
-                          "typeAnnotation": {
-                            "type": "TSTypeAnnotation",
-                            "start":185,"end":192,"loc":{"start":{"line":8,"column":5,"index":185},"end":{"line":8,"column":12,"index":192}},
-                            "typeAnnotation": {
-                              "type": "TSNumberKeyword",
-                              "start":186,"end":192,"loc":{"start":{"line":8,"column":6,"index":186},"end":{"line":8,"column":12,"index":192}}
-                            }
-                          }
-                        },
-                        {
-                          "type": "Identifier",
-                          "start":194,"end":202,"loc":{"start":{"line":8,"column":14,"index":194},"end":{"line":8,"column":22,"index":202},"identifierName":"y"},
-                          "name": "y",
-                          "typeAnnotation": {
-                            "type": "TSTypeAnnotation",
-                            "start":195,"end":202,"loc":{"start":{"line":8,"column":15,"index":195},"end":{"line":8,"column":22,"index":202}},
-                            "typeAnnotation": {
-                              "type": "TSNumberKeyword",
-                              "start":196,"end":202,"loc":{"start":{"line":8,"column":16,"index":196},"end":{"line":8,"column":22,"index":202}}
-                            }
-                          }
-                        }
-                      ],
-                      "body": {
-                        "type": "BinaryExpression",
-                        "start":207,"end":210,"loc":{"start":{"line":8,"column":27,"index":207},"end":{"line":8,"column":30,"index":210}},
-                        "left": {
-                          "type": "Identifier",
-                          "start":207,"end":208,"loc":{"start":{"line":8,"column":27,"index":207},"end":{"line":8,"column":28,"index":208},"identifierName":"x"},
-                          "name": "x"
-                        },
-                        "operator": "*",
-                        "right": {
-                          "type": "Identifier",
-                          "start":209,"end":210,"loc":{"start":{"line":8,"column":29,"index":209},"end":{"line":8,"column":30,"index":210},"identifierName":"y"},
-                          "name": "y"
-                        }
-                      }
-                    },
-                    {
-                      "type": "StringLiteral",
-                      "start":212,"end":234,"loc":{"start":{"line":8,"column":32,"index":212},"end":{"line":8,"column":54,"index":234}},
-                      "extra": {
-                        "rawValue": "multiply the numbers",
-                        "raw": "\"multiply the numbers\""
-                      },
-                      "value": "multiply the numbers"
-                    }
-                  ]
-                }
-              ]
-            }
-          }
-        ],
-        "kind": "const"
       }
     ],
     "directives": []
