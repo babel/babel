@@ -11,6 +11,7 @@ import {
   type TokenType,
   tokenIsTemplate,
   tokenCanStartExpression,
+  tokenIsKeyword,
 } from "../../tokenizer/types";
 import { types as tc } from "../../tokenizer/context";
 import type * as N from "../../types";
@@ -1099,13 +1100,16 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return this.finishNode(node, "TSTupleType");
     }
 
-    tsParseTupleElementType(): N.TsType | N.TsNamedTupleMember {
+    tsParseTupleElementType(): N.TsNamedTupleMember | N.TsType {
       // parses `...TsType[]`
 
       const { startLoc } = this.state;
 
       const rest = this.eat(tt.ellipsis);
-      let type: N.TsType | N.TsNamedTupleMember = this.tsParseType();
+      const isKeyword = tokenIsKeyword(this.state.type);
+      let type: N.TsNamedTupleMember | N.TsType | N.Identifier = isKeyword
+        ? this.parseIdentifier(true)
+        : this.tsParseType();
       const optional = this.eat(tt.question);
       const labeled = this.eat(tt.colon);
 
@@ -1113,34 +1117,36 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         const labeledNode = this.startNodeAtNode<N.TsNamedTupleMember>(type);
         labeledNode.optional = optional;
 
-        if (
-          type.type === "TSTypeReference" &&
-          !type.typeParameters &&
-          type.typeName.type === "Identifier"
-        ) {
-          labeledNode.label = type.typeName;
+        if (isKeyword) {
+          labeledNode.label = type as N.Identifier;
         } else {
-          this.raise(TSErrors.InvalidTupleMemberLabel, { at: type });
-          // @ts-expect-error This produces an invalid AST, but at least we don't drop
-          // nodes representing the invalid source.
-          labeledNode.label = type;
+          if (
+            type.type === "TSTypeReference" &&
+            !type.typeParameters &&
+            type.typeName.type === "Identifier"
+          ) {
+            labeledNode.label = type.typeName;
+          } else {
+            this.raise(TSErrors.InvalidTupleMemberLabel, { at: type });
+            // @ts-expect-error This produces an invalid AST, but at least we don't drop
+            // nodes representing the invalid source.
+            labeledNode.label = type;
+          }
         }
-
         labeledNode.elementType = this.tsParseType();
         type = this.finishNode(labeledNode, "TSNamedTupleMember");
       } else if (optional) {
         const optionalTypeNode = this.startNodeAtNode<N.TsOptionalType>(type);
-        optionalTypeNode.typeAnnotation = type;
+        optionalTypeNode.typeAnnotation = type as N.TsType;
         type = this.finishNode(optionalTypeNode, "TSOptionalType");
       }
-
       if (rest) {
         const restNode = this.startNodeAt<N.TsRestType>(startLoc);
-        restNode.typeAnnotation = type;
+        restNode.typeAnnotation = type as N.TsType;
         type = this.finishNode(restNode, "TSRestType");
       }
 
-      return type;
+      return type as N.TsNamedTupleMember | N.TsType;
     }
 
     tsParseParenthesizedType(): N.TsParenthesizedType {
