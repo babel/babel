@@ -1,9 +1,6 @@
 {
   "type": "File",
   "start":0,"end":90,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":90}},
-  "errors": [
-    "SyntaxError: Tuple members must be labeled with a simple identifier. (3:2)"
-  ],
   "program": {
     "type": "Program",
     "start":0,"end":90,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":90}},
@@ -72,8 +69,9 @@
               "start":74,"end":88,"loc":{"start":{"line":3,"column":2,"index":74},"end":{"line":3,"column":16,"index":88}},
               "optional": false,
               "label": {
-                "type": "TSStringKeyword",
-                "start":74,"end":80,"loc":{"start":{"line":3,"column":2,"index":74},"end":{"line":3,"column":8,"index":80}}
+                "type": "Identifier",
+                "start":74,"end":80,"loc":{"start":{"line":3,"column":2,"index":74},"end":{"line":3,"column":8,"index":80},"identifierName":"string"},
+                "name": "string"
               },
               "elementType": {
                 "type": "TSStringKeyword",

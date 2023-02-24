@@ -11,7 +11,6 @@ import {
   type TokenType,
   tokenIsTemplate,
   tokenCanStartExpression,
-  tokenIsKeyword,
 } from "../../tokenizer/types";
 import { types as tc } from "../../tokenizer/context";
 import type * as N from "../../types";
@@ -1106,47 +1105,87 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       const { startLoc } = this.state;
 
       const rest = this.eat(tt.ellipsis);
-      const isKeyword = tokenIsKeyword(this.state.type);
-      let type: N.TsNamedTupleMember | N.TsType | N.Identifier = isKeyword
-        ? this.parseIdentifier(true)
-        : this.tsParseType();
-      const optional = this.eat(tt.question);
-      const labeled = this.eat(tt.colon);
+
+      let labeled: boolean;
+      let label: N.Identifier;
+      let optional: boolean;
+      let type: N.TsNamedTupleMember | N.TsType;
+
+      const isWord = tokenIsKeywordOrIdentifier(this.state.type);
+      if (isWord && this.lookaheadCharCode() === charCodes.colon) {
+        labeled = true;
+        optional = false;
+        label = this.parseIdentifier(true);
+        this.expect(tt.colon);
+        type = this.tsParseType();
+      } else if (
+        isWord &&
+        this.lookaheadCharCode() === charCodes.questionMark
+      ) {
+        optional = true;
+        const startLoc = this.state.startLoc;
+        const wordName = this.state.value;
+        const typeOrLabel = this.tsParseNonArrayType();
+
+        if (this.lookaheadCharCode() === charCodes.colon) {
+          labeled = true;
+          label = this.createIdentifier(
+            this.startNodeAt<N.Identifier>(startLoc),
+            wordName,
+          );
+          this.expect(tt.question);
+          this.expect(tt.colon);
+          type = this.tsParseType();
+        } else {
+          labeled = false;
+          type = typeOrLabel;
+          this.expect(tt.question);
+        }
+      } else {
+        type = this.tsParseType();
+        optional = this.eat(tt.question);
+        labeled = this.eat(tt.colon);
+      }
 
       if (labeled) {
-        const labeledNode = this.startNodeAtNode<N.TsNamedTupleMember>(type);
-        labeledNode.optional = optional;
-
-        if (isKeyword) {
-          labeledNode.label = type as N.Identifier;
+        let labeledNode: Undone<N.TsNamedTupleMember>;
+        if (label) {
+          labeledNode = this.startNodeAtNode<N.TsNamedTupleMember>(label);
+          labeledNode.optional = optional;
+          labeledNode.label = label;
+          labeledNode.elementType = type;
         } else {
+          labeledNode = this.startNodeAtNode<N.TsNamedTupleMember>(type);
+          labeledNode.optional = optional;
           if (
             type.type === "TSTypeReference" &&
             !type.typeParameters &&
             type.typeName.type === "Identifier"
           ) {
             labeledNode.label = type.typeName;
+            labeledNode.elementType = this.tsParseType();
           } else {
             this.raise(TSErrors.InvalidTupleMemberLabel, { at: type });
             // @ts-expect-error This produces an invalid AST, but at least we don't drop
             // nodes representing the invalid source.
             labeledNode.label = type;
+            labeledNode.elementType = this.tsParseType();
           }
         }
-        labeledNode.elementType = this.tsParseType();
         type = this.finishNode(labeledNode, "TSNamedTupleMember");
       } else if (optional) {
         const optionalTypeNode = this.startNodeAtNode<N.TsOptionalType>(type);
-        optionalTypeNode.typeAnnotation = type as N.TsType;
+        optionalTypeNode.typeAnnotation = type;
         type = this.finishNode(optionalTypeNode, "TSOptionalType");
       }
+
       if (rest) {
         const restNode = this.startNodeAt<N.TsRestType>(startLoc);
-        restNode.typeAnnotation = type as N.TsType;
+        restNode.typeAnnotation = type;
         type = this.finishNode(restNode, "TSRestType");
       }
 
-      return type as N.TsNamedTupleMember | N.TsType;
+      return type;
     }
 
     tsParseParenthesizedType(): N.TsParenthesizedType {
