@@ -1144,6 +1144,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       } else {
         type = this.tsParseType();
         optional = this.eat(tt.question);
+        // In this case (labeled === true) could be only in invalid label.
+        // E.g. [x.y:type]
+        // An error is raised while processing node.
         labeled = this.eat(tt.colon);
       }
 
@@ -1157,20 +1160,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         } else {
           labeledNode = this.startNodeAtNode<N.TsNamedTupleMember>(type);
           labeledNode.optional = optional;
-          if (
-            type.type === "TSTypeReference" &&
-            !type.typeParameters &&
-            type.typeName.type === "Identifier"
-          ) {
-            labeledNode.label = type.typeName;
-            labeledNode.elementType = this.tsParseType();
-          } else {
-            this.raise(TSErrors.InvalidTupleMemberLabel, { at: type });
-            // @ts-expect-error This produces an invalid AST, but at least we don't drop
-            // nodes representing the invalid source.
-            labeledNode.label = type;
-            labeledNode.elementType = this.tsParseType();
-          }
+          this.raise(TSErrors.InvalidTupleMemberLabel, { at: type });
+          // @ts-expect-error This produces an invalid AST, but at least we don't drop
+          // nodes representing the invalid source.
+          labeledNode.label = type;
+          labeledNode.elementType = this.tsParseType();
         }
         type = this.finishNode(labeledNode, "TSNamedTupleMember");
       } else if (optional) {
