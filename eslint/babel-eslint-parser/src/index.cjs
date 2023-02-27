@@ -5,6 +5,10 @@ const baseParse = require("./parse.cjs");
 const { LocalClient, WorkerClient } = require("./client.cjs");
 const client = new (USE_ESM ? WorkerClient : LocalClient)();
 
+exports.meta = {
+  name: "@babel/eslint-parser"
+};
+
 exports.parse = function (code, options = {}) {
   return baseParse(code, normalizeESLintConfig(options), client);
 };
