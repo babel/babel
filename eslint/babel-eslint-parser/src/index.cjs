@@ -6,7 +6,7 @@ const { LocalClient, WorkerClient } = require("./client.cjs");
 const client = new (USE_ESM ? WorkerClient : LocalClient)();
 
 exports.meta = {
-  name: "@babel/eslint-parser"
+  name: "@babel/eslint-parser",
 };
 
 exports.parse = function (code, options = {}) {
