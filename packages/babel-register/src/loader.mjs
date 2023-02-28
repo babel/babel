@@ -247,7 +247,7 @@ export async function getFormat(url, context, next) {
   if (flag[url]) {
     const format = await getPackageType(url);
     return {
-      format,
+      format: format || "commonjs",
     };
   }
   return next(url, context, next);

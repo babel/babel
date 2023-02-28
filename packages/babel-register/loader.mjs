@@ -1,4 +1,4 @@
-import {
+/*import {
   load as _load,
   resolve as _resolve,
   getSource as _getSource,
@@ -16,3 +16,6 @@ export const globalPreload = major >= 16 && _globalPreload;
 export const getSource = major < 16 && _getSource;
 export const getFormat = major < 16 && _getFormat;
 export const getGlobalPreloadCode = major < 16 && _getGlobalPreloadCode;
+*/
+
+export * from "./lib/loader.mjs";
