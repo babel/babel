@@ -36,7 +36,11 @@ global._BABEL_ESM_REGISTER = {
         ignoreNodeModules: false,
       });
 
-      JS_EXTENSIONS = new Set(opts.extensions ?? client.getDefaultExtensions());
+      JS_EXTENSIONS = new Set(
+        opts.extensions != null
+          ? opts.extensions
+          : client.getDefaultExtensions()
+      );
     }
   },
   revert() {
