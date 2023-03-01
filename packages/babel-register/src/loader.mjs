@@ -29,7 +29,10 @@ global._BABEL_ESM_REGISTER = {
 
       // handle CJS
       piratesRevert = addHook(compile, {
-        exts: opts.extensions ?? client.getDefaultExtensions(),
+        exts:
+          opts.extensions != null
+            ? opts.extensions
+            : client.getDefaultExtensions(),
         ignoreNodeModules: false,
       });
 
