@@ -265,8 +265,8 @@ async function getPackageType(url) {
   // work for most projects but does not cover some edge-cases (such as
   // extensionless files or a url ending in a trailing space)
   const ext = extname(url);
-  if (ext === "cjs") return "commonjs";
-  if (ext === "mjs") return "module";
+  if (ext === ".cjs") return "commonjs";
+  if (ext === ".mjs") return "module";
   const isFilePath = !!ext;
   // If it is a file path, get the directory it's in
   const dir = isFilePath ? dirname(fileURLToPath(url)) : url;
