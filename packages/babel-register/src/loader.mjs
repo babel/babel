@@ -36,11 +36,7 @@ global._BABEL_ESM_REGISTER = {
         ignoreNodeModules: false,
       });
 
-      JS_EXTENSIONS = new Set(
-        opts.extensions != null
-          ? opts.extensions
-          : client.getDefaultExtensions()
-      );
+      JS_EXTENSIONS = new Set(opts.extensions ?? client.getDefaultExtensions());
     }
   },
   revert() {
@@ -52,10 +48,14 @@ global._BABEL_ESM_REGISTER = {
   },
 };
 
+let readyPromise;
+
 if (env.BABEL_REGISTER) {
-  const { default: opts } = await import(env.BABEL_REGISTER);
-  const { default: register } = await import("./experimental-worker.js");
-  register(opts);
+  readyPromise = (async () => {
+    const { default: opts } = await import(env.BABEL_REGISTER);
+    const { default: register } = await import("./experimental-worker.js");
+    register(opts);
+  })();
 }
 
 function tryCJSResolve(specifier, context) {
@@ -104,6 +104,11 @@ async function exists(path) {
 }
 
 export async function resolve(specifier, context, nextResolve) {
+  if (readyPromise) {
+    await readyPromise;
+    readyPromise = null;
+  }
+
   if (!compile) {
     return nextResolve(specifier, context);
   }
