@@ -5,7 +5,7 @@
 const hook = require("./hook-cjs");
 
 function register(opts = {}) {
-  return hook.register("LocalClient", { ...opts });
+  return hook.register("LocalClient", opts);
 }
 
 module.exports = Object.assign(register, {

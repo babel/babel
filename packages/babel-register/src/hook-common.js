@@ -84,7 +84,10 @@ module.exports = function setup(client, opts) {
     clientType = client;
   }
 
-  clientInstance.setOptions(opts);
+  // the worker modifies those options and the changes get synced by node,
+  // thereby removing options such as extensions
+  // so we need to clone the whole thing
+  clientInstance.setOptions({ ...opts });
 
   return {
     compile: (process.env.BABEL_8_BREAKING ? compile : compileBabel7).bind(
