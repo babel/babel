@@ -9,6 +9,10 @@ import {
 
 const [major] = process.versions.node.split(".").map(Number);
 
+if (major < 12) {
+  throw new Error("--experimental-loader is supported no earlier than node 12");
+}
+
 export const load = _load;
 export const resolve = _resolve;
 export const globalPreload = _globalPreload;

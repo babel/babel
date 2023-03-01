@@ -4,6 +4,8 @@ import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+const [major] = process.versions.node.split(".").map(Number);
+
 function runTest(fixture, args, output) {
   const out = spawnSync(
     "node",
@@ -22,6 +24,12 @@ function runTest(fixture, args, output) {
   expect(out.error).toBeUndefined();
   expect(out.signal).toBeNull();
   expect(String(out.stdout)).toEqual(output);
+}
+
+// skip everything if below version 12
+if (major < 12) {
+  // eslint-disable-next-line no-global-assign
+  it = it.skip;
 }
 
 describe("experimental-loader", () => {
