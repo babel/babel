@@ -178,17 +178,18 @@ module.exports = function (api) {
         },
       ],
     ],
-    plugins: [
-      ["@babel/proposal-object-rest-spread", { useBuiltIns: true }],
-
-      convertESM ? "@babel/proposal-export-namespace-from" : null,
-      convertESM ? pluginImportMetaUrl : null,
-
-      pluginPackageJsonMacro,
-
-      needsPolyfillsForOldNode && pluginPolyfillsOldNode,
-    ].filter(Boolean),
+    plugins: [["@babel/proposal-object-rest-spread", { useBuiltIns: true }]],
     overrides: [
+      convertESM && {
+        exclude: /\.mjs$/,
+        plugins: ["@babel/proposal-export-namespace-from", pluginImportMetaUrl],
+      },
+      {
+        plugins: [pluginPackageJsonMacro],
+      },
+      needsPolyfillsForOldNode && {
+        plugins: [pluginPolyfillsOldNode],
+      },
       {
         test: [
           "packages/babel-parser",
@@ -268,7 +269,7 @@ module.exports = function (api) {
       },
       convertESM && {
         test: sources.map(normalize),
-        exclude: lazyRequireSources.map(normalize),
+        exclude: lazyRequireSources.map(normalize).concat([/\.mjs$/]),
         plugins: [
           [
             "@babel/transform-modules-commonjs",

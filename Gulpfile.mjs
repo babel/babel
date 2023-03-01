@@ -38,7 +38,7 @@ const require = createRequire(import.meta.url);
 const monorepoRoot = path.dirname(fileURLToPath(import.meta.url));
 
 const defaultPackagesGlob = "./@(codemods|packages|eslint)/*";
-const defaultSourcesGlob = `${defaultPackagesGlob}/src/**/{*.js,*.cjs,!(*.d).ts}`;
+const defaultSourcesGlob = `${defaultPackagesGlob}/src/**/{*.js,*.cjs,*.mjs,!(*.d).ts}`;
 
 const babelStandalonePluginConfigGlob =
   "./packages/babel-standalone/scripts/pluginConfig.json";
@@ -705,12 +705,6 @@ gulp.task(
   gulp.series("copy-dts", () => buildRollupDts(dtsBundles))
 );
 
-gulp.task("build-other", () =>
-  getFiles(`packages/babel-register/src/loader.mjs`, {})
-    .pipe(rename(file => path.resolve(file.base, mapSrcToLib(file.relative))))
-    .pipe(gulp.dest(monorepoRoot))
-);
-
 gulp.task("build-babel", () => buildBabel(true, /* exclude */ libBundles));
 
 gulp.task("build-vendor", async () => {
@@ -805,8 +799,7 @@ gulp.task(
     // rebuild @babel/types and @babel/helpers since
     // type-helpers and generated helpers may be changed
     "build-babel",
-    gulp.parallel("generate-standalone", "build-cjs-bundles"),
-    "build-other"
+    gulp.parallel("generate-standalone", "build-cjs-bundles")
   )
 );
 
@@ -822,7 +815,6 @@ gulp.task(
   gulp.series(
     "build-vendor",
     "build-no-bundle",
-    "build-other",
     gulp.parallel(
       "generate-standalone",
       "generate-runtime-helpers",
