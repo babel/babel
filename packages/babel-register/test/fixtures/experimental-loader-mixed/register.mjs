@@ -7,5 +7,5 @@ export default {
     cwd: __dirname,
     only: [join(__dirname, 'src')],
     presets: ['module:@babel/preset-typescript'],
-    extensions: ['.ts', '.js'],
+    extensions: ['.ts', '.js', '.cjs'],
 }
