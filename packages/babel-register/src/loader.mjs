@@ -49,7 +49,7 @@ global._BABEL_ESM_REGISTER = {
 };
 
 if (env.BABEL_REGISTER) {
-  const { default: opts } = await import(env.BABEL_REGISTER);
+  const { default: opts } = await import(pathToFileURL(env.BABEL_REGISTER));
   const { default: register } = await import("./experimental-worker.js");
   register(opts);
 }

@@ -1,6 +1,6 @@
 import { spawnSync } from "child_process";
 import { dirname, join } from "path";
-import { fileURLToPath } from "url";
+import { fileURLToPath, pathToFileURL } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -9,7 +9,11 @@ const [major] = process.versions.node.split(".").map(Number);
 function runTest(fixture, args, output) {
   const out = spawnSync(
     "node",
-    ["--experimental-loader", join(__dirname, "..", "loader.mjs"), ...args],
+    [
+      "--experimental-loader",
+      pathToFileURL(join(__dirname, "../loader.mjs")),
+      ...args,
+    ],
     {
       stdio: "pipe",
       env: {
