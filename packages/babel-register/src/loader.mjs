@@ -137,7 +137,7 @@ export async function resolve(specifier, context, nextResolve) {
   ) {
     const result = compile(
       // FIXME: we're calling it with the "correct" source from nextLoad later, but this will get cached
-      String(await readFile(resolvedPath)),
+      await readFile(resolvedPath, "utf8"),
       resolvedPath,
       true
     );

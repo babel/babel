@@ -8,7 +8,7 @@ const [major] = process.versions.node.split(".").map(Number);
 
 function runTest(fixture, args, output) {
   const out = spawnSync(
-    "node",
+    process.execPath,
     [
       "--experimental-loader",
       pathToFileURL(join(__dirname, "../loader.mjs")),
