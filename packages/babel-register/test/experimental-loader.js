@@ -48,4 +48,8 @@ describe("experimental-loader", () => {
       "Hello Babel\n",
     );
   });
+
+  it("mixed test", () => {
+    runTest("experimental-loader-mixed", ["src/bin.ts"], "Hello Babel\n");
+  });
 });
