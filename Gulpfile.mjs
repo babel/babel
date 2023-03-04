@@ -444,6 +444,33 @@ function buildRollup(packages, buildStandalone) {
               preferBuiltins: !buildStandalone,
             }),
             rollupJson(),
+            // inline enums
+            src === "packages/babel-parser" &&
+              rollupTerser({
+                // workaround https://bugs.webkit.org/show_bug.cgi?id=212725
+                format: {
+                  ascii_only: true,
+
+                  beautify: true,
+                  comments: true,
+                  indent_level: 2,
+                },
+                mangle: false,
+                compress: {
+                  defaults: false,
+
+                  collapse_vars: true,
+                  conditionals: true,
+                  dead_code: true,
+                  evaluate: true,
+                  hoist_props: true,
+                  if_return: true,
+                  join_vars: true,
+                  properties: true,
+                  reduce_vars: true,
+                  unused: true,
+                },
+              }),
             buildStandalone &&
               rollupPolyfillNode({
                 sourceMap: sourcemap,
