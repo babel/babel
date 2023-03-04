@@ -1,4 +1,3 @@
-var E;
-(function (E) {
+var E = /*#__PURE__*/function (E) {
   E["A"] = "HALLOWERLD";
-})(E || (E = {}));
+}(E || {});

@@ -1,5 +1,4 @@
-var E;
-(function (E) {
+var E = /*#__PURE__*/function (E) {
   E[E["x"] = 0] = "x";
   E[E["y"] = 1] = "y";
-})(E || (E = {}));
+}(E || {});

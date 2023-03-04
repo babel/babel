@@ -1,10 +1,9 @@
 var x = 10;
-var Foo;
-(function (Foo) {
+var Foo = /*#__PURE__*/function (Foo) {
   Foo[Foo["a"] = 10] = "a";
   Foo[Foo["b"] = 10] = "b";
   Foo[Foo["c"] = 20] = "c";
-})(Foo || (Foo = {}));
+}(Foo || {});
 var Bar;
 (function (Bar) {
   Bar[Bar["D"] = 10] = "D";
