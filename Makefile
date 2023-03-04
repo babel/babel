@@ -86,6 +86,9 @@ test: lint test-only
 clone-license:
 	$(MAKEJS) clone-license
 
+prepublish-prepare-dts:
+	$(MAKEJS) prepublish-prepare-dts
+
 prepublish-build:
 	$(MAKEJS) prepublish-build
 

@@ -181,7 +181,7 @@ jobs:
       - name: Extract artifacts
         run: tar -xf babel-artifact.tar; rm babel-artifact.tar
       - name: Lint
-        run: make -j tscheck lint-ci
+        run: make -j prepublish-prepare-dts lint-ci
       - name: Ensure cwd does not contain uncommitted changes
         run: |
           node ./scripts/assert-dir-git-clean.js code-quality
