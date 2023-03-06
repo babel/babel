@@ -8,7 +8,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-class-static-block { safari }
+  transform-class-static-block { safari }
   syntax-private-property-in-object
   syntax-class-properties
   syntax-numeric-separator
@@ -19,8 +19,8 @@ Using plugins:
   transform-parameters { safari }
   syntax-async-generators
   syntax-object-rest-spread
-  proposal-export-namespace-from { safari }
+  transform-export-namespace-from { safari }
   transform-modules-commonjs
-  proposal-dynamic-import
+  transform-dynamic-import
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
