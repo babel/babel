@@ -451,6 +451,8 @@ function buildRollup(packages, buildStandalone) {
                 format: {
                   ascii_only: true,
 
+                  ecma: 2015,
+
                   beautify: true,
                   comments: true,
                   indent_level: 2,
