@@ -7,7 +7,7 @@ const {
   generateData,
   environments,
   writeFile,
-  defineLegacyPluginAliases,
+  maybeDefineLegacyPluginAliases,
 } = require("./utils-build-data");
 
 if (process.cwd().endsWith("scripts")) {
@@ -33,9 +33,7 @@ for (const target of ["plugin", "corejs2-built-in"]) {
     newData["transform-export-namespace-from"] = exportNamespaceFromCompatData;
 
     // Add proposal-* aliases for backward compatibility.
-    if (!process.env.BABEL_8_BREAKING) {
-      newData = defineLegacyPluginAliases(newData);
-    }
+    newData = maybeDefineLegacyPluginAliases(newData);
   }
   const dataPath = path.join(__dirname, `../data/${target}s.json`);
 

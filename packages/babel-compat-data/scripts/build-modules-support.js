@@ -2,7 +2,7 @@ const path = require("path");
 
 const compatData = require("@mdn/browser-compat-data").javascript;
 const { addElectronSupportFromChromium } = require("./chromium-to-electron");
-const { writeFile } = require("./utils-build-data");
+const { writeFile, babel7Only } = require("./utils-build-data");
 
 // Map mdn-browser-compat-data to browserslist browser names
 const browserNameMap = {
@@ -61,11 +61,11 @@ function generateModuleSupport(source) {
 
 const dataPath = path.join(__dirname, "../data/native-modules.json");
 const processed = generateModuleSupport(compatData.statements.export);
-if (!process.env.BABEL_8_BREAKING) {
+babel7Only(() => {
   if (processed.ios) {
     processed.ios_saf = processed.ios;
   }
-}
+});
 const data = {
   "es6.module": processed,
 };

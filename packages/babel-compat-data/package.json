@@ -12,20 +12,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "conditions": {
-    "BABEL_8_BREAKING": [
-      null,
-      {
-        "exports": {
-          "./plugins": "./plugins.js",
-          "./corejs2-built-ins": "./corejs2-built-ins.js",
-          "./native-modules": "./native-modules.js",
-          "./overlapping-plugins": "./overlapping-plugins.js",
-          "./plugin-bugfixes": "./plugin-bugfixes.js"
-        }
-      }
-    ]
-  },
   "exports": {
     "./plugins": "./plugins.js",
     "./native-modules": "./native-modules.js",
