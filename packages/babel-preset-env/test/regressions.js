@@ -1,4 +1,4 @@
-import * as babel7_12 from "@babel/core";
+import * as babel7_12 from "@babel/core-7.12";
 import env from "../lib/index.js";
 import path from "path";
 import { fileURLToPath } from "url";
