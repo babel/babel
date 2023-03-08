@@ -320,7 +320,7 @@ describe("babel-preset-env", () => {
       log = jest.spyOn(console, "log").mockImplementation(() => {});
     });
     afterEach(() => {
-      jest.restoreAllMocks();
+      log.restoreMock();
     });
 
     itBabel7(
