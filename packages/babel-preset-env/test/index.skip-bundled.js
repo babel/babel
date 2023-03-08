@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/extensions
 import compatData from "@babel/compat-data/plugins";
+import * as babel from "@babel/core";
 
 import * as babelPresetEnv from "../lib/index.js";
 
@@ -33,6 +34,9 @@ if (/* commonjs */ _transformations.default) {
   pluginCoreJS3 = _pluginCoreJS3_esm;
   pluginRegenerator = _pluginRegenerator_esm;
 }
+
+const itBabel7 = process.env.BABEL_8_BREAKING ? it.skip : it;
+const itBabel8 = process.env.BABEL_8_BREAKING ? it : it.skip;
 
 describe("babel-preset-env", () => {
   describe("transformIncludesAndExcludes", () => {
@@ -308,5 +312,41 @@ describe("babel-preset-env", () => {
       .sort();
 
     expect(arrAvailablePlugins).toEqual(expect.arrayContaining(arrCompatData));
+  });
+
+  describe("debug", () => {
+    let log;
+    beforeEach(() => {
+      log = jest.spyOn(console, "log").mockImplementation(() => {});
+    });
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    itBabel7(
+      "logs proposal- for packages that were proposals during the Babel 7 lifetime",
+      () => {
+        babel.transformSync("code", {
+          configFile: false,
+          browserslistConfigFile: false,
+          presets: [[babelPresetEnv.default, { debug: true }]],
+        });
+        expect(log).toHaveBeenCalledWith(expect.stringContaining("proposal-"));
+      },
+    );
+
+    itBabel8(
+      "logs transform- for packages that were proposals during the Babel 7 lifetime",
+      () => {
+        babel.transformSync("code", {
+          configFile: false,
+          browserslistConfigFile: false,
+          presets: [[babelPresetEnv.default, { debug: true }]],
+        });
+        expect(log).not.toHaveBeenCalledWith(
+          expect.stringContaining("proposal-"),
+        );
+      },
+    );
   });
 });

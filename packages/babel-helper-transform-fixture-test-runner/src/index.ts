@@ -441,6 +441,13 @@ function normalizeOutput(code: string, normalizePathSeparator?: boolean) {
       );
     }
   }
+
+  // In Babel 8, preset-env logs transform- instead of proposal-. Manually rewrite
+  // the output logs so that we don't have to duplicate all the debug fixtures for
+  // the two different Babel versions.
+  // TODO(Babel 8): Remove this.
+  result = result.replace(/(\s+)proposal-/gm, "$1transform-");
+
   return result;
 }
 
