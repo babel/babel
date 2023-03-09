@@ -86,14 +86,35 @@ function loadCtsDefault(filepath: string) {
     handler = function (m, filename) {
       // If we want to support `.ts`, `.d.ts` must be handled specially.
       if (handler && filename.endsWith(ext)) {
-        // @ts-expect-error Undocumented API
-        return m._compile(
-          transformFileSync(filename, {
-            ...opts,
+        try {
+          // @ts-expect-error Undocumented API
+          return m._compile(
+            transformFileSync(filename, {
+              ...opts,
+              filename,
+            }).code,
             filename,
-          }).code,
-          filename,
-        );
+          );
+        } catch (error) {
+          if (!hasTsSupport) {
+            const packageJson = require("@babel/preset-typescript/package.json");
+
+            if (
+              semver.lte(
+                // eslint-disable-next-line import/no-extraneous-dependencies
+                packageJson.version,
+                "7.21.0",
+              ) &&
+              // ignore the version check if not published
+              !packageJson.conditions
+            ) {
+              console.error(
+                "`.cts` configuration file failed to load, please try to update `@babel/preset-typescript`.",
+              );
+            }
+          }
+          throw error;
+        }
       }
       return require.extensions[".js"](m, filename);
     };
@@ -134,22 +155,6 @@ async function loadMjsDefault(filepath: string) {
 
 function getTSPreset(filepath: string) {
   try {
-    const packageJson = require("@babel/preset-typescript/package.json");
-
-    if (
-      semver.lte(
-        // eslint-disable-next-line import/no-extraneous-dependencies
-        packageJson.version,
-        "7.21.0",
-      ) &&
-      // ignore the version check if not published
-      !packageJson.conditions
-    ) {
-      throw new ConfigError(
-        "The installed version of `@babel/preset-typescript` is too old to support `.cts` configuration files.",
-        filepath,
-      );
-    }
     // eslint-disable-next-line import/no-extraneous-dependencies
     return require("@babel/preset-typescript");
   } catch (error) {
