@@ -209,15 +209,7 @@ export function StringLiteral(this: Printer, node: t.StringLiteral) {
     return;
   }
 
-  const val = jsesc(
-    node.value,
-    process.env.BABEL_8_BREAKING
-      ? this.format.jsescOption
-      : Object.assign(
-          this.format.jsescOption,
-          this.format.jsonCompatibleStrings && { json: true },
-        ),
-  );
+  const val = jsesc(node.value, this.format.jsescOption);
 
   return this.token(val);
 }

@@ -78,6 +78,9 @@ function normalizeOptions(
   if (!process.env.BABEL_8_BREAKING) {
     format.decoratorsBeforeExport = opts.decoratorsBeforeExport;
     format.jsonCompatibleStrings = opts.jsonCompatibleStrings;
+    if (format.jsonCompatibleStrings) {
+      format.jsescOption.json = true;
+    }
   }
 
   if (format.minified) {
