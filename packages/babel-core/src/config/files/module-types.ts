@@ -68,16 +68,16 @@ function loadCtsDefault(filepath: string) {
       configFile: false,
       sourceType: "script",
       sourceMaps: "inline",
+      sourceFileName: path.basename(filepath),
       presets: [
         [
           getTSPreset(filepath),
           {
-            disallowAmbiguousJSXLike: true,
             onlyRemoveTypeImports: true,
             optimizeConstEnums: true,
             ...(process.env.BABEL_8_BREAKING
-              ? { ignoreExtensions: true }
-              : { allExtensions: true, allowDeclareFields: true }),
+              ? {}
+              : { allowDeclareFields: true }),
           },
         ],
       ],
@@ -100,7 +100,8 @@ function loadCtsDefault(filepath: string) {
     require.extensions[ext] = handler;
   }
   try {
-    return endHiddenCallStack(require)(filepath);
+    const module = endHiddenCallStack(require)(filepath);
+    return module?.__esModule ? module.default : module;
   } finally {
     if (!hasTsSupport) {
       if (require.extensions[ext] === handler) delete require.extensions[ext];

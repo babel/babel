@@ -1,6 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
 import {
-  isModule,
   rewriteModuleStatementsAndPrepareHeader,
   type RewriteModuleStatementsAndPrepareHeaderOptions,
   isSideEffectImport,
@@ -8,6 +7,7 @@ import {
   ensureStatementsHoisted,
   wrapInterop,
   getModuleName,
+  isModuleOrCts,
 } from "@babel/helper-module-transforms";
 import simplifyAccess from "@babel/helper-simple-access";
 import { template, types as t } from "@babel/core";
@@ -183,7 +183,7 @@ export default declare((api, options: Options) => {
 
       Program: {
         exit(path, state) {
-          if (!isModule(path)) return;
+          if (!isModuleOrCts(path)) return;
 
           // Rename the bindings auto-injected into the scope so there is no
           // risk of conflict between the bindings.

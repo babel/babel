@@ -17,7 +17,7 @@ import {
 import type * as t from "@babel/types";
 import template from "@babel/template";
 
-import { isModule } from "@babel/helper-module-imports";
+import { isModule, isModuleOrCts } from "@babel/helper-module-imports";
 
 import rewriteThis from "./rewrite-this";
 import rewriteLiveReferences from "./rewrite-live-references";
@@ -40,7 +40,7 @@ export { buildDynamicImport, getDynamicImportSource } from "./dynamic-import";
 export { default as getModuleName } from "./get-module-name";
 export type { PluginOptions } from "./get-module-name";
 
-export { hasExports, isSideEffectImport, isModule, rewriteThis };
+export { hasExports, isSideEffectImport, isModule, isModuleOrCts, rewriteThis };
 
 export interface RewriteModuleStatementsAndPrepareHeaderOptions {
   exportName?: string;
@@ -86,7 +86,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
   }: RewriteModuleStatementsAndPrepareHeaderOptions,
 ) {
   validateImportInteropOption(importInterop);
-  assert(isModule(path), "Cannot process module statements in a script");
+  assert(isModuleOrCts(path), "Cannot process module statements in a script");
   path.node.sourceType = "script";
 
   const meta = normalizeModuleAndLoadMetadata(path, exportName, {
