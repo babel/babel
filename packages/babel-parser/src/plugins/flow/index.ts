@@ -692,16 +692,13 @@ export default (superClass: typeof Parser) =>
       node: Undone<N.FlowDeclareInterface>,
     ): N.FlowDeclareInterface {
       this.next();
-      this.flowParseInterfaceish(node);
+      this.flowParseInterfaceish(node, /* isClass */ false);
       return this.finishNode(node, "DeclareInterface");
     }
 
     // Interfaces
 
-    flowParseInterfaceish(
-      node: Undone<N.FlowDeclare>,
-      isClass: boolean = false,
-    ): void {
+    flowParseInterfaceish(node: Undone<N.FlowDeclare>, isClass: boolean): void {
       node.id = this.flowParseRestrictedIdentifier(
         /* liberal */ !isClass,
         /* declaration */ true,
@@ -729,18 +726,18 @@ export default (superClass: typeof Parser) =>
         } while (!isClass && this.eat(tt.comma));
       }
 
-      if (this.isContextual(tt._mixins)) {
-        this.next();
-        do {
-          node.mixins.push(this.flowParseInterfaceExtends());
-        } while (this.eat(tt.comma));
-      }
+      if (isClass) {
+        if (this.eatContextual(tt._mixins)) {
+          do {
+            node.mixins.push(this.flowParseInterfaceExtends());
+          } while (this.eat(tt.comma));
+        }
 
-      if (this.isContextual(tt._implements)) {
-        this.next();
-        do {
-          node.implements.push(this.flowParseInterfaceExtends());
-        } while (this.eat(tt.comma));
+        if (this.eatContextual(tt._implements)) {
+          do {
+            node.implements.push(this.flowParseInterfaceExtends());
+          } while (this.eat(tt.comma));
+        }
       }
 
       node.body = this.flowParseObjectType({
@@ -766,7 +763,7 @@ export default (superClass: typeof Parser) =>
     }
 
     flowParseInterface(node: Undone<N.FlowInterface>): N.FlowInterface {
-      this.flowParseInterfaceish(node);
+      this.flowParseInterfaceish(node, /* isClass */ false);
       return this.finishNode(node, "InterfaceDeclaration");
     }
 
