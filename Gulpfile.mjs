@@ -9,7 +9,10 @@ import chalk from "chalk";
 import filter from "gulp-filter";
 import gulp from "gulp";
 import { rollup } from "rollup";
-import { babel as rollupBabel } from "@rollup/plugin-babel";
+import {
+  babel as rollupBabel,
+  getBabelOutputPlugin,
+} from "@rollup/plugin-babel";
 import rollupCommonJs from "@rollup/plugin-commonjs";
 import rollupJson from "@rollup/plugin-json";
 import rollupPolyfillNode from "rollup-plugin-polyfill-node";
@@ -444,34 +447,56 @@ function buildRollup(packages, buildStandalone) {
               preferBuiltins: !buildStandalone,
             }),
             rollupJson(),
-            // inline enums
             src === "packages/babel-parser" &&
-              rollupTerser({
-                // workaround https://bugs.webkit.org/show_bug.cgi?id=212725
-                format: {
-                  ascii_only: true,
+              getBabelOutputPlugin({
+                configFile: false,
+                babelrc: false,
+                plugins: [
+                  function babelPluginInlineConstNumericObjects({ types: t }) {
+                    return {
+                      visitor: {
+                        VariableDeclarator(path) {
+                          const { node } = path;
+                          if (
+                            !t.isIdentifier(node.id) ||
+                            !t.isObjectExpression(node.init)
+                          ) {
+                            return;
+                          }
 
-                  ecma: 2015,
+                          const binding = path.scope.getBinding(node.id.name);
+                          if (!binding.constant) return;
 
-                  beautify: true,
-                  comments: true,
-                  indent_level: 2,
-                },
-                mangle: false,
-                compress: {
-                  defaults: false,
+                          const vals = new Map();
+                          for (const { key, value } of node.init.properties) {
+                            if (!t.isIdentifier(key)) return;
+                            if (!t.isNumericLiteral(value)) return;
+                            vals.set(key.name, value.value);
+                          }
 
-                  collapse_vars: true,
-                  conditionals: true,
-                  dead_code: true,
-                  evaluate: true,
-                  hoist_props: true,
-                  if_return: true,
-                  join_vars: true,
-                  properties: true,
-                  reduce_vars: true,
-                  unused: true,
-                },
+                          let all = true;
+                          binding.referencePaths.forEach(({ parentPath }) => {
+                            const { node } = parentPath;
+                            if (
+                              !t.isMemberExpression(node) ||
+                              !t.isIdentifier(node.property) ||
+                              node.computed ||
+                              !vals.has(node.property.name)
+                            ) {
+                              all = false;
+                              return;
+                            }
+                            parentPath.replaceWith(
+                              t.numericLiteral(vals.get(node.property.name))
+                            );
+                          });
+
+                          if (all) path.remove();
+                        },
+                      },
+                    };
+                  },
+                ],
               }),
             buildStandalone &&
               rollupPolyfillNode({
