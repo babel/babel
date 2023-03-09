@@ -134,18 +134,22 @@ async function loadMjsDefault(filepath: string) {
 
 function getTSPreset(filepath: string) {
   try {
-    // if (
-    //   semver.lte(
-    //     // eslint-disable-next-line import/no-extraneous-dependencies
-    //     require("@babel/preset-typescript/package.json").version,
-    //     "7.21.0",
-    //   )
-    // ) {
-    //   throw new ConfigError(
-    //     "The installed version of `@babel/preset-typescript` is too old to support `.cts` configuration files.",
-    //     filepath,
-    //   );
-    // }
+    const packageJson = require("@babel/preset-typescript/package.json");
+
+    if (
+      semver.lte(
+        // eslint-disable-next-line import/no-extraneous-dependencies
+        packageJson.version,
+        "7.21.0",
+      ) &&
+      // ignore the version check if not published
+      !packageJson.conditions
+    ) {
+      throw new ConfigError(
+        "The installed version of `@babel/preset-typescript` is too old to support `.cts` configuration files.",
+        filepath,
+      );
+    }
     // eslint-disable-next-line import/no-extraneous-dependencies
     return require("@babel/preset-typescript");
   } catch (error) {

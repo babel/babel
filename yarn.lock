@@ -3581,6 +3581,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/preset-typescript@npm:^7.21.0":
+  version: 7.21.0
+  resolution: "@babel/preset-typescript@npm:7.21.0"
+  dependencies:
+    "@babel/helper-plugin-utils": ^7.20.2
+    "@babel/helper-validator-option": ^7.21.0
+    "@babel/plugin-transform-typescript": ^7.21.0
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: 6e1f4d7294de2678fbaf36035e98847b2be432f40fe7a1204e5e45b8b05bcbe22902fe0d726e16af14de5bc08987fae28a7899871503fd661050d85f58755af6
+  languageName: node
+  linkType: hard
+
 "@babel/preset-typescript@workspace:^, @babel/preset-typescript@workspace:packages/babel-preset-typescript":
   version: 0.0.0-use.local
   resolution: "@babel/preset-typescript@workspace:packages/babel-preset-typescript"
@@ -6038,19 +6051,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-preset-stable-typescript@npm:@babel/preset-typescript@^7.21.0":
-  version: 7.21.0
-  resolution: "@babel/preset-typescript@npm:7.21.0"
-  dependencies:
-    "@babel/helper-plugin-utils": ^7.20.2
-    "@babel/helper-validator-option": ^7.21.0
-    "@babel/plugin-transform-typescript": ^7.21.0
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  checksum: 6e1f4d7294de2678fbaf36035e98847b2be432f40fe7a1204e5e45b8b05bcbe22902fe0d726e16af14de5bc08987fae28a7899871503fd661050d85f58755af6
-  languageName: node
-  linkType: hard
-
 "babel@workspace:.":
   version: 0.0.0-use.local
   resolution: "babel@workspace:."
@@ -6067,6 +6067,7 @@ __metadata:
     "@babel/plugin-transform-modules-commonjs": ^7.21.2
     "@babel/plugin-transform-runtime": ^7.21.0
     "@babel/preset-env": ^7.20.2
+    "@babel/preset-typescript": ^7.21.0
     "@babel/runtime": ^7.21.0
     "@rollup/plugin-babel": ^5.3.1
     "@rollup/plugin-commonjs": ^22.0.2
@@ -6077,7 +6078,6 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^5.55.0
     "@typescript-eslint/parser": ^5.55.0
     babel-plugin-transform-charcodes: ^0.2.0
-    babel-preset-stable-typescript: "npm:@babel/preset-typescript@^7.21.0"
     c8: ^7.12.0
     chalk: ^5.0.0
     charcodes: ^0.2.0
