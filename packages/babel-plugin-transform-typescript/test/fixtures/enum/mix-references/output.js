@@ -3,6 +3,7 @@ var Foo = /*#__PURE__*/function (Foo) {
   Foo[Foo["a"] = 10] = "a";
   Foo[Foo["b"] = 10] = "b";
   Foo[Foo["c"] = 20] = "c";
+  return Foo;
 }(Foo || {});
 var Bar;
 (function (Bar) {

@@ -3,4 +3,5 @@ var E = /*#__PURE__*/function (E) {
   E["B"] = "";
   E[E["A2"] = 0] = "A2";
   E["B2"] = "";
+  return E;
 }(E || {});

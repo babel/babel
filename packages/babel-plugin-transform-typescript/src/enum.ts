@@ -16,6 +16,7 @@ const buildPureEnumWrapper = template.expression(
   `
   /*#__PURE__*/(function (ID) {
     ASSIGNMENTS;
+    return ID;
   })(ID || {})
 `,
   { preserveComments: true },

@@ -1,3 +1,5 @@
-var None = /*#__PURE__*/function (None) {}(None || {});
+var None = /*#__PURE__*/function (None) {
+  return None;
+}(None || {});
 ;
 export {};
