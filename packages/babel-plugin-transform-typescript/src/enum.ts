@@ -195,9 +195,7 @@ export function translateEnumValues(path: NodePath<t.TSEnumDeclaration>, t: t) {
             value = t.stringLiteral(constValue);
           }
         } else {
-          if (isPure && !initializerPath.isPure()) {
-            isPure = false;
-          }
+          isPure &&= initializerPath.isPure();
 
           if (initializerPath.isReferencedIdentifier()) {
             ReferencedIdentifier(initializerPath, {
