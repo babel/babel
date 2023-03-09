@@ -12,8 +12,9 @@ let N;
     _N8._N5 = _N5;
   })(N || (N = _N2.N || (_N2.N = {})));
   (function (_N9) {
-    let _N;
-    (function (_N) {})(_N || (_N = {}));
+    let _N = /*#__PURE__*/function (_N) {
+      return _N;
+    }({});
     _N9._N = _N;
   })(N || (N = _N2.N || (_N2.N = {})));
 })(N || (N = {}));

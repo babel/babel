@@ -1,32 +1,26 @@
 import { template, types as t } from "@babel/core";
 import type { NodePath } from "@babel/traverse";
 import assert from "assert";
+import annotateAsPure from "@babel/helper-annotate-as-pure";
 
 type t = typeof t;
 
 const ENUMS = new WeakMap<t.Identifier, PreviousEnumMembers>();
 
-const buildEnumWrapper = template.statement(`
-  (function (ID) {
-    ASSIGNMENTS;
-  })(ID || (ID = {}));
-`);
-
-const buildPureEnumWrapper = template.expression(
+const buildEnumWrapper = template.expression(
   `
-  /*#__PURE__*/(function (ID) {
-    ASSIGNMENTS;
-    return ID;
-  })(ID || {})
-`,
-  { preserveComments: true },
+    (function (ID) {
+      ASSIGNMENTS;
+      return ID;
+    })(INIT)
+  `,
 );
 
 export default function transpileEnum(
   path: NodePath<t.TSEnumDeclaration>,
   t: t,
 ) {
-  const { node } = path;
+  const { node, parentPath } = path;
 
   if (node.declare) {
     path.remove();
@@ -36,46 +30,37 @@ export default function transpileEnum(
   const name = node.id.name;
   const { fill, data, isPure } = enumFill(path, t, node.id);
 
-  switch (path.parent.type) {
+  switch (parentPath.type) {
     case "BlockStatement":
     case "ExportNamedDeclaration":
     case "Program": {
       // todo: Consider exclude program with import/export
       // && !path.parent.body.some(n => t.isImportDeclaration(n) || t.isExportDeclaration(n));
       const isGlobal = t.isProgram(path.parent);
+      const isSeen = seen(parentPath);
 
-      if (isPure && isGlobal) {
-        if (seen(path.parentPath)) {
-          path.replaceWith(
-            t.assignmentExpression(
-              "=",
-              t.cloneNode(node.id),
-              buildPureEnumWrapper(fill),
-            ),
-          );
-        } else {
-          path.scope.registerDeclaration(
-            path.replaceWith(
-              t.variableDeclaration("var", [
-                t.variableDeclarator(node.id, buildPureEnumWrapper(fill)),
-              ]),
-            )[0],
-          );
-        }
+      let init: t.Expression = t.objectExpression([]);
+      if (isSeen || isGlobal) {
+        init = t.logicalExpression("||", t.cloneNode(fill.ID), init);
+      }
+      const enumIIFE = buildEnumWrapper({ ...fill, INIT: init });
+      if (isPure) annotateAsPure(enumIIFE);
+
+      if (isSeen) {
+        const toReplace = parentPath.isExportDeclaration() ? parentPath : path;
+        toReplace.replaceWith(
+          t.expressionStatement(
+            t.assignmentExpression("=", t.cloneNode(node.id), enumIIFE),
+          ),
+        );
       } else {
-        path.insertAfter(buildEnumWrapper(fill));
-
-        if (seen(path.parentPath)) {
-          path.remove();
-        } else {
-          path.scope.registerDeclaration(
-            path.replaceWith(
-              t.variableDeclaration(isGlobal ? "var" : "let", [
-                t.variableDeclarator(node.id),
-              ]),
-            )[0],
-          );
-        }
+        path.scope.registerDeclaration(
+          path.replaceWith(
+            t.variableDeclaration(isGlobal ? "var" : "let", [
+              t.variableDeclarator(node.id, enumIIFE),
+            ]),
+          )[0],
+        );
       }
       ENUMS.set(path.scope.getBindingIdentifier(name), data);
       break;

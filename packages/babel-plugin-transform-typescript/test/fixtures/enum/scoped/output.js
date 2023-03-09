@@ -1,5 +1,6 @@
 {
   // Uses 'let' within a scope
-  let E;
-  (function (E) {})(E || (E = {}));
+  let E = /*#__PURE__*/function (E) {
+    return E;
+  }({});
 }

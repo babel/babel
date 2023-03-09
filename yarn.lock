@@ -3303,6 +3303,7 @@ __metadata:
   resolution: "@babel/plugin-transform-typescript@workspace:packages/babel-plugin-transform-typescript"
   dependencies:
     "@babel/core": "workspace:^"
+    "@babel/helper-annotate-as-pure": "workspace:^"
     "@babel/helper-create-class-features-plugin": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"

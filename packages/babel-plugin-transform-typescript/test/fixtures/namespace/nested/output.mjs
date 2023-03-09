@@ -14,20 +14,20 @@ class A {}
   _A.D = D;
   (function (_D) {
     const C = 5;
-    let H;
-    (function (H) {
+    let H = /*#__PURE__*/function (H) {
       H[H["I"] = 11] = "I";
       H[H["J"] = 13] = "J";
       H[H["K"] = 17] = "K";
-    })(H || (H = {}));
+      return H;
+    }({});
     _D.H = H;
   })(D || (D = _A.D || (_A.D = {})));
   class F {}
   (function (_F) {})(F || (F = {}));
   let G;
   (function (_G) {})(G || (G = {}));
-  let L;
-  (function (L) {
+  let L = /*#__PURE__*/function (L) {
     L[L["M"] = 19] = "M";
-  })(L || (L = {}));
+    return L;
+  }({});
 })(A || (A = {}));
