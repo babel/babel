@@ -9,7 +9,10 @@ import chalk from "chalk";
 import filter from "gulp-filter";
 import gulp from "gulp";
 import { rollup } from "rollup";
-import { babel as rollupBabel } from "@rollup/plugin-babel";
+import {
+  babel as rollupBabel,
+  getBabelOutputPlugin,
+} from "@rollup/plugin-babel";
 import rollupCommonJs from "@rollup/plugin-commonjs";
 import rollupJson from "@rollup/plugin-json";
 import rollupPolyfillNode from "rollup-plugin-polyfill-node";
@@ -444,6 +447,57 @@ function buildRollup(packages, buildStandalone) {
               preferBuiltins: !buildStandalone,
             }),
             rollupJson(),
+            src === "packages/babel-parser" &&
+              getBabelOutputPlugin({
+                configFile: false,
+                babelrc: false,
+                plugins: [
+                  function babelPluginInlineConstNumericObjects({ types: t }) {
+                    return {
+                      visitor: {
+                        VariableDeclarator(path) {
+                          const { node } = path;
+                          if (
+                            !t.isIdentifier(node.id) ||
+                            !t.isObjectExpression(node.init)
+                          ) {
+                            return;
+                          }
+
+                          const binding = path.scope.getBinding(node.id.name);
+                          if (!binding.constant) return;
+
+                          const vals = new Map();
+                          for (const { key, value } of node.init.properties) {
+                            if (!t.isIdentifier(key)) return;
+                            if (!t.isNumericLiteral(value)) return;
+                            vals.set(key.name, value.value);
+                          }
+
+                          let all = true;
+                          binding.referencePaths.forEach(({ parentPath }) => {
+                            const { node } = parentPath;
+                            if (
+                              !t.isMemberExpression(node) ||
+                              !t.isIdentifier(node.property) ||
+                              node.computed ||
+                              !vals.has(node.property.name)
+                            ) {
+                              all = false;
+                              return;
+                            }
+                            parentPath.replaceWith(
+                              t.numericLiteral(vals.get(node.property.name))
+                            );
+                          });
+
+                          if (all) path.remove();
+                        },
+                      },
+                    };
+                  },
+                ],
+              }),
             buildStandalone &&
               rollupPolyfillNode({
                 sourceMap: sourcemap,
