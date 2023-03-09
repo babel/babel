@@ -12,11 +12,13 @@ import type { PluginTarget } from "./validation/options";
 import type {
   PluginAPI as basePluginAPI,
   PresetAPI as basePresetAPI,
+  ConfigAPI as baseConfigAPI,
 } from "./helpers/config-api";
 export type { PluginObject } from "./validation/plugins";
 type PluginAPI = basePluginAPI & typeof import("..");
 type PresetAPI = basePresetAPI & typeof import("..");
-export type { PluginAPI, PresetAPI };
+type ConfigAPI = baseConfigAPI & typeof import("..");
+export type { PluginAPI, PresetAPI, ConfigAPI };
 // todo: may need to refine PresetObject to be a subset of ValidatedOptions
 export type {
   CallerMetadata,

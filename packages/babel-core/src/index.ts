@@ -40,6 +40,7 @@ export type {
   PluginObject,
   PresetAPI,
   PresetObject,
+  ConfigAPI,
 } from "./config";
 
 export {

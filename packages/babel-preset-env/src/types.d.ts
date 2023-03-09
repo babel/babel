@@ -21,7 +21,7 @@ export type CorejsOption =
 export type PluginListItem = string | RegExp;
 export type PluginListOption = Array<PluginListItem>;
 
-export type Options = {
+export type Options = Partial<{
   bugfixes: boolean;
   configPath: string;
   corejs: CorejsOption;
@@ -40,7 +40,7 @@ export type Options = {
   } & InputTargets;
   useBuiltIns: BuiltInsOption;
   browserslistEnv: string;
-};
+}>;
 
 // Babel
 export type Plugin = [any, any];

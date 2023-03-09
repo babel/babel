@@ -1,14 +1,18 @@
 "use strict";
 
-const pathUtils = require("path");
-const fs = require("fs");
-const { parseSync } = require("@babel/core");
+import pathUtils from "path";
+import fs from "fs";
+import { parseSync } from "@babel/core";
+import { Options as EnvOpts } from "./packages/babel-preset-env/src/types";
+import type { ConfigAPI, PluginAPI, PluginObject } from "@babel/core";
+import type * as t from "@babel/types";
+import type { NodePath } from "@babel/traverse";
 
-function normalize(src) {
+function normalize(src: string) {
   return src.replace(/\//, pathUtils.sep);
 }
 
-module.exports = function (api) {
+export default function (api: ConfigAPI) {
   const env = api.env();
 
   const outputType = api.cache.invalidate(() => {
@@ -21,7 +25,7 @@ module.exports = function (api) {
 
   const sources = ["packages/*/src", "codemods/*/src", "eslint/*/src"];
 
-  const envOpts = {
+  const envOpts: EnvOpts = {
     shippedProposals: true,
     modules: false,
     exclude: [
@@ -61,8 +65,9 @@ module.exports = function (api) {
 
   let targets = {};
   let convertESM = outputType === "script";
-  /** @type {false | "externals" | "always"} */
-  let addImportExtension = convertESM ? false : "always";
+  let addImportExtension: false | "externals" | "always" = convertESM
+    ? false
+    : "always";
   let ignoreLib = true;
   let includeRegeneratorRuntime = false;
   let needsPolyfillsForOldNode = false;
@@ -297,9 +302,9 @@ module.exports = function (api) {
   };
 
   return config;
-};
+}
 
-let monorepoPackages;
+let monorepoPackages: string[];
 function getMonorepoPackages() {
   if (!monorepoPackages) {
     monorepoPackages = ["codemods", "eslint", "packages"]
@@ -310,7 +315,7 @@ function getMonorepoPackages() {
   return monorepoPackages;
 }
 
-function importInteropSrc(source, filename) {
+function importInteropSrc(source: string, filename: string) {
   if (
     // These internal files are "real CJS" (whose default export is
     // on module.exports) and not compiled ESM.
@@ -334,7 +339,7 @@ function importInteropSrc(source, filename) {
   return "node";
 }
 
-function importInteropTest(source) {
+function importInteropTest(source: string) {
   // This file will soon have an esm entrypoint
   if (source === "@babel/helper-plugin-test-runner") {
     return "none";
@@ -351,7 +356,7 @@ function importInteropTest(source) {
 }
 
 // env vars from the cli are always strings, so !!ENV_VAR returns true for "false"
-function bool(value) {
+function bool(value: string | undefined) {
   return value && value !== "false" && value !== "0";
 }
 
@@ -370,9 +375,16 @@ function bool(value) {
 // `((v,w)=>(v=v.split("."),w=w.split("."),+v[0]>+w[0]||v[0]==w[0]&&+v[1]>=+w[1]))`;
 
 // TODO(Babel 8) This polyfills are only needed for Node.js 6 and 8
-/** @param {import("@babel/core")} api */
-function pluginPolyfillsOldNode({ template, types: t }) {
-  const polyfills = [
+function pluginPolyfillsOldNode({
+  template,
+  types: t,
+}: PluginAPI): PluginObject {
+  const polyfills: {
+    name: string;
+    necessary({ node, parent }: NodePath): boolean;
+    supported({ parent }: NodePath & { parent: t.CallExpression }): boolean;
+    replacement: () => t.Statement | t.Statement[];
+  }[] = [
     {
       name: "require.resolve",
       necessary({ node, parent }) {
@@ -385,6 +397,7 @@ function pluginPolyfillsOldNode({ template, types: t }) {
         return (
           t.isObjectExpression(args[1]) &&
           args[1].properties.length === 1 &&
+          t.isObjectProperty(args[1].properties[0]) &&
           t.isIdentifier(args[1].properties[0].key, { name: "paths" }) &&
           t.isArrayExpression(args[1].properties[0].value) &&
           args[1].properties[0].value.elements.length === 1
@@ -418,6 +431,7 @@ function pluginPolyfillsOldNode({ template, types: t }) {
         return (
           t.isObjectExpression(args[1]) &&
           args[1].properties.length === 1 &&
+          t.isObjectProperty(args[1].properties[0]) &&
           t.isIdentifier(args[1].properties[0].key, { name: "recursive" }) &&
           t.isBooleanLiteral(args[1].properties[0].value, { value: true })
         );
@@ -455,12 +469,17 @@ function pluginPolyfillsOldNode({ template, types: t }) {
           if (!path.matchesPattern(polyfill.name)) continue;
 
           if (!polyfill.necessary(path)) return;
-          if (!polyfill.supported(path)) {
+          if (
+            !polyfill.supported(
+              path as unknown as NodePath & { parent: t.CallExpression }
+            )
+          ) {
             throw path.buildCodeFrameError(
               `This '${polyfill.name}' usage is not supported by the inline polyfill.`
             );
           }
 
+          // @ts-expect-error
           path.replaceWith(polyfill.replacement());
 
           break;
@@ -470,12 +489,11 @@ function pluginPolyfillsOldNode({ template, types: t }) {
   };
 }
 
-/**
- * @param {import("@babel/core")} pluginAPI
- * @returns {import("@babel/core").PluginObj}
- */
-function pluginToggleBooleanFlag({ types: t }, { name, value }) {
-  function check(test) {
+function pluginToggleBooleanFlag(
+  { types: t }: PluginAPI,
+  { name, value }: { name: string; value: boolean }
+): PluginObject {
+  function check(test: NodePath<t.Expression>) {
     let keepConsequent = value;
 
     if (test.isUnaryExpression({ operator: "!" })) {
@@ -490,7 +508,9 @@ function pluginToggleBooleanFlag({ types: t }, { name, value }) {
 
   return {
     visitor: {
-      "IfStatement|ConditionalExpression"(path) {
+      "IfStatement|ConditionalExpression"(
+        path: NodePath<t.IfStatement | t.ConditionalExpression>
+      ) {
         // eslint-disable-next-line prefer-const
         let { test, keepConsequent } = check(path.get("test"));
 
@@ -501,7 +521,7 @@ function pluginToggleBooleanFlag({ types: t }, { name, value }) {
           test.get("callee").isIdentifier({ name: "bool" }) &&
           test.get("arguments").length === 1
         ) {
-          test = test.get("arguments")[0];
+          test = test.get("arguments")[0] as NodePath<t.Expression>;
         }
 
         if (!test.isIdentifier({ name }) && !test.matchesPattern(name)) return;
@@ -546,7 +566,7 @@ function pluginToggleBooleanFlag({ types: t }, { name, value }) {
   };
 }
 
-function pluginPackageJsonMacro({ types: t }) {
+function pluginPackageJsonMacro({ types: t }: PluginAPI): PluginObject {
   const fnName = "PACKAGE_JSON";
 
   return {
@@ -566,13 +586,14 @@ function pluginPackageJsonMacro({ types: t }) {
             `"${fnName}" does not support computed properties.`
           );
         }
+        // @ts-expect-error
         const field = path.node.property.name;
 
         // TODO: When dropping old Node.js versions, use require.resolve
         // instead of looping through the folders hierarchy
 
         let pkg;
-        for (let dir = pathUtils.dirname(this.filename); ; ) {
+        for (let dir = pathUtils.dirname(this.filename as string); ; ) {
           try {
             pkg = fs.readFileSync(pathUtils.join(dir, "package.json"), "utf8");
             break;
@@ -602,7 +623,7 @@ function transformNamedBabelTypesImportToDestructuring({
     variableDeclarator,
     variableDeclaration,
   },
-}) {
+}: PluginAPI): PluginObject {
   return {
     name: "transform-babel-types-named-imports",
     visitor: {
@@ -614,12 +635,16 @@ function transformNamedBabelTypesImportToDestructuring({
           node.specifiers[0].type === "ImportSpecifier"
         ) {
           const hoistedDestructuringProperties = [];
-          for (const { imported, local } of node.specifiers) {
+          for (const {
+            imported,
+            local,
+          } of node.specifiers as t.ImportSpecifier[]) {
             hoistedDestructuringProperties.push(
               objectProperty(
                 imported,
                 local,
                 false,
+                // @ts-expect-error
                 imported.name === local.name
               )
             );
@@ -640,16 +665,22 @@ function transformNamedBabelTypesImportToDestructuring({
   };
 }
 
-function pluginImportMetaUrl({ types: t, template }) {
-  const isImportMeta = node =>
-    t.isMetaProperty(node) &&
-    t.isIdentifier(node.meta, { name: "import" }) &&
-    t.isIdentifier(node.property, { name: "meta" });
+function pluginImportMetaUrl({ types: t, template }: PluginAPI): PluginObject {
+  const isImportMeta = function (node: t.Node) {
+    return (
+      t.isMetaProperty(node) &&
+      t.isIdentifier(node.meta, { name: "import" }) &&
+      t.isIdentifier(node.property, { name: "meta" })
+    );
+  };
 
-  const isImportMetaUrl = node =>
-    t.isMemberExpression(node, { computed: false }) &&
-    t.isIdentifier(node.property, { name: "url" }) &&
-    isImportMeta(node.object);
+  const isImportMetaUrl = function (node: t.Node) {
+    return (
+      t.isMemberExpression(node, { computed: false }) &&
+      t.isIdentifier(node.property, { name: "url" }) &&
+      isImportMeta(node.object)
+    );
+  };
 
   return {
     visitor: {
@@ -719,27 +750,31 @@ function pluginImportMetaUrl({ types: t, template }) {
     },
   };
 }
-
-function pluginAddImportExtension(api, { when }) {
+function pluginAddImportExtension(
+  api: PluginAPI,
+  { when }: { when: "always" | "never" }
+): PluginObject {
   return {
     visitor: {
-      "ImportDeclaration|ExportDeclaration"({ node }) {
+      "ImportDeclaration|ExportDeclaration"({
+        node,
+      }: NodePath<t.ImportDeclaration | t.ExportDeclaration>) {
+        if (!("source" in node)) return;
         const { source } = node;
-        if (!source) return;
 
         if (
           when === "always" &&
           source.value.startsWith(".") &&
           !/\.[a-z]+$/.test(source.value)
         ) {
-          const dir = pathUtils.dirname(this.filename);
+          const dir = pathUtils.dirname(this.filename as string);
 
           try {
             const pkg = JSON.parse(
               fs.readFileSync(
-                pathUtils.join(dir, `${source.value}/package.json`)
-              ),
-              "utf8"
+                pathUtils.join(dir, `${source.value}/package.json`),
+                "utf8"
+              )
             );
 
             if (pkg.main) source.value = pathUtils.join(source.value, pkg.main);
@@ -787,7 +822,7 @@ function getTokenTypesMapping() {
       }),
       {
         configFile: false,
-        parserOpts: { attachComments: false, plugins: ["typescript"] },
+        parserOpts: { attachComment: false, plugins: ["typescript"] },
       }
     );
 
@@ -820,7 +855,7 @@ function getTokenTypesMapping() {
 
 function pluginBabelParserTokenType({
   types: { isIdentifier, numericLiteral },
-}) {
+}: PluginAPI): PluginObject {
   return {
     visitor: {
       MemberExpression(path) {
@@ -847,7 +882,10 @@ function pluginBabelParserTokenType({
 // Inject `0 && exports.foo = 0` hints for the specified exports,
 // to help the Node.js CJS-ESM interop. This is only
 // needed when compiling ESM re-exports to CJS in `lazy` mode.
-function pluginInjectNodeReexportsHints({ types: t, template }, { names }) {
+function pluginInjectNodeReexportsHints(
+  { types: t, template }: PluginAPI,
+  { names }: { names: string[] }
+): PluginObject {
   return {
     visitor: {
       Program: {
@@ -860,8 +898,8 @@ function pluginInjectNodeReexportsHints({ types: t, template }, { names }) {
               !expr.isCallExpression() ||
               !expr.get("callee").matchesPattern("Object.defineProperty") ||
               expr.node.arguments.length !== 3 ||
-              !expr.get("arguments.0").isIdentifier({ name: "exports" }) ||
-              !expr.get("arguments.1").isStringLiteral() ||
+              !t.isIdentifier(expr.node.arguments[0], { name: "exports" }) ||
+              !t.isStringLiteral(expr.node.arguments[1]) ||
               !names.includes(expr.node.arguments[1].value)
             ) {
               continue;
@@ -884,11 +922,7 @@ function pluginInjectNodeReexportsHints({ types: t, template }, { names }) {
   };
 }
 
-/**
- * @param {import("@babel/core")} pluginAPI
- * @returns {import("@babel/core").PluginObj}
- */
-function pluginGeneratorOptimization({ types: t }) {
+function pluginGeneratorOptimization({ types: t }: PluginAPI): PluginObject {
   return {
     visitor: {
       CallExpression: {
@@ -901,12 +935,14 @@ function pluginGeneratorOptimization({ types: t }) {
             const args = node.arguments;
 
             if (
+              // @ts-expect-error
               node.callee.property.name === "token" &&
               args.length === 1 &&
               t.isStringLiteral(args[0])
             ) {
               const str = args[0].value;
               if (str.length == 1) {
+                // @ts-expect-error
                 node.callee.property.name = "tokenChar";
                 args[0] = t.numericLiteral(str.charCodeAt(0));
               }
