@@ -170,7 +170,7 @@ module.exports = function (api) {
       // presets are applied from right to left
       ["@babel/env", envOpts],
       [
-        "@babel/preset-typescript",
+        "babel-preset-stable-typescript",
         {
           onlyRemoveTypeImports: true,
           allowDeclareFields: true,

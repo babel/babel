@@ -66,7 +66,7 @@ function loadCtsDefault(filepath: string) {
     const opts: InputOptions = {
       babelrc: false,
       configFile: false,
-      sourceType: "script",
+      sourceType: "unambiguous",
       sourceMaps: "inline",
       sourceFileName: path.basename(filepath),
       presets: [
@@ -134,6 +134,18 @@ async function loadMjsDefault(filepath: string) {
 
 function getTSPreset(filepath: string) {
   try {
+    // if (
+    //   semver.lte(
+    //     // eslint-disable-next-line import/no-extraneous-dependencies
+    //     require("@babel/preset-typescript/package.json").version,
+    //     "7.21.0",
+    //   )
+    // ) {
+    //   throw new ConfigError(
+    //     "The installed version of `@babel/preset-typescript` is too old to support `.cts` configuration files.",
+    //     filepath,
+    //   );
+    // }
     // eslint-disable-next-line import/no-extraneous-dependencies
     return require("@babel/preset-typescript");
   } catch (error) {

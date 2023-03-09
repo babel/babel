@@ -4,7 +4,7 @@ import type * as t from "@babel/types";
 
 export { ImportInjector };
 
-export { default as isModule, isModuleOrCts } from "./is-module";
+export { default as isModule } from "./is-module";
 
 export function addDefault(
   path: NodePath,
