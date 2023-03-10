@@ -64,6 +64,9 @@ export type Format = {
   };
   recordAndTupleSyntaxType: RecordAndTuplePluginOptions["syntaxType"];
   jsescOption: jsescOptions;
+  /**
+   * @deprecated Removed in Babel 8, use `jsescOption` instead
+   */
   jsonCompatibleStrings?: boolean;
   /**
    * For use with the Hack-style pipe operator.
