@@ -219,7 +219,7 @@ export function StringLiteral(this: Printer, node: t.StringLiteral) {
         ),
   );
 
-  return this.token(val);
+  this.token(val);
 }
 
 export function BigIntLiteral(this: Printer, node: t.BigIntLiteral) {

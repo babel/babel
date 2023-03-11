@@ -38,8 +38,9 @@ export default class PluginPass {
     return this.file.addHelper(name);
   }
 
+  // TODO: Remove this in Babel 8
   addImport() {
-    return this.file.addImport();
+    this.file.addImport();
   }
 
   buildCodeFrameError(

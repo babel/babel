@@ -106,12 +106,15 @@ export default (superClass: typeof Parser) =>
             if (this.state.pos === this.state.start) {
               if (ch === charCodes.lessThan && this.state.canStartJSXElement) {
                 ++this.state.pos;
-                return this.finishToken(tt.jsxTagStart);
+                this.finishToken(tt.jsxTagStart);
+              } else {
+                super.getTokenFromCode(ch);
               }
-              return super.getTokenFromCode(ch);
+              return;
             }
             out += this.input.slice(chunkStart, this.state.pos);
-            return this.finishToken(tt.jsxText, out);
+            this.finishToken(tt.jsxText, out);
+            return;
 
           case charCodes.ampersand:
             out += this.input.slice(chunkStart, this.state.pos);
@@ -187,7 +190,7 @@ export default (superClass: typeof Parser) =>
         }
       }
       out += this.input.slice(chunkStart, this.state.pos++);
-      return this.finishToken(tt.string, out);
+      this.finishToken(tt.string, out);
     }
 
     jsxReadEntity(): string {
@@ -254,10 +257,7 @@ export default (superClass: typeof Parser) =>
       do {
         ch = this.input.charCodeAt(++this.state.pos);
       } while (isIdentifierChar(ch) || ch === charCodes.dash);
-      return this.finishToken(
-        tt.jsxName,
-        this.input.slice(start, this.state.pos),
-      );
+      this.finishToken(tt.jsxName, this.input.slice(start, this.state.pos));
     }
 
     // Parse next token as JSX identifier
@@ -491,7 +491,7 @@ export default (superClass: typeof Parser) =>
             }
             // istanbul ignore next - should never happen
             default:
-              throw this.unexpected();
+              this.unexpected();
           }
         }
 
@@ -584,24 +584,28 @@ export default (superClass: typeof Parser) =>
       const context = this.curContext();
 
       if (context === tc.j_expr) {
-        return this.jsxReadToken();
+        this.jsxReadToken();
+        return;
       }
 
       if (context === tc.j_oTag || context === tc.j_cTag) {
         if (isIdentifierStart(code)) {
-          return this.jsxReadWord();
+          this.jsxReadWord();
+          return;
         }
 
         if (code === charCodes.greaterThan) {
           ++this.state.pos;
-          return this.finishToken(tt.jsxTagEnd);
+          this.finishToken(tt.jsxTagEnd);
+          return;
         }
 
         if (
           (code === charCodes.quotationMark || code === charCodes.apostrophe) &&
           context === tc.j_oTag
         ) {
-          return this.jsxReadString(code);
+          this.jsxReadString(code);
+          return;
         }
       }
 
@@ -611,10 +615,11 @@ export default (superClass: typeof Parser) =>
         this.input.charCodeAt(this.state.pos + 1) !== charCodes.exclamationMark
       ) {
         ++this.state.pos;
-        return this.finishToken(tt.jsxTagStart);
+        this.finishToken(tt.jsxTagStart);
+        return;
       }
 
-      return super.getTokenFromCode(code);
+      super.getTokenFromCode(code);
     }
 
     updateContext(prevType: TokenType): void {

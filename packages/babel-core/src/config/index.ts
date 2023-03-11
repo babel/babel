@@ -54,7 +54,10 @@ const maybeErrback =
       callback = maybeCallback;
       arg = argOrCallback as Arg;
     }
-    return callback ? runner.errback(arg, callback) : runner.sync(arg);
+    if (!callback) {
+      return runner.sync(arg);
+    }
+    runner.errback(arg, callback);
   };
 
 export const loadPartialConfig = maybeErrback(loadPartialConfigRunner);
@@ -73,9 +76,9 @@ export function createConfigItem(
   callback?: (err: Error, val: ConfigItem | null) => void,
 ) {
   if (callback !== undefined) {
-    return createConfigItemRunner.errback(target, options, callback);
+    createConfigItemRunner.errback(target, options, callback);
   } else if (typeof options === "function") {
-    return createConfigItemRunner.errback(target, undefined, callback);
+    createConfigItemRunner.errback(target, undefined, callback);
   } else {
     return createConfigItemRunner.sync(target, options);
   }

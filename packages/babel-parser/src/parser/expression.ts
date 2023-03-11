@@ -1265,9 +1265,9 @@ export default abstract class ExpressionParser extends LValParser {
 
         if (pipeProposal) {
           return this.parseTopicReference(pipeProposal);
-        } else {
-          throw this.unexpected();
         }
+        this.unexpected();
+        break;
       }
 
       case tt.lt: {
@@ -1277,10 +1277,10 @@ export default abstract class ExpressionParser extends LValParser {
           lookaheadCh === charCodes.greaterThan // Fragment <>
         ) {
           this.expectOnePlugin(["jsx", "flow", "typescript"]);
-          break;
         } else {
-          throw this.unexpected();
+          this.unexpected();
         }
+        break;
       }
 
       default:
@@ -1345,7 +1345,7 @@ export default abstract class ExpressionParser extends LValParser {
 
           return id;
         } else {
-          throw this.unexpected();
+          this.unexpected();
         }
     }
   }
@@ -1383,7 +1383,7 @@ export default abstract class ExpressionParser extends LValParser {
       // Now actually consume the topic token.
       return this.parseTopicReference(pipeProposal);
     } else {
-      throw this.unexpected();
+      this.unexpected();
     }
   }
 
@@ -2387,7 +2387,7 @@ export default abstract class ExpressionParser extends LValParser {
             break;
           }
           default:
-            throw this.unexpected();
+            this.unexpected();
         }
       }
       (prop as any).key = key;
@@ -2751,7 +2751,7 @@ export default abstract class ExpressionParser extends LValParser {
     if (tokenIsKeywordOrIdentifier(type)) {
       name = this.state.value;
     } else {
-      throw this.unexpected();
+      this.unexpected();
     }
 
     const tokenIsKeyword = tokenKeywordOrIdentifierIsKeyword(type);

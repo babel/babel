@@ -108,7 +108,7 @@ function handleVariableDeclaration(
 }
 
 function buildNestedAmbientModuleError(path: NodePath, node: t.Node) {
-  throw path.hub.buildError(
+  return path.hub.buildError(
     node,
     "Ambient modules cannot be nested in other modules or namespaces.",
     Error,

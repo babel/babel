@@ -2343,11 +2343,11 @@ export default abstract class StatementParser extends ExpressionParser {
     );
 
     if (hasDefault && parseAfterDefault && !hasStar && !hasSpecifiers) {
-      throw this.unexpected(null, tt.braceL);
+      this.unexpected(null, tt.braceL);
     }
 
     if (hasNamespace && parseAfterNamespace) {
-      throw this.unexpected(null, tt._from);
+      this.unexpected(null, tt._from);
     }
 
     let hasDeclaration;
@@ -2394,7 +2394,7 @@ export default abstract class StatementParser extends ExpressionParser {
       return this.finishNode(node2, "ExportDefaultDeclaration");
     }
 
-    throw this.unexpected(null, tt.braceL);
+    this.unexpected(null, tt.braceL);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -410,7 +410,10 @@ export default class Buffer {
    * over "();", where previously it would have been a single mapping.
    */
   exactSource(loc: Loc | undefined, cb: () => void) {
-    if (!this._map) return cb();
+    if (!this._map) {
+      cb();
+      return;
+    }
 
     this.source("start", loc);
     // @ts-expect-error identifierName is not defined
@@ -459,9 +462,9 @@ export default class Buffer {
    */
 
   withSource(prop: "start" | "end", loc: Loc, cb: () => void): void {
-    if (!this._map) return cb();
-
-    this.source(prop, loc);
+    if (this._map) {
+      this.source(prop, loc);
+    }
 
     cb();
   }

@@ -328,7 +328,10 @@ class Printer {
   }
 
   exactSource(loc: Loc | undefined, cb: () => void) {
-    if (!loc) return cb();
+    if (!loc) {
+      cb();
+      return;
+    }
 
     this._catchUp("start", loc);
 
@@ -361,7 +364,10 @@ class Printer {
     loc: Loc | undefined,
     cb: () => void,
   ): void {
-    if (!loc) return cb();
+    if (!loc) {
+      cb();
+      return;
+    }
 
     this._catchUp(prop, loc);
 
@@ -871,7 +877,7 @@ class Printer {
     opts: PrintSequenceOptions = {},
   ) {
     opts.statement = true;
-    return this.printJoin(nodes, parent, opts);
+    this.printJoin(nodes, parent, opts);
   }
 
   printList(items: t.Node[], parent: t.Node, opts: PrintListOptions = {}) {
@@ -879,7 +885,7 @@ class Printer {
       opts.separator = commaSeparator;
     }
 
-    return this.printJoin(items, parent, opts);
+    this.printJoin(items, parent, opts);
   }
 
   _printNewline(newLine: boolean, opts: AddNewlinesOptions) {

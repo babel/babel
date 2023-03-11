@@ -292,7 +292,7 @@ export function defineAliasedType(...aliases: string[]) {
     }
     const additional = aliases.filter(a => !defined.includes(a));
     defined.unshift(...additional);
-    return defineType(type, opts);
+    defineType(type, opts);
   };
 }
 

@@ -231,9 +231,7 @@ export default abstract class Tokenizer extends CommentsParser {
     return this.state.context[this.state.context.length - 1];
   }
 
-  // Read a single token, updating the parser object's token-related
-  // properties.
-
+  // Read a single token, updating the parser object's token-related properties.
   nextToken(): void {
     this.skipSpace();
     this.state.start = this.state.pos;
@@ -679,7 +677,7 @@ export default abstract class Tokenizer extends CommentsParser {
       // `^^^` is forbidden and must be separated by a space.
       const lookaheadCh = this.input.codePointAt(this.state.pos);
       if (lookaheadCh === charCodes.caret) {
-        throw this.unexpected();
+        this.unexpected();
       }
     }
     // '^'
@@ -825,7 +823,6 @@ export default abstract class Tokenizer extends CommentsParser {
       case charCodes.dot:
         this.readToken_dot();
         return;
-
       // Punctuation tokens.
       case charCodes.leftParenthesis:
         ++this.state.pos;
