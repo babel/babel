@@ -761,11 +761,7 @@ class Printer {
       | t.JSXText,
   ): string | undefined {
     const extra = node.extra;
-    if (
-      extra?.raw != null &&
-      extra.rawValue != null &&
-      node.value === extra.rawValue
-    ) {
+    if (extra && extra.raw != null && node.value === extra.rawValue) {
       // @ts-expect-error: The extra.raw of these AST node types must be a string
       return extra.raw;
     }

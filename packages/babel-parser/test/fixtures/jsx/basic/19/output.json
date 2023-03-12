@@ -35,7 +35,8 @@
                   "start":9,"end":18,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":18,"index":18}},
                   "extra": {
                     "rawValue": "leading",
-                    "raw": "\"leading\""
+                    "raw": "\"leading\"",
+                    "jsx": true
                   },
                   "value": "leading"
                 }
@@ -53,7 +54,8 @@
                   "start":24,"end":35,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":35,"index":35}},
                   "extra": {
                     "rawValue": "attribute",
-                    "raw": "\"attribute\""
+                    "raw": "\"attribute\"",
+                    "jsx": true
                   },
                   "value": "attribute"
                 }

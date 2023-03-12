@@ -68,7 +68,8 @@
                       "start":15,"end":21,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":21,"index":21}},
                       "extra": {
                         "rawValue": "test",
-                        "raw": "\"test\""
+                        "raw": "\"test\"",
+                        "jsx": true
                       },
                       "value": "test"
                     }
