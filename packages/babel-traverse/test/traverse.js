@@ -4,6 +4,8 @@ import * as t from "@babel/types";
 import _traverse from "../lib/index.js";
 const traverse = _traverse.default || _traverse;
 
+import { callFromAtBabelPackage } from "./helpers/@babel/fake-babel-package/index.js";
+
 describe("traverse", function () {
   const code = `
     var foo = "bar";
@@ -342,8 +344,11 @@ describe("traverse", function () {
       beforeAll(() => {
         jest.spyOn(console, "warn").mockImplementation(() => {});
       });
-      afterAll(() => {
+      afterEach(() => {
         console.warn.mockClear();
+      });
+      afterAll(() => {
+        console.warn.mockRestore();
       });
       it("should warn for deprecated node types", function testFn1() {
         const visitNumericLiteral = () => {};
@@ -360,6 +365,7 @@ describe("traverse", function () {
           visitNumericLiteral,
         ]);
       });
+
       it("should warn for deprecated aliases", function testFn2() {
         const visitImportOrExportDeclaration = () => {};
         const visitor = {
@@ -371,6 +377,18 @@ describe("traverse", function () {
             /Visitor `ModuleDeclaration` has been deprecated, please migrate to `ImportOrExportDeclaration`[^]+at.+testFn2/,
           ),
         );
+        expect(visitor).toHaveProperty("ImportDeclaration.enter", [
+          visitImportOrExportDeclaration,
+        ]);
+      });
+
+      it("should not warn deprecations if usage comes from a @babel/* package", () => {
+        const visitImportOrExportDeclaration = () => {};
+        const visitor = {
+          ModuleDeclaration: visitImportOrExportDeclaration,
+        };
+        callFromAtBabelPackage(traverse.explode, visitor);
+        expect(console.warn).not.toHaveBeenCalled();
         expect(visitor).toHaveProperty("ImportDeclaration.enter", [
           visitImportOrExportDeclaration,
         ]);
