@@ -7,8 +7,6 @@ import {
 import type * as t from "@babel/types";
 import type { NodePath } from "@babel/traverse";
 import jsesc from "jsesc";
-// eslint-disable-next-line import/extensions
-import { escapeAttribute } from "entities/lib/escape.js";
 
 export function Identifier(this: Printer, node: t.Identifier) {
   this.sourceIdentifierName(node.loc?.identifierName || node.name);
@@ -208,6 +206,31 @@ export function NumericLiteral(this: Printer, node: t.NumericLiteral) {
   }
 }
 
+const escapeCodeMap = new Map([
+  [34, "&quot;"],
+  [38, "&amp;"],
+  [60, "&lt;"],
+  [62, "&gt;"],
+]);
+const escapeReplacer = /["&<>]/g;
+
+// From https://www.npmjs.com/package/entities License: MIT
+function escape(data: string) {
+  let match;
+  let lastIdx = 0;
+  let result = "";
+  while ((match = escapeReplacer.exec(data))) {
+    if (lastIdx !== match.index) {
+      result += data.substring(lastIdx, match.index);
+    }
+    // We know that this character will be in the map.
+    result += escapeCodeMap.get(match[0].charCodeAt(0));
+    // Every match will be of length 1
+    lastIdx = match.index + 1;
+  }
+  return result + data.substring(lastIdx);
+}
+
 export function StringLiteral(
   this: Printer,
   node: t.StringLiteral,
@@ -228,7 +251,7 @@ export function StringLiteral(
   }
 
   const val = inJsx
-    ? `"${escapeAttribute(node.value)}"`
+    ? `"${escape(node.value)}"`
     : jsesc(node.value, this.format.jsescOption);
 
   this.token(val);
