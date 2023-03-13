@@ -7,7 +7,8 @@ import {
 import type * as t from "@babel/types";
 import type { NodePath } from "@babel/traverse";
 import jsesc from "jsesc";
-import { encode as htmlEncode, EntityLevel, EncodingMode } from "entities";
+// eslint-disable-next-line import/extensions
+import { escapeUTF8 as htmlEncode } from "entities/lib/escape.js";
 
 export function Identifier(this: Printer, node: t.Identifier) {
   this.sourceIdentifierName(node.loc?.identifierName || node.name);
@@ -227,10 +228,7 @@ export function StringLiteral(
   }
 
   const val = inJsx
-    ? `"${htmlEncode(node.value, {
-        level: EntityLevel.HTML,
-        mode: EncodingMode.UTF8,
-      })}"`
+    ? `"${htmlEncode(node.value)}"`
     : jsesc(node.value, this.format.jsescOption);
 
   this.token(val);
