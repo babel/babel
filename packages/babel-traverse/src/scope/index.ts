@@ -632,7 +632,7 @@ export default class Scope {
       if (process.env.BABEL_8_BREAKING) {
         renamer.rename();
       } else {
-        // @ts-expect-error: babel 7->8
+        // @ts-ignore(Babel 7 vs Babel 8)
         renamer.rename(arguments[2]);
       }
     }
