@@ -230,7 +230,7 @@ __metadata:
     glob: ^7.2.0
     rimraf: ^3.0.0
     semver: ^6.3.0
-    slash: "condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0"
+    slash: ^3.0.0
   peerDependencies:
     "@babel/core": ^7.0.0-0
   dependenciesMeta:
@@ -13737,27 +13737,17 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"slash-BABEL_8_BREAKING-false@npm:slash@^2.0.0, slash@npm:^2.0.0":
+"slash@npm:^2.0.0":
   version: 2.0.0
   resolution: "slash@npm:2.0.0"
   checksum: 512d4350735375bd11647233cb0e2f93beca6f53441015eea241fe784d8068281c3987fbaa93e7ef1c38df68d9c60013045c92837423c69115297d6169aa85e6
   languageName: node
   linkType: hard
 
-"slash-BABEL_8_BREAKING-true@npm:slash@^3.0.0, slash@npm:^3.0.0":
+"slash@npm:^3.0.0":
   version: 3.0.0
   resolution: "slash@npm:3.0.0"
   checksum: 94a93fff615f25a999ad4b83c9d5e257a7280c90a32a7cb8b4a87996e4babf322e469c42b7f649fd5796edd8687652f3fb452a86dc97a816f01113183393f11c
-  languageName: node
-  linkType: hard
-
-"slash@condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0":
-  version: 0.0.0-condition-8fb1fb
-  resolution: "slash@condition:BABEL_8_BREAKING?^3.0.0:^2.0.0#8fb1fb"
-  dependencies:
-    slash-BABEL_8_BREAKING-false: "npm:slash@^2.0.0"
-    slash-BABEL_8_BREAKING-true: "npm:slash@^3.0.0"
-  checksum: 9defd9f4a0ac58d7e3b5de662dee97a0c693efdf61116cf7d3db9cff45ce86b5bfbd8461c5c77049e502bed16e8c6387720cf98af0e87a873dc57c21d2e1cac7
   languageName: node
   linkType: hard
 

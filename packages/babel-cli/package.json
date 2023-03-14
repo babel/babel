@@ -29,7 +29,7 @@
     "convert-source-map": "^1.1.0",
     "fs-readdir-recursive": "^1.1.0",
     "glob": "^7.2.0",
-    "slash": "condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0"
+    "slash": "^3.0.0"
   },
   "optionalDependencies": {
     "chokidar": "^3.4.0"
