@@ -221,7 +221,6 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-fixtures": "workspace:^"
     "@jridgewell/trace-mapping": ^0.3.17
-    "@nicolo-ribaudo/chokidar-2": "condition:BABEL_8_BREAKING ? : 2.1.8-no-fsevents.3"
     "@types/fs-readdir-recursive": ^1.1.0
     "@types/glob": ^7.2.0
     chokidar: ^3.4.0
@@ -235,8 +234,6 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.0.0-0
   dependenciesMeta:
-    "@nicolo-ribaudo/chokidar-2":
-      optional: true
     chokidar:
       optional: true
   bin:
@@ -4275,19 +4272,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nicolo-ribaudo/chokidar-2-BABEL_8_BREAKING-false@npm:@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents.3, @nicolo-ribaudo/chokidar-2@npm:2.1.8-no-fsevents.3":
+"@nicolo-ribaudo/chokidar-2@npm:2.1.8-no-fsevents.3":
   version: 2.1.8-no-fsevents.3
   resolution: "@nicolo-ribaudo/chokidar-2@npm:2.1.8-no-fsevents.3"
   checksum: ee55cc9241aeea7eb94b8a8551bfa4246c56c53bc71ecda0a2104018fcc328ba5723b33686bdf9cc65d4df4ae65e8016b89e0bbdeb94e0309fe91bb9ced42344
-  languageName: node
-  linkType: hard
-
-"@nicolo-ribaudo/chokidar-2@condition:BABEL_8_BREAKING ? : 2.1.8-no-fsevents.3":
-  version: 0.0.0-condition-2e969f
-  resolution: "@nicolo-ribaudo/chokidar-2@condition:BABEL_8_BREAKING?:2.1.8-no-fsevents.3#2e969f"
-  dependencies:
-    "@nicolo-ribaudo/chokidar-2-BABEL_8_BREAKING-false": "npm:@nicolo-ribaudo/chokidar-2@2.1.8-no-fsevents.3"
-  checksum: f5f76f2136c04a78bad4f9fc4c3219de13c953fcb5c667fbb79de5740fce01793f7e3a07948bedea8b3b6d6dbb19b6baedd778d36a71fb58629a9a04484cafc8
   languageName: node
   linkType: hard
 

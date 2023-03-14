@@ -32,7 +32,6 @@
     "slash": "condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0"
   },
   "optionalDependencies": {
-    "@nicolo-ribaudo/chokidar-2": "condition:BABEL_8_BREAKING ? : 2.1.8-no-fsevents.3",
     "chokidar": "^3.4.0"
   },
   "peerDependencies": {
