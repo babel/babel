@@ -595,6 +595,7 @@ export default declare((api, opts: Options) => {
             ),
           ]),
         );
+        path.scope.registerDeclaration(path);
       },
 
       TSExportAssignment(path) {
