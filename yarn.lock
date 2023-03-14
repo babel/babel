@@ -2383,7 +2383,7 @@ __metadata:
     "@babel/helper-replace-supers": "workspace:^"
     "@babel/helper-split-export-declaration": "workspace:^"
     "@babel/traverse": "workspace:^"
-    globals: "condition:BABEL_8_BREAKING ? ^13.5.0 : ^11.1.0"
+    globals: ^13.20.0
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -3830,7 +3830,7 @@ __metadata:
     "@babel/parser": "workspace:^"
     "@babel/types": "workspace:^"
     debug: ^4.1.0
-    globals: "condition:BABEL_8_BREAKING ? ^13.5.0 : ^11.1.0"
+    globals: ^13.20.0
   languageName: unknown
   linkType: soft
 
@@ -9134,38 +9134,19 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"globals-BABEL_8_BREAKING-false@npm:globals@^11.1.0, globals@npm:^11.1.0":
+"globals@npm:^11.1.0":
   version: 11.12.0
   resolution: "globals@npm:11.12.0"
   checksum: 67051a45eca3db904aee189dfc7cd53c20c7d881679c93f6146ddd4c9f4ab2268e68a919df740d39c71f4445d2b38ee360fc234428baea1dbdfe68bbcb46979e
   languageName: node
   linkType: hard
 
-"globals-BABEL_8_BREAKING-true@npm:globals@^13.5.0":
-  version: 13.5.0
-  resolution: "globals@npm:13.5.0"
+"globals@npm:^13.15.0, globals@npm:^13.20.0":
+  version: 13.20.0
+  resolution: "globals@npm:13.20.0"
   dependencies:
     type-fest: ^0.20.2
-  checksum: 1cbeff4fd9eaabce86631a2eba2891a983708fa52954433c4df373e754148d39cbebb0ac4422a993728c0bab0f7da3d14ea79cbd7bfd8adaddbd36ee7022f76a
-  languageName: node
-  linkType: hard
-
-"globals@condition:BABEL_8_BREAKING ? ^13.5.0 : ^11.1.0":
-  version: 0.0.0-condition-365c0f
-  resolution: "globals@condition:BABEL_8_BREAKING?^13.5.0:^11.1.0#365c0f"
-  dependencies:
-    globals-BABEL_8_BREAKING-false: "npm:globals@^11.1.0"
-    globals-BABEL_8_BREAKING-true: "npm:globals@^13.5.0"
-  checksum: 216349112d414b806012f38d0fd676efae3ac661cf71dfe4324968fd45625c623681436807f8d7ab629b09f7d91f34a341624ad4928498e5c2c8281512f04dec
-  languageName: node
-  linkType: hard
-
-"globals@npm:^13.15.0":
-  version: 13.17.0
-  resolution: "globals@npm:13.17.0"
-  dependencies:
-    type-fest: ^0.20.2
-  checksum: fbaf4112e59b92c9f5575e85ce65e9e17c0b82711196ec5f58beb08599bbd92fd72703d6dfc9b080381fd35b644e1b11dcf25b38cc2341ec21df942594cbc8ce
+  checksum: ad1ecf914bd051325faad281d02ea2c0b1df5d01bd94d368dcc5513340eac41d14b3c61af325768e3c7f8d44576e72780ec0b6f2d366121f8eec6e03c3a3b97a
   languageName: node
   linkType: hard
 
