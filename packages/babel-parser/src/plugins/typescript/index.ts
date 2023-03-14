@@ -214,6 +214,8 @@ const TSErrors = ParseErrorEnum`typescript`({
     `Single type parameter ${typeParameterName} should have a trailing comma. Example usage: <${typeParameterName},>.`,
   StaticBlockCannotHaveModifier:
     "Static class blocks cannot have any modifier.",
+  TupleOptionalAfterType:
+    "A labeled tuple optional element must be declared using a question mark after the name and before the colon (`name?: type`), rather than after the type (`name: type?`).",
   TypeAnnotationAfterAssign:
     "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`.",
   TypeImportCannotSpecifyDefaultAndNamed:
@@ -460,8 +462,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         case "TypeParametersOrArguments":
           return this.match(tt.gt);
       }
-
-      throw new Error("Unreachable");
     }
 
     tsParseList<T extends N.Node>(
@@ -1099,34 +1099,78 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return this.finishNode(node, "TSTupleType");
     }
 
-    tsParseTupleElementType(): N.TsType | N.TsNamedTupleMember {
+    tsParseTupleElementType(): N.TsNamedTupleMember | N.TsType {
       // parses `...TsType[]`
 
       const { startLoc } = this.state;
 
       const rest = this.eat(tt.ellipsis);
-      let type: N.TsType | N.TsNamedTupleMember = this.tsParseType();
-      const optional = this.eat(tt.question);
-      const labeled = this.eat(tt.colon);
+
+      let labeled: boolean;
+      let label: N.Identifier;
+      let optional: boolean;
+      let type: N.TsNamedTupleMember | N.TsType;
+
+      const isWord = tokenIsKeywordOrIdentifier(this.state.type);
+      const chAfterWord = isWord ? this.lookaheadCharCode() : null;
+      if (chAfterWord === charCodes.colon) {
+        labeled = true;
+        optional = false;
+        label = this.parseIdentifier(true);
+        this.expect(tt.colon);
+        type = this.tsParseType();
+      } else if (chAfterWord === charCodes.questionMark) {
+        optional = true;
+        const startLoc = this.state.startLoc;
+        const wordName = this.state.value;
+        const typeOrLabel = this.tsParseNonArrayType();
+
+        if (this.lookaheadCharCode() === charCodes.colon) {
+          labeled = true;
+          label = this.createIdentifier(
+            this.startNodeAt<N.Identifier>(startLoc),
+            wordName,
+          );
+          this.expect(tt.question);
+          this.expect(tt.colon);
+          type = this.tsParseType();
+        } else {
+          labeled = false;
+          type = typeOrLabel;
+          this.expect(tt.question);
+        }
+      } else {
+        type = this.tsParseType();
+        optional = this.eat(tt.question);
+        // In this case (labeled === true) could be only in invalid label.
+        // E.g. [x.y:type]
+        // An error is raised while processing node.
+        labeled = this.eat(tt.colon);
+      }
 
       if (labeled) {
-        const labeledNode = this.startNodeAtNode<N.TsNamedTupleMember>(type);
-        labeledNode.optional = optional;
+        let labeledNode: Undone<N.TsNamedTupleMember>;
+        if (label) {
+          labeledNode = this.startNodeAtNode<N.TsNamedTupleMember>(label);
+          labeledNode.optional = optional;
+          labeledNode.label = label;
+          labeledNode.elementType = type;
 
-        if (
-          type.type === "TSTypeReference" &&
-          !type.typeParameters &&
-          type.typeName.type === "Identifier"
-        ) {
-          labeledNode.label = type.typeName;
+          if (this.eat(tt.question)) {
+            labeledNode.optional = true;
+            this.raise(TSErrors.TupleOptionalAfterType, {
+              at: this.state.lastTokStartLoc,
+            });
+          }
         } else {
+          labeledNode = this.startNodeAtNode<N.TsNamedTupleMember>(type);
+          labeledNode.optional = optional;
           this.raise(TSErrors.InvalidTupleMemberLabel, { at: type });
           // @ts-expect-error This produces an invalid AST, but at least we don't drop
           // nodes representing the invalid source.
           labeledNode.label = type;
+          labeledNode.elementType = this.tsParseType();
         }
-
-        labeledNode.elementType = this.tsParseType();
         type = this.finishNode(labeledNode, "TSNamedTupleMember");
       } else if (optional) {
         const optionalTypeNode = this.startNodeAtNode<N.TsOptionalType>(type);
