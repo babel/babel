@@ -191,7 +191,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [18, 16, 14, 12, 10, 8, 6]
+        node-version: [18, 16, 14]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -204,21 +204,6 @@ jobs:
       - name: Install
         run: |
           yarn install
-      - name: Downgrade Jest for node <= 10
-        if: matrix.node-version == '6' || matrix.node-version == '8' || matrix.node-version == '10'
-        run: |
-          yarn up jest@24
-          # Deduplicate dependencies, because duplicate copies of graceful-fs cause
-          # problems with the "path" module: https://github.com/facebook/jest/issues/9656
-          yarn dedupe
-      - name: Downgrade Jest and jest-light-runner for node == 12
-        if: matrix.node-version == '12'
-        run: |
-          yarn up jest@28
-          yarn up jest-light-runner@0.3.0
-          # Deduplicate dependencies, because duplicate copies of graceful-fs cause
-          # problems with the "path" module: https://github.com/facebook/jest/issues/9656
-          yarn dedupe
       - uses: actions/download-artifact@v3
         with:
           name: babel-artifact
@@ -233,12 +218,7 @@ jobs:
         run: |
           BABEL_ENV=test node --max-old-space-size=4096 ./node_modules/.bin/jest --ci
         env:
-          TEST_FUZZ: "${{ (matrix.node-version == '6' || matrix.node-version == '8' || matrix.node-version == '10') && 'false' || 'true' }}"
-      - name: Use Node.js latest # For `yarn version` in post actions of the first actions/setup-node
-        if: matrix.node-version == '6' || matrix.node-version == '8' || matrix.node-version == '10'
-        uses: actions/setup-node@v3
-        with:
-          node-version: latest
+          TEST_FUZZ: "true"
 
   build-babel8:
     name: Build Babel 8 Artifacts for tests
@@ -409,53 +389,11 @@ jobs:
         run: yarn test:runtime:bundlers
       - name: Test Node.js latest
         run: node test/runtime-integration/node.cjs
-      - name: Use Node.js 10
+      - name: Use Node.js 14.17
         uses: actions/setup-node@v3
         with:
-          node-version: 10
-      - name: Test Node.js 10
-        run: node test/runtime-integration/node.cjs
-      - name: Use Node.js 12.0
-        uses: actions/setup-node@v3
-        with:
-          node-version: "12.0" # quoted, otherwise it's just 13
-      - name: Test Node.js 12.0
-        run: node test/runtime-integration/node.cjs
-      - name: Use Node.js 12.17
-        uses: actions/setup-node@v3
-        with:
-          node-version: 12.17
-      - name: Test Node.js  12.17
-        run: node test/runtime-integration/node.cjs
-      - name: Use Node.js 13.0
-        uses: actions/setup-node@v3
-        with:
-          node-version: "13.0" # quoted, otherwise it's just 13
-      - name: Test Node.js 13.0
-        run: node test/runtime-integration/node.cjs
-      - name: Use Node.js 13.2
-        uses: actions/setup-node@v3
-        with:
-          node-version: 13.2
-      - name: Test Node.js 13.2
-        run: node test/runtime-integration/node.cjs
-      - name: Use Node.js 13.6
-        uses: actions/setup-node@v3
-        with:
-          node-version: 13.6
-      - name: Test Node.js 13.6
-        run: node test/runtime-integration/node.cjs
-      - name: Use Node.js 13.7
-        uses: actions/setup-node@v3
-        with:
-          node-version: 13.7
-      - name: Test Node.js 13.7
-        run: node test/runtime-integration/node.cjs
-      - name: Use Node.js 14.2
-        uses: actions/setup-node@v3
-        with:
-          node-version: 14.2
-      - name: Test Node.js 14.2
+          node-version: 14.17
+      - name: Test Node.js 14.17
         run: node test/runtime-integration/node.cjs
       - name: Use Node.js 16.5
         uses: actions/setup-node@v3
