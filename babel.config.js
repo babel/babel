@@ -69,7 +69,7 @@ module.exports = function (api) {
 
   let transformRuntimeOptions;
 
-  const nodeVersion = bool(process.env.BABEL_8_BREAKING) ? "14.17" : "6.9";
+  const nodeVersion = "14.17";
   // The vast majority of our src files are modules, but we use
   // unambiguous to keep things simple until we get around to renaming
   // the modules to be more easily distinguished from CommonJS
@@ -369,85 +369,14 @@ function bool(value) {
 // copy and paste it.
 // `((v,w)=>(v=v.split("."),w=w.split("."),+v[0]>+w[0]||v[0]==w[0]&&+v[1]>=+w[1]))`;
 
-// TODO(Babel 8) This polyfills are only needed for Node.js 6 and 8
+// Add polyfills for older Node.js versions
 /** @param {import("@babel/core")} api */
-function pluginPolyfillsOldNode({ template, types: t }) {
-  const polyfills = [
-    {
-      name: "require.resolve",
-      necessary({ node, parent }) {
-        return (
-          t.isCallExpression(parent, { callee: node }) &&
-          parent.arguments.length > 1
-        );
-      },
-      supported({ parent: { arguments: args } }) {
-        return (
-          t.isObjectExpression(args[1]) &&
-          args[1].properties.length === 1 &&
-          t.isIdentifier(args[1].properties[0].key, { name: "paths" }) &&
-          t.isArrayExpression(args[1].properties[0].value) &&
-          args[1].properties[0].value.elements.length === 1
-        );
-      },
-      // require.resolve's paths option has been introduced in Node.js 8.9
-      // https://nodejs.org/api/modules.html#modules_require_resolve_request_options
-      replacement: template({ syntacticPlaceholders: true })`
-        ((v,w)=>(v=v.split("."),w=w.split("."),+v[0]>+w[0]||v[0]==w[0]&&+v[1]>=+w[1]))(process.versions.node, "8.9")
-          ? require.resolve
-          : (/* request */ r, { paths: [/* base */ b] }, M = require("module")) => {
-              let /* filename */ f = M._findPath(r, M._nodeModulePaths(b).concat(b));
-              if (f) return f;
-              f = new Error(\`Cannot resolve module '\${r}'\`);
-              f.code = "MODULE_NOT_FOUND";
-              throw f;
-            }
-      `,
-    },
-    {
-      // NOTE: This polyfills depends on the "make-dir" library. Any package
-      // using fs.mkdirSync must have "make-dir" as a dependency.
-      name: "fs.mkdirSync",
-      necessary({ node, parent }) {
-        return (
-          t.isCallExpression(parent, { callee: node }) &&
-          parent.arguments.length > 1
-        );
-      },
-      supported({ parent: { arguments: args } }) {
-        return (
-          t.isObjectExpression(args[1]) &&
-          args[1].properties.length === 1 &&
-          t.isIdentifier(args[1].properties[0].key, { name: "recursive" }) &&
-          t.isBooleanLiteral(args[1].properties[0].value, { value: true })
-        );
-      },
-      // fs.mkdirSync's recursive option has been introduced in Node.js 10.12
-      // https://nodejs.org/api/fs.html#fs_fs_mkdirsync_path_options
-      replacement: template`
-        ((v,w)=>(v=v.split("."),w=w.split("."),+v[0]>+w[0]||v[0]==w[0]&&+v[1]>=+w[1]))(process.versions.node, "10.12")
-          ? fs.mkdirSync
-          : require("make-dir").sync
-      `,
-    },
-    {
-      // NOTE: This polyfills depends on the "node-environment-flags"
-      // library. Any package using process.allowedNodeEnvironmentFlags
-      // must have "node-environment-flags" as a dependency.
-      name: "process.allowedNodeEnvironmentFlags",
-      necessary({ parent, node }) {
-        // To avoid infinite replacement loops
-        return !t.isLogicalExpression(parent, { operator: "||", left: node });
-      },
-      supported: () => true,
-      // process.allowedNodeEnvironmentFlags has been introduced in Node.js 10.10
-      // https://nodejs.org/api/process.html#process_process_allowednodeenvironmentflags
-      replacement: template`
-        process.allowedNodeEnvironmentFlags || require("node-environment-flags")
-      `,
-    },
-  ];
+function pluginPolyfillsOldNode() {
+  const polyfills = [];
 
+  if (polyfills.length === 0) {
+    return { visitor: {} };
+  }
   return {
     visitor: {
       MemberExpression(path) {
