@@ -1,4 +1,5 @@
 type FuncWithDescription = [
   function: (...args: any[]) => any,
-  string: string
+  string: string,
+  void?: number
 ]

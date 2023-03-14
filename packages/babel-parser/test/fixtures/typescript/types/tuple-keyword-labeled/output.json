@@ -1,15 +1,15 @@
 {
   "type": "File",
-  "start":0,"end":84,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":84}},
+  "start":0,"end":101,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":101}},
   "program": {
     "type": "Program",
-    "start":0,"end":84,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":84}},
+    "start":0,"end":101,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":101}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "TSTypeAliasDeclaration",
-        "start":0,"end":84,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":84}},
+        "start":0,"end":101,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":101}},
         "id": {
           "type": "Identifier",
           "start":5,"end":24,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":24,"index":24},"identifierName":"FuncWithDescription"},
@@ -17,7 +17,7 @@
         },
         "typeAnnotation": {
           "type": "TSTupleType",
-          "start":27,"end":84,"loc":{"start":{"line":1,"column":27,"index":27},"end":{"line":4,"column":1,"index":84}},
+          "start":27,"end":101,"loc":{"start":{"line":1,"column":27,"index":27},"end":{"line":5,"column":1,"index":101}},
           "elementTypes": [
             {
               "type": "TSNamedTupleMember",
@@ -76,6 +76,20 @@
               "elementType": {
                 "type": "TSStringKeyword",
                 "start":76,"end":82,"loc":{"start":{"line":3,"column":10,"index":76},"end":{"line":3,"column":16,"index":82}}
+              }
+            },
+            {
+              "type": "TSNamedTupleMember",
+              "start":86,"end":99,"loc":{"start":{"line":4,"column":2,"index":86},"end":{"line":4,"column":15,"index":99}},
+              "optional": true,
+              "label": {
+                "type": "Identifier",
+                "start":86,"end":90,"loc":{"start":{"line":4,"column":2,"index":86},"end":{"line":4,"column":6,"index":90},"identifierName":"void"},
+                "name": "void"
+              },
+              "elementType": {
+                "type": "TSNumberKeyword",
+                "start":93,"end":99,"loc":{"start":{"line":4,"column":9,"index":93},"end":{"line":4,"column":15,"index":99}}
               }
             }
           ]

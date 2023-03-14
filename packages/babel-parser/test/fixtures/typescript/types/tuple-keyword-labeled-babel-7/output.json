@@ -1,15 +1,15 @@
 {
   "type": "File",
-  "start":0,"end":90,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":90}},
+  "start":0,"end":107,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":107}},
   "program": {
     "type": "Program",
-    "start":0,"end":90,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":90}},
+    "start":0,"end":107,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":107}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "TSTypeAliasDeclaration",
-        "start":0,"end":90,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":90}},
+        "start":0,"end":107,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":107}},
         "id": {
           "type": "Identifier",
           "start":5,"end":30,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":30,"index":30},"identifierName":"FuncWithDescriptionBabel7"},
@@ -17,7 +17,7 @@
         },
         "typeAnnotation": {
           "type": "TSTupleType",
-          "start":33,"end":90,"loc":{"start":{"line":1,"column":33,"index":33},"end":{"line":4,"column":1,"index":90}},
+          "start":33,"end":107,"loc":{"start":{"line":1,"column":33,"index":33},"end":{"line":5,"column":1,"index":107}},
           "elementTypes": [
             {
               "type": "TSNamedTupleMember",
@@ -76,6 +76,20 @@
               "elementType": {
                 "type": "TSStringKeyword",
                 "start":82,"end":88,"loc":{"start":{"line":3,"column":10,"index":82},"end":{"line":3,"column":16,"index":88}}
+              }
+            },
+            {
+              "type": "TSNamedTupleMember",
+              "start":92,"end":105,"loc":{"start":{"line":4,"column":2,"index":92},"end":{"line":4,"column":15,"index":105}},
+              "optional": true,
+              "label": {
+                "type": "Identifier",
+                "start":92,"end":96,"loc":{"start":{"line":4,"column":2,"index":92},"end":{"line":4,"column":6,"index":96},"identifierName":"void"},
+                "name": "void"
+              },
+              "elementType": {
+                "type": "TSNumberKeyword",
+                "start":99,"end":105,"loc":{"start":{"line":4,"column":9,"index":99},"end":{"line":4,"column":15,"index":105}}
               }
             }
           ]

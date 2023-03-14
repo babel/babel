@@ -1,4 +1,5 @@
 type FuncWithDescriptionBabel7 = [
   function: (...args: any[]) => any,
-  string: string
+  string: string,
+  void?: number
 ]

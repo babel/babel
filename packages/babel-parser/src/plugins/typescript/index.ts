@@ -1112,16 +1112,14 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       let type: N.TsNamedTupleMember | N.TsType;
 
       const isWord = tokenIsKeywordOrIdentifier(this.state.type);
-      if (isWord && this.lookaheadCharCode() === charCodes.colon) {
+      const chAfterWord = isWord ? this.lookaheadCharCode() : null;
+      if (chAfterWord === charCodes.colon) {
         labeled = true;
         optional = false;
         label = this.parseIdentifier(true);
         this.expect(tt.colon);
         type = this.tsParseType();
-      } else if (
-        isWord &&
-        this.lookaheadCharCode() === charCodes.questionMark
-      ) {
+      } else if (chAfterWord === charCodes.questionMark) {
         optional = true;
         const startLoc = this.state.startLoc;
         const wordName = this.state.value;
