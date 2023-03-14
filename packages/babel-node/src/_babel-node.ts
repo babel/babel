@@ -1,4 +1,4 @@
-import commander from "commander";
+import { Command } from "commander";
 import Module from "module";
 import { inspect } from "util";
 import path from "path";
@@ -16,7 +16,7 @@ import type { PluginAPI, PluginObject } from "@babel/core";
 
 const require = createRequire(import.meta.url);
 
-const program = new commander.Command("babel-node");
+const command = new Command("babel-node");
 
 function collect(value: unknown, previousValue: string[]): Array<string> {
   // If the user passed the option with no value, like "babel-node file.js --presets", do nothing.
@@ -31,49 +31,50 @@ function collect(value: unknown, previousValue: string[]): Array<string> {
   return values;
 }
 
-program.option("-e, --eval [script]", "Evaluate script");
-program.option(
+command.option("-e, --eval [script]", "Evaluate script");
+command.option(
   "--no-babelrc",
   "Specify whether or not to use .babelrc and .babelignore files",
 );
-program.option("-r, --require [module]", "Require module");
-program.option("-p, --print [code]", "Evaluate script and print result");
-program.option(
+command.option("-r, --require [module]", "Require module");
+command.option("-p, --print [code]", "Evaluate script and print result");
+command.option(
   "-o, --only [globs]",
   "A comma-separated list of glob patterns to compile",
   collect,
 );
-program.option(
+command.option(
   "-i, --ignore [globs]",
   "A comma-separated list of glob patterns to skip compiling",
   collect,
 );
-program.option(
+command.option(
   "-x, --extensions [extensions]",
   "List of extensions to hook into [.es6,.js,.es,.jsx,.mjs]",
   collect,
 );
-program.option(
+command.option(
   "--config-file [path]",
   "Path to the babel config file to use. Defaults to working directory babel.config.js",
 );
-program.option(
+command.option(
   "--env-name [name]",
   "The name of the 'env' to use when loading configs and plugins. " +
     "Defaults to the value of BABEL_ENV, or else NODE_ENV, or else 'development'.",
 );
-program.option(
+command.option(
   "--root-mode [mode]",
   "The project-root resolution mode. " +
     "One of 'root' (the default), 'upward', or 'upward-optional'.",
 );
-program.option("-w, --plugins [string]", "", collect);
-program.option("-b, --presets [string]", "", collect);
+command.option("-w, --plugins [string]", "", collect);
+command.option("-b, --presets [string]", "", collect);
 
 declare const PACKAGE_JSON: { name: string; version: string };
-program.version(PACKAGE_JSON.version);
-program.usage("[options] [ -e script | script.js ] [arguments]");
-program.parse(process.argv);
+command.version(PACKAGE_JSON.version);
+command.usage("[options] [ -e script | script.js ] [arguments]");
+command.parse(process.argv);
+const program = command.opts();
 
 const babelOptions = {
   caller: {
@@ -177,7 +178,7 @@ if (program.eval || program.print) {
     process.stdout.write(output + "\n");
   }
 } else {
-  if (program.args.length) {
+  if (command.args.length) {
     // slice all arguments up to the first filename since they're babel args that we handle
     let args = process.argv.slice(2);
 
@@ -190,7 +191,7 @@ if (program.eval || program.print) {
       }
 
       if (arg[0] === "-") {
-        const parsedOption = program.options.find((option: any) => {
+        const parsedOption = command.options.find((option: any) => {
           return option.long === arg || option.short === arg;
         });
         if (parsedOption === undefined) {

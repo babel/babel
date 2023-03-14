@@ -224,7 +224,7 @@ __metadata:
     "@types/fs-readdir-recursive": ^1.1.0
     "@types/glob": ^7.2.0
     chokidar: ^3.4.0
-    commander: ^4.0.1
+    commander: ^10.0.0
     convert-source-map: ^1.1.0
     fs-readdir-recursive: ^1.1.0
     glob: ^7.2.0
@@ -1089,7 +1089,7 @@ __metadata:
     "@babel/register": "workspace:^"
     "@babel/runtime": "workspace:^"
     "@types/v8flags": ^3.1.1
-    commander: ^4.0.1
+    commander: ^10.0.0
     core-js: ^3.26.0
     fs-readdir-recursive: ^1.0.0
     regenerator-runtime: ^0.13.11
@@ -7013,6 +7013,13 @@ __metadata:
   dependencies:
     delayed-stream: ~1.0.0
   checksum: 49fa4aeb4916567e33ea81d088f6584749fc90c7abec76fd516bf1c5aa5c79f3584b5ba3de6b86d26ddd64bae5329c4c7479343250cfe71c75bb366eae53bb7c
+  languageName: node
+  linkType: hard
+
+"commander@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "commander@npm:10.0.0"
+  checksum: 9f6495651f878213005ac744dd87a85fa3d9f2b8b90d1c19d0866d666bda7f735adfd7c2f10dfff345782e2f80ea258f98bb4efcef58e4e502f25f883940acfd
   languageName: node
   linkType: hard
 
