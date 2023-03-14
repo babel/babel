@@ -254,7 +254,10 @@ class Printer {
       (strFirst === charCodes.plusSign && lastChar === charCodes.plusSign) ||
       (strFirst === charCodes.dash && lastChar === charCodes.dash) ||
       // Needs spaces to avoid changing '34' to '34.', which would still be a valid number.
-      (strFirst === charCodes.dot && this._endsWithInteger)
+      (strFirst === charCodes.dot && this._endsWithInteger) ||
+      // Needs spaces to avoid changing a! == 0 to a!== 0
+      (strFirst === charCodes.equalsTo &&
+        lastChar === charCodes.exclamationMark)
     ) {
       this._space();
     }
