@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "clone-deep": "^4.0.1",
-    "find-cache-dir": "condition:BABEL_8_BREAKING ? ^3.3.1 : ^2.0.0",
+    "find-cache-dir": "^3.3.2",
     "pirates": "^4.0.5",
     "source-map-support": "^0.5.16"
   },

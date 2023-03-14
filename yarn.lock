@@ -3609,7 +3609,7 @@ __metadata:
     "@babel/plugin-transform-modules-commonjs": "workspace:^"
     browserify: ^16.5.2
     clone-deep: ^4.0.1
-    find-cache-dir: "condition:BABEL_8_BREAKING ? ^3.3.1 : ^2.0.0"
+    find-cache-dir: ^3.3.2
     pirates: ^4.0.5
     source-map-support: ^0.5.16
   peerDependencies:
@@ -8591,7 +8591,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"find-cache-dir-BABEL_8_BREAKING-false@npm:find-cache-dir@^2.0.0, find-cache-dir@npm:^2.1.0":
+"find-cache-dir@npm:^2.1.0":
   version: 2.1.0
   resolution: "find-cache-dir@npm:2.1.0"
   dependencies:
@@ -8602,24 +8602,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"find-cache-dir-BABEL_8_BREAKING-true@npm:find-cache-dir@^3.3.1":
-  version: 3.3.1
-  resolution: "find-cache-dir@npm:3.3.1"
+"find-cache-dir@npm:^3.3.2":
+  version: 3.3.2
+  resolution: "find-cache-dir@npm:3.3.2"
   dependencies:
     commondir: ^1.0.1
     make-dir: ^3.0.2
     pkg-dir: ^4.1.0
-  checksum: 0f7c22b65e07f9b486b4560227d014fab1e79ffbbfbafb87d113a2e878510bd620ef6fdff090e5248bb2846d28851d19e42bfdc7c50687966acc106328e7abf1
-  languageName: node
-  linkType: hard
-
-"find-cache-dir@condition:BABEL_8_BREAKING ? ^3.3.1 : ^2.0.0":
-  version: 0.0.0-condition-1cab84
-  resolution: "find-cache-dir@condition:BABEL_8_BREAKING?^3.3.1:^2.0.0#1cab84"
-  dependencies:
-    find-cache-dir-BABEL_8_BREAKING-false: "npm:find-cache-dir@^2.0.0"
-    find-cache-dir-BABEL_8_BREAKING-true: "npm:find-cache-dir@^3.3.1"
-  checksum: ecc27cee26d013251b915cac38083e2cd1e9f965984fce4de5d82391c2c878f22f7d7a717d130912dd85b0a891f58794eab8f94aca8240dbdfb41fae7f6fbb13
+  checksum: 1e61c2e64f5c0b1c535bd85939ae73b0e5773142713273818cc0b393ee3555fb0fd44e1a5b161b8b6c3e03e98c2fcc9c227d784850a13a90a8ab576869576817
   languageName: node
   linkType: hard
 
