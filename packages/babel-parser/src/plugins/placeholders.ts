@@ -78,10 +78,10 @@ export default (superClass: typeof Parser) =>
         code === charCodes.percentSign &&
         this.input.charCodeAt(this.state.pos + 1) === charCodes.percentSign
       ) {
-        return this.finishOp(tt.placeholder, 2);
+        this.finishOp(tt.placeholder, 2);
+      } else {
+        super.getTokenFromCode(code);
       }
-
-      return super.getTokenFromCode(code);
     }
 
     /* ============================================================ *

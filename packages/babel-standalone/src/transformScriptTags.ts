@@ -125,7 +125,7 @@ function load(
       }
     }
   };
-  return xhr.send(null);
+  xhr.send(null);
 }
 
 /**

@@ -78,7 +78,8 @@ traverse.verify = visitors.verify;
 traverse.explode = visitors.explode;
 
 traverse.cheap = function (node: t.Node, enter: (node: t.Node) => void) {
-  return traverseFast(node, enter);
+  traverseFast(node, enter);
+  return;
 };
 
 traverse.node = function (

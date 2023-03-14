@@ -1182,7 +1182,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             // For compatibility to estree we cannot call parseLiteral directly here
             return super.parseExprAtom();
           default:
-            throw this.unexpected();
+            this.unexpected();
         }
       })();
       return this.finishNode(node, "TSLiteralType");
@@ -1221,7 +1221,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             const node = this.startNode<N.TsLiteralType>();
             const nextToken = this.lookahead();
             if (nextToken.type !== tt.num && nextToken.type !== tt.bigint) {
-              throw this.unexpected();
+              this.unexpected();
             }
             // @ts-expect-error: parseMaybeUnary must returns unary expression
             node.literal = this.parseMaybeUnary();
@@ -1283,7 +1283,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         }
       }
 
-      throw this.unexpected();
+      this.unexpected();
     }
 
     tsParseArrayTypeOrHigher(): N.TsType {
@@ -1968,7 +1968,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       this.expectContextual(tt._require);
       this.expect(tt.parenL);
       if (!this.match(tt.string)) {
-        throw this.unexpected();
+        this.unexpected();
       }
       // For compatibility to estree we cannot call parseLiteral directly here
       node.expression = super.parseExprAtom() as N.StringLiteral;
@@ -3751,13 +3751,15 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     getTokenFromCode(code: number): void {
       if (this.state.inType) {
         if (code === charCodes.greaterThan) {
-          return this.finishOp(tt.gt, 1);
+          this.finishOp(tt.gt, 1);
+          return;
         }
         if (code === charCodes.lessThan) {
-          return this.finishOp(tt.lt, 1);
+          this.finishOp(tt.lt, 1);
+          return;
         }
       }
-      return super.getTokenFromCode(code);
+      super.getTokenFromCode(code);
     }
 
     // used after we have finished parsing types

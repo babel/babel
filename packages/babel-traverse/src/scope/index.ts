@@ -629,10 +629,12 @@ export default class Scope {
     if (binding) {
       newName ||= this.generateUidIdentifier(oldName).name;
       const renamer = new Renamer(binding, oldName, newName);
-      return process.env.BABEL_8_BREAKING
-        ? renamer.rename()
-        : // @ts-expect-error: babel 7->8
-          renamer.rename(arguments[2]);
+      if (process.env.BABEL_8_BREAKING) {
+        renamer.rename();
+      } else {
+        // @ts-ignore(Babel 7 vs Babel 8) TODO: Delete this
+        renamer.rename(arguments[2]);
+      }
     }
   }
 

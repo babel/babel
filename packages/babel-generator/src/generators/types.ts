@@ -211,7 +211,7 @@ export function StringLiteral(this: Printer, node: t.StringLiteral) {
 
   const val = jsesc(node.value, this.format.jsescOption);
 
-  return this.token(val);
+  this.token(val);
 }
 
 export function BigIntLiteral(this: Printer, node: t.BigIntLiteral) {

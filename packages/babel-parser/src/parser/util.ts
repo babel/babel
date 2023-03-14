@@ -101,7 +101,7 @@ export default abstract class UtilParser extends Tokenizer {
       if (toParseError != null) {
         throw this.raise(toParseError, { at: this.state.startLoc });
       }
-      throw this.unexpected(null, token);
+      this.unexpected(null, token);
     }
   }
 

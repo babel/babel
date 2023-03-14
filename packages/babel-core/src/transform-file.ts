@@ -40,7 +40,7 @@ export function transformFile(
 export function transformFile(
   ...args: Parameters<typeof transformFileRunner.errback>
 ) {
-  return transformFileRunner.errback(...args);
+  transformFileRunner.errback(...args);
 }
 
 export function transformFileSync(

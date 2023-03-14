@@ -439,7 +439,8 @@ export class DestructuringTransformer {
     // eg: let [a, b] = [1, 2];
 
     if (this.canUnpackArrayPattern(pattern, arrayRef)) {
-      return this.pushUnpackedArrayPattern(pattern, arrayRef);
+      this.pushUnpackedArrayPattern(pattern, arrayRef);
+      return;
     }
 
     // if we have a rest then we need all the elements so don't tell

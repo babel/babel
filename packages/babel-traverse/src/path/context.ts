@@ -214,14 +214,16 @@ export function _resyncKey(this: NodePath) {
   if (Array.isArray(this.container)) {
     for (let i = 0; i < this.container.length; i++) {
       if (this.container[i] === this.node) {
-        return this.setKey(i);
+        this.setKey(i);
+        return;
       }
     }
   } else {
     for (const key of Object.keys(this.container)) {
       // @ts-expect-error this.key should present in this.container
       if (this.container[key] === this.node) {
-        return this.setKey(key);
+        this.setKey(key);
+        return;
       }
     }
   }

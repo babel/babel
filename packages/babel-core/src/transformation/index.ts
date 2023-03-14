@@ -94,6 +94,7 @@ function* transformFile(file: File, pluginPasses: PluginPasses): Handler<void> {
     for (const [plugin, pass] of passPairs) {
       const fn = plugin.pre;
       if (fn) {
+        // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
         const result = fn.call(pass, file);
 
         // @ts-expect-error - If we want to support async .pre
@@ -121,6 +122,7 @@ function* transformFile(file: File, pluginPasses: PluginPasses): Handler<void> {
     for (const [plugin, pass] of passPairs) {
       const fn = plugin.post;
       if (fn) {
+        // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
         const result = fn.call(pass, file);
 
         // @ts-expect-error - If we want to support async .post
