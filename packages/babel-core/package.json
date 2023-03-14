@@ -60,7 +60,7 @@
     "debug": "^4.1.0",
     "gensync": "^1.0.0-beta.2",
     "json5": "^2.2.2",
-    "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
+    "semver": "^7.3.8"
   },
   "devDependencies": {
     "@babel/helper-transform-fixture-test-runner": "workspace:^",
