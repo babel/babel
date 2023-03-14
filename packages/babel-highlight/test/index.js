@@ -9,20 +9,16 @@ describe("@babel/highlight", function () {
   function stubColorSupport(supported) {
     let originalChalkLevel;
     let originalChalkSupportsColor;
-    let originalChalkEnabled;
     beforeEach(function () {
       originalChalkSupportsColor = chalk.supportsColor;
       originalChalkLevel = chalk.level;
-      originalChalkEnabled = chalk.enabled;
       chalk.supportsColor = supported ? { level: 1 } : false;
       chalk.level = supported ? 1 : 0;
-      chalk.enabled = supported;
     });
 
     afterEach(function () {
       chalk.supportsColor = originalChalkSupportsColor;
       chalk.level = originalChalkLevel;
-      chalk.enabled = originalChalkEnabled;
     });
   }
 
@@ -92,15 +88,13 @@ describe("@babel/highlight", function () {
 
       describe("when forceColor is not passed", function () {
         it("returns a Chalk instance", function () {
-          expect(getChalk({}).constructor).toBe(chalk.constructor);
+          expect(getChalk({}).Instance).toBe(chalk.Instance);
         });
       });
 
       describe("when forceColor is passed", function () {
         it("returns a Chalk instance", function () {
-          expect(getChalk({ forceColor: true }).constructor).toBe(
-            chalk.constructor,
-          );
+          expect(getChalk({ forceColor: true }).Instance).toBe(chalk.Instance);
         });
       });
     });
@@ -110,15 +104,13 @@ describe("@babel/highlight", function () {
 
       describe("when forceColor is not passed", function () {
         it("returns a Chalk instance", function () {
-          expect(getChalk({}).constructor).toBe(chalk.constructor);
+          expect(getChalk({}).Instance).toBe(chalk.Instance);
         });
       });
 
       describe("when forceColor is passed", function () {
         it("returns a Chalk instance", function () {
-          expect(getChalk({ forceColor: true }).constructor).toBe(
-            chalk.constructor,
-          );
+          expect(getChalk({ forceColor: true }).Instance).toBe(chalk.Instance);
         });
       });
     });

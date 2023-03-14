@@ -256,9 +256,7 @@ export function shouldHighlight(options: Options): boolean {
  * The Chalk instance that should be used given the passed options.
  */
 export function getChalk(options: Options) {
-  return options.forceColor
-    ? new Chalk.constructor({ enabled: true, level: 1 })
-    : Chalk;
+  return options.forceColor ? new Chalk.Instance({ level: 1 }) : Chalk;
 }
 
 /**
