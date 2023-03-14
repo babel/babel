@@ -567,7 +567,7 @@ __metadata:
     "@types/lru-cache": ^5.1.1
     "@types/semver": ^5.5.0
     browserslist: ^4.21.3
-    lru-cache: "condition:BABEL_8_BREAKING ? ^7.14.1 : ^5.1.1"
+    lru-cache: ^7.18.0
     semver: ^7.3.8
   peerDependencies:
     "@babel/core": ^7.0.0
@@ -11289,32 +11289,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"lru-cache-BABEL_8_BREAKING-false@npm:lru-cache@^5.1.1, lru-cache@npm:^5.1.1":
-  version: 5.1.1
-  resolution: "lru-cache@npm:5.1.1"
-  dependencies:
-    yallist: ^3.0.2
-  checksum: c154ae1cbb0c2206d1501a0e94df349653c92c8cbb25236d7e85190bcaf4567a03ac6eb43166fabfa36fd35623694da7233e88d9601fbf411a9a481d85dbd2cb
-  languageName: node
-  linkType: hard
-
-"lru-cache-BABEL_8_BREAKING-true@npm:lru-cache@^7.14.1":
-  version: 7.14.1
-  resolution: "lru-cache@npm:7.14.1"
-  checksum: d72c6713c6a6d86836a7a6523b3f1ac6764768cca47ec99341c3e76db06aacd4764620e5e2cda719a36848785a52a70e531822dc2b33fb071fa709683746c104
-  languageName: node
-  linkType: hard
-
-"lru-cache@condition:BABEL_8_BREAKING ? ^7.14.1 : ^5.1.1":
-  version: 0.0.0-condition-86c673
-  resolution: "lru-cache@condition:BABEL_8_BREAKING?^7.14.1:^5.1.1#86c673"
-  dependencies:
-    lru-cache-BABEL_8_BREAKING-false: "npm:lru-cache@^5.1.1"
-    lru-cache-BABEL_8_BREAKING-true: "npm:lru-cache@^7.14.1"
-  checksum: 9a90e9b7fff14a71bd363ac5e40cea193f2da3380ca92d012589d3da49cc6af9c9a8399fc59b57b206e62753347ff4d77769a1e3bc0dd5550f3a8225a1a78a9a
-  languageName: node
-  linkType: hard
-
 "lru-cache@npm:^4.0.1":
   version: 4.1.5
   resolution: "lru-cache@npm:4.1.5"
@@ -11325,12 +11299,28 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"lru-cache@npm:^5.1.1":
+  version: 5.1.1
+  resolution: "lru-cache@npm:5.1.1"
+  dependencies:
+    yallist: ^3.0.2
+  checksum: c154ae1cbb0c2206d1501a0e94df349653c92c8cbb25236d7e85190bcaf4567a03ac6eb43166fabfa36fd35623694da7233e88d9601fbf411a9a481d85dbd2cb
+  languageName: node
+  linkType: hard
+
 "lru-cache@npm:^6.0.0":
   version: 6.0.0
   resolution: "lru-cache@npm:6.0.0"
   dependencies:
     yallist: ^4.0.0
   checksum: f97f499f898f23e4585742138a22f22526254fdba6d75d41a1c2526b3b6cc5747ef59c5612ba7375f42aca4f8461950e925ba08c991ead0651b4918b7c978297
+  languageName: node
+  linkType: hard
+
+"lru-cache@npm:^7.18.0":
+  version: 7.18.3
+  resolution: "lru-cache@npm:7.18.3"
+  checksum: e550d772384709deea3f141af34b6d4fa392e2e418c1498c078de0ee63670f1f46f5eee746e8ef7e69e1c895af0d4224e62ee33e66a543a14763b0f2e74c1356
   languageName: node
   linkType: hard
 
