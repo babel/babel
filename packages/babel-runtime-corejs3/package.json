@@ -1232,7 +1232,7 @@
     "./core-js/instance/values": "./core-js/instance/values.js"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": ">=14.17.0"
   },
   "type": "commonjs",
   "conditions": {

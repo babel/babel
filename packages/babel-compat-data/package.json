@@ -34,7 +34,7 @@
     "electron-to-chromium": "^1.4.248"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": ">=14.17.0"
   },
   "type": "commonjs"
 }

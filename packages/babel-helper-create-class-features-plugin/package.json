@@ -37,7 +37,7 @@
     "@babel/preset-env": "workspace:^"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": ">=14.17.0"
   },
   "conditions": {
     "BABEL_8_BREAKING": [

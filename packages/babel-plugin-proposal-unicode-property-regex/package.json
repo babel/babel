@@ -9,7 +9,7 @@
   },
   "main": "./lib/index.js",
   "engines": {
-    "node": ">=4"
+    "node": ">=14.17.0"
   },
   "keywords": [
     "babel-plugin",

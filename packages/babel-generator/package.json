@@ -31,7 +31,7 @@
     "charcodes": "^0.2.0"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": ">=14.17.0"
   },
   "conditions": {
     "BABEL_8_BREAKING": [

@@ -30,7 +30,7 @@
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-logical-assignment-operators",
   "engines": {
-    "node": ">=6.9.0"
+    "node": ">=14.17.0"
   },
   "author": "The Babel Team (https://babel.dev/team)",
   "conditions": {
