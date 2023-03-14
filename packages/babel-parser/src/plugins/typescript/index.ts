@@ -214,6 +214,8 @@ const TSErrors = ParseErrorEnum`typescript`({
     `Single type parameter ${typeParameterName} should have a trailing comma. Example usage: <${typeParameterName},>.`,
   StaticBlockCannotHaveModifier:
     "Static class blocks cannot have any modifier.",
+  TupleOptionalAfterType:
+    "A labeled tuple optional element must be declared using a question mark after the name and before the colon (`name?: type`), rather than after the type (`name: type?`).",
   TypeAnnotationAfterAssign:
     "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`.",
   TypeImportCannotSpecifyDefaultAndNamed:
@@ -460,8 +462,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         case "TypeParametersOrArguments":
           return this.match(tt.gt);
       }
-
-      throw new Error("Unreachable");
     }
 
     tsParseList<T extends N.Node>(
@@ -1155,6 +1155,13 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           labeledNode.optional = optional;
           labeledNode.label = label;
           labeledNode.elementType = type;
+
+          if (this.eat(tt.question)) {
+            labeledNode.optional = true;
+            this.raise(TSErrors.TupleOptionalAfterType, {
+              at: this.state.lastTokStartLoc,
+            });
+          }
         } else {
           labeledNode = this.startNodeAtNode<N.TsNamedTupleMember>(type);
           labeledNode.optional = optional;
