@@ -269,8 +269,6 @@ __metadata:
   resolution: "@babel/code-frame@workspace:packages/babel-code-frame"
   dependencies:
     "@babel/highlight": "workspace:^"
-    "@types/chalk": ^2.0.0
-    chalk: ^2.0.0
     strip-ansi: ^4.0.0
   languageName: unknown
   linkType: soft
