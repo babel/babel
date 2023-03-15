@@ -12,16 +12,20 @@ describe("@babel/code-frame", function () {
   function stubColorSupport(supported) {
     let originalChalkLevel;
     let originalChalkSupportsColor;
+    let originalChalkEnabled;
     beforeEach(function () {
       originalChalkSupportsColor = chalk.supportsColor;
       originalChalkLevel = chalk.level;
+      originalChalkEnabled = chalk.enabled;
       chalk.supportsColor = supported ? { level: 1 } : false;
       chalk.level = supported ? 1 : 0;
+      chalk.enabled = supported;
     });
 
     afterEach(function () {
       chalk.supportsColor = originalChalkSupportsColor;
       chalk.level = originalChalkLevel;
+      chalk.enabled = originalChalkEnabled;
     });
   }
   test("basic usage", function () {
