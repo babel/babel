@@ -2711,6 +2711,18 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     */
     checkDuplicateExports() {}
 
+    assertModuleNodeAllowed(node: N.Node): void {
+      if (
+        node.type === "TSImportEqualsDeclaration" ||
+        node.type === "TSExportAssignment"
+      ) {
+        // `import ... =` and `export =` are allowed in scripts,
+        // since they are used for CommonJS.
+        return;
+      }
+      super.assertModuleNodeAllowed(node);
+    }
+
     parseImport(
       node: Undone<N.ImportDeclaration | N.TsImportEqualsDeclaration>,
     ): N.AnyImport {
