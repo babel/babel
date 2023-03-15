@@ -72,8 +72,8 @@ rm -f packages/jest-transform/src/__tests__/__snapshots__/ScriptTransformer.test
 # The goals of this e2e test are:
 #   1) Check that the typescript compilation isn't completely broken
 #   2) Make sure that we don't accidentally break jest's usage of the Babel API
-CI=true yarn jest --color --maxWorkers=2 --config jest.config.mjs packages
-CI=true yarn jest --color --maxWorkers=2 --config jest.config.mjs e2e/__tests__/babel
-CI=true yarn jest --color --maxWorkers=2 --config jest.config.mjs e2e/__tests__/transform
+CI=true yarn jest --maxWorkers=2 --config jest.config.mjs packages
+CI=true yarn jest --maxWorkers=2 --config jest.config.mjs e2e/__tests__/babel
+CI=true yarn jest --maxWorkers=2 --config jest.config.mjs e2e/__tests__/transform
 
 cleanup

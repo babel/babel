@@ -90,9 +90,7 @@ jobs:
         env:
           USE_ESM: true
       - name: Test
-        # Hack: --color has supports-color@5 returned true for GitHub CI
-        # Remove once `chalk` is bumped to 4.0.
-        run: yarn jest --ci --color
+        run: yarn jest --ci
         env:
           BABEL_ENV: test
           USE_ESM: true
@@ -231,12 +229,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Test on node.js ${{ matrix.node-version }}
-        # Hack: --color has supports-color@5 returned true for GitHub CI
-        # Remove once `chalk` is bumped to 4.0.
-
         # Todo(Babel 8): Jest execution path is hardcoded because Yarn 2 does not support node 6
         run: |
-          BABEL_ENV=test node --max-old-space-size=4096 ./node_modules/.bin/jest --ci --color
+          BABEL_ENV=test node --max-old-space-size=4096 ./node_modules/.bin/jest --ci
         env:
           TEST_FUZZ: "${{ (matrix.node-version == '6' || matrix.node-version == '8' || matrix.node-version == '10') && 'false' || 'true' }}"
       - name: Use Node.js latest # For `yarn version` in post actions of the first actions/setup-node
@@ -307,10 +302,8 @@ jobs:
       - name: Generate runtime helpers
         run: make build-plugin-transform-runtime-dist
       - name: Test
-        # Hack: --color has supports-color@5 returned true for GitHub CI
-        # Remove once `chalk` is bumped to 4.0.
         run: |
-          yarn jest --ci --color
+          yarn jest --ci
           yarn test:esm
         env:
           BABEL_ENV: test
@@ -338,9 +331,7 @@ jobs:
       - name: Extract artifacts
         run: tar -xf babel-artifact.tar; rm babel-artifact.tar
       - name: Test on Windows
-        # Hack: --color has supports-color@5 returned true for GitHub CI
-        # Remove once `chalk` is bumped to 4.0.
-        run: yarn jest --ci --color
+        run: yarn jest --ci
         env:
           BABEL_ENV: test
 
