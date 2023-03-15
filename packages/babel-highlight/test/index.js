@@ -6,14 +6,18 @@ const highlight = _highlight.default || _highlight;
 
 describe("@babel/highlight", function () {
   function stubColorSupport(supported) {
-    let originalSupportsColor;
+    let originalChalkLevel;
+    let originalChalkSupportsColor;
     beforeEach(function () {
-      originalSupportsColor = chalk.supportsColor;
+      originalChalkSupportsColor = chalk.supportsColor;
+      originalChalkLevel = chalk.level;
       chalk.supportsColor = supported;
+      chalk.level = supported ? 1 : 0;
     });
 
     afterEach(function () {
-      chalk.supportsColor = originalSupportsColor;
+      chalk.supportsColor = originalChalkSupportsColor;
+      chalk.level = originalChalkLevel;
     });
   }
 
