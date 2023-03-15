@@ -1,12 +1,9 @@
 import stripAnsi from "strip-ansi";
-import { createRequire } from "module";
+import { getChalk } from "@babel/highlight";
 import _codeFrame, { codeFrameColumns } from "../lib/index.js";
 const codeFrame = _codeFrame.default || _codeFrame;
 
-const require = createRequire(import.meta.url);
-const babelHighlightPath = require.resolve("@babel/highlight");
-const chalkPath = require.resolve("chalk", { paths: [babelHighlightPath] });
-const chalk = require(chalkPath);
+const chalk = getChalk({});
 
 describe("@babel/code-frame", function () {
   function stubColorSupport(supported) {
