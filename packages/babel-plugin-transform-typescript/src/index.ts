@@ -78,6 +78,21 @@ function safeRemove(path: NodePath) {
   path.opts.noScope = false;
 }
 
+function assertCjsModuleIsScript(
+  path: NodePath,
+  wrong: string,
+  suggestion: string,
+  extra: string = "",
+): void {
+  const programParent = path.find(p => p.isProgram()) as NodePath<t.Program>;
+  if (programParent.node.sourceType !== "script") {
+    throw path.buildCodeFrameError(
+      `\`${wrong}\` is only supported when "sourceType" is "script".\n` +
+        `Please consider using \`${suggestion}\`${extra}.`,
+    );
+  }
+}
+
 export interface Options extends SyntaxOptions {
   /** @default true */
   allowNamespaces?: boolean;
@@ -575,33 +590,42 @@ export default declare((api, opts: Options) => {
       },
 
       TSImportEqualsDeclaration(path: NodePath<t.TSImportEqualsDeclaration>) {
-        if (t.isTSExternalModuleReference(path.node.moduleReference)) {
+        const { id, moduleReference } = path.node;
+
+        let init: t.Expression;
+        let varKind: "var" | "const";
+        if (t.isTSExternalModuleReference(moduleReference)) {
           // import alias = require('foo');
-          throw path.buildCodeFrameError(
-            `\`import ${path.node.id.name} = require('${path.node.moduleReference.expression.value}')\` ` +
-              "is not supported by @babel/plugin-transform-typescript\n" +
-              "Please consider using " +
-              `\`import ${path.node.id.name} from '${path.node.moduleReference.expression.value}';\` alongside ` +
-              "Typescript's --allowSyntheticDefaultImports option.",
+          assertCjsModuleIsScript(
+            path,
+            `import ${id.name} = require(...);`,
+            `import ${id.name} from '...';`,
+            " alongside Typescript's --allowSyntheticDefaultImports option",
           );
+          init = t.callExpression(t.identifier("require"), [
+            moduleReference.expression,
+          ]);
+          varKind = "const";
+        } else {
+          // import alias = Namespace;
+          init = entityNameToExpr(moduleReference);
+          varKind = "var";
         }
 
-        // import alias = Namespace;
         path.replaceWith(
-          t.variableDeclaration("var", [
-            t.variableDeclarator(
-              path.node.id,
-              entityNameToExpr(path.node.moduleReference),
-            ),
-          ]),
+          t.variableDeclaration(varKind, [t.variableDeclarator(id, init)]),
         );
         path.scope.registerDeclaration(path);
       },
 
       TSExportAssignment(path) {
-        throw path.buildCodeFrameError(
-          "`export =` is not supported by @babel/plugin-transform-typescript\n" +
-            "Please consider using `export <value>;`.",
+        assertCjsModuleIsScript(
+          path,
+          `export = <value>;`,
+          `export default <value>;`,
+        );
+        path.replaceWith(
+          template.statement.ast`module.exports = ${path.node.expression}`,
         );
       },
 
