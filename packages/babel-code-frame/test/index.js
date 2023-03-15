@@ -15,7 +15,7 @@ describe("@babel/code-frame", function () {
     beforeEach(function () {
       originalChalkSupportsColor = chalk.supportsColor;
       originalChalkLevel = chalk.level;
-      chalk.supportsColor = supported;
+      chalk.supportsColor = supported ? { level: 1 } : false;
       chalk.level = supported ? 1 : 0;
     });
 
