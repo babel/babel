@@ -19,12 +19,10 @@
     "@babel/highlight": "workspace:^"
   },
   "devDependencies": {
-    "@types/chalk": "^2.0.0",
-    "chalk": "^2.0.0",
     "strip-ansi": "^4.0.0"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": ">=14.17.0"
   },
   "conditions": {
     "BABEL_8_BREAKING": [

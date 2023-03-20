@@ -31,7 +31,7 @@
     "index.cjs"
   ],
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=14.17.0"
   },
   "devDependencies": {
     "@babel/code-frame": "workspace:^",

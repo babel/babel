@@ -33,7 +33,7 @@
     "core-js": "^3.26.0"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": ">=14.17.0"
   },
   "author": "The Babel Team (https://babel.dev/team)",
   "conditions": {

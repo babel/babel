@@ -670,6 +670,8 @@ A `this` expression.
 interface ArrowFunctionExpression <: Function, Expression {
   type: "ArrowFunctionExpression";
   body: BlockStatement | Expression;
+  async: boolean;
+  generator: false;
 }
 ```
 

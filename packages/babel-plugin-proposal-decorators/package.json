@@ -40,7 +40,7 @@
     "object.getownpropertydescriptors": "^2.1.1"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": ">=14.17.0"
   },
   "conditions": {
     "BABEL_8_BREAKING": [

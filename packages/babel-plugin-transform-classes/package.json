@@ -22,7 +22,7 @@
     "@babel/helper-plugin-utils": "workspace:^",
     "@babel/helper-replace-supers": "workspace:^",
     "@babel/helper-split-export-declaration": "workspace:^",
-    "globals": "condition:BABEL_8_BREAKING ? ^13.5.0 : ^11.1.0"
+    "globals": "^13.20.0"
   },
   "keywords": [
     "babel-plugin"
@@ -36,7 +36,7 @@
     "@babel/traverse": "workspace:^"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": ">=14.17.0"
   },
   "author": "The Babel Team (https://babel.dev/team)",
   "conditions": {

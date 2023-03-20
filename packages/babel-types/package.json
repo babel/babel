@@ -26,7 +26,7 @@
   "dependencies": {
     "@babel/helper-string-parser": "workspace:^",
     "@babel/helper-validator-identifier": "workspace:^",
-    "to-fast-properties": "condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0"
+    "to-fast-properties": "^3.0.1"
   },
   "devDependencies": {
     "@babel/generator": "workspace:^",
@@ -35,7 +35,7 @@
     "glob": "^7.2.0"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": ">=14.17.0"
   },
   "conditions": {
     "BABEL_8_BREAKING": [

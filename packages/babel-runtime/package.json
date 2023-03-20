@@ -924,7 +924,7 @@
     "./regenerator/": "./regenerator/"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": ">=14.17.0"
   },
   "type": "commonjs",
   "conditions": {

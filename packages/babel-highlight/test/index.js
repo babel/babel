@@ -1,19 +1,24 @@
-import chalk from "chalk";
 import stripAnsi from "strip-ansi";
 
 import _highlight, { shouldHighlight, getChalk } from "../lib/index.js";
 const highlight = _highlight.default || _highlight;
 
+const chalk = getChalk({});
+
 describe("@babel/highlight", function () {
   function stubColorSupport(supported) {
-    let originalSupportsColor;
+    let originalChalkLevel;
+    let originalChalkSupportsColor;
     beforeEach(function () {
-      originalSupportsColor = chalk.supportsColor;
-      chalk.supportsColor = supported;
+      originalChalkSupportsColor = chalk.supportsColor;
+      originalChalkLevel = chalk.level;
+      chalk.supportsColor = supported ? { level: 1 } : false;
+      chalk.level = supported ? 1 : 0;
     });
 
     afterEach(function () {
-      chalk.supportsColor = originalSupportsColor;
+      chalk.supportsColor = originalChalkSupportsColor;
+      chalk.level = originalChalkLevel;
     });
   }
 
@@ -83,15 +88,13 @@ describe("@babel/highlight", function () {
 
       describe("when forceColor is not passed", function () {
         it("returns a Chalk instance", function () {
-          expect(getChalk({}).constructor).toBe(chalk.constructor);
+          expect(getChalk({}).Instance).toBe(chalk.Instance);
         });
       });
 
       describe("when forceColor is passed", function () {
         it("returns a Chalk instance", function () {
-          expect(getChalk({ forceColor: true }).constructor).toBe(
-            chalk.constructor,
-          );
+          expect(getChalk({ forceColor: true }).Instance).toBe(chalk.Instance);
         });
       });
     });
@@ -101,15 +104,13 @@ describe("@babel/highlight", function () {
 
       describe("when forceColor is not passed", function () {
         it("returns a Chalk instance", function () {
-          expect(getChalk({}).constructor).toBe(chalk.constructor);
+          expect(getChalk({}).Instance).toBe(chalk.Instance);
         });
       });
 
       describe("when forceColor is passed", function () {
         it("returns a Chalk instance", function () {
-          expect(getChalk({ forceColor: true }).constructor).toBe(
-            chalk.constructor,
-          );
+          expect(getChalk({ forceColor: true }).Instance).toBe(chalk.Instance);
         });
       });
     });

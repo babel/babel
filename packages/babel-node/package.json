@@ -24,9 +24,8 @@
   ],
   "dependencies": {
     "@babel/register": "workspace:^",
-    "commander": "^4.0.1",
+    "commander": "^10.0.0",
     "core-js": "^3.26.0",
-    "node-environment-flags": "^1.0.5",
     "regenerator-runtime": "^0.13.11",
     "v8flags": "^3.1.1"
   },
@@ -39,14 +38,13 @@
     "@babel/runtime": "workspace:^",
     "@types/v8flags": "^3.1.1",
     "fs-readdir-recursive": "^1.0.0",
-    "make-dir": "condition:BABEL_8_BREAKING ? : ^2.1.0",
     "rimraf": "^3.0.0"
   },
   "bin": {
     "babel-node": "./bin/babel-node.js"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": ">=14.17.0"
   },
   "conditions": {
     "BABEL_8_BREAKING": [

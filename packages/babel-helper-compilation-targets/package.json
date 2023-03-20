@@ -25,8 +25,8 @@
     "@babel/compat-data": "workspace:^",
     "@babel/helper-validator-option": "workspace:^",
     "browserslist": "^4.21.3",
-    "lru-cache": "condition:BABEL_8_BREAKING ? ^7.14.1 : ^5.1.1",
-    "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
+    "lru-cache": "^7.18.0",
+    "semver": "^7.3.8"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0"
@@ -38,7 +38,7 @@
     "@types/semver": "^5.5.0"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": ">=14.17.0"
   },
   "type": "commonjs",
   "conditions": {

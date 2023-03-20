@@ -15,7 +15,7 @@
     "./package.json": "./package.json"
   },
   "engines": {
-    "node": "^10.13.0 || ^12.13.0 || >=14.0.0"
+    "node": ">=14.17.0"
   },
   "publishConfig": {
     "access": "public"

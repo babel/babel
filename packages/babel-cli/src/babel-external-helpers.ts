@@ -1,4 +1,4 @@
-import commander from "commander";
+import { Command } from "commander";
 import { buildExternalHelpers } from "@babel/core";
 
 function collect(
@@ -17,18 +17,21 @@ function collect(
   return values;
 }
 
-commander.option(
+const command = new Command();
+
+command.option(
   "-l, --whitelist [whitelist]",
   "Whitelist of helpers to ONLY include",
   collect,
 );
-commander.option(
+command.option(
   "-t, --output-type [type]",
   "Type of output (global|umd|var)",
   "global",
 );
 
-commander.usage("[options]");
-commander.parse(process.argv);
+command.usage("[options]");
+command.parse();
+const opts = command.opts();
 
-console.log(buildExternalHelpers(commander.whitelist, commander.outputType));
+console.log(buildExternalHelpers(opts.whitelist, opts.outputType));

@@ -25,13 +25,13 @@
     "@babel/parser": "workspace:^",
     "@babel/types": "workspace:^",
     "debug": "^4.1.0",
-    "globals": "condition:BABEL_8_BREAKING ? ^13.5.0 : ^11.1.0"
+    "globals": "^13.20.0"
   },
   "devDependencies": {
     "@babel/helper-plugin-test-runner": "workspace:^"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": ">=14.17.0"
   },
   "conditions": {
     "BABEL_8_BREAKING": [

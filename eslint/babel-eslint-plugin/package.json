@@ -26,7 +26,7 @@
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
   "engines": {
-    "node": "^10.13.0 || ^12.13.0 || >=14.0.0"
+    "node": ">=14.17.0"
   },
   "bugs": {
     "url": "https://github.com/babel/babel/issues"

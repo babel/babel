@@ -90,7 +90,7 @@
     "babel-plugin-polyfill-corejs3": "^0.6.0",
     "babel-plugin-polyfill-regenerator": "^0.4.1",
     "core-js-compat": "^3.25.1",
-    "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
+    "semver": "^7.3.8"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
@@ -102,7 +102,7 @@
     "@babel/traverse": "workspace:^"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": ">=14.17.0"
   },
   "conditions": {
     "BABEL_8_BREAKING": [
