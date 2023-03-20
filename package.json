@@ -39,8 +39,8 @@
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@rollup/plugin-replace": "^4.0.0",
     "@types/node": "^18.11.7",
-    "@typescript-eslint/eslint-plugin": "^5.46.0",
-    "@typescript-eslint/parser": "^5.46.0",
+    "@typescript-eslint/eslint-plugin": "^5.55.0",
+    "@typescript-eslint/parser": "^5.55.0",
     "babel-plugin-transform-charcodes": "^0.2.0",
     "c8": "^7.12.0",
     "chalk": "^5.0.0",
@@ -64,7 +64,7 @@
     "jest-worker": "^29.0.1",
     "lint-staged": "^13.0.3",
     "mergeiterator": "^1.4.4",
-    "prettier": "^2.7.1",
+    "prettier": "^2.8.5",
     "rollup": "^2.78.0",
     "rollup-plugin-dts": "^5.0.0",
     "rollup-plugin-polyfill-node": "^0.10.2",
@@ -73,7 +73,7 @@
     "shelljs": "^0.8.5",
     "test262-stream": "^1.4.0",
     "through2": "^4.0.0",
-    "typescript": "~5.0.0-beta"
+    "typescript": "^5.0.2"
   },
   "workspaces": [
     "codemods/*",
