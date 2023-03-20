@@ -15,7 +15,7 @@ export const ChainFormatter = {
 
 type PrintableConfig = {
   content: OptionsAndDescriptors;
-  type: typeof ChainFormatter[keyof typeof ChainFormatter];
+  type: (typeof ChainFormatter)[keyof typeof ChainFormatter];
   callerName: string | undefined | null;
   filepath: string | undefined | null;
   index: number | undefined | null;
@@ -24,7 +24,7 @@ type PrintableConfig = {
 
 const Formatter = {
   title(
-    type: typeof ChainFormatter[keyof typeof ChainFormatter],
+    type: (typeof ChainFormatter)[keyof typeof ChainFormatter],
     callerName?: string | null,
     filepath?: string | null,
   ): string {
@@ -98,7 +98,7 @@ export class ConfigPrinter {
   _stack: Array<PrintableConfig> = [];
   configure(
     enabled: boolean,
-    type: typeof ChainFormatter[keyof typeof ChainFormatter],
+    type: (typeof ChainFormatter)[keyof typeof ChainFormatter],
     {
       callerName,
       filepath,

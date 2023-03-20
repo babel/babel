@@ -389,7 +389,7 @@ export default abstract class LValParser extends NodeUtils {
   parseBindingList(
     this: Parser,
     close: TokenType,
-    closeCharCode: typeof charCodes[keyof typeof charCodes],
+    closeCharCode: (typeof charCodes)[keyof typeof charCodes],
     flags: ParseBindingListFlags,
   ): Array<Pattern | TSParameterProperty> {
     const allowEmpty = flags & ParseBindingListFlags.ALLOW_EMPTY;
@@ -723,7 +723,7 @@ export default abstract class LValParser extends NodeUtils {
   }
 
   checkCommaAfterRest(
-    close: typeof charCodes[keyof typeof charCodes],
+    close: (typeof charCodes)[keyof typeof charCodes],
   ): boolean {
     if (!this.match(tt.comma)) {
       return false;

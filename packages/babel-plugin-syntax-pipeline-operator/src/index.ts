@@ -6,8 +6,8 @@ const documentationURL =
   "https://babeljs.io/docs/en/babel-plugin-proposal-pipeline-operator";
 
 export interface Options {
-  proposal: typeof PIPELINE_PROPOSALS[number];
-  topicToken?: typeof TOPIC_TOKENS[number];
+  proposal: (typeof PIPELINE_PROPOSALS)[number];
+  topicToken?: (typeof TOPIC_TOKENS)[number];
 }
 
 export default declare((api, { proposal, topicToken }: Options) => {

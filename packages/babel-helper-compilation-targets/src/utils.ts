@@ -53,7 +53,7 @@ export function isUnreleasedVersion(
 
 export function getLowestUnreleased(a: string, b: string, env: Target): string {
   const unreleasedLabel:
-    | typeof unreleasedLabels[keyof typeof unreleasedLabels]
+    | (typeof unreleasedLabels)[keyof typeof unreleasedLabels]
     | undefined =
     // @ts-expect-error unreleasedLabel is undefined when env is not safari
     unreleasedLabels[env];
