@@ -6,14 +6,14 @@ import type * as t from "@babel/types";
 const VALID_CALLEES = ["String", "Number", "Math"] as const;
 const INVALID_METHODS = ["random"] as const;
 
-function isValidCallee(val: string): val is typeof VALID_CALLEES[number] {
+function isValidCallee(val: string): val is (typeof VALID_CALLEES)[number] {
   return VALID_CALLEES.includes(
     // @ts-expect-error val is a string
     val,
   );
 }
 
-function isInvalidMethod(val: string): val is typeof INVALID_METHODS[number] {
+function isInvalidMethod(val: string): val is (typeof INVALID_METHODS)[number] {
   return INVALID_METHODS.includes(
     // @ts-expect-error val is a string
     val,

@@ -287,7 +287,7 @@ const knownAssumptions = [
   "skipForOfIteratorClosing",
   "superIsCallableConstructor",
 ] as const;
-export type AssumptionName = typeof knownAssumptions[number];
+export type AssumptionName = (typeof knownAssumptions)[number];
 export const assumptionsNames = new Set(knownAssumptions);
 
 function getSource(loc: NestingPath): OptionsSource {

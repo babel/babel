@@ -12,7 +12,7 @@ type transformFileType = typeof import("./transform-file");
 // Kind of gross, but essentially asserting that the exports of this module are the same as the
 // exports of transform-file-browser, since this file may be replaced at bundle time with
 // transform-file-browser.
-({} as any as transformFileBrowserType as transformFileType);
+({}) as any as transformFileBrowserType as transformFileType;
 
 const transformFileRunner = gensync(function* (
   filename: string,

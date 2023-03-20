@@ -3743,7 +3743,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     checkCommaAfterRest(
-      close: typeof charCodes[keyof typeof charCodes],
+      close: (typeof charCodes)[keyof typeof charCodes],
     ): boolean {
       if (
         this.state.isAmbientContext &&
