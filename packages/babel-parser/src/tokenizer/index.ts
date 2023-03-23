@@ -29,6 +29,7 @@ import {
   isNewLine,
   isWhitespace,
   skipWhiteSpace,
+  skipWhiteSpaceInLine,
 } from "../util/whitespace";
 import State from "./state";
 import type { LookaheadState, DeferredStrictError } from "./state";
@@ -193,6 +194,34 @@ export default abstract class Tokenizer extends CommentsParser {
 
   lookaheadCharCode(): number {
     return this.input.charCodeAt(this.nextTokenStart());
+  }
+
+  /**
+   * Similar to nextToken, but it will stop at line break when it is seen before the next token
+   *
+   * @returns {number} position of the next token start or line break, whichever is seen first.
+   * @memberof Tokenizer
+   */
+  nextTokenInLineStart(): number {
+    return this.nextTokenInLineStartSince(this.state.pos);
+  }
+
+  nextTokenInLineStartSince(pos: number): number {
+    skipWhiteSpaceInLine.lastIndex = pos;
+    return skipWhiteSpaceInLine.test(this.input)
+      ? skipWhiteSpaceInLine.lastIndex
+      : pos;
+  }
+
+  /**
+   * Similar to lookaheadCharCode, but it will return the char code of line break if it is
+   * seen before the next token
+   *
+   * @returns {number} char code of the next token start or line break, whichever is seen first.
+   * @memberof Tokenizer
+   */
+  lookaheadInLineCharCode(): number {
+    return this.input.charCodeAt(this.nextTokenInLineStart());
   }
 
   codePointAtPos(pos: number): number {
