@@ -339,11 +339,11 @@ export default abstract class StatementParser extends ExpressionParser {
   }
 
   startsUsingForOf(): boolean {
-    const lookahead = this.lookahead();
-    if (lookahead.type === tt._of && !lookahead.containsEsc) {
+    const { type, containsEsc } = this.lookahead();
+    if (type === tt._of && !containsEsc) {
       // `using of` must start a for-lhs-of statement
       return false;
-    } else {
+    } else if (tokenIsIdentifier(type) && !this.hasFollowingLineBreak()) {
       this.expectPlugin("explicitResourceManagement");
       return true;
     }
@@ -913,9 +913,7 @@ export default abstract class StatementParser extends ExpressionParser {
     }
 
     const startsWithLet = this.isContextual(tt._let);
-    const startsWithUsing =
-      this.isContextual(tt._using) &&
-      this.hasInLineFollowingBindingIdentifier();
+    const startsWithUsing = this.isContextual(tt._using);
     const isLetOrUsing =
       (startsWithLet && this.hasFollowingBindingAtom()) ||
       (startsWithUsing && this.startsUsingForOf());
