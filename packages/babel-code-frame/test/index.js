@@ -1,10 +1,30 @@
-import chalk from "chalk";
 import stripAnsi from "strip-ansi";
-
+import { getChalk } from "@babel/highlight";
 import _codeFrame, { codeFrameColumns } from "../lib/index.js";
 const codeFrame = _codeFrame.default || _codeFrame;
 
+const chalk = getChalk({});
+
 describe("@babel/code-frame", function () {
+  function stubColorSupport(supported) {
+    let originalChalkLevel;
+    let originalChalkSupportsColor;
+    let originalChalkEnabled;
+    beforeEach(function () {
+      originalChalkSupportsColor = chalk.supportsColor;
+      originalChalkLevel = chalk.level;
+      originalChalkEnabled = chalk.enabled;
+      chalk.supportsColor = supported ? { level: 1 } : false;
+      chalk.level = supported ? 1 : 0;
+      chalk.enabled = supported;
+    });
+
+    afterEach(function () {
+      chalk.supportsColor = originalChalkSupportsColor;
+      chalk.level = originalChalkLevel;
+      chalk.enabled = originalChalkEnabled;
+    });
+  }
   test("basic usage", function () {
     const rawLines = ["class Foo {", "  constructor()", "};"].join("\n");
     expect(codeFrame(rawLines, 2, 16)).toEqual(
@@ -94,53 +114,109 @@ describe("@babel/code-frame", function () {
     );
   });
 
-  test("opts.highlightCode", function () {
-    const rawLines = "console.log('babel')";
-    const result = codeFrame(rawLines, 1, 9, { highlightCode: true });
-    const stripped = stripAnsi(result);
-    expect(result.length).toBeGreaterThan(stripped.length);
-    expect(stripped).toEqual(
-      ["> 1 | console.log('babel')", "    |         ^"].join("\n"),
-    );
-  });
+  describe("when colors are supported", () => {
+    stubColorSupport(true);
 
-  test("opts.highlightCode with multiple columns and lines", function () {
-    // prettier-ignore
-    const rawLines = [
-      "function a(b, c) {",
-      "  return b + c;",
-      "}"
-    ].join("\n");
+    test("opts.highlightCode", function () {
+      const rawLines = "console.log('babel')";
+      const result = codeFrame(rawLines, 1, 9, { highlightCode: true });
+      const stripped = stripAnsi(result);
+      expect(result.length).toBeGreaterThan(stripped.length);
+      expect(stripped).toEqual(
+        ["> 1 | console.log('babel')", "    |         ^"].join("\n"),
+      );
+    });
 
-    const result = codeFrameColumns(
-      rawLines,
-      {
-        start: {
-          line: 1,
-          column: 1,
-        },
-        end: {
-          line: 3,
-          column: 1,
-        },
-      },
-      {
-        highlightCode: true,
-        message: "Message about things",
-      },
-    );
-    const stripped = stripAnsi(result);
-    expect(stripped).toEqual(
+    test("opts.highlightCode with multiple columns and lines", function () {
       // prettier-ignore
-      [
-        "> 1 | function a(b, c) {",
-        "    | ^^^^^^^^^^^^^^^^^^",
-        "> 2 |   return b + c;",
-        "    | ^^^^^^^^^^^^^^^",
-        "> 3 | }",
-        "    | ^ Message about things",
-      ].join('\n'),
-    );
+      const rawLines = [
+        "function a(b, c) {",
+        "  return b + c;",
+        "}"
+      ].join("\n");
+
+      const result = codeFrameColumns(
+        rawLines,
+        {
+          start: {
+            line: 1,
+            column: 1,
+          },
+          end: {
+            line: 3,
+            column: 1,
+          },
+        },
+        {
+          highlightCode: true,
+          message: "Message about things",
+        },
+      );
+      const stripped = stripAnsi(result);
+      expect(result.length).toBeGreaterThan(stripped.length);
+      expect(stripped).toEqual(
+        // prettier-ignore
+        [
+          "> 1 | function a(b, c) {",
+          "    | ^^^^^^^^^^^^^^^^^^",
+          "> 2 |   return b + c;",
+          "    | ^^^^^^^^^^^^^^^",
+          "> 3 | }",
+          "    | ^ Message about things",
+        ].join('\n'),
+      );
+    });
+    test("opts.forceColor", function () {
+      const marker = chalk.red.bold;
+      const gutter = chalk.grey;
+
+      const rawLines = ["", "", "", ""].join("\n");
+      expect(
+        codeFrame(rawLines, 3, null, {
+          linesAbove: 1,
+          linesBelow: 1,
+          forceColor: true,
+        }),
+      ).toEqual(
+        chalk.reset(
+          [
+            " " + gutter(" 2 |"),
+            marker(">") + gutter(" 3 |"),
+            " " + gutter(" 4 |"),
+          ].join("\n"),
+        ),
+      );
+    });
+
+    test("jsx", function () {
+      const gutter = chalk.grey;
+      const yellow = chalk.yellow;
+
+      const rawLines = ["<div />"].join("\n");
+
+      expect(
+        JSON.stringify(
+          codeFrame(rawLines, 0, null, {
+            linesAbove: 1,
+            linesBelow: 1,
+            forceColor: true,
+          }),
+        ),
+      ).toEqual(
+        JSON.stringify(
+          chalk.reset(
+            " " +
+              gutter(" 1 |") +
+              " " +
+              yellow("<") +
+              yellow("div") +
+              " " +
+              yellow("/") +
+              yellow(">"),
+          ),
+        ),
+      );
+    });
   });
 
   test("opts.linesAbove", function () {
@@ -261,58 +337,6 @@ describe("@babel/code-frame", function () {
         { linesAbove: 0, linesBelow: 0 },
       ),
     ).toEqual(["> 2 |   constructor() {"].join("\n"));
-  });
-
-  test("opts.forceColor", function () {
-    const marker = chalk.red.bold;
-    const gutter = chalk.grey;
-
-    const rawLines = ["", "", "", ""].join("\n");
-    expect(
-      codeFrame(rawLines, 3, null, {
-        linesAbove: 1,
-        linesBelow: 1,
-        forceColor: true,
-      }),
-    ).toEqual(
-      chalk.reset(
-        [
-          " " + gutter(" 2 |"),
-          marker(">") + gutter(" 3 |"),
-          " " + gutter(" 4 |"),
-        ].join("\n"),
-      ),
-    );
-  });
-
-  test("jsx", function () {
-    const gutter = chalk.grey;
-    const yellow = chalk.yellow;
-
-    const rawLines = ["<div />"].join("\n");
-
-    expect(
-      JSON.stringify(
-        codeFrame(rawLines, 0, null, {
-          linesAbove: 1,
-          linesBelow: 1,
-          forceColor: true,
-        }),
-      ),
-    ).toEqual(
-      JSON.stringify(
-        chalk.reset(
-          " " +
-            gutter(" 1 |") +
-            " " +
-            yellow("<") +
-            yellow("div") +
-            " " +
-            yellow("/") +
-            yellow(">"),
-        ),
-      ),
-    );
   });
 
   test("basic usage, new API", function () {

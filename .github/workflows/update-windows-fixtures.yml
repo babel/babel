@@ -60,10 +60,8 @@ jobs:
           git reset --hard HEAD
 
       - name: Regenerate fixtures
-        # Hack: --color has supports-color@5 returned true for GitHub CI
-        # Remove once `chalk` is bumped to 4.0.
         run: |
-          yarn jest -u --ci --color || true
+          yarn jest -u --ci || true
         env:
           BABEL_ENV: test
           OVERWRITE: true
