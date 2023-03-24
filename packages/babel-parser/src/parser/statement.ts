@@ -329,20 +329,21 @@ export default abstract class StatementParser extends ExpressionParser {
 
   /**
    * Assuming we have seen a contextual `using` and declaration is allowed, check if it
-   * starts a variable declaration so that it should be interpreted as a keyword.
+   * starts a variable declaration in the same line so that it should be interpreted as
+   * a keyword.
    */
-  hasFollowingBindingIdentifier(): boolean {
-    const next = this.nextTokenStart();
+  hasInLineFollowingBindingIdentifier(): boolean {
+    const next = this.nextTokenInLineStart();
     const nextCh = this.codePointAtPos(next);
     return this.chStartsBindingIdentifier(nextCh, next);
   }
 
   startsUsingForOf(): boolean {
-    const lookahead = this.lookahead();
-    if (lookahead.type === tt._of && !lookahead.containsEsc) {
+    const { type, containsEsc } = this.lookahead();
+    if (type === tt._of && !containsEsc) {
       // `using of` must start a for-lhs-of statement
       return false;
-    } else {
+    } else if (tokenIsIdentifier(type) && !this.hasFollowingLineBreak()) {
       this.expectPlugin("explicitResourceManagement");
       return true;
     }
@@ -485,9 +486,8 @@ export default abstract class StatementParser extends ExpressionParser {
       case tt._using:
         // using [no LineTerminator here][lookahead != `await`] BindingList[+Using]
         if (
-          this.hasFollowingLineBreak() ||
           this.state.containsEsc ||
-          !this.hasFollowingBindingIdentifier()
+          !this.hasInLineFollowingBindingIdentifier()
         ) {
           break;
         }
@@ -913,13 +913,10 @@ export default abstract class StatementParser extends ExpressionParser {
     }
 
     const startsWithLet = this.isContextual(tt._let);
-    const startsWithUsing =
-      this.isContextual(tt._using) && !this.hasFollowingLineBreak();
+    const startsWithUsing = this.isContextual(tt._using);
     const isLetOrUsing =
       (startsWithLet && this.hasFollowingBindingAtom()) ||
-      (startsWithUsing &&
-        this.hasFollowingBindingIdentifier() &&
-        this.startsUsingForOf());
+      (startsWithUsing && this.startsUsingForOf());
     if (this.match(tt._var) || this.match(tt._const) || isLetOrUsing) {
       const initNode = this.startNode<N.VariableDeclaration>();
       const kind = this.state.value;

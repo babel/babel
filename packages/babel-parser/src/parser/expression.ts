@@ -1287,8 +1287,7 @@ export default abstract class ExpressionParser extends LValParser {
         if (tokenIsIdentifier(type)) {
           if (
             this.isContextual(tt._module) &&
-            this.lookaheadCharCode() === charCodes.leftCurlyBrace &&
-            !this.hasFollowingLineBreak()
+            this.lookaheadInLineCharCode() === charCodes.leftCurlyBrace
           ) {
             return this.parseModuleExpression();
           }
