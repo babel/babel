@@ -332,6 +332,8 @@ export function ClassExpression(
   );
 }
 
+export { ClassExpression as ModuleExpression };
+
 export function UnaryLike(
   node:
     | t.UnaryLike
