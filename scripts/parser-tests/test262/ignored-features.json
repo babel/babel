@@ -89,6 +89,7 @@
   "destructuring-binding",
   "dynamic-import",
   "error-cause",
+  "exponentiation",
   "export-star-as-namespace-from-module",
   "for-in-order",
   "for-of",
