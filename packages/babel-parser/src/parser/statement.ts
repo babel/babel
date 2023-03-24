@@ -10,7 +10,6 @@ import {
 import ExpressionParser from "./expression";
 import { Errors } from "../parse-error";
 import { isIdentifierChar, isIdentifierStart } from "../util/identifier";
-import { lineBreak } from "../util/whitespace";
 import * as charCodes from "charcodes";
 import {
   BIND_CLASS,
@@ -2458,11 +2457,8 @@ export default abstract class StatementParser extends ExpressionParser {
 
   isAsyncFunction(): boolean {
     if (!this.isContextual(tt._async)) return false;
-    const next = this.nextTokenStart();
-    return (
-      !lineBreak.test(this.input.slice(this.state.pos, next)) &&
-      this.isUnparsedContextual(next, "function")
-    );
+    const next = this.nextTokenInLineStart();
+    return this.isUnparsedContextual(next, "function");
   }
 
   parseExportDefaultExpression(this: Parser): N.Expression | N.Declaration {
