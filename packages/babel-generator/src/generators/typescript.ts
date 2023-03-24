@@ -317,9 +317,7 @@ function tsPrintBraced(printer: Printer, members: t.Node[], node: t.Node) {
     printer.dedent();
   }
 
-  printer.sourceWithOffset("end", node.loc, 0, -1);
-
-  printer.rightBrace();
+  printer.rightBrace(node);
 }
 
 export function TSArrayType(this: Printer, node: t.TSArrayType) {

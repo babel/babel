@@ -174,11 +174,17 @@ class Printer {
    * Add a right brace to the buffer.
    */
 
-  rightBrace(): void {
+  rightBrace(node: t.Node): void {
     if (this.format.minified) {
       this._buf.removeLastSemicolon();
     }
+    this.sourceWithOffset("end", node.loc, 0, -1);
     this.token("}");
+  }
+
+  rightParens(node: t.Node): void {
+    this.sourceWithOffset("end", node.loc, 0, -1);
+    this.token(")");
   }
 
   /**
@@ -240,7 +246,6 @@ class Printer {
   /**
    * Writes a simple token.
    */
-
   token(str: string, maybeNewline = false): void {
     this._maybePrintInnerComments();
 
@@ -270,8 +275,6 @@ class Printer {
   tokenChar(char: number): void {
     this._maybePrintInnerComments();
 
-    // space is mandatory to avoid outputting <!--
-    // http://javascript.spec.whatwg.org/#comment-syntax
     const lastChar = this.getLastChar();
     if (
       // Need spaces for operators of the same kind to avoid: `a+++b`
@@ -655,19 +658,13 @@ class Printer {
     this._insideAux = node.loc == undefined;
     this._maybeAddAuxComment(this._insideAux && !oldInAux);
 
-    let shouldPrintParens = false;
-    if (forceParens) {
-      shouldPrintParens = true;
-    } else if (
-      format.retainFunctionParens &&
-      nodeType === "FunctionExpression" &&
-      node.extra &&
-      node.extra.parenthesized
-    ) {
-      shouldPrintParens = true;
-    } else {
-      shouldPrintParens = needsParens(node, parent, this._printStack);
-    }
+    const shouldPrintParens =
+      forceParens ||
+      (format.retainFunctionParens &&
+        nodeType === "FunctionExpression" &&
+        node.extra?.parenthesized) ||
+      needsParens(node, parent, this._printStack);
+
     if (shouldPrintParens) {
       this.token("(");
       this._endsWithInnerRaw = false;
@@ -895,12 +892,14 @@ class Printer {
   }
 
   _printNewline(newLine: boolean, opts: AddNewlinesOptions) {
+    const format = this.format;
+
     // Fast path since 'this.newline' does nothing when not tracking lines.
-    if (this.format.retainLines || this.format.compact) return;
+    if (format.retainLines || format.compact) return;
 
     // Fast path for concise since 'this.newline' just inserts a space when
     // concise formatting is in use.
-    if (this.format.concise) {
+    if (format.concise) {
       this.space();
       return;
     }

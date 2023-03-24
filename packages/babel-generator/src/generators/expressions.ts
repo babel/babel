@@ -9,17 +9,18 @@ import type * as t from "@babel/types";
 import * as n from "../node";
 
 export function UnaryExpression(this: Printer, node: t.UnaryExpression) {
+  const { operator } = node;
   if (
-    node.operator === "void" ||
-    node.operator === "delete" ||
-    node.operator === "typeof" ||
+    operator === "void" ||
+    operator === "delete" ||
+    operator === "typeof" ||
     // throwExpressions
-    node.operator === "throw"
+    operator === "throw"
   ) {
-    this.word(node.operator);
+    this.word(operator);
     this.space();
   } else {
-    this.token(node.operator);
+    this.token(operator);
   }
 
   this.print(node.argument, node);
@@ -41,7 +42,7 @@ export function ParenthesizedExpression(
 ) {
   this.token("(");
   this.print(node.expression, node);
-  this.token(")");
+  this.rightParens(node);
 }
 
 export function UpdateExpression(this: Printer, node: t.UpdateExpression) {
@@ -97,7 +98,7 @@ export function NewExpression(
   }
   this.token("(");
   this.printList(node.arguments, node);
-  this.token(")");
+  this.rightParens(node);
 }
 
 export function SequenceExpression(this: Printer, node: t.SequenceExpression) {
@@ -169,30 +170,32 @@ export function OptionalMemberExpression(
   this: Printer,
   node: t.OptionalMemberExpression,
 ) {
+  let { computed } = node;
+  const { optional, property } = node;
+
   this.print(node.object, node);
 
-  if (!node.computed && isMemberExpression(node.property)) {
+  if (!computed && isMemberExpression(property)) {
     throw new TypeError("Got a MemberExpression for MemberExpression property");
   }
 
-  let computed = node.computed;
   // @ts-expect-error todo(flow->ts) maybe instead of typeof check specific literal types?
-  if (isLiteral(node.property) && typeof node.property.value === "number") {
+  if (isLiteral(property) && typeof property.value === "number") {
     computed = true;
   }
-  if (node.optional) {
+  if (optional) {
     this.token("?.");
   }
 
   if (computed) {
     this.token("[");
-    this.print(node.property, node);
+    this.print(property, node);
     this.token("]");
   } else {
-    if (!node.optional) {
+    if (!optional) {
       this.token(".");
     }
-    this.print(node.property, node);
+    this.print(property, node);
   }
 }
 
@@ -212,7 +215,7 @@ export function OptionalCallExpression(
 
   this.token("(");
   this.printList(node.arguments, node);
-  this.token(")");
+  this.rightParens(node);
 }
 
 export function CallExpression(this: Printer, node: t.CallExpression) {
@@ -222,7 +225,7 @@ export function CallExpression(this: Printer, node: t.CallExpression) {
   this.print(node.typeParameters, node); // TS
   this.token("(");
   this.printList(node.arguments, node);
-  this.token(")");
+  this.rightParens(node);
 }
 
 export function Import(this: Printer) {
@@ -377,6 +380,5 @@ export function ModuleExpression(this: Printer, node: t.ModuleExpression) {
   }
   this.print(body, node);
   this.dedent();
-  this.sourceWithOffset("end", node.loc, 0, -1);
-  this.rightBrace();
+  this.rightBrace(node);
 }
