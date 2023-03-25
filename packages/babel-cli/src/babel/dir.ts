@@ -238,13 +238,12 @@ export default async function ({
       processing++;
       if (startTime === null) startTime = process.hrtime();
 
+      let errFilename;
       try {
         const written = await Promise.all(
           filenames.map(filename => {
             if (outputtedFiles.has(filename)) {
-              console.error(
-                `The file \`${filename}\` is both an input file and output file. This is not allowed with --watch.`,
-              );
+              errFilename ??= filename;
             }
             return handleFile(filename, getBase(filename));
           }),
@@ -253,6 +252,11 @@ export default async function ({
         compiledFiles += written.filter(Boolean).length;
       } catch (err) {
         console.error(err);
+      }
+      if (errFilename) {
+        throw Error(
+          `The file \`${errFilename}\` is both an input file and output file. This is not allowed with --watch.`,
+        );
       }
 
       processing--;
