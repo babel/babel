@@ -509,7 +509,7 @@ export function updateExpression(
   });
 }
 export function variableDeclaration(
-  kind: "var" | "let" | "const" | "using",
+  kind: "var" | "let" | "const" | "using" | "await using",
   declarations: Array<t.VariableDeclarator>,
 ): t.VariableDeclaration {
   return validateNode<t.VariableDeclaration>({
