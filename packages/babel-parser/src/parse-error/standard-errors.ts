@@ -33,6 +33,8 @@ export default {
     "Can not use 'await' as identifier inside a static block.",
   AwaitExpressionFormalParameter:
     "'await' is not allowed in async function parameters.",
+  AwaitUsingNotInAsyncContext:
+    "'await using' is only allowed within async functions and at the top levels of modules.",
   AwaitNotInAsyncContext:
     "'await' is only allowed within async functions and at the top levels of modules.",
   AwaitNotInAsyncFunction: "'await' is only allowed within async functions.",

@@ -355,7 +355,7 @@ export interface FunctionDeclaration extends OptFunctionDeclaration {
 export interface VariableDeclaration extends DeclarationBase, HasDecorators {
   type: "VariableDeclaration";
   declarations: VariableDeclarator[];
-  kind: "var" | "let" | "const" | "using";
+  kind: "var" | "let" | "const" | "using" | "await using";
 }
 
 export interface VariableDeclarator extends NodeBase {
