@@ -4,6 +4,7 @@ import * as _babel_types from '@babel/types';
 
 type Plugin =
   | "asyncDoExpressions"
+  | "asyncExplicitResourceManagement"
   | "asyncGenerators"
   | "bigInt"
   | "classPrivateMethods"
