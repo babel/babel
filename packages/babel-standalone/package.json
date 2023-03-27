@@ -39,6 +39,7 @@
     "@babel/plugin-proposal-throw-expressions": "workspace:^",
     "@babel/plugin-proposal-unicode-property-regex": "workspace:^",
     "@babel/plugin-proposal-unicode-sets-regex": "workspace:^",
+    "@babel/plugin-syntax-async-explicit-resource-management": "workspace:^",
     "@babel/plugin-syntax-decimal": "workspace:^",
     "@babel/plugin-syntax-decorators": "workspace:^",
     "@babel/plugin-syntax-destructuring-private": "workspace:^",

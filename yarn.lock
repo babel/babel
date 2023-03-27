@@ -1832,7 +1832,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-syntax-async-explicit-resource-management@workspace:packages/babel-plugin-syntax-async-explicit-resource-management":
+"@babel/plugin-syntax-async-explicit-resource-management@workspace:^, @babel/plugin-syntax-async-explicit-resource-management@workspace:packages/babel-plugin-syntax-async-explicit-resource-management":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-async-explicit-resource-management@workspace:packages/babel-plugin-syntax-async-explicit-resource-management"
   dependencies:
@@ -3708,6 +3708,7 @@ __metadata:
     "@babel/plugin-proposal-throw-expressions": "workspace:^"
     "@babel/plugin-proposal-unicode-property-regex": "workspace:^"
     "@babel/plugin-proposal-unicode-sets-regex": "workspace:^"
+    "@babel/plugin-syntax-async-explicit-resource-management": "workspace:^"
     "@babel/plugin-syntax-decimal": "workspace:^"
     "@babel/plugin-syntax-decorators": "workspace:^"
     "@babel/plugin-syntax-destructuring-private": "workspace:^"

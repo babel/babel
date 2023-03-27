@@ -4,6 +4,7 @@
  */
 import makeNoopPlugin from "../make-noop-plugin";
 import externalHelpers from "@babel/plugin-external-helpers";
+import syntaxAsyncExplicitResourceManagement from "@babel/plugin-syntax-async-explicit-resource-management";
 import syntaxDecimal from "@babel/plugin-syntax-decimal";
 import syntaxDecorators from "@babel/plugin-syntax-decorators";
 import syntaxDestructuringPrivate from "@babel/plugin-syntax-destructuring-private";
@@ -107,6 +108,7 @@ export const syntaxAsyncGenerators = makeNoopPlugin(),
   syntaxTopLevelAwait = makeNoopPlugin();
 export {
   externalHelpers,
+  syntaxAsyncExplicitResourceManagement,
   syntaxDecimal,
   syntaxDecorators,
   syntaxDestructuringPrivate,
@@ -211,6 +213,8 @@ export const all: { [k: string]: any } = {
   "syntax-optional-catch-binding": syntaxOptionalCatchBinding,
   "syntax-top-level-await": syntaxTopLevelAwait,
   "external-helpers": externalHelpers,
+  "syntax-async-explicit-resource-management":
+    syntaxAsyncExplicitResourceManagement,
   "syntax-decimal": syntaxDecimal,
   "syntax-decorators": syntaxDecorators,
   "syntax-destructuring-private": syntaxDestructuringPrivate,
