@@ -184,7 +184,7 @@ jobs:
         run: make -j prepublish-prepare-dts lint-ci
       - name: Ensure cwd does not contain uncommitted changes
         run: |
-          node ./scripts/assert-dir-git-clean.js code-quality
+          node ./scripts/assert-dir-git-clean.js "prepublish-prepare-dts lint-ci"
 
   test:
     name: Test on Node.js # GitHub will add ${{ matrix.node-version }} to this title
