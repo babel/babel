@@ -746,7 +746,10 @@ export default class Scope {
       const declarations = path.get("declarations");
       const { kind } = path.node;
       for (const declar of declarations) {
-        this.registerBinding(kind === "using" ? "const" : kind, declar);
+        this.registerBinding(
+          kind === "using" || kind === "await using" ? "const" : kind,
+          declar,
+        );
       }
     } else if (path.isClassDeclaration()) {
       if (path.node.declare) return;
