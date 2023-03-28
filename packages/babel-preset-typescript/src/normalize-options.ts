@@ -98,10 +98,17 @@ export default function normalizeOptions(options: Options = {}) {
     false,
   );
   if (disallowAmbiguousJSXLike) {
-    v.invariant(
-      allExtensions,
-      "disallowAmbiguousJSXLike:true requires allExtensions:true",
-    );
+    if (process.env.BABEL_8_BREAKING) {
+      v.invariant(
+        ignoreExtensions,
+        "disallowAmbiguousJSXLike:true requires ignoreExtensions:true",
+      );
+    } else {
+      v.invariant(
+        allExtensions,
+        "disallowAmbiguousJSXLike:true requires allExtensions:true",
+      );
+    }
   }
 
   const optimizeConstEnums = v.validateBooleanOption(
