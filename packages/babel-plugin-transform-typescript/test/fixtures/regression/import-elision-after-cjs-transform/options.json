@@ -1,0 +1,7 @@
+{
+  "sourceType": "module",
+  "plugins": [
+    "transform-modules-commonjs",
+    ["transform-typescript", { "onlyRemoveTypeImports": true }]
+  ]
+}
