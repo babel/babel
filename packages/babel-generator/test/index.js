@@ -1047,6 +1047,28 @@ describe("programmatic generation", function () {
     expect(output).toBe("() => void");
   });
 
+  it("generate a child node with retainLines", () => {
+    const node = parse("a;\n\nexpect(a).toMatchInlineSnapshot(`[1, 2]`\n);")
+      .program.body[1].expression;
+
+    expect(node.type).toBe("CallExpression");
+
+    expect(generate(node, { retainLines: true }).code).toMatchInlineSnapshot(`
+      "
+
+      expect(a).toMatchInlineSnapshot(\`[1, 2]\`
+      )"
+    `);
+
+    node.loc.end.line = node.loc.start.line;
+
+    expect(generate(node, { retainLines: true }).code).toMatchInlineSnapshot(`
+      "
+
+      expect(a).toMatchInlineSnapshot(\`[1, 2]\`)"
+    `);
+  });
+
   describe("directives", function () {
     it("preserves escapes", function () {
       const directive = t.directive(

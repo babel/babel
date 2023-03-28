@@ -130,11 +130,6 @@ class Printer {
   _indentInnerComments: boolean = true;
 
   generate(ast: t.Node) {
-    // Avoid inserting unexpected blank lines at the beginning and in the middle.
-    if (this.format.retainLines && ast.loc) {
-      this._buf._position.line = ast.loc.start.line;
-    }
-
     this.print(ast);
     this._maybeAddAuxComment();
 
