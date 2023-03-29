@@ -353,6 +353,7 @@ __metadata:
     "@babel/plugin-transform-flow-strip-types": "workspace:^"
     "@babel/plugin-transform-modules-commonjs": "workspace:^"
     "@babel/preset-env": "workspace:^"
+    "@babel/preset-typescript": "workspace:^"
     "@babel/template": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"

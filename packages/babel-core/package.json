@@ -68,6 +68,7 @@
     "@babel/plugin-transform-flow-strip-types": "workspace:^",
     "@babel/plugin-transform-modules-commonjs": "workspace:^",
     "@babel/preset-env": "workspace:^",
+    "@babel/preset-typescript": "workspace:^",
     "@jridgewell/trace-mapping": "^0.3.17",
     "@types/convert-source-map": "^1.5.1",
     "@types/debug": "^4.1.0",
