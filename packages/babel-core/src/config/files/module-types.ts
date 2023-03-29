@@ -73,12 +73,11 @@ function loadCtsDefault(filepath: string) {
           getTSPreset(filepath),
           {
             disallowAmbiguousJSXLike: true,
-            allExtensions: true,
             onlyRemoveTypeImports: true,
             optimizeConstEnums: true,
-            ...(!process.env.BABEL_8_BREAKING && {
-              allowDeclareFields: true,
-            }),
+            ...(process.env.BABEL_8_BREAKING
+              ? { ignoreExtensions: true }
+              : { allExtensions: true, allowDeclareFields: true }),
           },
         ],
       ],

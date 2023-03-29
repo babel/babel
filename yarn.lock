@@ -353,6 +353,7 @@ __metadata:
     "@babel/plugin-transform-flow-strip-types": "workspace:^"
     "@babel/plugin-transform-modules-commonjs": "workspace:^"
     "@babel/preset-env": "workspace:^"
+    "@babel/preset-typescript": "workspace:^"
     "@babel/template": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
@@ -3601,6 +3602,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-validator-option": "workspace:^"
+    "@babel/plugin-syntax-jsx": "workspace:^"
     "@babel/plugin-transform-typescript": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.0.0-0

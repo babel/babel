@@ -49,6 +49,10 @@ if [ "$BABEL_8_BREAKING" = true ] ; then
   # Jest depends on @types/babel__traverse for Babel 7, and they contain the removed Noop node
   sed -i 's/t.Noop/any/g' node_modules/@types/babel__traverse/index.d.ts
 
+  # Replace isTSX with the JSX plugin
+  sed -i "s/isTSX: sourceFilePath.endsWith('x')//g" packages/jest-snapshot/src/InlineSnapshots.ts
+  sed -i "s%'TypeScript syntax plugin added by Jest snapshot',%'TypeScript syntax plugin added by Jest snapshot'],[require.resolve('@babel/plugin-syntax-jsx')%g" packages/jest-snapshot/src/InlineSnapshots.ts
+
   node -e "
     var pkg = require('./package.json');
     pkg.resolutions || (pkg.resolutions = {});

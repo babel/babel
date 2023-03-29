@@ -29,6 +29,7 @@ describe("normalize options", () => {
       expect(normalizeOptions({})).toMatchInlineSnapshot(`
         Object {
           "all": undefined,
+          "ignoreExtensions": undefined,
         }
       `);
     });
@@ -48,6 +49,7 @@ describe("normalize options", () => {
         Object {
           "all": undefined,
           "allowDeclareFields": undefined,
+          "ignoreExtensions": undefined,
         }
       `);
     });

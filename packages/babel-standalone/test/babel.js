@@ -27,7 +27,8 @@ describe("@babel/standalone", () => {
   });
   it("handles the typescript preset", () => {
     const output = Babel.transform("var a: string;", {
-      presets: [["typescript", { allExtensions: true }]],
+      presets: ["typescript"],
+      filename: "input.ts",
     }).code;
     expect(output).toBe("var a;");
   });

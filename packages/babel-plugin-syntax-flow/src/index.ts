@@ -20,14 +20,16 @@ export default declare((api, options: FlowPluginOptions) => {
     name: "syntax-flow",
 
     manipulateOptions(opts, parserOpts) {
-      // If the file has already enabled TS, assume that this is not a
-      // valid Flowtype file.
-      if (
-        parserOpts.plugins.some(
-          p => (Array.isArray(p) ? p[0] : p) === "typescript",
-        )
-      ) {
-        return;
+      if (!process.env.BABEL_8_BREAKING) {
+        // If the file has already enabled TS, assume that this is not a
+        // valid Flowtype file.
+        if (
+          parserOpts.plugins.some(
+            p => (Array.isArray(p) ? p[0] : p) === "typescript",
+          )
+        ) {
+          return;
+        }
       }
 
       parserOpts.plugins.push(["flow", { all, enums }]);
