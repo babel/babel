@@ -281,23 +281,25 @@ export default declare((api, options: Options, dirname) => {
         // If the helper didn't exist yet at the version given, we bail
         // out and let Babel either insert it directly, or throw an error
         // so that plugins can handle that case properly.
-        if (!file.availableHelper?.(name, runtimeVersion)) {
-          if (name === "regeneratorRuntime") {
-            // For regeneratorRuntime, we can fallback to the old behavior of
-            // relying on the regeneratorRuntime global. If the 'regenerator'
-            // option is not disabled, babel-plugin-polyfill-regenerator will
-            // then replace it with a @babel/helpers/regeneratorRuntime import.
-            //
-            // We must wrap it in a function, because built-in Babel helpers
-            // are functions.
-            //
-            // TODO: Remove this in Babel 8.
-            return t.arrowFunctionExpression(
-              [],
-              t.identifier("regeneratorRuntime"),
-            );
+        if (!process.env.BABEL_8_BREAKING) {
+          if (!file.availableHelper?.(name, runtimeVersion)) {
+            if (name === "regeneratorRuntime") {
+              // For regeneratorRuntime, we can fallback to the old behavior of
+              // relying on the regeneratorRuntime global. If the 'regenerator'
+              // option is not disabled, babel-plugin-polyfill-regenerator will
+              // then replace it with a @babel/helpers/regeneratorRuntime import.
+              //
+              // We must wrap it in a function, because built-in Babel helpers
+              // are functions.
+              return t.arrowFunctionExpression(
+                [],
+                t.identifier("regeneratorRuntime"),
+              );
+            }
+            return;
           }
-          return;
+        } else {
+          if (!file.availableHelper(name, runtimeVersion)) return;
         }
 
         const isInteropHelper = HEADER_HELPERS.indexOf(name) !== -1;
