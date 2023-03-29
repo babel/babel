@@ -36,8 +36,12 @@ export function _callRemovalHooks(this: NodePath) {
 
 export function _remove(this: NodePath) {
   if (Array.isArray(this.container)) {
-    this.container.splice(this.key as number, 1);
-    this.updateSiblingKeys(this.key as number, -1);
+    if (!this.key) {
+      this.container[0] = null;
+    } else {
+      this.container.splice(this.key as number, 1);
+      this.updateSiblingKeys(this.key as number, -1);
+    }
   } else {
     this._replaceWith(null);
   }

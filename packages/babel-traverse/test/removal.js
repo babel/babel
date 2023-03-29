@@ -63,4 +63,14 @@ describe("removal", function () {
       expect(ifPath.get("alternate").node).toBeNull();
     });
   });
+
+  describe("ArrayPattern", function () {
+    it("remove first", function () {
+      const rootPath = getPath("const [a, b] = c");
+      const path = rootPath.get("body")[0].get("declarations.0.id.elements.0");
+      path.remove();
+
+      expect(generateCode(rootPath)).toBe("const [, b] = c;");
+    });
+  });
 });
