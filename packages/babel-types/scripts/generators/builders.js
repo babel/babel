@@ -5,8 +5,19 @@ import {
   toBindingIdentifierName,
 } from "../../lib/index.js";
 import formatBuilderName from "../utils/formatBuilderName.js";
-import lowerFirst from "../utils/lowerFirst.js";
 import stringifyValidator from "../utils/stringifyValidator.js";
+
+// env vars from the cli are always strings, so !!ENV_VAR returns true for "false"
+function bool(value) {
+  return value && value !== "false" && value !== "0";
+}
+
+if (!bool(process.env.BABEL_8_BREAKING)) {
+  // eslint-disable-next-line no-var
+  var lowerFirst = function (string) {
+    return string[0].toLowerCase() + string.slice(1);
+  };
+}
 
 function areAllRemainingFieldsNullable(fieldName, fieldNames, fields) {
   const index = fieldNames.indexOf(fieldName);
@@ -135,13 +146,14 @@ import deprecationWarning from "../../utils/deprecationWarning";
       output += `export { ${formattedBuilderNameLocal} as ${formattedBuilderName} };\n`;
     }
 
-    // This is needed for backwards compatibility.
-    // It should be removed in the next major version.
-    // JSXIdentifier -> jSXIdentifier
-    if (/^[A-Z]{2}/.test(type)) {
-      output += `export { ${formattedBuilderNameLocal} as ${lowerFirst(
-        type
-      )} }\n`;
+    if (!bool(process.env.BABEL_8_BREAKING)) {
+      // This is needed for backwards compatibility.
+      // JSXIdentifier -> jSXIdentifier
+      if (/^[A-Z]{2}/.test(type)) {
+        output += `export { ${formattedBuilderNameLocal} as ${lowerFirst(
+          type
+        )} }\n`;
+      }
     }
   });
 
@@ -155,11 +167,13 @@ function ${type}(${generateBuilderArgs(newType).join(", ")}) {
   return ${formattedNewBuilderName}(${BUILDER_KEYS[newType].join(", ")});
 }
 export { ${type} as ${formattedBuilderName} };\n`;
-    // This is needed for backwards compatibility.
-    // It should be removed in the next major version.
-    // JSXIdentifier -> jSXIdentifier
-    if (/^[A-Z]{2}/.test(type)) {
-      output += `export { ${type} as ${lowerFirst(type)} }\n`;
+
+    if (!bool(process.env.BABEL_8_BREAKING)) {
+      // This is needed for backwards compatibility.
+      // JSXIdentifier -> jSXIdentifier
+      if (/^[A-Z]{2}/.test(type)) {
+        output += `export { ${type} as ${lowerFirst(type)} }\n`;
+      }
     }
   });
 
