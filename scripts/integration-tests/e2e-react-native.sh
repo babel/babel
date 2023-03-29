@@ -35,8 +35,10 @@ cd rnbabel
 
 if [ "$BABEL_8_BREAKING" = true ] ; then
   # metro-react-native-babel-preset unconditionally enables the Flow plugin, even on TS files.
+  # https://github.com/facebook/metro/blob/2c16fa67/packages/metro-react-native-babel-preset/src/configs/main.js#L25
+  npx replace '(?=\[require\("@babel/plugin-syntax-flow")' '//' node_modules/metro-react-native-babel-preset/src/configs/main.js
   # https://github.com/facebook/metro/blob/2c16fa67/packages/metro-react-native-babel-preset/src/configs/main.js#L169
-  npx replace '(?=plugins:.*?flow-strip-types)' 'exclude: [isTypeScriptSource, isTSXSource], ' node_modules/metro-react-native-babel-preset/src/configs/main.js
+  npx replace '(?=plugins:.*?flow-strip-types)' 'exclude: [isTypeScriptSource, isTSXSource],' node_modules/metro-react-native-babel-preset/src/configs/main.js
 fi
 
 # Build the project
