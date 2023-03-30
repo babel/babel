@@ -1,6 +1,7 @@
 import { declarePreset } from "@babel/helper-plugin-utils";
 import transformTypeScript from "@babel/plugin-transform-typescript";
 import syntaxJSX from "@babel/plugin-syntax-jsx";
+import transformModulesCommonJS from "@babel/plugin-transform-modules-commonjs";
 import normalizeOptions from "./normalize-options";
 import type { Options } from "./normalize-options";
 
@@ -77,8 +78,11 @@ export default declarePreset((api, opts: Options) => {
             test: !process.env.BABEL_8_BREAKING
               ? /\.cts$/
               : filename => filename?.endsWith(".cts"),
-            sourceType: "script",
-            plugins: getPlugins(false, true),
+            sourceType: "unambiguous",
+            plugins: [
+              [transformModulesCommonJS, { allowTopLevelThis: true }],
+              [transformTypeScript, pluginOptions(true)],
+            ],
           },
           {
             test: !process.env.BABEL_8_BREAKING

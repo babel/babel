@@ -66,18 +66,18 @@ function loadCtsDefault(filepath: string) {
     const opts: InputOptions = {
       babelrc: false,
       configFile: false,
-      sourceType: "script",
+      sourceType: "unambiguous",
       sourceMaps: "inline",
+      sourceFileName: path.basename(filepath),
       presets: [
         [
           getTSPreset(filepath),
           {
-            disallowAmbiguousJSXLike: true,
             onlyRemoveTypeImports: true,
             optimizeConstEnums: true,
             ...(process.env.BABEL_8_BREAKING
-              ? { ignoreExtensions: true }
-              : { allExtensions: true, allowDeclareFields: true }),
+              ? {}
+              : { allowDeclareFields: true }),
           },
         ],
       ],
@@ -86,21 +86,43 @@ function loadCtsDefault(filepath: string) {
     handler = function (m, filename) {
       // If we want to support `.ts`, `.d.ts` must be handled specially.
       if (handler && filename.endsWith(ext)) {
-        // @ts-expect-error Undocumented API
-        return m._compile(
-          transformFileSync(filename, {
-            ...opts,
+        try {
+          // @ts-expect-error Undocumented API
+          return m._compile(
+            transformFileSync(filename, {
+              ...opts,
+              filename,
+            }).code,
             filename,
-          }).code,
-          filename,
-        );
+          );
+        } catch (error) {
+          if (!hasTsSupport) {
+            const packageJson = require("@babel/preset-typescript/package.json");
+
+            if (
+              semver.lte(
+                // eslint-disable-next-line import/no-extraneous-dependencies
+                packageJson.version,
+                "7.21.0",
+              ) &&
+              // ignore the version check if not published
+              !packageJson.conditions
+            ) {
+              console.error(
+                "`.cts` configuration file failed to load, please try to update `@babel/preset-typescript`.",
+              );
+            }
+          }
+          throw error;
+        }
       }
       return require.extensions[".js"](m, filename);
     };
     require.extensions[ext] = handler;
   }
   try {
-    return endHiddenCallStack(require)(filepath);
+    const module = endHiddenCallStack(require)(filepath);
+    return module?.__esModule ? module.default : module;
   } finally {
     if (!hasTsSupport) {
       if (require.extensions[ext] === handler) delete require.extensions[ext];

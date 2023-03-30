@@ -42,10 +42,12 @@ const shouldSkip = semver.lt(process.version, "12.0.0") || USE_ESM;
     });
 
     expect(config.options.targets).toMatchInlineSnapshot(`
-          Object {
-            "node": "12.0.0",
-          }
-        `);
+      Object {
+        "node": "12.0.0",
+      }
+    `);
+
+    expect(config.options.sourceRoot).toMatchInlineSnapshot(`"/a/b"`);
   });
 
   it("should throw with invalid .ts register", () => {
@@ -89,10 +91,12 @@ const shouldSkip = semver.lt(process.version, "12.0.0") || USE_ESM;
       });
 
       expect(config.options.targets).toMatchInlineSnapshot(`
-            Object {
-              "node": "12.0.0",
-            }
-          `);
+        Object {
+          "node": "12.0.0",
+        }
+      `);
+
+      expect(config.options.sourceRoot).toMatchInlineSnapshot(`"/a/b"`);
     } finally {
       service.enabled(false);
     }
