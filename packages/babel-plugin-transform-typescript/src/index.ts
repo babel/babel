@@ -1,6 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxTypeScript from "@babel/plugin-syntax-typescript";
-import type { types as t } from "@babel/core";
+import type { PluginPass, types as t } from "@babel/core";
 import { injectInitialization } from "@babel/helper-create-class-features-plugin";
 import type { Binding, NodePath, Scope } from "@babel/traverse";
 import type { Options as SyntaxOptions } from "@babel/plugin-syntax-typescript";
@@ -78,17 +78,18 @@ function safeRemove(path: NodePath) {
   path.opts.noScope = false;
 }
 
-function assertCjsModuleIsScript(
+function assertCjsTransformEnabled(
   path: NodePath,
+  pass: PluginPass,
   wrong: string,
   suggestion: string,
   extra: string = "",
 ): void {
-  const programParent = path.find(p => p.isProgram()) as NodePath<t.Program>;
-  if (programParent.node.sourceType !== "script") {
+  if (pass.file.get("@babel/plugin-transform-modules-*") !== "commonjs") {
     throw path.buildCodeFrameError(
-      `\`${wrong}\` is only supported when "sourceType" is "script".\n` +
-        `Please consider using \`${suggestion}\`${extra}.`,
+      `\`${wrong}\` is only supported when compiling modules to CommonJS.\n` +
+        `Please consider using \`${suggestion}\`${extra}, or add ` +
+        `@babel/plugin-transform-modules-commonjs to your Babel config.`,
     );
   }
 }
@@ -589,15 +590,19 @@ export default declare((api, opts: Options) => {
         }
       },
 
-      TSImportEqualsDeclaration(path: NodePath<t.TSImportEqualsDeclaration>) {
+      TSImportEqualsDeclaration(
+        path: NodePath<t.TSImportEqualsDeclaration>,
+        pass,
+      ) {
         const { id, moduleReference } = path.node;
 
         let init: t.Expression;
         let varKind: "var" | "const";
         if (t.isTSExternalModuleReference(moduleReference)) {
           // import alias = require('foo');
-          assertCjsModuleIsScript(
+          assertCjsTransformEnabled(
             path,
+            pass,
             `import ${id.name} = require(...);`,
             `import ${id.name} from '...';`,
             " alongside Typescript's --allowSyntheticDefaultImports option",
@@ -618,9 +623,10 @@ export default declare((api, opts: Options) => {
         path.scope.registerDeclaration(path);
       },
 
-      TSExportAssignment(path) {
-        assertCjsModuleIsScript(
+      TSExportAssignment(path, pass) {
+        assertCjsTransformEnabled(
           path,
+          pass,
           `export = <value>;`,
           `export default <value>;`,
         );

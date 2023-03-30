@@ -2017,6 +2017,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       // For compatibility to estree we cannot call parseLiteral directly here
       node.expression = super.parseExprAtom() as N.StringLiteral;
       this.expect(tt.parenR);
+      this.sawUnambiguousESM = true;
       return this.finishNode(node, "TSExternalModuleReference");
     }
 
@@ -2711,18 +2712,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     */
     checkDuplicateExports() {}
 
-    assertModuleNodeAllowed(node: N.Node): void {
-      if (
-        node.type === "TSImportEqualsDeclaration" ||
-        node.type === "TSExportAssignment"
-      ) {
-        // `import ... =` and `export =` are allowed in scripts,
-        // since they are used for CommonJS.
-        return;
-      }
-      super.assertModuleNodeAllowed(node);
-    }
-
     parseImport(
       node: Undone<N.ImportDeclaration | N.TsImportEqualsDeclaration>,
     ): N.AnyImport {
@@ -2800,6 +2789,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         const assign = node as Undone<N.TsExportAssignment>;
         assign.expression = super.parseExpression();
         this.semicolon();
+        this.sawUnambiguousESM = true;
         return this.finishNode(assign, "TSExportAssignment");
       } else if (this.eatContextual(tt._as)) {
         // `export as namespace A;`

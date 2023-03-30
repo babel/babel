@@ -1,3 +1,3 @@
 {
-  "throws": "`export = <value>;` is only supported when \"sourceType\" is \"script\".\nPlease consider using `export default <value>;`"
+  "throws": "`export = <value>;` is only supported when compiling modules to CommonJS.\nPlease consider using `export default <value>;`, or add @babel/plugin-transform-modules-commonjs to your Babel config."
 }
