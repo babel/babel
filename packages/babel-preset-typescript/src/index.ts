@@ -78,10 +78,7 @@ export default declarePreset((api, opts: Options) => {
             test: !process.env.BABEL_8_BREAKING
               ? /\.cts$/
               : filename => filename?.endsWith(".cts"),
-            sourceType: "script",
-            parserOpts: {
-              allowImportExportEverywhere: true,
-            },
+            sourceType: "unambiguous",
             plugins: [
               [transformModulesCommonJS, { allowTopLevelThis: true }],
               [transformTypeScript, pluginOptions(true)],
