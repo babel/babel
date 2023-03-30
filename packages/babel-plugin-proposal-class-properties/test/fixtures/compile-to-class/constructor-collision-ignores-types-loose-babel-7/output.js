@@ -1,7 +1,6 @@
 class C {
-  // Output should not use `_initialiseProps`
-
   constructor(T) {
+    // Output should not use `_initialiseProps`
     this.y = 0;
   }
 }

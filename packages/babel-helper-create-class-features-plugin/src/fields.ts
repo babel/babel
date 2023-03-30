@@ -1283,6 +1283,12 @@ export function buildFieldsInitNodes(
     pureStaticNodes: pureStaticNodes.filter(Boolean),
     wrapClass(path: NodePath<t.Class>) {
       for (const prop of props) {
+        // Delete leading comments so that they don't get attached as
+        // trailing comments of the previous sibling.
+        // When transforming props, we explicitly attach their leading
+        // comments to the transformed node with `inheritPropComments`
+        // above.
+        prop.node.leadingComments = null;
         prop.remove();
       }
 
