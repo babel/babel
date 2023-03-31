@@ -1,0 +1,63 @@
+{
+  "type": "File",
+  "start":0,"end":59,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":59,"index":59}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":59,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":59,"index":59}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":59,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":59,"index":59}},
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":9,"end":16,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":16,"index":16}},
+            "local": {
+              "type": "Identifier",
+              "start":9,"end":16,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":16,"index":16},"identifierName":"default"},
+              "name": "default"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":9,"end":16,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":16,"index":16},"identifierName":"default"},
+              "name": "default"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":24,"end":34,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":34,"index":34}},
+          "extra": {
+            "rawValue": "foo.json",
+            "raw": "\"foo.json\""
+          },
+          "value": "foo.json"
+        },
+        "declaration": null,
+        "assertions": [
+          {
+            "type": "ImportAttribute",
+            "start":44,"end":56,"loc":{"start":{"line":1,"column":44,"index":44},"end":{"line":1,"column":56,"index":56}},
+            "key": {
+              "type": "Identifier",
+              "start":44,"end":48,"loc":{"start":{"line":1,"column":44,"index":44},"end":{"line":1,"column":48,"index":48},"identifierName":"lazy"},
+              "name": "lazy"
+            },
+            "value": {
+              "type": "StringLiteral",
+              "start":50,"end":56,"loc":{"start":{"line":1,"column":50,"index":50},"end":{"line":1,"column":56,"index":56}},
+              "extra": {
+                "rawValue": "true",
+                "raw": "\"true\""
+              },
+              "value": "true"
+            }
+          }
+        ]
+      }
+    ],
+    "directives": []
+  }
+}

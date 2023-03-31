@@ -1,0 +1,9 @@
+{
+  "plugins": [
+    [
+      ["importAttributes", { "deprecatedAssertSyntax": true }]
+    ]
+  ],
+  "sourceType": "module",
+  "throws": "Unexpected token (1:17)"
+}

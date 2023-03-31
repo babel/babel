@@ -1,0 +1,86 @@
+{
+  "type": "File",
+  "start":0,"end":64,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":3,"index":64}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":64,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":3,"index":64}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":60,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":60,"index":60}},
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":9,"end":23,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":23,"index":23}},
+            "local": {
+              "type": "StringLiteral",
+              "start":9,"end":18,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":18,"index":18}},
+              "extra": {
+                "rawValue": "default",
+                "raw": "\"default\""
+              },
+              "value": "default"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":22,"end":23,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":23,"index":23},"identifierName":"x"},
+              "name": "x"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":31,"end":36,"loc":{"start":{"line":1,"column":31,"index":31},"end":{"line":1,"column":36,"index":36}},
+          "extra": {
+            "rawValue": "foo",
+            "raw": "\"foo\""
+          },
+          "value": "foo"
+        },
+        "declaration": null,
+        "assertions": [
+          {
+            "type": "ImportAttribute",
+            "start":46,"end":58,"loc":{"start":{"line":1,"column":46,"index":46},"end":{"line":1,"column":58,"index":58}},
+            "key": {
+              "type": "Identifier",
+              "start":46,"end":50,"loc":{"start":{"line":1,"column":46,"index":46},"end":{"line":1,"column":50,"index":50},"identifierName":"type"},
+              "name": "type"
+            },
+            "value": {
+              "type": "StringLiteral",
+              "start":52,"end":58,"loc":{"start":{"line":1,"column":52,"index":52},"end":{"line":1,"column":58,"index":58}},
+              "extra": {
+                "rawValue": "json",
+                "raw": "\"json\""
+              },
+              "value": "json"
+            }
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":61,"end":64,"loc":{"start":{"line":2,"column":0,"index":61},"end":{"line":2,"column":3,"index":64}},
+        "expression": {
+          "type": "ArrayExpression",
+          "start":61,"end":64,"loc":{"start":{"line":2,"column":0,"index":61},"end":{"line":2,"column":3,"index":64}},
+          "elements": [
+            {
+              "type": "NumericLiteral",
+              "start":62,"end":63,"loc":{"start":{"line":2,"column":1,"index":62},"end":{"line":2,"column":2,"index":63}},
+              "extra": {
+                "rawValue": 0,
+                "raw": "0"
+              },
+              "value": 0
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

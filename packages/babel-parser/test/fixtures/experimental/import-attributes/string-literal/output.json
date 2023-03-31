@@ -1,0 +1,107 @@
+{
+  "type": "File",
+  "start":0,"end":101,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":52,"index":101}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":101,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":52,"index":101}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":48,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":48,"index":48}},
+        "specifiers": [
+          {
+            "type": "ImportDefaultSpecifier",
+            "start":7,"end":10,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":10,"index":10}},
+            "local": {
+              "type": "Identifier",
+              "start":7,"end":10,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":10,"index":10},"identifierName":"foo"},
+              "name": "foo"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":16,"end":26,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":26,"index":26}},
+          "extra": {
+            "rawValue": "foo.json",
+            "raw": "\"foo.json\""
+          },
+          "value": "foo.json"
+        },
+        "assertions": [
+          {
+            "type": "ImportAttribute",
+            "start":36,"end":46,"loc":{"start":{"line":1,"column":36,"index":36},"end":{"line":1,"column":46,"index":46}},
+            "key": {
+              "type": "Identifier",
+              "start":36,"end":39,"loc":{"start":{"line":1,"column":36,"index":36},"end":{"line":1,"column":39,"index":39},"identifierName":"for"},
+              "name": "for"
+            },
+            "value": {
+              "type": "StringLiteral",
+              "start":41,"end":46,"loc":{"start":{"line":1,"column":41,"index":41},"end":{"line":1,"column":46,"index":46}},
+              "extra": {
+                "rawValue": "for",
+                "raw": "\"for\""
+              },
+              "value": "for"
+            }
+          }
+        ]
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":49,"end":101,"loc":{"start":{"line":2,"column":0,"index":49},"end":{"line":2,"column":52,"index":101}},
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":58,"end":61,"loc":{"start":{"line":2,"column":9,"index":58},"end":{"line":2,"column":12,"index":61}},
+            "local": {
+              "type": "Identifier",
+              "start":58,"end":61,"loc":{"start":{"line":2,"column":9,"index":58},"end":{"line":2,"column":12,"index":61},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":58,"end":61,"loc":{"start":{"line":2,"column":9,"index":58},"end":{"line":2,"column":12,"index":61},"identifierName":"foo"},
+              "name": "foo"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":69,"end":79,"loc":{"start":{"line":2,"column":20,"index":69},"end":{"line":2,"column":30,"index":79}},
+          "extra": {
+            "rawValue": "foo.json",
+            "raw": "\"foo.json\""
+          },
+          "value": "foo.json"
+        },
+        "declaration": null,
+        "assertions": [
+          {
+            "type": "ImportAttribute",
+            "start":89,"end":99,"loc":{"start":{"line":2,"column":40,"index":89},"end":{"line":2,"column":50,"index":99}},
+            "key": {
+              "type": "Identifier",
+              "start":89,"end":92,"loc":{"start":{"line":2,"column":40,"index":89},"end":{"line":2,"column":43,"index":92},"identifierName":"for"},
+              "name": "for"
+            },
+            "value": {
+              "type": "StringLiteral",
+              "start":94,"end":99,"loc":{"start":{"line":2,"column":45,"index":94},"end":{"line":2,"column":50,"index":99}},
+              "extra": {
+                "rawValue": "for",
+                "raw": "\"for\""
+              },
+              "value": "for"
+            }
+          }
+        ]
+      }
+    ],
+    "directives": []
+  }
+}

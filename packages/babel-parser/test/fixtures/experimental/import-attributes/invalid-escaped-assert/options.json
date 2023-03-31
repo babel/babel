@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    [
+      "importAttributes"
+    ]
+  ],
+  "sourceType": "module"
+}
