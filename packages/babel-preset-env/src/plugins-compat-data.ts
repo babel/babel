@@ -9,6 +9,10 @@ export const plugins = filterAvailable(originalPlugins);
 export const pluginsBugfixes = filterAvailable(originalPluginsBugfixes);
 export const overlappingPlugins = filterAvailable(originalOverlappingPlugins);
 
+// @ts-expect-error: we extend this here, since it's a syntax plugin and thus
+// doesn't make sense to store it in a compat-data package.
+overlappingPlugins["syntax-import-attributes"] = ["syntax-import-assertions"];
+
 function filterAvailable<Data extends { [name: string]: unknown }>(
   data: Data,
 ): { [Name in keyof Data & keyof typeof availablePlugins]: Data[Name] } {

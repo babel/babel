@@ -392,11 +392,11 @@ option \`forceAllTransforms: true\` instead.
     getOptionSpecificExcludesFor({ loose }),
     pluginSyntaxMap,
   );
-  removeUnnecessaryItems(pluginNames, overlappingPlugins);
   removeUnsupportedItems(pluginNames, api.version);
   if (shippedProposals) {
     addProposalSyntaxPlugins(pluginNames, proposalSyntaxPlugins);
   }
+  removeUnnecessaryItems(pluginNames, overlappingPlugins);
 
   const polyfillPlugins = getPolyfillPlugins({
     useBuiltIns,
@@ -426,6 +426,12 @@ option \`forceAllTransforms: true\` instead.
               : "#__internal__@babel/preset-env__prefer-false-but-true-is-ok-if-it-prevents-an-error",
           },
         ];
+      }
+      if (pluginName === "syntax-import-attributes") {
+        // For backward compatibility with the import-assertions plugin, we
+        // allow the deprecated `assert` keyword.
+        // TODO(Babel 8): Revisit this.
+        return [getPlugin(pluginName), { deprecatedAssertSyntax: true }];
       }
       return [
         getPlugin(pluginName),

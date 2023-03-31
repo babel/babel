@@ -30,6 +30,7 @@
     "syntax-function-bind",
     "syntax-function-sent",
     "syntax-import-assertions",
+    "syntax-import-attributes",
     "syntax-import-reflection",
     "syntax-module-blocks",
     "syntax-jsx",

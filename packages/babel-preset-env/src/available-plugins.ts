@@ -6,6 +6,7 @@ import syntaxClassStaticBlock from "@babel/plugin-syntax-class-static-block";
 import syntaxDynamicImport from "@babel/plugin-syntax-dynamic-import";
 import syntaxExportNamespaceFrom from "@babel/plugin-syntax-export-namespace-from";
 import syntaxImportAssertions from "@babel/plugin-syntax-import-assertions";
+import syntaxImportAttributes from "@babel/plugin-syntax-import-attributes";
 import syntaxImportMeta from "@babel/plugin-syntax-import-meta";
 import syntaxJsonStrings from "@babel/plugin-syntax-json-strings";
 import syntaxLogicalAssignmentOperators from "@babel/plugin-syntax-logical-assignment-operators";
@@ -90,6 +91,7 @@ export default {
   "syntax-dynamic-import": () => syntaxDynamicImport,
   "syntax-export-namespace-from": () => syntaxExportNamespaceFrom,
   "syntax-import-assertions": () => syntaxImportAssertions,
+  "syntax-import-attributes": () => syntaxImportAttributes,
   "syntax-import-meta": () => syntaxImportMeta,
   "syntax-json-strings": () => syntaxJsonStrings,
   "syntax-logical-assignment-operators": () => syntaxLogicalAssignmentOperators,
@@ -156,6 +158,7 @@ export default {
 export const minVersions = {
   "bugfix/transform-safari-id-destructuring-collision-in-function-expression":
     "7.16.0",
+  "syntax-import-attributes": "7.21.0",
   "transform-class-static-block": "7.12.0",
   "transform-private-property-in-object": "7.10.0",
 };

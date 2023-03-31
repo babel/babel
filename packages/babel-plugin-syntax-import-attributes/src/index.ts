@@ -1,6 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 
-interface Options {
+export interface Options {
   deprecatedAssertSyntax?: boolean;
 }
 
