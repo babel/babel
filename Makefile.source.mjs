@@ -450,14 +450,16 @@ target["bootstrap-flow"] = function () {
 
 target["new-version-checklist"] = function () {
   // eslint-disable-next-line no-constant-condition
-  if (0) {
+  if (1) {
     console.log(
       `
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!                                                   !!!!!!
-!!!!!!         Write any message that should             !!!!!!
-!!!!!!            block the release here                 !!!!!!
+!!!!!!              Update the version in                !!!!!!
+!!!!!! packages/babel-plugin-syntax-import-attributes/src/index.ts
+!!!!!!                    and                            !!!!!!
+!!!!!! /Users/nic/Documents/dev/babel/babel/packages/babel-preset-env/src/available-plugins.ts#L159
 !!!!!!                                                   !!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
