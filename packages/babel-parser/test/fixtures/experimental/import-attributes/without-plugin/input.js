@@ -1,1 +1,1 @@
-import foo from "foo.json" assert { type: "json" };
+import foo from "foo.json" with { type: "json" };

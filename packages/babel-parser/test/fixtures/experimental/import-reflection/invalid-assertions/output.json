@@ -34,6 +34,9 @@
           },
           "value": "./module.json"
         },
+        "extra": {
+          "usesAssertKeyword": true
+        },
         "assertions": [
           {
             "type": "ImportAttribute",

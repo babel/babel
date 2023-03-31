@@ -44,6 +44,9 @@
           },
           "value": "foo"
         },
+        "extra": {
+          "usesAssertKeyword": true
+        },
         "assertions": []
       },
       {
@@ -68,6 +71,9 @@
             "raw": "\"foo\""
           },
           "value": "foo"
+        },
+        "extra": {
+          "usesAssertKeyword": true
         },
         "assertions": []
       },
@@ -100,7 +106,10 @@
           "value": "foo"
         },
         "declaration": null,
-        "assertions": []
+        "assertions": [],
+        "extra": {
+          "usesAssertKeyword": true
+        }
       },
       {
         "type": "ExportNamedDeclaration",
@@ -124,6 +133,9 @@
             "raw": "\"foo\""
           },
           "value": "foo"
+        },
+        "extra": {
+          "usesAssertKeyword": true
         },
         "assertions": []
       }

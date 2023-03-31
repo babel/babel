@@ -1,15 +1,15 @@
 {
   "type": "File",
-  "start":0,"end":154,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":37,"index":154}},
+  "start":0,"end":146,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":35,"index":146}},
   "program": {
     "type": "Program",
-    "start":0,"end":154,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":37,"index":154}},
+    "start":0,"end":146,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":35,"index":146}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "ImportDeclaration",
-        "start":0,"end":41,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":41,"index":41}},
+        "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":39,"index":39}},
         "specifiers": [
           {
             "type": "ImportDefaultSpecifier",
@@ -44,55 +44,55 @@
           },
           "value": "foo"
         },
-        "assertions": []
+        "attributes": []
       },
       {
         "type": "ImportDeclaration",
-        "start":42,"end":78,"loc":{"start":{"line":2,"column":0,"index":42},"end":{"line":2,"column":36,"index":78}},
+        "start":40,"end":74,"loc":{"start":{"line":2,"column":0,"index":40},"end":{"line":2,"column":34,"index":74}},
         "specifiers": [
           {
             "type": "ImportNamespaceSpecifier",
-            "start":49,"end":56,"loc":{"start":{"line":2,"column":7,"index":49},"end":{"line":2,"column":14,"index":56}},
+            "start":47,"end":54,"loc":{"start":{"line":2,"column":7,"index":47},"end":{"line":2,"column":14,"index":54}},
             "local": {
               "type": "Identifier",
-              "start":54,"end":56,"loc":{"start":{"line":2,"column":12,"index":54},"end":{"line":2,"column":14,"index":56},"identifierName":"ns"},
+              "start":52,"end":54,"loc":{"start":{"line":2,"column":12,"index":52},"end":{"line":2,"column":14,"index":54},"identifierName":"ns"},
               "name": "ns"
             }
           }
         ],
         "source": {
           "type": "StringLiteral",
-          "start":62,"end":67,"loc":{"start":{"line":2,"column":20,"index":62},"end":{"line":2,"column":25,"index":67}},
+          "start":60,"end":65,"loc":{"start":{"line":2,"column":20,"index":60},"end":{"line":2,"column":25,"index":65}},
           "extra": {
             "rawValue": "foo",
             "raw": "\"foo\""
           },
           "value": "foo"
         },
-        "assertions": []
+        "attributes": []
       },
       {
         "type": "ExportNamedDeclaration",
-        "start":79,"end":116,"loc":{"start":{"line":3,"column":0,"index":79},"end":{"line":3,"column":37,"index":116}},
+        "start":75,"end":110,"loc":{"start":{"line":3,"column":0,"index":75},"end":{"line":3,"column":35,"index":110}},
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start":88,"end":92,"loc":{"start":{"line":3,"column":9,"index":88},"end":{"line":3,"column":13,"index":92}},
+            "start":84,"end":88,"loc":{"start":{"line":3,"column":9,"index":84},"end":{"line":3,"column":13,"index":88}},
             "local": {
               "type": "Identifier",
-              "start":88,"end":92,"loc":{"start":{"line":3,"column":9,"index":88},"end":{"line":3,"column":13,"index":92},"identifierName":"quux"},
+              "start":84,"end":88,"loc":{"start":{"line":3,"column":9,"index":84},"end":{"line":3,"column":13,"index":88},"identifierName":"quux"},
               "name": "quux"
             },
             "exported": {
               "type": "Identifier",
-              "start":88,"end":92,"loc":{"start":{"line":3,"column":9,"index":88},"end":{"line":3,"column":13,"index":92},"identifierName":"quux"},
+              "start":84,"end":88,"loc":{"start":{"line":3,"column":9,"index":84},"end":{"line":3,"column":13,"index":88},"identifierName":"quux"},
               "name": "quux"
             }
           }
         ],
         "source": {
           "type": "StringLiteral",
-          "start":100,"end":105,"loc":{"start":{"line":3,"column":21,"index":100},"end":{"line":3,"column":26,"index":105}},
+          "start":96,"end":101,"loc":{"start":{"line":3,"column":21,"index":96},"end":{"line":3,"column":26,"index":101}},
           "extra": {
             "rawValue": "foo",
             "raw": "\"foo\""
@@ -100,32 +100,33 @@
           "value": "foo"
         },
         "declaration": null,
-        "assertions": []
+        "assertions": [],
+        "attributes": []
       },
       {
         "type": "ExportNamedDeclaration",
-        "start":117,"end":154,"loc":{"start":{"line":4,"column":0,"index":117},"end":{"line":4,"column":37,"index":154}},
+        "start":111,"end":146,"loc":{"start":{"line":4,"column":0,"index":111},"end":{"line":4,"column":35,"index":146}},
         "specifiers": [
           {
             "type": "ExportNamespaceSpecifier",
-            "start":124,"end":132,"loc":{"start":{"line":4,"column":7,"index":124},"end":{"line":4,"column":15,"index":132}},
+            "start":118,"end":126,"loc":{"start":{"line":4,"column":7,"index":118},"end":{"line":4,"column":15,"index":126}},
             "exported": {
               "type": "Identifier",
-              "start":129,"end":132,"loc":{"start":{"line":4,"column":12,"index":129},"end":{"line":4,"column":15,"index":132},"identifierName":"ns2"},
+              "start":123,"end":126,"loc":{"start":{"line":4,"column":12,"index":123},"end":{"line":4,"column":15,"index":126},"identifierName":"ns2"},
               "name": "ns2"
             }
           }
         ],
         "source": {
           "type": "StringLiteral",
-          "start":138,"end":143,"loc":{"start":{"line":4,"column":21,"index":138},"end":{"line":4,"column":26,"index":143}},
+          "start":132,"end":137,"loc":{"start":{"line":4,"column":21,"index":132},"end":{"line":4,"column":26,"index":137}},
           "extra": {
             "rawValue": "foo",
             "raw": "\"foo\""
           },
           "value": "foo"
         },
-        "assertions": []
+        "attributes": []
       }
     ],
     "directives": []

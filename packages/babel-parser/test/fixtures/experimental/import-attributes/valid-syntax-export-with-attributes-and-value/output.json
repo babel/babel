@@ -1,15 +1,15 @@
 {
   "type": "File",
-  "start":0,"end":64,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":3,"index":64}},
+  "start":0,"end":62,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":3,"index":62}},
   "program": {
     "type": "Program",
-    "start":0,"end":64,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":3,"index":64}},
+    "start":0,"end":62,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":3,"index":62}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "ExportNamedDeclaration",
-        "start":0,"end":60,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":60,"index":60}},
+        "start":0,"end":58,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":58,"index":58}},
         "specifiers": [
           {
             "type": "ExportSpecifier",
@@ -40,18 +40,18 @@
           "value": "foo"
         },
         "declaration": null,
-        "assertions": [
+        "attributes": [
           {
             "type": "ImportAttribute",
-            "start":46,"end":58,"loc":{"start":{"line":1,"column":46,"index":46},"end":{"line":1,"column":58,"index":58}},
+            "start":44,"end":56,"loc":{"start":{"line":1,"column":44,"index":44},"end":{"line":1,"column":56,"index":56}},
             "key": {
               "type": "Identifier",
-              "start":46,"end":50,"loc":{"start":{"line":1,"column":46,"index":46},"end":{"line":1,"column":50,"index":50},"identifierName":"type"},
+              "start":44,"end":48,"loc":{"start":{"line":1,"column":44,"index":44},"end":{"line":1,"column":48,"index":48},"identifierName":"type"},
               "name": "type"
             },
             "value": {
               "type": "StringLiteral",
-              "start":52,"end":58,"loc":{"start":{"line":1,"column":52,"index":52},"end":{"line":1,"column":58,"index":58}},
+              "start":50,"end":56,"loc":{"start":{"line":1,"column":50,"index":50},"end":{"line":1,"column":56,"index":56}},
               "extra": {
                 "rawValue": "json",
                 "raw": "\"json\""
@@ -63,14 +63,14 @@
       },
       {
         "type": "ExpressionStatement",
-        "start":61,"end":64,"loc":{"start":{"line":2,"column":0,"index":61},"end":{"line":2,"column":3,"index":64}},
+        "start":59,"end":62,"loc":{"start":{"line":2,"column":0,"index":59},"end":{"line":2,"column":3,"index":62}},
         "expression": {
           "type": "ArrayExpression",
-          "start":61,"end":64,"loc":{"start":{"line":2,"column":0,"index":61},"end":{"line":2,"column":3,"index":64}},
+          "start":59,"end":62,"loc":{"start":{"line":2,"column":0,"index":59},"end":{"line":2,"column":3,"index":62}},
           "elements": [
             {
               "type": "NumericLiteral",
-              "start":62,"end":63,"loc":{"start":{"line":2,"column":1,"index":62},"end":{"line":2,"column":2,"index":63}},
+              "start":60,"end":61,"loc":{"start":{"line":2,"column":1,"index":60},"end":{"line":2,"column":2,"index":61}},
               "extra": {
                 "rawValue": 0,
                 "raw": "0"

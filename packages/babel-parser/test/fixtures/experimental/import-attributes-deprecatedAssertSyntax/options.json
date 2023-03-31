@@ -1,4 +1,0 @@
-{
-  "plugins": [["importAttributes", { "deprecatedAssertSyntax": true }]],
-  "sourceType": "module"
-}

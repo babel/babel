@@ -1,13 +1,13 @@
 {
   "type": "File",
-  "start":0,"end":75,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":65,"index":75}},
+  "start":0,"end":73,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":63,"index":73}},
   "errors": [
-    "SyntaxError: `import()` requires exactly one or two arguments. (1:0)",
-    "SyntaxError: `import()` requires exactly one or two arguments. (2:0)"
+    "SyntaxError: `import()` requires exactly one argument. (1:0)",
+    "SyntaxError: `import()` requires exactly one argument. (2:0)"
   ],
   "program": {
     "type": "Program",
-    "start":0,"end":75,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":65,"index":75}},
+    "start":0,"end":73,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":63,"index":73}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
@@ -26,10 +26,10 @@
       },
       {
         "type": "ExpressionStatement",
-        "start":10,"end":75,"loc":{"start":{"line":2,"column":0,"index":10},"end":{"line":2,"column":65,"index":75}},
+        "start":10,"end":73,"loc":{"start":{"line":2,"column":0,"index":10},"end":{"line":2,"column":63,"index":73}},
         "expression": {
           "type": "CallExpression",
-          "start":10,"end":74,"loc":{"start":{"line":2,"column":0,"index":10},"end":{"line":2,"column":64,"index":74}},
+          "start":10,"end":72,"loc":{"start":{"line":2,"column":0,"index":10},"end":{"line":2,"column":62,"index":72}},
           "callee": {
             "type": "Import",
             "start":10,"end":16,"loc":{"start":{"line":2,"column":0,"index":10},"end":{"line":2,"column":6,"index":16}}
@@ -46,37 +46,37 @@
             },
             {
               "type": "ObjectExpression",
-              "start":31,"end":58,"loc":{"start":{"line":2,"column":21,"index":31},"end":{"line":2,"column":48,"index":58}},
+              "start":31,"end":56,"loc":{"start":{"line":2,"column":21,"index":31},"end":{"line":2,"column":46,"index":56}},
               "properties": [
                 {
                   "type": "ObjectProperty",
-                  "start":33,"end":56,"loc":{"start":{"line":2,"column":23,"index":33},"end":{"line":2,"column":46,"index":56}},
+                  "start":33,"end":54,"loc":{"start":{"line":2,"column":23,"index":33},"end":{"line":2,"column":44,"index":54}},
                   "method": false,
                   "key": {
                     "type": "Identifier",
-                    "start":33,"end":39,"loc":{"start":{"line":2,"column":23,"index":33},"end":{"line":2,"column":29,"index":39},"identifierName":"assert"},
-                    "name": "assert"
+                    "start":33,"end":37,"loc":{"start":{"line":2,"column":23,"index":33},"end":{"line":2,"column":27,"index":37},"identifierName":"with"},
+                    "name": "with"
                   },
                   "computed": false,
                   "shorthand": false,
                   "value": {
                     "type": "ObjectExpression",
-                    "start":41,"end":56,"loc":{"start":{"line":2,"column":31,"index":41},"end":{"line":2,"column":46,"index":56}},
+                    "start":39,"end":54,"loc":{"start":{"line":2,"column":29,"index":39},"end":{"line":2,"column":44,"index":54}},
                     "properties": [
                       {
                         "type": "ObjectProperty",
-                        "start":43,"end":55,"loc":{"start":{"line":2,"column":33,"index":43},"end":{"line":2,"column":45,"index":55}},
+                        "start":41,"end":53,"loc":{"start":{"line":2,"column":31,"index":41},"end":{"line":2,"column":43,"index":53}},
                         "method": false,
                         "key": {
                           "type": "Identifier",
-                          "start":43,"end":47,"loc":{"start":{"line":2,"column":33,"index":43},"end":{"line":2,"column":37,"index":47},"identifierName":"type"},
+                          "start":41,"end":45,"loc":{"start":{"line":2,"column":31,"index":41},"end":{"line":2,"column":35,"index":45},"identifierName":"type"},
                           "name": "type"
                         },
                         "computed": false,
                         "shorthand": false,
                         "value": {
                           "type": "StringLiteral",
-                          "start":49,"end":55,"loc":{"start":{"line":2,"column":39,"index":49},"end":{"line":2,"column":45,"index":55}},
+                          "start":47,"end":53,"loc":{"start":{"line":2,"column":37,"index":47},"end":{"line":2,"column":43,"index":53}},
                           "extra": {
                             "rawValue": "json",
                             "raw": "\"json\""
@@ -91,7 +91,7 @@
             },
             {
               "type": "StringLiteral",
-              "start":60,"end":73,"loc":{"start":{"line":2,"column":50,"index":60},"end":{"line":2,"column":63,"index":73}},
+              "start":58,"end":71,"loc":{"start":{"line":2,"column":48,"index":58},"end":{"line":2,"column":61,"index":71}},
               "extra": {
                 "rawValue": "unsupported",
                 "raw": "\"unsupported\""

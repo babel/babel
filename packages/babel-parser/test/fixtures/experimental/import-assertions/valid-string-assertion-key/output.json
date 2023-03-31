@@ -20,6 +20,9 @@
           },
           "value": "foo"
         },
+        "extra": {
+          "usesAssertKeyword": true
+        },
         "assertions": [
           {
             "type": "ImportAttribute",

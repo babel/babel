@@ -1,2 +1,2 @@
 import();
-import("./foo.json", { assert: { type: "json"} }, "unsupported");
+import("./foo.json", { with: { type: "json"} }, "unsupported");

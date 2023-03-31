@@ -1,2 +1,2 @@
-import foo from "foo" assert { type: "json", }
-export { default as foo } from "foo" assert { type: "json", }
+import foo from "foo" with { type: "json", }
+export { default as foo } from "foo" with { type: "json", }

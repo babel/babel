@@ -1,9 +1,9 @@
 {
   "type": "File",
-  "start":0,"end":69,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":50,"index":69}},
+  "start":0,"end":67,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":48,"index":67}},
   "program": {
     "type": "Program",
-    "start":0,"end":69,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":50,"index":69}},
+    "start":0,"end":67,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":48,"index":67}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
@@ -35,16 +35,16 @@
       },
       {
         "type": "ExpressionStatement",
-        "start":19,"end":69,"loc":{"start":{"line":2,"column":0,"index":19},"end":{"line":2,"column":50,"index":69}},
+        "start":19,"end":67,"loc":{"start":{"line":2,"column":0,"index":19},"end":{"line":2,"column":48,"index":67}},
         "expression": {
           "type": "CallExpression",
-          "start":19,"end":68,"loc":{"start":{"line":2,"column":0,"index":19},"end":{"line":2,"column":49,"index":68}},
+          "start":19,"end":66,"loc":{"start":{"line":2,"column":0,"index":19},"end":{"line":2,"column":47,"index":66}},
           "callee": {
             "type": "Import",
             "start":19,"end":25,"loc":{"start":{"line":2,"column":0,"index":19},"end":{"line":2,"column":6,"index":25}}
           },
           "extra": {
-            "trailingComma": 66
+            "trailingComma": 64
           },
           "arguments": [
             {
@@ -58,37 +58,37 @@
             },
             {
               "type": "ObjectExpression",
-              "start":38,"end":66,"loc":{"start":{"line":2,"column":19,"index":38},"end":{"line":2,"column":47,"index":66}},
+              "start":38,"end":64,"loc":{"start":{"line":2,"column":19,"index":38},"end":{"line":2,"column":45,"index":64}},
               "properties": [
                 {
                   "type": "ObjectProperty",
-                  "start":40,"end":64,"loc":{"start":{"line":2,"column":21,"index":40},"end":{"line":2,"column":45,"index":64}},
+                  "start":40,"end":62,"loc":{"start":{"line":2,"column":21,"index":40},"end":{"line":2,"column":43,"index":62}},
                   "method": false,
                   "key": {
                     "type": "Identifier",
-                    "start":40,"end":46,"loc":{"start":{"line":2,"column":21,"index":40},"end":{"line":2,"column":27,"index":46},"identifierName":"assert"},
-                    "name": "assert"
+                    "start":40,"end":44,"loc":{"start":{"line":2,"column":21,"index":40},"end":{"line":2,"column":25,"index":44},"identifierName":"with"},
+                    "name": "with"
                   },
                   "computed": false,
                   "shorthand": false,
                   "value": {
                     "type": "ObjectExpression",
-                    "start":48,"end":64,"loc":{"start":{"line":2,"column":29,"index":48},"end":{"line":2,"column":45,"index":64}},
+                    "start":46,"end":62,"loc":{"start":{"line":2,"column":27,"index":46},"end":{"line":2,"column":43,"index":62}},
                     "properties": [
                       {
                         "type": "ObjectProperty",
-                        "start":50,"end":62,"loc":{"start":{"line":2,"column":31,"index":50},"end":{"line":2,"column":43,"index":62}},
+                        "start":48,"end":60,"loc":{"start":{"line":2,"column":29,"index":48},"end":{"line":2,"column":41,"index":60}},
                         "method": false,
                         "key": {
                           "type": "Identifier",
-                          "start":50,"end":54,"loc":{"start":{"line":2,"column":31,"index":50},"end":{"line":2,"column":35,"index":54},"identifierName":"type"},
+                          "start":48,"end":52,"loc":{"start":{"line":2,"column":29,"index":48},"end":{"line":2,"column":33,"index":52},"identifierName":"type"},
                           "name": "type"
                         },
                         "computed": false,
                         "shorthand": false,
                         "value": {
                           "type": "StringLiteral",
-                          "start":56,"end":62,"loc":{"start":{"line":2,"column":37,"index":56},"end":{"line":2,"column":43,"index":62}},
+                          "start":54,"end":60,"loc":{"start":{"line":2,"column":35,"index":54},"end":{"line":2,"column":41,"index":60}},
                           "extra": {
                             "rawValue": "json",
                             "raw": "\"json\""

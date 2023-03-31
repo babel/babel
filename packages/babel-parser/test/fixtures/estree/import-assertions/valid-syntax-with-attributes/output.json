@@ -28,6 +28,9 @@
           "value": "foo.json",
           "raw": "\"foo.json\""
         },
+        "extra": {
+          "usesAssertKeyword": true
+        },
         "assertions": [
           {
             "type": "ImportAttribute",

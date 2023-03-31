@@ -1,9 +1,0 @@
-{
-  "plugins": [
-    [
-      ["importAttributes", { "deprecatedAssertSyntax": true }]
-    ]
-  ],
-  "sourceType": "module",
-  "throws": "Only string literals are allowed as module attribute values. (1:64)"
-}

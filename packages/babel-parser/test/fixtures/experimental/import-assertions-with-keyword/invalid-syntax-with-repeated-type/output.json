@@ -1,18 +1,18 @@
 {
   "type": "File",
-  "start":0,"end":65,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":65,"index":65}},
+  "start":0,"end":63,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":63,"index":63}},
   "errors": [
-    "SyntaxError: Duplicate key \"type\" is not allowed in module attributes. (1:50)"
+    "SyntaxError: Duplicate key \"type\" is not allowed in module attributes. (1:48)"
   ],
   "program": {
     "type": "Program",
-    "start":0,"end":65,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":65,"index":65}},
+    "start":0,"end":63,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":63,"index":63}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "ImportDeclaration",
-        "start":0,"end":65,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":65,"index":65}},
+        "start":0,"end":63,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":63,"index":63}},
         "specifiers": [
           {
             "type": "ImportDefaultSpecifier",
@@ -33,18 +33,18 @@
           },
           "value": "foo.json"
         },
-        "assertions": [
+        "attributes": [
           {
             "type": "ImportAttribute",
-            "start":36,"end":48,"loc":{"start":{"line":1,"column":36,"index":36},"end":{"line":1,"column":48,"index":48}},
+            "start":34,"end":46,"loc":{"start":{"line":1,"column":34,"index":34},"end":{"line":1,"column":46,"index":46}},
             "key": {
               "type": "Identifier",
-              "start":36,"end":40,"loc":{"start":{"line":1,"column":36,"index":36},"end":{"line":1,"column":40,"index":40},"identifierName":"type"},
+              "start":34,"end":38,"loc":{"start":{"line":1,"column":34,"index":34},"end":{"line":1,"column":38,"index":38},"identifierName":"type"},
               "name": "type"
             },
             "value": {
               "type": "StringLiteral",
-              "start":42,"end":48,"loc":{"start":{"line":1,"column":42,"index":42},"end":{"line":1,"column":48,"index":48}},
+              "start":40,"end":46,"loc":{"start":{"line":1,"column":40,"index":40},"end":{"line":1,"column":46,"index":46}},
               "extra": {
                 "rawValue": "json",
                 "raw": "\"json\""
@@ -54,15 +54,15 @@
           },
           {
             "type": "ImportAttribute",
-            "start":50,"end":62,"loc":{"start":{"line":1,"column":50,"index":50},"end":{"line":1,"column":62,"index":62}},
+            "start":48,"end":60,"loc":{"start":{"line":1,"column":48,"index":48},"end":{"line":1,"column":60,"index":60}},
             "key": {
               "type": "Identifier",
-              "start":50,"end":54,"loc":{"start":{"line":1,"column":50,"index":50},"end":{"line":1,"column":54,"index":54},"identifierName":"type"},
+              "start":48,"end":52,"loc":{"start":{"line":1,"column":48,"index":48},"end":{"line":1,"column":52,"index":52},"identifierName":"type"},
               "name": "type"
             },
             "value": {
               "type": "StringLiteral",
-              "start":56,"end":62,"loc":{"start":{"line":1,"column":56,"index":56},"end":{"line":1,"column":62,"index":62}},
+              "start":54,"end":60,"loc":{"start":{"line":1,"column":54,"index":54},"end":{"line":1,"column":60,"index":60}},
               "extra": {
                 "rawValue": "html",
                 "raw": "\"html\""
