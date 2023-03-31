@@ -23,6 +23,25 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.21.4 (2023-03-31)
+
+#### :bug: Bug Fix
+* `babel-core`, `babel-helper-module-imports`, `babel-preset-typescript`
+  * [#15478](https://github.com/babel/babel/pull/15478) Fix support for `import/export` in `.cts` files ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-generator`
+  * [#15496](https://github.com/babel/babel/pull/15496) Fix compact printing of non-null assertion operators ([@rtsao](https://github.com/rtsao))
+
+#### :nail_care: Polish
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-class-properties`, `babel-plugin-transform-typescript`, `babel-traverse`
+  * [#15427](https://github.com/babel/babel/pull/15427) Fix moving comments of removed nodes ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* Other
+  * [#15519](https://github.com/babel/babel/pull/15519) Update Prettier integration test ([@fisker](https://github.com/fisker))
+* `babel-parser`
+  * [#15510](https://github.com/babel/babel/pull/15510) refactor: introduce `lookaheadInLineCharCode` ([@JLHwung](https://github.com/JLHwung))
+* `babel-code-frame`, `babel-highlight`
+  * [#15499](https://github.com/babel/babel/pull/15499) Polish babel-code-frame highlight test ([@JLHwung](https://github.com/JLHwung))
 ## v7.21.3 (2023-03-14)
 
 #### :eyeglasses: Spec Compliance
