@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-typescript",
-  "version": "7.20.0",
+  "version": "7.21.4",
   "description": "Allow parsing of TypeScript syntax",
   "repository": {
     "type": "git",
