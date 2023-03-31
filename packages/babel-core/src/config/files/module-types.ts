@@ -98,7 +98,7 @@ function loadCtsDefault(filepath: string) {
         } catch (error) {
           if (!hasTsSupport) {
             const packageJson = require("@babel/preset-typescript/package.json");
-            if (semver.lte(packageJson.version, "7.21.4")) {
+            if (semver.lt(packageJson.version, "7.21.4")) {
               console.error(
                 "`.cts` configuration file failed to load, please try to update `@babel/preset-typescript`.",
               );
