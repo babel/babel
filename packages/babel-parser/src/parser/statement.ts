@@ -3097,6 +3097,7 @@ export default abstract class StatementParser extends ExpressionParser {
       if (!process.env.BABEL_8_BREAKING) {
         if (this.hasPlugin("moduleAttributes")) {
           attributes = this.parseModuleAttributes();
+          this.addExtra(node, "useLegacyModuleAttributes", true);
         } else {
           this.expectImportAttributesPlugin();
           attributes = this.parseImportAttributes();

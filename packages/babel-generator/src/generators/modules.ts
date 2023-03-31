@@ -66,17 +66,25 @@ export function ExportNamespaceSpecifier(
   this.print(node.exported, node);
 }
 
-export function _printAssertions(
+export function _printAttributes(
   this: Printer,
-  node: Extract<t.Node, { assertions?: t.ImportAttribute[] }>,
+  node: Extract<t.Node, { attributes?: t.ImportAttribute[] }>,
 ) {
-  this.word("assert");
+  if (!node.attributes || node.extra?.usesAssertKeyword) {
+    this.word("assert");
+  } else {
+    this.word("with");
+  }
   this.space();
-  this.token("{");
-  this.space();
-  this.printList(node.assertions, node);
-  this.space();
-  this.token("}");
+  if (!node.extra?.useLegacyModuleAttributes) {
+    this.token("{");
+    this.space();
+  }
+  this.printList(node.attributes || node.assertions, node);
+  if (!node.extra?.useLegacyModuleAttributes) {
+    this.space();
+    this.token("}");
+  }
 }
 
 export function ExportAllDeclaration(
@@ -93,12 +101,12 @@ export function ExportAllDeclaration(
   this.space();
   this.word("from");
   this.space();
-  // @ts-expect-error Fixme: assertions is not defined in DeclareExportAllDeclaration
-  if (node.assertions?.length) {
+  // @ts-expect-error Fixme: attributes is not defined in DeclareExportAllDeclaration
+  if (node.attributes?.length || node.assertions?.length) {
     this.print(node.source, node, true);
     this.space();
-    // @ts-expect-error Fixme: assertions is not defined in DeclareExportAllDeclaration
-    this._printAssertions(node);
+    // @ts-expect-error Fixme: attributes is not defined in DeclareExportAllDeclaration
+    this._printAttributes(node);
   } else {
     this.print(node.source, node);
   }
@@ -173,10 +181,10 @@ export function ExportNamedDeclaration(
       this.space();
       this.word("from");
       this.space();
-      if (node.assertions?.length) {
+      if (node.attributes?.length || node.assertions?.length) {
         this.print(node.source, node, true);
         this.space();
-        this._printAssertions(node);
+        this._printAttributes(node);
       } else {
         this.print(node.source, node);
       }
@@ -251,22 +259,12 @@ export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
     this.space();
   }
 
-  if (node.assertions?.length) {
+  if (node.attributes?.length || node.assertions?.length) {
     this.print(node.source, node, true);
     this.space();
-    this._printAssertions(node);
+    this._printAttributes(node);
   } else {
     this.print(node.source, node);
-  }
-  if (!process.env.BABEL_8_BREAKING) {
-    // @ts-ignore(Babel 7 vs Babel 8) Babel 7 supports module attributes
-    if (node.attributes?.length) {
-      this.space();
-      this.word("with");
-      this.space();
-      // @ts-ignore(Babel 7 vs Babel 8) Babel 7 supports module attributes
-      this.printList(node.attributes, node);
-    }
   }
 
   this.semicolon();
