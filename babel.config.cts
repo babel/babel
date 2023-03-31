@@ -3,7 +3,7 @@
 import pathUtils from "path";
 import fs from "fs";
 import { parseSync } from "@babel/core";
-import { Options as EnvOpts } from "./packages/babel-preset-env/src/types";
+import type { Options as EnvOpts } from "./packages/babel-preset-env/src/types";
 import type { ConfigAPI, PluginAPI, PluginObject } from "@babel/core";
 import type * as t from "@babel/types";
 import type { NodePath } from "@babel/traverse";
