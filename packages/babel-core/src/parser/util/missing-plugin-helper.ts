@@ -84,10 +84,10 @@ const pluginNameMap: Record<
       url: "https://github.com/babel/babel/tree/main/packages/babel-preset-react",
     },
   },
-  importAssertions: {
+  importAttributes: {
     syntax: {
-      name: "@babel/plugin-syntax-import-assertions",
-      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-import-assertions",
+      name: "@babel/plugin-syntax-import-attributes",
+      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-import-attributes",
     },
   },
   pipelineOperator: {
@@ -205,6 +205,13 @@ if (!process.env.BABEL_8_BREAKING) {
       transform: {
         name: "@babel/plugin-proposal-export-namespace-from",
         url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-export-namespace-from",
+      },
+    },
+    // Will be removed
+    importAssertions: {
+      syntax: {
+        name: "@babel/plugin-syntax-import-assertions",
+        url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-import-assertions",
       },
     },
     importMeta: {
