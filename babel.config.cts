@@ -756,11 +756,14 @@ function pluginAddImportExtension(
 ): PluginObject {
   return {
     visitor: {
-      "ImportDeclaration|ExportDeclaration"({
+      "ImportDeclaration|ExportAllDeclaration|ExportNamedDeclaration"({
         node,
-      }: NodePath<t.ImportDeclaration | t.ExportDeclaration>) {
-        if (!("source" in node)) return;
+      }: NodePath<
+        t.ImportDeclaration | t.ExportAllDeclaration | t.ExportNamedDeclaration
+      >) {
         const { source } = node;
+
+        if (!source) return;
 
         if (
           when === "always" &&
