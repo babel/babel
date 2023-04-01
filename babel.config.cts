@@ -26,6 +26,7 @@ export default function (api: ConfigAPI) {
   const sources = ["packages/*/src", "codemods/*/src", "eslint/*/src"];
 
   const envOpts: EnvOpts = {
+    // #e2e-babel-old-env-opts#
     shippedProposals: true,
     modules: false,
     exclude: [

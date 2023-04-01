@@ -49,13 +49,13 @@ node "$PWD"/scripts/integration-tests/utils/bump-babel-dependencies.js
 # Older @babel/core versions don't support "targets" and "assumptions"
 # Let's just remove them when running this e2e test.
 node -e "
-  var config = fs.readFileSync('./babel.config.js', 'utf8')
+  var config = fs.readFileSync('./babel.config.cts', 'utf8')
     .replace(/assumptions,/, '')
     .replace(/targets,/g, '')
     .replace(/assumptions,/g, '')
     .replace(/assumptions:[^,]*,/g, '')
-    .replace(/(?<=envOpts\s+=\s+\{)/, 'targets: { node: \'6.9\' },');
-  fs.writeFileSync('./babel.config.js', config);
+    .replace(/\/\/ #e2e-babel-old-env-opts#/, 'targets: { node: \'6.9\' },');
+  fs.writeFileSync('./babel.config.cts', config);
 "
 
 # https://github.com/babel/babel/pull/12331 - This test is fixed in @babel/traverse 7.12.7,
