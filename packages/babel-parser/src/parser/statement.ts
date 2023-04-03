@@ -3082,6 +3082,7 @@ export default abstract class StatementParser extends ExpressionParser {
     let attributes: N.ImportAttribute[];
     let useWith = false;
 
+    // https://tc39.es/proposal-import-attributes/#prod-WithClause
     if (this.match(tt._with)) {
       if (
         this.hasPrecedingLineBreak() &&
