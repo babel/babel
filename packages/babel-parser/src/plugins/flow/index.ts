@@ -717,8 +717,6 @@ export default (superClass: typeof Parser) =>
       }
 
       node.extends = [];
-      node.implements = [];
-      node.mixins = [];
 
       if (this.eat(tt._extends)) {
         do {
@@ -727,6 +725,9 @@ export default (superClass: typeof Parser) =>
       }
 
       if (isClass) {
+        node.implements = [];
+        node.mixins = [];
+
         if (this.eatContextual(tt._mixins)) {
           do {
             node.mixins.push(this.flowParseInterfaceExtends());
