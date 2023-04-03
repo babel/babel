@@ -1137,8 +1137,6 @@ export interface DeclareInterface extends BaseNode {
   typeParameters?: TypeParameterDeclaration | null;
   extends?: Array<InterfaceExtends> | null;
   body: ObjectTypeAnnotation;
-  implements?: Array<ClassImplements> | null;
-  mixins?: Array<InterfaceExtends> | null;
 }
 
 export interface DeclareModule extends BaseNode {
@@ -1234,8 +1232,6 @@ export interface InterfaceDeclaration extends BaseNode {
   typeParameters?: TypeParameterDeclaration | null;
   extends?: Array<InterfaceExtends> | null;
   body: ObjectTypeAnnotation;
-  implements?: Array<ClassImplements> | null;
-  mixins?: Array<InterfaceExtends> | null;
 }
 
 export interface InterfaceTypeAnnotation extends BaseNode {
@@ -3651,9 +3647,7 @@ export interface ParentMaps {
     | ClassExpression
     | DeclareClass
     | DeclareExportDeclaration
-    | DeclareInterface
-    | DeclaredPredicate
-    | InterfaceDeclaration;
+    | DeclaredPredicate;
   ClassMethod: ClassBody;
   ClassPrivateMethod: ClassBody;
   ClassPrivateProperty: ClassBody;
