@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-react-inline-elements",
-  "version": "7.21.0",
+  "version": "7.21.4-esm",
   "description": "Turn JSX elements into exploded React objects",
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
     "@babel/helper-plugin-utils": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "^7.0.0-0 || 7.21.4-esm"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

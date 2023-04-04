@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-import-reflection",
-  "version": "7.20.0",
+  "version": "7.21.4-esm",
   "description": "Allow parsing of the reflection attributes in the import statement",
   "repository": {
     "type": "git",
@@ -19,7 +19,7 @@
     "@babel/helper-plugin-utils": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "^7.0.0-0 || 7.21.4-esm"
   },
   "devDependencies": {
     "@babel/core": "workspace:^"

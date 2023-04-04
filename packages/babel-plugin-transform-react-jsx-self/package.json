@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-react-jsx-self",
-  "version": "7.21.0",
+  "version": "7.21.4-esm",
   "description": "Add a __self prop to all JSX Elements",
   "repository": {
     "type": "git",
@@ -20,7 +20,7 @@
     "@babel/helper-plugin-utils": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "^7.0.0-0 || 7.21.4-esm"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

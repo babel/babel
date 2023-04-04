@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining",
-  "version": "7.20.7",
+  "version": "7.21.4-esm",
   "description": "Transform optional chaining operators to workaround https://crbug.com/v8/11558",
   "repository": {
     "type": "git",
@@ -27,7 +27,7 @@
     "@babel/plugin-proposal-optional-chaining": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.13.0"
+    "@babel/core": "^7.13.0 || 7.21.4-esm"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

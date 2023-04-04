@@ -1,6 +1,6 @@
 {
   "name": "@babel/eslint-config-internal",
-  "version": "7.20.13",
+  "version": "7.21.4-esm",
   "description": "The Babel Team's ESLint configuration. Since it's internal, it might not respect semver.",
   "private": true,
   "main": "./index.js",

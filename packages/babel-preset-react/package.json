@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-react",
-  "version": "7.18.6",
+  "version": "7.21.4-esm",
   "description": "Babel preset for all React plugins.",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-preset-react",
@@ -24,7 +24,7 @@
     "@babel/plugin-transform-react-pure-annotations": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "^7.0.0-0 || 7.21.4-esm"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

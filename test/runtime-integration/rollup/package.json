@@ -7,5 +7,6 @@
     "@rollup/plugin-node-resolve": "^13.3.0",
     "rollup": "^2.78.0"
   },
-  "type": "commonjs"
+  "type": "commonjs",
+  "version": "7.21.4-esm"
 }

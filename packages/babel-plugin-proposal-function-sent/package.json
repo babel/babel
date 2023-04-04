@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-function-sent",
-  "version": "7.18.6",
+  "version": "7.21.4-esm",
   "description": "Compile the function.sent meta property to valid ES2015 code",
   "repository": {
     "type": "git",
@@ -22,7 +22,7 @@
     "@babel/plugin-syntax-function-sent": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "^7.0.0-0 || 7.21.4-esm"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

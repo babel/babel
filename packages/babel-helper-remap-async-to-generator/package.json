@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-remap-async-to-generator",
-  "version": "7.18.9",
+  "version": "7.21.4-esm",
   "description": "Helper function to remap async functions to generators",
   "repository": {
     "type": "git",
@@ -24,7 +24,7 @@
     "@babel/traverse": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0"
+    "@babel/core": "^7.0.0 || 7.21.4-esm"
   },
   "engines": {
     "node": ">=6.9.0"

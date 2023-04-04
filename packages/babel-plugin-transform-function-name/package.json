@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-function-name",
-  "version": "7.18.9",
+  "version": "7.21.4-esm",
   "description": "Apply ES2015 function.name semantics to all functions",
   "repository": {
     "type": "git",
@@ -22,7 +22,7 @@
     "@babel/helper-plugin-utils": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "^7.0.0-0 || 7.21.4-esm"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

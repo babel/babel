@@ -121,7 +121,7 @@ function assertVersion(range: string | number): void {
     throw new Error("Expected string or integer value.");
   }
 
-  if (semver.satisfies(coreVersion, range)) return;
+  if (semver.satisfies(coreVersion.replace("-esm", ""), range)) return;
 
   const limit = Error.stackTraceLimit;
 
