@@ -110,7 +110,6 @@ function evaluateCached(path: NodePath, state: State): any {
       return existing.value;
     } else {
       deopt(path, state);
-      return;
     }
   } else {
     const item: Result = { resolved: false };

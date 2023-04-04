@@ -38,7 +38,6 @@ const visitor: Visitor = {
   FunctionParent(path) {
     if (path.isArrowFunctionExpression()) {
       // arrows are not skipped because they inherit the context.
-      return;
     } else {
       path.skip();
       if (path.isMethod()) {

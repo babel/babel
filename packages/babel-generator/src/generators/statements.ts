@@ -2,6 +2,7 @@ import type Printer from "../printer.ts";
 import {
   isFor,
   isForStatement,
+  isForXStatement,
   isIfStatement,
   isStatement,
 } from "@babel/types";
@@ -294,16 +295,15 @@ export function VariableDeclaration(
           this.newline();
         }
       : undefined,
-    indent: node.declarations.length > 1 ? true : false,
+    indent: node.declarations.length > 1,
   });
 
-  if (isFor(parent)) {
-    // don't give semicolons to these nodes since they'll be inserted in the parent generator
-    if (isForStatement(parent)) {
-      if (parent.init === node) return;
-    } else {
-      if (parent.left === node) return;
-    }
+  // don't give semicolons to these nodes since they'll be inserted in the parent generator
+  if (
+    isForStatement(parent, { init: node }) ||
+    isForXStatement(parent, { left: node })
+  ) {
+    return;
   }
 
   this.semicolon();

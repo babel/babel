@@ -85,7 +85,7 @@ export default class Binding {
 
   reassign(path: NodePath) {
     this.constant = false;
-    if (this.constantViolations.indexOf(path) !== -1) {
+    if (this.constantViolations.includes(path)) {
       return;
     }
     this.constantViolations.push(path);
@@ -96,7 +96,7 @@ export default class Binding {
    */
 
   reference(path: NodePath) {
-    if (this.referencePaths.indexOf(path) !== -1) {
+    if (this.referencePaths.includes(path)) {
       return;
     }
     this.referenced = true;

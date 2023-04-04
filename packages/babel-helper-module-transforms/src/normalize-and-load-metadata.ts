@@ -216,13 +216,11 @@ function getExportSpecifierName(
 function assertExportSpecifier(
   path: NodePath,
 ): asserts path is NodePath<t.ExportSpecifier> {
-  if (path.isExportSpecifier()) {
-    return;
-  } else if (path.isExportNamespaceSpecifier()) {
+  if (path.isExportNamespaceSpecifier()) {
     throw path.buildCodeFrameError(
       "Export namespace should be first transformed by `@babel/plugin-transform-export-namespace-from`.",
     );
-  } else {
+  } else if (!path.isExportSpecifier()) {
     throw path.buildCodeFrameError("Unexpected export specifier type");
   }
 }

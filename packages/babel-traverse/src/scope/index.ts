@@ -1297,8 +1297,9 @@ export default class Scope {
   ) {
     if (!name) return false;
     if (this.hasOwnBinding(name)) return true;
+    // TODO: Only accept the object form.
+    // eslint-disable-next-line no-lone-blocks
     {
-      // TODO: Only accept the object form.
       if (typeof opts === "boolean") opts = { noGlobals: opts };
     }
     if (this.parentHasBinding(name, opts)) return true;

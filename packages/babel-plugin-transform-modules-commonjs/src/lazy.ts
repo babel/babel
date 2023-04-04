@@ -17,7 +17,7 @@ export const lazyImportsHook = (lazy: Lazy): CommonJSHook => ({
       return /\./.test(source) ? null : "lazy/function";
     }
     if (Array.isArray(lazy)) {
-      return lazy.indexOf(source) === -1 ? null : "lazy/function";
+      return !lazy.includes(source) ? null : "lazy/function";
     }
     if (typeof lazy === "function") {
       return lazy(source) ? "lazy/function" : null;

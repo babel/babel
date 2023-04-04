@@ -2,7 +2,7 @@ import highlight, { shouldHighlight } from "@babel/highlight";
 
 import chalk, { Chalk as ChalkClass, type ChalkInstance as Chalk } from "chalk";
 
-let chalkWithForcedColor: Chalk = undefined;
+let chalkWithForcedColor: Chalk;
 function getChalk(forceColor: boolean) {
   if (forceColor) {
     chalkWithForcedColor ??= process.env.BABEL_8_BREAKING

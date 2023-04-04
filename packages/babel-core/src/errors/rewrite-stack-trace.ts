@@ -63,11 +63,13 @@ function CallSite(filename: string): CallSite {
     isConstructor: () => false,
     isToplevel: () => true,
     getFileName: () => filename,
-    getLineNumber: () => undefined,
-    getColumnNumber: () => undefined,
-    getFunctionName: () => undefined,
-    getMethodName: () => undefined,
-    getTypeName: () => undefined,
+    // eslint-disable unicorn/no-useless-undefined
+    getLineNumber: () => {},
+    getColumnNumber: () => {},
+    getFunctionName: () => {},
+    getMethodName: () => {},
+    getTypeName: () => {},
+    // eslint-enable unicorn/no-useless-undefined
     toString: () => filename,
   } as CallSite);
 }

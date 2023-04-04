@@ -218,7 +218,7 @@ export default class File {
     // TODO: NodePath#unshiftContainer should automatically register new
     // bindings.
     this.path.get("body").forEach(path => {
-      if (nodes.indexOf(path.node) === -1) return;
+      if (!nodes.includes(path.node)) return;
       if (path.isVariableDeclaration()) this.scope.registerDeclaration(path);
     });
 

@@ -22,7 +22,7 @@ function makePath(path: NodePath) {
   return parts.reverse().join(".");
 }
 
-let FileClass: typeof File | undefined = undefined;
+let FileClass: typeof File | undefined;
 
 interface HelperMetadata {
   globals: string[];

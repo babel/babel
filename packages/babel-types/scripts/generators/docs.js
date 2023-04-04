@@ -198,7 +198,7 @@ function printNodeFields(key, readme) {
           fieldDescription.push(
             " (default: `" + util.inspect(defaultValue) + "`"
           );
-          if (t.BUILDER_KEYS[key].indexOf(field) < 0) {
+          if (!t.BUILDER_KEYS[key].includes(field)) {
             fieldDescription.push(", excluded from builder function");
           }
           fieldDescription.push(")");

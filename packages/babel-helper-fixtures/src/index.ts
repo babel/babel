@@ -79,7 +79,7 @@ function assertDirectory(loc: string) {
 }
 
 function shouldIgnore(name: string, ignore?: Array<string>) {
-  if (ignore && ignore.indexOf(name) >= 0) {
+  if (ignore && ignore.includes(name)) {
     return true;
   }
 
@@ -182,7 +182,7 @@ function pushTask(
     stderrLoc = taskDir + "/stderr.txt";
   } else if (taskDirStats.isFile()) {
     const ext = path.extname(taskDir);
-    if (EXTENSIONS.indexOf(ext) === -1) return;
+    if (!EXTENSIONS.includes(ext)) return;
 
     execLoc = taskDir;
     execLocAlias = suiteName + "/" + taskName;

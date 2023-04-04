@@ -194,8 +194,6 @@ export default class ExpressionScopeHandler {
       this.parser.raise(error, origin);
     } else if (scope.canBeArrowParameterDeclaration()) {
       scope.recordDeclarationError(error, origin);
-    } else {
-      return;
     }
   }
 

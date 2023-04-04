@@ -29,9 +29,7 @@ if (!process.env.BABEL_8_BREAKING) {
       return {};
     },
     // This is supported starting from Babel 7.13
-    assumption: () => () => {
-      return undefined;
-    },
+    assumption: () => () => {},
   });
 }
 

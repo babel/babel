@@ -141,7 +141,7 @@ const replPlugin = ({ types: t }: PluginAPI): PluginObject => ({
 
 const _eval = function (code: string, filename: string) {
   code = code.trim();
-  if (!code) return undefined;
+  if (!code) return;
 
   code = babel.transformSync(code, {
     filename: filename,

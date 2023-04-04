@@ -251,7 +251,7 @@ export function shouldHighlight(options: Options): boolean {
   return chalk.level > 0 || options.forceColor;
 }
 
-let chalkWithForcedColor: Chalk = undefined;
+let chalkWithForcedColor: Chalk;
 function getChalk(forceColor: boolean) {
   if (forceColor) {
     chalkWithForcedColor ??= process.env.BABEL_8_BREAKING

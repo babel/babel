@@ -2843,11 +2843,9 @@ export default abstract class ExpressionParser extends LValParser {
         at: startLoc,
         reservedWord: word,
       });
-      return;
     } else if (word === "yield") {
       if (this.prodParam.hasYield) {
         this.raise(Errors.YieldBindingIdentifier, { at: startLoc });
-        return;
       }
     } else if (word === "await") {
       if (this.prodParam.hasAwait) {
@@ -2866,7 +2864,6 @@ export default abstract class ExpressionParser extends LValParser {
     } else if (word === "arguments") {
       if (this.scope.inClassAndNotInNonArrowFunction) {
         this.raise(Errors.ArgumentsInClass, { at: startLoc });
-        return;
       }
     }
   }

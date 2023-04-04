@@ -190,7 +190,7 @@ export default declare((api, options: Options, dirname) => {
           if (!file.availableHelper(name, runtimeVersion)) return;
         }
 
-        const isInteropHelper = HEADER_HELPERS.indexOf(name) !== -1;
+        const isInteropHelper = HEADER_HELPERS.includes(name);
 
         // Explicitly set the CommonJS interop helpers to their reserve
         // blockHoist of 4 so they are guaranteed to exist

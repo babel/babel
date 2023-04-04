@@ -91,7 +91,7 @@ describe("@babel/standalone", () => {
     }).code;
     // Transforms arrow syntax but NOT "const".
     expect(output).toBe(
-      "const getMessage = function () {\n" + '  return "Hello World";\n' + "};",
+      `const getMessage = function () {\n  return "Hello World";\n};`,
     );
   });
 

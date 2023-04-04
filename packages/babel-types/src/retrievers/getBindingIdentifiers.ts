@@ -100,7 +100,11 @@ function getBindingIdentifiers(
           // @ts-expect-error key must present in id
           id[key] as t.Node[] | t.Node | undefined | null;
         if (nodes) {
-          Array.isArray(nodes) ? search.push(...nodes) : search.push(nodes);
+          if (Array.isArray(nodes)) {
+            search.push(...nodes);
+          } else {
+            search.push(nodes);
+          }
         }
       }
     }

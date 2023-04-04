@@ -322,7 +322,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
 
       const modifier = this.state.value;
-      if (allowedModifiers.indexOf(modifier) !== -1) {
+      if (allowedModifiers.includes(modifier)) {
         if (stopOnStartOfClassStaticBlock && this.tsIsStartOfStaticBlocks()) {
           return undefined;
         }

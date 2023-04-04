@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+
 import * as babel from "../lib/index.js";
 
 import { commonJS, itGte } from "$repo-utils";
@@ -42,6 +44,7 @@ function expectError(run) {
     // This is only needed because Node.js < 16 (and old Jest) stack traces
     // are quite different from newer stack traces.
     // TODO(Babel 8): Delete this code
+    // eslint-disable-next-line no-lone-blocks
     {
       // Node.js <= 10
       stack = stack.replace(/(?:Object|undefined)(?=\.parseSync)/g, "Module");

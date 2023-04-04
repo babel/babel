@@ -8,6 +8,7 @@ const pluginBabelDevelopment = require("@babel/eslint-plugin-development");
 const pluginBabelDevelopmentInternal = require("@babel/eslint-plugin-development-internal");
 const pluginTypeScriptESLint = require("@typescript-eslint/eslint-plugin");
 const parserTypeScriptESLint = require("@typescript-eslint/parser");
+const pluginUnicorn = require("eslint-plugin-unicorn");
 
 const { FlatCompat } = require("@eslint/eslintrc");
 
@@ -69,10 +70,14 @@ module.exports = [
       prettier: pluginPrettier,
       "@babel/development": pluginBabelDevelopment,
       "@babel/development-internal": pluginBabelDevelopmentInternal,
+      unicorn: pluginUnicorn,
     },
     rules: {
       "prettier/prettier": "error",
       "import/no-extraneous-dependencies": "error",
+
+      "unicorn/no-useless-undefined": ["error", { checkArguments: false }],
+      "unicorn/prefer-includes": "error",
     },
   },
   ...compat
