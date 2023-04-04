@@ -1,4 +1,5 @@
 {
   "plugins": [["moduleAttributes", { "version": "may-2020" }]],
-  "importAttributesKeyword": "with-legacy"
+  "importAttributesKeyword": "with-legacy",
+  "BABEL_8_BREAKING": false
 }

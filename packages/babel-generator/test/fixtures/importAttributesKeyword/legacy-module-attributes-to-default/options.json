@@ -1,4 +1,5 @@
 {
   "plugins": [["moduleAttributes", { "version": "may-2020" }]],
-  "warns": "You are using import attributes, without specifying the desired output syntax."
+  "warns": "You are using import attributes, without specifying the desired output syntax.",
+  "BABEL_8_BREAKING": false
 }
