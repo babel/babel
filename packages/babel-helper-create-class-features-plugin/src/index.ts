@@ -25,6 +25,7 @@ declare const PACKAGE_JSON: { name: string; version: string };
 //       package, but it breaks if we release x.y.z where x, y or z are
 //       greater than 99_999.
 const version = PACKAGE_JSON.version
+  .replace(/-.*$/, "")
   .split(".")
   .reduce((v, x) => v * 1e5 + +x, 0);
 const versionKey = "@babel/plugin-class-features/version";
