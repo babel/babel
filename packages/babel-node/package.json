@@ -1,6 +1,6 @@
 {
   "name": "@babel/node",
-  "version": "7.21.4-esm.1",
+  "version": "7.21.4-esm.2",
   "description": "Babel command line",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-node",
@@ -23,7 +23,7 @@
     "compiler"
   ],
   "dependencies": {
-    "@babel/register": "workspace:^",
+    "@babel/register": "workspace:*",
     "commander": "^4.0.1",
     "core-js": "^3.26.0",
     "node-environment-flags": "^1.0.5",
@@ -31,12 +31,12 @@
     "v8flags": "^3.1.1"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0 || 7.21.4-esm.1"
+    "@babel/core": "^7.0.0-0 || ^7.21.4-esm.2"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^",
-    "@babel/helper-fixtures": "workspace:^",
-    "@babel/runtime": "workspace:^",
+    "@babel/core": "workspace:*",
+    "@babel/helper-fixtures": "workspace:*",
+    "@babel/runtime": "workspace:*",
     "@types/v8flags": "^3.1.1",
     "fs-readdir-recursive": "^1.0.0",
     "make-dir": "condition:BABEL_8_BREAKING ? : ^2.1.0",

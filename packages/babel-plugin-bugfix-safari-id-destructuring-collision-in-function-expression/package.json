@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression",
-  "version": "7.21.4-esm.1",
+  "version": "7.21.4-esm.2",
   "description": "Rename destructuring parameter to workaround https://bugs.webkit.org/show_bug.cgi?id=220517",
   "repository": {
     "type": "git",
@@ -22,16 +22,16 @@
     "bugfix"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:*"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0 || 7.21.4-esm.1"
+    "@babel/core": "^7.0.0 || ^7.21.4-esm.2"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^",
-    "@babel/helper-function-name": "workspace:^",
-    "@babel/helper-plugin-test-runner": "workspace:^",
-    "@babel/traverse": "workspace:^"
+    "@babel/core": "workspace:*",
+    "@babel/helper-function-name": "workspace:*",
+    "@babel/helper-plugin-test-runner": "workspace:*",
+    "@babel/traverse": "workspace:*"
   },
   "engines": {
     "node": ">=6.9.0"

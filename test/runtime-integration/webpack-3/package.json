@@ -2,9 +2,9 @@
   "name": "@babel-internal/runtime-integration-webpack-3",
   "private": true,
   "devDependencies": {
-    "@babel/runtime": "workspace:^",
+    "@babel/runtime": "workspace:*",
     "webpack": "^3.12.0"
   },
   "type": "commonjs",
-  "version": "7.21.4-esm.1"
+  "version": "7.21.4-esm.2"
 }

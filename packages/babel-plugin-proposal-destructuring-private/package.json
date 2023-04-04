@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-destructuring-private",
-  "version": "7.21.4-esm.1",
+  "version": "7.21.4-esm.2",
   "description": "Transform destructuring private proposal",
   "repository": {
     "type": "git",
@@ -16,19 +16,19 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^",
-    "@babel/plugin-syntax-destructuring-private": "workspace:^",
-    "@babel/plugin-transform-destructuring": "workspace:^",
-    "@babel/plugin-transform-parameters": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:*",
+    "@babel/plugin-syntax-destructuring-private": "workspace:*",
+    "@babel/plugin-transform-destructuring": "workspace:*",
+    "@babel/plugin-transform-parameters": "workspace:*"
   },
   "peerDependencies": {
-    "@babel/core": "^7.17.0 || 7.21.4-esm.1"
+    "@babel/core": "^7.17.0 || ^7.21.4-esm.2"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^",
-    "@babel/helper-plugin-test-runner": "workspace:^",
-    "@babel/traverse": "workspace:^",
-    "@babel/types": "workspace:^"
+    "@babel/core": "workspace:*",
+    "@babel/helper-plugin-test-runner": "workspace:*",
+    "@babel/traverse": "workspace:*",
+    "@babel/types": "workspace:*"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-destructuring-private",
   "engines": {

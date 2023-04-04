@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-typescript",
-  "version": "7.21.4-esm.1",
+  "version": "7.21.4-esm.2",
   "description": "Transform TypeScript into ES.next",
   "repository": {
     "type": "git",
@@ -17,19 +17,19 @@
     "typescript"
   ],
   "dependencies": {
-    "@babel/helper-annotate-as-pure": "workspace:^",
-    "@babel/helper-create-class-features-plugin": "workspace:^",
-    "@babel/helper-plugin-utils": "workspace:^",
-    "@babel/plugin-syntax-typescript": "workspace:^"
+    "@babel/helper-annotate-as-pure": "workspace:*",
+    "@babel/helper-create-class-features-plugin": "workspace:*",
+    "@babel/helper-plugin-utils": "workspace:*",
+    "@babel/plugin-syntax-typescript": "workspace:*"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0 || 7.21.4-esm.1"
+    "@babel/core": "^7.0.0-0 || ^7.21.4-esm.2"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^",
-    "@babel/helper-plugin-test-runner": "workspace:^",
-    "@babel/traverse": "workspace:^",
-    "@babel/types": "workspace:^"
+    "@babel/core": "workspace:*",
+    "@babel/helper-plugin-test-runner": "workspace:*",
+    "@babel/traverse": "workspace:*",
+    "@babel/types": "workspace:*"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-typescript",
   "engines": {

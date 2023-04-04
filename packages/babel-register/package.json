@@ -1,6 +1,6 @@
 {
   "name": "@babel/register",
-  "version": "7.21.4-esm.1",
+  "version": "7.21.4-esm.2",
   "description": "babel require hook",
   "license": "MIT",
   "publishConfig": {
@@ -25,12 +25,12 @@
     "source-map-support": "^0.5.16"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0 || 7.21.4-esm.1"
+    "@babel/core": "^7.0.0-0 || ^7.21.4-esm.2"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^",
-    "@babel/plugin-transform-arrow-functions": "workspace:^",
-    "@babel/plugin-transform-modules-commonjs": "workspace:^",
+    "@babel/core": "workspace:*",
+    "@babel/plugin-transform-arrow-functions": "workspace:*",
+    "@babel/plugin-transform-modules-commonjs": "workspace:*",
     "browserify": "^16.5.2"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-register",

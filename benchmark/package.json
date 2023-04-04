@@ -10,16 +10,16 @@
     "@babel-baseline/parser": "npm:@babel/parser@7.18.5",
     "@babel-baseline/traverse": "npm:@babel/traverse@7.18.5",
     "@babel-baseline/types": "npm:@babel/types@7.18.4",
-    "@babel/core": "workspace:^",
-    "@babel/generator": "workspace:^",
-    "@babel/helper-compilation-targets": "workspace:^",
-    "@babel/helper-validator-identifier": "workspace:^",
-    "@babel/parser": "workspace:^",
-    "@babel/preset-env": "workspace:^",
-    "@babel/preset-flow": "workspace:^",
-    "@babel/traverse": "workspace:^",
-    "@babel/types": "workspace:^",
+    "@babel/core": "workspace:*",
+    "@babel/generator": "workspace:*",
+    "@babel/helper-compilation-targets": "workspace:*",
+    "@babel/helper-validator-identifier": "workspace:*",
+    "@babel/parser": "workspace:*",
+    "@babel/preset-env": "workspace:*",
+    "@babel/preset-flow": "workspace:*",
+    "@babel/traverse": "workspace:*",
+    "@babel/types": "workspace:*",
     "benchmark": "^2.1.4"
   },
-  "version": "7.21.4-esm.1"
+  "version": "7.21.4-esm.2"
 }

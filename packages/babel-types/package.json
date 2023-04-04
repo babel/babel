@@ -1,6 +1,6 @@
 {
   "name": "@babel/types",
-  "version": "7.21.4-esm.1",
+  "version": "7.21.4-esm.2",
   "description": "Babel Types is a Lodash-esque utility library for AST nodes",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-types",
@@ -24,13 +24,13 @@
     }
   },
   "dependencies": {
-    "@babel/helper-string-parser": "workspace:^",
-    "@babel/helper-validator-identifier": "workspace:^",
+    "@babel/helper-string-parser": "workspace:*",
+    "@babel/helper-validator-identifier": "workspace:*",
     "to-fast-properties": "condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0"
   },
   "devDependencies": {
-    "@babel/generator": "workspace:^",
-    "@babel/parser": "workspace:^",
+    "@babel/generator": "workspace:*",
+    "@babel/parser": "workspace:*",
     "chalk": "^4.1.0",
     "glob": "^7.2.0"
   },

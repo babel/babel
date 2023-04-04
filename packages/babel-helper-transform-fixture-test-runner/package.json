@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-transform-fixture-test-runner",
-  "version": "7.21.4-esm.1",
+  "version": "7.21.4-esm.2",
   "description": "Transform test runner for @babel/helper-fixtures module",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-helper-transform-fixture-test-runner",
@@ -15,10 +15,10 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/code-frame": "workspace:^",
-    "@babel/core": "workspace:^",
-    "@babel/helper-check-duplicate-nodes": "workspace:^",
-    "@babel/helper-fixtures": "workspace:^",
+    "@babel/code-frame": "workspace:*",
+    "@babel/core": "workspace:*",
+    "@babel/helper-check-duplicate-nodes": "workspace:*",
+    "@babel/helper-fixtures": "workspace:*",
     "quick-lru": "5.1.0"
   },
   "devDependencies": {

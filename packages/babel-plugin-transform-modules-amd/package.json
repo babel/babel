@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-modules-amd",
-  "version": "7.21.4-esm.1",
+  "version": "7.21.4-esm.2",
   "description": "This plugin transforms ES2015 modules to AMD",
   "repository": {
     "type": "git",
@@ -14,19 +14,19 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/helper-module-transforms": "workspace:^",
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/helper-module-transforms": "workspace:*",
+    "@babel/helper-plugin-utils": "workspace:*"
   },
   "keywords": [
     "babel-plugin"
   ],
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0 || 7.21.4-esm.1"
+    "@babel/core": "^7.0.0-0 || ^7.21.4-esm.2"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^",
-    "@babel/helper-plugin-test-runner": "workspace:^",
-    "@babel/plugin-external-helpers": "workspace:^"
+    "@babel/core": "workspace:*",
+    "@babel/helper-plugin-test-runner": "workspace:*",
+    "@babel/plugin-external-helpers": "workspace:*"
   },
   "engines": {
     "node": ">=6.9.0"

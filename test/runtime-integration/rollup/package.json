@@ -2,11 +2,11 @@
   "name": "@babel-internal/runtime-integration-rollup",
   "private": true,
   "devDependencies": {
-    "@babel/runtime": "workspace:^",
+    "@babel/runtime": "workspace:*",
     "@rollup/plugin-commonjs": "^22.0.2",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "rollup": "^2.78.0"
   },
   "type": "commonjs",
-  "version": "7.21.4-esm.1"
+  "version": "7.21.4-esm.2"
 }

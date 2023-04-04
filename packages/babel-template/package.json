@@ -1,6 +1,6 @@
 {
   "name": "@babel/template",
-  "version": "7.21.4-esm.1",
+  "version": "7.21.4-esm.2",
   "description": "Generate an AST from a string template.",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-template",
@@ -16,9 +16,9 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/code-frame": "workspace:^",
-    "@babel/parser": "workspace:^",
-    "@babel/types": "workspace:^"
+    "@babel/code-frame": "workspace:*",
+    "@babel/parser": "workspace:*",
+    "@babel/types": "workspace:*"
   },
   "engines": {
     "node": ">=6.9.0"

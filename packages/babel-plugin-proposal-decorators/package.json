@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-decorators",
-  "version": "7.21.4-esm.1",
+  "version": "7.21.4-esm.2",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
   "publishConfig": {
@@ -20,19 +20,19 @@
     "decorators"
   ],
   "dependencies": {
-    "@babel/helper-create-class-features-plugin": "workspace:^",
-    "@babel/helper-plugin-utils": "workspace:^",
-    "@babel/helper-replace-supers": "workspace:^",
-    "@babel/helper-split-export-declaration": "workspace:^",
-    "@babel/plugin-syntax-decorators": "workspace:^"
+    "@babel/helper-create-class-features-plugin": "workspace:*",
+    "@babel/helper-plugin-utils": "workspace:*",
+    "@babel/helper-replace-supers": "workspace:*",
+    "@babel/helper-split-export-declaration": "workspace:*",
+    "@babel/plugin-syntax-decorators": "workspace:*"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0 || 7.21.4-esm.1"
+    "@babel/core": "^7.0.0-0 || ^7.21.4-esm.2"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^",
-    "@babel/helper-plugin-test-runner": "workspace:^",
-    "@babel/traverse": "workspace:^",
+    "@babel/core": "workspace:*",
+    "@babel/helper-plugin-test-runner": "workspace:*",
+    "@babel/traverse": "workspace:*",
     "@types/charcodes": "^0.2.0",
     "array.prototype.concat": "^1.0.2",
     "babel-plugin-polyfill-es-shims": "^0.7.1",

@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-typescript",
-  "version": "7.21.4-esm.1",
+  "version": "7.21.4-esm.2",
   "description": "Babel preset for TypeScript.",
   "repository": {
     "type": "git",
@@ -17,18 +17,18 @@
     "typescript"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^",
-    "@babel/helper-validator-option": "workspace:^",
-    "@babel/plugin-syntax-jsx": "workspace:^",
-    "@babel/plugin-transform-modules-commonjs": "workspace:^",
-    "@babel/plugin-transform-typescript": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:*",
+    "@babel/helper-validator-option": "workspace:*",
+    "@babel/plugin-syntax-jsx": "workspace:*",
+    "@babel/plugin-transform-modules-commonjs": "workspace:*",
+    "@babel/plugin-transform-typescript": "workspace:*"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0 || 7.21.4-esm.1"
+    "@babel/core": "^7.0.0-0 || ^7.21.4-esm.2"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^",
-    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/core": "workspace:*",
+    "@babel/helper-plugin-test-runner": "workspace:*"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-preset-typescript",
   "bugs": "https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22area%3A%20typescript%22+is%3Aopen",

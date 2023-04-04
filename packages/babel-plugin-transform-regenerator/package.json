@@ -2,7 +2,7 @@
   "name": "@babel/plugin-transform-regenerator",
   "author": "The Babel Team (https://babel.dev/team)",
   "description": "Explode async and generator functions into a state machine.",
-  "version": "7.21.4-esm.1",
+  "version": "7.21.4-esm.2",
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-regenerator",
   "repository": {
     "type": "git",
@@ -11,7 +11,7 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/helper-plugin-utils": "workspace:*",
     "regenerator-transform": "^0.15.1"
   },
   "license": "MIT",
@@ -19,11 +19,11 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0 || 7.21.4-esm.1"
+    "@babel/core": "^7.0.0-0 || ^7.21.4-esm.2"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^",
-    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/core": "workspace:*",
+    "@babel/helper-plugin-test-runner": "workspace:*"
   },
   "engines": {
     "node": ">=6.9.0"

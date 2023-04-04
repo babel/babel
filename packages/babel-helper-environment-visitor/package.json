@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-environment-visitor",
-  "version": "7.21.4-esm.1",
+  "version": "7.21.4-esm.2",
   "description": "Helper visitor to only visit nodes in the current 'this' context",
   "repository": {
     "type": "git",
@@ -18,8 +18,8 @@
     "./package.json": "./package.json"
   },
   "devDependencies": {
-    "@babel/traverse": "workspace:^",
-    "@babel/types": "workspace:^"
+    "@babel/traverse": "workspace:*",
+    "@babel/types": "workspace:*"
   },
   "engines": {
     "node": ">=6.9.0"

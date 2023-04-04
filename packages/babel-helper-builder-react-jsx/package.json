@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-builder-react-jsx",
-  "version": "7.21.4-esm.1",
+  "version": "7.21.4-esm.2",
   "description": "Helper function to build react jsx",
   "repository": {
     "type": "git",
@@ -14,12 +14,12 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/helper-annotate-as-pure": "workspace:^",
-    "@babel/types": "workspace:^"
+    "@babel/helper-annotate-as-pure": "workspace:*",
+    "@babel/types": "workspace:*"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^",
-    "@babel/traverse": "workspace:^"
+    "@babel/core": "workspace:*",
+    "@babel/traverse": "workspace:*"
   },
   "engines": {
     "node": ">=6.9.0"

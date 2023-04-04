@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-wrap-function",
-  "version": "7.21.4-esm.1",
+  "version": "7.21.4-esm.2",
   "description": "Helper to wrap functions inside a function call.",
   "repository": {
     "type": "git",
@@ -14,10 +14,10 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/helper-function-name": "workspace:^",
-    "@babel/template": "workspace:^",
-    "@babel/traverse": "workspace:^",
-    "@babel/types": "workspace:^"
+    "@babel/helper-function-name": "workspace:*",
+    "@babel/template": "workspace:*",
+    "@babel/traverse": "workspace:*",
+    "@babel/types": "workspace:*"
   },
   "engines": {
     "node": ">=6.9.0"

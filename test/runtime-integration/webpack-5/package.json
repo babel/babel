@@ -3,10 +3,10 @@
   "private": true,
   "exports": "./index.js",
   "devDependencies": {
-    "@babel/runtime": "workspace:^",
+    "@babel/runtime": "workspace:*",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0"
   },
   "type": "commonjs",
-  "version": "7.21.4-esm.1"
+  "version": "7.21.4-esm.2"
 }

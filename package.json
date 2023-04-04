@@ -1,6 +1,6 @@
 {
   "name": "babel",
-  "version": "7.21.4-esm.1",
+  "version": "7.21.4-esm.2",
   "private": true,
   "type": "commonjs",
   "scripts": {
@@ -21,10 +21,10 @@
   "devDependencies": {
     "@babel/cli": "^7.21.0",
     "@babel/core": "^7.21.0",
-    "@babel/eslint-config-internal": "workspace:^",
-    "@babel/eslint-parser": "workspace:^",
-    "@babel/eslint-plugin-development": "workspace:^",
-    "@babel/eslint-plugin-development-internal": "workspace:^",
+    "@babel/eslint-config-internal": "workspace:*",
+    "@babel/eslint-parser": "workspace:*",
+    "@babel/eslint-plugin-development": "workspace:*",
+    "@babel/eslint-plugin-development-internal": "workspace:*",
     "@babel/plugin-proposal-dynamic-import": "^7.18.6",
     "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
     "@babel/plugin-proposal-object-rest-spread": "^7.20.7",

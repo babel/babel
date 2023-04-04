@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-optimise-call-expression",
-  "version": "7.21.4-esm.1",
+  "version": "7.21.4-esm.2",
   "description": "Helper function to optimise call expression",
   "repository": {
     "type": "git",
@@ -14,11 +14,11 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/types": "workspace:^"
+    "@babel/types": "workspace:*"
   },
   "devDependencies": {
-    "@babel/generator": "workspace:^",
-    "@babel/parser": "workspace:^"
+    "@babel/generator": "workspace:*",
+    "@babel/parser": "workspace:*"
   },
   "engines": {
     "node": ">=6.9.0"

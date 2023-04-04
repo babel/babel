@@ -1,6 +1,6 @@
 {
   "name": "@babel/generator",
-  "version": "7.21.4-esm.1",
+  "version": "7.21.4-esm.2",
   "description": "Turns an AST into code.",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
@@ -19,14 +19,14 @@
     "lib"
   ],
   "dependencies": {
-    "@babel/types": "workspace:^",
+    "@babel/types": "workspace:*",
     "@jridgewell/gen-mapping": "^0.3.2",
     "@jridgewell/trace-mapping": "^0.3.17",
     "jsesc": "condition: BABEL_8_BREAKING ? ^3.0.2 : ^2.5.1"
   },
   "devDependencies": {
-    "@babel/helper-fixtures": "workspace:^",
-    "@babel/parser": "workspace:^",
+    "@babel/helper-fixtures": "workspace:*",
+    "@babel/parser": "workspace:*",
     "@types/jsesc": "^2.5.0",
     "charcodes": "^0.2.0"
   },

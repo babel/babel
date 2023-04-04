@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-do-expressions",
-  "version": "7.21.4-esm.1",
+  "version": "7.21.4-esm.2",
   "description": "Compile do expressions to ES5",
   "repository": {
     "type": "git",
@@ -17,15 +17,15 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^",
-    "@babel/plugin-syntax-do-expressions": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:*",
+    "@babel/plugin-syntax-do-expressions": "workspace:*"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0 || 7.21.4-esm.1"
+    "@babel/core": "^7.0.0-0 || ^7.21.4-esm.2"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^",
-    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/core": "workspace:*",
+    "@babel/helper-plugin-test-runner": "workspace:*"
   },
   "engines": {
     "node": ">=6.9.0"

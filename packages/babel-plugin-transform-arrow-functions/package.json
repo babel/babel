@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-arrow-functions",
-  "version": "7.21.4-esm.1",
+  "version": "7.21.4-esm.2",
   "description": "Compile ES2015 arrow functions to ES5",
   "repository": {
     "type": "git",
@@ -17,16 +17,16 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:*"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0 || 7.21.4-esm.1"
+    "@babel/core": "^7.0.0-0 || ^7.21.4-esm.2"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^",
-    "@babel/helper-plugin-test-runner": "workspace:^",
-    "@babel/traverse": "workspace:^",
-    "@babel/types": "workspace:^"
+    "@babel/core": "workspace:*",
+    "@babel/helper-plugin-test-runner": "workspace:*",
+    "@babel/traverse": "workspace:*",
+    "@babel/types": "workspace:*"
   },
   "engines": {
     "node": ">=6.9.0"

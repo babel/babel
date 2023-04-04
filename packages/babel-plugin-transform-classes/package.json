@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-classes",
-  "version": "7.21.4-esm.1",
+  "version": "7.21.4-esm.2",
   "description": "Compile ES2015 classes to ES5",
   "repository": {
     "type": "git",
@@ -14,26 +14,26 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/helper-annotate-as-pure": "workspace:^",
-    "@babel/helper-compilation-targets": "workspace:^",
-    "@babel/helper-environment-visitor": "workspace:^",
-    "@babel/helper-function-name": "workspace:^",
-    "@babel/helper-optimise-call-expression": "workspace:^",
-    "@babel/helper-plugin-utils": "workspace:^",
-    "@babel/helper-replace-supers": "workspace:^",
-    "@babel/helper-split-export-declaration": "workspace:^",
+    "@babel/helper-annotate-as-pure": "workspace:*",
+    "@babel/helper-compilation-targets": "workspace:*",
+    "@babel/helper-environment-visitor": "workspace:*",
+    "@babel/helper-function-name": "workspace:*",
+    "@babel/helper-optimise-call-expression": "workspace:*",
+    "@babel/helper-plugin-utils": "workspace:*",
+    "@babel/helper-replace-supers": "workspace:*",
+    "@babel/helper-split-export-declaration": "workspace:*",
     "globals": "condition:BABEL_8_BREAKING ? ^13.5.0 : ^11.1.0"
   },
   "keywords": [
     "babel-plugin"
   ],
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0 || 7.21.4-esm.1"
+    "@babel/core": "^7.0.0-0 || ^7.21.4-esm.2"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^",
-    "@babel/helper-plugin-test-runner": "workspace:^",
-    "@babel/traverse": "workspace:^"
+    "@babel/core": "workspace:*",
+    "@babel/helper-plugin-test-runner": "workspace:*",
+    "@babel/traverse": "workspace:*"
   },
   "engines": {
     "node": ">=6.9.0"

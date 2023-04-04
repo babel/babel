@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-plugin-test-runner",
-  "version": "7.21.4-esm.1",
+  "version": "7.21.4-esm.2",
   "description": "Helper function to support test runner",
   "repository": {
     "type": "git",
@@ -28,7 +28,7 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@babel/helper-transform-fixture-test-runner": "workspace:^"
+    "@babel/helper-transform-fixture-test-runner": "workspace:*"
   },
   "engines": {
     "node": ">=6.9.0"
