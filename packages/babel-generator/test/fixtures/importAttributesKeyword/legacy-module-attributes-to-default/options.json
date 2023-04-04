@@ -1,0 +1,4 @@
+{
+  "plugins": [["moduleAttributes", { "version": "may-2020" }]],
+  "warns": "You are using import attributes, without specifying the desired output syntax."
+}

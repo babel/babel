@@ -73,10 +73,7 @@
               "value": "true"
             }
           }
-        ],
-        "extra": {
-          "usesAssertKeyword": true
-        }
+        ]
       }
     ],
     "directives": []

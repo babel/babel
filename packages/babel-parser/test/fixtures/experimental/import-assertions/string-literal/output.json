@@ -30,9 +30,6 @@
           },
           "value": "foo.json"
         },
-        "extra": {
-          "usesAssertKeyword": true
-        },
         "assertions": [
           {
             "type": "ImportAttribute",
@@ -102,10 +99,7 @@
               "value": "for"
             }
           }
-        ],
-        "extra": {
-          "usesAssertKeyword": true
-        }
+        ]
       }
     ],
     "directives": []

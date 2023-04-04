@@ -3098,7 +3098,6 @@ export default abstract class StatementParser extends ExpressionParser {
       if (!process.env.BABEL_8_BREAKING) {
         if (this.hasPlugin("moduleAttributes")) {
           attributes = this.parseModuleAttributes();
-          this.addExtra(node, "useLegacyModuleAttributes", true);
         } else {
           this.expectImportAttributesPlugin();
           attributes = this.parseImportAttributes();
@@ -3123,7 +3122,6 @@ export default abstract class StatementParser extends ExpressionParser {
       }
       this.next(); // eat `assert`
       attributes = this.parseImportAttributes();
-      this.addExtra(node, "usesAssertKeyword", true);
     } else if (
       this.hasPlugin("importAttributes") ||
       this.hasPlugin("importAssertions")

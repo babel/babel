@@ -55,10 +55,7 @@
               "value": "json"
             }
           }
-        ],
-        "extra": {
-          "usesAssertKeyword": true
-        }
+        ]
       }
     ],
     "directives": []

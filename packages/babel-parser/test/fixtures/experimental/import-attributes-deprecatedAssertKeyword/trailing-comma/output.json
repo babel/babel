@@ -30,9 +30,6 @@
           },
           "value": "foo"
         },
-        "extra": {
-          "usesAssertKeyword": true
-        },
         "attributes": [
           {
             "type": "ImportAttribute",
@@ -83,9 +80,6 @@
           "value": "foo"
         },
         "declaration": null,
-        "extra": {
-          "usesAssertKeyword": true
-        },
         "attributes": [
           {
             "type": "ImportAttribute",

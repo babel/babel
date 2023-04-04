@@ -1439,6 +1439,10 @@ const suites = (fixtures.default || fixtures)(
   path.join(path.dirname(fileURLToPath(import.meta.url)), "fixtures"),
 );
 
+afterEach(() => {
+  jest.restoreAllMocks();
+});
+
 suites.forEach(function (testSuite) {
   describe("generation/" + testSuite.title, function () {
     testSuite.tests.forEach(function (task) {
@@ -1481,7 +1485,17 @@ suites.forEach(function (testSuite) {
                 throwMsg === true ? undefined : throwMsg,
               );
             } else {
+              jest.spyOn(console, "warn").mockImplementation(() => {});
+
               const result = run();
+
+              if (options.warns) {
+                expect(console.warn).toHaveBeenCalledWith(
+                  expect.stringContaining(options.warns),
+                );
+              } else {
+                expect(console.warn).not.toHaveBeenCalled();
+              }
 
               if (options.sourceMaps) {
                 try {

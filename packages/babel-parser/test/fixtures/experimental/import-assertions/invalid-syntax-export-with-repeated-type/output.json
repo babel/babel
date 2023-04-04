@@ -76,10 +76,7 @@
               "value": "html"
             }
           }
-        ],
-        "extra": {
-          "usesAssertKeyword": true
-        }
+        ]
       }
     ],
     "directives": []

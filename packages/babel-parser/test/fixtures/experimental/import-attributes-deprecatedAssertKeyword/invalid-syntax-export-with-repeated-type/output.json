@@ -39,9 +39,6 @@
           "value": "foo.json"
         },
         "declaration": null,
-        "extra": {
-          "usesAssertKeyword": true
-        },
         "attributes": [
           {
             "type": "ImportAttribute",

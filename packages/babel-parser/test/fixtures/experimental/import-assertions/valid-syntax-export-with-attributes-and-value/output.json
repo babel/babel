@@ -59,10 +59,7 @@
               "value": "json"
             }
           }
-        ],
-        "extra": {
-          "usesAssertKeyword": true
-        }
+        ]
       },
       {
         "type": "ExpressionStatement",

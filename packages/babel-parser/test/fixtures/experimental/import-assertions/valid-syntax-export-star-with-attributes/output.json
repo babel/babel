@@ -19,9 +19,6 @@
           },
           "value": "foo.json"
         },
-        "extra": {
-          "usesAssertKeyword": true
-        },
         "assertions": [
           {
             "type": "ImportAttribute",

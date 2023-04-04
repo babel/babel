@@ -47,9 +47,6 @@
           },
           "value": "./fixture.json"
         },
-        "extra": {
-          "usesAssertKeyword": true
-        },
         "assertions": [
           {
             "type": "ImportAttribute",

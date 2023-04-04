@@ -44,9 +44,6 @@
           },
           "value": "foo"
         },
-        "extra": {
-          "usesAssertKeyword": true
-        },
         "attributes": []
       },
       {
@@ -71,9 +68,6 @@
             "raw": "\"foo\""
           },
           "value": "foo"
-        },
-        "extra": {
-          "usesAssertKeyword": true
         },
         "attributes": []
       },
@@ -106,9 +100,6 @@
           "value": "foo"
         },
         "declaration": null,
-        "extra": {
-          "usesAssertKeyword": true
-        },
         "attributes": []
       },
       {
@@ -133,9 +124,6 @@
             "raw": "\"foo\""
           },
           "value": "foo"
-        },
-        "extra": {
-          "usesAssertKeyword": true
         },
         "attributes": []
       }

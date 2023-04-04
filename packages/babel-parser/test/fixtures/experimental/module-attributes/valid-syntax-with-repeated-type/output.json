@@ -33,9 +33,6 @@
           },
           "value": "foo.json"
         },
-        "extra": {
-          "useLegacyModuleAttributes": true
-        },
         "attributes": [
           {
             "type": "ImportAttribute",

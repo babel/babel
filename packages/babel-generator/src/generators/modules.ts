@@ -70,21 +70,38 @@ export function _printAttributes(
   this: Printer,
   node: Extract<t.Node, { attributes?: t.ImportAttribute[] }>,
 ) {
-  if (!node.attributes || node.extra?.usesAssertKeyword) {
-    this.word("assert");
-  } else {
-    this.word("with");
+  if (node.attributes && !this.format.importAttributesKeyword) {
+    this.format.importAttributesKeyword = "auto-legacy";
+    console.warn(`\
+You are using import attributes, without specifying the desired output syntax.
+Please specify the "importAttributesKeyword" generator option, whose value can be one of:
+ - "with"        : \`import { a } from "b" with { type: "json" };\`
+ - "assert"      : \`import { a } from "b" assert { type: "json" };\`
+ - "with-legacy" : \`import { a } from "b" with type: "json";\`
+`);
   }
+  this.word(
+    !this.format.importAttributesKeyword ||
+      this.format.importAttributesKeyword === "assert" ||
+      (this.format.importAttributesKeyword === "auto-legacy" && node.assertions)
+      ? "assert"
+      : "with",
+  );
   this.space();
-  if (!node.extra?.useLegacyModuleAttributes) {
-    this.token("{");
-    this.space();
+
+  if (
+    this.format.importAttributesKeyword === "with-legacy" ||
+    (this.format.importAttributesKeyword === "auto-legacy" && !node.assertions)
+  ) {
+    this.printList(node.attributes || node.assertions, node);
+    return;
   }
+
+  this.token("{");
+  this.space();
   this.printList(node.attributes || node.assertions, node);
-  if (!node.extra?.useLegacyModuleAttributes) {
-    this.space();
-    this.token("}");
-  }
+  this.space();
+  this.token("}");
 }
 
 export function ExportAllDeclaration(

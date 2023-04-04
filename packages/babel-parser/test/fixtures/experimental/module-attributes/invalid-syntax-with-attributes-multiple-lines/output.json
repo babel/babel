@@ -20,9 +20,6 @@
           },
           "value": "x"
         },
-        "extra": {
-          "useLegacyModuleAttributes": true
-        },
         "attributes": [
           {
             "type": "ImportAttribute",
