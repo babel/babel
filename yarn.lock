@@ -118,7 +118,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel-internal/runtime-integration-rollup@workspace:test/runtime-integration/rollup"
   dependencies:
-    "@babel/runtime": "workspace:^"
+    "@babel/runtime": "workspace:*"
     "@rollup/plugin-commonjs": ^22.0.2
     "@rollup/plugin-node-resolve": ^13.3.0
     rollup: ^2.78.0
@@ -129,8 +129,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel-internal/runtime-integration-src@workspace:test/runtime-integration/src"
   dependencies:
-    "@babel/runtime": "workspace:^"
-    "@babel/runtime-corejs3": "workspace:^"
+    "@babel/runtime": "workspace:*"
+    "@babel/runtime-corejs3": "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -138,7 +138,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel-internal/runtime-integration-webpack-3@workspace:test/runtime-integration/webpack-3"
   dependencies:
-    "@babel/runtime": "workspace:^"
+    "@babel/runtime": "workspace:*"
     webpack: ^3.12.0
   languageName: unknown
   linkType: soft
@@ -147,7 +147,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel-internal/runtime-integration-webpack-4@workspace:test/runtime-integration/webpack-4"
   dependencies:
-    "@babel/runtime": "workspace:^"
+    "@babel/runtime": "workspace:*"
     webpack: ^4.46.0
     webpack-cli: ^4.5.0
   languageName: unknown
@@ -157,7 +157,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel-internal/runtime-integration-webpack-5@workspace:test/runtime-integration/webpack-5"
   dependencies:
-    "@babel/runtime": "workspace:^"
+    "@babel/runtime": "workspace:*"
     webpack: ^5.74.0
     webpack-cli: ^4.10.0
   languageName: unknown
@@ -174,15 +174,15 @@ __metadata:
     "@babel-baseline/parser": "npm:@babel/parser@7.18.5"
     "@babel-baseline/traverse": "npm:@babel/traverse@7.18.5"
     "@babel-baseline/types": "npm:@babel/types@7.18.4"
-    "@babel/core": "workspace:^"
-    "@babel/generator": "workspace:^"
-    "@babel/helper-compilation-targets": "workspace:^"
-    "@babel/helper-validator-identifier": "workspace:^"
-    "@babel/parser": "workspace:^"
-    "@babel/preset-env": "workspace:^"
-    "@babel/preset-flow": "workspace:^"
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/generator": "workspace:*"
+    "@babel/helper-compilation-targets": "workspace:*"
+    "@babel/helper-validator-identifier": "workspace:*"
+    "@babel/parser": "workspace:*"
+    "@babel/preset-env": "workspace:*"
+    "@babel/preset-flow": "workspace:*"
+    "@babel/traverse": "workspace:*"
+    "@babel/types": "workspace:*"
     benchmark: ^2.1.4
   languageName: unknown
   linkType: soft
@@ -218,8 +218,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/cli@workspace:packages/babel-cli"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-fixtures": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-fixtures": "workspace:*"
     "@jridgewell/trace-mapping": ^0.3.17
     "@nicolo-ribaudo/chokidar-2": "condition:BABEL_8_BREAKING ? : 2.1.8-no-fsevents.3"
     "@types/fs-readdir-recursive": ^1.1.0
@@ -234,7 +234,7 @@ __metadata:
     semver: ^6.3.0
     slash: "condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   dependenciesMeta:
     "@nicolo-ribaudo/chokidar-2":
       optional: true
@@ -264,11 +264,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/code-frame@workspace:^, @babel/code-frame@workspace:packages/babel-code-frame":
+"@babel/code-frame@workspace:*, @babel/code-frame@workspace:packages/babel-code-frame":
   version: 0.0.0-use.local
   resolution: "@babel/code-frame@workspace:packages/babel-code-frame"
   dependencies:
-    "@babel/highlight": "workspace:^"
+    "@babel/highlight": "workspace:*"
     strip-ansi: ^4.0.0
   languageName: unknown
   linkType: soft
@@ -280,7 +280,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/compat-data@workspace:*, @babel/compat-data@workspace:^, @babel/compat-data@workspace:packages/babel-compat-data":
+"@babel/compat-data@workspace:*, @babel/compat-data@workspace:packages/babel-compat-data":
   version: 0.0.0-use.local
   resolution: "@babel/compat-data@workspace:packages/babel-compat-data"
   dependencies:
@@ -337,26 +337,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@workspace:^, @babel/core@workspace:packages/babel-core":
+"@babel/core@workspace:*, @babel/core@workspace:packages/babel-core":
   version: 0.0.0-use.local
   resolution: "@babel/core@workspace:packages/babel-core"
   dependencies:
     "@ampproject/remapping": ^2.2.0
-    "@babel/code-frame": "workspace:^"
-    "@babel/generator": "workspace:^"
-    "@babel/helper-compilation-targets": "workspace:^"
-    "@babel/helper-module-transforms": "workspace:^"
-    "@babel/helper-transform-fixture-test-runner": "workspace:^"
-    "@babel/helpers": "workspace:^"
-    "@babel/parser": "workspace:^"
-    "@babel/plugin-syntax-flow": "workspace:^"
-    "@babel/plugin-transform-flow-strip-types": "workspace:^"
-    "@babel/plugin-transform-modules-commonjs": "workspace:^"
-    "@babel/preset-env": "workspace:^"
-    "@babel/preset-typescript": "workspace:^"
-    "@babel/template": "workspace:^"
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/code-frame": "workspace:*"
+    "@babel/generator": "workspace:*"
+    "@babel/helper-compilation-targets": "workspace:*"
+    "@babel/helper-module-transforms": "workspace:*"
+    "@babel/helper-transform-fixture-test-runner": "workspace:*"
+    "@babel/helpers": "workspace:*"
+    "@babel/parser": "workspace:*"
+    "@babel/plugin-syntax-flow": "workspace:*"
+    "@babel/plugin-transform-flow-strip-types": "workspace:*"
+    "@babel/plugin-transform-modules-commonjs": "workspace:*"
+    "@babel/preset-env": "workspace:*"
+    "@babel/preset-typescript": "workspace:*"
+    "@babel/template": "workspace:*"
+    "@babel/traverse": "workspace:*"
+    "@babel/types": "workspace:*"
     "@jridgewell/trace-mapping": ^0.3.17
     "@types/convert-source-map": ^1.5.1
     "@types/debug": ^4.1.0
@@ -373,7 +373,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/eslint-config-internal@workspace:^, @babel/eslint-config-internal@workspace:eslint/babel-eslint-config-internal":
+"@babel/eslint-config-internal@workspace:*, @babel/eslint-config-internal@workspace:eslint/babel-eslint-config-internal":
   version: 0.0.0-use.local
   resolution: "@babel/eslint-config-internal@workspace:eslint/babel-eslint-config-internal"
   peerDependencies:
@@ -381,11 +381,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/eslint-parser@workspace:^, @babel/eslint-parser@workspace:eslint/babel-eslint-parser":
+"@babel/eslint-parser@workspace:*, @babel/eslint-parser@workspace:eslint/babel-eslint-parser":
   version: 0.0.0-use.local
   resolution: "@babel/eslint-parser@workspace:eslint/babel-eslint-parser"
   dependencies:
-    "@babel/core": "workspace:^"
+    "@babel/core": "workspace:*"
     "@nicolo-ribaudo/eslint-scope-5-internals": "condition:BABEL_8_BREAKING ? : 5.1.1-v1"
     dedent: ^0.7.0
     eslint: ^8.22.0
@@ -398,7 +398,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/eslint-plugin-development-internal@workspace:^, @babel/eslint-plugin-development-internal@workspace:eslint/babel-eslint-plugin-development-internal":
+"@babel/eslint-plugin-development-internal@workspace:*, @babel/eslint-plugin-development-internal@workspace:eslint/babel-eslint-plugin-development-internal":
   version: 0.0.0-use.local
   resolution: "@babel/eslint-plugin-development-internal@workspace:eslint/babel-eslint-plugin-development-internal"
   dependencies:
@@ -409,7 +409,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/eslint-plugin-development@workspace:^, @babel/eslint-plugin-development@workspace:eslint/babel-eslint-plugin-development":
+"@babel/eslint-plugin-development@workspace:*, @babel/eslint-plugin-development@workspace:eslint/babel-eslint-plugin-development":
   version: 0.0.0-use.local
   resolution: "@babel/eslint-plugin-development@workspace:eslint/babel-eslint-plugin-development"
   dependencies:
@@ -434,17 +434,17 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/eslint-shared-fixtures@workspace:eslint/babel-eslint-shared-fixtures"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/eslint-parser": "workspace:^"
-    "@babel/plugin-proposal-class-properties": "workspace:^"
-    "@babel/plugin-proposal-decorators": "workspace:^"
-    "@babel/plugin-proposal-do-expressions": "workspace:^"
-    "@babel/plugin-proposal-pipeline-operator": "workspace:^"
-    "@babel/plugin-proposal-private-methods": "workspace:^"
-    "@babel/plugin-syntax-export-default-from": "workspace:^"
-    "@babel/preset-env": "workspace:^"
-    "@babel/preset-flow": "workspace:^"
-    "@babel/preset-react": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/eslint-parser": "workspace:*"
+    "@babel/plugin-proposal-class-properties": "workspace:*"
+    "@babel/plugin-proposal-decorators": "workspace:*"
+    "@babel/plugin-proposal-do-expressions": "workspace:*"
+    "@babel/plugin-proposal-pipeline-operator": "workspace:*"
+    "@babel/plugin-proposal-private-methods": "workspace:*"
+    "@babel/plugin-syntax-export-default-from": "workspace:*"
+    "@babel/preset-env": "workspace:*"
+    "@babel/preset-flow": "workspace:*"
+    "@babel/preset-react": "workspace:*"
     eslint: ^8.22.0
   languageName: unknown
   linkType: soft
@@ -453,9 +453,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/eslint-tests@workspace:eslint/babel-eslint-tests"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/eslint-parser": "workspace:^"
-    "@babel/preset-react": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/eslint-parser": "workspace:*"
+    "@babel/preset-react": "workspace:*"
     dedent: ^0.7.0
     eslint: ^8.22.0
     eslint-plugin-import: ^2.25.4
@@ -475,13 +475,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/generator@workspace:^, @babel/generator@workspace:packages/babel-generator":
+"@babel/generator@workspace:*, @babel/generator@workspace:packages/babel-generator":
   version: 0.0.0-use.local
   resolution: "@babel/generator@workspace:packages/babel-generator"
   dependencies:
-    "@babel/helper-fixtures": "workspace:^"
-    "@babel/parser": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/helper-fixtures": "workspace:*"
+    "@babel/parser": "workspace:*"
+    "@babel/types": "workspace:*"
     "@jridgewell/gen-mapping": ^0.3.2
     "@jridgewell/trace-mapping": ^0.3.17
     "@types/jsesc": ^2.5.0
@@ -499,11 +499,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-annotate-as-pure@workspace:^, @babel/helper-annotate-as-pure@workspace:packages/babel-helper-annotate-as-pure":
+"@babel/helper-annotate-as-pure@workspace:*, @babel/helper-annotate-as-pure@workspace:packages/babel-helper-annotate-as-pure":
   version: 0.0.0-use.local
   resolution: "@babel/helper-annotate-as-pure@workspace:packages/babel-helper-annotate-as-pure"
   dependencies:
-    "@babel/types": "workspace:^"
+    "@babel/types": "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -517,32 +517,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-builder-binary-assignment-operator-visitor@workspace:^, @babel/helper-builder-binary-assignment-operator-visitor@workspace:packages/babel-helper-builder-binary-assignment-operator-visitor":
+"@babel/helper-builder-binary-assignment-operator-visitor@workspace:*, @babel/helper-builder-binary-assignment-operator-visitor@workspace:packages/babel-helper-builder-binary-assignment-operator-visitor":
   version: 0.0.0-use.local
   resolution: "@babel/helper-builder-binary-assignment-operator-visitor@workspace:packages/babel-helper-builder-binary-assignment-operator-visitor"
   dependencies:
-    "@babel/helper-explode-assignable-expression": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/helper-explode-assignable-expression": "workspace:*"
+    "@babel/types": "workspace:*"
   languageName: unknown
   linkType: soft
 
-"@babel/helper-builder-react-jsx@workspace:^, @babel/helper-builder-react-jsx@workspace:packages/babel-helper-builder-react-jsx":
+"@babel/helper-builder-react-jsx@workspace:*, @babel/helper-builder-react-jsx@workspace:packages/babel-helper-builder-react-jsx":
   version: 0.0.0-use.local
   resolution: "@babel/helper-builder-react-jsx@workspace:packages/babel-helper-builder-react-jsx"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-annotate-as-pure": "workspace:^"
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-annotate-as-pure": "workspace:*"
+    "@babel/traverse": "workspace:*"
+    "@babel/types": "workspace:*"
   languageName: unknown
   linkType: soft
 
-"@babel/helper-check-duplicate-nodes@workspace:^, @babel/helper-check-duplicate-nodes@workspace:packages/babel-helper-check-duplicate-nodes":
+"@babel/helper-check-duplicate-nodes@workspace:*, @babel/helper-check-duplicate-nodes@workspace:packages/babel-helper-check-duplicate-nodes":
   version: 0.0.0-use.local
   resolution: "@babel/helper-check-duplicate-nodes@workspace:packages/babel-helper-check-duplicate-nodes"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/types": "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -561,21 +561,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-compilation-targets@workspace:^, @babel/helper-compilation-targets@workspace:packages/babel-helper-compilation-targets":
+"@babel/helper-compilation-targets@workspace:*, @babel/helper-compilation-targets@workspace:packages/babel-helper-compilation-targets":
   version: 0.0.0-use.local
   resolution: "@babel/helper-compilation-targets@workspace:packages/babel-helper-compilation-targets"
   dependencies:
-    "@babel/compat-data": "workspace:^"
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-validator-option": "workspace:^"
+    "@babel/compat-data": "workspace:*"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-validator-option": "workspace:*"
     "@types/lru-cache": ^5.1.1
     "@types/semver": ^5.5.0
     browserslist: ^4.21.3
     lru-cache: "condition:BABEL_8_BREAKING ? ^7.14.1 : ^5.1.1"
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   peerDependencies:
-    "@babel/core": ^7.0.0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -597,24 +597,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-create-class-features-plugin@workspace:^, @babel/helper-create-class-features-plugin@workspace:packages/babel-helper-create-class-features-plugin":
+"@babel/helper-create-class-features-plugin@workspace:*, @babel/helper-create-class-features-plugin@workspace:packages/babel-helper-create-class-features-plugin":
   version: 0.0.0-use.local
   resolution: "@babel/helper-create-class-features-plugin@workspace:packages/babel-helper-create-class-features-plugin"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-annotate-as-pure": "workspace:^"
-    "@babel/helper-environment-visitor": "workspace:^"
-    "@babel/helper-function-name": "workspace:^"
-    "@babel/helper-member-expression-to-functions": "workspace:^"
-    "@babel/helper-optimise-call-expression": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-replace-supers": "workspace:^"
-    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^"
-    "@babel/helper-split-export-declaration": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-annotate-as-pure": "workspace:*"
+    "@babel/helper-environment-visitor": "workspace:*"
+    "@babel/helper-function-name": "workspace:*"
+    "@babel/helper-member-expression-to-functions": "workspace:*"
+    "@babel/helper-optimise-call-expression": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-replace-supers": "workspace:*"
+    "@babel/helper-skip-transparent-expression-wrappers": "workspace:*"
+    "@babel/helper-split-export-declaration": "workspace:*"
     "@babel/plugin-syntax-class-static-block": ^7.14.5
-    "@babel/preset-env": "workspace:^"
+    "@babel/preset-env": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -630,16 +630,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-create-regexp-features-plugin@workspace:^, @babel/helper-create-regexp-features-plugin@workspace:packages/babel-helper-create-regexp-features-plugin":
+"@babel/helper-create-regexp-features-plugin@workspace:*, @babel/helper-create-regexp-features-plugin@workspace:packages/babel-helper-create-regexp-features-plugin":
   version: 0.0.0-use.local
   resolution: "@babel/helper-create-regexp-features-plugin@workspace:packages/babel-helper-create-regexp-features-plugin"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-annotate-as-pure": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-annotate-as-pure": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
     regexpu-core: ^5.3.1
   peerDependencies:
-    "@babel/core": ^7.0.0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -666,12 +666,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-environment-visitor@workspace:^, @babel/helper-environment-visitor@workspace:packages/babel-helper-environment-visitor":
+"@babel/helper-environment-visitor@workspace:*, @babel/helper-environment-visitor@workspace:packages/babel-helper-environment-visitor":
   version: 0.0.0-use.local
   resolution: "@babel/helper-environment-visitor@workspace:packages/babel-helper-environment-visitor"
   dependencies:
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/traverse": "workspace:*"
+    "@babel/types": "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -684,16 +684,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-explode-assignable-expression@workspace:^, @babel/helper-explode-assignable-expression@workspace:packages/babel-helper-explode-assignable-expression":
+"@babel/helper-explode-assignable-expression@workspace:*, @babel/helper-explode-assignable-expression@workspace:packages/babel-helper-explode-assignable-expression":
   version: 0.0.0-use.local
   resolution: "@babel/helper-explode-assignable-expression@workspace:packages/babel-helper-explode-assignable-expression"
   dependencies:
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/traverse": "workspace:*"
+    "@babel/types": "workspace:*"
   languageName: unknown
   linkType: soft
 
-"@babel/helper-fixtures@workspace:^, @babel/helper-fixtures@workspace:packages/babel-helper-fixtures":
+"@babel/helper-fixtures@workspace:*, @babel/helper-fixtures@workspace:packages/babel-helper-fixtures":
   version: 0.0.0-use.local
   resolution: "@babel/helper-fixtures@workspace:packages/babel-helper-fixtures"
   dependencies:
@@ -712,12 +712,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-function-name@workspace:^, @babel/helper-function-name@workspace:packages/babel-helper-function-name":
+"@babel/helper-function-name@workspace:*, @babel/helper-function-name@workspace:packages/babel-helper-function-name":
   version: 0.0.0-use.local
   resolution: "@babel/helper-function-name@workspace:packages/babel-helper-function-name"
   dependencies:
-    "@babel/template": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/template": "workspace:*"
+    "@babel/types": "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -730,12 +730,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-hoist-variables@workspace:^, @babel/helper-hoist-variables@workspace:packages/babel-helper-hoist-variables":
+"@babel/helper-hoist-variables@workspace:*, @babel/helper-hoist-variables@workspace:packages/babel-helper-hoist-variables":
   version: 0.0.0-use.local
   resolution: "@babel/helper-hoist-variables@workspace:packages/babel-helper-hoist-variables"
   dependencies:
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/traverse": "workspace:*"
+    "@babel/types": "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -748,12 +748,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-member-expression-to-functions@workspace:^, @babel/helper-member-expression-to-functions@workspace:packages/babel-helper-member-expression-to-functions":
+"@babel/helper-member-expression-to-functions@workspace:*, @babel/helper-member-expression-to-functions@workspace:packages/babel-helper-member-expression-to-functions":
   version: 0.0.0-use.local
   resolution: "@babel/helper-member-expression-to-functions@workspace:packages/babel-helper-member-expression-to-functions"
   dependencies:
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/traverse": "workspace:*"
+    "@babel/types": "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -766,13 +766,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-module-imports@workspace:^, @babel/helper-module-imports@workspace:packages/babel-helper-module-imports":
+"@babel/helper-module-imports@workspace:*, @babel/helper-module-imports@workspace:packages/babel-helper-module-imports":
   version: 0.0.0-use.local
   resolution: "@babel/helper-module-imports@workspace:packages/babel-helper-module-imports"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/traverse": "workspace:*"
+    "@babel/types": "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -792,18 +792,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-module-transforms@workspace:^, @babel/helper-module-transforms@workspace:packages/babel-helper-module-transforms":
+"@babel/helper-module-transforms@workspace:*, @babel/helper-module-transforms@workspace:packages/babel-helper-module-transforms":
   version: 0.0.0-use.local
   resolution: "@babel/helper-module-transforms@workspace:packages/babel-helper-module-transforms"
   dependencies:
-    "@babel/helper-environment-visitor": "workspace:^"
-    "@babel/helper-module-imports": "workspace:^"
-    "@babel/helper-simple-access": "workspace:^"
-    "@babel/helper-split-export-declaration": "workspace:^"
-    "@babel/helper-validator-identifier": "workspace:^"
-    "@babel/template": "workspace:^"
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/helper-environment-visitor": "workspace:*"
+    "@babel/helper-module-imports": "workspace:*"
+    "@babel/helper-simple-access": "workspace:*"
+    "@babel/helper-split-export-declaration": "workspace:*"
+    "@babel/helper-validator-identifier": "workspace:*"
+    "@babel/template": "workspace:*"
+    "@babel/traverse": "workspace:*"
+    "@babel/types": "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -816,21 +816,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-optimise-call-expression@workspace:^, @babel/helper-optimise-call-expression@workspace:packages/babel-helper-optimise-call-expression":
+"@babel/helper-optimise-call-expression@workspace:*, @babel/helper-optimise-call-expression@workspace:packages/babel-helper-optimise-call-expression":
   version: 0.0.0-use.local
   resolution: "@babel/helper-optimise-call-expression@workspace:packages/babel-helper-optimise-call-expression"
   dependencies:
-    "@babel/generator": "workspace:^"
-    "@babel/parser": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/generator": "workspace:*"
+    "@babel/parser": "workspace:*"
+    "@babel/types": "workspace:*"
   languageName: unknown
   linkType: soft
 
-"@babel/helper-plugin-test-runner@workspace:^, @babel/helper-plugin-test-runner@workspace:packages/babel-helper-plugin-test-runner":
+"@babel/helper-plugin-test-runner@workspace:*, @babel/helper-plugin-test-runner@workspace:packages/babel-helper-plugin-test-runner":
   version: 0.0.0-use.local
   resolution: "@babel/helper-plugin-test-runner@workspace:packages/babel-helper-plugin-test-runner"
   dependencies:
-    "@babel/helper-transform-fixture-test-runner": "workspace:^"
+    "@babel/helper-transform-fixture-test-runner": "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -841,7 +841,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-plugin-utils@workspace:^, @babel/helper-plugin-utils@workspace:packages/babel-helper-plugin-utils":
+"@babel/helper-plugin-utils@workspace:*, @babel/helper-plugin-utils@workspace:packages/babel-helper-plugin-utils":
   version: 0.0.0-use.local
   resolution: "@babel/helper-plugin-utils@workspace:packages/babel-helper-plugin-utils"
   languageName: unknown
@@ -861,18 +861,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-remap-async-to-generator@workspace:^, @babel/helper-remap-async-to-generator@workspace:packages/babel-helper-remap-async-to-generator":
+"@babel/helper-remap-async-to-generator@workspace:*, @babel/helper-remap-async-to-generator@workspace:packages/babel-helper-remap-async-to-generator":
   version: 0.0.0-use.local
   resolution: "@babel/helper-remap-async-to-generator@workspace:packages/babel-helper-remap-async-to-generator"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-annotate-as-pure": "workspace:^"
-    "@babel/helper-environment-visitor": "workspace:^"
-    "@babel/helper-wrap-function": "workspace:^"
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-annotate-as-pure": "workspace:*"
+    "@babel/helper-environment-visitor": "workspace:*"
+    "@babel/helper-wrap-function": "workspace:*"
+    "@babel/traverse": "workspace:*"
+    "@babel/types": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -890,16 +890,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-replace-supers@workspace:^, @babel/helper-replace-supers@workspace:packages/babel-helper-replace-supers":
+"@babel/helper-replace-supers@workspace:*, @babel/helper-replace-supers@workspace:packages/babel-helper-replace-supers":
   version: 0.0.0-use.local
   resolution: "@babel/helper-replace-supers@workspace:packages/babel-helper-replace-supers"
   dependencies:
-    "@babel/helper-environment-visitor": "workspace:^"
-    "@babel/helper-member-expression-to-functions": "workspace:^"
-    "@babel/helper-optimise-call-expression": "workspace:^"
-    "@babel/template": "workspace:^"
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/helper-environment-visitor": "workspace:*"
+    "@babel/helper-member-expression-to-functions": "workspace:*"
+    "@babel/helper-optimise-call-expression": "workspace:*"
+    "@babel/template": "workspace:*"
+    "@babel/traverse": "workspace:*"
+    "@babel/types": "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -912,13 +912,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-simple-access@workspace:^, @babel/helper-simple-access@workspace:packages/babel-helper-simple-access":
+"@babel/helper-simple-access@workspace:*, @babel/helper-simple-access@workspace:packages/babel-helper-simple-access":
   version: 0.0.0-use.local
   resolution: "@babel/helper-simple-access@workspace:packages/babel-helper-simple-access"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/traverse": "workspace:*"
+    "@babel/types": "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -931,12 +931,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-skip-transparent-expression-wrappers@workspace:^, @babel/helper-skip-transparent-expression-wrappers@workspace:packages/babel-helper-skip-transparent-expression-wrappers":
+"@babel/helper-skip-transparent-expression-wrappers@workspace:*, @babel/helper-skip-transparent-expression-wrappers@workspace:packages/babel-helper-skip-transparent-expression-wrappers":
   version: 0.0.0-use.local
   resolution: "@babel/helper-skip-transparent-expression-wrappers@workspace:packages/babel-helper-skip-transparent-expression-wrappers"
   dependencies:
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/traverse": "workspace:*"
+    "@babel/types": "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -949,11 +949,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-split-export-declaration@workspace:^, @babel/helper-split-export-declaration@workspace:packages/babel-helper-split-export-declaration":
+"@babel/helper-split-export-declaration@workspace:*, @babel/helper-split-export-declaration@workspace:packages/babel-helper-split-export-declaration":
   version: 0.0.0-use.local
   resolution: "@babel/helper-split-export-declaration@workspace:packages/babel-helper-split-export-declaration"
   dependencies:
-    "@babel/types": "workspace:^"
+    "@babel/types": "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -964,7 +964,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-string-parser@workspace:^, @babel/helper-string-parser@workspace:packages/babel-helper-string-parser":
+"@babel/helper-string-parser@workspace:*, @babel/helper-string-parser@workspace:packages/babel-helper-string-parser":
   version: 0.0.0-use.local
   resolution: "@babel/helper-string-parser@workspace:packages/babel-helper-string-parser"
   dependencies:
@@ -972,14 +972,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/helper-transform-fixture-test-runner@workspace:^, @babel/helper-transform-fixture-test-runner@workspace:packages/babel-helper-transform-fixture-test-runner":
+"@babel/helper-transform-fixture-test-runner@workspace:*, @babel/helper-transform-fixture-test-runner@workspace:packages/babel-helper-transform-fixture-test-runner":
   version: 0.0.0-use.local
   resolution: "@babel/helper-transform-fixture-test-runner@workspace:packages/babel-helper-transform-fixture-test-runner"
   dependencies:
-    "@babel/code-frame": "workspace:^"
-    "@babel/core": "workspace:^"
-    "@babel/helper-check-duplicate-nodes": "workspace:^"
-    "@babel/helper-fixtures": "workspace:^"
+    "@babel/code-frame": "workspace:*"
+    "@babel/core": "workspace:*"
+    "@babel/helper-check-duplicate-nodes": "workspace:*"
+    "@babel/helper-fixtures": "workspace:*"
     "@types/jest": ^27.4.1
     quick-lru: 5.1.0
   languageName: unknown
@@ -992,7 +992,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-validator-identifier@workspace:^, @babel/helper-validator-identifier@workspace:packages/babel-helper-validator-identifier":
+"@babel/helper-validator-identifier@workspace:*, @babel/helper-validator-identifier@workspace:packages/babel-helper-validator-identifier":
   version: 0.0.0-use.local
   resolution: "@babel/helper-validator-identifier@workspace:packages/babel-helper-validator-identifier"
   dependencies:
@@ -1008,7 +1008,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-validator-option@workspace:^, @babel/helper-validator-option@workspace:packages/babel-helper-validator-option":
+"@babel/helper-validator-option@workspace:*, @babel/helper-validator-option@workspace:packages/babel-helper-validator-option":
   version: 0.0.0-use.local
   resolution: "@babel/helper-validator-option@workspace:packages/babel-helper-validator-option"
   languageName: unknown
@@ -1026,14 +1026,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-wrap-function@workspace:^, @babel/helper-wrap-function@workspace:packages/babel-helper-wrap-function":
+"@babel/helper-wrap-function@workspace:*, @babel/helper-wrap-function@workspace:packages/babel-helper-wrap-function":
   version: 0.0.0-use.local
   resolution: "@babel/helper-wrap-function@workspace:packages/babel-helper-wrap-function"
   dependencies:
-    "@babel/helper-function-name": "workspace:^"
-    "@babel/template": "workspace:^"
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/helper-function-name": "workspace:*"
+    "@babel/template": "workspace:*"
+    "@babel/traverse": "workspace:*"
+    "@babel/types": "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -1048,16 +1048,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helpers@workspace:^, @babel/helpers@workspace:packages/babel-helpers":
+"@babel/helpers@workspace:*, @babel/helpers@workspace:packages/babel-helpers":
   version: 0.0.0-use.local
   resolution: "@babel/helpers@workspace:packages/babel-helpers"
   dependencies:
-    "@babel/generator": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/parser": "workspace:^"
-    "@babel/template": "workspace:^"
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/generator": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/parser": "workspace:*"
+    "@babel/template": "workspace:*"
+    "@babel/traverse": "workspace:*"
+    "@babel/types": "workspace:*"
     regenerator-runtime: ^0.13.11
     terser: ^5.9.0
   languageName: unknown
@@ -1074,11 +1074,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/highlight@workspace:^, @babel/highlight@workspace:packages/babel-highlight":
+"@babel/highlight@workspace:*, @babel/highlight@workspace:packages/babel-highlight":
   version: 0.0.0-use.local
   resolution: "@babel/highlight@workspace:packages/babel-highlight"
   dependencies:
-    "@babel/helper-validator-identifier": "workspace:^"
+    "@babel/helper-validator-identifier": "workspace:*"
     "@types/chalk": ^2.0.0
     chalk: ^2.0.0
     js-tokens: "condition:BABEL_8_BREAKING ? ^8.0.0 : ^4.0.0"
@@ -1090,10 +1090,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/node@workspace:packages/babel-node"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-fixtures": "workspace:^"
-    "@babel/register": "workspace:^"
-    "@babel/runtime": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-fixtures": "workspace:*"
+    "@babel/register": "workspace:*"
+    "@babel/runtime": "workspace:*"
     "@types/v8flags": ^3.1.1
     commander: ^4.0.1
     core-js: ^3.26.0
@@ -1104,7 +1104,7 @@ __metadata:
     rimraf: ^3.0.0
     v8flags: ^3.1.1
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   bin:
     babel-node: ./bin/babel-node.js
   languageName: unknown
@@ -1119,15 +1119,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/parser@workspace:^, @babel/parser@workspace:packages/babel-parser":
+"@babel/parser@workspace:*, @babel/parser@workspace:packages/babel-parser":
   version: 0.0.0-use.local
   resolution: "@babel/parser@workspace:packages/babel-parser"
   dependencies:
-    "@babel/code-frame": "workspace:^"
-    "@babel/helper-check-duplicate-nodes": "workspace:^"
-    "@babel/helper-fixtures": "workspace:^"
-    "@babel/helper-string-parser": "workspace:^"
-    "@babel/helper-validator-identifier": "workspace:^"
+    "@babel/code-frame": "workspace:*"
+    "@babel/helper-check-duplicate-nodes": "workspace:*"
+    "@babel/helper-fixtures": "workspace:*"
+    "@babel/helper-string-parser": "workspace:*"
+    "@babel/helper-validator-identifier": "workspace:*"
     charcodes: ^0.2.0
   bin:
     parser: ./bin/babel-parser.js
@@ -1145,17 +1145,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression@workspace:^, @babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression@workspace:packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression":
+"@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression@workspace:*, @babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression@workspace:packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression@workspace:packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-function-name": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/traverse": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-function-name": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/traverse": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -1172,18 +1172,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining@workspace:^, @babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining@workspace:packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining":
+"@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining@workspace:*, @babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining@workspace:packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining@workspace:packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^"
-    "@babel/plugin-proposal-optional-chaining": "workspace:^"
-    "@babel/traverse": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/helper-skip-transparent-expression-wrappers": "workspace:*"
+    "@babel/plugin-proposal-optional-chaining": "workspace:*"
+    "@babel/traverse": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.13.0 || 7.21.4-esm.1
+    "@babel/core": ^7.13.0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -1191,11 +1191,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/plugin-codemod-object-assign-to-object-spread@workspace:codemods/babel-plugin-codemod-object-assign-to-object-spread"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/plugin-syntax-object-rest-spread": ^7.8.3
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -1203,23 +1203,23 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/plugin-codemod-optional-catch-binding@workspace:codemods/babel-plugin-codemod-optional-catch-binding"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
     "@babel/plugin-syntax-optional-catch-binding": ^7.8.3
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-external-helpers@workspace:^, @babel/plugin-external-helpers@workspace:packages/babel-plugin-external-helpers":
+"@babel/plugin-external-helpers@workspace:*, @babel/plugin-external-helpers@workspace:packages/babel-plugin-external-helpers":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-external-helpers@workspace:packages/babel-plugin-external-helpers"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -1227,15 +1227,15 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-async-do-expressions@workspace:packages/babel-plugin-proposal-async-do-expressions"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-hoist-variables": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-async-do-expressions": "workspace:^"
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-hoist-variables": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/plugin-syntax-async-do-expressions": "workspace:*"
+    "@babel/traverse": "workspace:*"
+    "@babel/types": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.13.0 || 7.21.4-esm.1
+    "@babel/core": ^7.13.0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -1253,20 +1253,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-async-generator-functions@workspace:^, @babel/plugin-proposal-async-generator-functions@workspace:packages/babel-plugin-proposal-async-generator-functions":
+"@babel/plugin-proposal-async-generator-functions@workspace:*, @babel/plugin-proposal-async-generator-functions@workspace:packages/babel-plugin-proposal-async-generator-functions":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-async-generator-functions@workspace:packages/babel-plugin-proposal-async-generator-functions"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-environment-visitor": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/helper-remap-async-to-generator": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-environment-visitor": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/helper-remap-async-to-generator": "workspace:*"
     "@babel/plugin-syntax-async-generators": ^7.8.4
     babel-plugin-polyfill-corejs3: ^0.6.0
     core-js-pure: ^3.25.1
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -1282,16 +1282,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-class-properties@workspace:^, @babel/plugin-proposal-class-properties@workspace:packages/babel-plugin-proposal-class-properties":
+"@babel/plugin-proposal-class-properties@workspace:*, @babel/plugin-proposal-class-properties@workspace:packages/babel-plugin-proposal-class-properties":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-class-properties@workspace:packages/babel-plugin-proposal-class-properties"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-create-class-features-plugin": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-create-class-features-plugin": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -1308,85 +1308,85 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-class-static-block@workspace:^, @babel/plugin-proposal-class-static-block@workspace:packages/babel-plugin-proposal-class-static-block":
+"@babel/plugin-proposal-class-static-block@workspace:*, @babel/plugin-proposal-class-static-block@workspace:packages/babel-plugin-proposal-class-static-block":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-class-static-block@workspace:packages/babel-plugin-proposal-class-static-block"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-create-class-features-plugin": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-create-class-features-plugin": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
     "@babel/plugin-syntax-class-static-block": ^7.14.5
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/traverse": "workspace:*"
+    "@babel/types": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.12.0 || 7.21.4-esm.1
+    "@babel/core": ^7.12.0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-proposal-decorators@workspace:^, @babel/plugin-proposal-decorators@workspace:packages/babel-plugin-proposal-decorators":
+"@babel/plugin-proposal-decorators@workspace:*, @babel/plugin-proposal-decorators@workspace:packages/babel-plugin-proposal-decorators":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-decorators@workspace:packages/babel-plugin-proposal-decorators"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-create-class-features-plugin": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/helper-replace-supers": "workspace:^"
-    "@babel/helper-split-export-declaration": "workspace:^"
-    "@babel/plugin-syntax-decorators": "workspace:^"
-    "@babel/traverse": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-create-class-features-plugin": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/helper-replace-supers": "workspace:*"
+    "@babel/helper-split-export-declaration": "workspace:*"
+    "@babel/plugin-syntax-decorators": "workspace:*"
+    "@babel/traverse": "workspace:*"
     "@types/charcodes": ^0.2.0
     array.prototype.concat: ^1.0.2
     babel-plugin-polyfill-es-shims: ^0.7.1
     charcodes: ^0.2.0
     object.getownpropertydescriptors: ^2.1.1
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-proposal-destructuring-private@workspace:^, @babel/plugin-proposal-destructuring-private@workspace:packages/babel-plugin-proposal-destructuring-private":
+"@babel/plugin-proposal-destructuring-private@workspace:*, @babel/plugin-proposal-destructuring-private@workspace:packages/babel-plugin-proposal-destructuring-private":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-destructuring-private@workspace:packages/babel-plugin-proposal-destructuring-private"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-destructuring-private": "workspace:^"
-    "@babel/plugin-transform-destructuring": "workspace:^"
-    "@babel/plugin-transform-parameters": "workspace:^"
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/plugin-syntax-destructuring-private": "workspace:*"
+    "@babel/plugin-transform-destructuring": "workspace:*"
+    "@babel/plugin-transform-parameters": "workspace:*"
+    "@babel/traverse": "workspace:*"
+    "@babel/types": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.17.0 || 7.21.4-esm.1
+    "@babel/core": ^7.17.0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-proposal-do-expressions@workspace:^, @babel/plugin-proposal-do-expressions@workspace:packages/babel-plugin-proposal-do-expressions":
+"@babel/plugin-proposal-do-expressions@workspace:*, @babel/plugin-proposal-do-expressions@workspace:packages/babel-plugin-proposal-do-expressions":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-do-expressions@workspace:packages/babel-plugin-proposal-do-expressions"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-do-expressions": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/plugin-syntax-do-expressions": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-proposal-duplicate-named-capturing-groups-regex@workspace:^, @babel/plugin-proposal-duplicate-named-capturing-groups-regex@workspace:packages/babel-plugin-proposal-duplicate-named-capturing-groups-regex":
+"@babel/plugin-proposal-duplicate-named-capturing-groups-regex@workspace:*, @babel/plugin-proposal-duplicate-named-capturing-groups-regex@workspace:packages/babel-plugin-proposal-duplicate-named-capturing-groups-regex":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-duplicate-named-capturing-groups-regex@workspace:packages/babel-plugin-proposal-duplicate-named-capturing-groups-regex"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-create-regexp-features-plugin": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-create-regexp-features-plugin": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
     core-js: ^3.26.0
   peerDependencies:
-    "@babel/core": ^7.0.0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -1402,29 +1402,29 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-dynamic-import@workspace:^, @babel/plugin-proposal-dynamic-import@workspace:packages/babel-plugin-proposal-dynamic-import":
+"@babel/plugin-proposal-dynamic-import@workspace:*, @babel/plugin-proposal-dynamic-import@workspace:packages/babel-plugin-proposal-dynamic-import":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-dynamic-import@workspace:packages/babel-plugin-proposal-dynamic-import"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
     "@babel/plugin-syntax-dynamic-import": ^7.8.3
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-proposal-export-default-from@workspace:^, @babel/plugin-proposal-export-default-from@workspace:packages/babel-plugin-proposal-export-default-from":
+"@babel/plugin-proposal-export-default-from@workspace:*, @babel/plugin-proposal-export-default-from@workspace:packages/babel-plugin-proposal-export-default-from":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-export-default-from@workspace:packages/babel-plugin-proposal-export-default-from"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-export-default-from": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/plugin-syntax-export-default-from": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -1440,43 +1440,43 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-export-namespace-from@workspace:^, @babel/plugin-proposal-export-namespace-from@workspace:packages/babel-plugin-proposal-export-namespace-from":
+"@babel/plugin-proposal-export-namespace-from@workspace:*, @babel/plugin-proposal-export-namespace-from@workspace:packages/babel-plugin-proposal-export-namespace-from":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-export-namespace-from@workspace:packages/babel-plugin-proposal-export-namespace-from"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
     "@babel/plugin-syntax-export-namespace-from": ^7.8.3
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-proposal-function-bind@workspace:^, @babel/plugin-proposal-function-bind@workspace:packages/babel-plugin-proposal-function-bind":
+"@babel/plugin-proposal-function-bind@workspace:*, @babel/plugin-proposal-function-bind@workspace:packages/babel-plugin-proposal-function-bind":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-function-bind@workspace:packages/babel-plugin-proposal-function-bind"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-function-bind": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/plugin-syntax-function-bind": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-proposal-function-sent@workspace:^, @babel/plugin-proposal-function-sent@workspace:packages/babel-plugin-proposal-function-sent":
+"@babel/plugin-proposal-function-sent@workspace:*, @babel/plugin-proposal-function-sent@workspace:packages/babel-plugin-proposal-function-sent":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-function-sent@workspace:packages/babel-plugin-proposal-function-sent"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/helper-wrap-function": "workspace:^"
-    "@babel/plugin-syntax-function-sent": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/helper-wrap-function": "workspace:*"
+    "@babel/plugin-syntax-function-sent": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -1492,16 +1492,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-json-strings@workspace:^, @babel/plugin-proposal-json-strings@workspace:packages/babel-plugin-proposal-json-strings":
+"@babel/plugin-proposal-json-strings@workspace:*, @babel/plugin-proposal-json-strings@workspace:packages/babel-plugin-proposal-json-strings":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-json-strings@workspace:packages/babel-plugin-proposal-json-strings"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
     "@babel/plugin-syntax-json-strings": ^7.8.3
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -1517,18 +1517,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-logical-assignment-operators@workspace:^, @babel/plugin-proposal-logical-assignment-operators@workspace:packages/babel-plugin-proposal-logical-assignment-operators":
+"@babel/plugin-proposal-logical-assignment-operators@workspace:*, @babel/plugin-proposal-logical-assignment-operators@workspace:packages/babel-plugin-proposal-logical-assignment-operators":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-logical-assignment-operators@workspace:packages/babel-plugin-proposal-logical-assignment-operators"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-proposal-nullish-coalescing-operator": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/plugin-proposal-nullish-coalescing-operator": "workspace:*"
     "@babel/plugin-syntax-logical-assignment-operators": ^7.10.4
     "@babel/plugin-syntax-nullish-coalescing-operator": ^7.8.3
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -1544,16 +1544,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-nullish-coalescing-operator@workspace:^, @babel/plugin-proposal-nullish-coalescing-operator@workspace:packages/babel-plugin-proposal-nullish-coalescing-operator":
+"@babel/plugin-proposal-nullish-coalescing-operator@workspace:*, @babel/plugin-proposal-nullish-coalescing-operator@workspace:packages/babel-plugin-proposal-nullish-coalescing-operator":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-nullish-coalescing-operator@workspace:packages/babel-plugin-proposal-nullish-coalescing-operator"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
     "@babel/plugin-syntax-nullish-coalescing-operator": ^7.8.3
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -1569,18 +1569,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-numeric-separator@workspace:^, @babel/plugin-proposal-numeric-separator@workspace:packages/babel-plugin-proposal-numeric-separator":
+"@babel/plugin-proposal-numeric-separator@workspace:*, @babel/plugin-proposal-numeric-separator@workspace:packages/babel-plugin-proposal-numeric-separator":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-numeric-separator@workspace:packages/babel-plugin-proposal-numeric-separator"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
     "@babel/plugin-syntax-numeric-separator": ^7.10.4
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/traverse": "workspace:*"
+    "@babel/types": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -1599,20 +1599,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-object-rest-spread@workspace:^, @babel/plugin-proposal-object-rest-spread@workspace:packages/babel-plugin-proposal-object-rest-spread":
+"@babel/plugin-proposal-object-rest-spread@workspace:*, @babel/plugin-proposal-object-rest-spread@workspace:packages/babel-plugin-proposal-object-rest-spread":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-object-rest-spread@workspace:packages/babel-plugin-proposal-object-rest-spread"
   dependencies:
-    "@babel/compat-data": "workspace:^"
-    "@babel/core": "workspace:^"
-    "@babel/helper-compilation-targets": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/parser": "workspace:^"
+    "@babel/compat-data": "workspace:*"
+    "@babel/core": "workspace:*"
+    "@babel/helper-compilation-targets": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/parser": "workspace:*"
     "@babel/plugin-syntax-object-rest-spread": ^7.8.3
-    "@babel/plugin-transform-parameters": "workspace:^"
+    "@babel/plugin-transform-parameters": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -1628,16 +1628,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-optional-catch-binding@workspace:^, @babel/plugin-proposal-optional-catch-binding@workspace:packages/babel-plugin-proposal-optional-catch-binding":
+"@babel/plugin-proposal-optional-catch-binding@workspace:*, @babel/plugin-proposal-optional-catch-binding@workspace:packages/babel-plugin-proposal-optional-catch-binding":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-optional-catch-binding@workspace:packages/babel-plugin-proposal-optional-catch-binding"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
     "@babel/plugin-syntax-optional-catch-binding": ^7.8.3
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -1654,19 +1654,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-optional-chaining@workspace:^, @babel/plugin-proposal-optional-chaining@workspace:packages/babel-plugin-proposal-optional-chaining":
+"@babel/plugin-proposal-optional-chaining@workspace:*, @babel/plugin-proposal-optional-chaining@workspace:packages/babel-plugin-proposal-optional-chaining":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-optional-chaining@workspace:packages/babel-plugin-proposal-optional-chaining"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/helper-skip-transparent-expression-wrappers": "workspace:*"
     "@babel/plugin-syntax-optional-chaining": ^7.8.3
-    "@babel/plugin-transform-block-scoping": "workspace:^"
-    "@babel/traverse": "workspace:^"
+    "@babel/plugin-transform-block-scoping": "workspace:*"
+    "@babel/traverse": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -1674,25 +1674,25 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-partial-application@workspace:packages/babel-plugin-proposal-partial-application"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-partial-application": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/plugin-syntax-partial-application": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-proposal-pipeline-operator@workspace:^, @babel/plugin-proposal-pipeline-operator@workspace:packages/babel-plugin-proposal-pipeline-operator":
+"@babel/plugin-proposal-pipeline-operator@workspace:*, @babel/plugin-proposal-pipeline-operator@workspace:packages/babel-plugin-proposal-pipeline-operator":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-pipeline-operator@workspace:packages/babel-plugin-proposal-pipeline-operator"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-pipeline-operator": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/plugin-syntax-pipeline-operator": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -1708,16 +1708,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-private-methods@workspace:^, @babel/plugin-proposal-private-methods@workspace:packages/babel-plugin-proposal-private-methods":
+"@babel/plugin-proposal-private-methods@workspace:*, @babel/plugin-proposal-private-methods@workspace:packages/babel-plugin-proposal-private-methods":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-private-methods@workspace:packages/babel-plugin-proposal-private-methods"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-create-class-features-plugin": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-create-class-features-plugin": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -1735,58 +1735,58 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-private-property-in-object@workspace:^, @babel/plugin-proposal-private-property-in-object@workspace:packages/babel-plugin-proposal-private-property-in-object":
+"@babel/plugin-proposal-private-property-in-object@workspace:*, @babel/plugin-proposal-private-property-in-object@workspace:packages/babel-plugin-proposal-private-property-in-object":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-private-property-in-object@workspace:packages/babel-plugin-proposal-private-property-in-object"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-annotate-as-pure": "workspace:^"
-    "@babel/helper-create-class-features-plugin": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-annotate-as-pure": "workspace:*"
+    "@babel/helper-create-class-features-plugin": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
     "@babel/plugin-syntax-private-property-in-object": ^7.14.5
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-proposal-record-and-tuple@workspace:^, @babel/plugin-proposal-record-and-tuple@workspace:packages/babel-plugin-proposal-record-and-tuple":
+"@babel/plugin-proposal-record-and-tuple@workspace:*, @babel/plugin-proposal-record-and-tuple@workspace:packages/babel-plugin-proposal-record-and-tuple":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-record-and-tuple@workspace:packages/babel-plugin-proposal-record-and-tuple"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-module-imports": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/helper-validator-option": "workspace:^"
-    "@babel/plugin-syntax-record-and-tuple": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-module-imports": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/helper-validator-option": "workspace:*"
+    "@babel/plugin-syntax-record-and-tuple": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.12.0 || 7.21.4-esm.1
+    "@babel/core": ^7.12.0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-proposal-regexp-modifiers@workspace:^, @babel/plugin-proposal-regexp-modifiers@workspace:packages/babel-plugin-proposal-regexp-modifiers":
+"@babel/plugin-proposal-regexp-modifiers@workspace:*, @babel/plugin-proposal-regexp-modifiers@workspace:packages/babel-plugin-proposal-regexp-modifiers":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-regexp-modifiers@workspace:packages/babel-plugin-proposal-regexp-modifiers"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-create-regexp-features-plugin": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-create-regexp-features-plugin": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-proposal-throw-expressions@workspace:^, @babel/plugin-proposal-throw-expressions@workspace:packages/babel-plugin-proposal-throw-expressions":
+"@babel/plugin-proposal-throw-expressions@workspace:*, @babel/plugin-proposal-throw-expressions@workspace:packages/babel-plugin-proposal-throw-expressions":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-throw-expressions@workspace:packages/babel-plugin-proposal-throw-expressions"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-throw-expressions": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/plugin-syntax-throw-expressions": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -1802,40 +1802,40 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-unicode-property-regex@workspace:^, @babel/plugin-proposal-unicode-property-regex@workspace:packages/babel-plugin-proposal-unicode-property-regex":
+"@babel/plugin-proposal-unicode-property-regex@workspace:*, @babel/plugin-proposal-unicode-property-regex@workspace:packages/babel-plugin-proposal-unicode-property-regex":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-unicode-property-regex@workspace:packages/babel-plugin-proposal-unicode-property-regex"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-create-regexp-features-plugin": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-create-regexp-features-plugin": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-proposal-unicode-sets-regex@workspace:^, @babel/plugin-proposal-unicode-sets-regex@workspace:packages/babel-plugin-proposal-unicode-sets-regex":
+"@babel/plugin-proposal-unicode-sets-regex@workspace:*, @babel/plugin-proposal-unicode-sets-regex@workspace:packages/babel-plugin-proposal-unicode-sets-regex":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-unicode-sets-regex@workspace:packages/babel-plugin-proposal-unicode-sets-regex"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-create-regexp-features-plugin": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-create-regexp-features-plugin": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-syntax-async-do-expressions@workspace:^, @babel/plugin-syntax-async-do-expressions@workspace:packages/babel-plugin-syntax-async-do-expressions":
+"@babel/plugin-syntax-async-do-expressions@workspace:*, @babel/plugin-syntax-async-do-expressions@workspace:packages/babel-plugin-syntax-async-do-expressions":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-async-do-expressions@workspace:packages/babel-plugin-syntax-async-do-expressions"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -1883,45 +1883,45 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-decimal@workspace:^, @babel/plugin-syntax-decimal@workspace:packages/babel-plugin-syntax-decimal":
+"@babel/plugin-syntax-decimal@workspace:*, @babel/plugin-syntax-decimal@workspace:packages/babel-plugin-syntax-decimal":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-decimal@workspace:packages/babel-plugin-syntax-decimal"
   dependencies:
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-syntax-decorators@workspace:^, @babel/plugin-syntax-decorators@workspace:packages/babel-plugin-syntax-decorators":
+"@babel/plugin-syntax-decorators@workspace:*, @babel/plugin-syntax-decorators@workspace:packages/babel-plugin-syntax-decorators":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-decorators@workspace:packages/babel-plugin-syntax-decorators"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-syntax-destructuring-private@workspace:^, @babel/plugin-syntax-destructuring-private@workspace:packages/babel-plugin-syntax-destructuring-private":
+"@babel/plugin-syntax-destructuring-private@workspace:*, @babel/plugin-syntax-destructuring-private@workspace:packages/babel-plugin-syntax-destructuring-private":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-destructuring-private@workspace:packages/babel-plugin-syntax-destructuring-private"
   dependencies:
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-syntax-do-expressions@workspace:^, @babel/plugin-syntax-do-expressions@workspace:packages/babel-plugin-syntax-do-expressions":
+"@babel/plugin-syntax-do-expressions@workspace:*, @babel/plugin-syntax-do-expressions@workspace:packages/babel-plugin-syntax-do-expressions":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-do-expressions@workspace:packages/babel-plugin-syntax-do-expressions"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -1936,25 +1936,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-explicit-resource-management@workspace:^, @babel/plugin-syntax-explicit-resource-management@workspace:packages/babel-plugin-syntax-explicit-resource-management":
+"@babel/plugin-syntax-explicit-resource-management@workspace:*, @babel/plugin-syntax-explicit-resource-management@workspace:packages/babel-plugin-syntax-explicit-resource-management":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-explicit-resource-management@workspace:packages/babel-plugin-syntax-explicit-resource-management"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-syntax-export-default-from@workspace:^, @babel/plugin-syntax-export-default-from@workspace:packages/babel-plugin-syntax-export-default-from":
+"@babel/plugin-syntax-export-default-from@workspace:*, @babel/plugin-syntax-export-default-from@workspace:packages/babel-plugin-syntax-export-default-from":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-export-default-from@workspace:packages/babel-plugin-syntax-export-default-from"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -1969,36 +1969,36 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-flow@workspace:^, @babel/plugin-syntax-flow@workspace:packages/babel-plugin-syntax-flow":
+"@babel/plugin-syntax-flow@workspace:*, @babel/plugin-syntax-flow@workspace:packages/babel-plugin-syntax-flow":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-flow@workspace:packages/babel-plugin-syntax-flow"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-syntax-function-bind@workspace:^, @babel/plugin-syntax-function-bind@workspace:packages/babel-plugin-syntax-function-bind":
+"@babel/plugin-syntax-function-bind@workspace:*, @babel/plugin-syntax-function-bind@workspace:packages/babel-plugin-syntax-function-bind":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-function-bind@workspace:packages/babel-plugin-syntax-function-bind"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-syntax-function-sent@workspace:^, @babel/plugin-syntax-function-sent@workspace:packages/babel-plugin-syntax-function-sent":
+"@babel/plugin-syntax-function-sent@workspace:*, @babel/plugin-syntax-function-sent@workspace:packages/babel-plugin-syntax-function-sent":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-function-sent@workspace:packages/babel-plugin-syntax-function-sent"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2013,14 +2013,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-import-assertions@workspace:^, @babel/plugin-syntax-import-assertions@workspace:packages/babel-plugin-syntax-import-assertions":
+"@babel/plugin-syntax-import-assertions@workspace:*, @babel/plugin-syntax-import-assertions@workspace:packages/babel-plugin-syntax-import-assertions":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-import-assertions@workspace:packages/babel-plugin-syntax-import-assertions"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2035,14 +2035,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-import-reflection@workspace:^, @babel/plugin-syntax-import-reflection@workspace:packages/babel-plugin-syntax-import-reflection":
+"@babel/plugin-syntax-import-reflection@workspace:*, @babel/plugin-syntax-import-reflection@workspace:packages/babel-plugin-syntax-import-reflection":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-import-reflection@workspace:packages/babel-plugin-syntax-import-reflection"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2068,14 +2068,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-jsx@workspace:^, @babel/plugin-syntax-jsx@workspace:packages/babel-plugin-syntax-jsx":
+"@babel/plugin-syntax-jsx@workspace:*, @babel/plugin-syntax-jsx@workspace:packages/babel-plugin-syntax-jsx":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-jsx@workspace:packages/babel-plugin-syntax-jsx"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2090,13 +2090,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-module-blocks@workspace:^, @babel/plugin-syntax-module-blocks@workspace:packages/babel-plugin-syntax-module-blocks":
+"@babel/plugin-syntax-module-blocks@workspace:*, @babel/plugin-syntax-module-blocks@workspace:packages/babel-plugin-syntax-module-blocks":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-module-blocks@workspace:packages/babel-plugin-syntax-module-blocks"
   dependencies:
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2155,25 +2155,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-partial-application@workspace:^, @babel/plugin-syntax-partial-application@workspace:packages/babel-plugin-syntax-partial-application":
+"@babel/plugin-syntax-partial-application@workspace:*, @babel/plugin-syntax-partial-application@workspace:packages/babel-plugin-syntax-partial-application":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-partial-application@workspace:packages/babel-plugin-syntax-partial-application"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-syntax-pipeline-operator@workspace:^, @babel/plugin-syntax-pipeline-operator@workspace:packages/babel-plugin-syntax-pipeline-operator":
+"@babel/plugin-syntax-pipeline-operator@workspace:*, @babel/plugin-syntax-pipeline-operator@workspace:packages/babel-plugin-syntax-pipeline-operator":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-pipeline-operator@workspace:packages/babel-plugin-syntax-pipeline-operator"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2188,25 +2188,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-record-and-tuple@workspace:^, @babel/plugin-syntax-record-and-tuple@workspace:packages/babel-plugin-syntax-record-and-tuple":
+"@babel/plugin-syntax-record-and-tuple@workspace:*, @babel/plugin-syntax-record-and-tuple@workspace:packages/babel-plugin-syntax-record-and-tuple":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-record-and-tuple@workspace:packages/babel-plugin-syntax-record-and-tuple"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-syntax-throw-expressions@workspace:^, @babel/plugin-syntax-throw-expressions@workspace:packages/babel-plugin-syntax-throw-expressions":
+"@babel/plugin-syntax-throw-expressions@workspace:*, @babel/plugin-syntax-throw-expressions@workspace:packages/babel-plugin-syntax-throw-expressions":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-throw-expressions@workspace:packages/babel-plugin-syntax-throw-expressions"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2232,15 +2232,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-typescript@workspace:^, @babel/plugin-syntax-typescript@workspace:packages/babel-plugin-syntax-typescript":
+"@babel/plugin-syntax-typescript@workspace:*, @babel/plugin-syntax-typescript@workspace:packages/babel-plugin-syntax-typescript":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-typescript@workspace:packages/babel-plugin-syntax-typescript"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2248,12 +2248,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-unicode-sets-regex@workspace:packages/babel-plugin-syntax-unicode-sets-regex"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-create-regexp-features-plugin": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-create-regexp-features-plugin": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2268,17 +2268,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-arrow-functions@workspace:^, @babel/plugin-transform-arrow-functions@workspace:packages/babel-plugin-transform-arrow-functions":
+"@babel/plugin-transform-arrow-functions@workspace:*, @babel/plugin-transform-arrow-functions@workspace:packages/babel-plugin-transform-arrow-functions":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-arrow-functions@workspace:packages/babel-plugin-transform-arrow-functions"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/traverse": "workspace:*"
+    "@babel/types": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2295,17 +2295,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-async-to-generator@workspace:^, @babel/plugin-transform-async-to-generator@workspace:packages/babel-plugin-transform-async-to-generator":
+"@babel/plugin-transform-async-to-generator@workspace:*, @babel/plugin-transform-async-to-generator@workspace:packages/babel-plugin-transform-async-to-generator":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-async-to-generator@workspace:packages/babel-plugin-transform-async-to-generator"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-module-imports": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/helper-remap-async-to-generator": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-module-imports": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/helper-remap-async-to-generator": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2320,15 +2320,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-block-scoped-functions@workspace:^, @babel/plugin-transform-block-scoped-functions@workspace:packages/babel-plugin-transform-block-scoped-functions":
+"@babel/plugin-transform-block-scoped-functions@workspace:*, @babel/plugin-transform-block-scoped-functions@workspace:packages/babel-plugin-transform-block-scoped-functions":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-block-scoped-functions@workspace:packages/babel-plugin-transform-block-scoped-functions"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2343,16 +2343,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-block-scoping@workspace:^, @babel/plugin-transform-block-scoping@workspace:packages/babel-plugin-transform-block-scoping":
+"@babel/plugin-transform-block-scoping@workspace:*, @babel/plugin-transform-block-scoping@workspace:packages/babel-plugin-transform-block-scoping":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-block-scoping@workspace:packages/babel-plugin-transform-block-scoping"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/traverse": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/traverse": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2375,24 +2375,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-classes@workspace:^, @babel/plugin-transform-classes@workspace:packages/babel-plugin-transform-classes":
+"@babel/plugin-transform-classes@workspace:*, @babel/plugin-transform-classes@workspace:packages/babel-plugin-transform-classes":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-classes@workspace:packages/babel-plugin-transform-classes"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-annotate-as-pure": "workspace:^"
-    "@babel/helper-compilation-targets": "workspace:^"
-    "@babel/helper-environment-visitor": "workspace:^"
-    "@babel/helper-function-name": "workspace:^"
-    "@babel/helper-optimise-call-expression": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/helper-replace-supers": "workspace:^"
-    "@babel/helper-split-export-declaration": "workspace:^"
-    "@babel/traverse": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-annotate-as-pure": "workspace:*"
+    "@babel/helper-compilation-targets": "workspace:*"
+    "@babel/helper-environment-visitor": "workspace:*"
+    "@babel/helper-function-name": "workspace:*"
+    "@babel/helper-optimise-call-expression": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/helper-replace-supers": "workspace:*"
+    "@babel/helper-split-export-declaration": "workspace:*"
+    "@babel/traverse": "workspace:*"
     globals: "condition:BABEL_8_BREAKING ? ^13.5.0 : ^11.1.0"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2408,16 +2408,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-computed-properties@workspace:^, @babel/plugin-transform-computed-properties@workspace:packages/babel-plugin-transform-computed-properties":
+"@babel/plugin-transform-computed-properties@workspace:*, @babel/plugin-transform-computed-properties@workspace:packages/babel-plugin-transform-computed-properties":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-computed-properties@workspace:packages/babel-plugin-transform-computed-properties"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/template": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/template": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2432,16 +2432,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-destructuring@workspace:^, @babel/plugin-transform-destructuring@workspace:packages/babel-plugin-transform-destructuring":
+"@babel/plugin-transform-destructuring@workspace:*, @babel/plugin-transform-destructuring@workspace:packages/babel-plugin-transform-destructuring":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-destructuring@workspace:packages/babel-plugin-transform-destructuring"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/traverse": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/traverse": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2457,16 +2457,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-dotall-regex@workspace:^, @babel/plugin-transform-dotall-regex@workspace:packages/babel-plugin-transform-dotall-regex":
+"@babel/plugin-transform-dotall-regex@workspace:*, @babel/plugin-transform-dotall-regex@workspace:packages/babel-plugin-transform-dotall-regex":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-dotall-regex@workspace:packages/babel-plugin-transform-dotall-regex"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-create-regexp-features-plugin": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-create-regexp-features-plugin": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2481,15 +2481,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-duplicate-keys@workspace:^, @babel/plugin-transform-duplicate-keys@workspace:packages/babel-plugin-transform-duplicate-keys":
+"@babel/plugin-transform-duplicate-keys@workspace:*, @babel/plugin-transform-duplicate-keys@workspace:packages/babel-plugin-transform-duplicate-keys":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-duplicate-keys@workspace:packages/babel-plugin-transform-duplicate-keys"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2505,43 +2505,43 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-exponentiation-operator@workspace:^, @babel/plugin-transform-exponentiation-operator@workspace:packages/babel-plugin-transform-exponentiation-operator":
+"@babel/plugin-transform-exponentiation-operator@workspace:*, @babel/plugin-transform-exponentiation-operator@workspace:packages/babel-plugin-transform-exponentiation-operator":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-exponentiation-operator@workspace:packages/babel-plugin-transform-exponentiation-operator"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-builder-binary-assignment-operator-visitor": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-builder-binary-assignment-operator-visitor": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-transform-flow-comments@workspace:^, @babel/plugin-transform-flow-comments@workspace:packages/babel-plugin-transform-flow-comments":
+"@babel/plugin-transform-flow-comments@workspace:*, @babel/plugin-transform-flow-comments@workspace:packages/babel-plugin-transform-flow-comments":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-flow-comments@workspace:packages/babel-plugin-transform-flow-comments"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/generator": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-flow": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/generator": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/plugin-syntax-flow": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-transform-flow-strip-types@workspace:^, @babel/plugin-transform-flow-strip-types@workspace:packages/babel-plugin-transform-flow-strip-types":
+"@babel/plugin-transform-flow-strip-types@workspace:*, @babel/plugin-transform-flow-strip-types@workspace:packages/babel-plugin-transform-flow-strip-types":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-flow-strip-types@workspace:packages/babel-plugin-transform-flow-strip-types"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-flow": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/plugin-syntax-flow": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2556,15 +2556,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-for-of@workspace:^, @babel/plugin-transform-for-of@workspace:packages/babel-plugin-transform-for-of":
+"@babel/plugin-transform-for-of@workspace:*, @babel/plugin-transform-for-of@workspace:packages/babel-plugin-transform-for-of":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-for-of@workspace:packages/babel-plugin-transform-for-of"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2581,41 +2581,41 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-function-name@workspace:^, @babel/plugin-transform-function-name@workspace:packages/babel-plugin-transform-function-name":
+"@babel/plugin-transform-function-name@workspace:*, @babel/plugin-transform-function-name@workspace:packages/babel-plugin-transform-function-name":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-function-name@workspace:packages/babel-plugin-transform-function-name"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-compilation-targets": "workspace:^"
-    "@babel/helper-function-name": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-compilation-targets": "workspace:*"
+    "@babel/helper-function-name": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-transform-instanceof@workspace:^, @babel/plugin-transform-instanceof@workspace:packages/babel-plugin-transform-instanceof":
+"@babel/plugin-transform-instanceof@workspace:*, @babel/plugin-transform-instanceof@workspace:packages/babel-plugin-transform-instanceof":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-instanceof@workspace:packages/babel-plugin-transform-instanceof"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-transform-jscript@workspace:^, @babel/plugin-transform-jscript@workspace:packages/babel-plugin-transform-jscript":
+"@babel/plugin-transform-jscript@workspace:*, @babel/plugin-transform-jscript@workspace:packages/babel-plugin-transform-jscript":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-jscript@workspace:packages/babel-plugin-transform-jscript"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2630,15 +2630,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-literals@workspace:^, @babel/plugin-transform-literals@workspace:packages/babel-plugin-transform-literals":
+"@babel/plugin-transform-literals@workspace:*, @babel/plugin-transform-literals@workspace:packages/babel-plugin-transform-literals":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-literals@workspace:packages/babel-plugin-transform-literals"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2653,15 +2653,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-member-expression-literals@workspace:^, @babel/plugin-transform-member-expression-literals@workspace:packages/babel-plugin-transform-member-expression-literals":
+"@babel/plugin-transform-member-expression-literals@workspace:*, @babel/plugin-transform-member-expression-literals@workspace:packages/babel-plugin-transform-member-expression-literals":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-member-expression-literals@workspace:packages/babel-plugin-transform-member-expression-literals"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2677,17 +2677,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-modules-amd@workspace:^, @babel/plugin-transform-modules-amd@workspace:packages/babel-plugin-transform-modules-amd":
+"@babel/plugin-transform-modules-amd@workspace:*, @babel/plugin-transform-modules-amd@workspace:packages/babel-plugin-transform-modules-amd":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-modules-amd@workspace:packages/babel-plugin-transform-modules-amd"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-module-transforms": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-external-helpers": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-module-transforms": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/plugin-external-helpers": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2704,20 +2704,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-modules-commonjs@workspace:^, @babel/plugin-transform-modules-commonjs@workspace:packages/babel-plugin-transform-modules-commonjs":
+"@babel/plugin-transform-modules-commonjs@workspace:*, @babel/plugin-transform-modules-commonjs@workspace:packages/babel-plugin-transform-modules-commonjs":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-modules-commonjs@workspace:packages/babel-plugin-transform-modules-commonjs"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-module-transforms": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/helper-simple-access": "workspace:^"
-    "@babel/plugin-external-helpers": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-module-transforms": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/helper-simple-access": "workspace:*"
+    "@babel/plugin-external-helpers": "workspace:*"
     "@babel/plugin-syntax-class-static-block": ^7.14.5
     "@babel/plugin-syntax-object-rest-spread": ^7.8.3
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2735,19 +2735,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-modules-systemjs@workspace:^, @babel/plugin-transform-modules-systemjs@workspace:packages/babel-plugin-transform-modules-systemjs":
+"@babel/plugin-transform-modules-systemjs@workspace:*, @babel/plugin-transform-modules-systemjs@workspace:packages/babel-plugin-transform-modules-systemjs":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-modules-systemjs@workspace:packages/babel-plugin-transform-modules-systemjs"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-hoist-variables": "workspace:^"
-    "@babel/helper-module-transforms": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/helper-validator-identifier": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-hoist-variables": "workspace:*"
+    "@babel/helper-module-transforms": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/helper-validator-identifier": "workspace:*"
     "@babel/plugin-syntax-dynamic-import": ^7.8.3
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2763,17 +2763,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-modules-umd@workspace:^, @babel/plugin-transform-modules-umd@workspace:packages/babel-plugin-transform-modules-umd":
+"@babel/plugin-transform-modules-umd@workspace:*, @babel/plugin-transform-modules-umd@workspace:packages/babel-plugin-transform-modules-umd":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-modules-umd@workspace:packages/babel-plugin-transform-modules-umd"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-module-transforms": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-external-helpers": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-module-transforms": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/plugin-external-helpers": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2789,17 +2789,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-named-capturing-groups-regex@workspace:^, @babel/plugin-transform-named-capturing-groups-regex@workspace:packages/babel-plugin-transform-named-capturing-groups-regex":
+"@babel/plugin-transform-named-capturing-groups-regex@workspace:*, @babel/plugin-transform-named-capturing-groups-regex@workspace:packages/babel-plugin-transform-named-capturing-groups-regex":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-named-capturing-groups-regex@workspace:packages/babel-plugin-transform-named-capturing-groups-regex"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-create-regexp-features-plugin": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-create-regexp-features-plugin": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
     core-js: ^3.26.0
   peerDependencies:
-    "@babel/core": ^7.0.0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2814,40 +2814,40 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-new-target@workspace:^, @babel/plugin-transform-new-target@workspace:packages/babel-plugin-transform-new-target":
+"@babel/plugin-transform-new-target@workspace:*, @babel/plugin-transform-new-target@workspace:packages/babel-plugin-transform-new-target":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-new-target@workspace:packages/babel-plugin-transform-new-target"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-proposal-class-properties": "workspace:^"
-    "@babel/plugin-transform-arrow-functions": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/plugin-proposal-class-properties": "workspace:*"
+    "@babel/plugin-transform-arrow-functions": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-transform-object-assign@workspace:^, @babel/plugin-transform-object-assign@workspace:packages/babel-plugin-transform-object-assign":
+"@babel/plugin-transform-object-assign@workspace:*, @babel/plugin-transform-object-assign@workspace:packages/babel-plugin-transform-object-assign":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-object-assign@workspace:packages/babel-plugin-transform-object-assign"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-transform-object-set-prototype-of-to-assign@workspace:^, @babel/plugin-transform-object-set-prototype-of-to-assign@workspace:packages/babel-plugin-transform-object-set-prototype-of-to-assign":
+"@babel/plugin-transform-object-set-prototype-of-to-assign@workspace:*, @babel/plugin-transform-object-set-prototype-of-to-assign@workspace:packages/babel-plugin-transform-object-set-prototype-of-to-assign":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-object-set-prototype-of-to-assign@workspace:packages/babel-plugin-transform-object-set-prototype-of-to-assign"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2863,16 +2863,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-object-super@workspace:^, @babel/plugin-transform-object-super@workspace:packages/babel-plugin-transform-object-super":
+"@babel/plugin-transform-object-super@workspace:*, @babel/plugin-transform-object-super@workspace:packages/babel-plugin-transform-object-super":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-object-super@workspace:packages/babel-plugin-transform-object-super"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/helper-replace-supers": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/helper-replace-supers": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2887,15 +2887,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-parameters@workspace:^, @babel/plugin-transform-parameters@workspace:packages/babel-plugin-transform-parameters":
+"@babel/plugin-transform-parameters@workspace:*, @babel/plugin-transform-parameters@workspace:packages/babel-plugin-transform-parameters":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-parameters@workspace:packages/babel-plugin-transform-parameters"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -2910,157 +2910,157 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-property-literals@workspace:^, @babel/plugin-transform-property-literals@workspace:packages/babel-plugin-transform-property-literals":
+"@babel/plugin-transform-property-literals@workspace:*, @babel/plugin-transform-property-literals@workspace:packages/babel-plugin-transform-property-literals":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-property-literals@workspace:packages/babel-plugin-transform-property-literals"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-transform-property-mutators@workspace:^, @babel/plugin-transform-property-mutators@workspace:packages/babel-plugin-transform-property-mutators":
+"@babel/plugin-transform-property-mutators@workspace:*, @babel/plugin-transform-property-mutators@workspace:packages/babel-plugin-transform-property-mutators":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-property-mutators@workspace:packages/babel-plugin-transform-property-mutators"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-transform-proto-to-assign@workspace:^, @babel/plugin-transform-proto-to-assign@workspace:packages/babel-plugin-transform-proto-to-assign":
+"@babel/plugin-transform-proto-to-assign@workspace:*, @babel/plugin-transform-proto-to-assign@workspace:packages/babel-plugin-transform-proto-to-assign":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-proto-to-assign@workspace:packages/babel-plugin-transform-proto-to-assign"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-transform-react-constant-elements@workspace:^, @babel/plugin-transform-react-constant-elements@workspace:packages/babel-plugin-transform-react-constant-elements":
+"@babel/plugin-transform-react-constant-elements@workspace:*, @babel/plugin-transform-react-constant-elements@workspace:packages/babel-plugin-transform-react-constant-elements":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-react-constant-elements@workspace:packages/babel-plugin-transform-react-constant-elements"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-transform-react-display-name@workspace:^, @babel/plugin-transform-react-display-name@workspace:packages/babel-plugin-transform-react-display-name":
+"@babel/plugin-transform-react-display-name@workspace:*, @babel/plugin-transform-react-display-name@workspace:packages/babel-plugin-transform-react-display-name":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-react-display-name@workspace:packages/babel-plugin-transform-react-display-name"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-transform-react-inline-elements@workspace:^, @babel/plugin-transform-react-inline-elements@workspace:packages/babel-plugin-transform-react-inline-elements":
+"@babel/plugin-transform-react-inline-elements@workspace:*, @babel/plugin-transform-react-inline-elements@workspace:packages/babel-plugin-transform-react-inline-elements":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-react-inline-elements@workspace:packages/babel-plugin-transform-react-inline-elements"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-builder-react-jsx": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-builder-react-jsx": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-transform-react-jsx-compat@workspace:^, @babel/plugin-transform-react-jsx-compat@workspace:packages/babel-plugin-transform-react-jsx-compat":
+"@babel/plugin-transform-react-jsx-compat@workspace:*, @babel/plugin-transform-react-jsx-compat@workspace:packages/babel-plugin-transform-react-jsx-compat":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-react-jsx-compat@workspace:packages/babel-plugin-transform-react-jsx-compat"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-builder-react-jsx": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-builder-react-jsx": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-transform-react-jsx-development@workspace:^, @babel/plugin-transform-react-jsx-development@workspace:packages/babel-plugin-transform-react-jsx-development":
+"@babel/plugin-transform-react-jsx-development@workspace:*, @babel/plugin-transform-react-jsx-development@workspace:packages/babel-plugin-transform-react-jsx-development":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-react-jsx-development@workspace:packages/babel-plugin-transform-react-jsx-development"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/plugin-transform-react-jsx": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/plugin-transform-react-jsx": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-transform-react-jsx-self@workspace:^, @babel/plugin-transform-react-jsx-self@workspace:packages/babel-plugin-transform-react-jsx-self":
+"@babel/plugin-transform-react-jsx-self@workspace:*, @babel/plugin-transform-react-jsx-self@workspace:packages/babel-plugin-transform-react-jsx-self":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-react-jsx-self@workspace:packages/babel-plugin-transform-react-jsx-self"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-jsx": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/plugin-syntax-jsx": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-transform-react-jsx-source@workspace:^, @babel/plugin-transform-react-jsx-source@workspace:packages/babel-plugin-transform-react-jsx-source":
+"@babel/plugin-transform-react-jsx-source@workspace:*, @babel/plugin-transform-react-jsx-source@workspace:packages/babel-plugin-transform-react-jsx-source":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-react-jsx-source@workspace:packages/babel-plugin-transform-react-jsx-source"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-jsx": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/plugin-syntax-jsx": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-transform-react-jsx@workspace:^, @babel/plugin-transform-react-jsx@workspace:packages/babel-plugin-transform-react-jsx":
+"@babel/plugin-transform-react-jsx@workspace:*, @babel/plugin-transform-react-jsx@workspace:packages/babel-plugin-transform-react-jsx":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-react-jsx@workspace:packages/babel-plugin-transform-react-jsx"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-annotate-as-pure": "workspace:^"
-    "@babel/helper-module-imports": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-jsx": "workspace:^"
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-annotate-as-pure": "workspace:*"
+    "@babel/helper-module-imports": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/plugin-syntax-jsx": "workspace:*"
+    "@babel/traverse": "workspace:*"
+    "@babel/types": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-transform-react-pure-annotations@workspace:^, @babel/plugin-transform-react-pure-annotations@workspace:packages/babel-plugin-transform-react-pure-annotations":
+"@babel/plugin-transform-react-pure-annotations@workspace:*, @babel/plugin-transform-react-pure-annotations@workspace:packages/babel-plugin-transform-react-pure-annotations":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-react-pure-annotations@workspace:packages/babel-plugin-transform-react-pure-annotations"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-annotate-as-pure": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-annotate-as-pure": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -3076,16 +3076,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-regenerator@workspace:^, @babel/plugin-transform-regenerator@workspace:packages/babel-plugin-transform-regenerator":
+"@babel/plugin-transform-regenerator@workspace:*, @babel/plugin-transform-regenerator@workspace:packages/babel-plugin-transform-regenerator":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-regenerator@workspace:packages/babel-plugin-transform-regenerator"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
     regenerator-transform: ^0.15.1
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -3100,15 +3100,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-reserved-words@workspace:^, @babel/plugin-transform-reserved-words@workspace:packages/babel-plugin-transform-reserved-words":
+"@babel/plugin-transform-reserved-words@workspace:*, @babel/plugin-transform-reserved-words@workspace:packages/babel-plugin-transform-reserved-words":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-reserved-words@workspace:packages/babel-plugin-transform-reserved-words"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -3128,27 +3128,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-runtime@workspace:^, @babel/plugin-transform-runtime@workspace:packages/babel-plugin-transform-runtime":
+"@babel/plugin-transform-runtime@workspace:*, @babel/plugin-transform-runtime@workspace:packages/babel-plugin-transform-runtime":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-runtime@workspace:packages/babel-plugin-transform-runtime"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-module-imports": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/helpers": "workspace:^"
-    "@babel/preset-env": "workspace:^"
-    "@babel/runtime": "workspace:^"
-    "@babel/runtime-corejs3": "workspace:^"
-    "@babel/template": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-module-imports": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/helpers": "workspace:*"
+    "@babel/preset-env": "workspace:*"
+    "@babel/runtime": "workspace:*"
+    "@babel/runtime-corejs3": "workspace:*"
+    "@babel/template": "workspace:*"
+    "@babel/types": "workspace:*"
     babel-plugin-polyfill-corejs2: ^0.3.3
     babel-plugin-polyfill-corejs3: ^0.6.0
     babel-plugin-polyfill-regenerator: ^0.4.1
     make-dir: "condition:BABEL_8_BREAKING ? : ^2.1.0"
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -3163,15 +3163,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-shorthand-properties@workspace:^, @babel/plugin-transform-shorthand-properties@workspace:packages/babel-plugin-transform-shorthand-properties":
+"@babel/plugin-transform-shorthand-properties@workspace:*, @babel/plugin-transform-shorthand-properties@workspace:packages/babel-plugin-transform-shorthand-properties":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-shorthand-properties@workspace:packages/babel-plugin-transform-shorthand-properties"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -3187,16 +3187,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-spread@workspace:^, @babel/plugin-transform-spread@workspace:packages/babel-plugin-transform-spread":
+"@babel/plugin-transform-spread@workspace:*, @babel/plugin-transform-spread@workspace:packages/babel-plugin-transform-spread":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-spread@workspace:packages/babel-plugin-transform-spread"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/helper-skip-transparent-expression-wrappers": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -3211,27 +3211,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-sticky-regex@workspace:^, @babel/plugin-transform-sticky-regex@workspace:packages/babel-plugin-transform-sticky-regex":
+"@babel/plugin-transform-sticky-regex@workspace:*, @babel/plugin-transform-sticky-regex@workspace:packages/babel-plugin-transform-sticky-regex":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-sticky-regex@workspace:packages/babel-plugin-transform-sticky-regex"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-transform-strict-mode@workspace:^, @babel/plugin-transform-strict-mode@workspace:packages/babel-plugin-transform-strict-mode":
+"@babel/plugin-transform-strict-mode@workspace:*, @babel/plugin-transform-strict-mode@workspace:packages/babel-plugin-transform-strict-mode":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-strict-mode@workspace:packages/babel-plugin-transform-strict-mode"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -3246,15 +3246,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-template-literals@workspace:^, @babel/plugin-transform-template-literals@workspace:packages/babel-plugin-transform-template-literals":
+"@babel/plugin-transform-template-literals@workspace:*, @babel/plugin-transform-template-literals@workspace:packages/babel-plugin-transform-template-literals":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-template-literals@workspace:packages/babel-plugin-transform-template-literals"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -3269,18 +3269,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-typeof-symbol@workspace:^, @babel/plugin-transform-typeof-symbol@workspace:packages/babel-plugin-transform-typeof-symbol":
+"@babel/plugin-transform-typeof-symbol@workspace:*, @babel/plugin-transform-typeof-symbol@workspace:packages/babel-plugin-transform-typeof-symbol":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-typeof-symbol@workspace:packages/babel-plugin-transform-typeof-symbol"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/runtime": "workspace:^"
-    "@babel/runtime-corejs2": "workspace:^"
-    "@babel/runtime-corejs3": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/runtime": "workspace:*"
+    "@babel/runtime-corejs2": "workspace:*"
+    "@babel/runtime-corejs3": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -3297,20 +3297,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-typescript@workspace:^, @babel/plugin-transform-typescript@workspace:packages/babel-plugin-transform-typescript":
+"@babel/plugin-transform-typescript@workspace:*, @babel/plugin-transform-typescript@workspace:packages/babel-plugin-transform-typescript":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-typescript@workspace:packages/babel-plugin-transform-typescript"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-annotate-as-pure": "workspace:^"
-    "@babel/helper-create-class-features-plugin": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-typescript": "workspace:^"
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-annotate-as-pure": "workspace:*"
+    "@babel/helper-create-class-features-plugin": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/plugin-syntax-typescript": "workspace:*"
+    "@babel/traverse": "workspace:*"
+    "@babel/types": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -3325,15 +3325,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-unicode-escapes@workspace:^, @babel/plugin-transform-unicode-escapes@workspace:packages/babel-plugin-transform-unicode-escapes":
+"@babel/plugin-transform-unicode-escapes@workspace:*, @babel/plugin-transform-unicode-escapes@workspace:packages/babel-plugin-transform-unicode-escapes":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-unicode-escapes@workspace:packages/babel-plugin-transform-unicode-escapes"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -3349,16 +3349,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-unicode-regex@workspace:^, @babel/plugin-transform-unicode-regex@workspace:packages/babel-plugin-transform-unicode-regex":
+"@babel/plugin-transform-unicode-regex@workspace:*, @babel/plugin-transform-unicode-regex@workspace:packages/babel-plugin-transform-unicode-regex":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-unicode-regex@workspace:packages/babel-plugin-transform-unicode-regex"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-create-regexp-features-plugin": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-create-regexp-features-plugin": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -3447,40 +3447,40 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/preset-env@workspace:^, @babel/preset-env@workspace:packages/babel-preset-env":
+"@babel/preset-env@workspace:*, @babel/preset-env@workspace:packages/babel-preset-env":
   version: 0.0.0-use.local
   resolution: "@babel/preset-env@workspace:packages/babel-preset-env"
   dependencies:
-    "@babel/compat-data": "workspace:^"
-    "@babel/core": "workspace:^"
+    "@babel/compat-data": "workspace:*"
+    "@babel/core": "workspace:*"
     "@babel/core-7.12": "npm:@babel/core@7.12.9"
-    "@babel/helper-compilation-targets": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/helper-validator-option": "workspace:^"
-    "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression": "workspace:^"
-    "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining": "workspace:^"
-    "@babel/plugin-proposal-async-generator-functions": "workspace:^"
-    "@babel/plugin-proposal-class-properties": "workspace:^"
-    "@babel/plugin-proposal-class-static-block": "workspace:^"
-    "@babel/plugin-proposal-dynamic-import": "workspace:^"
-    "@babel/plugin-proposal-export-namespace-from": "workspace:^"
-    "@babel/plugin-proposal-json-strings": "workspace:^"
-    "@babel/plugin-proposal-logical-assignment-operators": "workspace:^"
-    "@babel/plugin-proposal-nullish-coalescing-operator": "workspace:^"
-    "@babel/plugin-proposal-numeric-separator": "workspace:^"
-    "@babel/plugin-proposal-object-rest-spread": "workspace:^"
-    "@babel/plugin-proposal-optional-catch-binding": "workspace:^"
-    "@babel/plugin-proposal-optional-chaining": "workspace:^"
-    "@babel/plugin-proposal-private-methods": "workspace:^"
-    "@babel/plugin-proposal-private-property-in-object": "workspace:^"
-    "@babel/plugin-proposal-unicode-property-regex": "workspace:^"
+    "@babel/helper-compilation-targets": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/helper-validator-option": "workspace:*"
+    "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression": "workspace:*"
+    "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining": "workspace:*"
+    "@babel/plugin-proposal-async-generator-functions": "workspace:*"
+    "@babel/plugin-proposal-class-properties": "workspace:*"
+    "@babel/plugin-proposal-class-static-block": "workspace:*"
+    "@babel/plugin-proposal-dynamic-import": "workspace:*"
+    "@babel/plugin-proposal-export-namespace-from": "workspace:*"
+    "@babel/plugin-proposal-json-strings": "workspace:*"
+    "@babel/plugin-proposal-logical-assignment-operators": "workspace:*"
+    "@babel/plugin-proposal-nullish-coalescing-operator": "workspace:*"
+    "@babel/plugin-proposal-numeric-separator": "workspace:*"
+    "@babel/plugin-proposal-object-rest-spread": "workspace:*"
+    "@babel/plugin-proposal-optional-catch-binding": "workspace:*"
+    "@babel/plugin-proposal-optional-chaining": "workspace:*"
+    "@babel/plugin-proposal-private-methods": "workspace:*"
+    "@babel/plugin-proposal-private-property-in-object": "workspace:*"
+    "@babel/plugin-proposal-unicode-property-regex": "workspace:*"
     "@babel/plugin-syntax-async-generators": ^7.8.4
     "@babel/plugin-syntax-class-properties": ^7.12.13
     "@babel/plugin-syntax-class-static-block": ^7.14.5
     "@babel/plugin-syntax-dynamic-import": ^7.8.3
     "@babel/plugin-syntax-export-namespace-from": ^7.8.3
-    "@babel/plugin-syntax-import-assertions": "workspace:^"
+    "@babel/plugin-syntax-import-assertions": "workspace:*"
     "@babel/plugin-syntax-json-strings": ^7.8.3
     "@babel/plugin-syntax-logical-assignment-operators": ^7.10.4
     "@babel/plugin-syntax-nullish-coalescing-operator": ^7.8.3
@@ -3490,62 +3490,62 @@ __metadata:
     "@babel/plugin-syntax-optional-chaining": ^7.8.3
     "@babel/plugin-syntax-private-property-in-object": ^7.14.5
     "@babel/plugin-syntax-top-level-await": ^7.14.5
-    "@babel/plugin-transform-arrow-functions": "workspace:^"
-    "@babel/plugin-transform-async-to-generator": "workspace:^"
-    "@babel/plugin-transform-block-scoped-functions": "workspace:^"
-    "@babel/plugin-transform-block-scoping": "workspace:^"
-    "@babel/plugin-transform-classes": "workspace:^"
-    "@babel/plugin-transform-computed-properties": "workspace:^"
-    "@babel/plugin-transform-destructuring": "workspace:^"
-    "@babel/plugin-transform-dotall-regex": "workspace:^"
-    "@babel/plugin-transform-duplicate-keys": "workspace:^"
-    "@babel/plugin-transform-exponentiation-operator": "workspace:^"
-    "@babel/plugin-transform-for-of": "workspace:^"
-    "@babel/plugin-transform-function-name": "workspace:^"
-    "@babel/plugin-transform-literals": "workspace:^"
-    "@babel/plugin-transform-member-expression-literals": "workspace:^"
-    "@babel/plugin-transform-modules-amd": "workspace:^"
-    "@babel/plugin-transform-modules-commonjs": "workspace:^"
-    "@babel/plugin-transform-modules-systemjs": "workspace:^"
-    "@babel/plugin-transform-modules-umd": "workspace:^"
-    "@babel/plugin-transform-named-capturing-groups-regex": "workspace:^"
-    "@babel/plugin-transform-new-target": "workspace:^"
-    "@babel/plugin-transform-object-super": "workspace:^"
-    "@babel/plugin-transform-parameters": "workspace:^"
-    "@babel/plugin-transform-property-literals": "workspace:^"
-    "@babel/plugin-transform-regenerator": "workspace:^"
-    "@babel/plugin-transform-reserved-words": "workspace:^"
-    "@babel/plugin-transform-shorthand-properties": "workspace:^"
-    "@babel/plugin-transform-spread": "workspace:^"
-    "@babel/plugin-transform-sticky-regex": "workspace:^"
-    "@babel/plugin-transform-template-literals": "workspace:^"
-    "@babel/plugin-transform-typeof-symbol": "workspace:^"
-    "@babel/plugin-transform-unicode-escapes": "workspace:^"
-    "@babel/plugin-transform-unicode-regex": "workspace:^"
+    "@babel/plugin-transform-arrow-functions": "workspace:*"
+    "@babel/plugin-transform-async-to-generator": "workspace:*"
+    "@babel/plugin-transform-block-scoped-functions": "workspace:*"
+    "@babel/plugin-transform-block-scoping": "workspace:*"
+    "@babel/plugin-transform-classes": "workspace:*"
+    "@babel/plugin-transform-computed-properties": "workspace:*"
+    "@babel/plugin-transform-destructuring": "workspace:*"
+    "@babel/plugin-transform-dotall-regex": "workspace:*"
+    "@babel/plugin-transform-duplicate-keys": "workspace:*"
+    "@babel/plugin-transform-exponentiation-operator": "workspace:*"
+    "@babel/plugin-transform-for-of": "workspace:*"
+    "@babel/plugin-transform-function-name": "workspace:*"
+    "@babel/plugin-transform-literals": "workspace:*"
+    "@babel/plugin-transform-member-expression-literals": "workspace:*"
+    "@babel/plugin-transform-modules-amd": "workspace:*"
+    "@babel/plugin-transform-modules-commonjs": "workspace:*"
+    "@babel/plugin-transform-modules-systemjs": "workspace:*"
+    "@babel/plugin-transform-modules-umd": "workspace:*"
+    "@babel/plugin-transform-named-capturing-groups-regex": "workspace:*"
+    "@babel/plugin-transform-new-target": "workspace:*"
+    "@babel/plugin-transform-object-super": "workspace:*"
+    "@babel/plugin-transform-parameters": "workspace:*"
+    "@babel/plugin-transform-property-literals": "workspace:*"
+    "@babel/plugin-transform-regenerator": "workspace:*"
+    "@babel/plugin-transform-reserved-words": "workspace:*"
+    "@babel/plugin-transform-shorthand-properties": "workspace:*"
+    "@babel/plugin-transform-spread": "workspace:*"
+    "@babel/plugin-transform-sticky-regex": "workspace:*"
+    "@babel/plugin-transform-template-literals": "workspace:*"
+    "@babel/plugin-transform-typeof-symbol": "workspace:*"
+    "@babel/plugin-transform-unicode-escapes": "workspace:*"
+    "@babel/plugin-transform-unicode-regex": "workspace:*"
     "@babel/preset-modules": ^0.1.5
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/traverse": "workspace:*"
+    "@babel/types": "workspace:*"
     babel-plugin-polyfill-corejs2: ^0.3.3
     babel-plugin-polyfill-corejs3: ^0.6.0
     babel-plugin-polyfill-regenerator: ^0.4.1
     core-js-compat: ^3.25.1
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/preset-flow@workspace:^, @babel/preset-flow@workspace:packages/babel-preset-flow":
+"@babel/preset-flow@workspace:*, @babel/preset-flow@workspace:packages/babel-preset-flow":
   version: 0.0.0-use.local
   resolution: "@babel/preset-flow@workspace:packages/babel-preset-flow"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/helper-validator-option": "workspace:^"
-    "@babel/plugin-transform-flow-strip-types": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/helper-validator-option": "workspace:*"
+    "@babel/plugin-transform-flow-strip-types": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -3564,20 +3564,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/preset-react@workspace:^, @babel/preset-react@workspace:packages/babel-preset-react":
+"@babel/preset-react@workspace:*, @babel/preset-react@workspace:packages/babel-preset-react":
   version: 0.0.0-use.local
   resolution: "@babel/preset-react@workspace:packages/babel-preset-react"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/helper-validator-option": "workspace:^"
-    "@babel/plugin-transform-react-display-name": "workspace:^"
-    "@babel/plugin-transform-react-jsx": "workspace:^"
-    "@babel/plugin-transform-react-jsx-development": "workspace:^"
-    "@babel/plugin-transform-react-pure-annotations": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/helper-validator-option": "workspace:*"
+    "@babel/plugin-transform-react-display-name": "workspace:*"
+    "@babel/plugin-transform-react-jsx": "workspace:*"
+    "@babel/plugin-transform-react-jsx-development": "workspace:*"
+    "@babel/plugin-transform-react-pure-annotations": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -3594,29 +3594,29 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/preset-typescript@workspace:^, @babel/preset-typescript@workspace:packages/babel-preset-typescript":
+"@babel/preset-typescript@workspace:*, @babel/preset-typescript@workspace:packages/babel-preset-typescript":
   version: 0.0.0-use.local
   resolution: "@babel/preset-typescript@workspace:packages/babel-preset-typescript"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/helper-validator-option": "workspace:^"
-    "@babel/plugin-syntax-jsx": "workspace:^"
-    "@babel/plugin-transform-modules-commonjs": "workspace:^"
-    "@babel/plugin-transform-typescript": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-plugin-utils": "workspace:*"
+    "@babel/helper-validator-option": "workspace:*"
+    "@babel/plugin-syntax-jsx": "workspace:*"
+    "@babel/plugin-transform-modules-commonjs": "workspace:*"
+    "@babel/plugin-transform-typescript": "workspace:*"
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
-"@babel/register@workspace:^, @babel/register@workspace:packages/babel-register":
+"@babel/register@workspace:*, @babel/register@workspace:packages/babel-register":
   version: 0.0.0-use.local
   resolution: "@babel/register@workspace:packages/babel-register"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/plugin-transform-arrow-functions": "workspace:^"
-    "@babel/plugin-transform-modules-commonjs": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/plugin-transform-arrow-functions": "workspace:*"
+    "@babel/plugin-transform-modules-commonjs": "workspace:*"
     browserify: ^16.5.2
     clone-deep: ^4.0.1
     find-cache-dir: "condition:BABEL_8_BREAKING ? ^3.3.1 : ^2.0.0"
@@ -3624,7 +3624,7 @@ __metadata:
     pirates: ^4.0.5
     source-map-support: ^0.5.16
   peerDependencies:
-    "@babel/core": ^7.0.0-0 || 7.21.4-esm.1
+    "@babel/core": ^7.0.0-0 || ^7.21.4-esm.2
   languageName: unknown
   linkType: soft
 
@@ -3635,7 +3635,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime-corejs2@workspace:^, @babel/runtime-corejs2@workspace:packages/babel-runtime-corejs2":
+"@babel/runtime-corejs2@workspace:*, @babel/runtime-corejs2@workspace:packages/babel-runtime-corejs2":
   version: 0.0.0-use.local
   resolution: "@babel/runtime-corejs2@workspace:packages/babel-runtime-corejs2"
   dependencies:
@@ -3644,7 +3644,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/runtime-corejs3@workspace:^, @babel/runtime-corejs3@workspace:packages/babel-runtime-corejs3":
+"@babel/runtime-corejs3@workspace:*, @babel/runtime-corejs3@workspace:packages/babel-runtime-corejs3":
   version: 0.0.0-use.local
   resolution: "@babel/runtime-corejs3@workspace:packages/babel-runtime-corejs3"
   dependencies:
@@ -3662,7 +3662,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@workspace:^, @babel/runtime@workspace:packages/babel-runtime":
+"@babel/runtime@workspace:*, @babel/runtime@workspace:packages/babel-runtime":
   version: 0.0.0-use.local
   resolution: "@babel/runtime@workspace:packages/babel-runtime"
   dependencies:
@@ -3674,106 +3674,106 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/standalone@workspace:packages/babel-standalone"
   dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/plugin-external-helpers": "workspace:^"
-    "@babel/plugin-proposal-async-generator-functions": "workspace:^"
-    "@babel/plugin-proposal-class-properties": "workspace:^"
-    "@babel/plugin-proposal-class-static-block": "workspace:^"
-    "@babel/plugin-proposal-decorators": "workspace:^"
-    "@babel/plugin-proposal-destructuring-private": "workspace:^"
-    "@babel/plugin-proposal-do-expressions": "workspace:^"
-    "@babel/plugin-proposal-duplicate-named-capturing-groups-regex": "workspace:^"
-    "@babel/plugin-proposal-dynamic-import": "workspace:^"
-    "@babel/plugin-proposal-export-default-from": "workspace:^"
-    "@babel/plugin-proposal-export-namespace-from": "workspace:^"
-    "@babel/plugin-proposal-function-bind": "workspace:^"
-    "@babel/plugin-proposal-function-sent": "workspace:^"
-    "@babel/plugin-proposal-json-strings": "workspace:^"
-    "@babel/plugin-proposal-logical-assignment-operators": "workspace:^"
-    "@babel/plugin-proposal-nullish-coalescing-operator": "workspace:^"
-    "@babel/plugin-proposal-numeric-separator": "workspace:^"
-    "@babel/plugin-proposal-object-rest-spread": "workspace:^"
-    "@babel/plugin-proposal-optional-catch-binding": "workspace:^"
-    "@babel/plugin-proposal-optional-chaining": "workspace:^"
-    "@babel/plugin-proposal-pipeline-operator": "workspace:^"
-    "@babel/plugin-proposal-private-methods": "workspace:^"
-    "@babel/plugin-proposal-private-property-in-object": "workspace:^"
-    "@babel/plugin-proposal-record-and-tuple": "workspace:^"
-    "@babel/plugin-proposal-regexp-modifiers": "workspace:^"
-    "@babel/plugin-proposal-throw-expressions": "workspace:^"
-    "@babel/plugin-proposal-unicode-property-regex": "workspace:^"
-    "@babel/plugin-proposal-unicode-sets-regex": "workspace:^"
-    "@babel/plugin-syntax-decimal": "workspace:^"
-    "@babel/plugin-syntax-decorators": "workspace:^"
-    "@babel/plugin-syntax-destructuring-private": "workspace:^"
-    "@babel/plugin-syntax-do-expressions": "workspace:^"
-    "@babel/plugin-syntax-explicit-resource-management": "workspace:^"
-    "@babel/plugin-syntax-export-default-from": "workspace:^"
-    "@babel/plugin-syntax-flow": "workspace:^"
-    "@babel/plugin-syntax-function-bind": "workspace:^"
-    "@babel/plugin-syntax-function-sent": "workspace:^"
-    "@babel/plugin-syntax-import-assertions": "workspace:^"
-    "@babel/plugin-syntax-import-reflection": "workspace:^"
-    "@babel/plugin-syntax-jsx": "workspace:^"
-    "@babel/plugin-syntax-module-blocks": "workspace:^"
-    "@babel/plugin-syntax-pipeline-operator": "workspace:^"
-    "@babel/plugin-syntax-record-and-tuple": "workspace:^"
-    "@babel/plugin-syntax-typescript": "workspace:^"
-    "@babel/plugin-transform-arrow-functions": "workspace:^"
-    "@babel/plugin-transform-async-to-generator": "workspace:^"
-    "@babel/plugin-transform-block-scoped-functions": "workspace:^"
-    "@babel/plugin-transform-block-scoping": "workspace:^"
-    "@babel/plugin-transform-classes": "workspace:^"
-    "@babel/plugin-transform-computed-properties": "workspace:^"
-    "@babel/plugin-transform-destructuring": "workspace:^"
-    "@babel/plugin-transform-dotall-regex": "workspace:^"
-    "@babel/plugin-transform-duplicate-keys": "workspace:^"
-    "@babel/plugin-transform-exponentiation-operator": "workspace:^"
-    "@babel/plugin-transform-flow-comments": "workspace:^"
-    "@babel/plugin-transform-flow-strip-types": "workspace:^"
-    "@babel/plugin-transform-for-of": "workspace:^"
-    "@babel/plugin-transform-function-name": "workspace:^"
-    "@babel/plugin-transform-instanceof": "workspace:^"
-    "@babel/plugin-transform-jscript": "workspace:^"
-    "@babel/plugin-transform-literals": "workspace:^"
-    "@babel/plugin-transform-member-expression-literals": "workspace:^"
-    "@babel/plugin-transform-modules-amd": "workspace:^"
-    "@babel/plugin-transform-modules-commonjs": "workspace:^"
-    "@babel/plugin-transform-modules-systemjs": "workspace:^"
-    "@babel/plugin-transform-modules-umd": "workspace:^"
-    "@babel/plugin-transform-named-capturing-groups-regex": "workspace:^"
-    "@babel/plugin-transform-new-target": "workspace:^"
-    "@babel/plugin-transform-object-assign": "workspace:^"
-    "@babel/plugin-transform-object-set-prototype-of-to-assign": "workspace:^"
-    "@babel/plugin-transform-object-super": "workspace:^"
-    "@babel/plugin-transform-parameters": "workspace:^"
-    "@babel/plugin-transform-property-literals": "workspace:^"
-    "@babel/plugin-transform-property-mutators": "workspace:^"
-    "@babel/plugin-transform-proto-to-assign": "workspace:^"
-    "@babel/plugin-transform-react-constant-elements": "workspace:^"
-    "@babel/plugin-transform-react-display-name": "workspace:^"
-    "@babel/plugin-transform-react-inline-elements": "workspace:^"
-    "@babel/plugin-transform-react-jsx": "workspace:^"
-    "@babel/plugin-transform-react-jsx-compat": "workspace:^"
-    "@babel/plugin-transform-react-jsx-development": "workspace:^"
-    "@babel/plugin-transform-react-jsx-self": "workspace:^"
-    "@babel/plugin-transform-react-jsx-source": "workspace:^"
-    "@babel/plugin-transform-regenerator": "workspace:^"
-    "@babel/plugin-transform-reserved-words": "workspace:^"
-    "@babel/plugin-transform-runtime": "workspace:^"
-    "@babel/plugin-transform-shorthand-properties": "workspace:^"
-    "@babel/plugin-transform-spread": "workspace:^"
-    "@babel/plugin-transform-sticky-regex": "workspace:^"
-    "@babel/plugin-transform-strict-mode": "workspace:^"
-    "@babel/plugin-transform-template-literals": "workspace:^"
-    "@babel/plugin-transform-typeof-symbol": "workspace:^"
-    "@babel/plugin-transform-typescript": "workspace:^"
-    "@babel/plugin-transform-unicode-escapes": "workspace:^"
-    "@babel/plugin-transform-unicode-regex": "workspace:^"
-    "@babel/preset-env": "workspace:^"
-    "@babel/preset-flow": "workspace:^"
-    "@babel/preset-react": "workspace:^"
-    "@babel/preset-typescript": "workspace:^"
+    "@babel/core": "workspace:*"
+    "@babel/plugin-external-helpers": "workspace:*"
+    "@babel/plugin-proposal-async-generator-functions": "workspace:*"
+    "@babel/plugin-proposal-class-properties": "workspace:*"
+    "@babel/plugin-proposal-class-static-block": "workspace:*"
+    "@babel/plugin-proposal-decorators": "workspace:*"
+    "@babel/plugin-proposal-destructuring-private": "workspace:*"
+    "@babel/plugin-proposal-do-expressions": "workspace:*"
+    "@babel/plugin-proposal-duplicate-named-capturing-groups-regex": "workspace:*"
+    "@babel/plugin-proposal-dynamic-import": "workspace:*"
+    "@babel/plugin-proposal-export-default-from": "workspace:*"
+    "@babel/plugin-proposal-export-namespace-from": "workspace:*"
+    "@babel/plugin-proposal-function-bind": "workspace:*"
+    "@babel/plugin-proposal-function-sent": "workspace:*"
+    "@babel/plugin-proposal-json-strings": "workspace:*"
+    "@babel/plugin-proposal-logical-assignment-operators": "workspace:*"
+    "@babel/plugin-proposal-nullish-coalescing-operator": "workspace:*"
+    "@babel/plugin-proposal-numeric-separator": "workspace:*"
+    "@babel/plugin-proposal-object-rest-spread": "workspace:*"
+    "@babel/plugin-proposal-optional-catch-binding": "workspace:*"
+    "@babel/plugin-proposal-optional-chaining": "workspace:*"
+    "@babel/plugin-proposal-pipeline-operator": "workspace:*"
+    "@babel/plugin-proposal-private-methods": "workspace:*"
+    "@babel/plugin-proposal-private-property-in-object": "workspace:*"
+    "@babel/plugin-proposal-record-and-tuple": "workspace:*"
+    "@babel/plugin-proposal-regexp-modifiers": "workspace:*"
+    "@babel/plugin-proposal-throw-expressions": "workspace:*"
+    "@babel/plugin-proposal-unicode-property-regex": "workspace:*"
+    "@babel/plugin-proposal-unicode-sets-regex": "workspace:*"
+    "@babel/plugin-syntax-decimal": "workspace:*"
+    "@babel/plugin-syntax-decorators": "workspace:*"
+    "@babel/plugin-syntax-destructuring-private": "workspace:*"
+    "@babel/plugin-syntax-do-expressions": "workspace:*"
+    "@babel/plugin-syntax-explicit-resource-management": "workspace:*"
+    "@babel/plugin-syntax-export-default-from": "workspace:*"
+    "@babel/plugin-syntax-flow": "workspace:*"
+    "@babel/plugin-syntax-function-bind": "workspace:*"
+    "@babel/plugin-syntax-function-sent": "workspace:*"
+    "@babel/plugin-syntax-import-assertions": "workspace:*"
+    "@babel/plugin-syntax-import-reflection": "workspace:*"
+    "@babel/plugin-syntax-jsx": "workspace:*"
+    "@babel/plugin-syntax-module-blocks": "workspace:*"
+    "@babel/plugin-syntax-pipeline-operator": "workspace:*"
+    "@babel/plugin-syntax-record-and-tuple": "workspace:*"
+    "@babel/plugin-syntax-typescript": "workspace:*"
+    "@babel/plugin-transform-arrow-functions": "workspace:*"
+    "@babel/plugin-transform-async-to-generator": "workspace:*"
+    "@babel/plugin-transform-block-scoped-functions": "workspace:*"
+    "@babel/plugin-transform-block-scoping": "workspace:*"
+    "@babel/plugin-transform-classes": "workspace:*"
+    "@babel/plugin-transform-computed-properties": "workspace:*"
+    "@babel/plugin-transform-destructuring": "workspace:*"
+    "@babel/plugin-transform-dotall-regex": "workspace:*"
+    "@babel/plugin-transform-duplicate-keys": "workspace:*"
+    "@babel/plugin-transform-exponentiation-operator": "workspace:*"
+    "@babel/plugin-transform-flow-comments": "workspace:*"
+    "@babel/plugin-transform-flow-strip-types": "workspace:*"
+    "@babel/plugin-transform-for-of": "workspace:*"
+    "@babel/plugin-transform-function-name": "workspace:*"
+    "@babel/plugin-transform-instanceof": "workspace:*"
+    "@babel/plugin-transform-jscript": "workspace:*"
+    "@babel/plugin-transform-literals": "workspace:*"
+    "@babel/plugin-transform-member-expression-literals": "workspace:*"
+    "@babel/plugin-transform-modules-amd": "workspace:*"
+    "@babel/plugin-transform-modules-commonjs": "workspace:*"
+    "@babel/plugin-transform-modules-systemjs": "workspace:*"
+    "@babel/plugin-transform-modules-umd": "workspace:*"
+    "@babel/plugin-transform-named-capturing-groups-regex": "workspace:*"
+    "@babel/plugin-transform-new-target": "workspace:*"
+    "@babel/plugin-transform-object-assign": "workspace:*"
+    "@babel/plugin-transform-object-set-prototype-of-to-assign": "workspace:*"
+    "@babel/plugin-transform-object-super": "workspace:*"
+    "@babel/plugin-transform-parameters": "workspace:*"
+    "@babel/plugin-transform-property-literals": "workspace:*"
+    "@babel/plugin-transform-property-mutators": "workspace:*"
+    "@babel/plugin-transform-proto-to-assign": "workspace:*"
+    "@babel/plugin-transform-react-constant-elements": "workspace:*"
+    "@babel/plugin-transform-react-display-name": "workspace:*"
+    "@babel/plugin-transform-react-inline-elements": "workspace:*"
+    "@babel/plugin-transform-react-jsx": "workspace:*"
+    "@babel/plugin-transform-react-jsx-compat": "workspace:*"
+    "@babel/plugin-transform-react-jsx-development": "workspace:*"
+    "@babel/plugin-transform-react-jsx-self": "workspace:*"
+    "@babel/plugin-transform-react-jsx-source": "workspace:*"
+    "@babel/plugin-transform-regenerator": "workspace:*"
+    "@babel/plugin-transform-reserved-words": "workspace:*"
+    "@babel/plugin-transform-runtime": "workspace:*"
+    "@babel/plugin-transform-shorthand-properties": "workspace:*"
+    "@babel/plugin-transform-spread": "workspace:*"
+    "@babel/plugin-transform-sticky-regex": "workspace:*"
+    "@babel/plugin-transform-strict-mode": "workspace:*"
+    "@babel/plugin-transform-template-literals": "workspace:*"
+    "@babel/plugin-transform-typeof-symbol": "workspace:*"
+    "@babel/plugin-transform-typescript": "workspace:*"
+    "@babel/plugin-transform-unicode-escapes": "workspace:*"
+    "@babel/plugin-transform-unicode-regex": "workspace:*"
+    "@babel/preset-env": "workspace:*"
+    "@babel/preset-flow": "workspace:*"
+    "@babel/preset-react": "workspace:*"
+    "@babel/preset-typescript": "workspace:*"
     acorn: ^8.7.0
   languageName: unknown
   linkType: soft
@@ -3789,13 +3789,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/template@workspace:^, @babel/template@workspace:packages/babel-template":
+"@babel/template@workspace:*, @babel/template@workspace:packages/babel-template":
   version: 0.0.0-use.local
   resolution: "@babel/template@workspace:packages/babel-template"
   dependencies:
-    "@babel/code-frame": "workspace:^"
-    "@babel/parser": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/code-frame": "workspace:*"
+    "@babel/parser": "workspace:*"
+    "@babel/types": "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -3803,8 +3803,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/test-esm@workspace:test/esm"
   dependencies:
-    "@babel/runtime": "workspace:^"
-    "@babel/runtime-corejs3": "workspace:^"
+    "@babel/runtime": "workspace:*"
+    "@babel/runtime-corejs3": "workspace:*"
     chalk: ^4.1.0
   languageName: unknown
   linkType: soft
@@ -3827,19 +3827,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/traverse@workspace:^, @babel/traverse@workspace:packages/babel-traverse":
+"@babel/traverse@workspace:*, @babel/traverse@workspace:packages/babel-traverse":
   version: 0.0.0-use.local
   resolution: "@babel/traverse@workspace:packages/babel-traverse"
   dependencies:
-    "@babel/code-frame": "workspace:^"
-    "@babel/generator": "workspace:^"
-    "@babel/helper-environment-visitor": "workspace:^"
-    "@babel/helper-function-name": "workspace:^"
-    "@babel/helper-hoist-variables": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-split-export-declaration": "workspace:^"
-    "@babel/parser": "workspace:^"
-    "@babel/types": "workspace:^"
+    "@babel/code-frame": "workspace:*"
+    "@babel/generator": "workspace:*"
+    "@babel/helper-environment-visitor": "workspace:*"
+    "@babel/helper-function-name": "workspace:*"
+    "@babel/helper-hoist-variables": "workspace:*"
+    "@babel/helper-plugin-test-runner": "workspace:*"
+    "@babel/helper-split-export-declaration": "workspace:*"
+    "@babel/parser": "workspace:*"
+    "@babel/types": "workspace:*"
     debug: ^4.1.0
     globals: "condition:BABEL_8_BREAKING ? ^13.5.0 : ^11.1.0"
   languageName: unknown
@@ -3856,14 +3856,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/types@workspace:*, @babel/types@workspace:^, @babel/types@workspace:packages/babel-types":
+"@babel/types@workspace:*, @babel/types@workspace:packages/babel-types":
   version: 0.0.0-use.local
   resolution: "@babel/types@workspace:packages/babel-types"
   dependencies:
-    "@babel/generator": "workspace:^"
-    "@babel/helper-string-parser": "workspace:^"
-    "@babel/helper-validator-identifier": "workspace:^"
-    "@babel/parser": "workspace:^"
+    "@babel/generator": "workspace:*"
+    "@babel/helper-string-parser": "workspace:*"
+    "@babel/helper-validator-identifier": "workspace:*"
+    "@babel/parser": "workspace:*"
     chalk: ^4.1.0
     glob: ^7.2.0
     to-fast-properties: "condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0"
@@ -6057,10 +6057,10 @@ __metadata:
   dependencies:
     "@babel/cli": ^7.21.0
     "@babel/core": ^7.21.0
-    "@babel/eslint-config-internal": "workspace:^"
-    "@babel/eslint-parser": "workspace:^"
-    "@babel/eslint-plugin-development": "workspace:^"
-    "@babel/eslint-plugin-development-internal": "workspace:^"
+    "@babel/eslint-config-internal": "workspace:*"
+    "@babel/eslint-parser": "workspace:*"
+    "@babel/eslint-plugin-development": "workspace:*"
+    "@babel/eslint-plugin-development-internal": "workspace:*"
     "@babel/plugin-proposal-dynamic-import": ^7.18.6
     "@babel/plugin-proposal-export-namespace-from": ^7.18.9
     "@babel/plugin-proposal-object-rest-spread": ^7.20.7

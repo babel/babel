@@ -8,5 +8,5 @@
     "@babel/runtime-corejs3": "workspace:*",
     "chalk": "^4.1.0"
   },
-  "version": "7.21.4-esm.2"
+  "version": "7.21.4-esm.3"
 }
