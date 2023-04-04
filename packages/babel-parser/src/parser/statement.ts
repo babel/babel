@@ -2984,7 +2984,7 @@ export default abstract class StatementParser extends ExpressionParser {
   /**
    * parse assert entries
    *
-   * @see {@link https://tc39.es/proposal-import-assertions/#prod-AssertEntries AssertEntries}
+   * @see {@link https://tc39.es/proposal-import-attributes/#prod-WithEntries WithEntries}
    */
   parseImportAttributes(): N.ImportAttribute[] {
     this.expect(tt.braceL);
