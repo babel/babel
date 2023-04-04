@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-record-and-tuple",
-  "version": "7.21.4-esm",
+  "version": "7.21.4-esm.1",
   "description": "A transform for Record and Tuple syntax.",
   "repository": {
     "type": "git",
@@ -26,7 +26,7 @@
     "@babel/plugin-syntax-record-and-tuple": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.12.0 || 7.21.4-esm"
+    "@babel/core": "^7.12.0 || 7.21.4-esm.1"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

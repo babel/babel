@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-validator-identifier",
-  "version": "7.21.4-esm",
+  "version": "7.21.4-esm.1",
   "description": "Validate identifier/keywords name",
   "repository": {
     "type": "git",

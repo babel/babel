@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-template-literals",
-  "version": "7.21.4-esm",
+  "version": "7.21.4-esm.1",
   "description": "Compile ES2015 template literals to ES5",
   "repository": {
     "type": "git",
@@ -19,7 +19,7 @@
     "babel-plugin"
   ],
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0 || 7.21.4-esm"
+    "@babel/core": "^7.0.0-0 || 7.21.4-esm.1"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

@@ -6,5 +6,5 @@
     "@babel/runtime-corejs3": "workspace:^"
   },
   "type": "commonjs",
-  "version": "7.21.4-esm"
+  "version": "7.21.4-esm.1"
 }

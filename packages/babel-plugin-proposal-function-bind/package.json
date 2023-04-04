@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-function-bind",
-  "version": "7.21.4-esm",
+  "version": "7.21.4-esm.1",
   "description": "Compile function bind operator to ES5",
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
     "@babel/plugin-syntax-function-bind": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0 || 7.21.4-esm"
+    "@babel/core": "^7.0.0-0 || 7.21.4-esm.1"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

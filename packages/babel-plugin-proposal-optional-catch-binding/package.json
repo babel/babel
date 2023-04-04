@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-optional-catch-binding",
-  "version": "7.21.4-esm",
+  "version": "7.21.4-esm.1",
   "description": "Compile optional catch bindings",
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
     "@babel/plugin-syntax-optional-catch-binding": "^7.8.3"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0 || 7.21.4-esm"
+    "@babel/core": "^7.0.0-0 || 7.21.4-esm.1"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

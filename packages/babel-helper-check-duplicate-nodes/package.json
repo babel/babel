@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-check-duplicate-nodes",
-  "version": "7.21.4-esm",
+  "version": "7.21.4-esm.1",
   "description": "Babel helper module for babel transforms authors to check the AST against duplicated nodes.",
   "main": "./lib/index.js",
   "exports": {

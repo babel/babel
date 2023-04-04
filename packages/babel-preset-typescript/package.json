@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-typescript",
-  "version": "7.21.4-esm",
+  "version": "7.21.4-esm.1",
   "description": "Babel preset for TypeScript.",
   "repository": {
     "type": "git",
@@ -24,7 +24,7 @@
     "@babel/plugin-transform-typescript": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0 || 7.21.4-esm"
+    "@babel/core": "^7.0.0-0 || 7.21.4-esm.1"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

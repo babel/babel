@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-modules-umd",
-  "version": "7.21.4-esm",
+  "version": "7.21.4-esm.1",
   "description": "This plugin transforms ES2015 modules to UMD",
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
     "babel-plugin"
   ],
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0 || 7.21.4-esm"
+    "@babel/core": "^7.0.0-0 || 7.21.4-esm.1"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

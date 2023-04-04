@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-destructuring-private",
-  "version": "7.21.4-esm",
+  "version": "7.21.4-esm.1",
   "description": "Transform destructuring private proposal",
   "repository": {
     "type": "git",
@@ -22,7 +22,7 @@
     "@babel/plugin-transform-parameters": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.17.0 || 7.21.4-esm"
+    "@babel/core": "^7.17.0 || 7.21.4-esm.1"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

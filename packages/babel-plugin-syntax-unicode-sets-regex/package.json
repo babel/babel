@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-unicode-sets-regex",
-  "version": "7.21.4-esm",
+  "version": "7.21.4-esm.1",
   "description": "Parse regular expressions' unicodeSets (v) flag.",
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-syntax-unicode-sets-regex",
   "license": "MIT",
@@ -31,7 +31,7 @@
     "@babel/helper-plugin-utils": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0 || 7.21.4-esm"
+    "@babel/core": "^7.0.0 || 7.21.4-esm.1"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
