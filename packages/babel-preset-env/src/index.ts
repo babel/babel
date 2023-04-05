@@ -392,10 +392,10 @@ option \`forceAllTransforms: true\` instead.
     getOptionSpecificExcludesFor({ loose }),
     pluginSyntaxMap,
   );
-  removeUnsupportedItems(pluginNames, api.version);
   if (shippedProposals) {
     addProposalSyntaxPlugins(pluginNames, proposalSyntaxPlugins);
   }
+  removeUnsupportedItems(pluginNames, api.version);
   removeUnnecessaryItems(pluginNames, overlappingPlugins);
 
   const polyfillPlugins = getPolyfillPlugins({
