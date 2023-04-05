@@ -4,15 +4,22 @@
 import * as t from "@babel/types";
 import template from "@babel/template";
 
-// TODO(Babel 8): Remove this
-export function getDynamicImportSource(
-  node: t.CallExpression,
-): t.StringLiteral | t.TemplateLiteral {
-  const [source] = node.arguments;
+declare const USE_ESM: boolean, IS_STANDALONE: boolean;
+if (!process.env.BABEL_8_BREAKING) {
+  if (!USE_ESM) {
+    if (!IS_STANDALONE) {
+      // eslint-disable-next-line no-restricted-globals
+      exports.getDynamicImportSource = function getDynamicImportSource(
+        node: t.CallExpression,
+      ): t.StringLiteral | t.TemplateLiteral {
+        const [source] = node.arguments;
 
-  return t.isStringLiteral(source) || t.isTemplateLiteral(source)
-    ? source
-    : (template.expression.ast`\`\${${source}}\`` as t.TemplateLiteral);
+        return t.isStringLiteral(source) || t.isTemplateLiteral(source)
+          ? source
+          : (template.expression.ast`\`\${${source}}\`` as t.TemplateLiteral);
+      };
+    }
+  }
 }
 
 export function buildDynamicImport(

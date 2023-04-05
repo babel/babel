@@ -248,7 +248,7 @@ const handle = {
         // `(a?.#b)()` to `(a == null ? void 0 : a.#b.bind(a))()`
         member.replaceWith(this.boundGet(member));
       } else if (
-        this.delete &&
+        (process.env.BABEL_8_BREAKING || this.delete) &&
         parentPath.isUnaryExpression({ operator: "delete" })
       ) {
         parentPath.replaceWith(this.delete(member));
@@ -498,7 +498,10 @@ const handle = {
     }
 
     // delete MEMBER -> _delete(MEMBER)
-    if (this.delete && parentPath.isUnaryExpression({ operator: "delete" })) {
+    if (
+      (process.env.BABEL_8_BREAKING || this.delete) &&
+      parentPath.isUnaryExpression({ operator: "delete" })
+    ) {
       parentPath.replaceWith(this.delete(member));
       return;
     }
@@ -574,9 +577,7 @@ export interface Handler<State> {
     member: Member,
     args: t.OptionalCallExpression["arguments"],
   ): t.Expression;
-  // TODO(Babel 8): Consider making this required, since `.get` doesn't
-  // really work as a fallback for `.delete`
-  delete?(this: HandlerState<State> & State, member: Member): t.Expression;
+  delete(this: HandlerState<State> & State, member: Member): t.Expression;
 }
 
 export interface HandlerState<State = {}> extends Handler<State> {

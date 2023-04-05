@@ -35,7 +35,19 @@ import type {
 } from "./normalize-and-load-metadata";
 import type { NodePath } from "@babel/traverse";
 
-export { buildDynamicImport, getDynamicImportSource } from "./dynamic-import";
+export { buildDynamicImport } from "./dynamic-import";
+
+declare const USE_ESM: boolean, IS_STANDALONE: boolean;
+if (!process.env.BABEL_8_BREAKING) {
+  if (!USE_ESM) {
+    if (!IS_STANDALONE) {
+      // eslint-disable-next-line no-restricted-globals
+      exports.getDynamicImportSource =
+        // eslint-disable-next-line no-restricted-globals
+        require("./dynamic-import").getDynamicImportSource;
+    }
+  }
+}
 
 export { default as getModuleName } from "./get-module-name";
 export type { PluginOptions } from "./get-module-name";
@@ -67,9 +79,6 @@ export interface RewriteModuleStatementsAndPrepareHeaderOptions {
 export function rewriteModuleStatementsAndPrepareHeader(
   path: NodePath<t.Program>,
   {
-    // TODO(Babel 8): Remove this
-    loose,
-
     exportName,
     strict,
     allowTopLevelThis,
@@ -80,8 +89,12 @@ export function rewriteModuleStatementsAndPrepareHeader(
     esNamespaceOnly,
     filename,
 
-    constantReexports = loose,
-    enumerableModuleMeta = loose,
+    constantReexports = process.env.BABEL_8_BREAKING
+      ? undefined
+      : arguments[1].loose,
+    enumerableModuleMeta = process.env.BABEL_8_BREAKING
+      ? undefined
+      : arguments[1].loose,
     noIncompleteNsImportDetection,
   }: RewriteModuleStatementsAndPrepareHeaderOptions,
 ) {

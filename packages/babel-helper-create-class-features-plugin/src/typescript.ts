@@ -4,9 +4,12 @@ import type * as t from "@babel/types";
 export function assertFieldTransformed(
   path: NodePath<t.ClassProperty | t.ClassDeclaration>,
 ) {
-  // TODO(Babel 8): Also check path.node.definite
-
-  if (path.node.declare) {
+  if (
+    path.node.declare ||
+    (process.env.BABEL_8_BREAKING
+      ? path.isClassProperty({ definite: true })
+      : false)
+  ) {
     throw path.buildCodeFrameError(
       `TypeScript 'declare' fields must first be transformed by ` +
         `@babel/plugin-transform-typescript.\n` +

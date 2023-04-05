@@ -1,7 +1,8 @@
-import explode from "@babel/helper-explode-assignable-expression";
 import { assignmentExpression, sequenceExpression } from "@babel/types";
 import type { Visitor } from "@babel/traverse";
 import type * as t from "@babel/types";
+
+import explode from "./explode-assignable-expression";
 
 export default function (opts: {
   build: (
@@ -19,7 +20,7 @@ export default function (opts: {
 
       const nodes: t.AssignmentExpression[] = [];
       // @ts-expect-error Fixme: node.left can be a TSAsExpression
-      const exploded = explode(node.left, nodes, this, scope);
+      const exploded = explode(node.left, nodes, scope);
       nodes.push(
         assignmentExpression(
           "=",

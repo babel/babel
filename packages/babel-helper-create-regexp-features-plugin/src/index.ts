@@ -62,10 +62,11 @@ export function createRegExpFeaturePlugin({
         if (
           file.has(runtimeKey) &&
           file.get(runtimeKey) !== runtime &&
-          // TODO(Babel 8): Remove this check. It's necessary because in Babel 7
-          // we allow multiple copies of transform-named-capturing-groups-regex
-          // with conflicting 'runtime' options.
-          hasFeature(newFeatures, FEATURES.duplicateNamedCaptureGroups)
+          (process.env.BABEL_8_BREAKING ||
+            // This check. Is necessary because in Babel 7 we allow multiple
+            // copies of transform-named-capturing-groups-regex with
+            // conflicting 'runtime' options.
+            hasFeature(newFeatures, FEATURES.duplicateNamedCaptureGroups))
         ) {
           throw new Error(
             `The 'runtime' option must be the same for ` +
@@ -73,10 +74,15 @@ export function createRegExpFeaturePlugin({
               `'@babel/plugin-proposal-duplicate-named-capturing-groups-regex'.`,
           );
         }
-        // TODO(Babel 8): Remove this check and always set it.
-        // It's necessary because in Babel 7 we allow multiple copies of
-        // transform-named-capturing-groups-regex with conflicting 'runtime' options.
-        if (feature === "namedCaptureGroups") {
+
+        if (process.env.BABEL_8_BREAKING) {
+          file.set(runtimeKey, runtime);
+        } else if (
+          // This check. Is necessary because in Babel 7 we allow multiple
+          // copies of transform-named-capturing-groups-regex with
+          // conflicting 'runtime' options.
+          feature === "namedCaptureGroups"
+        ) {
           if (!runtime || !file.has(runtimeKey)) file.set(runtimeKey, runtime);
         } else {
           file.set(runtimeKey, runtime);

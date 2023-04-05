@@ -80,7 +80,16 @@
   },
   "conditions": {
     "BABEL_8_BREAKING": [
-      null,
+      {
+        "peerDependencies": {
+          "@babel/preset-typescript": "^7.21.4 || ^8.0.0-0"
+        },
+        "peerDependenciesMeta": {
+          "@babel/preset-typescript": {
+            "optional": true
+          }
+        }
+      },
       {
         "exports": null
       }
