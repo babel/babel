@@ -36,13 +36,11 @@ export function requeueComputedKeyAndDecorators(
 // Avoid using `path.scope` here
 const visitor: Visitor = {
   FunctionParent(path) {
-    if (path.isArrowFunctionExpression()) {
-      // arrows are not skipped because they inherit the context.
-    } else {
-      path.skip();
-      if (path.isMethod()) {
-        requeueComputedKeyAndDecorators(path);
-      }
+    // arrows are not skipped because they inherit the context.
+    if (path.isArrowFunctionExpression()) return;
+    path.skip();
+    if (path.isMethod()) {
+      requeueComputedKeyAndDecorators(path);
     }
   },
   Property(path) {
