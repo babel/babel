@@ -10,20 +10,17 @@ import {
 
 const has = Function.call.bind(Object.prototype.hasOwnProperty);
 
-function joinComparisons(leftArr, right) {
-  return (
-    leftArr.map(JSON.stringify).join(` === ${right} || `) + ` === ${right}`
-  );
+function buildCases(arr) {
+  return arr.map(key => `case ${JSON.stringify(key)}:`).join("") + "break;";
 }
 
 function addIsHelper(type, aliasKeys, deprecated) {
   const targetType = JSON.stringify(type);
-  let aliasSource = "";
+  let cases = "";
   if (aliasKeys) {
-    aliasSource = joinComparisons(aliasKeys, "nodeType");
+    cases = buildCases(aliasKeys);
   }
 
-  let placeholderSource = "";
   const placeholderTypes = [];
   if (PLACEHOLDERS.includes(type) && has(FLIPPED_ALIAS_KEYS, type)) {
     placeholderTypes.push(type);
@@ -32,13 +29,14 @@ function addIsHelper(type, aliasKeys, deprecated) {
     placeholderTypes.push(...PLACEHOLDERS_FLIPPED_ALIAS[type]);
   }
   if (placeholderTypes.length > 0) {
-    placeholderSource =
-      ' || nodeType === "Placeholder" && (' +
-      joinComparisons(
-        placeholderTypes,
-        "(node as t.Placeholder).expectedNode"
-      ) +
-      ")";
+    cases += `
+    case "Placeholder":
+      switch ((node as t.Placeholder).expectedNode) {
+        ${buildCases(placeholderTypes)}
+        default:
+          return false;
+      }
+      break;`;
   }
 
   const result =
@@ -50,18 +48,18 @@ function addIsHelper(type, aliasKeys, deprecated) {
     ${deprecated || ""}
     if (!node) return false;
 
-    const nodeType = (node as t.Node).type;
-    if (${
-      aliasSource ? aliasSource : `nodeType === ${targetType}`
-    }${placeholderSource}) {
-      if (typeof opts === "undefined") {
-        return true;
-      } else {
-        return shallowEqual(node, opts);
-      }
+    ${
+      cases
+        ? `
+          switch((node as t.Node).type){
+            ${cases}
+            default:
+              return false;
+          }`
+        : `if ((node as t.Node).type !== ${targetType}) return false;`
     }
 
-    return false;
+    return opts == null || shallowEqual(node, opts);
   }
   `;
 }

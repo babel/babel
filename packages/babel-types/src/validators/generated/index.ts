@@ -12,16 +12,9 @@ export function isArrayExpression(
 ): node is t.ArrayExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ArrayExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ArrayExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isAssignmentExpression(
   node: object | null | undefined,
@@ -29,16 +22,9 @@ export function isAssignmentExpression(
 ): node is t.AssignmentExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "AssignmentExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "AssignmentExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isBinaryExpression(
   node: object | null | undefined,
@@ -46,16 +32,9 @@ export function isBinaryExpression(
 ): node is t.BinaryExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "BinaryExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "BinaryExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isInterpreterDirective(
   node: object | null | undefined,
@@ -63,16 +42,9 @@ export function isInterpreterDirective(
 ): node is t.InterpreterDirective {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "InterpreterDirective") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "InterpreterDirective") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isDirective(
   node: object | null | undefined,
@@ -80,16 +52,9 @@ export function isDirective(
 ): node is t.Directive {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "Directive") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "Directive") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isDirectiveLiteral(
   node: object | null | undefined,
@@ -97,16 +62,9 @@ export function isDirectiveLiteral(
 ): node is t.DirectiveLiteral {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "DirectiveLiteral") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "DirectiveLiteral") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isBlockStatement(
   node: object | null | undefined,
@@ -114,16 +72,9 @@ export function isBlockStatement(
 ): node is t.BlockStatement {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "BlockStatement") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "BlockStatement") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isBreakStatement(
   node: object | null | undefined,
@@ -131,16 +82,9 @@ export function isBreakStatement(
 ): node is t.BreakStatement {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "BreakStatement") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "BreakStatement") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isCallExpression(
   node: object | null | undefined,
@@ -148,16 +92,9 @@ export function isCallExpression(
 ): node is t.CallExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "CallExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "CallExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isCatchClause(
   node: object | null | undefined,
@@ -165,16 +102,9 @@ export function isCatchClause(
 ): node is t.CatchClause {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "CatchClause") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "CatchClause") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isConditionalExpression(
   node: object | null | undefined,
@@ -182,16 +112,9 @@ export function isConditionalExpression(
 ): node is t.ConditionalExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ConditionalExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ConditionalExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isContinueStatement(
   node: object | null | undefined,
@@ -199,16 +122,9 @@ export function isContinueStatement(
 ): node is t.ContinueStatement {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ContinueStatement") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ContinueStatement") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isDebuggerStatement(
   node: object | null | undefined,
@@ -216,16 +132,9 @@ export function isDebuggerStatement(
 ): node is t.DebuggerStatement {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "DebuggerStatement") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "DebuggerStatement") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isDoWhileStatement(
   node: object | null | undefined,
@@ -233,16 +142,9 @@ export function isDoWhileStatement(
 ): node is t.DoWhileStatement {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "DoWhileStatement") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "DoWhileStatement") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isEmptyStatement(
   node: object | null | undefined,
@@ -250,16 +152,9 @@ export function isEmptyStatement(
 ): node is t.EmptyStatement {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "EmptyStatement") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "EmptyStatement") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isExpressionStatement(
   node: object | null | undefined,
@@ -267,16 +162,9 @@ export function isExpressionStatement(
 ): node is t.ExpressionStatement {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ExpressionStatement") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ExpressionStatement") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isFile(
   node: object | null | undefined,
@@ -284,16 +172,9 @@ export function isFile(
 ): node is t.File {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "File") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "File") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isForInStatement(
   node: object | null | undefined,
@@ -301,16 +182,9 @@ export function isForInStatement(
 ): node is t.ForInStatement {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ForInStatement") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ForInStatement") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isForStatement(
   node: object | null | undefined,
@@ -318,16 +192,9 @@ export function isForStatement(
 ): node is t.ForStatement {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ForStatement") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ForStatement") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isFunctionDeclaration(
   node: object | null | undefined,
@@ -335,16 +202,9 @@ export function isFunctionDeclaration(
 ): node is t.FunctionDeclaration {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "FunctionDeclaration") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "FunctionDeclaration") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isFunctionExpression(
   node: object | null | undefined,
@@ -352,16 +212,9 @@ export function isFunctionExpression(
 ): node is t.FunctionExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "FunctionExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "FunctionExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isIdentifier(
   node: object | null | undefined,
@@ -369,16 +222,9 @@ export function isIdentifier(
 ): node is t.Identifier {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "Identifier") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "Identifier") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isIfStatement(
   node: object | null | undefined,
@@ -386,16 +232,9 @@ export function isIfStatement(
 ): node is t.IfStatement {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "IfStatement") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "IfStatement") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isLabeledStatement(
   node: object | null | undefined,
@@ -403,16 +242,9 @@ export function isLabeledStatement(
 ): node is t.LabeledStatement {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "LabeledStatement") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "LabeledStatement") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isStringLiteral(
   node: object | null | undefined,
@@ -420,16 +252,9 @@ export function isStringLiteral(
 ): node is t.StringLiteral {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "StringLiteral") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "StringLiteral") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isNumericLiteral(
   node: object | null | undefined,
@@ -437,16 +262,9 @@ export function isNumericLiteral(
 ): node is t.NumericLiteral {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "NumericLiteral") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "NumericLiteral") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isNullLiteral(
   node: object | null | undefined,
@@ -454,16 +272,9 @@ export function isNullLiteral(
 ): node is t.NullLiteral {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "NullLiteral") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "NullLiteral") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isBooleanLiteral(
   node: object | null | undefined,
@@ -471,16 +282,9 @@ export function isBooleanLiteral(
 ): node is t.BooleanLiteral {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "BooleanLiteral") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "BooleanLiteral") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isRegExpLiteral(
   node: object | null | undefined,
@@ -488,16 +292,9 @@ export function isRegExpLiteral(
 ): node is t.RegExpLiteral {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "RegExpLiteral") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "RegExpLiteral") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isLogicalExpression(
   node: object | null | undefined,
@@ -505,16 +302,9 @@ export function isLogicalExpression(
 ): node is t.LogicalExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "LogicalExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "LogicalExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isMemberExpression(
   node: object | null | undefined,
@@ -522,16 +312,9 @@ export function isMemberExpression(
 ): node is t.MemberExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "MemberExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "MemberExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isNewExpression(
   node: object | null | undefined,
@@ -539,16 +322,9 @@ export function isNewExpression(
 ): node is t.NewExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "NewExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "NewExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isProgram(
   node: object | null | undefined,
@@ -556,16 +332,9 @@ export function isProgram(
 ): node is t.Program {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "Program") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "Program") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isObjectExpression(
   node: object | null | undefined,
@@ -573,16 +342,9 @@ export function isObjectExpression(
 ): node is t.ObjectExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ObjectExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ObjectExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isObjectMethod(
   node: object | null | undefined,
@@ -590,16 +352,9 @@ export function isObjectMethod(
 ): node is t.ObjectMethod {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ObjectMethod") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ObjectMethod") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isObjectProperty(
   node: object | null | undefined,
@@ -607,16 +362,9 @@ export function isObjectProperty(
 ): node is t.ObjectProperty {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ObjectProperty") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ObjectProperty") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isRestElement(
   node: object | null | undefined,
@@ -624,16 +372,9 @@ export function isRestElement(
 ): node is t.RestElement {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "RestElement") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "RestElement") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isReturnStatement(
   node: object | null | undefined,
@@ -641,16 +382,9 @@ export function isReturnStatement(
 ): node is t.ReturnStatement {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ReturnStatement") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ReturnStatement") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isSequenceExpression(
   node: object | null | undefined,
@@ -658,16 +392,9 @@ export function isSequenceExpression(
 ): node is t.SequenceExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "SequenceExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "SequenceExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isParenthesizedExpression(
   node: object | null | undefined,
@@ -675,16 +402,9 @@ export function isParenthesizedExpression(
 ): node is t.ParenthesizedExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ParenthesizedExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ParenthesizedExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isSwitchCase(
   node: object | null | undefined,
@@ -692,16 +412,9 @@ export function isSwitchCase(
 ): node is t.SwitchCase {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "SwitchCase") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "SwitchCase") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isSwitchStatement(
   node: object | null | undefined,
@@ -709,16 +422,9 @@ export function isSwitchStatement(
 ): node is t.SwitchStatement {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "SwitchStatement") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "SwitchStatement") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isThisExpression(
   node: object | null | undefined,
@@ -726,16 +432,9 @@ export function isThisExpression(
 ): node is t.ThisExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ThisExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ThisExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isThrowStatement(
   node: object | null | undefined,
@@ -743,16 +442,9 @@ export function isThrowStatement(
 ): node is t.ThrowStatement {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ThrowStatement") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ThrowStatement") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTryStatement(
   node: object | null | undefined,
@@ -760,16 +452,9 @@ export function isTryStatement(
 ): node is t.TryStatement {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TryStatement") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TryStatement") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isUnaryExpression(
   node: object | null | undefined,
@@ -777,16 +462,9 @@ export function isUnaryExpression(
 ): node is t.UnaryExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "UnaryExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "UnaryExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isUpdateExpression(
   node: object | null | undefined,
@@ -794,16 +472,9 @@ export function isUpdateExpression(
 ): node is t.UpdateExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "UpdateExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "UpdateExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isVariableDeclaration(
   node: object | null | undefined,
@@ -811,16 +482,9 @@ export function isVariableDeclaration(
 ): node is t.VariableDeclaration {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "VariableDeclaration") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "VariableDeclaration") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isVariableDeclarator(
   node: object | null | undefined,
@@ -828,16 +492,9 @@ export function isVariableDeclarator(
 ): node is t.VariableDeclarator {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "VariableDeclarator") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "VariableDeclarator") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isWhileStatement(
   node: object | null | undefined,
@@ -845,16 +502,9 @@ export function isWhileStatement(
 ): node is t.WhileStatement {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "WhileStatement") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "WhileStatement") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isWithStatement(
   node: object | null | undefined,
@@ -862,16 +512,9 @@ export function isWithStatement(
 ): node is t.WithStatement {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "WithStatement") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "WithStatement") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isAssignmentPattern(
   node: object | null | undefined,
@@ -879,16 +522,9 @@ export function isAssignmentPattern(
 ): node is t.AssignmentPattern {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "AssignmentPattern") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "AssignmentPattern") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isArrayPattern(
   node: object | null | undefined,
@@ -896,16 +532,9 @@ export function isArrayPattern(
 ): node is t.ArrayPattern {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ArrayPattern") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ArrayPattern") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isArrowFunctionExpression(
   node: object | null | undefined,
@@ -913,16 +542,9 @@ export function isArrowFunctionExpression(
 ): node is t.ArrowFunctionExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ArrowFunctionExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ArrowFunctionExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isClassBody(
   node: object | null | undefined,
@@ -930,16 +552,9 @@ export function isClassBody(
 ): node is t.ClassBody {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ClassBody") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ClassBody") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isClassExpression(
   node: object | null | undefined,
@@ -947,16 +562,9 @@ export function isClassExpression(
 ): node is t.ClassExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ClassExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ClassExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isClassDeclaration(
   node: object | null | undefined,
@@ -964,16 +572,9 @@ export function isClassDeclaration(
 ): node is t.ClassDeclaration {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ClassDeclaration") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ClassDeclaration") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isExportAllDeclaration(
   node: object | null | undefined,
@@ -981,16 +582,9 @@ export function isExportAllDeclaration(
 ): node is t.ExportAllDeclaration {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ExportAllDeclaration") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ExportAllDeclaration") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isExportDefaultDeclaration(
   node: object | null | undefined,
@@ -998,16 +592,9 @@ export function isExportDefaultDeclaration(
 ): node is t.ExportDefaultDeclaration {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ExportDefaultDeclaration") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ExportDefaultDeclaration") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isExportNamedDeclaration(
   node: object | null | undefined,
@@ -1015,16 +602,9 @@ export function isExportNamedDeclaration(
 ): node is t.ExportNamedDeclaration {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ExportNamedDeclaration") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ExportNamedDeclaration") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isExportSpecifier(
   node: object | null | undefined,
@@ -1032,16 +612,9 @@ export function isExportSpecifier(
 ): node is t.ExportSpecifier {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ExportSpecifier") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ExportSpecifier") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isForOfStatement(
   node: object | null | undefined,
@@ -1049,16 +622,9 @@ export function isForOfStatement(
 ): node is t.ForOfStatement {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ForOfStatement") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ForOfStatement") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isImportDeclaration(
   node: object | null | undefined,
@@ -1066,16 +632,9 @@ export function isImportDeclaration(
 ): node is t.ImportDeclaration {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ImportDeclaration") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ImportDeclaration") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isImportDefaultSpecifier(
   node: object | null | undefined,
@@ -1083,16 +642,9 @@ export function isImportDefaultSpecifier(
 ): node is t.ImportDefaultSpecifier {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ImportDefaultSpecifier") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ImportDefaultSpecifier") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isImportNamespaceSpecifier(
   node: object | null | undefined,
@@ -1100,16 +652,9 @@ export function isImportNamespaceSpecifier(
 ): node is t.ImportNamespaceSpecifier {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ImportNamespaceSpecifier") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ImportNamespaceSpecifier") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isImportSpecifier(
   node: object | null | undefined,
@@ -1117,16 +662,9 @@ export function isImportSpecifier(
 ): node is t.ImportSpecifier {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ImportSpecifier") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ImportSpecifier") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isMetaProperty(
   node: object | null | undefined,
@@ -1134,16 +672,9 @@ export function isMetaProperty(
 ): node is t.MetaProperty {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "MetaProperty") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "MetaProperty") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isClassMethod(
   node: object | null | undefined,
@@ -1151,16 +682,9 @@ export function isClassMethod(
 ): node is t.ClassMethod {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ClassMethod") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ClassMethod") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isObjectPattern(
   node: object | null | undefined,
@@ -1168,16 +692,9 @@ export function isObjectPattern(
 ): node is t.ObjectPattern {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ObjectPattern") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ObjectPattern") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isSpreadElement(
   node: object | null | undefined,
@@ -1185,16 +702,9 @@ export function isSpreadElement(
 ): node is t.SpreadElement {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "SpreadElement") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "SpreadElement") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isSuper(
   node: object | null | undefined,
@@ -1202,16 +712,9 @@ export function isSuper(
 ): node is t.Super {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "Super") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "Super") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTaggedTemplateExpression(
   node: object | null | undefined,
@@ -1219,16 +722,9 @@ export function isTaggedTemplateExpression(
 ): node is t.TaggedTemplateExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TaggedTemplateExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TaggedTemplateExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTemplateElement(
   node: object | null | undefined,
@@ -1236,16 +732,9 @@ export function isTemplateElement(
 ): node is t.TemplateElement {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TemplateElement") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TemplateElement") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTemplateLiteral(
   node: object | null | undefined,
@@ -1253,16 +742,9 @@ export function isTemplateLiteral(
 ): node is t.TemplateLiteral {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TemplateLiteral") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TemplateLiteral") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isYieldExpression(
   node: object | null | undefined,
@@ -1270,16 +752,9 @@ export function isYieldExpression(
 ): node is t.YieldExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "YieldExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "YieldExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isAwaitExpression(
   node: object | null | undefined,
@@ -1287,16 +762,9 @@ export function isAwaitExpression(
 ): node is t.AwaitExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "AwaitExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "AwaitExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isImport(
   node: object | null | undefined,
@@ -1304,16 +772,9 @@ export function isImport(
 ): node is t.Import {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "Import") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "Import") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isBigIntLiteral(
   node: object | null | undefined,
@@ -1321,16 +782,9 @@ export function isBigIntLiteral(
 ): node is t.BigIntLiteral {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "BigIntLiteral") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "BigIntLiteral") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isExportNamespaceSpecifier(
   node: object | null | undefined,
@@ -1338,16 +792,9 @@ export function isExportNamespaceSpecifier(
 ): node is t.ExportNamespaceSpecifier {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ExportNamespaceSpecifier") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ExportNamespaceSpecifier") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isOptionalMemberExpression(
   node: object | null | undefined,
@@ -1355,16 +802,9 @@ export function isOptionalMemberExpression(
 ): node is t.OptionalMemberExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "OptionalMemberExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "OptionalMemberExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isOptionalCallExpression(
   node: object | null | undefined,
@@ -1372,16 +812,9 @@ export function isOptionalCallExpression(
 ): node is t.OptionalCallExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "OptionalCallExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "OptionalCallExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isClassProperty(
   node: object | null | undefined,
@@ -1389,16 +822,9 @@ export function isClassProperty(
 ): node is t.ClassProperty {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ClassProperty") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ClassProperty") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isClassAccessorProperty(
   node: object | null | undefined,
@@ -1406,16 +832,9 @@ export function isClassAccessorProperty(
 ): node is t.ClassAccessorProperty {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ClassAccessorProperty") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ClassAccessorProperty") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isClassPrivateProperty(
   node: object | null | undefined,
@@ -1423,16 +842,9 @@ export function isClassPrivateProperty(
 ): node is t.ClassPrivateProperty {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ClassPrivateProperty") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ClassPrivateProperty") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isClassPrivateMethod(
   node: object | null | undefined,
@@ -1440,16 +852,9 @@ export function isClassPrivateMethod(
 ): node is t.ClassPrivateMethod {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ClassPrivateMethod") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ClassPrivateMethod") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isPrivateName(
   node: object | null | undefined,
@@ -1457,16 +862,9 @@ export function isPrivateName(
 ): node is t.PrivateName {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "PrivateName") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "PrivateName") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isStaticBlock(
   node: object | null | undefined,
@@ -1474,16 +872,9 @@ export function isStaticBlock(
 ): node is t.StaticBlock {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "StaticBlock") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "StaticBlock") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isAnyTypeAnnotation(
   node: object | null | undefined,
@@ -1491,16 +882,9 @@ export function isAnyTypeAnnotation(
 ): node is t.AnyTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "AnyTypeAnnotation") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "AnyTypeAnnotation") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isArrayTypeAnnotation(
   node: object | null | undefined,
@@ -1508,16 +892,9 @@ export function isArrayTypeAnnotation(
 ): node is t.ArrayTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ArrayTypeAnnotation") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ArrayTypeAnnotation") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isBooleanTypeAnnotation(
   node: object | null | undefined,
@@ -1525,16 +902,9 @@ export function isBooleanTypeAnnotation(
 ): node is t.BooleanTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "BooleanTypeAnnotation") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "BooleanTypeAnnotation") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isBooleanLiteralTypeAnnotation(
   node: object | null | undefined,
@@ -1542,16 +912,9 @@ export function isBooleanLiteralTypeAnnotation(
 ): node is t.BooleanLiteralTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "BooleanLiteralTypeAnnotation") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "BooleanLiteralTypeAnnotation") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isNullLiteralTypeAnnotation(
   node: object | null | undefined,
@@ -1559,16 +922,9 @@ export function isNullLiteralTypeAnnotation(
 ): node is t.NullLiteralTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "NullLiteralTypeAnnotation") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "NullLiteralTypeAnnotation") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isClassImplements(
   node: object | null | undefined,
@@ -1576,16 +932,9 @@ export function isClassImplements(
 ): node is t.ClassImplements {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ClassImplements") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ClassImplements") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isDeclareClass(
   node: object | null | undefined,
@@ -1593,16 +942,9 @@ export function isDeclareClass(
 ): node is t.DeclareClass {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "DeclareClass") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "DeclareClass") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isDeclareFunction(
   node: object | null | undefined,
@@ -1610,16 +952,9 @@ export function isDeclareFunction(
 ): node is t.DeclareFunction {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "DeclareFunction") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "DeclareFunction") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isDeclareInterface(
   node: object | null | undefined,
@@ -1627,16 +962,9 @@ export function isDeclareInterface(
 ): node is t.DeclareInterface {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "DeclareInterface") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "DeclareInterface") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isDeclareModule(
   node: object | null | undefined,
@@ -1644,16 +972,9 @@ export function isDeclareModule(
 ): node is t.DeclareModule {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "DeclareModule") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "DeclareModule") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isDeclareModuleExports(
   node: object | null | undefined,
@@ -1661,16 +982,9 @@ export function isDeclareModuleExports(
 ): node is t.DeclareModuleExports {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "DeclareModuleExports") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "DeclareModuleExports") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isDeclareTypeAlias(
   node: object | null | undefined,
@@ -1678,16 +992,9 @@ export function isDeclareTypeAlias(
 ): node is t.DeclareTypeAlias {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "DeclareTypeAlias") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "DeclareTypeAlias") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isDeclareOpaqueType(
   node: object | null | undefined,
@@ -1695,16 +1002,9 @@ export function isDeclareOpaqueType(
 ): node is t.DeclareOpaqueType {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "DeclareOpaqueType") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "DeclareOpaqueType") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isDeclareVariable(
   node: object | null | undefined,
@@ -1712,16 +1012,9 @@ export function isDeclareVariable(
 ): node is t.DeclareVariable {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "DeclareVariable") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "DeclareVariable") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isDeclareExportDeclaration(
   node: object | null | undefined,
@@ -1729,16 +1022,9 @@ export function isDeclareExportDeclaration(
 ): node is t.DeclareExportDeclaration {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "DeclareExportDeclaration") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "DeclareExportDeclaration") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isDeclareExportAllDeclaration(
   node: object | null | undefined,
@@ -1746,16 +1032,9 @@ export function isDeclareExportAllDeclaration(
 ): node is t.DeclareExportAllDeclaration {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "DeclareExportAllDeclaration") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "DeclareExportAllDeclaration") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isDeclaredPredicate(
   node: object | null | undefined,
@@ -1763,16 +1042,9 @@ export function isDeclaredPredicate(
 ): node is t.DeclaredPredicate {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "DeclaredPredicate") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "DeclaredPredicate") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isExistsTypeAnnotation(
   node: object | null | undefined,
@@ -1780,16 +1052,9 @@ export function isExistsTypeAnnotation(
 ): node is t.ExistsTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ExistsTypeAnnotation") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ExistsTypeAnnotation") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isFunctionTypeAnnotation(
   node: object | null | undefined,
@@ -1797,16 +1062,9 @@ export function isFunctionTypeAnnotation(
 ): node is t.FunctionTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "FunctionTypeAnnotation") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "FunctionTypeAnnotation") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isFunctionTypeParam(
   node: object | null | undefined,
@@ -1814,16 +1072,9 @@ export function isFunctionTypeParam(
 ): node is t.FunctionTypeParam {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "FunctionTypeParam") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "FunctionTypeParam") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isGenericTypeAnnotation(
   node: object | null | undefined,
@@ -1831,16 +1082,9 @@ export function isGenericTypeAnnotation(
 ): node is t.GenericTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "GenericTypeAnnotation") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "GenericTypeAnnotation") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isInferredPredicate(
   node: object | null | undefined,
@@ -1848,16 +1092,9 @@ export function isInferredPredicate(
 ): node is t.InferredPredicate {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "InferredPredicate") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "InferredPredicate") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isInterfaceExtends(
   node: object | null | undefined,
@@ -1865,16 +1102,9 @@ export function isInterfaceExtends(
 ): node is t.InterfaceExtends {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "InterfaceExtends") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "InterfaceExtends") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isInterfaceDeclaration(
   node: object | null | undefined,
@@ -1882,16 +1112,9 @@ export function isInterfaceDeclaration(
 ): node is t.InterfaceDeclaration {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "InterfaceDeclaration") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "InterfaceDeclaration") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isInterfaceTypeAnnotation(
   node: object | null | undefined,
@@ -1899,16 +1122,9 @@ export function isInterfaceTypeAnnotation(
 ): node is t.InterfaceTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "InterfaceTypeAnnotation") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "InterfaceTypeAnnotation") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isIntersectionTypeAnnotation(
   node: object | null | undefined,
@@ -1916,16 +1132,9 @@ export function isIntersectionTypeAnnotation(
 ): node is t.IntersectionTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "IntersectionTypeAnnotation") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "IntersectionTypeAnnotation") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isMixedTypeAnnotation(
   node: object | null | undefined,
@@ -1933,16 +1142,9 @@ export function isMixedTypeAnnotation(
 ): node is t.MixedTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "MixedTypeAnnotation") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "MixedTypeAnnotation") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isEmptyTypeAnnotation(
   node: object | null | undefined,
@@ -1950,16 +1152,9 @@ export function isEmptyTypeAnnotation(
 ): node is t.EmptyTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "EmptyTypeAnnotation") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "EmptyTypeAnnotation") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isNullableTypeAnnotation(
   node: object | null | undefined,
@@ -1967,16 +1162,9 @@ export function isNullableTypeAnnotation(
 ): node is t.NullableTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "NullableTypeAnnotation") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "NullableTypeAnnotation") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isNumberLiteralTypeAnnotation(
   node: object | null | undefined,
@@ -1984,16 +1172,9 @@ export function isNumberLiteralTypeAnnotation(
 ): node is t.NumberLiteralTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "NumberLiteralTypeAnnotation") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "NumberLiteralTypeAnnotation") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isNumberTypeAnnotation(
   node: object | null | undefined,
@@ -2001,16 +1182,9 @@ export function isNumberTypeAnnotation(
 ): node is t.NumberTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "NumberTypeAnnotation") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "NumberTypeAnnotation") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isObjectTypeAnnotation(
   node: object | null | undefined,
@@ -2018,16 +1192,9 @@ export function isObjectTypeAnnotation(
 ): node is t.ObjectTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ObjectTypeAnnotation") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ObjectTypeAnnotation") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isObjectTypeInternalSlot(
   node: object | null | undefined,
@@ -2035,16 +1202,9 @@ export function isObjectTypeInternalSlot(
 ): node is t.ObjectTypeInternalSlot {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ObjectTypeInternalSlot") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ObjectTypeInternalSlot") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isObjectTypeCallProperty(
   node: object | null | undefined,
@@ -2052,16 +1212,9 @@ export function isObjectTypeCallProperty(
 ): node is t.ObjectTypeCallProperty {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ObjectTypeCallProperty") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ObjectTypeCallProperty") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isObjectTypeIndexer(
   node: object | null | undefined,
@@ -2069,16 +1222,9 @@ export function isObjectTypeIndexer(
 ): node is t.ObjectTypeIndexer {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ObjectTypeIndexer") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ObjectTypeIndexer") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isObjectTypeProperty(
   node: object | null | undefined,
@@ -2086,16 +1232,9 @@ export function isObjectTypeProperty(
 ): node is t.ObjectTypeProperty {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ObjectTypeProperty") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ObjectTypeProperty") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isObjectTypeSpreadProperty(
   node: object | null | undefined,
@@ -2103,16 +1242,9 @@ export function isObjectTypeSpreadProperty(
 ): node is t.ObjectTypeSpreadProperty {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ObjectTypeSpreadProperty") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ObjectTypeSpreadProperty") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isOpaqueType(
   node: object | null | undefined,
@@ -2120,16 +1252,9 @@ export function isOpaqueType(
 ): node is t.OpaqueType {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "OpaqueType") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "OpaqueType") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isQualifiedTypeIdentifier(
   node: object | null | undefined,
@@ -2137,16 +1262,9 @@ export function isQualifiedTypeIdentifier(
 ): node is t.QualifiedTypeIdentifier {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "QualifiedTypeIdentifier") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "QualifiedTypeIdentifier") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isStringLiteralTypeAnnotation(
   node: object | null | undefined,
@@ -2154,16 +1272,9 @@ export function isStringLiteralTypeAnnotation(
 ): node is t.StringLiteralTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "StringLiteralTypeAnnotation") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "StringLiteralTypeAnnotation") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isStringTypeAnnotation(
   node: object | null | undefined,
@@ -2171,16 +1282,9 @@ export function isStringTypeAnnotation(
 ): node is t.StringTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "StringTypeAnnotation") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "StringTypeAnnotation") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isSymbolTypeAnnotation(
   node: object | null | undefined,
@@ -2188,16 +1292,9 @@ export function isSymbolTypeAnnotation(
 ): node is t.SymbolTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "SymbolTypeAnnotation") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "SymbolTypeAnnotation") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isThisTypeAnnotation(
   node: object | null | undefined,
@@ -2205,16 +1302,9 @@ export function isThisTypeAnnotation(
 ): node is t.ThisTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ThisTypeAnnotation") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ThisTypeAnnotation") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTupleTypeAnnotation(
   node: object | null | undefined,
@@ -2222,16 +1312,9 @@ export function isTupleTypeAnnotation(
 ): node is t.TupleTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TupleTypeAnnotation") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TupleTypeAnnotation") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTypeofTypeAnnotation(
   node: object | null | undefined,
@@ -2239,16 +1322,9 @@ export function isTypeofTypeAnnotation(
 ): node is t.TypeofTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TypeofTypeAnnotation") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TypeofTypeAnnotation") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTypeAlias(
   node: object | null | undefined,
@@ -2256,16 +1332,9 @@ export function isTypeAlias(
 ): node is t.TypeAlias {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TypeAlias") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TypeAlias") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTypeAnnotation(
   node: object | null | undefined,
@@ -2273,16 +1342,9 @@ export function isTypeAnnotation(
 ): node is t.TypeAnnotation {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TypeAnnotation") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TypeAnnotation") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTypeCastExpression(
   node: object | null | undefined,
@@ -2290,16 +1352,9 @@ export function isTypeCastExpression(
 ): node is t.TypeCastExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TypeCastExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TypeCastExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTypeParameter(
   node: object | null | undefined,
@@ -2307,16 +1362,9 @@ export function isTypeParameter(
 ): node is t.TypeParameter {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TypeParameter") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TypeParameter") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTypeParameterDeclaration(
   node: object | null | undefined,
@@ -2324,16 +1372,9 @@ export function isTypeParameterDeclaration(
 ): node is t.TypeParameterDeclaration {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TypeParameterDeclaration") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TypeParameterDeclaration") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTypeParameterInstantiation(
   node: object | null | undefined,
@@ -2341,16 +1382,9 @@ export function isTypeParameterInstantiation(
 ): node is t.TypeParameterInstantiation {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TypeParameterInstantiation") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TypeParameterInstantiation") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isUnionTypeAnnotation(
   node: object | null | undefined,
@@ -2358,16 +1392,9 @@ export function isUnionTypeAnnotation(
 ): node is t.UnionTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "UnionTypeAnnotation") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "UnionTypeAnnotation") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isVariance(
   node: object | null | undefined,
@@ -2375,16 +1402,9 @@ export function isVariance(
 ): node is t.Variance {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "Variance") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "Variance") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isVoidTypeAnnotation(
   node: object | null | undefined,
@@ -2392,16 +1412,9 @@ export function isVoidTypeAnnotation(
 ): node is t.VoidTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "VoidTypeAnnotation") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "VoidTypeAnnotation") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isEnumDeclaration(
   node: object | null | undefined,
@@ -2409,16 +1422,9 @@ export function isEnumDeclaration(
 ): node is t.EnumDeclaration {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "EnumDeclaration") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "EnumDeclaration") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isEnumBooleanBody(
   node: object | null | undefined,
@@ -2426,16 +1432,9 @@ export function isEnumBooleanBody(
 ): node is t.EnumBooleanBody {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "EnumBooleanBody") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "EnumBooleanBody") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isEnumNumberBody(
   node: object | null | undefined,
@@ -2443,16 +1442,9 @@ export function isEnumNumberBody(
 ): node is t.EnumNumberBody {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "EnumNumberBody") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "EnumNumberBody") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isEnumStringBody(
   node: object | null | undefined,
@@ -2460,16 +1452,9 @@ export function isEnumStringBody(
 ): node is t.EnumStringBody {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "EnumStringBody") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "EnumStringBody") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isEnumSymbolBody(
   node: object | null | undefined,
@@ -2477,16 +1462,9 @@ export function isEnumSymbolBody(
 ): node is t.EnumSymbolBody {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "EnumSymbolBody") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "EnumSymbolBody") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isEnumBooleanMember(
   node: object | null | undefined,
@@ -2494,16 +1472,9 @@ export function isEnumBooleanMember(
 ): node is t.EnumBooleanMember {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "EnumBooleanMember") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "EnumBooleanMember") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isEnumNumberMember(
   node: object | null | undefined,
@@ -2511,16 +1482,9 @@ export function isEnumNumberMember(
 ): node is t.EnumNumberMember {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "EnumNumberMember") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "EnumNumberMember") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isEnumStringMember(
   node: object | null | undefined,
@@ -2528,16 +1492,9 @@ export function isEnumStringMember(
 ): node is t.EnumStringMember {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "EnumStringMember") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "EnumStringMember") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isEnumDefaultedMember(
   node: object | null | undefined,
@@ -2545,16 +1502,9 @@ export function isEnumDefaultedMember(
 ): node is t.EnumDefaultedMember {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "EnumDefaultedMember") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "EnumDefaultedMember") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isIndexedAccessType(
   node: object | null | undefined,
@@ -2562,16 +1512,9 @@ export function isIndexedAccessType(
 ): node is t.IndexedAccessType {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "IndexedAccessType") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "IndexedAccessType") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isOptionalIndexedAccessType(
   node: object | null | undefined,
@@ -2579,16 +1522,9 @@ export function isOptionalIndexedAccessType(
 ): node is t.OptionalIndexedAccessType {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "OptionalIndexedAccessType") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "OptionalIndexedAccessType") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isJSXAttribute(
   node: object | null | undefined,
@@ -2596,16 +1532,9 @@ export function isJSXAttribute(
 ): node is t.JSXAttribute {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "JSXAttribute") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "JSXAttribute") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isJSXClosingElement(
   node: object | null | undefined,
@@ -2613,16 +1542,9 @@ export function isJSXClosingElement(
 ): node is t.JSXClosingElement {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "JSXClosingElement") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "JSXClosingElement") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isJSXElement(
   node: object | null | undefined,
@@ -2630,16 +1552,9 @@ export function isJSXElement(
 ): node is t.JSXElement {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "JSXElement") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "JSXElement") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isJSXEmptyExpression(
   node: object | null | undefined,
@@ -2647,16 +1562,9 @@ export function isJSXEmptyExpression(
 ): node is t.JSXEmptyExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "JSXEmptyExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "JSXEmptyExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isJSXExpressionContainer(
   node: object | null | undefined,
@@ -2664,16 +1572,9 @@ export function isJSXExpressionContainer(
 ): node is t.JSXExpressionContainer {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "JSXExpressionContainer") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "JSXExpressionContainer") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isJSXSpreadChild(
   node: object | null | undefined,
@@ -2681,16 +1582,9 @@ export function isJSXSpreadChild(
 ): node is t.JSXSpreadChild {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "JSXSpreadChild") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "JSXSpreadChild") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isJSXIdentifier(
   node: object | null | undefined,
@@ -2698,16 +1592,9 @@ export function isJSXIdentifier(
 ): node is t.JSXIdentifier {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "JSXIdentifier") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "JSXIdentifier") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isJSXMemberExpression(
   node: object | null | undefined,
@@ -2715,16 +1602,9 @@ export function isJSXMemberExpression(
 ): node is t.JSXMemberExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "JSXMemberExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "JSXMemberExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isJSXNamespacedName(
   node: object | null | undefined,
@@ -2732,16 +1612,9 @@ export function isJSXNamespacedName(
 ): node is t.JSXNamespacedName {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "JSXNamespacedName") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "JSXNamespacedName") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isJSXOpeningElement(
   node: object | null | undefined,
@@ -2749,16 +1622,9 @@ export function isJSXOpeningElement(
 ): node is t.JSXOpeningElement {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "JSXOpeningElement") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "JSXOpeningElement") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isJSXSpreadAttribute(
   node: object | null | undefined,
@@ -2766,16 +1632,9 @@ export function isJSXSpreadAttribute(
 ): node is t.JSXSpreadAttribute {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "JSXSpreadAttribute") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "JSXSpreadAttribute") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isJSXText(
   node: object | null | undefined,
@@ -2783,16 +1642,9 @@ export function isJSXText(
 ): node is t.JSXText {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "JSXText") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "JSXText") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isJSXFragment(
   node: object | null | undefined,
@@ -2800,16 +1652,9 @@ export function isJSXFragment(
 ): node is t.JSXFragment {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "JSXFragment") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "JSXFragment") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isJSXOpeningFragment(
   node: object | null | undefined,
@@ -2817,16 +1662,9 @@ export function isJSXOpeningFragment(
 ): node is t.JSXOpeningFragment {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "JSXOpeningFragment") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "JSXOpeningFragment") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isJSXClosingFragment(
   node: object | null | undefined,
@@ -2834,16 +1672,9 @@ export function isJSXClosingFragment(
 ): node is t.JSXClosingFragment {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "JSXClosingFragment") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "JSXClosingFragment") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isNoop(
   node: object | null | undefined,
@@ -2851,16 +1682,9 @@ export function isNoop(
 ): node is t.Noop {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "Noop") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "Noop") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isPlaceholder(
   node: object | null | undefined,
@@ -2868,16 +1692,9 @@ export function isPlaceholder(
 ): node is t.Placeholder {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "Placeholder") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "Placeholder") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isV8IntrinsicIdentifier(
   node: object | null | undefined,
@@ -2885,16 +1702,9 @@ export function isV8IntrinsicIdentifier(
 ): node is t.V8IntrinsicIdentifier {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "V8IntrinsicIdentifier") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "V8IntrinsicIdentifier") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isArgumentPlaceholder(
   node: object | null | undefined,
@@ -2902,16 +1712,9 @@ export function isArgumentPlaceholder(
 ): node is t.ArgumentPlaceholder {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ArgumentPlaceholder") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ArgumentPlaceholder") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isBindExpression(
   node: object | null | undefined,
@@ -2919,16 +1722,9 @@ export function isBindExpression(
 ): node is t.BindExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "BindExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "BindExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isImportAttribute(
   node: object | null | undefined,
@@ -2936,16 +1732,9 @@ export function isImportAttribute(
 ): node is t.ImportAttribute {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ImportAttribute") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ImportAttribute") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isDecorator(
   node: object | null | undefined,
@@ -2953,16 +1742,9 @@ export function isDecorator(
 ): node is t.Decorator {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "Decorator") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "Decorator") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isDoExpression(
   node: object | null | undefined,
@@ -2970,16 +1752,9 @@ export function isDoExpression(
 ): node is t.DoExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "DoExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "DoExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isExportDefaultSpecifier(
   node: object | null | undefined,
@@ -2987,16 +1762,9 @@ export function isExportDefaultSpecifier(
 ): node is t.ExportDefaultSpecifier {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ExportDefaultSpecifier") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ExportDefaultSpecifier") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isRecordExpression(
   node: object | null | undefined,
@@ -3004,16 +1772,9 @@ export function isRecordExpression(
 ): node is t.RecordExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "RecordExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "RecordExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTupleExpression(
   node: object | null | undefined,
@@ -3021,16 +1782,9 @@ export function isTupleExpression(
 ): node is t.TupleExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TupleExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TupleExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isDecimalLiteral(
   node: object | null | undefined,
@@ -3038,16 +1792,9 @@ export function isDecimalLiteral(
 ): node is t.DecimalLiteral {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "DecimalLiteral") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "DecimalLiteral") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isModuleExpression(
   node: object | null | undefined,
@@ -3055,16 +1802,9 @@ export function isModuleExpression(
 ): node is t.ModuleExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "ModuleExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "ModuleExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTopicReference(
   node: object | null | undefined,
@@ -3072,16 +1812,9 @@ export function isTopicReference(
 ): node is t.TopicReference {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TopicReference") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TopicReference") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isPipelineTopicExpression(
   node: object | null | undefined,
@@ -3089,16 +1822,9 @@ export function isPipelineTopicExpression(
 ): node is t.PipelineTopicExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "PipelineTopicExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "PipelineTopicExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isPipelineBareFunction(
   node: object | null | undefined,
@@ -3106,16 +1832,9 @@ export function isPipelineBareFunction(
 ): node is t.PipelineBareFunction {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "PipelineBareFunction") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "PipelineBareFunction") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isPipelinePrimaryTopicReference(
   node: object | null | undefined,
@@ -3123,16 +1842,9 @@ export function isPipelinePrimaryTopicReference(
 ): node is t.PipelinePrimaryTopicReference {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "PipelinePrimaryTopicReference") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "PipelinePrimaryTopicReference") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSParameterProperty(
   node: object | null | undefined,
@@ -3140,16 +1852,9 @@ export function isTSParameterProperty(
 ): node is t.TSParameterProperty {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSParameterProperty") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSParameterProperty") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSDeclareFunction(
   node: object | null | undefined,
@@ -3157,16 +1862,9 @@ export function isTSDeclareFunction(
 ): node is t.TSDeclareFunction {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSDeclareFunction") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSDeclareFunction") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSDeclareMethod(
   node: object | null | undefined,
@@ -3174,16 +1872,9 @@ export function isTSDeclareMethod(
 ): node is t.TSDeclareMethod {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSDeclareMethod") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSDeclareMethod") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSQualifiedName(
   node: object | null | undefined,
@@ -3191,16 +1882,9 @@ export function isTSQualifiedName(
 ): node is t.TSQualifiedName {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSQualifiedName") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSQualifiedName") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSCallSignatureDeclaration(
   node: object | null | undefined,
@@ -3208,16 +1892,9 @@ export function isTSCallSignatureDeclaration(
 ): node is t.TSCallSignatureDeclaration {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSCallSignatureDeclaration") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSCallSignatureDeclaration") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSConstructSignatureDeclaration(
   node: object | null | undefined,
@@ -3225,16 +1902,9 @@ export function isTSConstructSignatureDeclaration(
 ): node is t.TSConstructSignatureDeclaration {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSConstructSignatureDeclaration") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSConstructSignatureDeclaration") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSPropertySignature(
   node: object | null | undefined,
@@ -3242,16 +1912,9 @@ export function isTSPropertySignature(
 ): node is t.TSPropertySignature {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSPropertySignature") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSPropertySignature") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSMethodSignature(
   node: object | null | undefined,
@@ -3259,16 +1922,9 @@ export function isTSMethodSignature(
 ): node is t.TSMethodSignature {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSMethodSignature") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSMethodSignature") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSIndexSignature(
   node: object | null | undefined,
@@ -3276,16 +1932,9 @@ export function isTSIndexSignature(
 ): node is t.TSIndexSignature {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSIndexSignature") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSIndexSignature") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSAnyKeyword(
   node: object | null | undefined,
@@ -3293,16 +1942,9 @@ export function isTSAnyKeyword(
 ): node is t.TSAnyKeyword {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSAnyKeyword") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSAnyKeyword") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSBooleanKeyword(
   node: object | null | undefined,
@@ -3310,16 +1952,9 @@ export function isTSBooleanKeyword(
 ): node is t.TSBooleanKeyword {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSBooleanKeyword") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSBooleanKeyword") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSBigIntKeyword(
   node: object | null | undefined,
@@ -3327,16 +1962,9 @@ export function isTSBigIntKeyword(
 ): node is t.TSBigIntKeyword {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSBigIntKeyword") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSBigIntKeyword") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSIntrinsicKeyword(
   node: object | null | undefined,
@@ -3344,16 +1972,9 @@ export function isTSIntrinsicKeyword(
 ): node is t.TSIntrinsicKeyword {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSIntrinsicKeyword") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSIntrinsicKeyword") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSNeverKeyword(
   node: object | null | undefined,
@@ -3361,16 +1982,9 @@ export function isTSNeverKeyword(
 ): node is t.TSNeverKeyword {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSNeverKeyword") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSNeverKeyword") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSNullKeyword(
   node: object | null | undefined,
@@ -3378,16 +1992,9 @@ export function isTSNullKeyword(
 ): node is t.TSNullKeyword {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSNullKeyword") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSNullKeyword") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSNumberKeyword(
   node: object | null | undefined,
@@ -3395,16 +2002,9 @@ export function isTSNumberKeyword(
 ): node is t.TSNumberKeyword {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSNumberKeyword") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSNumberKeyword") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSObjectKeyword(
   node: object | null | undefined,
@@ -3412,16 +2012,9 @@ export function isTSObjectKeyword(
 ): node is t.TSObjectKeyword {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSObjectKeyword") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSObjectKeyword") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSStringKeyword(
   node: object | null | undefined,
@@ -3429,16 +2022,9 @@ export function isTSStringKeyword(
 ): node is t.TSStringKeyword {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSStringKeyword") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSStringKeyword") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSSymbolKeyword(
   node: object | null | undefined,
@@ -3446,16 +2032,9 @@ export function isTSSymbolKeyword(
 ): node is t.TSSymbolKeyword {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSSymbolKeyword") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSSymbolKeyword") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSUndefinedKeyword(
   node: object | null | undefined,
@@ -3463,16 +2042,9 @@ export function isTSUndefinedKeyword(
 ): node is t.TSUndefinedKeyword {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSUndefinedKeyword") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSUndefinedKeyword") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSUnknownKeyword(
   node: object | null | undefined,
@@ -3480,16 +2052,9 @@ export function isTSUnknownKeyword(
 ): node is t.TSUnknownKeyword {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSUnknownKeyword") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSUnknownKeyword") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSVoidKeyword(
   node: object | null | undefined,
@@ -3497,16 +2062,9 @@ export function isTSVoidKeyword(
 ): node is t.TSVoidKeyword {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSVoidKeyword") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSVoidKeyword") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSThisType(
   node: object | null | undefined,
@@ -3514,16 +2072,9 @@ export function isTSThisType(
 ): node is t.TSThisType {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSThisType") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSThisType") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSFunctionType(
   node: object | null | undefined,
@@ -3531,16 +2082,9 @@ export function isTSFunctionType(
 ): node is t.TSFunctionType {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSFunctionType") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSFunctionType") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSConstructorType(
   node: object | null | undefined,
@@ -3548,16 +2092,9 @@ export function isTSConstructorType(
 ): node is t.TSConstructorType {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSConstructorType") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSConstructorType") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSTypeReference(
   node: object | null | undefined,
@@ -3565,16 +2102,9 @@ export function isTSTypeReference(
 ): node is t.TSTypeReference {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSTypeReference") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSTypeReference") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSTypePredicate(
   node: object | null | undefined,
@@ -3582,16 +2112,9 @@ export function isTSTypePredicate(
 ): node is t.TSTypePredicate {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSTypePredicate") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSTypePredicate") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSTypeQuery(
   node: object | null | undefined,
@@ -3599,16 +2122,9 @@ export function isTSTypeQuery(
 ): node is t.TSTypeQuery {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSTypeQuery") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSTypeQuery") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSTypeLiteral(
   node: object | null | undefined,
@@ -3616,16 +2132,9 @@ export function isTSTypeLiteral(
 ): node is t.TSTypeLiteral {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSTypeLiteral") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSTypeLiteral") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSArrayType(
   node: object | null | undefined,
@@ -3633,16 +2142,9 @@ export function isTSArrayType(
 ): node is t.TSArrayType {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSArrayType") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSArrayType") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSTupleType(
   node: object | null | undefined,
@@ -3650,16 +2152,9 @@ export function isTSTupleType(
 ): node is t.TSTupleType {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSTupleType") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSTupleType") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSOptionalType(
   node: object | null | undefined,
@@ -3667,16 +2162,9 @@ export function isTSOptionalType(
 ): node is t.TSOptionalType {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSOptionalType") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSOptionalType") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSRestType(
   node: object | null | undefined,
@@ -3684,16 +2172,9 @@ export function isTSRestType(
 ): node is t.TSRestType {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSRestType") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSRestType") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSNamedTupleMember(
   node: object | null | undefined,
@@ -3701,16 +2182,9 @@ export function isTSNamedTupleMember(
 ): node is t.TSNamedTupleMember {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSNamedTupleMember") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSNamedTupleMember") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSUnionType(
   node: object | null | undefined,
@@ -3718,16 +2192,9 @@ export function isTSUnionType(
 ): node is t.TSUnionType {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSUnionType") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSUnionType") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSIntersectionType(
   node: object | null | undefined,
@@ -3735,16 +2202,9 @@ export function isTSIntersectionType(
 ): node is t.TSIntersectionType {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSIntersectionType") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSIntersectionType") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSConditionalType(
   node: object | null | undefined,
@@ -3752,16 +2212,9 @@ export function isTSConditionalType(
 ): node is t.TSConditionalType {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSConditionalType") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSConditionalType") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSInferType(
   node: object | null | undefined,
@@ -3769,16 +2222,9 @@ export function isTSInferType(
 ): node is t.TSInferType {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSInferType") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSInferType") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSParenthesizedType(
   node: object | null | undefined,
@@ -3786,16 +2232,9 @@ export function isTSParenthesizedType(
 ): node is t.TSParenthesizedType {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSParenthesizedType") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSParenthesizedType") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSTypeOperator(
   node: object | null | undefined,
@@ -3803,16 +2242,9 @@ export function isTSTypeOperator(
 ): node is t.TSTypeOperator {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSTypeOperator") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSTypeOperator") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSIndexedAccessType(
   node: object | null | undefined,
@@ -3820,16 +2252,9 @@ export function isTSIndexedAccessType(
 ): node is t.TSIndexedAccessType {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSIndexedAccessType") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSIndexedAccessType") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSMappedType(
   node: object | null | undefined,
@@ -3837,16 +2262,9 @@ export function isTSMappedType(
 ): node is t.TSMappedType {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSMappedType") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSMappedType") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSLiteralType(
   node: object | null | undefined,
@@ -3854,16 +2272,9 @@ export function isTSLiteralType(
 ): node is t.TSLiteralType {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSLiteralType") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSLiteralType") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSExpressionWithTypeArguments(
   node: object | null | undefined,
@@ -3871,16 +2282,9 @@ export function isTSExpressionWithTypeArguments(
 ): node is t.TSExpressionWithTypeArguments {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSExpressionWithTypeArguments") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSExpressionWithTypeArguments") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSInterfaceDeclaration(
   node: object | null | undefined,
@@ -3888,16 +2292,9 @@ export function isTSInterfaceDeclaration(
 ): node is t.TSInterfaceDeclaration {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSInterfaceDeclaration") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSInterfaceDeclaration") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSInterfaceBody(
   node: object | null | undefined,
@@ -3905,16 +2302,9 @@ export function isTSInterfaceBody(
 ): node is t.TSInterfaceBody {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSInterfaceBody") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSInterfaceBody") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSTypeAliasDeclaration(
   node: object | null | undefined,
@@ -3922,16 +2312,9 @@ export function isTSTypeAliasDeclaration(
 ): node is t.TSTypeAliasDeclaration {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSTypeAliasDeclaration") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSTypeAliasDeclaration") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSInstantiationExpression(
   node: object | null | undefined,
@@ -3939,16 +2322,9 @@ export function isTSInstantiationExpression(
 ): node is t.TSInstantiationExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSInstantiationExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSInstantiationExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSAsExpression(
   node: object | null | undefined,
@@ -3956,16 +2332,9 @@ export function isTSAsExpression(
 ): node is t.TSAsExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSAsExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSAsExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSSatisfiesExpression(
   node: object | null | undefined,
@@ -3973,16 +2342,9 @@ export function isTSSatisfiesExpression(
 ): node is t.TSSatisfiesExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSSatisfiesExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSSatisfiesExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSTypeAssertion(
   node: object | null | undefined,
@@ -3990,16 +2352,9 @@ export function isTSTypeAssertion(
 ): node is t.TSTypeAssertion {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSTypeAssertion") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSTypeAssertion") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSEnumDeclaration(
   node: object | null | undefined,
@@ -4007,16 +2362,9 @@ export function isTSEnumDeclaration(
 ): node is t.TSEnumDeclaration {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSEnumDeclaration") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSEnumDeclaration") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSEnumMember(
   node: object | null | undefined,
@@ -4024,16 +2372,9 @@ export function isTSEnumMember(
 ): node is t.TSEnumMember {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSEnumMember") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSEnumMember") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSModuleDeclaration(
   node: object | null | undefined,
@@ -4041,16 +2382,9 @@ export function isTSModuleDeclaration(
 ): node is t.TSModuleDeclaration {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSModuleDeclaration") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSModuleDeclaration") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSModuleBlock(
   node: object | null | undefined,
@@ -4058,16 +2392,9 @@ export function isTSModuleBlock(
 ): node is t.TSModuleBlock {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSModuleBlock") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSModuleBlock") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSImportType(
   node: object | null | undefined,
@@ -4075,16 +2402,9 @@ export function isTSImportType(
 ): node is t.TSImportType {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSImportType") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSImportType") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSImportEqualsDeclaration(
   node: object | null | undefined,
@@ -4092,16 +2412,9 @@ export function isTSImportEqualsDeclaration(
 ): node is t.TSImportEqualsDeclaration {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSImportEqualsDeclaration") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSImportEqualsDeclaration") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSExternalModuleReference(
   node: object | null | undefined,
@@ -4109,16 +2422,9 @@ export function isTSExternalModuleReference(
 ): node is t.TSExternalModuleReference {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSExternalModuleReference") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSExternalModuleReference") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSNonNullExpression(
   node: object | null | undefined,
@@ -4126,16 +2432,9 @@ export function isTSNonNullExpression(
 ): node is t.TSNonNullExpression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSNonNullExpression") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSNonNullExpression") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSExportAssignment(
   node: object | null | undefined,
@@ -4143,16 +2442,9 @@ export function isTSExportAssignment(
 ): node is t.TSExportAssignment {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSExportAssignment") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSExportAssignment") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSNamespaceExportDeclaration(
   node: object | null | undefined,
@@ -4160,16 +2452,9 @@ export function isTSNamespaceExportDeclaration(
 ): node is t.TSNamespaceExportDeclaration {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSNamespaceExportDeclaration") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSNamespaceExportDeclaration") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSTypeAnnotation(
   node: object | null | undefined,
@@ -4177,16 +2462,9 @@ export function isTSTypeAnnotation(
 ): node is t.TSTypeAnnotation {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSTypeAnnotation") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSTypeAnnotation") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSTypeParameterInstantiation(
   node: object | null | undefined,
@@ -4194,16 +2472,9 @@ export function isTSTypeParameterInstantiation(
 ): node is t.TSTypeParameterInstantiation {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSTypeParameterInstantiation") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSTypeParameterInstantiation") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSTypeParameterDeclaration(
   node: object | null | undefined,
@@ -4211,16 +2482,9 @@ export function isTSTypeParameterDeclaration(
 ): node is t.TSTypeParameterDeclaration {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSTypeParameterDeclaration") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSTypeParameterDeclaration") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSTypeParameter(
   node: object | null | undefined,
@@ -4228,16 +2492,9 @@ export function isTSTypeParameter(
 ): node is t.TSTypeParameter {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "TSTypeParameter") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "TSTypeParameter") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isStandardized(
   node: object | null | undefined,
@@ -4245,109 +2502,111 @@ export function isStandardized(
 ): node is t.Standardized {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "ArrayExpression" === nodeType ||
-    "AssignmentExpression" === nodeType ||
-    "BinaryExpression" === nodeType ||
-    "InterpreterDirective" === nodeType ||
-    "Directive" === nodeType ||
-    "DirectiveLiteral" === nodeType ||
-    "BlockStatement" === nodeType ||
-    "BreakStatement" === nodeType ||
-    "CallExpression" === nodeType ||
-    "CatchClause" === nodeType ||
-    "ConditionalExpression" === nodeType ||
-    "ContinueStatement" === nodeType ||
-    "DebuggerStatement" === nodeType ||
-    "DoWhileStatement" === nodeType ||
-    "EmptyStatement" === nodeType ||
-    "ExpressionStatement" === nodeType ||
-    "File" === nodeType ||
-    "ForInStatement" === nodeType ||
-    "ForStatement" === nodeType ||
-    "FunctionDeclaration" === nodeType ||
-    "FunctionExpression" === nodeType ||
-    "Identifier" === nodeType ||
-    "IfStatement" === nodeType ||
-    "LabeledStatement" === nodeType ||
-    "StringLiteral" === nodeType ||
-    "NumericLiteral" === nodeType ||
-    "NullLiteral" === nodeType ||
-    "BooleanLiteral" === nodeType ||
-    "RegExpLiteral" === nodeType ||
-    "LogicalExpression" === nodeType ||
-    "MemberExpression" === nodeType ||
-    "NewExpression" === nodeType ||
-    "Program" === nodeType ||
-    "ObjectExpression" === nodeType ||
-    "ObjectMethod" === nodeType ||
-    "ObjectProperty" === nodeType ||
-    "RestElement" === nodeType ||
-    "ReturnStatement" === nodeType ||
-    "SequenceExpression" === nodeType ||
-    "ParenthesizedExpression" === nodeType ||
-    "SwitchCase" === nodeType ||
-    "SwitchStatement" === nodeType ||
-    "ThisExpression" === nodeType ||
-    "ThrowStatement" === nodeType ||
-    "TryStatement" === nodeType ||
-    "UnaryExpression" === nodeType ||
-    "UpdateExpression" === nodeType ||
-    "VariableDeclaration" === nodeType ||
-    "VariableDeclarator" === nodeType ||
-    "WhileStatement" === nodeType ||
-    "WithStatement" === nodeType ||
-    "AssignmentPattern" === nodeType ||
-    "ArrayPattern" === nodeType ||
-    "ArrowFunctionExpression" === nodeType ||
-    "ClassBody" === nodeType ||
-    "ClassExpression" === nodeType ||
-    "ClassDeclaration" === nodeType ||
-    "ExportAllDeclaration" === nodeType ||
-    "ExportDefaultDeclaration" === nodeType ||
-    "ExportNamedDeclaration" === nodeType ||
-    "ExportSpecifier" === nodeType ||
-    "ForOfStatement" === nodeType ||
-    "ImportDeclaration" === nodeType ||
-    "ImportDefaultSpecifier" === nodeType ||
-    "ImportNamespaceSpecifier" === nodeType ||
-    "ImportSpecifier" === nodeType ||
-    "MetaProperty" === nodeType ||
-    "ClassMethod" === nodeType ||
-    "ObjectPattern" === nodeType ||
-    "SpreadElement" === nodeType ||
-    "Super" === nodeType ||
-    "TaggedTemplateExpression" === nodeType ||
-    "TemplateElement" === nodeType ||
-    "TemplateLiteral" === nodeType ||
-    "YieldExpression" === nodeType ||
-    "AwaitExpression" === nodeType ||
-    "Import" === nodeType ||
-    "BigIntLiteral" === nodeType ||
-    "ExportNamespaceSpecifier" === nodeType ||
-    "OptionalMemberExpression" === nodeType ||
-    "OptionalCallExpression" === nodeType ||
-    "ClassProperty" === nodeType ||
-    "ClassAccessorProperty" === nodeType ||
-    "ClassPrivateProperty" === nodeType ||
-    "ClassPrivateMethod" === nodeType ||
-    "PrivateName" === nodeType ||
-    "StaticBlock" === nodeType ||
-    (nodeType === "Placeholder" &&
-      ("Identifier" === (node as t.Placeholder).expectedNode ||
-        "StringLiteral" === (node as t.Placeholder).expectedNode ||
-        "BlockStatement" === (node as t.Placeholder).expectedNode ||
-        "ClassBody" === (node as t.Placeholder).expectedNode))
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "ArrayExpression":
+    case "AssignmentExpression":
+    case "BinaryExpression":
+    case "InterpreterDirective":
+    case "Directive":
+    case "DirectiveLiteral":
+    case "BlockStatement":
+    case "BreakStatement":
+    case "CallExpression":
+    case "CatchClause":
+    case "ConditionalExpression":
+    case "ContinueStatement":
+    case "DebuggerStatement":
+    case "DoWhileStatement":
+    case "EmptyStatement":
+    case "ExpressionStatement":
+    case "File":
+    case "ForInStatement":
+    case "ForStatement":
+    case "FunctionDeclaration":
+    case "FunctionExpression":
+    case "Identifier":
+    case "IfStatement":
+    case "LabeledStatement":
+    case "StringLiteral":
+    case "NumericLiteral":
+    case "NullLiteral":
+    case "BooleanLiteral":
+    case "RegExpLiteral":
+    case "LogicalExpression":
+    case "MemberExpression":
+    case "NewExpression":
+    case "Program":
+    case "ObjectExpression":
+    case "ObjectMethod":
+    case "ObjectProperty":
+    case "RestElement":
+    case "ReturnStatement":
+    case "SequenceExpression":
+    case "ParenthesizedExpression":
+    case "SwitchCase":
+    case "SwitchStatement":
+    case "ThisExpression":
+    case "ThrowStatement":
+    case "TryStatement":
+    case "UnaryExpression":
+    case "UpdateExpression":
+    case "VariableDeclaration":
+    case "VariableDeclarator":
+    case "WhileStatement":
+    case "WithStatement":
+    case "AssignmentPattern":
+    case "ArrayPattern":
+    case "ArrowFunctionExpression":
+    case "ClassBody":
+    case "ClassExpression":
+    case "ClassDeclaration":
+    case "ExportAllDeclaration":
+    case "ExportDefaultDeclaration":
+    case "ExportNamedDeclaration":
+    case "ExportSpecifier":
+    case "ForOfStatement":
+    case "ImportDeclaration":
+    case "ImportDefaultSpecifier":
+    case "ImportNamespaceSpecifier":
+    case "ImportSpecifier":
+    case "MetaProperty":
+    case "ClassMethod":
+    case "ObjectPattern":
+    case "SpreadElement":
+    case "Super":
+    case "TaggedTemplateExpression":
+    case "TemplateElement":
+    case "TemplateLiteral":
+    case "YieldExpression":
+    case "AwaitExpression":
+    case "Import":
+    case "BigIntLiteral":
+    case "ExportNamespaceSpecifier":
+    case "OptionalMemberExpression":
+    case "OptionalCallExpression":
+    case "ClassProperty":
+    case "ClassAccessorProperty":
+    case "ClassPrivateProperty":
+    case "ClassPrivateMethod":
+    case "PrivateName":
+    case "StaticBlock":
+      break;
+    case "Placeholder":
+      switch ((node as t.Placeholder).expectedNode) {
+        case "Identifier":
+        case "StringLiteral":
+        case "BlockStatement":
+        case "ClassBody":
+          break;
+        default:
+          return false;
+      }
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isExpression(
   node: object | null | undefined,
@@ -4355,72 +2614,74 @@ export function isExpression(
 ): node is t.Expression {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "ArrayExpression" === nodeType ||
-    "AssignmentExpression" === nodeType ||
-    "BinaryExpression" === nodeType ||
-    "CallExpression" === nodeType ||
-    "ConditionalExpression" === nodeType ||
-    "FunctionExpression" === nodeType ||
-    "Identifier" === nodeType ||
-    "StringLiteral" === nodeType ||
-    "NumericLiteral" === nodeType ||
-    "NullLiteral" === nodeType ||
-    "BooleanLiteral" === nodeType ||
-    "RegExpLiteral" === nodeType ||
-    "LogicalExpression" === nodeType ||
-    "MemberExpression" === nodeType ||
-    "NewExpression" === nodeType ||
-    "ObjectExpression" === nodeType ||
-    "SequenceExpression" === nodeType ||
-    "ParenthesizedExpression" === nodeType ||
-    "ThisExpression" === nodeType ||
-    "UnaryExpression" === nodeType ||
-    "UpdateExpression" === nodeType ||
-    "ArrowFunctionExpression" === nodeType ||
-    "ClassExpression" === nodeType ||
-    "MetaProperty" === nodeType ||
-    "Super" === nodeType ||
-    "TaggedTemplateExpression" === nodeType ||
-    "TemplateLiteral" === nodeType ||
-    "YieldExpression" === nodeType ||
-    "AwaitExpression" === nodeType ||
-    "Import" === nodeType ||
-    "BigIntLiteral" === nodeType ||
-    "OptionalMemberExpression" === nodeType ||
-    "OptionalCallExpression" === nodeType ||
-    "TypeCastExpression" === nodeType ||
-    "JSXElement" === nodeType ||
-    "JSXFragment" === nodeType ||
-    "BindExpression" === nodeType ||
-    "DoExpression" === nodeType ||
-    "RecordExpression" === nodeType ||
-    "TupleExpression" === nodeType ||
-    "DecimalLiteral" === nodeType ||
-    "ModuleExpression" === nodeType ||
-    "TopicReference" === nodeType ||
-    "PipelineTopicExpression" === nodeType ||
-    "PipelineBareFunction" === nodeType ||
-    "PipelinePrimaryTopicReference" === nodeType ||
-    "TSInstantiationExpression" === nodeType ||
-    "TSAsExpression" === nodeType ||
-    "TSSatisfiesExpression" === nodeType ||
-    "TSTypeAssertion" === nodeType ||
-    "TSNonNullExpression" === nodeType ||
-    (nodeType === "Placeholder" &&
-      ("Expression" === (node as t.Placeholder).expectedNode ||
-        "Identifier" === (node as t.Placeholder).expectedNode ||
-        "StringLiteral" === (node as t.Placeholder).expectedNode))
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "ArrayExpression":
+    case "AssignmentExpression":
+    case "BinaryExpression":
+    case "CallExpression":
+    case "ConditionalExpression":
+    case "FunctionExpression":
+    case "Identifier":
+    case "StringLiteral":
+    case "NumericLiteral":
+    case "NullLiteral":
+    case "BooleanLiteral":
+    case "RegExpLiteral":
+    case "LogicalExpression":
+    case "MemberExpression":
+    case "NewExpression":
+    case "ObjectExpression":
+    case "SequenceExpression":
+    case "ParenthesizedExpression":
+    case "ThisExpression":
+    case "UnaryExpression":
+    case "UpdateExpression":
+    case "ArrowFunctionExpression":
+    case "ClassExpression":
+    case "MetaProperty":
+    case "Super":
+    case "TaggedTemplateExpression":
+    case "TemplateLiteral":
+    case "YieldExpression":
+    case "AwaitExpression":
+    case "Import":
+    case "BigIntLiteral":
+    case "OptionalMemberExpression":
+    case "OptionalCallExpression":
+    case "TypeCastExpression":
+    case "JSXElement":
+    case "JSXFragment":
+    case "BindExpression":
+    case "DoExpression":
+    case "RecordExpression":
+    case "TupleExpression":
+    case "DecimalLiteral":
+    case "ModuleExpression":
+    case "TopicReference":
+    case "PipelineTopicExpression":
+    case "PipelineBareFunction":
+    case "PipelinePrimaryTopicReference":
+    case "TSInstantiationExpression":
+    case "TSAsExpression":
+    case "TSSatisfiesExpression":
+    case "TSTypeAssertion":
+    case "TSNonNullExpression":
+      break;
+    case "Placeholder":
+      switch ((node as t.Placeholder).expectedNode) {
+        case "Expression":
+        case "Identifier":
+        case "StringLiteral":
+          break;
+        default:
+          return false;
+      }
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isBinary(
   node: object | null | undefined,
@@ -4428,16 +2689,15 @@ export function isBinary(
 ): node is t.Binary {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if ("BinaryExpression" === nodeType || "LogicalExpression" === nodeType) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "BinaryExpression":
+    case "LogicalExpression":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isScopable(
   node: object | null | undefined,
@@ -4445,38 +2705,40 @@ export function isScopable(
 ): node is t.Scopable {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "BlockStatement" === nodeType ||
-    "CatchClause" === nodeType ||
-    "DoWhileStatement" === nodeType ||
-    "ForInStatement" === nodeType ||
-    "ForStatement" === nodeType ||
-    "FunctionDeclaration" === nodeType ||
-    "FunctionExpression" === nodeType ||
-    "Program" === nodeType ||
-    "ObjectMethod" === nodeType ||
-    "SwitchStatement" === nodeType ||
-    "WhileStatement" === nodeType ||
-    "ArrowFunctionExpression" === nodeType ||
-    "ClassExpression" === nodeType ||
-    "ClassDeclaration" === nodeType ||
-    "ForOfStatement" === nodeType ||
-    "ClassMethod" === nodeType ||
-    "ClassPrivateMethod" === nodeType ||
-    "StaticBlock" === nodeType ||
-    "TSModuleBlock" === nodeType ||
-    (nodeType === "Placeholder" &&
-      "BlockStatement" === (node as t.Placeholder).expectedNode)
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "BlockStatement":
+    case "CatchClause":
+    case "DoWhileStatement":
+    case "ForInStatement":
+    case "ForStatement":
+    case "FunctionDeclaration":
+    case "FunctionExpression":
+    case "Program":
+    case "ObjectMethod":
+    case "SwitchStatement":
+    case "WhileStatement":
+    case "ArrowFunctionExpression":
+    case "ClassExpression":
+    case "ClassDeclaration":
+    case "ForOfStatement":
+    case "ClassMethod":
+    case "ClassPrivateMethod":
+    case "StaticBlock":
+    case "TSModuleBlock":
+      break;
+    case "Placeholder":
+      switch ((node as t.Placeholder).expectedNode) {
+        case "BlockStatement":
+          break;
+        default:
+          return false;
+      }
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isBlockParent(
   node: object | null | undefined,
@@ -4484,36 +2746,38 @@ export function isBlockParent(
 ): node is t.BlockParent {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "BlockStatement" === nodeType ||
-    "CatchClause" === nodeType ||
-    "DoWhileStatement" === nodeType ||
-    "ForInStatement" === nodeType ||
-    "ForStatement" === nodeType ||
-    "FunctionDeclaration" === nodeType ||
-    "FunctionExpression" === nodeType ||
-    "Program" === nodeType ||
-    "ObjectMethod" === nodeType ||
-    "SwitchStatement" === nodeType ||
-    "WhileStatement" === nodeType ||
-    "ArrowFunctionExpression" === nodeType ||
-    "ForOfStatement" === nodeType ||
-    "ClassMethod" === nodeType ||
-    "ClassPrivateMethod" === nodeType ||
-    "StaticBlock" === nodeType ||
-    "TSModuleBlock" === nodeType ||
-    (nodeType === "Placeholder" &&
-      "BlockStatement" === (node as t.Placeholder).expectedNode)
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "BlockStatement":
+    case "CatchClause":
+    case "DoWhileStatement":
+    case "ForInStatement":
+    case "ForStatement":
+    case "FunctionDeclaration":
+    case "FunctionExpression":
+    case "Program":
+    case "ObjectMethod":
+    case "SwitchStatement":
+    case "WhileStatement":
+    case "ArrowFunctionExpression":
+    case "ForOfStatement":
+    case "ClassMethod":
+    case "ClassPrivateMethod":
+    case "StaticBlock":
+    case "TSModuleBlock":
+      break;
+    case "Placeholder":
+      switch ((node as t.Placeholder).expectedNode) {
+        case "BlockStatement":
+          break;
+        default:
+          return false;
+      }
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isBlock(
   node: object | null | undefined,
@@ -4521,22 +2785,24 @@ export function isBlock(
 ): node is t.Block {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "BlockStatement" === nodeType ||
-    "Program" === nodeType ||
-    "TSModuleBlock" === nodeType ||
-    (nodeType === "Placeholder" &&
-      "BlockStatement" === (node as t.Placeholder).expectedNode)
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "BlockStatement":
+    case "Program":
+    case "TSModuleBlock":
+      break;
+    case "Placeholder":
+      switch ((node as t.Placeholder).expectedNode) {
+        case "BlockStatement":
+          break;
+        default:
+          return false;
+      }
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isStatement(
   node: object | null | undefined,
@@ -4544,68 +2810,70 @@ export function isStatement(
 ): node is t.Statement {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "BlockStatement" === nodeType ||
-    "BreakStatement" === nodeType ||
-    "ContinueStatement" === nodeType ||
-    "DebuggerStatement" === nodeType ||
-    "DoWhileStatement" === nodeType ||
-    "EmptyStatement" === nodeType ||
-    "ExpressionStatement" === nodeType ||
-    "ForInStatement" === nodeType ||
-    "ForStatement" === nodeType ||
-    "FunctionDeclaration" === nodeType ||
-    "IfStatement" === nodeType ||
-    "LabeledStatement" === nodeType ||
-    "ReturnStatement" === nodeType ||
-    "SwitchStatement" === nodeType ||
-    "ThrowStatement" === nodeType ||
-    "TryStatement" === nodeType ||
-    "VariableDeclaration" === nodeType ||
-    "WhileStatement" === nodeType ||
-    "WithStatement" === nodeType ||
-    "ClassDeclaration" === nodeType ||
-    "ExportAllDeclaration" === nodeType ||
-    "ExportDefaultDeclaration" === nodeType ||
-    "ExportNamedDeclaration" === nodeType ||
-    "ForOfStatement" === nodeType ||
-    "ImportDeclaration" === nodeType ||
-    "DeclareClass" === nodeType ||
-    "DeclareFunction" === nodeType ||
-    "DeclareInterface" === nodeType ||
-    "DeclareModule" === nodeType ||
-    "DeclareModuleExports" === nodeType ||
-    "DeclareTypeAlias" === nodeType ||
-    "DeclareOpaqueType" === nodeType ||
-    "DeclareVariable" === nodeType ||
-    "DeclareExportDeclaration" === nodeType ||
-    "DeclareExportAllDeclaration" === nodeType ||
-    "InterfaceDeclaration" === nodeType ||
-    "OpaqueType" === nodeType ||
-    "TypeAlias" === nodeType ||
-    "EnumDeclaration" === nodeType ||
-    "TSDeclareFunction" === nodeType ||
-    "TSInterfaceDeclaration" === nodeType ||
-    "TSTypeAliasDeclaration" === nodeType ||
-    "TSEnumDeclaration" === nodeType ||
-    "TSModuleDeclaration" === nodeType ||
-    "TSImportEqualsDeclaration" === nodeType ||
-    "TSExportAssignment" === nodeType ||
-    "TSNamespaceExportDeclaration" === nodeType ||
-    (nodeType === "Placeholder" &&
-      ("Statement" === (node as t.Placeholder).expectedNode ||
-        "Declaration" === (node as t.Placeholder).expectedNode ||
-        "BlockStatement" === (node as t.Placeholder).expectedNode))
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "BlockStatement":
+    case "BreakStatement":
+    case "ContinueStatement":
+    case "DebuggerStatement":
+    case "DoWhileStatement":
+    case "EmptyStatement":
+    case "ExpressionStatement":
+    case "ForInStatement":
+    case "ForStatement":
+    case "FunctionDeclaration":
+    case "IfStatement":
+    case "LabeledStatement":
+    case "ReturnStatement":
+    case "SwitchStatement":
+    case "ThrowStatement":
+    case "TryStatement":
+    case "VariableDeclaration":
+    case "WhileStatement":
+    case "WithStatement":
+    case "ClassDeclaration":
+    case "ExportAllDeclaration":
+    case "ExportDefaultDeclaration":
+    case "ExportNamedDeclaration":
+    case "ForOfStatement":
+    case "ImportDeclaration":
+    case "DeclareClass":
+    case "DeclareFunction":
+    case "DeclareInterface":
+    case "DeclareModule":
+    case "DeclareModuleExports":
+    case "DeclareTypeAlias":
+    case "DeclareOpaqueType":
+    case "DeclareVariable":
+    case "DeclareExportDeclaration":
+    case "DeclareExportAllDeclaration":
+    case "InterfaceDeclaration":
+    case "OpaqueType":
+    case "TypeAlias":
+    case "EnumDeclaration":
+    case "TSDeclareFunction":
+    case "TSInterfaceDeclaration":
+    case "TSTypeAliasDeclaration":
+    case "TSEnumDeclaration":
+    case "TSModuleDeclaration":
+    case "TSImportEqualsDeclaration":
+    case "TSExportAssignment":
+    case "TSNamespaceExportDeclaration":
+      break;
+    case "Placeholder":
+      switch ((node as t.Placeholder).expectedNode) {
+        case "Statement":
+        case "Declaration":
+        case "BlockStatement":
+          break;
+        default:
+          return false;
+      }
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTerminatorless(
   node: object | null | undefined,
@@ -4613,23 +2881,19 @@ export function isTerminatorless(
 ): node is t.Terminatorless {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "BreakStatement" === nodeType ||
-    "ContinueStatement" === nodeType ||
-    "ReturnStatement" === nodeType ||
-    "ThrowStatement" === nodeType ||
-    "YieldExpression" === nodeType ||
-    "AwaitExpression" === nodeType
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "BreakStatement":
+    case "ContinueStatement":
+    case "ReturnStatement":
+    case "ThrowStatement":
+    case "YieldExpression":
+    case "AwaitExpression":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isCompletionStatement(
   node: object | null | undefined,
@@ -4637,21 +2901,17 @@ export function isCompletionStatement(
 ): node is t.CompletionStatement {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "BreakStatement" === nodeType ||
-    "ContinueStatement" === nodeType ||
-    "ReturnStatement" === nodeType ||
-    "ThrowStatement" === nodeType
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "BreakStatement":
+    case "ContinueStatement":
+    case "ReturnStatement":
+    case "ThrowStatement":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isConditional(
   node: object | null | undefined,
@@ -4659,16 +2919,15 @@ export function isConditional(
 ): node is t.Conditional {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if ("ConditionalExpression" === nodeType || "IfStatement" === nodeType) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "ConditionalExpression":
+    case "IfStatement":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isLoop(
   node: object | null | undefined,
@@ -4676,22 +2935,18 @@ export function isLoop(
 ): node is t.Loop {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "DoWhileStatement" === nodeType ||
-    "ForInStatement" === nodeType ||
-    "ForStatement" === nodeType ||
-    "WhileStatement" === nodeType ||
-    "ForOfStatement" === nodeType
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "DoWhileStatement":
+    case "ForInStatement":
+    case "ForStatement":
+    case "WhileStatement":
+    case "ForOfStatement":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isWhile(
   node: object | null | undefined,
@@ -4699,16 +2954,15 @@ export function isWhile(
 ): node is t.While {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if ("DoWhileStatement" === nodeType || "WhileStatement" === nodeType) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "DoWhileStatement":
+    case "WhileStatement":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isExpressionWrapper(
   node: object | null | undefined,
@@ -4716,20 +2970,16 @@ export function isExpressionWrapper(
 ): node is t.ExpressionWrapper {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "ExpressionStatement" === nodeType ||
-    "ParenthesizedExpression" === nodeType ||
-    "TypeCastExpression" === nodeType
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "ExpressionStatement":
+    case "ParenthesizedExpression":
+    case "TypeCastExpression":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isFor(
   node: object | null | undefined,
@@ -4737,20 +2987,16 @@ export function isFor(
 ): node is t.For {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "ForInStatement" === nodeType ||
-    "ForStatement" === nodeType ||
-    "ForOfStatement" === nodeType
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "ForInStatement":
+    case "ForStatement":
+    case "ForOfStatement":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isForXStatement(
   node: object | null | undefined,
@@ -4758,16 +3004,15 @@ export function isForXStatement(
 ): node is t.ForXStatement {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if ("ForInStatement" === nodeType || "ForOfStatement" === nodeType) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "ForInStatement":
+    case "ForOfStatement":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isFunction(
   node: object | null | undefined,
@@ -4775,23 +3020,19 @@ export function isFunction(
 ): node is t.Function {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "FunctionDeclaration" === nodeType ||
-    "FunctionExpression" === nodeType ||
-    "ObjectMethod" === nodeType ||
-    "ArrowFunctionExpression" === nodeType ||
-    "ClassMethod" === nodeType ||
-    "ClassPrivateMethod" === nodeType
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "FunctionDeclaration":
+    case "FunctionExpression":
+    case "ObjectMethod":
+    case "ArrowFunctionExpression":
+    case "ClassMethod":
+    case "ClassPrivateMethod":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isFunctionParent(
   node: object | null | undefined,
@@ -4799,25 +3040,21 @@ export function isFunctionParent(
 ): node is t.FunctionParent {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "FunctionDeclaration" === nodeType ||
-    "FunctionExpression" === nodeType ||
-    "ObjectMethod" === nodeType ||
-    "ArrowFunctionExpression" === nodeType ||
-    "ClassMethod" === nodeType ||
-    "ClassPrivateMethod" === nodeType ||
-    "StaticBlock" === nodeType ||
-    "TSModuleBlock" === nodeType
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "FunctionDeclaration":
+    case "FunctionExpression":
+    case "ObjectMethod":
+    case "ArrowFunctionExpression":
+    case "ClassMethod":
+    case "ClassPrivateMethod":
+    case "StaticBlock":
+    case "TSModuleBlock":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isPureish(
   node: object | null | undefined,
@@ -4825,29 +3062,31 @@ export function isPureish(
 ): node is t.Pureish {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "FunctionDeclaration" === nodeType ||
-    "FunctionExpression" === nodeType ||
-    "StringLiteral" === nodeType ||
-    "NumericLiteral" === nodeType ||
-    "NullLiteral" === nodeType ||
-    "BooleanLiteral" === nodeType ||
-    "RegExpLiteral" === nodeType ||
-    "ArrowFunctionExpression" === nodeType ||
-    "BigIntLiteral" === nodeType ||
-    "DecimalLiteral" === nodeType ||
-    (nodeType === "Placeholder" &&
-      "StringLiteral" === (node as t.Placeholder).expectedNode)
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "FunctionDeclaration":
+    case "FunctionExpression":
+    case "StringLiteral":
+    case "NumericLiteral":
+    case "NullLiteral":
+    case "BooleanLiteral":
+    case "RegExpLiteral":
+    case "ArrowFunctionExpression":
+    case "BigIntLiteral":
+    case "DecimalLiteral":
+      break;
+    case "Placeholder":
+      switch ((node as t.Placeholder).expectedNode) {
+        case "StringLiteral":
+          break;
+        default:
+          return false;
+      }
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isDeclaration(
   node: object | null | undefined,
@@ -4855,45 +3094,47 @@ export function isDeclaration(
 ): node is t.Declaration {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "FunctionDeclaration" === nodeType ||
-    "VariableDeclaration" === nodeType ||
-    "ClassDeclaration" === nodeType ||
-    "ExportAllDeclaration" === nodeType ||
-    "ExportDefaultDeclaration" === nodeType ||
-    "ExportNamedDeclaration" === nodeType ||
-    "ImportDeclaration" === nodeType ||
-    "DeclareClass" === nodeType ||
-    "DeclareFunction" === nodeType ||
-    "DeclareInterface" === nodeType ||
-    "DeclareModule" === nodeType ||
-    "DeclareModuleExports" === nodeType ||
-    "DeclareTypeAlias" === nodeType ||
-    "DeclareOpaqueType" === nodeType ||
-    "DeclareVariable" === nodeType ||
-    "DeclareExportDeclaration" === nodeType ||
-    "DeclareExportAllDeclaration" === nodeType ||
-    "InterfaceDeclaration" === nodeType ||
-    "OpaqueType" === nodeType ||
-    "TypeAlias" === nodeType ||
-    "EnumDeclaration" === nodeType ||
-    "TSDeclareFunction" === nodeType ||
-    "TSInterfaceDeclaration" === nodeType ||
-    "TSTypeAliasDeclaration" === nodeType ||
-    "TSEnumDeclaration" === nodeType ||
-    "TSModuleDeclaration" === nodeType ||
-    (nodeType === "Placeholder" &&
-      "Declaration" === (node as t.Placeholder).expectedNode)
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "FunctionDeclaration":
+    case "VariableDeclaration":
+    case "ClassDeclaration":
+    case "ExportAllDeclaration":
+    case "ExportDefaultDeclaration":
+    case "ExportNamedDeclaration":
+    case "ImportDeclaration":
+    case "DeclareClass":
+    case "DeclareFunction":
+    case "DeclareInterface":
+    case "DeclareModule":
+    case "DeclareModuleExports":
+    case "DeclareTypeAlias":
+    case "DeclareOpaqueType":
+    case "DeclareVariable":
+    case "DeclareExportDeclaration":
+    case "DeclareExportAllDeclaration":
+    case "InterfaceDeclaration":
+    case "OpaqueType":
+    case "TypeAlias":
+    case "EnumDeclaration":
+    case "TSDeclareFunction":
+    case "TSInterfaceDeclaration":
+    case "TSTypeAliasDeclaration":
+    case "TSEnumDeclaration":
+    case "TSModuleDeclaration":
+      break;
+    case "Placeholder":
+      switch ((node as t.Placeholder).expectedNode) {
+        case "Declaration":
+          break;
+        default:
+          return false;
+      }
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isPatternLike(
   node: object | null | undefined,
@@ -4901,29 +3142,31 @@ export function isPatternLike(
 ): node is t.PatternLike {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "Identifier" === nodeType ||
-    "RestElement" === nodeType ||
-    "AssignmentPattern" === nodeType ||
-    "ArrayPattern" === nodeType ||
-    "ObjectPattern" === nodeType ||
-    "TSAsExpression" === nodeType ||
-    "TSSatisfiesExpression" === nodeType ||
-    "TSTypeAssertion" === nodeType ||
-    "TSNonNullExpression" === nodeType ||
-    (nodeType === "Placeholder" &&
-      ("Pattern" === (node as t.Placeholder).expectedNode ||
-        "Identifier" === (node as t.Placeholder).expectedNode))
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "Identifier":
+    case "RestElement":
+    case "AssignmentPattern":
+    case "ArrayPattern":
+    case "ObjectPattern":
+    case "TSAsExpression":
+    case "TSSatisfiesExpression":
+    case "TSTypeAssertion":
+    case "TSNonNullExpression":
+      break;
+    case "Placeholder":
+      switch ((node as t.Placeholder).expectedNode) {
+        case "Pattern":
+        case "Identifier":
+          break;
+        default:
+          return false;
+      }
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isLVal(
   node: object | null | undefined,
@@ -4931,31 +3174,33 @@ export function isLVal(
 ): node is t.LVal {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "Identifier" === nodeType ||
-    "MemberExpression" === nodeType ||
-    "RestElement" === nodeType ||
-    "AssignmentPattern" === nodeType ||
-    "ArrayPattern" === nodeType ||
-    "ObjectPattern" === nodeType ||
-    "TSParameterProperty" === nodeType ||
-    "TSAsExpression" === nodeType ||
-    "TSSatisfiesExpression" === nodeType ||
-    "TSTypeAssertion" === nodeType ||
-    "TSNonNullExpression" === nodeType ||
-    (nodeType === "Placeholder" &&
-      ("Pattern" === (node as t.Placeholder).expectedNode ||
-        "Identifier" === (node as t.Placeholder).expectedNode))
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "Identifier":
+    case "MemberExpression":
+    case "RestElement":
+    case "AssignmentPattern":
+    case "ArrayPattern":
+    case "ObjectPattern":
+    case "TSParameterProperty":
+    case "TSAsExpression":
+    case "TSSatisfiesExpression":
+    case "TSTypeAssertion":
+    case "TSNonNullExpression":
+      break;
+    case "Placeholder":
+      switch ((node as t.Placeholder).expectedNode) {
+        case "Pattern":
+        case "Identifier":
+          break;
+        default:
+          return false;
+      }
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSEntityName(
   node: object | null | undefined,
@@ -4963,21 +3208,23 @@ export function isTSEntityName(
 ): node is t.TSEntityName {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "Identifier" === nodeType ||
-    "TSQualifiedName" === nodeType ||
-    (nodeType === "Placeholder" &&
-      "Identifier" === (node as t.Placeholder).expectedNode)
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "Identifier":
+    case "TSQualifiedName":
+      break;
+    case "Placeholder":
+      switch ((node as t.Placeholder).expectedNode) {
+        case "Identifier":
+          break;
+        default:
+          return false;
+      }
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isLiteral(
   node: object | null | undefined,
@@ -4985,27 +3232,29 @@ export function isLiteral(
 ): node is t.Literal {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "StringLiteral" === nodeType ||
-    "NumericLiteral" === nodeType ||
-    "NullLiteral" === nodeType ||
-    "BooleanLiteral" === nodeType ||
-    "RegExpLiteral" === nodeType ||
-    "TemplateLiteral" === nodeType ||
-    "BigIntLiteral" === nodeType ||
-    "DecimalLiteral" === nodeType ||
-    (nodeType === "Placeholder" &&
-      "StringLiteral" === (node as t.Placeholder).expectedNode)
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "StringLiteral":
+    case "NumericLiteral":
+    case "NullLiteral":
+    case "BooleanLiteral":
+    case "RegExpLiteral":
+    case "TemplateLiteral":
+    case "BigIntLiteral":
+    case "DecimalLiteral":
+      break;
+    case "Placeholder":
+      switch ((node as t.Placeholder).expectedNode) {
+        case "StringLiteral":
+          break;
+        default:
+          return false;
+      }
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isImmutable(
   node: object | null | undefined,
@@ -5013,35 +3262,37 @@ export function isImmutable(
 ): node is t.Immutable {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "StringLiteral" === nodeType ||
-    "NumericLiteral" === nodeType ||
-    "NullLiteral" === nodeType ||
-    "BooleanLiteral" === nodeType ||
-    "BigIntLiteral" === nodeType ||
-    "JSXAttribute" === nodeType ||
-    "JSXClosingElement" === nodeType ||
-    "JSXElement" === nodeType ||
-    "JSXExpressionContainer" === nodeType ||
-    "JSXSpreadChild" === nodeType ||
-    "JSXOpeningElement" === nodeType ||
-    "JSXText" === nodeType ||
-    "JSXFragment" === nodeType ||
-    "JSXOpeningFragment" === nodeType ||
-    "JSXClosingFragment" === nodeType ||
-    "DecimalLiteral" === nodeType ||
-    (nodeType === "Placeholder" &&
-      "StringLiteral" === (node as t.Placeholder).expectedNode)
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "StringLiteral":
+    case "NumericLiteral":
+    case "NullLiteral":
+    case "BooleanLiteral":
+    case "BigIntLiteral":
+    case "JSXAttribute":
+    case "JSXClosingElement":
+    case "JSXElement":
+    case "JSXExpressionContainer":
+    case "JSXSpreadChild":
+    case "JSXOpeningElement":
+    case "JSXText":
+    case "JSXFragment":
+    case "JSXOpeningFragment":
+    case "JSXClosingFragment":
+    case "DecimalLiteral":
+      break;
+    case "Placeholder":
+      switch ((node as t.Placeholder).expectedNode) {
+        case "StringLiteral":
+          break;
+        default:
+          return false;
+      }
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isUserWhitespacable(
   node: object | null | undefined,
@@ -5049,24 +3300,20 @@ export function isUserWhitespacable(
 ): node is t.UserWhitespacable {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "ObjectMethod" === nodeType ||
-    "ObjectProperty" === nodeType ||
-    "ObjectTypeInternalSlot" === nodeType ||
-    "ObjectTypeCallProperty" === nodeType ||
-    "ObjectTypeIndexer" === nodeType ||
-    "ObjectTypeProperty" === nodeType ||
-    "ObjectTypeSpreadProperty" === nodeType
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "ObjectMethod":
+    case "ObjectProperty":
+    case "ObjectTypeInternalSlot":
+    case "ObjectTypeCallProperty":
+    case "ObjectTypeIndexer":
+    case "ObjectTypeProperty":
+    case "ObjectTypeSpreadProperty":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isMethod(
   node: object | null | undefined,
@@ -5074,20 +3321,16 @@ export function isMethod(
 ): node is t.Method {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "ObjectMethod" === nodeType ||
-    "ClassMethod" === nodeType ||
-    "ClassPrivateMethod" === nodeType
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "ObjectMethod":
+    case "ClassMethod":
+    case "ClassPrivateMethod":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isObjectMember(
   node: object | null | undefined,
@@ -5095,16 +3338,15 @@ export function isObjectMember(
 ): node is t.ObjectMember {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if ("ObjectMethod" === nodeType || "ObjectProperty" === nodeType) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "ObjectMethod":
+    case "ObjectProperty":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isProperty(
   node: object | null | undefined,
@@ -5112,21 +3354,17 @@ export function isProperty(
 ): node is t.Property {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "ObjectProperty" === nodeType ||
-    "ClassProperty" === nodeType ||
-    "ClassAccessorProperty" === nodeType ||
-    "ClassPrivateProperty" === nodeType
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "ObjectProperty":
+    case "ClassProperty":
+    case "ClassAccessorProperty":
+    case "ClassPrivateProperty":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isUnaryLike(
   node: object | null | undefined,
@@ -5134,16 +3372,15 @@ export function isUnaryLike(
 ): node is t.UnaryLike {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if ("UnaryExpression" === nodeType || "SpreadElement" === nodeType) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "UnaryExpression":
+    case "SpreadElement":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isPattern(
   node: object | null | undefined,
@@ -5151,22 +3388,24 @@ export function isPattern(
 ): node is t.Pattern {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "AssignmentPattern" === nodeType ||
-    "ArrayPattern" === nodeType ||
-    "ObjectPattern" === nodeType ||
-    (nodeType === "Placeholder" &&
-      "Pattern" === (node as t.Placeholder).expectedNode)
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "AssignmentPattern":
+    case "ArrayPattern":
+    case "ObjectPattern":
+      break;
+    case "Placeholder":
+      switch ((node as t.Placeholder).expectedNode) {
+        case "Pattern":
+          break;
+        default:
+          return false;
+      }
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isClass(
   node: object | null | undefined,
@@ -5174,16 +3413,15 @@ export function isClass(
 ): node is t.Class {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if ("ClassExpression" === nodeType || "ClassDeclaration" === nodeType) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "ClassExpression":
+    case "ClassDeclaration":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isImportOrExportDeclaration(
   node: object | null | undefined,
@@ -5191,21 +3429,17 @@ export function isImportOrExportDeclaration(
 ): node is t.ImportOrExportDeclaration {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "ExportAllDeclaration" === nodeType ||
-    "ExportDefaultDeclaration" === nodeType ||
-    "ExportNamedDeclaration" === nodeType ||
-    "ImportDeclaration" === nodeType
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "ExportAllDeclaration":
+    case "ExportDefaultDeclaration":
+    case "ExportNamedDeclaration":
+    case "ImportDeclaration":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isExportDeclaration(
   node: object | null | undefined,
@@ -5213,20 +3447,16 @@ export function isExportDeclaration(
 ): node is t.ExportDeclaration {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "ExportAllDeclaration" === nodeType ||
-    "ExportDefaultDeclaration" === nodeType ||
-    "ExportNamedDeclaration" === nodeType
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "ExportAllDeclaration":
+    case "ExportDefaultDeclaration":
+    case "ExportNamedDeclaration":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isModuleSpecifier(
   node: object | null | undefined,
@@ -5234,23 +3464,19 @@ export function isModuleSpecifier(
 ): node is t.ModuleSpecifier {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "ExportSpecifier" === nodeType ||
-    "ImportDefaultSpecifier" === nodeType ||
-    "ImportNamespaceSpecifier" === nodeType ||
-    "ImportSpecifier" === nodeType ||
-    "ExportNamespaceSpecifier" === nodeType ||
-    "ExportDefaultSpecifier" === nodeType
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "ExportSpecifier":
+    case "ImportDefaultSpecifier":
+    case "ImportNamespaceSpecifier":
+    case "ImportSpecifier":
+    case "ExportNamespaceSpecifier":
+    case "ExportDefaultSpecifier":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isAccessor(
   node: object | null | undefined,
@@ -5258,16 +3484,14 @@ export function isAccessor(
 ): node is t.Accessor {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if ("ClassAccessorProperty" === nodeType) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "ClassAccessorProperty":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isPrivate(
   node: object | null | undefined,
@@ -5275,20 +3499,16 @@ export function isPrivate(
 ): node is t.Private {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "ClassPrivateProperty" === nodeType ||
-    "ClassPrivateMethod" === nodeType ||
-    "PrivateName" === nodeType
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "ClassPrivateProperty":
+    case "ClassPrivateMethod":
+    case "PrivateName":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isFlow(
   node: object | null | undefined,
@@ -5296,82 +3516,78 @@ export function isFlow(
 ): node is t.Flow {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "AnyTypeAnnotation" === nodeType ||
-    "ArrayTypeAnnotation" === nodeType ||
-    "BooleanTypeAnnotation" === nodeType ||
-    "BooleanLiteralTypeAnnotation" === nodeType ||
-    "NullLiteralTypeAnnotation" === nodeType ||
-    "ClassImplements" === nodeType ||
-    "DeclareClass" === nodeType ||
-    "DeclareFunction" === nodeType ||
-    "DeclareInterface" === nodeType ||
-    "DeclareModule" === nodeType ||
-    "DeclareModuleExports" === nodeType ||
-    "DeclareTypeAlias" === nodeType ||
-    "DeclareOpaqueType" === nodeType ||
-    "DeclareVariable" === nodeType ||
-    "DeclareExportDeclaration" === nodeType ||
-    "DeclareExportAllDeclaration" === nodeType ||
-    "DeclaredPredicate" === nodeType ||
-    "ExistsTypeAnnotation" === nodeType ||
-    "FunctionTypeAnnotation" === nodeType ||
-    "FunctionTypeParam" === nodeType ||
-    "GenericTypeAnnotation" === nodeType ||
-    "InferredPredicate" === nodeType ||
-    "InterfaceExtends" === nodeType ||
-    "InterfaceDeclaration" === nodeType ||
-    "InterfaceTypeAnnotation" === nodeType ||
-    "IntersectionTypeAnnotation" === nodeType ||
-    "MixedTypeAnnotation" === nodeType ||
-    "EmptyTypeAnnotation" === nodeType ||
-    "NullableTypeAnnotation" === nodeType ||
-    "NumberLiteralTypeAnnotation" === nodeType ||
-    "NumberTypeAnnotation" === nodeType ||
-    "ObjectTypeAnnotation" === nodeType ||
-    "ObjectTypeInternalSlot" === nodeType ||
-    "ObjectTypeCallProperty" === nodeType ||
-    "ObjectTypeIndexer" === nodeType ||
-    "ObjectTypeProperty" === nodeType ||
-    "ObjectTypeSpreadProperty" === nodeType ||
-    "OpaqueType" === nodeType ||
-    "QualifiedTypeIdentifier" === nodeType ||
-    "StringLiteralTypeAnnotation" === nodeType ||
-    "StringTypeAnnotation" === nodeType ||
-    "SymbolTypeAnnotation" === nodeType ||
-    "ThisTypeAnnotation" === nodeType ||
-    "TupleTypeAnnotation" === nodeType ||
-    "TypeofTypeAnnotation" === nodeType ||
-    "TypeAlias" === nodeType ||
-    "TypeAnnotation" === nodeType ||
-    "TypeCastExpression" === nodeType ||
-    "TypeParameter" === nodeType ||
-    "TypeParameterDeclaration" === nodeType ||
-    "TypeParameterInstantiation" === nodeType ||
-    "UnionTypeAnnotation" === nodeType ||
-    "Variance" === nodeType ||
-    "VoidTypeAnnotation" === nodeType ||
-    "EnumDeclaration" === nodeType ||
-    "EnumBooleanBody" === nodeType ||
-    "EnumNumberBody" === nodeType ||
-    "EnumStringBody" === nodeType ||
-    "EnumSymbolBody" === nodeType ||
-    "EnumBooleanMember" === nodeType ||
-    "EnumNumberMember" === nodeType ||
-    "EnumStringMember" === nodeType ||
-    "EnumDefaultedMember" === nodeType ||
-    "IndexedAccessType" === nodeType ||
-    "OptionalIndexedAccessType" === nodeType
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "AnyTypeAnnotation":
+    case "ArrayTypeAnnotation":
+    case "BooleanTypeAnnotation":
+    case "BooleanLiteralTypeAnnotation":
+    case "NullLiteralTypeAnnotation":
+    case "ClassImplements":
+    case "DeclareClass":
+    case "DeclareFunction":
+    case "DeclareInterface":
+    case "DeclareModule":
+    case "DeclareModuleExports":
+    case "DeclareTypeAlias":
+    case "DeclareOpaqueType":
+    case "DeclareVariable":
+    case "DeclareExportDeclaration":
+    case "DeclareExportAllDeclaration":
+    case "DeclaredPredicate":
+    case "ExistsTypeAnnotation":
+    case "FunctionTypeAnnotation":
+    case "FunctionTypeParam":
+    case "GenericTypeAnnotation":
+    case "InferredPredicate":
+    case "InterfaceExtends":
+    case "InterfaceDeclaration":
+    case "InterfaceTypeAnnotation":
+    case "IntersectionTypeAnnotation":
+    case "MixedTypeAnnotation":
+    case "EmptyTypeAnnotation":
+    case "NullableTypeAnnotation":
+    case "NumberLiteralTypeAnnotation":
+    case "NumberTypeAnnotation":
+    case "ObjectTypeAnnotation":
+    case "ObjectTypeInternalSlot":
+    case "ObjectTypeCallProperty":
+    case "ObjectTypeIndexer":
+    case "ObjectTypeProperty":
+    case "ObjectTypeSpreadProperty":
+    case "OpaqueType":
+    case "QualifiedTypeIdentifier":
+    case "StringLiteralTypeAnnotation":
+    case "StringTypeAnnotation":
+    case "SymbolTypeAnnotation":
+    case "ThisTypeAnnotation":
+    case "TupleTypeAnnotation":
+    case "TypeofTypeAnnotation":
+    case "TypeAlias":
+    case "TypeAnnotation":
+    case "TypeCastExpression":
+    case "TypeParameter":
+    case "TypeParameterDeclaration":
+    case "TypeParameterInstantiation":
+    case "UnionTypeAnnotation":
+    case "Variance":
+    case "VoidTypeAnnotation":
+    case "EnumDeclaration":
+    case "EnumBooleanBody":
+    case "EnumNumberBody":
+    case "EnumStringBody":
+    case "EnumSymbolBody":
+    case "EnumBooleanMember":
+    case "EnumNumberMember":
+    case "EnumStringMember":
+    case "EnumDefaultedMember":
+    case "IndexedAccessType":
+    case "OptionalIndexedAccessType":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isFlowType(
   node: object | null | undefined,
@@ -5379,43 +3595,39 @@ export function isFlowType(
 ): node is t.FlowType {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "AnyTypeAnnotation" === nodeType ||
-    "ArrayTypeAnnotation" === nodeType ||
-    "BooleanTypeAnnotation" === nodeType ||
-    "BooleanLiteralTypeAnnotation" === nodeType ||
-    "NullLiteralTypeAnnotation" === nodeType ||
-    "ExistsTypeAnnotation" === nodeType ||
-    "FunctionTypeAnnotation" === nodeType ||
-    "GenericTypeAnnotation" === nodeType ||
-    "InterfaceTypeAnnotation" === nodeType ||
-    "IntersectionTypeAnnotation" === nodeType ||
-    "MixedTypeAnnotation" === nodeType ||
-    "EmptyTypeAnnotation" === nodeType ||
-    "NullableTypeAnnotation" === nodeType ||
-    "NumberLiteralTypeAnnotation" === nodeType ||
-    "NumberTypeAnnotation" === nodeType ||
-    "ObjectTypeAnnotation" === nodeType ||
-    "StringLiteralTypeAnnotation" === nodeType ||
-    "StringTypeAnnotation" === nodeType ||
-    "SymbolTypeAnnotation" === nodeType ||
-    "ThisTypeAnnotation" === nodeType ||
-    "TupleTypeAnnotation" === nodeType ||
-    "TypeofTypeAnnotation" === nodeType ||
-    "UnionTypeAnnotation" === nodeType ||
-    "VoidTypeAnnotation" === nodeType ||
-    "IndexedAccessType" === nodeType ||
-    "OptionalIndexedAccessType" === nodeType
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "AnyTypeAnnotation":
+    case "ArrayTypeAnnotation":
+    case "BooleanTypeAnnotation":
+    case "BooleanLiteralTypeAnnotation":
+    case "NullLiteralTypeAnnotation":
+    case "ExistsTypeAnnotation":
+    case "FunctionTypeAnnotation":
+    case "GenericTypeAnnotation":
+    case "InterfaceTypeAnnotation":
+    case "IntersectionTypeAnnotation":
+    case "MixedTypeAnnotation":
+    case "EmptyTypeAnnotation":
+    case "NullableTypeAnnotation":
+    case "NumberLiteralTypeAnnotation":
+    case "NumberTypeAnnotation":
+    case "ObjectTypeAnnotation":
+    case "StringLiteralTypeAnnotation":
+    case "StringTypeAnnotation":
+    case "SymbolTypeAnnotation":
+    case "ThisTypeAnnotation":
+    case "TupleTypeAnnotation":
+    case "TypeofTypeAnnotation":
+    case "UnionTypeAnnotation":
+    case "VoidTypeAnnotation":
+    case "IndexedAccessType":
+    case "OptionalIndexedAccessType":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isFlowBaseAnnotation(
   node: object | null | undefined,
@@ -5423,27 +3635,23 @@ export function isFlowBaseAnnotation(
 ): node is t.FlowBaseAnnotation {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "AnyTypeAnnotation" === nodeType ||
-    "BooleanTypeAnnotation" === nodeType ||
-    "NullLiteralTypeAnnotation" === nodeType ||
-    "MixedTypeAnnotation" === nodeType ||
-    "EmptyTypeAnnotation" === nodeType ||
-    "NumberTypeAnnotation" === nodeType ||
-    "StringTypeAnnotation" === nodeType ||
-    "SymbolTypeAnnotation" === nodeType ||
-    "ThisTypeAnnotation" === nodeType ||
-    "VoidTypeAnnotation" === nodeType
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "AnyTypeAnnotation":
+    case "BooleanTypeAnnotation":
+    case "NullLiteralTypeAnnotation":
+    case "MixedTypeAnnotation":
+    case "EmptyTypeAnnotation":
+    case "NumberTypeAnnotation":
+    case "StringTypeAnnotation":
+    case "SymbolTypeAnnotation":
+    case "ThisTypeAnnotation":
+    case "VoidTypeAnnotation":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isFlowDeclaration(
   node: object | null | undefined,
@@ -5451,30 +3659,26 @@ export function isFlowDeclaration(
 ): node is t.FlowDeclaration {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "DeclareClass" === nodeType ||
-    "DeclareFunction" === nodeType ||
-    "DeclareInterface" === nodeType ||
-    "DeclareModule" === nodeType ||
-    "DeclareModuleExports" === nodeType ||
-    "DeclareTypeAlias" === nodeType ||
-    "DeclareOpaqueType" === nodeType ||
-    "DeclareVariable" === nodeType ||
-    "DeclareExportDeclaration" === nodeType ||
-    "DeclareExportAllDeclaration" === nodeType ||
-    "InterfaceDeclaration" === nodeType ||
-    "OpaqueType" === nodeType ||
-    "TypeAlias" === nodeType
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "DeclareClass":
+    case "DeclareFunction":
+    case "DeclareInterface":
+    case "DeclareModule":
+    case "DeclareModuleExports":
+    case "DeclareTypeAlias":
+    case "DeclareOpaqueType":
+    case "DeclareVariable":
+    case "DeclareExportDeclaration":
+    case "DeclareExportAllDeclaration":
+    case "InterfaceDeclaration":
+    case "OpaqueType":
+    case "TypeAlias":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isFlowPredicate(
   node: object | null | undefined,
@@ -5482,16 +3686,15 @@ export function isFlowPredicate(
 ): node is t.FlowPredicate {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if ("DeclaredPredicate" === nodeType || "InferredPredicate" === nodeType) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "DeclaredPredicate":
+    case "InferredPredicate":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isEnumBody(
   node: object | null | undefined,
@@ -5499,21 +3702,17 @@ export function isEnumBody(
 ): node is t.EnumBody {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "EnumBooleanBody" === nodeType ||
-    "EnumNumberBody" === nodeType ||
-    "EnumStringBody" === nodeType ||
-    "EnumSymbolBody" === nodeType
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "EnumBooleanBody":
+    case "EnumNumberBody":
+    case "EnumStringBody":
+    case "EnumSymbolBody":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isEnumMember(
   node: object | null | undefined,
@@ -5521,21 +3720,17 @@ export function isEnumMember(
 ): node is t.EnumMember {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "EnumBooleanMember" === nodeType ||
-    "EnumNumberMember" === nodeType ||
-    "EnumStringMember" === nodeType ||
-    "EnumDefaultedMember" === nodeType
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "EnumBooleanMember":
+    case "EnumNumberMember":
+    case "EnumStringMember":
+    case "EnumDefaultedMember":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isJSX(
   node: object | null | undefined,
@@ -5543,32 +3738,28 @@ export function isJSX(
 ): node is t.JSX {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "JSXAttribute" === nodeType ||
-    "JSXClosingElement" === nodeType ||
-    "JSXElement" === nodeType ||
-    "JSXEmptyExpression" === nodeType ||
-    "JSXExpressionContainer" === nodeType ||
-    "JSXSpreadChild" === nodeType ||
-    "JSXIdentifier" === nodeType ||
-    "JSXMemberExpression" === nodeType ||
-    "JSXNamespacedName" === nodeType ||
-    "JSXOpeningElement" === nodeType ||
-    "JSXSpreadAttribute" === nodeType ||
-    "JSXText" === nodeType ||
-    "JSXFragment" === nodeType ||
-    "JSXOpeningFragment" === nodeType ||
-    "JSXClosingFragment" === nodeType
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "JSXAttribute":
+    case "JSXClosingElement":
+    case "JSXElement":
+    case "JSXEmptyExpression":
+    case "JSXExpressionContainer":
+    case "JSXSpreadChild":
+    case "JSXIdentifier":
+    case "JSXMemberExpression":
+    case "JSXNamespacedName":
+    case "JSXOpeningElement":
+    case "JSXSpreadAttribute":
+    case "JSXText":
+    case "JSXFragment":
+    case "JSXOpeningFragment":
+    case "JSXClosingFragment":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isMiscellaneous(
   node: object | null | undefined,
@@ -5576,20 +3767,16 @@ export function isMiscellaneous(
 ): node is t.Miscellaneous {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "Noop" === nodeType ||
-    "Placeholder" === nodeType ||
-    "V8IntrinsicIdentifier" === nodeType
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "Noop":
+    case "Placeholder":
+    case "V8IntrinsicIdentifier":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTypeScript(
   node: object | null | undefined,
@@ -5597,82 +3784,78 @@ export function isTypeScript(
 ): node is t.TypeScript {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "TSParameterProperty" === nodeType ||
-    "TSDeclareFunction" === nodeType ||
-    "TSDeclareMethod" === nodeType ||
-    "TSQualifiedName" === nodeType ||
-    "TSCallSignatureDeclaration" === nodeType ||
-    "TSConstructSignatureDeclaration" === nodeType ||
-    "TSPropertySignature" === nodeType ||
-    "TSMethodSignature" === nodeType ||
-    "TSIndexSignature" === nodeType ||
-    "TSAnyKeyword" === nodeType ||
-    "TSBooleanKeyword" === nodeType ||
-    "TSBigIntKeyword" === nodeType ||
-    "TSIntrinsicKeyword" === nodeType ||
-    "TSNeverKeyword" === nodeType ||
-    "TSNullKeyword" === nodeType ||
-    "TSNumberKeyword" === nodeType ||
-    "TSObjectKeyword" === nodeType ||
-    "TSStringKeyword" === nodeType ||
-    "TSSymbolKeyword" === nodeType ||
-    "TSUndefinedKeyword" === nodeType ||
-    "TSUnknownKeyword" === nodeType ||
-    "TSVoidKeyword" === nodeType ||
-    "TSThisType" === nodeType ||
-    "TSFunctionType" === nodeType ||
-    "TSConstructorType" === nodeType ||
-    "TSTypeReference" === nodeType ||
-    "TSTypePredicate" === nodeType ||
-    "TSTypeQuery" === nodeType ||
-    "TSTypeLiteral" === nodeType ||
-    "TSArrayType" === nodeType ||
-    "TSTupleType" === nodeType ||
-    "TSOptionalType" === nodeType ||
-    "TSRestType" === nodeType ||
-    "TSNamedTupleMember" === nodeType ||
-    "TSUnionType" === nodeType ||
-    "TSIntersectionType" === nodeType ||
-    "TSConditionalType" === nodeType ||
-    "TSInferType" === nodeType ||
-    "TSParenthesizedType" === nodeType ||
-    "TSTypeOperator" === nodeType ||
-    "TSIndexedAccessType" === nodeType ||
-    "TSMappedType" === nodeType ||
-    "TSLiteralType" === nodeType ||
-    "TSExpressionWithTypeArguments" === nodeType ||
-    "TSInterfaceDeclaration" === nodeType ||
-    "TSInterfaceBody" === nodeType ||
-    "TSTypeAliasDeclaration" === nodeType ||
-    "TSInstantiationExpression" === nodeType ||
-    "TSAsExpression" === nodeType ||
-    "TSSatisfiesExpression" === nodeType ||
-    "TSTypeAssertion" === nodeType ||
-    "TSEnumDeclaration" === nodeType ||
-    "TSEnumMember" === nodeType ||
-    "TSModuleDeclaration" === nodeType ||
-    "TSModuleBlock" === nodeType ||
-    "TSImportType" === nodeType ||
-    "TSImportEqualsDeclaration" === nodeType ||
-    "TSExternalModuleReference" === nodeType ||
-    "TSNonNullExpression" === nodeType ||
-    "TSExportAssignment" === nodeType ||
-    "TSNamespaceExportDeclaration" === nodeType ||
-    "TSTypeAnnotation" === nodeType ||
-    "TSTypeParameterInstantiation" === nodeType ||
-    "TSTypeParameterDeclaration" === nodeType ||
-    "TSTypeParameter" === nodeType
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "TSParameterProperty":
+    case "TSDeclareFunction":
+    case "TSDeclareMethod":
+    case "TSQualifiedName":
+    case "TSCallSignatureDeclaration":
+    case "TSConstructSignatureDeclaration":
+    case "TSPropertySignature":
+    case "TSMethodSignature":
+    case "TSIndexSignature":
+    case "TSAnyKeyword":
+    case "TSBooleanKeyword":
+    case "TSBigIntKeyword":
+    case "TSIntrinsicKeyword":
+    case "TSNeverKeyword":
+    case "TSNullKeyword":
+    case "TSNumberKeyword":
+    case "TSObjectKeyword":
+    case "TSStringKeyword":
+    case "TSSymbolKeyword":
+    case "TSUndefinedKeyword":
+    case "TSUnknownKeyword":
+    case "TSVoidKeyword":
+    case "TSThisType":
+    case "TSFunctionType":
+    case "TSConstructorType":
+    case "TSTypeReference":
+    case "TSTypePredicate":
+    case "TSTypeQuery":
+    case "TSTypeLiteral":
+    case "TSArrayType":
+    case "TSTupleType":
+    case "TSOptionalType":
+    case "TSRestType":
+    case "TSNamedTupleMember":
+    case "TSUnionType":
+    case "TSIntersectionType":
+    case "TSConditionalType":
+    case "TSInferType":
+    case "TSParenthesizedType":
+    case "TSTypeOperator":
+    case "TSIndexedAccessType":
+    case "TSMappedType":
+    case "TSLiteralType":
+    case "TSExpressionWithTypeArguments":
+    case "TSInterfaceDeclaration":
+    case "TSInterfaceBody":
+    case "TSTypeAliasDeclaration":
+    case "TSInstantiationExpression":
+    case "TSAsExpression":
+    case "TSSatisfiesExpression":
+    case "TSTypeAssertion":
+    case "TSEnumDeclaration":
+    case "TSEnumMember":
+    case "TSModuleDeclaration":
+    case "TSModuleBlock":
+    case "TSImportType":
+    case "TSImportEqualsDeclaration":
+    case "TSExternalModuleReference":
+    case "TSNonNullExpression":
+    case "TSExportAssignment":
+    case "TSNamespaceExportDeclaration":
+    case "TSTypeAnnotation":
+    case "TSTypeParameterInstantiation":
+    case "TSTypeParameterDeclaration":
+    case "TSTypeParameter":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSTypeElement(
   node: object | null | undefined,
@@ -5680,22 +3863,18 @@ export function isTSTypeElement(
 ): node is t.TSTypeElement {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "TSCallSignatureDeclaration" === nodeType ||
-    "TSConstructSignatureDeclaration" === nodeType ||
-    "TSPropertySignature" === nodeType ||
-    "TSMethodSignature" === nodeType ||
-    "TSIndexSignature" === nodeType
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "TSCallSignatureDeclaration":
+    case "TSConstructSignatureDeclaration":
+    case "TSPropertySignature":
+    case "TSMethodSignature":
+    case "TSIndexSignature":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSType(
   node: object | null | undefined,
@@ -5703,52 +3882,48 @@ export function isTSType(
 ): node is t.TSType {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "TSAnyKeyword" === nodeType ||
-    "TSBooleanKeyword" === nodeType ||
-    "TSBigIntKeyword" === nodeType ||
-    "TSIntrinsicKeyword" === nodeType ||
-    "TSNeverKeyword" === nodeType ||
-    "TSNullKeyword" === nodeType ||
-    "TSNumberKeyword" === nodeType ||
-    "TSObjectKeyword" === nodeType ||
-    "TSStringKeyword" === nodeType ||
-    "TSSymbolKeyword" === nodeType ||
-    "TSUndefinedKeyword" === nodeType ||
-    "TSUnknownKeyword" === nodeType ||
-    "TSVoidKeyword" === nodeType ||
-    "TSThisType" === nodeType ||
-    "TSFunctionType" === nodeType ||
-    "TSConstructorType" === nodeType ||
-    "TSTypeReference" === nodeType ||
-    "TSTypePredicate" === nodeType ||
-    "TSTypeQuery" === nodeType ||
-    "TSTypeLiteral" === nodeType ||
-    "TSArrayType" === nodeType ||
-    "TSTupleType" === nodeType ||
-    "TSOptionalType" === nodeType ||
-    "TSRestType" === nodeType ||
-    "TSUnionType" === nodeType ||
-    "TSIntersectionType" === nodeType ||
-    "TSConditionalType" === nodeType ||
-    "TSInferType" === nodeType ||
-    "TSParenthesizedType" === nodeType ||
-    "TSTypeOperator" === nodeType ||
-    "TSIndexedAccessType" === nodeType ||
-    "TSMappedType" === nodeType ||
-    "TSLiteralType" === nodeType ||
-    "TSExpressionWithTypeArguments" === nodeType ||
-    "TSImportType" === nodeType
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "TSAnyKeyword":
+    case "TSBooleanKeyword":
+    case "TSBigIntKeyword":
+    case "TSIntrinsicKeyword":
+    case "TSNeverKeyword":
+    case "TSNullKeyword":
+    case "TSNumberKeyword":
+    case "TSObjectKeyword":
+    case "TSStringKeyword":
+    case "TSSymbolKeyword":
+    case "TSUndefinedKeyword":
+    case "TSUnknownKeyword":
+    case "TSVoidKeyword":
+    case "TSThisType":
+    case "TSFunctionType":
+    case "TSConstructorType":
+    case "TSTypeReference":
+    case "TSTypePredicate":
+    case "TSTypeQuery":
+    case "TSTypeLiteral":
+    case "TSArrayType":
+    case "TSTupleType":
+    case "TSOptionalType":
+    case "TSRestType":
+    case "TSUnionType":
+    case "TSIntersectionType":
+    case "TSConditionalType":
+    case "TSInferType":
+    case "TSParenthesizedType":
+    case "TSTypeOperator":
+    case "TSIndexedAccessType":
+    case "TSMappedType":
+    case "TSLiteralType":
+    case "TSExpressionWithTypeArguments":
+    case "TSImportType":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isTSBaseType(
   node: object | null | undefined,
@@ -5756,32 +3931,28 @@ export function isTSBaseType(
 ): node is t.TSBaseType {
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (
-    "TSAnyKeyword" === nodeType ||
-    "TSBooleanKeyword" === nodeType ||
-    "TSBigIntKeyword" === nodeType ||
-    "TSIntrinsicKeyword" === nodeType ||
-    "TSNeverKeyword" === nodeType ||
-    "TSNullKeyword" === nodeType ||
-    "TSNumberKeyword" === nodeType ||
-    "TSObjectKeyword" === nodeType ||
-    "TSStringKeyword" === nodeType ||
-    "TSSymbolKeyword" === nodeType ||
-    "TSUndefinedKeyword" === nodeType ||
-    "TSUnknownKeyword" === nodeType ||
-    "TSVoidKeyword" === nodeType ||
-    "TSThisType" === nodeType ||
-    "TSLiteralType" === nodeType
-  ) {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
+  switch ((node as t.Node).type) {
+    case "TSAnyKeyword":
+    case "TSBooleanKeyword":
+    case "TSBigIntKeyword":
+    case "TSIntrinsicKeyword":
+    case "TSNeverKeyword":
+    case "TSNullKeyword":
+    case "TSNumberKeyword":
+    case "TSObjectKeyword":
+    case "TSStringKeyword":
+    case "TSSymbolKeyword":
+    case "TSUndefinedKeyword":
+    case "TSUnknownKeyword":
+    case "TSVoidKeyword":
+    case "TSThisType":
+    case "TSLiteralType":
+      break;
+    default:
+      return false;
   }
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isNumberLiteral(
   node: object | null | undefined,
@@ -5790,16 +3961,9 @@ export function isNumberLiteral(
   deprecationWarning("isNumberLiteral", "isNumericLiteral");
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "NumberLiteral") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "NumberLiteral") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isRegexLiteral(
   node: object | null | undefined,
@@ -5808,16 +3972,9 @@ export function isRegexLiteral(
   deprecationWarning("isRegexLiteral", "isRegExpLiteral");
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "RegexLiteral") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "RegexLiteral") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isRestProperty(
   node: object | null | undefined,
@@ -5826,16 +3983,9 @@ export function isRestProperty(
   deprecationWarning("isRestProperty", "isRestElement");
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "RestProperty") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "RestProperty") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isSpreadProperty(
   node: object | null | undefined,
@@ -5844,16 +3994,9 @@ export function isSpreadProperty(
   deprecationWarning("isSpreadProperty", "isSpreadElement");
   if (!node) return false;
 
-  const nodeType = (node as t.Node).type;
-  if (nodeType === "SpreadProperty") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
+  if ((node as t.Node).type !== "SpreadProperty") return false;
 
-  return false;
+  return opts == null || shallowEqual(node, opts);
 }
 export function isModuleDeclaration(
   node: object | null | undefined,
