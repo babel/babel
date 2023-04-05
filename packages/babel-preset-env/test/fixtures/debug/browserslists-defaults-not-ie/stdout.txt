@@ -15,10 +15,10 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-class-static-block { ios, safari }
-  proposal-private-property-in-object { ios < 15 }
-  proposal-class-properties { ios < 15 }
-  proposal-private-methods { ios < 15 }
+  transform-class-static-block { ios, safari }
+  transform-private-property-in-object { ios < 15 }
+  transform-class-properties { ios < 15 }
+  transform-private-methods { ios < 15 }
   syntax-numeric-separator
   syntax-nullish-coalescing-operator
   syntax-optional-chaining
@@ -26,9 +26,9 @@ Using plugins:
   syntax-optional-catch-binding
   syntax-async-generators
   syntax-object-rest-spread
-  proposal-export-namespace-from { ios, safari }
+  transform-export-namespace-from { ios, safari }
   bugfix/transform-safari-id-destructuring-collision-in-function-expression { ios, safari }
   transform-modules-commonjs
-  proposal-dynamic-import
+  transform-dynamic-import
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

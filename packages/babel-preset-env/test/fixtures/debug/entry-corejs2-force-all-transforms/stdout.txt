@@ -8,21 +8,21 @@ Using targets:
 Using modules transform: false
 
 Using plugins:
-  proposal-class-static-block { chrome < 94 }
-  proposal-private-property-in-object { chrome < 91 }
-  proposal-class-properties { chrome < 74 }
-  proposal-private-methods { chrome < 84 }
-  proposal-numeric-separator { chrome < 75 }
-  proposal-logical-assignment-operators { chrome < 85 }
-  proposal-nullish-coalescing-operator { chrome < 80 }
-  proposal-optional-chaining { chrome < 80 }
-  proposal-json-strings { chrome < 66 }
-  proposal-optional-catch-binding { chrome < 66 }
+  transform-class-static-block { chrome < 94 }
+  transform-private-property-in-object { chrome < 91 }
+  transform-class-properties { chrome < 74 }
+  transform-private-methods { chrome < 84 }
+  transform-numeric-separator { chrome < 75 }
+  transform-logical-assignment-operators { chrome < 85 }
+  transform-nullish-coalescing-operator { chrome < 80 }
+  transform-optional-chaining { chrome < 80 }
+  transform-json-strings { chrome < 66 }
+  transform-optional-catch-binding { chrome < 66 }
   transform-parameters { }
-  proposal-async-generator-functions { chrome < 63 }
-  proposal-object-rest-spread { chrome < 60 }
+  transform-async-generator-functions { chrome < 63 }
+  transform-object-rest-spread { chrome < 60 }
   transform-dotall-regex { chrome < 62 }
-  proposal-unicode-property-regex { chrome < 64 }
+  transform-unicode-property-regex { chrome < 64 }
   transform-named-capturing-groups-regex { chrome < 64 }
   transform-async-to-generator { }
   transform-exponentiation-operator { }
@@ -49,7 +49,7 @@ Using plugins:
   transform-member-expression-literals { }
   transform-property-literals { }
   transform-reserved-words { }
-  proposal-export-namespace-from { chrome < 72 }
+  transform-export-namespace-from { chrome < 72 }
   syntax-dynamic-import
 corejs2: `DEBUG` option
 

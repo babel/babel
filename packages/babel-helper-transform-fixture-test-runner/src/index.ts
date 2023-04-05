@@ -358,13 +358,18 @@ async function run(task: Test) {
     }
 
     if (validateLogs) {
+      const normalizationOpts = {
+        normalizePathSeparator: true,
+        normalizePresetEnvDebug: task.taskDir.includes("babel-preset-env"),
+      };
+
       validateFile(
-        normalizeOutput(actualLogs.stdout, /* normalizePathSeparator */ true),
+        normalizeOutput(actualLogs.stdout, normalizationOpts),
         stdout.loc,
         stdout.code,
       );
       validateFile(
-        normalizeOutput(actualLogs.stderr, /* normalizePathSeparator */ true),
+        normalizeOutput(actualLogs.stderr, normalizationOpts),
         stderr.loc,
         stderr.code,
       );
@@ -412,7 +417,10 @@ function escapeRegExp(string: string) {
   return string.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&");
 }
 
-function normalizeOutput(code: string, normalizePathSeparator?: boolean) {
+function normalizeOutput(
+  code: string,
+  { normalizePathSeparator = false, normalizePresetEnvDebug = false } = {},
+) {
   const projectRoot = path.resolve(
     path.dirname(fileURLToPath(import.meta.url)),
     "../../../",
@@ -441,6 +449,15 @@ function normalizeOutput(code: string, normalizePathSeparator?: boolean) {
       );
     }
   }
+
+  // In Babel 8, preset-env logs transform- instead of proposal-. Manually rewrite
+  // the output logs so that we don't have to duplicate all the debug fixtures for
+  // the two different Babel versions.
+  // TODO(Babel 8): Remove this.
+  if (normalizePresetEnvDebug) {
+    result = result.replace(/(\s+)proposal-/gm, "$1transform-");
+  }
+
   return result;
 }
 
