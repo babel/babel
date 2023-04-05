@@ -3954,6 +3954,9 @@ export function isTSBaseType(
 
   return opts == null || shallowEqual(node, opts);
 }
+/**
+ * @deprecated Use `isNumericLiteral`
+ */
 export function isNumberLiteral(
   node: object | null | undefined,
   opts?: object | null,
@@ -3965,6 +3968,9 @@ export function isNumberLiteral(
 
   return opts == null || shallowEqual(node, opts);
 }
+/**
+ * @deprecated Use `isRegExpLiteral`
+ */
 export function isRegexLiteral(
   node: object | null | undefined,
   opts?: object | null,
@@ -3976,6 +3982,9 @@ export function isRegexLiteral(
 
   return opts == null || shallowEqual(node, opts);
 }
+/**
+ * @deprecated Use `isRestElement`
+ */
 export function isRestProperty(
   node: object | null | undefined,
   opts?: object | null,
@@ -3987,6 +3996,9 @@ export function isRestProperty(
 
   return opts == null || shallowEqual(node, opts);
 }
+/**
+ * @deprecated Use `isSpreadElement`
+ */
 export function isSpreadProperty(
   node: object | null | undefined,
   opts?: object | null,
@@ -3998,6 +4010,9 @@ export function isSpreadProperty(
 
   return opts == null || shallowEqual(node, opts);
 }
+/**
+ * @deprecated Use `isImportOrExportDeclaration`
+ */
 export function isModuleDeclaration(
   node: object | null | undefined,
   opts?: object | null,

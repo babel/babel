@@ -8,6 +8,8 @@ import {
   VISITOR_KEYS,
 } from "../../lib/index.js";
 
+const BABEL8 = !!process.env.BABEL_8_BREAKING;
+
 const has = Function.call.bind(Object.prototype.hasOwnProperty);
 
 function buildCases(arr) {
@@ -31,7 +33,7 @@ function addIsHelper(type, aliasKeys, deprecated) {
   if (placeholderTypes.length > 0) {
     cases += `
     case "Placeholder":
-      switch ((node as t.Placeholder).expectedNode) {
+      switch (${BABEL8 ? "node" : "(node as t.Placeholder)"}.expectedNode) {
         ${buildCases(placeholderTypes)}
         default:
           return false;
@@ -44,19 +46,25 @@ function addIsHelper(type, aliasKeys, deprecated) {
       ? `node is t.${type}`
       : "boolean";
 
-  return `export function is${type}(node: object | null | undefined, opts?: object | null): ${result} {
+  return `export function is${type}(${
+    BABEL8
+      ? `node: t.Node | null | undefined, opts?: Partial<t.${type}> | null`
+      : "node: object | null | undefined, opts?: object | null"
+  }): ${result} {
     ${deprecated || ""}
     if (!node) return false;
 
     ${
       cases
         ? `
-          switch((node as t.Node).type){
+          switch(${BABEL8 ? "node" : "(node as t.Node)"}.type){
             ${cases}
             default:
               return false;
           }`
-        : `if ((node as t.Node).type !== ${targetType}) return false;`
+        : `if (${
+            BABEL8 ? "node" : "(node as t.Node)"
+          }.type !== ${targetType}) return false;`
     }
 
     return opts == null || shallowEqual(node, opts);
@@ -87,16 +95,23 @@ import deprecationWarning from "../../utils/deprecationWarning";
     });
 
   Object.keys(DEPRECATED_KEYS).forEach(type => {
-    output += addIsHelper(
-      type,
-      null,
-      `deprecationWarning("is${type}", "is${DEPRECATED_KEYS[type]}")`
-    );
+    const newType = DEPRECATED_KEYS[type];
+    output += `/**
+ * @deprecated Use \`is${newType}\`
+ */
+${addIsHelper(type, null, `deprecationWarning("is${type}", "is${newType}")`)}`;
   });
 
   Object.keys(DEPRECATED_ALIASES).forEach(type => {
     const newType = DEPRECATED_ALIASES[type];
-    output += `export function is${type}(node: object | null | undefined, opts?: object | null): node is t.${newType} {
+    output += `/**
+ * @deprecated Use \`is${newType}\`
+ */
+export function is${type}(${
+      BABEL8
+        ? `node: t.Node | null | undefined, opts?: Partial<t.${type}> | null`
+        : "node: object | null | undefined, opts?: object | null"
+    }): node is t.${newType} {
   deprecationWarning("is${type}", "is${newType}");
   return is${newType}(node, opts);
 }
