@@ -15,8 +15,8 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  transform-class-static-block { ios, safari, samsung }
-  transform-private-property-in-object { ios < 15, samsung }
+  transform-class-static-block { ios, safari }
+  transform-private-property-in-object { ios < 15 }
   transform-class-properties { ios < 15 }
   transform-private-methods { ios < 15 }
   syntax-numeric-separator
@@ -28,7 +28,6 @@ Using plugins:
   syntax-object-rest-spread
   transform-export-namespace-from { ios, safari }
   bugfix/transform-safari-id-destructuring-collision-in-function-expression { ios, safari }
-  bugfix/transform-v8-spread-parameters-in-optional-chaining { samsung }
   transform-modules-commonjs
   transform-dynamic-import
 
