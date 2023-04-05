@@ -3,6 +3,9 @@ import type { PluginAPI, PluginObject } from "@babel/core";
 import type { NodePath } from "@babel/traverse";
 import nameFunction from "@babel/helper-function-name";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
+
+import semver from "semver";
+
 import {
   buildPrivateNamesNodes,
   buildPrivateNamesMap,
@@ -19,14 +22,6 @@ import { assertFieldTransformed } from "./typescript";
 export { FEATURES, enableFeature, injectInitialization, buildCheckInRHS };
 
 declare const PACKAGE_JSON: { name: string; version: string };
-
-// Note: Versions are represented as an integer. e.g. 7.1.5 is represented
-//       as 70000100005. This method is easier than using a semver-parsing
-//       package, but it breaks if we release x.y.z where x, y or z are
-//       greater than 99_999.
-const version = PACKAGE_JSON.version
-  .split(".")
-  .reduce((v, x) => v * 1e5 + +x, 0);
 const versionKey = "@babel/plugin-class-features/version";
 
 interface Options {
@@ -99,14 +94,17 @@ export function createClassFeaturePlugin({
     pre(file) {
       enableFeature(file, feature, loose);
 
-      if (!file.get(versionKey) || file.get(versionKey) < version) {
-        file.set(versionKey, version);
+      if (
+        !file.get(versionKey) ||
+        semver.lt(file.get(versionKey), PACKAGE_JSON.version)
+      ) {
+        file.set(versionKey, PACKAGE_JSON.version);
       }
     },
 
     visitor: {
       Class(path, { file }) {
-        if (file.get(versionKey) !== version) return;
+        if (file.get(versionKey) !== PACKAGE_JSON.version) return;
 
         if (!shouldTransform(path, file)) return;
 
@@ -301,7 +299,7 @@ export function createClassFeaturePlugin({
 
       ExportDefaultDeclaration(path, { file }) {
         if (!process.env.BABEL_8_BREAKING) {
-          if (file.get(versionKey) !== version) return;
+          if (file.get(versionKey) !== PACKAGE_JSON.version) return;
 
           const decl = path.get("declaration");
 

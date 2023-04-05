@@ -1,4 +1,10 @@
 import rewritePattern from "regexpu-core";
+import type { NodePath } from "@babel/traverse";
+import { types as t, type PluginObject } from "@babel/core";
+import annotateAsPure from "@babel/helper-annotate-as-pure";
+
+import semver from "semver";
+
 import {
   featuresKey,
   FEATURES,
@@ -7,21 +13,8 @@ import {
   hasFeature,
 } from "./features";
 import { generateRegexpuOptions, canSkipRegexpu, transformFlags } from "./util";
-import type { NodePath } from "@babel/traverse";
-
-import { types as t } from "@babel/core";
-import type { PluginObject } from "@babel/core";
-import annotateAsPure from "@babel/helper-annotate-as-pure";
 
 declare const PACKAGE_JSON: { name: string; version: string };
-
-// Note: Versions are represented as an integer. e.g. 7.1.5 is represented
-//       as 70000100005. This method is easier than using a semver-parsing
-//       package, but it breaks if we release x.y.z where x, y or z are
-//       greater than 99_999.
-const version = PACKAGE_JSON.version
-  .split(".")
-  .reduce((v, x) => v * 1e5 + +x, 0);
 const versionKey = "@babel/plugin-regexp-features/version";
 
 export interface Options {
@@ -83,8 +76,11 @@ export function createRegExpFeaturePlugin({
         }
       }
 
-      if (!file.has(versionKey) || file.get(versionKey) < version) {
-        file.set(versionKey, version);
+      if (
+        !file.has(versionKey) ||
+        semver.lt(file.get(versionKey), PACKAGE_JSON.version)
+      ) {
+        file.set(versionKey, PACKAGE_JSON.version);
       }
     },
 
