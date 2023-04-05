@@ -113,8 +113,9 @@ jobs:
           cache: "yarn"
       - name: Build babel artifacts
         run: |
-          BABEL_ENV=test-legacy make -j build-standalone-ci
+          make -j build-standalone-ci
         env:
+          BABEL_ENV: test-legacy
           BABEL_8_BREAKING: false
           STRIP_BABEL_8_FLAG: true
       - name: Build Makefile.js
@@ -133,7 +134,7 @@ jobs:
           retention-days: 5
 
   build-windows:
-    name: Build Babel Artifacts On Windows
+    name: Build Babel Artifacts on Windows
     runs-on: windows-latest
     # Yarn PnP does not support native ESM yet (https://github.com/yarnpkg/berry/issues/638)
     # env:
@@ -150,8 +151,9 @@ jobs:
       - name: Build babel artifacts
         shell: bash
         run: |
-          BABEL_ENV=test-legacy make -j build-standalone-ci
+          make -j build-standalone-ci
         env:
+          BABEL_ENV: test-legacy
           BABEL_8_BREAKING: false
           STRIP_BABEL_8_FLAG: true
       - name: Ensure cwd does not contain uncommitted changes
@@ -241,7 +243,7 @@ jobs:
           node-version: latest
 
   build-babel8:
-    name: Build Babel 8 Artifacts for tests
+    name: Build Babel 8 Artifacts
     needs: prepare-yarn-cache
     runs-on: ubuntu-latest
     # Yarn PnP does not support native ESM yet (https://github.com/yarnpkg/berry/issues/638)
@@ -250,15 +252,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Use Node.js 14.17
+      - name: Use Node.js latest
         uses: actions/setup-node@v3
         with:
-          node-version: "14.17" # Node.js 14.17 is the first LTS supported by Babel 8
+          node-version: latest
+          check-latest: true
           cache: "yarn"
-      - name: Install and build
-        run: make -j bootstrap
+      - name: Build babel artifacts
+        run: |
+          make -j build-standalone-ci
         env:
-          BABEL_ENV: test
+          BABEL_ENV: test-legacy
           BABEL_8_BREAKING: true
           STRIP_BABEL_8_FLAG: true
       - name: Lint
@@ -299,8 +303,6 @@ jobs:
           name: babel8-artifact
       - name: Extract artifacts
         run: tar -xf babel-artifact.tar; rm babel-artifact.tar
-      - name: Generate runtime helpers
-        run: make build-plugin-transform-runtime-dist
       - name: Test
         run: |
           yarn jest --ci

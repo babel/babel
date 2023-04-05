@@ -72,7 +72,6 @@ export default function createPlugin({
 
       throwIfNamespace = true,
 
-      // TODO (Babel 8): It should throw if this option is used with the automatic runtime
       filter,
 
       runtime: RUNTIME_DEFAULT = process.env.BABEL_8_BREAKING
@@ -105,6 +104,12 @@ export default function createPlugin({
     ["@babel/plugin-proposal-object-rest-spread", { "loose": true, "useBuiltIns": ${useBuiltInsFormatted} }]
   ]
 }`,
+        );
+      }
+
+      if (filter != null && RUNTIME_DEFAULT === "automatic") {
+        throw new Error(
+          '@babel/plugin-transform-react-jsx: "filter" option can not be used with automatic runtime. If you are upgrading from Babel 7, please specify `runtime: "classic"`.',
         );
       }
     } else {
@@ -262,7 +267,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
             }
           },
 
-          // TODO (Babel 8): Decide if this should be removed or brought back.
+          // TODO(Babel 8): Decide if this should be removed or brought back.
           // see: https://github.com/babel/babel/pull/12253#discussion_r513086528
           //
           // exit(path, state) {

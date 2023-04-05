@@ -179,7 +179,7 @@ helpers.extends = helper("7.0.0-beta.0")`
   }
 `;
 
-// TODO(babel-8): This old helper can be removed in babel v8
+// TODO(Babel 8): This old helper can be removed in babel v8
 helpers.objectSpread = helper("7.0.0-beta.0")`
   import defineProperty from "defineProperty";
 

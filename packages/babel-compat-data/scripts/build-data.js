@@ -2,12 +2,12 @@
 
 const path = require("path");
 const compatData = require("@mdn/browser-compat-data").javascript;
-const { process: processData } = require("./build-modules-support");
+const { generateModuleSupport } = require("./build-modules-support");
 const {
   generateData,
   environments,
   writeFile,
-  defineLegacyPluginAliases,
+  maybeDefineLegacyPluginAliases,
 } = require("./utils-build-data");
 
 if (process.cwd().endsWith("scripts")) {
@@ -24,7 +24,7 @@ for (const target of ["plugin", "corejs2-built-in"]) {
   );
   if (target === "plugin") {
     // add export-namespace-from from @mdn/browser-compat-data
-    const exportNamespaceFromCompatData = processData(
+    const exportNamespaceFromCompatData = generateModuleSupport(
       compatData.statements.export.namespace
     );
     // the node.js compat data is 12.0, the first node version ships `export *` behind a flag
@@ -33,8 +33,7 @@ for (const target of ["plugin", "corejs2-built-in"]) {
     newData["transform-export-namespace-from"] = exportNamespaceFromCompatData;
 
     // Add proposal-* aliases for backward compatibility.
-    // TODO(Babel 7): This won't be needed anymore.
-    newData = defineLegacyPluginAliases(newData);
+    newData = maybeDefineLegacyPluginAliases(newData);
   }
   const dataPath = path.join(__dirname, `../data/${target}s.json`);
 

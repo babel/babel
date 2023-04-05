@@ -3,7 +3,7 @@ import type { NodePath } from "@babel/traverse";
 
 // This is the legacy implementation, which inlines all the code.
 // It must be kept for compatibility reasons.
-// TODO (Babel 8): Remove this code.
+// TODO(Babel 8): Remove this code.
 
 export default function transformWithoutHelper(
   loose: boolean | void,

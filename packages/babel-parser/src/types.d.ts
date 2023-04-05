@@ -1049,7 +1049,7 @@ export interface TypeParameter extends NodeBase {
 
 export interface TsTypeParameter extends NodeBase {
   type: "TSTypeParameter";
-  // TODO(Babel-8): remove string type support
+  // TODO(Babel 8): remove string type support
   name: string | Identifier;
   in?: boolean;
   out?: boolean;
@@ -1287,7 +1287,7 @@ export interface TsSignatureDeclarationOrIndexSignatureBase extends NodeBase {
   // Not using TypeScript's "ParameterDeclaration" here, since it's inconsistent with regular functions.
   params: Array<Identifier | RestElement | ObjectPattern | ArrayPattern>;
   returnType: TsTypeAnnotation | undefined | null;
-  // TODO(Babel-8): Remove
+  // TODO(Babel 8): Remove
   parameters: Array<Identifier | RestElement | ObjectPattern | ArrayPattern>;
   typeAnnotation: TsTypeAnnotation | undefined | null;
 }

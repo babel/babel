@@ -1,10 +1,10 @@
 {
-  "BABEL_8_BREAKING": true,
+  "BABEL_8_BREAKING": false,
   "validateLogs": true,
   "presets": [
     ["env", {
       "debug": true,
-      "bugfixes": true,
+      "bugfixes": false,
       "targets": {
         "esmodules": true
       }

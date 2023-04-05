@@ -1,8 +1,8 @@
 const path = require("path");
-const fs = require("fs");
 
 const compatData = require("@mdn/browser-compat-data").javascript;
 const { addElectronSupportFromChromium } = require("./chromium-to-electron");
+const { writeFile, babel7Only } = require("./utils-build-data");
 
 // Map mdn-browser-compat-data to browserslist browser names
 const browserNameMap = {
@@ -31,7 +31,7 @@ function browserVersion(browser, version_added) {
   return version_added;
 }
 
-function process(source) {
+function generateModuleSupport(source) {
   const stats = source.__compat.support;
   const allowedBrowsers = {};
 
@@ -60,13 +60,14 @@ function process(source) {
 }
 
 const dataPath = path.join(__dirname, "../data/native-modules.json");
-const processed = process(compatData.statements.export);
-// Todo(Babel 8): remove `ios_saf` as it is identical to ios
-if (processed.ios) {
-  processed.ios_saf = processed.ios;
-}
+const processed = generateModuleSupport(compatData.statements.export);
+babel7Only(() => {
+  if (processed.ios) {
+    processed.ios_saf = processed.ios;
+  }
+});
 const data = {
   "es6.module": processed,
 };
-fs.writeFileSync(dataPath, `${JSON.stringify(data, null, 2)}\n`);
-exports.process = process;
+writeFile(data, dataPath, "native-modules");
+exports.generateModuleSupport = generateModuleSupport;
