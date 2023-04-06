@@ -176,7 +176,7 @@ export function isCompletionRecord(
 export function isStatementOrBlock(this: NodePath): boolean {
   if (
     this.parentPath.isLabeledStatement() ||
-    isBlockStatement(this.container)
+    isBlockStatement(this.container as t.Node)
   ) {
     return false;
   } else {

@@ -153,7 +153,7 @@ export default declare((api, options: Options) => {
           skip();
           return;
         }
-      } else if (t.isIdentifier(expressionResult.deopt)) {
+      } else if (expressionResult.deopt?.isIdentifier()) {
         // It's safe to hoist here if the deopt reason is an identifier (e.g. func param).
         // The hoister will take care of how high up it can be hoisted.
         return;
