@@ -8,7 +8,10 @@ import {
   VISITOR_KEYS,
 } from "../../lib/index.js";
 
-const BABEL8 = !!process.env.BABEL_8_BREAKING;
+function bool(value) {
+  return value && value !== "false" && value !== "0";
+}
+const BABEL8 = bool(process.env.BABEL_8_BREAKING);
 
 const has = Function.call.bind(Object.prototype.hasOwnProperty);
 
