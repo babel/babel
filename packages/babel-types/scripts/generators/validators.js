@@ -48,7 +48,7 @@ function addIsHelper(type, aliasKeys, deprecated) {
 
   return `export function is${type}(${
     BABEL8
-      ? `node: t.Node | null | undefined, opts?: Partial<t.${type}> | null`
+      ? `node: t.Node | null | undefined, opts?: Opts<t.${type}> | null`
       : "node: object | null | undefined, opts?: object | null"
   }): ${result} {
     ${deprecated || ""}
@@ -81,6 +81,16 @@ import shallowEqual from "../../utils/shallowEqual";
 import type * as t from "../..";
 import deprecationWarning from "../../utils/deprecationWarning";
 \n`;
+  if (BABEL8) {
+    output += `type Opts<Object> = Partial<{
+  [Prop in keyof Object]: Object[Prop] extends t.Node
+    ? t.Node | Object[Prop]
+    : Object[Prop] extends t.Node[]
+    ? t.Node[] | Object[Prop]
+    : Object[Prop];
+}>;
+\n`;
+  }
 
   Object.keys(VISITOR_KEYS).forEach(type => {
     output += addIsHelper(type);
@@ -109,7 +119,7 @@ ${addIsHelper(type, null, `deprecationWarning("is${type}", "is${newType}")`)}`;
  */
 export function is${type}(${
       BABEL8
-        ? `node: t.Node | null | undefined, opts?: Partial<t.${type}> | null`
+        ? `node: t.Node | null | undefined, opts?: Opts<t.${type}> | null`
         : "node: object | null | undefined, opts?: object | null"
     }): node is t.${newType} {
   deprecationWarning("is${type}", "is${newType}");
