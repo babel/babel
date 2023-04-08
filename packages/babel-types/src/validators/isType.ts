@@ -18,7 +18,7 @@ export default function isType(nodeType: string, targetType: string): boolean {
   if (nodeType === targetType) return true;
 
   // if nodeType is null or undefined, it can't be an alias of targetType
-  if (!nodeType) return false;
+  if (nodeType == null) return false;
 
   // This is a fast-path. If the test above failed, but an alias key is found, then the
   // targetType was a primary node type, so there's no need to check the aliases.
