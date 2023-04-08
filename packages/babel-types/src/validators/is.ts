@@ -1,9 +1,14 @@
 import * as generated from "./generated";
 import type * as t from "..";
 
-const generatedMap = new Map(
-  Object.entries(generated).map(([key, value]) => [key.slice(2), value]),
-);
+const generatedMap = new Map<
+  string,
+  (node: t.Node | null | undefined, opts?: Partial<t.Node>) => boolean
+>();
+
+for (const name of Object.keys(generated) as Array<keyof typeof generated>) {
+  generatedMap.set(name.slice(2), generated[name]);
+}
 
 export default function is<T extends t.Node["type"]>(
   type: T,
