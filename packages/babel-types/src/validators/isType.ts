@@ -24,11 +24,7 @@ export default function isType(nodeType: string, targetType: string): boolean {
 
   const aliases: Array<string> | undefined = FLIPPED_ALIAS_KEYS[targetType];
   if (aliases) {
-    if (aliases[0] === nodeType) return true;
-
-    for (const alias of aliases) {
-      if (nodeType === alias) return true;
-    }
+    return aliases.includes(nodeType);
   }
 
   return false;

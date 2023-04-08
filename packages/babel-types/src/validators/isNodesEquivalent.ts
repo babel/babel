@@ -25,9 +25,8 @@ export default function isNodesEquivalent<T extends Partial<t.Node>>(
   const visitorKeys = VISITOR_KEYS[a.type];
 
   for (const field of fields) {
-    const val_a =
-      // @ts-expect-error field must present in a
-      a[field];
+    // @ts-expect-error field must present in a
+    const val_a = a[field];
     const val_b = b[field];
     if (typeof val_a !== typeof val_b) {
       return false;

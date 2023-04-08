@@ -12,9 +12,7 @@ export default function isPlaceholderType(
   const aliases: Array<string> | undefined =
     PLACEHOLDERS_ALIAS[placeholderType];
   if (aliases) {
-    for (const alias of aliases) {
-      if (targetType === alias) return true;
-    }
+    return aliases.includes(targetType);
   }
 
   return false;
