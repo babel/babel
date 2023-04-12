@@ -93,12 +93,14 @@ function shouldIgnore(name: string, ignore?: Array<string>) {
   );
 }
 
-const EXTENSIONS = [".js", ".mjs", ".ts", ".tsx", ".cts", ".mts"];
+const EXTENSIONS = [".js", ".mjs", ".ts", ".tsx", ".cts", ".mts", ".vue"];
+const JSON_AND_EXTENSIONS = [".json", ...EXTENSIONS];
 
 function findFile(filepath: string, allowJSON?: boolean) {
   const matches = [];
+  const extensions = allowJSON ? JSON_AND_EXTENSIONS : EXTENSIONS;
 
-  for (const ext of EXTENSIONS.concat(allowJSON ? ".json" : [])) {
+  for (const ext of extensions) {
     const name = filepath + ext;
 
     if (fs.existsSync(name)) matches.push(name);
