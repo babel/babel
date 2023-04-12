@@ -3037,10 +3037,10 @@ export default abstract class StatementParser extends ExpressionParser {
    * @deprecated It will be removed in Babel 8
    */
   parseModuleAttributes() {
-    const attrs = [];
+    const attrs: N.ImportAttribute[] = [];
     const attributes = new Set();
     do {
-      const node = this.startNode();
+      const node = this.startNode<N.ImportAttribute>();
       node.key = this.parseIdentifier(true);
 
       if (node.key.name !== "type") {
@@ -3063,17 +3063,10 @@ export default abstract class StatementParser extends ExpressionParser {
         });
       }
       node.value = this.parseStringLiteral(this.state.value);
-      this.finishNode(node, "ImportAttribute");
-      attrs.push(node as N.ImportAttribute);
+      attrs.push(this.finishNode(node, "ImportAttribute"));
     } while (this.eat(tt.comma));
 
     return attrs;
-  }
-
-  expectImportAttributesPlugin() {
-    if (!this.hasPlugin("importAssertions")) {
-      this.expectPlugin("importAttributes");
-    }
   }
 
   maybeParseImportAttributes(

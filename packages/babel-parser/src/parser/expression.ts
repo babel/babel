@@ -967,6 +967,12 @@ export default abstract class ExpressionParser extends LValParser {
     );
   }
 
+  expectImportAttributesPlugin() {
+    if (!this.hasPlugin("importAssertions")) {
+      this.expectPlugin("importAttributes");
+    }
+  }
+
   finishCallExpression<T extends N.CallExpression | N.OptionalCallExpression>(
     node: Undone<T>,
     optional: boolean,
@@ -974,10 +980,10 @@ export default abstract class ExpressionParser extends LValParser {
     if (node.callee.type === "Import") {
       if (node.arguments.length === 2) {
         if (process.env.BABEL_8_BREAKING) {
-          this.expectPlugin("importAssertions");
+          this.expectImportAttributesPlugin();
         } else {
           if (!this.hasPlugin("moduleAttributes")) {
-            this.expectPlugin("importAssertions");
+            this.expectImportAttributesPlugin();
           }
         }
       }
