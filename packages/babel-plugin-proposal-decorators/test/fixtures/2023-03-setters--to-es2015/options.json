@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    ["proposal-decorators", { "version": "2023-03" }],
+    "proposal-class-properties",
+    "proposal-private-methods",
+    "proposal-class-static-block"
+  ]
+}
