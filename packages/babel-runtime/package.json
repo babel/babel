@@ -71,6 +71,15 @@
       "./helpers/applyDecs2301.js"
     ],
     "./helpers/esm/applyDecs2301": "./helpers/esm/applyDecs2301.js",
+    "./helpers/applyDecs2303": [
+      {
+        "node": "./helpers/applyDecs2303.js",
+        "import": "./helpers/esm/applyDecs2303.js",
+        "default": "./helpers/applyDecs2303.js"
+      },
+      "./helpers/applyDecs2303.js"
+    ],
+    "./helpers/esm/applyDecs2303": "./helpers/esm/applyDecs2303.js",
     "./helpers/asyncGeneratorDelegate": [
       {
         "node": "./helpers/asyncGeneratorDelegate.js",
