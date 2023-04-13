@@ -20,7 +20,7 @@ type ClassElement =
   | t.TSIndexSignature
   | t.StaticBlock;
 
-type DecoratorVersionKind = "2023-01" | "2022-03" | "2021-12";
+type DecoratorVersionKind = "2023-03" | "2023-01" | "2022-03" | "2021-12";
 
 function incrementId(id: number[], idx = id.length - 1): void {
   // If index is -1, id needs an additional character, unshift A
@@ -233,7 +233,7 @@ function extractProxyAccessorsFor(
   targetKey: t.PrivateName,
   version: DecoratorVersionKind,
 ): (t.FunctionExpression | t.ArrowFunctionExpression)[] {
-  if (version !== "2023-01") {
+  if (version !== "2023-03" && version !== "2023-01") {
     return [
       template.expression.ast`
         function () {
@@ -1056,7 +1056,16 @@ function createLocalsAssignment(
     );
   } else {
     // TODO(Babel 8): Only keep the if branch
-    if (version === "2023-01") {
+    if (version === "2023-03") {
+      if (maybePrivateBranName) {
+        args.push(
+          template.expression.ast`
+            _ => ${t.cloneNode(maybePrivateBranName)} in _
+          ` as t.ArrowFunctionExpression,
+        );
+      }
+      rhs = t.callExpression(state.addHelper("applyDecs2303"), args);
+    } else if (version === "2023-01") {
       if (maybePrivateBranName) {
         args.push(
           template.expression.ast`
@@ -1092,9 +1101,9 @@ function createLocalsAssignment(
 export default function (
   { assertVersion, assumption }: PluginAPI,
   { loose }: Options,
-  version: "2023-01" | "2022-03" | "2021-12",
+  version: "2023-03" | "2023-01" | "2022-03" | "2021-12",
 ): PluginObject {
-  if (version === "2023-01") {
+  if (version === "2023-03" || version === "2023-01") {
     assertVersion("^7.21.0");
   } else if (version === "2021-12") {
     assertVersion("^7.16.0");
