@@ -1,6 +1,7 @@
 import * as babel from "../lib/index.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import { readFileSync } from "fs";
 
 const cwd = path.dirname(fileURLToPath(import.meta.url));
 
@@ -12,10 +13,20 @@ function loadOptionsAsync(opts) {
   return babel.loadOptionsAsync({ cwd, ...opts });
 }
 
+let USE_ESM = false;
+try {
+  const type = readFileSync(
+    new URL("../../../.module-type", import.meta.url),
+    "utf-8",
+  ).trim();
+  USE_ESM = type === "module";
+} catch {}
+
 const itBabel7 = process.env.BABEL_8_BREAKING ? it.skip : it;
+const itBabel7cjs = process.env.BABEL_8_BREAKING || USE_ESM ? it.skip : it;
 
 describe("option-manager", () => {
-  itBabel7("throws for babel 5 plugin", () => {
+  itBabel7cjs("throws for babel 5 plugin", () => {
     return expect(() => {
       loadOptions({
         plugins: [({ Plugin }) => new Plugin("object-assign", {})],
