@@ -991,6 +991,7 @@ export default abstract class ExpressionParser extends LValParser {
         this.raise(Errors.ImportCallArity, {
           at: node,
           maxArgumentCount:
+            this.hasPlugin("importAttributes") ||
             this.hasPlugin("importAssertions") ||
             this.hasPlugin("moduleAttributes")
               ? 2
@@ -1031,6 +1032,7 @@ export default abstract class ExpressionParser extends LValParser {
         if (this.match(close)) {
           if (
             dynamicImport &&
+            !this.hasPlugin("importAttributes") &&
             !this.hasPlugin("importAssertions") &&
             !this.hasPlugin("moduleAttributes")
           ) {
