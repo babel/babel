@@ -197,7 +197,12 @@ export default declare((api, options: Options) => {
           // These objects are specific to CommonJS and are not available in
           // real ES6 implementations.
           if (!allowCommonJSExports) {
-            simplifyAccess(path, new Set(["module", "exports"]), false);
+            if (process.env.BABEL_8_BREAKING) {
+              simplifyAccess(path, new Set(["module", "exports"]));
+            } else {
+              // @ts-ignore(Babel 7 vs Babel 8) The third param has been removed in Babel 8.
+              simplifyAccess(path, new Set(["module", "exports"]), false);
+            }
             path.traverse(moduleExportsVisitor, {
               scope: path.scope,
             });
