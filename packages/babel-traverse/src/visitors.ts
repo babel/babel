@@ -101,11 +101,11 @@ export function explode(visitor: Visitor) {
 
     let aliases = FLIPPED_ALIAS_KEYS[nodeType];
 
-    if (nodeType in DEPRECATED_KEYS) {
+    if (DEPRECATED_KEYS && nodeType in DEPRECATED_KEYS) {
       const deprecatedKey = DEPRECATED_KEYS[nodeType];
       deprecationWarning(nodeType, deprecatedKey, "Visitor ");
       aliases = [deprecatedKey];
-    } else if (nodeType in DEPRECATED_ALIASES) {
+    } else if (DEPRECATED_ALIASES && nodeType in DEPRECATED_ALIASES) {
       const deprecatedAlias =
         DEPRECATED_ALIASES[nodeType as keyof typeof DEPRECATED_ALIASES];
       deprecationWarning(nodeType, deprecatedAlias, "Visitor ");
