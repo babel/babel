@@ -362,6 +362,17 @@ export function resolveOptionPluginOrPreset(
   options: any,
   optionsDir: string,
 ): {} {
+  if (options.overrides) {
+    for (const subOption of options.overrides) {
+      resolveOptionPluginOrPreset(subOption, optionsDir);
+    }
+  }
+  if (options.env) {
+    for (const envName in options.env) {
+      if (!{}.hasOwnProperty.call(options.env, envName)) continue;
+      resolveOptionPluginOrPreset(options.env[envName], optionsDir);
+    }
+  }
   if (options.plugins) {
     options.plugins = wrapPackagesArray("plugin", options.plugins, optionsDir);
   }
