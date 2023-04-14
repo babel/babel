@@ -5,8 +5,8 @@
       "include": "*.vue",
       "sourceType": "module",
       "presets": [
-        ["@babel/preset-react"],
-        ["@babel/preset-typescript", { "allExtensions": true, "isTSX": true }]
+        ["react"],
+        ["typescript", { "allExtensions": true, "isTSX": true }]
       ]
     }
   ]
