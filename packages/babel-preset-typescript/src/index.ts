@@ -10,6 +10,7 @@ export default declarePreset((api, opts: Options) => {
 
   const {
     allExtensions,
+    ignoreExtensions,
     allowNamespaces,
     disallowAmbiguousJSXLike,
     isTSX,
@@ -55,8 +56,10 @@ export default declarePreset((api, opts: Options) => {
     }
   };
 
+  const disableExtensionDetect = allExtensions || ignoreExtensions;
+
   return {
-    overrides: allExtensions
+    overrides: disableExtensionDetect
       ? [{ plugins: getPlugins(isTSX, disallowAmbiguousJSXLike) }]
       : // Only set 'test' if explicitly requested, since it requires that
         // Babel is being called with a filename.
