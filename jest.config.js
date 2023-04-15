@@ -68,6 +68,7 @@ module.exports = {
     "<rootDir>/packages/babel-standalone/babel(\\.min)?\\.js",
     "/test/(fixtures|tmp|__data__)/",
     "<rootDir>/(packages|codemods|eslint)/[^/]+/lib/",
+    "<rootDir>/babel.config.cts",
   ],
   modulePathIgnorePatterns: [
     "/test/fixtures/",

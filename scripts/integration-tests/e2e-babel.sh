@@ -22,7 +22,7 @@ cd ../..
 
 if [ "$BABEL_8_BREAKING" = true ] ; then
   # This option is removed in Babel 8
-  sed -i 's/allowDeclareFields: true,\?/\/* allowDeclareFields: true *\//g' babel.config.js
+  sed -i 's/allowDeclareFields: true,\?/\/* allowDeclareFields: true *\//g' babel.config.cts
 fi
 
 startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml

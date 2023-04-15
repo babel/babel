@@ -54,8 +54,7 @@ export function declare<State = {}, Option = {}>(
     ) as (keyof typeof apiPolyfills)[]) {
       if (api[name]) continue;
 
-      // TODO: Use ??= when flow lets us to do so
-      clonedApi = clonedApi ?? copyApiObject(api);
+      clonedApi ??= copyApiObject(api);
       // @ts-expect-error The shape of API polyfill is guaranteed by APIPolyfillFactory
       clonedApi[name] = apiPolyfills[name](clonedApi);
     }
