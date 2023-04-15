@@ -4,10 +4,7 @@
     {
       "include": "*.vue",
       "sourceType": "module",
-      "presets": [
-        ["@babel/preset-react"],
-        ["@babel/preset-typescript", { "ignoreExtensions": true }]
-      ]
+      "presets": [["react"], ["typescript", { "ignoreExtensions": true }]]
     }
   ]
 }
