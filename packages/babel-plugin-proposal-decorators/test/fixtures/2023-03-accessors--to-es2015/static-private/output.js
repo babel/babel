@@ -27,7 +27,7 @@ function _get_b2() {
   return _get_b(this);
 }
 (() => {
-  [_init_a, _get_a, _set_a, _init_b, _get_b, _set_b, _initStatic] = babelHelpers.applyDecs2303(Foo, [[dec, 6, "a", o => babelHelpers.classStaticPrivateFieldSpecGet(o, Foo, _A), (o, v) => babelHelpers.classStaticPrivateFieldSpecSet(o, Foo, _A, v)], [dec, 6, "b", o => babelHelpers.classStaticPrivateFieldSpecGet(o, Foo, _B), (o, v) => babelHelpers.classStaticPrivateFieldSpecSet(o, Foo, _B, v)]], []).e;
+  [_init_a, _get_a, _set_a, _init_b, _get_b, _set_b, _initStatic] = babelHelpers.applyDecs2303(Foo, [[[0, dec], 6, "a", o => babelHelpers.classStaticPrivateFieldSpecGet(o, Foo, _A), (o, v) => babelHelpers.classStaticPrivateFieldSpecSet(o, Foo, _A, v)], [[0, dec], 6, "b", o => babelHelpers.classStaticPrivateFieldSpecGet(o, Foo, _B), (o, v) => babelHelpers.classStaticPrivateFieldSpecSet(o, Foo, _B, v)]], []).e;
   _initStatic(Foo);
 })();
 var _A = {

@@ -14,5 +14,5 @@ class C {
 ({
   e: [_init_m],
   c: [_C, _initClass]
-} = babelHelpers.applyDecs2303(C, [[memberDec, 0, "m"]], [classDec]));
+} = babelHelpers.applyDecs2303(C, [[[0, memberDec], 0, "m"]], [0, classDec]));
 _initClass();

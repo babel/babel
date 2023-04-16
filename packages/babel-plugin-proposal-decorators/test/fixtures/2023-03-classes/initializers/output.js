@@ -5,7 +5,7 @@ new class extends babelHelpers.identity {
   static {
     class Foo {
       static {
-        [_Foo, _initClass] = babelHelpers.applyDecs2303(this, [], [dec]).c;
+        [_Foo, _initClass] = babelHelpers.applyDecs2303(this, [], [0, dec]).c;
       }
     }
   }
@@ -19,7 +19,7 @@ new class extends babelHelpers.identity {
   static {
     class Bar extends _Foo {
       static {
-        [_Bar, _initClass2] = babelHelpers.applyDecs2303(this, [], [dec]).c;
+        [_Bar, _initClass2] = babelHelpers.applyDecs2303(this, [], [0, dec]).c;
       }
     }
   }
