@@ -8,23 +8,23 @@ class Foo {
   }
   static #A = _init_a(this);
   static get a() {
-    return this.#A;
+    return Foo.#A;
   }
   static set a(v) {
-    this.#A = v;
+    Foo.#A = v;
   }
   static #B = _init_b(this, 123);
   static get b() {
-    return this.#B;
+    return Foo.#B;
   }
   static set b(v) {
-    this.#B = v;
+    Foo.#B = v;
   }
   static #C = _init_computedKey(this, 456);
   static get [_computedKey]() {
-    return this.#C;
+    return Foo.#C;
   }
   static set [_computedKey](v) {
-    this.#C = v;
+    Foo.#C = v;
   }
 }

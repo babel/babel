@@ -2,16 +2,16 @@ const dec = () => {};
 class Foo {
   static #A;
   static get #a() {
-    return this.#A;
+    return Foo.#A;
   }
   static set #a(v) {
-    this.#A = v;
+    Foo.#A = v;
   }
   static #B = 123;
   static get #b() {
-    return this.#B;
+    return Foo.#B;
   }
   static set #b(v) {
-    this.#B = v;
+    Foo.#B = v;
   }
 }

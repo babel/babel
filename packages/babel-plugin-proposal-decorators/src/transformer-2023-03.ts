@@ -165,16 +165,21 @@ function generateClassProperty(
 }
 
 function addProxyAccessorsFor(
+  className: t.Identifier,
   element: NodePath<ClassDecoratableElement>,
   originalKey: t.PrivateName | t.Expression,
   targetKey: t.PrivateName,
+  version: DecoratorVersionKind,
   isComputed = false,
 ): void {
   const { static: isStatic } = element.node;
 
+  const thisArg =
+    version === "2023-03" && isStatic ? className : t.thisExpression();
+
   const getterBody = t.blockStatement([
     t.returnStatement(
-      t.memberExpression(t.thisExpression(), t.cloneNode(targetKey)),
+      t.memberExpression(t.cloneNode(thisArg), t.cloneNode(targetKey)),
     ),
   ]);
 
@@ -182,7 +187,7 @@ function addProxyAccessorsFor(
     t.expressionStatement(
       t.assignmentExpression(
         "=",
-        t.memberExpression(t.thisExpression(), t.cloneNode(targetKey)),
+        t.memberExpression(t.cloneNode(thisArg), t.cloneNode(targetKey)),
         t.identifier("v"),
       ),
     ),
@@ -538,7 +543,14 @@ function transformClass(
       const newField = generateClassProperty(newId, valueNode, isStatic);
 
       const [newPath] = element.replaceWith(newField);
-      addProxyAccessorsFor(newPath, key, newId, computed);
+      addProxyAccessorsFor(
+        path.node.id,
+        newPath,
+        key,
+        newId,
+        version,
+        computed,
+      );
     }
   }
 
@@ -698,7 +710,14 @@ function transformClass(
 
             locals = [newFieldInitId, getId, setId];
           } else {
-            addProxyAccessorsFor(newPath, key, newId, isComputed);
+            addProxyAccessorsFor(
+              path.node.id,
+              newPath,
+              key,
+              newId,
+              version,
+              isComputed,
+            );
             locals = newFieldInitId;
           }
         } else if (kind === FIELD) {

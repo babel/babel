@@ -3,22 +3,22 @@ const dec = () => {};
 _computedKey = 'c';
 class Foo {
   static get a() {
-    return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _A);
+    return babelHelpers.classStaticPrivateFieldSpecGet(Foo, Foo, _A);
   }
   static set a(v) {
-    babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _A, v);
+    babelHelpers.classStaticPrivateFieldSpecSet(Foo, Foo, _A, v);
   }
   static get b() {
-    return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _B);
+    return babelHelpers.classStaticPrivateFieldSpecGet(Foo, Foo, _B);
   }
   static set b(v) {
-    babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _B, v);
+    babelHelpers.classStaticPrivateFieldSpecSet(Foo, Foo, _B, v);
   }
   static get [_computedKey]() {
-    return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _C);
+    return babelHelpers.classStaticPrivateFieldSpecGet(Foo, Foo, _C);
   }
   static set [_computedKey](v) {
-    babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _C, v);
+    babelHelpers.classStaticPrivateFieldSpecSet(Foo, Foo, _C, v);
   }
 }
 (() => {

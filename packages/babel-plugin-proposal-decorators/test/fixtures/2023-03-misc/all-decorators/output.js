@@ -41,10 +41,10 @@ new class extends babelHelpers.identity {
       static get k() {}
       static set l(v) {}
       static get m() {
-        return this.#C;
+        return Class.#C;
       }
       static set m(v) {
-        this.#C = v;
+        Class.#C = v;
       }
       set #r(v) {
         _set_r(this, v);
