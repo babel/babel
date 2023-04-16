@@ -288,6 +288,7 @@ function getElementKind(element: NodePath<ClassDecoratableElement>): number {
 interface DecoratorInfo {
   // The expressions of the decorators themselves
   decorators: t.Expression[];
+  decoratorsThis: t.Expression[];
 
   // The kind of the decorated value, matches the kind value passed to applyDecs
   kind: number;
@@ -337,21 +338,45 @@ function filteredOrderedDecoratorInfo(
   ];
 }
 
+function generateDecorationList(
+  decorators: t.Expression[],
+  decoratorsThis: (t.Expression | null)[],
+  version: DecoratorVersionKind,
+) {
+  const decsCount = decorators.length;
+  const hasOneThis = decoratorsThis.some(Boolean);
+  const decs: t.Expression[] = [];
+  for (let i = 0; i < decsCount; i++) {
+    if (version === "2023-03" && hasOneThis) {
+      decs.push(
+        decoratorsThis[i] || t.unaryExpression("void", t.numericLiteral(0)),
+      );
+    }
+    decs.push(decorators[i]);
+  }
+
+  if (version === "2023-03") {
+    decs.unshift(t.numericLiteral(hasOneThis ? 1 : 0));
+  }
+  return decs;
+}
+
 function generateDecorationExprs(
   info: (DecoratorInfo | ComputedPropInfo)[],
+  version: DecoratorVersionKind,
 ): t.ArrayExpression {
   return t.arrayExpression(
     filteredOrderedDecoratorInfo(info).map(el => {
-      const decs =
-        el.decorators.length > 1
-          ? t.arrayExpression(el.decorators)
-          : el.decorators[0];
-
-      const kind = el.isStatic ? el.kind + STATIC : el.kind;
-
+      const decs = generateDecorationList(
+        el.decorators,
+        el.decoratorsThis,
+        version,
+      );
       return t.arrayExpression([
-        decs,
-        t.numericLiteral(kind),
+        version !== "2023-03" && decs.length === 1
+          ? decs[0]
+          : t.arrayExpression(decs),
+        t.numericLiteral(el.isStatic ? el.kind + STATIC : el.kind),
         el.name,
         ...(el.privateMethods || []),
       ]);
@@ -544,6 +569,20 @@ function transformClass(
     return t.cloneNode(localEvaluatedId);
   };
 
+  const decoratorsThis = new Map<t.Decorator, t.Expression>();
+  const maybeExtractDecorator = (decorator: t.Decorator) => {
+    const { expression } = decorator;
+    if (version === "2023-03" && t.isMemberExpression(expression)) {
+      if (!scopeParent.isStatic(expression)) {
+        expression.object = memoiseExpression(expression.object, "obj");
+      }
+      decoratorsThis.set(decorator, t.cloneNode(expression.object));
+    }
+    if (!scopeParent.isStatic(expression)) {
+      decorator.expression = memoiseExpression(expression, "dec");
+    }
+  };
+
   if (classDecorators) {
     classInitLocal = scopeParent.generateDeclaredUidIdentifier("initClass");
 
@@ -554,12 +593,7 @@ function transformClass(
     path.node.decorators = null;
 
     for (const classDecorator of classDecorators) {
-      if (!scopeParent.isStatic(classDecorator.expression)) {
-        classDecorator.expression = memoiseExpression(
-          classDecorator.expression,
-          "dec",
-        );
-      }
+      maybeExtractDecorator(classDecorator);
     }
   } else {
     if (!path.node.id) {
@@ -584,12 +618,7 @@ function transformClass(
 
       if (hasDecorators) {
         for (const decoratorPath of decorators) {
-          if (!scopeParent.isStatic(decoratorPath.node.expression)) {
-            decoratorPath.node.expression = memoiseExpression(
-              decoratorPath.node.expression,
-              "dec",
-            );
-          }
+          maybeExtractDecorator(decoratorPath.node);
         }
       }
 
@@ -759,6 +788,7 @@ function transformClass(
         elementDecoratorInfo.push({
           kind,
           decorators: decorators.map(d => d.node.expression),
+          decoratorsThis: decorators.map(d => decoratorsThis.get(d.node)),
           name: nameExpr,
           isStatic,
           privateMethods,
@@ -790,9 +820,18 @@ function transformClass(
     }
   }
 
-  const elementDecorations = generateDecorationExprs(elementDecoratorInfo);
+  const elementDecorations = generateDecorationExprs(
+    elementDecoratorInfo,
+    version,
+  );
   const classDecorations = t.arrayExpression(
-    (classDecorators || []).map(d => d.expression),
+    classDecorators
+      ? generateDecorationList(
+          classDecorators.map(el => el.expression),
+          classDecorators.map(dec => decoratorsThis.get(dec)),
+          version,
+        )
+      : [],
   );
 
   const elementLocals: t.Identifier[] =

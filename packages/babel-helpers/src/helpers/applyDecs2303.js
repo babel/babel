@@ -36,6 +36,7 @@ function assertInstanceIfPrivate(has, target) {
 
 function memberDec(
   dec,
+  thisArg,
   name,
   desc,
   initializers,
@@ -137,7 +138,7 @@ function memberDec(
       : { set: set, has: has };
 
   try {
-    return dec(value, ctx);
+    return dec.call(thisArg, value, ctx);
   } finally {
     decoratorFinishedRef.v = true;
   }
@@ -254,9 +255,15 @@ function applyMemberDec(
 
   var newValue, get, set;
 
-  if (typeof decs === "function") {
+  var hasThis = decs[0] === 1;
+  var inc = hasThis ? 2 : 1;
+
+  for (var i = decs.length - 1; i >= 1; i -= inc) {
+    var dec = decs[i];
+
     newValue = memberDec(
-      decs,
+      dec,
+      hasThis ? decs[i - 1] : undefined,
       name,
       desc,
       initializers,
@@ -269,11 +276,12 @@ function applyMemberDec(
 
     if (newValue !== void 0) {
       assertValidReturnValue(kind, newValue);
+      var newInit;
 
       if (kind === 0 /* FIELD */) {
-        init = newValue;
+        newInit = newValue;
       } else if (kind === 1 /* ACCESSOR */) {
-        init = newValue.init;
+        newInit = newValue.init;
         get = newValue.get || value.get;
         set = newValue.set || value.set;
 
@@ -281,47 +289,14 @@ function applyMemberDec(
       } else {
         value = newValue;
       }
-    }
-  } else {
-    for (var i = decs.length - 1; i >= 0; i--) {
-      var dec = decs[i];
 
-      newValue = memberDec(
-        dec,
-        name,
-        desc,
-        initializers,
-        kind,
-        isStatic,
-        isPrivate,
-        value,
-        hasPrivateBrand
-      );
-
-      if (newValue !== void 0) {
-        assertValidReturnValue(kind, newValue);
-        var newInit;
-
-        if (kind === 0 /* FIELD */) {
-          newInit = newValue;
-        } else if (kind === 1 /* ACCESSOR */) {
-          newInit = newValue.init;
-          get = newValue.get || value.get;
-          set = newValue.set || value.set;
-
-          value = { get: get, set: set };
+      if (newInit !== void 0) {
+        if (init === void 0) {
+          init = newInit;
+        } else if (typeof init === "function") {
+          init = [init, newInit];
         } else {
-          value = newValue;
-        }
-
-        if (newInit !== void 0) {
-          if (init === void 0) {
-            init = newInit;
-          } else if (typeof init === "function") {
-            init = [init, newInit];
-          } else {
-            init.push(newInit);
-          }
+          init.push(newInit);
         }
       }
     }
@@ -494,18 +469,25 @@ function applyClassDecs(targetClass, classDecs) {
     var newClass = targetClass;
     var name = targetClass.name;
 
-    for (var i = classDecs.length - 1; i >= 0; i--) {
+    var hasThis = classDecs[0] === 1;
+    var inc = hasThis ? 2 : 1;
+
+    for (var i = classDecs.length - 1; i >= 1; i -= inc) {
       var decoratorFinishedRef = { v: false };
 
       try {
-        var nextNewClass = classDecs[i](newClass, {
-          kind: "class",
-          name: name,
-          addInitializer: createAddInitializerMethod(
-            initializers,
-            decoratorFinishedRef
-          ),
-        });
+        var nextNewClass = classDecs[i].call(
+          hasThis ? classDecs[i - 1] : undefined,
+          newClass,
+          {
+            kind: "class",
+            name: name,
+            addInitializer: createAddInitializerMethod(
+              initializers,
+              decoratorFinishedRef
+            ),
+          }
+        );
       } finally {
         decoratorFinishedRef.v = true;
       }
@@ -537,7 +519,7 @@ function applyClassDecs(targetClass, classDecs) {
     [
       // member decorators
       [
-        dec,                // dec or array of decs
+        decs,               // array of decs or of decs and this values
         0,                  // kind of value being decorated
         'prop',             // name of public prop on class containing the value being decorated,
         '#p',               // the name of the private property (if is private, void 0 otherwise),
@@ -608,21 +590,21 @@ function applyClassDecs(targetClass, classDecs) {
       let ret = applyDecs(
         this,
         [
-          [dec, 0, 'a'],
-          [dec, 0, 'a', (i) => i.#a, (i, v) => i.#a = v],
-          [[dec, dec2], 1, 'b'],
-          [dec, 1, 'b', (i) => i.#privBData, (i, v) => i.#privBData = v],
-          [dec, 2, 'c'],
-          [dec, 2, 'c', () => console.log('privC')],
-          [dec, 3, 'd'],
-          [dec, 3, 'd', () => console.log('privD')],
-          [dec, 4, 'e'],
-          [dec, 4, 'e', () => console.log('privE')],
+          [[0, dec], 0, 'a'],
+          [[0, dec], 0, 'a', (i) => i.#a, (i, v) => i.#a = v],
+          [[0, dec, dec2], 1, 'b'],
+          [[0, dec], 1, 'b', (i) => i.#privBData, (i, v) => i.#privBData = v],
+          [[0, dec], 2, 'c'],
+          [[0, dec], 2, 'c', () => console.log('privC')],
+          [[0, dec], 3, 'd'],
+          [[0, dec], 3, 'd', () => console.log('privD')],
+          [[0, dec], 4, 'e'],
+          [[0, dec], 4, 'e', () => console.log('privE')],
         ],
         [
-          dec
+          0, dec
         ]
-      )
+      );
 
       initA = ret[0];
 
@@ -675,7 +657,7 @@ function applyClassDecs(targetClass, classDecs) {
   initializeClass(Class);
  */
 
-export default function applyDecs2301(
+export default function applyDecs2303(
   targetClass,
   memberDecs,
   classDecs,
