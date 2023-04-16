@@ -585,10 +585,19 @@ function transformClass(
   const maybeExtractDecorator = (decorator: t.Decorator) => {
     const { expression } = decorator;
     if (version === "2023-03" && t.isMemberExpression(expression)) {
-      if (!scopeParent.isStatic(expression)) {
-        expression.object = memoiseExpression(expression.object, "obj");
+      let object;
+      if (
+        t.isSuper(expression.object) ||
+        t.isThisExpression(expression.object)
+      ) {
+        object = memoiseExpression(t.thisExpression(), "obj");
+      } else if (!scopeParent.isStatic(expression.object)) {
+        object = memoiseExpression(expression.object, "obj");
+        expression.object = object;
+      } else {
+        object = expression.object;
       }
-      decoratorsThis.set(decorator, t.cloneNode(expression.object));
+      decoratorsThis.set(decorator, t.cloneNode(object));
     }
     if (!scopeParent.isStatic(expression)) {
       decorator.expression = memoiseExpression(expression, "dec");

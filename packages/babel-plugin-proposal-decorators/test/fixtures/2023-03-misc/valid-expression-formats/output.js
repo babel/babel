@@ -25,7 +25,7 @@ class Foo {
   method() {}
   makeClass() {
     var _obj3, _dec9, _init_bar;
-    return _obj3 = this, _dec9 = _obj3.#a, class Nested {
+    return _obj3 = this, _dec9 = this.#a, class Nested {
       static {
         [_init_bar] = babelHelpers.applyDecs2303(this, [[[1, _obj3, _dec9], 0, "bar"]], []).e;
       }
