@@ -8,4 +8,4 @@ class Foo {
     return 1;
   }
 }
-[_init_a, _initProto] = babelHelpers.applyDecs2303(Foo, [[[dec], 2, "a"], [[dec], 0, "a"]], []).e;
+[_init_a, _initProto] = babelHelpers.applyDecs2303(Foo, [[dec, 2, "a"], [dec, 0, "a"]], []).e;

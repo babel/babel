@@ -2,7 +2,7 @@ var _init_a, _get_a, _set_a, _init_b, _get_b, _set_b, _initProto;
 const dec = () => {};
 class Foo {
   static {
-    [_init_a, _get_a, _set_a, _init_b, _get_b, _set_b, _initProto] = babelHelpers.applyDecs2303(this, [[[dec], 1, "a", o => o.#A, (o, v) => o.#A = v], [[dec], 1, "b", o => o.#B, (o, v) => o.#B = v]], [], 0, _ => #a in _).e;
+    [_init_a, _get_a, _set_a, _init_b, _get_b, _set_b, _initProto] = babelHelpers.applyDecs2303(this, [[dec, 1, "a", o => o.#A, (o, v) => o.#A = v], [dec, 1, "b", o => o.#B, (o, v) => o.#B = v]], [], 0, _ => #a in _).e;
   }
   #A = (_initProto(this), _init_a(this));
   set #a(v) {

@@ -385,9 +385,7 @@ function generateDecorationExprs(
       if (hasThis) flag += DECORATORS_HAVE_THIS;
 
       return t.arrayExpression([
-        version !== "2023-03" && decs.length === 1
-          ? decs[0]
-          : t.arrayExpression(decs),
+        decs.length === 1 ? decs[0] : t.arrayExpression(decs),
         t.numericLiteral(flag),
         el.name,
         ...(el.privateMethods || []),

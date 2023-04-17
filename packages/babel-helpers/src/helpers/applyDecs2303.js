@@ -215,6 +215,10 @@ function applyMemberDec(
 ) {
   var decs = decInfo[0];
 
+  if (!decoratorsHaveThis && !Array.isArray(decs)) {
+    decs = [decs];
+  }
+
   var desc, init, value;
 
   if (isPrivate) {
@@ -522,7 +526,7 @@ function applyClassDecs(targetClass, classDecs, decoratorsHaveThis) {
     [
       // member decorators
       [
-        decs,               // array of decs or of decs and this values
+        decs,               // dec, or array of decs, or array of this values and decs
         0,                  // kind of value being decorated
         'prop',             // name of public prop on class containing the value being decorated,
         '#p',               // the name of the private property (if is private, void 0 otherwise),
@@ -593,19 +597,19 @@ function applyClassDecs(targetClass, classDecs, decoratorsHaveThis) {
       let ret = applyDecs(
         this,
         [
-          [[0, dec], 0, 'a'],
-          [[0, dec], 0, 'a', (i) => i.#a, (i, v) => i.#a = v],
-          [[0, dec, dec2], 1, 'b'],
-          [[0, dec], 1, 'b', (i) => i.#privBData, (i, v) => i.#privBData = v],
-          [[0, dec], 2, 'c'],
-          [[0, dec], 2, 'c', () => console.log('privC')],
-          [[0, dec], 3, 'd'],
-          [[0, dec], 3, 'd', () => console.log('privD')],
-          [[0, dec], 4, 'e'],
-          [[0, dec], 4, 'e', () => console.log('privE')],
+          [dec, 0, 'a'],
+          [dec, 0, 'a', (i) => i.#a, (i, v) => i.#a = v],
+          [[dec, dec2], 1, 'b'],
+          [dec, 1, 'b', (i) => i.#privBData, (i, v) => i.#privBData = v],
+          [dec, 2, 'c'],
+          [dec, 2, 'c', () => console.log('privC')],
+          [dec, 3, 'd'],
+          [dec, 3, 'd', () => console.log('privD')],
+          [dec, 4, 'e'],
+          [dec, 4, 'e', () => console.log('privE')],
         ],
         [
-          0, dec
+          dec
         ]
       );
 

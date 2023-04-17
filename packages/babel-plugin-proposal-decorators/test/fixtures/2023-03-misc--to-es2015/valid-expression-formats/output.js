@@ -27,7 +27,7 @@ class Foo {
       constructor() {
         babelHelpers.defineProperty(this, "bar", _init_bar(this));
       }
-    }, [_init_bar] = babelHelpers.applyDecs2303(_class, [[[_dec9], 0, "bar"]], []).e, _class);
+    }, [_init_bar] = babelHelpers.applyDecs2303(_class, [[_dec9, 0, "bar"]], []).e, _class);
   }
 }
 ({

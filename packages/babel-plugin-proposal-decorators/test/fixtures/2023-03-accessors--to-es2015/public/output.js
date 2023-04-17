@@ -38,4 +38,4 @@ class Foo {
     babelHelpers.classPrivateFieldSet(this, _C, v);
   }
 }
-[_init_a, _init_b, _init_computedKey, _initProto] = babelHelpers.applyDecs2303(Foo, [[[dec], 1, "a"], [[dec], 1, "b"], [[dec], 1, _computedKey]], []).e;
+[_init_a, _init_b, _init_computedKey, _initProto] = babelHelpers.applyDecs2303(Foo, [[dec, 1, "a"], [dec, 1, "b"], [dec, 1, _computedKey]], []).e;

@@ -9,4 +9,4 @@ class A extends B {
   }
   method() {}
 }
-[_initProto] = babelHelpers.applyDecs2303(A, [[[_dec], 2, "method"]], []).e;
+[_initProto] = babelHelpers.applyDecs2303(A, [[_dec, 2, "method"]], []).e;
