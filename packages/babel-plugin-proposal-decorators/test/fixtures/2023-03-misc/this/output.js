@@ -17,7 +17,7 @@ class A {
     ({
       e: [_init_x, _init_y],
       c: [_A, _initClass]
-    } = babelHelpers.applyDecs2303(this, [[[1, _obj3, _dec4, _obj4, _dec5], 0, "x"], [[1, _obj5, _dec6, void 0, _dec7], 0, "y"]], [1, _obj, _dec, void 0, _dec2, _obj2, _dec3]));
+    } = babelHelpers.applyDecs2303(this, [[[_obj3, _dec4, _obj4, _dec5], 16, "x"], [[_obj5, _dec6, void 0, _dec7], 16, "y"]], [_obj, _dec, void 0, _dec2, _obj2, _dec3], 1));
   }
   x = _init_x(this);
   y = _init_y(this);

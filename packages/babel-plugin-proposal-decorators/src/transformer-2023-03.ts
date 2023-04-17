@@ -262,13 +262,16 @@ function extractProxyAccessorsFor(
   ];
 }
 
+// 3 bits reserved to this (0-7)
 const FIELD = 0;
 const ACCESSOR = 1;
 const METHOD = 2;
 const GETTER = 3;
 const SETTER = 4;
 
-const STATIC = 5;
+const STATIC_OLD_VERSION = 5; // Before 2023-03
+const STATIC = 8; // 1 << 3
+const DECORATORS_HAVE_THIS = 16; // 1 << 3
 
 function getElementKind(element: NodePath<ClassDecoratableElement>): number {
   switch (element.node.type) {
@@ -360,10 +363,7 @@ function generateDecorationList(
     decs.push(decorators[i]);
   }
 
-  if (version === "2023-03") {
-    decs.unshift(t.numericLiteral(hasOneThis ? 1 : 0));
-  }
-  return decs;
+  return { hasThis: hasOneThis, decs };
 }
 
 function generateDecorationExprs(
@@ -372,16 +372,23 @@ function generateDecorationExprs(
 ): t.ArrayExpression {
   return t.arrayExpression(
     filteredOrderedDecoratorInfo(info).map(el => {
-      const decs = generateDecorationList(
+      const { decs, hasThis } = generateDecorationList(
         el.decorators,
         el.decoratorsThis,
         version,
       );
+
+      let flag = el.kind;
+      if (el.isStatic) {
+        flag += version === "2023-03" ? STATIC : STATIC_OLD_VERSION;
+      }
+      if (hasThis) flag += DECORATORS_HAVE_THIS;
+
       return t.arrayExpression([
         version !== "2023-03" && decs.length === 1
           ? decs[0]
           : t.arrayExpression(decs),
-        t.numericLiteral(el.isStatic ? el.kind + STATIC : el.kind),
+        t.numericLiteral(flag),
         el.name,
         ...(el.privateMethods || []),
       ]);
@@ -852,15 +859,17 @@ function transformClass(
     elementDecoratorInfo,
     version,
   );
-  const classDecorations = t.arrayExpression(
-    classDecorators
-      ? generateDecorationList(
-          classDecorators.map(el => el.expression),
-          classDecorators.map(dec => decoratorsThis.get(dec)),
-          version,
-        )
-      : [],
-  );
+  let classDecorationsFlag = 0;
+  let classDecorations: t.Expression[] = [];
+  if (classDecorators) {
+    const { hasThis, decs } = generateDecorationList(
+      classDecorators.map(el => el.expression),
+      classDecorators.map(dec => decoratorsThis.get(dec)),
+      version,
+    );
+    classDecorationsFlag = hasThis ? 1 : 0;
+    classDecorations = decs;
+  }
 
   const elementLocals: t.Identifier[] =
     extractElementLocalAssignments(elementDecoratorInfo);
@@ -1070,7 +1079,8 @@ function transformClass(
             elementLocals,
             classLocals,
             elementDecorations,
-            classDecorations,
+            t.arrayExpression(classDecorations),
+            t.numericLiteral(classDecorationsFlag),
             needsInstancePrivateBrandCheck ? lastInstancePrivateName : null,
             state,
             version,
@@ -1101,6 +1111,7 @@ function createLocalsAssignment(
   classLocals: t.Identifier[],
   elementDecorations: t.ArrayExpression,
   classDecorations: t.ArrayExpression,
+  classDecorationsFlag: t.NumericLiteral,
   maybePrivateBranName: t.PrivateName | null,
   state: PluginPass,
   version: DecoratorVersionKind,
@@ -1124,6 +1135,9 @@ function createLocalsAssignment(
   } else {
     // TODO(Babel 8): Only keep the if branch
     if (version === "2023-03") {
+      if (maybePrivateBranName || classDecorationsFlag.value !== 0) {
+        args.push(classDecorationsFlag);
+      }
       if (maybePrivateBranName) {
         args.push(
           template.expression.ast`

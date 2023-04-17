@@ -14,4 +14,4 @@ class Foo {
     });
   }
 }
-[_init_a, _init_b] = babelHelpers.applyDecs2303(Foo, [[[0, dec], 0, "a", o => babelHelpers.classPrivateFieldGet(o, _a), (o, v) => babelHelpers.classPrivateFieldSet(o, _a, v)], [[0, dec], 0, "b", o => babelHelpers.classPrivateFieldGet(o, _b), (o, v) => babelHelpers.classPrivateFieldSet(o, _b, v)]], [], _ => _b.has(babelHelpers.checkInRHS(_))).e;
+[_init_a, _init_b] = babelHelpers.applyDecs2303(Foo, [[[dec], 0, "a", o => babelHelpers.classPrivateFieldGet(o, _a), (o, v) => babelHelpers.classPrivateFieldSet(o, _a, v)], [[dec], 0, "b", o => babelHelpers.classPrivateFieldGet(o, _b), (o, v) => babelHelpers.classPrivateFieldSet(o, _b, v)]], [], 0, _ => _b.has(babelHelpers.checkInRHS(_))).e;

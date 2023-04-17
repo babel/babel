@@ -4,7 +4,7 @@ _computedKey = 'b';
 _computedKey2 = 'b';
 class Foo {
   static {
-    [_initStatic] = babelHelpers.applyDecs2303(this, [[[0, dec], 8, "a"], [[0, dec], 9, "a"], [[0, dec], 8, _computedKey], [[0, dec], 9, _computedKey2]], []).e;
+    [_initStatic] = babelHelpers.applyDecs2303(this, [[[dec], 11, "a"], [[dec], 12, "a"], [[dec], 11, _computedKey], [[dec], 12, _computedKey2]], []).e;
     _initStatic(this);
   }
   static value = 1;

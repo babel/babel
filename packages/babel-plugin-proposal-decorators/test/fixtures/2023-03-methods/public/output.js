@@ -3,7 +3,7 @@ const dec = () => {};
 _computedKey = 'b';
 class Foo {
   static {
-    [_initProto] = babelHelpers.applyDecs2303(this, [[[0, dec], 2, "a"], [[0, dec], 2, _computedKey]], []).e;
+    [_initProto] = babelHelpers.applyDecs2303(this, [[[dec], 2, "a"], [[dec], 2, _computedKey]], []).e;
   }
   constructor(...args) {
     _initProto(this);

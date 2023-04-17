@@ -11,7 +11,7 @@ class A extends B {
         ({
           e: [_initProto],
           c: [_C, _initClass]
-        } = babelHelpers.applyDecs2303(this, [[[1, _obj2, _dec2], 2, "m2"]], [1, _obj, _dec]));
+        } = babelHelpers.applyDecs2303(this, [[[_obj2, _dec2], 18, "m2"]], [_obj, _dec], 1));
       }
       constructor(...args) {
         _initProto(this);

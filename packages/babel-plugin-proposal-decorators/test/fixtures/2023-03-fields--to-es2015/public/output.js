@@ -8,4 +8,4 @@ class Foo {
     babelHelpers.defineProperty(this, _computedKey, _init_computedKey(this, 456));
   }
 }
-[_init_a, _init_b, _init_computedKey] = babelHelpers.applyDecs2303(Foo, [[[0, dec], 0, "a"], [[0, dec], 0, "b"], [[0, dec], 0, _computedKey]], []).e;
+[_init_a, _init_b, _init_computedKey] = babelHelpers.applyDecs2303(Foo, [[[dec], 0, "a"], [[dec], 0, "b"], [[dec], 0, _computedKey]], []).e;

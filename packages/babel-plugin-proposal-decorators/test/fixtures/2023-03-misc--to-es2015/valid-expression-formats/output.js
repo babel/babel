@@ -27,11 +27,11 @@ class Foo {
       constructor() {
         babelHelpers.defineProperty(this, "bar", _init_bar(this));
       }
-    }, [_init_bar] = babelHelpers.applyDecs2303(_class, [[[0, _dec9], 0, "bar"]], []).e, _class);
+    }, [_init_bar] = babelHelpers.applyDecs2303(_class, [[[_dec9], 0, "bar"]], []).e, _class);
   }
 }
 ({
   e: [_initProto],
   c: [_Foo, _initClass]
-} = babelHelpers.applyDecs2303(Foo, [[[1, void 0, dec, void 0, _dec5, void 0, _dec6, void 0, _dec7, _obj2, _dec8], 2, "method"]], [1, void 0, dec, void 0, _dec, void 0, _dec2, void 0, _dec3, _obj, _dec4]));
+} = babelHelpers.applyDecs2303(Foo, [[[void 0, dec, void 0, _dec5, void 0, _dec6, void 0, _dec7, _obj2, _dec8], 18, "method"]], [void 0, dec, void 0, _dec, void 0, _dec2, void 0, _dec3, _obj, _dec4], 1));
 _initClass();

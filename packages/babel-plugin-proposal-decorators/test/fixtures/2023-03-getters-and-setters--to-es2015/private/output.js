@@ -23,8 +23,8 @@ function _get_a() {
 function _set_a(v) {
   _call_a2(this, v);
 }
-[_call_a, _call_a2, _initProto] = babelHelpers.applyDecs2303(Foo, [[[0, dec], 3, "a", function () {
+[_call_a, _call_a2, _initProto] = babelHelpers.applyDecs2303(Foo, [[[dec], 3, "a", function () {
   return this.value;
-}], [[0, dec], 4, "a", function (v) {
+}], [[dec], 4, "a", function (v) {
   this.value = v;
-}]], [], _ => _a.has(babelHelpers.checkInRHS(_))).e;
+}]], [], 0, _ => _a.has(babelHelpers.checkInRHS(_))).e;

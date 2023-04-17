@@ -13,7 +13,7 @@ var _a = {
   set: _set_a
 };
 (() => {
-  [_call_a, _initStatic] = babelHelpers.applyDecs2303(Foo, [[[0, dec], 9, "a", function (v) {
+  [_call_a, _initStatic] = babelHelpers.applyDecs2303(Foo, [[[dec], 12, "a", function (v) {
     return this.value = v;
   }]], []).e;
   _initStatic(Foo);

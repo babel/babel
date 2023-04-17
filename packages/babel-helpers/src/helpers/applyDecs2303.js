@@ -14,10 +14,11 @@ import checkInRHS from "checkInRHS";
   METHOD = 2;
   GETTER = 3;
   SETTER = 4;
+  CLASS = 5; // only used in assertValidReturnValue
 
-  STATIC = 5;
+  STATIC = 8;
 
-  CLASS = 10; // only used in assertValidReturnValue
+  DECORATORS_HAVE_THIS = 16;
 */
 
 function createAddInitializerMethod(initializers, decoratorFinishedRef) {
@@ -180,7 +181,7 @@ function assertValidReturnValue(kind, value) {
     var hint;
     if (kind === 0 /* FIELD */) {
       hint = "field";
-    } else if (kind === 10 /* CLASS */) {
+    } else if (kind === 5 /* CLASS */) {
       hint = "class";
     } else {
       hint = "method";
@@ -204,6 +205,7 @@ function applyMemberDec(
   ret,
   base,
   decInfo,
+  decoratorsHaveThis,
   name,
   kind,
   isStatic,
@@ -255,15 +257,14 @@ function applyMemberDec(
 
   var newValue, get, set;
 
-  var hasThis = decs[0] === 1;
-  var inc = hasThis ? 2 : 1;
+  var inc = decoratorsHaveThis ? 2 : 1;
 
-  for (var i = decs.length - 1; i >= 1; i -= inc) {
+  for (var i = decs.length - 1; i >= 0; i -= inc) {
     var dec = decs[i];
 
     newValue = memberDec(
       dec,
-      hasThis ? decs[i - 1] : undefined,
+      decoratorsHaveThis ? decs[i - 1] : undefined,
       name,
       desc,
       initializers,
@@ -383,14 +384,16 @@ function applyMemberDecs(Class, decInfos, instanceBrand) {
     var name = decInfo[2];
     var isPrivate = decInfo.length > 3;
 
-    var isStatic = kind >= 5; /* STATIC */
+    var decoratorsHaveThis = kind & 16; /* DECORATORS_HAVE_THIS */
+    var isStatic = !!(kind & 8); /* STATIC */
     var base;
     var initializers;
     var hasPrivateBrand = instanceBrand;
 
+    kind &= 7 /* 0b111 */;
+
     if (isStatic) {
       base = Class;
-      kind = kind - 5 /* STATIC */;
       // initialize staticInitializers when we see a non-field static member
       if (kind !== 0 /* FIELD */) {
         staticInitializers = staticInitializers || [];
@@ -438,6 +441,7 @@ function applyMemberDecs(Class, decInfos, instanceBrand) {
       ret,
       base,
       decInfo,
+      decoratorsHaveThis,
       name,
       kind,
       isStatic,
@@ -463,21 +467,20 @@ function pushInitializers(ret, initializers) {
   }
 }
 
-function applyClassDecs(targetClass, classDecs) {
+function applyClassDecs(targetClass, classDecs, decoratorsHaveThis) {
   if (classDecs.length > 0) {
     var initializers = [];
     var newClass = targetClass;
     var name = targetClass.name;
 
-    var hasThis = classDecs[0] === 1;
-    var inc = hasThis ? 2 : 1;
+    var inc = decoratorsHaveThis ? 2 : 1;
 
-    for (var i = classDecs.length - 1; i >= 1; i -= inc) {
+    for (var i = classDecs.length - 1; i >= 0; i -= inc) {
       var decoratorFinishedRef = { v: false };
 
       try {
         var nextNewClass = classDecs[i].call(
-          hasThis ? classDecs[i - 1] : undefined,
+          decoratorsHaveThis ? classDecs[i - 1] : undefined,
           newClass,
           {
             kind: "class",
@@ -493,7 +496,7 @@ function applyClassDecs(targetClass, classDecs) {
       }
 
       if (nextNewClass !== undefined) {
-        assertValidReturnValue(10 /* CLASS */, nextNewClass);
+        assertValidReturnValue(5 /* CLASS */, nextNewClass);
         newClass = nextNewClass;
       }
     }
@@ -661,13 +664,14 @@ export default function applyDecs2303(
   targetClass,
   memberDecs,
   classDecs,
+  classDecsHaveThis,
   instanceBrand
 ) {
   return {
     e: applyMemberDecs(targetClass, memberDecs, instanceBrand),
     // Lazily apply class decorations so that member init locals can be properly bound.
     get c() {
-      return applyClassDecs(targetClass, classDecs);
+      return applyClassDecs(targetClass, classDecs, classDecsHaveThis);
     },
   };
 }
