@@ -470,13 +470,6 @@ target["new-version"] = function () {
 };
 
 target["new-babel-8-version-prepare"] = function () {
-  const branch = shell
-    .exec("git rev-parse --abbrev-ref HEAD", { silent: true })
-    .trim();
-  if (branch !== "main") {
-    throw new Error("You must be on the main branch to run this command");
-  }
-
   shell.exec("git pull --rebase");
 
   const pkg = JSON.parse(readFileSync("./package.json", "utf8"));
