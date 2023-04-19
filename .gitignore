@@ -25,8 +25,8 @@ package-lock.json
 
 /packages/babel-compat-data/build
 
-/packages/babel-core/src/vendor/*.js
-/packages/babel-core/src/vendor/*.ts
+#/packages/babel-core/src/vendor/*.js
+#/packages/babel-core/src/vendor/*.ts
 
 /packages/babel-runtime/helpers/*.js
 !/packages/babel-runtime/helpers/toArray.js
