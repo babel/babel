@@ -115,12 +115,17 @@ export default function rewriteLiveReferences(
     rewriteBindingInitVisitorState,
   );
 
-  simplifyAccess(
-    programPath,
-    // NOTE(logan): The 'Array.from' calls are to make this code with in loose mode.
-    new Set([...Array.from(imported.keys()), ...Array.from(exported.keys())]),
-    false,
-  );
+  // NOTE(logan): The 'Array.from' calls are to make this code with in loose mode.
+  const bindingNames = new Set([
+    ...Array.from(imported.keys()),
+    ...Array.from(exported.keys()),
+  ]);
+  if (process.env.BABEL_8_BREAKING) {
+    simplifyAccess(programPath, bindingNames);
+  } else {
+    // @ts-ignore(Babel 7 vs Babel 8) The third param has been removed in Babel 8.
+    simplifyAccess(programPath, bindingNames, false);
+  }
 
   // Rewrite reads/writes from imports and exports to have the correct behavior.
   const rewriteReferencesVisitorState: RewriteReferencesVisitorState = {

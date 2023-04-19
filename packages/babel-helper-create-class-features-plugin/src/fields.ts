@@ -471,6 +471,12 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
 
       return optimiseCall(this.get(member), this.receiver(member), args, true);
     },
+
+    delete() {
+      throw new Error(
+        "Internal Babel error: deleting private elements is a parsing error.",
+      );
+    },
   };
 
 const privateNameHandlerLoose: Handler<PrivateNameState> = {
@@ -513,6 +519,12 @@ const privateNameHandlerLoose: Handler<PrivateNameState> = {
 
   optionalCall(member, args) {
     return t.optionalCallExpression(this.get(member), args, true);
+  },
+
+  delete() {
+    throw new Error(
+      "Internal Babel error: deleting private elements is a parsing error.",
+    );
   },
 };
 

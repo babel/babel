@@ -14,8 +14,10 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/helper-explode-assignable-expression": "workspace:^",
     "@babel/types": "workspace:^"
+  },
+  "devDependencies": {
+    "@babel/traverse": "workspace:^"
   },
   "engines": {
     "node": ">=6.9.0"

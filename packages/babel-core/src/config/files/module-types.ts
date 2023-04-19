@@ -124,10 +124,13 @@ function loadCtsDefault(filepath: string) {
 
 function loadCjsDefault(filepath: string, fallbackToTranspiledModule: boolean) {
   const module = endHiddenCallStack(require)(filepath);
-  return module?.__esModule
-    ? // TODO(Babel 8): Remove "module" and "undefined" fallback
-      module.default || (fallbackToTranspiledModule ? module : undefined)
-    : module;
+  if (process.env.BABEL_8_BREAKING) {
+    return module?.__esModule ? module.default : module;
+  } else {
+    return module?.__esModule
+      ? module.default || (fallbackToTranspiledModule ? module : undefined)
+      : module;
+  }
 }
 
 async function loadMjsDefault(filepath: string) {
@@ -154,12 +157,11 @@ function getTSPreset(filepath: string) {
     let message =
       "You appear to be using a .cts file as Babel configuration, but the `@babel/preset-typescript` package was not found: please install it!";
 
-    if (process.versions.pnp) {
-      // Using Yarn PnP, which doesn't allow requiring packages that are not
-      // explicitly specified as dependencies.
-      // TODO(Babel 8): Explicitly add `@babel/preset-typescript` as an
-      // optional peer dependency of `@babel/core`.
-      message += `
+    if (!process.env.BABEL_8_BREAKING) {
+      if (process.versions.pnp) {
+        // Using Yarn PnP, which doesn't allow requiring packages that are not
+        // explicitly specified as dependencies.
+        message += `
 If you are using Yarn Plug'n'Play, you may also need to add the following configuration to your .yarnrc.yml file:
 
 packageExtensions:
@@ -167,6 +169,7 @@ packageExtensions:
 \t\tpeerDependencies:
 \t\t\t"@babel/preset-typescript": "*"
 `;
+      }
     }
 
     throw new ConfigError(message, filepath);

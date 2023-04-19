@@ -1,6 +1,7 @@
 import * as babel from "../lib/index.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import { readFileSync } from "fs";
 
 const cwd = path.dirname(fileURLToPath(import.meta.url));
 
@@ -12,8 +13,20 @@ function loadOptionsAsync(opts) {
   return babel.loadOptionsAsync({ cwd, ...opts });
 }
 
+let USE_ESM = false;
+try {
+  const type = readFileSync(
+    new URL("../../../.module-type", import.meta.url),
+    "utf-8",
+  ).trim();
+  USE_ESM = type === "module";
+} catch {}
+
+const itBabel7 = process.env.BABEL_8_BREAKING ? it.skip : it;
+const itBabel7cjs = process.env.BABEL_8_BREAKING || USE_ESM ? it.skip : it;
+
 describe("option-manager", () => {
-  it("throws for babel 5 plugin", () => {
+  itBabel7cjs("throws for babel 5 plugin", () => {
     return expect(() => {
       loadOptions({
         plugins: [({ Plugin }) => new Plugin("object-assign", {})],
@@ -248,16 +261,25 @@ describe("option-manager", () => {
       expect(options.presets).toHaveLength(0);
     });
 
-    it.each([
-      ["es2015_named", /Must export a default export when using ES6 modules/],
-      ["es2015_invalid", /Unsupported format: string/],
-      ["es5_invalid", /Unsupported format: string/],
-    ])("%p should throw %p", async (name, msg) => {
+    itBabel7("es2015_named shuold throw", async () => {
       await expect(
         loadOptionsAsync({
-          presets: [path.join(cwd, "fixtures/option-manager/presets", name)],
+          presets: [
+            path.join(cwd, "fixtures/option-manager/presets", "es2015_named"),
+          ],
         }),
-      ).rejects.toThrow(msg);
+      ).rejects.toThrow(/Must export a default export when using ES6 modules/);
     });
+
+    it.each(["es2015_invalid", "es5_invalid"])(
+      "%p should throw",
+      async name => {
+        await expect(
+          loadOptionsAsync({
+            presets: [path.join(cwd, "fixtures/option-manager/presets", name)],
+          }),
+        ).rejects.toThrow(/Unsupported format: string/);
+      },
+    );
   });
 });

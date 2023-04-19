@@ -521,7 +521,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-builder-binary-assignment-operator-visitor@workspace:packages/babel-helper-builder-binary-assignment-operator-visitor"
   dependencies:
-    "@babel/helper-explode-assignable-expression": "workspace:^"
+    "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
   languageName: unknown
   linkType: soft
@@ -686,7 +686,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-explode-assignable-expression@workspace:^, @babel/helper-explode-assignable-expression@workspace:packages/babel-helper-explode-assignable-expression":
+"@babel/helper-explode-assignable-expression@workspace:packages/babel-helper-explode-assignable-expression":
   version: 0.0.0-use.local
   resolution: "@babel/helper-explode-assignable-expression@workspace:packages/babel-helper-explode-assignable-expression"
   dependencies:

@@ -12,8 +12,6 @@ type APIPolyfillFactory<T extends keyof PluginAPI> = (
 
 type APIPolyfills = {
   assertVersion: APIPolyfillFactory<"assertVersion">;
-  targets: APIPolyfillFactory<"targets">;
-  assumption: APIPolyfillFactory<"assumption">;
 };
 
 const apiPolyfills: APIPolyfills = {
@@ -23,17 +21,19 @@ const apiPolyfills: APIPolyfills = {
   assertVersion: (api: PluginAPI) => (range: number | string) => {
     throwVersionError(range, api.version);
   },
-  // This is supported starting from Babel 7.13
-  // TODO(Babel 8): Remove this polyfill
-  targets: () => () => {
-    return {};
-  },
-  // This is supported starting from Babel 7.13
-  // TODO(Babel 8): Remove this polyfill
-  assumption: () => () => {
-    return undefined;
-  },
 };
+if (!process.env.BABEL_8_BREAKING) {
+  Object.assign(apiPolyfills, {
+    // This is supported starting from Babel 7.13
+    targets: () => () => {
+      return {};
+    },
+    // This is supported starting from Babel 7.13
+    assumption: () => () => {
+      return undefined;
+    },
+  });
+}
 
 export function declare<State = {}, Option = {}>(
   builder: (
@@ -54,9 +54,7 @@ export function declare<State = {}, Option = {}>(
     ) as (keyof typeof apiPolyfills)[]) {
       if (api[name]) continue;
 
-      // TODO: Use ??= when flow lets us to do so
-      clonedApi = clonedApi ?? copyApiObject(api);
-      // @ts-expect-error The shape of API polyfill is guaranteed by APIPolyfillFactory
+      clonedApi ??= copyApiObject(api);
       clonedApi[name] = apiPolyfills[name](clonedApi);
     }
 

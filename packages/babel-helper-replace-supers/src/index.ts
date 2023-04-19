@@ -19,11 +19,19 @@ import {
 } from "@babel/types";
 import type * as t from "@babel/types";
 
-// TODO(Babel 8): Don't export this.
-export {
-  default as environmentVisitor,
-  skipAllButComputedKey,
-} from "@babel/helper-environment-visitor";
+declare const USE_ESM: boolean, IS_STANDALONE: boolean;
+if (!process.env.BABEL_8_BREAKING) {
+  if (!USE_ESM) {
+    if (!IS_STANDALONE) {
+      // eslint-disable-next-line no-restricted-globals
+      const ns = require("@babel/helper-environment-visitor");
+      // eslint-disable-next-line no-restricted-globals
+      exports.environmentVisitor = ns.default;
+      // eslint-disable-next-line no-restricted-globals
+      exports.skipAllButComputedKey = ns.skipAllButComputedKey;
+    }
+  }
+}
 
 type ThisRef =
   | {
