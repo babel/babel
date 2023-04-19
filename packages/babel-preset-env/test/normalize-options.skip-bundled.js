@@ -6,6 +6,8 @@ import _normalizeOptions, {
 } from "../lib/normalize-options.js";
 const normalizeOptions = _normalizeOptions.default || _normalizeOptions;
 
+const itBabel7 = process.env.BABEL_8_BREAKING ? it.skip : it;
+
 describe("normalize-options", () => {
   describe("normalizeOptions", () => {
     it("should return normalized `include` and `exclude`", () => {
@@ -83,7 +85,7 @@ describe("normalize-options", () => {
 
     it("throws when including module plugins", () => {
       expect(() =>
-        normalizeOptions({ include: ["proposal-dynamic-import"] }),
+        normalizeOptions({ include: ["transform-dynamic-import"] }),
       ).toThrow();
       expect(() =>
         normalizeOptions({ include: ["transform-modules-amd"] }),
@@ -92,7 +94,7 @@ describe("normalize-options", () => {
 
     it("allows exclusion of module plugins", () => {
       expect(() =>
-        normalizeOptions({ exclude: ["proposal-dynamic-import"] }),
+        normalizeOptions({ exclude: ["transform-dynamic-import"] }),
       ).not.toThrow();
       expect(() =>
         normalizeOptions({ exclude: ["transform-modules-commonjs"] }),
@@ -142,7 +144,7 @@ describe("normalize-options", () => {
       ]);
     });
 
-    it("should work both with proposal-* and transform-*", () => {
+    itBabel7("should work both with proposal-* and transform-*", () => {
       expect(
         normalizeOptions({ include: ["proposal-.*-regex"] }).include,
       ).toEqual([
