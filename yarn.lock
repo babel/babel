@@ -686,15 +686,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-explode-assignable-expression@workspace:packages/babel-helper-explode-assignable-expression":
-  version: 0.0.0-use.local
-  resolution: "@babel/helper-explode-assignable-expression@workspace:packages/babel-helper-explode-assignable-expression"
-  dependencies:
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
-  languageName: unknown
-  linkType: soft
-
 "@babel/helper-fixtures@workspace:^, @babel/helper-fixtures@workspace:packages/babel-helper-fixtures":
   version: 0.0.0-use.local
   resolution: "@babel/helper-fixtures@workspace:packages/babel-helper-fixtures"
