@@ -113,9 +113,6 @@ jobs:
         if: needs.git-version.result == 'success'
         run: git checkout ${{ needs.git-version.outputs.branch }}
 
-      - name: Check if Babel 8
-        run: git log -1 --format=%B HEAD | node -p "'is-babel-8=' + fs.readFileSync(0, 'utf8').includes('v8')"
-
       - name: Build and Test
         run: make prepublish
         env:
