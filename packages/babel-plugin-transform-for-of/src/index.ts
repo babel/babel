@@ -217,10 +217,12 @@ export default declare((api, options: Options) => {
           return;
         }
 
-        if (!state.availableHelper(builder.helper)) {
-          // Babel <7.9.0 doesn't support this helper
-          transformWithoutHelper(skipIteratorClosing, path, state);
-          return;
+        if (!process.env.BABEL_8_BREAKING) {
+          if (!state.availableHelper(builder.helper)) {
+            // Babel <7.9.0 doesn't support this helper
+            transformWithoutHelper(skipIteratorClosing, path, state);
+            return;
+          }
         }
 
         const { node, parent, scope } = path;

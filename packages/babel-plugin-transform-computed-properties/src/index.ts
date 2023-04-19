@@ -17,15 +17,18 @@ type PropertyInfo = {
   state: PluginPass;
 };
 
-// TODO(Babel 8): Remove this
-const DefineAccessorHelper = template.expression.ast`
-function (type, obj, key, fn) {
-  var desc = { configurable: true, enumerable: true };
-  desc[type] = fn;
-  return Object.defineProperty(obj, key, desc);
-}`;
-// @ts-expect-error undocumented _compact node property
-DefineAccessorHelper._compact = true;
+if (!process.env.BABEL_8_BREAKING) {
+  // eslint-disable-next-line no-var
+  var DefineAccessorHelper = template.expression.ast`
+    function (type, obj, key, fn) {
+      var desc = { configurable: true, enumerable: true };
+      desc[type] = fn;
+      return Object.defineProperty(obj, key, desc);
+    }
+  `;
+  // @ts-expect-error undocumented _compact node property
+  DefineAccessorHelper._compact = true;
+}
 
 export default declare((api, options: Options) => {
   api.assertVersion(7);
@@ -44,26 +47,34 @@ export default declare((api, options: Options) => {
     key: t.Expression,
     fn: t.Expression,
   ) {
-    let helper: t.Identifier;
-    if (state.availableHelper("defineAccessor")) {
-      helper = state.addHelper("defineAccessor");
+    if (process.env.BABEL_8_BREAKING) {
+      return t.callExpression(state.addHelper("defineAccessor"), [
+        t.stringLiteral(type),
+        obj,
+        key,
+        fn,
+      ]);
     } else {
-      // Fallback for @babel/helpers <= 7.20.6, manually add helper function
-      // TODO(Babel 8): Remove this
-      const file = state.file;
-      helper = file.get("fallbackDefineAccessorHelper");
-      if (!helper) {
-        const id = file.scope.generateUidIdentifier("defineAccessor");
-        file.scope.push({
-          id,
-          init: DefineAccessorHelper,
-        });
-        file.set("fallbackDefineAccessorHelper", (helper = id));
+      let helper: t.Identifier;
+      if (state.availableHelper("defineAccessor")) {
+        helper = state.addHelper("defineAccessor");
+      } else {
+        // Fallback for @babel/helpers <= 7.20.6, manually add helper function
+        const file = state.file;
+        helper = file.get("fallbackDefineAccessorHelper");
+        if (!helper) {
+          const id = file.scope.generateUidIdentifier("defineAccessor");
+          file.scope.push({
+            id,
+            init: DefineAccessorHelper,
+          });
+          file.set("fallbackDefineAccessorHelper", (helper = id));
+        }
+        helper = t.cloneNode(helper);
       }
-      helper = t.cloneNode(helper);
-    }
 
-    return t.callExpression(helper, [t.stringLiteral(type), obj, key, fn]);
+      return t.callExpression(helper, [t.stringLiteral(type), obj, key, fn]);
+    }
   }
 
   /**
