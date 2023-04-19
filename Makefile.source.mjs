@@ -2,6 +2,7 @@ import "shelljs/make.js";
 import path from "path";
 import { execFileSync } from "child_process";
 import { readFileSync, writeFileSync } from "fs";
+import semver from "semver";
 
 /**
  * @type {import("shelljs")}
@@ -468,9 +469,29 @@ target["new-version"] = function () {
   yarn(["release-tool", "version", "-f", "@babel/standalone"]);
 };
 
-target["new-version"] = function () {
-  target["new-version-checklist"]();
+target["new-babel-8-version-prepare"] = function () {
+  const branch = shell
+    .exec("git rev-parse --abbrev-ref HEAD", { silent: true })
+    .trim();
+  if (branch !== "main") {
+    throw new Error("You must be on the main branch to run this command");
+  }
 
-  exec("git", ["pull", "--rebase"]);
-  yarn(["release-tool", "version", "-f", "@babel/standalone"]);
+  shell.exec("git pull --rebase");
+
+  const pkg = JSON.parse(readFileSync("./package.json", "utf8"));
+  const nextVersion = semver.inc(pkg.version_babel8, "prerelease");
+  pkg.version_babel8 = nextVersion;
+  writeFileSync("./package.json", JSON.stringify(pkg, null, 2) + "\n");
+  shell.exec("git add package.json");
+  shell.exec("git commit -m 'Bump Babel 8 version to " + nextVersion + "'");
+
+  return nextVersion;
+};
+
+target["new-babel-8-version"] = function () {
+  const nextVersion = target["new-babel-8-version-prepare"]();
+
+  shell.exec("git checkout -b release/v" + nextVersion);
+  yarn(["release-tool", "version", nextVersion, "--all"]);
 };

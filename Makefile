@@ -177,20 +177,13 @@ test-test262-update-allowlist:
 
 
 new-version-checklist:
-	# @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	# @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	# @echo "!!!!!!                                                   !!!!!!"
-	# @echo "!!!!!!   Write any release-blocking message here, and    !!!!!!"
-	# @echo "!!!!!!              UNCOMMENT THESE LINES                !!!!!!"
-	# @echo "!!!!!!                                                   !!!!!!"
-	# @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	# @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	# @exit 1
+	$(MAKEJS) new-version-checklist
 
 new-version:
-	$(MAKE) new-version-checklist
-	git pull --rebase
-	$(YARN) release-tool version -f @babel/standalone
+	$(MAKEJS) new-version
+
+new-babel-8-version:
+	$(MAKEJS) new-babel-8-version
 
 # NOTE: Run make new-version first
 publish:
