@@ -119,15 +119,15 @@ jobs:
           # Hack: use FORCE_COLOR so that supports-color@5 returnes true for GitHub CI
           # Remove once `chalk` is bumped to 4.0.
           FORCE_COLOR: true
-          BABEL_8_BREAKING: ${{ needs.check-release-type.outputs.is_babel_9 == 'true' }}
-          USE_ESM: ${{ needs.check-release-type.outputs.is_babel_9 == 'true' }}
+          BABEL_8_BREAKING: ${{ needs.check-release-type.outputs.is-babel-8 == 'true' }}
+          USE_ESM: ${{ needs.check-release-type.outputs.is-babel-8 == 'true' }}
 
       - name: Publish to npm
         run: yarn release-tool publish --yes
         env:
           YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          BABEL_8_BREAKING: ${{ needs.check-release-type.outputs.is_babel_9 == 'true' }}
-          USE_ESM: ${{ needs.check-release-type.outputs.is_babel_9 == 'true' }}
+          BABEL_8_BREAKING: ${{ needs.check-release-type.outputs.is-babel-8 == 'true' }}
+          USE_ESM: ${{ needs.check-release-type.outputs.is-babel-8 == 'true' }}
 
   github-release:
     name: Create GitHub release draft

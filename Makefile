@@ -193,7 +193,7 @@ publish:
 		exit 1; \
 	fi
 	$(MAKE) prepublish
-ifeq ("$(BABEL_8_BREAKING)", "true"))"
+ifeq ("$(BABEL_8_BREAKING)", "true")
 	$(YARN) release-tool publish --tag next
 else
 	$(YARN) release-tool publish
