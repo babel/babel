@@ -487,4 +487,8 @@ target["new-babel-8-version"] = function () {
 
   shell.exec("git checkout -b release/v" + nextVersion);
   yarn(["release-tool", "version", nextVersion, "--all"]);
+
+  console.log(
+    `Run \`git push upstream main release/v${nextVersion} --follow-tags\` to push the changes on GitHub and release them.`
+  );
 };
