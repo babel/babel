@@ -194,7 +194,7 @@ publish:
 	fi
 	$(MAKE) prepublish
 ifeq ("$(BABEL_8_BREAKING)", "true")
-	$(YARN) release-tool publish --tag next
+	USE_ESM=true $(YARN) release-tool publish --tag next
 else
 	$(YARN) release-tool publish
 endif

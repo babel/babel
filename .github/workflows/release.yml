@@ -120,14 +120,20 @@ jobs:
           # Remove once `chalk` is bumped to 4.0.
           FORCE_COLOR: true
           BABEL_8_BREAKING: ${{ needs.check-release-type.outputs.is-babel-8 == 'true' }}
-          USE_ESM: ${{ needs.check-release-type.outputs.is-babel-8 == 'true' }}
 
-      - name: Publish to npm
+      - name: Publish to npm (Babel 7)
         run: yarn release-tool publish --yes
+        if: needs.check-release-type.outputs.is-babel-8 == 'false'
         env:
           YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          BABEL_8_BREAKING: ${{ needs.check-release-type.outputs.is-babel-8 == 'true' }}
-          USE_ESM: ${{ needs.check-release-type.outputs.is-babel-8 == 'true' }}
+
+      - name: Publish to npm (Babel 8)
+        run: yarn release-tool publish --yes --tag next
+        if: needs.check-release-type.outputs.is-babel-8 == 'true'
+        env:
+          YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          BABEL_8_BREAKING: true
+          USE_ESM: true
 
   github-release:
     name: Create GitHub release draft
