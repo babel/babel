@@ -1,7 +1,7 @@
 import "shelljs/make.js";
 import path from "path";
 import { execFileSync } from "child_process";
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync, writeFileSync, readdirSync } from "fs";
 import semver from "semver";
 
 /**
@@ -492,6 +492,18 @@ target["new-babel-8-version"] = function () {
   const nextVersion = target["new-babel-8-version-prepare"]();
 
   exec("git", ["checkout", "-b", "release/v" + nextVersion]);
+
+  SOURCES.forEach(source => {
+    readdirSync(source).forEach(name => {
+      const pkgPath = `${source}/${name}/package.json`;
+      try {
+        const pkg = JSON.parse(readFileSync(pkgPath, "utf8"));
+        pkg.peerDependencies["@babel/core"] = `^${nextVersion}`;
+        writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + "\n");
+      } catch {}
+    });
+  });
+
   yarn(["release-tool", "version", nextVersion, "--all"]);
 
   console.log(
