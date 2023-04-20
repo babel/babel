@@ -52,6 +52,7 @@ Using plugins:
   transform-export-namespace-from { ie }
   transform-modules-commonjs
   transform-dynamic-import
+  syntax-import-meta
 corejs3: `DEBUG` option
 
 Using targets: {

@@ -71,15 +71,11 @@ describe("babel-preset-env", () => {
             shouldTransformDynamicImport: false,
             shouldTransformExportNamespaceFrom: false,
           }),
-        ).toEqual(
-          process.env.BABEL_8_BREAKING
-            ? ["syntax-dynamic-import", "syntax-export-namespace-from"]
-            : [
-                "syntax-dynamic-import",
-                "syntax-export-namespace-from",
-                "syntax-import-meta",
-              ],
-        );
+        ).toEqual([
+          "syntax-dynamic-import",
+          "syntax-export-namespace-from",
+          "syntax-import-meta",
+        ]);
       });
     });
     describe("modules is not set to false", () => {
@@ -93,15 +89,11 @@ describe("babel-preset-env", () => {
               shouldTransformDynamicImport: false,
               shouldTransformExportNamespaceFrom: false,
             }),
-          ).toEqual(
-            process.env.BABEL_8_BREAKING
-              ? ["syntax-dynamic-import", "syntax-export-namespace-from"]
-              : [
-                  "syntax-dynamic-import",
-                  "syntax-export-namespace-from",
-                  "syntax-import-meta",
-                ],
-          );
+          ).toEqual([
+            "syntax-dynamic-import",
+            "syntax-export-namespace-from",
+            "syntax-import-meta",
+          ]);
         });
       });
       describe("ESMs should be transformed", () => {
@@ -115,20 +107,12 @@ describe("babel-preset-env", () => {
                 shouldTransformDynamicImport: false,
                 shouldTransformExportNamespaceFrom: false,
               }),
-            ).toEqual(
-              process.env.BABEL_8_BREAKING
-                ? [
-                    "transform-modules-commonjs",
-                    "syntax-dynamic-import",
-                    "syntax-export-namespace-from",
-                  ]
-                : [
-                    "transform-modules-commonjs",
-                    "syntax-dynamic-import",
-                    "syntax-export-namespace-from",
-                    "syntax-import-meta",
-                  ],
-            );
+            ).toEqual([
+              "transform-modules-commonjs",
+              "syntax-dynamic-import",
+              "syntax-export-namespace-from",
+              "syntax-import-meta",
+            ]);
           });
         });
         describe("dynamic imports should be transformed", () => {
@@ -141,20 +125,12 @@ describe("babel-preset-env", () => {
                 shouldTransformDynamicImport: true,
                 shouldTransformExportNamespaceFrom: false,
               }),
-            ).toEqual(
-              process.env.BABEL_8_BREAKING
-                ? [
-                    "transform-modules-systemjs",
-                    "transform-dynamic-import",
-                    "syntax-export-namespace-from",
-                  ]
-                : [
-                    "transform-modules-systemjs",
-                    "transform-dynamic-import",
-                    "syntax-export-namespace-from",
-                    "syntax-import-meta",
-                  ],
-            );
+            ).toEqual([
+              "transform-modules-systemjs",
+              "transform-dynamic-import",
+              "syntax-export-namespace-from",
+              "syntax-import-meta",
+            ]);
           });
           describe("export namespace from should be transformed", () => {
             it("works", () => {
@@ -166,20 +142,12 @@ describe("babel-preset-env", () => {
                   shouldTransformDynamicImport: true,
                   shouldTransformExportNamespaceFrom: true,
                 }),
-              ).toEqual(
-                process.env.BABEL_8_BREAKING
-                  ? [
-                      "transform-modules-systemjs",
-                      "transform-dynamic-import",
-                      "transform-export-namespace-from",
-                    ]
-                  : [
-                      "transform-modules-systemjs",
-                      "transform-dynamic-import",
-                      "transform-export-namespace-from",
-                      "syntax-import-meta",
-                    ],
-              );
+              ).toEqual([
+                "transform-modules-systemjs",
+                "transform-dynamic-import",
+                "transform-export-namespace-from",
+                "syntax-import-meta",
+              ]);
             });
           });
         });

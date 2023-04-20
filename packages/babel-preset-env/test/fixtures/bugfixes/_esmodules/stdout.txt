@@ -42,5 +42,6 @@ Using plugins:
   bugfix/transform-tagged-template-caching { ios < 13, safari < 13 }
   transform-modules-commonjs
   transform-dynamic-import
+  syntax-import-meta
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
