@@ -223,6 +223,12 @@ target["build-plugin-transform-runtime-dist"] = function () {
 };
 
 target["prepublish"] = function () {
+  if (process.env.BABEL_8_BREAKING) {
+    node(["scripts/set-module-type.js", "module"]);
+  } else {
+    node(["scripts/set-module-type.js", "script"]);
+  }
+
   target["bootstrap-only"]();
 
   env(
