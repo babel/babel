@@ -1,8 +1,6 @@
 import env from "../lib/index.js";
 import * as babel from "@babel/core";
 
-const itBabel7 = process.env.BABEL_8_BREAKING ? it.skip : it;
-
 describe("preset-env", () => {
   function extractParserOptions(api, { ref }) {
     return {
@@ -13,20 +11,17 @@ describe("preset-env", () => {
     };
   }
 
-  itBabel7(
-    "should enable the 'importMeta' parser plugin for old parser versions",
-    () => {
-      const ref = {};
-      babel.transformSync("", {
-        configFile: false,
-        presets: [env],
-        plugins: [[extractParserOptions, { ref }]],
-        caller: {
-          name: "test",
-        },
-      });
+  it("should enable the 'importMeta' parser plugin for old parser versions", () => {
+    const ref = {};
+    babel.transformSync("", {
+      configFile: false,
+      presets: [env],
+      plugins: [[extractParserOptions, { ref }]],
+      caller: {
+        name: "test",
+      },
+    });
 
-      expect(ref.parserOpts.plugins).toContain("importMeta");
-    },
-  );
+    expect(ref.parserOpts.plugins).toContain("importMeta");
+  });
 });

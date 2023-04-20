@@ -170,10 +170,8 @@ export const getModulesPluginNames = ({
     modulesPluginNames.push("syntax-top-level-await");
   }
 
-  if (!process.env.BABEL_8_BREAKING) {
-    // Enable import meta for @babel/core < 7.10
-    modulesPluginNames.push("syntax-import-meta");
-  }
+  // Enable import meta for @babel/core < 7.10
+  modulesPluginNames.push("syntax-import-meta");
 
   return modulesPluginNames;
 };
