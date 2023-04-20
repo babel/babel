@@ -470,14 +470,14 @@ target["new-version"] = function () {
 };
 
 target["new-babel-8-version-prepare"] = function () {
-  shell.exec("git pull --rebase");
+  exec("git", ["pull", "--rebase"]);
 
   const pkg = JSON.parse(readFileSync("./package.json", "utf8"));
   const nextVersion = semver.inc(pkg.version_babel8, "prerelease");
   pkg.version_babel8 = nextVersion;
   writeFileSync("./package.json", JSON.stringify(pkg, null, 2) + "\n");
-  shell.exec("git add package.json");
-  shell.exec("git commit -m 'Bump Babel 8 version to " + nextVersion + "'");
+  exec("git", ["add", "./package.json"]);
+  exec("git", ["commit", "-m", "Bump Babel 8 version to " + nextVersion]);
 
   return nextVersion;
 };
@@ -485,7 +485,7 @@ target["new-babel-8-version-prepare"] = function () {
 target["new-babel-8-version"] = function () {
   const nextVersion = target["new-babel-8-version-prepare"]();
 
-  shell.exec("git checkout -b release/v" + nextVersion);
+  exec("git", ["checkout", "-b", "release/v" + nextVersion]);
   yarn(["release-tool", "version", nextVersion, "--all"]);
 
   console.log(
