@@ -21,5 +21,6 @@ Using plugins:
   transform-modules-commonjs
   transform-dynamic-import
   transform-export-namespace-from { }
+  syntax-import-meta
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

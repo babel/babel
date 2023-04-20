@@ -39,6 +39,7 @@ Using plugins:
   transform-block-scoping { ios < 11, safari < 11 }
   transform-export-namespace-from { android < 72, chrome < 72, edge < 79, firefox < 80, ios, opera < 60, safari, samsung < 11.0 }
   syntax-dynamic-import
+  syntax-import-meta
 corejs2: `DEBUG` option
 
 Using targets: {

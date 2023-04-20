@@ -46,5 +46,6 @@ Using plugins:
   transform-export-namespace-from { chrome < 72 }
   transform-modules-commonjs
   transform-dynamic-import
+  syntax-import-meta
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
