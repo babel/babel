@@ -38,11 +38,6 @@ export default class PluginPass {
     return this.file.addHelper(name);
   }
 
-  // TODO: Remove this in Babel 8
-  addImport() {
-    this.file.addImport();
-  }
-
   buildCodeFrameError(
     node: NodeLocation | undefined | null,
     msg: string,
@@ -57,5 +52,8 @@ if (!process.env.BABEL_8_BREAKING) {
     | string
     | undefined {
     return this.file.getModuleName();
+  };
+  (PluginPass as any).prototype.addImport = function addImport(): void {
+    this.file.addImport();
   };
 }
