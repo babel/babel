@@ -71,7 +71,11 @@ describe("babel-preset-env", () => {
             shouldTransformDynamicImport: false,
             shouldTransformExportNamespaceFrom: false,
           }),
-        ).toEqual(["syntax-dynamic-import", "syntax-export-namespace-from"]);
+        ).toEqual([
+          "syntax-dynamic-import",
+          "syntax-export-namespace-from",
+          "syntax-import-meta",
+        ]);
       });
     });
     describe("modules is not set to false", () => {
@@ -85,7 +89,11 @@ describe("babel-preset-env", () => {
               shouldTransformDynamicImport: false,
               shouldTransformExportNamespaceFrom: false,
             }),
-          ).toEqual(["syntax-dynamic-import", "syntax-export-namespace-from"]);
+          ).toEqual([
+            "syntax-dynamic-import",
+            "syntax-export-namespace-from",
+            "syntax-import-meta",
+          ]);
         });
       });
       describe("ESMs should be transformed", () => {
@@ -103,6 +111,7 @@ describe("babel-preset-env", () => {
               "transform-modules-commonjs",
               "syntax-dynamic-import",
               "syntax-export-namespace-from",
+              "syntax-import-meta",
             ]);
           });
         });
@@ -120,6 +129,7 @@ describe("babel-preset-env", () => {
               "transform-modules-systemjs",
               "transform-dynamic-import",
               "syntax-export-namespace-from",
+              "syntax-import-meta",
             ]);
           });
           describe("export namespace from should be transformed", () => {
@@ -136,6 +146,7 @@ describe("babel-preset-env", () => {
                 "transform-modules-systemjs",
                 "transform-dynamic-import",
                 "transform-export-namespace-from",
+                "syntax-import-meta",
               ]);
             });
           });

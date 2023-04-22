@@ -33,5 +33,6 @@ Using plugins:
   bugfix/transform-async-arrows-in-class { node < 7.6 }
   transform-modules-commonjs
   transform-dynamic-import
+  syntax-import-meta
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

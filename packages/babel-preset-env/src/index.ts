@@ -170,6 +170,9 @@ export const getModulesPluginNames = ({
     modulesPluginNames.push("syntax-top-level-await");
   }
 
+  // Enable import meta for @babel/core < 7.10
+  modulesPluginNames.push("syntax-import-meta");
+
   return modulesPluginNames;
 };
 

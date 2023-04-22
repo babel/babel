@@ -30,5 +30,6 @@ Using plugins:
   transform-export-namespace-from { ios, safari }
   transform-modules-commonjs
   transform-dynamic-import
+  syntax-import-meta
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

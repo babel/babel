@@ -23,6 +23,7 @@ Using plugins:
   transform-export-namespace-from { chrome < 72 }
   transform-modules-commonjs
   transform-dynamic-import
+  syntax-import-meta
   syntax-import-assertions
 corejs2: `DEBUG` option
 

@@ -25,6 +25,7 @@ Using plugins:
   transform-export-namespace-from { samsung < 11.0 }
   transform-modules-commonjs
   transform-dynamic-import
+  syntax-import-meta
   syntax-import-assertions
 corejs3: `DEBUG` option
 

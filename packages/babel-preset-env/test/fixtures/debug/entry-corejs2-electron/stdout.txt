@@ -36,6 +36,7 @@ Using plugins:
   transform-export-namespace-from { electron < 5.0 }
   transform-modules-commonjs
   transform-dynamic-import
+  syntax-import-meta
 corejs2: `DEBUG` option
 
 Using targets: {

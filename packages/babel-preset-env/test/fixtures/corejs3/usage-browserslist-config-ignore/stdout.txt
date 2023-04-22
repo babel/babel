@@ -41,6 +41,7 @@ Using plugins:
   bugfix/transform-safari-id-destructuring-collision-in-function-expression { ios, safari }
   bugfix/transform-tagged-template-caching { ios < 13, safari < 13 }
   syntax-dynamic-import
+  syntax-import-meta
 corejs3: `DEBUG` option
 
 Using targets: {

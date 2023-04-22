@@ -23,5 +23,6 @@ Using plugins:
   transform-export-namespace-from { node < 13.2 }
   transform-modules-commonjs
   transform-dynamic-import
+  syntax-import-meta
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
