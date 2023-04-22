@@ -67,13 +67,13 @@ exports.transform = async function (input, filename) {
   const { cached, store } = cacheLookup(opts, filename);
   if (cached) return cached;
 
-  const { code, map } = await babel.transformAsync(input, {
+  const { code, map, sourceType } = await babel.transformAsync(input, {
     ...opts,
     sourceMaps: opts.sourceMaps === undefined ? "both" : opts.sourceMaps,
     ast: false,
   });
 
-  return store({ code, map });
+  return store({ code, map, sourceType });
 };
 
 if (!process.env.BABEL_8_BREAKING) {
@@ -91,13 +91,13 @@ if (!process.env.BABEL_8_BREAKING) {
     const { cached, store } = cacheLookup(opts, filename);
     if (cached) return cached;
 
-    const { code, map } = babel.transformSync(input, {
+    const { code, map, sourceType } = babel.transformSync(input, {
       ...opts,
       sourceMaps: opts.sourceMaps === undefined ? "both" : opts.sourceMaps,
       ast: false,
     });
 
-    return store({ code, map });
+    return store({ code, map, sourceType });
   };
 }
 

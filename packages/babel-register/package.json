@@ -48,6 +48,7 @@
   },
   "exports": {
     ".": "./lib/index.js",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./loader.mjs": "./loader.mjs"
   }
 }

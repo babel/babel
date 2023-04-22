@@ -41,7 +41,7 @@ const require = createRequire(import.meta.url);
 const monorepoRoot = path.dirname(fileURLToPath(import.meta.url));
 
 const defaultPackagesGlob = "./@(codemods|packages|eslint)/*";
-const defaultSourcesGlob = `${defaultPackagesGlob}/src/**/{*.js,*.cjs,!(*.d).ts}`;
+const defaultSourcesGlob = `${defaultPackagesGlob}/src/**/{*.js,*.cjs,*.mjs,!(*.d).ts}`;
 
 const babelStandalonePluginConfigGlob =
   "./packages/babel-standalone/scripts/pluginConfig.json";
