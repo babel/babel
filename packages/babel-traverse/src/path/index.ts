@@ -8,7 +8,7 @@ import Scope from "../scope";
 import { validate } from "@babel/types";
 import * as t from "@babel/types";
 import { path as pathCache } from "../cache";
-import generator from "@babel/generator";
+import generate from "@babel/generator";
 
 // NodePath is split across many files.
 import * as NodePath_ancestry from "./ancestry";
@@ -168,7 +168,7 @@ class NodePath<T extends t.Node = t.Node> {
   }
 
   toString() {
-    return generator(this.node).code;
+    return generate(this.node).code;
   }
 
   get inList() {

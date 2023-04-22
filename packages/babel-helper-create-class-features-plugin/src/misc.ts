@@ -93,20 +93,40 @@ export function injectInitialization(
     renamer(referenceVisitor, { scope: constructor.scope });
   }
 
+  const TAG_LAST_INJECTED = "babel_class_constructor_last_injected";
+  function getInjectionPath(paths: NodePath[]) {
+    for (const path of paths) {
+      if (path.getData(TAG_LAST_INJECTED)) {
+        path.setData(TAG_LAST_INJECTED, null);
+        return path;
+      }
+    }
+  }
+
+  let paths;
   if (isDerived) {
     const bareSupers: NodePath<t.CallExpression>[] = [];
     constructor.traverse(findBareSupers, bareSupers);
     let isFirst = true;
     for (const bareSuper of bareSupers) {
+      const path =
+        getInjectionPath(bareSuper.parentPath.getAllNextSiblings()) ||
+        bareSuper;
       if (isFirst) {
-        bareSuper.insertAfter(nodes);
+        paths = path.insertAfter(nodes);
         isFirst = false;
       } else {
-        bareSuper.insertAfter(nodes.map(n => t.cloneNode(n)));
+        paths = path.insertAfter(nodes.map(n => t.cloneNode(n)));
       }
+      paths[paths.length - 1].setData(TAG_LAST_INJECTED, true);
     }
   } else {
-    constructor.get("body").unshiftContainer("body", nodes);
+    const path = getInjectionPath(constructor.get("body.body"));
+    paths = path
+      ? path.insertAfter(nodes)
+      : constructor.get("body").unshiftContainer("body", nodes);
+
+    paths[paths.length - 1].setData(TAG_LAST_INJECTED, true);
   }
 }
 
