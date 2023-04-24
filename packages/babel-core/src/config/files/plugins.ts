@@ -115,11 +115,15 @@ function* resolveAlternativesHelper(
 }
 
 function tryRequireResolve(
-  id: Parameters<RequireResolve>[0],
-  opts: Parameters<RequireResolve>[1],
+  id: string,
+  dirname: string | undefined,
 ): Result<string> {
   try {
-    return { error: null, value: require.resolve(id, opts) };
+    if (dirname) {
+      return { error: null, value: require.resolve(id, { paths: [dirname] }) };
+    } else {
+      return { error: null, value: require.resolve(id) };
+    }
   } catch (error) {
     return { error, value: null };
   }
@@ -141,11 +145,10 @@ function resolveStandardizedNameForRequire(
   name: string,
   dirname: string,
 ) {
-  const resolveOpts = dirname ? { paths: [dirname] } : undefined;
   const it = resolveAlternativesHelper(type, name);
   let res = it.next();
   while (!res.done) {
-    res = it.next(tryRequireResolve(res.value, resolveOpts));
+    res = it.next(tryRequireResolve(res.value, dirname));
   }
   return res.value;
 }
