@@ -779,6 +779,11 @@ gulp.task("build-vendor", async () => {
         extensions: [".js", ".mjs", ".cjs", ".json"],
         preferBuiltins: true,
       }),
+      {
+        // Remove the node: prefix from imports, so that it works in old Node.js version
+        // TODO(Babel 8): This can be removed.
+        transform: code => code.replace(/(?<=from ["'"])node:/g, ""),
+      },
     ],
   });
 
@@ -801,7 +806,7 @@ ${fs.readFileSync(path.join(path.dirname(input), "license"), "utf8")}*/
 
   fs.writeFileSync(
     output.replace(".js", ".d.ts"),
-    `export function resolve(specifier: string, parent: string): Promise<string>;`
+    `export function resolve(specifier: string, parent: string): string;`
   );
 });
 
