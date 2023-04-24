@@ -52,6 +52,11 @@ gen_enforced_field(WorkspaceCwd, 'engines.node', '^10.13.0 || ^12.13.0 || >=14.0
 gen_enforced_field(WorkspaceCwd, 'conditions.BABEL_8_BREAKING.0.engines.node', '^16.20.0 || ^18.16.0 || >=20.0.0') :-
   \+ workspace_field(WorkspaceCwd, 'private', true).
 
+% Ensure that the BABEL_8_BREAKING condition has both 'yes' and 'no' cases
+gen_enforced_field(WorkspaceCwd, 'conditions.BABEL_8_BREAKING.1', {}) :-
+  workspace_field(WorkspaceCwd, 'conditions.BABEL_8_BREAKING.0', _),
+  \+ workspace_field(WorkspaceCwd, 'conditions.BABEL_8_BREAKING.1', _).
+
 % Removes the 'engines.node' field from private workspaces
 gen_enforced_field(WorkspaceCwd, 'engines.node', null) :-
   workspace_field(WorkspaceCwd, 'private', true).
