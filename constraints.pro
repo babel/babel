@@ -29,6 +29,7 @@ gen_enforced_field(WorkspaceCwd, 'publishConfig.access', null) :-
   workspace_field(WorkspaceCwd, 'private', true).
 
 % Enforces the engines.node field for all workspaces except '@babel/eslint*'
+% TODO(Babel 8): Enforce '^18.16.0 || >=20.0.0' for al workspaces
 gen_enforced_field(WorkspaceCwd, 'engines.node', '>=6.9.0') :-
   \+ workspace_field(WorkspaceCwd, 'private', true),
   % Get the workspace name
@@ -46,6 +47,10 @@ gen_enforced_field(WorkspaceCwd, 'engines.node', '^10.13.0 || ^12.13.0 || >=14.0
   workspace_ident(WorkspaceCwd, WorkspaceIdent),
   % Only target '@babel/eslint*' workspaces
   atom_concat('@babel/eslint', _, WorkspaceIdent).
+
+% (Babel 8) Enforces the engines.node field for all workspaces except private ones
+gen_enforced_field(WorkspaceCwd, 'conditions.BABEL_8_BREAKING.0.engines.node', '^16.20.0 || ^18.16.0 || >=20.0.0') :-
+  \+ workspace_field(WorkspaceCwd, 'private', true).
 
 % Removes the 'engines.node' field from private workspaces
 gen_enforced_field(WorkspaceCwd, 'engines.node', null) :-
