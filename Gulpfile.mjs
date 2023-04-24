@@ -762,17 +762,8 @@ gulp.task(
 gulp.task("build-babel", () => buildBabel(true, /* exclude */ libBundles));
 
 gulp.task("build-vendor", async () => {
-  // TODO: Re-enable this task.
-  // (@nicolo-ribaudo) I'm using a dynamic expression in the condition because:
-  // - If I just use `return;`, my editor deletes the following lines
-  // - Comments break with the comments in the template literals below
-  if (Math.random() < 2) return;
-
   const input = fileURLToPath(
-    await importMetaResolve(
-      "../../giltayar/import-meta-resolve/index.js",
-      import.meta.url
-    )
+    importMetaResolve("import-meta-resolve", import.meta.url)
   );
   const output = "./packages/babel-core/src/vendor/import-meta-resolve.js";
 
