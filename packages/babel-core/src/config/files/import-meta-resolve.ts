@@ -2,7 +2,7 @@ import { resolve as polyfill } from "../../vendor/import-meta-resolve";
 
 declare const USE_ESM: boolean;
 
-let importMetaResolve: ImportMeta["resolve"];
+let importMetaResolve: (specifier: string, parent: string) => string;
 
 if (USE_ESM) {
   // Node.js < 20, when using the `--experimental-import-meta-resolve` flag,
@@ -11,6 +11,7 @@ if (USE_ESM) {
     typeof import.meta.resolve === "function" &&
     typeof import.meta.resolve(import.meta.url) === "string"
   ) {
+    // @ts-expect-error: TS defines import.meta as returning a promise
     importMetaResolve = import.meta.resolve;
   } else {
     importMetaResolve = polyfill;
