@@ -48,9 +48,7 @@ export function BlockStatement(this: Printer, node: t.BlockStatement) {
 
   this.printSequence(node.body, node, { indent: true });
 
-  this.sourceWithOffset("end", node.loc, 0, -1);
-
-  this.rightBrace();
+  this.rightBrace(node);
 }
 
 export function Directive(this: Printer, node: t.Directive) {

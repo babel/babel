@@ -78,9 +78,7 @@ export function ClassBody(this: Printer, node: t.ClassBody) {
 
     if (!this.endsWith(charCodes.lineFeed)) this.newline();
 
-    this.sourceWithOffset("end", node.loc, 0, -1);
-
-    this.rightBrace();
+    this.rightBrace(node);
   }
 }
 
@@ -224,9 +222,6 @@ export function StaticBlock(this: Printer, node: t.StaticBlock) {
     this.printSequence(node.body, node, {
       indent: true,
     });
-
-    this.sourceWithOffset("end", node.loc, 0, -1);
-
-    this.rightBrace();
+    this.rightBrace(node);
   }
 }

@@ -224,7 +224,7 @@ export function SwitchStatement(this: Printer, node: t.SwitchStatement) {
     },
   });
 
-  this.token("}");
+  this.rightBrace(node);
 }
 
 export function SwitchCase(this: Printer, node: t.SwitchCase) {
