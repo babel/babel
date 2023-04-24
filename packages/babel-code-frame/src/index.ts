@@ -68,20 +68,11 @@ function getMarkerLines(
   end: number;
   markerLines: MarkerLines;
 } {
-  const startLoc: Location = {
-    column: 0,
-    line: -1,
-    ...loc.start,
-  };
-  const endLoc: Location = {
-    ...startLoc,
-    ...loc.end,
-  };
   const { linesAbove = 2, linesBelow = 3 } = opts || {};
-  const startLine = startLoc.line;
-  const startColumn = startLoc.column;
-  const endLine = endLoc.line;
-  const endColumn = endLoc.column;
+  const startLine = loc.start.line ?? -1;
+  const startColumn = loc.start.column ?? 0;
+  const endLine = loc.end?.line ?? startLine;
+  const endColumn = loc.end?.column ?? startColumn;
 
   let start = Math.max(startLine - (linesAbove + 1), 0);
   let end = Math.min(source.length, endLine + linesBelow);
@@ -117,11 +108,7 @@ function getMarkerLines(
     }
   } else {
     if (startColumn === endColumn) {
-      if (startColumn) {
-        markerLines[startLine] = [startColumn, 0];
-      } else {
-        markerLines[startLine] = true;
-      }
+      markerLines[startLine] = startColumn ? [startColumn, 0] : true;
     } else {
       markerLines[startLine] = [startColumn, endColumn - startColumn];
     }
@@ -144,7 +131,8 @@ export function codeFrameColumns(
   };
   const lines = rawLines.split(NEWLINE);
   const { start, end, markerLines } = getMarkerLines(loc, lines, opts);
-  const hasColumns = loc.start && typeof loc.start.column === "number";
+  const hasColumns =
+    typeof loc.start?.column === "number" && loc.start.column > 0;
 
   const numberMaxWidth = String(end).length;
 

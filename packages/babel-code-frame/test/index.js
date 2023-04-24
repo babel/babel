@@ -539,4 +539,30 @@ describe("@babel/code-frame", function () {
       ].join("\n"),
     );
   });
+
+  test("opts.message with multiple lines and `column=0`", function () {
+    const rawLines = [
+      "class Foo {",
+      "  constructor() {",
+      "    console.log(arguments);",
+      "  }",
+      "};",
+    ].join("\n");
+    expect(
+      codeFrameColumns(
+        rawLines,
+        { start: { line: 2, column: 0 }, end: { line: 4, column: 3 } },
+        {
+          message: "something about the constructor body",
+        },
+      ),
+    ).toMatchInlineSnapshot(`
+      "  something about the constructor body
+        1 | class Foo {
+      > 2 |   constructor() {
+      > 3 |     console.log(arguments);
+      > 4 |   }
+        5 | };"
+    `);
+  });
 });
