@@ -50,11 +50,13 @@ export default declare((api, options: Options) => {
       );
     }
 
-    // TODO: Remove in Babel 8
-    if (allowArrayLike && /^7\.\d\./.test(api.version)) {
-      throw new Error(
-        `The allowArrayLike is only supported when using @babel/core@^7.10.0`,
-      );
+    if (!process.env.BABEL_8_BREAKING) {
+      // TODO: Remove in Babel 8
+      if (allowArrayLike && /^7\.\d\./.test(api.version)) {
+        throw new Error(
+          `The allowArrayLike is only supported when using @babel/core@^7.10.0`,
+        );
+      }
     }
   }
 

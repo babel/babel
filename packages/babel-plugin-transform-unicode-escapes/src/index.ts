@@ -9,11 +9,15 @@ export default declare(api => {
   const unicodeEscape = /(\\+)u\{([0-9a-fA-F]+)\}/g;
 
   function escape(code: number) {
-    let str = code.toString(16);
-    // Sigh, node 6 doesn't have padStart
-    // TODO: Remove in Babel 8, when we drop node 6.
-    while (str.length < 4) str = "0" + str;
-    return "\\u" + str;
+    if (process.env.BABEL_8_BREAKING) {
+      return "\\u" + code.toString(16);
+    } else {
+      let str = code.toString(16);
+      // Sigh, node 6 doesn't have padStart
+      // TODO: Remove in Babel 8, when we drop node 6.
+      while (str.length < 4) str = "0" + str;
+      return "\\u" + str;
+    }
   }
 
   function replacer(match: string, backslashes: string[], code: string) {
