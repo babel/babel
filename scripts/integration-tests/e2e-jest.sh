@@ -15,7 +15,7 @@ source utils/cleanup.sh
 set -x
 
 # Clone jest
-git clone --depth=1 https://github.com/facebook/jest /tmp/jest
+git clone --depth=1 https://github.com/jestjs/jest /tmp/jest
 cd /tmp/jest || exit
 
 # Update @babel/* dependencies
@@ -52,6 +52,9 @@ if [ "$BABEL_8_BREAKING" = true ] ; then
   # Replace isTSX with the JSX plugin
   sed -i "s/isTSX: sourceFilePath.endsWith('x')//g" packages/jest-snapshot/src/InlineSnapshots.ts
   sed -i "s%'TypeScript syntax plugin added by Jest snapshot',%'TypeScript syntax plugin added by Jest snapshot'],[require.resolve('@babel/plugin-syntax-jsx')%g" packages/jest-snapshot/src/InlineSnapshots.ts
+
+  # Delete once https://github.com/jestjs/jest/pull/14109 is merged
+  sed -i "s/blacklist/denylist/g" packages/babel-plugin-jest-hoist/src/index.ts
 
   node -e "
     var pkg = require('./package.json');
