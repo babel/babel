@@ -10,7 +10,7 @@ export default declare(api => {
 
   function escape(code: number) {
     if (process.env.BABEL_8_BREAKING) {
-      return "\\u" + code.toString(16);
+      return "\\u" + code.toString(16).padStart(4, "0");
     } else {
       let str = code.toString(16);
       // Sigh, node 6 doesn't have padStart
