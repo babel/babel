@@ -82,14 +82,14 @@ const expandIncludesAndExcludes = (
     } else {
       re = filter;
     }
-    const items = filterableItems.filter(
-      item =>
-        re.test(item) ||
-        // For backwards compatibility, we also support matching against the
-        // proposal- name.
-        // TODO(Babel 8): Remove this.
-        re.test(item.replace(/^transform-/, "proposal-")),
-    );
+    const items = filterableItems.filter(item => {
+      return process.env.BABEL_8_BREAKING
+        ? re.test(item)
+        : re.test(item) ||
+            // For backwards compatibility, we also support matching against the
+            // proposal- name.
+            re.test(item.replace(/^transform-/, "proposal-"));
+    });
     if (items.length === 0) invalidFilters.push(filter);
     return items;
   });

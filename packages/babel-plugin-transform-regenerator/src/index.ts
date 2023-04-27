@@ -14,11 +14,13 @@ export default declare(({ types: t, assertVersion }) => {
       // We visit MemberExpression so that we always transform
       // regeneratorRuntime before babel-plugin-polyfill-regenerator.
       MemberExpression(path) {
-        if (!this.availableHelper?.("regeneratorRuntime")) {
-          // When using an older @babel/helpers version, fallback
-          // to the old behavior.
-          // TODO: Remove this in Babel 8.
-          return;
+        if (!process.env.BABEL_8_BREAKING) {
+          if (!this.availableHelper?.("regeneratorRuntime")) {
+            // When using an older @babel/helpers version, fallback
+            // to the old behavior.
+            // TODO: Remove this in Babel 8.
+            return;
+          }
         }
 
         const obj = path.get("object");
@@ -27,13 +29,15 @@ export default declare(({ types: t, assertVersion }) => {
             | t.Identifier
             | t.ArrowFunctionExpression;
 
-          if (
-            // TODO: Remove this in Babel 8, it's necessary to
-            // avoid the IIFE when using older Babel versions.
-            t.isArrowFunctionExpression(helper)
-          ) {
-            obj.replaceWith(helper.body);
-            return;
+          if (!process.env.BABEL_8_BREAKING) {
+            if (
+              // TODO: Remove this in Babel 8, it's necessary to
+              // avoid the IIFE when using older Babel versions.
+              t.isArrowFunctionExpression(helper)
+            ) {
+              obj.replaceWith(helper.body);
+              return;
+            }
           }
 
           obj.replaceWith(t.callExpression(helper, []));

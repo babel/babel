@@ -38,10 +38,12 @@ export function createClassFeaturePlugin({
   feature,
   loose,
   manipulateOptions,
-  // @ts-ignore(Babel 7 vs Babel 8) TODO(Babel 8): Remove the default value
-  api = { assumption: () => void 0 },
+  api,
   inherits,
 }: Options): PluginObject {
+  if (!process.env.BABEL_8_BREAKING) {
+    api ??= { assumption: () => void 0 as any } as any;
+  }
   const setPublicClassFields = api.assumption("setPublicClassFields");
   const privateFieldsAsSymbols = api.assumption("privateFieldsAsSymbols");
   const privateFieldsAsProperties = api.assumption("privateFieldsAsProperties");

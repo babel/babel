@@ -29,19 +29,33 @@ export const supportsESM = semver.satisfies(
 export default function* loadCodeDefault(
   filepath: string,
   asyncError: string,
-  // TODO(Babel 8): Remove this
-  fallbackToTranspiledModule: boolean = false,
 ): Handler<unknown> {
   switch (path.extname(filepath)) {
     case ".cjs":
-      return loadCjsDefault(filepath, fallbackToTranspiledModule);
+      if (process.env.BABEL_8_BREAKING) {
+        return loadCjsDefault(filepath);
+      } else {
+        return loadCjsDefault(
+          filepath,
+          // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
+          /* fallbackToTranspiledModule */ arguments[2],
+        );
+      }
     case ".mjs":
       break;
     case ".cts":
       return loadCtsDefault(filepath);
     default:
       try {
-        return loadCjsDefault(filepath, fallbackToTranspiledModule);
+        if (process.env.BABEL_8_BREAKING) {
+          return loadCjsDefault(filepath);
+        } else {
+          return loadCjsDefault(
+            filepath,
+            // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
+            /* fallbackToTranspiledModule */ arguments[2],
+          );
+        }
       } catch (e) {
         if (e.code !== "ERR_REQUIRE_ESM") throw e;
       }
@@ -122,13 +136,14 @@ function loadCtsDefault(filepath: string) {
   }
 }
 
-function loadCjsDefault(filepath: string, fallbackToTranspiledModule: boolean) {
+function loadCjsDefault(filepath: string) {
   const module = endHiddenCallStack(require)(filepath);
   if (process.env.BABEL_8_BREAKING) {
     return module?.__esModule ? module.default : module;
   } else {
     return module?.__esModule
-      ? module.default || (fallbackToTranspiledModule ? module : undefined)
+      ? module.default ||
+          /* fallbackToTranspiledModule */ (arguments[1] ? module : undefined)
       : module;
   }
 }

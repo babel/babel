@@ -105,14 +105,20 @@ export function ensureBlock(
   return this.node;
 }
 
-/**
- * Keeping this for backward-compatibility. You should use arrowFunctionToExpression() for >=7.x.
- */
-// TODO(Babel 8): Remove this
-export function arrowFunctionToShadowed(this: NodePath) {
-  if (!this.isArrowFunctionExpression()) return;
+declare const USE_ESM: boolean;
 
-  this.arrowFunctionToExpression();
+if (!process.env.BABEL_8_BREAKING) {
+  if (!USE_ESM) {
+    /**
+     * Keeping this for backward-compatibility. You should use arrowFunctionToExpression() for >=7.x.
+     */
+    // eslint-disable-next-line no-restricted-globals
+    exports.arrowFunctionToShadowed = function (this: NodePath) {
+      if (!this.isArrowFunctionExpression()) return;
+
+      this.arrowFunctionToExpression();
+    };
+  }
 }
 
 /**
@@ -150,14 +156,13 @@ export function arrowFunctionToExpression(
   {
     allowInsertArrow = true,
     allowInsertArrowWithRest = allowInsertArrow,
-    /** @deprecated Use `noNewArrows` instead */
-    specCompliant = false,
-    // TODO(Babel 8): Consider defaulting to `false` for spec compliancy
-    noNewArrows = !specCompliant,
+    noNewArrows = process.env.BABEL_8_BREAKING
+      ? // TODO(Babel 8): Consider defaulting to `false` for spec compliancy
+        true
+      : !arguments[0]?.specCompliant,
   }: {
     allowInsertArrow?: boolean | void;
     allowInsertArrowWithRest?: boolean | void;
-    specCompliant?: boolean | void;
     noNewArrows?: boolean;
   } = {},
 ): NodePath<

@@ -79,7 +79,7 @@ export function visit(this: NodePath): boolean {
     return false;
   }
 
-  if (this.opts.shouldSkip && this.opts.shouldSkip(this)) {
+  if (this.opts.shouldSkip?.(this)) {
     return false;
   }
 
@@ -129,7 +129,7 @@ export function stop(this: NodePath) {
 }
 
 export function setScope(this: NodePath) {
-  if (this.opts && this.opts.noScope) return;
+  if (this.opts?.noScope) return;
 
   let path = this.parentPath;
 
@@ -145,14 +145,14 @@ export function setScope(this: NodePath) {
 
   let target;
   while (path && !target) {
-    if (path.opts && path.opts.noScope) return;
+    if (path.opts?.noScope) return;
 
     target = path.scope;
     path = path.parentPath;
   }
 
   this.scope = this.getScope(target);
-  if (this.scope) this.scope.init();
+  this.scope?.init();
 }
 
 export function setContext<S = unknown>(

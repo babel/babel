@@ -6,7 +6,7 @@
         "useBuiltIns": "usage",
         "corejs": 3,
         "modules": false,
-        "exclude": ["proposal-object-rest-spread"]
+        "exclude": ["transform-object-rest-spread"]
       }
     ]
   ]

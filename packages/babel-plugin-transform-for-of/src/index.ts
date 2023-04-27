@@ -50,11 +50,13 @@ export default declare((api, options: Options) => {
       );
     }
 
-    // TODO: Remove in Babel 8
-    if (allowArrayLike && /^7\.\d\./.test(api.version)) {
-      throw new Error(
-        `The allowArrayLike is only supported when using @babel/core@^7.10.0`,
-      );
+    if (!process.env.BABEL_8_BREAKING) {
+      // TODO: Remove in Babel 8
+      if (allowArrayLike && /^7\.\d\./.test(api.version)) {
+        throw new Error(
+          `The allowArrayLike is only supported when using @babel/core@^7.10.0`,
+        );
+      }
     }
   }
 
@@ -217,10 +219,12 @@ export default declare((api, options: Options) => {
           return;
         }
 
-        if (!state.availableHelper(builder.helper)) {
-          // Babel <7.9.0 doesn't support this helper
-          transformWithoutHelper(skipIteratorClosing, path, state);
-          return;
+        if (!process.env.BABEL_8_BREAKING) {
+          if (!state.availableHelper(builder.helper)) {
+            // Babel <7.9.0 doesn't support this helper
+            transformWithoutHelper(skipIteratorClosing, path, state);
+            return;
+          }
         }
 
         const { node, parent, scope } = path;

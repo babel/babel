@@ -27,7 +27,7 @@ module.exports = function (api) {
     exclude: [
       "transform-typeof-symbol",
       // We need to enable useBuiltIns
-      "proposal-object-rest-spread",
+      "transform-object-rest-spread",
     ],
   };
 
