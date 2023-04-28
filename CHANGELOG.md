@@ -23,6 +23,31 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.21.5 (2023-04-28)
+
+#### :eyeglasses: Spec Compliance
+* `babel-generator`, `babel-parser`, `babel-types`
+  * [#15539](https://github.com/babel/babel/pull/15539) fix: Remove `mixins` and `implements` for `DeclareInterface` and `InterfaceDeclaration` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :bug: Bug Fix
+* `babel-core`, `babel-generator`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-react-jsx`
+  * [#15515](https://github.com/babel/babel/pull/15515) fix: `)` position with `createParenthesizedExpressions` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-preset-env`
+  * [#15580](https://github.com/babel/babel/pull/15580) Add syntax import meta to preset env ([@JLHwung](https://github.com/JLHwung))
+
+#### :nail_care: Polish
+* `babel-types`
+  * [#15546](https://github.com/babel/babel/pull/15546) Improve the layout of generated validators ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-core`
+  * [#15535](https://github.com/babel/babel/pull/15535) Use `lt` instead of `lte` to check TS version for .cts config ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-core`
+  * [#15575](https://github.com/babel/babel/pull/15575) Use synchronous `import.meta.resolve` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-fixtures`, `babel-preset-typescript`
+  * [#15568](https://github.com/babel/babel/pull/15568) Handle `.overrides` and `.env` when resolving plugins/presets from fixture options ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-create-class-features-plugin`, `babel-helper-create-regexp-features-plugin`
+  * [#15548](https://github.com/babel/babel/pull/15548) Use `semver` package to compare versions ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.21.4 (2023-03-31)
 
 #### :bug: Bug Fix
