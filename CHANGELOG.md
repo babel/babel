@@ -23,6 +23,11 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.21.6 (2023-04-29)
+
+#### :bug: Bug Fix
+* `babel-compat-data`
+  * [#15598](https://github.com/babel/babel/pull/15598) fix: Not found `corejs3-shipped-proposals.json` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.21.5 (2023-04-28)
 
 #### :eyeglasses: Spec Compliance
