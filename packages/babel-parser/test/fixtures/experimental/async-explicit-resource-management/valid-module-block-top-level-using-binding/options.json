@@ -1,4 +1,4 @@
 {
   "sourceType": "script",
-  "plugins": ["asyncExplicitResourceManagement", "moduleBlocks"]
+  "plugins": ["explicitResourceManagement", "moduleBlocks"]
 }

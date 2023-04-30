@@ -354,7 +354,7 @@ export default abstract class StatementParser extends ExpressionParser {
       next = this.nextTokenInLineStartSince(next + 5);
       const nextCh = this.codePointAtPos(next);
       if (this.chStartsBindingIdentifier(nextCh, next)) {
-        this.expectPlugin("asyncExplicitResourceManagement");
+        this.expectPlugin("explicitResourceManagement");
         return true;
       }
     }

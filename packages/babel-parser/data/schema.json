@@ -127,7 +127,6 @@
           {
             "enum": [
               "asyncDoExpressions",
-              "asyncExplicitResourceManagement",
               "asyncGenerators",
               "bigInt",
               "classPrivateMethods",
