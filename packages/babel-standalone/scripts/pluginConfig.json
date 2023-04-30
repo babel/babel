@@ -20,7 +20,6 @@
   ],
   "externalPlugins": [
     "external-helpers",
-    "syntax-async-explicit-resource-management",
     "syntax-decimal",
     "syntax-decorators",
     "syntax-destructuring-private",

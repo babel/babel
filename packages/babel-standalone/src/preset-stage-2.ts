@@ -11,7 +11,6 @@ export default (_: any, opts: any = {}) => {
   return {
     presets: [[presetStage3, opts]],
     plugins: [
-      babelPlugins.syntaxAsyncExplicitResourceManagement,
       babelPlugins.proposalDestructuringPrivate,
       [
         babelPlugins.proposalPipelineOperator,
