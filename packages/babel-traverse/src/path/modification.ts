@@ -97,7 +97,7 @@ export function _containerInsert<N extends t.Node>(
     const path = this.getSibling(to) as NodePath<N>;
     paths.push(path);
 
-    if (this.context && this.context.queue) {
+    if (this.context?.queue) {
       path.pushContext(this.context);
     }
   }
@@ -154,10 +154,8 @@ function isAlmostConstantAssignment(
 
   // If the variable is defined in the current scope and only assigned here,
   // we can be sure that its value won't change.
-  return (
-    blockScope.hasOwnBinding(node.left.name) &&
-    blockScope.getOwnBinding(node.left.name).constantViolations.length <= 1
-  );
+  const binding = blockScope.getOwnBinding(node.left.name);
+  return binding && binding.constantViolations.length <= 1;
 }
 
 /**

@@ -109,16 +109,25 @@ export function injectInitialization(
     constructor.traverse(findBareSupers, bareSupers);
     let isFirst = true;
     for (const bareSuper of bareSupers) {
+      const inStmt = bareSuper.parentPath.isStatement();
       const path =
-        getInjectionPath(bareSuper.parentPath.getAllNextSiblings()) ||
-        bareSuper;
+        getInjectionPath(
+          (inStmt ? bareSuper.parentPath : bareSuper).getAllNextSiblings(),
+        ) || bareSuper;
+
       if (isFirst) {
         paths = path.insertAfter(nodes);
         isFirst = false;
       } else {
         paths = path.insertAfter(nodes.map(n => t.cloneNode(n)));
       }
-      paths[paths.length - 1].setData(TAG_LAST_INJECTED, true);
+
+      let last = paths[paths.length - 1];
+      if (!inStmt && last.isThisExpression()) {
+        last = paths[paths.length - 2];
+      }
+
+      last.setData(TAG_LAST_INJECTED, true);
     }
   } else {
     const path = getInjectionPath(constructor.get("body.body"));

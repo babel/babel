@@ -22,3 +22,8 @@ class Foo4 extends Foo {
     }
   }
 }
+class Foo5 extends Foo {
+  constructor(incoming) {
+    var c = a ? (super(), (this.incoming = incoming, babelHelpers.defineProperty(this, "value", this.incoming)), this) : b;
+  }
+}

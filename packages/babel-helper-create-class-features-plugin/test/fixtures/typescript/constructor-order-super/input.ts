@@ -23,3 +23,11 @@ class Foo4 extends Foo {
   }
   value = this.incoming;
 }
+
+
+class Foo5 extends Foo {
+  constructor(private readonly incoming: number) {
+    var c = a ? super() : b;
+  }
+  value = this.incoming;
+}
