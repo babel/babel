@@ -1,7 +1,8 @@
 import "shelljs/make.js";
 import path from "path";
 import { execFileSync } from "child_process";
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync, writeFileSync, readdirSync } from "fs";
+import semver from "semver";
 
 /**
  * @type {import("shelljs")}
@@ -222,6 +223,12 @@ target["build-plugin-transform-runtime-dist"] = function () {
 };
 
 target["prepublish"] = function () {
+  if (process.env.BABEL_8_BREAKING) {
+    node(["scripts/set-module-type.js", "module"]);
+  } else {
+    node(["scripts/set-module-type.js", "script"]);
+  }
+
   target["bootstrap-only"]();
 
   env(
@@ -468,9 +475,38 @@ target["new-version"] = function () {
   yarn(["release-tool", "version", "-f", "@babel/standalone"]);
 };
 
-target["new-version"] = function () {
-  target["new-version-checklist"]();
-
+target["new-babel-8-version-prepare"] = function () {
   exec("git", ["pull", "--rebase"]);
-  yarn(["release-tool", "version", "-f", "@babel/standalone"]);
+
+  const pkg = JSON.parse(readFileSync("./package.json", "utf8"));
+  const nextVersion = semver.inc(pkg.version_babel8, "prerelease");
+  pkg.version_babel8 = nextVersion;
+  writeFileSync("./package.json", JSON.stringify(pkg, null, 2) + "\n");
+  exec("git", ["add", "./package.json"]);
+  exec("git", ["commit", "-m", "Bump Babel 8 version to " + nextVersion]);
+
+  return nextVersion;
+};
+
+target["new-babel-8-version"] = function () {
+  const nextVersion = target["new-babel-8-version-prepare"]();
+
+  exec("git", ["checkout", "-b", "release/v" + nextVersion]);
+
+  SOURCES.forEach(source => {
+    readdirSync(source).forEach(name => {
+      const pkgPath = `${source}/${name}/package.json`;
+      try {
+        const pkg = JSON.parse(readFileSync(pkgPath, "utf8"));
+        pkg.peerDependencies["@babel/core"] = `^${nextVersion}`;
+        writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + "\n");
+      } catch {}
+    });
+  });
+
+  yarn(["release-tool", "version", nextVersion, "--all"]);
+
+  console.log(
+    `Run \`git push upstream main release/v${nextVersion} --follow-tags\` to push the changes on GitHub and release them.`
+  );
 };

@@ -67,15 +67,44 @@ jobs:
 
           git push "https://babel-bot:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" HEAD:"$branch" --follow-tags
 
-  npm-release:
-    name: Build, Test and Publish
+  check-release-type:
+    name: Check the release type
     runs-on: ubuntu-latest
     needs: git-version
-    environment: npm
     # The default condition is success(), but this is false when one of the previous jobs is skipped
     if: |
       always() &&
       (needs.git-version.result == 'success' || needs.git-version.result == 'skipped')
+    outputs:
+      is-babel-8: ${{ steps.is-babel-8.outputs.result }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Checkout the temporary branch
+        if: needs.git-version.result == 'success'
+        run: git checkout ${{ needs.git-version.outputs.branch }}
+      - name: Check if Babel 8
+        id: is-babel-8
+        run: |
+          git log -1 --format=%B HEAD \
+          | node -p "'result=' + fs.readFileSync(0, 'utf8').includes('v8')" \
+          >> $GITHUB_OUTPUT
+      - name: Log
+        run: echo ${{ steps.is-babel-8.outputs.result }}
+
+  npm-release:
+    name: Build, Test and Publish
+    runs-on: ubuntu-latest
+    needs:
+      - check-release-type
+      - git-version
+    environment: npm
+    # The default condition is success(), but this is false when one of the previous jobs is skipped
+    if: |
+      always() &&
+      (needs.git-version.result == 'success' || needs.git-version.result == 'skipped') &&
+      needs.check-release-type.result == 'success'
     steps:
       - uses: actions/checkout@v3
         with:
@@ -90,20 +119,34 @@ jobs:
           # Hack: use FORCE_COLOR so that supports-color@5 returnes true for GitHub CI
           # Remove once `chalk` is bumped to 4.0.
           FORCE_COLOR: true
+          BABEL_8_BREAKING: ${{ needs.check-release-type.outputs.is-babel-8 == 'true' }}
 
-      - name: Publish to npm
+      - name: Publish to npm (Babel 7)
         run: yarn release-tool publish --yes
+        if: needs.check-release-type.outputs.is-babel-8 == 'false'
         env:
           YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish to npm (Babel 8)
+        run: yarn release-tool publish --yes --tag next
+        if: needs.check-release-type.outputs.is-babel-8 == 'true'
+        env:
+          YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          BABEL_8_BREAKING: true
+          USE_ESM: true
 
   github-release:
     name: Create GitHub release draft
     runs-on: ubuntu-latest
-    needs: git-version
+    needs:
+      - check-release-type
+      - git-version
     # The default condition is success(), but this is false when one of the previous jobs is skipped
     if: |
       always() &&
-      (needs.git-version.result == 'success' || needs.git-version.result == 'skipped')
+      (needs.git-version.result == 'success' || needs.git-version.result == 'skipped') &&
+      needs.check-release-type.result == 'success' &&
+      needs.check-release-type.outputs.is-babel-8 == 'false'
     outputs:
       is-main: ${{ steps.is-main.outputs.result == 1 }}
       changelog: ${{ steps.changelog.outputs.changelog }}
