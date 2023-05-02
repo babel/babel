@@ -119,7 +119,9 @@ jobs:
           # Hack: use FORCE_COLOR so that supports-color@5 returnes true for GitHub CI
           # Remove once `chalk` is bumped to 4.0.
           FORCE_COLOR: true
-          BABEL_8_BREAKING: ${{ needs.check-release-type.outputs.is-babel-8 == 'true' }}
+          # Note: `false` doesn't work here, because env vars are strings and Boolean('false')
+          # is true. Use the empry string instead.
+          BABEL_8_BREAKING: ${{ needs.check-release-type.outputs.is-babel-8 == 'true' || '' }}
 
       - name: Publish to npm (Babel 7)
         run: yarn release-tool publish --yes
