@@ -82,8 +82,17 @@ export function createRegExpFeaturePlugin({
         }
       }
 
+      if (!process.env.BABEL_8_BREAKING) {
+        // Until 7.21.4, we used to encode the version as a number.
+        // If file.get(versionKey) is a number, it has thus been
+        // set by an older version of this plugin.
+        if (typeof file.get(versionKey) === "number") {
+          file.set(versionKey, PACKAGE_JSON.version);
+          return;
+        }
+      }
       if (
-        !file.has(versionKey) ||
+        !file.get(versionKey) ||
         semver.lt(file.get(versionKey), PACKAGE_JSON.version)
       ) {
         file.set(versionKey, PACKAGE_JSON.version);
