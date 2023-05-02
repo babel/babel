@@ -23,6 +23,15 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.21.8 (2023-05-02)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#15602](https://github.com/babel/babel/pull/15602) Remove `using await` restriction in explicitResourceManagement ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-helper-create-class-features-plugin`, `babel-helper-create-regexp-features-plugin`
+  * [#15605](https://github.com/babel/babel/pull/15605) Fix backward compat for semver checks in class&regexp feat plugins ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 
 ## v7.21.6 (2023-04-29)
 
