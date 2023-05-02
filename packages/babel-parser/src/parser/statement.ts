@@ -484,7 +484,7 @@ export default abstract class StatementParser extends ExpressionParser {
         return this.parseTryStatement(node as Undone<N.TryStatement>);
 
       case tt._using:
-        // using [no LineTerminator here][lookahead != `await`] BindingList[+Using]
+        // using [no LineTerminator here] BindingList[+Using]
         if (
           this.state.containsEsc ||
           !this.hasInLineFollowingBindingIdentifier()
@@ -1536,11 +1536,6 @@ export default abstract class StatementParser extends ExpressionParser {
     decl: Undone<N.VariableDeclarator>,
     kind: "var" | "let" | "const" | "using",
   ): void {
-    // Unlike "let" which must be handled in checkLVal, it suffices to check
-    // await here because `using` must not precede binding patterns.
-    if (kind === "using" && !this.inModule && this.match(tt._await)) {
-      this.raise(Errors.AwaitInUsingBinding, { at: this.state.startLoc });
-    }
     const id = this.parseBindingAtom();
     this.checkLVal(id, {
       in: { type: "VariableDeclarator" },

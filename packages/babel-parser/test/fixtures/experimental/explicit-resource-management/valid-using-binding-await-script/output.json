@@ -1,12 +1,6 @@
 {
   "type": "File",
   "start":0,"end":113,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":12,"column":1,"index":113}},
-  "errors": [
-    "SyntaxError: 'await' is not allowed to be used as a name in 'using' declarations. (2:8)",
-    "SyntaxError: 'await' is not allowed to be used as a name in 'using' declarations. (5:8)",
-    "SyntaxError: 'await' is not allowed to be used as a name in 'using' declarations. (8:11)",
-    "SyntaxError: 'await' is not allowed to be used as a name in 'using' declarations. (11:13)"
-  ],
   "program": {
     "type": "Program",
     "start":0,"end":113,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":12,"column":1,"index":113}},
