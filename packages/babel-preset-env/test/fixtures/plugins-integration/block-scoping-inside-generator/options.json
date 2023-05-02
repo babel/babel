@@ -1,0 +1,12 @@
+{
+  "validateLogs": true,
+  "presets": [
+    [
+      "env",
+      {
+        "debug": true,
+        "targets": ["Chrome 49"]
+      }
+    ]
+  ]
+}

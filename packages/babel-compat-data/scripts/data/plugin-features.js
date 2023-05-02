@@ -102,7 +102,7 @@ const es2015 = {
     features: ["destructuring, assignment", "destructuring, declarations"],
   },
   "transform-block-scoping": {
-    features: ["const", "let"],
+    features: ["const", "let", "generators"],
   },
   "transform-typeof-symbol": {
     features: ["Symbol / typeof support"],

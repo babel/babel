@@ -29,6 +29,7 @@ Using plugins:
   transform-for-of { firefox < 53 }
   transform-unicode-escapes { firefox < 53 }
   transform-destructuring { firefox < 53 }
+  transform-block-scoping { firefox < 53 }
   transform-export-namespace-from { firefox < 80, node < 13.2 }
   transform-modules-commonjs
   transform-dynamic-import
