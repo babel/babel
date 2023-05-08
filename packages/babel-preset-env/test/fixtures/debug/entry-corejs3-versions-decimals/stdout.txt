@@ -45,7 +45,7 @@ Using plugins:
   transform-unicode-regex { electron < 1.1, ie }
   transform-spread { ie }
   transform-destructuring { electron < 1.2, ie, node < 6.5 }
-  transform-block-scoping { electron < 0.37, ie }
+  transform-block-scoping { electron < 1.1, ie }
   transform-typeof-symbol { ie }
   transform-new-target { ie }
   transform-regenerator { electron < 1.1, ie }
