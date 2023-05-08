@@ -102,7 +102,13 @@ const es2015 = {
     features: ["destructuring, assignment", "destructuring, declarations"],
   },
   "transform-block-scoping": {
-    features: ["const", "let", "generators"],
+    features: [
+      "const",
+      "let",
+      // regenerator-transform doesn't support let/const,
+      // so we must compile them when compiling generators.
+      "generators",
+    ],
   },
   "transform-typeof-symbol": {
     features: ["Symbol / typeof support"],

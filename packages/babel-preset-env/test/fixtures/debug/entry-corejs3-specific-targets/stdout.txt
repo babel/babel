@@ -47,7 +47,7 @@ Using plugins:
   transform-unicode-regex { ie, ios < 12, safari < 12 }
   transform-spread { ie, ios < 10, safari < 10 }
   transform-destructuring { edge < 15, firefox < 53, ie, ios < 10, safari < 10 }
-  transform-block-scoping { edge < 14, firefox < 51, ie, ios < 10, safari < 10 }
+  transform-block-scoping { edge < 14, firefox < 53, ie, ios < 10, safari < 10 }
   transform-typeof-symbol { ie, safari < 9 }
   transform-new-target { edge < 14, ie, ios < 10, safari < 10 }
   transform-regenerator { firefox < 53, ie, ios < 10, safari < 10 }

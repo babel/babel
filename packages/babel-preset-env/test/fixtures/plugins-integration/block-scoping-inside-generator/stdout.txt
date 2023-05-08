@@ -15,7 +15,7 @@ Using plugins:
   transform-numeric-separator { chrome < 75 }
   transform-logical-assignment-operators { chrome < 85 }
   transform-nullish-coalescing-operator { chrome < 80 }
-  transform-optional-chaining { chrome < 91 }
+  transform-optional-chaining { chrome < 80 }
   transform-json-strings { chrome < 66 }
   transform-optional-catch-binding { chrome < 66 }
   transform-async-generator-functions { chrome < 63 }

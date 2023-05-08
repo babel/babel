@@ -43,7 +43,7 @@ Using plugins:
   transform-unicode-regex { ie }
   transform-spread { ie }
   transform-destructuring { firefox < 53, ie }
-  transform-block-scoping { firefox < 51, ie }
+  transform-block-scoping { firefox < 53, ie }
   transform-typeof-symbol { ie }
   transform-new-target { ie }
   transform-regenerator { firefox < 53, ie }
