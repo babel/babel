@@ -54,7 +54,7 @@
     "eslint-plugin-jest": "^27.1.5",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "glob": "^8.0.3",
+    "glob": "^10.2.2",
     "gulp": "^4.0.2",
     "gulp-filter": "^7.0.0",
     "gulp-plumber": "^1.2.1",
