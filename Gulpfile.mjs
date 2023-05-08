@@ -290,9 +290,7 @@ async function buildBabel(useWorker, ignore = []) {
       });
     })
     .finally(() => {
-      if (worker.end !== undefined) {
-        worker.end();
-      }
+      worker.end?.();
     });
 }
 
