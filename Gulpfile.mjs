@@ -21,7 +21,7 @@ import rollupReplace from "@rollup/plugin-replace";
 import { terser as rollupTerser } from "rollup-plugin-terser";
 import rollupDts from "rollup-plugin-dts";
 import { Worker as JestWorker } from "jest-worker";
-import glob from "glob";
+import { glob } from "glob";
 import { resolve as importMetaResolve } from "import-meta-resolve";
 
 import rollupBabelSource from "./scripts/rollup-plugin-babel-source.js";
@@ -263,23 +263,14 @@ function createWorker(useWorker) {
 
 async function buildBabel(useWorker, ignore = []) {
   const worker = createWorker(useWorker);
-  const files = await new Promise((resolve, reject) => {
-    glob(
-      defaultSourcesGlob,
-      {
-        ignore: ignore.map(p => `./${p.src}/**`),
-      },
-      (err, files) => {
-        if (err) reject(err);
-        resolve(files);
-      }
-    );
+  const files = await glob(defaultSourcesGlob, {
+    ignore: ignore.map(p => `./${p.src}/**`),
   });
 
   const promises = [];
   for (const file of files) {
     // @example ./packages/babel-parser/src/index.js
-    const dest = "./" + mapSrcToLib(file.slice(2));
+    const dest = "./" + mapSrcToLib(file);
     promises.push(
       worker.transform(file, dest, {
         sourceMaps: !file.endsWith(".d.ts"),
