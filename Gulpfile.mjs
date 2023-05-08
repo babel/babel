@@ -265,12 +265,13 @@ async function buildBabel(useWorker, ignore = []) {
   const worker = createWorker(useWorker);
   const files = new Glob(defaultSourcesGlob, {
     ignore: ignore.map(p => `./${p.src}/**`),
+    posix: true,
   });
 
   const promises = [];
   for await (const file of files) {
     // @example ./packages/babel-parser/src/index.js
-    const dest = "./" + mapSrcToLib(file.replaceAll("\\", "/"));
+    const dest = "./" + mapSrcToLib(file);
     promises.push(
       worker.transform(file, dest, {
         sourceMaps: !file.endsWith(".d.ts"),
