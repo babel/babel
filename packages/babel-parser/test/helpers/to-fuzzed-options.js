@@ -35,12 +35,12 @@ const toAdjustedSyntaxError = (adjust, error) =>
             line: parseInt(line, 10),
             column: parseInt(column, 10),
           };
-          return `(${adjust(
+          return `(${adjust(adjust, loc.line, "line", loc)}:${adjust(
             adjust,
-            loc.line,
-            "line",
+            loc.column,
+            "column",
             loc,
-          )}:${adjust(adjust, loc.column, "column", loc)})`;
+          )})`;
         }),
       )
     : error;

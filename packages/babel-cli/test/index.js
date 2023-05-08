@@ -320,9 +320,11 @@ fs.readdirSync(fixtureLoc).forEach(function (binName) {
         parseInt(process.versions.node, 10) < opts.minNodeVersion;
 
       // eslint-disable-next-line jest/valid-title
-      (skip
-        ? it.skip
-        : it)(testName, buildTest(binName, testName, opts), 20000);
+      (skip ? it.skip : it)(
+        testName,
+        buildTest(binName, testName, opts),
+        20000,
+      );
     });
   });
 });

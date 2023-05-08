@@ -115,7 +115,7 @@ function generateHelpers(generator, dest, filename, message) {
 
         file.path = filename;
         file.contents = Buffer.from(
-          formatCode(await generateCode(filename), dest + file.path)
+          await formatCode(await generateCode(filename), dest + file.path)
         );
         log(`${chalk.green("✔")} Generated ${message}`);
         callback(null, file);
@@ -178,7 +178,7 @@ function generateStandalone() {
   return gulp
     .src(babelStandalonePluginConfigGlob, { base: monorepoRoot })
     .pipe(
-      through.obj((file, enc, callback) => {
+      through.obj(async (file, enc, callback) => {
         log("Generating @babel/standalone files");
         const pluginConfig = JSON.parse(file.contents);
         let imports = `import makeNoopPlugin from "../make-noop-plugin";`;
@@ -208,7 +208,9 @@ export const ${exportDecls.slice(0, -1)};
 export {${exportsList}};
 export const all: { [k: string]: any } = {${allList}};`;
         file.path = "plugins.ts";
-        file.contents = Buffer.from(formatCode(fileContents, dest));
+        file.contents = Buffer.from(
+          await formatCode(fileContents, dest + file.path)
+        );
         callback(null, file);
       })
     )

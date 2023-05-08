@@ -161,9 +161,9 @@ export default declare((api, opt: Options) => {
             path.replaceWith(
               template.expression.ast`
                 ${t.cloneNode(outerClass.node.id)} === ${buildCheckInRHS(
-                node.right,
-                file,
-              )}
+                  node.right,
+                  file,
+                )}
               `,
             );
           } else {

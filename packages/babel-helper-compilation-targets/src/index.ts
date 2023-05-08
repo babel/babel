@@ -65,45 +65,48 @@ function validateBrowsers(browsers: Browsers | undefined) {
 }
 
 function getLowestVersions(browsers: Array<string>): Targets {
-  return browsers.reduce((all, browser) => {
-    const [browserName, browserVersion] = browser.split(" ") as [
-      BrowserslistBrowserName,
-      string,
-    ];
-    const target = browserNameMap[browserName];
+  return browsers.reduce(
+    (all, browser) => {
+      const [browserName, browserVersion] = browser.split(" ") as [
+        BrowserslistBrowserName,
+        string,
+      ];
+      const target = browserNameMap[browserName];
 
-    if (!target) {
-      return all;
-    }
-
-    try {
-      // Browser version can return as "10.0-10.2"
-      const splitVersion = browserVersion.split("-")[0].toLowerCase();
-      const isSplitUnreleased = isUnreleasedVersion(splitVersion, target);
-
-      if (!all[target]) {
-        all[target] = isSplitUnreleased
-          ? splitVersion
-          : semverify(splitVersion);
+      if (!target) {
         return all;
       }
 
-      const version = all[target];
-      const isUnreleased = isUnreleasedVersion(version, target);
+      try {
+        // Browser version can return as "10.0-10.2"
+        const splitVersion = browserVersion.split("-")[0].toLowerCase();
+        const isSplitUnreleased = isUnreleasedVersion(splitVersion, target);
 
-      if (isUnreleased && isSplitUnreleased) {
-        all[target] = getLowestUnreleased(version, splitVersion, target);
-      } else if (isUnreleased) {
-        all[target] = semverify(splitVersion);
-      } else if (!isUnreleased && !isSplitUnreleased) {
-        const parsedBrowserVersion = semverify(splitVersion);
+        if (!all[target]) {
+          all[target] = isSplitUnreleased
+            ? splitVersion
+            : semverify(splitVersion);
+          return all;
+        }
 
-        all[target] = semverMin(version, parsedBrowserVersion);
-      }
-    } catch (e) {}
+        const version = all[target];
+        const isUnreleased = isUnreleasedVersion(version, target);
 
-    return all;
-  }, {} as Record<Target, string>);
+        if (isUnreleased && isSplitUnreleased) {
+          all[target] = getLowestUnreleased(version, splitVersion, target);
+        } else if (isUnreleased) {
+          all[target] = semverify(splitVersion);
+        } else if (!isUnreleased && !isSplitUnreleased) {
+          const parsedBrowserVersion = semverify(splitVersion);
+
+          all[target] = semverMin(version, parsedBrowserVersion);
+        }
+      } catch (e) {}
+
+      return all;
+    },
+    {} as Record<Target, string>,
+  );
 }
 
 function outputDecimalWarning(
