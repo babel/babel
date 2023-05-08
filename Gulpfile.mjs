@@ -265,6 +265,7 @@ async function buildBabel(useWorker, ignore = []) {
   const worker = createWorker(useWorker);
   const files = await glob(defaultSourcesGlob, {
     ignore: ignore.map(p => `./${p.src}/**`),
+    allowWindowsEscape: false,
   });
 
   const promises = [];
