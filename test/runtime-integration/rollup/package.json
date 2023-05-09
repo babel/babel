@@ -3,9 +3,9 @@
   "private": true,
   "devDependencies": {
     "@babel/runtime": "workspace:^",
-    "@rollup/plugin-commonjs": "^22.0.2",
-    "@rollup/plugin-node-resolve": "^13.3.0",
-    "rollup": "^2.78.0"
+    "@rollup/plugin-commonjs": "^24.1.0",
+    "@rollup/plugin-node-resolve": "^15.0.2",
+    "rollup": "^2.79.1"
   },
   "type": "commonjs"
 }
