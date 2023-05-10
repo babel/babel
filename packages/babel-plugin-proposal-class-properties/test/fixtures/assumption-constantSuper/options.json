@@ -1,6 +1,0 @@
-{
-  "assumptions": {
-    "constantSuper": true
-  },
-  "plugins": ["proposal-class-properties"]
-}

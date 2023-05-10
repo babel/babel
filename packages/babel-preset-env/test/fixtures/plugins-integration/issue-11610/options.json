@@ -1,5 +1,5 @@
 {
-  "plugins": ["transform-parameters", "proposal-async-generator-functions"],
+  "plugins": ["transform-parameters", "transform-async-generator-functions"],
   "parserOpts": {
     "allowReturnOutsideFunction": true
   },

@@ -1,4 +1,0 @@
-{
-  "plugins": ["proposal-class-properties"],
-  "externalHelpers": false
-}

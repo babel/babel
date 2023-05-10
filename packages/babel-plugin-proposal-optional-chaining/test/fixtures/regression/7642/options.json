@@ -1,3 +1,0 @@
-{
-  "plugins": ["proposal-optional-chaining", "transform-block-scoping"]
-}

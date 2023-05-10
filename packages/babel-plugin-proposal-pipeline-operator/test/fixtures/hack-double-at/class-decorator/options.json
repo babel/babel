@@ -2,7 +2,7 @@
   "plugins": [
     ["proposal-pipeline-operator", { "proposal": "hack", "topicToken": "@@" }],
     ["proposal-decorators", { "version": "2021-12" }],
-    "proposal-class-static-block",
-    "proposal-class-properties"
+    "transform-class-static-block",
+    "transform-class-properties"
   ]
 }

@@ -1,8 +1,0 @@
-{
-  "plugins": [
-    "transform-destructuring",
-    "transform-regenerator",
-    "proposal-async-generator-functions"
-  ],
-  "externalHelpers": false
-}

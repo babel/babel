@@ -1,7 +1,7 @@
 {
   "plugins": [
     [
-      "proposal-class-properties",
+      "transform-class-properties",
       {
         "loose": false
       }

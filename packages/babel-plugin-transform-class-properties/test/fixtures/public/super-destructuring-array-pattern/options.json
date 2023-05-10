@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    "transform-class-properties",
+    "transform-classes",
+    "transform-block-scoping"
+  ],
+  "throws": "Destructuring to a super field is not supported yet."
+}

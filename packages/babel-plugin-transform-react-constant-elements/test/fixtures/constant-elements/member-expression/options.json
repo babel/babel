@@ -2,6 +2,6 @@
   "plugins": [
     "syntax-jsx",
     "transform-react-constant-elements",
-    ["proposal-class-properties", { "loose": true }]
+    ["transform-class-properties", { "loose": true }]
   ]
 }

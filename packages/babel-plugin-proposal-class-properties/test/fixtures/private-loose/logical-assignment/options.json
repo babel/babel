@@ -1,6 +1,0 @@
-{
-  "plugins": [
-    ["proposal-logical-assignment-operators", { "loose": true }],
-    ["proposal-class-properties", { "loose": true }]
-  ]
-}

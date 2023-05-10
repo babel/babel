@@ -1,6 +1,0 @@
-{
-  "plugins": ["proposal-nullish-coalescing-operator"],
-  "assumptions": {
-    "noDocumentAll": true
-  }
-}

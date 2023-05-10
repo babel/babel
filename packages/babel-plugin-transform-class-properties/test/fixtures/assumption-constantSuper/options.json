@@ -1,0 +1,6 @@
+{
+  "assumptions": {
+    "constantSuper": true
+  },
+  "plugins": ["transform-class-properties"]
+}

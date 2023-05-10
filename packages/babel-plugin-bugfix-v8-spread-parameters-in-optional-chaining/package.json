@@ -24,7 +24,7 @@
   "dependencies": {
     "@babel/helper-plugin-utils": "workspace:^",
     "@babel/helper-skip-transparent-expression-wrappers": "workspace:^",
-    "@babel/plugin-proposal-optional-chaining": "workspace:^"
+    "@babel/plugin-transform-optional-chaining": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.13.0"

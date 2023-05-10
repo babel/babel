@@ -1,3 +1,0 @@
-{
-  "plugins": ["./plugin-clear-scope", "proposal-object-rest-spread"]
-}
