@@ -679,8 +679,8 @@ if (bool(process.env.BABEL_8_BREAKING)) {
   libBundles = [
     "packages/babel-parser",
     "packages/babel-plugin-proposal-destructuring-private",
-    "packages/babel-plugin-proposal-object-rest-spread",
-    "packages/babel-plugin-proposal-optional-chaining",
+    "packages/babel-plugin-transform-object-rest-spread",
+    "packages/babel-plugin-transform-optional-chaining",
     "packages/babel-preset-react",
     "packages/babel-plugin-transform-destructuring",
     "packages/babel-preset-typescript",

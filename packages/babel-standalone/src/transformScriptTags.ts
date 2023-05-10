@@ -77,8 +77,8 @@ function buildBabelOptions(script: CompilationResult, filename: string) {
     filename,
     presets,
     plugins: script.plugins || [
-      "proposal-class-properties",
-      "proposal-object-rest-spread",
+      "transform-class-properties",
+      "transform-object-rest-spread",
       "transform-flow-strip-types",
     ],
     sourceMaps: "inline" as const,

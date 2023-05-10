@@ -101,7 +101,7 @@ export default function createPlugin({
 {
   "plugins": [
     "@babel/plugin-transform-react-jsx"
-    ["@babel/plugin-proposal-object-rest-spread", { "loose": true, "useBuiltIns": ${useBuiltInsFormatted} }]
+    ["@babel/plugin-transform-object-rest-spread", { "loose": true, "useBuiltIns": ${useBuiltInsFormatted} }]
   ]
 }`,
         );

@@ -11,7 +11,7 @@ import type { NodePath } from "@babel/traverse";
  * // returns false
  * willPathCastToBoolean(NodePath("a?.#b"))
  * @todo Respect transparent expression wrappers
- * @see {@link packages/babel-plugin-proposal-optional-chaining/src/util.js}
+ * @see {@link packages/babel-plugin-transform-optional-chaining/src/util.js}
  * @param {NodePath} path
  * @returns {boolean}
  */

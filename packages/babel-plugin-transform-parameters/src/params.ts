@@ -29,7 +29,7 @@ const buildSafeArgumentsAccess = template.statement(`
   let $0 = arguments.length > $1 ? arguments[$1] : undefined;
 `);
 
-// last 2 parameters are optional -- they are used by proposal-object-rest-spread/src/index.js
+// last 2 parameters are optional -- they are used by transform-object-rest-spread/src/index.js
 export default function convertFunctionParams(
   path: NodePath<t.Function>,
   ignoreFunctionLength: boolean | void,
