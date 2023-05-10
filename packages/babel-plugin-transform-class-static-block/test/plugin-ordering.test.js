@@ -1,9 +1,9 @@
 import * as babel from "@babel/core";
 import proposalClassStaticBlock from "../lib/index.js";
-import proposalClassProperties from "@babel/plugin-proposal-class-properties";
+import proposalClassProperties from "@babel/plugin-transform-class-properties";
 
 describe("plugin ordering", () => {
-  it("should work when @babel/plugin-proposal-class-static-block is after class features plugin", () => {
+  it("should work when @babel/plugin-transform-class-static-block is after class features plugin", () => {
     const source = `class Foo {
       static {
         this.foo = Foo.bar;
