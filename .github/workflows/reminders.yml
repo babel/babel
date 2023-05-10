@@ -33,4 +33,5 @@ jobs:
             npm deprecate @babel/plugin-proposal-object-rest-spread "This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-object-rest-spread instead."
             npm deprecate @babel/plugin-proposal-unicode-property-regex "This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-unicode-property-regex instead."
             npm deprecate @babel/plugin-proposal-export-namespace-from "This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-export-namespace-from instead."
+            npm deprecate @babel/plugin-proposal-dynamic-import "This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-dynamic-import instead."
             ```

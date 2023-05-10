@@ -1,0 +1,3 @@
+{
+  "plugins": ["transform-dynamic-import", "transform-modules-systemjs"]
+}

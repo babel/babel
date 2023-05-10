@@ -23,7 +23,7 @@ console.info("Updating package.json...");
     oldName,
     newName
   );
-  pkgJSON.homepage = pkgJSON.homepage.replace(oldName, newName);
+  pkgJSON.homepage = pkgJSON.homepage?.replace(oldName, newName);
   fs.writeFileSync(oldPackageJSONPath, JSON.stringify(pkgJSON, null, 2) + "\n");
 }
 

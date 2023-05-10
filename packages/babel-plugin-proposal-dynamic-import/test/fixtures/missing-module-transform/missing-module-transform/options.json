@@ -1,4 +1,0 @@
-{
-  "plugins": ["proposal-dynamic-import"],
-  "throws": "@babel/plugin-proposal-dynamic-import depends on a modules\ntransform plugin. Supported plugins are:"
-}

@@ -1,11 +1,11 @@
 {
-  "name": "@babel/plugin-proposal-dynamic-import",
+  "name": "@babel/plugin-transform-dynamic-import",
   "version": "7.18.6",
   "description": "Transform import() expressions",
   "repository": {
     "type": "git",
     "url": "https://github.com/babel/babel.git",
-    "directory": "packages/babel-plugin-proposal-dynamic-import"
+    "directory": "packages/babel-plugin-transform-dynamic-import"
   },
   "license": "MIT",
   "publishConfig": {

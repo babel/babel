@@ -43,7 +43,7 @@
     "proposal-destructuring-private",
     "proposal-do-expressions",
     "proposal-duplicate-named-capturing-groups-regex",
-    "proposal-dynamic-import",
+    "transform-dynamic-import",
     "proposal-export-default-from",
     "transform-export-namespace-from",
     "proposal-function-bind",

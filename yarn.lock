@@ -1349,19 +1349,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-dynamic-import@workspace:^, @babel/plugin-proposal-dynamic-import@workspace:packages/babel-plugin-proposal-dynamic-import":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-proposal-dynamic-import@workspace:packages/babel-plugin-proposal-dynamic-import"
-  dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-dynamic-import": ^7.8.3
-  peerDependencies:
-    "@babel/core": ^7.0.0-0
-  languageName: unknown
-  linkType: soft
-
 "@babel/plugin-proposal-export-default-from@workspace:^, @babel/plugin-proposal-export-default-from@workspace:packages/babel-plugin-proposal-export-default-from":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-export-default-from@workspace:packages/babel-plugin-proposal-export-default-from"
@@ -2325,6 +2312,19 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
+
+"@babel/plugin-transform-dynamic-import@workspace:^, @babel/plugin-transform-dynamic-import@workspace:packages/babel-plugin-transform-dynamic-import":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-transform-dynamic-import@workspace:packages/babel-plugin-transform-dynamic-import"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/plugin-syntax-dynamic-import": ^7.8.3
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -3453,7 +3453,6 @@ __metadata:
     "@babel/helper-validator-option": "workspace:^"
     "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression": "workspace:^"
     "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining": "workspace:^"
-    "@babel/plugin-proposal-dynamic-import": "workspace:^"
     "@babel/plugin-syntax-async-generators": ^7.8.4
     "@babel/plugin-syntax-class-properties": ^7.12.13
     "@babel/plugin-syntax-class-static-block": ^7.14.5
@@ -3482,6 +3481,7 @@ __metadata:
     "@babel/plugin-transform-destructuring": "workspace:^"
     "@babel/plugin-transform-dotall-regex": "workspace:^"
     "@babel/plugin-transform-duplicate-keys": "workspace:^"
+    "@babel/plugin-transform-dynamic-import": "workspace:^"
     "@babel/plugin-transform-exponentiation-operator": "workspace:^"
     "@babel/plugin-transform-export-namespace-from": "workspace:^"
     "@babel/plugin-transform-for-of": "workspace:^"
@@ -3674,7 +3674,6 @@ __metadata:
     "@babel/plugin-proposal-destructuring-private": "workspace:^"
     "@babel/plugin-proposal-do-expressions": "workspace:^"
     "@babel/plugin-proposal-duplicate-named-capturing-groups-regex": "workspace:^"
-    "@babel/plugin-proposal-dynamic-import": "workspace:^"
     "@babel/plugin-proposal-export-default-from": "workspace:^"
     "@babel/plugin-proposal-function-bind": "workspace:^"
     "@babel/plugin-proposal-function-sent": "workspace:^"
@@ -3711,6 +3710,7 @@ __metadata:
     "@babel/plugin-transform-destructuring": "workspace:^"
     "@babel/plugin-transform-dotall-regex": "workspace:^"
     "@babel/plugin-transform-duplicate-keys": "workspace:^"
+    "@babel/plugin-transform-dynamic-import": "workspace:^"
     "@babel/plugin-transform-exponentiation-operator": "workspace:^"
     "@babel/plugin-transform-export-namespace-from": "workspace:^"
     "@babel/plugin-transform-flow-comments": "workspace:^"

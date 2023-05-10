@@ -4,7 +4,7 @@ import syntaxDynamicImport from "@babel/plugin-syntax-dynamic-import";
 const SUPPORTED_MODULES = ["commonjs", "amd", "systemjs"];
 
 const MODULES_NOT_FOUND = `\
-@babel/plugin-proposal-dynamic-import depends on a modules
+@babel/plugin-transform-dynamic-import depends on a modules
 transform plugin. Supported plugins are:
  - @babel/plugin-transform-modules-commonjs ^7.4.0
  - @babel/plugin-transform-modules-amd ^7.4.0
@@ -22,10 +22,12 @@ export default declare(api => {
   api.assertVersion(7);
 
   return {
-    name: "proposal-dynamic-import",
+    name: "transform-dynamic-import",
     inherits: syntaxDynamicImport.default,
 
     pre() {
+      // We keep using the old name, for compatibility with older
+      // version of the CommonJS transform.
       this.file.set(
         "@babel/plugin-proposal-dynamic-import",
         PACKAGE_JSON.version,

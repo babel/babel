@@ -46,7 +46,6 @@
     "./packages/babel-plugin-proposal-destructuring-private/src/**/*.ts",
     "./packages/babel-plugin-proposal-do-expressions/src/**/*.ts",
     "./packages/babel-plugin-proposal-duplicate-named-capturing-groups-regex/src/**/*.ts",
-    "./packages/babel-plugin-proposal-dynamic-import/src/**/*.ts",
     "./packages/babel-plugin-proposal-export-default-from/src/**/*.ts",
     "./packages/babel-plugin-proposal-function-bind/src/**/*.ts",
     "./packages/babel-plugin-proposal-function-sent/src/**/*.ts",
@@ -88,6 +87,7 @@
     "./packages/babel-plugin-transform-destructuring/src/**/*.ts",
     "./packages/babel-plugin-transform-dotall-regex/src/**/*.ts",
     "./packages/babel-plugin-transform-duplicate-keys/src/**/*.ts",
+    "./packages/babel-plugin-transform-dynamic-import/src/**/*.ts",
     "./packages/babel-plugin-transform-exponentiation-operator/src/**/*.ts",
     "./packages/babel-plugin-transform-export-namespace-from/src/**/*.ts",
     "./packages/babel-plugin-transform-flow-comments/src/**/*.ts",
@@ -304,9 +304,6 @@
       "@babel/plugin-proposal-duplicate-named-capturing-groups-regex": [
         "./packages/babel-plugin-proposal-duplicate-named-capturing-groups-regex/src"
       ],
-      "@babel/plugin-proposal-dynamic-import": [
-        "./packages/babel-plugin-proposal-dynamic-import/src"
-      ],
       "@babel/plugin-proposal-export-default-from": [
         "./packages/babel-plugin-proposal-export-default-from/src"
       ],
@@ -429,6 +426,9 @@
       ],
       "@babel/plugin-transform-duplicate-keys": [
         "./packages/babel-plugin-transform-duplicate-keys/src"
+      ],
+      "@babel/plugin-transform-dynamic-import": [
+        "./packages/babel-plugin-transform-dynamic-import/src"
       ],
       "@babel/plugin-transform-exponentiation-operator": [
         "./packages/babel-plugin-transform-exponentiation-operator/src"

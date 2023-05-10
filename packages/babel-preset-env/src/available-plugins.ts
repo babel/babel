@@ -19,7 +19,7 @@ import syntaxTopLevelAwait from "@babel/plugin-syntax-top-level-await";
 import proposalAsyncGeneratorFunctions from "@babel/plugin-transform-async-generator-functions";
 import proposalClassProperties from "@babel/plugin-transform-class-properties";
 import proposalClassStaticBlock from "@babel/plugin-transform-class-static-block";
-import proposalDynamicImport from "@babel/plugin-proposal-dynamic-import";
+import proposalDynamicImport from "@babel/plugin-transform-dynamic-import";
 import proposalExportNamespaceFrom from "@babel/plugin-transform-export-namespace-from";
 import proposalJsonStrings from "@babel/plugin-transform-json-strings";
 import proposalLogicalAssignmentOperators from "@babel/plugin-transform-logical-assignment-operators";

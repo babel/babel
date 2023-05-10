@@ -27,7 +27,7 @@ import proposalDecorators from "@babel/plugin-proposal-decorators";
 import proposalDestructuringPrivate from "@babel/plugin-proposal-destructuring-private";
 import proposalDoExpressions from "@babel/plugin-proposal-do-expressions";
 import proposalDuplicateNamedCapturingGroupsRegex from "@babel/plugin-proposal-duplicate-named-capturing-groups-regex";
-import proposalDynamicImport from "@babel/plugin-proposal-dynamic-import";
+import transformDynamicImport from "@babel/plugin-transform-dynamic-import";
 import proposalExportDefaultFrom from "@babel/plugin-proposal-export-default-from";
 import transformExportNamespaceFrom from "@babel/plugin-transform-export-namespace-from";
 import proposalFunctionBind from "@babel/plugin-proposal-function-bind";
@@ -130,7 +130,7 @@ export {
   proposalDestructuringPrivate,
   proposalDoExpressions,
   proposalDuplicateNamedCapturingGroupsRegex,
-  proposalDynamicImport,
+  transformDynamicImport,
   proposalExportDefaultFrom,
   transformExportNamespaceFrom,
   proposalFunctionBind,
@@ -235,7 +235,7 @@ export const all: { [k: string]: any } = {
   "proposal-do-expressions": proposalDoExpressions,
   "proposal-duplicate-named-capturing-groups-regex":
     proposalDuplicateNamedCapturingGroupsRegex,
-  "proposal-dynamic-import": proposalDynamicImport,
+  "transform-dynamic-import": transformDynamicImport,
   "proposal-export-default-from": proposalExportDefaultFrom,
   "transform-export-namespace-from": transformExportNamespaceFrom,
   "proposal-function-bind": proposalFunctionBind,
