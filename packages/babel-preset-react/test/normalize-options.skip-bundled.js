@@ -32,7 +32,7 @@ describe("normalize options", () => {
         \`useBuiltIns: true\`, you can use the following config
         {
           \\"plugins\\": [
-            [\\"@babel/plugin-proposal-object-rest-spread\\", { \\"loose\\": true, \\"useBuiltIns\\": true }]
+            [\\"@babel/plugin-transform-object-rest-spread\\", { \\"loose\\": true, \\"useBuiltIns\\": true }]
           ],
           \\"presets\\": [\\"@babel/preset-react\\"]
         }"
