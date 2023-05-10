@@ -404,6 +404,8 @@ function buildRollup(packages, buildStandalone) {
                 "packages/babel-preset-env/data/*.js",
                 // Rollup doesn't read export maps, so it loads the cjs fallback
                 "packages/babel-compat-data/*.js",
+                // Used by @babel/standalone
+                "packages/babel-compat-data/scripts/data/legacy-plugin-aliases.js",
                 "packages/*/src/**/*.cjs",
               ],
               dynamicRequireTargets: [

@@ -30,6 +30,17 @@ import type { InputOptions } from "@babel/core";
 
 import { runScripts } from "./transformScriptTags";
 
+// We import this file from another package using a relative path because it's
+// meant to just be build-time script; it's ok because @babel/standalone is
+// bundled anyway.
+// TODO: Remove this in Babel 8
+// @ts-expect-error TS complains about importing a JS file without type declarations
+import legacyPluginAliases from "../../babel-compat-data/scripts/data/legacy-plugin-aliases";
+// eslint-disable-next-line guard-for-in
+for (const name in legacyPluginAliases) {
+  all[legacyPluginAliases[name]] = all[name];
+}
+
 export const availablePlugins: typeof all = {};
 
 // All the plugins we should bundle
