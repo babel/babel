@@ -54,6 +54,7 @@
     "./packages/babel-plugin-proposal-export-namespace-from/src/**/*.ts",
     "./packages/babel-plugin-proposal-function-bind/src/**/*.ts",
     "./packages/babel-plugin-proposal-function-sent/src/**/*.ts",
+    "./packages/babel-plugin-proposal-import-attributes-to-assertions/src/**/*.ts",
     "./packages/babel-plugin-proposal-json-strings/src/**/*.ts",
     "./packages/babel-plugin-proposal-logical-assignment-operators/src/**/*.ts",
     "./packages/babel-plugin-proposal-nullish-coalescing-operator/src/**/*.ts",
@@ -328,6 +329,9 @@
       ],
       "@babel/plugin-proposal-function-sent": [
         "./packages/babel-plugin-proposal-function-sent/src"
+      ],
+      "@babel/plugin-proposal-import-attributes-to-assertions": [
+        "./packages/babel-plugin-proposal-import-attributes-to-assertions/src"
       ],
       "@babel/plugin-proposal-json-strings": [
         "./packages/babel-plugin-proposal-json-strings/src"
