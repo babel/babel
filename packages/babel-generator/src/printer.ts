@@ -18,7 +18,7 @@ import type { Opts as jsescOptions } from "jsesc";
 import * as generatorFunctions from "./generators";
 import type SourceMap from "./source-map";
 import * as charCodes from "charcodes";
-import { type TraceMap } from "@jridgewell/trace-mapping";
+import type { TraceMap } from "@jridgewell/trace-mapping";
 
 const SCIENTIFIC_NOTATION = /e/i;
 const ZERO_DECIMAL_INTEGER = /\.0+$/;
@@ -85,7 +85,7 @@ export type Format = {
    * - "auto-legacy" : "assert" if the AST node has an .assertions property,
    *                   "with-legacy" if it has an .attributes property.
    */
-  importAttributesKeyword?: "with" | "assert" | "with-legacy" | "auto-legacy";
+  importAttributesKeyword?: "with" | "assert" | "with-legacy";
 };
 
 interface AddNewlinesOptions {

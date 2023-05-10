@@ -66,12 +66,23 @@ export function ExportNamespaceSpecifier(
   this.print(node.exported, node);
 }
 
+let warningShown = false;
+
 export function _printAttributes(
   this: Printer,
   node: Extract<t.Node, { attributes?: t.ImportAttribute[] }>,
 ) {
-  if (node.attributes && !this.format.importAttributesKeyword) {
-    this.format.importAttributesKeyword = "auto-legacy";
+  const { importAttributesKeyword } = this.format;
+  const { attributes, assertions } = node;
+
+  if (
+    attributes &&
+    !importAttributesKeyword &&
+    // In the production build only show the warning once.
+    // We want to show it per-usage locally for tests.
+    (!process.env.IS_PUBLISH || !warningShown)
+  ) {
+    warningShown = true;
     console.warn(`\
 You are using import attributes, without specifying the desired output syntax.
 Please specify the "importAttributesKeyword" generator option, whose value can be one of:
@@ -80,26 +91,23 @@ Please specify the "importAttributesKeyword" generator option, whose value can b
  - "with-legacy" : \`import { a } from "b" with type: "json";\`
 `);
   }
-  this.word(
-    !this.format.importAttributesKeyword ||
-      this.format.importAttributesKeyword === "assert" ||
-      (this.format.importAttributesKeyword === "auto-legacy" && node.assertions)
-      ? "assert"
-      : "with",
-  );
+
+  const useAssertKeyword =
+    importAttributesKeyword === "assert" ||
+    (!importAttributesKeyword && assertions);
+
+  this.word(useAssertKeyword ? "assert" : "with");
   this.space();
 
-  if (
-    this.format.importAttributesKeyword === "with-legacy" ||
-    (this.format.importAttributesKeyword === "auto-legacy" && !node.assertions)
-  ) {
-    this.printList(node.attributes || node.assertions, node);
+  if (!useAssertKeyword && importAttributesKeyword !== "with") {
+    // with-legacy
+    this.printList(attributes || assertions, node);
     return;
   }
 
   this.token("{");
   this.space();
-  this.printList(node.attributes || node.assertions, node);
+  this.printList(attributes || assertions, node);
   this.space();
   this.token("}");
 }
