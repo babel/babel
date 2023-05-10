@@ -434,11 +434,11 @@ function applyMemberDecs(Class, decInfos, instanceBrand) {
           "Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " +
             name
         );
-      } else if (!existingKind && kind > 2 /* METHOD */) {
-        existingNonFields.set(name, kind);
-      } else {
-        existingNonFields.set(name, true);
       }
+      existingNonFields.set(
+        name,
+        !existingKind && kind > 2 /* METHOD */ ? kind : true
+      );
     }
 
     applyMemberDec(
@@ -472,7 +472,7 @@ function pushInitializers(ret, initializers) {
 }
 
 function applyClassDecs(targetClass, classDecs, decoratorsHaveThis) {
-  if (classDecs.length > 0) {
+  if (classDecs.length) {
     var initializers = [];
     var newClass = targetClass;
     var name = targetClass.name;
