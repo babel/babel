@@ -1,5 +1,5 @@
-var _createClass = require("@babel/runtime/helpers/createClass");
-var _classCallCheck = require("@babel/runtime/helpers/classCallCheck");
+var _createClass = require("@babel/runtime/helpers/createClass")["default"];
+var _classCallCheck = require("@babel/runtime/helpers/classCallCheck")["default"];
 var A = /*#__PURE__*/_createClass(function A() {
   "use strict";
 
