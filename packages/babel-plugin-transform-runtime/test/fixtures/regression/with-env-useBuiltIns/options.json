@@ -1,0 +1,4 @@
+{
+  "presets": [["env", { "corejs": 3, "useBuiltIns": "usage" }]],
+  "plugins": ["transform-runtime"]
+}

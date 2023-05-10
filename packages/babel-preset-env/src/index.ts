@@ -208,6 +208,9 @@ export const getPolyfillPlugins = ({
       proposals,
       shippedProposals,
       debug,
+      "#__secret_key__@babel/preset-env__compatibility": {
+        noRuntimeName: true,
+      },
     };
 
     if (corejs) {
