@@ -763,7 +763,16 @@ class Printer {
   ) {
     if (!nodes?.length) return;
 
-    if (opts.indent) this.indent();
+    let indent = opts.indent;
+
+    if (indent == null && this.format.retainLines) {
+      const startLine = nodes[0].loc?.start.line;
+      if (startLine != null && startLine !== this._buf.getCurrentLine()) {
+        indent = true;
+      }
+    }
+
+    if (indent) this.indent();
 
     const newlineOpts: AddNewlinesOptions = {
       addNewlines: opts.addNewlines,
@@ -797,7 +806,7 @@ class Printer {
       }
     }
 
-    if (opts.indent) this.dedent();
+    if (indent) this.dedent();
   }
 
   printAndIndentOnComments(node: t.Node, parent: t.Node) {
@@ -880,6 +889,7 @@ class Printer {
     opts: PrintSequenceOptions = {},
   ) {
     opts.statement = true;
+    opts.indent ??= false;
     this.printJoin(nodes, parent, opts);
   }
 
