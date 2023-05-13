@@ -2,6 +2,10 @@ import * as babel from "../lib/index.js";
 
 import { fileURLToPath } from "url";
 import path from "path";
+import { spawnSync } from "child_process";
+import semver from "semver";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const replaceAll = "".replaceAll
   ? Function.call.bind("".replaceAll)
@@ -283,4 +287,29 @@ describe("@babel/core errors", function () {
           at ... internal jest frames ..."
     `);
   });
+
+  (semver.gte(process.version, "12.0.0") ? it : it.skip)(
+    "should not throw in `node --frozen-intrinsics`",
+    function () {
+      expect(
+        spawnSync(
+          process.execPath,
+          [
+            "--frozen-intrinsics",
+            "-e",
+            `
+        const babel = require("../lib/index.js");
+        babel.parseSync("foo;", {
+          root: String.raw\`${fixture("valid")}\`,
+        });
+        console.log("%done%");
+        `,
+          ],
+          {
+            cwd: __dirname,
+          },
+        ).output + "",
+      ).toContain("%done%");
+    },
+  );
 });
