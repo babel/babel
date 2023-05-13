@@ -1,4 +1,4 @@
-import { type TokenType } from "../tokenizer/types";
+import type { TokenType } from "../tokenizer/types";
 import type Parser from "../parser";
 import type { ExpressionErrors } from "../parser/util";
 import type * as N from "../types";
