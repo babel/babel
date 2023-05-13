@@ -69,6 +69,7 @@ module.exports = {
           "error",
           { ignoreArrowShorthand: true },
         ],
+        "@typescript-eslint/no-import-type-side-effects": "error",
       },
     },
     {

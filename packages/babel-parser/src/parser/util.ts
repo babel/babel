@@ -1,4 +1,4 @@
-import { type Position } from "../util/location";
+import type { Position } from "../util/location";
 import {
   tokenIsLiteralPropertyName,
   tt,

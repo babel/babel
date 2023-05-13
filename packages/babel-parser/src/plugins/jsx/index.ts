@@ -17,7 +17,7 @@ import { isIdentifierChar, isIdentifierStart } from "../../util/identifier";
 import type { Position } from "../../util/location";
 import { isNewLine } from "../../util/whitespace";
 import { Errors, ParseErrorEnum } from "../../parse-error";
-import { type Undone } from "../../parser/node";
+import type { Undone } from "../../parser/node";
 
 /* eslint sort-keys: "error" */
 const JsxErrors = ParseErrorEnum`jsx`({

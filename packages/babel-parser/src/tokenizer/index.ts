@@ -17,7 +17,7 @@ import {
   keywords as keywordTypes,
   type TokenType,
 } from "./types";
-import { type TokContext } from "./context";
+import type { TokContext } from "./context";
 import {
   Errors,
   type ParseError,

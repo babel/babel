@@ -6,7 +6,7 @@ import { Position } from "../util/location";
 import { types as ct, type TokContext } from "./context";
 import { tt, type TokenType } from "./types";
 import type { Errors } from "../parse-error";
-import { type ParseError } from "../parse-error";
+import type { ParseError } from "../parse-error";
 
 export type DeferredStrictError =
   | typeof Errors.StrictNumericEscape
