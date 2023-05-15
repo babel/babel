@@ -72,9 +72,7 @@ export function ClassBody(this: Printer, node: t.ClassBody) {
   } else {
     this.newline();
 
-    this.indent();
-    this.printSequence(node.body, node);
-    this.dedent();
+    this.printSequence(node.body, node, { indent: true });
 
     if (!this.endsWith(charCodes.lineFeed)) this.newline();
 
