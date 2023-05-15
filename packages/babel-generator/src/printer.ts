@@ -763,7 +763,7 @@ class Printer {
   ) {
     if (!nodes?.length) return;
 
-    let indent = opts.indent;
+    let { indent } = opts;
 
     if (indent == null && this.format.retainLines) {
       const startLine = nodes[0].loc?.start.line;
