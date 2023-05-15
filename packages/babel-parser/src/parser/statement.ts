@@ -2918,38 +2918,74 @@ export default abstract class StatementParser extends ExpressionParser {
     }
   }
 
-  parseMaybeImportReflection(node: Undone<N.ImportDeclaration>) {
-    let isImportReflection = false;
-    if (this.isContextual(tt._module)) {
-      const lookahead = this.lookahead();
-      const nextType = lookahead.type;
-      if (tokenIsIdentifier(nextType)) {
-        if (nextType !== tt._from) {
-          // import module x
-          isImportReflection = true;
-        } else {
-          const nextNextTokenFirstChar = this.input.charCodeAt(
-            this.nextTokenStartSince(lookahead.end),
-          );
-          if (nextNextTokenFirstChar === charCodes.lowercaseF) {
-            // import module from from ...
-            isImportReflection = true;
-          }
-        }
-      } else if (nextType !== tt.comma) {
-        // import module { x } ...
-        // import module "foo"
-        // They are invalid, we will continue parsing and throw
-        // a recoverable error later
-        isImportReflection = true;
-      }
-    }
-    if (isImportReflection) {
-      this.expectPlugin("importReflection");
-      this.next(); // eat tt._module;
+  isPotentialImportPhase(): boolean {
+    return this.isContextual(tt._module);
+  }
+
+  applyImportPhase(
+    node: Undone<N.ImportDeclaration>,
+    phase: string | null,
+    loc?: Position,
+  ): void {
+    if (phase === "module") {
+      this.expectPlugin("importReflection", loc);
       node.module = true;
     } else if (this.hasPlugin("importReflection")) {
       node.module = false;
+    }
+  }
+
+  /*
+   * Parse `module` in `import module x fro "x"`, disambiguating
+   * `import module from "x"` and `import module from from "x"`.
+   *
+   * This function might return an identifier representing the `module`
+   * if it eats `module` and then discovers that it was the default import
+   * binding and not the import reflection.
+   *
+   * This function is also used to parse `import type` and `import typeof`
+   * in the TS and Flow plugins.
+   *
+   * Note: the proposal has been updated to use `source` instead of `module`,
+   * but it has not been implemented yet.
+   */
+  parseMaybeImportPhase(
+    node: Undone<N.ImportDeclaration | N.TsImportEqualsDeclaration>,
+  ): N.Identifier | null {
+    if (!this.isPotentialImportPhase()) {
+      this.applyImportPhase(node as Undone<N.ImportDeclaration>, null);
+      return null;
+    }
+
+    const phaseIdentifier = this.parseIdentifier(true);
+    const { type } = this.state;
+    const isImportPhase = tokenIsIdentifier(type)
+      ? // `import <phase> x`
+        type !== tt._from ||
+        // `import module from from ...`
+        // We can safely assume that `f` is `from` because otherwise it
+        // will be a syntax error anyway. This will change with the
+        // module declarations proposal, and we will neet to disambiguate
+        // after parsing a second identifier.
+        this.lookaheadCharCode() === charCodes.lowercaseF
+      : // import <phase> { x } ...
+        // import <phase> "foo"
+        // The second one is invalid, we will continue parsing and throw
+        // a recoverable error later
+        // tt.eq is needed for TS `import type = require(...)`.
+        type !== tt.comma && type !== tt.eq;
+
+    if (isImportPhase) {
+      this.applyImportPhase(
+        node as Undone<N.ImportDeclaration>,
+        phaseIdentifier.name,
+        phaseIdentifier.loc.start,
+      );
+      return null;
+    } else {
+      this.applyImportPhase(node as Undone<N.ImportDeclaration>, null);
+      // `<phase>` is a default binding, return it to the main import declaration parser
+      return phaseIdentifier;
     }
   }
 
@@ -2957,28 +2993,53 @@ export default abstract class StatementParser extends ExpressionParser {
   // https://tc39.es/ecma262/#prod-ImportDeclaration
 
   parseImport(this: Parser, node: Undone<N.ImportDeclaration>): N.AnyImport {
-    // import '...'
-    node.specifiers = [];
-    if (!this.match(tt.string)) {
-      this.parseMaybeImportReflection(node);
-      // check if we have a default import like
-      // import React from "react";
-      const hasDefault = this.maybeParseDefaultImportSpecifier(node);
-      /* we are checking if we do not have a default import, then it is obvious that we need named imports
-       * import { get } from "axios";
-       * but if we do have a default import
-       * we need to check if we have a comma after that and
-       * that is where this `|| this.eat` condition comes into play
-       */
-      const parseNext = !hasDefault || this.eat(tt.comma);
-      // if we do have to parse the next set of specifiers, we first check for star imports
-      // import React, * from "react";
-      const hasStar = parseNext && this.maybeParseStarImportSpecifier(node);
-      // now we check if we need to parse the next imports
-      // but only if they are not importing * (everything)
-      if (parseNext && !hasStar) this.parseNamedImportSpecifiers(node);
-      this.expectContextual(tt._from);
+    if (this.match(tt.string)) {
+      // import '...'
+      return this.parseImportSourceAndAttributes(node);
     }
+
+    return this.parseImportSpecifiersAndAfter(
+      node,
+      this.parseMaybeImportPhase(node),
+    );
+  }
+
+  parseImportSpecifiersAndAfter(
+    this: Parser,
+    node: Undone<N.ImportDeclaration>,
+    maybeDefaultIdentifier: N.Identifier | null,
+  ): N.AnyImport {
+    node.specifiers = [];
+
+    // check if we have a default import like
+    // import React from "react";
+    const hasDefault = this.maybeParseDefaultImportSpecifier(
+      node,
+      maybeDefaultIdentifier,
+    );
+    /* we are checking if we do not have a default import, then it is obvious that we need named imports
+     * import { get } from "axios";
+     * but if we do have a default import
+     * we need to check if we have a comma after that and
+     * that is where this `|| this.eat` condition comes into play
+     */
+    const parseNext = !hasDefault || this.eat(tt.comma);
+    // if we do have to parse the next set of specifiers, we first check for star imports
+    // import React, * from "react";
+    const hasStar = parseNext && this.maybeParseStarImportSpecifier(node);
+    // now we check if we need to parse the next imports
+    // but only if they are not importing * (everything)
+    if (parseNext && !hasStar) this.parseNamedImportSpecifiers(node);
+    this.expectContextual(tt._from);
+
+    return this.parseImportSourceAndAttributes(node);
+  }
+
+  parseImportSourceAndAttributes(
+    this: Parser,
+    node: Undone<N.ImportDeclaration>,
+  ): N.AnyImport {
+    node.specifiers ??= [];
     node.source = this.parseImportSource();
     this.maybeParseImportAttributes(node);
     this.checkImportReflection(node);
@@ -2991,11 +3052,6 @@ export default abstract class StatementParser extends ExpressionParser {
   parseImportSource(this: Parser): N.StringLiteral {
     if (!this.match(tt.string)) this.unexpected();
     return this.parseExprAtom() as N.StringLiteral;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  shouldParseDefaultImport(node: Undone<N.ImportDeclaration>): boolean {
-    return tokenIsIdentifier(this.state.type);
   }
 
   parseImportSpecifierLocal<
@@ -3177,9 +3233,21 @@ export default abstract class StatementParser extends ExpressionParser {
     }
   }
 
-  maybeParseDefaultImportSpecifier(node: Undone<N.ImportDeclaration>): boolean {
-    if (this.shouldParseDefaultImport(node)) {
-      // import defaultObj, { x, y as z } from '...'
+  maybeParseDefaultImportSpecifier(
+    node: Undone<N.ImportDeclaration>,
+    maybeDefaultIdentifier: N.Identifier | null,
+  ): boolean {
+    // import defaultObj, { x, y as z } from '...'
+    if (maybeDefaultIdentifier) {
+      const specifier = this.startNodeAtNode<N.ImportDefaultSpecifier>(
+        maybeDefaultIdentifier,
+      );
+      specifier.local = maybeDefaultIdentifier;
+      node.specifiers.push(
+        this.finishImportSpecifier(specifier, "ImportDefaultSpecifier"),
+      );
+      return true;
+    } else if (tokenIsIdentifier(this.state.type)) {
       this.parseImportSpecifierLocal(
         node,
         this.startNode<N.ImportDefaultSpecifier>(),

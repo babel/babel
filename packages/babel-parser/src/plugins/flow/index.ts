@@ -247,10 +247,6 @@ function hasTypeImportKind(node: N.Node): boolean {
   return node.importKind === "type" || node.importKind === "typeof";
 }
 
-function isMaybeDefaultImport(type: TokenType): boolean {
-  return tokenIsKeywordOrIdentifier(type) && type !== tt._from;
-}
-
 const exportSuggestions = {
   const: "declare export var",
   let: "declare export var",
@@ -2713,14 +2709,6 @@ export default (superClass: typeof Parser) =>
       return node;
     }
 
-    shouldParseDefaultImport(node: N.ImportDeclaration): boolean {
-      if (!hasTypeImportKind(node)) {
-        return super.shouldParseDefaultImport(node);
-      }
-
-      return isMaybeDefaultImport(this.state.type);
-    }
-
     checkImportReflection(node: Undone<N.ImportDeclaration>) {
       super.checkImportReflection(node);
       if (node.module && node.importKind !== "value") {
@@ -2746,37 +2734,28 @@ export default (superClass: typeof Parser) =>
       node.specifiers.push(this.finishImportSpecifier(specifier, type));
     }
 
-    // parse typeof and type imports
-    maybeParseDefaultImportSpecifier(node: N.ImportDeclaration): boolean {
-      node.importKind = "value";
+    isPotentialImportPhase(): boolean {
+      return (
+        super.isPotentialImportPhase() ||
+        this.isContextual(tt._type) ||
+        this.isContextual(tt._typeof)
+      );
+    }
 
-      let kind = null;
-      if (this.match(tt._typeof)) {
-        kind = "typeof" as const;
-      } else if (this.isContextual(tt._type)) {
-        kind = "type" as const;
+    applyImportPhase(
+      node: Undone<N.ImportDeclaration>,
+      phase: string | null,
+      loc?: Position,
+    ): void {
+      super.applyImportPhase(node, phase, loc);
+      if (phase === "type") {
+        node.importKind = "type";
+        if (this.match(tt.star)) this.unexpected();
+      } else if (phase === "typeof") {
+        node.importKind = "typeof";
+      } else {
+        node.importKind = "value";
       }
-      if (kind) {
-        const lh = this.lookahead();
-        const { type } = lh;
-
-        // import type * is not allowed
-        if (kind === "type" && type === tt.star) {
-          // FIXME: lh.start?
-          this.unexpected(null, lh.type);
-        }
-
-        if (
-          isMaybeDefaultImport(type) ||
-          type === tt.braceL ||
-          type === tt.star
-        ) {
-          this.next();
-          node.importKind = kind;
-        }
-      }
-
-      return super.maybeParseDefaultImportSpecifier(node);
     }
 
     // parse import-type/typeof shorthand
