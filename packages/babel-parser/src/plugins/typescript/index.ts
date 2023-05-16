@@ -2705,32 +2705,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     isPotentialImportPhase(isExport: boolean): boolean {
       if (super.isPotentialImportPhase(isExport)) return true;
       if (this.isContextual(tt._type)) {
-        if (!isExport) return true;
         const ch = this.lookaheadCharCode();
-        return ch === charCodes.leftCurlyBrace || ch === charCodes.asterisk;
+        return isExport
+          ? ch === charCodes.leftCurlyBrace || ch === charCodes.asterisk
+          : ch !== charCodes.equalsTo;
       }
       return !isExport && this.isContextual(tt._typeof);
-    }
-
-    isPrecedingIdImportPhase(phase: string): boolean {
-      if (phase !== "type") return super.isPrecedingIdImportPhase(phase);
-      const { type } = this.state;
-      return tokenIsIdentifier(type)
-        ? // OK: import type x from "foo";
-          // OK: import type from from "foo";
-          // NO: import type from "foo";
-          // NO: import type from 'foo';
-          // OK: import type x = require("foo");
-          // OK: import type from = require("foo");
-          type !== tt._from ||
-            this.lookaheadCharCode() === charCodes.lowercaseF ||
-            this.lookaheadCharCode() === tt.eq
-        : // OK: import type { x } from "foo";
-          // OK: import type x from "foo";
-          // OK: import type * as T from "foo";
-          // NO: import type, {} from "foo";
-          // NO: import type = require("foo");
-          type !== tt.comma && type !== tt.eq;
     }
 
     applyImportPhase(

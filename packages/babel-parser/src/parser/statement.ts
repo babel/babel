@@ -2983,7 +2983,25 @@ export default abstract class StatementParser extends ExpressionParser {
 
     const phaseIdentifier = this.parseIdentifier(true);
 
-    if (this.isPrecedingIdImportPhase(phaseIdentifier.name)) {
+    const { type } = this.state;
+    const isImportPhase = tokenIsIdentifier(type)
+      ? // OK: import <phase> x from "foo";
+        // OK: import <phase> from from "foo";
+        // NO: import <phase> from "foo";
+        // NO: import <phase> from 'foo';
+        // With the module declarations proposals, we will need further disambiguation
+        // for `import module from from;`.
+        type !== tt._from || this.lookaheadCharCode() === charCodes.lowercaseF
+      : // OK: import <phase> { x } from "foo";
+        // OK: import <phase> x from "foo";
+        // OK: import <phase> * as T from "foo";
+        // NO: import <phase> from "foo";
+        // OK: import <phase> "foo";
+        // The last one is invalid, we will continue parsing and throw
+        // an error later
+        type !== tt.comma;
+
+    if (isImportPhase) {
       this.applyImportPhase(
         node as Undone<N.ImportDeclaration>,
         isExport,

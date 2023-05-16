@@ -2730,14 +2730,6 @@ export default (superClass: typeof Parser) =>
       return !isExport && this.isContextual(tt._typeof);
     }
 
-    isPrecedingIdImportPhase(phase: string): boolean {
-      return (
-        super.isPrecedingIdImportPhase(phase) &&
-        // `export type x = ...`
-        (phase !== "type" || this.lookaheadCharCode() !== tt.eq)
-      );
-    }
-
     applyImportPhase(
       node: Undone<N.ImportDeclaration | N.ExportNamedDeclaration>,
       isExport: boolean,
