@@ -2702,22 +2702,51 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     */
     checkDuplicateExports() {}
 
-    isPotentialImportPhase(): boolean {
-      return (
-        super.isPotentialImportPhase() ||
-        this.isContextual(tt._type) ||
-        this.isContextual(tt._typeof)
-      );
+    isPotentialImportPhase(isExport: boolean): boolean {
+      if (super.isPotentialImportPhase(isExport)) return true;
+      if (this.isContextual(tt._type)) {
+        if (!isExport) return true;
+        const ch = this.lookaheadCharCode();
+        return ch === charCodes.leftCurlyBrace || ch === charCodes.asterisk;
+      }
+      return !isExport && this.isContextual(tt._typeof);
+    }
+
+    isPrecedingIdImportPhase(phase: string): boolean {
+      if (phase !== "type") return super.isPrecedingIdImportPhase(phase);
+      const { type } = this.state;
+      return tokenIsIdentifier(type)
+        ? // OK: import type x from "foo";
+          // OK: import type from from "foo";
+          // NO: import type from "foo";
+          // NO: import type from 'foo';
+          // OK: import type x = require("foo");
+          // OK: import type from = require("foo");
+          type !== tt._from ||
+            this.lookaheadCharCode() === charCodes.lowercaseF ||
+            this.lookaheadCharCode() === tt.eq
+        : // OK: import type { x } from "foo";
+          // OK: import type x from "foo";
+          // OK: import type * as T from "foo";
+          // NO: import type, {} from "foo";
+          // NO: import type = require("foo");
+          type !== tt.comma && type !== tt.eq;
     }
 
     applyImportPhase(
-      node: Undone<N.ImportDeclaration>,
+      node: Undone<N.ImportDeclaration | N.ExportNamedDeclaration>,
+      isExport: boolean,
       phase: string | null,
       loc?: Position,
     ): void {
-      super.applyImportPhase(node, phase, loc);
-      node.importKind =
-        phase === "type" || phase === "typeof" ? phase : "value";
+      super.applyImportPhase(node, isExport, phase, loc);
+      if (isExport) {
+        (node as N.ExportNamedDeclaration).exportKind =
+          phase === "type" ? "type" : "value";
+      } else {
+        (node as N.ImportDeclaration).importKind =
+          phase === "type" || phase === "typeof" ? phase : "value";
+      }
     }
 
     parseImport(
@@ -2740,6 +2769,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       } else if (this.isContextual(tt._type)) {
         const maybeDefaultIdentifier = this.parseMaybeImportPhase(
           node as Undone<N.ImportDeclaration>,
+          /* isExport */ false,
         );
         if (this.lookaheadCharCode() === charCodes.equalsTo) {
           return this.tsParseImportEqualsDeclaration(
@@ -2781,9 +2811,14 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         // `export import A = B;`
         this.next(); // eat `tt._import`
         let maybeDefaultIdentifier: N.Identifier | null = null;
-        if (this.isContextual(tt._type)) {
+        if (
+          this.isContextual(tt._type) &&
+          // We pass false here, because we are parsing an `import ... =`
+          this.isPotentialImportPhase(/* isExport */ false)
+        ) {
           maybeDefaultIdentifier = this.parseMaybeImportPhase(
             node as Undone<N.TsImportEqualsDeclaration>,
+            /* isExport */ false,
           );
         } else {
           node.importKind = "value";
@@ -2808,16 +2843,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         this.semicolon();
         return this.finishNode(decl, "TSNamespaceExportDeclaration");
       } else {
-        node.exportKind = "value";
-
-        if (this.isContextual(tt._type)) {
-          const ch = this.lookaheadCharCode();
-          if (ch === charCodes.leftCurlyBrace || ch === charCodes.asterisk) {
-            this.next();
-            node.exportKind = "type";
-          }
-        }
-
         return super.parseExport(
           node as Undone<N.ExportAllDeclaration | N.ExportDefaultDeclaration>,
           decorators,

@@ -2226,20 +2226,6 @@ export default (superClass: typeof Parser) =>
       super.assertModuleNodeAllowed(node);
     }
 
-    parseExport(
-      node: Undone<N.ExportNamedDeclaration | N.ExportAllDeclaration>,
-      decorators: N.Decorator[] | null,
-    ): N.AnyExport {
-      const decl = super.parseExport(node, decorators);
-      if (
-        decl.type === "ExportNamedDeclaration" ||
-        decl.type === "ExportAllDeclaration"
-      ) {
-        decl.exportKind = decl.exportKind || "value";
-      }
-      return decl;
-    }
-
     parseExportDeclaration(
       node: N.ExportNamedDeclaration,
     ): N.Declaration | undefined | null {
@@ -2734,27 +2720,42 @@ export default (superClass: typeof Parser) =>
       node.specifiers.push(this.finishImportSpecifier(specifier, type));
     }
 
-    isPotentialImportPhase(): boolean {
+    isPotentialImportPhase(isExport: boolean): boolean {
+      if (super.isPotentialImportPhase(isExport)) return true;
+      if (this.isContextual(tt._type)) {
+        if (!isExport) return true;
+        const ch = this.lookaheadCharCode();
+        return ch === charCodes.leftCurlyBrace || ch === charCodes.asterisk;
+      }
+      return !isExport && this.isContextual(tt._typeof);
+    }
+
+    isPrecedingIdImportPhase(phase: string): boolean {
       return (
-        super.isPotentialImportPhase() ||
-        this.isContextual(tt._type) ||
-        this.isContextual(tt._typeof)
+        super.isPrecedingIdImportPhase(phase) &&
+        // `export type x = ...`
+        (phase !== "type" || this.lookaheadCharCode() !== tt.eq)
       );
     }
 
     applyImportPhase(
-      node: Undone<N.ImportDeclaration>,
+      node: Undone<N.ImportDeclaration | N.ExportNamedDeclaration>,
+      isExport: boolean,
       phase: string | null,
       loc?: Position,
     ): void {
-      super.applyImportPhase(node, phase, loc);
-      if (phase === "type") {
-        node.importKind = "type";
-        if (this.match(tt.star)) this.unexpected();
-      } else if (phase === "typeof") {
-        node.importKind = "typeof";
+      super.applyImportPhase(node, isExport, phase, loc);
+      if (isExport) {
+        if (!phase && this.match(tt._default)) {
+          // TODO: Align with our TS AST and always add .exportKind
+          return;
+        }
+        (node as N.ExportNamedDeclaration).exportKind =
+          phase === "type" ? phase : "value";
       } else {
-        node.importKind = "value";
+        if (phase === "type" && this.match(tt.star)) this.unexpected();
+        (node as N.ImportDeclaration).importKind =
+          phase === "type" || phase === "typeof" ? phase : "value";
       }
     }
 

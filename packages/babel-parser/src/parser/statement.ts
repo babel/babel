@@ -2345,9 +2345,13 @@ export default abstract class StatementParser extends ExpressionParser {
     >,
     decorators: N.Decorator[] | null,
   ): N.AnyExport {
-    const hasDefault = this.maybeParseExportDefaultSpecifier(
-      // @ts-expect-error todo(flow->ts)
+    const maybeDefaultIdentifier = this.parseMaybeImportPhase(
       node,
+      /* isExport */ true,
+    );
+    const hasDefault = this.maybeParseExportDefaultSpecifier(
+      node,
+      maybeDefaultIdentifier,
     );
     const parseAfterDefault = !hasDefault || this.eat(tt.comma);
     const hasStar =
@@ -2441,13 +2445,23 @@ export default abstract class StatementParser extends ExpressionParser {
     return this.eat(tt.star);
   }
 
-  maybeParseExportDefaultSpecifier(node: N.Node): boolean {
-    if (this.isExportDefaultSpecifier()) {
+  maybeParseExportDefaultSpecifier(
+    node: Undone<
+      | N.ExportDefaultDeclaration
+      | N.ExportAllDeclaration
+      | N.ExportNamedDeclaration
+    >,
+    maybeDefaultIdentifier: N.Identifier | null,
+  ): node is Undone<N.ExportNamedDeclaration> {
+    if (maybeDefaultIdentifier || this.isExportDefaultSpecifier()) {
       // export defaultObj ...
-      this.expectPlugin("exportDefaultFrom");
-      const specifier = this.startNode();
-      specifier.exported = this.parseIdentifier(true);
-      node.specifiers = [this.finishNode(specifier, "ExportDefaultSpecifier")];
+      this.expectPlugin("exportDefaultFrom", maybeDefaultIdentifier?.loc.start);
+      const id = maybeDefaultIdentifier || this.parseIdentifier(true);
+      const specifier = this.startNodeAtNode<N.ExportDefaultSpecifier>(id);
+      specifier.exported = id;
+      (node as Undone<N.ExportNamedDeclaration>).specifiers = [
+        this.finishNode(specifier, "ExportDefaultSpecifier"),
+      ];
       return true;
     }
     return false;
@@ -2918,20 +2932,25 @@ export default abstract class StatementParser extends ExpressionParser {
     }
   }
 
-  isPotentialImportPhase(): boolean {
-    return this.isContextual(tt._module);
+  isPotentialImportPhase(isExport: boolean): boolean {
+    return !isExport && this.isContextual(tt._module);
   }
 
   applyImportPhase(
-    node: Undone<N.ImportDeclaration>,
+    node: Undone<N.ImportDeclaration | N.ExportNamedDeclaration>,
+    isExport: boolean,
     phase: string | null,
     loc?: Position,
   ): void {
+    if (isExport) {
+      // This will never happen
+      return;
+    }
     if (phase === "module") {
       this.expectPlugin("importReflection", loc);
-      node.module = true;
+      (node as N.ImportDeclaration).module = true;
     } else if (this.hasPlugin("importReflection")) {
-      node.module = false;
+      (node as N.ImportDeclaration).module = false;
     }
   }
 
@@ -2951,42 +2970,59 @@ export default abstract class StatementParser extends ExpressionParser {
    */
   parseMaybeImportPhase(
     node: Undone<N.ImportDeclaration | N.TsImportEqualsDeclaration>,
+    isExport: boolean,
   ): N.Identifier | null {
-    if (!this.isPotentialImportPhase()) {
-      this.applyImportPhase(node as Undone<N.ImportDeclaration>, null);
+    if (!this.isPotentialImportPhase(isExport)) {
+      this.applyImportPhase(
+        node as Undone<N.ImportDeclaration>,
+        isExport,
+        null,
+      );
       return null;
     }
 
     const phaseIdentifier = this.parseIdentifier(true);
-    const { type } = this.state;
-    const isImportPhase = tokenIsIdentifier(type)
-      ? // `import <phase> x`
-        type !== tt._from ||
-        // `import module from from ...`
-        // We can safely assume that `f` is `from` because otherwise it
-        // will be a syntax error anyway. This will change with the
-        // module declarations proposal, and we will neet to disambiguate
-        // after parsing a second identifier.
-        this.lookaheadCharCode() === charCodes.lowercaseF
-      : // import <phase> { x } ...
-        // import <phase> "foo"
-        // The second one is invalid, we will continue parsing and throw
-        // a recoverable error later
-        // tt.eq is needed for TS `import type = require(...)`.
-        type !== tt.comma && type !== tt.eq;
 
-    if (isImportPhase) {
+    if (this.isPrecedingIdImportPhase(phaseIdentifier.name)) {
       this.applyImportPhase(
         node as Undone<N.ImportDeclaration>,
+        isExport,
         phaseIdentifier.name,
         phaseIdentifier.loc.start,
       );
       return null;
     } else {
-      this.applyImportPhase(node as Undone<N.ImportDeclaration>, null);
+      this.applyImportPhase(
+        node as Undone<N.ImportDeclaration>,
+        isExport,
+        null,
+      );
       // `<phase>` is a default binding, return it to the main import declaration parser
       return phaseIdentifier;
     }
+  }
+
+  isPrecedingIdImportPhase(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    phase: string,
+  ) {
+    const { type } = this.state;
+    return tokenIsIdentifier(type)
+      ? // OK: import <phase> x from "foo";
+        // OK: import <phase> from from "foo";
+        // NO: import <phase> from "foo";
+        // NO: import <phase> from 'foo';
+        // With the module declarations proposals, we will need further disambiguation
+        // for `import module from from;`.
+        type !== tt._from || this.lookaheadCharCode() === charCodes.lowercaseF
+      : // OK: import <phase> { x } from "foo";
+        // OK: import <phase> x from "foo";
+        // OK: import <phase> * as T from "foo";
+        // NO: import <phase> from "foo";
+        // OK: import <phase> "foo";
+        // The last one is invalid, we will continue parsing and throw
+        // an error later
+        type !== tt.comma;
   }
 
   // Parses import declaration.
@@ -3000,7 +3036,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
     return this.parseImportSpecifiersAndAfter(
       node,
-      this.parseMaybeImportPhase(node),
+      this.parseMaybeImportPhase(node, /* isExport */ false),
     );
   }
 
