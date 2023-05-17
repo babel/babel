@@ -261,7 +261,7 @@ export function VariableDeclaration(
   }
 
   const { kind } = node;
-  this.word(kind, kind === "using");
+  this.word(kind, kind === "using" || kind === "await using");
   this.space();
 
   let hasInits = false;

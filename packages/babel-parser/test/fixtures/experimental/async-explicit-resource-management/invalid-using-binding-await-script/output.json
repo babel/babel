@@ -1,0 +1,214 @@
+{
+  "type": "File",
+  "start":0,"end":213,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":12,"column":1,"index":213}},
+  "errors": [
+    "SyntaxError: Can not use 'await' as identifier inside an async function. (2:14)",
+    "SyntaxError: Can not use 'await' as identifier inside an async function. (5:14)",
+    "SyntaxError: Can not use 'await' as identifier inside an async function. (8:17)",
+    "SyntaxError: Can not use 'await' as identifier inside an async function. (11:19)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":213,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":12,"column":1,"index":213}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":49,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":49}},
+        "id": {
+          "type": "Identifier",
+          "start":15,"end":16,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":16,"index":16},"identifierName":"f"},
+          "name": "f"
+        },
+        "generator": false,
+        "async": true,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":19,"end":49,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":3,"column":1,"index":49}},
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "start":23,"end":47,"loc":{"start":{"line":2,"column":2,"index":23},"end":{"line":2,"column":26,"index":47}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":35,"end":46,"loc":{"start":{"line":2,"column":14,"index":35},"end":{"line":2,"column":25,"index":46}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":35,"end":40,"loc":{"start":{"line":2,"column":14,"index":35},"end":{"line":2,"column":19,"index":40},"identifierName":"await"},
+                    "name": "await"
+                  },
+                  "init": {
+                    "type": "CallExpression",
+                    "start":43,"end":46,"loc":{"start":{"line":2,"column":22,"index":43},"end":{"line":2,"column":25,"index":46}},
+                    "callee": {
+                      "type": "Identifier",
+                      "start":43,"end":44,"loc":{"start":{"line":2,"column":22,"index":43},"end":{"line":2,"column":23,"index":44},"identifierName":"h"},
+                      "name": "h"
+                    },
+                    "arguments": []
+                  }
+                }
+              ],
+              "kind": "await using"
+            }
+          ],
+          "directives": []
+        }
+      },
+      {
+        "type": "FunctionDeclaration",
+        "start":50,"end":104,"loc":{"start":{"line":4,"column":0,"index":50},"end":{"line":6,"column":1,"index":104}},
+        "id": {
+          "type": "Identifier",
+          "start":65,"end":66,"loc":{"start":{"line":4,"column":15,"index":65},"end":{"line":4,"column":16,"index":66},"identifierName":"f"},
+          "name": "f"
+        },
+        "generator": false,
+        "async": true,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":69,"end":104,"loc":{"start":{"line":4,"column":19,"index":69},"end":{"line":6,"column":1,"index":104}},
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "start":73,"end":102,"loc":{"start":{"line":5,"column":2,"index":73},"end":{"line":5,"column":31,"index":102}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":85,"end":101,"loc":{"start":{"line":5,"column":14,"index":85},"end":{"line":5,"column":30,"index":101}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":85,"end":95,"loc":{"start":{"line":5,"column":14,"index":85},"end":{"line":5,"column":24,"index":95},"identifierName":"await"},
+                    "name": "await"
+                  },
+                  "init": {
+                    "type": "CallExpression",
+                    "start":98,"end":101,"loc":{"start":{"line":5,"column":27,"index":98},"end":{"line":5,"column":30,"index":101}},
+                    "callee": {
+                      "type": "Identifier",
+                      "start":98,"end":99,"loc":{"start":{"line":5,"column":27,"index":98},"end":{"line":5,"column":28,"index":99},"identifierName":"h"},
+                      "name": "h"
+                    },
+                    "arguments": []
+                  }
+                }
+              ],
+              "kind": "await using"
+            }
+          ],
+          "directives": []
+        }
+      },
+      {
+        "type": "FunctionDeclaration",
+        "start":105,"end":157,"loc":{"start":{"line":7,"column":0,"index":105},"end":{"line":9,"column":1,"index":157}},
+        "id": {
+          "type": "Identifier",
+          "start":120,"end":121,"loc":{"start":{"line":7,"column":15,"index":120},"end":{"line":7,"column":16,"index":121},"identifierName":"f"},
+          "name": "f"
+        },
+        "generator": false,
+        "async": true,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":124,"end":157,"loc":{"start":{"line":7,"column":19,"index":124},"end":{"line":9,"column":1,"index":157}},
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "start":128,"end":155,"loc":{"start":{"line":8,"column":2,"index":128},"end":{"line":8,"column":29,"index":155}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":140,"end":141,"loc":{"start":{"line":8,"column":14,"index":140},"end":{"line":8,"column":15,"index":141}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":140,"end":141,"loc":{"start":{"line":8,"column":14,"index":140},"end":{"line":8,"column":15,"index":141},"identifierName":"x"},
+                    "name": "x"
+                  },
+                  "init": null
+                },
+                {
+                  "type": "VariableDeclarator",
+                  "start":143,"end":154,"loc":{"start":{"line":8,"column":17,"index":143},"end":{"line":8,"column":28,"index":154}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":143,"end":148,"loc":{"start":{"line":8,"column":17,"index":143},"end":{"line":8,"column":22,"index":148},"identifierName":"await"},
+                    "name": "await"
+                  },
+                  "init": {
+                    "type": "CallExpression",
+                    "start":151,"end":154,"loc":{"start":{"line":8,"column":25,"index":151},"end":{"line":8,"column":28,"index":154}},
+                    "callee": {
+                      "type": "Identifier",
+                      "start":151,"end":152,"loc":{"start":{"line":8,"column":25,"index":151},"end":{"line":8,"column":26,"index":152},"identifierName":"h"},
+                      "name": "h"
+                    },
+                    "arguments": []
+                  }
+                }
+              ],
+              "kind": "await using"
+            }
+          ],
+          "directives": []
+        }
+      },
+      {
+        "type": "FunctionDeclaration",
+        "start":158,"end":213,"loc":{"start":{"line":10,"column":0,"index":158},"end":{"line":12,"column":1,"index":213}},
+        "id": {
+          "type": "Identifier",
+          "start":173,"end":174,"loc":{"start":{"line":10,"column":15,"index":173},"end":{"line":10,"column":16,"index":174},"identifierName":"f"},
+          "name": "f"
+        },
+        "generator": false,
+        "async": true,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":177,"end":213,"loc":{"start":{"line":10,"column":19,"index":177},"end":{"line":12,"column":1,"index":213}},
+          "body": [
+            {
+              "type": "ForOfStatement",
+              "start":181,"end":211,"loc":{"start":{"line":11,"column":2,"index":181},"end":{"line":11,"column":32,"index":211}},
+              "await": false,
+              "left": {
+                "type": "VariableDeclaration",
+                "start":186,"end":203,"loc":{"start":{"line":11,"column":7,"index":186},"end":{"line":11,"column":24,"index":203}},
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start":198,"end":203,"loc":{"start":{"line":11,"column":19,"index":198},"end":{"line":11,"column":24,"index":203}},
+                    "id": {
+                      "type": "Identifier",
+                      "start":198,"end":203,"loc":{"start":{"line":11,"column":19,"index":198},"end":{"line":11,"column":24,"index":203},"identifierName":"await"},
+                      "name": "await"
+                    },
+                    "init": null
+                  }
+                ],
+                "kind": "await using"
+              },
+              "right": {
+                "type": "ArrayExpression",
+                "start":207,"end":209,"loc":{"start":{"line":11,"column":28,"index":207},"end":{"line":11,"column":30,"index":209}},
+                "elements": []
+              },
+              "body": {
+                "type": "EmptyStatement",
+                "start":210,"end":211,"loc":{"start":{"line":11,"column":31,"index":210},"end":{"line":11,"column":32,"index":211}}
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

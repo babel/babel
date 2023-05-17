@@ -1,0 +1,61 @@
+{
+  "type": "File",
+  "start":0,"end":47,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":47}},
+  "errors": [
+    "SyntaxError: 'let' is not allowed to be used as a name in 'let' or 'const' declarations. (2:14)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":47,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":47}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":47,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":47}},
+        "id": {
+          "type": "Identifier",
+          "start":15,"end":16,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":16,"index":16},"identifierName":"f"},
+          "name": "f"
+        },
+        "generator": false,
+        "async": true,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":19,"end":47,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":3,"column":1,"index":47}},
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "start":23,"end":45,"loc":{"start":{"line":2,"column":2,"index":23},"end":{"line":2,"column":24,"index":45}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":35,"end":44,"loc":{"start":{"line":2,"column":14,"index":35},"end":{"line":2,"column":23,"index":44}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":35,"end":38,"loc":{"start":{"line":2,"column":14,"index":35},"end":{"line":2,"column":17,"index":38},"identifierName":"let"},
+                    "name": "let"
+                  },
+                  "init": {
+                    "type": "CallExpression",
+                    "start":41,"end":44,"loc":{"start":{"line":2,"column":20,"index":41},"end":{"line":2,"column":23,"index":44}},
+                    "callee": {
+                      "type": "Identifier",
+                      "start":41,"end":42,"loc":{"start":{"line":2,"column":20,"index":41},"end":{"line":2,"column":21,"index":42},"identifierName":"h"},
+                      "name": "h"
+                    },
+                    "arguments": []
+                  }
+                }
+              ],
+              "kind": "await using"
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

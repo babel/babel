@@ -1,0 +1,42 @@
+{
+  "type": "File",
+  "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+  "errors": [
+    "SyntaxError: 'await using' is only allowed within async functions and at the top levels of modules. (1:0)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":12,"end":21,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":21,"index":21}},
+            "id": {
+              "type": "Identifier",
+              "start":12,"end":13,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":13,"index":13},"identifierName":"x"},
+              "name": "x"
+            },
+            "init": {
+              "type": "CallExpression",
+              "start":16,"end":21,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":21,"index":21}},
+              "callee": {
+                "type": "Identifier",
+                "start":16,"end":19,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":19,"index":19},"identifierName":"bar"},
+                "name": "bar"
+              },
+              "arguments": []
+            }
+          }
+        ],
+        "kind": "await using"
+      }
+    ],
+    "directives": []
+  }
+}

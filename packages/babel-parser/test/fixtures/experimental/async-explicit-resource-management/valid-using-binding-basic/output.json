@@ -1,0 +1,58 @@
+{
+  "type": "File",
+  "start":0,"end":57,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":57}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":57,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":57}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":57,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":57}},
+        "id": {
+          "type": "Identifier",
+          "start":15,"end":16,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":16,"index":16},"identifierName":"f"},
+          "name": "f"
+        },
+        "generator": false,
+        "async": true,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":19,"end":57,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":3,"column":1,"index":57}},
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "start":23,"end":55,"loc":{"start":{"line":2,"column":2,"index":23},"end":{"line":2,"column":34,"index":55}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":35,"end":54,"loc":{"start":{"line":2,"column":14,"index":35},"end":{"line":2,"column":33,"index":54}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":35,"end":40,"loc":{"start":{"line":2,"column":14,"index":35},"end":{"line":2,"column":19,"index":40},"identifierName":"basic"},
+                    "name": "basic"
+                  },
+                  "init": {
+                    "type": "CallExpression",
+                    "start":43,"end":54,"loc":{"start":{"line":2,"column":22,"index":43},"end":{"line":2,"column":33,"index":54}},
+                    "callee": {
+                      "type": "Identifier",
+                      "start":43,"end":52,"loc":{"start":{"line":2,"column":22,"index":43},"end":{"line":2,"column":31,"index":52},"identifierName":"getReader"},
+                      "name": "getReader"
+                    },
+                    "arguments": []
+                  }
+                }
+              ],
+              "kind": "await using"
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

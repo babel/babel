@@ -10,7 +10,6 @@ import {
 import ExpressionParser from "./expression";
 import { Errors } from "../parse-error";
 import { isIdentifierChar, isIdentifierStart } from "../util/identifier";
-import { lineBreak } from "../util/whitespace";
 import * as charCodes from "charcodes";
 import {
   BIND_CLASS,
@@ -349,6 +348,19 @@ export default abstract class StatementParser extends ExpressionParser {
     }
   }
 
+  startsAwaitUsing(): boolean {
+    let next = this.nextTokenInLineStart();
+    if (this.isUnparsedContextual(next, "using")) {
+      next = this.nextTokenInLineStartSince(next + 5);
+      const nextCh = this.codePointAtPos(next);
+      if (this.chStartsBindingIdentifier(nextCh, next)) {
+        this.expectPlugin("explicitResourceManagement");
+        return true;
+      }
+    }
+    return false;
+  }
+
   // https://tc39.es/ecma262/#prod-ModuleItem
   parseModuleItem(this: Parser) {
     return this.parseStatementLike(
@@ -483,6 +495,23 @@ export default abstract class StatementParser extends ExpressionParser {
       case tt._try:
         return this.parseTryStatement(node as Undone<N.TryStatement>);
 
+      case tt._await:
+        // [+Await] await [no LineTerminator here] using [no LineTerminator here] BindingList[+Using]
+        if (!this.state.containsEsc && this.startsAwaitUsing()) {
+          if (!this.isAwaitAllowed()) {
+            this.raise(Errors.AwaitUsingNotInAsyncContext, { at: node });
+          } else if (!allowDeclaration) {
+            this.raise(Errors.UnexpectedLexicalDeclaration, {
+              at: node,
+            });
+          }
+          this.next(); // eat 'await'
+          return this.parseVarStatement(
+            node as Undone<N.VariableDeclaration>,
+            "await using",
+          );
+        }
+        break;
       case tt._using:
         // using [no LineTerminator here] BindingList[+Using]
         if (
@@ -913,31 +942,49 @@ export default abstract class StatementParser extends ExpressionParser {
     }
 
     const startsWithLet = this.isContextual(tt._let);
-    const startsWithUsing = this.isContextual(tt._using);
-    const isLetOrUsing =
-      (startsWithLet && this.hasFollowingBindingAtom()) ||
-      (startsWithUsing && this.startsUsingForOf());
-    if (this.match(tt._var) || this.match(tt._const) || isLetOrUsing) {
-      const initNode = this.startNode<N.VariableDeclaration>();
-      const kind = this.state.value;
-      this.next();
-      this.parseVar(initNode, true, kind);
-      const init = this.finishNode(initNode, "VariableDeclaration");
+    {
+      const startsWithAwaitUsing =
+        this.isContextual(tt._await) && this.startsAwaitUsing();
+      const starsWithUsingDeclaration =
+        startsWithAwaitUsing ||
+        (this.isContextual(tt._using) && this.startsUsingForOf());
+      const isLetOrUsing =
+        (startsWithLet && this.hasFollowingBindingAtom()) ||
+        starsWithUsingDeclaration;
 
-      const isForIn = this.match(tt._in);
-      if (isForIn && startsWithUsing) {
-        this.raise(Errors.ForInUsing, { at: init });
+      if (this.match(tt._var) || this.match(tt._const) || isLetOrUsing) {
+        const initNode = this.startNode<N.VariableDeclaration>();
+        let kind;
+        if (startsWithAwaitUsing) {
+          kind = "await using";
+          if (!this.isAwaitAllowed()) {
+            this.raise(Errors.AwaitUsingNotInAsyncContext, {
+              at: this.state.startLoc,
+            });
+          }
+          this.next(); // eat 'await'
+        } else {
+          kind = this.state.value;
+        }
+        this.next();
+        this.parseVar(initNode, true, kind);
+        const init = this.finishNode(initNode, "VariableDeclaration");
+
+        const isForIn = this.match(tt._in);
+        if (isForIn && starsWithUsingDeclaration) {
+          this.raise(Errors.ForInUsing, { at: init });
+        }
+        if (
+          (isForIn || this.isContextual(tt._of)) &&
+          init.declarations.length === 1
+        ) {
+          return this.parseForIn(node as Undone<N.ForInOf>, init, awaitAt);
+        }
+        if (awaitAt !== null) {
+          this.unexpected(awaitAt);
+        }
+        return this.parseFor(node as Undone<N.ForStatement>, init);
       }
-      if (
-        (isForIn || this.isContextual(tt._of)) &&
-        init.declarations.length === 1
-      ) {
-        return this.parseForIn(node as Undone<N.ForInOf>, init, awaitAt);
-      }
-      if (awaitAt !== null) {
-        this.unexpected(awaitAt);
-      }
-      return this.parseFor(node as Undone<N.ForStatement>, init);
     }
 
     // Check whether the first token is possibly a contextual keyword, so that
@@ -1159,7 +1206,7 @@ export default abstract class StatementParser extends ExpressionParser {
   parseVarStatement(
     this: Parser,
     node: Undone<N.VariableDeclaration>,
-    kind: "var" | "let" | "const" | "using",
+    kind: "var" | "let" | "const" | "using" | "await using",
     allowMissingInitializer: boolean = false,
   ): N.VariableDeclaration {
     this.next();
@@ -1492,7 +1539,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this: Parser,
     node: Undone<N.VariableDeclaration>,
     isFor: boolean,
-    kind: "var" | "let" | "const" | "using",
+    kind: "var" | "let" | "const" | "using" | "await using",
     allowMissingInitializer: boolean = false,
   ): Undone<N.VariableDeclaration> {
     const declarations: N.VariableDeclarator[] = (node.declarations = []);
@@ -1534,7 +1581,7 @@ export default abstract class StatementParser extends ExpressionParser {
   parseVarId(
     this: Parser,
     decl: Undone<N.VariableDeclarator>,
-    kind: "var" | "let" | "const" | "using",
+    kind: "var" | "let" | "const" | "using" | "await using",
   ): void {
     const id = this.parseBindingAtom();
     this.checkLVal(id, {
@@ -2458,11 +2505,8 @@ export default abstract class StatementParser extends ExpressionParser {
 
   isAsyncFunction(): boolean {
     if (!this.isContextual(tt._async)) return false;
-    const next = this.nextTokenStart();
-    return (
-      !lineBreak.test(this.input.slice(this.state.pos, next)) &&
-      this.isUnparsedContextual(next, "function")
-    );
+    const next = this.nextTokenInLineStart();
+    return this.isUnparsedContextual(next, "function");
   }
 
   parseExportDefaultExpression(this: Parser): N.Expression | N.Declaration {

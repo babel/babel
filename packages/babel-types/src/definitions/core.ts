@@ -1155,6 +1155,8 @@ defineType("VariableDeclaration", {
         "const",
         // https://github.com/tc39/proposal-explicit-resource-management
         "using",
+        // https://github.com/tc39/proposal-async-explicit-resource-management
+        "await using",
       ),
     },
     declarations: {
