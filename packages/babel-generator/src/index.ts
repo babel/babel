@@ -73,6 +73,7 @@ function normalizeOptions(
     },
     recordAndTupleSyntaxType: opts.recordAndTupleSyntaxType,
     topicToken: opts.topicToken,
+    importAttributesKeyword: opts.importAttributesKeyword,
   };
 
   if (!process.env.BABEL_8_BREAKING) {
@@ -218,11 +219,20 @@ export interface GeneratorOptions {
    * For use with the recordAndTuple token.
    */
   recordAndTupleSyntaxType?: RecordAndTuplePluginOptions["syntaxType"];
+
   /**
    * For use with the Hack-style pipe operator.
    * Changes what token is used for pipe bodies’ topic references.
    */
   topicToken?: PipelineOperatorPluginOptions["topicToken"];
+
+  /**
+   * The import attributes syntax style:
+   * - "with"        : `import { a } from "b" with { type: "json" };`
+   * - "assert"      : `import { a } from "b" assert { type: "json" };`
+   * - "with-legacy" : `import { a } from "b" with type: "json";`
+   */
+  importAttributesKeyword?: "with" | "assert" | "with-legacy";
 }
 
 export interface GeneratorResult {

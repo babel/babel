@@ -967,6 +967,12 @@ export default abstract class ExpressionParser extends LValParser {
     );
   }
 
+  expectImportAttributesPlugin() {
+    if (!this.hasPlugin("importAssertions")) {
+      this.expectPlugin("importAttributes");
+    }
+  }
+
   finishCallExpression<T extends N.CallExpression | N.OptionalCallExpression>(
     node: Undone<T>,
     optional: boolean,
@@ -974,10 +980,10 @@ export default abstract class ExpressionParser extends LValParser {
     if (node.callee.type === "Import") {
       if (node.arguments.length === 2) {
         if (process.env.BABEL_8_BREAKING) {
-          this.expectPlugin("importAssertions");
+          this.expectImportAttributesPlugin();
         } else {
           if (!this.hasPlugin("moduleAttributes")) {
-            this.expectPlugin("importAssertions");
+            this.expectImportAttributesPlugin();
           }
         }
       }
@@ -985,6 +991,7 @@ export default abstract class ExpressionParser extends LValParser {
         this.raise(Errors.ImportCallArity, {
           at: node,
           maxArgumentCount:
+            this.hasPlugin("importAttributes") ||
             this.hasPlugin("importAssertions") ||
             this.hasPlugin("moduleAttributes")
               ? 2
@@ -1025,6 +1032,7 @@ export default abstract class ExpressionParser extends LValParser {
         if (this.match(close)) {
           if (
             dynamicImport &&
+            !this.hasPlugin("importAttributes") &&
             !this.hasPlugin("importAssertions") &&
             !this.hasPlugin("moduleAttributes")
           ) {

@@ -22,7 +22,8 @@ export type Plugin =
   | "importMeta"
   | "jsx"
   | "logicalAssignment"
-  | "importAssertions"
+  | "importAssertions" // deprecated
+  | "importAttributes"
   | "importReflection"
   | "moduleBlocks"
   | "moduleStringNames"
@@ -43,6 +44,7 @@ export type Plugin =
 export type ParserPluginWithOptions =
   | ["decorators", DecoratorsPluginOptions]
   | ["estree", { classFeatures?: boolean }]
+  | ["importAttributes", { deprecatedAssertSyntax: boolean }]
   // @deprecated
   | ["moduleAttributes", { version: "may-2020" }]
   | ["pipelineOperator", PipelineOperatorPluginOptions]

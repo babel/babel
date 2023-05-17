@@ -174,12 +174,15 @@ export function validatePlugins(plugins: PluginList) {
   if (hasPlugin(plugins, "moduleAttributes")) {
     if (process.env.BABEL_8_BREAKING) {
       throw new Error(
-        "`moduleAttributes` has been removed in Babel 8, please use `importAssertions` parser plugin, or `@babel/plugin-syntax-import-assertions`.",
+        "`moduleAttributes` has been removed in Babel 8, please use `importAttributes` parser plugin, or `@babel/plugin-syntax-import-attributes`.",
       );
     } else {
-      if (hasPlugin(plugins, "importAssertions")) {
+      if (
+        hasPlugin(plugins, "importAssertions") ||
+        hasPlugin(plugins, "importAttributes")
+      ) {
         throw new Error(
-          "Cannot combine importAssertions and moduleAttributes plugins.",
+          "Cannot combine importAssertions, importAttributes and moduleAttributes plugins.",
         );
       }
       const moduleAttributesVersionPluginOption = getPluginOption(
@@ -195,6 +198,14 @@ export function validatePlugins(plugins: PluginList) {
         );
       }
     }
+  }
+  if (
+    hasPlugin(plugins, "importAssertions") &&
+    hasPlugin(plugins, "importAttributes")
+  ) {
+    throw new Error(
+      "Cannot combine importAssertions and importAttributes plugins.",
+    );
   }
 
   if (

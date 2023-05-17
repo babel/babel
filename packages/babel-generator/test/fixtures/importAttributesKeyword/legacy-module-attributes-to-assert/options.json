@@ -1,0 +1,6 @@
+{
+  "plugins": [["moduleAttributes", { "version": "may-2020" }]],
+  "importAttributesKeyword": "assert",
+  "expectedReParseError": true,
+  "BABEL_8_BREAKING": false
+}
