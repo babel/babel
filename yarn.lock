@@ -2033,6 +2033,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-syntax-unicode-sets-regex@npm:^7.18.6":
+  version: 7.18.6
+  resolution: "@babel/plugin-syntax-unicode-sets-regex@npm:7.18.6"
+  dependencies:
+    "@babel/helper-create-regexp-features-plugin": ^7.18.6
+    "@babel/helper-plugin-utils": ^7.18.6
+  peerDependencies:
+    "@babel/core": ^7.0.0
+  checksum: a651d700fe63ff0ddfd7186f4ebc24447ca734f114433139e3c027bc94a900d013cf1ef2e2db8430425ba542e39ae160c3b05f06b59fd4656273a3df97679e9c
+  languageName: node
+  linkType: hard
+
 "@babel/plugin-transform-arrow-functions@npm:^7.18.6":
   version: 7.20.7
   resolution: "@babel/plugin-transform-arrow-functions@npm:7.20.7"
@@ -3481,6 +3493,7 @@ __metadata:
     "@babel/plugin-syntax-optional-chaining": ^7.8.3
     "@babel/plugin-syntax-private-property-in-object": ^7.14.5
     "@babel/plugin-syntax-top-level-await": ^7.14.5
+    "@babel/plugin-syntax-unicode-sets-regex": ^7.18.6
     "@babel/plugin-transform-arrow-functions": "workspace:^"
     "@babel/plugin-transform-async-generator-functions": "workspace:^"
     "@babel/plugin-transform-async-to-generator": "workspace:^"
@@ -3528,6 +3541,7 @@ __metadata:
     "@babel/plugin-transform-unicode-escapes": "workspace:^"
     "@babel/plugin-transform-unicode-property-regex": "workspace:^"
     "@babel/plugin-transform-unicode-regex": "workspace:^"
+    "@babel/plugin-transform-unicode-sets-regex": "workspace:^"
     "@babel/preset-modules": ^0.1.5
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"

@@ -64,6 +64,7 @@ import transformTemplateLiterals from "@babel/plugin-transform-template-literals
 import transformTypeofSymbol from "@babel/plugin-transform-typeof-symbol";
 import transformUnicodeEscapes from "@babel/plugin-transform-unicode-escapes";
 import transformUnicodeRegex from "@babel/plugin-transform-unicode-regex";
+import transformUnicodeSetsRegex from "@babel/plugin-transform-unicode-sets-regex";
 
 import bugfixAsyncArrowsInClass from "@babel/preset-modules/lib/plugins/transform-async-arrows-in-class";
 import bugfixEdgeDefaultParameters from "@babel/preset-modules/lib/plugins/transform-edge-default-parameters";
@@ -102,6 +103,7 @@ export default {
   "syntax-optional-chaining": () => syntaxOptionalChaining,
   "syntax-private-property-in-object": () => syntaxPrivatePropertyInObject,
   "syntax-top-level-await": () => syntaxTopLevelAwait,
+  "syntax-unicode-sets-regex": () => syntaxUnicodeSetsRegex,
   "transform-arrow-functions": () => transformArrowFunctions,
   "transform-async-generator-functions": () => proposalAsyncGeneratorFunctions,
   "transform-async-to-generator": () => transformAsyncToGenerator,
@@ -153,6 +155,7 @@ export default {
   "transform-unicode-escapes": () => transformUnicodeEscapes,
   "transform-unicode-property-regex": () => proposalUnicodePropertyRegex,
   "transform-unicode-regex": () => transformUnicodeRegex,
+  "transform-unicode-sets-regex": () => transformUnicodeSetsRegex,
 };
 
 export const minVersions = {
