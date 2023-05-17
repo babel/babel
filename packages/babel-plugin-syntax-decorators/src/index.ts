@@ -10,7 +10,7 @@ export interface Options {
     | "2021-12"
     | "2022-03"
     | "2023-01"
-    | "2023-03";
+    | "2023-05";
   // TODO(Babel 8): Remove
   decoratorsBeforeExport?: boolean;
 }
@@ -24,11 +24,11 @@ export default declare((api, options: Options) => {
     if (version === undefined) {
       throw new Error(
         "The decorators plugin requires a 'version' option, whose value must be one of: " +
-          "'2023-03', '2023-01', '2022-03', '2021-12', '2018-09', or 'legacy'.",
+          "'2023-05', '2023-01', '2022-03', '2021-12', '2018-09', or 'legacy'.",
       );
     }
     if (
-      version !== "2023-03" &&
+      version !== "2023-05" &&
       version !== "2023-01" &&
       version !== "2022-03" &&
       version !== "2021-12" &&
@@ -63,7 +63,7 @@ export default declare((api, options: Options) => {
     if (version === undefined) {
       version = legacy ? "legacy" : "2018-09";
     } else if (
-      version !== "2023-03" &&
+      version !== "2023-05" &&
       version !== "2023-01" &&
       version !== "2022-03" &&
       version !== "2021-12" &&
@@ -112,7 +112,7 @@ export default declare((api, options: Options) => {
           "decoratorAutoAccessors",
         );
       } else {
-        if (version === "2023-01" || version === "2023-03") {
+        if (version === "2023-01" || version === "2023-05") {
           parserOpts.plugins.push(
             ["decorators", { allowCallParenthesized: false }],
             "decoratorAutoAccessors",

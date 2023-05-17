@@ -1,6 +1,0 @@
-{
-  "plugins": [["proposal-decorators", { "version": "2023-03" }]],
-  "assumptions": {
-    "constantSuper": true
-  }
-}

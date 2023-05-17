@@ -7,7 +7,7 @@ import {
   FEATURES,
 } from "@babel/helper-create-class-features-plugin";
 import legacyVisitor from "./transformer-legacy";
-import transformer2022_03 from "./transformer-2023-03";
+import transformer2023_05 from "./transformer-2023-05";
 import type { Options as SyntaxOptions } from "@babel/plugin-syntax-decorators";
 
 interface Options extends SyntaxOptions {
@@ -41,9 +41,9 @@ export default declare((api, options: Options) => {
     version === "2021-12" ||
     version === "2022-03" ||
     version === "2023-01" ||
-    version === "2023-03"
+    version === "2023-05"
   ) {
-    return transformer2022_03(api, options, version);
+    return transformer2023_05(api, options, version);
   } else if (!process.env.BABEL_8_BREAKING) {
     api.assertVersion("^7.0.2");
     return createClassFeaturePlugin({
