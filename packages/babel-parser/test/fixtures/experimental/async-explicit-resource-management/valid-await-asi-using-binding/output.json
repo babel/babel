@@ -1,0 +1,55 @@
+{
+  "type": "File",
+  "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":32}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":32}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "BlockStatement",
+        "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":32}},
+        "body": [
+          {
+            "type": "ExpressionStatement",
+            "start":4,"end":9,"loc":{"start":{"line":2,"column":2,"index":4},"end":{"line":2,"column":7,"index":9}},
+            "expression": {
+              "type": "Identifier",
+              "start":4,"end":9,"loc":{"start":{"line":2,"column":2,"index":4},"end":{"line":2,"column":7,"index":9},"identifierName":"await"},
+              "name": "await"
+            }
+          },
+          {
+            "type": "VariableDeclaration",
+            "start":12,"end":30,"loc":{"start":{"line":3,"column":2,"index":12},"end":{"line":3,"column":20,"index":30}},
+            "declarations": [
+              {
+                "type": "VariableDeclarator",
+                "start":18,"end":29,"loc":{"start":{"line":3,"column":8,"index":18},"end":{"line":3,"column":19,"index":29}},
+                "id": {
+                  "type": "Identifier",
+                  "start":18,"end":23,"loc":{"start":{"line":3,"column":8,"index":18},"end":{"line":3,"column":13,"index":23},"identifierName":"using"},
+                  "name": "using"
+                },
+                "init": {
+                  "type": "CallExpression",
+                  "start":26,"end":29,"loc":{"start":{"line":3,"column":16,"index":26},"end":{"line":3,"column":19,"index":29}},
+                  "callee": {
+                    "type": "Identifier",
+                    "start":26,"end":27,"loc":{"start":{"line":3,"column":16,"index":26},"end":{"line":3,"column":17,"index":27},"identifierName":"h"},
+                    "name": "h"
+                  },
+                  "arguments": []
+                }
+              }
+            ],
+            "kind": "using"
+          }
+        ],
+        "directives": []
+      }
+    ],
+    "directives": []
+  }
+}

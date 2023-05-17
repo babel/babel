@@ -1,0 +1,68 @@
+{
+  "type": "File",
+  "start":0,"end":62,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":62}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":62,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":62}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":62,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":62}},
+        "id": {
+          "type": "Identifier",
+          "start":15,"end":16,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":16,"index":16},"identifierName":"f"},
+          "name": "f"
+        },
+        "generator": false,
+        "async": true,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":19,"end":62,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":3,"column":1,"index":62}},
+          "body": [
+            {
+              "type": "ForStatement",
+              "start":23,"end":60,"loc":{"start":{"line":2,"column":2,"index":23},"end":{"line":2,"column":39,"index":60}},
+              "init": {
+                "type": "VariableDeclaration",
+                "start":28,"end":56,"loc":{"start":{"line":2,"column":7,"index":28},"end":{"line":2,"column":35,"index":56}},
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start":40,"end":56,"loc":{"start":{"line":2,"column":19,"index":40},"end":{"line":2,"column":35,"index":56}},
+                    "id": {
+                      "type": "Identifier",
+                      "start":40,"end":45,"loc":{"start":{"line":2,"column":19,"index":40},"end":{"line":2,"column":24,"index":45},"identifierName":"basic"},
+                      "name": "basic"
+                    },
+                    "init": {
+                      "type": "CallExpression",
+                      "start":48,"end":56,"loc":{"start":{"line":2,"column":27,"index":48},"end":{"line":2,"column":35,"index":56}},
+                      "callee": {
+                        "type": "Identifier",
+                        "start":48,"end":54,"loc":{"start":{"line":2,"column":27,"index":48},"end":{"line":2,"column":33,"index":54},"identifierName":"reader"},
+                        "name": "reader"
+                      },
+                      "arguments": []
+                    }
+                  }
+                ],
+                "kind": "await using"
+              },
+              "test": null,
+              "update": null,
+              "body": {
+                "type": "EmptyStatement",
+                "start":59,"end":60,"loc":{"start":{"line":2,"column":38,"index":59},"end":{"line":2,"column":39,"index":60}}
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}
