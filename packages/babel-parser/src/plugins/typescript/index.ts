@@ -2281,6 +2281,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       );
       if (node.params.length === 0) {
         this.raise(TSErrors.EmptyTypeArguments, { at: node });
+      } else if (!this.state.inType && this.curContext() === tc.brace) {
+        // rescan `>` when we are no longer in type context and JSX parsing context
+        // since it was tokenized when `inType` is `true`.
+        this.reScan_lt_gt();
       }
       this.expect(tt.gt);
       return this.finishNode(node, "TSTypeParameterInstantiation");
