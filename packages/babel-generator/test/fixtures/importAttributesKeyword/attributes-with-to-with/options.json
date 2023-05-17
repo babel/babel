@@ -1,0 +1,4 @@
+{
+  "plugins": ["importAttributes"],
+  "importAttributesKeyword": "with"
+}

@@ -236,6 +236,14 @@ module.exports = function (api) {
             "flag-IS_STANDALONE",
           ],
 
+          [
+            pluginToggleBooleanFlag,
+            {
+              name: "process.env.IS_PUBLISH",
+              value: bool(process.env.IS_PUBLISH),
+            },
+          ],
+
           process.env.STRIP_BABEL_8_FLAG && [
             pluginToggleBooleanFlag,
             {

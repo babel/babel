@@ -14,6 +14,7 @@ import syntaxFlow from "@babel/plugin-syntax-flow";
 import syntaxFunctionBind from "@babel/plugin-syntax-function-bind";
 import syntaxFunctionSent from "@babel/plugin-syntax-function-sent";
 import syntaxImportAssertions from "@babel/plugin-syntax-import-assertions";
+import syntaxImportAttributes from "@babel/plugin-syntax-import-attributes";
 import syntaxImportReflection from "@babel/plugin-syntax-import-reflection";
 import syntaxModuleBlocks from "@babel/plugin-syntax-module-blocks";
 import syntaxJsx from "@babel/plugin-syntax-jsx";
@@ -117,6 +118,7 @@ export {
   syntaxFunctionBind,
   syntaxFunctionSent,
   syntaxImportAssertions,
+  syntaxImportAttributes,
   syntaxImportReflection,
   syntaxModuleBlocks,
   syntaxJsx,
@@ -221,6 +223,7 @@ export const all: { [k: string]: any } = {
   "syntax-function-bind": syntaxFunctionBind,
   "syntax-function-sent": syntaxFunctionSent,
   "syntax-import-assertions": syntaxImportAssertions,
+  "syntax-import-attributes": syntaxImportAttributes,
   "syntax-import-reflection": syntaxImportReflection,
   "syntax-module-blocks": syntaxModuleBlocks,
   "syntax-jsx": syntaxJsx,

@@ -77,6 +77,13 @@ export type Format = {
    * @deprecated Removed in Babel 8
    */
   decoratorsBeforeExport?: boolean;
+  /**
+   * The import attributes syntax style:
+   * - "with"        : `import { a } from "b" with { type: "json" };`
+   * - "assert"      : `import { a } from "b" assert { type: "json" };`
+   * - "with-legacy" : `import { a } from "b" with type: "json";`
+   */
+  importAttributesKeyword?: "with" | "assert" | "with-legacy";
 };
 
 interface AddNewlinesOptions {
