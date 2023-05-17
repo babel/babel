@@ -43,8 +43,8 @@ function logMethodDecoratorRun(a, b, c, d) {
 @logClassDecoratorRun(0, 19, 21)
 @logClassDecoratorRun(1, 18, 20)
 class A {
-  @logAccessorDecoratorRun(2, 11, 23, 31)
-  @logAccessorDecoratorRun(3, 10, 22, 30)
+  @logAccessorDecoratorRun(2, 11, 23, 30)
+  @logAccessorDecoratorRun(3, 10, 22, 31)
   accessor a;
 
   @logMethodDecoratorRun(4, 13, 25, 35)
@@ -55,8 +55,8 @@ class A {
   @logMethodDecoratorRun(7, 14, 26, 36)
   #c() {};
 
-  @logAccessorDecoratorRun(8, 17, 29, 33)
-  @logAccessorDecoratorRun(9, 16, 28, 32)
+  @logAccessorDecoratorRun(8, 17, 29, 32)
+  @logAccessorDecoratorRun(9, 16, 28, 33)
   accessor #d;
 
   constructor() {

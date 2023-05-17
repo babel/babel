@@ -25,20 +25,20 @@ function logAccessorDecoratorRun(a, b, c, d) {
 @logClassDecoratorRun(0, 19, 29)
 @logClassDecoratorRun(1, 18, 28)
 class A {
-  @logAccessorDecoratorRun(2, 15, 31, 35)
-  @logAccessorDecoratorRun(3, 14, 30, 34)
+  @logAccessorDecoratorRun(2, 15, 31, 34)
+  @logAccessorDecoratorRun(3, 14, 30, 35)
   accessor a;
 
-  @logAccessorDecoratorRun(4, 11, 21, 25)
-  @logAccessorDecoratorRun(5, 10, 20, 24)
+  @logAccessorDecoratorRun(4, 11, 21, 24)
+  @logAccessorDecoratorRun(5, 10, 20, 25)
   static accessor b;
 
-  @logAccessorDecoratorRun(6, 13, 23, 27)
-  @logAccessorDecoratorRun(7, 12, 22, 26)
+  @logAccessorDecoratorRun(6, 13, 23, 26)
+  @logAccessorDecoratorRun(7, 12, 22, 27)
   static accessor #c;
 
-  @logAccessorDecoratorRun(8, 17, 33, 37)
-  @logAccessorDecoratorRun(9, 16, 32, 36)
+  @logAccessorDecoratorRun(8, 17, 33, 36)
+  @logAccessorDecoratorRun(9, 16, 32, 37)
   accessor #d;
 }
 

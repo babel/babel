@@ -38,12 +38,12 @@ function logFieldDecoratorRun(a, b) {
 @logClassDecoratorRun(0, 11, 13)
 @logClassDecoratorRun(1, 10, 12)
 class A {
-  @logAccessorDecoratorRun(2, 7, 15, 19, 22, 25)
-  @logAccessorDecoratorRun(3, 6, 14, 18, 23, 24)
+  @logAccessorDecoratorRun(2, 7, 15, 18, 22, 25)
+  @logAccessorDecoratorRun(3, 6, 14, 19, 23, 24)
   accessor a;
 
-  @logAccessorDecoratorRun(4, 9, 17, 21, 26, 29)
-  @logAccessorDecoratorRun(5, 8, 16, 20, 27, 28)
+  @logAccessorDecoratorRun(4, 9, 17, 20, 26, 29)
+  @logAccessorDecoratorRun(5, 8, 16, 21, 27, 28)
   accessor #b;
 
   constructor() {

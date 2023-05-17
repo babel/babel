@@ -319,7 +319,7 @@ function applyMemberDec(
       init = function (instance, init) {
         var value = init;
 
-        for (var i = 0; i < ownInitializers.length; i++) {
+        for (var i = ownInitializers.length - 1; i >= 0; i--) {
           value = ownInitializers[i].call(instance, value);
         }
 
