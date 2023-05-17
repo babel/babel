@@ -148,6 +148,7 @@ describe("normalize-options", () => {
       expect(
         normalizeOptions({ include: ["proposal-.*-regex"] }).include,
       ).toEqual([
+        "transform-unicode-sets-regex",
         "transform-dotall-regex",
         "transform-unicode-property-regex",
         "transform-named-capturing-groups-regex",
@@ -158,6 +159,7 @@ describe("normalize-options", () => {
       expect(
         normalizeOptions({ include: ["transform-.*-regex"] }).include,
       ).toEqual([
+        "transform-unicode-sets-regex",
         "transform-dotall-regex",
         "transform-unicode-property-regex",
         "transform-named-capturing-groups-regex",
