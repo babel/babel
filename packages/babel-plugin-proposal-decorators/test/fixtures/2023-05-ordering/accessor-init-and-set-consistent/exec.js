@@ -23,7 +23,6 @@ function timesFour({ set }) {
 class Foo {
   @minusTwo @timesFour accessor bar = 5;
 }
-debugger;
 const foo = new Foo();
 expect(foo.bar).toBe(12); // (5 - 2) * 4
 
