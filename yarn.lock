@@ -2237,19 +2237,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-syntax-unicode-sets-regex@workspace:packages/babel-plugin-syntax-unicode-sets-regex":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-syntax-unicode-sets-regex@workspace:packages/babel-plugin-syntax-unicode-sets-regex"
-  dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-create-regexp-features-plugin": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-  peerDependencies:
-    "@babel/core": ^7.0.0
-  languageName: unknown
-  linkType: soft
-
 "@babel/plugin-transform-arrow-functions@npm:^7.18.6":
   version: 7.20.7
   resolution: "@babel/plugin-transform-arrow-functions@npm:7.20.7"
