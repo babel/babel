@@ -246,6 +246,40 @@ export default class CommentsParser extends BaseParser {
     }
   }
 
+  /* eslint-disable no-irregular-whitespace */
+  /**
+   * Reset previous node leading comments. Used in import phase modifiers
+   * parsing. We parse `module` in `import module foo from ...` as an
+   * identifier but may reinterpret it into a phase modifier later. In this
+   * case the identifier is not part of the AST and we should sync the
+   * knowledge to commentStacks
+   *
+   * For example, when parsing
+   * ```
+   * import /* 1 *​/ module a from "a";
+   * ```
+   * the comment whitespace `/* 1 *​/` has trailing node Identifier(module). When
+   * we see that `module` is not a default import binding, we mark `/* 1 *​/` as
+   * inner comments of the ImportDeclaration. So `/* 1 *​/` should be detached from
+   * the Identifier node.
+   *
+   * @param node the last finished AST node _before_ current token
+   */
+  /* eslint-enable no-irregular-whitespace */
+  resetPreviousNodeLeadingComments(node: Node) {
+    const { commentStack } = this.state;
+    const { length } = commentStack;
+    if (length === 0) return;
+
+    for (let i = length - 1; i >= 0; i--) {
+      const commentWS = commentStack[i];
+      if (commentWS.trailingNode === node) {
+        commentWS.trailingNode = null;
+      }
+      if (commentWS.end < node.start) break;
+    }
+  }
+
   /**
    * Attach a node to the comment whitespaces right before/after
    * the given range.
