@@ -56,6 +56,7 @@ export type Validator = (
 export type FieldOptions = {
   default?: string | number | boolean | [];
   optional?: boolean;
+  deprecated?: boolean;
   validate?: Validator;
 };
 
@@ -277,7 +278,7 @@ const validTypeOpts = [
   "visitor",
   "validate",
 ];
-const validFieldKeys = ["default", "optional", "validate"];
+const validFieldKeys = ["default", "optional", "deprecated", "validate"];
 
 const store = {} as Record<string, DefineTypeOpts>;
 
@@ -317,6 +318,7 @@ export default function defineType(type: string, opts: DefineTypeOpts = {}) {
         fields[key] = {
           default: Array.isArray(def) ? [] : def,
           optional: field.optional,
+          deprecated: field.deprecated,
           validate: field.validate,
         };
       }

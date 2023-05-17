@@ -17,6 +17,14 @@
       },
       "type": "object"
     },
+    "ImportAttributesPluginOptions": {
+      "properties": {
+        "deprecatedAssertSyntax": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "PipelineOperatorPluginOptions": {
       "properties": {
         "proposal": {
@@ -88,6 +96,19 @@
           {
             "items": [
               {
+                "enum": ["importAttributes"],
+                "type": "string"
+              },
+              {
+                "$ref": "#/definitions/ImportAttributesPluginOptions"
+              }
+            ],
+            "additionalItems": false,
+            "type": "array"
+          },
+          {
+            "items": [
+              {
                 "enum": ["pipelineOperator"],
                 "type": "string"
               },
@@ -149,6 +170,7 @@
               "functionBind",
               "functionSent",
               "importAssertions",
+              "importAttributes",
               "importMeta",
               "importReflection",
               "jsx",

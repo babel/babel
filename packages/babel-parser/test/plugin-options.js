@@ -70,7 +70,7 @@ describe("plugin options", function () {
       expect(
         getParser("", ["moduleAttributes"]),
       ).toThrowErrorMatchingInlineSnapshot(
-        `"\`moduleAttributes\` has been removed in Babel 8, please use \`importAssertions\` parser plugin, or \`@babel/plugin-syntax-import-assertions\`."`,
+        `"\`moduleAttributes\` has been removed in Babel 8, please use \`importAttributes\` parser plugin, or \`@babel/plugin-syntax-import-attributes\`."`,
       );
     });
   });

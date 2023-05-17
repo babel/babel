@@ -2634,11 +2634,8 @@ export default abstract class StatementParser extends ExpressionParser {
     if (this.eatContextual(tt._from)) {
       node.source = this.parseImportSource();
       this.checkExport(node);
-      const assertions = this.maybeParseImportAssertions();
-      if (assertions) {
-        node.assertions = assertions;
-        this.checkJSONModuleImport(node);
-      }
+      this.maybeParseImportAttributes(node);
+      this.checkJSONModuleImport(node);
     } else if (expect) {
       this.unexpected();
     }
@@ -2983,19 +2980,7 @@ export default abstract class StatementParser extends ExpressionParser {
       this.expectContextual(tt._from);
     }
     node.source = this.parseImportSource();
-    // https://github.com/tc39/proposal-import-assertions
-    // parse module import assertions if the next token is `assert` or ignore
-    // and finish the ImportDeclaration node.
-    const assertions = this.maybeParseImportAssertions();
-    if (assertions) {
-      node.assertions = assertions;
-    } else if (!process.env.BABEL_8_BREAKING) {
-      const attributes = this.maybeParseModuleAttributes();
-      if (attributes) {
-        // @ts-expect-error attributes have been deprecated
-        node.attributes = attributes;
-      }
-    }
+    this.maybeParseImportAttributes(node);
     this.checkImportReflection(node);
     this.checkJSONModuleImport(node);
 
@@ -3043,9 +3028,11 @@ export default abstract class StatementParser extends ExpressionParser {
   /**
    * parse assert entries
    *
-   * @see {@link https://tc39.es/proposal-import-assertions/#prod-AssertEntries AssertEntries}
+   * @see {@link https://tc39.es/proposal-import-attributes/#prod-WithEntries WithEntries}
    */
-  parseAssertEntries(): N.ImportAttribute[] {
+  parseImportAttributes(): N.ImportAttribute[] {
+    this.expect(tt.braceL);
+
     const attrs = [];
     const attrNames = new Set();
 
@@ -3084,6 +3071,8 @@ export default abstract class StatementParser extends ExpressionParser {
       attrs.push(this.finishNode(node, "ImportAttribute"));
     } while (this.eat(tt.comma));
 
+    this.expect(tt.braceR);
+
     return attrs;
   }
 
@@ -3091,18 +3080,11 @@ export default abstract class StatementParser extends ExpressionParser {
    * parse module attributes
    * @deprecated It will be removed in Babel 8
    */
-  maybeParseModuleAttributes() {
-    if (this.match(tt._with) && !this.hasPrecedingLineBreak()) {
-      this.expectPlugin("moduleAttributes");
-      this.next();
-    } else {
-      if (this.hasPlugin("moduleAttributes")) return [];
-      return null;
-    }
-    const attrs = [];
+  parseModuleAttributes() {
+    const attrs: N.ImportAttribute[] = [];
     const attributes = new Set();
     do {
-      const node = this.startNode();
+      const node = this.startNode<N.ImportAttribute>();
       node.key = this.parseIdentifier(true);
 
       if (node.key.name !== "type") {
@@ -3125,28 +3107,74 @@ export default abstract class StatementParser extends ExpressionParser {
         });
       }
       node.value = this.parseStringLiteral(this.state.value);
-      this.finishNode(node, "ImportAttribute");
-      attrs.push(node);
+      attrs.push(this.finishNode(node, "ImportAttribute"));
     } while (this.eat(tt.comma));
 
     return attrs;
   }
 
-  maybeParseImportAssertions() {
-    // [no LineTerminator here] AssertClause
-    if (this.isContextual(tt._assert) && !this.hasPrecedingLineBreak()) {
-      this.expectPlugin("importAssertions");
-      this.next(); // eat `assert`
-    } else {
-      if (this.hasPlugin("importAssertions")) return [];
-      return null;
-    }
-    // https://tc39.es/proposal-import-assertions/#prod-AssertClause
-    this.eat(tt.braceL);
-    const attrs = this.parseAssertEntries();
-    this.eat(tt.braceR);
+  maybeParseImportAttributes(
+    node: Undone<N.ImportDeclaration | N.ExportNamedDeclaration>,
+  ) {
+    let attributes: N.ImportAttribute[];
+    let useWith = false;
 
-    return attrs;
+    // https://tc39.es/proposal-import-attributes/#prod-WithClause
+    if (this.match(tt._with)) {
+      if (
+        this.hasPrecedingLineBreak() &&
+        this.lookaheadCharCode() === charCodes.leftParenthesis
+      ) {
+        // This will be parsed as a with statement, and we will throw a
+        // better error about it not being supported in strict mode.
+        return;
+      }
+
+      this.next(); // eat `with`
+
+      if (!process.env.BABEL_8_BREAKING) {
+        if (this.hasPlugin("moduleAttributes")) {
+          attributes = this.parseModuleAttributes();
+        } else {
+          this.expectImportAttributesPlugin();
+          attributes = this.parseImportAttributes();
+        }
+      } else {
+        this.expectImportAttributesPlugin();
+        attributes = this.parseImportAttributes();
+      }
+      useWith = true;
+    } else if (this.isContextual(tt._assert) && !this.hasPrecedingLineBreak()) {
+      if (this.hasPlugin("importAttributes")) {
+        if (
+          this.getPluginOption("importAttributes", "deprecatedAssertSyntax") !==
+          true
+        ) {
+          this.raise(Errors.ImportAttributesUseAssert, {
+            at: this.state.startLoc,
+          });
+        }
+      } else {
+        this.expectOnePlugin(["importAttributes", "importAssertions"]);
+      }
+      this.next(); // eat `assert`
+      attributes = this.parseImportAttributes();
+    } else if (
+      this.hasPlugin("importAttributes") ||
+      this.hasPlugin("importAssertions")
+    ) {
+      attributes = [];
+    } else if (!process.env.BABEL_8_BREAKING) {
+      if (this.hasPlugin("moduleAttributes")) {
+        attributes = [];
+      } else return;
+    } else return;
+
+    if (!useWith && this.hasPlugin("importAssertions")) {
+      node.assertions = attributes;
+    } else {
+      node.attributes = attributes;
+    }
   }
 
   maybeParseDefaultImportSpecifier(node: Undone<N.ImportDeclaration>): boolean {

@@ -420,7 +420,10 @@ export default (superClass: typeof Parser) =>
       if (node.callee.type === "Import") {
         (node as N.Node as N.EstreeImportExpression).type = "ImportExpression";
         (node as N.Node as N.EstreeImportExpression).source = node.arguments[0];
-        if (this.hasPlugin("importAssertions")) {
+        if (
+          this.hasPlugin("importAttributes") ||
+          this.hasPlugin("importAssertions")
+        ) {
           (node as N.Node as N.EstreeImportExpression).attributes =
             node.arguments[1] ?? null;
         }

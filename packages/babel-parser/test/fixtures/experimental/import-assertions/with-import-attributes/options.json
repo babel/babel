@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    "importAttributes",
+    "importAssertions"
+  ],
+  "sourceType": "module",
+  "throws": "Cannot combine importAssertions and importAttributes plugins."
+}

@@ -51,7 +51,7 @@ Using plugins:
   transform-modules-commonjs
   transform-dynamic-import
   syntax-import-meta
-  syntax-import-assertions
+  syntax-import-attributes
 corejs2: `DEBUG` option
 
 Using targets: {

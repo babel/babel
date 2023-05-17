@@ -66,6 +66,7 @@
     "./packages/babel-plugin-syntax-function-bind/src/**/*.ts",
     "./packages/babel-plugin-syntax-function-sent/src/**/*.ts",
     "./packages/babel-plugin-syntax-import-assertions/src/**/*.ts",
+    "./packages/babel-plugin-syntax-import-attributes/src/**/*.ts",
     "./packages/babel-plugin-syntax-import-reflection/src/**/*.ts",
     "./packages/babel-plugin-syntax-jsx/src/**/*.ts",
     "./packages/babel-plugin-syntax-module-blocks/src/**/*.ts",
@@ -362,6 +363,9 @@
       ],
       "@babel/plugin-syntax-import-assertions": [
         "./packages/babel-plugin-syntax-import-assertions/src"
+      ],
+      "@babel/plugin-syntax-import-attributes": [
+        "./packages/babel-plugin-syntax-import-attributes/src"
       ],
       "@babel/plugin-syntax-import-reflection": [
         "./packages/babel-plugin-syntax-import-reflection/src"
