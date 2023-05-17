@@ -4,5 +4,5 @@
     "flow"
   ],
   "sourceType": "module",
-  "throws": "Unexpected token, expected \"{\" (1:14)"
+  "throws": "Unexpected token, expected \"from\" (1:21)"
 }

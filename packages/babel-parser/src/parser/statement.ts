@@ -1,6 +1,7 @@
 import type * as N from "../types";
 import {
   tokenIsIdentifier,
+  tokenIsKeywordOrIdentifier,
   tokenIsLoop,
   tokenIsTemplate,
   tt,
@@ -2984,7 +2985,7 @@ export default abstract class StatementParser extends ExpressionParser {
     const phaseIdentifier = this.parseIdentifier(true);
 
     const { type } = this.state;
-    const isImportPhase = tokenIsIdentifier(type)
+    const isImportPhase = tokenIsKeywordOrIdentifier(type)
       ? // OK: import <phase> x from "foo";
         // OK: import <phase> from from "foo";
         // NO: import <phase> from "foo";
@@ -3302,7 +3303,10 @@ export default abstract class StatementParser extends ExpressionParser {
         this.finishImportSpecifier(specifier, "ImportDefaultSpecifier"),
       );
       return true;
-    } else if (tokenIsIdentifier(this.state.type)) {
+    } else if (
+      // We allow keywords, and parseImportSpecifierLocal will report a recoverable error
+      tokenIsKeywordOrIdentifier(this.state.type)
+    ) {
       this.parseImportSpecifierLocal(
         node,
         this.startNode<N.ImportDefaultSpecifier>(),
