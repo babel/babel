@@ -174,12 +174,17 @@ const es2022 = {
   "transform-private-methods": "private class methods",
 };
 
+const es2024 = {
+  "transform-unicode-sets-regex": "RegExp `v` flag",
+};
+
 const shippedProposal = {};
 
 // Run plugins for modern features first
 module.exports = Object.assign(
   {},
   shippedProposal,
+  es2024,
   es2022,
   es2021,
   es2020,
