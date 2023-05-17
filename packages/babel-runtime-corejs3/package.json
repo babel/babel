@@ -125,6 +125,15 @@
       "./helpers/defineAccessor.js"
     ],
     "./helpers/esm/defineAccessor": "./helpers/esm/defineAccessor.js",
+    "./helpers/dispose": [
+      {
+        "node": "./helpers/dispose.js",
+        "import": "./helpers/esm/dispose.js",
+        "default": "./helpers/dispose.js"
+      },
+      "./helpers/dispose.js"
+    ],
+    "./helpers/esm/dispose": "./helpers/esm/dispose.js",
     "./helpers/iterableToArrayLimit": [
       {
         "node": "./helpers/iterableToArrayLimit.js",
@@ -179,6 +188,15 @@
       "./helpers/typeof.js"
     ],
     "./helpers/esm/typeof": "./helpers/esm/typeof.js",
+    "./helpers/using": [
+      {
+        "node": "./helpers/using.js",
+        "import": "./helpers/esm/using.js",
+        "default": "./helpers/using.js"
+      },
+      "./helpers/using.js"
+    ],
+    "./helpers/esm/using": "./helpers/esm/using.js",
     "./helpers/wrapRegExp": [
       {
         "node": "./helpers/wrapRegExp.js",

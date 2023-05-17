@@ -1365,6 +1365,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/plugin-proposal-explicit-resource-management@workspace:packages/babel-plugin-proposal-explicit-resource-management":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-proposal-explicit-resource-management@workspace:packages/babel-plugin-proposal-explicit-resource-management"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/plugin-syntax-explicit-resource-management": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-proposal-export-default-from@workspace:^, @babel/plugin-proposal-export-default-from@workspace:packages/babel-plugin-proposal-export-default-from":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-export-default-from@workspace:packages/babel-plugin-proposal-export-default-from"

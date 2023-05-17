@@ -46,6 +46,7 @@
     "./packages/babel-plugin-proposal-destructuring-private/src/**/*.ts",
     "./packages/babel-plugin-proposal-do-expressions/src/**/*.ts",
     "./packages/babel-plugin-proposal-duplicate-named-capturing-groups-regex/src/**/*.ts",
+    "./packages/babel-plugin-proposal-explicit-resource-management/src/**/*.ts",
     "./packages/babel-plugin-proposal-export-default-from/src/**/*.ts",
     "./packages/babel-plugin-proposal-function-bind/src/**/*.ts",
     "./packages/babel-plugin-proposal-function-sent/src/**/*.ts",
@@ -304,6 +305,9 @@
       ],
       "@babel/plugin-proposal-duplicate-named-capturing-groups-regex": [
         "./packages/babel-plugin-proposal-duplicate-named-capturing-groups-regex/src"
+      ],
+      "@babel/plugin-proposal-explicit-resource-management": [
+        "./packages/babel-plugin-proposal-explicit-resource-management/src"
       ],
       "@babel/plugin-proposal-export-default-from": [
         "./packages/babel-plugin-proposal-export-default-from/src"
