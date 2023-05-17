@@ -16,16 +16,33 @@ function dispose_SuppressedError(suppressed, error) {
 }
 
 export default function _dispose(stack, error, hasError, SuppressedError) {
-  while (stack.length > 0) {
-    const r = stack.pop();
-    try {
-      r.d.call(r.v);
-    } catch (e) {
-      error = hasError
-        ? new (SuppressedError || dispose_SuppressedError)(e, error)
-        : e;
-      hasError = true;
+  function next() {
+    if (stack.length === 0) {
+      if (hasError) throw error;
+      return;
+    }
+
+    var r = stack.pop();
+    if (r.a) {
+      return r.d.call(r.v).then(next, err);
+    } else {
+      try {
+        r.d.call(r.v);
+      } catch (e) {
+        return err(e);
+      }
+      return next();
     }
   }
-  if (hasError) throw error;
+
+  function err(e) {
+    error = hasError
+      ? new (SuppressedError || dispose_SuppressedError)(e, error)
+      : e;
+    hasError = true;
+
+    return next();
+  }
+
+  return next();
 }
