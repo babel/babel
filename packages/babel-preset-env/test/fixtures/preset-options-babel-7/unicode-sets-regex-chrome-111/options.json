@@ -1,4 +1,5 @@
 {
+  "minNodeVersion": "12.0.0",
   "presets": [
     [
       "env",
