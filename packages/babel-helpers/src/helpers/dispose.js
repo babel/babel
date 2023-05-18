@@ -24,15 +24,14 @@ export default function _dispose(stack, error, hasError, SuppressedError) {
 
     var r = stack.pop();
     if (r.a) {
-      return r.d.call(r.v).then(next, err);
-    } else {
-      try {
-        r.d.call(r.v);
-      } catch (e) {
-        return err(e);
-      }
-      return next();
+      return Promise.resolve(r.d.call(r.v)).then(next, err);
     }
+    try {
+      r.d.call(r.v);
+    } catch (e) {
+      return err(e);
+    }
+    return next();
   }
 
   function err(e) {
