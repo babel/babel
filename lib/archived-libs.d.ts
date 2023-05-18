@@ -105,3 +105,8 @@ declare module "@babel/plugin-syntax-trailing-function-commas" {
   let exports: {default: ReturnType<typeof declare>};
   export = exports;
 }
+declare module "@babel/plugin-syntax-unicode-sets-regex" {
+  import { declare } from "@babel/helper-plugin-utils";
+  let exports: {default: ReturnType<typeof declare>};
+  export = exports;
+}

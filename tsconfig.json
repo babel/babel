@@ -695,6 +695,9 @@
       "@babel/plugin-syntax-trailing-function-commas": [
         "./lib/archived-libs.d.ts"
       ],
+      "@babel/plugin-syntax-unicode-sets-regex": [
+        "./lib/archived-libs.d.ts"
+      ],
       "@babel/preset-modules/lib/plugins/transform-async-arrows-in-class": [
         "./lib/third-party-libs.d.ts"
       ],
