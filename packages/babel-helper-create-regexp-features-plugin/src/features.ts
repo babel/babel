@@ -3,7 +3,7 @@ export const FEATURES = Object.freeze({
   dotAllFlag: 1 << 1,
   unicodePropertyEscape: 1 << 2,
   namedCaptureGroups: 1 << 3,
-  // Babel 8.1: remove unicodeSetsFlag_syntax
+  // Not used, for backward compatibility with syntax-unicode-sets-regex
   unicodeSetsFlag_syntax: 1 << 4,
   unicodeSetsFlag: 1 << 5,
   duplicateNamedCaptureGroups: 1 << 6,
