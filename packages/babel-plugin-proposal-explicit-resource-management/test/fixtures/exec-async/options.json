@@ -1,0 +1,4 @@
+{
+  "plugins": ["proposal-explicit-resource-management"],
+  "parserOpts": { "allowReturnOutsideFunction": true }
+}

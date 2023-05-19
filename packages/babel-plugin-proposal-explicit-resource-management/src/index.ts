@@ -72,7 +72,7 @@ export default declare(api => {
             // polyfills that do not compile the contents of runtime
             // helpers.
             template.expression.ast`
-              typeof SuppressedError !== undefined && SuppressedError
+              typeof SuppressedError !== "undefined" && SuppressedError
             `,
           ],
         );
@@ -90,7 +90,13 @@ export default declare(api => {
           }
         `;
 
-        if (path.parentPath.isFunction()) {
+        const { parentPath } = path;
+        if (
+          parentPath.isFunction() ||
+          parentPath.isTryStatement() ||
+          parentPath.isCatchClause() ||
+          parentPath.isStaticBlock()
+        ) {
           path.replaceWith(t.blockStatement([replacement]));
         } else {
           path.replaceWith(replacement);

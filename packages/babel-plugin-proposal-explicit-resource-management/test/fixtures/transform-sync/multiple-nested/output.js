@@ -12,7 +12,7 @@ try {
         var _error3 = _;
         var _hasError3 = true;
       } finally {
-        babelHelpers.dispose(_stack3, _error3, _hasError3, typeof SuppressedError !== undefined && SuppressedError);
+        babelHelpers.dispose(_stack3, _error3, _hasError3, typeof SuppressedError !== "undefined" && SuppressedError);
       }
     }));
     stmt;
@@ -20,12 +20,12 @@ try {
     var _error2 = _;
     var _hasError2 = true;
   } finally {
-    babelHelpers.dispose(_stack2, _error2, _hasError2, typeof SuppressedError !== undefined && SuppressedError);
+    babelHelpers.dispose(_stack2, _error2, _hasError2, typeof SuppressedError !== "undefined" && SuppressedError);
   }
   stmt;
 } catch (_) {
   var _error = _;
   var _hasError = true;
 } finally {
-  babelHelpers.dispose(_stack, _error, _hasError, typeof SuppressedError !== undefined && SuppressedError);
+  babelHelpers.dispose(_stack, _error, _hasError, typeof SuppressedError !== "undefined" && SuppressedError);
 }
