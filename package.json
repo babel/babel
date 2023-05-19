@@ -93,6 +93,7 @@
     "@types/babel__core": "link:./nope",
     "@types/babel__traverse": "link:./nope",
     "@babel/parser/@babel/types": "workspace:*",
+    "@babel/plugin-syntax-unicode-sets-regex/@babel/helper-create-regexp-features-plugin": "workspace:*",
     "babel-plugin-polyfill-corejs2/@babel/compat-data": "workspace:*"
   },
   "engines": {
