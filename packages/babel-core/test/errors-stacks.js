@@ -4,8 +4,18 @@ import { fileURLToPath } from "url";
 import path from "path";
 import { spawnSync } from "child_process";
 import semver from "semver";
+import { readFileSync } from "fs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+let USE_ESM = false;
+try {
+  const type = readFileSync(
+    new URL("../../../.module-type", import.meta.url),
+    "utf-8",
+  ).trim();
+  USE_ESM = type === "module";
+} catch {}
 
 const replaceAll = "".replaceAll
   ? Function.call.bind("".replaceAll)
@@ -288,7 +298,7 @@ describe("@babel/core errors", function () {
     `);
   });
 
-  (semver.gte(process.version, "12.0.0") ? it : it.skip)(
+  (semver.gte(process.version, "12.0.0") && !USE_ESM ? it : it.skip)(
     "should not throw in `node --frozen-intrinsics`",
     function () {
       expect(
