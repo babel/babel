@@ -8,11 +8,6 @@ import {
   VISITOR_KEYS,
 } from "../../lib/index.js";
 
-function bool(value) {
-  return value && value !== "false" && value !== "0";
-}
-const BABEL8 = bool(process.env.BABEL_8_BREAKING);
-
 const has = Function.call.bind(Object.prototype.hasOwnProperty);
 
 function buildCases(arr) {
@@ -36,7 +31,7 @@ function addIsHelper(type, aliasKeys, deprecated) {
   if (placeholderTypes.length > 0) {
     cases += `
     case "Placeholder":
-      switch (${BABEL8 ? "node" : "(node as t.Placeholder)"}.expectedNode) {
+      switch (node.expectedNode) {
         ${buildCases(placeholderTypes)}
         default:
           return false;
@@ -49,25 +44,19 @@ function addIsHelper(type, aliasKeys, deprecated) {
       ? `node is t.${type}`
       : "boolean";
 
-  return `export function is${type}(${
-    BABEL8
-      ? `node: t.Node | null | undefined, opts?: Opts<t.${type}> | null`
-      : "node: object | null | undefined, opts?: object | null"
-  }): ${result} {
+  return `export function is${type}(node: t.Node | null | undefined, opts?: Opts<t.${type}> | null): ${result} {
     ${deprecated || ""}
     if (!node) return false;
 
     ${
       cases
         ? `
-          switch(${BABEL8 ? "node" : "(node as t.Node)"}.type){
+          switch(node.type){
             ${cases}
             default:
               return false;
           }`
-        : `if (${
-            BABEL8 ? "node" : "(node as t.Node)"
-          }.type !== ${targetType}) return false;`
+        : `if (node.type !== ${targetType}) return false;`
     }
 
     return opts == null || shallowEqual(node, opts);
@@ -83,17 +72,16 @@ export default function generateValidators() {
 import shallowEqual from "../../utils/shallowEqual";
 import type * as t from "../..";
 import deprecationWarning from "../../utils/deprecationWarning";
-\n`;
-  if (BABEL8) {
-    output += `type Opts<Object> = Partial<{
+
+type Opts<Object> = Partial<{
   [Prop in keyof Object]: Object[Prop] extends t.Node
     ? t.Node | Object[Prop]
     : Object[Prop] extends t.Node[]
     ? t.Node[] | Object[Prop]
     : Object[Prop];
 }>;
-\n`;
-  }
+
+`;
 
   Object.keys(VISITOR_KEYS).forEach(type => {
     output += addIsHelper(type);
@@ -120,11 +108,7 @@ ${addIsHelper(type, null, `deprecationWarning("is${type}", "is${newType}")`)}`;
     output += `/**
  * @deprecated Use \`is${newType}\`
  */
-export function is${type}(${
-      BABEL8
-        ? `node: t.Node | null | undefined, opts?: Opts<t.${type}> | null`
-        : "node: object | null | undefined, opts?: object | null"
-    }): node is t.${newType} {
+export function is${type}(node: t.Node | null | undefined, opts?: Opts<t.${type}> | null): node is t.${newType} {
   deprecationWarning("is${type}", "is${newType}");
   return is${newType}(node, opts);
 }
