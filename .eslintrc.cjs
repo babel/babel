@@ -23,13 +23,26 @@ module.exports = {
     "@babel/development",
     "@babel/development-internal",
   ],
-  extends: "@babel/internal",
+  extends: [
+    "@babel/internal",
+    "plugin:import/recommended",
+    "plugin:import/typescript",
+  ],
   rules: {
     "prettier/prettier": "error",
     "import/no-extraneous-dependencies": "error",
+    "import/no-named-as-default": "off",
+    "import/no-named-as-default-member": "off",
+    "import/no-duplicates": "off",
+    "import/namespace": ["error", { allowComputed: true }],
   },
   env: {
     node: true,
+  },
+  settings: {
+    "import/resolver": {
+      typescript: true,
+    },
   },
   overrides: [
     {
@@ -78,9 +91,18 @@ module.exports = {
         "@babel/development/no-undefined-identifier": "error",
         "@babel/development/no-deprecated-clone": "error",
         "guard-for-in": "error",
-        "import/extensions": ["error", { json: "always", cjs: "always" }],
+        "import/extensions": [
+          "error",
+          { json: "ignorePackages", cjs: "ignorePackages" },
+        ],
       },
       globals: { PACKAGE_JSON: "readonly", USE_ESM: "readonly" },
+    },
+    {
+      files: "benchmark/**/*.mjs",
+      rules: {
+        "import/default": "off",
+      },
     },
     {
       files: [
@@ -98,7 +120,7 @@ module.exports = {
         "jest/no-standalone-expect": "off",
         "jest/no-test-callback": "off",
         "jest/valid-describe": "off",
-        "import/extensions": ["error", "always"],
+        "import/extensions": ["error", "ignorePackages"],
         "import/no-extraneous-dependencies": "off",
         "no-restricted-imports": ["error", { patterns: ["**/src/**"] }],
       },
@@ -155,6 +177,7 @@ module.exports = {
         "comma-dangle": "off",
         "no-func-assign": "off",
         "import/no-extraneous-dependencies": "off",
+        "import/no-unresolved": "off",
       },
     },
     {

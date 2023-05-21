@@ -1,5 +1,8 @@
 import browserslist from "browserslist";
-import { findSuggestion } from "@babel/helper-validator-option";
+import {
+  findSuggestion,
+  OptionValidator,
+} from "@babel/helper-validator-option";
 import browserModulesData from "@babel/compat-data/native-modules";
 import LruCache from "lru-cache";
 
@@ -10,7 +13,6 @@ import {
   getLowestUnreleased,
   getHighestUnreleased,
 } from "./utils";
-import { OptionValidator } from "@babel/helper-validator-option";
 import { browserNameMap } from "./targets";
 import { TargetNames } from "./options";
 import type {

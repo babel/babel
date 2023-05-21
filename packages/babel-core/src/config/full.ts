@@ -21,13 +21,12 @@ import {
   validate,
   checkNoUnwrappedItemOptionPairs,
 } from "./validation/options";
-import type { PluginItem } from "./validation/options";
+import type { PluginItem, ValidatedOptions } from "./validation/options";
 import { validatePluginObject } from "./validation/plugins";
 import { makePluginAPI, makePresetAPI } from "./helpers/config-api";
 import type { PluginAPI, PresetAPI } from "./helpers/config-api";
 
 import loadPrivatePartialConfig from "./partial";
-import type { ValidatedOptions } from "./validation/options";
 
 import type * as Context from "./cache-contexts";
 import ConfigError from "../errors/config-error";

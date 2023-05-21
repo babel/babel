@@ -3,7 +3,6 @@ import { basename, extname } from "path";
 import {
   isModule,
   rewriteModuleStatementsAndPrepareHeader,
-  type RewriteModuleStatementsAndPrepareHeaderOptions,
   hasExports,
   isSideEffectImport,
   buildNamespaceInitStatements,
@@ -11,7 +10,10 @@ import {
   wrapInterop,
   getModuleName,
 } from "@babel/helper-module-transforms";
-import type { PluginOptions } from "@babel/helper-module-transforms";
+import type {
+  PluginOptions,
+  RewriteModuleStatementsAndPrepareHeaderOptions,
+} from "@babel/helper-module-transforms";
 import { types as t, template } from "@babel/core";
 import type { NodePath } from "@babel/traverse";
 

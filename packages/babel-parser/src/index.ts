@@ -14,12 +14,8 @@ import type {
 } from "./typings";
 import Parser from "./parser";
 
-import type { ExportedTokenType } from "./tokenizer/types";
-import {
-  getExportedToken,
-  tt as internalTokenTypes,
-  type InternalTokenTypes,
-} from "./tokenizer/types";
+import { getExportedToken, tt as internalTokenTypes } from "./tokenizer/types";
+import type { ExportedTokenType, InternalTokenTypes } from "./tokenizer/types";
 import "./tokenizer/context";
 
 import type { Expression, File } from "./types";

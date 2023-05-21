@@ -1,5 +1,5 @@
-import Buffer, { type Pos } from "./buffer";
-import type { Loc } from "./buffer";
+import Buffer from "./buffer";
+import type { Loc, Pos } from "./buffer";
 import * as n from "./node";
 import type * as t from "@babel/types";
 import {

@@ -39,8 +39,7 @@ import type { ParseStatementFlag } from "../../parser/statement";
 import { PARAM } from "../../util/production-parameter";
 import { Errors, ParseErrorEnum } from "../../parse-error";
 import { cloneIdentifier, type Undone } from "../../parser/node";
-import type { Pattern } from "../../types";
-import type { Expression } from "../../types";
+import type { Expression, Pattern } from "../../types";
 import type { IJSXParserMixin } from "../jsx";
 import { ParseBindingListFlags } from "../../parser/lval";
 
