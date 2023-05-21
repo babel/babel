@@ -5,7 +5,7 @@ return (async function () {
     return {
       async [Symbol[symbolName] || Symbol.for("Symbol." + symbolName)]() {
         log.push(name);
-        cb?.();
+        if (cb) cb();
       }
     };
   }
