@@ -49,6 +49,7 @@
     "./packages/babel-plugin-proposal-export-default-from/src/**/*.ts",
     "./packages/babel-plugin-proposal-function-bind/src/**/*.ts",
     "./packages/babel-plugin-proposal-function-sent/src/**/*.ts",
+    "./packages/babel-plugin-proposal-import-attributes-to-assertions/src/**/*.ts",
     "./packages/babel-plugin-proposal-partial-application/src/**/*.ts",
     "./packages/babel-plugin-proposal-pipeline-operator/src/**/*.ts",
     "./packages/babel-plugin-proposal-record-and-tuple/src/**/*.ts",
@@ -312,6 +313,9 @@
       ],
       "@babel/plugin-proposal-function-sent": [
         "./packages/babel-plugin-proposal-function-sent/src"
+      ],
+      "@babel/plugin-proposal-import-attributes-to-assertions": [
+        "./packages/babel-plugin-proposal-import-attributes-to-assertions/src"
       ],
       "@babel/plugin-proposal-partial-application": [
         "./packages/babel-plugin-proposal-partial-application/src"
