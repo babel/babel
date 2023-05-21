@@ -3,27 +3,28 @@ import syntacExplicitResourceManagement from "@babel/plugin-syntax-explicit-reso
 import { types as t, template } from "@babel/core";
 import type { NodePath } from "@babel/traverse";
 
-function isUsingDeclaration(node: t.Node): node is t.VariableDeclaration {
-  if (!t.isVariableDeclaration(node)) return false;
-  return node.kind === "using" || node.kind === "await using";
-}
-
 export default declare(api => {
   // TOOD: assert version 7.22.0
   api.assertVersion(7);
+
+  const TOP_LEVEL_USING = new WeakSet();
+  const TOP_LEVEL_AWAIT_USING = new WeakSet();
+
+  function isUsingDeclaration(node: t.Node): node is t.VariableDeclaration {
+    if (!t.isVariableDeclaration(node)) return false;
+    return (
+      node.kind === "using" ||
+      node.kind === "await using" ||
+      TOP_LEVEL_USING.has(node) ||
+      TOP_LEVEL_AWAIT_USING.has(node)
+    );
+  }
 
   return {
     name: "proposal-explicit-resource-management",
     inherits: syntacExplicitResourceManagement,
 
     visitor: {
-      VariableDeclaration(path) {
-        if (path.node.kind === "using" || path.node.kind === "await using") {
-          throw path.buildCodeFrameError(
-            `"using" declaration at the top-level of modules is not supported yet.`,
-          );
-        }
-      },
       ForOfStatement(path: NodePath<t.ForOfStatement>) {
         const { left } = path.node;
         if (!isUsingDeclaration(left)) return;
@@ -47,10 +48,16 @@ export default declare(api => {
         for (const node of path.node.body) {
           if (!isUsingDeclaration(node)) continue;
           stackId ??= path.scope.generateUidIdentifier("stack");
-          const isAwaitUsing = node.kind === "await using";
+          const isAwaitUsing =
+            node.kind === "await using" || TOP_LEVEL_AWAIT_USING.has(node);
           needsAwait ||= isAwaitUsing;
 
-          node.kind = "const";
+          if (
+            !TOP_LEVEL_AWAIT_USING.delete(node) &&
+            !TOP_LEVEL_USING.delete(node)
+          ) {
+            node.kind = "const";
+          }
           node.declarations.forEach(decl => {
             const args = [t.cloneNode(stackId), decl.init];
             if (isAwaitUsing) args.push(t.booleanLiteral(true));
@@ -101,6 +108,88 @@ export default declare(api => {
         } else {
           path.replaceWith(replacement);
         }
+      },
+      // To transform top-level using declarations, we must wrap the
+      // module body in a block after hoisting all the exports and imports.
+      // This might cause some variables to be `undefined` rather than TDZ.
+      Program(path) {
+        if (path.node.sourceType !== "module") return;
+        if (!path.node.body.some(isUsingDeclaration)) return;
+
+        const innerBlockBody = [];
+        for (const stmt of path.get("body")) {
+          if (stmt.isFunctionDeclaration() || stmt.isImportDeclaration()) {
+            continue;
+          }
+
+          let { node } = stmt;
+          let shouldRemove = true;
+
+          if (stmt.isExportDefaultDeclaration()) {
+            let { declaration } = stmt.node;
+            let varId;
+            if (t.isClassDeclaration(declaration)) {
+              varId = declaration.id;
+              declaration.id = null;
+              declaration = t.toExpression(declaration);
+            } else if (!t.isExpression(declaration)) {
+              continue;
+            }
+
+            varId ??= path.scope.generateUidIdentifier("_default");
+            innerBlockBody.push(
+              t.variableDeclaration("var", [
+                t.variableDeclarator(varId, declaration),
+              ]),
+            );
+            stmt.replaceWith(
+              t.exportNamedDeclaration(null, [
+                t.exportSpecifier(t.cloneNode(varId), t.identifier("default")),
+              ]),
+            );
+            continue;
+          }
+
+          if (stmt.isExportNamedDeclaration()) {
+            node = stmt.node.declaration;
+            if (!node || t.isFunction(node)) continue;
+            stmt.replaceWith(
+              t.exportNamedDeclaration(
+                null,
+                Object.values(t.getOuterBindingIdentifiers(node, false)).map(
+                  id => t.exportSpecifier(t.cloneNode(id), t.cloneNode(id)),
+                ),
+              ),
+            );
+            shouldRemove = false;
+          } else if (stmt.isExportDeclaration()) {
+            continue;
+          }
+
+          if (t.isClassDeclaration(node)) {
+            const { id } = node;
+            node.id = null;
+            innerBlockBody.push(
+              t.variableDeclaration("var", [
+                t.variableDeclarator(id, t.toExpression(node)),
+              ]),
+            );
+          } else if (t.isVariableDeclaration(node)) {
+            if (node.kind === "using") {
+              TOP_LEVEL_USING.add(stmt.node);
+            } else if (node.kind === "await using") {
+              TOP_LEVEL_AWAIT_USING.add(stmt.node);
+            }
+            node.kind = "var";
+            innerBlockBody.push(node);
+          } else {
+            innerBlockBody.push(stmt.node);
+          }
+
+          if (shouldRemove) stmt.remove();
+        }
+
+        path.pushContainer("body", t.blockStatement(innerBlockBody));
       },
     },
   };
