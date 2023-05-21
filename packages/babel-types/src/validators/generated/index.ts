@@ -2,6 +2,9 @@
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'make build'
  */
+
+/* eslint-disable no-fallthrough */
+
 import shallowEqual from "../../utils/shallowEqual";
 import type * as t from "../..";
 import deprecationWarning from "../../utils/deprecationWarning";
@@ -2735,13 +2738,7 @@ export function isScopable(
     case "TSModuleBlock":
       break;
     case "Placeholder":
-      switch (node.expectedNode) {
-        case "BlockStatement":
-          break;
-        default:
-          return false;
-      }
-      break;
+      if (node.expectedNode === "BlockStatement") break;
     default:
       return false;
   }
@@ -2774,13 +2771,7 @@ export function isBlockParent(
     case "TSModuleBlock":
       break;
     case "Placeholder":
-      switch (node.expectedNode) {
-        case "BlockStatement":
-          break;
-        default:
-          return false;
-      }
-      break;
+      if (node.expectedNode === "BlockStatement") break;
     default:
       return false;
   }
@@ -2799,13 +2790,7 @@ export function isBlock(
     case "TSModuleBlock":
       break;
     case "Placeholder":
-      switch (node.expectedNode) {
-        case "BlockStatement":
-          break;
-        default:
-          return false;
-      }
-      break;
+      if (node.expectedNode === "BlockStatement") break;
     default:
       return false;
   }
@@ -3083,13 +3068,7 @@ export function isPureish(
     case "DecimalLiteral":
       break;
     case "Placeholder":
-      switch (node.expectedNode) {
-        case "StringLiteral":
-          break;
-        default:
-          return false;
-      }
-      break;
+      if (node.expectedNode === "StringLiteral") break;
     default:
       return false;
   }
@@ -3131,13 +3110,7 @@ export function isDeclaration(
     case "TSModuleDeclaration":
       break;
     case "Placeholder":
-      switch (node.expectedNode) {
-        case "Declaration":
-          break;
-        default:
-          return false;
-      }
-      break;
+      if (node.expectedNode === "Declaration") break;
     default:
       return false;
   }
@@ -3221,13 +3194,7 @@ export function isTSEntityName(
     case "TSQualifiedName":
       break;
     case "Placeholder":
-      switch (node.expectedNode) {
-        case "Identifier":
-          break;
-        default:
-          return false;
-      }
-      break;
+      if (node.expectedNode === "Identifier") break;
     default:
       return false;
   }
@@ -3251,13 +3218,7 @@ export function isLiteral(
     case "DecimalLiteral":
       break;
     case "Placeholder":
-      switch (node.expectedNode) {
-        case "StringLiteral":
-          break;
-        default:
-          return false;
-      }
-      break;
+      if (node.expectedNode === "StringLiteral") break;
     default:
       return false;
   }
@@ -3289,13 +3250,7 @@ export function isImmutable(
     case "DecimalLiteral":
       break;
     case "Placeholder":
-      switch (node.expectedNode) {
-        case "StringLiteral":
-          break;
-        default:
-          return false;
-      }
-      break;
+      if (node.expectedNode === "StringLiteral") break;
     default:
       return false;
   }
@@ -3402,13 +3357,7 @@ export function isPattern(
     case "ObjectPattern":
       break;
     case "Placeholder":
-      switch (node.expectedNode) {
-        case "Pattern":
-          break;
-        default:
-          return false;
-      }
-      break;
+      if (node.expectedNode === "Pattern") break;
     default:
       return false;
   }

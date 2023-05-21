@@ -28,7 +28,12 @@ function addIsHelper(type, aliasKeys, deprecated) {
   if (has(PLACEHOLDERS_FLIPPED_ALIAS, type)) {
     placeholderTypes.push(...PLACEHOLDERS_FLIPPED_ALIAS[type]);
   }
-  if (placeholderTypes.length > 0) {
+  if (placeholderTypes.length === 1) {
+    cases += `
+    case "Placeholder":
+      if (node.expectedNode === ${JSON.stringify(placeholderTypes[0])})
+      break;`;
+  } else if (placeholderTypes.length) {
     cases += `
     case "Placeholder":
       switch (node.expectedNode) {
@@ -69,6 +74,9 @@ export default function generateValidators() {
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'make build'
  */
+
+  /* eslint-disable no-fallthrough */
+
 import shallowEqual from "../../utils/shallowEqual";
 import type * as t from "../..";
 import deprecationWarning from "../../utils/deprecationWarning";
