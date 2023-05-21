@@ -77,7 +77,6 @@ export { default as shallowEqual } from "./utils/shallowEqual";
 export { default as is } from "./validators/is";
 export { default as isBinding } from "./validators/isBinding";
 export { default as isBlockScoped } from "./validators/isBlockScoped";
-export { default as isImmutable } from "./validators/isImmutable";
 export { default as isLet } from "./validators/isLet";
 export { default as isNode } from "./validators/isNode";
 export { default as isNodesEquivalent } from "./validators/isNodesEquivalent";
