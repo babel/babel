@@ -105,9 +105,7 @@ fs.writeFileSync(
           .map(({ relative }) => `${relative}/src/**/*.ts`)
           .concat([
             "./lib/globals.d.ts",
-
             "./scripts/repo-utils/*.d.ts",
-
             "./packages/babel-parser/typings/*.d.ts",
           ]),
         compilerOptions: {
