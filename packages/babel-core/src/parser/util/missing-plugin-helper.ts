@@ -289,6 +289,16 @@ if (!process.env.BABEL_8_BREAKING) {
         url: "https://github.com/babel/babel/blob/main/packages/babel-plugin-proposalunicode-sets-regex/README.md",
       },
     },
+    regexpUnicodeSets: {
+      syntax: {
+        name: "@babel/plugin-syntax-unicode-sets-regex",
+        url: "https://github.com/babel/babel/blob/main/packages/babel-plugin-syntax-unicode-sets-regex/README.md",
+      },
+      transform: {
+        name: "@babel/plugin-proposal-unicode-sets-regex",
+        url: "https://github.com/babel/babel/blob/main/packages/babel-plugin-proposalunicode-sets-regex/README.md",
+      },
+    },
   });
 }
 
