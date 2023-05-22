@@ -1,6 +1,6 @@
 {
   "plugins": [
-    "proposal-optional-chaining",
+    "transform-optional-chaining",
     "transform-function-name",
     "transform-classes",
     "transform-spread",

@@ -58,7 +58,7 @@ function getPropRef(
   const prop = node.property;
   if (isPrivateName(prop)) {
     throw new Error(
-      "We can't generate property ref for private name, please install `@babel/plugin-proposal-class-properties`",
+      "We can't generate property ref for private name, please install `@babel/plugin-transform-class-properties`",
     );
   }
   const key = toComputedKey(node, prop);

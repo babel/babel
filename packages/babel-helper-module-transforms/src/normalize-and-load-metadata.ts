@@ -217,7 +217,7 @@ function assertExportSpecifier(
     return;
   } else if (path.isExportNamespaceSpecifier()) {
     throw path.buildCodeFrameError(
-      "Export namespace should be first transformed by `@babel/plugin-proposal-export-namespace-from`.",
+      "Export namespace should be first transformed by `@babel/plugin-transform-export-namespace-from`.",
     );
   } else {
     throw path.buildCodeFrameError("Unexpected export specifier type");

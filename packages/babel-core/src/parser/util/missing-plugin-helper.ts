@@ -147,8 +147,8 @@ if (!process.env.BABEL_8_BREAKING) {
         url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-async-generators",
       },
       transform: {
-        name: "@babel/plugin-proposal-async-generator-functions",
-        url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-async-generator-functions",
+        name: "@babel/plugin-transform-async-generator-functions",
+        url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-transform-async-generator-functions",
       },
     },
     classProperties: {
@@ -157,8 +157,8 @@ if (!process.env.BABEL_8_BREAKING) {
         url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-class-properties",
       },
       transform: {
-        name: "@babel/plugin-proposal-class-properties",
-        url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-class-properties",
+        name: "@babel/plugin-transform-class-properties",
+        url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-transform-class-properties",
       },
     },
     classPrivateProperties: {
@@ -167,8 +167,8 @@ if (!process.env.BABEL_8_BREAKING) {
         url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-class-properties",
       },
       transform: {
-        name: "@babel/plugin-proposal-class-properties",
-        url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-class-properties",
+        name: "@babel/plugin-transform-class-properties",
+        url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-transform-class-properties",
       },
     },
     classPrivateMethods: {
@@ -177,8 +177,8 @@ if (!process.env.BABEL_8_BREAKING) {
         url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-class-properties",
       },
       transform: {
-        name: "@babel/plugin-proposal-private-methods",
-        url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-private-methods",
+        name: "@babel/plugin-transform-private-methods",
+        url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-transform-private-methods",
       },
     },
     classStaticBlock: {
@@ -187,8 +187,8 @@ if (!process.env.BABEL_8_BREAKING) {
         url: "https://github.com/babel/babel/tree/HEAD/packages/babel-plugin-syntax-class-static-block",
       },
       transform: {
-        name: "@babel/plugin-proposal-class-static-block",
-        url: "https://github.com/babel/babel/tree/HEAD/packages/babel-plugin-proposal-class-static-block",
+        name: "@babel/plugin-transform-class-static-block",
+        url: "https://github.com/babel/babel/tree/HEAD/packages/babel-plugin-transform-class-static-block",
       },
     },
     dynamicImport: {
@@ -203,8 +203,8 @@ if (!process.env.BABEL_8_BREAKING) {
         url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-export-namespace-from",
       },
       transform: {
-        name: "@babel/plugin-proposal-export-namespace-from",
-        url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-export-namespace-from",
+        name: "@babel/plugin-transform-export-namespace-from",
+        url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-transform-export-namespace-from",
       },
     },
     importMeta: {
@@ -219,8 +219,8 @@ if (!process.env.BABEL_8_BREAKING) {
         url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-logical-assignment-operators",
       },
       transform: {
-        name: "@babel/plugin-proposal-logical-assignment-operators",
-        url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-logical-assignment-operators",
+        name: "@babel/plugin-transform-logical-assignment-operators",
+        url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-transform-logical-assignment-operators",
       },
     },
     moduleStringNames: {
@@ -235,8 +235,8 @@ if (!process.env.BABEL_8_BREAKING) {
         url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-numeric-separator",
       },
       transform: {
-        name: "@babel/plugin-proposal-numeric-separator",
-        url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-numeric-separator",
+        name: "@babel/plugin-transform-numeric-separator",
+        url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-transform-numeric-separator",
       },
     },
     nullishCoalescingOperator: {
@@ -245,7 +245,7 @@ if (!process.env.BABEL_8_BREAKING) {
         url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-nullish-coalescing-operator",
       },
       transform: {
-        name: "@babel/plugin-proposal-nullish-coalescing-operator",
+        name: "@babel/plugin-transform-nullish-coalescing-operator",
         url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-transform-nullish-coalescing-opearator",
       },
     },
@@ -255,8 +255,8 @@ if (!process.env.BABEL_8_BREAKING) {
         url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-object-rest-spread",
       },
       transform: {
-        name: "@babel/plugin-proposal-object-rest-spread",
-        url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-object-rest-spread",
+        name: "@babel/plugin-transform-object-rest-spread",
+        url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-transform-object-rest-spread",
       },
     },
     optionalCatchBinding: {
@@ -265,8 +265,8 @@ if (!process.env.BABEL_8_BREAKING) {
         url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-optional-catch-binding",
       },
       transform: {
-        name: "@babel/plugin-proposal-optional-catch-binding",
-        url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-optional-catch-binding",
+        name: "@babel/plugin-transform-optional-catch-binding",
+        url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-transform-optional-catch-binding",
       },
     },
     optionalChaining: {
@@ -275,8 +275,8 @@ if (!process.env.BABEL_8_BREAKING) {
         url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-optional-chaining",
       },
       transform: {
-        name: "@babel/plugin-proposal-optional-chaining",
-        url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-optional-chaining",
+        name: "@babel/plugin-transform-optional-chaining",
+        url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-transform-optional-chaining",
       },
     },
     privateIn: {
@@ -285,8 +285,8 @@ if (!process.env.BABEL_8_BREAKING) {
         url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-private-property-in-object",
       },
       transform: {
-        name: "@babel/plugin-proposal-private-property-in-object",
-        url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-private-property-in-object",
+        name: "@babel/plugin-transform-private-property-in-object",
+        url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-transform-private-property-in-object",
       },
     },
   });

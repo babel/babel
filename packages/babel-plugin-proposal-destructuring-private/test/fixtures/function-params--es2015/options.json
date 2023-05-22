@@ -1,7 +1,7 @@
 {
   "plugins": [
     "proposal-destructuring-private",
-    "proposal-class-static-block",
-    "proposal-class-properties"
+    "transform-class-static-block",
+    "transform-class-properties"
   ]
 }

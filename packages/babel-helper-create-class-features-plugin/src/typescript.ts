@@ -15,8 +15,8 @@ export function assertFieldTransformed(
         `@babel/plugin-transform-typescript.\n` +
         `If you have already enabled that plugin (or '@babel/preset-typescript'), make sure ` +
         `that it runs before any plugin related to additional class features:\n` +
-        ` - @babel/plugin-proposal-class-properties\n` +
-        ` - @babel/plugin-proposal-private-methods\n` +
+        ` - @babel/plugin-transform-class-properties\n` +
+        ` - @babel/plugin-transform-private-methods\n` +
         ` - @babel/plugin-proposal-decorators`,
     );
   }

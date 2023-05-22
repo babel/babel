@@ -1,3 +1,0 @@
-{
-  "plugins": [["proposal-optional-chaining", { "loose": true }], ["proposal-nullish-coalescing-operator", { "loose": true }]]
-}

@@ -1,7 +1,0 @@
-{
-  "validateLogs": true,
-  "plugins": [["proposal-class-properties", { "loose": true }]],
-  "assumptions": {
-    "setPublicClassFields": true
-  }
-}

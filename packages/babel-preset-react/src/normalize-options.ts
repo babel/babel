@@ -20,7 +20,7 @@ export default function normalizeOptions(options: any = {}) {
 \`useBuiltIns: ${useBuiltInsFormatted}\`, you can use the following config
 {
   "plugins": [
-    ["@babel/plugin-proposal-object-rest-spread", { "loose": true, "useBuiltIns": ${useBuiltInsFormatted} }]
+    ["@babel/plugin-transform-object-rest-spread", { "loose": true, "useBuiltIns": ${useBuiltInsFormatted} }]
   ],
   "presets": ["@babel/preset-react"]
 }`,

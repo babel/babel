@@ -13,7 +13,7 @@ export const FEATURES = Object.freeze({
 // this package isn't deduped by npm. e.g.
 //  - node_modules/
 //    - @babel/plugin-regexp-features
-//    - @babel/plugin-proposal-unicode-property-regex
+//    - @babel/plugin-transform-unicode-property-regex
 //      - node_modules
 //        - @babel-plugin-regexp-features
 export const featuresKey = "@babel/plugin-regexp-features/featuresKey";

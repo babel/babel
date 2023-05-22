@@ -1,0 +1,13 @@
+{
+  "externalHelpers": false,
+  "parserOpts": {
+    "allowReturnOutsideFunction": true
+  },
+  "plugins": [
+    "transform-async-to-generator",
+    "transform-async-generator-functions",
+    ["babel-plugin-polyfill-corejs3", { "method": "usage-pure", "targets": {
+      "node": "6.17"
+    }}]
+  ]
+}

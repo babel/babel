@@ -1,7 +1,7 @@
 import { transformSync } from "@babel/core";
 import proposalDestructuringPrivate from "../lib/index.js";
-import proposalClassProperties from "@babel/plugin-proposal-class-properties";
-import proposalClassStaticBlock from "@babel/plugin-proposal-class-static-block";
+import proposalClassProperties from "@babel/plugin-transform-class-properties";
+import proposalClassStaticBlock from "@babel/plugin-transform-class-static-block";
 
 describe("plugin ordering", () => {
   it("should work when @babel/plugin-proposal-destructuring-private is after class features plugin", () => {

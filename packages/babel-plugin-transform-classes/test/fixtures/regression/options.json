@@ -1,5 +1,5 @@
 {
-  "plugins": ["proposal-class-properties"],
+  "plugins": ["transform-class-properties"],
   "presets": [
     ["env", { "targets": { "browsers": "ie 6" } }],
     ["react", { "runtime": "classic" }]

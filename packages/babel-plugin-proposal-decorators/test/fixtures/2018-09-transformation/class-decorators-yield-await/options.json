@@ -1,6 +1,6 @@
 {
   "plugins": [
     ["proposal-decorators", { "decoratorsBeforeExport": true }],
-    "proposal-class-properties"
+    "transform-class-properties"
   ]
 }

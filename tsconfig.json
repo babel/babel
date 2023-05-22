@@ -42,33 +42,18 @@
     "./packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining/src/**/*.ts",
     "./packages/babel-plugin-external-helpers/src/**/*.ts",
     "./packages/babel-plugin-proposal-async-do-expressions/src/**/*.ts",
-    "./packages/babel-plugin-proposal-async-generator-functions/src/**/*.ts",
-    "./packages/babel-plugin-proposal-class-properties/src/**/*.ts",
-    "./packages/babel-plugin-proposal-class-static-block/src/**/*.ts",
     "./packages/babel-plugin-proposal-decorators/src/**/*.ts",
     "./packages/babel-plugin-proposal-destructuring-private/src/**/*.ts",
     "./packages/babel-plugin-proposal-do-expressions/src/**/*.ts",
     "./packages/babel-plugin-proposal-duplicate-named-capturing-groups-regex/src/**/*.ts",
-    "./packages/babel-plugin-proposal-dynamic-import/src/**/*.ts",
     "./packages/babel-plugin-proposal-export-default-from/src/**/*.ts",
-    "./packages/babel-plugin-proposal-export-namespace-from/src/**/*.ts",
     "./packages/babel-plugin-proposal-function-bind/src/**/*.ts",
     "./packages/babel-plugin-proposal-function-sent/src/**/*.ts",
-    "./packages/babel-plugin-proposal-json-strings/src/**/*.ts",
-    "./packages/babel-plugin-proposal-logical-assignment-operators/src/**/*.ts",
-    "./packages/babel-plugin-proposal-nullish-coalescing-operator/src/**/*.ts",
-    "./packages/babel-plugin-proposal-numeric-separator/src/**/*.ts",
-    "./packages/babel-plugin-proposal-object-rest-spread/src/**/*.ts",
-    "./packages/babel-plugin-proposal-optional-catch-binding/src/**/*.ts",
-    "./packages/babel-plugin-proposal-optional-chaining/src/**/*.ts",
     "./packages/babel-plugin-proposal-partial-application/src/**/*.ts",
     "./packages/babel-plugin-proposal-pipeline-operator/src/**/*.ts",
-    "./packages/babel-plugin-proposal-private-methods/src/**/*.ts",
-    "./packages/babel-plugin-proposal-private-property-in-object/src/**/*.ts",
     "./packages/babel-plugin-proposal-record-and-tuple/src/**/*.ts",
     "./packages/babel-plugin-proposal-regexp-modifiers/src/**/*.ts",
     "./packages/babel-plugin-proposal-throw-expressions/src/**/*.ts",
-    "./packages/babel-plugin-proposal-unicode-property-regex/src/**/*.ts",
     "./packages/babel-plugin-proposal-unicode-sets-regex/src/**/*.ts",
     "./packages/babel-plugin-syntax-async-do-expressions/src/**/*.ts",
     "./packages/babel-plugin-syntax-decimal/src/**/*.ts",
@@ -90,22 +75,29 @@
     "./packages/babel-plugin-syntax-throw-expressions/src/**/*.ts",
     "./packages/babel-plugin-syntax-typescript/src/**/*.ts",
     "./packages/babel-plugin-transform-arrow-functions/src/**/*.ts",
+    "./packages/babel-plugin-transform-async-generator-functions/src/**/*.ts",
     "./packages/babel-plugin-transform-async-to-generator/src/**/*.ts",
     "./packages/babel-plugin-transform-block-scoped-functions/src/**/*.ts",
     "./packages/babel-plugin-transform-block-scoping/src/**/*.ts",
+    "./packages/babel-plugin-transform-class-properties/src/**/*.ts",
+    "./packages/babel-plugin-transform-class-static-block/src/**/*.ts",
     "./packages/babel-plugin-transform-classes/src/**/*.ts",
     "./packages/babel-plugin-transform-computed-properties/src/**/*.ts",
     "./packages/babel-plugin-transform-destructuring/src/**/*.ts",
     "./packages/babel-plugin-transform-dotall-regex/src/**/*.ts",
     "./packages/babel-plugin-transform-duplicate-keys/src/**/*.ts",
+    "./packages/babel-plugin-transform-dynamic-import/src/**/*.ts",
     "./packages/babel-plugin-transform-exponentiation-operator/src/**/*.ts",
+    "./packages/babel-plugin-transform-export-namespace-from/src/**/*.ts",
     "./packages/babel-plugin-transform-flow-comments/src/**/*.ts",
     "./packages/babel-plugin-transform-flow-strip-types/src/**/*.ts",
     "./packages/babel-plugin-transform-for-of/src/**/*.ts",
     "./packages/babel-plugin-transform-function-name/src/**/*.ts",
     "./packages/babel-plugin-transform-instanceof/src/**/*.ts",
     "./packages/babel-plugin-transform-jscript/src/**/*.ts",
+    "./packages/babel-plugin-transform-json-strings/src/**/*.ts",
     "./packages/babel-plugin-transform-literals/src/**/*.ts",
+    "./packages/babel-plugin-transform-logical-assignment-operators/src/**/*.ts",
     "./packages/babel-plugin-transform-member-expression-literals/src/**/*.ts",
     "./packages/babel-plugin-transform-modules-amd/src/**/*.ts",
     "./packages/babel-plugin-transform-modules-commonjs/src/**/*.ts",
@@ -113,10 +105,17 @@
     "./packages/babel-plugin-transform-modules-umd/src/**/*.ts",
     "./packages/babel-plugin-transform-named-capturing-groups-regex/src/**/*.ts",
     "./packages/babel-plugin-transform-new-target/src/**/*.ts",
+    "./packages/babel-plugin-transform-nullish-coalescing-operator/src/**/*.ts",
+    "./packages/babel-plugin-transform-numeric-separator/src/**/*.ts",
     "./packages/babel-plugin-transform-object-assign/src/**/*.ts",
+    "./packages/babel-plugin-transform-object-rest-spread/src/**/*.ts",
     "./packages/babel-plugin-transform-object-set-prototype-of-to-assign/src/**/*.ts",
     "./packages/babel-plugin-transform-object-super/src/**/*.ts",
+    "./packages/babel-plugin-transform-optional-catch-binding/src/**/*.ts",
+    "./packages/babel-plugin-transform-optional-chaining/src/**/*.ts",
     "./packages/babel-plugin-transform-parameters/src/**/*.ts",
+    "./packages/babel-plugin-transform-private-methods/src/**/*.ts",
+    "./packages/babel-plugin-transform-private-property-in-object/src/**/*.ts",
     "./packages/babel-plugin-transform-property-literals/src/**/*.ts",
     "./packages/babel-plugin-transform-property-mutators/src/**/*.ts",
     "./packages/babel-plugin-transform-proto-to-assign/src/**/*.ts",
@@ -140,6 +139,7 @@
     "./packages/babel-plugin-transform-typeof-symbol/src/**/*.ts",
     "./packages/babel-plugin-transform-typescript/src/**/*.ts",
     "./packages/babel-plugin-transform-unicode-escapes/src/**/*.ts",
+    "./packages/babel-plugin-transform-unicode-property-regex/src/**/*.ts",
     "./packages/babel-plugin-transform-unicode-regex/src/**/*.ts",
     "./packages/babel-preset-env/src/**/*.ts",
     "./packages/babel-preset-flow/src/**/*.ts",
@@ -291,15 +291,6 @@
       "@babel/plugin-proposal-async-do-expressions": [
         "./packages/babel-plugin-proposal-async-do-expressions/src"
       ],
-      "@babel/plugin-proposal-async-generator-functions": [
-        "./packages/babel-plugin-proposal-async-generator-functions/src"
-      ],
-      "@babel/plugin-proposal-class-properties": [
-        "./packages/babel-plugin-proposal-class-properties/src"
-      ],
-      "@babel/plugin-proposal-class-static-block": [
-        "./packages/babel-plugin-proposal-class-static-block/src"
-      ],
       "@babel/plugin-proposal-decorators": [
         "./packages/babel-plugin-proposal-decorators/src"
       ],
@@ -312,14 +303,8 @@
       "@babel/plugin-proposal-duplicate-named-capturing-groups-regex": [
         "./packages/babel-plugin-proposal-duplicate-named-capturing-groups-regex/src"
       ],
-      "@babel/plugin-proposal-dynamic-import": [
-        "./packages/babel-plugin-proposal-dynamic-import/src"
-      ],
       "@babel/plugin-proposal-export-default-from": [
         "./packages/babel-plugin-proposal-export-default-from/src"
-      ],
-      "@babel/plugin-proposal-export-namespace-from": [
-        "./packages/babel-plugin-proposal-export-namespace-from/src"
       ],
       "@babel/plugin-proposal-function-bind": [
         "./packages/babel-plugin-proposal-function-bind/src"
@@ -327,38 +312,11 @@
       "@babel/plugin-proposal-function-sent": [
         "./packages/babel-plugin-proposal-function-sent/src"
       ],
-      "@babel/plugin-proposal-json-strings": [
-        "./packages/babel-plugin-proposal-json-strings/src"
-      ],
-      "@babel/plugin-proposal-logical-assignment-operators": [
-        "./packages/babel-plugin-proposal-logical-assignment-operators/src"
-      ],
-      "@babel/plugin-proposal-nullish-coalescing-operator": [
-        "./packages/babel-plugin-proposal-nullish-coalescing-operator/src"
-      ],
-      "@babel/plugin-proposal-numeric-separator": [
-        "./packages/babel-plugin-proposal-numeric-separator/src"
-      ],
-      "@babel/plugin-proposal-object-rest-spread": [
-        "./packages/babel-plugin-proposal-object-rest-spread/src"
-      ],
-      "@babel/plugin-proposal-optional-catch-binding": [
-        "./packages/babel-plugin-proposal-optional-catch-binding/src"
-      ],
-      "@babel/plugin-proposal-optional-chaining": [
-        "./packages/babel-plugin-proposal-optional-chaining/src"
-      ],
       "@babel/plugin-proposal-partial-application": [
         "./packages/babel-plugin-proposal-partial-application/src"
       ],
       "@babel/plugin-proposal-pipeline-operator": [
         "./packages/babel-plugin-proposal-pipeline-operator/src"
-      ],
-      "@babel/plugin-proposal-private-methods": [
-        "./packages/babel-plugin-proposal-private-methods/src"
-      ],
-      "@babel/plugin-proposal-private-property-in-object": [
-        "./packages/babel-plugin-proposal-private-property-in-object/src"
       ],
       "@babel/plugin-proposal-record-and-tuple": [
         "./packages/babel-plugin-proposal-record-and-tuple/src"
@@ -368,9 +326,6 @@
       ],
       "@babel/plugin-proposal-throw-expressions": [
         "./packages/babel-plugin-proposal-throw-expressions/src"
-      ],
-      "@babel/plugin-proposal-unicode-property-regex": [
-        "./packages/babel-plugin-proposal-unicode-property-regex/src"
       ],
       "@babel/plugin-proposal-unicode-sets-regex": [
         "./packages/babel-plugin-proposal-unicode-sets-regex/src"
@@ -435,6 +390,9 @@
       "@babel/plugin-transform-arrow-functions": [
         "./packages/babel-plugin-transform-arrow-functions/src"
       ],
+      "@babel/plugin-transform-async-generator-functions": [
+        "./packages/babel-plugin-transform-async-generator-functions/src"
+      ],
       "@babel/plugin-transform-async-to-generator": [
         "./packages/babel-plugin-transform-async-to-generator/src"
       ],
@@ -443,6 +401,12 @@
       ],
       "@babel/plugin-transform-block-scoping": [
         "./packages/babel-plugin-transform-block-scoping/src"
+      ],
+      "@babel/plugin-transform-class-properties": [
+        "./packages/babel-plugin-transform-class-properties/src"
+      ],
+      "@babel/plugin-transform-class-static-block": [
+        "./packages/babel-plugin-transform-class-static-block/src"
       ],
       "@babel/plugin-transform-classes": [
         "./packages/babel-plugin-transform-classes/src"
@@ -459,8 +423,14 @@
       "@babel/plugin-transform-duplicate-keys": [
         "./packages/babel-plugin-transform-duplicate-keys/src"
       ],
+      "@babel/plugin-transform-dynamic-import": [
+        "./packages/babel-plugin-transform-dynamic-import/src"
+      ],
       "@babel/plugin-transform-exponentiation-operator": [
         "./packages/babel-plugin-transform-exponentiation-operator/src"
+      ],
+      "@babel/plugin-transform-export-namespace-from": [
+        "./packages/babel-plugin-transform-export-namespace-from/src"
       ],
       "@babel/plugin-transform-flow-comments": [
         "./packages/babel-plugin-transform-flow-comments/src"
@@ -480,8 +450,14 @@
       "@babel/plugin-transform-jscript": [
         "./packages/babel-plugin-transform-jscript/src"
       ],
+      "@babel/plugin-transform-json-strings": [
+        "./packages/babel-plugin-transform-json-strings/src"
+      ],
       "@babel/plugin-transform-literals": [
         "./packages/babel-plugin-transform-literals/src"
+      ],
+      "@babel/plugin-transform-logical-assignment-operators": [
+        "./packages/babel-plugin-transform-logical-assignment-operators/src"
       ],
       "@babel/plugin-transform-member-expression-literals": [
         "./packages/babel-plugin-transform-member-expression-literals/src"
@@ -504,8 +480,17 @@
       "@babel/plugin-transform-new-target": [
         "./packages/babel-plugin-transform-new-target/src"
       ],
+      "@babel/plugin-transform-nullish-coalescing-operator": [
+        "./packages/babel-plugin-transform-nullish-coalescing-operator/src"
+      ],
+      "@babel/plugin-transform-numeric-separator": [
+        "./packages/babel-plugin-transform-numeric-separator/src"
+      ],
       "@babel/plugin-transform-object-assign": [
         "./packages/babel-plugin-transform-object-assign/src"
+      ],
+      "@babel/plugin-transform-object-rest-spread": [
+        "./packages/babel-plugin-transform-object-rest-spread/src"
       ],
       "@babel/plugin-transform-object-set-prototype-of-to-assign": [
         "./packages/babel-plugin-transform-object-set-prototype-of-to-assign/src"
@@ -513,8 +498,20 @@
       "@babel/plugin-transform-object-super": [
         "./packages/babel-plugin-transform-object-super/src"
       ],
+      "@babel/plugin-transform-optional-catch-binding": [
+        "./packages/babel-plugin-transform-optional-catch-binding/src"
+      ],
+      "@babel/plugin-transform-optional-chaining": [
+        "./packages/babel-plugin-transform-optional-chaining/src"
+      ],
       "@babel/plugin-transform-parameters": [
         "./packages/babel-plugin-transform-parameters/src"
+      ],
+      "@babel/plugin-transform-private-methods": [
+        "./packages/babel-plugin-transform-private-methods/src"
+      ],
+      "@babel/plugin-transform-private-property-in-object": [
+        "./packages/babel-plugin-transform-private-property-in-object/src"
       ],
       "@babel/plugin-transform-property-literals": [
         "./packages/babel-plugin-transform-property-literals/src"
@@ -587,6 +584,9 @@
       ],
       "@babel/plugin-transform-unicode-escapes": [
         "./packages/babel-plugin-transform-unicode-escapes/src"
+      ],
+      "@babel/plugin-transform-unicode-property-regex": [
+        "./packages/babel-plugin-transform-unicode-property-regex/src"
       ],
       "@babel/plugin-transform-unicode-regex": [
         "./packages/babel-plugin-transform-unicode-regex/src"

@@ -5,7 +5,7 @@
       "proposal-decorators",
       { "decoratorsBeforeExport": false, "version": "2018-09" }
     ],
-    "proposal-class-static-block"
+    "transform-class-static-block"
   ],
   "throws": "Static blocks are not supported in 2018-09 decorator transform, please specify { \"version\": \"2021-12\" } instead."
 }

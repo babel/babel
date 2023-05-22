@@ -1,0 +1,6 @@
+{
+  "plugins": ["transform-private-methods", "transform-class-properties"],
+  "assumptions": {
+    "privateFieldsAsSymbols": true
+  }
+}

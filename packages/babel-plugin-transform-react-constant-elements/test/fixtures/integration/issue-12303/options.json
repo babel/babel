@@ -2,6 +2,6 @@
   "plugins": [
     "syntax-jsx",
     "transform-react-constant-elements",
-    "proposal-object-rest-spread"
+    "transform-object-rest-spread"
   ]
 }

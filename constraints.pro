@@ -33,8 +33,6 @@ gen_enforced_field(WorkspaceCwd, 'engines.node', '>=6.9.0') :-
   \+ workspace_field(WorkspaceCwd, 'private', true),
   % Get the workspace name
   workspace_ident(WorkspaceCwd, WorkspaceIdent),
-  % Exempt from the rule as it supports '>=4'. TODO: remove with the next major
-  WorkspaceIdent \= '@babel/plugin-proposal-unicode-property-regex',
   % Exempt from the rule as it supports '>=6.0.0'. TODO: remove with the next major
   WorkspaceIdent \= '@babel/parser',
   % Skip '@babel/eslint*' workspaces. TODO: remove with the next major

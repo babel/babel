@@ -1,0 +1,4 @@
+{
+  "plugins": ["transform-class-static-block"],
+  "minNodeVersion": "12.0.0"
+}

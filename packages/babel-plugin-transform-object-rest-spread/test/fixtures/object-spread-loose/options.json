@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    ["transform-object-rest-spread", { "loose": true }]
+  ],
+  "targets": {
+    "browsers": "ie 6"
+  }
+}

@@ -1,7 +1,0 @@
-{
-  "plugins": [
-    "proposal-class-properties",
-    "transform-block-scoping",
-    "transform-async-to-generator"
-  ]
-}

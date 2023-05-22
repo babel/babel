@@ -1,0 +1,9 @@
+{
+  "parserOpts": {
+    "allowReturnOutsideFunction": true
+  },
+  "plugins": [
+    "transform-async-to-generator",
+    "transform-async-generator-functions"
+  ]
+}

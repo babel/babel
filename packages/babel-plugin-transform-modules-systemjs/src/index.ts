@@ -29,13 +29,13 @@ const buildExportAll = template.statement(`
 
 const MISSING_PLUGIN_WARNING = `\
 WARNING: Dynamic import() transformation must be enabled using the
-         @babel/plugin-proposal-dynamic-import plugin. Babel 8 will
+         @babel/plugin-transform-dynamic-import plugin. Babel 8 will
          no longer transform import() without using that plugin.
 `;
 
 const MISSING_PLUGIN_ERROR = `\
 ERROR: Dynamic import() transformation must be enabled using the
-       @babel/plugin-proposal-dynamic-import plugin. Babel 8
+       @babel/plugin-transform-dynamic-import plugin. Babel 8
        no longer transforms import() without using that plugin.
 `;
 

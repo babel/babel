@@ -7,7 +7,7 @@
     }]
   ],
   "plugins": [
-    ["proposal-class-properties", { "loose": false }],
-    ["proposal-private-methods", { "loose": false }]
+    ["transform-class-properties", { "loose": false }],
+    ["transform-private-methods", { "loose": false }]
   ]
 }
