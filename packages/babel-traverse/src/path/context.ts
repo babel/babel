@@ -272,7 +272,7 @@ export function pushContext(this: NodePath, context: TraversalContext) {
 export function setup(
   this: NodePath,
   parentPath: NodePath | undefined,
-  container: t.Node,
+  container: t.Node | t.Node[],
   listKey: string,
   key: string | number,
 ) {

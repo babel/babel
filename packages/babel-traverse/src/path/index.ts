@@ -54,7 +54,7 @@ class NodePath<T extends t.Node = t.Node> {
   opts: any = null;
   // this.shouldSkip = false; this.shouldStop = false; this.removed = false;
   _traverseFlags: number = 0;
-  skipKeys: any = null;
+  skipKeys: Record<string, boolean> | null = null;
   parentPath: t.ParentMaps[T["type"]] extends null
     ? null
     : NodePath<t.ParentMaps[T["type"]]> | null = null;

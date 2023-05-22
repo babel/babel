@@ -24,6 +24,7 @@ export type TraverseOptions<S = t.Node> = {
   scope?: Scope;
   noScope?: boolean;
   denylist?: string[];
+  shouldSkip?: (node: NodePath) => boolean;
 } & Visitor<S>;
 
 function traverse<S>(
