@@ -161,6 +161,8 @@ function writeHelpers(runtimeName, { corejs } = {}) {
     // - Node.js >=13.7.0 and bundlers will successfully load the first
     //   array entry:
     //    * Node.js will always load the CJS file
+    //    * Bundlers without ESM support (e.g. Metro) will load the CJS file
+    //      (these Babel helpers enable subsequent "import"+"require" interop)
     //    * Modern tools when using "import" will load the ESM file
     //    * Everything else (old tools, or require() in tools) will
     //      load the CJS file
@@ -170,7 +172,7 @@ function writeHelpers(runtimeName, { corejs } = {}) {
     //   fallback to the second entry (the CJS file)
     // In Babel 8 we can simplify this.
     helperSubExports[`./${path.posix.join("helpers", helperName)}`] = [
-      { node: cjs, import: esm, default: cjs },
+      { node: cjs, require: cjs, import: esm, default: cjs },
       cjs,
     ];
     // For backward compatibility. We can remove this in Babel 8.

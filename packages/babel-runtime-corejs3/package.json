@@ -20,6 +20,7 @@
     "./helpers/AsyncGenerator": [
       {
         "node": "./helpers/AsyncGenerator.js",
+        "require": "./helpers/AsyncGenerator.js",
         "import": "./helpers/esm/AsyncGenerator.js",
         "default": "./helpers/AsyncGenerator.js"
       },
@@ -29,6 +30,7 @@
     "./helpers/OverloadYield": [
       {
         "node": "./helpers/OverloadYield.js",
+        "require": "./helpers/OverloadYield.js",
         "import": "./helpers/esm/OverloadYield.js",
         "default": "./helpers/OverloadYield.js"
       },
@@ -38,6 +40,7 @@
     "./helpers/applyDecs": [
       {
         "node": "./helpers/applyDecs.js",
+        "require": "./helpers/applyDecs.js",
         "import": "./helpers/esm/applyDecs.js",
         "default": "./helpers/applyDecs.js"
       },
@@ -47,6 +50,7 @@
     "./helpers/applyDecs2203": [
       {
         "node": "./helpers/applyDecs2203.js",
+        "require": "./helpers/applyDecs2203.js",
         "import": "./helpers/esm/applyDecs2203.js",
         "default": "./helpers/applyDecs2203.js"
       },
@@ -56,6 +60,7 @@
     "./helpers/applyDecs2203R": [
       {
         "node": "./helpers/applyDecs2203R.js",
+        "require": "./helpers/applyDecs2203R.js",
         "import": "./helpers/esm/applyDecs2203R.js",
         "default": "./helpers/applyDecs2203R.js"
       },
@@ -65,6 +70,7 @@
     "./helpers/applyDecs2301": [
       {
         "node": "./helpers/applyDecs2301.js",
+        "require": "./helpers/applyDecs2301.js",
         "import": "./helpers/esm/applyDecs2301.js",
         "default": "./helpers/applyDecs2301.js"
       },
@@ -74,6 +80,7 @@
     "./helpers/applyDecs2305": [
       {
         "node": "./helpers/applyDecs2305.js",
+        "require": "./helpers/applyDecs2305.js",
         "import": "./helpers/esm/applyDecs2305.js",
         "default": "./helpers/applyDecs2305.js"
       },
@@ -83,6 +90,7 @@
     "./helpers/asyncGeneratorDelegate": [
       {
         "node": "./helpers/asyncGeneratorDelegate.js",
+        "require": "./helpers/asyncGeneratorDelegate.js",
         "import": "./helpers/esm/asyncGeneratorDelegate.js",
         "default": "./helpers/asyncGeneratorDelegate.js"
       },
@@ -92,6 +100,7 @@
     "./helpers/asyncIterator": [
       {
         "node": "./helpers/asyncIterator.js",
+        "require": "./helpers/asyncIterator.js",
         "import": "./helpers/esm/asyncIterator.js",
         "default": "./helpers/asyncIterator.js"
       },
@@ -101,6 +110,7 @@
     "./helpers/awaitAsyncGenerator": [
       {
         "node": "./helpers/awaitAsyncGenerator.js",
+        "require": "./helpers/awaitAsyncGenerator.js",
         "import": "./helpers/esm/awaitAsyncGenerator.js",
         "default": "./helpers/awaitAsyncGenerator.js"
       },
@@ -110,6 +120,7 @@
     "./helpers/checkInRHS": [
       {
         "node": "./helpers/checkInRHS.js",
+        "require": "./helpers/checkInRHS.js",
         "import": "./helpers/esm/checkInRHS.js",
         "default": "./helpers/checkInRHS.js"
       },
@@ -119,6 +130,7 @@
     "./helpers/defineAccessor": [
       {
         "node": "./helpers/defineAccessor.js",
+        "require": "./helpers/defineAccessor.js",
         "import": "./helpers/esm/defineAccessor.js",
         "default": "./helpers/defineAccessor.js"
       },
@@ -128,6 +140,7 @@
     "./helpers/iterableToArrayLimit": [
       {
         "node": "./helpers/iterableToArrayLimit.js",
+        "require": "./helpers/iterableToArrayLimit.js",
         "import": "./helpers/esm/iterableToArrayLimit.js",
         "default": "./helpers/iterableToArrayLimit.js"
       },
@@ -137,6 +150,7 @@
     "./helpers/iterableToArrayLimitLoose": [
       {
         "node": "./helpers/iterableToArrayLimitLoose.js",
+        "require": "./helpers/iterableToArrayLimitLoose.js",
         "import": "./helpers/esm/iterableToArrayLimitLoose.js",
         "default": "./helpers/iterableToArrayLimitLoose.js"
       },
@@ -146,6 +160,7 @@
     "./helpers/jsx": [
       {
         "node": "./helpers/jsx.js",
+        "require": "./helpers/jsx.js",
         "import": "./helpers/esm/jsx.js",
         "default": "./helpers/jsx.js"
       },
@@ -155,6 +170,7 @@
     "./helpers/objectSpread2": [
       {
         "node": "./helpers/objectSpread2.js",
+        "require": "./helpers/objectSpread2.js",
         "import": "./helpers/esm/objectSpread2.js",
         "default": "./helpers/objectSpread2.js"
       },
@@ -164,6 +180,7 @@
     "./helpers/regeneratorRuntime": [
       {
         "node": "./helpers/regeneratorRuntime.js",
+        "require": "./helpers/regeneratorRuntime.js",
         "import": "./helpers/esm/regeneratorRuntime.js",
         "default": "./helpers/regeneratorRuntime.js"
       },
@@ -173,6 +190,7 @@
     "./helpers/typeof": [
       {
         "node": "./helpers/typeof.js",
+        "require": "./helpers/typeof.js",
         "import": "./helpers/esm/typeof.js",
         "default": "./helpers/typeof.js"
       },
@@ -182,6 +200,7 @@
     "./helpers/wrapRegExp": [
       {
         "node": "./helpers/wrapRegExp.js",
+        "require": "./helpers/wrapRegExp.js",
         "import": "./helpers/esm/wrapRegExp.js",
         "default": "./helpers/wrapRegExp.js"
       },
@@ -191,6 +210,7 @@
     "./helpers/AwaitValue": [
       {
         "node": "./helpers/AwaitValue.js",
+        "require": "./helpers/AwaitValue.js",
         "import": "./helpers/esm/AwaitValue.js",
         "default": "./helpers/AwaitValue.js"
       },
@@ -200,6 +220,7 @@
     "./helpers/wrapAsyncGenerator": [
       {
         "node": "./helpers/wrapAsyncGenerator.js",
+        "require": "./helpers/wrapAsyncGenerator.js",
         "import": "./helpers/esm/wrapAsyncGenerator.js",
         "default": "./helpers/wrapAsyncGenerator.js"
       },
@@ -209,6 +230,7 @@
     "./helpers/asyncToGenerator": [
       {
         "node": "./helpers/asyncToGenerator.js",
+        "require": "./helpers/asyncToGenerator.js",
         "import": "./helpers/esm/asyncToGenerator.js",
         "default": "./helpers/asyncToGenerator.js"
       },
@@ -218,6 +240,7 @@
     "./helpers/classCallCheck": [
       {
         "node": "./helpers/classCallCheck.js",
+        "require": "./helpers/classCallCheck.js",
         "import": "./helpers/esm/classCallCheck.js",
         "default": "./helpers/classCallCheck.js"
       },
@@ -227,6 +250,7 @@
     "./helpers/createClass": [
       {
         "node": "./helpers/createClass.js",
+        "require": "./helpers/createClass.js",
         "import": "./helpers/esm/createClass.js",
         "default": "./helpers/createClass.js"
       },
@@ -236,6 +260,7 @@
     "./helpers/defineEnumerableProperties": [
       {
         "node": "./helpers/defineEnumerableProperties.js",
+        "require": "./helpers/defineEnumerableProperties.js",
         "import": "./helpers/esm/defineEnumerableProperties.js",
         "default": "./helpers/defineEnumerableProperties.js"
       },
@@ -245,6 +270,7 @@
     "./helpers/defaults": [
       {
         "node": "./helpers/defaults.js",
+        "require": "./helpers/defaults.js",
         "import": "./helpers/esm/defaults.js",
         "default": "./helpers/defaults.js"
       },
@@ -254,6 +280,7 @@
     "./helpers/defineProperty": [
       {
         "node": "./helpers/defineProperty.js",
+        "require": "./helpers/defineProperty.js",
         "import": "./helpers/esm/defineProperty.js",
         "default": "./helpers/defineProperty.js"
       },
@@ -263,6 +290,7 @@
     "./helpers/extends": [
       {
         "node": "./helpers/extends.js",
+        "require": "./helpers/extends.js",
         "import": "./helpers/esm/extends.js",
         "default": "./helpers/extends.js"
       },
@@ -272,6 +300,7 @@
     "./helpers/objectSpread": [
       {
         "node": "./helpers/objectSpread.js",
+        "require": "./helpers/objectSpread.js",
         "import": "./helpers/esm/objectSpread.js",
         "default": "./helpers/objectSpread.js"
       },
@@ -281,6 +310,7 @@
     "./helpers/inherits": [
       {
         "node": "./helpers/inherits.js",
+        "require": "./helpers/inherits.js",
         "import": "./helpers/esm/inherits.js",
         "default": "./helpers/inherits.js"
       },
@@ -290,6 +320,7 @@
     "./helpers/inheritsLoose": [
       {
         "node": "./helpers/inheritsLoose.js",
+        "require": "./helpers/inheritsLoose.js",
         "import": "./helpers/esm/inheritsLoose.js",
         "default": "./helpers/inheritsLoose.js"
       },
@@ -299,6 +330,7 @@
     "./helpers/getPrototypeOf": [
       {
         "node": "./helpers/getPrototypeOf.js",
+        "require": "./helpers/getPrototypeOf.js",
         "import": "./helpers/esm/getPrototypeOf.js",
         "default": "./helpers/getPrototypeOf.js"
       },
@@ -308,6 +340,7 @@
     "./helpers/setPrototypeOf": [
       {
         "node": "./helpers/setPrototypeOf.js",
+        "require": "./helpers/setPrototypeOf.js",
         "import": "./helpers/esm/setPrototypeOf.js",
         "default": "./helpers/setPrototypeOf.js"
       },
@@ -317,6 +350,7 @@
     "./helpers/isNativeReflectConstruct": [
       {
         "node": "./helpers/isNativeReflectConstruct.js",
+        "require": "./helpers/isNativeReflectConstruct.js",
         "import": "./helpers/esm/isNativeReflectConstruct.js",
         "default": "./helpers/isNativeReflectConstruct.js"
       },
@@ -326,6 +360,7 @@
     "./helpers/construct": [
       {
         "node": "./helpers/construct.js",
+        "require": "./helpers/construct.js",
         "import": "./helpers/esm/construct.js",
         "default": "./helpers/construct.js"
       },
@@ -335,6 +370,7 @@
     "./helpers/isNativeFunction": [
       {
         "node": "./helpers/isNativeFunction.js",
+        "require": "./helpers/isNativeFunction.js",
         "import": "./helpers/esm/isNativeFunction.js",
         "default": "./helpers/isNativeFunction.js"
       },
@@ -344,6 +380,7 @@
     "./helpers/wrapNativeSuper": [
       {
         "node": "./helpers/wrapNativeSuper.js",
+        "require": "./helpers/wrapNativeSuper.js",
         "import": "./helpers/esm/wrapNativeSuper.js",
         "default": "./helpers/wrapNativeSuper.js"
       },
@@ -353,6 +390,7 @@
     "./helpers/instanceof": [
       {
         "node": "./helpers/instanceof.js",
+        "require": "./helpers/instanceof.js",
         "import": "./helpers/esm/instanceof.js",
         "default": "./helpers/instanceof.js"
       },
@@ -362,6 +400,7 @@
     "./helpers/interopRequireDefault": [
       {
         "node": "./helpers/interopRequireDefault.js",
+        "require": "./helpers/interopRequireDefault.js",
         "import": "./helpers/esm/interopRequireDefault.js",
         "default": "./helpers/interopRequireDefault.js"
       },
@@ -371,6 +410,7 @@
     "./helpers/interopRequireWildcard": [
       {
         "node": "./helpers/interopRequireWildcard.js",
+        "require": "./helpers/interopRequireWildcard.js",
         "import": "./helpers/esm/interopRequireWildcard.js",
         "default": "./helpers/interopRequireWildcard.js"
       },
@@ -380,6 +420,7 @@
     "./helpers/newArrowCheck": [
       {
         "node": "./helpers/newArrowCheck.js",
+        "require": "./helpers/newArrowCheck.js",
         "import": "./helpers/esm/newArrowCheck.js",
         "default": "./helpers/newArrowCheck.js"
       },
@@ -389,6 +430,7 @@
     "./helpers/objectDestructuringEmpty": [
       {
         "node": "./helpers/objectDestructuringEmpty.js",
+        "require": "./helpers/objectDestructuringEmpty.js",
         "import": "./helpers/esm/objectDestructuringEmpty.js",
         "default": "./helpers/objectDestructuringEmpty.js"
       },
@@ -398,6 +440,7 @@
     "./helpers/objectWithoutPropertiesLoose": [
       {
         "node": "./helpers/objectWithoutPropertiesLoose.js",
+        "require": "./helpers/objectWithoutPropertiesLoose.js",
         "import": "./helpers/esm/objectWithoutPropertiesLoose.js",
         "default": "./helpers/objectWithoutPropertiesLoose.js"
       },
@@ -407,6 +450,7 @@
     "./helpers/objectWithoutProperties": [
       {
         "node": "./helpers/objectWithoutProperties.js",
+        "require": "./helpers/objectWithoutProperties.js",
         "import": "./helpers/esm/objectWithoutProperties.js",
         "default": "./helpers/objectWithoutProperties.js"
       },
@@ -416,6 +460,7 @@
     "./helpers/assertThisInitialized": [
       {
         "node": "./helpers/assertThisInitialized.js",
+        "require": "./helpers/assertThisInitialized.js",
         "import": "./helpers/esm/assertThisInitialized.js",
         "default": "./helpers/assertThisInitialized.js"
       },
@@ -425,6 +470,7 @@
     "./helpers/possibleConstructorReturn": [
       {
         "node": "./helpers/possibleConstructorReturn.js",
+        "require": "./helpers/possibleConstructorReturn.js",
         "import": "./helpers/esm/possibleConstructorReturn.js",
         "default": "./helpers/possibleConstructorReturn.js"
       },
@@ -434,6 +480,7 @@
     "./helpers/createSuper": [
       {
         "node": "./helpers/createSuper.js",
+        "require": "./helpers/createSuper.js",
         "import": "./helpers/esm/createSuper.js",
         "default": "./helpers/createSuper.js"
       },
@@ -443,6 +490,7 @@
     "./helpers/superPropBase": [
       {
         "node": "./helpers/superPropBase.js",
+        "require": "./helpers/superPropBase.js",
         "import": "./helpers/esm/superPropBase.js",
         "default": "./helpers/superPropBase.js"
       },
@@ -452,6 +500,7 @@
     "./helpers/get": [
       {
         "node": "./helpers/get.js",
+        "require": "./helpers/get.js",
         "import": "./helpers/esm/get.js",
         "default": "./helpers/get.js"
       },
@@ -461,6 +510,7 @@
     "./helpers/set": [
       {
         "node": "./helpers/set.js",
+        "require": "./helpers/set.js",
         "import": "./helpers/esm/set.js",
         "default": "./helpers/set.js"
       },
@@ -470,6 +520,7 @@
     "./helpers/taggedTemplateLiteral": [
       {
         "node": "./helpers/taggedTemplateLiteral.js",
+        "require": "./helpers/taggedTemplateLiteral.js",
         "import": "./helpers/esm/taggedTemplateLiteral.js",
         "default": "./helpers/taggedTemplateLiteral.js"
       },
@@ -479,6 +530,7 @@
     "./helpers/taggedTemplateLiteralLoose": [
       {
         "node": "./helpers/taggedTemplateLiteralLoose.js",
+        "require": "./helpers/taggedTemplateLiteralLoose.js",
         "import": "./helpers/esm/taggedTemplateLiteralLoose.js",
         "default": "./helpers/taggedTemplateLiteralLoose.js"
       },
@@ -488,6 +540,7 @@
     "./helpers/readOnlyError": [
       {
         "node": "./helpers/readOnlyError.js",
+        "require": "./helpers/readOnlyError.js",
         "import": "./helpers/esm/readOnlyError.js",
         "default": "./helpers/readOnlyError.js"
       },
@@ -497,6 +550,7 @@
     "./helpers/writeOnlyError": [
       {
         "node": "./helpers/writeOnlyError.js",
+        "require": "./helpers/writeOnlyError.js",
         "import": "./helpers/esm/writeOnlyError.js",
         "default": "./helpers/writeOnlyError.js"
       },
@@ -506,6 +560,7 @@
     "./helpers/classNameTDZError": [
       {
         "node": "./helpers/classNameTDZError.js",
+        "require": "./helpers/classNameTDZError.js",
         "import": "./helpers/esm/classNameTDZError.js",
         "default": "./helpers/classNameTDZError.js"
       },
@@ -515,6 +570,7 @@
     "./helpers/temporalUndefined": [
       {
         "node": "./helpers/temporalUndefined.js",
+        "require": "./helpers/temporalUndefined.js",
         "import": "./helpers/esm/temporalUndefined.js",
         "default": "./helpers/temporalUndefined.js"
       },
@@ -524,6 +580,7 @@
     "./helpers/tdz": [
       {
         "node": "./helpers/tdz.js",
+        "require": "./helpers/tdz.js",
         "import": "./helpers/esm/tdz.js",
         "default": "./helpers/tdz.js"
       },
@@ -533,6 +590,7 @@
     "./helpers/temporalRef": [
       {
         "node": "./helpers/temporalRef.js",
+        "require": "./helpers/temporalRef.js",
         "import": "./helpers/esm/temporalRef.js",
         "default": "./helpers/temporalRef.js"
       },
@@ -542,6 +600,7 @@
     "./helpers/slicedToArray": [
       {
         "node": "./helpers/slicedToArray.js",
+        "require": "./helpers/slicedToArray.js",
         "import": "./helpers/esm/slicedToArray.js",
         "default": "./helpers/slicedToArray.js"
       },
@@ -551,6 +610,7 @@
     "./helpers/slicedToArrayLoose": [
       {
         "node": "./helpers/slicedToArrayLoose.js",
+        "require": "./helpers/slicedToArrayLoose.js",
         "import": "./helpers/esm/slicedToArrayLoose.js",
         "default": "./helpers/slicedToArrayLoose.js"
       },
@@ -560,6 +620,7 @@
     "./helpers/toArray": [
       {
         "node": "./helpers/toArray.js",
+        "require": "./helpers/toArray.js",
         "import": "./helpers/esm/toArray.js",
         "default": "./helpers/toArray.js"
       },
@@ -569,6 +630,7 @@
     "./helpers/toConsumableArray": [
       {
         "node": "./helpers/toConsumableArray.js",
+        "require": "./helpers/toConsumableArray.js",
         "import": "./helpers/esm/toConsumableArray.js",
         "default": "./helpers/toConsumableArray.js"
       },
@@ -578,6 +640,7 @@
     "./helpers/arrayWithoutHoles": [
       {
         "node": "./helpers/arrayWithoutHoles.js",
+        "require": "./helpers/arrayWithoutHoles.js",
         "import": "./helpers/esm/arrayWithoutHoles.js",
         "default": "./helpers/arrayWithoutHoles.js"
       },
@@ -587,6 +650,7 @@
     "./helpers/arrayWithHoles": [
       {
         "node": "./helpers/arrayWithHoles.js",
+        "require": "./helpers/arrayWithHoles.js",
         "import": "./helpers/esm/arrayWithHoles.js",
         "default": "./helpers/arrayWithHoles.js"
       },
@@ -596,6 +660,7 @@
     "./helpers/maybeArrayLike": [
       {
         "node": "./helpers/maybeArrayLike.js",
+        "require": "./helpers/maybeArrayLike.js",
         "import": "./helpers/esm/maybeArrayLike.js",
         "default": "./helpers/maybeArrayLike.js"
       },
@@ -605,6 +670,7 @@
     "./helpers/iterableToArray": [
       {
         "node": "./helpers/iterableToArray.js",
+        "require": "./helpers/iterableToArray.js",
         "import": "./helpers/esm/iterableToArray.js",
         "default": "./helpers/iterableToArray.js"
       },
@@ -614,6 +680,7 @@
     "./helpers/unsupportedIterableToArray": [
       {
         "node": "./helpers/unsupportedIterableToArray.js",
+        "require": "./helpers/unsupportedIterableToArray.js",
         "import": "./helpers/esm/unsupportedIterableToArray.js",
         "default": "./helpers/unsupportedIterableToArray.js"
       },
@@ -623,6 +690,7 @@
     "./helpers/arrayLikeToArray": [
       {
         "node": "./helpers/arrayLikeToArray.js",
+        "require": "./helpers/arrayLikeToArray.js",
         "import": "./helpers/esm/arrayLikeToArray.js",
         "default": "./helpers/arrayLikeToArray.js"
       },
@@ -632,6 +700,7 @@
     "./helpers/nonIterableSpread": [
       {
         "node": "./helpers/nonIterableSpread.js",
+        "require": "./helpers/nonIterableSpread.js",
         "import": "./helpers/esm/nonIterableSpread.js",
         "default": "./helpers/nonIterableSpread.js"
       },
@@ -641,6 +710,7 @@
     "./helpers/nonIterableRest": [
       {
         "node": "./helpers/nonIterableRest.js",
+        "require": "./helpers/nonIterableRest.js",
         "import": "./helpers/esm/nonIterableRest.js",
         "default": "./helpers/nonIterableRest.js"
       },
@@ -650,6 +720,7 @@
     "./helpers/createForOfIteratorHelper": [
       {
         "node": "./helpers/createForOfIteratorHelper.js",
+        "require": "./helpers/createForOfIteratorHelper.js",
         "import": "./helpers/esm/createForOfIteratorHelper.js",
         "default": "./helpers/createForOfIteratorHelper.js"
       },
@@ -659,6 +730,7 @@
     "./helpers/createForOfIteratorHelperLoose": [
       {
         "node": "./helpers/createForOfIteratorHelperLoose.js",
+        "require": "./helpers/createForOfIteratorHelperLoose.js",
         "import": "./helpers/esm/createForOfIteratorHelperLoose.js",
         "default": "./helpers/createForOfIteratorHelperLoose.js"
       },
@@ -668,6 +740,7 @@
     "./helpers/skipFirstGeneratorNext": [
       {
         "node": "./helpers/skipFirstGeneratorNext.js",
+        "require": "./helpers/skipFirstGeneratorNext.js",
         "import": "./helpers/esm/skipFirstGeneratorNext.js",
         "default": "./helpers/skipFirstGeneratorNext.js"
       },
@@ -677,6 +750,7 @@
     "./helpers/toPrimitive": [
       {
         "node": "./helpers/toPrimitive.js",
+        "require": "./helpers/toPrimitive.js",
         "import": "./helpers/esm/toPrimitive.js",
         "default": "./helpers/toPrimitive.js"
       },
@@ -686,6 +760,7 @@
     "./helpers/toPropertyKey": [
       {
         "node": "./helpers/toPropertyKey.js",
+        "require": "./helpers/toPropertyKey.js",
         "import": "./helpers/esm/toPropertyKey.js",
         "default": "./helpers/toPropertyKey.js"
       },
@@ -695,6 +770,7 @@
     "./helpers/initializerWarningHelper": [
       {
         "node": "./helpers/initializerWarningHelper.js",
+        "require": "./helpers/initializerWarningHelper.js",
         "import": "./helpers/esm/initializerWarningHelper.js",
         "default": "./helpers/initializerWarningHelper.js"
       },
@@ -704,6 +780,7 @@
     "./helpers/initializerDefineProperty": [
       {
         "node": "./helpers/initializerDefineProperty.js",
+        "require": "./helpers/initializerDefineProperty.js",
         "import": "./helpers/esm/initializerDefineProperty.js",
         "default": "./helpers/initializerDefineProperty.js"
       },
@@ -713,6 +790,7 @@
     "./helpers/applyDecoratedDescriptor": [
       {
         "node": "./helpers/applyDecoratedDescriptor.js",
+        "require": "./helpers/applyDecoratedDescriptor.js",
         "import": "./helpers/esm/applyDecoratedDescriptor.js",
         "default": "./helpers/applyDecoratedDescriptor.js"
       },
@@ -722,6 +800,7 @@
     "./helpers/classPrivateFieldLooseKey": [
       {
         "node": "./helpers/classPrivateFieldLooseKey.js",
+        "require": "./helpers/classPrivateFieldLooseKey.js",
         "import": "./helpers/esm/classPrivateFieldLooseKey.js",
         "default": "./helpers/classPrivateFieldLooseKey.js"
       },
@@ -731,6 +810,7 @@
     "./helpers/classPrivateFieldLooseBase": [
       {
         "node": "./helpers/classPrivateFieldLooseBase.js",
+        "require": "./helpers/classPrivateFieldLooseBase.js",
         "import": "./helpers/esm/classPrivateFieldLooseBase.js",
         "default": "./helpers/classPrivateFieldLooseBase.js"
       },
@@ -740,6 +820,7 @@
     "./helpers/classPrivateFieldGet": [
       {
         "node": "./helpers/classPrivateFieldGet.js",
+        "require": "./helpers/classPrivateFieldGet.js",
         "import": "./helpers/esm/classPrivateFieldGet.js",
         "default": "./helpers/classPrivateFieldGet.js"
       },
@@ -749,6 +830,7 @@
     "./helpers/classPrivateFieldSet": [
       {
         "node": "./helpers/classPrivateFieldSet.js",
+        "require": "./helpers/classPrivateFieldSet.js",
         "import": "./helpers/esm/classPrivateFieldSet.js",
         "default": "./helpers/classPrivateFieldSet.js"
       },
@@ -758,6 +840,7 @@
     "./helpers/classPrivateFieldDestructureSet": [
       {
         "node": "./helpers/classPrivateFieldDestructureSet.js",
+        "require": "./helpers/classPrivateFieldDestructureSet.js",
         "import": "./helpers/esm/classPrivateFieldDestructureSet.js",
         "default": "./helpers/classPrivateFieldDestructureSet.js"
       },
@@ -767,6 +850,7 @@
     "./helpers/classExtractFieldDescriptor": [
       {
         "node": "./helpers/classExtractFieldDescriptor.js",
+        "require": "./helpers/classExtractFieldDescriptor.js",
         "import": "./helpers/esm/classExtractFieldDescriptor.js",
         "default": "./helpers/classExtractFieldDescriptor.js"
       },
@@ -776,6 +860,7 @@
     "./helpers/classStaticPrivateFieldSpecGet": [
       {
         "node": "./helpers/classStaticPrivateFieldSpecGet.js",
+        "require": "./helpers/classStaticPrivateFieldSpecGet.js",
         "import": "./helpers/esm/classStaticPrivateFieldSpecGet.js",
         "default": "./helpers/classStaticPrivateFieldSpecGet.js"
       },
@@ -785,6 +870,7 @@
     "./helpers/classStaticPrivateFieldSpecSet": [
       {
         "node": "./helpers/classStaticPrivateFieldSpecSet.js",
+        "require": "./helpers/classStaticPrivateFieldSpecSet.js",
         "import": "./helpers/esm/classStaticPrivateFieldSpecSet.js",
         "default": "./helpers/classStaticPrivateFieldSpecSet.js"
       },
@@ -794,6 +880,7 @@
     "./helpers/classStaticPrivateMethodGet": [
       {
         "node": "./helpers/classStaticPrivateMethodGet.js",
+        "require": "./helpers/classStaticPrivateMethodGet.js",
         "import": "./helpers/esm/classStaticPrivateMethodGet.js",
         "default": "./helpers/classStaticPrivateMethodGet.js"
       },
@@ -803,6 +890,7 @@
     "./helpers/classStaticPrivateMethodSet": [
       {
         "node": "./helpers/classStaticPrivateMethodSet.js",
+        "require": "./helpers/classStaticPrivateMethodSet.js",
         "import": "./helpers/esm/classStaticPrivateMethodSet.js",
         "default": "./helpers/classStaticPrivateMethodSet.js"
       },
@@ -812,6 +900,7 @@
     "./helpers/classApplyDescriptorGet": [
       {
         "node": "./helpers/classApplyDescriptorGet.js",
+        "require": "./helpers/classApplyDescriptorGet.js",
         "import": "./helpers/esm/classApplyDescriptorGet.js",
         "default": "./helpers/classApplyDescriptorGet.js"
       },
@@ -821,6 +910,7 @@
     "./helpers/classApplyDescriptorSet": [
       {
         "node": "./helpers/classApplyDescriptorSet.js",
+        "require": "./helpers/classApplyDescriptorSet.js",
         "import": "./helpers/esm/classApplyDescriptorSet.js",
         "default": "./helpers/classApplyDescriptorSet.js"
       },
@@ -830,6 +920,7 @@
     "./helpers/classApplyDescriptorDestructureSet": [
       {
         "node": "./helpers/classApplyDescriptorDestructureSet.js",
+        "require": "./helpers/classApplyDescriptorDestructureSet.js",
         "import": "./helpers/esm/classApplyDescriptorDestructureSet.js",
         "default": "./helpers/classApplyDescriptorDestructureSet.js"
       },
@@ -839,6 +930,7 @@
     "./helpers/classStaticPrivateFieldDestructureSet": [
       {
         "node": "./helpers/classStaticPrivateFieldDestructureSet.js",
+        "require": "./helpers/classStaticPrivateFieldDestructureSet.js",
         "import": "./helpers/esm/classStaticPrivateFieldDestructureSet.js",
         "default": "./helpers/classStaticPrivateFieldDestructureSet.js"
       },
@@ -848,6 +940,7 @@
     "./helpers/classCheckPrivateStaticAccess": [
       {
         "node": "./helpers/classCheckPrivateStaticAccess.js",
+        "require": "./helpers/classCheckPrivateStaticAccess.js",
         "import": "./helpers/esm/classCheckPrivateStaticAccess.js",
         "default": "./helpers/classCheckPrivateStaticAccess.js"
       },
@@ -857,6 +950,7 @@
     "./helpers/classCheckPrivateStaticFieldDescriptor": [
       {
         "node": "./helpers/classCheckPrivateStaticFieldDescriptor.js",
+        "require": "./helpers/classCheckPrivateStaticFieldDescriptor.js",
         "import": "./helpers/esm/classCheckPrivateStaticFieldDescriptor.js",
         "default": "./helpers/classCheckPrivateStaticFieldDescriptor.js"
       },
@@ -866,6 +960,7 @@
     "./helpers/decorate": [
       {
         "node": "./helpers/decorate.js",
+        "require": "./helpers/decorate.js",
         "import": "./helpers/esm/decorate.js",
         "default": "./helpers/decorate.js"
       },
@@ -875,6 +970,7 @@
     "./helpers/classPrivateMethodGet": [
       {
         "node": "./helpers/classPrivateMethodGet.js",
+        "require": "./helpers/classPrivateMethodGet.js",
         "import": "./helpers/esm/classPrivateMethodGet.js",
         "default": "./helpers/classPrivateMethodGet.js"
       },
@@ -884,6 +980,7 @@
     "./helpers/checkPrivateRedeclaration": [
       {
         "node": "./helpers/checkPrivateRedeclaration.js",
+        "require": "./helpers/checkPrivateRedeclaration.js",
         "import": "./helpers/esm/checkPrivateRedeclaration.js",
         "default": "./helpers/checkPrivateRedeclaration.js"
       },
@@ -893,6 +990,7 @@
     "./helpers/classPrivateFieldInitSpec": [
       {
         "node": "./helpers/classPrivateFieldInitSpec.js",
+        "require": "./helpers/classPrivateFieldInitSpec.js",
         "import": "./helpers/esm/classPrivateFieldInitSpec.js",
         "default": "./helpers/classPrivateFieldInitSpec.js"
       },
@@ -902,6 +1000,7 @@
     "./helpers/classPrivateMethodInitSpec": [
       {
         "node": "./helpers/classPrivateMethodInitSpec.js",
+        "require": "./helpers/classPrivateMethodInitSpec.js",
         "import": "./helpers/esm/classPrivateMethodInitSpec.js",
         "default": "./helpers/classPrivateMethodInitSpec.js"
       },
@@ -911,6 +1010,7 @@
     "./helpers/classPrivateMethodSet": [
       {
         "node": "./helpers/classPrivateMethodSet.js",
+        "require": "./helpers/classPrivateMethodSet.js",
         "import": "./helpers/esm/classPrivateMethodSet.js",
         "default": "./helpers/classPrivateMethodSet.js"
       },
@@ -920,6 +1020,7 @@
     "./helpers/identity": [
       {
         "node": "./helpers/identity.js",
+        "require": "./helpers/identity.js",
         "import": "./helpers/esm/identity.js",
         "default": "./helpers/identity.js"
       },
