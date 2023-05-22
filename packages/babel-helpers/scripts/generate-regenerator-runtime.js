@@ -6,14 +6,16 @@ import { createRequire } from "module";
 const [parse, generate] = await Promise.all([
   import("@babel/parser").then(ns => ns.parse),
   import("@babel/generator").then(ns => ns.default.default || ns.default),
-]).catch(error =>
-  Promise.reject(
-    new Error(
+]).catch(error => {
+  if (error.code === "ERR_MODULE_NOT_FOUND") {
+    throw new Error(
       "Before running generate-helpers.js you must compile @babel/parser and @babel/generator.",
       { cause: error }
-    )
-  )
-);
+    );
+  } else {
+    throw error;
+  }
+});
 
 const REGENERATOR_RUNTIME_IN_FILE = fs.readFileSync(
   createRequire(import.meta.url).resolve("regenerator-runtime"),

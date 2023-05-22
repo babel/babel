@@ -117,10 +117,6 @@ getBindingIdentifiers.keys = {
   ImportDefaultSpecifier: ["local"],
   ImportDeclaration: ["specifiers"],
 
-  ExportSpecifier: ["exported"],
-  ExportNamespaceSpecifier: ["exported"],
-  ExportDefaultSpecifier: ["exported"],
-
   FunctionDeclaration: ["id", "params"],
   FunctionExpression: ["id", "params"],
   ArrowFunctionExpression: ["params"],

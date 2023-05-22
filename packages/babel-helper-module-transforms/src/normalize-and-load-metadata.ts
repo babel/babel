@@ -279,7 +279,12 @@ function getModuleMetadata(
   };
   let hasExports = false;
   programPath.get("body").forEach(child => {
-    if (child.isImportDeclaration()) {
+    if (
+      child.isImportDeclaration() &&
+      // If the TS plugin runs after the modules plugin, there will still be
+      // some `import type` declarations in the AST. Ignore them.
+      child.node.importKind !== "type"
+    ) {
       const data = getData(child.node.source);
       if (!data.loc) data.loc = child.node.loc;
 
@@ -311,7 +316,10 @@ function getModuleMetadata(
             });
             data.referenced = true;
           }
-        } else if (spec.isImportSpecifier()) {
+        } else if (
+          spec.isImportSpecifier() &&
+          spec.node.importKind !== "type"
+        ) {
           const importName = getExportSpecifierName(
             spec.get("imported"),
             stringSpecifiers,
@@ -566,7 +574,7 @@ function nameAnonymousExports(programPath: NodePath<t.Program>) {
 
 function removeImportExportDeclarations(programPath: NodePath<t.Program>) {
   programPath.get("body").forEach(child => {
-    if (child.isImportDeclaration()) {
+    if (child.isImportDeclaration() && child.node.importKind !== "type") {
       child.remove();
     } else if (child.isExportNamedDeclaration()) {
       if (child.node.declaration) {
