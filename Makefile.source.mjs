@@ -456,10 +456,13 @@ target["new-version-checklist"] = function () {
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!                                                   !!!!!!
-!!!!!!              Update the version in                !!!!!!
-!!!!!! packages/babel-plugin-syntax-import-attributes/src/index.ts
-!!!!!!                    and                            !!!!!!
-!!!!!! /Users/nic/Documents/dev/babel/babel/packages/babel-preset-env/src/available-plugins.ts#L159
+!!!!!! - Update the version in the                       !!!!!!
+!!!!!!   syntax-import-attributes plugin and in          !!!!!!
+!!!!!!   babel-preset-env/src/available-plugins.ts#L159  !!!!!!
+!!!!!! - Update the version in the using and dispose     !!!!!!
+!!!!!!   helpers                                         !!!!!!
+!!!!!! - Update the version in the                       !!!!!!
+!!!!!    proposal-explicit-resource-management plugin    !!!!!!
 !!!!!!                                                   !!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
