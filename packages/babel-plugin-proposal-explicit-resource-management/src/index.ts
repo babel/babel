@@ -153,11 +153,12 @@ export default declare(api => {
           if (stmt.isExportNamedDeclaration()) {
             node = stmt.node.declaration;
             if (!node || t.isFunction(node)) continue;
+
             stmt.replaceWith(
               t.exportNamedDeclaration(
                 null,
-                Object.values(t.getOuterBindingIdentifiers(node, false)).map(
-                  id => t.exportSpecifier(t.cloneNode(id), t.cloneNode(id)),
+                Object.keys(t.getOuterBindingIdentifiers(node, false)).map(id =>
+                  t.exportSpecifier(t.identifier(id), t.identifier(id)),
                 ),
               ),
             );
