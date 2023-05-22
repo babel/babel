@@ -20,7 +20,7 @@ type ClassElement =
   | t.TSIndexSignature
   | t.StaticBlock;
 
-type DecoratorVersionKind = "2023-01" | "2022-03" | "2021-12";
+type DecoratorVersionKind = "2023-05" | "2023-01" | "2022-03" | "2021-12";
 
 function incrementId(id: number[], idx = id.length - 1): void {
   // If index is -1, id needs an additional character, unshift A
@@ -165,16 +165,21 @@ function generateClassProperty(
 }
 
 function addProxyAccessorsFor(
+  className: t.Identifier,
   element: NodePath<ClassDecoratableElement>,
   originalKey: t.PrivateName | t.Expression,
   targetKey: t.PrivateName,
+  version: DecoratorVersionKind,
   isComputed = false,
 ): void {
   const { static: isStatic } = element.node;
 
+  const thisArg =
+    version === "2023-05" && isStatic ? className : t.thisExpression();
+
   const getterBody = t.blockStatement([
     t.returnStatement(
-      t.memberExpression(t.thisExpression(), t.cloneNode(targetKey)),
+      t.memberExpression(t.cloneNode(thisArg), t.cloneNode(targetKey)),
     ),
   ]);
 
@@ -182,7 +187,7 @@ function addProxyAccessorsFor(
     t.expressionStatement(
       t.assignmentExpression(
         "=",
-        t.memberExpression(t.thisExpression(), t.cloneNode(targetKey)),
+        t.memberExpression(t.cloneNode(thisArg), t.cloneNode(targetKey)),
         t.identifier("v"),
       ),
     ),
@@ -233,7 +238,7 @@ function extractProxyAccessorsFor(
   targetKey: t.PrivateName,
   version: DecoratorVersionKind,
 ): (t.FunctionExpression | t.ArrowFunctionExpression)[] {
-  if (version !== "2023-01") {
+  if (version !== "2023-05" && version !== "2023-01") {
     return [
       template.expression.ast`
         function () {
@@ -257,13 +262,16 @@ function extractProxyAccessorsFor(
   ];
 }
 
+// 3 bits reserved to this (0-7)
 const FIELD = 0;
 const ACCESSOR = 1;
 const METHOD = 2;
 const GETTER = 3;
 const SETTER = 4;
 
-const STATIC = 5;
+const STATIC_OLD_VERSION = 5; // Before 2023-05
+const STATIC = 8; // 1 << 3
+const DECORATORS_HAVE_THIS = 16; // 1 << 3
 
 function getElementKind(element: NodePath<ClassDecoratableElement>): number {
   switch (element.node.type) {
@@ -288,6 +296,7 @@ function getElementKind(element: NodePath<ClassDecoratableElement>): number {
 interface DecoratorInfo {
   // The expressions of the decorators themselves
   decorators: t.Expression[];
+  decoratorsThis: t.Expression[];
 
   // The kind of the decorated value, matches the kind value passed to applyDecs
   kind: number;
@@ -337,21 +346,47 @@ function filteredOrderedDecoratorInfo(
   ];
 }
 
+function generateDecorationList(
+  decorators: t.Expression[],
+  decoratorsThis: (t.Expression | null)[],
+  version: DecoratorVersionKind,
+) {
+  const decsCount = decorators.length;
+  const hasOneThis = decoratorsThis.some(Boolean);
+  const decs: t.Expression[] = [];
+  for (let i = 0; i < decsCount; i++) {
+    if (version === "2023-05" && hasOneThis) {
+      decs.push(
+        decoratorsThis[i] || t.unaryExpression("void", t.numericLiteral(0)),
+      );
+    }
+    decs.push(decorators[i]);
+  }
+
+  return { hasThis: hasOneThis, decs };
+}
+
 function generateDecorationExprs(
   info: (DecoratorInfo | ComputedPropInfo)[],
+  version: DecoratorVersionKind,
 ): t.ArrayExpression {
   return t.arrayExpression(
     filteredOrderedDecoratorInfo(info).map(el => {
-      const decs =
-        el.decorators.length > 1
-          ? t.arrayExpression(el.decorators)
-          : el.decorators[0];
+      const { decs, hasThis } = generateDecorationList(
+        el.decorators,
+        el.decoratorsThis,
+        version,
+      );
 
-      const kind = el.isStatic ? el.kind + STATIC : el.kind;
+      let flag = el.kind;
+      if (el.isStatic) {
+        flag += version === "2023-05" ? STATIC : STATIC_OLD_VERSION;
+      }
+      if (hasThis) flag += DECORATORS_HAVE_THIS;
 
       return t.arrayExpression([
-        decs,
-        t.numericLiteral(kind),
+        decs.length === 1 ? decs[0] : t.arrayExpression(decs),
+        t.numericLiteral(flag),
         el.name,
         ...(el.privateMethods || []),
       ]);
@@ -513,7 +548,14 @@ function transformClass(
       const newField = generateClassProperty(newId, valueNode, isStatic);
 
       const [newPath] = element.replaceWith(newField);
-      addProxyAccessorsFor(newPath, key, newId, computed);
+      addProxyAccessorsFor(
+        path.node.id,
+        newPath,
+        key,
+        newId,
+        version,
+        computed,
+      );
     }
   }
 
@@ -544,6 +586,29 @@ function transformClass(
     return t.cloneNode(localEvaluatedId);
   };
 
+  const decoratorsThis = new Map<t.Decorator, t.Expression>();
+  const maybeExtractDecorator = (decorator: t.Decorator) => {
+    const { expression } = decorator;
+    if (version === "2023-05" && t.isMemberExpression(expression)) {
+      let object;
+      if (
+        t.isSuper(expression.object) ||
+        t.isThisExpression(expression.object)
+      ) {
+        object = memoiseExpression(t.thisExpression(), "obj");
+      } else if (!scopeParent.isStatic(expression.object)) {
+        object = memoiseExpression(expression.object, "obj");
+        expression.object = object;
+      } else {
+        object = expression.object;
+      }
+      decoratorsThis.set(decorator, t.cloneNode(object));
+    }
+    if (!scopeParent.isStatic(expression)) {
+      decorator.expression = memoiseExpression(expression, "dec");
+    }
+  };
+
   if (classDecorators) {
     classInitLocal = scopeParent.generateDeclaredUidIdentifier("initClass");
 
@@ -554,12 +619,7 @@ function transformClass(
     path.node.decorators = null;
 
     for (const classDecorator of classDecorators) {
-      if (!scopeParent.isStatic(classDecorator.expression)) {
-        classDecorator.expression = memoiseExpression(
-          classDecorator.expression,
-          "dec",
-        );
-      }
+      maybeExtractDecorator(classDecorator);
     }
   } else {
     if (!path.node.id) {
@@ -584,12 +644,7 @@ function transformClass(
 
       if (hasDecorators) {
         for (const decoratorPath of decorators) {
-          if (!scopeParent.isStatic(decoratorPath.node.expression)) {
-            decoratorPath.node.expression = memoiseExpression(
-              decoratorPath.node.expression,
-              "dec",
-            );
-          }
+          maybeExtractDecorator(decoratorPath.node);
         }
       }
 
@@ -669,7 +724,14 @@ function transformClass(
 
             locals = [newFieldInitId, getId, setId];
           } else {
-            addProxyAccessorsFor(newPath, key, newId, isComputed);
+            addProxyAccessorsFor(
+              path.node.id,
+              newPath,
+              key,
+              newId,
+              version,
+              isComputed,
+            );
             locals = newFieldInitId;
           }
         } else if (kind === FIELD) {
@@ -759,6 +821,7 @@ function transformClass(
         elementDecoratorInfo.push({
           kind,
           decorators: decorators.map(d => d.node.expression),
+          decoratorsThis: decorators.map(d => decoratorsThis.get(d.node)),
           name: nameExpr,
           isStatic,
           privateMethods,
@@ -790,10 +853,21 @@ function transformClass(
     }
   }
 
-  const elementDecorations = generateDecorationExprs(elementDecoratorInfo);
-  const classDecorations = t.arrayExpression(
-    (classDecorators || []).map(d => d.expression),
+  const elementDecorations = generateDecorationExprs(
+    elementDecoratorInfo,
+    version,
   );
+  let classDecorationsFlag = 0;
+  let classDecorations: t.Expression[] = [];
+  if (classDecorators) {
+    const { hasThis, decs } = generateDecorationList(
+      classDecorators.map(el => el.expression),
+      classDecorators.map(dec => decoratorsThis.get(dec)),
+      version,
+    );
+    classDecorationsFlag = hasThis ? 1 : 0;
+    classDecorations = decs;
+  }
 
   const elementLocals: t.Identifier[] =
     extractElementLocalAssignments(elementDecoratorInfo);
@@ -1003,7 +1077,8 @@ function transformClass(
             elementLocals,
             classLocals,
             elementDecorations,
-            classDecorations,
+            t.arrayExpression(classDecorations),
+            t.numericLiteral(classDecorationsFlag),
             needsInstancePrivateBrandCheck ? lastInstancePrivateName : null,
             state,
             version,
@@ -1034,6 +1109,7 @@ function createLocalsAssignment(
   classLocals: t.Identifier[],
   elementDecorations: t.ArrayExpression,
   classDecorations: t.ArrayExpression,
+  classDecorationsFlag: t.NumericLiteral,
   maybePrivateBranName: t.PrivateName | null,
   state: PluginPass,
   version: DecoratorVersionKind,
@@ -1056,7 +1132,19 @@ function createLocalsAssignment(
     );
   } else {
     // TODO(Babel 8): Only keep the if branch
-    if (version === "2023-01") {
+    if (version === "2023-05") {
+      if (maybePrivateBranName || classDecorationsFlag.value !== 0) {
+        args.push(classDecorationsFlag);
+      }
+      if (maybePrivateBranName) {
+        args.push(
+          template.expression.ast`
+            _ => ${t.cloneNode(maybePrivateBranName)} in _
+          ` as t.ArrowFunctionExpression,
+        );
+      }
+      rhs = t.callExpression(state.addHelper("applyDecs2305"), args);
+    } else if (version === "2023-01") {
       if (maybePrivateBranName) {
         args.push(
           template.expression.ast`
@@ -1092,9 +1180,9 @@ function createLocalsAssignment(
 export default function (
   { assertVersion, assumption }: PluginAPI,
   { loose }: Options,
-  version: "2023-01" | "2022-03" | "2021-12",
+  version: "2023-05" | "2023-01" | "2022-03" | "2021-12",
 ): PluginObject {
-  if (version === "2023-01") {
+  if (version === "2023-05" || version === "2023-01") {
     assertVersion("^7.21.0");
   } else if (version === "2021-12") {
     assertVersion("^7.16.0");
