@@ -249,7 +249,12 @@ function getFiles(glob, { include, exclude }) {
 
 function createWorker(useWorker) {
   const numWorkers = Math.ceil(Math.max(cpus().length, 1) / 2) - 1;
-  if (numWorkers === 0 || !useWorker) {
+  if (
+    numWorkers === 0 ||
+    !useWorker ||
+    // For some reason, on CircleCI the workers hang indefinitely.
+    process.env.CIRCLECI
+  ) {
     return require("./babel-worker.cjs");
   }
   const worker = new JestWorker(require.resolve("./babel-worker.cjs"), {
