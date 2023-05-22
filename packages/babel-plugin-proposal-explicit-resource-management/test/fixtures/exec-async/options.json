@@ -1,7 +1,7 @@
 {
   "plugins": [
     "proposal-explicit-resource-management",
-    "proposal-optional-catch-binding"
+    "transform-optional-catch-binding"
   ],
   "parserOpts": { "allowReturnOutsideFunction": true }
 }
