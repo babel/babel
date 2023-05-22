@@ -1,7 +1,5 @@
 import { resolve as polyfill } from "../../vendor/import-meta-resolve";
 
-declare const USE_ESM: boolean;
-
 let importMetaResolve: (specifier: string, parent: string) => string;
 
 if (USE_ESM) {

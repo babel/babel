@@ -37,7 +37,6 @@ import type { NodePath } from "@babel/traverse";
 
 export { buildDynamicImport } from "./dynamic-import";
 
-declare const USE_ESM: boolean, IS_STANDALONE: boolean;
 if (!process.env.BABEL_8_BREAKING) {
   if (!USE_ESM) {
     if (!IS_STANDALONE) {

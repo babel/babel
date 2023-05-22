@@ -14,7 +14,6 @@ import {
 } from "./features";
 import { generateRegexpuOptions, canSkipRegexpu, transformFlags } from "./util";
 
-declare const PACKAGE_JSON: { name: string; version: string };
 const versionKey = "@babel/plugin-regexp-features/version";
 
 export interface Options {

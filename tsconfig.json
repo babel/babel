@@ -155,6 +155,8 @@
     "./packages/babel-types/src/**/*.ts",
     "./codemods/babel-plugin-codemod-object-assign-to-object-spread/src/**/*.ts",
     "./codemods/babel-plugin-codemod-optional-catch-binding/src/**/*.ts",
+    "./lib/globals.d.ts",
+    "./scripts/repo-utils/*.d.ts",
     "./packages/babel-parser/typings/*.d.ts"
   ],
   "compilerOptions": {

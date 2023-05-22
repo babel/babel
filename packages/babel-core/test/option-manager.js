@@ -1,7 +1,7 @@
 import * as babel from "../lib/index.js";
 import path from "path";
 import { fileURLToPath } from "url";
-import { readFileSync } from "fs";
+import { USE_ESM } from "$repo-utils";
 
 const cwd = path.dirname(fileURLToPath(import.meta.url));
 
@@ -12,15 +12,6 @@ function loadOptions(opts) {
 function loadOptionsAsync(opts) {
   return babel.loadOptionsAsync({ cwd, ...opts });
 }
-
-let USE_ESM = false;
-try {
-  const type = readFileSync(
-    new URL("../../../.module-type", import.meta.url),
-    "utf-8",
-  ).trim();
-  USE_ESM = type === "module";
-} catch {}
 
 const itBabel7 = process.env.BABEL_8_BREAKING ? it.skip : it;
 const itBabel7cjs = process.env.BABEL_8_BREAKING || USE_ESM ? it.skip : it;

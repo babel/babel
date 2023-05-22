@@ -22,7 +22,6 @@ import { addNamed, isModule } from "@babel/helper-module-imports";
 import { OptionValidator } from "@babel/helper-validator-option";
 import type { NodePath } from "@babel/traverse";
 
-declare const PACKAGE_JSON: { name: string; version: string };
 const v = new OptionValidator(PACKAGE_JSON.name);
 
 export interface Options extends SyntaxOptions {

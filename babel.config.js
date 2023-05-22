@@ -653,6 +653,10 @@ function transformNamedBabelTypesImportToDestructuring({
   };
 }
 
+/**
+ * @param {import("@babel/core")} pluginAPI
+ * @returns {import("@babel/core").PluginObj}
+ */
 function pluginImportMetaUrl({ types: t, template }) {
   const isImportMeta = node =>
     t.isMetaProperty(node) &&
@@ -675,23 +679,50 @@ function pluginImportMetaUrl({ types: t, template }) {
             const { node } = path;
 
             if (
-              !t.isIdentifier(node.callee, { name: "fileURLToPath" }) ||
+              (function () {
+                if (
+                  !t.isIdentifier(node.callee, {
+                    name: "fileURLToPath",
+                  }) ||
+                  node.arguments.length !== 1
+                ) {
+                  return;
+                }
+
+                const arg = node.arguments[0];
+
+                if (
+                  !t.isMemberExpression(arg, {
+                    computed: false,
+                  }) ||
+                  !t.isIdentifier(arg.property, {
+                    name: "url",
+                  }) ||
+                  !isImportMeta(arg.object)
+                ) {
+                  return;
+                }
+                path.replaceWith(t.identifier("__filename"));
+                return true;
+              })()
+            ) {
+              return;
+            }
+
+            if (
+              !t.isIdentifier(node.callee, { name: "globals" }) ||
               node.arguments.length !== 1
             ) {
               return;
             }
 
-            const arg = node.arguments[0];
+            const binding = path.scope.getBinding("globals");
+            if (!binding) return;
 
-            if (
-              !t.isMemberExpression(arg, { computed: false }) ||
-              !t.isIdentifier(arg.property, { name: "url" }) ||
-              !isImportMeta(arg.object)
-            ) {
-              return;
+            if (binding.path.isImportSpecifier()) {
+              path.parentPath.parentPath.assertVariableDeclaration();
+              path.parentPath.parentPath.remove();
             }
-
-            path.replaceWith(t.identifier("__filename"));
           },
 
           // const require = createRequire(import.meta.url)

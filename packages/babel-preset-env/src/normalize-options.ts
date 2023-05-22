@@ -23,8 +23,6 @@ import type {
   PluginListOption,
 } from "./types";
 
-declare const PACKAGE_JSON: { name: string; version: string };
-
 const v = new OptionValidator(PACKAGE_JSON.name);
 
 const allPluginsList = Object.keys(pluginsList);
