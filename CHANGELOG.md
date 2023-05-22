@@ -23,6 +23,17 @@ See [`eslint-plugin-babel`'s releases](https://github.com/babel/eslint-plugin-ba
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.21.9 (2023-05-22)
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#15631](https://github.com/babel/babel/pull/15631) rescan gt token at the end of type args parsing ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`
+  * [#15569](https://github.com/babel/babel/pull/15569) Fix indentation when `retainLines` is `true` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-template`
+  * [#15534](https://github.com/babel/babel/pull/15534) fix: Template `export { x }` stuck in infinite loop ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-compat-data`, `babel-preset-env`
+  * [#15606](https://github.com/babel/babel/pull/15606) fix: enable transform-block-scoping with generators feature (#12806) ([@IlyaSemenov](https://github.com/IlyaSemenov))
 ## v7.21.8 (2023-05-02)
 
 #### :eyeglasses: Spec Compliance
