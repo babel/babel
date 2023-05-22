@@ -106,16 +106,6 @@ const pluginNameMap: Record<
       url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-record-and-tuple",
     },
   },
-  regexpUnicodeSets: {
-    syntax: {
-      name: "@babel/plugin-syntax-unicode-sets-regex",
-      url: "https://github.com/babel/babel/blob/main/packages/babel-plugin-syntax-unicode-sets-regex/README.md",
-    },
-    transform: {
-      name: "@babel/plugin-proposal-unicode-sets-regex",
-      url: "https://github.com/babel/babel/blob/main/packages/babel-plugin-proposalunicode-sets-regex/README.md",
-    },
-  },
   throwExpressions: {
     syntax: {
       name: "@babel/plugin-syntax-throw-expressions",
@@ -287,6 +277,16 @@ if (!process.env.BABEL_8_BREAKING) {
       transform: {
         name: "@babel/plugin-transform-private-property-in-object",
         url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-transform-private-property-in-object",
+      },
+    },
+    regexpUnicodeSets: {
+      syntax: {
+        name: "@babel/plugin-syntax-unicode-sets-regex",
+        url: "https://github.com/babel/babel/blob/main/packages/babel-plugin-syntax-unicode-sets-regex/README.md",
+      },
+      transform: {
+        name: "@babel/plugin-proposal-unicode-sets-regex",
+        url: "https://github.com/babel/babel/blob/main/packages/babel-plugin-proposalunicode-sets-regex/README.md",
       },
     },
   });

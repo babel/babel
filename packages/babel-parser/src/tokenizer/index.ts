@@ -57,7 +57,6 @@ const VALID_REGEX_FLAGS = new Set([
   charCodes.lowercaseY,
   charCodes.lowercaseU,
   charCodes.lowercaseD,
-  // This is only valid when using the regexpUnicodeSets plugin
   charCodes.lowercaseV,
 ]);
 
@@ -1100,8 +1099,6 @@ export default abstract class Tokenizer extends CommentsParser {
       // @ts-expect-error VALID_REGEX_FLAGS.has should accept expanded type: number
       if (VALID_REGEX_FLAGS.has(cp)) {
         if (cp === charCodes.lowercaseV) {
-          this.expectPlugin("regexpUnicodeSets", nextPos());
-
           if (mods.includes("u")) {
             this.raise(Errors.IncompatibleRegExpUVFlags, { at: nextPos() });
           }

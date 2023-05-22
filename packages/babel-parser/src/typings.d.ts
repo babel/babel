@@ -34,7 +34,7 @@ export type Plugin =
   | "partialApplication"
   | "placeholders"
   | "privateIn" // Enabled by default
-  | "regexpUnicodeSets"
+  | "regexpUnicodeSets" // Enabled by default
   | "throwExpressions"
   | "topLevelAwait"
   | "v8intrinsic"
