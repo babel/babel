@@ -1,5 +1,7 @@
 /* eslint sort-keys: "error" */
 
+declare const USE_ESM: boolean;
+
 import syntaxAsyncGenerators from "@babel/plugin-syntax-async-generators";
 import syntaxClassProperties from "@babel/plugin-syntax-class-properties";
 import syntaxClassStaticBlock from "@babel/plugin-syntax-class-static-block";
@@ -103,7 +105,13 @@ export default {
   "syntax-optional-chaining": () => syntaxOptionalChaining,
   "syntax-private-property-in-object": () => syntaxPrivatePropertyInObject,
   "syntax-top-level-await": () => syntaxTopLevelAwait,
-  "syntax-unicode-sets-regex": () => syntaxUnicodeSetsRegex,
+  // This is a CJS plugin that depends on a package from the monorepo, so it
+  // breaks using ESM. Given that ESM builds are new enough to have this
+  // syntax enabled by default, we can safely skip enabling it.
+  "syntax-unicode-sets-regex": USE_ESM
+    ? null
+    : // eslint-disable-next-line no-restricted-globals
+      () => require("@babel/plugin-syntax-unicode-sets-regex"),
   "transform-arrow-functions": () => transformArrowFunctions,
   "transform-async-generator-functions": () => proposalAsyncGeneratorFunctions,
   "transform-async-to-generator": () => transformAsyncToGenerator,
