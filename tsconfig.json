@@ -55,7 +55,6 @@
     "./packages/babel-plugin-proposal-record-and-tuple/src/**/*.ts",
     "./packages/babel-plugin-proposal-regexp-modifiers/src/**/*.ts",
     "./packages/babel-plugin-proposal-throw-expressions/src/**/*.ts",
-    "./packages/babel-plugin-proposal-unicode-sets-regex/src/**/*.ts",
     "./packages/babel-plugin-syntax-async-do-expressions/src/**/*.ts",
     "./packages/babel-plugin-syntax-decimal/src/**/*.ts",
     "./packages/babel-plugin-syntax-decorators/src/**/*.ts",
@@ -143,6 +142,7 @@
     "./packages/babel-plugin-transform-unicode-escapes/src/**/*.ts",
     "./packages/babel-plugin-transform-unicode-property-regex/src/**/*.ts",
     "./packages/babel-plugin-transform-unicode-regex/src/**/*.ts",
+    "./packages/babel-plugin-transform-unicode-sets-regex/src/**/*.ts",
     "./packages/babel-preset-env/src/**/*.ts",
     "./packages/babel-preset-flow/src/**/*.ts",
     "./packages/babel-preset-react/src/**/*.ts",
@@ -331,9 +331,6 @@
       ],
       "@babel/plugin-proposal-throw-expressions": [
         "./packages/babel-plugin-proposal-throw-expressions/src"
-      ],
-      "@babel/plugin-proposal-unicode-sets-regex": [
-        "./packages/babel-plugin-proposal-unicode-sets-regex/src"
       ],
       "@babel/plugin-syntax-async-do-expressions": [
         "./packages/babel-plugin-syntax-async-do-expressions/src"
@@ -598,6 +595,9 @@
       ],
       "@babel/plugin-transform-unicode-regex": [
         "./packages/babel-plugin-transform-unicode-regex/src"
+      ],
+      "@babel/plugin-transform-unicode-sets-regex": [
+        "./packages/babel-plugin-transform-unicode-sets-regex/src"
       ],
       "@babel/preset-env": [
         "./packages/babel-preset-env/src"

@@ -1606,19 +1606,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-unicode-sets-regex@workspace:^, @babel/plugin-proposal-unicode-sets-regex@workspace:packages/babel-plugin-proposal-unicode-sets-regex":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-proposal-unicode-sets-regex@workspace:packages/babel-plugin-proposal-unicode-sets-regex"
-  dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-create-regexp-features-plugin": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-  peerDependencies:
-    "@babel/core": ^7.0.0
-  languageName: unknown
-  linkType: soft
-
 "@babel/plugin-syntax-async-do-expressions@workspace:^, @babel/plugin-syntax-async-do-expressions@workspace:packages/babel-plugin-syntax-async-do-expressions":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-async-do-expressions@workspace:packages/babel-plugin-syntax-async-do-expressions"
@@ -3366,6 +3353,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-transform-unicode-sets-regex@workspace:^, @babel/plugin-transform-unicode-sets-regex@workspace:packages/babel-plugin-transform-unicode-sets-regex":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-transform-unicode-sets-regex@workspace:packages/babel-plugin-transform-unicode-sets-regex"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-create-regexp-features-plugin": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
+  languageName: unknown
+  linkType: soft
+
 "@babel/preset-env@npm:^7.20.2":
   version: 7.20.2
   resolution: "@babel/preset-env@npm:7.20.2"
@@ -3693,7 +3693,6 @@ __metadata:
     "@babel/plugin-proposal-record-and-tuple": "workspace:^"
     "@babel/plugin-proposal-regexp-modifiers": "workspace:^"
     "@babel/plugin-proposal-throw-expressions": "workspace:^"
-    "@babel/plugin-proposal-unicode-sets-regex": "workspace:^"
     "@babel/plugin-syntax-decimal": "workspace:^"
     "@babel/plugin-syntax-decorators": "workspace:^"
     "@babel/plugin-syntax-destructuring-private": "workspace:^"
@@ -3777,6 +3776,7 @@ __metadata:
     "@babel/plugin-transform-unicode-escapes": "workspace:^"
     "@babel/plugin-transform-unicode-property-regex": "workspace:^"
     "@babel/plugin-transform-unicode-regex": "workspace:^"
+    "@babel/plugin-transform-unicode-sets-regex": "workspace:^"
     "@babel/preset-env": "workspace:^"
     "@babel/preset-flow": "workspace:^"
     "@babel/preset-react": "workspace:^"

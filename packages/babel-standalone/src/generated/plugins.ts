@@ -47,7 +47,7 @@ import proposalRecordAndTuple from "@babel/plugin-proposal-record-and-tuple";
 import proposalRegexpModifiers from "@babel/plugin-proposal-regexp-modifiers";
 import proposalThrowExpressions from "@babel/plugin-proposal-throw-expressions";
 import transformUnicodePropertyRegex from "@babel/plugin-transform-unicode-property-regex";
-import proposalUnicodeSetsRegex from "@babel/plugin-proposal-unicode-sets-regex";
+import transformUnicodeSetsRegex from "@babel/plugin-transform-unicode-sets-regex";
 import transformAsyncToGenerator from "@babel/plugin-transform-async-to-generator";
 import transformArrowFunctions from "@babel/plugin-transform-arrow-functions";
 import transformBlockScopedFunctions from "@babel/plugin-transform-block-scoped-functions";
@@ -151,7 +151,7 @@ export {
   proposalRegexpModifiers,
   proposalThrowExpressions,
   transformUnicodePropertyRegex,
-  proposalUnicodeSetsRegex,
+  transformUnicodeSetsRegex,
   transformAsyncToGenerator,
   transformArrowFunctions,
   transformBlockScopedFunctions,
@@ -257,7 +257,7 @@ export const all: { [k: string]: any } = {
   "proposal-regexp-modifiers": proposalRegexpModifiers,
   "proposal-throw-expressions": proposalThrowExpressions,
   "transform-unicode-property-regex": transformUnicodePropertyRegex,
-  "proposal-unicode-sets-regex": proposalUnicodeSetsRegex,
+  "transform-unicode-sets-regex": transformUnicodeSetsRegex,
   "transform-async-to-generator": transformAsyncToGenerator,
   "transform-arrow-functions": transformArrowFunctions,
   "transform-block-scoped-functions": transformBlockScopedFunctions,
