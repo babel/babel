@@ -28,9 +28,9 @@ import rollupBabelSource from "./scripts/rollup-plugin-babel-source.js";
 import rollupStandaloneInternals from "./scripts/rollup-plugin-standalone-internals.js";
 import formatCode from "./scripts/utils/formatCode.js";
 import { log } from "./scripts/utils/logger.cjs";
-import { USE_ESM, globals } from "$repo-utils";
+import { USE_ESM, commonJS } from "$repo-utils";
 
-const { require, __dirname: monorepoRoot } = globals(import.meta.url);
+const { require, __dirname: monorepoRoot } = commonJS(import.meta.url);
 
 const defaultPackagesGlob = "./@(codemods|packages|eslint)/*";
 const defaultSourcesGlob = `${defaultPackagesGlob}/src/**/{*.js,*.cjs,!(*.d).ts}`;

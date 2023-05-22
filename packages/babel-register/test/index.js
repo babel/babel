@@ -2,9 +2,9 @@ import { Module } from "module";
 import path from "path";
 import fs from "fs";
 import child from "child_process";
-import { USE_ESM, globals } from "$repo-utils";
+import { USE_ESM, commonJS } from "$repo-utils";
 
-const { __dirname, require } = globals(import.meta.url);
+const { __dirname, require } = commonJS(import.meta.url);
 
 const testCacheFilename = path.join(__dirname, ".index.babel");
 const testFile = require.resolve("./fixtures/babelrc/es2015");

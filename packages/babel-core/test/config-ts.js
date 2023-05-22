@@ -1,9 +1,9 @@
 import { loadPartialConfigSync } from "../lib/index.js";
 import path from "path";
 import semver from "semver";
-import { USE_ESM, globals } from "$repo-utils";
+import { USE_ESM, commonJS } from "$repo-utils";
 
-const { __dirname, require } = globals(import.meta.url);
+const { __dirname, require } = commonJS(import.meta.url);
 
 // We skip older versions of node testing for two reasons.
 // 1. ts-node does not support the old version of node.

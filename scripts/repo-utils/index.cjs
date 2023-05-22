@@ -31,7 +31,7 @@ if (typeof jest !== "undefined") {
   };
 }
 
-exports.globals = function (metaUrl) {
+exports.commonJS = function (metaUrl) {
   const filename = fileURLToPath(metaUrl);
   const dirname = path.dirname(filename);
   return {

@@ -710,13 +710,13 @@ function pluginImportMetaUrl({ types: t, template }) {
             }
 
             if (
-              !t.isIdentifier(node.callee, { name: "globals" }) ||
+              !t.isIdentifier(node.callee, { name: "commonJS" }) ||
               node.arguments.length !== 1
             ) {
               return;
             }
 
-            const binding = path.scope.getBinding("globals");
+            const binding = path.scope.getBinding("commonJS");
             if (!binding) return;
 
             if (binding.path.isImportSpecifier()) {

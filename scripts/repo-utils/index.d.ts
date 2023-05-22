@@ -1,5 +1,5 @@
 export const USE_ESM: boolean;
-export function globals(metaUrl: string): {
+export function commonJS(metaUrl: string): {
   __dirname: string;
   __filename: string;
   require: NodeRequire;
