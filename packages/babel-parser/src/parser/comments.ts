@@ -1,7 +1,7 @@
 /*:: declare var invariant; */
 
 import BaseParser from "./base";
-import type { Comment, Node } from "../types";
+import type { Comment, Node, Identifier } from "../types";
 import * as charCodes from "charcodes";
 import type { Undone } from "./node";
 
@@ -248,11 +248,11 @@ export default class CommentsParser extends BaseParser {
 
   /* eslint-disable no-irregular-whitespace */
   /**
-   * Reset previous node leading comments. Used in import phase modifiers
-   * parsing. We parse `module` in `import module foo from ...` as an
-   * identifier but may reinterpret it into a phase modifier later. In this
-   * case the identifier is not part of the AST and we should sync the
-   * knowledge to commentStacks
+   * Reset previous node leading comments, assuming that `node` is a
+   * single-token node. Used in import phase modifiers parsing. We parse
+   * `module` in `import module foo from ...` as an identifier but may
+   * reinterpret it into a phase modifier later. In this case the identifier is
+   * not part of the AST and we should sync the knowledge to commentStacks
    *
    * For example, when parsing
    * ```
@@ -266,17 +266,15 @@ export default class CommentsParser extends BaseParser {
    * @param node the last finished AST node _before_ current token
    */
   /* eslint-enable no-irregular-whitespace */
-  resetPreviousNodeLeadingComments(node: Node) {
+  resetPreviousIdentifierLeadingComments(node: Identifier) {
     const { commentStack } = this.state;
     const { length } = commentStack;
     if (length === 0) return;
 
-    for (let i = length - 1; i >= 0; i--) {
-      const commentWS = commentStack[i];
-      if (commentWS.trailingNode === node) {
-        commentWS.trailingNode = null;
-      }
-      if (commentWS.end < node.start) break;
+    if (commentStack[length - 1].trailingNode === node) {
+      commentStack[length - 1].trailingNode = null;
+    } else if (length >= 2 && commentStack[length - 2].trailingNode === node) {
+      commentStack[length - 2].trailingNode = null;
     }
   }
 

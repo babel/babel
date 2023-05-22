@@ -3003,7 +3003,7 @@ export default abstract class StatementParser extends ExpressionParser {
         type !== tt.comma;
 
     if (isImportPhase) {
-      this.resetPreviousNodeLeadingComments(phaseIdentifier);
+      this.resetPreviousIdentifierLeadingComments(phaseIdentifier);
       this.applyImportPhase(
         node as Undone<N.ImportDeclaration>,
         isExport,
