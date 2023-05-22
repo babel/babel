@@ -1,5 +1,6 @@
 import type { HubInterface } from "../hub";
 import type TraversalContext from "../context";
+import type { ExplodedTraverseOptions } from "..";
 import * as virtualTypes from "./lib/virtual-types";
 import buildDebug from "debug";
 import traverse from "../index";
@@ -51,7 +52,7 @@ class NodePath<T extends t.Node = t.Node> {
 
   contexts: Array<TraversalContext> = [];
   state: any = null;
-  opts: any = null;
+  opts: ExplodedTraverseOptions | null = null;
   // this.shouldSkip = false; this.shouldStop = false; this.removed = false;
   _traverseFlags: number = 0;
   skipKeys: Record<string, boolean> | null = null;

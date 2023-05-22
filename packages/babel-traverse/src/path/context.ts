@@ -3,20 +3,21 @@
 import { traverseNode } from "../traverse-node";
 import { SHOULD_SKIP, SHOULD_STOP } from "./index";
 import type TraversalContext from "../context";
+import type { VisitNodeKey } from "../types";
 import type NodePath from "./index";
 import type * as t from "@babel/types";
 
-export function call(this: NodePath, key: string): boolean {
+export function call(this: NodePath, key: VisitNodeKey): boolean {
   const opts = this.opts;
 
   this.debug(key);
 
   if (this.node) {
-    if (this._call(opts[key])) return true;
+    if (this._call(opts?.[key])) return true;
   }
 
   if (this.node) {
-    return this._call(opts[this.node.type] && opts[this.node.type][key]);
+    return this._call(opts?.[this.node.type]?.[key]);
   }
 
   return false;
@@ -55,7 +56,7 @@ export function _call(this: NodePath, fns?: Array<Function>): boolean {
 }
 
 export function isDenylisted(this: NodePath): boolean {
-  const denylist = this.opts.denylist ?? this.opts.blacklist;
+  const denylist = this.opts.denylist;
   return denylist && denylist.indexOf(this.node.type) > -1;
 }
 

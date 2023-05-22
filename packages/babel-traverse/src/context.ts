@@ -1,14 +1,14 @@
 import NodePath from "./path";
 import { VISITOR_KEYS } from "@babel/types";
 import type Scope from "./scope";
-import type { TraverseOptions } from ".";
+import type { ExplodedTraverseOptions } from ".";
 import type * as t from "@babel/types";
 import type { Visitor } from "./types";
 
 export default class TraversalContext<S = unknown> {
   constructor(
     scope: Scope,
-    opts: TraverseOptions,
+    opts: ExplodedTraverseOptions,
     state: S,
     parentPath: NodePath,
   ) {
@@ -21,7 +21,7 @@ export default class TraversalContext<S = unknown> {
   declare parentPath: NodePath;
   declare scope: Scope;
   declare state: S;
-  declare opts: TraverseOptions;
+  declare opts: ExplodedTraverseOptions;
   queue: Array<NodePath> | null = null;
   priorityQueue: Array<NodePath> | null = null;
 

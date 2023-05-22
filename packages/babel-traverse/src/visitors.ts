@@ -6,11 +6,15 @@ import {
   TYPES,
   __internal__deprecationWarning as deprecationWarning,
 } from "@babel/types";
-import type { NodePath, Visitor } from "./index";
+import type { ExplodedVisitor, NodePath, Visitor } from "./index";
 
 type VIRTUAL_TYPES = keyof typeof virtualTypes;
 function isVirtualType(type: string): type is VIRTUAL_TYPES {
   return type in virtualTypes;
+}
+
+function isExplodedVisitor(visitor: Visitor): visitor is ExplodedVisitor {
+  return visitor?._exploded;
 }
 
 /**
@@ -29,8 +33,8 @@ function isVirtualType(type: string): type is VIRTUAL_TYPES {
  * * `enter` and `exit` functions are wrapped in arrays, to ease merging of
  *   visitors
  */
-export function explode(visitor: Visitor) {
-  if (visitor._exploded) return visitor;
+export function explode<S>(visitor: Visitor<S>): ExplodedVisitor {
+  if (isExplodedVisitor(visitor)) return visitor;
   visitor._exploded = true;
 
   // normalise pipes
@@ -72,7 +76,7 @@ export function explode(visitor: Visitor) {
     // wrap all the functions
     const fns = visitor[nodeType];
     for (const type of Object.keys(fns)) {
-      // @ts-expect-error manipulating visitors
+      // @ts-expect-error normalised as VisitNodeObject
       fns[type] = wrapCheck(nodeType, fns[type]);
     }
 
@@ -138,7 +142,8 @@ export function explode(visitor: Visitor) {
     );
   }
 
-  return visitor;
+  // @ts-expect-error explosion has been performed
+  return visitor as ExplodedVisitor;
 }
 
 export function verify(visitor: Visitor) {
@@ -249,13 +254,12 @@ function wrapWithStateOrWrapper<State>(
     // not an enter/exit array of callbacks
     if (!Array.isArray(fns)) continue;
 
-    // @ts-expect-error manipulating visitors
     fns = fns.map(function (fn) {
       let newFn = fn;
 
       if (state) {
         newFn = function (path: NodePath) {
-          return fn.call(state, path, state);
+          fn.call(state, path, state);
         };
       }
 
@@ -292,9 +296,7 @@ function ensureEntranceObjects(obj: Visitor) {
 }
 
 function ensureCallbackArrays(obj: Visitor) {
-  // @ts-expect-error normalizing enter property
   if (obj.enter && !Array.isArray(obj.enter)) obj.enter = [obj.enter];
-  // @ts-expect-error normalizing exit property
   if (obj.exit && !Array.isArray(obj.exit)) obj.exit = [obj.exit];
 }
 
