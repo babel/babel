@@ -1,4 +1,4 @@
-if (test) {
+function fn() {
   using x = obj;
-  doSomethingWith(x);
+  return doSomethingWith(x);
 }

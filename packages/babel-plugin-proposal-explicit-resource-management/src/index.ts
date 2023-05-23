@@ -37,7 +37,10 @@ export default declare(api => {
         ]),
       );
     },
-    BlockStatement(path, state) {
+    "BlockStatement|StaticBlock"(
+      path: NodePath<t.BlockStatement | t.StaticBlock>,
+      state,
+    ) {
       let stackId: t.Identifier | null = null;
       let needsAwait = false;
 
@@ -97,10 +100,11 @@ export default declare(api => {
       if (
         parentPath.isFunction() ||
         parentPath.isTryStatement() ||
-        parentPath.isCatchClause() ||
-        parentPath.isStaticBlock()
+        parentPath.isCatchClause()
       ) {
         path.replaceWith(t.blockStatement([replacement]));
+      } else if (path.isStaticBlock()) {
+        path.node.body = [replacement];
       } else {
         path.replaceWith(replacement);
       }
