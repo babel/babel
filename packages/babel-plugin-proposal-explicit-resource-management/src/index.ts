@@ -1,10 +1,10 @@
 import { declare } from "@babel/helper-plugin-utils";
-import syntacExplicitResourceManagement from "@babel/plugin-syntax-explicit-resource-management";
+import syntaxExplicitResourceManagement from "@babel/plugin-syntax-explicit-resource-management";
 import { types as t, template, traverse, type PluginPass } from "@babel/core";
 import type { NodePath, Visitor } from "@babel/traverse";
 
 export default declare(api => {
-  // TOOD: assert version 7.22.0
+  // TODO: assert version 7.22.0
   api.assertVersion(7);
 
   const TOP_LEVEL_USING = new WeakSet();
@@ -119,7 +119,7 @@ export default declare(api => {
 
   return {
     name: "proposal-explicit-resource-management",
-    inherits: syntacExplicitResourceManagement,
+    inherits: syntaxExplicitResourceManagement,
 
     visitor: traverse.visitors.merge([
       transformUsingDeclarationsVisitor,
