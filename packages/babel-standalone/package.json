@@ -16,6 +16,7 @@
     "@babel/plugin-proposal-destructuring-private": "workspace:^",
     "@babel/plugin-proposal-do-expressions": "workspace:^",
     "@babel/plugin-proposal-duplicate-named-capturing-groups-regex": "workspace:^",
+    "@babel/plugin-proposal-explicit-resource-management": "workspace:^",
     "@babel/plugin-proposal-export-default-from": "workspace:^",
     "@babel/plugin-proposal-function-bind": "workspace:^",
     "@babel/plugin-proposal-function-sent": "workspace:^",
