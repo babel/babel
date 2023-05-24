@@ -457,6 +457,16 @@ function normalizeOutput(
     if (normalizePresetEnvDebug) {
       result = result.replace(/(\s+)proposal-/gm, "$1transform-");
     }
+
+    // For some reasons, in older Node.js versions some symlinks are not properly
+    // resolved. The behavior is still ok, but we need to unify the output with
+    // newer Node.js versions.
+    if (parseInt(process.versions.node, 10) <= 8) {
+      result = result.replace(
+        /<CWD>\/node_modules\/@babel\/runtime-corejs3/g,
+        "<CWD>/packages/babel-runtime-corejs3",
+      );
+    }
   }
 
   return result;
