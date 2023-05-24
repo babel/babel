@@ -12,7 +12,7 @@ function _fn() {
       var _error = _;
       var _hasError = true;
     } finally {
-      yield babelHelpers.dispose(_stack, _error, _hasError, typeof SuppressedError !== "undefined" && SuppressedError);
+      yield babelHelpers.dispose(_stack, _error, _hasError);
     }
   });
   return _fn.apply(this, arguments);

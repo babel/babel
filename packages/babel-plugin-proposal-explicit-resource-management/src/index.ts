@@ -70,17 +70,7 @@ export default declare(api => {
 
       let disposeCall: t.Expression = t.callExpression(
         state.addHelper("dispose"),
-        [
-          t.cloneNode(stackId),
-          t.cloneNode(errorId),
-          t.cloneNode(hasErrorId),
-          // Pass SuppressedError so that it can be used with "pure"
-          // polyfills that do not compile the contents of runtime
-          // helpers.
-          template.expression.ast`
-            typeof SuppressedError !== "undefined" && SuppressedError
-          `,
-        ],
+        [t.cloneNode(stackId), t.cloneNode(errorId), t.cloneNode(hasErrorId)],
       );
       if (needsAwait) disposeCall = t.awaitExpression(disposeCall);
 

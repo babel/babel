@@ -6,5 +6,5 @@ try {
   var _error = _;
   var _hasError = true;
 } finally {
-  babelHelpers.dispose(_stack, _error, _hasError, typeof SuppressedError !== "undefined" && SuppressedError);
+  babelHelpers.dispose(_stack, _error, _hasError);
 }
