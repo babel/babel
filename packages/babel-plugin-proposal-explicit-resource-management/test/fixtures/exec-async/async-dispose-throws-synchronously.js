@@ -7,7 +7,7 @@ return async function () {
 
   try {
     await using x = {
-      async [Symbol.asyncDispose || Symbol.for("Symbol.asyncDispose")]() {
+      [Symbol.asyncDispose || Symbol.for("Symbol.asyncDispose")]() {
         throw err;
       }
     };
