@@ -1,4 +1,8 @@
 {
-  "plugins": ["importReflection", "flow"],
-  "sourceType": "module"
+  "plugins": [
+    "importReflection",
+    "flow"
+  ],
+  "sourceType": "module",
+  "throws": "Unexpected token, expected \"from\" (1:21)"
 }

@@ -1,0 +1,1 @@
+/* 0 */ import /* 1 */ module /* 2 */ Foo /* 3 */ from /* 4 */ "foo" /* 5 */;

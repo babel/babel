@@ -247,10 +247,6 @@ function hasTypeImportKind(node: N.Node): boolean {
   return node.importKind === "type" || node.importKind === "typeof";
 }
 
-function isMaybeDefaultImport(type: TokenType): boolean {
-  return tokenIsKeywordOrIdentifier(type) && type !== tt._from;
-}
-
 const exportSuggestions = {
   const: "declare export var",
   let: "declare export var",
@@ -2230,20 +2226,6 @@ export default (superClass: typeof Parser) =>
       super.assertModuleNodeAllowed(node);
     }
 
-    parseExport(
-      node: Undone<N.ExportNamedDeclaration | N.ExportAllDeclaration>,
-      decorators: N.Decorator[] | null,
-    ): N.AnyExport {
-      const decl = super.parseExport(node, decorators);
-      if (
-        decl.type === "ExportNamedDeclaration" ||
-        decl.type === "ExportAllDeclaration"
-      ) {
-        decl.exportKind = decl.exportKind || "value";
-      }
-      return decl;
-    }
-
     parseExportDeclaration(
       node: N.ExportNamedDeclaration,
     ): N.Declaration | undefined | null {
@@ -2713,14 +2695,6 @@ export default (superClass: typeof Parser) =>
       return node;
     }
 
-    shouldParseDefaultImport(node: N.ImportDeclaration): boolean {
-      if (!hasTypeImportKind(node)) {
-        return super.shouldParseDefaultImport(node);
-      }
-
-      return isMaybeDefaultImport(this.state.type);
-    }
-
     checkImportReflection(node: Undone<N.ImportDeclaration>) {
       super.checkImportReflection(node);
       if (node.module && node.importKind !== "value") {
@@ -2746,37 +2720,35 @@ export default (superClass: typeof Parser) =>
       node.specifiers.push(this.finishImportSpecifier(specifier, type));
     }
 
-    // parse typeof and type imports
-    maybeParseDefaultImportSpecifier(node: N.ImportDeclaration): boolean {
-      node.importKind = "value";
-
-      let kind = null;
-      if (this.match(tt._typeof)) {
-        kind = "typeof" as const;
-      } else if (this.isContextual(tt._type)) {
-        kind = "type" as const;
+    isPotentialImportPhase(isExport: boolean): boolean {
+      if (super.isPotentialImportPhase(isExport)) return true;
+      if (this.isContextual(tt._type)) {
+        if (!isExport) return true;
+        const ch = this.lookaheadCharCode();
+        return ch === charCodes.leftCurlyBrace || ch === charCodes.asterisk;
       }
-      if (kind) {
-        const lh = this.lookahead();
-        const { type } = lh;
+      return !isExport && this.isContextual(tt._typeof);
+    }
 
-        // import type * is not allowed
-        if (kind === "type" && type === tt.star) {
-          // FIXME: lh.start?
-          this.unexpected(null, lh.type);
+    applyImportPhase(
+      node: Undone<N.ImportDeclaration | N.ExportNamedDeclaration>,
+      isExport: boolean,
+      phase: string | null,
+      loc?: Position,
+    ): void {
+      super.applyImportPhase(node, isExport, phase, loc);
+      if (isExport) {
+        if (!phase && this.match(tt._default)) {
+          // TODO: Align with our TS AST and always add .exportKind
+          return;
         }
-
-        if (
-          isMaybeDefaultImport(type) ||
-          type === tt.braceL ||
-          type === tt.star
-        ) {
-          this.next();
-          node.importKind = kind;
-        }
+        (node as N.ExportNamedDeclaration).exportKind =
+          phase === "type" ? phase : "value";
+      } else {
+        if (phase === "type" && this.match(tt.star)) this.unexpected();
+        (node as N.ImportDeclaration).importKind =
+          phase === "type" || phase === "typeof" ? phase : "value";
       }
-
-      return super.maybeParseDefaultImportSpecifier(node);
     }
 
     // parse import-type/typeof shorthand

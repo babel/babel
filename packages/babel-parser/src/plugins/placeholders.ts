@@ -302,12 +302,22 @@ export default (superClass: typeof Parser) =>
       return super.isExportDefaultSpecifier();
     }
 
-    maybeParseExportDefaultSpecifier(node: N.Node): boolean {
-      if (node.specifiers && node.specifiers.length > 0) {
+    maybeParseExportDefaultSpecifier(
+      node: Undone<
+        | N.ExportDefaultDeclaration
+        | N.ExportAllDeclaration
+        | N.ExportNamedDeclaration
+      >,
+      maybeDefaultIdentifier: N.Identifier | null,
+    ): node is Undone<N.ExportNamedDeclaration> {
+      if ((node as N.ExportNamedDeclaration).specifiers?.length) {
         // "export %%NAME%%" has already been parsed by #parseExport.
         return true;
       }
-      return super.maybeParseExportDefaultSpecifier(node);
+      return super.maybeParseExportDefaultSpecifier(
+        node,
+        maybeDefaultIdentifier,
+      );
     }
 
     checkExport(node: N.ExportNamedDeclaration): void {

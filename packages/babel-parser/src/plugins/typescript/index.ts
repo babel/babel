@@ -1971,10 +1971,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     tsParseImportEqualsDeclaration(
       node: Undone<N.TsImportEqualsDeclaration>,
+      maybeDefaultIdentifier?: N.Identifier | null,
       isExport?: boolean,
     ): N.TsImportEqualsDeclaration {
       node.isExport = isExport || false;
-      node.id = this.parseIdentifier();
+      node.id = maybeDefaultIdentifier || this.parseIdentifier();
       this.checkIdentifier(node.id, BIND_FLAGS_TS_IMPORT);
       this.expect(tt.eq);
       const moduleReference = this.tsParseModuleReference();
@@ -2701,40 +2702,69 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     */
     checkDuplicateExports() {}
 
+    isPotentialImportPhase(isExport: boolean): boolean {
+      if (super.isPotentialImportPhase(isExport)) return true;
+      if (this.isContextual(tt._type)) {
+        const ch = this.lookaheadCharCode();
+        return isExport
+          ? ch === charCodes.leftCurlyBrace || ch === charCodes.asterisk
+          : ch !== charCodes.equalsTo;
+      }
+      return !isExport && this.isContextual(tt._typeof);
+    }
+
+    applyImportPhase(
+      node: Undone<N.ImportDeclaration | N.ExportNamedDeclaration>,
+      isExport: boolean,
+      phase: string | null,
+      loc?: Position,
+    ): void {
+      super.applyImportPhase(node, isExport, phase, loc);
+      if (isExport) {
+        (node as N.ExportNamedDeclaration).exportKind =
+          phase === "type" ? "type" : "value";
+      } else {
+        (node as N.ImportDeclaration).importKind =
+          phase === "type" || phase === "typeof" ? phase : "value";
+      }
+    }
+
     parseImport(
       node: Undone<N.ImportDeclaration | N.TsImportEqualsDeclaration>,
     ): N.AnyImport {
-      node.importKind = "value";
-      if (
-        tokenIsIdentifier(this.state.type) ||
-        this.match(tt.star) ||
-        this.match(tt.braceL)
-      ) {
-        let ahead = this.lookahead();
-
-        if (
-          this.isContextual(tt._type) &&
-          // import type, { a } from "b";
-          ahead.type !== tt.comma &&
-          // import type from "a";
-          ahead.type !== tt._from &&
-          // import type = require("a");
-          ahead.type !== tt.eq
-        ) {
-          node.importKind = "type";
-          this.next();
-          ahead = this.lookahead();
-        }
-
-        if (tokenIsIdentifier(this.state.type) && ahead.type === tt.eq) {
-          return this.tsParseImportEqualsDeclaration(
-            node as Undone<N.TsImportEqualsDeclaration>,
-          );
-        }
+      if (this.match(tt.string)) {
+        node.importKind = "value";
+        return super.parseImport(node as Undone<N.ImportDeclaration>);
       }
 
-      const importNode = super.parseImport(node as Undone<N.ImportDeclaration>);
-      /*:: invariant(importNode.type !== "TSImportEqualsDeclaration") */
+      let importNode;
+      if (
+        tokenIsIdentifier(this.state.type) &&
+        this.lookaheadCharCode() === charCodes.equalsTo
+      ) {
+        node.importKind = "value";
+        return this.tsParseImportEqualsDeclaration(
+          node as Undone<N.TsImportEqualsDeclaration>,
+        );
+      } else if (this.isContextual(tt._type)) {
+        const maybeDefaultIdentifier = this.parseMaybeImportPhase(
+          node as Undone<N.ImportDeclaration>,
+          /* isExport */ false,
+        );
+        if (this.lookaheadCharCode() === charCodes.equalsTo) {
+          return this.tsParseImportEqualsDeclaration(
+            node as Undone<N.TsImportEqualsDeclaration>,
+            maybeDefaultIdentifier,
+          );
+        } else {
+          importNode = super.parseImportSpecifiersAndAfter(
+            node as Undone<N.ImportDeclaration>,
+            maybeDefaultIdentifier,
+          );
+        }
+      } else {
+        importNode = super.parseImport(node as Undone<N.ImportDeclaration>);
+      }
 
       // `import type` can only be used on imports with named imports or with a
       // default import - but not both
@@ -2760,17 +2790,22 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       if (this.match(tt._import)) {
         // `export import A = B;`
         this.next(); // eat `tt._import`
+        let maybeDefaultIdentifier: N.Identifier | null = null;
         if (
           this.isContextual(tt._type) &&
-          this.lookaheadCharCode() !== charCodes.equalsTo
+          // We pass false here, because we are parsing an `import ... =`
+          this.isPotentialImportPhase(/* isExport */ false)
         ) {
-          node.importKind = "type";
-          this.next(); // eat "type"
+          maybeDefaultIdentifier = this.parseMaybeImportPhase(
+            node as Undone<N.TsImportEqualsDeclaration>,
+            /* isExport */ false,
+          );
         } else {
           node.importKind = "value";
         }
         return this.tsParseImportEqualsDeclaration(
           node as Undone<N.TsImportEqualsDeclaration>,
+          maybeDefaultIdentifier,
           /* isExport */ true,
         );
       } else if (this.eat(tt.eq)) {
@@ -2788,16 +2823,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         this.semicolon();
         return this.finishNode(decl, "TSNamespaceExportDeclaration");
       } else {
-        node.exportKind = "value";
-
-        if (this.isContextual(tt._type)) {
-          const ch = this.lookaheadCharCode();
-          if (ch === charCodes.leftCurlyBrace || ch === charCodes.asterisk) {
-            this.next();
-            node.exportKind = "type";
-          }
-        }
-
         return super.parseExport(
           node as Undone<N.ExportAllDeclaration | N.ExportDefaultDeclaration>,
           decorators,
