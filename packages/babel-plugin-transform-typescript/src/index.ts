@@ -1,6 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxTypeScript from "@babel/plugin-syntax-typescript";
-import type { types as t } from "@babel/core";
+import type { PluginPass, types as t } from "@babel/core";
 import { injectInitialization } from "@babel/helper-create-class-features-plugin";
 import type { Binding, NodePath, Scope } from "@babel/traverse";
 import type { Options as SyntaxOptions } from "@babel/plugin-syntax-typescript";
@@ -76,6 +76,22 @@ function safeRemove(path: NodePath) {
   path.opts.noScope = true;
   path.remove();
   path.opts.noScope = false;
+}
+
+function assertCjsTransformEnabled(
+  path: NodePath,
+  pass: PluginPass,
+  wrong: string,
+  suggestion: string,
+  extra: string = "",
+): void {
+  if (pass.file.get("@babel/plugin-transform-modules-*") !== "commonjs") {
+    throw path.buildCodeFrameError(
+      `\`${wrong}\` is only supported when compiling modules to CommonJS.\n` +
+        `Please consider using \`${suggestion}\`${extra}, or add ` +
+        `@babel/plugin-transform-modules-commonjs to your Babel config.`,
+    );
+  }
 }
 
 export interface Options extends SyntaxOptions {
@@ -574,34 +590,48 @@ export default declare((api, opts: Options) => {
         }
       },
 
-      TSImportEqualsDeclaration(path: NodePath<t.TSImportEqualsDeclaration>) {
-        if (t.isTSExternalModuleReference(path.node.moduleReference)) {
+      TSImportEqualsDeclaration(
+        path: NodePath<t.TSImportEqualsDeclaration>,
+        pass,
+      ) {
+        const { id, moduleReference } = path.node;
+
+        let init: t.Expression;
+        let varKind: "var" | "const";
+        if (t.isTSExternalModuleReference(moduleReference)) {
           // import alias = require('foo');
-          throw path.buildCodeFrameError(
-            `\`import ${path.node.id.name} = require('${path.node.moduleReference.expression.value}')\` ` +
-              "is not supported by @babel/plugin-transform-typescript\n" +
-              "Please consider using " +
-              `\`import ${path.node.id.name} from '${path.node.moduleReference.expression.value}';\` alongside ` +
-              "Typescript's --allowSyntheticDefaultImports option.",
+          assertCjsTransformEnabled(
+            path,
+            pass,
+            `import ${id.name} = require(...);`,
+            `import ${id.name} from '...';`,
+            " alongside Typescript's --allowSyntheticDefaultImports option",
           );
+          init = t.callExpression(t.identifier("require"), [
+            moduleReference.expression,
+          ]);
+          varKind = "const";
+        } else {
+          // import alias = Namespace;
+          init = entityNameToExpr(moduleReference);
+          varKind = "var";
         }
 
-        // import alias = Namespace;
         path.replaceWith(
-          t.variableDeclaration("var", [
-            t.variableDeclarator(
-              path.node.id,
-              entityNameToExpr(path.node.moduleReference),
-            ),
-          ]),
+          t.variableDeclaration(varKind, [t.variableDeclarator(id, init)]),
         );
         path.scope.registerDeclaration(path);
       },
 
-      TSExportAssignment(path) {
-        throw path.buildCodeFrameError(
-          "`export =` is not supported by @babel/plugin-transform-typescript\n" +
-            "Please consider using `export <value>;`.",
+      TSExportAssignment(path, pass) {
+        assertCjsTransformEnabled(
+          path,
+          pass,
+          `export = <value>;`,
+          `export default <value>;`,
+        );
+        path.replaceWith(
+          template.statement.ast`module.exports = ${path.node.expression}`,
         );
       },
 
