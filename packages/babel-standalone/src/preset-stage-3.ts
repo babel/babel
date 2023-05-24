@@ -10,7 +10,7 @@ export default (_: any, opts: any = {}) => {
 
   const plugins = [
     babelPlugins.syntaxImportAssertions,
-    babelPlugins.proposalUnicodeSetsRegex,
+    babelPlugins.transformUnicodeSetsRegex,
     babelPlugins.proposalDuplicateNamedCapturingGroupsRegex,
     [
       babelPlugins.proposalDecorators,

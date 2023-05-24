@@ -40,6 +40,7 @@ import legacyPluginAliases from "../../babel-compat-data/scripts/data/legacy-plu
 for (const name in legacyPluginAliases) {
   all[legacyPluginAliases[name]] = all[name];
 }
+all["proposal-unicode-sets-regex"] = all["transform-unicode-sets-regex"];
 
 export const availablePlugins: typeof all = {};
 

@@ -8,6 +8,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  transform-unicode-sets-regex { chrome < 112 }
   transform-class-static-block { chrome < 94 }
   transform-private-property-in-object { chrome < 91 }
   transform-class-properties { chrome < 74 }

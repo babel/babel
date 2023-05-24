@@ -9,6 +9,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  transform-unicode-sets-regex { firefox, node }
   transform-class-static-block { firefox < 93, node < 16.11 }
   transform-private-property-in-object { firefox < 90, node < 16.9 }
   transform-class-properties { firefox < 90, node < 12 }

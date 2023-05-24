@@ -1,5 +1,7 @@
 /* eslint sort-keys: "error" */
 
+declare const USE_ESM: boolean;
+
 import syntaxAsyncGenerators from "@babel/plugin-syntax-async-generators";
 import syntaxClassProperties from "@babel/plugin-syntax-class-properties";
 import syntaxClassStaticBlock from "@babel/plugin-syntax-class-static-block";
@@ -64,6 +66,7 @@ import transformTemplateLiterals from "@babel/plugin-transform-template-literals
 import transformTypeofSymbol from "@babel/plugin-transform-typeof-symbol";
 import transformUnicodeEscapes from "@babel/plugin-transform-unicode-escapes";
 import transformUnicodeRegex from "@babel/plugin-transform-unicode-regex";
+import transformUnicodeSetsRegex from "@babel/plugin-transform-unicode-sets-regex";
 
 import bugfixAsyncArrowsInClass from "@babel/preset-modules/lib/plugins/transform-async-arrows-in-class";
 import bugfixEdgeDefaultParameters from "@babel/preset-modules/lib/plugins/transform-edge-default-parameters";
@@ -102,6 +105,13 @@ export default {
   "syntax-optional-chaining": () => syntaxOptionalChaining,
   "syntax-private-property-in-object": () => syntaxPrivatePropertyInObject,
   "syntax-top-level-await": () => syntaxTopLevelAwait,
+  // This is a CJS plugin that depends on a package from the monorepo, so it
+  // breaks using ESM. Given that ESM builds are new enough to have this
+  // syntax enabled by default, we can safely skip enabling it.
+  "syntax-unicode-sets-regex": USE_ESM
+    ? null
+    : // eslint-disable-next-line no-restricted-globals
+      () => require("@babel/plugin-syntax-unicode-sets-regex"),
   "transform-arrow-functions": () => transformArrowFunctions,
   "transform-async-generator-functions": () => proposalAsyncGeneratorFunctions,
   "transform-async-to-generator": () => transformAsyncToGenerator,
@@ -153,6 +163,7 @@ export default {
   "transform-unicode-escapes": () => transformUnicodeEscapes,
   "transform-unicode-property-regex": () => proposalUnicodePropertyRegex,
   "transform-unicode-regex": () => transformUnicodeRegex,
+  "transform-unicode-sets-regex": () => transformUnicodeSetsRegex,
 };
 
 export const minVersions = {

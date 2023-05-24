@@ -1,8 +1,8 @@
 {
-  "name": "@babel/plugin-proposal-unicode-sets-regex",
+  "name": "@babel/plugin-transform-unicode-sets-regex",
   "version": "7.18.6",
   "description": "Compile regular expressions' unicodeSets (v) flag.",
-  "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-unicode-sets-regex",
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-unicode-sets-regex",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -23,7 +23,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/babel/babel.git",
-    "directory": "packages/babel-plugin-proposal-unicode-sets-regex"
+    "directory": "packages/babel-plugin-transform-unicode-sets-regex"
   },
   "bugs": "https://github.com/babel/babel/issues",
   "dependencies": {

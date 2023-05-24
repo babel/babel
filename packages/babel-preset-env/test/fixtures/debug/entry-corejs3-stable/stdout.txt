@@ -8,6 +8,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  transform-unicode-sets-regex { ie }
   transform-class-static-block { ie }
   transform-private-property-in-object { ie }
   transform-class-properties { ie }

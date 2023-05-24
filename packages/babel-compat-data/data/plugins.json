@@ -1,4 +1,7 @@
 {
+  "transform-unicode-sets-regex": {
+    "chrome": "112"
+  },
   "transform-class-static-block": {
     "chrome": "94",
     "opera": "80",
