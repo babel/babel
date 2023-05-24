@@ -1,5 +1,5 @@
 function dispose_SuppressedError(suppressed, error) {
-  return dispose_SuppressedError = function dispose_SuppressedError(suppressed, error) {
+  return "undefined" != typeof SuppressedError ? dispose_SuppressedError = SuppressedError : (dispose_SuppressedError = function dispose_SuppressedError(suppressed, error) {
     this.suppressed = suppressed, this.error = error, this.stack = new Error().stack;
   }, dispose_SuppressedError.prototype = Object.create(Error.prototype, {
     constructor: {
@@ -7,9 +7,9 @@ function dispose_SuppressedError(suppressed, error) {
       writable: !0,
       configurable: !0
     }
-  }), new dispose_SuppressedError(suppressed, error);
+  })), new dispose_SuppressedError(suppressed, error);
 }
-function _dispose(stack, error, hasError, SuppressedError) {
+function _dispose(stack, error, hasError) {
   function next() {
     if (0 !== stack.length) {
       var r = stack.pop();
@@ -24,7 +24,7 @@ function _dispose(stack, error, hasError, SuppressedError) {
     if (hasError) throw error;
   }
   function err(e) {
-    return error = hasError ? new (SuppressedError || dispose_SuppressedError)(e, error) : e, hasError = !0, next();
+    return error = hasError ? new dispose_SuppressedError(e, error) : e, hasError = !0, next();
   }
   return next();
 }
