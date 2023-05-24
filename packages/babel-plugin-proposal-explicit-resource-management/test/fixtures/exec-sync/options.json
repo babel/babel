@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "proposal-explicit-resource-management",
+    "transform-optional-catch-binding"
+  ]
+}

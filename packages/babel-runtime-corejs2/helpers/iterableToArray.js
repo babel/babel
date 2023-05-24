@@ -1,6 +1,6 @@
-var _Symbol = require("@babel/runtime-corejs2/core-js/symbol");
-var _Symbol$iterator = require("@babel/runtime-corejs2/core-js/symbol/iterator");
-var _Array$from = require("@babel/runtime-corejs2/core-js/array/from");
+var _Symbol = require("core-js/library/fn/symbol.js");
+var _Symbol$iterator = require("core-js/library/fn/symbol/iterator.js");
+var _Array$from = require("core-js/library/fn/array/from.js");
 function _iterableToArray(iter) {
   if (typeof _Symbol !== "undefined" && iter[_Symbol$iterator] != null || iter["@@iterator"] != null) return _Array$from(iter);
 }

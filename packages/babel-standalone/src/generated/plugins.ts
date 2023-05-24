@@ -99,6 +99,7 @@ import transformTypeofSymbol from "@babel/plugin-transform-typeof-symbol";
 import transformTypescript from "@babel/plugin-transform-typescript";
 import transformUnicodeEscapes from "@babel/plugin-transform-unicode-escapes";
 import transformUnicodeRegex from "@babel/plugin-transform-unicode-regex";
+import proposalExplicitResourceManagement from "@babel/plugin-proposal-explicit-resource-management";
 export const syntaxAsyncGenerators = makeNoopPlugin(),
   syntaxClassProperties = makeNoopPlugin(),
   syntaxClassStaticBlock = makeNoopPlugin(),
@@ -203,6 +204,7 @@ export {
   transformTypescript,
   transformUnicodeEscapes,
   transformUnicodeRegex,
+  proposalExplicitResourceManagement,
 };
 export const all: { [k: string]: any } = {
   "syntax-async-generators": syntaxAsyncGenerators,
@@ -310,4 +312,5 @@ export const all: { [k: string]: any } = {
   "transform-typescript": transformTypescript,
   "transform-unicode-escapes": transformUnicodeEscapes,
   "transform-unicode-regex": transformUnicodeRegex,
+  "proposal-explicit-resource-management": proposalExplicitResourceManagement,
 };
