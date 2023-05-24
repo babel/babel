@@ -310,10 +310,7 @@ export default (superClass: typeof Parser) =>
       >,
       maybeDefaultIdentifier: N.Identifier | null,
     ): node is Undone<N.ExportNamedDeclaration> {
-      if (
-        (node as N.ExportNamedDeclaration).specifiers &&
-        (node as N.ExportNamedDeclaration).specifiers.length > 0
-      ) {
+      if ((node as N.ExportNamedDeclaration).specifiers?.length) {
         // "export %%NAME%%" has already been parsed by #parseExport.
         return true;
       }

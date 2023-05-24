@@ -2944,7 +2944,13 @@ export default abstract class StatementParser extends ExpressionParser {
     loc?: Position,
   ): void {
     if (isExport) {
-      // This will never happen
+      if (!process.env.IS_PUBLISH) {
+        if (phase === "module") {
+          throw new Error(
+            "Assertion failure: export declarations do not support the 'module' phase.",
+          );
+        }
+      }
       return;
     }
     if (phase === "module") {
