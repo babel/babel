@@ -768,10 +768,11 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       const found = Object.create(null);
 
       for (const attr of attribs) {
+        const { node } = attr;
         const name =
-          t.isJSXAttribute(attr) &&
-          t.isJSXIdentifier(attr.name) &&
-          attr.name.name;
+          t.isJSXAttribute(node) &&
+          t.isJSXIdentifier(node.name) &&
+          node.name.name;
 
         if (
           runtime === "automatic" &&

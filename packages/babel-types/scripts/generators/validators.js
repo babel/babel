@@ -28,10 +28,15 @@ function addIsHelper(type, aliasKeys, deprecated) {
   if (has(PLACEHOLDERS_FLIPPED_ALIAS, type)) {
     placeholderTypes.push(...PLACEHOLDERS_FLIPPED_ALIAS[type]);
   }
-  if (placeholderTypes.length > 0) {
+  if (placeholderTypes.length === 1) {
     cases += `
     case "Placeholder":
-      switch ((node as t.Placeholder).expectedNode) {
+      if (node.expectedNode === ${JSON.stringify(placeholderTypes[0])})
+      break;`;
+  } else if (placeholderTypes.length) {
+    cases += `
+    case "Placeholder":
+      switch (node.expectedNode) {
         ${buildCases(placeholderTypes)}
         default:
           return false;
@@ -44,19 +49,19 @@ function addIsHelper(type, aliasKeys, deprecated) {
       ? `node is t.${type}`
       : "boolean";
 
-  return `export function is${type}(node: object | null | undefined, opts?: object | null): ${result} {
+  return `export function is${type}(node: t.Node | null | undefined, opts?: Opts<t.${type}> | null): ${result} {
     ${deprecated || ""}
     if (!node) return false;
 
     ${
       cases
         ? `
-          switch((node as t.Node).type){
+          switch(node.type){
             ${cases}
             default:
               return false;
           }`
-        : `if ((node as t.Node).type !== ${targetType}) return false;`
+        : `if (node.type !== ${targetType}) return false;`
     }
 
     return opts == null || shallowEqual(node, opts);
@@ -69,10 +74,22 @@ export default function generateValidators() {
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'make build'
  */
+
+  /* eslint-disable no-fallthrough */
+
 import shallowEqual from "../../utils/shallowEqual";
 import type * as t from "../..";
 import deprecationWarning from "../../utils/deprecationWarning";
-\n`;
+
+type Opts<Object> = Partial<{
+  [Prop in keyof Object]: Object[Prop] extends t.Node
+    ? t.Node | Object[Prop]
+    : Object[Prop] extends t.Node[]
+    ? t.Node[] | Object[Prop]
+    : Object[Prop];
+}>;
+
+`;
 
   Object.keys(VISITOR_KEYS).forEach(type => {
     output += addIsHelper(type);
@@ -87,16 +104,19 @@ import deprecationWarning from "../../utils/deprecationWarning";
     });
 
   Object.keys(DEPRECATED_KEYS).forEach(type => {
-    output += addIsHelper(
-      type,
-      null,
-      `deprecationWarning("is${type}", "is${DEPRECATED_KEYS[type]}")`
-    );
+    const newType = DEPRECATED_KEYS[type];
+    output += `/**
+ * @deprecated Use \`is${newType}\`
+ */
+${addIsHelper(type, null, `deprecationWarning("is${type}", "is${newType}")`)}`;
   });
 
   Object.keys(DEPRECATED_ALIASES).forEach(type => {
     const newType = DEPRECATED_ALIASES[type];
-    output += `export function is${type}(node: object | null | undefined, opts?: object | null): node is t.${newType} {
+    output += `/**
+ * @deprecated Use \`is${newType}\`
+ */
+export function is${type}(node: t.Node | null | undefined, opts?: Opts<t.${type}> | null): node is t.${newType} {
   deprecationWarning("is${type}", "is${newType}");
   return is${newType}(node, opts);
 }
