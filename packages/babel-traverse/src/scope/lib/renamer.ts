@@ -5,6 +5,7 @@ import type { NodePath, Visitor } from "../..";
 import { requeueComputedKeyAndDecorators } from "@babel/helper-environment-visitor";
 import { traverseNode } from "../../traverse-node";
 import { explode } from "../../visitors";
+import type { Identifier, ObjectProperty } from "@babel/types";
 
 const renameVisitor: Visitor<Renamer> = {
   ReferencedIdentifier({ node }, state) {
@@ -112,6 +113,26 @@ export default class Renamer {
     //   assignmentExpression("=", identifier(this.newName), path.node),
     // );
   }
+  maybeFixObjectProperty(name: string, path: NodePath) {
+    path.traverse({
+      ObjectProperty(path: NodePath<ObjectProperty>) {
+        const { key, computed, shorthand } = path.node;
+
+        if (computed) {
+          return;
+        }
+
+        if (!shorthand) {
+          return;
+        }
+
+        if (name === (key as Identifier).name) {
+          path.node.shorthand = false;
+          path.stop();
+        }
+      },
+    });
+  }
 
   rename(/* Babel 7 - block?: t.Pattern | t.Scopable */) {
     const { binding, oldName, newName } = this;
@@ -157,6 +178,7 @@ export default class Renamer {
     }
 
     if (parentDeclar) {
+      this.maybeFixObjectProperty(oldName, path);
       this.maybeConvertFromClassFunctionDeclaration(path);
       this.maybeConvertFromClassFunctionExpression(path);
     }

@@ -1038,5 +1038,18 @@ describe("scope", () => {
         },
       });
     });
+    it("shorthand of ObjectProperty inside ObjectPattern", () => {
+      const program = getPath(`
+        const {a} = b;
+      `);
+      program.traverse({
+        VariableDeclaration(path) {
+          path.scope.rename("a", "zzz");
+          expect(
+            path.node.declarations[0].id.properties[0].shorthand,
+          ).toBeFalsy();
+        },
+      });
+    });
   });
 });
