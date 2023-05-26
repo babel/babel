@@ -24,6 +24,11 @@ This file contains the changelog starting frm v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.22.1 (2023-05-26)
+
+#### :bug: Bug Fix
+* `babel-preset-env`
+  * [#15658](https://github.com/babel/babel/pull/15658) Workaround for broken babel-preset-react-app ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.22.0 (2023-05-26)
 
 #### :rocket: New Feature
