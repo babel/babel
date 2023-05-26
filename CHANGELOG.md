@@ -24,6 +24,38 @@ This file contains the changelog starting frm v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.22.0 (2023-05-26)
+
+#### :rocket: New Feature
+* `babel-parser`, `babel-plugin-transform-typescript`
+  * [#15497](https://github.com/babel/babel/pull/15497) [ts] Support `import ... =` and `export =` in scripts ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-compat-data`, `babel-core`, `babel-plugin-proposal-unicode-sets-regex`, `babel-plugin-transform-unicode-sets-regex`, `babel-preset-env`, `babel-standalone`
+  * [#15636](https://github.com/babel/babel/pull/15636) Add `unicode-sets-regex` transform to `preset-env` ([@JLHwung](https://github.com/JLHwung))
+* `babel-helpers`, `babel-plugin-proposal-explicit-resource-management`, `babel-plugin-transform-runtime`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`, `babel-standalone`
+  * [#15633](https://github.com/babel/babel/pull/15633) Implement transform support for `using` declarations ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-proposal-import-attributes-to-assertions`
+  * [#15620](https://github.com/babel/babel/pull/15620) Create `@babel/plugin-proposal-import-attributes-to-assertions` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`, `babel-generator`, `babel-parser`, `babel-plugin-syntax-import-attributes`, `babel-preset-env`, `babel-standalone`, `babel-types`
+  * [#15536](https://github.com/babel/babel/pull/15536) Add support for the updated import attributes proposal ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`, `babel-parser`, `babel-traverse`, `babel-types`
+  * [#15520](https://github.com/babel/babel/pull/15520) Parse `await using` declarations ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`, `babel-helper-create-regexp-features-plugin`, `babel-parser`
+  * [#15638](https://github.com/babel/babel/pull/15638) Enable regexp unicode sets parsing by default ([@JLHwung](https://github.com/JLHwung))
+* `babel-helpers`, `babel-plugin-proposal-decorators`, `babel-plugin-syntax-decorators`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#15570](https://github.com/babel/babel/pull/15570) Add decorators version `2023-05` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :nail_care: Polish
+* `babel-plugin-transform-react-constant-elements`, `babel-plugin-transform-react-jsx`, `babel-traverse`, `babel-types`
+  * [#15549](https://github.com/babel/babel/pull/15549) Improve type definitions for validators ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :house: Internal
+* `babel-parser`
+  * [#15630](https://github.com/babel/babel/pull/15630) Unify parsing of import/export modifiers (type/typeof/module) ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-compat-data`, `babel-helper-transform-fixture-test-runner`, `babel-node`, `babel-plugin-proposal-decorators`, `babel-plugin-proposal-duplicate-named-capturing-groups-regex`, `babel-plugin-transform-async-generator-functions`, `babel-plugin-transform-named-capturing-groups-regex`, `babel-plugin-transform-runtime`, `babel-preset-env`, `babel-runtime-corejs3`
+  * [#15531](https://github.com/babel/babel/pull/15531) Allow polyfill providers to specify custom `@babel/runtime` pkg ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`, `babel-plugin-proposal-async-generator-functions`, `babel-plugin-proposal-class-properties`, `babel-plugin-proposal-class-static-block`, `babel-plugin-proposal-decorators`, `babel-plugin-proposal-dynamic-import`, `babel-plugin-proposal-export-namespace-from`, `babel-plugin-proposal-function-sent`, `babel-plugin-proposal-json-strings`, `babel-plugin-proposal-logical-assignment-operators`, `babel-plugin-proposal-nullish-coalescing-operator`, `babel-plugin-proposal-numeric-separator`, `babel-plugin-proposal-object-rest-spread`, `babel-plugin-proposal-optional-catch-binding`, `babel-plugin-proposal-optional-chaining`, `babel-plugin-proposal-pipeline-operator`, `babel-plugin-proposal-private-methods`, `babel-plugin-proposal-private-property-in-object`, `babel-plugin-proposal-unicode-property-regex`, `babel-preset-env`, `babel-standalone`
+  * [#15614](https://github.com/babel/babel/pull/15614) Rename `-proposal-`s that became standard to `-transform-` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
 ## v7.21.9 (2023-05-22)
 
 #### :bug: Bug Fix
