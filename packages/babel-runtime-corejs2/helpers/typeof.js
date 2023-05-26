@@ -1,4 +1,4 @@
-var _Symbol = require("core-js/library/fn/symbol.js");
+var _Symbol = require("core-js/library/fn/symbol/index.js");
 var _Symbol$iterator = require("core-js/library/fn/symbol/iterator.js");
 function _typeof(obj) {
   "@babel/helpers - typeof";
