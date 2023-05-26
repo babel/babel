@@ -1,6 +1,3 @@
-declare const PACKAGE_JSON: { name: string; version: string };
-declare const USE_ESM: boolean, IS_STANDALONE: boolean;
-
 export const version = PACKAGE_JSON.version;
 
 export { default as File } from "./transformation/file/file";

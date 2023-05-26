@@ -191,7 +191,7 @@ module.exports = {
       },
     },
     {
-      files: ["scripts/**/*.js"],
+      files: ["scripts/**/*.{js,cjs}"],
       rules: {
         "import/no-extraneous-dependencies": ["error", { packageDir: "." }],
       },

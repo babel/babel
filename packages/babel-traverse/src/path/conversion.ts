@@ -105,8 +105,6 @@ export function ensureBlock(
   return this.node;
 }
 
-declare const USE_ESM: boolean;
-
 if (!process.env.BABEL_8_BREAKING) {
   if (!USE_ESM) {
     /**

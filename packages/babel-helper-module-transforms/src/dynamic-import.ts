@@ -4,7 +4,6 @@
 import * as t from "@babel/types";
 import template from "@babel/template";
 
-declare const USE_ESM: boolean, IS_STANDALONE: boolean;
 if (!process.env.BABEL_8_BREAKING) {
   if (!USE_ESM) {
     if (!IS_STANDALONE) {

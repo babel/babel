@@ -1,15 +1,7 @@
 import { ESLint } from "eslint";
 import path from "path";
 import { fileURLToPath } from "url";
-import fs from "fs";
-
-let USE_ESM = false;
-try {
-  const type = fs
-    .readFileSync(new URL("../../../../.module-type", import.meta.url), "utf-8")
-    .trim();
-  USE_ESM = type === "module";
-} catch {}
+import { USE_ESM } from "$repo-utils";
 
 describe("Babel config files", () => {
   const itESM = USE_ESM ? it : it.skip;

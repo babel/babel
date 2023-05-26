@@ -1,13 +1,12 @@
-import { createRequire, Module } from "module";
+import { Module } from "module";
 import path from "path";
 import fs from "fs";
 import child from "child_process";
-import { fileURLToPath } from "url";
+import { USE_ESM, commonJS } from "$repo-utils";
 
-const dirname = path.dirname(fileURLToPath(import.meta.url));
-const require = createRequire(import.meta.url);
+const { __dirname, require } = commonJS(import.meta.url);
 
-const testCacheFilename = path.join(dirname, ".index.babel");
+const testCacheFilename = path.join(__dirname, ".index.babel");
 const testFile = require.resolve("./fixtures/babelrc/es2015");
 const testFileLog = require.resolve("./fixtures/babelrc/log");
 const testFileMjs = require.resolve("./fixtures/mjs-babelrc/es2015");
@@ -35,14 +34,6 @@ function resetCache() {
 }
 
 const OLD_JEST_MOCKS = !!jest.doMock;
-
-let USE_ESM = false;
-try {
-  const type = fs
-    .readFileSync(new URL("../../../.module-type", import.meta.url), "utf-8")
-    .trim();
-  USE_ESM = type === "module";
-} catch {}
 
 describe("@babel/register", function () {
   let currentHook, currentOptions, sourceMapSupport;
@@ -408,7 +399,7 @@ describe("@babel/register", function () {
   }
 });
 
-function spawnNodeAsync(args, cwd = dirname, env) {
+function spawnNodeAsync(args, cwd = __dirname, env) {
   const spawn = child.spawn(process.execPath, args, { cwd, env });
 
   let output = "";

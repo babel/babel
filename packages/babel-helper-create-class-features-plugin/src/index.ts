@@ -21,7 +21,6 @@ import { assertFieldTransformed } from "./typescript";
 
 export { FEATURES, enableFeature, injectInitialization, buildCheckInRHS };
 
-declare const PACKAGE_JSON: { name: string; version: string };
 const versionKey = "@babel/plugin-class-features/version";
 
 interface Options {

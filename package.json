@@ -20,6 +20,7 @@
   },
   "packageManager": "yarn@3.5.0",
   "devDependencies": {
+    "$repo-utils": "link:./scripts/repo-utils",
     "@babel/cli": "^7.21.0",
     "@babel/core": "^7.21.0",
     "@babel/eslint-config-internal": "workspace:^",
