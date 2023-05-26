@@ -3,7 +3,6 @@ import {
   buildDynamicImport,
   isModule,
   rewriteModuleStatementsAndPrepareHeader,
-  type RewriteModuleStatementsAndPrepareHeaderOptions,
   hasExports,
   isSideEffectImport,
   buildNamespaceInitStatements,
@@ -11,8 +10,11 @@ import {
   wrapInterop,
   getModuleName,
 } from "@babel/helper-module-transforms";
+import type {
+  PluginOptions,
+  RewriteModuleStatementsAndPrepareHeaderOptions,
+} from "@babel/helper-module-transforms";
 import { template, types as t } from "@babel/core";
-import type { PluginOptions } from "@babel/helper-module-transforms";
 import type { NodePath } from "@babel/traverse";
 
 const buildWrapper = template.statement(`

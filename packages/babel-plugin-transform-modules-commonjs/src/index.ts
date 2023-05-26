@@ -2,16 +2,18 @@ import { declare } from "@babel/helper-plugin-utils";
 import {
   isModule,
   rewriteModuleStatementsAndPrepareHeader,
-  type RewriteModuleStatementsAndPrepareHeaderOptions,
   isSideEffectImport,
   buildNamespaceInitStatements,
   ensureStatementsHoisted,
   wrapInterop,
   getModuleName,
 } from "@babel/helper-module-transforms";
+import type {
+  PluginOptions,
+  RewriteModuleStatementsAndPrepareHeaderOptions,
+} from "@babel/helper-module-transforms";
 import simplifyAccess from "@babel/helper-simple-access";
 import { template, types as t } from "@babel/core";
-import type { PluginOptions } from "@babel/helper-module-transforms";
 import type { Visitor, Scope } from "@babel/traverse";
 
 import { transformDynamicImport } from "./dynamic-import";

@@ -13,6 +13,7 @@ export { default as createUnionTypeAnnotation } from "./builders/flow/createFlow
 export { default as createFlowUnionType } from "./builders/flow/createFlowUnionType";
 export { default as createTSUnionType } from "./builders/typescript/createTSUnionType";
 export * from "./builders/generated";
+// eslint-disable-next-line import/export
 export * from "./builders/generated/uppercase";
 
 // clone
@@ -77,7 +78,6 @@ export { default as shallowEqual } from "./utils/shallowEqual";
 export { default as is } from "./validators/is";
 export { default as isBinding } from "./validators/isBinding";
 export { default as isBlockScoped } from "./validators/isBlockScoped";
-export { default as isImmutable } from "./validators/isImmutable";
 export { default as isLet } from "./validators/isLet";
 export { default as isNode } from "./validators/isNode";
 export { default as isNodesEquivalent } from "./validators/isNodesEquivalent";

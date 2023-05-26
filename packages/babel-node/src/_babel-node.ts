@@ -1,5 +1,5 @@
 import commander from "commander";
-import Module from "module";
+import Module, { createRequire } from "module";
 import { inspect } from "util";
 import path from "path";
 import repl from "repl";
@@ -10,7 +10,6 @@ import "regenerator-runtime/runtime";
 // @ts-expect-error @babel/register is a CommonJS module
 import register from "@babel/register";
 import { fileURLToPath } from "url";
-import { createRequire } from "module";
 
 import type { PluginAPI, PluginObject } from "@babel/core";
 

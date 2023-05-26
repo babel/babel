@@ -73,6 +73,7 @@ getV8Flags(async function (err, v8Flags) {
   }
 
   try {
+    // eslint-disable-next-line import/no-extraneous-dependencies
     const { default: kexec } = await import("kexec");
     kexec(process.argv[0], args);
   } catch (err) {

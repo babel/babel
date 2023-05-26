@@ -1,8 +1,7 @@
 import * as helpers from "@babel/helpers";
-import { NodePath } from "@babel/traverse";
+import traverse, { NodePath } from "@babel/traverse";
 import type { HubInterface, Visitor, Scope } from "@babel/traverse";
 import { codeFrameColumns } from "@babel/code-frame";
-import traverse from "@babel/traverse";
 import { cloneNode, interpreterDirective } from "@babel/types";
 import type * as t from "@babel/types";
 import { getModuleName } from "@babel/helper-module-transforms";

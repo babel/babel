@@ -1,9 +1,6 @@
 import type { ValidatedOptions } from "./validation/options";
-import getTargets, {
-  type InputTargets,
-} from "@babel/helper-compilation-targets";
-
-import type { Targets } from "@babel/helper-compilation-targets";
+import getTargets from "@babel/helper-compilation-targets";
+import type { Targets, InputTargets } from "@babel/helper-compilation-targets";
 
 export function resolveBrowserslistConfigFile(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
