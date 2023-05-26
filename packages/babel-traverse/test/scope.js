@@ -1038,18 +1038,58 @@ describe("scope", () => {
         },
       });
     });
-    it("shorthand of ObjectProperty inside ObjectPattern", () => {
+
+    it(".shorthand after renaming `ObjectProperty ` in `ObjectPattern`", () => {
       const program = getPath(`
-        const {a} = b;
-      `);
+         const { a } = b;
+         ({ a } = b);
+       `);
+
       program.traverse({
-        VariableDeclaration(path) {
-          path.scope.rename("a", "zzz");
-          expect(
-            path.node.declarations[0].id.properties[0].shorthand,
-          ).toBeFalsy();
+        Identifier(path) {
+          if (path.node.name !== "a") return;
+
+          path.scope.rename("a");
         },
       });
+
+      expect(
+        t.cloneDeepWithoutLoc(
+          program.node.body[0].declarations[0].id.properties[0],
+        ),
+      ).toMatchInlineSnapshot(`
+         Object {
+           "computed": false,
+           "extra": Object {
+             "shorthand": false,
+           },
+           "key": Object {
+             "loc": null,
+             "name": "a",
+             "type": "Identifier",
+           },
+           "loc": null,
+           "shorthand": false,
+           "type": "ObjectProperty",
+           "value": Object {
+             "extra": Object {},
+             "loc": null,
+             "name": "_a",
+             "type": "Identifier",
+           },
+         }
+       `);
+      expect(
+        t.cloneDeepWithoutLoc(program.node.body[0].declarations[1]),
+      ).toMatchInlineSnapshot(`undefined`);
+      expect(program + "").toMatchInlineSnapshot(`
+         "const {
+           a: _a
+         } = b;
+         ({
+           a: _a
+         } = b);"
+       `);
     });
   });
 });
