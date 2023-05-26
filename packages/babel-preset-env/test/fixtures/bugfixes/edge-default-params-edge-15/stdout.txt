@@ -8,7 +8,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  transform-unicode-sets-regex { edge }
+  transform-unicode-sets-regex { edge < 112 }
   transform-class-static-block { edge < 94 }
   transform-private-property-in-object { edge < 91 }
   transform-class-properties { edge < 79 }
