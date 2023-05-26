@@ -1589,6 +1589,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/plugin-proposal-private-property-in-object@npm:^7.21.0":
+  version: 7.21.0
+  resolution: "@babel/plugin-proposal-private-property-in-object@npm:7.21.0"
+  dependencies:
+    "@babel/helper-annotate-as-pure": ^7.18.6
+    "@babel/helper-create-class-features-plugin": ^7.21.0
+    "@babel/helper-plugin-utils": ^7.20.2
+    "@babel/plugin-syntax-private-property-in-object": ^7.14.5
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: add881a6a836635c41d2710551fdf777e2c07c0b691bf2baacc5d658dd64107479df1038680d6e67c468bfc6f36fb8920025d6bac2a1df0a81b867537d40ae78
+  languageName: node
+  linkType: hard
+
 "@babel/plugin-proposal-record-and-tuple@workspace:^, @babel/plugin-proposal-record-and-tuple@workspace:packages/babel-plugin-proposal-record-and-tuple":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-record-and-tuple@workspace:packages/babel-plugin-proposal-record-and-tuple"
@@ -3511,6 +3525,7 @@ __metadata:
     "@babel/helper-validator-option": "workspace:^"
     "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression": "workspace:^"
     "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining": "workspace:^"
+    "@babel/plugin-proposal-private-property-in-object": ^7.21.0
     "@babel/plugin-syntax-async-generators": ^7.8.4
     "@babel/plugin-syntax-class-properties": ^7.12.13
     "@babel/plugin-syntax-class-static-block": ^7.14.5
