@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-environment-visitor",
-  "version": "7.21.5",
+  "version": "7.22.1",
   "description": "Helper visitor to only visit nodes in the current 'this' context",
   "repository": {
     "type": "git",
