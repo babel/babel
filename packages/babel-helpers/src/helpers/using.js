@@ -1,4 +1,4 @@
-/* @minVersion 7.0.0-beta.0 */
+/* @minVersion 7.22.0 */
 
 export default function _using(stack, value, isAwait) {
   if (value === null || value === void 0) return value;

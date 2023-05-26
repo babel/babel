@@ -450,19 +450,14 @@ target["bootstrap-flow"] = function () {
 
 target["new-version-checklist"] = function () {
   // eslint-disable-next-line no-constant-condition
-  if (1) {
+  if (0) {
     console.log(
       `
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!                                                   !!!!!!
-!!!!!! - Update the version in the                       !!!!!!
-!!!!!!   syntax-import-attributes plugin and in          !!!!!!
-!!!!!!   babel-preset-env/src/available-plugins.ts#L159  !!!!!!
-!!!!!! - Update the version in the using and dispose     !!!!!!
-!!!!!!   helpers                                         !!!!!!
-!!!!!! - Update the version in the                       !!!!!!
-!!!!!    proposal-explicit-resource-management plugin    !!!!!!
+!!!!!! Write any important message here, and change the  !!!!!!
+!!!!!! if (0) above to if (1)                            !!!!!!
 !!!!!!                                                   !!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

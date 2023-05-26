@@ -4,8 +4,7 @@ import { types as t, template, traverse, type PluginPass } from "@babel/core";
 import type { NodePath, Visitor } from "@babel/traverse";
 
 export default declare(api => {
-  // TODO: assert version 7.22.0
-  api.assertVersion(7);
+  api.assertVersion("^7.22.0");
 
   const TOP_LEVEL_USING = new WeakSet();
   const TOP_LEVEL_AWAIT_USING = new WeakSet();

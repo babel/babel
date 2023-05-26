@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-optional-catch-binding",
-  "version": "7.18.6",
+  "version": "7.22.0",
   "description": "Compile optional catch bindings",
   "repository": {
     "type": "git",

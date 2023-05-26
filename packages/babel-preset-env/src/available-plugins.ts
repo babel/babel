@@ -169,7 +169,7 @@ export default {
 export const minVersions = {
   "bugfix/transform-safari-id-destructuring-collision-in-function-expression":
     "7.16.0",
-  "syntax-import-attributes": "7.21.0",
+  "syntax-import-attributes": "7.22.0",
   "transform-class-static-block": "7.12.0",
   "transform-private-property-in-object": "7.10.0",
 };
