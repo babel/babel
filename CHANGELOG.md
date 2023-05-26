@@ -24,6 +24,11 @@ This file contains the changelog starting frm v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.22.2 (2023-05-26)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-runtime`, `babel-preset-env`, `babel-runtime-corejs2`
+  * [#15660](https://github.com/babel/babel/pull/15660) Fix importing symbol polyfill in `@babel/runtime-corejs2` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.22.1 (2023-05-26)
 
 #### :bug: Bug Fix
