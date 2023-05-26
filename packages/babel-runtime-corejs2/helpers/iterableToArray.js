@@ -1,4 +1,4 @@
-var _Symbol = require("core-js/library/fn/symbol.js");
+var _Symbol = require("core-js/library/fn/symbol/index.js");
 var _Symbol$iterator = require("core-js/library/fn/symbol/iterator.js");
 var _Array$from = require("core-js/library/fn/array/from.js");
 function _iterableToArray(iter) {
