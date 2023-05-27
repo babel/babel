@@ -142,7 +142,7 @@ target["clean-runtime-helpers"] = function () {
  */
 
 target["use-cjs"] = function () {
-  node(["scripts/set-module-type.js", "script"]);
+  node(["scripts/set-module-type.js", "commonjs"]);
 
   target["bootstrap"]();
 };
