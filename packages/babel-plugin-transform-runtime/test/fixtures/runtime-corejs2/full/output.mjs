@@ -1,6 +1,6 @@
 import _regeneratorRuntime from "@babel/runtime-corejs2/helpers/regeneratorRuntime";
 var _marked = /*#__PURE__*/_regeneratorRuntime().mark(giveWord);
-import _Symbol from "@babel/runtime-corejs2/core-js/symbol/index";
+import _Symbol from "@babel/runtime-corejs2/core-js/symbol";
 import foo, * as bar from "someModule";
 export const myWord = _Symbol("abc");
 export function giveWord() {

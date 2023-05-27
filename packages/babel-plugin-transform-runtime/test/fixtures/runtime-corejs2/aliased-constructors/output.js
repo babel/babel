@@ -1,5 +1,5 @@
 var _Promise = require("@babel/runtime-corejs2/core-js/promise");
-var _Symbol = require("@babel/runtime-corejs2/core-js/symbol/index");
+var _Symbol = require("@babel/runtime-corejs2/core-js/symbol");
 var _Map = require("@babel/runtime-corejs2/core-js/map");
 obj.constructor === Object;
 obj.constructor === _Promise;

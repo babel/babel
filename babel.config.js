@@ -179,9 +179,9 @@ module.exports = function (api) {
       ],
     ],
     plugins: [
-      ["@babel/proposal-object-rest-spread", { useBuiltIns: true }],
+      ["@babel/transform-object-rest-spread", { useBuiltIns: true }],
 
-      convertESM ? "@babel/proposal-export-namespace-from" : null,
+      convertESM ? "@babel/transform-export-namespace-from" : null,
 
       pluginPackageJsonMacro,
 
@@ -214,7 +214,7 @@ module.exports = function (api) {
       convertESM && {
         test: ["./packages/babel-node/src"].map(normalize),
         // Used to conditionally import kexec
-        plugins: ["@babel/plugin-proposal-dynamic-import"],
+        plugins: ["@babel/plugin-transform-dynamic-import"],
       },
       {
         test: sources.map(normalize),
