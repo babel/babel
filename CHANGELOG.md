@@ -25,6 +25,10 @@ This file contains the changelog starting frm v7.15.0.
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
 
+## v7.22.3 (2023-05-27)
+
+- Re-publish all the package published in 7.22.0 that hadn't been republished yet. We accidentally published them with a `package.json` file containing `"type": "script"` instead of `"type": "commonjs"` ([#15664](https://github.com/babel/babel/issues/15664)).
+
 ## v7.22.2 (2023-05-26)
 
 #### :bug: Bug Fix
