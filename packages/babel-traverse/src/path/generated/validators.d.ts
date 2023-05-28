@@ -1230,5 +1230,5 @@ interface BaseNodePathValidators {
 }
 
 export interface NodePathValidators
-  extends BaseNodePathValidators,
+  extends Omit<BaseNodePathValidators, keyof VirtualTypeNodePathValidators>,
     VirtualTypeNodePathValidators {}
