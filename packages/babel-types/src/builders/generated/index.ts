@@ -634,10 +634,12 @@ export function classDeclaration(
 }
 export function exportAllDeclaration(
   source: t.StringLiteral,
+  attributes: Array<t.ImportAttribute> | null = null,
 ): t.ExportAllDeclaration {
   return validateNode<t.ExportAllDeclaration>({
     type: "ExportAllDeclaration",
     source,
+    attributes,
   });
 }
 export function exportDefaultDeclaration(
@@ -658,12 +660,14 @@ export function exportNamedDeclaration(
     t.ExportSpecifier | t.ExportDefaultSpecifier | t.ExportNamespaceSpecifier
   > = [],
   source: t.StringLiteral | null = null,
+  attributes: Array<t.ImportAttribute> | null = null,
 ): t.ExportNamedDeclaration {
   return validateNode<t.ExportNamedDeclaration>({
     type: "ExportNamedDeclaration",
     declaration,
     specifiers,
     source,
+    attributes,
   });
 }
 export function exportSpecifier(
@@ -695,11 +699,13 @@ export function importDeclaration(
     t.ImportSpecifier | t.ImportDefaultSpecifier | t.ImportNamespaceSpecifier
   >,
   source: t.StringLiteral,
+  attributes: Array<t.ImportAttribute> | null = null,
 ): t.ImportDeclaration {
   return validateNode<t.ImportDeclaration>({
     type: "ImportDeclaration",
     specifiers,
     source,
+    attributes,
   });
 }
 export function importDefaultSpecifier(
