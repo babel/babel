@@ -39,6 +39,9 @@
           "value": "foo.json"
         },
         "declaration": null,
+        "extra": {
+          "deprecatedAssertSyntax": true
+        },
         "attributes": [
           {
             "type": "ImportAttribute",

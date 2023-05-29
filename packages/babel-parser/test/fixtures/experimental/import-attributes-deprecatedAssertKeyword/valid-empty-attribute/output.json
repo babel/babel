@@ -44,6 +44,9 @@
           },
           "value": "foo"
         },
+        "extra": {
+          "deprecatedAssertSyntax": true
+        },
         "attributes": []
       },
       {
@@ -68,6 +71,9 @@
             "raw": "\"foo\""
           },
           "value": "foo"
+        },
+        "extra": {
+          "deprecatedAssertSyntax": true
         },
         "attributes": []
       },
@@ -100,6 +106,9 @@
           "value": "foo"
         },
         "declaration": null,
+        "extra": {
+          "deprecatedAssertSyntax": true
+        },
         "attributes": []
       },
       {
@@ -124,6 +133,9 @@
             "raw": "\"foo\""
           },
           "value": "foo"
+        },
+        "extra": {
+          "deprecatedAssertSyntax": true
         },
         "attributes": []
       }
