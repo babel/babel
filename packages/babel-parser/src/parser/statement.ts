@@ -3272,6 +3272,7 @@ export default abstract class StatementParser extends ExpressionParser {
             at: this.state.startLoc,
           });
         }
+        this.addExtra(node, "deprecatedAssertSyntax", true);
       } else {
         this.expectOnePlugin(["importAttributes", "importAssertions"]);
       }

@@ -23,6 +23,9 @@
           },
           "value": "foo"
         },
+        "extra": {
+          "deprecatedAssertSyntax": true
+        },
         "attributes": [
           {
             "type": "ImportAttribute",

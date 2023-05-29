@@ -40,6 +40,9 @@
           "value": "foo"
         },
         "declaration": null,
+        "extra": {
+          "deprecatedAssertSyntax": true
+        },
         "attributes": [
           {
             "type": "ImportAttribute",
