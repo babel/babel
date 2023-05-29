@@ -24,6 +24,17 @@ This file contains the changelog starting frm v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.22.4 (2023-05-29)
+
+#### :bug: Bug Fix
+* `babel-traverse`
+  * [#15649](https://github.com/babel/babel/pull/15649) Set `shorthand: false` when renaming an identifier inside an object property ([@coderaiser](https://github.com/coderaiser))
+
+#### :house: Internal
+* `babel-types`
+  * [#15666](https://github.com/babel/babel/pull/15666) Add missing `attributes`/`assertions` to `VISITOR_KEYS` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#15667](https://github.com/babel/babel/pull/15667) Mark `assert` attributes with `extra.deprecatedAssertSyntax` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 
 ## v7.22.3 (2023-05-27)
 
