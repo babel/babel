@@ -5,7 +5,7 @@ import type { NodePath, Visitor } from "../..";
 import { requeueComputedKeyAndDecorators } from "@babel/helper-environment-visitor";
 import { traverseNode } from "../../traverse-node";
 import { explode } from "../../visitors";
-import type { Identifier, ObjectProperty } from "@babel/types";
+import type { Identifier } from "@babel/types";
 
 const renameVisitor: Visitor<Renamer> = {
   ReferencedIdentifier({ node }, state) {
@@ -28,12 +28,11 @@ const renameVisitor: Visitor<Renamer> = {
     }
   },
 
-  ObjectProperty({ node, scope }: NodePath<ObjectProperty>, state) {
+  ObjectProperty({ node, scope }, state) {
     const { name } = node.key as Identifier;
-    if (!node.shorthand) return;
     if (
       node.shorthand &&
-      // In destrucutring the identifier is already renamed by the
+      // In destructuring the identifier is already renamed by the
       // AssignmentExpression|Declaration|VariableDeclarator visitor,
       // while in object literals it's renamed later by the
       // ReferencedIdentifier visitor.
