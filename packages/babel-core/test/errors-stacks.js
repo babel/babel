@@ -306,18 +306,17 @@ describe("@babel/core errors", function () {
           process.execPath,
           [
             "--frozen-intrinsics",
+            "--input-type=module",
             "-e",
             `
-        const babel = require("../lib/index.js");
-        babel.parseSync("foo;", {
+        import * as babel from "@babel/core";
+        await babel.parseAsync("foo;", {
           root: String.raw\`${fixture("valid")}\`,
         });
         console.log("%done%");
         `,
           ],
-          {
-            cwd: __dirname,
-          },
+          { cwd: __dirname },
         ).output + "",
       ).toContain("%done%");
     },
