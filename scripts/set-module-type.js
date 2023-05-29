@@ -14,14 +14,14 @@ if (process.argv.length >= 3) {
 } else if (fs.existsSync(root(".module-type"))) {
   moduleType = fs.readFileSync(root(".module-type"), "utf-8").trim();
 } else {
-  moduleType = "script";
+  moduleType = "commonjs";
 }
 
 if (moduleType === "clean") {
   try {
     fs.unlinkSync(root(".module-type"));
   } catch {}
-} else if (moduleType === "module" || moduleType === "script") {
+} else if (moduleType === "module" || moduleType === "commonjs") {
   fs.writeFileSync(root(".module-type"), moduleType);
 } else {
   throw new Error(`Unknown module type: ${moduleType}`);

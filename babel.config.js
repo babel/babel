@@ -13,10 +13,10 @@ module.exports = function (api) {
 
   const outputType = api.cache.invalidate(() => {
     try {
-      return fs.readFileSync(__dirname + "/.module-type", "utf-8").trim();
-    } catch (_) {
-      return "script";
-    }
+      const type = fs.readFileSync(__dirname + "/.module-type", "utf-8").trim();
+      if (type === "module") return type;
+    } catch (_) {}
+    return "script";
   });
 
   const sources = ["packages/*/src", "codemods/*/src", "eslint/*/src"];
