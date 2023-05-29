@@ -1485,7 +1485,7 @@ defineType("ClassDeclaration", {
 });
 
 defineType("ExportAllDeclaration", {
-  builder: ["source", "attributes"],
+  builder: ["source"],
   visitor: ["source", "attributes", "assertions"],
   aliases: [
     "Statement",
@@ -1538,7 +1538,7 @@ defineType("ExportDefaultDeclaration", {
 });
 
 defineType("ExportNamedDeclaration", {
-  builder: ["declaration", "specifiers", "source", "attributes"],
+  builder: ["declaration", "specifiers", "source"],
   visitor: ["declaration", "specifiers", "source", "attributes", "assertions"],
   aliases: [
     "Statement",
@@ -1694,7 +1694,7 @@ defineType("ForOfStatement", {
 });
 
 defineType("ImportDeclaration", {
-  builder: ["specifiers", "source", "attributes"],
+  builder: ["specifiers", "source"],
   visitor: ["specifiers", "source", "attributes", "assertions"],
   aliases: ["Statement", "Declaration", "ImportOrExportDeclaration"],
   fields: {
