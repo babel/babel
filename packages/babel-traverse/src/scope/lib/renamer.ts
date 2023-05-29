@@ -27,20 +27,22 @@ const renameVisitor: Visitor<Renamer> = {
       }
     }
   },
-  ObjectProperty(path: NodePath<ObjectProperty>) {
-    const { extra, key, value, computed, shorthand } = path.node;
 
-    if (computed) {
-      return;
-    }
-
-    if (!shorthand) {
-      return;
-    }
-
-    if ((key as Identifier).name !== (value as Identifier).name) {
-      path.node.shorthand = false;
-      if (extra?.shorthand) extra.shorthand = false;
+  ObjectProperty({ node, scope }: NodePath<ObjectProperty>, state) {
+    const { name } = node.key as Identifier;
+    if (!node.shorthand) return;
+    if (
+      node.shorthand &&
+      // In destrucutring the identifier is already renamed by the
+      // AssignmentExpression|Declaration|VariableDeclarator visitor,
+      // while in object literals it's renamed later by the
+      // ReferencedIdentifier visitor.
+      (name === state.oldName || name === state.newName) &&
+      // Ignore shadowed bindings
+      scope.getBindingIdentifier(name) === state.binding.identifier
+    ) {
+      node.shorthand = false;
+      if (node.extra?.shorthand) node.extra.shorthand = false;
     }
   },
 
