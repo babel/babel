@@ -1,21 +1,10 @@
 import * as babel from "../lib/index.js";
 
-import { fileURLToPath } from "url";
+import { commonJS, itGte } from "$repo-utils";
 import path from "path";
 import { spawnSync } from "child_process";
-import semver from "semver";
-import { readFileSync } from "fs";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-let USE_ESM = false;
-try {
-  const type = readFileSync(
-    new URL("../../../.module-type", import.meta.url),
-    "utf-8",
-  ).trim();
-  USE_ESM = type === "module";
-} catch {}
+const { __dirname } = commonJS(import.meta.url);
 
 const replaceAll = "".replaceAll
   ? Function.call.bind("".replaceAll)
@@ -84,12 +73,7 @@ function expectError(run) {
   throw new Error("It should have thrown an error.");
 }
 
-const fixture = name =>
-  path.join(
-    path.dirname(fileURLToPath(import.meta.url)),
-    "fixtures/errors",
-    name,
-  );
+const fixture = name => path.join(__dirname, "fixtures/errors", name);
 
 describe("@babel/core errors", function () {
   it("error inside config function", function () {
@@ -298,7 +282,7 @@ describe("@babel/core errors", function () {
     `);
   });
 
-  (semver.gte(process.version, "12.0.0") && !USE_ESM ? it : it.skip)(
+  itGte("12.0.0")(
     "should not throw in `node --frozen-intrinsics`",
     function () {
       expect(
@@ -309,7 +293,7 @@ describe("@babel/core errors", function () {
             "--input-type=module",
             "-e",
             `
-        import * as babel from "@babel/core";
+        import * as babel from "../lib/index.js";
         await babel.parseAsync("foo;", {
           root: String.raw\`${fixture("valid")}\`,
         });

@@ -44,12 +44,14 @@
 
 const ErrorToString = Function.call.bind(Error.prototype.toString);
 
-const SUPPORTED = !!Error.captureStackTrace && isErrorStackTraceLimitWritable();
+const SUPPORTED =
+  !!Error.captureStackTrace &&
+  Object.getOwnPropertyDescriptor(Error, "stackTraceLimit")?.writable === true;
 
 const START_HIDING = "startHiding - secret - don't use this - v1";
 const STOP_HIDING = "stopHiding - secret - don't use this - v1";
 
-type CallSite = Parameters<typeof Error.prepareStackTrace>[1][number];
+type CallSite = NodeJS.CallSite;
 
 const expectedErrors = new WeakSet<Error>();
 const virtualFrames = new WeakMap<Error, CallSite[]>();
@@ -68,18 +70,6 @@ function CallSite(filename: string): CallSite {
     getTypeName: () => undefined,
     toString: () => filename,
   } as CallSite);
-}
-
-// https://github.com/nodejs/node/pull/38215/files#diff-670bf55805b781d9a3579f8bca9104c04d94af87cc33220149fd7d37b095ca1cR210
-function isErrorStackTraceLimitWritable() {
-  const desc = Object.getOwnPropertyDescriptor(Error, "stackTraceLimit");
-  if (desc === undefined) {
-    return Object.isExtensible(Error);
-  }
-
-  return Object.prototype.hasOwnProperty.call(desc, "writable")
-    ? desc.writable
-    : desc.set !== undefined;
 }
 
 export function injectVirtualStackFrame(error: Error, filename: string) {
