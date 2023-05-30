@@ -54,6 +54,7 @@ import {
 import type * as t from "@babel/types";
 import { scope as scopeCache } from "../cache";
 import type { Visitor } from "../types";
+import { isExplodedVisitor } from "../visitors";
 
 type NodePart = string | number | boolean;
 // Recursively gathers the identifying names of a node.
@@ -1007,16 +1008,14 @@ export default class Scope {
     this.crawling = true;
     // traverse does not visit the root node, here we explicitly collect
     // root node binding info when the root is not a Program.
-    if (path.type !== "Program" && collectorVisitor._exploded) {
-      // @ts-expect-error when collectorVisitor is exploded, `enter` always exists
+    if (path.type !== "Program" && isExplodedVisitor(collectorVisitor)) {
       for (const visit of collectorVisitor.enter) {
-        visit(path, state);
+        visit.call(state, path, state);
       }
       const typeVisitors = collectorVisitor[path.type];
       if (typeVisitors) {
-        // @ts-expect-error when collectorVisitor is exploded, `enter` always exists
         for (const visit of typeVisitors.enter) {
-          visit(path, state);
+          visit.call(state, path, state);
         }
       }
     }

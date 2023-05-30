@@ -8,7 +8,7 @@ import type { Visitor } from "./types";
 export default class TraversalContext<S = unknown> {
   constructor(
     scope: Scope,
-    opts: ExplodedTraverseOptions,
+    opts: ExplodedTraverseOptions<S>,
     state: S,
     parentPath: NodePath,
   ) {
@@ -21,7 +21,7 @@ export default class TraversalContext<S = unknown> {
   declare parentPath: NodePath;
   declare scope: Scope;
   declare state: S;
-  declare opts: ExplodedTraverseOptions;
+  declare opts: ExplodedTraverseOptions<S>;
   queue: Array<NodePath> | null = null;
   priorityQueue: Array<NodePath> | null = null;
 

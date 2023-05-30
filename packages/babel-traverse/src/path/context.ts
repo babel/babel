@@ -3,21 +3,21 @@
 import { traverseNode } from "../traverse-node";
 import { SHOULD_SKIP, SHOULD_STOP } from "./index";
 import type TraversalContext from "../context";
-import type { VisitNodeKey } from "../types";
+import type { VisitPhase } from "../types";
 import type NodePath from "./index";
 import type * as t from "@babel/types";
 
-export function call(this: NodePath, key: VisitNodeKey): boolean {
+export function call(this: NodePath, key: VisitPhase): boolean {
   const opts = this.opts;
 
   this.debug(key);
 
   if (this.node) {
-    if (this._call(opts?.[key])) return true;
+    if (this._call(opts[key])) return true;
   }
 
   if (this.node) {
-    return this._call(opts?.[this.node.type]?.[key]);
+    return this._call(opts[this.node.type]?.[key]);
   }
 
   return false;
@@ -56,7 +56,8 @@ export function _call(this: NodePath, fns?: Array<Function>): boolean {
 }
 
 export function isDenylisted(this: NodePath): boolean {
-  const denylist = this.opts.denylist;
+  // @ts-expect-error TODO(Babel 8): Remove blacklist
+  const denylist = this.opts.denylist ?? this.opts.blacklist;
   return denylist && denylist.indexOf(this.node.type) > -1;
 }
 
@@ -169,7 +170,8 @@ export function setContext<S = unknown>(
   if (context) {
     this.context = context;
     this.state = context.state;
-    this.opts = context.opts;
+    // Discard the S type parameter from contect.opts
+    this.opts = context.opts as typeof this.opts;
   }
 
   this.setScope();

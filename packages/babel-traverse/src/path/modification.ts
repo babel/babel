@@ -280,9 +280,9 @@ export function updateSiblingKeys(
   if (!this.parent) return;
 
   const paths = pathCache.get(this.parent);
+
   for (const [, path] of paths) {
-    if (typeof path.key !== "number") continue;
-    if (path.key >= fromIndex) {
+    if (typeof path.key === "number" && path.key >= fromIndex) {
       path.key += incrementBy;
     }
   }

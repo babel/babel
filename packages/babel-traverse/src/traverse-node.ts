@@ -17,9 +17,9 @@ import { VISITOR_KEYS } from "@babel/types";
 
  * @note This function does not visit the given `node`.
  */
-export function traverseNode(
+export function traverseNode<S = unknown>(
   node: t.Node,
-  opts: ExplodedTraverseOptions,
+  opts: ExplodedTraverseOptions<S>,
   scope?: Scope,
   state?: any,
   path?: NodePath,

@@ -13,7 +13,10 @@ function isVirtualType(type: string): type is VIRTUAL_TYPES {
   return type in virtualTypes;
 }
 
-function isExplodedVisitor(visitor: Visitor): visitor is ExplodedVisitor {
+export function isExplodedVisitor(
+  visitor: Visitor,
+): visitor is ExplodedVisitor {
+  // @ts-expect-error _exploded is not defined on non-exploded Visitor
   return visitor?._exploded;
 }
 
@@ -33,8 +36,9 @@ function isExplodedVisitor(visitor: Visitor): visitor is ExplodedVisitor {
  * * `enter` and `exit` functions are wrapped in arrays, to ease merging of
  *   visitors
  */
-export function explode<S>(visitor: Visitor<S>): ExplodedVisitor {
+export function explode<S>(visitor: Visitor<S>): ExplodedVisitor<S> {
   if (isExplodedVisitor(visitor)) return visitor;
+  // @ts-expect-error `visitor` will be cast to ExplodedVisitor by this function
   visitor._exploded = true;
 
   // normalise pipes
@@ -147,6 +151,8 @@ export function explode<S>(visitor: Visitor<S>): ExplodedVisitor {
 }
 
 export function verify(visitor: Visitor) {
+  // @ts-expect-error _verified is not defined on non-verified Visitor.
+  // TODO: unify _verified and _exploded.
   if (visitor._verified) return;
 
   if (typeof visitor === "function") {
@@ -188,6 +194,8 @@ export function verify(visitor: Visitor) {
     }
   }
 
+  // @ts-expect-error _verified is not defined on non-verified Visitor.
+  // TODO: unify _verified and _exploded.
   visitor._verified = true;
 }
 
