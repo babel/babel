@@ -1,5 +1,5 @@
 import TraversalContext from "./context";
-import type { TraverseOptions } from "./index";
+import type { ExplodedTraverseOptions } from "./index";
 import type NodePath from "./path";
 import type Scope from "./scope";
 import type * as t from "@babel/types";
@@ -17,9 +17,9 @@ import { VISITOR_KEYS } from "@babel/types";
 
  * @note This function does not visit the given `node`.
  */
-export function traverseNode(
+export function traverseNode<S = unknown>(
   node: t.Node,
-  opts: TraverseOptions,
+  opts: ExplodedTraverseOptions<S>,
   scope?: Scope,
   state?: any,
   path?: NodePath,
