@@ -294,7 +294,7 @@ describe("@babel/core errors", function () {
             "-e",
             `
         import * as babel from "../lib/index.js";
-        await babel.parseAsync("foo;", {
+        babel.parseSync("foo;", {
           root: String.raw\`${fixture("valid")}\`,
         });
         console.log("%done%");
