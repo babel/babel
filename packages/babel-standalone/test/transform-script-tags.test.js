@@ -1,5 +1,7 @@
 import fs from "fs";
+import { createRequire } from "module";
 import semver from "semver";
+const require = createRequire(import.meta.url);
 
 const nodeGte16 = semver.gte(process.version, "16.0.0");
 
@@ -11,7 +13,7 @@ const nodeGte16 = semver.gte(process.version, "16.0.0");
       new URL("../babel.js", import.meta.url),
       "utf8",
     );
-    JSDOM = (await import("jsdom")).JSDOM;
+    JSDOM = require("jsdom").JSDOM;
   });
   it("should transform script element with type 'text/babel'", () => {
     const dom = new JSDOM(
