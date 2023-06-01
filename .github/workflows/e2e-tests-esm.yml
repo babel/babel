@@ -45,6 +45,8 @@ jobs:
       matrix:
         project:
           - babel
+          - create-react-app
+          - prettier
     steps:
       - name: Get yarn1 cache directory path
         id: yarn1-cache-dir-path
@@ -80,11 +82,5 @@ jobs:
         with:
           name: verdaccio-workspace
           path: /tmp/verdaccio-workspace
-      - name: Setup upterm session
-        uses: lhotari/action-upterm@v1
-        with:
-          limit-access-to-users: nicolo-ribaudo
       - name: Test
         run: ./scripts/integration-tests/e2e-${{ matrix.project }}.sh
-        env:
-          USE_ESM: true
