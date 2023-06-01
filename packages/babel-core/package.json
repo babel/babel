@@ -88,6 +88,9 @@
           "@babel/preset-typescript": {
             "optional": true
           }
+        },
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
         }
       },
       {

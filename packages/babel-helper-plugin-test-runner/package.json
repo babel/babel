@@ -43,6 +43,9 @@
             "default": "./lib/index.js"
           },
           "./package.json": "./package.json"
+        },
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
         }
       },
       {
