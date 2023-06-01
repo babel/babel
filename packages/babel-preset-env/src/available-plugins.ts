@@ -110,6 +110,13 @@ export default {
   // syntax enabled by default, we can safely skip enabling it.
   "syntax-unicode-sets-regex": USE_ESM
     ? null
+    : // We cannot use the require call when bundling, because this is an ESM file.
+    // Babel standalone uses a modern parser, so just include a known noop plugin.
+    // Use `bind` so that it's not detected as a duplicate plugin when using it
+    // together with the TLA
+    IS_STANDALONE
+    ? // @ts-expect-error syntaxTopLevelAwait is a function when bundled
+      () => syntaxTopLevelAwait.bind()
     : // eslint-disable-next-line no-restricted-globals
       () => require("@babel/plugin-syntax-unicode-sets-regex"),
   "transform-arrow-functions": () => transformArrowFunctions,

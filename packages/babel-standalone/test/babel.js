@@ -261,5 +261,26 @@ describe("@babel/standalone", () => {
     it("#14425 - numeric separators should be parsed correctly", () => {
       expect(() => Babel.transform("1_1", {})).not.toThrow();
     });
+    it("#15674 - supports unicode sets regex", () => {
+      expect(
+        Babel.transform("/[\\w--[b]]/v", {
+          plugins: ["transform-unicode-sets-regex"],
+        }).code,
+      ).toMatchInlineSnapshot(`"/[0-9A-Z_ac-z]/u;"`);
+
+      expect(
+        Babel.transform("/[\\w--[b]]/v", {
+          targets: { chrome: 90 },
+          presets: [["env", { modules: false }]],
+        }).code,
+      ).toMatchInlineSnapshot(`"/[0-9A-Z_ac-z]/u;"`);
+
+      expect(
+        Babel.transform("/[\\w--[b]]/v", {
+          targets: { chrome: 113 },
+          presets: [["env", { modules: false }]],
+        }).code,
+      ).toMatchInlineSnapshot(`"/[\\\\w--[b]]/v;"`);
+    });
   });
 });
