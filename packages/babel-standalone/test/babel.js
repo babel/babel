@@ -261,5 +261,12 @@ describe("@babel/standalone", () => {
     it("#14425 - numeric separators should be parsed correctly", () => {
       expect(() => Babel.transform("1_1", {})).not.toThrow();
     });
+    it("#15674 - syntax-unicode-sets-regex can be used", () => {
+      expect(() =>
+        Babel.transform("/[\\p{L}]/u", {
+          plugins: ["syntax-unicode-sets-regex"],
+        }),
+      ).not.toThrow();
+    });
   });
 });
