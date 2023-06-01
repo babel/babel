@@ -1120,7 +1120,7 @@ function createLocalsAssignment(
     elementDecorations,
     classDecorations,
   ];
-  // TODO(Babel 8): Only keep the else branch
+
   if (!process.env.BABEL_8_BREAKING) {
     if (
       version === "2021-12" ||
