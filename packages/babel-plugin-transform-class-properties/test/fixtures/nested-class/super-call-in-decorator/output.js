@@ -16,7 +16,7 @@ let Outer = /*#__PURE__*/function (_Hello) {
       babelHelpers.classCallCheck(this, Inner);
       babelHelpers.defineProperty(this, "hello", _init_hello(this));
     });
-    [_init_hello] = babelHelpers.applyDecs(Inner, [[_dec, 0, "hello"]], []);
+    [_init_hello] = babelHelpers.applyDecs2305(Inner, [[_dec, 0, "hello"]], []).e;
     return babelHelpers.possibleConstructorReturn(_this, new Inner());
   }
   return babelHelpers.createClass(Outer);
