@@ -624,6 +624,12 @@ export interface NewExpression extends CallOrNewBase {
   optional?: boolean; // TODO: Not in spec
 }
 
+export interface ImportExpression extends NodeBase {
+  type: "ImportExpression";
+  source: Expression;
+  options: Expression | null;
+}
+
 export interface SequenceExpression extends NodeBase {
   type: "SequenceExpression";
   expressions: Expression[];
