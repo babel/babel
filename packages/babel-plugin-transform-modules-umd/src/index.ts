@@ -95,14 +95,17 @@ export default declare((api, options: Options) => {
         initAssignments = [];
 
         const members = globalName.split(".");
-        globalToAssign = members.slice(1).reduce((accum, curr) => {
-          initAssignments.push(
-            buildPrerequisiteAssignment({
-              GLOBAL_REFERENCE: t.cloneNode(accum),
-            }),
-          );
-          return t.memberExpression(accum, t.identifier(curr));
-        }, t.memberExpression(t.identifier("global"), t.identifier(members[0])));
+        globalToAssign = members.slice(1).reduce(
+          (accum, curr) => {
+            initAssignments.push(
+              buildPrerequisiteAssignment({
+                GLOBAL_REFERENCE: t.cloneNode(accum),
+              }),
+            );
+            return t.memberExpression(accum, t.identifier(curr));
+          },
+          t.memberExpression(t.identifier("global"), t.identifier(members[0])),
+        );
       }
     }
 

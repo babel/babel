@@ -667,19 +667,19 @@ describe("api", function () {
   });
 
   it("code option false", function () {
-    return transformAsync("foo('bar');", { code: false }).then(function (
-      result,
-    ) {
-      expect(result.code).toBeFalsy();
-    });
+    return transformAsync("foo('bar');", { code: false }).then(
+      function (result) {
+        expect(result.code).toBeFalsy();
+      },
+    );
   });
 
   it("ast option false", function () {
-    return transformAsync("foo('bar');", { ast: false }).then(function (
-      result,
-    ) {
-      expect(result.ast).toBeFalsy();
-    });
+    return transformAsync("foo('bar');", { ast: false }).then(
+      function (result) {
+        expect(result.ast).toBeFalsy();
+      },
+    );
   });
 
   it("ast option true", function () {

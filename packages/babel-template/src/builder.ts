@@ -13,9 +13,10 @@ export type TemplateBuilder<T> = {
   (tpl: string, opts?: PublicOpts): (replacements?: PublicReplacements) => T;
 
   // Building from a template literal produces an AST builder function by default.
-  (tpl: TemplateStringsArray, ...args: Array<unknown>): (
-    replacements?: PublicReplacements,
-  ) => T;
+  (
+    tpl: TemplateStringsArray,
+    ...args: Array<unknown>
+  ): (replacements?: PublicReplacements) => T;
 
   // Allow users to explicitly create templates that produce ASTs, skipping
   // the need for an intermediate function.

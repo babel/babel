@@ -106,10 +106,10 @@ type SharedState = {
 
 type Handler = HandlerState<SharedState> & SharedState;
 type SuperMember = NodePath<
-  | t.MemberExpression & {
-      object: t.Super;
-      property: Exclude<t.MemberExpression["property"], t.PrivateName>;
-    }
+  t.MemberExpression & {
+    object: t.Super;
+    property: Exclude<t.MemberExpression["property"], t.PrivateName>;
+  }
 >;
 
 interface SpecHandler
