@@ -6,10 +6,10 @@ import { USE_ESM, commonJS } from "$repo-utils";
 const { __dirname, require } = commonJS(import.meta.url);
 
 // We skip older versions of node testing for two reasons.
-// 1. ts-node does not support the old version of node.
+// 1. ts-node and ts don't support the old version of node.
 // 2. In the old version of node, jest has been registered in `require.extensions`, which will cause babel to disable the transforming as expected.
 // TODO: Make it work with USE_ESM.
-const shouldSkip = semver.lt(process.version, "12.0.0") || USE_ESM;
+const shouldSkip = semver.lt(process.version, "14.0.0") || USE_ESM;
 
 (shouldSkip ? describe : describe.skip)(
   "@babel/core config with ts [dummy]",
