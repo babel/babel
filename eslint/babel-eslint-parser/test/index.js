@@ -3,8 +3,19 @@ import escope from "eslint-scope";
 import unpad from "dedent";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
-import { parseForESLint } from "../lib/index.cjs";
+import { parseForESLint as parseForESLintOriginal } from "../lib/index.cjs";
 import { ESLint } from "eslint";
+
+function parseForESLint(code, options) {
+  return parseForESLintOriginal(code, {
+    requireConfigFile: false,
+    ...options,
+    babelOptions: {
+      configFile: false,
+      ...options.babelOptions,
+    },
+  });
+}
 
 const ESLINT_VERSION = ESLint.version;
 const isESLint7 = ESLINT_VERSION.startsWith("7.");
