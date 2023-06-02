@@ -40,17 +40,17 @@ export const Expression: VirtualTypeMapping = ["Expression"] as const;
 
 export const Scope: VirtualTypeMapping = ["Scopable", "Pattern"] as const;
 
-export const Referenced: VirtualTypeMapping = null as null;
+export const Referenced: VirtualTypeMapping = null;
 
-export const BlockScoped: VirtualTypeMapping = null as null;
+export const BlockScoped: VirtualTypeMapping = null;
 
 export const Var: VirtualTypeMapping = ["VariableDeclaration"];
 
-export const User: VirtualTypeMapping = null as null;
+export const User: VirtualTypeMapping = null;
 
-export const Generated: VirtualTypeMapping = null as null;
+export const Generated: VirtualTypeMapping = null;
 
-export const Pure: VirtualTypeMapping = null as null;
+export const Pure: VirtualTypeMapping = null;
 
 export const Flow: VirtualTypeMapping = [
   "Flow",
