@@ -466,6 +466,22 @@ describe("addon resolution", function () {
 
   const nodeGte12 = parseInt(process.versions.node, 10) >= 12 ? it : it.skip;
 
+  nodeGte12(
+    "should suggest -transform- as an alternative to -proposal-",
+    function () {
+      process.chdir("throw-proposal-to-transform");
+
+      expect(() => {
+        babel.transformSync("", {
+          filename: "filename.js",
+          configFile: false,
+          plugins: ["@babel/proposal-halting-functions"],
+        });
+      }).toThrow(
+        /Cannot (?:find|resolve) module '@babel\/plugin-proposal-halting-functions'.*\n- Did you mean "@babel\/plugin-transform-halting-functions"\?/s,
+      );
+    },
+  );
   nodeGte12("should respect package.json#exports", async function () {
     process.chdir("pkg-exports");
 
