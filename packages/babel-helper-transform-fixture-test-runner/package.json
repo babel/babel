@@ -21,9 +21,6 @@
     "@babel/helper-fixtures": "workspace:^",
     "quick-lru": "5.1.0"
   },
-  "devDependencies": {
-    "@types/jest": "^27.4.1"
-  },
   "engines": {
     "node": ">=6.9.0"
   },
