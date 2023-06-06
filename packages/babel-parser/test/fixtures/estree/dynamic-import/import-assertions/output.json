@@ -19,7 +19,7 @@
             "value": "module",
             "raw": "\"module\""
           },
-          "attributes": {
+          "options": {
             "type": "ObjectExpression",
             "start":17,"end":45,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":45}},
             "properties": [

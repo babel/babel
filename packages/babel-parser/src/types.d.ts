@@ -1219,7 +1219,7 @@ export interface EstreeMethodDefinition extends NodeBase {
 export interface EstreeImportExpression extends NodeBase {
   type: "ImportExpression";
   source: Expression;
-  attributes?: Expression | null;
+  options?: Expression | null;
 }
 
 export interface EstreePrivateIdentifier extends NodeBase {

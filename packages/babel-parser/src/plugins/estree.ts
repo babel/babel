@@ -424,7 +424,7 @@ export default (superClass: typeof Parser) =>
           this.hasPlugin("importAttributes") ||
           this.hasPlugin("importAssertions")
         ) {
-          (node as N.Node as N.EstreeImportExpression).attributes =
+          (node as N.Node as N.EstreeImportExpression).options =
             node.arguments[1] ?? null;
         }
         // arguments isn't optional in the type definition
