@@ -46,6 +46,7 @@ module.exports = {
     "/node_modules/",
     "/test/fixtures/",
     "/test/debug-fixtures/",
+    "/babel-preset-env/test/regressions/",
     "/babel-parser/test/expressions/",
     "/test/tmp/",
     "/test/__data__/",
