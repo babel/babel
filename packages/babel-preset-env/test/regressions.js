@@ -5,6 +5,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 const itBabel7 = process.env.BABEL_8_BREAKING ? it.skip : it;
+const itBabel7Node14plus =
+  process.env.BABEL_8_BREAKING || parseInt(process.version) < 14 ? it.skip : it;
 
 describe("regressions", () => {
   it("empty", () => {
@@ -62,7 +64,8 @@ describe("regressions", () => {
       consoleWarn.mockRestore();
     });
 
-    itBabel7(
+    // jest fake timers only work in the Jest version we are using for Node.js 14+
+    itBabel7Node14plus(
       "proposal-private-property-in-object should warn and fallback to transform-...",
       async () => {
         const out = babel.transformSync("class A { #a; x = #a in this }", {
