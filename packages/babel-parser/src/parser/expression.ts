@@ -1127,8 +1127,8 @@ export default abstract class ExpressionParser extends LValParser {
           this.raise(Errors.UnsupportedImport, {
             at: this.state.lastTokStartLoc,
           });
+          return this.finishNode(node, "Import");
         }
-        break;
 
       case tt._this:
         node = this.startNode();
