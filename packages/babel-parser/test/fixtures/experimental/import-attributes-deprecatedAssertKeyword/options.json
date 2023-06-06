@@ -1,4 +1,5 @@
 {
+  "createImportExpression": false,
   "plugins": [
     ["importAttributes", { "deprecatedAssertSyntax": true }]
   ],
