@@ -21,7 +21,8 @@
               "raw": "\"foo.js\""
             },
             "value": "foo.js"
-          }
+          },
+          "options": null
         }
       },
       {
