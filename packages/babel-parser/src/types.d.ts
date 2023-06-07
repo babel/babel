@@ -1220,6 +1220,10 @@ export interface EstreeImportExpression extends NodeBase {
   type: "ImportExpression";
   source: Expression;
   options?: Expression | null;
+  /**
+   * @deprecated Use options instead
+   */
+  attributes?: Expression | null;
 }
 
 export interface EstreePrivateIdentifier extends NodeBase {

@@ -426,6 +426,9 @@ export default (superClass: typeof Parser) =>
         ) {
           (node as N.Node as N.EstreeImportExpression).options =
             node.arguments[1] ?? null;
+          // compatibility with previous ESTree AST
+          (node as N.Node as N.EstreeImportExpression).attributes =
+            node.arguments[1] ?? null;
         }
         // arguments isn't optional in the type definition
         delete node.arguments;

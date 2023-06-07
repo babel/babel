@@ -19,7 +19,8 @@
             "value": "module",
             "raw": "\"module\""
           },
-          "options": null
+          "options": null,
+          "attributes": null
         }
       }
     ]
