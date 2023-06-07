@@ -7,7 +7,9 @@ import { USE_ESM } from "$repo-utils";
 
 const itBabel7 = process.env.BABEL_8_BREAKING ? it.skip : it;
 const itBabel7Node14plusCjs =
-  process.env.BABEL_8_BREAKING || parseInt(process.version) < 14 || USE_ESM
+  process.env.BABEL_8_BREAKING ||
+  parseInt(process.versions.node) < 14 ||
+  USE_ESM
     ? it.skip
     : it;
 
