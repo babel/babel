@@ -1,21 +1,27 @@
 import * as babel7_12 from "@babel/core-7.12";
+import * as babel from "@babel/core";
 import env from "../lib/index.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import { USE_ESM, commonJS } from "$repo-utils";
+
+const { require } = commonJS(import.meta.url);
 
 const itBabel7 = process.env.BABEL_8_BREAKING ? it.skip : it;
+const itBabel7Node14plusCjs =
+  process.env.BABEL_8_BREAKING ||
+  parseInt(process.versions.node) < 14 ||
+  USE_ESM
+    ? it.skip
+    : it;
 
-describe("#12880", () => {
-  afterEach(() => {
-    jest.spyOn(process, "cwd").mockRestore();
-  });
-
+describe("regressions", () => {
   it("empty", () => {
     // TODO(Babel 8): Delete this file
   });
 
   itBabel7(
-    "read the .browserslistrc file when using @babel/core < 7.13.0",
+    "#12880 - read the .browserslistrc file when using @babel/core < 7.13.0",
     () => {
       const root = path.join(
         path.dirname(fileURLToPath(import.meta.url)),
@@ -39,11 +45,44 @@ describe("#12880", () => {
         });
 
         expect(out.code).toMatchInlineSnapshot(`
-        "Math.pow(a, b);
-        a => b;"
-      `);
+                    "Math.pow(a, b);
+                    a => b;"
+                `);
       } finally {
         spy.mockRestore();
+      }
+    },
+  );
+
+  // create-reat-app missing dependency fallback
+  // jest fake timers only work in the Jest version we are using for Node.js 14+
+  itBabel7Node14plusCjs(
+    "proposal-private-property-in-object should warn and fallback to transform-...",
+    () => {
+      jest.useFakeTimers();
+      const consoleWarn = jest
+        .spyOn(console, "warn")
+        .mockImplementation(() => {});
+      try {
+        const out = babel.transformSync("class A { #a; x = #a in this }", {
+          configFile: false,
+          presets: [require("./regressions/babel-preset-react-app/index.js")],
+        });
+
+        jest.advanceTimersByTime(5000);
+        expect(consoleWarn).toHaveBeenCalled();
+
+        expect(out.code).toMatchInlineSnapshot(`
+        "function _checkInRHS(value) { if (Object(value) !== value) throw TypeError(\\"right-hand side of 'in' should be an object, got \\" + (null !== value ? typeof value : \\"null\\")); return value; }
+        var _aBrandCheck = /*#__PURE__*/new WeakSet();
+        class A {
+          #a = void _aBrandCheck.add(this);
+          x = _aBrandCheck.has(_checkInRHS(this));
+        }"
+      `);
+      } finally {
+        jest.useRealTimers();
+        consoleWarn.mockRestore();
       }
     },
   );

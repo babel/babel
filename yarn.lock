@@ -1387,6 +1387,24 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-proposal-private-property-in-object-BABEL_8_BREAKING-false@npm:@babel/plugin-proposal-private-property-in-object@7.21.0-placeholder-for-preset-env.2":
+  version: 7.21.0-placeholder-for-preset-env.2
+  resolution: "@babel/plugin-proposal-private-property-in-object@npm:7.21.0-placeholder-for-preset-env.2"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: d97745d098b835d55033ff3a7fb2b895b9c5295b08a5759e4f20df325aa385a3e0bc9bd5ad8f2ec554a44d4e6525acfc257b8c5848a1345cb40f26a30e277e91
+  languageName: node
+  linkType: hard
+
+"@babel/plugin-proposal-private-property-in-object@condition:BABEL_8_BREAKING ? : 7.21.0-placeholder-for-preset-env.2":
+  version: 0.0.0-condition-87b572
+  resolution: "@babel/plugin-proposal-private-property-in-object@condition:BABEL_8_BREAKING?:7.21.0-placeholder-for-preset-env.2#87b572"
+  dependencies:
+    "@babel/plugin-proposal-private-property-in-object-BABEL_8_BREAKING-false": "npm:@babel/plugin-proposal-private-property-in-object@7.21.0-placeholder-for-preset-env.2"
+  checksum: 3eb1935da93425f15865962e434f3574cf05510f4ed72be4e3ffa6242ea1e75efc98a906fa90e178debc915cae8dc5f03691b780ab2f5fc27d7911bfcdfa1b26
+  languageName: node
+  linkType: hard
+
 "@babel/plugin-proposal-private-property-in-object@npm:^7.21.0":
   version: 7.21.0
   resolution: "@babel/plugin-proposal-private-property-in-object@npm:7.21.0"
@@ -3541,7 +3559,7 @@ __metadata:
     "@babel/helper-validator-option": "workspace:^"
     "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression": "workspace:^"
     "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining": "workspace:^"
-    "@babel/plugin-proposal-private-property-in-object": ^7.21.0
+    "@babel/plugin-proposal-private-property-in-object": "condition:BABEL_8_BREAKING ? : 7.21.0-placeholder-for-preset-env.2"
     "@babel/plugin-syntax-async-generators": ^7.8.4
     "@babel/plugin-syntax-class-properties": ^7.12.13
     "@babel/plugin-syntax-class-static-block": ^7.14.5
@@ -4163,7 +4181,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jest/fake-timers@npm:^29.5.0":
+"@jest/fake-timers@npm:^29.2.2, @jest/fake-timers@npm:^29.5.0":
   version: 29.5.0
   resolution: "@jest/fake-timers@npm:29.5.0"
   dependencies:
@@ -6269,7 +6287,7 @@ __metadata:
     husky: ^7.0.4
     import-meta-resolve: ^3.0.0
     jest: ^29.5.0
-    jest-light-runner: ^0.4.1
+    jest-light-runner: ^0.5.0
     jest-worker: ^29.5.0
     lint-staged: ^13.0.3
     mergeiterator: ^1.4.4
@@ -10861,11 +10879,12 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"jest-light-runner@npm:^0.4.1":
-  version: 0.4.1
-  resolution: "jest-light-runner@npm:0.4.1"
+"jest-light-runner@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "jest-light-runner@npm:0.5.0"
   dependencies:
     "@jest/expect": ^29.0.1
+    "@jest/fake-timers": ^29.2.2
     jest-circus: ^29.0.1
     jest-each: ^29.0.1
     jest-mock: ^29.0.1
@@ -10874,7 +10893,7 @@ fsevents@^1.2.7:
     supports-color: ^9.2.1
   peerDependencies:
     jest: ^27.5.0 || ^28.0.0 || ^29.0.0
-  checksum: e1a3019e9d3cd03627f85e2a7cfd10f89c6b34e88f6fbd8496575fe995cad1e333a7aed476137612cbd2f2de0474c4bc6c5191a28c4db8b231c9ea957d09d07b
+  checksum: 9a572e175ccadaaa67073ea6e3caf02c20e937f4e6a1dc7c4f8ccafcbed47b475375694f1f87e980da85af79d120830ff133f73831f294439f3125f9eb5f93a7
   languageName: node
   linkType: hard
 
@@ -13206,6 +13225,15 @@ fsevents@^1.2.7:
   bin:
     prettier: bin/prettier.cjs
   checksum: a5e326653997c38dcc20c1b908f90089b0e7fd7613eec67c2ec298c7637f5a26b4ca7486ed6830d9b49160467d5442769f3b5b61cbce1850122cccecf1ce73a8
+  languageName: node
+  linkType: hard
+
+"prettier@npm:^2.0.0":
+  version: 2.8.8
+  resolution: "prettier@npm:2.8.8"
+  bin:
+    prettier: bin-prettier.js
+  checksum: b49e409431bf129dd89238d64299ba80717b57ff5a6d1c1a8b1a28b590d998a34e083fa13573bc732bb8d2305becb4c9a4407f8486c81fa7d55100eb08263cf8
   languageName: node
   linkType: hard
 

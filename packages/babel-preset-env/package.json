@@ -22,7 +22,7 @@
     "@babel/helper-validator-option": "workspace:^",
     "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression": "workspace:^",
     "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining": "workspace:^",
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.0",
+    "@babel/plugin-proposal-private-property-in-object": "condition:BABEL_8_BREAKING ? : 7.21.0-placeholder-for-preset-env.2",
     "@babel/plugin-syntax-async-generators": "^7.8.4",
     "@babel/plugin-syntax-class-properties": "^7.12.13",
     "@babel/plugin-syntax-class-static-block": "^7.14.5",
