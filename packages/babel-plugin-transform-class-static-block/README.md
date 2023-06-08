@@ -1,6 +1,6 @@
 # @babel/plugin-transform-class-static-block
 
-> Allow parsing of class static blocks
+> Transform class static blocks
 
 See our website [@babel/plugin-transform-class-static-block](https://babeljs.io/docs/en/babel-plugin-transform-class-static-block) for more information.
 

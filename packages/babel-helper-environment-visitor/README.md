@@ -9,11 +9,11 @@ See our website [@babel/helper-environment-visitor](https://babeljs.io/docs/en/b
 Using npm:
 
 ```sh
-npm install --save-dev @babel/helper-environment-visitor
+npm install --save @babel/helper-environment-visitor
 ```
 
 or using yarn:
 
 ```sh
-yarn add @babel/helper-environment-visitor --dev
+yarn add @babel/helper-environment-visitor
 ```

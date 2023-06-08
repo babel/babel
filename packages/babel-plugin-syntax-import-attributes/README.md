@@ -1,19 +1,19 @@
-# @babel/plugin-syntax-import-assertions
+# @babel/plugin-syntax-import-attributes
 
-> Allow parsing of the module assertion attributes in the import statement
+> Allow parsing of the module attributes in the import statement
 
-See our website [@babel/plugin-syntax-import-assertions](https://babeljs.io/docs/en/babel-plugin-syntax-import-assertions) for more information.
+See our website [@babel/plugin-syntax-import-attributes](https://babeljs.io/docs/en/babel-plugin-syntax-import-attributes) for more information.
 
 ## Install
 
 Using npm:
 
 ```sh
-npm install --save-dev @babel/plugin-syntax-import-assertions
+npm install --save-dev @babel/plugin-syntax-import-attributes
 ```
 
 or using yarn:
 
 ```sh
-yarn add @babel/plugin-syntax-import-assertions --dev
+yarn add @babel/plugin-syntax-import-attributes --dev
 ```
