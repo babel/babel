@@ -3,7 +3,9 @@ import * as babel from "@babel/core";
 import env from "../lib/index.js";
 import path from "path";
 import { fileURLToPath } from "url";
-import { USE_ESM } from "$repo-utils";
+import { USE_ESM, commonJS } from "$repo-utils";
+
+const { require } = commonJS(import.meta.url);
 
 const itBabel7 = process.env.BABEL_8_BREAKING ? it.skip : it;
 const itBabel7Node14plusCjs =
@@ -56,7 +58,7 @@ describe("regressions", () => {
   // jest fake timers only work in the Jest version we are using for Node.js 14+
   itBabel7Node14plusCjs(
     "proposal-private-property-in-object should warn and fallback to transform-...",
-    async () => {
+    () => {
       jest.useFakeTimers();
       const consoleWarn = jest
         .spyOn(console, "warn")
@@ -65,8 +67,7 @@ describe("regressions", () => {
         const out = babel.transformSync("class A { #a; x = #a in this }", {
           configFile: false,
           presets: [
-            (await import("./regressions/babel-preset-react-app/index.js"))
-              .default,
+            require("./regressions/babel-preset-react-app/index.js").default,
           ],
         });
 
