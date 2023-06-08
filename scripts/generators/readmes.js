@@ -79,22 +79,26 @@ packages
   .filter(x => x !== "README.md") // ignore root readme
   .filter(x => x.indexOf("babel-helper-check-duplicate-nodes") === -1) // ignore check-duplicate-nodes
   .forEach(id => {
-    const { name, description } = getPackageJson(id);
-    const readmePath = join(packageDir, id, "README.md");
+    try {
+      const { name, description } = getPackageJson(id);
+      const readmePath = join(packageDir, id, "README.md");
 
-    // generate
-    const websiteLink = getWebsiteLink(id);
-    const issuesLink = labels[id];
+      // generate
+      const websiteLink = getWebsiteLink(id);
+      const issuesLink = labels[id];
 
-    const readme = generateReadme({
-      websiteLink,
-      issuesLink,
-      name,
-      description,
-    });
+      const readme = generateReadme({
+        websiteLink,
+        issuesLink,
+        name,
+        description,
+      });
 
-    // write
-    writeFileSync(readmePath, readme);
+      // write
+      writeFileSync(readmePath, readme);
 
-    console.log("OK", id);
+      console.log("OK", id);
+    } catch (e) {
+      console.error("ERR", id, e);
+    }
   });

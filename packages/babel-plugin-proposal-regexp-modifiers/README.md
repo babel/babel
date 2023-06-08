@@ -1,6 +1,6 @@
 # @babel/plugin-proposal-regexp-modifiers
 
-> Compile regular expressions using duplicate named groups to index-based groups.
+> Compile inline regular expression modifiers
 
 See our website [@babel/plugin-proposal-regexp-modifiers](https://babeljs.io/docs/en/babel-plugin-proposal-regexp-modifiers) for more information.
 
