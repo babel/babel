@@ -22,31 +22,33 @@ const isDep = name =>
   name.startsWith("@babel/helper-") ||
   name === "@babel/compat-data";
 
-const getWebsiteLink = n => `https://babeljs.io/docs/en/${n}`;
+const getWebsiteLink = n => `https://babeljs.io/docs/${n}`;
 const getPackageJson = pkg => require(join(packageDir, pkg, "package.json"));
-const getIssueLabelLink = l =>
-  `https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22${encodeURIComponent(
+const getIssueLabelLink = l => {
+  if (!l) return "";
+  return `https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22${encodeURIComponent(
     l
   )}%22+is%3Aopen`;
+};
 const getNpmInstall = name =>
   `npm install ${isDep(name) ? "--save" : "--save-dev"} ${name}`;
 const getYarnAdd = name => `yarn add ${name}${isDep(name) ? "" : " --dev"}`;
 
 const labels = {
-  "babel-preset-flow": getIssueLabelLink("area: flow"),
-  "babel-preset-node": getIssueLabelLink("area: node"),
-  "babel-preset-react": getIssueLabelLink("area: react"),
-  "babel-preset-typescript": getIssueLabelLink("area: typescript"),
-  "babel-parser": getIssueLabelLink("pkg: parser (babylon)"),
-  "babel-cli": getIssueLabelLink("pkg: cli"),
-  "babel-core": getIssueLabelLink("pkg: core"),
-  "babel-generator": getIssueLabelLink("pkg: generator"),
-  "babel-preset-env": getIssueLabelLink("pkg: preset-env"),
-  "babel-register": getIssueLabelLink("pkg: register"),
-  "babel-template": getIssueLabelLink("pkg: template"),
-  "babel-traverse": getIssueLabelLink("pkg: traverse"),
-  "babel-types": getIssueLabelLink("pkg: types"),
-  "babel-standalone": getIssueLabelLink("pkg: standalone"),
+  "babel-preset-flow": "area: flow",
+  "babel-preset-node": "area: node",
+  "babel-preset-react": "area: react",
+  "babel-preset-typescript": "area: typescript",
+  "babel-parser": "pkg: parser",
+  "babel-cli": "pkg: cli",
+  "babel-core": "pkg: core",
+  "babel-generator": "pkg: generator",
+  "babel-preset-env": "pkg: preset-env",
+  "babel-register": "pkg: register",
+  "babel-template": "pkg: template",
+  "babel-traverse": "pkg: traverse",
+  "babel-types": "pkg: types",
+  "babel-standalone": "pkg: standalone",
 };
 
 const generateReadme = ({ websiteLink, issuesLink, name, description }) =>
@@ -85,7 +87,7 @@ packages
 
       // generate
       const websiteLink = getWebsiteLink(id);
-      const issuesLink = labels[id];
+      const issuesLink = getIssueLabelLink(labels[id]);
 
       const readme = generateReadme({
         websiteLink,

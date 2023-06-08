@@ -61,6 +61,7 @@ tscheck:
 	$(MAKEJS) tscheck
 
 lint-ci: lint check-compat-data-ci
+	$(NODE) scripts/generators/readmes.js
 
 check-compat-data-ci: check-compat-data
 
