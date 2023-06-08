@@ -24,6 +24,15 @@ This file contains the changelog starting frm v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.22.5 (2023-06-08)
+
+#### :bug: Bug Fix
+* `babel-preset-env`, `babel-standalone`
+  * [#15675](https://github.com/babel/babel/pull/15675) Fix using `syntax-unicode-sets-regex` in standalone ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :nail_care: Polish
+* `babel-core`
+  * [#15683](https://github.com/babel/babel/pull/15683) Suggest `-transform-` when resolving missing plugins ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.22.4 (2023-05-29)
 
 #### :bug: Bug Fix
