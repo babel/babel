@@ -1387,21 +1387,21 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-proposal-private-property-in-object-BABEL_8_BREAKING-false@npm:@babel/plugin-proposal-private-property-in-object@7.21.0-placeholder-for-preset-env.1":
-  version: 7.21.0-placeholder-for-preset-env.1
-  resolution: "@babel/plugin-proposal-private-property-in-object@npm:7.21.0-placeholder-for-preset-env.1"
+"@babel/plugin-proposal-private-property-in-object-BABEL_8_BREAKING-false@npm:@babel/plugin-proposal-private-property-in-object@7.21.0-placeholder-for-preset-env.2":
+  version: 7.21.0-placeholder-for-preset-env.2
+  resolution: "@babel/plugin-proposal-private-property-in-object@npm:7.21.0-placeholder-for-preset-env.2"
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 34ee9fee925efe5271ea7652dc65c0218210f2313e64f69d516a31fbdd4757e0ab58140283f8702a5920e82ffed438541a83badec8bcc2101feadb58b29d8014
+  checksum: d97745d098b835d55033ff3a7fb2b895b9c5295b08a5759e4f20df325aa385a3e0bc9bd5ad8f2ec554a44d4e6525acfc257b8c5848a1345cb40f26a30e277e91
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-private-property-in-object@condition:BABEL_8_BREAKING ? : 7.21.0-placeholder-for-preset-env.1":
-  version: 0.0.0-condition-c1180e
-  resolution: "@babel/plugin-proposal-private-property-in-object@condition:BABEL_8_BREAKING?:7.21.0-placeholder-for-preset-env.1#c1180e"
+"@babel/plugin-proposal-private-property-in-object@condition:BABEL_8_BREAKING ? : 7.21.0-placeholder-for-preset-env.2":
+  version: 0.0.0-condition-87b572
+  resolution: "@babel/plugin-proposal-private-property-in-object@condition:BABEL_8_BREAKING?:7.21.0-placeholder-for-preset-env.2#87b572"
   dependencies:
-    "@babel/plugin-proposal-private-property-in-object-BABEL_8_BREAKING-false": "npm:@babel/plugin-proposal-private-property-in-object@7.21.0-placeholder-for-preset-env.1"
-  checksum: db920fe1b3349424e856d9b02d96bb4aa2d5608b224edb28c8942b42bddd2d281ecc207ce65978e0b71f70244980110a69405c57576278c19e9fbd1bc698cf28
+    "@babel/plugin-proposal-private-property-in-object-BABEL_8_BREAKING-false": "npm:@babel/plugin-proposal-private-property-in-object@7.21.0-placeholder-for-preset-env.2"
+  checksum: 3eb1935da93425f15865962e434f3574cf05510f4ed72be4e3ffa6242ea1e75efc98a906fa90e178debc915cae8dc5f03691b780ab2f5fc27d7911bfcdfa1b26
   languageName: node
   linkType: hard
 
@@ -3559,7 +3559,7 @@ __metadata:
     "@babel/helper-validator-option": "workspace:^"
     "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression": "workspace:^"
     "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining": "workspace:^"
-    "@babel/plugin-proposal-private-property-in-object": "condition:BABEL_8_BREAKING ? : 7.21.0-placeholder-for-preset-env.1"
+    "@babel/plugin-proposal-private-property-in-object": "condition:BABEL_8_BREAKING ? : 7.21.0-placeholder-for-preset-env.2"
     "@babel/plugin-syntax-async-generators": ^7.8.4
     "@babel/plugin-syntax-class-properties": ^7.12.13
     "@babel/plugin-syntax-class-static-block": ^7.14.5
