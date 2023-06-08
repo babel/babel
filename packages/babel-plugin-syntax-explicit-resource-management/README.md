@@ -2,7 +2,7 @@
 
 > Allow parsing of the using declarations
 
-See our website [@babel/plugin-syntax-explicit-resource-management](https://babeljs.io/docs/en/babel-plugin-syntax-explicit-resource-management) for more information.
+See our website [@babel/plugin-syntax-explicit-resource-management](https://babeljs.io/docs/babel-plugin-syntax-explicit-resource-management) for more information.
 
 ## Install
 

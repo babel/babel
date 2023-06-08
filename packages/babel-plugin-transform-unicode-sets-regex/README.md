@@ -2,7 +2,7 @@
 
 > Compile regular expressions' unicodeSets (v) flag.
 
-See our website [@babel/plugin-transform-unicode-sets-regex](https://babeljs.io/docs/en/babel-plugin-transform-unicode-sets-regex) for more information.
+See our website [@babel/plugin-transform-unicode-sets-regex](https://babeljs.io/docs/babel-plugin-transform-unicode-sets-regex) for more information.
 
 ## Install
 

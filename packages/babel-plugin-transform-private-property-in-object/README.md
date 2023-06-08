@@ -2,7 +2,7 @@
 
 > This plugin transforms checks for a private property in an object
 
-See our website [@babel/plugin-transform-private-property-in-object](https://babeljs.io/docs/en/babel-plugin-transform-private-property-in-object) for more information.
+See our website [@babel/plugin-transform-private-property-in-object](https://babeljs.io/docs/babel-plugin-transform-private-property-in-object) for more information.
 
 ## Install
 

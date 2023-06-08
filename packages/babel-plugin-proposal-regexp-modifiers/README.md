@@ -2,7 +2,7 @@
 
 > Compile inline regular expression modifiers
 
-See our website [@babel/plugin-proposal-regexp-modifiers](https://babeljs.io/docs/en/babel-plugin-proposal-regexp-modifiers) for more information.
+See our website [@babel/plugin-proposal-regexp-modifiers](https://babeljs.io/docs/babel-plugin-proposal-regexp-modifiers) for more information.
 
 ## Install
 

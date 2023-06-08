@@ -2,7 +2,7 @@
 
 > Remove nullish coalescing operator
 
-See our website [@babel/plugin-transform-nullish-coalescing-operator](https://babeljs.io/docs/en/babel-plugin-transform-nullish-coalescing-operator) for more information.
+See our website [@babel/plugin-transform-nullish-coalescing-operator](https://babeljs.io/docs/babel-plugin-transform-nullish-coalescing-operator) for more information.
 
 ## Install
 

@@ -2,7 +2,7 @@
 
 > This plugin contains helper functions that’ll be placed at the top of the generated code
 
-See our website [@babel/plugin-external-helpers](https://babeljs.io/docs/en/babel-plugin-external-helpers) for more information.
+See our website [@babel/plugin-external-helpers](https://babeljs.io/docs/babel-plugin-external-helpers) for more information.
 
 ## Install
 

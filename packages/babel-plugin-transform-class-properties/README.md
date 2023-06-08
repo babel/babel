@@ -2,7 +2,7 @@
 
 > This plugin transforms static class properties as well as properties declared with the property initializer syntax
 
-See our website [@babel/plugin-transform-class-properties](https://babeljs.io/docs/en/babel-plugin-transform-class-properties) for more information.
+See our website [@babel/plugin-transform-class-properties](https://babeljs.io/docs/babel-plugin-transform-class-properties) for more information.
 
 ## Install
 

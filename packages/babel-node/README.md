@@ -2,7 +2,7 @@
 
 > Babel command line
 
-See our website [@babel/node](https://babeljs.io/docs/en/babel-node) for more information.
+See our website [@babel/node](https://babeljs.io/docs/babel-node) for more information.
 
 ## Install
 

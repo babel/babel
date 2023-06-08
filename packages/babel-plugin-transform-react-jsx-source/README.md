@@ -2,7 +2,7 @@
 
 > Add a __source prop to all JSX Elements
 
-See our website [@babel/plugin-transform-react-jsx-source](https://babeljs.io/docs/en/babel-plugin-transform-react-jsx-source) for more information.
+See our website [@babel/plugin-transform-react-jsx-source](https://babeljs.io/docs/babel-plugin-transform-react-jsx-source) for more information.
 
 ## Install
 

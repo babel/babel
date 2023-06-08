@@ -2,7 +2,7 @@
 
 > Allow parsing of decorators
 
-See our website [@babel/plugin-syntax-decorators](https://babeljs.io/docs/en/babel-plugin-syntax-decorators) for more information.
+See our website [@babel/plugin-syntax-decorators](https://babeljs.io/docs/babel-plugin-syntax-decorators) for more information.
 
 ## Install
 

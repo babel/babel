@@ -2,7 +2,7 @@
 
 > Turn JSX into React function calls
 
-See our website [@babel/plugin-transform-react-jsx](https://babeljs.io/docs/en/babel-plugin-transform-react-jsx) for more information.
+See our website [@babel/plugin-transform-react-jsx](https://babeljs.io/docs/babel-plugin-transform-react-jsx) for more information.
 
 ## Install
 

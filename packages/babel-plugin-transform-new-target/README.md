@@ -2,7 +2,7 @@
 
 > Transforms new.target meta property
 
-See our website [@babel/plugin-transform-new-target](https://babeljs.io/docs/en/babel-plugin-transform-new-target) for more information.
+See our website [@babel/plugin-transform-new-target](https://babeljs.io/docs/babel-plugin-transform-new-target) for more information.
 
 ## Install
 

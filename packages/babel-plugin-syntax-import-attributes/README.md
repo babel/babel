@@ -2,7 +2,7 @@
 
 > Allow parsing of the module attributes in the import statement
 
-See our website [@babel/plugin-syntax-import-attributes](https://babeljs.io/docs/en/babel-plugin-syntax-import-attributes) for more information.
+See our website [@babel/plugin-syntax-import-attributes](https://babeljs.io/docs/babel-plugin-syntax-import-attributes) for more information.
 
 ## Install
 
