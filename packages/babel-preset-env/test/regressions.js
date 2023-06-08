@@ -66,9 +66,7 @@ describe("regressions", () => {
       try {
         const out = babel.transformSync("class A { #a; x = #a in this }", {
           configFile: false,
-          presets: [
-            require("./regressions/babel-preset-react-app/index.js").default,
-          ],
+          presets: [require("./regressions/babel-preset-react-app/index.js")],
         });
 
         jest.advanceTimersByTime(5000);
