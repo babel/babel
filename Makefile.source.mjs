@@ -226,7 +226,7 @@ target["prepublish"] = function () {
   if (process.env.BABEL_8_BREAKING) {
     node(["scripts/set-module-type.js", "module"]);
   } else {
-    node(["scripts/set-module-type.js", "script"]);
+    node(["scripts/set-module-type.js", "commonjs"]);
   }
 
   target["bootstrap-only"]();
