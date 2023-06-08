@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-destructuring",
-  "version": "7.21.3",
+  "version": "7.22.5",
   "description": "Compile ES2015 destructuring to ES5",
   "repository": {
     "type": "git",
