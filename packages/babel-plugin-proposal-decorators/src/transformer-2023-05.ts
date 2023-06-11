@@ -1120,74 +1120,82 @@ function createLocalsAssignment(
     elementDecorations,
     classDecorations,
   ];
-  // TODO(Babel 8): Only keep the else branch
-  if (
-    version === "2021-12" ||
-    (version === "2022-03" && !state.availableHelper("applyDecs2203R"))
-  ) {
-    lhs = t.arrayPattern([...elementLocals, ...classLocals]);
-    rhs = t.callExpression(
-      state.addHelper(version === "2021-12" ? "applyDecs" : "applyDecs2203"),
-      args,
-    );
-  } else {
-    // TODO(Babel 8): Only keep the if branch
-    if (version === "2023-05") {
-      if (maybePrivateBranName || classDecorationsFlag.value !== 0) {
-        args.push(classDecorationsFlag);
-      }
-      if (maybePrivateBranName) {
-        args.push(
-          template.expression.ast`
-            _ => ${t.cloneNode(maybePrivateBranName)} in _
-          ` as t.ArrowFunctionExpression,
-        );
-      }
-      rhs = t.callExpression(state.addHelper("applyDecs2305"), args);
-    } else if (version === "2023-01") {
-      if (maybePrivateBranName) {
-        args.push(
-          template.expression.ast`
-            _ => ${t.cloneNode(maybePrivateBranName)} in _
-          ` as t.ArrowFunctionExpression,
-        );
-      }
-      rhs = t.callExpression(state.addHelper("applyDecs2301"), args);
-    } else {
-      rhs = t.callExpression(state.addHelper("applyDecs2203R"), args);
-    }
-    // optimize `{ c: [classLocals] } = applyapplyDecs2203R(...)` to
-    // `[classLocals] = applyapplyDecs2203R(...).c`
-    if (elementLocals.length > 0) {
-      if (classLocals.length > 0) {
-        lhs = t.objectPattern([
-          t.objectProperty(t.identifier("e"), t.arrayPattern(elementLocals)),
-          t.objectProperty(t.identifier("c"), t.arrayPattern(classLocals)),
-        ]);
-      } else {
-        lhs = t.arrayPattern(elementLocals);
-        rhs = t.memberExpression(rhs, t.identifier("e"), false, false);
-      }
-    } else {
-      // invariant: classLocals.length > 0
-      lhs = t.arrayPattern(classLocals);
-      rhs = t.memberExpression(rhs, t.identifier("c"), false, false);
+
+  if (!process.env.BABEL_8_BREAKING) {
+    if (
+      version === "2021-12" ||
+      (version === "2022-03" && !state.availableHelper("applyDecs2203R"))
+    ) {
+      const lhs = t.arrayPattern([...elementLocals, ...classLocals]);
+      const rhs = t.callExpression(
+        state.addHelper(version === "2021-12" ? "applyDecs" : "applyDecs2203"),
+        args,
+      );
+      return t.assignmentExpression("=", lhs, rhs);
     }
   }
+
+  if (process.env.BABEL_8_BREAKING || version === "2023-05") {
+    if (maybePrivateBranName || classDecorationsFlag.value !== 0) {
+      args.push(classDecorationsFlag);
+    }
+    if (maybePrivateBranName) {
+      args.push(
+        template.expression.ast`
+            _ => ${t.cloneNode(maybePrivateBranName)} in _
+          ` as t.ArrowFunctionExpression,
+      );
+    }
+    rhs = t.callExpression(state.addHelper("applyDecs2305"), args);
+  } else if (version === "2023-01") {
+    if (maybePrivateBranName) {
+      args.push(
+        template.expression.ast`
+            _ => ${t.cloneNode(maybePrivateBranName)} in _
+          ` as t.ArrowFunctionExpression,
+      );
+    }
+    rhs = t.callExpression(state.addHelper("applyDecs2301"), args);
+  } else {
+    rhs = t.callExpression(state.addHelper("applyDecs2203R"), args);
+  }
+  // optimize `{ c: [classLocals] } = applyapplyDecs2203R(...)` to
+  // `[classLocals] = applyapplyDecs2203R(...).c`
+  if (elementLocals.length > 0) {
+    if (classLocals.length > 0) {
+      lhs = t.objectPattern([
+        t.objectProperty(t.identifier("e"), t.arrayPattern(elementLocals)),
+        t.objectProperty(t.identifier("c"), t.arrayPattern(classLocals)),
+      ]);
+    } else {
+      lhs = t.arrayPattern(elementLocals);
+      rhs = t.memberExpression(rhs, t.identifier("e"), false, false);
+    }
+  } else {
+    // invariant: classLocals.length > 0
+    lhs = t.arrayPattern(classLocals);
+    rhs = t.memberExpression(rhs, t.identifier("c"), false, false);
+  }
+
   return t.assignmentExpression("=", lhs, rhs);
 }
 
 export default function (
   { assertVersion, assumption }: PluginAPI,
   { loose }: Options,
+  // TODO(Babel 8): Only keep 2023-05
   version: "2023-05" | "2023-01" | "2022-03" | "2021-12",
 ): PluginObject {
-  if (version === "2023-05" || version === "2023-01") {
+  if (process.env.BABEL_8_BREAKING) {
     assertVersion("^7.21.0");
-  } else if (version === "2021-12") {
-    assertVersion("^7.16.0");
   } else {
-    assertVersion("^7.19.0");
+    if (version === "2023-05" || version === "2023-01") {
+      assertVersion("^7.21.0");
+    } else if (version === "2021-12") {
+      assertVersion("^7.16.0");
+    } else {
+      assertVersion("^7.19.0");
+    }
   }
 
   const VISITED = new WeakSet<NodePath>();
