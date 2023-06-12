@@ -163,17 +163,13 @@ export default function transformClass(
   }
 
   /**
-   * Creates a class constructor or bail out if there is none
+   * Creates a class constructor or bail out if there is one
    */
   function maybeCreateConstructor() {
-    let hasConstructor = false;
-    const paths = classState.path.get("body.body");
-    for (const path of paths) {
-      // @ts-expect-error: StaticBlock does not have `kind` property
-      hasConstructor = path.equals("kind", "constructor");
-      if (hasConstructor) break;
+    const classBodyPath = classState.path.get("body");
+    for (const path of classBodyPath.get("body")) {
+      if (path.isClassMethod({ kind: "constructor" })) return;
     }
-    if (hasConstructor) return;
 
     let params: t.FunctionExpression["params"], body;
 
@@ -190,12 +186,10 @@ export default function transformClass(
       body = t.blockStatement([]);
     }
 
-    classState.path
-      .get("body")
-      .unshiftContainer(
-        "body",
-        t.classMethod("constructor", t.identifier("constructor"), params, body),
-      );
+    classBodyPath.unshiftContainer(
+      "body",
+      t.classMethod("constructor", t.identifier("constructor"), params, body),
+    );
   }
 
   function buildBody() {
