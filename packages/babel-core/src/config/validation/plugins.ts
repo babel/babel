@@ -38,7 +38,7 @@ const VALIDATORS: ValidatorSet = {
 function assertVisitorMap(loc: OptionPath, value: unknown): Visitor {
   const obj = assertObject(loc, value);
   if (obj) {
-    Object.keys(obj).forEach(prop => assertVisitorHandler(prop, obj[prop]));
+    if (obj._exploded) return;
 
     if (obj.enter || obj.exit) {
       throw new Error(
@@ -47,14 +47,13 @@ function assertVisitorMap(loc: OptionPath, value: unknown): Visitor {
         )} cannot contain catch-all "enter" or "exit" handlers. Please target individual nodes.`,
       );
     }
+
+    Object.keys(obj).forEach(prop => assertVisitorHandler(prop, obj[prop]));
   }
   return obj as Visitor;
 }
 
-function assertVisitorHandler(
-  key: string,
-  value: unknown,
-): VisitorHandler | void {
+function assertVisitorHandler(key: string, value: unknown) {
   if (value && typeof value === "object") {
     Object.keys(value).forEach((handler: string) => {
       if (handler !== "enter" && handler !== "exit") {
@@ -66,16 +65,7 @@ function assertVisitorHandler(
   } else if (typeof value !== "function") {
     throw new Error(`.visitor["${key}"] must be a function`);
   }
-
-  return value as any;
 }
-
-type VisitorHandler =
-  | Function
-  | {
-      enter?: Function;
-      exit?: Function;
-    };
 
 export type PluginObject<S extends PluginPass = PluginPass> = {
   name?: string;
