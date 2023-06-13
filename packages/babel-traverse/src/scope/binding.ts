@@ -66,11 +66,17 @@ export default class Binding {
   }
 
   constantViolations: Array<NodePath> = [];
-  constant: boolean = true;
+  get constant(): boolean {
+    return this.constantViolations.length === 0;
+  }
 
   referencePaths: Array<NodePath> = [];
-  referenced: boolean = false;
-  references: number = 0;
+  get references(): number {
+    return this.referencePaths.length;
+  }
+  get referenced(): boolean {
+    return this.references !== 0;
+  }
 
   declare hasDeoptedValue: boolean;
   declare hasValue: boolean;
@@ -98,7 +104,6 @@ export default class Binding {
    */
 
   reassign(path: NodePath) {
-    this.constant = false;
     if (this.constantViolations.indexOf(path) !== -1) {
       return;
     }
@@ -113,8 +118,6 @@ export default class Binding {
     if (this.referencePaths.indexOf(path) !== -1) {
       return;
     }
-    this.referenced = true;
-    this.references++;
     this.referencePaths.push(path);
   }
 
@@ -122,9 +125,12 @@ export default class Binding {
    * Decrement the amount of references to this binding.
    */
 
-  dereference() {
-    this.references--;
-    this.referenced = !!this.references;
+  dereference(path: NodePath) {
+    const index = this.referencePaths.indexOf(path);
+    if (index === -1) {
+      return;
+    }
+    this.referencePaths.splice(index, 1);
   }
 }
 
