@@ -10,7 +10,7 @@ import type {
 } from "@babel/helper-member-expression-to-functions";
 import optimiseCall from "@babel/helper-optimise-call-expression";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
-import { isTransparentExprWrapper } from "@babel/helper-skip-transparent-expression-wrappers";
+import { skipTransparentExprWrapperNodes } from "@babel/helper-skip-transparent-expression-wrappers";
 
 import * as ts from "./typescript";
 
@@ -956,29 +956,25 @@ type ReplaceThisState = {
 
 const thisContextVisitor = traverse.visitors.merge<ReplaceThisState>([
   {
-    ThisExpression(path, state) {
+    UnaryExpression(path) {
       // Replace `delete this` with `true`
-      const parent = path.findParent(
-        path => !isTransparentExprWrapper(path.node),
-      );
-      if (t.isUnaryExpression(parent.node, { operator: "delete" })) {
-        path.parentPath.replaceWith(t.booleanLiteral(true));
-        return;
+      const { node } = path;
+      if (node.operator === "delete") {
+        const argument = skipTransparentExprWrapperNodes(node.argument);
+        if (t.isThisExpression(argument)) {
+          path.replaceWith(t.booleanLiteral(true));
+        }
       }
-
+    },
+    ThisExpression(path, state) {
       state.needsClassRef = true;
       path.replaceWith(t.cloneNode(state.classRef));
     },
     MetaProperty(path) {
-      const meta = path.get("meta");
-      const property = path.get("property");
-      const { scope } = path;
+      const { node, scope } = path;
       // if there are `new.target` in static field
       // we should replace it with `undefined`
-      if (
-        meta.isIdentifier({ name: "new" }) &&
-        property.isIdentifier({ name: "target" })
-      ) {
+      if (node.meta.name === "new" && node.property.name === "target") {
         path.replaceWith(scope.buildUndefinedNode());
       }
     },
