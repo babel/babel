@@ -383,8 +383,8 @@ export default class Scope {
   path: NodePath;
   block: t.Pattern | t.Scopable;
 
-  labels;
-  inited;
+  labels: Map<string, NodePath<t.LabeledStatement>>;
+  inited: boolean;
 
   bindings: { [name: string]: Binding };
   references: { [name: string]: true };
@@ -1315,8 +1315,7 @@ export default class Scope {
 
   removeBinding(name: string) {
     // clear literal binding
-    const binding = this.getBinding(name);
-    binding?.scope.removeOwnBinding(name);
+    this.getBinding(name)?.scope.removeOwnBinding(name);
 
     // clear uids with this name - https://github.com/babel/babel/issues/2101
     let scope: Scope = this;
