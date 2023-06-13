@@ -1,4 +1,4 @@
-var _init_a, _init_b;
+var _init_a, _init_b, _class;
 const dec = () => {};
 var _a = /*#__PURE__*/new WeakMap();
 var _b = /*#__PURE__*/new WeakMap();
@@ -14,7 +14,8 @@ class Foo {
     });
   }
 }
-[_init_a, _init_b] = babelHelpers.applyDecs(Foo, [[dec, 0, "a", function () {
+_class = Foo;
+[_init_a, _init_b] = babelHelpers.applyDecs(_class, [[dec, 0, "a", function () {
   return babelHelpers.classPrivateFieldGet(this, _a);
 }, function (value) {
   babelHelpers.classPrivateFieldSet(this, _a, value);

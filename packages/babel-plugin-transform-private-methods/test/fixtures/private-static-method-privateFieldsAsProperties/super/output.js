@@ -1,3 +1,4 @@
+var _class;
 class Base {
   static basePublicStaticMethod() {
     return 'good';
@@ -12,8 +13,9 @@ class Sub extends Base {
     babelHelpers.classPrivateFieldLooseBase(Sub, _subStaticPrivateMethod)[_subStaticPrivateMethod]();
   }
 }
+_class = Sub;
 function _subStaticPrivateMethod2() {
-  return babelHelpers.get(babelHelpers.getPrototypeOf(Sub), "basePublicStaticMethod", this).call(this);
+  return babelHelpers.get(babelHelpers.getPrototypeOf(_class), "basePublicStaticMethod", this).call(this);
 }
 Object.defineProperty(Sub, _subStaticPrivateMethod, {
   value: _subStaticPrivateMethod2

@@ -1,4 +1,4 @@
-var _initClass, _dec, _dec2, _dec3, _obj, _dec4, _dec5, _dec6, _dec7, _obj2, _dec8, _initProto;
+var _initClass, _dec, _dec2, _dec3, _obj, _dec4, _dec5, _dec6, _dec7, _obj2, _dec8, _initProto, _class;
 const dec = () => {};
 let _Foo;
 _dec = call();
@@ -22,16 +22,17 @@ class Foo {
   }
   method() {}
   makeClass() {
-    var _dec9, _init_bar, _class;
-    return _dec9 = babelHelpers.classPrivateFieldGet(this, _a), (_class = class Nested {
+    var _dec9, _init_bar, _class2;
+    return _dec9 = babelHelpers.classPrivateFieldGet(this, _a), (_class2 = class Nested {
       constructor() {
         babelHelpers.defineProperty(this, "bar", _init_bar(this));
       }
-    }, [_init_bar] = babelHelpers.applyDecs2305(_class, [[_dec9, 0, "bar"]], []).e, _class);
+    }, [_init_bar] = babelHelpers.applyDecs2305(_class2, [[_dec9, 0, "bar"]], []).e, _class2);
   }
 }
+_class = Foo;
 ({
   e: [_initProto],
   c: [_Foo, _initClass]
-} = babelHelpers.applyDecs2305(Foo, [[[void 0, dec, void 0, _dec5, void 0, _dec6, void 0, _dec7, _obj2, _dec8], 18, "method"]], [void 0, dec, void 0, _dec, void 0, _dec2, void 0, _dec3, _obj, _dec4], 1));
+} = babelHelpers.applyDecs2305(_class, [[[void 0, dec, void 0, _dec5, void 0, _dec6, void 0, _dec7, _obj2, _dec8], 18, "method"]], [void 0, dec, void 0, _dec, void 0, _dec2, void 0, _dec3, _obj, _dec4], 1));
 _initClass();

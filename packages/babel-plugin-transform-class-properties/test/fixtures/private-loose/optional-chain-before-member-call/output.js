@@ -1,3 +1,4 @@
+var _class;
 var _x = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("x");
 var _m = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("m");
 var _self = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("self");
@@ -61,6 +62,7 @@ class Foo {
     (_getSelf6 = (fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self])?.getSelf?.()) === null || _getSelf6 === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(_getSelf6.self, _m)[_m]();
   }
 }
+_class = Foo;
 Object.defineProperty(Foo, _x, {
   writable: true,
   value: 1
@@ -73,7 +75,7 @@ Object.defineProperty(Foo, _m, {
 });
 Object.defineProperty(Foo, _self, {
   writable: true,
-  value: Foo
+  value: _class
 });
-Foo.self = Foo;
+Foo.self = _class;
 Foo.test();

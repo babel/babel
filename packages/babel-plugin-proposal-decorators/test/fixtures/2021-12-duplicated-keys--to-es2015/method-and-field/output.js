@@ -1,4 +1,4 @@
-var _init_a, _initProto;
+var _init_a, _initProto, _class;
 const dec = () => {};
 class Foo {
   constructor() {
@@ -8,4 +8,5 @@ class Foo {
     return 1;
   }
 }
-[_init_a, _initProto] = babelHelpers.applyDecs(Foo, [[dec, 2, "a"], [dec, 0, "a"]], []);
+_class = Foo;
+[_init_a, _initProto] = babelHelpers.applyDecs(_class, [[dec, 2, "a"], [dec, 0, "a"]], []);

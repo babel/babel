@@ -13,9 +13,11 @@ new (_x = /*#__PURE__*/new WeakMap(), _m = /*#__PURE__*/new WeakSet(), (_temp = 
     })(), _initClass();
   }
 }, (() => {
+  var _class2;
   class Foo {
     static m() {}
   }
-  [_Foo, _initClass] = babelHelpers.applyDecs(Foo, [], [dec]);
+  _class2 = Foo;
+  [_Foo, _initClass] = babelHelpers.applyDecs(_class2, [], [dec]);
 })(), _temp))();
 function _m2() {}
