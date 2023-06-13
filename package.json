@@ -5,7 +5,7 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
-    "postinstall": "husky install",
+    "prepare": "is-ci || husky install",
     "bootstrap": "make bootstrap",
     "codesandbox:build": "make build-no-bundle",
     "build": "make build",
@@ -122,5 +122,8 @@
       "PR: Revert :leftwards_arrow_with_hook:": ":leftwards_arrow_with_hook: Revert",
       "PR: Output optimization :microscope:": ":microscope: Output optimization"
     }
+  },
+  "dependencies": {
+    "is-ci": "^3.0.1"
   }
 }
