@@ -6306,6 +6306,8 @@ __metadata:
       built: false
     core-js-pure:
       built: false
+    uglifyjs-webpack-plugin:
+      built: false
   languageName: unknown
   linkType: soft
 

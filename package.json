@@ -112,6 +112,9 @@
     },
     "core-js-pure": {
       "built": false
+    },
+    "uglifyjs-webpack-plugin": {
+      "built": false
     }
   },
   "changelog": {
