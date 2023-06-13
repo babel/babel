@@ -44,12 +44,14 @@
 
 const ErrorToString = Function.call.bind(Error.prototype.toString);
 
-const SUPPORTED = !!Error.captureStackTrace;
+const SUPPORTED =
+  !!Error.captureStackTrace &&
+  Object.getOwnPropertyDescriptor(Error, "stackTraceLimit")?.writable === true;
 
 const START_HIDING = "startHiding - secret - don't use this - v1";
 const STOP_HIDING = "stopHiding - secret - don't use this - v1";
 
-type CallSite = Parameters<typeof Error.prepareStackTrace>[1][number];
+type CallSite = NodeJS.CallSite;
 
 const expectedErrors = new WeakSet<Error>();
 const virtualFrames = new WeakMap<Error, CallSite[]>();
