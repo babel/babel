@@ -4,4 +4,7 @@ class Foo {
     this.foo = Foo.bar;
   }
 }
-expect(Foo.foo).toBe(42);
+const oldFoo = Foo;
+Foo = null;
+
+expect(oldFoo.foo).toBe(42);

@@ -1,3 +1,4 @@
+var _class2;
 var A = /*#__PURE__*/babelHelpers.createClass(function A() {
   "use strict";
 
@@ -15,6 +16,7 @@ var B = /*#__PURE__*/function (_A) {
   }
   return babelHelpers.createClass(B);
 }(A);
+_class2 = B;
 babelHelpers.defineProperty(B, "prop", 2);
-babelHelpers.defineProperty(B, "propA", babelHelpers.get(babelHelpers.getPrototypeOf(B), "prop", B));
-babelHelpers.defineProperty(B, "getPropA", () => babelHelpers.get(babelHelpers.getPrototypeOf(B), "prop", B));
+babelHelpers.defineProperty(B, "propA", babelHelpers.get(babelHelpers.getPrototypeOf(_class2), "prop", _class2));
+babelHelpers.defineProperty(B, "getPropA", () => babelHelpers.get(babelHelpers.getPrototypeOf(_class2), "prop", _class2));
