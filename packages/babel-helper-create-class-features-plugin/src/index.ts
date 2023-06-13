@@ -118,7 +118,9 @@ export function createClassFeaturePlugin({
 
         if (!shouldTransform(path, file)) return;
 
-        if (path.isClassDeclaration()) assertFieldTransformed(path);
+        const pathIsClassDeclaration = path.isClassDeclaration();
+
+        if (pathIsClassDeclaration) assertFieldTransformed(path);
 
         const loose = isLoose(file, feature);
 
@@ -198,13 +200,12 @@ export function createClassFeaturePlugin({
         }
 
         const innerBinding = path.node.id;
-        let ref: t.Identifier;
-        if (!innerBinding || path.isClassExpression()) {
+        let ref: t.Identifier | null;
+        if (!innerBinding || !pathIsClassDeclaration) {
           nameFunction(path);
           ref = path.scope.generateUidIdentifier("class");
-        } else {
-          ref = t.cloneNode(path.node.id);
         }
+        const classRefForDefine = ref ?? t.cloneNode(innerBinding);
 
         // NODE: These three functions don't support decorators yet,
         //       but verifyUsedFeatures throws if there are both
@@ -218,7 +219,7 @@ export function createClassFeaturePlugin({
         );
 
         transformPrivateNamesUsage(
-          ref,
+          classRefForDefine,
           path,
           privateNamesMap,
           {
@@ -234,36 +235,27 @@ export function createClassFeaturePlugin({
           staticNodes: t.Statement[],
           instanceNodes: t.Statement[],
           pureStaticNodes: t.FunctionDeclaration[],
+          classBindingNode: t.Statement | null,
           wrapClass: (path: NodePath<t.Class>) => NodePath;
 
         if (!process.env.BABEL_8_BREAKING) {
           if (isDecorated) {
             staticNodes = pureStaticNodes = keysNodes = [];
             ({ instanceNodes, wrapClass } = buildDecoratedClass(
-              ref,
+              classRefForDefine,
               path,
               elements,
               file,
             ));
           } else {
             keysNodes = extractComputedKeys(path, computedPaths, file);
-            ({ staticNodes, pureStaticNodes, instanceNodes, wrapClass } =
-              buildFieldsInitNodes(
-                ref,
-                path.node.superClass,
-                props,
-                privateNamesMap,
-                file,
-                setPublicClassFields ?? loose,
-                privateFieldsAsSymbolsOrProperties ?? loose,
-                constantSuper ?? loose,
-                innerBinding,
-              ));
-          }
-        } else {
-          keysNodes = extractComputedKeys(path, computedPaths, file);
-          ({ staticNodes, pureStaticNodes, instanceNodes, wrapClass } =
-            buildFieldsInitNodes(
+            ({
+              staticNodes,
+              pureStaticNodes,
+              instanceNodes,
+              classBindingNode,
+              wrapClass,
+            } = buildFieldsInitNodes(
               ref,
               path.node.superClass,
               props,
@@ -274,6 +266,26 @@ export function createClassFeaturePlugin({
               constantSuper ?? loose,
               innerBinding,
             ));
+          }
+        } else {
+          keysNodes = extractComputedKeys(path, computedPaths, file);
+          ({
+            staticNodes,
+            pureStaticNodes,
+            instanceNodes,
+            classBindingNode,
+            wrapClass,
+          } = buildFieldsInitNodes(
+            ref,
+            path.node.superClass,
+            props,
+            privateNamesMap,
+            file,
+            setPublicClassFields ?? loose,
+            privateFieldsAsSymbolsOrProperties ?? loose,
+            constantSuper ?? loose,
+            innerBinding,
+          ));
         }
 
         if (instanceNodes.length > 0) {
@@ -304,6 +316,9 @@ export function createClassFeaturePlugin({
           wrappedPath
             .find(parent => parent.isStatement() || parent.isDeclaration())
             .insertAfter(pureStaticNodes);
+        }
+        if (classBindingNode != null && pathIsClassDeclaration) {
+          wrappedPath.insertAfter(classBindingNode);
         }
       },
 
