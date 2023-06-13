@@ -1,6 +1,7 @@
 import type NodePath from "../path";
 import type * as t from "@babel/types";
 import type Scope from "./index";
+import { binding as bindingCache } from "../cache";
 
 export type BindingKind =
   | "var" /* var declarator */
@@ -22,7 +23,11 @@ export type BindingKind =
  *  * The kind of binding. (Is it a parameter, declaration etc)
  */
 
+let uid = 0;
+
 export default class Binding {
+  uid: number;
+
   identifier: t.Identifier;
   scope: Scope;
   path: NodePath;
@@ -39,11 +44,34 @@ export default class Binding {
     path: NodePath;
     kind: BindingKind;
   }) {
-    this.identifier = identifier;
-    this.scope = scope;
-    this.path = path;
-    this.kind = kind;
+    const { node } = path;
 
+    let nodeBindingCache = bindingCache.get(node);
+    if (!nodeBindingCache) {
+      nodeBindingCache = new Map();
+      bindingCache.set(node, nodeBindingCache);
+    }
+
+    const cached = nodeBindingCache?.get(identifier);
+    if (cached?.path === path) {
+      cached.setup(scope, kind);
+      return cached;
+    }
+
+    nodeBindingCache.set(identifier, this);
+
+    this.uid = uid++;
+    this.identifier = identifier;
+    this.path = path;
+
+    this.setup(scope, kind);
+  }
+
+  setup(scope: Scope, kind: BindingKind) {
+    this.scope = scope;
+    this.kind = kind;
+    this.referencePaths = [];
+    this.constantViolations = [];
     if (
       (kind === "var" || kind === "hoisted") &&
       // https://github.com/rollup/rollup/issues/4654
@@ -53,13 +81,13 @@ export default class Binding {
       // You can reproduce this with
       //   BABEL_8_BREAKING=true make prepublish-build
       isDeclaredInLoop(
-        path ||
+        this.path ||
           (() => {
             throw new Error("Internal Babel error: unreachable ");
           })(),
       )
     ) {
-      this.reassign(path);
+      this.reassign(this.path);
     }
 
     this.clearValue();

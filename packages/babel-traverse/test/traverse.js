@@ -107,8 +107,10 @@ describe("traverse", function () {
   it("clearCache", function () {
     const paths = [];
     const scopes = [];
+    const bindings = [];
     traverse(ast, {
       enter(path) {
+        bindings.push(...Object.values(path.scope.bindings));
         scopes.push(path.scope);
         paths.push(path);
         path.stop();
@@ -119,8 +121,10 @@ describe("traverse", function () {
 
     const paths2 = [];
     const scopes2 = [];
+    const bindings2 = [];
     traverse(ast, {
       enter(path) {
+        bindings2.push(...Object.values(path.scope.bindings));
         scopes2.push(path.scope);
         paths2.push(path);
         path.stop();
@@ -128,6 +132,7 @@ describe("traverse", function () {
     });
 
     scopes2.forEach(function (_, i) {
+      expect(bindings[i]).not.toBe(bindings2[i]);
       expect(scopes[i]).not.toBe(scopes2[i]);
       expect(paths[i]).not.toBe(paths2[i]);
     });
@@ -176,6 +181,31 @@ describe("traverse", function () {
 
     scopes2.forEach(function (p, i) {
       expect(p).not.toBe(scopes[i]);
+    });
+  });
+
+  it("clearBinding", function () {
+    const bindings = [];
+    traverse(ast, {
+      enter(path) {
+        bindings.push(...Object.values(path.scope.bindings));
+        path.stop();
+      },
+    });
+
+    traverse.cache.clearBinding();
+
+    const bindings2 = [];
+    traverse(ast, {
+      enter(path) {
+        path.scope.crawl(); // force binding registering
+        bindings2.push(...Object.values(path.scope.bindings));
+        path.stop();
+      },
+    });
+
+    bindings2.forEach(function (p, i) {
+      expect(p).not.toBe(bindings[i]);
     });
   });
 

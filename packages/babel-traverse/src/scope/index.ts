@@ -52,7 +52,7 @@ import {
   isExportDeclaration,
 } from "@babel/types";
 import type * as t from "@babel/types";
-import { scope as scopeCache } from "../cache";
+import { scope as scopeCache, binding as bindingCache } from "../cache";
 import type { Visitor } from "../types";
 import { isExplodedVisitor } from "../visitors";
 
@@ -1308,12 +1308,15 @@ export default class Scope {
   }
 
   removeOwnBinding(name: string) {
+    const binding = this.bindings[name];
+    bindingCache.get(binding?.path.node)?.delete(binding?.identifier);
     delete this.bindings[name];
   }
 
   removeBinding(name: string) {
     // clear literal binding
-    this.getBinding(name)?.scope.removeOwnBinding(name);
+    const binding = this.getBinding(name);
+    binding?.scope.removeOwnBinding(name);
 
     // clear uids with this name - https://github.com/babel/babel/issues/2101
     let scope: Scope = this;
