@@ -106,17 +106,6 @@
       "eslint --format=codeframe --cache --cache-strategy=content"
     ]
   },
-  "dependenciesMeta": {
-    "core-js": {
-      "built": false
-    },
-    "core-js-pure": {
-      "built": false
-    },
-    "uglifyjs-webpack-plugin": {
-      "built": false
-    }
-  },
   "changelog": {
     "repo": "babel/babel",
     "cacheDir": ".changelog",

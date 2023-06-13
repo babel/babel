@@ -6301,13 +6301,6 @@ __metadata:
     test262-stream: ^1.4.0
     through2: ^4.0.0
     typescript: ^5.0.2
-  dependenciesMeta:
-    core-js:
-      built: false
-    core-js-pure:
-      built: false
-    uglifyjs-webpack-plugin:
-      built: false
   languageName: unknown
   linkType: soft
 
