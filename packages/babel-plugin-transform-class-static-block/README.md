@@ -2,7 +2,7 @@
 
 > Transform class static blocks
 
-See our website [@babel/plugin-transform-class-static-block](https://babeljs.io/docs/en/babel-plugin-transform-class-static-block) for more information.
+See our website [@babel/plugin-transform-class-static-block](https://babeljs.io/docs/babel-plugin-transform-class-static-block) for more information.
 
 ## Install
 

@@ -2,7 +2,7 @@
 
 > This plugin transforms private class methods
 
-See our website [@babel/plugin-transform-private-methods](https://babeljs.io/docs/en/babel-plugin-transform-private-methods) for more information.
+See our website [@babel/plugin-transform-private-methods](https://babeljs.io/docs/babel-plugin-transform-private-methods) for more information.
 
 ## Install
 

@@ -2,7 +2,7 @@
 
 > Allow parsing of the reflection attributes in the import statement
 
-See our website [@babel/plugin-syntax-import-reflection](https://babeljs.io/docs/en/babel-plugin-syntax-import-reflection) for more information.
+See our website [@babel/plugin-syntax-import-reflection](https://babeljs.io/docs/babel-plugin-syntax-import-reflection) for more information.
 
 ## Install
 

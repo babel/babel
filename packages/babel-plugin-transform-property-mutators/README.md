@@ -2,7 +2,7 @@
 
 > Compile ES5 property mutator shorthand syntax to Object.defineProperty
 
-See our website [@babel/plugin-transform-property-mutators](https://babeljs.io/docs/en/babel-plugin-transform-property-mutators) for more information.
+See our website [@babel/plugin-transform-property-mutators](https://babeljs.io/docs/babel-plugin-transform-property-mutators) for more information.
 
 ## Install
 

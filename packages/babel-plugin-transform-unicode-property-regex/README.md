@@ -2,7 +2,7 @@
 
 > Compile Unicode property escapes in Unicode regular expressions to ES5.
 
-See our website [@babel/plugin-transform-unicode-property-regex](https://babeljs.io/docs/en/babel-plugin-transform-unicode-property-regex) for more information.
+See our website [@babel/plugin-transform-unicode-property-regex](https://babeljs.io/docs/babel-plugin-transform-unicode-property-regex) for more information.
 
 ## Install
 

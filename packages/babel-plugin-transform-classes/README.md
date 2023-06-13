@@ -2,7 +2,7 @@
 
 > Compile ES2015 classes to ES5
 
-See our website [@babel/plugin-transform-classes](https://babeljs.io/docs/en/babel-plugin-transform-classes) for more information.
+See our website [@babel/plugin-transform-classes](https://babeljs.io/docs/babel-plugin-transform-classes) for more information.
 
 ## Install
 

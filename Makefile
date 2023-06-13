@@ -60,9 +60,10 @@ code-quality: tscheck lint
 tscheck:
 	$(MAKEJS) tscheck
 
-lint-ci: lint check-compat-data-ci
+lint-ci: lint check-compat-data
 
-check-compat-data-ci: check-compat-data
+generate-readme:
+	$(NODE) scripts/generators/readmes.js
 
 lint:
 	$(MAKEJS) lint

@@ -121,6 +121,9 @@ jobs:
       - name: Build Makefile.js
         run: |
           node ./scripts/pack-script.js
+      - name: Generate readmes
+        run: |
+          make generate-readme
       - name: Ensure cwd does not contain uncommitted changes
         run: |
           node ./scripts/assert-dir-git-clean.js build

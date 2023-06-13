@@ -2,7 +2,7 @@
 
 > Transform import() expressions
 
-See our website [@babel/plugin-transform-dynamic-import](https://babeljs.io/docs/en/babel-plugin-transform-dynamic-import) for more information.
+See our website [@babel/plugin-transform-dynamic-import](https://babeljs.io/docs/babel-plugin-transform-dynamic-import) for more information.
 
 ## Install
 

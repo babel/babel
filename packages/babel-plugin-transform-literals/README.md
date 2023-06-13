@@ -2,7 +2,7 @@
 
 > Compile ES2015 unicode string and number literals to ES5
 
-See our website [@babel/plugin-transform-literals](https://babeljs.io/docs/en/babel-plugin-transform-literals) for more information.
+See our website [@babel/plugin-transform-literals](https://babeljs.io/docs/babel-plugin-transform-literals) for more information.
 
 ## Install
 
