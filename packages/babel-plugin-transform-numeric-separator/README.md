@@ -2,7 +2,7 @@
 
 > Remove numeric separators from Decimal, Binary, Hex and Octal literals
 
-See our website [@babel/plugin-transform-numeric-separator](https://babeljs.io/docs/en/babel-plugin-transform-numeric-separator) for more information.
+See our website [@babel/plugin-transform-numeric-separator](https://babeljs.io/docs/babel-plugin-transform-numeric-separator) for more information.
 
 ## Install
 

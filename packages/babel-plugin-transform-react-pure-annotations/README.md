@@ -2,7 +2,7 @@
 
 > Mark top-level React method calls as pure for tree shaking
 
-See our website [@babel/plugin-transform-react-pure-annotations](https://babeljs.io/docs/en/babel-plugin-transform-react-pure-annotations) for more information.
+See our website [@babel/plugin-transform-react-pure-annotations](https://babeljs.io/docs/babel-plugin-transform-react-pure-annotations) for more information.
 
 ## Install
 

@@ -2,7 +2,7 @@
 
 > Transforms logical assignment operators into short-circuited assignments
 
-See our website [@babel/plugin-transform-logical-assignment-operators](https://babeljs.io/docs/en/babel-plugin-transform-logical-assignment-operators) for more information.
+See our website [@babel/plugin-transform-logical-assignment-operators](https://babeljs.io/docs/babel-plugin-transform-logical-assignment-operators) for more information.
 
 ## Install
 

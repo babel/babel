@@ -2,7 +2,7 @@
 
 > Escape U+2028 LINE SEPARATOR and U+2029 PARAGRAPH SEPARATOR in JS strings
 
-See our website [@babel/plugin-transform-json-strings](https://babeljs.io/docs/en/babel-plugin-transform-json-strings) for more information.
+See our website [@babel/plugin-transform-json-strings](https://babeljs.io/docs/babel-plugin-transform-json-strings) for more information.
 
 ## Install
 

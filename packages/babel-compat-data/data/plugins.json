@@ -56,7 +56,7 @@
     "safari": "14.1",
     "node": "12",
     "deno": "1",
-    "ios": "15",
+    "ios": "14.5",
     "samsung": "11",
     "electron": "6.0"
   },
@@ -68,7 +68,7 @@
     "safari": "14.1",
     "node": "12",
     "deno": "1",
-    "ios": "15",
+    "ios": "14.5",
     "samsung": "11",
     "electron": "6.0"
   },

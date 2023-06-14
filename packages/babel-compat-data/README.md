@@ -2,7 +2,7 @@
 
 > 
 
-See our website [@babel/compat-data](https://babeljs.io/docs/en/babel-compat-data) for more information.
+See our website [@babel/compat-data](https://babeljs.io/docs/babel-compat-data) for more information.
 
 ## Install
 

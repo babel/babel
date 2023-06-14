@@ -1,7 +1,10 @@
 import * as babel from "../lib/index.js";
 
-import { fileURLToPath } from "url";
+import { commonJS, itGte } from "$repo-utils";
 import path from "path";
+import { spawnSync } from "child_process";
+
+const { __dirname } = commonJS(import.meta.url);
 
 const replaceAll = "".replaceAll
   ? Function.call.bind("".replaceAll)
@@ -70,12 +73,7 @@ function expectError(run) {
   throw new Error("It should have thrown an error.");
 }
 
-const fixture = name =>
-  path.join(
-    path.dirname(fileURLToPath(import.meta.url)),
-    "fixtures/errors",
-    name,
-  );
+const fixture = name => path.join(__dirname, "fixtures/errors", name);
 
 describe("@babel/core errors", function () {
   it("error inside config function", function () {
@@ -283,4 +281,28 @@ describe("@babel/core errors", function () {
           at ... internal jest frames ..."
     `);
   });
+
+  itGte("12.0.0")(
+    "should not throw in `node --frozen-intrinsics`",
+    function () {
+      expect(
+        spawnSync(
+          process.execPath,
+          [
+            "--frozen-intrinsics",
+            "--input-type=module",
+            "-e",
+            `
+        import * as babel from "../lib/index.js";
+        babel.parseSync("foo;", {
+          root: String.raw\`${fixture("valid")}\`,
+        });
+        console.log("%done%");
+        `,
+          ],
+          { cwd: __dirname },
+        ).output + "",
+      ).toContain("%done%");
+    },
+  );
 });

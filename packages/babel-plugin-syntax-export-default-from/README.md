@@ -2,7 +2,7 @@
 
 > Allow parsing of export default from
 
-See our website [@babel/plugin-syntax-export-default-from](https://babeljs.io/docs/en/babel-plugin-syntax-export-default-from) for more information.
+See our website [@babel/plugin-syntax-export-default-from](https://babeljs.io/docs/babel-plugin-syntax-export-default-from) for more information.
 
 ## Install
 

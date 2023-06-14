@@ -2,7 +2,7 @@
 
 > Transform the Import Attributes proposal (`import ... from '...' with { ... }`) to the previous version known as Import Assertions (`import ... from '...' assert { ... }`).
 
-See our website [@babel/plugin-proposal-import-attributes-to-assertions](https://babeljs.io/docs/en/babel-plugin-proposal-import-attributes-to-assertions) for more information.
+See our website [@babel/plugin-proposal-import-attributes-to-assertions](https://babeljs.io/docs/babel-plugin-proposal-import-attributes-to-assertions) for more information.
 
 ## Install
 

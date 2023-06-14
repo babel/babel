@@ -2,7 +2,7 @@
 
 > Turn async generator functions into ES2015 generators
 
-See our website [@babel/plugin-transform-async-generator-functions](https://babeljs.io/docs/en/babel-plugin-transform-async-generator-functions) for more information.
+See our website [@babel/plugin-transform-async-generator-functions](https://babeljs.io/docs/babel-plugin-transform-async-generator-functions) for more information.
 
 ## Install
 

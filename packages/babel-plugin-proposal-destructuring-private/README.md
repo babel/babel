@@ -2,7 +2,7 @@
 
 > Transform destructuring private proposal
 
-See our website [@babel/plugin-proposal-destructuring-private](https://babeljs.io/docs/en/babel-plugin-proposal-destructuring-private) for more information.
+See our website [@babel/plugin-proposal-destructuring-private](https://babeljs.io/docs/babel-plugin-proposal-destructuring-private) for more information.
 
 ## Install
 

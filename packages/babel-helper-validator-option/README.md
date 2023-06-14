@@ -2,7 +2,7 @@
 
 > Validate plugin/preset options
 
-See our website [@babel/helper-validator-option](https://babeljs.io/docs/en/babel-helper-validator-option) for more information.
+See our website [@babel/helper-validator-option](https://babeljs.io/docs/babel-helper-validator-option) for more information.
 
 ## Install
 

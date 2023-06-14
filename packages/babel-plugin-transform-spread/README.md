@@ -2,7 +2,7 @@
 
 > Compile ES2015 spread to ES5
 
-See our website [@babel/plugin-transform-spread](https://babeljs.io/docs/en/babel-plugin-transform-spread) for more information.
+See our website [@babel/plugin-transform-spread](https://babeljs.io/docs/babel-plugin-transform-spread) for more information.
 
 ## Install
 

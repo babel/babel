@@ -1,5 +1,5 @@
 FLOW_COMMIT = 105ad30f566f401db9cafcb49cd2831fb29e87c5
-TEST262_COMMIT = f4e31fc397957bc0712bb7cb2c2a0d0a2946c55b
+TEST262_COMMIT = aecd10eec8bbc95a88bf9bd96a96ed8774c8eaf9
 TYPESCRIPT_COMMIT = d87d0adcd30ac285393bf3bfbbb4d94d50c4f3c9
 
 SOURCES = packages codemods eslint
@@ -60,9 +60,10 @@ code-quality: tscheck lint
 tscheck:
 	$(MAKEJS) tscheck
 
-lint-ci: lint check-compat-data-ci
+lint-ci: lint check-compat-data
 
-check-compat-data-ci: check-compat-data
+generate-readme:
+	$(NODE) scripts/generators/readmes.js
 
 lint:
 	$(MAKEJS) lint

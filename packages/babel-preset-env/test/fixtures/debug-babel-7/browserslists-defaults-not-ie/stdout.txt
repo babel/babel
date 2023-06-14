@@ -18,7 +18,7 @@ Using plugins:
   transform-unicode-sets-regex { android, chrome < 112, edge < 112, firefox, ios, opera < 98, safari, samsung }
   transform-class-static-block { ios, safari }
   transform-private-property-in-object { ios < 15 }
-  transform-class-properties { ios < 15 }
+  syntax-class-properties
   transform-private-methods { ios < 15 }
   syntax-numeric-separator
   syntax-nullish-coalescing-operator

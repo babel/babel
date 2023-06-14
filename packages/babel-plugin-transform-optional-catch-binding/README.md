@@ -2,7 +2,7 @@
 
 > Compile optional catch bindings
 
-See our website [@babel/plugin-transform-optional-catch-binding](https://babeljs.io/docs/en/babel-plugin-transform-optional-catch-binding) for more information.
+See our website [@babel/plugin-transform-optional-catch-binding](https://babeljs.io/docs/babel-plugin-transform-optional-catch-binding) for more information.
 
 ## Install
 
