@@ -8,7 +8,7 @@ type VisitNodeObject<S, P extends t.Node> = {
   [K in VisitPhase]?: VisitNodeFunction<S, P>;
 };
 
-type ExplVisitNode<S, P extends t.Node> = {
+export type ExplVisitNode<S, P extends t.Node> = {
   [K in VisitPhase]?: VisitNodeFunction<S, P>[];
 };
 
