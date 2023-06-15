@@ -440,11 +440,9 @@ const validatePreset = (
   if (!context.filename) {
     const { options } = preset;
     validateIfOptionNeedsFilename(options, descriptor);
-    if (options.overrides) {
-      options.overrides.forEach(overrideOptions =>
-        validateIfOptionNeedsFilename(overrideOptions, descriptor),
-      );
-    }
+    options.overrides?.forEach(overrideOptions =>
+      validateIfOptionNeedsFilename(overrideOptions, descriptor),
+    );
   }
 };
 

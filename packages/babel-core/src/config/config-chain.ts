@@ -395,9 +395,7 @@ function* loadFileChain(
   baseLogger: ConfigPrinter,
 ) {
   const chain = yield* loadFileChainWalker(input, context, files, baseLogger);
-  if (chain) {
-    chain.files.add(input.filepath);
-  }
+  chain?.files.add(input.filepath);
 
   return chain;
 }

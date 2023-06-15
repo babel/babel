@@ -245,9 +245,7 @@ export function assertIgnoreList(
   value: unknown[] | undefined,
 ): IgnoreList | void {
   const arr = assertArray(loc, value);
-  if (arr) {
-    arr.forEach((item, i) => assertIgnoreItem(access(loc, i), item));
-  }
+  arr?.forEach((item, i) => assertIgnoreItem(access(loc, i), item));
   // @ts-expect-error todo(flow->ts)
   return arr;
 }
