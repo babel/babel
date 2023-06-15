@@ -97,13 +97,8 @@ export default function filterItems(
     }
   }
 
-  if (defaultIncludes) {
-    defaultIncludes.forEach(item => !excludes.has(item) && result.add(item));
-  }
-
-  if (defaultExcludes) {
-    defaultExcludes.forEach(item => !includes.has(item) && result.delete(item));
-  }
+  defaultIncludes?.forEach(item => !excludes.has(item) && result.add(item));
+  defaultExcludes?.forEach(item => !includes.has(item) && result.delete(item));
 
   return result;
 }

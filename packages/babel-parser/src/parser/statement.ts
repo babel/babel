@@ -1429,9 +1429,7 @@ export default abstract class StatementParser extends ExpressionParser {
       body.push(stmt);
     }
 
-    if (afterBlockParse) {
-      afterBlockParse.call(this, hasStrictModeDirective);
-    }
+    afterBlockParse?.call(this, hasStrictModeDirective);
 
     if (!oldStrict) {
       this.setStrict(false);

@@ -790,8 +790,7 @@ export default class Scope {
   registerConstantViolation(path: NodePath) {
     const ids = path.getBindingIdentifiers();
     for (const name of Object.keys(ids)) {
-      const binding = this.getBinding(name);
-      if (binding) binding.reassign(path);
+      this.getBinding(name)?.reassign(path);
     }
   }
 
