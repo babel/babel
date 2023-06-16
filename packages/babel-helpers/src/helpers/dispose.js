@@ -23,8 +23,8 @@ function dispose_SuppressedError(suppressed, error) {
 export default function _dispose(stack, error, hasError) {
   function next() {
     while (stack.length > 0) {
-      var r = stack.pop();
       try {
+        var r = stack.pop();
         var p = r.d.call(r.v);
         if (r.a) return Promise.resolve(p).then(next, err);
       } catch (e) {

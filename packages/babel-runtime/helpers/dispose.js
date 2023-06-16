@@ -11,14 +11,12 @@ function dispose_SuppressedError(suppressed, error) {
 }
 function _dispose(stack, error, hasError) {
   function next() {
-    for (; stack.length > 0;) {
-      var r = stack.pop();
-      try {
-        var p = r.d.call(r.v);
-        if (r.a) return Promise.resolve(p).then(next, err);
-      } catch (e) {
-        return err(e);
-      }
+    for (; stack.length > 0;) try {
+      var r = stack.pop(),
+        p = r.d.call(r.v);
+      if (r.a) return Promise.resolve(p).then(next, err);
+    } catch (e) {
+      return err(e);
     }
     if (hasError) throw error;
   }
