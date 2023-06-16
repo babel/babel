@@ -14,7 +14,7 @@ function dispose_SuppressedError(suppressed, error) {
 }
 function _dispose(stack, error, hasError) {
   function next() {
-    if (0 !== stack.length) {
+    for (; stack.length > 0;) {
       var r = stack.pop();
       if (r.a) return _Promise.resolve(r.d.call(r.v)).then(next, err);
       try {
@@ -22,7 +22,6 @@ function _dispose(stack, error, hasError) {
       } catch (e) {
         return err(e);
       }
-      return next();
     }
     if (hasError) throw error;
   }

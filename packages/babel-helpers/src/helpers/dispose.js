@@ -22,21 +22,18 @@ function dispose_SuppressedError(suppressed, error) {
 
 export default function _dispose(stack, error, hasError) {
   function next() {
-    if (stack.length === 0) {
-      if (hasError) throw error;
-      return;
+    while (stack.length > 0) {
+      var r = stack.pop();
+      if (r.a) {
+        return Promise.resolve(r.d.call(r.v)).then(next, err);
+      }
+      try {
+        r.d.call(r.v);
+      } catch (e) {
+        return err(e);
+      }
     }
-
-    var r = stack.pop();
-    if (r.a) {
-      return Promise.resolve(r.d.call(r.v)).then(next, err);
-    }
-    try {
-      r.d.call(r.v);
-    } catch (e) {
-      return err(e);
-    }
-    return next();
+    if (hasError) throw error;
   }
 
   function err(e) {
