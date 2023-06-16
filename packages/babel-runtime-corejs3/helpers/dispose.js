@@ -16,9 +16,9 @@ function _dispose(stack, error, hasError) {
   function next() {
     for (; stack.length > 0;) {
       var r = stack.pop();
-      if (r.a) return _Promise.resolve(r.d.call(r.v)).then(next, err);
       try {
-        r.d.call(r.v);
+        var p = r.d.call(r.v);
+        if (r.a) return _Promise.resolve(p).then(next, err);
       } catch (e) {
         return err(e);
       }
