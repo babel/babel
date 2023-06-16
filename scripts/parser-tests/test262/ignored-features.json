@@ -99,6 +99,7 @@
   "host-gc-required",
   "import.meta",
   "intl-normative-optional",
+  "iterator-helpers",
   "json-modules",
   "json-parse-with-source",
   "json-superset",
