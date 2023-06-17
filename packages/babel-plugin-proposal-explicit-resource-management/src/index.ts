@@ -3,19 +3,22 @@ import syntaxExplicitResourceManagement from "@babel/plugin-syntax-explicit-reso
 import { types as t, template, traverse, type PluginPass } from "@babel/core";
 import type { NodePath, Visitor } from "@babel/traverse";
 
+const enum USING_KIND {
+  NORMAL,
+  AWAIT,
+}
+
 export default declare(api => {
   api.assertVersion("^7.22.0");
 
-  const TOP_LEVEL_USING = new WeakSet();
-  const TOP_LEVEL_AWAIT_USING = new WeakSet();
+  const TOP_LEVEL_USING = new Map<t.Node, USING_KIND>();
 
   function isUsingDeclaration(node: t.Node): node is t.VariableDeclaration {
     if (!t.isVariableDeclaration(node)) return false;
     return (
       node.kind === "using" ||
       node.kind === "await using" ||
-      TOP_LEVEL_USING.has(node) ||
-      TOP_LEVEL_AWAIT_USING.has(node)
+      TOP_LEVEL_USING.has(node)
     );
   }
 
@@ -47,13 +50,11 @@ export default declare(api => {
         if (!isUsingDeclaration(node)) continue;
         stackId ??= path.scope.generateUidIdentifier("stack");
         const isAwaitUsing =
-          node.kind === "await using" || TOP_LEVEL_AWAIT_USING.has(node);
+          node.kind === "await using" ||
+          TOP_LEVEL_USING.get(node) === USING_KIND.AWAIT;
         needsAwait ||= isAwaitUsing;
 
-        if (
-          !TOP_LEVEL_AWAIT_USING.delete(node) &&
-          !TOP_LEVEL_USING.delete(node)
-        ) {
+        if (!TOP_LEVEL_USING.delete(node)) {
           node.kind = "const";
         }
         node.declarations.forEach(decl => {
@@ -121,6 +122,8 @@ export default declare(api => {
         // module body in a block after hoisting all the exports and imports.
         // This might cause some variables to be `undefined` rather than TDZ.
         Program(path) {
+          TOP_LEVEL_USING.clear();
+
           if (path.node.sourceType !== "module") return;
           if (!path.node.body.some(isUsingDeclaration)) return;
 
@@ -188,9 +191,9 @@ export default declare(api => {
               );
             } else if (t.isVariableDeclaration(node)) {
               if (node.kind === "using") {
-                TOP_LEVEL_USING.add(stmt.node);
+                TOP_LEVEL_USING.set(stmt.node, USING_KIND.NORMAL);
               } else if (node.kind === "await using") {
-                TOP_LEVEL_AWAIT_USING.add(stmt.node);
+                TOP_LEVEL_USING.set(stmt.node, USING_KIND.AWAIT);
               }
               node.kind = "var";
               innerBlockBody.push(node);
