@@ -6,6 +6,7 @@ import {
   directive,
   directiveLiteral,
   expressionStatement,
+  functionDeclaration,
   identifier,
   isIdentifier,
   memberExpression,
@@ -233,17 +234,17 @@ export function buildNamespaceInitStatements(
     statements.push(
       (sourceMetadata.lazy
         ? template.statement`
-            Object.defineProperty(EXPORTS, "NAME", {
-              enumerable: true,
-              get: function() {
-                return NAMESPACE;
-              }
+            DEFINE_GETTER(EXPORTS, "NAME", function() {
+              return NAMESPACE;
             });
           `
         : template.statement`EXPORTS.NAME = NAMESPACE;`)({
         EXPORTS: metadata.exportName,
         NAME: exportName,
         NAMESPACE: cloneNode(srcNamespace),
+        ...(sourceMetadata.lazy && {
+          DEFINE_GETTER: buildDefineGetter(metadata.programPath),
+        }),
       }),
     );
   }
@@ -256,7 +257,7 @@ export function buildNamespaceInitStatements(
     statement.loc = sourceMetadata.reexportAll.loc;
 
     // Iterate props creating getter for each prop.
-    statements.push(statement);
+    statements.push(expressionStatement(statement));
   }
   return statements;
 }
@@ -265,11 +266,8 @@ const ReexportTemplate = {
   constant: template.statement`EXPORTS.EXPORT_NAME = NAMESPACE_IMPORT;`,
   constantComputed: template.statement`EXPORTS["EXPORT_NAME"] = NAMESPACE_IMPORT;`,
   spec: template.statement`
-    Object.defineProperty(EXPORTS, "EXPORT_NAME", {
-      enumerable: true,
-      get: function() {
-        return NAMESPACE_IMPORT;
-      },
+    DEFINE_GETTER(EXPORTS, "EXPORT_NAME", function () {
+      return NAMESPACE_IMPORT;
     });
     `,
 };
@@ -312,7 +310,10 @@ function buildReexportsFromMeta(
         return ReexportTemplate.constant(astNodes);
       }
     } else {
-      return ReexportTemplate.spec(astNodes);
+      return ReexportTemplate.spec({
+        ...astNodes,
+        DEFINE_GETTER: buildDefineGetter(meta.programPath),
+      });
     }
   });
 }
@@ -337,6 +338,44 @@ function buildESModuleHeader(
   )({ EXPORTS: metadata.exportName });
 }
 
+function addPrivateHelper(
+  path: NodePath<t.Program>,
+  name: string,
+  fn: t.FunctionExpression,
+) {
+  const { scope } = path;
+  const key = `babel-helper-module-transforms.${name}`;
+  let id = path.getData(key);
+  if (id) {
+    return cloneNode(id);
+  }
+  id = scope.generateUidIdentifier("_" + name);
+  path.setData(key, id);
+
+  const [fnPath] = path.unshiftContainer(
+    "body",
+    functionDeclaration(id, fn.params, fn.body),
+  );
+  path.scope.registerBinding("hoisted", fnPath);
+
+  return cloneNode(id);
+}
+
+function buildDefineGetter(path: NodePath<t.Program>) {
+  return addPrivateHelper(
+    path,
+    "defineGetter",
+    template.expression`
+    function (obj, prop, fn) {
+      Object.defineProperty(obj, prop, {
+        enumerable: true,
+        get: fn
+      });
+    }
+  `() as t.FunctionExpression,
+  );
+}
+
 /**
  * Create a re-export initialization loop for a specific imported namespace.
  */
@@ -345,46 +384,63 @@ function buildNamespaceReexport(
   namespace: t.Identifier | t.CallExpression,
   constantReexports: boolean | void,
 ) {
-  return (
-    constantReexports
-      ? template.statement`
-        Object.keys(NAMESPACE).forEach(function(key) {
-          if (key === "default" || key === "__esModule") return;
-          VERIFY_NAME_LIST;
-          if (key in EXPORTS && EXPORTS[key] === NAMESPACE[key]) return;
+  const { programPath, exportNameListName } = metadata;
 
-          EXPORTS[key] = NAMESPACE[key];
-        });
-      `
+  const fn = (
+    constantReexports
+      ? template.expression`
+        function (exports, namespace, exportNames) {
+          Object.keys(namespace).forEach(function(k) {
+            if (k === "default" || k === "__esModule") return;
+            VERIFY_NAME_LIST;
+            if (k in exports && exports[k] === namespace[k]) return;
+
+            exports[k] = namespace[k];
+          });
+        }`
       : // Also skip already assigned bindings if they are strictly equal
         // to be somewhat more spec-compliant when a file has multiple
         // namespace re-exports that would cause a binding to be exported
         // multiple times. However, multiple bindings of the same name that
         // export the same primitive value are silently skipped
         // (the spec requires an "ambiguous bindings" early error here).
-        template.statement`
-        Object.keys(NAMESPACE).forEach(function(key) {
-          if (key === "default" || key === "__esModule") return;
-          VERIFY_NAME_LIST;
-          if (key in EXPORTS && EXPORTS[key] === NAMESPACE[key]) return;
+        template.expression`
+          function (exports, namespace, exportNames) {
+            Object.keys(namespace).forEach(function(k) {
+              if (k === "default" || k === "__esModule") return;
+              VERIFY_NAME_LIST;
+              if (k in exports && exports[k] === namespace[k]) return;
 
-          Object.defineProperty(EXPORTS, key, {
-            enumerable: true,
-            get: function() {
-              return NAMESPACE[key];
-            },
-          });
-        });
-    `
+              DEFINE_GETTER(exports, k, function () {
+                return namespace[k];
+              });
+            });
+          }`
   )({
-    NAMESPACE: namespace,
-    EXPORTS: metadata.exportName,
-    VERIFY_NAME_LIST: metadata.exportNameListName
-      ? template`
-            if (Object.prototype.hasOwnProperty.call(EXPORTS_LIST, key)) return;
-          `({ EXPORTS_LIST: metadata.exportNameListName })
+    VERIFY_NAME_LIST: exportNameListName
+      ? template.statement`
+            if (exportNames.indexOf(k) >= 0) return;
+          `()
       : null,
-  });
+
+    ...(!constantReexports && {
+      DEFINE_GETTER: buildDefineGetter(programPath),
+    }),
+  }) as t.FunctionExpression;
+
+  if (!exportNameListName) fn.params.pop();
+
+  const fnId = addPrivateHelper(
+    programPath,
+    constantReexports ? "reexports" : "reexports2",
+    fn,
+  );
+
+  const args = [identifier(metadata.exportName), namespace];
+  if (exportNameListName) {
+    args.push(identifier(exportNameListName));
+  }
+  return callExpression(fnId, args);
 }
 
 /**
@@ -396,35 +452,36 @@ function buildExportNameListDeclaration(
   programPath: NodePath,
   metadata: ModuleMetadata,
 ) {
-  const exportedVars = Object.create(null);
+  const exportedVars = new Set<string>();
   for (const data of metadata.local.values()) {
     for (const name of data.names) {
-      exportedVars[name] = true;
+      exportedVars.add(name);
     }
   }
 
   let hasReexport = false;
   for (const data of metadata.source.values()) {
     for (const exportName of data.reexports.keys()) {
-      exportedVars[exportName] = true;
+      exportedVars.add(exportName);
     }
     for (const exportName of data.reexportNamespace) {
-      exportedVars[exportName] = true;
+      exportedVars.add(exportName);
     }
 
     hasReexport = hasReexport || !!data.reexportAll;
   }
 
-  if (!hasReexport || Object.keys(exportedVars).length === 0) return null;
+  exportedVars.delete("default");
+  exportedVars.delete("__esModule");
+
+  if (!hasReexport || exportedVars.size === 0) return null;
 
   const name = programPath.scope.generateUidIdentifier("exportNames");
-
-  delete exportedVars.default;
 
   return {
     name: name.name,
     statement: variableDeclaration("var", [
-      variableDeclarator(name, valueToNode(exportedVars)),
+      variableDeclarator(name, valueToNode(Array.from(exportedVars))),
     ]),
   };
 }

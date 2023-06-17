@@ -16,10 +16,13 @@
   Object.defineProperty(_exports, "__esModule", {
     value: true
   });
-  Object.defineProperty(_exports, "some exports", {
-    enumerable: true,
-    get: function () {
-      return _foo["some exports"];
-    }
+  _defineGetter(_exports, "some exports", function () {
+    return _foo["some exports"];
   });
+  function _defineGetter(obj, prop, fn) {
+    Object.defineProperty(obj, prop, {
+      enumerable: true,
+      get: fn
+    });
+  }
 });

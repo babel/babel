@@ -3,17 +3,11 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-Object.defineProperty(exports, "named1", {
-  enumerable: true,
-  get: function () {
-    return _white().named1;
-  }
+_defineGetter(exports, "named1", function () {
+  return _white().named1;
 });
-Object.defineProperty(exports, "named2", {
-  enumerable: true,
-  get: function () {
-    return _black.named2;
-  }
+_defineGetter(exports, "named2", function () {
+  return _black.named2;
 });
 function _white() {
   const data = require("white");
@@ -23,3 +17,9 @@ function _white() {
   return data;
 }
 var _black = require("black");
+function _defineGetter(obj, prop, fn) {
+  Object.defineProperty(obj, prop, {
+    enumerable: true,
+    get: fn
+  });
+}

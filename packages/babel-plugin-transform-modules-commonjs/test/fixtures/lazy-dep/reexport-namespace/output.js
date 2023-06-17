@@ -11,9 +11,12 @@ function namespace() {
   };
   return data;
 }
-Object.defineProperty(exports, "namespace", {
-  enumerable: true,
-  get: function () {
-    return namespace();
-  }
+_defineGetter(exports, "namespace", function () {
+  return namespace();
 });
+function _defineGetter(obj, prop, fn) {
+  Object.defineProperty(obj, prop, {
+    enumerable: true,
+    get: fn
+  });
+}

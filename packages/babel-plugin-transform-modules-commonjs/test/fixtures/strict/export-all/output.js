@@ -3,38 +3,33 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var _exportNames = {
-  z: true,
-  a: true,
-  b: true,
-  d: true,
-  e: true,
-  f: true,
-  c: true
-};
+var _exportNames = ["z", "a", "b", "d", "e", "f", "c"];
 exports.a = void 0;
 exports.b = b;
-Object.defineProperty(exports, "c", {
-  enumerable: true,
-  get: function () {
-    return _mod.c;
-  }
+_defineGetter(exports, "c", function () {
+  return _mod.c;
 });
 exports.d = void 0;
 exports.default = _default;
 exports.z = exports.f = exports.e = void 0;
 var _mod = require("mod");
-Object.keys(_mod).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
-  if (key in exports && exports[key] === _mod[key]) return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function () {
-      return _mod[key];
-    }
+_reexports(exports, _mod, _exportNames);
+function _reexports(exports, namespace, exportNames) {
+  Object.keys(namespace).forEach(function (k) {
+    if (k === "default" || k === "__esModule") return;
+    if (exportNames.indexOf(k) >= 0) return;
+    if (k in exports && exports[k] === namespace[k]) return;
+    _defineGetter(exports, k, function () {
+      return namespace[k];
+    });
   });
-});
+}
+function _defineGetter(obj, prop, fn) {
+  Object.defineProperty(obj, prop, {
+    enumerable: true,
+    get: fn
+  });
+}
 var z = 100;
 exports.z = z;
 class a {}

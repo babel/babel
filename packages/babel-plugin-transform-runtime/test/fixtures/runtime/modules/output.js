@@ -6,14 +6,20 @@ Object.defineProperty(exports, "__esModule", {
 });
 var _bar = _interopRequireDefault(require("bar"));
 var _mod = require("mod");
-Object.keys(_mod).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-  if (key in exports && exports[key] === _mod[key]) return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-    get: function () {
-      return _mod[key];
-    }
+_reexports(exports, _mod);
+function _reexports(exports, namespace) {
+  Object.keys(namespace).forEach(function (k) {
+    if (k === "default" || k === "__esModule") return;
+    if (k in exports && exports[k] === namespace[k]) return;
+    _defineGetter(exports, k, function () {
+      return namespace[k];
+    });
   });
-});
+}
+function _defineGetter(obj, prop, fn) {
+  Object.defineProperty(obj, prop, {
+    enumerable: true,
+    get: fn
+  });
+}
 _bar.default;

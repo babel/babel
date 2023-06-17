@@ -3,11 +3,8 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-Object.defineProperty(exports, "default", {
-  enumerable: true,
-  get: function () {
-    return _white().default;
-  }
+_defineGetter(exports, "default", function () {
+  return _white().default;
 });
 function _white() {
   const data = babelHelpers.interopRequireDefault(require("white"));
@@ -15,4 +12,10 @@ function _white() {
     return data;
   };
   return data;
+}
+function _defineGetter(obj, prop, fn) {
+  Object.defineProperty(obj, prop, {
+    enumerable: true,
+    get: fn
+  });
 }

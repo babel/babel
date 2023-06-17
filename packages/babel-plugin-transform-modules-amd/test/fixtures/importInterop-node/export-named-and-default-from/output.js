@@ -4,17 +4,17 @@ define(["exports", "dep"], function (_exports, _dep) {
   Object.defineProperty(_exports, "__esModule", {
     value: true
   });
-  Object.defineProperty(_exports, "default", {
-    enumerable: true,
-    get: function () {
-      return _dep.default;
-    }
+  _defineGetter(_exports, "default", function () {
+    return _dep.default;
   });
-  Object.defineProperty(_exports, "name", {
-    enumerable: true,
-    get: function () {
-      return _dep.name;
-    }
+  _defineGetter(_exports, "name", function () {
+    return _dep.name;
   });
   _dep = babelHelpers.interopRequireWildcard(_dep, true);
+  function _defineGetter(obj, prop, fn) {
+    Object.defineProperty(obj, prop, {
+      enumerable: true,
+      get: fn
+    });
+  }
 });

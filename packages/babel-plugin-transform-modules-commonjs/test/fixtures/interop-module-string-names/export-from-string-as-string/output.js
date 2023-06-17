@@ -3,10 +3,13 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-Object.defineProperty(exports, "some exports", {
-  enumerable: true,
-  get: function () {
-    return _foo["some imports"];
-  }
+_defineGetter(exports, "some exports", function () {
+  return _foo["some imports"];
 });
 var _foo = require("foo");
+function _defineGetter(obj, prop, fn) {
+  Object.defineProperty(obj, prop, {
+    enumerable: true,
+    get: fn
+  });
+}

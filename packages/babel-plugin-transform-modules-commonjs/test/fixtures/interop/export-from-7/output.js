@@ -3,10 +3,13 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-Object.defineProperty(exports, "foo", {
-  enumerable: true,
-  get: function () {
-    return _foo.default;
-  }
+_defineGetter(exports, "foo", function () {
+  return _foo.default;
 });
 var _foo = babelHelpers.interopRequireDefault(require("foo"));
+function _defineGetter(obj, prop, fn) {
+  Object.defineProperty(obj, prop, {
+    enumerable: true,
+    get: fn
+  });
+}

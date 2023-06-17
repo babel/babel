@@ -6,6 +6,7 @@ import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import type { NodePath } from "@babel/traverse";
 
 export interface ModuleMetadata {
+  programPath: NodePath<t.Program>;
   exportName: string;
   // The name of the variable that will reference an object containing export names.
   exportNameListName: null | string;
@@ -176,6 +177,7 @@ export default function normalizeModuleAndLoadMetadata(
   }
 
   return {
+    programPath,
     exportName,
     exportNameListName: null,
     hasExports,

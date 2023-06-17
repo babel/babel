@@ -11,11 +11,14 @@ function namespace1() {
   };
   return data;
 }
-Object.defineProperty(exports, "namespace1", {
-  enumerable: true,
-  get: function () {
-    return namespace1();
-  }
+_defineGetter(exports, "namespace1", function () {
+  return namespace1();
 });
 var namespace2 = babelHelpers.interopRequireWildcard(require("black"));
 exports.namespace2 = namespace2;
+function _defineGetter(obj, prop, fn) {
+  Object.defineProperty(obj, prop, {
+    enumerable: true,
+    get: fn
+  });
+}
