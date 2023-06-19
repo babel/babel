@@ -20,6 +20,7 @@ export default (_: any, opts: any = {}) => {
       },
     ],
     babelPlugins.proposalRegexpModifiers,
+    babelPlugins.proposalExplicitResourceManagement,
     // These are Stage 4
     ...(process.env.BABEL_8_BREAKING
       ? []
