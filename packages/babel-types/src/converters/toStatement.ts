@@ -43,7 +43,7 @@ function toStatement(node: t.Node, ignore?: boolean): t.Statement | false {
 
   // @ts-expect-error todo(flow->ts): node.id might be missing
   if (mustHaveId && !node.id) {
-    newType = false as false;
+    newType = false;
   }
 
   if (!newType) {
