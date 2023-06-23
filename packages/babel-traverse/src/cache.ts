@@ -17,3 +17,7 @@ export function clearPath() {
 export function clearScope() {
   scope = new WeakMap();
 }
+
+export function usePath(newPath: WeakMap<Node, Map<Node, NodePath>>) {
+  path = newPath;
+}
