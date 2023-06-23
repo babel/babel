@@ -480,7 +480,7 @@ export default class Buffer {
 
     if (pos) {
       target.line = pos.line + lineOffset;
-      target.column = pos.column + columnOffset;
+      target.column = Math.max(pos.column + columnOffset, 0);
       target.filename = loc.filename;
     }
   }
