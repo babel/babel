@@ -39,6 +39,9 @@ if [ "$BABEL_8_BREAKING" = true ] ; then
   npx replace '(?=\[require\("@babel/plugin-syntax-flow")' '//' node_modules/metro-react-native-babel-preset/src/configs/main.js
   # https://github.com/facebook/metro/blob/2c16fa67/packages/metro-react-native-babel-preset/src/configs/main.js#L169
   npx replace '(?=plugins:.*?flow-strip-types)' 'exclude: [isTypeScriptSource, isTSXSource],' node_modules/metro-react-native-babel-preset/src/configs/main.js
+  # Use `usePath` API instead of reassigning named exports
+  # https://github.com/facebook/metro/blob/29bb5f2ad3319ba8f4764c3993aa85c15f59af23/packages/metro-source-map/src/generateFunctionMap.js#L182
+  npx replace '_traverse.default.cache.path = previousCache;' '_traverse.default.cache.usePath(previousCache);' node_modules/metro-source-map/src/generateFunctionMap.js
 fi
 
 # Build the project
