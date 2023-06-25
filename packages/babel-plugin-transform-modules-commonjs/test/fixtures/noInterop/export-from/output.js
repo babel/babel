@@ -1,14 +1,15 @@
 "use strict";
 
+0 && (module.exports = { default: _ });
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-_defineGetter(exports, "default", function () {
+_export("default", function () {
   return _foo.default;
 });
 var _foo = require("foo");
-function _defineGetter(obj, prop, fn) {
-  Object.defineProperty(obj, prop, {
+function _export(name, fn) {
+  Object.defineProperty(exports, name, {
     enumerable: true,
     get: fn
   });

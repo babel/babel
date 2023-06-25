@@ -28,7 +28,8 @@
     "@babel/helper-plugin-test-runner": "workspace:^",
     "@babel/plugin-external-helpers": "workspace:^",
     "@babel/plugin-syntax-class-static-block": "^7.14.5",
-    "@babel/plugin-syntax-object-rest-spread": "^7.8.3"
+    "@babel/plugin-syntax-object-rest-spread": "^7.8.3",
+    "cjs-module-lexer": "^1.2.3"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-modules-commonjs",
   "engines": {

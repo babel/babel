@@ -1,9 +1,10 @@
 "use strict";
 
+0 && (module.exports = { default: _ });
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-_defineGetter(exports, "default", function () {
+_export("default", function () {
   return _white().default;
 });
 function _white() {
@@ -13,8 +14,8 @@ function _white() {
   };
   return data;
 }
-function _defineGetter(obj, prop, fn) {
-  Object.defineProperty(obj, prop, {
+function _export(name, fn) {
+  Object.defineProperty(exports, name, {
     enumerable: true,
     get: fn
   });

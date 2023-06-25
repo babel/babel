@@ -16,11 +16,11 @@
   Object.defineProperty(_exports, "__esModule", {
     value: true
   });
-  _defineGetter(_exports, "name", function () {
+  _export("name", function () {
     return _dep.name;
   });
-  function _defineGetter(obj, prop, fn) {
-    Object.defineProperty(obj, prop, {
+  function _export(name, fn) {
+    Object.defineProperty(_exports, name, {
       enumerable: true,
       get: fn
     });

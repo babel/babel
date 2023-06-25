@@ -1,314 +1,315 @@
 "use strict";
 
+0 && (module.exports = { foo: _, foo1: _, foo2: _, foo3: _, foo4: _, foo5: _, foo6: _, foo7: _, foo8: _, foo9: _, foo10: _, foo11: _, foo12: _, foo13: _, foo14: _, foo15: _, foo16: _, foo17: _, foo18: _, foo19: _, foo20: _, foo21: _, foo22: _, foo23: _, foo24: _, foo25: _, foo26: _, foo27: _, foo28: _, foo29: _, foo30: _, foo31: _, foo32: _, foo33: _, foo34: _, foo35: _, foo36: _, foo37: _, foo38: _, foo39: _, foo40: _, foo41: _, foo42: _, foo43: _, foo44: _, foo45: _, foo46: _, foo47: _, foo48: _, foo49: _, foo50: _, foo51: _, foo52: _, foo53: _, foo54: _, foo55: _, foo56: _, foo57: _, foo58: _, foo59: _, foo60: _, foo61: _, foo62: _, foo63: _, foo64: _, foo65: _, foo66: _, foo67: _, foo68: _, foo69: _, foo70: _, foo71: _, foo72: _, foo73: _, foo74: _, foo75: _, foo76: _, foo77: _, foo78: _, foo79: _, foo80: _, foo81: _, foo82: _, foo83: _, foo84: _, foo85: _, foo86: _, foo87: _, foo88: _, foo89: _, foo90: _, foo91: _, foo92: _, foo93: _, foo94: _, foo95: _, foo96: _, foo97: _, foo98: _, foo99: _, foo100: _ });
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-_defineGetter(exports, "foo", function () {
+_export("foo", function () {
   return _foo.foo;
 });
-_defineGetter(exports, "foo1", function () {
+_export("foo1", function () {
   return _foo.foo1;
 });
-_defineGetter(exports, "foo10", function () {
+_export("foo10", function () {
   return _foo.foo10;
 });
-_defineGetter(exports, "foo100", function () {
+_export("foo100", function () {
   return _foo.foo100;
 });
-_defineGetter(exports, "foo11", function () {
+_export("foo11", function () {
   return _foo.foo11;
 });
-_defineGetter(exports, "foo12", function () {
+_export("foo12", function () {
   return _foo.foo12;
 });
-_defineGetter(exports, "foo13", function () {
+_export("foo13", function () {
   return _foo.foo13;
 });
-_defineGetter(exports, "foo14", function () {
+_export("foo14", function () {
   return _foo.foo14;
 });
-_defineGetter(exports, "foo15", function () {
+_export("foo15", function () {
   return _foo.foo15;
 });
-_defineGetter(exports, "foo16", function () {
+_export("foo16", function () {
   return _foo.foo16;
 });
-_defineGetter(exports, "foo17", function () {
+_export("foo17", function () {
   return _foo.foo17;
 });
-_defineGetter(exports, "foo18", function () {
+_export("foo18", function () {
   return _foo.foo18;
 });
-_defineGetter(exports, "foo19", function () {
+_export("foo19", function () {
   return _foo.foo19;
 });
-_defineGetter(exports, "foo2", function () {
+_export("foo2", function () {
   return _foo.foo2;
 });
-_defineGetter(exports, "foo20", function () {
+_export("foo20", function () {
   return _foo.foo20;
 });
-_defineGetter(exports, "foo21", function () {
+_export("foo21", function () {
   return _foo.foo21;
 });
-_defineGetter(exports, "foo22", function () {
+_export("foo22", function () {
   return _foo.foo22;
 });
-_defineGetter(exports, "foo23", function () {
+_export("foo23", function () {
   return _foo.foo23;
 });
-_defineGetter(exports, "foo24", function () {
+_export("foo24", function () {
   return _foo.foo24;
 });
-_defineGetter(exports, "foo25", function () {
+_export("foo25", function () {
   return _foo.foo25;
 });
-_defineGetter(exports, "foo26", function () {
+_export("foo26", function () {
   return _foo.foo26;
 });
-_defineGetter(exports, "foo27", function () {
+_export("foo27", function () {
   return _foo.foo27;
 });
-_defineGetter(exports, "foo28", function () {
+_export("foo28", function () {
   return _foo.foo28;
 });
-_defineGetter(exports, "foo29", function () {
+_export("foo29", function () {
   return _foo.foo29;
 });
-_defineGetter(exports, "foo3", function () {
+_export("foo3", function () {
   return _foo.foo3;
 });
-_defineGetter(exports, "foo30", function () {
+_export("foo30", function () {
   return _foo.foo30;
 });
-_defineGetter(exports, "foo31", function () {
+_export("foo31", function () {
   return _foo.foo31;
 });
-_defineGetter(exports, "foo32", function () {
+_export("foo32", function () {
   return _foo.foo32;
 });
-_defineGetter(exports, "foo33", function () {
+_export("foo33", function () {
   return _foo.foo33;
 });
-_defineGetter(exports, "foo34", function () {
+_export("foo34", function () {
   return _foo.foo34;
 });
-_defineGetter(exports, "foo35", function () {
+_export("foo35", function () {
   return _foo.foo35;
 });
-_defineGetter(exports, "foo36", function () {
+_export("foo36", function () {
   return _foo.foo36;
 });
-_defineGetter(exports, "foo37", function () {
+_export("foo37", function () {
   return _foo.foo37;
 });
-_defineGetter(exports, "foo38", function () {
+_export("foo38", function () {
   return _foo.foo38;
 });
-_defineGetter(exports, "foo39", function () {
+_export("foo39", function () {
   return _foo.foo39;
 });
-_defineGetter(exports, "foo4", function () {
+_export("foo4", function () {
   return _foo.foo4;
 });
-_defineGetter(exports, "foo40", function () {
+_export("foo40", function () {
   return _foo.foo40;
 });
-_defineGetter(exports, "foo41", function () {
+_export("foo41", function () {
   return _foo.foo41;
 });
-_defineGetter(exports, "foo42", function () {
+_export("foo42", function () {
   return _foo.foo42;
 });
-_defineGetter(exports, "foo43", function () {
+_export("foo43", function () {
   return _foo.foo43;
 });
-_defineGetter(exports, "foo44", function () {
+_export("foo44", function () {
   return _foo.foo44;
 });
-_defineGetter(exports, "foo45", function () {
+_export("foo45", function () {
   return _foo.foo45;
 });
-_defineGetter(exports, "foo46", function () {
+_export("foo46", function () {
   return _foo.foo46;
 });
-_defineGetter(exports, "foo47", function () {
+_export("foo47", function () {
   return _foo.foo47;
 });
-_defineGetter(exports, "foo48", function () {
+_export("foo48", function () {
   return _foo.foo48;
 });
-_defineGetter(exports, "foo49", function () {
+_export("foo49", function () {
   return _foo.foo49;
 });
-_defineGetter(exports, "foo5", function () {
+_export("foo5", function () {
   return _foo.foo5;
 });
-_defineGetter(exports, "foo50", function () {
+_export("foo50", function () {
   return _foo.foo50;
 });
-_defineGetter(exports, "foo51", function () {
+_export("foo51", function () {
   return _foo.foo51;
 });
-_defineGetter(exports, "foo52", function () {
+_export("foo52", function () {
   return _foo.foo52;
 });
-_defineGetter(exports, "foo53", function () {
+_export("foo53", function () {
   return _foo.foo53;
 });
-_defineGetter(exports, "foo54", function () {
+_export("foo54", function () {
   return _foo.foo54;
 });
-_defineGetter(exports, "foo55", function () {
+_export("foo55", function () {
   return _foo.foo55;
 });
-_defineGetter(exports, "foo56", function () {
+_export("foo56", function () {
   return _foo.foo56;
 });
-_defineGetter(exports, "foo57", function () {
+_export("foo57", function () {
   return _foo.foo57;
 });
-_defineGetter(exports, "foo58", function () {
+_export("foo58", function () {
   return _foo.foo58;
 });
-_defineGetter(exports, "foo59", function () {
+_export("foo59", function () {
   return _foo.foo59;
 });
-_defineGetter(exports, "foo6", function () {
+_export("foo6", function () {
   return _foo.foo6;
 });
-_defineGetter(exports, "foo60", function () {
+_export("foo60", function () {
   return _foo.foo60;
 });
-_defineGetter(exports, "foo61", function () {
+_export("foo61", function () {
   return _foo.foo61;
 });
-_defineGetter(exports, "foo62", function () {
+_export("foo62", function () {
   return _foo.foo62;
 });
-_defineGetter(exports, "foo63", function () {
+_export("foo63", function () {
   return _foo.foo63;
 });
-_defineGetter(exports, "foo64", function () {
+_export("foo64", function () {
   return _foo.foo64;
 });
-_defineGetter(exports, "foo65", function () {
+_export("foo65", function () {
   return _foo.foo65;
 });
-_defineGetter(exports, "foo66", function () {
+_export("foo66", function () {
   return _foo.foo66;
 });
-_defineGetter(exports, "foo67", function () {
+_export("foo67", function () {
   return _foo.foo67;
 });
-_defineGetter(exports, "foo68", function () {
+_export("foo68", function () {
   return _foo.foo68;
 });
-_defineGetter(exports, "foo69", function () {
+_export("foo69", function () {
   return _foo.foo69;
 });
-_defineGetter(exports, "foo7", function () {
+_export("foo7", function () {
   return _foo.foo7;
 });
-_defineGetter(exports, "foo70", function () {
+_export("foo70", function () {
   return _foo.foo70;
 });
-_defineGetter(exports, "foo71", function () {
+_export("foo71", function () {
   return _foo.foo71;
 });
-_defineGetter(exports, "foo72", function () {
+_export("foo72", function () {
   return _foo.foo72;
 });
-_defineGetter(exports, "foo73", function () {
+_export("foo73", function () {
   return _foo.foo73;
 });
-_defineGetter(exports, "foo74", function () {
+_export("foo74", function () {
   return _foo.foo74;
 });
-_defineGetter(exports, "foo75", function () {
+_export("foo75", function () {
   return _foo.foo75;
 });
-_defineGetter(exports, "foo76", function () {
+_export("foo76", function () {
   return _foo.foo76;
 });
-_defineGetter(exports, "foo77", function () {
+_export("foo77", function () {
   return _foo.foo77;
 });
-_defineGetter(exports, "foo78", function () {
+_export("foo78", function () {
   return _foo.foo78;
 });
-_defineGetter(exports, "foo79", function () {
+_export("foo79", function () {
   return _foo.foo79;
 });
-_defineGetter(exports, "foo8", function () {
+_export("foo8", function () {
   return _foo.foo8;
 });
-_defineGetter(exports, "foo80", function () {
+_export("foo80", function () {
   return _foo.foo80;
 });
-_defineGetter(exports, "foo81", function () {
+_export("foo81", function () {
   return _foo.foo81;
 });
-_defineGetter(exports, "foo82", function () {
+_export("foo82", function () {
   return _foo.foo82;
 });
-_defineGetter(exports, "foo83", function () {
+_export("foo83", function () {
   return _foo.foo83;
 });
-_defineGetter(exports, "foo84", function () {
+_export("foo84", function () {
   return _foo.foo84;
 });
-_defineGetter(exports, "foo85", function () {
+_export("foo85", function () {
   return _foo.foo85;
 });
-_defineGetter(exports, "foo86", function () {
+_export("foo86", function () {
   return _foo.foo86;
 });
-_defineGetter(exports, "foo87", function () {
+_export("foo87", function () {
   return _foo.foo87;
 });
-_defineGetter(exports, "foo88", function () {
+_export("foo88", function () {
   return _foo.foo88;
 });
-_defineGetter(exports, "foo89", function () {
+_export("foo89", function () {
   return _foo.foo89;
 });
-_defineGetter(exports, "foo9", function () {
+_export("foo9", function () {
   return _foo.foo9;
 });
-_defineGetter(exports, "foo90", function () {
+_export("foo90", function () {
   return _foo.foo90;
 });
-_defineGetter(exports, "foo91", function () {
+_export("foo91", function () {
   return _foo.foo91;
 });
-_defineGetter(exports, "foo92", function () {
+_export("foo92", function () {
   return _foo.foo92;
 });
-_defineGetter(exports, "foo93", function () {
+_export("foo93", function () {
   return _foo.foo93;
 });
-_defineGetter(exports, "foo94", function () {
+_export("foo94", function () {
   return _foo.foo94;
 });
-_defineGetter(exports, "foo95", function () {
+_export("foo95", function () {
   return _foo.foo95;
 });
-_defineGetter(exports, "foo96", function () {
+_export("foo96", function () {
   return _foo.foo96;
 });
-_defineGetter(exports, "foo97", function () {
+_export("foo97", function () {
   return _foo.foo97;
 });
-_defineGetter(exports, "foo98", function () {
+_export("foo98", function () {
   return _foo.foo98;
 });
-_defineGetter(exports, "foo99", function () {
+_export("foo99", function () {
   return _foo.foo99;
 });
 var _foo = require("foo");
-function _defineGetter(obj, prop, fn) {
-  Object.defineProperty(obj, prop, {
+function _export(name, fn) {
+  Object.defineProperty(exports, name, {
     enumerable: true,
     get: fn
   });

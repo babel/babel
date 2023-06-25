@@ -4,11 +4,11 @@ define(["exports", "foo"], function (_exports, _foo) {
   Object.defineProperty(_exports, "__esModule", {
     value: true
   });
-  _defineGetter(_exports, "some exports", function () {
+  _export("some exports", function () {
     return _foo["some exports"];
   });
-  function _defineGetter(obj, prop, fn) {
-    Object.defineProperty(obj, prop, {
+  function _export(name, fn) {
+    Object.defineProperty(_exports, name, {
       enumerable: true,
       get: fn
     });

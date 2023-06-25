@@ -11,13 +11,13 @@ function namespace1() {
   };
   return data;
 }
-_defineGetter(exports, "namespace1", function () {
+_export("namespace1", function () {
   return namespace1();
 });
 var namespace2 = babelHelpers.interopRequireWildcard(require("black"));
 exports.namespace2 = namespace2;
-function _defineGetter(obj, prop, fn) {
-  Object.defineProperty(obj, prop, {
+function _export(name, fn) {
+  Object.defineProperty(exports, name, {
     enumerable: true,
     get: fn
   });

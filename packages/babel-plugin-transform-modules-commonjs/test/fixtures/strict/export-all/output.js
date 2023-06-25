@@ -1,31 +1,41 @@
 "use strict";
 
+0 && (module.exports = { c: _ });
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var _exportNames = ["z", "a", "b", "d", "e", "f", "c"];
 exports.a = void 0;
 exports.b = b;
-_defineGetter(exports, "c", function () {
+_export("c", function () {
   return _mod.c;
 });
 exports.d = void 0;
 exports.default = _default;
 exports.z = exports.f = exports.e = void 0;
-var _mod = require("mod");
-_reexports(exports, _mod, _exportNames);
-function _reexports(exports, namespace, exportNames) {
-  Object.keys(namespace).forEach(function (k) {
-    if (k === "default" || k === "__esModule") return;
-    if (exportNames.indexOf(k) >= 0) return;
-    if (k in exports && exports[k] === namespace[k]) return;
-    _defineGetter(exports, k, function () {
-      return namespace[k];
-    });
-  });
+__exportStar(require("mod"));
+var _mod = _lastRequired;
+var _lastRequired;
+function __exportStar(mod) {
+  return _reexports(exports, _lastRequired = mod, _exportNames);
 }
-function _defineGetter(obj, prop, fn) {
-  Object.defineProperty(obj, prop, {
+function _reexports(exports, mod, exportNames) {
+  var _loop = function (k) {
+    if (k === "default" || k === "__esModule" || exportNames.indexOf(k) >= 0) return "continue";
+    k in exports && exports[k] === mod[k] || Object.defineProperty(exports, k, {
+      get: function () {
+        return mod[k];
+      },
+      enumerable: true
+    });
+  };
+  for (var k in mod) {
+    var _ret = _loop(k);
+    if (_ret === "continue") continue;
+  }
+}
+function _export(name, fn) {
+  Object.defineProperty(exports, name, {
     enumerable: true,
     get: fn
   });

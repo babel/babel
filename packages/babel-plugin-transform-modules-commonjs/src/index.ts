@@ -12,7 +12,7 @@ import {
 import simplifyAccess from "@babel/helper-simple-access";
 import { template, types as t } from "@babel/core";
 import type { PluginOptions } from "@babel/helper-module-transforms";
-import type { Visitor, Scope } from "@babel/traverse";
+import type { Visitor, Scope, NodePath } from "@babel/traverse";
 
 import { transformDynamicImport } from "./dynamic-import";
 
@@ -234,6 +234,58 @@ export default declare((api, options: Options) => {
             },
           );
 
+          function addPrivateHelper(
+            path: NodePath<t.Program>,
+            name: string,
+            buildFn: () => t.FunctionExpression,
+          ) {
+            const { scope } = path;
+            const key = PACKAGE_JSON.name + "." + name;
+            let id = path.getData(key);
+            if (id) {
+              return t.cloneNode(id);
+            }
+            if (name.startsWith("_")) {
+              let uid;
+              let i = 1;
+              do {
+                uid = scope._generateUid(name, i);
+                i++;
+              } while (
+                scope.hasLabel(uid) ||
+                scope.hasBinding(uid) ||
+                scope.hasGlobal(uid) ||
+                scope.hasReference(uid)
+              );
+
+              scope.references[uid] = true;
+              scope.uids[uid] = true;
+
+              id = t.identifier(uid);
+            } else {
+              id = scope.generateUidIdentifier(name);
+            }
+            path.setData(key, id);
+
+            const fn = buildFn();
+            const [fnPath] = path.unshiftContainer(
+              "body",
+              t.functionDeclaration(id, fn.params, fn.body),
+            );
+            path.scope.registerBinding("hoisted", fnPath);
+
+            return t.cloneNode(id);
+          }
+
+          const interopTypes = new Map<number, t.CallExpression>();
+          const exportStarFnBody = t.blockStatement([]);
+          let reexports: t.CallExpression;
+
+          let interopTypeId: t.Identifier;
+          let lastInteropType: number;
+          let lastRequired: t.Identifier;
+          const props = new Map<string, t.ObjectProperty>();
+
           for (const [source, metadata] of meta.source) {
             const loadExpr = t.callExpression(t.identifier("require"), [
               t.stringLiteral(source),
@@ -270,20 +322,157 @@ export default declare((api, options: Options) => {
             }
             header.loc = metadata.loc;
 
-            headers.push(header);
-            headers.push(
-              ...buildNamespaceInitStatements(
-                meta,
-                metadata,
-                constantReexports,
+            if (metadata.reexportAll && t.isVariableDeclaration(header)) {
+              const interopType = (
+                {
+                  none: 0,
+                  "node-default": 0,
+                  namespace: 1,
+                  "node-namespace": 2,
+                  default: 3,
+                } as const
+              )[metadata.interop];
+
+              const needInitVar =
+                metadata.imports.size || metadata.reexports.size;
+
+              if (needInitVar && !lastRequired) {
+                lastRequired = path.scope.generateUidIdentifier("lastRequired");
+                path.scope.push({
+                  id: lastRequired,
+                  kind: "var",
+                });
+              }
+
+              if (lastInteropType == null && interopType !== 0) {
+                interopTypeId = path.scope.generateUidIdentifier("interop");
+                path.scope.push({
+                  id: interopTypeId,
+                  kind: "var",
+                });
+              }
+
+              if (lastInteropType !== interopType && interopTypeId) {
+                lastInteropType = interopType;
+                headers.push(
+                  t.expressionStatement(
+                    t.assignmentExpression(
+                      "=",
+                      t.cloneNode(interopTypeId),
+                      t.numericLiteral(interopType),
+                    ),
+                  ),
+                );
+              }
+
+              headers.push(
+                ...buildNamespaceInitStatements(
+                  meta,
+                  metadata,
+                  constantReexports,
+                  reexportsCall => {
+                    reexports ??= reexportsCall;
+
+                    if (interopType && !interopTypes.has(interopType)) {
+                      interopTypes.set(
+                        interopType,
+                        wrapInterop(
+                          path,
+                          t.identifier("mod"),
+                          metadata.interop,
+                        ),
+                      );
+                    }
+
+                    const exportStarHelper = addPrivateHelper(
+                      path,
+                      "_exportStar",
+                      () =>
+                        t.functionExpression(
+                          null,
+                          [t.identifier("mod")],
+                          exportStarFnBody,
+                        ),
+                    );
+
+                    const interopRequire = t.callExpression(exportStarHelper, [
+                      loadExpr,
+                    ]);
+                    interopRequire.loc = metadata.loc;
+
+                    return interopRequire;
+                  },
+                ),
+              );
+
+              if (needInitVar) {
+                headers.push(template.statement.ast`
+                  var ${metadata.name} = ${t.cloneNode(lastRequired)};
+                `);
+              }
+            } else {
+              headers.push(header);
+              headers.push(
+                ...buildNamespaceInitStatements(
+                  meta,
+                  metadata,
+                  constantReexports,
+                ),
+              );
+            }
+
+            if (!constantReexports) {
+              metadata.reexports.forEach((importName, exportName) => {
+                props.set(
+                  exportName,
+                  t.objectProperty(
+                    meta.stringSpecifiers.has(exportName)
+                      ? t.stringLiteral(exportName)
+                      : t.identifier(exportName),
+                    t.identifier("_"),
+                  ),
+                );
+              });
+            }
+          }
+
+          let cond: t.Identifier | t.ConditionalExpression =
+            t.identifier("mod");
+          interopTypes.forEach((call, type) => {
+            if (!interopTypeId) return;
+            cond = t.conditionalExpression(
+              t.binaryExpression(
+                "==",
+                t.cloneNode(interopTypeId),
+                t.numericLiteral(type),
               ),
+              call,
+              cond,
             );
+          });
+
+          if (reexports) {
+            reexports.arguments[1] = lastRequired
+              ? t.assignmentExpression("=", t.cloneNode(lastRequired), cond)
+              : cond;
+
+            exportStarFnBody.body.push(t.returnStatement(reexports));
+          }
+
+          if (props.size) {
+            const object = t.objectExpression(Array.from(props.values()));
+            // @ts-expect-error Undocumented property
+            object._compact = true;
+            headers.unshift(template.statement.ast`
+              0 && (module.exports = ${object});
+            `);
           }
 
           ensureStatementsHoisted(headers);
-          path.unshiftContainer("body", headers);
-          path.get("body").forEach(path => {
-            if (headers.indexOf(path.node) === -1) return;
+
+          (
+            path.unshiftContainer("body", headers) as NodePath<t.Statement>[]
+          ).forEach(path => {
             if (path.isVariableDeclaration()) {
               path.scope.registerDeclaration(path);
             }

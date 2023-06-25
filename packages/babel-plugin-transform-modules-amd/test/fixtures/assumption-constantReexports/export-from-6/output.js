@@ -5,11 +5,10 @@ define(["exports", "foo"], function (_exports, _foo) {
     value: true
   });
   _reexports(_exports, _foo);
-  function _reexports(exports, namespace) {
-    Object.keys(namespace).forEach(function (k) {
-      if (k === "default" || k === "__esModule") return;
-      if (k in exports && exports[k] === namespace[k]) return;
-      exports[k] = namespace[k];
-    });
+  function _reexports(exports, mod) {
+    for (const k in mod) {
+      if (k === "default" || k === "__esModule") continue;
+      k in exports && exports[k] === mod[k] || (exports[k] = mod[k]);
+    }
   }
 });

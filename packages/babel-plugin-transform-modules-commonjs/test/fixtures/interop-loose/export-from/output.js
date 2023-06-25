@@ -1,12 +1,13 @@
 "use strict";
 
 exports.__esModule = true;
-var _foo = require("foo");
-_reexports(exports, _foo);
-function _reexports(exports, namespace) {
-  Object.keys(namespace).forEach(function (k) {
-    if (k === "default" || k === "__esModule") return;
-    if (k in exports && exports[k] === namespace[k]) return;
-    exports[k] = namespace[k];
-  });
+__exportStar(require("foo"));
+function __exportStar(mod) {
+  return _reexports(exports, mod);
+}
+function _reexports(exports, mod) {
+  for (const k in mod) {
+    if (k === "default" || k === "__esModule") continue;
+    k in exports && exports[k] === mod[k] || (exports[k] = mod[k]);
+  }
 }

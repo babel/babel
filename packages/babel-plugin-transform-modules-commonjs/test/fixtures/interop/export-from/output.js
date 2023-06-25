@@ -3,20 +3,18 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var _foo = require("foo");
-_reexports(exports, _foo);
-function _reexports(exports, namespace) {
-  Object.keys(namespace).forEach(function (k) {
-    if (k === "default" || k === "__esModule") return;
-    if (k in exports && exports[k] === namespace[k]) return;
-    _defineGetter(exports, k, function () {
-      return namespace[k];
-    });
-  });
+__exportStar(require("foo"));
+function __exportStar(mod) {
+  return _reexports(exports, mod);
 }
-function _defineGetter(obj, prop, fn) {
-  Object.defineProperty(obj, prop, {
-    enumerable: true,
-    get: fn
-  });
+function _reexports(exports, mod) {
+  for (const k in mod) {
+    if (k === "default" || k === "__esModule") continue;
+    k in exports && exports[k] === mod[k] || Object.defineProperty(exports, k, {
+      get: function () {
+        return mod[k];
+      },
+      enumerable: true
+    });
+  }
 }
