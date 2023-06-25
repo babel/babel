@@ -45,7 +45,7 @@
     "@types/fs-readdir-recursive": "^1.1.0",
     "@types/glob": "^7.2.0",
     "rimraf": "^3.0.0",
-    "semver": "^6.3.0"
+    "semver": "^7.0.0"
   },
   "bin": {
     "babel": "./bin/babel.js",
