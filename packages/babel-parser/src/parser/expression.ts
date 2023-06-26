@@ -2961,9 +2961,7 @@ export default abstract class ExpressionParser extends LValParser {
       node.options = null;
     }
     if (this.eat(tt.comma)) {
-      if (!this.hasPlugin("importAssertions")) {
-        this.expectPlugin("importAttributes");
-      }
+      this.expectImportAttributesPlugin();
       if (!this.match(tt.parenR)) {
         node.options = this.parseMaybeAssignAllowIn();
         this.eat(tt.comma);
