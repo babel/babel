@@ -1927,9 +1927,13 @@ export default abstract class ExpressionParser extends LValParser {
   }
 
   parseNewCallee(this: Parser, node: Undone<N.NewExpression>): void {
+    const isImport = this.match(tt._import);
     const callee = this.parseNoCallExpr();
     node.callee = callee;
-    if (callee.type === "Import" || callee.type === "ImportExpression") {
+    if (
+      isImport &&
+      (callee.type === "Import" || callee.type === "ImportExpression")
+    ) {
       this.raise(Errors.ImportCallNotNewExpression, { at: callee });
     }
   }
