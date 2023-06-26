@@ -25,13 +25,16 @@ export default function verifyAndAssertMessages(
     parserOptions: {
       sourceType,
       requireConfigFile: false,
+      ...(overrideConfig && overrideConfig.parserOptions),
       babelOptions: {
         configFile: path.resolve(
           path.dirname(fileURLToPath(import.meta.url)),
           "../../../babel-eslint-shared-fixtures/config/babel.config.js",
         ),
+        ...(overrideConfig &&
+          overrideConfig.parserOptions &&
+          overrideConfig.parserOptions.babelOptions),
       },
-      ...(overrideConfig && overrideConfig.parserOptions),
     },
   });
 

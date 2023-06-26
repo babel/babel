@@ -1,5 +1,9 @@
 "use strict";
 
+if (typeof it === "function") {
+  throw new Error("Monorepo root's babel.config.js loaded by a test.");
+}
+
 const pathUtils = require("path");
 const fs = require("fs");
 const { parseSync } = require("@babel/core");

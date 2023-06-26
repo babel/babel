@@ -1082,6 +1082,7 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/helper-fixtures": "workspace:^"
+    "@babel/preset-env": "workspace:^"
     "@babel/register": "workspace:^"
     "@babel/runtime": "workspace:^"
     "@types/v8flags": ^3.1.1
