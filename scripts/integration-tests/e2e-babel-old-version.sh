@@ -56,6 +56,7 @@ node -e "
 rm packages/babel-standalone/test/built-into-es5.js
 
 # Update deps, build and test
+rm yarn.lock
 YARN_ENABLE_IMMUTABLE_INSTALLS=false make -j test-ci
 
 cleanup
