@@ -2,20 +2,20 @@
 
 Using targets:
 {
-  "android": "109",
-  "chrome": "109",
-  "edge": "109",
-  "firefox": "109",
-  "ios": "16.2",
-  "opera": "94",
-  "safari": "16.2",
-  "samsung": "19"
+  "android": "113",
+  "chrome": "113",
+  "edge": "113",
+  "firefox": "113",
+  "ios": "16.4",
+  "opera": "98",
+  "safari": "16.4",
+  "samsung": "20"
 }
 
 Using modules transform: auto
 
 Using plugins:
-  transform-unicode-sets-regex { android, chrome < 112, edge < 112, firefox, ios, opera < 98, safari, samsung }
+  transform-unicode-sets-regex { firefox, ios, safari, samsung }
   transform-class-static-block { ios, safari }
   syntax-private-property-in-object
   syntax-class-properties
