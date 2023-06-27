@@ -115,8 +115,6 @@ traverse.node = function (
 
 traverse.clearNode = function (node: t.Node, opts?: RemovePropertiesOptions) {
   removeProperties(node, opts);
-
-  cache.path.delete(node);
 };
 
 traverse.removeProperties = function (
