@@ -97,7 +97,13 @@
     "@types/babel__traverse": "link:./nope",
     "@babel/parser/@babel/types": "workspace:*",
     "@babel/plugin-syntax-unicode-sets-regex/@babel/helper-create-regexp-features-plugin": "workspace:*",
-    "babel-plugin-polyfill-corejs2/@babel/compat-data": "workspace:*"
+    "babel-plugin-polyfill-corejs2/@babel/compat-data": "workspace:*",
+    "@babel/helper-compilation-targets@^7.17.7": "patch:@babel/helper-compilation-targets@npm%3A7.22.5#./.yarn/patches/@babel-helper-compilation-targets-npm-7.22.5-5e6d9af186.patch",
+    "@babel/helper-compilation-targets@^7.18.2": "patch:@babel/helper-compilation-targets@npm%3A7.22.5#./.yarn/patches/@babel-helper-compilation-targets-npm-7.22.5-5e6d9af186.patch",
+    "@babel/helper-compilation-targets@^7.21.5": "patch:@babel/helper-compilation-targets@npm%3A7.22.5#./.yarn/patches/@babel-helper-compilation-targets-npm-7.22.5-5e6d9af186.patch",
+    "@babel/helper-compilation-targets@^7.22.1": "patch:@babel/helper-compilation-targets@npm%3A7.22.5#./.yarn/patches/@babel-helper-compilation-targets-npm-7.22.5-5e6d9af186.patch",
+    "@babel/helper-compilation-targets@^7.18.9": "patch:@babel/helper-compilation-targets@npm%3A7.22.5#./.yarn/patches/@babel-helper-compilation-targets-npm-7.22.5-5e6d9af186.patch",
+    "@babel/helper-compilation-targets@^7.20.7": "patch:@babel/helper-compilation-targets@npm%3A7.22.5#./.yarn/patches/@babel-helper-compilation-targets-npm-7.22.5-5e6d9af186.patch"
   },
   "engines": {
     "yarn": ">=1.4.0"

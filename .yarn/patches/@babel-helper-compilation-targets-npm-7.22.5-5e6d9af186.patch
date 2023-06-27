@@ -1,0 +1,27 @@
+diff --git a/lib/options.js b/lib/options.js
+index 0ec76e1e3d2860aa800789d42d2ab1d6bd6e1c4d..71c949b356a266257c14d94a49a35d721cab7b55 100644
+--- a/lib/options.js
++++ b/lib/options.js
+@@ -17,7 +17,8 @@ const TargetNames = {
+   android: "android",
+   electron: "electron",
+   samsung: "samsung",
+-  rhino: "rhino"
++  rhino: "rhino",
++  opera_mobile: "opera_mobile"
+ };
+ exports.TargetNames = TargetNames;
+ 
+diff --git a/lib/targets.js b/lib/targets.js
+index 316e4cc1d78350e70c718bc24dbaa48048b708b6..6c4f68311441709f355cff282453c469f0f8b86e 100644
+--- a/lib/targets.js
++++ b/lib/targets.js
+@@ -20,7 +20,7 @@ const browserNameMap = {
+   ios_saf: "ios",
+   node: "node",
+   deno: "deno",
+-  op_mob: "opera",
++  op_mob: "opera_mobile",
+   opera: "opera",
+   safari: "safari",
+   samsung: "samsung"

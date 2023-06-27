@@ -553,7 +553,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/helper-compilation-targets@npm:^7.17.7, @babel/helper-compilation-targets@npm:^7.18.2, @babel/helper-compilation-targets@npm:^7.18.9, @babel/helper-compilation-targets@npm:^7.20.7, @babel/helper-compilation-targets@npm:^7.21.5, @babel/helper-compilation-targets@npm:^7.22.1":
+"@babel/helper-compilation-targets@npm:7.22.5":
   version: 7.22.5
   resolution: "@babel/helper-compilation-targets@npm:7.22.5"
   dependencies:
@@ -565,6 +565,21 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.0.0
   checksum: a479460615acffa0f4fd0a29b740eafb53a93694265207d23a6038ccd18d183a382cacca515e77b7c9b042c3ba80b0aca0da5f1f62215140e81660d2cf721b68
+  languageName: node
+  linkType: hard
+
+"@babel/helper-compilation-targets@patch:@babel/helper-compilation-targets@npm%3A7.22.5#./.yarn/patches/@babel-helper-compilation-targets-npm-7.22.5-5e6d9af186.patch::locator=babel%40workspace%3A.":
+  version: 7.22.5
+  resolution: "@babel/helper-compilation-targets@patch:@babel/helper-compilation-targets@npm%3A7.22.5#./.yarn/patches/@babel-helper-compilation-targets-npm-7.22.5-5e6d9af186.patch::version=7.22.5&hash=88b490&locator=babel%40workspace%3A."
+  dependencies:
+    "@babel/compat-data": ^7.22.5
+    "@babel/helper-validator-option": ^7.22.5
+    browserslist: ^4.21.3
+    lru-cache: ^5.1.1
+    semver: ^6.3.0
+  peerDependencies:
+    "@babel/core": ^7.0.0
+  checksum: 033b03d8e85949c234432b75b24bf3e979c0c3e60a19e98289157e328d0064cc7c01d96daa7e3c238070c2ad5f4de316a21c3ec37671be60aa26866821f61a07
   languageName: node
   linkType: hard
 
