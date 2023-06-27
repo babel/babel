@@ -29,7 +29,7 @@ node -e "\
   pkg.devDependencies['@babel/core'] = '7.0.0';\
   Object.assign(pkg.resolutions, {\
     '@babel/core': '7.0.0',\
-    '@babel/helpers': '7.0.0',\
+    '@babel/helpers': '7.0.2',\
     '@babel/traverse': '7.0.0'\
   });\
   fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2));\
