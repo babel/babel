@@ -11,7 +11,8 @@ export type Target =
   | "ios"
   | "android"
   | "electron"
-  | "samsung";
+  | "samsung"
+  | "opera_mobile";
 
 export type Targets = {
   [target in Target]?: string;

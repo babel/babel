@@ -33,6 +33,7 @@ exports.environments = [
   "phantom",
   "samsung",
   "rhino",
+  "opera_mobile",
 ];
 
 const compatibilityTests = compatSources.flatMap(data =>
