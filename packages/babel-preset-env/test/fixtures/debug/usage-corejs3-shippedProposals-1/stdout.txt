@@ -71,6 +71,7 @@ Using targets: {
   "firefox": "102",
   "ios": "15.6",
   "opera": "98",
+  "opera_mobile": "73",
   "safari": "15.6",
   "samsung": "20"
 }
