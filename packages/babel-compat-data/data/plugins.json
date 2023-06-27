@@ -2,7 +2,8 @@
   "transform-unicode-sets-regex": {
     "chrome": "112",
     "opera": "98",
-    "edge": "112"
+    "edge": "112",
+    "electron": "24.0"
   },
   "transform-class-static-block": {
     "chrome": "94",
