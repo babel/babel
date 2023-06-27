@@ -4,15 +4,27 @@ const compatData = require("@mdn/browser-compat-data").javascript;
 const { addElectronSupportFromChromium } = require("./chromium-to-electron");
 const { writeFile, babel7Only } = require("./utils-build-data");
 
-// Map mdn-browser-compat-data to browserslist browser names
-const browserNameMap = {
-  chrome_android: "and_chr",
-  firefox_android: "and_ff",
-  safari_ios: "ios",
-  nodejs: "node",
-  webview_android: "android",
-  opera_android: "op_mob",
-  samsunginternet_android: "samsung",
+const browserNameMaps = {
+  // Map @mdn/browser-compat-data to browserslist browser names
+  toBrowserslist: {
+    chrome_android: "and_chr",
+    firefox_android: "and_ff",
+    safari_ios: "ios",
+    nodejs: "node",
+    webview_android: "android",
+    opera_android: "op_mob",
+    samsunginternet_android: "samsung",
+  },
+  // Map @mdn/browser-compat-data to kangax/compat-table engine names
+  toCompatTable: {
+    chrome_android: "chrome",
+    firefox_android: "firefox",
+    safari_ios: "ios",
+    nodejs: "node",
+    webview_android: "android",
+    opera_android: "op_mob",
+    samsunginternet_android: "samsung",
+  },
 };
 
 const browserSupportMap = {
@@ -31,14 +43,17 @@ function browserVersion(browser, version_added) {
   return version_added;
 }
 
-function generateModuleSupport(source) {
+function generateModuleSupport(source, toCompatTable) {
   const stats = source.__compat.support;
   const allowedBrowsers = {};
+  const browserNameMap = toCompatTable
+    ? browserNameMaps.toCompatTable
+    : browserNameMaps.toBrowserslist;
 
   Object.keys(stats).forEach(browser => {
     const browserName = browserNameMap[browser] || browser;
-    // todo: remove this when we support deno
-    if (browserName === "deno") return;
+    // todo: remove this when we support oculus
+    if (browserName === "oculus") return;
     let browserSupport = stats[browserSupportMap[browserName] || browser];
     if (Array.isArray(browserSupport)) {
       browserSupport = browserSupport[0]; // The first item is the most progressive support
@@ -60,7 +75,9 @@ function generateModuleSupport(source) {
 }
 
 const dataPath = path.join(__dirname, "../data/native-modules.json");
-const processed = generateModuleSupport(compatData.statements.export);
+const processed = generateModuleSupport(compatData.statements.export, false);
+// todo: restore deno support when browserslist recognizes deno
+delete processed.deno;
 babel7Only(() => {
   if (processed.ios) {
     processed.ios_saf = processed.ios;

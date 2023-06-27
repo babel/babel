@@ -26,10 +26,10 @@ Using plugins:
   syntax-optional-catch-binding
   syntax-async-generators
   syntax-object-rest-spread
-  transform-export-namespace-from { ios, safari }
   bugfix/transform-safari-id-destructuring-collision-in-function-expression { ios, safari }
   transform-modules-commonjs
   transform-dynamic-import
+  transform-export-namespace-from { }
   syntax-import-meta
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

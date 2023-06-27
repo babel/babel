@@ -38,7 +38,7 @@ Using plugins:
   transform-function-name { edge < 79 }
   transform-unicode-regex { ios < 12, safari < 12 }
   transform-block-scoping { ios < 11, safari < 11 }
-  transform-export-namespace-from { android < 72, chrome < 72, edge < 79, firefox < 80, ios, opera < 60, safari, samsung < 11.0 }
+  transform-export-namespace-from { android < 72, chrome < 72, edge < 79, firefox < 80, ios < 14.5, opera < 60, safari < 14.1, samsung < 11.0 }
   transform-modules-commonjs
   transform-dynamic-import
   syntax-import-meta

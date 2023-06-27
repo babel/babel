@@ -279,10 +279,10 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/compat-data@npm:^7.20.0, @babel/compat-data@npm:^7.22.0":
-  version: 7.22.0
-  resolution: "@babel/compat-data@npm:7.22.0"
-  checksum: 6e5d8c2c6f1598c6d6301ca853180030810ef2e81f73f531147c5ebfef711867b80e9ebe344e9529cc3843a4b5b398f3973f6a88addd827acf2226dfabb11c11
+"@babel/compat-data@npm:^7.20.0, @babel/compat-data@npm:^7.22.0, @babel/compat-data@npm:^7.22.5":
+  version: 7.22.5
+  resolution: "@babel/compat-data@npm:7.22.5"
+  checksum: eb1a47ebf79ae268b4a16903e977be52629339806e248455eb9973897c503a04b701f36a9de64e19750d6e081d0561e77a514c8dc470babbeba59ae94298ed18
   languageName: node
   linkType: hard
 
@@ -290,9 +290,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/compat-data@workspace:packages/babel-compat-data"
   dependencies:
-    "@mdn/browser-compat-data": ^4.0.10
-    core-js-compat: ^3.30.2
-    electron-to-chromium: ^1.4.248
+    "@mdn/browser-compat-data": ^5.3.0
+    core-js-compat: ^3.31.0
+    electron-to-chromium: ^1.4.441
   languageName: unknown
   linkType: soft
 
@@ -552,17 +552,17 @@ __metadata:
   linkType: soft
 
 "@babel/helper-compilation-targets@npm:^7.17.7, @babel/helper-compilation-targets@npm:^7.18.2, @babel/helper-compilation-targets@npm:^7.18.9, @babel/helper-compilation-targets@npm:^7.20.7, @babel/helper-compilation-targets@npm:^7.21.5, @babel/helper-compilation-targets@npm:^7.22.1":
-  version: 7.22.1
-  resolution: "@babel/helper-compilation-targets@npm:7.22.1"
+  version: 7.22.5
+  resolution: "@babel/helper-compilation-targets@npm:7.22.5"
   dependencies:
-    "@babel/compat-data": ^7.22.0
-    "@babel/helper-validator-option": ^7.21.0
+    "@babel/compat-data": ^7.22.5
+    "@babel/helper-validator-option": ^7.22.5
     browserslist: ^4.21.3
     lru-cache: ^5.1.1
     semver: ^6.3.0
   peerDependencies:
     "@babel/core": ^7.0.0
-  checksum: a686a01bd3288cf95ca26faa27958d34c04e2501c4b0858c3a6558776dec20317b5635f33d64c5a635b6fbdfe462a85c30d4bfa0ae7e7ffe3467e4d06442d7c8
+  checksum: a479460615acffa0f4fd0a29b740eafb53a93694265207d23a6038ccd18d183a382cacca515e77b7c9b042c3ba80b0aca0da5f1f62215140e81660d2cf721b68
   languageName: node
   linkType: hard
 
@@ -576,7 +576,7 @@ __metadata:
     "@babel/helper-validator-option": "workspace:^"
     "@types/lru-cache": ^5.1.1
     "@types/semver": ^5.5.0
-    browserslist: ^4.21.3
+    browserslist: ^4.21.9
     lru-cache: "condition:BABEL_8_BREAKING ? ^7.14.1 : ^5.1.1"
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   peerDependencies:
@@ -991,10 +991,10 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/helper-validator-option@npm:^7.18.6, @babel/helper-validator-option@npm:^7.21.0":
-  version: 7.21.0
-  resolution: "@babel/helper-validator-option@npm:7.21.0"
-  checksum: 8ece4c78ffa5461fd8ab6b6e57cc51afad59df08192ed5d84b475af4a7193fc1cb794b59e3e7be64f3cdc4df7ac78bf3dbb20c129d7757ae078e6279ff8c2f07
+"@babel/helper-validator-option@npm:^7.18.6, @babel/helper-validator-option@npm:^7.21.0, @babel/helper-validator-option@npm:^7.22.5":
+  version: 7.22.5
+  resolution: "@babel/helper-validator-option@npm:7.22.5"
+  checksum: bbeca8a85ee86990215c0424997438b388b8d642d69b9f86c375a174d3cdeb270efafd1ff128bc7a1d370923d13b6e45829ba8581c027620e83e3a80c5c414b3
   languageName: node
   linkType: hard
 
@@ -3633,7 +3633,7 @@ __metadata:
     babel-plugin-polyfill-corejs2: ^0.4.3
     babel-plugin-polyfill-corejs3: ^0.8.1
     babel-plugin-polyfill-regenerator: ^0.5.0
-    core-js-compat: ^3.30.2
+    core-js-compat: ^3.31.0
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   peerDependencies:
     "@babel/core": ^7.0.0-0
@@ -4405,10 +4405,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mdn/browser-compat-data@npm:^4.0.10":
-  version: 4.0.10
-  resolution: "@mdn/browser-compat-data@npm:4.0.10"
-  checksum: fcb7fac153b589d4e8f253bf2bb1bb8c72da8e1c081bbc886e4cca8234721800b15a768cf5f91d003877a8b17358ccfe67e121d767ac3d9b28bae7c8978e45f1
+"@mdn/browser-compat-data@npm:^5.3.0":
+  version: 5.3.0
+  resolution: "@mdn/browser-compat-data@npm:5.3.0"
+  checksum: ab7e4cc86e0eb1ded721050c2e159c3d84fc3e79f17537a2334c9a531d4f3eba02e585da7b28d587eb8e78edb583dfc9b0eb62da052b1aaa3635b0a90ca3d9c3
   languageName: node
   linkType: hard
 

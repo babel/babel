@@ -38,7 +38,7 @@ Using plugins:
   transform-block-scoping { safari < 10 }
   transform-new-target { safari < 10 }
   transform-regenerator { safari < 10 }
-  transform-export-namespace-from { safari }
+  transform-export-namespace-from { safari < 14.1 }
   bugfix/transform-tagged-template-caching { safari < 13 }
   transform-modules-commonjs
   transform-dynamic-import
