@@ -3,10 +3,11 @@ import type NodePath from "./path";
 import type Scope from "./scope";
 import type { HubInterface } from "./hub";
 
-export let pathsCache: WeakMap<
+let pathsCache: WeakMap<
   HubInterface | typeof nullHub,
   WeakMap<Node, Map<Node, NodePath>>
 > = new WeakMap();
+export { pathsCache as path };
 export let scope: WeakMap<Node, Scope> = new WeakMap();
 
 export function clear() {
