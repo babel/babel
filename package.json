@@ -88,13 +88,14 @@
     "benchmark"
   ],
   "resolutions": {
-    "browserslist": "npm:4.21.5",
+    "browserslist": "npm:4.21.9",
     "caniuse-lite": "npm:1.0.30001508",
     "core-js-compat": "npm:3.31.0",
     "electron-to-chromium": "npm:1.4.441",
     "glob-watcher/chokidar": "npm:^3.4.0",
     "@types/babel__core": "link:./nope",
     "@types/babel__traverse": "link:./nope",
+    "@babel/helper-define-polyfill-provider/@babel/helper-compilation-targets": "workspace:*",
     "@babel/parser/@babel/types": "workspace:*",
     "@babel/plugin-syntax-unicode-sets-regex/@babel/helper-create-regexp-features-plugin": "workspace:*",
     "babel-plugin-polyfill-corejs2/@babel/compat-data": "workspace:*"
