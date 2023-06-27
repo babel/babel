@@ -20,9 +20,9 @@ Using plugins:
   transform-parameters { safari }
   syntax-async-generators
   syntax-object-rest-spread
-  transform-export-namespace-from { safari }
   transform-modules-commonjs
   transform-dynamic-import
+  transform-export-namespace-from { }
   syntax-import-meta
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

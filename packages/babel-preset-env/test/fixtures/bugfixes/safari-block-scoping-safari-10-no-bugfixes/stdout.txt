@@ -30,7 +30,7 @@ Using plugins:
   transform-template-literals { safari < 13 }
   transform-unicode-regex { safari < 12 }
   transform-block-scoping { safari < 11 }
-  transform-export-namespace-from { safari }
+  transform-export-namespace-from { safari < 14.1 }
   transform-modules-commonjs
   transform-dynamic-import
   syntax-import-meta

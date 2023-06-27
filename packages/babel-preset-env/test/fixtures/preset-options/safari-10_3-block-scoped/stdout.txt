@@ -27,7 +27,7 @@ Using plugins:
   transform-async-to-generator { safari < 10.1 }
   transform-exponentiation-operator { safari < 10.1 }
   transform-unicode-regex { safari < 12 }
-  transform-export-namespace-from { safari }
+  transform-export-namespace-from { safari < 14.1 }
   bugfix/transform-safari-block-shadowing { safari < 11 }
   bugfix/transform-safari-for-shadowing { safari < 11 }
   bugfix/transform-safari-id-destructuring-collision-in-function-expression { safari }
