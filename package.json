@@ -95,7 +95,6 @@
     "glob-watcher/chokidar": "npm:^3.4.0",
     "@types/babel__core": "link:./nope",
     "@types/babel__traverse": "link:./nope",
-    "@babel/helper-define-polyfill-provider/@babel/helper-compilation-targets": "workspace:*",
     "@babel/parser/@babel/types": "workspace:*",
     "@babel/plugin-syntax-unicode-sets-regex/@babel/helper-create-regexp-features-plugin": "workspace:*",
     "babel-plugin-polyfill-corejs2/@babel/compat-data": "workspace:*"
