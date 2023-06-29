@@ -46,7 +46,9 @@ jobs:
           - create-react-app
           - vue-cli
           - jest
-          - react-native
+          # todo: Enable this test when metro-source-map does not reassign NodePath cache
+          # https://github.com/facebook/metro/blob/29bb5f2ad3319ba8f4764c3993aa85c15f59af23/packages/metro-source-map/src/generateFunctionMap.js#L182
+          # react-native
           - prettier
     steps:
       - name: Get yarn1 cache directory path
