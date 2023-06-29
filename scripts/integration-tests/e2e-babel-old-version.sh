@@ -28,9 +28,10 @@ node -e "\
   var pkg = require('./package.json');\
   pkg.devDependencies['@babel/core'] = '7.0.0';\
   Object.assign(pkg.resolutions, {\
-    '@babel/core': '7.0.0',\
-    '@babel/helpers': '7.0.2',\
-    '@babel/traverse': '7.0.0'\
+    '@babel/core@npm:*': '7.0.0',\
+    '@babel/core@npm:7.0.0/@babel/traverse': '7.0.0',\
+    '@babel/core@npm:7.0.0/@babel/helpers': '7.0.0',\
+    '@babel/helpers@npm:7.0.0/@babel/traverse': '7.0.0',\
   });\
   fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2));\
 "
