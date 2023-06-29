@@ -320,6 +320,8 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
       const isAccessor = getId || setId;
 
       if (isStatic) {
+        // NOTE: This package has a peerDependency on @babel/core@^7.0.0, but these
+        // helpers have been introduced in @babel/helpers@7.1.0.
         const helperName =
           isMethod && !isAccessor
             ? "classStaticPrivateMethodGet"
