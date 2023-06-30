@@ -3,6 +3,8 @@
     "chrome": "112",
     "opera": "98",
     "edge": "112",
+    "firefox": "116",
+    "deno": "1.32",
     "electron": "24.0"
   },
   "transform-class-static-block": {
