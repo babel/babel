@@ -185,12 +185,12 @@ class Printer {
     if (this.format.minified) {
       this._buf.removeLastSemicolon();
     }
-    this.sourceWithOffset("end", node.loc, 0, -1);
+    this.sourceWithOffset("end", node.loc, -1);
     this.token("}");
   }
 
   rightParens(node: t.Node): void {
-    this.sourceWithOffset("end", node.loc, 0, -1);
+    this.sourceWithOffset("end", node.loc, -1);
     this.token(")");
   }
 
@@ -365,14 +365,13 @@ class Printer {
   sourceWithOffset(
     prop: "start" | "end",
     loc: Loc | undefined,
-    lineOffset: number,
     columnOffset: number,
   ): void {
     if (!loc) return;
 
     this._catchUp(prop, loc);
 
-    this._buf.sourceWithOffset(prop, loc, lineOffset, columnOffset);
+    this._buf.sourceWithOffset(prop, loc, columnOffset);
   }
 
   withSource(

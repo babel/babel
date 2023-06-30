@@ -443,18 +443,17 @@ export default class Buffer {
 
     // Since this is called extremely often, we re-use the same _sourcePosition
     // object for the whole lifetime of the buffer.
-    this._normalizePosition(prop, loc, 0, 0);
+    this._normalizePosition(prop, loc, 0);
   }
 
   sourceWithOffset(
     prop: "start" | "end",
     loc: Loc | undefined,
-    lineOffset: number,
     columnOffset: number,
   ): void {
     if (!this._map) return;
 
-    this._normalizePosition(prop, loc, lineOffset, columnOffset);
+    this._normalizePosition(prop, loc, columnOffset);
   }
 
   /**
@@ -469,17 +468,12 @@ export default class Buffer {
     cb();
   }
 
-  _normalizePosition(
-    prop: "start" | "end",
-    loc: Loc,
-    lineOffset: number,
-    columnOffset: number,
-  ) {
+  _normalizePosition(prop: "start" | "end", loc: Loc, columnOffset: number) {
     const pos = loc[prop];
     const target = this._sourcePosition;
 
     if (pos) {
-      target.line = pos.line + lineOffset;
+      target.line = pos.line;
       target.column = Math.max(pos.column + columnOffset, 0);
       target.filename = loc.filename;
     }
