@@ -27,6 +27,8 @@ export default function splitExportDeclaration(
     const declaration = exportDeclaration.get("declaration");
     const standaloneDeclaration =
       declaration.isFunctionDeclaration() || declaration.isClassDeclaration();
+    const exportExpr =
+      declaration.isFunctionExpression() || declaration.isClassExpression();
 
     const scope = declaration.isScope()
       ? declaration.scope.parent
@@ -41,13 +43,13 @@ export default function splitExportDeclaration(
 
       id = scope.generateUidIdentifier("default");
 
-      if (
-        standaloneDeclaration ||
-        declaration.isFunctionExpression() ||
-        declaration.isClassExpression()
-      ) {
+      if (standaloneDeclaration || exportExpr) {
         declaration.node.id = cloneNode(id);
       }
+    } else if (exportExpr && scope.hasBinding(id.name)) {
+      needBindingRegistration = true;
+
+      id = scope.generateUidIdentifier(id.name);
     }
 
     const updatedDeclaration = standaloneDeclaration
