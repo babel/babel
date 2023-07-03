@@ -26,16 +26,10 @@ class Foo {
     function g(o, r = (() => o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(babelHelpers.classPrivateFieldLooseBase(o.Foo, _self)[_self].getSelf(), _m)[_m])()?.()) {
       return r;
     }
-    function h(fnDeep, r = (() => {
-      var _fnDeep$very$o$Foo;
-      return (_fnDeep$very$o$Foo = fnDeep?.().very.o?.Foo) === null || _fnDeep$very$o$Foo === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(_fnDeep$very$o$Foo, _m)[_m]();
-    })()) {
+    function h(fnDeep, r = (_fnDeep$very$o$Foo => (_fnDeep$very$o$Foo = fnDeep?.().very.o?.Foo) === null || _fnDeep$very$o$Foo === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(_fnDeep$very$o$Foo, _m)[_m]())()) {
       return r;
     }
-    function i(fn, r = (() => {
-      var _getSelf;
-      return (_getSelf = (() => fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self])()?.getSelf()) === null || _getSelf === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(_getSelf.self, _m)[_m]();
-    })()) {
+    function i(fn, r = (_getSelf => (_getSelf = (() => fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self])()?.getSelf()) === null || _getSelf === void 0 ? void 0 : babelHelpers.classPrivateFieldLooseBase(_getSelf.self, _m)[_m]())()) {
       return r;
     }
     function j(fn, r = (() => babelHelpers.classPrivateFieldLooseBase(babelHelpers.classPrivateFieldLooseBase(fn().Foo, _self)[_self].getSelf().self, _m)[_m]?.())()) {
