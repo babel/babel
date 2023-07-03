@@ -50,36 +50,32 @@ function needsMemoize(
   }
 }
 
-export function transform(
+interface OptionalChainAssumptions {
+  pureGetters: boolean;
+  noDocumentAll: boolean;
+}
+
+export function transformOptionalChain(
   path: NodePath<t.OptionalCallExpression | t.OptionalMemberExpression>,
-  {
-    pureGetters,
-    noDocumentAll,
-  }: { pureGetters: boolean; noDocumentAll: boolean },
+  { pureGetters, noDocumentAll }: OptionalChainAssumptions,
+  replacementPath: NodePath<t.Expression>,
+  ifNullish: () => t.Expression,
+  wrapLast?: (value: t.Expression) => t.Expression,
+  willReplacementCastToBoolean: boolean = false,
 ) {
   const { scope } = path;
-  // maybeWrapped points to the outermost transparent expression wrapper
-  // or the path itself
-  const maybeWrapped = findOutermostTransparentParent(path);
-  const { parentPath } = maybeWrapped;
-  const willReplacementCastToBoolean = willPathCastToBoolean(maybeWrapped);
-  let isDeleteOperation = false;
-  const parentIsCall =
-    parentPath.isCallExpression({ callee: maybeWrapped.node }) &&
-    // note that the first condition must implies that `path.optional` is `true`,
-    // otherwise the parentPath should be an OptionalCallExpression
-    path.isOptionalMemberExpression();
 
-  const optionals = [];
-
-  let optionalPath = path;
   // Replace `function (a, x = a.b?.c) {}` to `function (a, x = (() => a.b?.c)() ){}`
   // so the temporary variable can be injected in correct scope
-  if (scope.path.isPattern() && needsMemoize(optionalPath)) {
+  if (scope.path.isPattern() && needsMemoize(path)) {
     path.replaceWith(template.ast`(() => ${path.node})()` as t.Statement);
     // The injected optional chain will be queued and eventually transformed when visited
     return;
   }
+
+  const optionals = [];
+
+  let optionalPath = path;
   while (
     optionalPath.isOptionalMemberExpression() ||
     optionalPath.isOptionalCallExpression()
@@ -102,12 +98,6 @@ export function transform(
     }
   }
 
-  // todo: Improve replacementPath typings
-  let replacementPath: NodePath<any> = path;
-  if (parentPath.isUnaryExpression({ operator: "delete" })) {
-    replacementPath = parentPath;
-    isDeleteOperation = true;
-  }
   for (let i = optionals.length - 1; i >= 0; i--) {
     const node = optionals[i] as unknown as
       | t.MemberExpression
@@ -180,63 +170,103 @@ export function transform(
         node.callee = t.memberExpression(node.callee, t.identifier("call"));
       }
     }
-    let replacement = replacementPath.node;
-    // Ensure (a?.b)() has proper `this`
-    // The `parentIsCall` is constant within loop, we should check i === 0
-    // to ensure that it is only applied to the first optional chain element
-    // i.e. `?.b` in `(a?.b.c)()`
-    if (i === 0 && parentIsCall) {
-      // `(a?.b)()` to `(a == null ? undefined : a.b.bind(a))()`
-      // object must not be Super as super?.foo is invalid
-      const object = skipTransparentExprWrapperNodes(
-        replacement.object,
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-      ) as any as t.Expression;
-      let baseRef;
-      if (!pureGetters || !isSimpleMemberExpression(object)) {
-        // memoize the context object when getters are not always pure
-        // or the object is not a simple member expression
-        // `(a?.b.c)()` to `(a == null ? undefined : (_a$b = a.b).c.bind(_a$b))()`
-        baseRef = scope.maybeGenerateMemoised(object);
-        if (baseRef) {
-          replacement.object = t.assignmentExpression("=", baseRef, object);
-        }
-      }
-      replacement = t.callExpression(
-        t.memberExpression(replacement, t.identifier("bind")),
-        [t.cloneNode(baseRef ?? object)],
-      );
-    }
+
+    const replacement = replacementPath.node;
 
     if (willReplacementCastToBoolean) {
-      // `if (a?.b) {}` transformed to `if (a != null && a.b) {}`
-      // we don't need to return `void 0` because the returned value will
-      // eventually cast to boolean.
       const nonNullishCheck = noDocumentAll
         ? ast`${t.cloneNode(check)} != null`
         : ast`
-            ${t.cloneNode(check)} !== null && ${t.cloneNode(ref)} !== void 0`;
+        ${t.cloneNode(check)} !== null && ${t.cloneNode(ref)} !== void 0`;
+
+      // `if (a?.b) {}` transformed to `if (a != null && a.b) {}`
+      // we don't need to return `void 0` because the returned value will
+      // eventually cast to boolean.
       replacementPath.replaceWith(
-        t.logicalExpression("&&", nonNullishCheck, replacement),
+        t.logicalExpression(
+          "&&",
+          nonNullishCheck,
+          i === 0 && wrapLast ? wrapLast(replacement) : replacement,
+        ),
       );
       replacementPath = skipTransparentExprWrappers(
-        // @ts-expect-error todo(flow->ts)
         replacementPath.get("right"),
       );
     } else {
       const nullishCheck = noDocumentAll
         ? ast`${t.cloneNode(check)} == null`
         : ast`
-            ${t.cloneNode(check)} === null || ${t.cloneNode(ref)} === void 0`;
-
-      const returnValue = isDeleteOperation ? ast`true` : ast`void 0`;
+        ${t.cloneNode(check)} === null || ${t.cloneNode(ref)} === void 0`;
       replacementPath.replaceWith(
-        t.conditionalExpression(nullishCheck, returnValue, replacement),
+        t.conditionalExpression(
+          nullishCheck,
+          ifNullish(),
+          i === 0 && wrapLast ? wrapLast(replacement) : replacement,
+        ),
       );
       replacementPath = skipTransparentExprWrappers(
-        // @ts-expect-error todo(flow->ts)
         replacementPath.get("alternate"),
       );
     }
+  }
+}
+
+export function transform(
+  path: NodePath<t.OptionalCallExpression | t.OptionalMemberExpression>,
+  assumptions: OptionalChainAssumptions,
+) {
+  const { scope } = path;
+
+  // maybeWrapped points to the outermost transparent expression wrapper
+  // or the path itself
+  const maybeWrapped = findOutermostTransparentParent(path);
+  const { parentPath } = maybeWrapped;
+  const willReplacementCastToBoolean = willPathCastToBoolean(maybeWrapped);
+
+  if (parentPath.isUnaryExpression({ operator: "delete" })) {
+    transformOptionalChain(path, assumptions, parentPath, () =>
+      t.booleanLiteral(true),
+    );
+  } else {
+    let wrapLast;
+    if (
+      parentPath.isCallExpression({ callee: maybeWrapped.node }) &&
+      // note that the first condition must implies that `path.optional` is `true`,
+      // otherwise the parentPath should be an OptionalCallExpression
+      path.isOptionalMemberExpression()
+    ) {
+      // Ensure (a?.b)() has proper `this`
+      wrapLast = (replacement: t.MemberExpression) => {
+        // `(a?.b)()` to `(a == null ? undefined : a.b.bind(a))()`
+        // object must not be Super as super?.foo is invalid
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+        const object = skipTransparentExprWrapperNodes(
+          replacement.object,
+        ) as t.Expression;
+        let baseRef: t.Expression;
+        if (!assumptions.pureGetters || !isSimpleMemberExpression(object)) {
+          // memoize the context object when getters are not always pure
+          // or the object is not a simple member expression
+          // `(a?.b.c)()` to `(a == null ? undefined : (_a$b = a.b).c.bind(_a$b))()`
+          baseRef = scope.maybeGenerateMemoised(object);
+          if (baseRef) {
+            replacement.object = t.assignmentExpression("=", baseRef, object);
+          }
+        }
+        return t.callExpression(
+          t.memberExpression(replacement, t.identifier("bind")),
+          [t.cloneNode(baseRef ?? object)],
+        );
+      };
+    }
+
+    transformOptionalChain(
+      path,
+      assumptions,
+      path,
+      () => scope.buildUndefinedNode(),
+      wrapLast,
+      willReplacementCastToBoolean,
+    );
   }
 }
