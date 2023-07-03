@@ -66,9 +66,8 @@ export function transformOptionalChain(
   path: NodePath<t.OptionalCallExpression | t.OptionalMemberExpression>,
   { pureGetters, noDocumentAll }: OptionalChainAssumptions,
   replacementPath: NodePath<t.Expression>,
-  ifNullish: () => t.Expression,
+  ifNullish: t.Expression,
   wrapLast?: (value: t.Expression) => t.Expression,
-  willReplacementCastToBoolean: boolean = false,
 ) {
   const { scope } = path;
 
@@ -198,19 +197,24 @@ export function transformOptionalChain(
   let result = replacementPath.node;
   if (wrapLast) result = wrapLast(result);
 
-  if (willReplacementCastToBoolean) {
-    const check = checks
-      .map(noDocumentAll ? NULLISH_CHECK_NO_DDA_NEG : NULLISH_CHECK_NEG)
-      .reduce((expr, check) => t.logicalExpression("&&", expr, check));
-    replacementPath.replaceWith(template.expression.ast`${check} && ${result}`);
-  } else {
-    const check = checks
-      .map(noDocumentAll ? NULLISH_CHECK_NO_DDA : NULLISH_CHECK)
-      .reduce((expr, check) => t.logicalExpression("||", expr, check));
-    replacementPath.replaceWith(
-      template.expression.ast`${check} ? ${ifNullish()} : ${result}`,
-    );
-  }
+  const ifNullishBoolean = t.isBooleanLiteral(ifNullish);
+  const ifNullishFalse = ifNullishBoolean && ifNullish.value === false;
+
+  // prettier-ignore
+  const tpl = ifNullishFalse
+    ? (noDocumentAll ? NULLISH_CHECK_NO_DDA_NEG : NULLISH_CHECK_NEG)
+    : (noDocumentAll ? NULLISH_CHECK_NO_DDA : NULLISH_CHECK);
+  const logicalOp = ifNullishFalse ? "&&" : "||";
+
+  const check = checks
+    .map(tpl)
+    .reduce((expr, check) => t.logicalExpression(logicalOp, expr, check));
+
+  replacementPath.replaceWith(
+    ifNullishBoolean
+      ? t.logicalExpression(logicalOp, check, result)
+      : t.conditionalExpression(check, ifNullish, result),
+  );
 }
 
 export function transform(
@@ -223,10 +227,12 @@ export function transform(
   // or the path itself
   const maybeWrapped = findOutermostTransparentParent(path);
   const { parentPath } = maybeWrapped;
-  const willReplacementCastToBoolean = willPathCastToBoolean(maybeWrapped);
 
   if (parentPath.isUnaryExpression({ operator: "delete" })) {
-    transformOptionalChain(path, assumptions, parentPath, () =>
+    transformOptionalChain(
+      path,
+      assumptions,
+      parentPath,
       t.booleanLiteral(true),
     );
   } else {
@@ -266,9 +272,10 @@ export function transform(
       path,
       assumptions,
       path,
-      () => scope.buildUndefinedNode(),
+      willPathCastToBoolean(maybeWrapped)
+        ? t.booleanLiteral(false)
+        : scope.buildUndefinedNode(),
       wrapLast,
-      willReplacementCastToBoolean,
     );
   }
 }
