@@ -1,6 +1,8 @@
 "use strict";
 
-const semver = require("semver");
+const semver = process.env.BABEL_8_BREAKING
+  ? require("semver")
+  : require("@nicolo-ribaudo/semver-v6");
 const convert = require("./convert/index.cjs");
 
 const babelParser = require(require.resolve("@babel/parser", {

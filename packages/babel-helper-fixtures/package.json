@@ -15,7 +15,8 @@
   "homepage": "https://babel.dev/docs/en/next/babel-helper-fixtures",
   "main": "./lib/index.js",
   "dependencies": {
-    "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
+    "@nicolo-ribaudo/semver-v6": "^6.3.3",
+    "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : "
   },
   "devDependencies": {
     "@types/semver": "^7.3.4"

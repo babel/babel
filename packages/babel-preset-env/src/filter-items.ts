@@ -1,4 +1,7 @@
-import semver from "semver";
+/// <reference path="../../../lib/semver.d.ts" />
+
+// TODO(Babel 8): Use "semver" directly
+import semver from "@nicolo-ribaudo/semver-v6";
 import { minVersions } from "./available-plugins";
 
 const has = Function.call.bind(Object.hasOwnProperty);

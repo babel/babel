@@ -1,10 +1,13 @@
+/// <reference path="../../../lib/semver.d.ts" />
+
 import { types as t } from "@babel/core";
 import type { PluginAPI, PluginObject } from "@babel/core";
 import type { NodePath } from "@babel/traverse";
 import nameFunction from "@babel/helper-function-name";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
 
-import semver from "semver";
+// TODO(Babel 8): Use "semver" directly
+import semver from "@nicolo-ribaudo/semver-v6";
 
 import {
   buildPrivateNamesNodes,
