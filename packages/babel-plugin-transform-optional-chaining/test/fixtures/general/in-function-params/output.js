@@ -4,10 +4,10 @@ function g({
   b = a === null || a === void 0 ? void 0 : a.c
 }) {}
 function h(a, {
-  b = ((_a$b, _a$b$c) => (_a$b = a.b) === null || _a$b === void 0 || (_a$b$c = _a$b.c) === null || _a$b$c === void 0 ? void 0 : _a$b$c.d.e)()
+  b = (_a$b => (_a$b = a.b) === null || _a$b === void 0 || (_a$b = _a$b.c) === null || _a$b === void 0 ? void 0 : _a$b.d.e)()
 }) {}
 function i(a, {
-  b = ((_a$b2, _a$b2$c) => (_a$b2 = a.b) === null || _a$b2 === void 0 || (_a$b2$c = _a$b2.c) === null || _a$b2$c === void 0 ? void 0 : _a$b2$c.d)().e
+  b = (_a$b2 => (_a$b2 = a.b) === null || _a$b2 === void 0 || (_a$b2 = _a$b2.c) === null || _a$b2 === void 0 ? void 0 : _a$b2.d)().e
 }) {}
 function j(a, {
   b = (_a$b3 => a === null || a === void 0 || (_a$b3 = a.b) === null || _a$b3 === void 0 ? void 0 : _a$b3.c().d.e)()

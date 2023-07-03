@@ -30,36 +30,36 @@ class C {
     return !!(o !== null && o !== void 0 && (_o$a$b3 = o.a.b) !== null && _o$a$b3 !== void 0 && _o$a$b3.c.d);
   }
   static testIfDeep(o) {
-    var _o$obj, _o$obj$a$b;
-    if ((_o$obj = o.obj) !== null && _o$obj !== void 0 && (_o$obj$a$b = _o$obj.a.b) !== null && _o$obj$a$b !== void 0 && _o$obj$a$b.c.d) {
+    var _o$obj;
+    if ((_o$obj = o.obj) !== null && _o$obj !== void 0 && (_o$obj = _o$obj.a.b) !== null && _o$obj !== void 0 && _o$obj.c.d) {
       return true;
     }
     return false;
   }
   static testConditionalDeep(o) {
-    var _o$obj2, _o$obj2$a$b;
-    return (_o$obj2 = o.obj) !== null && _o$obj2 !== void 0 && (_o$obj2$a$b = _o$obj2.a.b) !== null && _o$obj2$a$b !== void 0 && _o$obj2$a$b.c.d ? true : false;
+    var _o$obj2;
+    return (_o$obj2 = o.obj) !== null && _o$obj2 !== void 0 && (_o$obj2 = _o$obj2.a.b) !== null && _o$obj2 !== void 0 && _o$obj2.c.d ? true : false;
   }
   static testLoopDeep(o) {
     while ((_o$obj3 = o.obj) !== null && _o$obj3 !== void 0 && _o$obj3.a.b.c.d) {
       var _o$obj3;
-      for (; (_o$obj4 = o.obj) !== null && _o$obj4 !== void 0 && (_o$obj4$a$b$c = _o$obj4.a.b.c) !== null && _o$obj4$a$b$c !== void 0 && _o$obj4$a$b$c.d;) {
-        var _o$obj4, _o$obj4$a$b$c;
+      for (; (_o$obj4 = o.obj) !== null && _o$obj4 !== void 0 && (_o$obj4 = _o$obj4.a.b.c) !== null && _o$obj4 !== void 0 && _o$obj4.d;) {
+        var _o$obj4;
         let i = 0;
         do {
-          var _o$obj5, _o$obj5$a$b;
+          var _o$obj5;
           i++;
           if (i === 2) {
             return true;
           }
-        } while ((_o$obj5 = o.obj) !== null && _o$obj5 !== void 0 && (_o$obj5$a$b = _o$obj5.a.b) !== null && _o$obj5$a$b !== void 0 && _o$obj5$a$b.c.d);
+        } while ((_o$obj5 = o.obj) !== null && _o$obj5 !== void 0 && (_o$obj5 = _o$obj5.a.b) !== null && _o$obj5 !== void 0 && _o$obj5.c.d);
       }
     }
     return false;
   }
   static testNegateDeep(o) {
-    var _o$obj6, _o$obj6$a$b;
-    return !!((_o$obj6 = o.obj) !== null && _o$obj6 !== void 0 && (_o$obj6$a$b = _o$obj6.a.b) !== null && _o$obj6$a$b !== void 0 && _o$obj6$a$b.c.d);
+    var _o$obj6;
+    return !!((_o$obj6 = o.obj) !== null && _o$obj6 !== void 0 && (_o$obj6 = _o$obj6.a.b) !== null && _o$obj6 !== void 0 && _o$obj6.c.d);
   }
   static testLogicalInIf(o) {
     var _o$a$b4, _o$a;

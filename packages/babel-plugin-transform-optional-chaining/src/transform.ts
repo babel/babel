@@ -114,6 +114,8 @@ export function transformOptionalChain(
 
   const checks = [];
 
+  let tmpVar;
+
   for (let i = optionals.length - 1; i >= 0; i--) {
     const node = optionals[i] as unknown as
       | t.MemberExpression
@@ -138,23 +140,27 @@ export function transformOptionalChain(
       // we can avoid a needless memoize. We only do this if the callee is a simple member
       // expression, to avoid multiple calls to nested call expressions.
       check = ref = node.callee;
+    } else if (scope.isStatic(chain)) {
+      check = ref = chainWithTypes;
     } else {
-      ref = scope.maybeGenerateMemoised(chain);
-      if (ref) {
-        check = t.assignmentExpression(
-          "=",
-          t.cloneNode(ref),
-          // Here `chainWithTypes` MUST NOT be cloned because it could be
-          // updated when generating the memoised context of a call
-          // expression. It must be an Expression when `ref` is an identifier
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-          chainWithTypes as t.Expression,
-        );
-
-        isCall ? (node.callee = ref) : (node.object = ref);
-      } else {
-        check = ref = chainWithTypes;
+      // We cannot re-use the tmpVar for calls, because we need to
+      // store both the method and the receiver.
+      if (!tmpVar || isCall) {
+        tmpVar = scope.generateUidIdentifierBasedOnNode(chain);
+        scope.push({ id: t.cloneNode(tmpVar) });
       }
+      ref = tmpVar;
+      check = t.assignmentExpression(
+        "=",
+        t.cloneNode(tmpVar),
+        // Here `chainWithTypes` MUST NOT be cloned because it could be
+        // updated when generating the memoised context of a call
+        // expression. It must be an Expression when `ref` is an identifier
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+        chainWithTypes as t.Expression,
+      );
+
+      isCall ? (node.callee = ref) : (node.object = ref);
     }
 
     // Ensure call expressions have the proper `this`
