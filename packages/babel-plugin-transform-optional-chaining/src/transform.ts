@@ -6,8 +6,6 @@ import {
 } from "@babel/helper-skip-transparent-expression-wrappers";
 import { willPathCastToBoolean, findOutermostTransparentParent } from "./util";
 
-const { ast } = template.expression;
-
 function isSimpleMemberExpression(
   expression: t.Expression | t.Super,
 ): expression is t.Identifier | t.Super | t.MemberExpression {
@@ -49,6 +47,15 @@ function needsMemoize(
     optionalPath = childPath;
   }
 }
+
+const NULLISH_CHECK = template.expression(
+  `%%check%% === null || %%ref%% === void 0`,
+);
+const NULLISH_CHECK_NO_DDA = template.expression(`%%check%% == null`);
+const NULLISH_CHECK_NEG = template.expression(
+  `%%check%% !== null && %%ref%% !== void 0`,
+);
+const NULLISH_CHECK_NO_DDA_NEG = template.expression(`%%check%% != null`);
 
 interface OptionalChainAssumptions {
   pureGetters: boolean;
@@ -99,6 +106,14 @@ export function transformOptionalChain(
       optionalPath = skipTransparentExprWrappers(optionalPath.get("callee"));
     }
   }
+
+  if (optionals.length === 0) {
+    // Malformed AST: there was an OptionalMemberExpression node
+    // with no actual optional elements.
+    return;
+  }
+
+  const checks = [];
 
   for (let i = optionals.length - 1; i >= 0; i--) {
     const node = optionals[i] as unknown as
@@ -173,43 +188,28 @@ export function transformOptionalChain(
       }
     }
 
-    const replacement = replacementPath.node;
+    const data = { check: t.cloneNode(check), ref: t.cloneNode(ref) };
+    // We make `ref` non-enumerable, so that @babel/template doesn't throw
+    // in the noDocumentAll template if it's not used.
+    Object.defineProperty(data, "ref", { enumerable: false });
+    checks.push(data);
+  }
 
-    if (willReplacementCastToBoolean) {
-      const nonNullishCheck = noDocumentAll
-        ? ast`${t.cloneNode(check)} != null`
-        : ast`
-        ${t.cloneNode(check)} !== null && ${t.cloneNode(ref)} !== void 0`;
+  let result = replacementPath.node;
+  if (wrapLast) result = wrapLast(result);
 
-      // `if (a?.b) {}` transformed to `if (a != null && a.b) {}`
-      // we don't need to return `void 0` because the returned value will
-      // eventually cast to boolean.
-      replacementPath.replaceWith(
-        t.logicalExpression(
-          "&&",
-          nonNullishCheck,
-          i === 0 && wrapLast ? wrapLast(replacement) : replacement,
-        ),
-      );
-      replacementPath = skipTransparentExprWrappers(
-        replacementPath.get("right"),
-      );
-    } else {
-      const nullishCheck = noDocumentAll
-        ? ast`${t.cloneNode(check)} == null`
-        : ast`
-        ${t.cloneNode(check)} === null || ${t.cloneNode(ref)} === void 0`;
-      replacementPath.replaceWith(
-        t.conditionalExpression(
-          nullishCheck,
-          ifNullish(),
-          i === 0 && wrapLast ? wrapLast(replacement) : replacement,
-        ),
-      );
-      replacementPath = skipTransparentExprWrappers(
-        replacementPath.get("alternate"),
-      );
-    }
+  if (willReplacementCastToBoolean) {
+    const check = checks
+      .map(noDocumentAll ? NULLISH_CHECK_NO_DDA_NEG : NULLISH_CHECK_NEG)
+      .reduce((expr, check) => t.logicalExpression("&&", expr, check));
+    replacementPath.replaceWith(template.expression.ast`${check} && ${result}`);
+  } else {
+    const check = checks
+      .map(noDocumentAll ? NULLISH_CHECK_NO_DDA : NULLISH_CHECK)
+      .reduce((expr, check) => t.logicalExpression("||", expr, check));
+    replacementPath.replaceWith(
+      template.expression.ast`${check} ? ${ifNullish()} : ${result}`,
+    );
   }
 }
 
