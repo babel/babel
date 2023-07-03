@@ -68,7 +68,9 @@ export function transformOptionalChain(
   // Replace `function (a, x = a.b?.c) {}` to `function (a, x = (() => a.b?.c)() ){}`
   // so the temporary variable can be injected in correct scope
   if (scope.path.isPattern() && needsMemoize(path)) {
-    path.replaceWith(template.ast`(() => ${path.node})()` as t.Statement);
+    replacementPath.replaceWith(
+      template.expression.ast`(() => ${replacementPath.node})()`,
+    );
     // The injected optional chain will be queued and eventually transformed when visited
     return;
   }
