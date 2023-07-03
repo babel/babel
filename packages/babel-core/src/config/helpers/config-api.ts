@@ -1,4 +1,5 @@
-import semver from "semver";
+// TODO(Babel 8): Use "semver" directly
+import semver from "@nicolo-ribaudo/semver-v6";
 import type { Targets } from "@babel/helper-compilation-targets";
 
 import { version as coreVersion } from "../../";

@@ -1,6 +1,6 @@
 import { loadPartialConfigSync } from "../lib/index.js";
 import path from "path";
-import semver from "semver";
+import semver from "@nicolo-ribaudo/semver-v6";
 import { USE_ESM, commonJS } from "$repo-utils";
 
 const { __dirname, require } = commonJS(import.meta.url);

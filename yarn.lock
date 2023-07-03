@@ -228,6 +228,7 @@ __metadata:
     "@babel/helper-fixtures": "workspace:^"
     "@jridgewell/trace-mapping": ^0.3.17
     "@nicolo-ribaudo/chokidar-2": "condition:BABEL_8_BREAKING ? : 2.1.8-no-fsevents.3"
+    "@nicolo-ribaudo/semver-v6": ^6.3.3
     "@types/fs-readdir-recursive": ^1.1.0
     "@types/glob": ^7.2.0
     chokidar: ^3.4.0
@@ -237,7 +238,6 @@ __metadata:
     glob: ^7.2.0
     make-dir: "condition:BABEL_8_BREAKING ? : ^2.1.0"
     rimraf: ^3.0.0
-    semver: ^6.3.0
     slash: "condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0"
   peerDependencies:
     "@babel/core": ^7.0.0-0
@@ -364,6 +364,7 @@ __metadata:
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
     "@jridgewell/trace-mapping": ^0.3.17
+    "@nicolo-ribaudo/semver-v6": ^6.3.3
     "@types/convert-source-map": ^1.5.1
     "@types/debug": ^4.1.0
     "@types/gensync": ^1.0.0
@@ -374,7 +375,7 @@ __metadata:
     gensync: ^1.0.0-beta.2
     json5: ^2.2.2
     rimraf: ^3.0.0
-    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
+    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : "
     ts-node: ^10.9.1
   languageName: unknown
   linkType: soft
@@ -393,11 +394,12 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
     "@nicolo-ribaudo/eslint-scope-5-internals": "condition:BABEL_8_BREAKING ? : 5.1.1-v1"
+    "@nicolo-ribaudo/semver-v6": "condition:BABEL_8_BREAKING ? : ^6.3.3"
     dedent: ^0.7.0
     eslint: ^8.22.0
     eslint-scope: "condition:BABEL_8_BREAKING ? ^7.1.1 : "
     eslint-visitor-keys: "condition:BABEL_8_BREAKING ? ^3.3.0 : ^2.1.0"
-    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
+    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : "
   peerDependencies:
     "@babel/core": ">=7.11.0"
     eslint: ^7.5.0 || ^8.0.0
@@ -574,11 +576,12 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-validator-option": "workspace:^"
+    "@nicolo-ribaudo/semver-v6": ^6.3.3
     "@types/lru-cache": ^5.1.1
     "@types/semver": ^5.5.0
     browserslist: ^4.21.3
     lru-cache: "condition:BABEL_8_BREAKING ? ^7.14.1 : ^5.1.1"
-    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
+    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : "
   peerDependencies:
     "@babel/core": ^7.0.0
   languageName: unknown
@@ -619,7 +622,8 @@ __metadata:
     "@babel/helper-split-export-declaration": "workspace:^"
     "@babel/plugin-syntax-class-static-block": ^7.14.5
     "@babel/preset-env": "workspace:^"
-    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
+    "@nicolo-ribaudo/semver-v6": ^6.3.3
+    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : "
   peerDependencies:
     "@babel/core": ^7.0.0
   languageName: unknown
@@ -645,8 +649,9 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-annotate-as-pure": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
+    "@nicolo-ribaudo/semver-v6": ^6.3.3
     regexpu-core: ^5.3.1
-    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
+    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : "
   peerDependencies:
     "@babel/core": ^7.0.0
   languageName: unknown
@@ -688,8 +693,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-fixtures@workspace:packages/babel-helper-fixtures"
   dependencies:
+    "@nicolo-ribaudo/semver-v6": ^6.3.3
     "@types/semver": ^7.3.4
-    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
+    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : "
   languageName: unknown
   linkType: soft
 
@@ -3186,11 +3192,12 @@ __metadata:
     "@babel/runtime-corejs3": "workspace:^"
     "@babel/template": "workspace:^"
     "@babel/types": "workspace:^"
+    "@nicolo-ribaudo/semver-v6": ^6.3.3
     babel-plugin-polyfill-corejs2: ^0.4.3
     babel-plugin-polyfill-corejs3: ^0.8.1
     babel-plugin-polyfill-regenerator: ^0.5.0
     make-dir: "condition:BABEL_8_BREAKING ? : ^2.1.0"
-    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
+    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : "
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -3630,11 +3637,12 @@ __metadata:
     "@babel/preset-modules": ^0.1.5
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
+    "@nicolo-ribaudo/semver-v6": ^6.3.3
     babel-plugin-polyfill-corejs2: ^0.4.3
     babel-plugin-polyfill-corejs3: ^0.8.1
     babel-plugin-polyfill-regenerator: ^0.5.0
     core-js-compat: ^3.31.0
-    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
+    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : "
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -4443,6 +4451,24 @@ __metadata:
   dependencies:
     "@nicolo-ribaudo/eslint-scope-5-internals-BABEL_8_BREAKING-false": "npm:@nicolo-ribaudo/eslint-scope-5-internals@5.1.1-v1"
   checksum: 35c6c2d0fe2e6ff24708b60835fe4f53e8bcdc0dcda98f81ce04849d27e51f6039b213e08d8440d8ee14aa5b8d94654314b1a2ba4d64bb09bd16feb01db74631
+  languageName: node
+  linkType: hard
+
+"@nicolo-ribaudo/semver-v6-BABEL_8_BREAKING-false@npm:@nicolo-ribaudo/semver-v6@^6.3.3, @nicolo-ribaudo/semver-v6@npm:^6.3.3":
+  version: 6.3.3
+  resolution: "@nicolo-ribaudo/semver-v6@npm:6.3.3"
+  bin:
+    semver: bin/semver.js
+  checksum: 8290855b1591477d2298364541fda64fafd4acc110b387067a71c9b05f4105c0a4ac079857ae9cd107c42ee884e8724a406b5116f069575e02d7ab87a35a5272
+  languageName: node
+  linkType: hard
+
+"@nicolo-ribaudo/semver-v6@condition:BABEL_8_BREAKING ? : ^6.3.3":
+  version: 0.0.0-condition-95613c
+  resolution: "@nicolo-ribaudo/semver-v6@condition:BABEL_8_BREAKING?:^6.3.3#95613c"
+  dependencies:
+    "@nicolo-ribaudo/semver-v6-BABEL_8_BREAKING-false": "npm:@nicolo-ribaudo/semver-v6@^6.3.3"
+  checksum: c3d51e01a6abcc86bfc9d5ef99ec12b455bef66f45b27c2b7c9806c25d9e48bca7a7c3394155f224405d5d40b68eaa9780c3f1046aeec1f16478e6133d1f07b0
   languageName: node
   linkType: hard
 
@@ -14062,15 +14088,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"semver-BABEL_8_BREAKING-false@npm:semver@^6.3.0, semver@npm:^6.0.0, semver@npm:^6.1.0, semver@npm:^6.1.1, semver@npm:^6.1.2, semver@npm:^6.3.0":
-  version: 6.3.0
-  resolution: "semver@npm:6.3.0"
-  bin:
-    semver: ./bin/semver.js
-  checksum: 1b26ecf6db9e8292dd90df4e781d91875c0dcc1b1909e70f5d12959a23c7eebb8f01ea581c00783bbee72ceeaad9505797c381756326073850dc36ed284b21b9
-  languageName: node
-  linkType: hard
-
 "semver-BABEL_8_BREAKING-true@npm:semver@^7.3.4":
   version: 7.3.4
   resolution: "semver@npm:7.3.4"
@@ -14091,13 +14108,12 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"semver@condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0":
-  version: 0.0.0-condition-4d8c2f
-  resolution: "semver@condition:BABEL_8_BREAKING?^7.3.4:^6.3.0#4d8c2f"
+"semver@condition:BABEL_8_BREAKING ? ^7.3.4 : ":
+  version: 0.0.0-condition-414f33
+  resolution: "semver@condition:BABEL_8_BREAKING?^7.3.4:#414f33"
   dependencies:
-    semver-BABEL_8_BREAKING-false: "npm:semver@^6.3.0"
     semver-BABEL_8_BREAKING-true: "npm:semver@^7.3.4"
-  checksum: 7d234c05a75393edc945e70d0c67df4b61beb3ffe7eaa3c3ebd9b93627e5ff98afb009e52f82d6de4a1d425287c5f7f3c98631514bf1524d1a1c07cb511fb1b1
+  checksum: 41eeaa7c35f21b3c66a8d9d77ccd1db5d96e907cf3a340ada2e141b767c70ba71ed88c033f9965ff17ff1b77616d1b80dbb6701779734d6eb719eb4f6d3e9793
   languageName: node
   linkType: hard
 
@@ -14107,6 +14123,15 @@ fsevents@^1.2.7:
   bin:
     semver: ./bin/semver
   checksum: 57fd0acfd0bac382ee87cd52cd0aaa5af086a7dc8d60379dfe65fea491fb2489b6016400813930ecd61fd0952dae75c115287a1b16c234b1550887117744dfaf
+  languageName: node
+  linkType: hard
+
+"semver@npm:^6.0.0, semver@npm:^6.1.0, semver@npm:^6.1.1, semver@npm:^6.1.2, semver@npm:^6.3.0":
+  version: 6.3.0
+  resolution: "semver@npm:6.3.0"
+  bin:
+    semver: ./bin/semver.js
+  checksum: 1b26ecf6db9e8292dd90df4e781d91875c0dcc1b1909e70f5d12959a23c7eebb8f01ea581c00783bbee72ceeaad9505797c381756326073850dc36ed284b21b9
   languageName: node
   linkType: hard
 
