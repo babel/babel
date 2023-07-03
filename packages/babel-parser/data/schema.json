@@ -69,7 +69,7 @@
       "type": "boolean"
     },
     "createImportExpression": {
-      "description": "By default, `import(foo)` is parsed as `CallExpression(Import, [Identifier(foo)])`.\nSet this to true to parse it as an ImportExpression node",
+      "description": "By default, `import(foo)` is parsed as `CallExpression(Import, [Identifier(foo)])`.\nSet this to true to parse it as an `ImportExpression` node.",
       "type": "boolean",
       "default": false
     },
