@@ -182,6 +182,7 @@
               "objectRestSpread",
               "optionalCatchBinding",
               "optionalChaining",
+              "optionalChainingAssign",
               "partialApplication",
               "pipelineOperator",
               "placeholders",

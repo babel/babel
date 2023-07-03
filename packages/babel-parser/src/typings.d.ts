@@ -32,6 +32,7 @@ export type Plugin =
   | "objectRestSpread"
   | "optionalCatchBinding"
   | "optionalChaining"
+  | "optionalChainingAssign"
   | "partialApplication"
   | "placeholders"
   | "privateIn" // Enabled by default

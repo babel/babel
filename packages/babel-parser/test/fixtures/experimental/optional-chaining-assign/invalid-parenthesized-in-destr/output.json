@@ -1,0 +1,56 @@
+{
+  "type": "File",
+  "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+  "errors": [
+    "SyntaxError: Invalid optional chaining in the left-hand side of array destructuring pattern. (1:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+          "operator": "=",
+          "left": {
+            "type": "ArrayPattern",
+            "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}},
+            "elements": [
+              {
+                "type": "OptionalMemberExpression",
+                "start":2,"end":6,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":6,"index":6}},
+                "object": {
+                  "type": "Identifier",
+                  "start":2,"end":3,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":3,"index":3},"identifierName":"a"},
+                  "name": "a"
+                },
+                "computed": false,
+                "property": {
+                  "type": "Identifier",
+                  "start":5,"end":6,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":6,"index":6},"identifierName":"b"},
+                  "name": "b"
+                },
+                "optional": true,
+                "extra": {
+                  "parenthesized": true,
+                  "parenStart": 1
+                }
+              }
+            ]
+          },
+          "right": {
+            "type": "Identifier",
+            "start":11,"end":12,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":12,"index":12},"identifierName":"c"},
+            "name": "c"
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

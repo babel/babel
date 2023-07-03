@@ -113,7 +113,10 @@ export default abstract class LValParser extends NodeUtils {
             Errors.InvalidParenthesizedAssignment,
             { at: node },
           );
-        } else if (parenthesized.type !== "MemberExpression") {
+        } else if (
+          parenthesized.type !== "MemberExpression" &&
+          !this.isOptionalMemberExpression(parenthesized)
+        ) {
           // A parenthesized member expression can be in LHS but not in pattern.
           // If the LHS is later interpreted as a pattern, `checkLVal` will throw for member expression binding
           // i.e. `([(a.b) = []] = []) => {}`
@@ -552,6 +555,11 @@ export default abstract class LValParser extends NodeUtils {
     );
   }
 
+  // Overridden by the estree plugin
+  isOptionalMemberExpression(expression: Node) {
+    return expression.type === "OptionalMemberExpression";
+  }
+
   /**
    * Verify that a target expression is an lval (something that can be assigned to).
    *
@@ -600,7 +608,20 @@ export default abstract class LValParser extends NodeUtils {
     // toAssignable already reported this error with a nicer message.
     if (this.isObjectMethod(expression)) return;
 
-    if (type === "MemberExpression") {
+    const isOptionalMemberExpression =
+      this.isOptionalMemberExpression(expression);
+
+    if (isOptionalMemberExpression || type === "MemberExpression") {
+      if (isOptionalMemberExpression) {
+        this.expectPlugin("optionalChainingAssign", expression.loc.start);
+        if (ancestor.type !== "AssignmentExpression") {
+          this.raise(Errors.InvalidLhsOptionalChaining, {
+            at: expression,
+            ancestor,
+          });
+        }
+      }
+
       if (binding !== BindingFlag.TYPE_NONE) {
         this.raise(Errors.InvalidPropertyBindingPattern, { at: expression });
       }
@@ -649,9 +670,7 @@ export default abstract class LValParser extends NodeUtils {
       ? validity
       : [validity, type === "ParenthesizedExpression"];
     const nextAncestor =
-      type === "ArrayPattern" ||
-      type === "ObjectPattern" ||
-      type === "ParenthesizedExpression"
+      type === "ArrayPattern" || type === "ObjectPattern"
         ? ({ type } as const)
         : ancestor;
 

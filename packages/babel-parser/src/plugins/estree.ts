@@ -535,6 +535,13 @@ export default (superClass: typeof Parser) =>
       return node;
     }
 
+    isOptionalMemberExpression(node: N.Node) {
+      if (node.type === "ChainExpression") {
+        return node.expression.type === "MemberExpression";
+      }
+      return super.isOptionalMemberExpression(node);
+    }
+
     hasPropertyAsPrivateName(node: N.Node): boolean {
       if (node.type === "ChainExpression") {
         node = node.expression;

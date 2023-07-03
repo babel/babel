@@ -147,6 +147,10 @@ export default {
     `Invalid left-hand side in ${toNodeDescription(ancestor)}.`,
   InvalidLhsBinding: ({ ancestor }: { ancestor: LValAncestor }) =>
     `Binding invalid left-hand side in ${toNodeDescription(ancestor)}.`,
+  InvalidLhsOptionalChaining: ({ ancestor }: { ancestor: LValAncestor }) =>
+    `Invalid optional chaining in the left-hand side of ${toNodeDescription(
+      ancestor,
+    )}.`,
   InvalidNumber: "Invalid number.",
   InvalidOrMissingExponent:
     "Floating-point numbers require a valid exponent after the 'e'.",
