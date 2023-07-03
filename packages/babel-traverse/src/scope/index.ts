@@ -52,7 +52,7 @@ import {
   isExportDeclaration,
 } from "@babel/types";
 import type * as t from "@babel/types";
-import { scope as scopeCache } from "../cache";
+import { scope as scopeCache, binding as bindingCache } from "../cache";
 import type { Visitor } from "../types";
 import { isExplodedVisitor } from "../visitors";
 
@@ -383,8 +383,8 @@ export default class Scope {
   path: NodePath;
   block: t.Pattern | t.Scopable;
 
-  labels;
-  inited;
+  labels: Map<string, NodePath<t.LabeledStatement>>;
+  inited: boolean;
 
   bindings: { [name: string]: Binding };
   references: { [name: string]: true };
@@ -1307,6 +1307,8 @@ export default class Scope {
   }
 
   removeOwnBinding(name: string) {
+    const binding = this.bindings[name];
+    bindingCache.get(binding?.path.node)?.delete(binding?.identifier);
     delete this.bindings[name];
   }
 
