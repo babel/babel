@@ -1078,7 +1078,7 @@ export default class Scope {
     if (
       !init &&
       !unique &&
-      kind !== "const" &&
+      (kind === "var" || kind === "let") &&
       path.isFunction() &&
       // @ts-expect-error ArrowFunctionExpression never has a name
       !path.node.name &&
