@@ -474,6 +474,7 @@ export default class Buffer {
 
     if (pos) {
       target.line = pos.line;
+      // TODO: Fix https://github.com/babel/babel/issues/15712 in downstream
       target.column = Math.max(pos.column + columnOffset, 0);
       target.filename = loc.filename;
     }
