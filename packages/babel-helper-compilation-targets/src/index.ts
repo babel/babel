@@ -254,17 +254,20 @@ export default function getTargets(
 
     if (esmodules === "intersect") {
       for (const browser of Object.keys(queryBrowsers) as Target[]) {
-        const version = queryBrowsers[browser];
-        const esmSupportVersion =
-          // @ts-expect-error ie is not in ESM_SUPPORT
-          ESM_SUPPORT[browser];
+        if (browser !== "deno" && browser !== "ie") {
+          const esmSupportVersion =
+            ESM_SUPPORT[browser === "opera_mobile" ? "op_mob" : browser];
 
-        if (esmSupportVersion) {
-          queryBrowsers[browser] = getHighestUnreleased(
-            version,
-            semverify(esmSupportVersion),
-            browser,
-          );
+          if (esmSupportVersion) {
+            const version = queryBrowsers[browser];
+            queryBrowsers[browser] = getHighestUnreleased(
+              version,
+              semverify(esmSupportVersion),
+              browser,
+            );
+          } else {
+            delete queryBrowsers[browser];
+          }
         } else {
           delete queryBrowsers[browser];
         }

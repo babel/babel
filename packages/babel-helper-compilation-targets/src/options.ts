@@ -12,4 +12,5 @@ export const TargetNames = {
   electron: "electron",
   samsung: "samsung",
   rhino: "rhino",
+  opera_mobile: "opera_mobile",
 };

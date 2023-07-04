@@ -22,7 +22,7 @@ const browserNameMaps = {
     safari_ios: "ios",
     nodejs: "node",
     webview_android: "android",
-    opera_android: "op_mob",
+    opera_android: "opera_mobile",
     samsunginternet_android: "samsung",
   },
 };
@@ -34,11 +34,6 @@ const browserSupportMap = {
 function browserVersion(browser, version_added) {
   if (browser === "samsunginternet_android" && version_added === "8.0") {
     return "8.2"; // samsung 8.0 is not defined in browserslist
-  }
-  // fixme: preset-env maps opera_android as opera, this is incorrect as they have different engine mappings
-  // see https://github.com/mdn/browser-compat-data/blob/master/browsers/opera_android.json
-  if (browser === "opera_android" && version_added === "45") {
-    return "48";
   }
   return version_added;
 }
