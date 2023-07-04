@@ -6,8 +6,6 @@ import {
 } from "@babel/helper-skip-transparent-expression-wrappers";
 import { willPathCastToBoolean, findOutermostTransparentParent } from "./util";
 
-const { ast } = template.expression;
-
 function isSimpleMemberExpression(
   expression: t.Expression | t.Super,
 ): expression is t.Identifier | t.Super | t.MemberExpression {
@@ -50,6 +48,15 @@ function needsMemoize(
   }
 }
 
+const NULLISH_CHECK = template.expression(
+  `%%check%% === null || %%ref%% === void 0`,
+);
+const NULLISH_CHECK_NO_DDA = template.expression(`%%check%% == null`);
+const NULLISH_CHECK_NEG = template.expression(
+  `%%check%% !== null && %%ref%% !== void 0`,
+);
+const NULLISH_CHECK_NO_DDA_NEG = template.expression(`%%check%% != null`);
+
 interface OptionalChainAssumptions {
   pureGetters: boolean;
   noDocumentAll: boolean;
@@ -59,9 +66,8 @@ export function transformOptionalChain(
   path: NodePath<t.OptionalCallExpression | t.OptionalMemberExpression>,
   { pureGetters, noDocumentAll }: OptionalChainAssumptions,
   replacementPath: NodePath<t.Expression>,
-  ifNullish: () => t.Expression,
+  ifNullish: t.Expression,
   wrapLast?: (value: t.Expression) => t.Expression,
-  willReplacementCastToBoolean: boolean = false,
 ) {
   const { scope } = path;
 
@@ -100,6 +106,16 @@ export function transformOptionalChain(
     }
   }
 
+  if (optionals.length === 0) {
+    // Malformed AST: there was an OptionalMemberExpression node
+    // with no actual optional elements.
+    return;
+  }
+
+  const checks = [];
+
+  let tmpVar;
+
   for (let i = optionals.length - 1; i >= 0; i--) {
     const node = optionals[i] as unknown as
       | t.MemberExpression
@@ -124,23 +140,27 @@ export function transformOptionalChain(
       // we can avoid a needless memoize. We only do this if the callee is a simple member
       // expression, to avoid multiple calls to nested call expressions.
       check = ref = node.callee;
+    } else if (scope.isStatic(chain)) {
+      check = ref = chainWithTypes;
     } else {
-      ref = scope.maybeGenerateMemoised(chain);
-      if (ref) {
-        check = t.assignmentExpression(
-          "=",
-          t.cloneNode(ref),
-          // Here `chainWithTypes` MUST NOT be cloned because it could be
-          // updated when generating the memoised context of a call
-          // expression. It must be an Expression when `ref` is an identifier
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-          chainWithTypes as t.Expression,
-        );
-
-        isCall ? (node.callee = ref) : (node.object = ref);
-      } else {
-        check = ref = chainWithTypes;
+      // We cannot re-use the tmpVar for calls, because we need to
+      // store both the method and the receiver.
+      if (!tmpVar || isCall) {
+        tmpVar = scope.generateUidIdentifierBasedOnNode(chain);
+        scope.push({ id: t.cloneNode(tmpVar) });
       }
+      ref = tmpVar;
+      check = t.assignmentExpression(
+        "=",
+        t.cloneNode(tmpVar),
+        // Here `chainWithTypes` MUST NOT be cloned because it could be
+        // updated when generating the memoised context of a call
+        // expression. It must be an Expression when `ref` is an identifier
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+        chainWithTypes as t.Expression,
+      );
+
+      isCall ? (node.callee = ref) : (node.object = ref);
     }
 
     // Ensure call expressions have the proper `this`
@@ -173,44 +193,34 @@ export function transformOptionalChain(
       }
     }
 
-    const replacement = replacementPath.node;
-
-    if (willReplacementCastToBoolean) {
-      const nonNullishCheck = noDocumentAll
-        ? ast`${t.cloneNode(check)} != null`
-        : ast`
-        ${t.cloneNode(check)} !== null && ${t.cloneNode(ref)} !== void 0`;
-
-      // `if (a?.b) {}` transformed to `if (a != null && a.b) {}`
-      // we don't need to return `void 0` because the returned value will
-      // eventually cast to boolean.
-      replacementPath.replaceWith(
-        t.logicalExpression(
-          "&&",
-          nonNullishCheck,
-          i === 0 && wrapLast ? wrapLast(replacement) : replacement,
-        ),
-      );
-      replacementPath = skipTransparentExprWrappers(
-        replacementPath.get("right"),
-      );
-    } else {
-      const nullishCheck = noDocumentAll
-        ? ast`${t.cloneNode(check)} == null`
-        : ast`
-        ${t.cloneNode(check)} === null || ${t.cloneNode(ref)} === void 0`;
-      replacementPath.replaceWith(
-        t.conditionalExpression(
-          nullishCheck,
-          ifNullish(),
-          i === 0 && wrapLast ? wrapLast(replacement) : replacement,
-        ),
-      );
-      replacementPath = skipTransparentExprWrappers(
-        replacementPath.get("alternate"),
-      );
-    }
+    const data = { check: t.cloneNode(check), ref: t.cloneNode(ref) };
+    // We make `ref` non-enumerable, so that @babel/template doesn't throw
+    // in the noDocumentAll template if it's not used.
+    Object.defineProperty(data, "ref", { enumerable: false });
+    checks.push(data);
   }
+
+  let result = replacementPath.node;
+  if (wrapLast) result = wrapLast(result);
+
+  const ifNullishBoolean = t.isBooleanLiteral(ifNullish);
+  const ifNullishFalse = ifNullishBoolean && ifNullish.value === false;
+
+  // prettier-ignore
+  const tpl = ifNullishFalse
+    ? (noDocumentAll ? NULLISH_CHECK_NO_DDA_NEG : NULLISH_CHECK_NEG)
+    : (noDocumentAll ? NULLISH_CHECK_NO_DDA : NULLISH_CHECK);
+  const logicalOp = ifNullishFalse ? "&&" : "||";
+
+  const check = checks
+    .map(tpl)
+    .reduce((expr, check) => t.logicalExpression(logicalOp, expr, check));
+
+  replacementPath.replaceWith(
+    ifNullishBoolean
+      ? t.logicalExpression(logicalOp, check, result)
+      : t.conditionalExpression(check, ifNullish, result),
+  );
 }
 
 export function transform(
@@ -223,10 +233,12 @@ export function transform(
   // or the path itself
   const maybeWrapped = findOutermostTransparentParent(path);
   const { parentPath } = maybeWrapped;
-  const willReplacementCastToBoolean = willPathCastToBoolean(maybeWrapped);
 
   if (parentPath.isUnaryExpression({ operator: "delete" })) {
-    transformOptionalChain(path, assumptions, parentPath, () =>
+    transformOptionalChain(
+      path,
+      assumptions,
+      parentPath,
       t.booleanLiteral(true),
     );
   } else {
@@ -266,9 +278,10 @@ export function transform(
       path,
       assumptions,
       path,
-      () => scope.buildUndefinedNode(),
+      willPathCastToBoolean(maybeWrapped)
+        ? t.booleanLiteral(false)
+        : scope.buildUndefinedNode(),
       wrapLast,
-      willReplacementCastToBoolean,
     );
   }
 }
