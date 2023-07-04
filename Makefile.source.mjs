@@ -29,8 +29,6 @@ const EslintArgs = [
   "*.{js,cjs,mjs,ts}",
   "--format",
   "codeframe",
-  "--ext",
-  ".js,.cjs,.mjs,.ts",
 ];
 
 const YARN_PATH = shell.which("yarn").stdout;
