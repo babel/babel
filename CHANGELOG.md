@@ -24,6 +24,33 @@ This file contains the changelog starting frm v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.22.6 (2023-07-04)
+
+#### :bug: Bug Fix
+* `babel-compat-data`, `babel-helper-compilation-targets`, `babel-preset-env`
+  * [#15727](https://github.com/babel/babel/pull/15727) Add opera mobile compat data ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-optional-chaining`
+  * [#15739](https://github.com/babel/babel/pull/15739) Fix transform of `delete a?.b` in function params ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-split-export-declaration`, `babel-plugin-transform-modules-commonjs`
+  * [#15736](https://github.com/babel/babel/pull/15736) fix: Default export for duplicate names ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-compat-data`, `babel-preset-env`
+  * [#15726](https://github.com/babel/babel/pull/15726) update compat-data sources ([@JLHwung](https://github.com/JLHwung))
+* `babel-helpers`, `babel-plugin-proposal-explicit-resource-management`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#15705](https://github.com/babel/babel/pull/15705) Fix handling of sync error in `@@asyncDispose` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-standalone`
+  * [#15707](https://github.com/babel/babel/pull/15707) fix: Support transforming Explicit Resource Management in `stage-2` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-core`
+  * [#15626](https://github.com/babel/babel/pull/15626) fix: Works correctly with `--frozen-intrinsics` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :house: Internal
+* `babel-helper-create-class-features-plugin`, `babel-plugin-transform-classes`
+  * [#15700](https://github.com/babel/babel/pull/15700) Minor class transform cleanups ([@JLHwung](https://github.com/JLHwung))
+
+#### :microscope: Output optimization
+* `babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining`, `babel-plugin-transform-class-properties`, `babel-plugin-transform-optional-chaining`, `babel-plugin-transform-typescript`
+  * [#15740](https://github.com/babel/babel/pull/15740) Compress output for optional chain with multiple `?.` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-proposal-destructuring-private`, `babel-plugin-proposal-do-expressions`, `babel-plugin-proposal-pipeline-operator`, `babel-plugin-transform-class-properties`, `babel-plugin-transform-nullish-coalescing-operator`, `babel-plugin-transform-optional-chaining`, `babel-plugin-transform-private-property-in-object`, `babel-traverse`
+  * [#15741](https://github.com/babel/babel/pull/15741) Inject tmp vars in the params list of IIFEs when possible ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.22.5 (2023-06-08)
 
 #### :bug: Bug Fix
