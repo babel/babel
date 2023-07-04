@@ -15,7 +15,7 @@ source utils/cleanup.sh
 set -x
 
 # Clone jest
-git clone --depth=1 https://github.com/jestjs/jest /tmp/jest
+git clone --depth=1 -b tweak-test https://github.com/SimenB/jest /tmp/jest
 cd /tmp/jest || exit
 
 # Update @babel/* dependencies
