@@ -8,8 +8,7 @@ var _x = {
   writable: true,
   value: C
 };
-(() => {
-  var _babelHelpers$classSt;
+(_babelHelpers$classSt => {
   var x, y, z;
   ({
     x

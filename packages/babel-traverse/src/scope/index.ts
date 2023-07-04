@@ -51,7 +51,7 @@ import {
   isPrivateName,
   isExportDeclaration,
 } from "@babel/types";
-import type * as t from "@babel/types";
+import * as t from "@babel/types";
 import { scope as scopeCache } from "../cache";
 import type { Visitor } from "../types";
 import { isExplodedVisitor } from "../visitors";
@@ -1069,6 +1069,31 @@ export default class Scope {
       path = (this.getFunctionParent() || this.getProgramParent()).path;
     }
 
+    const { init, unique, kind = "var", id } = opts;
+
+    // When injecting a non-const non-initialized binding inside
+    // an IIFE, if the number of call arguments is less than or
+    // equal to the number of function parameters, we can safely
+    // inject the binding into the parameter list.
+    if (
+      !init &&
+      !unique &&
+      (kind === "var" || kind === "let") &&
+      path.isFunction() &&
+      // @ts-expect-error ArrowFunctionExpression never has a name
+      !path.node.name &&
+      t.isCallExpression(path.parent, { callee: path.node }) &&
+      path.parent.arguments.length <= path.node.params.length &&
+      t.isIdentifier(id)
+    ) {
+      path.pushContainer("params", id);
+      path.scope.registerBinding(
+        "param",
+        path.get("params")[path.node.params.length - 1],
+      );
+      return;
+    }
+
     if (path.isLoop() || path.isCatchClause() || path.isFunction()) {
       // @ts-expect-error TS can not infer NodePath<Loop> | NodePath<CatchClause> as NodePath<Loop | CatchClause>
       path.ensureBlock();
@@ -1076,8 +1101,6 @@ export default class Scope {
       path = path.get("body");
     }
 
-    const unique = opts.unique;
-    const kind = opts.kind || "var";
     const blockHoist = opts._blockHoist == null ? 2 : opts._blockHoist;
 
     const dataKey = `declaration:${kind}:${blockHoist}`;
@@ -1095,7 +1118,7 @@ export default class Scope {
       if (!unique) path.setData(dataKey, declarPath);
     }
 
-    const declarator = variableDeclarator(opts.id, opts.init);
+    const declarator = variableDeclarator(id, init);
     const len = declarPath.node.declarations.push(declarator);
     path.scope.registerBinding(kind, declarPath.get("declarations")[len - 1]);
   }

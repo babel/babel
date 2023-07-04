@@ -12,8 +12,7 @@ var _y = {
 babelHelpers.defineProperty(C, "a", "a");
 babelHelpers.defineProperty(C, "b", "b");
 babelHelpers.defineProperty(C, "c", "c");
-(() => {
-  var _C;
+(_C => {
   let x, y, z;
   x = babelHelpers.classStaticPrivateFieldSpecGet(C, C, _x), (_C = C, ({
     y
