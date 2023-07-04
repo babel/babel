@@ -254,45 +254,91 @@ export function wrapLoopBody(
     }
   }
   if (varNames.length) {
-    bodyStmts.push(
-      t.variableDeclaration(
-        "var",
-        varNames.map(name => t.variableDeclarator(t.identifier(name))),
-      ),
+    varPath.unshiftContainer(
+      "declarations",
+      varNames.map(name => t.variableDeclarator(t.identifier(name))),
     );
   }
 
-  if (state.breaksContinues.length === 0 && state.returns.length === 0) {
+  const labelNum = state.breaksContinues.length;
+  const returnNum = state.returns.length;
+  if (labelNum + returnNum === 0) {
     bodyStmts.push(t.expressionStatement(call));
-  } else {
-    const completionId = loopPath.scope.generateUid("ret");
-    bodyStmts.push(
-      t.variableDeclaration("var", [
-        t.variableDeclarator(t.identifier(completionId), call),
-      ]),
-    );
-
-    const injected = new Set<string>();
+  } else if (labelNum === 1 && returnNum === 0) {
     for (const path of state.breaksContinues) {
       const { node } = path;
       const { type, label } = node;
       let name = type === "BreakStatement" ? "break" : "continue";
-      if (label) name += "|" + label.name;
-      path.replaceWith(t.returnStatement(t.stringLiteral(name)));
+      if (label) name += " " + label.name;
+      path.replaceWith(
+        t.addComment(
+          t.returnStatement(t.numericLiteral(1)),
+          "leading",
+          " " + name,
+          true,
+        ),
+      );
       if (updaterNode) path.insertBefore(t.cloneNode(updaterNode));
-
-      if (injected.has(name)) continue;
-      injected.add(name);
 
       bodyStmts.push(
         template.statement.ast`
-        if (
-          ${t.identifier(completionId)} === ${t.stringLiteral(name)}
-        ) ${node}
+        if (${call}) ${node}
       `,
       );
     }
-    if (state.returns.length) {
+  } else {
+    const completionId = loopPath.scope.generateUid("ret");
+
+    if (varPath.isVariableDeclaration()) {
+      varPath.unshiftContainer("declarations", [
+        t.variableDeclarator(t.identifier(completionId)),
+      ]);
+      bodyStmts.push(
+        t.expressionStatement(
+          t.assignmentExpression("=", t.identifier(completionId), call),
+        ),
+      );
+    } else {
+      bodyStmts.push(
+        t.variableDeclaration("var", [
+          t.variableDeclarator(t.identifier(completionId), call),
+        ]),
+      );
+    }
+
+    const injected: string[] = [];
+    for (const path of state.breaksContinues) {
+      const { node } = path;
+      const { type, label } = node;
+      let name = type === "BreakStatement" ? "break" : "continue";
+      if (label) name += " " + label.name;
+
+      let i = injected.indexOf(name);
+      const hasInjected = i !== -1;
+      if (!hasInjected) {
+        injected.push(name);
+        i = injected.length - 1;
+      }
+
+      path.replaceWith(
+        t.addComment(
+          t.returnStatement(t.numericLiteral(i)),
+          "leading",
+          " " + name,
+          true,
+        ),
+      );
+      if (updaterNode) path.insertBefore(t.cloneNode(updaterNode));
+
+      if (hasInjected) continue;
+
+      bodyStmts.push(
+        template.statement.ast`
+        if (${t.identifier(completionId)} === ${t.numericLiteral(i)}) ${node}
+      `,
+      );
+    }
+    if (returnNum) {
       for (const path of state.returns) {
         const arg = path.node.argument || path.scope.buildUndefinedNode();
         path.replaceWith(
@@ -304,9 +350,10 @@ export function wrapLoopBody(
 
       bodyStmts.push(
         template.statement.ast`
-        if (typeof ${t.identifier(completionId)} === "object")
-          return ${t.identifier(completionId)}.v;
-      `,
+          if (${t.identifier(completionId)}) return ${t.identifier(
+            completionId,
+          )}.v;
+        `,
       );
     }
   }

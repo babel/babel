@@ -7,7 +7,8 @@ var _loop = function () {
           return b;
         });
         if (true) break;
-        return "continue";
+        // continue
+        return 1;
       }
     case false:
       {
@@ -16,6 +17,5 @@ var _loop = function () {
   }
 };
 for (var a of [1]) {
-  var _ret = _loop();
-  if (_ret === "continue") continue;
+  if (_loop()) continue;
 }
