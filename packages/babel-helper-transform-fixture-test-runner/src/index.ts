@@ -128,7 +128,6 @@ function runCacheableScriptInTestContext(
   if (process.env.BABEL_8_BREAKING) {
     script = new vm.Script(cached.code, {
       filename,
-      displayErrors: true,
       lineOffset: -1,
       cachedData: cached.cachedData,
     });
@@ -136,7 +135,6 @@ function runCacheableScriptInTestContext(
   } else {
     script = new vm.Script(cached.code, {
       filename,
-      displayErrors: true,
       lineOffset: -1,
       cachedData: cached.cachedData,
       produceCachedData: true,

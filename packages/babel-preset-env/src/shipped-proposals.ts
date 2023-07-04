@@ -26,17 +26,16 @@ const pluginSyntaxObject = {
   // note: we don't have syntax-private-methods
   "transform-private-methods": "syntax-class-properties",
   "transform-private-property-in-object": "syntax-private-property-in-object",
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
   "transform-unicode-property-regex": null as null,
 } as const;
 
+type PluginSyntaxObjectKeys = keyof typeof pluginSyntaxObject;
+
 const pluginSyntaxEntries = Object.keys(pluginSyntaxObject).map<
-  [string, string | null]
->(function (key) {
-  return [
-    key,
-    // @ts-expect-error key has been guarded
-    pluginSyntaxObject[key],
-  ];
+  [PluginSyntaxObjectKeys, string | null]
+>(function (key: PluginSyntaxObjectKeys) {
+  return [key, pluginSyntaxObject[key]];
 });
 
 const pluginSyntaxMap = new Map(pluginSyntaxEntries);

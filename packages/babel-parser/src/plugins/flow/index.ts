@@ -2645,6 +2645,7 @@ export default (superClass: typeof Parser) =>
 
       // add typeParameters if we found them
       if (typeParameters) {
+        // @ts-expect-error: refine typings
         (result.value || result).typeParameters = typeParameters;
       }
       return result;
