@@ -140,7 +140,7 @@ export interface ParserOptions {
    * By default, `import(foo)` is parsed as `CallExpression(Import, [Identifier(foo)])`.
    * Set this to true to parse it as an `ImportExpression` node.
    */
-  createImportExpression?: boolean;
+  createImportExpressions?: boolean;
 }
 
 export type ParserPlugin = import("../src/typings").PluginConfig;

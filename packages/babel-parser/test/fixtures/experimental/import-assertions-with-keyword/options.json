@@ -1,7 +1,5 @@
 {
-  "createImportExpression": false,
-  "plugins": [
-    "importAssertions"
-  ],
+  "createImportExpressions": false,
+  "plugins": ["importAssertions"],
   "sourceType": "module"
 }

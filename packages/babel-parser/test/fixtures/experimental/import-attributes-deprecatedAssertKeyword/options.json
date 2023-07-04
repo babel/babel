@@ -1,7 +1,5 @@
 {
-  "createImportExpression": false,
-  "plugins": [
-    ["importAttributes", { "deprecatedAssertSyntax": true }]
-  ],
+  "createImportExpressions": false,
+  "plugins": [["importAttributes", { "deprecatedAssertSyntax": true }]],
   "sourceType": "module"
 }

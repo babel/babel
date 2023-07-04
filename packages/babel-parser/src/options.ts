@@ -20,7 +20,7 @@ export type Options = {
   strictMode: boolean | undefined | null;
   ranges: boolean;
   tokens: boolean;
-  createImportExpression: boolean;
+  createImportExpressions: boolean;
   createParenthesizedExpressions: boolean;
   errorRecovery: boolean;
   attachComment: boolean;
@@ -71,7 +71,7 @@ export const defaultOptions: Options = {
   tokens: false,
   // Whether to create ImportExpression AST nodes (if false
   // `import(foo)` will be parsed as CallExpression(Import, [Identifier(foo)])
-  createImportExpression: false,
+  createImportExpressions: false,
   // Whether to create ParenthesizedExpression AST nodes (if false
   // the parser sets extra.parenthesized on the expression nodes instead).
   createParenthesizedExpressions: false,

@@ -68,7 +68,7 @@
       "description": "By default, exported identifiers must refer to a declared variable.\nSet this to true to allow export statements to reference undeclared variables.",
       "type": "boolean"
     },
-    "createImportExpression": {
+    "createImportExpressions": {
       "description": "By default, `import(foo)` is parsed as `CallExpression(Import, [Identifier(foo)])`.\nSet this to true to parse it as an `ImportExpression` node.",
       "type": "boolean",
       "default": false

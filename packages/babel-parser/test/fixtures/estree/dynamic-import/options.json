@@ -1,4 +1,4 @@
 {
   "plugins": ["estree"],
-  "createImportExpression": false
+  "createImportExpressions": false
 }

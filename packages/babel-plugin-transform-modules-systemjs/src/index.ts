@@ -279,7 +279,7 @@ export default declare<PluginState>((api, options: Options) => {
             }
           }
         } else {
-          // when createImportExpression is true, we require the dynamic import transform
+          // when createImportExpressions is true, we require the dynamic import transform
           if (!this.file.has("@babel/plugin-proposal-dynamic-import")) {
             throw new Error(MISSING_PLUGIN_ERROR);
           }

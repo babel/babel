@@ -1,4 +1,4 @@
 {
   "BABEL_8_BREAKING": false,
-  "createImportExpression": false
+  "createImportExpressions": false
 }

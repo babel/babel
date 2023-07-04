@@ -1118,7 +1118,7 @@ export default abstract class ExpressionParser extends LValParser {
         }
 
         if (this.match(tt.parenL)) {
-          if (this.options.createImportExpression) {
+          if (this.options.createImportExpressions) {
             return this.parseImportCall(node as Undone<N.ImportExpression>);
           } else {
             return this.finishNode(node, "Import");
