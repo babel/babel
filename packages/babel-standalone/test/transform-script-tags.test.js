@@ -1,11 +1,11 @@
 import fs from "fs";
 import { createRequire } from "module";
-import semver from "semver";
+import { itGte } from "$repo-utils";
 const require = createRequire(import.meta.url);
 
-const nodeGte16 = semver.gte(process.version, "16.0.0");
+const nodeGte16 = itGte("16.0.0");
 
-(nodeGte16 ? describe : describe.skip)("transformScriptTags", () => {
+describe("transformScriptTags", () => {
   let standaloneSource;
   let JSDOM;
   beforeAll(async () => {
@@ -15,7 +15,7 @@ const nodeGte16 = semver.gte(process.version, "16.0.0");
     );
     JSDOM = require("jsdom").JSDOM;
   });
-  it("should transform script element with type 'text/babel'", () => {
+  nodeGte16("should transform script element with type 'text/babel'", () => {
     const dom = new JSDOM(
       `<!DOCTYPE html><head><script>${standaloneSource}</script><script type="text/babel">globalThis ?? window</script></head>`,
       { runScripts: "dangerously" },
@@ -36,24 +36,27 @@ const nodeGte16 = semver.gte(process.version, "16.0.0");
       });
     });
   });
-  it("should pass through the nonce attribute to the transformed script element", () => {
-    const nonceAttribute = "nonce_example";
+  nodeGte16(
+    "should pass through the nonce attribute to the transformed script element",
+    () => {
+      const nonceAttribute = "nonce_example";
 
-    const dom = new JSDOM(
-      `<!DOCTYPE html><head><script>${standaloneSource}</script><script type="text/babel" nonce="${nonceAttribute}">globalThis ?? window</script></head>`,
-      { runScripts: "dangerously" },
-    );
-    return new Promise((resolve, reject) => {
-      dom.window.addEventListener("DOMContentLoaded", () => {
-        try {
-          const transformedScriptElement =
-            dom.window.document.head.children.item(2);
-          expect(transformedScriptElement.nonce).toBe(nonceAttribute);
-          resolve();
-        } catch (err) {
-          reject(err);
-        }
+      const dom = new JSDOM(
+        `<!DOCTYPE html><head><script>${standaloneSource}</script><script type="text/babel" nonce="${nonceAttribute}">globalThis ?? window</script></head>`,
+        { runScripts: "dangerously" },
+      );
+      return new Promise((resolve, reject) => {
+        dom.window.addEventListener("DOMContentLoaded", () => {
+          try {
+            const transformedScriptElement =
+              dom.window.document.head.children.item(2);
+            expect(transformedScriptElement.nonce).toBe(nonceAttribute);
+            resolve();
+          } catch (err) {
+            reject(err);
+          }
+        });
       });
-    });
-  });
+    },
+  );
 });

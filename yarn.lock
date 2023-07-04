@@ -4229,7 +4229,6 @@ __metadata:
     "@babel/preset-typescript": "workspace:^"
     acorn: ^8.7.0
     jsdom: ^22.1.0
-    semver: ^6.3.0
   languageName: unknown
   linkType: soft
 
