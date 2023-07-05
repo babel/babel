@@ -15,7 +15,7 @@ function isVirtualType(type: string): type is VIRTUAL_TYPES {
   return type in virtualTypes;
 }
 export type VisitWrapper<S = any> = (
-  stateName: string | null | undefined,
+  stateName: string | undefined,
   visitorType: VisitPhase,
   callback: VisitNodeFunction<S, Node>,
 ) => VisitNodeFunction<S, Node>;
@@ -273,7 +273,7 @@ export function merge(
 
 function wrapWithStateOrWrapper<State>(
   oldVisitor: ExplVisitNode<State, Node>,
-  state: State,
+  state: State | null,
   wrapper?: VisitWrapper<State> | null,
 ): ExplVisitNode<State, Node> {
   const newVisitor: ExplVisitNode<State, Node> = {};
