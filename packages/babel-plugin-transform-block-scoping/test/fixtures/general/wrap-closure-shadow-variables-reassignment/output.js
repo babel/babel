@@ -2,8 +2,7 @@ var _loop = function (_index) {
   if (_index % 2) {
     _index += 3;
     index = _index;
-    // continue
-    return 1;
+    return 1; // continue
   }
   var fn = function () {
     _index;

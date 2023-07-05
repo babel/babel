@@ -273,7 +273,7 @@ export function wrapLoopBody(
       path.replaceWith(
         t.addComment(
           t.returnStatement(t.numericLiteral(1)),
-          "leading",
+          "trailing",
           " " + name,
           true,
         ),
@@ -323,7 +323,7 @@ export function wrapLoopBody(
       path.replaceWith(
         t.addComment(
           t.returnStatement(t.numericLiteral(i)),
-          "leading",
+          "trailing",
           " " + name,
           true,
         ),

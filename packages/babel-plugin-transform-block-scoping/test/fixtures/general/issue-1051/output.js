@@ -7,8 +7,7 @@ foo.func1 = function () {
         func4(function () {
           func2();
         });
-        // break
-        return 1;
+        return 1; // break
       }
     };
     for (;;) {

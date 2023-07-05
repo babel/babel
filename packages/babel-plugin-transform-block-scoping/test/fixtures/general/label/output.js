@@ -5,8 +5,7 @@ var _loop = function () {
   });
   switch (true) {
     case true:
-      // break loop
-      return 1;
+      return 1; // break loop
   }
 };
 loop: for (var i = 0; i < 10; i++) {

@@ -20,8 +20,7 @@ var j = 0;
 var _loop2 = function () {
   switch (i) {
     case 0:
-      // continue
-      return 1;
+      return 1; // continue
   }
   j++;
   var z = 3;
@@ -46,8 +45,7 @@ var k,
             return z;
           });
           j++;
-          // break
-          return 1;
+          return 1; // break
         };
         for (k = 0; k < 10; k++) {
           if (_loop4()) break;

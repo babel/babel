@@ -7,8 +7,7 @@ var _loop = function () {
           return b;
         });
         if (true) break;
-        // continue
-        return 1;
+        return 1; // continue
       }
     case false:
       {

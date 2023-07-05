@@ -5,11 +5,9 @@
         return i;
       });
       if (i === 1) {
-        // continue
-        return 0;
+        return 0; // continue
       } else if (i === 2) {
-        // break
-        return 1;
+        return 1; // break
       } else if (i === 3) {
         return {
           v: i
