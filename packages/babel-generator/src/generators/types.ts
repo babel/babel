@@ -33,7 +33,7 @@ export function ObjectExpression(this: Printer, node: t.ObjectExpression) {
     this.space();
   }
 
-  this.sourceWithOffset("end", node.loc, 0, -1);
+  this.sourceWithOffset("end", node.loc, -1);
 
   this.token("}");
 }

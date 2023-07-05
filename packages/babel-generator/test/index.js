@@ -1,13 +1,16 @@
-import { parse } from "@babel/parser";
+import { parse, parseExpression } from "@babel/parser";
 import * as t from "@babel/types";
 import fs from "fs";
 import path from "path";
 import fixtures from "@babel/helper-fixtures";
 import { TraceMap, originalPositionFor } from "@jridgewell/trace-mapping";
-import { fileURLToPath } from "url";
+import { commonJS } from "$repo-utils";
+import { encode } from "@jridgewell/sourcemap-codec";
 
 import _generate, { CodeGenerator } from "../lib/index.js";
 const generate = _generate.default || _generate;
+
+const { __dirname } = commonJS(import.meta.url);
 
 describe("generation", function () {
   it("multiple sources", function () {
@@ -914,6 +917,61 @@ describe("generation", function () {
       }
     `);
   });
+
+  it("should not throw when loc.column === 0 with inputSourceMap", () => {
+    const ast = parseExpression("a(\n)");
+
+    ast.loc.end.column = 0;
+
+    expect(
+      generate(ast, {
+        sourceMaps: true,
+        inputSourceMap: {
+          version: 3,
+          names: [],
+          sources: ["input.js"],
+          // [ generatedCodeColumn, sourceIndex, sourceCodeLine, sourceCodeColumn, nameIndex ]
+          mappings: encode([[0, 0, 1, 0]]),
+        },
+      }).rawMappings,
+    ).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "generated": Object {
+            "column": 0,
+            "line": 1,
+          },
+          "name": "a",
+          "original": Object {
+            "column": 0,
+            "line": 1,
+          },
+          "source": "input.js",
+        },
+        Object {
+          "generated": Object {
+            "column": 1,
+            "line": 1,
+          },
+          "name": undefined,
+          "original": Object {
+            "column": 0,
+            "line": 1,
+          },
+          "source": "input.js",
+        },
+        Object {
+          "generated": Object {
+            "column": 2,
+            "line": 1,
+          },
+          "name": undefined,
+          "original": undefined,
+          "source": undefined,
+        },
+      ]
+    `);
+  });
 });
 
 describe("programmatic generation", function () {
@@ -1435,9 +1493,7 @@ describe("CodeGenerator", function () {
   });
 });
 
-const suites = (fixtures.default || fixtures)(
-  path.join(path.dirname(fileURLToPath(import.meta.url)), "fixtures"),
-);
+const suites = (fixtures.default || fixtures)(path.join(__dirname, "fixtures"));
 
 afterEach(() => {
   jest.restoreAllMocks();
@@ -1467,10 +1523,7 @@ suites.forEach(function (testSuite) {
             };
             const actualAst = parse(actualCode, parserOpts);
             const options = {
-              sourceFileName: path.relative(
-                path.dirname(fileURLToPath(import.meta.url)),
-                actual.loc,
-              ),
+              sourceFileName: path.relative(__dirname, actual.loc),
               ...task.options,
               sourceMaps: task.sourceMap ? true : task.options.sourceMaps,
             };

@@ -27,6 +27,7 @@
   "devDependencies": {
     "@babel/helper-fixtures": "workspace:^",
     "@babel/parser": "workspace:^",
+    "@jridgewell/sourcemap-codec": "^1.4.15",
     "@types/jsesc": "^2.5.0",
     "charcodes": "^0.2.0"
   },
