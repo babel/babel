@@ -220,7 +220,7 @@ describe("traverse", function () {
       expect(visited).toBe(true);
     });
   });
-  describe("path.visit()", () => {
+  describe("path.traverse()", () => {
     it("should preserve traversal context after enter hook is executed", () => {
       const ast = parse("{;}");
       // The test initiates a sub-traverse from program. When the `enter` hook of BlockStatement
@@ -277,6 +277,41 @@ describe("traverse", function () {
         },
       });
       expect(blockStatementVisitedCounter).toBe(1);
+    });
+    it("regression - #12570", () => {
+      const logs = [];
+
+      const ast = parse(
+        `
+          import { Foo } from './Foo'
+          import { Bar } from './Bar'
+        `,
+        { sourceType: "module" },
+      );
+      traverse(ast, {
+        Program(path) {
+          path.traverse({
+            ImportDeclaration: {
+              enter(path) {
+                logs.push(["ENTER", path.node.source.value]);
+                if (path.node.source.value === "./Bar") {
+                  path.parentPath.get(path.listKey);
+                }
+              },
+              exit(path) {
+                logs.push(["EXIT", path.node.source.value]);
+              },
+            },
+          });
+        },
+      });
+
+      expect(logs).toEqual([
+        ["ENTER", "./Foo"],
+        ["EXIT", "./Foo"],
+        ["ENTER", "./Bar"],
+        ["EXIT", "./Bar"],
+      ]);
     });
   });
   describe("path.stop()", () => {
