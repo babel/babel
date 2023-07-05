@@ -1,4 +1,5 @@
 import * as virtualTypes from "./path/lib/virtual-types";
+import type { Node } from "@babel/types";
 import {
   DEPRECATED_KEYS,
   DEPRECATED_ALIASES,
@@ -7,11 +8,17 @@ import {
   __internal__deprecationWarning as deprecationWarning,
 } from "@babel/types";
 import type { ExplodedVisitor, NodePath, Visitor } from "./index";
+import type { ExplVisitNode, VisitNodeFunction, VisitPhase } from "./types";
 
 type VIRTUAL_TYPES = keyof typeof virtualTypes;
 function isVirtualType(type: string): type is VIRTUAL_TYPES {
   return type in virtualTypes;
 }
+export type VisitWrapper<S = any> = (
+  stateName: string | undefined,
+  visitorType: VisitPhase,
+  callback: VisitNodeFunction<S, Node>,
+) => VisitNodeFunction<S, Node>;
 
 export function isExplodedVisitor(
   visitor: Visitor,
@@ -29,7 +36,6 @@ export function isExplodedVisitor(
  * * `Identifier() { ... }` -> `Identifier: { enter() { ... } }`
  * * `"Identifier|NumericLiteral": { ... }` -> `Identifier: { ... }, NumericLiteral: { ... }`
  * * Aliases in `@babel/types`: e.g. `Property: { ... }` -> `ObjectProperty: { ... }, ClassProperty: { ... }`
- *
  * Other normalizations are:
  * * Visitors of virtual types are wrapped, so that they are only visited when
  *   their dynamic check passes
@@ -213,51 +219,67 @@ function validateVisitorMethods(
   }
 }
 
-export function merge<State>(visitors: Visitor<State>[]): Visitor<State>;
+export function merge<State>(
+  visitors: Visitor<State>[],
+): ExplodedVisitor<State>;
 export function merge(
   visitors: Visitor<unknown>[],
   states?: any[],
   wrapper?: Function | null,
-): Visitor<unknown>;
+): ExplodedVisitor<unknown>;
 export function merge(
   visitors: any[],
   states: any[] = [],
-  wrapper?: Function | null,
-) {
-  const rootVisitor: Visitor = {};
+  wrapper?: VisitWrapper | null,
+): ExplodedVisitor {
+  // @ts-expect-error don't bother with internal flags so it can work with earlier @babel/core validations
+  const mergedVisitor: ExplodedVisitor = {};
 
   for (let i = 0; i < visitors.length; i++) {
-    const visitor = visitors[i];
+    const visitor = explode(visitors[i]);
     const state = states[i];
 
-    explode(visitor);
+    let topVisitor: ExplVisitNode<unknown, Node> = visitor;
+    if (state || wrapper) {
+      topVisitor = wrapWithStateOrWrapper(topVisitor, state, wrapper);
+    }
+    mergePair(mergedVisitor, topVisitor);
 
-    for (const type of Object.keys(visitor) as (keyof Visitor)[]) {
-      let visitorType = visitor[type];
+    for (const key of Object.keys(visitor) as (keyof ExplodedVisitor)[]) {
+      if (shouldIgnoreKey(key)) continue;
+
+      let typeVisitor = visitor[key];
 
       // if we have state or wrapper then overload the callbacks to take it
       if (state || wrapper) {
-        visitorType = wrapWithStateOrWrapper(visitorType, state, wrapper);
+        typeVisitor = wrapWithStateOrWrapper(typeVisitor, state, wrapper);
       }
 
-      // @ts-expect-error: Expression produces a union type that is too complex to represent.
-      const nodeVisitor = (rootVisitor[type] ||= {});
-      mergePair(nodeVisitor, visitorType);
+      const nodeVisitor = (mergedVisitor[key] ||= {});
+      mergePair(nodeVisitor, typeVisitor);
     }
   }
 
-  return rootVisitor;
+  if (process.env.BABEL_8_BREAKING) {
+    return {
+      ...mergedVisitor,
+      _exploded: true,
+      _verified: true,
+    };
+  }
+
+  return mergedVisitor;
 }
 
 function wrapWithStateOrWrapper<State>(
-  oldVisitor: Visitor<State>,
-  state: State,
-  wrapper?: Function | null,
-) {
-  const newVisitor: Visitor = {};
+  oldVisitor: ExplVisitNode<State, Node>,
+  state: State | null,
+  wrapper?: VisitWrapper<State> | null,
+): ExplVisitNode<State, Node> {
+  const newVisitor: ExplVisitNode<State, Node> = {};
 
-  for (const key of Object.keys(oldVisitor) as (keyof Visitor<State>)[]) {
-    let fns = oldVisitor[key];
+  for (const phase of ["enter", "exit"] as VisitPhase[]) {
+    let fns = oldVisitor[phase];
 
     // not an enter/exit array of callbacks
     if (!Array.isArray(fns)) continue;
@@ -272,8 +294,8 @@ function wrapWithStateOrWrapper<State>(
       }
 
       if (wrapper) {
-        // @ts-expect-error Fixme: document state.key
-        newFn = wrapper(state.key, key, newFn);
+        // @ts-expect-error Fixme: actually PluginPass.key (aka pluginAlias)?
+        newFn = wrapper(state?.key, phase, newFn);
       }
 
       // Override toString in case this function is printed, we want to print the wrapped function, same as we do in `wrapCheck`
@@ -284,8 +306,7 @@ function wrapWithStateOrWrapper<State>(
       return newFn;
     });
 
-    // @ts-expect-error: Expression produces a union type that is too complex to represent.
-    newVisitor[key] = fns;
+    newVisitor[phase] = fns;
   }
 
   return newVisitor;
@@ -321,6 +342,7 @@ function wrapCheck(nodeType: VIRTUAL_TYPES, fn: Function) {
 function shouldIgnoreKey(
   key: string,
 ): key is
+  | `_${string}`
   | "enter"
   | "exit"
   | "shouldSkip"
@@ -348,8 +370,15 @@ function shouldIgnoreKey(
   return false;
 }
 
+/*
+function mergePair(
+  dest: ExplVisitNode<unknown, Node>,
+  src: ExplVisitNode<unknown, Node>,
+);
+*/
 function mergePair(dest: any, src: any) {
-  for (const key of Object.keys(src)) {
-    dest[key] = [].concat(dest[key] || [], src[key]);
+  for (const phase of ["enter", "exit"] as VisitPhase[]) {
+    if (!src[phase]) continue;
+    dest[phase] = [].concat(dest[phase] || [], src[phase]);
   }
 }

@@ -38,7 +38,11 @@ const VALIDATORS: ValidatorSet = {
 function assertVisitorMap(loc: OptionPath, value: unknown): Visitor {
   const obj = assertObject(loc, value);
   if (obj) {
-    Object.keys(obj).forEach(prop => assertVisitorHandler(prop, obj[prop]));
+    Object.keys(obj).forEach(prop => {
+      if (prop !== "_exploded" && prop !== "_verified") {
+        assertVisitorHandler(prop, obj[prop]);
+      }
+    });
 
     if (obj.enter || obj.exit) {
       throw new Error(
@@ -54,7 +58,7 @@ function assertVisitorMap(loc: OptionPath, value: unknown): Visitor {
 function assertVisitorHandler(
   key: string,
   value: unknown,
-): VisitorHandler | void {
+): asserts value is VisitorHandler {
   if (value && typeof value === "object") {
     Object.keys(value).forEach((handler: string) => {
       if (handler !== "enter" && handler !== "exit") {
@@ -66,8 +70,6 @@ function assertVisitorHandler(
   } else if (typeof value !== "function") {
     throw new Error(`.visitor["${key}"] must be a function`);
   }
-
-  return value as any;
 }
 
 type VisitorHandler =
