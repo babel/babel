@@ -2406,6 +2406,7 @@ export type LVal =
   | AssignmentPattern
   | ArrayPattern
   | ObjectPattern
+  | OptionalMemberExpression
   | TSParameterProperty
   | TSAsExpression
   | TSSatisfiesExpression
@@ -5797,6 +5798,7 @@ export interface ParentMaps {
     | UnionTypeAnnotation;
   OptionalMemberExpression:
     | ArrayExpression
+    | ArrayPattern
     | ArrowFunctionExpression
     | AssignmentExpression
     | AssignmentPattern
@@ -5832,6 +5834,7 @@ export interface ParentMaps {
     | ParenthesizedExpression
     | PipelineBareFunction
     | PipelineTopicExpression
+    | RestElement
     | ReturnStatement
     | SequenceExpression
     | SpreadElement

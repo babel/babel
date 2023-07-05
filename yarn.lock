@@ -1562,6 +1562,20 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-proposal-optional-chaining-assign@workspace:packages/babel-plugin-proposal-optional-chaining-assign":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-proposal-optional-chaining-assign@workspace:packages/babel-plugin-proposal-optional-chaining-assign"
+  dependencies:
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^"
+    "@babel/plugin-syntax-optional-chaining-assign": "workspace:^"
+    "@babel/plugin-transform-optional-chaining": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.22.5
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-proposal-partial-application@workspace:packages/babel-plugin-proposal-partial-application":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-partial-application@workspace:packages/babel-plugin-proposal-partial-application"
@@ -2116,6 +2130,17 @@ __metadata:
   checksum: eef94d53a1453361553c1f98b68d17782861a04a392840341bc91780838dd4e695209c783631cf0de14c635758beafb6a3a65399846ffa4386bff90639347f30
   languageName: node
   linkType: hard
+
+"@babel/plugin-syntax-optional-chaining-assign@workspace:^, @babel/plugin-syntax-optional-chaining-assign@workspace:packages/babel-plugin-syntax-optional-chaining-assign":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-syntax-optional-chaining-assign@workspace:packages/babel-plugin-syntax-optional-chaining-assign"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
 
 "@babel/plugin-syntax-optional-chaining@condition:BABEL_8_BREAKING ? : ^7.8.3":
   version: 0.0.0-condition-4311ec

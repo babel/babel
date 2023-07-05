@@ -51,6 +51,7 @@
     "./packages/babel-plugin-proposal-function-bind/src/**/*.ts",
     "./packages/babel-plugin-proposal-function-sent/src/**/*.ts",
     "./packages/babel-plugin-proposal-import-attributes-to-assertions/src/**/*.ts",
+    "./packages/babel-plugin-proposal-optional-chaining-assign/src/**/*.ts",
     "./packages/babel-plugin-proposal-partial-application/src/**/*.ts",
     "./packages/babel-plugin-proposal-pipeline-operator/src/**/*.ts",
     "./packages/babel-plugin-proposal-record-and-tuple/src/**/*.ts",
@@ -71,6 +72,7 @@
     "./packages/babel-plugin-syntax-import-reflection/src/**/*.ts",
     "./packages/babel-plugin-syntax-jsx/src/**/*.ts",
     "./packages/babel-plugin-syntax-module-blocks/src/**/*.ts",
+    "./packages/babel-plugin-syntax-optional-chaining-assign/src/**/*.ts",
     "./packages/babel-plugin-syntax-partial-application/src/**/*.ts",
     "./packages/babel-plugin-syntax-pipeline-operator/src/**/*.ts",
     "./packages/babel-plugin-syntax-record-and-tuple/src/**/*.ts",
@@ -323,6 +325,9 @@
       "@babel/plugin-proposal-import-attributes-to-assertions": [
         "./packages/babel-plugin-proposal-import-attributes-to-assertions/src"
       ],
+      "@babel/plugin-proposal-optional-chaining-assign": [
+        "./packages/babel-plugin-proposal-optional-chaining-assign/src"
+      ],
       "@babel/plugin-proposal-partial-application": [
         "./packages/babel-plugin-proposal-partial-application/src"
       ],
@@ -382,6 +387,9 @@
       ],
       "@babel/plugin-syntax-module-blocks": [
         "./packages/babel-plugin-syntax-module-blocks/src"
+      ],
+      "@babel/plugin-syntax-optional-chaining-assign": [
+        "./packages/babel-plugin-syntax-optional-chaining-assign/src"
       ],
       "@babel/plugin-syntax-partial-application": [
         "./packages/babel-plugin-syntax-partial-application/src"
