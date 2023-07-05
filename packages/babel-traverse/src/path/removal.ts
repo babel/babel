@@ -1,7 +1,7 @@
 // This file contains methods responsible for removing a node.
 
 import { hooks } from "./lib/removal-hooks";
-import { path as pathCache } from "../cache";
+import { getCachedPaths } from "../cache";
 import type NodePath from "./index";
 import { REMOVED, SHOULD_SKIP } from "./index";
 
@@ -46,7 +46,9 @@ export function _remove(this: NodePath) {
 export function _markRemoved(this: NodePath) {
   // this.shouldSkip = true; this.removed = true;
   this._traverseFlags |= SHOULD_SKIP | REMOVED;
-  if (this.parent) pathCache.get(this.parent).delete(this.node);
+  if (this.parent) {
+    getCachedPaths(this.hub, this.parent).delete(this.node);
+  }
   this.node = null;
 }
 
