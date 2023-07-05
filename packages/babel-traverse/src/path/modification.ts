@@ -279,7 +279,7 @@ export function updateSiblingKeys(
 ) {
   if (!this.parent) return;
 
-  const paths = getCachedPaths(this.hub, this.parent) ?? ([] as never[]);
+  const paths = getCachedPaths(this.hub, this.parent) || ([] as never[]);
 
   for (const [, path] of paths) {
     if (typeof path.key === "number" && path.key >= fromIndex) {
