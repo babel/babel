@@ -79,6 +79,49 @@ function traverse<Options extends TraverseOptions>(
 
   visitors.explode(opts as Visitor);
 
+  if (!IS_STANDALONE) {
+    if (!USE_ESM) {
+      if (!process.env.BABEL_8_BREAKING) {
+        // noHubInCacheKeyForBackwardCompat has three states (true, false, and
+        // undefined) instead of two so that we can run the magic checks only
+        // at the top-level of the traverse call stack, and not when recursing.
+        // new Error().stack is expensive, and no try/finally is better than
+        // using it in a very hot code path.
+        // See the .noHubInCacheKeyForBackwardCompat definition in ./cache.ts
+        // for why we need this.
+        // @ts-expect-error ts does not know about this property
+        if (cache.noHubInCacheKeyForBackwardCompat === undefined) {
+          const callerIsOldBabelCore =
+            arguments.length === 3 &&
+            !!new Error().stack
+              ?.split("\n", 3)[2]
+              ?.replace(/\\/g, "/")
+              .includes("@babel/core/lib/transformation/index.js");
+
+          // @ts-expect-error ts does not know about this property
+          // eslint-disable-next-line no-import-assign
+          cache.noHubInCacheKeyForBackwardCompat = callerIsOldBabelCore;
+          try {
+            traverseNode(
+              parent,
+              opts as ExplodedVisitor,
+              scope,
+              state,
+              parentPath,
+              /* skipKeys */ null,
+              visitSelf,
+            );
+          } finally {
+            // @ts-expect-error ts does not know about this property
+            // eslint-disable-next-line no-import-assign
+            cache.noHubInCacheKeyForBackwardCompat = undefined;
+          }
+          return;
+        }
+      }
+    }
+  }
+
   traverseNode(
     parent,
     opts as ExplodedVisitor,
