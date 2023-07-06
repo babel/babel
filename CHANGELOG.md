@@ -24,6 +24,11 @@ This file contains the changelog starting frm v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.22.8 (2023-07-06)
+
+#### :leftwards_arrow_with_hook: Revert
+* `babel-core`, `babel-traverse`
+  * [#15754](https://github.com/babel/babel/pull/15754) Revert "Use `NodePath#hub` as part of the paths cache key" ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.22.7 (2023-07-06)
 
 #### :bug: Bug Fix
