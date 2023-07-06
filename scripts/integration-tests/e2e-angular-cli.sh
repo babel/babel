@@ -13,9 +13,6 @@ source utils/cleanup.sh
 # Echo every command being executed
 set -x
 
-mkdir tmp
-cd tmp
-
 #==============================================================================#
 #                                   TEST                                       #
 #==============================================================================#
@@ -23,8 +20,9 @@ cd tmp
 startLocalRegistry "$PWD"/../../verdaccio-config.yml
 
 # Create and build a new angular project
+mkdir tmp && cd tmp
 npx -p @angular/cli ng new --defaults ngx
-# cd ngx
-# npm run build
+cd ngx
+npm run build
 
 cleanup
