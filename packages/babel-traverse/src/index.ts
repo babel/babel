@@ -36,7 +36,6 @@ function traverse<S>(
   scope: Scope | undefined,
   state: S,
   parentPath?: NodePath,
-  visitSelf?: boolean,
 ): void;
 
 function traverse(
@@ -45,7 +44,6 @@ function traverse(
   scope?: Scope,
   state?: any,
   parentPath?: NodePath,
-  visitSelf?: boolean,
 ): void;
 
 function traverse<Options extends TraverseOptions>(
@@ -55,7 +53,6 @@ function traverse<Options extends TraverseOptions>(
   scope?: Scope,
   state?: any,
   parentPath?: NodePath,
-  visitSelf?: boolean,
 ) {
   if (!parent) return;
 
@@ -69,25 +66,13 @@ function traverse<Options extends TraverseOptions>(
     }
   }
 
-  if (!parentPath && visitSelf) {
-    throw new Error("visitSelf can only be used when providing a NodePath.");
-  }
-
   if (!VISITOR_KEYS[parent.type]) {
     return;
   }
 
   visitors.explode(opts as Visitor);
 
-  traverseNode(
-    parent,
-    opts as ExplodedVisitor,
-    scope,
-    state,
-    parentPath,
-    /* skipKeys */ null,
-    visitSelf,
-  );
+  traverseNode(parent, opts as ExplodedVisitor, scope, state, parentPath);
 }
 
 export default traverse;
@@ -115,6 +100,8 @@ traverse.node = function (
 
 traverse.clearNode = function (node: t.Node, opts?: RemovePropertiesOptions) {
   removeProperties(node, opts);
+
+  cache.path.delete(node);
 };
 
 traverse.removeProperties = function (
