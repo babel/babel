@@ -3,7 +3,7 @@
 import { codeFrameColumns } from "@babel/code-frame";
 import traverse from "../index";
 import NodePath from "./index";
-import { path as pathCache } from "../cache";
+import { getCachedPaths } from "../cache";
 import { parse } from "@babel/parser";
 import {
   FUNCTION_TYPES,
@@ -47,7 +47,7 @@ export function replaceWithMultiple(
   nodes = this._verifyNodeList(nodes);
   inheritLeadingComments(nodes[0], this.node);
   inheritTrailingComments(nodes[nodes.length - 1], this.node);
-  pathCache.get(this.parent)?.delete(this.node);
+  getCachedPaths(this.hub, this.parent)?.delete(this.node);
   this.node =
     // @ts-expect-error this.key must present in this.container
     this.container[this.key] = null;
@@ -210,7 +210,7 @@ export function _replaceWith(this: NodePath, node: t.Node) {
   }
 
   this.debug(`Replace with ${node?.type}`);
-  pathCache.get(this.parent)?.set(node, this).delete(this.node);
+  getCachedPaths(this.hub, this.parent)?.set(node, this).delete(this.node);
 
   this.node =
     // @ts-expect-error this.key must present in this.container

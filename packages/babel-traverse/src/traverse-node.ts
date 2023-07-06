@@ -24,13 +24,19 @@ export function traverseNode<S = unknown>(
   state?: any,
   path?: NodePath,
   skipKeys?: Record<string, boolean>,
+  visitSelf?: boolean,
 ): boolean {
   const keys = VISITOR_KEYS[node.type];
   if (!keys) return false;
 
   const context = new TraversalContext(scope, opts, state, path);
+  if (visitSelf) {
+    if (skipKeys?.[path.parentKey]) return false;
+    return context.visitQueue([path]);
+  }
+
   for (const key of keys) {
-    if (skipKeys && skipKeys[key]) continue;
+    if (skipKeys?.[key]) continue;
     if (context.visit(node, key)) {
       return true;
     }
