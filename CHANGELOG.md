@@ -24,6 +24,19 @@ This file contains the changelog starting frm v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.22.7 (2023-07-06)
+
+#### :bug: Bug Fix
+* `babel-generator`
+  * [#15719](https://github.com/babel/babel/pull/15719) fix: Avoid internally generating negative source maps columns ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-core`, `babel-traverse`
+  * [#15725](https://github.com/babel/babel/pull/15725) Use `NodePath#hub` as part of the paths cache key ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* Other
+  * [#15747](https://github.com/babel/babel/pull/15747) fix: export `meta` from `eslint-parser/experimental-worker` ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* `babel-core`, `babel-traverse`
+  * [#15702](https://github.com/babel/babel/pull/15702) Refactor visitors merging ([@nullableVoidPtr](https://github.com/nullableVoidPtr))
 ## v7.22.6 (2023-07-04)
 
 #### :bug: Bug Fix
