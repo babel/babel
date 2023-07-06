@@ -44,6 +44,9 @@ if (typeof jest !== "undefined") {
   exports.describeESM = USE_ESM ? describe : dummy;
   exports.describeBabel7 = process.env.BABEL_8_BREAKING ? dummy : describe;
   exports.describeBabel8 = process.env.BABEL_8_BREAKING ? describe : dummy;
+  exports.describeGte = function (version) {
+    return semver.gte(process.version, version) ? describe : describe.skip;
+  };
 }
 
 exports.commonJS = function (metaUrl) {
