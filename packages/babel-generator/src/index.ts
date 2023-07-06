@@ -71,7 +71,7 @@ function normalizeOptions(
       minimal: process.env.BABEL_8_BREAKING ? true : false,
       ...opts.jsescOption,
     },
-    recordAndTupleSyntaxType: opts.recordAndTupleSyntaxType || "hash",
+    recordAndTupleSyntaxType: opts.recordAndTupleSyntaxType ?? "hash",
     topicToken: opts.topicToken,
     importAttributesKeyword: opts.importAttributesKeyword,
   };
