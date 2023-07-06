@@ -44,9 +44,9 @@ jobs:
       fail-fast: false
       matrix:
         project:
-          #- babel
-          #- create-react-app
-          #- prettier
+          - babel
+          - create-react-app
+          - prettier
           - angular-cli
     steps:
       - name: Get yarn1 cache directory path

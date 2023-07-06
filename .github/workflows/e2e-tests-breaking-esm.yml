@@ -45,7 +45,7 @@ jobs:
       fail-fast: false
       matrix:
         project:
-          #- create-react-app
+          - create-react-app
           - angular-cli
     steps:
       - name: Get yarn1 cache directory path
