@@ -17,7 +17,7 @@ set -x
 #                                   TEST                                       #
 #==============================================================================#
 
-startLocalRegistry "$PWD"/../../verdaccio-config.yml
+startLocalRegistry "$PWD"/verdaccio-config.yml
 
 # Create and build a new angular project
 mkdir tmp && cd tmp
