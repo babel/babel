@@ -24,7 +24,7 @@ startLocalRegistry "$PWD"/../../verdaccio-config.yml
 
 # Create and build a new angular project
 npx -p @angular/cli ng new --defaults ngx
-cd ngx
-npm run build
+# cd ngx
+# npm run build
 
 cleanup
