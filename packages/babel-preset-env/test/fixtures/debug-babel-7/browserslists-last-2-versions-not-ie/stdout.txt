@@ -16,8 +16,8 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  transform-unicode-sets-regex { firefox < 116, ios, opera_mobile, safari, samsung }
-  transform-class-static-block { ios, safari }
+  transform-unicode-sets-regex { firefox < 116, ios, opera_mobile < 75, safari, samsung }
+  syntax-class-static-block
   syntax-private-property-in-object
   syntax-class-properties
   syntax-numeric-separator
@@ -25,7 +25,6 @@ Using plugins:
   syntax-optional-chaining
   syntax-json-strings
   syntax-optional-catch-binding
-  transform-parameters { ios, safari }
   syntax-async-generators
   syntax-object-rest-spread
   transform-modules-commonjs

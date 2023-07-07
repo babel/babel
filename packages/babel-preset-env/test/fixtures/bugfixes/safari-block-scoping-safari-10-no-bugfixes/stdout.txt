@@ -9,7 +9,7 @@ Using modules transform: auto
 
 Using plugins:
   transform-unicode-sets-regex { safari }
-  transform-class-static-block { safari }
+  transform-class-static-block { safari < 16.4 }
   transform-private-property-in-object { safari < 15 }
   transform-class-properties { safari < 14.1 }
   transform-private-methods { safari < 15 }
@@ -19,7 +19,7 @@ Using plugins:
   transform-optional-chaining { safari < 13.1 }
   transform-json-strings { safari < 12 }
   transform-optional-catch-binding { safari < 11.1 }
-  transform-parameters { safari }
+  transform-parameters { safari < 16.3 }
   transform-async-generator-functions { safari < 12 }
   transform-object-rest-spread { safari < 11.1 }
   transform-dotall-regex { safari < 11.1 }

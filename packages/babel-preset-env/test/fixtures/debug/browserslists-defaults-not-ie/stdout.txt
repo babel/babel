@@ -16,8 +16,8 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  transform-unicode-sets-regex { chrome < 112, firefox < 116, ios, opera_mobile, safari, samsung }
-  transform-class-static-block { ios, safari }
+  transform-unicode-sets-regex { chrome < 112, firefox < 116, ios, opera_mobile < 75, safari, samsung }
+  transform-class-static-block { ios < 16.4, safari < 16.4 }
   syntax-private-property-in-object
   syntax-class-properties
   syntax-numeric-separator
@@ -27,7 +27,7 @@ Using plugins:
   syntax-optional-catch-binding
   syntax-async-generators
   syntax-object-rest-spread
-  bugfix/transform-safari-id-destructuring-collision-in-function-expression { ios, safari }
+  bugfix/transform-safari-id-destructuring-collision-in-function-expression { ios < 16.3, safari < 16.3 }
   transform-modules-commonjs
   transform-dynamic-import
   transform-export-namespace-from { }
