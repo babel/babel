@@ -1,6 +1,5 @@
 function foo() {
-  var _ret,
-    _loop = function () {
+  var _loop = function () {
       switch (2) {
         case 0:
           {
@@ -17,7 +16,8 @@ function foo() {
             break;
           }
       }
-    };
+    },
+    _ret;
   while (true) {
     _ret = _loop();
     if (_ret) return _ret.v;

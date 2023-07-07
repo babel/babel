@@ -133,10 +133,7 @@ export default declare((api, opts: Options) => {
               transformBlockScopedVariable(headPath, state, tdzEnabled);
             }
 
-            const declarations = varPath.get("declarations");
-            declarations[declarations.length - 1]
-              .get("init")
-              .unwrapFunctionEnvironment();
+            varPath.get("declarations.0.init").unwrapFunctionEnvironment();
           }
         },
 

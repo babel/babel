@@ -39,7 +39,7 @@ expect(foo2({
   bar: 3
 }).next().value).toBe(3);
 function foo3() {
-  var _ret, _loop;
+  var _loop, _ret;
   return babelHelpers.regeneratorRuntime().wrap(function foo3$(_context4) {
     while (1) switch (_context4.prev = _context4.next) {
       case 0:

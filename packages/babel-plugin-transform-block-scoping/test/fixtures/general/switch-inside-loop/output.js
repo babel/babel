@@ -35,8 +35,7 @@ expect(j).toBe(9);
 
 // it should work with loops nested within switch
 j = 0;
-var k,
-  _loop3 = function () {
+var _loop3 = function () {
     switch (i) {
       case 0:
         var _loop4 = function () {
@@ -56,7 +55,8 @@ var k,
     (function () {
       return z;
     });
-  };
+  },
+  k;
 for (i = 0; i < 10; i++) {
   _loop3();
 }

@@ -1,6 +1,4 @@
-var x,
-  f,
-  _loop = function (i) {
+var _loop = function (i) {
     x = 5;
     ({
       f
@@ -10,7 +8,9 @@ var x,
     fns.push(function () {
       return i * x;
     });
-  };
+  },
+  x,
+  f;
 var _iterator = babelHelpers.createForOfIteratorHelper(nums),
   _step;
 try {

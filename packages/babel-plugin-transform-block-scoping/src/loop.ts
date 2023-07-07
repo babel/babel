@@ -254,7 +254,7 @@ export function wrapLoopBody(
     }
   }
   if (varNames.length) {
-    varPath.unshiftContainer(
+    varPath.pushContainer(
       "declarations",
       varNames.map(name => t.variableDeclarator(t.identifier(name))),
     );
@@ -290,7 +290,7 @@ export function wrapLoopBody(
     const completionId = loopPath.scope.generateUid("ret");
 
     if (varPath.isVariableDeclaration()) {
-      varPath.unshiftContainer("declarations", [
+      varPath.pushContainer("declarations", [
         t.variableDeclarator(t.identifier(completionId)),
       ]);
       bodyStmts.push(
@@ -338,6 +338,7 @@ export function wrapLoopBody(
       `,
       );
     }
+
     if (returnNum) {
       for (const path of state.returns) {
         const arg = path.node.argument || path.scope.buildUndefinedNode();

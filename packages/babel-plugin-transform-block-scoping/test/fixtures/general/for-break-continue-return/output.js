@@ -1,6 +1,5 @@
 (function () {
-  var _ret,
-    _loop = function (i) {
+  var _loop = function (i) {
       fns.push(function () {
         return i;
       });
@@ -13,7 +12,8 @@
           v: i
         };
       }
-    };
+    },
+    _ret;
   for (var i in nums) {
     _ret = _loop(i);
     if (_ret === 0) continue;

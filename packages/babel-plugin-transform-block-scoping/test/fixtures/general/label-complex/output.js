@@ -1,7 +1,6 @@
 outer: while (t) {
   inner: while (t2) {
-    var _ret,
-      _loop = function (i) {
+    var _loop = function (i) {
         later(function () {
           return i;
         });
@@ -11,7 +10,8 @@ outer: while (t) {
         else if (test4) return 3; // continue inner
         else if (test5) return 4; // break
         else if (test6) return 5; // continue
-      };
+      },
+      _ret;
     for (var i = 0; i < 3; i++) {
       _ret = _loop(i);
       if (_ret === 0) break outer;
