@@ -409,7 +409,7 @@ __metadata:
     eslint-visitor-keys: "condition:BABEL_8_BREAKING ? ^3.3.0 : ^2.1.0"
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
   peerDependencies:
-    "@babel/core": ">=7.11.0"
+    "@babel/core": ^7.11.0
     eslint: ^7.5.0 || ^8.0.0
   languageName: unknown
   linkType: soft
@@ -441,8 +441,8 @@ __metadata:
     eslint: ^8.22.0
     eslint-rule-composer: ^0.3.0
   peerDependencies:
-    "@babel/eslint-parser": ">=7.11.0"
-    eslint: ">=7.5.0"
+    "@babel/eslint-parser": ^7.11.0
+    eslint: ^7.5.0 || ^8.0.0
   languageName: unknown
   linkType: soft
 
