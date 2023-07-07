@@ -9,7 +9,7 @@ Using modules transform: auto
 
 Using plugins:
   transform-unicode-sets-regex { safari }
-  transform-class-static-block { safari }
+  transform-class-static-block { safari < 16.4 }
   syntax-private-property-in-object
   syntax-class-properties
   syntax-numeric-separator
@@ -19,7 +19,7 @@ Using plugins:
   syntax-optional-catch-binding
   syntax-async-generators
   syntax-object-rest-spread
-  bugfix/transform-safari-id-destructuring-collision-in-function-expression { safari }
+  bugfix/transform-safari-id-destructuring-collision-in-function-expression { safari < 16.3 }
   transform-modules-commonjs
   transform-dynamic-import
   transform-export-namespace-from { }

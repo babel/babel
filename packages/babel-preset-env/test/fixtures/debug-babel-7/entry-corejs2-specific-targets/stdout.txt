@@ -14,7 +14,7 @@ Using modules transform: auto
 
 Using plugins:
   transform-unicode-sets-regex { chrome < 112, edge < 112, firefox < 116, ie, ios, safari }
-  transform-class-static-block { chrome < 94, edge < 94, firefox < 93, ie, ios, safari }
+  transform-class-static-block { chrome < 94, edge < 94, firefox < 93, ie, ios < 16.4, safari < 16.4 }
   transform-private-property-in-object { chrome < 91, edge < 91, firefox < 90, ie, ios < 15, safari < 15 }
   transform-class-properties { chrome < 74, edge < 79, firefox < 90, ie, ios < 14.5, safari < 14.1 }
   transform-private-methods { chrome < 84, edge < 84, firefox < 90, ie, ios < 15, safari < 15 }
@@ -24,7 +24,7 @@ Using plugins:
   transform-optional-chaining { chrome < 91, edge < 91, firefox < 74, ie, ios < 13.4, safari < 13.1 }
   transform-json-strings { chrome < 66, edge < 79, firefox < 62, ie, ios < 12, safari < 12 }
   transform-optional-catch-binding { chrome < 66, edge < 79, firefox < 58, ie, ios < 11.3, safari < 11.1 }
-  transform-parameters { edge < 18, firefox < 53, ie, ios, safari }
+  transform-parameters { edge < 18, firefox < 53, ie, ios < 16.3, safari < 16.3 }
   transform-async-generator-functions { chrome < 63, edge < 79, firefox < 57, ie, ios < 12, safari < 12 }
   transform-object-rest-spread { chrome < 60, edge < 79, firefox < 55, ie, ios < 11.3, safari < 11.1 }
   transform-dotall-regex { chrome < 62, edge < 79, firefox < 78, ie, ios < 11.3, safari < 11.1 }

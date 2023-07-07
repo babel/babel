@@ -72,8 +72,10 @@
     "opera": "36",
     "edge": "14",
     "firefox": "2",
+    "safari": "16.3",
     "node": "6",
     "deno": "1",
+    "ios": "16.3",
     "samsung": "5",
     "opera_mobile": "36",
     "electron": "0.37"
