@@ -19,9 +19,8 @@
   ],
   "dependencies": {
     "@babel/helper-annotate-as-pure": "workspace:^",
-    "@nicolo-ribaudo/semver-v6": "^6.3.3",
     "regexpu-core": "^5.3.1",
-    "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : "
+    "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0"

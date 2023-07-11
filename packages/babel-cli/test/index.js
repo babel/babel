@@ -1,7 +1,7 @@
 import readdir from "fs-readdir-recursive";
 import * as helper from "@babel/helper-fixtures";
 import rimraf from "rimraf";
-import semver from "@nicolo-ribaudo/semver-v6";
+import semver from "semver";
 import child from "child_process";
 import path from "path";
 import fs from "fs";

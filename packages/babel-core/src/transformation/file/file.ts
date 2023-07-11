@@ -6,8 +6,7 @@ import traverse from "@babel/traverse";
 import { cloneNode, interpreterDirective } from "@babel/types";
 import type * as t from "@babel/types";
 import { getModuleName } from "@babel/helper-module-transforms";
-// TODO(Babel 8): Use "semver" directly
-import semver from "@nicolo-ribaudo/semver-v6";
+import semver from "semver";
 
 import type { NormalizedFile } from "../normalize-file";
 

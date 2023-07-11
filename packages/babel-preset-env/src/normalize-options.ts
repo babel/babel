@@ -1,5 +1,4 @@
-// TODO(Babel 8): Use "semver" directly
-import semver, { type SemVer } from "@nicolo-ribaudo/semver-v6";
+import semver, { type SemVer } from "semver";
 import corejs2Polyfills from "@babel/compat-data/corejs2-built-ins";
 // @ts-expect-error Fixme: TS can not infer types from ../data/core-js-compat.js
 // but we can't import core-js-compat/data.json because JSON imports do

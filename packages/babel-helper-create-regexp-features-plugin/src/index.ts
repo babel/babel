@@ -1,12 +1,9 @@
-/// <reference path="../../../lib/semver.d.ts" />
-
 import rewritePattern from "regexpu-core";
 import type { NodePath } from "@babel/traverse";
 import { types as t, type PluginObject } from "@babel/core";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 
-// TODO(Babel 8): Use "semver" directly
-import semver from "@nicolo-ribaudo/semver-v6";
+import semver from "semver";
 
 import {
   featuresKey,
