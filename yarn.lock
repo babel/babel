@@ -244,7 +244,7 @@ __metadata:
     glob: ^7.2.0
     make-dir: "condition:BABEL_8_BREAKING ? : ^2.1.0"
     rimraf: ^3.0.0
-    semver: ^6.3.0
+    semver: ^6.3.1
     slash: "condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0"
   peerDependencies:
     "@babel/core": ^7.0.0-0
@@ -381,7 +381,7 @@ __metadata:
     gensync: ^1.0.0-beta.2
     json5: ^2.2.2
     rimraf: ^3.0.0
-    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
+    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
     ts-node: ^10.9.1
   languageName: unknown
   linkType: soft
@@ -404,7 +404,7 @@ __metadata:
     eslint: ^8.22.0
     eslint-scope: "condition:BABEL_8_BREAKING ? ^7.1.1 : "
     eslint-visitor-keys: "condition:BABEL_8_BREAKING ? ^3.3.0 : ^2.1.0"
-    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
+    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
   peerDependencies:
     "@babel/core": ">=7.11.0"
     eslint: ^7.5.0 || ^8.0.0
@@ -586,7 +586,7 @@ __metadata:
     "@types/semver": ^5.5.0
     browserslist: ^4.21.9
     lru-cache: "condition:BABEL_8_BREAKING ? ^7.14.1 : ^5.1.1"
-    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
+    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
   peerDependencies:
     "@babel/core": ^7.0.0
   languageName: unknown
@@ -627,7 +627,7 @@ __metadata:
     "@babel/helper-split-export-declaration": "workspace:^"
     "@babel/plugin-syntax-class-static-block": ^7.14.5
     "@babel/preset-env": "workspace:^"
-    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
+    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
   peerDependencies:
     "@babel/core": ^7.0.0
   languageName: unknown
@@ -654,7 +654,7 @@ __metadata:
     "@babel/helper-annotate-as-pure": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     regexpu-core: ^5.3.1
-    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
+    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
   peerDependencies:
     "@babel/core": ^7.0.0
   languageName: unknown
@@ -696,7 +696,7 @@ __metadata:
   resolution: "@babel/helper-fixtures@workspace:packages/babel-helper-fixtures"
   dependencies:
     "@types/semver": ^7.3.4
-    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
+    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
   languageName: unknown
   linkType: soft
 
@@ -3197,7 +3197,7 @@ __metadata:
     babel-plugin-polyfill-corejs3: ^0.8.2
     babel-plugin-polyfill-regenerator: ^0.5.1
     make-dir: "condition:BABEL_8_BREAKING ? : ^2.1.0"
-    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
+    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -3641,7 +3641,7 @@ __metadata:
     babel-plugin-polyfill-corejs3: ^0.8.2
     babel-plugin-polyfill-regenerator: ^0.5.1
     core-js-compat: ^3.31.0
-    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
+    semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -6321,7 +6321,7 @@ __metadata:
     rollup-plugin-dts: ^5.3.0
     rollup-plugin-polyfill-node: ^0.12.0
     rollup-plugin-terser: ^7.0.2
-    semver: ^6.3.0
+    semver: ^6.3.1
     shelljs: ^0.8.5
     test262-stream: ^1.4.0
     through2: ^4.0.0
@@ -14099,12 +14099,12 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"semver-BABEL_8_BREAKING-false@npm:semver@^6.3.0, semver@npm:^6.0.0, semver@npm:^6.1.0, semver@npm:^6.3.0":
-  version: 6.3.0
-  resolution: "semver@npm:6.3.0"
+"semver-BABEL_8_BREAKING-false@npm:semver@^6.3.1, semver@npm:^6.0.0, semver@npm:^6.1.0, semver@npm:^6.3.0, semver@npm:^6.3.1":
+  version: 6.3.1
+  resolution: "semver@npm:6.3.1"
   bin:
-    semver: ./bin/semver.js
-  checksum: 1b26ecf6db9e8292dd90df4e781d91875c0dcc1b1909e70f5d12959a23c7eebb8f01ea581c00783bbee72ceeaad9505797c381756326073850dc36ed284b21b9
+    semver: bin/semver.js
+  checksum: ae47d06de28836adb9d3e25f22a92943477371292d9b665fb023fae278d345d508ca1958232af086d85e0155aee22e313e100971898bbb8d5d89b8b1d4054ca2
   languageName: node
   linkType: hard
 
@@ -14128,13 +14128,13 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"semver@condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0":
-  version: 0.0.0-condition-4d8c2f
-  resolution: "semver@condition:BABEL_8_BREAKING?^7.3.4:^6.3.0#4d8c2f"
+"semver@condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1":
+  version: 0.0.0-condition-2dc914
+  resolution: "semver@condition:BABEL_8_BREAKING?^7.3.4:^6.3.1#2dc914"
   dependencies:
-    semver-BABEL_8_BREAKING-false: "npm:semver@^6.3.0"
+    semver-BABEL_8_BREAKING-false: "npm:semver@^6.3.1"
     semver-BABEL_8_BREAKING-true: "npm:semver@^7.3.4"
-  checksum: 7d234c05a75393edc945e70d0c67df4b61beb3ffe7eaa3c3ebd9b93627e5ff98afb009e52f82d6de4a1d425287c5f7f3c98631514bf1524d1a1c07cb511fb1b1
+  checksum: 74e99cc101349b14cd6c9bbdc0d29bb9b106df61182b4f2033607d2d0f01ade1122757691850d46032304f9e1b2f340b5b20f37458b585fa4b678bcd795fae4c
   languageName: node
   linkType: hard
 
