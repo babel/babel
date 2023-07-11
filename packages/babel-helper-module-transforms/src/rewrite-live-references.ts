@@ -1,5 +1,11 @@
 import assert from "assert";
-import {
+import { template, types as t } from "@babel/core";
+import type { NodePath, Visitor, Scope } from "@babel/traverse";
+import simplifyAccess from "@babel/helper-simple-access";
+
+import type { ModuleMetadata } from "./normalize-and-load-metadata";
+
+const {
   assignmentExpression,
   callExpression,
   cloneNode,
@@ -16,13 +22,7 @@ import {
   stringLiteral,
   variableDeclaration,
   variableDeclarator,
-} from "@babel/types";
-import type * as t from "@babel/types";
-import template from "@babel/template";
-import type { NodePath, Visitor, Scope } from "@babel/traverse";
-import simplifyAccess from "@babel/helper-simple-access";
-
-import type { ModuleMetadata } from "./normalize-and-load-metadata";
+} = t;
 
 interface RewriteReferencesVisitorState {
   exported: Map<any, any>;

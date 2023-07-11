@@ -1,8 +1,7 @@
 // Heavily inspired by
 // https://github.com/airbnb/babel-plugin-dynamic-import-node/blob/master/src/utils.js
 
-import * as t from "@babel/types";
-import template from "@babel/template";
+import { types as t, template } from "@babel/core";
 
 if (!process.env.BABEL_8_BREAKING) {
   if (!USE_ESM) {

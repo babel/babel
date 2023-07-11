@@ -1,21 +1,5 @@
 import assert from "assert";
-import {
-  booleanLiteral,
-  callExpression,
-  cloneNode,
-  directive,
-  directiveLiteral,
-  expressionStatement,
-  identifier,
-  isIdentifier,
-  memberExpression,
-  stringLiteral,
-  valueToNode,
-  variableDeclaration,
-  variableDeclarator,
-} from "@babel/types";
-import type * as t from "@babel/types";
-import template from "@babel/template";
+import { template, types as t } from "@babel/core";
 
 import { isModule } from "@babel/helper-module-imports";
 
@@ -34,6 +18,22 @@ import type {
   SourceModuleMetadata,
 } from "./normalize-and-load-metadata";
 import type { NodePath } from "@babel/traverse";
+
+const {
+  booleanLiteral,
+  callExpression,
+  cloneNode,
+  directive,
+  directiveLiteral,
+  expressionStatement,
+  identifier,
+  isIdentifier,
+  memberExpression,
+  stringLiteral,
+  valueToNode,
+  variableDeclaration,
+  variableDeclarator,
+} = t;
 
 export { buildDynamicImport } from "./dynamic-import";
 
