@@ -111,10 +111,7 @@ gen_enforced_field(WorkspaceCwd, 'conditions', '{ "USE_ESM": [{ "type": "module"
   WorkspaceIdent \= '@babel/compat-data'.
 
 % Enforces that @babel/runtime-corejs2 must depend on core-js 2
-gen_enforced_dependency(WorkspaceCwd, 'core-js', '^2.6.12', DependencyType) :-
+gen_enforced_dependency(WorkspaceCwd, 'core-js', '^2.6.12', 'dependencies') :-
   % Get the workspace name
-  workspace_ident(WorkspaceCwd, WorkspaceIdent),
-  % Only consider 'dependencies'
-  (DependencyType = 'dependencies'),
   % The rule works for @babel/runtime-corejs2 only
-  (WorkspaceIdent = '@babel/runtime-corejs2').
+  workspace_ident(WorkspaceCwd, '@babel/runtime-corejs2').
