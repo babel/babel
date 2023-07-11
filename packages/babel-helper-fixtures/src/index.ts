@@ -1,7 +1,4 @@
-/// <reference path="../../../lib/semver.d.ts" />
-
-// TODO(Babel 8): Use "semver" directly
-import semver from "@nicolo-ribaudo/semver-v6";
+import semver from "semver";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";

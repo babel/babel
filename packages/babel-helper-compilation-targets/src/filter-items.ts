@@ -1,5 +1,4 @@
-// TODO(Babel 8): Use "semver" directly
-import semver from "@nicolo-ribaudo/semver-v6";
+import semver from "semver";
 
 import pluginsCompatData from "@babel/compat-data/plugins";
 

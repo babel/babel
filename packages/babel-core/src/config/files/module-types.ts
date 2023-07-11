@@ -1,12 +1,9 @@
-/// <reference path="../../../../../lib/semver.d.ts" />
-
 import { isAsync, waitFor } from "../../gensync-utils/async";
 import type { Handler } from "gensync";
 import path from "path";
 import { pathToFileURL } from "url";
 import { createRequire } from "module";
-// TODO(Babel 8): Use "semver" directly
-import semver from "@nicolo-ribaudo/semver-v6";
+import semver from "semver";
 
 import { endHiddenCallStack } from "../../errors/rewrite-stack-trace";
 import ConfigError from "../../errors/config-error";

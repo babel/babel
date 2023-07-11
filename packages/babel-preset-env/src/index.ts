@@ -1,5 +1,4 @@
-// TODO(Babel 8): Use "semver" directly
-import semver, { type SemVer } from "@nicolo-ribaudo/semver-v6";
+import semver, { type SemVer } from "semver";
 import { logPlugin } from "./debug";
 import getOptionSpecificExcludesFor from "./get-option-specific-excludes";
 import {

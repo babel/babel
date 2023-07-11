@@ -91,12 +91,11 @@
     "@babel/plugin-transform-unicode-sets-regex": "workspace:^",
     "@babel/preset-modules": "^0.1.5",
     "@babel/types": "workspace:^",
-    "@nicolo-ribaudo/semver-v6": "^6.3.3",
     "babel-plugin-polyfill-corejs2": "^0.4.4",
     "babel-plugin-polyfill-corejs3": "^0.8.2",
     "babel-plugin-polyfill-regenerator": "^0.5.1",
     "core-js-compat": "^3.31.0",
-    "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : "
+    "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"

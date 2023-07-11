@@ -32,10 +32,9 @@
   },
   "dependencies": {
     "@nicolo-ribaudo/eslint-scope-5-internals": "condition:BABEL_8_BREAKING ? : 5.1.1-v1",
-    "@nicolo-ribaudo/semver-v6": "condition:BABEL_8_BREAKING ? : ^6.3.3",
     "eslint-scope": "condition:BABEL_8_BREAKING ? ^7.1.1 : ",
     "eslint-visitor-keys": "condition:BABEL_8_BREAKING ? ^3.3.0 : ^2.1.0",
-    "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : "
+    "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

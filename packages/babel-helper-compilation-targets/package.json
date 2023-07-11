@@ -24,10 +24,9 @@
   "dependencies": {
     "@babel/compat-data": "workspace:^",
     "@babel/helper-validator-option": "workspace:^",
-    "@nicolo-ribaudo/semver-v6": "^6.3.3",
     "browserslist": "^4.21.9",
     "lru-cache": "condition:BABEL_8_BREAKING ? ^7.14.1 : ^5.1.1",
-    "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : "
+    "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0"
