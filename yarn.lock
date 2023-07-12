@@ -389,6 +389,9 @@ __metadata:
 "@babel/eslint-config-internal@workspace:^, @babel/eslint-config-internal@workspace:eslint/babel-eslint-config-internal":
   version: 0.0.0-use.local
   resolution: "@babel/eslint-config-internal@workspace:eslint/babel-eslint-config-internal"
+  dependencies:
+    "@eslint/js": ^8.44.0
+    globals: ^13.20.0
   peerDependencies:
     "@babel/eslint-parser": ^7.16.0
   languageName: unknown
@@ -4044,7 +4047,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/js@npm:8.44.0":
+"@eslint/js@npm:8.44.0, @eslint/js@npm:^8.44.0":
   version: 8.44.0
   resolution: "@eslint/js@npm:8.44.0"
   checksum: fc539583226a28f5677356e9f00d2789c34253f076643d2e32888250e509a4e13aafe0880cb2425139051de0f3a48d25bfc5afa96b7304f203b706c17340e3cf
@@ -6283,6 +6286,7 @@ __metadata:
     "@babel/preset-env": ^7.22.2
     "@babel/preset-typescript": ^7.21.5
     "@babel/runtime": ^7.22.0
+    "@eslint/eslintrc": ^2.1.0
     "@rollup/plugin-babel": ^6.0.3
     "@rollup/plugin-commonjs": ^24.1.0
     "@rollup/plugin-json": ^6.0.0
@@ -9533,7 +9537,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"globals@npm:^13.19.0":
+"globals@npm:^13.19.0, globals@npm:^13.20.0":
   version: 13.20.0
   resolution: "globals@npm:13.20.0"
   dependencies:

@@ -35,6 +35,7 @@
     "@babel/preset-env": "^7.22.2",
     "@babel/preset-typescript": "^7.21.5",
     "@babel/runtime": "^7.22.0",
+    "@eslint/eslintrc": "^2.1.0",
     "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-commonjs": "^24.1.0",
     "@rollup/plugin-json": "^6.0.0",

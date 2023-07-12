@@ -1,4 +1,5 @@
 {
+  "eslint.experimental.useFlatConfig": true,
   "json.schemas": [
     {
       "fileMatch": [
@@ -8,9 +9,7 @@
       "url": "./packages/babel-helper-fixtures/data/schema.json"
     },
     {
-      "fileMatch": [
-        "/packages/babel-parser/test/fixtures/**/options.json"
-      ],
+      "fileMatch": ["/packages/babel-parser/test/fixtures/**/options.json"],
       "url": "./packages/babel-parser/test/schema.json"
     }
   ]
