@@ -797,6 +797,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-module-transforms@workspace:packages/babel-helper-module-transforms"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-module-imports": "workspace:^"
     "@babel/helper-simple-access": "workspace:^"
@@ -894,6 +895,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-replace-supers@workspace:packages/babel-helper-replace-supers"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-member-expression-to-functions": "workspace:^"
     "@babel/helper-optimise-call-expression": "workspace:^"

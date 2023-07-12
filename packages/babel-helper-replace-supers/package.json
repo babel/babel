@@ -18,6 +18,9 @@
     "@babel/helper-member-expression-to-functions": "workspace:^",
     "@babel/helper-optimise-call-expression": "workspace:^"
   },
+  "devDependencies": {
+    "@babel/core": "workspace:^"
+  },
   "peerDependencies": {
     "@babel/core": "^7.0.0"
   },
