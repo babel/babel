@@ -111,10 +111,35 @@ gen_enforced_field(WorkspaceCwd, 'conditions', '{ "USE_ESM": [{ "type": "module"
   WorkspaceIdent \= '@babel/compat-data'.
 
 % Enforces that @babel/runtime-corejs2 must depend on core-js 2
-gen_enforced_dependency(WorkspaceCwd, 'core-js', '^2.6.12', DependencyType) :-
+gen_enforced_dependency(WorkspaceCwd, 'core-js', '^2.6.12', 'dependencies') :-
+  % Get the workspace name
+  % The rule works for @babel/runtime-corejs2 only
+  workspace_ident(WorkspaceCwd, '@babel/runtime-corejs2').
+
+% Enforces that @babel/helper-* must peer-depend on @babel/core if they depend on @babel/traverse
+gen_enforced_dependency(WorkspaceCwd, '@babel/core', '^7.0.0', 'peerDependencies') :-
   % Get the workspace name
   workspace_ident(WorkspaceCwd, WorkspaceIdent),
-  % Only consider 'dependencies'
-  (DependencyType = 'dependencies'),
-  % The rule works for @babel/runtime-corejs2 only
-  (WorkspaceIdent = '@babel/runtime-corejs2').
+  atom_concat('@babel/helper-', _, WorkspaceIdent),
+  workspace_has_dependency(WorkspaceCwd, DependencyIdent, _, 'dependencies'),
+  (DependencyIdent = '@babel/traverse').
+
+% Enforces that @babel/helper-* must not depend on @babel/traverse, @babel/template, @babel/types if they peer-depend on @babel/core
+gen_enforced_dependency(WorkspaceCwd, DependencyIdent, null, 'dependencies') :-
+  % Get the workspace name
+  workspace_ident(WorkspaceCwd, WorkspaceIdent),
+  atom_concat('@babel/helper-', _, WorkspaceIdent),
+  workspace_has_dependency(WorkspaceCwd, '@babel/core', _, 'peerDependencies'),
+  member(DependencyIdent, ['@babel/template', '@babel/traverse', '@babel/types']).
+
+% Enforces that @babel/core must not be in dependency for most packages
+gen_enforced_dependency(WorkspaceCwd, '@babel/core', null, 'dependencies') :-
+  % Get the workspace name
+  workspace_ident(WorkspaceCwd, WorkspaceIdent),
+  % Exclude some packages
+  \+ member(WorkspaceIdent, ['@babel/eslint-shared-fixtures', '@babel/eslint-tests', '@babel/helper-transform-fixture-test-runner']).
+
+% Enforces that @babel/core should be in devDependencies if a package peer-depends on @babel/core and it does not list @babel/core in dependencies. Doing so will ensure that they are linked to an ESM @babel/core build in the e2e ESM tests.
+gen_enforced_dependency(WorkspaceCwd, '@babel/core', 'workspace:^', 'devDependencies') :-
+  workspace_has_dependency(WorkspaceCwd, '@babel/core', _, 'peerDependencies'),
+  \+ workspace_has_dependency(WorkspaceCwd, '@babel/core', _, 'dependencies').

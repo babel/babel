@@ -45,5 +45,8 @@
       },
       {}
     ]
+  },
+  "devDependencies": {
+    "@babel/core": "workspace:^"
   }
 }

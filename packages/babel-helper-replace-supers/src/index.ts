@@ -3,10 +3,9 @@ import environmentVisitor from "@babel/helper-environment-visitor";
 import memberExpressionToFunctions from "@babel/helper-member-expression-to-functions";
 import type { HandlerState } from "@babel/helper-member-expression-to-functions";
 import optimiseCall from "@babel/helper-optimise-call-expression";
-import template from "@babel/template";
-import traverse from "@babel/traverse";
+import { traverse, template, types as t } from "@babel/core";
 import type { NodePath, Scope } from "@babel/traverse";
-import {
+const {
   assignmentExpression,
   booleanLiteral,
   callExpression,
@@ -16,8 +15,7 @@ import {
   sequenceExpression,
   stringLiteral,
   thisExpression,
-} from "@babel/types";
-import type * as t from "@babel/types";
+} = t;
 
 if (!process.env.BABEL_8_BREAKING) {
   if (!USE_ESM) {
