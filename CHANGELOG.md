@@ -24,6 +24,19 @@ This file contains the changelog starting frm v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.22.9 (2023-07-12)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-typescript`
+  * [#15774](https://github.com/babel/babel/pull/15774) fix: `Infinity` in enums ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :nail_care: Polish
+* `babel-generator`
+  * [#15757](https://github.com/babel/babel/pull/15757) `recordAndTupleSyntaxType` defaults to `"hash"` ([@coderaiser](https://github.com/coderaiser))
+
+#### :house: Internal
+* [#15748](https://github.com/babel/babel/pull/15748) Migrate to `eslint.config.js` ([@JLHwung](https://github.com/JLHwung))
+* [#15758](https://github.com/babel/babel/pull/15758) Use Prettier 3 stable ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.22.8 (2023-07-06)
 
 #### :leftwards_arrow_with_hook: Revert
