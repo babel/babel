@@ -4,10 +4,7 @@ import type * as t from "@babel/types";
 import jsesc from "jsesc";
 
 export function Identifier(this: Printer, node: t.Identifier) {
-  this.sourceIdentifierName(
-    // @ts-expect-error Undocumented property identifierName
-    node.loc?.identifierName || node.name,
-  );
+  this.sourceIdentifierName(node.loc?.identifierName || node.name);
   this.word(node.name);
 }
 

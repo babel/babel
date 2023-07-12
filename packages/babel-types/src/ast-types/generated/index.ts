@@ -30,6 +30,8 @@ export type Comment = CommentBlock | CommentLine;
 export interface SourceLocation {
   start: Position;
   end: Position;
+  filename: string;
+  identifierName: string | undefined | null;
 }
 
 interface BaseNode {

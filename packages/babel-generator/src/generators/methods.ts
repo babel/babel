@@ -282,9 +282,7 @@ function _getFuncIdName(
   if (id.type === "Identifier") {
     nameInfo = {
       pos: id.loc?.start,
-      name:
-        // @ts-expect-error Undocumented property identifierName
-        id.loc?.identifierName || id.name,
+      name: id.loc?.identifierName || id.name,
     };
   } else if (id.type === "PrivateName") {
     nameInfo = {
