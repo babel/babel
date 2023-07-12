@@ -301,6 +301,10 @@ function computeConstantValue(
     } else if (path.isIdentifier()) {
       const name = path.node.name;
 
+      if (["Infinity", "NaN"].includes(name)) {
+        return Number(name);
+      }
+
       let value = prevMembers?.get(name);
       if (value !== undefined) {
         return value;
