@@ -138,3 +138,8 @@ gen_enforced_dependency(WorkspaceCwd, '@babel/core', null, 'dependencies') :-
   workspace_ident(WorkspaceCwd, WorkspaceIdent),
   % Exclude some packages
   \+ member(WorkspaceIdent, ['@babel/eslint-shared-fixtures', '@babel/eslint-tests', '@babel/helper-transform-fixture-test-runner']).
+
+% Enforces that @babel/core should be in devDependencies if a package peer-depends on @babel/core and it does not list @babel/core in dependencies. Doing so will ensure that they are linked to an ESM @babel/core build in the e2e ESM tests.
+gen_enforced_dependency(WorkspaceCwd, '@babel/core', 'workspace:^', 'devDependencies') :-
+  workspace_has_dependency(WorkspaceCwd, '@babel/core', _, 'peerDependencies'),
+  \+ workspace_has_dependency(WorkspaceCwd, '@babel/core', _, 'dependencies').

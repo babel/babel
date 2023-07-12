@@ -1541,6 +1541,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-decimal@workspace:packages/babel-plugin-syntax-decimal"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.0.0-0
@@ -1562,6 +1563,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-destructuring-private@workspace:packages/babel-plugin-syntax-destructuring-private"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.0.0-0
@@ -1770,6 +1772,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-module-blocks@workspace:packages/babel-plugin-syntax-module-blocks"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.0.0-0
