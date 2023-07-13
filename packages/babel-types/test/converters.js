@@ -32,21 +32,12 @@ describe("converters", function () {
       expect(t.valueToNode(-0)).toEqual(
         t.unaryExpression("-", t.numericLiteral(0)),
       );
-      expect(t.valueToNode(NaN)).toEqual(
-        t.binaryExpression("/", t.numericLiteral(0), t.numericLiteral(0)),
-      );
-      expect(t.valueToNode(-NaN)).toEqual(
-        t.binaryExpression("/", t.numericLiteral(0), t.numericLiteral(0)),
-      );
+      expect(t.valueToNode(NaN)).toEqual(t.identifier("NaN"));
+      expect(t.valueToNode(-NaN)).toEqual(t.identifier("NaN"));
 
-      expect(t.valueToNode(Infinity)).toEqual(
-        t.binaryExpression("/", t.numericLiteral(1), t.numericLiteral(0)),
-      );
+      expect(t.valueToNode(Infinity)).toEqual(t.identifier("Infinity"));
       expect(t.valueToNode(-Infinity)).toEqual(
-        t.unaryExpression(
-          "-",
-          t.binaryExpression("/", t.numericLiteral(1), t.numericLiteral(0)),
-        ),
+        t.unaryExpression("-", t.identifier("Infinity")),
       );
     });
     it("string", function () {
