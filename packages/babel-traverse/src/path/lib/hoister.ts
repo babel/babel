@@ -223,7 +223,7 @@ export default class PathHoister<T extends t.Node = t.Node> {
     return false;
   }
 
-  run() {
+  run(): NodePath<t.Expression> | undefined {
     this.path.traverse(referenceVisitor, this);
 
     if (this.mutableBinding) return;
