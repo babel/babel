@@ -56,8 +56,8 @@ function isEqualDescriptor(
     a.dirname === b.dirname &&
     a.alias === b.alias &&
     a.ownPass === b.ownPass &&
-    (a.file && a.file.request) === (b.file && b.file.request) &&
-    (a.file && a.file.resolved) === (b.file && b.file.resolved)
+    a.file?.request === b.file?.request &&
+    a.file?.resolved === b.file?.resolved
   );
 }
 

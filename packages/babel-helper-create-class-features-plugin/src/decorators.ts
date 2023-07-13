@@ -8,9 +8,9 @@ import nameFunction from "@babel/helper-function-name";
 
 type Decoratable = Extract<t.Node, { decorators?: t.Decorator[] | null }>;
 
-export function hasOwnDecorators(node: t.Node) {
-  // @ts-expect-error(flow->ts) TODO: maybe we could add t.isDecoratable to make ts happy
-  return !!(node.decorators && node.decorators.length);
+export function hasOwnDecorators(node: t.Class | t.ClassBody["body"][number]) {
+  // @ts-expect-error: 'decorators' not in TSIndexSignature
+  return !!node.decorators?.length;
 }
 
 export function hasDecorators(node: t.Class) {

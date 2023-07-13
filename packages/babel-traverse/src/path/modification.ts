@@ -97,7 +97,7 @@ export function _containerInsert<N extends t.Node>(
     const path = this.getSibling(to) as NodePath<N>;
     paths.push(path);
 
-    if (this.context && this.context.queue) {
+    if (this.context?.queue) {
       path.pushContext(this.context);
     }
   }

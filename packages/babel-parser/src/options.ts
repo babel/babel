@@ -87,14 +87,16 @@ export const defaultOptions: Options = {
 // Interpret and default an options object
 
 export function getOptions(opts?: Options | null): Options {
-  if (opts && opts.annexB != null && opts.annexB !== false) {
+  if (opts == null) {
+    return { ...defaultOptions };
+  }
+  if (opts.annexB != null && opts.annexB !== false) {
     throw new Error("The `annexB` option can only be set to `false`.");
   }
 
   const options: any = {};
-  for (const key of Object.keys(defaultOptions)) {
-    // @ts-expect-error key may not exist in opts
-    options[key] = opts && opts[key] != null ? opts[key] : defaultOptions[key];
+  for (const key of Object.keys(defaultOptions) as (keyof Options)[]) {
+    options[key] = opts[key] ?? defaultOptions[key];
   }
   return options;
 }

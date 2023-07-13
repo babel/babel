@@ -486,7 +486,7 @@ function buildEnvDescriptors(
   ) => OptionsAndDescriptors,
   envName: string,
 ) {
-  const opts = options.env && options.env[envName];
+  const opts = options.env?.[envName];
   return opts ? descriptors(dirname, opts, `${alias}.env["${envName}"]`) : null;
 }
 
@@ -500,7 +500,7 @@ function buildOverrideDescriptors(
   ) => OptionsAndDescriptors,
   index: number,
 ) {
-  const opts = options.overrides && options.overrides[index];
+  const opts = options.overrides?.[index];
   if (!opts) throw new Error("Assertion failure - missing override");
 
   return descriptors(dirname, opts, `${alias}.overrides[${index}]`);
@@ -517,10 +517,10 @@ function buildOverrideEnvDescriptors(
   index: number,
   envName: string,
 ) {
-  const override = options.overrides && options.overrides[index];
+  const override = options.overrides?.[index];
   if (!override) throw new Error("Assertion failure - missing override");
 
-  const opts = override.env && override.env[envName];
+  const opts = override.env?.[envName];
   return opts
     ? descriptors(
         dirname,

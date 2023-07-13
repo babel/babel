@@ -752,8 +752,7 @@ class Printer {
   ): string | undefined {
     const extra = node.extra;
     if (
-      extra &&
-      extra.raw != null &&
+      extra?.raw != null &&
       extra.rawValue != null &&
       node.value === extra.rawValue
     ) {
