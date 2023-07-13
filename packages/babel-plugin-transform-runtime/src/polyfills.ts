@@ -8,10 +8,13 @@ import type { PluginAPI, PluginObject } from "@babel/core";
 import _pluginCorejs2 from "babel-plugin-polyfill-corejs2";
 import _pluginCorejs3 from "babel-plugin-polyfill-corejs3";
 import _pluginRegenerator from "babel-plugin-polyfill-regenerator";
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 const pluginCorejs2 = (_pluginCorejs2.default ||
   _pluginCorejs2) as typeof _pluginCorejs2.default;
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 const pluginCorejs3 = (_pluginCorejs3.default ||
   _pluginCorejs3) as typeof _pluginCorejs3.default;
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 const pluginRegenerator = (_pluginRegenerator.default ||
   _pluginRegenerator) as typeof _pluginRegenerator.default;
 
