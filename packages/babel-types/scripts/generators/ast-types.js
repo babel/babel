@@ -48,6 +48,12 @@ interface BaseComment {
   type: "CommentBlock" | "CommentLine";
 }
 
+interface Position {
+  line: number;
+  column: number;
+  index: number;
+}
+
 export interface CommentBlock extends BaseComment {
   type: "CommentBlock";
 }
@@ -59,15 +65,10 @@ export interface CommentLine extends BaseComment {
 export type Comment = CommentBlock | CommentLine;
 
 export interface SourceLocation {
-  start: {
-    line: number;
-    column: number;
-  };
-
-  end: {
-    line: number;
-    column: number;
-  };
+  start: Position;
+  end: Position;
+  filename: string;
+  identifierName: string | undefined | null;
 }
 
 interface BaseNode {
