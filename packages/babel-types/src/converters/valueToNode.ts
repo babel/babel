@@ -10,7 +10,6 @@ import {
   objectProperty,
   objectExpression,
   unaryExpression,
-  binaryExpression,
 } from "../builders/generated";
 import type * as t from "..";
 
