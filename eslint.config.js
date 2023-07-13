@@ -128,7 +128,6 @@ module.exports = [
 
           // Todo: Investigate, for each of these, whether we want them
           "@typescript-eslint/array-type": "off",
-          "@typescript-eslint/await-thenable": "off",
           "@typescript-eslint/ban-types": "off",
           "@typescript-eslint/consistent-generic-constructors": "off",
           "@typescript-eslint/consistent-indexed-object-style": "off",

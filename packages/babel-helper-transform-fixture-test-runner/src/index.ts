@@ -232,7 +232,10 @@ export function runCodeInTestContext(
   }
 }
 
-async function maybeMockConsole<R>(validateLogs: boolean, run: () => R) {
+async function maybeMockConsole<R>(
+  validateLogs: boolean,
+  run: () => Promise<R>,
+) {
   const actualLogs = { stdout: "", stderr: "" };
 
   if (!validateLogs) return { result: await run(), actualLogs };
