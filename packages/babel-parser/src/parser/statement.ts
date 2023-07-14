@@ -17,12 +17,7 @@ import {
   BIND_LEXICAL,
   BIND_VAR,
   BIND_FUNCTION,
-  SCOPE_CLASS,
-  SCOPE_FUNCTION,
-  SCOPE_OTHER,
-  SCOPE_SIMPLE_CATCH,
-  SCOPE_STATIC_BLOCK,
-  SCOPE_SUPER,
+  ScopeFlag,
   CLASS_ELEMENT_OTHER,
   CLASS_ELEMENT_INSTANCE_GETTER,
   CLASS_ELEMENT_INSTANCE_SETTER,
@@ -932,7 +927,7 @@ export default abstract class StatementParser extends ExpressionParser {
     if (this.isAwaitAllowed() && this.eatContextual(tt._await)) {
       awaitAt = this.state.lastTokStartLoc;
     }
-    this.scope.enter(SCOPE_OTHER);
+    this.scope.enter(ScopeFlag.OTHER);
     this.expect(tt.parenL);
 
     if (this.match(tt.semi)) {
@@ -1091,7 +1086,7 @@ export default abstract class StatementParser extends ExpressionParser {
     const cases: N.SwitchStatement["cases"] = (node.cases = []);
     this.expect(tt.braceL);
     this.state.labels.push(switchLabel);
-    this.scope.enter(SCOPE_OTHER);
+    this.scope.enter(ScopeFlag.OTHER);
 
     // Statements under must be grouped (by label) in SwitchCase
     // nodes. `cur` is used to keep the node that we are currently
@@ -1148,7 +1143,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
     this.scope.enter(
       this.options.annexB && param.type === "Identifier"
-        ? SCOPE_SIMPLE_CATCH
+        ? ScopeFlag.SIMPLE_CATCH
         : 0,
     );
     this.checkLVal(param, {
@@ -1177,7 +1172,7 @@ export default abstract class StatementParser extends ExpressionParser {
         this.expect(tt.parenR);
       } else {
         clause.param = null;
-        this.scope.enter(SCOPE_OTHER);
+        this.scope.enter(ScopeFlag.OTHER);
       }
 
       // Parse the catch clause's body.
@@ -1344,7 +1339,7 @@ export default abstract class StatementParser extends ExpressionParser {
     }
     this.expect(tt.braceL);
     if (createNewLexicalScope) {
-      this.scope.enter(SCOPE_OTHER);
+      this.scope.enter(ScopeFlag.OTHER);
     }
     this.parseBlockBody(
       node,
@@ -1629,7 +1624,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
     const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
     this.state.maybeInArrowParameters = false;
-    this.scope.enter(SCOPE_FUNCTION);
+    this.scope.enter(ScopeFlag.FUNCTION);
     this.prodParam.enter(functionFlags(isAsync, node.generator));
 
     if (!isDeclaration) {
@@ -2114,7 +2109,9 @@ export default abstract class StatementParser extends ExpressionParser {
     >,
   ) {
     // Start a new lexical scope
-    this.scope.enter(SCOPE_CLASS | SCOPE_STATIC_BLOCK | SCOPE_SUPER);
+    this.scope.enter(
+      ScopeFlag.CLASS | ScopeFlag.STATIC_BLOCK | ScopeFlag.SUPER,
+    );
     // Start a new scope with regard to loop labels
     const oldLabels = this.state.labels;
     this.state.labels = [];
@@ -2298,7 +2295,7 @@ export default abstract class StatementParser extends ExpressionParser {
       N.ClassProperty | N.ClassPrivateProperty | N.ClassAccessorProperty
     >,
   ): void {
-    this.scope.enter(SCOPE_CLASS | SCOPE_SUPER);
+    this.scope.enter(ScopeFlag.CLASS | ScopeFlag.SUPER);
     this.expressionScope.enter(newExpressionScope());
     this.prodParam.enter(PARAM);
     node.value = this.eat(tt.eq) ? this.parseMaybeAssignAllowIn() : null;

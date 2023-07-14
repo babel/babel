@@ -7,10 +7,9 @@ import {
   BIND_FLAGS_TS_EXPORT_ONLY,
   BIND_KIND_VALUE,
   BIND_FLAGS_CLASS,
-  type ScopeFlags,
+  ScopeFlag,
   type BindingTypes,
   BIND_FLAGS_TS_IMPORT,
-  SCOPE_TS_MODULE,
 } from "../../util/scopeflags";
 import type * as N from "../../types";
 import { Errors } from "../../parse-error";
@@ -40,14 +39,14 @@ class TypeScriptScope extends Scope {
 export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope> {
   importsStack: Set<string>[] = [];
 
-  createScope(flags: ScopeFlags): TypeScriptScope {
+  createScope(flags: ScopeFlag): TypeScriptScope {
     this.importsStack.push(new Set()); // Always keep the top-level scope for export checks.
 
     return new TypeScriptScope(flags);
   }
 
-  enter(flags: number): void {
-    if (flags == SCOPE_TS_MODULE) {
+  enter(flags: ScopeFlag): void {
+    if (flags == ScopeFlag.TS_MODULE) {
       this.importsStack.push(new Set());
     }
 
@@ -57,7 +56,7 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
   exit() {
     const flags = super.exit();
 
-    if (flags == SCOPE_TS_MODULE) {
+    if (flags == ScopeFlag.TS_MODULE) {
       this.importsStack.pop();
     }
 

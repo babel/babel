@@ -2,7 +2,7 @@ import type { Position } from "../../util/location";
 import ScopeHandler, { Scope } from "../../util/scope";
 import {
   BIND_FLAGS_FLOW_DECLARE_FN,
-  type ScopeFlags,
+  type ScopeFlag,
   type BindingTypes,
 } from "../../util/scopeflags";
 import type * as N from "../../types";
@@ -14,7 +14,7 @@ class FlowScope extends Scope {
 }
 
 export default class FlowScopeHandler extends ScopeHandler<FlowScope> {
-  createScope(flags: ScopeFlags): FlowScope {
+  createScope(flags: ScopeFlag): FlowScope {
     return new FlowScope(flags);
   }
 

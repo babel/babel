@@ -19,8 +19,7 @@ import { createPositionWithColumnOffset } from "../../util/location";
 import type Parser from "../../parser";
 import {
   type BindingTypes,
-  SCOPE_TS_MODULE,
-  SCOPE_OTHER,
+  ScopeFlag,
   BIND_TS_ENUM,
   BIND_TS_CONST_ENUM,
   BIND_TS_TYPE,
@@ -1906,7 +1905,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     tsParseModuleBlock(): N.TsModuleBlock {
       const node = this.startNode<N.TsModuleBlock>();
-      this.scope.enter(SCOPE_OTHER);
+      this.scope.enter(ScopeFlag.OTHER);
 
       this.expect(tt.braceL);
       // Inside of a module block is considered "top-level", meaning it can have imports and exports.
@@ -1936,7 +1935,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         // @ts-expect-error Fixme: refine typings
         node.body = inner;
       } else {
-        this.scope.enter(SCOPE_TS_MODULE);
+        this.scope.enter(ScopeFlag.TS_MODULE);
         this.prodParam.enter(PARAM);
         node.body = this.tsParseModuleBlock();
         this.prodParam.exit();
@@ -1957,7 +1956,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         this.unexpected();
       }
       if (this.match(tt.braceL)) {
-        this.scope.enter(SCOPE_TS_MODULE);
+        this.scope.enter(ScopeFlag.TS_MODULE);
         this.prodParam.enter(PARAM);
         node.body = this.tsParseModuleBlock();
         this.prodParam.exit();
@@ -2151,7 +2150,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           // `global { }` (with no `declare`) may appear inside an ambient module declaration.
           // Would like to use tsParseAmbientExternalModuleDeclaration here, but already ran past "global".
           if (this.match(tt.braceL)) {
-            this.scope.enter(SCOPE_TS_MODULE);
+            this.scope.enter(ScopeFlag.TS_MODULE);
             this.prodParam.enter(PARAM);
             const mod = node;
             mod.global = true;

@@ -1,28 +1,17 @@
 // Each scope gets a bitset that may contain these flags
-// prettier-ignore
-export const SCOPE_OTHER        = 0b000000000,
-             SCOPE_PROGRAM      = 0b000000001,
-             SCOPE_FUNCTION     = 0b000000010,
-             SCOPE_ARROW        = 0b000000100,
-             SCOPE_SIMPLE_CATCH = 0b000001000,
-             SCOPE_SUPER        = 0b000010000,
-             SCOPE_DIRECT_SUPER = 0b000100000,
-             SCOPE_CLASS        = 0b001000000,
-             SCOPE_STATIC_BLOCK = 0b010000000,
-             SCOPE_TS_MODULE    = 0b100000000,
-             SCOPE_VAR = SCOPE_PROGRAM | SCOPE_FUNCTION | SCOPE_STATIC_BLOCK | SCOPE_TS_MODULE;
-
-export type ScopeFlags =
-  | typeof SCOPE_OTHER
-  | typeof SCOPE_PROGRAM
-  | typeof SCOPE_FUNCTION
-  | typeof SCOPE_VAR
-  | typeof SCOPE_ARROW
-  | typeof SCOPE_SIMPLE_CATCH
-  | typeof SCOPE_SUPER
-  | typeof SCOPE_DIRECT_SUPER
-  | typeof SCOPE_CLASS
-  | typeof SCOPE_STATIC_BLOCK;
+export const enum ScopeFlag {
+  OTHER = 0b000000000,
+  PROGRAM = 0b000000001,
+  FUNCTION = 0b000000010,
+  ARROW = 0b000000100,
+  SIMPLE_CATCH = 0b000001000,
+  SUPER = 0b000010000,
+  DIRECT_SUPER = 0b000100000,
+  CLASS = 0b001000000,
+  STATIC_BLOCK = 0b010000000,
+  TS_MODULE = 0b100000000,
+  VAR = PROGRAM | FUNCTION | STATIC_BLOCK | TS_MODULE,
+}
 
 // These flags are meant to be _only_ used inside the Scope class (or subclasses).
 // prettier-ignore

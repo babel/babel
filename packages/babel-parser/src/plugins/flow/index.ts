@@ -22,9 +22,7 @@ import {
   BIND_VAR,
   BIND_FUNCTION,
   BIND_FLOW_DECLARE_FN,
-  SCOPE_ARROW,
-  SCOPE_FUNCTION,
-  SCOPE_OTHER,
+  ScopeFlag,
   type BindingTypes,
 } from "../../util/scopeflags";
 import type { ExpressionErrors } from "../../parser/util";
@@ -508,7 +506,7 @@ export default (superClass: typeof Parser) =>
     flowParseDeclareModule(
       node: Undone<N.FlowDeclareModule>,
     ): N.FlowDeclareModule {
-      this.scope.enter(SCOPE_OTHER);
+      this.scope.enter(ScopeFlag.OTHER);
 
       if (this.match(tt.string)) {
         node.id = super.parseExprAtom();
@@ -2163,7 +2161,7 @@ export default (superClass: typeof Parser) =>
         /* isLHS */ false,
       );
       // Enter scope, as checkParams defines bindings
-      this.scope.enter(SCOPE_FUNCTION | SCOPE_ARROW);
+      this.scope.enter(ScopeFlag.FUNCTION | ScopeFlag.ARROW);
       // Use super's method to force the parameters to be checked
       super.checkParams(node, false, true);
       this.scope.exit();
