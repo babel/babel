@@ -70,6 +70,8 @@ export default declare((api, options: Options) => {
       version !== "2018-09" &&
       version !== "legacy"
     ) {
+      // Fallback to print the invalid version option regardless of the type
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
       throw new Error("Unsupported decorators version: " + version);
     }
 

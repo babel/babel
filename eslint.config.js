@@ -152,7 +152,6 @@ module.exports = [
           "@typescript-eslint/prefer-nullish-coalescing": "off",
           "@typescript-eslint/prefer-string-starts-ends-with": "off",
           "@typescript-eslint/require-await": "off",
-          "@typescript-eslint/restrict-plus-operands": "off",
           "@typescript-eslint/restrict-template-expressions": "off",
           "@typescript-eslint/sort-type-constituents": "off",
           "@typescript-eslint/triple-slash-reference": "off",
