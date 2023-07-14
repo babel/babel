@@ -47,29 +47,29 @@ There are four different expression scope
 // @see {@link https://docs.google.com/document/d/1FAvEp9EUK-G8kHfDIEo_385Hs2SUBCYbJ5H-NnLvq8M|V8 Expression Scope design docs}
  */
 
-const kExpression = 0,
+const enum ExpressionScopeType {
+  kExpression = 0,
   kMaybeArrowParameterDeclaration = 1,
   kMaybeAsyncArrowParameterDeclaration = 2,
-  kParameterDeclaration = 3;
-
-type ExpressionScopeType = 0 | 1 | 2 | 3;
+  kParameterDeclaration = 3,
+}
 
 class ExpressionScope {
-  type: ExpressionScopeType;
+  declare type: ExpressionScopeType;
 
-  constructor(type: ExpressionScopeType = kExpression) {
+  constructor(type: ExpressionScopeType = ExpressionScopeType.kExpression) {
     this.type = type;
   }
 
   canBeArrowParameterDeclaration(): this is ArrowHeadParsingScope {
     return (
-      this.type === kMaybeAsyncArrowParameterDeclaration ||
-      this.type === kMaybeArrowParameterDeclaration
+      this.type === ExpressionScopeType.kMaybeAsyncArrowParameterDeclaration ||
+      this.type === ExpressionScopeType.kMaybeArrowParameterDeclaration
     );
   }
 
   isCertainlyParameterDeclaration() {
-    return this.type === kParameterDeclaration;
+    return this.type === ExpressionScopeType.kParameterDeclaration;
   }
 }
 
@@ -84,7 +84,11 @@ type ArrowHeadParsingDeclarationError =
 class ArrowHeadParsingScope extends ExpressionScope {
   declarationErrors: Map<number, [ParseErrorConstructor<{}>, Position]> =
     new Map();
-  constructor(type: 1 | 2) {
+  constructor(
+    type:
+      | ExpressionScopeType.kMaybeArrowParameterDeclaration
+      | ExpressionScopeType.kMaybeAsyncArrowParameterDeclaration,
+  ) {
     super(type);
   }
   recordDeclarationError(
@@ -147,7 +151,7 @@ export default class ExpressionScopeHandler {
       if (scope.canBeArrowParameterDeclaration()) {
         scope.recordDeclarationError(toParseError, origin);
       } else {
-        /*:: invariant(scope.type == kExpression) */
+        /*:: invariant(scope.type == ExpressionScopeType.kExpression) */
         // Type-Expression is the boundary where initializer error can populate to
         return;
       }
@@ -206,7 +210,9 @@ export default class ExpressionScopeHandler {
     let i = stack.length - 1;
     let scope: ExpressionScope = stack[i];
     while (scope.canBeArrowParameterDeclaration()) {
-      if (scope.type === kMaybeAsyncArrowParameterDeclaration) {
+      if (
+        scope.type === ExpressionScopeType.kMaybeAsyncArrowParameterDeclaration
+      ) {
         scope.recordDeclarationError(Errors.AwaitBindingIdentifier, { at });
       }
       scope = stack[--i];
@@ -231,15 +237,19 @@ export default class ExpressionScopeHandler {
 }
 
 export function newParameterDeclarationScope() {
-  return new ExpressionScope(kParameterDeclaration);
+  return new ExpressionScope(ExpressionScopeType.kParameterDeclaration);
 }
 
 export function newArrowHeadScope() {
-  return new ArrowHeadParsingScope(kMaybeArrowParameterDeclaration);
+  return new ArrowHeadParsingScope(
+    ExpressionScopeType.kMaybeArrowParameterDeclaration,
+  );
 }
 
 export function newAsyncArrowScope() {
-  return new ArrowHeadParsingScope(kMaybeAsyncArrowParameterDeclaration);
+  return new ArrowHeadParsingScope(
+    ExpressionScopeType.kMaybeAsyncArrowParameterDeclaration,
+  );
 }
 
 export function newExpressionScope() {
