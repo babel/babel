@@ -2709,7 +2709,7 @@ export default abstract class StatementParser extends ExpressionParser {
           }
         }
         // @ts-expect-error node.specifiers may not exist
-      } else if (node.specifiers && node.specifiers.length) {
+      } else if (node.specifiers?.length) {
         // Named exports
         // @ts-expect-error node.specifiers may not exist
         for (const specifier of node.specifiers) {

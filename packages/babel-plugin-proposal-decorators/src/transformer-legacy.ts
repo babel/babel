@@ -113,7 +113,7 @@ function applyClassDecorators(classPath: NodePath<t.ClassExpression>) {
 }
 
 function hasClassDecorators(classNode: t.Class) {
-  return !!(classNode.decorators && classNode.decorators.length);
+  return !!classNode.decorators?.length;
 }
 
 /**

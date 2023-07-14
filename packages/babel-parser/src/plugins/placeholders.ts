@@ -181,10 +181,7 @@ export default (superClass: typeof Parser) =>
       node: MaybePlaceholder<"Statement">,
       expr: N.Expression,
     ): MaybePlaceholder<"Statement"> {
-      if (
-        expr.type !== "Placeholder" ||
-        (expr.extra && expr.extra.parenthesized)
-      ) {
+      if (expr.type !== "Placeholder" || expr.extra?.parenthesized) {
         // @ts-expect-error placeholder typings
         return super.parseExpressionStatement(node, expr);
       }

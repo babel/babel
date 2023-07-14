@@ -150,7 +150,6 @@ module.exports = [
           "@typescript-eslint/prefer-for-of": "off",
           "@typescript-eslint/prefer-function-type": "off",
           "@typescript-eslint/prefer-nullish-coalescing": "off",
-          "@typescript-eslint/prefer-optional-chain": "off",
           "@typescript-eslint/prefer-string-starts-ends-with": "off",
           "@typescript-eslint/require-await": "off",
           "@typescript-eslint/restrict-plus-operands": "off",

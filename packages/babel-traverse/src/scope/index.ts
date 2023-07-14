@@ -71,8 +71,7 @@ function gatherNodeParts(node: t.Node, parts: NodePart[]) {
           gatherNodeParts(node.source, parts);
         } else if (
           (isExportNamedDeclaration(node) || isImportDeclaration(node)) &&
-          node.specifiers &&
-          node.specifiers.length
+          node.specifiers?.length
         ) {
           for (const e of node.specifiers) gatherNodeParts(e, parts);
         } else if (
