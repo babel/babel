@@ -18,11 +18,7 @@ import {
   BIND_VAR,
   BIND_FUNCTION,
   ScopeFlag,
-  CLASS_ELEMENT_OTHER,
-  CLASS_ELEMENT_INSTANCE_GETTER,
-  CLASS_ELEMENT_INSTANCE_SETTER,
-  CLASS_ELEMENT_STATIC_GETTER,
-  CLASS_ELEMENT_STATIC_SETTER,
+  ClassElementType,
   type BindingTypes,
   BIND_CATCH_PARAM,
 } from "../util/scopeflags";
@@ -2156,7 +2152,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
     this.classScope.declarePrivateName(
       this.getPrivateNameSV(node.key),
-      CLASS_ELEMENT_OTHER,
+      ClassElementType.OTHER,
       node.key.loc.start,
     );
   }
@@ -2184,7 +2180,7 @@ export default abstract class StatementParser extends ExpressionParser {
     if (isPrivate) {
       this.classScope.declarePrivateName(
         this.getPrivateNameSV(node.key),
-        CLASS_ELEMENT_OTHER,
+        ClassElementType.OTHER,
         node.key.loc.start,
       );
     }
@@ -2233,13 +2229,13 @@ export default abstract class StatementParser extends ExpressionParser {
     const kind =
       node.kind === "get"
         ? node.static
-          ? CLASS_ELEMENT_STATIC_GETTER
-          : CLASS_ELEMENT_INSTANCE_GETTER
+          ? ClassElementType.STATIC_GETTER
+          : ClassElementType.INSTANCE_GETTER
         : node.kind === "set"
         ? node.static
-          ? CLASS_ELEMENT_STATIC_SETTER
-          : CLASS_ELEMENT_INSTANCE_SETTER
-        : CLASS_ELEMENT_OTHER;
+          ? ClassElementType.STATIC_SETTER
+          : ClassElementType.INSTANCE_SETTER
+        : ClassElementType.OTHER;
     this.declareClassPrivateMethodInScope(node, kind);
   }
 
