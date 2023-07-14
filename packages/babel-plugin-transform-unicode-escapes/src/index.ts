@@ -13,14 +13,12 @@ export default declare(api => {
       return "\\u" + code.toString(16).padStart(4, "0");
     } else {
       let str = code.toString(16);
-      // Sigh, node 6 doesn't have padStart
-      // TODO: Remove in Babel 8, when we drop node 6.
       while (str.length < 4) str = "0" + str;
       return "\\u" + str;
     }
   }
 
-  function replacer(match: string, backslashes: string[], code: string) {
+  function replacer(match: string, backslashes: string, code: string) {
     if (backslashes.length % 2 === 0) {
       return match;
     }

@@ -255,7 +255,7 @@ export default declare(api => {
 
       Class(path) {
         const { node } = path;
-        let comments = [];
+        let comments: [string?, ...(string | t.Comment)[]] = [];
         if (node.typeParameters) {
           const typeParameters = path.get("typeParameters");
           comments.push(
