@@ -155,7 +155,7 @@ export function arrowFunctionToExpression(
     allowInsertArrow = true,
     allowInsertArrowWithRest = allowInsertArrow,
     noNewArrows = process.env.BABEL_8_BREAKING
-      ? // TODO(Babel 8): Consider defaulting to `false` for spec compliancy
+      ? // TODO(Babel 8): Consider defaulting to `false` for spec compliance
         true
       : !arguments[0]?.specCompliant,
   }: {
@@ -245,7 +245,7 @@ const getSuperCallsVisitor = mergeVisitors<{
  */
 function hoistFunctionEnvironment(
   fnPath: NodePath<t.Function>,
-  // TODO(Babel 8): Consider defaulting to `false` for spec compliancy
+  // TODO(Babel 8): Consider defaulting to `false` for spec compliance
   noNewArrows: boolean | void = true,
   allowInsertArrow: boolean | void = true,
   allowInsertArrowWithRest: boolean | void = true,

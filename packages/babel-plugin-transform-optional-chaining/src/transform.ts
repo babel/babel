@@ -143,7 +143,7 @@ export function transformOptionalChain(
     } else if (scope.isStatic(chain)) {
       check = ref = chainWithTypes;
     } else {
-      // We cannot re-use the tmpVar for calls, because we need to
+      // We cannot reuse the tmpVar for calls, because we need to
       // store both the method and the receiver.
       if (!tmpVar || isCall) {
         tmpVar = scope.generateUidIdentifierBasedOnNode(chain);

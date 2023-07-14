@@ -32,7 +32,7 @@ export default class SourceMap {
   private _lastGenLine = 0;
   private _lastSourceLine = 0;
 
-  // Source columns can be 0, but we ony check in unison with sourceLine, which
+  // Source columns can be 0, but we only check in unison with sourceLine, which
   // inits to an impossible value. So init to 0 is fine.
   private _lastSourceColumn = 0;
 

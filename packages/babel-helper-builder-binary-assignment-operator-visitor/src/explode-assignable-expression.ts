@@ -22,7 +22,7 @@ function getObjRef(
   if (isIdentifier(node)) {
     if (scope.hasBinding(node.name)) {
       // this variable is declared in scope so we can be 100% sure
-      // that evaluating it multiple times wont trigger a getter
+      // that evaluating it multiple times won't trigger a getter
       // or something else
       return node;
     } else {

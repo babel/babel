@@ -441,7 +441,7 @@ export default class Buffer {
   source(prop: "start" | "end", loc: Loc | undefined): void {
     if (!this._map) return;
 
-    // Since this is called extremely often, we re-use the same _sourcePosition
+    // Since this is called extremely often, we reuse the same _sourcePosition
     // object for the whole lifetime of the buffer.
     this._normalizePosition(prop, loc, 0);
   }

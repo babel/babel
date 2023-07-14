@@ -2960,7 +2960,7 @@ export default abstract class StatementParser extends ExpressionParser {
   }
 
   /*
-   * Parse `module` in `import module x fro "x"`, disambiguating
+   * Parse `module` in `import module x from "x"`, disambiguating
    * `import module from "x"` and `import module from from "x"`.
    *
    * This function might return an identifier representing the `module`

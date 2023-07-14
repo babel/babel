@@ -170,7 +170,7 @@ export function setContext<S = unknown>(
   if (context) {
     this.context = context;
     this.state = context.state;
-    // Discard the S type parameter from contect.opts
+    // Discard the S type parameter from context.opts
     this.opts = context.opts as typeof this.opts;
   }
 
