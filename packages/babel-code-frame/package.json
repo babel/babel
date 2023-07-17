@@ -19,7 +19,7 @@
     "@babel/highlight": "workspace:^"
   },
   "devDependencies": {
-    "strip-ansi": "^4.0.0"
+    "strip-ansi": "^7.1.0"
   },
   "engines": {
     "node": ">=6.9.0"
