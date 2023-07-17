@@ -65,7 +65,7 @@ module.exports = {
   ],
   testEnvironment: "node",
   transformIgnorePatterns: [
-    "/node_modules/",
+    "/node_modules/(?!strip-ansi|ansi-regex)",
     "<rootDir>/packages/babel-standalone/babel(\\.min)?\\.js",
     "/test/(fixtures|tmp|__data__)/",
     "<rootDir>/(packages|codemods|eslint)/[^/]+/lib/",
