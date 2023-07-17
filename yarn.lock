@@ -1080,7 +1080,7 @@ __metadata:
   dependencies:
     "@babel/helper-validator-identifier": "workspace:^"
     "@types/chalk": ^2.0.0
-    chalk: ^2.0.0
+    chalk: "condition:BABEL_8_BREAKING ? ^5.3.0 : ^2.0.0 (esm:default)"
     js-tokens: "condition:BABEL_8_BREAKING ? ^8.0.0 : ^4.0.0"
     strip-ansi: ^4.0.0
   languageName: unknown
@@ -3924,7 +3924,7 @@ __metadata:
   dependencies:
     "@babel/runtime": "workspace:^"
     "@babel/runtime-corejs3": "workspace:^"
-    chalk: ^4.1.0
+    chalk: ^5.3.0
   languageName: unknown
   linkType: soft
 
@@ -3983,7 +3983,7 @@ __metadata:
     "@babel/helper-string-parser": "workspace:^"
     "@babel/helper-validator-identifier": "workspace:^"
     "@babel/parser": "workspace:^"
-    chalk: ^4.1.0
+    chalk: ^5.3.0
     glob: ^7.2.0
     to-fast-properties: "condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0"
   languageName: unknown
@@ -6898,6 +6898,34 @@ __metadata:
   languageName: node
   linkType: hard
 
+"chalk-BABEL_8_BREAKING-false@npm:chalk@^2.0.0, chalk@npm:^2.0.0":
+  version: 2.4.2
+  resolution: "chalk@npm:2.4.2"
+  dependencies:
+    ansi-styles: ^3.2.1
+    escape-string-regexp: ^1.0.5
+    supports-color: ^5.3.0
+  checksum: ec3661d38fe77f681200f878edbd9448821924e0f93a9cefc0e26a33b145f1027a2084bf19967160d11e1f03bfe4eaffcabf5493b89098b2782c3fe0b03d80c2
+  languageName: node
+  linkType: hard
+
+"chalk-BABEL_8_BREAKING-true@npm:chalk@^5.3.0, chalk@npm:^5.3.0":
+  version: 5.3.0
+  resolution: "chalk@npm:5.3.0"
+  checksum: 623922e077b7d1e9dedaea6f8b9e9352921f8ae3afe739132e0e00c275971bdd331268183b2628cf4ab1727c45ea1f28d7e24ac23ce1db1eb653c414ca8a5a80
+  languageName: node
+  linkType: hard
+
+"chalk@condition:BABEL_8_BREAKING ? ^5.3.0 : ^2.0.0 (esm:default)":
+  version: 0.0.0-condition-be18bf
+  resolution: "chalk@condition:BABEL_8_BREAKING?^5.3.0:^2.0.0(esm:default)#be18bf"
+  dependencies:
+    chalk-BABEL_8_BREAKING-false: "npm:chalk@^2.0.0"
+    chalk-BABEL_8_BREAKING-true: "npm:chalk@^5.3.0"
+  checksum: 674fea9ff1468a4ffeb3c68d1c85448123104ecc3dbca04857116d281bd66918ab2a39b3b42f622b8e11bd387955174a394eb407525e8f6e8ebe825c8c1af455
+  languageName: node
+  linkType: hard
+
 "chalk@npm:*, chalk@npm:^5.0.0":
   version: 5.0.0
   resolution: "chalk@npm:5.0.0"
@@ -6918,18 +6946,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:^2.0.0":
-  version: 2.4.2
-  resolution: "chalk@npm:2.4.2"
-  dependencies:
-    ansi-styles: ^3.2.1
-    escape-string-regexp: ^1.0.5
-    supports-color: ^5.3.0
-  checksum: ec3661d38fe77f681200f878edbd9448821924e0f93a9cefc0e26a33b145f1027a2084bf19967160d11e1f03bfe4eaffcabf5493b89098b2782c3fe0b03d80c2
-  languageName: node
-  linkType: hard
-
-"chalk@npm:^4.0.0, chalk@npm:^4.1.0":
+"chalk@npm:^4.0.0":
   version: 4.1.0
   resolution: "chalk@npm:4.1.0"
   dependencies:

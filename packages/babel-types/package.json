@@ -31,7 +31,7 @@
   "devDependencies": {
     "@babel/generator": "workspace:^",
     "@babel/parser": "workspace:^",
-    "chalk": "^4.1.0",
+    "chalk": "^5.3.0",
     "glob": "^7.2.0"
   },
   "engines": {
