@@ -18,10 +18,7 @@ import * as charCodes from "charcodes";
 import { isIteratorStart } from "../../util/identifier";
 import FlowScopeHandler from "./scope";
 import {
-  BIND_LEXICAL,
-  BIND_VAR,
-  BIND_FUNCTION,
-  BIND_FLOW_DECLARE_FN,
+  BindingFlag,
   ScopeFlag,
   type BindingTypes,
 } from "../../util/scopeflags";
@@ -450,7 +447,7 @@ export default (superClass: typeof Parser) =>
 
       this.scope.declareName(
         node.id.name,
-        BIND_FLOW_DECLARE_FN,
+        BindingFlag.TYPE_FLOW_DECLARE_FN,
         node.id.loc.start,
       );
 
@@ -498,7 +495,11 @@ export default (superClass: typeof Parser) =>
       node.id = this.flowParseTypeAnnotatableIdentifier(
         /*allowPrimitiveOverride*/ true,
       );
-      this.scope.declareName(node.id.name, BIND_VAR, node.id.loc.start);
+      this.scope.declareName(
+        node.id.name,
+        BindingFlag.TYPE_VAR,
+        node.id.loc.start,
+      );
       this.semicolon();
       return this.finishNode(node, "DeclareVariable");
     }
@@ -700,7 +701,7 @@ export default (superClass: typeof Parser) =>
 
       this.scope.declareName(
         node.id.name,
-        isClass ? BIND_FUNCTION : BIND_LEXICAL,
+        isClass ? BindingFlag.TYPE_FUNCTION : BindingFlag.TYPE_LEXICAL,
         node.id.loc.start,
       );
 
@@ -803,7 +804,11 @@ export default (superClass: typeof Parser) =>
         /* liberal */ false,
         /* declaration */ true,
       );
-      this.scope.declareName(node.id.name, BIND_LEXICAL, node.id.loc.start);
+      this.scope.declareName(
+        node.id.name,
+        BindingFlag.TYPE_LEXICAL,
+        node.id.loc.start,
+      );
 
       if (this.match(tt.lt)) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
@@ -826,7 +831,11 @@ export default (superClass: typeof Parser) =>
         /* liberal */ true,
         /* declaration */ true,
       );
-      this.scope.declareName(node.id.name, BIND_LEXICAL, node.id.loc.start);
+      this.scope.declareName(
+        node.id.name,
+        BindingFlag.TYPE_LEXICAL,
+        node.id.loc.start,
+      );
 
       if (this.match(tt.lt)) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();

@@ -20,16 +20,7 @@ import type Parser from "../../parser";
 import {
   type BindingTypes,
   ScopeFlag,
-  BIND_TS_ENUM,
-  BIND_TS_CONST_ENUM,
-  BIND_TS_TYPE,
-  BIND_TS_INTERFACE,
-  BIND_TS_AMBIENT,
-  BIND_TS_NAMESPACE,
-  BIND_TS_TYPE_IMPORT,
-  BIND_CLASS,
-  BIND_NONE,
-  BIND_FLAGS_TS_IMPORT,
+  BindingFlag,
 } from "../../util/scopeflags";
 import TypeScriptScopeHandler from "./scope";
 import * as charCodes from "charcodes";
@@ -1750,7 +1741,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       if (properties.declare) node.declare = true;
       if (tokenIsIdentifier(this.state.type)) {
         node.id = this.parseIdentifier();
-        this.checkIdentifier(node.id, BIND_TS_INTERFACE);
+        this.checkIdentifier(node.id, BindingFlag.TYPE_TS_INTERFACE);
       } else {
         node.id = null;
         this.raise(TSErrors.MissingInterfaceName, { at: this.state.startLoc });
@@ -1772,7 +1763,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       node: N.TsTypeAliasDeclaration,
     ): N.TsTypeAliasDeclaration {
       node.id = this.parseIdentifier();
-      this.checkIdentifier(node.id, BIND_TS_TYPE);
+      this.checkIdentifier(node.id, BindingFlag.TYPE_TS_TYPE);
 
       node.typeAnnotation = this.tsInType(() => {
         node.typeParameters = this.tsTryParseTypeParameters(
@@ -1891,7 +1882,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       node.id = this.parseIdentifier();
       this.checkIdentifier(
         node.id,
-        node.const ? BIND_TS_CONST_ENUM : BIND_TS_ENUM,
+        node.const ? BindingFlag.TYPE_TS_CONST_ENUM : BindingFlag.TYPE_TS_ENUM,
       );
 
       this.expect(tt.braceL);
@@ -1926,7 +1917,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       node.id = this.parseIdentifier();
 
       if (!nested) {
-        this.checkIdentifier(node.id, BIND_TS_NAMESPACE);
+        this.checkIdentifier(node.id, BindingFlag.TYPE_TS_NAMESPACE);
       }
 
       if (this.eat(tt.dot)) {
@@ -1975,7 +1966,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     ): N.TsImportEqualsDeclaration {
       node.isExport = isExport || false;
       node.id = maybeDefaultIdentifier || this.parseIdentifier();
-      this.checkIdentifier(node.id, BIND_FLAGS_TS_IMPORT);
+      this.checkIdentifier(node.id, BindingFlag.TYPE_TS_VALUE_IMPORT);
       this.expect(tt.eq);
       const moduleReference = this.tsParseModuleReference();
       if (
@@ -2423,7 +2414,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       if (!node.body && node.id) {
         // Function ids are validated after parsing their body.
         // For bodiless function, we need to do it here.
-        this.checkIdentifier(node.id, BIND_TS_AMBIENT);
+        this.checkIdentifier(node.id, BindingFlag.TYPE_TS_AMBIENT);
       } else {
         super.registerFunctionStatementId(node);
       }
@@ -3203,7 +3194,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         node,
         isStatement,
         optionalId,
-        (node as any).declare ? BIND_TS_AMBIENT : BIND_CLASS,
+        (node as any).declare
+          ? BindingFlag.TYPE_TS_AMBIENT
+          : BindingFlag.TYPE_CLASS,
       );
       const typeParameters = this.tsTryParseTypeParameters(
         this.tsParseInOutConstModifiers,
@@ -3714,11 +3707,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             TSTypeCastExpression: true,
             TSParameterProperty: "parameter",
             TSNonNullExpression: "expression",
-            TSAsExpression: (binding !== BIND_NONE ||
+            TSAsExpression: (binding !== BindingFlag.TYPE_NONE ||
               !isUnparenthesizedInAssign) && ["expression", true],
-            TSSatisfiesExpression: (binding !== BIND_NONE ||
+            TSSatisfiesExpression: (binding !== BindingFlag.TYPE_NONE ||
               !isUnparenthesizedInAssign) && ["expression", true],
-            TSTypeAssertion: (binding !== BIND_NONE ||
+            TSTypeAssertion: (binding !== BindingFlag.TYPE_NONE ||
               !isUnparenthesizedInAssign) && ["expression", true],
           },
           type,
@@ -4079,7 +4072,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         importedIsString,
         isInTypeOnlyImport,
         isMaybeTypeOnly,
-        isInTypeOnlyImport ? BIND_TS_TYPE_IMPORT : BIND_FLAGS_TS_IMPORT,
+        isInTypeOnlyImport
+          ? BindingFlag.TYPE_TS_TYPE_IMPORT
+          : BindingFlag.TYPE_TS_VALUE_IMPORT,
       );
     }
 
@@ -4177,7 +4172,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       if (isImport) {
         this.checkIdentifier(
           node[rightOfAsKey],
-          hasTypeSpecifier ? BIND_TS_TYPE_IMPORT : BIND_FLAGS_TS_IMPORT,
+          hasTypeSpecifier
+            ? BindingFlag.TYPE_TS_TYPE_IMPORT
+            : BindingFlag.TYPE_TS_VALUE_IMPORT,
         );
       }
     }

@@ -26,11 +26,7 @@ import {
   isStrictBindReservedWord,
 } from "../util/identifier";
 import { NodeUtils, type Undone } from "./node";
-import {
-  type BindingTypes,
-  BIND_NONE,
-  BIND_FLAGS_NO_LET_IN_LEXICAL,
-} from "../util/scopeflags";
+import { type BindingTypes, BindingFlag } from "../util/scopeflags";
 import type { ExpressionErrors } from "./util";
 import { Errors, type LValAncestor } from "../parse-error";
 import type Parser from "./index";
@@ -566,7 +562,7 @@ export default abstract class LValParser extends NodeUtils {
    *        if the check fails.
    * @param options.binding
    *        The desired binding type. If the given expression is an identifier
-   *        and `binding` is not `BIND_NONE`, `checkLVal` will register binding
+   *        and `binding` is not `BindingFlag.TYPE_NONE`, `checkLVal` will register binding
    *        to the parser scope See also `src/util/scopeflags.js`
    * @param options.checkClashes
    *        An optional string set to check if an identifier name is included.
@@ -585,7 +581,7 @@ export default abstract class LValParser extends NodeUtils {
     expression: Expression | ObjectMember | RestElement,
     {
       in: ancestor,
-      binding = BIND_NONE,
+      binding = BindingFlag.TYPE_NONE,
       checkClashes = false,
       strictModeChanged = false,
       hasParenthesizedAncestor = false,
@@ -605,7 +601,7 @@ export default abstract class LValParser extends NodeUtils {
     if (this.isObjectMethod(expression)) return;
 
     if (type === "MemberExpression") {
-      if (binding !== BIND_NONE) {
+      if (binding !== BindingFlag.TYPE_NONE) {
         this.raise(Errors.InvalidPropertyBindingPattern, { at: expression });
       }
       return;
@@ -641,7 +637,9 @@ export default abstract class LValParser extends NodeUtils {
     if (validity === true) return;
     if (validity === false) {
       const ParseErrorClass =
-        binding === BIND_NONE ? Errors.InvalidLhs : Errors.InvalidLhsBinding;
+        binding === BindingFlag.TYPE_NONE
+          ? Errors.InvalidLhs
+          : Errors.InvalidLhsBinding;
 
       this.raise(ParseErrorClass, { at: expression, ancestor });
       return;
@@ -682,7 +680,7 @@ export default abstract class LValParser extends NodeUtils {
         ? isStrictBindReservedWord(at.name, this.inModule)
         : isStrictBindOnlyReservedWord(at.name))
     ) {
-      if (bindingType === BIND_NONE) {
+      if (bindingType === BindingFlag.TYPE_NONE) {
         this.raise(Errors.StrictEvalArguments, { at, referenceName: at.name });
       } else {
         this.raise(Errors.StrictEvalArgumentsBinding, {
@@ -692,11 +690,11 @@ export default abstract class LValParser extends NodeUtils {
       }
     }
 
-    if (bindingType & BIND_FLAGS_NO_LET_IN_LEXICAL && at.name === "let") {
+    if (bindingType & BindingFlag.FLAG_NO_LET_IN_LEXICAL && at.name === "let") {
       this.raise(Errors.LetInLexicalBinding, { at });
     }
 
-    if (!(bindingType & BIND_NONE)) {
+    if (!(bindingType & BindingFlag.TYPE_NONE)) {
       this.declareNameFromIdentifier(at, bindingType);
     }
   }

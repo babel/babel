@@ -1,11 +1,4 @@
-import {
-  ScopeFlag,
-  BIND_SCOPE_FUNCTION,
-  BIND_SCOPE_VAR,
-  BIND_SCOPE_LEXICAL,
-  BIND_KIND_VALUE,
-  type BindingTypes,
-} from "./scopeflags";
+import { ScopeFlag, BindingFlag, type BindingTypes } from "./scopeflags";
 import type { Position } from "./location";
 import type * as N from "../types";
 import { Errors } from "../parse-error";
@@ -104,19 +97,22 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
 
   declareName(name: string, bindingType: BindingTypes, loc: Position) {
     let scope = this.currentScope();
-    if (bindingType & BIND_SCOPE_LEXICAL || bindingType & BIND_SCOPE_FUNCTION) {
+    if (
+      bindingType & BindingFlag.SCOPE_LEXICAL ||
+      bindingType & BindingFlag.SCOPE_FUNCTION
+    ) {
       this.checkRedeclarationInScope(scope, name, bindingType, loc);
 
-      if (bindingType & BIND_SCOPE_FUNCTION) {
+      if (bindingType & BindingFlag.SCOPE_FUNCTION) {
         scope.functions.add(name);
       } else {
         scope.lexical.add(name);
       }
 
-      if (bindingType & BIND_SCOPE_LEXICAL) {
+      if (bindingType & BindingFlag.SCOPE_LEXICAL) {
         this.maybeExportDefined(scope, name);
       }
-    } else if (bindingType & BIND_SCOPE_VAR) {
+    } else if (bindingType & BindingFlag.SCOPE_VAR) {
       for (let i = this.scopeStack.length - 1; i >= 0; --i) {
         scope = this.scopeStack[i];
         this.checkRedeclarationInScope(scope, name, bindingType, loc);
@@ -156,9 +152,9 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
     name: string,
     bindingType: BindingTypes,
   ): boolean {
-    if (!(bindingType & BIND_KIND_VALUE)) return false;
+    if (!(bindingType & BindingFlag.KIND_VALUE)) return false;
 
-    if (bindingType & BIND_SCOPE_LEXICAL) {
+    if (bindingType & BindingFlag.SCOPE_LEXICAL) {
       return (
         scope.lexical.has(name) ||
         scope.functions.has(name) ||
@@ -166,7 +162,7 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
       );
     }
 
-    if (bindingType & BIND_SCOPE_FUNCTION) {
+    if (bindingType & BindingFlag.SCOPE_FUNCTION) {
       return (
         scope.lexical.has(name) ||
         (!this.treatFunctionsAsVarInScope(scope) && scope.var.has(name))
