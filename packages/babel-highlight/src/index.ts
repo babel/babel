@@ -7,9 +7,12 @@ import {
   isStrictReservedWord,
   isKeyword,
 } from "@babel/helper-validator-identifier";
+
 import _chalk, { supportsColor, Chalk, type ChalkInstance } from "chalk";
-// TODO: Eventuallu remove the .default fallback when we fully migrate to chalk 5
-const chalk = (_chalk as unknown as typeof import("chalk")).default ?? _chalk;
+// TODO: Eventually remove the .default fallback when we fully migrate to chalk 5
+const chalk =
+  (_chalk as unknown as typeof import("chalk-BABEL_8_BREAKING-false"))
+    .default ?? _chalk;
 
 /**
  * Names that are always allowed as identifiers, but also appear as keywords
@@ -251,21 +254,22 @@ type Options = {
  * Whether the code should be highlighted given the passed options.
  */
 export function shouldHighlight(options: Options): boolean {
-  return !!supportsColor || options.forceColor;
+  return Boolean(
+    (supportsColor && supportsColor.level > 0) || options.forceColor,
+  );
 }
 
 /**
  * The Chalk instance that should be used given the passed options.
  */
 export function getChalk(options: Options) {
-  return options.forceColor
-    ? new Chalk(
-        process.env.BABEL_8_BREAKING
-          ? { level: 1 }
-          : // @ts-expect-error `enabled` has been removed in chalk 3
-            { enabled: true, level: 1 },
-      )
-    : chalk;
+  if (!options.forceColor) return chalk;
+  return process.env.BABEL_8_BREAKING
+    ? new Chalk({ level: 1 })
+    : // @ts-expect-error Chalk 2 exposes the constructor as
+      // chalk.constructor, and needs an `enabled: true` prop that has been
+      // removed in newer versions
+      new chalk.constructor({ enabled: true, level: 1 });
 }
 
 /**

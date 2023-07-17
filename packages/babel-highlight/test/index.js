@@ -1,4 +1,5 @@
 import stripAnsi from "strip-ansi";
+import { supportsColor } from "chalk";
 
 import _highlight, { shouldHighlight, getChalk } from "../lib/index.js";
 const highlight = _highlight.default || _highlight;
@@ -8,19 +9,18 @@ const chalk = getChalk({});
 describe("@babel/highlight", function () {
   function stubColorSupport(supported) {
     let originalChalkLevel;
-    let originalChalkSupportsColor;
+    let originalSupportsColorLevel;
     let originalChalkEnabled;
     beforeEach(function () {
-      originalChalkSupportsColor = chalk.supportsColor;
+      originalSupportsColorLevel = supportsColor.level;
       originalChalkLevel = chalk.level;
       originalChalkEnabled = chalk.enabled;
-      chalk.supportsColor = supported ? { level: 1 } : false;
-      chalk.level = supported ? 1 : 0;
+      supportsColor.level = chalk.level = supported ? 1 : 0;
       chalk.enabled = supported;
     });
 
     afterEach(function () {
-      chalk.supportsColor = originalChalkSupportsColor;
+      supportsColor.level = originalSupportsColorLevel;
       chalk.level = originalChalkLevel;
       chalk.enabled = originalChalkEnabled;
     });
