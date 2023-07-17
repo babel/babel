@@ -7,9 +7,9 @@ import {
   isStrictReservedWord,
   isKeyword,
 } from "@babel/helper-validator-identifier";
-import Chalk from "chalk";
-
-type ChalkClass = ReturnType<typeof getChalk>;
+import _chalk, { supportsColor, Chalk, type ChalkInstance } from "chalk";
+// TODO: Eventuallu remove the .default fallback when we fully migrate to chalk 5
+const chalk = (_chalk as unknown as typeof import("chalk")).default ?? _chalk;
 
 /**
  * Names that are always allowed as identifiers, but also appear as keywords
@@ -40,7 +40,9 @@ type Token = {
 /**
  * Chalk styles for token types.
  */
-function getDefs(chalk: ChalkClass): Record<InternalTokenType, ChalkClass> {
+function getDefs(
+  chalk: ChalkInstance,
+): Record<InternalTokenType, ChalkInstance> {
   return {
     keyword: chalk.cyan,
     capitalized: chalk.yellow,
@@ -219,7 +221,7 @@ if (process.env.BABEL_8_BREAKING) {
 /**
  * Highlight `text` using the token definitions in `defs`.
  */
-function highlightTokens(defs: Record<string, ChalkClass>, text: string) {
+function highlightTokens(defs: Record<string, ChalkInstance>, text: string) {
   let highlighted = "";
 
   for (const { type, value } of tokenize(text)) {
@@ -249,7 +251,7 @@ type Options = {
  * Whether the code should be highlighted given the passed options.
  */
 export function shouldHighlight(options: Options): boolean {
-  return !!Chalk.supportsColor || options.forceColor;
+  return !!supportsColor || options.forceColor;
 }
 
 /**
@@ -257,8 +259,13 @@ export function shouldHighlight(options: Options): boolean {
  */
 export function getChalk(options: Options) {
   return options.forceColor
-    ? new Chalk.constructor({ enabled: true, level: 1 })
-    : Chalk;
+    ? new Chalk(
+        process.env.BABEL_8_BREAKING
+          ? { level: 1 }
+          : // @ts-expect-error `enabled` has been removed in chalk 3
+            { enabled: true, level: 1 },
+      )
+    : chalk;
 }
 
 /**
