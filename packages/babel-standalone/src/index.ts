@@ -15,6 +15,8 @@ import {
   transformFromAstSync as babelTransformFromAstSync,
   transformSync as babelTransformSync,
   buildExternalHelpers as babelBuildExternalHelpers,
+  type PluginObject,
+  type PresetObject,
 } from "@babel/core";
 import { all } from "./generated/plugins";
 import preset2015 from "./preset-es2015";
@@ -168,7 +170,7 @@ export const buildExternalHelpers = babelBuildExternalHelpers;
 /**
  * Registers a named plugin for use with Babel.
  */
-export function registerPlugin(name: string, plugin: any | Function): void {
+export function registerPlugin(name: string, plugin: () => PluginObject): void {
   if (Object.prototype.hasOwnProperty.call(availablePlugins, name)) {
     console.warn(
       `A plugin named "${name}" is already registered, it will be overridden`,
@@ -181,7 +183,7 @@ export function registerPlugin(name: string, plugin: any | Function): void {
  * is the name of the plugin, and the value is the plugin itself.
  */
 export function registerPlugins(newPlugins: {
-  [x: string]: any | Function;
+  [x: string]: () => PluginObject;
 }): void {
   Object.keys(newPlugins).forEach(name =>
     registerPlugin(name, newPlugins[name]),
@@ -191,7 +193,7 @@ export function registerPlugins(newPlugins: {
 /**
  * Registers a named preset for use with Babel.
  */
-export function registerPreset(name: string, preset: any | Function): void {
+export function registerPreset(name: string, preset: () => PresetObject): void {
   if (Object.prototype.hasOwnProperty.call(availablePresets, name)) {
     if (name === "env") {
       console.warn(
@@ -212,7 +214,7 @@ export function registerPreset(name: string, preset: any | Function): void {
  * is the name of the preset, and the value is the preset itself.
  */
 export function registerPresets(newPresets: {
-  [x: string]: any | Function;
+  [x: string]: () => PresetObject;
 }): void {
   Object.keys(newPresets).forEach(name =>
     registerPreset(name, newPresets[name]),
