@@ -17,6 +17,9 @@ export default function isType(
 export default function isType(nodeType: string, targetType: string): boolean {
   if (nodeType === targetType) return true;
 
+  // If nodeType is nullish, it can't be an alias of targetType.
+  if (nodeType == null) return false;
+
   // This is a fast-path. If the test above failed, but an alias key is found, then the
   // targetType was a primary node type, so there's no need to check the aliases.
   // @ts-expect-error targetType may not index ALIAS_KEYS
