@@ -1,42 +1,44 @@
 // Each scope gets a bitset that may contain these flags
 /* eslint-disable prettier/prettier */
+/* prettier-ignore */
 export const enum ScopeFlag {
-  OTHER = 0b000000000,
-  PROGRAM = 0b000000001,
-  FUNCTION = 0b000000010,
-  ARROW = 0b000000100,
+  OTHER        = 0b000000000,
+  PROGRAM      = 0b000000001,
+  FUNCTION     = 0b000000010,
+  ARROW        = 0b000000100,
   SIMPLE_CATCH = 0b000001000,
-  SUPER = 0b000010000,
+  SUPER        = 0b000010000,
   DIRECT_SUPER = 0b000100000,
-  CLASS = 0b001000000,
+  CLASS        = 0b001000000,
   STATIC_BLOCK = 0b010000000,
-  TS_MODULE = 0b100000000,
-  VAR = PROGRAM | FUNCTION | STATIC_BLOCK | TS_MODULE,
+  TS_MODULE    = 0b100000000,
+  VAR          = PROGRAM | FUNCTION | STATIC_BLOCK | TS_MODULE,
 }
 
+/* prettier-ignore */
 export const enum BindingFlag {
   // These flags are meant to be _only_ used inside the Scope class (or subclasses).
-  KIND_VALUE = 0b0000000_0000_01,
-  KIND_TYPE = 0b0000000_0000_10,
+  KIND_VALUE             = 0b0000000_0000_01,
+  KIND_TYPE              = 0b0000000_0000_10,
   // Used in checkLVal and declareName to determine the type of a binding
-  SCOPE_VAR = 0b0000000_0001_00, // Var-style binding
-  SCOPE_LEXICAL = 0b0000000_0010_00, // Let- or const-style binding
-  SCOPE_FUNCTION = 0b0000000_0100_00, // Function declaration
-  SCOPE_OUTSIDE = 0b0000000_1000_00, // Special case for function names as
+  SCOPE_VAR              = 0b0000000_0001_00, // Var-style binding
+  SCOPE_LEXICAL          = 0b0000000_0010_00, // Let- or const-style binding
+  SCOPE_FUNCTION         = 0b0000000_0100_00, // Function declaration
+  SCOPE_OUTSIDE          = 0b0000000_1000_00, // Special case for function names as
   // bound inside the function
   // Misc flags
-  FLAG_NONE = 0b00000001_0000_00,
-  FLAG_CLASS = 0b00000010_0000_00,
-  FLAG_TS_ENUM = 0b00000100_0000_00,
-  FLAG_TS_CONST_ENUM = 0b00001000_0000_00,
-  FLAG_TS_EXPORT_ONLY = 0b00010000_0000_00,
-  FLAG_FLOW_DECLARE_FN = 0b00100000_0000_00,
-  FLAG_TS_IMPORT = 0b01000000_0000_00,
+  FLAG_NONE              = 0b00000001_0000_00,
+  FLAG_CLASS             = 0b00000010_0000_00,
+  FLAG_TS_ENUM           = 0b00000100_0000_00,
+  FLAG_TS_CONST_ENUM     = 0b00001000_0000_00,
+  FLAG_TS_EXPORT_ONLY    = 0b00010000_0000_00,
+  FLAG_FLOW_DECLARE_FN   = 0b00100000_0000_00,
+  FLAG_TS_IMPORT         = 0b01000000_0000_00,
   // Whether "let" should be allowed in bound names in sloppy mode
   FLAG_NO_LET_IN_LEXICAL = 0b10000000_0000_00,
 
   // These flags are meant to be _only_ used by Scope consumers
-  /* prettier-ignore */
+/* prettier-ignore */
   /*                   = is value?  | is type?  |      scope     |    misc flags    */
   TYPE_CLASS           = KIND_VALUE | KIND_TYPE | SCOPE_LEXICAL  | FLAG_CLASS|FLAG_NO_LET_IN_LEXICAL,
   TYPE_LEXICAL         = KIND_VALUE | 0         | SCOPE_LEXICAL  | FLAG_NO_LET_IN_LEXICAL,
@@ -74,17 +76,18 @@ export type BindingTypes =
   | BindingFlag.TYPE_TS_AMBIENT
   | BindingFlag.TYPE_TS_NAMESPACE
   | BindingFlag.TYPE_TS_CONST_ENUM
-  | BindingFlag.TYPE_FLOW_DECLARE_FN
+  | BindingFlag.TYPE_FLOW_DECLARE_FN;
 
+/* prettier-ignore */
 export const enum ClassElementType {
-  OTHER = 0,
-  FLAG_STATIC = 0b1_00,
-  KIND_GETTER = 0b0_10,
-  KIND_SETTER = 0b0_01,
-  KIND_ACCESSOR = KIND_GETTER | KIND_SETTER,
+  OTHER           = 0,
+  FLAG_STATIC     = 0b1_00,
+  KIND_GETTER     = 0b0_10,
+  KIND_SETTER     = 0b0_01,
+  KIND_ACCESSOR   = KIND_GETTER | KIND_SETTER,
 
-  STATIC_GETTER = FLAG_STATIC | KIND_GETTER,
-  STATIC_SETTER = FLAG_STATIC | KIND_SETTER,
+  STATIC_GETTER   = FLAG_STATIC | KIND_GETTER,
+  STATIC_SETTER   = FLAG_STATIC | KIND_SETTER,
   INSTANCE_GETTER = KIND_GETTER,
   INSTANCE_SETTER = KIND_SETTER,
 }
