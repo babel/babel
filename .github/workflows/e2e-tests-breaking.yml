@@ -50,7 +50,9 @@ jobs:
           # https://github.com/facebook/metro/blob/29bb5f2ad3319ba8f4764c3993aa85c15f59af23/packages/metro-source-map/src/generateFunctionMap.js#L182
           # react-native
           - prettier
-          - angular-cli
+          # disabled due to https://github.com/babel/babel/pull/15759, because
+          # angular pins the @babel/core dependency
+          # - angular-cli
     steps:
       - name: Get yarn1 cache directory path
         id: yarn1-cache-dir-path
