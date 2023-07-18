@@ -3,16 +3,16 @@ import type { NodeLocation } from "./file/file";
 
 export default class PluginPass<Options = {}> {
   _map: Map<unknown, unknown> = new Map();
-  declare key: string | undefined | null;
-  declare file: File;
-  declare opts: Partial<Options>;
+  key: string | undefined | null;
+  file: File;
+  opts: Partial<Options>;
 
   // The working directory that Babel's programmatic options are loaded
   // relative to.
-  declare cwd: string;
+  cwd: string;
 
   // The absolute path of the file being compiled.
-  declare filename: string | void;
+  filename: string | void;
 
   constructor(file: File, key?: string | null, options?: Options) {
     this.key = key;
