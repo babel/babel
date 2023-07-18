@@ -70,6 +70,7 @@ module.exports = function (api) {
   let ignoreLib = true;
   let includeRegeneratorRuntime = false;
   let needsPolyfillsForOldNode = false;
+  let compileNodeModulesESM = false;
 
   let transformRuntimeOptions;
 
@@ -130,7 +131,7 @@ module.exports = function (api) {
       // When runing tests, we might need to compile some dependencies for old
       // node versions. They might use ESM, which old Jest does not support.
       // Jest will only run Babel in Node.js <= 10.
-      unambiguousSources.push("/**/node_modules");
+      compileNodeModulesESM = true;
       targets = { node: "current" };
       needsPolyfillsForOldNode = true;
       break;
@@ -297,6 +298,11 @@ module.exports = function (api) {
         ].map(normalize),
         plugins: [pluginImportMetaUrl],
       },
+      compileNodeModulesESM && {
+        test: [normalize("/**/node_modules")],
+        sourceType: "unambiguous",
+        plugins: ["@babel/transform-modules-commonjs"],
+      },
       {
         test: sources.map(source => normalize(source.replace("/src", "/test"))),
         plugins: [
@@ -359,6 +365,11 @@ function importInteropTest(source) {
   // This file will soon have an esm entrypoint
   if (source === "@babel/helper-plugin-test-runner") {
     return "none";
+  }
+  // This file is native ESM, but we compile it to CJS in old versions of Node.
+  // TODO: Remove this case once we only test ESM.
+  if (source === "strip-ansi") {
+    return "babel";
   }
   if (
     // non-test files
