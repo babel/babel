@@ -155,31 +155,31 @@ describe("evaluation", function () {
   it("should evaluate global call expressions", function() {
     expect(
       getPath("isFinite(1);")
-        .get("body.0.expression")
+        .get("program.body.0.expression")
         .evaluate().value,
     ).toBe(true);
     
     expect(
       getPath("isFinite(Infinity);")
-        .get("body.0.expression")
+        .get("program.body.0.expression")
         .evaluate().value,
     ).toBe(false);
     
     expect(
       getPath("isNaN(NaN);")
-        .get("body.0.expression")
+        .get("program.body.0.expression")
         .evaluate().value,
     ).toBe(true);
     
     expect(
       getPath("isNaN(1);")
-        .get("body.0.expression")
+        .get("program.body.0.expression")
         .evaluate().value,
     ).toBe(false);
 
     expect(
       getPath("parseFloat('1.1');")
-        .get("body.0.expression")
+        .get("program.body.0.expression")
         .evaluate().value,
     ).toBe(1.1);
     
