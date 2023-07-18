@@ -92,56 +92,6 @@ class NodePath<T extends t.Node = t.Node> {
       // @ts-expect-error key must present in container
       container[key];
 
-    if (!IS_STANDALONE) {
-      if (!USE_ESM) {
-        if (!process.env.BABEL_8_BREAKING) {
-          // noHubInCacheKeyForBackwardCompat has three states (true, false,
-          // and undefined) instead of two so that we can run the magic checks
-          // only at the top-level of the traverse call stack, and not when
-          // recursing. new Error().stack is expensive, and we want to avoid it
-          // as much as possible in this very hot path. New @babel/core
-          // versions already set .noHubInCacheKeyForBackwardCompat to false.
-          // See the .noHubInCacheKeyForBackwardCompat definition in ./cache.ts
-          // for why we need this.
-          // @ts-expect-error ts does not know about this property
-          if (cache.noHubInCacheKeyForBackwardCompat === undefined) {
-            const callerIsOldBabelCore =
-              parentPath === null &&
-              key === "program" &&
-              !!new Error().stack
-                ?.split("\n", 3)[2]
-                ?.replace(/\\/g, "/")
-                .includes("@babel/core/lib/transformation/file/file.js");
-
-            // @ts-expect-error ts does not know about this property
-            // eslint-disable-next-line no-import-assign
-            cache.noHubInCacheKeyForBackwardCompat = callerIsOldBabelCore;
-
-            // Old @babel/core will call NodePath#setContext right after this
-            // NodePath.get call. We need to reset
-            // cache.noHubInCacheKeyForBackwardCompat _after_ that call is
-            // done, because .setContext internally calls .setScope which
-            // trigger a traverasal thus calling NodePath.get again.
-            // @ts-expect-error ts doesn't know about methods introduced
-            // by mixins at the end of the file here, because they are on
-            // the NodePath _interface_ and not class.
-            this.setContext = () => {
-              // @ts-expect-error same as above
-              this.setContext = NodePath_context.setContext;
-              try {
-                // @ts-expect-error same as above
-                return this.setContext();
-              } finally {
-                // @ts-expect-error ts does not know about this property
-                // eslint-disable-next-line no-import-assign
-                cache.noHubInCacheKeyForBackwardCompat = undefined;
-              }
-            };
-          }
-        }
-      }
-    }
-
     const paths = cache.getOrCreateCachedPaths(hub, parent);
 
     let path = paths.get(targetNode);

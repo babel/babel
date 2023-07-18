@@ -3,24 +3,6 @@ import type NodePath from "./path";
 import type Scope from "./scope";
 import type { HubInterface } from "./hub";
 
-if (!IS_STANDALONE) {
-  if (!USE_ESM) {
-    if (!process.env.BABEL_8_BREAKING) {
-      // `@babel/core` up to v7.22.5 relies on the (wrong) behavior
-      // of NodePaths not taking into account .hub for their cache
-      // key. To preserve backwards compatibility, we need to disable
-      // the caching behavior in some cases.
-      // The logic to detect _when_ we are being called by an old
-      // `@babel/core` version is rather ugly, and it's in the
-      // `traverse` function in ./index.ts and in the `static get`
-      // function in ./path/index.ts
-
-      // eslint-disable-next-line no-restricted-globals
-      exports.noHubInCacheKeyForBackwardCompat = undefined;
-    }
-  }
-}
-
 let pathsCache: WeakMap<
   HubInterface | typeof nullHub,
   WeakMap<Node, Map<Node, NodePath>>
@@ -48,25 +30,18 @@ export function clearScope() {
 const nullHub = Object.freeze({} as const);
 
 export function getCachedPaths(hub: HubInterface | null, parent: Node) {
-  if (!IS_STANDALONE) {
-    if (!USE_ESM) {
-      if (!process.env.BABEL_8_BREAKING) {
-        // eslint-disable-next-line no-restricted-globals
-        if (exports.noHubInCacheKeyForBackwardCompat) hub = null;
-      }
-    }
+  if (!process.env.BABEL_8_BREAKING) {
+    // Only use Hub as part of the cache key in Babel 8, because it is a
+    // breaking change (it causes incompatibilities with older `@babel/core`
+    // versions: see https://github.com/babel/babel/pull/15759)
+    hub = null;
   }
   return pathsCache.get(hub ?? nullHub)?.get(parent);
 }
 
 export function getOrCreateCachedPaths(hub: HubInterface | null, parent: Node) {
-  if (!IS_STANDALONE) {
-    if (!USE_ESM) {
-      if (!process.env.BABEL_8_BREAKING) {
-        // eslint-disable-next-line no-restricted-globals
-        if (exports.noHubInCacheKeyForBackwardCompat) hub = null;
-      }
-    }
+  if (!process.env.BABEL_8_BREAKING) {
+    hub = null;
   }
 
   let parents = pathsCache.get(hub ?? nullHub);

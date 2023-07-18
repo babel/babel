@@ -1,6 +1,8 @@
 import { transformSync } from "@babel/core";
 import { Hub } from "../lib/index.js";
 
+const itBabel8 = process.env.BABEL_8_BREAKING ? it : it.skip;
+
 describe("hub", function () {
   it("default buildError should return TypeError", function () {
     const hub = new Hub();
@@ -8,7 +10,7 @@ describe("hub", function () {
     expect(hub.buildError(null, msg)).toEqual(new TypeError(msg));
   });
 
-  it("should be preserved across nested traversals", function () {
+  itBabel8("should be preserved across nested traversals", function () {
     let origHub;
     let innerHub = {};
     let exprHub;

@@ -69,36 +69,6 @@ export default class File {
     this.ast = ast;
     this.inputMap = inputMap;
 
-    if (!IS_STANDALONE) {
-      if (!USE_ESM) {
-        if (!process.env.BABEL_8_BREAKING) {
-          // @ts-expect-error TS does not know about this property
-          if (traverse.cache.noHubInCacheKeyForBackwardCompat === undefined) {
-            try {
-              // For backward compatibility, `@babel/core` ignores `hub` when
-              // caching NodePath instances. Disable that backward
-              // compatibility hack when using new `@babel/core` versions.
-              // @ts-expect-error TS does not know about this property
-              traverse.cache.noHubInCacheKeyForBackwardCompat = false;
-
-              this.path = NodePath.get({
-                hub: this.hub,
-                parentPath: null,
-                parent: this.ast,
-                container: this.ast,
-                key: "program",
-              }).setContext() as NodePath<t.Program>;
-              this.scope = this.path.scope;
-            } finally {
-              // @ts-expect-error TS does not know about this property
-              traverse.cache.noHubInCacheKeyForBackwardCompat = undefined;
-            }
-            return;
-          }
-        }
-      }
-    }
-
     this.path = NodePath.get({
       hub: this.hub,
       parentPath: null,
