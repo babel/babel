@@ -359,7 +359,7 @@ export class DestructuringTransformer {
     if (!t.isArrayExpression(arr)) return false;
 
     // pattern has less elements than the array and doesn't have a rest so some
-    // elements wont be evaluated
+    // elements won't be evaluated
     if (pattern.elements.length > arr.elements.length) return;
     if (
       pattern.elements.length < arr.elements.length &&
@@ -434,7 +434,7 @@ export class DestructuringTransformer {
     // optimise basic array destructuring of an array expression
     //
     // we can't do this to a pattern of unequal size to it's right hand
-    // array expression as then there will be values that wont be evaluated
+    // array expression as then there will be values that won't be evaluated
     //
     // eg: let [a, b] = [1, 2];
 

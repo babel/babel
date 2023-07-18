@@ -252,7 +252,7 @@ describe("option-manager", () => {
       expect(options.presets).toHaveLength(0);
     });
 
-    itBabel7("es2015_named shuold throw", async () => {
+    itBabel7("es2015_named should throw", async () => {
       await expect(
         loadOptionsAsync({
           presets: [

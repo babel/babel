@@ -93,6 +93,7 @@ const TSErrors = ParseErrorEnum`typescript`({
     propertyName: string;
   }) =>
     `Property '${propertyName}' cannot have an initializer because it is marked abstract.`,
+  // TODO: Accesor -> Accessor
   AccesorCannotDeclareThisParameter:
     "'get' and 'set' accessors cannot declare 'this' parameters.",
   AccesorCannotHaveTypeParameters: "An accessor cannot have type parameters.",

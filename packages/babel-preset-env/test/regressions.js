@@ -28,7 +28,7 @@ describe("regressions", () => {
         "regressions",
       );
 
-      // Unfortunatly, when loading the browserslist config through
+      // Unfortunately, when loading the browserslist config through
       // @babel/preset-env, it's resolved from process.cwd() and not
       // from root. Mock it to isolate this test.
       const spy = jest.spyOn(process, "cwd").mockReturnValue(root);

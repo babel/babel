@@ -546,7 +546,7 @@ export default class Scope {
 
   /**
    * Determine whether evaluating the specific input `node` is a consequenceless reference. ie.
-   * evaluating it wont result in potentially arbitrary code from being ran. The following are
+   * evaluating it won't result in potentially arbitrary code from being ran. The following are
    * allowed and determined not to cause side effects:
    *
    *  - `this` expressions
