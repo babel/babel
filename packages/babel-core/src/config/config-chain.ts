@@ -18,6 +18,7 @@ import type { ReadonlyDeepArray } from "./helpers/deep-array";
 
 import { endHiddenCallStack } from "../errors/rewrite-stack-trace";
 import ConfigError from "../errors/config-error";
+import type { PluginAPI, PresetAPI } from "./helpers/config-api";
 
 const debug = buildDebug("babel:config:config-chain");
 
@@ -42,8 +43,8 @@ import type {
 } from "./config-descriptors";
 
 export type ConfigChain = {
-  plugins: Array<UnloadedDescriptor>;
-  presets: Array<UnloadedDescriptor>;
+  plugins: Array<UnloadedDescriptor<PluginAPI>>;
+  presets: Array<UnloadedDescriptor<PresetAPI>>;
   options: Array<ValidatedOptions>;
   files: Set<string>;
 };
@@ -760,12 +761,12 @@ function normalizeOptions(opts: ValidatedOptions): ValidatedOptions {
   return options;
 }
 
-function dedupDescriptors(
-  items: Array<UnloadedDescriptor>,
-): Array<UnloadedDescriptor> {
+function dedupDescriptors<API>(
+  items: Array<UnloadedDescriptor<API>>,
+): Array<UnloadedDescriptor<API>> {
   const map: Map<
     Function,
-    Map<string | void, { value: UnloadedDescriptor }>
+    Map<string | void, { value: UnloadedDescriptor<API> }>
   > = new Map();
 
   const descriptors = [];

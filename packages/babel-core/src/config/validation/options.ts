@@ -28,6 +28,7 @@ import {
 } from "./option-assertions";
 import type { ValidatorSet, Validator, OptionPath } from "./option-assertions";
 import type { UnloadedDescriptor } from "../config-descriptors";
+import type { PluginAPI } from "../helpers/config-api";
 import type { ParserOptions } from "@babel/parser";
 import type { GeneratorOptions } from "@babel/generator";
 import ConfigError from "../../errors/config-error";
@@ -213,7 +214,7 @@ export type IgnoreList = ReadonlyArray<IgnoreItem>;
 export type PluginOptions = object | void | false;
 export type PluginTarget = string | object | Function;
 export type PluginItem =
-  | ConfigItem
+  | ConfigItem<PluginAPI>
   | Plugin
   | PluginTarget
   | [PluginTarget, PluginOptions]
@@ -460,8 +461,8 @@ function assertOverridesList(
   return arr as OverridesList;
 }
 
-export function checkNoUnwrappedItemOptionPairs(
-  items: Array<UnloadedDescriptor>,
+export function checkNoUnwrappedItemOptionPairs<API>(
+  items: Array<UnloadedDescriptor<API>>,
   index: number,
   type: "plugin" | "preset",
   e: Error,

@@ -73,7 +73,7 @@ export const createConfigItemAsync = createConfigItemRunner.async;
 export function createConfigItem(
   target: PluginTarget,
   options: Parameters<typeof createConfigItemImpl>[1],
-  callback?: (err: Error, val: ConfigItem | null) => void,
+  callback?: (err: Error, val: ConfigItem<PluginAPI> | null) => void,
 ) {
   if (callback !== undefined) {
     createConfigItemRunner.errback(target, options, callback);

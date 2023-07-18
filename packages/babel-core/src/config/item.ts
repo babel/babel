@@ -6,7 +6,9 @@ import { createDescriptor } from "./config-descriptors";
 
 import type { UnloadedDescriptor } from "./config-descriptors";
 
-export function createItemFromDescriptor(desc: UnloadedDescriptor): ConfigItem {
+export function createItemFromDescriptor<API>(
+  desc: UnloadedDescriptor<API>,
+): ConfigItem<API> {
   return new ConfigItem(desc);
 }
 
@@ -16,7 +18,7 @@ export function createItemFromDescriptor(desc: UnloadedDescriptor): ConfigItem {
  * ideally, as recreating the config item will mean re-resolving the item
  * and re-evaluating the plugin/preset function.
  */
-export function* createConfigItem(
+export function* createConfigItem<API>(
   value:
     | PluginTarget
     | [PluginTarget, PluginOptions]
@@ -28,7 +30,7 @@ export function* createConfigItem(
     dirname?: string;
     type?: "preset" | "plugin";
   } = {},
-): Handler<ConfigItem> {
+): Handler<ConfigItem<API>> {
   const descriptor = yield* createDescriptor(value, path.resolve(dirname), {
     type,
     alias: "programmatic item",
@@ -39,9 +41,11 @@ export function* createConfigItem(
 
 const CONFIG_ITEM_BRAND = Symbol.for("@babel/core@7 - ConfigItem");
 
-export function getItemDescriptor(item: unknown): UnloadedDescriptor | void {
+export function getItemDescriptor<API>(
+  item: unknown,
+): UnloadedDescriptor<API> | void {
   if ((item as any)?.[CONFIG_ITEM_BRAND]) {
-    return (item as ConfigItem)._descriptor;
+    return (item as ConfigItem<API>)._descriptor;
   }
 
   return undefined;
@@ -57,12 +61,12 @@ export type { ConfigItem };
  * Any changes to public properties of this class should be considered a
  * breaking change to Babel's API.
  */
-class ConfigItem {
+class ConfigItem<API> {
   /**
    * The private underlying descriptor that Babel actually cares about.
    * If you access this, you are a bad person.
    */
-  _descriptor: UnloadedDescriptor;
+  _descriptor: UnloadedDescriptor<API>;
 
   // TODO(Babel 9): Check if this symbol needs to be updated
   /**
@@ -103,7 +107,7 @@ class ConfigItem {
     resolved: string;
   } | void;
 
-  constructor(descriptor: UnloadedDescriptor) {
+  constructor(descriptor: UnloadedDescriptor<API>) {
     // Make people less likely to stumble onto this if they are exploring
     // programmatically, and also make sure that if people happen to
     // pass the item through JSON.stringify, it doesn't show up.
