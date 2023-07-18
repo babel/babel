@@ -127,6 +127,10 @@ module.exports = function (api) {
       needsPolyfillsForOldNode = true;
       break;
     case "test":
+      // When runing tests, we might need to compile some dependencies for old
+      // node versions. They might use ESM, which old Jest does not support.
+      // Jest will only run Babel in Node.js <= 10.
+      unambiguousSources.push("/**/node_modules");
       targets = { node: "current" };
       needsPolyfillsForOldNode = true;
       break;
