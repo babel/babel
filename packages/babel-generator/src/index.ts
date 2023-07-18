@@ -7,7 +7,11 @@ import type {
   RecordAndTuplePluginOptions,
   PipelineOperatorPluginOptions,
 } from "@babel/parser";
-import type { DecodedSourceMap, Mapping } from "@jridgewell/gen-mapping";
+import type {
+  EncodedSourceMap,
+  DecodedSourceMap,
+  Mapping,
+} from "@jridgewell/gen-mapping";
 
 /**
  * Babel's code generator, turns an ast into code, maintaining sourcemaps,
@@ -237,15 +241,7 @@ export interface GeneratorOptions {
 
 export interface GeneratorResult {
   code: string;
-  map: {
-    version: number;
-    sources: readonly string[];
-    names: readonly string[];
-    sourceRoot?: string;
-    sourcesContent?: readonly string[];
-    mappings: string;
-    file?: string;
-  } | null;
+  map: EncodedSourceMap | null;
   decodedMap: DecodedSourceMap | undefined;
   rawMappings: Mapping[] | undefined;
 }
