@@ -152,6 +152,81 @@ describe("evaluation", function () {
     expect(eval_invalid_call.confident).toBe(false);
   });
 
+  it("should evaluate global call expressions", function() {
+    expect(
+      getPath("isFinite(1);")
+        .get("body.0.expression")
+        .evaluate().value,
+    ).toBe(true);
+    
+    expect(
+      getPath("isFinite(Infinity);")
+        .get("body.0.expression")
+        .evaluate().value,
+    ).toBe(false);
+    
+    expect(
+      getPath("isNaN(NaN);")
+        .get("body.0.expression")
+        .evaluate().value,
+    ).toBe(true);
+    
+    expect(
+      getPath("isNaN(1);")
+        .get("body.0.expression")
+        .evaluate().value,
+    ).toBe(false);
+
+    expect(
+      getPath("parseFloat('1.1');")
+        .get("body.0.expression")
+        .evaluate().value,
+    ).toBe(1.1);
+    
+    expect(
+      getPath("parseFloat('1');")
+        .get("body.0.expression")
+        .evaluate().value,
+    ).toBe(1);
+
+    expect(
+      getPath("encodeURI('x 1');")
+        .get("body.0.expression")
+        .evaluate().value,
+    ).toBe("x%201");
+
+    expect(
+      getPath("decodeURI('x%201');")
+        .get("body.0.expression")
+        .evaluate().value,
+    ).toBe("x 1");
+
+    expect(
+      getPath("encodeURIComponent('?x=1');")
+        .get("body.0.expression")
+        .evaluate().value,
+    ).toBe("%3Fx%3D1");
+
+    expect(
+      getPath("decodeURIComponent('%3Fx%3D1');")
+        .get("body.0.expression")
+        .evaluate().value,
+    ).toBe("?x=1");
+
+    expect(
+      getPath("btoa('hello');")
+        .get("body.0.expression")
+        .evaluate().value,
+    ).toBe("aGVsbG8=");
+
+    expect(
+      getPath("atob('aGVsbG8=');")
+        .get("body.0.expression")
+        .evaluate().value,
+    ).toBe("hello");
+
+  });
+
   it("should not deopt vars in different scope", function () {
     const input =
       "var a = 5; function x() { var a = 5; var b = a + 1; } var b = a + 2";
