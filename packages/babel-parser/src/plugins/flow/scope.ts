@@ -1,8 +1,8 @@
 import type { Position } from "../../util/location";
 import ScopeHandler, { Scope } from "../../util/scope";
 import {
-  BIND_FLAGS_FLOW_DECLARE_FN,
-  type ScopeFlags,
+  BindingFlag,
+  type ScopeFlag,
   type BindingTypes,
 } from "../../util/scopeflags";
 import type * as N from "../../types";
@@ -14,13 +14,13 @@ class FlowScope extends Scope {
 }
 
 export default class FlowScopeHandler extends ScopeHandler<FlowScope> {
-  createScope(flags: ScopeFlags): FlowScope {
+  createScope(flags: ScopeFlag): FlowScope {
     return new FlowScope(flags);
   }
 
   declareName(name: string, bindingType: BindingTypes, loc: Position) {
     const scope = this.currentScope();
-    if (bindingType & BIND_FLAGS_FLOW_DECLARE_FN) {
+    if (bindingType & BindingFlag.FLAG_FLOW_DECLARE_FN) {
       this.checkRedeclarationInScope(scope, name, bindingType, loc);
       this.maybeExportDefined(scope, name);
       scope.declareFunctions.add(name);
@@ -37,7 +37,7 @@ export default class FlowScopeHandler extends ScopeHandler<FlowScope> {
   ): boolean {
     if (super.isRedeclaredInScope(scope, name, bindingType)) return true;
 
-    if (bindingType & BIND_FLAGS_FLOW_DECLARE_FN) {
+    if (bindingType & BindingFlag.FLAG_FLOW_DECLARE_FN) {
       return (
         !scope.declareFunctions.has(name) &&
         (scope.lexical.has(name) || scope.functions.has(name))

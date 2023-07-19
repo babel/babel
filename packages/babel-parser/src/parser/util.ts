@@ -11,7 +11,7 @@ import { lineBreak, skipWhiteSpaceToLineBreak } from "../util/whitespace";
 import { isIdentifierChar } from "../util/identifier";
 import ClassScopeHandler from "../util/class-scope";
 import ExpressionScopeHandler from "../util/expression-scope";
-import { SCOPE_PROGRAM } from "../util/scopeflags";
+import { ScopeFlag } from "../util/scopeflags";
 import ProductionParameterHandler, {
   PARAM_AWAIT,
   PARAM,
@@ -347,7 +347,7 @@ export default abstract class UtilParser extends Tokenizer {
     if (this.inModule) {
       paramFlags |= PARAM_AWAIT;
     }
-    this.scope.enter(SCOPE_PROGRAM);
+    this.scope.enter(ScopeFlag.PROGRAM);
     this.prodParam.enter(paramFlags);
   }
 

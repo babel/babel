@@ -47,15 +47,7 @@ import {
   createPositionWithColumnOffset,
 } from "../util/location";
 import * as charCodes from "charcodes";
-import {
-  BIND_OUTSIDE,
-  BIND_VAR,
-  SCOPE_ARROW,
-  SCOPE_CLASS,
-  SCOPE_DIRECT_SUPER,
-  SCOPE_FUNCTION,
-  SCOPE_SUPER,
-} from "../util/scopeflags";
+import { ScopeFlag, BindingFlag } from "../util/scopeflags";
 import { ExpressionErrors } from "./util";
 import {
   PARAM_AWAIT,
@@ -2430,10 +2422,10 @@ export default abstract class ExpressionParser extends LValParser {
     this.initFunction(node, isAsync);
     node.generator = isGenerator;
     this.scope.enter(
-      SCOPE_FUNCTION |
-        SCOPE_SUPER |
-        (inClassScope ? SCOPE_CLASS : 0) |
-        (allowDirectSuper ? SCOPE_DIRECT_SUPER : 0),
+      ScopeFlag.FUNCTION |
+        ScopeFlag.SUPER |
+        (inClassScope ? ScopeFlag.CLASS : 0) |
+        (allowDirectSuper ? ScopeFlag.DIRECT_SUPER : 0),
     );
     this.prodParam.enter(functionFlags(isAsync, node.generator));
     this.parseFunctionParams(node, isConstructor);
@@ -2485,7 +2477,7 @@ export default abstract class ExpressionParser extends LValParser {
     isAsync: boolean,
     trailingCommaLoc?: Position | null,
   ): N.ArrowFunctionExpression {
-    this.scope.enter(SCOPE_FUNCTION | SCOPE_ARROW);
+    this.scope.enter(ScopeFlag.FUNCTION | ScopeFlag.ARROW);
     let flags = functionFlags(isAsync, false);
     // ConciseBody[In] :
     //   [lookahead ≠ {] ExpressionBody[?In, ~Await]
@@ -2591,7 +2583,11 @@ export default abstract class ExpressionParser extends LValParser {
 
           // Ensure the function name isn't a forbidden identifier in strict mode, e.g. 'eval'
           if (this.state.strict && node.id) {
-            this.checkIdentifier(node.id, BIND_OUTSIDE, strictModeChanged);
+            this.checkIdentifier(
+              node.id,
+              BindingFlag.TYPE_OUTSIDE,
+              strictModeChanged,
+            );
           }
         },
       );
@@ -2632,7 +2628,7 @@ export default abstract class ExpressionParser extends LValParser {
     for (const param of node.params) {
       this.checkLVal(param, {
         in: formalParameters,
-        binding: BIND_VAR,
+        binding: BindingFlag.TYPE_VAR,
         checkClashes,
         strictModeChanged,
       });

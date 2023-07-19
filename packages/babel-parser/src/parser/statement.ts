@@ -13,23 +13,10 @@ import { Errors } from "../parse-error";
 import { isIdentifierChar, isIdentifierStart } from "../util/identifier";
 import * as charCodes from "charcodes";
 import {
-  BIND_CLASS,
-  BIND_LEXICAL,
-  BIND_VAR,
-  BIND_FUNCTION,
-  SCOPE_CLASS,
-  SCOPE_FUNCTION,
-  SCOPE_OTHER,
-  SCOPE_SIMPLE_CATCH,
-  SCOPE_STATIC_BLOCK,
-  SCOPE_SUPER,
-  CLASS_ELEMENT_OTHER,
-  CLASS_ELEMENT_INSTANCE_GETTER,
-  CLASS_ELEMENT_INSTANCE_SETTER,
-  CLASS_ELEMENT_STATIC_GETTER,
-  CLASS_ELEMENT_STATIC_SETTER,
+  ScopeFlag,
+  ClassElementType,
   type BindingTypes,
-  BIND_CATCH_PARAM,
+  BindingFlag,
 } from "../util/scopeflags";
 import { ExpressionErrors } from "./util";
 import { PARAM, functionFlags } from "../util/production-parameter";
@@ -932,7 +919,7 @@ export default abstract class StatementParser extends ExpressionParser {
     if (this.isAwaitAllowed() && this.eatContextual(tt._await)) {
       awaitAt = this.state.lastTokStartLoc;
     }
-    this.scope.enter(SCOPE_OTHER);
+    this.scope.enter(ScopeFlag.OTHER);
     this.expect(tt.parenL);
 
     if (this.match(tt.semi)) {
@@ -1091,7 +1078,7 @@ export default abstract class StatementParser extends ExpressionParser {
     const cases: N.SwitchStatement["cases"] = (node.cases = []);
     this.expect(tt.braceL);
     this.state.labels.push(switchLabel);
-    this.scope.enter(SCOPE_OTHER);
+    this.scope.enter(ScopeFlag.OTHER);
 
     // Statements under must be grouped (by label) in SwitchCase
     // nodes. `cur` is used to keep the node that we are currently
@@ -1148,12 +1135,12 @@ export default abstract class StatementParser extends ExpressionParser {
 
     this.scope.enter(
       this.options.annexB && param.type === "Identifier"
-        ? SCOPE_SIMPLE_CATCH
+        ? ScopeFlag.SIMPLE_CATCH
         : 0,
     );
     this.checkLVal(param, {
       in: { type: "CatchClause" },
-      binding: BIND_CATCH_PARAM,
+      binding: BindingFlag.TYPE_CATCH_PARAM,
     });
 
     return param;
@@ -1177,7 +1164,7 @@ export default abstract class StatementParser extends ExpressionParser {
         this.expect(tt.parenR);
       } else {
         clause.param = null;
-        this.scope.enter(SCOPE_OTHER);
+        this.scope.enter(ScopeFlag.OTHER);
       }
 
       // Parse the catch clause's body.
@@ -1344,7 +1331,7 @@ export default abstract class StatementParser extends ExpressionParser {
     }
     this.expect(tt.braceL);
     if (createNewLexicalScope) {
-      this.scope.enter(SCOPE_OTHER);
+      this.scope.enter(ScopeFlag.OTHER);
     }
     this.parseBlockBody(
       node,
@@ -1585,7 +1572,7 @@ export default abstract class StatementParser extends ExpressionParser {
     const id = this.parseBindingAtom();
     this.checkLVal(id, {
       in: { type: "VariableDeclarator" },
-      binding: kind === "var" ? BIND_VAR : BIND_LEXICAL,
+      binding: kind === "var" ? BindingFlag.TYPE_VAR : BindingFlag.TYPE_LEXICAL,
     });
     decl.id = id;
   }
@@ -1629,7 +1616,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
     const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
     this.state.maybeInArrowParameters = false;
-    this.scope.enter(SCOPE_FUNCTION);
+    this.scope.enter(ScopeFlag.FUNCTION);
     this.prodParam.enter(functionFlags(isAsync, node.generator));
 
     if (!isDeclaration) {
@@ -1690,16 +1677,16 @@ export default abstract class StatementParser extends ExpressionParser {
     if (!node.id) return;
 
     // If it is a regular function declaration in sloppy mode, then it is
-    // subject to Annex B semantics (BIND_FUNCTION). Otherwise, the binding
+    // subject to Annex B semantics (BindingFlag.TYPE_FUNCTION). Otherwise, the binding
     // mode depends on properties of the current scope (see
     // treatFunctionsAsVar).
     this.scope.declareName(
       node.id.name,
       !this.options.annexB || this.state.strict || node.generator || node.async
         ? this.scope.treatFunctionsAsVar
-          ? BIND_VAR
-          : BIND_LEXICAL
-        : BIND_FUNCTION,
+          ? BindingFlag.TYPE_VAR
+          : BindingFlag.TYPE_LEXICAL
+        : BindingFlag.TYPE_FUNCTION,
       node.id.loc.start,
     );
   }
@@ -2114,7 +2101,9 @@ export default abstract class StatementParser extends ExpressionParser {
     >,
   ) {
     // Start a new lexical scope
-    this.scope.enter(SCOPE_CLASS | SCOPE_STATIC_BLOCK | SCOPE_SUPER);
+    this.scope.enter(
+      ScopeFlag.CLASS | ScopeFlag.STATIC_BLOCK | ScopeFlag.SUPER,
+    );
     // Start a new scope with regard to loop labels
     const oldLabels = this.state.labels;
     this.state.labels = [];
@@ -2159,7 +2148,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
     this.classScope.declarePrivateName(
       this.getPrivateNameSV(node.key),
-      CLASS_ELEMENT_OTHER,
+      ClassElementType.OTHER,
       node.key.loc.start,
     );
   }
@@ -2187,7 +2176,7 @@ export default abstract class StatementParser extends ExpressionParser {
     if (isPrivate) {
       this.classScope.declarePrivateName(
         this.getPrivateNameSV(node.key),
-        CLASS_ELEMENT_OTHER,
+        ClassElementType.OTHER,
         node.key.loc.start,
       );
     }
@@ -2236,13 +2225,13 @@ export default abstract class StatementParser extends ExpressionParser {
     const kind =
       node.kind === "get"
         ? node.static
-          ? CLASS_ELEMENT_STATIC_GETTER
-          : CLASS_ELEMENT_INSTANCE_GETTER
+          ? ClassElementType.STATIC_GETTER
+          : ClassElementType.INSTANCE_GETTER
         : node.kind === "set"
         ? node.static
-          ? CLASS_ELEMENT_STATIC_SETTER
-          : CLASS_ELEMENT_INSTANCE_SETTER
-        : CLASS_ELEMENT_OTHER;
+          ? ClassElementType.STATIC_SETTER
+          : ClassElementType.INSTANCE_SETTER
+        : ClassElementType.OTHER;
     this.declareClassPrivateMethodInScope(node, kind);
   }
 
@@ -2298,7 +2287,7 @@ export default abstract class StatementParser extends ExpressionParser {
       N.ClassProperty | N.ClassPrivateProperty | N.ClassAccessorProperty
     >,
   ): void {
-    this.scope.enter(SCOPE_CLASS | SCOPE_SUPER);
+    this.scope.enter(ScopeFlag.CLASS | ScopeFlag.SUPER);
     this.expressionScope.enter(newExpressionScope());
     this.prodParam.enter(PARAM);
     node.value = this.eat(tt.eq) ? this.parseMaybeAssignAllowIn() : null;
@@ -2311,7 +2300,7 @@ export default abstract class StatementParser extends ExpressionParser {
     node: Undone<N.Class>,
     isStatement: boolean,
     optionalId?: boolean | null,
-    bindingType: BindingTypes = BIND_CLASS,
+    bindingType: BindingTypes = BindingFlag.TYPE_CLASS,
   ): void {
     if (tokenIsIdentifier(this.state.type)) {
       node.id = this.parseIdentifier();
@@ -3133,7 +3122,11 @@ export default abstract class StatementParser extends ExpressionParser {
       | N.ImportSpecifier
       | N.ImportDefaultSpecifier
       | N.ImportNamespaceSpecifier,
-  >(specifier: Undone<T>, type: T["type"], bindingType = BIND_LEXICAL) {
+  >(
+    specifier: Undone<T>,
+    type: T["type"],
+    bindingType: BindingTypes = BindingFlag.TYPE_LEXICAL,
+  ) {
     this.checkLVal(specifier.local, {
       in: { type },
       binding: bindingType,
