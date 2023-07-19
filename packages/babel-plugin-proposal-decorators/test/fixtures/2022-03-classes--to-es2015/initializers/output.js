@@ -5,9 +5,10 @@ new (_temp = class extends babelHelpers.identity {
   constructor() {
     (super(_Foo), babelHelpers.defineProperty(this, "field", 123)), _initClass();
   }
-}, (() => {
+}, (_class2 => {
   class Foo {}
-  [_Foo, _initClass] = babelHelpers.applyDecs2203R(Foo, [], [dec]).c;
+  _class2 = Foo;
+  [_Foo, _initClass] = babelHelpers.applyDecs2203R(_class2, [], [dec]).c;
 })(), _temp)();
 let _Bar;
 new (_temp2 = class extends babelHelpers.identity {
@@ -16,7 +17,8 @@ new (_temp2 = class extends babelHelpers.identity {
       this.otherField = 456;
     })(), 123))), _initClass2();
   }
-}, (() => {
+}, (_class3 => {
   class Bar extends _Foo {}
-  [_Bar, _initClass2] = babelHelpers.applyDecs2203R(Bar, [], [dec]).c;
+  _class3 = Bar;
+  [_Bar, _initClass2] = babelHelpers.applyDecs2203R(_class3, [], [dec]).c;
 })(), _temp2)();

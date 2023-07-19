@@ -1,4 +1,4 @@
-var _computedKey, _initProto;
+var _computedKey, _initProto, _class;
 const dec = () => {};
 _computedKey = 'b';
 class Foo {
@@ -13,4 +13,5 @@ class Foo {
     return this.value = v;
   }
 }
-[_initProto] = babelHelpers.applyDecs2305(Foo, [[dec, 4, "a"], [dec, 4, _computedKey]], []).e;
+_class = Foo;
+[_initProto] = babelHelpers.applyDecs2305(_class, [[dec, 4, "a"], [dec, 4, _computedKey]], []).e;

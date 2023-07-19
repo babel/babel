@@ -1,3 +1,4 @@
+var _class;
 class Base {
   superMethod() {
     return 'good';
@@ -18,6 +19,7 @@ class Sub extends Base {
     return babelHelpers.classPrivateFieldLooseBase(this, _privateMethod)[_privateMethod]();
   }
 }
+_class = Sub;
 function _privateMethod2() {
-  return babelHelpers.get(babelHelpers.getPrototypeOf(Sub.prototype), "superMethod", this).call(this);
+  return babelHelpers.get(babelHelpers.getPrototypeOf(_class.prototype), "superMethod", this).call(this);
 }

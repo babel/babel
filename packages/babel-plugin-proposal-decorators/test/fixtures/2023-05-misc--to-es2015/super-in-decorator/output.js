@@ -1,6 +1,6 @@
 class A extends B {
   m() {
-    var _initClass, _obj, _dec, _obj2, _dec2, _initProto;
+    var _initClass, _obj, _dec, _obj2, _dec2, _initProto, _class;
     let _C;
     _obj = this;
     _dec = super.dec1;
@@ -12,10 +12,11 @@ class A extends B {
       }
       m2() {}
     }
+    _class = C;
     ({
       e: [_initProto],
       c: [_C, _initClass]
-    } = babelHelpers.applyDecs2305(C, [[[_obj2, _dec2], 18, "m2"]], [_obj, _dec], 1));
+    } = babelHelpers.applyDecs2305(_class, [[[_obj2, _dec2], 18, "m2"]], [_obj, _dec], 1));
     _initClass();
   }
 }

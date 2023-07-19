@@ -956,6 +956,8 @@ type ReplaceThisState = {
   innerBinding: t.Identifier | null;
 };
 
+type ReplaceInnerBindingReferenceState = ReplaceThisState;
+
 const thisContextVisitor = traverse.visitors.merge<ReplaceThisState>([
   {
     UnaryExpression(path) {
@@ -984,7 +986,7 @@ const thisContextVisitor = traverse.visitors.merge<ReplaceThisState>([
   environmentVisitor,
 ]);
 
-const innerReferencesVisitor: Visitor<ReplaceThisState> = {
+const innerReferencesVisitor: Visitor<ReplaceInnerBindingReferenceState> = {
   ReferencedIdentifier(path, state) {
     if (
       path.scope.bindingIdentifierEquals(path.node.name, state.innerBinding)
@@ -998,10 +1000,6 @@ const innerReferencesVisitor: Visitor<ReplaceThisState> = {
 function replaceThisContext(
   path: PropPath,
   ref: t.Identifier,
-  getSuperRef: () => t.Identifier,
-  file: File,
-  isStaticBlock: boolean,
-  constantSuper: boolean,
   innerBindingRef: t.Identifier | null,
 ) {
   const state: ReplaceThisState = {
@@ -1009,23 +1007,8 @@ function replaceThisContext(
     needsClassRef: false,
     innerBinding: innerBindingRef,
   };
-
-  const replacer = new ReplaceSupers({
-    methodPath: path,
-    constantSuper,
-    file,
-    refToPreserve: ref,
-    getSuperRef,
-    getObjectRef() {
-      state.needsClassRef = true;
-      // @ts-expect-error: TS doesn't infer that path.node is not a StaticBlock
-      return t.isStaticBlock?.(path.node) || path.node.static
-        ? ref
-        : t.memberExpression(ref, t.identifier("prototype"));
-    },
-  });
-  replacer.replace();
-  if (isStaticBlock || path.isProperty()) {
+  if (!path.isMethod()) {
+    // replace `this` in property initializers and static blocks
     path.traverse(thisContextVisitor, state);
   }
 
@@ -1033,7 +1016,7 @@ function replaceThisContext(
   if (
     innerBindingRef != null &&
     state.classRef?.name &&
-    state.classRef.name !== innerBindingRef?.name
+    state.classRef.name !== innerBindingRef.name
   ) {
     path.traverse(innerReferencesVisitor, state);
   }
@@ -1075,23 +1058,47 @@ function inheritPropComments<T extends t.Node>(node: T, prop: PropPath) {
   return node;
 }
 
+/**
+ * ClassRefFlag records the requirement of the class binding reference.
+ *
+ * @enum {number}
+ */
+const enum ClassRefFlag {
+  None,
+  /**
+   * When this flag is enabled, the binding reference can be the class id,
+   * if exists, or the uid identifier generated for class expression. The
+   * reference is safe to be consumed by [[Define]].
+   */
+  ForDefine = 1 << 0,
+  /**
+   * When this flag is enabled, the reference must be a uid, because the outer
+   * class binding can be mutated by user codes.
+   * E.g.
+   * class C { static p = C }; const oldC = C; C = null; oldC.p;
+   * we must memoize class `C` before defining the property `p`.
+   */
+  ForInnerBinding = 1 << 1,
+}
+
 export function buildFieldsInitNodes(
-  ref: t.Identifier,
+  ref: t.Identifier | null,
   superRef: t.Expression | undefined,
   props: PropPath[],
   privateNamesMap: PrivateNamesMap,
-  state: File,
+  file: File,
   setPublicClassFields: boolean,
   privateFieldsAsProperties: boolean,
   constantSuper: boolean,
-  innerBindingRef: t.Identifier,
+  innerBindingRef: t.Identifier | null,
 ) {
-  let needsClassRef = false;
+  let classRefFlags = ClassRefFlag.None;
   let injectSuperRef: t.Identifier;
   const staticNodes: t.Statement[] = [];
   const instanceNodes: t.Statement[] = [];
   // These nodes are pure and can be moved to the closest statement position
   const pureStaticNodes: t.FunctionDeclaration[] = [];
+  let classBindingNode: t.ExpressionStatement | null = null;
 
   const getSuperRef = t.isIdentifier(superRef)
     ? () => superRef
@@ -1100,6 +1107,10 @@ export function buildFieldsInitNodes(
           props[0].scope.generateUidIdentifierBasedOnNode(superRef);
         return injectSuperRef;
       };
+
+  const classRefForInnerBinding =
+    ref ?? props[0].scope.generateUidIdentifier("class");
+  ref ??= t.cloneNode(innerBindingRef);
 
   for (const prop of props) {
     prop.isClassProperty() && ts.assertFieldTransformed(prop);
@@ -1113,17 +1124,36 @@ export function buildFieldsInitNodes(
     const isMethod = !isField;
     const isStaticBlock = prop.isStaticBlock?.();
 
+    if (isStatic) classRefFlags |= ClassRefFlag.ForDefine;
+
     if (isStatic || (isMethod && isPrivate) || isStaticBlock) {
+      new ReplaceSupers({
+        methodPath: prop,
+        constantSuper,
+        file: file,
+        refToPreserve: innerBindingRef,
+        getSuperRef,
+        getObjectRef() {
+          classRefFlags |= ClassRefFlag.ForInnerBinding;
+          if (isStatic || isStaticBlock) {
+            return classRefForInnerBinding;
+          } else {
+            return t.memberExpression(
+              classRefForInnerBinding,
+              t.identifier("prototype"),
+            );
+          }
+        },
+      }).replace();
+
       const replaced = replaceThisContext(
         prop,
-        ref,
-        getSuperRef,
-        state,
-        isStaticBlock,
-        constantSuper,
+        classRefForInnerBinding,
         innerBindingRef,
       );
-      needsClassRef = needsClassRef || replaced;
+      if (replaced) {
+        classRefFlags |= ClassRefFlag.ForInnerBinding;
+      }
     }
 
     // TODO(ts): there are so many `ts-expect-error` inside cases since
@@ -1149,14 +1179,12 @@ export function buildFieldsInitNodes(
         break;
       }
       case isStatic && isPrivate && isField && privateFieldsAsProperties:
-        needsClassRef = true;
         staticNodes.push(
           // @ts-expect-error checked in switch
           buildPrivateFieldInitLoose(t.cloneNode(ref), prop, privateNamesMap),
         );
         break;
       case isStatic && isPrivate && isField && !privateFieldsAsProperties:
-        needsClassRef = true;
         staticNodes.push(
           // @ts-expect-error checked in switch
           buildPrivateStaticFieldInitSpec(prop, privateNamesMap),
@@ -1170,17 +1198,15 @@ export function buildFieldsInitNodes(
         // not going to happen.
         // @ts-expect-error checked in switch
         if (!isNameOrLength(prop.node)) {
-          needsClassRef = true;
           // @ts-expect-error checked in switch
           staticNodes.push(buildPublicFieldInitLoose(t.cloneNode(ref), prop));
           break;
         }
       // falls through
       case isStatic && isPublic && isField && !setPublicClassFields:
-        needsClassRef = true;
         staticNodes.push(
           // @ts-expect-error checked in switch
-          buildPublicFieldInitSpec(t.cloneNode(ref), prop, state),
+          buildPublicFieldInitSpec(t.cloneNode(ref), prop, file),
         );
         break;
       case isInstance && isPrivate && isField && privateFieldsAsProperties:
@@ -1196,7 +1222,7 @@ export function buildFieldsInitNodes(
             // @ts-expect-error checked in switch
             prop,
             privateNamesMap,
-            state,
+            file,
           ),
         );
         break;
@@ -1225,7 +1251,7 @@ export function buildFieldsInitNodes(
             // @ts-expect-error checked in switch
             prop,
             privateNamesMap,
-            state,
+            file,
           ),
         );
         pureStaticNodes.push(
@@ -1238,7 +1264,6 @@ export function buildFieldsInitNodes(
         );
         break;
       case isStatic && isPrivate && isMethod && !privateFieldsAsProperties:
-        needsClassRef = true;
         staticNodes.unshift(
           // @ts-expect-error checked in switch
           buildPrivateStaticFieldInitSpec(prop, privateNamesMap),
@@ -1253,13 +1278,12 @@ export function buildFieldsInitNodes(
         );
         break;
       case isStatic && isPrivate && isMethod && privateFieldsAsProperties:
-        needsClassRef = true;
         staticNodes.unshift(
           buildPrivateStaticMethodInitLoose(
             t.cloneNode(ref),
             // @ts-expect-error checked in switch
             prop,
-            state,
+            file,
             privateNamesMap,
           ),
         );
@@ -1279,7 +1303,7 @@ export function buildFieldsInitNodes(
       case isInstance && isPublic && isField && !setPublicClassFields:
         instanceNodes.push(
           // @ts-expect-error checked in switch
-          buildPublicFieldInitSpec(t.thisExpression(), prop, state),
+          buildPublicFieldInitSpec(t.thisExpression(), prop, file),
         );
         break;
       default:
@@ -1287,10 +1311,21 @@ export function buildFieldsInitNodes(
     }
   }
 
+  if (classRefFlags & ClassRefFlag.ForInnerBinding && innerBindingRef != null) {
+    classBindingNode = t.expressionStatement(
+      t.assignmentExpression(
+        "=",
+        t.cloneNode(classRefForInnerBinding),
+        t.cloneNode(innerBindingRef),
+      ),
+    );
+  }
+
   return {
     staticNodes: staticNodes.filter(Boolean),
     instanceNodes: instanceNodes.filter(Boolean),
     pureStaticNodes: pureStaticNodes.filter(Boolean),
+    classBindingNode,
     wrapClass(path: NodePath<t.Class>) {
       for (const prop of props) {
         // Delete leading comments so that they don't get attached as
@@ -1310,16 +1345,21 @@ export function buildFieldsInitNodes(
         );
       }
 
-      if (!needsClassRef) return path;
-
-      if (path.isClassExpression()) {
-        path.scope.push({ id: ref });
-        path.replaceWith(
-          t.assignmentExpression("=", t.cloneNode(ref), path.node),
-        );
-      } else if (!path.node.id) {
-        // Anonymous class declaration
-        path.node.id = ref;
+      if (classRefFlags !== ClassRefFlag.None) {
+        if (path.isClassExpression()) {
+          path.scope.push({ id: ref });
+          path.replaceWith(
+            t.assignmentExpression("=", t.cloneNode(ref), path.node),
+          );
+        } else {
+          if (innerBindingRef == null) {
+            // export anonymous class declaration
+            path.node.id = ref;
+          }
+          if (classBindingNode != null) {
+            path.scope.push({ id: classRefForInnerBinding });
+          }
+        }
       }
 
       return path;

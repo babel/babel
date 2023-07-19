@@ -1,5 +1,6 @@
-var _ref, _class;
-class Foo extends (_ref = (_class = class _ref {}, _class.bar = 42, _class)) {}
+var _ref, _class, _class2;
+class Foo extends (_ref = (_class2 = class _ref {}, _class2.bar = 42, _class2)) {}
+_class = Foo;
 Foo.bar = 21;
-Foo.foo = _ref.bar;
+_class.foo = _ref.bar;
 expect(Foo.foo).toBe(42);

@@ -1,4 +1,4 @@
-var _computedKey, _initStatic;
+var _computedKey, _initStatic, _class;
 const dec = () => {};
 _computedKey = 'b';
 class Foo {
@@ -9,8 +9,9 @@ class Foo {
     return this.value;
   }
 }
+_class = Foo;
 (() => {
-  [_initStatic] = babelHelpers.applyDecs2305(Foo, [[dec, 11, "a"], [dec, 11, _computedKey]], []).e;
-  _initStatic(Foo);
+  [_initStatic] = babelHelpers.applyDecs2305(_class, [[dec, 11, "a"], [dec, 11, _computedKey]], []).e;
+  _initStatic(_class);
 })();
 babelHelpers.defineProperty(Foo, "value", 1);

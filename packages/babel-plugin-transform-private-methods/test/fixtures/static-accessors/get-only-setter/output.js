@@ -1,10 +1,12 @@
+var _class;
 class Cl {
   static getPrivateStaticFieldValue() {
     return babelHelpers.classStaticPrivateFieldSpecGet(Cl, Cl, _privateStaticFieldValue);
   }
 }
+_class = Cl;
 function _set_privateStaticFieldValue(newValue) {
-  babelHelpers.classStaticPrivateFieldSpecSet(Cl, Cl, _PRIVATE_STATIC_FIELD, newValue);
+  babelHelpers.classStaticPrivateFieldSpecSet(_class, _class, _PRIVATE_STATIC_FIELD, newValue);
 }
 var _privateStaticFieldValue = {
   get: void 0,
