@@ -1,2 +1,2 @@
-namespace N {}
-namespace N {}
+namespace N { var x; }
+namespace N { var y; }

@@ -23,9 +23,13 @@ class A {}
     _D.H = H;
   })(D || (D = _A.D || (_A.D = {})));
   class F {}
-  (function (_F) {})(F || (F = {}));
+  (function (_F) {
+    var x;
+  })(F || (F = {}));
   let G;
-  (function (_G) {})(G || (G = {}));
+  (function (_G) {
+    var x;
+  })(G || (G = {}));
   let L = /*#__PURE__*/function (L) {
     L[L["M"] = 19] = "M";
     return L;

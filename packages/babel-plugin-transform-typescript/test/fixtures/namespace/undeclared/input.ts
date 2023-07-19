@@ -1,1 +1,1 @@
-namespace N {}
+namespace N { var x }

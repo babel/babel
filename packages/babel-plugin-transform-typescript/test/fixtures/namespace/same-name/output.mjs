@@ -1,7 +1,9 @@
 let N;
 (function (_N2) {
   let _N7;
-  (function (_N4) {})(_N7 || (_N7 = {}));
+  (function (_N4) {
+    var x;
+  })(_N7 || (_N7 = {}));
   let N;
   (function (_N6) {
     function _N3() {}

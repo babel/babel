@@ -1,5 +1,5 @@
 namespace N {
-  namespace _N7 {}
+  namespace _N7 { var x }
   export namespace N {
     export function _N3() {}
   }
