@@ -23,16 +23,7 @@ export default function transpileNamespace(
 
   const name = path.node.id.name;
   const value = handleNested(path, t.cloneNode(path.node, true));
-  const bound = path.scope.hasOwnBinding(name);
-  if (path.parent.type === "ExportNamedDeclaration") {
-    if (!bound) {
-      path.parentPath.insertAfter(value);
-      path.replaceWith(getDeclaration(name));
-      path.scope.registerDeclaration(path.parentPath);
-    } else {
-      path.parentPath.replaceWith(value);
-    }
-  } else if (bound) {
+  if (path.scope.hasOwnBinding(name)) {
     path.replaceWith(value);
   } else {
     path.scope.registerDeclaration(
