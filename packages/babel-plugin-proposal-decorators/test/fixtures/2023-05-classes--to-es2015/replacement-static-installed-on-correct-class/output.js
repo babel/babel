@@ -12,8 +12,7 @@ new (_x = /*#__PURE__*/new WeakMap(), _m = /*#__PURE__*/new WeakSet(), (_temp = 
       hasM = o => _m.has(babelHelpers.checkInRHS(o));
     })(), _initClass();
   }
-}, (() => {
-  var _class2;
+}, (_class2 => {
   class Foo {
     static m() {}
   }

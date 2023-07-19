@@ -4,8 +4,7 @@ const A = (new (_temp = class extends babelHelpers.identity {
   constructor() {
     super(_A), (() => {})(), _initClass();
   }
-}, (() => {
-  var _class2;
+}, (_class2 => {
   class A {}
   _class2 = A;
   [_A, _initClass] = babelHelpers.applyDecs2203R(_class2, [], [dec]).c;
@@ -14,8 +13,7 @@ const B = (new (_temp2 = class extends babelHelpers.identity {
   constructor() {
     super(_C), (() => {})(), _initClass2();
   }
-}, (() => {
-  var _class3;
+}, (_class3 => {
   class C {}
   _class3 = C;
   [_C, _initClass2] = babelHelpers.applyDecs2203R(_class3, [], [dec]).c;
@@ -24,8 +22,7 @@ const D = (new (_temp3 = class extends babelHelpers.identity {
   constructor() {
     super(_D), (() => {})(), _initClass3();
   }
-}, (() => {
-  var _class4;
+}, (_class4 => {
   class D {}
   _class4 = D;
   [_D, _initClass3] = babelHelpers.applyDecs2203R(_class4, [], [dec]).c;
@@ -39,8 +36,7 @@ const F = [(new (_temp5 = class extends babelHelpers.identity {
   constructor() {
     super(_G), (() => {})(), _initClass5();
   }
-}, (() => {
-  var _class6;
+}, (_class6 => {
   class G {}
   _class6 = G;
   [_G, _initClass5] = babelHelpers.applyDecs2203R(_class6, [], [dec]).c;
@@ -53,8 +49,7 @@ const H = (new (_temp7 = class extends babelHelpers.identity {
   constructor() {
     super(_H), (() => {})(), _initClass7();
   }
-}, (() => {
-  var _class8;
+}, (_class8 => {
   class H extends I {}
   _class8 = H;
   [_H, _initClass7] = babelHelpers.applyDecs2203R(_class8, [], [dec]).c;
@@ -63,8 +58,7 @@ const J = (new (_temp8 = class extends babelHelpers.identity {
   constructor() {
     super(_K), (() => {})(), _initClass8();
   }
-}, (() => {
-  var _class9;
+}, (_class9 => {
   class K extends L {}
   _class9 = K;
   [_K, _initClass8] = babelHelpers.applyDecs2203R(_class9, [], [dec]).c;
