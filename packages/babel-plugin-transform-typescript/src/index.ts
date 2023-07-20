@@ -460,6 +460,29 @@ export default declare((api, opts: Options) => {
           return;
         }
 
+        // Convert `export namespace X {}` into `export let X; namespace X {}`,
+        // so that when visiting TSModuleDeclaration we do not have to possibly
+        // replace its parent path.
+        if (t.isTSModuleDeclaration(path.node.declaration)) {
+          const namespace = path.node.declaration;
+          const { id } = namespace;
+          if (t.isIdentifier(id)) {
+            if (path.scope.hasOwnBinding(id.name)) {
+              path.replaceWith(namespace);
+            } else {
+              const [newExport] = path.replaceWithMultiple([
+                t.exportNamedDeclaration(
+                  t.variableDeclaration("let", [
+                    t.variableDeclarator(t.cloneNode(id)),
+                  ]),
+                ),
+                namespace,
+              ]);
+              path.scope.registerDeclaration(newExport);
+            }
+          }
+        }
+
         NEEDS_EXPLICIT_ESM.set(state.file.ast.program, false);
       },
 
