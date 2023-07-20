@@ -23,7 +23,9 @@ export default function transpileNamespace(
 
   const name = path.node.id.name;
   const value = handleNested(path, t.cloneNode(path.node, true));
-  if (path.scope.hasOwnBinding(name)) {
+  if (value === null) {
+    path.remove();
+  } else if (path.scope.hasOwnBinding(name)) {
     path.replaceWith(value);
   } else {
     path.scope.registerDeclaration(
@@ -110,7 +112,7 @@ function handleNested(
   path: NodePath,
   node: t.TSModuleDeclaration,
   parentExport?: t.Expression,
-) {
+): t.Statement | null {
   const names = new Set();
   const realName = node.id;
   t.assertIdentifier(realName);
@@ -125,6 +127,8 @@ function handleNested(
       //   }
       [t.exportNamedDeclaration(node.body)];
 
+  let isEmpty = true;
+
   for (let i = 0; i < namespaceTopLevel.length; i++) {
     const subNode = namespaceTopLevel[i];
 
@@ -137,26 +141,31 @@ function handleNested(
         }
 
         const transformed = handleNested(path, subNode);
-        const moduleName = subNode.id.name;
-        if (names.has(moduleName)) {
-          namespaceTopLevel[i] = transformed;
-        } else {
-          names.add(moduleName);
-          namespaceTopLevel.splice(
-            i++,
-            1,
-            getDeclaration(moduleName),
-            transformed,
-          );
+        if (transformed !== null) {
+          isEmpty = false;
+          const moduleName = subNode.id.name;
+          if (names.has(moduleName)) {
+            namespaceTopLevel[i] = transformed;
+          } else {
+            names.add(moduleName);
+            namespaceTopLevel.splice(
+              i++,
+              1,
+              getDeclaration(moduleName),
+              transformed,
+            );
+          }
         }
         continue;
       }
       case "TSEnumDeclaration":
       case "FunctionDeclaration":
       case "ClassDeclaration":
+        isEmpty = false;
         names.add(subNode.id.name);
         continue;
       case "VariableDeclaration": {
+        isEmpty = false;
         // getBindingIdentifiers returns an object without prototype.
         // eslint-disable-next-line guard-for-in
         for (const name in t.getBindingIdentifiers(subNode)) {
@@ -165,6 +174,7 @@ function handleNested(
         continue;
       }
       default:
+        isEmpty &&= t.isTypeScript(subNode);
         // Neither named declaration nor export, continue to next item.
         continue;
       case "ExportNamedDeclaration":
@@ -180,6 +190,7 @@ function handleNested(
       case "TSEnumDeclaration":
       case "FunctionDeclaration":
       case "ClassDeclaration": {
+        isEmpty = false;
         const itemName = subNode.declaration.id.name;
         names.add(itemName);
         namespaceTopLevel.splice(
@@ -197,6 +208,7 @@ function handleNested(
         break;
       }
       case "VariableDeclaration": {
+        isEmpty = false;
         const nodes = handleVariableDeclaration(
           subNode.declaration,
           name,
@@ -216,21 +228,26 @@ function handleNested(
           subNode.declaration,
           t.identifier(name),
         );
-        const moduleName = subNode.declaration.id.name;
-        if (names.has(moduleName)) {
-          namespaceTopLevel[i] = transformed;
-        } else {
-          names.add(moduleName);
-          namespaceTopLevel.splice(
-            i++,
-            1,
-            getDeclaration(moduleName),
-            transformed,
-          );
+        if (transformed !== null) {
+          isEmpty = false;
+          const moduleName = subNode.declaration.id.name;
+          if (names.has(moduleName)) {
+            namespaceTopLevel[i] = transformed;
+          } else {
+            names.add(moduleName);
+            namespaceTopLevel.splice(
+              i++,
+              1,
+              getDeclaration(moduleName),
+              transformed,
+            );
+          }
         }
       }
     }
   }
+
+  if (isEmpty) return null;
 
   // {}
   let fallthroughValue: t.Expression = t.objectExpression([]);
