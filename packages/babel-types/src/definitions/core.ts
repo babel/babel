@@ -628,6 +628,7 @@ defineType("NumericLiteral", {
                 }
               } else {
                 // TODO: Enable this warning once regenerator is fixed.
+                // https://github.com/facebook/regenerator/pull/680
                 // console.warn(error);
               }
             }
