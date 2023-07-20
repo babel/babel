@@ -623,8 +623,10 @@ defineType("NumericLiteral", {
               if (process.env.BABEL_8_BREAKING) {
                 // TODO(@nicolo-ribaudo) Fix regenerator to not pass negative
                 // numbers here.
-                if (!new Error().stack.includes("regenerator")) {
-                  throw error;
+                if (!IS_STANDALONE) {
+                  if (!new Error().stack.includes("regenerator")) {
+                    throw error;
+                  }
                 }
               } else {
                 // TODO: Enable this warning once regenerator is fixed.
