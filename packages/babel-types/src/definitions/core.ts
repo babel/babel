@@ -611,7 +611,30 @@ defineType("NumericLiteral", {
   deprecatedAlias: "NumberLiteral",
   fields: {
     value: {
-      validate: assertValueType("number"),
+      validate: chain(
+        assertValueType("number"),
+        Object.assign(
+          function (node, key, val) {
+            if (1 / val < 0 || !Number.isFinite(val)) {
+              const error = new Error(
+                "NumericLiterals must be non-negative finite numbers. " +
+                  `You can use t.valueToNode(${val}) instead.`,
+              );
+              if (process.env.BABEL_8_BREAKING) {
+                // TODO(@nicolo-ribaudo) Fix regenerator to not pass negative
+                // numbers here.
+                if (!new Error().stack.includes("regenerator")) {
+                  throw error;
+                }
+              } else {
+                // TODO: Enable this warning once regenerator is fixed.
+                // console.warn(error);
+              }
+            }
+          } satisfies Validator,
+          { type: "number" },
+        ),
+      ),
     },
   },
   aliases: ["Expression", "Pureish", "Literal", "Immutable"],
