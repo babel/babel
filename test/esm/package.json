@@ -7,5 +7,6 @@
     "@babel/runtime": "workspace:^",
     "@babel/runtime-corejs3": "workspace:^",
     "chalk": "^4.1.0"
-  }
+  },
+  "version": "8.0.0-alpha.0"
 }

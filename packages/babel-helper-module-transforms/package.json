@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-module-transforms",
-  "version": "7.22.9",
+  "version": "8.0.0-alpha.0",
   "description": "Babel helper functions for implementing ES6 module transformations",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-helper-module-transforms",
@@ -26,7 +26,7 @@
     "@babel/traverse": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0"
+    "@babel/core": "^8.0.0-alpha.0"
   },
   "engines": {
     "node": ">=6.9.0"

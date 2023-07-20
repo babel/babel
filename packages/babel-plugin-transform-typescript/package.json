@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-typescript",
-  "version": "7.22.9",
+  "version": "8.0.0-alpha.0",
   "description": "Transform TypeScript into ES.next",
   "repository": {
     "type": "git",
@@ -23,7 +23,7 @@
     "@babel/plugin-syntax-typescript": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "^8.0.0-alpha.0"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

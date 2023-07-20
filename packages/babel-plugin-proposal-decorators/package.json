@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-decorators",
-  "version": "7.22.7",
+  "version": "8.0.0-alpha.0",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
   "publishConfig": {
@@ -27,7 +27,7 @@
     "@babel/plugin-syntax-decorators": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "^8.0.0-alpha.0"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

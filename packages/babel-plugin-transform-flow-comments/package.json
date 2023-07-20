@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-flow-comments",
-  "version": "7.22.5",
+  "version": "8.0.0-alpha.0",
   "description": "Turn flow type annotations into comments",
   "repository": {
     "type": "git",
@@ -22,7 +22,7 @@
     "@babel/plugin-syntax-flow": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "^8.0.0-alpha.0"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

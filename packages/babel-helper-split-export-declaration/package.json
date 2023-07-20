@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-split-export-declaration",
-  "version": "7.22.6",
+  "version": "8.0.0-alpha.0",
   "description": "",
   "repository": {
     "type": "git",
