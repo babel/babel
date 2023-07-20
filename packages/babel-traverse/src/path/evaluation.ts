@@ -4,7 +4,18 @@ import type * as t from "@babel/types";
 // This file contains Babels metainterpreter that can evaluate static code.
 
 const VALID_CALLEES = ["Number", "String", "Math"] as const;
-const GLOBAL_VALID_CALLEES = ["isFinite", "isNaN", "parseFloat", "parseInt", "decodeURI", "decodeURIComponent", "encodeURI", "encodeURIComponent", "btoa", "atob"] as const;
+const GLOBAL_VALID_CALLEES = [
+  "isFinite",
+  "isNaN",
+  "parseFloat",
+  "parseInt",
+  "decodeURI",
+  "decodeURIComponent",
+  "encodeURI",
+  "encodeURIComponent",
+  "btoa",
+  "atob",
+] as const;
 const INVALID_METHODS = ["random"] as const;
 
 function isValidCallee(val: string): val is (typeof VALID_CALLEES)[number] {
@@ -14,7 +25,9 @@ function isValidCallee(val: string): val is (typeof VALID_CALLEES)[number] {
   );
 }
 
-function isGlobalValidCallee(val: string): val is (typeof GLOBAL_VALID_CALLEES)[number] {
+function isGlobalValidCallee(
+  val: string,
+): val is (typeof GLOBAL_VALID_CALLEES)[number] {
   return GLOBAL_VALID_CALLEES.includes(
     // @ts-expect-error val is a string
     val,
@@ -410,10 +423,7 @@ function _evaluate(path: NodePath, state: State): any {
     if (
       callee.isIdentifier() &&
       !path.scope.getBinding(callee.node.name) &&
-      (
-      isValidCallee(callee.node.name) ||
-      isGlobalValidCallee(callee.node.name)
-      )
+      (isValidCallee(callee.node.name) || isGlobalValidCallee(callee.node.name))
     ) {
       func = global[callee.node.name];
     }
