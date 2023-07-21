@@ -5,18 +5,11 @@ const codeFrame = _codeFrame.default || _codeFrame;
 
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
-
-const babelHightlightChalkPath = require.resolve("chalk", {
+const babelHighlightChalk = require(require.resolve("chalk", {
   paths: [require.resolve("@babel/highlight")],
-});
+}));
 
 describe("@babel/code-frame", function () {
-  let babelHighlightChalk;
-
-  beforeAll(async function () {
-    ({ default: babelHighlightChalk } = await import(babelHightlightChalkPath));
-  });
-
   function stubColorSupport(supported) {
     let originalChalkEnabled;
     let originalChalkLevel;

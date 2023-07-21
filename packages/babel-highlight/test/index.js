@@ -6,22 +6,10 @@ import chalk from "chalk";
 import _highlight, { shouldHighlight } from "../lib/index.js";
 const highlight = _highlight.default || _highlight;
 
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
-
-const babelHightlightChalkPath = require.resolve("chalk", {
-  paths: [require.resolve("@babel/highlight")],
-});
-
 const describeBabel7NoESM =
   process.env.BABEL_8_BREAKING || USE_ESM ? describe.skip : describe;
 
 describe("@babel/highlight", function () {
-  let babelHighlightChalk;
-  beforeAll(async function () {
-    ({ default: babelHighlightChalk } = await import(babelHightlightChalkPath));
-  });
-
   function stubColorSupport(supported) {
     let originalChalkEnabled;
     let originalChalkLevel;
