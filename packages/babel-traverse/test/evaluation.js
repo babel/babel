@@ -213,18 +213,6 @@ describe("evaluation", function () {
         .evaluate().value,
     ).toBe("?x=1");
 
-    expect(
-      getPath("btoa('hello');")
-        .get("body.0.expression")
-        .evaluate().value,
-    ).toBe("aGVsbG8=");
-
-    expect(
-      getPath("atob('aGVsbG8=');")
-        .get("body.0.expression")
-        .evaluate().value,
-    ).toBe("hello");
-
   });
 
   it("should not deopt vars in different scope", function () {

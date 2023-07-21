@@ -13,8 +13,6 @@ const GLOBAL_VALID_CALLEES = [
   "decodeURIComponent",
   "encodeURI",
   "encodeURIComponent",
-  "btoa",
-  "atob",
 ] as const;
 const INVALID_METHODS = ["random"] as const;
 
