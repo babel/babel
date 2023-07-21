@@ -67,7 +67,11 @@
     ],
     "USE_ESM": [
       {
-        "type": "module"
+        "type": "module",
+        "bin": {
+          "babel": "./bin/babel.mjs",
+          "babel-external-helpers": "./bin/babel-external-helpers.mjs"
+        }
       },
       null
     ]
