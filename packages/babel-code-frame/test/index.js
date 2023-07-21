@@ -3,20 +3,50 @@ import chalk from "chalk";
 import _codeFrame, { codeFrameColumns } from "../lib/index.js";
 const codeFrame = _codeFrame.default || _codeFrame;
 
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+
+const babelHightlightChalkPath = require.resolve("chalk", {
+  paths: [require.resolve("@babel/highlight")],
+});
+
 describe("@babel/code-frame", function () {
+  let babelHighlightChalk;
+
+  beforeAll(async function () {
+    ({ default: babelHighlightChalk } = await import(babelHightlightChalkPath));
+  });
+
   function stubColorSupport(supported) {
+    let originalChalkEnabled;
     let originalChalkLevel;
     let originalChalkSupportsColor;
-    beforeEach(function () {
+    let originalHighlightChalkEnabled;
+    let originalHighlightChalkLevel;
+    let originalHighlightChalkSupportsColor;
+
+    beforeEach(async function () {
       originalChalkSupportsColor = chalk.supportsColor;
       originalChalkLevel = chalk.level;
-      chalk.supportsColor = supported ? { level: 1 } : false;
-      chalk.level = supported ? 1 : 0;
+      originalChalkEnabled = chalk.enabled;
+      originalHighlightChalkSupportsColor = babelHighlightChalk.supportsColor;
+      originalHighlightChalkLevel = babelHighlightChalk.level;
+      originalHighlightChalkEnabled = babelHighlightChalk.enabled;
+
+      babelHighlightChalk.supportsColor = chalk.supportsColor = supported
+        ? { level: 1 }
+        : false;
+      babelHighlightChalk.level = chalk.level = supported ? 1 : 0;
+      babelHighlightChalk.enabled = chalk.enabled = true;
     });
 
     afterEach(function () {
       chalk.supportsColor = originalChalkSupportsColor;
       chalk.level = originalChalkLevel;
+      chalk.enabled = originalChalkEnabled;
+      babelHighlightChalk.supportsColor = originalHighlightChalkSupportsColor;
+      babelHighlightChalk.level = originalHighlightChalkLevel;
+      babelHighlightChalk.enabled = originalChalkEnabled;
     });
   }
 
