@@ -20,7 +20,6 @@
     "js-tokens": "condition:BABEL_8_BREAKING ? ^8.0.0 : ^4.0.0"
   },
   "devDependencies": {
-    "@types/chalk": "^2.0.0",
     "strip-ansi": "^4.0.0"
   },
   "engines": {
