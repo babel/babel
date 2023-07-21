@@ -209,7 +209,6 @@ export type CmdOptions = {
 };
 
 export default function parseArgv(args: Array<string>): CmdOptions | null {
-  //
   commander.parse(args);
 
   const errors: string[] = [];
@@ -359,16 +358,13 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
   };
 }
 
-function booleanify(val: any): boolean | any {
-  if (val === undefined) return undefined;
+function booleanify(val: number | string): boolean | string | undefined {
+  if (val == null) return undefined;
 
-  if (val === "true" || val == 1) {
-    return true;
-  }
+  if (typeof val === "number") return val > 0;
 
-  if (val === "false" || val == 0 || !val) {
-    return false;
-  }
+  if (val === "true") return true;
+  if (val === "false") return false;
 
   return val;
 }

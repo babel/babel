@@ -6,12 +6,14 @@ import * as util from "./util";
 import * as watcher from "./watcher";
 import type { CmdOptions } from "./options";
 
-const FILE_TYPE = Object.freeze({
-  NON_COMPILABLE: "NON_COMPILABLE",
-  COMPILED: "COMPILED",
-  IGNORED: "IGNORED",
-  ERR_COMPILATION: "ERR_COMPILATION",
-} as const);
+const enum FILE_TYPE {
+  NON_COMPILABLE = "NON_COMPILABLE",
+  COMPILED = "COMPILED",
+  IGNORED = "IGNORED",
+  ERR_COMPILATION = "ERR_COMPILATION",
+}
+
+const outputtedFiles = new Set<string>();
 
 function outputFileSync(filePath: string, data: string | Buffer): void {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
@@ -22,24 +24,22 @@ export default async function ({
   cliOptions,
   babelOptions,
 }: CmdOptions): Promise<void> {
-  async function write(
-    src: string,
-    base: string,
-  ): Promise<keyof typeof FILE_TYPE> {
+  async function write(src: string, base: string): Promise<FILE_TYPE> {
     let relative = path.relative(base, src);
 
     if (!util.isCompilableExtension(relative, cliOptions.extensions)) {
       return FILE_TYPE.NON_COMPILABLE;
     }
 
-    relative = util.withExtension(
-      relative,
-      cliOptions.keepFileExtension
-        ? path.extname(relative)
-        : cliOptions.outFileExtension,
-    );
+    if (!cliOptions.keepFileExtension) {
+      relative = util.withExtension(relative, cliOptions.outFileExtension);
+    }
 
     const dest = getDest(relative, base);
+
+    if (cliOptions.watch) {
+      outputtedFiles.add(path.resolve(dest));
+    }
 
     try {
       const res = await util.compile(src, {
@@ -135,6 +135,7 @@ export default async function ({
   }
 
   let compiledFiles = 0;
+  // TODO(Babel 8): Use `bigint`
   let startTime: [number, number] | null = null;
 
   const logSuccess = util.debounce(function () {
@@ -237,14 +238,25 @@ export default async function ({
       processing++;
       if (startTime === null) startTime = process.hrtime();
 
+      let errFilename;
       try {
         const written = await Promise.all(
-          filenames.map(filename => handleFile(filename, getBase(filename))),
+          filenames.map(filename => {
+            if (outputtedFiles.has(filename)) {
+              errFilename ??= filename;
+            }
+            return handleFile(filename, getBase(filename));
+          }),
         );
 
         compiledFiles += written.filter(Boolean).length;
       } catch (err) {
         console.error(err);
+      }
+      if (errFilename) {
+        throw Error(
+          `The file \`${errFilename}\` is both an input file and output file. This is not allowed with --watch.`,
+        );
       }
 
       processing--;
