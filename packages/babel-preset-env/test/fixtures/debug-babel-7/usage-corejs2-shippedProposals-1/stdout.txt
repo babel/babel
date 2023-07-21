@@ -51,6 +51,7 @@ Using plugins:
   transform-export-namespace-from { chrome < 72, firefox < 80, ie }
   transform-modules-commonjs
   transform-dynamic-import
+  syntax-top-level-await
   syntax-import-meta
   syntax-import-attributes
 corejs2: `DEBUG` option

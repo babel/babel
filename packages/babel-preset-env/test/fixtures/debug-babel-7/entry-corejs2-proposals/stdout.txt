@@ -53,6 +53,7 @@ Using plugins:
   transform-export-namespace-from { ie }
   transform-modules-commonjs
   transform-dynamic-import
+  syntax-top-level-await
   syntax-import-meta
 corejs2: `DEBUG` option
 

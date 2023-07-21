@@ -32,6 +32,7 @@ Using plugins:
   transform-export-namespace-from { node < 13.2 }
   transform-modules-commonjs
   transform-dynamic-import
+  syntax-top-level-await
   syntax-import-meta
 corejs2: `DEBUG` option
 
