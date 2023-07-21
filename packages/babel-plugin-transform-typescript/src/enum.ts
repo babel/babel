@@ -173,11 +173,20 @@ export function translateEnumValues(path: NodePath<t.TSEnumDeclaration>, t: t) {
         constValue = computeConstantValue(initializerPath, seen);
         if (constValue !== undefined) {
           seen.set(name, constValue);
-          if (typeof constValue === "number") {
-            value = t.numericLiteral(constValue);
+          assert(
+            typeof constValue === "number" || typeof constValue === "string",
+          );
+          // We do not use `t.valueToNode` because `Infinity`/`NaN` might refer
+          // to a local variable. Even 1/0
+          // Revisit once https://github.com/microsoft/TypeScript/issues/55091
+          // is fixed. Note: we will have to distinguish between actual
+          // infinities and reference  to non-infinite variables names Infinity.
+          if (constValue === Infinity || Number.isNaN(constValue)) {
+            value = t.identifier(String(constValue));
+          } else if (constValue === -Infinity) {
+            value = t.unaryExpression("-", t.identifier("Infinity"));
           } else {
-            assert(typeof constValue === "string");
-            value = t.stringLiteral(constValue);
+            value = t.valueToNode(constValue);
           }
         } else {
           isPure &&= initializerPath.isPure();

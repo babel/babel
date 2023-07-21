@@ -45,6 +45,9 @@ const customTypes = {
   ClassPrivateProperty: {
     computed: "'false'",
   },
+  NumericLiteral: {
+    value: "a non-negative finite `number`",
+  },
 };
 const APIHistory = {
   ClassProperty: [["v7.6.0", "Supports `static`"]],
