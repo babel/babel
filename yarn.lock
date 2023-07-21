@@ -582,7 +582,6 @@ __metadata:
   resolution: "@babel/helper-compilation-targets@workspace:packages/babel-helper-compilation-targets"
   dependencies:
     "@babel/compat-data": "workspace:^"
-    "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-validator-option": "workspace:^"
     "@types/lru-cache": ^5.1.1
@@ -590,8 +589,6 @@ __metadata:
     browserslist: ^4.21.9
     lru-cache: "condition:BABEL_8_BREAKING ? ^7.14.1 : ^5.1.1"
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
-  peerDependencies:
-    "@babel/core": ^7.0.0
   languageName: unknown
   linkType: soft
 
