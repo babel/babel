@@ -38,6 +38,8 @@ if (/* commonjs */ _transformations.default) {
 const itBabel7 = process.env.BABEL_8_BREAKING ? it.skip : it;
 const itBabel8 = process.env.BABEL_8_BREAKING ? it : it.skip;
 
+const describeBabel7 = process.env.BABEL_8_BREAKING ? describe.skip : describe;
+
 describe("babel-preset-env", () => {
   describe("transformIncludesAndExcludes", () => {
     it("should return in transforms array", () => {
@@ -61,7 +63,7 @@ describe("babel-preset-env", () => {
     });
   });
   describe("getModulesPluginNames", () => {
-    describe("modules is set to false", () => {
+    describeBabel7("modules is set to false", () => {
       it("returns only syntax plugins", () => {
         expect(
           babelPresetEnv.getModulesPluginNames({
@@ -74,12 +76,13 @@ describe("babel-preset-env", () => {
         ).toEqual([
           "syntax-dynamic-import",
           "syntax-export-namespace-from",
+          "syntax-top-level-await",
           "syntax-import-meta",
         ]);
       });
     });
     describe("modules is not set to false", () => {
-      describe("ESMs should not be transformed", () => {
+      describeBabel7("ESMs should not be transformed", () => {
         it("returns syntax plugins", () => {
           expect(
             babelPresetEnv.getModulesPluginNames({
@@ -92,6 +95,7 @@ describe("babel-preset-env", () => {
           ).toEqual([
             "syntax-dynamic-import",
             "syntax-export-namespace-from",
+            "syntax-top-level-await",
             "syntax-import-meta",
           ]);
         });
@@ -99,55 +103,74 @@ describe("babel-preset-env", () => {
       describe("ESMs should be transformed", () => {
         describe("dynamic imports should not be transformed", () => {
           it("returns specified modules transform and syntax-dynamic-import", () => {
-            expect(
-              babelPresetEnv.getModulesPluginNames({
-                modules: "commonjs",
-                transformations,
-                shouldTransformESM: true,
-                shouldTransformDynamicImport: false,
-                shouldTransformExportNamespaceFrom: false,
-              }),
-            ).toEqual([
-              "transform-modules-commonjs",
-              "syntax-dynamic-import",
-              "syntax-export-namespace-from",
-              "syntax-import-meta",
-            ]);
+            const names = babelPresetEnv.getModulesPluginNames({
+              modules: "commonjs",
+              transformations,
+              shouldTransformESM: true,
+              shouldTransformDynamicImport: false,
+              shouldTransformExportNamespaceFrom: false,
+            });
+            if (process.env.BABEL_8_BREAKING) {
+              expect(names).toEqual(["transform-modules-commonjs"]);
+            } else {
+              expect(names).toEqual([
+                "transform-modules-commonjs",
+                "syntax-dynamic-import",
+                "syntax-export-namespace-from",
+                "syntax-top-level-await",
+                "syntax-import-meta",
+              ]);
+            }
           });
         });
         describe("dynamic imports should be transformed", () => {
           it("returns specified modules transform and transform-dynamic-import", () => {
-            expect(
-              babelPresetEnv.getModulesPluginNames({
+            const names = babelPresetEnv.getModulesPluginNames({
+              modules: "systemjs",
+              transformations,
+              shouldTransformESM: true,
+              shouldTransformDynamicImport: true,
+              shouldTransformExportNamespaceFrom: false,
+            });
+            if (process.env.BABEL_8_BREAKING) {
+              expect(names).toEqual([
+                "transform-modules-systemjs",
+                "transform-dynamic-import",
+              ]);
+            } else {
+              expect(names).toEqual([
+                "transform-modules-systemjs",
+                "transform-dynamic-import",
+                "syntax-export-namespace-from",
+                "syntax-top-level-await",
+                "syntax-import-meta",
+              ]);
+            }
+          });
+          describe("export namespace from should be transformed", () => {
+            it("works", () => {
+              const names = babelPresetEnv.getModulesPluginNames({
                 modules: "systemjs",
                 transformations,
                 shouldTransformESM: true,
                 shouldTransformDynamicImport: true,
-                shouldTransformExportNamespaceFrom: false,
-              }),
-            ).toEqual([
-              "transform-modules-systemjs",
-              "transform-dynamic-import",
-              "syntax-export-namespace-from",
-              "syntax-import-meta",
-            ]);
-          });
-          describe("export namespace from should be transformed", () => {
-            it("works", () => {
-              expect(
-                babelPresetEnv.getModulesPluginNames({
-                  modules: "systemjs",
-                  transformations,
-                  shouldTransformESM: true,
-                  shouldTransformDynamicImport: true,
-                  shouldTransformExportNamespaceFrom: true,
-                }),
-              ).toEqual([
-                "transform-modules-systemjs",
-                "transform-dynamic-import",
-                "transform-export-namespace-from",
-                "syntax-import-meta",
-              ]);
+                shouldTransformExportNamespaceFrom: true,
+              });
+              if (process.env.BABEL_8_BREAKING) {
+                expect(names).toEqual([
+                  "transform-modules-systemjs",
+                  "transform-dynamic-import",
+                  "transform-export-namespace-from",
+                ]);
+              } else {
+                expect(names).toEqual([
+                  "transform-modules-systemjs",
+                  "transform-dynamic-import",
+                  "transform-export-namespace-from",
+                  "syntax-top-level-await",
+                  "syntax-import-meta",
+                ]);
+              }
             });
           });
         });
