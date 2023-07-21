@@ -7,9 +7,7 @@ import {
   isStrictReservedWord,
   isKeyword,
 } from "@babel/helper-validator-identifier";
-import Chalk from "chalk";
-
-type ChalkClass = ReturnType<typeof getChalk>;
+import chalk, { type Chalk } from "chalk";
 
 /**
  * Names that are always allowed as identifiers, but also appear as keywords
@@ -40,7 +38,7 @@ type Token = {
 /**
  * Chalk styles for token types.
  */
-function getDefs(chalk: ChalkClass): Record<InternalTokenType, ChalkClass> {
+function getDefs(chalk: Chalk): Record<InternalTokenType, Chalk> {
   return {
     keyword: chalk.cyan,
     capitalized: chalk.yellow,
@@ -219,7 +217,7 @@ if (process.env.BABEL_8_BREAKING) {
 /**
  * Highlight `text` using the token definitions in `defs`.
  */
-function highlightTokens(defs: Record<string, ChalkClass>, text: string) {
+function highlightTokens(defs: Record<string, Chalk>, text: string) {
   let highlighted = "";
 
   for (const { type, value } of tokenize(text)) {
@@ -249,16 +247,22 @@ type Options = {
  * Whether the code should be highlighted given the passed options.
  */
 export function shouldHighlight(options: Options): boolean {
-  return !!Chalk.supportsColor || options.forceColor;
+  return !!chalk.supportsColor || options.forceColor;
 }
 
-/**
- * The Chalk instance that should be used given the passed options.
- */
-export function getChalk(options: Options) {
-  return options.forceColor
-    ? new Chalk.constructor({ enabled: true, level: 1 })
-    : Chalk;
+let chalkWithForcedColor: Chalk = undefined;
+function getChalk(forceColor: boolean) {
+  if (forceColor) {
+    chalkWithForcedColor ??= new chalk.constructor({ enabled: true, level: 1 });
+    return chalkWithForcedColor;
+  }
+  return chalk;
+}
+if (!process.env.BABEL_8_BREAKING) {
+  if (!USE_ESM) {
+    // eslint-disable-next-line no-restricted-globals
+    exports.getChalk = (options: Options) => getChalk(options.forceColor);
+  }
 }
 
 /**
@@ -266,8 +270,7 @@ export function getChalk(options: Options) {
  */
 export default function highlight(code: string, options: Options = {}): string {
   if (code !== "" && shouldHighlight(options)) {
-    const chalk = getChalk(options);
-    const defs = getDefs(chalk);
+    const defs = getDefs(getChalk(options.forceColor));
     return highlightTokens(defs, code);
   } else {
     return code;

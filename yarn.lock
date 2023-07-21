@@ -282,6 +282,7 @@ __metadata:
   resolution: "@babel/code-frame@workspace:packages/babel-code-frame"
   dependencies:
     "@babel/highlight": "workspace:^"
+    chalk: ^2.4.2
     strip-ansi: ^4.0.0
   languageName: unknown
   linkType: soft
@@ -1076,7 +1077,7 @@ __metadata:
   dependencies:
     "@babel/helper-validator-identifier": "workspace:^"
     "@types/chalk": ^2.0.0
-    chalk: ^2.0.0
+    chalk: ^2.4.2
     js-tokens: "condition:BABEL_8_BREAKING ? ^8.0.0 : ^4.0.0"
     strip-ansi: ^4.0.0
   languageName: unknown
@@ -6968,7 +6969,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:^2.0.0":
+"chalk@npm:^2.0.0, chalk@npm:^2.4.2":
   version: 2.4.2
   resolution: "chalk@npm:2.4.2"
   dependencies:

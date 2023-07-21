@@ -16,7 +16,8 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/highlight": "workspace:^"
+    "@babel/highlight": "workspace:^",
+    "chalk": "^2.4.2"
   },
   "devDependencies": {
     "strip-ansi": "^4.0.0"

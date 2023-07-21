@@ -1,30 +1,25 @@
 import stripAnsi from "strip-ansi";
-import { getChalk } from "@babel/highlight";
+import chalk from "chalk";
 import _codeFrame, { codeFrameColumns } from "../lib/index.js";
 const codeFrame = _codeFrame.default || _codeFrame;
-
-const chalk = getChalk({});
 
 describe("@babel/code-frame", function () {
   function stubColorSupport(supported) {
     let originalChalkLevel;
     let originalChalkSupportsColor;
-    let originalChalkEnabled;
     beforeEach(function () {
       originalChalkSupportsColor = chalk.supportsColor;
       originalChalkLevel = chalk.level;
-      originalChalkEnabled = chalk.enabled;
       chalk.supportsColor = supported ? { level: 1 } : false;
       chalk.level = supported ? 1 : 0;
-      chalk.enabled = supported;
     });
 
     afterEach(function () {
       chalk.supportsColor = originalChalkSupportsColor;
       chalk.level = originalChalkLevel;
-      chalk.enabled = originalChalkEnabled;
     });
   }
+
   test("basic usage", function () {
     const rawLines = ["class Foo {", "  constructor()", "};"].join("\n");
     expect(codeFrame(rawLines, 2, 16)).toEqual(

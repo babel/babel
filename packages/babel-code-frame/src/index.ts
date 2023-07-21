@@ -1,6 +1,14 @@
-import highlight, { shouldHighlight, getChalk } from "@babel/highlight";
+import highlight, { shouldHighlight } from "@babel/highlight";
+import chalk, { type Chalk } from "chalk";
 
-type Chalk = ReturnType<typeof getChalk>;
+let chalkWithForcedColor: Chalk = undefined;
+function getChalk(forceColor: boolean) {
+  if (forceColor) {
+    chalkWithForcedColor ??= new chalk.constructor({ enabled: true, level: 1 });
+    return chalkWithForcedColor;
+  }
+  return chalk;
+}
 
 let deprecationWarningShown = false;
 
@@ -137,7 +145,7 @@ export function codeFrameColumns(
 ): string {
   const highlighted =
     (opts.highlightCode || opts.forceColor) && shouldHighlight(opts);
-  const chalk = getChalk(opts);
+  const chalk = getChalk(opts.forceColor);
   const defs = getDefs(chalk);
   const maybeHighlight = (chalkFn: Chalk, string: string) => {
     return highlighted ? chalkFn(string) : string;
