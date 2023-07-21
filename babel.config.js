@@ -1,7 +1,12 @@
 "use strict";
 
 if (typeof it === "function") {
-  throw new Error("Monorepo root's babel.config.js loaded by a test.");
+  const err = {};
+  Error.captureStackTrace(err);
+  // jest-snapshot
+  if (!err.stack.includes("at addSnapshotData")) {
+    throw new Error("Monorepo root's babel.config.js loaded by a test.");
+  }
 }
 
 const pathUtils = require("path");

@@ -972,6 +972,50 @@ describe("generation", function () {
       ]
     `);
   });
+
+  it("should normalize sources", () => {
+    const ast = parseExpression("a(\n)");
+
+    expect(
+      generate(ast, {
+        sourceMaps: true,
+        sourceFileName: "input.js",
+        sourceRoot: __dirname,
+        inputSourceMap: {
+          version: 3,
+          names: [],
+          sources: [
+            path.join(__dirname, "input.js"),
+            path.join(__dirname, "input2.js"),
+          ],
+
+          // [ generatedCodeColumn, sourceIndex, sourceCodeLine, sourceCodeColumn, nameIndex ]
+          mappings: encode([
+            [0, 0, 1, 0],
+            [0, 1, 1, 0],
+          ]),
+        },
+      }).map,
+    ).toMatchInlineSnapshot(`
+      Object {
+        "file": undefined,
+        "mappings": "AAAAA,CAAA",
+        "names": Array [
+          "a",
+        ],
+        "sourceRoot": undefined,
+        "sources": Array [
+          "F:/babel/packages/babel-generator/test/input.js",
+          "F:/babel/packages/babel-generator/test/input2.js",
+        ],
+        "sourcesContent": Array [
+          undefined,
+          undefined,
+        ],
+        "version": 3,
+      }
+    `);
+  });
 });
 
 describe("programmatic generation", function () {
