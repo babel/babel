@@ -94,8 +94,8 @@ describe("@babel/highlight", function () {
 
   describeBabel7NoESM("getChalk", function () {
     let getChalk;
-    beforeAll(async () => {
-      ({ getChalk } = await import("../lib/index.js"));
+    beforeAll(() => {
+      ({ getChalk } = require("../lib/index.js"));
     });
 
     describe("when colors are supported", function () {
