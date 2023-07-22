@@ -4,6 +4,7 @@ import stripAnsi from "strip-ansi";
 import chalk from "chalk";
 
 import { createRequire } from "module";
+const require = createRequire(import.meta.url);
 
 import _highlight, { shouldHighlight } from "../lib/index.js";
 const highlight = _highlight.default || _highlight;
