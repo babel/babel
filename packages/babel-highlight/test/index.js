@@ -3,6 +3,8 @@ import { USE_ESM } from "$repo-utils";
 import stripAnsi from "strip-ansi";
 import chalk from "chalk";
 
+import { createRequire } from "module";
+
 import _highlight, { shouldHighlight } from "../lib/index.js";
 const highlight = _highlight.default || _highlight;
 
@@ -93,6 +95,8 @@ describe("@babel/highlight", function () {
   });
 
   describeBabel7NoESM("getChalk", function () {
+    const { getChalk } = require("../lib/index.js");
+
     describe("when colors are supported", function () {
       stubColorSupport(true);
 
