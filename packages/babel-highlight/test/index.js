@@ -96,7 +96,10 @@ describe("@babel/highlight", function () {
   });
 
   describeBabel7NoESM("getChalk", function () {
-    const { getChalk } = require("../lib/index.js");
+	let getChalk;
+	beforeAll(() => {
+      ({ getChalk } = require("../lib/index.js"));
+    });
 
     describe("when colors are supported", function () {
       stubColorSupport(true);
