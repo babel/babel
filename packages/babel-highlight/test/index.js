@@ -93,22 +93,19 @@ describe("@babel/highlight", function () {
   });
 
   describeBabel7NoESM("getChalk", function () {
-    let getChalk;
-    beforeAll(() => {
-      ({ getChalk } = require("../lib/index.js"));
-    });
-
     describe("when colors are supported", function () {
       stubColorSupport(true);
 
       describe("when forceColor is not passed", function () {
         it("returns a Chalk instance", function () {
+          const { getChalk } = require("../lib/index.js");
           expect(getChalk({}).constructor).toBe(chalk.constructor);
         });
       });
 
       describe("when forceColor is passed", function () {
         it("returns a Chalk instance", function () {
+          const { getChalk } = require("../lib/index.js");
           expect(getChalk({ forceColor: true }).constructor).toBe(
             chalk.constructor,
           );
@@ -121,12 +118,14 @@ describe("@babel/highlight", function () {
 
       describe("when forceColor is not passed", function () {
         it("returns a Chalk instance", function () {
+          const { getChalk } = require("../lib/index.js");
           expect(getChalk({}).constructor).toBe(chalk.constructor);
         });
       });
 
       describe("when forceColor is passed", function () {
         it("returns a Chalk instance", function () {
+          const { getChalk } = require("../lib/index.js");
           expect(getChalk({ forceColor: true }).constructor).toBe(
             chalk.constructor,
           );
