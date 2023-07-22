@@ -1,6 +1,7 @@
 import traverse from "@babel/traverse";
 import type * as t from "@babel/types";
-type SourceMap = any;
+import type { GeneratorResult } from "@babel/generator";
+
 import type { Handler } from "gensync";
 
 import type { ResolvedConfig, Plugin, PluginPasses } from "../config";
@@ -25,7 +26,7 @@ export type FileResult = {
   options: { [key: string]: any };
   ast: t.File | null;
   code: string | null;
-  map: SourceMap | null;
+  map: GeneratorResult["map"] | null;
   sourceType: "script" | "module";
   externalDependencies: Set<string>;
 };

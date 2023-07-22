@@ -14,7 +14,7 @@ import type {
 import type { ParserOptions } from "@babel/parser";
 import type { Visitor } from "@babel/traverse";
 import type { ValidatedOptions } from "./options";
-import type { File, PluginPass } from "../../index";
+import type { File, PluginAPI, PluginPass } from "../../index";
 
 // Note: The casts here are just meant to be static assertions to make sure
 // that the assertion functions actually assert that the value's type matches
@@ -87,7 +87,11 @@ export type PluginObject<S extends PluginPass = PluginPass> = {
   ) => void;
   pre?: (this: S, file: File) => void;
   post?: (this: S, file: File) => void;
-  inherits?: Function;
+  inherits?: (
+    api: PluginAPI,
+    options: unknown,
+    dirname: string,
+  ) => PluginObject;
   visitor?: Visitor<S>;
   parserOverride?: Function;
   generatorOverride?: Function;

@@ -43,10 +43,12 @@ export interface Options {
   compat?: boolean;
   pure?: string;
   throwIfNamespace?: boolean;
+  useSpread?: boolean;
+  useBuiltIns?: boolean;
 }
 
 export default function (opts: Options) {
-  const visitor: Visitor<PluginPass> = {};
+  const visitor: Visitor<PluginPass<Options>> = {};
 
   visitor.JSXNamespacedName = function (path) {
     if (opts.throwIfNamespace) {
@@ -242,7 +244,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
 
   function buildOpeningElementAttributes(
     attribs: (t.JSXAttribute | t.JSXSpreadAttribute)[],
-    pass: PluginPass,
+    pass: PluginPass<Options>,
   ): t.Expression {
     let _props: (t.ObjectProperty | t.SpreadElement)[] = [];
     const objs: t.Expression[] = [];

@@ -89,7 +89,9 @@ export default gensync(function* loadFullConfig(
 
   const presetsDescriptors = presets.map(toDescriptor);
   const initialPluginsDescriptors = plugins.map(toDescriptor);
-  const pluginDescriptorsByPass: Array<Array<UnloadedDescriptor>> = [[]];
+  const pluginDescriptorsByPass: Array<Array<UnloadedDescriptor<PluginAPI>>> = [
+    [],
+  ];
   const passes: Array<Array<Plugin>> = [];
 
   const externalDependencies: DeepArray<string> = [];
@@ -97,12 +99,12 @@ export default gensync(function* loadFullConfig(
   const ignored = yield* enhanceError(
     context,
     function* recursePresetDescriptors(
-      rawPresets: Array<UnloadedDescriptor>,
-      pluginDescriptorsPass: Array<UnloadedDescriptor>,
+      rawPresets: Array<UnloadedDescriptor<PresetAPI>>,
+      pluginDescriptorsPass: Array<UnloadedDescriptor<PluginAPI>>,
     ): Handler<true | void> {
       const presets: Array<{
         preset: ConfigChain | null;
-        pass: Array<UnloadedDescriptor>;
+        pass: Array<UnloadedDescriptor<PluginAPI>>;
       }> = [];
 
       for (let i = 0; i < rawPresets.length; i++) {
@@ -178,7 +180,7 @@ export default gensync(function* loadFullConfig(
       passes.push(pass);
 
       for (let i = 0; i < descs.length; i++) {
-        const descriptor: UnloadedDescriptor = descs[i];
+        const descriptor = descs[i];
         if (descriptor.options !== false) {
           try {
             // eslint-disable-next-line no-var
@@ -240,7 +242,7 @@ const makeDescriptorLoader = <Context, API>(
   ) => API,
 ) =>
   makeWeakCache(function* (
-    { value, options, dirname, alias }: UnloadedDescriptor,
+    { value, options, dirname, alias }: UnloadedDescriptor<API>,
     cache: CacheConfigurator<Context>,
   ): Handler<LoadedDescriptor> {
     // Disabled presets should already have been filtered out
@@ -250,10 +252,10 @@ const makeDescriptorLoader = <Context, API>(
 
     const externalDependencies: Array<string> = [];
 
-    let item = value;
+    let item: unknown = value;
     if (typeof value === "function") {
       const factory = maybeAsync(
-        value,
+        value as (api: API, options: {}, dirname: string) => unknown,
         `You appear to be using an async plugin/preset, but Babel has been called synchronously`,
       );
 
@@ -344,7 +346,7 @@ const instantiatePlugin = makeWeakCache(function* (
   }
 
   if (plugin.inherits) {
-    const inheritsDescriptor: UnloadedDescriptor = {
+    const inheritsDescriptor: UnloadedDescriptor<PluginAPI> = {
       name: undefined,
       alias: `${alias}$inherits`,
       value: plugin.inherits,
@@ -387,7 +389,7 @@ const instantiatePlugin = makeWeakCache(function* (
  * Instantiate a plugin for the given descriptor, returning the plugin/options pair.
  */
 function* loadPluginDescriptor(
-  descriptor: UnloadedDescriptor,
+  descriptor: UnloadedDescriptor<PluginAPI>,
   context: Context.SimplePlugin,
 ): Handler<Plugin> {
   if (descriptor.value instanceof Plugin) {
@@ -410,7 +412,7 @@ const needsFilename = (val: unknown) => val && typeof val !== "function";
 
 const validateIfOptionNeedsFilename = (
   options: ValidatedOptions,
-  descriptor: UnloadedDescriptor,
+  descriptor: UnloadedDescriptor<PresetAPI>,
 ): void => {
   if (
     needsFilename(options.test) ||
@@ -435,7 +437,7 @@ const validateIfOptionNeedsFilename = (
 const validatePreset = (
   preset: PresetInstance,
   context: ConfigContext,
-  descriptor: UnloadedDescriptor,
+  descriptor: UnloadedDescriptor<PresetAPI>,
 ): void => {
   if (!context.filename) {
     const { options } = preset;
@@ -466,7 +468,7 @@ const instantiatePreset = makeWeakCacheSync(
  * Generate a config object that will act as the root of a new nested config.
  */
 function* loadPresetDescriptor(
-  descriptor: UnloadedDescriptor,
+  descriptor: UnloadedDescriptor<PresetAPI>,
   context: Context.FullPreset,
 ): Handler<{
   chain: ConfigChain | null;
