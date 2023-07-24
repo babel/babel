@@ -1,15 +1,23 @@
-import stripAnsi from "strip-ansi";
+import { USE_ESM } from "$repo-utils";
 
-import _highlight, { shouldHighlight, getChalk } from "../lib/index.js";
+import stripAnsi from "strip-ansi";
+import chalk from "chalk";
+
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+
+import _highlight, { shouldHighlight } from "../lib/index.js";
 const highlight = _highlight.default || _highlight;
 
-const chalk = getChalk({});
+const describeBabel7NoESM =
+  process.env.BABEL_8_BREAKING || USE_ESM ? describe.skip : describe;
 
 describe("@babel/highlight", function () {
   function stubColorSupport(supported) {
     let originalChalkLevel;
     let originalChalkSupportsColor;
     let originalChalkEnabled;
+
     beforeEach(function () {
       originalChalkSupportsColor = chalk.supportsColor;
       originalChalkLevel = chalk.level;
@@ -86,7 +94,12 @@ describe("@babel/highlight", function () {
     });
   });
 
-  describe("getChalk", function () {
+  describeBabel7NoESM("getChalk", function () {
+	let getChalk;
+	beforeAll(() => {
+      ({ getChalk } = require("../lib/index.js"));
+    });
+
     describe("when colors are supported", function () {
       stubColorSupport(true);
 
