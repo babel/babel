@@ -4120,7 +4120,6 @@ __metadata:
     "@babel/helper-string-parser": "workspace:^"
     "@babel/helper-validator-identifier": "workspace:^"
     "@babel/parser": "workspace:^"
-    chalk: ^4.1.0
     glob: ^7.2.0
     to-fast-properties: "condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0"
   languageName: unknown
