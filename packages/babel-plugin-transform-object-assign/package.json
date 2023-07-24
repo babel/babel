@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-object-assign",
-  "version": "7.22.5",
+  "version": "8.0.0-alpha.1",
   "description": "Replace Object.assign with an inline helper",
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
     "@babel/helper-plugin-utils": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "^8.0.0-alpha.1"
   },
   "devDependencies": {
     "@babel/core": "workspace:^"

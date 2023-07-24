@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-computed-properties",
-  "version": "7.22.5",
+  "version": "8.0.0-alpha.1",
   "description": "Compile ES2015 computed properties to ES5",
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
     "@babel/template": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "^8.0.0-alpha.1"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

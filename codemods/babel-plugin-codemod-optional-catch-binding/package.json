@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-codemod-optional-catch-binding",
-  "version": "7.10.4",
+  "version": "8.0.0-alpha.1",
   "description": "Remove unused catch bindings",
   "repository": {
     "type": "git",
@@ -20,7 +20,7 @@
     "@babel/plugin-syntax-optional-catch-binding": "^7.8.3"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "^8.0.0-alpha.1"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

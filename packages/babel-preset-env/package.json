@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-env",
-  "version": "7.22.9",
+  "version": "8.0.0-alpha.1",
   "description": "A Babel preset for each environment.",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-preset-env",
@@ -98,7 +98,7 @@
     "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "^8.0.0-alpha.1"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

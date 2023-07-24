@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-module-blocks",
-  "version": "7.22.9",
+  "version": "8.0.0-alpha.1",
   "description": "Allow parsing of JS Module Blocks",
   "repository": {
     "type": "git",
@@ -23,7 +23,7 @@
     "@babel/helper-plugin-utils": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "^8.0.0-alpha.1"
   },
   "engines": {
     "node": ">=6.9.0"

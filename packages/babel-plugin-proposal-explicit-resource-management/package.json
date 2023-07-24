@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-explicit-resource-management",
-  "version": "7.22.6",
+  "version": "8.0.0-alpha.1",
   "description": "Compile `using` declarations to ES2015",
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
     "@babel/plugin-syntax-explicit-resource-management": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "^8.0.0-alpha.1"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
