@@ -1,3 +1,13 @@
+if (!process.env.IS_PUBLISH) {
+  if (!USE_ESM) {
+    if (process.env.BABEL_8_BREAKING) {
+      throw new Error(
+        "BABEL_8_BREAKING is only supported in ESM. Please run `make use-esm`.",
+      );
+    }
+  }
+}
+
 export const version = PACKAGE_JSON.version;
 
 export { default as File } from "./transformation/file/file";
