@@ -126,14 +126,12 @@ export const getModulesPluginNames = ({
   shouldTransformESM,
   shouldTransformDynamicImport,
   shouldTransformExportNamespaceFrom,
-  shouldParseTopLevelAwait,
 }: {
   modules: ModuleOption;
   transformations: ModuleTransformationsType;
   shouldTransformESM: boolean;
   shouldTransformDynamicImport: boolean;
   shouldTransformExportNamespaceFrom: boolean;
-  shouldParseTopLevelAwait: boolean;
 }) => {
   const modulesPluginNames = [];
   if (modules !== false && transformations[modules]) {
@@ -141,37 +139,33 @@ export const getModulesPluginNames = ({
       modulesPluginNames.push(transformations[modules]);
     }
 
-    if (
-      shouldTransformDynamicImport &&
-      shouldTransformESM &&
-      modules !== "umd"
-    ) {
-      modulesPluginNames.push("transform-dynamic-import");
-    } else {
-      if (shouldTransformDynamicImport) {
+    if (shouldTransformDynamicImport) {
+      if (shouldTransformESM && modules !== "umd") {
+        modulesPluginNames.push("transform-dynamic-import");
+      } else {
         console.warn(
-          "Dynamic import can only be supported when transforming ES modules" +
-            " to AMD, CommonJS or SystemJS. Only the parser plugin will be enabled.",
+          "Dynamic import can only be transformed when transforming ES" +
+            " modules to AMD, CommonJS or SystemJS.",
         );
       }
-      modulesPluginNames.push("syntax-dynamic-import");
     }
-  } else {
-    modulesPluginNames.push("syntax-dynamic-import");
   }
 
   if (shouldTransformExportNamespaceFrom) {
     modulesPluginNames.push("transform-export-namespace-from");
-  } else {
-    modulesPluginNames.push("syntax-export-namespace-from");
   }
 
-  if (shouldParseTopLevelAwait) {
+  if (!process.env.BABEL_8_BREAKING) {
+    // Enable module-related syntax plugins for older Babel versions
+    if (!shouldTransformDynamicImport) {
+      modulesPluginNames.push("syntax-dynamic-import");
+    }
+    if (!shouldTransformExportNamespaceFrom) {
+      modulesPluginNames.push("syntax-export-namespace-from");
+    }
     modulesPluginNames.push("syntax-top-level-await");
+    modulesPluginNames.push("syntax-import-meta");
   }
-
-  // Enable import meta for @babel/core < 7.10
-  modulesPluginNames.push("syntax-import-meta");
 
   return modulesPluginNames;
 };
@@ -288,11 +282,6 @@ function supportsExportNamespaceFrom(caller: CallerMetadata | undefined) {
   return !!caller?.supportsExportNamespaceFrom;
 }
 
-function supportsTopLevelAwait(caller: CallerMetadata | undefined) {
-  // @ts-expect-error supportsTopLevelAwait is not defined in CallerMetadata
-  return !!caller?.supportsTopLevelAwait;
-}
-
 export default declarePreset((api, opts: Options) => {
   api.assertVersion(7);
 
@@ -382,8 +371,6 @@ option \`forceAllTransforms: true\` instead.
     shouldTransformDynamicImport:
       modules !== "auto" || !api.caller?.(supportsDynamicImport),
     shouldTransformExportNamespaceFrom: !shouldSkipExportNamespaceFrom,
-    shouldParseTopLevelAwait:
-      !api.caller || (api.caller(supportsTopLevelAwait) as boolean),
   });
 
   const pluginNames = filterItems(

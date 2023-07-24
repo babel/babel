@@ -42,6 +42,7 @@ Using plugins:
   transform-export-namespace-from { android < 72, chrome < 72, edge < 79, firefox < 80, ios < 14.5, opera < 60, safari < 14.1, samsung < 11.0 }
   transform-modules-commonjs
   transform-dynamic-import
+  syntax-top-level-await
   syntax-import-meta
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

@@ -2,23 +2,9 @@
 
 declare const USE_ESM: boolean;
 
-import syntaxAsyncGenerators from "@babel/plugin-syntax-async-generators";
-import syntaxClassProperties from "@babel/plugin-syntax-class-properties";
-import syntaxClassStaticBlock from "@babel/plugin-syntax-class-static-block";
-import syntaxDynamicImport from "@babel/plugin-syntax-dynamic-import";
-import syntaxExportNamespaceFrom from "@babel/plugin-syntax-export-namespace-from";
 import syntaxImportAssertions from "@babel/plugin-syntax-import-assertions";
 import syntaxImportAttributes from "@babel/plugin-syntax-import-attributes";
-import syntaxImportMeta from "@babel/plugin-syntax-import-meta";
-import syntaxJsonStrings from "@babel/plugin-syntax-json-strings";
-import syntaxLogicalAssignmentOperators from "@babel/plugin-syntax-logical-assignment-operators";
-import syntaxNullishCoalescingOperator from "@babel/plugin-syntax-nullish-coalescing-operator";
-import syntaxNumericSeparator from "@babel/plugin-syntax-numeric-separator";
-import syntaxObjectRestSpread from "@babel/plugin-syntax-object-rest-spread";
-import syntaxOptionalCatchBinding from "@babel/plugin-syntax-optional-catch-binding";
-import syntaxOptionalChaining from "@babel/plugin-syntax-optional-chaining";
-import syntaxPrivatePropertyInObject from "@babel/plugin-syntax-private-property-in-object";
-import syntaxTopLevelAwait from "@babel/plugin-syntax-top-level-await";
+
 import proposalAsyncGeneratorFunctions from "@babel/plugin-transform-async-generator-functions";
 import proposalClassProperties from "@babel/plugin-transform-class-properties";
 import proposalClassStaticBlock from "@babel/plugin-transform-class-static-block";
@@ -77,7 +63,8 @@ import bugfixSafariForShadowing from "@babel/preset-modules/lib/plugins/transfor
 import bugfixSafariIdDestructuringCollisionInFunctionExpression from "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression";
 import bugfixV8SpreadParametersInOptionalChaining from "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining";
 
-export default {
+export { availablePlugins as default };
+const availablePlugins = {
   "bugfix/transform-async-arrows-in-class": () => bugfixAsyncArrowsInClass,
   "bugfix/transform-edge-default-parameters": () => bugfixEdgeDefaultParameters,
   "bugfix/transform-edge-function-name": () => bugfixEdgeFunctionName,
@@ -88,37 +75,8 @@ export default {
   "bugfix/transform-tagged-template-caching": () => bugfixTaggedTemplateCaching,
   "bugfix/transform-v8-spread-parameters-in-optional-chaining": () =>
     bugfixV8SpreadParametersInOptionalChaining,
-  "syntax-async-generators": () => syntaxAsyncGenerators,
-  "syntax-class-properties": () => syntaxClassProperties,
-  "syntax-class-static-block": () => syntaxClassStaticBlock,
-  "syntax-dynamic-import": () => syntaxDynamicImport,
-  "syntax-export-namespace-from": () => syntaxExportNamespaceFrom,
   "syntax-import-assertions": () => syntaxImportAssertions,
   "syntax-import-attributes": () => syntaxImportAttributes,
-  "syntax-import-meta": () => syntaxImportMeta,
-  "syntax-json-strings": () => syntaxJsonStrings,
-  "syntax-logical-assignment-operators": () => syntaxLogicalAssignmentOperators,
-  "syntax-nullish-coalescing-operator": () => syntaxNullishCoalescingOperator,
-  "syntax-numeric-separator": () => syntaxNumericSeparator,
-  "syntax-object-rest-spread": () => syntaxObjectRestSpread,
-  "syntax-optional-catch-binding": () => syntaxOptionalCatchBinding,
-  "syntax-optional-chaining": () => syntaxOptionalChaining,
-  "syntax-private-property-in-object": () => syntaxPrivatePropertyInObject,
-  "syntax-top-level-await": () => syntaxTopLevelAwait,
-  // This is a CJS plugin that depends on a package from the monorepo, so it
-  // breaks using ESM. Given that ESM builds are new enough to have this
-  // syntax enabled by default, we can safely skip enabling it.
-  "syntax-unicode-sets-regex": USE_ESM
-    ? null
-    : // We cannot use the require call when bundling, because this is an ESM file.
-    // Babel standalone uses a modern parser, so just include a known noop plugin.
-    // Use `bind` so that it's not detected as a duplicate plugin when using it
-    // together with the TLA
-    IS_STANDALONE
-    ? // @ts-expect-error syntaxTopLevelAwait is a function when bundled
-      () => syntaxTopLevelAwait.bind()
-    : // eslint-disable-next-line no-restricted-globals
-      () => require("@babel/plugin-syntax-unicode-sets-regex"),
   "transform-arrow-functions": () => transformArrowFunctions,
   "transform-async-generator-functions": () => proposalAsyncGeneratorFunctions,
   "transform-async-to-generator": () => transformAsyncToGenerator,
@@ -173,10 +131,50 @@ export default {
   "transform-unicode-sets-regex": () => transformUnicodeSetsRegex,
 };
 
-export const minVersions = {
-  "bugfix/transform-safari-id-destructuring-collision-in-function-expression":
-    "7.16.0",
-  "syntax-import-attributes": "7.22.0",
-  "transform-class-static-block": "7.12.0",
-  "transform-private-property-in-object": "7.10.0",
-};
+export const minVersions = {};
+
+if (!process.env.BABEL_8_BREAKING) {
+  Object.assign(minVersions, {
+    "bugfix/transform-safari-id-destructuring-collision-in-function-expression":
+      "7.16.0",
+    "syntax-import-attributes": "7.22.0",
+    "transform-class-static-block": "7.12.0",
+    "transform-private-property-in-object": "7.10.0",
+  });
+
+  const emptyPlugin = () => ({});
+
+  const babel7SyntaxPlugin = (name: string) => {
+    // We cannot use the require call in ESM and when bundling.
+    // Babel standalone uses a modern parser, so just include a noop plugin.
+    // Use `bind` so that it's not detected as a duplicate plugin when using it.
+    // @ts-expect-error key not recognized in the object
+    availablePlugins[`syntax-${name}`] = USE_ESM
+      ? () => emptyPlugin.bind(null)
+      : IS_STANDALONE
+      ? () => emptyPlugin.bind(null)
+      : // eslint-disable-next-line no-restricted-globals
+        () => require(`@babel/plugin-syntax-${name}`);
+  };
+
+  babel7SyntaxPlugin("async-generators");
+  babel7SyntaxPlugin("class-properties");
+  babel7SyntaxPlugin("class-static-block");
+  babel7SyntaxPlugin("dynamic-import");
+  babel7SyntaxPlugin("export-namespace-from");
+  babel7SyntaxPlugin("import-meta");
+  babel7SyntaxPlugin("json-strings");
+  babel7SyntaxPlugin("logical-assignment-operators");
+  babel7SyntaxPlugin("nullish-coalescing-operator");
+  babel7SyntaxPlugin("numeric-separator");
+  babel7SyntaxPlugin("object-rest-spread");
+  babel7SyntaxPlugin("optional-catch-binding");
+  babel7SyntaxPlugin("optional-chaining");
+  babel7SyntaxPlugin("private-property-in-object");
+  babel7SyntaxPlugin("top-level-await");
+
+  // This is a CJS plugin that depends on a package from the monorepo, so it
+  // breaks using ESM. Given that ESM builds are new enough to have this
+  // syntax enabled by default, we can safely skip enabling it.
+  if (!USE_ESM) babel7SyntaxPlugin("unicode-sets-regex");
+}
