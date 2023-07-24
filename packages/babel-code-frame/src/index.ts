@@ -1,10 +1,19 @@
 import highlight, { shouldHighlight } from "@babel/highlight";
-import chalk, { type Chalk } from "chalk";
+
+import _chalk from "chalk";
+const chalk = _chalk as unknown as typeof import("chalk-BABEL_8_BREAKING-true");
+type Chalk =
+  typeof import("chalk-BABEL_8_BREAKING-true").Instance extends new () => infer R
+    ? R
+    : never;
 
 let chalkWithForcedColor: Chalk = undefined;
 function getChalk(forceColor: boolean) {
   if (forceColor) {
-    chalkWithForcedColor ??= new chalk.constructor({ enabled: true, level: 1 });
+    chalkWithForcedColor ??= process.env.BABEL_8_BREAKING
+      ? new chalk.Instance({ level: 1 })
+      : // @ts-expect-error .Instance was .constructor in chalk 2
+        new chalk.constructor({ enabled: true, level: 1 });
     return chalkWithForcedColor;
   }
   return chalk;
