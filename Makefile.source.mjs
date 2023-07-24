@@ -121,6 +121,9 @@ target["clean-lib"] = function () {
     "-rf",
     SOURCES.map(source => `${source}/*/lib`)
   );
+
+  // re-generate the necessary lib/package.json files
+  node(["scripts/set-module-type.js"]);
 };
 
 target["clean-runtime-helpers"] = function () {
