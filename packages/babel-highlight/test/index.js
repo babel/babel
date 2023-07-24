@@ -14,18 +14,17 @@ const describeBabel7NoESM =
 
 describe("@babel/highlight", function () {
   function stubColorSupport(supported) {
-    let originalChalkEnabled;
     let originalChalkLevel;
     let originalChalkSupportsColor;
+    let originalChalkEnabled;
 
-    beforeEach(async function () {
+    beforeEach(function () {
       originalChalkSupportsColor = chalk.supportsColor;
       originalChalkLevel = chalk.level;
       originalChalkEnabled = chalk.enabled;
-
       chalk.supportsColor = supported ? { level: 1 } : false;
       chalk.level = supported ? 1 : 0;
-      chalk.enabled = true;
+      chalk.enabled = supported;
     });
 
     afterEach(function () {
@@ -106,14 +105,12 @@ describe("@babel/highlight", function () {
 
       describe("when forceColor is not passed", function () {
         it("returns a Chalk instance", function () {
-          const { getChalk } = require("../lib/index.js");
           expect(getChalk({}).constructor).toBe(chalk.constructor);
         });
       });
 
       describe("when forceColor is passed", function () {
         it("returns a Chalk instance", function () {
-          const { getChalk } = require("../lib/index.js");
           expect(getChalk({ forceColor: true }).constructor).toBe(
             chalk.constructor,
           );
@@ -126,14 +123,12 @@ describe("@babel/highlight", function () {
 
       describe("when forceColor is not passed", function () {
         it("returns a Chalk instance", function () {
-          const { getChalk } = require("../lib/index.js");
           expect(getChalk({}).constructor).toBe(chalk.constructor);
         });
       });
 
       describe("when forceColor is passed", function () {
         it("returns a Chalk instance", function () {
-          const { getChalk } = require("../lib/index.js");
           expect(getChalk({ forceColor: true }).constructor).toBe(
             chalk.constructor,
           );

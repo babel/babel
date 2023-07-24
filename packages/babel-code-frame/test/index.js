@@ -18,7 +18,7 @@ describe("@babel/code-frame", function () {
     let originalHighlightChalkLevel;
     let originalHighlightChalkSupportsColor;
 
-    beforeEach(async function () {
+    beforeEach(function () {
       originalChalkSupportsColor = chalk.supportsColor;
       originalChalkLevel = chalk.level;
       originalChalkEnabled = chalk.enabled;
@@ -30,7 +30,7 @@ describe("@babel/code-frame", function () {
         ? { level: 1 }
         : false;
       babelHighlightChalk.level = chalk.level = supported ? 1 : 0;
-      babelHighlightChalk.enabled = chalk.enabled = true;
+      babelHighlightChalk.enabled = chalk.enabled = supported;
     });
 
     afterEach(function () {
