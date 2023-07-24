@@ -17,9 +17,10 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/highlight": "workspace:^",
-    "chalk": "condition:BABEL_8_BREAKING ? ^4.1.2 : ^2.4.2"
+    "chalk": "condition:BABEL_8_BREAKING ? ^5.3.0 : ^2.4.2 (esm:default,supportsColor,Chalk)"
   },
   "devDependencies": {
+    "import-meta-resolve": "^3.0.0",
     "strip-ansi": "^4.0.0"
   },
   "engines": {
