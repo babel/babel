@@ -27,6 +27,8 @@ export {
   loadPartialConfigAsync,
   loadOptions,
   loadOptionsAsync,
+  loadResolvedConfigSync,
+  loadResolvedConfigAsync,
 } from "./config";
 import { loadOptionsSync } from "./config";
 export { loadOptionsSync };
@@ -55,6 +57,8 @@ export {
   transformFromAst,
   transformFromAstSync,
   transformFromAstAsync,
+  transformFromAstWithResolvedConfigSync,
+  transformFromAstWithResolvedConfigAsync,
 } from "./transform-ast";
 export { parse, parseSync, parseAsync } from "./parse";
 
