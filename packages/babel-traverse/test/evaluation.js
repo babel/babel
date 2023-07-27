@@ -152,59 +152,42 @@ describe("evaluation", function () {
     expect(eval_invalid_call.confident).toBe(false);
   });
 
-  it("should evaluate global call expressions", function() {
+  it("should evaluate global call expressions", function () {
     expect(
-      getPath("isFinite(1);")
-        .get("body.0.expression")
-        .evaluate().value,
+      getPath("isFinite(1);").get("body.0.expression").evaluate().value,
     ).toBe(true);
-    
+
     expect(
-      getPath("isFinite(Infinity);")
-        .get("body.0.expression")
-        .evaluate().value,
-    ).toBe(false);
-    
-    expect(
-      getPath("isNaN(NaN);")
-        .get("body.0.expression")
-        .evaluate().value,
-    ).toBe(true);
-    
-    expect(
-      getPath("isNaN(1);")
-        .get("body.0.expression")
-        .evaluate().value,
+      getPath("isFinite(Infinity);").get("body.0.expression").evaluate().value,
     ).toBe(false);
 
     expect(
-      getPath("parseFloat('1.1');")
-        .get("body.0.expression")
-        .evaluate().value,
-    ).toBe(1.1);
-    
+      getPath("isNaN(NaN);").get("body.0.expression").evaluate().value,
+    ).toBe(true);
+
+    expect(getPath("isNaN(1);").get("body.0.expression").evaluate().value).toBe(
+      false,
+    );
+
     expect(
-      getPath("parseFloat('1');")
-        .get("body.0.expression")
-        .evaluate().value,
+      getPath("parseFloat('1.1');").get("body.0.expression").evaluate().value,
+    ).toBe(1.1);
+
+    expect(
+      getPath("parseFloat('1');").get("body.0.expression").evaluate().value,
     ).toBe(1);
 
     expect(
-      getPath("encodeURI('x 1');")
-        .get("body.0.expression")
-        .evaluate().value,
+      getPath("encodeURI('x 1');").get("body.0.expression").evaluate().value,
     ).toBe("x%201");
 
     expect(
-      getPath("decodeURI('x%201');")
-        .get("body.0.expression")
-        .evaluate().value,
+      getPath("decodeURI('x%201');").get("body.0.expression").evaluate().value,
     ).toBe("x 1");
 
     expect(
-      getPath("encodeURIComponent('?x=1');")
-        .get("body.0.expression")
-        .evaluate().value,
+      getPath("encodeURIComponent('?x=1');").get("body.0.expression").evaluate()
+        .value,
     ).toBe("%3Fx%3D1");
 
     expect(
@@ -212,7 +195,6 @@ describe("evaluation", function () {
         .get("body.0.expression")
         .evaluate().value,
     ).toBe("?x=1");
-
   });
 
   it("should not deopt vars in different scope", function () {
