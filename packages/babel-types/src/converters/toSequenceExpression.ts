@@ -1,6 +1,7 @@
 import gatherSequenceExpressions from "./gatherSequenceExpressions.ts";
 import type * as t from "../index.ts";
 import type { DeclarationInfo } from "./gatherSequenceExpressions.ts";
+import type { Scope } from "@babel/traverse";
 
 /**
  * Turn an array of statement `nodes` into a `SequenceExpression`.
@@ -12,12 +13,12 @@ import type { DeclarationInfo } from "./gatherSequenceExpressions.ts";
  */
 export default function toSequenceExpression(
   nodes: ReadonlyArray<t.Node>,
-  scope: any,
+  scope: Scope,
 ): t.SequenceExpression | undefined {
   if (!nodes?.length) return;
 
   const declars: DeclarationInfo[] = [];
-  const result = gatherSequenceExpressions(nodes, scope, declars);
+  const result = gatherSequenceExpressions(nodes, declars);
   if (!result) return;
 
   for (const declar of declars) {

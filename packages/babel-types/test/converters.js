@@ -273,7 +273,7 @@ describe("converters", function () {
       t.assertIdentifier(scope[0].id, { name: "a" });
       t.assertIdentifier(scope[1].id, { name: "b" });
       expect(generateCode(sequence.expressions[1])).toBe("b = 1");
-      expect(generateCode(sequence.expressions[2])).toBe("undefined");
+      expect(generateCode(sequence.expressions[2])).toBe("void 0");
     });
     it("skips undefined if expression after var declaration", function () {
       const node = parseCode("{ var a, b = 1; true }");
@@ -293,7 +293,7 @@ describe("converters", function () {
       let node = parseCode("if (true) { true }");
       let sequence = t.toSequenceExpression([undefinedNode, node], scope);
       expect(generateCode(sequence.expressions[1])).toBe(
-        "true ? true : undefined",
+        "true ? true : void 0",
       );
 
       node = parseCode("if (true) { true } else { b }");
