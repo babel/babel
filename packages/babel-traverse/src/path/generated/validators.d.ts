@@ -6,12 +6,12 @@ import type * as t from "@babel/types";
 import type NodePath from "../index";
 import type { VirtualTypeNodePathValidators } from "../lib/virtual-types-validator";
 
-type Opts<Object> = Partial<{
-  [Prop in keyof Object]: Object[Prop] extends t.Node
-    ? t.Node | Object[Prop]
-    : Object[Prop] extends t.Node[]
-    ? t.Node[] | Object[Prop]
-    : Object[Prop];
+type Opts<Obj> = Partial<{
+  [Prop in keyof Obj]: Obj[Prop] extends t.Node
+    ? t.Node
+    : Obj[Prop] extends t.Node[]
+    ? t.Node[]
+    : Obj[Prop];
 }>;
 
 interface BaseNodePathValidators {

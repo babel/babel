@@ -26,13 +26,14 @@ import type * as t from "@babel/types";
 const { isCompatTag } = react;
 import type { VirtualTypeAliases } from "./virtual-types";
 
-type Opts<Object> = Partial<{
-  [Prop in keyof Object]: Object[Prop] extends t.Node
-    ? t.Node | Object[Prop]
-    : Object[Prop] extends t.Node[]
-    ? t.Node[] | Object[Prop]
-    : Object[Prop];
+type Opts<Obj> = Partial<{
+  [Prop in keyof Obj]: Obj[Prop] extends t.Node
+    ? t.Node
+    : Obj[Prop] extends t.Node[]
+    ? t.Node[]
+    : Obj[Prop];
 }>;
+
 export interface VirtualTypeNodePathValidators {
   isBindingIdentifier<T extends t.Node>(
     this: NodePath<T>,
@@ -210,15 +211,23 @@ export function isForAwaitStatement(this: NodePath): boolean {
   return isForOfStatement(this.node, { await: true });
 }
 
-// TODO: Remove in Babel 8
-export function isExistentialTypeParam(this: NodePath): void {
-  throw new Error(
-    "`path.isExistentialTypeParam` has been renamed to `path.isExistsTypeAnnotation()` in Babel 7.",
-  );
-}
+if (!process.env.BABEL_8_BREAKING) {
+  if (!USE_ESM) {
+    // eslint-disable-next-line no-restricted-globals
+    exports.isExistentialTypeParam = function isExistentialTypeParam(
+      this: NodePath,
+    ): void {
+      throw new Error(
+        "`path.isExistentialTypeParam` has been renamed to `path.isExistsTypeAnnotation()` in Babel 7.",
+      );
+    };
 
-export function isNumericLiteralTypeAnnotation(this: NodePath): void {
-  throw new Error(
-    "`path.isNumericLiteralTypeAnnotation()` has been renamed to `path.isNumberLiteralTypeAnnotation()` in Babel 7.",
-  );
+    // eslint-disable-next-line no-restricted-globals
+    exports.isNumericLiteralTypeAnnotation =
+      function isNumericLiteralTypeAnnotation(this: NodePath): void {
+        throw new Error(
+          "`path.isNumericLiteralTypeAnnotation()` has been renamed to `path.isNumberLiteralTypeAnnotation()` in Babel 7.",
+        );
+      };
+  }
 }
