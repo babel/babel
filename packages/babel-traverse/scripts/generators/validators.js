@@ -9,18 +9,27 @@ import type * as t from "@babel/types";
 import type NodePath from "../index";
 import type { VirtualTypeNodePathValidators } from "../lib/virtual-types-validator";
 
+type Opts<Obj> = Partial<{
+  [Prop in keyof Obj]: Obj[Prop] extends t.Node
+    ? t.Node
+    : Obj[Prop] extends t.Node[]
+    ? t.Node[]
+    : Obj[Prop];
+}>;
+
 interface BaseNodePathValidators {
 `;
 
   for (const type of [...t.TYPES].sort()) {
-    output += `is${type}<T extends t.Node>(this: NodePath<T>, opts?: object): this is NodePath<T & t.${type}>;`;
+    output += `is${type}<T extends t.Node>(this: NodePath<T>, opts?: Opts<t.${type}>): this is NodePath<T & t.${type}>;`;
   }
 
   output += `
 }
 
 export interface NodePathValidators
-  extends BaseNodePathValidators, VirtualTypeNodePathValidators {}
+  extends Omit<BaseNodePathValidators, keyof VirtualTypeNodePathValidators>,
+    VirtualTypeNodePathValidators {}
 `;
 
   return output;

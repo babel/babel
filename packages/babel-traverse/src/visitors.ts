@@ -331,6 +331,7 @@ function ensureCallbackArrays(obj: Visitor) {
 
 function wrapCheck(nodeType: VIRTUAL_TYPES, fn: Function) {
   const newFn = function (this: unknown, path: NodePath) {
+    // @ts-expect-error: Expression produces a union type that is too complex to represent.
     if (path[`is${nodeType}`]()) {
       return fn.apply(this, arguments);
     }
