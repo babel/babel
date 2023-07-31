@@ -1,5 +1,4 @@
 import { declare } from "@babel/helper-plugin-utils";
-import syntaxNullishCoalescingOperator from "@babel/plugin-syntax-nullish-coalescing-operator";
 import { types as t, template } from "@babel/core";
 
 export interface Options {
@@ -12,7 +11,10 @@ export default declare((api, { loose = false }: Options) => {
 
   return {
     name: "transform-nullish-coalescing-operator",
-    inherits: syntaxNullishCoalescingOperator.default,
+    inherits: USE_ESM
+      ? undefined
+      : // eslint-disable-next-line no-restricted-globals
+        require("@babel/plugin-syntax-nullish-coalescing-operator").default,
 
     visitor: {
       LogicalExpression(path) {

@@ -1,5 +1,4 @@
 import { declare } from "@babel/helper-plugin-utils";
-import syntaxJsonStrings from "@babel/plugin-syntax-json-strings";
 import type * as t from "@babel/types";
 import type { NodePath } from "@babel/traverse";
 
@@ -18,7 +17,10 @@ export default declare(api => {
 
   return {
     name: "transform-json-strings",
-    inherits: syntaxJsonStrings.default,
+    inherits: USE_ESM
+      ? undefined
+      : // eslint-disable-next-line no-restricted-globals
+        require("@babel/plugin-syntax-json-strings").default,
 
     visitor: {
       "DirectiveLiteral|StringLiteral"({

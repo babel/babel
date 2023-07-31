@@ -1,5 +1,4 @@
 import { declare } from "@babel/helper-plugin-utils";
-import syntaxClassStaticBlock from "@babel/plugin-syntax-class-static-block";
 import type { Scope } from "@babel/traverse";
 
 import {
@@ -30,7 +29,10 @@ export default declare(({ types: t, template, assertVersion }) => {
 
   return {
     name: "transform-class-static-block",
-    inherits: syntaxClassStaticBlock.default,
+    inherits: USE_ESM
+      ? undefined
+      : // eslint-disable-next-line no-restricted-globals
+        require("@babel/plugin-syntax-class-static-block").default,
 
     pre() {
       // Enable this in @babel/helper-create-class-features-plugin, so that it

@@ -1,5 +1,4 @@
 import { declare } from "@babel/helper-plugin-utils";
-import syntaxNumericSeparator from "@babel/plugin-syntax-numeric-separator";
 import type { NodePath } from "@babel/traverse";
 import type * as t from "@babel/types";
 
@@ -23,7 +22,10 @@ export default declare(api => {
 
   return {
     name: "transform-numeric-separator",
-    inherits: syntaxNumericSeparator.default,
+    inherits: USE_ESM
+      ? undefined
+      : // eslint-disable-next-line no-restricted-globals
+        require("@babel/plugin-syntax-numeric-separator").default,
 
     visitor: {
       NumericLiteral: remover,

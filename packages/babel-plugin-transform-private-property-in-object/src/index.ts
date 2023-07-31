@@ -1,5 +1,4 @@
 import { declare } from "@babel/helper-plugin-utils";
-import syntaxPlugin from "@babel/plugin-syntax-private-property-in-object";
 import {
   enableFeature,
   FEATURES,
@@ -113,7 +112,10 @@ export default declare((api, opt: Options) => {
 
   return {
     name: "transform-private-property-in-object",
-    inherits: syntaxPlugin.default,
+    inherits: USE_ESM
+      ? undefined
+      : // eslint-disable-next-line no-restricted-globals
+        require("@babel/plugin-syntax-private-property-in-object").default,
     pre() {
       // Enable this in @babel/helper-create-class-features-plugin, so that it
       // can be handled by the private fields and methods transform.

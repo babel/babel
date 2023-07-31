@@ -17,7 +17,7 @@
   ],
   "dependencies": {
     "@babel/helper-plugin-utils": "workspace:^",
-    "@babel/plugin-syntax-logical-assignment-operators": "^7.10.4"
+    "@babel/plugin-syntax-logical-assignment-operators": "condition:BABEL_8_BREAKING ? : ^7.10.4"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
@@ -25,7 +25,6 @@
   "devDependencies": {
     "@babel/core": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
-    "@babel/plugin-syntax-nullish-coalescing-operator": "^7.8.3",
     "@babel/plugin-transform-nullish-coalescing-operator": "workspace:^"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-logical-assignment-operators",

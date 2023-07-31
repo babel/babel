@@ -17,7 +17,7 @@
   ],
   "dependencies": {
     "@babel/helper-plugin-utils": "workspace:^",
-    "@babel/plugin-syntax-dynamic-import": "^7.8.3"
+    "@babel/plugin-syntax-dynamic-import": "condition:BABEL_8_BREAKING ? : ^7.8.3"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"

@@ -1,6 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
 import remapAsyncToGenerator from "@babel/helper-remap-async-to-generator";
-import syntaxAsyncGenerators from "@babel/plugin-syntax-async-generators";
 import type { NodePath, Visitor } from "@babel/traverse";
 import { traverse, types as t, type PluginPass } from "@babel/core";
 import rewriteForAwait from "./for-await";
@@ -95,7 +94,10 @@ export default declare(api => {
 
   return {
     name: "transform-async-generator-functions",
-    inherits: syntaxAsyncGenerators.default,
+    inherits: USE_ESM
+      ? undefined
+      : // eslint-disable-next-line no-restricted-globals
+        require("@babel/plugin-syntax-async-generators").default,
 
     visitor: {
       Program(path, state) {
