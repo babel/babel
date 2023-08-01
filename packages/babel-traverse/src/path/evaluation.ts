@@ -4,9 +4,6 @@ import type * as t from "@babel/types";
 // This file contains Babels metainterpreter that can evaluate static code.
 
 const VALID_OBJECT_CALLEES = ["Number", "String", "Math"] as const;
-const NODE_MAJOR_VERSION = process.versions.node
-  ? parseInt(process.versions.node.split(".")[0])
-  : null;
 const VALID_IDENTIFIER_CALLEES = [
   "isFinite",
   "isNaN",
