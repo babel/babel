@@ -197,19 +197,15 @@ describe("evaluation", function () {
     ).toBe("?x=1");
 
     // the two tests below produce an undefined result when the node version is less than 16
-    expect(
-      getPath("btoa('babel');").get("body.0.expression").evaluate().value ===
-        "YmFiZWw=" ||
-        getPath("btoa('babel');").get("body.0.expression").evaluate().value ===
-          undefined,
-    ).toBeTruthy();
+    if (process.env.BABEL_8_BREAKING) {
+      expect(
+        getPath("btoa('babel');").get("body.0.expression").evaluate().value,
+      ).toBe("YmFiZWw=");
 
-    expect(
-      getPath("atob('YmFiZWw=');").get("body.0.expression").evaluate().value ===
-        "babel" ||
-        getPath("atob('YmFiZWw=');").get("body.0.expression").evaluate()
-          .value === undefined,
-    ).toBeTruthy();
+      expect(
+        getPath("atob('YmFiZWw=');").get("body.0.expression").evaluate().value,
+      ).toBe("babel");
+    }
   });
 
   it("should not deopt vars in different scope", function () {
