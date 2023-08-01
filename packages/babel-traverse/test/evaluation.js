@@ -196,7 +196,6 @@ describe("evaluation", function () {
         .evaluate().value,
     ).toBe("?x=1");
 
-    // the two tests below produce an undefined result when the node version is less than 16
     if (process.env.BABEL_8_BREAKING) {
       expect(
         getPath("btoa('babel');").get("body.0.expression").evaluate().value,
