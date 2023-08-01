@@ -95,8 +95,8 @@ describe("@babel/highlight", function () {
   });
 
   describeBabel7NoESM("getChalk", function () {
-	let getChalk;
-	beforeAll(() => {
+    let getChalk;
+    beforeAll(() => {
       ({ getChalk } = require("../lib/index.js"));
     });
 

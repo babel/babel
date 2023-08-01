@@ -110,17 +110,17 @@ describe("babel-preset-env", () => {
               shouldTransformDynamicImport: false,
               shouldTransformExportNamespaceFrom: false,
             });
-            if (process.env.BABEL_8_BREAKING) {
-              expect(names).toEqual(["transform-modules-commonjs"]);
-            } else {
-              expect(names).toEqual([
-                "transform-modules-commonjs",
-                "syntax-dynamic-import",
-                "syntax-export-namespace-from",
-                "syntax-top-level-await",
-                "syntax-import-meta",
-              ]);
-            }
+            expect(names).toEqual(
+              process.env.BABEL_8_BREAKING
+                ? ["transform-modules-commonjs"]
+                : [
+                    "transform-modules-commonjs",
+                    "syntax-dynamic-import",
+                    "syntax-export-namespace-from",
+                    "syntax-top-level-await",
+                    "syntax-import-meta",
+                  ],
+            );
           });
         });
         describe("dynamic imports should be transformed", () => {
@@ -132,20 +132,17 @@ describe("babel-preset-env", () => {
               shouldTransformDynamicImport: true,
               shouldTransformExportNamespaceFrom: false,
             });
-            if (process.env.BABEL_8_BREAKING) {
-              expect(names).toEqual([
-                "transform-modules-systemjs",
-                "transform-dynamic-import",
-              ]);
-            } else {
-              expect(names).toEqual([
-                "transform-modules-systemjs",
-                "transform-dynamic-import",
-                "syntax-export-namespace-from",
-                "syntax-top-level-await",
-                "syntax-import-meta",
-              ]);
-            }
+            expect(names).toEqual(
+              process.env.BABEL_8_BREAKING
+                ? ["transform-modules-systemjs", "transform-dynamic-import"]
+                : [
+                    "transform-modules-systemjs",
+                    "transform-dynamic-import",
+                    "syntax-export-namespace-from",
+                    "syntax-top-level-await",
+                    "syntax-import-meta",
+                  ],
+            );
           });
           describe("export namespace from should be transformed", () => {
             it("works", () => {
@@ -156,21 +153,21 @@ describe("babel-preset-env", () => {
                 shouldTransformDynamicImport: true,
                 shouldTransformExportNamespaceFrom: true,
               });
-              if (process.env.BABEL_8_BREAKING) {
-                expect(names).toEqual([
-                  "transform-modules-systemjs",
-                  "transform-dynamic-import",
-                  "transform-export-namespace-from",
-                ]);
-              } else {
-                expect(names).toEqual([
-                  "transform-modules-systemjs",
-                  "transform-dynamic-import",
-                  "transform-export-namespace-from",
-                  "syntax-top-level-await",
-                  "syntax-import-meta",
-                ]);
-              }
+              expect(names).toEqual(
+                process.env.BABEL_8_BREAKING
+                  ? [
+                      "transform-modules-systemjs",
+                      "transform-dynamic-import",
+                      "transform-export-namespace-from",
+                    ]
+                  : [
+                      "transform-modules-systemjs",
+                      "transform-dynamic-import",
+                      "transform-export-namespace-from",
+                      "syntax-top-level-await",
+                      "syntax-import-meta",
+                    ],
+              );
             });
           });
         });
