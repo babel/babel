@@ -699,7 +699,7 @@ describe("Babel and Espree", () => {
     parseAndAssertSame("/affix-top|affix-bottom|affix|[a-z]/");
   });
 
-  it("regexp", () => {
+  it("regexp without flag", () => {
     parseAndAssertSame("const foo = /foo/;");
   });
 
@@ -893,7 +893,7 @@ describe("Babel and Espree", () => {
         }).not.toThrow();
       });
     } else {
-      it("super outside method", () => {
+      it("super outside method in Babel 7", () => {
         expect(() => {
           parseForESLint("function F() { super(); }", {
             babelOptions: BABEL_OPTIONS,

@@ -52,7 +52,7 @@ describe("builders", function () {
     (process.env.BABEL_8_BREAKING ? describe.skip : describe)(
       "tsTypeParameter - Babel 7",
       function () {
-        it("accept name as argument for tsTypeParameter", function () {
+        it("accept name as argument for tsTypeParameter in Babel 7", function () {
           const tsTypeParameter = t.tsTypeParameter(
             t.tsTypeReference(t.identifier("bar")),
             t.tsTypeReference(t.identifier("baz")),
@@ -81,7 +81,7 @@ describe("builders", function () {
             }
           `);
         });
-        it("throws when name is missing", function () {
+        it("throws when name is missing in Babel 7", function () {
           expect(() => {
             t.tsTypeParameter(
               t.tsTypeReference(t.identifier("bar")),

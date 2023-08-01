@@ -188,7 +188,6 @@ module.exports = [
       config.rules = {
         ...config.rules,
         "jest/expect-expect": "off",
-        "jest/no-identical-title": "off",
         "jest/no-standalone-expect": "off",
         "jest/no-test-callback": "off",
         "jest/valid-describe": "off",

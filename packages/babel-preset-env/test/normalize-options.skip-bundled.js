@@ -113,15 +113,21 @@ describe("normalize-options", () => {
 
   describe("RegExp include/exclude", () => {
     it("should not allow invalid plugins in `include` and `exclude`", () => {
-      const normalizeWithNonExistingPlugin = () => {
+      const normalizeIncludeWithNonExistingPlugin = () => {
         normalizeOptions({
           include: ["non-existing-plugin"],
         });
       };
-      expect(normalizeWithNonExistingPlugin).toThrow(Error);
+      const normalizeExcludeWithNonExistingPlugin = () => {
+        normalizeOptions({
+          exclude: ["non-existing-plugin"],
+        });
+      };
+      expect(normalizeIncludeWithNonExistingPlugin).toThrow(Error);
+      expect(normalizeExcludeWithNonExistingPlugin).toThrow(Error);
     });
 
-    it("should expand regular expressions in `include` and `exclude`", () => {
+    it("should expand regular expressions in `include`", () => {
       const normalized = normalizeOptions({
         include: ["^[a-z]*-spread", "babel-plugin-transform-classes"],
       });
@@ -131,7 +137,7 @@ describe("normalize-options", () => {
       ]);
     });
 
-    it("should expand regular expressions in `include` and `exclude`", () => {
+    it("should expand regular expressions in `exclude`", () => {
       const normalized = normalizeOptions({
         useBuiltIns: "entry",
         corejs: 3,

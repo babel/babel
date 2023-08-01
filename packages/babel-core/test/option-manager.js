@@ -205,7 +205,7 @@ describe("option-manager", () => {
   });
 
   describe("mergeOptions", () => {
-    it("throws for removed babel 5 options", () => {
+    it("throws for removed babel 5 options: randomOption", () => {
       return expect(() => {
         loadOptions({
           randomOption: true,
@@ -213,7 +213,7 @@ describe("option-manager", () => {
       }).toThrow(/Unknown option: .randomOption/);
     });
 
-    it("throws for removed babel 5 options", () => {
+    it("throws for removed babel 5 options: auxiliaryComment", () => {
       return expect(() => {
         loadOptions({
           auxiliaryComment: true,

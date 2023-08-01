@@ -83,7 +83,7 @@ describe("normalize options", () => {
         );
       },
     );
-    it("default values", () => {
+    it("default values in Babel 7", () => {
       expect(normalizeOptions({})).toMatchInlineSnapshot(`
         Object {
           "allExtensions": false,
