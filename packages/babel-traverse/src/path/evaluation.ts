@@ -16,8 +16,8 @@ const VALID_IDENTIFIER_CALLEES = [
   "decodeURIComponent",
   "encodeURI",
   "encodeURIComponent",
-  NODE_MAJOR_VERSION >= 16 ? "btoa" : null,
-  NODE_MAJOR_VERSION >= 16 ? "atob" : null,
+  process.env.BABEL_8_BREAKING ? "btoa" : null,
+  process.env.BABEL_8_BREAKING ? "atob" : null,
 ] as const;
 
 const INVALID_METHODS = ["random"] as const;
