@@ -12,7 +12,7 @@
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-This file contains the changelog starting frm v7.15.0.
+This file contains the changelog starting from v7.15.0.
 
 - See [CHANGELOG - v7.0.0 to v7.14.9](/.github/CHANGELOG-v7.0.0-v7.14.9.md) for v7.0.0 to v7.14.9 changes.
 - See [CHANGELOG - v7 prereleases](/.github/CHANGELOG-v7-prereleases.md) for v7.0.0-alpha.1 to v7.0.0-rc.4 changes.
