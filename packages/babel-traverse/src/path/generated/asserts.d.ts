@@ -308,7 +308,7 @@ export interface NodePathAssertions {
     opts?: Opts<t.ImportDefaultSpecifier>,
   ): asserts this is NodePath<t.ImportDefaultSpecifier>;
   assertImportExpression(
-    opts?: object,
+    opts?: Opts<t.ImportExpression>,
   ): asserts this is NodePath<t.ImportExpression>;
   assertImportNamespaceSpecifier(
     opts?: Opts<t.ImportNamespaceSpecifier>,
