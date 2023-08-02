@@ -144,13 +144,13 @@ function cloneNodeInternal<T extends t.Node>(
   return newNode;
 }
 
-function maybeCloneComments<T extends t.Comment>(
-  comments: ReadonlyArray<T> | null,
+function maybeCloneComments(
+  comments: t.Comment[] | null,
   deep: boolean,
   withoutLoc: boolean,
-  commentsCache: Map<T, T>,
-): ReadonlyArray<T> | null {
-  if (!comments || !deep) {
+  commentsCache: Map<t.Comment, t.Comment>,
+): t.Comment[] | null {
+  if (!comments?.length || !deep) {
     return comments;
   }
   return comments.map(comment => {
@@ -159,10 +159,7 @@ function maybeCloneComments<T extends t.Comment>(
 
     const { type, value, loc } = comment;
 
-    const ret = { type, value, loc } as T;
-    if (withoutLoc) {
-      ret.loc = null;
-    }
+    const ret = { type, value, loc: withoutLoc ? null : loc } as t.Comment;
 
     commentsCache.set(comment, ret);
 
