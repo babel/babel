@@ -11,7 +11,7 @@ export default (_: any, opts: any = {}) => {
     pipelineProposal,
     pipelineTopicToken,
     recordAndTupleSyntax,
-    optionalChainingAssignVersion,
+    optionalChainingAssignVersion = "2023-07",
   } = opts;
 
   return {
