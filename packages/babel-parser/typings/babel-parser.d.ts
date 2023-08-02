@@ -40,6 +40,7 @@ type Plugin =
   | "placeholders"
   | "privateIn" // Enabled by default
   | "regexpUnicodeSets" // Enabled by default
+  | "sourcePhaseImports"
   | "throwExpressions"
   | "topLevelAwait"
   | "v8intrinsic"
