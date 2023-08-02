@@ -1,6 +1,11 @@
 "use strict";
 
-if (typeof it === "function") {
+if (
+  typeof it === "function" &&
+  // Jest loads the Babel config to parse file and update inline snapshots.
+  // This is ok, as it's not loading the Babel config to test Babel itself.
+  !new Error().stack.includes("jest-snapshot")
+) {
   throw new Error("Monorepo root's babel.config.js loaded by a test.");
 }
 
