@@ -677,6 +677,16 @@ export function isImportSpecifier(
 
   return opts == null || shallowEqual(node, opts);
 }
+export function isImportExpression(
+  node: t.Node | null | undefined,
+  opts?: Opts<t.ImportExpression> | null,
+): node is t.ImportExpression {
+  if (!node) return false;
+
+  if (node.type !== "ImportExpression") return false;
+
+  return opts == null || shallowEqual(node, opts);
+}
 export function isMetaProperty(
   node: t.Node | null | undefined,
   opts?: Opts<t.MetaProperty> | null,
@@ -2580,6 +2590,7 @@ export function isStandardized(
     case "ImportDefaultSpecifier":
     case "ImportNamespaceSpecifier":
     case "ImportSpecifier":
+    case "ImportExpression":
     case "MetaProperty":
     case "ClassMethod":
     case "ObjectPattern":
@@ -2649,6 +2660,7 @@ export function isExpression(
     case "UpdateExpression":
     case "ArrowFunctionExpression":
     case "ClassExpression":
+    case "ImportExpression":
     case "MetaProperty":
     case "Super":
     case "TaggedTemplateExpression":

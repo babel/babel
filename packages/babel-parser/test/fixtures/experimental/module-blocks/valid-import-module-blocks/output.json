@@ -71,19 +71,13 @@
         "type": "ExpressionStatement",
         "start":50,"end":65,"loc":{"start":{"line":4,"column":0,"index":50},"end":{"line":4,"column":15,"index":65}},
         "expression": {
-          "type": "CallExpression",
+          "type": "ImportExpression",
           "start":50,"end":64,"loc":{"start":{"line":4,"column":0,"index":50},"end":{"line":4,"column":14,"index":64}},
-          "callee": {
-            "type": "Import",
-            "start":50,"end":56,"loc":{"start":{"line":4,"column":0,"index":50},"end":{"line":4,"column":6,"index":56}}
-          },
-          "arguments": [
-            {
-              "type": "Identifier",
-              "start":57,"end":63,"loc":{"start":{"line":4,"column":7,"index":57},"end":{"line":4,"column":13,"index":63},"identifierName":"module"},
-              "name": "module"
-            }
-          ]
+          "source": {
+            "type": "Identifier",
+            "start":57,"end":63,"loc":{"start":{"line":4,"column":7,"index":57},"end":{"line":4,"column":13,"index":63},"identifierName":"module"},
+            "name": "module"
+          }
         }
       }
     ],

@@ -14,7 +14,7 @@ const requireInterop = (source: t.Expression, file: File) =>
   ]);
 
 export function transformDynamicImport(
-  path: NodePath<t.CallExpression>,
+  path: NodePath<t.CallExpression | t.ImportExpression>,
   noInterop: boolean,
   file: File,
 ) {

@@ -10,9 +10,9 @@ import {
   getModuleName,
 } from "@babel/helper-module-transforms";
 import simplifyAccess from "@babel/helper-simple-access";
-import { template, types as t } from "@babel/core";
+import { template, types as t, type PluginPass } from "@babel/core";
 import type { PluginOptions } from "@babel/helper-module-transforms";
-import type { Visitor, Scope } from "@babel/traverse";
+import type { Visitor, Scope, NodePath } from "@babel/traverse";
 
 import { transformDynamicImport } from "./dynamic-import";
 
@@ -169,9 +169,13 @@ export default declare((api, options: Options) => {
     },
 
     visitor: {
-      CallExpression(path) {
+      ["CallExpression" +
+        (api.types.importExpression ? "|ImportExpression" : "")](
+        this: PluginPass,
+        path: NodePath<t.CallExpression | t.ImportExpression>,
+      ) {
         if (!this.file.has("@babel/plugin-proposal-dynamic-import")) return;
-        if (!t.isImport(path.node.callee)) return;
+        if (path.isCallExpression() && !t.isImport(path.node.callee)) return;
 
         let { scope } = path;
         do {

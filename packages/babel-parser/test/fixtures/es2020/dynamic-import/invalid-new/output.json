@@ -17,11 +17,9 @@
           "type": "NewExpression",
           "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
           "callee": {
-            "type": "Import",
-            "start":4,"end":10,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":10,"index":10}}
-          },
-          "arguments": [
-            {
+            "type": "ImportExpression",
+            "start":4,"end":17,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":17,"index":17}},
+            "source": {
               "type": "StringLiteral",
               "start":11,"end":16,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":16,"index":16}},
               "extra": {
@@ -30,7 +28,8 @@
               },
               "value": "foo"
             }
-          ]
+          },
+          "arguments": []
         }
       }
     ],

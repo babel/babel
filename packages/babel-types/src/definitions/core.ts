@@ -1806,6 +1806,20 @@ defineType("ImportSpecifier", {
   },
 });
 
+defineType("ImportExpression", {
+  visitor: ["source", "options"],
+  aliases: ["Expression"],
+  fields: {
+    source: {
+      validate: assertNodeType("Expression"),
+    },
+    options: {
+      validate: assertNodeType("Expression"),
+      optional: true,
+    },
+  },
+});
+
 defineType("MetaProperty", {
   visitor: ["meta", "property"],
   aliases: ["Expression"],

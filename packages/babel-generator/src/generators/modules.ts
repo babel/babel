@@ -312,3 +312,15 @@ export function ImportNamespaceSpecifier(
   this.space();
   this.print(node.local, node);
 }
+
+export function ImportExpression(this: Printer, node: t.ImportExpression) {
+  this.word("import");
+  this.token("(");
+  this.print(node.source, node);
+  if (node.options != null) {
+    this.token(",");
+    this.space();
+    this.print(node.options, node);
+  }
+  this.token(")");
+}
