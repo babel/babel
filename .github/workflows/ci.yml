@@ -261,6 +261,8 @@ jobs:
           node-version: latest
           check-latest: true
           cache: "yarn"
+      - name: Use ESM
+        run: node scripts/set-module-type.js module
       - name: Build babel artifacts
         run: |
           make -j build-standalone-ci
@@ -306,6 +308,8 @@ jobs:
           name: babel8-artifact
       - name: Extract artifacts
         run: tar -xf babel-artifact.tar; rm babel-artifact.tar
+      - name: Use ESM
+        run: node scripts/set-module-type.js module
       - name: Test
         run: |
           yarn jest --ci
