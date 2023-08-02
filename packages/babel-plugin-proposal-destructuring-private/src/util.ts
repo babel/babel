@@ -151,7 +151,7 @@ function buildAssignmentsFromPatternList(
 }
 
 type StackItem = {
-  node: t.LVal | t.ObjectProperty | null;
+  node: t.AssignmentExpression["left"] | t.ObjectProperty | null;
   index: number;
   depth: number;
 };
@@ -169,9 +169,9 @@ type StackItem = {
  * @param visitor
  */
 export function* traversePattern(
-  root: t.LVal,
+  root: t.AssignmentExpression["left"],
   visitor: (
-    node: t.LVal | t.ObjectProperty,
+    node: t.AssignmentExpression["left"] | t.ObjectProperty,
     index: number,
     depth: number,
   ) => Generator<any, void, any>,
@@ -221,7 +221,7 @@ export function* traversePattern(
   }
 }
 
-export function hasPrivateKeys(pattern: t.LVal) {
+export function hasPrivateKeys(pattern: t.AssignmentExpression["left"]) {
   let result = false;
   traversePattern(pattern, function* (node) {
     if (isObjectProperty(node) && isPrivateName(node.key)) {

@@ -224,7 +224,11 @@ export default function <N extends t.FunctionExpression | t.Class>(
     node: N;
     parent?: NodePath<N>["parent"];
     scope: Scope;
-    id?: t.LVal | t.StringLiteral | t.NumericLiteral | t.BigIntLiteral;
+    id?:
+      | t.AssignmentExpression["left"]
+      | t.StringLiteral
+      | t.NumericLiteral
+      | t.BigIntLiteral;
   },
   localBinding = false,
   supportUnicodeId = false,
