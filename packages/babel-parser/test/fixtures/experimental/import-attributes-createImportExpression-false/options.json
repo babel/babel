@@ -1,5 +1,5 @@
 {
-  "createImportExpression": false,
+  "createImportExpressions": false,
   "plugins": ["importAttributes"],
   "sourceType": "module"
 }
