@@ -4,6 +4,11 @@ const noUnusedExpressions = require("./rules/no-unused-expressions.cjs");
 const objectCurlySpacing = require("./rules/object-curly-spacing.cjs");
 const semi = require("./rules/semi.cjs");
 
+const meta = {
+  name: PACKAGE_JSON.name,
+  version: PACKAGE_JSON.version,
+};
+
 const rules = {
   "new-cap": newCap,
   "no-invalid-this": noInvalidThis,
@@ -20,9 +25,10 @@ const rulesConfig = {
   semi: "off",
 };
 
+exports.meta = meta;
 exports.rules = rules;
 exports.rulesConfig = rulesConfig;
 
 if (!process.env.BABEL_8_BREAKING) {
-  exports.default = { rules, rulesConfig };
+  exports.default = { meta, rules, rulesConfig };
 }

@@ -177,7 +177,6 @@ commander.option(
   "Use a specific extension for the output files",
 );
 
-declare const PACKAGE_JSON: { name: string; version: string };
 commander.version(PACKAGE_JSON.version + " (@babel/core " + version + ")");
 commander.usage("[options] <files ...>");
 // register an empty action handler so that commander.js can throw on
