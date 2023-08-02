@@ -82,6 +82,9 @@ describe("stage-1 preset", () => {
     const output = Babel.transform("expr1?.prop = val", {
       presets: [["stage-1", { decoratorsVersion: "2021-12" }]],
     }).code;
-    expect(output).toMatchInlineSnapshot(`"expr1 == null ? undefined : expr1.prop = val;"`);
+    expect(output).toMatchInlineSnapshot(`
+      "var _expr;
+      (_expr = expr1) === null || _expr === void 0 ? void 0 : _expr.prop = val;"
+    `);
   });
 });
