@@ -19,6 +19,50 @@
             "value": "module",
             "raw": "\"module\""
           },
+          "options": {
+            "type": "ObjectExpression",
+            "start":17,"end":43,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":43}},
+            "properties": [
+              {
+                "type": "Property",
+                "start":19,"end":41,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":41}},
+                "method": false,
+                "key": {
+                  "type": "Identifier",
+                  "start":19,"end":23,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":23},"identifierName":"with"},
+                  "name": "with"
+                },
+                "computed": false,
+                "shorthand": false,
+                "value": {
+                  "type": "ObjectExpression",
+                  "start":25,"end":41,"loc":{"start":{"line":1,"column":25},"end":{"line":1,"column":41}},
+                  "properties": [
+                    {
+                      "type": "Property",
+                      "start":27,"end":39,"loc":{"start":{"line":1,"column":27},"end":{"line":1,"column":39}},
+                      "method": false,
+                      "key": {
+                        "type": "Identifier",
+                        "start":27,"end":31,"loc":{"start":{"line":1,"column":27},"end":{"line":1,"column":31},"identifierName":"type"},
+                        "name": "type"
+                      },
+                      "computed": false,
+                      "shorthand": false,
+                      "value": {
+                        "type": "Literal",
+                        "start":33,"end":39,"loc":{"start":{"line":1,"column":33},"end":{"line":1,"column":39}},
+                        "value": "json",
+                        "raw": "\"json\""
+                      },
+                      "kind": "init"
+                    }
+                  ]
+                },
+                "kind": "init"
+              }
+            ]
+          },
           "attributes": {
             "type": "ObjectExpression",
             "start":17,"end":43,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":43}},

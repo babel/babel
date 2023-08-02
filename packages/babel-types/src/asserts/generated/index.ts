@@ -411,6 +411,12 @@ export function assertImportSpecifier(
 ): asserts node is t.ImportSpecifier {
   assert("ImportSpecifier", node, opts);
 }
+export function assertImportExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.ImportExpression {
+  assert("ImportExpression", node, opts);
+}
 export function assertMetaProperty(
   node: object | null | undefined,
   opts?: object | null,

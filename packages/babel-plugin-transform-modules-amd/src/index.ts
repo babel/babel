@@ -11,7 +11,7 @@ import {
   wrapInterop,
   getModuleName,
 } from "@babel/helper-module-transforms";
-import { template, types as t } from "@babel/core";
+import { template, types as t, type PluginPass } from "@babel/core";
 import type { PluginOptions } from "@babel/helper-module-transforms";
 import type { NodePath } from "@babel/traverse";
 
@@ -79,9 +79,14 @@ export default declare<State>((api, options: Options) => {
     },
 
     visitor: {
-      CallExpression(path, state) {
+      ["CallExpression" +
+        (api.types.importExpression ? "|ImportExpression" : "")](
+        this: State & PluginPass,
+        path: NodePath<t.CallExpression | t.ImportExpression>,
+        state: State,
+      ) {
         if (!this.file.has("@babel/plugin-proposal-dynamic-import")) return;
-        if (!path.get("callee").isImport()) return;
+        if (path.isCallExpression() && !path.get("callee").isImport()) return;
 
         let { requireId, resolveId, rejectId } = state;
         if (!requireId) {
@@ -96,7 +101,9 @@ export default declare<State>((api, options: Options) => {
         }
 
         let result: t.Node = t.identifier("imported");
-        if (!noInterop) result = wrapInterop(path, result, "namespace");
+        if (!noInterop) {
+          result = wrapInterop(this.file.path, result, "namespace");
+        }
 
         path.replaceWith(
           buildDynamicImport(
@@ -115,7 +122,6 @@ export default declare<State>((api, options: Options) => {
           ),
         );
       },
-
       Program: {
         exit(path, { requireId }) {
           if (!isModule(path)) {

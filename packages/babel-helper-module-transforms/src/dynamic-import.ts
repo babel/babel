@@ -17,12 +17,12 @@ if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
 }
 
 export function buildDynamicImport(
-  node: t.CallExpression,
+  node: t.CallExpression | t.ImportExpression,
   deferToThen: boolean,
   wrapWithPromise: boolean,
   builder: (specifier: t.Expression) => t.Expression,
 ): t.Expression {
-  const [specifier] = node.arguments;
+  const specifier = t.isCallExpression(node) ? node.arguments[0] : node.source;
 
   if (
     t.isStringLiteral(specifier) ||
