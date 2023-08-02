@@ -12,6 +12,8 @@ import pluginSyntaxFlow from "@babel/plugin-syntax-flow";
 import pluginSyntaxJSX from "@babel/plugin-syntax-jsx";
 import pluginFlowStripTypes from "@babel/plugin-transform-flow-strip-types";
 
+const itBabel8 = process.env.BABEL_8_BREAKING ? it : it.skip;
+
 const cwd = path.dirname(fileURLToPath(import.meta.url));
 
 function assertIgnored(result) {
@@ -173,26 +175,20 @@ describe("api", function () {
     expect(babel.tokTypes).toBeDefined();
   });
 
-  (process.env.BABEL_8_BREAKING ? it : it.skip)(
-    "parse throws on undefined callback",
-    () => {
-      expect(() => parse("", {})).toThrowErrorMatchingInlineSnapshot(
-        `"Starting from Babel 8.0.0, the 'parse' function expects a callback. If you need to call it synchronously, please use 'parseSync'."`,
-      );
-    },
-  );
+  itBabel8("parse throws on undefined callback", () => {
+    expect(() => parse("", {})).toThrowErrorMatchingInlineSnapshot(
+      `"Starting from Babel 8.0.0, the 'parse' function expects a callback. If you need to call it synchronously, please use 'parseSync'."`,
+    );
+  });
 
-  (process.env.BABEL_8_BREAKING ? it : it.skip)(
-    "transform throws on undefined callback",
-    () => {
-      const options = {
-        filename: "example.js",
-      };
-      expect(() => transform("", options)).toThrowErrorMatchingInlineSnapshot(
-        `"Starting from Babel 8.0.0, the 'transform' function expects a callback. If you need to call it synchronously, please use 'transformSync'."`,
-      );
-    },
-  );
+  itBabel8("transform throws on undefined callback", () => {
+    const options = {
+      filename: "example.js",
+    };
+    expect(() => transform("", options)).toThrowErrorMatchingInlineSnapshot(
+      `"Starting from Babel 8.0.0, the 'transform' function expects a callback. If you need to call it synchronously, please use 'transformSync'."`,
+    );
+  });
 
   it("transformFile", function () {
     const options = {
@@ -249,18 +245,15 @@ describe("api", function () {
     expect(options).toEqual({ babelrc: false });
   });
 
-  (process.env.BABEL_8_BREAKING ? it : it.skip)(
-    "transformFromAst throws on undefined callback",
-    () => {
-      const program = "const identifier = 1";
-      const node = parseSync(program);
-      expect(() =>
-        transformFromAst(node, program),
-      ).toThrowErrorMatchingInlineSnapshot(
-        `"Starting from Babel 8.0.0, the 'transformFromAst' function expects a callback. If you need to call it synchronously, please use 'transformFromAstSync'."`,
-      );
-    },
-  );
+  itBabel8("transformFromAst throws on undefined callback", () => {
+    const program = "const identifier = 1";
+    const node = parseSync(program);
+    expect(() =>
+      transformFromAst(node, program),
+    ).toThrowErrorMatchingInlineSnapshot(
+      `"Starting from Babel 8.0.0, the 'transformFromAst' function expects a callback. If you need to call it synchronously, please use 'transformFromAstSync'."`,
+    );
+  });
 
   it("transformFromAst should generate same code with different cloneInputAst", function () {
     const program = `//test1

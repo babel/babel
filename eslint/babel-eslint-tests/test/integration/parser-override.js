@@ -2,6 +2,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
 import * as babelESLint from "@babel/eslint-parser";
+import { itGte } from "$repo-utils";
 
 describe("parserOverride", () => {
   const expectedAST = {
@@ -31,8 +32,8 @@ describe("parserOverride", () => {
     expect(ast).toMatchObject(expectedAST);
   });
 
-  const babel7node12 = parseInt(process.versions.node) < 12 ? it.skip : it;
-  babel7node12("works when parsing in a worker", async () => {
+  const nodeGte12 = itGte("12.0.0");
+  nodeGte12("works when parsing in a worker", async () => {
     const require = createRequire(import.meta.url);
     // eslint-disable-next-line import/extensions
     const babelESLintWorker = require("@babel/eslint-parser/experimental-worker");

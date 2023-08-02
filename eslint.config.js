@@ -188,7 +188,26 @@ module.exports = [
       config.rules = {
         ...config.rules,
         "jest/expect-expect": "off",
-        "jest/no-standalone-expect": "off",
+        "jest/no-standalone-expect": [
+          "error",
+          {
+            additionalTestBlockFunctions: [
+              "itBabel7",
+              "itBabel7NoESM",
+              "itBabel7NodeGte14NoESM",
+              "itBabel8",
+              "itESLint7",
+              "itESLint8",
+              "itNoESM",
+              "itNoWin32",
+              "itESM",
+              "nodeGte8",
+              "nodeGte12",
+              "nodeGte12NoESM",
+              "testFn",
+            ],
+          },
+        ],
         "jest/no-test-callback": "off",
         "jest/valid-describe": "off",
         "import/extensions": ["error", "always"],

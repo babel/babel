@@ -6,6 +6,8 @@ import { spawnSync } from "child_process";
 
 const { __dirname } = commonJS(import.meta.url);
 
+const nodeGte12 = itGte("12.0.0");
+
 const replaceAll = "".replaceAll
   ? Function.call.bind("".replaceAll)
   : (str, find, replace) => str.split(find).join(replace);
@@ -282,27 +284,24 @@ describe("@babel/core errors", function () {
     `);
   });
 
-  itGte("12.0.0")(
-    "should not throw in `node --frozen-intrinsics`",
-    function () {
-      expect(
-        spawnSync(
-          process.execPath,
-          [
-            "--frozen-intrinsics",
-            "--input-type=module",
-            "-e",
-            `
+  nodeGte12("should not throw in `node --frozen-intrinsics`", function () {
+    expect(
+      spawnSync(
+        process.execPath,
+        [
+          "--frozen-intrinsics",
+          "--input-type=module",
+          "-e",
+          `
         import * as babel from "../lib/index.js";
         babel.parseSync("foo;", {
           root: String.raw\`${fixture("valid")}\`,
         });
         console.log("%done%");
         `,
-          ],
-          { cwd: __dirname },
-        ).output + "",
-      ).toContain("%done%");
-    },
-  );
+        ],
+        { cwd: __dirname },
+      ).output + "",
+    ).toContain("%done%");
+  });
 });

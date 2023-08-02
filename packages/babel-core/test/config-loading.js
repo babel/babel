@@ -10,6 +10,7 @@ import {
 import path from "path";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
+import { itNoWin32 } from "$repo-utils";
 
 const require = createRequire(import.meta.url);
 
@@ -65,9 +66,7 @@ describe("@babel/core config loading", () => {
 
   describe("createConfigItemSync", () => {
     // Windows uses different file paths
-    const noWin = process.platform === "win32" ? it.skip : it;
-
-    noWin("can be called synchronously with one param", () => {
+    itNoWin32("can be called synchronously with one param", () => {
       function myPlugin() {
         return {};
       }
@@ -81,7 +80,7 @@ describe("@babel/core config loading", () => {
       });
     });
 
-    noWin("can be called synchronously with two params", () => {
+    itNoWin32("can be called synchronously with two params", () => {
       function myPlugin() {
         return {};
       }

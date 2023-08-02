@@ -8,7 +8,7 @@ import { USE_ESM, commonJS } from "$repo-utils";
 const { require } = commonJS(import.meta.url);
 
 const itBabel7 = process.env.BABEL_8_BREAKING ? it.skip : it;
-const itBabel7Node14plusCjs =
+const itBabel7NodeGte14NoESM =
   process.env.BABEL_8_BREAKING ||
   parseInt(process.versions.node) < 14 ||
   USE_ESM
@@ -56,7 +56,7 @@ describe("regressions", () => {
 
   // create-reat-app missing dependency fallback
   // jest fake timers only work in the Jest version we are using for Node.js 14+
-  itBabel7Node14plusCjs(
+  itBabel7NodeGte14NoESM(
     "proposal-private-property-in-object should warn and fallback to transform-...",
     () => {
       jest.useFakeTimers();

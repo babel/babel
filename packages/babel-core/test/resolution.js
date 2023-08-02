@@ -1,6 +1,7 @@
 import * as babel from "../lib/index.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import { itGte } from "$repo-utils";
 
 describe("addon resolution", function () {
   const base = path.join(
@@ -464,7 +465,7 @@ describe("addon resolution", function () {
     }).toThrow(/Cannot (?:find|resolve) module 'babel-plugin-foo'/);
   });
 
-  const nodeGte12 = parseInt(process.versions.node, 10) >= 12 ? it : it.skip;
+  const nodeGte12 = itGte("12.0.0");
 
   nodeGte12(
     "should suggest -transform- as an alternative to -proposal-",
