@@ -7,7 +7,7 @@ export interface Options {
   version: "2023-07";
 }
 
-export default declare((api, options) => {
+export default declare((api, options: Options) => {
   api.assertVersion(7);
 
   v.validateTopLevelOptions(options, { version: "version" });
