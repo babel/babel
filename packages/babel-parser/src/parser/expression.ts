@@ -1110,19 +1110,26 @@ export default abstract class ExpressionParser extends LValParser {
         return this.parseSuper();
 
       case tt._import:
-        node = this.startNode<N.MetaProperty | N.Import>();
+        node = this.startNode<N.MetaProperty | N.Import | N.ImportExpression>();
         this.next();
 
         if (this.match(tt.dot)) {
           return this.parseImportMetaProperty(node as Undone<N.MetaProperty>);
         }
 
-        if (!this.match(tt.parenL)) {
+        if (this.match(tt.parenL)) {
+          if (this.options.createImportExpressions) {
+            return this.parseImportCall(node as Undone<N.ImportExpression>);
+          } else {
+            return this.finishNode(node, "Import");
+          }
+        } else {
           this.raise(Errors.UnsupportedImport, {
             at: this.state.lastTokStartLoc,
           });
+          return this.finishNode(node, "Import");
         }
-        return this.finishNode(node, "Import");
+
       case tt._this:
         node = this.startNode();
         this.next();
@@ -1920,9 +1927,14 @@ export default abstract class ExpressionParser extends LValParser {
   }
 
   parseNewCallee(this: Parser, node: Undone<N.NewExpression>): void {
-    node.callee = this.parseNoCallExpr();
-    if (node.callee.type === "Import") {
-      this.raise(Errors.ImportCallNotNewExpression, { at: node.callee });
+    const isImport = this.match(tt._import);
+    const callee = this.parseNoCallExpr();
+    node.callee = callee;
+    if (
+      isImport &&
+      (callee.type === "Import" || callee.type === "ImportExpression")
+    ) {
+      this.raise(Errors.ImportCallNotNewExpression, { at: callee });
     }
   }
 
@@ -2937,6 +2949,30 @@ export default abstract class ExpressionParser extends LValParser {
     node.delegate = delegating;
     node.argument = argument;
     return this.finishNode(node, "YieldExpression");
+  }
+
+  // https://tc39.es/ecma262/#prod-ImportCall
+  parseImportCall(
+    this: Parser,
+    node: Undone<N.ImportExpression>,
+  ): N.ImportExpression {
+    this.next(); // eat tt.parenL
+    node.source = this.parseMaybeAssignAllowIn();
+    if (
+      this.hasPlugin("importAttributes") ||
+      this.hasPlugin("importAssertions")
+    ) {
+      node.options = null;
+    }
+    if (this.eat(tt.comma)) {
+      this.expectImportAttributesPlugin();
+      if (!this.match(tt.parenR)) {
+        node.options = this.parseMaybeAssignAllowIn();
+        this.eat(tt.comma);
+      }
+    }
+    this.expect(tt.parenR);
+    return this.finishNode(node, "ImportExpression");
   }
 
   // Validates a pipeline (for any of the pipeline Babylon plugins) at the point

@@ -728,6 +728,16 @@ export function importSpecifier(
     imported,
   });
 }
+export function importExpression(
+  source: t.Expression,
+  options: t.Expression | null = null,
+): t.ImportExpression {
+  return validateNode<t.ImportExpression>({
+    type: "ImportExpression",
+    source,
+    options,
+  });
+}
 export function metaProperty(
   meta: t.Identifier,
   property: t.Identifier,

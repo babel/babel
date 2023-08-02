@@ -30,23 +30,17 @@
                 "start":18,"end":38,"loc":{"start":{"line":2,"column":2,"index":18},"end":{"line":2,"column":22,"index":38}},
                 "delegate": false,
                 "argument": {
-                  "type": "CallExpression",
+                  "type": "ImportExpression",
                   "start":24,"end":38,"loc":{"start":{"line":2,"column":8,"index":24},"end":{"line":2,"column":22,"index":38}},
-                  "callee": {
-                    "type": "Import",
-                    "start":24,"end":30,"loc":{"start":{"line":2,"column":8,"index":24},"end":{"line":2,"column":14,"index":30}}
-                  },
-                  "arguments": [
-                    {
-                      "type": "StringLiteral",
-                      "start":31,"end":37,"loc":{"start":{"line":2,"column":15,"index":31},"end":{"line":2,"column":21,"index":37}},
-                      "extra": {
-                        "rawValue": "http",
-                        "raw": "'http'"
-                      },
-                      "value": "http"
-                    }
-                  ]
+                  "source": {
+                    "type": "StringLiteral",
+                    "start":31,"end":37,"loc":{"start":{"line":2,"column":15,"index":31},"end":{"line":2,"column":21,"index":37}},
+                    "extra": {
+                      "rawValue": "http",
+                      "raw": "'http'"
+                    },
+                    "value": "http"
+                  }
                 }
               }
             }

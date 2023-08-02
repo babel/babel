@@ -131,6 +131,7 @@ export type Node =
   | ImportAttribute
   | ImportDeclaration
   | ImportDefaultSpecifier
+  | ImportExpression
   | ImportNamespaceSpecifier
   | ImportSpecifier
   | IndexedAccessType
@@ -880,6 +881,12 @@ export interface ImportSpecifier extends BaseNode {
   local: Identifier;
   imported: Identifier | StringLiteral;
   importKind?: "type" | "typeof" | "value" | null;
+}
+
+export interface ImportExpression extends BaseNode {
+  type: "ImportExpression";
+  source: Expression;
+  options?: Expression | null;
 }
 
 export interface MetaProperty extends BaseNode {
@@ -2148,6 +2155,7 @@ export type Standardized =
   | ImportDefaultSpecifier
   | ImportNamespaceSpecifier
   | ImportSpecifier
+  | ImportExpression
   | MetaProperty
   | ClassMethod
   | ObjectPattern
@@ -2193,6 +2201,7 @@ export type Expression =
   | UpdateExpression
   | ArrowFunctionExpression
   | ClassExpression
+  | ImportExpression
   | MetaProperty
   | Super
   | TaggedTemplateExpression
@@ -2860,6 +2869,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -2972,6 +2982,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -3036,6 +3047,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -3117,6 +3129,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -3181,6 +3194,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -3246,6 +3260,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -3310,6 +3325,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -3399,6 +3415,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -3528,6 +3545,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -3611,6 +3629,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -3687,6 +3706,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -3779,6 +3799,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -4039,6 +4060,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -4352,6 +4374,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -4497,6 +4520,7 @@ export interface ParentMaps {
     | IfStatement
     | ImportAttribute
     | ImportDefaultSpecifier
+    | ImportExpression
     | ImportNamespaceSpecifier
     | ImportSpecifier
     | InterfaceDeclaration
@@ -4609,6 +4633,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -4669,6 +4694,71 @@ export interface ParentMaps {
     | WhileStatement
     | WithStatement;
   ImportDefaultSpecifier: ImportDeclaration;
+  ImportExpression:
+    | ArrayExpression
+    | ArrowFunctionExpression
+    | AssignmentExpression
+    | AssignmentPattern
+    | AwaitExpression
+    | BinaryExpression
+    | BindExpression
+    | CallExpression
+    | ClassAccessorProperty
+    | ClassDeclaration
+    | ClassExpression
+    | ClassMethod
+    | ClassPrivateProperty
+    | ClassProperty
+    | ConditionalExpression
+    | Decorator
+    | DoWhileStatement
+    | ExportDefaultDeclaration
+    | ExpressionStatement
+    | ForInStatement
+    | ForOfStatement
+    | ForStatement
+    | IfStatement
+    | ImportExpression
+    | JSXExpressionContainer
+    | JSXSpreadAttribute
+    | JSXSpreadChild
+    | LogicalExpression
+    | MemberExpression
+    | NewExpression
+    | ObjectMethod
+    | ObjectProperty
+    | OptionalCallExpression
+    | OptionalMemberExpression
+    | ParenthesizedExpression
+    | PipelineBareFunction
+    | PipelineTopicExpression
+    | ReturnStatement
+    | SequenceExpression
+    | SpreadElement
+    | SwitchCase
+    | SwitchStatement
+    | TSAsExpression
+    | TSDeclareMethod
+    | TSEnumDeclaration
+    | TSEnumMember
+    | TSExportAssignment
+    | TSInstantiationExpression
+    | TSMethodSignature
+    | TSNonNullExpression
+    | TSPropertySignature
+    | TSSatisfiesExpression
+    | TSTypeAssertion
+    | TaggedTemplateExpression
+    | TemplateLiteral
+    | ThrowStatement
+    | TupleExpression
+    | TypeCastExpression
+    | UnaryExpression
+    | UpdateExpression
+    | VariableDeclarator
+    | WhileStatement
+    | WithStatement
+    | YieldExpression;
   ImportNamespaceSpecifier: ImportDeclaration;
   ImportSpecifier: ImportDeclaration;
   IndexedAccessType:
@@ -4806,6 +4896,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXAttribute
     | JSXElement
     | JSXExpressionContainer
@@ -4875,6 +4966,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXAttribute
     | JSXElement
     | JSXExpressionContainer
@@ -4978,6 +5070,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -5043,6 +5136,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -5108,6 +5202,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -5197,6 +5292,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -5261,6 +5357,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -5344,6 +5441,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -5510,6 +5608,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -5575,6 +5674,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -5730,6 +5830,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -5819,6 +5920,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -5883,6 +5985,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -5947,6 +6050,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -6011,6 +6115,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -6075,6 +6180,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -6154,6 +6260,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -6218,6 +6325,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -6320,6 +6428,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -6403,6 +6512,7 @@ export interface ParentMaps {
     | IfStatement
     | ImportAttribute
     | ImportDeclaration
+    | ImportExpression
     | ImportSpecifier
     | JSXAttribute
     | JSXExpressionContainer
@@ -6524,6 +6634,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -6671,6 +6782,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -6994,6 +7106,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -7213,6 +7326,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -7423,6 +7537,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -7614,6 +7729,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -7900,6 +8016,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -7965,6 +8082,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -8030,6 +8148,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -8133,6 +8252,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -8211,6 +8331,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -8339,6 +8460,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -8464,6 +8586,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -8554,6 +8677,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
@@ -8697,6 +8821,7 @@ export interface ParentMaps {
     | ForOfStatement
     | ForStatement
     | IfStatement
+    | ImportExpression
     | JSXExpressionContainer
     | JSXSpreadAttribute
     | JSXSpreadChild
