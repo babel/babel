@@ -6,13 +6,17 @@ export function setup() {
   // "polyfill" when releasing Babel 7 to make sure that we do not accidentally
   // bundle Chalk 5.
 
-  if (!process.env.IS_PUBLISH || process.env.BABEL_8_BREAKING) {
+  if (process.env.BABEL_8_BREAKING) {
     globalThis.navigator = {};
+  } else if (!process.env.IS_PUBLISH) {
+    global.navigator = {};
   }
 }
 
 export function teardown() {
-  if (!process.env.IS_PUBLISH || process.env.BABEL_8_BREAKING) {
+  if (process.env.BABEL_8_BREAKING) {
     delete globalThis.navigator;
+  } else if (!process.env.IS_PUBLISH) {
+    delete global.navigator;
   }
 }
