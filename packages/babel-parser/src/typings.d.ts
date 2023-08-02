@@ -32,7 +32,6 @@ export type Plugin =
   | "objectRestSpread"
   | "optionalCatchBinding"
   | "optionalChaining"
-  | "optionalChainingAssign"
   | "partialApplication"
   | "placeholders"
   | "privateIn" // Enabled by default
@@ -48,6 +47,7 @@ export type ParserPluginWithOptions =
   | ["importAttributes", { deprecatedAssertSyntax: boolean }]
   // @deprecated
   | ["moduleAttributes", { version: "may-2020" }]
+  | ["optionalChainingAssign", { version: "2023-07" }]
   | ["pipelineOperator", PipelineOperatorPluginOptions]
   | ["recordAndTuple", RecordAndTuplePluginOptions]
   | ["flow", FlowPluginOptions]

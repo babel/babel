@@ -17,6 +17,7 @@
     "babel-plugin"
   ],
   "dependencies": {
+    "@babel/helper-validator-option": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^"
   },
   "peerDependencies": {

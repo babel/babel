@@ -2,5 +2,5 @@
   "assumptions": {
     "noDocumentAll": true
   },
-  "plugins": ["proposal-optional-chaining-assign"]
+  "plugins": [["proposal-optional-chaining-assign", { "version": "2023-07" }]]
 }
