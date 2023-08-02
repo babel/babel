@@ -1743,6 +1743,10 @@ defineType("ImportDeclaration", {
       optional: true,
       validate: assertValueType("boolean"),
     },
+    phase: {
+      default: null,
+      validate: assertOneOf("source"),
+    },
     specifiers: {
       validate: chain(
         assertValueType("array"),
@@ -1810,6 +1814,10 @@ defineType("ImportExpression", {
   visitor: ["source", "options"],
   aliases: ["Expression"],
   fields: {
+    phase: {
+      default: null,
+      validate: assertOneOf("source"),
+    },
     source: {
       validate: assertNodeType("Expression"),
     },
