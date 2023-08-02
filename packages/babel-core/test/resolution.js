@@ -109,7 +109,7 @@ describe("addon resolution", function () {
     });
   });
 
-  it("should find @babel scoped plugins", function () {
+  it("should find @babel scoped plugins with an existing prefix", function () {
     process.chdir("babel-org-paths");
 
     babel.transformSync("", {

@@ -177,22 +177,25 @@ module.exports = [
     },
   },
   ...compat.extends("plugin:jest/recommended").map(config => {
-    config.files = [
-      ...testFiles,
-      "packages/babel-helper-transform-fixture-test-runner/src/helpers.{ts,js}",
-      "test/**/*.js",
-    ];
-    config.rules = {
-      ...config.rules,
-      "jest/expect-expect": "off",
-      "jest/no-identical-title": "off",
-      "jest/no-standalone-expect": "off",
-      "jest/no-test-callback": "off",
-      "jest/valid-describe": "off",
-      "import/extensions": ["error", "always"],
-      "import/no-extraneous-dependencies": "off",
-      "no-restricted-imports": ["error", { patterns: ["**/src/**"] }],
-    };
+    if (config.files == null) {
+      config.files = [
+        ...testFiles,
+        "packages/babel-helper-transform-fixture-test-runner/src/helpers.{ts,js}",
+        "test/**/*.js",
+      ];
+    }
+    if (config.rules != null) {
+      config.rules = {
+        ...config.rules,
+        "jest/expect-expect": "off",
+        "jest/no-standalone-expect": "off",
+        "jest/no-test-callback": "off",
+        "jest/valid-describe": "off",
+        "import/extensions": ["error", "always"],
+        "import/no-extraneous-dependencies": "off",
+        "no-restricted-imports": ["error", { patterns: ["**/src/**"] }],
+      };
+    }
     return config;
   }),
   {

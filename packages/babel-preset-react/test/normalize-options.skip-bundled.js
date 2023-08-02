@@ -96,7 +96,7 @@ describe("normalize options", () => {
         expect(() => normalizeOptions({ [optionName]: 0 })).not.toThrow();
       },
     );
-    it("default values", () => {
+    it("default values in Babel 7", () => {
       expect(normalizeOptions({})).toMatchInlineSnapshot(`
         Object {
           "development": false,

@@ -1282,14 +1282,14 @@ describe("verify", () => {
     );
   });
 
-  it("does not mark spread variables false-positive", () => {
+  it("does not mark spread variables false-positive: multiple destructuring bindings", () => {
     verifyAndAssertMessages(
       "var originalObject = {}; var {field1, field2, ...clone} = originalObject;",
       { "no-undef": 1, "no-redeclare": 1 },
     );
   });
 
-  it("does not mark spread variables false-positive", () => {
+  it("does not mark spread variables false-positive: single destructuring binding", () => {
     verifyAndAssertMessages(
       "const props = { yo: 'yo' }; const { ...otherProps } = props;",
       { "no-undef": 1, "no-redeclare": 1 },

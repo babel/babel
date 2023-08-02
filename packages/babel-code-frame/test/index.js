@@ -39,7 +39,7 @@ describe("@babel/code-frame", function () {
       chalk.enabled = originalChalkEnabled;
       babelHighlightChalk.supportsColor = originalHighlightChalkSupportsColor;
       babelHighlightChalk.level = originalHighlightChalkLevel;
-      babelHighlightChalk.enabled = originalChalkEnabled;
+      babelHighlightChalk.enabled = originalHighlightChalkEnabled;
     });
   }
 
