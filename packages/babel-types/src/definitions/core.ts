@@ -63,10 +63,11 @@ defineType("AssignmentExpression", {
     },
     left: {
       validate: !process.env.BABEL_TYPES_8_BREAKING
-        ? assertNodeType("LVal")
+        ? assertNodeType("LVal", "OptionalMemberExpression")
         : assertNodeType(
             "Identifier",
             "MemberExpression",
+            "OptionalMemberExpression",
             "ArrayPattern",
             "ObjectPattern",
             "TSAsExpression",
@@ -2177,7 +2178,7 @@ defineType("ExportNamespaceSpecifier", {
 defineType("OptionalMemberExpression", {
   builder: ["object", "property", "computed", "optional"],
   visitor: ["object", "property"],
-  aliases: ["Expression", "LVal"],
+  aliases: ["Expression"],
   fields: {
     object: {
       validate: assertNodeType("Expression"),
