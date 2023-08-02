@@ -4088,6 +4088,7 @@ __metadata:
   resolution: "@babel/traverse@workspace:packages/babel-traverse"
   dependencies:
     "@babel/code-frame": "workspace:^"
+    "@babel/core": "workspace:^"
     "@babel/generator": "workspace:^"
     "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-function-name": "workspace:^"

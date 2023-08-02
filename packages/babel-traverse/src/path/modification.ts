@@ -1,6 +1,6 @@
 // This file contains methods that modify the path/node in some ways.
 
-import { path as pathCache } from "../cache";
+import { getCachedPaths } from "../cache";
 import PathHoister from "./lib/hoister";
 import NodePath from "./index";
 import {
@@ -279,7 +279,7 @@ export function updateSiblingKeys(
 ) {
   if (!this.parent) return;
 
-  const paths = pathCache.get(this.parent);
+  const paths = getCachedPaths(this.hub, this.parent) || ([] as never[]);
 
   for (const [, path] of paths) {
     if (typeof path.key === "number" && path.key >= fromIndex) {

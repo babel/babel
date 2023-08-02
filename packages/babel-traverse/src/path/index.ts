@@ -8,7 +8,7 @@ import type { Visitor } from "../types";
 import Scope from "../scope";
 import { validate } from "@babel/types";
 import * as t from "@babel/types";
-import { path as pathCache } from "../cache";
+import * as cache from "../cache";
 import generator from "@babel/generator";
 
 // NodePath is split across many files.
@@ -92,11 +92,7 @@ class NodePath<T extends t.Node = t.Node> {
       // @ts-expect-error key must present in container
       container[key];
 
-    let paths = pathCache.get(parent);
-    if (!paths) {
-      paths = new Map();
-      pathCache.set(parent, paths);
-    }
+    const paths = cache.getOrCreateCachedPaths(hub, parent);
 
     let path = paths.get(targetNode);
     if (!path) {
