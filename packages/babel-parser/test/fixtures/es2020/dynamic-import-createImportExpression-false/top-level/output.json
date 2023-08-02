@@ -1,0 +1,159 @@
+{
+  "type": "File",
+  "start":0,"end":112,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":36,"index":112}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":112,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":36,"index":112}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":21,"index":21}},
+        "expression": {
+          "type": "CallExpression",
+          "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+          "callee": {
+            "type": "Import",
+            "start":0,"end":6,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":6,"index":6}}
+          },
+          "arguments": [
+            {
+              "type": "StringLiteral",
+              "start":7,"end":19,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":19,"index":19}},
+              "extra": {
+                "rawValue": "testing.js",
+                "raw": "'testing.js'"
+              },
+              "value": "testing.js"
+            }
+          ]
+        }
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":23,"end":44,"loc":{"start":{"line":3,"column":0,"index":23},"end":{"line":3,"column":21,"index":44}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":29,"end":43,"loc":{"start":{"line":3,"column":6,"index":29},"end":{"line":3,"column":20,"index":43}},
+            "id": {
+              "type": "Identifier",
+              "start":29,"end":33,"loc":{"start":{"line":3,"column":6,"index":29},"end":{"line":3,"column":10,"index":33},"identifierName":"test"},
+              "name": "test"
+            },
+            "init": {
+              "type": "StringLiteral",
+              "start":36,"end":43,"loc":{"start":{"line":3,"column":13,"index":36},"end":{"line":3,"column":20,"index":43}},
+              "extra": {
+                "rawValue": "hello",
+                "raw": "'hello'"
+              },
+              "value": "hello"
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":45,"end":74,"loc":{"start":{"line":4,"column":0,"index":45},"end":{"line":4,"column":29,"index":74}},
+        "expression": {
+          "type": "CallExpression",
+          "start":45,"end":73,"loc":{"start":{"line":4,"column":0,"index":45},"end":{"line":4,"column":28,"index":73}},
+          "callee": {
+            "type": "Import",
+            "start":45,"end":51,"loc":{"start":{"line":4,"column":0,"index":45},"end":{"line":4,"column":6,"index":51}}
+          },
+          "arguments": [
+            {
+              "type": "TemplateLiteral",
+              "start":52,"end":72,"loc":{"start":{"line":4,"column":7,"index":52},"end":{"line":4,"column":27,"index":72}},
+              "expressions": [
+                {
+                  "type": "Identifier",
+                  "start":63,"end":67,"loc":{"start":{"line":4,"column":18,"index":63},"end":{"line":4,"column":22,"index":67},"identifierName":"test"},
+                  "name": "test"
+                }
+              ],
+              "quasis": [
+                {
+                  "type": "TemplateElement",
+                  "start":53,"end":61,"loc":{"start":{"line":4,"column":8,"index":53},"end":{"line":4,"column":16,"index":61}},
+                  "value": {
+                    "raw": "testing/",
+                    "cooked": "testing/"
+                  },
+                  "tail": false
+                },
+                {
+                  "type": "TemplateElement",
+                  "start":68,"end":71,"loc":{"start":{"line":4,"column":23,"index":68},"end":{"line":4,"column":26,"index":71}},
+                  "value": {
+                    "raw": ".js",
+                    "cooked": ".js"
+                  },
+                  "tail": true
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":76,"end":112,"loc":{"start":{"line":6,"column":0,"index":76},"end":{"line":6,"column":36,"index":112}},
+        "expression": {
+          "type": "CallExpression",
+          "start":76,"end":111,"loc":{"start":{"line":6,"column":0,"index":76},"end":{"line":6,"column":35,"index":111}},
+          "callee": {
+            "type": "MemberExpression",
+            "start":76,"end":101,"loc":{"start":{"line":6,"column":0,"index":76},"end":{"line":6,"column":25,"index":101}},
+            "object": {
+              "type": "CallExpression",
+              "start":76,"end":96,"loc":{"start":{"line":6,"column":0,"index":76},"end":{"line":6,"column":20,"index":96}},
+              "callee": {
+                "type": "Import",
+                "start":76,"end":82,"loc":{"start":{"line":6,"column":0,"index":76},"end":{"line":6,"column":6,"index":82}}
+              },
+              "arguments": [
+                {
+                  "type": "StringLiteral",
+                  "start":83,"end":95,"loc":{"start":{"line":6,"column":7,"index":83},"end":{"line":6,"column":19,"index":95}},
+                  "extra": {
+                    "rawValue": "testing.js",
+                    "raw": "'testing.js'"
+                  },
+                  "value": "testing.js"
+                }
+              ]
+            },
+            "computed": false,
+            "property": {
+              "type": "Identifier",
+              "start":97,"end":101,"loc":{"start":{"line":6,"column":21,"index":97},"end":{"line":6,"column":25,"index":101},"identifierName":"then"},
+              "name": "then"
+            }
+          },
+          "arguments": [
+            {
+              "type": "ArrowFunctionExpression",
+              "start":102,"end":110,"loc":{"start":{"line":6,"column":26,"index":102},"end":{"line":6,"column":34,"index":110}},
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":108,"end":110,"loc":{"start":{"line":6,"column":32,"index":108},"end":{"line":6,"column":34,"index":110}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

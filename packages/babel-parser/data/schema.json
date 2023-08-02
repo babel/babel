@@ -68,6 +68,11 @@
       "description": "By default, exported identifiers must refer to a declared variable.\nSet this to true to allow export statements to reference undeclared variables.",
       "type": "boolean"
     },
+    "createImportExpressions": {
+      "description": "By default, `import(foo)` is parsed as `CallExpression(Import, [Identifier(foo)])`.\nSet this to true to parse it as an `ImportExpression` node.",
+      "type": "boolean",
+      "default": false
+    },
     "createParenthesizedExpressions": {
       "description": "By default, the parser adds information about parentheses by setting\n`extra.parenthesized` to `true` as needed.\nWhen this option is `true` the parser creates `ParenthesizedExpression`\nAST nodes instead of using the `extra` property.",
       "type": "boolean"

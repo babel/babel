@@ -1,6 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import hoistVariables from "@babel/helper-hoist-variables";
-import { template, types as t } from "@babel/core";
+import { template, types as t, type PluginPass } from "@babel/core";
 import {
   buildDynamicImport,
   getModuleName,
@@ -263,8 +263,14 @@ export default declare<PluginState>((api, options: Options) => {
     },
 
     visitor: {
-      CallExpression(path, state: PluginState) {
-        if (t.isImport(path.node.callee)) {
+      ["CallExpression" +
+        (api.types.importExpression ? "|ImportExpression" : "")](
+        this: PluginPass & PluginState,
+        path: NodePath<t.CallExpression | t.ImportExpression>,
+        state: PluginState,
+      ) {
+        if (path.isCallExpression() && !t.isImport(path.node.callee)) return;
+        if (path.isCallExpression()) {
           if (!this.file.has("@babel/plugin-proposal-dynamic-import")) {
             if (process.env.BABEL_8_BREAKING) {
               throw new Error(MISSING_PLUGIN_ERROR);
@@ -272,19 +278,23 @@ export default declare<PluginState>((api, options: Options) => {
               console.warn(MISSING_PLUGIN_WARNING);
             }
           }
-
-          path.replaceWith(
-            buildDynamicImport(path.node, false, true, specifier =>
-              t.callExpression(
-                t.memberExpression(
-                  t.identifier(state.contextIdent),
-                  t.identifier("import"),
-                ),
-                [specifier],
-              ),
-            ),
-          );
+        } else {
+          // when createImportExpressions is true, we require the dynamic import transform
+          if (!this.file.has("@babel/plugin-proposal-dynamic-import")) {
+            throw new Error(MISSING_PLUGIN_ERROR);
+          }
         }
+        path.replaceWith(
+          buildDynamicImport(path.node, false, true, specifier =>
+            t.callExpression(
+              t.memberExpression(
+                t.identifier(state.contextIdent),
+                t.identifier("import"),
+              ),
+              [specifier],
+            ),
+          ),
+        );
       },
 
       MetaProperty(path, state: PluginState) {

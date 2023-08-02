@@ -1,3 +1,6 @@
 {
-  "plugins": ["transform-dynamic-import", "transform-modules-systemjs"]
+  "plugins": ["transform-dynamic-import", "transform-modules-systemjs"],
+  "parserOpts": {
+    "createImportExpressions": true
+  }
 }

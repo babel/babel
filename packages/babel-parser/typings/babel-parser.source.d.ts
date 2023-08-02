@@ -135,6 +135,12 @@ export interface ParserOptions {
    * AST nodes instead of using the `extra` property.
    */
   createParenthesizedExpressions?: boolean;
+
+  /**
+   * By default, `import(foo)` is parsed as `CallExpression(Import, [Identifier(foo)])`.
+   * Set this to true to parse it as an `ImportExpression` node.
+   */
+  createImportExpressions?: boolean;
 }
 
 export type ParserPlugin = import("../src/typings").PluginConfig;

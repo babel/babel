@@ -75,6 +75,7 @@ export {
   importDefaultSpecifier as ImportDefaultSpecifier,
   importNamespaceSpecifier as ImportNamespaceSpecifier,
   importSpecifier as ImportSpecifier,
+  importExpression as ImportExpression,
   metaProperty as MetaProperty,
   classMethod as ClassMethod,
   objectPattern as ObjectPattern,

@@ -165,7 +165,7 @@ export function ensureStatementsHoisted(statements: t.Statement[]) {
  * wrap it in a call to the interop helpers based on the type.
  */
 export function wrapInterop(
-  programPath: NodePath,
+  programPath: NodePath<t.Program>,
   expr: t.Expression,
   type: InteropType,
 ): t.CallExpression {
