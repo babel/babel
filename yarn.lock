@@ -1566,6 +1566,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-optional-chaining-assign@workspace:packages/babel-plugin-proposal-optional-chaining-assign"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-skip-transparent-expression-wrappers": "workspace:^"
