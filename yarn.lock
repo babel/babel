@@ -2137,6 +2137,7 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/helper-validator-option": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
