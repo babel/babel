@@ -19,6 +19,8 @@ import {
   TraceMap,
 } from "@jridgewell/trace-mapping";
 
+import path from "path";
+
 /**
  * Build a sourcemap.
  */
@@ -27,6 +29,7 @@ export default class SourceMap {
   private _map: GenMapping;
   private _rawMappings: Mapping[] | undefined;
   private _sourceFileName: string | undefined;
+  private _sourcePath: string | undefined;
 
   // Any real line is > 0, so init to 0 is fine.
   private _lastGenLine = 0;
@@ -46,9 +49,15 @@ export default class SourceMap {
     },
     code: string | { [sourceFileName: string]: string },
   ) {
-    const map = (this._map = new GenMapping({ sourceRoot: opts.sourceRoot }));
     this._sourceFileName = opts.sourceFileName?.replace(/\\/g, "/");
+    this._sourcePath = path
+      .join(
+        opts.sourceRoot?.replace(/\\/g, "/") || "",
+        this._sourceFileName || "",
+      )
+      .replace(/\\/g, "/");
     this._rawMappings = undefined;
+    const map = (this._map = new GenMapping());
 
     if (opts.inputSourceMap) {
       this._inputMap = new TraceMap(opts.inputSourceMap);
@@ -57,7 +66,7 @@ export default class SourceMap {
         for (let i = 0; i < resolvedSources.length; i++) {
           setSourceContent(
             map,
-            resolvedSources[i],
+            resolvedSources[i]?.replace(/\\/g, "/"),
             this._inputMap.sourcesContent?.[i],
           );
         }
@@ -70,7 +79,7 @@ export default class SourceMap {
       for (const sourceFileName of Object.keys(code)) {
         setSourceContent(
           map,
-          sourceFileName.replace(/\\/g, "/"),
+          sourceFileName?.replace(/\\/g, "/"),
           code[sourceFileName],
         );
       }
@@ -140,7 +149,7 @@ export default class SourceMap {
         }
       } else {
         originalMapping = {
-          source: filename?.replace(/\\/g, "/") || this._sourceFileName,
+          source: filename || this._sourceFileName,
           line: line,
           column: column,
         };
@@ -150,7 +159,7 @@ export default class SourceMap {
     maybeAddMapping(this._map, {
       name: identifierName,
       generated,
-      source: originalMapping?.source,
+      source: originalMapping?.source?.replace(/\\/g, "/"),
       original: originalMapping,
     });
   }

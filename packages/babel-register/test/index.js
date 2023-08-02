@@ -331,7 +331,7 @@ describe("@babel/register", function () {
       ]);
       const sourceMap = JSON.parse(output);
       expect(sourceMap.map.sourceRoot + sourceMap.map.sources[0]).toBe(
-        require.resolve("./fixtures/source-map/foo/bar"),
+        require.resolve("./fixtures/source-map/foo/bar").replace(/\\/g, "/"),
       );
     });
 
