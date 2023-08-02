@@ -1,4 +1,4 @@
 {
   "plugins": ["sourcePhaseImports"],
-  "parserOpts": { "createImportExpression": true }
+  "parserOpts": { "createImportExpressions": true }
 }

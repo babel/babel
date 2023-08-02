@@ -1669,7 +1669,7 @@ export default abstract class ExpressionParser extends LValParser {
       this.sawUnambiguousESM = true;
     } else if (this.isContextual(tt._source)) {
       this.expectPlugin("sourcePhaseImports");
-      if (!this.options.createImportExpression) {
+      if (!this.options.createImportExpressions) {
         throw this.raise(
           Errors.SourcePhaseDynamicImportRequiresImportExpressions,
           { at: this.state.startLoc },
