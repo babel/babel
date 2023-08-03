@@ -288,7 +288,7 @@ __metadata:
   resolution: "@babel/code-frame@workspace:packages/babel-code-frame"
   dependencies:
     "@babel/highlight": "workspace:^"
-    chalk: "condition:BABEL_8_BREAKING ? ^5.3.0 : ^2.4.2 (esm:default,supportsColor,Chalk)"
+    chalk: "condition:BABEL_8_BREAKING ? ^5.3.0 : ^2.4.2 (esm:default,Chalk)"
     import-meta-resolve: ^3.0.0
     strip-ansi: ^4.0.0
   languageName: unknown
@@ -1257,7 +1257,7 @@ __metadata:
   resolution: "@babel/highlight@workspace:packages/babel-highlight"
   dependencies:
     "@babel/helper-validator-identifier": "workspace:^"
-    chalk: "condition:BABEL_8_BREAKING ? ^5.3.0 : ^2.4.2 (esm:default,supportsColor,Chalk)"
+    chalk: "condition:BABEL_8_BREAKING ? ^5.3.0 : ^2.4.2 (esm:default,Chalk)"
     js-tokens: "condition:BABEL_8_BREAKING ? ^8.0.0 : ^4.0.0"
     strip-ansi: ^4.0.0
   languageName: unknown
@@ -7325,13 +7325,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@condition:BABEL_8_BREAKING ? ^5.3.0 : ^2.4.2 (esm:default,supportsColor,Chalk)":
-  version: 0.0.0-condition-230b14
-  resolution: "chalk@condition:BABEL_8_BREAKING?^5.3.0:^2.4.2(esm:default,supportsColor,Chalk)#230b14"
+"chalk@condition:BABEL_8_BREAKING ? ^5.3.0 : ^2.4.2 (esm:default,Chalk)":
+  version: 0.0.0-condition-97fe7c
+  resolution: "chalk@condition:BABEL_8_BREAKING?^5.3.0:^2.4.2(esm:default,Chalk)#97fe7c"
   dependencies:
     chalk-BABEL_8_BREAKING-false: "npm:chalk@^2.4.2"
     chalk-BABEL_8_BREAKING-true: "npm:chalk@^5.3.0"
-  checksum: f8d57457df4d079e54cb33f7d8634f6c5cf2b923c979cfa52caff6f27a3460f33c4e13834d2186a3935526d876420626ba790028ead9472177c0798d8c812f35
+  checksum: a91c28866fcc83ab1a68519c8d02fe522ff6cff4f885e79e18231f35c6dd18cc807e2e49d7f907c9f98ea74646f72a852c3472dbc1ad543f57fe6d44050e2f6c
   languageName: node
   linkType: hard
 
