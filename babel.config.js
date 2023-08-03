@@ -305,6 +305,7 @@ module.exports = function (api) {
             "@babel/transform-modules-commonjs",
             { importInterop: importInteropTest },
           ],
+          "@babel/plugin-transform-dynamic-import",
         ],
       },
       {
