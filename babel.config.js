@@ -347,7 +347,7 @@ function importInteropSrc(source, filename) {
     return "node";
   }
   if (
-    source[0] === "." ||
+    (source[0] === "." && !source.endsWith(".cjs")) ||
     getMonorepoPackages().some(name => source.startsWith(name))
   ) {
     // We don't need to worry about interop for internal files, since we know

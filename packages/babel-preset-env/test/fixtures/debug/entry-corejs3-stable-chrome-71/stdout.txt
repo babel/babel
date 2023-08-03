@@ -17,14 +17,9 @@ Using plugins:
   transform-logical-assignment-operators { chrome < 85 }
   transform-nullish-coalescing-operator { chrome < 80 }
   transform-optional-chaining { chrome < 80 }
-  syntax-json-strings
-  syntax-optional-catch-binding
-  syntax-async-generators
-  syntax-object-rest-spread
   transform-export-namespace-from { chrome < 72 }
   transform-modules-commonjs
   transform-dynamic-import
-  syntax-import-meta
   syntax-import-attributes
 corejs3: `DEBUG` option
 
@@ -46,5 +41,3 @@ The corejs3 polyfill entry has been replaced with the following polyfills:
   es.typed-array.set { "chrome":"71" }
   es.typed-array.sort { "chrome":"71" }
   web.immediate { "chrome":"71" }
-
-[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-stable-chrome-71/input.mjs] Based on your targets, regenerator-runtime import excluded.

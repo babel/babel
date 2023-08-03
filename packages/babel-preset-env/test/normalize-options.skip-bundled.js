@@ -65,7 +65,15 @@ describe("normalize-options", () => {
     );
 
     it("should not throw if corejs version is valid", () => {
-      [2, 2.1, 3, 3.5].forEach(corejs => {
+      [3, 3.5].forEach(corejs => {
+        ["entry", "usage"].forEach(useBuiltIns => {
+          expect(() => normalizeOptions({ useBuiltIns, corejs })).not.toThrow();
+        });
+      });
+    });
+
+    itBabel7("should not throw if corejs version is valid (babel 7)", () => {
+      [2, 2.1].forEach(corejs => {
         ["entry", "usage"].forEach(useBuiltIns => {
           expect(() => normalizeOptions({ useBuiltIns, corejs })).not.toThrow();
         });

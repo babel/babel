@@ -19,17 +19,14 @@ import {
   overlappingPlugins,
 } from "./plugins-compat-data.ts";
 
-import removeRegeneratorEntryPlugin from "./polyfills/regenerator.ts";
-import legacyBabelPolyfillPlugin from "./polyfills/babel-polyfill.ts";
-
 import type { CallerMetadata } from "@babel/core";
 
-import _pluginCoreJS2 from "babel-plugin-polyfill-corejs2";
 import _pluginCoreJS3 from "babel-plugin-polyfill-corejs3";
-import _pluginRegenerator from "babel-plugin-polyfill-regenerator";
-const pluginCoreJS2 = _pluginCoreJS2.default || _pluginCoreJS2;
+// TODO(Babel 8): Just use the default import
 const pluginCoreJS3 = _pluginCoreJS3.default || _pluginCoreJS3;
-const pluginRegenerator = _pluginRegenerator.default || _pluginRegenerator;
+
+// TODO(Babel 8): Remove this
+import babel7 from "./polyfills/babel-7-plugins.cjs";
 
 import getTargets, {
   prettifyTargets,
@@ -170,7 +167,7 @@ export const getModulesPluginNames = ({
   return modulesPluginNames;
 };
 
-export const getPolyfillPlugins = ({
+const getCoreJSOptions = ({
   useBuiltIns,
   corejs,
   polyfillTargets,
@@ -178,7 +175,6 @@ export const getPolyfillPlugins = ({
   exclude,
   proposals,
   shippedProposals,
-  regenerator,
   debug,
 }: {
   useBuiltIns: BuiltInsOption;
@@ -188,64 +184,112 @@ export const getPolyfillPlugins = ({
   exclude: Set<string>;
   proposals: boolean;
   shippedProposals: boolean;
-  regenerator: boolean;
   debug: boolean;
-}) => {
-  const polyfillPlugins = [];
-  if (useBuiltIns === "usage" || useBuiltIns === "entry") {
-    const pluginOptions = {
-      method: `${useBuiltIns}-global`,
-      version: corejs ? corejs.toString() : undefined,
-      targets: polyfillTargets,
-      include,
-      exclude,
-      proposals,
-      shippedProposals,
-      debug,
-      "#__secret_key__@babel/preset-env__compatibility": {
-        noRuntimeName: true,
-      },
-    };
+}) => ({
+  method: `${useBuiltIns}-global`,
+  version: corejs ? corejs.toString() : undefined,
+  targets: polyfillTargets,
+  include,
+  exclude,
+  proposals,
+  shippedProposals,
+  debug,
+  "#__secret_key__@babel/preset-env__compatibility": {
+    noRuntimeName: true,
+  },
+});
 
-    if (corejs) {
-      if (useBuiltIns === "usage") {
-        if (corejs.major === 2) {
-          polyfillPlugins.push(
-            [pluginCoreJS2, pluginOptions],
-            [legacyBabelPolyfillPlugin, { usage: true }],
-          );
+if (!process.env.BABEL_8_BREAKING) {
+  // eslint-disable-next-line no-var
+  var getPolyfillPlugins = ({
+    useBuiltIns,
+    corejs,
+    polyfillTargets,
+    include,
+    exclude,
+    proposals,
+    shippedProposals,
+    regenerator,
+    debug,
+  }: {
+    useBuiltIns: BuiltInsOption;
+    corejs: SemVer | null | false;
+    polyfillTargets: Targets;
+    include: Set<string>;
+    exclude: Set<string>;
+    proposals: boolean;
+    shippedProposals: boolean;
+    regenerator: boolean;
+    debug: boolean;
+  }) => {
+    const polyfillPlugins = [];
+    if (useBuiltIns === "usage" || useBuiltIns === "entry") {
+      const pluginOptions = getCoreJSOptions({
+        useBuiltIns,
+        corejs,
+        polyfillTargets,
+        include,
+        exclude,
+        proposals,
+        shippedProposals,
+        debug,
+      });
+
+      if (corejs) {
+        if (process.env.BABEL_8_BREAKING) {
+          polyfillPlugins.push([pluginCoreJS3, pluginOptions]);
         } else {
-          polyfillPlugins.push(
-            [pluginCoreJS3, pluginOptions],
-            [legacyBabelPolyfillPlugin, { usage: true, deprecated: true }],
-          );
-        }
-        if (regenerator) {
-          polyfillPlugins.push([
-            pluginRegenerator,
-            { method: "usage-global", debug },
-          ]);
-        }
-      } else {
-        if (corejs.major === 2) {
-          polyfillPlugins.push(
-            [legacyBabelPolyfillPlugin, { regenerator }],
-            [pluginCoreJS2, pluginOptions],
-          );
-        } else {
-          polyfillPlugins.push(
-            [pluginCoreJS3, pluginOptions],
-            [legacyBabelPolyfillPlugin, { deprecated: true }],
-          );
-          if (!regenerator) {
-            polyfillPlugins.push([removeRegeneratorEntryPlugin, pluginOptions]);
+          if (useBuiltIns === "usage") {
+            if (corejs.major === 2) {
+              polyfillPlugins.push(
+                [babel7.pluginCoreJS2, pluginOptions],
+                [babel7.legacyBabelPolyfillPlugin, { usage: true }],
+              );
+            } else {
+              polyfillPlugins.push(
+                [pluginCoreJS3, pluginOptions],
+                [
+                  babel7.legacyBabelPolyfillPlugin,
+                  { usage: true, deprecated: true },
+                ],
+              );
+            }
+            if (regenerator) {
+              polyfillPlugins.push([
+                babel7.pluginRegenerator,
+                { method: "usage-global", debug },
+              ]);
+            }
+          } else {
+            if (corejs.major === 2) {
+              polyfillPlugins.push(
+                [babel7.legacyBabelPolyfillPlugin, { regenerator }],
+                [babel7.pluginCoreJS2, pluginOptions],
+              );
+            } else {
+              polyfillPlugins.push(
+                [pluginCoreJS3, pluginOptions],
+                [babel7.legacyBabelPolyfillPlugin, { deprecated: true }],
+              );
+              if (!regenerator) {
+                polyfillPlugins.push([
+                  babel7.removeRegeneratorEntryPlugin,
+                  pluginOptions,
+                ]);
+              }
+            }
           }
         }
       }
     }
+    return polyfillPlugins;
+  };
+
+  if (!USE_ESM) {
+    // eslint-disable-next-line no-restricted-globals
+    exports.getPolyfillPlugins = getPolyfillPlugins;
   }
-  return polyfillPlugins;
-};
+}
 
 function getLocalTargets(
   optionsTargets: Options["targets"],
@@ -388,17 +432,35 @@ option \`forceAllTransforms: true\` instead.
   removeUnsupportedItems(pluginNames, api.version);
   removeUnnecessaryItems(pluginNames, overlappingPlugins);
 
-  const polyfillPlugins = getPolyfillPlugins({
-    useBuiltIns,
-    corejs,
-    polyfillTargets: targets,
-    include: include.builtIns,
-    exclude: exclude.builtIns,
-    proposals,
-    shippedProposals,
-    regenerator: pluginNames.has("transform-regenerator"),
-    debug,
-  });
+  const polyfillPlugins = process.env.BABEL_8_BREAKING
+    ? useBuiltIns
+      ? [
+          [
+            pluginCoreJS3,
+            getCoreJSOptions({
+              useBuiltIns,
+              corejs,
+              polyfillTargets: targets,
+              include: include.builtIns,
+              exclude: exclude.builtIns,
+              proposals,
+              shippedProposals,
+              debug,
+            }),
+          ],
+        ]
+      : []
+    : getPolyfillPlugins({
+        useBuiltIns,
+        corejs,
+        polyfillTargets: targets,
+        include: include.builtIns,
+        exclude: exclude.builtIns,
+        proposals,
+        shippedProposals,
+        regenerator: pluginNames.has("transform-regenerator"),
+        debug,
+      });
 
   const pluginUseBuiltIns = useBuiltIns !== false;
   const plugins = Array.from(pluginNames)

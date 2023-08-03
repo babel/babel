@@ -112,7 +112,10 @@
     ]
   },
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "require": "./cjs-proxy-dev.cjs",
+      "default": "./lib/index.js"
+    },
     "./package.json": "./package.json"
   },
   "type": "commonjs"
