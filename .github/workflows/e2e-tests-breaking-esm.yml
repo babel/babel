@@ -46,7 +46,7 @@ jobs:
       matrix:
         # todo: verify which of these tests can be re-enabled
         project:
-          # - babel
+          - babel
           - create-react-app
           # - vue-cli
           # - jest
