@@ -33,7 +33,7 @@ function convert(es6File, es5File, callback) {
     try {
       checkDuplicatedNodes(babel, ast);
     } catch (err) {
-      err.message = "Occured while transforming: " + es6File + "\n" + err.message;
+      err.message = "Occurred while transforming: " + es6File + "\n" + err.message;
       throw err;
     }
     callback();
@@ -163,7 +163,7 @@ function convertWithRegeneratorPluginOnly(inputFile, outputFile, callback) {
     try {
       checkDuplicatedNodes(babel, ast);
     } catch (err) {
-      err.message = "Occured while transforming: " + inputFile + "\n" + err.message;
+      err.message = "Occurred while transforming: " + inputFile + "\n" + err.message;
       throw err;
     }
     callback();
@@ -197,7 +197,7 @@ function convertWithParamsTransform(es6File, es5File, callback) {
     try {
       checkDuplicatedNodes(babel, ast);
     } catch (err) {
-      err.message = "Occured while transforming: " + es6File + "\n" + err.message;
+      err.message = "Occurred while transforming: " + es6File + "\n" + err.message;
       throw err;
     }
     callback();
@@ -253,7 +253,7 @@ function convertWithCustomPromiseReplacer(es6File, es5File, callback) {
     try {
       checkDuplicatedNodes(babel, ast);
     } catch (err) {
-      err.message = "Occured while transforming: " + es6File + "\n" + err.message;
+      err.message = "Occurred while transforming: " + es6File + "\n" + err.message;
       callback(err);
     }
     callback();

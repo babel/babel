@@ -333,7 +333,7 @@ var runtime = (function (exports) {
     var method = delegate.iterator[methodName];
     if (method === undefined) {
       // A .throw or .return when the delegate iterator has no .throw
-      // method, or a missing .next mehtod, always terminate the
+      // method, or a missing .next method, always terminate the
       // yield* loop.
       context.delegate = null;
 

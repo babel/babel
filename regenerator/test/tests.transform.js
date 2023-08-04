@@ -153,7 +153,7 @@ context("functions", function() {
   }
 
   function assertMarkCall(node) {
-    // assiging a call expression to regeneratorRuntime.mark()
+    // assigning a call expression to regeneratorRuntime.mark()
 
     n.CallExpression.assert(node);
     assert.strictEqual(node.callee.object.name, 'regeneratorRuntime')
