@@ -1504,6 +1504,28 @@ describe("delegated yield", function() {
     check(gen(iterator), [], "1foo");
   });
 
+  it("should work with empty string", function() {
+    function* f() {
+      yield* "";
+    };
+
+    assert.deepEqual(f().next(), { value: undefined, done: true });
+  });
+
+  it("should throw if not iterable", function() {
+    function* f(x) {
+      yield* x;
+    };
+
+    assert.throws(() => f(undefined).next(), TypeError);
+    assert.throws(() => f(null).next(), TypeError);
+    assert.throws(() => f(false).next(), TypeError);
+    assert.throws(() => f(true).next(), TypeError);
+    assert.throws(() => f(0).next(), TypeError);
+    assert.throws(() => f(1).next(), TypeError);
+    assert.throws(() => f({}).next(), TypeError);
+  });
+
   it("should throw if the delegated iterable's iterator doesn't have .next", function() {
     var it = function* () {
       yield* {
