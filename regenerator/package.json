@@ -35,7 +35,7 @@
     "private": "^0.1.8",
     "recast": "^0.21.5",
     "regenerator-preset": "^0.14.1",
-    "regenerator-runtime": "^0.13.11",
+    "regenerator-runtime": "^0.14.0",
     "regenerator-transform": "^0.15.2",
     "through": "^2.3.8"
   },
