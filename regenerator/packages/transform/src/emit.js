@@ -61,9 +61,9 @@ exports.Emitter = Emitter;
 // so because no code can realistically have about 1.8e+308 locations before
 // hitting memory limit of the machine it's running on. For comparison, the
 // estimated number of atoms in the observable universe is around 1e+80.
-let uninitializedLocation = Number.MAX_VALUE;
+const PENDING_LOCATION = Number.MAX_VALUE;
 Ep.loc = function() {
-  const l = util.getTypes().numericLiteral(uninitializedLocation)
+  const l = util.getTypes().numericLiteral(PENDING_LOCATION)
   this.insertedLocs.add(l);
   return l;
 }
@@ -81,7 +81,7 @@ Ep.getContextId = function() {
 Ep.mark = function(loc) {
   util.getTypes().assertLiteral(loc);
   let index = this.listing.length;
-  if (loc.value === uninitializedLocation) {
+  if (loc.value === PENDING_LOCATION) {
     loc.value = index;
   } else {
     // Locations can be marked redundantly, but their values cannot change
@@ -649,7 +649,7 @@ Ep.explodeStatement = function(path, labelId) {
     );
 
     self.mark(after);
-    if (defaultLoc.value === uninitializedLocation) {
+    if (defaultLoc.value === PENDING_LOCATION) {
       self.mark(defaultLoc);
       assert.strictEqual(after.value, defaultLoc.value);
     }
@@ -890,7 +890,7 @@ Ep.updateContextPrevLoc = function(loc) {
   if (loc) {
     t.assertLiteral(loc);
 
-    if (loc.value === uninitializedLocation) {
+    if (loc.value === PENDING_LOCATION) {
       // If an uninitialized location literal was passed in, set its value
       // to the current this.listing.length.
       loc.value = this.listing.length;
