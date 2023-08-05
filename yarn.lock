@@ -1052,7 +1052,7 @@ __metadata:
     "@babel/template": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
-    regenerator-runtime: ^0.13.11
+    regenerator-runtime: ^0.14.0
     terser: ^5.9.0
   languageName: unknown
   linkType: soft
@@ -1094,7 +1094,7 @@ __metadata:
     fs-readdir-recursive: ^1.0.0
     make-dir: "condition:BABEL_8_BREAKING ? : ^2.1.0"
     node-environment-flags: ^1.0.5
-    regenerator-runtime: ^0.13.11
+    regenerator-runtime: ^0.14.0
     rimraf: ^3.0.0
     v8flags: ^3.1.1
   peerDependencies:
@@ -3263,7 +3263,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
-    regenerator-transform: ^0.15.1
+    regenerator-transform: ^0.15.2
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -3894,7 +3894,7 @@ __metadata:
   resolution: "@babel/runtime-corejs2@workspace:packages/babel-runtime-corejs2"
   dependencies:
     core-js: ^2.6.12
-    regenerator-runtime: ^0.13.11
+    regenerator-runtime: ^0.14.0
   languageName: unknown
   linkType: soft
 
@@ -3903,7 +3903,7 @@ __metadata:
   resolution: "@babel/runtime-corejs3@workspace:packages/babel-runtime-corejs3"
   dependencies:
     core-js-pure: ^3.30.2
-    regenerator-runtime: ^0.13.11
+    regenerator-runtime: ^0.14.0
   languageName: unknown
   linkType: soft
 
@@ -3920,7 +3920,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/runtime@workspace:packages/babel-runtime"
   dependencies:
-    regenerator-runtime: ^0.13.11
+    regenerator-runtime: ^0.14.0
   languageName: unknown
   linkType: soft
 
@@ -13837,12 +13837,19 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"regenerator-transform@npm:^0.15.1":
-  version: 0.15.1
-  resolution: "regenerator-transform@npm:0.15.1"
+"regenerator-runtime@npm:^0.14.0":
+  version: 0.14.0
+  resolution: "regenerator-runtime@npm:0.14.0"
+  checksum: 1c977ad82a82a4412e4f639d65d22be376d3ebdd30da2c003eeafdaaacd03fc00c2320f18120007ee700900979284fc78a9f00da7fb593f6e6eeebc673fba9a3
+  languageName: node
+  linkType: hard
+
+"regenerator-transform@npm:^0.15.1, regenerator-transform@npm:^0.15.2":
+  version: 0.15.2
+  resolution: "regenerator-transform@npm:0.15.2"
   dependencies:
     "@babel/runtime": ^7.8.4
-  checksum: 2d15bdeadbbfb1d12c93f5775493d85874dbe1d405bec323da5c61ec6e701bc9eea36167483e1a5e752de9b2df59ab9a2dfff6bf3784f2b28af2279a673d29a4
+  checksum: 20b6f9377d65954980fe044cfdd160de98df415b4bff38fbade67b3337efaf078308c4fed943067cd759827cc8cfeca9cb28ccda1f08333b85d6a2acbd022c27
   languageName: node
   linkType: hard
 
