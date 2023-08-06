@@ -387,7 +387,8 @@ function buildRollup(packages, buildStandalone) {
           plugins: [
             buildStandalone && rollupStandaloneInternals(),
             rollupBabelSource(),
-            process.env.STRIP_BABEL_8_FLAG && rollupDependencyCondition(),
+            process.env.STRIP_BABEL_8_FLAG &&
+              rollupDependencyCondition(bool(process.env.BABEL_8_BREAKING)),
             rollupReplace({
               preventAssignment: true,
               values: {
