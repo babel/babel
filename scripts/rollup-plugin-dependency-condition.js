@@ -9,7 +9,7 @@ export default function (value) {
       const re = /^(.*?-BABEL_8_BREAKING)-(?:true|false)$/;
       const match = specifier.match(re);
       if (!match) return null;
-      return require.resolve(`${match[1]}-${value}`, {
+      return require.resolve(`${match[1]}-${!!value}`, {
         paths: [referrer],
       });
     },
