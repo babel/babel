@@ -26,6 +26,7 @@ import { resolve as importMetaResolve } from "import-meta-resolve";
 
 import rollupBabelSource from "./scripts/rollup-plugin-babel-source.js";
 import rollupStandaloneInternals from "./scripts/rollup-plugin-standalone-internals.js";
+import rollupDependencyCondition from "./scripts/rollup-plugin-dependency-condition.js";
 import formatCode from "./scripts/utils/formatCode.js";
 import { log } from "./scripts/utils/logger.cjs";
 import { USE_ESM, commonJS } from "$repo-utils";
@@ -386,6 +387,8 @@ function buildRollup(packages, buildStandalone) {
           plugins: [
             buildStandalone && rollupStandaloneInternals(),
             rollupBabelSource(),
+            process.env.STRIP_BABEL_8_FLAG &&
+              rollupDependencyCondition(!!bool(process.env.BABEL_8_BREAKING)),
             rollupReplace({
               preventAssignment: true,
               values: {
