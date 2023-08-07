@@ -24,6 +24,39 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.22.10 (2023-08-07)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-typescript`
+  * [#15799](https://github.com/babel/babel/pull/15799) [ts] Strip type-only namespaces ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#15798](https://github.com/babel/babel/pull/15798) [ts] Fix compiling extended exported nested namespace ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-decorators`, `babel-plugin-proposal-destructuring-private`, `babel-plugin-transform-class-properties`, `babel-plugin-transform-class-static-block`, `babel-plugin-transform-new-target`, `babel-plugin-transform-private-methods`, `babel-preset-env`
+  * [#15701](https://github.com/babel/babel/pull/15701) Memoize class binding when compiling private methods and static elements ([@JLHwung](https://github.com/JLHwung))
+
+#### :nail_care: Polish
+* `babel-cli`
+  * [#15824](https://github.com/babel/babel/pull/15824) Add `meta` object to `@babel/eslint-plugin` ([@JLHwung](https://github.com/JLHwung))
+* `babel-traverse`, `babel-types`
+  * [#15661](https://github.com/babel/babel/pull/15661) Improve the type definition of `path.isX` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-generator`, `babel-types`
+  * [#15776](https://github.com/babel/babel/pull/15776) improve SourceLocation typing ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* Other
+  * [#15818](https://github.com/babel/babel/pull/15818) build: generate flow typings in prepublish job ([@JLHwung](https://github.com/JLHwung))
+  * [#15777](https://github.com/babel/babel/pull/15777) chore: bump dev dependencies and remove .eslintignore ([@JLHwung](https://github.com/JLHwung))
+* `babel-cli`, `babel-core`, `babel-generator`, `babel-helper-builder-react-jsx`, `babel-preset-env`, `babel-standalone`
+  * [#15794](https://github.com/babel/babel/pull/15794) Enable `@typescript-eslint/no-redundant-type-constituents` rule ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-compilation-targets`
+  * [#15811](https://github.com/babel/babel/pull/15811) Remove `@babel/core` peerDep from `helper-compilation-targets` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#15793](https://github.com/babel/babel/pull/15793) Use const enum in babel-parser ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-runtime`, `babel-traverse`, `babel-types`
+  * [#15716](https://github.com/babel/babel/pull/15716) chore: Use `typescript-eslint@v6` with reworked configs ([@JoshuaKGoldberg](https://github.com/JoshuaKGoldberg))
+
+#### :microscope: Output optimization
+* `babel-plugin-transform-block-scoping`, `babel-plugin-transform-parameters`, `babel-plugin-transform-regenerator`
+  * [#15746](https://github.com/babel/babel/pull/15746) Reduce `transform-block-scoping` loops output size ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.22.9 (2023-07-12)
 
 #### :bug: Bug Fix
