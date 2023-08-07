@@ -65,6 +65,8 @@ export default {
     "Decorators must be placed *after* the 'export' keyword. Remove the 'decoratorsBeforeExport: false' option to use the '@decorator export class {}' syntax.",
   DecoratorSemicolon: "Decorators must not be followed by a semicolon.",
   DecoratorStaticBlock: "Decorators can't be used with a static block.",
+  DeferImportRequiresNamespace:
+    'Only `import defer * as x from "./module"` is valid.',
   DeletePrivateField: "Deleting a private field is not allowed.",
   DestructureNamedImport:
     "ES2015 named imports do not destructure. Use another statement for destructuring after the import.",
@@ -74,6 +76,8 @@ export default {
     `\`${exportName}\` has already been exported. Exported identifiers must be unique.`,
   DuplicateProto: "Redefinition of __proto__ property.",
   DuplicateRegExpFlags: "Duplicate regular expression flag.",
+  DynamicImportPhaseRequiresImportExpressions: ({ phase }: { phase: string }) =>
+    `'import.${phase}(...)' can only be parsed when using the 'createImportExpressions' option.`,
   ElementAfterRest: "Rest element must be last element.",
   EscapedCharNotAnIdentifier: "Invalid Unicode escape.",
   ExportBindingIsString: ({
@@ -235,8 +239,6 @@ export default {
     "In non-strict mode code, functions can only be declared at top level, inside a block, or as the body of an if statement.",
   SourcePhaseImportRequiresDefault:
     'Only `import source x from "./module"` is valid.',
-  SourcePhaseDynamicImportRequiresImportExpressions:
-    "'import.source(...)' can only be parsed when using the 'createImportExpressions' option.",
   StaticPrototype: "Classes may not have static property named prototype.",
   SuperNotAllowed:
     "`super()` is only valid inside a class constructor of a subclass. Maybe a typo in the method name ('constructor') or not extending another class?",
