@@ -124,17 +124,17 @@
       "PR: Output optimization :microscope:": ":microscope: Output optimization"
     },
     "labels_breaking": {
-      "PR: Spec Compliance (Next major only) :eyeglasses:": ":eyeglasses: Spec Compliance",
+      "PR: Spec Compliance (next major) :eyeglasses:": ":eyeglasses: Spec Compliance",
       "PR: Breaking Change :boom:": ":boom: Breaking Change",
-      "PR: Deprecation (Next major only) :loudspeaker:": ":loudspeaker: Deprecation",
-      "PR: New Feature (Next major only) :rocket:": ":rocket: New Feature",
-      "PR: Bug Fix (Next major only) :bug:": ":bug: Bug Fix",
-      "PR: Polish (Next major only) :nail_care:": ":nail_care: Polish",
-      "PR: Docs (Next major only) :memo:": ":memo: Documentation",
-      "PR: Internal (Next major only) :house:": ":house: Internal",
-      "PR: Performance (Next major only) :running_woman:": ":running_woman: Performance",
-      "PR: Revert (Next major only) :leftwards_arrow_with_hook:": ":leftwards_arrow_with_hook: Revert",
-      "PR: Output optimization (Next major only) :microscope:": ":microscope: Output optimization"
+      "PR: Deprecation (next major) :loudspeaker:": ":loudspeaker: Deprecation",
+      "PR: New Feature (next major) :rocket:": ":rocket: New Feature",
+      "PR: Bug Fix (next major) :bug:": ":bug: Bug Fix",
+      "PR: Polish (next major) :nail_care:": ":nail_care: Polish",
+      "PR: Docs (next major) :memo:": ":memo: Documentation",
+      "PR: Internal (next major) :house:": ":house: Internal",
+      "PR: Performance (next major) :running_woman:": ":running_woman: Performance",
+      "PR: Revert (next major) :leftwards_arrow_with_hook:": ":leftwards_arrow_with_hook: Revert",
+      "PR: Output optimization (next major) :microscope:": ":microscope: Output optimization"
     }
   }
 }
