@@ -182,7 +182,6 @@ module.exports = function (api) {
         "@babel/preset-typescript",
         {
           onlyRemoveTypeImports: true,
-          allowDeclareFields: true,
           optimizeConstEnums: true,
         },
       ],
