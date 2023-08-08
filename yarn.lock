@@ -976,7 +976,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-check-duplicate-nodes": "workspace:^"
     "@babel/helper-fixtures": "workspace:^"
-    quick-lru: 5.1.0
+    lru-cache: "condition:BABEL_8_BREAKING ? ^7.14.1 : ^5.1.1"
   languageName: unknown
   linkType: soft
 
@@ -13663,13 +13663,6 @@ fsevents@^1.2.7:
   version: 0.2.0
   resolution: "querystring@npm:0.2.0"
   checksum: 8258d6734f19be27e93f601758858c299bdebe71147909e367101ba459b95446fbe5b975bf9beb76390156a592b6f4ac3a68b6087cea165c259705b8b4e56a69
-  languageName: node
-  linkType: hard
-
-"quick-lru@npm:5.1.0":
-  version: 5.1.0
-  resolution: "quick-lru@npm:5.1.0"
-  checksum: 48e42823990a274764f611800debe3024d93685039b2becbbe824f7841658e13462b1138ab72d664de1754f0636761b607e6b5b392cc286b8322ee563c5ed33b
   languageName: node
   linkType: hard
 

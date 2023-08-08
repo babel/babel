@@ -18,7 +18,7 @@ import assert from "assert";
 import fs from "fs";
 import path from "path";
 import vm from "vm";
-import QuickLRU from "quick-lru";
+import LruCache from "lru-cache";
 import { fileURLToPath } from "url";
 
 import { createRequire } from "module";
@@ -53,10 +53,10 @@ if (!process.env.BABEL_8_BREAKING) {
 
 const EXTERNAL_HELPERS_VERSION = "7.100.0";
 
-const cachedScripts = new QuickLRU<
+const cachedScripts = new LruCache<
   string,
   { code: string; cachedData?: Buffer }
->({ maxSize: 10 });
+>({ max: 10 });
 const contextModuleCache = new WeakMap();
 const sharedTestContext = createContext();
 
