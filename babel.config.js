@@ -11,7 +11,6 @@ if (
 
 const pathUtils = require("path");
 const fs = require("fs");
-const { parseSync } = require("@babel/core");
 
 function normalize(src) {
   return src.replace(/\//, pathUtils.sep);
@@ -831,7 +830,7 @@ function pluginAddImportExtension(api, { when }) {
 const tokenTypesMapping = new Map();
 const tokenTypeSourcePath = "./packages/babel-parser/src/tokenizer/types.ts";
 
-function getTokenTypesMapping() {
+function getTokenTypesMapping(parseSync) {
   if (tokenTypesMapping.size === 0) {
     const tokenTypesAst = parseSync(
       fs.readFileSync(tokenTypeSourcePath, {
@@ -871,6 +870,7 @@ function getTokenTypesMapping() {
 }
 
 function pluginBabelParserTokenType({
+  parseSync,
   types: { isIdentifier, numericLiteral },
 }) {
   return {
@@ -883,7 +883,9 @@ function pluginBabelParserTokenType({
           !node.computed
         ) {
           const tokenName = node.property.name;
-          const tokenType = getTokenTypesMapping().get(node.property.name);
+          const tokenType = getTokenTypesMapping(parseSync).get(
+            node.property.name
+          );
           if (tokenType === undefined) {
             throw path.buildCodeFrameError(
               `${tokenName} is not defined in ${tokenTypeSourcePath}`
