@@ -33,7 +33,7 @@ jobs:
       - name: Log
         run: |
           echo "Is Babel 8 push? ${{ github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v8') }}"
-          echo "Is Babel 8 dispatch? ${{ github.event_name == 'workflow_dispatch' && github.event.inputs == 'breaking-prerelease' }}"
+          echo "Is Babel 8 dispatch? ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.version == 'breaking-prerelease' }}"
 
   log-updates:
     name: Log packages to publish
