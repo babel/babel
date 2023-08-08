@@ -36,7 +36,7 @@ export default function normalizeOptions(options: Options = {}) {
   if (process.env.BABEL_8_BREAKING) {
     v.invariant(
       !("allowDeclareFields" in options),
-      "The .allowDeclareFields options have been removed. Please remove it from your config.",
+      "The .allowDeclareFields option has been removed and it's now always enabled. Please remove it from your config.",
     );
     v.invariant(
       !("allExtensions" in options) && !("isTSX" in options),
