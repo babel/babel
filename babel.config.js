@@ -39,6 +39,14 @@ module.exports = function (api) {
     ],
   };
 
+  const presetTsOpts = {
+    onlyRemoveTypeImports: true,
+    optimizeConstEnums: true,
+  };
+  if (api.version.startsWith("7")) {
+    presetTsOpts.allowDeclareFields = true;
+  }
+
   // These are "safe" assumptions, that we can enable globally
   const assumptions = {
     constantSuper: true,
@@ -177,13 +185,7 @@ module.exports = function (api) {
     presets: [
       // presets are applied from right to left
       ["@babel/env", envOpts],
-      [
-        "@babel/preset-typescript",
-        {
-          onlyRemoveTypeImports: true,
-          optimizeConstEnums: true,
-        },
-      ],
+      ["@babel/preset-typescript", presetTsOpts],
     ],
     plugins: [
       ["@babel/transform-object-rest-spread", { useBuiltIns: true }],
