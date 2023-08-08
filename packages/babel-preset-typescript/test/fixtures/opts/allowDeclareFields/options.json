@@ -1,0 +1,5 @@
+{
+  "BABEL_8_BREAKING": true,
+  "presets": [["typescript", { "allowDeclareFields": true }]],
+  "throws": "The .allowDeclareFields options have been removed. Please remove it from your config."
+}

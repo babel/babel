@@ -35,6 +35,10 @@ export default function normalizeOptions(options: Options = {}) {
 
   if (process.env.BABEL_8_BREAKING) {
     v.invariant(
+      !("allowDeclareFields" in options),
+      "The .allowDeclareFields options have been removed. Please remove it from your config.",
+    );
+    v.invariant(
       !("allExtensions" in options) && !("isTSX" in options),
       "The .allExtensions and .isTSX options have been removed.\n" +
         "If you want to disable JSX detection based on file extensions, " +
