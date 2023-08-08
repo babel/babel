@@ -6,6 +6,7 @@ import {
   spawnTransformAsync,
   spawnTransformSync,
   supportsESM,
+  itESM,
 } from "./helpers/esm.js";
 
 const nodeGte8 = (...args) => {
@@ -114,6 +115,14 @@ describe("asynchronicity", () => {
             ` handle your caching logic."`,
         );
       });
+    });
+
+    itESM("mjs configuring cache", async () => {
+      process.chdir("config-file-mjs-cache");
+
+      const { code } = await babel.transformAsync("");
+
+      expect(code).toBe(`"success"`);
     });
   });
 
