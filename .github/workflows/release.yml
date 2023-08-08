@@ -118,7 +118,9 @@ jobs:
 
       - name: Bump package versions (Babel 8)
         if: needs.check-release-type.outputs.is-babel-8 == 'true'
-        run: make new-babel-8-version-create-commit-ci
+        run: |
+          make new-babel-8-version-create-commit-ci
+          YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn
 
       - name: Build and Test
         run: make prepublish
