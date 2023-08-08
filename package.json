@@ -113,8 +113,7 @@
     "cacheDir": ".changelog",
     "labels": {
       "PR: Spec Compliance :eyeglasses:": ":eyeglasses: Spec Compliance",
-      "PR: Breaking Change :boom:": ":boom: Breaking Change",
-      "PR: Deprecation: :loudspeaker:": ":loudspeaker: Deprecation",
+      "PR: Deprecation :loudspeaker:": ":loudspeaker: Deprecation",
       "PR: New Feature :rocket:": ":rocket: New Feature",
       "PR: Bug Fix :bug:": ":bug: Bug Fix",
       "PR: Polish :nail_care:": ":nail_care: Polish",
@@ -123,6 +122,19 @@
       "PR: Performance :running_woman:": ":running_woman: Performance",
       "PR: Revert :leftwards_arrow_with_hook:": ":leftwards_arrow_with_hook: Revert",
       "PR: Output optimization :microscope:": ":microscope: Output optimization"
+    },
+    "labels_breaking": {
+      "PR: Spec Compliance (next major) :eyeglasses:": ":eyeglasses: Spec Compliance",
+      "PR: Breaking Change :boom:": ":boom: Breaking Change",
+      "PR: Deprecation (next major) :loudspeaker:": ":loudspeaker: Deprecation",
+      "PR: New Feature (next major) :rocket:": ":rocket: New Feature",
+      "PR: Bug Fix (next major) :bug:": ":bug: Bug Fix",
+      "PR: Polish (next major) :nail_care:": ":nail_care: Polish",
+      "PR: Docs (next major) :memo:": ":memo: Documentation",
+      "PR: Internal (next major) :house:": ":house: Internal",
+      "PR: Performance (next major) :running_woman:": ":running_woman: Performance",
+      "PR: Revert (next major)": ":leftwards_arrow_with_hook: Revert",
+      "PR: Output optimization (next major) :microscope:": ":microscope: Output optimization"
     }
   }
 }
