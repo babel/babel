@@ -133,7 +133,7 @@
       "PR: Docs (next major) :memo:": ":memo: Documentation",
       "PR: Internal (next major) :house:": ":house: Internal",
       "PR: Performance (next major) :running_woman:": ":running_woman: Performance",
-      "PR: Revert (next major) :leftwards_arrow_with_hook:": ":leftwards_arrow_with_hook: Revert",
+      "PR: Revert (next major)": ":leftwards_arrow_with_hook: Revert",
       "PR: Output optimization (next major) :microscope:": ":microscope: Output optimization"
     }
   }
