@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: check-release-type
     # (...) to disambiguate from a yaml tag
-    if: (!needs.check-release-type.outputs.is-babel-8)
+    if: needs.check-release-type.outputs.is-babel-8 == 'false'
     steps:
       - name: Checkout the new tag
         uses: actions/checkout@v3
@@ -74,13 +74,13 @@ jobs:
           git config user.email "babel-bot@users.noreply.github.com"
 
       - name: Create new version (Babel 7)
-        if: (!needs.check-release-type.outputs.is-babel-8)
+        if: needs.check-release-type.outputs.is-babel-8 == 'false'
         run: |
           make new-version-checklist
           yarn release-tool version -f @babel/standalone --yes patch
 
       - name: Create new version (Babel 8)
-        if: needs.check-release-type.outputs.is-babel-8
+        if: needs.check-release-type.outputs.is-babel-8 == 'true'
         run: |
           make new-babel-8-version
 
@@ -116,7 +116,7 @@ jobs:
         run: git checkout ${{ needs.git-version.outputs.branch }}
 
       - name: Bump package versions (Babel 8)
-        if: needs.check-release-type.outputs.is-babel-8
+        if: needs.check-release-type.outputs.is-babel-8 == 'true'
         run: make new-babel-8-version-create-commit-ci
 
       - name: Build and Test
@@ -127,18 +127,18 @@ jobs:
           FORCE_COLOR: true
           # Note: `false` doesn't work here, because env vars are strings and Boolean('false')
           # is true. Use the empry string instead.
-          BABEL_8_BREAKING: ${{ needs.check-release-type.outputs.is-babel-8 || '' }}
+          BABEL_8_BREAKING: ${{ needs.check-release-type.outputs.is-babel-8 == 'true' || '' }}
 
       # - name: Publish to npm (Babel 7)
       #   run: yarn release-tool publish --yes
-      #   if: (!needs.check-release-type.outputs.is-babel-8)
+      #   if: needs.check-release-type.outputs.is-babel-8 == 'false'
       #   env:
       #     YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       # - name: Publish to npm (Babel 8)
       #   # --tag-version-prefix must match the one set in `make new-babel-8-version-create-branch`
       #   run: yarn release-tool publish --yes --tag next --tag-version-prefix tmp.v
-      #   if: needs.check-release-type.outputs.is-babel-8
+      #   if: needs.check-release-type.outputs.is-babel-8 == 'true'
       #   env:
       #     YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       #     BABEL_8_BREAKING: true
@@ -181,10 +181,10 @@ jobs:
           # GitHub workflow do not support the ternary operator:
           # https://github.com/actions/runner/issues/409
           # `a && b || c` is equivalent to `a ? b : c` if `b` is truthy
-          prefix: ${{ needs.check-release-type.outputs.is-babel-8 && 'v8' || 'v7' }}
+          prefix: ${{ needs.check-release-type.outputs.is-babel-8 == 'true' && 'v8' || 'v7' }}
 
       - name: Use Babel 8 PR labels
-        if: needs.check-release-type.outputs.is-babel-8
+        if: needs.check-release-type.outputs.is-babel-8 == 'true'
         run: |
           node -e "
             const pkg = require('./package.json');
@@ -235,7 +235,7 @@ jobs:
       - name: Get changelog file name
         id: filename
         run: |
-          echo "filename=${{ needs.check-release-type.outputs.is-babel-8 && '.github/CHANGELOG-v8.md' || 'CHANGELOG.md' }}" >> $GITHUB_OUTPUT
+          echo "filename=${{ needs.check-release-type.outputs.is-babel-8 == 'true' && '.github/CHANGELOG-v8.md' || 'CHANGELOG.md' }}" >> $GITHUB_OUTPUT
 
       - name: Update CHANGELOG.md
         uses: babel/actions/update-changelog@v2
