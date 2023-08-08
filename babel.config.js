@@ -827,11 +827,13 @@ function pluginAddImportExtension(api, { when }) {
   };
 }
 
-const tokenTypesMapping = new Map();
-const tokenTypeSourcePath = "./packages/babel-parser/src/tokenizer/types.ts";
-
-function getTokenTypesMapping(parseSync) {
-  if (tokenTypesMapping.size === 0) {
+function pluginBabelParserTokenType({
+  parseSync,
+  types: { isIdentifier, numericLiteral },
+}) {
+  const tokenTypeSourcePath = "./packages/babel-parser/src/tokenizer/types.ts";
+  function getTokenTypesMapping() {
+    const tokenTypesMapping = new Map();
     const tokenTypesAst = parseSync(
       fs.readFileSync(tokenTypeSourcePath, {
         encoding: "utf-8",
@@ -865,14 +867,10 @@ function getTokenTypesMapping(parseSync) {
     for (let i = 0; i < tokenTypesDefinition.length; i++) {
       tokenTypesMapping.set(tokenTypesDefinition[i].key.name, i);
     }
+    return tokenTypesMapping;
   }
-  return tokenTypesMapping;
-}
 
-function pluginBabelParserTokenType({
-  parseSync,
-  types: { isIdentifier, numericLiteral },
-}) {
+  const tokenTypesMapping = getTokenTypesMapping();
   return {
     visitor: {
       MemberExpression(path) {
@@ -883,9 +881,7 @@ function pluginBabelParserTokenType({
           !node.computed
         ) {
           const tokenName = node.property.name;
-          const tokenType = getTokenTypesMapping(parseSync).get(
-            node.property.name
-          );
+          const tokenType = tokenTypesMapping.get(node.property.name);
           if (tokenType === undefined) {
             throw path.buildCodeFrameError(
               `${tokenName} is not defined in ${tokenTypeSourcePath}`
