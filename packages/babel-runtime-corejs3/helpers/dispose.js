@@ -1,30 +1,30 @@
 var _SuppressedError = require("core-js-pure/features/suppressed-error.js");
 var _Object$create = require("core-js-pure/features/object/create.js");
 var _Promise = require("core-js-pure/features/promise/index.js");
-function dispose_SuppressedError(suppressed, error) {
-  return "undefined" != typeof _SuppressedError ? dispose_SuppressedError = _SuppressedError : (dispose_SuppressedError = function dispose_SuppressedError(suppressed, error) {
-    this.suppressed = suppressed, this.error = error, this.stack = new Error().stack;
+function dispose_SuppressedError(r, e) {
+  return "undefined" != typeof _SuppressedError ? dispose_SuppressedError = _SuppressedError : (dispose_SuppressedError = function dispose_SuppressedError(r, e) {
+    this.suppressed = r, this.error = e, this.stack = new Error().stack;
   }, dispose_SuppressedError.prototype = _Object$create(Error.prototype, {
     constructor: {
       value: dispose_SuppressedError,
       writable: !0,
       configurable: !0
     }
-  })), new dispose_SuppressedError(suppressed, error);
+  })), new dispose_SuppressedError(r, e);
 }
-function _dispose(stack, error, hasError) {
+function _dispose(r, e, s) {
   function next() {
-    for (; stack.length > 0;) try {
-      var r = stack.pop(),
-        p = r.d.call(r.v);
-      if (r.a) return _Promise.resolve(p).then(next, err);
-    } catch (e) {
-      return err(e);
+    for (; r.length > 0;) try {
+      var o = r.pop(),
+        p = o.d.call(o.v);
+      if (o.a) return _Promise.resolve(p).then(next, err);
+    } catch (r) {
+      return err(r);
     }
-    if (hasError) throw error;
+    if (s) throw e;
   }
-  function err(e) {
-    return error = hasError ? new dispose_SuppressedError(e, error) : e, hasError = !0, next();
+  function err(r) {
+    return e = s ? new dispose_SuppressedError(r, e) : r, s = !0, next();
   }
   return next();
 }
