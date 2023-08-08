@@ -43,7 +43,7 @@ module.exports = function (api) {
     onlyRemoveTypeImports: true,
     optimizeConstEnums: true,
   };
-  if (api.version.startsWith("7")) {
+  if (api.version.startsWith("7") && !bool(process.env.BABEL_8_BREAKING)) {
     presetTsOpts.allowDeclareFields = true;
   }
 
