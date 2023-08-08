@@ -122,7 +122,7 @@ describe("asynchronicity", () => {
 
       const { code } = await babel.transformAsync("");
 
-      expect(code).toBe(`"succes";`);
+      expect(code).toBe(`"success"`);
     });
   });
 

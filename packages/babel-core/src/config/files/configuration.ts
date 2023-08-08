@@ -4,7 +4,7 @@ import path from "path";
 import json5 from "json5";
 import gensync from "gensync";
 import type { Handler } from "gensync";
-import { makeStrongCache, makeWeakCacheSync } from "../caching";
+import { makeWeakCache, makeWeakCacheSync } from "../caching";
 import type { CacheConfigurator } from "../caching";
 import { makeConfigAPI } from "../helpers/config-api";
 import type { ConfigAPI } from "../helpers/config-api";
@@ -12,7 +12,7 @@ import { makeStaticFileCache } from "./utils";
 import loadCodeDefault from "./module-types";
 import pathPatternToRegex from "../pattern-to-regex";
 import type { FilePackageData, RelativeConfig, ConfigFile } from "./types";
-import type { CallerMetadata } from "../validation/options";
+import type { CallerMetadata, InputOptions } from "../validation/options";
 import ConfigError from "../../errors/config-error";
 
 import * as fs from "../../gensync-utils/fs";
@@ -43,30 +43,41 @@ const BABELIGNORE_FILENAME = ".babelignore";
 
 const LOADING_CONFIGS = new Set();
 
-const readConfigCode = makeStrongCache(function* readConfigCode(
+type ConfigCacheData = {
+  envName: string;
+  caller: CallerMetadata | undefined;
+};
+
+const runConfig = makeWeakCache(function* runConfig(
+  options: Function,
+  cache: CacheConfigurator<ConfigCacheData>,
+): Handler<{
+  options: InputOptions | null;
+  cacheNeedsConfiguration: boolean;
+}> {
+  // @ts-expect-error - if we want to make it possible to use async configs
+  yield* [];
+
+  return {
+    options: endHiddenCallStack(options as any as (api: ConfigAPI) => {})(
+      makeConfigAPI(cache),
+    ),
+    cacheNeedsConfiguration: !cache.configured(),
+  };
+});
+
+function* readConfigCode(
   filepath: string,
-  cache: CacheConfigurator<{
-    envName: string;
-    caller: CallerMetadata | undefined;
-  }>,
+  data: ConfigCacheData,
 ): Handler<ConfigFile | null> {
-  if (!nodeFs.existsSync(filepath)) {
-    cache.never();
-    return null;
-  }
+  if (!nodeFs.existsSync(filepath)) return null;
 
   // The `require()` call below can make this code reentrant if a require hook like @babel/register has been
   // loaded into the system. That would cause Babel to attempt to compile the `.babelrc.js` file as it loads
   // below. To cover this case, we auto-ignore re-entrant config processing.
   if (LOADING_CONFIGS.has(filepath)) {
-    cache.never();
-
     debug("Auto-ignoring usage of config %o.", filepath);
-    return {
-      filepath,
-      dirname: path.dirname(filepath),
-      options: {},
-    };
+    return buildConfigFileObject({}, filepath);
   }
 
   let options: unknown;
@@ -81,16 +92,9 @@ const readConfigCode = makeStrongCache(function* readConfigCode(
     LOADING_CONFIGS.delete(filepath);
   }
 
-  let assertCache = false;
+  let cacheNeedsConfiguration = false;
   if (typeof options === "function") {
-    // @ts-expect-error - if we want to make it possible to use async configs
-    yield* [];
-
-    options = endHiddenCallStack(options as any as (api: ConfigAPI) => {})(
-      makeConfigAPI(cache),
-    );
-
-    assertCache = true;
+    ({ options, cacheNeedsConfiguration } = yield* runConfig(options, data));
   }
 
   if (!options || typeof options !== "object" || Array.isArray(options)) {
@@ -102,6 +106,10 @@ const readConfigCode = makeStrongCache(function* readConfigCode(
 
   // @ts-expect-error todo(flow->ts)
   if (typeof options.then === "function") {
+    // @ts-expect-error We use ?. in case options is a thenable
+    // but not a promise
+    options.catch?.(() => {});
+
     throw new ConfigError(
       `You appear to be using an async configuration, ` +
         `which your current version of Babel does not support. ` +
@@ -112,14 +120,38 @@ const readConfigCode = makeStrongCache(function* readConfigCode(
     );
   }
 
-  if (assertCache && !cache.configured()) throwConfigError(filepath);
+  if (cacheNeedsConfiguration) throwConfigError(filepath);
 
-  return {
-    filepath,
-    dirname: path.dirname(filepath),
-    options,
-  };
-});
+  return buildConfigFileObject(options, filepath);
+}
+
+// We cache the generated ConfigFile object rather than creating a new one
+// every time, so that it can be used as a cache key in other functions.
+const cfboaf /* configFilesByOptionsAndFilepath */ = new WeakMap<
+  InputOptions,
+  Map<string, ConfigFile>
+>();
+function buildConfigFileObject(
+  options: InputOptions,
+  filepath: string,
+): ConfigFile {
+  let configFilesByFilepath = cfboaf.get(options);
+  if (!configFilesByFilepath) {
+    cfboaf.set(options, (configFilesByFilepath = new Map()));
+  }
+
+  let configFile = configFilesByFilepath.get(filepath);
+  if (!configFile) {
+    configFile = {
+      filepath,
+      dirname: path.dirname(filepath),
+      options,
+    };
+    configFilesByFilepath.set(filepath, configFile);
+  }
+
+  return configFile;
+}
 
 const packageToBabelConfig = makeWeakCacheSync(
   (file: ConfigFile): ConfigFile | null => {
