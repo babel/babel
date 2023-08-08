@@ -475,7 +475,7 @@ target["new-version"] = function () {
   yarn(["release-tool", "version", "-f", "@babel/standalone"]);
 };
 
-target["new-babel-8-version-prepare"] = function () {
+target["new-babel-8-version"] = function () {
   exec("git", ["pull", "--rebase"]);
 
   const pkg = JSON.parse(readFileSync("./package.json", "utf8"));
@@ -484,14 +484,14 @@ target["new-babel-8-version-prepare"] = function () {
   writeFileSync("./package.json", JSON.stringify(pkg, null, 2) + "\n");
   exec("git", ["add", "./package.json"]);
   exec("git", ["commit", "-m", "Bump Babel 8 version to " + nextVersion]);
+  exec("git", ["tag", nextVersion, "-m", nextVersion]);
 
   return nextVersion;
 };
 
-target["new-babel-8-version"] = function () {
-  const nextVersion = target["new-babel-8-version-prepare"]();
-
-  exec("git", ["checkout", "-b", "release/v" + nextVersion]);
+target["new-babel-8-version-create-commit-ci"] = function () {
+  const pkg = JSON.parse(readFileSync("./package.json", "utf8"));
+  const nextVersion = pkg.version_babel8;
 
   SOURCES.forEach(source => {
     readdirSync(source).forEach(name => {
@@ -504,9 +504,21 @@ target["new-babel-8-version"] = function () {
     });
   });
 
-  yarn(["release-tool", "version", nextVersion, "--all"]);
+  yarn([
+    "release-tool",
+    "version",
+    nextVersion,
+    "--all",
+    "--tag-version-prefix",
+    "tmp.v",
+  ]);
+};
 
-  console.log(
-    `Run \`git push upstream main release/v${nextVersion} --follow-tags\` to push the changes on GitHub and release them.`
-  );
+target["new-babel-8-version-create-commit"] = function () {
+  const pkg = JSON.parse(readFileSync("./package.json", "utf8"));
+  const nextVersion = pkg.version_babel8;
+  exec("git", ["checkout", "-b", `release/temp/v${nextVersion}`]);
+  target["new-babel-8-version-create-commit-ci"]();
+
+  console.log("Run `BABEL_8_BREAKING-true make publish` to finish publishing");
 };

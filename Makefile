@@ -186,6 +186,12 @@ new-version:
 new-babel-8-version:
 	$(MAKEJS) new-babel-8-version
 
+new-babel-8-version-create-commit:
+	$(MAKEJS) new-babel-8-version-create-commit
+
+new-babel-8-version-create-commit-ci:
+	$(MAKEJS) new-babel-8-version-create-commit-ci
+
 # NOTE: Run make new-version first
 publish:
 	@echo "Please confirm you have stopped make watch. (y)es, [N]o:"; \
