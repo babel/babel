@@ -74,7 +74,7 @@ jobs:
           git config user.email "babel-bot@users.noreply.github.com"
 
       - name: Create new version (Babel 7)
-        if: !needs.check-release-type.outputs.is-babel-8
+        if: (!needs.check-release-type.outputs.is-babel-8)
         run: |
           make new-version-checklist
           yarn release-tool version -f @babel/standalone --yes patch
