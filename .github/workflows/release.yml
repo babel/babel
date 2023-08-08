@@ -24,7 +24,7 @@ jobs:
     name: Check the release type
     runs-on: ubuntu-latest
     outputs:
-      is-babel-8: |
+      is-babel-8: >-
         ${{
           (github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v8')) ||
           (github.event_name == 'workflow_dispatch' && github.event.inputs == 'breaking-prerelease')
