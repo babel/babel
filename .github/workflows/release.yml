@@ -72,6 +72,7 @@ jobs:
         run: |
           git config user.name "Babel Bot"
           git config user.email "babel-bot@users.noreply.github.com"
+          echo "${{needs.check-release-type.outputs.is-babel-8}}"
 
       - name: Create new version (Babel 7)
         if: needs.check-release-type.outputs.is-babel-8 == 'false'
