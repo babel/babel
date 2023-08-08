@@ -24,10 +24,16 @@ jobs:
     name: Check the release type
     runs-on: ubuntu-latest
     outputs:
-      is-babel-8: ${{ github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v8') }}
+      is-babel-8: |
+        ${{
+          (github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v8')) ||
+          (github.event_name == 'workflow_dispatch' && github.event.inputs == 'breaking-prerelease')
+        }}
     steps:
       - name: Log
-        run: echo ${{ github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v8') }}
+        run: |
+          echo "Is Babel 8 push? ${{ github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v8') }}"
+          echo "Is Babel 8 dispatch? ${{ github.event_name == 'workflow_dispatch' && github.event.inputs == 'breaking-prerelease' }}"
 
   log-updates:
     name: Log packages to publish
