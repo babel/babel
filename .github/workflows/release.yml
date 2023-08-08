@@ -27,7 +27,7 @@ jobs:
       is-babel-8: >-
         ${{
           (github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v8')) ||
-          (github.event_name == 'workflow_dispatch' && github.event.inputs == 'breaking-prerelease')
+          (github.event_name == 'workflow_dispatch' && github.event.inputs.version == 'breaking-prerelease')
         }}
     steps:
       - name: Log
