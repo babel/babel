@@ -71,7 +71,6 @@ jobs:
         run: |
           git config user.name "Babel Bot"
           git config user.email "babel-bot@users.noreply.github.com"
-          echo "${{ needs.check-release-type.outputs.is-babel-8 }}"
 
       - name: Create new version (Babel 7)
         if: needs.check-release-type.outputs.is-babel-8 == 'false'
@@ -114,6 +113,11 @@ jobs:
       - name: Checkout the temporary branch
         if: needs.git-version.result == 'success'
         run: git checkout ${{ needs.git-version.outputs.branch }}
+
+      - name: Set @babel-bot as committer
+        run: |
+          git config user.name "Babel Bot"
+          git config user.email "babel-bot@users.noreply.github.com"
 
       - name: Bump package versions (Babel 8)
         if: needs.check-release-type.outputs.is-babel-8 == 'true'
