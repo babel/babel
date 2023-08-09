@@ -504,7 +504,7 @@ function bumpVersionsToBabel8Pre() {
     });
   });
 
-  env(() => yarn("install"), {
+  env(() => yarn(["install"]), {
     YARN_ENABLE_IMMUTABLE_INSTALLS: false,
   });
 
