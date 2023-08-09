@@ -1,5 +1,4 @@
 import { declare } from "@babel/helper-plugin-utils";
-import syntaxExportNamespaceFrom from "@babel/plugin-syntax-export-namespace-from";
 import { types as t } from "@babel/core";
 
 export default declare(api => {
@@ -7,7 +6,10 @@ export default declare(api => {
 
   return {
     name: "transform-export-namespace-from",
-    inherits: syntaxExportNamespaceFrom.default,
+    inherits: USE_ESM
+      ? undefined
+      : // eslint-disable-next-line no-restricted-globals
+        require("@babel/plugin-syntax-export-namespace-from").default,
 
     visitor: {
       ExportNamedDeclaration(path) {

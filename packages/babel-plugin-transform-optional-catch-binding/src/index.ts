@@ -1,12 +1,14 @@
 import { declare } from "@babel/helper-plugin-utils";
-import syntaxOptionalCatchBinding from "@babel/plugin-syntax-optional-catch-binding";
 
 export default declare(api => {
   api.assertVersion(7);
 
   return {
     name: "transform-optional-catch-binding",
-    inherits: syntaxOptionalCatchBinding.default,
+    inherits: USE_ESM
+      ? undefined
+      : // eslint-disable-next-line no-restricted-globals
+        require("@babel/plugin-syntax-optional-catch-binding").default,
 
     visitor: {
       CatchClause(path) {

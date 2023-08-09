@@ -626,7 +626,6 @@ __metadata:
     "@babel/helper-replace-supers": "workspace:^"
     "@babel/helper-skip-transparent-expression-wrappers": "workspace:^"
     "@babel/helper-split-export-declaration": "workspace:^"
-    "@babel/plugin-syntax-class-static-block": ^7.14.5
     "@babel/preset-env": "workspace:^"
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
   peerDependencies:
@@ -1187,7 +1186,7 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/plugin-syntax-object-rest-spread": ^7.8.3
+    "@babel/plugin-syntax-object-rest-spread": "condition:BABEL_8_BREAKING ? : ^7.8.3"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -1199,7 +1198,7 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/plugin-syntax-optional-catch-binding": ^7.8.3
+    "@babel/plugin-syntax-optional-catch-binding": "condition:BABEL_8_BREAKING ? : ^7.8.3"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -2106,7 +2105,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-remap-async-to-generator": "workspace:^"
-    "@babel/plugin-syntax-async-generators": ^7.8.4
+    "@babel/plugin-syntax-async-generators": "condition:BABEL_8_BREAKING ? : ^7.8.4"
     babel-plugin-polyfill-corejs3: ^0.8.3
     core-js-pure: ^3.30.2
   peerDependencies:
@@ -2234,7 +2233,7 @@ __metadata:
     "@babel/helper-create-class-features-plugin": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-class-static-block": ^7.14.5
+    "@babel/plugin-syntax-class-static-block": "condition:BABEL_8_BREAKING ? : ^7.14.5"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
   peerDependencies:
@@ -2398,7 +2397,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-dynamic-import": ^7.8.3
+    "@babel/plugin-syntax-dynamic-import": "condition:BABEL_8_BREAKING ? : ^7.8.3"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -2448,7 +2447,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-export-namespace-from": ^7.8.3
+    "@babel/plugin-syntax-export-namespace-from": "condition:BABEL_8_BREAKING ? : ^7.8.3"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -2574,7 +2573,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-json-strings": ^7.8.3
+    "@babel/plugin-syntax-json-strings": "condition:BABEL_8_BREAKING ? : ^7.8.3"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -2622,8 +2621,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-logical-assignment-operators": ^7.10.4
-    "@babel/plugin-syntax-nullish-coalescing-operator": ^7.8.3
+    "@babel/plugin-syntax-logical-assignment-operators": "condition:BABEL_8_BREAKING ? : ^7.10.4"
     "@babel/plugin-transform-nullish-coalescing-operator": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.0.0-0
@@ -2702,8 +2700,6 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-simple-access": "workspace:^"
     "@babel/plugin-external-helpers": "workspace:^"
-    "@babel/plugin-syntax-class-static-block": ^7.14.5
-    "@babel/plugin-syntax-object-rest-spread": ^7.8.3
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -2733,7 +2729,6 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-validator-identifier": "workspace:^"
-    "@babel/plugin-syntax-dynamic-import": ^7.8.3
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -2835,7 +2830,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-nullish-coalescing-operator": ^7.8.3
+    "@babel/plugin-syntax-nullish-coalescing-operator": "condition:BABEL_8_BREAKING ? : ^7.8.3"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -2860,7 +2855,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-numeric-separator": ^7.10.4
+    "@babel/plugin-syntax-numeric-separator": "condition:BABEL_8_BREAKING ? : ^7.10.4"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
   peerDependencies:
@@ -2904,7 +2899,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/parser": "workspace:^"
-    "@babel/plugin-syntax-object-rest-spread": ^7.8.3
+    "@babel/plugin-syntax-object-rest-spread": "condition:BABEL_8_BREAKING ? : ^7.8.3"
     "@babel/plugin-transform-parameters": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.0.0-0
@@ -2967,7 +2962,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-optional-catch-binding": ^7.8.3
+    "@babel/plugin-syntax-optional-catch-binding": "condition:BABEL_8_BREAKING ? : ^7.8.3"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -2994,7 +2989,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-skip-transparent-expression-wrappers": "workspace:^"
-    "@babel/plugin-syntax-optional-chaining": ^7.8.3
+    "@babel/plugin-syntax-optional-chaining": "condition:BABEL_8_BREAKING ? : ^7.8.3"
     "@babel/plugin-transform-block-scoping": "workspace:^"
     "@babel/traverse": "workspace:^"
   peerDependencies:
@@ -3073,7 +3068,7 @@ __metadata:
     "@babel/helper-create-class-features-plugin": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-private-property-in-object": ^7.14.5
+    "@babel/plugin-syntax-private-property-in-object": "condition:BABEL_8_BREAKING ? : ^7.14.5"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown

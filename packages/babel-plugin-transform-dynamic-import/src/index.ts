@@ -1,5 +1,4 @@
 import { declare } from "@babel/helper-plugin-utils";
-import syntaxDynamicImport from "@babel/plugin-syntax-dynamic-import";
 
 const SUPPORTED_MODULES = ["commonjs", "amd", "systemjs"];
 
@@ -21,7 +20,10 @@ export default declare(api => {
 
   return {
     name: "transform-dynamic-import",
-    inherits: syntaxDynamicImport.default,
+    inherits: USE_ESM
+      ? undefined
+      : // eslint-disable-next-line no-restricted-globals
+        require("@babel/plugin-syntax-dynamic-import").default,
 
     pre() {
       // We keep using the old name, for compatibility with older

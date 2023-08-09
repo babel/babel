@@ -1,5 +1,4 @@
 import { declare } from "@babel/helper-plugin-utils";
-import syntaxOptionalChaining from "@babel/plugin-syntax-optional-chaining";
 import { transform } from "./transform";
 import type { NodePath } from "@babel/traverse";
 import type * as t from "@babel/types";
@@ -16,7 +15,10 @@ export default declare((api, options: Options) => {
 
   return {
     name: "transform-optional-chaining",
-    inherits: syntaxOptionalChaining.default,
+    inherits: USE_ESM
+      ? undefined
+      : // eslint-disable-next-line no-restricted-globals
+        require("@babel/plugin-syntax-optional-chaining").default,
 
     visitor: {
       "OptionalCallExpression|OptionalMemberExpression"(

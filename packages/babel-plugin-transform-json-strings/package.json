@@ -18,7 +18,7 @@
   ],
   "dependencies": {
     "@babel/helper-plugin-utils": "workspace:^",
-    "@babel/plugin-syntax-json-strings": "^7.8.3"
+    "@babel/plugin-syntax-json-strings": "condition:BABEL_8_BREAKING ? : ^7.8.3"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"

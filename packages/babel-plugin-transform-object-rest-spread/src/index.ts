@@ -1,5 +1,4 @@
 import { declare } from "@babel/helper-plugin-utils";
-import syntaxObjectRestSpread from "@babel/plugin-syntax-object-rest-spread";
 import { types as t } from "@babel/core";
 import type { PluginPass } from "@babel/core";
 import type { NodePath, Scope } from "@babel/traverse";
@@ -285,7 +284,10 @@ export default declare((api, opts: Options) => {
 
   return {
     name: "transform-object-rest-spread",
-    inherits: syntaxObjectRestSpread.default,
+    inherits: USE_ESM
+      ? undefined
+      : // eslint-disable-next-line no-restricted-globals
+        require("@babel/plugin-syntax-object-rest-spread").default,
 
     visitor: {
       // function a({ b, ...c }) {}
