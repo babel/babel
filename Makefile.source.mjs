@@ -521,8 +521,7 @@ target["new-babel-8-version-create-commit-ci"] = function () {
 };
 
 target["new-babel-8-version-create-commit"] = function () {
-  const pkg = JSON.parse(readFileSync("./package.json", "utf8"));
-  const nextVersion = pkg.version_babel8;
+  const nextVersion = bumpVersionsToBabel8Pre();
   exec("git", ["checkout", "-b", `release/temp/v${nextVersion}`]);
   yarn([
     "release-tool",
