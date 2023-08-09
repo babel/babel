@@ -16,7 +16,8 @@ on:
           - patch
           - breaking-prerelease
 
-permissions: write-all
+permissions:
+  contents: read
 
 jobs:
   check-release-type:
@@ -38,7 +39,6 @@ jobs:
     name: Log packages to publish
     runs-on: ubuntu-latest
     needs: check-release-type
-    # (...) to disambiguate from a yaml tag
     if: needs.check-release-type.outputs.is-babel-8 == 'false'
     steps:
       - name: Checkout the new tag
@@ -71,7 +71,7 @@ jobs:
         run: |
           git config user.name "Babel Bot"
           git config user.email "babel-bot@users.noreply.github.com"
-          echo "${{needs.check-release-type.outputs.is-babel-8}}"
+          echo "${{ needs.check-release-type.outputs.is-babel-8 }}"
 
       - name: Create new version (Babel 7)
         if: needs.check-release-type.outputs.is-babel-8 == 'false'
@@ -101,7 +101,7 @@ jobs:
     needs:
       - check-release-type
       - git-version
-    # environment: npm
+    environment: npm
     # The default condition is success(), but this is false when one of the previous jobs is skipped
     if: |
       always() &&
@@ -122,7 +122,7 @@ jobs:
           YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn
 
       - name: Build and Test
-        run: echo "OK" || make prepublish
+        run: make prepublish
         env:
           # Hack: use FORCE_COLOR so that supports-color@5 returnes true for GitHub CI
           # Remove once `chalk` is bumped to 4.0.
@@ -131,20 +131,20 @@ jobs:
           # is true. Use the empry string instead.
           BABEL_8_BREAKING: ${{ needs.check-release-type.outputs.is-babel-8 == 'true' || '' }}
 
-      # - name: Publish to npm (Babel 7)
-      #   run: yarn release-tool publish --yes
-      #   if: needs.check-release-type.outputs.is-babel-8 == 'false'
-      #   env:
-      #     YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish to npm (Babel 7)
+        run: yarn release-tool publish --yes
+        if: needs.check-release-type.outputs.is-babel-8 == 'false'
+        env:
+          YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      # - name: Publish to npm (Babel 8)
-      #   # --tag-version-prefix must match the one set in `make new-babel-8-version-create-branch`
-      #   run: yarn release-tool publish --yes --tag next --tag-version-prefix tmp.v
-      #   if: needs.check-release-type.outputs.is-babel-8 == 'true'
-      #   env:
-      #     YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      #     BABEL_8_BREAKING: true
-      #     USE_ESM: true
+      - name: Publish to npm (Babel 8)
+        # --tag-version-prefix must match the one set in `make new-babel-8-version-create-branch`
+        run: yarn release-tool publish --yes --tag next --tag-version-prefix tmp.v
+        if: needs.check-release-type.outputs.is-babel-8 == 'true'
+        env:
+          YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          BABEL_8_BREAKING: true
+          USE_ESM: true
 
   github-release:
     name: Create GitHub release draft
@@ -170,7 +170,7 @@ jobs:
         id: is-main
         uses: babel/actions/ref-matches-branch@v2
         with:
-          name: new-babel-8-release-process
+          name: main
 
       - name: Checkout the temporary branch
         if: needs.git-version.result == 'success'
@@ -209,7 +209,7 @@ jobs:
         with:
           tag: ${{ steps.tags.outputs.new }}
           changelog: ${{ steps.changelog.outputs.changelog }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.BOT_TOKEN }}
 
   github-push:
     permissions:
@@ -254,7 +254,7 @@ jobs:
 
       - name: Push to GitHub
         run: |
-          git push "https://babel-bot:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" HEAD:new-babel-8-release-process --follow-tags
+          git push "https://babel-bot:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" HEAD:main --follow-tags
 
       - name: Delete temporary branch from GitHub
         if: needs.git-version.result == 'success'
