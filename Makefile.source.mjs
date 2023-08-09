@@ -504,6 +504,10 @@ function bumpVersionsToBabel8Pre() {
     });
   });
 
+  env(() => yarn("install"), {
+    YARN_ENABLE_IMMUTABLE_INSTALLS: false,
+  });
+
   return nextVersion;
 }
 
@@ -532,5 +536,5 @@ target["new-babel-8-version-create-commit"] = function () {
     "tmp.v",
   ]);
 
-  console.log("Run `BABEL_8_BREAKING-true make publish` to finish publishing");
+  console.log("Run `BABEL_8_BREAKING=true make publish` to finish publishing");
 };
