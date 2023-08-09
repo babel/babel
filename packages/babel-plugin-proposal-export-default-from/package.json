@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-export-default-from",
-  "version": "7.22.5",
+  "version": "8.0.0-alpha.2",
   "description": "Compile export default to ES2015",
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
     "@babel/plugin-syntax-export-default-from": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "^8.0.0-alpha.2"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

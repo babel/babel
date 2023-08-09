@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-export-namespace-from",
-  "version": "7.22.5",
+  "version": "8.0.0-alpha.2",
   "description": "Compile export namespace to ES2015",
   "repository": {
     "type": "git",
@@ -20,7 +20,7 @@
     "@babel/plugin-syntax-export-namespace-from": "condition:BABEL_8_BREAKING ? : ^7.8.3"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "^8.0.0-alpha.2"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

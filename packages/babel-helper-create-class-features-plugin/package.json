@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-create-class-features-plugin",
-  "version": "7.22.10",
+  "version": "8.0.0-alpha.2",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
   "description": "Compile class public and private fields, private methods and decorators to ES6",
@@ -29,7 +29,7 @@
     "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0"
+    "@babel/core": "^8.0.0-alpha.2"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

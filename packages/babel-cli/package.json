@@ -1,6 +1,6 @@
 {
   "name": "@babel/cli",
-  "version": "7.22.10",
+  "version": "8.0.0-alpha.2",
   "description": "Babel command line.",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-cli",
@@ -37,7 +37,7 @@
     "chokidar": "^3.4.0"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "^8.0.0-alpha.2"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

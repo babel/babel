@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-typescript",
-  "version": "7.22.5",
+  "version": "8.0.0-alpha.2",
   "description": "Babel preset for TypeScript.",
   "repository": {
     "type": "git",
@@ -24,7 +24,7 @@
     "@babel/plugin-transform-typescript": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "^8.0.0-alpha.2"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

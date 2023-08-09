@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-optional-catch-binding",
-  "version": "7.22.5",
+  "version": "8.0.0-alpha.2",
   "description": "Compile optional catch bindings",
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
     "@babel/plugin-syntax-optional-catch-binding": "condition:BABEL_8_BREAKING ? : ^7.8.3"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "^8.0.0-alpha.2"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
