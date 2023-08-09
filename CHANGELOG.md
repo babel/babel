@@ -24,6 +24,11 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.22.11 (2023-08-09)
+
+#### :bug: Bug Fix
+* `babel-core`
+  * [#15850](https://github.com/babel/babel/pull/15850) Support configuring cache in ESM configs ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.22.10 (2023-08-07)
 
 #### :bug: Bug Fix
