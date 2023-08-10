@@ -19,6 +19,8 @@ export default declare(api => {
     name: "transform-json-strings",
     inherits: USE_ESM
       ? undefined
+      : IS_STANDALONE
+      ? undefined
       : // eslint-disable-next-line no-restricted-globals
         require("@babel/plugin-syntax-json-strings").default,
 

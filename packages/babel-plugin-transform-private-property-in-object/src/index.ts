@@ -114,6 +114,8 @@ export default declare((api, opt: Options) => {
     name: "transform-private-property-in-object",
     inherits: USE_ESM
       ? undefined
+      : IS_STANDALONE
+      ? undefined
       : // eslint-disable-next-line no-restricted-globals
         require("@babel/plugin-syntax-private-property-in-object").default,
     pre() {

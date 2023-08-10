@@ -24,6 +24,8 @@ export default declare(api => {
     name: "transform-numeric-separator",
     inherits: USE_ESM
       ? undefined
+      : IS_STANDALONE
+      ? undefined
       : // eslint-disable-next-line no-restricted-globals
         require("@babel/plugin-syntax-numeric-separator").default,
 
