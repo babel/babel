@@ -24,7 +24,7 @@
     "@babel/helper-plugin-test-runner": "workspace:^",
     "@babel/parser": "workspace:^",
     "regenerator-runtime": "^0.14.0",
-    "terser": "^5.9.0"
+    "terser": "^5.19.2"
   },
   "engines": {
     "node": ">=6.9.0"

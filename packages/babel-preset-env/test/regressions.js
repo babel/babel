@@ -73,7 +73,7 @@ describe("regressions", () => {
         expect(consoleWarn).toHaveBeenCalled();
 
         expect(out.code).toMatchInlineSnapshot(`
-        "function _checkInRHS(value) { if (Object(value) !== value) throw TypeError(\\"right-hand side of 'in' should be an object, got \\" + (null !== value ? typeof value : \\"null\\")); return value; }
+        "function _checkInRHS(e) { if (Object(e) !== e) throw TypeError(\\"right-hand side of 'in' should be an object, got \\" + (null !== e ? typeof e : \\"null\\")); return e; }
         var _aBrandCheck = /*#__PURE__*/new WeakSet();
         class A {
           #a = void _aBrandCheck.add(this);

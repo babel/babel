@@ -4,7 +4,7 @@
   "exports": "./index.js",
   "devDependencies": {
     "@babel/runtime": "workspace:^",
-    "webpack": "^5.74.0",
+    "webpack": "^5.88.2",
     "webpack-cli": "^4.10.0"
   },
   "type": "commonjs"
