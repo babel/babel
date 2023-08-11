@@ -264,7 +264,7 @@ function createWorker(useWorker) {
 async function buildBabel(useWorker, ignore = []) {
   const worker = createWorker(useWorker);
   const files = new Glob(defaultSourcesGlob, {
-    ignore: ignore.map(p => `./${p.src}/**`),
+    ignore: ignore.map(p => `${p.src}/**`),
     posix: true,
   });
 
