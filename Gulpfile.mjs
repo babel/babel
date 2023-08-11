@@ -18,7 +18,7 @@ import rollupJson from "@rollup/plugin-json";
 import rollupPolyfillNode from "rollup-plugin-polyfill-node";
 import rollupNodeResolve from "@rollup/plugin-node-resolve";
 import rollupReplace from "@rollup/plugin-replace";
-import { terser as rollupTerser } from "rollup-plugin-terser";
+import rollupTerser from "@rollup/plugin-terser";
 import rollupDts from "rollup-plugin-dts";
 import { Worker as JestWorker } from "jest-worker";
 import { Glob } from "glob";
@@ -560,7 +560,7 @@ function buildRollup(packages, buildStandalone) {
           plugins: [
             rollupTerser({
               // workaround https://bugs.webkit.org/show_bug.cgi?id=212725
-              output: {
+              format: {
                 ascii_only: true,
               },
               numWorkers: process.env.CIRCLECI ? 1 : undefined,
