@@ -11,7 +11,6 @@ if (
 
 const pathUtils = require("path");
 const fs = require("fs");
-const { parseSync } = require("@babel/core");
 
 function normalize(src) {
   return src.replace(/\//, pathUtils.sep);
@@ -39,6 +38,14 @@ module.exports = function (api) {
       "transform-object-rest-spread",
     ],
   };
+
+  const presetTsOpts = {
+    onlyRemoveTypeImports: true,
+    optimizeConstEnums: true,
+  };
+  if (api.version.startsWith("7") && !bool(process.env.BABEL_8_BREAKING)) {
+    presetTsOpts.allowDeclareFields = true;
+  }
 
   // These are "safe" assumptions, that we can enable globally
   const assumptions = {
@@ -178,14 +185,7 @@ module.exports = function (api) {
     presets: [
       // presets are applied from right to left
       ["@babel/env", envOpts],
-      [
-        "@babel/preset-typescript",
-        {
-          onlyRemoveTypeImports: true,
-          allowDeclareFields: true,
-          optimizeConstEnums: true,
-        },
-      ],
+      ["@babel/preset-typescript", presetTsOpts],
     ],
     plugins: [
       ["@babel/transform-object-rest-spread", { useBuiltIns: true }],
@@ -829,11 +829,13 @@ function pluginAddImportExtension(api, { when }) {
   };
 }
 
-const tokenTypesMapping = new Map();
-const tokenTypeSourcePath = "./packages/babel-parser/src/tokenizer/types.ts";
-
-function getTokenTypesMapping() {
-  if (tokenTypesMapping.size === 0) {
+function pluginBabelParserTokenType({
+  parseSync,
+  types: { isIdentifier, numericLiteral },
+}) {
+  const tokenTypeSourcePath = "./packages/babel-parser/src/tokenizer/types.ts";
+  function getTokenTypesMapping() {
+    const tokenTypesMapping = new Map();
     const tokenTypesAst = parseSync(
       fs.readFileSync(tokenTypeSourcePath, {
         encoding: "utf-8",
@@ -867,13 +869,10 @@ function getTokenTypesMapping() {
     for (let i = 0; i < tokenTypesDefinition.length; i++) {
       tokenTypesMapping.set(tokenTypesDefinition[i].key.name, i);
     }
+    return tokenTypesMapping;
   }
-  return tokenTypesMapping;
-}
 
-function pluginBabelParserTokenType({
-  types: { isIdentifier, numericLiteral },
-}) {
+  const tokenTypesMapping = getTokenTypesMapping();
   return {
     visitor: {
       MemberExpression(path) {
@@ -884,7 +883,7 @@ function pluginBabelParserTokenType({
           !node.computed
         ) {
           const tokenName = node.property.name;
-          const tokenType = getTokenTypesMapping().get(node.property.name);
+          const tokenType = tokenTypesMapping.get(node.property.name);
           if (tokenType === undefined) {
             throw path.buildCodeFrameError(
               `${tokenName} is not defined in ${tokenTypeSourcePath}`

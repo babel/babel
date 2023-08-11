@@ -209,9 +209,12 @@ jobs:
       - name: Install
         run: |
           yarn install
-      - name: Downgrade Jest for node <= 10
+      - name: Downgrade Jest and Babel for node <= 10
         if: matrix.node-version == '6' || matrix.node-version == '8' || matrix.node-version == '10'
         run: |
+          # It's a bit sarcastic that in this scenario bump-babel-dependencies.js
+          # actually downgrades the root `@babel/*` deps from 8.0 alpha to 7
+          node ./scripts/integration-tests/utils/bump-babel-dependencies.js
           yarn up jest@24
           # Deduplicate dependencies, because duplicate copies of graceful-fs cause
           # problems with the "path" module: https://github.com/facebook/jest/issues/9656
