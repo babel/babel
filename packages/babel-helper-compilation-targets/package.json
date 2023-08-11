@@ -31,7 +31,7 @@
   "devDependencies": {
     "@babel/helper-plugin-test-runner": "workspace:^",
     "@types/lru-cache": "^5.1.1",
-    "@types/semver": "^5.5.0"
+    "@types/semver": "^7.3.4"
   },
   "engines": {
     "node": ">=6.9.0"
