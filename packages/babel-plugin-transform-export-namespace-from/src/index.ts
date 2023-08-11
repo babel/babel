@@ -8,6 +8,8 @@ export default declare(api => {
     name: "transform-export-namespace-from",
     inherits: USE_ESM
       ? undefined
+      : IS_STANDALONE
+      ? undefined
       : // eslint-disable-next-line no-restricted-globals
         require("@babel/plugin-syntax-export-namespace-from").default,
 

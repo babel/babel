@@ -22,6 +22,8 @@ export default declare(api => {
     name: "transform-dynamic-import",
     inherits: USE_ESM
       ? undefined
+      : IS_STANDALONE
+      ? undefined
       : // eslint-disable-next-line no-restricted-globals
         require("@babel/plugin-syntax-dynamic-import").default,
 

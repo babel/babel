@@ -286,6 +286,8 @@ export default declare((api, opts: Options) => {
     name: "transform-object-rest-spread",
     inherits: USE_ESM
       ? undefined
+      : IS_STANDALONE
+      ? undefined
       : // eslint-disable-next-line no-restricted-globals
         require("@babel/plugin-syntax-object-rest-spread").default,
 

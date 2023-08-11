@@ -17,6 +17,8 @@ export default declare((api, options: Options) => {
     name: "transform-optional-chaining",
     inherits: USE_ESM
       ? undefined
+      : IS_STANDALONE
+      ? undefined
       : // eslint-disable-next-line no-restricted-globals
         require("@babel/plugin-syntax-optional-chaining").default,
 
