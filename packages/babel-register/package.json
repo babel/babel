@@ -20,7 +20,7 @@
   "dependencies": {
     "clone-deep": "^4.0.1",
     "find-cache-dir": "condition:BABEL_8_BREAKING ? ^3.3.1 : ^2.0.0",
-    "make-dir": "condition:BABEL_8_BREAKING ? : ^2.1.0",
+    "make-dir": "condition:BABEL_8_BREAKING ? : ^4.0.0",
     "pirates": "^4.0.5",
     "source-map-support": "^0.5.16"
   },

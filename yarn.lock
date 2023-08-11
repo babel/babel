@@ -3869,7 +3869,7 @@ __metadata:
     browserify: ^16.5.2
     clone-deep: ^4.0.1
     find-cache-dir: "condition:BABEL_8_BREAKING ? ^3.3.1 : ^2.0.0"
-    make-dir: "condition:BABEL_8_BREAKING ? : ^2.1.0"
+    make-dir: "condition:BABEL_8_BREAKING ? : ^4.0.0"
     pirates: ^4.0.5
     source-map-support: ^0.5.16
   peerDependencies:
@@ -12049,12 +12049,30 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"make-dir-BABEL_8_BREAKING-false@npm:make-dir@^4.0.0":
+  version: 4.0.0
+  resolution: "make-dir@npm:4.0.0"
+  dependencies:
+    semver: ^7.5.3
+  checksum: bf0731a2dd3aab4db6f3de1585cea0b746bb73eb5a02e3d8d72757e376e64e6ada190b1eddcde5b2f24a81b688a9897efd5018737d05e02e2a671dda9cff8a8a
+  languageName: node
+  linkType: hard
+
 "make-dir@condition:BABEL_8_BREAKING ? : ^2.1.0":
   version: 0.0.0-condition-86eacd
   resolution: "make-dir@condition:BABEL_8_BREAKING?:^2.1.0#86eacd"
   dependencies:
     make-dir-BABEL_8_BREAKING-false: "npm:make-dir@^2.1.0"
   checksum: 98e37a75730bfb08722d3eac1295aa8a73960791e662f16491c49397f193f44ce2ac32938b71059b43ae9ff48003610edeeb2c59ac86c20d4b21d02a6dcc54a0
+  languageName: node
+  linkType: hard
+
+"make-dir@condition:BABEL_8_BREAKING ? : ^4.0.0":
+  version: 0.0.0-condition-9fdeb6
+  resolution: "make-dir@condition:BABEL_8_BREAKING?:^4.0.0#9fdeb6"
+  dependencies:
+    make-dir-BABEL_8_BREAKING-false: "npm:make-dir@^4.0.0"
+  checksum: 1ed7e3c808af6b47cf760f25a564e870ef25404ff91e070c92167e941f82bc480dedbcb449f834d0118e38222a8baf7be0db190db1abda33c1714ea12a51c588
   languageName: node
   linkType: hard
 
