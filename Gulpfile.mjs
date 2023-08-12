@@ -563,7 +563,7 @@ function buildRollup(packages, buildStandalone) {
               format: {
                 ascii_only: true,
               },
-              numWorkers: process.env.CIRCLECI ? 1 : undefined,
+              maxWorkers: process.env.CIRCLECI ? 1 : undefined,
             }),
           ],
         });
