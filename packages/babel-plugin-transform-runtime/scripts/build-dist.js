@@ -2,7 +2,13 @@ import path from "path";
 import fs from "fs";
 import { createRequire } from "module";
 import * as helpers from "@babel/helpers";
-import { transformFromAstSync, File, template, types as t } from "@babel/core";
+import {
+  transformFromAstWithResolvedConfigSync,
+  loadResolvedConfigSync,
+  File,
+  template,
+  types as t,
+} from "@babel/core";
 import { fileURLToPath } from "url";
 
 import transformRuntime from "../lib/index.js";
@@ -24,6 +30,8 @@ function outputFile(filePath, data) {
 function corejsVersion(pkgName, depName) {
   return require(`../../${pkgName}/package.json`).dependencies[depName];
 }
+
+const resolvedConfigs = new Map();
 
 writeHelpers("@babel/runtime");
 writeHelpers("@babel/runtime-corejs2", {
@@ -148,7 +156,7 @@ function writeHelperFile(
 
   outputFile(
     fullPath,
-    buildHelper(runtimeName, pkgDirname, fullPath, helperName, {
+    buildHelper(runtimeName, fullPath, helperName, {
       esm,
       polyfillProvider,
     })
@@ -234,7 +242,6 @@ function getRuntimeRoot(runtimeName) {
 
 function buildHelper(
   runtimeName,
-  pkgDirname,
   helperFilename,
   helperName,
   { esm, polyfillProvider }
@@ -263,19 +270,32 @@ function buildHelper(
   );
   tree.body.push(...helper.nodes);
 
-  return transformFromAstSync(tree, null, {
-    filename: helperFilename,
-    presets: [[presetEnv, { modules: false }]],
-    plugins: [
-      polyfillProvider,
-      [transformRuntime, { version: runtimeVersion }],
-      buildRuntimeRewritePlugin(runtimeName, helperName),
-      esm ? null : addDefaultCJSExport,
-    ].filter(Boolean),
-  }).code;
+  const configCacheKey = JSON.stringify([esm, polyfillProvider]);
+  const resolvedConfig =
+    resolvedConfigs.get(configCacheKey) ??
+    loadResolvedConfigSync({
+      filename: helperFilename,
+      presets: [[presetEnv, { modules: false }]],
+      plugins: [
+        polyfillProvider,
+        [transformRuntime, { version: runtimeVersion }],
+        buildRuntimeRewritePlugin(),
+        esm ? null : addDefaultCJSExport,
+      ].filter(Boolean),
+    });
+
+  resolvedConfigs.set(configCacheKey, resolvedConfig);
+
+  const { options } = resolvedConfig;
+  options.filename = helperFilename;
+  options.runtimeName = runtimeName;
+  options.helperName = helperName;
+
+  return transformFromAstWithResolvedConfigSync(tree, null, resolvedConfig)
+    .code;
 }
 
-function buildRuntimeRewritePlugin(runtimeName, helperName) {
+function buildRuntimeRewritePlugin() {
   /**
    * Rewrite helper imports to load the adequate module format version
    * @example
@@ -286,7 +306,7 @@ function buildRuntimeRewritePlugin(runtimeName, helperName) {
    * // returns ast`"./typeof"`
    * @param {*} node The string literal that contains the import path
    */
-  function adjustImportPath(node) {
+  function adjustImportPath(node, runtimeName) {
     const helpersPath = path.posix.join(runtimeName, "helpers");
     const helper = node.value.startsWith(helpersPath)
       ? path.basename(node.value)
@@ -300,6 +320,7 @@ function buildRuntimeRewritePlugin(runtimeName, helperName) {
   return {
     pre(file) {
       const original = file.get("helperGenerator");
+      const { helperName } = file.opts;
       file.set("helperGenerator", name => {
         // make sure that helpers won't insert circular references to themselves
         if (name === helperName) return false;
@@ -308,10 +329,10 @@ function buildRuntimeRewritePlugin(runtimeName, helperName) {
       });
     },
     visitor: {
-      ImportDeclaration(path) {
-        adjustImportPath(path.get("source").node);
+      ImportDeclaration(path, state) {
+        adjustImportPath(path.get("source").node, state.file.opts.runtimeName);
       },
-      CallExpression(path) {
+      CallExpression(path, state) {
         if (
           !path.get("callee").isIdentifier({ name: "require" }) ||
           path.get("arguments").length !== 1 ||
@@ -321,7 +342,10 @@ function buildRuntimeRewritePlugin(runtimeName, helperName) {
         }
 
         // replace reference to internal helpers with @babel/runtime import path
-        adjustImportPath(path.get("arguments")[0].node);
+        adjustImportPath(
+          path.get("arguments")[0].node,
+          state.file.opts.runtimeName
+        );
       },
     },
   };

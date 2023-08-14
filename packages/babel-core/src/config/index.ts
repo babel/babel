@@ -40,6 +40,13 @@ const loadOptionsRunner = gensync(function* (
   return config?.options ?? null;
 });
 
+const loadResolvedConfigRunner = gensync(function* (
+  opts: unknown,
+): Handler<ResolvedConfig | null> {
+  const config = yield* loadFullConfig(opts);
+  return config;
+});
+
 const createConfigItemRunner = gensync(createConfigItemImpl);
 
 const maybeErrback =
@@ -67,6 +74,9 @@ export const loadPartialConfigAsync = loadPartialConfigRunner.async;
 export const loadOptions = maybeErrback(loadOptionsRunner);
 export const loadOptionsSync = loadOptionsRunner.sync;
 export const loadOptionsAsync = loadOptionsRunner.async;
+
+export const loadResolvedConfigSync = loadResolvedConfigRunner.sync;
+export const loadResolvedConfigAsync = loadResolvedConfigRunner.async;
 
 export const createConfigItemSync = createConfigItemRunner.sync;
 export const createConfigItemAsync = createConfigItemRunner.async;

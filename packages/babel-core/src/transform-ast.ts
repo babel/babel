@@ -82,3 +82,72 @@ export function transformFromAstAsync(
 ) {
   return beginHiddenCallStack(transformFromAstRunner.async)(...args);
 }
+
+type TransformFromAstWithResolvedConfig = {
+  (ast: AstRoot, code: string, callback: FileResultCallback): void;
+  (
+    ast: AstRoot,
+    code: string,
+    opts: ResolvedConfig | undefined | null,
+    callback: FileResultCallback,
+  ): void;
+};
+
+const transformFromAstWithResolvedConfigRunner = gensync(function* (
+  ast: AstRoot,
+  code: string,
+  config: ResolvedConfig | null,
+): Handler<FileResult | null> {
+  if (config === null) return null;
+
+  if (!ast) throw new Error("No AST given");
+
+  return yield* run(config, code, ast);
+});
+
+export const transformFromAstWithResolvedConfig: TransformFromAstWithResolvedConfig =
+  function transformFromAstWithResolvedConfig(
+    ast,
+    code,
+    optsOrCallback?: ResolvedConfig | null | undefined | FileResultCallback,
+    maybeCallback?: FileResultCallback,
+  ) {
+    let opts: ResolvedConfig | undefined | null;
+    let callback: FileResultCallback | undefined;
+    if (typeof optsOrCallback === "function") {
+      callback = optsOrCallback;
+      opts = undefined;
+    } else {
+      opts = optsOrCallback;
+      callback = maybeCallback;
+    }
+
+    if (callback === undefined) {
+      throw new Error(
+        "The 'transformFromAstWithResolvedConfig' function expects a callback. If you need to call it synchronously, please use 'transformFromAstWithResolvedConfigSync'.",
+      );
+    }
+
+    beginHiddenCallStack(transformFromAstWithResolvedConfigRunner.errback)(
+      ast,
+      code,
+      opts,
+      callback,
+    );
+  };
+
+export function transformFromAstWithResolvedConfigSync(
+  ...args: Parameters<typeof transformFromAstWithResolvedConfigRunner.sync>
+) {
+  return beginHiddenCallStack(transformFromAstWithResolvedConfigRunner.sync)(
+    ...args,
+  );
+}
+
+export function transformFromAstWithResolvedConfigAsync(
+  ...args: Parameters<typeof transformFromAstWithResolvedConfigRunner.async>
+) {
+  return beginHiddenCallStack(transformFromAstWithResolvedConfigRunner.async)(
+    ...args,
+  );
+}
