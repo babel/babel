@@ -1927,7 +1927,9 @@ export function tsQualifiedName(
 export { tsQualifiedName as tSQualifiedName };
 export function tsCallSignatureDeclaration(
   typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
-  parameters: Array<t.Identifier | t.RestElement>,
+  parameters: Array<
+    t.ArrayPattern | t.Identifier | t.ObjectPattern | t.RestElement
+  >,
   typeAnnotation: t.TSTypeAnnotation | null = null,
 ): t.TSCallSignatureDeclaration {
   return validateNode<t.TSCallSignatureDeclaration>({
@@ -1940,7 +1942,9 @@ export function tsCallSignatureDeclaration(
 export { tsCallSignatureDeclaration as tSCallSignatureDeclaration };
 export function tsConstructSignatureDeclaration(
   typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
-  parameters: Array<t.Identifier | t.RestElement>,
+  parameters: Array<
+    t.ArrayPattern | t.Identifier | t.ObjectPattern | t.RestElement
+  >,
   typeAnnotation: t.TSTypeAnnotation | null = null,
 ): t.TSConstructSignatureDeclaration {
   return validateNode<t.TSConstructSignatureDeclaration>({
@@ -1968,7 +1972,9 @@ export { tsPropertySignature as tSPropertySignature };
 export function tsMethodSignature(
   key: t.Expression,
   typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
-  parameters: Array<t.Identifier | t.RestElement>,
+  parameters: Array<
+    t.ArrayPattern | t.Identifier | t.ObjectPattern | t.RestElement
+  >,
   typeAnnotation: t.TSTypeAnnotation | null = null,
 ): t.TSMethodSignature {
   return validateNode<t.TSMethodSignature>({
@@ -2078,7 +2084,9 @@ export function tsThisType(): t.TSThisType {
 export { tsThisType as tSThisType };
 export function tsFunctionType(
   typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
-  parameters: Array<t.Identifier | t.RestElement>,
+  parameters: Array<
+    t.ArrayPattern | t.Identifier | t.ObjectPattern | t.RestElement
+  >,
   typeAnnotation: t.TSTypeAnnotation | null = null,
 ): t.TSFunctionType {
   return validateNode<t.TSFunctionType>({
@@ -2091,7 +2099,9 @@ export function tsFunctionType(
 export { tsFunctionType as tSFunctionType };
 export function tsConstructorType(
   typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
-  parameters: Array<t.Identifier | t.RestElement>,
+  parameters: Array<
+    t.ArrayPattern | t.Identifier | t.ObjectPattern | t.RestElement
+  >,
   typeAnnotation: t.TSTypeAnnotation | null = null,
 ): t.TSConstructorType {
   return validateNode<t.TSConstructorType>({

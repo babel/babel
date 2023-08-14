@@ -1718,14 +1718,14 @@ export interface TSQualifiedName extends BaseNode {
 export interface TSCallSignatureDeclaration extends BaseNode {
   type: "TSCallSignatureDeclaration";
   typeParameters?: TSTypeParameterDeclaration | null;
-  parameters: Array<Identifier | RestElement>;
+  parameters: Array<ArrayPattern | Identifier | ObjectPattern | RestElement>;
   typeAnnotation?: TSTypeAnnotation | null;
 }
 
 export interface TSConstructSignatureDeclaration extends BaseNode {
   type: "TSConstructSignatureDeclaration";
   typeParameters?: TSTypeParameterDeclaration | null;
-  parameters: Array<Identifier | RestElement>;
+  parameters: Array<ArrayPattern | Identifier | ObjectPattern | RestElement>;
   typeAnnotation?: TSTypeAnnotation | null;
 }
 
@@ -1744,7 +1744,7 @@ export interface TSMethodSignature extends BaseNode {
   type: "TSMethodSignature";
   key: Expression;
   typeParameters?: TSTypeParameterDeclaration | null;
-  parameters: Array<Identifier | RestElement>;
+  parameters: Array<ArrayPattern | Identifier | ObjectPattern | RestElement>;
   typeAnnotation?: TSTypeAnnotation | null;
   computed?: boolean;
   kind: "method" | "get" | "set";
@@ -1818,14 +1818,14 @@ export interface TSThisType extends BaseNode {
 export interface TSFunctionType extends BaseNode {
   type: "TSFunctionType";
   typeParameters?: TSTypeParameterDeclaration | null;
-  parameters: Array<Identifier | RestElement>;
+  parameters: Array<ArrayPattern | Identifier | ObjectPattern | RestElement>;
   typeAnnotation?: TSTypeAnnotation | null;
 }
 
 export interface TSConstructorType extends BaseNode {
   type: "TSConstructorType";
   typeParameters?: TSTypeParameterDeclaration | null;
-  parameters: Array<Identifier | RestElement>;
+  parameters: Array<ArrayPattern | Identifier | ObjectPattern | RestElement>;
   typeAnnotation?: TSTypeAnnotation | null;
   abstract?: boolean | null;
 }
@@ -2915,8 +2915,13 @@ export interface ParentMaps {
     | ObjectMethod
     | ObjectProperty
     | RestElement
+    | TSCallSignatureDeclaration
+    | TSConstructSignatureDeclaration
+    | TSConstructorType
     | TSDeclareFunction
     | TSDeclareMethod
+    | TSFunctionType
+    | TSMethodSignature
     | VariableDeclarator;
   ArrayTypeAnnotation:
     | ArrayTypeAnnotation
@@ -5626,8 +5631,13 @@ export interface ParentMaps {
     | ObjectMethod
     | ObjectProperty
     | RestElement
+    | TSCallSignatureDeclaration
+    | TSConstructSignatureDeclaration
+    | TSConstructorType
     | TSDeclareFunction
     | TSDeclareMethod
+    | TSFunctionType
+    | TSMethodSignature
     | VariableDeclarator;
   ObjectProperty: ObjectExpression | ObjectPattern | RecordExpression;
   ObjectTypeAnnotation:

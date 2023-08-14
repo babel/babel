@@ -97,7 +97,7 @@ defineType("TSQualifiedName", {
 const signatureDeclarationCommon = () => ({
   typeParameters: validateOptionalType("TSTypeParameterDeclaration"),
   [process.env.BABEL_8_BREAKING ? "params" : "parameters"]: validateArrayOfType(
-    ["Identifier", "RestElement"],
+    ["ArrayPattern", "Identifier", "ObjectPattern", "RestElement"],
   ),
   [process.env.BABEL_8_BREAKING ? "returnType" : "typeAnnotation"]:
     validateOptionalType("TSTypeAnnotation"),
