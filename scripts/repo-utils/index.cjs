@@ -32,6 +32,9 @@ if (typeof jest !== "undefined") {
 }
 
 exports.commonJS = function (metaUrl) {
+  if (!metaUrl) {
+    throw new Error("commonJS() requires import.meta.url");
+  }
   const filename = fileURLToPath(metaUrl);
   const dirname = path.dirname(filename);
   return {
