@@ -1,5 +1,4 @@
 import path from "path";
-import gensync from "gensync";
 import type { Handler } from "gensync";
 import Plugin from "./plugin";
 import { mergeOptions } from "./util";
@@ -159,7 +158,7 @@ type LoadPartialConfigOpts = {
   showIgnoredFiles?: boolean;
 };
 
-export const loadPartialConfig = gensync(function* (
+export function* loadPartialConfig(
   opts?: LoadPartialConfigOpts,
 ): Handler<PartialConfig | null> {
   let showIgnoredFiles = false;
@@ -197,7 +196,7 @@ export const loadPartialConfig = gensync(function* (
     fileHandling,
     files,
   );
-});
+}
 
 export type { PartialConfig };
 

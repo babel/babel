@@ -1,6 +1,8 @@
 import {
+  loadOptions,
   loadOptionsSync,
   loadOptionsAsync,
+  loadPartialConfig,
   loadPartialConfigSync,
   createConfigItem,
   createConfigItemSync,
@@ -48,13 +50,17 @@ describe("@babel/core config loading", () => {
     };
   }
 
-  itBabel8("createConfigItem throws on undefined callback", () => {
-    function myPlugin() {
-      return {};
-    }
-    expect(() => createConfigItem(myPlugin)).toThrowErrorMatchingInlineSnapshot(
-      `"Starting from Babel 8.0.0, the 'createConfigItem' function expects a callback. If you need to call it synchronously, please use 'createConfigItemSync'."`,
-    );
+  describe("createConfigItem", () => {
+    itBabel8("throws on undefined callback", () => {
+      function myPlugin() {
+        return {};
+      }
+      expect(() =>
+        createConfigItem(myPlugin),
+      ).toThrowErrorMatchingInlineSnapshot(
+        `"Starting from Babel 8.0.0, the 'createConfigItem' function expects a callback. If you need to call it synchronously, please use 'createConfigItemSync'."`,
+      );
+    });
   });
 
   describe("createConfigItemSync", () => {
@@ -89,6 +95,20 @@ describe("@babel/core config loading", () => {
         options: undefined,
         value: myPlugin,
       });
+    });
+  });
+
+  describe("loadPartialConfig", () => {
+    itBabel8("throws on undefined callback", () => {
+      expect(() =>
+        loadPartialConfig({
+          ...makeOpts(true),
+          babelrc: false,
+          configFile: false,
+        }),
+      ).toThrowErrorMatchingInlineSnapshot(
+        `"Starting from Babel 8.0.0, the 'loadPartialConfig' function expects a callback. If you need to call it synchronously, please use 'loadPartialConfigSync'."`,
+      );
     });
   });
 
@@ -140,7 +160,7 @@ describe("@babel/core config loading", () => {
         "nested",
       );
 
-      const { options } = await loadPartialConfigSync({
+      const { options } = loadPartialConfigSync({
         cwd,
         filename: path.join(cwd, "file.js"),
         rootMode: "upward",
@@ -148,6 +168,16 @@ describe("@babel/core config loading", () => {
 
       expect(options.root).toBe(path.join(cwd, ".."));
       expect(options.rootMode).toBe("root");
+    });
+  });
+
+  describe("loadOptions", () => {
+    itBabel8("throws on undefined callback", () => {
+      const opts = makeOpts();
+
+      expect(() => loadOptions(opts)).toThrowErrorMatchingInlineSnapshot(
+        `"Starting from Babel 8.0.0, the 'loadOptions' function expects a callback. If you need to call it synchronously, please use 'loadOptionsSync'."`,
+      );
     });
   });
 
