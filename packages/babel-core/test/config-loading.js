@@ -2,6 +2,7 @@ import {
   loadOptionsSync,
   loadOptionsAsync,
   loadPartialConfigSync,
+  createConfigItem,
   createConfigItemSync,
 } from "../lib/index.js";
 import path from "path";
@@ -9,6 +10,8 @@ import { fileURLToPath } from "url";
 import { createRequire } from "module";
 
 const require = createRequire(import.meta.url);
+
+const itBabel8 = process.env.BABEL_8_BREAKING ? it : it.skip;
 
 describe("@babel/core config loading", () => {
   const FILEPATH = path.join(
@@ -44,6 +47,15 @@ describe("@babel/core config loading", () => {
         : [[require("./fixtures/config-loading/plugin6.js"), {}]],
     };
   }
+
+  itBabel8("createConfigItem throws on undefined callback", () => {
+    function myPlugin() {
+      return {};
+    }
+    expect(() => createConfigItem(myPlugin)).toThrowErrorMatchingInlineSnapshot(
+      `"Starting from Babel 8.0.0, the 'createConfigItem' function expects a callback. If you need to call it synchronously, please use 'createConfigItemSync'."`,
+    );
+  });
 
   describe("createConfigItemSync", () => {
     // Windows uses different file paths

@@ -32,6 +32,8 @@ export type { PartialConfig } from "./partial";
 import { createConfigItem as createConfigItemImpl } from "./item";
 import type { ConfigItem } from "./item";
 
+import { beginHiddenCallStack } from "../errors/rewrite-stack-trace";
+
 const loadOptionsRunner = gensync(function* (
   opts: unknown,
 ): Handler<ResolvedConfig | null> {
@@ -80,6 +82,12 @@ export function createConfigItem(
   } else if (typeof options === "function") {
     createConfigItemRunner.errback(target, undefined, callback);
   } else {
-    return createConfigItemRunner.sync(target, options);
+    if (process.env.BABEL_8_BREAKING) {
+      throw new Error(
+        "Starting from Babel 8.0.0, the 'createConfigItem' function expects a callback. If you need to call it synchronously, please use 'createConfigItemSync'.",
+      );
+    } else {
+      return beginHiddenCallStack(createConfigItemRunner.sync)(target, options);
+    }
   }
 }
