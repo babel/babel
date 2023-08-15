@@ -7,7 +7,14 @@ function initialize(babel) {
   exports.parseSync = babel.parseSync;
   exports.loadPartialConfigSync = babel.loadPartialConfigSync;
   exports.loadPartialConfigAsync = babel.loadPartialConfigAsync;
-  exports.createConfigItem = babel.createConfigItem;
+  if (process.env.BABEL_8_BREAKING) {
+    exports.createConfigItemSync = babel.createConfigItemSync;
+  } else {
+    // babel.createConfigItemSync is available on 7.13+
+    // we support Babel 7.11+
+    exports.createConfigItemSync =
+      babel.createConfigItemSync || babel.createConfigItem;
+  }
 }
 
 if (USE_ESM) {

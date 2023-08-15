@@ -10,7 +10,7 @@ const MULTIPLE_OVERRIDES = /More than one plugin attempted to override parsing/;
 
 module.exports = function maybeParse(code, options) {
   if (!extractParserOptionsConfigItem) {
-    extractParserOptionsConfigItem = babel.createConfigItem(
+    extractParserOptionsConfigItem = babel.createConfigItemSync(
       [extractParserOptionsPlugin, ref],
       { dirname: __dirname, type: "plugin" },
     );
