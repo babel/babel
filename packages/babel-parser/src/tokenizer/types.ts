@@ -284,6 +284,7 @@ export const tt = {
   _assert: createKeywordLike("assert", { startsExpr }),
   _async: createKeywordLike("async", { startsExpr }),
   _await: createKeywordLike("await", { startsExpr }),
+  _defer: createKeywordLike("defer", { startsExpr }),
   _from: createKeywordLike("from", { startsExpr }),
   _get: createKeywordLike("get", { startsExpr }),
   _let: createKeywordLike("let", { startsExpr }),

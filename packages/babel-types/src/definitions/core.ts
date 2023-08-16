@@ -1746,7 +1746,7 @@ defineType("ImportDeclaration", {
     },
     phase: {
       default: null,
-      validate: assertOneOf("source"),
+      validate: assertOneOf("source", "defer"),
     },
     specifiers: {
       validate: chain(
@@ -1817,7 +1817,7 @@ defineType("ImportExpression", {
   fields: {
     phase: {
       default: null,
-      validate: assertOneOf("source"),
+      validate: assertOneOf("source", "defer"),
     },
     source: {
       validate: assertNodeType("Expression"),

@@ -2871,18 +2871,23 @@ export default abstract class StatementParser extends ExpressionParser {
 
   checkImportReflection(node: Undone<N.ImportDeclaration>) {
     const { specifiers } = node;
-    const isSingleDefaultBinding =
-      specifiers.length === 1 &&
-      specifiers[0].type === "ImportDefaultSpecifier";
+    const singleBindingType =
+      specifiers.length === 1 ? specifiers[0].type : null;
 
     if (node.phase === "source") {
-      if (!isSingleDefaultBinding) {
+      if (singleBindingType !== "ImportDefaultSpecifier") {
         this.raise(Errors.SourcePhaseImportRequiresDefault, {
           at: specifiers[0].loc.start,
         });
       }
+    } else if (node.phase === "defer") {
+      if (singleBindingType !== "ImportNamespaceSpecifier") {
+        this.raise(Errors.DeferImportRequiresNamespace, {
+          at: specifiers[0].loc.start,
+        });
+      }
     } else if (node.module) {
-      if (!isSingleDefaultBinding) {
+      if (singleBindingType !== "ImportDefaultSpecifier") {
         this.raise(Errors.ImportReflectionNotBinding, {
           at: specifiers[0].loc.start,
         });
@@ -2930,7 +2935,11 @@ export default abstract class StatementParser extends ExpressionParser {
 
   isPotentialImportPhase(isExport: boolean): boolean {
     if (isExport) return false;
-    return this.isContextual(tt._source) || this.isContextual(tt._module);
+    return (
+      this.isContextual(tt._source) ||
+      this.isContextual(tt._defer) ||
+      this.isContextual(tt._module)
+    );
   }
 
   applyImportPhase(
@@ -2960,6 +2969,9 @@ export default abstract class StatementParser extends ExpressionParser {
     if (phase === "source") {
       this.expectPlugin("sourcePhaseImports", loc);
       (node as N.ImportDeclaration).phase = "source";
+    } else if (phase === "defer") {
+      this.expectPlugin("deferredImportEvaluation", loc);
+      (node as N.ImportDeclaration).phase = "defer";
     } else if (this.hasPlugin("sourcePhaseImports")) {
       (node as N.ImportDeclaration).phase = null;
     }
