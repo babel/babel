@@ -209,6 +209,7 @@
               "placeholders",
               "privateIn",
               "regexpUnicodeSets",
+              "sourcePhaseImports",
               "throwExpressions",
               "topLevelAwait",
               "typescript",

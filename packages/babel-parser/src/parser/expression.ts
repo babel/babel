@@ -1652,7 +1652,10 @@ export default abstract class ExpressionParser extends LValParser {
   }
 
   // https://tc39.es/ecma262/#prod-ImportMeta
-  parseImportMetaProperty(node: Undone<N.MetaProperty>): N.MetaProperty {
+  parseImportMetaProperty(
+    this: Parser,
+    node: Undone<N.MetaProperty | N.ImportExpression>,
+  ): N.MetaProperty | N.ImportExpression {
     const id = this.createIdentifier(
       this.startNodeAtNode<N.Identifier>(node),
       "import",
@@ -1664,9 +1667,20 @@ export default abstract class ExpressionParser extends LValParser {
         this.raise(Errors.ImportMetaOutsideModule, { at: id });
       }
       this.sawUnambiguousESM = true;
+    } else if (this.isContextual(tt._source)) {
+      this.expectPlugin("sourcePhaseImports");
+      if (!this.options.createImportExpressions) {
+        throw this.raise(
+          Errors.SourcePhaseDynamicImportRequiresImportExpressions,
+          { at: this.state.startLoc },
+        );
+      }
+      this.next();
+      (node as Undone<N.ImportExpression>).phase = "source";
+      return this.parseImportCall(node as Undone<N.ImportExpression>);
     }
 
-    return this.parseMetaProperty(node, id, "meta");
+    return this.parseMetaProperty(node as Undone<N.MetaProperty>, id, "meta");
   }
 
   parseLiteralAtNode<T extends N.Node>(
