@@ -291,6 +291,7 @@ export const tt = {
   _of: createKeywordLike("of", { startsExpr }),
   _sent: createKeywordLike("sent", { startsExpr }),
   _set: createKeywordLike("set", { startsExpr }),
+  _source: createKeywordLike("source", { startsExpr }),
   _static: createKeywordLike("static", { startsExpr }),
   _using: createKeywordLike("using", { startsExpr }),
   _yield: createKeywordLike("yield", { startsExpr }),

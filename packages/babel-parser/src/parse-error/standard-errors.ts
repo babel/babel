@@ -233,6 +233,10 @@ export default {
     "In non-strict mode code, functions can only be declared at top level or inside a block.",
   SloppyFunctionAnnexB:
     "In non-strict mode code, functions can only be declared at top level, inside a block, or as the body of an if statement.",
+  SourcePhaseImportRequiresDefault:
+    'Only `import source x from "./module"` is valid.',
+  SourcePhaseDynamicImportRequiresImportExpressions:
+    "'import.source(...)' can only be parsed when using the 'createImportExpressions' option.",
   StaticPrototype: "Classes may not have static property named prototype.",
   SuperNotAllowed:
     "`super()` is only valid inside a class constructor of a subclass. Maybe a typo in the method name ('constructor') or not extending another class?",
