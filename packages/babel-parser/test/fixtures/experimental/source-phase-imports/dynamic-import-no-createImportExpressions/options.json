@@ -1,0 +1,4 @@
+{
+  "plugins": ["sourcePhaseImports"],
+  "throws": "'import.source(...)' can only be parsed when using the 'createImportExpressions' option. (1:7)"
+}
