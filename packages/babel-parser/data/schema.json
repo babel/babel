@@ -180,6 +180,7 @@
               "decorators",
               "decorators-legacy",
               "decoratorAutoAccessors",
+              "deferredImportEvaluation",
               "destructuringPrivate",
               "doExpressions",
               "dynamicImport",

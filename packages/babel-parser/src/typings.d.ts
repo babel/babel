@@ -8,6 +8,7 @@ export type Plugin =
   | "classStaticBlock" // Enabled by default
   | "decimal"
   | "decorators-legacy"
+  | "deferredImportEvaluation"
   | "decoratorAutoAccessors"
   | "destructuringPrivate"
   | "doExpressions"
