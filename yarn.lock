@@ -1576,6 +1576,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-proposal-import-wasm-source-to-fetch@workspace:packages/babel-plugin-proposal-import-wasm-source-to-fetch":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-proposal-import-wasm-source-to-fetch@workspace:packages/babel-plugin-proposal-import-wasm-source-to-fetch"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/plugin-syntax-import-source-phase": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.22.0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-proposal-partial-application@workspace:packages/babel-plugin-proposal-partial-application":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-partial-application@workspace:packages/babel-plugin-proposal-partial-application"
@@ -1959,6 +1972,17 @@ __metadata:
 "@babel/plugin-syntax-import-reflection@workspace:^, @babel/plugin-syntax-import-reflection@workspace:packages/babel-plugin-syntax-import-reflection":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-import-reflection@workspace:packages/babel-plugin-syntax-import-reflection"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
+
+"@babel/plugin-syntax-import-source-phase@workspace:^, @babel/plugin-syntax-import-source-phase@workspace:packages/babel-plugin-syntax-import-source-phase":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-syntax-import-source-phase@workspace:packages/babel-plugin-syntax-import-source-phase"
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
