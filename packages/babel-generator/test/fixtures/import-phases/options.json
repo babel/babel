@@ -1,4 +1,4 @@
 {
-  "plugins": ["sourcePhaseImports"],
+  "plugins": ["sourcePhaseImports", "deferredImportEvaluation"],
   "parserOpts": { "createImportExpressions": true }
 }

@@ -864,7 +864,7 @@ export interface ImportDeclaration extends BaseNode {
   attributes?: Array<ImportAttribute> | null;
   importKind?: "type" | "typeof" | "value" | null;
   module?: boolean | null;
-  phase?: "source" | null;
+  phase?: "source" | "defer" | null;
 }
 
 export interface ImportDefaultSpecifier extends BaseNode {
@@ -888,7 +888,7 @@ export interface ImportExpression extends BaseNode {
   type: "ImportExpression";
   source: Expression;
   options?: Expression | null;
-  phase?: "source" | null;
+  phase?: "source" | "defer" | null;
 }
 
 export interface MetaProperty extends BaseNode {
