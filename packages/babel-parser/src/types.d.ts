@@ -627,6 +627,7 @@ export interface NewExpression extends CallOrNewBase {
 export interface ImportExpression extends NodeBase {
   type: "ImportExpression";
   source: Expression;
+  phase?: null | "source";
   options: Expression | null;
 }
 
@@ -927,6 +928,7 @@ export interface ImportDeclaration extends NodeBase {
   >;
   source: Literal;
   importKind?: "type" | "typeof" | "value"; // TODO: Not in spec,
+  phase?: null | "source";
   attributes?: ImportAttribute[];
   // @deprecated
   assertions?: ImportAttribute[];

@@ -2870,13 +2870,21 @@ export default abstract class StatementParser extends ExpressionParser {
   }
 
   checkImportReflection(node: Undone<N.ImportDeclaration>) {
-    if (node.module) {
-      if (
-        node.specifiers.length !== 1 ||
-        node.specifiers[0].type !== "ImportDefaultSpecifier"
-      ) {
+    const { specifiers } = node;
+    const isSingleDefaultBinding =
+      specifiers.length === 1 &&
+      specifiers[0].type === "ImportDefaultSpecifier";
+
+    if (node.phase === "source") {
+      if (!isSingleDefaultBinding) {
+        this.raise(Errors.SourcePhaseImportRequiresDefault, {
+          at: specifiers[0].loc.start,
+        });
+      }
+    } else if (node.module) {
+      if (!isSingleDefaultBinding) {
         this.raise(Errors.ImportReflectionNotBinding, {
-          at: node.specifiers[0].loc.start,
+          at: specifiers[0].loc.start,
         });
       }
       if (node.assertions?.length > 0) {
@@ -2921,7 +2929,8 @@ export default abstract class StatementParser extends ExpressionParser {
   }
 
   isPotentialImportPhase(isExport: boolean): boolean {
-    return !isExport && this.isContextual(tt._module);
+    if (isExport) return false;
+    return this.isContextual(tt._source) || this.isContextual(tt._module);
   }
 
   applyImportPhase(
@@ -2932,19 +2941,27 @@ export default abstract class StatementParser extends ExpressionParser {
   ): void {
     if (isExport) {
       if (!process.env.IS_PUBLISH) {
-        if (phase === "module") {
+        if (phase === "module" || phase === "source") {
           throw new Error(
-            "Assertion failure: export declarations do not support the 'module' phase.",
+            `Assertion failure: export declarations do not support the '${phase}' phase.`,
           );
         }
       }
       return;
     }
+
     if (phase === "module") {
       this.expectPlugin("importReflection", loc);
       (node as N.ImportDeclaration).module = true;
     } else if (this.hasPlugin("importReflection")) {
       (node as N.ImportDeclaration).module = false;
+    }
+
+    if (phase === "source") {
+      this.expectPlugin("sourcePhaseImports", loc);
+      (node as N.ImportDeclaration).phase = "source";
+    } else if (this.hasPlugin("sourcePhaseImports")) {
+      (node as N.ImportDeclaration).phase = null;
     }
   }
 
