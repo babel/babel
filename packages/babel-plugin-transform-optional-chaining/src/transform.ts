@@ -205,6 +205,13 @@ export function transformOptionalChain(
 
   const ifNullishBoolean = t.isBooleanLiteral(ifNullish);
   const ifNullishFalse = ifNullishBoolean && ifNullish.value === false;
+  const ifNullishVoid =
+    !ifNullishBoolean && t.isUnaryExpression(ifNullish, { operator: "void" });
+
+  const isEvaluationValueIgnored =
+    (t.isExpressionStatement(replacementPath.parent) ||
+      t.isSequenceExpression(replacementPath.parent)) &&
+    !replacementPath.isCompletionRecord();
 
   // prettier-ignore
   const tpl = ifNullishFalse
@@ -217,7 +224,7 @@ export function transformOptionalChain(
     .reduce((expr, check) => t.logicalExpression(logicalOp, expr, check));
 
   replacementPath.replaceWith(
-    ifNullishBoolean
+    ifNullishBoolean || (ifNullishVoid && isEvaluationValueIgnored)
       ? t.logicalExpression(logicalOp, check, result)
       : t.conditionalExpression(check, ifNullish, result),
   );
