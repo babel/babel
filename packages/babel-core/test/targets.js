@@ -1,15 +1,15 @@
-import { loadOptions as loadOptionsOrig } from "../lib/index.js";
+import { loadOptionsSync as loadOptionsSyncOrig } from "../lib/index.js";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 
 const cwd = dirname(fileURLToPath(import.meta.url));
 
-function loadOptions(opts) {
-  return loadOptionsOrig({ cwd, ...opts });
+function loadOptionsSync(opts) {
+  return loadOptionsSyncOrig({ cwd, ...opts });
 }
 
 function withTargets(targets) {
-  return loadOptions({ targets });
+  return loadOptionsSync({ targets });
 }
 
 describe("targets", () => {
@@ -85,7 +85,7 @@ describe("targets", () => {
 describe("browserslist", () => {
   it("loads .browserslistrc by default", () => {
     expect(
-      loadOptions({
+      loadOptionsSync({
         cwd: join(cwd, "fixtures", "targets"),
       }).targets,
     ).toEqual({ chrome: "80.0.0" });
@@ -93,7 +93,7 @@ describe("browserslist", () => {
 
   it("loads .browserslistrc relative to the root", () => {
     expect(
-      loadOptions({
+      loadOptionsSync({
         cwd: join(cwd, "fixtures", "targets"),
         filename: "./node_modules/dep/test.js",
       }).targets,
@@ -103,7 +103,7 @@ describe("browserslist", () => {
   describe("browserslistConfigFile", () => {
     it("can disable config loading", () => {
       expect(
-        loadOptions({
+        loadOptionsSync({
           cwd: join(cwd, "fixtures", "targets"),
           browserslistConfigFile: false,
         }).targets,
@@ -112,7 +112,7 @@ describe("browserslist", () => {
 
     it("can specify a custom file", () => {
       expect(
-        loadOptions({
+        loadOptionsSync({
           cwd: join(cwd, "fixtures", "targets"),
           browserslistConfigFile: "./.browserslistrc-firefox",
         }).targets,
@@ -121,7 +121,7 @@ describe("browserslist", () => {
 
     it("is relative to the cwd even if specifying 'root'", () => {
       expect(
-        loadOptions({
+        loadOptionsSync({
           cwd: join(cwd, "fixtures", "targets"),
           root: "..",
           filename: "./nested/test.js",
@@ -132,7 +132,7 @@ describe("browserslist", () => {
 
     it("is relative to the config files that defines it", () => {
       expect(
-        loadOptions({
+        loadOptionsSync({
           cwd: join(cwd, "fixtures", "targets"),
           filename: "./node_modules/dep/test.js",
           babelrcRoots: ["./node_modules/dep/"],
@@ -144,7 +144,7 @@ describe("browserslist", () => {
   describe("browserslistEnv", () => {
     it("is forwarded to browserslist", () => {
       expect(
-        loadOptions({
+        loadOptionsSync({
           cwd: join(cwd, "fixtures", "targets"),
           browserslistEnv: "browserslist-loading-test",
         }).targets,

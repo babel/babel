@@ -1,4 +1,4 @@
-import gensync, { type Handler, type Callback } from "gensync";
+import gensync, { type Handler } from "gensync";
 
 export type {
   ResolvedConfig,
@@ -24,7 +24,10 @@ export type {
 } from "./validation/options";
 
 import loadFullConfig, { type ResolvedConfig } from "./full";
-import { loadPartialConfig as loadPartialConfigRunner } from "./partial";
+import {
+  type PartialConfig,
+  loadPartialConfig as loadPartialConfigImpl,
+} from "./partial";
 
 export { loadFullConfig as default };
 export type { PartialConfig } from "./partial";
@@ -32,54 +35,114 @@ export type { PartialConfig } from "./partial";
 import { createConfigItem as createConfigItemImpl } from "./item";
 import type { ConfigItem } from "./item";
 
-const loadOptionsRunner = gensync(function* (
-  opts: unknown,
-): Handler<ResolvedConfig | null> {
+import { beginHiddenCallStack } from "../errors/rewrite-stack-trace";
+
+const loadPartialConfigRunner = gensync(loadPartialConfigImpl);
+export function loadPartialConfigAsync(
+  ...args: Parameters<typeof loadPartialConfigRunner.async>
+) {
+  return beginHiddenCallStack(loadPartialConfigRunner.async)(...args);
+}
+export function loadPartialConfigSync(
+  ...args: Parameters<typeof loadPartialConfigRunner.sync>
+) {
+  return beginHiddenCallStack(loadPartialConfigRunner.sync)(...args);
+}
+export function loadPartialConfig(
+  opts: Parameters<typeof loadPartialConfigImpl>[0],
+  callback?: (err: Error, val: PartialConfig | null) => void,
+) {
+  if (callback !== undefined) {
+    beginHiddenCallStack(loadPartialConfigRunner.errback)(opts, callback);
+  } else if (typeof opts === "function") {
+    beginHiddenCallStack(loadPartialConfigRunner.errback)(
+      undefined,
+      opts as (err: Error, val: PartialConfig | null) => void,
+    );
+  } else {
+    if (process.env.BABEL_8_BREAKING) {
+      throw new Error(
+        "Starting from Babel 8.0.0, the 'loadPartialConfig' function expects a callback. If you need to call it synchronously, please use 'loadPartialConfigSync'.",
+      );
+    } else {
+      return loadPartialConfigSync(opts);
+    }
+  }
+}
+
+function* loadOptionsImpl(opts: unknown): Handler<ResolvedConfig | null> {
   const config = yield* loadFullConfig(opts);
   // NOTE: We want to return "null" explicitly, while ?. alone returns undefined
   return config?.options ?? null;
-});
+}
+const loadOptionsRunner = gensync(loadOptionsImpl);
+export function loadOptionsAsync(
+  ...args: Parameters<typeof loadOptionsRunner.async>
+) {
+  return beginHiddenCallStack(loadOptionsRunner.async)(...args);
+}
+export function loadOptionsSync(
+  ...args: Parameters<typeof loadOptionsRunner.sync>
+) {
+  return beginHiddenCallStack(loadOptionsRunner.sync)(...args);
+}
+export function loadOptions(
+  opts: Parameters<typeof loadOptionsImpl>[0],
+  callback?: (err: Error, val: ResolvedConfig | null) => void,
+) {
+  if (callback !== undefined) {
+    beginHiddenCallStack(loadOptionsRunner.errback)(opts, callback);
+  } else if (typeof opts === "function") {
+    beginHiddenCallStack(loadOptionsRunner.errback)(
+      undefined,
+      opts as (err: Error, val: ResolvedConfig | null) => void,
+    );
+  } else {
+    if (process.env.BABEL_8_BREAKING) {
+      throw new Error(
+        "Starting from Babel 8.0.0, the 'loadOptions' function expects a callback. If you need to call it synchronously, please use 'loadOptionsSync'.",
+      );
+    } else {
+      return loadOptionsSync(opts);
+    }
+  }
+}
 
 const createConfigItemRunner = gensync(createConfigItemImpl);
-
-const maybeErrback =
-  <Arg, Return>(runner: gensync.Gensync<[Arg], Return>) =>
-  (argOrCallback: Arg | Callback<Return>, maybeCallback?: Callback<Return>) => {
-    let arg: Arg | undefined;
-    let callback: Callback<Return>;
-    if (maybeCallback === undefined && typeof argOrCallback === "function") {
-      callback = argOrCallback as Callback<Return>;
-      arg = undefined;
-    } else {
-      callback = maybeCallback;
-      arg = argOrCallback as Arg;
-    }
-    if (!callback) {
-      return runner.sync(arg);
-    }
-    runner.errback(arg, callback);
-  };
-
-export const loadPartialConfig = maybeErrback(loadPartialConfigRunner);
-export const loadPartialConfigSync = loadPartialConfigRunner.sync;
-export const loadPartialConfigAsync = loadPartialConfigRunner.async;
-
-export const loadOptions = maybeErrback(loadOptionsRunner);
-export const loadOptionsSync = loadOptionsRunner.sync;
-export const loadOptionsAsync = loadOptionsRunner.async;
-
-export const createConfigItemSync = createConfigItemRunner.sync;
-export const createConfigItemAsync = createConfigItemRunner.async;
+export function createConfigItemAsync(
+  ...args: Parameters<typeof createConfigItemRunner.async>
+) {
+  return beginHiddenCallStack(createConfigItemRunner.async)(...args);
+}
+export function createConfigItemSync(
+  ...args: Parameters<typeof createConfigItemRunner.sync>
+) {
+  return beginHiddenCallStack(createConfigItemRunner.sync)(...args);
+}
 export function createConfigItem(
   target: PluginTarget,
   options: Parameters<typeof createConfigItemImpl>[1],
   callback?: (err: Error, val: ConfigItem<PluginAPI> | null) => void,
 ) {
   if (callback !== undefined) {
-    createConfigItemRunner.errback(target, options, callback);
+    beginHiddenCallStack(createConfigItemRunner.errback)(
+      target,
+      options,
+      callback,
+    );
   } else if (typeof options === "function") {
-    createConfigItemRunner.errback(target, undefined, callback);
+    beginHiddenCallStack(createConfigItemRunner.errback)(
+      target,
+      undefined,
+      callback,
+    );
   } else {
-    return createConfigItemRunner.sync(target, options);
+    if (process.env.BABEL_8_BREAKING) {
+      throw new Error(
+        "Starting from Babel 8.0.0, the 'createConfigItem' function expects a callback. If you need to call it synchronously, please use 'createConfigItemSync'.",
+      );
+    } else {
+      return createConfigItemSync(target, options);
+    }
   }
 }
