@@ -9,23 +9,12 @@ export default declare(({ assertVersion, types: t, template }) => {
   function buildFetch(
     path: NodePath<t.ImportDeclaration | t.ImportExpression>,
   ) {
-    let specifier = path.node.source;
-    let specifierRef: t.Expression;
-    if (t.isStringLiteral(specifier)) {
-      specifierRef = specifier;
-    } else {
-      specifierRef = path.scope.generateDeclaredUidIdentifier("specifier");
-      specifier = t.assignmentExpression(
-        "=",
-        t.cloneNode(specifierRef),
-        specifier,
-      );
-    }
+    const specifier = path.node.source;
 
     return template.expression.ast`
       WebAssembly.compileStreaming(fetch(
         import.meta.resolve?.(${specifier}) ??
-        new URL(${t.cloneNode(specifierRef)}, import.meta.url)
+        new URL(${t.cloneNode(specifier)}, import.meta.url)
       ))
     `;
   }
