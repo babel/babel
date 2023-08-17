@@ -27,10 +27,7 @@ if (typeof jest !== "undefined") {
     return !USE_ESM && semver.gte(process.version, version) ? it : it.skip;
   };
   exports.itGte = function (version) {
-    return (...args) => {
-      const testFn = semver.gte(process.version, version) ? it : it.skip;
-      return testFn(...args);
-    };
+    return semver.gte(process.version, version) ? it : it.skip;
   };
   exports.itNoWin32 = process.platform === "win32" ? it.skip : it;
 }
