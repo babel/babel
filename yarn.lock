@@ -1911,6 +1911,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-syntax-import-defer@workspace:^, @babel/plugin-syntax-import-defer@workspace:packages/babel-plugin-syntax-import-defer":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-syntax-import-defer@workspace:packages/babel-plugin-syntax-import-defer"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-syntax-import-meta-BABEL_8_BREAKING-false@npm:@babel/plugin-syntax-import-meta@^7.10.4, @babel/plugin-syntax-import-meta@npm:^7.8.3":
   version: 7.10.4
   resolution: "@babel/plugin-syntax-import-meta@npm:7.10.4"
