@@ -1562,6 +1562,20 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-proposal-import-defer@workspace:packages/babel-plugin-proposal-import-defer":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-proposal-import-defer@workspace:packages/babel-plugin-proposal-import-defer"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/plugin-syntax-import-defer": "workspace:^"
+    "@babel/plugin-transform-modules-commonjs": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-proposal-partial-application@workspace:packages/babel-plugin-proposal-partial-application":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-partial-application@workspace:packages/babel-plugin-proposal-partial-application"
