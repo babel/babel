@@ -14,10 +14,10 @@ function loadOptionsAsync(opts) {
 }
 
 const itBabel7 = process.env.BABEL_8_BREAKING ? it.skip : it;
-const itBabel7cjs = process.env.BABEL_8_BREAKING || USE_ESM ? it.skip : it;
+const itBabel7NoESM = process.env.BABEL_8_BREAKING || USE_ESM ? it.skip : it;
 
 describe("option-manager", () => {
-  itBabel7cjs("throws for babel 5 plugin", () => {
+  itBabel7NoESM("throws for babel 5 plugin", () => {
     return expect(() => {
       loadOptions({
         plugins: [({ Plugin }) => new Plugin("object-assign", {})],

@@ -1,5 +1,7 @@
 import { parse } from "../lib/index.js";
 
+const itBabel8 = process.env.BABEL_8_BREAKING ? it : it.skip;
+
 function getParser(code, plugins) {
   return () => parse(code, { plugins, sourceType: "module" });
 }
@@ -66,7 +68,7 @@ describe("plugin options", function () {
     });
   });
   describe("'moduleAttributes' plugin", () => {
-    (process.env.BABEL_8_BREAKING ? it : it.skip)("removed in Babel 8", () => {
+    itBabel8("removed in Babel 8", () => {
       expect(
         getParser("", ["moduleAttributes"]),
       ).toThrowErrorMatchingInlineSnapshot(

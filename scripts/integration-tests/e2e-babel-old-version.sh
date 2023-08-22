@@ -60,8 +60,8 @@ rm packages/babel-standalone/test/built-into-es5.js
 # when using '@babel/helpers@^7.6.0'
 # NOTE: When running this command on MacOS, use gsed from 'brew install gnu-sed'
 sed -i 's/describe, "worker"/describe.skip, "worker"/g' packages/babel-register/test/index.js
-sed -i 's/babel7node12(/babel7node12.skip(/g' eslint/babel-eslint-tests/test/integration/parser-override.js
-sed -i 's/itNode12upNoESM(/itNode12upNoESM.skip(/g' eslint/babel-eslint-tests/test/integration/config-files.js
+sed -i 's/nodeGte12(/nodeGte12.skip(/g' eslint/babel-eslint-tests/test/integration/parser-override.js
+sed -i 's/nodeGte12NoESM(/nodeGte12NoESM.skip(/g' eslint/babel-eslint-tests/test/integration/config-files.js
 
 # Update deps, build and test
 rm yarn.lock

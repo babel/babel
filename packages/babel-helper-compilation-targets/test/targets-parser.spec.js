@@ -5,6 +5,9 @@ import { fileURLToPath } from "url";
 import _getTargets from "../lib/index.js";
 const getTargets = _getTargets.default || _getTargets;
 
+const itBabel7 = process.env.BABEL_8_BREAKING ? it.skip : it;
+const itBabel8 = process.env.BABEL_8_BREAKING ? it : it.skip;
+
 describe("getTargets", () => {
   it("parses", () => {
     expect(
@@ -284,7 +287,7 @@ describe("getTargets", () => {
       ).toMatchSnapshot();
     });
 
-    (process.env.BABEL_8_BREAKING ? it.skip : it)(
+    itBabel7(
       "'intersect' behaves like 'true' if no browsers are specified - Babel 7",
       () => {
         expect(getTargets({ esmodules: "intersect" })).toEqual(
@@ -293,7 +296,7 @@ describe("getTargets", () => {
       },
     );
 
-    (process.env.BABEL_8_BREAKING ? it.skip : it)(
+    itBabel7(
       "'browsers' option will have no effect if it is an empty array - Babel 7",
       () => {
         expect(getTargets({ esmodules: "intersect", browsers: [] })).toEqual(
@@ -318,7 +321,7 @@ describe("getTargets", () => {
       ).toThrow();
     });
 
-    (process.env.BABEL_8_BREAKING ? it : it.skip)(
+    itBabel8(
       "'intersect' behaves like no-op if no browsers are specified",
       () => {
         expect(getTargets({ esmodules: "intersect" })).toEqual(getTargets({}));

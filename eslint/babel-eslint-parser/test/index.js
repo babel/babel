@@ -23,7 +23,7 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // @babel/eslint-parser 8 will drop ESLint 7 support
 const itESLint7 = isESLint7 && !process.env.BABEL_8_BREAKING ? it : it.skip;
-const itNotESLint7 = isESLint7 ? it.skip : it;
+const itESLint8 = isESLint7 ? it.skip : it;
 
 const BABEL_OPTIONS = {
   configFile: path.resolve(
@@ -435,7 +435,7 @@ describe("Babel and Espree", () => {
     expect(babylonAST.tokens[3].value).toEqual("#");
   });
 
-  itNotESLint7("private identifier (token) - ESLint 8", () => {
+  itESLint8("private identifier (token) - ESLint 8", () => {
     const code = "class A { #x }";
     const babylonAST = parseForESLint(code, {
       eslintVisitorKeys: true,
@@ -492,7 +492,7 @@ describe("Babel and Espree", () => {
     expect(classDeclaration.body.body[0].type).toEqual("PropertyDefinition");
   });
 
-  itNotESLint7("class fields with ESLint 8", () => {
+  itESLint8("class fields with ESLint 8", () => {
     parseAndAssertSame(
       `
         class A {
@@ -536,7 +536,7 @@ describe("Babel and Espree", () => {
     ).toMatchObject(staticKw);
   });
 
-  itNotESLint7("static (token) - ESLint 8", () => {
+  itESLint8("static (token) - ESLint 8", () => {
     const code = `
       class A {
         static m() {}
@@ -593,7 +593,7 @@ describe("Babel and Espree", () => {
     expect(babylonAST.tokens[17]).toMatchObject(topicToken);
   });
 
-  itNotESLint7("pipeline # topic token - ESLint 8", () => {
+  itESLint8("pipeline # topic token - ESLint 8", () => {
     const code = `
       x |> #
       y |> #[0]

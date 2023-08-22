@@ -100,6 +100,7 @@ describe("@babel/register", function () {
           Object.defineProperty(Module, "_cache", {
             get: () => emptyInitialCache,
             set(value) {
+              // eslint-disable-next-line jest/no-standalone-expect
               expect(isEmptyObj(value)).toBe(true);
 
               Object.defineProperty(Module, "_cache", {

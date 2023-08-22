@@ -10,7 +10,7 @@ function makeParser(code, options) {
     });
 }
 
-const babel8 = process.env.BABEL_8_BREAKING ? test : test.skip;
+const itBabel8 = process.env.BABEL_8_BREAKING ? test : test.skip;
 const babel7describe = process.env.BABEL_8_BREAKING ? describe.skip : describe;
 
 babel7describe("'legacy' option", function () {
@@ -153,7 +153,7 @@ describe("'version' option", function () {
     ).not.toThrow();
   });
 
-  babel8("is required", function () {
+  itBabel8("is required", function () {
     expect(makeParser("", {})).toThrow();
   });
 });

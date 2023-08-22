@@ -9,11 +9,10 @@ import {
   itESM,
 } from "./helpers/esm.js";
 
-const nodeGte8 = (...args) => {
-  // "minNodeVersion": "8.0.0" <-- For Ctrl+F when dropping node 6
-  const testFn = process.version.slice(0, 3) === "v6." ? it.skip : it;
-  testFn(...args);
-};
+import { itGte } from "$repo-utils";
+
+// "minNodeVersion": "8.0.0" <-- For Ctrl+F when dropping node 6
+const nodeGte8 = itGte("8.0.0");
 
 describe("asynchronicity", () => {
   const base = path.join(

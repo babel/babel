@@ -29,6 +29,7 @@ if (typeof jest !== "undefined") {
   exports.itGte = function (version) {
     return semver.gte(process.version, version) ? it : it.skip;
   };
+  exports.itNoWin32 = process.platform === "win32" ? it.skip : it;
 }
 
 exports.commonJS = function (metaUrl) {

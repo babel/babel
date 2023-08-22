@@ -5,7 +5,7 @@ import { USE_ESM } from "$repo-utils";
 
 describe("Babel config files", () => {
   const itESM = USE_ESM ? it : it.skip;
-  const itNode12upNoESM =
+  const nodeGte12NoESM =
     USE_ESM || parseInt(process.versions.node) < 12 ? it.skip : it;
 
   itESM("works with babel.config.mjs", async () => {
@@ -20,7 +20,7 @@ describe("Babel config files", () => {
     ).toMatchObject([{ errorCount: 0 }]);
   });
 
-  itNode12upNoESM(
+  nodeGte12NoESM(
     "experimental worker works with babel.config.mjs",
     async () => {
       const engine = new ESLint({ ignore: false });
