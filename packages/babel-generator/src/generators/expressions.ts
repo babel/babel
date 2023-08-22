@@ -85,24 +85,10 @@ export function NewExpression(
     !isMemberExpression(parent) &&
     !isNewExpression(parent)
   ) {
-    if (!process.env.BABEL_8_BREAKING) {
-      // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
-      if (!node.optional) return;
-    } else {
-      return;
-    }
+    return;
   }
 
-  this.print(node.typeArguments, node); // Flow
-  this.print(node.typeParameters, node); // TS
-
-  if (!process.env.BABEL_8_BREAKING) {
-    // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
-    if (node.optional) {
-      // TODO: This can never happen
-      this.token("?.");
-    }
-  }
+  this.print(node.typeArguments || node.typeParameters, node); // Flow || TS
 
   this.token("(");
   this.printList(node.arguments, node);
