@@ -122,7 +122,6 @@ function generateHelpers(generator, dest, filename, message) {
         file.contents = Buffer.from(
           await formatCode(await generateCode(filename), dest + file.path)
         );
-
         log(`${chalk.green("✔")} Generated ${message}`);
         callback(null, file);
       })
