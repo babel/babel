@@ -285,6 +285,7 @@ jobs:
         env:
           BABEL_ENV: test-legacy
           BABEL_8_BREAKING: true
+          BABEL_TYPES_8_BREAKING: true
           STRIP_BABEL_8_FLAG: true
       - name: Lint
         run: make -j tscheck lint-ci
