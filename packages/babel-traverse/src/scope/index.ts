@@ -1117,6 +1117,7 @@ export default class Scope {
       if (!unique) path.setData(dataKey, declarPath);
     }
 
+    // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
     const declarator = variableDeclarator(id, init);
     const len = declarPath.node.declarations.push(declarator);
     path.scope.registerBinding(kind, declarPath.get("declarations")[len - 1]);

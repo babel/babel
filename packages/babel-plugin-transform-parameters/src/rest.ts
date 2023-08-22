@@ -336,6 +336,7 @@ export default function convertFunctionRest(path: NodePath<t.Function>) {
     rest = scope.generateUidIdentifier("ref");
 
     const declar = t.variableDeclaration("let", [
+      // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
       t.variableDeclarator(pattern, rest),
     ]);
     path.ensureBlock();

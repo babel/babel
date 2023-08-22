@@ -640,16 +640,15 @@ class Printer {
       format.concise = true;
     }
 
-    const printMethod =
-      this[
-        nodeType as Exclude<
-          t.Node["type"],
-          // removed
-          | "Noop"
-          // renamed
-          | t.DeprecatedAliases["type"]
-        >
-      ];
+    const printMethod = this[
+      nodeType as Exclude<
+        t.Node["type"],
+        // removed
+        | "Noop"
+        // renamed
+        | t.DeprecatedAliases["type"]
+      >
+    ] as (this: Printer, node: t.Node, parent?: t.Node) => void;
     if (printMethod === undefined) {
       throw new ReferenceError(
         `unknown node of type ${JSON.stringify(

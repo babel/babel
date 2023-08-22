@@ -98,6 +98,7 @@ export function buildVariableDeclarationFromParams(
     params: elements,
     variableDeclaration: variableDeclaration(
       "var",
+      // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
       transformed.map(({ left, right }) => variableDeclarator(left, right)),
     ),
   };

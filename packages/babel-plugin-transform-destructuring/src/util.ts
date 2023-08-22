@@ -155,7 +155,8 @@ export class DestructuringTransformer {
       }
 
       node = t.variableDeclaration(this.kind, [
-        t.variableDeclarator(id as t.LVal, nodeInit),
+        // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
+        t.variableDeclarator(id, nodeInit),
       ]);
     }
 
@@ -183,6 +184,7 @@ export class DestructuringTransformer {
     } else if (t.isAssignmentPattern(id)) {
       this.pushAssignmentPattern(id, init);
     } else {
+      // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
       this.nodes.push(this.buildVariableAssignment(id, init));
     }
   }
@@ -283,6 +285,7 @@ export class DestructuringTransformer {
     if (t.isPattern(pattern)) {
       this.push(pattern, objRef);
     } else {
+      // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
       this.nodes.push(this.buildVariableAssignment(pattern, objRef));
     }
   }
@@ -411,10 +414,12 @@ export class DestructuringTransformer {
       const elem = pattern.elements[i];
       if (t.isRestElement(elem)) {
         this.push(
+          // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
           elem.argument,
           t.arrayExpression(arr.elements.slice(i).map(holeToUndefined)),
         );
       } else {
+        // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
         this.push(elem, holeToUndefined(arr.elements[i]));
       }
     }
@@ -481,9 +486,11 @@ export class DestructuringTransformer {
 
         // set the element to the rest element argument since we've dealt with it
         // being a rest already
+        // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
         this.push(elem.argument, elemRef);
       } else {
         elemRef = t.memberExpression(arrayRef, t.numericLiteral(i), true);
+        // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
         this.push(elem, elemRef);
       }
     }

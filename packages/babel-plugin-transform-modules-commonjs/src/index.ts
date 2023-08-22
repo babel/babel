@@ -125,7 +125,7 @@ export default declare((api, options: Options) => {
 
       path.replaceWith(
         t.assignmentExpression(
-          path.node.operator[0] + "=",
+          (path.node.operator[0] + "=") as "+=" | "-=",
           arg.node,
           getAssertion(localName),
         ),

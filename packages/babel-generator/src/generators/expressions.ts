@@ -81,21 +81,29 @@ export function NewExpression(
   if (
     this.format.minified &&
     node.arguments.length === 0 &&
-    !node.optional &&
     !isCallExpression(parent, { callee: node }) &&
     !isMemberExpression(parent) &&
     !isNewExpression(parent)
   ) {
-    return;
+    if (!process.env.BABEL_8_BREAKING) {
+      // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
+      if (!node.optional) return;
+    } else {
+      return;
+    }
   }
 
   this.print(node.typeArguments, node); // Flow
   this.print(node.typeParameters, node); // TS
 
-  if (node.optional) {
-    // TODO: This can never happen
-    this.token("?.");
+  if (!process.env.BABEL_8_BREAKING) {
+    // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
+    if (node.optional) {
+      // TODO: This can never happen
+      this.token("?.");
+    }
   }
+
   this.token("(");
   this.printList(node.arguments, node);
   this.rightParens(node);
@@ -285,7 +293,22 @@ export function AssignmentPattern(this: Printer, node: t.AssignmentPattern) {
 
 export function AssignmentExpression(
   this: Printer,
-  node: t.AssignmentExpression,
+  node: t.AssignmentExpression | t.LogicalExpression,
+) {
+  this.print(node.left, node);
+
+  this.space();
+  this.token(node.operator);
+  this.space();
+
+  this.print(node.right, node);
+}
+
+export { AssignmentExpression as LogicalExpression };
+
+export function BinaryExpression(
+  this: Printer,
+  node: t.BinaryExpression,
   parent: t.Node,
 ) {
   // Somewhere inside a for statement `init` node but doesn't usually
@@ -321,11 +344,6 @@ export function BindExpression(this: Printer, node: t.BindExpression) {
   this.token("::");
   this.print(node.callee, node);
 }
-
-export {
-  AssignmentExpression as BinaryExpression,
-  AssignmentExpression as LogicalExpression,
-};
 
 export function MemberExpression(this: Printer, node: t.MemberExpression) {
   this.print(node.object, node);

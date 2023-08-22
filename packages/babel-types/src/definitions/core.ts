@@ -55,10 +55,16 @@ defineType("AssignmentExpression", {
         const identifier = assertOneOf(...ASSIGNMENT_OPERATORS);
         const pattern = assertOneOf("=");
 
-        return function (node: t.AssignmentExpression, key, val) {
-          const validator = is("Pattern", node.left) ? pattern : identifier;
-          validator(node, key, val);
-        };
+        return Object.assign(
+          function (node: t.AssignmentExpression, key: string, val: unknown) {
+            const validator = is("Pattern", node.left) ? pattern : identifier;
+            validator(node, key, val);
+          } as Validator,
+          // For building dts
+          {
+            oneOf: ASSIGNMENT_OPERATORS,
+          },
+        );
       })(),
     },
     left: {
@@ -1221,10 +1227,16 @@ defineType("VariableDeclarator", {
         );
         const without = assertNodeType("Identifier");
 
-        return function (node: t.VariableDeclarator, key, val) {
-          const validator = node.init ? normal : without;
-          validator(node, key, val);
-        };
+        return Object.assign(
+          function (node: t.VariableDeclarator, key, val) {
+            const validator = node.init ? normal : without;
+            validator(node, key, val);
+          } as Validator,
+          // For building dts
+          {
+            oneOfNodeTypes: ["Identifier", "ArrayPattern", "ObjectPattern"],
+          },
+        );
       })(),
     },
     definite: {
@@ -1636,10 +1648,20 @@ defineType("ExportNamedDeclaration", {
 
             if (!process.env.BABEL_TYPES_8_BREAKING) return sourced;
 
-            return function (node: t.ExportNamedDeclaration, key, val) {
-              const validator = node.source ? sourced : sourceless;
-              validator(node, key, val);
-            } as Validator;
+            return Object.assign(
+              function (node: t.ExportNamedDeclaration, key, val) {
+                const validator = node.source ? sourced : sourceless;
+                validator(node, key, val);
+              } as Validator,
+              // For ParentMaps
+              {
+                oneOfNodeTypes: [
+                  "ExportSpecifier",
+                  "ExportDefaultSpecifier",
+                  "ExportNamespaceSpecifier",
+                ],
+              },
+            );
           })(),
         ),
       ),
@@ -1700,13 +1722,30 @@ defineType("ForOfStatement", {
           "TSNonNullExpression",
         );
 
-        return function (node, key, val) {
-          if (is("VariableDeclaration", val)) {
-            declaration(node, key, val);
-          } else {
-            lval(node, key, val);
-          }
-        };
+        return Object.assign(
+          function (node, key, val) {
+            if (is("VariableDeclaration", val)) {
+              declaration(node, key, val);
+            } else {
+              lval(node, key, val);
+            }
+          } as Validator,
+          // for building dts
+          {
+            oneOfNodeTypes: [
+              "VariableDeclaration",
+
+              "Identifier",
+              "MemberExpression",
+              "ArrayPattern",
+              "ObjectPattern",
+              "TSAsExpression",
+              "TSSatisfiesExpression",
+              "TSTypeAssertion",
+              "TSNonNullExpression",
+            ],
+          },
+        );
       })(),
     },
     right: {

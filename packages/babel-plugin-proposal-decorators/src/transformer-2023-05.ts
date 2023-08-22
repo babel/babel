@@ -1251,12 +1251,14 @@ function createLocalsAssignment(
       ]);
     } else {
       lhs = t.arrayPattern(elementLocals);
-      rhs = t.memberExpression(rhs, t.identifier("e"), false, false);
+      // @ts-ignore(Babel 7 vs Babel 8) optional parameter was removed in Babel 8
+      rhs = t.memberExpression(rhs, t.identifier("e"), false);
     }
   } else {
     // invariant: classLocals.length > 0
     lhs = t.arrayPattern(classLocals);
-    rhs = t.memberExpression(rhs, t.identifier("c"), false, false);
+    // @ts-ignore(Babel 7 vs Babel 8) optional parameter was removed in Babel 8
+    rhs = t.memberExpression(rhs, t.identifier("c"), false);
   }
 
   return t.assignmentExpression("=", lhs, rhs);
