@@ -648,7 +648,7 @@ class Printer {
         // renamed
         | t.DeprecatedAliases["type"]
       >
-    ] as (this: Printer, node: t.Node, parent?: t.Node) => void;
+    ] as undefined | (this: Printer, node: t.Node, parent?: t.Node) => void;
     if (printMethod === undefined) {
       throw new ReferenceError(
         `unknown node of type ${JSON.stringify(

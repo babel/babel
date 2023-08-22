@@ -1734,7 +1734,6 @@ defineType("ForOfStatement", {
           {
             oneOfNodeTypes: [
               "VariableDeclaration",
-
               "Identifier",
               "MemberExpression",
               "ArrayPattern",
