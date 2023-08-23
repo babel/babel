@@ -37,6 +37,8 @@ module.exports = {
     "<rootDir>/packages/babel-core/.*/vendor/.*",
   ],
 
+  setupFiles: ["source-map-support/register"],
+
   // The eslint/* packages is tested against ESLint v8, which has dropped support for Node v10.
   // TODO: Remove this process.version check in Babel 8.
   testRegex: `./(packages|codemods${
