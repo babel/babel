@@ -242,6 +242,9 @@ function handleNested(
               transformed,
             );
           }
+        } else {
+          namespaceTopLevel.splice(i, 1);
+          i--;
         }
       }
     }
