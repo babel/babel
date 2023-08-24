@@ -173,7 +173,7 @@ module.exports = [
       "@babel/development/no-undefined-identifier": "error",
       "@babel/development/no-deprecated-clone": "error",
       "guard-for-in": "error",
-      "import/extensions": ["error", { json: "always", cjs: "always" }],
+      "import/extensions": ["error", "ignorePackages"],
     },
   },
   ...compat.extends("plugin:jest/recommended").map(config => {
