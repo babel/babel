@@ -241,12 +241,6 @@ function pushTask(
     delete taskOpts.os;
   }
 
-  // traceur checks
-
-  if (test.exec.code.indexOf("// Async.") >= 0) {
-    return;
-  }
-
   suite.tests.push(test);
 
   const sourceMapLoc = taskDir + "/source-map.json";
