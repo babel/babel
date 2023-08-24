@@ -24,6 +24,32 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.22.11 (2023-08-24)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-typescript`
+  * [#15882](https://github.com/babel/babel/pull/15882) Fix: fully remove TS nested type-only exported namespaces ([@yangguansen](https://github.com/yangguansen))
+* `babel-types`
+  * [#15867](https://github.com/babel/babel/pull/15867) fix: definition of TS function type params ([@danez](https://github.com/danez))
+* `babel-plugin-transform-async-generator-functions`, `babel-plugin-transform-class-static-block`, `babel-plugin-transform-dynamic-import`, `babel-plugin-transform-export-namespace-from`, `babel-plugin-transform-json-strings`, `babel-plugin-transform-logical-assignment-operators`, `babel-plugin-transform-nullish-coalescing-operator`, `babel-plugin-transform-numeric-separator`, `babel-plugin-transform-object-rest-spread`, `babel-plugin-transform-optional-catch-binding`, `babel-plugin-transform-optional-chaining`, `babel-plugin-transform-private-property-in-object`
+  * [#15858](https://github.com/babel/babel/pull/15858) fix(standalone): strip archived syntax plugins ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`
+  * [#15850](https://github.com/babel/babel/pull/15850) Support configuring cache in ESM configs ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-parser`
+  * [#10940](https://github.com/babel/babel/pull/10940) Do not record trailing comma pos when `maybeAsyncArrow: false` ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`, `babel-helper-compilation-targets`, `babel-parser`, `babel-plugin-proposal-destructuring-private`, `babel-plugin-syntax-decorators`, `babel-preset-env`, `babel-preset-react`, `babel-register`, `babel-traverse`, `babel-types`
+  * [#15872](https://github.com/babel/babel/pull/15872) enable jest/no-standalone-expect ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`, `babel-helpers`, `babel-plugin-transform-async-generator-functions`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-regenerator`, `babel-preset-env`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#15833](https://github.com/babel/babel/pull/15833) bump json5, terser and webpack, further minimize babel helpers ([@JLHwung](https://github.com/JLHwung))
+* Other
+  * [#15846](https://github.com/babel/babel/pull/15846) Use Babel 8.0 alpha to build babel ([@JLHwung](https://github.com/JLHwung))
+  * [#15856](https://github.com/babel/babel/pull/15856) Exclude redundant files from publish process ([@JLHwung](https://github.com/JLHwung))
+
+#### :microscope: Output optimization
+* `babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining`, `babel-plugin-transform-class-properties`, `babel-plugin-transform-classes`, `babel-plugin-transform-optional-chaining`, `babel-preset-env`
+  * [#15871](https://github.com/babel/babel/pull/15871) Simplify `?.` output when chain result is ignored ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.22.10 (2023-08-07)
 
 #### :bug: Bug Fix
