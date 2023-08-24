@@ -96,21 +96,25 @@ function shouldIgnore(name: string, ignore?: Array<string>) {
 const EXTENSIONS = [".js", ".mjs", ".ts", ".tsx", ".cts", ".mts", ".vue"];
 const JSON_AND_EXTENSIONS = [".json", ...EXTENSIONS];
 
-function findFile(filepath: string, allowJSON?: boolean) {
-  const matches = [];
+function checkFile(
+  file: string,
+  allowJSON: boolean,
+  taskDir: string,
+  matchedLoc: string | undefined,
+) {
+  const ext = path.extname(file);
   const extensions = allowJSON ? JSON_AND_EXTENSIONS : EXTENSIONS;
 
-  for (const ext of extensions) {
-    const name = filepath + ext;
-
-    if (fs.existsSync(name)) matches.push(name);
+  if (!extensions.includes(ext)) {
+    throw new Error(`Unsupported input extension: ${file}`);
   }
-
-  if (matches.length > 1) {
-    throw new Error(`Found conflicting file matches: ${matches.join(", ")}`);
+  if (!matchedLoc) {
+    return `${taskDir}/${file}`;
+  } else {
+    throw new Error(
+      `Found conflicting file matches: ${matchedLoc},${taskDir}/${file}`,
+    );
   }
-
-  return matches[0];
 }
 
 function pushTask(
@@ -120,47 +124,63 @@ function pushTask(
   suiteName: string,
 ) {
   const taskDirStats = fs.statSync(taskDir);
-  let actualLoc = findFile(taskDir + "/input");
-  let execLoc = findFile(taskDir + "/exec");
-
-  // If neither input nor exec is present it is not a real testcase
-  if (taskDirStats.isDirectory() && !actualLoc && !execLoc) {
-    if (fs.readdirSync(taskDir).length > 0) {
-      console.warn(`Skipped test folder with invalid layout: ${taskDir}`);
+  let actualLoc,
+    actualLocAlias,
+    expectLoc,
+    expectLocAlias,
+    execLoc,
+    execLocAlias,
+    taskOptsLoc;
+  const taskOpts: TaskOptions = JSON.parse(JSON.stringify(suite.options));
+  if (taskDirStats.isDirectory()) {
+    const files = fs.readdirSync(taskDir);
+    for (const file of files) {
+      const name = path.basename(file, path.extname(file));
+      switch (name) {
+        case "input":
+          actualLoc = checkFile(file, false, taskDir, actualLoc);
+          break;
+        case "exec":
+          execLoc = checkFile(file, false, taskDir, execLoc);
+          break;
+        case "output":
+          expectLoc = checkFile(file, true, taskDir, expectLoc);
+          break;
+        case "output.extended":
+          expectLoc = checkFile(file, true, taskDir, expectLoc);
+          break;
+        case "options":
+          taskOptsLoc = `${taskDir}/${file}`;
+          Object.assign(taskOpts, require(taskOptsLoc));
+      }
     }
-    return;
-  } else if (!actualLoc) {
-    actualLoc = taskDir + "/input.js";
-  } else if (!execLoc) {
-    execLoc = taskDir + "/exec.js";
-  }
+    // If neither input nor exec is present it is not a real testcase
+    if (files.length > 0 && !actualLoc && !execLoc) {
+      console.warn(`Skipped test folder with invalid layout: ${taskDir}`);
+      return;
+    }
+    actualLoc ??= taskDir + "/input.js";
+    execLoc ??= taskDir + "/exec.js";
+    expectLoc ??= taskDir + "/output.js";
 
-  const expectLoc =
-    findFile(taskDir + "/output", true /* allowJSON */) ||
-    findFile(`${taskDir}/output.extended`, true) ||
-    taskDir + "/output.js";
-  const stdoutLoc = taskDir + "/stdout.txt";
-  const stderrLoc = taskDir + "/stderr.txt";
-
-  const actualLocAlias =
-    suiteName + "/" + taskName + "/" + path.basename(actualLoc);
-  const expectLocAlias =
-    suiteName + "/" + taskName + "/" + path.basename(actualLoc);
-  let execLocAlias =
-    suiteName + "/" + taskName + "/" + path.basename(actualLoc);
-
-  if (taskDirStats.isFile()) {
+    actualLocAlias =
+      suiteName + "/" + taskName + "/" + path.basename(actualLoc);
+    expectLocAlias =
+      suiteName + "/" + taskName + "/" + path.basename(actualLoc);
+    execLocAlias = suiteName + "/" + taskName + "/" + path.basename(actualLoc);
+  } else if (taskDirStats.isFile()) {
     const ext = path.extname(taskDir);
     if (EXTENSIONS.indexOf(ext) === -1) return;
 
     execLoc = taskDir;
     execLocAlias = suiteName + "/" + taskName;
+  } else {
+    console.warn(`Skipped test folder with invalid layout: ${taskDir}`);
+    return;
   }
 
-  const taskOpts: TaskOptions = JSON.parse(JSON.stringify(suite.options));
-
-  const taskOptsLoc = tryResolve(taskDir + "/options");
-  if (taskOptsLoc) Object.assign(taskOpts, require(taskOptsLoc));
+  const stdoutLoc = taskDir + "/stdout.txt";
+  const stderrLoc = taskDir + "/stderr.txt";
 
   const shouldIgnore = process.env.BABEL_8_BREAKING
     ? taskOpts.BABEL_8_BREAKING === false
