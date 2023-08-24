@@ -4,10 +4,6 @@ import { commonJS, itGte } from "$repo-utils";
 import path from "path";
 import { spawnSync } from "child_process";
 
-// TODO: This can be removed when we stop using old Jest, since it's also
-// included in the Jest config.
-import "source-map-support/register.js";
-
 const { __dirname } = commonJS(import.meta.url);
 
 const nodeGte12 = itGte("12.0.0");
