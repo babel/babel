@@ -260,28 +260,29 @@ describe("@babel/core errors", function () {
       } finally {
         Array.prototype.map = map;
       }
-    }).toMatchInlineSnapshot(`
-      "Error: Internal error! This is a fake bug :)
-          at Array.map (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
-          at loadOneConfig (<CWD>/packages/babel-core/src/config/files/configuration.ts:_:_)
-          at loadOneConfig.next (<anonymous>)
-          at buildRootChain (<CWD>/packages/babel-core/src/config/config-chain.ts:_:_)
-          at buildRootChain.next (<anonymous>)
-          at loadPrivatePartialConfig (<CWD>/packages/babel-core/src/config/partial.ts:_:_)
-          at loadPrivatePartialConfig.next (<anonymous>)
-          at loadFullConfig (<CWD>/packages/babel-core/src/config/full.ts:_:_)
-          at loadFullConfig.next (<anonymous>)
-          at parse (<CWD>/packages/babel-core/src/parse.ts:_:_)
-          at parse.next (<anonymous>)
-          at evaluateSync (<CWD>/node_modules/gensync/index.js:_:_)
-          at fn (<CWD>/node_modules/gensync/index.js:_:_)
-          at stopHiding - secret - don't use this - v1 (<CWD>/packages/babel-core/src/errors/rewrite-stack-trace.ts:_:_)
-          at Module.parseSync (<CWD>/packages/babel-core/src/parse.ts:_:_)
-          at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
-          at expectError (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
-          at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
-          at ... internal jest frames ..."
-    `);
+    }).toMatchTemplate`\
+Error: Internal error! This is a fake bug :)
+    at Array.map (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
+    at ${/loadOneConfig|findRootConfig/} (<CWD>/packages/babel-core/src/config/files/configuration.ts:_:_)
+    at loadOneConfig.next (<anonymous>)
+    at buildRootChain (<CWD>/packages/babel-core/src/config/config-chain.ts:_:_)
+    at buildRootChain.next (<anonymous>)
+    at loadPrivatePartialConfig (<CWD>/packages/babel-core/src/config/partial.ts:_:_)
+    at loadPrivatePartialConfig.next (<anonymous>)
+    at ${/loadFullConfig|loadConfig/} (<CWD>/packages/babel-core/src/config/full.ts:_:_)
+    at loadFullConfig.next (<anonymous>)
+    at parse (<CWD>/packages/babel-core/src/parse.ts:_:_)
+    at parse.next (<anonymous>)
+    at evaluateSync (<CWD>/node_modules/gensync/index.js:_:_)
+    at fn (<CWD>/node_modules/gensync/index.js:_:_)
+    at stopHiding - secret - don't use this - v1 (<CWD>/packages/babel-core/src/errors/rewrite-stack-trace.ts:_:_)
+    at Module.parseSync (<CWD>/packages/babel-core/src/parse.ts:_:_)
+    at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
+    at expectError (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
+    at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
+    at ... internal jest frames ...\
+`;
+    // TODO(Babel 8): We do not need regexps anymore in the matcher above
   });
 
   nodeGte12("should not throw in `node --frozen-intrinsics`", function () {
@@ -304,4 +305,40 @@ describe("@babel/core errors", function () {
       ).output + "",
     ).toContain("%done%");
   });
+});
+
+expect.extend({
+  toMatchTemplate(received, parts, ...replacements) {
+    let pass = true;
+
+    if (!received.startsWith(parts[0])) {
+      pass = false;
+    } else {
+      let index = parts[0].length;
+
+      for (let i = 1; i < parts.length - 1; i++) {
+        const partStart = received.indexOf(parts[i], index);
+        if (partStart === -1) {
+          pass = false;
+          break;
+        }
+        const holeCandidate = received.slice(index, partStart);
+        const hole = replacements[i - 1];
+        const matcher =
+          hole instanceof RegExp ? expect.stringMatching(hole) : hole;
+        if (!matcher.asymmetricMatch(holeCandidate)) {
+          pass = false;
+          break;
+        }
+        index = partStart + parts[i].length;
+      }
+    }
+
+    return {
+      pass,
+      message: () => {
+        return `${received} did not match provided template.`;
+      },
+    };
+  },
 });
