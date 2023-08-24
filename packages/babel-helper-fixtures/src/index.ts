@@ -162,15 +162,17 @@ function pushTask(
   const taskOptsLoc = tryResolve(taskDir + "/options");
   if (taskOptsLoc) Object.assign(taskOpts, require(taskOptsLoc));
 
+  const shouldIgnore = process.env.BABEL_8_BREAKING
+    ? taskOpts.BABEL_8_BREAKING === false
+    : taskOpts.BABEL_8_BREAKING === true;
+
+  if (shouldIgnore) return;
+
   const test: Test = {
     taskDir,
     optionsDir: taskOptsLoc ? path.dirname(taskOptsLoc) : null,
     title: humanize(taskName, true),
-    disabled:
-      taskName[0] === "." ||
-      (process.env.BABEL_8_BREAKING
-        ? taskOpts.BABEL_8_BREAKING === false
-        : taskOpts.BABEL_8_BREAKING === true),
+    disabled: taskName[0] === ".",
     options: taskOpts,
     doNotSetSourceType: taskOpts.DO_NOT_SET_SOURCE_TYPE,
     externalHelpers:
@@ -390,8 +392,8 @@ export function resolveOptionPluginOrPreset(
   return options;
 }
 
-export default function get(entryLoc: string): Array<Suite> {
-  const suites = [];
+export default function get(entryLoc: string) {
+  const suites: Suite[] = [];
 
   let rootOpts: TaskOptions = {};
   const rootOptsLoc = tryResolve(entryLoc + "/options");
@@ -400,9 +402,9 @@ export default function get(entryLoc: string): Array<Suite> {
   for (const suiteName of fs.readdirSync(entryLoc)) {
     if (shouldIgnore(suiteName)) continue;
 
-    const suite = {
+    const suite: Suite = {
       options: { ...rootOpts },
-      tests: [] as Test[],
+      tests: [],
       title: humanize(suiteName),
       filename: entryLoc + "/" + suiteName,
     };
