@@ -132,7 +132,12 @@ function pushTask(
     execLocAlias,
     taskOptsLoc,
     stdoutLoc,
-    stderrLoc;
+    stderrLoc,
+    sourceMap,
+    sourceMapLoc,
+    sourceMapFile,
+    inputSourceMap;
+
   const taskOpts: TaskOptions = JSON.parse(JSON.stringify(suite.options));
   if (taskDirStats.isDirectory()) {
     const files = fs.readdirSync(taskDir);
@@ -154,6 +159,21 @@ function pushTask(
         case "options":
           taskOptsLoc = `${taskDir}/${file}`;
           Object.assign(taskOpts, require(taskOptsLoc));
+          break;
+        case "source-map": {
+          sourceMapLoc = `${taskDir}/${file}`;
+          sourceMap = JSON.parse(readFile(sourceMapLoc));
+          sourceMapFile = {
+            loc: sourceMapLoc,
+            code: sourceMap,
+            filename:
+              suiteName + "/" + taskName + "/" + path.basename(sourceMapLoc),
+          };
+          break;
+        }
+        case "input-source-map":
+          inputSourceMap = JSON.parse(readFile(`${taskDir}/${file}`));
+          break;
       }
     }
     // If neither input nor exec is present it is not a real testcase
@@ -219,9 +239,9 @@ function pushTask(
       code: readFile(expectLoc),
       filename: expectLocAlias,
     },
-    sourceMap: undefined,
-    sourceMapFile: undefined,
-    inputSourceMap: undefined,
+    sourceMap,
+    sourceMapFile,
+    inputSourceMap,
   };
 
   delete taskOpts.BABEL_8_BREAKING;
@@ -266,21 +286,6 @@ function pushTask(
   }
 
   suite.tests.push(test);
-
-  const sourceMapLoc = taskDir + "/source-map.json";
-  if (fs.existsSync(sourceMapLoc)) {
-    test.sourceMap = JSON.parse(readFile(sourceMapLoc));
-  }
-  test.sourceMapFile = {
-    loc: sourceMapLoc,
-    code: test.sourceMap,
-    filename: "",
-  };
-
-  const inputMapLoc = taskDir + "/input-source-map.json";
-  if (fs.existsSync(inputMapLoc)) {
-    test.inputSourceMap = JSON.parse(readFile(inputMapLoc));
-  }
 
   if (taskOpts.throws) {
     if (test.expect.code) {
@@ -472,7 +477,7 @@ export function readFile(filename: string | undefined) {
     }
     return fs.readFileSync(filename, "utf8").trimRight();
   } catch (e) {
-    if (e.code === "ENOENT" || e.code === "ENOTDIR") {
+    if (e.code === "ENOENT") {
       return "";
     }
     throw e;
