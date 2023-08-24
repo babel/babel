@@ -21,6 +21,9 @@ import vm from "vm";
 import LruCache from "lru-cache";
 import { fileURLToPath } from "url";
 
+// TODO: Stop using polyfill when fully dropping Node.js 14
+import "string.prototype.replaceall/auto";
+
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 
@@ -422,10 +425,6 @@ function validateFile(
   }
 }
 
-function escapeRegExp(string: string) {
-  return string.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&");
-}
-
 function normalizeOutput(
   code: string,
   { normalizePathSeparator = false, normalizePresetEnvDebug = false } = {},
@@ -439,19 +438,13 @@ function normalizeOutput(
     .trim()
     // (non-win32) /foo/babel/packages -> <CWD>/packages
     // (win32) C:\foo\babel\packages -> <CWD>\packages
-    .replace(new RegExp(escapeRegExp(projectRoot), "g"), cwdSymbol);
+    .replaceAll(projectRoot, cwdSymbol);
   if (process.platform === "win32") {
     result = result
       // C:/foo/babel/packages -> <CWD>/packages
-      .replace(
-        new RegExp(escapeRegExp(projectRoot.replace(/\\/g, "/")), "g"),
-        cwdSymbol,
-      )
+      .replaceAll(projectRoot, cwdSymbol)
       // C:\\foo\\babel\\packages -> <CWD>\\packages (in js string literal)
-      .replace(
-        new RegExp(escapeRegExp(projectRoot.replace(/\\/g, "\\\\")), "g"),
-        cwdSymbol,
-      );
+      .replaceAll(projectRoot.replace(/\\/g, "\\\\"), cwdSymbol);
     if (normalizePathSeparator) {
       result = result.replace(/<CWD>[\w\\/.-]+/g, path =>
         path.replace(/\\\\?/g, "/"),

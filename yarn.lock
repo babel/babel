@@ -242,6 +242,7 @@ __metadata:
     rimraf: ^3.0.0
     semver: ^6.3.1
     slash: "condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0"
+    string.prototype.replaceall: ^1.0.7
   peerDependencies:
     "@babel/core": ^7.0.0-0
   dependenciesMeta:
@@ -1124,6 +1125,7 @@ __metadata:
     "@babel/helper-check-duplicate-nodes": "workspace:^"
     "@babel/helper-fixtures": "workspace:^"
     lru-cache: "condition:BABEL_8_BREAKING ? ^7.14.1 : ^5.1.1"
+    string.prototype.replaceall: ^1.0.7
   languageName: unknown
   linkType: soft
 
@@ -15146,6 +15148,20 @@ __metadata:
     emoji-regex: ^9.2.2
     strip-ansi: ^7.0.1
   checksum: 7369deaa29f21dda9a438686154b62c2c5f661f8dda60449088f9f980196f7908fc39fdd1803e3e01541970287cf5deae336798337e9319a7055af89dafa7193
+  languageName: node
+  linkType: hard
+
+"string.prototype.replaceall@npm:^1.0.7":
+  version: 1.0.7
+  resolution: "string.prototype.replaceall@npm:1.0.7"
+  dependencies:
+    call-bind: ^1.0.2
+    define-properties: ^1.1.4
+    es-abstract: ^1.20.4
+    get-intrinsic: ^1.1.3
+    has-symbols: ^1.0.3
+    is-regex: ^1.1.4
+  checksum: 79571b1fa0a2d668e8f8725d63e8cea23adb7e68d80911ca40d2e798e98859e59855349b53114cbc25e9ec36c9c6c86b861bfbd263bbf9c540a47ac15416068a
   languageName: node
   linkType: hard
 

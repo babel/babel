@@ -10,6 +10,9 @@ import { createRequire } from "module";
 
 import { chmod } from "../lib/babel/util.js";
 
+// TODO: Stop using polyfill when fully dropping Node.js 14
+import "string.prototype.replaceall/auto.js";
+
 const require = createRequire(import.meta.url);
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -53,24 +56,16 @@ const saveInFiles = function (files) {
   });
 };
 
-function escapeRegExp(string) {
-  return string.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&");
-}
-
 const normalizeOutput = function (str, cwd) {
   let result = str
     .replace(/\(\d+ms\)/g, "(123ms)")
-    .replace(new RegExp(escapeRegExp(cwd), "g"), "<CWD>")
+    .replaceAll(cwd, "<CWD>")
     // (non-win32) /foo/babel/packages -> <CWD>/packages
     // (win32) C:\foo\babel\packages -> <CWD>\packages
-    .replace(new RegExp(escapeRegExp(rootDir), "g"), "<ROOTDIR>");
+    .replaceAll(rootDir, "<ROOTDIR>");
   if (process.platform === "win32") {
-    result = result
-      // C:\\foo\\babel\\packages -> <CWD>\\packages (in js string literal)
-      .replace(
-        new RegExp(escapeRegExp(rootDir.replace(/\\/g, "\\\\")), "g"),
-        "<ROOTDIR>",
-      );
+    // C:\\foo\\babel\\packages -> <CWD>\\packages (in js string literal)
+    result = result.replaceAll(rootDir.replace(/\\/g, "\\\\"), "<ROOTDIR>");
   }
   return result;
 };
