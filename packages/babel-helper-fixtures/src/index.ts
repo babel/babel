@@ -130,7 +130,9 @@ function pushTask(
     expectLocAlias,
     execLoc,
     execLocAlias,
-    taskOptsLoc;
+    taskOptsLoc,
+    stdoutLoc,
+    stderrLoc;
   const taskOpts: TaskOptions = JSON.parse(JSON.stringify(suite.options));
   if (taskDirStats.isDirectory()) {
     const files = fs.readdirSync(taskDir);
@@ -168,6 +170,9 @@ function pushTask(
     expectLocAlias =
       suiteName + "/" + taskName + "/" + path.basename(actualLoc);
     execLocAlias = suiteName + "/" + taskName + "/" + path.basename(actualLoc);
+
+    stdoutLoc = taskDir + "/stdout.txt";
+    stderrLoc = taskDir + "/stderr.txt";
   } else if (taskDirStats.isFile()) {
     const ext = path.extname(taskDir);
     if (EXTENSIONS.indexOf(ext) === -1) return;
@@ -178,9 +183,6 @@ function pushTask(
     console.warn(`Skipped test folder with invalid layout: ${taskDir}`);
     return;
   }
-
-  const stdoutLoc = taskDir + "/stdout.txt";
-  const stderrLoc = taskDir + "/stderr.txt";
 
   const shouldIgnore = process.env.BABEL_8_BREAKING
     ? taskOpts.BABEL_8_BREAKING === false
@@ -463,12 +465,16 @@ export function multiple(entryLoc: string, ignore?: Array<string>) {
   return categories;
 }
 
-export function readFile(filename: string) {
-  if (fs.existsSync(filename)) {
-    let file = fs.readFileSync(filename, "utf8").trimRight();
-    file = file.replace(/\r\n/g, "\n");
-    return file;
-  } else {
-    return "";
+export function readFile(filename: string | undefined) {
+  try {
+    if (filename === undefined) {
+      return "";
+    }
+    return fs.readFileSync(filename, "utf8").trimRight();
+  } catch (e) {
+    if (e.code === "ENOENT" || e.code === "ENOTDIR") {
+      return "";
+    }
+    throw e;
   }
 }
