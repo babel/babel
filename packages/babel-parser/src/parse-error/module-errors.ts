@@ -1,12 +1,12 @@
-import { ParseErrorCode } from "../parse-error";
+const code = "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED";
 
 export default {
   ImportMetaOutsideModule: {
     message: `import.meta may appear only with 'sourceType: "module"'`,
-    code: ParseErrorCode.SourceTypeModuleError,
+    code,
   },
   ImportOutsideModule: {
     message: `'import' and 'export' may appear only with 'sourceType: "module"'`,
-    code: ParseErrorCode.SourceTypeModuleError,
+    code,
   },
 };
