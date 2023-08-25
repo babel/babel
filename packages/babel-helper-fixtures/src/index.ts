@@ -233,6 +233,16 @@ function pushTask(
     inputSourceMap,
   };
 
+  if (
+    test.exec.code &&
+    test.actual.code &&
+    path.extname(execLoc) !== path.extname(actualLoc)
+  ) {
+    throw new Error(
+      `Input file extension should match exec file extension: ${execLoc}, ${actualLoc}`,
+    );
+  }
+
   delete taskOpts.BABEL_8_BREAKING;
   delete taskOpts.DO_NOT_SET_SOURCE_TYPE;
 
