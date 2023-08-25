@@ -24,6 +24,11 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.22.12 (2023-08-25)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-optional-chaining`
+  * [#15888](https://github.com/babel/babel/pull/15888) Fix optional chain optimization in sequence expression ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.22.11 (2023-08-24)
 
 #### :bug: Bug Fix
