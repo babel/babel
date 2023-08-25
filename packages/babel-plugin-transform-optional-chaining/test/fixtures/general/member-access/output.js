@@ -7,5 +7,5 @@ var _foo, _a, _a$b, _a$b$c, _orders, _orders2, _client, _orders$client$key, _a2,
 (_orders2 = orders) === null || _orders2 === void 0 || (_orders2 = _orders2[0]) === null || _orders2 === void 0 || _orders2.price;
 orders[(_client = client) === null || _client === void 0 ? void 0 : _client.key].price;
 (_orders$client$key = orders[client.key]) === null || _orders$client$key === void 0 || _orders$client$key.price;
-(0, (_a2 = a) === null || _a2 === void 0 || _a2.b).c;
+(0, (_a2 = a) === null || _a2 === void 0 ? void 0 : _a2.b).c;
 (0, (_c = (0, (_a3 = a) === null || _a3 === void 0 ? void 0 : _a3.b).c) === null || _c === void 0 ? void 0 : _c.d).e;

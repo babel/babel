@@ -6,6 +6,9 @@ import {
 } from "@babel/helper-skip-transparent-expression-wrappers";
 import { willPathCastToBoolean, findOutermostTransparentParent } from "./util";
 
+// TODO(Babel 9): Use .at(-1)
+const last = <T>(arr: T[]) => arr[arr.length - 1];
+
 function isSimpleMemberExpression(
   expression: t.Expression | t.Super,
 ): expression is t.Identifier | t.Super | t.MemberExpression {
@@ -209,9 +212,10 @@ export function transformOptionalChain(
     !ifNullishBoolean && t.isUnaryExpression(ifNullish, { operator: "void" });
 
   const isEvaluationValueIgnored =
-    (t.isExpressionStatement(replacementPath.parent) ||
-      t.isSequenceExpression(replacementPath.parent)) &&
-    !replacementPath.isCompletionRecord();
+    (t.isExpressionStatement(replacementPath.parent) &&
+      !replacementPath.isCompletionRecord()) ||
+    (t.isSequenceExpression(replacementPath.parent) &&
+      last(replacementPath.parent.expressions) !== replacementPath.node);
 
   // prettier-ignore
   const tpl = ifNullishFalse
