@@ -97,23 +97,20 @@ const EXTENSIONS = [".js", ".mjs", ".ts", ".tsx", ".cts", ".mts", ".vue"];
 const JSON_AND_EXTENSIONS = [".json", ...EXTENSIONS];
 
 function checkFile(
-  file: string,
+  loc: string,
   allowJSON: boolean,
-  taskDir: string,
   matchedLoc: string | undefined,
 ) {
-  const ext = path.extname(file);
+  const ext = path.extname(loc);
   const extensions = allowJSON ? JSON_AND_EXTENSIONS : EXTENSIONS;
 
   if (!extensions.includes(ext)) {
-    throw new Error(`Unsupported input extension: ${file}`);
+    throw new Error(`Unsupported input extension: ${loc}`);
   }
   if (!matchedLoc) {
-    return `${taskDir}/${file}`;
+    return loc;
   } else {
-    throw new Error(
-      `Found conflicting file matches: ${matchedLoc},${taskDir}/${file}`,
-    );
+    throw new Error(`Found conflicting file matches: ${matchedLoc},${loc}`);
   }
 }
 
@@ -125,54 +122,45 @@ function pushTask(
 ) {
   const taskDirStats = fs.statSync(taskDir);
   let actualLoc,
-    actualLocAlias,
     expectLoc,
-    expectLocAlias,
     execLoc,
     execLocAlias,
     taskOptsLoc,
     stdoutLoc,
     stderrLoc,
-    sourceMap,
     sourceMapLoc,
-    sourceMapFile,
     inputSourceMap;
 
   const taskOpts: TaskOptions = JSON.parse(JSON.stringify(suite.options));
   if (taskDirStats.isDirectory()) {
     const files = fs.readdirSync(taskDir);
     for (const file of files) {
+      const loc = path.join(taskDir, file);
       const name = path.basename(file, path.extname(file));
+
       switch (name) {
         case "input":
-          actualLoc = checkFile(file, false, taskDir, actualLoc);
+          actualLoc = checkFile(loc, false, actualLoc);
           break;
         case "exec":
-          execLoc = checkFile(file, false, taskDir, execLoc);
+          execLoc = checkFile(loc, false, execLoc);
           break;
         case "output":
-          expectLoc = checkFile(file, true, taskDir, expectLoc);
+          expectLoc = checkFile(loc, true, expectLoc);
           break;
         case "output.extended":
-          expectLoc = checkFile(file, true, taskDir, expectLoc);
+          expectLoc = checkFile(loc, true, expectLoc);
           break;
         case "options":
-          taskOptsLoc = `${taskDir}/${file}`;
+          taskOptsLoc = loc;
           Object.assign(taskOpts, require(taskOptsLoc));
           break;
         case "source-map": {
-          sourceMapLoc = `${taskDir}/${file}`;
-          sourceMap = JSON.parse(readFile(sourceMapLoc));
-          sourceMapFile = {
-            loc: sourceMapLoc,
-            code: sourceMap,
-            filename:
-              suiteName + "/" + taskName + "/" + path.basename(sourceMapLoc),
-          };
+          sourceMapLoc = loc;
           break;
         }
         case "input-source-map":
-          inputSourceMap = JSON.parse(readFile(`${taskDir}/${file}`));
+          inputSourceMap = JSON.parse(readFile(loc));
           break;
       }
     }
@@ -184,12 +172,6 @@ function pushTask(
     actualLoc ??= taskDir + "/input.js";
     execLoc ??= taskDir + "/exec.js";
     expectLoc ??= taskDir + "/output.js";
-
-    actualLocAlias =
-      suiteName + "/" + taskName + "/" + path.basename(actualLoc);
-    expectLocAlias =
-      suiteName + "/" + taskName + "/" + path.basename(actualLoc);
-    execLocAlias = suiteName + "/" + taskName + "/" + path.basename(actualLoc);
 
     stdoutLoc = taskDir + "/stdout.txt";
     stderrLoc = taskDir + "/stderr.txt";
@@ -210,6 +192,25 @@ function pushTask(
 
   if (shouldIgnore) return;
 
+  function buildTestFile(
+    loc: string | undefined,
+    fileName?: true | string,
+  ): TestFile {
+    return {
+      loc,
+      code: readFile(loc),
+      filename: !loc
+        ? undefined
+        : fileName === true
+        ? suiteName + "/" + taskName + "/" + path.basename(loc)
+        : fileName || undefined,
+    };
+  }
+
+  const sourceMapFile = buildTestFile(sourceMapLoc, true);
+  // TODO: code should not be a object
+  sourceMapFile.code &&= JSON.parse(sourceMapFile.code);
+
   const test: Test = {
     taskDir,
     optionsDir: taskOptsLoc ? path.dirname(taskOptsLoc) : null,
@@ -222,24 +223,12 @@ function pushTask(
       !!tryResolve("@babel/plugin-external-helpers"),
     validateLogs: taskOpts.validateLogs,
     ignoreOutput: taskOpts.ignoreOutput,
-    stdout: { loc: stdoutLoc, code: readFile(stdoutLoc) },
-    stderr: { loc: stderrLoc, code: readFile(stderrLoc) },
-    exec: {
-      loc: execLoc,
-      code: readFile(execLoc),
-      filename: execLocAlias,
-    },
-    actual: {
-      loc: actualLoc,
-      code: readFile(actualLoc),
-      filename: actualLocAlias,
-    },
-    expect: {
-      loc: expectLoc,
-      code: readFile(expectLoc),
-      filename: expectLocAlias,
-    },
-    sourceMap,
+    stdout: buildTestFile(stdoutLoc),
+    stderr: buildTestFile(stderrLoc),
+    exec: buildTestFile(execLoc, execLocAlias),
+    actual: buildTestFile(actualLoc, true),
+    expect: buildTestFile(expectLoc, true),
+    sourceMap: sourceMapFile.code,
     sourceMapFile,
     inputSourceMap,
   };
