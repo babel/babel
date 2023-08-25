@@ -316,6 +316,10 @@ module.exports = function (api) {
         exclude: /regenerator-runtime/,
         plugins: [["@babel/transform-runtime", transformRuntimeOptions]],
       },
+      env === "standalone" && {
+        test: /chalk/,
+        plugins: [pluginReplaceNavigator],
+      },
     ].filter(Boolean),
   };
 
@@ -966,6 +970,23 @@ function pluginGeneratorOptimization({ types: t }) {
             }
           }
         },
+      },
+    },
+  };
+}
+
+function pluginReplaceNavigator({ template }) {
+  return {
+    visitor: {
+      MemberExpression(path) {
+        const object = path.get("object");
+        if (object.isIdentifier({ name: "navigator" })) {
+          object.replaceWith(
+            template.expression.ast`
+              typeof navigator == "object" ? navigator : {}
+            `
+          );
+        }
       },
     },
   };
