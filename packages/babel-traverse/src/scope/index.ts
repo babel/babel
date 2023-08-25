@@ -40,7 +40,6 @@ import {
   memberExpression,
   numericLiteral,
   toIdentifier,
-  unaryExpression,
   variableDeclaration,
   variableDeclarator,
   isRecordExpression,
@@ -50,6 +49,7 @@ import {
   isMetaProperty,
   isPrivateName,
   isExportDeclaration,
+  buildUndefinedNode,
 } from "@babel/types";
 import * as t from "@babel/types";
 import { scope as scopeCache } from "../cache.ts";
@@ -783,7 +783,7 @@ export default class Scope {
   }
 
   buildUndefinedNode() {
-    return unaryExpression("void", numericLiteral(0), true);
+    return buildUndefinedNode();
   }
 
   registerConstantViolation(path: NodePath) {
