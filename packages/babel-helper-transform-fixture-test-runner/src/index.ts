@@ -442,7 +442,7 @@ function normalizeOutput(
   if (process.platform === "win32") {
     result = result
       // C:/foo/babel/packages -> <CWD>/packages
-      .replaceAll(projectRoot, cwdSymbol)
+      .replaceAll(projectRoot.replace(/\\/g, "/"), cwdSymbol)
       // C:\\foo\\babel\\packages -> <CWD>\\packages (in js string literal)
       .replaceAll(projectRoot.replace(/\\/g, "\\\\"), cwdSymbol);
     if (normalizePathSeparator) {
