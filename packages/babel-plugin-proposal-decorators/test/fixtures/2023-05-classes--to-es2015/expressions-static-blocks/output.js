@@ -52,7 +52,7 @@ const H = (new (_temp7 = class extends babelHelpers.identity {
 }, (_class8 => {
   class H extends I {}
   _class8 = H;
-  [_H, _initClass7] = babelHelpers.applyDecs2305(_class8, [], [dec]).c;
+  [_H, _initClass7] = babelHelpers.applyDecs2305(_class8, [], [dec], 0, void 0, I).c;
 })(), _temp7)(), _H);
 const J = (new (_temp8 = class extends babelHelpers.identity {
   constructor() {
@@ -61,7 +61,7 @@ const J = (new (_temp8 = class extends babelHelpers.identity {
 }, (_class9 => {
   class K extends L {}
   _class9 = K;
-  [_K, _initClass8] = babelHelpers.applyDecs2305(_class9, [], [dec]).c;
+  [_K, _initClass8] = babelHelpers.applyDecs2305(_class9, [], [dec], 0, void 0, L).c;
 })(), _temp8)(), _K);
 function classFactory() {
   var _initClass9, _decorated_class3, _temp9, _class11;

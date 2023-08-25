@@ -4,7 +4,7 @@ class Foo extends Bar {
   static {
     [_call_x, _initProto] = babelHelpers.applyDecs2305(this, [[dec, 3, "x", function () {
       return Bar.prototype.foo.call(this);
-    }]], [], 0, _ => #x in _).e;
+    }]], [], 0, _ => #x in _, Bar).e;
   }
   constructor(...args) {
     super(...args);

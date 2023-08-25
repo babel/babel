@@ -1080,6 +1080,7 @@ function transformClass(
             t.arrayExpression(classDecorations),
             t.numericLiteral(classDecorationsFlag),
             needsInstancePrivateBrandCheck ? lastInstancePrivateName : null,
+            t.cloneNode(originalClass.superClass),
             state,
             version,
           ),
@@ -1111,6 +1112,7 @@ function createLocalsAssignment(
   classDecorations: t.ArrayExpression,
   classDecorationsFlag: t.NumericLiteral,
   maybePrivateBranName: t.PrivateName | null,
+  superClass: null | t.Expression,
   state: PluginPass,
   version: DecoratorVersionKind,
 ) {
@@ -1136,7 +1138,11 @@ function createLocalsAssignment(
   }
 
   if (process.env.BABEL_8_BREAKING || version === "2023-05") {
-    if (maybePrivateBranName || classDecorationsFlag.value !== 0) {
+    if (
+      maybePrivateBranName ||
+      superClass ||
+      classDecorationsFlag.value !== 0
+    ) {
       args.push(classDecorationsFlag);
     }
     if (maybePrivateBranName) {
@@ -1145,7 +1151,10 @@ function createLocalsAssignment(
             _ => ${t.cloneNode(maybePrivateBranName)} in _
           ` as t.ArrowFunctionExpression,
       );
+    } else if (superClass) {
+      args.push(t.unaryExpression("void", t.numericLiteral(0)));
     }
+    if (superClass) args.push(superClass);
     rhs = t.callExpression(state.addHelper("applyDecs2305"), args);
   } else if (version === "2023-01") {
     if (maybePrivateBranName) {

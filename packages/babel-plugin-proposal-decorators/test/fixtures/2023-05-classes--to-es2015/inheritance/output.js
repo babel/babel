@@ -9,5 +9,5 @@ _initClass();
 let _Foo;
 class Foo extends _Bar {}
 _class2 = Foo;
-[_Foo, _initClass2] = babelHelpers.applyDecs2305(_class2, [], [dec2]).c;
+[_Foo, _initClass2] = babelHelpers.applyDecs2305(_class2, [], [dec2], 0, void 0, _Bar).c;
 _initClass2();

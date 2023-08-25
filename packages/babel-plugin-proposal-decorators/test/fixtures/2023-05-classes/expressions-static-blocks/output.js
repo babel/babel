@@ -75,7 +75,7 @@ const H = (new class extends babelHelpers.identity {
   static {
     class H extends I {
       static {
-        [_H, _initClass7] = babelHelpers.applyDecs2305(this, [], [dec]).c;
+        [_H, _initClass7] = babelHelpers.applyDecs2305(this, [], [dec], 0, void 0, I).c;
       }
     }
   }
@@ -87,7 +87,7 @@ const J = (new class extends babelHelpers.identity {
   static {
     class K extends L {
       static {
-        [_K, _initClass8] = babelHelpers.applyDecs2305(this, [], [dec]).c;
+        [_K, _initClass8] = babelHelpers.applyDecs2305(this, [], [dec], 0, void 0, L).c;
       }
     }
   }

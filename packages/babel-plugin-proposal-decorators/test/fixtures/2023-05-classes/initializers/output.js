@@ -19,7 +19,7 @@ new class extends babelHelpers.identity {
   static {
     class Bar extends _Foo {
       static {
-        [_Bar, _initClass2] = babelHelpers.applyDecs2305(this, [], [dec]).c;
+        [_Bar, _initClass2] = babelHelpers.applyDecs2305(this, [], [dec], 0, void 0, _Foo).c;
       }
     }
   }
