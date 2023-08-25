@@ -1,4 +1,3 @@
-import * as env from "./helpers/env.js";
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 
@@ -6,12 +5,7 @@ const require = createRequire(import.meta.url);
 describe("@babel/standalone", () => {
   let Babel;
   beforeAll(() => {
-    env.setup();
-    try {
-      Babel = require("../babel.js");
-    } finally {
-      env.teardown();
-    }
+    Babel = require("../babel.js");
   });
 
   it("handles the es2015-no-commonjs preset", () => {

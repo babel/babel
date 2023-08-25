@@ -397,6 +397,17 @@ function buildRollup(packages, buildStandalone) {
                 "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
                 BABEL_VERSION: JSON.stringify(babelVersion),
                 VERSION: JSON.stringify(version),
+                // chalk, which we bundle in @babel/standalone, relies on `window.navigator`
+                // for the browser build:
+                // https://github.com/chalk/chalk/blob/f399cd0ff69841e88cca89d43a49f1cc9ba2efd5/source/vendor/supports-color/browser.js#L4
+                // We only bundle Chalk 5 in local dev and in Babel 8, so we avoid this
+                // "polyfill" when releasing Babel 7 to make sure that we do not accidentally
+                // bundle Chalk 5.
+                ...(buildStandalone &&
+                  bool(process.env.BABEL_8_BREAKING) && {
+                    navigator:
+                      "typeof navigator === 'undefined' ? {} : navigator",
+                  }),
               },
             }),
             rollupCommonJs({

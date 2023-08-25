@@ -1,17 +1,10 @@
-import * as env from "./helpers/env.js";
-
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 
 describe("stage-1 preset", () => {
   let Babel;
   beforeAll(() => {
-    env.setup();
-    try {
-      Babel = require("../babel.js");
-    } finally {
-      env.teardown();
-    }
+    Babel = require("../babel.js");
   });
 
   it("should parser decimal literal", () => {
