@@ -1,5 +1,6 @@
 import { parseSync } from "@babel/core";
 import syntaxDecorators from "../lib/index.js";
+import { itBabel8, describeBabel7 } from "$repo-utils";
 
 function makeParser(code, options) {
   return () =>
@@ -10,10 +11,7 @@ function makeParser(code, options) {
     });
 }
 
-const itBabel8 = process.env.BABEL_8_BREAKING ? test : test.skip;
-const babel7describe = process.env.BABEL_8_BREAKING ? describe.skip : describe;
-
-babel7describe("'legacy' option", function () {
+describeBabel7("'legacy' option", function () {
   test("legacy must be boolean", function () {
     expect(makeParser("", { legacy: "legacy" })).toThrow();
   });
@@ -31,7 +29,7 @@ babel7describe("'legacy' option", function () {
   });
 });
 
-babel7describe("'decoratorsBeforeExport' option", function () {
+describeBabel7("'decoratorsBeforeExport' option", function () {
   test("decoratorsBeforeExport must be boolean", function () {
     expect(
       makeParser("", { version: "2021-12", decoratorsBeforeExport: "before" }),

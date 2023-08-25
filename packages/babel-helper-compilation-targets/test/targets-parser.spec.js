@@ -4,9 +4,7 @@ import { fileURLToPath } from "url";
 
 import _getTargets from "../lib/index.js";
 const getTargets = _getTargets.default || _getTargets;
-
-const itBabel7 = process.env.BABEL_8_BREAKING ? it.skip : it;
-const itBabel8 = process.env.BABEL_8_BREAKING ? it : it.skip;
+import { itBabel8, itBabel7 } from "$repo-utils";
 
 describe("getTargets", () => {
   it("parses", () => {

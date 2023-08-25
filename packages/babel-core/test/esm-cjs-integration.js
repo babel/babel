@@ -1,6 +1,6 @@
 import { execFile } from "child_process";
 import { createRequire } from "module";
-import { outputType } from "./helpers/esm.js";
+import { describeESM } from "$repo-utils";
 
 const require = createRequire(import.meta.url);
 
@@ -18,7 +18,11 @@ async function run(name) {
   });
 }
 
-(outputType === "module" ? describe : describe.skip)("usage from cjs", () => {
+describe("dummy", () => {
+  it("dummy", () => {});
+});
+
+describeESM("usage from cjs", () => {
   it("lazy plugin required", async () => {
     expect(await run("lazy-plugin-required.cjs")).toMatchInlineSnapshot(`
       Object {

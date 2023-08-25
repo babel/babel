@@ -34,11 +34,7 @@ if (/* commonjs */ _transformations.default) {
   pluginCoreJS3 = _pluginCoreJS3_esm;
   pluginRegenerator = _pluginRegenerator_esm;
 }
-
-const itBabel7 = process.env.BABEL_8_BREAKING ? it.skip : it;
-const itBabel8 = process.env.BABEL_8_BREAKING ? it : it.skip;
-
-const describeBabel7 = process.env.BABEL_8_BREAKING ? describe.skip : describe;
+import { itBabel7, itBabel8, describeBabel7 } from "$repo-utils";
 
 describe("babel-preset-env", () => {
   describe("transformIncludesAndExcludes", () => {

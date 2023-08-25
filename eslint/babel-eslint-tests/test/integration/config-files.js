@@ -1,12 +1,10 @@
 import { ESLint } from "eslint";
 import path from "path";
 import { fileURLToPath } from "url";
-import { USE_ESM } from "$repo-utils";
+import { itESM, itGteNoESM } from "$repo-utils";
 
 describe("Babel config files", () => {
-  const itESM = USE_ESM ? it : it.skip;
-  const nodeGte12NoESM =
-    USE_ESM || parseInt(process.versions.node) < 12 ? it.skip : it;
+  const nodeGte12NoESM = itGteNoESM("12.0.0");
 
   itESM("works with babel.config.mjs", async () => {
     const engine = new ESLint({ ignore: false });

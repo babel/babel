@@ -1,7 +1,7 @@
 import _reactPreset from "../lib/index.js";
 const reactPreset = _reactPreset.default || _reactPreset;
 
-const itBabel8 = process.env.BABEL_8_BREAKING ? it : it.skip;
+import { itBabel8 } from "$repo-utils";
 
 describe("react preset", () => {
   it("does throw clear error when no options passed for Babel 6", () => {

@@ -1,9 +1,7 @@
 import { parse } from "@babel/parser";
-
+import { itBabel8 } from "$repo-utils";
 import _traverse, { visitors } from "../lib/index.js";
 const traverse = _traverse.default || _traverse;
-
-const itBabel8 = process.env.BABEL_8_BREAKING ? it : it.skip;
 
 describe("visitors", () => {
   describe("merge", () => {

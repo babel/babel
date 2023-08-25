@@ -5,8 +5,7 @@ import _normalizeOptions, {
   normalizePluginName,
 } from "../lib/normalize-options.js";
 const normalizeOptions = _normalizeOptions.default || _normalizeOptions;
-
-const itBabel7 = process.env.BABEL_8_BREAKING ? it.skip : it;
+import { itBabel7 } from "$repo-utils";
 
 describe("normalize-options", () => {
   describe("normalizeOptions", () => {

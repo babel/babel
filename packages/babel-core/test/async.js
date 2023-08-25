@@ -6,10 +6,9 @@ import {
   spawnTransformAsync,
   spawnTransformSync,
   supportsESM,
-  itESM,
 } from "./helpers/esm.js";
 
-import { itGte } from "$repo-utils";
+import { itGte, itESM } from "$repo-utils";
 
 // "minNodeVersion": "8.0.0" <-- For Ctrl+F when dropping node 6
 const nodeGte8 = itGte("8.0.0");

@@ -11,8 +11,7 @@ import presetEnv from "@babel/preset-env";
 import pluginSyntaxFlow from "@babel/plugin-syntax-flow";
 import pluginSyntaxJSX from "@babel/plugin-syntax-jsx";
 import pluginFlowStripTypes from "@babel/plugin-transform-flow-strip-types";
-
-const itBabel8 = process.env.BABEL_8_BREAKING ? it : it.skip;
+import { itBabel8 } from "$repo-utils";
 
 const cwd = path.dirname(fileURLToPath(import.meta.url));
 

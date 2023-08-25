@@ -22,8 +22,9 @@ const isESLint7 = ESLINT_VERSION.startsWith("7.");
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // @babel/eslint-parser 8 will drop ESLint 7 support
-const itESLint7 = isESLint7 && !process.env.BABEL_8_BREAKING ? it : it.skip;
-const itESLint8 = isESLint7 ? it.skip : it;
+const dummy = () => {};
+const itESLint7 = isESLint7 && !process.env.BABEL_8_BREAKING ? it : dummy;
+const itESLint8 = isESLint7 ? dummy : it;
 
 const BABEL_OPTIONS = {
   configFile: path.resolve(

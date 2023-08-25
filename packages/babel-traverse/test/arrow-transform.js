@@ -5,6 +5,8 @@ import * as t from "@babel/types";
 import _generate from "@babel/generator";
 const generate = _generate.default || _generate;
 
+import { itBabel7 } from "$repo-utils";
+
 function assertConversion(
   input,
   output,
@@ -47,8 +49,6 @@ function wrapMethod(body, methodName, extend) {
     { plugins: ["jsx"] },
   );
 }
-
-const itBabel7 = process.env.BABEL_8_BREAKING ? it.skip : it;
 
 describe("arrow function conversion", () => {
   it("should convert super calls in constructors", () => {

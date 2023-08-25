@@ -10,11 +10,9 @@ import {
 import path from "path";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
-import { itNoWin32 } from "$repo-utils";
+import { itNoWin32, itBabel8 } from "$repo-utils";
 
 const require = createRequire(import.meta.url);
-
-const itBabel8 = process.env.BABEL_8_BREAKING ? it : it.skip;
 
 describe("@babel/core config loading", () => {
   const FILEPATH = path.join(

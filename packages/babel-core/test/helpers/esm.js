@@ -14,8 +14,6 @@ export const outputType = USE_ESM ? "module" : "script";
 
 export const isMJS = file => path.extname(file) === ".mjs";
 
-export const itESM = supportsESM ? it : it.skip;
-
 export function skipUnsupportedESM(name) {
   if (!supportsESM) {
     console.warn(
