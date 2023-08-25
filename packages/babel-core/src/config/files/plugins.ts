@@ -5,11 +5,11 @@
 import buildDebug from "debug";
 import path from "path";
 import type { Handler } from "gensync";
-import { isAsync } from "../../gensync-utils/async";
-import loadCodeDefault, { supportsESM } from "./module-types";
+import { isAsync } from "../../gensync-utils/async.ts";
+import loadCodeDefault, { supportsESM } from "./module-types.ts";
 import { fileURLToPath, pathToFileURL } from "url";
 
-import importMetaResolve from "./import-meta-resolve";
+import importMetaResolve from "./import-meta-resolve.ts";
 
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);

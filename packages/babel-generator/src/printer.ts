@@ -1,6 +1,6 @@
-import Buffer, { type Pos } from "./buffer";
-import type { Loc } from "./buffer";
-import * as n from "./node";
+import Buffer, { type Pos } from "./buffer.ts";
+import type { Loc } from "./buffer.ts";
+import * as n from "./node/index.ts";
 import type * as t from "@babel/types";
 import {
   isFunction,
@@ -15,8 +15,8 @@ import type {
 } from "@babel/parser";
 import type { Opts as jsescOptions } from "jsesc";
 
-import * as generatorFunctions from "./generators";
-import type SourceMap from "./source-map";
+import * as generatorFunctions from "./generators/index.ts";
+import type SourceMap from "./source-map.ts";
 import * as charCodes from "charcodes";
 import type { TraceMap } from "@jridgewell/trace-mapping";
 

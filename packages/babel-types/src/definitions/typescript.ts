@@ -11,12 +11,12 @@ import {
   validateOptional,
   validateOptionalType,
   validateType,
-} from "./utils";
+} from "./utils.ts";
 import {
   functionDeclarationCommon,
   classMethodOrDeclareMethodCommon,
-} from "./core";
-import is from "../validators/is";
+} from "./core.ts";
+import is from "../validators/is.ts";
 
 const defineType = defineAliasedType("TypeScript");
 

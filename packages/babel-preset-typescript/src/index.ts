@@ -2,8 +2,8 @@ import { declarePreset } from "@babel/helper-plugin-utils";
 import transformTypeScript from "@babel/plugin-transform-typescript";
 import syntaxJSX from "@babel/plugin-syntax-jsx";
 import transformModulesCommonJS from "@babel/plugin-transform-modules-commonjs";
-import normalizeOptions from "./normalize-options";
-import type { Options } from "./normalize-options";
+import normalizeOptions from "./normalize-options.ts";
+import type { Options } from "./normalize-options.ts";
 
 export default declarePreset((api, opts: Options) => {
   api.assertVersion(7);

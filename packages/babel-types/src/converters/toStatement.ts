@@ -3,9 +3,9 @@ import {
   isFunction,
   isClass,
   isAssignmentExpression,
-} from "../validators/generated";
-import { expressionStatement } from "../builders/generated";
-import type * as t from "..";
+} from "../validators/generated/index.ts";
+import { expressionStatement } from "../builders/generated/index.ts";
+import type * as t from "../index.ts";
 
 export default toStatement as {
   (node: t.AssignmentExpression, ignore?: boolean): t.ExpressionStatement;

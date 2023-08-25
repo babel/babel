@@ -1,9 +1,9 @@
 // This file contains methods responsible for removing a node.
 
-import { hooks } from "./lib/removal-hooks";
-import { getCachedPaths } from "../cache";
-import type NodePath from "./index";
-import { REMOVED, SHOULD_SKIP } from "./index";
+import { hooks } from "./lib/removal-hooks.ts";
+import { getCachedPaths } from "../cache.ts";
+import type NodePath from "./index.ts";
+import { REMOVED, SHOULD_SKIP } from "./index.ts";
 
 export function remove(this: NodePath) {
   this._assertUnremoved();

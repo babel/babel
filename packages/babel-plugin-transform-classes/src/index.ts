@@ -5,7 +5,7 @@ import nameFunction from "@babel/helper-function-name";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import { types as t } from "@babel/core";
 import globals from "globals";
-import transformClass from "./transformClass";
+import transformClass from "./transformClass.ts";
 
 const getBuiltinClasses = (category: keyof typeof globals) =>
   Object.keys(globals[category]).filter(name => /^[A-Z]/.test(name));

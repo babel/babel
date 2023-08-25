@@ -1,4 +1,4 @@
-import type * as N from "../types";
+import type * as N from "../types.ts";
 import {
   tokenIsIdentifier,
   tokenIsKeywordOrIdentifier,
@@ -7,30 +7,30 @@ import {
   tt,
   type TokenType,
   getExportedToken,
-} from "../tokenizer/types";
-import ExpressionParser from "./expression";
-import { Errors } from "../parse-error";
-import { isIdentifierChar, isIdentifierStart } from "../util/identifier";
+} from "../tokenizer/types.ts";
+import ExpressionParser from "./expression.ts";
+import { Errors } from "../parse-error.ts";
+import { isIdentifierChar, isIdentifierStart } from "../util/identifier.ts";
 import * as charCodes from "charcodes";
 import {
   ScopeFlag,
   ClassElementType,
   type BindingTypes,
   BindingFlag,
-} from "../util/scopeflags";
-import { ExpressionErrors } from "./util";
-import { PARAM, functionFlags } from "../util/production-parameter";
+} from "../util/scopeflags.ts";
+import { ExpressionErrors } from "./util.ts";
+import { PARAM, functionFlags } from "../util/production-parameter.ts";
 import {
   newExpressionScope,
   newParameterDeclarationScope,
-} from "../util/expression-scope";
-import type { SourceType } from "../options";
-import { Token } from "../tokenizer";
-import type { Position } from "../util/location";
-import { createPositionWithColumnOffset } from "../util/location";
-import { cloneStringLiteral, cloneIdentifier, type Undone } from "./node";
-import type Parser from "./index";
-import { ParseBindingListFlags } from "./lval";
+} from "../util/expression-scope.ts";
+import type { SourceType } from "../options.ts";
+import { Token } from "../tokenizer/index.ts";
+import type { Position } from "../util/location.ts";
+import { createPositionWithColumnOffset } from "../util/location.ts";
+import { cloneStringLiteral, cloneIdentifier, type Undone } from "./node.ts";
+import type Parser from "./index.ts";
+import { ParseBindingListFlags } from "./lval.ts";
 
 const loopLabel = { kind: "loop" } as const,
   switchLabel = { kind: "switch" } as const;

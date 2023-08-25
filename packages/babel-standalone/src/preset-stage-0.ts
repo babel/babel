@@ -1,5 +1,5 @@
-import presetStage1 from "./preset-stage-1";
-import { proposalFunctionBind } from "./generated/plugins";
+import presetStage1 from "./preset-stage-1.ts";
+import { proposalFunctionBind } from "./generated/plugins.ts";
 
 export default (_: any, opts: any = {}) => {
   const {

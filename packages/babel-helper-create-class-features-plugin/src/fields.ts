@@ -12,7 +12,7 @@ import optimiseCall from "@babel/helper-optimise-call-expression";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 import { skipTransparentExprWrapperNodes } from "@babel/helper-skip-transparent-expression-wrappers";
 
-import * as ts from "./typescript";
+import * as ts from "./typescript.ts";
 
 interface PrivateNameMetadata {
   id: t.Identifier;

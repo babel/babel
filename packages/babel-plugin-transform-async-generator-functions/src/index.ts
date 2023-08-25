@@ -2,7 +2,7 @@ import { declare } from "@babel/helper-plugin-utils";
 import remapAsyncToGenerator from "@babel/helper-remap-async-to-generator";
 import type { NodePath, Visitor } from "@babel/traverse";
 import { traverse, types as t, type PluginPass } from "@babel/core";
-import rewriteForAwait from "./for-await";
+import rewriteForAwait from "./for-await.ts";
 import environmentVisitor from "@babel/helper-environment-visitor";
 
 export default declare(api => {

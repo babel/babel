@@ -1,7 +1,7 @@
-import type Parser from "../parser";
-import { tokenIsIdentifier, tt } from "../tokenizer/types";
-import type * as N from "../types";
-import type { ExpressionErrors } from "../parser/util";
+import type Parser from "../parser/index.ts";
+import { tokenIsIdentifier, tt } from "../tokenizer/types.ts";
+import type * as N from "../types.ts";
+import type { ExpressionErrors } from "../parser/util.ts";
 
 export default (superClass: typeof Parser) =>
   class V8IntrinsicMixin extends superClass implements Parser {

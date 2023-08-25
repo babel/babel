@@ -1,4 +1,4 @@
-import type SourceMap from "./source-map";
+import type SourceMap from "./source-map.ts";
 import * as charcodes from "charcodes";
 
 export type Pos = {

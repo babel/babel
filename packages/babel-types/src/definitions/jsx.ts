@@ -4,7 +4,7 @@ import {
   assertValueType,
   chain,
   assertEach,
-} from "./utils";
+} from "./utils.ts";
 
 const defineType = defineAliasedType("JSX");
 

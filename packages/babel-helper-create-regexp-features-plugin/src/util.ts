@@ -1,5 +1,5 @@
 import type { types as t } from "@babel/core";
-import { FEATURES, hasFeature } from "./features";
+import { FEATURES, hasFeature } from "./features.ts";
 
 import type { RegexpuOptions } from "regexpu-core";
 

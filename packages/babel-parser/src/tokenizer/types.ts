@@ -1,4 +1,4 @@
-import { types as tc, type TokContext } from "./context";
+import { types as tc, type TokContext } from "./context.ts";
 // ## Token types
 
 // The assignment of fine-grained, information-carrying type objects

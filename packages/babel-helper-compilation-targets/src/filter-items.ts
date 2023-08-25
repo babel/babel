@@ -2,12 +2,12 @@ import semver from "semver";
 
 import pluginsCompatData from "@babel/compat-data/plugins";
 
-import type { Targets } from "./types";
+import type { Targets } from "./types.ts";
 import {
   getLowestImplementedVersion,
   isUnreleasedVersion,
   semverify,
-} from "./utils";
+} from "./utils.ts";
 
 export function targetsSupported(target: Targets, support: Targets) {
   const targetEnvironments = Object.keys(target) as Array<keyof Targets>;

@@ -1,9 +1,9 @@
 /*:: declare var invariant; */
 
-import BaseParser from "./base";
-import type { Comment, Node, Identifier } from "../types";
+import BaseParser from "./base.ts";
+import type { Comment, Node, Identifier } from "../types.ts";
 import * as charCodes from "charcodes";
-import type { Undone } from "./node";
+import type { Undone } from "./node.ts";
 
 /**
  * A whitespace token containing comments

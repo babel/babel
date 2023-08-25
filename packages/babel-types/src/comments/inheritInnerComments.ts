@@ -1,5 +1,5 @@
-import inherit from "../utils/inherit";
-import type * as t from "..";
+import inherit from "../utils/inherit.ts";
+import type * as t from "../index.ts";
 
 export default function inheritInnerComments(
   child: t.Node,

@@ -182,7 +182,7 @@ function generateStandalone() {
       through.obj(async (file, enc, callback) => {
         log("Generating @babel/standalone files");
         const pluginConfig = JSON.parse(file.contents);
-        let imports = `import makeNoopPlugin from "../make-noop-plugin";`;
+        let imports = `import makeNoopPlugin from "../make-noop-plugin.ts";`;
         let exportDecls = "";
         let exportsList = "";
         let allList = "";

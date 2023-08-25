@@ -2,8 +2,8 @@ import {
   NODE_FIELDS,
   NODE_PARENT_VALIDATIONS,
   type FieldOptions,
-} from "../definitions";
-import type * as t from "..";
+} from "../definitions/index.ts";
+import type * as t from "../index.ts";
 
 export default function validate(
   node: t.Node | undefined | null,

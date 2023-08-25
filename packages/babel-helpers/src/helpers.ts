@@ -1,7 +1,7 @@
 import template from "@babel/template";
 import type * as t from "@babel/types";
 
-import generated from "./helpers-generated";
+import generated from "./helpers-generated.ts";
 
 interface Helper {
   minVersion: string;

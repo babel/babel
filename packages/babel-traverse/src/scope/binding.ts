@@ -1,6 +1,6 @@
-import type NodePath from "../path";
+import type NodePath from "../path/index.ts";
 import type * as t from "@babel/types";
-import type Scope from "./index";
+import type Scope from "./index.ts";
 
 export type BindingKind =
   | "var" /* var declarator */

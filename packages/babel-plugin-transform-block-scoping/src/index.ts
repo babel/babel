@@ -7,9 +7,9 @@ import {
   getUsageInBody,
   isVarInLoopHead,
   wrapLoopBody,
-} from "./loop";
-import { validateUsage } from "./validation";
-import { annexB33FunctionsVisitor, isVarScope } from "./annex-B_3_3";
+} from "./loop.ts";
+import { validateUsage } from "./validation.ts";
+import { annexB33FunctionsVisitor, isVarScope } from "./annex-B_3_3.ts";
 
 export interface Options {
   tdz?: boolean;

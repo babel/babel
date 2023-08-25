@@ -1,5 +1,5 @@
-import presetStage3 from "./preset-stage-3";
-import * as babelPlugins from "./generated/plugins";
+import presetStage3 from "./preset-stage-3.ts";
+import * as babelPlugins from "./generated/plugins.ts";
 
 export default (_: any, opts: any = {}) => {
   const {

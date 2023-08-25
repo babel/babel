@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-import parseArgv from "./options";
-import dirCommand from "./dir";
-import fileCommand from "./file";
+import parseArgv from "./options.ts";
+import dirCommand from "./dir.ts";
+import fileCommand from "./file.ts";
 
 const opts = parseArgv(process.argv);
 

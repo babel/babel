@@ -1,8 +1,8 @@
-import { ScopeFlag, BindingFlag, type BindingTypes } from "./scopeflags";
-import type { Position } from "./location";
-import type * as N from "../types";
-import { Errors } from "../parse-error";
-import type Tokenizer from "../tokenizer";
+import { ScopeFlag, BindingFlag, type BindingTypes } from "./scopeflags.ts";
+import type { Position } from "./location.ts";
+import type * as N from "../types.ts";
+import { Errors } from "../parse-error.ts";
+import type Tokenizer from "../tokenizer/index.ts";
 
 // Start an AST node, attaching a start offset.
 export class Scope {

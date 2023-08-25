@@ -1,5 +1,5 @@
-import getBindingIdentifiers from "./getBindingIdentifiers";
-import type * as t from "..";
+import getBindingIdentifiers from "./getBindingIdentifiers.ts";
+import type * as t from "../index.ts";
 
 export default getOuterBindingIdentifiers as {
   (node: t.Node, duplicates: true): Record<string, Array<t.Identifier>>;

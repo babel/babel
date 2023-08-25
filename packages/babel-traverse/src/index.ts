@@ -1,4 +1,4 @@
-import * as visitors from "./visitors";
+import * as visitors from "./visitors.ts";
 import {
   VISITOR_KEYS,
   removeProperties,
@@ -6,17 +6,17 @@ import {
   traverseFast,
 } from "@babel/types";
 import type * as t from "@babel/types";
-import * as cache from "./cache";
-import type NodePath from "./path";
-import type { default as Scope, Binding } from "./scope";
-import type { ExplodedVisitor, Visitor } from "./types";
-import { traverseNode } from "./traverse-node";
+import * as cache from "./cache.ts";
+import type NodePath from "./path/index.ts";
+import type { default as Scope, Binding } from "./scope/index.ts";
+import type { ExplodedVisitor, Visitor } from "./types.ts";
+import { traverseNode } from "./traverse-node.ts";
 
 export type { ExplodedVisitor, Visitor, Binding };
-export { default as NodePath } from "./path";
-export { default as Scope } from "./scope";
-export { default as Hub } from "./hub";
-export type { HubInterface } from "./hub";
+export { default as NodePath } from "./path/index.ts";
+export { default as Scope } from "./scope/index.ts";
+export { default as Hub } from "./hub.ts";
+export type { HubInterface } from "./hub.ts";
 
 export { visitors };
 

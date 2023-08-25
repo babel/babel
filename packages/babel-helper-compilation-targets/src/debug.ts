@@ -1,11 +1,11 @@
 import semver from "semver";
-import { prettifyVersion } from "./pretty";
+import { prettifyVersion } from "./pretty.ts";
 import {
   semverify,
   isUnreleasedVersion,
   getLowestImplementedVersion,
-} from "./utils";
-import type { Target, Targets } from "./types";
+} from "./utils.ts";
+import type { Target, Targets } from "./types.ts";
 
 export function getInclusionReasons(
   item: string,

@@ -12,12 +12,17 @@ import {
   transformPrivateNamesUsage,
   buildFieldsInitNodes,
   buildCheckInRHS,
-} from "./fields";
-import type { PropPath } from "./fields";
-import { buildDecoratedClass, hasDecorators } from "./decorators";
-import { injectInitialization, extractComputedKeys } from "./misc";
-import { enableFeature, FEATURES, isLoose, shouldTransform } from "./features";
-import { assertFieldTransformed } from "./typescript";
+} from "./fields.ts";
+import type { PropPath } from "./fields.ts";
+import { buildDecoratedClass, hasDecorators } from "./decorators.ts";
+import { injectInitialization, extractComputedKeys } from "./misc.ts";
+import {
+  enableFeature,
+  FEATURES,
+  isLoose,
+  shouldTransform,
+} from "./features.ts";
+import { assertFieldTransformed } from "./typescript.ts";
 
 export { FEATURES, enableFeature, injectInitialization, buildCheckInRHS };
 

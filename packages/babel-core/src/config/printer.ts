@@ -5,7 +5,7 @@ import type { Handler } from "gensync";
 import type {
   OptionsAndDescriptors,
   UnloadedDescriptor,
-} from "./config-descriptors";
+} from "./config-descriptors.ts";
 
 // todo: Use flow enums when @babel/transform-flow-types supports it
 export const ChainFormatter = {

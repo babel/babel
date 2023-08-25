@@ -11,8 +11,8 @@ import {
 } from "@babel/types";
 import type * as t from "@babel/types";
 
-import type { TemplateReplacements } from "./options";
-import type { Metadata, Placeholder } from "./parse";
+import type { TemplateReplacements } from "./options.ts";
+import type { Metadata, Placeholder } from "./parse.ts";
 
 export default function populatePlaceholders(
   metadata: Metadata,

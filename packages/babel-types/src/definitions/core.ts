@@ -1,7 +1,7 @@
-import is from "../validators/is";
-import isValidIdentifier from "../validators/isValidIdentifier";
+import is from "../validators/is.ts";
+import isValidIdentifier from "../validators/isValidIdentifier.ts";
 import { isKeyword, isReservedWord } from "@babel/helper-validator-identifier";
-import type * as t from "..";
+import type * as t from "../index.ts";
 import { readStringContents } from "@babel/helper-string-parser";
 
 import {
@@ -10,7 +10,7 @@ import {
   ASSIGNMENT_OPERATORS,
   UNARY_OPERATORS,
   UPDATE_OPERATORS,
-} from "../constants";
+} from "../constants/index.ts";
 
 import {
   defineAliasedType,
@@ -24,7 +24,7 @@ import {
   assertOneOf,
   validateOptional,
   type Validator,
-} from "./utils";
+} from "./utils.ts";
 
 const defineType = defineAliasedType("Standardized");
 

@@ -1,9 +1,9 @@
-import Renamer from "./lib/renamer";
-import type NodePath from "../path";
-import traverse from "../index";
-import type { TraverseOptions } from "../index";
-import Binding from "./binding";
-import type { BindingKind } from "./binding";
+import Renamer from "./lib/renamer.ts";
+import type NodePath from "../path/index.ts";
+import traverse from "../index.ts";
+import type { TraverseOptions } from "../index.ts";
+import Binding from "./binding.ts";
+import type { BindingKind } from "./binding.ts";
 import globals from "globals";
 import {
   NOT_LOCAL_BINDING,
@@ -52,9 +52,9 @@ import {
   isExportDeclaration,
 } from "@babel/types";
 import * as t from "@babel/types";
-import { scope as scopeCache } from "../cache";
-import type { Visitor } from "../types";
-import { isExplodedVisitor } from "../visitors";
+import { scope as scopeCache } from "../cache.ts";
+import type { Visitor } from "../types.ts";
+import { isExplodedVisitor } from "../visitors.ts";
 
 type NodePart = string | number | boolean;
 // Recursively gathers the identifying names of a node.

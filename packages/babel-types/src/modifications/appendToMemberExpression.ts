@@ -1,5 +1,5 @@
-import { memberExpression } from "../builders/generated";
-import type * as t from "..";
+import { memberExpression } from "../builders/generated/index.ts";
+import type * as t from "../index.ts";
 
 /**
  * Append a node to a member expression.

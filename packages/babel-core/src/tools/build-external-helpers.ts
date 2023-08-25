@@ -23,7 +23,7 @@ import {
   variableDeclarator,
 } from "@babel/types";
 import type * as t from "@babel/types";
-import File from "../transformation/file/file";
+import File from "../transformation/file/file.ts";
 import type { PublicReplacements } from "@babel/template/src/options";
 
 // Wrapped to avoid wasting time parsing this when almost no-one uses

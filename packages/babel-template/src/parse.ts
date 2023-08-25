@@ -15,8 +15,8 @@ import type * as t from "@babel/types";
 import type { TraversalAncestors } from "@babel/types";
 import { parse } from "@babel/parser";
 import { codeFrameColumns } from "@babel/code-frame";
-import type { TemplateOpts, ParserOpts } from "./options";
-import type { Formatter } from "./formatters";
+import type { TemplateOpts, ParserOpts } from "./options.ts";
+import type { Formatter } from "./formatters.ts";
 
 export type Metadata = {
   ast: t.File;

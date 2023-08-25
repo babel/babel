@@ -1,5 +1,5 @@
-import type { ParseErrorTemplates } from "../parse-error";
-import toNodeDescription from "./to-node-description";
+import type { ParseErrorTemplates } from "../parse-error.ts";
+import toNodeDescription from "./to-node-description.ts";
 
 export const UnparenthesizedPipeBodyDescriptions = new Set([
   "ArrowFunctionExpression",

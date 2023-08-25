@@ -3,13 +3,13 @@ import {
   isFunction,
   isEmptyStatement,
   isStatement,
-} from "../validators/generated";
+} from "../validators/generated/index.ts";
 import {
   returnStatement,
   expressionStatement,
   blockStatement,
-} from "../builders/generated";
-import type * as t from "..";
+} from "../builders/generated/index.ts";
+import type * as t from "../index.ts";
 
 export default function toBlock(
   node: t.Statement | t.Expression,

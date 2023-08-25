@@ -3,7 +3,7 @@ import defineType, {
   assertNodeType,
   assertValueType,
   chain,
-} from "./utils";
+} from "./utils.ts";
 
 defineType("ArgumentPlaceholder", {});
 

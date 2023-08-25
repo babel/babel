@@ -11,8 +11,12 @@ import {
   enableFeature,
   runtimeKey,
   hasFeature,
-} from "./features";
-import { generateRegexpuOptions, canSkipRegexpu, transformFlags } from "./util";
+} from "./features.ts";
+import {
+  generateRegexpuOptions,
+  canSkipRegexpu,
+  transformFlags,
+} from "./util.ts";
 
 const versionKey = "@babel/plugin-regexp-features/version";
 

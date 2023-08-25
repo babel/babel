@@ -5,7 +5,7 @@ import type { NodePath, Scope } from "@babel/traverse";
 import { convertFunctionParams } from "@babel/plugin-transform-parameters";
 import { isRequired } from "@babel/helper-compilation-targets";
 import compatData from "@babel/compat-data/corejs2-built-ins";
-import shouldStoreRHSInTemporaryVariable from "./shouldStoreRHSInTemporaryVariable";
+import shouldStoreRHSInTemporaryVariable from "./shouldStoreRHSInTemporaryVariable.ts";
 
 const { isAssignmentPattern, isObjectProperty } = t;
 // @babel/types <=7.3.3 counts FOO as referenced in var { x: FOO }.

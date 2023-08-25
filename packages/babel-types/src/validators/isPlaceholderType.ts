@@ -1,4 +1,4 @@
-import { PLACEHOLDERS_ALIAS } from "../definitions";
+import { PLACEHOLDERS_ALIAS } from "../definitions/index.ts";
 
 /**
  * Test if a `placeholderType` is a `targetType` or if `targetType` is an alias of `placeholderType`.

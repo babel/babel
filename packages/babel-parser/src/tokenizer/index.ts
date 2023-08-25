@@ -1,38 +1,38 @@
 /*:: declare var invariant; */
 
-import type { Options } from "../options";
+import type { Options } from "../options.ts";
 import {
   Position,
   SourceLocation,
   createPositionWithColumnOffset,
-} from "../util/location";
-import CommentsParser, { type CommentWhitespace } from "../parser/comments";
-import type * as N from "../types";
+} from "../util/location.ts";
+import CommentsParser, { type CommentWhitespace } from "../parser/comments.ts";
+import type * as N from "../types.ts";
 import * as charCodes from "charcodes";
-import { isIdentifierStart, isIdentifierChar } from "../util/identifier";
+import { isIdentifierStart, isIdentifierChar } from "../util/identifier.ts";
 import {
   tokenIsKeyword,
   tokenLabelName,
   tt,
   keywords as keywordTypes,
   type TokenType,
-} from "./types";
-import type { TokContext } from "./context";
+} from "./types.ts";
+import type { TokContext } from "./context.ts";
 import {
   Errors,
   type ParseError,
   type ParseErrorConstructor,
   type RaiseProperties,
-} from "../parse-error";
+} from "../parse-error.ts";
 import {
   lineBreakG,
   isNewLine,
   isWhitespace,
   skipWhiteSpace,
   skipWhiteSpaceInLine,
-} from "../util/whitespace";
-import State from "./state";
-import type { LookaheadState, DeferredStrictError } from "./state";
+} from "../util/whitespace.ts";
+import State from "./state.ts";
+import type { LookaheadState, DeferredStrictError } from "./state.ts";
 
 import {
   readInt,
@@ -43,7 +43,7 @@ import {
   type StringContentsErrorHandlers,
 } from "@babel/helper-string-parser";
 
-import type { Plugin } from "../typings";
+import type { Plugin } from "../typings.ts";
 
 function buildPosition(pos: number, lineStart: number, curLine: number) {
   return new Position(curLine, pos - lineStart, pos);

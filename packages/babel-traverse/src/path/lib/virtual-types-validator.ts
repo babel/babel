@@ -1,4 +1,4 @@
-import type NodePath from "../index";
+import type NodePath from "../index.ts";
 import {
   isBinding,
   isBlockScoped as nodeIsBlockScoped,
@@ -24,7 +24,7 @@ import {
 } from "@babel/types";
 import type * as t from "@babel/types";
 const { isCompatTag } = react;
-import type { VirtualTypeAliases } from "./virtual-types";
+import type { VirtualTypeAliases } from "./virtual-types.ts";
 
 type Opts<Obj> = Partial<{
   [Prop in keyof Obj]: Obj[Prop] extends t.Node

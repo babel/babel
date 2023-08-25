@@ -1,5 +1,5 @@
-import getBindingIdentifiers from "../retrievers/getBindingIdentifiers";
-import type * as t from "..";
+import getBindingIdentifiers from "../retrievers/getBindingIdentifiers.ts";
+import type * as t from "../index.ts";
 /**
  * Check if the input `node` is a binding identifier.
  */

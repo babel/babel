@@ -1,6 +1,6 @@
 /*:: declare var invariant; */
 
-import type State from "../../tokenizer/state";
+import type State from "../../tokenizer/state.ts";
 import {
   tokenIsIdentifier,
   tokenIsTSDeclarationStart,
@@ -11,28 +11,28 @@ import {
   type TokenType,
   tokenIsTemplate,
   tokenCanStartExpression,
-} from "../../tokenizer/types";
-import { types as tc } from "../../tokenizer/context";
-import type * as N from "../../types";
-import type { Position } from "../../util/location";
-import { createPositionWithColumnOffset } from "../../util/location";
-import type Parser from "../../parser";
+} from "../../tokenizer/types.ts";
+import { types as tc } from "../../tokenizer/context.ts";
+import type * as N from "../../types.ts";
+import type { Position } from "../../util/location.ts";
+import { createPositionWithColumnOffset } from "../../util/location.ts";
+import type Parser from "../../parser/index.ts";
 import {
   type BindingTypes,
   ScopeFlag,
   BindingFlag,
-} from "../../util/scopeflags";
-import TypeScriptScopeHandler from "./scope";
+} from "../../util/scopeflags.ts";
+import TypeScriptScopeHandler from "./scope.ts";
 import * as charCodes from "charcodes";
-import type { ExpressionErrors } from "../../parser/util";
-import type { ParseStatementFlag } from "../../parser/statement";
-import { PARAM } from "../../util/production-parameter";
-import { Errors, ParseErrorEnum } from "../../parse-error";
-import { cloneIdentifier, type Undone } from "../../parser/node";
-import type { Pattern } from "../../types";
-import type { Expression } from "../../types";
-import type { IJSXParserMixin } from "../jsx";
-import { ParseBindingListFlags } from "../../parser/lval";
+import type { ExpressionErrors } from "../../parser/util.ts";
+import type { ParseStatementFlag } from "../../parser/statement.ts";
+import { PARAM } from "../../util/production-parameter.ts";
+import { Errors, ParseErrorEnum } from "../../parse-error.ts";
+import { cloneIdentifier, type Undone } from "../../parser/node.ts";
+import type { Pattern } from "../../types.ts";
+import type { Expression } from "../../types.ts";
+import type { IJSXParserMixin } from "../jsx/index.ts";
+import { ParseBindingListFlags } from "../../parser/lval.ts";
 
 const getOwn = <T extends {}>(object: T, key: keyof T) =>
   Object.hasOwnProperty.call(object, key) && object[key];

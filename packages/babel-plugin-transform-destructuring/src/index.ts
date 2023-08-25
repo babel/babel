@@ -6,8 +6,8 @@ import {
   convertAssignmentExpression,
   unshiftForXStatementBody,
   type DestructuringTransformerNode,
-} from "./util";
-export { buildObjectExcludingKeys, unshiftForXStatementBody } from "./util";
+} from "./util.ts";
+export { buildObjectExcludingKeys, unshiftForXStatementBody } from "./util.ts";
 import type { NodePath } from "@babel/traverse";
 
 /**

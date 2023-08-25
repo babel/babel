@@ -1,8 +1,8 @@
-import SourceMap from "./source-map";
-import Printer from "./printer";
+import SourceMap from "./source-map.ts";
+import Printer from "./printer.ts";
 import type * as t from "@babel/types";
 import type { Opts as jsescOptions } from "jsesc";
-import type { Format } from "./printer";
+import type { Format } from "./printer.ts";
 import type {
   RecordAndTuplePluginOptions,
   PipelineOperatorPluginOptions,

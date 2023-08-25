@@ -1,5 +1,5 @@
-import type NodePath from "../index";
-import * as inferers from "./inferers";
+import type NodePath from "../index.ts";
+import * as inferers from "./inferers.ts";
 import {
   anyTypeAnnotation,
   isAnyTypeAnnotation,

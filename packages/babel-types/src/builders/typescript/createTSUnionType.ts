@@ -1,7 +1,7 @@
-import { tsUnionType } from "../generated";
-import removeTypeDuplicates from "../../modifications/typescript/removeTypeDuplicates";
-import { isTSTypeAnnotation } from "../../validators/generated/index";
-import type * as t from "../..";
+import { tsUnionType } from "../generated/index.ts";
+import removeTypeDuplicates from "../../modifications/typescript/removeTypeDuplicates.ts";
+import { isTSTypeAnnotation } from "../../validators/generated/index.ts";
+import type * as t from "../../index.ts";
 
 /**
  * Takes an array of `types` and flattens them, removing duplicates and

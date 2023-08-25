@@ -1,10 +1,10 @@
-import ImportInjector, { type ImportOptions } from "./import-injector";
+import ImportInjector, { type ImportOptions } from "./import-injector.ts";
 import type { NodePath } from "@babel/traverse";
 import type * as t from "@babel/types";
 
 export { ImportInjector };
 
-export { default as isModule } from "./is-module";
+export { default as isModule } from "./is-module.ts";
 
 export function addDefault(
   path: NodePath,

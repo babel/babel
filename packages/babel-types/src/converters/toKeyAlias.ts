@@ -1,7 +1,10 @@
-import { isIdentifier, isStringLiteral } from "../validators/generated";
-import cloneNode from "../clone/cloneNode";
-import removePropertiesDeep from "../modifications/removePropertiesDeep";
-import type * as t from "..";
+import {
+  isIdentifier,
+  isStringLiteral,
+} from "../validators/generated/index.ts";
+import cloneNode from "../clone/cloneNode.ts";
+import removePropertiesDeep from "../modifications/removePropertiesDeep.ts";
+import type * as t from "../index.ts";
 
 export default function toKeyAlias(
   node: t.Method | t.Property,

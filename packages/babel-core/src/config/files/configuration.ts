@@ -4,21 +4,21 @@ import path from "path";
 import json5 from "json5";
 import gensync from "gensync";
 import type { Handler } from "gensync";
-import { makeWeakCache, makeWeakCacheSync } from "../caching";
-import type { CacheConfigurator } from "../caching";
-import { makeConfigAPI } from "../helpers/config-api";
-import type { ConfigAPI } from "../helpers/config-api";
-import { makeStaticFileCache } from "./utils";
-import loadCodeDefault from "./module-types";
-import pathPatternToRegex from "../pattern-to-regex";
-import type { FilePackageData, RelativeConfig, ConfigFile } from "./types";
-import type { CallerMetadata, InputOptions } from "../validation/options";
-import ConfigError from "../../errors/config-error";
+import { makeWeakCache, makeWeakCacheSync } from "../caching.ts";
+import type { CacheConfigurator } from "../caching.ts";
+import { makeConfigAPI } from "../helpers/config-api.ts";
+import type { ConfigAPI } from "../helpers/config-api.ts";
+import { makeStaticFileCache } from "./utils.ts";
+import loadCodeDefault from "./module-types.ts";
+import pathPatternToRegex from "../pattern-to-regex.ts";
+import type { FilePackageData, RelativeConfig, ConfigFile } from "./types.ts";
+import type { CallerMetadata, InputOptions } from "../validation/options.ts";
+import ConfigError from "../../errors/config-error.ts";
 
-import * as fs from "../../gensync-utils/fs";
+import * as fs from "../../gensync-utils/fs.ts";
 
 import { createRequire } from "module";
-import { endHiddenCallStack } from "../../errors/rewrite-stack-trace";
+import { endHiddenCallStack } from "../../errors/rewrite-stack-trace.ts";
 const require = createRequire(import.meta.url);
 
 const debug = buildDebug("babel:config:loading:files:configuration");

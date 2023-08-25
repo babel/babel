@@ -1,15 +1,15 @@
-import type { Options } from "../options";
-import type State from "../tokenizer/state";
-import type { PluginsMap } from "./index";
-import type ScopeHandler from "../util/scope";
-import type ExpressionScopeHandler from "../util/expression-scope";
-import type ClassScopeHandler from "../util/class-scope";
-import type ProductionParameterHandler from "../util/production-parameter";
+import type { Options } from "../options.ts";
+import type State from "../tokenizer/state.ts";
+import type { PluginsMap } from "./index.ts";
+import type ScopeHandler from "../util/scope.ts";
+import type ExpressionScopeHandler from "../util/expression-scope.ts";
+import type ClassScopeHandler from "../util/class-scope.ts";
+import type ProductionParameterHandler from "../util/production-parameter.ts";
 import type {
   ParserPluginWithOptions,
   PluginConfig,
   PluginOptions,
-} from "../typings";
+} from "../typings.ts";
 
 export default class BaseParser {
   // Properties set by constructor in index.js

@@ -1,5 +1,5 @@
 import path from "path";
-import type { ResolvedConfig } from "../config";
+import type { ResolvedConfig } from "../config/index.ts";
 
 export default function normalizeOptions(config: ResolvedConfig): {} {
   const {

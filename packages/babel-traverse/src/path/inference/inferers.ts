@@ -20,10 +20,10 @@ import {
 } from "@babel/types";
 import type * as t from "@babel/types";
 
-export { default as Identifier } from "./inferer-reference";
+export { default as Identifier } from "./inferer-reference.ts";
 
-import { createUnionType } from "./util";
-import type NodePath from "..";
+import { createUnionType } from "./util.ts";
+import type NodePath from "../index.ts";
 
 export function VariableDeclarator(this: NodePath<t.VariableDeclarator>) {
   if (!this.get("id").isIdentifier()) return;

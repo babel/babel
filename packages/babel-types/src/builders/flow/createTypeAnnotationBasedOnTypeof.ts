@@ -6,8 +6,8 @@ import {
   booleanTypeAnnotation,
   genericTypeAnnotation,
   identifier,
-} from "../generated";
-import type * as t from "../..";
+} from "../generated/index.ts";
+import type * as t from "../../index.ts";
 
 export default createTypeAnnotationBasedOnTypeof as {
   (type: "string"): t.StringTypeAnnotation;

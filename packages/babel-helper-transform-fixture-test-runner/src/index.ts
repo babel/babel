@@ -13,7 +13,7 @@ import {
   type TaskOptions,
 } from "@babel/helper-fixtures";
 import { codeFrameColumns } from "@babel/code-frame";
-import * as helpers from "./helpers";
+import * as helpers from "./helpers.ts";
 import assert from "assert";
 import fs from "fs";
 import path from "path";

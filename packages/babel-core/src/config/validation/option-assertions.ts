@@ -21,11 +21,11 @@ import type {
   RootMode,
   TargetsListOrObject,
   AssumptionName,
-} from "./options";
+} from "./options.ts";
 
-import { assumptionsNames } from "./options";
+import { assumptionsNames } from "./options.ts";
 
-export type { RootPath } from "./options";
+export type { RootPath } from "./options.ts";
 
 export type ValidatorSet = {
   [name: string]: Validator<any>;

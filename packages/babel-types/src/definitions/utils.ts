@@ -1,6 +1,6 @@
-import is from "../validators/is";
-import { validateField, validateChild } from "../validators/validate";
-import type * as t from "..";
+import is from "../validators/is.ts";
+import { validateField, validateChild } from "../validators/validate.ts";
+import type * as t from "../index.ts";
 
 export const VISITOR_KEYS: Record<string, string[]> = {};
 export const ALIAS_KEYS: Partial<Record<NodeTypesWithoutComment, string[]>> =

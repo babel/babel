@@ -1,5 +1,5 @@
-import matchesPattern from "./matchesPattern";
-import type * as t from "..";
+import matchesPattern from "./matchesPattern.ts";
+import type * as t from "../index.ts";
 
 /**
  * Build a function that when called will return whether or not the

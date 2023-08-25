@@ -1,4 +1,4 @@
-import * as virtualTypes from "./path/lib/virtual-types";
+import * as virtualTypes from "./path/lib/virtual-types.ts";
 import type { Node } from "@babel/types";
 import {
   DEPRECATED_KEYS,
@@ -7,8 +7,8 @@ import {
   TYPES,
   __internal__deprecationWarning as deprecationWarning,
 } from "@babel/types";
-import type { ExplodedVisitor, NodePath, Visitor } from "./index";
-import type { ExplVisitNode, VisitNodeFunction, VisitPhase } from "./types";
+import type { ExplodedVisitor, NodePath, Visitor } from "./index.ts";
+import type { ExplVisitNode, VisitNodeFunction, VisitPhase } from "./types.ts";
 
 type VIRTUAL_TYPES = keyof typeof virtualTypes;
 function isVirtualType(type: string): type is VIRTUAL_TYPES {

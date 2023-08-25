@@ -8,7 +8,7 @@ import {
   validateOptional,
   validateOptionalType,
   validateType,
-} from "./utils";
+} from "./utils.ts";
 
 const defineType = defineAliasedType("Flow");
 

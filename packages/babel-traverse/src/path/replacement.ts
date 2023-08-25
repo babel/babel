@@ -1,9 +1,9 @@
 // This file contains methods responsible for replacing a node with another.
 
 import { codeFrameColumns } from "@babel/code-frame";
-import traverse from "../index";
-import NodePath from "./index";
-import { getCachedPaths } from "../cache";
+import traverse from "../index.ts";
+import NodePath from "./index.ts";
+import { getCachedPaths } from "../cache.ts";
 import { parse } from "@babel/parser";
 import {
   FUNCTION_TYPES,

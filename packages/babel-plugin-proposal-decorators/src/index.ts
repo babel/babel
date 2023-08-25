@@ -6,8 +6,8 @@ import {
   createClassFeaturePlugin,
   FEATURES,
 } from "@babel/helper-create-class-features-plugin";
-import legacyVisitor from "./transformer-legacy";
-import transformer2023_05 from "./transformer-2023-05";
+import legacyVisitor from "./transformer-legacy.ts";
+import transformer2023_05 from "./transformer-2023-05.ts";
 import type { Options as SyntaxOptions } from "@babel/plugin-syntax-decorators";
 
 interface Options extends SyntaxOptions {

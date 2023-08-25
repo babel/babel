@@ -4,17 +4,17 @@ import type { GeneratorResult } from "@babel/generator";
 
 import type { Handler } from "gensync";
 
-import type { ResolvedConfig, Plugin, PluginPasses } from "../config";
+import type { ResolvedConfig, Plugin, PluginPasses } from "../config/index.ts";
 
-import PluginPass from "./plugin-pass";
-import loadBlockHoistPlugin from "./block-hoist-plugin";
-import normalizeOptions from "./normalize-opts";
-import normalizeFile from "./normalize-file";
+import PluginPass from "./plugin-pass.ts";
+import loadBlockHoistPlugin from "./block-hoist-plugin.ts";
+import normalizeOptions from "./normalize-opts.ts";
+import normalizeFile from "./normalize-file.ts";
 
-import generateCode from "./file/generate";
-import type File from "./file/file";
+import generateCode from "./file/generate.ts";
+import type File from "./file/file.ts";
 
-import { flattenToSet } from "../config/helpers/deep-array";
+import { flattenToSet } from "../config/helpers/deep-array.ts";
 
 export type FileResultCallback = {
   (err: Error, file: null): void;

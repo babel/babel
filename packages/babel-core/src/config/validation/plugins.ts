@@ -3,18 +3,18 @@ import {
   assertFunction,
   assertObject,
   msg,
-} from "./option-assertions";
+} from "./option-assertions.ts";
 
 import type {
   ValidatorSet,
   Validator,
   OptionPath,
   RootPath,
-} from "./option-assertions";
+} from "./option-assertions.ts";
 import type { ParserOptions } from "@babel/parser";
 import type { Visitor } from "@babel/traverse";
-import type { ValidatedOptions } from "./options";
-import type { File, PluginAPI, PluginPass } from "../../index";
+import type { ValidatedOptions } from "./options.ts";
+import type { File, PluginAPI, PluginPass } from "../../index.ts";
 
 // Note: The casts here are just meant to be static assertions to make sure
 // that the assertion functions actually assert that the value's type matches

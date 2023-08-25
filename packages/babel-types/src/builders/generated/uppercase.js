@@ -262,4 +262,4 @@ export {
   regexLiteral as RegexLiteral,
   restProperty as RestProperty,
   spreadProperty as SpreadProperty,
-} from "./index";
+} from "./index.ts";

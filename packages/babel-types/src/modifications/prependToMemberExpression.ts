@@ -1,6 +1,6 @@
-import { memberExpression } from "../builders/generated";
-import { isSuper } from "..";
-import type * as t from "..";
+import { memberExpression } from "../builders/generated/index.ts";
+import { isSuper } from "../index.ts";
+import type * as t from "../index.ts";
 
 /**
  * Prepend a node to a member expression.

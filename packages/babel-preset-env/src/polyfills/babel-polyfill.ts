@@ -1,4 +1,8 @@
-import { getImportSource, getRequireSource, isPolyfillSource } from "./utils";
+import {
+  getImportSource,
+  getRequireSource,
+  isPolyfillSource,
+} from "./utils.ts";
 
 import type { NodePath } from "@babel/traverse";
 import type * as t from "@babel/types";

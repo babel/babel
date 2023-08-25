@@ -5,15 +5,15 @@ export type {
   InputOptions,
   PluginPasses,
   Plugin,
-} from "./full";
+} from "./full.ts";
 
-import type { PluginTarget } from "./validation/options";
+import type { PluginTarget } from "./validation/options.ts";
 
 import type {
   PluginAPI as basePluginAPI,
   PresetAPI as basePresetAPI,
-} from "./helpers/config-api";
-export type { PluginObject } from "./validation/plugins";
+} from "./helpers/config-api.ts";
+export type { PluginObject } from "./validation/plugins.ts";
 type PluginAPI = basePluginAPI & typeof import("..");
 type PresetAPI = basePresetAPI & typeof import("..");
 export type { PluginAPI, PresetAPI };
@@ -21,21 +21,21 @@ export type { PluginAPI, PresetAPI };
 export type {
   CallerMetadata,
   ValidatedOptions as PresetObject,
-} from "./validation/options";
+} from "./validation/options.ts";
 
-import loadFullConfig, { type ResolvedConfig } from "./full";
+import loadFullConfig, { type ResolvedConfig } from "./full.ts";
 import {
   type PartialConfig,
   loadPartialConfig as loadPartialConfigImpl,
-} from "./partial";
+} from "./partial.ts";
 
 export { loadFullConfig as default };
-export type { PartialConfig } from "./partial";
+export type { PartialConfig } from "./partial.ts";
 
-import { createConfigItem as createConfigItemImpl } from "./item";
-import type { ConfigItem } from "./item";
+import { createConfigItem as createConfigItemImpl } from "./item.ts";
+import type { ConfigItem } from "./item.ts";
 
-import { beginHiddenCallStack } from "../errors/rewrite-stack-trace";
+import { beginHiddenCallStack } from "../errors/rewrite-stack-trace.ts";
 
 const loadPartialConfigRunner = gensync(loadPartialConfigImpl);
 export function loadPartialConfigAsync(

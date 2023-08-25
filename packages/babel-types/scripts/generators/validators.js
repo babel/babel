@@ -77,9 +77,9 @@ export default function generateValidators() {
 
   /* eslint-disable no-fallthrough */
 
-import shallowEqual from "../../utils/shallowEqual";
-import type * as t from "../..";
-import deprecationWarning from "../../utils/deprecationWarning";
+import shallowEqual from "../../utils/shallowEqual.ts";
+import type * as t from "../../index.ts";
+import deprecationWarning from "../../utils/deprecationWarning.ts";
 
 type Opts<Obj> = Partial<{
   [Prop in keyof Obj]: Obj[Prop] extends t.Node

@@ -5,8 +5,8 @@ import {
   isFunctionDeclaration,
   isFunctionExpression,
   isExportAllDeclaration,
-} from "../validators/generated";
-import type * as t from "..";
+} from "../validators/generated/index.ts";
+import type * as t from "../index.ts";
 
 export { getBindingIdentifiers as default };
 

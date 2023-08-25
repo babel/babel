@@ -1,5 +1,5 @@
-import type { ModulesOption, UseBuiltInsOption } from "./options";
-import type { NormalizedCorejsOption } from "./normalize-options";
+import type { ModulesOption, UseBuiltInsOption } from "./options.ts";
+import type { NormalizedCorejsOption } from "./normalize-options.ts";
 import type { Targets, InputTargets } from "@babel/helper-compilation-targets";
 
 // Options

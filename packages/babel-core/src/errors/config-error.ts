@@ -1,4 +1,7 @@
-import { injectVirtualStackFrame, expectedError } from "./rewrite-stack-trace";
+import {
+  injectVirtualStackFrame,
+  expectedError,
+} from "./rewrite-stack-trace.ts";
 
 export default class ConfigError extends Error {
   constructor(message: string, filename?: string) {

@@ -18,7 +18,7 @@ const pluginCorejs3 = (_pluginCorejs3.default ||
 const pluginRegenerator = (_pluginRegenerator.default ||
   _pluginRegenerator) as typeof _pluginRegenerator.default;
 
-import type { Options } from "./index";
+import type { Options } from "./index.ts";
 
 const pluginsCompat = "#__secret_key__@babel/runtime__compatibility";
 

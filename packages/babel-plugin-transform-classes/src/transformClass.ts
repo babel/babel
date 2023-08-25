@@ -6,7 +6,7 @@ import optimiseCall from "@babel/helper-optimise-call-expression";
 import { traverse, template, types as t, type File } from "@babel/core";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 
-import addCreateSuperHelper from "./inline-createSuper-helpers";
+import addCreateSuperHelper from "./inline-createSuper-helpers.ts";
 
 type ClassAssumptions = {
   setClassMethods: boolean;

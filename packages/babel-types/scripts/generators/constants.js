@@ -5,7 +5,7 @@ export default function generateConstants() {
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'make build'
  */
-import { FLIPPED_ALIAS_KEYS } from "../../definitions";\n\n`;
+import { FLIPPED_ALIAS_KEYS } from "../../definitions/index.ts";\n\n`;
 
   Object.keys(FLIPPED_ALIAS_KEYS)
     .filter(

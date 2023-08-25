@@ -1,5 +1,5 @@
 import semver from "semver";
-import { minVersions } from "./available-plugins";
+import { minVersions } from "./available-plugins.ts";
 
 const has = Function.call.bind(Object.hasOwnProperty);
 

@@ -1,6 +1,9 @@
-import { isClassDeclaration, isFunctionDeclaration } from "./generated";
-import isLet from "./isLet";
-import type * as t from "..";
+import {
+  isClassDeclaration,
+  isFunctionDeclaration,
+} from "./generated/index.ts";
+import isLet from "./isLet.ts";
+import type * as t from "../index.ts";
 
 /**
  * Check if the input `node` is block scoped.

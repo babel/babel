@@ -30,8 +30,8 @@ import {
 import type * as t from "@babel/types";
 import environmentVisitor from "@babel/helper-environment-visitor";
 import nameFunction from "@babel/helper-function-name";
-import { merge as mergeVisitors } from "../visitors";
-import type NodePath from "./index";
+import { merge as mergeVisitors } from "../visitors.ts";
+import type NodePath from "./index.ts";
 
 export function toComputedKey(this: NodePath) {
   let key;

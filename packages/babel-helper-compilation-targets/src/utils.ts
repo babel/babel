@@ -1,7 +1,7 @@
 import semver from "semver";
 import { OptionValidator } from "@babel/helper-validator-option";
-import { unreleasedLabels } from "./targets";
-import type { Target, Targets } from "./types";
+import { unreleasedLabels } from "./targets.ts";
+import type { Target, Targets } from "./types.ts";
 
 const versionRegExp = /^(\d+|\d+.\d+)$/;
 

@@ -1,7 +1,7 @@
 import type { Targets } from "@babel/helper-compilation-targets";
 
-import type { ConfigContext } from "./config-chain";
-import type { CallerMetadata } from "./validation/options";
+import type { ConfigContext } from "./config-chain.ts";
+import type { CallerMetadata } from "./validation/options.ts";
 
 export type { ConfigContext as FullConfig };
 

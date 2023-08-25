@@ -4,8 +4,8 @@ import {
   isUnionTypeAnnotation,
   isFlowBaseAnnotation,
   isIdentifier,
-} from "../../validators/generated";
-import type * as t from "../..";
+} from "../../validators/generated/index.ts";
+import type * as t from "../../index.ts";
 
 function getQualifiedName(node: t.GenericTypeAnnotation["id"]): string {
   return isIdentifier(node)

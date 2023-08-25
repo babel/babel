@@ -1,4 +1,4 @@
-import * as babelPlugins from "./generated/plugins";
+import * as babelPlugins from "./generated/plugins.ts";
 
 export default (_: any, opts: any): any => {
   let loose = false;
