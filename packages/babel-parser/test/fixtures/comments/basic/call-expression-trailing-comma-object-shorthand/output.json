@@ -18,6 +18,9 @@
             "start":0,"end":2,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":2,"index":2},"identifierName":"fn"},
             "name": "fn"
           },
+          "extra": {
+            "trailingComma": 11
+          },
           "arguments": [
             {
               "type": "Identifier",

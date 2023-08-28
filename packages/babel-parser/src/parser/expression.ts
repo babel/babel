@@ -887,7 +887,8 @@ export default abstract class ExpressionParser extends LValParser {
         tt.parenR,
         base.type === "Import",
         base.type !== "Super",
-        maybeAsyncArrow ? node : null,
+        // @ts-expect-error todo(flow->ts)
+        node,
         refExpressionErrors,
       );
     }
@@ -1007,7 +1008,7 @@ export default abstract class ExpressionParser extends LValParser {
     close: TokenType,
     dynamicImport?: boolean,
     allowPlaceholder?: boolean,
-    nodeForExtra?: Undone<N.Node> | null,
+    nodeForExtra?: N.Node | null,
     refExpressionErrors?: ExpressionErrors | null,
   ): Array<N.Expression | undefined | null> {
     const elts: N.Expression[] = [];
@@ -2028,7 +2029,10 @@ export default abstract class ExpressionParser extends LValParser {
       } else {
         this.expect(tt.comma);
         if (this.match(close)) {
-          this.addTrailingCommaExtraToNode(node);
+          this.addTrailingCommaExtraToNode(
+            // @ts-expect-error todo(flow->ts) improve node types
+            node,
+          );
           break;
         }
       }
@@ -2071,7 +2075,7 @@ export default abstract class ExpressionParser extends LValParser {
     return this.finishNode(node, type);
   }
 
-  addTrailingCommaExtraToNode(node: Undone<N.Node>): void {
+  addTrailingCommaExtraToNode(node: N.Node): void {
     this.addExtra(node, "trailingComma", this.state.lastTokStart);
     this.addExtra(node, "trailingCommaLoc", this.state.lastTokStartLoc, false);
   }
