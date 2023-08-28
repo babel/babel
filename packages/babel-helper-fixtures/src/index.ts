@@ -96,21 +96,22 @@ function shouldIgnore(name: string, ignore?: Array<string>) {
 const EXTENSIONS = [".js", ".mjs", ".ts", ".tsx", ".cts", ".mts", ".vue"];
 const JSON_AND_EXTENSIONS = [".json", ...EXTENSIONS];
 
-function findFile(filepath: string, allowJSON?: boolean) {
-  const matches = [];
+function checkFile(
+  loc: string,
+  allowJSON: boolean,
+  matchedLoc: string | undefined,
+) {
+  const ext = path.extname(loc);
   const extensions = allowJSON ? JSON_AND_EXTENSIONS : EXTENSIONS;
 
-  for (const ext of extensions) {
-    const name = filepath + ext;
-
-    if (fs.existsSync(name)) matches.push(name);
+  if (!extensions.includes(ext)) {
+    throw new Error(`Unsupported input extension: ${loc}`);
   }
-
-  if (matches.length > 1) {
-    throw new Error(`Found conflicting file matches: ${matches.join(", ")}`);
+  if (!matchedLoc) {
+    return loc;
+  } else {
+    throw new Error(`Found conflicting file matches: ${matchedLoc},${loc}`);
   }
-
-  return matches[0];
 }
 
 function pushTask(
@@ -120,57 +121,101 @@ function pushTask(
   suiteName: string,
 ) {
   const taskDirStats = fs.statSync(taskDir);
-  let actualLoc = findFile(taskDir + "/input");
-  let execLoc = findFile(taskDir + "/exec");
+  let actualLoc,
+    expectLoc,
+    execLoc,
+    execLocAlias,
+    taskOptsLoc,
+    stdoutLoc,
+    stderrLoc,
+    sourceMapLoc,
+    inputSourceMap;
 
-  // If neither input nor exec is present it is not a real testcase
-  if (taskDirStats.isDirectory() && !actualLoc && !execLoc) {
-    if (fs.readdirSync(taskDir).length > 0) {
-      console.warn(`Skipped test folder with invalid layout: ${taskDir}`);
+  const taskOpts: TaskOptions = JSON.parse(JSON.stringify(suite.options));
+  if (taskDirStats.isDirectory()) {
+    const files = fs.readdirSync(taskDir);
+    for (const file of files) {
+      const loc = path.join(taskDir, file);
+      const name = path.basename(file, path.extname(file));
+
+      switch (name) {
+        case "input":
+          actualLoc = checkFile(loc, false, actualLoc);
+          break;
+        case "exec":
+          execLoc = checkFile(loc, false, execLoc);
+          break;
+        case "output":
+          expectLoc = checkFile(loc, true, expectLoc);
+          break;
+        case "output.extended":
+          expectLoc = checkFile(loc, true, expectLoc);
+          break;
+        case "options":
+          taskOptsLoc = loc;
+          Object.assign(taskOpts, require(taskOptsLoc));
+          break;
+        case "source-map": {
+          sourceMapLoc = loc;
+          break;
+        }
+        case "input-source-map":
+          inputSourceMap = JSON.parse(readFile(loc));
+          break;
+      }
     }
-    return;
-  } else if (!actualLoc) {
-    actualLoc = taskDir + "/input.js";
-  } else if (!execLoc) {
-    execLoc = taskDir + "/exec.js";
-  }
+    // If neither input nor exec is present it is not a real testcase
+    if (files.length > 0 && !actualLoc && !execLoc) {
+      console.warn(`Skipped test folder with invalid layout: ${taskDir}`);
+      return;
+    }
+    actualLoc ??= taskDir + "/input.js";
+    execLoc ??= taskDir + "/exec.js";
+    expectLoc ??= taskDir + "/output.js";
 
-  const expectLoc =
-    findFile(taskDir + "/output", true /* allowJSON */) ||
-    findFile(`${taskDir}/output.extended`, true) ||
-    taskDir + "/output.js";
-  const stdoutLoc = taskDir + "/stdout.txt";
-  const stderrLoc = taskDir + "/stderr.txt";
-
-  const actualLocAlias =
-    suiteName + "/" + taskName + "/" + path.basename(actualLoc);
-  const expectLocAlias =
-    suiteName + "/" + taskName + "/" + path.basename(actualLoc);
-  let execLocAlias =
-    suiteName + "/" + taskName + "/" + path.basename(actualLoc);
-
-  if (taskDirStats.isFile()) {
+    stdoutLoc = taskDir + "/stdout.txt";
+    stderrLoc = taskDir + "/stderr.txt";
+  } else if (taskDirStats.isFile()) {
     const ext = path.extname(taskDir);
     if (EXTENSIONS.indexOf(ext) === -1) return;
 
     execLoc = taskDir;
     execLocAlias = suiteName + "/" + taskName;
+  } else {
+    console.warn(`Skipped test folder with invalid layout: ${taskDir}`);
+    return;
   }
 
-  const taskOpts: TaskOptions = JSON.parse(JSON.stringify(suite.options));
+  const shouldIgnore = process.env.BABEL_8_BREAKING
+    ? taskOpts.BABEL_8_BREAKING === false
+    : taskOpts.BABEL_8_BREAKING === true;
 
-  const taskOptsLoc = tryResolve(taskDir + "/options");
-  if (taskOptsLoc) Object.assign(taskOpts, require(taskOptsLoc));
+  if (shouldIgnore) return;
+
+  function buildTestFile(
+    loc: string | undefined,
+    fileName?: true | string,
+  ): TestFile {
+    return {
+      loc,
+      code: readFile(loc),
+      filename: !loc
+        ? undefined
+        : fileName === true
+        ? suiteName + "/" + taskName + "/" + path.basename(loc)
+        : fileName || undefined,
+    };
+  }
+
+  const sourceMapFile = buildTestFile(sourceMapLoc, true);
+  // TODO: code should not be a object
+  sourceMapFile.code &&= JSON.parse(sourceMapFile.code);
 
   const test: Test = {
     taskDir,
     optionsDir: taskOptsLoc ? path.dirname(taskOptsLoc) : null,
     title: humanize(taskName, true),
-    disabled:
-      taskName[0] === "." ||
-      (process.env.BABEL_8_BREAKING
-        ? taskOpts.BABEL_8_BREAKING === false
-        : taskOpts.BABEL_8_BREAKING === true),
+    disabled: taskName[0] === ".",
     options: taskOpts,
     doNotSetSourceType: taskOpts.DO_NOT_SET_SOURCE_TYPE,
     externalHelpers:
@@ -178,27 +223,25 @@ function pushTask(
       !!tryResolve("@babel/plugin-external-helpers"),
     validateLogs: taskOpts.validateLogs,
     ignoreOutput: taskOpts.ignoreOutput,
-    stdout: { loc: stdoutLoc, code: readFile(stdoutLoc) },
-    stderr: { loc: stderrLoc, code: readFile(stderrLoc) },
-    exec: {
-      loc: execLoc,
-      code: readFile(execLoc),
-      filename: execLocAlias,
-    },
-    actual: {
-      loc: actualLoc,
-      code: readFile(actualLoc),
-      filename: actualLocAlias,
-    },
-    expect: {
-      loc: expectLoc,
-      code: readFile(expectLoc),
-      filename: expectLocAlias,
-    },
-    sourceMap: undefined,
-    sourceMapFile: undefined,
-    inputSourceMap: undefined,
+    stdout: buildTestFile(stdoutLoc),
+    stderr: buildTestFile(stderrLoc),
+    exec: buildTestFile(execLoc, execLocAlias),
+    actual: buildTestFile(actualLoc, true),
+    expect: buildTestFile(expectLoc, true),
+    sourceMap: sourceMapFile.code,
+    sourceMapFile,
+    inputSourceMap,
   };
+
+  if (
+    test.exec.code &&
+    test.actual.code &&
+    path.extname(execLoc) !== path.extname(actualLoc)
+  ) {
+    throw new Error(
+      `Input file extension should match exec file extension: ${execLoc}, ${actualLoc}`,
+    );
+  }
 
   delete taskOpts.BABEL_8_BREAKING;
   delete taskOpts.DO_NOT_SET_SOURCE_TYPE;
@@ -241,28 +284,7 @@ function pushTask(
     delete taskOpts.os;
   }
 
-  // traceur checks
-
-  if (test.exec.code.indexOf("// Async.") >= 0) {
-    return;
-  }
-
   suite.tests.push(test);
-
-  const sourceMapLoc = taskDir + "/source-map.json";
-  if (fs.existsSync(sourceMapLoc)) {
-    test.sourceMap = JSON.parse(readFile(sourceMapLoc));
-  }
-  test.sourceMapFile = {
-    loc: sourceMapLoc,
-    code: test.sourceMap,
-    filename: "",
-  };
-
-  const inputMapLoc = taskDir + "/input-source-map.json";
-  if (fs.existsSync(inputMapLoc)) {
-    test.inputSourceMap = JSON.parse(readFile(inputMapLoc));
-  }
 
   if (taskOpts.throws) {
     if (test.expect.code) {
@@ -396,8 +418,8 @@ export function resolveOptionPluginOrPreset(
   return options;
 }
 
-export default function get(entryLoc: string): Array<Suite> {
-  const suites = [];
+export default function get(entryLoc: string) {
+  const suites: Suite[] = [];
 
   let rootOpts: TaskOptions = {};
   const rootOptsLoc = tryResolve(entryLoc + "/options");
@@ -406,9 +428,9 @@ export default function get(entryLoc: string): Array<Suite> {
   for (const suiteName of fs.readdirSync(entryLoc)) {
     if (shouldIgnore(suiteName)) continue;
 
-    const suite = {
+    const suite: Suite = {
       options: { ...rootOpts },
-      tests: [] as Test[],
+      tests: [],
       title: humanize(suiteName),
       filename: entryLoc + "/" + suiteName,
     };
@@ -447,12 +469,16 @@ export function multiple(entryLoc: string, ignore?: Array<string>) {
   return categories;
 }
 
-export function readFile(filename: string) {
-  if (fs.existsSync(filename)) {
-    let file = fs.readFileSync(filename, "utf8").trimRight();
-    file = file.replace(/\r\n/g, "\n");
-    return file;
-  } else {
-    return "";
+export function readFile(filename: string | undefined) {
+  try {
+    if (filename === undefined) {
+      return "";
+    }
+    return fs.readFileSync(filename, "utf8").trimRight();
+  } catch (e) {
+    if (e.code === "ENOENT") {
+      return "";
+    }
+    throw e;
   }
 }
