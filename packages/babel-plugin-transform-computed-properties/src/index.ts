@@ -266,7 +266,9 @@ export default declare((api, options: Options) => {
           if (single) {
             path.replaceWith(single);
           } else {
-            body.push(t.expressionStatement(t.cloneNode(objId)));
+            if (setComputedProperties) {
+              body.push(t.expressionStatement(t.cloneNode(objId)));
+            }
             path.replaceWithMultiple(body);
           }
         },

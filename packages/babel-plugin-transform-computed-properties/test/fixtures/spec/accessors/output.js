@@ -7,4 +7,4 @@ var obj = (_obj = {}, babelHelpers.defineAccessor("get", _obj, foobar, function 
   return "regular getter after computed property";
 }), babelHelpers.defineAccessor("set", _obj, "test", function (x) {
   console.log(x);
-}), _obj);
+}));
