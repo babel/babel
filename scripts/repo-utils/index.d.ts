@@ -14,5 +14,6 @@ export const itNoWin32: jest.It;
 export const itBabel8: jest.It;
 export const itBabel7: jest.It;
 export const itBabel7NoESM: jest.It;
+export const itDummy: jest.It;
 export const describeBabel7: jest.Describe;
 export const describeBabel8: jest.Describe;

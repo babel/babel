@@ -19,6 +19,8 @@ exports.USE_ESM = USE_ESM;
 
 if (typeof jest !== "undefined") {
   const dummy = () => {};
+  dummy.only = dummy.skip = dummy;
+  exports.itDummy = dummy;
   exports.itNoESM = USE_ESM ? dummy : it;
   exports.itESM = USE_ESM ? it : dummy;
   exports.itGteESM = function (version) {
