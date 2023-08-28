@@ -24,6 +24,15 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.22.13 (2023-08-28)
+
+#### :house: Internal
+* `babel-helper-fixtures`, `babel-plugin-proposal-function-bind`, `babel-plugin-transform-modules-commonjs`, `babel-preset-env`
+  * [#15890](https://github.com/babel/babel/pull/15890) Improve helper-fixtures ([@JLHwung](https://github.com/JLHwung))
+
+#### :leftwards_arrow_with_hook: Revert
+* `babel-parser`
+  * [#15901](https://github.com/babel/babel/pull/15901) Revert "Do not record trailing comma pos when `maybeAsyncArrow: false`" ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.22.12 (2023-08-25)
 
 #### :bug: Bug Fix
