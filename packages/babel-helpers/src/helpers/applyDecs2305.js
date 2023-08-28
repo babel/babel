@@ -512,7 +512,7 @@ function applyClassDecs(targetClass, classDecs, decoratorsHaveThis, metadata) {
     }
 
     return [
-      newClass,
+      defineMetadata(newClass, metadata),
       function () {
         for (var i = 0; i < initializers.length; i++) {
           initializers[i].call(newClass);
@@ -520,8 +520,6 @@ function applyClassDecs(targetClass, classDecs, decoratorsHaveThis, metadata) {
       },
     ];
   }
-
-  defineMetadata(targetClass, metadata);
   // The transformer will not emit assignment when there are no class decorators,
   // so we don't have to return an empty array here.
 }
