@@ -2,7 +2,6 @@ import * as babel from "../lib/index.js";
 import { TraceMap, originalPositionFor } from "@jridgewell/trace-mapping";
 import path from "path";
 import generator from "@babel/generator";
-import { fileURLToPath } from "url";
 
 import _Plugin from "../lib/config/plugin.js";
 const Plugin = _Plugin.default || _Plugin;
@@ -11,9 +10,9 @@ import presetEnv from "@babel/preset-env";
 import pluginSyntaxFlow from "@babel/plugin-syntax-flow";
 import pluginSyntaxJSX from "@babel/plugin-syntax-jsx";
 import pluginFlowStripTypes from "@babel/plugin-transform-flow-strip-types";
-import { itBabel8 } from "$repo-utils";
+import { itBabel8, commonJS } from "$repo-utils";
 
-const cwd = path.dirname(fileURLToPath(import.meta.url));
+const { __dirname: cwd } = commonJS(import.meta.url);
 
 function assertIgnored(result) {
   expect(result).toBeNull();

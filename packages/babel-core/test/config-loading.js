@@ -8,15 +8,13 @@ import {
   createConfigItemSync,
 } from "../lib/index.js";
 import path from "path";
-import { fileURLToPath } from "url";
-import { createRequire } from "module";
-import { itNoWin32, itBabel8 } from "$repo-utils";
+import { itNoWin32, itBabel8, commonJS } from "$repo-utils";
 
-const require = createRequire(import.meta.url);
+const { require, __dirname } = commonJS(import.meta.url);
 
 describe("@babel/core config loading", () => {
   const FILEPATH = path.join(
-    path.dirname(fileURLToPath(import.meta.url)),
+    __dirname,
     "fixtures",
     "config-loading",
     "folder",
@@ -150,7 +148,7 @@ describe("@babel/core config loading", () => {
 
     it("should always set 'rootMode' to 'root'", async () => {
       const cwd = path.join(
-        path.dirname(fileURLToPath(import.meta.url)),
+        __dirname,
         "fixtures",
         "config-loading",
         "root",
