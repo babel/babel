@@ -1,6 +1,7 @@
 /* eslint sort-keys: "error" */
 
 declare const USE_ESM: boolean;
+declare const USE_ESM_OR_STANDALONE: boolean;
 
 import syntaxImportAssertions from "@babel/plugin-syntax-import-assertions";
 import syntaxImportAttributes from "@babel/plugin-syntax-import-attributes";
@@ -134,6 +135,8 @@ const availablePlugins = {
 export const minVersions = {};
 
 if (!process.env.BABEL_8_BREAKING) {
+  /* eslint-disable no-restricted-globals */
+
   Object.assign(minVersions, {
     "bugfix/transform-safari-id-destructuring-collision-in-function-expression":
       "7.16.0",
@@ -142,39 +145,68 @@ if (!process.env.BABEL_8_BREAKING) {
     "transform-private-property-in-object": "7.10.0",
   });
 
-  const emptyPlugin = () => ({});
+  // We cannot use the require call in ESM and when bundling.
+  // Babel standalone uses a modern parser, so just include a noop plugin.
+  // Use `bind` so that it's not detected as a duplicate plugin when using it.
 
-  const babel7SyntaxPlugin = (name: string) => {
-    // We cannot use the require call in ESM and when bundling.
-    // Babel standalone uses a modern parser, so just include a noop plugin.
-    // Use `bind` so that it's not detected as a duplicate plugin when using it.
-    // @ts-expect-error key not recognized in the object
-    availablePlugins[`syntax-${name}`] = USE_ESM
-      ? () => emptyPlugin.bind(null)
-      : IS_STANDALONE
-      ? () => emptyPlugin.bind(null)
-      : // eslint-disable-next-line no-restricted-globals
-        () => require(`@babel/plugin-syntax-${name}`);
-  };
+  // This is a factory to create a function that returns a no-op plugn
+  const e = () => () => () => ({});
 
-  babel7SyntaxPlugin("async-generators");
-  babel7SyntaxPlugin("class-properties");
-  babel7SyntaxPlugin("class-static-block");
-  babel7SyntaxPlugin("dynamic-import");
-  babel7SyntaxPlugin("export-namespace-from");
-  babel7SyntaxPlugin("import-meta");
-  babel7SyntaxPlugin("json-strings");
-  babel7SyntaxPlugin("logical-assignment-operators");
-  babel7SyntaxPlugin("nullish-coalescing-operator");
-  babel7SyntaxPlugin("numeric-separator");
-  babel7SyntaxPlugin("object-rest-spread");
-  babel7SyntaxPlugin("optional-catch-binding");
-  babel7SyntaxPlugin("optional-chaining");
-  babel7SyntaxPlugin("private-property-in-object");
-  babel7SyntaxPlugin("top-level-await");
+  Object.assign(availablePlugins, {
+    "syntax-async-generators": USE_ESM_OR_STANDALONE
+      ? e()
+      : () => require("@babel/plugin-syntax-async-generators"),
+    "syntax-class-properties": USE_ESM_OR_STANDALONE
+      ? e()
+      : () => require("@babel/plugin-syntax-class-properties"),
+    "syntax-class-static-block": USE_ESM_OR_STANDALONE
+      ? e()
+      : () => require("@babel/plugin-syntax-class-static-block"),
+    "syntax-dynamic-import": USE_ESM_OR_STANDALONE
+      ? e()
+      : () => require("@babel/plugin-syntax-dynamic-import"),
+    "syntax-export-namespace-from": USE_ESM_OR_STANDALONE
+      ? e()
+      : () => require("@babel/plugin-syntax-export-namespace-from"),
+    "syntax-import-meta": USE_ESM_OR_STANDALONE
+      ? e()
+      : () => require("@babel/plugin-syntax-import-meta"),
+    "syntax-json-strings": USE_ESM_OR_STANDALONE
+      ? e()
+      : () => require("@babel/plugin-syntax-json-strings"),
+    "syntax-logical-assignment-operators": USE_ESM_OR_STANDALONE
+      ? e()
+      : () => require("@babel/plugin-syntax-logical-assignment-operators"),
+    "syntax-nullish-coalescing-operator": USE_ESM_OR_STANDALONE
+      ? e()
+      : () => require("@babel/plugin-syntax-nullish-coalescing-operator"),
+    "syntax-numeric-separator": USE_ESM_OR_STANDALONE
+      ? e()
+      : () => require("@babel/plugin-syntax-numeric-separator"),
+    "syntax-object-rest-spread": USE_ESM_OR_STANDALONE
+      ? e()
+      : () => require("@babel/plugin-syntax-object-rest-spread"),
+    "syntax-optional-catch-binding": USE_ESM_OR_STANDALONE
+      ? e()
+      : () => require("@babel/plugin-syntax-optional-catch-binding"),
+    "syntax-optional-chaining": USE_ESM_OR_STANDALONE
+      ? e()
+      : () => require("@babel/plugin-syntax-optional-chaining"),
+    "syntax-private-property-in-object": USE_ESM_OR_STANDALONE
+      ? e()
+      : () => require("@babel/plugin-syntax-private-property-in-object"),
+    "syntax-top-level-await": USE_ESM_OR_STANDALONE
+      ? e()
+      : () => require("@babel/plugin-syntax-top-level-await"),
+  });
 
   // This is a CJS plugin that depends on a package from the monorepo, so it
   // breaks using ESM. Given that ESM builds are new enough to have this
   // syntax enabled by default, we can safely skip enabling it.
-  if (!USE_ESM) babel7SyntaxPlugin("unicode-sets-regex");
+  if (!USE_ESM) {
+    // @ts-expect-error unknown key
+    availablePlugins["unicode-sets-regex"] = USE_ESM_OR_STANDALONE
+      ? e()
+      : require("@babel/plugin-syntax-unicode-sets-regex");
+  }
 }
