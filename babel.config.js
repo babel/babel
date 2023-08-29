@@ -736,8 +736,12 @@ function pluginImportMetaUrl({ types: t, template }) {
 
             if (binding.path.isImportSpecifier()) {
               path.parentPath.parentPath.assertVariableDeclaration();
-              path.replaceWith(
-                template.expression.ast`{ __dirname, __filename, require }`
+              const { parentPath } = path;
+              parentPath.replaceWith(
+                t.variableDeclarator(
+                  parentPath.node.id,
+                  template.expression.ast`{ __dirname, __filename, require }`
+                )
               );
             }
           },
