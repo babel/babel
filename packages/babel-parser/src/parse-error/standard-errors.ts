@@ -1,3 +1,4 @@
+import type { ParseErrorTemplates } from "../parse-error";
 import toNodeDescription from "./to-node-description";
 
 export type LValAncestor =
@@ -312,4 +313,4 @@ export default {
   YieldInParameter: "Yield expression is not allowed in formal parameters.",
   ZeroDigitNumericSeparator:
     "Numeric separator can not be used after leading 0.",
-};
+} satisfies ParseErrorTemplates;

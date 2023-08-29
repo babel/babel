@@ -9,6 +9,10 @@ type SyntaxPlugin =
   | "pipelineOperator"
   | "placeholders";
 
+type ParseErrorCode =
+  | "BABEL_PARSER_SYNTAX_ERROR"
+  | "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED";
+
 // Babel uses "normal" SyntaxErrors for it's errors, but adds some extra
 // functionality. This functionality is defined in the
 // `ParseErrorSpecification` interface below. We may choose to change to someday
@@ -22,7 +26,7 @@ interface ParseErrorSpecification<ErrorDetails> {
   // readonly for when we create the error, then cast it to the readonly
   // interface for public use, but the previous implementation didn't have them
   // as readonly, so let's just not worry about it for now.
-  code: string;
+  code: ParseErrorCode;
   reasonCode: string;
   syntaxPlugin?: SyntaxPlugin;
   missingPlugin?: string | string[];
@@ -113,9 +117,9 @@ function toParseErrorConstructor<ErrorDetails extends object>({
 type ParseErrorTemplate =
   | string
   | ToMessage<any>
-  | { message: string | ToMessage<any> };
+  | { message: string | ToMessage<any>; code?: ParseErrorCode };
 
-type ParseErrorTemplates = { [reasonCode: string]: ParseErrorTemplate };
+export type ParseErrorTemplates = { [reasonCode: string]: ParseErrorTemplate };
 
 // This is the templated form of `ParseErrorEnum`.
 //

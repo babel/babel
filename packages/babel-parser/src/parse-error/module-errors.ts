@@ -1,3 +1,5 @@
+import type { ParseErrorTemplates } from "../parse-error";
+
 const code = "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED";
 
 export default {
@@ -9,4 +11,4 @@ export default {
     message: `'import' and 'export' may appear only with 'sourceType: "module"'`,
     code,
   },
-};
+} satisfies ParseErrorTemplates;
