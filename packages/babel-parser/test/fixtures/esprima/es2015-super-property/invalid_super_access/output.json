@@ -1,0 +1,76 @@
+{
+  "type": "File",
+  "start":0,"end":66,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":66}},
+  "errors": [
+    "SyntaxError: 'super' can only be used with function calls (i.e. super()) or in property accesses (i.e. super.prop or super[prop]). (3:9)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":66,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":66}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":66,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":66}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": {
+          "type": "Identifier",
+          "start":16,"end":17,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":17,"index":17},"identifierName":"B"},
+          "name": "B"
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":18,"end":66,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":5,"column":1,"index":66}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":24,"end":64,"loc":{"start":{"line":2,"column":4,"index":24},"end":{"line":4,"column":5,"index":64}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":24,"end":35,"loc":{"start":{"line":2,"column":4,"index":24},"end":{"line":2,"column":15,"index":35},"identifierName":"constructor"},
+                "name": "constructor"
+              },
+              "computed": false,
+              "kind": "constructor",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":38,"end":64,"loc":{"start":{"line":2,"column":18,"index":38},"end":{"line":4,"column":5,"index":64}},
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start":48,"end":58,"loc":{"start":{"line":3,"column":8,"index":48},"end":{"line":3,"column":18,"index":58}},
+                    "expression": {
+                      "type": "CallExpression",
+                      "start":48,"end":57,"loc":{"start":{"line":3,"column":8,"index":48},"end":{"line":3,"column":17,"index":57}},
+                      "callee": {
+                        "type": "Super",
+                        "start":49,"end":54,"loc":{"start":{"line":3,"column":9,"index":49},"end":{"line":3,"column":14,"index":54}},
+                        "extra": {
+                          "parenthesized": true,
+                          "parenStart": 48
+                        }
+                      },
+                      "arguments": []
+                    }
+                  }
+                ],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}
