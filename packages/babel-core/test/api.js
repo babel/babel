@@ -12,7 +12,8 @@ import pluginSyntaxJSX from "@babel/plugin-syntax-jsx";
 import pluginFlowStripTypes from "@babel/plugin-transform-flow-strip-types";
 import { itBabel8, commonJS } from "$repo-utils";
 
-const { __dirname: cwd } = commonJS(import.meta.url);
+const { __dirname } = commonJS(import.meta.url);
+const cwd = __dirname;
 
 function assertIgnored(result) {
   expect(result).toBeNull();
