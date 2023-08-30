@@ -244,6 +244,14 @@ module.exports = function (api) {
             { name: "IS_STANDALONE", value: env === "standalone" },
             "flag-IS_STANDALONE",
           ],
+          [
+            pluginToggleBooleanFlag,
+            {
+              name: "USE_ESM_OR_STANDALONE",
+              value: outputType === "module" || env === "standalone",
+            },
+            "flag-USE_ESM_OR_STANDALONE",
+          ],
 
           [
             pluginToggleBooleanFlag,
