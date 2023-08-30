@@ -293,6 +293,14 @@ jobs:
           BABEL_ENV: test
           BABEL_8_BREAKING: true
           BABEL_TYPES_8_BREAKING: true
+      - name: Update source snapshots
+        run: |
+          node ./scripts/update-source-snapshots.js
+        env:
+          token: ${{ secrets.BOT_TOKEN }}
+          repo: ${{ github.event.pull_request.head.repo.full_name }}
+          branch: ${{ github.event.pull_request.head.ref }}
+          hash: ${{ github.event.pull_request.head.sha }}
       - name: Prepare artifacts
         run: |
           ./scripts/get-artifact-files.sh | tar --null -cvf babel-artifact.tar --files-from=-
