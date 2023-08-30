@@ -46,6 +46,7 @@ function getNormalizedV8Flag(arg: string) {
 }
 
 // These are aliases for node options defined by babel-node.
+// TODO(Babel 8): Consider removing these
 const aliases = new Map([
   ["-d", "--debug"],
   ["-gc", "--expose-gc"],
