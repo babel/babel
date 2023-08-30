@@ -1,8 +1,6 @@
 import env from "../lib/index.js";
 import * as babel from "@babel/core";
-import { itNoESM } from "$repo-utils";
-
-const itBabel7NoESM = process.env.BABEL_8_BREAKING ? it.skip : itNoESM;
+import { itBabel7NoESM } from "$repo-utils";
 
 describe("preset-env", () => {
   function extractParserOptions(api, { ref }) {

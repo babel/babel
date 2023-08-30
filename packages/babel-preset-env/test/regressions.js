@@ -3,17 +3,9 @@ import * as babel from "@babel/core";
 import env from "../lib/index.js";
 import path from "path";
 import { fileURLToPath } from "url";
-import { USE_ESM, commonJS } from "$repo-utils";
+import { commonJS, itBabel7, itBabel7GteNoESM } from "$repo-utils";
 
 const { require } = commonJS(import.meta.url);
-
-const itBabel7 = process.env.BABEL_8_BREAKING ? it.skip : it;
-const itBabel7NodeGte14NoESM =
-  process.env.BABEL_8_BREAKING ||
-  parseInt(process.versions.node) < 14 ||
-  USE_ESM
-    ? it.skip
-    : it;
 
 describe("regressions", () => {
   it("empty", () => {
@@ -54,6 +46,7 @@ describe("regressions", () => {
     },
   );
 
+  const itBabel7NodeGte14NoESM = itBabel7GteNoESM("14.0.0");
   // create-reat-app missing dependency fallback
   // jest fake timers only work in the Jest version we are using for Node.js 14+
   itBabel7NodeGte14NoESM(

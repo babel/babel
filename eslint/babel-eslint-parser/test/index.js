@@ -1,10 +1,9 @@
 import path from "path";
 import escope from "eslint-scope";
 import unpad from "dedent";
-import { fileURLToPath } from "url";
-import { createRequire } from "module";
 import { parseForESLint as parseForESLintOriginal } from "../lib/index.cjs";
 import { ESLint } from "eslint";
+import { itDummy, commonJS } from "$repo-utils";
 
 function parseForESLint(code, options) {
   return parseForESLintOriginal(code, {
@@ -19,11 +18,12 @@ function parseForESLint(code, options) {
 
 const ESLINT_VERSION = ESLint.version;
 const isESLint7 = ESLINT_VERSION.startsWith("7.");
-const dirname = path.dirname(fileURLToPath(import.meta.url));
+const { __dirname: dirname, require } = commonJS(import.meta.url);
 
 // @babel/eslint-parser 8 will drop ESLint 7 support
-const itESLint7 = isESLint7 && !process.env.BABEL_8_BREAKING ? it : it.skip;
-const itESLint8 = isESLint7 ? it.skip : it;
+
+const itESLint7 = isESLint7 && !process.env.BABEL_8_BREAKING ? it : itDummy;
+const itESLint8 = isESLint7 ? itDummy : it;
 
 const BABEL_OPTIONS = {
   configFile: path.resolve(
@@ -122,8 +122,6 @@ describe("Babel and Espree", () => {
   }
 
   beforeAll(() => {
-    const require = createRequire(import.meta.url);
-
     // Use the version of Espree that is a dependency of
     // the version of ESLint we are testing against.
     const espreePath = require.resolve("espree", {

@@ -1,6 +1,5 @@
 import { parse } from "../lib/index.js";
-
-const itBabel8 = process.env.BABEL_8_BREAKING ? it : it.skip;
+import { itBabel8 } from "$repo-utils";
 
 function getParser(code, plugins) {
   return () => parse(code, { plugins, sourceType: "module" });

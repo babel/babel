@@ -1,7 +1,6 @@
 import { transformSync } from "@babel/core";
 import { Hub } from "../lib/index.js";
-
-const itBabel8 = process.env.BABEL_8_BREAKING ? it : it.skip;
+import { itBabel8 } from "$repo-utils";
 
 describe("hub", function () {
   it("default buildError should return TypeError", function () {

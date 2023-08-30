@@ -1,7 +1,7 @@
 import * as babel from "../lib/index.js";
 import path from "path";
 import { fileURLToPath } from "url";
-import { USE_ESM } from "$repo-utils";
+import { itBabel7, itBabel7NoESM } from "$repo-utils";
 
 const cwd = path.dirname(fileURLToPath(import.meta.url));
 
@@ -12,9 +12,6 @@ function loadOptions(opts) {
 function loadOptionsAsync(opts) {
   return babel.loadOptionsAsync({ cwd, ...opts });
 }
-
-const itBabel7 = process.env.BABEL_8_BREAKING ? it.skip : it;
-const itBabel7NoESM = process.env.BABEL_8_BREAKING || USE_ESM ? it.skip : it;
 
 describe("option-manager", () => {
   itBabel7NoESM("throws for babel 5 plugin", () => {

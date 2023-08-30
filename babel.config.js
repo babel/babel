@@ -696,10 +696,10 @@ function pluginImportMetaUrl({ types: t, template }) {
         // We must be sure to run this before the istanbul plugins, because its
         // instrumentation breaks our detection.
         programPath.traverse({
-          // fileURLToPath(import.meta.url)
           CallExpression(path) {
             const { node } = path;
 
+            // fileURLToPath(import.meta.url)
             if (
               (function () {
                 if (
@@ -731,6 +731,7 @@ function pluginImportMetaUrl({ types: t, template }) {
               return;
             }
 
+            // const { __dirname: cwd } = commonJS(import.meta.url)
             if (
               !t.isIdentifier(node.callee, { name: "commonJS" }) ||
               node.arguments.length !== 1

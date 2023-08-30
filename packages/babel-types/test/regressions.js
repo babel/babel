@@ -1,9 +1,8 @@
 import * as t from "../lib/index.js";
 import * as vm from "vm";
+import { itBabel7 } from "$repo-utils";
 
 describe("regressions", () => {
-  const itBabel7 = process.env.BABEL_TYPES_8_BREAKING ? it.skip : it;
-
   itBabel7("jest .toMatchInlineSnapshot used 'Line' for comments", () => {
     expect(() => {
       t.file(t.program([]), [{ type: "Line" }]);
