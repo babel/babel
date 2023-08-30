@@ -24,6 +24,17 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.22.14 (2023-08-30)
+
+#### :bug: Bug Fix
+* `babel-preset-env`
+  * [#15907](https://github.com/babel/babel/pull/15907) Avoid dynamic require call in preset-env ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-parser`
+  * [#15884](https://github.com/babel/babel/pull/15884) Simplify parser errors creation ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`, `babel-helper-compilation-targets`, `babel-helper-simple-access`, `babel-parser`, `babel-plugin-syntax-decorators`, `babel-preset-env`, `babel-preset-flow`, `babel-preset-react`, `babel-preset-typescript`, `babel-traverse`, `babel-types`
+  * [#15902](https://github.com/babel/babel/pull/15902) extract more test helpers to repo-utils ([@JLHwung](https://github.com/JLHwung))
 ## v7.22.13 (2023-08-28)
 
 #### :house: Internal
