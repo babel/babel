@@ -164,8 +164,7 @@ export default {
   InvalidRestAssignmentPattern: "Invalid rest operator's argument.",
   LabelRedeclaration: ({ labelName }: { labelName: string }) =>
     `Label '${labelName}' is already declared.`,
-  LetInLexicalBinding:
-    "'let' is not allowed to be used as a name in 'let' or 'const' declarations.",
+  LetInLexicalBinding: "'let' is disallowed as a lexically bound name.",
   LineTerminatorBeforeArrow: "No line break is allowed before '=>'.",
   MalformedRegExpFlags: "Invalid regular expression flag.",
   MissingClassName: "A class name is required.",
