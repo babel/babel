@@ -1,6 +1,5 @@
 /* eslint sort-keys: "error" */
 
-declare const USE_ESM: boolean;
 declare const USE_ESM_OR_STANDALONE: boolean;
 
 import syntaxImportAssertions from "@babel/plugin-syntax-import-assertions";
