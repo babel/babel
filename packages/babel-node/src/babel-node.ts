@@ -23,7 +23,7 @@ if (argSeparator > -1) {
 }
 
 /**
- * Replace dashes with underscores in the v8Flag name
+ * Replace underscores with dashes in the v8Flag name
  * Also ensure that if the arg contains a value (e.g. --arg=true)
  * that only the flag is returned.
  */
@@ -33,7 +33,7 @@ function getNormalizedV8Flag(arg: string) {
   const matches = arg.match(/--(?:no)?(.+)/);
 
   if (matches) {
-    return `--${matches[1].replace(/-/g, "_")}`;
+    return `--${matches[1].replace(/_/g, "-")}`;
   }
 
   return arg;
@@ -50,6 +50,10 @@ getV8Flags(async function (err, v8Flags) {
     const arg = babelArgs[i];
     const flag = arg.split("=")[0];
 
+    if (!process.env.BABEL_8_BREAKING) {
+      v8Flags.push(...process.allowedNodeEnvironmentFlags);
+    }
+
     if (flag === "-r" || flag === "--require") {
       args.push(flag);
       args.push(babelArgs[++i]);
@@ -58,8 +62,7 @@ getV8Flags(async function (err, v8Flags) {
     } else if (
       flag === "debug" || // node debug foo.js
       flag === "inspect" ||
-      v8Flags.indexOf(getNormalizedV8Flag(flag)) >= 0 ||
-      process.allowedNodeEnvironmentFlags.has(flag)
+      v8Flags.indexOf(getNormalizedV8Flag(flag)) >= 0
     ) {
       args.unshift(arg);
     } else {
