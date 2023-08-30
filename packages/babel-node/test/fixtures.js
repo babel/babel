@@ -105,8 +105,8 @@ const buildTest = function (testName, opts) {
     const spawnOpts = {
       cwd: tmpLoc,
       env: {
+        ...process.env,
         BABEL_DISABLE_CACHE: true,
-        BABEL_8_BREAKING: process.env.BABEL_8_BREAKING,
       },
     };
     if (opts.ipc) {
