@@ -207,6 +207,6 @@ if (!process.env.BABEL_8_BREAKING) {
     // @ts-expect-error unknown key
     availablePlugins["unicode-sets-regex"] = USE_ESM_OR_STANDALONE
       ? e()
-      : require("@babel/plugin-syntax-unicode-sets-regex");
+      : () => require("@babel/plugin-syntax-unicode-sets-regex");
   }
 }
