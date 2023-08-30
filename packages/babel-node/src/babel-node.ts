@@ -33,7 +33,13 @@ function getNormalizedV8Flag(arg: string) {
   const matches = arg.match(/--(?:no)?(.+)/);
 
   if (matches) {
-    return `--${matches[1].replace(/_/g, "-")}`;
+    if (!process.env.BABEL_8_BREAKING) {
+      // The version of v8flags used by Babel 7 uses _, while the one used
+      // by Babel 8 used -. Normalize the flags accordingly.
+      return `--${matches[1].replace(/-/g, "_")}`;
+    } else {
+      return `--${matches[1].replace(/_/g, "-")}`;
+    }
   }
 
   return arg;
@@ -46,13 +52,17 @@ const aliases = new Map([
 ]);
 
 getV8Flags(async function (err, v8Flags) {
+  const v8FlagsSet = new Set(v8Flags);
+
+  if (!process.env.BABEL_8_BREAKING) {
+    process.allowedNodeEnvironmentFlags.forEach(flag =>
+      v8FlagsSet.add(getNormalizedV8Flag(flag)),
+    );
+  }
+
   for (let i = 0; i < babelArgs.length; i++) {
     const arg = babelArgs[i];
     const flag = arg.split("=")[0];
-
-    if (!process.env.BABEL_8_BREAKING) {
-      v8Flags.push(...process.allowedNodeEnvironmentFlags);
-    }
 
     if (flag === "-r" || flag === "--require") {
       args.push(flag);
@@ -62,7 +72,7 @@ getV8Flags(async function (err, v8Flags) {
     } else if (
       flag === "debug" || // node debug foo.js
       flag === "inspect" ||
-      v8Flags.indexOf(getNormalizedV8Flag(flag)) >= 0
+      v8FlagsSet.has(getNormalizedV8Flag(flag))
     ) {
       args.unshift(arg);
     } else {
