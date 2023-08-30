@@ -112,12 +112,20 @@ function generateHelpers(generator, dest, filename, message) {
     .pipe(errorsLogger())
     .pipe(
       through.obj(async (file, enc, callback) => {
+        // https://github.com/babel/babel/pull/15843
+        if (bool(process.env.BABEL_8_BREAKING)) {
+          process.env.BABEL_TYPES_8_BREAKING = "true";
+        }
+
         const { default: generateCode } = await import(generator);
 
         file.path = filename;
         file.contents = Buffer.from(
           await formatCode(await generateCode(filename), dest + file.path)
         );
+
+        delete process.env.BABEL_TYPES_8_BREAKING;
+
         log(`${chalk.green("✔")} Generated ${message}`);
         callback(null, file);
       })
