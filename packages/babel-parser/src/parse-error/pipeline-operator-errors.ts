@@ -1,3 +1,4 @@
+import type { ParseErrorTemplates } from "../parse-error";
 import toNodeDescription from "./to-node-description";
 
 export const UnparenthesizedPipeBodyDescriptions = new Set([
@@ -48,4 +49,4 @@ export default {
     "Topic reference was used in a lexical context without topic binding.",
   PrimaryTopicRequiresSmartPipeline:
     'Topic reference is used, but the pipelineOperator plugin was not passed a "proposal": "hack" or "smart" option.',
-};
+} satisfies ParseErrorTemplates;

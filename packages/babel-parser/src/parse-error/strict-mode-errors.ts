@@ -1,3 +1,5 @@
+import type { ParseErrorTemplates } from "../parse-error";
+
 export default {
   StrictDelete: "Deleting local variable in strict mode.",
 
@@ -25,4 +27,4 @@ export default {
   StrictOctalLiteral: "Legacy octal literals are not allowed in strict mode.",
 
   StrictWith: "'with' in strict mode.",
-};
+} satisfies ParseErrorTemplates;
