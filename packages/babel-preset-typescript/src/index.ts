@@ -4,6 +4,7 @@ import syntaxJSX from "@babel/plugin-syntax-jsx";
 import transformModulesCommonJS from "@babel/plugin-transform-modules-commonjs";
 import normalizeOptions from "./normalize-options.ts";
 import type { Options } from "./normalize-options.ts";
+import pluginRewriteTSImports from "./plugin-rewrite-ts-imports.ts";
 
 export default declarePreset((api, opts: Options) => {
   api.assertVersion(7);
@@ -18,6 +19,7 @@ export default declarePreset((api, opts: Options) => {
     jsxPragmaFrag,
     onlyRemoveTypeImports,
     optimizeConstEnums,
+    rewriteImportExtensions,
   } = normalizeOptions(opts);
 
   const pluginOptions = process.env.BABEL_8_BREAKING
@@ -59,6 +61,7 @@ export default declarePreset((api, opts: Options) => {
   const disableExtensionDetect = allExtensions || ignoreExtensions;
 
   return {
+    plugins: rewriteImportExtensions ? [pluginRewriteTSImports] : [],
     overrides: disableExtensionDetect
       ? [{ plugins: getPlugins(isTSX, disallowAmbiguousJSXLike) }]
       : // Only set 'test' if explicitly requested, since it requires that
