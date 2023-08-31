@@ -229,9 +229,11 @@ if (program.eval || program.print) {
 // We have to handle require ourselves, as we want to require it in the context of babel-register
 function requireArgs() {
   if (program.require) {
-    require(require.resolve(program.require, {
-      paths: [process.cwd()],
-    }));
+    require(
+      require.resolve(program.require, {
+        paths: [process.cwd()],
+      }),
+    );
   }
 }
 function replEval(

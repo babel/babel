@@ -17,9 +17,11 @@ describe("@babel/code-frame", function () {
         resolve("chalk", resolve("@babel/highlight", import.meta.url))
       ));
     } else {
-      babelHighlightChalk = require(require.resolve("chalk", {
-        paths: [require.resolve("@babel/highlight")],
-      }));
+      babelHighlightChalk = require(
+        require.resolve("chalk", {
+          paths: [require.resolve("@babel/highlight")],
+        }),
+      );
     }
   });
 
