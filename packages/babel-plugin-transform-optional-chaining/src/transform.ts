@@ -4,7 +4,10 @@ import {
   skipTransparentExprWrapperNodes,
   skipTransparentExprWrappers,
 } from "@babel/helper-skip-transparent-expression-wrappers";
-import { willPathCastToBoolean, findOutermostTransparentParent } from "./util";
+import {
+  willPathCastToBoolean,
+  findOutermostTransparentParent,
+} from "./util.ts";
 
 // TODO(Babel 9): Use .at(-1)
 const last = <T>(arr: T[]) => arr[arr.length - 1];

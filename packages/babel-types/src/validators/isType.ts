@@ -1,5 +1,5 @@
-import { FLIPPED_ALIAS_KEYS, ALIAS_KEYS } from "../definitions";
-import type * as t from "..";
+import { FLIPPED_ALIAS_KEYS, ALIAS_KEYS } from "../definitions/index.ts";
+import type * as t from "../index.ts";
 
 export default function isType<T extends t.Node["type"]>(
   nodeType: string,

@@ -1,5 +1,5 @@
-import toBlock from "./toBlock";
-import type * as t from "..";
+import toBlock from "./toBlock.ts";
+import type * as t from "../index.ts";
 
 /**
  * Ensure the `key` (defaults to "body") of a `node` is a block.

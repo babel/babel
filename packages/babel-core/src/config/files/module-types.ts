@@ -1,15 +1,15 @@
-import { isAsync, waitFor } from "../../gensync-utils/async";
+import { isAsync, waitFor } from "../../gensync-utils/async.ts";
 import type { Handler } from "gensync";
 import path from "path";
 import { pathToFileURL } from "url";
 import { createRequire } from "module";
 import semver from "semver";
 
-import { endHiddenCallStack } from "../../errors/rewrite-stack-trace";
-import ConfigError from "../../errors/config-error";
+import { endHiddenCallStack } from "../../errors/rewrite-stack-trace.ts";
+import ConfigError from "../../errors/config-error.ts";
 
-import type { InputOptions } from "..";
-import { transformFileSync } from "../../transform-file";
+import type { InputOptions } from "../index.ts";
+import { transformFileSync } from "../../transform-file.ts";
 
 const require = createRequire(import.meta.url);
 

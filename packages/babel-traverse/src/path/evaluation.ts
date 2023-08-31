@@ -1,4 +1,4 @@
-import type NodePath from "./index";
+import type NodePath from "./index.ts";
 import type * as t from "@babel/types";
 
 // This file contains Babels metainterpreter that can evaluate static code.

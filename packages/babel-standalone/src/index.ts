@@ -18,26 +18,26 @@ import {
   type PluginObject,
   type PresetObject,
 } from "@babel/core";
-import { all } from "./generated/plugins";
-import preset2015 from "./preset-es2015";
-import presetStage0 from "./preset-stage-0";
-import presetStage1 from "./preset-stage-1";
-import presetStage2 from "./preset-stage-2";
-import presetStage3 from "./preset-stage-3";
+import { all } from "./generated/plugins.ts";
+import preset2015 from "./preset-es2015.ts";
+import presetStage0 from "./preset-stage-0.ts";
+import presetStage1 from "./preset-stage-1.ts";
+import presetStage2 from "./preset-stage-2.ts";
+import presetStage3 from "./preset-stage-3.ts";
 import presetEnv from "@babel/preset-env";
 import presetFlow from "@babel/preset-flow";
 import presetReact from "@babel/preset-react";
 import presetTypescript from "@babel/preset-typescript";
 import type { InputOptions } from "@babel/core";
 
-import { runScripts } from "./transformScriptTags";
+import { runScripts } from "./transformScriptTags.ts";
 
 // We import this file from another package using a relative path because it's
 // meant to just be build-time script; it's ok because @babel/standalone is
 // bundled anyway.
 // TODO: Remove this in Babel 8
 // @ts-expect-error TS complains about importing a JS file without type declarations
-import legacyPluginAliases from "../../babel-compat-data/scripts/data/legacy-plugin-aliases";
+import legacyPluginAliases from "../../babel-compat-data/scripts/data/legacy-plugin-aliases.js";
 // eslint-disable-next-line guard-for-in
 for (const name in legacyPluginAliases) {
   all[legacyPluginAliases[name]] = all[name];

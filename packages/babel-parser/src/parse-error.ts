@@ -1,6 +1,6 @@
-import { Position } from "./util/location";
-import type { Undone } from "./parser/node";
-import type { Node } from "./types";
+import { Position } from "./util/location.ts";
+import type { Undone } from "./parser/node.ts";
+import type { Node } from "./types.ts";
 
 type SyntaxPlugin =
   | "flow"
@@ -220,10 +220,10 @@ export type RaiseProperties<ErrorDetails> = {
   at: Position | Undone<Node>;
 } & ErrorDetails;
 
-import ModuleErrors from "./parse-error/module-errors";
-import StandardErrors from "./parse-error/standard-errors";
-import StrictModeErrors from "./parse-error/strict-mode-errors";
-import PipelineOperatorErrors from "./parse-error/pipeline-operator-errors";
+import ModuleErrors from "./parse-error/module-errors.ts";
+import StandardErrors from "./parse-error/standard-errors.ts";
+import StrictModeErrors from "./parse-error/strict-mode-errors.ts";
+import PipelineOperatorErrors from "./parse-error/pipeline-operator-errors.ts";
 
 export const Errors = {
   ...ParseErrorEnum(ModuleErrors),
@@ -232,4 +232,4 @@ export const Errors = {
   ...ParseErrorEnum`pipelineOperator`(PipelineOperatorErrors),
 };
 
-export type { LValAncestor } from "./parse-error/standard-errors";
+export type { LValAncestor } from "./parse-error/standard-errors.ts";

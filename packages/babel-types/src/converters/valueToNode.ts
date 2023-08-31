@@ -1,4 +1,4 @@
-import isValidIdentifier from "../validators/isValidIdentifier";
+import isValidIdentifier from "../validators/isValidIdentifier.ts";
 import {
   identifier,
   booleanLiteral,
@@ -11,8 +11,8 @@ import {
   objectExpression,
   unaryExpression,
   binaryExpression,
-} from "../builders/generated";
-import type * as t from "..";
+} from "../builders/generated/index.ts";
+import type * as t from "../index.ts";
 
 export default valueToNode as {
   (value: undefined): t.Identifier; // TODO: This should return "void 0"

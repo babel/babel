@@ -3,7 +3,7 @@ import * as babel from "@babel/core";
 import path from "path";
 import fs from "fs";
 
-import * as watcher from "./watcher";
+import * as watcher from "./watcher.ts";
 
 import type { FileResult, InputOptions } from "@babel/core";
 

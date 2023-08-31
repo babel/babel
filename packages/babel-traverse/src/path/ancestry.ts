@@ -2,7 +2,7 @@
 
 import { VISITOR_KEYS } from "@babel/types";
 import type * as t from "@babel/types";
-import type NodePath from "./index";
+import type NodePath from "./index.ts";
 
 /**
  * Starting at the parent path of the current `NodePath` and going up the

@@ -2,11 +2,11 @@ export {
   isIdentifierName,
   isIdentifierChar,
   isIdentifierStart,
-} from "./identifier";
+} from "./identifier.ts";
 export {
   isReservedWord,
   isStrictBindOnlyReservedWord,
   isStrictBindReservedWord,
   isStrictReservedWord,
   isKeyword,
-} from "./keyword";
+} from "./keyword.ts";

@@ -1,4 +1,4 @@
-import type { InputOptions } from "..";
+import type { InputOptions } from "../index.ts";
 
 export type ConfigFile = {
   filepath: string;

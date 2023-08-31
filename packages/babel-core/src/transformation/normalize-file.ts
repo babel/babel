@@ -4,12 +4,12 @@ import buildDebug from "debug";
 import type { Handler } from "gensync";
 import { file, traverseFast } from "@babel/types";
 import type * as t from "@babel/types";
-import type { PluginPasses } from "../config";
+import type { PluginPasses } from "../config/index.ts";
 import convertSourceMap from "convert-source-map";
 import type { SourceMapConverter as Converter } from "convert-source-map";
-import File from "./file/file";
-import parser from "../parser";
-import cloneDeep from "./util/clone-deep";
+import File from "./file/file.ts";
+import parser from "../parser/index.ts";
+import cloneDeep from "./util/clone-deep.ts";
 
 const debug = buildDebug("babel:transform:file");
 

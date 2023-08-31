@@ -5,7 +5,7 @@ import {
   hasPrivateClassElement,
   transformPrivateKeyDestructuring,
   buildVariableDeclarationFromParams,
-} from "./util";
+} from "./util.ts";
 import { convertFunctionParams } from "@babel/plugin-transform-parameters";
 import { unshiftForXStatementBody } from "@babel/plugin-transform-destructuring";
 

@@ -10,12 +10,12 @@ if (!process.env.IS_PUBLISH) {
 
 export const version = PACKAGE_JSON.version;
 
-export { default as File } from "./transformation/file/file";
-export type { default as PluginPass } from "./transformation/plugin-pass";
-export { default as buildExternalHelpers } from "./tools/build-external-helpers";
-export { resolvePlugin, resolvePreset } from "./config/files";
+export { default as File } from "./transformation/file/file.ts";
+export type { default as PluginPass } from "./transformation/plugin-pass.ts";
+export { default as buildExternalHelpers } from "./tools/build-external-helpers.ts";
+export { resolvePlugin, resolvePreset } from "./config/files/index.ts";
 
-export { getEnv } from "./config/helpers/environment";
+export { getEnv } from "./config/helpers/environment.ts";
 
 // NOTE: Lazy re-exports aren't detected by the Node.js CJS-ESM interop.
 // These are handled by pluginInjectNodeReexportsHints in our babel.config.js
@@ -29,7 +29,7 @@ export {
   createConfigItem,
   createConfigItemSync,
   createConfigItemAsync,
-} from "./config";
+} from "./config/index.ts";
 
 export {
   loadPartialConfig,
@@ -37,8 +37,8 @@ export {
   loadPartialConfigAsync,
   loadOptions,
   loadOptionsAsync,
-} from "./config";
-import { loadOptionsSync } from "./config";
+} from "./config/index.ts";
+import { loadOptionsSync } from "./config/index.ts";
 export { loadOptionsSync };
 
 export type {
@@ -48,25 +48,25 @@ export type {
   PluginObject,
   PresetAPI,
   PresetObject,
-} from "./config";
+} from "./config/index.ts";
 
 export {
   transform,
   transformSync,
   transformAsync,
   type FileResult,
-} from "./transform";
+} from "./transform.ts";
 export {
   transformFile,
   transformFileSync,
   transformFileAsync,
-} from "./transform-file";
+} from "./transform-file.ts";
 export {
   transformFromAst,
   transformFromAstSync,
   transformFromAstAsync,
-} from "./transform-ast";
-export { parse, parseSync, parseAsync } from "./parse";
+} from "./transform-ast.ts";
+export { parse, parseSync, parseAsync } from "./parse.ts";
 
 /**
  * Recommended set of compilable extensions. Not used in @babel/core directly, but meant as
@@ -82,7 +82,7 @@ export const DEFAULT_EXTENSIONS = Object.freeze([
 ] as const);
 
 import Module from "module";
-import * as thisFile from "./index";
+import * as thisFile from "./index.ts";
 if (USE_ESM) {
   if (!IS_STANDALONE) {
     // Pass this module to the CJS proxy, so that it can be synchronously accessed.

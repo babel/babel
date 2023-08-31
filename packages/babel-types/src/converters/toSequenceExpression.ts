@@ -1,6 +1,6 @@
-import gatherSequenceExpressions from "./gatherSequenceExpressions";
-import type * as t from "..";
-import type { DeclarationInfo } from "./gatherSequenceExpressions";
+import gatherSequenceExpressions from "./gatherSequenceExpressions.ts";
+import type * as t from "../index.ts";
+import type { DeclarationInfo } from "./gatherSequenceExpressions.ts";
 
 /**
  * Turn an array of statement `nodes` into a `SequenceExpression`.

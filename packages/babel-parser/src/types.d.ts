@@ -1,8 +1,8 @@
-import type { SourceType } from "./options";
-import type { Token } from "./tokenizer";
-import type { SourceLocation } from "./util/location";
-import type { PlaceholderTypes } from "./plugins/placeholders";
-import type { ParseError } from "./parse-error";
+import type { SourceType } from "./options.ts";
+import type { Token } from "./tokenizer/index.ts";
+import type { SourceLocation } from "./util/location.ts";
+import type { PlaceholderTypes } from "./plugins/placeholders.ts";
+import type { ParseError } from "./parse-error.ts";
 
 /*
  * If making any changes to the AST, update:

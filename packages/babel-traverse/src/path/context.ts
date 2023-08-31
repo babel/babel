@@ -1,10 +1,10 @@
 // This file contains methods responsible for maintaining a TraversalContext.
 
-import { traverseNode } from "../traverse-node";
-import { SHOULD_SKIP, SHOULD_STOP } from "./index";
-import type TraversalContext from "../context";
-import type { VisitPhase } from "../types";
-import type NodePath from "./index";
+import { traverseNode } from "../traverse-node.ts";
+import { SHOULD_SKIP, SHOULD_STOP } from "./index.ts";
+import type TraversalContext from "../context.ts";
+import type { VisitPhase } from "../types.ts";
+import type NodePath from "./index.ts";
 import type * as t from "@babel/types";
 
 export function call(this: NodePath, key: VisitPhase): boolean {

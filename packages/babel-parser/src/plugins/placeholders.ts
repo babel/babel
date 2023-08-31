@@ -1,13 +1,13 @@
 import * as charCodes from "charcodes";
 
-import { tokenLabelName, tt } from "../tokenizer/types";
-import type Parser from "../parser";
-import type * as N from "../types";
-import { ParseErrorEnum } from "../parse-error";
-import type { Undone } from "../parser/node";
-import type { ExpressionErrors } from "../parser/util";
-import type { BindingTypes } from "../util/scopeflags";
-import type { Position } from "../util/location";
+import { tokenLabelName, tt } from "../tokenizer/types.ts";
+import type Parser from "../parser/index.ts";
+import type * as N from "../types.ts";
+import { ParseErrorEnum } from "../parse-error.ts";
+import type { Undone } from "../parser/node.ts";
+import type { ExpressionErrors } from "../parser/util.ts";
+import type { BindingTypes } from "../util/scopeflags.ts";
+import type { Position } from "../util/location.ts";
 
 type PossiblePlaceholders = {
   Identifier: N.Identifier;

@@ -1,4 +1,4 @@
-import type Scope from "./scope";
+import type Scope from "./scope/index.ts";
 import type { Node } from "@babel/types";
 
 export interface HubInterface {

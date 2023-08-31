@@ -1,7 +1,7 @@
-import { Errors, type ParseErrorConstructor } from "../parse-error";
-import type { Position } from "./location";
-import type { Node } from "../types";
-import type Tokenizer from "../tokenizer";
+import { Errors, type ParseErrorConstructor } from "../parse-error.ts";
+import type { Position } from "./location.ts";
+import type { Node } from "../types.ts";
+import type Tokenizer from "../tokenizer/index.ts";
 
 /**
  * @module util/expression-scope

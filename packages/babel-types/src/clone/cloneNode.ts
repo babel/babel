@@ -1,6 +1,6 @@
-import { NODE_FIELDS } from "../definitions";
-import type * as t from "..";
-import { isFile, isIdentifier } from "../validators/generated";
+import { NODE_FIELDS } from "../definitions/index.ts";
+import type * as t from "../index.ts";
+import { isFile, isIdentifier } from "../validators/generated/index.ts";
 
 const has = Function.call.bind(Object.prototype.hasOwnProperty);
 

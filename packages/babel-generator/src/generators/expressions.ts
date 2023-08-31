@@ -1,4 +1,4 @@
-import type Printer from "../printer";
+import type Printer from "../printer.ts";
 import {
   isCallExpression,
   isLiteral,
@@ -6,7 +6,7 @@ import {
   isNewExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
-import * as n from "../node";
+import * as n from "../node/index.ts";
 
 export function UnaryExpression(this: Printer, node: t.UnaryExpression) {
   const { operator } = node;

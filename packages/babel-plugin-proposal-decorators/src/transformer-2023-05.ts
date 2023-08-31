@@ -5,7 +5,7 @@ import ReplaceSupers from "@babel/helper-replace-supers";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import * as charCodes from "charcodes";
 import type { PluginAPI, PluginObject, PluginPass } from "@babel/core";
-import type { Options } from "./index";
+import type { Options } from "./index.ts";
 
 type ClassDecoratableElement =
   | t.ClassMethod

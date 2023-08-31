@@ -1,4 +1,4 @@
-import type { ParseErrorTemplates } from "../parse-error";
+import type { ParseErrorTemplates } from "../parse-error.ts";
 
 const code = "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED";
 

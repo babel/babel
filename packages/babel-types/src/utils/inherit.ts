@@ -1,4 +1,4 @@
-import type * as t from "..";
+import type * as t from "../index.ts";
 
 export default function inherit<
   C extends t.Node | undefined,

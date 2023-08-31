@@ -1,5 +1,5 @@
-import { COMMENT_KEYS } from "../constants";
-import type * as t from "..";
+import { COMMENT_KEYS } from "../constants/index.ts";
+import type * as t from "../index.ts";
 
 const CLEAR_KEYS = [
   "tokens", // only exist in t.File

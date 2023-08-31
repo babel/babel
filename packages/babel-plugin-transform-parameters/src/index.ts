@@ -1,6 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
-import convertFunctionParams from "./params";
-import convertFunctionRest from "./rest";
+import convertFunctionParams from "./params.ts";
+import convertFunctionRest from "./rest.ts";
 export { convertFunctionParams };
 
 export interface Options {

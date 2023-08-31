@@ -22,7 +22,7 @@ import {
   updateExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
-import { willPathCastToBoolean } from "./util";
+import { willPathCastToBoolean } from "./util.ts";
 
 class AssignmentMemoiser {
   private _map: WeakMap<t.Expression, { count: number; value: t.Identifier }>;

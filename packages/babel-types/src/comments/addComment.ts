@@ -1,5 +1,5 @@
-import addComments from "./addComments";
-import type * as t from "..";
+import addComments from "./addComments.ts";
+import type * as t from "../index.ts";
 
 /**
  * Add comment of certain type to a node.

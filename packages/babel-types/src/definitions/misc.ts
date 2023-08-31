@@ -3,8 +3,8 @@ import {
   assertNodeType,
   assertOneOf,
   assertValueType,
-} from "./utils";
-import { PLACEHOLDERS } from "./placeholders";
+} from "./utils.ts";
+import { PLACEHOLDERS } from "./placeholders.ts";
 
 const defineType = defineAliasedType("Miscellaneous");
 

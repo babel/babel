@@ -1,6 +1,6 @@
 /*:: declare var invariant; */
 
-import type Parser from "../../parser";
+import type Parser from "../../parser/index.ts";
 import {
   tokenIsIdentifier,
   tokenIsKeyword,
@@ -10,22 +10,22 @@ import {
   tt,
   type TokenType,
   tokenIsFlowInterfaceOrTypeOrOpaque,
-} from "../../tokenizer/types";
-import type * as N from "../../types";
-import type { Position } from "../../util/location";
-import { types as tc } from "../../tokenizer/context";
+} from "../../tokenizer/types.ts";
+import type * as N from "../../types.ts";
+import type { Position } from "../../util/location.ts";
+import { types as tc } from "../../tokenizer/context.ts";
 import * as charCodes from "charcodes";
-import { isIteratorStart } from "../../util/identifier";
-import FlowScopeHandler from "./scope";
+import { isIteratorStart } from "../../util/identifier.ts";
+import FlowScopeHandler from "./scope.ts";
 import {
   BindingFlag,
   ScopeFlag,
   type BindingTypes,
-} from "../../util/scopeflags";
-import type { ExpressionErrors } from "../../parser/util";
-import type { ParseStatementFlag } from "../../parser/statement";
-import { Errors, ParseErrorEnum } from "../../parse-error";
-import { cloneIdentifier, type Undone } from "../../parser/node";
+} from "../../util/scopeflags.ts";
+import type { ExpressionErrors } from "../../parser/util.ts";
+import type { ParseStatementFlag } from "../../parser/statement.ts";
+import { Errors, ParseErrorEnum } from "../../parse-error.ts";
+import { cloneIdentifier, type Undone } from "../../parser/node.ts";
 
 const reservedTypes = new Set([
   "_",

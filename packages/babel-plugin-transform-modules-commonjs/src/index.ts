@@ -14,7 +14,7 @@ import { template, types as t } from "@babel/core";
 import type { PluginOptions } from "@babel/helper-module-transforms";
 import type { Visitor, Scope } from "@babel/traverse";
 
-import { transformDynamicImport } from "./dynamic-import";
+import { transformDynamicImport } from "./dynamic-import.ts";
 
 export interface Options extends PluginOptions {
   allowCommonJSExports?: boolean;

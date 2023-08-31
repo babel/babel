@@ -4,8 +4,8 @@ import type * as t from "@babel/types";
 import type { NodePath, Scope } from "@babel/traverse";
 import type { File } from "@babel/core";
 
-import ImportBuilder from "./import-builder";
-import isModule from "./is-module";
+import ImportBuilder from "./import-builder.ts";
+import isModule from "./is-module.ts";
 
 export type ImportOptions = {
   /**

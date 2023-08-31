@@ -1,26 +1,26 @@
 import semver, { type SemVer } from "semver";
-import { logPlugin } from "./debug";
-import getOptionSpecificExcludesFor from "./get-option-specific-excludes";
+import { logPlugin } from "./debug.ts";
+import getOptionSpecificExcludesFor from "./get-option-specific-excludes.ts";
 import {
   addProposalSyntaxPlugins,
   removeUnnecessaryItems,
   removeUnsupportedItems,
-} from "./filter-items";
-import moduleTransformations from "./module-transformations";
-import normalizeOptions from "./normalize-options";
+} from "./filter-items.ts";
+import moduleTransformations from "./module-transformations.ts";
+import normalizeOptions from "./normalize-options.ts";
 import {
   pluginSyntaxMap,
   proposalPlugins,
   proposalSyntaxPlugins,
-} from "./shipped-proposals";
+} from "./shipped-proposals.ts";
 import {
   plugins as pluginsList,
   pluginsBugfixes as pluginsBugfixesList,
   overlappingPlugins,
-} from "./plugins-compat-data";
+} from "./plugins-compat-data.ts";
 
-import removeRegeneratorEntryPlugin from "./polyfills/regenerator";
-import legacyBabelPolyfillPlugin from "./polyfills/babel-polyfill";
+import removeRegeneratorEntryPlugin from "./polyfills/regenerator.ts";
+import legacyBabelPolyfillPlugin from "./polyfills/babel-polyfill.ts";
 
 import type { CallerMetadata } from "@babel/core";
 
@@ -37,12 +37,12 @@ import getTargets, {
   isRequired,
 } from "@babel/helper-compilation-targets";
 import type { Targets, InputTargets } from "@babel/helper-compilation-targets";
-import availablePlugins from "./available-plugins";
+import availablePlugins from "./available-plugins.ts";
 import { declarePreset } from "@babel/helper-plugin-utils";
 
 type ModuleTransformationsType =
   typeof import("./module-transformations").default;
-import type { BuiltInsOption, ModuleOption, Options } from "./types";
+import type { BuiltInsOption, ModuleOption, Options } from "./types.ts";
 
 // TODO: Remove in Babel 8
 export function isPluginRequired(targets: Targets, support: Targets) {

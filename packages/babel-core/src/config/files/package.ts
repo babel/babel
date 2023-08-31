@@ -1,10 +1,10 @@
 import path from "path";
 import type { Handler } from "gensync";
-import { makeStaticFileCache } from "./utils";
+import { makeStaticFileCache } from "./utils.ts";
 
-import type { ConfigFile, FilePackageData } from "./types";
+import type { ConfigFile, FilePackageData } from "./types.ts";
 
-import ConfigError from "../../errors/config-error";
+import ConfigError from "../../errors/config-error.ts";
 
 const PACKAGE_FILENAME = "package.json";
 

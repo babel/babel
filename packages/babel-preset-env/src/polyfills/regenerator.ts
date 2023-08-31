@@ -1,7 +1,7 @@
-import { getImportSource, getRequireSource } from "./utils";
+import { getImportSource, getRequireSource } from "./utils.ts";
 import type { Visitor } from "@babel/traverse";
 import type { PluginObject, PluginPass } from "@babel/core";
-import type { Options } from "../types";
+import type { Options } from "../types.ts";
 
 function isRegeneratorSource(source: string) {
   return (

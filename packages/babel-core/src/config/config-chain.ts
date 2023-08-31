@@ -3,7 +3,7 @@
 import path from "path";
 import buildDebug from "debug";
 import type { Handler } from "gensync";
-import { validate } from "./validation/options";
+import { validate } from "./validation/options.ts";
 import type {
   ValidatedOptions,
   IgnoreList,
@@ -11,14 +11,14 @@ import type {
   BabelrcSearch,
   CallerMetadata,
   IgnoreItem,
-} from "./validation/options";
-import pathPatternToRegex from "./pattern-to-regex";
-import { ConfigPrinter, ChainFormatter } from "./printer";
-import type { ReadonlyDeepArray } from "./helpers/deep-array";
+} from "./validation/options.ts";
+import pathPatternToRegex from "./pattern-to-regex.ts";
+import { ConfigPrinter, ChainFormatter } from "./printer.ts";
+import type { ReadonlyDeepArray } from "./helpers/deep-array.ts";
 
-import { endHiddenCallStack } from "../errors/rewrite-stack-trace";
-import ConfigError from "../errors/config-error";
-import type { PluginAPI, PresetAPI } from "./helpers/config-api";
+import { endHiddenCallStack } from "../errors/rewrite-stack-trace.ts";
+import ConfigError from "../errors/config-error.ts";
+import type { PluginAPI, PresetAPI } from "./helpers/config-api.ts";
 
 const debug = buildDebug("babel:config:config-chain");
 
@@ -27,20 +27,20 @@ import {
   findRelativeConfig,
   findRootConfig,
   loadConfig,
-} from "./files";
-import type { ConfigFile, IgnoreFile, FilePackageData } from "./files";
+} from "./files/index.ts";
+import type { ConfigFile, IgnoreFile, FilePackageData } from "./files/index.ts";
 
-import { makeWeakCacheSync, makeStrongCacheSync } from "./caching";
+import { makeWeakCacheSync, makeStrongCacheSync } from "./caching.ts";
 
 import {
   createCachedDescriptors,
   createUncachedDescriptors,
-} from "./config-descriptors";
+} from "./config-descriptors.ts";
 import type {
   UnloadedDescriptor,
   OptionsAndDescriptors,
   ValidatedFile,
-} from "./config-descriptors";
+} from "./config-descriptors.ts";
 
 export type ConfigChain = {
   plugins: Array<UnloadedDescriptor<PluginAPI>>;

@@ -1,8 +1,8 @@
 // This file contains methods that modify the path/node in some ways.
 
-import { getCachedPaths } from "../cache";
-import PathHoister from "./lib/hoister";
-import NodePath from "./index";
+import { getCachedPaths } from "../cache.ts";
+import PathHoister from "./lib/hoister.ts";
+import NodePath from "./index.ts";
 import {
   arrowFunctionExpression,
   assertExpression,
@@ -21,7 +21,7 @@ import {
   thisExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
-import type Scope from "../scope";
+import type Scope from "../scope/index.ts";
 
 /**
  * Insert the provided nodes before the current one.

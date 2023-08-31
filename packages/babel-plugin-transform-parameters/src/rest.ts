@@ -5,7 +5,7 @@ import {
   iifeVisitor,
   collectShadowedParamsNames,
   buildScopeIIFE,
-} from "./shadow-utils";
+} from "./shadow-utils.ts";
 
 const buildRest = template.statement(`
   for (var LEN = ARGUMENTS.length,

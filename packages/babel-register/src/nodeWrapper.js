@@ -13,7 +13,7 @@ const globalModuleCache = Module._cache;
 const internalModuleCache = Object.create(null);
 
 Module._cache = internalModuleCache;
-const node = require("./node");
+const node = require("./node.js");
 
 // NOTE: This Module._cache set is intercepted by the beforeEach hook in
 // packages/babel-register/test/index.js to install dependencies mocks.

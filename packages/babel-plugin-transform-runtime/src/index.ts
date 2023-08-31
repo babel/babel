@@ -2,9 +2,9 @@ import { declare } from "@babel/helper-plugin-utils";
 import { addDefault, isModule } from "@babel/helper-module-imports";
 import { types as t, type CallerMetadata } from "@babel/core";
 
-import { hasMinVersion } from "./helpers";
-import getRuntimePath, { resolveFSPath } from "./get-runtime-path";
-import { createBasePolyfillsPlugin } from "./polyfills";
+import { hasMinVersion } from "./helpers.ts";
+import getRuntimePath, { resolveFSPath } from "./get-runtime-path/index.ts";
+import { createBasePolyfillsPlugin } from "./polyfills.ts";
 
 function supportsStaticESM(caller: CallerMetadata | undefined) {
   // @ts-expect-error TS does not narrow down optional chaining

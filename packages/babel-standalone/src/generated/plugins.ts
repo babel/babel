@@ -2,7 +2,7 @@
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'yarn gulp generate-standalone'
  */
-import makeNoopPlugin from "../make-noop-plugin";
+import makeNoopPlugin from "../make-noop-plugin.ts";
 import externalHelpers from "@babel/plugin-external-helpers";
 import syntaxDecimal from "@babel/plugin-syntax-decimal";
 import syntaxDecorators from "@babel/plugin-syntax-decorators";

@@ -2,7 +2,7 @@
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'make build'
  */
-import { FLIPPED_ALIAS_KEYS } from "../../definitions";
+import { FLIPPED_ALIAS_KEYS } from "../../definitions/index.ts";
 
 export const STANDARDIZED_TYPES = FLIPPED_ALIAS_KEYS["Standardized"];
 export const EXPRESSION_TYPES = FLIPPED_ALIAS_KEYS["Expression"];

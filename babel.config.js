@@ -77,8 +77,7 @@ module.exports = function (api) {
 
   let targets = {};
   let convertESM = outputType === "script";
-  /** @type {false | "externals" | "always"} */
-  let addImportExtension = convertESM ? false : "always";
+  let replaceTSImportExtension = true;
   let ignoreLib = true;
   let includeRegeneratorRuntime = false;
   let needsPolyfillsForOldNode = false;
@@ -107,7 +106,7 @@ module.exports = function (api) {
     case "standalone":
       includeRegeneratorRuntime = true;
       convertESM = false;
-      addImportExtension = false;
+      replaceTSImportExtension = false;
       ignoreLib = false;
       // rollup-commonjs will converts node_modules to ESM
       unambiguousSources.push(
@@ -120,7 +119,7 @@ module.exports = function (api) {
       break;
     case "rollup":
       convertESM = false;
-      addImportExtension = "externals";
+      replaceTSImportExtension = false;
       ignoreLib = false;
       // rollup-commonjs will converts node_modules to ESM
       unambiguousSources.push(
@@ -230,9 +229,7 @@ module.exports = function (api) {
         assumptions: sourceAssumptions,
         plugins: [
           transformNamedBabelTypesImportToDestructuring,
-          addImportExtension
-            ? [pluginAddImportExtension, { when: addImportExtension }]
-            : null,
+          replaceTSImportExtension ? pluginReplaceTSImportExtension : null,
 
           [
             pluginToggleBooleanFlag,
@@ -787,56 +784,13 @@ function pluginImportMetaUrl({ types: t, template }) {
   };
 }
 
-function pluginAddImportExtension(api, { when }) {
+function pluginReplaceTSImportExtension() {
   return {
     visitor: {
       "ImportDeclaration|ExportDeclaration"({ node }) {
         const { source } = node;
-        if (!source) return;
-
-        if (
-          when === "always" &&
-          source.value.startsWith(".") &&
-          !/\.[a-z]+$/.test(source.value)
-        ) {
-          const dir = pathUtils.dirname(this.filename);
-
-          try {
-            const pkg = JSON.parse(
-              fs.readFileSync(
-                pathUtils.join(dir, `${source.value}/package.json`)
-              ),
-              "utf8"
-            );
-
-            if (pkg.main) source.value = pathUtils.join(source.value, pkg.main);
-          } catch (_) {}
-
-          try {
-            if (fs.statSync(pathUtils.join(dir, source.value)).isFile()) return;
-          } catch (_) {}
-
-          for (const [src, lib = src] of [["ts", "js"], ["js"], ["cjs"]]) {
-            try {
-              fs.statSync(pathUtils.join(dir, `${source.value}.${src}`));
-              source.value += `.${lib}`;
-              return;
-            } catch (_) {}
-          }
-
-          source.value += "/index.js";
-        }
-        if (
-          source.value.startsWith("lodash/") ||
-          source.value.startsWith("core-js-compat/") ||
-          source.value === "core-js/stable/index" ||
-          source.value === "regenerator-runtime/runtime" ||
-          source.value === "babel-plugin-dynamic-import-node/utils"
-        ) {
-          source.value += ".js";
-        }
-        if (source.value.startsWith("@babel/preset-modules/")) {
-          source.value += "/index.js";
+        if (source) {
+          source.value = source.value.replace(/(\.[mc]?)ts$/, "$1js");
         }
       },
     },

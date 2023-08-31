@@ -1,6 +1,6 @@
-import { stringLiteral } from "../../builders/generated";
-import type * as t from "../..";
-import { inherits } from "../..";
+import { stringLiteral } from "../../builders/generated/index.ts";
+import type * as t from "../../index.ts";
+import { inherits } from "../../index.ts";
 
 export default function cleanJSXElementLiteralChild(
   child: t.JSXText,

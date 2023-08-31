@@ -3,10 +3,14 @@ import corejs2Polyfills from "@babel/compat-data/corejs2-built-ins";
 // @ts-expect-error Fixme: TS can not infer types from ../data/core-js-compat.js
 // but we can't import core-js-compat/data.json because JSON imports do
 // not work on Node 14
-import corejs3Polyfills from "../data/core-js-compat";
-import { plugins as pluginsList } from "./plugins-compat-data";
-import moduleTransformations from "./module-transformations";
-import { TopLevelOptions, ModulesOption, UseBuiltInsOption } from "./options";
+import corejs3Polyfills from "../data/core-js-compat.js";
+import { plugins as pluginsList } from "./plugins-compat-data.ts";
+import moduleTransformations from "./module-transformations.ts";
+import {
+  TopLevelOptions,
+  ModulesOption,
+  UseBuiltInsOption,
+} from "./options.ts";
 import { OptionValidator } from "@babel/helper-validator-option";
 
 const corejs2DefaultWebIncludes = [
@@ -21,7 +25,7 @@ import type {
   ModuleOption,
   Options,
   PluginListOption,
-} from "./types";
+} from "./types.ts";
 
 const v = new OptionValidator(PACKAGE_JSON.name);
 

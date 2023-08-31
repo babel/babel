@@ -3,20 +3,20 @@ import { template, types as t } from "@babel/core";
 
 import { isModule } from "@babel/helper-module-imports";
 
-import rewriteThis from "./rewrite-this";
-import rewriteLiveReferences from "./rewrite-live-references";
+import rewriteThis from "./rewrite-this.ts";
+import rewriteLiveReferences from "./rewrite-live-references.ts";
 import normalizeModuleAndLoadMetadata, {
   hasExports,
   isSideEffectImport,
   validateImportInteropOption,
-} from "./normalize-and-load-metadata";
+} from "./normalize-and-load-metadata.ts";
 import type {
   ImportInterop,
   InteropType,
   Lazy,
   ModuleMetadata,
   SourceModuleMetadata,
-} from "./normalize-and-load-metadata";
+} from "./normalize-and-load-metadata.ts";
 import type { NodePath } from "@babel/traverse";
 
 const {
@@ -35,21 +35,21 @@ const {
   variableDeclarator,
 } = t;
 
-export { buildDynamicImport } from "./dynamic-import";
+export { buildDynamicImport } from "./dynamic-import.ts";
 
 if (!process.env.BABEL_8_BREAKING) {
   if (!USE_ESM) {
     if (!IS_STANDALONE) {
       // eslint-disable-next-line no-restricted-globals
       exports.getDynamicImportSource =
-        // eslint-disable-next-line no-restricted-globals
+        // eslint-disable-next-line no-restricted-globals, import/extensions
         require("./dynamic-import").getDynamicImportSource;
     }
   }
 }
 
-export { default as getModuleName } from "./get-module-name";
-export type { PluginOptions } from "./get-module-name";
+export { default as getModuleName } from "./get-module-name.ts";
+export type { PluginOptions } from "./get-module-name.ts";
 
 export { hasExports, isSideEffectImport, isModule, rewriteThis };
 

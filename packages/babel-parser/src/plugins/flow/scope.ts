@@ -1,11 +1,11 @@
-import type { Position } from "../../util/location";
-import ScopeHandler, { Scope } from "../../util/scope";
+import type { Position } from "../../util/location.ts";
+import ScopeHandler, { Scope } from "../../util/scope.ts";
 import {
   BindingFlag,
   type ScopeFlag,
   type BindingTypes,
-} from "../../util/scopeflags";
-import type * as N from "../../types";
+} from "../../util/scopeflags.ts";
+import type * as N from "../../types.ts";
 
 // Reference implementation: https://github.com/facebook/flow/blob/23aeb2a2ef6eb4241ce178fde5d8f17c5f747fb5/src/typing/env.ml#L536-L584
 class FlowScope extends Scope {

@@ -5,7 +5,7 @@ type nodeType = typeof import("./resolve-targets");
 // exports of index-browser, since this file may be replaced at bundle time with index-browser.
 ({}) as any as browserType as nodeType;
 
-import type { ValidatedOptions } from "./validation/options";
+import type { ValidatedOptions } from "./validation/options.ts";
 import path from "path";
 import getTargets, {
   type InputTargets,

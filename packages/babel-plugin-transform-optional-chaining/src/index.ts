@@ -1,5 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import { transform } from "./transform";
+import { transform } from "./transform.ts";
 import type { NodePath } from "@babel/traverse";
 import type * as t from "@babel/types";
 

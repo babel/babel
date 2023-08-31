@@ -1,6 +1,6 @@
-import { isIdentifier } from "../validators/generated";
-import { stringLiteral } from "../builders/generated";
-import type * as t from "..";
+import { isIdentifier } from "../validators/generated/index.ts";
+import { stringLiteral } from "../builders/generated/index.ts";
+import type * as t from "../index.ts";
 
 export default function toComputedKey(
   node:

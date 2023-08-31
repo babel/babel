@@ -2,7 +2,7 @@ import { assignmentExpression, sequenceExpression } from "@babel/types";
 import type { Visitor } from "@babel/traverse";
 import type * as t from "@babel/types";
 
-import explode from "./explode-assignable-expression";
+import explode from "./explode-assignable-expression.ts";
 
 export default function (opts: {
   build: (

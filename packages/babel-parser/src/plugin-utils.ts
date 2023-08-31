@@ -1,9 +1,9 @@
-import type Parser from "./parser";
+import type Parser from "./parser/index.ts";
 import type {
   ParserPluginWithOptions,
   PluginConfig,
   PluginOptions,
-} from "./typings";
+} from "./typings.ts";
 
 export type Plugin = PluginConfig;
 
@@ -236,12 +236,12 @@ export function validatePlugins(plugins: PluginList) {
 
 // These plugins are defined using a mixin which extends the parser class.
 
-import estree from "./plugins/estree";
-import flow from "./plugins/flow";
-import jsx from "./plugins/jsx";
-import typescript from "./plugins/typescript";
-import placeholders from "./plugins/placeholders";
-import v8intrinsic from "./plugins/v8intrinsic";
+import estree from "./plugins/estree.ts";
+import flow from "./plugins/flow/index.ts";
+import jsx from "./plugins/jsx/index.ts";
+import typescript from "./plugins/typescript/index.ts";
+import placeholders from "./plugins/placeholders.ts";
+import v8intrinsic from "./plugins/v8intrinsic.ts";
 
 // NOTE: order is important. estree must come first; placeholders must come last.
 export const mixinPlugins = {

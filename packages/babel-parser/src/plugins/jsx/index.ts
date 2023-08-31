@@ -1,23 +1,23 @@
 import * as charCodes from "charcodes";
 
-import XHTMLEntities from "./xhtml";
-import type Parser from "../../parser";
-import type { ExpressionErrors } from "../../parser/util";
+import XHTMLEntities from "./xhtml.ts";
+import type Parser from "../../parser/index.ts";
+import type { ExpressionErrors } from "../../parser/util.ts";
 import {
   tokenComesBeforeExpression,
   tokenIsKeyword,
   tokenLabelName,
   type TokenType,
   tt,
-} from "../../tokenizer/types";
-import type { TokContext } from "../../tokenizer/context";
-import { types as tc } from "../../tokenizer/context";
-import type * as N from "../../types";
-import { isIdentifierChar, isIdentifierStart } from "../../util/identifier";
-import type { Position } from "../../util/location";
-import { isNewLine } from "../../util/whitespace";
-import { Errors, ParseErrorEnum } from "../../parse-error";
-import type { Undone } from "../../parser/node";
+} from "../../tokenizer/types.ts";
+import type { TokContext } from "../../tokenizer/context.ts";
+import { types as tc } from "../../tokenizer/context.ts";
+import type * as N from "../../types.ts";
+import { isIdentifierChar, isIdentifierStart } from "../../util/identifier.ts";
+import type { Position } from "../../util/location.ts";
+import { isNewLine } from "../../util/whitespace.ts";
+import { Errors, ParseErrorEnum } from "../../parse-error.ts";
+import type { Undone } from "../../parser/node.ts";
 
 /* eslint sort-keys: "error" */
 const JsxErrors = ParseErrorEnum`jsx`({

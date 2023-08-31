@@ -1,6 +1,6 @@
-import { isVariableDeclaration } from "./generated";
-import { BLOCK_SCOPED_SYMBOL } from "../constants";
-import type * as t from "..";
+import { isVariableDeclaration } from "./generated/index.ts";
+import { BLOCK_SCOPED_SYMBOL } from "../constants/index.ts";
+import type * as t from "../index.ts";
 
 /**
  * Check if the input `node` is a `let` variable declaration.

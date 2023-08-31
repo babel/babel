@@ -1,6 +1,6 @@
 import type * as t from "@babel/types";
-import type { NodePath } from "./index";
-import type { VirtualTypeAliases } from "./path/lib/virtual-types";
+import type { NodePath } from "./index.ts";
+import type { VirtualTypeAliases } from "./path/lib/virtual-types.ts";
 
 export type VisitPhase = "enter" | "exit";
 

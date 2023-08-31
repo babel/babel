@@ -1,36 +1,40 @@
 import gensync, { type Handler } from "gensync";
-import { forwardAsync, maybeAsync, isThenable } from "../gensync-utils/async";
+import {
+  forwardAsync,
+  maybeAsync,
+  isThenable,
+} from "../gensync-utils/async.ts";
 
-import { mergeOptions } from "./util";
-import * as context from "../index";
-import Plugin from "./plugin";
-import { getItemDescriptor } from "./item";
-import { buildPresetChain } from "./config-chain";
-import { finalize as freezeDeepArray } from "./helpers/deep-array";
-import type { DeepArray, ReadonlyDeepArray } from "./helpers/deep-array";
+import { mergeOptions } from "./util.ts";
+import * as context from "../index.ts";
+import Plugin from "./plugin.ts";
+import { getItemDescriptor } from "./item.ts";
+import { buildPresetChain } from "./config-chain.ts";
+import { finalize as freezeDeepArray } from "./helpers/deep-array.ts";
+import type { DeepArray, ReadonlyDeepArray } from "./helpers/deep-array.ts";
 import type {
   ConfigContext,
   ConfigChain,
   PresetInstance,
-} from "./config-chain";
-import type { UnloadedDescriptor } from "./config-descriptors";
+} from "./config-chain.ts";
+import type { UnloadedDescriptor } from "./config-descriptors.ts";
 import traverse from "@babel/traverse";
-import { makeWeakCache, makeWeakCacheSync } from "./caching";
-import type { CacheConfigurator } from "./caching";
+import { makeWeakCache, makeWeakCacheSync } from "./caching.ts";
+import type { CacheConfigurator } from "./caching.ts";
 import {
   validate,
   checkNoUnwrappedItemOptionPairs,
-} from "./validation/options";
-import type { PluginItem } from "./validation/options";
-import { validatePluginObject } from "./validation/plugins";
-import { makePluginAPI, makePresetAPI } from "./helpers/config-api";
-import type { PluginAPI, PresetAPI } from "./helpers/config-api";
+} from "./validation/options.ts";
+import type { PluginItem } from "./validation/options.ts";
+import { validatePluginObject } from "./validation/plugins.ts";
+import { makePluginAPI, makePresetAPI } from "./helpers/config-api.ts";
+import type { PluginAPI, PresetAPI } from "./helpers/config-api.ts";
 
-import loadPrivatePartialConfig from "./partial";
-import type { ValidatedOptions } from "./validation/options";
+import loadPrivatePartialConfig from "./partial.ts";
+import type { ValidatedOptions } from "./validation/options.ts";
 
-import type * as Context from "./cache-contexts";
-import ConfigError from "../errors/config-error";
+import type * as Context from "./cache-contexts.ts";
+import ConfigError from "../errors/config-error.ts";
 
 type LoadedDescriptor = {
   value: {};
@@ -40,7 +44,7 @@ type LoadedDescriptor = {
   externalDependencies: ReadonlyDeepArray<string>;
 };
 
-export type { InputOptions } from "./validation/options";
+export type { InputOptions } from "./validation/options.ts";
 
 export type ResolvedConfig = {
   options: any;

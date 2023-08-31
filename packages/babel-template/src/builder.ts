@@ -1,9 +1,13 @@
-import { merge, validate } from "./options";
-import type { TemplateOpts, PublicOpts, PublicReplacements } from "./options";
-import type { Formatter } from "./formatters";
+import { merge, validate } from "./options.ts";
+import type {
+  TemplateOpts,
+  PublicOpts,
+  PublicReplacements,
+} from "./options.ts";
+import type { Formatter } from "./formatters.ts";
 
-import stringTemplate from "./string";
-import literalTemplate from "./literal";
+import stringTemplate from "./string.ts";
+import literalTemplate from "./literal.ts";
 
 export type TemplateBuilder<T> = {
   // Build a new builder, merging the given options with the previous ones.

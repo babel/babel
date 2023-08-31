@@ -6,8 +6,8 @@ import {
   onFirstPause,
   waitFor,
   isThenable,
-} from "../gensync-utils/async";
-import { isIterableIterator } from "./util";
+} from "../gensync-utils/async.ts";
+import { isIterableIterator } from "./util.ts";
 
 export type { CacheConfigurator };
 

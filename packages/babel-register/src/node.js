@@ -2,8 +2,8 @@
 
 "use strict";
 
-const hook = require("./hook");
-const { LocalClient } = require("./worker-client");
+const hook = require("./hook.js");
+const { LocalClient } = require("./worker-client.js");
 
 const client = new LocalClient();
 function register(opts = {}) {

@@ -1,4 +1,4 @@
-import isValidIdentifier from "./isValidIdentifier";
+import isValidIdentifier from "./isValidIdentifier.ts";
 
 const RESERVED_WORDS_ES3_ONLY: Set<string> = new Set([
   "abstract",

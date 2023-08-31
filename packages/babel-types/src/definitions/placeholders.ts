@@ -1,4 +1,4 @@
-import { ALIAS_KEYS } from "./utils";
+import { ALIAS_KEYS } from "./utils.ts";
 
 export const PLACEHOLDERS = [
   "Identifier",

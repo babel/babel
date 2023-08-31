@@ -1,10 +1,10 @@
 import type { Handler } from "gensync";
-import type { PluginTarget, PluginOptions } from "./validation/options";
+import type { PluginTarget, PluginOptions } from "./validation/options.ts";
 
 import path from "path";
-import { createDescriptor } from "./config-descriptors";
+import { createDescriptor } from "./config-descriptors.ts";
 
-import type { UnloadedDescriptor } from "./config-descriptors";
+import type { UnloadedDescriptor } from "./config-descriptors.ts";
 
 export function createItemFromDescriptor<API>(
   desc: UnloadedDescriptor<API>,

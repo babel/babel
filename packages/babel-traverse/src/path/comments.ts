@@ -1,6 +1,6 @@
 // This file contains methods responsible for dealing with comments.
 import type * as t from "@babel/types";
-import type NodePath from "./index";
+import type NodePath from "./index.ts";
 import {
   addComment as _addComment,
   addComments as _addComments,

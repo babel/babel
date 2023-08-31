@@ -34,4 +34,4 @@ export type InputTargets = {
   esmodules?: boolean | "intersect";
 } & Targets;
 
-export type { BrowserslistBrowserName } from "./targets";
+export type { BrowserslistBrowserName } from "./targets.ts";

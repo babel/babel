@@ -1,5 +1,5 @@
 import * as charCodes from "charcodes";
-import { tt, type TokenType } from "../tokenizer/types";
+import { tt, type TokenType } from "../tokenizer/types.ts";
 import type {
   AssignmentPattern,
   TSParameterProperty,
@@ -19,17 +19,17 @@ import type {
   ObjectPattern,
   ArrayExpression,
   ArrayPattern,
-} from "../types";
-import type { Pos, Position } from "../util/location";
+} from "../types.ts";
+import type { Pos, Position } from "../util/location.ts";
 import {
   isStrictBindOnlyReservedWord,
   isStrictBindReservedWord,
-} from "../util/identifier";
-import { NodeUtils, type Undone } from "./node";
-import { type BindingTypes, BindingFlag } from "../util/scopeflags";
-import type { ExpressionErrors } from "./util";
-import { Errors, type LValAncestor } from "../parse-error";
-import type Parser from "./index";
+} from "../util/identifier.ts";
+import { NodeUtils, type Undone } from "./node.ts";
+import { type BindingTypes, BindingFlag } from "../util/scopeflags.ts";
+import type { ExpressionErrors } from "./util.ts";
+import { Errors, type LValAncestor } from "../parse-error.ts";
+import type Parser from "./index.ts";
 
 const getOwn = <T extends {}>(object: T, key: keyof T) =>
   Object.hasOwnProperty.call(object, key) && object[key];

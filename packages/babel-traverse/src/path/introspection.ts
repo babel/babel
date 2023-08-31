@@ -1,6 +1,6 @@
 // This file contains methods responsible for introspecting the current path for certain values.
 
-import type NodePath from "./index";
+import type NodePath from "./index.ts";
 import {
   STATEMENT_OR_BLOCK_KEYS,
   VISITOR_KEYS,

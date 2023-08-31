@@ -1,9 +1,9 @@
-import NodePath from "./path";
+import NodePath from "./path/index.ts";
 import { VISITOR_KEYS } from "@babel/types";
-import type Scope from "./scope";
-import type { ExplodedTraverseOptions } from ".";
+import type Scope from "./scope/index.ts";
+import type { ExplodedTraverseOptions } from "./index.ts";
 import type * as t from "@babel/types";
-import type { Visitor } from "./types";
+import type { Visitor } from "./types.ts";
 
 export default class TraversalContext<S = unknown> {
   constructor(

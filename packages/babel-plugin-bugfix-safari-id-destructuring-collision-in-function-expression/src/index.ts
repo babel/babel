@@ -1,5 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import { shouldTransform } from "./util";
+import { shouldTransform } from "./util.ts";
 
 export default declare(api => {
   api.assertVersion("^7.16.0");

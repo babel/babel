@@ -1,28 +1,28 @@
-import type { Options } from "./options";
+import type { Options } from "./options.ts";
 import {
   hasPlugin,
   validatePlugins,
   mixinPluginNames,
   mixinPlugins,
   type PluginList,
-} from "./plugin-utils";
+} from "./plugin-utils.ts";
 import type {
   PluginConfig as ParserPlugin,
   FlowPluginOptions,
   RecordAndTuplePluginOptions,
   PipelineOperatorPluginOptions,
-} from "./typings";
-import Parser from "./parser";
+} from "./typings.ts";
+import Parser from "./parser/index.ts";
 
-import type { ExportedTokenType } from "./tokenizer/types";
+import type { ExportedTokenType } from "./tokenizer/types.ts";
 import {
   getExportedToken,
   tt as internalTokenTypes,
   type InternalTokenTypes,
-} from "./tokenizer/types";
-import "./tokenizer/context";
+} from "./tokenizer/types.ts";
+import "./tokenizer/context.ts";
 
-import type { Expression, File } from "./types";
+import type { Expression, File } from "./types.ts";
 
 export function parse(input: string, options?: Options): File {
   if (options?.sourceType === "unambiguous") {

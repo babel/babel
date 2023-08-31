@@ -1,4 +1,4 @@
-import { resolve as polyfill } from "../../vendor/import-meta-resolve";
+import { resolve as polyfill } from "../../vendor/import-meta-resolve.ts";
 
 let importMetaResolve: (specifier: string, parent: string) => string;
 

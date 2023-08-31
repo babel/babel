@@ -3,8 +3,8 @@ import {
   isMemberExpression,
   isStringLiteral,
   isThisExpression,
-} from "./generated";
-import type * as t from "..";
+} from "./generated/index.ts";
+import type * as t from "../index.ts";
 
 /**
  * Determines whether or not the input node `member` matches the

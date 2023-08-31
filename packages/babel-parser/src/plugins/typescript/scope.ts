@@ -1,12 +1,12 @@
-import type { Position } from "../../util/location";
-import ScopeHandler, { Scope } from "../../util/scope";
+import type { Position } from "../../util/location.ts";
+import ScopeHandler, { Scope } from "../../util/scope.ts";
 import {
   BindingFlag,
   ScopeFlag,
   type BindingTypes,
-} from "../../util/scopeflags";
-import type * as N from "../../types";
-import { Errors } from "../../parse-error";
+} from "../../util/scopeflags.ts";
+import type * as N from "../../types.ts";
+import { Errors } from "../../parse-error.ts";
 
 class TypeScriptScope extends Scope {
   types: Set<string> = new Set();

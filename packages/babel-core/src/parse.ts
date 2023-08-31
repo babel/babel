@@ -1,13 +1,11 @@
 import gensync, { type Handler } from "gensync";
 
-import loadConfig from "./config";
-import type { InputOptions } from "./config";
-import parser from "./parser";
-import type { ParseResult } from "./parser";
-import normalizeOptions from "./transformation/normalize-opts";
-import type { ValidatedOptions } from "./config/validation/options";
+import loadConfig, { type InputOptions } from "./config/index.ts";
+import parser, { type ParseResult } from "./parser/index.ts";
+import normalizeOptions from "./transformation/normalize-opts.ts";
+import type { ValidatedOptions } from "./config/validation/options.ts";
 
-import { beginHiddenCallStack } from "./errors/rewrite-stack-trace";
+import { beginHiddenCallStack } from "./errors/rewrite-stack-trace.ts";
 
 type FileParseCallback = {
   (err: Error, ast: null): void;

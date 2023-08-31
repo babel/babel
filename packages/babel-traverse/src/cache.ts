@@ -1,7 +1,7 @@
 import type { Node } from "@babel/types";
-import type NodePath from "./path";
-import type Scope from "./scope";
-import type { HubInterface } from "./hub";
+import type NodePath from "./path/index.ts";
+import type Scope from "./scope/index.ts";
+import type { HubInterface } from "./hub.ts";
 
 let pathsCache: WeakMap<
   HubInterface | typeof nullHub,

@@ -1,4 +1,4 @@
-import type NodePath from "../index";
+import type NodePath from "../index.ts";
 import {
   BOOLEAN_NUMBER_BINARY_OPERATORS,
   createTypeAnnotationBasedOnTypeof,
@@ -6,9 +6,9 @@ import {
   voidTypeAnnotation,
 } from "@babel/types";
 import type * as t from "@babel/types";
-import type Binding from "../../scope/binding";
+import type Binding from "../../scope/binding.ts";
 
-import { createUnionType } from "./util";
+import { createUnionType } from "./util.ts";
 
 export default function (this: NodePath<t.Identifier>, node: t.Identifier) {
   if (!this.isReferenced()) return;

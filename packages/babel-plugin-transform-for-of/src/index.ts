@@ -2,7 +2,7 @@ import { declare } from "@babel/helper-plugin-utils";
 import { template, types as t } from "@babel/core";
 import type { NodePath } from "@babel/traverse";
 
-import transformWithoutHelper from "./no-helper-implementation";
+import transformWithoutHelper from "./no-helper-implementation.ts";
 
 export interface Options {
   allowArrayLike?: boolean;

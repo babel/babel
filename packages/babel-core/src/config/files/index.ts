@@ -5,7 +5,7 @@ type indexType = typeof import("./index");
 // exports of index-browser, since this file may be replaced at bundle time with index-browser.
 ({}) as any as indexBrowserType as indexType;
 
-export { findPackageData } from "./package";
+export { findPackageData } from "./package.ts";
 
 export {
   findConfigUpwards,
@@ -14,16 +14,16 @@ export {
   loadConfig,
   resolveShowConfigPath,
   ROOT_CONFIG_FILENAMES,
-} from "./configuration";
+} from "./configuration.ts";
 export type {
   ConfigFile,
   IgnoreFile,
   RelativeConfig,
   FilePackageData,
-} from "./types";
+} from "./types.ts";
 export {
   loadPlugin,
   loadPreset,
   resolvePlugin,
   resolvePreset,
-} from "./plugins";
+} from "./plugins.ts";

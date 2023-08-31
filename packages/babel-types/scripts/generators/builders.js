@@ -100,9 +100,9 @@ function generateLowercaseBuilders() {
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'make build'
  */
-import validateNode from "../validateNode";
-import type * as t from "../..";
-import deprecationWarning from "../../utils/deprecationWarning";
+import validateNode from "../validateNode.ts";
+import type * as t from "../../index.ts";
+import deprecationWarning from "../../utils/deprecationWarning.ts";
 `;
 
   const reservedNames = new Set(["super", "import"]);
@@ -203,6 +203,6 @@ function generateUppercaseBuilders() {
     output += `  ${formattedBuilderName} as ${type},\n`;
   });
 
-  output += ` } from './index';\n`;
+  output += ` } from './index.ts';\n`;
   return output;
 }

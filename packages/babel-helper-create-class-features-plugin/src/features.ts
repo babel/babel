@@ -1,6 +1,6 @@
 import type { File, types as t } from "@babel/core";
 import type { NodePath } from "@babel/traverse";
-import { hasOwnDecorators } from "./decorators";
+import { hasOwnDecorators } from "./decorators.ts";
 
 export const FEATURES = Object.freeze(
   process.env.BABEL_8_BREAKING

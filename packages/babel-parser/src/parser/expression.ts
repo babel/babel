@@ -31,9 +31,9 @@ import {
   tokenOperatorPrecedence,
   tt,
   type TokenType,
-} from "../tokenizer/types";
-import type * as N from "../types";
-import LValParser from "./lval";
+} from "../tokenizer/types.ts";
+import type * as N from "../types.ts";
+import LValParser from "./lval.ts";
 import {
   isKeyword,
   isReservedWord,
@@ -41,32 +41,32 @@ import {
   isStrictBindReservedWord,
   isIdentifierStart,
   canBeReservedWord,
-} from "../util/identifier";
+} from "../util/identifier.ts";
 import {
   type Position,
   createPositionWithColumnOffset,
-} from "../util/location";
+} from "../util/location.ts";
 import * as charCodes from "charcodes";
-import { ScopeFlag, BindingFlag } from "../util/scopeflags";
-import { ExpressionErrors } from "./util";
+import { ScopeFlag, BindingFlag } from "../util/scopeflags.ts";
+import { ExpressionErrors } from "./util.ts";
 import {
   PARAM_AWAIT,
   PARAM_IN,
   PARAM_RETURN,
   functionFlags,
-} from "../util/production-parameter";
+} from "../util/production-parameter.ts";
 import {
   newArrowHeadScope,
   newAsyncArrowScope,
   newExpressionScope,
-} from "../util/expression-scope";
-import { Errors, type ParseError } from "../parse-error";
-import { UnparenthesizedPipeBodyDescriptions } from "../parse-error/pipeline-operator-errors";
-import { setInnerComments } from "./comments";
-import { cloneIdentifier, type Undone } from "./node";
-import type Parser from ".";
+} from "../util/expression-scope.ts";
+import { Errors, type ParseError } from "../parse-error.ts";
+import { UnparenthesizedPipeBodyDescriptions } from "../parse-error/pipeline-operator-errors.ts";
+import { setInnerComments } from "./comments.ts";
+import { cloneIdentifier, type Undone } from "./node.ts";
+import type Parser from "./index.ts";
 
-import type { SourceType } from "../options";
+import type { SourceType } from "../options.ts";
 
 export default abstract class ExpressionParser extends LValParser {
   // Forward-declaration: defined in statement.js

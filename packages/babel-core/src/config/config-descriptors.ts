@@ -1,25 +1,25 @@
 import gensync, { type Handler } from "gensync";
-import { once } from "../gensync-utils/functional";
+import { once } from "../gensync-utils/functional.ts";
 
-import { loadPlugin, loadPreset } from "./files";
+import { loadPlugin, loadPreset } from "./files/index.ts";
 
-import { getItemDescriptor } from "./item";
+import { getItemDescriptor } from "./item.ts";
 
 import {
   makeWeakCacheSync,
   makeStrongCacheSync,
   makeStrongCache,
-} from "./caching";
-import type { CacheConfigurator } from "./caching";
+} from "./caching.ts";
+import type { CacheConfigurator } from "./caching.ts";
 
 import type {
   ValidatedOptions,
   PluginList,
   PluginItem,
-} from "./validation/options";
+} from "./validation/options.ts";
 
-import { resolveBrowserslistConfigFile } from "./resolve-targets";
-import type { PluginAPI, PresetAPI } from "./helpers/config-api";
+import { resolveBrowserslistConfigFile } from "./resolve-targets.ts";
+import type { PluginAPI, PresetAPI } from "./helpers/config-api.ts";
 
 // Represents a config object and functions to lazily load the descriptors
 // for the plugins and presets so we don't load the plugins/presets unless

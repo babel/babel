@@ -1,6 +1,6 @@
 import semver from "semver";
-import { unreleasedLabels } from "./targets";
-import type { Targets, Target } from "./types";
+import { unreleasedLabels } from "./targets.ts";
+import type { Targets, Target } from "./types.ts";
 
 export function prettifyVersion(version: string) {
   if (typeof version !== "string") {

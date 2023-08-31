@@ -1,6 +1,6 @@
-import { unionTypeAnnotation } from "../generated";
-import removeTypeDuplicates from "../../modifications/flow/removeTypeDuplicates";
-import type * as t from "../..";
+import { unionTypeAnnotation } from "../generated/index.ts";
+import removeTypeDuplicates from "../../modifications/flow/removeTypeDuplicates.ts";
+import type * as t from "../../index.ts";
 
 /**
  * Takes an array of `types` and flattens them, removing duplicates and

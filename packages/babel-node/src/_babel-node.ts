@@ -5,8 +5,8 @@ import path from "path";
 import repl from "repl";
 import * as babel from "@babel/core";
 import vm from "vm";
-import "core-js/stable/index";
-import "regenerator-runtime/runtime";
+import "core-js/stable/index.js";
+import "regenerator-runtime/runtime.js";
 // @ts-expect-error @babel/register is a CommonJS module
 import register from "@babel/register";
 import { fileURLToPath } from "url";

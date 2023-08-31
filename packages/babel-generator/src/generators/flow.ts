@@ -1,7 +1,7 @@
-import type Printer from "../printer";
+import type Printer from "../printer.ts";
 import { isDeclareExportDeclaration, isStatement } from "@babel/types";
 import type * as t from "@babel/types";
-import { ExportAllDeclaration } from "./modules";
+import { ExportAllDeclaration } from "./modules.ts";
 
 export function AnyTypeAnnotation(this: Printer) {
   this.word("any");
@@ -474,7 +474,7 @@ export function NullableTypeAnnotation(
 export {
   NumericLiteral as NumberLiteralTypeAnnotation,
   StringLiteral as StringLiteralTypeAnnotation,
-} from "./types";
+} from "./types.ts";
 
 export function NumberTypeAnnotation(this: Printer) {
   this.word("number");

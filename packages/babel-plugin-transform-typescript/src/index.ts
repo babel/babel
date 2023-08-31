@@ -5,10 +5,10 @@ import { injectInitialization } from "@babel/helper-create-class-features-plugin
 import type { Binding, NodePath, Scope } from "@babel/traverse";
 import type { Options as SyntaxOptions } from "@babel/plugin-syntax-typescript";
 
-import transpileConstEnum from "./const-enum";
-import type { NodePathConstEnum } from "./const-enum";
-import transpileEnum from "./enum";
-import transpileNamespace from "./namespace";
+import transpileConstEnum from "./const-enum.ts";
+import type { NodePathConstEnum } from "./const-enum.ts";
+import transpileEnum from "./enum.ts";
+import transpileNamespace from "./namespace.ts";
 
 function isInType(path: NodePath) {
   switch (path.parent.type) {

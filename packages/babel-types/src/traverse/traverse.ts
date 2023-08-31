@@ -1,5 +1,5 @@
-import { VISITOR_KEYS } from "../definitions";
-import type * as t from "..";
+import { VISITOR_KEYS } from "../definitions/index.ts";
+import type * as t from "../index.ts";
 
 export type TraversalAncestors = Array<{
   node: t.Node;

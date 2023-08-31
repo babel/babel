@@ -1,8 +1,8 @@
-import type { Formatter } from "./formatters";
-import type { TemplateReplacements, TemplateOpts } from "./options";
-import { normalizeReplacements } from "./options";
-import parseAndBuildMetadata from "./parse";
-import populatePlaceholders from "./populate";
+import type { Formatter } from "./formatters.ts";
+import type { TemplateReplacements, TemplateOpts } from "./options.ts";
+import { normalizeReplacements } from "./options.ts";
+import parseAndBuildMetadata from "./parse.ts";
+import populatePlaceholders from "./populate.ts";
 
 export default function literalTemplate<T>(
   formatter: Formatter<T>,
