@@ -28,7 +28,6 @@
     "bin",
     "lib",
     "typings/babel-parser.d.ts",
-    "typings/babel-parser-legacy.d.ts",
     "index.cjs"
   ],
   "engines": {
@@ -51,7 +50,6 @@
         }
       },
       {
-        "types": "./typings/babel-parser-legacy.d.ts",
         "exports": null
       }
     ],
