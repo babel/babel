@@ -66,10 +66,12 @@ const shouldSkip = semver.lt(process.version, "14.0.0") || USE_ESM;
     service.enabled(true);
 
     try {
-      require(path.join(
-        __dirname,
-        "fixtures/config-ts/simple-cts-with-ts-node/babel.config.cts",
-      ));
+      require(
+        path.join(
+          __dirname,
+          "fixtures/config-ts/simple-cts-with-ts-node/babel.config.cts",
+        ),
+      );
 
       const config = loadPartialConfigSync({
         configFile: path.join(

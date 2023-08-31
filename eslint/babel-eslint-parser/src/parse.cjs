@@ -3,9 +3,11 @@
 const semver = require("semver");
 const convert = require("./convert/index.cjs");
 
-const babelParser = require(require.resolve("@babel/parser", {
-  paths: [require.resolve("@babel/core/package.json")],
-}));
+const babelParser = require(
+  require.resolve("@babel/parser", {
+    paths: [require.resolve("@babel/core/package.json")],
+  }),
+);
 
 let isRunningMinSupportedCoreVersion = null;
 
