@@ -2,6 +2,13 @@ import path from "node:path";
 import type { ResolvedConfig } from "../config/index.ts";
 
 export default function normalizeOptions(config: ResolvedConfig) {
+  // TODO: Everything in this function is basically typed as `any`. Improve it.
+
+  // TODO(@nicolo-ribaudo): Currently, soure map's `sources` is generated taking
+  // into account both the options passed to the parser and the options passed
+  // to the generator. If they disagree, both are included. Clean this up, so
+  // that there is a single source of thruth.
+
   const {
     filename,
     cwd,
@@ -66,10 +73,10 @@ export default function normalizeOptions(config: ResolvedConfig) {
         sourceFileName == null
           ? "unknown"
           : sourceRoot == null
-          ? sourceFileName
-          : // @babel/generator will prepend sourceFileName with sourceRoot,
-            // so we need to remove it here.
-            path.relative(sourceRoot, sourceFileName),
+            ? sourceFileName
+            : // @babel/generator will prepend sourceFileName with sourceRoot,
+              // so we need to remove it here.
+              path.relative(sourceRoot, sourceFileName),
       ...opts.generatorOpts,
     },
   };
