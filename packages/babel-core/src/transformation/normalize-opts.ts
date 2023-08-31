@@ -15,7 +15,9 @@ export default function normalizeOptions(config: ResolvedConfig) {
       ? undefined
       : config.options.moduleRoot,
 
-    sourceFileName = path.basename(filenameRelative),
+    sourceFileName = filenameRelative === "unknown"
+      ? undefined
+      : filenameRelative,
 
     comments = true,
     compact = "auto",

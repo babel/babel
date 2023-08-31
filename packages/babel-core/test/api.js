@@ -664,7 +664,7 @@ describe("api", function () {
       sourceMaps: true,
     });
 
-    expect(result.map.sources).toEqual(["path.js", "file/path.js"]);
+    expect(result.map.sources).toEqual(["file/path.js"]);
   });
 
   it("code option false", function () {
