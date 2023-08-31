@@ -30,7 +30,12 @@ export default function normalizeOptions(config: ResolvedConfig) {
       sourceType:
         path.extname(filenameRelative) === ".mjs" ? "module" : sourceType,
 
-      sourceFileName: filename,
+      // TODO: @babel/parser uses sourceFilename, while @babel/generator and
+      // @babel/core use sourceFileName. Eventualy align them.
+      // https://github.com/babel/babel/pull/13518
+      // We use the relative filename here so that source maps do not include
+      // absolute paths, and are thus portable.
+      sourceFilename: filename,
       plugins: [],
       ...opts.parserOpts,
     },
