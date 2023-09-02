@@ -102,7 +102,13 @@ const buildTest = function (testName, opts) {
     saveInFiles(opts.inFiles);
     const args = [binLoc].concat(opts.args);
 
-    const spawnOpts = { cwd: tmpLoc, env: { BABEL_DISABLE_CACHE: true } };
+    const spawnOpts = {
+      cwd: tmpLoc,
+      env: {
+        ...(process.env.BABEL_8_BREAKING && { BABEL_8_BREAKING: true }),
+        BABEL_DISABLE_CACHE: true,
+      },
+    };
     if (opts.ipc) {
       spawnOpts.stdio = ["pipe", "pipe", "pipe", "ipc"];
     }
