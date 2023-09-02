@@ -619,7 +619,7 @@ export function classExpression(
   });
 }
 export function classDeclaration(
-  id: t.Identifier,
+  id: t.Identifier | null | undefined = null,
   superClass: t.Expression | null | undefined = null,
   body: t.ClassBody,
   decorators: Array<t.Decorator> | null = null,

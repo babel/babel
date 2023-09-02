@@ -1378,8 +1378,6 @@ defineType("ClassExpression", {
   fields: {
     id: {
       validate: assertNodeType("Identifier"),
-      // In declarations, this is missing if this is the
-      // child of an ExportDefaultDeclaration.
       optional: true,
     },
     typeParameters: {
@@ -1439,6 +1437,9 @@ defineType("ClassDeclaration", {
   fields: {
     id: {
       validate: assertNodeType("Identifier"),
+      // The id may be omitted if this is the child of an
+      // ExportDefaultDeclaration.
+      optional: true,
     },
     typeParameters: {
       validate: process.env.BABEL_8_BREAKING
