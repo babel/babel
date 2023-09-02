@@ -220,7 +220,6 @@ describe("option-manager", () => {
           blacklist: true,
         });
       }).toThrow(
-        // eslint-disable-next-line max-len
         /Using removed Babel 5 option: .auxiliaryComment - Use `auxiliaryCommentBefore` or `auxiliaryCommentAfter`/,
       );
     });

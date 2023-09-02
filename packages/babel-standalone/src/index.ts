@@ -4,11 +4,9 @@
  * plugins, instead explicitly registering all the available plugins and
  * presets, and requiring custom ones to be registered through `registerPlugin`
  * and `registerPreset` respectively.
- * @flow
  */
 
 /* global VERSION */
-/* eslint-disable max-len */
 /// <reference lib="dom" />
 
 import {

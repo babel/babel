@@ -16,7 +16,6 @@ const debug = buildDebug("babel:transform:file");
 // These regexps are copied from the convert-source-map package,
 // but without // or /* at the beginning of the comment.
 
-// eslint-disable-next-line max-len
 const INLINE_SOURCEMAP_REGEX =
   /^[@#]\s+sourceMappingURL=data:(?:application|text)\/json;(?:charset[:=]\S+?;)?base64,(?:.*)$/;
 const EXTERNAL_SOURCEMAP_REGEX =
