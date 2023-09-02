@@ -62,9 +62,17 @@ export default function* normalizeFile(
       const lastComment = extractComments(INLINE_SOURCEMAP_REGEX, ast);
       if (lastComment) {
         try {
-          inputMap = convertSourceMap.fromComment(lastComment);
+          inputMap = convertSourceMap.fromComment("//" + lastComment);
         } catch (err) {
-          debug("discarding unknown inline input sourcemap", err);
+          if (process.env.BABEL_8_BREAKING) {
+            console.warn(
+              "discarding unknown inline input sourcemap",
+              options.filename,
+              err,
+            );
+          } else {
+            debug("discarding unknown inline input sourcemap");
+          }
         }
       }
     }
