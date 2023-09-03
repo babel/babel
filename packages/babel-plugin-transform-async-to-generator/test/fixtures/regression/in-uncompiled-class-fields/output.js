@@ -11,7 +11,7 @@ class A {
   })();
   b = (_ref2 => {
     var _this2 = this;
-    return function () {
+    return function (_x, _x2, _x3) {
       return (_ref2 = _ref2 || babelHelpers.asyncToGenerator(function* (x, y, z) {
         return _this2;
       })).apply(this, arguments);

@@ -3,7 +3,7 @@
 function mandatory(paramName) {
   throw new Error(`Missing parameter: ${paramName}`);
 }
-function foo() {
+function foo(_x) {
   return (foo = babelHelpers.asyncToGenerator(function (_ref) {
     let a = _ref.a,
       _ref$b = _ref.b,

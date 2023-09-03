@@ -20,7 +20,7 @@ function test() {
         babelHelpers.defineProperty(this, "b", /*#__PURE__*/babelHelpers.asyncToGenerator(function* () {
           return _superprop_get('foo').bind(_this)``;
         }));
-        babelHelpers.defineProperty(this, "c", /*#__PURE__*/function () {
+        babelHelpers.defineProperty(this, "c", /*#__PURE__*/function (_x) {
           return (_ref3 = _ref3 || babelHelpers.asyncToGenerator(function* (foo) {
             return _superprop_get(foo).bind(_this)``;
           })).apply(this, arguments);

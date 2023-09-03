@@ -32,7 +32,7 @@ import type * as t from "@babel/types";
 // };
 
 const buildAnonymousExpressionWrapper = template.expression(`
-    (function () {
+    (function (PARAMS) {
       return (REF = REF || FUNCTION).apply(this, arguments);
     })
 `) as (
@@ -40,7 +40,7 @@ const buildAnonymousExpressionWrapper = template.expression(`
 ) => t.FunctionExpression;
 
 const buildNamedExpressionWrapper = template.expression(`
-    (function NAME() {
+    (function NAME(PARAMS) {
       return (NAME = FUNCTION).apply(this, arguments);
     })
 `) as (
@@ -48,7 +48,7 @@ const buildNamedExpressionWrapper = template.expression(`
 ) => t.FunctionExpression;
 
 const buildDeclarationWrapper = template.statement(
-  `function NAME() { return (NAME = FUNCTION).apply(this, arguments); }`,
+  `function NAME(PARAMS) { return (NAME = FUNCTION).apply(this, arguments); }`,
 );
 
 function classOrObjectMethod(
@@ -135,6 +135,7 @@ function plainFunction(
       buildDeclarationWrapper({
         NAME: functionId || path.scope.generateUidIdentifier("ref"),
         FUNCTION: built,
+        PARAMS: params,
       }),
     );
   } else {
@@ -143,6 +144,7 @@ function plainFunction(
       container = buildNamedExpressionWrapper({
         NAME: functionId || null,
         FUNCTION: built,
+        PARAMS: params,
       });
     } else {
       ref = path.scope.generateUidIdentifier(
@@ -151,6 +153,7 @@ function plainFunction(
       container = buildAnonymousExpressionWrapper({
         REF: ref,
         FUNCTION: built,
+        PARAMS: params,
       });
       nameFunction({
         node: container,

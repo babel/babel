@@ -4,7 +4,7 @@ function foo() {
     return babelHelpers.regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
-          ( /*#__PURE__*/function () {
+          ( /*#__PURE__*/function (_x) {
             return (_ref = _ref || babelHelpers.asyncToGenerator( /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee(number) {
               var tmp;
               return babelHelpers.regeneratorRuntime().wrap(function _callee$(_context) {

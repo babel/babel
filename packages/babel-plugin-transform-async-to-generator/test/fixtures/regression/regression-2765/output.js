@@ -12,7 +12,7 @@ class Class {
     var _this2 = this;
     return babelHelpers.asyncToGenerator(function* () {
       var _ref2;
-      var c = /*#__PURE__*/function c() {
+      var c = /*#__PURE__*/function c(_x) {
         return (_ref2 = _ref2 || babelHelpers.asyncToGenerator(function* (b) {
           _this2;
         })).apply(this, arguments);
