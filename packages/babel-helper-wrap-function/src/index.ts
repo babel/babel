@@ -142,14 +142,12 @@ function plainFunction(
     let container, ref;
     if (functionId) {
       container = buildNamedExpressionWrapper({
-        NAME: functionId || null,
+        NAME: functionId,
         FUNCTION: built,
         PARAMS: params,
       });
     } else {
-      ref = path.scope.generateUidIdentifier(
-        functionId ? functionId.name : "ref",
-      );
+      ref = path.scope.generateUidIdentifier("ref");
       container = buildAnonymousExpressionWrapper({
         REF: ref,
         FUNCTION: built,
