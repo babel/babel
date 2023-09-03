@@ -10,56 +10,46 @@ import {
   isRestElement,
   returnStatement,
   isCallExpression,
+  cloneNode,
 } from "@babel/types";
 import type * as t from "@babel/types";
 
-type ExpressionWrapperBuilder<ExtraBody extends t.Node[]> = (
-  replacements?: Parameters<ReturnType<typeof template.expression>>[0],
-) => t.CallExpression & {
-  callee: t.FunctionExpression & {
-    body: {
-      body: [
-        t.VariableDeclaration & {
-          declarations: [
-            { init: t.FunctionExpression | t.ArrowFunctionExpression },
-          ];
-        },
-        ...ExtraBody,
-      ];
-    };
-  };
-};
+// type ExpressionWrapperBuilder<ExtraBody extends t.Node[]> = (
+//   replacements?: Parameters<ReturnType<typeof template.expression>>[0],
+// ) => t.CallExpression & {
+//   callee: t.FunctionExpression & {
+//     body: {
+//       body: [
+//         t.VariableDeclaration & {
+//           declarations: [
+//             { init: t.FunctionExpression | t.ArrowFunctionExpression },
+//           ];
+//         },
+//         ...ExtraBody,
+//       ];
+//     };
+//   };
+// };
 
 const buildAnonymousExpressionWrapper = template.expression(`
-  (function () {
-    var REF = FUNCTION;
-    return function NAME(PARAMS) {
-      return REF.apply(this, arguments);
-    };
-  })()
-`) as ExpressionWrapperBuilder<
-  [t.ReturnStatement & { argument: t.FunctionExpression }]
->;
+    (function () {
+      return (REF = REF || FUNCTION).apply(this, arguments);
+    })
+`) as (
+  replacements?: Parameters<ReturnType<typeof template.expression>>[0],
+) => t.FunctionExpression;
 
 const buildNamedExpressionWrapper = template.expression(`
-  (function () {
-    var REF = FUNCTION;
-    function NAME(PARAMS) {
-      return REF.apply(this, arguments);
-    }
-    return NAME;
-  })()
-`) as ExpressionWrapperBuilder<
-  [t.FunctionDeclaration, t.ReturnStatement & { argument: t.Identifier }]
->;
+    (function NAME() {
+      return (NAME = FUNCTION).apply(this, arguments);
+    })
+`) as (
+  replacements?: Parameters<ReturnType<typeof template.expression>>[0],
+) => t.FunctionExpression;
 
-const buildDeclarationWrapper = template.statements(`
-  function NAME(PARAMS) { return REF.apply(this, arguments); }
-  function REF() {
-    REF = FUNCTION;
-    return REF.apply(this, arguments);
-  }
-`);
+const buildDeclarationWrapper = template.statement(
+  `function NAME() { return (NAME = FUNCTION).apply(this, arguments); }`,
+);
 
 function classOrObjectMethod(
   path: NodePath<t.ClassMethod | t.ClassPrivateMethod | t.ObjectMethod>,
@@ -140,35 +130,39 @@ function plainFunction(
     params.push(path.scope.generateUidIdentifier("x"));
   }
 
-  const wrapperArgs = {
-    NAME: functionId || null,
-    REF: path.scope.generateUidIdentifier(functionId ? functionId.name : "ref"),
-    FUNCTION: built,
-    PARAMS: params,
-  };
-
   if (isDeclaration) {
-    const container = buildDeclarationWrapper(wrapperArgs);
-    path.replaceWith(container[0]);
-    path.insertAfter(container[1]);
+    path.replaceWith(
+      buildDeclarationWrapper({
+        NAME: functionId || path.scope.generateUidIdentifier("ref"),
+        FUNCTION: built,
+      }),
+    );
   } else {
-    let container;
-
+    let container, ref;
     if (functionId) {
-      container = buildNamedExpressionWrapper(wrapperArgs);
+      container = buildNamedExpressionWrapper({
+        NAME: functionId || null,
+        FUNCTION: built,
+      });
     } else {
-      container = buildAnonymousExpressionWrapper(wrapperArgs);
-
-      const returnFn = container.callee.body.body[1].argument;
+      ref = path.scope.generateUidIdentifier(
+        functionId ? functionId.name : "ref",
+      );
+      container = buildAnonymousExpressionWrapper({
+        REF: ref,
+        FUNCTION: built,
+      });
       nameFunction({
-        node: returnFn,
+        node: container,
         parent: (path as NodePath<t.FunctionExpression>).parent,
         scope: path.scope,
       });
-      functionId = returnFn.id;
+      functionId = container.id;
     }
 
     if (functionId || (!ignoreFunctionLength && params.length)) {
+      if (ref) path.parentPath.scope.push({ id: cloneNode(ref) });
+
       path.replaceWith(container);
     } else {
       // we can omit this wrapper as the conditions it protects for do not apply
