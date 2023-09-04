@@ -4,12 +4,15 @@ import path from "path";
 import { pathToFileURL } from "url";
 import { createRequire } from "module";
 import semver from "semver";
+import buildDebug from "debug";
 
 import { endHiddenCallStack } from "../../errors/rewrite-stack-trace.ts";
 import ConfigError from "../../errors/config-error.ts";
 
 import type { InputOptions } from "../index.ts";
 import { transformFileSync } from "../../transform-file.ts";
+
+const debug = buildDebug("babel:config:loading:files:module-types");
 
 const require = createRequire(import.meta.url);
 
@@ -126,8 +129,7 @@ function loadCtsDefault(filepath: string) {
     require.extensions[ext] = handler;
   }
   try {
-    const module = endHiddenCallStack(require)(filepath);
-    return module?.__esModule ? module.default : module;
+    return loadCjsDefault(filepath);
   } finally {
     if (!hasTsSupport) {
       if (require.extensions[ext] === handler) delete require.extensions[ext];
@@ -136,8 +138,27 @@ function loadCtsDefault(filepath: string) {
   }
 }
 
+const LOADING_CJS_FILES = new Set();
+
 function loadCjsDefault(filepath: string) {
-  const module = endHiddenCallStack(require)(filepath);
+  // The `require()` call below can make this code reentrant if a require hook
+  // like @babel/register has been loaded into the system. That would cause
+  // Babel to attempt to compile the `.babelrc.js` file as it loads below. To
+  // cover this case, we auto-ignore re-entrant config processing. ESM loaders
+  // do not have this problem, because loaders do not apply to themselves.
+  if (LOADING_CJS_FILES.has(filepath)) {
+    debug("Auto-ignoring usage of config %o.", filepath);
+    return {};
+  }
+
+  let module;
+  try {
+    LOADING_CJS_FILES.add(filepath);
+    module = endHiddenCallStack(require)(filepath);
+  } finally {
+    LOADING_CJS_FILES.delete(filepath);
+  }
+
   if (process.env.BABEL_8_BREAKING) {
     return module?.__esModule ? module.default : module;
   } else {

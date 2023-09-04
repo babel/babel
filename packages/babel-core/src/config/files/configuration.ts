@@ -41,8 +41,6 @@ const RELATIVE_CONFIG_FILENAMES = [
 
 const BABELIGNORE_FILENAME = ".babelignore";
 
-const LOADING_CONFIGS = new Set();
-
 type ConfigCacheData = {
   envName: string;
   caller: CallerMetadata | undefined;
@@ -72,25 +70,11 @@ function* readConfigCode(
 ): Handler<ConfigFile | null> {
   if (!nodeFs.existsSync(filepath)) return null;
 
-  // The `require()` call below can make this code reentrant if a require hook like @babel/register has been
-  // loaded into the system. That would cause Babel to attempt to compile the `.babelrc.js` file as it loads
-  // below. To cover this case, we auto-ignore re-entrant config processing.
-  if (LOADING_CONFIGS.has(filepath)) {
-    debug("Auto-ignoring usage of config %o.", filepath);
-    return buildConfigFileObject({}, filepath);
-  }
-
-  let options: unknown;
-  try {
-    LOADING_CONFIGS.add(filepath);
-    options = yield* loadCodeDefault(
-      filepath,
-      "You appear to be using a native ECMAScript module configuration " +
-        "file, which is only supported when running Babel asynchronously.",
-    );
-  } finally {
-    LOADING_CONFIGS.delete(filepath);
-  }
+  let options = yield* loadCodeDefault(
+    filepath,
+    "You appear to be using a native ECMAScript module configuration " +
+      "file, which is only supported when running Babel asynchronously.",
+  );
 
   let cacheNeedsConfiguration = false;
   if (typeof options === "function") {
