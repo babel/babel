@@ -1,3 +1,4 @@
-export default function _ref(_x) {
-  return (_ref = babelHelpers.asyncToGenerator(function* (x) {})).apply(this, arguments);
+var _ref;
+export default function (_x) {
+  return (_ref = _ref || babelHelpers.asyncToGenerator(function* (x) {})).apply(this, arguments);
 }

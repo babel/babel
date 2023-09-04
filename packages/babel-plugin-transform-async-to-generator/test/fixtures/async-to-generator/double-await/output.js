@@ -1,5 +1,6 @@
+var _ref;
 function fn() {
-  return (fn = babelHelpers.asyncToGenerator(function* () {
+  return (_ref = _ref || babelHelpers.asyncToGenerator(function* () {
     yield yield 1;
   })).apply(this, arguments);
 }

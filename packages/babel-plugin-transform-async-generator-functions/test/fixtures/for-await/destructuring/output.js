@@ -1,5 +1,6 @@
+var _ref;
 function f() {
-  return (f = babelHelpers.asyncToGenerator(function* () {
+  return (_ref = _ref || babelHelpers.asyncToGenerator(function* () {
     var _iteratorAbruptCompletion = false;
     var _didIteratorError = false;
     var _iteratorError;

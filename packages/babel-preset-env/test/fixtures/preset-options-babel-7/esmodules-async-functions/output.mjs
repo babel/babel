@@ -1,3 +1,4 @@
+var _ref;
 function f() {
-  return (f = babelHelpers.asyncToGenerator(function* () {})).apply(this, arguments);
+  return (_ref = _ref || babelHelpers.asyncToGenerator(function* () {})).apply(this, arguments);
 }

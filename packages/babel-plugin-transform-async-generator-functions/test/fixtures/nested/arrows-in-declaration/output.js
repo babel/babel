@@ -1,5 +1,6 @@
+var _ref;
 function g() {
-  return (g = babelHelpers.wrapAsyncGenerator(function* () {
+  return (_ref = _ref || babelHelpers.wrapAsyncGenerator(function* () {
     var _this = this;
     () => this;
     function f() {

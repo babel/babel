@@ -1,6 +1,7 @@
+var _ref;
 // This should print "true true true"
 function test() {
-  return (test = babelHelpers.asyncToGenerator(function* () {
+  return (_ref = _ref || babelHelpers.asyncToGenerator(function* () {
     class Foo {
       foo() {
         return this;
@@ -11,7 +12,7 @@ function test() {
         var _superprop_getFoo = () => super.foo,
           _this,
           _superprop_get = _prop => super[_prop],
-          _ref3;
+          _ref4;
         super(...args);
         _this = this;
         babelHelpers.defineProperty(this, "a", /*#__PURE__*/babelHelpers.asyncToGenerator(function* () {
@@ -20,8 +21,8 @@ function test() {
         babelHelpers.defineProperty(this, "b", /*#__PURE__*/babelHelpers.asyncToGenerator(function* () {
           return _superprop_get('foo').bind(_this)``;
         }));
-        babelHelpers.defineProperty(this, "c", /*#__PURE__*/function (_x) {
-          return (_ref3 = _ref3 || babelHelpers.asyncToGenerator(function* (foo) {
+        babelHelpers.defineProperty(this, "c", function (_x) {
+          return (_ref4 = _ref4 || babelHelpers.asyncToGenerator(function* (foo) {
             return _superprop_get(foo).bind(_this)``;
           })).apply(this, arguments);
         });

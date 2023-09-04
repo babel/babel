@@ -4,14 +4,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-var Foo = /*#__PURE__*/function () {
+var _ref2;
+var Foo = /*#__PURE__*/function (_ref) {
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
   }
   babelHelpers.createClass(Foo, [{
     key: "bar",
     value: function bar() {
-      return (bar = babelHelpers.asyncToGenerator( /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee() {
+      return (_ref = _ref || babelHelpers.asyncToGenerator( /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee() {
         var baz;
         return babelHelpers.regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
@@ -29,13 +30,14 @@ var Foo = /*#__PURE__*/function () {
 }();
 exports["default"] = Foo;
 function foo() {
-  return (foo = babelHelpers.asyncToGenerator( /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee3() {
+  return (_ref2 = _ref2 || babelHelpers.asyncToGenerator( /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee3() {
+    var _ref3;
     var bar;
     return babelHelpers.regeneratorRuntime().wrap(function _callee3$(_context3) {
       while (1) switch (_context3.prev = _context3.next) {
         case 0:
           bar = function _bar() {
-            return (bar = babelHelpers.asyncToGenerator( /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee2() {
+            return (_ref3 = _ref3 || babelHelpers.asyncToGenerator( /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee2() {
               var baz;
               return babelHelpers.regeneratorRuntime().wrap(function _callee2$(_context2) {
                 while (1) switch (_context2.prev = _context2.next) {

@@ -1,7 +1,7 @@
-var _Contact;
+var _ref, _Contact;
 const title = "Neem contact op";
 function action() {
-  return (action = babelHelpers.asyncToGenerator(function* () {
+  return (_ref = _ref || babelHelpers.asyncToGenerator(function* () {
     return _Contact || (_Contact = /*#__PURE__*/React.createElement(Contact, {
       title: title
     }));

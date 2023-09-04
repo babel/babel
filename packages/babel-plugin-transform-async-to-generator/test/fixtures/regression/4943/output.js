@@ -1,13 +1,14 @@
 "use strict";
 
+var _ref;
 function mandatory(paramName) {
   throw new Error(`Missing parameter: ${paramName}`);
 }
 function foo(_x) {
-  return (foo = babelHelpers.asyncToGenerator(function (_ref) {
-    let a = _ref.a,
-      _ref$b = _ref.b,
-      b = _ref$b === void 0 ? mandatory("b") : _ref$b;
+  return (_ref = _ref || babelHelpers.asyncToGenerator(function (_ref2) {
+    let a = _ref2.a,
+      _ref2$b = _ref2.b,
+      b = _ref2$b === void 0 ? mandatory("b") : _ref2$b;
     return function* () {
       return Promise.resolve(b);
     }();

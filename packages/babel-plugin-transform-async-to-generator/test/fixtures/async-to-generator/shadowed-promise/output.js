@@ -1,6 +1,7 @@
+var _ref;
 let Promise;
 function foo() {
-  return (foo = babelHelpers.asyncToGenerator(function* () {
+  return (_ref = _ref || babelHelpers.asyncToGenerator(function* () {
     yield new Promise(resolve => {
       resolve();
     });

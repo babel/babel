@@ -1,3 +1,4 @@
+var _ref;
 var _x$y$a$b = {
     x: 1,
     y: 2,
@@ -12,7 +13,7 @@ var n = babelHelpers.objectSpread2({
   y: y
 }, z);
 function agf() {
-  return (agf = babelHelpers.wrapAsyncGenerator( /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee() {
+  return (_ref = _ref || babelHelpers.wrapAsyncGenerator( /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee() {
     return babelHelpers.regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:

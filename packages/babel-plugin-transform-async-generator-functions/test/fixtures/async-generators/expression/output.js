@@ -1,5 +1,6 @@
-( /*#__PURE__*/function agf() {
-  return (agf = babelHelpers.wrapAsyncGenerator(function* () {
+var _ref;
+(function agf() {
+  return (_ref = _ref || babelHelpers.wrapAsyncGenerator(function* () {
     this;
     yield babelHelpers.awaitAsyncGenerator(1);
     yield 2;
