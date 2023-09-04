@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.foo = foo;
 var _bar = babelHelpers.interopRequireDefault(require("bar"));
-var _ref;
+var _foo;
 function foo() {
-  return (_ref = _ref || babelHelpers.asyncToGenerator(function* () {})).apply(this, arguments);
+  return (_foo = _foo || babelHelpers.asyncToGenerator(function* () {})).apply(this, arguments);
 }

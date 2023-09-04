@@ -1,6 +1,6 @@
-var _ref;
+var _f;
 function f() {
-  return (_ref = _ref || babelHelpers.asyncToGenerator(function* () {
+  return (_f = _f || babelHelpers.asyncToGenerator(function* () {
     var _iteratorAbruptCompletion = false;
     var _didIteratorError = false;
     var _iteratorError;

@@ -122,7 +122,9 @@ function plainFunction(
     params.push(path.scope.generateUidIdentifier("x"));
   }
 
-  const ref = path.scope.generateUidIdentifier("ref");
+  const ref = path.scope.generateUidIdentifier(
+    functionId ? functionId.name : "ref",
+  );
 
   if (isDeclaration) {
     path.replaceWith(

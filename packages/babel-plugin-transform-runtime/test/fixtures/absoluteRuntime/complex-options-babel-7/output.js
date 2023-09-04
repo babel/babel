@@ -1,7 +1,7 @@
 var _asyncToGenerator = require("<CWD>/packages/babel-runtime/helpers/asyncToGenerator.js");
-var _ref, _ref2;
+var _test, _main;
 function test() {
-  return (_ref = _ref || _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+  return (_test = _test || _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
@@ -14,7 +14,7 @@ function test() {
   }))).apply(this, arguments);
 }
 function main() {
-  return (_ref2 = _ref2 || _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+  return (_main = _main || _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
     return regeneratorRuntime.wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:

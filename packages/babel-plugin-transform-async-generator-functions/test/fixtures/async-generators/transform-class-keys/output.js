@@ -1,6 +1,6 @@
-var _ref;
+var _fn;
 function fn() {
-  return (_ref = _ref || babelHelpers.wrapAsyncGenerator(function* () {
+  return (_fn = _fn || babelHelpers.wrapAsyncGenerator(function* () {
     class A {
       [yield 1]() {}
     }

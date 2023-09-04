@@ -1,6 +1,6 @@
-var _ref;
+var _test;
 function test() {
-  return (_ref = _ref || babelHelpers.asyncToGenerator( /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee() {
+  return (_test = _test || babelHelpers.asyncToGenerator( /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee() {
     var obj, _loop, _i, _arr;
     return babelHelpers.regeneratorRuntime().wrap(function _callee$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {

@@ -1,5 +1,5 @@
 var _this = this,
-  _ref3;
+  _notIIFE;
 babelHelpers.asyncToGenerator( /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee() {
   return babelHelpers.regeneratorRuntime().wrap(function _callee$(_context) {
     while (1) switch (_context.prev = _context.next) {
@@ -26,7 +26,7 @@ babelHelpers.asyncToGenerator( /*#__PURE__*/babelHelpers.regeneratorRuntime().ma
   }, _callee2, this);
 })).bind(this)();
 (function notIIFE() {
-  return (_ref3 = _ref3 || babelHelpers.asyncToGenerator( /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee3() {
+  return (_notIIFE = _notIIFE || babelHelpers.asyncToGenerator( /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee3() {
     return babelHelpers.regeneratorRuntime().wrap(function _callee3$(_context3) {
       while (1) switch (_context3.prev = _context3.next) {
         case 0:

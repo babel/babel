@@ -1,6 +1,6 @@
-var _ref;
+var _gen;
 export default function gen() {
-  return (_ref = _ref || babelHelpers.skipFirstGeneratorNext(function* () {
+  return (_gen = _gen || babelHelpers.skipFirstGeneratorNext(function* () {
     let _functionSent = yield;
     return _functionSent;
   })).apply(this, arguments);

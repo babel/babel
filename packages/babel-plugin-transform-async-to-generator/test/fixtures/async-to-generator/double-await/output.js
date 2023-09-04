@@ -1,6 +1,6 @@
-var _ref;
+var _fn;
 function fn() {
-  return (_ref = _ref || babelHelpers.asyncToGenerator(function* () {
+  return (_fn = _fn || babelHelpers.asyncToGenerator(function* () {
     yield yield 1;
   })).apply(this, arguments);
 }

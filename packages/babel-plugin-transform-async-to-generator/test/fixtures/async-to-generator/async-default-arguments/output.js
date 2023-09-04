@@ -1,9 +1,9 @@
-var _ref2;
+var _foo;
 function mandatory(paramName) {
   throw new Error(`Missing parameter: ${paramName}`);
 }
 function foo(_x) {
-  return (_ref2 = _ref2 || babelHelpers.asyncToGenerator(function* (_ref) {
+  return (_foo = _foo || babelHelpers.asyncToGenerator(function* (_ref) {
     let {
       a,
       b = mandatory("b")
