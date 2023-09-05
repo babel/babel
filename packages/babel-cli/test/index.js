@@ -316,8 +316,13 @@ fs.readdirSync(fixtureLoc).forEach(function (binName) {
       }
 
       const skip =
-        opts.minNodeVersion &&
-        parseInt(process.versions.node, 10) < opts.minNodeVersion;
+        (opts.minNodeVersion &&
+          parseInt(process.versions.node, 10) < opts.minNodeVersion) ||
+        (opts.flaky && !process.env.BABEL_CLI_FLAKY_TESTS);
+
+      if (opts.flaky) {
+        testName += " (flaky)";
+      }
 
       // eslint-disable-next-line jest/valid-title
       (skip ? it.skip : it)(
