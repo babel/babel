@@ -1,15 +1,31 @@
-import { TraceMap, eachMapping } from "@jridgewell/trace-mapping";
+import {
+  TraceMap,
+  eachMapping,
+  type EachMapping,
+} from "@jridgewell/trace-mapping";
 
 const CONTEXT_SIZE = 4;
-const MAX_LOC_SIZE = 10;
+const LOC_SIZE = 10;
+const CONTENT_SIZE = 15;
 
-function simpleCodeFrame(lines: string[], line: number, col: number) {
-  const start = Math.max(col - CONTEXT_SIZE, 0);
-  const end = Math.min(col + CONTEXT_SIZE + 1, lines[line - 1].length);
-  const marker = col - start;
+function simpleCodeFrameRange(
+  lines: string[],
+  line: number,
+  colStart: number,
+  colEnd: number,
+) {
+  colEnd = Math.min(colEnd, lines[line - 1].length);
+
+  const start = Math.max(colStart - CONTEXT_SIZE, 0);
+  const end = Math.min(colEnd + CONTEXT_SIZE, lines[line - 1].length);
+
+  const markerSize = colEnd - colStart;
+  const marker = markerSize === 0 ? "><" : " " + "^".repeat(markerSize);
+  const markerPadding = colStart - start - 1;
+
   const code = lines[line - 1].slice(start, end);
-  const loc = `(${line}:${col}) `.padStart(MAX_LOC_SIZE, " ");
-  return loc + code + "\n" + " ".repeat(marker + loc.length) + "^";
+  const loc = `(${line}:${colStart}-${colEnd}) `.padStart(LOC_SIZE, " ");
+  return loc + code + "\n" + " ".repeat(markerPadding + loc.length) + marker;
 }
 
 function joinMultiline(left: string, right: string, leftLen?: number) {
@@ -33,24 +49,89 @@ export default function visualize(input: string, output: string, map: any) {
   const inputLines = input.split("\n");
   const outputLines = output.split("\n");
 
-  const res: string[] = [];
+  type Pos = { line: number; column: number };
+  type Range = { from: Pos; to: Pos };
+  const ranges: Array<{
+    original: Range;
+    generated: Range;
+    name: string | null;
+  }> = [];
+  let prev: EachMapping = null;
   eachMapping(new TraceMap(map), mapping => {
-    const input = simpleCodeFrame(
+    if (prev === null) {
+      prev = mapping;
+      return;
+    }
+    const original = {
+      from: { line: prev.originalLine, column: prev.originalColumn },
+      to: { line: mapping.originalLine, column: mapping.originalColumn },
+    };
+    const generated = {
+      from: { line: prev.generatedLine, column: prev.generatedColumn },
+      to: { line: mapping.generatedLine, column: mapping.generatedColumn },
+    };
+    if (original.from.line !== original.to.line) {
+      original.to.line = original.from.line;
+      original.to.column = Infinity;
+    } else if (original.to.column < original.from.column) {
+      original.to.column = original.from.column;
+    }
+    if (generated.from.line !== generated.to.line) {
+      generated.to.line = generated.from.line;
+      generated.to.column = Infinity;
+    } else if (generated.to.column < generated.from.column) {
+      generated.to.column = generated.from.column;
+    }
+    ranges.push({ original, generated, name: prev.name });
+    prev = mapping;
+  });
+  ranges.push({
+    original: {
+      from: { line: prev.originalLine, column: prev.originalColumn },
+      to: { line: prev.originalLine, column: Infinity },
+    },
+    generated: {
+      from: { line: prev.generatedLine, column: prev.generatedColumn },
+      to: { line: prev.generatedLine, column: Infinity },
+    },
+    name: prev.name,
+  });
+
+  // Multiple generated ranges can map to the same original range. The previous
+  // loop would generate a 0-length original range, so replace its end with the
+  // end of the following range if possible.
+  for (let i = ranges.length - 1; i >= 0; i--) {
+    const { original } = ranges[i];
+    if (
+      original.from.column === original.to.column &&
+      original.to.column < ranges[i + 1].original.to.column &&
+      ranges[i].name === ranges[i + 1].name
+    ) {
+      original.to.column = ranges[i + 1].original.to.column;
+    }
+  }
+
+  const res = ranges.map(({ original, generated }) => {
+    const input = simpleCodeFrameRange(
       inputLines,
-      mapping.originalLine,
-      mapping.originalColumn,
+      original.from.line,
+      original.from.column,
+      original.to.column,
     );
-    const output = simpleCodeFrame(
+    const output = simpleCodeFrameRange(
       outputLines,
-      mapping.generatedLine,
-      mapping.generatedColumn,
+      generated.from.line,
+      generated.from.column,
+      generated.to.column,
     );
 
-    res.push(
+    return joinMultiline(
       joinMultiline(
-        joinMultiline(input, " <-- ", MAX_LOC_SIZE + CONTEXT_SIZE * 2 + 5),
-        output,
+        input,
+        " <--  ",
+        LOC_SIZE + CONTEXT_SIZE * 2 + CONTENT_SIZE,
       ),
+      output,
     );
   });
 
