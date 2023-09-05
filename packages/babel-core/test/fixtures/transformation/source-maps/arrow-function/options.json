@@ -1,4 +1,5 @@
 {
   "plugins": ["transform-arrow-functions", "transform-function-name"],
-  "sourceMaps": true
+  "sourceMaps": true,
+  "sourceMapVisual": true
 }

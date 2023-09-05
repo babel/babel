@@ -14,6 +14,7 @@ import {
 } from "@babel/helper-fixtures";
 import { codeFrameColumns } from "@babel/code-frame";
 import * as helpers from "./helpers.ts";
+import visualizeSourceMap from "./source-map-visualizer.ts";
 import assert from "assert";
 import fs from "fs";
 import path from "path";
@@ -381,6 +382,21 @@ async function run(task: Test) {
         normalizeOutput(actualLogs.stderr, normalizationOpts),
         stderr.loc,
         stderr.code,
+      );
+    }
+  }
+
+  if (task.validateSourceMapVisual === true) {
+    const visual = visualizeSourceMap(inputCode, result.code, result.map);
+    try {
+      expect(visual).toEqual(task.sourceMapVisual.code);
+    } catch (e) {
+      if (!process.env.OVERWRITE && task.sourceMapVisual.code) throw e;
+
+      console.log(`Updated test file: ${task.sourceMapVisual.loc}`);
+      fs.writeFileSync(
+        task.sourceMapVisual.loc ?? task.taskDir + "/source-map-visual.txt",
+        visual + "\n",
       );
     }
   }

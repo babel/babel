@@ -41,6 +41,8 @@ export interface Test {
   inputSourceMap?: EncodedSourceMap;
   sourceMap: string;
   sourceMapFile: TestFile;
+  sourceMapVisual: TestFile;
+  validateSourceMapVisual: boolean;
   validateLogs: boolean;
 }
 
@@ -51,6 +53,7 @@ export interface TaskOptions extends InputOptions {
   ignoreOutput?: boolean;
   minNodeVersion?: string;
   sourceMap?: boolean;
+  sourceMapVisual?: boolean;
   os?: string | string[];
   validateLogs?: boolean;
   throws?: boolean | string;
@@ -129,6 +132,7 @@ function pushTask(
     stdoutLoc,
     stderrLoc,
     sourceMapLoc,
+    sourceMapVisualLoc,
     inputSourceMap;
 
   const taskOpts: TaskOptions = JSON.parse(JSON.stringify(suite.options));
@@ -155,10 +159,12 @@ function pushTask(
           taskOptsLoc = loc;
           Object.assign(taskOpts, require(taskOptsLoc));
           break;
-        case "source-map": {
+        case "source-map":
           sourceMapLoc = loc;
           break;
-        }
+        case "source-map-visual":
+          sourceMapVisualLoc = loc;
+          break;
         case "input-source-map":
           inputSourceMap = JSON.parse(readFile(loc));
           break;
@@ -230,8 +236,13 @@ function pushTask(
     expect: buildTestFile(expectLoc, true),
     sourceMap: sourceMapFile.code,
     sourceMapFile,
+    sourceMapVisual: buildTestFile(sourceMapVisualLoc),
+    validateSourceMapVisual: taskOpts.sourceMapVisual,
     inputSourceMap,
   };
+
+  // Not an option to pass to Babel
+  delete taskOpts.sourceMapVisual;
 
   if (
     test.exec.code &&

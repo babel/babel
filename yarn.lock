@@ -1126,6 +1126,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-check-duplicate-nodes": "workspace:^"
     "@babel/helper-fixtures": "workspace:^"
+    "@jridgewell/trace-mapping": ^0.3.17
     lru-cache: "condition:BABEL_8_BREAKING ? ^7.14.1 : ^5.1.1"
   languageName: unknown
   linkType: soft
