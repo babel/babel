@@ -14,8 +14,8 @@ jobs:
     permissions:
       contents: write # for Git to git push
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           repository: kangax/compat-table
           path: packages/babel-compat-data/build/compat-table

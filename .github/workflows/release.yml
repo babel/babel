@@ -42,7 +42,7 @@ jobs:
     if: needs.check-release-type.outputs.is-babel-8 == 'false'
     steps:
       - name: Checkout the new tag
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: This release will publish the following packages
@@ -63,7 +63,7 @@ jobs:
     outputs:
       branch: ${{ steps.branch-name.outputs.branch }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -107,7 +107,7 @@ jobs:
       (needs.git-version.result == 'success' || needs.git-version.result == 'skipped') &&
       needs.check-release-type.result == 'success'
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Checkout the temporary branch
@@ -166,7 +166,7 @@ jobs:
       changelog: ${{ steps.changelog.outputs.changelog }}
       version: ${{ steps.tags.outputs.new }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -232,7 +232,7 @@ jobs:
       needs.github-release.result == 'success' &&
       needs.github-release.outputs.is-main
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Checkout the temporary branch

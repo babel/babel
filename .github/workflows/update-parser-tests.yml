@@ -17,8 +17,8 @@ jobs:
       contents: write # for Git to git push
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           repository: tc39/test262
           path: build/test262
