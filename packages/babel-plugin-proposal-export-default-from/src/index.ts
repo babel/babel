@@ -24,19 +24,13 @@ export default declare(api => {
           return;
         }
 
-        const nodes = [
+        path.insertBefore(
           t.exportNamedDeclaration(
             null,
             [t.exportSpecifier(t.identifier("default"), exported)],
             t.cloneNode(source),
           ),
-        ];
-
-        if (specifiers.length >= 1) {
-          nodes.push(node);
-        }
-
-        path.replaceWithMultiple(nodes);
+        );
       },
     },
   };

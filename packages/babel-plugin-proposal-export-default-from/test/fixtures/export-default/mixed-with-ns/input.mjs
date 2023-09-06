@@ -1,0 +1,1 @@
+export foo, * as ns from "bar";
