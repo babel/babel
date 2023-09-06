@@ -20,7 +20,6 @@ import {
   tt as internalTokenTypes,
   type InternalTokenTypes,
 } from "./tokenizer/types.ts";
-import "./tokenizer/context.ts";
 
 import type { Expression, File } from "./types.ts";
 
