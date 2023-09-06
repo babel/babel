@@ -8,6 +8,11 @@ const CONTEXT_SIZE = 4;
 const LOC_SIZE = 10;
 const CONTENT_SIZE = 15;
 
+// TODO(Babel 8): Just use "".padStart when dropping Node.js 6
+const padStart: (str: string, len: number, pad: string) => string = "".padStart
+  ? (Function.call.bind("".padStart) as any)
+  : (str, len, pad) => pad.repeat(Math.max(0, len - str.length)) + str;
+
 function simpleCodeFrameRange(
   lines: string[],
   line: number,
@@ -24,7 +29,7 @@ function simpleCodeFrameRange(
   const markerPadding = colStart - start - 1;
 
   const code = lines[line - 1].slice(start, end);
-  const loc = `(${line}:${colStart}-${colEnd}) `.padStart(LOC_SIZE, " ");
+  const loc = padStart(`(${line}:${colStart}-${colEnd}) `, LOC_SIZE, " ");
   return loc + code + "\n" + " ".repeat(markerPadding + loc.length) + marker;
 }
 
