@@ -7367,6 +7367,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"chokidar@npm:3.5.3, chokidar@npm:^3.4.0":
+  version: 3.5.3
+  resolution: "chokidar@npm:3.5.3"
+  dependencies:
+    anymatch: ~3.1.2
+    braces: ~3.0.2
+    fsevents: ~2.3.2
+    glob-parent: ~5.1.2
+    is-binary-path: ~2.1.0
+    is-glob: ~4.0.1
+    normalize-path: ~3.0.0
+    readdirp: ~3.6.0
+  dependenciesMeta:
+    fsevents:
+      optional: true
+  checksum: b49fcde40176ba007ff361b198a2d35df60d9bb2a5aab228279eb810feae9294a6b4649ab15981304447afe1e6ffbf4788ad5db77235dc770ab777c6e771980c
+  languageName: node
+  linkType: hard
+
 "chokidar@npm:^2.1.8":
   version: 2.1.8
   resolution: "chokidar@npm:2.1.8"
@@ -7390,9 +7409,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chokidar@npm:^3.4.0, chokidar@npm:^3.4.1":
+"chokidar@patch:chokidar@npm%3A3.5.3#./.yarn/patches/chokidar-npm-3.5.3-c5f9b0a56a.patch::locator=babel%40workspace%3A.":
   version: 3.5.3
-  resolution: "chokidar@npm:3.5.3"
+  resolution: "chokidar@patch:chokidar@npm%3A3.5.3#./.yarn/patches/chokidar-npm-3.5.3-c5f9b0a56a.patch::version=3.5.3&hash=c922bc&locator=babel%40workspace%3A."
   dependencies:
     anymatch: ~3.1.2
     braces: ~3.0.2
@@ -7405,7 +7424,7 @@ __metadata:
   dependenciesMeta:
     fsevents:
       optional: true
-  checksum: b49fcde40176ba007ff361b198a2d35df60d9bb2a5aab228279eb810feae9294a6b4649ab15981304447afe1e6ffbf4788ad5db77235dc770ab777c6e771980c
+  checksum: 47ebddc0207bf7525c2a29d73ce4e27b2fd9187d8d63d34cbe20d447f0a7bbd7508d13d5901803b75fc2e84b3b162458b0863cc14a7af2fe5ad758dba791edf4
   languageName: node
   linkType: hard
 
