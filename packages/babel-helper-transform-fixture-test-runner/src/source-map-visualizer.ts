@@ -54,7 +54,6 @@ export default function visualize(input: string, output: string, map: any) {
   const ranges: Array<{
     original: Range;
     generated: Range;
-    name: string | null;
   }> = [];
   let prev: EachMapping = null;
   eachMapping(new TraceMap(map), mapping => {
@@ -82,7 +81,7 @@ export default function visualize(input: string, output: string, map: any) {
     } else if (generated.to.column < generated.from.column) {
       generated.to.column = generated.from.column;
     }
-    ranges.push({ original, generated, name: prev.name });
+    ranges.push({ original, generated });
     prev = mapping;
   });
   ranges.push({
@@ -94,7 +93,6 @@ export default function visualize(input: string, output: string, map: any) {
       from: { line: prev.generatedLine, column: prev.generatedColumn },
       to: { line: prev.generatedLine, column: Infinity },
     },
-    name: prev.name,
   });
 
   // Multiple generated ranges can map to the same original range. The previous
@@ -104,8 +102,7 @@ export default function visualize(input: string, output: string, map: any) {
     const { original } = ranges[i];
     if (
       original.from.column === original.to.column &&
-      original.to.column < ranges[i + 1].original.to.column &&
-      ranges[i].name === ranges[i + 1].name
+      original.to.column < ranges[i + 1].original.to.column
     ) {
       original.to.column = ranges[i + 1].original.to.column;
     }
