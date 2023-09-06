@@ -24,6 +24,15 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.22.16 (2023-09-06)
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#15935](https://github.com/babel/babel/pull/15935) fix: `__esModule` is missing from published `@babel/parser` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :house: Internal
+* `babel-traverse`
+  * [#15936](https://github.com/babel/babel/pull/15936) Skip deprecation warning tests when in a folder named `@babel` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.22.15 (2023-09-04)
 
 #### :bug: Bug Fix
