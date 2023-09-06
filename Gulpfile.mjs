@@ -509,6 +509,7 @@ function buildRollup(packages, buildStandalone) {
 
         const outputFile = path.join(src, dest, filename || "index.js");
         await bundle.write({
+          esModule: true,
           file: outputFile,
           format,
           name,
@@ -557,6 +558,7 @@ function buildRollup(packages, buildStandalone) {
         await bundle.write({
           file: outputFile.replace(/\.js$/, ".min.js"),
           format,
+          esModule: true,
           interop: "compat",
           name,
           sourcemap: sourcemap,
