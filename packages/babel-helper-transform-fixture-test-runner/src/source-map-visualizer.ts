@@ -50,8 +50,13 @@ function joinMultiline(left: string, right: string, leftLen?: number) {
   return res;
 }
 
-export default function visualize(input: string, output: string, map: any) {
-  const inputLines = input.split("\n");
+export default function visualize(output: string, map: any) {
+  const sourcesLines = new Map<string, string[]>(
+    map.sources.map((source: string, index: number) => [
+      source,
+      map.sourcesContent[index].split("\n"),
+    ]),
+  );
   const outputLines = output.split("\n");
 
   type Pos = { line: number; column: number };
@@ -59,6 +64,7 @@ export default function visualize(input: string, output: string, map: any) {
   const ranges: Array<{
     original: Range;
     generated: Range;
+    source: string;
   }> = [];
   let prev: EachMapping = null;
   eachMapping(new TraceMap(map), mapping => {
@@ -86,19 +92,26 @@ export default function visualize(input: string, output: string, map: any) {
     } else if (generated.to.column < generated.from.column) {
       generated.to.column = generated.from.column;
     }
-    ranges.push({ original, generated });
+    ranges.push({ original, generated, source: prev.source });
     prev = mapping;
   });
-  ranges.push({
-    original: {
-      from: { line: prev.originalLine, column: prev.originalColumn },
-      to: { line: prev.originalLine, column: Infinity },
-    },
-    generated: {
-      from: { line: prev.generatedLine, column: prev.generatedColumn },
-      to: { line: prev.generatedLine, column: Infinity },
-    },
-  });
+  // TODO(@nicolo-ribaudo): The "input source map complex" fixture in
+  // @babel/core generates a source map with the last mapping that has `null`
+  // originalLine, originalColumn, generatedLine, and generatedColumn. Verify if
+  // this is expected.
+  if (prev.originalLine) {
+    ranges.push({
+      original: {
+        from: { line: prev.originalLine, column: prev.originalColumn },
+        to: { line: prev.originalLine, column: Infinity },
+      },
+      generated: {
+        from: { line: prev.generatedLine, column: prev.generatedColumn },
+        to: { line: prev.generatedLine, column: Infinity },
+      },
+      source: prev.source,
+    });
+  }
 
   // Multiple generated ranges can map to the same original range. The previous
   // loop would generate a 0-length original range, so replace its end with the
@@ -113,9 +126,9 @@ export default function visualize(input: string, output: string, map: any) {
     }
   }
 
-  const res = ranges.map(({ original, generated }) => {
+  const res = ranges.map(({ original, generated, source }) => {
     const input = simpleCodeFrameRange(
-      inputLines,
+      sourcesLines.get(source),
       original.from.line,
       original.from.column,
       original.to.column,

@@ -237,12 +237,10 @@ function pushTask(
     sourceMap: sourceMapFile.code,
     sourceMapFile,
     sourceMapVisual: buildTestFile(sourceMapVisualLoc),
-    validateSourceMapVisual: taskOpts.sourceMapVisual,
+    validateSourceMapVisual:
+      taskOpts.sourceMaps === true || taskOpts.sourceMaps === "both",
     inputSourceMap,
   };
-
-  // Not an option to pass to Babel
-  delete taskOpts.sourceMapVisual;
 
   if (
     test.exec.code &&

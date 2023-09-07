@@ -387,7 +387,7 @@ async function run(task: Test) {
   }
 
   if (task.validateSourceMapVisual === true) {
-    const visual = visualizeSourceMap(inputCode, result.code, result.map);
+    const visual = visualizeSourceMap(result.code, result.map);
     try {
       expect(visual).toEqual(task.sourceMapVisual.code);
     } catch (e) {
