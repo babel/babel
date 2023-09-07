@@ -11,37 +11,17 @@ import {
   returnStatement,
   isCallExpression,
   cloneNode,
+  toExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
 
-// type ExpressionWrapperBuilder<ExtraBody extends t.Node[]> = (
-//   replacements?: Parameters<ReturnType<typeof template.expression>>[0],
-// ) => t.CallExpression & {
-//   callee: t.FunctionExpression & {
-//     body: {
-//       body: [
-//         t.VariableDeclaration & {
-//           declarations: [
-//             { init: t.FunctionExpression | t.ArrowFunctionExpression },
-//           ];
-//         },
-//         ...ExtraBody,
-//       ];
-//     };
-//   };
-// };
-
-const buildExpressionWrapper = template.expression(`
-    function NAME(PARAMS) {
-      return (REF = REF || FUNCTION).apply(this, arguments);
-    }
+const buildWrapper = template.statement(`
+  function NAME(PARAMS) {
+    return (REF = REF || FUNCTION).apply(this, arguments);
+  }
 `) as (
-  replacements?: Parameters<ReturnType<typeof template.expression>>[0],
-) => t.FunctionExpression;
-
-const buildDeclarationWrapper = template.statement(
-  `function NAME(PARAMS) { return (REF = REF || FUNCTION).apply(this, arguments); }`,
-);
+  replacements: Parameters<ReturnType<typeof template.expression>>[0],
+) => t.FunctionDeclaration;
 
 function classOrObjectMethod(
   path: NodePath<t.ClassMethod | t.ClassPrivateMethod | t.ObjectMethod>,
@@ -126,38 +106,28 @@ function plainFunction(
     functionId ? functionId.name : "ref",
   );
 
-  if (isDeclaration) {
-    path.replaceWith(
-      buildDeclarationWrapper({
-        NAME: functionId,
-        REF: ref,
-        FUNCTION: built,
-        PARAMS: params,
-      }),
-    );
-    path.parentPath.scope.push({ id: cloneNode(ref) });
-  } else {
-    const container = buildExpressionWrapper({
-      NAME: functionId,
-      REF: ref,
-      FUNCTION: built,
-      PARAMS: params,
-    });
+  let wrapper: t.Function = buildWrapper({
+    NAME: functionId,
+    REF: ref,
+    FUNCTION: built,
+    PARAMS: params,
+  });
+
+  if (!isDeclaration) {
+    wrapper = toExpression(wrapper);
     nameFunction({
-      node: container,
+      node: wrapper,
       parent: (path as NodePath<t.FunctionExpression>).parent,
       scope: path.scope,
     });
-    functionId = container.id;
+  }
 
-    if (functionId || (!ignoreFunctionLength && params.length)) {
-      path.parentPath.scope.push({ id: cloneNode(ref) });
-
-      path.replaceWith(container);
-    } else {
-      // we can omit this wrapper as the conditions it protects for do not apply
-      path.replaceWith(built);
-    }
+  if (isDeclaration || wrapper.id || (!ignoreFunctionLength && params.length)) {
+    path.replaceWith(wrapper);
+    path.parentPath.scope.push({ id: cloneNode(ref) });
+  } else {
+    // we can omit this wrapper as the conditions it protects for do not apply
+    path.replaceWith(built);
   }
 }
 
