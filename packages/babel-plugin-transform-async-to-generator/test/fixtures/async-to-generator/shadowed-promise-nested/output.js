@@ -1,20 +1,14 @@
+var _foo;
 let Promise;
 function foo() {
-  return _foo.apply(this, arguments);
-}
-function _foo() {
-  _foo = babelHelpers.asyncToGenerator(function* () {
+  return (_foo = _foo || babelHelpers.asyncToGenerator(function* () {
+    var _bar;
     let Promise;
     yield bar();
     function bar() {
-      return _bar.apply(this, arguments);
-    }
-    function _bar() {
-      _bar = babelHelpers.asyncToGenerator(function* () {
+      return (_bar = _bar || babelHelpers.asyncToGenerator(function* () {
         return Promise.resolve();
-      });
-      return _bar.apply(this, arguments);
+      })).apply(this, arguments);
     }
-  });
-  return _foo.apply(this, arguments);
+  })).apply(this, arguments);
 }

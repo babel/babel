@@ -1,6 +1,7 @@
-var _this = this;
-x = /*#__PURE__*/function () {
-  var _ref = function (_x) {
+var _this = this,
+  _ref;
+x = /*#__PURE__*/function (_x3) {
+  return (_ref = _ref || function (_x) {
     var _marked = /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(x);
     function x(_x2) {
       var _args = arguments;
@@ -31,8 +32,5 @@ x = /*#__PURE__*/function () {
           return _context2.stop();
       }
     }, _callee, this);
-  }));
-  return function (_x3) {
-    return _ref.apply(this, arguments);
-  };
-}().bind(this);
+  }))).apply(this, arguments);
+}.bind(this);

@@ -1,19 +1,13 @@
+var _f;
 function f() {
-  return _f.apply(this, arguments);
-}
-function _f() {
-  _f = babelHelpers.asyncToGenerator(function* () {
+  return (_f = _f || babelHelpers.asyncToGenerator(function* () {
+    var _g;
     yield 1;
     function g() {
-      return _g.apply(this, arguments);
-    }
-    function _g() {
-      _g = babelHelpers.wrapAsyncGenerator(function* () {
+      return (_g = _g || babelHelpers.wrapAsyncGenerator(function* () {
         yield babelHelpers.awaitAsyncGenerator(2);
         yield 3;
-      });
-      return _g.apply(this, arguments);
+      })).apply(this, arguments);
     }
-  });
-  return _f.apply(this, arguments);
+  })).apply(this, arguments);
 }

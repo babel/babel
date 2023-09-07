@@ -1,5 +1,3 @@
-/* @noflow */
-
 import type { NodePath } from "@babel/traverse";
 import wrapFunction from "@babel/helper-wrap-function";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
@@ -65,7 +63,7 @@ export default function (
     path.parentPath.isObjectProperty() ||
     path.parentPath.isClassProperty();
 
-  if (!isProperty && !isIIFE && path.isExpression()) {
+  if (!isProperty && !isIIFE && path.isCallExpression()) {
     annotateAsPure(path);
   }
 

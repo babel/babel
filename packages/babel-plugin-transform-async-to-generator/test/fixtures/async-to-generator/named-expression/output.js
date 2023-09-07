@@ -1,9 +1,6 @@
-var foo = /*#__PURE__*/function () {
-  var _bar = babelHelpers.asyncToGenerator(function* () {
+var _bar;
+var foo = function bar() {
+  return (_bar = _bar || babelHelpers.asyncToGenerator(function* () {
     console.log(bar);
-  });
-  function bar() {
-    return _bar.apply(this, arguments);
-  }
-  return bar;
-}();
+  })).apply(this, arguments);
+};

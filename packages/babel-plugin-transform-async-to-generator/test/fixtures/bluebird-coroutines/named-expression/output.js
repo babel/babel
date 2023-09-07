@@ -1,10 +1,7 @@
 var _coroutine = require("bluebird").coroutine;
-var foo = /*#__PURE__*/function () {
-  var _bar = _coroutine(function* () {
+var _bar;
+var foo = function bar() {
+  return (_bar = _bar || _coroutine(function* () {
     console.log(bar);
-  });
-  function bar() {
-    return _bar.apply(this, arguments);
-  }
-  return bar;
-}();
+  })).apply(this, arguments);
+};
