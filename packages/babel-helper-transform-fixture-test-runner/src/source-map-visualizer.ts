@@ -12,6 +12,9 @@ const CONTENT_SIZE = 15;
 const padStart: (str: string, len: number, pad: string) => string = "".padStart
   ? (Function.call.bind("".padStart) as any)
   : (str, len, pad) => pad.repeat(Math.max(0, len - str.length)) + str;
+const padEnd: (str: string, len: number, pad: string) => string = "".padStart
+  ? (Function.call.bind("".padEnd) as any)
+  : (str, len, pad) => str + pad.repeat(Math.max(0, len - str.length));
 
 function simpleCodeFrameRange(
   lines: string[],
@@ -43,7 +46,7 @@ function joinMultiline(left: string, right: string, leftLen?: number) {
   let res = "";
   for (let i = 0; i < linesCount; i++) {
     if (res !== "") res += "\n";
-    if (i < leftLines.length) res += leftLines[i].padEnd(leftLen, " ");
+    if (i < leftLines.length) res += padEnd(leftLines[i], leftLen, " ");
     else res += " ".repeat(leftLen);
     if (i < rightLines.length) res += rightLines[i];
   }
