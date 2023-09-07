@@ -226,8 +226,8 @@ export function buildNamespaceInitStatements(
   }
 
   const srcNamespace = sourceMetadata.lazy
-    ? srcNamespaceId
-    : callExpression(srcNamespaceId, []);
+    ? callExpression(srcNamespaceId, [])
+    : srcNamespaceId;
 
   if (constantReexports) {
     statements.push(...buildReexportsFromMeta(metadata, sourceMetadata, true));
