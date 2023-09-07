@@ -211,8 +211,7 @@ export function buildNamespaceInitStatements(
 ) {
   const statements = [];
 
-  let srcNamespace: t.Node = identifier(sourceMetadata.name);
-  if (sourceMetadata.lazy) srcNamespace = callExpression(srcNamespace, []);
+  const srcNamespaceId = identifier(sourceMetadata.name);
 
   for (const localName of sourceMetadata.importsNamespace) {
     if (localName === sourceMetadata.name) continue;
@@ -221,10 +220,15 @@ export function buildNamespaceInitStatements(
     statements.push(
       template.statement`var NAME = SOURCE;`({
         NAME: localName,
-        SOURCE: t.identifier(sourceMetadata.name),
+        SOURCE: cloneNode(srcNamespaceId),
       }),
     );
   }
+
+  const srcNamespace = sourceMetadata.lazy
+    ? srcNamespaceId
+    : callExpression(srcNamespaceId, []);
+
   if (constantReexports) {
     statements.push(...buildReexportsFromMeta(metadata, sourceMetadata, true));
   }
