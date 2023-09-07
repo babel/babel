@@ -53,7 +53,6 @@ export interface TaskOptions extends InputOptions {
   ignoreOutput?: boolean;
   minNodeVersion?: string;
   sourceMap?: boolean;
-  sourceMapVisual?: boolean;
   os?: string | string[];
   validateLogs?: boolean;
   throws?: boolean | string;
