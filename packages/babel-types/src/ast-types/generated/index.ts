@@ -789,7 +789,7 @@ export interface ClassExpression extends BaseNode {
 
 export interface ClassDeclaration extends BaseNode {
   type: "ClassDeclaration";
-  id: Identifier;
+  id?: Identifier | null;
   superClass?: Expression | null;
   body: ClassBody;
   decorators?: Array<Decorator> | null;
