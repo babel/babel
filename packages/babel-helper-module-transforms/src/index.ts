@@ -221,7 +221,7 @@ export function buildNamespaceInitStatements(
     statements.push(
       template.statement`var NAME = SOURCE;`({
         NAME: localName,
-        SOURCE: cloneNode(srcNamespace),
+        SOURCE: t.identifier(sourceMetadata.name),
       }),
     );
   }
