@@ -41,7 +41,7 @@ export default declare(api => {
         });
 
         if (objectRef) {
-          path.scope.push({ id: t.cloneNode(objectRef) });
+          path.scope.push({ id: t.cloneNode(objectRef), kind: "let" });
           path.replaceWith(
             t.assignmentExpression("=", t.cloneNode(objectRef), path.node),
           );

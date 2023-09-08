@@ -1,4 +1,4 @@
-var _obj;
+let _obj;
 var Base = {
   test: '1'
 };

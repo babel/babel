@@ -1,6 +1,6 @@
 "use strict";
 
-var _obj;
+let _obj;
 let value = 1;
 const Base = {
   set test(v) {
