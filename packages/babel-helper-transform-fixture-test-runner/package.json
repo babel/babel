@@ -19,7 +19,8 @@
     "@babel/core": "workspace:^",
     "@babel/helper-check-duplicate-nodes": "workspace:^",
     "@babel/helper-fixtures": "workspace:^",
-    "lru-cache": "condition:BABEL_8_BREAKING ? ^7.14.1 : ^5.1.1"
+    "lru-cache": "condition:BABEL_8_BREAKING ? ^7.14.1 : ^5.1.1",
+    "string.prototype.replaceall": "^1.0.7"
   },
   "engines": {
     "node": ">=6.9.0"
