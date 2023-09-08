@@ -3,29 +3,19 @@ import type { NodePath } from "@babel/traverse";
 
 const buildForAwait = template(`
   async function wrapper() {
-    var ITERATOR_ABRUPT_COMPLETION = false;
-    var ITERATOR_HAD_ERROR_KEY = false;
-    var ITERATOR_ERROR_KEY;
+    var STEP_KEY = {};
     try {
       for (
-        var ITERATOR_KEY = GET_ITERATOR(OBJECT), STEP_KEY;
-        ITERATOR_ABRUPT_COMPLETION = !(STEP_KEY = await ITERATOR_KEY.next()).done;
-        ITERATOR_ABRUPT_COMPLETION = false
+        var ITERATOR_KEY = GET_ITERATOR(OBJECT);
+        !(STEP_KEY = await ITERATOR_KEY.next()).done;
       ) {
       }
-    } catch (err) {
-      ITERATOR_HAD_ERROR_KEY = true;
-      ITERATOR_ERROR_KEY = err;
     } finally {
       try {
-        if (ITERATOR_ABRUPT_COMPLETION && ITERATOR_KEY.return != null) {
+        if (!STEP_KEY.done && ITERATOR_KEY.return != null) {
           await ITERATOR_KEY.return();
         }
-      } finally {
-        if (ITERATOR_HAD_ERROR_KEY) {
-          throw ITERATOR_ERROR_KEY;
-        }
-      }
+      } catch (e) {}
     }
   }
 `);
@@ -53,11 +43,6 @@ export default function (
     ]);
   }
   let template = buildForAwait({
-    ITERATOR_HAD_ERROR_KEY: scope.generateUidIdentifier("didIteratorError"),
-    ITERATOR_ABRUPT_COMPLETION: scope.generateUidIdentifier(
-      "iteratorAbruptCompletion",
-    ),
-    ITERATOR_ERROR_KEY: scope.generateUidIdentifier("iteratorError"),
     ITERATOR_KEY: scope.generateUidIdentifier("iterator"),
     GET_ITERATOR: getAsyncIterator,
     OBJECT: node.right,
@@ -69,7 +54,7 @@ export default function (
   template = template.body.body as t.Statement[];
 
   const isLabeledParent = t.isLabeledStatement(parent);
-  const tryBody = (template[3] as t.TryStatement).block.body;
+  const tryBody = (template[1] as t.TryStatement).block.body;
   const loop = tryBody[0] as t.ForStatement;
 
   if (isLabeledParent) {
