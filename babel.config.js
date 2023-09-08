@@ -303,6 +303,15 @@ module.exports = function (api) {
         ].map(normalize),
         plugins: [pluginImportMetaUrl],
       },
+      // See comment in the plugin
+      convertESM && {
+        test: [
+          "./packages/babel-core/src/index.ts",
+          "./packages/babel-types/src/index.ts",
+          "./packages/babel-traverse/src/index.ts",
+        ],
+        plugins: [pluginInjectErrorBugNode_20_6_0],
+      },
       {
         test: sources.map(source => normalize(source.replace("/src", "/test"))),
         plugins: [
@@ -951,6 +960,48 @@ function pluginReplaceNavigator({ template }) {
           );
         }
       },
+    },
+  };
+}
+
+// Workaround for https://github.com/nodejs/node/issues/49497, since
+// Node.js is taking ages to release the fix.
+// This bug only affects CJS packages that are imported from ESM. We only apply
+// it to packages that have cycles in their entrypoint. They can be easily
+// caught by our CI in ESM mode on Node.js 20.6.0:
+// - @babel/core
+// - @babel/types
+// - @babel/traverse
+//
+// We will remove this workaround after one week that Node.js 20.6.1 has been
+// released, so that all CIs using `node:latest` will be using the new version.
+function pluginInjectErrorBugNode_20_6_0({ template }) {
+  const flag = "___internal__alreadyRunning";
+
+  return {
+    post({ path }) {
+      path.unshiftContainer(
+        "body",
+        // We use `"${flag}" + ""` so that the Node.js ESM-CJS
+        // integration does not detect it as an export.
+        template.statement.ast`
+          if (typeof process === "object" && process.version === "v20.6.0") {
+            if (exports["${flag}" + ""]) return;
+            Object.defineProperty(exports, "${flag}", {
+              value: true,
+              enumerable: false,
+              configurable: true,
+            });
+          }
+        `
+      );
+      path.pushContainer(
+        "body",
+        template.statement.ast`
+          if (typeof process === "object" && process.version === "v20.6.0")
+            delete exports["${flag}" + ""];
+          `
+      );
     },
   };
 }

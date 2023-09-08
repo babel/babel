@@ -60,6 +60,11 @@ module.exports = {
     ...(process.env.BABEL_COVERAGE === "true"
       ? ["<rootDir>/packages/babel-standalone/"]
       : []),
+    // Node.js 20.6.0 has a bug that causes importing all previous Babel
+    // versions to fail. This test relies on Babel 7.12, so let's skip it.
+    ...(process.version === "v20.6.0"
+      ? ["/babel-preset-env/test/regressions.js"]
+      : []),
   ],
   testEnvironment: "node",
   transformIgnorePatterns: [
