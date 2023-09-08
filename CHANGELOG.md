@@ -24,6 +24,19 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.22.17 (2023-09-08)
+
+#### :bug: Bug Fix
+* `babel-core`
+  * [#15947](https://github.com/babel/babel/pull/15947) Fix compatibility with Node.js 20.6 ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-module-transforms`, `babel-plugin-transform-modules-commonjs`
+  * [#15941](https://github.com/babel/babel/pull/15941) Fix compiling duplicate ns imports to lazy CommonJS ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-types`
+  * [#15920](https://github.com/babel/babel/pull/15920) Make `ClassDeclaration["id"]` optional in babel-types ([@jordanbtucker](https://github.com/jordanbtucker))
+
+#### :microscope: Output optimization
+* `babel-helper-remap-async-to-generator`, `babel-helper-wrap-function`, `babel-plugin-proposal-explicit-resource-management`, `babel-plugin-proposal-function-sent`, `babel-plugin-transform-async-generator-functions`, `babel-plugin-transform-async-to-generator`, `babel-plugin-transform-block-scoping`, `babel-plugin-transform-class-properties`, `babel-plugin-transform-classes`, `babel-plugin-transform-parameters`, `babel-plugin-transform-runtime`, `babel-preset-env`
+  * [#15922](https://github.com/babel/babel/pull/15922) Improve output when wrapping functions (e.g. `async` functions) ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.22.16 (2023-09-06)
 
 #### :bug: Bug Fix
