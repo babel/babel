@@ -41,6 +41,8 @@ export interface Test {
   inputSourceMap?: EncodedSourceMap;
   sourceMap: string;
   sourceMapFile: TestFile;
+  sourceMapVisual: TestFile;
+  validateSourceMapVisual: boolean;
   validateLogs: boolean;
 }
 
@@ -129,6 +131,7 @@ function pushTask(
     stdoutLoc,
     stderrLoc,
     sourceMapLoc,
+    sourceMapVisualLoc,
     inputSourceMap;
 
   const taskOpts: TaskOptions = JSON.parse(JSON.stringify(suite.options));
@@ -155,10 +158,12 @@ function pushTask(
           taskOptsLoc = loc;
           Object.assign(taskOpts, require(taskOptsLoc));
           break;
-        case "source-map": {
+        case "source-map":
           sourceMapLoc = loc;
           break;
-        }
+        case "source-map-visual":
+          sourceMapVisualLoc = loc;
+          break;
         case "input-source-map":
           inputSourceMap = JSON.parse(readFile(loc));
           break;
@@ -230,6 +235,9 @@ function pushTask(
     expect: buildTestFile(expectLoc, true),
     sourceMap: sourceMapFile.code,
     sourceMapFile,
+    sourceMapVisual: buildTestFile(sourceMapVisualLoc),
+    validateSourceMapVisual:
+      taskOpts.sourceMaps === true || taskOpts.sourceMaps === "both",
     inputSourceMap,
   };
 
