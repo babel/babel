@@ -1,6 +1,6 @@
 "use strict";
 
-let _obj;
+var _obj;
 const Base = {
   get test() {
     expect(this).toBe(obj);
