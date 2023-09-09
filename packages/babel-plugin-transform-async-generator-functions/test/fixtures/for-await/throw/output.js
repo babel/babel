@@ -1,4 +1,4 @@
-let returnCalled = false;
+let throwCalled = false;
 let iterable = {
   [Symbol.asyncIterator || "@@asyncIterator"]() {
     return {
@@ -7,32 +7,40 @@ let iterable = {
         value: 1
       }),
       return: () => {
-        returnCalled = true;
+        throwCalled = true;
         throw "return";
       }
     };
   }
 };
 return babelHelpers.asyncToGenerator(function* () {
-  let value;
+  let err;
   try {
-    var _step = {};
+    var _iterator = babelHelpers.asyncIterator(iterable),
+      _step = {},
+      _notDone;
     try {
-      for (var _iterator = babelHelpers.asyncIterator(iterable); !(_step = yield _iterator.next()).done;) {
-        value = _step.value;
+      for (; _notDone = !(_step = yield _iterator.next()).done; _notDone = false) {
+        const value = _step.value;
         {
           throw "error";
         }
       }
+    } catch (e) {
+      _step = null;
+      throw e;
     } finally {
       try {
-        if (!_step.done && _iterator.return != null) {
+        if (_notDone && _iterator.return) {
           yield _iterator.return();
         }
-      } catch (e) {}
+      } catch (e) {
+        if (_step) throw e;
+      }
     }
-  } catch (err) {
-    expect(err).toBe("error");
+  } catch (e) {
+    err = e;
   }
-  expect(returnCalled).toBe(true);
+  expect(err).toBe("error");
+  expect(throwCalled).toBe(true);
 })();

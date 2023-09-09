@@ -1,4 +1,4 @@
-let returnCalled = false;
+let throwCalled = false;
 
 let iterable = {
   [Symbol.asyncIterator || "@@asyncIterator"]() {
@@ -7,19 +7,20 @@ let iterable = {
         throw "next"
       },
       return: () => {
-        returnCalled = true;
-        throw "return"
-      }
+          throwCalled = true;
+          throw "return"
+        }
     };
   },
 };
 
 return async function () {
-  let value;
+  let err;
   try {
-    for await (value of iterable);
-  } catch (err) {
-    expect(err).toBe("next");
+    for await (const value of iterable);
+  } catch (e) {
+    err = e;
   }
-  expect(returnCalled).toBe(true);
+  expect(err).toBe("next");
+  expect(throwCalled).toBe(false);
 }();

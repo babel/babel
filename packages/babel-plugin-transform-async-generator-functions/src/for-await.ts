@@ -1,21 +1,21 @@
 import { types as t, template } from "@babel/core";
 import type { NodePath } from "@babel/traverse";
 
-const buildForAwait = template(`
-  async function wrapper() {
-    var STEP_KEY = {};
+const buildForAwait = template.statements(`
+  var ITERATOR_KEY = GET_ITERATOR(OBJECT), STEP_KEY = {}, NOT_DONE_KEY;
+  try {
+    for (;NOT_DONE_KEY = !(STEP_KEY = await ITERATOR_KEY.next()).done;NOT_DONE_KEY = false) {
+    }
+  } catch(e) {
+    STEP_KEY = null;
+    throw e;
+  } finally {
     try {
-      for (
-        var ITERATOR_KEY = GET_ITERATOR(OBJECT);
-        !(STEP_KEY = await ITERATOR_KEY.next()).done;
-      ) {
+      if (NOT_DONE_KEY && ITERATOR_KEY.return) {
+        await ITERATOR_KEY.return();
       }
-    } finally {
-      try {
-        if (!STEP_KEY.done && ITERATOR_KEY.return != null) {
-          await ITERATOR_KEY.return();
-        }
-      } catch (e) {}
+    } catch (e) {
+      if (STEP_KEY) throw e;
     }
   }
 `);
@@ -42,16 +42,13 @@ export default function (
       t.variableDeclarator(left.declarations[0].id, stepValue),
     ]);
   }
-  let template = buildForAwait({
+  const template = buildForAwait({
     ITERATOR_KEY: scope.generateUidIdentifier("iterator"),
+    NOT_DONE_KEY: scope.generateUidIdentifier("notDone"),
     GET_ITERATOR: getAsyncIterator,
     OBJECT: node.right,
     STEP_KEY: t.cloneNode(stepKey),
   });
-
-  // remove async function wrapper
-  // @ts-expect-error todo(flow->ts) improve type annotation for buildForAwait
-  template = template.body.body as t.Statement[];
 
   const isLabeledParent = t.isLabeledStatement(parent);
   const tryBody = (template[1] as t.TryStatement).block.body;

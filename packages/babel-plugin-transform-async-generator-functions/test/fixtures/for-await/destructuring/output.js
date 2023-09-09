@@ -1,9 +1,11 @@
 var _f;
 function f() {
   return (_f = _f || babelHelpers.asyncToGenerator(function* () {
-    var _step = {};
+    var _iterator = babelHelpers.asyncIterator(a),
+      _step = {},
+      _notDone;
     try {
-      for (var _iterator = babelHelpers.asyncIterator(a); !(_step = yield _iterator.next()).done;) {
+      for (; _notDone = !(_step = yield _iterator.next()).done; _notDone = false) {
         let {
           x,
           y: [z]
@@ -12,12 +14,17 @@ function f() {
           g(x, z);
         }
       }
+    } catch (e) {
+      _step = null;
+      throw e;
     } finally {
       try {
-        if (!_step.done && _iterator.return != null) {
+        if (_notDone && _iterator.return) {
           yield _iterator.return();
         }
-      } catch (e) {}
+      } catch (e) {
+        if (_step) throw e;
+      }
     }
   })).apply(this, arguments);
 }

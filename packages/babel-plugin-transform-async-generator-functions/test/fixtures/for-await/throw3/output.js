@@ -1,8 +1,14 @@
 let throwCalled = false;
+let i;
 let iterable = {
   [Symbol.asyncIterator || "@@asyncIterator"]() {
     return {
       next: () => {
+        i++;
+        if (i) return {
+          done: false,
+          value: 1
+        };
         throw "next";
       },
       return: () => {

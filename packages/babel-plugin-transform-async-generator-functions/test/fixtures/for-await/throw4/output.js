@@ -1,28 +1,21 @@
-let throwCalled = false;
-let iterable = {
-  [Symbol.asyncIterator || "@@asyncIterator"]() {
-    return {
-      next: () => {
-        throw "next";
-      },
-      return: () => {
-        throwCalled = true;
-        throw "return";
-      }
-    };
+function* gen() {
+  try {
+    yield 1;
+  } finally {
+    throw 2;
   }
-};
+}
 return babelHelpers.asyncToGenerator(function* () {
   let err;
   try {
-    var _iterator = babelHelpers.asyncIterator(iterable),
+    var _iterator = babelHelpers.asyncIterator(gen()),
       _step = {},
       _notDone;
     try {
       for (; _notDone = !(_step = yield _iterator.next()).done; _notDone = false) {
-        const value = _step.value;
+        const _ = _step.value;
         {
-          ;
+          break;
         }
       }
     } catch (e) {
@@ -40,6 +33,5 @@ return babelHelpers.asyncToGenerator(function* () {
   } catch (e) {
     err = e;
   }
-  expect(err).toBe("next");
-  expect(throwCalled).toBe(false);
+  expect(err).toBe(2);
 })();
