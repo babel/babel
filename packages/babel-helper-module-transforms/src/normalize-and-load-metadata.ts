@@ -147,10 +147,11 @@ export default function normalizeModuleAndLoadMetadata(
 
   // Reuse the imported namespace name if there is one.
   for (const [source, metadata] of sources) {
-    if (metadata.importsNamespace.size > 0) {
-      // This is kind of gross. If we stop using `loose: true` we should
-      // just make this destructuring assignment.
-      metadata.name = metadata.importsNamespace.values().next().value;
+    const { importsNamespace, imports } = metadata;
+    // If there is at least one namespace import and other imports, it may collipse with local ident, can be seen in issue 15879.
+    if (importsNamespace.size > 0 && imports.size === 0) {
+      const [nameOfnamespace] = importsNamespace;
+      metadata.name = nameOfnamespace;
     }
 
     const resolvedInterop = resolveImportInterop(
