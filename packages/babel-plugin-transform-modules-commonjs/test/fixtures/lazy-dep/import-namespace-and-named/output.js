@@ -1,10 +1,11 @@
 "use strict";
 
-function foo() {
+function _foo() {
   const data = babelHelpers.interopRequireWildcard(require("foo"));
-  foo = function () {
+  _foo = function () {
     return data;
   };
   return data;
 }
-console.log(foo(), foo().bar);
+var foo = _foo;
+console.log(foo(), _foo().bar);
