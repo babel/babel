@@ -1,6 +1,6 @@
 (async () => {
   var _iterator = babelHelpers.asyncIterator(iterable),
-    _step = {},
+    _step,
     _notDone;
   try {
     for (; _notDone = !(_step = await _iterator.next()).done; _notDone = false) {

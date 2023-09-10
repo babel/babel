@@ -2,7 +2,7 @@ var _g;
 function g() {
   return (_g = _g || babelHelpers.wrapAsyncGenerator(function* () {
     var _iterator = babelHelpers.asyncIterator(y),
-      _step = {},
+      _step,
       _notDone;
     try {
       for (; _notDone = !(_step = yield babelHelpers.awaitAsyncGenerator(_iterator.next())).done; _notDone = false) {

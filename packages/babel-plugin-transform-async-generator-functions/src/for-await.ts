@@ -2,7 +2,7 @@ import { types as t, template } from "@babel/core";
 import type { NodePath } from "@babel/traverse";
 
 const buildForAwait = template.statements(`
-  var ITERATOR_KEY = GET_ITERATOR(OBJECT), STEP_KEY = {}, NOT_DONE_KEY;
+  var ITERATOR_KEY = GET_ITERATOR(OBJECT), STEP_KEY, NOT_DONE_KEY;
   try {
     for (;NOT_DONE_KEY = !(STEP_KEY = await ITERATOR_KEY.next()).done;NOT_DONE_KEY = false) {
     }

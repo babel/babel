@@ -1,6 +1,6 @@
 /*#__PURE__*/babelHelpers.asyncToGenerator(function* () {
   var _iterator = babelHelpers.asyncIterator([]),
-    _step = {},
+    _step,
     _notDone;
   try {
     for (; _notDone = !(_step = yield _iterator.next()).done; _notDone = false) {

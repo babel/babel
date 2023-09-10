@@ -2,7 +2,7 @@ var _fn;
 function fn() {
   return (_fn = _fn || babelHelpers.wrapAsyncGenerator(function* () {
     var _iterator = babelHelpers.asyncIterator([Promise.resolve("ok")]),
-      _step = {},
+      _step,
       _notDone;
     try {
       for (; _notDone = !(_step = yield babelHelpers.awaitAsyncGenerator(_iterator.next())).done; _notDone = false) {

@@ -12,7 +12,7 @@ function main() {
             while (1) switch (_context.prev = _context.next) {
               case 0:
                 // IIFE: required for babel to crash
-                _iterator = _asyncIterator(async_iterable), _step = {};
+                _iterator = _asyncIterator(async_iterable);
                 _context.prev = 1;
               case 2:
                 _context.next = 4;
