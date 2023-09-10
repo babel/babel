@@ -4,13 +4,15 @@ for (const proto of [{
 }, {
   x: 1
 }]) {
-  let _obj;
-  objects.push(_obj = {
-    __proto__: proto,
-    foo: function () {
-      return babelHelpers.get(babelHelpers.getPrototypeOf(_obj), "x", this);
-    }
-  });
+  if (true) {
+    let _obj;
+    objects.push(_obj = {
+      __proto__: proto,
+      foo: function () {
+        return babelHelpers.get(babelHelpers.getPrototypeOf(_obj), "x", this);
+      }
+    });
+  }
 }
 expect(objects[0].foo()).toBe(0);
 expect(objects[1].foo()).toBe(1);

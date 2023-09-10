@@ -41,10 +41,12 @@ export default declare(api => {
         });
 
         if (objectRef) {
-          const scopePath = path.scope.getBlockParent().path;
+          const scopePath = path.findParent(
+            p => p.isFunction() || p.isProgram() || p.isLoop(),
+          );
           path.scope.push({
             id: t.cloneNode(objectRef),
-            kind: scopePath.parentPath?.isLoop() ? "let" : "var",
+            kind: scopePath.isLoop() ? "let" : "var",
           });
           path.replaceWith(
             t.assignmentExpression("=", t.cloneNode(objectRef), path.node),
