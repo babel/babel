@@ -21,6 +21,7 @@ import path from "path";
 import vm from "vm";
 import LruCache from "lru-cache";
 import { fileURLToPath } from "url";
+import { diff } from "jest-diff";
 
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
@@ -425,16 +426,19 @@ function validateFile(
   expectedLoc: string,
   expectedCode: string,
 ) {
-  try {
-    expect(actualCode).toEqualFile({
-      filename: expectedLoc,
-      code: expectedCode,
-    });
-  } catch (e) {
-    if (!process.env.OVERWRITE) throw e;
+  if (actualCode !== expectedCode) {
+    if (process.env.OVERWRITE) {
+      console.log(`Updated test file: ${expectedLoc}`);
+      fs.writeFileSync(expectedLoc, `${actualCode}\n`);
+      return;
+    }
 
-    console.log(`Updated test file: ${expectedLoc}`);
-    fs.writeFileSync(expectedLoc, `${actualCode}\n`);
+    throw new Error(
+      `Expected ${expectedLoc} to match transform output.\n` +
+        `To autogenerate a passing version of this file, delete ` +
+        ` the file and re-run the tests.\n\n` +
+        `Diff:\n\n${diff(expectedCode, actualCode, { expand: false })}`,
+    );
   }
 }
 
@@ -495,42 +499,6 @@ function normalizeOutput(
   }
 
   return result;
-}
-
-expect.extend({
-  toEqualFile(actual, { filename, code }: Pick<TestFile, "filename" | "code">) {
-    if (this.isNot) {
-      throw new Error(".toEqualFile does not support negation");
-    }
-
-    const pass = actual === code;
-    return {
-      pass,
-      message: () => {
-        const diffString = this.utils.diff(code, actual, {
-          expand: false,
-        });
-        return (
-          `Expected ${filename} to match transform output.\n` +
-          `To autogenerate a passing version of this file, delete the file and re-run the tests.\n\n` +
-          `Diff:\n\n${diffString}`
-        );
-      },
-    };
-  },
-});
-
-declare global {
-  // eslint-disable-next-line no-redeclare,@typescript-eslint/no-unused-vars
-  namespace jest {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    interface Matchers<R> {
-      toEqualFile({
-        filename,
-        code,
-      }: Pick<TestFile, "filename" | "code">): jest.CustomMatcherResult;
-    }
-  }
 }
 
 export type SuiteOptions = {
