@@ -39,13 +39,6 @@ function getNormalizedV8Flag(arg: string) {
   return arg;
 }
 
-// These are aliases for node options defined by babel-node.
-// TODO(Babel 8): Consider removing these
-const aliases = new Map([
-  ["-d", "--debug"],
-  ["-gc", "--expose-gc"],
-]);
-
 getV8Flags(async function (err, v8Flags) {
   if (!process.env.BABEL_8_BREAKING) {
     // The version of v8flags used by Babel 7 uses _, while the one used
@@ -62,11 +55,18 @@ getV8Flags(async function (err, v8Flags) {
     const arg = babelArgs[i];
     const flag = arg.split("=")[0];
 
+    if (!process.env.BABEL_8_BREAKING) {
+      if (flag === "-d") {
+        args.unshift("--debug");
+        continue;
+      } else if (flag === "-gc") {
+        args.unshift("--expose-gc");
+        continue;
+      }
+    }
     if (flag === "-r" || flag === "--require") {
       args.push(flag);
       args.push(babelArgs[++i]);
-    } else if (aliases.has(flag)) {
-      args.unshift(aliases.get(flag));
     } else if (
       flag === "debug" || // node debug foo.js
       flag === "inspect" ||
