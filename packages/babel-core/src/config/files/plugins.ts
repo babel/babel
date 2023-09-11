@@ -9,7 +9,7 @@ import { isAsync } from "../../gensync-utils/async.ts";
 import loadCodeDefault, { supportsESM } from "./module-types.ts";
 import { fileURLToPath, pathToFileURL } from "url";
 
-import { resolve as importMetaResolve } from "../../vendor/import-meta-resolve.ts";
+import { resolve as importMetaResolve } from "../../vendor/import-meta-resolve.js";
 
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
