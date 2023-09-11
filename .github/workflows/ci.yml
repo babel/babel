@@ -225,6 +225,7 @@ jobs:
           # actually downgrades the root `@babel/*` deps from 8.0 alpha to 7
           node ./scripts/integration-tests/utils/bump-babel-dependencies.js
           yarn up jest@24
+          cd packages/babel-helper-transform-fixture-test-runner && yarn up jest-diff@24 && cd ../..
           # Deduplicate dependencies, because duplicate copies of graceful-fs cause
           # problems with the "path" module: https://github.com/facebook/jest/issues/9656
           yarn dedupe
@@ -232,6 +233,7 @@ jobs:
         if: matrix.node-version == '12'
         run: |
           yarn up jest@28
+          cd packages/babel-helper-transform-fixture-test-runner && yarn up jest-diff@28 && cd ../..
           yarn up jest-light-runner@0.3.0
           # Deduplicate dependencies, because duplicate copies of graceful-fs cause
           # problems with the "path" module: https://github.com/facebook/jest/issues/9656
