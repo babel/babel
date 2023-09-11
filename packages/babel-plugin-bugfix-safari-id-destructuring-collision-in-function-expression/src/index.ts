@@ -2,7 +2,9 @@ import { declare } from "@babel/helper-plugin-utils";
 import { shouldTransform } from "./util.ts";
 
 export default declare(api => {
-  api.assertVersion("^7.16.0");
+  api.assertVersion(
+    process.env.BABEL_8_BREAKING ? PACKAGE_JSON.version : "^7.16.0",
+  );
 
   return {
     name: "plugin-bugfix-safari-id-destructuring-collision-in-function-expression",

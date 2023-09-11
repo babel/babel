@@ -6,7 +6,7 @@ export interface Options {
 }
 
 export default declare((api, { loose = false }: Options) => {
-  api.assertVersion(7);
+  api.assertVersion(process.env.BABEL_8_BREAKING ? PACKAGE_JSON.version : 7);
   const noDocumentAll = api.assumption("noDocumentAll") ?? loose;
 
   return {

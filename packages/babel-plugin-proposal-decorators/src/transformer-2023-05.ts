@@ -1187,14 +1187,22 @@ export default function (
   version: "2023-05" | "2023-01" | "2022-03" | "2021-12",
 ): PluginObject {
   if (process.env.BABEL_8_BREAKING) {
-    assertVersion("^7.21.0");
+    assertVersion(
+      process.env.BABEL_8_BREAKING ? PACKAGE_JSON.version : "^7.21.0",
+    );
   } else {
     if (version === "2023-05" || version === "2023-01") {
-      assertVersion("^7.21.0");
+      assertVersion(
+        process.env.BABEL_8_BREAKING ? PACKAGE_JSON.version : "^7.21.0",
+      );
     } else if (version === "2021-12") {
-      assertVersion("^7.16.0");
+      assertVersion(
+        process.env.BABEL_8_BREAKING ? PACKAGE_JSON.version : "^7.16.0",
+      );
     } else {
-      assertVersion("^7.19.0");
+      assertVersion(
+        process.env.BABEL_8_BREAKING ? PACKAGE_JSON.version : "^7.19.0",
+      );
     }
   }
 

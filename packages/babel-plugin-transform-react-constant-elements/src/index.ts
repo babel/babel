@@ -13,7 +13,7 @@ interface VisitorState {
   targetScope: Scope;
 }
 export default declare((api, options: Options) => {
-  api.assertVersion(7);
+  api.assertVersion(process.env.BABEL_8_BREAKING ? PACKAGE_JSON.version : 7);
 
   const { allowMutablePropsOnTags } = options;
 

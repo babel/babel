@@ -3,7 +3,7 @@ import { type MutatorMap, pushAccessor, toDefineObject } from "./define-map.ts";
 import { types as t } from "@babel/core";
 
 export default declare(api => {
-  api.assertVersion(7);
+  api.assertVersion(process.env.BABEL_8_BREAKING ? PACKAGE_JSON.version : 7);
 
   return {
     name: "transform-property-mutators",

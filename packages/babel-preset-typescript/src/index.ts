@@ -6,7 +6,7 @@ import normalizeOptions from "./normalize-options.ts";
 import type { Options } from "./normalize-options.ts";
 
 export default declarePreset((api, opts: Options) => {
-  api.assertVersion(7);
+  api.assertVersion(process.env.BABEL_8_BREAKING ? PACKAGE_JSON.version : 7);
 
   const {
     allExtensions,

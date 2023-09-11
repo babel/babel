@@ -3,7 +3,7 @@ import type { types as t } from "@babel/core";
 import regeneratorTransform from "regenerator-transform";
 
 export default declare(({ types: t, assertVersion }) => {
-  assertVersion(7);
+  assertVersion(process.env.BABEL_8_BREAKING ? PACKAGE_JSON.version : 7);
 
   return {
     name: "transform-regenerator",

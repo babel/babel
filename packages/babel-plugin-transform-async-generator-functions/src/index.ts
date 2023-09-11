@@ -6,7 +6,7 @@ import rewriteForAwait from "./for-await.ts";
 import environmentVisitor from "@babel/helper-environment-visitor";
 
 export default declare(api => {
-  api.assertVersion(7);
+  api.assertVersion(process.env.BABEL_8_BREAKING ? PACKAGE_JSON.version : 7);
 
   const yieldStarVisitor = traverse.visitors.merge<PluginPass>([
     {

@@ -17,7 +17,7 @@ export interface Options {
 }
 
 export default declare((api, opts: Options) => {
-  api.assertVersion(7);
+  api.assertVersion(process.env.BABEL_8_BREAKING ? PACKAGE_JSON.version : 7);
 
   const { throwIfClosureRequired = false, tdz: tdzEnabled = false } = opts;
   if (typeof throwIfClosureRequired !== "boolean") {

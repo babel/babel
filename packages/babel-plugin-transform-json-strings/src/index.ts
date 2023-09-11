@@ -3,7 +3,7 @@ import type * as t from "@babel/types";
 import type { NodePath } from "@babel/traverse";
 
 export default declare(api => {
-  api.assertVersion(7);
+  api.assertVersion(process.env.BABEL_8_BREAKING ? PACKAGE_JSON.version : 7);
   const regex = /(\\*)([\u2028\u2029])/g;
   function replace(match: string, escapes: string, separator: string) {
     // If there's an odd number, that means the separator itself was escaped.

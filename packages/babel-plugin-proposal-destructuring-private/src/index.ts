@@ -14,7 +14,9 @@ import type { NodePath, Visitor } from "@babel/traverse";
 import type * as t from "@babel/types";
 
 export default declare(function ({ assertVersion, assumption, types: t }) {
-  assertVersion("^7.17.0");
+  assertVersion(
+    process.env.BABEL_8_BREAKING ? PACKAGE_JSON.version : "^7.17.0",
+  );
   const {
     assignmentExpression,
     assignmentPattern,

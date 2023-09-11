@@ -5,7 +5,7 @@ import type { NodePath } from "@babel/traverse";
 import type * as t from "@babel/types";
 
 export default declare(api => {
-  api.assertVersion(7);
+  api.assertVersion(process.env.BABEL_8_BREAKING ? PACKAGE_JSON.version : 7);
 
   const noDocumentAll = api.assumption("noDocumentAll") ?? false;
   const pureGetters = api.assumption("pureGetters") ?? false;

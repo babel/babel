@@ -11,7 +11,7 @@ export interface Options {
 }
 
 export default declare((api, { proposal, topicToken }: Options) => {
-  api.assertVersion(7);
+  api.assertVersion(process.env.BABEL_8_BREAKING ? PACKAGE_JSON.version : 7);
 
   if (typeof proposal !== "string" || !PIPELINE_PROPOSALS.includes(proposal)) {
     const proposalList = PIPELINE_PROPOSALS.map(p => `"${p}"`).join(", ");

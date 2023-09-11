@@ -5,7 +5,7 @@ import { types as t } from "@babel/core";
 import type { Visitor } from "@babel/traverse";
 
 export default declare(api => {
-  api.assertVersion(7);
+  api.assertVersion(process.env.BABEL_8_BREAKING ? PACKAGE_JSON.version : 7);
 
   const isFunctionSent = (node: t.MetaProperty) =>
     t.isIdentifier(node.meta, { name: "function" }) &&
