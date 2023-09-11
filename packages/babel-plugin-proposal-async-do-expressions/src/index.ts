@@ -5,7 +5,11 @@ import type * as t from "@babel/types";
 
 export default declare(({ types: t, assertVersion }) => {
   assertVersion(
-    process.env.BABEL_8_BREAKING ? PACKAGE_JSON.version : "^7.13.0",
+    process.env.BABEL_8_BREAKING
+      ? process.env.IS_PUBLISH
+        ? PACKAGE_JSON.version
+        : "^7.13.0"
+      : "^7.13.0",
   );
 
   return {

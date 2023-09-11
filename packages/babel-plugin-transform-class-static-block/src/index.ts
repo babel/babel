@@ -26,7 +26,11 @@ function generateUid(scope: Scope, denyList: Set<string>) {
 
 export default declare(({ types: t, template, assertVersion }) => {
   assertVersion(
-    process.env.BABEL_8_BREAKING ? PACKAGE_JSON.version : "^7.12.0",
+    process.env.BABEL_8_BREAKING
+      ? process.env.IS_PUBLISH
+        ? PACKAGE_JSON.version
+        : "^7.12.0"
+      : "^7.12.0",
   );
 
   return {

@@ -15,7 +15,11 @@ import type * as t from "@babel/types";
 
 export default declare(function ({ assertVersion, assumption, types: t }) {
   assertVersion(
-    process.env.BABEL_8_BREAKING ? PACKAGE_JSON.version : "^7.17.0",
+    process.env.BABEL_8_BREAKING
+      ? process.env.IS_PUBLISH
+        ? PACKAGE_JSON.version
+        : "^7.17.0"
+      : "^7.17.0",
   );
   const {
     assignmentExpression,

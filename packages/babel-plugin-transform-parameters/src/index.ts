@@ -8,7 +8,13 @@ export interface Options {
 }
 
 export default declare((api, options: Options) => {
-  api.assertVersion(process.env.BABEL_8_BREAKING ? PACKAGE_JSON.version : 7);
+  api.assertVersion(
+    process.env.BABEL_8_BREAKING
+      ? process.env.IS_PUBLISH
+        ? PACKAGE_JSON.version
+        : 7
+      : 7,
+  );
 
   const ignoreFunctionLength =
     api.assumption("ignoreFunctionLength") ?? options.loose;
