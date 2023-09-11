@@ -316,7 +316,7 @@ jobs:
           token: ${{ secrets.BOT_TOKEN }}
           branch: update-types-docs
           title: Update Babel types docs
-          description: Updated `@babel/types` for [Babel v${{ needs.github-release.outputs.version }}](https://github.com/babel/babel/releases/tag/${{ needs.github-release.outputs.version }}).
+          description: Updated `@babel/types` docs for [Babel v${{ needs.github-release.outputs.version }}](https://github.com/babel/babel/releases/tag/${{ needs.github-release.outputs.version }}).
           labels: |
             docs
             repo automation :robot:
