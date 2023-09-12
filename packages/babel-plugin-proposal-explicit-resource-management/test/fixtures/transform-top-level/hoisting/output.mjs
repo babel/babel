@@ -24,9 +24,9 @@ try {
   var c = 2;
   var A = class {};
   var B = class {};
-  var x = _usingCtx.using(null);
+  var x = _usingCtx.u(null);
 } catch (_) {
   _usingCtx.e = _;
 } finally {
-  _usingCtx.dispose();
+  _usingCtx.d();
 }

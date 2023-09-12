@@ -66,7 +66,7 @@ export default declare(api => {
             const args = [decl.init];
             if (isAwaitUsing) args.push(t.booleanLiteral(true));
             decl.init = t.callExpression(
-              t.memberExpression(t.cloneNode(ctx), t.identifier("using")),
+              t.memberExpression(t.cloneNode(ctx), t.identifier("u")),
               args,
             );
           });
@@ -74,7 +74,7 @@ export default declare(api => {
         if (!ctx) return;
 
         let disposeCall: t.Expression = t.callExpression(
-          t.memberExpression(t.cloneNode(ctx), t.identifier("dispose")),
+          t.memberExpression(t.cloneNode(ctx), t.identifier("d")),
           [],
         );
         if (needsAwait) disposeCall = t.awaitExpression(disposeCall);
