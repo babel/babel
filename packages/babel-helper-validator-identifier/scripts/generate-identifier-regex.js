@@ -2,7 +2,7 @@
 
 // Always use the latest available version of Unicode!
 // https://tc39.github.io/ecma262/#sec-conformance
-const version = "15.0.0";
+const version = "15.1.0";
 
 const start = require(
   "@unicode/unicode-" + version + "/Binary_Property/ID_Start/code-points.js"
