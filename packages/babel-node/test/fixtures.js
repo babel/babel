@@ -6,6 +6,7 @@ import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
+import { itBabel8, itBabel7 } from "$repo-utils";
 
 const require = createRequire(import.meta.url);
 
@@ -198,7 +199,11 @@ describe("bin/babel-node", function () {
       opts.inFiles["package.json"] = `{ "type": "commonjs" }`;
     }
 
-    // eslint-disable-next-line jest/valid-title
-    it(testName, buildTest(testName, opts), 20000);
+    let run = it;
+    if (typeof opts.BABEL_8_BREAKING === "boolean") {
+      run = opts.BABEL_8_BREAKING ? itBabel8 : itBabel7;
+    }
+
+    run(testName, buildTest(testName, opts), 20000);
   });
 });
