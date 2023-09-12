@@ -47,38 +47,94 @@ export default declare(api => {
       path: NodePath<t.BlockStatement | t.StaticBlock>,
       state,
     ) {
-      let stackId: t.Identifier | null = null;
-      let needsAwait = false;
+      if (state.availableHelper("usingCtx")) {
+        let ctx: t.Identifier | null = null;
+        let needsAwait = false;
 
-      for (const node of path.node.body) {
-        if (!isUsingDeclaration(node)) continue;
-        stackId ??= path.scope.generateUidIdentifier("stack");
-        const isAwaitUsing =
-          node.kind === "await using" ||
-          TOP_LEVEL_USING.get(node) === USING_KIND.AWAIT;
-        needsAwait ||= isAwaitUsing;
+        for (const node of path.node.body) {
+          if (!isUsingDeclaration(node)) continue;
+          ctx ??= path.scope.generateUidIdentifier("usingCtx");
+          const isAwaitUsing =
+            node.kind === "await using" ||
+            TOP_LEVEL_USING.get(node) === USING_KIND.AWAIT;
+          needsAwait ||= isAwaitUsing;
 
-        if (!TOP_LEVEL_USING.delete(node)) {
-          node.kind = "const";
+          if (!TOP_LEVEL_USING.delete(node)) {
+            node.kind = "const";
+          }
+          node.declarations.forEach(decl => {
+            const args = [decl.init];
+            if (isAwaitUsing) args.push(t.booleanLiteral(true));
+            decl.init = t.callExpression(
+              t.memberExpression(t.cloneNode(ctx), t.identifier("using")),
+              args,
+            );
+          });
         }
-        node.declarations.forEach(decl => {
-          const args = [t.cloneNode(stackId), decl.init];
-          if (isAwaitUsing) args.push(t.booleanLiteral(true));
-          decl.init = t.callExpression(state.addHelper("using"), args);
-        });
-      }
-      if (!stackId) return;
+        if (!ctx) return;
 
-      const errorId = path.scope.generateUidIdentifier("error");
-      const hasErrorId = path.scope.generateUidIdentifier("hasError");
+        let disposeCall: t.Expression = t.callExpression(
+          t.memberExpression(t.cloneNode(ctx), t.identifier("dispose")),
+          [],
+        );
+        if (needsAwait) disposeCall = t.awaitExpression(disposeCall);
 
-      let disposeCall: t.Expression = t.callExpression(
-        state.addHelper("dispose"),
-        [t.cloneNode(stackId), t.cloneNode(errorId), t.cloneNode(hasErrorId)],
-      );
-      if (needsAwait) disposeCall = t.awaitExpression(disposeCall);
+        const replacement = template.statement.ast`
+        try {
+          var ${t.cloneNode(ctx)} = ${state.addHelper("usingCtx")}();
+          ${path.node.body}
+        } catch (_) {
+          ${t.cloneNode(ctx)}.e = _;
+        } finally {
+          ${disposeCall}
+        }
+      `;
 
-      const replacement = template.statement.ast`
+        const { parentPath } = path;
+        if (
+          parentPath.isFunction() ||
+          parentPath.isTryStatement() ||
+          parentPath.isCatchClause()
+        ) {
+          path.replaceWith(t.blockStatement([replacement]));
+        } else if (path.isStaticBlock()) {
+          path.node.body = [replacement];
+        } else {
+          path.replaceWith(replacement);
+        }
+      } else {
+        let stackId: t.Identifier | null = null;
+        let needsAwait = false;
+
+        for (const node of path.node.body) {
+          if (!isUsingDeclaration(node)) continue;
+          stackId ??= path.scope.generateUidIdentifier("stack");
+          const isAwaitUsing =
+            node.kind === "await using" ||
+            TOP_LEVEL_USING.get(node) === USING_KIND.AWAIT;
+          needsAwait ||= isAwaitUsing;
+
+          if (!TOP_LEVEL_USING.delete(node)) {
+            node.kind = "const";
+          }
+          node.declarations.forEach(decl => {
+            const args = [t.cloneNode(stackId), decl.init];
+            if (isAwaitUsing) args.push(t.booleanLiteral(true));
+            decl.init = t.callExpression(state.addHelper("using"), args);
+          });
+        }
+        if (!stackId) return;
+
+        const errorId = path.scope.generateUidIdentifier("error");
+        const hasErrorId = path.scope.generateUidIdentifier("hasError");
+
+        let disposeCall: t.Expression = t.callExpression(
+          state.addHelper("dispose"),
+          [t.cloneNode(stackId), t.cloneNode(errorId), t.cloneNode(hasErrorId)],
+        );
+        if (needsAwait) disposeCall = t.awaitExpression(disposeCall);
+
+        const replacement = template.statement.ast`
         try {
           var ${stackId} = [];
           ${path.node.body}
@@ -92,17 +148,18 @@ export default declare(api => {
 
       t.inherits(replacement.block, path.node);
 
-      const { parentPath } = path;
-      if (
-        parentPath.isFunction() ||
-        parentPath.isTryStatement() ||
-        parentPath.isCatchClause()
-      ) {
-        path.replaceWith(t.blockStatement([replacement]));
-      } else if (path.isStaticBlock()) {
-        path.node.body = [replacement];
-      } else {
-        path.replaceWith(replacement);
+        const { parentPath } = path;
+        if (
+          parentPath.isFunction() ||
+          parentPath.isTryStatement() ||
+          parentPath.isCatchClause()
+        ) {
+          path.replaceWith(t.blockStatement([replacement]));
+        } else if (path.isStaticBlock()) {
+          path.node.body = [replacement];
+        } else {
+          path.replaceWith(replacement);
+        }
       }
     },
   };

@@ -1,16 +1,15 @@
 try {
-  var _stack = [];
+  var _usingCtx = babelHelpers.usingCtx();
   stmt;
-  const x = babelHelpers.using(_stack, obj);
+  const x = _usingCtx.using(obj);
   stmt;
-  const y = babelHelpers.using(_stack, obj),
-    z = babelHelpers.using(_stack, obj);
+  const y = _usingCtx.using(obj),
+    z = _usingCtx.using(obj);
   stmt;
-  const w = babelHelpers.using(_stack, obj);
+  const w = _usingCtx.using(obj);
   doSomethingWith(x, z);
 } catch (_) {
-  var _error = _;
-  var _hasError = true;
+  _usingCtx.e = _;
 } finally {
-  babelHelpers.dispose(_stack, _error, _hasError);
+  _usingCtx.dispose();
 }
