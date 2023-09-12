@@ -174,6 +174,7 @@ module.exports = [
       "@babel/development/no-deprecated-clone": "error",
       "guard-for-in": "error",
       "import/extensions": ["error", "ignorePackages"],
+      "import/no-unresolved": "error",
     },
   },
   ...compat.extends("plugin:jest/recommended").map(config => {
@@ -225,6 +226,7 @@ module.exports = [
         { version: "12.17.0", ignores: ["modules"] },
       ],
       "@babel/development-internal/require-default-import-fallback": "error",
+      "import/no-unresolved": "error",
     },
   },
   {
@@ -269,6 +271,7 @@ module.exports = [
       "comma-dangle": "off",
       "no-func-assign": "off",
       "import/no-extraneous-dependencies": "off",
+      "import/no-unresolved": "off",
     },
   },
   {
