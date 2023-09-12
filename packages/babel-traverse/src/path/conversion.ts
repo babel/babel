@@ -105,18 +105,16 @@ export function ensureBlock(
   return this.node;
 }
 
-if (!process.env.BABEL_8_BREAKING) {
-  if (!USE_ESM) {
-    /**
-     * Keeping this for backward-compatibility. You should use arrowFunctionToExpression() for >=7.x.
-     */
-    // eslint-disable-next-line no-restricted-globals
-    exports.arrowFunctionToShadowed = function (this: NodePath) {
-      if (!this.isArrowFunctionExpression()) return;
+if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
+  /**
+   * Keeping this for backward-compatibility. You should use arrowFunctionToExpression() for >=7.x.
+   */
+  // eslint-disable-next-line no-restricted-globals
+  exports.arrowFunctionToShadowed = function (this: NodePath) {
+    if (!this.isArrowFunctionExpression()) return;
 
-      this.arrowFunctionToExpression();
-    };
-  }
+    this.arrowFunctionToExpression();
+  };
 }
 
 /**

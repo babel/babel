@@ -217,9 +217,8 @@ if (!process.env.BABEL_8_BREAKING) {
   // syntax enabled by default, we can safely skip enabling it.
   if (!USE_ESM) {
     // @ts-expect-error unknown key
-    availablePlugins["unicode-sets-regex"] =
-      USE_ESM || IS_STANDALONE
-        ? e()
-        : () => require("@babel/plugin-syntax-unicode-sets-regex");
+    availablePlugins["unicode-sets-regex"] = IS_STANDALONE
+      ? e()
+      : () => require("@babel/plugin-syntax-unicode-sets-regex");
   }
 }

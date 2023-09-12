@@ -17,17 +17,13 @@ const {
   thisExpression,
 } = t;
 
-if (!process.env.BABEL_8_BREAKING) {
-  if (!USE_ESM) {
-    if (!IS_STANDALONE) {
-      // eslint-disable-next-line no-restricted-globals
-      const ns = require("@babel/helper-environment-visitor");
-      // eslint-disable-next-line no-restricted-globals
-      exports.environmentVisitor = ns.default;
-      // eslint-disable-next-line no-restricted-globals
-      exports.skipAllButComputedKey = ns.skipAllButComputedKey;
-    }
-  }
+if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
+  // eslint-disable-next-line no-restricted-globals
+  const ns = require("@babel/helper-environment-visitor");
+  // eslint-disable-next-line no-restricted-globals
+  exports.environmentVisitor = ns.default;
+  // eslint-disable-next-line no-restricted-globals
+  exports.skipAllButComputedKey = ns.skipAllButComputedKey;
 }
 
 type ThisRef =
