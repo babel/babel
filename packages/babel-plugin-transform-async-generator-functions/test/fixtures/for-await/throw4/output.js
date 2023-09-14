@@ -1,14 +1,21 @@
-var _f;
-function f() {
-  return (_f = _f || babelHelpers.asyncToGenerator(function* () {
-    var _iterator = babelHelpers.asyncIterator(y),
+function* gen() {
+  try {
+    yield 1;
+  } finally {
+    throw 2;
+  }
+}
+return babelHelpers.asyncToGenerator(function* () {
+  let err;
+  try {
+    var _iterator = babelHelpers.asyncIterator(gen()),
       _step,
       _notDone;
     try {
       for (; _notDone = !(_step = yield _iterator.next()).done; _notDone = false) {
-        let x = _step.value;
+        const _ = _step.value;
         {
-          g(x);
+          break;
         }
       }
     } catch (e) {
@@ -23,5 +30,8 @@ function f() {
         if (_step) throw e;
       }
     }
-  })).apply(this, arguments);
-}
+  } catch (e) {
+    err = e;
+  }
+  expect(err).toBe(2);
+})();

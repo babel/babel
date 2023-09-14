@@ -1,23 +1,21 @@
 babelHelpers.asyncToGenerator(function* () {
-  var _iteratorAbruptCompletion = false;
-  var _didIteratorError = false;
-  var _iteratorError;
+  var _iterator = babelHelpers.asyncIterator(y),
+    _step,
+    _notDone;
   try {
-    for (var _iterator = babelHelpers.asyncIterator(y), _step; _iteratorAbruptCompletion = !(_step = yield _iterator.next()).done; _iteratorAbruptCompletion = false) {
+    for (; _notDone = !(_step = yield _iterator.next()).done; _notDone = false) {
       obj.x = _step.value;
     }
-  } catch (err) {
-    _didIteratorError = true;
-    _iteratorError = err;
+  } catch (e) {
+    _step = null;
+    throw e;
   } finally {
     try {
-      if (_iteratorAbruptCompletion && _iterator.return != null) {
+      if (_notDone && _iterator.return) {
         yield _iterator.return();
       }
-    } finally {
-      if (_didIteratorError) {
-        throw _iteratorError;
-      }
+    } catch (e) {
+      if (_step) throw e;
     }
   }
 })();

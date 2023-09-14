@@ -1,31 +1,21 @@
 import { types as t, template } from "@babel/core";
 import type { NodePath } from "@babel/traverse";
 
-const buildForAwait = template(`
-  async function wrapper() {
-    var ITERATOR_ABRUPT_COMPLETION = false;
-    var ITERATOR_HAD_ERROR_KEY = false;
-    var ITERATOR_ERROR_KEY;
+const buildForAwait = template.statements(`
+  var ITERATOR_KEY = GET_ITERATOR(OBJECT), STEP_KEY, NOT_DONE_KEY;
+  try {
+    for (;NOT_DONE_KEY = !(STEP_KEY = await ITERATOR_KEY.next()).done;NOT_DONE_KEY = false) {
+    }
+  } catch(e) {
+    STEP_KEY = null;
+    throw e;
+  } finally {
     try {
-      for (
-        var ITERATOR_KEY = GET_ITERATOR(OBJECT), STEP_KEY;
-        ITERATOR_ABRUPT_COMPLETION = !(STEP_KEY = await ITERATOR_KEY.next()).done;
-        ITERATOR_ABRUPT_COMPLETION = false
-      ) {
+      if (NOT_DONE_KEY && ITERATOR_KEY.return) {
+        await ITERATOR_KEY.return();
       }
-    } catch (err) {
-      ITERATOR_HAD_ERROR_KEY = true;
-      ITERATOR_ERROR_KEY = err;
-    } finally {
-      try {
-        if (ITERATOR_ABRUPT_COMPLETION && ITERATOR_KEY.return != null) {
-          await ITERATOR_KEY.return();
-        }
-      } finally {
-        if (ITERATOR_HAD_ERROR_KEY) {
-          throw ITERATOR_ERROR_KEY;
-        }
-      }
+    } catch (e) {
+      if (STEP_KEY) throw e;
     }
   }
 `);
@@ -52,24 +42,16 @@ export default function (
       t.variableDeclarator(left.declarations[0].id, stepValue),
     ]);
   }
-  let template = buildForAwait({
-    ITERATOR_HAD_ERROR_KEY: scope.generateUidIdentifier("didIteratorError"),
-    ITERATOR_ABRUPT_COMPLETION: scope.generateUidIdentifier(
-      "iteratorAbruptCompletion",
-    ),
-    ITERATOR_ERROR_KEY: scope.generateUidIdentifier("iteratorError"),
+  const template = buildForAwait({
     ITERATOR_KEY: scope.generateUidIdentifier("iterator"),
+    NOT_DONE_KEY: scope.generateUidIdentifier("notDone"),
     GET_ITERATOR: getAsyncIterator,
     OBJECT: node.right,
     STEP_KEY: t.cloneNode(stepKey),
   });
 
-  // remove async function wrapper
-  // @ts-expect-error todo(flow->ts) improve type annotation for buildForAwait
-  template = template.body.body as t.Statement[];
-
   const isLabeledParent = t.isLabeledStatement(parent);
-  const tryBody = (template[3] as t.TryStatement).block.body;
+  const tryBody = (template[1] as t.TryStatement).block.body;
   const loop = tryBody[0] as t.ForStatement;
 
   if (isLabeledParent) {

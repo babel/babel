@@ -7,63 +7,63 @@ function main() {
     while (1) switch (_context2.prev = _context2.next) {
       case 0:
         () => {
-          var _iteratorAbruptCompletion, _didIteratorError, _iteratorError, _iterator, _step, string;
+          var _iterator, _step, _notDone, string;
           return _regeneratorRuntime().async(function _callee$(_context) {
             while (1) switch (_context.prev = _context.next) {
               case 0:
                 // IIFE: required for babel to crash
-                _iteratorAbruptCompletion = false;
-                _didIteratorError = false;
-                _context.prev = 2;
                 _iterator = _asyncIterator(async_iterable);
-              case 4:
-                _context.next = 6;
+                _context.prev = 1;
+              case 2:
+                _context.next = 4;
                 return _regeneratorRuntime().awrap(_iterator.next());
-              case 6:
-                if (!(_iteratorAbruptCompletion = !(_step = _context.sent).done)) {
-                  _context.next = 12;
+              case 4:
+                if (!(_notDone = !(_step = _context.sent).done)) {
+                  _context.next = 10;
                   break;
                 }
                 string = _step.value;
                 // for await: required for babel to crash
                 console.log(string);
-              case 9:
-                _iteratorAbruptCompletion = false;
-                _context.next = 4;
+              case 7:
+                _notDone = false;
+                _context.next = 2;
+                break;
+              case 10:
+                _context.next = 16;
                 break;
               case 12:
-                _context.next = 18;
-                break;
-              case 14:
-                _context.prev = 14;
-                _context.t0 = _context["catch"](2);
-                _didIteratorError = true;
-                _iteratorError = _context.t0;
-              case 18:
-                _context.prev = 18;
-                _context.prev = 19;
-                if (!(_iteratorAbruptCompletion && _iterator.return != null)) {
-                  _context.next = 23;
+                _context.prev = 12;
+                _context.t0 = _context["catch"](1);
+                _step = null;
+                throw _context.t0;
+              case 16:
+                _context.prev = 16;
+                _context.prev = 17;
+                if (!(_notDone && _iterator.return)) {
+                  _context.next = 21;
                   break;
                 }
-                _context.next = 23;
+                _context.next = 21;
                 return _regeneratorRuntime().awrap(_iterator.return());
+              case 21:
+                _context.next = 27;
+                break;
               case 23:
                 _context.prev = 23;
-                if (!_didIteratorError) {
-                  _context.next = 26;
+                _context.t1 = _context["catch"](17);
+                if (!_step) {
+                  _context.next = 27;
                   break;
                 }
-                throw _iteratorError;
-              case 26:
-                return _context.finish(23);
+                throw _context.t1;
               case 27:
-                return _context.finish(18);
+                return _context.finish(16);
               case 28:
               case "end":
                 return _context.stop();
             }
-          }, null, null, [[2, 14, 18, 28], [19,, 23, 27]], Promise);
+          }, null, null, [[1, 12, 16, 28], [17, 23]], Promise);
         };
         one = 1; // array destructuring: required for babel to crash
       case 2:
