@@ -84,7 +84,7 @@ export default declare(api => {
         //   import "a"
         // we have the correct evaluation order
 
-        const eagerImports = new Map();
+        const eagerImports = new Set();
 
         for (const child of path.get("body")) {
           if (
@@ -94,7 +94,7 @@ export default declare(api => {
           ) {
             const specifier = child.node.source!.value;
             if (!eagerImports.has(specifier)) {
-              eagerImports.set(specifier, child);
+              eagerImports.add(specifier);
             }
           }
         }

@@ -6,10 +6,15 @@ const commonJSHooksKey =
 
 type SourceMetadata = Parameters<typeof isSideEffectImport>[0];
 
+// A hook exposes a set of function that can customize how `require()` calls and
+// references to the imported bindings are handled. These functions can either
+// return a result, or return `null` to delegate to the next hook.
 export interface CommonJSHook {
   name: string;
   version: string;
   wrapReference?(ref: t.Expression, payload: unknown): t.CallExpression | null;
+  // Optionally wrap a `require` call. If this function returns `false`, the
+  // `require` call is removed from the generated code.
   buildRequireWrapper?(
     name: string,
     init: t.Expression,
