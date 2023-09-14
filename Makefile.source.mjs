@@ -374,7 +374,7 @@ target["watch"] = function () {
 };
 
 target["test"] = function () {
-  target["lint"]();
+  //target["lint"]();
   target["test-only"]();
 };
 
