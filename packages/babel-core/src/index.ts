@@ -1,11 +1,7 @@
-if (!process.env.IS_PUBLISH) {
-  if (!USE_ESM) {
-    if (process.env.BABEL_8_BREAKING) {
-      throw new Error(
-        "BABEL_8_BREAKING is only supported in ESM. Please run `make use-esm`.",
-      );
-    }
-  }
+if (!process.env.IS_PUBLISH && !USE_ESM && process.env.BABEL_8_BREAKING) {
+  throw new Error(
+    "BABEL_8_BREAKING is only supported in ESM. Please run `make use-esm`.",
+  );
 }
 
 export const version = PACKAGE_JSON.version;
@@ -83,29 +79,25 @@ export const DEFAULT_EXTENSIONS = Object.freeze([
 
 import Module from "module";
 import * as thisFile from "./index.ts";
-if (USE_ESM) {
-  if (!IS_STANDALONE) {
-    // Pass this module to the CJS proxy, so that it can be synchronously accessed.
-    const cjsProxy = Module.createRequire(import.meta.url)("../cjs-proxy.cjs");
-    cjsProxy["__ initialize @babel/core cjs proxy __"] = thisFile;
-  }
+if (USE_ESM && !IS_STANDALONE) {
+  // Pass this module to the CJS proxy, so that it can be synchronously accessed.
+  const cjsProxy = Module.createRequire(import.meta.url)("../cjs-proxy.cjs");
+  cjsProxy["__ initialize @babel/core cjs proxy __"] = thisFile;
 }
 
-if (!process.env.BABEL_8_BREAKING) {
+if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
   // For easier backward-compatibility, provide an API like the one we exposed in Babel 6.
-  if (!USE_ESM) {
-    // eslint-disable-next-line no-restricted-globals
-    exports.OptionManager = class OptionManager {
-      init(opts: {}) {
-        return loadOptionsSync(opts);
-      }
-    };
+  // eslint-disable-next-line no-restricted-globals
+  exports.OptionManager = class OptionManager {
+    init(opts: {}) {
+      return loadOptionsSync(opts);
+    }
+  };
 
-    // eslint-disable-next-line no-restricted-globals
-    exports.Plugin = function Plugin(alias: string) {
-      throw new Error(
-        `The (${alias}) Babel 5 plugin is being run with an unsupported Babel version.`,
-      );
-    };
-  }
+  // eslint-disable-next-line no-restricted-globals
+  exports.Plugin = function Plugin(alias: string) {
+    throw new Error(
+      `The (${alias}) Babel 5 plugin is being run with an unsupported Babel version.`,
+    );
+  };
 }

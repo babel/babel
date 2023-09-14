@@ -262,11 +262,9 @@ function getChalk(forceColor: boolean) {
   }
   return chalk;
 }
-if (!process.env.BABEL_8_BREAKING) {
-  if (!USE_ESM) {
-    // eslint-disable-next-line no-restricted-globals
-    exports.getChalk = (options: Options) => getChalk(options.forceColor);
-  }
+if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
+  // eslint-disable-next-line no-restricted-globals
+  exports.getChalk = (options: Options) => getChalk(options.forceColor);
 }
 
 /**

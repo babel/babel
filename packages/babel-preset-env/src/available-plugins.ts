@@ -1,7 +1,5 @@
 /* eslint sort-keys: "error" */
 
-declare const USE_ESM_OR_STANDALONE: boolean;
-
 import syntaxImportAssertions from "@babel/plugin-syntax-import-assertions";
 import syntaxImportAttributes from "@babel/plugin-syntax-import-attributes";
 
@@ -152,51 +150,66 @@ if (!process.env.BABEL_8_BREAKING) {
   const e = () => () => () => ({});
 
   Object.assign(availablePlugins, {
-    "syntax-async-generators": USE_ESM_OR_STANDALONE
-      ? e()
-      : () => require("@babel/plugin-syntax-async-generators"),
-    "syntax-class-properties": USE_ESM_OR_STANDALONE
-      ? e()
-      : () => require("@babel/plugin-syntax-class-properties"),
-    "syntax-class-static-block": USE_ESM_OR_STANDALONE
-      ? e()
-      : () => require("@babel/plugin-syntax-class-static-block"),
-    "syntax-dynamic-import": USE_ESM_OR_STANDALONE
-      ? e()
-      : () => require("@babel/plugin-syntax-dynamic-import"),
-    "syntax-export-namespace-from": USE_ESM_OR_STANDALONE
-      ? e()
-      : () => require("@babel/plugin-syntax-export-namespace-from"),
-    "syntax-import-meta": USE_ESM_OR_STANDALONE
-      ? e()
-      : () => require("@babel/plugin-syntax-import-meta"),
-    "syntax-json-strings": USE_ESM_OR_STANDALONE
-      ? e()
-      : () => require("@babel/plugin-syntax-json-strings"),
-    "syntax-logical-assignment-operators": USE_ESM_OR_STANDALONE
-      ? e()
-      : () => require("@babel/plugin-syntax-logical-assignment-operators"),
-    "syntax-nullish-coalescing-operator": USE_ESM_OR_STANDALONE
-      ? e()
-      : () => require("@babel/plugin-syntax-nullish-coalescing-operator"),
-    "syntax-numeric-separator": USE_ESM_OR_STANDALONE
-      ? e()
-      : () => require("@babel/plugin-syntax-numeric-separator"),
-    "syntax-object-rest-spread": USE_ESM_OR_STANDALONE
-      ? e()
-      : () => require("@babel/plugin-syntax-object-rest-spread"),
-    "syntax-optional-catch-binding": USE_ESM_OR_STANDALONE
-      ? e()
-      : () => require("@babel/plugin-syntax-optional-catch-binding"),
-    "syntax-optional-chaining": USE_ESM_OR_STANDALONE
-      ? e()
-      : () => require("@babel/plugin-syntax-optional-chaining"),
-    "syntax-private-property-in-object": USE_ESM_OR_STANDALONE
-      ? e()
-      : () => require("@babel/plugin-syntax-private-property-in-object"),
-    "syntax-top-level-await": USE_ESM_OR_STANDALONE
-      ? e()
-      : () => require("@babel/plugin-syntax-top-level-await"),
+    "syntax-async-generators":
+      USE_ESM || IS_STANDALONE
+        ? e()
+        : () => require("@babel/plugin-syntax-async-generators"),
+    "syntax-class-properties":
+      USE_ESM || IS_STANDALONE
+        ? e()
+        : () => require("@babel/plugin-syntax-class-properties"),
+    "syntax-class-static-block":
+      USE_ESM || IS_STANDALONE
+        ? e()
+        : () => require("@babel/plugin-syntax-class-static-block"),
+    "syntax-dynamic-import":
+      USE_ESM || IS_STANDALONE
+        ? e()
+        : () => require("@babel/plugin-syntax-dynamic-import"),
+    "syntax-export-namespace-from":
+      USE_ESM || IS_STANDALONE
+        ? e()
+        : () => require("@babel/plugin-syntax-export-namespace-from"),
+    "syntax-import-meta":
+      USE_ESM || IS_STANDALONE
+        ? e()
+        : () => require("@babel/plugin-syntax-import-meta"),
+    "syntax-json-strings":
+      USE_ESM || IS_STANDALONE
+        ? e()
+        : () => require("@babel/plugin-syntax-json-strings"),
+    "syntax-logical-assignment-operators":
+      USE_ESM || IS_STANDALONE
+        ? e()
+        : () => require("@babel/plugin-syntax-logical-assignment-operators"),
+    "syntax-nullish-coalescing-operator":
+      USE_ESM || IS_STANDALONE
+        ? e()
+        : () => require("@babel/plugin-syntax-nullish-coalescing-operator"),
+    "syntax-numeric-separator":
+      USE_ESM || IS_STANDALONE
+        ? e()
+        : () => require("@babel/plugin-syntax-numeric-separator"),
+    "syntax-object-rest-spread":
+      USE_ESM || IS_STANDALONE
+        ? e()
+        : () => require("@babel/plugin-syntax-object-rest-spread"),
+    "syntax-optional-catch-binding":
+      USE_ESM || IS_STANDALONE
+        ? e()
+        : () => require("@babel/plugin-syntax-optional-catch-binding"),
+    "syntax-optional-chaining":
+      USE_ESM || IS_STANDALONE
+        ? e()
+        : () => require("@babel/plugin-syntax-optional-chaining"),
+    "syntax-private-property-in-object":
+      USE_ESM || IS_STANDALONE
+        ? e()
+        : () => require("@babel/plugin-syntax-private-property-in-object"),
+    "syntax-top-level-await":
+      USE_ESM || IS_STANDALONE
+        ? e()
+        : () => require("@babel/plugin-syntax-top-level-await"),
   });
 
   // This is a CJS plugin that depends on a package from the monorepo, so it
@@ -204,7 +217,7 @@ if (!process.env.BABEL_8_BREAKING) {
   // syntax enabled by default, we can safely skip enabling it.
   if (!USE_ESM) {
     // @ts-expect-error unknown key
-    availablePlugins["unicode-sets-regex"] = USE_ESM_OR_STANDALONE
+    availablePlugins["unicode-sets-regex"] = IS_STANDALONE
       ? e()
       : () => require("@babel/plugin-syntax-unicode-sets-regex");
   }

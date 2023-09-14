@@ -244,15 +244,6 @@ module.exports = function (api) {
           [
             pluginToggleBooleanFlag,
             {
-              name: "USE_ESM_OR_STANDALONE",
-              value: outputType === "module" || env === "standalone",
-            },
-            "flag-USE_ESM_OR_STANDALONE",
-          ],
-
-          [
-            pluginToggleBooleanFlag,
-            {
               name: "process.env.IS_PUBLISH",
               value: bool(process.env.IS_PUBLISH),
             },
@@ -384,7 +375,7 @@ function importInteropTest(source) {
 
 // env vars from the cli are always strings, so !!ENV_VAR returns true for "false"
 function bool(value) {
-  return value && value !== "false" && value !== "0";
+  return Boolean(value) && value !== "false" && value !== "0";
 }
 
 // A minimum semver GTE implementation
@@ -507,24 +498,72 @@ function pluginPolyfillsOldNode({ template, types: t }) {
  * @returns {import("@babel/core").PluginObj}
  */
 function pluginToggleBooleanFlag({ types: t }, { name, value }) {
-  function check(test) {
-    let keepConsequent = value;
+  if (typeof value !== "boolean") throw new Error(`.value must be a boolean`);
+
+  function evaluate(test) {
+    const res = {
+      replace: replacement => ({ replacement, value: null, unrelated: false }),
+      value: value => ({ replacement: null, value, unrelated: false }),
+      unrelated: () => ({
+        replacement: test.node,
+        value: null,
+        unrelated: true,
+      }),
+    };
+
+    if (test.isIdentifier({ name }) || test.matchesPattern(name)) {
+      return res.value(value);
+    }
 
     if (test.isUnaryExpression({ operator: "!" })) {
-      test = test.get("argument");
-      keepConsequent = !keepConsequent;
+      const arg = evaluate(test.get("argument"));
+      return arg.unrelated
+        ? res.unrelated()
+        : arg.replacement
+        ? res.replacement(t.unaryExpression("!", arg.replacement))
+        : res.value(!arg.value);
     }
-    return {
-      test,
-      keepConsequent,
-    };
+
+    if (test.isLogicalExpression({ operator: "||" })) {
+      const left = evaluate(test.get("left"));
+      const right = evaluate(test.get("right"));
+
+      if (left.value === true || right.value === true) return res.value(true);
+      if (left.value === false && right.value === false) {
+        return res.value(false);
+      }
+      if (left.value === false) return res.replace(right.replacement);
+      if (right.value === false) return res.replace(left.replacement);
+      if (left.unrelated && right.unrelated) return res.unrelated();
+      console.log(left, right);
+      return res.replace(
+        t.logicalExpression("||", left.replacement, right.replacement)
+      );
+    }
+
+    if (test.isLogicalExpression({ operator: "&&" })) {
+      const left = evaluate(test.get("left"));
+      const right = evaluate(test.get("right"));
+
+      if (left.value === true && right.value === true) return res.value(true);
+      if (left.value === false || right.value === false) {
+        return res.value(false);
+      }
+      if (left.value === true) return res.replace(right.replacement);
+      if (right.value === true) return res.replace(left.replacement);
+      if (left.unrelated && right.unrelated) return res.unrelated();
+      return res.replace(
+        t.logicalExpression("&&", left.replacement, right.replacement)
+      );
+    }
+
+    return res.unrelated();
   }
 
   return {
     visitor: {
       "IfStatement|ConditionalExpression"(path) {
-        // eslint-disable-next-line prefer-const
-        let { test, keepConsequent } = check(path.get("test"));
+        let test = path.get("test");
 
         // yarn-plugin-conditions injects bool(process.env.BABEL_8_BREAKING)
         // tests, to properly cast the env variable to a boolean.
@@ -536,32 +575,26 @@ function pluginToggleBooleanFlag({ types: t }, { name, value }) {
           test = test.get("arguments")[0];
         }
 
-        if (!test.isIdentifier({ name }) && !test.matchesPattern(name)) return;
+        const res = evaluate(test);
 
-        path.replaceWith(
-          keepConsequent
-            ? path.node.consequent
-            : path.node.alternate || t.emptyStatement()
-        );
+        if (res.unrelated) return;
+        if (res.replacement) {
+          path.get("test").replaceWith(res.replacement);
+        } else {
+          path.replaceWith(
+            res.value
+              ? path.node.consequent
+              : path.node.alternate || t.emptyStatement()
+          );
+        }
       },
       LogicalExpression(path) {
-        const { test, keepConsequent } = check(path.get("left"));
-
-        if (!test.matchesPattern(name)) return;
-
-        switch (path.node.operator) {
-          case "&&":
-            path.replaceWith(
-              keepConsequent ? path.node.right : t.booleanLiteral(false)
-            );
-            break;
-          case "||":
-            path.replaceWith(
-              keepConsequent ? t.booleanLiteral(true) : path.node.right
-            );
-            break;
-          default:
-            throw path.buildCodeFrameError("This check could not be stripped.");
+        const res = evaluate(path.get("test"));
+        if (res.unrelated) return;
+        if (res.replacement) {
+          path.get("test").replaceWith(res.replacement);
+        } else {
+          path.replaceWith(t.booleanLiteral(res.value));
         }
       },
       MemberExpression(path) {
