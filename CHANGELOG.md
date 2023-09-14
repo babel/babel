@@ -25,6 +25,17 @@ This file contains the changelog starting from v7.15.0.
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
 
+## v7.22.18 (2023-09-14)
+
+#### :bug: Bug Fix
+* `babel-helper-validator-identifier`
+  * [#15957](https://github.com/babel/babel/pull/15957) Update identifier name definitions to Unicode 15.1 ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-module-transforms`, `babel-plugin-transform-modules-amd`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-umd`
+  * [#15898](https://github.com/babel/babel/pull/15898) Fix transform of named import with shadowed namespace import ([@dhlolo](https://github.com/dhlolo))
+
+#### :leftwards_arrow_with_hook: Revert
+* [#15965](https://github.com/babel/babel/pull/15965) Revert Node.js 20.6.0 bug workaround ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
 ## v7.22.17 (2023-09-08)
 
 #### :bug: Bug Fix
