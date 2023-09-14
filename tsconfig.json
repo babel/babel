@@ -52,7 +52,7 @@
     "./packages/babel-plugin-proposal-function-sent/src/**/*.ts",
     "./packages/babel-plugin-proposal-import-attributes-to-assertions/src/**/*.ts",
     "./packages/babel-plugin-proposal-import-defer/src/**/*.ts",
-    "./packages/babel-plugin-proposal-import-wasm-source-to-fetch/src/**/*.ts",
+    "./packages/babel-plugin-proposal-import-wasm-source/src/**/*.ts",
     "./packages/babel-plugin-proposal-partial-application/src/**/*.ts",
     "./packages/babel-plugin-proposal-pipeline-operator/src/**/*.ts",
     "./packages/babel-plugin-proposal-record-and-tuple/src/**/*.ts",
@@ -330,8 +330,8 @@
       "@babel/plugin-proposal-import-defer": [
         "./packages/babel-plugin-proposal-import-defer/src"
       ],
-      "@babel/plugin-proposal-import-wasm-source-to-fetch": [
-        "./packages/babel-plugin-proposal-import-wasm-source-to-fetch/src"
+      "@babel/plugin-proposal-import-wasm-source": [
+        "./packages/babel-plugin-proposal-import-wasm-source/src"
       ],
       "@babel/plugin-proposal-partial-application": [
         "./packages/babel-plugin-proposal-partial-application/src"

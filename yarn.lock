@@ -1576,11 +1576,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-proposal-import-wasm-source-to-fetch@workspace:packages/babel-plugin-proposal-import-wasm-source-to-fetch":
+"@babel/plugin-proposal-import-wasm-source@workspace:packages/babel-plugin-proposal-import-wasm-source":
   version: 0.0.0-use.local
-  resolution: "@babel/plugin-proposal-import-wasm-source-to-fetch@workspace:packages/babel-plugin-proposal-import-wasm-source-to-fetch"
+  resolution: "@babel/plugin-proposal-import-wasm-source@workspace:packages/babel-plugin-proposal-import-wasm-source"
   dependencies:
     "@babel/core": "workspace:^"
+    "@babel/helper-compilation-targets": "workspace:^"
+    "@babel/helper-module-imports": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-syntax-import-source-phase": "workspace:^"

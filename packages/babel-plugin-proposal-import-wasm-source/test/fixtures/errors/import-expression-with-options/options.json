@@ -1,0 +1,5 @@
+{
+  "sourceType": "module",
+  "plugins": ["proposal-import-wasm-source", "syntax-import-attributes"],
+  "throws": "`import.source` with an options bag cannot be compiled."
+}
