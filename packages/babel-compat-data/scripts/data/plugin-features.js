@@ -138,7 +138,7 @@ const es2018 = {
   "transform-object-rest-spread": "object rest/spread properties",
 
   "transform-dotall-regex": "s (dotAll) flag for regular expressions",
-  "transform-unicode-property-regex": "RegExp Unicode Property Escapes",
+  "transform-unicode-property-regex": "RegExp Unicode Property Escapes / basic",
   "transform-named-capturing-groups-regex": "RegExp named capture groups",
 };
 
@@ -175,7 +175,14 @@ const es2022 = {
 };
 
 const es2024 = {
-  "transform-unicode-sets-regex": "RegExp `v` flag",
+  "transform-unicode-sets-regex": {
+    features: [
+      "RegExp `v` flag / set notations",
+      "RegExp `v` flag / properties of Strings",
+      "RegExp `v` flag / constructor supports it",
+      "RegExp `v` flag / shows up in flags",
+    ],
+  },
 };
 
 const shippedProposal = {};
