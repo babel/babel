@@ -16,7 +16,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  transform-unicode-sets-regex { firefox < 116, ios, opera_mobile < 75, safari, samsung }
+  transform-unicode-sets-regex { firefox < 116, ios, opera_mobile < 75, safari < tp, samsung }
   syntax-class-static-block
   syntax-private-property-in-object
   syntax-class-properties
