@@ -24,6 +24,7 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+
 ## v7.22.17 (2023-09-08)
 
 #### :bug: Bug Fix
