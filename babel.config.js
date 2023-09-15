@@ -165,6 +165,8 @@ module.exports = function (api) {
   const config = {
     targets,
     assumptions,
+    babelrc: false,
+    browserslistConfigFile: false,
 
     // Our dependencies are all standard CommonJS, along with all sorts of
     // other random files in Babel's codebase, so we use script as the default,
