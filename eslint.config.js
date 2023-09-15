@@ -59,6 +59,7 @@ module.exports = [
       "test/runtime-integration/*/output.js",
       "test/runtime-integration/*/output-absolute.js",
       "Makefile.js",
+      ...(process.env.IS_PUBLISH ? testFiles : []),
     ],
   },
   {
