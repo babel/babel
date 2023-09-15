@@ -13972,11 +13972,11 @@ __metadata:
   linkType: hard
 
 "regenerate-unicode-properties@npm:^10.1.0":
-  version: 10.1.0
-  resolution: "regenerate-unicode-properties@npm:10.1.0"
+  version: 10.1.1
+  resolution: "regenerate-unicode-properties@npm:10.1.1"
   dependencies:
     regenerate: ^1.4.2
-  checksum: b1a8929588433ab8b9dc1a34cf3665b3b472f79f2af6ceae00d905fc496b332b9af09c6718fb28c730918f19a00dc1d7310adbaa9b72a2ec7ad2f435da8ace17
+  checksum: b80958ef40f125275824c2c47d5081dfaefebd80bff26c76761e9236767c748a4a95a69c053fe29d2df881177f2ca85df4a71fe70a82360388b31159ef19adcf
   languageName: node
   linkType: hard
 
