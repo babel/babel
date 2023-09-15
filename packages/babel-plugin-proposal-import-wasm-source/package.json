@@ -5,7 +5,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/babel/babel.git",
-    "directory": "packages/babel-plugin-proposal-import-wasm-source-to-fetch"
+    "directory": "packages/babel-plugin-proposal-import-wasm-source"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-import-wasm-source-to-fetch",
   "license": "MIT",
