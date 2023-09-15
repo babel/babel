@@ -112,6 +112,7 @@
   "object-spread",
   "optional-catch-binding",
   "optional-chaining",
+  "promise-with-resolvers",
   "proxy-missing-checks",
   "regexp-dotall",
   "regexp-duplicate-named-groups",
