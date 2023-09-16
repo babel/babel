@@ -1,22 +1,26 @@
 function f() {
-  var _this = this,
-    _ref;
-  let g = function g() {
-    return (_ref = _ref || babelHelpers.asyncToGenerator(function* () {
+  var _this = this;
+  let g = /*#__PURE__*/function () {
+    var _ref = babelHelpers.asyncToGenerator(function* () {
       _this;
-    })).apply(this, arguments);
-  };
+    });
+    return function g() {
+      return _ref.apply(this, arguments);
+    };
+  }();
 }
 class Class {
   m() {
     var _this2 = this;
     return babelHelpers.asyncToGenerator(function* () {
-      var _ref2;
-      var c = function c(_x) {
-        return (_ref2 = _ref2 || babelHelpers.asyncToGenerator(function* (b) {
+      var c = /*#__PURE__*/function () {
+        var _ref2 = babelHelpers.asyncToGenerator(function* (b) {
           _this2;
-        })).apply(this, arguments);
-      };
+        });
+        return function c(_x) {
+          return _ref2.apply(this, arguments);
+        };
+      }();
     })();
   }
 }

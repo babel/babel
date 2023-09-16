@@ -1,6 +1,9 @@
-var _foo;
 function foo() {
-  return (_foo = _foo || babelHelpers.asyncToGenerator(function* () {
+  return _foo.apply(this, arguments);
+}
+function _foo() {
+  _foo = babelHelpers.asyncToGenerator(function* () {
     var wat = yield bar();
-  })).apply(this, arguments);
+  });
+  return _foo.apply(this, arguments);
 }

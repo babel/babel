@@ -1,13 +1,15 @@
 let TestClass = {
   name: "John Doe",
   testMethodFailure() {
-    var _this = this,
-      _ref;
-    return new Promise(function (_x) {
-      return (_ref = _ref || babelHelpers.asyncToGenerator(function* (resolve) {
+    var _this = this;
+    return new Promise( /*#__PURE__*/function () {
+      var _ref = babelHelpers.asyncToGenerator(function* (resolve) {
         console.log(_this);
         setTimeout(resolve, 1000);
-      })).apply(this, arguments);
-    });
+      });
+      return function (_x) {
+        return _ref.apply(this, arguments);
+      };
+    }());
   }
 };

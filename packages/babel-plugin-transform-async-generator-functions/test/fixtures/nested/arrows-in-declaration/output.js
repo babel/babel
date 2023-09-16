@@ -1,6 +1,8 @@
-var _g;
 function g() {
-  return (_g = _g || babelHelpers.wrapAsyncGenerator(function* () {
+  return _g.apply(this, arguments);
+}
+function _g() {
+  _g = babelHelpers.wrapAsyncGenerator(function* () {
     var _this = this;
     () => this;
     function f() {
@@ -11,5 +13,6 @@ function g() {
       yield 1;
     });
     yield babelHelpers.awaitAsyncGenerator(1);
-  })).apply(this, arguments);
+  });
+  return _g.apply(this, arguments);
 }
