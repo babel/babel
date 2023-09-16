@@ -1,8 +1,10 @@
 var _regeneratorRuntime = require("<CWD>/packages/babel-runtime/helpers/regeneratorRuntime.js")["default"];
 var _asyncToGenerator = require("<CWD>/packages/babel-runtime/helpers/asyncToGenerator.js")["default"];
-var _test, _main;
 function test() {
-  return (_test = _test || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  return _test.apply(this, arguments);
+}
+function _test() {
+  _test = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
@@ -12,10 +14,14 @@ function test() {
           return _context.stop();
       }
     }, _callee);
-  }))).apply(this, arguments);
+  }));
+  return _test.apply(this, arguments);
 }
 function main() {
-  return (_main = _main || _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+  return _main.apply(this, arguments);
+}
+function _main() {
+  _main = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
@@ -30,6 +36,7 @@ function main() {
           return _context2.stop();
       }
     }, _callee2);
-  }))).apply(this, arguments);
+  }));
+  return _main.apply(this, arguments);
 }
 main();

@@ -1,6 +1,8 @@
-var _fn;
 function fn() {
-  return (_fn = _fn || babelHelpers.asyncToGenerator(function* () {
+  return _fn.apply(this, arguments);
+}
+function _fn() {
+  _fn = babelHelpers.asyncToGenerator(function* () {
     yield 0;
     try {
       var _stack = [];
@@ -12,5 +14,6 @@ function fn() {
     } finally {
       yield babelHelpers.dispose(_stack, _error, _hasError);
     }
-  })).apply(this, arguments);
+  });
+  return _fn.apply(this, arguments);
 }

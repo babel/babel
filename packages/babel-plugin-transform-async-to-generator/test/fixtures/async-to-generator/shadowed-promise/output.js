@@ -1,9 +1,12 @@
-var _foo;
 let Promise;
 function foo() {
-  return (_foo = _foo || babelHelpers.asyncToGenerator(function* () {
+  return _foo.apply(this, arguments);
+}
+function _foo() {
+  _foo = babelHelpers.asyncToGenerator(function* () {
     yield new Promise(resolve => {
       resolve();
     });
-  })).apply(this, arguments);
+  });
+  return _foo.apply(this, arguments);
 }
