@@ -49,7 +49,9 @@ jobs:
       - name: Update tests (Babel 8)
         if: steps.updated.outputs.updated == 'true'
         continue-on-error: true
-        run: yarn jest
+        run: |
+          make use-esm
+          yarn jest
         env:
           OVERWRITE: true
           BABEL_8_BREAKING: true

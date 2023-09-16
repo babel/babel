@@ -16,20 +16,9 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  transform-unicode-sets-regex { firefox < 116, ios, opera_mobile < 75, safari, samsung }
-  syntax-class-static-block
-  syntax-private-property-in-object
-  syntax-class-properties
-  syntax-numeric-separator
-  syntax-nullish-coalescing-operator
-  syntax-optional-chaining
-  syntax-json-strings
-  syntax-optional-catch-binding
-  syntax-async-generators
-  syntax-object-rest-spread
+  transform-unicode-sets-regex { firefox < 116, ios, opera_mobile < 75, safari < tp, samsung }
   transform-modules-commonjs
   transform-dynamic-import
   transform-export-namespace-from { }
-  syntax-import-meta
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
