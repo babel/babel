@@ -24,6 +24,17 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.22.20 (2023-09-16)
+
+#### :house: Internal
+* `babel-helper-validator-identifier`
+  * [#15973](https://github.com/babel/babel/pull/15973) Remove special-casing of U+200C and U+200D ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-dotall-regex`
+  * [#15974](https://github.com/babel/babel/pull/15974) Update Unicode test fixtures ([@JLHwung](https://github.com/JLHwung))
+
+#### :leftwards_arrow_with_hook: Revert
+* `babel-helper-remap-async-to-generator`, `babel-helper-wrap-function`, `babel-plugin-proposal-explicit-resource-management`, `babel-plugin-proposal-function-sent`, `babel-plugin-transform-async-generator-functions`, `babel-plugin-transform-async-to-generator`, `babel-plugin-transform-block-scoping`, `babel-plugin-transform-class-properties`, `babel-plugin-transform-classes`, `babel-plugin-transform-parameters`, `babel-plugin-transform-runtime`, `babel-preset-env`
+  * [#15979](https://github.com/babel/babel/pull/15979) Revert "Improve output when wrapping functions" ([@jjonescz](https://github.com/jjonescz))
 
 ## v7.22.18 (2023-09-14)
 
