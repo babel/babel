@@ -1,9 +1,8 @@
 "use strict";
 
-function ns() {
-  const data = babelHelpers.interopRequireWildcard(require("x"));
+function ns(data) {
   ns = () => data;
-  return data;
+  return data = babelHelpers.interopRequireWildcard(require("x"));
 }
 later(() => {
   ns().prop;

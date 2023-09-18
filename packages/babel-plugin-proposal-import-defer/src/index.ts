@@ -55,10 +55,9 @@ export default declare(api => {
           if (payload === "defer/function") {
             if (!referenced) return false;
             return template.statement.ast`
-              function ${name}() {
-                const data = ${init};
+              function ${name}(data) {
                 ${name} = () => data;
-                return data;
+                return data = ${init};
               }
             `;
           }
