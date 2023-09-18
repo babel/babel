@@ -8,7 +8,7 @@ var _net = babelHelpers.interopRequireDefault(require("net"));
 var _events = require("events");
 var _binarySerializer = babelHelpers.interopRequireDefault(require("./helpers/binary-serializer"));
 // import ...
-var Connection = exports.default = /*#__PURE__*/function (_EventEmitter) {
+var Connection = exports["default"] = /*#__PURE__*/function (_EventEmitter) {
   babelHelpers.inherits(Connection, _EventEmitter);
   var _super = babelHelpers.createSuper(Connection);
   function Connection(endpoint, joinKey, joinData, roomId) {

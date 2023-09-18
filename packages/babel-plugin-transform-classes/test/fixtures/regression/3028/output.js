@@ -21,7 +21,7 @@ var a1 = /*#__PURE__*/function (_b) {
   }
   return babelHelpers.createClass(a1);
 }(b);
-var a2 = exports.default = /*#__PURE__*/function (_b2) {
+var a2 = exports["default"] = /*#__PURE__*/function (_b2) {
   babelHelpers.inherits(a2, _b2);
   var _super2 = babelHelpers.createSuper(a2);
   function a2() {

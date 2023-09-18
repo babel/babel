@@ -210,9 +210,9 @@ const rewriteBindingInitVisitor: Visitor<RewriteBindingInitVisitorState> = {
 
     const isVar = path.node.kind === "var";
 
-    for (const decl of path.node.declarations) {
-      const { id } = decl;
-      let { init } = decl;
+    for (const decl of path.get("declarations")) {
+      const { id } = decl.node;
+      let { init } = decl.node;
       if (
         isIdentifier(id) &&
         exported.has(id.name) &&
@@ -231,14 +231,17 @@ const rewriteBindingInitVisitor: Visitor<RewriteBindingInitVisitorState> = {
           }
         }
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        decl.init = buildBindingExportAssignmentExpression(
+        decl.node.init = buildBindingExportAssignmentExpression(
           metadata,
           exported.get(id.name),
           init,
           path.scope,
         );
+        requeueInParent(decl.get("init"));
       } else {
-        for (const localName of Object.keys(getOuterBindingIdentifiers(decl))) {
+        for (const localName of Object.keys(
+          decl.getOuterBindingIdentifiers(),
+        )) {
           if (exported.has(localName)) {
             const statement = expressionStatement(
               // eslint-disable-next-line @typescript-eslint/no-use-before-define

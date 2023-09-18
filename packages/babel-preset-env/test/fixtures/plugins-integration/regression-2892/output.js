@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = void 0;
-var Foo = exports.default = /*#__PURE__*/function () {
+var Foo = exports["default"] = /*#__PURE__*/function () {
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
   }
