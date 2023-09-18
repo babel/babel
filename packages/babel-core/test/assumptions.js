@@ -156,8 +156,7 @@ describe("assumptions", () => {
 
         exports.__esModule = true;
         exports.foo = void 0;
-        const foo = 1;
-        exports.foo = foo;"
+        const foo = exports.foo = 1;"
       `);
     });
   });

@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 var _react = babelHelpers.interopRequireWildcard(require("react"));
-var RandomComponent = /*#__PURE__*/function (_Component) {
+var RandomComponent = exports.default = /*#__PURE__*/function (_Component) {
   babelHelpers.inherits(RandomComponent, _Component);
   var _super = babelHelpers.createSuper(RandomComponent);
   function RandomComponent() {
@@ -22,4 +22,3 @@ var RandomComponent = /*#__PURE__*/function (_Component) {
   }]);
   return RandomComponent;
 }(_react.Component);
-exports["default"] = RandomComponent;

@@ -1,4 +1,4 @@
-(87:0-16) export default {        <--  (92:15-16) t = {
+(87:0-16) export default {        <--  (92:33-34) t = {
           ^^^^^^^^^^^^^^^^                            ^
 
 (88:0-21)   name: 'HelloWorld',   <--   (93:2-6)   name: 'H
