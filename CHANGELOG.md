@@ -1470,7 +1470,7 @@ This file contains the changelog starting from v7.15.0.
 * `babel-parser`
   * [#13982](https://github.com/babel/babel/pull/13982) Extend `hasPlugin` to accept plugin-configuration array pairs ([@js-choi](https://github.com/js-choi))
 * `babel-helpers`
-  * [#13996](https://github.com/babel/babel/pull/13996) Don't use ESM for `required` files in `@babel/helpers` tests ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#13996](https://github.com/babel/babel/pull/13996) Don't use ESM for `require`d files in `@babel/helpers` tests ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 * `babel-plugin-proposal-object-rest-spread`, `babel-traverse`
   * [#13948](https://github.com/babel/babel/pull/13948) Convert proposal-object-rest-spread to TS ([@JLHwung](https://github.com/JLHwung))
 * `babel-parser`, `babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression`, `babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining`, `babel-plugin-proposal-optional-chaining`, `babel-preset-react`, `babel-preset-typescript`
