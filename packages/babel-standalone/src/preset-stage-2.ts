@@ -22,7 +22,6 @@ export default (_: any, opts: any = {}) => {
         babelPlugins.proposalRecordAndTuple,
         { syntaxType: recordAndTupleSyntax },
       ],
-      babelPlugins.proposalImportDefer,
       babelPlugins.syntaxModuleBlocks,
       babelPlugins.syntaxImportReflection,
     ],
