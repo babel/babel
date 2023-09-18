@@ -7,7 +7,6 @@ import type { ModuleMetadata } from "./normalize-and-load-metadata.ts";
 
 const {
   assignmentExpression,
-  callExpression,
   cloneNode,
   expressionStatement,
   getOuterBindingIdentifiers,
@@ -76,6 +75,7 @@ function isInType(path: NodePath) {
 export default function rewriteLiveReferences(
   programPath: NodePath<t.Program>,
   metadata: ModuleMetadata,
+  wrapReference: (ref: t.Expression, payload: unknown) => null | t.Expression,
 ) {
   const imported = new Map();
   const exported = new Map();
@@ -139,23 +139,22 @@ export default function rewriteLiveReferences(
     scope: programPath.scope,
     imported, // local / import
     exported, // local name => exported name list
-    buildImportReference: ([source, importName, localName], identNode) => {
+    buildImportReference([source, importName, localName], identNode) {
       const meta = metadata.source.get(source);
       meta.referenced = true;
 
       if (localName) {
-        if (meta.lazy) {
-          identNode = callExpression(
-            // @ts-expect-error Fixme: we should handle the case when identNode is a JSXIdentifier
-            identNode,
-            [],
-          );
+        if (meta.wrap) {
+          // @ts-expect-error Fixme: we should handle the case when identNode is a JSXIdentifier
+          identNode = wrapReference(identNode, meta.wrap) ?? identNode;
         }
         return identNode;
       }
 
       let namespace: t.Expression = identifier(meta.name);
-      if (meta.lazy) namespace = callExpression(namespace, []);
+      if (meta.wrap) {
+        namespace = wrapReference(namespace, meta.wrap) ?? namespace;
+      }
 
       if (importName === "default" && meta.interop === "node-default") {
         return namespace;

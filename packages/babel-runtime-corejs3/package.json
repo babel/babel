@@ -134,6 +134,15 @@
       "./helpers/dispose.js"
     ],
     "./helpers/esm/dispose": "./helpers/esm/dispose.js",
+    "./helpers/importDeferProxy": [
+      {
+        "node": "./helpers/importDeferProxy.js",
+        "import": "./helpers/esm/importDeferProxy.js",
+        "default": "./helpers/importDeferProxy.js"
+      },
+      "./helpers/importDeferProxy.js"
+    ],
+    "./helpers/esm/importDeferProxy": "./helpers/esm/importDeferProxy.js",
     "./helpers/iterableToArrayLimit": [
       {
         "node": "./helpers/iterableToArrayLimit.js",
