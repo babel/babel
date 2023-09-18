@@ -34,8 +34,6 @@ export type ImportInterop =
   | "node"
   | ((source: string, filename?: string) => "none" | "babel" | "node");
 
-export type Lazy = boolean | string[] | ((source: string) => boolean);
-
 export interface SourceModuleMetadata {
   // A unique variable name to use for this namespace object. Centralized for simplicity.
   name: string;
@@ -53,7 +51,7 @@ export interface SourceModuleMetadata {
   reexportAll: null | {
     loc: t.SourceLocation | undefined | null;
   };
-  lazy?: Lazy;
+  wrap?: unknown;
   referenced: boolean;
 }
 
@@ -119,13 +117,17 @@ export default function normalizeModuleAndLoadMetadata(
   {
     importInterop,
     initializeReexports = false,
-    lazy = false,
+    getWrapperPayload,
     esNamespaceOnly = false,
     filename,
   }: {
     importInterop: ImportInterop;
     initializeReexports: boolean | void;
-    lazy: Lazy;
+    getWrapperPayload?: (
+      source: string,
+      metadata: SourceModuleMetadata,
+      importNodes: t.Node[],
+    ) => unknown;
     esNamespaceOnly: boolean;
     filename: string;
   },
@@ -139,7 +141,7 @@ export default function normalizeModuleAndLoadMetadata(
 
   const { local, sources, hasExports } = getModuleMetadata(
     programPath,
-    { initializeReexports, lazy },
+    { initializeReexports, getWrapperPayload },
     stringSpecifiers,
   );
 
@@ -231,11 +233,14 @@ function assertExportSpecifier(
 function getModuleMetadata(
   programPath: NodePath<t.Program>,
   {
-    lazy,
+    getWrapperPayload,
     initializeReexports,
   }: {
-    // todo(flow-ts) changed from boolean, to match expected usage inside the function
-    lazy: boolean | string[] | ((source: string) => boolean);
+    getWrapperPayload?: (
+      source: string,
+      metadata: SourceModuleMetadata,
+      importNodes: t.Node[],
+    ) => unknown;
     initializeReexports: boolean | void;
   },
   stringSpecifiers: Set<string>,
@@ -246,8 +251,9 @@ function getModuleMetadata(
     stringSpecifiers,
   );
 
+  const importNodes = new Map<string, t.Node[]>();
   const sourceData = new Map<string, SourceModuleMetadata>();
-  const getData = (sourceNode: t.StringLiteral) => {
+  const getData = (sourceNode: t.StringLiteral, node: t.Node) => {
     const source = sourceNode.value;
 
     let data = sourceData.get(source);
@@ -270,18 +276,29 @@ function getModuleMetadata(
         reexportNamespace: new Set(),
         reexportAll: null,
 
-        lazy: false,
+        wrap: null,
+
+        // @ts-expect-error lazy is not listed in the type.
+        // This is needed for compatibility with older version of the commonjs
+        // plusing.
+        // TODO(Babel 8): Remove this
+        get lazy() {
+          return this.wrap === "lazy";
+        },
 
         referenced: false,
       };
       sourceData.set(source, data);
+      importNodes.set(source, [node]);
+    } else {
+      importNodes.get(source).push(node);
     }
     return data;
   };
   let hasExports = false;
   programPath.get("body").forEach(child => {
     if (child.isImportDeclaration()) {
-      const data = getData(child.node.source);
+      const data = getData(child.node.source, child.node);
       if (!data.loc) data.loc = child.node.loc;
 
       child.get("specifiers").forEach(spec => {
@@ -334,7 +351,7 @@ function getModuleMetadata(
       });
     } else if (child.isExportAllDeclaration()) {
       hasExports = true;
-      const data = getData(child.node.source);
+      const data = getData(child.node.source, child.node);
       if (!data.loc) data.loc = child.node.loc;
 
       data.reexportAll = {
@@ -343,7 +360,7 @@ function getModuleMetadata(
       data.referenced = true;
     } else if (child.isExportNamedDeclaration() && child.node.source) {
       hasExports = true;
-      const data = getData(child.node.source);
+      const data = getData(child.node.source, child.node);
       if (!data.loc) data.loc = child.node.loc;
 
       child.get("specifiers").forEach(spec => {
@@ -404,22 +421,13 @@ function getModuleMetadata(
     }
   }
 
-  for (const [source, metadata] of sourceData) {
-    if (
-      lazy !== false &&
-      !(isSideEffectImport(metadata) || metadata.reexportAll)
-    ) {
-      if (lazy === true) {
-        // 'true' means that local relative files are eagerly loaded and
-        // dependency modules are loaded lazily.
-        metadata.lazy = !/\./.test(source);
-      } else if (Array.isArray(lazy)) {
-        metadata.lazy = lazy.indexOf(source) !== -1;
-      } else if (typeof lazy === "function") {
-        metadata.lazy = lazy(source);
-      } else {
-        throw new Error(`.lazy must be a boolean, string array, or function`);
-      }
+  if (getWrapperPayload) {
+    for (const [source, metadata] of sourceData) {
+      metadata.wrap = getWrapperPayload(
+        source,
+        metadata,
+        importNodes.get(source),
+      );
     }
   }
 

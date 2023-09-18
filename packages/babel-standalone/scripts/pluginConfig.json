@@ -115,6 +115,7 @@
     "transform-typescript",
     "transform-unicode-escapes",
     "transform-unicode-regex",
-    "proposal-explicit-resource-management"
+    "proposal-explicit-resource-management",
+    "proposal-import-defer"
   ]
 }
