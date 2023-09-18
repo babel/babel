@@ -616,7 +616,7 @@ This file contains the changelog starting from v7.15.0.
 * `babel-generator`
   * [#15160](https://github.com/babel/babel/pull/15160) Fix printing of comments before `=>` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 * `babel-generator`, `babel-plugin-transform-typescript`
-  * [#15144](https://github.com/babel/babel/pull/15144) Falback to printing inner comments as trailing ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#15144](https://github.com/babel/babel/pull/15144) Fallback to printing inner comments as trailing ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.20.3 (2022-11-07)
 
 #### :bug: Bug Fix
@@ -1165,7 +1165,7 @@ This file contains the changelog starting from v7.15.0.
 
 #### :bug: Bug Fix
 * `babel-parser`, `babel-standalone`
-  * [#14427](https://github.com/babel/babel/pull/14427) Restore numeric seaprators support in `@babel/standalone` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#14427](https://github.com/babel/babel/pull/14427) Restore numeric separators support in `@babel/standalone` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 * `babel-traverse`
   * [#14403](https://github.com/babel/babel/pull/14403) Fix NodePath.referencesImport for  JSXMemberExpression ([@swandir](https://github.com/swandir))
 * `babel-plugin-proposal-decorators`
@@ -1517,7 +1517,7 @@ This file contains the changelog starting from v7.15.0.
 
 #### :house: Internal
 * `babel-parser`
-  * [#13891](https://github.com/babel/babel/pull/13891) Simplifiy tracking of valid JSX positions ([@JLHwung](https://github.com/JLHwung))
+  * [#13891](https://github.com/babel/babel/pull/13891) Simplify tracking of valid JSX positions ([@JLHwung](https://github.com/JLHwung))
   * [#13892](https://github.com/babel/babel/pull/13892) extract tt.lt and tt.gt from tt.relation ([@JLHwung](https://github.com/JLHwung))
 * `babel-helper-compilation-targets`, `babel-preset-env`
   * [#13914](https://github.com/babel/babel/pull/13914) Update browserslist ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
