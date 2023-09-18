@@ -1,4 +1,4 @@
-var _initClass, _A, _initClass2, _C, _initClass3, _D, _initClass4, _decorated_class, _initClass5, _G, _initClass6, _decorated_class2, _initClass7, _H, _initClass8, _K;
+var _initClass, _A, _initClass2, _C, _initClass3, _D, _initClass4, _decorated_class, _initClass5, _G, _initClass6, _decorated_class2, _initClass7, _H, _I, _initClass8, _K, _L;
 const dec = () => {};
 const A = (new class extends babelHelpers.identity {
   static {
@@ -73,9 +73,9 @@ const F = [(new class extends babelHelpers.identity {
 }(), _decorated_class2)];
 const H = (new class extends babelHelpers.identity {
   static {
-    class H extends I {
+    class H extends (_I = I) {
       static {
-        [_H, _initClass7] = babelHelpers.applyDecs2305(this, [], [dec], 0, void 0, I).c;
+        [_H, _initClass7] = babelHelpers.applyDecs2305(this, [], [dec], 0, void 0, _I).c;
       }
     }
   }
@@ -85,9 +85,9 @@ const H = (new class extends babelHelpers.identity {
 }(), _H);
 const J = (new class extends babelHelpers.identity {
   static {
-    class K extends L {
+    class K extends (_L = L) {
       static {
-        [_K, _initClass8] = babelHelpers.applyDecs2305(this, [], [dec], 0, void 0, L).c;
+        [_K, _initClass8] = babelHelpers.applyDecs2305(this, [], [dec], 0, void 0, _L).c;
       }
     }
   }

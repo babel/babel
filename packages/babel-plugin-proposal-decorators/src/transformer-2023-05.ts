@@ -1069,6 +1069,15 @@ function transformClass(
     );
   }
 
+  let { superClass } = originalClass;
+  if (superClass && (process.env.BABEL_8_BREAKING || version === "2023-05")) {
+    const id = path.scope.maybeGenerateMemoised(superClass);
+    if (id) {
+      originalClass.superClass = t.assignmentExpression("=", id, superClass);
+      superClass = id;
+    }
+  }
+
   originalClass.body.body.unshift(
     t.staticBlock(
       [
@@ -1080,7 +1089,7 @@ function transformClass(
             t.arrayExpression(classDecorations),
             t.numericLiteral(classDecorationsFlag),
             needsInstancePrivateBrandCheck ? lastInstancePrivateName : null,
-            t.cloneNode(originalClass.superClass),
+            t.cloneNode(superClass),
             state,
             version,
           ),

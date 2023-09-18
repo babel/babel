@@ -1,10 +1,10 @@
-var _call_x, _initProto;
+var _call_x, _initProto, _Bar;
 const dec = () => {};
-class Foo extends Bar {
+class Foo extends (_Bar = Bar) {
   static {
     [_call_x, _initProto] = babelHelpers.applyDecs2305(this, [[dec, 3, "x", function () {
       return babelHelpers.get(babelHelpers.getPrototypeOf(Foo), "foo", this).call(this);
-    }]], [], 0, _ => #x in _, Bar).e;
+    }]], [], 0, _ => #x in _, _Bar).e;
   }
   constructor(...args) {
     super(...args);

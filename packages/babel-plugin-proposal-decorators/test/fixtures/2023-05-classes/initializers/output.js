@@ -1,4 +1,4 @@
-var _initClass, _initClass2;
+var _initClass, _initClass2, _Foo2;
 const dec = () => {};
 let _Foo;
 new class extends babelHelpers.identity {
@@ -17,9 +17,9 @@ new class extends babelHelpers.identity {
 let _Bar;
 new class extends babelHelpers.identity {
   static {
-    class Bar extends _Foo {
+    class Bar extends (_Foo2 = _Foo) {
       static {
-        [_Bar, _initClass2] = babelHelpers.applyDecs2305(this, [], [dec], 0, void 0, _Foo).c;
+        [_Bar, _initClass2] = babelHelpers.applyDecs2305(this, [], [dec], 0, void 0, _Foo2).c;
       }
     }
   }
