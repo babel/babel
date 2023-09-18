@@ -1,5 +1,5 @@
 {
   "sourceType": "module",
-  "targets": {},
+  "targets": [],
   "plugins": ["proposal-import-wasm-source"]
 }
