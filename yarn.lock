@@ -235,7 +235,7 @@ __metadata:
     "@types/glob": ^7.2.0
     chokidar: ^3.4.0
     commander: ^4.0.1
-    convert-source-map: ^1.1.0
+    convert-source-map: ^2.0.0
     fs-readdir-recursive: ^1.1.0
     glob: ^7.2.0
     make-dir: "condition:BABEL_8_BREAKING ? : ^2.1.0"
@@ -415,12 +415,12 @@ __metadata:
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
     "@jridgewell/trace-mapping": ^0.3.17
-    "@types/convert-source-map": ^1.5.1
+    "@types/convert-source-map": ^2.0.0
     "@types/debug": ^4.1.0
     "@types/gensync": ^1.0.0
     "@types/resolve": ^1.3.2
     "@types/semver": ^5.4.0
-    convert-source-map: ^1.7.0
+    convert-source-map: ^2.0.0
     debug: ^4.1.0
     gensync: ^1.0.0-beta.2
     json5: ^2.2.3
@@ -5088,10 +5088,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/convert-source-map@npm:^1.5.1":
-  version: 1.5.1
-  resolution: "@types/convert-source-map@npm:1.5.1"
-  checksum: f201025a8078a0f80172a7b0b93253368ab00603aa656ac093d79257b7b78dca0b7b011bc3d19d20b1275e7ba0dea76528f6873b528338f44c34dda221fa58d9
+"@types/convert-source-map@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@types/convert-source-map@npm:2.0.0"
+  checksum: 012497f7495d67204950eeebe10e94b7ab3508bf8659214ad430b527514e0611260d3ac41c47b88212b9de55aa7a9ee18b2fad2d03eb16234b66101150f74017
   languageName: node
   linkType: hard
 

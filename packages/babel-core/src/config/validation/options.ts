@@ -384,7 +384,6 @@ function throwUnknownError(loc: OptionPath) {
       `Using removed Babel ${version} option: ${msg(loc)} - ${message}`,
     );
   } else {
-    // eslint-disable-next-line max-len
     const unknownOptErr = new Error(
       `Unknown option: ${msg(
         loc,

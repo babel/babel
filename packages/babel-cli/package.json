@@ -26,7 +26,7 @@
   "dependencies": {
     "@jridgewell/trace-mapping": "^0.3.17",
     "commander": "^4.0.1",
-    "convert-source-map": "^1.1.0",
+    "convert-source-map": "^2.0.0",
     "fs-readdir-recursive": "^1.1.0",
     "glob": "^7.2.0",
     "make-dir": "condition:BABEL_8_BREAKING ? : ^2.1.0",

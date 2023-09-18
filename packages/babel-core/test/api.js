@@ -605,7 +605,6 @@ describe("api", function () {
   it("source map merging", function () {
     const result = transformSync(
       [
-        /* eslint-disable max-len */
         'function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }',
         "",
         "let Foo = function Foo() {",
@@ -613,7 +612,6 @@ describe("api", function () {
         "};",
         "",
         "//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInN0ZG91dCJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztJQUFNLEdBQUcsWUFBSCxHQUFHO3dCQUFILEdBQUciLCJmaWxlIjoidW5kZWZpbmVkIiwic291cmNlc0NvbnRlbnQiOlsiY2xhc3MgRm9vIHt9XG4iXX0=",
-        /* eslint-enable max-len */
       ].join("\n"),
       {
         sourceMap: true,

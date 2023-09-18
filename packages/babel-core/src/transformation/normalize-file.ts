@@ -16,7 +16,6 @@ const debug = buildDebug("babel:transform:file");
 // These regexps are copied from the convert-source-map package,
 // but without // or /* at the beginning of the comment.
 
-// eslint-disable-next-line max-len
 const INLINE_SOURCEMAP_REGEX =
   /^[@#]\s+sourceMappingURL=data:(?:application|text)\/json;(?:charset[:=]\S+?;)?base64,(?:.*)$/;
 const EXTERNAL_SOURCEMAP_REGEX =
@@ -63,9 +62,17 @@ export default function* normalizeFile(
       const lastComment = extractComments(INLINE_SOURCEMAP_REGEX, ast);
       if (lastComment) {
         try {
-          inputMap = convertSourceMap.fromComment(lastComment);
+          inputMap = convertSourceMap.fromComment("//" + lastComment);
         } catch (err) {
-          debug("discarding unknown inline input sourcemap", err);
+          if (process.env.BABEL_8_BREAKING) {
+            console.warn(
+              "discarding unknown inline input sourcemap",
+              options.filename,
+              err,
+            );
+          } else {
+            debug("discarding unknown inline input sourcemap");
+          }
         }
       }
     }
