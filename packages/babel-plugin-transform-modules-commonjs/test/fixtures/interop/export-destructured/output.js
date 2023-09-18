@@ -8,10 +8,8 @@ exports.f2 = f2;
 exports.f3 = f3;
 exports.f4 = f4;
 exports.y = exports.x = void 0;
-let x = 0;
-exports.x = x;
-let y = 0;
-exports.y = y;
+let x = exports.x = 0;
+let y = exports.y = 0;
 function f1() {
   ({
     x

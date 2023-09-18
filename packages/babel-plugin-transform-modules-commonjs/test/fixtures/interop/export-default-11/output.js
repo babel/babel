@@ -5,6 +5,5 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Cacher = Cacher;
 exports.default = void 0;
-var _default = new Cacher();
-exports.default = _default;
+var _default = exports.default = new Cacher();
 function Cacher(databaseName) {}

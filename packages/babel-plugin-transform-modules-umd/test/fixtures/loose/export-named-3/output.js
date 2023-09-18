@@ -16,6 +16,4 @@
   _exports.__esModule = true;
   _exports.default = _exports.bar = void 0;
   var foo, bar;
-  _exports.bar = bar;
-  _exports.default = foo;
 });

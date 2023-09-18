@@ -4,8 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.foo = exports.bar = void 0;
-let foo;
-exports.bar = exports.foo = foo;
+let foo = exports.bar = exports.foo = void 0;
 for (let _foo of []) {
   exports.bar = exports.foo = foo = _foo;
 }

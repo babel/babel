@@ -15,6 +15,5 @@
 
   _exports.__esModule = true;
   _exports.foo = void 0;
-  var foo = 2;
-  _exports.foo = foo;
+  var foo = _exports.foo = 2;
 });
