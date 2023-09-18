@@ -12,6 +12,10 @@ const {
   expressionStatement,
   getOuterBindingIdentifiers,
   identifier,
+  isArrowFunctionExpression,
+  isClassExpression,
+  isFunctionExpression,
+  isIdentifier,
   isMemberExpression,
   isVariableDeclaration,
   jsxIdentifier,
@@ -204,25 +208,55 @@ const rewriteBindingInitVisitor: Visitor<RewriteBindingInitVisitorState> = {
   VariableDeclaration(path) {
     const { requeueInParent, exported, metadata } = this;
 
-    Object.keys(path.getOuterBindingIdentifiers()).forEach(localName => {
-      const exportNames = exported.get(localName) || [];
+    const isVar = path.node.kind === "var";
 
-      if (exportNames.length > 0) {
-        const statement = expressionStatement(
-          // eslint-disable-next-line @typescript-eslint/no-use-before-define
-          buildBindingExportAssignmentExpression(
-            metadata,
-            exportNames,
-            identifier(localName),
-            path.scope,
-          ),
+    for (const decl of path.node.declarations) {
+      const { id } = decl;
+      let { init } = decl;
+      if (
+        isIdentifier(id) &&
+        exported.has(id.name) &&
+        !isArrowFunctionExpression(init) &&
+        (!isFunctionExpression(init) || init.id) &&
+        (!isClassExpression(init) || init.id)
+      ) {
+        if (!init) {
+          if (isVar) {
+            // This variable might have already been assigned to, and the
+            // uninitalized declaration doesn't set it to `undefined` and does
+            // not updated the exported value.
+            continue;
+          } else {
+            init = path.scope.buildUndefinedNode();
+          }
+        }
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        decl.init = buildBindingExportAssignmentExpression(
+          metadata,
+          exported.get(id.name),
+          init,
+          path.scope,
         );
-        // @ts-expect-error todo(flow->ts): avoid mutations
-        statement._blockHoist = path.node._blockHoist;
+      } else {
+        for (const localName of Object.keys(getOuterBindingIdentifiers(decl))) {
+          if (exported.has(localName)) {
+            const statement = expressionStatement(
+              // eslint-disable-next-line @typescript-eslint/no-use-before-define
+              buildBindingExportAssignmentExpression(
+                metadata,
+                exported.get(localName),
+                identifier(localName),
+                path.scope,
+              ),
+            );
+            // @ts-expect-error todo(flow->ts): avoid mutations
+            statement._blockHoist = path.node._blockHoist;
 
-        requeueInParent(path.insertAfter(statement)[0]);
+            requeueInParent(path.insertAfter(statement)[0]);
+          }
+        }
       }
-    });
+    }
   },
 };
 
