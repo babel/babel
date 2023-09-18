@@ -39,10 +39,8 @@ type ImportCache = WeakMap<t.Program, Cache>;
 
 export default declare<State>((api, options: Options) => {
   api.assertVersion(
-    process.env.BABEL_8_BREAKING
-      ? process.env.IS_PUBLISH
-        ? PACKAGE_JSON.version
-        : 7
+    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
+      ? PACKAGE_JSON.version
       : 7,
   );
 
