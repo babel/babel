@@ -36,10 +36,11 @@ node -e "
   fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2));
 "
 
-# Older @babel/core versions don't support "targets" and "assumptions"
-# Let's just remove them when running this e2e test.
+# Older @babel/core versions don't support "browserslistConfigFile", "targets".
+# and "assumptions". Let's just remove them when running this e2e test.
 node -e "
   var config = fs.readFileSync('./babel.config.js', 'utf8')
+    .replace(/browserslistConfigFile:[^,]*,/g, '')
     .replace(/assumptions,/, '')
     .replace(/targets,/g, '')
     .replace(/assumptions,/g, '')
