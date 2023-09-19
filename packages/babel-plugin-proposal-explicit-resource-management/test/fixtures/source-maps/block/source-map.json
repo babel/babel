@@ -13,7 +13,7 @@
     "dispose"
   ],
   "sources": [
-    "source-maps/sync/input.js"
+    "source-maps/block/input.js"
   ],
   "sourcesContent": [
     "{\n  using x = fn();\n  doSomethingWith(x);\n}"
