@@ -20,11 +20,8 @@
   _foo = babelHelpers.interopRequireWildcard(_foo);
   var foo2 = _foo;
   var test;
-  _exports.test = test;
-  var test2 = 5;
-  _exports.test2 = test2;
-  var _default = test;
-  _exports.default = _default;
+  var test2 = _exports.test2 = 5;
+  var _default = _exports.default = test;
   _foo.bar;
   _foo.foo;
 });

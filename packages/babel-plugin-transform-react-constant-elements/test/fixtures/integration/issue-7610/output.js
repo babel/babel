@@ -17,5 +17,4 @@ function MyComponent({
     }))
   });
 }
-var _default = _Parent.default;
-exports.default = _default;
+var _default = exports.default = _Parent.default;

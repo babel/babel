@@ -35,15 +35,11 @@ Object.keys(_mod).forEach(function (key) {
     }
   });
 });
-var z = 100;
-exports.z = z;
+var z = exports.z = 100;
 class a {}
 exports.a = a;
 function b() {}
-var d = 42;
-exports.d = d;
-var e = 1,
-  f = 2;
-exports.f = f;
-exports.e = e;
+var d = exports.d = 42;
+var e = exports.e = 1,
+  f = exports.f = 2;
 function _default() {}

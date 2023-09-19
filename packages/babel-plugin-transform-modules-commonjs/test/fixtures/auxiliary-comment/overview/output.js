@@ -39,13 +39,11 @@ _foo5 = require("foo5")
 /*after*/
 ;
 var test;
+var test2 =
 /*before*/
-exports.test = test;
+exports.test2 =
 /*after*/
-var test2 = 5;
-/*before*/
-exports.test2 = test2;
-/*after*/
+5;
 /*before*/
 (0,
 /*after*/

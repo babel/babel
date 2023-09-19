@@ -18,5 +18,4 @@ _forEachInstanceProperty(_context = _Object$keys(_mod)).call(_context, function 
   if (key in exports && exports[key] === _mod[key]) return;
   exports[key] = _mod[key];
 });
-const exp = _bar.default + _fuz.baz;
-exports.exp = exp;
+const exp = exports.exp = _bar.default + _fuz.baz;

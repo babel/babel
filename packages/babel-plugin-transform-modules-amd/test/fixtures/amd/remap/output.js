@@ -6,8 +6,7 @@ define(["exports"], function (_exports) {
   });
   _exports.test = _exports.f = _exports.e = _exports.c = _exports.a = void 0;
   var _test;
-  var test = 2;
-  _exports.test = test;
+  var test = _exports.test = 2;
   _exports.test = test = 5;
   _test = test++, _exports.test = test, _test;
   (function () {
@@ -15,13 +14,10 @@ define(["exports"], function (_exports) {
     test = 3;
     test++;
   })();
-  var a = 2;
-  _exports.a = a;
+  var a = _exports.a = 2;
   _exports.a = a = 3;
-  var b = 2;
-  _exports.c = b;
+  var b = _exports.c = 2;
   _exports.c = b = 3;
-  var d = 3;
-  _exports.f = _exports.e = d;
+  var d = _exports.f = _exports.e = 3;
   _exports.f = _exports.e = d = 4;
 });
