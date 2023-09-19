@@ -37,8 +37,6 @@ import type { Targets, InputTargets } from "@babel/helper-compilation-targets";
 import availablePlugins from "./available-plugins.ts";
 import { declarePreset } from "@babel/helper-plugin-utils";
 
-type ModuleTransformationsType =
-  typeof import("./module-transformations").default;
 import type { BuiltInsOption, ModuleOption, Options } from "./types.ts";
 
 // TODO: Remove in Babel 8
@@ -117,34 +115,33 @@ export const transformIncludesAndExcludes = (opts: Array<string>): any => {
   );
 };
 
-export const getModulesPluginNames = ({
+export function getModulesPluginNames({
   modules,
-  transformations,
-  shouldTransformESM,
   shouldTransformDynamicImport,
   shouldTransformExportNamespaceFrom,
 }: {
-  modules: ModuleOption;
-  transformations: ModuleTransformationsType;
-  shouldTransformESM: boolean;
+  modules: Exclude<ModuleOption, "auto">;
   shouldTransformDynamicImport: boolean;
   shouldTransformExportNamespaceFrom: boolean;
-}) => {
+}) {
+  // For backward compat since this function is exported
+  if (!process.env.BABEL_8_BREAKING) {
+    if (arguments[0].modules === "auto") modules = "cjs";
+    if (arguments[0].shouldTransformESM === false) modules = false;
+  }
   const modulesPluginNames = [];
-  if (modules !== false && transformations[modules]) {
-    if (shouldTransformESM) {
-      modulesPluginNames.push(transformations[modules]);
-    }
+  if (modules) {
+    modulesPluginNames.push(moduleTransformations[modules]);
+  }
 
-    if (shouldTransformDynamicImport) {
-      if (shouldTransformESM && modules !== "umd") {
-        modulesPluginNames.push("transform-dynamic-import");
-      } else {
-        console.warn(
-          "Dynamic import can only be transformed when transforming ES" +
-            " modules to AMD, CommonJS or SystemJS.",
-        );
-      }
+  if (shouldTransformDynamicImport) {
+    if (modules && modules !== "umd") {
+      modulesPluginNames.push("transform-dynamic-import");
+    } else {
+      console.warn(
+        "Dynamic import can only be transformed when transforming ES" +
+          " modules to AMD, CommonJS or SystemJS.",
+      );
     }
   }
 
@@ -157,15 +154,12 @@ export const getModulesPluginNames = ({
     if (!shouldTransformDynamicImport) {
       modulesPluginNames.push("syntax-dynamic-import");
     }
-    if (!shouldTransformExportNamespaceFrom) {
-      modulesPluginNames.push("syntax-export-namespace-from");
-    }
     modulesPluginNames.push("syntax-top-level-await");
     modulesPluginNames.push("syntax-import-meta");
   }
 
   return modulesPluginNames;
-};
+}
 
 const getCoreJSOptions = ({
   useBuiltIns,
@@ -312,16 +306,19 @@ function getLocalTargets(
 }
 
 function supportsStaticESM(caller: CallerMetadata | undefined) {
+  // TODO(Babel 8): Fallback to true
   // @ts-expect-error supportsStaticESM is not defined in CallerMetadata
   return !!caller?.supportsStaticESM;
 }
 
 function supportsDynamicImport(caller: CallerMetadata | undefined) {
+  // TODO(Babel 8): Fallback to true
   // @ts-expect-error supportsDynamicImport is not defined in CallerMetadata
   return !!caller?.supportsDynamicImport;
 }
 
 function supportsExportNamespaceFrom(caller: CallerMetadata | undefined) {
+  // TODO(Babel 8): Fallback to null
   // @ts-expect-error supportsExportNamespaceFrom is not defined in CallerMetadata
   return !!caller?.supportsExportNamespaceFrom;
 }
@@ -340,7 +337,7 @@ export default declarePreset((api, opts: Options) => {
     ignoreBrowserslistConfig,
     include: optionsInclude,
     loose,
-    modules,
+    modules: optionsModules,
     shippedProposals,
     spec,
     targets: optionsTargets,
@@ -398,21 +395,20 @@ option \`forceAllTransforms: true\` instead.
   const exclude = transformIncludesAndExcludes(optionsExclude);
 
   const compatData = getPluginList(shippedProposals, bugfixes);
-  const shouldSkipExportNamespaceFrom =
-    (modules === "auto" && api.caller(supportsExportNamespaceFrom)) ||
-    (modules === false &&
-      !isRequired("transform-export-namespace-from", transformTargets, {
-        compatData,
-        includes: include.plugins,
-        excludes: exclude.plugins,
-      }));
+  const modules =
+    optionsModules === "auto"
+      ? api.caller(supportsStaticESM)
+        ? false
+        : "commonjs"
+      : optionsModules;
+  const shouldTransformDynamicImport =
+    optionsModules === "auto" ? !api.caller(supportsDynamicImport) : !!modules;
+  const shouldTransformExportNamespaceFrom =
+    optionsModules === "auto" && !api.caller(supportsExportNamespaceFrom);
   const modulesPluginNames = getModulesPluginNames({
     modules,
-    transformations: moduleTransformations,
-    shouldTransformESM: modules !== "auto" || !api.caller(supportsStaticESM),
-    shouldTransformDynamicImport:
-      modules !== "auto" || !api.caller(supportsDynamicImport),
-    shouldTransformExportNamespaceFrom: !shouldSkipExportNamespaceFrom,
+    shouldTransformDynamicImport,
+    shouldTransformExportNamespaceFrom,
   });
 
   const pluginNames = filterItems(
@@ -494,7 +490,7 @@ option \`forceAllTransforms: true\` instead.
     console.log("@babel/preset-env: `DEBUG` option");
     console.log("\nUsing targets:");
     console.log(JSON.stringify(prettifyTargets(targets), null, 2));
-    console.log(`\nUsing modules transform: ${modules.toString()}`);
+    console.log(`\nUsing modules transform: ${optionsModules.toString()}`);
     console.log("\nUsing plugins:");
     pluginNames.forEach(pluginName => {
       logPlugin(pluginName, targets, compatData);

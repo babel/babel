@@ -20,9 +20,14 @@ type EnvFunction = {
   (envVars: Array<string>): boolean;
 };
 
-type CallerFactory = (
-  extractor: (callerMetadata: CallerMetadata | undefined) => unknown,
-) => SimpleType;
+type CallerFactory = {
+  <T extends SimpleType>(
+    extractor: (callerMetadata: CallerMetadata | undefined) => T,
+  ): T;
+  (
+    extractor: (callerMetadata: CallerMetadata | undefined) => unknown,
+  ): SimpleType;
+};
 type TargetsFunction = () => Targets;
 type AssumptionFunction = (name: AssumptionName) => boolean | undefined;
 

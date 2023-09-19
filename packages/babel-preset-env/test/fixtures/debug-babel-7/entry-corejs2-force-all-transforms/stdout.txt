@@ -51,6 +51,7 @@ Using plugins:
   transform-property-literals { }
   transform-reserved-words { }
   transform-export-namespace-from { chrome < 72 }
+  syntax-dynamic-import
   syntax-top-level-await
   syntax-import-meta
 corejs2: `DEBUG` option
