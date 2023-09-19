@@ -1,0 +1,22 @@
+{
+  "version": 3,
+  "names": [
+    "x",
+    "babelHelpers",
+    "using",
+    "_stack",
+    "fn",
+    "doSomethingWith",
+    "_",
+    "_error",
+    "_hasError",
+    "dispose"
+  ],
+  "sources": [
+    "source-maps/sync/input.js"
+  ],
+  "sourcesContent": [
+    "{\n  using x = fn();\n  doSomethingWith(x);\n}"
+  ],
+  "mappings": ";;EACE,MAAMA,CAAC,GAAAC,YAAA,CAAAC,KAAA,CAAAC,MAAA,EAAGC,EAAE,CAAC,CAAC;EACdC,eAAe,CAACL,CAAC,CAAC;AAAC,SAAAM,CAAA;EAAA,IAAAC,MAAA,GAAAD,CAAA;EAAA,IAAAE,SAAA;AAAA;EAAAP,YAAA,CAAAQ,OAAA,CAAAN,MAAA,EAAAI,MAAA,EAAAC,SAAA;AAAA"
+}

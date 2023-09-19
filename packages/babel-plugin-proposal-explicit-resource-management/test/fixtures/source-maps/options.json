@@ -1,0 +1,4 @@
+{
+  "sourceMaps": true,
+  "plugins": ["proposal-explicit-resource-management"]
+}
