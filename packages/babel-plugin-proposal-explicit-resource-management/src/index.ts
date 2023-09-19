@@ -84,7 +84,9 @@ export default declare(api => {
         } finally {
           ${disposeCall}
         }
-      `;
+      ` as t.TryStatement;
+
+      t.inherits(replacement.block, path.node);
 
       const { parentPath } = path;
       if (
