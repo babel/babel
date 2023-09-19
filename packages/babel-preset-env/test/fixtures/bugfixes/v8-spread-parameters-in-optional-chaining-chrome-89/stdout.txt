@@ -22,7 +22,7 @@ Using plugins:
   bugfix/transform-v8-spread-parameters-in-optional-chaining { chrome < 91 }
   transform-modules-commonjs
   transform-dynamic-import
-  transform-export-namespace-from { }
+  syntax-export-namespace-from
   syntax-top-level-await
   syntax-import-meta
 

@@ -22,7 +22,7 @@ Using plugins:
   bugfix/transform-safari-id-destructuring-collision-in-function-expression { safari < 16.3 }
   transform-modules-commonjs
   transform-dynamic-import
-  transform-export-namespace-from { }
+  syntax-export-namespace-from
   syntax-top-level-await
   syntax-import-meta
 

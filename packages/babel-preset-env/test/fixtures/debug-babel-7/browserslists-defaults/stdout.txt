@@ -30,7 +30,7 @@ Using plugins:
   syntax-object-rest-spread
   transform-modules-commonjs
   transform-dynamic-import
-  transform-export-namespace-from { }
+  syntax-export-namespace-from
   syntax-top-level-await
   syntax-import-meta
 
