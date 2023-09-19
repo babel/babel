@@ -399,7 +399,7 @@ option \`forceAllTransforms: true\` instead.
 
   const compatData = getPluginList(shippedProposals, bugfixes);
   const shouldSkipExportNamespaceFrom =
-    (modules === "auto" && api.caller?.(supportsExportNamespaceFrom)) ||
+    (modules === "auto" && api.caller(supportsExportNamespaceFrom)) ||
     (modules === false &&
       !isRequired("transform-export-namespace-from", transformTargets, {
         compatData,
@@ -409,11 +409,9 @@ option \`forceAllTransforms: true\` instead.
   const modulesPluginNames = getModulesPluginNames({
     modules,
     transformations: moduleTransformations,
-    // TODO: Remove the 'api.caller' check eventually. Just here to prevent
-    // unnecessary breakage in the short term for users on older betas/RCs.
-    shouldTransformESM: modules !== "auto" || !api.caller?.(supportsStaticESM),
+    shouldTransformESM: modules !== "auto" || !api.caller(supportsStaticESM),
     shouldTransformDynamicImport:
-      modules !== "auto" || !api.caller?.(supportsDynamicImport),
+      modules !== "auto" || !api.caller(supportsDynamicImport),
     shouldTransformExportNamespaceFrom: !shouldSkipExportNamespaceFrom,
   });
 
