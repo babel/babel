@@ -13,9 +13,10 @@ let isRunningMinSupportedCoreVersion = null;
 
 module.exports = function parse(code, options, client) {
   // Ensure we're using a version of `@babel/core` that includes `parse()` and `tokTypes`.
-  const minSupportedCoreVersion = process.env.BABEL_8_BREAKING
-    ? PACKAGE_JSON.version
-    : ">=7.2.0";
+  const minSupportedCoreVersion =
+    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
+      ? PACKAGE_JSON.version
+      : ">=7.2.0";
 
   if (typeof isRunningMinSupportedCoreVersion !== "boolean") {
     isRunningMinSupportedCoreVersion = semver.satisfies(
