@@ -41,7 +41,6 @@ node -e "
 node -e "
   var config = fs.readFileSync('./babel.config.js', 'utf8')
     .replace(/browserslistConfigFile:[^,]*,/g, '')
-    .replace(/assumptions,/, '')
     .replace(/targets,/g, '')
     .replace(/assumptions,/g, '')
     .replace(/assumptions:[^,]*,/g, '')
