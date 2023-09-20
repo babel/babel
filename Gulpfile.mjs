@@ -429,9 +429,8 @@ function buildRollup(packages, buildStandalone) {
             }),
             rollupBabel({
               envName,
-              babelrc: false,
               babelHelpers: "bundled",
-              extends: "./babel.config.js",
+              configFile: "./babel.config.js",
               extensions: [".ts", ".js", ".mjs", ".cjs"],
               ignore: ["packages/babel-runtime/helpers/*.js"],
             }),
