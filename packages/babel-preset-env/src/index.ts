@@ -115,7 +115,7 @@ export const transformIncludesAndExcludes = (opts: Array<string>): any => {
   );
 };
 
-export function getModulesPluginNames({
+function getModulesPluginNames({
   modules,
   shouldTransformDynamicImport,
   shouldTransformExportNamespaceFrom,
@@ -124,11 +124,6 @@ export function getModulesPluginNames({
   shouldTransformDynamicImport: boolean;
   shouldTransformExportNamespaceFrom: boolean;
 }) {
-  // For backward compat since this function is exported
-  if (!process.env.BABEL_8_BREAKING) {
-    if (arguments[0].modules === "auto") modules = "cjs";
-    if (arguments[0].shouldTransformESM === false) modules = false;
-  }
   const modulesPluginNames = [];
   if (modules) {
     modulesPluginNames.push(moduleTransformations[modules]);
@@ -505,3 +500,55 @@ option \`forceAllTransforms: true\` instead.
 
   return { plugins };
 });
+
+// TODO(Babel 8): This is only here for backward compatibility. Remove it.
+export { getModulesPluginNamesBackwardCompat as getModulesPluginNames };
+const getModulesPluginNamesBackwardCompat = ({
+  modules,
+  transformations,
+  shouldTransformESM,
+  shouldTransformDynamicImport,
+  shouldTransformExportNamespaceFrom,
+}: {
+  modules: ModuleOption;
+  transformations: typeof import("./module-transformations").default;
+  shouldTransformESM: boolean;
+  shouldTransformDynamicImport: boolean;
+  shouldTransformExportNamespaceFrom: boolean;
+}) => {
+  const modulesPluginNames = [];
+  if (modules !== false && transformations[modules]) {
+    if (shouldTransformESM) {
+      modulesPluginNames.push(transformations[modules]);
+    }
+
+    if (shouldTransformDynamicImport) {
+      if (shouldTransformESM && modules !== "umd") {
+        modulesPluginNames.push("transform-dynamic-import");
+      } else {
+        console.warn(
+          "Dynamic import can only be transformed when transforming ES" +
+            " modules to AMD, CommonJS or SystemJS.",
+        );
+      }
+    }
+  }
+
+  if (shouldTransformExportNamespaceFrom) {
+    modulesPluginNames.push("transform-export-namespace-from");
+  }
+
+  if (!process.env.BABEL_8_BREAKING) {
+    // Enable module-related syntax plugins for older Babel versions
+    if (!shouldTransformDynamicImport) {
+      modulesPluginNames.push("syntax-dynamic-import");
+    }
+    if (!shouldTransformExportNamespaceFrom) {
+      modulesPluginNames.push("syntax-export-namespace-from");
+    }
+    modulesPluginNames.push("syntax-top-level-await");
+    modulesPluginNames.push("syntax-import-meta");
+  }
+
+  return modulesPluginNames;
+};

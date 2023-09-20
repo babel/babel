@@ -73,6 +73,7 @@ describe("babel-preset-env", () => {
           }),
         ).toEqual([
           "syntax-dynamic-import",
+          "syntax-export-namespace-from",
           "syntax-top-level-await",
           "syntax-import-meta",
         ]);
@@ -91,6 +92,7 @@ describe("babel-preset-env", () => {
             }),
           ).toEqual([
             "syntax-dynamic-import",
+            "syntax-export-namespace-from",
             "syntax-top-level-await",
             "syntax-import-meta",
           ]);
@@ -112,6 +114,7 @@ describe("babel-preset-env", () => {
                 : [
                     "transform-modules-commonjs",
                     "syntax-dynamic-import",
+                    "syntax-export-namespace-from",
                     "syntax-top-level-await",
                     "syntax-import-meta",
                   ],
@@ -133,6 +136,7 @@ describe("babel-preset-env", () => {
                 : [
                     "transform-modules-systemjs",
                     "transform-dynamic-import",
+                    "syntax-export-namespace-from",
                     "syntax-top-level-await",
                     "syntax-import-meta",
                   ],
