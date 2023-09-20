@@ -19,11 +19,10 @@ Using plugins:
   syntax-optional-catch-binding
   syntax-async-generators
   syntax-object-rest-spread
-  syntax-export-namespace-from
+  transform-export-namespace-from { }
   bugfix/transform-v8-spread-parameters-in-optional-chaining { chrome < 91 }
   transform-modules-commonjs
   transform-dynamic-import
-  transform-export-namespace-from { }
   syntax-top-level-await
   syntax-import-meta
 

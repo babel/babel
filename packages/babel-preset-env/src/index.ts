@@ -115,15 +115,10 @@ export const transformIncludesAndExcludes = (opts: Array<string>): any => {
   );
 };
 
-function getModulesPluginNames({
-  modules,
-  shouldTransformDynamicImport,
-  shouldTransformExportNamespaceFrom,
-}: {
-  modules: Exclude<ModuleOption, "auto">;
-  shouldTransformDynamicImport: boolean;
-  shouldTransformExportNamespaceFrom: boolean;
-}) {
+function getSpecialModulesPluginNames(
+  modules: Exclude<ModuleOption, "auto">,
+  shouldTransformDynamicImport: boolean,
+) {
   const modulesPluginNames = [];
   if (modules) {
     modulesPluginNames.push(moduleTransformations[modules]);
@@ -138,10 +133,6 @@ function getModulesPluginNames({
           " modules to AMD, CommonJS or SystemJS.",
       );
     }
-  }
-
-  if (shouldTransformExportNamespaceFrom) {
-    modulesPluginNames.push("transform-export-namespace-from");
   }
 
   if (!process.env.BABEL_8_BREAKING) {
@@ -398,20 +389,26 @@ option \`forceAllTransforms: true\` instead.
       : optionsModules;
   const shouldTransformDynamicImport =
     optionsModules === "auto" ? !api.caller(supportsDynamicImport) : !!modules;
-  const shouldTransformExportNamespaceFrom =
-    optionsModules === "auto" && !api.caller(supportsExportNamespaceFrom);
-  const modulesPluginNames = getModulesPluginNames({
-    modules,
-    shouldTransformDynamicImport,
-    shouldTransformExportNamespaceFrom,
-  });
+
+  // If the caller does not support export-namespace-from, we forcefully add
+  // the plugin to `includes`.
+  // TODO(Babel 8): stop doing this, similarly to how we don't do this for any
+  // other plugin. We can consider adding bundlers as targets in the future,
+  // but we should not have a one-off special case for this plugin.
+  if (
+    optionsModules === "auto" &&
+    !api.caller(supportsExportNamespaceFrom) &&
+    !exclude.plugins.has("transform-export-namespace-from")
+  ) {
+    include.plugins.add("transform-export-namespace-from");
+  }
 
   const pluginNames = filterItems(
     compatData,
     include.plugins,
     exclude.plugins,
     transformTargets,
-    modulesPluginNames,
+    getSpecialModulesPluginNames(modules, shouldTransformDynamicImport),
     getOptionSpecificExcludesFor({ loose }),
     pluginSyntaxMap,
   );
