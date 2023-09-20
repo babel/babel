@@ -21,6 +21,7 @@ Using plugins:
   syntax-optional-catch-binding
   syntax-async-generators
   syntax-object-rest-spread
+  syntax-export-namespace-from
   transform-modules-commonjs
   transform-dynamic-import
   transform-export-namespace-from { }

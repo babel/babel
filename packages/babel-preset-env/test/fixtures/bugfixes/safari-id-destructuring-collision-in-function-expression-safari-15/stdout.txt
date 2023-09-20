@@ -20,6 +20,7 @@ Using plugins:
   transform-parameters { safari < 16.3 }
   syntax-async-generators
   syntax-object-rest-spread
+  syntax-export-namespace-from
   transform-modules-commonjs
   transform-dynamic-import
   transform-export-namespace-from { }

@@ -19,6 +19,7 @@ const pluginSyntaxObject = process.env.BABEL_8_BREAKING
       "transform-async-generator-functions": "syntax-async-generators",
       "transform-class-properties": "syntax-class-properties",
       "transform-class-static-block": "syntax-class-static-block",
+      "transform-export-namespace-from": "syntax-export-namespace-from",
       "transform-json-strings": "syntax-json-strings",
       "transform-nullish-coalescing-operator":
         "syntax-nullish-coalescing-operator",
