@@ -218,7 +218,7 @@ export default declare(api => {
                   .then(WebAssembly.compile)
               `;
           return template.expression.ast`
-            typeof process === "object" && process.versions.node
+            typeof process === "object" && process.versions?.node
               ? ${node}
               : ${web}
           `;
@@ -226,7 +226,7 @@ export default declare(api => {
         break;
       case p({ web: true, node: true, webIMR: false, nodeIMR: true }):
         buildFetchAsync = specifier => template.expression.ast`
-          typeof process === "object" && process.versions.node
+          typeof process === "object" && process.versions?.node
             ? import("fs").then(fs =>
                 new WebAssembly.Module(fs.readFileSync(
                   new URL(${imr(specifier)})
