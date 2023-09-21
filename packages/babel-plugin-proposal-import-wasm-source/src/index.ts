@@ -295,10 +295,23 @@ export default declare(api => {
     }
 
     buildFetchAsync ??= buildFetchSync;
-    const buildFetchAsyncWrapped: typeof buildFetchAsync = (expression, path) =>
-      template.expression.ast`
-        Promise.resolve().then(() => ${buildFetchAsync(expression, path)})
-      `;
+    const buildFetchAsyncWrapped: typeof buildFetchAsync = (
+      expression,
+      path,
+    ) => {
+      if (t.isStringLiteral(expression)) {
+        return template.expression.ast`
+          Promise.resolve().then(() => ${buildFetchAsync(expression, path)})
+        `;
+      } else {
+        return template.expression.ast`
+          Promise.resolve(\`\${${expression}}\`).then((s) => ${buildFetchAsync(
+            t.identifier("s"),
+            path,
+          )})
+        `;
+      }
+    };
 
     return {
       buildFetch: buildFetchSync || buildFetchAsync,
