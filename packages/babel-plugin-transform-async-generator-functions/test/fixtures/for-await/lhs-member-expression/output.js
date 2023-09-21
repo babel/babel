@@ -1,4 +1,4 @@
-babelHelpers.asyncToGenerator(function* () {
+babelHelpers.asyncToGenerator2(function* () {
   var _iteratorAbruptCompletion = false;
   var _didIteratorError = false;
   var _iteratorError;

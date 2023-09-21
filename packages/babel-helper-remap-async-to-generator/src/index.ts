@@ -1,5 +1,3 @@
-/* @noflow */
-
 import type { NodePath } from "@babel/traverse";
 import wrapFunction from "@babel/helper-wrap-function";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
@@ -37,8 +35,9 @@ const awaitVisitor = traverse.visitors.merge<{ wrapAwait: t.Expression }>([
 export default function (
   path: NodePath<t.Function>,
   helpers: {
-    wrapAsync: t.Expression;
-    wrapAwait?: t.Expression;
+    wrapAsync: t.Identifier | string;
+    wrapAwait?: t.Identifier;
+    callAsync?: t.Identifier;
   },
   noNewArrows?: boolean,
   ignoreFunctionLength?: boolean,
@@ -54,9 +53,10 @@ export default function (
 
   wrapFunction(
     path,
-    cloneNode(helpers.wrapAsync),
+    helpers.wrapAsync,
     noNewArrows,
     ignoreFunctionLength,
+    helpers.callAsync,
   );
 
   const isProperty =
@@ -65,7 +65,7 @@ export default function (
     path.parentPath.isObjectProperty() ||
     path.parentPath.isClassProperty();
 
-  if (!isProperty && !isIIFE && path.isExpression()) {
+  if (!isProperty && !isIIFE && path.isCallExpression()) {
     annotateAsPure(path);
   }
 
@@ -99,3 +99,5 @@ export default function (
     return false;
   }
 }
+
+export { onCallExpressionExit } from "@babel/helper-wrap-function";

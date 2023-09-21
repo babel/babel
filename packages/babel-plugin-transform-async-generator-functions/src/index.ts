@@ -1,5 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import remapAsyncToGenerator from "@babel/helper-remap-async-to-generator";
+import * as remapAsyncToGenerator from "@babel/helper-remap-async-to-generator";
 import type { NodePath, Visitor } from "@babel/traverse";
 import { traverse, types as t, type PluginPass } from "@babel/core";
 import rewriteForAwait from "./for-await.ts";
@@ -85,9 +85,10 @@ export default declare(api => {
 
       // We don't need to pass the noNewArrows assumption, since
       // async generators are never arrow functions.
-      remapAsyncToGenerator(path, {
+      remapAsyncToGenerator.default(path, {
         wrapAsync: state.addHelper("wrapAsyncGenerator"),
         wrapAwait: state.addHelper("awaitAsyncGenerator"),
+        callAsync: state.addHelper("callAsyncGenerator"),
       });
     },
   };
@@ -101,6 +102,11 @@ export default declare(api => {
           require("@babel/plugin-syntax-async-generators").default,
 
     visitor: {
+      CallExpression: {
+        exit(path) {
+          remapAsyncToGenerator.onCallExpressionExit(path);
+        },
+      },
       Program(path, state) {
         // We need to traverse the ast here (instead of just vising Function
         // in the top level visitor) because for-await needs to run before the

@@ -1,6 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxFunctionSent from "@babel/plugin-syntax-function-sent";
-import wrapFunction from "@babel/helper-wrap-function";
+import * as wrapFunction from "@babel/helper-wrap-function";
 import { types as t } from "@babel/core";
 import type { Visitor } from "@babel/traverse";
 
@@ -43,6 +43,9 @@ export default declare(api => {
     inherits: syntaxFunctionSent,
 
     visitor: {
+      CallExpression(path) {
+        wrapFunction.onCallExpressionExit(path);
+      },
       MetaProperty(path, state) {
         if (!isFunctionSent(path.node)) return;
 
@@ -62,7 +65,13 @@ export default declare(api => {
           ]),
         );
 
-        wrapFunction(fnPath, state.addHelper("skipFirstGeneratorNext"));
+        wrapFunction.default(
+          fnPath,
+          "skipFirstGeneratorNext",
+          undefined,
+          undefined,
+          state.addHelper("callSkipFirstGeneratorNext"),
+        );
       },
     },
   };

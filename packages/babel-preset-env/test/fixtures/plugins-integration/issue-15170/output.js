@@ -1,6 +1,7 @@
-var _this = this;
-x = /*#__PURE__*/function () {
-  var _ref = function (_x) {
+var _this = this,
+  _ref;
+x = function x(_x3) {
+  return function (_x) {
     var _marked = /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(x);
     function x(_x2) {
       var _args = arguments;
@@ -20,7 +21,7 @@ x = /*#__PURE__*/function () {
       return _x.toString();
     };
     return x;
-  }( /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee(x) {
+  }(_ref = _ref || /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee(x) {
     return babelHelpers.regeneratorRuntime().wrap(function _callee$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
@@ -32,7 +33,4 @@ x = /*#__PURE__*/function () {
       }
     }, _callee, this);
   }));
-  return function (_x3) {
-    return _ref.apply(this, arguments);
-  };
-}().bind(this);
+};

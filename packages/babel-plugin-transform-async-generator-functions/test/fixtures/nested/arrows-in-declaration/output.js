@@ -1,18 +1,14 @@
 function g() {
-  return _g.apply(this, arguments);
-}
-function _g() {
-  _g = babelHelpers.wrapAsyncGenerator(function* () {
+  return babelHelpers.callAsyncGenerator(function* () {
     var _this = this;
     () => this;
     function f() {
       () => this;
     }
-    /*#__PURE__*/babelHelpers.asyncToGenerator(function* () {
+    /*#__PURE__*/babelHelpers.asyncToGenerator2(function* () {
       _this;
       yield 1;
     });
     yield babelHelpers.awaitAsyncGenerator(1);
-  });
-  return _g.apply(this, arguments);
+  }, this, arguments);
 }

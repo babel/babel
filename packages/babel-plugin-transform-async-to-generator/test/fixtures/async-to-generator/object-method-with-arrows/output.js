@@ -1,7 +1,7 @@
 class Class {
   method() {
     var _this = this;
-    return babelHelpers.asyncToGenerator(function* () {
+    return babelHelpers.callAsync(function* () {
       _this;
       () => _this;
       () => {
@@ -13,7 +13,7 @@ class Class {
           () => {
             this;
           };
-          /*#__PURE__*/babelHelpers.asyncToGenerator(function* () {
+          /*#__PURE__*/babelHelpers.asyncToGenerator2(function* () {
             _this2;
           });
         }
@@ -24,10 +24,10 @@ class Class {
         () => {
           this;
         };
-        /*#__PURE__*/babelHelpers.asyncToGenerator(function* () {
+        /*#__PURE__*/babelHelpers.asyncToGenerator2(function* () {
           _this3;
         });
       }
-    })();
+    });
   }
 }

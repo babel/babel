@@ -1,18 +1,14 @@
-babelHelpers.asyncToGenerator(function* () {
+babelHelpers.asyncToGenerator2(function* () {
   yield 'ok';
 })();
-babelHelpers.asyncToGenerator(function* () {
+babelHelpers.asyncToGenerator2(function* () {
   yield 'ok';
 })();
-/*#__PURE__*/(function () {
-  var _notIIFE = babelHelpers.asyncToGenerator(function* () {
+(function notIIFE() {
+  return babelHelpers.callAsync(function* () {
     yield 'ok';
-  });
-  function notIIFE() {
-    return _notIIFE.apply(this, arguments);
-  }
-  return notIIFE;
-})();
-/*#__PURE__*/babelHelpers.asyncToGenerator(function* () {
+  }, this, arguments);
+});
+/*#__PURE__*/babelHelpers.asyncToGenerator2(function* () {
   yield 'not iife';
 });

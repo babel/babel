@@ -1,5 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import remapAsyncToGenerator from "@babel/helper-remap-async-to-generator";
+import * as remapAsyncToGenerator from "@babel/helper-remap-async-to-generator";
 import { addNamed } from "@babel/helper-module-imports";
 import { types as t } from "@babel/core";
 
@@ -9,7 +9,7 @@ export interface Options {
 }
 
 type State = {
-  methodWrapper?: t.Identifier | t.SequenceExpression;
+  methodWrapper?: t.Identifier;
 };
 
 export default declare<State>((api, options: Options) => {
@@ -35,7 +35,7 @@ export default declare<State>((api, options: Options) => {
             wrapAsync = state.methodWrapper = addNamed(path, method, module);
           }
 
-          remapAsyncToGenerator(
+          remapAsyncToGenerator.default(
             path,
             { wrapAsync },
             noNewArrows,
@@ -50,12 +50,22 @@ export default declare<State>((api, options: Options) => {
     name: "transform-async-to-generator",
 
     visitor: {
+      CallExpression: {
+        exit(path) {
+          remapAsyncToGenerator.onCallExpressionExit(path);
+        },
+      },
       Function(path, state) {
         if (!path.node.async || path.node.generator) return;
 
-        remapAsyncToGenerator(
+        remapAsyncToGenerator.default(
           path,
-          { wrapAsync: state.addHelper("asyncToGenerator") },
+          {
+            wrapAsync: state.availableHelper("asyncToGenerator2")
+              ? "asyncToGenerator2"
+              : "asyncToGenerator",
+            callAsync: state.addHelper("callAsync"),
+          },
           noNewArrows,
           ignoreFunctionLength,
         );
