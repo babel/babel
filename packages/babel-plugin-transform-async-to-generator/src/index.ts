@@ -51,8 +51,10 @@ export default declare<State>((api, options: Options) => {
 
     visitor: {
       CallExpression: {
-        exit(path) {
-          remapAsyncToGenerator.onCallExpressionExit(path);
+        exit(path, state) {
+          if (state.availableHelper("callAsync")) {
+            remapAsyncToGenerator.onCallExpressionExit(path);
+          }
         },
       },
       Function(path, state) {
@@ -64,7 +66,9 @@ export default declare<State>((api, options: Options) => {
             wrapAsync: state.availableHelper("asyncToGenerator2")
               ? "asyncToGenerator2"
               : "asyncToGenerator",
-            callAsync: state.addHelper("callAsync"),
+            callAsync: state.availableHelper("callAsync")
+              ? state.addHelper("callAsync")
+              : undefined,
           },
           noNewArrows,
           ignoreFunctionLength,

@@ -88,7 +88,9 @@ export default declare(api => {
       remapAsyncToGenerator.default(path, {
         wrapAsync: state.addHelper("wrapAsyncGenerator"),
         wrapAwait: state.addHelper("awaitAsyncGenerator"),
-        callAsync: state.addHelper("callAsyncGenerator"),
+        callAsync: state.availableHelper("callAsyncGenerator")
+          ? state.addHelper("callAsyncGenerator")
+          : undefined,
       });
     },
   };
@@ -103,8 +105,10 @@ export default declare(api => {
 
     visitor: {
       CallExpression: {
-        exit(path) {
-          remapAsyncToGenerator.onCallExpressionExit(path);
+        exit(path, state) {
+          if (state.availableHelper("callAsyncGenerator")) {
+            remapAsyncToGenerator.onCallExpressionExit(path);
+          }
         },
       },
       Program(path, state) {

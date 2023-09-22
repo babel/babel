@@ -43,8 +43,10 @@ export default declare(api => {
     inherits: syntaxFunctionSent,
 
     visitor: {
-      CallExpression(path) {
-        wrapFunction.onCallExpressionExit(path);
+      CallExpression(path, state) {
+        if (state.availableHelper("callSkipFirstGeneratorNext")) {
+          wrapFunction.onCallExpressionExit(path);
+        }
       },
       MetaProperty(path, state) {
         if (!isFunctionSent(path.node)) return;
@@ -70,7 +72,9 @@ export default declare(api => {
           "skipFirstGeneratorNext",
           undefined,
           undefined,
-          state.addHelper("callSkipFirstGeneratorNext"),
+          state.availableHelper("callSkipFirstGeneratorNext")
+            ? state.addHelper("callSkipFirstGeneratorNext")
+            : undefined,
         );
       },
     },
