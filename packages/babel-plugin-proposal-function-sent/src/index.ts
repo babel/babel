@@ -67,15 +67,20 @@ export default declare(api => {
           ]),
         );
 
-        wrapFunction.default(
-          fnPath,
-          "skipFirstGeneratorNext",
-          undefined,
-          undefined,
-          state.availableHelper("callSkipFirstGeneratorNext")
-            ? state.addHelper("callSkipFirstGeneratorNext")
-            : undefined,
-        );
+        if (state.availableHelper("callSkipFirstGeneratorNext")) {
+          wrapFunction.default(
+            fnPath,
+            "skipFirstGeneratorNext",
+            undefined,
+            undefined,
+            "callSkipFirstGeneratorNext",
+          );
+        } else {
+          wrapFunction.default(
+            fnPath,
+            state.addHelper("skipFirstGeneratorNext"),
+          );
+        }
       },
     },
   };

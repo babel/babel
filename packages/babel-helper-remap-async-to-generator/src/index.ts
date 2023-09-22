@@ -11,7 +11,9 @@ const {
   yieldExpression,
 } = t;
 
-const awaitVisitor = traverse.visitors.merge<{ wrapAwait: t.Expression }>([
+const awaitVisitor = traverse.visitors.merge<{
+  wrapAwait: t.Expression | string;
+}>([
   {
     ArrowFunctionExpression(path) {
       path.skip();
@@ -23,7 +25,12 @@ const awaitVisitor = traverse.visitors.merge<{ wrapAwait: t.Expression }>([
       path.replaceWith(
         yieldExpression(
           wrapAwait
-            ? callExpression(cloneNode(wrapAwait), [argument.node])
+            ? callExpression(
+                typeof wrapAwait === "string"
+                  ? path.hub.addHelper(wrapAwait)
+                  : cloneNode(wrapAwait),
+                [argument.node],
+              )
             : argument.node,
         ),
       );
@@ -35,9 +42,9 @@ const awaitVisitor = traverse.visitors.merge<{ wrapAwait: t.Expression }>([
 export default function (
   path: NodePath<t.Function>,
   helpers: {
-    wrapAsync: t.Identifier | string;
-    wrapAwait?: t.Identifier;
-    callAsync?: t.Identifier;
+    wrapAsync: t.Expression | string;
+    wrapAwait?: t.Expression | string;
+    callAsync?: string;
   },
   noNewArrows?: boolean,
   ignoreFunctionLength?: boolean,

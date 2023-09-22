@@ -9,7 +9,7 @@ export interface Options {
 }
 
 type State = {
-  methodWrapper?: t.Identifier;
+  methodWrapper?: t.Expression;
 };
 
 export default declare<State>((api, options: Options) => {
@@ -60,19 +60,29 @@ export default declare<State>((api, options: Options) => {
       Function(path, state) {
         if (!path.node.async || path.node.generator) return;
 
-        remapAsyncToGenerator.default(
-          path,
-          {
-            wrapAsync: state.availableHelper("asyncToGenerator2")
-              ? "asyncToGenerator2"
-              : "asyncToGenerator",
-            callAsync: state.availableHelper("callAsync")
-              ? state.addHelper("callAsync")
-              : undefined,
-          },
-          noNewArrows,
-          ignoreFunctionLength,
-        );
+        if (
+          state.availableHelper("callAsync") &&
+          state.availableHelper("asyncToGenerator2")
+        ) {
+          remapAsyncToGenerator.default(
+            path,
+            {
+              wrapAsync: "asyncToGenerator2",
+              callAsync: "callAsync",
+            },
+            noNewArrows,
+            ignoreFunctionLength,
+          );
+        } else {
+          remapAsyncToGenerator.default(
+            path,
+            {
+              wrapAsync: state.addHelper("asyncToGenerator"),
+            },
+            noNewArrows,
+            ignoreFunctionLength,
+          );
+        }
       },
     },
   };

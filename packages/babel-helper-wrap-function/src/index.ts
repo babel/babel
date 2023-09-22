@@ -201,7 +201,7 @@ export default function wrapFunction(
   // TODO(Babel 8): Consider defaulting to false for spec compliance
   noNewArrows: boolean = true,
   ignoreFunctionLength: boolean = false,
-  callAsync?: t.Expression,
+  callAsync?: string,
 ) {
   if (callAsync) {
     if (path.isMethod()) {
@@ -214,7 +214,11 @@ export default function wrapFunction(
         blockStatement(body.body),
         true,
       );
-      body.body = [returnStatement(callExpression(callAsync, [container]))];
+      body.body = [
+        returnStatement(
+          callExpression(path.hub.addHelper(callAsync), [container]),
+        ),
+      ];
 
       // Regardless of whether or not the wrapped function is a an async method
       // or generator the outer function should not be
@@ -246,15 +250,14 @@ export default function wrapFunction(
       } else {
         node = path.node as t.FunctionDeclaration | t.FunctionExpression;
       }
-
-      const isDeclaration = isFunctionDeclaration(node);
+      const isDeclaration = path.isFunctionDeclaration();
 
       let built = node;
       if (!isCallExpression(node)) {
         functionId = node.id;
         node.id = null;
         node.type = "FunctionExpression";
-        built = callExpression(callAsync, [
+        built = callExpression(path.hub.addHelper(callAsync), [
           node as t.FunctionExpression,
           identifier("this"),
           identifier("arguments"),
@@ -289,8 +292,11 @@ export default function wrapFunction(
         wrapper.id ||
         (!ignoreFunctionLength && params.length)
       ) {
+        // Because we previously mutated some `FunctionDeclaration` nodes to `FunctionExpression`.
+        path.type = isDeclaration
+          ? "FunctionDeclaration"
+          : "FunctionExpression";
         path.replaceWith(wrapper);
-
         markCallWrapped(path);
       } else {
         // we can omit this wrapper as the conditions it protects for do not apply
@@ -305,11 +311,11 @@ export default function wrapFunction(
   }
 
   if (path.isMethod()) {
-    classOrObjectMethod(path, callId as t.Identifier);
+    classOrObjectMethod(path, callId as t.Expression);
   } else {
     plainFunction(
       path as NodePath<Exclude<t.Function, t.Method>>,
-      callId as t.Identifier,
+      callId as t.Expression,
       noNewArrows,
       ignoreFunctionLength,
     );

@@ -85,13 +85,18 @@ export default declare(api => {
 
       // We don't need to pass the noNewArrows assumption, since
       // async generators are never arrow functions.
-      remapAsyncToGenerator.default(path, {
-        wrapAsync: state.addHelper("wrapAsyncGenerator"),
-        wrapAwait: state.addHelper("awaitAsyncGenerator"),
-        callAsync: state.availableHelper("callAsyncGenerator")
-          ? state.addHelper("callAsyncGenerator")
-          : undefined,
-      });
+      if (state.availableHelper("callAsyncGenerator")) {
+        remapAsyncToGenerator.default(path, {
+          wrapAsync: "wrapAsyncGenerator",
+          wrapAwait: "awaitAsyncGenerator",
+          callAsync: "callAsyncGenerator",
+        });
+      } else {
+        remapAsyncToGenerator.default(path, {
+          wrapAsync: state.addHelper("wrapAsyncGenerator"),
+          wrapAwait: state.addHelper("awaitAsyncGenerator"),
+        });
+      }
     },
   };
 
