@@ -1,11 +1,11 @@
 {
-  "name": "@babel/plugin-syntax-import-source-phase",
+  "name": "@babel/plugin-syntax-import-source",
   "version": "7.22.5",
   "description": "Allow parsing of the `import source` proposal.",
   "repository": {
     "type": "git",
     "url": "https://github.com/babel/babel.git",
-    "directory": "packages/babel-plugin-syntax-import-source-phase"
+    "directory": "packages/babel-plugin-syntax-import-source"
   },
   "license": "MIT",
   "publishConfig": {

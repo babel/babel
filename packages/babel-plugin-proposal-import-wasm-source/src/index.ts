@@ -3,7 +3,7 @@ import type { NodePath } from "@babel/traverse";
 import type { types as t, File } from "@babel/core";
 import { addNamed } from "@babel/helper-module-imports";
 import { isRequired } from "@babel/helper-compilation-targets";
-import syntaxImportSourcePhase from "@babel/plugin-syntax-import-source-phase";
+import syntaxImportSourcePhase from "@babel/plugin-syntax-import-source";
 
 // `import.meta.resolve` compat data.
 // Source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import.meta/resolve#browser_compatibility

@@ -32,7 +32,7 @@
     "@babel/helper-compilation-targets": "workspace:^",
     "@babel/helper-module-imports": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^",
-    "@babel/plugin-syntax-import-source-phase": "workspace:^"
+    "@babel/plugin-syntax-import-source": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.22.0"

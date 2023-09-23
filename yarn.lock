@@ -1585,7 +1585,7 @@ __metadata:
     "@babel/helper-module-imports": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-syntax-import-source-phase": "workspace:^"
+    "@babel/plugin-syntax-import-source": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.22.0
   languageName: unknown
@@ -1982,9 +1982,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-syntax-import-source-phase@workspace:^, @babel/plugin-syntax-import-source-phase@workspace:packages/babel-plugin-syntax-import-source-phase":
+"@babel/plugin-syntax-import-source@workspace:^, @babel/plugin-syntax-import-source@workspace:packages/babel-plugin-syntax-import-source":
   version: 0.0.0-use.local
-  resolution: "@babel/plugin-syntax-import-source-phase@workspace:packages/babel-plugin-syntax-import-source-phase"
+  resolution: "@babel/plugin-syntax-import-source@workspace:packages/babel-plugin-syntax-import-source"
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
