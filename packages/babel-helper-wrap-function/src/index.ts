@@ -255,10 +255,8 @@ export default function wrapFunction(
       let built = node;
       if (!isCallExpression(node)) {
         functionId = node.id;
-        node.id = null;
-        node.type = "FunctionExpression";
         built = callExpression(path.hub.addHelper(callAsync), [
-          node as t.FunctionExpression,
+          functionExpression(null, node.params, node.body, node.generator),
           identifier("this"),
           identifier("arguments"),
         ]);
@@ -292,10 +290,6 @@ export default function wrapFunction(
         wrapper.id ||
         (!ignoreFunctionLength && params.length)
       ) {
-        // Because we previously mutated some `FunctionDeclaration` nodes to `FunctionExpression`.
-        path.type = isDeclaration
-          ? "FunctionDeclaration"
-          : "FunctionExpression";
         path.replaceWith(wrapper);
         markCallWrapped(path);
       } else {
