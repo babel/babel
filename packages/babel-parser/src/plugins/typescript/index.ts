@@ -164,8 +164,6 @@ const TSErrors = ParseErrorEnum`typescript`({
     "Tuple members must be labeled with a simple identifier.",
   MissingInterfaceName:
     "'interface' declarations must be followed by an identifier.",
-  MixedLabeledAndUnlabeledElements:
-    "Tuple members must all have names or all not have names.",
   NonAbstractClassHasAbstractMethod:
     "Abstract methods can only appear within an abstract class.",
   NonClassMethodPropertyHasAbstractModifer:
@@ -1050,7 +1048,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       // Validate the elementTypes to ensure that no mandatory elements
       // follow optional elements
       let seenOptionalElement = false;
-      let labeledElements: boolean | null = null;
       node.elementTypes.forEach(elementNode => {
         const { type } = elementNode;
 
@@ -1068,21 +1065,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         seenOptionalElement ||=
           (type === "TSNamedTupleMember" && elementNode.optional) ||
           type === "TSOptionalType";
-
-        // When checking labels, check the argument of the spread operator
-        let checkType = type;
-        if (type === "TSRestType") {
-          elementNode = elementNode.typeAnnotation;
-          checkType = elementNode.type;
-        }
-
-        const isLabeled = checkType === "TSNamedTupleMember";
-        labeledElements ??= isLabeled;
-        if (labeledElements !== isLabeled) {
-          this.raise(TSErrors.MixedLabeledAndUnlabeledElements, {
-            at: elementNode,
-          });
-        }
       });
 
       return this.finishNode(node, "TSTupleType");
