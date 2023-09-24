@@ -48,6 +48,7 @@ describe("normalize options", () => {
           "jsxPragmaFrag": "React.Fragment",
           "onlyRemoveTypeImports": true,
           "optimizeConstEnums": false,
+          "rewriteImportExtensions": false,
         }
       `);
     });
@@ -96,6 +97,7 @@ describe("normalize options", () => {
           "jsxPragmaFrag": "React.Fragment",
           "onlyRemoveTypeImports": undefined,
           "optimizeConstEnums": false,
+          "rewriteImportExtensions": false,
         }
       `);
     });
