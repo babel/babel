@@ -14,6 +14,7 @@ export { default as createFlowUnionType } from "./builders/flow/createFlowUnionT
 export { default as createTSUnionType } from "./builders/typescript/createTSUnionType.ts";
 export * from "./builders/generated/index.ts";
 export * from "./builders/generated/uppercase.js";
+export * from "./builders/productions.ts";
 
 // clone
 export { default as cloneNode } from "./clone/cloneNode.ts";
