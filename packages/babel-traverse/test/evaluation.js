@@ -197,10 +197,12 @@ describe("evaluation", function () {
     ).toBe("?x=1");
 
     if (process.env.BABEL_8_BREAKING) {
+      // eslint-disable-next-line jest/no-conditional-expect
       expect(
         getPath("btoa('babel');").get("body.0.expression").evaluate().value,
       ).toBe("YmFiZWw=");
 
+      // eslint-disable-next-line jest/no-conditional-expect
       expect(
         getPath("atob('YmFiZWw=');").get("body.0.expression").evaluate().value,
       ).toBe("babel");
