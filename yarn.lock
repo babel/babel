@@ -563,6 +563,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/helper-annotate-as-pure@npm:^7.22.5":
+  version: 7.22.5
+  resolution: "@babel/helper-annotate-as-pure@npm:7.22.5"
+  dependencies:
+    "@babel/types": ^7.22.5
+  checksum: 53da330f1835c46f26b7bf4da31f7a496dee9fd8696cca12366b94ba19d97421ce519a74a837f687749318f94d1a37f8d1abcbf35e8ed22c32d16373b2f6198d
+  languageName: node
+  linkType: hard
+
 "@babel/helper-annotate-as-pure@npm:^8.0.0-alpha.2":
   version: 8.0.0-alpha.2
   resolution: "@babel/helper-annotate-as-pure@npm:8.0.0-alpha.2"
@@ -700,6 +709,19 @@ __metadata:
     "@babel/core": ^7.0.0
   languageName: unknown
   linkType: soft
+
+"@babel/helper-create-regexp-features-plugin@npm:^7.18.6, @babel/helper-create-regexp-features-plugin@npm:^7.22.5":
+  version: 7.22.15
+  resolution: "@babel/helper-create-regexp-features-plugin@npm:7.22.15"
+  dependencies:
+    "@babel/helper-annotate-as-pure": ^7.22.5
+    regexpu-core: ^5.3.1
+    semver: ^6.3.1
+  peerDependencies:
+    "@babel/core": ^7.0.0
+  checksum: 0243b8d4854f1dc8861b1029a46d3f6393ad72f366a5a08e36a4648aa682044f06da4c6e87a456260e1e1b33c999f898ba591a0760842c1387bcc93fbf2151a6
+  languageName: node
+  linkType: hard
 
 "@babel/helper-create-regexp-features-plugin@npm:^8.0.0-alpha.2":
   version: 8.0.0-alpha.2
@@ -1690,6 +1712,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-proposal-unicode-property-regex@npm:^7.4.4":
+  version: 7.18.6
+  resolution: "@babel/plugin-proposal-unicode-property-regex@npm:7.18.6"
+  dependencies:
+    "@babel/helper-create-regexp-features-plugin": ^7.18.6
+    "@babel/helper-plugin-utils": ^7.18.6
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: a8575ecb7ff24bf6c6e94808d5c84bb5a0c6dd7892b54f09f4646711ba0ee1e1668032b3c43e3e1dfec2c5716c302e851ac756c1645e15882d73df6ad21ae951
+  languageName: node
+  linkType: hard
+
 "@babel/plugin-syntax-async-do-expressions@workspace:^, @babel/plugin-syntax-async-do-expressions@workspace:packages/babel-plugin-syntax-async-do-expressions":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-async-do-expressions@workspace:packages/babel-plugin-syntax-async-do-expressions"
@@ -2613,6 +2647,18 @@ __metadata:
     "@babel/core": ^7.0.0-0
   languageName: unknown
   linkType: soft
+
+"@babel/plugin-transform-dotall-regex@npm:^7.4.4":
+  version: 7.22.5
+  resolution: "@babel/plugin-transform-dotall-regex@npm:7.22.5"
+  dependencies:
+    "@babel/helper-create-regexp-features-plugin": ^7.22.5
+    "@babel/helper-plugin-utils": ^7.22.5
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  checksum: 409b658d11e3082c8f69e9cdef2d96e4d6d11256f005772425fb230cc48fd05945edbfbcb709dab293a1a2f01f9c8a5bb7b4131e632b23264039d9f95864b453
+  languageName: node
+  linkType: hard
 
 "@babel/plugin-transform-dotall-regex@npm:^8.0.0-alpha.2":
   version: 8.0.0-alpha.2
@@ -4013,7 +4059,7 @@ __metadata:
     "@babel/plugin-transform-unicode-property-regex": "workspace:^"
     "@babel/plugin-transform-unicode-regex": "workspace:^"
     "@babel/plugin-transform-unicode-sets-regex": "workspace:^"
-    "@babel/preset-modules": 0.1.6-no-external-plugins
+    "@babel/preset-modules": 0.1.6
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
     babel-plugin-polyfill-corejs2: ^0.4.5
@@ -4039,6 +4085,21 @@ __metadata:
     "@babel/core": ^7.0.0-0
   languageName: unknown
   linkType: soft
+
+"@babel/preset-modules@npm:0.1.6":
+  version: 0.1.6
+  resolution: "@babel/preset-modules@npm:0.1.6"
+  dependencies:
+    "@babel/helper-plugin-utils": ^7.0.0
+    "@babel/plugin-proposal-unicode-property-regex": ^7.4.4
+    "@babel/plugin-transform-dotall-regex": ^7.4.4
+    "@babel/types": ^7.4.4
+    esutils: ^2.0.2
+  peerDependencies:
+    "@babel/core": ^7.0.0-0 || ^8.0.0-0 <8.0.0
+  checksum: 9700992d2b9526e703ab49eb8c4cd0b26bec93594d57c6b808967619df1a387565e0e58829b65b5bd6d41049071ea0152c9195b39599515fddb3e52b09a55ff0
+  languageName: node
+  linkType: hard
 
 "@babel/preset-modules@npm:0.1.6-no-external-plugins":
   version: 0.1.6-no-external-plugins

@@ -89,7 +89,7 @@
     "@babel/plugin-transform-unicode-property-regex": "workspace:^",
     "@babel/plugin-transform-unicode-regex": "workspace:^",
     "@babel/plugin-transform-unicode-sets-regex": "workspace:^",
-    "@babel/preset-modules": "0.1.6-no-external-plugins",
+    "@babel/preset-modules": "0.1.6",
     "@babel/types": "workspace:^",
     "babel-plugin-polyfill-corejs2": "^0.4.5",
     "babel-plugin-polyfill-corejs3": "^0.8.3",
