@@ -15,7 +15,7 @@ export function arrayExpression(
 }
 export function assignmentExpression(
   operator: string,
-  left: t.LVal,
+  left: t.LVal | t.OptionalMemberExpression,
   right: t.Expression,
 ): t.AssignmentExpression {
   return validateNode<t.AssignmentExpression>({

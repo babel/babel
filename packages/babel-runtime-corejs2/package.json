@@ -945,6 +945,15 @@
       "./helpers/identity.js"
     ],
     "./helpers/esm/identity": "./helpers/esm/identity.js",
+    "./helpers/nullishReceiverError": [
+      {
+        "node": "./helpers/nullishReceiverError.js",
+        "import": "./helpers/esm/nullishReceiverError.js",
+        "default": "./helpers/nullishReceiverError.js"
+      },
+      "./helpers/nullishReceiverError.js"
+    ],
+    "./helpers/esm/nullishReceiverError": "./helpers/esm/nullishReceiverError.js",
     "./package": "./package.json",
     "./package.json": "./package.json",
     "./regenerator": "./regenerator/index.js",

@@ -311,7 +311,7 @@ export interface ArrayExpression extends BaseNode {
 export interface AssignmentExpression extends BaseNode {
   type: "AssignmentExpression";
   operator: string;
-  left: LVal;
+  left: LVal | OptionalMemberExpression;
   right: Expression;
 }
 

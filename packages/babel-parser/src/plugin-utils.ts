@@ -232,6 +232,17 @@ export function validatePlugins(plugins: PluginList) {
     error.missingPlugins = "doExpressions";
     throw error;
   }
+
+  if (
+    hasPlugin(plugins, "optionalChainingAssign") &&
+    getPluginOption(plugins, "optionalChainingAssign", "version") !== "2023-07"
+  ) {
+    throw new Error(
+      "The 'optionalChainingAssign' plugin requires a 'version' option," +
+        " representing the last proposal update. Currently, the" +
+        " only supported value is '2023-07'.",
+    );
+  }
 }
 
 // These plugins are defined using a mixin which extends the parser class.

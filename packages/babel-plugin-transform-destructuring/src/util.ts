@@ -133,7 +133,7 @@ export class DestructuringTransformer {
     init: t.Expression,
   ) {
     let op = this.operator;
-    if (t.isMemberExpression(id)) op = "=";
+    if (t.isMemberExpression(id) || t.isOptionalMemberExpression(id)) op = "=";
 
     let node: t.ExpressionStatement | t.VariableDeclaration;
 
@@ -155,7 +155,7 @@ export class DestructuringTransformer {
       }
 
       node = t.variableDeclaration(this.kind, [
-        t.variableDeclarator(id, nodeInit),
+        t.variableDeclarator(id as t.LVal, nodeInit),
       ]);
     }
 
@@ -703,7 +703,7 @@ export function convertVariableDeclaration(
 }
 
 export function convertAssignmentExpression(
-  path: NodePath<t.AssignmentExpression>,
+  path: NodePath<t.AssignmentExpression & { left: t.Pattern }>,
   addHelper: File["addHelper"],
   arrayLikeIsIterable: boolean,
   iterableIsArray: boolean,

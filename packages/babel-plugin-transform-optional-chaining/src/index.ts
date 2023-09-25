@@ -1,5 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import { transform } from "./transform.ts";
+import { transform, transformOptionalChain } from "./transform.ts";
 import type { NodePath } from "@babel/traverse";
 import type * as t from "@babel/types";
 
@@ -32,4 +32,4 @@ export default declare((api, options: Options) => {
   };
 });
 
-export { transform };
+export { transform, transformOptionalChain };

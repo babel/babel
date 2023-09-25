@@ -146,6 +146,23 @@
             "type": "array"
           },
           {
+            "items": [
+              {
+                "type": "string",
+                "enum": ["optionalChainingAssign"]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "version": {
+                    "type": "string",
+                    "enum": ["2023-07"]
+                  }
+                }
+              }
+            ]
+          },
+          {
             "enum": [
               "asyncDoExpressions",
               "asyncGenerators",

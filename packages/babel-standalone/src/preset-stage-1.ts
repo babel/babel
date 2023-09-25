@@ -11,6 +11,7 @@ export default (_: any, opts: any = {}) => {
     pipelineProposal,
     pipelineTopicToken,
     recordAndTupleSyntax,
+    optionalChainingAssignVersion = "2023-07",
   } = opts;
 
   return {
@@ -33,6 +34,10 @@ export default (_: any, opts: any = {}) => {
       babelPlugins.syntaxDecimal,
       babelPlugins.proposalExportDefaultFrom,
       babelPlugins.proposalDoExpressions,
+      [
+        babelPlugins.proposalOptionalChainingAssign,
+        { version: optionalChainingAssignVersion },
+      ],
     ],
   };
 };
