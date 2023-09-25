@@ -1,4 +1,4 @@
-/* @minVersion 7.22.0 */
+/* @minVersion 7.23.0 */
 export default function _importDeferProxy(init) {
   var ns = null;
   var constValue = function (v) {
