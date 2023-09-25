@@ -21,6 +21,8 @@ type CompilationResult = {
   loaded: boolean;
   content: string | null;
   executed: boolean;
+  // nonce is undefined in browsers that don't support the nonce global attribute
+  nonce: string | undefined;
   // todo: refine plugins/presets
   plugins: InputOptions["plugins"];
   presets: InputOptions["presets"];
@@ -95,6 +97,9 @@ function run(transformFn: typeof transform, script: CompilationResult) {
   if (script.type) {
     scriptEl.setAttribute("type", script.type);
   }
+  if (script.nonce) {
+    scriptEl.nonce = script.nonce;
+  }
   scriptEl.text = transformCode(transformFn, script);
   headEl.appendChild(scriptEl);
 }
@@ -159,64 +164,60 @@ function loadScripts(
   transformFn: typeof transform,
   scripts: HTMLScriptElement[],
 ) {
-  const result: CompilationResult[] = [];
+  const results: CompilationResult[] = [];
   const count = scripts.length;
 
   function check() {
-    let script, i;
+    for (let i = 0; i < count; i++) {
+      const result = results[i];
 
-    for (i = 0; i < count; i++) {
-      script = result[i];
-
-      if (script.loaded && !script.executed) {
-        script.executed = true;
-        run(transformFn, script);
-      } else if (!script.loaded && !script.error && !script.async) {
+      if (result.loaded && !result.executed) {
+        result.executed = true;
+        run(transformFn, result);
+      } else if (!result.loaded && !result.error && !result.async) {
         break;
       }
     }
   }
 
-  scripts.forEach((script, i) => {
-    const scriptData = {
+  for (let i = 0; i < count; i++) {
+    const script = scripts[i];
+    const result: CompilationResult = {
       // script.async is always true for non-JavaScript script tags
       async: script.hasAttribute("async"),
       type: script.getAttribute("data-type"),
+      nonce: script.nonce,
       error: false,
       executed: false,
       plugins: getPluginsOrPresetsFromScript(script, "data-plugins"),
       presets: getPluginsOrPresetsFromScript(script, "data-presets"),
+      loaded: false,
+      url: null,
+      content: null,
     };
+    results.push(result);
 
     if (script.src) {
-      result[i] = {
-        ...scriptData,
-        content: null,
-        loaded: false,
-        url: script.src,
-      };
+      result.url = script.src;
 
       load(
         script.src,
         content => {
-          result[i].loaded = true;
-          result[i].content = content;
+          result.loaded = true;
+          result.content = content;
           check();
         },
         () => {
-          result[i].error = true;
+          result.error = true;
           check();
         },
       );
     } else {
-      result[i] = {
-        ...scriptData,
-        content: script.innerHTML,
-        loaded: true,
-        url: script.getAttribute("data-module") || null,
-      };
+      result.url = script.getAttribute("data-module") || null;
+      result.loaded = true;
+      result.content = script.innerHTML;
     }
-  });
+  }
 
   check();
 }

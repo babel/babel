@@ -114,7 +114,8 @@
     "@babel/preset-flow": "workspace:^",
     "@babel/preset-react": "workspace:^",
     "@babel/preset-typescript": "workspace:^",
-    "acorn": "^8.7.0"
+    "acorn": "^8.7.0",
+    "jsdom": "^22.1.0"
   },
   "keywords": [
     "babel",
