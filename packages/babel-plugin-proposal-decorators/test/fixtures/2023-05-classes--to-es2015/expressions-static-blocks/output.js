@@ -1,4 +1,4 @@
-var _initClass, _A, _temp, _initClass2, _C, _temp2, _initClass3, _D, _temp3, _initClass4, _decorated_class, _temp4, _class5, _initClass5, _G, _temp5, _initClass6, _decorated_class2, _temp6, _class7, _initClass7, _H, _temp7, _initClass8, _K, _temp8;
+var _initClass, _A, _temp, _initClass2, _C, _temp2, _initClass3, _D, _temp3, _initClass4, _decorated_class, _temp4, _class5, _initClass5, _G, _temp5, _initClass6, _decorated_class2, _temp6, _class7, _initClass7, _H, _I, _temp7, _initClass8, _K, _L, _temp8;
 const dec = () => {};
 const A = (new (_temp = class extends babelHelpers.identity {
   constructor() {
@@ -50,18 +50,18 @@ const H = (new (_temp7 = class extends babelHelpers.identity {
     super(_H), (() => {})(), _initClass7();
   }
 }, (_class8 => {
-  class H extends I {}
+  class H extends (_I = I) {}
   _class8 = H;
-  [_H, _initClass7] = babelHelpers.applyDecs2305(_class8, [], [dec]).c;
+  [_H, _initClass7] = babelHelpers.applyDecs2305(_class8, [], [dec], 0, void 0, _I).c;
 })(), _temp7)(), _H);
 const J = (new (_temp8 = class extends babelHelpers.identity {
   constructor() {
     super(_K), (() => {})(), _initClass8();
   }
 }, (_class9 => {
-  class K extends L {}
+  class K extends (_L = L) {}
   _class9 = K;
-  [_K, _initClass8] = babelHelpers.applyDecs2305(_class9, [], [dec]).c;
+  [_K, _initClass8] = babelHelpers.applyDecs2305(_class9, [], [dec], 0, void 0, _L).c;
 })(), _temp8)(), _K);
 function classFactory() {
   var _initClass9, _decorated_class3, _temp9, _class11;

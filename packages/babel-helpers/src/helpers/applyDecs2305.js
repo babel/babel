@@ -45,7 +45,8 @@ function memberDec(
   isStatic,
   isPrivate,
   value,
-  hasPrivateBrand
+  hasPrivateBrand,
+  metadata
 ) {
   var kindStr;
 
@@ -71,6 +72,7 @@ function memberDec(
     name: isPrivate ? "#" + name : name,
     static: isStatic,
     private: isPrivate,
+    metadata: metadata,
   };
 
   var decoratorFinishedRef = { v: false };
@@ -211,7 +213,8 @@ function applyMemberDec(
   isStatic,
   isPrivate,
   initializers,
-  hasPrivateBrand
+  hasPrivateBrand,
+  metadata
 ) {
   var decs = decInfo[0];
 
@@ -276,7 +279,8 @@ function applyMemberDec(
       isStatic,
       isPrivate,
       value,
-      hasPrivateBrand
+      hasPrivateBrand,
+      metadata
     );
 
     if (newValue !== void 0) {
@@ -369,7 +373,7 @@ function applyMemberDec(
   }
 }
 
-function applyMemberDecs(Class, decInfos, instanceBrand) {
+function applyMemberDecs(Class, decInfos, instanceBrand, metadata) {
   var ret = [];
   var protoInitializers;
   var staticInitializers;
@@ -451,7 +455,8 @@ function applyMemberDecs(Class, decInfos, instanceBrand) {
       isStatic,
       isPrivate,
       initializers,
-      hasPrivateBrand
+      hasPrivateBrand,
+      metadata
     );
   }
 
@@ -471,7 +476,7 @@ function pushInitializers(ret, initializers) {
   }
 }
 
-function applyClassDecs(targetClass, classDecs, decoratorsHaveThis) {
+function applyClassDecs(targetClass, classDecs, decoratorsHaveThis, metadata) {
   if (classDecs.length) {
     var initializers = [];
     var newClass = targetClass;
@@ -493,6 +498,7 @@ function applyClassDecs(targetClass, classDecs, decoratorsHaveThis) {
               initializers,
               decoratorFinishedRef
             ),
+            metadata,
           }
         );
       } finally {
@@ -506,7 +512,7 @@ function applyClassDecs(targetClass, classDecs, decoratorsHaveThis) {
     }
 
     return [
-      newClass,
+      defineMetadata(newClass, metadata),
       function () {
         for (var i = 0; i < initializers.length; i++) {
           initializers[i].call(newClass);
@@ -516,6 +522,14 @@ function applyClassDecs(targetClass, classDecs, decoratorsHaveThis) {
   }
   // The transformer will not emit assignment when there are no class decorators,
   // so we don't have to return an empty array here.
+}
+
+function defineMetadata(Class, metadata) {
+  return Object.defineProperty(
+    Class,
+    Symbol.metadata || Symbol.for("Symbol.metadata"),
+    { configurable: true, enumerable: true, value: metadata }
+  );
 }
 
 /**
@@ -669,13 +683,28 @@ export default function applyDecs2305(
   memberDecs,
   classDecs,
   classDecsHaveThis,
-  instanceBrand
+  instanceBrand,
+  parentClass
 ) {
+  if (arguments.length >= 6) {
+    var parentMetadata =
+      parentClass[Symbol.metadata || Symbol.for("Symbol.metadata")];
+  }
+  var metadata = Object.create(
+    parentMetadata === void 0 ? null : parentMetadata
+  );
+  var e = applyMemberDecs(targetClass, memberDecs, instanceBrand, metadata);
+  if (!classDecs.length) defineMetadata(targetClass, metadata);
   return {
-    e: applyMemberDecs(targetClass, memberDecs, instanceBrand),
+    e: e,
     // Lazily apply class decorations so that member init locals can be properly bound.
     get c() {
-      return applyClassDecs(targetClass, classDecs, classDecsHaveThis);
+      return applyClassDecs(
+        targetClass,
+        classDecs,
+        classDecsHaveThis,
+        metadata
+      );
     },
   };
 }

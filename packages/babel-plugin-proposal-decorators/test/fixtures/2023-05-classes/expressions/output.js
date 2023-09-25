@@ -1,4 +1,4 @@
-var _initClass, _A, _initClass2, _C, _initClass3, _D, _initClass4, _decorated_class, _initClass5, _G, _initClass6, _decorated_class2, _initClass7, _H, _initClass8, _K;
+var _initClass, _A, _initClass2, _C, _initClass3, _D, _initClass4, _decorated_class, _initClass5, _G, _initClass6, _decorated_class2, _initClass7, _H, _I, _initClass8, _K, _L;
 const dec = () => {};
 const A = (class A {
   static {
@@ -47,17 +47,17 @@ const F = [(class G {
     _initClass6();
   }
 }, _decorated_class2)];
-const H = (class H extends I {
+const H = (class H extends (_I = I) {
   static {
-    [_H, _initClass7] = babelHelpers.applyDecs2305(this, [], [dec]).c;
+    [_H, _initClass7] = babelHelpers.applyDecs2305(this, [], [dec], 0, void 0, _I).c;
   }
   static {
     _initClass7();
   }
 }, _H);
-const J = (class K extends L {
+const J = (class K extends (_L = L) {
   static {
-    [_K, _initClass8] = babelHelpers.applyDecs2305(this, [], [dec]).c;
+    [_K, _initClass8] = babelHelpers.applyDecs2305(this, [], [dec], 0, void 0, _L).c;
   }
   static {
     _initClass8();
