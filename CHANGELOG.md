@@ -24,6 +24,44 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.23.0 (2023-09-25)
+
+#### :rocket: New Feature
+* `babel-plugin-proposal-import-wasm-source`, `babel-plugin-syntax-import-source`, `babel-plugin-transform-dynamic-import`
+  * [#15870](https://github.com/babel/babel/pull/15870) Support transforming `import source` for wasm ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-module-transforms`, `babel-helpers`, `babel-plugin-proposal-import-defer`, `babel-plugin-syntax-import-defer`, `babel-plugin-transform-modules-commonjs`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`, `babel-standalone`
+  * [#15878](https://github.com/babel/babel/pull/15878) Implement `import defer` proposal transform support ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`, `babel-parser`, `babel-types`
+  * [#15845](https://github.com/babel/babel/pull/15845) Implement `import defer` parsing support ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#15829](https://github.com/babel/babel/pull/15829) Add parsing support for the "source phase imports" proposal ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`, `babel-helper-module-transforms`, `babel-parser`, `babel-plugin-transform-dynamic-import`, `babel-plugin-transform-modules-amd`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-systemjs`, `babel-traverse`, `babel-types`
+  * [#15682](https://github.com/babel/babel/pull/15682) Add `createImportExpressions` parser option ([@JLHwung](https://github.com/JLHwung))
+* `babel-standalone`
+  * [#15671](https://github.com/babel/babel/pull/15671) Pass through nonce to the transformed script element ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-function-name`, `babel-helper-member-expression-to-functions`, `babel-helpers`, `babel-parser`, `babel-plugin-proposal-destructuring-private`, `babel-plugin-proposal-optional-chaining-assign`, `babel-plugin-syntax-optional-chaining-assign`, `babel-plugin-transform-destructuring`, `babel-plugin-transform-optional-chaining`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`, `babel-standalone`, `babel-types`
+  * [#15751](https://github.com/babel/babel/pull/15751) Add support for optional chain in assignments ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helpers`, `babel-plugin-proposal-decorators`
+  * [#15895](https://github.com/babel/babel/pull/15895) Implement the "decorator metadata" proposal ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-traverse`, `babel-types`
+  * [#15893](https://github.com/babel/babel/pull/15893) Add `t.buildUndefinedNode` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-preset-typescript`
+  * [#15913](https://github.com/babel/babel/pull/15913) Add `rewriteImportExtensions` option to TS preset ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#15896](https://github.com/babel/babel/pull/15896) Allow TS tuples to have both labeled and unlabeled elements ([@yukukotani](https://github.com/yukukotani))
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-block-scoping`
+  * [#15962](https://github.com/babel/babel/pull/15962) fix: `transform-block-scoping` captures the variables of the method in the loop ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :nail_care: Polish
+* `babel-traverse`
+  * [#15797](https://github.com/babel/babel/pull/15797) Expand evaluation of global built-ins in `@babel/traverse` ([@lorenzoferre](https://github.com/lorenzoferre))
+* `babel-plugin-proposal-explicit-resource-management`
+  * [#15985](https://github.com/babel/babel/pull/15985) Improve source maps for blocks with `using` declarations ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :microscope: Output optimization
+* `babel-core`, `babel-helper-module-transforms`, `babel-plugin-transform-async-to-generator`, `babel-plugin-transform-classes`, `babel-plugin-transform-dynamic-import`, `babel-plugin-transform-function-name`, `babel-plugin-transform-modules-amd`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-umd`, `babel-plugin-transform-parameters`, `babel-plugin-transform-react-constant-elements`, `babel-plugin-transform-react-inline-elements`, `babel-plugin-transform-runtime`, `babel-plugin-transform-typescript`, `babel-preset-env`
+  * [#15984](https://github.com/babel/babel/pull/15984) Inline `exports.XXX =` update in simple variable declarations ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.22.20 (2023-09-16)
 
 #### :house: Internal
