@@ -7,8 +7,13 @@ export function generateRegexpuOptions(
   pattern: string,
   toTransform: number,
 ): RegexpuOptions {
-  const feat = (name: keyof typeof FEATURES) => {
-    return hasFeature(toTransform, FEATURES[name]) ? "transform" : false;
+  type Experimental = 1;
+
+  const feat = <Stability extends 0 | 1 = 0>(
+    name: keyof typeof FEATURES,
+    ok: "transform" | (Stability extends 0 ? never : "parse") = "transform",
+  ) => {
+    return hasFeature(toTransform, FEATURES[name]) ? ok : false;
   };
 
   const featDuplicateNamedGroups = (): "transform" | false => {
@@ -28,7 +33,7 @@ export function generateRegexpuOptions(
 
   return {
     unicodeFlag: feat("unicodeFlag"),
-    unicodeSetsFlag: feat("unicodeSetsFlag"),
+    unicodeSetsFlag: feat<Experimental>("unicodeSetsFlag") || "parse",
     dotAllFlag: feat("dotAllFlag"),
     unicodePropertyEscapes: feat("unicodePropertyEscape"),
     namedGroups: feat("namedCaptureGroups") || featDuplicateNamedGroups(),
