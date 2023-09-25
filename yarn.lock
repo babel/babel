@@ -1576,6 +1576,21 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-proposal-import-wasm-source@workspace:packages/babel-plugin-proposal-import-wasm-source":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-proposal-import-wasm-source@workspace:packages/babel-plugin-proposal-import-wasm-source"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-compilation-targets": "workspace:^"
+    "@babel/helper-module-imports": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/plugin-syntax-import-source": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.22.0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-proposal-optional-chaining-assign@workspace:^, @babel/plugin-proposal-optional-chaining-assign@workspace:packages/babel-plugin-proposal-optional-chaining-assign":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-optional-chaining-assign@workspace:packages/babel-plugin-proposal-optional-chaining-assign"
@@ -1974,6 +1989,17 @@ __metadata:
 "@babel/plugin-syntax-import-reflection@workspace:^, @babel/plugin-syntax-import-reflection@workspace:packages/babel-plugin-syntax-import-reflection":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-import-reflection@workspace:packages/babel-plugin-syntax-import-reflection"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
+
+"@babel/plugin-syntax-import-source@workspace:^, @babel/plugin-syntax-import-source@workspace:packages/babel-plugin-syntax-import-source":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-syntax-import-source@workspace:packages/babel-plugin-syntax-import-source"
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
