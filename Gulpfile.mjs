@@ -686,6 +686,7 @@ if (bool(process.env.BABEL_8_BREAKING)) {
   libBundles = Array.from(libBundlesIterator());
 } else {
   libBundles = [
+    "packages/babel-helper-builder-react-jsx",
     "packages/babel-parser",
     "packages/babel-plugin-proposal-destructuring-private",
     "packages/babel-plugin-transform-object-rest-spread",
