@@ -295,14 +295,6 @@ jobs:
           BABEL_ENV: test
           BABEL_8_BREAKING: true
           BABEL_TYPES_8_BREAKING: true
-      - name: Update source snapshots
-        run: |
-          node ./scripts/update-source-snapshots.js
-        env:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          repo: ${{ github.event.pull_request.head.repo.full_name }}
-          branch: ${{ github.event.pull_request.head.ref }}
-          hash: ${{ github.event.pull_request.head.sha }}
       - name: Prepare artifacts
         run: |
           ./scripts/get-artifact-files.sh | tar --null -cvf babel-artifact.tar --files-from=-
@@ -311,6 +303,9 @@ jobs:
           name: babel8-artifact
           path: babel-artifact.tar
           retention-days: 5
+      - name: Check source snapshots
+        run: |
+          node ./scripts/update-source-snapshots.js
 
   test-babel-8-breaking:
     name: Test Babel 8 breaking changes on
