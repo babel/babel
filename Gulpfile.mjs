@@ -638,6 +638,8 @@ function* libBundlesIterator() {
     "babel-helpers",
     // multiple exports
     "babel-plugin-transform-react-jsx",
+    // rollup bug https://github.com/babel/babel/pull/16001
+    "babel-helper-builder-react-jsx",
   ]);
   for (const packageDir of ["packages", "codemods"]) {
     for (const dir of fs.readdirSync(new URL(packageDir, import.meta.url))) {
@@ -686,7 +688,6 @@ if (bool(process.env.BABEL_8_BREAKING)) {
   libBundles = Array.from(libBundlesIterator());
 } else {
   libBundles = [
-    "packages/babel-helper-builder-react-jsx",
     "packages/babel-parser",
     "packages/babel-plugin-proposal-destructuring-private",
     "packages/babel-plugin-transform-object-rest-spread",
