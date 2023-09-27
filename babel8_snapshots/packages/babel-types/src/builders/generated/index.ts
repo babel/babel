@@ -2,9 +2,9 @@
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'make build'
  */
-import validateNode from "../validateNode";
-import type * as t from "../..";
-import deprecationWarning from "../../utils/deprecationWarning";
+import validateNode from "../validateNode.ts";
+import type * as t from "../../index.ts";
+import deprecationWarning from "../../utils/deprecationWarning.ts";
 export function arrayExpression(
   elements: Array<null | t.Expression | t.SpreadElement>,
 ): t.ArrayExpression {
@@ -34,6 +34,7 @@ export function assignmentExpression(
   left:
     | t.Identifier
     | t.MemberExpression
+    | t.OptionalMemberExpression
     | t.ArrayPattern
     | t.ObjectPattern
     | t.TSAsExpression
@@ -658,7 +659,7 @@ export function classExpression(
   });
 }
 export function classDeclaration(
-  id: t.Identifier,
+  id: t.Identifier | null | undefined = null,
   superClass: t.Expression | null | undefined = null,
   body: t.ClassBody,
   decorators: Array<t.Decorator> | null = null,
@@ -774,6 +775,16 @@ export function importSpecifier(
     type: "ImportSpecifier",
     local,
     imported,
+  });
+}
+export function importExpression(
+  source: t.Expression,
+  options: t.Expression | null = null,
+): t.ImportExpression {
+  return validateNode<t.ImportExpression>({
+    type: "ImportExpression",
+    source,
+    options,
   });
 }
 export function metaProperty(
@@ -1941,7 +1952,9 @@ export function tsQualifiedName(
 }
 export function tsCallSignatureDeclaration(
   typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
-  params: Array<t.Identifier | t.RestElement>,
+  params: Array<
+    t.ArrayPattern | t.Identifier | t.ObjectPattern | t.RestElement
+  >,
   returnType: t.TSTypeAnnotation | null = null,
 ): t.TSCallSignatureDeclaration {
   return validateNode<t.TSCallSignatureDeclaration>({
@@ -1953,7 +1966,9 @@ export function tsCallSignatureDeclaration(
 }
 export function tsConstructSignatureDeclaration(
   typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
-  params: Array<t.Identifier | t.RestElement>,
+  params: Array<
+    t.ArrayPattern | t.Identifier | t.ObjectPattern | t.RestElement
+  >,
   returnType: t.TSTypeAnnotation | null = null,
 ): t.TSConstructSignatureDeclaration {
   return validateNode<t.TSConstructSignatureDeclaration>({
@@ -1979,7 +1994,9 @@ export function tsPropertySignature(
 export function tsMethodSignature(
   key: t.Expression,
   typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
-  params: Array<t.Identifier | t.RestElement>,
+  params: Array<
+    t.ArrayPattern | t.Identifier | t.ObjectPattern | t.RestElement
+  >,
   returnType: t.TSTypeAnnotation | null = null,
 ): t.TSMethodSignature {
   return validateNode<t.TSMethodSignature>({
@@ -2073,7 +2090,9 @@ export function tsThisType(): t.TSThisType {
 }
 export function tsFunctionType(
   typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
-  params: Array<t.Identifier | t.RestElement>,
+  params: Array<
+    t.ArrayPattern | t.Identifier | t.ObjectPattern | t.RestElement
+  >,
   returnType: t.TSTypeAnnotation | null = null,
 ): t.TSFunctionType {
   return validateNode<t.TSFunctionType>({
@@ -2085,7 +2104,9 @@ export function tsFunctionType(
 }
 export function tsConstructorType(
   typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
-  params: Array<t.Identifier | t.RestElement>,
+  params: Array<
+    t.ArrayPattern | t.Identifier | t.ObjectPattern | t.RestElement
+  >,
   returnType: t.TSTypeAnnotation | null = null,
 ): t.TSConstructorType {
   return validateNode<t.TSConstructorType>({
