@@ -401,7 +401,10 @@ describe("@babel/register", function () {
 });
 
 function spawnNodeAsync(args, cwd = __dirname, env) {
-  const spawn = child.spawn(process.execPath, args, { cwd, env });
+  const spawn = child.spawn(process.execPath, args, {
+    cwd,
+    env: { ...env, BABEL_8_BREAKING: process.env.BABEL_8_BREAKING },
+  });
 
   let output = "";
   let callback;

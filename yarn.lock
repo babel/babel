@@ -13521,14 +13521,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pirates@npm:^4.0.4":
-  version: 4.0.5
-  resolution: "pirates@npm:4.0.5"
-  checksum: 3728bae0cf6c18c3d25f5449ee8c5bc1a6a83bca688abe0e1654ce8c069bfd408170397cef133ed9ec8b0faeb4093c5c728d0e72ab7b3385256cd87008c40364
-  languageName: node
-  linkType: hard
-
-"pirates@npm:^4.0.6":
+"pirates@npm:^4.0.4, pirates@npm:^4.0.6":
   version: 4.0.6
   resolution: "pirates@npm:4.0.6"
   checksum: d02dda76f4fec1cbdf395c36c11cf26f76a644f9f9a1bfa84d3167d0d3154d5289aacc72677aa20d599bb4a6937a471de1b65c995e2aea2d8687cbcd7e43ea5f
