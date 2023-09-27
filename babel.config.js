@@ -1,5 +1,6 @@
 "use strict";
 
+// Check if the babel.config.js is being loaded during testing
 if (
   typeof it === "function" &&
   // Jest loads the Babel config to parse file and update inline snapshots.
@@ -12,6 +13,7 @@ if (
 const pathUtils = require("path");
 const fs = require("fs");
 
+// Helper function to normalize file paths
 function normalize(src) {
   return src.replace(/\//, pathUtils.sep);
 }
@@ -75,6 +77,7 @@ module.exports = function (api) {
     iterableIsArray: true,
   };
 
+  // Define environment-specific configuration  
   let targets = {};
   let convertESM = outputType === "script";
   let replaceTSImportExtension = true;
@@ -101,6 +104,7 @@ module.exports = function (api) {
     "./packages/babel-preset-env/src/available-plugins.js",
   ];
 
+  // Handle different environments
   switch (env) {
     // Configs used during bundling builds.
     case "standalone":
@@ -324,6 +328,7 @@ module.exports = function (api) {
   return config;
 };
 
+// Helper function to get monorepo packages
 let monorepoPackages;
 function getMonorepoPackages() {
   if (!monorepoPackages) {
@@ -335,6 +340,8 @@ function getMonorepoPackages() {
   return monorepoPackages;
 }
 
+
+// Helper function to determine import interop strategy for source files
 function importInteropSrc(source, filename) {
   if (
     // These internal files are "real CJS" (whose default export is
@@ -359,6 +366,8 @@ function importInteropSrc(source, filename) {
   return "node";
 }
 
+
+// Helper function to determine import interop strategy for test files
 function importInteropTest(source) {
   // This file will soon have an esm entrypoint
   if (source === "@babel/helper-plugin-test-runner") {
