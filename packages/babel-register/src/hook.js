@@ -1,7 +1,9 @@
 "use strict";
 
 const { addHook } = require("pirates");
-const sourceMapSupport = require("source-map-support");
+const sourceMapSupport = process.env.BABEL_8_BREAKING
+  ? require("@cspotcode/source-map-support")
+  : require("source-map-support");
 
 let piratesRevert;
 const maps = Object.create(null);

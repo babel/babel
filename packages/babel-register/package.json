@@ -14,15 +14,13 @@
   "author": "The Babel Team (https://babel.dev/team)",
   "type": "commonjs",
   "main": "./lib/index.js",
-  "browser": {
-    "./lib/index.js": "./lib/browser.js"
-  },
   "dependencies": {
+    "@cspotcode/source-map-support": "condition:BABEL_8_BREAKING ? ^0.8.1 :",
     "clone-deep": "^4.0.1",
     "find-cache-dir": "condition:BABEL_8_BREAKING ? ^3.3.1 : ^2.0.0",
     "make-dir": "condition:BABEL_8_BREAKING ? : ^2.1.0",
-    "pirates": "^4.0.5",
-    "source-map-support": "^0.5.16"
+    "pirates": "^4.0.6",
+    "source-map-support": "condition:BABEL_8_BREAKING ? : ^0.5.16"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
@@ -30,8 +28,7 @@
   "devDependencies": {
     "@babel/core": "workspace:^",
     "@babel/plugin-transform-arrow-functions": "workspace:^",
-    "@babel/plugin-transform-modules-commonjs": "workspace:^",
-    "browserify": "^16.5.2"
+    "@babel/plugin-transform-modules-commonjs": "workspace:^"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-register",
   "bugs": "https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22pkg%3A%20register%22+is%3Aopen",
@@ -43,6 +40,9 @@
       {
         "engines": {
           "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+        },
+        "browser": {
+          "./lib/index.js": "./lib/browser.js"
         }
       },
       {
