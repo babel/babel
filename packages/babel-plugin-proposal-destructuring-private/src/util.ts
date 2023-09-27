@@ -11,17 +11,12 @@ const {
   isObjectProperty,
   isPrivateName,
   memberExpression,
-  numericLiteral,
   objectPattern,
   restElement,
   variableDeclarator,
   variableDeclaration,
-  unaryExpression,
+  buildUndefinedNode,
 } = types;
-
-function buildUndefinedNode() {
-  return unaryExpression("void", numericLiteral(0));
-}
 
 function transformAssignmentPattern(
   initializer: t.Expression,
@@ -152,7 +147,7 @@ function buildAssignmentsFromPatternList(
 }
 
 type StackItem = {
-  node: t.AssignmentExpression["left"] | t.ObjectProperty | null;
+  node: t.LVal | t.ObjectProperty | t.OptionalMemberExpression | null;
   index: number;
   depth: number;
 };
@@ -170,9 +165,9 @@ type StackItem = {
  * @param visitor
  */
 export function* traversePattern(
-  root: t.AssignmentExpression["left"],
+  root: t.LVal | t.OptionalMemberExpression,
   visitor: (
-    node: t.AssignmentExpression["left"] | t.ObjectProperty,
+    node: t.LVal | t.ObjectProperty | t.OptionalMemberExpression,
     index: number,
     depth: number,
   ) => Generator<any, void, any>,
@@ -222,7 +217,7 @@ export function* traversePattern(
   }
 }
 
-export function hasPrivateKeys(pattern: t.AssignmentExpression["left"]) {
+export function hasPrivateKeys(pattern: t.LVal | t.OptionalMemberExpression) {
   let result = false;
   traversePattern(pattern, function* (node) {
     if (isObjectProperty(node) && isPrivateName(node.key)) {
