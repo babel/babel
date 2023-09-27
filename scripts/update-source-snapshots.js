@@ -29,7 +29,9 @@ if (!result) {
 const files = result.split("\n");
 
 files.forEach(file => {
-  if (!file || !file.startsWith("packages")) return;
+  if (!file || !file.startsWith("packages") || file.endsWith("package.json")) {
+    return;
+  }
 
   const dst = path.join(snapshotDir, file);
   try {
