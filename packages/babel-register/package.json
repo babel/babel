@@ -40,13 +40,13 @@
       {
         "engines": {
           "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
-        },
-        "browser": {
-          "./lib/index.js": "./lib/browser.js"
         }
       },
       {
-        "exports": null
+        "exports": null,
+        "browser": {
+          "./lib/index.js": "./lib/browser.js"
+        }
       }
     ]
   },
