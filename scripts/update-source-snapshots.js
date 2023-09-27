@@ -52,7 +52,9 @@ if (!isCI) {
   process.exit(0);
 }
 
-if (exec("git status --porcelain=v1", { encoding: "utf8" })) {
+const status = exec("git status --porcelain=v1", { encoding: "utf8" });
+if (status) {
+  console.error(status);
   console.error("Snapshots are out of date");
   console.error("Please run `make update-source-snapshots`");
   process.exit(1);

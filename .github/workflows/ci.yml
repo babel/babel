@@ -305,6 +305,7 @@ jobs:
           retention-days: 5
       - name: Check source snapshots
         run: |
+          rm -rf babel-artifact.tar
           node ./scripts/update-source-snapshots.js
 
   test-babel-8-breaking:
