@@ -28,25 +28,27 @@
   "devDependencies": {
     "@babel/core": "workspace:^",
     "@babel/plugin-transform-arrow-functions": "workspace:^",
-    "@babel/plugin-transform-modules-commonjs": "workspace:^"
+    "@babel/plugin-transform-modules-commonjs": "workspace:^",
+    "browserify": "^16.5.2"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-register",
   "bugs": "https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22pkg%3A%20register%22+is%3Aopen",
   "engines": {
     "node": ">=6.9.0"
   },
+  "browser": {
+    "./lib/index.js": "./lib/browser.js"
+  },
   "conditions": {
     "BABEL_8_BREAKING": [
       {
+        "browser": null,
         "engines": {
           "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
         }
       },
       {
-        "exports": null,
-        "browser": {
-          "./lib/index.js": "./lib/browser.js"
-        }
+        "exports": null
       }
     ]
   },
