@@ -138,6 +138,7 @@ jobs:
       - name: Generate babel-types docs
         continue-on-error: true
         run: |
+          mkdir build
           node ./packages/babel-types/scripts/generators/docs.js > ./build/types.md
 
       - name: Upload babel-types docs
