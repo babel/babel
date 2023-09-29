@@ -59,7 +59,7 @@ rm packages/babel-standalone/test/built-into-es5.js
 # Our 'WorkerClient' implementation uses static private getters, that are only supported
 # when using '@babel/helpers@^7.6.0'
 # NOTE: When running this command on MacOS, use gsed from 'brew install gnu-sed'
-sed -i 's/describe, "worker"/describe.skip, "worker"/g' packages/babel-register/test/index.js
+sed -i 's/describeGte("12.0.0")("worker"/describeGte("12.0.0").skip("worker"/g' packages/babel-register/test/index.js
 sed -i 's/nodeGte12(/nodeGte12.skip(/g' eslint/babel-eslint-tests/test/integration/parser-override.js
 sed -i 's/nodeGte12NoESM(/nodeGte12NoESM.skip(/g' eslint/babel-eslint-tests/test/integration/config-files.js
 

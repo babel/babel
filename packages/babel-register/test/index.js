@@ -57,11 +57,6 @@ describe("@babel/register", function () {
         sourceMapSupport = true;
       },
     },
-    ["@cspotcode/source-map-support"]: {
-      install() {
-        sourceMapSupport = true;
-      },
-    },
   };
 
   beforeEach(() => {
@@ -76,7 +71,7 @@ describe("@babel/register", function () {
     jest.doMock("source-map-support", () => mocks["source-map-support"]);
     jest.doMock(
       "@cspotcode/source-map-support",
-      () => mocks["@cspotcode/source-map-support"],
+      () => mocks["source-map-support"],
     );
 
     afterEach(() => {
@@ -167,7 +162,7 @@ describe("@babel/register", function () {
             [piratesPath]: { exports: mocks["pirates"] },
             [smsPath]: { exports: mocks["source-map-support"] },
             [sms2Path]: {
-              exports: mocks["@cspotcode/source-map-support"],
+              exports: mocks["source-map-support"],
             },
           },
         });
