@@ -20,9 +20,9 @@ function buildLoopBody(
   const body = newBody ?? bodyPath.node;
   if (
     t.isBlockStatement(body) &&
-    Object.keys(path.getBindingIdentifiers()).some(id =>
-      bodyPath.scope.hasOwnBinding(id),
-    )
+    Object.keys(path.getBindingIdentifiers())
+      .concat(Object.keys(path.get("right").getBindingIdentifiers()))
+      .some(id => bodyPath.scope.hasOwnBinding(id))
   ) {
     block = t.blockStatement([declar, body]);
   } else {
