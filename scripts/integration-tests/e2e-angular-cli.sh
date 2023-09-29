@@ -21,8 +21,10 @@ startLocalRegistry "$PWD"/verdaccio-config.yml
 
 # Create and build a new angular project
 mkdir tmp && cd tmp
-npx -p @angular/cli ng new --defaults ngx
+npx -p @angular/cli ng new --defaults ngx --package-manager yarn
 cd ngx
-npm run build
+node "$PWD"/scripts/integration-tests/utils/set-babel-resolutions.js
+yarn run build
+yarn run ng test --watch=false
 
 cleanup
