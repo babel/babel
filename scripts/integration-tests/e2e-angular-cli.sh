@@ -30,6 +30,6 @@ touch yarn.lock
 yarn set version stable
 YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn
 yarn run build
-yarn run ng test --watch=false
+yarn run ng test --watch=false --browsers ChromeHeadless
 
 cleanup
