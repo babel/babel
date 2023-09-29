@@ -1,8 +1,8 @@
 import fs from "fs";
 import path from "path";
-import { commonJS } from "$repo-utils";
+import { fileURLToPath } from "url";
 
-const { __dirname } = commonJS(import.meta.url);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const packageJSONPath = path.resolve(process.cwd(), "./package.json");
 const content = JSON.parse(fs.readFileSync(packageJSONPath));
