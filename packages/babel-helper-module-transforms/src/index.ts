@@ -557,7 +557,10 @@ function buildExportInitializationStatements(
 const InitTemplate = {
   computed: template.expression`EXPORTS["NAME"] = VALUE`,
   default: template.expression`EXPORTS.NAME = VALUE`,
+  define: template.expression`Object.defineProperty(EXPORTS, "NAME", { enumerable:true, writable: true, value: void 0 })["NAME"] = VALUE`,
 };
+
+const shouldUseDefineProperty = new Set(["__proto__"]);
 
 function buildInitStatement(
   metadata: ModuleMetadata,
@@ -572,11 +575,16 @@ function buildInitStatement(
         NAME: exportName,
         VALUE: acc,
       };
+
+      if (shouldUseDefineProperty.has(exportName)) {
+        return InitTemplate.define(params);
+      }
+
       if (stringSpecifiers.has(exportName)) {
         return InitTemplate.computed(params);
-      } else {
-        return InitTemplate.default(params);
       }
+
+      return InitTemplate.default(params);
     }, initExpr),
   );
 }
