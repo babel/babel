@@ -557,7 +557,7 @@ function buildExportInitializationStatements(
 const InitTemplate = {
   computed: template.expression`EXPORTS["NAME"] = VALUE`,
   default: template.expression`EXPORTS.NAME = VALUE`,
-  define: template.expression`Object.defineProperty(EXPORTS, "NAME", { enumerable:true, writable: true, value: void 0 })["NAME"] = VALUE`,
+  define: template.expression`Object.defineProperty(EXPORTS, "NAME", { enumerable:true, value: void 0, writable: true })["NAME"] = VALUE`,
 };
 
 function buildInitStatement(

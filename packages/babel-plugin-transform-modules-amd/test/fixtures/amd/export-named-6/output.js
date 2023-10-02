@@ -6,8 +6,8 @@ define(["exports", "./input.js"], function (_exports, _input) {
   });
   _exports.a = Object.defineProperty(_exports, "__proto__", {
     enumerable: true,
-    writable: true,
-    value: void 0
+    value: void 0,
+    writable: true
   })["__proto__"] = _exports._ = void 0;
   const __proto__ = _exports.__proto__ = null;
   const a = _exports.a = 1;

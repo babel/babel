@@ -5,8 +5,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.a = Object.defineProperty(exports, "__proto__", {
   enumerable: true,
-  writable: true,
-  value: void 0
+  value: void 0,
+  writable: true
 })["__proto__"] = exports._ = void 0;
 var _input = require("./input.js");
 const __proto__ = exports.__proto__ = null;
