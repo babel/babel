@@ -560,8 +560,6 @@ const InitTemplate = {
   define: template.expression`Object.defineProperty(EXPORTS, "NAME", { enumerable:true, writable: true, value: void 0 })["NAME"] = VALUE`,
 };
 
-const shouldUseDefineProperty = new Set(["__proto__"]);
-
 function buildInitStatement(
   metadata: ModuleMetadata,
   exportNames: string[],
@@ -576,7 +574,7 @@ function buildInitStatement(
         VALUE: acc,
       };
 
-      if (shouldUseDefineProperty.has(exportName)) {
+      if (exportName === "__proto__") {
         return InitTemplate.define(params);
       }
 
