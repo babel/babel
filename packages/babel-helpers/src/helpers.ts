@@ -314,7 +314,12 @@ helpers.construct = helper("7.0.0-beta.0")`
 helpers.isNativeFunction = helper("7.0.0-beta.0")`
   export default function _isNativeFunction(fn) {
     // Note: This function returns "true" for core-js functions.
-    return Function.toString.call(fn).indexOf("[native code]") !== -1;
+    try {
+      return Function.toString.call(fn).indexOf("[native code]") !== -1;
+    } catch (e) {
+      // Firefox 31 throws when "toString" is applied to an HTMLElement
+      return typeof fn === "function";
+    }
   }
 `;
 
