@@ -599,10 +599,6 @@ interface BaseNodePathValidators {
     this: NodePath<T>,
     opts?: Opts<t.NewExpression>,
   ): this is NodePath<T & t.NewExpression>;
-  isNoop<T extends t.Node>(
-    this: NodePath<T>,
-    opts?: Opts<t.Noop>,
-  ): this is NodePath<T & t.Noop>;
   isNullLiteral<T extends t.Node>(
     this: NodePath<T>,
     opts?: Opts<t.NullLiteral>,

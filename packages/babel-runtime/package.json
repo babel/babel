@@ -215,15 +215,6 @@
       "./helpers/wrapRegExp.js"
     ],
     "./helpers/esm/wrapRegExp": "./helpers/esm/wrapRegExp.js",
-    "./helpers/AwaitValue": [
-      {
-        "node": "./helpers/AwaitValue.js",
-        "import": "./helpers/esm/AwaitValue.js",
-        "default": "./helpers/AwaitValue.js"
-      },
-      "./helpers/AwaitValue.js"
-    ],
-    "./helpers/esm/AwaitValue": "./helpers/esm/AwaitValue.js",
     "./helpers/wrapAsyncGenerator": [
       {
         "node": "./helpers/wrapAsyncGenerator.js",
@@ -296,15 +287,6 @@
       "./helpers/extends.js"
     ],
     "./helpers/esm/extends": "./helpers/esm/extends.js",
-    "./helpers/objectSpread": [
-      {
-        "node": "./helpers/objectSpread.js",
-        "import": "./helpers/esm/objectSpread.js",
-        "default": "./helpers/objectSpread.js"
-      },
-      "./helpers/objectSpread.js"
-    ],
-    "./helpers/esm/objectSpread": "./helpers/esm/objectSpread.js",
     "./helpers/inherits": [
       {
         "node": "./helpers/inherits.js",
@@ -935,15 +917,6 @@
       "./helpers/classPrivateMethodInitSpec.js"
     ],
     "./helpers/esm/classPrivateMethodInitSpec": "./helpers/esm/classPrivateMethodInitSpec.js",
-    "./helpers/classPrivateMethodSet": [
-      {
-        "node": "./helpers/classPrivateMethodSet.js",
-        "import": "./helpers/esm/classPrivateMethodSet.js",
-        "default": "./helpers/classPrivateMethodSet.js"
-      },
-      "./helpers/classPrivateMethodSet.js"
-    ],
-    "./helpers/esm/classPrivateMethodSet": "./helpers/esm/classPrivateMethodSet.js",
     "./helpers/identity": [
       {
         "node": "./helpers/identity.js",

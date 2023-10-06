@@ -1,10 +1,8 @@
 var _SuppressedError = require("core-js-pure/features/suppressed-error.js");
-var _Object$create = require("core-js-pure/features/object/create.js");
-var _Promise = require("core-js-pure/features/promise/index.js");
 function dispose_SuppressedError(r, e) {
-  return "undefined" != typeof _SuppressedError ? dispose_SuppressedError = _SuppressedError : (dispose_SuppressedError = function dispose_SuppressedError(r, e) {
+  return "undefined" != typeof _SuppressedError ? dispose_SuppressedError = _SuppressedError : (dispose_SuppressedError = function (r, e) {
     this.suppressed = r, this.error = e, this.stack = new Error().stack;
-  }, dispose_SuppressedError.prototype = _Object$create(Error.prototype, {
+  }, dispose_SuppressedError.prototype = Object.create(Error.prototype, {
     constructor: {
       value: dispose_SuppressedError,
       writable: !0,
@@ -17,7 +15,7 @@ function _dispose(r, e, s) {
     for (; r.length > 0;) try {
       var o = r.pop(),
         p = o.d.call(o.v);
-      if (o.a) return _Promise.resolve(p).then(next, err);
+      if (o.a) return Promise.resolve(p).then(next, err);
     } catch (r) {
       return err(r);
     }
@@ -28,4 +26,4 @@ function _dispose(r, e, s) {
   }
   return next();
 }
-module.exports = _dispose, module.exports.__esModule = true, module.exports["default"] = module.exports;
+module.exports = _dispose, module.exports.__esModule = true, module.exports.default = module.exports;
