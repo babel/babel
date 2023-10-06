@@ -418,6 +418,7 @@ export interface NodePathAssertions {
   assertNewExpression(
     opts?: Opts<t.NewExpression>,
   ): asserts this is NodePath<t.NewExpression>;
+  assertNoop(opts?: Opts<t.Noop>): asserts this is NodePath<t.Noop>;
   assertNullLiteral(
     opts?: Opts<t.NullLiteral>,
   ): asserts this is NodePath<t.NullLiteral>;

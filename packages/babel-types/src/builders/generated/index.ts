@@ -899,7 +899,7 @@ export function classProperty(
     | t.BigIntLiteral
     | t.Expression,
   value: t.Expression | null = null,
-  typeAnnotation: t.TypeAnnotation | t.TSTypeAnnotation | null = null,
+  typeAnnotation: t.TypeAnnotation | t.TSTypeAnnotation | t.Noop | null = null,
   decorators: Array<t.Decorator> | null = null,
   computed: boolean = false,
   _static: boolean = false,
@@ -923,7 +923,7 @@ export function classAccessorProperty(
     | t.Expression
     | t.PrivateName,
   value: t.Expression | null = null,
-  typeAnnotation: t.TypeAnnotation | t.TSTypeAnnotation | null = null,
+  typeAnnotation: t.TypeAnnotation | t.TSTypeAnnotation | t.Noop | null = null,
   decorators: Array<t.Decorator> | null = null,
   computed: boolean = false,
   _static: boolean = false,
@@ -1594,6 +1594,7 @@ export function jsxAttribute(
     value,
   });
 }
+export { jsxAttribute as jSXAttribute };
 export function jsxClosingElement(
   name: t.JSXIdentifier | t.JSXMemberExpression | t.JSXNamespacedName,
 ): t.JSXClosingElement {
@@ -1602,6 +1603,7 @@ export function jsxClosingElement(
     name,
   });
 }
+export { jsxClosingElement as jSXClosingElement };
 export function jsxElement(
   openingElement: t.JSXOpeningElement,
   closingElement: t.JSXClosingElement | null | undefined = null,
@@ -1612,19 +1614,23 @@ export function jsxElement(
     | t.JSXElement
     | t.JSXFragment
   >,
+  selfClosing: boolean | null = null,
 ): t.JSXElement {
   return validateNode<t.JSXElement>({
     type: "JSXElement",
     openingElement,
     closingElement,
     children,
+    selfClosing,
   });
 }
+export { jsxElement as jSXElement };
 export function jsxEmptyExpression(): t.JSXEmptyExpression {
   return {
     type: "JSXEmptyExpression",
   };
 }
+export { jsxEmptyExpression as jSXEmptyExpression };
 export function jsxExpressionContainer(
   expression: t.Expression | t.JSXEmptyExpression,
 ): t.JSXExpressionContainer {
@@ -1633,18 +1639,21 @@ export function jsxExpressionContainer(
     expression,
   });
 }
+export { jsxExpressionContainer as jSXExpressionContainer };
 export function jsxSpreadChild(expression: t.Expression): t.JSXSpreadChild {
   return validateNode<t.JSXSpreadChild>({
     type: "JSXSpreadChild",
     expression,
   });
 }
+export { jsxSpreadChild as jSXSpreadChild };
 export function jsxIdentifier(name: string): t.JSXIdentifier {
   return validateNode<t.JSXIdentifier>({
     type: "JSXIdentifier",
     name,
   });
 }
+export { jsxIdentifier as jSXIdentifier };
 export function jsxMemberExpression(
   object: t.JSXMemberExpression | t.JSXIdentifier,
   property: t.JSXIdentifier,
@@ -1655,6 +1664,7 @@ export function jsxMemberExpression(
     property,
   });
 }
+export { jsxMemberExpression as jSXMemberExpression };
 export function jsxNamespacedName(
   namespace: t.JSXIdentifier,
   name: t.JSXIdentifier,
@@ -1665,6 +1675,7 @@ export function jsxNamespacedName(
     name,
   });
 }
+export { jsxNamespacedName as jSXNamespacedName };
 export function jsxOpeningElement(
   name: t.JSXIdentifier | t.JSXMemberExpression | t.JSXNamespacedName,
   attributes: Array<t.JSXAttribute | t.JSXSpreadAttribute>,
@@ -1677,6 +1688,7 @@ export function jsxOpeningElement(
     selfClosing,
   });
 }
+export { jsxOpeningElement as jSXOpeningElement };
 export function jsxSpreadAttribute(
   argument: t.Expression,
 ): t.JSXSpreadAttribute {
@@ -1685,12 +1697,14 @@ export function jsxSpreadAttribute(
     argument,
   });
 }
+export { jsxSpreadAttribute as jSXSpreadAttribute };
 export function jsxText(value: string): t.JSXText {
   return validateNode<t.JSXText>({
     type: "JSXText",
     value,
   });
 }
+export { jsxText as jSXText };
 export function jsxFragment(
   openingFragment: t.JSXOpeningFragment,
   closingFragment: t.JSXClosingFragment,
@@ -1709,14 +1723,22 @@ export function jsxFragment(
     children,
   });
 }
+export { jsxFragment as jSXFragment };
 export function jsxOpeningFragment(): t.JSXOpeningFragment {
   return {
     type: "JSXOpeningFragment",
   };
 }
+export { jsxOpeningFragment as jSXOpeningFragment };
 export function jsxClosingFragment(): t.JSXClosingFragment {
   return {
     type: "JSXClosingFragment",
+  };
+}
+export { jsxClosingFragment as jSXClosingFragment };
+export function noop(): t.Noop {
+  return {
+    type: "Noop",
   };
 }
 export function placeholder(
@@ -1854,11 +1876,16 @@ export function tsParameterProperty(
     parameter,
   });
 }
+export { tsParameterProperty as tSParameterProperty };
 export function tsDeclareFunction(
   id: t.Identifier | null | undefined = null,
-  typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
+  typeParameters:
+    | t.TSTypeParameterDeclaration
+    | t.Noop
+    | null
+    | undefined = null,
   params: Array<t.Identifier | t.Pattern | t.RestElement>,
-  returnType: t.TSTypeAnnotation | null = null,
+  returnType: t.TSTypeAnnotation | t.Noop | null = null,
 ): t.TSDeclareFunction {
   return validateNode<t.TSDeclareFunction>({
     type: "TSDeclareFunction",
@@ -1868,6 +1895,7 @@ export function tsDeclareFunction(
     returnType,
   });
 }
+export { tsDeclareFunction as tSDeclareFunction };
 export function tsDeclareMethod(
   decorators: Array<t.Decorator> | null | undefined = null,
   key:
@@ -1876,11 +1904,15 @@ export function tsDeclareMethod(
     | t.NumericLiteral
     | t.BigIntLiteral
     | t.Expression,
-  typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
+  typeParameters:
+    | t.TSTypeParameterDeclaration
+    | t.Noop
+    | null
+    | undefined = null,
   params: Array<
     t.Identifier | t.Pattern | t.RestElement | t.TSParameterProperty
   >,
-  returnType: t.TSTypeAnnotation | null = null,
+  returnType: t.TSTypeAnnotation | t.Noop | null = null,
 ): t.TSDeclareMethod {
   return validateNode<t.TSDeclareMethod>({
     type: "TSDeclareMethod",
@@ -1891,6 +1923,7 @@ export function tsDeclareMethod(
     returnType,
   });
 }
+export { tsDeclareMethod as tSDeclareMethod };
 export function tsQualifiedName(
   left: t.TSEntityName,
   right: t.Identifier,
@@ -1901,34 +1934,37 @@ export function tsQualifiedName(
     right,
   });
 }
+export { tsQualifiedName as tSQualifiedName };
 export function tsCallSignatureDeclaration(
   typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
-  params: Array<
+  parameters: Array<
     t.ArrayPattern | t.Identifier | t.ObjectPattern | t.RestElement
   >,
-  returnType: t.TSTypeAnnotation | null = null,
+  typeAnnotation: t.TSTypeAnnotation | null = null,
 ): t.TSCallSignatureDeclaration {
   return validateNode<t.TSCallSignatureDeclaration>({
     type: "TSCallSignatureDeclaration",
     typeParameters,
-    params,
-    returnType,
+    parameters,
+    typeAnnotation,
   });
 }
+export { tsCallSignatureDeclaration as tSCallSignatureDeclaration };
 export function tsConstructSignatureDeclaration(
   typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
-  params: Array<
+  parameters: Array<
     t.ArrayPattern | t.Identifier | t.ObjectPattern | t.RestElement
   >,
-  returnType: t.TSTypeAnnotation | null = null,
+  typeAnnotation: t.TSTypeAnnotation | null = null,
 ): t.TSConstructSignatureDeclaration {
   return validateNode<t.TSConstructSignatureDeclaration>({
     type: "TSConstructSignatureDeclaration",
     typeParameters,
-    params,
-    returnType,
+    parameters,
+    typeAnnotation,
   });
 }
+export { tsConstructSignatureDeclaration as tSConstructSignatureDeclaration };
 export function tsPropertySignature(
   key: t.Expression,
   typeAnnotation: t.TSTypeAnnotation | null = null,
@@ -1942,23 +1978,25 @@ export function tsPropertySignature(
     kind: null,
   });
 }
+export { tsPropertySignature as tSPropertySignature };
 export function tsMethodSignature(
   key: t.Expression,
   typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
-  params: Array<
+  parameters: Array<
     t.ArrayPattern | t.Identifier | t.ObjectPattern | t.RestElement
   >,
-  returnType: t.TSTypeAnnotation | null = null,
+  typeAnnotation: t.TSTypeAnnotation | null = null,
 ): t.TSMethodSignature {
   return validateNode<t.TSMethodSignature>({
     type: "TSMethodSignature",
     key,
     typeParameters,
-    params,
-    returnType,
+    parameters,
+    typeAnnotation,
     kind: null,
   });
 }
+export { tsMethodSignature as tSMethodSignature };
 export function tsIndexSignature(
   parameters: Array<t.Identifier>,
   typeAnnotation: t.TSTypeAnnotation | null = null,
@@ -1969,104 +2007,121 @@ export function tsIndexSignature(
     typeAnnotation,
   });
 }
+export { tsIndexSignature as tSIndexSignature };
 export function tsAnyKeyword(): t.TSAnyKeyword {
   return {
     type: "TSAnyKeyword",
   };
 }
+export { tsAnyKeyword as tSAnyKeyword };
 export function tsBooleanKeyword(): t.TSBooleanKeyword {
   return {
     type: "TSBooleanKeyword",
   };
 }
+export { tsBooleanKeyword as tSBooleanKeyword };
 export function tsBigIntKeyword(): t.TSBigIntKeyword {
   return {
     type: "TSBigIntKeyword",
   };
 }
+export { tsBigIntKeyword as tSBigIntKeyword };
 export function tsIntrinsicKeyword(): t.TSIntrinsicKeyword {
   return {
     type: "TSIntrinsicKeyword",
   };
 }
+export { tsIntrinsicKeyword as tSIntrinsicKeyword };
 export function tsNeverKeyword(): t.TSNeverKeyword {
   return {
     type: "TSNeverKeyword",
   };
 }
+export { tsNeverKeyword as tSNeverKeyword };
 export function tsNullKeyword(): t.TSNullKeyword {
   return {
     type: "TSNullKeyword",
   };
 }
+export { tsNullKeyword as tSNullKeyword };
 export function tsNumberKeyword(): t.TSNumberKeyword {
   return {
     type: "TSNumberKeyword",
   };
 }
+export { tsNumberKeyword as tSNumberKeyword };
 export function tsObjectKeyword(): t.TSObjectKeyword {
   return {
     type: "TSObjectKeyword",
   };
 }
+export { tsObjectKeyword as tSObjectKeyword };
 export function tsStringKeyword(): t.TSStringKeyword {
   return {
     type: "TSStringKeyword",
   };
 }
+export { tsStringKeyword as tSStringKeyword };
 export function tsSymbolKeyword(): t.TSSymbolKeyword {
   return {
     type: "TSSymbolKeyword",
   };
 }
+export { tsSymbolKeyword as tSSymbolKeyword };
 export function tsUndefinedKeyword(): t.TSUndefinedKeyword {
   return {
     type: "TSUndefinedKeyword",
   };
 }
+export { tsUndefinedKeyword as tSUndefinedKeyword };
 export function tsUnknownKeyword(): t.TSUnknownKeyword {
   return {
     type: "TSUnknownKeyword",
   };
 }
+export { tsUnknownKeyword as tSUnknownKeyword };
 export function tsVoidKeyword(): t.TSVoidKeyword {
   return {
     type: "TSVoidKeyword",
   };
 }
+export { tsVoidKeyword as tSVoidKeyword };
 export function tsThisType(): t.TSThisType {
   return {
     type: "TSThisType",
   };
 }
+export { tsThisType as tSThisType };
 export function tsFunctionType(
   typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
-  params: Array<
+  parameters: Array<
     t.ArrayPattern | t.Identifier | t.ObjectPattern | t.RestElement
   >,
-  returnType: t.TSTypeAnnotation | null = null,
+  typeAnnotation: t.TSTypeAnnotation | null = null,
 ): t.TSFunctionType {
   return validateNode<t.TSFunctionType>({
     type: "TSFunctionType",
     typeParameters,
-    params,
-    returnType,
+    parameters,
+    typeAnnotation,
   });
 }
+export { tsFunctionType as tSFunctionType };
 export function tsConstructorType(
   typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
-  params: Array<
+  parameters: Array<
     t.ArrayPattern | t.Identifier | t.ObjectPattern | t.RestElement
   >,
-  returnType: t.TSTypeAnnotation | null = null,
+  typeAnnotation: t.TSTypeAnnotation | null = null,
 ): t.TSConstructorType {
   return validateNode<t.TSConstructorType>({
     type: "TSConstructorType",
     typeParameters,
-    params,
-    returnType,
+    parameters,
+    typeAnnotation,
   });
 }
+export { tsConstructorType as tSConstructorType };
 export function tsTypeReference(
   typeName: t.TSEntityName,
   typeParameters: t.TSTypeParameterInstantiation | null = null,
@@ -2077,6 +2132,7 @@ export function tsTypeReference(
     typeParameters,
   });
 }
+export { tsTypeReference as tSTypeReference };
 export function tsTypePredicate(
   parameterName: t.Identifier | t.TSThisType,
   typeAnnotation: t.TSTypeAnnotation | null = null,
@@ -2089,6 +2145,7 @@ export function tsTypePredicate(
     asserts,
   });
 }
+export { tsTypePredicate as tSTypePredicate };
 export function tsTypeQuery(
   exprName: t.TSEntityName | t.TSImportType,
   typeParameters: t.TSTypeParameterInstantiation | null = null,
@@ -2099,6 +2156,7 @@ export function tsTypeQuery(
     typeParameters,
   });
 }
+export { tsTypeQuery as tSTypeQuery };
 export function tsTypeLiteral(
   members: Array<t.TSTypeElement>,
 ): t.TSTypeLiteral {
@@ -2107,12 +2165,14 @@ export function tsTypeLiteral(
     members,
   });
 }
+export { tsTypeLiteral as tSTypeLiteral };
 export function tsArrayType(elementType: t.TSType): t.TSArrayType {
   return validateNode<t.TSArrayType>({
     type: "TSArrayType",
     elementType,
   });
 }
+export { tsArrayType as tSArrayType };
 export function tsTupleType(
   elementTypes: Array<t.TSType | t.TSNamedTupleMember>,
 ): t.TSTupleType {
@@ -2121,18 +2181,21 @@ export function tsTupleType(
     elementTypes,
   });
 }
+export { tsTupleType as tSTupleType };
 export function tsOptionalType(typeAnnotation: t.TSType): t.TSOptionalType {
   return validateNode<t.TSOptionalType>({
     type: "TSOptionalType",
     typeAnnotation,
   });
 }
+export { tsOptionalType as tSOptionalType };
 export function tsRestType(typeAnnotation: t.TSType): t.TSRestType {
   return validateNode<t.TSRestType>({
     type: "TSRestType",
     typeAnnotation,
   });
 }
+export { tsRestType as tSRestType };
 export function tsNamedTupleMember(
   label: t.Identifier,
   elementType: t.TSType,
@@ -2145,12 +2208,14 @@ export function tsNamedTupleMember(
     optional,
   });
 }
+export { tsNamedTupleMember as tSNamedTupleMember };
 export function tsUnionType(types: Array<t.TSType>): t.TSUnionType {
   return validateNode<t.TSUnionType>({
     type: "TSUnionType",
     types,
   });
 }
+export { tsUnionType as tSUnionType };
 export function tsIntersectionType(
   types: Array<t.TSType>,
 ): t.TSIntersectionType {
@@ -2159,6 +2224,7 @@ export function tsIntersectionType(
     types,
   });
 }
+export { tsIntersectionType as tSIntersectionType };
 export function tsConditionalType(
   checkType: t.TSType,
   extendsType: t.TSType,
@@ -2173,12 +2239,14 @@ export function tsConditionalType(
     falseType,
   });
 }
+export { tsConditionalType as tSConditionalType };
 export function tsInferType(typeParameter: t.TSTypeParameter): t.TSInferType {
   return validateNode<t.TSInferType>({
     type: "TSInferType",
     typeParameter,
   });
 }
+export { tsInferType as tSInferType };
 export function tsParenthesizedType(
   typeAnnotation: t.TSType,
 ): t.TSParenthesizedType {
@@ -2187,6 +2255,7 @@ export function tsParenthesizedType(
     typeAnnotation,
   });
 }
+export { tsParenthesizedType as tSParenthesizedType };
 export function tsTypeOperator(typeAnnotation: t.TSType): t.TSTypeOperator {
   return validateNode<t.TSTypeOperator>({
     type: "TSTypeOperator",
@@ -2194,6 +2263,7 @@ export function tsTypeOperator(typeAnnotation: t.TSType): t.TSTypeOperator {
     operator: null,
   });
 }
+export { tsTypeOperator as tSTypeOperator };
 export function tsIndexedAccessType(
   objectType: t.TSType,
   indexType: t.TSType,
@@ -2204,6 +2274,7 @@ export function tsIndexedAccessType(
     indexType,
   });
 }
+export { tsIndexedAccessType as tSIndexedAccessType };
 export function tsMappedType(
   typeParameter: t.TSTypeParameter,
   typeAnnotation: t.TSType | null = null,
@@ -2216,6 +2287,7 @@ export function tsMappedType(
     nameType,
   });
 }
+export { tsMappedType as tSMappedType };
 export function tsLiteralType(
   literal:
     | t.NumericLiteral
@@ -2230,6 +2302,7 @@ export function tsLiteralType(
     literal,
   });
 }
+export { tsLiteralType as tSLiteralType };
 export function tsExpressionWithTypeArguments(
   expression: t.TSEntityName,
   typeParameters: t.TSTypeParameterInstantiation | null = null,
@@ -2240,6 +2313,7 @@ export function tsExpressionWithTypeArguments(
     typeParameters,
   });
 }
+export { tsExpressionWithTypeArguments as tSExpressionWithTypeArguments };
 export function tsInterfaceDeclaration(
   id: t.Identifier,
   typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
@@ -2254,6 +2328,7 @@ export function tsInterfaceDeclaration(
     body,
   });
 }
+export { tsInterfaceDeclaration as tSInterfaceDeclaration };
 export function tsInterfaceBody(
   body: Array<t.TSTypeElement>,
 ): t.TSInterfaceBody {
@@ -2262,6 +2337,7 @@ export function tsInterfaceBody(
     body,
   });
 }
+export { tsInterfaceBody as tSInterfaceBody };
 export function tsTypeAliasDeclaration(
   id: t.Identifier,
   typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
@@ -2274,6 +2350,7 @@ export function tsTypeAliasDeclaration(
     typeAnnotation,
   });
 }
+export { tsTypeAliasDeclaration as tSTypeAliasDeclaration };
 export function tsInstantiationExpression(
   expression: t.Expression,
   typeParameters: t.TSTypeParameterInstantiation | null = null,
@@ -2284,6 +2361,7 @@ export function tsInstantiationExpression(
     typeParameters,
   });
 }
+export { tsInstantiationExpression as tSInstantiationExpression };
 export function tsAsExpression(
   expression: t.Expression,
   typeAnnotation: t.TSType,
@@ -2294,6 +2372,7 @@ export function tsAsExpression(
     typeAnnotation,
   });
 }
+export { tsAsExpression as tSAsExpression };
 export function tsSatisfiesExpression(
   expression: t.Expression,
   typeAnnotation: t.TSType,
@@ -2304,6 +2383,7 @@ export function tsSatisfiesExpression(
     typeAnnotation,
   });
 }
+export { tsSatisfiesExpression as tSSatisfiesExpression };
 export function tsTypeAssertion(
   typeAnnotation: t.TSType,
   expression: t.Expression,
@@ -2314,6 +2394,7 @@ export function tsTypeAssertion(
     expression,
   });
 }
+export { tsTypeAssertion as tSTypeAssertion };
 export function tsEnumDeclaration(
   id: t.Identifier,
   members: Array<t.TSEnumMember>,
@@ -2324,6 +2405,7 @@ export function tsEnumDeclaration(
     members,
   });
 }
+export { tsEnumDeclaration as tSEnumDeclaration };
 export function tsEnumMember(
   id: t.Identifier | t.StringLiteral,
   initializer: t.Expression | null = null,
@@ -2334,6 +2416,7 @@ export function tsEnumMember(
     initializer,
   });
 }
+export { tsEnumMember as tSEnumMember };
 export function tsModuleDeclaration(
   id: t.Identifier | t.StringLiteral,
   body: t.TSModuleBlock | t.TSModuleDeclaration,
@@ -2344,12 +2427,14 @@ export function tsModuleDeclaration(
     body,
   });
 }
+export { tsModuleDeclaration as tSModuleDeclaration };
 export function tsModuleBlock(body: Array<t.Statement>): t.TSModuleBlock {
   return validateNode<t.TSModuleBlock>({
     type: "TSModuleBlock",
     body,
   });
 }
+export { tsModuleBlock as tSModuleBlock };
 export function tsImportType(
   argument: t.StringLiteral,
   qualifier: t.TSEntityName | null = null,
@@ -2362,6 +2447,7 @@ export function tsImportType(
     typeParameters,
   });
 }
+export { tsImportType as tSImportType };
 export function tsImportEqualsDeclaration(
   id: t.Identifier,
   moduleReference: t.TSEntityName | t.TSExternalModuleReference,
@@ -2373,6 +2459,7 @@ export function tsImportEqualsDeclaration(
     isExport: null,
   });
 }
+export { tsImportEqualsDeclaration as tSImportEqualsDeclaration };
 export function tsExternalModuleReference(
   expression: t.StringLiteral,
 ): t.TSExternalModuleReference {
@@ -2381,6 +2468,7 @@ export function tsExternalModuleReference(
     expression,
   });
 }
+export { tsExternalModuleReference as tSExternalModuleReference };
 export function tsNonNullExpression(
   expression: t.Expression,
 ): t.TSNonNullExpression {
@@ -2389,6 +2477,7 @@ export function tsNonNullExpression(
     expression,
   });
 }
+export { tsNonNullExpression as tSNonNullExpression };
 export function tsExportAssignment(
   expression: t.Expression,
 ): t.TSExportAssignment {
@@ -2397,6 +2486,7 @@ export function tsExportAssignment(
     expression,
   });
 }
+export { tsExportAssignment as tSExportAssignment };
 export function tsNamespaceExportDeclaration(
   id: t.Identifier,
 ): t.TSNamespaceExportDeclaration {
@@ -2405,12 +2495,14 @@ export function tsNamespaceExportDeclaration(
     id,
   });
 }
+export { tsNamespaceExportDeclaration as tSNamespaceExportDeclaration };
 export function tsTypeAnnotation(typeAnnotation: t.TSType): t.TSTypeAnnotation {
   return validateNode<t.TSTypeAnnotation>({
     type: "TSTypeAnnotation",
     typeAnnotation,
   });
 }
+export { tsTypeAnnotation as tSTypeAnnotation };
 export function tsTypeParameterInstantiation(
   params: Array<t.TSType>,
 ): t.TSTypeParameterInstantiation {
@@ -2419,6 +2511,7 @@ export function tsTypeParameterInstantiation(
     params,
   });
 }
+export { tsTypeParameterInstantiation as tSTypeParameterInstantiation };
 export function tsTypeParameterDeclaration(
   params: Array<t.TSTypeParameter>,
 ): t.TSTypeParameterDeclaration {
@@ -2427,10 +2520,11 @@ export function tsTypeParameterDeclaration(
     params,
   });
 }
+export { tsTypeParameterDeclaration as tSTypeParameterDeclaration };
 export function tsTypeParameter(
   constraint: t.TSType | null | undefined = null,
   _default: t.TSType | null | undefined = null,
-  name: t.Identifier,
+  name: string,
 ): t.TSTypeParameter {
   return validateNode<t.TSTypeParameter>({
     type: "TSTypeParameter",
@@ -2439,6 +2533,7 @@ export function tsTypeParameter(
     name,
   });
 }
+export { tsTypeParameter as tSTypeParameter };
 /** @deprecated */
 function NumberLiteral(value: number) {
   deprecationWarning("NumberLiteral", "NumericLiteral", "The node type ");

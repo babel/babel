@@ -1,5 +1,5 @@
 function dispose_SuppressedError(r, e) {
-  return "undefined" != typeof SuppressedError ? dispose_SuppressedError = SuppressedError : (dispose_SuppressedError = function (r, e) {
+  return "undefined" != typeof SuppressedError ? dispose_SuppressedError = SuppressedError : (dispose_SuppressedError = function dispose_SuppressedError(r, e) {
     this.suppressed = r, this.error = e, this.stack = new Error().stack;
   }, dispose_SuppressedError.prototype = Object.create(Error.prototype, {
     constructor: {
@@ -25,4 +25,4 @@ function _dispose(r, e, s) {
   }
   return next();
 }
-module.exports = _dispose, module.exports.__esModule = true, module.exports.default = module.exports;
+module.exports = _dispose, module.exports.__esModule = true, module.exports["default"] = module.exports;

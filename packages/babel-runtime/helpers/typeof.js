@@ -5,6 +5,6 @@ function _typeof(o) {
     return typeof o;
   } : function (o) {
     return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, module.exports.__esModule = true, module.exports.default = module.exports), _typeof(o);
+  }, module.exports.__esModule = true, module.exports["default"] = module.exports), _typeof(o);
 }
-module.exports = _typeof, module.exports.__esModule = true, module.exports.default = module.exports;
+module.exports = _typeof, module.exports.__esModule = true, module.exports["default"] = module.exports;

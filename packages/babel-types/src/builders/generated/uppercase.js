@@ -177,6 +177,7 @@ export {
   jsxFragment as JSXFragment,
   jsxOpeningFragment as JSXOpeningFragment,
   jsxClosingFragment as JSXClosingFragment,
+  noop as Noop,
   placeholder as Placeholder,
   v8IntrinsicIdentifier as V8IntrinsicIdentifier,
   argumentPlaceholder as ArgumentPlaceholder,

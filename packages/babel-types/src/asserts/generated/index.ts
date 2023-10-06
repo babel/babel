@@ -1023,6 +1023,12 @@ export function assertJSXClosingFragment(
 ): asserts node is t.JSXClosingFragment {
   assert("JSXClosingFragment", node, opts);
 }
+export function assertNoop(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.Noop {
+  assert("Noop", node, opts);
+}
 export function assertPlaceholder(
   node: object | null | undefined,
   opts?: object | null,
