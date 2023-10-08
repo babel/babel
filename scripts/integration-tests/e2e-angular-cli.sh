@@ -25,7 +25,7 @@ startLocalRegistry "$PWD"/verdaccio-config.yml
 mkdir tmp && cd tmp
 npx -p @angular/cli ng new --defaults ngx --package-manager yarn --skip-git --skip-install
 cd ngx
-node "$dir"/utils/set-babel-resolutions.js
+node "$dir"/utils/bump-babel-dependencies.js
 touch yarn.lock
 yarn set version stable
 YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn
