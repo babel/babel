@@ -88,7 +88,16 @@ export default declare(api => {
         } finally {
           ${disposeCall}
         }
-      `;
+      ` as t.TryStatement;
+
+        t.inherits(replacement, path.node);
+
+        t.addComment(
+          replacement.block.body[0],
+          "leading",
+          "u: using(obj, isAwait), d: dispose()",
+          true,
+        );
 
         const { parentPath } = path;
         if (
@@ -146,7 +155,7 @@ export default declare(api => {
         }
       ` as t.TryStatement;
 
-      t.inherits(replacement.block, path.node);
+        t.inherits(replacement.block, path.node);
 
         const { parentPath } = path;
         if (

@@ -1,4 +1,5 @@
 try {
+  //u: using(obj, isAwait), d: dispose()
   var _usingCtx = babelHelpers.usingCtx();
   stmt;
   const x = _usingCtx.u(obj);

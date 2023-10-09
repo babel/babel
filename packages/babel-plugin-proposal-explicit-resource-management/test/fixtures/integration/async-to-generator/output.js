@@ -5,6 +5,7 @@ function _fn() {
   _fn = babelHelpers.asyncToGenerator(function* () {
     yield 0;
     try {
+      //u: using(obj, isAwait), d: dispose()
       var _usingCtx = babelHelpers.usingCtx();
       const x = _usingCtx.u(y, true);
       yield 1;
