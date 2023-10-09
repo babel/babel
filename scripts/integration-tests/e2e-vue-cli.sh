@@ -26,8 +26,8 @@ export YARN_IGNORE_PATH=1
 
 startLocalRegistry "$PWD"/../../verdaccio-config.yml
 yarn install --ignore-engines # Remove --ignore-engines when vue-cli upgrades their lockfile to eslint-import-resolver-webpack@0.13.2
-node "$PWD"/../../utils/bump-babel-dependencies.js
-yarn lerna exec -- node "$PWD"/../../utils/bump-babel-dependencies.js
+node "$PWD"/../../utils/bump-babel-dependencies.js resolutions
+yarn lerna exec -- node "$PWD"/../../utils/bump-babel-dependencies.js resolutions
 yarn install --ignore-engines # Remove --ignore-engines when vue-cli upgrades their lockfile to eslint-import-resolver-webpack@0.13.2
 
 if [[ "$(node --version)" == v17.* ]]; then
