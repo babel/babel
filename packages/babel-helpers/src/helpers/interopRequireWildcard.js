@@ -24,7 +24,7 @@ export default function _interopRequireWildcard(obj, nodeInterop) {
     return cache.get(obj);
   }
 
-  var newObj = {};
+  var newObj = { __proto__: null };
   var hasPropertyDescriptor =
     Object.defineProperty && Object.getOwnPropertyDescriptor;
   for (var key in obj) {
