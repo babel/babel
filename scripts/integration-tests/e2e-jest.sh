@@ -20,10 +20,10 @@ cd /tmp/jest || exit
 
 # Update @babel/* dependencies
 bump_deps="$root/utils/bump-babel-dependencies.js"
-node "$bump_deps"
+node "$bump_deps" resolutions
 for d in ./packages/*/
 do
-  (cd "$d"; node "$bump_deps")
+  (cd "$d"; node "$bump_deps" resolutions)
 done
 
 #==============================================================================#

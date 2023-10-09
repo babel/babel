@@ -19,8 +19,7 @@ git clone --depth=1 https://github.com/prettier/prettier tmp/prettier
 cd tmp/prettier || exit
 
 # Update @babel/* dependencies
-bump_deps="$root/utils/bump-babel-dependencies.js"
-node "$bump_deps"
+node "$root/utils/bump-babel-dependencies.js"
 
 if [ "$BABEL_8_BREAKING" = true ] ; then
   # Based on https://github.com/prettier/prettier/pull/15157
