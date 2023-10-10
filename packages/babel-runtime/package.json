@@ -143,6 +143,15 @@
       "./helpers/importDeferProxy.js"
     ],
     "./helpers/esm/importDeferProxy": "./helpers/esm/importDeferProxy.js",
+    "./helpers/interopRequireWildcard": [
+      {
+        "node": "./helpers/interopRequireWildcard.js",
+        "import": "./helpers/esm/interopRequireWildcard.js",
+        "default": "./helpers/interopRequireWildcard.js"
+      },
+      "./helpers/interopRequireWildcard.js"
+    ],
+    "./helpers/esm/interopRequireWildcard": "./helpers/esm/interopRequireWildcard.js",
     "./helpers/iterableToArrayLimit": [
       {
         "node": "./helpers/iterableToArrayLimit.js",
@@ -395,15 +404,6 @@
       "./helpers/interopRequireDefault.js"
     ],
     "./helpers/esm/interopRequireDefault": "./helpers/esm/interopRequireDefault.js",
-    "./helpers/interopRequireWildcard": [
-      {
-        "node": "./helpers/interopRequireWildcard.js",
-        "import": "./helpers/esm/interopRequireWildcard.js",
-        "default": "./helpers/interopRequireWildcard.js"
-      },
-      "./helpers/interopRequireWildcard.js"
-    ],
-    "./helpers/esm/interopRequireWildcard": "./helpers/esm/interopRequireWildcard.js",
     "./helpers/newArrowCheck": [
       {
         "node": "./helpers/newArrowCheck.js",
