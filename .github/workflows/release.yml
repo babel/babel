@@ -301,9 +301,9 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: babel-types.md
-          path: docs/types.md
       - name: Commit Babel website changes
         run: |
+          mv babel-types.md docs/types.md
           git config user.name "Babel Bot"
           git config user.email "babel-bot@users.noreply.github.com"
           git checkout -b update-types-docs
