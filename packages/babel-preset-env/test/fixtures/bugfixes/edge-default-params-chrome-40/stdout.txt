@@ -31,7 +31,7 @@ Using plugins:
   transform-literals { chrome < 44 }
   transform-function-name { chrome < 51 }
   transform-block-scoped-functions { chrome < 41 }
-  transform-classes { chrome < 46 }
+  transform-classes { chrome < 49 }
   transform-object-super { chrome < 46 }
   transform-shorthand-properties { chrome < 43 }
   transform-duplicate-keys { chrome < 42 }
