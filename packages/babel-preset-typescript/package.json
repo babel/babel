@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-typescript",
-  "version": "7.23.0",
+  "version": "7.23.2",
   "description": "Babel preset for TypeScript.",
   "repository": {
     "type": "git",
