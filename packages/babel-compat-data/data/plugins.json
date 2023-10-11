@@ -486,7 +486,7 @@
     "electron": "0.21"
   },
   "transform-classes": {
-    "chrome": "46",
+    "chrome": "49",
     "opera": "33",
     "edge": "13",
     "firefox": "45",
