@@ -87,6 +87,7 @@ module.exports = [
         languageOptions: {
           parser: parserTypeScriptESLint,
           parserOptions: {
+            allowAutomaticSingleRunInference: true,
             project: "./tsconfig.eslint.json",
           },
         },
