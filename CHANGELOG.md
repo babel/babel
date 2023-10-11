@@ -24,6 +24,17 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.23.2 (2023-10-11)
+
+#### :bug: Bug Fix
+* `babel-traverse`
+  * [#16033](https://github.com/babel/babel/pull/16033) Only evaluate own String/Number/Math methods ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-preset-typescript`
+  * [#16022](https://github.com/babel/babel/pull/16022) Rewrite `.tsx` extension when using `rewriteImportExtensions` ([@jimmydief](https://github.com/jimmydief))
+* `babel-helpers`
+  * [#16017](https://github.com/babel/babel/pull/16017) Fix: fallback to typeof when toString is applied to incompatible object ([@JLHwung](https://github.com/JLHwung))
+* `babel-helpers`, `babel-plugin-transform-modules-commonjs`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#16025](https://github.com/babel/babel/pull/16025) Avoid override mistake in namespace imports ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.23.0 (2023-09-25)
 
 #### :rocket: New Feature
