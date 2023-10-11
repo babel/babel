@@ -23,7 +23,7 @@ if (argSeparator > -1) {
 }
 
 /**
- * Replace dashes with underscores in the v8Flag name
+ * Replace underscores with dashes in the v8Flag name
  * Also ensure that if the arg contains a value (e.g. --arg=true)
  * that only the flag is returned.
  */
@@ -33,33 +33,44 @@ function getNormalizedV8Flag(arg: string) {
   const matches = arg.match(/--(?:no)?(.+)/);
 
   if (matches) {
-    return `--${matches[1].replace(/-/g, "_")}`;
+    return `--${matches[1].replace(/_/g, "-")}`;
   }
 
   return arg;
 }
 
-// These are aliases for node options defined by babel-node.
-const aliases = new Map([
-  ["-d", "--debug"],
-  ["-gc", "--expose-gc"],
-]);
-
 getV8Flags(async function (err, v8Flags) {
+  if (!process.env.BABEL_8_BREAKING) {
+    // The version of v8flags used by Babel 7 uses _, while the one used
+    // by Babel 8 used -. Normalize the flags accordingly.
+    v8Flags = v8Flags.map(getNormalizedV8Flag);
+    process.allowedNodeEnvironmentFlags.forEach(flag =>
+      v8Flags.push(getNormalizedV8Flag(flag)),
+    );
+  }
+
+  const v8FlagsSet = new Set(v8Flags);
+
   for (let i = 0; i < babelArgs.length; i++) {
     const arg = babelArgs[i];
     const flag = arg.split("=")[0];
 
+    if (!process.env.BABEL_8_BREAKING) {
+      if (flag === "-d") {
+        args.unshift("--debug");
+        continue;
+      } else if (flag === "-gc") {
+        args.unshift("--expose-gc");
+        continue;
+      }
+    }
     if (flag === "-r" || flag === "--require") {
       args.push(flag);
       args.push(babelArgs[++i]);
-    } else if (aliases.has(flag)) {
-      args.unshift(aliases.get(flag));
     } else if (
       flag === "debug" || // node debug foo.js
       flag === "inspect" ||
-      v8Flags.indexOf(getNormalizedV8Flag(flag)) >= 0 ||
-      process.allowedNodeEnvironmentFlags.has(flag)
+      v8FlagsSet.has(getNormalizedV8Flag(flag))
     ) {
       args.unshift(arg);
     } else {
@@ -73,6 +84,7 @@ getV8Flags(async function (err, v8Flags) {
   }
 
   try {
+    // eslint-disable-next-line import/no-unresolved
     const { default: kexec } = await import("kexec");
     kexec(process.argv[0], args);
   } catch (err) {

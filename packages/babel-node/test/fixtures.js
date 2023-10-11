@@ -6,6 +6,7 @@ import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import { createRequire } from "module";
+import { itBabel8, itBabel7 } from "$repo-utils";
 
 const require = createRequire(import.meta.url);
 
@@ -102,7 +103,13 @@ const buildTest = function (testName, opts) {
     saveInFiles(opts.inFiles);
     const args = [binLoc].concat(opts.args);
 
-    const spawnOpts = { cwd: tmpLoc, env: { BABEL_DISABLE_CACHE: true } };
+    const spawnOpts = {
+      cwd: tmpLoc,
+      env: {
+        ...(process.env.BABEL_8_BREAKING && { BABEL_8_BREAKING: true }),
+        BABEL_DISABLE_CACHE: true,
+      },
+    };
     if (opts.ipc) {
       spawnOpts.stdio = ["pipe", "pipe", "pipe", "ipc"];
     }
@@ -192,7 +199,11 @@ describe("bin/babel-node", function () {
       opts.inFiles["package.json"] = `{ "type": "commonjs" }`;
     }
 
-    // eslint-disable-next-line jest/valid-title
-    it(testName, buildTest(testName, opts), 20000);
+    let run = it;
+    if (typeof opts.BABEL_8_BREAKING === "boolean") {
+      run = opts.BABEL_8_BREAKING ? itBabel8 : itBabel7;
+    }
+
+    run(testName, buildTest(testName, opts), 20000);
   });
 });

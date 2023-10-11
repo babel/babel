@@ -1,0 +1,40 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "chrome": "49"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  transform-unicode-sets-regex { chrome < 112 }
+  transform-class-static-block { chrome < 94 }
+  transform-private-property-in-object { chrome < 91 }
+  transform-class-properties { chrome < 74 }
+  transform-private-methods { chrome < 84 }
+  transform-numeric-separator { chrome < 75 }
+  transform-logical-assignment-operators { chrome < 85 }
+  transform-nullish-coalescing-operator { chrome < 80 }
+  transform-optional-chaining { chrome < 80 }
+  transform-json-strings { chrome < 66 }
+  transform-optional-catch-binding { chrome < 66 }
+  transform-async-generator-functions { chrome < 63 }
+  transform-object-rest-spread { chrome < 60 }
+  transform-dotall-regex { chrome < 62 }
+  transform-unicode-property-regex { chrome < 64 }
+  transform-named-capturing-groups-regex { chrome < 64 }
+  transform-async-to-generator { chrome < 55 }
+  transform-exponentiation-operator { chrome < 52 }
+  transform-function-name { chrome < 51 }
+  transform-for-of { chrome < 51 }
+  transform-unicode-regex { chrome < 50 }
+  transform-destructuring { chrome < 51 }
+  transform-block-scoping { chrome < 50 }
+  transform-regenerator { chrome < 50 }
+  transform-export-namespace-from { chrome < 72 }
+  transform-modules-commonjs
+  transform-dynamic-import
+  syntax-import-meta
+
+Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

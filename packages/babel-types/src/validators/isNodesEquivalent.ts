@@ -1,5 +1,5 @@
-import { NODE_FIELDS, VISITOR_KEYS } from "../definitions";
-import type * as t from "..";
+import { NODE_FIELDS, VISITOR_KEYS } from "../definitions/index.ts";
+import type * as t from "../index.ts";
 
 /**
  * Check if two nodes are equivalent

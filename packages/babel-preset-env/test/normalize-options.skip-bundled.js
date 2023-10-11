@@ -5,6 +5,7 @@ import _normalizeOptions, {
   normalizePluginName,
 } from "../lib/normalize-options.js";
 const normalizeOptions = _normalizeOptions.default || _normalizeOptions;
+import { itBabel7 } from "$repo-utils";
 
 describe("normalize-options", () => {
   describe("normalizeOptions", () => {
@@ -83,7 +84,7 @@ describe("normalize-options", () => {
 
     it("throws when including module plugins", () => {
       expect(() =>
-        normalizeOptions({ include: ["proposal-dynamic-import"] }),
+        normalizeOptions({ include: ["transform-dynamic-import"] }),
       ).toThrow();
       expect(() =>
         normalizeOptions({ include: ["transform-modules-amd"] }),
@@ -92,7 +93,7 @@ describe("normalize-options", () => {
 
     it("allows exclusion of module plugins", () => {
       expect(() =>
-        normalizeOptions({ exclude: ["proposal-dynamic-import"] }),
+        normalizeOptions({ exclude: ["transform-dynamic-import"] }),
       ).not.toThrow();
       expect(() =>
         normalizeOptions({ exclude: ["transform-modules-commonjs"] }),
@@ -111,15 +112,21 @@ describe("normalize-options", () => {
 
   describe("RegExp include/exclude", () => {
     it("should not allow invalid plugins in `include` and `exclude`", () => {
-      const normalizeWithNonExistingPlugin = () => {
+      const normalizeIncludeWithNonExistingPlugin = () => {
         normalizeOptions({
           include: ["non-existing-plugin"],
         });
       };
-      expect(normalizeWithNonExistingPlugin).toThrow(Error);
+      const normalizeExcludeWithNonExistingPlugin = () => {
+        normalizeOptions({
+          exclude: ["non-existing-plugin"],
+        });
+      };
+      expect(normalizeIncludeWithNonExistingPlugin).toThrow(Error);
+      expect(normalizeExcludeWithNonExistingPlugin).toThrow(Error);
     });
 
-    it("should expand regular expressions in `include` and `exclude`", () => {
+    it("should expand regular expressions in `include`", () => {
       const normalized = normalizeOptions({
         include: ["^[a-z]*-spread", "babel-plugin-transform-classes"],
       });
@@ -129,7 +136,7 @@ describe("normalize-options", () => {
       ]);
     });
 
-    it("should expand regular expressions in `include` and `exclude`", () => {
+    it("should expand regular expressions in `exclude`", () => {
       const normalized = normalizeOptions({
         useBuiltIns: "entry",
         corejs: 3,
@@ -142,10 +149,11 @@ describe("normalize-options", () => {
       ]);
     });
 
-    it("should work both with proposal-* and transform-*", () => {
+    itBabel7("should work both with proposal-* and transform-*", () => {
       expect(
         normalizeOptions({ include: ["proposal-.*-regex"] }).include,
       ).toEqual([
+        "transform-unicode-sets-regex",
         "transform-dotall-regex",
         "transform-unicode-property-regex",
         "transform-named-capturing-groups-regex",
@@ -156,6 +164,7 @@ describe("normalize-options", () => {
       expect(
         normalizeOptions({ include: ["transform-.*-regex"] }).include,
       ).toEqual([
+        "transform-unicode-sets-regex",
         "transform-dotall-regex",
         "transform-unicode-property-regex",
         "transform-named-capturing-groups-regex",

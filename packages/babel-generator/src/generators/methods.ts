@@ -1,12 +1,23 @@
-import type Printer from "../printer";
-import { isIdentifier } from "@babel/types";
+import type Printer from "../printer.ts";
 import type * as t from "@babel/types";
+import { isIdentifier } from "@babel/types";
+import type { NodePath } from "@babel/traverse";
 
 export function _params(
   this: Printer,
   node: t.Function | t.TSDeclareMethod | t.TSDeclareFunction,
+  idNode: t.Expression | t.PrivateName,
+  parentNode: NodePath<
+    t.Function | t.TSDeclareMethod | t.TSDeclareFunction
+  >["parent"],
 ) {
   this.print(node.typeParameters, node);
+
+  const nameInfo = _getFuncIdName.call(this, idNode, parentNode);
+  if (nameInfo) {
+    this.sourceIdentifierName(nameInfo.name, nameInfo.pos);
+  }
+
   this.token("(");
   this._parameters(node.params, node);
   this.token(")");
@@ -106,7 +117,11 @@ export function _methodHead(this: Printer, node: t.Method | t.TSDeclareMethod) {
     this.token("?");
   }
 
-  this._params(node);
+  this._params(
+    node,
+    node.computed && node.key.type !== "StringLiteral" ? undefined : node.key,
+    undefined,
+  );
 }
 
 export function _predicate(
@@ -129,6 +144,9 @@ export function _predicate(
 export function _functionHead(
   this: Printer,
   node: t.FunctionDeclaration | t.FunctionExpression | t.TSDeclareFunction,
+  parent: NodePath<
+    t.FunctionDeclaration | t.FunctionExpression | t.TSDeclareFunction
+  >["parent"],
 ) {
   if (node.async) {
     this.word("async");
@@ -152,14 +170,18 @@ export function _functionHead(
     this.print(node.id, node);
   }
 
-  this._params(node);
+  this._params(node, node.id, parent);
   if (node.type !== "TSDeclareFunction") {
     this._predicate(node);
   }
 }
 
-export function FunctionExpression(this: Printer, node: t.FunctionExpression) {
-  this._functionHead(node);
+export function FunctionExpression(
+  this: Printer,
+  node: t.FunctionExpression,
+  parent: NodePath<t.FunctionExpression>["parent"],
+) {
+  this._functionHead(node, parent);
   this.space();
   this.print(node.body, node);
 }
@@ -169,6 +191,7 @@ export { FunctionExpression as FunctionDeclaration };
 export function ArrowFunctionExpression(
   this: Printer,
   node: t.ArrowFunctionExpression,
+  parent: NodePath<t.ArrowFunctionExpression>["parent"],
 ) {
   if (node.async) {
     this.word("async", true);
@@ -186,7 +209,7 @@ export function ArrowFunctionExpression(
   ) {
     this.print(firstParam, node, true);
   } else {
-    this._params(node);
+    this._params(node, undefined, parent);
   }
 
   this._predicate(node, true);
@@ -216,4 +239,62 @@ function hasTypesOrComments(
     param.leadingComments?.length ||
     param.trailingComments?.length
   );
+}
+
+function _getFuncIdName(
+  this: Printer,
+  idNode: t.Expression | t.PrivateName,
+  parent: NodePath<
+    t.Function | t.TSDeclareMethod | t.TSDeclareFunction
+  >["parent"],
+) {
+  let id: t.Expression | t.PrivateName | t.LVal = idNode;
+
+  if (!id && parent) {
+    const parentType = parent.type;
+
+    if (parentType === "VariableDeclarator") {
+      id = parent.id;
+    } else if (
+      parentType === "AssignmentExpression" ||
+      parentType === "AssignmentPattern"
+    ) {
+      id = parent.left;
+    } else if (
+      parentType === "ObjectProperty" ||
+      parentType === "ClassProperty"
+    ) {
+      if (!parent.computed || parent.key.type === "StringLiteral") {
+        id = parent.key;
+      }
+    } else if (
+      parentType === "ClassPrivateProperty" ||
+      parentType === "ClassAccessorProperty"
+    ) {
+      id = parent.key;
+    }
+  }
+
+  if (!id) return;
+
+  let nameInfo;
+
+  if (id.type === "Identifier") {
+    nameInfo = {
+      pos: id.loc?.start,
+      name: id.loc?.identifierName || id.name,
+    };
+  } else if (id.type === "PrivateName") {
+    nameInfo = {
+      pos: id.loc?.start,
+      name: "#" + id.id.name,
+    };
+  } else if (id.type === "StringLiteral") {
+    nameInfo = {
+      pos: id.loc?.start,
+      name: id.value,
+    };
+  }
+
+  return nameInfo;
 }

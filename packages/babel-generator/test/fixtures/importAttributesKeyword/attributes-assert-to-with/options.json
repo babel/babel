@@ -1,0 +1,4 @@
+{
+  "plugins": [["importAttributes", { "deprecatedAssertSyntax": true }]],
+  "importAttributesKeyword": "with"
+}

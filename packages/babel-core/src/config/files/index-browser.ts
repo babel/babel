@@ -5,9 +5,9 @@ import type {
   IgnoreFile,
   RelativeConfig,
   FilePackageData,
-} from "./types";
+} from "./types.ts";
 
-import type { CallerMetadata } from "../validation/options";
+import type { CallerMetadata } from "../validation/options.ts";
 
 export type { ConfigFile, IgnoreFile, RelativeConfig, FilePackageData };
 

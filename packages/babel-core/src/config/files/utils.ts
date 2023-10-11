@@ -1,8 +1,8 @@
 import type { Handler } from "gensync";
 
-import { makeStrongCache } from "../caching";
-import type { CacheConfigurator } from "../caching";
-import * as fs from "../../gensync-utils/fs";
+import { makeStrongCache } from "../caching.ts";
+import type { CacheConfigurator } from "../caching.ts";
+import * as fs from "../../gensync-utils/fs.ts";
 import nodeFs from "fs";
 
 export function makeStaticFileCache<T>(

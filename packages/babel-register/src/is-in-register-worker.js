@@ -2,7 +2,7 @@
 
 /**
  * Since workers inherit the exec options from the parent thread, we
- * must be careful to avoid infite "@babel/register" setup loops.
+ * must be careful to avoid infinite "@babel/register" setup loops.
  *
  * If @babel/register is imported using the -r/--require flag, the worker
  * will have the same flag and we must avoid registering the @babel/register

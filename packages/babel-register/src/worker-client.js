@@ -55,7 +55,7 @@ exports.WorkerClient = class WorkerClient extends Client {
   }
 
   static get #markInRegisterWorker() {
-    return require("./is-in-register-worker").markInRegisterWorker;
+    return require("./is-in-register-worker.js").markInRegisterWorker;
   }
 
   #worker = new WorkerClient.#worker_threads.Worker(
@@ -97,7 +97,7 @@ if (!process.env.BABEL_8_BREAKING) {
     static #handleMessage;
 
     constructor() {
-      LocalClient.#handleMessage ??= require("./worker/handle-message");
+      LocalClient.#handleMessage ??= require("./worker/handle-message.js");
 
       super((action, payload) => {
         return LocalClient.#handleMessage(

@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-typeof-symbol",
-  "version": "7.18.9",
+  "version": "7.22.5",
   "description": "This transformer wraps all typeof expressions with a method that replicates native behaviour. (ie. returning “symbol” for symbols)",
   "repository": {
     "type": "git",
@@ -35,7 +35,11 @@
   "author": "The Babel Team (https://babel.dev/team)",
   "conditions": {
     "BABEL_8_BREAKING": [
-      null,
+      {
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+        }
+      },
       {
         "exports": null
       }

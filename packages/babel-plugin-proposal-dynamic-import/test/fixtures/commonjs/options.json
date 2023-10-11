@@ -1,3 +1,0 @@
-{
-  "plugins": ["proposal-dynamic-import", "transform-modules-commonjs"]
-}

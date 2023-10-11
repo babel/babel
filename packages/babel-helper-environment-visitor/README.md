@@ -2,18 +2,18 @@
 
 > Helper visitor to only visit nodes in the current 'this' context
 
-See our website [@babel/helper-environment-visitor](https://babeljs.io/docs/en/babel-helper-environment-visitor) for more information.
+See our website [@babel/helper-environment-visitor](https://babeljs.io/docs/babel-helper-environment-visitor) for more information.
 
 ## Install
 
 Using npm:
 
 ```sh
-npm install --save-dev @babel/helper-environment-visitor
+npm install --save @babel/helper-environment-visitor
 ```
 
 or using yarn:
 
 ```sh
-yarn add @babel/helper-environment-visitor --dev
+yarn add @babel/helper-environment-visitor
 ```

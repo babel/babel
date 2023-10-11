@@ -1,0 +1,57 @@
+{
+  "name": "@babel/plugin-proposal-optional-chaining-assign",
+  "version": "7.23.0",
+  "description": "Transform optional chaining on the left-hand side of assignment expressions",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-proposal-optional-chaining-assign"
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-optional-chaining-assign",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ],
+  "dependencies": {
+    "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^",
+    "@babel/plugin-syntax-optional-chaining-assign": "workspace:^",
+    "@babel/plugin-transform-optional-chaining": "workspace:^"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.22.5"
+  },
+  "devDependencies": {
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^"
+  },
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)",
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      {
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+        }
+      },
+      {}
+    ],
+    "USE_ESM": [
+      {
+        "type": "module"
+      },
+      null
+    ]
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
+  "type": "commonjs"
+}

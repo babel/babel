@@ -1,0 +1,37 @@
+name: Open issue to remind doing something
+on:
+  schedule:
+    - cron: 0 0 15 07 *
+
+permissions:
+  issues: write
+
+jobs:
+  npm_deprecate:
+    name: Create issue for deprecating npm  packages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Issue Bot Action
+        uses: imjohnbo/issue-bot@v3.4.3
+        with:
+          assignees: nicolo-ribaudo
+          title: "Deprecate renamed npm packages"
+          body: |-
+            Please run these commands:
+            ```
+            npm deprecate @babel/plugin-proposal-class-static-block "This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-class-static-block instead."
+            npm deprecate @babel/plugin-proposal-private-property-in-object "This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-private-property-in-object instead."
+            npm deprecate @babel/plugin-proposal-class-properties "This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-class-properties instead."
+            npm deprecate @babel/plugin-proposal-private-methods "This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-private-methods instead."
+            npm deprecate @babel/plugin-proposal-numeric-separator "This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-numeric-separator instead."
+            npm deprecate @babel/plugin-proposal-logical-assignment-operators "This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-logical-assignment-operators instead."
+            npm deprecate @babel/plugin-proposal-nullish-coalescing-operator "This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-nullish-coalescing-operator instead."
+            npm deprecate @babel/plugin-proposal-optional-chaining "This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-optional-chaining instead."
+            npm deprecate @babel/plugin-proposal-json-strings "This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-json-strings instead."
+            npm deprecate @babel/plugin-proposal-optional-catch-binding "This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-optional-catch-binding instead."
+            npm deprecate @babel/plugin-proposal-async-generator-functions "This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-async-generator-functions instead."
+            npm deprecate @babel/plugin-proposal-object-rest-spread "This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-object-rest-spread instead."
+            npm deprecate @babel/plugin-proposal-unicode-property-regex "This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-unicode-property-regex instead."
+            npm deprecate @babel/plugin-proposal-export-namespace-from "This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-export-namespace-from instead."
+            npm deprecate @babel/plugin-proposal-dynamic-import "This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-dynamic-import instead."
+            ```

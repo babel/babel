@@ -2,7 +2,7 @@
 
 > Allow parsing of jsx
 
-See our website [@babel/plugin-syntax-jsx](https://babeljs.io/docs/en/babel-plugin-syntax-jsx) for more information.
+See our website [@babel/plugin-syntax-jsx](https://babeljs.io/docs/babel-plugin-syntax-jsx) for more information.
 
 ## Install
 

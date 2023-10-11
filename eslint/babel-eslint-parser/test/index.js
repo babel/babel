@@ -1,17 +1,29 @@
 import path from "path";
 import escope from "eslint-scope";
 import unpad from "dedent";
-import { fileURLToPath } from "url";
-import { createRequire } from "module";
-import { parseForESLint } from "../lib/index.cjs";
+import { parseForESLint as parseForESLintOriginal } from "../lib/index.cjs";
 import { ESLint } from "eslint";
+import { itDummy, commonJS } from "$repo-utils";
+
+function parseForESLint(code, options) {
+  return parseForESLintOriginal(code, {
+    requireConfigFile: false,
+    ...options,
+    babelOptions: {
+      configFile: false,
+      ...options.babelOptions,
+    },
+  });
+}
 
 const ESLINT_VERSION = ESLint.version;
 const isESLint7 = ESLINT_VERSION.startsWith("7.");
-const dirname = path.dirname(fileURLToPath(import.meta.url));
+const { __dirname: dirname, require } = commonJS(import.meta.url);
 
-const itESLint7 = isESLint7 ? it : it.skip;
-const itNotESLint7 = isESLint7 ? it.skip : it;
+// @babel/eslint-parser 8 will drop ESLint 7 support
+
+const itESLint7 = isESLint7 && !process.env.BABEL_8_BREAKING ? it : itDummy;
+const itESLint8 = isESLint7 ? itDummy : it;
 
 const BABEL_OPTIONS = {
   configFile: path.resolve(
@@ -110,8 +122,6 @@ describe("Babel and Espree", () => {
   }
 
   beforeAll(() => {
-    const require = createRequire(import.meta.url);
-
     // Use the version of Espree that is a dependency of
     // the version of ESLint we are testing against.
     const espreePath = require.resolve("espree", {
@@ -412,31 +422,18 @@ describe("Babel and Espree", () => {
     );
   });
 
-  if (process.env.BABEL_8_BREAKING) {
-    itESLint7("private identifier (token) - ESLint 7", () => {
-      const code = "class A { #x }";
-      const babylonAST = parseForESLint(code, {
-        eslintVisitorKeys: true,
-        eslintScopeManager: true,
-        babelOptions: BABEL_OPTIONS,
-      }).ast;
-      expect(babylonAST.tokens[3].type).toEqual("PrivateIdentifier");
-      expect(babylonAST.tokens[3].value).toEqual("x");
-    });
-  } else {
-    itESLint7("hash (token) - ESLint 7", () => {
-      const code = "class A { #x }";
-      const babylonAST = parseForESLint(code, {
-        eslintVisitorKeys: true,
-        eslintScopeManager: true,
-        babelOptions: BABEL_OPTIONS,
-      }).ast;
-      expect(babylonAST.tokens[3].type).toEqual("Punctuator");
-      expect(babylonAST.tokens[3].value).toEqual("#");
-    });
-  }
+  itESLint7("hash (token) - ESLint 7", () => {
+    const code = "class A { #x }";
+    const babylonAST = parseForESLint(code, {
+      eslintVisitorKeys: true,
+      eslintScopeManager: true,
+      babelOptions: BABEL_OPTIONS,
+    }).ast;
+    expect(babylonAST.tokens[3].type).toEqual("Punctuator");
+    expect(babylonAST.tokens[3].value).toEqual("#");
+  });
 
-  itNotESLint7("private identifier (token) - ESLint 8", () => {
+  itESLint8("private identifier (token) - ESLint 8", () => {
     const code = "class A { #x }";
     const babylonAST = parseForESLint(code, {
       eslintVisitorKeys: true,
@@ -493,7 +490,7 @@ describe("Babel and Espree", () => {
     expect(classDeclaration.body.body[0].type).toEqual("PropertyDefinition");
   });
 
-  itNotESLint7("class fields with ESLint 8", () => {
+  itESLint8("class fields with ESLint 8", () => {
     parseAndAssertSame(
       `
         class A {
@@ -537,7 +534,7 @@ describe("Babel and Espree", () => {
     ).toMatchObject(staticKw);
   });
 
-  itNotESLint7("static (token) - ESLint 8", () => {
+  itESLint8("static (token) - ESLint 8", () => {
     const code = `
       class A {
         static m() {}
@@ -564,9 +561,8 @@ describe("Babel and Espree", () => {
     expect(babylonAST.tokens[22]).toMatchObject(staticKw);
   });
 
-  if (process.env.BABEL_8_BREAKING) {
-    itESLint7("pipeline # topic token - ESLint 7", () => {
-      const code = `
+  itESLint7("pipeline # topic token - ESLint 7", () => {
+    const code = `
         x |> #
         y |> #[0]
         class A {
@@ -575,58 +571,27 @@ describe("Babel and Espree", () => {
           z
         }
       `;
-      const babylonAST = parseForESLint(code, {
-        eslintVisitorKeys: true,
-        eslintScopeManager: true,
-        babelOptions: {
-          filename: "test.js",
-          parserOpts: {
-            plugins: [
-              ["pipelineOperator", { proposal: "hack", topicToken: "#" }],
-            ],
-            tokens: true,
-          },
+    const babylonAST = parseForESLint(code, {
+      eslintVisitorKeys: true,
+      eslintScopeManager: true,
+      babelOptions: {
+        filename: "test.js",
+        parserOpts: {
+          plugins: [
+            ["pipelineOperator", { proposal: "hack", topicToken: "#" }],
+          ],
+          tokens: true,
         },
-      }).ast;
+      },
+    }).ast;
 
-      const topicToken = { type: "Punctuator", value: "#" };
-      expect(babylonAST.tokens[2]).toMatchObject(topicToken);
-      expect(babylonAST.tokens[5]).toMatchObject(topicToken);
-      expect(babylonAST.tokens[16]).toMatchObject(topicToken);
-    });
-  } else {
-    itESLint7("pipeline # topic token - ESLint 7", () => {
-      const code = `
-        x |> #
-        y |> #[0]
-        class A {
-          #x = y |>
-          #
-          z
-        }
-      `;
-      const babylonAST = parseForESLint(code, {
-        eslintVisitorKeys: true,
-        eslintScopeManager: true,
-        babelOptions: {
-          filename: "test.js",
-          parserOpts: {
-            plugins: [
-              ["pipelineOperator", { proposal: "hack", topicToken: "#" }],
-            ],
-            tokens: true,
-          },
-        },
-      }).ast;
+    const topicToken = { type: "Punctuator", value: "#" };
+    expect(babylonAST.tokens[2]).toMatchObject(topicToken);
+    expect(babylonAST.tokens[5]).toMatchObject(topicToken);
+    expect(babylonAST.tokens[17]).toMatchObject(topicToken);
+  });
 
-      const topicToken = { type: "Punctuator", value: "#" };
-      expect(babylonAST.tokens[2]).toMatchObject(topicToken);
-      expect(babylonAST.tokens[5]).toMatchObject(topicToken);
-      expect(babylonAST.tokens[17]).toMatchObject(topicToken);
-    });
-  }
-
-  itNotESLint7("pipeline # topic token - ESLint 8", () => {
+  itESLint8("pipeline # topic token - ESLint 8", () => {
     const code = `
       x |> #
       y |> #[0]
@@ -732,7 +697,7 @@ describe("Babel and Espree", () => {
     parseAndAssertSame("/affix-top|affix-bottom|affix|[a-z]/");
   });
 
-  it("regexp", () => {
+  it("regexp without flag", () => {
     parseAndAssertSame("const foo = /foo/;");
   });
 
@@ -926,7 +891,7 @@ describe("Babel and Espree", () => {
         }).not.toThrow();
       });
     } else {
-      it("super outside method", () => {
+      it("super outside method in Babel 7", () => {
         expect(() => {
           parseForESLint("function F() { super(); }", {
             babelOptions: BABEL_OPTIONS,

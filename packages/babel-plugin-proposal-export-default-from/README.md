@@ -2,7 +2,7 @@
 
 > Compile export default to ES2015
 
-See our website [@babel/plugin-proposal-export-default-from](https://babeljs.io/docs/en/babel-plugin-proposal-export-default-from) for more information.
+See our website [@babel/plugin-proposal-export-default-from](https://babeljs.io/docs/babel-plugin-proposal-export-default-from) for more information.
 
 ## Install
 

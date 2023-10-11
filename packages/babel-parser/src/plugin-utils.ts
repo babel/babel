@@ -1,9 +1,9 @@
-import type Parser from "./parser";
+import type Parser from "./parser/index.ts";
 import type {
   ParserPluginWithOptions,
   PluginConfig,
   PluginOptions,
-} from "./typings";
+} from "./typings.ts";
 
 export type Plugin = PluginConfig;
 
@@ -91,7 +91,9 @@ export function validatePlugins(plugins: PluginList) {
       decoratorsBeforeExport != null &&
       typeof decoratorsBeforeExport !== "boolean"
     ) {
-      throw new Error("'decoratorsBeforeExport' must be a boolean.");
+      throw new Error(
+        "'decoratorsBeforeExport' must be a boolean, if specified.",
+      );
     }
 
     const allowCallParenthesized = getPluginOption(
@@ -172,12 +174,15 @@ export function validatePlugins(plugins: PluginList) {
   if (hasPlugin(plugins, "moduleAttributes")) {
     if (process.env.BABEL_8_BREAKING) {
       throw new Error(
-        "`moduleAttributes` has been removed in Babel 8, please use `importAssertions` parser plugin, or `@babel/plugin-syntax-import-assertions`.",
+        "`moduleAttributes` has been removed in Babel 8, please use `importAttributes` parser plugin, or `@babel/plugin-syntax-import-attributes`.",
       );
     } else {
-      if (hasPlugin(plugins, "importAssertions")) {
+      if (
+        hasPlugin(plugins, "importAssertions") ||
+        hasPlugin(plugins, "importAttributes")
+      ) {
         throw new Error(
-          "Cannot combine importAssertions and moduleAttributes plugins.",
+          "Cannot combine importAssertions, importAttributes and moduleAttributes plugins.",
         );
       }
       const moduleAttributesVersionPluginOption = getPluginOption(
@@ -193,6 +198,14 @@ export function validatePlugins(plugins: PluginList) {
         );
       }
     }
+  }
+  if (
+    hasPlugin(plugins, "importAssertions") &&
+    hasPlugin(plugins, "importAttributes")
+  ) {
+    throw new Error(
+      "Cannot combine importAssertions and importAttributes plugins.",
+    );
   }
 
   if (
@@ -219,16 +232,27 @@ export function validatePlugins(plugins: PluginList) {
     error.missingPlugins = "doExpressions";
     throw error;
   }
+
+  if (
+    hasPlugin(plugins, "optionalChainingAssign") &&
+    getPluginOption(plugins, "optionalChainingAssign", "version") !== "2023-07"
+  ) {
+    throw new Error(
+      "The 'optionalChainingAssign' plugin requires a 'version' option," +
+        " representing the last proposal update. Currently, the" +
+        " only supported value is '2023-07'.",
+    );
+  }
 }
 
 // These plugins are defined using a mixin which extends the parser class.
 
-import estree from "./plugins/estree";
-import flow from "./plugins/flow";
-import jsx from "./plugins/jsx";
-import typescript from "./plugins/typescript";
-import placeholders from "./plugins/placeholders";
-import v8intrinsic from "./plugins/v8intrinsic";
+import estree from "./plugins/estree.ts";
+import flow from "./plugins/flow/index.ts";
+import jsx from "./plugins/jsx/index.ts";
+import typescript from "./plugins/typescript/index.ts";
+import placeholders from "./plugins/placeholders.ts";
+import v8intrinsic from "./plugins/v8intrinsic.ts";
 
 // NOTE: order is important. estree must come first; placeholders must come last.
 export const mixinPlugins = {

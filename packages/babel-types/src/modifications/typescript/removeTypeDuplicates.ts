@@ -4,8 +4,8 @@ import {
   isTSTypeReference,
   isTSUnionType,
   isTSBaseType,
-} from "../../validators/generated";
-import type * as t from "../..";
+} from "../../validators/generated/index.ts";
+import type * as t from "../../index.ts";
 
 function getQualifiedName(node: t.TSTypeReference["typeName"]): string {
   return isIdentifier(node)
@@ -17,8 +17,10 @@ function getQualifiedName(node: t.TSTypeReference["typeName"]): string {
  * Dedupe type annotations.
  */
 export default function removeTypeDuplicates(
-  nodes: Array<t.TSType>,
+  nodesIn: ReadonlyArray<t.TSType>,
 ): Array<t.TSType> {
+  const nodes = Array.from(nodesIn);
+
   const generics = new Map<string, t.TSTypeReference>();
   const bases = new Map<t.TSBaseType["type"], t.TSBaseType>();
 
@@ -63,8 +65,9 @@ export default function removeTypeDuplicates(
         let existing: t.TypeScript = generics.get(name);
         if (existing.typeParameters) {
           if (node.typeParameters) {
+            existing.typeParameters.params.push(...node.typeParameters.params);
             existing.typeParameters.params = removeTypeDuplicates(
-              existing.typeParameters.params.concat(node.typeParameters.params),
+              existing.typeParameters.params,
             );
           }
         } else {

@@ -11,12 +11,12 @@ import {
   validateOptional,
   validateOptionalType,
   validateType,
-} from "./utils";
+} from "./utils.ts";
 import {
   functionDeclarationCommon,
   classMethodOrDeclareMethodCommon,
-} from "./core";
-import is from "../validators/is";
+} from "./core.ts";
+import is from "../validators/is.ts";
 
 const defineType = defineAliasedType("TypeScript");
 
@@ -97,7 +97,7 @@ defineType("TSQualifiedName", {
 const signatureDeclarationCommon = () => ({
   typeParameters: validateOptionalType("TSTypeParameterDeclaration"),
   [process.env.BABEL_8_BREAKING ? "params" : "parameters"]: validateArrayOfType(
-    ["Identifier", "RestElement"],
+    ["ArrayPattern", "Identifier", "ObjectPattern", "RestElement"],
   ),
   [process.env.BABEL_8_BREAKING ? "returnType" : "typeAnnotation"]:
     validateOptionalType("TSTypeAnnotation"),
@@ -629,6 +629,10 @@ defineType("TSTypeParameter", {
       optional: true,
     },
     out: {
+      validate: assertValueType("boolean"),
+      optional: true,
+    },
+    const: {
       validate: assertValueType("boolean"),
       optional: true,
     },

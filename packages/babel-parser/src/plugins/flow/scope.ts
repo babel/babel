@@ -1,11 +1,11 @@
-import type { Position } from "../../util/location";
-import ScopeHandler, { Scope } from "../../util/scope";
+import type { Position } from "../../util/location.ts";
+import ScopeHandler, { Scope } from "../../util/scope.ts";
 import {
-  BIND_FLAGS_FLOW_DECLARE_FN,
-  type ScopeFlags,
+  BindingFlag,
+  type ScopeFlag,
   type BindingTypes,
-} from "../../util/scopeflags";
-import type * as N from "../../types";
+} from "../../util/scopeflags.ts";
+import type * as N from "../../types.ts";
 
 // Reference implementation: https://github.com/facebook/flow/blob/23aeb2a2ef6eb4241ce178fde5d8f17c5f747fb5/src/typing/env.ml#L536-L584
 class FlowScope extends Scope {
@@ -14,13 +14,13 @@ class FlowScope extends Scope {
 }
 
 export default class FlowScopeHandler extends ScopeHandler<FlowScope> {
-  createScope(flags: ScopeFlags): FlowScope {
+  createScope(flags: ScopeFlag): FlowScope {
     return new FlowScope(flags);
   }
 
   declareName(name: string, bindingType: BindingTypes, loc: Position) {
     const scope = this.currentScope();
-    if (bindingType & BIND_FLAGS_FLOW_DECLARE_FN) {
+    if (bindingType & BindingFlag.FLAG_FLOW_DECLARE_FN) {
       this.checkRedeclarationInScope(scope, name, bindingType, loc);
       this.maybeExportDefined(scope, name);
       scope.declareFunctions.add(name);
@@ -37,7 +37,7 @@ export default class FlowScopeHandler extends ScopeHandler<FlowScope> {
   ): boolean {
     if (super.isRedeclaredInScope(scope, name, bindingType)) return true;
 
-    if (bindingType & BIND_FLAGS_FLOW_DECLARE_FN) {
+    if (bindingType & BindingFlag.FLAG_FLOW_DECLARE_FN) {
       return (
         !scope.declareFunctions.has(name) &&
         (scope.lexical.has(name) || scope.functions.has(name))

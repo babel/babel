@@ -1,4 +1,4 @@
-var _call_a, _call_a2, _initProto;
+var _call_a, _call_a2, _initProto, _class;
 const dec = () => {};
 var _a = /*#__PURE__*/new WeakMap();
 class Foo {
@@ -17,14 +17,15 @@ class Foo {
     babelHelpers.classPrivateFieldSet(this, _a, v);
   }
 }
+_class = Foo;
 function _get_a() {
   return _call_a(this);
 }
 function _set_a(v) {
   _call_a2(this, v);
 }
-[_call_a, _call_a2, _initProto] = babelHelpers.applyDecs2203(Foo, [[dec, 3, "a", function () {
+[_call_a, _call_a2, _initProto] = babelHelpers.applyDecs2203R(_class, [[dec, 3, "a", function () {
   return this.value;
 }], [dec, 4, "a", function (v) {
   this.value = v;
-}]], []);
+}]], []).e;

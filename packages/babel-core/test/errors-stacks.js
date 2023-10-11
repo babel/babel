@@ -1,7 +1,12 @@
 import * as babel from "../lib/index.js";
 
-import { fileURLToPath } from "url";
+import { commonJS, itGte } from "$repo-utils";
 import path from "path";
+import { spawnSync } from "child_process";
+
+const { __dirname } = commonJS(import.meta.url);
+
+const nodeGte12 = itGte("12.0.0");
 
 const replaceAll = "".replaceAll
   ? Function.call.bind("".replaceAll)
@@ -70,12 +75,7 @@ function expectError(run) {
   throw new Error("It should have thrown an error.");
 }
 
-const fixture = name =>
-  path.join(
-    path.dirname(fileURLToPath(import.meta.url)),
-    "fixtures/errors",
-    name,
-  );
+const fixture = name => path.join(__dirname, "fixtures/errors", name);
 
 describe("@babel/core errors", function () {
   it("error inside config function", function () {
@@ -86,7 +86,7 @@ describe("@babel/core errors", function () {
     }).toMatchInlineSnapshot(`
       "Error: Error inside config!
           at myConfig (<CWD>/packages/babel-core/test/fixtures/errors/error-config-function/babel.config.js:_:_)
-          at Module.parseSync (<CWD>/packages/babel-core/lib/parse.js:_:_)
+          at Module.parseSync (<CWD>/packages/babel-core/src/parse.ts:_:_)
           at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
           at expectError (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
           at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
@@ -104,7 +104,7 @@ describe("@babel/core errors", function () {
           at f (<CWD>/packages/babel-core/test/fixtures/errors/error-config-function-more-frames/babel.config.js:_:_)
           at g (<CWD>/packages/babel-core/test/fixtures/errors/error-config-function-more-frames/babel.config.js:_:_)
           at myConfig (<CWD>/packages/babel-core/test/fixtures/errors/error-config-function-more-frames/babel.config.js:_:_)
-          at Module.parseSync (<CWD>/packages/babel-core/lib/parse.js:_:_)
+          at Module.parseSync (<CWD>/packages/babel-core/src/parse.ts:_:_)
           at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
           at expectError (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
           at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
@@ -121,7 +121,7 @@ describe("@babel/core errors", function () {
       "Error: Error inside config!
           at <CWD>/packages/babel-core/test/fixtures/errors/error-config-file/babel.config.js:_:_
           at require (... internal node frames ...)
-          at Module.parseSync (<CWD>/packages/babel-core/lib/parse.js:_:_)
+          at Module.parseSync (<CWD>/packages/babel-core/src/parse.ts:_:_)
           at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
           at expectError (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
           at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
@@ -140,7 +140,7 @@ describe("@babel/core errors", function () {
           at g (<CWD>/packages/babel-core/test/fixtures/errors/error-config-file-more-frames/babel.config.js:_:_)
           at <CWD>/packages/babel-core/test/fixtures/errors/error-config-file-more-frames/babel.config.js:_:_
           at require (... internal node frames ...)
-          at Module.parseSync (<CWD>/packages/babel-core/lib/parse.js:_:_)
+          at Module.parseSync (<CWD>/packages/babel-core/src/parse.ts:_:_)
           at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
           at expectError (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
           at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
@@ -156,7 +156,7 @@ describe("@babel/core errors", function () {
     }).toMatchInlineSnapshot(`
       "Error: Error while parsing config - JSON5: invalid character '}' at 3:1
           at <CWD>/packages/babel-core/test/fixtures/errors/invalid-json/babel.config.json
-          at Module.parseSync (<CWD>/packages/babel-core/lib/parse.js:_:_)
+          at Module.parseSync (<CWD>/packages/babel-core/src/parse.ts:_:_)
           at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
           at expectError (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
           at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
@@ -172,7 +172,7 @@ describe("@babel/core errors", function () {
     }).toMatchInlineSnapshot(`
       "Error: Configuration contains string/RegExp pattern, but no filename was passed to Babel
           at <CWD>/packages/babel-core/test/fixtures/errors/use-exclude/babel.config.js
-          at Module.parseSync (<CWD>/packages/babel-core/lib/parse.js:_:_)
+          at Module.parseSync (<CWD>/packages/babel-core/src/parse.ts:_:_)
           at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
           at expectError (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
           at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
@@ -188,7 +188,7 @@ describe("@babel/core errors", function () {
       });
     }).toMatchInlineSnapshot(`
       "Error: Configuration contains string/RegExp pattern, but no filename was passed to Babel
-          at Module.parseSync (<CWD>/packages/babel-core/lib/parse.js:_:_)
+          at Module.parseSync (<CWD>/packages/babel-core/src/parse.ts:_:_)
           at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
           at expectError (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
           at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
@@ -207,7 +207,7 @@ describe("@babel/core errors", function () {
       babel.transformSync(code, { filename: 'file.ts', presets: [/* your preset */] });
       \`\`\`
       See https://babeljs.io/docs/en/options#filename for more information.
-          at Module.parseSync (<CWD>/packages/babel-core/lib/parse.js:_:_)
+          at Module.parseSync (<CWD>/packages/babel-core/src/parse.ts:_:_)
           at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
           at expectError (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
           at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
@@ -223,7 +223,7 @@ describe("@babel/core errors", function () {
     }).toMatchInlineSnapshot(`
       "Error: .sourceType must be \\"module\\", \\"script\\", \\"unambiguous\\", or undefined
           at <CWD>/packages/babel-core/test/fixtures/errors/invalid-option/babel.config.json
-          at Module.parseSync (<CWD>/packages/babel-core/lib/parse.js:_:_)
+          at Module.parseSync (<CWD>/packages/babel-core/src/parse.ts:_:_)
           at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
           at expectError (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
           at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
@@ -239,7 +239,7 @@ describe("@babel/core errors", function () {
       }),
     ).toMatchInlineSnapshot(`
       "Error: .sourceType must be \\"module\\", \\"script\\", \\"unambiguous\\", or undefined
-          at Module.parseSync (<CWD>/packages/babel-core/lib/parse.js:_:_)
+          at Module.parseSync (<CWD>/packages/babel-core/src/parse.ts:_:_)
           at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
           at expectError (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
           at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
@@ -260,27 +260,85 @@ describe("@babel/core errors", function () {
       } finally {
         Array.prototype.map = map;
       }
-    }).toMatchInlineSnapshot(`
-      "Error: Internal error! This is a fake bug :)
-          at Array.map (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
-          at loadOneConfig (<CWD>/packages/babel-core/lib/config/files/configuration.js:_:_)
-          at loadOneConfig.next (<anonymous>)
-          at buildRootChain (<CWD>/packages/babel-core/lib/config/config-chain.js:_:_)
-          at buildRootChain.next (<anonymous>)
-          at loadPrivatePartialConfig (<CWD>/packages/babel-core/lib/config/partial.js:_:_)
-          at loadPrivatePartialConfig.next (<anonymous>)
-          at loadFullConfig (<CWD>/packages/babel-core/lib/config/full.js:_:_)
-          at loadFullConfig.next (<anonymous>)
-          at parse (<CWD>/packages/babel-core/lib/parse.js:_:_)
-          at parse.next (<anonymous>)
-          at evaluateSync (<CWD>/node_modules/gensync/index.js:_:_)
-          at sync (<CWD>/node_modules/gensync/index.js:_:_)
-          at stopHiding - secret - don't use this - v1 (<CWD>/packages/babel-core/lib/errors/rewrite-stack-trace.js:_:_)
-          at Module.parseSync (<CWD>/packages/babel-core/lib/parse.js:_:_)
-          at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
-          at expectError (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
-          at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
-          at ... internal jest frames ..."
-    `);
+    }).toMatchTemplate`\
+Error: Internal error! This is a fake bug :)
+    at Array.map (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
+    at ${/loadOneConfig|findRootConfig/} (<CWD>/packages/babel-core/src/config/files/configuration.ts:_:_)
+    at loadOneConfig.next (<anonymous>)
+    at buildRootChain (<CWD>/packages/babel-core/src/config/config-chain.ts:_:_)
+    at buildRootChain.next (<anonymous>)
+    at loadPrivatePartialConfig (<CWD>/packages/babel-core/src/config/partial.ts:_:_)
+    at loadPrivatePartialConfig.next (<anonymous>)
+    at ${/loadFullConfig|loadConfig/} (<CWD>/packages/babel-core/src/config/full.ts:_:_)
+    at loadFullConfig.next (<anonymous>)
+    at parse (<CWD>/packages/babel-core/src/parse.ts:_:_)
+    at parse.next (<anonymous>)
+    at evaluateSync (<CWD>/node_modules/gensync/index.js:_:_)
+    at fn (<CWD>/node_modules/gensync/index.js:_:_)
+    at stopHiding - secret - don't use this - v1 (<CWD>/packages/babel-core/src/errors/rewrite-stack-trace.ts:_:_)
+    at Module.parseSync (<CWD>/packages/babel-core/src/parse.ts:_:_)
+    at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
+    at expectError (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
+    at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
+    at ... internal jest frames ...\
+`;
+    // TODO(Babel 8): We do not need regexps anymore in the matcher above
   });
+
+  nodeGte12("should not throw in `node --frozen-intrinsics`", function () {
+    expect(
+      spawnSync(
+        process.execPath,
+        [
+          "--frozen-intrinsics",
+          "--input-type=module",
+          "-e",
+          `
+        import * as babel from "../lib/index.js";
+        babel.parseSync("foo;", {
+          root: String.raw\`${fixture("valid")}\`,
+        });
+        console.log("%done%");
+        `,
+        ],
+        { cwd: __dirname },
+      ).output + "",
+    ).toContain("%done%");
+  });
+});
+
+expect.extend({
+  toMatchTemplate(received, parts, ...replacements) {
+    let pass = true;
+
+    if (!received.startsWith(parts[0])) {
+      pass = false;
+    } else {
+      let index = parts[0].length;
+
+      for (let i = 1; i < parts.length - 1; i++) {
+        const partStart = received.indexOf(parts[i], index);
+        if (partStart === -1) {
+          pass = false;
+          break;
+        }
+        const holeCandidate = received.slice(index, partStart);
+        const hole = replacements[i - 1];
+        const matcher =
+          hole instanceof RegExp ? expect.stringMatching(hole) : hole;
+        if (!matcher.asymmetricMatch(holeCandidate)) {
+          pass = false;
+          break;
+        }
+        index = partStart + parts[i].length;
+      }
+    }
+
+    return {
+      pass,
+      message: () => {
+        return `${received} did not match provided template.`;
+      },
+    };
+  },
 });

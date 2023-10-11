@@ -4,8 +4,8 @@ const cloneDeep = require("clone-deep");
 const path = require("path");
 const fs = require("fs");
 
-const babel = require("./babel-core");
-const registerCache = require("../cache");
+const babel = require("./babel-core.js");
+const registerCache = require("../cache.js");
 
 const nmRE = escapeRegExp(path.sep + "node_modules" + path.sep);
 

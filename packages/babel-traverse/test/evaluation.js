@@ -109,7 +109,7 @@ describe("evaluation", function () {
       ).toBe("value is 4");
     });
 
-    it("shold evaluate String.raw tags", function () {
+    it("should evaluate String.raw tags", function () {
       expect(
         getPath("String.raw`a\\n${1}\\u`;").get("body.0.expression").evaluate()
           .value,
@@ -150,6 +150,63 @@ describe("evaluation", function () {
       .evaluate();
     expect(eval_member_expr.value).toBe(2);
     expect(eval_invalid_call.confident).toBe(false);
+  });
+
+  it("should evaluate global call expressions", function () {
+    expect(
+      getPath("isFinite(1);").get("body.0.expression").evaluate().value,
+    ).toBe(true);
+
+    expect(
+      getPath("isFinite(Infinity);").get("body.0.expression").evaluate().value,
+    ).toBe(false);
+
+    expect(
+      getPath("isNaN(NaN);").get("body.0.expression").evaluate().value,
+    ).toBe(true);
+
+    expect(getPath("isNaN(1);").get("body.0.expression").evaluate().value).toBe(
+      false,
+    );
+
+    expect(
+      getPath("parseFloat('1.1');").get("body.0.expression").evaluate().value,
+    ).toBe(1.1);
+
+    expect(
+      getPath("parseFloat('1');").get("body.0.expression").evaluate().value,
+    ).toBe(1);
+
+    expect(
+      getPath("encodeURI('x 1');").get("body.0.expression").evaluate().value,
+    ).toBe("x%201");
+
+    expect(
+      getPath("decodeURI('x%201');").get("body.0.expression").evaluate().value,
+    ).toBe("x 1");
+
+    expect(
+      getPath("encodeURIComponent('?x=1');").get("body.0.expression").evaluate()
+        .value,
+    ).toBe("%3Fx%3D1");
+
+    expect(
+      getPath("decodeURIComponent('%3Fx%3D1');")
+        .get("body.0.expression")
+        .evaluate().value,
+    ).toBe("?x=1");
+
+    if (process.env.BABEL_8_BREAKING) {
+      // eslint-disable-next-line jest/no-conditional-expect
+      expect(
+        getPath("btoa('babel');").get("body.0.expression").evaluate().value,
+      ).toBe("YmFiZWw=");
+
+      // eslint-disable-next-line jest/no-conditional-expect
+      expect(
+        getPath("atob('YmFiZWw=');").get("body.0.expression").evaluate().value,
+      ).toBe("babel");
+    }
   });
 
   it("should not deopt vars in different scope", function () {

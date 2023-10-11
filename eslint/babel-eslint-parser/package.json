@@ -1,6 +1,6 @@
 {
   "name": "@babel/eslint-parser",
-  "version": "7.19.1",
+  "version": "7.22.15",
   "description": "ESLint parser that allows for linting of experimental syntax transformed by Babel",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
@@ -27,18 +27,32 @@
     "./package.json": "./package.json"
   },
   "peerDependencies": {
-    "@babel/core": ">=7.11.0",
+    "@babel/core": "^7.11.0",
     "eslint": "^7.5.0 || ^8.0.0"
   },
   "dependencies": {
     "@nicolo-ribaudo/eslint-scope-5-internals": "condition:BABEL_8_BREAKING ? : 5.1.1-v1",
     "eslint-scope": "condition:BABEL_8_BREAKING ? ^7.1.1 : ",
     "eslint-visitor-keys": "condition:BABEL_8_BREAKING ? ^3.3.0 : ^2.1.0",
-    "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
+    "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
     "dedent": "^0.7.0",
     "eslint": "^8.22.0"
+  },
+  "conditions": {
+    "BABEL_8_BREAKING": [
+      {
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+        },
+        "peerDependencies": {
+          "@babel/core": ">=7.11.0",
+          "eslint": "^8.9.0"
+        }
+      },
+      {}
+    ]
   }
 }

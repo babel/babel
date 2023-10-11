@@ -1,13 +1,13 @@
 import gensync, { type Handler } from "gensync";
 
-import loadConfig from "./config";
-import type { InputOptions, ResolvedConfig } from "./config";
-import { run } from "./transformation";
+import loadConfig from "./config/index.ts";
+import type { InputOptions, ResolvedConfig } from "./config/index.ts";
+import { run } from "./transformation/index.ts";
 import type * as t from "@babel/types";
 
-import { beginHiddenCallStack } from "./errors/rewrite-stack-trace";
+import { beginHiddenCallStack } from "./errors/rewrite-stack-trace.ts";
 
-import type { FileResult, FileResultCallback } from "./transformation";
+import type { FileResult, FileResultCallback } from "./transformation/index.ts";
 type AstRoot = t.File | t.Program;
 
 type TransformFromAst = {

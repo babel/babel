@@ -1,0 +1,41 @@
+{
+  "type": "File",
+  "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "IfStatement",
+        "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
+        "test": {
+          "type": "Identifier",
+          "start":4,"end":11,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":11,"index":11},"identifierName":"morning"},
+          "name": "morning"
+        },
+        "consequent": {
+          "type": "FunctionDeclaration",
+          "start":13,"end":27,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":27,"index":27}},
+          "id": {
+            "type": "Identifier",
+            "start":22,"end":23,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":23,"index":23},"identifierName":"a"},
+            "name": "a"
+          },
+          "generator": false,
+          "async": false,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "start":25,"end":27,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":27,"index":27}},
+            "body": [],
+            "directives": []
+          }
+        },
+        "alternate": null
+      }
+    ],
+    "directives": []
+  }
+}

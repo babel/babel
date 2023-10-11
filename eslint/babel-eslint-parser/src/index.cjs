@@ -5,6 +5,11 @@ const baseParse = require("./parse.cjs");
 const { LocalClient, WorkerClient } = require("./client.cjs");
 const client = new (USE_ESM ? WorkerClient : LocalClient)();
 
+exports.meta = {
+  name: PACKAGE_JSON.name,
+  version: PACKAGE_JSON.version,
+};
+
 exports.parse = function (code, options = {}) {
   return baseParse(code, normalizeESLintConfig(options), client);
 };

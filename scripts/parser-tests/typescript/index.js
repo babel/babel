@@ -5,9 +5,9 @@ import TestRunner from "../utils/parser-test-runner.js";
 import ErrorCodes from "./error-codes.js";
 
 const getEncoding = path =>
-  ({ fffe: "utf-16le", feff: "utf-16be" }[
+  ({ fffe: "utf-16le", feff: "utf-16be" })[
     fs.readFileSync(path).slice(0, 2).toString("hex")
-  ] || "utf-8");
+  ] || "utf-8";
 
 const ErrorCodeRegExp = new RegExp(ErrorCodes.join("|"));
 

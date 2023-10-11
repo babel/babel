@@ -22,7 +22,7 @@ export function isNewLine(code: number): boolean {
 export const skipWhiteSpace = /(?:\s|\/\/.*|\/\*[^]*?\*\/)*/g;
 
 export const skipWhiteSpaceInLine =
-  /(?:[^\S\n\r\u2028\u2029]|\/\/.*|\/\*.*?\*\/)*/y;
+  /(?:[^\S\n\r\u2028\u2029]|\/\/.*|\/\*.*?\*\/)*/g;
 
 // Skip whitespace and single-line comments, including /* no newline here */.
 // After this RegExp matches, its lastIndex points to a line terminator, or

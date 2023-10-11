@@ -2,7 +2,7 @@
 
 > Compile ES2015 sticky regex to an ES5 RegExp constructor
 
-See our website [@babel/plugin-transform-sticky-regex](https://babeljs.io/docs/en/babel-plugin-transform-sticky-regex) for more information.
+See our website [@babel/plugin-transform-sticky-regex](https://babeljs.io/docs/babel-plugin-transform-sticky-regex) for more information.
 
 ## Install
 

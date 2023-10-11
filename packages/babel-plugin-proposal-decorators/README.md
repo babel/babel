@@ -2,7 +2,7 @@
 
 > Compile class and object decorators to ES5
 
-See our website [@babel/plugin-proposal-decorators](https://babeljs.io/docs/en/babel-plugin-proposal-decorators) for more information.
+See our website [@babel/plugin-proposal-decorators](https://babeljs.io/docs/babel-plugin-proposal-decorators) for more information.
 
 ## Install
 

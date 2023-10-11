@@ -136,9 +136,9 @@ export default declare((api, opts: Options) => {
 
       AssignmentPattern({ node }) {
         if (skipStrip) return;
-        // @ts-expect-error optional is not in ObjectPattern
+        // @ts-expect-error optional is not in TSAsExpression
         if (node.left.optional) {
-          // @ts-expect-error optional is not in ObjectPattern
+          // @ts-expect-error optional is not in TSAsExpression
           node.left.optional = false;
         }
       },
@@ -159,9 +159,9 @@ export default declare((api, opts: Options) => {
             // must not be a MemberExpression
             param = param.left;
           }
-          // @ts-expect-error optional is not in ObjectPattern
+          // @ts-expect-error optional is not in TSAsExpression
           if (param.optional) {
-            // @ts-expect-error optional is not in ObjectPattern
+            // @ts-expect-error optional is not in TSAsExpression
             param.optional = false;
           }
         }

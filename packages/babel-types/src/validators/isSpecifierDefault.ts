@@ -1,5 +1,5 @@
-import { isIdentifier, isImportDefaultSpecifier } from "./generated";
-import type * as t from "..";
+import { isIdentifier, isImportDefaultSpecifier } from "./generated/index.ts";
+import type * as t from "../index.ts";
 
 /**
  * Check if the input `specifier` is a `default` import or export.

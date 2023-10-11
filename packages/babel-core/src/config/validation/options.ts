@@ -1,9 +1,9 @@
 import type { InputTargets, Targets } from "@babel/helper-compilation-targets";
 
-import type { ConfigItem } from "../item";
-import type Plugin from "../plugin";
+import type { ConfigItem } from "../item.ts";
+import type Plugin from "../plugin.ts";
 
-import removed from "./removed";
+import removed from "./removed.ts";
 import {
   msg,
   access,
@@ -25,12 +25,17 @@ import {
   assertSourceType,
   assertTargets,
   assertAssumptions,
-} from "./option-assertions";
-import type { ValidatorSet, Validator, OptionPath } from "./option-assertions";
-import type { UnloadedDescriptor } from "../config-descriptors";
+} from "./option-assertions.ts";
+import type {
+  ValidatorSet,
+  Validator,
+  OptionPath,
+} from "./option-assertions.ts";
+import type { UnloadedDescriptor } from "../config-descriptors.ts";
+import type { PluginAPI } from "../helpers/config-api.ts";
 import type { ParserOptions } from "@babel/parser";
 import type { GeneratorOptions } from "@babel/generator";
-import ConfigError from "../../errors/config-error";
+import ConfigError from "../../errors/config-error.ts";
 
 const ROOT_VALIDATORS: ValidatorSet = {
   cwd: assertString as Validator<ValidatedOptions["cwd"]>,
@@ -213,7 +218,7 @@ export type IgnoreList = ReadonlyArray<IgnoreItem>;
 export type PluginOptions = object | void | false;
 export type PluginTarget = string | object | Function;
 export type PluginItem =
-  | ConfigItem
+  | ConfigItem<PluginAPI>
   | Plugin
   | PluginTarget
   | [PluginTarget, PluginOptions]
@@ -277,6 +282,7 @@ const knownAssumptions = [
   "noIncompleteNsImportDetection",
   "noNewArrows",
   "objectRestNoSymbols",
+  "privateFieldsAsSymbols",
   "privateFieldsAsProperties",
   "pureGetters",
   "setClassMethods",
@@ -286,7 +292,7 @@ const knownAssumptions = [
   "skipForOfIteratorClosing",
   "superIsCallableConstructor",
 ] as const;
-export type AssumptionName = typeof knownAssumptions[number];
+export type AssumptionName = (typeof knownAssumptions)[number];
 export const assumptionsNames = new Set(knownAssumptions);
 
 function getSource(loc: NestingPath): OptionsSource {
@@ -378,7 +384,6 @@ function throwUnknownError(loc: OptionPath) {
       `Using removed Babel ${version} option: ${msg(loc)} - ${message}`,
     );
   } else {
-    // eslint-disable-next-line max-len
     const unknownOptErr = new Error(
       `Unknown option: ${msg(
         loc,
@@ -459,8 +464,8 @@ function assertOverridesList(
   return arr as OverridesList;
 }
 
-export function checkNoUnwrappedItemOptionPairs(
-  items: Array<UnloadedDescriptor>,
+export function checkNoUnwrappedItemOptionPairs<API>(
+  items: Array<UnloadedDescriptor<API>>,
   index: number,
   type: "plugin" | "preset",
   e: Error,

@@ -1,19 +1,20 @@
 import traverse from "@babel/traverse";
 import type * as t from "@babel/types";
-type SourceMap = any;
+import type { GeneratorResult } from "@babel/generator";
+
 import type { Handler } from "gensync";
 
-import type { ResolvedConfig, Plugin, PluginPasses } from "../config";
+import type { ResolvedConfig, Plugin, PluginPasses } from "../config/index.ts";
 
-import PluginPass from "./plugin-pass";
-import loadBlockHoistPlugin from "./block-hoist-plugin";
-import normalizeOptions from "./normalize-opts";
-import normalizeFile from "./normalize-file";
+import PluginPass from "./plugin-pass.ts";
+import loadBlockHoistPlugin from "./block-hoist-plugin.ts";
+import normalizeOptions from "./normalize-opts.ts";
+import normalizeFile from "./normalize-file.ts";
 
-import generateCode from "./file/generate";
-import type File from "./file/file";
+import generateCode from "./file/generate.ts";
+import type File from "./file/file.ts";
 
-import { flattenToSet } from "../config/helpers/deep-array";
+import { flattenToSet } from "../config/helpers/deep-array.ts";
 
 export type FileResultCallback = {
   (err: Error, file: null): void;
@@ -25,7 +26,7 @@ export type FileResult = {
   options: { [key: string]: any };
   ast: t.File | null;
   code: string | null;
-  map: SourceMap | null;
+  map: GeneratorResult["map"] | null;
   sourceType: "script" | "module";
   externalDependencies: Set<string>;
 };
@@ -94,6 +95,7 @@ function* transformFile(file: File, pluginPasses: PluginPasses): Handler<void> {
     for (const [plugin, pass] of passPairs) {
       const fn = plugin.pre;
       if (fn) {
+        // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
         const result = fn.call(pass, file);
 
         // @ts-expect-error - If we want to support async .pre
@@ -116,11 +118,16 @@ function* transformFile(file: File, pluginPasses: PluginPasses): Handler<void> {
       passes,
       file.opts.wrapPluginVisitorMethod,
     );
-    traverse(file.ast, visitor, file.scope);
+    if (process.env.BABEL_8_BREAKING) {
+      traverse(file.ast.program, visitor, file.scope, null, file.path, true);
+    } else {
+      traverse(file.ast, visitor, file.scope);
+    }
 
     for (const [plugin, pass] of passPairs) {
       const fn = plugin.post;
       if (fn) {
+        // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
         const result = fn.call(pass, file);
 
         // @ts-expect-error - If we want to support async .post

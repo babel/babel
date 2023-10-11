@@ -133,7 +133,7 @@ export class DestructuringTransformer {
     init: t.Expression,
   ) {
     let op = this.operator;
-    if (t.isMemberExpression(id)) op = "=";
+    if (t.isMemberExpression(id) || t.isOptionalMemberExpression(id)) op = "=";
 
     let node: t.ExpressionStatement | t.VariableDeclaration;
 
@@ -155,7 +155,7 @@ export class DestructuringTransformer {
       }
 
       node = t.variableDeclaration(this.kind, [
-        t.variableDeclarator(id, nodeInit),
+        t.variableDeclarator(id as t.LVal, nodeInit),
       ]);
     }
 
@@ -359,7 +359,7 @@ export class DestructuringTransformer {
     if (!t.isArrayExpression(arr)) return false;
 
     // pattern has less elements than the array and doesn't have a rest so some
-    // elements wont be evaluated
+    // elements won't be evaluated
     if (pattern.elements.length > arr.elements.length) return;
     if (
       pattern.elements.length < arr.elements.length &&
@@ -434,12 +434,13 @@ export class DestructuringTransformer {
     // optimise basic array destructuring of an array expression
     //
     // we can't do this to a pattern of unequal size to it's right hand
-    // array expression as then there will be values that wont be evaluated
+    // array expression as then there will be values that won't be evaluated
     //
     // eg: let [a, b] = [1, 2];
 
     if (this.canUnpackArrayPattern(pattern, arrayRef)) {
-      return this.pushUnpackedArrayPattern(pattern, arrayRef);
+      this.pushUnpackedArrayPattern(pattern, arrayRef);
+      return;
     }
 
     // if we have a rest then we need all the elements so don't tell
@@ -702,7 +703,7 @@ export function convertVariableDeclaration(
 }
 
 export function convertAssignmentExpression(
-  path: NodePath<t.AssignmentExpression>,
+  path: NodePath<t.AssignmentExpression & { left: t.Pattern }>,
   addHelper: File["addHelper"],
   arrayLikeIsIterable: boolean,
   iterableIsArray: boolean,

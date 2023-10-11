@@ -8,6 +8,7 @@ export type Plugin =
   | "classStaticBlock" // Enabled by default
   | "decimal"
   | "decorators-legacy"
+  | "deferredImportEvaluation"
   | "decoratorAutoAccessors"
   | "destructuringPrivate"
   | "doExpressions"
@@ -22,7 +23,8 @@ export type Plugin =
   | "importMeta"
   | "jsx"
   | "logicalAssignment"
-  | "importAssertions"
+  | "importAssertions" // deprecated
+  | "importAttributes"
   | "importReflection"
   | "moduleBlocks"
   | "moduleStringNames"
@@ -34,7 +36,8 @@ export type Plugin =
   | "partialApplication"
   | "placeholders"
   | "privateIn" // Enabled by default
-  | "regexpUnicodeSets"
+  | "regexpUnicodeSets" // Enabled by default
+  | "sourcePhaseImports"
   | "throwExpressions"
   | "topLevelAwait"
   | "v8intrinsic"
@@ -43,8 +46,10 @@ export type Plugin =
 export type ParserPluginWithOptions =
   | ["decorators", DecoratorsPluginOptions]
   | ["estree", { classFeatures?: boolean }]
+  | ["importAttributes", { deprecatedAssertSyntax: boolean }]
   // @deprecated
   | ["moduleAttributes", { version: "may-2020" }]
+  | ["optionalChainingAssign", { version: "2023-07" }]
   | ["pipelineOperator", PipelineOperatorPluginOptions]
   | ["recordAndTuple", RecordAndTuplePluginOptions]
   | ["flow", FlowPluginOptions]

@@ -1,6 +1,6 @@
 {
   "name": "@babel/cli",
-  "version": "7.20.7",
+  "version": "7.23.0",
   "description": "Babel command line.",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-cli",
@@ -24,9 +24,9 @@
     "compiler"
   ],
   "dependencies": {
-    "@jridgewell/trace-mapping": "^0.3.8",
+    "@jridgewell/trace-mapping": "^0.3.17",
     "commander": "^4.0.1",
-    "convert-source-map": "^1.1.0",
+    "convert-source-map": "^2.0.0",
     "fs-readdir-recursive": "^1.1.0",
     "glob": "^7.2.0",
     "make-dir": "condition:BABEL_8_BREAKING ? : ^2.1.0",
@@ -45,7 +45,7 @@
     "@types/fs-readdir-recursive": "^1.1.0",
     "@types/glob": "^7.2.0",
     "rimraf": "^3.0.0",
-    "semver": "^6.3.0"
+    "semver": "^6.3.1"
   },
   "bin": {
     "babel": "./bin/babel.js",
@@ -56,14 +56,22 @@
   },
   "conditions": {
     "BABEL_8_BREAKING": [
-      null,
+      {
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+        }
+      },
       {
         "exports": null
       }
     ],
     "USE_ESM": [
       {
-        "type": "module"
+        "type": "module",
+        "bin": {
+          "babel": "./bin/babel.mjs",
+          "babel-external-helpers": "./bin/babel-external-helpers.mjs"
+        }
       },
       null
     ]

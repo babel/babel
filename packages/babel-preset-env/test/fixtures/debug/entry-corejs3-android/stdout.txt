@@ -8,21 +8,22 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-class-static-block { android }
-  proposal-private-property-in-object { android }
-  proposal-class-properties { android }
-  proposal-private-methods { android }
-  proposal-numeric-separator { android }
-  proposal-logical-assignment-operators { android }
-  proposal-nullish-coalescing-operator { android }
-  proposal-optional-chaining { android }
-  proposal-json-strings { android }
-  proposal-optional-catch-binding { android }
+  transform-unicode-sets-regex { android }
+  transform-class-static-block { android }
+  transform-private-property-in-object { android }
+  transform-class-properties { android }
+  transform-private-methods { android }
+  transform-numeric-separator { android }
+  transform-logical-assignment-operators { android }
+  transform-nullish-coalescing-operator { android }
+  transform-optional-chaining { android }
+  transform-json-strings { android }
+  transform-optional-catch-binding { android }
   transform-parameters { android }
-  proposal-async-generator-functions { android }
-  proposal-object-rest-spread { android }
+  transform-async-generator-functions { android }
+  transform-object-rest-spread { android }
   transform-dotall-regex { android }
-  proposal-unicode-property-regex { android }
+  transform-unicode-property-regex { android }
   transform-named-capturing-groups-regex { android }
   transform-async-to-generator { android }
   transform-exponentiation-operator { android }
@@ -47,9 +48,10 @@ Using plugins:
   transform-new-target { android }
   transform-regenerator { android }
   transform-reserved-words { android < 4.4 }
-  proposal-export-namespace-from { android < 72 }
+  transform-export-namespace-from { android < 72 }
   transform-modules-commonjs
-  proposal-dynamic-import
+  transform-dynamic-import
+  syntax-import-meta
 corejs3: `DEBUG` option
 
 Using targets: {

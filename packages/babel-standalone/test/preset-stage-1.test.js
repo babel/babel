@@ -78,4 +78,13 @@ describe("stage-1 preset", () => {
     }).code;
     expect(output).toMatchInlineSnapshot(`"Tuple(Record({}));"`);
   });
+  it("should support optional chaining assignment", () => {
+    const output = Babel.transform("expr1?.prop = val", {
+      presets: [["stage-1", { decoratorsVersion: "2021-12" }]],
+    }).code;
+    expect(output).toMatchInlineSnapshot(`
+      "var _expr;
+      (_expr = expr1) === null || _expr === void 0 ? void 0 : _expr.prop = val;"
+    `);
+  });
 });

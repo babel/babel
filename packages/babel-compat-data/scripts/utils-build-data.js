@@ -33,6 +33,7 @@ exports.environments = [
   "phantom",
   "samsung",
   "rhino",
+  "opera_mobile",
 ];
 
 const compatibilityTests = compatSources.flatMap(data =>
@@ -54,11 +55,10 @@ const getLowestImplementedVersion = (
   exclude = () => false
 ) => {
   const tests = compatibilityTests.filter(test => {
-    // TODO (Babel 9): Use ||=, &&=
     let ok = features.includes(test.name);
-    ok = ok || (test.group && features.includes(test.group));
-    ok = ok || (features.length === 1 && test.name.startsWith(features[0]));
-    ok = ok && !exclude(test.name);
+    ok ||= test.group && features.includes(test.group);
+    ok ||= features.length === 1 && test.name.startsWith(features[0]);
+    ok &&= !exclude(test.name);
     return ok;
   });
 
@@ -156,8 +156,7 @@ exports.writeFile = function (data, dataPath, name) {
     // Compare as JSON strings to also check keys ordering
     if (currentData !== stringified) {
       console.error(
-        `The newly generated ${name} data does not match the current ` +
-          "files. Re-run `make build-compat-data`."
+        `The newly generated ${name} data does not match the current files. Re-run \`make build-compat-data\`.`
       );
 
       return false;
@@ -169,7 +168,25 @@ exports.writeFile = function (data, dataPath, name) {
 };
 
 // TODO(Babel 8): Remove this.
-exports.defineLegacyPluginAliases = function (data) {
+// Since these scripts generates different compat data files, we generate
+// Babel 7 files also when BABEL_8_BREAKING to avoid diffs during development.
+// It's safe to do so because the Babel 7 data is a superset of the Babel 8
+// data, so it works with both versions.
+// When BABEL_8_BREAKING and IS_PUBLISHING are both true, we generate
+// the actual Babel 8 files so that:
+// - we don't accidentally release Babel 8 with the Babel 7 file
+// - at lest in our e2e tests, we use the new file
+function babel7Only(fn, arg) {
+  if (process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH) {
+    return arg;
+  } else {
+    return fn(arg);
+  }
+}
+exports.babel7Only = babel7Only;
+
+// TODO(Babel 8): Remove this.
+exports.maybeDefineLegacyPluginAliases = babel7Only.bind(null, function (data) {
   // We create a new object to inject legacy aliases in the correct
   // order, rather than all at the end.
   const result = {};
@@ -180,4 +197,4 @@ exports.defineLegacyPluginAliases = function (data) {
     }
   }
   return result;
-};
+});

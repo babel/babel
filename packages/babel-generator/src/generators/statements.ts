@@ -1,4 +1,4 @@
-import type Printer from "../printer";
+import type Printer from "../printer.ts";
 import {
   isFor,
   isForStatement,
@@ -224,7 +224,7 @@ export function SwitchStatement(this: Printer, node: t.SwitchStatement) {
     },
   });
 
-  this.token("}");
+  this.rightBrace(node);
 }
 
 export function SwitchCase(this: Printer, node: t.SwitchCase) {
@@ -261,7 +261,7 @@ export function VariableDeclaration(
   }
 
   const { kind } = node;
-  this.word(kind, kind === "using");
+  this.word(kind, kind === "using" || kind === "await using");
   this.space();
 
   let hasInits = false;

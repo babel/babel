@@ -1,6 +1,7 @@
 import * as babel from "../lib/index.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import { itGte } from "$repo-utils";
 
 describe("addon resolution", function () {
   const base = path.join(
@@ -109,7 +110,7 @@ describe("addon resolution", function () {
     });
   });
 
-  it("should find @babel scoped plugins", function () {
+  it("should find @babel scoped plugins with an existing prefix", function () {
     process.chdir("babel-org-paths");
 
     babel.transformSync("", {
@@ -464,8 +465,24 @@ describe("addon resolution", function () {
     }).toThrow(/Cannot (?:find|resolve) module 'babel-plugin-foo'/);
   });
 
-  const nodeGte12 = parseInt(process.versions.node, 10) >= 12 ? it : it.skip;
+  const nodeGte12 = itGte("12.0.0");
 
+  nodeGte12(
+    "should suggest -transform- as an alternative to -proposal-",
+    function () {
+      process.chdir("throw-proposal-to-transform");
+
+      expect(() => {
+        babel.transformSync("", {
+          filename: "filename.js",
+          configFile: false,
+          plugins: ["@babel/proposal-halting-functions"],
+        });
+      }).toThrow(
+        /Cannot (?:find|resolve) module '@babel\/plugin-proposal-halting-functions'.*\n- Did you mean "@babel\/plugin-transform-halting-functions"\?/s,
+      );
+    },
+  );
   nodeGte12("should respect package.json#exports", async function () {
     process.chdir("pkg-exports");
 

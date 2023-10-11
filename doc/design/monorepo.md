@@ -1,6 +1,6 @@
 # Why is Babel a monorepo?
 
-> Note: We don't use `lerna` to manage packages inside the monorepo, but yarn workspaces with an additional [custom plugin](https://github.com/nicolo-ribaudo/yarn-plugin-babel-release-tool).
+> **Note** We don't use `lerna` to manage packages inside the monorepo, but yarn workspaces with an additional [custom plugin](https://github.com/nicolo-ribaudo/yarn-plugin-babel-release-tool).
 
 Juggling a multimodule project over multiple repos is like trying to teach a newborn baby how to
 ride a bike.

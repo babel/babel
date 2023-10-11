@@ -1,0 +1,60 @@
+{
+  "name": "@babel/plugin-proposal-import-attributes-to-assertions",
+  "version": "7.22.5",
+  "description": "Transform the Import Attributes proposal (`import ... from '...' with { ... }`) to the previous version known as Import Assertions (`import ... from '...' assert { ... }`).",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-proposal-import-attributes-to-assertions"
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-import-attributes-to-assertions",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
+  "keywords": [
+    "babel-plugin",
+    "import",
+    "attributes",
+    "assertions",
+    "proposal",
+    "stage-3"
+  ],
+  "dependencies": {
+    "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/plugin-syntax-import-attributes": "workspace:^"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.22.0"
+  },
+  "devDependencies": {
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^"
+  },
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)",
+  "type": "commonjs",
+  "conditions": {
+    "USE_ESM": [
+      {
+        "type": "module"
+      },
+      null
+    ],
+    "BABEL_8_BREAKING": [
+      {
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+        }
+      },
+      {}
+    ]
+  }
+}

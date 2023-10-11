@@ -1,4 +1,4 @@
-// This file isn't maintaned anymore.
+// This file isn't maintained anymore.
 // Improvements should go in the babel-plugin-polyfill-corejs3 package.
 
 export default {

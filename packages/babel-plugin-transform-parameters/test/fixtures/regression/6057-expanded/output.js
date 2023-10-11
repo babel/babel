@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 var _args = babelHelpers.interopRequireDefault(require("utils/url/args"));
-var App = /*#__PURE__*/function (_Component) {
+var App = exports["default"] = /*#__PURE__*/function (_Component) {
   babelHelpers.inherits(App, _Component);
   var _super = babelHelpers.createSuper(App);
   function App() {
@@ -26,4 +26,3 @@ var App = /*#__PURE__*/function (_Component) {
   }]);
   return App;
 }(Component);
-exports["default"] = App;

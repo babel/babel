@@ -107,7 +107,6 @@ if (!process.env.BABEL_8_BREAKING) {
   // Config params for certain module output formats.
   commander.option(
     "--module-root [filename]",
-    // eslint-disable-next-line max-len
     "Optional prefix for the AMD module formatter that will be prepended to the filename on module definitions.",
   );
   commander.option("-M, --module-ids", "Insert an explicit id for modules.");
@@ -177,7 +176,6 @@ commander.option(
   "Use a specific extension for the output files",
 );
 
-declare const PACKAGE_JSON: { name: string; version: string };
 commander.version(PACKAGE_JSON.version + " (@babel/core " + version + ")");
 commander.usage("[options] <files ...>");
 // register an empty action handler so that commander.js can throw on
@@ -359,7 +357,9 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
   };
 }
 
-function booleanify(val: any): boolean | any {
+function booleanify(val: "false" | 0 | ""): false;
+function booleanify(val: "true" | 1): true;
+function booleanify(val: any): any {
   if (val === undefined) return undefined;
 
   if (val === "true" || val == 1) {
@@ -373,10 +373,7 @@ function booleanify(val: any): boolean | any {
   return val;
 }
 
-function collect(
-  value: string | any,
-  previousValue: Array<string>,
-): Array<string> {
+function collect(value: unknown, previousValue: Array<string>): Array<string> {
   // If the user passed the option with no value, like "babel file.js --presets", do nothing.
   if (typeof value !== "string") return previousValue;
 

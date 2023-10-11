@@ -16,17 +16,70 @@ type State = {
   scope: Scope;
   bindingNames: Set<string>;
   seen: WeakSet<t.Node>;
-  includeUpdateExpression: boolean;
 };
 
 const simpleAssignmentVisitor: Visitor<State> = {
-  // TODO(Babel 8): Remove UpdateExpression
-  UpdateExpression: {
+  AssignmentExpression: {
     exit(path) {
-      const { scope, bindingNames, includeUpdateExpression } = this;
-      if (!includeUpdateExpression) {
+      const { scope, seen, bindingNames } = this;
+
+      if (path.node.operator === "=") return;
+
+      if (seen.has(path.node)) return;
+      seen.add(path.node);
+
+      const left = path.get("left");
+      if (!left.isIdentifier()) return;
+
+      // Simple update-assign foo += 1;
+      // =>   exports.foo =  (foo += 1);
+      const localName = left.node.name;
+
+      if (!bindingNames.has(localName)) return;
+
+      // redeclared in this scope
+      if (scope.getBinding(localName) !== path.scope.getBinding(localName)) {
         return;
       }
+
+      const operator = path.node.operator.slice(0, -1);
+      if (LOGICAL_OPERATORS.includes(operator)) {
+        // &&, ||, ??
+        // (foo &&= bar) => (foo && foo = bar)
+        path.replaceWith(
+          logicalExpression(
+            // @ts-expect-error Guarded by LOGICAL_OPERATORS.includes
+            operator,
+            path.node.left,
+            assignmentExpression(
+              "=",
+              cloneNode(path.node.left),
+              path.node.right,
+            ),
+          ),
+        );
+      } else {
+        // (foo += bar) => (foo = foo + bar)
+        path.node.right = binaryExpression(
+          // @ts-expect-error An assignment expression operator removing "=" must
+          // be a valid binary operator
+          operator,
+          cloneNode(path.node.left),
+          path.node.right,
+        );
+        path.node.operator = "=";
+      }
+    },
+  },
+};
+
+if (!process.env.BABEL_8_BREAKING) {
+  simpleAssignmentVisitor.UpdateExpression = {
+    exit(path) {
+      // @ts-expect-error This is Babel7-only
+      if (!this.includeUpdateExpression) return;
+
+      const { scope, bindingNames } = this;
 
       const arg = path.get("argument");
       if (!arg.isIdentifier()) return;
@@ -90,72 +143,26 @@ const simpleAssignmentVisitor: Visitor<State> = {
         );
       }
     },
-  },
-
-  AssignmentExpression: {
-    exit(path) {
-      const { scope, seen, bindingNames } = this;
-
-      if (path.node.operator === "=") return;
-
-      if (seen.has(path.node)) return;
-      seen.add(path.node);
-
-      const left = path.get("left");
-      if (!left.isIdentifier()) return;
-
-      // Simple update-assign foo += 1;
-      // =>   exports.foo =  (foo += 1);
-      const localName = left.node.name;
-
-      if (!bindingNames.has(localName)) return;
-
-      // redeclared in this scope
-      if (scope.getBinding(localName) !== path.scope.getBinding(localName)) {
-        return;
-      }
-
-      const operator = path.node.operator.slice(0, -1);
-      if (LOGICAL_OPERATORS.includes(operator)) {
-        // &&, ||, ??
-        // (foo &&= bar) => (foo && foo = bar)
-        path.replaceWith(
-          logicalExpression(
-            // @ts-expect-error Guarded by LOGICAL_OPERATORS.includes
-            operator,
-            path.node.left,
-            assignmentExpression(
-              "=",
-              cloneNode(path.node.left),
-              path.node.right,
-            ),
-          ),
-        );
-      } else {
-        // (foo += bar) => (foo = foo + bar)
-        path.node.right = binaryExpression(
-          // @ts-expect-error An assignment expression operator removing "=" must
-          // be a valid binary operator
-          operator,
-          cloneNode(path.node.left),
-          path.node.right,
-        );
-        path.node.operator = "=";
-      }
-    },
-  },
-};
+  };
+}
 
 export default function simplifyAccess(
   path: NodePath,
   bindingNames: Set<string>,
-  // TODO(Babel 8): Remove this
-  includeUpdateExpression: boolean = true,
 ) {
-  path.traverse(simpleAssignmentVisitor, {
-    scope: path.scope,
-    bindingNames,
-    seen: new WeakSet(),
-    includeUpdateExpression,
-  });
+  if (process.env.BABEL_8_BREAKING) {
+    path.traverse(simpleAssignmentVisitor, {
+      scope: path.scope,
+      bindingNames,
+      seen: new WeakSet(),
+    });
+  } else {
+    path.traverse(simpleAssignmentVisitor, {
+      scope: path.scope,
+      bindingNames,
+      seen: new WeakSet(),
+      // @ts-expect-error This is Babel7-only
+      includeUpdateExpression: arguments[2] ?? true,
+    });
+  }
 }

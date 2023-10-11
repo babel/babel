@@ -1,4 +1,4 @@
-import isValidIdentifier from "../validators/isValidIdentifier";
+import isValidIdentifier from "../validators/isValidIdentifier.ts";
 import { isIdentifierChar } from "@babel/helper-validator-identifier";
 
 export default function toIdentifier(input: string): string {

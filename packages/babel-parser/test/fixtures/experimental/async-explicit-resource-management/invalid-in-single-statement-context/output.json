@@ -1,0 +1,211 @@
+{
+  "type": "File",
+  "start":0,"end":180,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":1,"index":180}},
+  "errors": [
+    "SyntaxError: Lexical declaration cannot appear in a single-statement context. (2:12)",
+    "SyntaxError: Lexical declaration cannot appear in a single-statement context. (3:11)",
+    "SyntaxError: Lexical declaration cannot appear in a single-statement context. (4:5)",
+    "SyntaxError: Lexical declaration cannot appear in a single-statement context. (5:9)",
+    "SyntaxError: Lexical declaration cannot appear in a single-statement context. (6:11)",
+    "SyntaxError: Lexical declaration cannot appear in a single-statement context. (7:9)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":180,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":1,"index":180}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":180,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":1,"index":180}},
+        "id": {
+          "type": "Identifier",
+          "start":15,"end":16,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":16,"index":16},"identifierName":"f"},
+          "name": "f"
+        },
+        "generator": false,
+        "async": true,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":19,"end":180,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":8,"column":1,"index":180}},
+          "body": [
+            {
+              "type": "WhileStatement",
+              "start":23,"end":47,"loc":{"start":{"line":2,"column":2,"index":23},"end":{"line":2,"column":26,"index":47}},
+              "test": {
+                "type": "NumericLiteral",
+                "start":30,"end":31,"loc":{"start":{"line":2,"column":9,"index":30},"end":{"line":2,"column":10,"index":31}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              },
+              "body": {
+                "type": "VariableDeclaration",
+                "start":33,"end":47,"loc":{"start":{"line":2,"column":12,"index":33},"end":{"line":2,"column":26,"index":47}},
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start":45,"end":46,"loc":{"start":{"line":2,"column":24,"index":45},"end":{"line":2,"column":25,"index":46}},
+                    "id": {
+                      "type": "Identifier",
+                      "start":45,"end":46,"loc":{"start":{"line":2,"column":24,"index":45},"end":{"line":2,"column":25,"index":46},"identifierName":"a"},
+                      "name": "a"
+                    },
+                    "init": null
+                  }
+                ],
+                "kind": "await using"
+              }
+            },
+            {
+              "type": "ForStatement",
+              "start":50,"end":73,"loc":{"start":{"line":3,"column":2,"index":50},"end":{"line":3,"column":25,"index":73}},
+              "init": null,
+              "test": null,
+              "update": null,
+              "body": {
+                "type": "VariableDeclaration",
+                "start":59,"end":73,"loc":{"start":{"line":3,"column":11,"index":59},"end":{"line":3,"column":25,"index":73}},
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start":71,"end":72,"loc":{"start":{"line":3,"column":23,"index":71},"end":{"line":3,"column":24,"index":72}},
+                    "id": {
+                      "type": "Identifier",
+                      "start":71,"end":72,"loc":{"start":{"line":3,"column":23,"index":71},"end":{"line":3,"column":24,"index":72},"identifierName":"b"},
+                      "name": "b"
+                    },
+                    "init": null
+                  }
+                ],
+                "kind": "await using"
+              }
+            },
+            {
+              "type": "DoWhileStatement",
+              "start":76,"end":104,"loc":{"start":{"line":4,"column":2,"index":76},"end":{"line":4,"column":30,"index":104}},
+              "body": {
+                "type": "VariableDeclaration",
+                "start":79,"end":93,"loc":{"start":{"line":4,"column":5,"index":79},"end":{"line":4,"column":19,"index":93}},
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start":91,"end":92,"loc":{"start":{"line":4,"column":17,"index":91},"end":{"line":4,"column":18,"index":92}},
+                    "id": {
+                      "type": "Identifier",
+                      "start":91,"end":92,"loc":{"start":{"line":4,"column":17,"index":91},"end":{"line":4,"column":18,"index":92},"identifierName":"c"},
+                      "name": "c"
+                    },
+                    "init": null
+                  }
+                ],
+                "kind": "await using"
+              },
+              "test": {
+                "type": "NumericLiteral",
+                "start":101,"end":102,"loc":{"start":{"line":4,"column":27,"index":101},"end":{"line":4,"column":28,"index":102}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              }
+            },
+            {
+              "type": "IfStatement",
+              "start":107,"end":128,"loc":{"start":{"line":5,"column":2,"index":107},"end":{"line":5,"column":23,"index":128}},
+              "test": {
+                "type": "NumericLiteral",
+                "start":111,"end":112,"loc":{"start":{"line":5,"column":6,"index":111},"end":{"line":5,"column":7,"index":112}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              },
+              "consequent": {
+                "type": "VariableDeclaration",
+                "start":114,"end":128,"loc":{"start":{"line":5,"column":9,"index":114},"end":{"line":5,"column":23,"index":128}},
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start":126,"end":127,"loc":{"start":{"line":5,"column":21,"index":126},"end":{"line":5,"column":22,"index":127}},
+                    "id": {
+                      "type": "Identifier",
+                      "start":126,"end":127,"loc":{"start":{"line":5,"column":21,"index":126},"end":{"line":5,"column":22,"index":127},"identifierName":"d"},
+                      "name": "d"
+                    },
+                    "init": null
+                  }
+                ],
+                "kind": "await using"
+              },
+              "alternate": null
+            },
+            {
+              "type": "WithStatement",
+              "start":131,"end":154,"loc":{"start":{"line":6,"column":2,"index":131},"end":{"line":6,"column":25,"index":154}},
+              "object": {
+                "type": "NumericLiteral",
+                "start":137,"end":138,"loc":{"start":{"line":6,"column":8,"index":137},"end":{"line":6,"column":9,"index":138}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              },
+              "body": {
+                "type": "VariableDeclaration",
+                "start":140,"end":154,"loc":{"start":{"line":6,"column":11,"index":140},"end":{"line":6,"column":25,"index":154}},
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start":152,"end":153,"loc":{"start":{"line":6,"column":23,"index":152},"end":{"line":6,"column":24,"index":153}},
+                    "id": {
+                      "type": "Identifier",
+                      "start":152,"end":153,"loc":{"start":{"line":6,"column":23,"index":152},"end":{"line":6,"column":24,"index":153},"identifierName":"e"},
+                      "name": "e"
+                    },
+                    "init": null
+                  }
+                ],
+                "kind": "await using"
+              }
+            },
+            {
+              "type": "LabeledStatement",
+              "start":157,"end":178,"loc":{"start":{"line":7,"column":2,"index":157},"end":{"line":7,"column":23,"index":178}},
+              "body": {
+                "type": "VariableDeclaration",
+                "start":164,"end":178,"loc":{"start":{"line":7,"column":9,"index":164},"end":{"line":7,"column":23,"index":178}},
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start":176,"end":177,"loc":{"start":{"line":7,"column":21,"index":176},"end":{"line":7,"column":22,"index":177}},
+                    "id": {
+                      "type": "Identifier",
+                      "start":176,"end":177,"loc":{"start":{"line":7,"column":21,"index":176},"end":{"line":7,"column":22,"index":177},"identifierName":"f"},
+                      "name": "f"
+                    },
+                    "init": null
+                  }
+                ],
+                "kind": "await using"
+              },
+              "label": {
+                "type": "Identifier",
+                "start":157,"end":162,"loc":{"start":{"line":7,"column":2,"index":157},"end":{"line":7,"column":7,"index":162},"identifierName":"label"},
+                "name": "label"
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

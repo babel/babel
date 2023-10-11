@@ -5,8 +5,8 @@ import path from "path";
 import repl from "repl";
 import * as babel from "@babel/core";
 import vm from "vm";
-import "core-js/stable/index";
-import "regenerator-runtime/runtime";
+import "core-js/stable/index.js";
+import "regenerator-runtime/runtime.js";
 // @ts-expect-error @babel/register is a CommonJS module
 import register from "@babel/register";
 import { fileURLToPath } from "url";
@@ -70,7 +70,6 @@ program.option(
 program.option("-w, --plugins [string]", "", collect);
 program.option("-b, --presets [string]", "", collect);
 
-declare const PACKAGE_JSON: { name: string; version: string };
 program.version(PACKAGE_JSON.version);
 program.usage("[options] [ -e script | script.js ] [arguments]");
 program.parse(process.argv);
@@ -230,9 +229,11 @@ if (program.eval || program.print) {
 // We have to handle require ourselves, as we want to require it in the context of babel-register
 function requireArgs() {
   if (program.require) {
-    require(require.resolve(program.require, {
-      paths: [process.cwd()],
-    }));
+    require(
+      require.resolve(program.require, {
+        paths: [process.cwd()],
+      }),
+    );
   }
 }
 function replEval(

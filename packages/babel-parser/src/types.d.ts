@@ -1,8 +1,8 @@
-import type { SourceType } from "./options";
-import type { Token } from "./tokenizer";
-import type { SourceLocation } from "./util/location";
-import type { PlaceholderTypes } from "./plugins/placeholders";
-import type { ParseError } from "./parse-error";
+import type { SourceType } from "./options.ts";
+import type { Token } from "./tokenizer/index.ts";
+import type { SourceLocation } from "./util/location.ts";
+import type { PlaceholderTypes } from "./plugins/placeholders.ts";
+import type { ParseError } from "./parse-error.ts";
 
 /*
  * If making any changes to the AST, update:
@@ -355,7 +355,7 @@ export interface FunctionDeclaration extends OptFunctionDeclaration {
 export interface VariableDeclaration extends DeclarationBase, HasDecorators {
   type: "VariableDeclaration";
   declarations: VariableDeclarator[];
-  kind: "var" | "let" | "const" | "using";
+  kind: "var" | "let" | "const" | "using" | "await using";
 }
 
 export interface VariableDeclarator extends NodeBase {
@@ -622,6 +622,13 @@ export interface CallExpression extends CallOrNewBase {
 export interface NewExpression extends CallOrNewBase {
   type: "NewExpression";
   optional?: boolean; // TODO: Not in spec
+}
+
+export interface ImportExpression extends NodeBase {
+  type: "ImportExpression";
+  source: Expression;
+  phase?: null | "source" | "defer";
+  options: Expression | null;
 }
 
 export interface SequenceExpression extends NodeBase {
@@ -921,6 +928,9 @@ export interface ImportDeclaration extends NodeBase {
   >;
   source: Literal;
   importKind?: "type" | "typeof" | "value"; // TODO: Not in spec,
+  phase?: null | "source" | "defer";
+  attributes?: ImportAttribute[];
+  // @deprecated
   assertions?: ImportAttribute[];
   module?: boolean;
 }
@@ -947,6 +957,8 @@ export interface ExportNamedDeclaration extends NodeBase {
   specifiers: Array<ExportSpecifier | ExportDefaultSpecifier>;
   source: Literal | undefined | null;
   exportKind?: "type" | "value"; // TODO: Not in spec,
+  attributes?: ImportAttribute[];
+  // @deprecated
   assertions?: ImportAttribute[];
 }
 
@@ -1049,10 +1061,11 @@ export interface TypeParameter extends NodeBase {
 
 export interface TsTypeParameter extends NodeBase {
   type: "TSTypeParameter";
-  // TODO(Babel-8): remove string type support
+  // TODO(Babel 8): remove string type support
   name: string | Identifier;
   in?: boolean;
   out?: boolean;
+  const?: boolean;
   constraint?: TsType;
   default?: TsType;
 }
@@ -1208,6 +1221,10 @@ export interface EstreeMethodDefinition extends NodeBase {
 export interface EstreeImportExpression extends NodeBase {
   type: "ImportExpression";
   source: Expression;
+  options?: Expression | null;
+  /**
+   * @deprecated Use options instead
+   */
   attributes?: Expression | null;
 }
 
@@ -1286,7 +1303,7 @@ export interface TsSignatureDeclarationOrIndexSignatureBase extends NodeBase {
   // Not using TypeScript's "ParameterDeclaration" here, since it's inconsistent with regular functions.
   params: Array<Identifier | RestElement | ObjectPattern | ArrayPattern>;
   returnType: TsTypeAnnotation | undefined | null;
-  // TODO(Babel-8): Remove
+  // TODO(Babel 8): Remove
   parameters: Array<Identifier | RestElement | ObjectPattern | ArrayPattern>;
   typeAnnotation: TsTypeAnnotation | undefined | null;
 }

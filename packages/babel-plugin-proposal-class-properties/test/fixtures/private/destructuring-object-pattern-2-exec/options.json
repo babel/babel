@@ -1,8 +1,0 @@
-{
-  "plugins": [
-    "transform-destructuring",
-    "proposal-class-properties",
-    "transform-classes",
-    "transform-block-scoping"
-  ]
-}

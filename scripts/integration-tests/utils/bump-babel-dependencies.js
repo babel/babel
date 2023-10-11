@@ -1,32 +1,41 @@
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 
-const cwd = process.cwd();
-const packageJSONPath = path.resolve(cwd, "./package.json");
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const packageJSONPath = path.resolve(process.cwd(), "./package.json");
 const content = JSON.parse(fs.readFileSync(packageJSONPath));
 
-let bumped = false;
 function bumpBabelDependency(type, version) {
   const dependencies = content[type];
   for (const dep of Object.keys(dependencies)) {
     if (dep.startsWith("@babel/") && !dependencies[dep].includes(":")) {
       dependencies[dep] = version;
       console.log(`Bumped ${type}:${dep} to ${version}`);
-      bumped = true;
     }
   }
 }
 
-if ("peerDependencies" in content) {
-  bumpBabelDependency("peerDependencies", "*");
-}
-if ("devDependencies" in content) {
-  bumpBabelDependency("devDependencies", "latest");
-}
-if ("dependencies" in content) {
-  bumpBabelDependency("dependencies", "latest");
+if (process.argv[2] === "resolutions") {
+  const resolutions = content.resolutions || {};
+  for (const name of fs.readdirSync(
+    path.join(__dirname, "../../../packages")
+  )) {
+    if (!name.startsWith("babel-")) continue;
+    resolutions[name.replace("babel-", "@babel/")] = "*";
+  }
+  content.resolutions = resolutions;
+} else {
+  if ("peerDependencies" in content) {
+    bumpBabelDependency("peerDependencies", "*");
+  }
+  if ("devDependencies" in content) {
+    bumpBabelDependency("devDependencies", "latest");
+  }
+  if ("dependencies" in content) {
+    bumpBabelDependency("dependencies", "latest");
+  }
 }
 
-if (bumped) {
-  fs.writeFileSync(packageJSONPath, JSON.stringify(content, undefined, 2));
-}
+fs.writeFileSync(packageJSONPath, JSON.stringify(content, undefined, 2));

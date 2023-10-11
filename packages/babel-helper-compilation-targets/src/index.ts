@@ -9,10 +9,10 @@ import {
   isUnreleasedVersion,
   getLowestUnreleased,
   getHighestUnreleased,
-} from "./utils";
+} from "./utils.ts";
 import { OptionValidator } from "@babel/helper-validator-option";
-import { browserNameMap } from "./targets";
-import { TargetNames } from "./options";
+import { browserNameMap } from "./targets.ts";
+import { TargetNames } from "./options.ts";
 import type {
   Target,
   Targets,
@@ -20,19 +20,18 @@ import type {
   Browsers,
   BrowserslistBrowserName,
   TargetsTuple,
-} from "./types";
+} from "./types.ts";
 
 export type { Target, Targets, InputTargets };
 
-export { prettifyTargets } from "./pretty";
-export { getInclusionReasons } from "./debug";
-export { default as filterItems, isRequired } from "./filter-items";
-export { unreleasedLabels } from "./targets";
+export { prettifyTargets } from "./pretty.ts";
+export { getInclusionReasons } from "./debug.ts";
+export { default as filterItems, isRequired } from "./filter-items.ts";
+export { unreleasedLabels } from "./targets.ts";
 export { TargetNames };
 
 const ESM_SUPPORT = browserModulesData["es6.module"];
 
-declare const PACKAGE_JSON: { name: string; version: string };
 const v = new OptionValidator(PACKAGE_JSON.name);
 
 function validateTargetNames(targets: Targets): TargetsTuple {
@@ -66,45 +65,48 @@ function validateBrowsers(browsers: Browsers | undefined) {
 }
 
 function getLowestVersions(browsers: Array<string>): Targets {
-  return browsers.reduce((all, browser) => {
-    const [browserName, browserVersion] = browser.split(" ") as [
-      BrowserslistBrowserName,
-      string,
-    ];
-    const target = browserNameMap[browserName];
+  return browsers.reduce(
+    (all, browser) => {
+      const [browserName, browserVersion] = browser.split(" ") as [
+        BrowserslistBrowserName,
+        string,
+      ];
+      const target = browserNameMap[browserName];
 
-    if (!target) {
-      return all;
-    }
-
-    try {
-      // Browser version can return as "10.0-10.2"
-      const splitVersion = browserVersion.split("-")[0].toLowerCase();
-      const isSplitUnreleased = isUnreleasedVersion(splitVersion, target);
-
-      if (!all[target]) {
-        all[target] = isSplitUnreleased
-          ? splitVersion
-          : semverify(splitVersion);
+      if (!target) {
         return all;
       }
 
-      const version = all[target];
-      const isUnreleased = isUnreleasedVersion(version, target);
+      try {
+        // Browser version can return as "10.0-10.2"
+        const splitVersion = browserVersion.split("-")[0].toLowerCase();
+        const isSplitUnreleased = isUnreleasedVersion(splitVersion, target);
 
-      if (isUnreleased && isSplitUnreleased) {
-        all[target] = getLowestUnreleased(version, splitVersion, target);
-      } else if (isUnreleased) {
-        all[target] = semverify(splitVersion);
-      } else if (!isUnreleased && !isSplitUnreleased) {
-        const parsedBrowserVersion = semverify(splitVersion);
+        if (!all[target]) {
+          all[target] = isSplitUnreleased
+            ? splitVersion
+            : semverify(splitVersion);
+          return all;
+        }
 
-        all[target] = semverMin(version, parsedBrowserVersion);
-      }
-    } catch (e) {}
+        const version = all[target];
+        const isUnreleased = isUnreleasedVersion(version, target);
 
-    return all;
-  }, {} as Record<Target, string>);
+        if (isUnreleased && isSplitUnreleased) {
+          all[target] = getLowestUnreleased(version, splitVersion, target);
+        } else if (isUnreleased) {
+          all[target] = semverify(splitVersion);
+        } else if (!isUnreleased && !isSplitUnreleased) {
+          const parsedBrowserVersion = semverify(splitVersion);
+
+          all[target] = semverMin(version, parsedBrowserVersion);
+        }
+      } catch (e) {}
+
+      return all;
+    },
+    {} as Record<Target, string>,
+  );
 }
 
 function outputDecimalWarning(
@@ -218,9 +220,8 @@ export default function getTargets(
     });
     if (browsers == null) {
       if (process.env.BABEL_8_BREAKING) {
-        // In Babel 8, if no targets are passed, we use browserslist's defaults
-        // and exclude IE 11.
-        browsers = ["defaults, not ie 11"];
+        // In Babel 8, if no targets are passed, we use browserslist's defaults.
+        browsers = ["defaults"];
       } else {
         // If no targets are passed, we need to overwrite browserslist's defaults
         // so that we enable all transforms (acting like the now deprecated
@@ -253,17 +254,20 @@ export default function getTargets(
 
     if (esmodules === "intersect") {
       for (const browser of Object.keys(queryBrowsers) as Target[]) {
-        const version = queryBrowsers[browser];
-        const esmSupportVersion =
-          // @ts-expect-error ie is not in ESM_SUPPORT
-          ESM_SUPPORT[browser];
+        if (browser !== "deno" && browser !== "ie") {
+          const esmSupportVersion =
+            ESM_SUPPORT[browser === "opera_mobile" ? "op_mob" : browser];
 
-        if (esmSupportVersion) {
-          queryBrowsers[browser] = getHighestUnreleased(
-            version,
-            semverify(esmSupportVersion),
-            browser,
-          );
+          if (esmSupportVersion) {
+            const version = queryBrowsers[browser];
+            queryBrowsers[browser] = getHighestUnreleased(
+              version,
+              semverify(esmSupportVersion),
+              browser,
+            );
+          } else {
+            delete queryBrowsers[browser];
+          }
         } else {
           delete queryBrowsers[browser];
         }

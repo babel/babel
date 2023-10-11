@@ -13,5 +13,6 @@ find . \
     -o -type f -path "./packages/babel-runtime/*" -name "*.js" \
     -o -type f -path "./packages/babel-runtime-corejs2/*" -name "*.js" \
     -o -type f -path "./packages/babel-runtime-corejs3/*" -name "*.js" \
+    -o -type f -path "./packages/babel-core/src/vendor/*" -name "*.js" \
   \) \
   -print0

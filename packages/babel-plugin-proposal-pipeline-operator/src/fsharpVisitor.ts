@@ -1,6 +1,6 @@
 import { types as t, type PluginObject } from "@babel/core";
 import type { NodePath } from "@babel/traverse";
-import buildOptimizedSequenceExpression from "./buildOptimizedSequenceExpression";
+import buildOptimizedSequenceExpression from "./buildOptimizedSequenceExpression.ts";
 
 const fsharpVisitor: PluginObject["visitor"] = {
   BinaryExpression(path) {

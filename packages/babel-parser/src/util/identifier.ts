@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 import * as charCodes from "charcodes";
 import { isIdentifierStart } from "@babel/helper-validator-identifier";
 

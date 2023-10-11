@@ -8,7 +8,7 @@ import type * as t from "@babel/types";
 import { getModuleName } from "@babel/helper-module-transforms";
 import semver from "semver";
 
-import type { NormalizedFile } from "../normalize-file";
+import type { NormalizedFile } from "../normalize-file.ts";
 
 const errorVisitor: Visitor<{ loc: NodeLocation["loc"] | null }> = {
   enter(path, state) {

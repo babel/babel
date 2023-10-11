@@ -1,0 +1,5 @@
+{
+  "BABEL_8_BREAKING": true,
+  "presets": [["env", { "corejs": 3, "useBuiltIns": "usage" }]],
+  "plugins": ["transform-runtime"]
+}

@@ -5,7 +5,10 @@ new class extends babelHelpers.identity {
   static {
     class Class {
       static {
-        [_init_m, _call_o, _call_p, _call_q, _init_r, _get_r, _set_r, _init_d, _call_f, _call_g, _call_g2, _init_h, _get_h, _set_h, _init_i, _init_n, _init_a, _init_e, _initProto, _initStatic, _Class, _initClass] = babelHelpers.applyDecs2203(this, [[dec, 7, "j"], [dec, 8, "k"], [dec, 9, "l"], [dec, 6, "m"], [dec, 7, "o", function () {}], [dec, 8, "p", function () {}], [dec, 9, "q", function (v) {}], [dec, 6, "r", function () {
+        ({
+          e: [_init_m, _call_o, _call_p, _call_q, _init_r, _get_r, _set_r, _init_d, _call_f, _call_g, _call_g2, _init_h, _get_h, _set_h, _init_i, _init_n, _init_a, _init_e, _initProto, _initStatic],
+          c: [_Class, _initClass]
+        } = babelHelpers.applyDecs2203R(this, [[dec, 7, "j"], [dec, 8, "k"], [dec, 9, "l"], [dec, 6, "m"], [dec, 7, "o", function () {}], [dec, 8, "p", function () {}], [dec, 9, "q", function (v) {}], [dec, 6, "r", function () {
           return this.#D;
         }, function (value) {
           this.#D = value;
@@ -21,7 +24,7 @@ new class extends babelHelpers.identity {
           return this.#e;
         }, function (value) {
           this.#e = value;
-        }]], [dec]);
+        }]], [dec]));
         _initStatic(this);
       }
       #f = _call_f;

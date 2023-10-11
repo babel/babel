@@ -1,0 +1,53 @@
+{
+  "type": "File",
+  "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":37,"index":37}},
+  "errors": [
+    "SyntaxError: The `assert` keyword in import attributes is deprecated and it has been replaced by the `with` keyword. You can enable the `deprecatedAssertSyntax: true` option in the import attributes plugin to suppress this error. (1:13)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":37,"index":37}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":37,"index":37}},
+        "specifiers": [],
+        "source": {
+          "type": "StringLiteral",
+          "start":7,"end":12,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":12,"index":12}},
+          "extra": {
+            "rawValue": "foo",
+            "raw": "\"foo\""
+          },
+          "value": "foo"
+        },
+        "extra": {
+          "deprecatedAssertSyntax": true
+        },
+        "attributes": [
+          {
+            "type": "ImportAttribute",
+            "start":22,"end":34,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":34,"index":34}},
+            "key": {
+              "type": "Identifier",
+              "start":22,"end":26,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":26,"index":26},"identifierName":"type"},
+              "name": "type"
+            },
+            "value": {
+              "type": "StringLiteral",
+              "start":28,"end":34,"loc":{"start":{"line":1,"column":28,"index":28},"end":{"line":1,"column":34,"index":34}},
+              "extra": {
+                "rawValue": "json",
+                "raw": "\"json\""
+              },
+              "value": "json"
+            }
+          }
+        ]
+      }
+    ],
+    "directives": []
+  }
+}

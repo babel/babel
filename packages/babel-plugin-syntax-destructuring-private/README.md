@@ -2,7 +2,7 @@
 
 > Allow parsing of destructuring private fields
 
-See our website [@babel/plugin-syntax-destructuring-private](https://babeljs.io/docs/en/babel-plugin-syntax-destructuring-private) for more information.
+See our website [@babel/plugin-syntax-destructuring-private](https://babeljs.io/docs/babel-plugin-syntax-destructuring-private) for more information.
 
 ## Install
 

@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-export-default-from",
-  "version": "7.18.10",
+  "version": "7.22.17",
   "description": "Compile export default to ES2015",
   "repository": {
     "type": "git",
@@ -33,7 +33,11 @@
   "author": "The Babel Team (https://babel.dev/team)",
   "conditions": {
     "BABEL_8_BREAKING": [
-      null,
+      {
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+        }
+      },
       {
         "exports": null
       }

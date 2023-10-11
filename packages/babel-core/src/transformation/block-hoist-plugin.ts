@@ -1,7 +1,7 @@
 import traverse from "@babel/traverse";
 import type { Statement } from "@babel/types";
-import type { PluginObject } from "../config";
-import Plugin from "../config/plugin";
+import type { PluginObject } from "../config/index.ts";
+import Plugin from "../config/plugin.ts";
 
 let LOADED_PLUGIN: Plugin | void;
 

@@ -1,17 +1,17 @@
 import _normalizeOptions from "../lib/normalize-options.js";
 const normalizeOptions = _normalizeOptions.default || _normalizeOptions;
+import { describeBabel8, describeBabel7 } from "$repo-utils";
 
 describe("normalize options", () => {
-  (process.env.BABEL_8_BREAKING ? describe : describe.skip)("Babel 8", () => {
+  describeBabel8("Babel 8", () => {
     it("should throw on unknown options", () => {
       expect(() => normalizeOptions({ allowNamespace: true })).toThrow(
         "@babel/preset-typescript: 'allowNamespace' is not a valid top-level option.\n- Did you mean 'allowNamespaces'?",
       );
     });
     it.each([
-      "allExtensions",
       "allowNamespaces",
-      "isTSX",
+      "ignoreExtensions",
       "onlyRemoveTypeImports",
       "optimizeConstEnums",
     ])("should throw when `%p` is not a boolean", optionName => {
@@ -27,25 +27,33 @@ describe("normalize options", () => {
         );
       },
     );
+    it.each(["isTSX", "allExtensions"])(
+      "should throw when `%p` is used",
+      optionName => {
+        expect(() => normalizeOptions({ [optionName]: true })).toThrow(
+          `@babel/preset-typescript: The .allExtensions and .isTSX options have been removed.`,
+        );
+      },
+    );
     it("should not throw when options is not defined", () => {
       expect(() => normalizeOptions()).not.toThrow();
     });
     it("default values", () => {
       expect(normalizeOptions({})).toMatchInlineSnapshot(`
         Object {
-          "allExtensions": false,
           "allowNamespaces": true,
           "disallowAmbiguousJSXLike": false,
-          "isTSX": false,
+          "ignoreExtensions": false,
           "jsxPragma": "React",
           "jsxPragmaFrag": "React.Fragment",
           "onlyRemoveTypeImports": true,
           "optimizeConstEnums": false,
+          "rewriteImportExtensions": false,
         }
       `);
     });
   });
-  (process.env.BABEL_8_BREAKING ? describe.skip : describe)("Babel 7", () => {
+  describeBabel7("Babel 7", () => {
     it("should not throw on unknown options", () => {
       expect(() => normalizeOptions({ allowNamespace: true })).not.toThrow();
     });
@@ -77,17 +85,19 @@ describe("normalize options", () => {
         );
       },
     );
-    it("default values", () => {
+    it("default values in Babel 7", () => {
       expect(normalizeOptions({})).toMatchInlineSnapshot(`
         Object {
           "allExtensions": false,
           "allowNamespaces": true,
           "disallowAmbiguousJSXLike": false,
+          "ignoreExtensions": false,
           "isTSX": false,
           "jsxPragma": undefined,
           "jsxPragmaFrag": "React.Fragment",
           "onlyRemoveTypeImports": undefined,
           "optimizeConstEnums": false,
+          "rewriteImportExtensions": false,
         }
       `);
     });

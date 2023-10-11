@@ -7,12 +7,11 @@ foo.func1 = function () {
         func4(function () {
           func2();
         });
-        return "break";
+        return 1; // break
       }
     };
     for (;;) {
-      var _ret = _loop();
-      if (_ret === "break") break;
+      if (_loop()) break;
     }
   }
 };

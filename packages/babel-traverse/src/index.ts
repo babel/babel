@@ -1,4 +1,4 @@
-import * as visitors from "./visitors";
+import * as visitors from "./visitors.ts";
 import {
   VISITOR_KEYS,
   removeProperties,
@@ -6,17 +6,17 @@ import {
   traverseFast,
 } from "@babel/types";
 import type * as t from "@babel/types";
-import * as cache from "./cache";
-import type NodePath from "./path";
-import type { default as Scope, Binding } from "./scope";
-import type { Visitor } from "./types";
-import { traverseNode } from "./traverse-node";
+import * as cache from "./cache.ts";
+import type NodePath from "./path/index.ts";
+import type { default as Scope, Binding } from "./scope/index.ts";
+import type { ExplodedVisitor, Visitor } from "./types.ts";
+import { traverseNode } from "./traverse-node.ts";
 
-export type { Visitor, Binding };
-export { default as NodePath } from "./path";
-export { default as Scope } from "./scope";
-export { default as Hub } from "./hub";
-export type { HubInterface } from "./hub";
+export type { ExplodedVisitor, Visitor, Binding };
+export { default as NodePath } from "./path/index.ts";
+export { default as Scope } from "./scope/index.ts";
+export { default as Hub } from "./hub.ts";
+export type { HubInterface } from "./hub.ts";
 
 export { visitors };
 
@@ -24,7 +24,11 @@ export type TraverseOptions<S = t.Node> = {
   scope?: Scope;
   noScope?: boolean;
   denylist?: string[];
+  shouldSkip?: (node: NodePath) => boolean;
 } & Visitor<S>;
+
+export type ExplodedTraverseOptions<S = t.Node> = TraverseOptions<S> &
+  ExplodedVisitor<S>;
 
 function traverse<S>(
   parent: t.Node,
@@ -32,6 +36,7 @@ function traverse<S>(
   scope: Scope | undefined,
   state: S,
   parentPath?: NodePath,
+  visitSelf?: boolean,
 ): void;
 
 function traverse(
@@ -40,6 +45,7 @@ function traverse(
   scope?: Scope,
   state?: any,
   parentPath?: NodePath,
+  visitSelf?: boolean,
 ): void;
 
 function traverse<Options extends TraverseOptions>(
@@ -49,6 +55,7 @@ function traverse<Options extends TraverseOptions>(
   scope?: Scope,
   state?: any,
   parentPath?: NodePath,
+  visitSelf?: boolean,
 ) {
   if (!parent) return;
 
@@ -62,13 +69,25 @@ function traverse<Options extends TraverseOptions>(
     }
   }
 
+  if (!parentPath && visitSelf) {
+    throw new Error("visitSelf can only be used when providing a NodePath.");
+  }
+
   if (!VISITOR_KEYS[parent.type]) {
     return;
   }
 
   visitors.explode(opts as Visitor);
 
-  traverseNode(parent, opts, scope, state, parentPath);
+  traverseNode(
+    parent,
+    opts as ExplodedVisitor,
+    scope,
+    state,
+    parentPath,
+    /* skipKeys */ null,
+    visitSelf,
+  );
 }
 
 export default traverse;
@@ -78,12 +97,13 @@ traverse.verify = visitors.verify;
 traverse.explode = visitors.explode;
 
 traverse.cheap = function (node: t.Node, enter: (node: t.Node) => void) {
-  return traverseFast(node, enter);
+  traverseFast(node, enter);
+  return;
 };
 
 traverse.node = function (
   node: t.Node,
-  opts: TraverseOptions,
+  opts: ExplodedTraverseOptions,
   scope?: Scope,
   state?: any,
   path?: NodePath,
@@ -95,8 +115,6 @@ traverse.node = function (
 
 traverse.clearNode = function (node: t.Node, opts?: RemovePropertiesOptions) {
   removeProperties(node, opts);
-
-  cache.path.delete(node);
 };
 
 traverse.removeProperties = function (

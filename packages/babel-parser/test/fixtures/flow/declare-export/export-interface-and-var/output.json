@@ -38,8 +38,6 @@
                 },
                 "typeParameters": null,
                 "extends": [],
-                "implements": [],
-                "mixins": [],
                 "body": {
                   "type": "ObjectTypeAnnotation",
                   "start":52,"end":54,"loc":{"start":{"line":1,"column":52,"index":52},"end":{"line":1,"column":54,"index":54}},

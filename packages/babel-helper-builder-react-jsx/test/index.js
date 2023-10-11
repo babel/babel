@@ -7,7 +7,7 @@ const helper = _helper.default || _helper;
 describe("@babel/helper-builder-react-jsx", () => {
   // The builder-react-jsx usage in transform-react-jsx 7.9.0
   // https://github.com/babel/babel/blob/v7.9.0/packages/babel-plugin-transform-react-jsx/src/transform-classic.js#L43
-  it("shuold pass post with plugin pass", () => {
+  it("should pass post with plugin pass", () => {
     const fn = jest.fn().mockReturnValue(t.identifier("foo"));
     const visitor = helper({
       post(state, pass) {
@@ -28,7 +28,7 @@ describe("@babel/helper-builder-react-jsx", () => {
     expect(fn).toHaveBeenCalledTimes(1);
   });
 
-  it("shuold pass pre with plugin pass", () => {
+  it("should pass pre with plugin pass", () => {
     const fn = jest.fn().mockReturnValue(t.identifier("foo"));
     const visitor = helper({
       pre(state, pass) {
@@ -49,7 +49,7 @@ describe("@babel/helper-builder-react-jsx", () => {
     expect(fn).toHaveBeenCalledTimes(1);
   });
 
-  it("shuold pass filter with plugin pass", () => {
+  it("should pass filter with plugin pass", () => {
     const fn = jest.fn().mockReturnValue(false);
     const visitor = helper({
       filter(_, pass) {

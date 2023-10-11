@@ -1,16 +1,18 @@
+var _class;
 const dec = () => {};
 class Foo {}
+_class = Foo;
 function _get_a() {
-  return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _A);
+  return babelHelpers.classStaticPrivateFieldSpecGet(this, _class, _A);
 }
 function _set_a(v) {
-  babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _A, v);
+  babelHelpers.classStaticPrivateFieldSpecSet(this, _class, _A, v);
 }
 function _get_b() {
-  return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _B);
+  return babelHelpers.classStaticPrivateFieldSpecGet(this, _class, _B);
 }
 function _set_b(v) {
-  babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _B, v);
+  babelHelpers.classStaticPrivateFieldSpecSet(this, _class, _B, v);
 }
 var _b = {
   get: _get_b,

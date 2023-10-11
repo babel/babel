@@ -3,10 +3,14 @@ import corejs2Polyfills from "@babel/compat-data/corejs2-built-ins";
 // @ts-expect-error Fixme: TS can not infer types from ../data/core-js-compat.js
 // but we can't import core-js-compat/data.json because JSON imports do
 // not work on Node 14
-import corejs3Polyfills from "../data/core-js-compat";
-import { plugins as pluginsList } from "./plugins-compat-data";
-import moduleTransformations from "./module-transformations";
-import { TopLevelOptions, ModulesOption, UseBuiltInsOption } from "./options";
+import corejs3Polyfills from "../data/core-js-compat.js";
+import { plugins as pluginsList } from "./plugins-compat-data.ts";
+import moduleTransformations from "./module-transformations.ts";
+import {
+  TopLevelOptions,
+  ModulesOption,
+  UseBuiltInsOption,
+} from "./options.ts";
 import { OptionValidator } from "@babel/helper-validator-option";
 
 const corejs2DefaultWebIncludes = [
@@ -21,9 +25,7 @@ import type {
   ModuleOption,
   Options,
   PluginListOption,
-} from "./types";
-
-declare const PACKAGE_JSON: { name: string; version: string };
+} from "./types.ts";
 
 const v = new OptionValidator(PACKAGE_JSON.name);
 
@@ -82,14 +84,14 @@ const expandIncludesAndExcludes = (
     } else {
       re = filter;
     }
-    const items = filterableItems.filter(
-      item =>
-        re.test(item) ||
-        // For backwards compatibility, we also support matching against the
-        // proposal- name.
-        // TODO(Babel 8): Remove this.
-        re.test(item.replace(/^transform-/, "proposal-")),
-    );
+    const items = filterableItems.filter(item => {
+      return process.env.BABEL_8_BREAKING
+        ? re.test(item)
+        : re.test(item) ||
+            // For backwards compatibility, we also support matching against the
+            // proposal- name.
+            re.test(item.replace(/^transform-/, "proposal-"));
+    });
     if (items.length === 0) invalidFilters.push(filter);
     return items;
   });

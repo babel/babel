@@ -16,7 +16,7 @@ import {
 } from "@babel/types";
 import * as charCodes from "charcodes";
 
-import type { NodeHandlers } from "./index";
+import type { NodeHandlers } from "./index.ts";
 
 import type * as t from "@babel/types";
 

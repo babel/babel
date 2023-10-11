@@ -3,9 +3,9 @@ import {
   isFunction,
   isClass,
   isAssignmentExpression,
-} from "../validators/generated";
-import { expressionStatement } from "../builders/generated";
-import type * as t from "..";
+} from "../validators/generated/index.ts";
+import { expressionStatement } from "../builders/generated/index.ts";
+import type * as t from "../index.ts";
 
 export default toStatement as {
   (node: t.AssignmentExpression, ignore?: boolean): t.ExpressionStatement;
@@ -43,7 +43,7 @@ function toStatement(node: t.Node, ignore?: boolean): t.Statement | false {
 
   // @ts-expect-error todo(flow->ts): node.id might be missing
   if (mustHaveId && !node.id) {
-    newType = false as false;
+    newType = false;
   }
 
   if (!newType) {

@@ -1,7 +1,7 @@
-import type Parser from "./index";
-import UtilParser from "./util";
-import { SourceLocation, type Position } from "../util/location";
-import type { Comment, Node as NodeType, NodeBase } from "../types";
+import type Parser from "./index.ts";
+import UtilParser from "./util.ts";
+import { SourceLocation, type Position } from "../util/location.ts";
+import type { Comment, Node as NodeType, NodeBase } from "../types.ts";
 
 // Start an AST node, attaching a start offset.
 

@@ -1,8 +1,6 @@
 {
   "plugins": [
-    "proposal-class-properties",
-    "syntax-typescript",
-    "syntax-flow",
+    "transform-class-properties",
     "transform-parameters",
     "transform-block-scoping",
     "transform-spread",

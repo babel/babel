@@ -18,8 +18,8 @@ namespace A {
     }
   }
   class F {}
-  namespace F {}
-  namespace G {}
+  namespace F { var x; }
+  namespace G { var x; }
   enum L {
     M = 19,
   }

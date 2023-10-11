@@ -21,11 +21,11 @@ import type {
   RootMode,
   TargetsListOrObject,
   AssumptionName,
-} from "./options";
+} from "./options.ts";
 
-import { assumptionsNames } from "./options";
+import { assumptionsNames } from "./options.ts";
 
-export type { RootPath } from "./options";
+export type { RootPath } from "./options.ts";
 
 export type ValidatorSet = {
   [name: string]: Validator<any>;
@@ -245,9 +245,7 @@ export function assertIgnoreList(
   value: unknown[] | undefined,
 ): IgnoreList | void {
   const arr = assertArray(loc, value);
-  if (arr) {
-    arr.forEach((item, i) => assertIgnoreItem(access(loc, i), item));
-  }
+  arr?.forEach((item, i) => assertIgnoreItem(access(loc, i), item));
   // @ts-expect-error todo(flow->ts)
   return arr;
 }

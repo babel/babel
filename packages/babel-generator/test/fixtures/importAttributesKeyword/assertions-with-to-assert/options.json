@@ -1,0 +1,4 @@
+{
+  "plugins": ["importAssertions"],
+  "importAttributesKeyword": "assert"
+}

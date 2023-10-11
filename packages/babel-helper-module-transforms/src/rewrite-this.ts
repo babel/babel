@@ -1,6 +1,6 @@
 import environmentVisitor from "@babel/helper-environment-visitor";
-import traverse from "@babel/traverse";
-import { numericLiteral, unaryExpression } from "@babel/types";
+import { traverse, types as t } from "@babel/core";
+const { numericLiteral, unaryExpression } = t;
 
 import type { NodePath, Visitor } from "@babel/traverse";
 

@@ -6,10 +6,10 @@ import {
   variableDeclarator,
 } from "@babel/types";
 import type * as t from "@babel/types";
-import type Scope from "../../scope";
-import type NodePath from "../index";
-import type Binding from "../../scope/binding";
-import type { Visitor } from "../../types";
+import type Scope from "../../scope/index.ts";
+import type NodePath from "../index.ts";
+import type Binding from "../../scope/binding.ts";
+import type { Visitor } from "../../types.ts";
 
 const referenceVisitor: Visitor<PathHoister> = {
   // This visitor looks for bindings to establish a topmost scope for hoisting.
@@ -223,7 +223,7 @@ export default class PathHoister<T extends t.Node = t.Node> {
     return false;
   }
 
-  run() {
+  run(): NodePath<t.Expression> | undefined {
     this.path.traverse(referenceVisitor, this);
 
     if (this.mutableBinding) return;

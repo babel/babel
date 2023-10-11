@@ -1,6 +1,0 @@
-{
-  "plugins": ["proposal-object-rest-spread"],
-  "assumptions": {
-    "objectRestNoSymbols": true
-  }
-}

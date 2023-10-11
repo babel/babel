@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-typescript",
-  "version": "7.18.6",
+  "version": "7.23.0",
   "description": "Babel preset for TypeScript.",
   "repository": {
     "type": "git",
@@ -19,6 +19,8 @@
   "dependencies": {
     "@babel/helper-plugin-utils": "workspace:^",
     "@babel/helper-validator-option": "workspace:^",
+    "@babel/plugin-syntax-jsx": "workspace:^",
+    "@babel/plugin-transform-modules-commonjs": "workspace:^",
     "@babel/plugin-transform-typescript": "workspace:^"
   },
   "peerDependencies": {
@@ -36,7 +38,11 @@
   "author": "The Babel Team (https://babel.dev/team)",
   "conditions": {
     "BABEL_8_BREAKING": [
-      null,
+      {
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+        }
+      },
       {
         "exports": null
       }

@@ -1,7 +1,7 @@
-import inheritTrailingComments from "./inheritTrailingComments";
-import inheritLeadingComments from "./inheritLeadingComments";
-import inheritInnerComments from "./inheritInnerComments";
-import type * as t from "..";
+import inheritTrailingComments from "./inheritTrailingComments.ts";
+import inheritLeadingComments from "./inheritLeadingComments.ts";
+import inheritInnerComments from "./inheritInnerComments.ts";
+import type * as t from "../index.ts";
 
 /**
  * Inherit all unique comments from `parent` node to `child` node.

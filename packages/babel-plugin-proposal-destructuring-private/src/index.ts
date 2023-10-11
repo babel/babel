@@ -5,7 +5,7 @@ import {
   hasPrivateClassElement,
   transformPrivateKeyDestructuring,
   buildVariableDeclarationFromParams,
-} from "./util";
+} from "./util.ts";
 import { convertFunctionParams } from "@babel/plugin-transform-parameters";
 import { unshiftForXStatementBody } from "@babel/plugin-transform-destructuring";
 
@@ -99,7 +99,7 @@ export default declare(function ({ assertVersion, assumption, types: t }) {
         // transforms to:
         // for (const ref of cls) { const { #x: x } = ref; body; }
         // todo: the transform here assumes that any expression within
-        // the destructuring pattern (`{ #x: x }`), when evluated, do not interfere
+        // the destructuring pattern (`{ #x: x }`), when evaluated, do not interfere
         // with the iterator of cls. Otherwise we have to pause the iterator and
         // interleave the expressions.
         // See also https://gist.github.com/nicolo-ribaudo/f8ac7916f89450f2ead77d99855b2098

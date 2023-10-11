@@ -1,4 +1,4 @@
-// TODO(Babel 7): This won't be needed anymore
+// TODO(Babel 8): This won't be needed anymore
 
 // prettier-ignore
 module.exports = {

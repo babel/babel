@@ -1,5 +1,0 @@
-{
-  "compact": false,
-  "presets": [["env", { "targets": { "browsers": "ie 6" } }]],
-  "plugins": ["proposal-object-rest-spread"]
-}

@@ -200,7 +200,7 @@ function visit(
  * Add id to function/class expression inferred from the AST
  *
  * @export
- * @template N The unamed expression type
+ * @template N The unnamed expression type
  * @param {Object} nodePathLike The NodePath-like input
  * @param {N} nodePathLike.node an AST node
  * @param {NodePath<N>["parent"]} [nodePathLike.parent] The parent of the AST node
@@ -224,7 +224,11 @@ export default function <N extends t.FunctionExpression | t.Class>(
     node: N;
     parent?: NodePath<N>["parent"];
     scope: Scope;
-    id?: t.LVal | t.StringLiteral | t.NumericLiteral | t.BigIntLiteral;
+    id?:
+      | t.AssignmentExpression["left"]
+      | t.StringLiteral
+      | t.NumericLiteral
+      | t.BigIntLiteral;
   },
   localBinding = false,
   supportUnicodeId = false,

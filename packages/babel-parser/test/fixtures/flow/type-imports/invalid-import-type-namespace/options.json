@@ -4,5 +4,5 @@
     "jsx",
     "flow"
   ],
-  "throws": "Unexpected token, expected \"*\" (1:7)"
+  "throws": "Unexpected token (1:12)"
 }

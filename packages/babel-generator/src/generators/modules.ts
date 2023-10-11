@@ -1,4 +1,4 @@
-import type Printer from "../printer";
+import type Printer from "../printer.ts";
 import {
   isClassDeclaration,
   isExportDefaultSpecifier,
@@ -66,15 +66,48 @@ export function ExportNamespaceSpecifier(
   this.print(node.exported, node);
 }
 
-export function _printAssertions(
+let warningShown = false;
+
+export function _printAttributes(
   this: Printer,
-  node: Extract<t.Node, { assertions?: t.ImportAttribute[] }>,
+  node: Extract<t.Node, { attributes?: t.ImportAttribute[] }>,
 ) {
-  this.word("assert");
+  const { importAttributesKeyword } = this.format;
+  const { attributes, assertions } = node;
+
+  if (
+    attributes &&
+    !importAttributesKeyword &&
+    // In the production build only show the warning once.
+    // We want to show it per-usage locally for tests.
+    (!process.env.IS_PUBLISH || !warningShown)
+  ) {
+    warningShown = true;
+    console.warn(`\
+You are using import attributes, without specifying the desired output syntax.
+Please specify the "importAttributesKeyword" generator option, whose value can be one of:
+ - "with"        : \`import { a } from "b" with { type: "json" };\`
+ - "assert"      : \`import { a } from "b" assert { type: "json" };\`
+ - "with-legacy" : \`import { a } from "b" with type: "json";\`
+`);
+  }
+
+  const useAssertKeyword =
+    importAttributesKeyword === "assert" ||
+    (!importAttributesKeyword && assertions);
+
+  this.word(useAssertKeyword ? "assert" : "with");
   this.space();
+
+  if (!useAssertKeyword && importAttributesKeyword !== "with") {
+    // with-legacy
+    this.printList(attributes || assertions, node);
+    return;
+  }
+
   this.token("{");
   this.space();
-  this.printList(node.assertions, node);
+  this.printList(attributes || assertions, node);
   this.space();
   this.token("}");
 }
@@ -93,12 +126,12 @@ export function ExportAllDeclaration(
   this.space();
   this.word("from");
   this.space();
-  // @ts-expect-error Fixme: assertions is not defined in DeclareExportAllDeclaration
-  if (node.assertions?.length) {
+  // @ts-expect-error Fixme: attributes is not defined in DeclareExportAllDeclaration
+  if (node.attributes?.length || node.assertions?.length) {
     this.print(node.source, node, true);
     this.space();
-    // @ts-expect-error Fixme: assertions is not defined in DeclareExportAllDeclaration
-    this._printAssertions(node);
+    // @ts-expect-error Fixme: attributes is not defined in DeclareExportAllDeclaration
+    this._printAttributes(node);
   } else {
     this.print(node.source, node);
   }
@@ -106,18 +139,25 @@ export function ExportAllDeclaration(
   this.semicolon();
 }
 
+function maybePrintDecoratorsBeforeExport(
+  printer: Printer,
+  node: t.ExportNamedDeclaration | t.ExportDefaultDeclaration,
+) {
+  if (
+    isClassDeclaration(node.declaration) &&
+    printer._shouldPrintDecoratorsBeforeExport(
+      node as t.ExportNamedDeclaration & { declaration: t.ClassDeclaration },
+    )
+  ) {
+    printer.printJoin(node.declaration.decorators, node);
+  }
+}
+
 export function ExportNamedDeclaration(
   this: Printer,
   node: t.ExportNamedDeclaration,
 ) {
-  if (!process.env.BABEL_8_BREAKING) {
-    if (
-      this.format.decoratorsBeforeExport &&
-      isClassDeclaration(node.declaration)
-    ) {
-      this.printJoin(node.declaration.decorators, node);
-    }
-  }
+  maybePrintDecoratorsBeforeExport(this, node);
 
   this.word("export");
   this.space();
@@ -166,10 +206,10 @@ export function ExportNamedDeclaration(
       this.space();
       this.word("from");
       this.space();
-      if (node.assertions?.length) {
+      if (node.attributes?.length || node.assertions?.length) {
         this.print(node.source, node, true);
         this.space();
-        this._printAssertions(node);
+        this._printAttributes(node);
       } else {
         this.print(node.source, node);
       }
@@ -183,14 +223,7 @@ export function ExportDefaultDeclaration(
   this: Printer,
   node: t.ExportDefaultDeclaration,
 ) {
-  if (!process.env.BABEL_8_BREAKING) {
-    if (
-      this.format.decoratorsBeforeExport &&
-      isClassDeclaration(node.declaration)
-    ) {
-      this.printJoin(node.declaration.decorators, node);
-    }
-  }
+  maybePrintDecoratorsBeforeExport(this, node);
 
   this.word("export");
   this.noIndentInnerCommentsHere();
@@ -214,6 +247,10 @@ export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
   } else if (node.module) {
     this.noIndentInnerCommentsHere();
     this.word("module");
+    this.space();
+  } else if (node.phase) {
+    this.noIndentInnerCommentsHere();
+    this.word(node.phase);
     this.space();
   }
 
@@ -251,22 +288,12 @@ export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
     this.space();
   }
 
-  if (node.assertions?.length) {
+  if (node.attributes?.length || node.assertions?.length) {
     this.print(node.source, node, true);
     this.space();
-    this._printAssertions(node);
+    this._printAttributes(node);
   } else {
     this.print(node.source, node);
-  }
-  if (!process.env.BABEL_8_BREAKING) {
-    // @ts-ignore(Babel 7 vs Babel 8) Babel 7 supports module attributes
-    if (node.attributes?.length) {
-      this.space();
-      this.word("with");
-      this.space();
-      // @ts-ignore(Babel 7 vs Babel 8) Babel 7 supports module attributes
-      this.printList(node.attributes, node);
-    }
   }
 
   this.semicolon();
@@ -288,4 +315,20 @@ export function ImportNamespaceSpecifier(
   this.word("as");
   this.space();
   this.print(node.local, node);
+}
+
+export function ImportExpression(this: Printer, node: t.ImportExpression) {
+  this.word("import");
+  if (node.phase) {
+    this.token(".");
+    this.word(node.phase);
+  }
+  this.token("(");
+  this.print(node.source, node);
+  if (node.options != null) {
+    this.token(",");
+    this.space();
+    this.print(node.options, node);
+  }
+  this.token(")");
 }

@@ -1,16 +1,19 @@
 import path from "path";
 import { fileURLToPath } from "url";
-import { loadOptions as loadOptionsOrig, transformSync } from "../lib/index.js";
+import {
+  loadOptionsSync as loadOptionsSyncOrig,
+  transformSync,
+} from "../lib/index.js";
 import pluginCommonJS from "@babel/plugin-transform-modules-commonjs";
 
 const cwd = path.dirname(fileURLToPath(import.meta.url));
 
-function loadOptions(opts) {
-  return loadOptionsOrig({ cwd, ...opts });
+function loadOptionsSync(opts) {
+  return loadOptionsSyncOrig({ cwd, ...opts });
 }
 
 function withAssumptions(assumptions) {
-  return loadOptions({ assumptions });
+  return loadOptionsSync({ assumptions });
 }
 
 describe("assumptions", () => {
@@ -35,7 +38,7 @@ describe("assumptions", () => {
 
   it("can be enabled by presets", () => {
     expect(
-      loadOptions({
+      loadOptionsSync({
         assumptions: {
           setPublicClassFields: true,
         },
@@ -49,7 +52,7 @@ describe("assumptions", () => {
 
   it("cannot be disabled by presets", () => {
     expect(() =>
-      loadOptions({
+      loadOptionsSync({
         presets: [() => ({ assumptions: { mutableTemplateObject: false } })],
       }),
     ).toThrow(
@@ -116,7 +119,7 @@ describe("assumptions", () => {
     it("plugin defined outside preset", () => {
       const ref = {};
 
-      loadOptions({
+      loadOptionsSync({
         configFile: false,
         presets: [presetEnumerableModuleMeta],
         plugins: [[pluginExtractEnumerableModuleMeta, ref]],
@@ -128,7 +131,7 @@ describe("assumptions", () => {
     it("plugin defined inside preset", () => {
       const ref = {};
 
-      loadOptions({
+      loadOptionsSync({
         configFile: false,
         presets: [
           () => ({
@@ -153,8 +156,7 @@ describe("assumptions", () => {
 
         exports.__esModule = true;
         exports.foo = void 0;
-        const foo = 1;
-        exports.foo = foo;"
+        const foo = exports.foo = 1;"
       `);
     });
   });

@@ -8,21 +8,23 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-class-static-block { chrome < 94 }
-  proposal-private-property-in-object { chrome < 91 }
-  proposal-class-properties { chrome < 74 }
-  proposal-private-methods { chrome < 84 }
-  proposal-numeric-separator { chrome < 75 }
-  proposal-logical-assignment-operators { chrome < 85 }
-  proposal-nullish-coalescing-operator { chrome < 80 }
-  proposal-optional-chaining { chrome < 80 }
+  transform-unicode-sets-regex { chrome < 112 }
+  transform-class-static-block { chrome < 94 }
+  transform-private-property-in-object { chrome < 91 }
+  transform-class-properties { chrome < 74 }
+  transform-private-methods { chrome < 84 }
+  transform-numeric-separator { chrome < 75 }
+  transform-logical-assignment-operators { chrome < 85 }
+  transform-nullish-coalescing-operator { chrome < 80 }
+  transform-optional-chaining { chrome < 80 }
   syntax-json-strings
   syntax-optional-catch-binding
   syntax-async-generators
   syntax-object-rest-spread
-  proposal-export-namespace-from { chrome < 72 }
+  transform-export-namespace-from { chrome < 72 }
   transform-modules-commonjs
-  proposal-dynamic-import
+  transform-dynamic-import
+  syntax-import-meta
 corejs3: `DEBUG` option
 
 Using targets: {

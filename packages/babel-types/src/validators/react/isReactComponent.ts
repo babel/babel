@@ -1,4 +1,4 @@
-import buildMatchMemberExpression from "../buildMatchMemberExpression";
+import buildMatchMemberExpression from "../buildMatchMemberExpression.ts";
 
 const isReactComponent = buildMatchMemberExpression("React.Component");
 

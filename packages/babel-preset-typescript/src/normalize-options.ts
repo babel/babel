@@ -2,32 +2,55 @@ import { OptionValidator } from "@babel/helper-validator-option";
 const v = new OptionValidator("@babel/preset-typescript");
 
 export interface Options {
-  allExtensions?: boolean;
+  ignoreExtensions?: boolean;
   allowDeclareFields?: boolean;
   allowNamespaces?: boolean;
   disallowAmbiguousJSXLike?: boolean;
-  isTSX?: boolean;
   jsxPragma?: string;
   jsxPragmaFrag?: string;
   onlyRemoveTypeImports?: boolean;
   optimizeConstEnums?: boolean;
+  rewriteImportExtensions?: boolean;
+
+  // TODO: Remove in Babel 8
+  allExtensions?: boolean;
+  isTSX?: boolean;
 }
 
 export default function normalizeOptions(options: Options = {}) {
   let { allowNamespaces = true, jsxPragma, onlyRemoveTypeImports } = options;
 
-  const TopLevelOptions = {
-    allExtensions: "allExtensions",
+  const TopLevelOptions: {
+    [Key in keyof Omit<Options, "allowDeclareFields">]-?: Key;
+  } = {
+    ignoreExtensions: "ignoreExtensions",
     allowNamespaces: "allowNamespaces",
     disallowAmbiguousJSXLike: "disallowAmbiguousJSXLike",
-    isTSX: "isTSX",
     jsxPragma: "jsxPragma",
     jsxPragmaFrag: "jsxPragmaFrag",
     onlyRemoveTypeImports: "onlyRemoveTypeImports",
     optimizeConstEnums: "optimizeConstEnums",
+    rewriteImportExtensions: "rewriteImportExtensions",
+
+    // TODO: Remove in Babel 8
+    allExtensions: "allExtensions",
+    isTSX: "isTSX",
   };
 
   if (process.env.BABEL_8_BREAKING) {
+    v.invariant(
+      !("allowDeclareFields" in options),
+      "The .allowDeclareFields option has been removed and it's now always enabled. Please remove it from your config.",
+    );
+    v.invariant(
+      !("allExtensions" in options) && !("isTSX" in options),
+      "The .allExtensions and .isTSX options have been removed.\n" +
+        "If you want to disable JSX detection based on file extensions, " +
+        "you can set the .ignoreExtensions option to true.\n" +
+        "If you want to force JSX parsing, you can enable the " +
+        "@babel/plugin-syntax-jsx plugin.",
+    );
+
     v.validateTopLevelOptions(options, TopLevelOptions);
     allowNamespaces = v.validateBooleanOption(
       TopLevelOptions.allowNamespaces,
@@ -52,20 +75,30 @@ export default function normalizeOptions(options: Options = {}) {
     "React.Fragment",
   );
 
-  const allExtensions = v.validateBooleanOption(
-    TopLevelOptions.allExtensions,
-    options.allExtensions,
-    false,
-  );
+  if (!process.env.BABEL_8_BREAKING) {
+    // eslint-disable-next-line no-var
+    var allExtensions = v.validateBooleanOption(
+      TopLevelOptions.allExtensions,
+      options.allExtensions,
+      false,
+    );
 
-  const isTSX = v.validateBooleanOption(
-    TopLevelOptions.isTSX,
-    options.isTSX,
+    // eslint-disable-next-line no-var
+    var isTSX = v.validateBooleanOption(
+      TopLevelOptions.isTSX,
+      options.isTSX,
+      false,
+    );
+    if (isTSX) {
+      v.invariant(allExtensions, "isTSX:true requires allExtensions:true");
+    }
+  }
+
+  const ignoreExtensions = v.validateBooleanOption(
+    TopLevelOptions.ignoreExtensions,
+    options.ignoreExtensions,
     false,
   );
-  if (isTSX) {
-    v.invariant(allExtensions, "isTSX:true requires allExtensions:true");
-  }
 
   const disallowAmbiguousJSXLike = v.validateBooleanOption(
     TopLevelOptions.disallowAmbiguousJSXLike,
@@ -73,10 +106,17 @@ export default function normalizeOptions(options: Options = {}) {
     false,
   );
   if (disallowAmbiguousJSXLike) {
-    v.invariant(
-      allExtensions,
-      "disallowAmbiguousJSXLike:true requires allExtensions:true",
-    );
+    if (process.env.BABEL_8_BREAKING) {
+      v.invariant(
+        ignoreExtensions,
+        "disallowAmbiguousJSXLike:true requires ignoreExtensions:true",
+      );
+    } else {
+      v.invariant(
+        allExtensions,
+        "disallowAmbiguousJSXLike:true requires allExtensions:true",
+      );
+    }
   }
 
   const optimizeConstEnums = v.validateBooleanOption(
@@ -85,14 +125,25 @@ export default function normalizeOptions(options: Options = {}) {
     false,
   );
 
-  return {
-    allExtensions,
+  const rewriteImportExtensions = v.validateBooleanOption(
+    TopLevelOptions.rewriteImportExtensions,
+    options.rewriteImportExtensions,
+    false,
+  );
+
+  const normalized: Options = {
+    ignoreExtensions,
     allowNamespaces,
     disallowAmbiguousJSXLike,
-    isTSX,
     jsxPragma,
     jsxPragmaFrag,
     onlyRemoveTypeImports,
     optimizeConstEnums,
+    rewriteImportExtensions,
   };
+  if (!process.env.BABEL_8_BREAKING) {
+    normalized.allExtensions = allExtensions;
+    normalized.isTSX = isTSX;
+  }
+  return normalized;
 }

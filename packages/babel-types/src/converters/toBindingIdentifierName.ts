@@ -1,4 +1,4 @@
-import toIdentifier from "./toIdentifier";
+import toIdentifier from "./toIdentifier.ts";
 
 export default function toBindingIdentifierName(name: string): string {
   name = toIdentifier(name);

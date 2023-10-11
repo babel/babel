@@ -1,4 +1,5 @@
 {
   "args": ["-gc", "--eval", "console.log(typeof global.gc)"],
-  "stdout": "function"
+  "stdout": "function",
+  "BABEL_8_BREAKING": false
 }

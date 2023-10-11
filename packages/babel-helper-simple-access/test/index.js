@@ -1,7 +1,9 @@
 import * as babel from "@babel/core";
 import simplifyAccess from "../lib/index.js";
+import { itBabel7 } from "$repo-utils";
 
 const plugin = (_api, options) => {
+  // TODO(Babel 8): Remove includeUpdateExpression
   const { includeUpdateExpression, bindingNames } = options;
 
   return {
@@ -17,7 +19,7 @@ const plugin = (_api, options) => {
   };
 };
 
-it("simplifyAccess with default config", function () {
+itBabel7("simplifyAccess with default config", function () {
   const code = `
     let a = foo++;
     a = ++foo;
@@ -27,7 +29,7 @@ it("simplifyAccess with default config", function () {
     a++;
     foo = a++;
     foo = ++a;
-    
+
     let b = bar--;
     b = --bar;
     bar--;
@@ -36,11 +38,11 @@ it("simplifyAccess with default config", function () {
     b--;
     bar = b--;
     bar = --b;
-    
+
     let c = baz += 1;
     baz += 1;
     c += 1;
-    
+
     function f() {
         let foo = 1;
         let a = foo++;
@@ -105,7 +107,7 @@ it("simplifyAccess with includeUpdateExpression=false", function () {
     a++;
     foo = a++;
     foo = ++a;
-    
+
     let b = bar--;
     b = --bar;
     bar--;
@@ -114,11 +116,11 @@ it("simplifyAccess with includeUpdateExpression=false", function () {
     b--;
     bar = b--;
     bar = --b;
-    
+
     let c = baz += 1;
     baz += 1;
     c += 1;
-    
+
     function f() {
         let foo = 1;
         let a = foo++;

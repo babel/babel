@@ -2,9 +2,7 @@ import path from "path";
 import fs from "fs";
 import { createRequire } from "module";
 import * as helpers from "@babel/helpers";
-import { transformFromAstSync, File } from "@babel/core";
-import template from "@babel/template";
-import * as t from "@babel/types";
+import { transformFromAstSync, File, template, types as t } from "@babel/core";
 import { fileURLToPath } from "url";
 
 import transformRuntime from "../lib/index.js";
@@ -12,6 +10,8 @@ import corejs2Definitions from "./runtime-corejs2-definitions.js";
 import corejs3Definitions from "./runtime-corejs3-definitions.js";
 
 import presetEnv from "@babel/preset-env";
+import polyfillCorejs2 from "babel-plugin-polyfill-corejs2";
+import polyfillCorejs3 from "babel-plugin-polyfill-corejs3";
 
 const require = createRequire(import.meta.url);
 const runtimeVersion = require("@babel/runtime/package.json").version;
@@ -21,10 +21,29 @@ function outputFile(filePath, data) {
   fs.writeFileSync(filePath, data);
 }
 
+function corejsVersion(pkgName, depName) {
+  return require(`../../${pkgName}/package.json`).dependencies[depName];
+}
+
 writeHelpers("@babel/runtime");
-writeHelpers("@babel/runtime-corejs2", { corejs: 2 });
+writeHelpers("@babel/runtime-corejs2", {
+  polyfillProvider: [
+    polyfillCorejs2,
+    {
+      method: "usage-pure",
+      version: corejsVersion("babel-runtime-corejs2", "core-js"),
+    },
+  ],
+});
 writeHelpers("@babel/runtime-corejs3", {
-  corejs: { version: 3, proposals: true },
+  polyfillProvider: [
+    polyfillCorejs3,
+    {
+      method: "usage-pure",
+      version: corejsVersion("babel-runtime-corejs3", "core-js-pure"),
+      proposals: true,
+    },
+  ],
 });
 
 writeCoreJS({
@@ -119,7 +138,7 @@ function writeHelperFile(
   pkgDirname,
   helperPath,
   helperName,
-  { esm, corejs }
+  { esm, polyfillProvider }
 ) {
   const fileName = `${helperName}.js`;
   const filePath = esm
@@ -129,13 +148,16 @@ function writeHelperFile(
 
   outputFile(
     fullPath,
-    buildHelper(runtimeName, pkgDirname, fullPath, helperName, { esm, corejs })
+    buildHelper(runtimeName, pkgDirname, fullPath, helperName, {
+      esm,
+      polyfillProvider,
+    })
   );
 
   return esm ? `./helpers/esm/${fileName}` : `./helpers/${fileName}`;
 }
 
-function writeHelpers(runtimeName, { corejs } = {}) {
+function writeHelpers(runtimeName, { polyfillProvider } = {}) {
   const pkgDirname = getRuntimeRoot(runtimeName);
   const helperSubExports = {};
   for (const helperName of helpers.list) {
@@ -145,14 +167,14 @@ function writeHelpers(runtimeName, { corejs } = {}) {
       pkgDirname,
       helperPath,
       helperName,
-      { esm: false, corejs }
+      { esm: false, polyfillProvider }
     );
     const esm = writeHelperFile(
       runtimeName,
       pkgDirname,
       helperPath,
       helperName,
-      { esm: true, corejs }
+      { esm: true, polyfillProvider }
     );
 
     // Node.js versions >=13.0.0, <13.7.0 support the `exports` field but
@@ -215,7 +237,7 @@ function buildHelper(
   pkgDirname,
   helperFilename,
   helperName,
-  { esm, corejs }
+  { esm, polyfillProvider }
 ) {
   const tree = t.program([], [], esm ? "module" : "script");
   const dependencies = {};
@@ -245,7 +267,8 @@ function buildHelper(
     filename: helperFilename,
     presets: [[presetEnv, { modules: false }]],
     plugins: [
-      [transformRuntime, { corejs, version: runtimeVersion }],
+      polyfillProvider,
+      [transformRuntime, { version: runtimeVersion }],
       buildRuntimeRewritePlugin(runtimeName, helperName),
       esm ? null : addDefaultCJSExport,
     ].filter(Boolean),

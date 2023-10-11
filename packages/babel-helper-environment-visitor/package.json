@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-environment-visitor",
-  "version": "7.18.9",
+  "version": "7.22.20",
   "description": "Helper visitor to only visit nodes in the current 'this' context",
   "repository": {
     "type": "git",
@@ -32,6 +32,14 @@
         "type": "module"
       },
       null
+    ],
+    "BABEL_8_BREAKING": [
+      {
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+        }
+      },
+      {}
     ]
   }
 }

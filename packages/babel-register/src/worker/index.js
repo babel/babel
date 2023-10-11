@@ -1,5 +1,5 @@
-const babel = require("./babel-core");
-const handleMessage = require("./handle-message");
+const babel = require("./babel-core.js");
+const handleMessage = require("./handle-message.js");
 
 const { parentPort } = require("worker_threads");
 

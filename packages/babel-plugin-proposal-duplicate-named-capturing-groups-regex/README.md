@@ -2,7 +2,7 @@
 
 > Compile regular expressions using duplicate named groups to index-based groups.
 
-See our website [@babel/plugin-proposal-duplicate-named-capturing-groups-regex](https://babeljs.io/docs/en/babel-plugin-proposal-duplicate-named-capturing-groups-regex) for more information.
+See our website [@babel/plugin-proposal-duplicate-named-capturing-groups-regex](https://babeljs.io/docs/babel-plugin-proposal-duplicate-named-capturing-groups-regex) for more information.
 
 ## Install
 

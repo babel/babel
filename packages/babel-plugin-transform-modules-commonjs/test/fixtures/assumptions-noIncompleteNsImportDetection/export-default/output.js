@@ -3,5 +3,4 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var _default = foo;
-exports.default = _default;
+var _default = exports.default = foo;

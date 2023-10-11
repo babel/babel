@@ -1,4 +1,5 @@
 import { parse } from "../lib/index.js";
+import { itBabel8 } from "$repo-utils";
 
 function getParser(code, plugins) {
   return () => parse(code, { plugins, sourceType: "module" });
@@ -66,11 +67,11 @@ describe("plugin options", function () {
     });
   });
   describe("'moduleAttributes' plugin", () => {
-    (process.env.BABEL_8_BREAKING ? it : it.skip)("removed in Babel 8", () => {
+    itBabel8("removed in Babel 8", () => {
       expect(
         getParser("", ["moduleAttributes"]),
       ).toThrowErrorMatchingInlineSnapshot(
-        `"\`moduleAttributes\` has been removed in Babel 8, please use \`importAssertions\` parser plugin, or \`@babel/plugin-syntax-import-assertions\`."`,
+        `"\`moduleAttributes\` has been removed in Babel 8, please use \`importAttributes\` parser plugin, or \`@babel/plugin-syntax-import-attributes\`."`,
       );
     });
   });

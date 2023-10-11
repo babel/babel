@@ -1,10 +1,11 @@
-import type Binding from "../binding";
+import type Binding from "../binding.ts";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import * as t from "@babel/types";
-import type { NodePath, Visitor } from "../..";
+import type { NodePath, Visitor } from "../../index.ts";
 import { requeueComputedKeyAndDecorators } from "@babel/helper-environment-visitor";
-import { traverseNode } from "../../traverse-node";
-import { explode } from "../../visitors";
+import { traverseNode } from "../../traverse-node.ts";
+import { explode } from "../../visitors.ts";
+import type { Identifier } from "@babel/types";
 
 const renameVisitor: Visitor<Renamer> = {
   ReferencedIdentifier({ node }, state) {
@@ -24,6 +25,23 @@ const renameVisitor: Visitor<Renamer> = {
       if (path.isMethod()) {
         requeueComputedKeyAndDecorators(path);
       }
+    }
+  },
+
+  ObjectProperty({ node, scope }, state) {
+    const { name } = node.key as Identifier;
+    if (
+      node.shorthand &&
+      // In destructuring the identifier is already renamed by the
+      // AssignmentExpression|Declaration|VariableDeclarator visitor,
+      // while in object literals it's renamed later by the
+      // ReferencedIdentifier visitor.
+      (name === state.oldName || name === state.newName) &&
+      // Ignore shadowed bindings
+      scope.getBindingIdentifier(name) === state.binding.identifier
+    ) {
+      node.shorthand = false;
+      if (node.extra?.shorthand) node.extra.shorthand = false;
     }
   },
 
@@ -113,8 +131,7 @@ export default class Renamer {
     // );
   }
 
-  // TODO(Babel 8): Remove this `block` parameter. It's not needed anywhere.
-  rename(block?: t.Pattern | t.Scopable) {
+  rename(/* Babel 7 - block?: t.Pattern | t.Scopable */) {
     const { binding, oldName, newName } = this;
     const { scope, path } = binding;
 
@@ -133,8 +150,11 @@ export default class Renamer {
       }
     }
 
+    const blockToTraverse = process.env.BABEL_8_BREAKING
+      ? scope.block
+      : (arguments[0] as t.Pattern | t.Scopable) || scope.block;
     traverseNode(
-      block || scope.block,
+      blockToTraverse,
       explode(renameVisitor),
       scope,
       this,
@@ -144,7 +164,11 @@ export default class Renamer {
       { discriminant: true },
     );
 
-    if (!block) {
+    if (process.env.BABEL_8_BREAKING) {
+      scope.removeOwnBinding(oldName);
+      scope.bindings[newName] = binding;
+      this.binding.identifier.name = newName;
+    } else if (!arguments[0]) {
       scope.removeOwnBinding(oldName);
       scope.bindings[newName] = binding;
       this.binding.identifier.name = newName;

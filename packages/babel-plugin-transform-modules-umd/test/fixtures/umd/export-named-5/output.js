@@ -18,6 +18,4 @@
   });
   _exports.foo = _exports.bar = void 0;
   var foo, bar;
-  _exports.bar = bar;
-  _exports.foo = foo;
 });

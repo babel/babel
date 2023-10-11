@@ -2,33 +2,36 @@
 
 Using targets:
 {
-  "android": "104",
-  "chrome": "103",
-  "edge": "103",
-  "firefox": "91",
-  "ios": "14.5",
-  "opera": "89",
-  "safari": "15.5",
-  "samsung": "17"
+  "android": "113",
+  "chrome": "109",
+  "edge": "112",
+  "firefox": "102",
+  "ios": "15.6",
+  "opera": "98",
+  "opera_mobile": "73",
+  "safari": "15.6",
+  "samsung": "20"
 }
 
 Using modules transform: auto
 
 Using plugins:
-  proposal-class-static-block { firefox < 93, ios, safari }
-  proposal-private-property-in-object { ios < 15 }
-  proposal-class-properties { ios < 15 }
-  proposal-private-methods { ios < 15 }
+  transform-unicode-sets-regex { chrome < 112, firefox < 116, ios, opera_mobile < 75, safari < tp, samsung }
+  transform-class-static-block { ios < 16.4, safari < 16.4 }
+  syntax-private-property-in-object
+  syntax-class-properties
   syntax-numeric-separator
   syntax-nullish-coalescing-operator
   syntax-optional-chaining
   syntax-json-strings
   syntax-optional-catch-binding
-  transform-parameters { ios, safari }
+  transform-parameters { ios < 16.3, safari < 16.3 }
   syntax-async-generators
   syntax-object-rest-spread
-  proposal-export-namespace-from { ios, safari }
   transform-modules-commonjs
-  proposal-dynamic-import
+  transform-dynamic-import
+  transform-export-namespace-from { }
+  syntax-top-level-await
+  syntax-import-meta
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

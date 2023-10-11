@@ -1,19 +1,43 @@
-import type NodePath from "./index";
+import type NodePath from "./index.ts";
 import type * as t from "@babel/types";
 
 // This file contains Babels metainterpreter that can evaluate static code.
 
-const VALID_CALLEES = ["String", "Number", "Math"] as const;
+const VALID_OBJECT_CALLEES = ["Number", "String", "Math"] as const;
+const VALID_IDENTIFIER_CALLEES = [
+  "isFinite",
+  "isNaN",
+  "parseFloat",
+  "parseInt",
+  "decodeURI",
+  "decodeURIComponent",
+  "encodeURI",
+  "encodeURIComponent",
+  process.env.BABEL_8_BREAKING ? "btoa" : null,
+  process.env.BABEL_8_BREAKING ? "atob" : null,
+] as const;
+
 const INVALID_METHODS = ["random"] as const;
 
-function isValidCallee(val: string): val is typeof VALID_CALLEES[number] {
-  return VALID_CALLEES.includes(
+function isValidObjectCallee(
+  val: string,
+): val is (typeof VALID_OBJECT_CALLEES)[number] {
+  return VALID_OBJECT_CALLEES.includes(
     // @ts-expect-error val is a string
     val,
   );
 }
 
-function isInvalidMethod(val: string): val is typeof INVALID_METHODS[number] {
+function isValidIdentifierCallee(
+  val: string,
+): val is (typeof VALID_IDENTIFIER_CALLEES)[number] {
+  return VALID_IDENTIFIER_CALLEES.includes(
+    // @ts-expect-error val is a string
+    val,
+  );
+}
+
+function isInvalidMethod(val: string): val is (typeof INVALID_METHODS)[number] {
   return INVALID_METHODS.includes(
     // @ts-expect-error val is a string
     val,
@@ -61,6 +85,12 @@ function deopt(path: NodePath, state: State) {
   state.deoptPath = path;
   state.confident = false;
 }
+
+const Globals = new Map([
+  ["undefined", undefined],
+  ["Infinity", Infinity],
+  ["NaN", NaN],
+]);
 
 /**
  * We wrap the _evaluate method so we can track `seen` nodes, we push an item
@@ -191,31 +221,34 @@ function _evaluate(path: NodePath, state: State): any {
   if (path.isReferencedIdentifier()) {
     const binding = path.scope.getBinding(path.node.name);
 
-    if (binding && binding.constantViolations.length > 0) {
-      return deopt(binding.path, state);
+    if (binding) {
+      if (
+        binding.constantViolations.length > 0 ||
+        path.node.start < binding.path.node.end
+      ) {
+        deopt(binding.path, state);
+        return;
+      }
+      if (binding.hasValue) {
+        return binding.value;
+      }
     }
 
-    if (binding && path.node.start < binding.path.node.end) {
-      return deopt(binding.path, state);
+    const name = path.node.name;
+    if (Globals.has(name)) {
+      if (!binding) {
+        return Globals.get(name);
+      }
+      deopt(binding.path, state);
+      return;
     }
 
-    if (binding?.hasValue) {
-      return binding.value;
+    const resolved = path.resolve();
+    if (resolved === path) {
+      deopt(path, state);
+      return;
     } else {
-      if (path.node.name === "undefined") {
-        return binding ? deopt(binding.path, state) : undefined;
-      } else if (path.node.name === "Infinity") {
-        return binding ? deopt(binding.path, state) : Infinity;
-      } else if (path.node.name === "NaN") {
-        return binding ? deopt(binding.path, state) : NaN;
-      }
-
-      const resolved = path.resolve();
-      if (resolved === path) {
-        return deopt(path, state);
-      } else {
-        return evaluateCached(resolved, state);
-      }
+      return evaluateCached(resolved, state);
     }
   }
 
@@ -258,7 +291,8 @@ function _evaluate(path: NodePath, state: State): any {
       if (elemValue.confident) {
         arr.push(elemValue.value);
       } else {
-        return deopt(elemValue.deopt, state);
+        deopt(elemValue.deopt, state);
+        return;
       }
     }
     return arr;
@@ -269,7 +303,8 @@ function _evaluate(path: NodePath, state: State): any {
     const props = path.get("properties");
     for (const prop of props) {
       if (prop.isObjectMethod() || prop.isSpreadElement()) {
-        return deopt(prop, state);
+        deopt(prop, state);
+        return;
       }
       const keyPath = (prop as NodePath<t.ObjectProperty>).get("key");
       let key;
@@ -277,7 +312,8 @@ function _evaluate(path: NodePath, state: State): any {
       if (prop.node.computed) {
         key = keyPath.evaluate();
         if (!key.confident) {
-          return deopt(key.deopt, state);
+          deopt(key.deopt, state);
+          return;
         }
         key = key.value;
       } else if (keyPath.isIdentifier()) {
@@ -290,7 +326,8 @@ function _evaluate(path: NodePath, state: State): any {
       const valuePath = (prop as NodePath<t.ObjectProperty>).get("value");
       let value = valuePath.evaluate();
       if (!value.confident) {
-        return deopt(value.deopt, state);
+        deopt(value.deopt, state);
+        return;
       }
       value = value.value;
       // @ts-expect-error key is any type
@@ -389,7 +426,8 @@ function _evaluate(path: NodePath, state: State): any {
     if (
       callee.isIdentifier() &&
       !path.scope.getBinding(callee.node.name) &&
-      isValidCallee(callee.node.name)
+      (isValidObjectCallee(callee.node.name) ||
+        isValidIdentifierCallee(callee.node.name))
     ) {
       func = global[callee.node.name];
     }
@@ -402,7 +440,7 @@ function _evaluate(path: NodePath, state: State): any {
       if (
         object.isIdentifier() &&
         property.isIdentifier() &&
-        isValidCallee(object.node.name) &&
+        isValidObjectCallee(object.node.name) &&
         !isInvalidMethod(property.node.name)
       ) {
         context = global[object.node.name];

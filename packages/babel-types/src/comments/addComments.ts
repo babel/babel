@@ -1,4 +1,4 @@
-import type * as t from "..";
+import type * as t from "../index.ts";
 
 /**
  * Add comments of certain type to a node.

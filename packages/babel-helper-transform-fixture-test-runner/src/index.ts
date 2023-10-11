@@ -13,13 +13,15 @@ import {
   type TaskOptions,
 } from "@babel/helper-fixtures";
 import { codeFrameColumns } from "@babel/code-frame";
-import * as helpers from "./helpers";
+import * as helpers from "./helpers.ts";
+import visualizeSourceMap from "./source-map-visualizer.ts";
 import assert from "assert";
 import fs from "fs";
 import path from "path";
 import vm from "vm";
-import QuickLRU from "quick-lru";
+import LruCache from "lru-cache";
 import { fileURLToPath } from "url";
+import { diff } from "jest-diff";
 
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
@@ -53,10 +55,10 @@ if (!process.env.BABEL_8_BREAKING) {
 
 const EXTERNAL_HELPERS_VERSION = "7.100.0";
 
-const cachedScripts = new QuickLRU<
+const cachedScripts = new LruCache<
   string,
   { code: string; cachedData?: Buffer }
->({ maxSize: 10 });
+>({ max: 10 });
 const contextModuleCache = new WeakMap();
 const sharedTestContext = createContext();
 
@@ -128,7 +130,6 @@ function runCacheableScriptInTestContext(
   if (process.env.BABEL_8_BREAKING) {
     script = new vm.Script(cached.code, {
       filename,
-      displayErrors: true,
       lineOffset: -1,
       cachedData: cached.cachedData,
     });
@@ -136,7 +137,6 @@ function runCacheableScriptInTestContext(
   } else {
     script = new vm.Script(cached.code, {
       filename,
-      displayErrors: true,
       lineOffset: -1,
       cachedData: cached.cachedData,
       produceCachedData: true,
@@ -234,7 +234,10 @@ export function runCodeInTestContext(
   }
 }
 
-async function maybeMockConsole<R>(validateLogs: boolean, run: () => R) {
+async function maybeMockConsole<R>(
+  validateLogs: boolean,
+  run: () => Promise<R>,
+) {
   const actualLogs = { stdout: "", stderr: "" };
 
   if (!validateLogs) return { result: await run(), actualLogs };
@@ -358,15 +361,43 @@ async function run(task: Test) {
     }
 
     if (validateLogs) {
+      const normalizationOpts = {
+        normalizePathSeparator: true,
+        normalizePresetEnvDebug: task.taskDir.includes("babel-preset-env"),
+      };
+
       validateFile(
-        normalizeOutput(actualLogs.stdout, /* normalizePathSeparator */ true),
+        normalizeOutput(actualLogs.stdout, normalizationOpts),
         stdout.loc,
-        stdout.code,
+        process.env.BABEL_8_BREAKING
+          ? // In Babel 8, preset-env does not enable all the unnecessary syntax
+            // plugins. For simplicity, just strip them fro the expected output
+            // so that we do not need to separate tests for every fixture.
+            stdout.code.replace(
+              /\n\s*syntax-(?!import-attributes|import-assertions).*/g,
+              "",
+            )
+          : stdout.code,
       );
       validateFile(
-        normalizeOutput(actualLogs.stderr, /* normalizePathSeparator */ true),
+        normalizeOutput(actualLogs.stderr, normalizationOpts),
         stderr.loc,
         stderr.code,
+      );
+    }
+  }
+
+  if (task.validateSourceMapVisual === true) {
+    const visual = visualizeSourceMap(result.code, result.map);
+    try {
+      expect(visual).toEqual(task.sourceMapVisual.code);
+    } catch (e) {
+      if (!process.env.OVERWRITE && task.sourceMapVisual.code) throw e;
+
+      console.log(`Updated test file: ${task.sourceMapVisual.loc}`);
+      fs.writeFileSync(
+        task.sourceMapVisual.loc ?? task.taskDir + "/source-map-visual.txt",
+        visual + "\n",
       );
     }
   }
@@ -395,16 +426,19 @@ function validateFile(
   expectedLoc: string,
   expectedCode: string,
 ) {
-  try {
-    expect(actualCode).toEqualFile({
-      filename: expectedLoc,
-      code: expectedCode,
-    });
-  } catch (e) {
-    if (!process.env.OVERWRITE) throw e;
+  if (actualCode !== expectedCode) {
+    if (process.env.OVERWRITE) {
+      console.log(`Updated test file: ${expectedLoc}`);
+      fs.writeFileSync(expectedLoc, `${actualCode}\n`);
+      return;
+    }
 
-    console.log(`Updated test file: ${expectedLoc}`);
-    fs.writeFileSync(expectedLoc, `${actualCode}\n`);
+    throw new Error(
+      `Expected ${expectedLoc} to match transform output.\n` +
+        `To autogenerate a passing version of this file, delete ` +
+        ` the file and re-run the tests.\n\n` +
+        `Diff:\n\n${diff(expectedCode, actualCode, { expand: false })}`,
+    );
   }
 }
 
@@ -412,7 +446,10 @@ function escapeRegExp(string: string) {
   return string.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&");
 }
 
-function normalizeOutput(code: string, normalizePathSeparator?: boolean) {
+function normalizeOutput(
+  code: string,
+  { normalizePathSeparator = false, normalizePresetEnvDebug = false } = {},
+) {
   const projectRoot = path.resolve(
     path.dirname(fileURLToPath(import.meta.url)),
     "../../../",
@@ -441,43 +478,27 @@ function normalizeOutput(code: string, normalizePathSeparator?: boolean) {
       );
     }
   }
-  return result;
-}
 
-expect.extend({
-  toEqualFile(actual, { filename, code }: Pick<TestFile, "filename" | "code">) {
-    if (this.isNot) {
-      throw new Error(".toEqualFile does not support negation");
+  if (!process.env.BABEL_8_BREAKING) {
+    // In Babel 8, preset-env logs transform- instead of proposal-. Manually rewrite
+    // the output logs so that we don't have to duplicate all the debug fixtures for
+    // the two different Babel versions.
+    if (normalizePresetEnvDebug) {
+      result = result.replace(/(\s+)proposal-/gm, "$1transform-");
     }
 
-    const pass = actual === code;
-    return {
-      pass,
-      message: () => {
-        const diffString = this.utils.diff(code, actual, {
-          expand: false,
-        });
-        return (
-          `Expected ${filename} to match transform output.\n` +
-          `To autogenerate a passing version of this file, delete the file and re-run the tests.\n\n` +
-          `Diff:\n\n${diffString}`
-        );
-      },
-    };
-  },
-});
-
-declare global {
-  // eslint-disable-next-line no-redeclare,@typescript-eslint/no-unused-vars
-  namespace jest {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    interface Matchers<R> {
-      toEqualFile({
-        filename,
-        code,
-      }: Pick<TestFile, "filename" | "code">): jest.CustomMatcherResult;
+    // For some reasons, in older Node.js versions some symlinks are not properly
+    // resolved. The behavior is still ok, but we need to unify the output with
+    // newer Node.js versions.
+    if (parseInt(process.versions.node, 10) <= 8) {
+      result = result.replace(
+        /<CWD>\/node_modules\/@babel\/runtime-corejs3/g,
+        "<CWD>/packages/babel-runtime-corejs3",
+      );
     }
   }
+
+  return result;
 }
 
 export type SuiteOptions = {
@@ -513,8 +534,15 @@ export default function (
 
           async function () {
             const runTask = () => run(task);
-            if ("sourceMap" in task.options === false) {
-              task.options.sourceMap = !!task.sourceMap;
+
+            if ("sourceMap" in task.options) {
+              throw new Error(
+                "`sourceMap` option is deprecated. Use `sourceMaps` instead.",
+              );
+            }
+
+            if ("sourceMaps" in task.options === false) {
+              task.options.sourceMaps = !!task.sourceMap;
             }
 
             Object.assign(task.options, taskOpts);

@@ -1,20 +1,18 @@
 import cp from "child_process";
 import util from "util";
 import path from "path";
-import { fileURLToPath } from "url";
-import { createRequire } from "module";
+import { USE_ESM, commonJS } from "$repo-utils";
 
 import * as babel from "../../lib/index.js";
 
-const require = createRequire(import.meta.url);
-const dirname = path.dirname(fileURLToPath(import.meta.url));
+const { require, __dirname } = commonJS(import.meta.url);
 
 // "minNodeVersion": "10.0.0" <-- For Ctrl+F when dropping node 10
 export const supportsESM = parseInt(process.versions.node) >= 12;
 
-export const isMJS = file => path.extname(file) === ".mjs";
+export const outputType = USE_ESM ? "module" : "script";
 
-export const itESM = supportsESM ? it : it.skip;
+export const isMJS = file => path.extname(file) === ".mjs";
 
 export function skipUnsupportedESM(name) {
   if (!supportsESM) {
@@ -26,7 +24,7 @@ export function skipUnsupportedESM(name) {
   return false;
 }
 
-export function loadOptionsAsync({ filename, cwd = dirname }, mjs) {
+export function loadOptionsAsync({ filename, cwd = __dirname }, mjs) {
   if (mjs) {
     // import() crashes with jest
     return spawn("load-options-async", filename, cwd);

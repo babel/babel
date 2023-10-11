@@ -1,9 +1,10 @@
-import type Printer from "../printer";
+import type Printer from "../printer.ts";
 import { isAssignmentPattern, isIdentifier } from "@babel/types";
 import type * as t from "@babel/types";
 import jsesc from "jsesc";
 
 export function Identifier(this: Printer, node: t.Identifier) {
+  this.sourceIdentifierName(node.loc?.identifierName || node.name);
   this.word(node.name);
 }
 
@@ -29,7 +30,7 @@ export function ObjectExpression(this: Printer, node: t.ObjectExpression) {
     this.space();
   }
 
-  this.sourceWithOffset("end", node.loc, 0, -1);
+  this.sourceWithOffset("end", node.loc, -1);
 
   this.token("}");
 }
@@ -205,17 +206,9 @@ export function StringLiteral(this: Printer, node: t.StringLiteral) {
     return;
   }
 
-  const val = jsesc(
-    node.value,
-    process.env.BABEL_8_BREAKING
-      ? this.format.jsescOption
-      : Object.assign(
-          this.format.jsescOption,
-          this.format.jsonCompatibleStrings && { json: true },
-        ),
-  );
+  const val = jsesc(node.value, this.format.jsescOption);
 
-  return this.token(val);
+  this.token(val);
 }
 
 export function BigIntLiteral(this: Printer, node: t.BigIntLiteral) {

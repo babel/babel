@@ -1,5 +1,5 @@
 {
   "plugins": [
-    "proposal-class-properties", "proposal-private-methods", "bugfix-v8-spread-parameters-in-optional-chaining"
+    "transform-class-properties", "transform-private-methods", "bugfix-v8-spread-parameters-in-optional-chaining"
   ]
 }

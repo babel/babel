@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Use Node.js latest
@@ -47,12 +47,13 @@ jobs:
           - jest
           - react-native
           - prettier
+          - angular-cli
     steps:
       - name: Get yarn1 cache directory path
         id: yarn1-cache-dir-path
         run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Use Node.js latest
         uses: actions/setup-node@v3
         with:

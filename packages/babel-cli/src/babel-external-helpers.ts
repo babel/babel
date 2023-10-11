@@ -1,10 +1,7 @@
 import commander from "commander";
 import { buildExternalHelpers } from "@babel/core";
 
-function collect(
-  value: string | any,
-  previousValue: Array<string>,
-): Array<string> {
+function collect(value: unknown, previousValue: Array<string>): Array<string> {
   // If the user passed the option with no value, like "babel-external-helpers --whitelist", do nothing.
   if (typeof value !== "string") return previousValue;
 

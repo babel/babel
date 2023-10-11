@@ -55,20 +55,22 @@ describe("traversePattern", () => {
 });
 
 describe("privateKeyPathIterator", () => {
-  const indexPaths = [
-    ...privateKeyPathIterator(
-      getPath(
-        "const { #a: { a, #b: b, c, ...d }, e: [{ #c: [{ d: e, #d: { #c: f } }] }, ...{ #b: g }], #a: i } = obj;",
-      ).node,
-    ),
-  ].map(indexPath => indexPath.join(","));
-  expect(indexPaths).toEqual([
-    "0",
-    "0,1",
-    "1,0,0",
-    "1,0,0,0,1",
-    "1,0,0,0,1,0",
-    "1,1,0,0",
-    "2",
-  ]);
+  it("should iterate every private key", () => {
+    const indexPaths = [
+      ...privateKeyPathIterator(
+        getPath(
+          "const { #a: { a, #b: b, c, ...d }, e: [{ #c: [{ d: e, #d: { #c: f } }] }, ...{ #b: g }], #a: i } = obj;",
+        ).node,
+      ),
+    ].map(indexPath => indexPath.join(","));
+    expect(indexPaths).toEqual([
+      "0",
+      "0,1",
+      "1,0,0",
+      "1,0,0,0,1",
+      "1,0,0,0,1,0",
+      "1,1,0,0",
+      "2",
+    ]);
+  });
 });

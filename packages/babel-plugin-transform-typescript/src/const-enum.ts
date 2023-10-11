@@ -1,7 +1,7 @@
 import type * as t from "@babel/types";
 import type { NodePath } from "@babel/traverse";
 
-import { translateEnumValues } from "./enum";
+import { translateEnumValues } from "./enum.ts";
 
 export type NodePathConstEnum = NodePath<t.TSEnumDeclaration & { const: true }>;
 export default function transpileConstEnum(
@@ -27,7 +27,7 @@ export default function transpileConstEnum(
     );
   }
 
-  const entries = translateEnumValues(path, t);
+  const { enumValues: entries } = translateEnumValues(path, t);
 
   if (isExported) {
     const obj = t.objectExpression(

@@ -1,37 +1,38 @@
 /*:: declare var invariant; */
 
-import type { Options } from "../options";
+import type { Options } from "../options.ts";
 import {
   Position,
   SourceLocation,
   createPositionWithColumnOffset,
-} from "../util/location";
-import CommentsParser, { type CommentWhitespace } from "../parser/comments";
-import type * as N from "../types";
+} from "../util/location.ts";
+import CommentsParser, { type CommentWhitespace } from "../parser/comments.ts";
+import type * as N from "../types.ts";
 import * as charCodes from "charcodes";
-import { isIdentifierStart, isIdentifierChar } from "../util/identifier";
+import { isIdentifierStart, isIdentifierChar } from "../util/identifier.ts";
 import {
   tokenIsKeyword,
   tokenLabelName,
   tt,
   keywords as keywordTypes,
   type TokenType,
-} from "./types";
-import { type TokContext } from "./context";
+} from "./types.ts";
+import type { TokContext } from "./context.ts";
 import {
   Errors,
   type ParseError,
   type ParseErrorConstructor,
   type RaiseProperties,
-} from "../parse-error";
+} from "../parse-error.ts";
 import {
   lineBreakG,
   isNewLine,
   isWhitespace,
   skipWhiteSpace,
-} from "../util/whitespace";
-import State from "./state";
-import type { LookaheadState, DeferredStrictError } from "./state";
+  skipWhiteSpaceInLine,
+} from "../util/whitespace.ts";
+import State from "./state.ts";
+import type { LookaheadState, DeferredStrictError } from "./state.ts";
 
 import {
   readInt,
@@ -42,7 +43,7 @@ import {
   type StringContentsErrorHandlers,
 } from "@babel/helper-string-parser";
 
-import type { Plugin } from "../typings";
+import type { Plugin } from "../typings.ts";
 
 function buildPosition(pos: number, lineStart: number, curLine: number) {
   return new Position(curLine, pos - lineStart, pos);
@@ -56,7 +57,6 @@ const VALID_REGEX_FLAGS = new Set([
   charCodes.lowercaseY,
   charCodes.lowercaseU,
   charCodes.lowercaseD,
-  // This is only valid when using the regexpUnicodeSets plugin
   charCodes.lowercaseV,
 ]);
 
@@ -195,6 +195,34 @@ export default abstract class Tokenizer extends CommentsParser {
     return this.input.charCodeAt(this.nextTokenStart());
   }
 
+  /**
+   * Similar to nextToken, but it will stop at line break when it is seen before the next token
+   *
+   * @returns {number} position of the next token start or line break, whichever is seen first.
+   * @memberof Tokenizer
+   */
+  nextTokenInLineStart(): number {
+    return this.nextTokenInLineStartSince(this.state.pos);
+  }
+
+  nextTokenInLineStartSince(pos: number): number {
+    skipWhiteSpaceInLine.lastIndex = pos;
+    return skipWhiteSpaceInLine.test(this.input)
+      ? skipWhiteSpaceInLine.lastIndex
+      : pos;
+  }
+
+  /**
+   * Similar to lookaheadCharCode, but it will return the char code of line break if it is
+   * seen before the next token
+   *
+   * @returns {number} char code of the next token start or line break, whichever is seen first.
+   * @memberof Tokenizer
+   */
+  lookaheadInLineCharCode(): number {
+    return this.input.charCodeAt(this.nextTokenInLineStart());
+  }
+
   codePointAtPos(pos: number): number {
     // The implementation is based on
     // https://source.chromium.org/chromium/chromium/src/+/master:v8/src/builtins/builtins-string-gen.cc;l=1455;drc=221e331b49dfefadbc6fa40b0c68e6f97606d0b3;bpv=0;bpt=1
@@ -231,9 +259,7 @@ export default abstract class Tokenizer extends CommentsParser {
     return this.state.context[this.state.context.length - 1];
   }
 
-  // Read a single token, updating the parser object's token-related
-  // properties.
-
+  // Read a single token, updating the parser object's token-related properties.
   nextToken(): void {
     this.skipSpace();
     this.state.start = this.state.pos;
@@ -373,7 +399,11 @@ export default abstract class Tokenizer extends CommentsParser {
         default:
           if (isWhitespace(ch)) {
             ++this.state.pos;
-          } else if (ch === charCodes.dash && !this.inModule) {
+          } else if (
+            ch === charCodes.dash &&
+            !this.inModule &&
+            this.options.annexB
+          ) {
             const pos = this.state.pos;
             if (
               this.input.charCodeAt(pos + 1) === charCodes.dash &&
@@ -389,7 +419,11 @@ export default abstract class Tokenizer extends CommentsParser {
             } else {
               break loop;
             }
-          } else if (ch === charCodes.lessThan && !this.inModule) {
+          } else if (
+            ch === charCodes.lessThan &&
+            !this.inModule &&
+            this.options.annexB
+          ) {
             const pos = this.state.pos;
             if (
               this.input.charCodeAt(pos + 1) === charCodes.exclamationMark &&
@@ -671,7 +705,7 @@ export default abstract class Tokenizer extends CommentsParser {
       // `^^^` is forbidden and must be separated by a space.
       const lookaheadCh = this.input.codePointAt(this.state.pos);
       if (lookaheadCh === charCodes.caret) {
-        throw this.unexpected();
+        this.unexpected();
       }
     }
     // '^'
@@ -817,7 +851,6 @@ export default abstract class Tokenizer extends CommentsParser {
       case charCodes.dot:
         this.readToken_dot();
         return;
-
       // Punctuation tokens.
       case charCodes.leftParenthesis:
         ++this.state.pos;
@@ -1066,8 +1099,6 @@ export default abstract class Tokenizer extends CommentsParser {
       // @ts-expect-error VALID_REGEX_FLAGS.has should accept expanded type: number
       if (VALID_REGEX_FLAGS.has(cp)) {
         if (cp === charCodes.lowercaseV) {
-          this.expectPlugin("regexpUnicodeSets", nextPos());
-
           if (mods.includes("u")) {
             this.raise(Errors.IncompatibleRegExpUVFlags, { at: nextPos() });
           }

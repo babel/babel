@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-property-mutators",
-  "version": "7.20.7",
+  "version": "7.22.15",
   "description": "Compile ES5 property mutator shorthand syntax to Object.defineProperty",
   "repository": {
     "type": "git",
@@ -32,7 +32,11 @@
   "author": "The Babel Team (https://babel.dev/team)",
   "conditions": {
     "BABEL_8_BREAKING": [
-      null,
+      {
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+        }
+      },
       {
         "exports": null
       }

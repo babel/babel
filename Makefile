@@ -1,9 +1,6 @@
-FLOW_COMMIT = 92bbb5e9dacb8185aa73ea343954d0434b42c40b
-TEST262_COMMIT = dac69563480b9f22709fd49d61a32b3a0513b6b1
-TYPESCRIPT_COMMIT = ce85d647ef88183c019588bcf398320ce29b625a
-
-# Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
-export FORCE_COLOR = true
+FLOW_COMMIT = 105ad30f566f401db9cafcb49cd2831fb29e87c5
+TEST262_COMMIT = e0436fc52dc92ce1157e13fb75fde2c2d42d075b
+TYPESCRIPT_COMMIT = d87d0adcd30ac285393bf3bfbbb4d94d50c4f3c9
 
 SOURCES = packages codemods eslint
 
@@ -63,9 +60,10 @@ code-quality: tscheck lint
 tscheck:
 	$(MAKEJS) tscheck
 
-lint-ci: lint check-compat-data-ci
+lint-ci: lint check-compat-data
 
-check-compat-data-ci: check-compat-data
+generate-readme:
+	$(NODE) scripts/generators/readmes.js
 
 lint:
 	$(MAKEJS) lint
@@ -88,6 +86,9 @@ test: lint test-only
 
 clone-license:
 	$(MAKEJS) clone-license
+
+prepublish-prepare-dts:
+	$(MAKEJS) prepublish-prepare-dts
 
 prepublish-build:
 	$(MAKEJS) prepublish-build
@@ -149,11 +150,7 @@ test-ci-coverage:
 	rm -rf coverage/tmp
 
 bootstrap-flow:
-	rm -rf build/flow
-	mkdir -p build
-	git clone --filter=blob:none --sparse --single-branch --shallow-since=2021-05-01 https://github.com/facebook/flow.git build/flow
-	cd build/flow && git sparse-checkout set "src/parser/test/flow"
-	cd build/flow && git checkout -q $(FLOW_COMMIT)
+	$(MAKEJS) bootstrap-flow
 
 test-flow:
 	$(NODE) scripts/parser-tests/flow
@@ -162,11 +159,7 @@ test-flow-update-allowlist:
 	$(NODE) scripts/parser-tests/flow --update-allowlist
 
 bootstrap-typescript:
-	rm -rf ./build/typescript
-	mkdir -p ./build
-	git clone --filter=blob:none --sparse --single-branch --shallow-since=2022-04-01 https://github.com/microsoft/TypeScript.git ./build/typescript
-	cd build/typescript && git sparse-checkout set "tests"
-	cd build/typescript && git checkout -q $(TYPESCRIPT_COMMIT)
+	$(MAKEJS) bootstrap-typescript
 
 test-typescript:
 	$(NODE) scripts/parser-tests/typescript
@@ -175,11 +168,7 @@ test-typescript-update-allowlist:
 	$(NODE) scripts/parser-tests/typescript --update-allowlist
 
 bootstrap-test262:
-	rm -rf build/test262
-	mkdir -p build
-	git clone --filter=blob:none --sparse --single-branch --shallow-since=2021-05-01 https://github.com/tc39/test262.git build/test262
-	cd build/test262 && git sparse-checkout set "test" "harness"
-	cd build/test262 && git checkout -q $(TEST262_COMMIT)
+	$(MAKEJS) bootstrap-test262
 
 test-test262:
 	$(NODE) scripts/parser-tests/test262
@@ -189,20 +178,19 @@ test-test262-update-allowlist:
 
 
 new-version-checklist:
-       # @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-       # @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-       # @echo "!!!!!!                                                   !!!!!!"
-       # @echo "!!!!!! Add any message here, and UNCOMMENT THESE LINES!  !!!!!!"
-       # @echo "!!!!!!                                                   !!!!!!"
-       # @echo "!!!!!!                                                   !!!!!!"
-       # @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-       # @echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-       # @exit 1
+	$(MAKEJS) new-version-checklist
 
 new-version:
-	$(MAKE) new-version-checklist
-	git pull --rebase
-	$(YARN) release-tool version -f @babel/standalone
+	$(MAKEJS) new-version
+
+new-babel-8-version:
+	$(MAKEJS) new-babel-8-version
+
+new-babel-8-version-create-commit:
+	$(MAKEJS) new-babel-8-version-create-commit
+
+new-babel-8-version-create-commit-ci:
+	$(MAKEJS) new-babel-8-version-create-commit-ci
 
 # NOTE: Run make new-version first
 publish:
@@ -212,7 +200,11 @@ publish:
 		exit 1; \
 	fi
 	$(MAKE) prepublish
+ifeq ("$(BABEL_8_BREAKING)", "true")
+	USE_ESM=true $(YARN) release-tool publish --tag next
+else
 	$(YARN) release-tool publish
+endif
 	$(MAKE) clean
 
 publish-test:
@@ -221,7 +213,7 @@ ifneq ("$(I_AM_USING_VERDACCIO)", "I_AM_SURE")
 	exit 1
 endif
 	$(YARN) release-tool version $(VERSION) --all --yes --tag-version-prefix="version-e2e-test-"
-	$(MAKE) prepublish-build
+	$(MAKE) prepublish
 	node ./scripts/set-module-type.js clean
 	YARN_NPM_PUBLISH_REGISTRY=http://localhost:4873 $(YARN) release-tool publish --yes --tag-version-prefix="version-e2e-test-"
 	$(MAKE) clean

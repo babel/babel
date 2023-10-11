@@ -1,6 +1,0 @@
-{
-  "plugins": [
-    "proposal-class-properties",
-    "proposal-private-methods"
-  ]
-}

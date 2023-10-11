@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "proposal-import-defer",
+    ["transform-modules-commonjs", { "lazy": ["lazy"] }]
+  ]
+}

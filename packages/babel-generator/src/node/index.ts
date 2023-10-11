@@ -1,5 +1,5 @@
-import * as whitespace from "./whitespace";
-import * as parens from "./parentheses";
+import * as whitespace from "./whitespace.ts";
+import * as parens from "./parentheses.ts";
 import {
   FLIPPED_ALIAS_KEYS,
   isCallExpression,
@@ -9,7 +9,7 @@ import {
 } from "@babel/types";
 import type * as t from "@babel/types";
 
-import type { WhitespaceFlag } from "./whitespace";
+import type { WhitespaceFlag } from "./whitespace.ts";
 
 export type NodeHandlers<R> = {
   [K in string]?: (

@@ -102,7 +102,13 @@ const es2015 = {
     features: ["destructuring, assignment", "destructuring, declarations"],
   },
   "transform-block-scoping": {
-    features: ["const", "let"],
+    features: [
+      "const",
+      "let",
+      // regenerator-transform doesn't support let/const,
+      // so we must compile them when compiling generators.
+      "generators",
+    ],
   },
   "transform-typeof-symbol": {
     features: ["Symbol / typeof support"],
@@ -132,7 +138,7 @@ const es2018 = {
   "transform-object-rest-spread": "object rest/spread properties",
 
   "transform-dotall-regex": "s (dotAll) flag for regular expressions",
-  "transform-unicode-property-regex": "RegExp Unicode Property Escapes",
+  "transform-unicode-property-regex": "RegExp Unicode Property Escapes / basic",
   "transform-named-capturing-groups-regex": "RegExp named capture groups",
 };
 
@@ -168,12 +174,24 @@ const es2022 = {
   "transform-private-methods": "private class methods",
 };
 
+const es2024 = {
+  "transform-unicode-sets-regex": {
+    features: [
+      "RegExp `v` flag / set notations",
+      "RegExp `v` flag / properties of Strings",
+      "RegExp `v` flag / constructor supports it",
+      "RegExp `v` flag / shows up in flags",
+    ],
+  },
+};
+
 const shippedProposal = {};
 
 // Run plugins for modern features first
 module.exports = Object.assign(
   {},
   shippedProposal,
+  es2024,
   es2022,
   es2021,
   es2020,

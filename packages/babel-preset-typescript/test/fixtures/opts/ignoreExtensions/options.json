@@ -1,0 +1,10 @@
+{
+  "BABEL_8_BREAKING": true,
+  "overrides": [
+    {
+      "include": "*.vue",
+      "sourceType": "module",
+      "presets": [["react"], ["typescript", { "ignoreExtensions": true }]]
+    }
+  ]
+}

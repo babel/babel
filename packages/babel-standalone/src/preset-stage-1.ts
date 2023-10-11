@@ -1,5 +1,5 @@
-import presetStage2 from "./preset-stage-2";
-import * as babelPlugins from "./generated/plugins";
+import presetStage2 from "./preset-stage-2.ts";
+import * as babelPlugins from "./generated/plugins.ts";
 
 export default (_: any, opts: any = {}) => {
   const {
@@ -11,6 +11,7 @@ export default (_: any, opts: any = {}) => {
     pipelineProposal,
     pipelineTopicToken,
     recordAndTupleSyntax,
+    optionalChainingAssignVersion = "2023-07",
   } = opts;
 
   return {
@@ -33,6 +34,10 @@ export default (_: any, opts: any = {}) => {
       babelPlugins.syntaxDecimal,
       babelPlugins.proposalExportDefaultFrom,
       babelPlugins.proposalDoExpressions,
+      [
+        babelPlugins.proposalOptionalChainingAssign,
+        { version: optionalChainingAssignVersion },
+      ],
     ],
   };
 };

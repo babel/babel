@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-record-and-tuple",
-  "version": "7.18.6",
+  "version": "7.22.5",
   "description": "Allow parsing of records and tuples.",
   "repository": {
     "type": "git",
@@ -30,7 +30,11 @@
   "author": "The Babel Team (https://babel.dev/team)",
   "conditions": {
     "BABEL_8_BREAKING": [
-      null,
+      {
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+        }
+      },
       {
         "exports": null
       }

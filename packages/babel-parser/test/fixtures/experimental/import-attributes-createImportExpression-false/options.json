@@ -1,0 +1,5 @@
+{
+  "createImportExpressions": false,
+  "plugins": ["importAttributes"],
+  "sourceType": "module"
+}

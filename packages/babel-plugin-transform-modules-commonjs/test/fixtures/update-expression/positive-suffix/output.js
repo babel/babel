@@ -5,8 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.diff = diff;
 exports.diffLevel = void 0;
-let diffLevel = 0;
-exports.diffLevel = diffLevel;
+let diffLevel = exports.diffLevel = 0;
 function diff() {
   if (!(exports.diffLevel = ++diffLevel)) {
     console.log("hey");

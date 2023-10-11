@@ -1,6 +1,6 @@
-var concat = (...arrs) => {
-  var x = arrs[0];
-  var y = arrs[1];
+var concat = (...args) => {
+  var x = args[0];
+  var y = args[1];
 };
 
 var somefun = function () {

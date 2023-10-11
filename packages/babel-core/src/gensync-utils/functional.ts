@@ -1,6 +1,6 @@
 import type { Handler } from "gensync";
 
-import { isAsync, waitFor } from "./async";
+import { isAsync, waitFor } from "./async.ts";
 
 export function once<R>(fn: () => Handler<R>): () => Handler<R> {
   let result: R;

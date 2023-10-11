@@ -11,7 +11,8 @@ export type Target =
   | "ios"
   | "android"
   | "electron"
-  | "samsung";
+  | "samsung"
+  | "opera_mobile";
 
 export type Targets = {
   [target in Target]?: string;
@@ -33,4 +34,4 @@ export type InputTargets = {
   esmodules?: boolean | "intersect";
 } & Targets;
 
-export type { BrowserslistBrowserName } from "./targets";
+export type { BrowserslistBrowserName } from "./targets.ts";

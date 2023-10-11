@@ -1,4 +1,4 @@
-var _init_a, _init_b, _computedKey, _init_computedKey;
+var _init_a, _init_b, _computedKey, _init_computedKey, _class;
 const dec = () => {};
 _computedKey = 'c';
 class Foo {
@@ -8,4 +8,5 @@ class Foo {
     babelHelpers.defineProperty(this, _computedKey, _init_computedKey(this, 456));
   }
 }
-[_init_a, _init_b, _init_computedKey] = babelHelpers.applyDecs2203(Foo, [[dec, 0, "a"], [dec, 0, "b"], [dec, 0, _computedKey]], []);
+_class = Foo;
+[_init_a, _init_b, _init_computedKey] = babelHelpers.applyDecs2203R(_class, [[dec, 0, "a"], [dec, 0, "b"], [dec, 0, _computedKey]], []).e;

@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-computed-properties",
-  "version": "7.20.7",
+  "version": "7.22.5",
   "description": "Compile ES2015 computed properties to ES5",
   "repository": {
     "type": "git",
@@ -33,7 +33,11 @@
   "author": "The Babel Team (https://babel.dev/team)",
   "conditions": {
     "BABEL_8_BREAKING": [
-      null,
+      {
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+        }
+      },
       {
         "exports": null
       }

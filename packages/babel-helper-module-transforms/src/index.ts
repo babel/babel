@@ -1,5 +1,25 @@
 import assert from "assert";
-import {
+import { template, types as t } from "@babel/core";
+
+import { isModule } from "@babel/helper-module-imports";
+
+import rewriteThis from "./rewrite-this.ts";
+import rewriteLiveReferences from "./rewrite-live-references.ts";
+import normalizeModuleAndLoadMetadata, {
+  hasExports,
+  isSideEffectImport,
+  validateImportInteropOption,
+} from "./normalize-and-load-metadata.ts";
+import type {
+  ImportInterop,
+  InteropType,
+  ModuleMetadata,
+  SourceModuleMetadata,
+} from "./normalize-and-load-metadata.ts";
+import * as Lazy from "./lazy-modules.ts";
+import type { NodePath } from "@babel/traverse";
+
+const {
   booleanLiteral,
   callExpression,
   cloneNode,
@@ -13,32 +33,19 @@ import {
   valueToNode,
   variableDeclaration,
   variableDeclarator,
-} from "@babel/types";
-import type * as t from "@babel/types";
-import template from "@babel/template";
+} = t;
 
-import { isModule } from "@babel/helper-module-imports";
+export { buildDynamicImport } from "./dynamic-import.ts";
 
-import rewriteThis from "./rewrite-this";
-import rewriteLiveReferences from "./rewrite-live-references";
-import normalizeModuleAndLoadMetadata, {
-  hasExports,
-  isSideEffectImport,
-  validateImportInteropOption,
-} from "./normalize-and-load-metadata";
-import type {
-  ImportInterop,
-  InteropType,
-  Lazy,
-  ModuleMetadata,
-  SourceModuleMetadata,
-} from "./normalize-and-load-metadata";
-import type { NodePath } from "@babel/traverse";
+if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
+  // eslint-disable-next-line no-restricted-globals
+  exports.getDynamicImportSource =
+    // eslint-disable-next-line no-restricted-globals, import/extensions
+    require("./dynamic-import").getDynamicImportSource;
+}
 
-export { buildDynamicImport, getDynamicImportSource } from "./dynamic-import";
-
-export { default as getModuleName } from "./get-module-name";
-export type { PluginOptions } from "./get-module-name";
+export { default as getModuleName } from "./get-module-name.ts";
+export type { PluginOptions } from "./get-module-name.ts";
 
 export { hasExports, isSideEffectImport, isModule, rewriteThis };
 
@@ -50,7 +57,13 @@ export interface RewriteModuleStatementsAndPrepareHeaderOptions {
   loose?: boolean;
   importInterop?: ImportInterop;
   noInterop?: boolean;
-  lazy?: Lazy;
+  lazy?: Lazy.Lazy;
+  getWrapperPayload?: (
+    source: string,
+    metadata: SourceModuleMetadata,
+    importNodes: t.Node[],
+  ) => unknown;
+  wrapReference?: (ref: t.Expression, payload: unknown) => t.Expression | null;
   esNamespaceOnly?: boolean;
   filename: string | undefined;
   constantReexports?: boolean | void;
@@ -67,21 +80,26 @@ export interface RewriteModuleStatementsAndPrepareHeaderOptions {
 export function rewriteModuleStatementsAndPrepareHeader(
   path: NodePath<t.Program>,
   {
-    // TODO(Babel 8): Remove this
-    loose,
-
     exportName,
     strict,
     allowTopLevelThis,
     strictMode,
     noInterop,
     importInterop = noInterop ? "none" : "babel",
+    // TODO(Babel 8): After that `lazy` implementation is moved to the CJS
+    // transform, remove this parameter.
     lazy,
+    getWrapperPayload = Lazy.toGetWrapperPayload(lazy ?? false),
+    wrapReference = Lazy.wrapReference,
     esNamespaceOnly,
     filename,
 
-    constantReexports = loose,
-    enumerableModuleMeta = loose,
+    constantReexports = process.env.BABEL_8_BREAKING
+      ? undefined
+      : arguments[1].loose,
+    enumerableModuleMeta = process.env.BABEL_8_BREAKING
+      ? undefined
+      : arguments[1].loose,
     noIncompleteNsImportDetection,
   }: RewriteModuleStatementsAndPrepareHeaderOptions,
 ) {
@@ -92,7 +110,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
   const meta = normalizeModuleAndLoadMetadata(path, exportName, {
     importInterop,
     initializeReexports: constantReexports,
-    lazy,
+    getWrapperPayload,
     esNamespaceOnly,
     filename,
   });
@@ -101,7 +119,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
     rewriteThis(path);
   }
 
-  rewriteLiveReferences(path, meta);
+  rewriteLiveReferences(path, meta, wrapReference);
 
   if (strictMode !== false) {
     const hasStrict = path.node.directives.some(directive => {
@@ -132,6 +150,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
     ...buildExportInitializationStatements(
       path,
       meta,
+      wrapReference,
       constantReexports,
       noIncompleteNsImportDetection,
     ),
@@ -157,7 +176,7 @@ export function ensureStatementsHoisted(statements: t.Statement[]) {
  * wrap it in a call to the interop helpers based on the type.
  */
 export function wrapInterop(
-  programPath: NodePath,
+  programPath: NodePath<t.Program>,
   expr: t.Expression,
   type: InteropType,
 ): t.CallExpression {
@@ -196,11 +215,14 @@ export function buildNamespaceInitStatements(
   metadata: ModuleMetadata,
   sourceMetadata: SourceModuleMetadata,
   constantReexports: boolean | void = false,
+  wrapReference: (
+    ref: t.Identifier,
+    payload: unknown,
+  ) => t.Expression | null = Lazy.wrapReference,
 ) {
   const statements = [];
 
-  let srcNamespace: t.Node = identifier(sourceMetadata.name);
-  if (sourceMetadata.lazy) srcNamespace = callExpression(srcNamespace, []);
+  const srcNamespaceId = identifier(sourceMetadata.name);
 
   for (const localName of sourceMetadata.importsNamespace) {
     if (localName === sourceMetadata.name) continue;
@@ -209,17 +231,23 @@ export function buildNamespaceInitStatements(
     statements.push(
       template.statement`var NAME = SOURCE;`({
         NAME: localName,
-        SOURCE: cloneNode(srcNamespace),
+        SOURCE: cloneNode(srcNamespaceId),
       }),
     );
   }
+
+  const srcNamespace =
+    wrapReference(srcNamespaceId, sourceMetadata.wrap) ?? srcNamespaceId;
+
   if (constantReexports) {
-    statements.push(...buildReexportsFromMeta(metadata, sourceMetadata, true));
+    statements.push(
+      ...buildReexportsFromMeta(metadata, sourceMetadata, true, wrapReference),
+    );
   }
   for (const exportName of sourceMetadata.reexportNamespace) {
     // Assign export to namespace object.
     statements.push(
-      (sourceMetadata.lazy
+      (!t.isIdentifier(srcNamespace)
         ? template.statement`
             Object.defineProperty(EXPORTS, "NAME", {
               enumerable: true,
@@ -266,10 +294,10 @@ function buildReexportsFromMeta(
   meta: ModuleMetadata,
   metadata: SourceModuleMetadata,
   constantReexports: boolean,
+  wrapReference: (ref: t.Expression, payload: unknown) => t.Expression | null,
 ) {
-  const namespace = metadata.lazy
-    ? callExpression(identifier(metadata.name), [])
-    : identifier(metadata.name);
+  let namespace: t.Expression = identifier(metadata.name);
+  namespace = wrapReference(namespace, metadata.wrap) ?? namespace;
 
   const { stringSpecifiers } = meta;
   return Array.from(metadata.reexports, ([exportName, importName]) => {
@@ -330,7 +358,7 @@ function buildESModuleHeader(
  */
 function buildNamespaceReexport(
   metadata: ModuleMetadata,
-  namespace: t.Identifier | t.CallExpression,
+  namespace: t.Expression,
   constantReexports: boolean | void,
 ) {
   return (
@@ -349,7 +377,7 @@ function buildNamespaceReexport(
         // namespace re-exports that would cause a binding to be exported
         // multiple times. However, multiple bindings of the same name that
         // export the same primitive value are silently skipped
-        // (the spec requires an "ambigous bindings" early error here).
+        // (the spec requires an "ambiguous bindings" early error here).
         template.statement`
         Object.keys(NAMESPACE).forEach(function(key) {
           if (key === "default" || key === "__esModule") return;
@@ -424,6 +452,7 @@ function buildExportNameListDeclaration(
 function buildExportInitializationStatements(
   programPath: NodePath,
   metadata: ModuleMetadata,
+  wrapReference: (ref: t.Expression, payload: unknown) => t.Expression | null,
   constantReexports: boolean | void = false,
   noIncompleteNsImportDetection: boolean | void = false,
 ) {
@@ -448,7 +477,12 @@ function buildExportInitializationStatements(
 
   for (const data of metadata.source.values()) {
     if (!constantReexports) {
-      const reexportsStatements = buildReexportsFromMeta(metadata, data, false);
+      const reexportsStatements = buildReexportsFromMeta(
+        metadata,
+        data,
+        false,
+        wrapReference,
+      );
       const reexports = [...data.reexports.keys()];
       for (let i = 0; i < reexportsStatements.length; i++) {
         initStatements.push([reexports[i], reexportsStatements[i]]);

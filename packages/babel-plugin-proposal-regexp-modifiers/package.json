@@ -1,0 +1,58 @@
+{
+  "name": "@babel/plugin-proposal-regexp-modifiers",
+  "version": "7.22.5",
+  "description": "Compile inline regular expression modifiers",
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-regexp-modifiers",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./lib/index.js",
+  "keywords": [
+    "babel-plugin",
+    "regex",
+    "regexp",
+    "regular expressions"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-proposal-regexp-modifiers"
+  },
+  "bugs": "https://github.com/babel/babel/issues",
+  "dependencies": {
+    "@babel/helper-create-regexp-features-plugin": "workspace:^",
+    "@babel/helper-plugin-utils": "workspace:^"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "workspace:^"
+  },
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)",
+  "conditions": {
+    "USE_ESM": [
+      {
+        "type": "module"
+      },
+      null
+    ],
+    "BABEL_8_BREAKING": [
+      {
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+        }
+      },
+      {}
+    ]
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
+  "type": "commonjs"
+}

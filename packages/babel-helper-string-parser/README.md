@@ -2,7 +2,7 @@
 
 > A utility package to parse strings
 
-See our website [@babel/helper-string-parser](https://babeljs.io/docs/en/babel-helper-string-parser) for more information.
+See our website [@babel/helper-string-parser](https://babeljs.io/docs/babel-helper-string-parser) for more information.
 
 ## Install
 

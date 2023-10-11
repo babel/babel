@@ -11,21 +11,22 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-class-static-block { chrome < 94, electron < 15.0, ie, node < 16.11 }
-  proposal-private-property-in-object { chrome < 91, electron < 13.0, ie, node < 16.9 }
-  proposal-class-properties { chrome < 74, electron < 6.0, ie, node < 12 }
-  proposal-private-methods { chrome < 84, electron < 10.0, ie, node < 14.6 }
-  proposal-numeric-separator { chrome < 75, electron < 6.0, ie, node < 12.5 }
-  proposal-logical-assignment-operators { chrome < 85, electron < 10.0, ie, node < 15 }
-  proposal-nullish-coalescing-operator { chrome < 80, electron < 8.0, ie, node < 14 }
-  proposal-optional-chaining { chrome < 80, electron < 8.0, ie, node < 14 }
-  proposal-json-strings { chrome < 66, electron < 3.0, ie, node < 10 }
-  proposal-optional-catch-binding { chrome < 66, electron < 3.0, ie, node < 10 }
+  transform-unicode-sets-regex { chrome < 112, electron < 24.0, ie, node < 20 }
+  transform-class-static-block { chrome < 94, electron < 15.0, ie, node < 16.11 }
+  transform-private-property-in-object { chrome < 91, electron < 13.0, ie, node < 16.9 }
+  transform-class-properties { chrome < 74, electron < 6.0, ie, node < 12 }
+  transform-private-methods { chrome < 84, electron < 10.0, ie, node < 14.6 }
+  transform-numeric-separator { chrome < 75, electron < 6.0, ie, node < 12.5 }
+  transform-logical-assignment-operators { chrome < 85, electron < 10.0, ie, node < 15 }
+  transform-nullish-coalescing-operator { chrome < 80, electron < 8.0, ie, node < 14 }
+  transform-optional-chaining { chrome < 80, electron < 8.0, ie, node < 14 }
+  transform-json-strings { chrome < 66, electron < 3.0, ie, node < 10 }
+  transform-optional-catch-binding { chrome < 66, electron < 3.0, ie, node < 10 }
   transform-parameters { electron < 0.37, ie }
-  proposal-async-generator-functions { chrome < 63, electron < 3.0, ie, node < 10 }
-  proposal-object-rest-spread { chrome < 60, electron < 2.0, ie, node < 8.3 }
+  transform-async-generator-functions { chrome < 63, electron < 3.0, ie, node < 10 }
+  transform-object-rest-spread { chrome < 60, electron < 2.0, ie, node < 8.3 }
   transform-dotall-regex { chrome < 62, electron < 3.0, ie, node < 8.10 }
-  proposal-unicode-property-regex { chrome < 64, electron < 3.0, ie, node < 10 }
+  transform-unicode-property-regex { chrome < 64, electron < 3.0, ie, node < 10 }
   transform-named-capturing-groups-regex { chrome < 64, electron < 3.0, ie, node < 10 }
   transform-async-to-generator { chrome < 55, electron < 1.6, ie, node < 7.6 }
   transform-exponentiation-operator { electron < 1.3, ie, node < 7 }
@@ -45,13 +46,14 @@ Using plugins:
   transform-unicode-regex { electron < 1.1, ie }
   transform-spread { ie }
   transform-destructuring { electron < 1.2, ie, node < 6.5 }
-  transform-block-scoping { electron < 0.37, ie }
+  transform-block-scoping { electron < 1.1, ie }
   transform-typeof-symbol { ie }
   transform-new-target { ie }
   transform-regenerator { electron < 1.1, ie }
-  proposal-export-namespace-from { chrome < 72, electron < 5.0, ie, node < 13.2 }
+  transform-export-namespace-from { chrome < 72, electron < 5.0, ie, node < 13.2 }
   transform-modules-commonjs
-  proposal-dynamic-import
+  transform-dynamic-import
+  syntax-import-meta
 corejs3: `DEBUG` option
 
 Using targets: {

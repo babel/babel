@@ -847,8 +847,6 @@
           ]
         },
         "extends": [],
-        "implements": [],
-        "mixins": [],
         "body": {
           "type": "ObjectTypeAnnotation",
           "start":649,"end":651,"loc":{"start":{"line":18,"column":26,"index":649},"end":{"line":18,"column":28,"index":651}},
@@ -896,8 +894,6 @@
           ]
         },
         "extends": [],
-        "implements": [],
-        "mixins": [],
         "body": {
           "type": "ObjectTypeAnnotation",
           "start":687,"end":689,"loc":{"start":{"line":19,"column":35,"index":687},"end":{"line":19,"column":37,"index":689}},
@@ -951,8 +947,6 @@
           ]
         },
         "extends": [],
-        "implements": [],
-        "mixins": [],
         "body": {
           "type": "ObjectTypeAnnotation",
           "start":728,"end":730,"loc":{"start":{"line":20,"column":38,"index":728},"end":{"line":20,"column":40,"index":730}},
@@ -1010,8 +1004,6 @@
           ]
         },
         "extends": [],
-        "implements": [],
-        "mixins": [],
         "body": {
           "type": "ObjectTypeAnnotation",
           "start":778,"end":780,"loc":{"start":{"line":21,"column":47,"index":778},"end":{"line":21,"column":49,"index":780}},

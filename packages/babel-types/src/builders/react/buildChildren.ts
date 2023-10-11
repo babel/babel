@@ -2,9 +2,9 @@ import {
   isJSXText,
   isJSXExpressionContainer,
   isJSXEmptyExpression,
-} from "../../validators/generated";
-import cleanJSXElementLiteralChild from "../../utils/react/cleanJSXElementLiteralChild";
-import type * as t from "../..";
+} from "../../validators/generated/index.ts";
+import cleanJSXElementLiteralChild from "../../utils/react/cleanJSXElementLiteralChild.ts";
+import type * as t from "../../index.ts";
 
 type ReturnedChild =
   | t.JSXSpreadChild

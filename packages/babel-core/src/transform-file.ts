@@ -1,10 +1,10 @@
 import gensync, { type Handler } from "gensync";
 
-import loadConfig from "./config";
-import type { InputOptions, ResolvedConfig } from "./config";
-import { run } from "./transformation";
-import type { FileResult, FileResultCallback } from "./transformation";
-import * as fs from "./gensync-utils/fs";
+import loadConfig from "./config/index.ts";
+import type { InputOptions, ResolvedConfig } from "./config/index.ts";
+import { run } from "./transformation/index.ts";
+import type { FileResult, FileResultCallback } from "./transformation/index.ts";
+import * as fs from "./gensync-utils/fs.ts";
 
 type transformFileBrowserType = typeof import("./transform-file-browser");
 type transformFileType = typeof import("./transform-file");
@@ -12,7 +12,7 @@ type transformFileType = typeof import("./transform-file");
 // Kind of gross, but essentially asserting that the exports of this module are the same as the
 // exports of transform-file-browser, since this file may be replaced at bundle time with
 // transform-file-browser.
-({} as any as transformFileBrowserType as transformFileType);
+({}) as any as transformFileBrowserType as transformFileType;
 
 const transformFileRunner = gensync(function* (
   filename: string,
@@ -40,7 +40,7 @@ export function transformFile(
 export function transformFile(
   ...args: Parameters<typeof transformFileRunner.errback>
 ) {
-  return transformFileRunner.errback(...args);
+  transformFileRunner.errback(...args);
 }
 
 export function transformFileSync(

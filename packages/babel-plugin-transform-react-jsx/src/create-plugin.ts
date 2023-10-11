@@ -12,6 +12,7 @@ import type {
   Identifier,
   JSXAttribute,
   JSXElement,
+  JSXFragment,
   JSXOpeningElement,
   JSXSpreadAttribute,
   MemberExpression,
@@ -71,6 +72,8 @@ export default function createPlugin({
 
       throwIfNamespace = true,
 
+      filter,
+
       runtime: RUNTIME_DEFAULT = process.env.BABEL_8_BREAKING
         ? "automatic"
         : development
@@ -98,9 +101,15 @@ export default function createPlugin({
 {
   "plugins": [
     "@babel/plugin-transform-react-jsx"
-    ["@babel/plugin-proposal-object-rest-spread", { "loose": true, "useBuiltIns": ${useBuiltInsFormatted} }]
+    ["@babel/plugin-transform-object-rest-spread", { "loose": true, "useBuiltIns": ${useBuiltInsFormatted} }]
   ]
 }`,
+        );
+      }
+
+      if (filter != null && RUNTIME_DEFAULT === "automatic") {
+        throw new Error(
+          '@babel/plugin-transform-react-jsx: "filter" option can not be used with automatic runtime. If you are upgrading from Babel 7, please specify `runtime: "classic"`.',
         );
       }
     } else {
@@ -258,7 +267,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
             }
           },
 
-          // TODO (Babel 8): Decide if this should be removed or brought back.
+          // TODO(Babel 8): Decide if this should be removed or brought back.
           // see: https://github.com/babel/babel/pull/12253#discussion_r513086528
           //
           // exit(path, state) {
@@ -276,24 +285,17 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
           // },
         },
 
-        JSXFragment(path, file) {
-          // <>...</>  ->  <React.Fragment>...</React.Fragment>
+        JSXFragment: {
+          exit(path, file) {
+            let callExpr;
+            if (get(file, "runtime") === "classic") {
+              callExpr = buildCreateElementFragmentCall(path, file);
+            } else {
+              callExpr = buildJSXFragmentCall(path, file);
+            }
 
-          const frag = memberExpressionToJSX(get(file, "id/fragment")());
-
-          path.replaceWith(
-            t.inherits(
-              t.jsxElement(
-                t.inherits(
-                  t.jsxOpeningElement(frag, []),
-                  path.node.openingFragment,
-                ),
-                t.jsxClosingElement(t.cloneNode(frag)),
-                path.node.children,
-              ),
-              path.node,
-            ),
-          );
+            path.replaceWith(t.inherits(callExpr, path.node));
+          },
         },
 
         JSXElement: {
@@ -344,7 +346,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
           return !isDerivedClass(path.parentPath.parentPath as NodePath<Class>);
         }
         if (path.isTSModuleBlock()) {
-          // If the closeset parent is a TS Module block, `this` will not be allowed.
+          // If the closest parent is a TS Module block, `this` will not be allowed.
           return false;
         }
       } while ((scope = scope.parent));
@@ -603,6 +605,56 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       return t.objectExpression(props);
     }
 
+    // Builds JSX Fragment <></> into
+    // Production: React.jsx(type, arguments)
+    // Development: React.jsxDEV(type, { children })
+    function buildJSXFragmentCall(
+      path: NodePath<JSXFragment>,
+      file: PluginPass,
+    ) {
+      const args = [get(file, "id/fragment")()];
+
+      const children = t.react.buildChildren(path.node);
+
+      args.push(
+        t.objectExpression(
+          children.length > 0
+            ? [
+                buildChildrenProperty(
+                  //@ts-expect-error The children here contains JSXSpreadChild,
+                  // which will be thrown later
+                  children,
+                ),
+              ]
+            : [],
+        ),
+      );
+
+      if (development) {
+        args.push(
+          path.scope.buildUndefinedNode(),
+          t.booleanLiteral(children.length > 1),
+        );
+      }
+
+      return call(file, children.length > 1 ? "jsxs" : "jsx", args);
+    }
+
+    // Builds JSX Fragment <></> into
+    // React.createElement(React.Fragment, null, ...children)
+    function buildCreateElementFragmentCall(
+      path: NodePath<JSXFragment>,
+      file: PluginPass,
+    ) {
+      if (filter && !filter(path.node, file)) return;
+
+      return call(file, "createElement", [
+        get(file, "id/fragment")(),
+        t.nullLiteral(),
+        ...t.react.buildChildren(path.node),
+      ]);
+    }
+
     // Builds JSX into:
     // Production: React.createElement(type, arguments, children)
     // Development: React.createElement(type, arguments, children, source, self)
@@ -716,10 +768,11 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       const found = Object.create(null);
 
       for (const attr of attribs) {
+        const { node } = attr;
         const name =
-          t.isJSXAttribute(attr) &&
-          t.isJSXIdentifier(attr.name) &&
-          attr.name.name;
+          t.isJSXAttribute(node) &&
+          t.isJSXIdentifier(node.name) &&
+          node.name.name;
 
         if (
           runtime === "automatic" &&
@@ -801,25 +854,9 @@ function toMemberExpression(id: string): Identifier | MemberExpression {
       .split(".")
       .map(name => t.identifier(name))
       // @ts-expect-error - The Array#reduce does not have a signature
-      // where the type of initialial value differs from callback return type
+      // where the type of initial value differs from callback return type
       .reduce((object, property) => t.memberExpression(object, property))
   );
-}
-
-function memberExpressionToJSX(
-  expr: t.Node,
-): t.JSXMemberExpression | t.JSXIdentifier {
-  switch (expr.type) {
-    case "Identifier":
-      return t.jsxIdentifier(expr.name);
-    case "MemberExpression":
-      return t.jsxMemberExpression(
-        memberExpressionToJSX(expr.object),
-        memberExpressionToJSX(expr.property) as t.JSXIdentifier,
-      );
-    default:
-      throw new Error("Internal error: unknown member expression type");
-  }
 }
 
 function makeSource(path: NodePath, state: PluginPass) {

@@ -1,8 +1,9 @@
 import _normalizeOptions from "../lib/normalize-options.js";
 const normalizeOptions = _normalizeOptions.default || _normalizeOptions;
+import { describeBabel8, describeBabel7 } from "$repo-utils";
 
 describe("normalize options", () => {
-  (process.env.BABEL_8_BREAKING ? describe : describe.skip)("Babel 8", () => {
+  describeBabel8("Babel 8", () => {
     it("should throw on unknown options", () => {
       expect(() => normalizeOptions({ throwIfNamespaces: true })).toThrow(
         "@babel/preset-react: 'throwIfNamespaces' is not a valid top-level option.\n- Did you mean 'throwIfNamespace'?",
@@ -32,7 +33,7 @@ describe("normalize options", () => {
         \`useBuiltIns: true\`, you can use the following config
         {
           \\"plugins\\": [
-            [\\"@babel/plugin-proposal-object-rest-spread\\", { \\"loose\\": true, \\"useBuiltIns\\": true }]
+            [\\"@babel/plugin-transform-object-rest-spread\\", { \\"loose\\": true, \\"useBuiltIns\\": true }]
           ],
           \\"presets\\": [\\"@babel/preset-react\\"]
         }"
@@ -80,7 +81,7 @@ describe("normalize options", () => {
       `);
     });
   });
-  (process.env.BABEL_8_BREAKING ? describe.skip : describe)("Babel 7", () => {
+  describeBabel7("Babel 7", () => {
     it("should not throw on unknown options", () => {
       expect(() => normalizeOptions({ throwIfNamespaces: true })).not.toThrow();
     });
@@ -96,7 +97,7 @@ describe("normalize options", () => {
         expect(() => normalizeOptions({ [optionName]: 0 })).not.toThrow();
       },
     );
-    it("default values", () => {
+    it("default values in Babel 7", () => {
       expect(normalizeOptions({})).toMatchInlineSnapshot(`
         Object {
           "development": false,

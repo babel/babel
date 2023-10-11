@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-simple-access",
-  "version": "7.20.2",
+  "version": "7.22.5",
   "description": "Babel helper for ensuring that access to a given value is performed through simple accesses",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-helper-simple-access",
@@ -26,7 +26,11 @@
   },
   "conditions": {
     "BABEL_8_BREAKING": [
-      null,
+      {
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+        }
+      },
       {
         "exports": null
       }

@@ -5,7 +5,7 @@ import {
   iifeVisitor,
   collectShadowedParamsNames,
   buildScopeIIFE,
-} from "./shadow-utils";
+} from "./shadow-utils.ts";
 
 const buildRest = template.statement(`
   for (var LEN = ARGUMENTS.length,
@@ -120,7 +120,10 @@ const memberExpressionOptimisationVisitor: Visitor<State> = {
       const { parentPath } = path;
 
       // Is this identifier the right hand side of a default parameter?
-      if (parentPath.listKey === "params" && parentPath.key < state.offset) {
+      if (
+        parentPath.listKey === "params" &&
+        (parentPath.key as number) < state.offset
+      ) {
         return;
       }
 

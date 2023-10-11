@@ -1,9 +1,9 @@
-import type { Options } from "../options";
-import type * as N from "../types";
-import type { PluginList } from "../plugin-utils";
-import { getOptions } from "../options";
-import StatementParser from "./statement";
-import ScopeHandler from "../util/scope";
+import type { Options } from "../options.ts";
+import type * as N from "../types.ts";
+import type { PluginList } from "../plugin-utils.ts";
+import { getOptions } from "../options.ts";
+import StatementParser from "./statement.ts";
+import ScopeHandler from "../util/scope.ts";
 
 export type PluginsMap = Map<
   string,

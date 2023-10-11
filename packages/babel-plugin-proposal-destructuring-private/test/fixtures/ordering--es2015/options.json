@@ -1,9 +1,9 @@
 {
   "plugins": [
     "proposal-destructuring-private",
-    "proposal-class-static-block",
-    "proposal-class-properties",
-    "proposal-private-methods",
-    ["proposal-object-rest-spread", { "useBuiltIns": true }]
+    "transform-class-static-block",
+    "transform-class-properties",
+    "transform-private-methods",
+    ["transform-object-rest-spread", { "useBuiltIns": true }]
   ]
 }

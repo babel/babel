@@ -1,27 +1,28 @@
 // Heavily inspired by
 // https://github.com/airbnb/babel-plugin-dynamic-import-node/blob/master/src/utils.js
 
-import * as t from "@babel/types";
-import template from "@babel/template";
+import { types as t, template } from "@babel/core";
 
-// TODO(Babel 8): Remove this
-export function getDynamicImportSource(
-  node: t.CallExpression,
-): t.StringLiteral | t.TemplateLiteral {
-  const [source] = node.arguments;
+if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
+  // eslint-disable-next-line no-restricted-globals
+  exports.getDynamicImportSource = function getDynamicImportSource(
+    node: t.CallExpression,
+  ): t.StringLiteral | t.TemplateLiteral {
+    const [source] = node.arguments;
 
-  return t.isStringLiteral(source) || t.isTemplateLiteral(source)
-    ? source
-    : (template.expression.ast`\`\${${source}}\`` as t.TemplateLiteral);
+    return t.isStringLiteral(source) || t.isTemplateLiteral(source)
+      ? source
+      : (template.expression.ast`\`\${${source}}\`` as t.TemplateLiteral);
+  };
 }
 
 export function buildDynamicImport(
-  node: t.CallExpression,
+  node: t.CallExpression | t.ImportExpression,
   deferToThen: boolean,
   wrapWithPromise: boolean,
   builder: (specifier: t.Expression) => t.Expression,
 ): t.Expression {
-  const [specifier] = node.arguments;
+  const specifier = t.isCallExpression(node) ? node.arguments[0] : node.source;
 
   if (
     t.isStringLiteral(specifier) ||

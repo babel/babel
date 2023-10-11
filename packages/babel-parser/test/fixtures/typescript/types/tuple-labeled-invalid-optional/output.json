@@ -1,0 +1,50 @@
+{
+  "type": "File",
+  "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+  "errors": [
+    "SyntaxError: A labeled tuple optional element must be declared using a question mark after the name and before the colon (`name?: type`), rather than after the type (`name: type?`). (1:14)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":6,"index":6},"identifierName":"T"},
+          "name": "T"
+        },
+        "typeAnnotation": {
+          "type": "TSTupleType",
+          "start":9,"end":16,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":16,"index":16}},
+          "elementTypes": [
+            {
+              "type": "TSNamedTupleMember",
+              "start":10,"end":15,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":15,"index":15}},
+              "optional": true,
+              "label": {
+                "type": "Identifier",
+                "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11},"identifierName":"x"},
+                "name": "x"
+              },
+              "elementType": {
+                "type": "TSTypeReference",
+                "start":13,"end":14,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":14,"index":14}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":13,"end":14,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":14,"index":14},"identifierName":"A"},
+                  "name": "A"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

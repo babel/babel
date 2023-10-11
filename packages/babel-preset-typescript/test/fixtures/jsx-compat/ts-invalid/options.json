@@ -1,3 +1,5 @@
 {
-  "throws": "Unexpected token, expected \",\" (1:6)"
+  "BABEL_8_BREAKING": true,
+  "throws": "Unexpected token, expected \",\" (1:6)",
+  "presets": ["typescript"]
 }

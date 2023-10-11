@@ -1,0 +1,101 @@
+{
+  "type": "File",
+  "start":0,"end":101,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":101}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":101,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":101}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":0,"end":101,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":101}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":24,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":24,"index":24},"identifierName":"FuncWithDescription"},
+          "name": "FuncWithDescription"
+        },
+        "typeAnnotation": {
+          "type": "TSTupleType",
+          "start":27,"end":101,"loc":{"start":{"line":1,"column":27,"index":27},"end":{"line":5,"column":1,"index":101}},
+          "elementTypes": [
+            {
+              "type": "TSNamedTupleMember",
+              "start":31,"end":64,"loc":{"start":{"line":2,"column":2,"index":31},"end":{"line":2,"column":35,"index":64}},
+              "optional": false,
+              "label": {
+                "type": "Identifier",
+                "start":31,"end":39,"loc":{"start":{"line":2,"column":2,"index":31},"end":{"line":2,"column":10,"index":39},"identifierName":"function"},
+                "name": "function"
+              },
+              "elementType": {
+                "type": "TSFunctionType",
+                "start":41,"end":64,"loc":{"start":{"line":2,"column":12,"index":41},"end":{"line":2,"column":35,"index":64}},
+                "params": [
+                  {
+                    "type": "RestElement",
+                    "start":42,"end":56,"loc":{"start":{"line":2,"column":13,"index":42},"end":{"line":2,"column":27,"index":56}},
+                    "argument": {
+                      "type": "Identifier",
+                      "start":45,"end":49,"loc":{"start":{"line":2,"column":16,"index":45},"end":{"line":2,"column":20,"index":49},"identifierName":"args"},
+                      "name": "args"
+                    },
+                    "typeAnnotation": {
+                      "type": "TSTypeAnnotation",
+                      "start":49,"end":56,"loc":{"start":{"line":2,"column":20,"index":49},"end":{"line":2,"column":27,"index":56}},
+                      "typeAnnotation": {
+                        "type": "TSArrayType",
+                        "start":51,"end":56,"loc":{"start":{"line":2,"column":22,"index":51},"end":{"line":2,"column":27,"index":56}},
+                        "elementType": {
+                          "type": "TSAnyKeyword",
+                          "start":51,"end":54,"loc":{"start":{"line":2,"column":22,"index":51},"end":{"line":2,"column":25,"index":54}}
+                        }
+                      }
+                    }
+                  }
+                ],
+                "returnType": {
+                  "type": "TSTypeAnnotation",
+                  "start":58,"end":64,"loc":{"start":{"line":2,"column":29,"index":58},"end":{"line":2,"column":35,"index":64}},
+                  "typeAnnotation": {
+                    "type": "TSAnyKeyword",
+                    "start":61,"end":64,"loc":{"start":{"line":2,"column":32,"index":61},"end":{"line":2,"column":35,"index":64}}
+                  }
+                }
+              }
+            },
+            {
+              "type": "TSNamedTupleMember",
+              "start":68,"end":82,"loc":{"start":{"line":3,"column":2,"index":68},"end":{"line":3,"column":16,"index":82}},
+              "optional": false,
+              "label": {
+                "type": "Identifier",
+                "start":68,"end":74,"loc":{"start":{"line":3,"column":2,"index":68},"end":{"line":3,"column":8,"index":74},"identifierName":"string"},
+                "name": "string"
+              },
+              "elementType": {
+                "type": "TSStringKeyword",
+                "start":76,"end":82,"loc":{"start":{"line":3,"column":10,"index":76},"end":{"line":3,"column":16,"index":82}}
+              }
+            },
+            {
+              "type": "TSNamedTupleMember",
+              "start":86,"end":99,"loc":{"start":{"line":4,"column":2,"index":86},"end":{"line":4,"column":15,"index":99}},
+              "optional": true,
+              "label": {
+                "type": "Identifier",
+                "start":86,"end":90,"loc":{"start":{"line":4,"column":2,"index":86},"end":{"line":4,"column":6,"index":90},"identifierName":"void"},
+                "name": "void"
+              },
+              "elementType": {
+                "type": "TSNumberKeyword",
+                "start":93,"end":99,"loc":{"start":{"line":4,"column":9,"index":93},"end":{"line":4,"column":15,"index":99}}
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -4,11 +4,12 @@ import slash from "slash";
 import path from "path";
 import fs from "fs";
 
-import * as util from "./util";
-import type { CmdOptions } from "./options";
-import * as watcher from "./watcher";
+import * as util from "./util.ts";
+import type { CmdOptions } from "./options.ts";
+import * as watcher from "./watcher.ts";
 
 import type {
+  EncodedSourceMap,
   SectionedSourceMap,
   SourceMapInput,
   TraceMap,
@@ -40,7 +41,7 @@ export default async function ({
 
       mapSections.push({
         offset: { line: offset, column: 0 },
-        map: result.map || {
+        map: (result.map as EncodedSourceMap) || {
           version: 3,
           names: [],
           sources: [],

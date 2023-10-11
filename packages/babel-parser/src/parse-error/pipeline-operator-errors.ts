@@ -1,4 +1,5 @@
-import toNodeDescription from "./to-node-description";
+import type { ParseErrorTemplates } from "../parse-error.ts";
+import toNodeDescription from "./to-node-description.ts";
 
 export const UnparenthesizedPipeBodyDescriptions = new Set([
   "ArrowFunctionExpression",
@@ -11,7 +12,7 @@ type GetSetMemberType<T extends Set<any>> = T extends Set<infer M>
   ? M
   : unknown;
 
-type UnparanthesizedPipeBodyTypes = GetSetMemberType<
+type UnparenthesizedPipeBodyTypes = GetSetMemberType<
   typeof UnparenthesizedPipeBodyDescriptions
 >;
 
@@ -27,7 +28,7 @@ export default {
     `Invalid topic token ${token}. In order to use ${token} as a topic reference, the pipelineOperator plugin must be configured with { "proposal": "hack", "topicToken": "${token}" }.`,
   PipeTopicUnused:
     "Hack-style pipe body does not contain a topic reference; Hack-style pipes must use topic at least once.",
-  PipeUnparenthesizedBody: ({ type }: { type: UnparanthesizedPipeBodyTypes }) =>
+  PipeUnparenthesizedBody: ({ type }: { type: UnparenthesizedPipeBodyTypes }) =>
     `Hack-style pipe body cannot be an unparenthesized ${toNodeDescription({
       type,
     })}; please wrap it in parentheses.`,
@@ -48,4 +49,4 @@ export default {
     "Topic reference was used in a lexical context without topic binding.",
   PrimaryTopicRequiresSmartPipeline:
     'Topic reference is used, but the pipelineOperator plugin was not passed a "proposal": "hack" or "smart" option.',
-};
+} satisfies ParseErrorTemplates;

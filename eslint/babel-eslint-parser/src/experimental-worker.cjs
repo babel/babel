@@ -13,6 +13,11 @@ const baseParse = require("./parse.cjs");
 const { WorkerClient } = require("./client.cjs");
 const client = new WorkerClient();
 
+exports.meta = {
+  name: "@babel/eslint-parser/experimental-worker",
+  version: PACKAGE_JSON.version,
+};
+
 exports.parseForESLint = function (code, options = {}) {
   const normalizedOptions = normalizeESLintConfig(options);
   const ast = baseParse(code, normalizedOptions, client);

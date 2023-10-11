@@ -12,11 +12,11 @@ import {
   traverse,
 } from "@babel/types";
 import type * as t from "@babel/types";
-import type { TraversalAncestors, TraversalHandler } from "@babel/types";
+import type { TraversalAncestors } from "@babel/types";
 import { parse } from "@babel/parser";
 import { codeFrameColumns } from "@babel/code-frame";
-import type { TemplateOpts, ParserOpts } from "./options";
-import type { Formatter } from "./formatters";
+import type { TemplateOpts, ParserOpts } from "./options.ts";
+import type { Formatter } from "./formatters.ts";
 
 export type Metadata = {
   ast: t.File;
@@ -54,28 +54,19 @@ export default function parseAndBuildMetadata<T>(
 
   formatter.validate(ast);
 
-  const syntactic: MetadataState["syntactic"] = {
-    placeholders: [],
-    placeholderNames: new Set(),
-  };
-  const legacy: MetadataState["legacy"] = {
-    placeholders: [],
-    placeholderNames: new Set(),
-  };
-  const isLegacyRef: MetadataState["isLegacyRef"] = { value: undefined };
-
-  traverse(ast, placeholderVisitorHandler as TraversalHandler<any>, {
-    syntactic,
-    legacy,
-    isLegacyRef,
+  const state: MetadataState = {
+    syntactic: { placeholders: [], placeholderNames: new Set() },
+    legacy: { placeholders: [], placeholderNames: new Set() },
     placeholderWhitelist,
     placeholderPattern,
     syntacticPlaceholders,
-  });
+  };
+
+  traverse(ast, placeholderVisitorHandler, state);
 
   return {
     ast,
-    ...(isLegacyRef.value ? legacy : syntactic),
+    ...(state.syntactic.placeholders.length ? state.syntactic : state.legacy),
   };
 }
 
@@ -86,30 +77,29 @@ function placeholderVisitorHandler(
 ) {
   let name: string;
 
+  let hasSyntacticPlaceholders = state.syntactic.placeholders.length > 0;
+
   if (isPlaceholder(node)) {
     if (state.syntacticPlaceholders === false) {
       throw new Error(
         "%%foo%%-style placeholders can't be used when " +
           "'.syntacticPlaceholders' is false.",
       );
-    } else {
-      name = node.name.name;
-      state.isLegacyRef.value = false;
     }
-  } else if (state.isLegacyRef.value === false || state.syntacticPlaceholders) {
+    name = node.name.name;
+    hasSyntacticPlaceholders = true;
+  } else if (hasSyntacticPlaceholders || state.syntacticPlaceholders) {
     return;
   } else if (isIdentifier(node) || isJSXIdentifier(node)) {
     name = node.name;
-    state.isLegacyRef.value = true;
   } else if (isStringLiteral(node)) {
     name = node.value;
-    state.isLegacyRef.value = true;
   } else {
     return;
   }
 
   if (
-    !state.isLegacyRef.value &&
+    hasSyntacticPlaceholders &&
     (state.placeholderPattern != null || state.placeholderWhitelist != null)
   ) {
     // This check is also in options.js. We need it there to handle the default
@@ -121,7 +111,7 @@ function placeholderVisitorHandler(
   }
 
   if (
-    state.isLegacyRef.value &&
+    !hasSyntacticPlaceholders &&
     (state.placeholderPattern === false ||
       !(state.placeholderPattern || PATTERN).test(name)) &&
     !state.placeholderWhitelist?.has(name)
@@ -155,7 +145,7 @@ function placeholderVisitorHandler(
     type = "other";
   }
 
-  const { placeholders, placeholderNames } = state.isLegacyRef.value
+  const { placeholders, placeholderNames } = !hasSyntacticPlaceholders
     ? state.legacy
     : state.syntactic;
 
@@ -193,9 +183,6 @@ type MetadataState = {
   legacy: {
     placeholders: Array<Placeholder>;
     placeholderNames: Set<string>;
-  };
-  isLegacyRef: {
-    value?: boolean;
   };
   placeholderWhitelist?: Set<string>;
   placeholderPattern?: RegExp | false;

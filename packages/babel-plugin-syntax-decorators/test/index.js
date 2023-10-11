@@ -1,5 +1,6 @@
 import { parseSync } from "@babel/core";
 import syntaxDecorators from "../lib/index.js";
+import { itBabel8, describeBabel7 } from "$repo-utils";
 
 function makeParser(code, options) {
   return () =>
@@ -10,11 +11,8 @@ function makeParser(code, options) {
     });
 }
 
-const babel8 = process.env.BABEL_8_BREAKING ? test : test.skip;
-const babel7describe = process.env.BABEL_8_BREAKING ? describe.skip : describe;
-
-babel7describe("'legacy' option", function () {
-  test("must be boolean", function () {
+describeBabel7("'legacy' option", function () {
+  test("legacy must be boolean", function () {
     expect(makeParser("", { legacy: "legacy" })).toThrow();
   });
 
@@ -31,8 +29,8 @@ babel7describe("'legacy' option", function () {
   });
 });
 
-babel7describe("'decoratorsBeforeExport' option", function () {
-  test("must be boolean", function () {
+describeBabel7("'decoratorsBeforeExport' option", function () {
+  test("decoratorsBeforeExport must be boolean", function () {
     expect(
       makeParser("", { version: "2021-12", decoratorsBeforeExport: "before" }),
     ).toThrow();
@@ -73,6 +71,15 @@ babel7describe("'decoratorsBeforeExport' option", function () {
     ).toThrow();
     expect(
       makeParser("", { decoratorsBeforeExport: true, version: "2022-03" }),
+    ).toThrow();
+  });
+
+  test("is incompatible with 2023-01 decorators", function () {
+    expect(
+      makeParser("", { decoratorsBeforeExport: false, version: "2023-01" }),
+    ).toThrow();
+    expect(
+      makeParser("", { decoratorsBeforeExport: true, version: "2023-01" }),
     ).toThrow();
   });
 
@@ -128,7 +135,23 @@ describe("'version' option", function () {
     ).not.toThrow();
   });
 
-  babel8("is required", function () {
+  test("'2023-01' disallows @(...)()", function () {
+    expect(makeParser("@(foo)() class A {}", { version: "2023-01" })).toThrow();
+    expect(
+      makeParser("@(foo()) class A {}", { version: "2023-01" }),
+    ).not.toThrow();
+  });
+
+  test("'2023-01' allows decorators both before and after export", function () {
+    expect(
+      makeParser("@dec export class A {}", { version: "2023-01" }),
+    ).not.toThrow();
+    expect(
+      makeParser("export @dec class A {}", { version: "2023-01" }),
+    ).not.toThrow();
+  });
+
+  itBabel8("is required", function () {
     expect(makeParser("", {})).toThrow();
   });
 });

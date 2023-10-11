@@ -1,4 +1,4 @@
-import { types as tc, type TokContext } from "./context";
+import { types as tc, type TokContext } from "./context.ts";
 // ## Token types
 
 // The assignment of fine-grained, information-carrying type objects
@@ -284,6 +284,7 @@ export const tt = {
   _assert: createKeywordLike("assert", { startsExpr }),
   _async: createKeywordLike("async", { startsExpr }),
   _await: createKeywordLike("await", { startsExpr }),
+  _defer: createKeywordLike("defer", { startsExpr }),
   _from: createKeywordLike("from", { startsExpr }),
   _get: createKeywordLike("get", { startsExpr }),
   _let: createKeywordLike("let", { startsExpr }),
@@ -291,6 +292,7 @@ export const tt = {
   _of: createKeywordLike("of", { startsExpr }),
   _sent: createKeywordLike("sent", { startsExpr }),
   _set: createKeywordLike("set", { startsExpr }),
+  _source: createKeywordLike("source", { startsExpr }),
   _static: createKeywordLike("static", { startsExpr }),
   _using: createKeywordLike("using", { startsExpr }),
   _yield: createKeywordLike("yield", { startsExpr }),

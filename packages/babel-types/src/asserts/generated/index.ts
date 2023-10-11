@@ -2,8 +2,9 @@
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'make build'
  */
-import is from "../../validators/is";
-import type * as t from "../..";
+import is from "../../validators/is.ts";
+import type * as t from "../../index.ts";
+import deprecationWarning from "../../utils/deprecationWarning.ts";
 
 function assert(type: string, node: any, opts?: any): void {
   if (!is(type, node, opts)) {
@@ -409,6 +410,12 @@ export function assertImportSpecifier(
   opts?: object | null,
 ): asserts node is t.ImportSpecifier {
   assert("ImportSpecifier", node, opts);
+}
+export function assertImportExpression(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.ImportExpression {
+  assert("ImportExpression", node, opts);
 }
 export function assertMetaProperty(
   node: object | null | undefined,
@@ -1694,11 +1701,11 @@ export function assertClass(
 ): asserts node is t.Class {
   assert("Class", node, opts);
 }
-export function assertModuleDeclaration(
+export function assertImportOrExportDeclaration(
   node: object | null | undefined,
   opts?: object | null,
-): asserts node is t.ModuleDeclaration {
-  assert("ModuleDeclaration", node, opts);
+): asserts node is t.ImportOrExportDeclaration {
+  assert("ImportOrExportDeclaration", node, opts);
 }
 export function assertExportDeclaration(
   node: object | null | undefined,
@@ -1803,22 +1810,25 @@ export function assertTSBaseType(
   assert("TSBaseType", node, opts);
 }
 export function assertNumberLiteral(node: any, opts: any): void {
-  console.trace(
-    "The node type NumberLiteral has been renamed to NumericLiteral",
-  );
+  deprecationWarning("assertNumberLiteral", "assertNumericLiteral");
   assert("NumberLiteral", node, opts);
 }
 export function assertRegexLiteral(node: any, opts: any): void {
-  console.trace("The node type RegexLiteral has been renamed to RegExpLiteral");
+  deprecationWarning("assertRegexLiteral", "assertRegExpLiteral");
   assert("RegexLiteral", node, opts);
 }
 export function assertRestProperty(node: any, opts: any): void {
-  console.trace("The node type RestProperty has been renamed to RestElement");
+  deprecationWarning("assertRestProperty", "assertRestElement");
   assert("RestProperty", node, opts);
 }
 export function assertSpreadProperty(node: any, opts: any): void {
-  console.trace(
-    "The node type SpreadProperty has been renamed to SpreadElement",
-  );
+  deprecationWarning("assertSpreadProperty", "assertSpreadElement");
   assert("SpreadProperty", node, opts);
+}
+export function assertModuleDeclaration(node: any, opts: any): void {
+  deprecationWarning(
+    "assertModuleDeclaration",
+    "assertImportOrExportDeclaration",
+  );
+  assert("ModuleDeclaration", node, opts);
 }

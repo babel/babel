@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-builder-react-jsx",
-  "version": "7.19.0",
+  "version": "7.22.10",
   "description": "Helper function to build react jsx",
   "repository": {
     "type": "git",
@@ -27,7 +27,11 @@
   "author": "The Babel Team (https://babel.dev/team)",
   "conditions": {
     "BABEL_8_BREAKING": [
-      null,
+      {
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+        }
+      },
       {
         "exports": null
       }

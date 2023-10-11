@@ -12,6 +12,7 @@ type Plugin =
   | "classStaticBlock" // Enabled by default
   | "decimal"
   | "decorators-legacy"
+  | "deferredImportEvaluation"
   | "decoratorAutoAccessors"
   | "destructuringPrivate"
   | "doExpressions"
@@ -26,7 +27,8 @@ type Plugin =
   | "importMeta"
   | "jsx"
   | "logicalAssignment"
-  | "importAssertions"
+  | "importAssertions" // deprecated
+  | "importAttributes"
   | "importReflection"
   | "moduleBlocks"
   | "moduleStringNames"
@@ -38,7 +40,8 @@ type Plugin =
   | "partialApplication"
   | "placeholders"
   | "privateIn" // Enabled by default
-  | "regexpUnicodeSets"
+  | "regexpUnicodeSets" // Enabled by default
+  | "sourcePhaseImports"
   | "throwExpressions"
   | "topLevelAwait"
   | "v8intrinsic"
@@ -47,8 +50,10 @@ type Plugin =
 type ParserPluginWithOptions =
   | ["decorators", DecoratorsPluginOptions]
   | ["estree", { classFeatures?: boolean }]
+  | ["importAttributes", { deprecatedAssertSyntax: boolean }]
   // @deprecated
   | ["moduleAttributes", { version: "may-2020" }]
+  | ["optionalChainingAssign", { version: "2023-07" }]
   | ["pipelineOperator", PipelineOperatorPluginOptions]
   | ["recordAndTuple", RecordAndTuplePluginOptions]
   | ["flow", FlowPluginOptions]
@@ -122,6 +127,12 @@ interface ParserOptions {
    */
   allowReturnOutsideFunction?: boolean;
 
+  /**
+   * By default, new.target use is not allowed outside of a function or class.
+   * Set this to true to accept such code.
+   */
+  allowNewTargetOutsideFunction?: boolean;
+
   allowSuperOutsideMethod?: boolean;
 
   /**
@@ -129,6 +140,12 @@ interface ParserOptions {
    * Set this to true to allow export statements to reference undeclared variables.
    */
   allowUndeclaredExports?: boolean;
+
+  /**
+   * By default, Babel parser JavaScript code according to Annex B syntax.
+   * Set this to `false` to disable such behavior.
+   */
+  annexB?: boolean;
 
   /**
    * By default, Babel attaches comments to adjacent AST nodes.
@@ -205,6 +222,12 @@ interface ParserOptions {
    * AST nodes instead of using the `extra` property.
    */
   createParenthesizedExpressions?: boolean;
+
+  /**
+   * By default, `import(foo)` is parsed as `CallExpression(Import, [Identifier(foo)])`.
+   * Set this to true to parse it as an `ImportExpression` node.
+   */
+  createImportExpressions?: boolean;
 }
 
 type ParserPlugin = PluginConfig;
@@ -224,4 +247,4 @@ type ParseResult<Result> = Result & {
   errors: ParseError[];
 };
 
-export { DecoratorsPluginOptions, FlowPluginOptions, ParseError, ParserOptions, ParserPlugin, ParserPluginWithOptions, PipelineOperatorPluginOptions, RecordAndTuplePluginOptions, TypeScriptPluginOptions, parse, parseExpression, tokTypes };
+export { DecoratorsPluginOptions, FlowPluginOptions, ParseError, ParseResult, ParserOptions, ParserPlugin, ParserPluginWithOptions, PipelineOperatorPluginOptions, RecordAndTuplePluginOptions, TypeScriptPluginOptions, parse, parseExpression, tokTypes };

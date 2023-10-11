@@ -1,7 +1,7 @@
-import prettier from "prettier";
+import * as prettier from "prettier";
 
-export default function formatCode(code, filename) {
-  const prettierConfig = prettier.resolveConfig.sync(filename);
+export default async function formatCode(code, filename) {
+  const prettierConfig = await prettier.resolveConfig(filename);
   prettierConfig.filepath = filename;
   prettierConfig.parser = filename.endsWith(".ts") ? "babel-ts" : "babel";
 

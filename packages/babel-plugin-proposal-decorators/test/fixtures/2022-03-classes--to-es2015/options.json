@@ -1,8 +1,9 @@
 {
+  "BABEL_8_BREAKING": false,
   "plugins": [
     ["proposal-decorators", { "version": "2022-03" }],
-    "proposal-class-properties",
-    "proposal-private-methods",
-    "proposal-class-static-block"
+    "transform-class-properties",
+    "transform-private-methods",
+    "transform-class-static-block"
   ]
 }

@@ -8,21 +8,22 @@ import {
   validateOptional,
   validateOptionalType,
   validateType,
-} from "./utils";
+} from "./utils.ts";
 
 const defineType = defineAliasedType("Flow");
 
 const defineInterfaceishType = (
   name: "DeclareClass" | "DeclareInterface" | "InterfaceDeclaration",
 ) => {
+  const isDeclareClass = name === "DeclareClass";
+
   defineType(name, {
     builder: ["id", "typeParameters", "extends", "body"],
     visitor: [
       "id",
       "typeParameters",
       "extends",
-      "mixins",
-      "implements",
+      ...(isDeclareClass ? ["mixins", "implements"] : []),
       "body",
     ],
     aliases: ["FlowDeclaration", "Statement", "Declaration"],
@@ -30,8 +31,12 @@ const defineInterfaceishType = (
       id: validateType("Identifier"),
       typeParameters: validateOptionalType("TypeParameterDeclaration"),
       extends: validateOptional(arrayOfType("InterfaceExtends")),
-      mixins: validateOptional(arrayOfType("InterfaceExtends")),
-      implements: validateOptional(arrayOfType("ClassImplements")),
+      ...(isDeclareClass
+        ? {
+            mixins: validateOptional(arrayOfType("InterfaceExtends")),
+            implements: validateOptional(arrayOfType("ClassImplements")),
+          }
+        : {}),
       body: validateType("ObjectTypeAnnotation"),
     },
   });

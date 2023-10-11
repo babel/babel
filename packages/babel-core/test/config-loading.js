@@ -1,18 +1,22 @@
 import {
+  loadOptions,
   loadOptionsSync,
   loadOptionsAsync,
+  loadPartialConfig,
+  loadPartialConfigAsync,
   loadPartialConfigSync,
+  createConfigItem,
   createConfigItemSync,
 } from "../lib/index.js";
 import path from "path";
-import { fileURLToPath } from "url";
-import { createRequire } from "module";
+import { itNoWin32, itBabel8, commonJS } from "$repo-utils";
+import { supportsESM } from "./helpers/esm.js";
 
-const require = createRequire(import.meta.url);
+const { require, __dirname } = commonJS(import.meta.url);
 
 describe("@babel/core config loading", () => {
   const FILEPATH = path.join(
-    path.dirname(fileURLToPath(import.meta.url)),
+    __dirname,
     "fixtures",
     "config-loading",
     "folder",
@@ -45,11 +49,22 @@ describe("@babel/core config loading", () => {
     };
   }
 
+  describe("createConfigItem", () => {
+    itBabel8("throws on undefined callback", () => {
+      function myPlugin() {
+        return {};
+      }
+      expect(() =>
+        createConfigItem(myPlugin),
+      ).toThrowErrorMatchingInlineSnapshot(
+        `"Starting from Babel 8.0.0, the 'createConfigItem' function expects a callback. If you need to call it synchronously, please use 'createConfigItemSync'."`,
+      );
+    });
+  });
+
   describe("createConfigItemSync", () => {
     // Windows uses different file paths
-    const noWin = process.platform === "win32" ? it.skip : it;
-
-    noWin("can be called synchronously with one param", () => {
+    itNoWin32("can be called synchronously with one param", () => {
       function myPlugin() {
         return {};
       }
@@ -63,7 +78,7 @@ describe("@babel/core config loading", () => {
       });
     });
 
-    noWin("can be called synchronously with two params", () => {
+    itNoWin32("can be called synchronously with two params", () => {
       function myPlugin() {
         return {};
       }
@@ -77,6 +92,20 @@ describe("@babel/core config loading", () => {
         options: undefined,
         value: myPlugin,
       });
+    });
+  });
+
+  describe("loadPartialConfig", () => {
+    itBabel8("throws on undefined callback", () => {
+      expect(() =>
+        loadPartialConfig({
+          ...makeOpts(true),
+          babelrc: false,
+          configFile: false,
+        }),
+      ).toThrowErrorMatchingInlineSnapshot(
+        `"Starting from Babel 8.0.0, the 'loadPartialConfig' function expects a callback. If you need to call it synchronously, please use 'loadPartialConfigSync'."`,
+      );
     });
   });
 
@@ -121,14 +150,14 @@ describe("@babel/core config loading", () => {
 
     it("should always set 'rootMode' to 'root'", async () => {
       const cwd = path.join(
-        path.dirname(fileURLToPath(import.meta.url)),
+        __dirname,
         "fixtures",
         "config-loading",
         "root",
         "nested",
       );
 
-      const { options } = await loadPartialConfigSync({
+      const { options } = loadPartialConfigSync({
         cwd,
         filename: path.join(cwd, "file.js"),
         rootMode: "upward",
@@ -136,6 +165,46 @@ describe("@babel/core config loading", () => {
 
       expect(options.root).toBe(path.join(cwd, ".."));
       expect(options.rootMode).toBe("root");
+    });
+  });
+
+  describe("loadPartialConfigAsync", () => {
+    // https://github.com/babel/babel/issues/15916
+    (supportsESM ? it : it.skip)(
+      "two calls in parallel loading the same ESM config",
+      async () => {
+        const cwd = path.join(
+          __dirname,
+          "fixtures",
+          "config",
+          "config-files",
+          "babel-config-mjs-object",
+        );
+
+        const [config1, config2] = await Promise.all([
+          loadPartialConfigAsync({
+            cwd,
+            filename: path.join(cwd, "./a.js"),
+          }),
+          loadPartialConfigAsync({
+            cwd,
+            filename: path.join(cwd, "./b.js"),
+          }),
+        ]);
+
+        // eslint-disable-next-line jest/no-standalone-expect
+        expect(config1.options.plugins).toEqual(config2.options.plugins);
+      },
+    );
+  });
+
+  describe("loadOptions", () => {
+    itBabel8("throws on undefined callback", () => {
+      const opts = makeOpts();
+
+      expect(() => loadOptions(opts)).toThrowErrorMatchingInlineSnapshot(
+        `"Starting from Babel 8.0.0, the 'loadOptions' function expects a callback. If you need to call it synchronously, please use 'loadOptionsSync'."`,
+      );
     });
   });
 
@@ -407,7 +476,7 @@ describe("@babel/core config loading", () => {
 
     it("should thrown when plugin is not valid", () => {
       const fooPlugin = {
-        inherits: "inhertis-should-not-be-string",
+        inherits: "inherits-should-not-be-string",
       };
       const opts = {
         cwd: path.dirname(FILEPATH),

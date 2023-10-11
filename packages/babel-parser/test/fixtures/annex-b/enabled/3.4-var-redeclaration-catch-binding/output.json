@@ -1,0 +1,125 @@
+{
+  "type": "File",
+  "start":0,"end":59,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":31,"index":59}},
+  "errors": [
+    "SyntaxError: Identifier 'f' has already been declared. (2:27)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":59,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":31,"index":59}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TryStatement",
+        "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
+        "block": {
+          "type": "BlockStatement",
+          "start":4,"end":6,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":6,"index":6}},
+          "body": [],
+          "directives": []
+        },
+        "handler": {
+          "type": "CatchClause",
+          "start":7,"end":27,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":27,"index":27}},
+          "param": {
+            "type": "Identifier",
+            "start":14,"end":15,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":15,"index":15},"identifierName":"e"},
+            "name": "e"
+          },
+          "body": {
+            "type": "BlockStatement",
+            "start":17,"end":27,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":27,"index":27}},
+            "body": [
+              {
+                "type": "VariableDeclaration",
+                "start":19,"end":25,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":25,"index":25}},
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start":23,"end":24,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":24,"index":24}},
+                    "id": {
+                      "type": "Identifier",
+                      "start":23,"end":24,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":24,"index":24},"identifierName":"e"},
+                      "name": "e"
+                    },
+                    "init": null
+                  }
+                ],
+                "kind": "var"
+              }
+            ],
+            "directives": []
+          }
+        },
+        "finalizer": null
+      },
+      {
+        "type": "TryStatement",
+        "start":28,"end":59,"loc":{"start":{"line":2,"column":0,"index":28},"end":{"line":2,"column":31,"index":59}},
+        "block": {
+          "type": "BlockStatement",
+          "start":32,"end":34,"loc":{"start":{"line":2,"column":4,"index":32},"end":{"line":2,"column":6,"index":34}},
+          "body": [],
+          "directives": []
+        },
+        "handler": {
+          "type": "CatchClause",
+          "start":35,"end":59,"loc":{"start":{"line":2,"column":7,"index":35},"end":{"line":2,"column":31,"index":59}},
+          "param": {
+            "type": "ObjectPattern",
+            "start":42,"end":47,"loc":{"start":{"line":2,"column":14,"index":42},"end":{"line":2,"column":19,"index":47}},
+            "properties": [
+              {
+                "type": "ObjectProperty",
+                "start":44,"end":45,"loc":{"start":{"line":2,"column":16,"index":44},"end":{"line":2,"column":17,"index":45}},
+                "key": {
+                  "type": "Identifier",
+                  "start":44,"end":45,"loc":{"start":{"line":2,"column":16,"index":44},"end":{"line":2,"column":17,"index":45},"identifierName":"f"},
+                  "name": "f"
+                },
+                "computed": false,
+                "method": false,
+                "shorthand": true,
+                "value": {
+                  "type": "Identifier",
+                  "start":44,"end":45,"loc":{"start":{"line":2,"column":16,"index":44},"end":{"line":2,"column":17,"index":45},"identifierName":"f"},
+                  "name": "f"
+                },
+                "extra": {
+                  "shorthand": true
+                }
+              }
+            ]
+          },
+          "body": {
+            "type": "BlockStatement",
+            "start":49,"end":59,"loc":{"start":{"line":2,"column":21,"index":49},"end":{"line":2,"column":31,"index":59}},
+            "body": [
+              {
+                "type": "VariableDeclaration",
+                "start":51,"end":57,"loc":{"start":{"line":2,"column":23,"index":51},"end":{"line":2,"column":29,"index":57}},
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start":55,"end":56,"loc":{"start":{"line":2,"column":27,"index":55},"end":{"line":2,"column":28,"index":56}},
+                    "id": {
+                      "type": "Identifier",
+                      "start":55,"end":56,"loc":{"start":{"line":2,"column":27,"index":55},"end":{"line":2,"column":28,"index":56},"identifierName":"f"},
+                      "name": "f"
+                    },
+                    "init": null
+                  }
+                ],
+                "kind": "var"
+              }
+            ],
+            "directives": []
+          }
+        },
+        "finalizer": null
+      }
+    ],
+    "directives": []
+  }
+}

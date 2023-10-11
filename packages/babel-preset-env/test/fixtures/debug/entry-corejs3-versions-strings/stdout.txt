@@ -10,21 +10,22 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-class-static-block { chrome < 94, ie, node < 16.11 }
-  proposal-private-property-in-object { chrome < 91, ie, node < 16.9 }
-  proposal-class-properties { chrome < 74, ie, node < 12 }
-  proposal-private-methods { chrome < 84, ie, node < 14.6 }
-  proposal-numeric-separator { chrome < 75, ie, node < 12.5 }
-  proposal-logical-assignment-operators { chrome < 85, ie, node < 15 }
-  proposal-nullish-coalescing-operator { chrome < 80, ie, node < 14 }
-  proposal-optional-chaining { chrome < 80, ie, node < 14 }
-  proposal-json-strings { chrome < 66, ie, node < 10 }
-  proposal-optional-catch-binding { chrome < 66, ie, node < 10 }
+  transform-unicode-sets-regex { chrome < 112, ie, node < 20 }
+  transform-class-static-block { chrome < 94, ie, node < 16.11 }
+  transform-private-property-in-object { chrome < 91, ie, node < 16.9 }
+  transform-class-properties { chrome < 74, ie, node < 12 }
+  transform-private-methods { chrome < 84, ie, node < 14.6 }
+  transform-numeric-separator { chrome < 75, ie, node < 12.5 }
+  transform-logical-assignment-operators { chrome < 85, ie, node < 15 }
+  transform-nullish-coalescing-operator { chrome < 80, ie, node < 14 }
+  transform-optional-chaining { chrome < 80, ie, node < 14 }
+  transform-json-strings { chrome < 66, ie, node < 10 }
+  transform-optional-catch-binding { chrome < 66, ie, node < 10 }
   transform-parameters { ie }
-  proposal-async-generator-functions { chrome < 63, ie, node < 10 }
-  proposal-object-rest-spread { chrome < 60, ie, node < 8.3 }
+  transform-async-generator-functions { chrome < 63, ie, node < 10 }
+  transform-object-rest-spread { chrome < 60, ie, node < 8.3 }
   transform-dotall-regex { chrome < 62, ie, node < 8.10 }
-  proposal-unicode-property-regex { chrome < 64, ie, node < 10 }
+  transform-unicode-property-regex { chrome < 64, ie, node < 10 }
   transform-named-capturing-groups-regex { chrome < 64, ie, node < 10 }
   transform-async-to-generator { chrome < 55, ie, node < 7.6 }
   transform-exponentiation-operator { ie, node < 7 }
@@ -48,9 +49,10 @@ Using plugins:
   transform-typeof-symbol { ie }
   transform-new-target { ie }
   transform-regenerator { ie }
-  proposal-export-namespace-from { chrome < 72, ie, node < 13.2 }
+  transform-export-namespace-from { chrome < 72, ie, node < 13.2 }
   transform-modules-commonjs
-  proposal-dynamic-import
+  transform-dynamic-import
+  syntax-import-meta
 corejs3: `DEBUG` option
 
 Using targets: {

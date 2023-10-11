@@ -1,0 +1,25 @@
+{
+  "version": 3,
+  "names": [
+    "ClassName",
+    "a",
+    "a1",
+    "a2",
+    "b",
+    "b1",
+    "b2",
+    "c",
+    "d",
+    "d1",
+    "d2",
+    "d3",
+    "fn"
+  ],
+  "sources": [
+    "fixtures/sourcemaps/ts-class-properties-with-retainlines/input.ts"
+  ],
+  "sourcesContent": [
+    "class ClassName {\n  a: {\n    a1: number;\n    a2: number;\n  };\n  b: {\n    b1: number;\n    b2: number;\n  };\n  c(\n    a: number,\n    b: number,\n    c: number,\n    d: {\n      d1: number;\n      d2: number;\n      d3: number;\n    }\n  ): {\n    a: number;\n    b: number;\n    c: number;\n    d: {\n      d1: number;\n      d2: number;\n      d3: number;\n    };\n  } {\n    fn(\n      a,\n      b,\n      c,\n      d,\n    );\n    return {\n      a,\n      b,\n      c,\n      d,\n    };\n  }\n}"
+  ],
+  "mappings": "AAAA,MAAMA,SAAS,CAAC;EACdC,CAAC,EAAE;IACDC,EAAE,EAAE,MAAM;IACVC,EAAE,EAAE,MAAM;EACZ,CAAC;EACDC,CAAC,EAAE;IACDC,EAAE,EAAE,MAAM;IACVC,EAAE,EAAE,MAAM;EACZ,CAAC;EACDC,CAACA;EACCN,CAAC,EAAE,MAAM;EACTG,CAAC,EAAE,MAAM;EACTG,CAAC,EAAE,MAAM;EACTC,CAAC,EAAE;IACDC,EAAE,EAAE,MAAM;IACVC,EAAE,EAAE,MAAM;IACVC,EAAE,EAAE,MAAM;EACZ,CAAC;EACF,EAAE;IACDV,CAAC,EAAE,MAAM;IACTG,CAAC,EAAE,MAAM;IACTG,CAAC,EAAE,MAAM;IACTC,CAAC,EAAE;MACDC,EAAE,EAAE,MAAM;MACVC,EAAE,EAAE,MAAM;MACVC,EAAE,EAAE,MAAM;IACZ,CAAC;EACH,CAAC,CAAC;IACAC,EAAE;MACAX,CAAC;MACDG,CAAC;MACDG,CAAC;MACDC;IACF,CAAC;IACD,OAAO;MACLP,CAAC;MACDG,CAAC;MACDG,CAAC;MACDC;IACF,CAAC;EACH;AACF"
+}

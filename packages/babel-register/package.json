@@ -1,6 +1,6 @@
 {
   "name": "@babel/register",
-  "version": "7.18.9",
+  "version": "7.22.15",
   "description": "babel require hook",
   "license": "MIT",
   "publishConfig": {
@@ -40,7 +40,11 @@
   },
   "conditions": {
     "BABEL_8_BREAKING": [
-      null,
+      {
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+        }
+      },
       {
         "exports": null
       }

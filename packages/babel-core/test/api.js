@@ -2,7 +2,6 @@ import * as babel from "../lib/index.js";
 import { TraceMap, originalPositionFor } from "@jridgewell/trace-mapping";
 import path from "path";
 import generator from "@babel/generator";
-import { fileURLToPath } from "url";
 
 import _Plugin from "../lib/config/plugin.js";
 const Plugin = _Plugin.default || _Plugin;
@@ -11,8 +10,10 @@ import presetEnv from "@babel/preset-env";
 import pluginSyntaxFlow from "@babel/plugin-syntax-flow";
 import pluginSyntaxJSX from "@babel/plugin-syntax-jsx";
 import pluginFlowStripTypes from "@babel/plugin-transform-flow-strip-types";
+import { itBabel8, commonJS } from "$repo-utils";
 
-const cwd = path.dirname(fileURLToPath(import.meta.url));
+const { __dirname } = commonJS(import.meta.url);
+const cwd = __dirname;
 
 function assertIgnored(result) {
   expect(result).toBeNull();
@@ -173,26 +174,20 @@ describe("api", function () {
     expect(babel.tokTypes).toBeDefined();
   });
 
-  (process.env.BABEL_8_BREAKING ? it : it.skip)(
-    "parse throws on undefined callback",
-    () => {
-      expect(() => parse("", {})).toThrowErrorMatchingInlineSnapshot(
-        `"Starting from Babel 8.0.0, the 'parse' function expects a callback. If you need to call it synchronously, please use 'parseSync'."`,
-      );
-    },
-  );
+  itBabel8("parse throws on undefined callback", () => {
+    expect(() => parse("", {})).toThrowErrorMatchingInlineSnapshot(
+      `"Starting from Babel 8.0.0, the 'parse' function expects a callback. If you need to call it synchronously, please use 'parseSync'."`,
+    );
+  });
 
-  (process.env.BABEL_8_BREAKING ? it : it.skip)(
-    "transform throws on undefined callback",
-    () => {
-      const options = {
-        filename: "example.js",
-      };
-      expect(() => transform("", options)).toThrowErrorMatchingInlineSnapshot(
-        `"Starting from Babel 8.0.0, the 'transform' function expects a callback. If you need to call it synchronously, please use 'transformSync'."`,
-      );
-    },
-  );
+  itBabel8("transform throws on undefined callback", () => {
+    const options = {
+      filename: "example.js",
+    };
+    expect(() => transform("", options)).toThrowErrorMatchingInlineSnapshot(
+      `"Starting from Babel 8.0.0, the 'transform' function expects a callback. If you need to call it synchronously, please use 'transformSync'."`,
+    );
+  });
 
   it("transformFile", function () {
     const options = {
@@ -249,18 +244,15 @@ describe("api", function () {
     expect(options).toEqual({ babelrc: false });
   });
 
-  (process.env.BABEL_8_BREAKING ? it : it.skip)(
-    "transformFromAst throws on undefined callback",
-    () => {
-      const program = "const identifier = 1";
-      const node = parseSync(program);
-      expect(() =>
-        transformFromAst(node, program),
-      ).toThrowErrorMatchingInlineSnapshot(
-        `"Starting from Babel 8.0.0, the 'transformFromAst' function expects a callback. If you need to call it synchronously, please use 'transformFromAstSync'."`,
-      );
-    },
-  );
+  itBabel8("transformFromAst throws on undefined callback", () => {
+    const program = "const identifier = 1";
+    const node = parseSync(program);
+    expect(() =>
+      transformFromAst(node, program),
+    ).toThrowErrorMatchingInlineSnapshot(
+      `"Starting from Babel 8.0.0, the 'transformFromAst' function expects a callback. If you need to call it synchronously, please use 'transformFromAstSync'."`,
+    );
+  });
 
   it("transformFromAst should generate same code with different cloneInputAst", function () {
     const program = `//test1
@@ -298,6 +290,16 @@ describe("api", function () {
     });
 
     expect(code).toBe(code2);
+  });
+
+  it("transformFromAstSync should not cause infinite recursion with circular objects", () => {
+    const program = "const identifier = 1";
+    const node = parseSync(program);
+    node.program.body[0].extra = { parent: node.program };
+
+    expect(transformFromAstSync(node, program, {}).code).toBe(
+      "const identifier = 1;",
+    );
   });
 
   it("transformFromAst should not mutate the AST", function () {
@@ -603,7 +605,6 @@ describe("api", function () {
   it("source map merging", function () {
     const result = transformSync(
       [
-        /* eslint-disable max-len */
         'function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }',
         "",
         "let Foo = function Foo() {",
@@ -611,7 +612,6 @@ describe("api", function () {
         "};",
         "",
         "//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInN0ZG91dCJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztJQUFNLEdBQUcsWUFBSCxHQUFHO3dCQUFILEdBQUciLCJmaWxlIjoidW5kZWZpbmVkIiwic291cmNlc0NvbnRlbnQiOlsiY2xhc3MgRm9vIHt9XG4iXX0=",
-        /* eslint-enable max-len */
       ].join("\n"),
       {
         sourceMap: true,
@@ -657,19 +657,19 @@ describe("api", function () {
   });
 
   it("code option false", function () {
-    return transformAsync("foo('bar');", { code: false }).then(function (
-      result,
-    ) {
-      expect(result.code).toBeFalsy();
-    });
+    return transformAsync("foo('bar');", { code: false }).then(
+      function (result) {
+        expect(result.code).toBeFalsy();
+      },
+    );
   });
 
   it("ast option false", function () {
-    return transformAsync("foo('bar');", { ast: false }).then(function (
-      result,
-    ) {
-      expect(result.ast).toBeFalsy();
-    });
+    return transformAsync("foo('bar');", { ast: false }).then(
+      function (result) {
+        expect(result.ast).toBeFalsy();
+      },
+    );
   });
 
   it("ast option true", function () {

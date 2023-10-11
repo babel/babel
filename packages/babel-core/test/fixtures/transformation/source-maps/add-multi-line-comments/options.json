@@ -1,0 +1,5 @@
+{
+  "sourceType": "module",
+  "inputSourceMap": true,
+  "plugins": ["./plugin.js"]
+}

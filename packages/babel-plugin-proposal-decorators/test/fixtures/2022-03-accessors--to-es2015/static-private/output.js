@@ -1,4 +1,4 @@
-var _init_a, _get_a, _set_a, _init_b, _get_b, _set_b, _initStatic;
+var _init_a, _get_a, _set_a, _init_b, _get_b, _set_b, _initStatic, _class;
 const dec = () => {};
 var _a = /*#__PURE__*/new WeakMap();
 var _b = /*#__PURE__*/new WeakMap();
@@ -14,6 +14,7 @@ class Foo {
     });
   }
 }
+_class = Foo;
 function _set_a2(v) {
   _set_a(this, v);
 }
@@ -27,22 +28,22 @@ function _get_b2() {
   return _get_b(this);
 }
 (() => {
-  [_init_a, _get_a, _set_a, _init_b, _get_b, _set_b, _initStatic] = babelHelpers.applyDecs2203(Foo, [[dec, 6, "a", function () {
-    return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _A);
+  [_init_a, _get_a, _set_a, _init_b, _get_b, _set_b, _initStatic] = babelHelpers.applyDecs2203R(_class, [[dec, 6, "a", function () {
+    return babelHelpers.classStaticPrivateFieldSpecGet(this, _class, _A);
   }, function (value) {
-    babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _A, value);
+    babelHelpers.classStaticPrivateFieldSpecSet(this, _class, _A, value);
   }], [dec, 6, "b", function () {
-    return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _B);
+    return babelHelpers.classStaticPrivateFieldSpecGet(this, _class, _B);
   }, function (value) {
-    babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _B, value);
-  }]], []);
-  _initStatic(Foo);
+    babelHelpers.classStaticPrivateFieldSpecSet(this, _class, _B, value);
+  }]], []).e;
+  _initStatic(_class);
 })();
 var _A = {
   writable: true,
-  value: _init_a(Foo)
+  value: _init_a(_class)
 };
 var _B = {
   writable: true,
-  value: _init_b(Foo, 123)
+  value: _init_b(_class, 123)
 };

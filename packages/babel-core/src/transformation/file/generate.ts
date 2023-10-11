@@ -1,20 +1,22 @@
-import type { PluginPasses } from "../../config";
+import type { PluginPasses } from "../../config/index.ts";
 import convertSourceMap from "convert-source-map";
-type SourceMap = any;
+import type { GeneratorResult } from "@babel/generator";
 import generate from "@babel/generator";
 
-import type File from "./file";
-import mergeSourceMap from "./merge-map";
+import type File from "./file.ts";
+import mergeSourceMap from "./merge-map.ts";
 
 export default function generateCode(
   pluginPasses: PluginPasses,
   file: File,
 ): {
   outputCode: string;
-  outputMap: SourceMap | null;
+  outputMap: GeneratorResult["map"] | null;
 } {
   const { opts, ast, code, inputMap } = file;
   const { generatorOpts } = opts;
+
+  generatorOpts.inputSourceMap = inputMap?.toObject();
 
   const results = [];
   for (const plugins of pluginPasses) {
@@ -51,18 +53,26 @@ export default function generateCode(
   // back to the encoded map.
   let { code: outputCode, decodedMap: outputMap = result.map } = result;
 
-  if (outputMap) {
-    if (inputMap) {
-      // mergeSourceMap returns an encoded map
-      outputMap = mergeSourceMap(
-        inputMap.toObject(),
-        outputMap,
-        generatorOpts.sourceFileName,
-      );
-    } else {
-      // We cannot output a decoded map, so retrieve the encoded form. Because
-      // the decoded form is free, it's fine to prioritize decoded first.
-      outputMap = result.map;
+  // For backwards compat.
+  if (result.__mergedMap) {
+    /**
+     * @see mergeSourceMap
+     */
+    outputMap = { ...result.map };
+  } else {
+    if (outputMap) {
+      if (inputMap) {
+        // mergeSourceMap returns an encoded map
+        outputMap = mergeSourceMap(
+          inputMap.toObject(),
+          outputMap,
+          generatorOpts.sourceFileName,
+        );
+      } else {
+        // We cannot output a decoded map, so retrieve the encoded form. Because
+        // the decoded form is free, it's fine to prioritize decoded first.
+        outputMap = result.map;
+      }
     }
   }
 

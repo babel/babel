@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    ["transform-optional-chaining", { "loose": true }],
+    ["transform-class-properties", { "loose": true }]
+  ]
+}

@@ -1,9 +1,11 @@
-import syntaxOptionalCatchBinding from "@babel/plugin-syntax-optional-catch-binding";
 import type { PluginAPI, PluginObject } from "@babel/core";
 
 export default function ({ types: t }: PluginAPI): PluginObject {
   return {
-    inherits: syntaxOptionalCatchBinding.default,
+    inherits: USE_ESM
+      ? undefined
+      : // eslint-disable-next-line no-restricted-globals
+        require("@babel/plugin-syntax-optional-catch-binding").default,
 
     visitor: {
       CatchClause(path) {

@@ -1,3 +1,4 @@
 {
-  "plugins": [["transform-typescript", { "isTSX": true }]]
+  "BABEL_8_BREAKING": true,
+  "plugins": ["transform-typescript", "syntax-jsx"]
 }

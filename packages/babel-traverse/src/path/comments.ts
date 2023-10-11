@@ -1,6 +1,6 @@
 // This file contains methods responsible for dealing with comments.
 import type * as t from "@babel/types";
-import type NodePath from "./index";
+import type NodePath from "./index.ts";
 import {
   addComment as _addComment,
   addComments as _addComments,
@@ -25,11 +25,35 @@ export function shareCommentsWithSiblings(this: NodePath) {
   const next = this.getSibling(this.key + 1);
   const hasPrev = Boolean(prev.node);
   const hasNext = Boolean(next.node);
-  if (hasPrev && !hasNext) {
-    prev.addComments("trailing", trailing);
-  } else if (hasNext && !hasPrev) {
-    next.addComments("leading", leading);
+
+  if (hasPrev) {
+    if (leading) {
+      prev.addComments(
+        "trailing",
+        removeIfExisting(leading, prev.node.trailingComments),
+      );
+    }
+    if (trailing && !hasNext) prev.addComments("trailing", trailing);
   }
+  if (hasNext) {
+    if (trailing) {
+      next.addComments(
+        "leading",
+        removeIfExisting(trailing, next.node.leadingComments),
+      );
+    }
+    if (leading && !hasPrev) next.addComments("leading", leading);
+  }
+}
+
+function removeIfExisting<T>(list: T[], toRemove?: T[]): T[] {
+  if (!toRemove) return list;
+  let lastFoundIndex = -1;
+  return list.filter(el => {
+    const i = toRemove.indexOf(el, lastFoundIndex);
+    if (i === -1) return true;
+    lastFoundIndex = i;
+  });
 }
 
 export function addComment(

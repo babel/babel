@@ -1,0 +1,9 @@
+{
+  "BABEL_8_BREAKING": false,
+  "plugins": [
+    [
+      "transform-react-jsx",
+      { "pragma": "m", "pragmaFrag": "'['", "runtime": "classic" }
+    ]
+  ]
+}

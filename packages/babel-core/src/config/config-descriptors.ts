@@ -1,41 +1,42 @@
 import gensync, { type Handler } from "gensync";
-import { once } from "../gensync-utils/functional";
+import { once } from "../gensync-utils/functional.ts";
 
-import { loadPlugin, loadPreset } from "./files";
+import { loadPlugin, loadPreset } from "./files/index.ts";
 
-import { getItemDescriptor } from "./item";
+import { getItemDescriptor } from "./item.ts";
 
 import {
   makeWeakCacheSync,
   makeStrongCacheSync,
   makeStrongCache,
-} from "./caching";
-import type { CacheConfigurator } from "./caching";
+} from "./caching.ts";
+import type { CacheConfigurator } from "./caching.ts";
 
 import type {
   ValidatedOptions,
   PluginList,
   PluginItem,
-} from "./validation/options";
+} from "./validation/options.ts";
 
-import { resolveBrowserslistConfigFile } from "./resolve-targets";
+import { resolveBrowserslistConfigFile } from "./resolve-targets.ts";
+import type { PluginAPI, PresetAPI } from "./helpers/config-api.ts";
 
 // Represents a config object and functions to lazily load the descriptors
 // for the plugins and presets so we don't load the plugins/presets unless
 // the options object actually ends up being applicable.
 export type OptionsAndDescriptors = {
   options: ValidatedOptions;
-  plugins: () => Handler<Array<UnloadedDescriptor>>;
-  presets: () => Handler<Array<UnloadedDescriptor>>;
+  plugins: () => Handler<Array<UnloadedDescriptor<PluginAPI>>>;
+  presets: () => Handler<Array<UnloadedDescriptor<PresetAPI>>>;
 };
 
 // Represents a plugin or presets at a given location in a config object.
 // At this point these have been resolved to a specific object or function,
 // but have not yet been executed to call functions with options.
-export type UnloadedDescriptor = {
+export interface UnloadedDescriptor<API, Options = {} | undefined | false> {
   name: string | undefined;
-  value: any | Function;
-  options: {} | undefined | false;
+  value: object | ((api: API, options: Options, dirname: string) => unknown);
+  options: Options;
   dirname: string;
   alias: string;
   ownPass?: boolean;
@@ -43,11 +44,11 @@ export type UnloadedDescriptor = {
     request: string;
     resolved: string;
   };
-};
+}
 
-function isEqualDescriptor(
-  a: UnloadedDescriptor,
-  b: UnloadedDescriptor,
+function isEqualDescriptor<API>(
+  a: UnloadedDescriptor<API>,
+  b: UnloadedDescriptor<API>,
 ): boolean {
   return (
     a.name === b.name &&
@@ -56,8 +57,8 @@ function isEqualDescriptor(
     a.dirname === b.dirname &&
     a.alias === b.alias &&
     a.ownPass === b.ownPass &&
-    (a.file && a.file.request) === (b.file && b.file.request) &&
-    (a.file && a.file.resolved) === (b.file && b.file.resolved)
+    a.file?.request === b.file?.request &&
+    a.file?.resolved === b.file?.resolved
   );
 }
 
@@ -150,7 +151,7 @@ const createCachedPresetDescriptors = makeWeakCacheSync(
     return makeStrongCacheSync((alias: string) =>
       makeStrongCache(function* (
         passPerPreset: boolean,
-      ): Handler<Array<UnloadedDescriptor>> {
+      ): Handler<Array<UnloadedDescriptor<PresetAPI>>> {
         const descriptors = yield* createPresetDescriptors(
           items,
           dirname,
@@ -174,7 +175,7 @@ const createCachedPluginDescriptors = makeWeakCacheSync(
     const dirname = cache.using(dir => dir);
     return makeStrongCache(function* (
       alias: string,
-    ): Handler<Array<UnloadedDescriptor>> {
+    ): Handler<Array<UnloadedDescriptor<PluginAPI>>> {
       const descriptors = yield* createPluginDescriptors(items, dirname, alias);
       return descriptors.map(
         // Items are cached using the overall plugin array identity when
@@ -197,9 +198,9 @@ const DEFAULT_OPTIONS = {};
  * cache, or else returns the input descriptor and adds it to the cache for
  * next time.
  */
-function loadCachedDescriptor(
-  cache: WeakMap<{} | Function, WeakMap<{}, Array<UnloadedDescriptor>>>,
-  desc: UnloadedDescriptor,
+function loadCachedDescriptor<API>(
+  cache: WeakMap<{} | Function, WeakMap<{}, Array<UnloadedDescriptor<API>>>>,
+  desc: UnloadedDescriptor<API>,
 ) {
   const { value, options = DEFAULT_OPTIONS } = desc;
   if (options === false) return desc;
@@ -235,7 +236,7 @@ function* createPresetDescriptors(
   dirname: string,
   alias: string,
   passPerPreset: boolean,
-): Handler<Array<UnloadedDescriptor>> {
+): Handler<Array<UnloadedDescriptor<PresetAPI>>> {
   return yield* createDescriptors(
     "preset",
     items,
@@ -249,17 +250,17 @@ function* createPluginDescriptors(
   items: PluginList,
   dirname: string,
   alias: string,
-): Handler<Array<UnloadedDescriptor>> {
+): Handler<Array<UnloadedDescriptor<PluginAPI>>> {
   return yield* createDescriptors("plugin", items, dirname, alias);
 }
 
-function* createDescriptors(
+function* createDescriptors<API>(
   type: "plugin" | "preset",
   items: PluginList,
   dirname: string,
   alias: string,
   ownPass?: boolean,
-): Handler<Array<UnloadedDescriptor>> {
+): Handler<Array<UnloadedDescriptor<API>>> {
   const descriptors = yield* gensync.all(
     items.map((item, index) =>
       createDescriptor(item, dirname, {
@@ -278,7 +279,7 @@ function* createDescriptors(
 /**
  * Given a plugin/preset item, resolve it into a standard format.
  */
-export function* createDescriptor(
+export function* createDescriptor<API>(
   pair: PluginItem,
   dirname: string,
   {
@@ -290,7 +291,7 @@ export function* createDescriptor(
     alias: string;
     ownPass?: boolean;
   },
-): Handler<UnloadedDescriptor> {
+): Handler<UnloadedDescriptor<API>> {
   const desc = getItemDescriptor(pair);
   if (desc) {
     return desc;
@@ -365,7 +366,7 @@ export function* createDescriptor(
   };
 }
 
-function assertNoDuplicates(items: Array<UnloadedDescriptor>): void {
+function assertNoDuplicates<API>(items: Array<UnloadedDescriptor<API>>): void {
   const map = new Map();
 
   for (const item of items) {

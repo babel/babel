@@ -1,4 +1,7 @@
-import type { ValidatedOptions, NormalizedOptions } from "./validation/options";
+import type {
+  ValidatedOptions,
+  NormalizedOptions,
+} from "./validation/options.ts";
 
 export function mergeOptions(
   target: ValidatedOptions,

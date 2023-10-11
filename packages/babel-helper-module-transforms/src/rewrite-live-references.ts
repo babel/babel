@@ -1,11 +1,20 @@
 import assert from "assert";
-import {
+import { template, types as t } from "@babel/core";
+import type { NodePath, Visitor, Scope } from "@babel/traverse";
+import simplifyAccess from "@babel/helper-simple-access";
+
+import type { ModuleMetadata } from "./normalize-and-load-metadata.ts";
+
+const {
   assignmentExpression,
-  callExpression,
   cloneNode,
   expressionStatement,
   getOuterBindingIdentifiers,
   identifier,
+  isArrowFunctionExpression,
+  isClassExpression,
+  isFunctionExpression,
+  isIdentifier,
   isMemberExpression,
   isVariableDeclaration,
   jsxIdentifier,
@@ -16,13 +25,7 @@ import {
   stringLiteral,
   variableDeclaration,
   variableDeclarator,
-} from "@babel/types";
-import type * as t from "@babel/types";
-import template from "@babel/template";
-import type { NodePath, Visitor, Scope } from "@babel/traverse";
-import simplifyAccess from "@babel/helper-simple-access";
-
-import type { ModuleMetadata } from "./normalize-and-load-metadata";
+} = t;
 
 interface RewriteReferencesVisitorState {
   exported: Map<any, any>;
@@ -72,6 +75,7 @@ function isInType(path: NodePath) {
 export default function rewriteLiveReferences(
   programPath: NodePath<t.Program>,
   metadata: ModuleMetadata,
+  wrapReference: (ref: t.Expression, payload: unknown) => null | t.Expression,
 ) {
   const imported = new Map();
   const exported = new Map();
@@ -115,12 +119,17 @@ export default function rewriteLiveReferences(
     rewriteBindingInitVisitorState,
   );
 
-  simplifyAccess(
-    programPath,
-    // NOTE(logan): The 'Array.from' calls are to make this code with in loose mode.
-    new Set([...Array.from(imported.keys()), ...Array.from(exported.keys())]),
-    false,
-  );
+  // NOTE(logan): The 'Array.from' calls are to make this code with in loose mode.
+  const bindingNames = new Set([
+    ...Array.from(imported.keys()),
+    ...Array.from(exported.keys()),
+  ]);
+  if (process.env.BABEL_8_BREAKING) {
+    simplifyAccess(programPath, bindingNames);
+  } else {
+    // @ts-ignore(Babel 7 vs Babel 8) The third param has been removed in Babel 8.
+    simplifyAccess(programPath, bindingNames, false);
+  }
 
   // Rewrite reads/writes from imports and exports to have the correct behavior.
   const rewriteReferencesVisitorState: RewriteReferencesVisitorState = {
@@ -130,22 +139,22 @@ export default function rewriteLiveReferences(
     scope: programPath.scope,
     imported, // local / import
     exported, // local name => exported name list
-    buildImportReference: ([source, importName, localName], identNode) => {
+    buildImportReference([source, importName, localName], identNode) {
       const meta = metadata.source.get(source);
+      meta.referenced = true;
 
       if (localName) {
-        if (meta.lazy) {
-          identNode = callExpression(
-            // @ts-expect-error Fixme: we should handle the case when identNode is a JSXIdentifier
-            identNode,
-            [],
-          );
+        if (meta.wrap) {
+          // @ts-expect-error Fixme: we should handle the case when identNode is a JSXIdentifier
+          identNode = wrapReference(identNode, meta.wrap) ?? identNode;
         }
         return identNode;
       }
 
       let namespace: t.Expression = identifier(meta.name);
-      if (meta.lazy) namespace = callExpression(namespace, []);
+      if (meta.wrap) {
+        namespace = wrapReference(namespace, meta.wrap) ?? namespace;
+      }
 
       if (importName === "default" && meta.interop === "node-default") {
         return namespace;
@@ -198,25 +207,58 @@ const rewriteBindingInitVisitor: Visitor<RewriteBindingInitVisitorState> = {
   VariableDeclaration(path) {
     const { requeueInParent, exported, metadata } = this;
 
-    Object.keys(path.getOuterBindingIdentifiers()).forEach(localName => {
-      const exportNames = exported.get(localName) || [];
+    const isVar = path.node.kind === "var";
 
-      if (exportNames.length > 0) {
-        const statement = expressionStatement(
-          // eslint-disable-next-line @typescript-eslint/no-use-before-define
-          buildBindingExportAssignmentExpression(
-            metadata,
-            exportNames,
-            identifier(localName),
-            path.scope,
-          ),
+    for (const decl of path.get("declarations")) {
+      const { id } = decl.node;
+      let { init } = decl.node;
+      if (
+        isIdentifier(id) &&
+        exported.has(id.name) &&
+        !isArrowFunctionExpression(init) &&
+        (!isFunctionExpression(init) || init.id) &&
+        (!isClassExpression(init) || init.id)
+      ) {
+        if (!init) {
+          if (isVar) {
+            // This variable might have already been assigned to, and the
+            // uninitalized declaration doesn't set it to `undefined` and does
+            // not updated the exported value.
+            continue;
+          } else {
+            init = path.scope.buildUndefinedNode();
+          }
+        }
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        decl.node.init = buildBindingExportAssignmentExpression(
+          metadata,
+          exported.get(id.name),
+          init,
+          path.scope,
         );
-        // @ts-expect-error todo(flow->ts): avoid mutations
-        statement._blockHoist = path.node._blockHoist;
+        requeueInParent(decl.get("init"));
+      } else {
+        for (const localName of Object.keys(
+          decl.getOuterBindingIdentifiers(),
+        )) {
+          if (exported.has(localName)) {
+            const statement = expressionStatement(
+              // eslint-disable-next-line @typescript-eslint/no-use-before-define
+              buildBindingExportAssignmentExpression(
+                metadata,
+                exported.get(localName),
+                identifier(localName),
+                path.scope,
+              ),
+            );
+            // @ts-expect-error todo(flow->ts): avoid mutations
+            statement._blockHoist = path.node._blockHoist;
 
-        requeueInParent(path.insertAfter(statement)[0]);
+            requeueInParent(path.insertAfter(statement)[0]);
+          }
+        }
       }
-    });
+    }
   },
 };
 

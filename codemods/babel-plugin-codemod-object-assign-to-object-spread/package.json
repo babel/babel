@@ -17,7 +17,7 @@
     "@babel/plugin"
   ],
   "dependencies": {
-    "@babel/plugin-syntax-object-rest-spread": "^7.8.3"
+    "@babel/plugin-syntax-object-rest-spread": "condition:BABEL_8_BREAKING ? : ^7.8.3"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
@@ -32,7 +32,11 @@
   "author": "The Babel Team (https://babel.dev/team)",
   "conditions": {
     "BABEL_8_BREAKING": [
-      null,
+      {
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+        }
+      },
       {
         "exports": null
       }

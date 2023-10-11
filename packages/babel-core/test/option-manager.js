@@ -1,6 +1,7 @@
 import * as babel from "../lib/index.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import { itBabel7, itBabel7NoESM } from "$repo-utils";
 
 const cwd = path.dirname(fileURLToPath(import.meta.url));
 
@@ -13,7 +14,7 @@ function loadOptionsAsync(opts) {
 }
 
 describe("option-manager", () => {
-  it("throws for babel 5 plugin", () => {
+  itBabel7NoESM("throws for babel 5 plugin", () => {
     return expect(() => {
       loadOptions({
         plugins: [({ Plugin }) => new Plugin("object-assign", {})],
@@ -201,7 +202,7 @@ describe("option-manager", () => {
   });
 
   describe("mergeOptions", () => {
-    it("throws for removed babel 5 options", () => {
+    it("throws for removed babel 5 options: randomOption", () => {
       return expect(() => {
         loadOptions({
           randomOption: true,
@@ -209,14 +210,13 @@ describe("option-manager", () => {
       }).toThrow(/Unknown option: .randomOption/);
     });
 
-    it("throws for removed babel 5 options", () => {
+    it("throws for removed babel 5 options: auxiliaryComment", () => {
       return expect(() => {
         loadOptions({
           auxiliaryComment: true,
           blacklist: true,
         });
       }).toThrow(
-        // eslint-disable-next-line max-len
         /Using removed Babel 5 option: .auxiliaryComment - Use `auxiliaryCommentBefore` or `auxiliaryCommentAfter`/,
       );
     });
@@ -248,16 +248,25 @@ describe("option-manager", () => {
       expect(options.presets).toHaveLength(0);
     });
 
-    it.each([
-      ["es2015_named", /Must export a default export when using ES6 modules/],
-      ["es2015_invalid", /Unsupported format: string/],
-      ["es5_invalid", /Unsupported format: string/],
-    ])("%p should throw %p", async (name, msg) => {
+    itBabel7("es2015_named should throw", async () => {
       await expect(
         loadOptionsAsync({
-          presets: [path.join(cwd, "fixtures/option-manager/presets", name)],
+          presets: [
+            path.join(cwd, "fixtures/option-manager/presets", "es2015_named"),
+          ],
         }),
-      ).rejects.toThrow(msg);
+      ).rejects.toThrow(/Must export a default export when using ES6 modules/);
     });
+
+    it.each(["es2015_invalid", "es5_invalid"])(
+      "%p should throw",
+      async name => {
+        await expect(
+          loadOptionsAsync({
+            presets: [path.join(cwd, "fixtures/option-manager/presets", name)],
+          }),
+        ).rejects.toThrow(/Unsupported format: string/);
+      },
+    );
   });
 });

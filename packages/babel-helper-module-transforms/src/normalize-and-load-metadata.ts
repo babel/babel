@@ -34,8 +34,6 @@ export type ImportInterop =
   | "node"
   | ((source: string, filename?: string) => "none" | "babel" | "node");
 
-export type Lazy = boolean | string[] | ((source: string) => boolean);
-
 export interface SourceModuleMetadata {
   // A unique variable name to use for this namespace object. Centralized for simplicity.
   name: string;
@@ -53,7 +51,8 @@ export interface SourceModuleMetadata {
   reexportAll: null | {
     loc: t.SourceLocation | undefined | null;
   };
-  lazy?: Lazy;
+  wrap?: unknown;
+  referenced: boolean;
 }
 
 export interface LocalExportMetadata {
@@ -118,13 +117,17 @@ export default function normalizeModuleAndLoadMetadata(
   {
     importInterop,
     initializeReexports = false,
-    lazy = false,
+    getWrapperPayload,
     esNamespaceOnly = false,
     filename,
   }: {
     importInterop: ImportInterop;
     initializeReexports: boolean | void;
-    lazy: Lazy;
+    getWrapperPayload?: (
+      source: string,
+      metadata: SourceModuleMetadata,
+      importNodes: t.Node[],
+    ) => unknown;
     esNamespaceOnly: boolean;
     filename: string;
   },
@@ -136,25 +139,26 @@ export default function normalizeModuleAndLoadMetadata(
 
   nameAnonymousExports(programPath);
 
-  const { local, source, hasExports } = getModuleMetadata(
+  const { local, sources, hasExports } = getModuleMetadata(
     programPath,
-    { initializeReexports, lazy },
+    { initializeReexports, getWrapperPayload },
     stringSpecifiers,
   );
 
   removeImportExportDeclarations(programPath);
 
   // Reuse the imported namespace name if there is one.
-  for (const [, metadata] of source) {
-    if (metadata.importsNamespace.size > 0) {
-      // This is kind of gross. If we stop using `loose: true` we should
-      // just make this destructuring assignment.
-      metadata.name = metadata.importsNamespace.values().next().value;
+  for (const [source, metadata] of sources) {
+    const { importsNamespace, imports } = metadata;
+    // If there is at least one namespace import and other imports, it may collipse with local ident, can be seen in issue 15879.
+    if (importsNamespace.size > 0 && imports.size === 0) {
+      const [nameOfnamespace] = importsNamespace;
+      metadata.name = nameOfnamespace;
     }
 
     const resolvedInterop = resolveImportInterop(
       importInterop,
-      metadata.source,
+      source,
       filename,
     );
 
@@ -179,7 +183,7 @@ export default function normalizeModuleAndLoadMetadata(
     exportNameListName: null,
     hasExports,
     local,
-    source,
+    source: sources,
     stringSpecifiers,
   };
 }
@@ -216,7 +220,7 @@ function assertExportSpecifier(
     return;
   } else if (path.isExportNamespaceSpecifier()) {
     throw path.buildCodeFrameError(
-      "Export namespace should be first transformed by `@babel/plugin-proposal-export-namespace-from`.",
+      "Export namespace should be first transformed by `@babel/plugin-transform-export-namespace-from`.",
     );
   } else {
     throw path.buildCodeFrameError("Unexpected export specifier type");
@@ -229,11 +233,14 @@ function assertExportSpecifier(
 function getModuleMetadata(
   programPath: NodePath<t.Program>,
   {
-    lazy,
+    getWrapperPayload,
     initializeReexports,
   }: {
-    // todo(flow-ts) changed from boolean, to match expected usage inside the function
-    lazy: boolean | string[] | ((source: string) => boolean);
+    getWrapperPayload?: (
+      source: string,
+      metadata: SourceModuleMetadata,
+      importNodes: t.Node[],
+    ) => unknown;
     initializeReexports: boolean | void;
   },
   stringSpecifiers: Set<string>,
@@ -244,8 +251,9 @@ function getModuleMetadata(
     stringSpecifiers,
   );
 
-  const sourceData = new Map();
-  const getData = (sourceNode: t.StringLiteral) => {
+  const importNodes = new Map<string, t.Node[]>();
+  const sourceData = new Map<string, SourceModuleMetadata>();
+  const getData = (sourceNode: t.StringLiteral, node: t.Node) => {
     const source = sourceNode.value;
 
     let data = sourceData.get(source);
@@ -268,18 +276,29 @@ function getModuleMetadata(
         reexportNamespace: new Set(),
         reexportAll: null,
 
-        lazy: false,
+        wrap: null,
 
-        source,
+        // @ts-expect-error lazy is not listed in the type.
+        // This is needed for compatibility with older version of the commonjs
+        // plusing.
+        // TODO(Babel 8): Remove this
+        get lazy() {
+          return this.wrap === "lazy";
+        },
+
+        referenced: false,
       };
       sourceData.set(source, data);
+      importNodes.set(source, [node]);
+    } else {
+      importNodes.get(source).push(node);
     }
     return data;
   };
   let hasExports = false;
   programPath.get("body").forEach(child => {
     if (child.isImportDeclaration()) {
-      const data = getData(child.node.source);
+      const data = getData(child.node.source, child.node);
       if (!data.loc) data.loc = child.node.loc;
 
       child.get("specifiers").forEach(spec => {
@@ -295,6 +314,7 @@ function getModuleMetadata(
             reexport.names.forEach(name => {
               data.reexports.set(name, "default");
             });
+            data.referenced = true;
           }
         } else if (spec.isImportNamespaceSpecifier()) {
           const localName = spec.get("local").node.name;
@@ -307,6 +327,7 @@ function getModuleMetadata(
             reexport.names.forEach(name => {
               data.reexportNamespace.add(name);
             });
+            data.referenced = true;
           }
         } else if (spec.isImportSpecifier()) {
           const importName = getExportSpecifierName(
@@ -324,20 +345,22 @@ function getModuleMetadata(
             reexport.names.forEach(name => {
               data.reexports.set(name, importName);
             });
+            data.referenced = true;
           }
         }
       });
     } else if (child.isExportAllDeclaration()) {
       hasExports = true;
-      const data = getData(child.node.source);
+      const data = getData(child.node.source, child.node);
       if (!data.loc) data.loc = child.node.loc;
 
       data.reexportAll = {
         loc: child.node.loc,
       };
+      data.referenced = true;
     } else if (child.isExportNamedDeclaration() && child.node.source) {
       hasExports = true;
-      const data = getData(child.node.source);
+      const data = getData(child.node.source, child.node);
       if (!data.loc) data.loc = child.node.loc;
 
       child.get("specifiers").forEach(spec => {
@@ -352,6 +375,7 @@ function getModuleMetadata(
         );
 
         data.reexports.set(exportName, importName);
+        data.referenced = true;
 
         if (exportName === "__esModule") {
           throw spec
@@ -397,29 +421,20 @@ function getModuleMetadata(
     }
   }
 
-  for (const [source, metadata] of sourceData) {
-    if (
-      lazy !== false &&
-      !(isSideEffectImport(metadata) || metadata.reexportAll)
-    ) {
-      if (lazy === true) {
-        // 'true' means that local relative files are eagerly loaded and
-        // dependency modules are loaded lazily.
-        metadata.lazy = !/\./.test(source);
-      } else if (Array.isArray(lazy)) {
-        metadata.lazy = lazy.indexOf(source) !== -1;
-      } else if (typeof lazy === "function") {
-        metadata.lazy = lazy(source);
-      } else {
-        throw new Error(`.lazy must be a boolean, string array, or function`);
-      }
+  if (getWrapperPayload) {
+    for (const [source, metadata] of sourceData) {
+      metadata.wrap = getWrapperPayload(
+        source,
+        metadata,
+        importNodes.get(source),
+      );
     }
   }
 
   return {
     hasExports,
     local: localData,
-    source: sourceData,
+    sources: sourceData,
   };
 }
 

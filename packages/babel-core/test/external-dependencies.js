@@ -117,7 +117,7 @@ describe("externalDependencies", () => {
       expect(new Set(result2.externalDependencies)).toEqual(new Set(["./foo"]));
     });
 
-    it("cached external depenencies are merged with new ones", () => {
+    it("cached external dependencies are merged with new ones", () => {
       const plugin1 = jest.fn(makePlugin("./foo"));
       const plugin2 = jest.fn((api, { file }) => {
         api.addExternalDependency(file);

@@ -6,11 +6,11 @@ import type { NodePath } from "@babel/traverse";
 import ReplaceSupers from "@babel/helper-replace-supers";
 import nameFunction from "@babel/helper-function-name";
 
-type Decorable = Extract<t.Node, { decorators?: t.Decorator[] | null }>;
+type Decoratable = Extract<t.Node, { decorators?: t.Decorator[] | null }>;
 
-export function hasOwnDecorators(node: t.Node) {
-  // @ts-expect-error(flow->ts) TODO: maybe we could add t.isDecoratable to make ts happy
-  return !!(node.decorators && node.decorators.length);
+export function hasOwnDecorators(node: t.Class | t.ClassBody["body"][number]) {
+  // @ts-expect-error: 'decorators' not in TSIndexSignature
+  return !!node.decorators?.length;
 }
 
 export function hasDecorators(node: t.Class) {
@@ -31,7 +31,7 @@ function method(key: string, body: t.Statement[]) {
   );
 }
 
-function takeDecorators(node: Decorable) {
+function takeDecorators(node: Decoratable) {
   let result: t.ArrayExpression | undefined;
   if (node.decorators && node.decorators.length > 0) {
     result = t.arrayExpression(
@@ -108,7 +108,7 @@ function extractElementDescriptor(
 
   const properties: t.ObjectExpression["properties"] = [
     prop("kind", t.stringLiteral(t.isClassMethod(node) ? node.kind : "field")),
-    prop("decorators", takeDecorators(node as Decorable)),
+    prop("decorators", takeDecorators(node as Decoratable)),
     prop("static", node.static && t.booleanLiteral(true)),
     prop("key", getKey(node)),
   ].filter(Boolean);

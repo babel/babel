@@ -1,1 +1,1 @@
-{ "plugins": ["dynamicImport"] }
+{ "parserOpts": { "createImportExpressions": true } }

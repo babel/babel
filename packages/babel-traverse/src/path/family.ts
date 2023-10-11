@@ -1,7 +1,7 @@
 // This file contains methods responsible for dealing with/retrieving children or siblings.
 
-import type TraversalContext from "../context";
-import NodePath from "./index";
+import type TraversalContext from "../context.ts";
+import NodePath from "./index.ts";
 import {
   getBindingIdentifiers as _getBindingIdentifiers,
   getOuterBindingIdentifiers as _getOuterBindingIdentifiers,

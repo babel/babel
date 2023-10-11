@@ -1,8 +1,8 @@
 import type { Handler } from "gensync";
 import { parse } from "@babel/parser";
 import { codeFrameColumns } from "@babel/code-frame";
-import generateMissingPluginMessage from "./util/missing-plugin-helper";
-import type { PluginPasses } from "../config";
+import generateMissingPluginMessage from "./util/missing-plugin-helper.ts";
+import type { PluginPasses } from "../config/index.ts";
 
 export type ParseResult = ReturnType<typeof parse>;
 

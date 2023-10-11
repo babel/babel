@@ -89,7 +89,7 @@ exports.default = void 0;
 //
 //
 //
-var _default = {
+var _default = exports.default = {
   name: 'HelloWorld',
   data() {
     return {
@@ -114,4 +114,3 @@ var _default = {
 //
 //
 //
-exports.default = _default;

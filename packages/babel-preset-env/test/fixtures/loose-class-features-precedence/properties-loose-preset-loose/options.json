@@ -7,6 +7,6 @@
     }]
   ],
   "plugins": [
-    ["proposal-class-properties", { "loose": true }]
+    ["transform-class-properties", { "loose": true }]
   ]
 }

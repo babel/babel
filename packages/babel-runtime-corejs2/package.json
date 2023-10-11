@@ -1,6 +1,6 @@
 {
   "name": "@babel/runtime-corejs2",
-  "version": "7.20.7",
+  "version": "7.23.1",
   "description": "babel's modular runtime helpers with core-js@2 polyfilling",
   "license": "MIT",
   "publishConfig": {
@@ -15,7 +15,7 @@
   "author": "The Babel Team (https://babel.dev/team)",
   "dependencies": {
     "core-js": "^2.6.12",
-    "regenerator-runtime": "^0.13.11"
+    "regenerator-runtime": "^0.14.0"
   },
   "exports": {
     "./helpers/AsyncGenerator": [
@@ -54,6 +54,33 @@
       "./helpers/applyDecs2203.js"
     ],
     "./helpers/esm/applyDecs2203": "./helpers/esm/applyDecs2203.js",
+    "./helpers/applyDecs2203R": [
+      {
+        "node": "./helpers/applyDecs2203R.js",
+        "import": "./helpers/esm/applyDecs2203R.js",
+        "default": "./helpers/applyDecs2203R.js"
+      },
+      "./helpers/applyDecs2203R.js"
+    ],
+    "./helpers/esm/applyDecs2203R": "./helpers/esm/applyDecs2203R.js",
+    "./helpers/applyDecs2301": [
+      {
+        "node": "./helpers/applyDecs2301.js",
+        "import": "./helpers/esm/applyDecs2301.js",
+        "default": "./helpers/applyDecs2301.js"
+      },
+      "./helpers/applyDecs2301.js"
+    ],
+    "./helpers/esm/applyDecs2301": "./helpers/esm/applyDecs2301.js",
+    "./helpers/applyDecs2305": [
+      {
+        "node": "./helpers/applyDecs2305.js",
+        "import": "./helpers/esm/applyDecs2305.js",
+        "default": "./helpers/applyDecs2305.js"
+      },
+      "./helpers/applyDecs2305.js"
+    ],
+    "./helpers/esm/applyDecs2305": "./helpers/esm/applyDecs2305.js",
     "./helpers/asyncGeneratorDelegate": [
       {
         "node": "./helpers/asyncGeneratorDelegate.js",
@@ -99,6 +126,33 @@
       "./helpers/defineAccessor.js"
     ],
     "./helpers/esm/defineAccessor": "./helpers/esm/defineAccessor.js",
+    "./helpers/dispose": [
+      {
+        "node": "./helpers/dispose.js",
+        "import": "./helpers/esm/dispose.js",
+        "default": "./helpers/dispose.js"
+      },
+      "./helpers/dispose.js"
+    ],
+    "./helpers/esm/dispose": "./helpers/esm/dispose.js",
+    "./helpers/importDeferProxy": [
+      {
+        "node": "./helpers/importDeferProxy.js",
+        "import": "./helpers/esm/importDeferProxy.js",
+        "default": "./helpers/importDeferProxy.js"
+      },
+      "./helpers/importDeferProxy.js"
+    ],
+    "./helpers/esm/importDeferProxy": "./helpers/esm/importDeferProxy.js",
+    "./helpers/interopRequireWildcard": [
+      {
+        "node": "./helpers/interopRequireWildcard.js",
+        "import": "./helpers/esm/interopRequireWildcard.js",
+        "default": "./helpers/interopRequireWildcard.js"
+      },
+      "./helpers/interopRequireWildcard.js"
+    ],
+    "./helpers/esm/interopRequireWildcard": "./helpers/esm/interopRequireWildcard.js",
     "./helpers/iterableToArrayLimit": [
       {
         "node": "./helpers/iterableToArrayLimit.js",
@@ -153,6 +207,15 @@
       "./helpers/typeof.js"
     ],
     "./helpers/esm/typeof": "./helpers/esm/typeof.js",
+    "./helpers/using": [
+      {
+        "node": "./helpers/using.js",
+        "import": "./helpers/esm/using.js",
+        "default": "./helpers/using.js"
+      },
+      "./helpers/using.js"
+    ],
+    "./helpers/esm/using": "./helpers/esm/using.js",
     "./helpers/wrapRegExp": [
       {
         "node": "./helpers/wrapRegExp.js",
@@ -342,15 +405,6 @@
       "./helpers/interopRequireDefault.js"
     ],
     "./helpers/esm/interopRequireDefault": "./helpers/esm/interopRequireDefault.js",
-    "./helpers/interopRequireWildcard": [
-      {
-        "node": "./helpers/interopRequireWildcard.js",
-        "import": "./helpers/esm/interopRequireWildcard.js",
-        "default": "./helpers/interopRequireWildcard.js"
-      },
-      "./helpers/interopRequireWildcard.js"
-    ],
-    "./helpers/esm/interopRequireWildcard": "./helpers/esm/interopRequireWildcard.js",
     "./helpers/newArrowCheck": [
       {
         "node": "./helpers/newArrowCheck.js",
@@ -900,6 +954,15 @@
       "./helpers/identity.js"
     ],
     "./helpers/esm/identity": "./helpers/esm/identity.js",
+    "./helpers/nullishReceiverError": [
+      {
+        "node": "./helpers/nullishReceiverError.js",
+        "import": "./helpers/esm/nullishReceiverError.js",
+        "default": "./helpers/nullishReceiverError.js"
+      },
+      "./helpers/nullishReceiverError.js"
+    ],
+    "./helpers/esm/nullishReceiverError": "./helpers/esm/nullishReceiverError.js",
     "./package": "./package.json",
     "./package.json": "./package.json",
     "./regenerator": "./regenerator/index.js",
@@ -1011,6 +1074,14 @@
         "type": "module"
       },
       null
+    ],
+    "BABEL_8_BREAKING": [
+      {
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+        }
+      },
+      {}
     ]
   }
 }

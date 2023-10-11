@@ -2,7 +2,7 @@
 
 > Turn JSX into React Pre-0.12 function calls
 
-See our website [@babel/plugin-transform-react-jsx-compat](https://babeljs.io/docs/en/babel-plugin-transform-react-jsx-compat) for more information.
+See our website [@babel/plugin-transform-react-jsx-compat](https://babeljs.io/docs/babel-plugin-transform-react-jsx-compat) for more information.
 
 ## Install
 

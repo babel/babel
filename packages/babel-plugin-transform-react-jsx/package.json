@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-react-jsx",
-  "version": "7.20.7",
+  "version": "7.22.15",
   "description": "Turn JSX into React function calls",
   "repository": {
     "type": "git",
@@ -37,7 +37,11 @@
   "author": "The Babel Team (https://babel.dev/team)",
   "conditions": {
     "BABEL_8_BREAKING": [
-      null,
+      {
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+        }
+      },
       {
         "exports": null
       }

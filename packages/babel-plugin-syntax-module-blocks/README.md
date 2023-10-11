@@ -2,7 +2,7 @@
 
 > Allow parsing of JS Module Blocks
 
-See our website [@babel/plugin-syntax-module-blocks](https://babeljs.io/docs/en/babel-plugin-syntax-module-blocks) for more information.
+See our website [@babel/plugin-syntax-module-blocks](https://babeljs.io/docs/babel-plugin-syntax-module-blocks) for more information.
 
 ## Install
 

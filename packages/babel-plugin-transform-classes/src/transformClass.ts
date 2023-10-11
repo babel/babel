@@ -6,7 +6,7 @@ import optimiseCall from "@babel/helper-optimise-call-expression";
 import { traverse, template, types as t, type File } from "@babel/core";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 
-import addCreateSuperHelper from "./inline-createSuper-helpers";
+import addCreateSuperHelper from "./inline-createSuper-helpers.ts";
 
 type ClassAssumptions = {
   setClassMethods: boolean;
@@ -163,17 +163,13 @@ export default function transformClass(
   }
 
   /**
-   * Creates a class constructor or bail out if there is none
+   * Creates a class constructor or bail out if there is one
    */
   function maybeCreateConstructor() {
-    let hasConstructor = false;
-    const paths = classState.path.get("body.body");
-    for (const path of paths) {
-      // @ts-expect-error: StaticBlock does not have `kind` property
-      hasConstructor = path.equals("kind", "constructor");
-      if (hasConstructor) break;
+    const classBodyPath = classState.path.get("body");
+    for (const path of classBodyPath.get("body")) {
+      if (path.isClassMethod({ kind: "constructor" })) return;
     }
-    if (hasConstructor) return;
 
     let params: t.FunctionExpression["params"], body;
 
@@ -190,12 +186,10 @@ export default function transformClass(
       body = t.blockStatement([]);
     }
 
-    classState.path
-      .get("body")
-      .unshiftContainer(
-        "body",
-        t.classMethod("constructor", t.identifier("constructor"), params, body),
-      );
+    classBodyPath.unshiftContainer(
+      "body",
+      t.classMethod("constructor", t.identifier("constructor"), params, body),
+    );
   }
 
   function buildBody() {
@@ -651,7 +645,7 @@ export default function transformClass(
     classState.pushedConstructor = true;
 
     // we haven't pushed any descriptors yet
-    // @ts-expect-error todo(flow->ts) maybe remove this block - properties from condition are not used anywhere esle
+    // @ts-expect-error todo(flow->ts) maybe remove this block - properties from condition are not used anywhere else
     if (classState.hasInstanceDescriptors || classState.hasStaticDescriptors) {
       pushDescriptors();
     }
@@ -704,7 +698,7 @@ export default function transformClass(
 
     for (const elem of node.body.body) {
       if (!t.isClassMethod(elem) || !elem.computed) continue;
-      if (scope.isPure(elem.key, /* constatns only*/ true)) continue;
+      if (scope.isPure(elem.key, /* constants only*/ true)) continue;
 
       const id = scope.generateUidIdentifierBasedOnNode(elem.key);
       dynamicKeys.set(id.name, elem.key);

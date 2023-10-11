@@ -46,7 +46,7 @@ describe("conversion", function () {
       expect(generateCode(rootPath)).toBe("() => {\n  return true;\n};");
     });
 
-    it("preserves arrow function body's context", function () {
+    it("preserves arrow function body's context when replaced with a boolean literal", function () {
       const rootPath = getPath("() => true").get("expression");
       const body = rootPath.get("body");
       rootPath.ensureBlock();
@@ -54,7 +54,7 @@ describe("conversion", function () {
       expect(generateCode(rootPath)).toBe("() => {\n  return false;\n};");
     });
 
-    it("preserves arrow function body's context", function () {
+    it("preserves arrow function body's context when replace with multiple nodes", function () {
       const rootPath = getPath("() => true").get("expression");
       const body = rootPath.get("body");
       rootPath.ensureBlock();

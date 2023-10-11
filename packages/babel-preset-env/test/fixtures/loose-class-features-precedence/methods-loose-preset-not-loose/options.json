@@ -6,6 +6,6 @@
     }]
   ],
   "plugins": [
-    ["proposal-private-methods", { "loose": true }]
+    ["transform-private-methods", { "loose": true }]
   ]
 }

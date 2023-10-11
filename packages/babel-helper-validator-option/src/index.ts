@@ -1,2 +1,2 @@
-export { OptionValidator } from "./validator";
-export { findSuggestion } from "./find-suggestion";
+export { OptionValidator } from "./validator.ts";
+export { findSuggestion } from "./find-suggestion.ts";

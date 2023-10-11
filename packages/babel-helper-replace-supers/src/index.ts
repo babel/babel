@@ -3,10 +3,9 @@ import environmentVisitor from "@babel/helper-environment-visitor";
 import memberExpressionToFunctions from "@babel/helper-member-expression-to-functions";
 import type { HandlerState } from "@babel/helper-member-expression-to-functions";
 import optimiseCall from "@babel/helper-optimise-call-expression";
-import template from "@babel/template";
-import traverse from "@babel/traverse";
+import { traverse, template, types as t } from "@babel/core";
 import type { NodePath, Scope } from "@babel/traverse";
-import {
+const {
   assignmentExpression,
   booleanLiteral,
   callExpression,
@@ -16,14 +15,16 @@ import {
   sequenceExpression,
   stringLiteral,
   thisExpression,
-} from "@babel/types";
-import type * as t from "@babel/types";
+} = t;
 
-// TODO (Babel 8): Don't export this.
-export {
-  default as environmentVisitor,
-  skipAllButComputedKey,
-} from "@babel/helper-environment-visitor";
+if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
+  // eslint-disable-next-line no-restricted-globals
+  const ns = require("@babel/helper-environment-visitor");
+  // eslint-disable-next-line no-restricted-globals
+  exports.environmentVisitor = ns.default;
+  // eslint-disable-next-line no-restricted-globals
+  exports.skipAllButComputedKey = ns.skipAllButComputedKey;
+}
 
 type ThisRef =
   | {
@@ -99,10 +100,10 @@ type SharedState = {
 
 type Handler = HandlerState<SharedState> & SharedState;
 type SuperMember = NodePath<
-  | t.MemberExpression & {
-      object: t.Super;
-      property: Exclude<t.MemberExpression["property"], t.PrivateName>;
-    }
+  t.MemberExpression & {
+    object: t.Super;
+    property: Exclude<t.MemberExpression["property"], t.PrivateName>;
+  }
 >;
 
 interface SpecHandler

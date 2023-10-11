@@ -4,8 +4,8 @@ import {
   isUnionTypeAnnotation,
   isFlowBaseAnnotation,
   isIdentifier,
-} from "../../validators/generated";
-import type * as t from "../..";
+} from "../../validators/generated/index.ts";
+import type * as t from "../../index.ts";
 
 function getQualifiedName(node: t.GenericTypeAnnotation["id"]): string {
   return isIdentifier(node)
@@ -17,9 +17,10 @@ function getQualifiedName(node: t.GenericTypeAnnotation["id"]): string {
  * Dedupe type annotations.
  */
 export default function removeTypeDuplicates(
-  // todo(babel-8): change type to Array<...>
-  nodes: ReadonlyArray<t.FlowType | false | null | undefined>,
+  nodesIn: ReadonlyArray<t.FlowType | false | null | undefined>,
 ): t.FlowType[] {
+  const nodes = Array.from(nodesIn);
+
   const generics = new Map<string, t.GenericTypeAnnotation>();
   const bases = new Map<t.FlowBaseAnnotation["type"], t.FlowBaseAnnotation>();
 
@@ -49,8 +50,7 @@ export default function removeTypeDuplicates(
 
     if (isUnionTypeAnnotation(node)) {
       if (!typeGroups.has(node.types)) {
-        // todo(babel-8): use .push when nodes is mutable
-        nodes = nodes.concat(node.types);
+        nodes.push(...node.types);
         typeGroups.add(node.types);
       }
       continue;
@@ -64,8 +64,9 @@ export default function removeTypeDuplicates(
         let existing: t.Flow = generics.get(name);
         if (existing.typeParameters) {
           if (node.typeParameters) {
+            existing.typeParameters.params.push(...node.typeParameters.params);
             existing.typeParameters.params = removeTypeDuplicates(
-              existing.typeParameters.params.concat(node.typeParameters.params),
+              existing.typeParameters.params,
             );
           }
         } else {

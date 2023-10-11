@@ -2,7 +2,7 @@
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'make build'
  */
-import { FLIPPED_ALIAS_KEYS } from "../../definitions";
+import { FLIPPED_ALIAS_KEYS } from "../../definitions/index.ts";
 
 export const STANDARDIZED_TYPES = FLIPPED_ALIAS_KEYS["Standardized"];
 export const EXPRESSION_TYPES = FLIPPED_ALIAS_KEYS["Expression"];
@@ -36,7 +36,8 @@ export const PROPERTY_TYPES = FLIPPED_ALIAS_KEYS["Property"];
 export const UNARYLIKE_TYPES = FLIPPED_ALIAS_KEYS["UnaryLike"];
 export const PATTERN_TYPES = FLIPPED_ALIAS_KEYS["Pattern"];
 export const CLASS_TYPES = FLIPPED_ALIAS_KEYS["Class"];
-export const MODULEDECLARATION_TYPES = FLIPPED_ALIAS_KEYS["ModuleDeclaration"];
+export const IMPORTOREXPORTDECLARATION_TYPES =
+  FLIPPED_ALIAS_KEYS["ImportOrExportDeclaration"];
 export const EXPORTDECLARATION_TYPES = FLIPPED_ALIAS_KEYS["ExportDeclaration"];
 export const MODULESPECIFIER_TYPES = FLIPPED_ALIAS_KEYS["ModuleSpecifier"];
 export const ACCESSOR_TYPES = FLIPPED_ALIAS_KEYS["Accessor"];
@@ -55,3 +56,7 @@ export const TYPESCRIPT_TYPES = FLIPPED_ALIAS_KEYS["TypeScript"];
 export const TSTYPEELEMENT_TYPES = FLIPPED_ALIAS_KEYS["TSTypeElement"];
 export const TSTYPE_TYPES = FLIPPED_ALIAS_KEYS["TSType"];
 export const TSBASETYPE_TYPES = FLIPPED_ALIAS_KEYS["TSBaseType"];
+/**
+ * @deprecated migrate to IMPORTOREXPORTDECLARATION_TYPES.
+ */
+export const MODULEDECLARATION_TYPES = IMPORTOREXPORTDECLARATION_TYPES;

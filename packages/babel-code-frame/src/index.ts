@@ -1,6 +1,18 @@
-import highlight, { shouldHighlight, getChalk } from "@babel/highlight";
+import highlight, { shouldHighlight } from "@babel/highlight";
 
-type Chalk = ReturnType<typeof getChalk>;
+import chalk, { Chalk as ChalkClass, type ChalkInstance as Chalk } from "chalk";
+
+let chalkWithForcedColor: Chalk = undefined;
+function getChalk(forceColor: boolean) {
+  if (forceColor) {
+    chalkWithForcedColor ??= process.env.BABEL_8_BREAKING
+      ? new ChalkClass({ level: 1 })
+      : // @ts-expect-error .Instance was .constructor in chalk 2
+        new chalk.constructor({ enabled: true, level: 1 });
+    return chalkWithForcedColor;
+  }
+  return chalk;
+}
 
 let deprecationWarningShown = false;
 
@@ -137,7 +149,7 @@ export function codeFrameColumns(
 ): string {
   const highlighted =
     (opts.highlightCode || opts.forceColor) && shouldHighlight(opts);
-  const chalk = getChalk(opts);
+  const chalk = getChalk(opts.forceColor);
   const defs = getDefs(chalk);
   const maybeHighlight = (chalkFn: Chalk, string: string) => {
     return highlighted ? chalkFn(string) : string;

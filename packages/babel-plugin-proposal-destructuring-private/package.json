@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-destructuring-private",
-  "version": "7.18.9",
+  "version": "7.23.0",
   "description": "Transform destructuring private proposal",
   "repository": {
     "type": "git",
@@ -46,6 +46,14 @@
         "type": "module"
       },
       null
+    ],
+    "BABEL_8_BREAKING": [
+      {
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+        }
+      },
+      {}
     ]
   }
 }

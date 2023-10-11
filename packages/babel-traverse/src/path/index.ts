@@ -1,30 +1,31 @@
-import type { HubInterface } from "../hub";
-import type TraversalContext from "../context";
-import * as virtualTypes from "./lib/virtual-types";
+import type { HubInterface } from "../hub.ts";
+import type TraversalContext from "../context.ts";
+import type { ExplodedTraverseOptions } from "../index.ts";
+import * as virtualTypes from "./lib/virtual-types.ts";
 import buildDebug from "debug";
-import traverse from "../index";
-import type { Visitor } from "../types";
-import Scope from "../scope";
+import traverse from "../index.ts";
+import type { Visitor } from "../types.ts";
+import Scope from "../scope/index.ts";
 import { validate } from "@babel/types";
 import * as t from "@babel/types";
-import { path as pathCache } from "../cache";
+import * as cache from "../cache.ts";
 import generator from "@babel/generator";
 
 // NodePath is split across many files.
-import * as NodePath_ancestry from "./ancestry";
-import * as NodePath_inference from "./inference";
-import * as NodePath_replacement from "./replacement";
-import * as NodePath_evaluation from "./evaluation";
-import * as NodePath_conversion from "./conversion";
-import * as NodePath_introspection from "./introspection";
-import * as NodePath_context from "./context";
-import * as NodePath_removal from "./removal";
-import * as NodePath_modification from "./modification";
-import * as NodePath_family from "./family";
-import * as NodePath_comments from "./comments";
-import * as NodePath_virtual_types_validator from "./lib/virtual-types-validator";
-import type { NodePathAssertions } from "./generated/asserts";
-import type { NodePathValidators } from "./generated/validators";
+import * as NodePath_ancestry from "./ancestry.ts";
+import * as NodePath_inference from "./inference/index.ts";
+import * as NodePath_replacement from "./replacement.ts";
+import * as NodePath_evaluation from "./evaluation.ts";
+import * as NodePath_conversion from "./conversion.ts";
+import * as NodePath_introspection from "./introspection.ts";
+import * as NodePath_context from "./context.ts";
+import * as NodePath_removal from "./removal.ts";
+import * as NodePath_modification from "./modification.ts";
+import * as NodePath_family from "./family.ts";
+import * as NodePath_comments from "./comments.ts";
+import * as NodePath_virtual_types_validator from "./lib/virtual-types-validator.ts";
+import type { NodePathAssertions } from "./generated/asserts.ts";
+import type { NodePathValidators } from "./generated/validators.ts";
 
 const debug = buildDebug("babel");
 
@@ -51,10 +52,10 @@ class NodePath<T extends t.Node = t.Node> {
 
   contexts: Array<TraversalContext> = [];
   state: any = null;
-  opts: any = null;
+  opts: ExplodedTraverseOptions | null = null;
   // this.shouldSkip = false; this.shouldStop = false; this.removed = false;
   _traverseFlags: number = 0;
-  skipKeys: any = null;
+  skipKeys: Record<string, boolean> | null = null;
   parentPath: t.ParentMaps[T["type"]] extends null
     ? null
     : NodePath<t.ParentMaps[T["type"]]> | null = null;
@@ -91,11 +92,7 @@ class NodePath<T extends t.Node = t.Node> {
       // @ts-expect-error key must present in container
       container[key];
 
-    let paths = pathCache.get(parent);
-    if (!paths) {
-      paths = new Map();
-      pathCache.set(parent, paths);
-    }
+    const paths = cache.getOrCreateCachedPaths(hub, parent);
 
     let path = paths.get(targetNode);
     if (!path) {

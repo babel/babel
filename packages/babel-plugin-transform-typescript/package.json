@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-typescript",
-  "version": "7.20.7",
+  "version": "7.22.15",
   "description": "Transform TypeScript into ES.next",
   "repository": {
     "type": "git",
@@ -17,6 +17,7 @@
     "typescript"
   ],
   "dependencies": {
+    "@babel/helper-annotate-as-pure": "workspace:^",
     "@babel/helper-create-class-features-plugin": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^",
     "@babel/plugin-syntax-typescript": "workspace:^"
@@ -37,7 +38,11 @@
   "author": "The Babel Team (https://babel.dev/team)",
   "conditions": {
     "BABEL_8_BREAKING": [
-      null,
+      {
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+        }
+      },
       {
         "exports": null
       }

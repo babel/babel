@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-runtime",
-  "version": "7.19.6",
+  "version": "7.22.15",
   "description": "Externalise references to helpers and builtins, automatically polyfilling your code without polluting globals",
   "repository": {
     "type": "git",
@@ -22,10 +22,10 @@
   "dependencies": {
     "@babel/helper-module-imports": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^",
-    "babel-plugin-polyfill-corejs2": "^0.3.3",
-    "babel-plugin-polyfill-corejs3": "^0.6.0",
-    "babel-plugin-polyfill-regenerator": "^0.4.1",
-    "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.0"
+    "babel-plugin-polyfill-corejs2": "^0.4.5",
+    "babel-plugin-polyfill-corejs3": "^0.8.3",
+    "babel-plugin-polyfill-regenerator": "^0.5.2",
+    "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
@@ -37,8 +37,6 @@
     "@babel/preset-env": "workspace:^",
     "@babel/runtime": "workspace:^",
     "@babel/runtime-corejs3": "workspace:^",
-    "@babel/template": "workspace:^",
-    "@babel/types": "workspace:^",
     "make-dir": "condition:BABEL_8_BREAKING ? : ^2.1.0"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-runtime",
@@ -48,7 +46,11 @@
   "author": "The Babel Team (https://babel.dev/team)",
   "conditions": {
     "BABEL_8_BREAKING": [
-      null,
+      {
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+        }
+      },
       {
         "exports": null
       }

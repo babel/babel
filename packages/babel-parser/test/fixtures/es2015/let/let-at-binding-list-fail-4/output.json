@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
   "errors": [
-    "SyntaxError: 'let' is not allowed to be used as a name in 'let' or 'const' declarations. (1:7)"
+    "SyntaxError: 'let' is disallowed as a lexically bound name. (1:7)"
   ],
   "program": {
     "type": "Program",

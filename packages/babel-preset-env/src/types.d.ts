@@ -1,12 +1,12 @@
-import type { ModulesOption, UseBuiltInsOption } from "./options";
-import type { NormalizedCorejsOption } from "./normalize-options";
+import type { ModulesOption, UseBuiltInsOption } from "./options.ts";
+import type { NormalizedCorejsOption } from "./normalize-options.ts";
 import type { Targets, InputTargets } from "@babel/helper-compilation-targets";
 
 // Options
 // Use explicit modules to prevent typo errors.
-export type ModuleOption = typeof ModulesOption[keyof typeof ModulesOption];
+export type ModuleOption = (typeof ModulesOption)[keyof typeof ModulesOption];
 export type BuiltInsOption =
-  typeof UseBuiltInsOption[keyof typeof UseBuiltInsOption];
+  (typeof UseBuiltInsOption)[keyof typeof UseBuiltInsOption];
 
 type CorejsVersion = 2 | 3 | string;
 

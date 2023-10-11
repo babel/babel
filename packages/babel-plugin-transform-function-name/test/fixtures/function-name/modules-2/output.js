@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var _last2 = babelHelpers.interopRequireDefault(require("lo-dash/last"));
-let Container = /*#__PURE__*/function () {
+let Container = exports.default = /*#__PURE__*/function () {
   function Container() {
     babelHelpers.classCallCheck(this, Container);
   }
@@ -20,4 +20,3 @@ let Container = /*#__PURE__*/function () {
   }]);
   return Container;
 }();
-exports.default = Container;

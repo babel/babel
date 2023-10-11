@@ -1,6 +1,6 @@
 {
   "name": "@babel/traverse",
-  "version": "7.20.12",
+  "version": "7.23.0",
   "description": "The Babel Traverse module maintains the overall tree state, and is responsible for replacing, removing, and adding nodes",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-traverse",
@@ -28,6 +28,7 @@
     "globals": "condition:BABEL_8_BREAKING ? ^13.5.0 : ^11.1.0"
   },
   "devDependencies": {
+    "@babel/core": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^"
   },
   "engines": {
@@ -35,7 +36,11 @@
   },
   "conditions": {
     "BABEL_8_BREAKING": [
-      null,
+      {
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+        }
+      },
       {
         "exports": null
       }

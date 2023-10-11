@@ -3,15 +3,21 @@
 const semver = require("semver");
 const convert = require("./convert/index.cjs");
 
-const babelParser = require(require.resolve("@babel/parser", {
-  paths: [require.resolve("@babel/core/package.json")],
-}));
+const babelParser = require(
+  require.resolve("@babel/parser", {
+    paths: [require.resolve("@babel/core/package.json")],
+  }),
+);
 
 let isRunningMinSupportedCoreVersion = null;
 
 module.exports = function parse(code, options, client) {
   // Ensure we're using a version of `@babel/core` that includes `parse()` and `tokTypes`.
-  const minSupportedCoreVersion = ">=7.2.0";
+  let minSupportedCoreVersion = ">=7.2.0";
+  // TODO(Babel 8): Update all the version checks
+  if (process.env.BABEL_8_BREAKING) {
+    minSupportedCoreVersion += " || >=8.0.0-0";
+  }
 
   if (typeof isRunningMinSupportedCoreVersion !== "boolean") {
     isRunningMinSupportedCoreVersion = semver.satisfies(

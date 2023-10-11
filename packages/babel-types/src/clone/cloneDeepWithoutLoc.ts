@@ -1,5 +1,5 @@
-import cloneNode from "./cloneNode";
-import type * as t from "..";
+import cloneNode from "./cloneNode.ts";
+import type * as t from "../index.ts";
 /**
  * Create a deep clone of a `node` and all of it's child nodes
  * including only properties belonging to the node.

@@ -29,6 +29,7 @@ package-lock.json
 /packages/babel-core/src/vendor/*.ts
 
 /packages/babel-runtime/helpers/*.js
+!/packages/babel-runtime/helpers/dispose.js
 !/packages/babel-runtime/helpers/toArray.js
 !/packages/babel-runtime/helpers/iterableToArray.js
 !/packages/babel-runtime/helpers/possibleConstructorReturn.js
@@ -55,6 +56,7 @@ package-lock.json
 !/packages/babel-runtime-corejs2/core-js/map.js
 
 /packages/babel-runtime-corejs3/helpers/*.js
+!/packages/babel-runtime-corejs3/helpers/dispose.js
 !/packages/babel-runtime-corejs3/helpers/possibleConstructorReturn.js
 /packages/babel-runtime-corejs3/helpers/esm/*.js
 !/packages/babel-runtime-corejs3/helpers/esm/possibleConstructorReturn.js

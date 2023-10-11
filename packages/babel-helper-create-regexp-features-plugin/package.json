@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-create-regexp-features-plugin",
-  "version": "7.20.5",
+  "version": "7.22.15",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
   "description": "Compile ESNext Regular Expressions to ES5",
@@ -19,7 +19,8 @@
   ],
   "dependencies": {
     "@babel/helper-annotate-as-pure": "workspace:^",
-    "regexpu-core": "^5.2.1"
+    "regexpu-core": "^5.3.1",
+    "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0"
@@ -33,7 +34,11 @@
   },
   "conditions": {
     "BABEL_8_BREAKING": [
-      null,
+      {
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+        }
+      },
       {
         "exports": null
       }

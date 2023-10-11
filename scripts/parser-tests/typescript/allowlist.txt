@@ -1,7 +1,6 @@
-# 9 invalid programs did not produce a parsing error
+# 8 invalid programs did not produce a parsing error
 
 bigintIndex.ts
-classExpressionWithDecorator1.ts
 collisionArgumentsArrowFunctions.ts # TypeScript doesn't allow a parameter to be named arguments even in non-strict mode, which we don't catch.
 collisionArgumentsFunction.ts # TypeScript doesn't allow a parameter to be named arguments even in non-strict mode, which we don't catch.
 collisionArgumentsFunctionExpressions.ts # TypeScript doesn't allow a parameter to be named arguments even in non-strict mode, which we don't catch.
@@ -11,7 +10,7 @@ exportDeclarationsInAmbientNamespaces2.ts
 multipleExports.ts
 
 
-# 131 valid programs produced a parsing error
+# 136 valid programs produced a parsing error
 
 ArrowFunctionExpression1.ts
 MemberAccessorDeclaration15.ts
@@ -36,11 +35,12 @@ classCannotExtendVar.ts
 classExtendsMultipleBaseClasses.ts
 classOverloadForFunction.ts
 classWithEmptyTypeParameter.ts
+conflictingDeclarationsImportFromNamespace1.ts
+conflictingDeclarationsImportFromNamespace2.ts
 constDeclarations-invalidContexts.ts
 constDeclarations-scopes.ts
 constDeclarations-validContexts.ts
 declarationEmitDestructuring2.ts
-declarationEmitDestructuringOptionalBindingParametersInOverloads.ts
 declarationEmitDestructuringParameterProperties.ts
 declarationEmitDestructuringWithOptionalBindingParameters.ts
 declarationEmitInterfaceWithNonEntityNameExpressionHeritage.ts
@@ -76,14 +76,13 @@ exportInterfaceClassAndValue.ts
 exportSameNameFuncVar.ts
 exportSpecifierForAGlobal.ts # We handle this fine, but it doesn't consider the different files together
 exportSpecifierReferencingOuterDeclaration2.ts # We handle this fine, but it doesn't consider the different files together
+expressionWithJSDocTypeArguments.ts
 expressionsForbiddenInParameterInitializers.ts
 extendsClauseAlreadySeen.ts
 extendsClauseAlreadySeen2.ts
 fileWithNextLine2.ts
 funClodule.ts
 functionCall15.ts
-gettersAndSettersErrors.ts
-giant.ts
 implementClausePrecedingExtends.ts
 implementsClauseAlreadySeen.ts
 importAndVariableDeclarationConflict3.ts
@@ -99,6 +98,7 @@ indexerSignatureWithRestParam.ts
 interfaceMayNotBeExtendedWitACall.ts
 interfaceNaming1.ts # We correctly identify this error, but we can't bring it in without bringing a bunch of other tests too.
 interfaceWithImplements1.ts
+invalidOptionalChainFromNewExpression.ts
 jsxAttributeMissingInitializer.tsx
 jsxAttributeWithoutExpressionReact.tsx
 letAndVarRedeclaration.ts
@@ -124,8 +124,11 @@ multipleInheritance.ts
 nameCollisions.ts
 noImplicitAnyDestructuringVarDeclaration.ts
 nonMergedOverloads.ts
+optionalChainWithInstantiationExpression1.ts
 parameterInitializerBeforeDestructuringEmit.ts
 parameterPropertyOutsideConstructor.ts
+parseInvalidNonNullableTypes.ts
+parseInvalidNullableTypes.ts
 parserConstructorDeclaration12.ts
 reExportGlobalDeclaration1.ts
 reExportGlobalDeclaration2.ts # We handle this fine, but it doesn't consider the different files together
@@ -143,4 +146,5 @@ staticAsIdentifier.ts
 staticModifierAlreadySeen.ts
 strictOptionalProperties1.ts
 superCallFromClassThatHasNoBaseType1.ts
+unicodeEscapesInNames02.ts
 varArgConstructorMemberParameter.ts

@@ -27,7 +27,8 @@ describe("@babel/standalone", () => {
   });
   it("handles the typescript preset", () => {
     const output = Babel.transform("var a: string;", {
-      presets: [["typescript", { allExtensions: true }]],
+      presets: ["typescript"],
+      filename: "input.ts",
     }).code;
     expect(output).toBe("var a;");
   });
@@ -243,15 +244,43 @@ describe("@babel/standalone", () => {
         }),
       ).not.toThrow();
     });
-    it("#12815 - unicode property letter short alias should be transformed", () => {
+    it("#12815 - unicode property letter short alias should be transformed (legacy package)", () => {
       expect(() =>
         Babel.transform("/\\p{L}/u", {
           plugins: ["proposal-unicode-property-regex"],
         }),
       ).not.toThrow();
     });
+    it("#12815 - unicode property letter short alias should be transformed", () => {
+      expect(() =>
+        Babel.transform("/\\p{L}/u", {
+          plugins: ["transform-unicode-property-regex"],
+        }),
+      ).not.toThrow();
+    });
     it("#14425 - numeric separators should be parsed correctly", () => {
       expect(() => Babel.transform("1_1", {})).not.toThrow();
+    });
+    it("#15674 - supports unicode sets regex", () => {
+      expect(
+        Babel.transform("/[\\w--[b]]/v", {
+          plugins: ["transform-unicode-sets-regex"],
+        }).code,
+      ).toMatchInlineSnapshot(`"/[0-9A-Z_ac-z]/u;"`);
+
+      expect(
+        Babel.transform("/[\\w--[b]]/v", {
+          targets: { chrome: 90 },
+          presets: [["env", { modules: false }]],
+        }).code,
+      ).toMatchInlineSnapshot(`"/[0-9A-Z_ac-z]/u;"`);
+
+      expect(
+        Babel.transform("/[\\w--[b]]/v", {
+          targets: { chrome: 113 },
+          presets: [["env", { modules: false }]],
+        }).code,
+      ).toMatchInlineSnapshot(`"/[\\\\w--[b]]/v;"`);
     });
   });
 });

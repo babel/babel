@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-module-blocks",
-  "version": "7.18.6",
+  "version": "7.22.9",
   "description": "Allow parsing of JS Module Blocks",
   "repository": {
     "type": "git",
@@ -36,6 +36,17 @@
         "type": "module"
       },
       null
+    ],
+    "BABEL_8_BREAKING": [
+      {
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+        }
+      },
+      {}
     ]
+  },
+  "devDependencies": {
+    "@babel/core": "workspace:^"
   }
 }

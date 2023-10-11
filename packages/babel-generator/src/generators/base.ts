@@ -1,4 +1,4 @@
-import type Printer from "../printer";
+import type Printer from "../printer.ts";
 import type * as t from "@babel/types";
 
 export function File(this: Printer, node: t.File) {
@@ -48,9 +48,7 @@ export function BlockStatement(this: Printer, node: t.BlockStatement) {
 
   this.printSequence(node.body, node, { indent: true });
 
-  this.sourceWithOffset("end", node.loc, 0, -1);
-
-  this.rightBrace();
+  this.rightBrace(node);
 }
 
 export function Directive(this: Printer, node: t.Directive) {

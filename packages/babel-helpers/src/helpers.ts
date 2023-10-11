@@ -1,7 +1,7 @@
 import template from "@babel/template";
 import type * as t from "@babel/types";
 
-import generated from "./helpers-generated";
+import generated from "./helpers-generated.ts";
 
 interface Helper {
   minVersion: string;
@@ -179,26 +179,27 @@ helpers.extends = helper("7.0.0-beta.0")`
   }
 `;
 
-// TODO(babel-8): This old helper can be removed in babel v8
-helpers.objectSpread = helper("7.0.0-beta.0")`
-  import defineProperty from "defineProperty";
+if (!process.env.BABEL_8_BREAKING) {
+  helpers.objectSpread = helper("7.0.0-beta.0")`
+    import defineProperty from "defineProperty";
 
-  export default function _objectSpread(target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = (arguments[i] != null) ? Object(arguments[i]) : {};
-      var ownKeys = Object.keys(source);
-      if (typeof Object.getOwnPropertySymbols === 'function') {
-        ownKeys.push.apply(ownKeys, Object.getOwnPropertySymbols(source).filter(function(sym) {
-          return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-        }));
+    export default function _objectSpread(target) {
+      for (var i = 1; i < arguments.length; i++) {
+        var source = (arguments[i] != null) ? Object(arguments[i]) : {};
+        var ownKeys = Object.keys(source);
+        if (typeof Object.getOwnPropertySymbols === 'function') {
+          ownKeys.push.apply(ownKeys, Object.getOwnPropertySymbols(source).filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+          }));
+        }
+        ownKeys.forEach(function(key) {
+          defineProperty(target, key, source[key]);
+        });
       }
-      ownKeys.forEach(function(key) {
-        defineProperty(target, key, source[key]);
-      });
+      return target;
     }
-    return target;
-  }
-`;
+  `;
+}
 
 helpers.inherits = helper("7.0.0-beta.0")`
   import setPrototypeOf from "setPrototypeOf";
@@ -313,7 +314,12 @@ helpers.construct = helper("7.0.0-beta.0")`
 helpers.isNativeFunction = helper("7.0.0-beta.0")`
   export default function _isNativeFunction(fn) {
     // Note: This function returns "true" for core-js functions.
-    return Function.toString.call(fn).indexOf("[native code]") !== -1;
+    try {
+      return Function.toString.call(fn).indexOf("[native code]") !== -1;
+    } catch (e) {
+      // Firefox 31 throws when "toString" is applied to an HTMLElement
+      return typeof fn === "function";
+    }
   }
 `;
 
@@ -368,53 +374,6 @@ helpers.instanceof = helper("7.0.0-beta.0")`
 helpers.interopRequireDefault = helper("7.0.0-beta.0")`
   export default function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
-  }
-`;
-
-helpers.interopRequireWildcard = helper("7.14.0")`
-  function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function (nodeInterop) {
-      return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-  }
-
-  export default function _interopRequireWildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-      return obj;
-    }
-
-    if (obj === null || (typeof obj !== "object" && typeof obj !== "function")) {
-      return { default: obj }
-    }
-
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-      return cache.get(obj);
-    }
-
-    var newObj = {};
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for (var key in obj) {
-      if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-        var desc = hasPropertyDescriptor
-          ? Object.getOwnPropertyDescriptor(obj, key)
-          : null;
-        if (desc && (desc.get || desc.set)) {
-          Object.defineProperty(newObj, key, desc);
-        } else {
-          newObj[key] = obj[key];
-        }
-      }
-    }
-    newObj.default = obj;
-    if (cache) {
-      cache.set(obj, newObj);
-    }
-    return newObj;
   }
 `;
 
@@ -939,7 +898,7 @@ helpers.initializerWarningHelper = helper("7.0.0-beta.0")`
     export default function _initializerWarningHelper(descriptor, context){
         throw new Error(
           'Decorating class property failed. Please ensure that ' +
-          'proposal-class-properties is enabled and runs after the decorators transform.'
+          'transform-class-properties is enabled and runs after the decorators transform.'
         );
     }
 `;
@@ -1881,5 +1840,11 @@ if (!process.env.BABEL_8_BREAKING) {
 helpers.identity = helper("7.17.0")`
   export default function _identity(x) {
     return x;
+  }
+`;
+
+helpers.nullishReceiverError = helper("7.22.6")`
+  export default function _nullishReceiverError(r) {
+    throw new TypeError("Cannot set property of null or undefined.");
   }
 `;

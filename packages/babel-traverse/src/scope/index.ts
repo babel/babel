@@ -1,9 +1,9 @@
-import Renamer from "./lib/renamer";
-import type NodePath from "../path";
-import traverse from "../index";
-import type { TraverseOptions } from "../index";
-import Binding from "./binding";
-import type { BindingKind } from "./binding";
+import Renamer from "./lib/renamer.ts";
+import type NodePath from "../path/index.ts";
+import traverse from "../index.ts";
+import type { TraverseOptions } from "../index.ts";
+import Binding from "./binding.ts";
+import type { BindingKind } from "./binding.ts";
 import globals from "globals";
 import {
   NOT_LOCAL_BINDING,
@@ -40,7 +40,6 @@ import {
   memberExpression,
   numericLiteral,
   toIdentifier,
-  unaryExpression,
   variableDeclaration,
   variableDeclarator,
   isRecordExpression,
@@ -50,10 +49,12 @@ import {
   isMetaProperty,
   isPrivateName,
   isExportDeclaration,
+  buildUndefinedNode,
 } from "@babel/types";
-import type * as t from "@babel/types";
-import { scope as scopeCache } from "../cache";
-import type { Visitor } from "../types";
+import * as t from "@babel/types";
+import { scope as scopeCache } from "../cache.ts";
+import type { Visitor } from "../types.ts";
+import { isExplodedVisitor } from "../visitors.ts";
 
 type NodePart = string | number | boolean;
 // Recursively gathers the identifying names of a node.
@@ -70,8 +71,7 @@ function gatherNodeParts(node: t.Node, parts: NodePart[]) {
           gatherNodeParts(node.source, parts);
         } else if (
           (isExportNamedDeclaration(node) || isImportDeclaration(node)) &&
-          node.specifiers &&
-          node.specifiers.length
+          node.specifiers?.length
         ) {
           for (const e of node.specifiers) gatherNodeParts(e, parts);
         } else if (
@@ -546,7 +546,7 @@ export default class Scope {
 
   /**
    * Determine whether evaluating the specific input `node` is a consequenceless reference. ie.
-   * evaluating it wont result in potentially arbitrary code from being ran. The following are
+   * evaluating it won't result in potentially arbitrary code from being ran. The following are
    * allowed and determined not to cause side effects:
    *
    *  - `this` expressions
@@ -619,11 +619,22 @@ export default class Scope {
     }
   }
 
-  rename(oldName: string, newName?: string, block?: t.Pattern | t.Scopable) {
+  rename(
+    oldName: string,
+    newName?: string,
+    // prettier-ignore
+    /* Babel 7 - block?: t.Pattern | t.Scopable */
+  ) {
     const binding = this.getBinding(oldName);
     if (binding) {
-      newName = newName || this.generateUidIdentifier(oldName).name;
-      return new Renamer(binding, oldName, newName).rename(block);
+      newName ||= this.generateUidIdentifier(oldName).name;
+      const renamer = new Renamer(binding, oldName, newName);
+      if (process.env.BABEL_8_BREAKING) {
+        renamer.rename();
+      } else {
+        // @ts-ignore(Babel 7 vs Babel 8) TODO: Delete this
+        renamer.rename(arguments[2]);
+      }
     }
   }
 
@@ -735,7 +746,10 @@ export default class Scope {
       const declarations = path.get("declarations");
       const { kind } = path.node;
       for (const declar of declarations) {
-        this.registerBinding(kind === "using" ? "const" : kind, declar);
+        this.registerBinding(
+          kind === "using" || kind === "await using" ? "const" : kind,
+          declar,
+        );
       }
     } else if (path.isClassDeclaration()) {
       if (path.node.declare) return;
@@ -769,14 +783,13 @@ export default class Scope {
   }
 
   buildUndefinedNode() {
-    return unaryExpression("void", numericLiteral(0), true);
+    return buildUndefinedNode();
   }
 
   registerConstantViolation(path: NodePath) {
     const ids = path.getBindingIdentifiers();
     for (const name of Object.keys(ids)) {
-      const binding = this.getBinding(name);
-      if (binding) binding.reassign(path);
+      this.getBinding(name)?.reassign(path);
     }
   }
 
@@ -993,16 +1006,14 @@ export default class Scope {
     this.crawling = true;
     // traverse does not visit the root node, here we explicitly collect
     // root node binding info when the root is not a Program.
-    if (path.type !== "Program" && collectorVisitor._exploded) {
-      // @ts-expect-error when collectorVisitor is exploded, `enter` always exists
+    if (path.type !== "Program" && isExplodedVisitor(collectorVisitor)) {
       for (const visit of collectorVisitor.enter) {
-        visit(path, state);
+        visit.call(state, path, state);
       }
       const typeVisitors = collectorVisitor[path.type];
       if (typeVisitors) {
-        // @ts-expect-error when collectorVisitor is exploded, `enter` always exists
         for (const visit of typeVisitors.enter) {
-          visit(path, state);
+          visit.call(state, path, state);
         }
       }
     }
@@ -1057,6 +1068,31 @@ export default class Scope {
       path = (this.getFunctionParent() || this.getProgramParent()).path;
     }
 
+    const { init, unique, kind = "var", id } = opts;
+
+    // When injecting a non-const non-initialized binding inside
+    // an IIFE, if the number of call arguments is less than or
+    // equal to the number of function parameters, we can safely
+    // inject the binding into the parameter list.
+    if (
+      !init &&
+      !unique &&
+      (kind === "var" || kind === "let") &&
+      path.isFunction() &&
+      // @ts-expect-error ArrowFunctionExpression never has a name
+      !path.node.name &&
+      t.isCallExpression(path.parent, { callee: path.node }) &&
+      path.parent.arguments.length <= path.node.params.length &&
+      t.isIdentifier(id)
+    ) {
+      path.pushContainer("params", id);
+      path.scope.registerBinding(
+        "param",
+        path.get("params")[path.node.params.length - 1],
+      );
+      return;
+    }
+
     if (path.isLoop() || path.isCatchClause() || path.isFunction()) {
       // @ts-expect-error TS can not infer NodePath<Loop> | NodePath<CatchClause> as NodePath<Loop | CatchClause>
       path.ensureBlock();
@@ -1064,8 +1100,6 @@ export default class Scope {
       path = path.get("body");
     }
 
-    const unique = opts.unique;
-    const kind = opts.kind || "var";
     const blockHoist = opts._blockHoist == null ? 2 : opts._blockHoist;
 
     const dataKey = `declaration:${kind}:${blockHoist}`;
@@ -1083,7 +1117,7 @@ export default class Scope {
       if (!unique) path.setData(dataKey, declarPath);
     }
 
-    const declarator = variableDeclarator(opts.id, opts.init);
+    const declarator = variableDeclarator(id, init);
     const len = declarPath.node.declarations.push(declarator);
     path.scope.registerBinding(kind, declarPath.get("declarations")[len - 1]);
   }

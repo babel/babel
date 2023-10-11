@@ -1,12 +1,12 @@
-import { type TokenType } from "../tokenizer/types";
-import type Parser from "../parser";
-import type { ExpressionErrors } from "../parser/util";
-import type * as N from "../types";
-import type { Node as NodeType, NodeBase, File } from "../types";
-import type { Position } from "../util/location";
-import { Errors } from "../parse-error";
-import type { Undone } from "../parser/node";
-import type { BindingTypes } from "../util/scopeflags";
+import type { TokenType } from "../tokenizer/types.ts";
+import type Parser from "../parser/index.ts";
+import type { ExpressionErrors } from "../parser/util.ts";
+import type * as N from "../types.ts";
+import type { Node as NodeType, NodeBase, File } from "../types.ts";
+import type { Position } from "../util/location.ts";
+import { Errors } from "../parse-error.ts";
+import type { Undone } from "../parser/node.ts";
+import type { BindingTypes } from "../util/scopeflags.ts";
 
 const { defineProperty } = Object;
 const toUnenumerable = (object: any, key: string) =>
@@ -420,7 +420,13 @@ export default (superClass: typeof Parser) =>
       if (node.callee.type === "Import") {
         (node as N.Node as N.EstreeImportExpression).type = "ImportExpression";
         (node as N.Node as N.EstreeImportExpression).source = node.arguments[0];
-        if (this.hasPlugin("importAssertions")) {
+        if (
+          this.hasPlugin("importAttributes") ||
+          this.hasPlugin("importAssertions")
+        ) {
+          (node as N.Node as N.EstreeImportExpression).options =
+            node.arguments[1] ?? null;
+          // compatibility with previous ESTree AST
           (node as N.Node as N.EstreeImportExpression).attributes =
             node.arguments[1] ?? null;
         }
@@ -532,15 +538,18 @@ export default (superClass: typeof Parser) =>
       return node;
     }
 
+    isOptionalMemberExpression(node: N.Node) {
+      if (node.type === "ChainExpression") {
+        return node.expression.type === "MemberExpression";
+      }
+      return super.isOptionalMemberExpression(node);
+    }
+
     hasPropertyAsPrivateName(node: N.Node): boolean {
       if (node.type === "ChainExpression") {
         node = node.expression;
       }
       return super.hasPropertyAsPrivateName(node);
-    }
-
-    isOptionalChain(node: N.Node): boolean {
-      return node.type === "ChainExpression";
     }
 
     // @ts-expect-error override interfaces

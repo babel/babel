@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-plugin-test-runner",
-  "version": "7.18.6",
+  "version": "7.22.5",
   "description": "Helper function to support test runner",
   "repository": {
     "type": "git",
@@ -43,6 +43,9 @@
             "default": "./lib/index.js"
           },
           "./package.json": "./package.json"
+        },
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
         }
       },
       {

@@ -1,12 +1,13 @@
 // This file contains methods responsible for maintaining a TraversalContext.
 
-import { traverseNode } from "../traverse-node";
-import { SHOULD_SKIP, SHOULD_STOP } from "./index";
-import type TraversalContext from "../context";
-import type NodePath from "./index";
+import { traverseNode } from "../traverse-node.ts";
+import { SHOULD_SKIP, SHOULD_STOP } from "./index.ts";
+import type TraversalContext from "../context.ts";
+import type { VisitPhase } from "../types.ts";
+import type NodePath from "./index.ts";
 import type * as t from "@babel/types";
 
-export function call(this: NodePath, key: string): boolean {
+export function call(this: NodePath, key: VisitPhase): boolean {
   const opts = this.opts;
 
   this.debug(key);
@@ -16,7 +17,7 @@ export function call(this: NodePath, key: string): boolean {
   }
 
   if (this.node) {
-    return this._call(opts[this.node.type] && opts[this.node.type][key]);
+    return this._call(opts[this.node.type]?.[key]);
   }
 
   return false;
@@ -55,6 +56,7 @@ export function _call(this: NodePath, fns?: Array<Function>): boolean {
 }
 
 export function isDenylisted(this: NodePath): boolean {
+  // @ts-expect-error TODO(Babel 8): Remove blacklist
   const denylist = this.opts.denylist ?? this.opts.blacklist;
   return denylist && denylist.indexOf(this.node.type) > -1;
 }
@@ -79,7 +81,7 @@ export function visit(this: NodePath): boolean {
     return false;
   }
 
-  if (this.opts.shouldSkip && this.opts.shouldSkip(this)) {
+  if (this.opts.shouldSkip?.(this)) {
     return false;
   }
 
@@ -129,7 +131,7 @@ export function stop(this: NodePath) {
 }
 
 export function setScope(this: NodePath) {
-  if (this.opts && this.opts.noScope) return;
+  if (this.opts?.noScope) return;
 
   let path = this.parentPath;
 
@@ -145,14 +147,14 @@ export function setScope(this: NodePath) {
 
   let target;
   while (path && !target) {
-    if (path.opts && path.opts.noScope) return;
+    if (path.opts?.noScope) return;
 
     target = path.scope;
     path = path.parentPath;
   }
 
   this.scope = this.getScope(target);
-  if (this.scope) this.scope.init();
+  this.scope?.init();
 }
 
 export function setContext<S = unknown>(
@@ -168,7 +170,8 @@ export function setContext<S = unknown>(
   if (context) {
     this.context = context;
     this.state = context.state;
-    this.opts = context.opts;
+    // Discard the S type parameter from context.opts
+    this.opts = context.opts as typeof this.opts;
   }
 
   this.setScope();
@@ -214,14 +217,16 @@ export function _resyncKey(this: NodePath) {
   if (Array.isArray(this.container)) {
     for (let i = 0; i < this.container.length; i++) {
       if (this.container[i] === this.node) {
-        return this.setKey(i);
+        this.setKey(i);
+        return;
       }
     }
   } else {
     for (const key of Object.keys(this.container)) {
       // @ts-expect-error this.key should present in this.container
       if (this.container[key] === this.node) {
-        return this.setKey(key);
+        this.setKey(key);
+        return;
       }
     }
   }
@@ -270,7 +275,7 @@ export function pushContext(this: NodePath, context: TraversalContext) {
 export function setup(
   this: NodePath,
   parentPath: NodePath | undefined,
-  container: t.Node,
+  container: t.Node | t.Node[],
   listKey: string,
   key: string | number,
 ) {

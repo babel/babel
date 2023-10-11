@@ -1,8 +1,8 @@
-import type { Formatter } from "./formatters";
-import type { TemplateReplacements, TemplateOpts } from "./options";
-import { normalizeReplacements } from "./options";
-import parseAndBuildMetadata from "./parse";
-import populatePlaceholders from "./populate";
+import type { Formatter } from "./formatters.ts";
+import type { TemplateReplacements, TemplateOpts } from "./options.ts";
+import { normalizeReplacements } from "./options.ts";
+import parseAndBuildMetadata from "./parse.ts";
+import populatePlaceholders from "./populate.ts";
 
 export default function literalTemplate<T>(
   formatter: Formatter<T>,
@@ -45,41 +45,33 @@ function buildLiteralData<T>(
   tpl: Array<string>,
   opts: TemplateOpts,
 ) {
-  let names;
-  let nameSet: Set<string>;
-  let metadata;
-  let prefix = "";
+  let prefix = "BABEL_TPL$";
+
+  const raw = tpl.join("");
 
   do {
-    // If there are cases where the template already contains $0 or any other
-    // matching pattern, we keep adding "$" characters until a unique prefix
+    // If there are cases where the template already contains $$BABEL_TPL$0 or any other
+    // matching pattern, we keep adding "$$" characters until a unique prefix
     // is found.
-    prefix += "$";
-    const result = buildTemplateCode(tpl, prefix);
+    prefix = "$$" + prefix;
+  } while (raw.includes(prefix));
 
-    names = result.names;
-    nameSet = new Set(names);
-    metadata = parseAndBuildMetadata(formatter, formatter.code(result.code), {
-      parser: opts.parser,
+  const { names, code } = buildTemplateCode(tpl, prefix);
 
-      // Explicitly include our generated names in the whitelist so users never
-      // have to think about whether their placeholder pattern will match.
-      placeholderWhitelist: new Set(
-        result.names.concat(
-          opts.placeholderWhitelist
-            ? Array.from(opts.placeholderWhitelist)
-            : [],
-        ),
+  const metadata = parseAndBuildMetadata(formatter, formatter.code(code), {
+    parser: opts.parser,
+
+    // Explicitly include our generated names in the whitelist so users never
+    // have to think about whether their placeholder pattern will match.
+    placeholderWhitelist: new Set(
+      names.concat(
+        opts.placeholderWhitelist ? Array.from(opts.placeholderWhitelist) : [],
       ),
-      placeholderPattern: opts.placeholderPattern,
-      preserveComments: opts.preserveComments,
-      syntacticPlaceholders: opts.syntacticPlaceholders,
-    });
-  } while (
-    metadata.placeholders.some(
-      placeholder => placeholder.isDuplicate && nameSet.has(placeholder.name),
-    )
-  );
+    ),
+    placeholderPattern: opts.placeholderPattern,
+    preserveComments: opts.preserveComments,
+    syntacticPlaceholders: opts.syntacticPlaceholders,
+  });
 
   return { metadata, names };
 }

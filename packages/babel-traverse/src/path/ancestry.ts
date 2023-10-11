@@ -2,7 +2,7 @@
 
 import { VISITOR_KEYS } from "@babel/types";
 import type * as t from "@babel/types";
-import type NodePath from "./index";
+import type NodePath from "./index.ts";
 
 /**
  * Starting at the parent path of the current `NodePath` and going up the
@@ -112,7 +112,7 @@ export function getEarliestCommonAncestorFrom(
 
         // handle keys
         const earliestKeyIndex = keys.indexOf(earliest.parentKey);
-        const currentKeyIndex = keys.indexOf(path.parentKey as string);
+        const currentKeyIndex = keys.indexOf(path.parentKey);
         if (earliestKeyIndex > currentKeyIndex) {
           // key appears before so it's earlier
           earliest = path;

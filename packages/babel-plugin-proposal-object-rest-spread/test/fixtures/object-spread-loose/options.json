@@ -1,8 +1,0 @@
-{
-  "plugins": [
-    ["proposal-object-rest-spread", { "loose": true }]
-  ],
-  "targets": {
-    "browsers": "ie 6"
-  }
-}

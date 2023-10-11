@@ -1,6 +1,6 @@
-import Buffer from "./buffer";
-import type { Loc } from "./buffer";
-import * as n from "./node";
+import Buffer, { type Pos } from "./buffer.ts";
+import type { Loc } from "./buffer.ts";
+import * as n from "./node/index.ts";
 import type * as t from "@babel/types";
 import {
   isFunction,
@@ -15,9 +15,10 @@ import type {
 } from "@babel/parser";
 import type { Opts as jsescOptions } from "jsesc";
 
-import * as generatorFunctions from "./generators";
-import type SourceMap from "./source-map";
+import * as generatorFunctions from "./generators/index.ts";
+import type SourceMap from "./source-map.ts";
 import * as charCodes from "charcodes";
+import type { TraceMap } from "@jridgewell/trace-mapping";
 
 const SCIENTIFIC_NOTATION = /e/i;
 const ZERO_DECIMAL_INTEGER = /\.0+$/;
@@ -63,6 +64,9 @@ export type Format = {
   };
   recordAndTupleSyntaxType: RecordAndTuplePluginOptions["syntaxType"];
   jsescOption: jsescOptions;
+  /**
+   * @deprecated Removed in Babel 8, use `jsescOption` instead
+   */
   jsonCompatibleStrings?: boolean;
   /**
    * For use with the Hack-style pipe operator.
@@ -73,6 +77,13 @@ export type Format = {
    * @deprecated Removed in Babel 8
    */
   decoratorsBeforeExport?: boolean;
+  /**
+   * The import attributes syntax style:
+   * - "with"        : `import { a } from "b" with { type: "json" };`
+   * - "assert"      : `import { a } from "b" assert { type: "json" };`
+   * - "with-legacy" : `import { a } from "b" with type: "json";`
+   */
+  importAttributesKeyword?: "with" | "assert" | "with-legacy";
 };
 
 interface AddNewlinesOptions {
@@ -101,7 +112,10 @@ class Printer {
 
     this._indentChar = format.indent.style.charCodeAt(0);
     this._indentRepeat = format.indent.style.length;
+
+    this._inputMap = map?._inputMap;
   }
+  declare _inputMap: TraceMap;
 
   declare format: Format;
   inForStatementInitCounter: number = 0;
@@ -167,11 +181,17 @@ class Printer {
    * Add a right brace to the buffer.
    */
 
-  rightBrace(): void {
+  rightBrace(node: t.Node): void {
     if (this.format.minified) {
       this._buf.removeLastSemicolon();
     }
+    this.sourceWithOffset("end", node.loc, -1);
     this.token("}");
+  }
+
+  rightParens(node: t.Node): void {
+    this.sourceWithOffset("end", node.loc, -1);
+    this.token(")");
   }
 
   /**
@@ -233,16 +253,18 @@ class Printer {
   /**
    * Writes a simple token.
    */
-
   token(str: string, maybeNewline = false): void {
     this._maybePrintInnerComments();
 
-    // space is mandatory to avoid outputting <!--
-    // http://javascript.spec.whatwg.org/#comment-syntax
     const lastChar = this.getLastChar();
     const strFirst = str.charCodeAt(0);
     if (
-      (lastChar === charCodes.exclamationMark && str === "--") ||
+      (lastChar === charCodes.exclamationMark &&
+        // space is mandatory to avoid outputting <!--
+        // http://javascript.spec.whatwg.org/#comment-syntax
+        (str === "--" ||
+          // Needs spaces to avoid changing a! == 0 to a!== 0
+          strFirst === charCodes.equalsTo)) ||
       // Need spaces for operators of the same kind to avoid: `a+++b`
       (strFirst === charCodes.plusSign && lastChar === charCodes.plusSign) ||
       (strFirst === charCodes.dash && lastChar === charCodes.dash) ||
@@ -260,8 +282,6 @@ class Printer {
   tokenChar(char: number): void {
     this._maybePrintInnerComments();
 
-    // space is mandatory to avoid outputting <!--
-    // http://javascript.spec.whatwg.org/#comment-syntax
     const lastChar = this.getLastChar();
     if (
       // Need spaces for operators of the same kind to avoid: `a+++b`
@@ -324,7 +344,10 @@ class Printer {
   }
 
   exactSource(loc: Loc | undefined, cb: () => void) {
-    if (!loc) return cb();
+    if (!loc) {
+      cb();
+      return;
+    }
 
     this._catchUp("start", loc);
 
@@ -342,14 +365,13 @@ class Printer {
   sourceWithOffset(
     prop: "start" | "end",
     loc: Loc | undefined,
-    lineOffset: number,
     columnOffset: number,
   ): void {
     if (!loc) return;
 
     this._catchUp(prop, loc);
 
-    this._buf.sourceWithOffset(prop, loc, lineOffset, columnOffset);
+    this._buf.sourceWithOffset(prop, loc, columnOffset);
   }
 
   withSource(
@@ -357,11 +379,22 @@ class Printer {
     loc: Loc | undefined,
     cb: () => void,
   ): void {
-    if (!loc) return cb();
+    if (!loc) {
+      cb();
+      return;
+    }
 
     this._catchUp(prop, loc);
 
     this._buf.withSource(prop, loc, cb);
+  }
+
+  sourceIdentifierName(identifierName: string, pos?: Pos): void {
+    if (!this._buf._canMarkIdName) return;
+
+    const sourcePosition = this._buf._sourcePosition;
+    sourcePosition.identifierNamePos = pos;
+    sourcePosition.identifierName = identifierName;
   }
 
   _space(): void {
@@ -529,9 +562,9 @@ class Printer {
     if (!this.format.retainLines) return;
 
     // catch up to this nodes newline if we're behind
-    const pos = loc ? loc[prop] : null;
-    if (pos?.line != null) {
-      const count = pos.line - this._buf.getCurrentLine();
+    const line = loc?.[prop]?.line;
+    if (line != null) {
+      const count = line - this._buf.getCurrentLine();
 
       for (let i = 0; i < count; i++) {
         this._newline();
@@ -631,19 +664,13 @@ class Printer {
     this._insideAux = node.loc == undefined;
     this._maybeAddAuxComment(this._insideAux && !oldInAux);
 
-    let shouldPrintParens = false;
-    if (forceParens) {
-      shouldPrintParens = true;
-    } else if (
-      format.retainFunctionParens &&
-      nodeType === "FunctionExpression" &&
-      node.extra &&
-      node.extra.parenthesized
-    ) {
-      shouldPrintParens = true;
-    } else {
-      shouldPrintParens = needsParens(node, parent, this._printStack);
-    }
+    const shouldPrintParens =
+      forceParens ||
+      (format.retainFunctionParens &&
+        nodeType === "FunctionExpression" &&
+        node.extra?.parenthesized) ||
+      needsParens(node, parent, this._printStack);
+
     if (shouldPrintParens) {
       this.token("(");
       this._endsWithInnerRaw = false;
@@ -725,8 +752,7 @@ class Printer {
   ): string | undefined {
     const extra = node.extra;
     if (
-      extra &&
-      extra.raw != null &&
+      extra?.raw != null &&
       extra.rawValue != null &&
       node.value === extra.rawValue
     ) {
@@ -742,7 +768,16 @@ class Printer {
   ) {
     if (!nodes?.length) return;
 
-    if (opts.indent) this.indent();
+    let { indent } = opts;
+
+    if (indent == null && this.format.retainLines) {
+      const startLine = nodes[0].loc?.start.line;
+      if (startLine != null && startLine !== this._buf.getCurrentLine()) {
+        indent = true;
+      }
+    }
+
+    if (indent) this.indent();
 
     const newlineOpts: AddNewlinesOptions = {
       addNewlines: opts.addNewlines,
@@ -776,7 +811,7 @@ class Printer {
       }
     }
 
-    if (opts.indent) this.dedent();
+    if (indent) this.dedent();
   }
 
   printAndIndentOnComments(node: t.Node, parent: t.Node) {
@@ -799,7 +834,7 @@ class Printer {
   _printTrailingComments(node: t.Node, parent?: t.Node, lineOffset?: number) {
     const { innerComments, trailingComments } = node;
     // We print inner comments here, so that if for some reason they couldn't
-    // be printed in earlier locations they are still printed *somehwere*,
+    // be printed in earlier locations they are still printed *somewhere*,
     // even if at the end of the node.
     if (innerComments?.length) {
       this._printComments(
@@ -859,7 +894,8 @@ class Printer {
     opts: PrintSequenceOptions = {},
   ) {
     opts.statement = true;
-    return this.printJoin(nodes, parent, opts);
+    opts.indent ??= false;
+    this.printJoin(nodes, parent, opts);
   }
 
   printList(items: t.Node[], parent: t.Node, opts: PrintListOptions = {}) {
@@ -867,16 +903,18 @@ class Printer {
       opts.separator = commaSeparator;
     }
 
-    return this.printJoin(items, parent, opts);
+    this.printJoin(items, parent, opts);
   }
 
   _printNewline(newLine: boolean, opts: AddNewlinesOptions) {
+    const format = this.format;
+
     // Fast path since 'this.newline' does nothing when not tracking lines.
-    if (this.format.retainLines || this.format.compact) return;
+    if (format.retainLines || format.compact) return;
 
     // Fast path for concise since 'this.newline' just inserts a space when
     // concise formatting is in use.
-    if (this.format.concise) {
+    if (format.concise) {
       this.space();
       return;
     }

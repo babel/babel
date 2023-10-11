@@ -8,30 +8,33 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-class-static-block { safari }
-  proposal-private-property-in-object { safari < 15 }
-  proposal-class-properties { safari < 14.1 }
-  proposal-private-methods { safari < 15 }
-  proposal-numeric-separator { safari < 13 }
-  proposal-logical-assignment-operators { safari < 14 }
-  proposal-nullish-coalescing-operator { safari < 13.1 }
-  proposal-optional-chaining { safari < 13.1 }
-  proposal-json-strings { safari < 12 }
-  proposal-optional-catch-binding { safari < 11.1 }
-  proposal-async-generator-functions { safari < 12 }
-  proposal-object-rest-spread { safari < 11.1 }
+  transform-unicode-sets-regex { safari < tp }
+  transform-class-static-block { safari < 16.4 }
+  transform-private-property-in-object { safari < 15 }
+  transform-class-properties { safari < 14.1 }
+  transform-private-methods { safari < 15 }
+  transform-numeric-separator { safari < 13 }
+  transform-logical-assignment-operators { safari < 14 }
+  transform-nullish-coalescing-operator { safari < 13.1 }
+  transform-optional-chaining { safari < 13.1 }
+  transform-json-strings { safari < 12 }
+  transform-optional-catch-binding { safari < 11.1 }
+  transform-async-generator-functions { safari < 12 }
+  transform-object-rest-spread { safari < 11.1 }
   transform-dotall-regex { safari < 11.1 }
-  proposal-unicode-property-regex { safari < 11.1 }
+  transform-unicode-property-regex { safari < 11.1 }
   transform-named-capturing-groups-regex { safari < 11.1 }
   transform-async-to-generator { safari < 10.1 }
   transform-exponentiation-operator { safari < 10.1 }
   transform-unicode-regex { safari < 12 }
-  proposal-export-namespace-from { safari }
+  transform-export-namespace-from { safari < 14.1 }
   bugfix/transform-safari-block-shadowing { safari < 11 }
   bugfix/transform-safari-for-shadowing { safari < 11 }
-  bugfix/transform-safari-id-destructuring-collision-in-function-expression { safari }
+  bugfix/transform-safari-id-destructuring-collision-in-function-expression { safari < 16.3 }
   bugfix/transform-tagged-template-caching { safari < 13 }
   transform-modules-commonjs
-  proposal-dynamic-import
+  transform-dynamic-import
+  syntax-top-level-await
+  syntax-import-meta
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

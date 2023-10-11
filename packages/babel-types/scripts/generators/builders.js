@@ -5,8 +5,19 @@ import {
   toBindingIdentifierName,
 } from "../../lib/index.js";
 import formatBuilderName from "../utils/formatBuilderName.js";
-import lowerFirst from "../utils/lowerFirst.js";
 import stringifyValidator from "../utils/stringifyValidator.js";
+
+// env vars from the cli are always strings, so !!ENV_VAR returns true for "false"
+function bool(value) {
+  return value && value !== "false" && value !== "0";
+}
+
+if (!bool(process.env.BABEL_8_BREAKING)) {
+  // eslint-disable-next-line no-var
+  var lowerFirst = function (string) {
+    return string[0].toLowerCase() + string.slice(1);
+  };
+}
 
 function areAllRemainingFieldsNullable(fieldName, fieldNames, fields) {
   const index = fieldNames.indexOf(fieldName);
@@ -89,17 +100,18 @@ function generateLowercaseBuilders() {
  * This file is auto-generated! Do not modify it directly.
  * To re-generate run 'make build'
  */
-import validateNode from "../validateNode";
-import type * as t from "../..";
+import validateNode from "../validateNode.ts";
+import type * as t from "../../index.ts";
+import deprecationWarning from "../../utils/deprecationWarning.ts";
 `;
 
   const reservedNames = new Set(["super", "import"]);
   Object.keys(BUILDER_KEYS).forEach(type => {
     const defArgs = generateBuilderArgs(type);
-    const formatedBuilderName = formatBuilderName(type);
-    const formatedBuilderNameLocal = reservedNames.has(formatedBuilderName)
-      ? `_${formatedBuilderName}`
-      : formatedBuilderName;
+    const formattedBuilderName = formatBuilderName(type);
+    const formattedBuilderNameLocal = reservedNames.has(formattedBuilderName)
+      ? `_${formattedBuilderName}`
+      : formattedBuilderName;
 
     const fieldNames = sortFieldNames(Object.keys(NODE_FIELDS[type]), type);
     const builderNames = BUILDER_KEYS[type];
@@ -116,8 +128,8 @@ import type * as t from "../..";
     });
 
     output += `${
-      formatedBuilderNameLocal === formatedBuilderName ? "export " : ""
-    }function ${formatedBuilderNameLocal}(${defArgs.join(", ")}): t.${type} {`;
+      formattedBuilderNameLocal === formattedBuilderName ? "export " : ""
+    }function ${formattedBuilderNameLocal}(${defArgs.join(", ")}): t.${type} {`;
 
     const nodeObjectExpression = `{\n${objectFields
       .map(([k, v]) => (k === v ? `    ${k},` : `    ${k}: ${v},`))
@@ -130,35 +142,38 @@ import type * as t from "../..";
     }
     output += `\n}\n`;
 
-    if (formatedBuilderNameLocal !== formatedBuilderName) {
-      output += `export { ${formatedBuilderNameLocal} as ${formatedBuilderName} };\n`;
+    if (formattedBuilderNameLocal !== formattedBuilderName) {
+      output += `export { ${formattedBuilderNameLocal} as ${formattedBuilderName} };\n`;
     }
 
-    // This is needed for backwards compatibility.
-    // It should be removed in the next major version.
-    // JSXIdentifier -> jSXIdentifier
-    if (/^[A-Z]{2}/.test(type)) {
-      output += `export { ${formatedBuilderNameLocal} as ${lowerFirst(
-        type
-      )} }\n`;
+    if (!bool(process.env.BABEL_8_BREAKING)) {
+      // This is needed for backwards compatibility.
+      // JSXIdentifier -> jSXIdentifier
+      if (/^[A-Z]{2}/.test(type)) {
+        output += `export { ${formattedBuilderNameLocal} as ${lowerFirst(
+          type
+        )} }\n`;
+      }
     }
   });
 
   Object.keys(DEPRECATED_KEYS).forEach(type => {
     const newType = DEPRECATED_KEYS[type];
-    const formatedBuilderName = formatBuilderName(type);
-    const formatedNewBuilderName = formatBuilderName(newType);
+    const formattedBuilderName = formatBuilderName(type);
+    const formattedNewBuilderName = formatBuilderName(newType);
     output += `/** @deprecated */
 function ${type}(${generateBuilderArgs(newType).join(", ")}) {
-  console.trace("The node type ${type} has been renamed to ${newType}");
-  return ${formatedNewBuilderName}(${BUILDER_KEYS[newType].join(", ")});
+  deprecationWarning("${type}", "${newType}", "The node type ");
+  return ${formattedNewBuilderName}(${BUILDER_KEYS[newType].join(", ")});
 }
-export { ${type} as ${formatedBuilderName} };\n`;
-    // This is needed for backwards compatibility.
-    // It should be removed in the next major version.
-    // JSXIdentifier -> jSXIdentifier
-    if (/^[A-Z]{2}/.test(type)) {
-      output += `export { ${type} as ${lowerFirst(type)} }\n`;
+export { ${type} as ${formattedBuilderName} };\n`;
+
+    if (!bool(process.env.BABEL_8_BREAKING)) {
+      // This is needed for backwards compatibility.
+      // JSXIdentifier -> jSXIdentifier
+      if (/^[A-Z]{2}/.test(type)) {
+        output += `export { ${type} as ${lowerFirst(type)} }\n`;
+      }
     }
   });
 
@@ -179,15 +194,15 @@ function generateUppercaseBuilders() {
  export {\n`;
 
   Object.keys(BUILDER_KEYS).forEach(type => {
-    const formatedBuilderName = formatBuilderName(type);
-    output += `  ${formatedBuilderName} as ${type},\n`;
+    const formattedBuilderName = formatBuilderName(type);
+    output += `  ${formattedBuilderName} as ${type},\n`;
   });
 
   Object.keys(DEPRECATED_KEYS).forEach(type => {
-    const formatedBuilderName = formatBuilderName(type);
-    output += `  ${formatedBuilderName} as ${type},\n`;
+    const formattedBuilderName = formatBuilderName(type);
+    output += `  ${formattedBuilderName} as ${type},\n`;
   });
 
-  output += ` } from './index';\n`;
+  output += ` } from './index.ts';\n`;
   return output;
 }

@@ -17,8 +17,6 @@
         },
         "typeParameters": null,
         "extends": [],
-        "implements": [],
-        "mixins": [],
         "body": {
           "type": "ObjectTypeAnnotation",
           "start":20,"end":35,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":35,"index":35}},
@@ -70,8 +68,6 @@
           ]
         },
         "extends": [],
-        "implements": [],
-        "mixins": [],
         "body": {
           "type": "ObjectTypeAnnotation",
           "start":60,"end":70,"loc":{"start":{"line":2,"column":24,"index":60},"end":{"line":2,"column":34,"index":70}},

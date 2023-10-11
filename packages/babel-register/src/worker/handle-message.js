@@ -1,5 +1,5 @@
-const babel = require("./babel-core");
-const { setOptions, transform, transformSync } = require("./transform");
+const babel = require("./babel-core.js");
+const { setOptions, transform, transformSync } = require("./transform.js");
 
 module.exports = function handleMessage(action, payload) {
   switch (action) {

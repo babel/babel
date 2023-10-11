@@ -8,21 +8,22 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  proposal-class-static-block { electron < 15.0 }
-  proposal-private-property-in-object { electron < 13.0 }
-  proposal-class-properties { electron < 6.0 }
-  proposal-private-methods { electron < 10.0 }
-  proposal-numeric-separator { electron < 6.0 }
-  proposal-logical-assignment-operators { electron < 10.0 }
-  proposal-nullish-coalescing-operator { electron < 8.0 }
-  proposal-optional-chaining { electron < 13.0 }
-  proposal-json-strings { electron < 3.0 }
-  proposal-optional-catch-binding { electron < 3.0 }
+  transform-unicode-sets-regex { electron < 24.0 }
+  transform-class-static-block { electron < 15.0 }
+  transform-private-property-in-object { electron < 13.0 }
+  transform-class-properties { electron < 6.0 }
+  transform-private-methods { electron < 10.0 }
+  transform-numeric-separator { electron < 6.0 }
+  transform-logical-assignment-operators { electron < 10.0 }
+  transform-nullish-coalescing-operator { electron < 8.0 }
+  transform-optional-chaining { electron < 13.0 }
+  transform-json-strings { electron < 3.0 }
+  transform-optional-catch-binding { electron < 3.0 }
   transform-parameters { electron < 0.37 }
-  proposal-async-generator-functions { electron < 3.0 }
-  proposal-object-rest-spread { electron < 2.0 }
+  transform-async-generator-functions { electron < 3.0 }
+  transform-object-rest-spread { electron < 2.0 }
   transform-dotall-regex { electron < 3.0 }
-  proposal-unicode-property-regex { electron < 3.0 }
+  transform-unicode-property-regex { electron < 3.0 }
   transform-named-capturing-groups-regex { electron < 3.0 }
   transform-async-to-generator { electron < 1.6 }
   transform-exponentiation-operator { electron < 1.3 }
@@ -31,11 +32,13 @@ Using plugins:
   transform-sticky-regex { electron < 0.37 }
   transform-unicode-regex { electron < 1.1 }
   transform-destructuring { electron < 1.2 }
-  transform-block-scoping { electron < 0.37 }
+  transform-block-scoping { electron < 1.1 }
   transform-regenerator { electron < 1.1 }
-  proposal-export-namespace-from { electron < 5.0 }
+  transform-export-namespace-from { electron < 5.0 }
   transform-modules-commonjs
-  proposal-dynamic-import
+  transform-dynamic-import
+  syntax-top-level-await
+  syntax-import-meta
 corejs3: `DEBUG` option
 
 Using targets: {

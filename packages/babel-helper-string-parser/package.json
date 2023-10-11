@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-string-parser",
-  "version": "7.19.4",
+  "version": "7.22.5",
   "description": "A utility package to parse strings",
   "repository": {
     "type": "git",
@@ -26,6 +26,14 @@
         "type": "module"
       },
       null
+    ],
+    "BABEL_8_BREAKING": [
+      {
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+        }
+      },
+      {}
     ]
   },
   "exports": {

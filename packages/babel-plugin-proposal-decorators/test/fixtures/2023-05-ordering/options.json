@@ -1,0 +1,4 @@
+{
+  "plugins": [["proposal-decorators", { "version": "2023-05" }]],
+  "minNodeVersion": "16.11.0"
+}

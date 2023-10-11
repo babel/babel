@@ -1,6 +1,6 @@
-import is from "../validators/is";
-import { validateField, validateChild } from "../validators/validate";
-import type * as t from "..";
+import is from "../validators/is.ts";
+import { validateField, validateChild } from "../validators/validate.ts";
+import type * as t from "../index.ts";
 
 export const VISITOR_KEYS: Record<string, string[]> = {};
 export const ALIAS_KEYS: Partial<Record<NodeTypesWithoutComment, string[]>> =
@@ -56,6 +56,7 @@ export type Validator = (
 export type FieldOptions = {
   default?: string | number | boolean | [];
   optional?: boolean;
+  deprecated?: boolean;
   validate?: Validator;
 };
 
@@ -277,7 +278,7 @@ const validTypeOpts = [
   "visitor",
   "validate",
 ];
-const validFieldKeys = ["default", "optional", "validate"];
+const validFieldKeys = ["default", "optional", "deprecated", "validate"];
 
 const store = {} as Record<string, DefineTypeOpts>;
 
@@ -292,7 +293,7 @@ export function defineAliasedType(...aliases: string[]) {
     }
     const additional = aliases.filter(a => !defined.includes(a));
     defined.unshift(...additional);
-    return defineType(type, opts);
+    defineType(type, opts);
   };
 }
 
@@ -317,6 +318,7 @@ export default function defineType(type: string, opts: DefineTypeOpts = {}) {
         fields[key] = {
           default: Array.isArray(def) ? [] : def,
           optional: field.optional,
+          deprecated: field.deprecated,
           validate: field.validate,
         };
       }

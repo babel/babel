@@ -30,8 +30,8 @@ import {
 import type * as t from "@babel/types";
 import environmentVisitor from "@babel/helper-environment-visitor";
 import nameFunction from "@babel/helper-function-name";
-import { merge as mergeVisitors } from "../visitors";
-import type NodePath from "./index";
+import { merge as mergeVisitors } from "../visitors.ts";
+import type NodePath from "./index.ts";
 
 export function toComputedKey(this: NodePath) {
   let key;
@@ -105,14 +105,16 @@ export function ensureBlock(
   return this.node;
 }
 
-/**
- * Keeping this for backward-compatibility. You should use arrowFunctionToExpression() for >=7.x.
- */
-// TODO(Babel 8): Remove this
-export function arrowFunctionToShadowed(this: NodePath) {
-  if (!this.isArrowFunctionExpression()) return;
+if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
+  /**
+   * Keeping this for backward-compatibility. You should use arrowFunctionToExpression() for >=7.x.
+   */
+  // eslint-disable-next-line no-restricted-globals
+  exports.arrowFunctionToShadowed = function (this: NodePath) {
+    if (!this.isArrowFunctionExpression()) return;
 
-  this.arrowFunctionToExpression();
+    this.arrowFunctionToExpression();
+  };
 }
 
 /**
@@ -150,14 +152,13 @@ export function arrowFunctionToExpression(
   {
     allowInsertArrow = true,
     allowInsertArrowWithRest = allowInsertArrow,
-    /** @deprecated Use `noNewArrows` instead */
-    specCompliant = false,
-    // TODO(Babel 8): Consider defaulting to `false` for spec compliancy
-    noNewArrows = !specCompliant,
+    noNewArrows = process.env.BABEL_8_BREAKING
+      ? // TODO(Babel 8): Consider defaulting to `false` for spec compliance
+        true
+      : !arguments[0]?.specCompliant,
   }: {
     allowInsertArrow?: boolean | void;
     allowInsertArrowWithRest?: boolean | void;
-    specCompliant?: boolean | void;
     noNewArrows?: boolean;
   } = {},
 ): NodePath<
@@ -242,7 +243,7 @@ const getSuperCallsVisitor = mergeVisitors<{
  */
 function hoistFunctionEnvironment(
   fnPath: NodePath<t.Function>,
-  // TODO(Babel 8): Consider defaulting to `false` for spec compliancy
+  // TODO(Babel 8): Consider defaulting to `false` for spec compliance
   noNewArrows: boolean | void = true,
   allowInsertArrow: boolean | void = true,
   allowInsertArrowWithRest: boolean | void = true,

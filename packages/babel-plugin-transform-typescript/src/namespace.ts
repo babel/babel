@@ -23,16 +23,9 @@ export default function transpileNamespace(
 
   const name = path.node.id.name;
   const value = handleNested(path, t.cloneNode(path.node, true));
-  const bound = path.scope.hasOwnBinding(name);
-  if (path.parent.type === "ExportNamedDeclaration") {
-    if (!bound) {
-      path.parentPath.insertAfter(value);
-      path.replaceWith(getDeclaration(name));
-      path.scope.registerDeclaration(path.parentPath);
-    } else {
-      path.parentPath.replaceWith(value);
-    }
-  } else if (bound) {
+  if (value === null) {
+    path.remove();
+  } else if (path.scope.hasOwnBinding(name)) {
     path.replaceWith(value);
   } else {
     path.scope.registerDeclaration(
@@ -52,7 +45,7 @@ function getMemberExpression(name: string, itemName: string) {
 }
 
 /**
- * Convert export const foo = 1 to Namepsace.foo = 1;
+ * Convert export const foo = 1 to Namespace.foo = 1;
  *
  * @param {t.VariableDeclaration} node given variable declaration, e.g. `const foo = 1`
  * @param {string} name the generated unique namespace member name
@@ -107,8 +100,8 @@ function handleVariableDeclaration(
   return [node, t.expressionStatement(t.sequenceExpression(assignments))];
 }
 
-function buildNestedAmbiendModuleError(path: NodePath, node: t.Node) {
-  throw path.hub.buildError(
+function buildNestedAmbientModuleError(path: NodePath, node: t.Node) {
+  return path.hub.buildError(
     node,
     "Ambient modules cannot be nested in other modules or namespaces.",
     Error,
@@ -119,7 +112,7 @@ function handleNested(
   path: NodePath,
   node: t.TSModuleDeclaration,
   parentExport?: t.Expression,
-) {
+): t.Statement | null {
   const names = new Set();
   const realName = node.id;
   t.assertIdentifier(realName);
@@ -134,6 +127,8 @@ function handleNested(
       //   }
       [t.exportNamedDeclaration(node.body)];
 
+  let isEmpty = true;
+
   for (let i = 0; i < namespaceTopLevel.length; i++) {
     const subNode = namespaceTopLevel[i];
 
@@ -142,30 +137,35 @@ function handleNested(
     switch (subNode.type) {
       case "TSModuleDeclaration": {
         if (!t.isIdentifier(subNode.id)) {
-          throw buildNestedAmbiendModuleError(path, subNode);
+          throw buildNestedAmbientModuleError(path, subNode);
         }
 
         const transformed = handleNested(path, subNode);
-        const moduleName = subNode.id.name;
-        if (names.has(moduleName)) {
-          namespaceTopLevel[i] = transformed;
-        } else {
-          names.add(moduleName);
-          namespaceTopLevel.splice(
-            i++,
-            1,
-            getDeclaration(moduleName),
-            transformed,
-          );
+        if (transformed !== null) {
+          isEmpty = false;
+          const moduleName = subNode.id.name;
+          if (names.has(moduleName)) {
+            namespaceTopLevel[i] = transformed;
+          } else {
+            names.add(moduleName);
+            namespaceTopLevel.splice(
+              i++,
+              1,
+              getDeclaration(moduleName),
+              transformed,
+            );
+          }
         }
         continue;
       }
       case "TSEnumDeclaration":
       case "FunctionDeclaration":
       case "ClassDeclaration":
+        isEmpty = false;
         names.add(subNode.id.name);
         continue;
       case "VariableDeclaration": {
+        isEmpty = false;
         // getBindingIdentifiers returns an object without prototype.
         // eslint-disable-next-line guard-for-in
         for (const name in t.getBindingIdentifiers(subNode)) {
@@ -174,6 +174,7 @@ function handleNested(
         continue;
       }
       default:
+        isEmpty &&= t.isTypeScript(subNode);
         // Neither named declaration nor export, continue to next item.
         continue;
       case "ExportNamedDeclaration":
@@ -189,6 +190,7 @@ function handleNested(
       case "TSEnumDeclaration":
       case "FunctionDeclaration":
       case "ClassDeclaration": {
+        isEmpty = false;
         const itemName = subNode.declaration.id.name;
         names.add(itemName);
         namespaceTopLevel.splice(
@@ -206,6 +208,7 @@ function handleNested(
         break;
       }
       case "VariableDeclaration": {
+        isEmpty = false;
         const nodes = handleVariableDeclaration(
           subNode.declaration,
           name,
@@ -217,7 +220,7 @@ function handleNested(
       }
       case "TSModuleDeclaration": {
         if (!t.isIdentifier(subNode.declaration.id)) {
-          throw buildNestedAmbiendModuleError(path, subNode.declaration);
+          throw buildNestedAmbientModuleError(path, subNode.declaration);
         }
 
         const transformed = handleNested(
@@ -225,21 +228,29 @@ function handleNested(
           subNode.declaration,
           t.identifier(name),
         );
-        const moduleName = subNode.declaration.id.name;
-        if (names.has(moduleName)) {
-          namespaceTopLevel[i] = transformed;
+        if (transformed !== null) {
+          isEmpty = false;
+          const moduleName = subNode.declaration.id.name;
+          if (names.has(moduleName)) {
+            namespaceTopLevel[i] = transformed;
+          } else {
+            names.add(moduleName);
+            namespaceTopLevel.splice(
+              i++,
+              1,
+              getDeclaration(moduleName),
+              transformed,
+            );
+          }
         } else {
-          names.add(moduleName);
-          namespaceTopLevel.splice(
-            i++,
-            1,
-            getDeclaration(moduleName),
-            transformed,
-          );
+          namespaceTopLevel.splice(i, 1);
+          i--;
         }
       }
     }
   }
+
+  if (isEmpty) return null;
 
   // {}
   let fallthroughValue: t.Expression = t.objectExpression([]);

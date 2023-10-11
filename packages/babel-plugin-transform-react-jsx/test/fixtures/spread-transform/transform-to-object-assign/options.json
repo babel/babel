@@ -1,5 +1,5 @@
 {
-  "plugins": ["transform-react-jsx", ["proposal-object-rest-spread", {
+  "plugins": ["transform-react-jsx", ["transform-object-rest-spread", {
     "loose": true,
     "useBuiltIns": true
   }]]

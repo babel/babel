@@ -2,10 +2,10 @@
 {
   hasPrev;
   /* top */
-  /* left */ /* right */
+  /* left */
+  /* right */
   /* bottom */
 }
-
 {
   /* top */
   /* left */ /* right */
@@ -16,7 +16,6 @@
   hasPrev;
   /* top */
   /* left */
-
   /* right */
   /* bottom */
   hasNext;
