@@ -11,6 +11,7 @@ if (
 
 const pathUtils = require("path");
 const fs = require("fs");
+const { parseSync } = require("@babel/core");
 
 function normalize(src) {
   return src.replace(/\//, pathUtils.sep);
@@ -832,13 +833,11 @@ function pluginReplaceTSImportExtension() {
   };
 }
 
-function pluginBabelParserTokenType({
-  parseSync,
-  types: { isIdentifier, numericLiteral },
-}) {
-  const tokenTypeSourcePath = "./packages/babel-parser/src/tokenizer/types.ts";
-  function getTokenTypesMapping() {
-    const tokenTypesMapping = new Map();
+const tokenTypesMapping = new Map();
+const tokenTypeSourcePath = "./packages/babel-parser/src/tokenizer/types.ts";
+
+function getTokenTypesMapping() {
+  if (tokenTypesMapping.size === 0) {
     const tokenTypesAst = parseSync(
       fs.readFileSync(tokenTypeSourcePath, {
         encoding: "utf-8",
@@ -872,9 +871,13 @@ function pluginBabelParserTokenType({
     for (let i = 0; i < tokenTypesDefinition.length; i++) {
       tokenTypesMapping.set(tokenTypesDefinition[i].key.name, i);
     }
-    return tokenTypesMapping;
   }
+  return tokenTypesMapping;
+}
 
+function pluginBabelParserTokenType({
+  types: { isIdentifier, numericLiteral },
+}) {
   const tokenTypesMapping = getTokenTypesMapping();
   return {
     visitor: {
