@@ -108,7 +108,10 @@
     "yarn": ">=1.4.0"
   },
   "lint-staged": {
-    "*.{js,cjs,mjs,ts}": [
+    "./Makefile.source.mjs": [
+      "node ./scripts/pack-script.js --auto"
+    ],
+    "*.{js,cjs,mjs,ts,cts,mts}": [
       "eslint --format=codeframe --cache --cache-strategy=content"
     ]
   },
