@@ -37,16 +37,26 @@ const featuresSameLoose = new Map([
 const featuresKey = "@babel/plugin-class-features/featuresKey";
 const looseKey = "@babel/plugin-class-features/looseKey";
 
-// See https://github.com/babel/babel/issues/11622.
-// Since preset-env sets loose for the fields and private methods plugins, it can
-// cause conflicts with the loose mode set by an explicit plugin in the config.
-// To solve this problem, we ignore preset-env's loose mode if another plugin
-// explicitly sets it
-// The code to handle this logic doesn't check that "low priority loose" is always
-// the same. However, it is only set by the preset and not directly by users:
-// unless someone _wants_ to break it, it shouldn't be a problem.
-const looseLowPriorityKey =
-  "@babel/plugin-class-features/looseLowPriorityKey/#__internal__@babel/preset-env__please-overwrite-loose-instead-of-throwing";
+if (!process.env.BABEL_8_BREAKING) {
+  // See https://github.com/babel/babel/issues/11622.
+  // Since preset-env sets loose for the fields and private methods plugins, it can
+  // cause conflicts with the loose mode set by an explicit plugin in the config.
+  // To solve this problem, we ignore preset-env's loose mode if another plugin
+  // explicitly sets it
+  // The code to handle this logic doesn't check that "low priority loose" is always
+  // the same. However, it is only set by the preset and not directly by users:
+  // unless someone _wants_ to break it, it shouldn't be a problem.
+  // eslint-disable-next-line no-var
+  var looseLowPriorityKey =
+    "@babel/plugin-class-features/looseLowPriorityKey/#__internal__@babel/preset-env__please-overwrite-loose-instead-of-throwing";
+}
+
+if (!process.env.BABEL_8_BREAKING) {
+  // eslint-disable-next-line no-var
+  var canIgnoreLoose = function (file: File, feature: number) {
+    return !!(file.get(looseLowPriorityKey) & feature);
+  };
+}
 
 export function enableFeature(file: File, feature: number, loose: boolean) {
   // We can't blindly enable the feature because, if it was already set,
@@ -55,7 +65,12 @@ export function enableFeature(file: File, feature: number, loose: boolean) {
   //   @babel/plugin-class-properties { loose: false }
   // is transformed in loose mode.
   // We only enabled the feature if it was previously disabled.
-  if (!hasFeature(file, feature) || canIgnoreLoose(file, feature)) {
+  if (process.env.BABEL_8_BREAKING) {
+    if (!hasFeature(file, feature)) {
+      file.set(featuresKey, file.get(featuresKey) | feature);
+      setLoose(file, feature, loose);
+    }
+  } else if (!hasFeature(file, feature) || canIgnoreLoose(file, feature)) {
     file.set(featuresKey, file.get(featuresKey) | feature);
     if (
       // @ts-expect-error comparing loose with internal private magic string
@@ -77,16 +92,15 @@ export function enableFeature(file: File, feature: number, loose: boolean) {
   }
 
   let resolvedLoose: boolean | undefined;
-  let higherPriorityPluginName: string | undefined;
-
   for (const [mask, name] of featuresSameLoose) {
     if (!hasFeature(file, mask)) continue;
+    if (!process.env.BABEL_8_BREAKING) {
+      if (canIgnoreLoose(file, mask)) continue;
+    }
 
     const loose = isLoose(file, mask);
 
-    if (canIgnoreLoose(file, mask)) {
-      continue;
-    } else if (resolvedLoose === !loose) {
+    if (resolvedLoose === !loose) {
       throw new Error(
         "'loose' mode configuration must be the same for @babel/plugin-transform-class-properties, " +
           "@babel/plugin-transform-private-methods and " +
@@ -94,11 +108,15 @@ export function enableFeature(file: File, feature: number, loose: boolean) {
       );
     } else {
       resolvedLoose = loose;
-      higherPriorityPluginName = name;
+
+      if (!process.env.BABEL_8_BREAKING) {
+        // eslint-disable-next-line no-var
+        var higherPriorityPluginName = name;
+      }
     }
   }
 
-  if (resolvedLoose !== undefined) {
+  if (!process.env.BABEL_8_BREAKING && resolvedLoose !== undefined) {
     for (const [mask, name] of featuresSameLoose) {
       if (hasFeature(file, mask) && isLoose(file, mask) !== resolvedLoose) {
         setLoose(file, mask, resolvedLoose);
@@ -129,11 +147,9 @@ function setLoose(file: File, feature: number, loose: boolean) {
   if (loose) file.set(looseKey, file.get(looseKey) | feature);
   else file.set(looseKey, file.get(looseKey) & ~feature);
 
-  file.set(looseLowPriorityKey, file.get(looseLowPriorityKey) & ~feature);
-}
-
-function canIgnoreLoose(file: File, feature: number) {
-  return !!(file.get(looseLowPriorityKey) & feature);
+  if (!process.env.BABEL_8_BREAKING) {
+    file.set(looseLowPriorityKey, file.get(looseLowPriorityKey) & ~feature);
+  }
 }
 
 export function shouldTransform(path: NodePath<t.Class>, file: File): boolean {
