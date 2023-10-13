@@ -44,7 +44,7 @@ function expectError(run) {
     // TODO(Babel 8): Delete this code
     {
       // Node.js <= 10
-      stack = replaceAll(stack, "Object.parseSync", "Module.parseSync");
+      stack = stack.replace(/(?:Object|undefined)(?=\.parseSync)/g, "Module");
       stack = stack.replace(
         /(?:run|Object\.<anonymous>) \((<CWD>[^)]+)\)/g,
         "$1",
