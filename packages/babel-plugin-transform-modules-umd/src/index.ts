@@ -133,7 +133,7 @@ export default declare((api, options: Options) => {
   }
 
   function getFileExtension(path: string) {
-    return hasFileExtension(path) ? path.splt(".").pop() : "";
+    return hasFileExtension(path) ? path.split(".").pop() : "";
   }
 
   function hasFileExtension(path: string) {
