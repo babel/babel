@@ -1,8 +1,5 @@
 {
   "sourceType": "module",
-  "plugins": [
-    "flow",
-    "jsx"
-  ],
+  "plugins": ["flow", "jsx"],
   "throws": "Unterminated JSX contents. (1:3)"
 }

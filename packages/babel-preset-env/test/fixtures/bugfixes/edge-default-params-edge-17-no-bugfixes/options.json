@@ -1,12 +1,15 @@
 {
   "validateLogs": true,
   "presets": [
-    ["env", {
-      "debug": true,
-      "bugfixes": false,
-      "targets": {
-        "edge": "17"
+    [
+      "env",
+      {
+        "debug": true,
+        "bugfixes": false,
+        "targets": {
+          "edge": "17"
+        }
       }
-    }]
+    ]
   ]
 }

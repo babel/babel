@@ -1,7 +1,10 @@
 {
   "plugins": [
-    ["transform-modules-systemjs", {
-      "allowTopLevelThis": true
-    }]
+    [
+      "transform-modules-systemjs",
+      {
+        "allowTopLevelThis": true
+      }
+    ]
   ]
 }

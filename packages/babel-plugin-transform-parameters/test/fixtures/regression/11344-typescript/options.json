@@ -1,6 +1,3 @@
 {
-  "plugins": [
-    "transform-parameters",
-    "syntax-typescript"
-  ]
+  "plugins": ["transform-parameters", "syntax-typescript"]
 }

@@ -1,4 +1,4 @@
 {
-    "sourceType": "module",
-    "plugins": ["transform-modules-commonjs", "./plugin"]
+  "sourceType": "module",
+  "plugins": ["transform-modules-commonjs", "./plugin"]
 }

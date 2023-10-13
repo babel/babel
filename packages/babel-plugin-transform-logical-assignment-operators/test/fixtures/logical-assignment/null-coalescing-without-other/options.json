@@ -1,5 +1,3 @@
 {
-  "plugins": [
-    "transform-logical-assignment-operators"
-  ]
+  "plugins": ["transform-logical-assignment-operators"]
 }

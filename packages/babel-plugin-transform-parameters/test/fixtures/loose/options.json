@@ -1,5 +1,3 @@
 {
-  "plugins": [
-    ["transform-parameters", { "loose": true }]
-  ]
+  "plugins": [["transform-parameters", { "loose": true }]]
 }

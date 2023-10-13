@@ -1,6 +1,3 @@
 {
-  "plugins": [
-    ["recordAndTuple", { "syntaxType": "bar" }],
-    ["flow"]
-  ]
+  "plugins": [["recordAndTuple", { "syntaxType": "bar" }], ["flow"]]
 }

@@ -1,8 +1,10 @@
 {
-  "plugins": [[
-    "transform-typescript",
-    {
-      "onlyRemoveTypeImports": true
-    }
-  ]]
+  "plugins": [
+    [
+      "transform-typescript",
+      {
+        "onlyRemoveTypeImports": true
+      }
+    ]
+  ]
 }

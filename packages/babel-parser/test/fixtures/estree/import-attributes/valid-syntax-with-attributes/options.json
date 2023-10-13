@@ -1,9 +1,4 @@
 {
-  "plugins": [
-    "flow",
-    "jsx",
-    "estree",
-    "importAttributes"
-  ],
+  "plugins": ["flow", "jsx", "estree", "importAttributes"],
   "sourceType": "module"
 }

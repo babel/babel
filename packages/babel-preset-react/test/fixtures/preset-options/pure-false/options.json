@@ -1,4 +1,4 @@
 {
   "sourceType": "module",
-  "presets": [["react", {"pure": false}]]
+  "presets": [["react", { "pure": false }]]
 }

@@ -7,9 +7,7 @@
       {
         "debug": true,
         "targets": {
-          "browsers": [
-            "android 3"
-          ]
+          "browsers": ["android 3"]
         }
       }
     ]

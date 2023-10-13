@@ -1,4 +1,4 @@
 {
-  "plugins": [[ "recordAndTuple", { "syntaxType": "hash" }]],
+  "plugins": [["recordAndTuple", { "syntaxType": "hash" }]],
   "tokens": true
 }

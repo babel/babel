@@ -1,3 +1,6 @@
 {
-  "plugins": [["transform-optional-chaining", { "loose": true }], ["transform-nullish-coalescing-operator", { "loose": true }]]
+  "plugins": [
+    ["transform-optional-chaining", { "loose": true }],
+    ["transform-nullish-coalescing-operator", { "loose": true }]
+  ]
 }

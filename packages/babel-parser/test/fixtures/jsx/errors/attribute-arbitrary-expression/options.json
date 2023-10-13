@@ -1,7 +1,4 @@
 {
-  "plugins": [
-    "jsx",
-    "flow"
-  ],
+  "plugins": ["jsx", "flow"],
   "throws": "JSX value should be either an expression or a quoted JSX text. (1:9)"
 }

@@ -1,3 +1,6 @@
 {
-  "plugins": [["pipelineOperator", { "proposal": "hack", "topicToken": "^^" }], "doExpressions"]
+  "plugins": [
+    ["pipelineOperator", { "proposal": "hack", "topicToken": "^^" }],
+    "doExpressions"
+  ]
 }

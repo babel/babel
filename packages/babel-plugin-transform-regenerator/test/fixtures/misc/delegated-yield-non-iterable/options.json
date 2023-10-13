@@ -1,6 +1,3 @@
 {
-  "plugins": [
-    "transform-destructuring",
-    "transform-regenerator"
-  ]
+  "plugins": ["transform-destructuring", "transform-regenerator"]
 }

@@ -1,12 +1,15 @@
 {
   "validateLogs": true,
   "presets": [
-    ["env", {
-      "debug": true,
-      "bugfixes": true,
-      "targets": {
-        "chrome": "89"
+    [
+      "env",
+      {
+        "debug": true,
+        "bugfixes": true,
+        "targets": {
+          "chrome": "89"
+        }
       }
-    }]
+    ]
   ]
 }

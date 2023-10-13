@@ -1,7 +1,5 @@
 {
   "sourceType": "module",
-  "plugins": [
-    "flow"
-  ],
+  "plugins": ["flow"],
   "throws": "Expected an arrow function after this type parameter declaration. (1:0)"
 }
