@@ -1,6 +1,5 @@
 import semver, { type SemVer } from "semver";
 import { logPlugin } from "./debug.ts";
-import getOptionSpecificExcludesFor from "./get-option-specific-excludes.ts";
 import {
   addProposalSyntaxPlugins,
   removeUnnecessaryItems,
@@ -318,6 +317,14 @@ export default declarePreset((api, opts: Options) => {
 
   const babelTargets = api.targets();
 
+  if (process.env.BABEL_8_BREAKING && ("loose" in opts || "spec" in opts)) {
+    throw new Error(
+      "@babel/preset-env: The 'loose' and 'spec' options have been removed, " +
+        "and you should configure granular compiler assumptions instead. See " +
+        "https://babeljs.io/assumptions for more information.",
+    );
+  }
+
   const {
     bugfixes,
     configPath,
@@ -326,15 +333,18 @@ export default declarePreset((api, opts: Options) => {
     forceAllTransforms,
     ignoreBrowserslistConfig,
     include: optionsInclude,
-    loose,
     modules: optionsModules,
     shippedProposals,
-    spec,
     targets: optionsTargets,
     useBuiltIns,
     corejs: { version: corejs, proposals },
     browserslistEnv,
   } = normalizeOptions(opts);
+
+  if (!process.env.BABEL_8_BREAKING) {
+    // eslint-disable-next-line no-var
+    var { loose, spec = false } = opts;
+  }
 
   let targets = babelTargets;
 
@@ -413,7 +423,9 @@ option \`forceAllTransforms: true\` instead.
     exclude.plugins,
     transformTargets,
     getSpecialModulesPluginNames(modules, shouldTransformDynamicImport),
-    getOptionSpecificExcludesFor({ loose }),
+    process.env.BABEL_8_BREAKING || !loose
+      ? undefined
+      : ["transform-typeof-symbol"],
     pluginSyntaxMap,
   );
   if (shippedProposals) {
@@ -456,9 +468,10 @@ option \`forceAllTransforms: true\` instead.
   const plugins = Array.from(pluginNames)
     .map(pluginName => {
       if (
-        pluginName === "transform-class-properties" ||
-        pluginName === "transform-private-methods" ||
-        pluginName === "transform-private-property-in-object"
+        !process.env.BABEL_8_BREAKING &&
+        (pluginName === "transform-class-properties" ||
+          pluginName === "transform-private-methods" ||
+          pluginName === "transform-private-property-in-object")
       ) {
         return [
           getPlugin(pluginName),
@@ -477,7 +490,9 @@ option \`forceAllTransforms: true\` instead.
       }
       return [
         getPlugin(pluginName),
-        { spec, loose, useBuiltIns: pluginUseBuiltIns },
+        process.env.BABEL_8_BREAKING
+          ? { useBuiltIns: pluginUseBuiltIns }
+          : { spec, loose, useBuiltIns: pluginUseBuiltIns },
       ];
     })
     .concat(polyfillPlugins);

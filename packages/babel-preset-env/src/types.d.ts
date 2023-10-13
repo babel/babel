@@ -30,16 +30,18 @@ export type Options = {
   forceAllTransforms: boolean;
   ignoreBrowserslistConfig: boolean;
   include: PluginListOption;
-  loose: boolean;
   modules: ModuleOption;
   shippedProposals: boolean;
-  spec: boolean;
   targets: {
     uglify?: boolean;
     esmodules?: boolean;
   } & InputTargets;
   useBuiltIns: BuiltInsOption;
   browserslistEnv: string;
+
+  // TODO(Babel 8): Remove these options
+  loose: boolean;
+  spec: boolean;
 };
 
 // Babel
