@@ -90,6 +90,7 @@ gen_enforced_field(WorkspaceCwd, 'exports', '{ ".": "./lib/index.js", "./package
   workspace_ident(WorkspaceCwd, WorkspaceIdent),
   WorkspaceIdent \= '@babel/compat-data',
   WorkspaceIdent \= '@babel/helper-plugin-test-runner', % TODO: Remove in Babel 8
+  WorkspaceIdent \= '@babel/core', % TODO: Remove in Babel 8
   WorkspaceIdent \= '@babel/parser',
   WorkspaceIdent \= '@babel/plugin-transform-react-jsx', % TODO: Remove in Babel 8
   WorkspaceIdent \= '@babel/standalone',

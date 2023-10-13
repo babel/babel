@@ -51,28 +51,12 @@ Using plugins:
   transform-export-namespace-from { chrome < 72, firefox < 80, ie }
   transform-modules-commonjs
   transform-dynamic-import
-  syntax-import-meta
 corejs3: `DEBUG` option
 
 Using targets: {
   "chrome": "52",
   "firefox": "50",
   "ie": "11"
-}
-
-Using polyfills with `usage-global` method:
-regenerator: `DEBUG` option
-
-Using targets: {
-  "android": "113",
-  "chrome": "109",
-  "edge": "112",
-  "firefox": "102",
-  "ios": "15.6",
-  "opera": "98",
-  "opera_mobile": "73",
-  "safari": "15.6",
-  "samsung": "20"
 }
 
 Using polyfills with `usage-global` method:
@@ -87,6 +71,3 @@ The corejs3 polyfill added the following polyfills:
   web.dom-collections.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
   web.queue-microtask { "chrome":"52", "firefox":"50", "ie":"11" }
   esnext.global-this { "chrome":"52", "firefox":"50", "ie":"11" }
-
-[<CWD>/packages/babel-preset-env/test/fixtures/debug/usage-corejs3-versions-strings-minor-3.0-1/input.js]
-Based on your code and targets, the regenerator polyfill did not add any polyfill.
