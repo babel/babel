@@ -3,7 +3,11 @@ import { types as t } from "@babel/core";
 import type { NodePath } from "@babel/traverse";
 
 export default declare(api => {
-  api.assertVersion(7);
+  api.assertVersion(
+    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
+      ? PACKAGE_JSON.version
+      : 7,
+  );
 
   function transformStatementList(paths: NodePath<t.Statement>[]) {
     for (const path of paths) {
