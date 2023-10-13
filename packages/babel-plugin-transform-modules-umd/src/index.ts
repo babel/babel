@@ -77,45 +77,50 @@ export default declare((api, options: Options) => {
     api.assumption("enumerableModuleMeta") ?? options.loose;
 
   /**
- * Eg:
- * relative-path : ./X
- * base-url      : /http:/example.com/a/b/c.js
- * return.       : http://example.com/a/b/X
- * 
- * relative-path : Y
- * base-url      : /http:/example.com/a/b/c.js
- * return.       : http://example.com/Y
- */
+   * Eg:
+   * relative-path : ./X
+   * base-url      : /http:/example.com/a/b/c.js
+   * return.       : http://example.com/a/b/X
+   *
+   * relative-path : Y
+   * base-url      : /http:/example.com/a/b/c.js
+   * return.       : http://example.com/Y
+   */
   function getAbsoluteURL(relativePath: string, base: string) {
-    let normalizedRelativePath = relativePath.startsWith("/") || relativePath.startsWith(".") ? relativePath : "/" + relativePath;
+    const normalizedRelativePath =
+      relativePath.startsWith("/") || relativePath.startsWith(".")
+        ? relativePath
+        : "/" + relativePath;
 
     return new URL(normalizedRelativePath, normalizeURL(base)).href;
   }
 
   /**
    * More details: https://babeljs.io/docs/babel-plugin-transform-modules-umd
-   * 
+   *
    * http://example.com/src/App => _src_App_index__js
    * /http:/example.com/src/App/index.js => _src_App_index__js
    */
   function getGlobalNameOfModule(path: string) {
-    let normalizedModuleLocation = normalizeModuleLocation(path);
+    const normalizedModuleLocation = normalizeModuleLocation(path);
 
-    let normalizedURL = normalizeURL(normalizedModuleLocation);
-    let pathname = new URL(normalizedURL).pathname;
+    const normalizedURL = normalizeURL(normalizedModuleLocation);
+    const pathname = new URL(normalizedURL).pathname;
 
-    return pathname
-      .split("/")
-      // .map(str => str.charAt(0).toUpperCase() + str.substring(1))
-      .join("_")
-      .replaceAll(".", "__");
+    return (
+      pathname
+        .split("/")
+        // .map(str => str.charAt(0).toUpperCase() + str.substring(1))
+        .join("_")
+        .replaceAll(".", "__")
+    );
   }
 
   /**
    * There are 2 case for import
    *     - import App from "./App" => "./App/index.js"
    *     - import App from "./App" => "./App.js"
-   * 
+   *
    * This method will transform:
    *     - X.js => X/index.js
    *     - X => X/index.js
@@ -130,10 +135,6 @@ export default declare((api, options: Options) => {
     }
 
     return path.replace(/.js$/, "/index.js");
-  }
-
-  function getFileExtension(path: string) {
-    return hasFileExtension(path) ? path.split(".").pop() : "";
   }
 
   function hasFileExtension(path: string) {
@@ -176,7 +177,13 @@ export default declare((api, options: Options) => {
       : basename(filename, extname(filename));
     let globalToAssign = t.memberExpression(
       t.identifier("global"),
-      t.identifier(t.toIdentifier(resolveGlobals ? getGlobalNameOfModule(filename)  : moduleNameOrBasename)),
+      t.identifier(
+        t.toIdentifier(
+          resolveGlobals
+            ? getGlobalNameOfModule(filename)
+            : moduleNameOrBasename,
+        ),
+      ),
     );
     let initAssignments = [];
 
@@ -242,8 +249,8 @@ export default declare((api, options: Options) => {
         );
       }
     } else {
-      const requireName = resolveGlobals ?
-        getGlobalNameOfModule(getAbsoluteURL(source, normalizeURL(filename)))
+      const requireName = resolveGlobals
+        ? getGlobalNameOfModule(getAbsoluteURL(source, normalizeURL(filename)))
         : basename(source, extname(source));
       const globalName = browserGlobals[requireName] || requireName;
       memberExpression = t.memberExpression(
@@ -304,7 +311,13 @@ export default declare((api, options: Options) => {
               ]),
             );
             browserArgs.push(
-              buildBrowserArg(browserGlobals, exactGlobals, source, resolveGlobals, this.filename || "unknown"),
+              buildBrowserArg(
+                browserGlobals,
+                exactGlobals,
+                source,
+                resolveGlobals,
+                this.filename || "unknown",
+              ),
             );
             importNames.push(t.identifier(metadata.name));
 
