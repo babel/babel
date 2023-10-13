@@ -263,8 +263,6 @@ jobs:
 
   build-babel8:
     name: Build Babel 8 Artifacts
-    permissions:
-      contents: write
     needs: prepare-yarn-cache
     runs-on: ubuntu-latest
     # Yarn PnP does not support native ESM yet (https://github.com/yarnpkg/berry/issues/638)
