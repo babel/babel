@@ -179,7 +179,7 @@ export default declare((api, options: Options) => {
       t.identifier("global"),
       t.identifier(
         t.toIdentifier(
-          resolveGlobals
+          resolveGlobals && !moduleName
             ? getGlobalNameOfModule(filename)
             : moduleNameOrBasename,
         ),
