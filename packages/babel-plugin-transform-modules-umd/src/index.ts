@@ -112,10 +112,10 @@ export default declare((api, options: Options) => {
 
   function normalizeGlobalNameOfModule(pathname: string) {
     const result = pathname
-    .split("/")
-    .map(str => str.charAt(0).toUpperCase() + str.slice(1))
-    .join("")
-    .replaceAll(".", "_")
+      .split("/")
+      .map(str => str.charAt(0).toUpperCase() + str.slice(1))
+      .join("")
+      .replaceAll(".", "_");
 
     return result.charAt(0).toLowerCase() + result.slice(1);
   }
