@@ -98,8 +98,8 @@ export default declare((api, options: Options) => {
   /**
    * More details: https://babeljs.io/docs/babel-plugin-transform-modules-umd
    *
-   * http://example.com/src/App => srcAppIndex_js
-   * /http:/example.com/src/App/index.js => srcAppIndex_js
+   * http://example.com/src/App => srcAppIndexJs
+   * /http:/example.com/src/App/index.js => srcAppIndexJs
    */
   function getGlobalNameOfModule(path: string) {
     const normalizedModuleLocation = normalizeModuleLocation(path);
@@ -115,7 +115,9 @@ export default declare((api, options: Options) => {
       .split("/")
       .map(str => str.charAt(0).toUpperCase() + str.slice(1))
       .join("")
-      .replaceAll(".", "_");
+      .split(".")
+      .map(str => str.charAt(0).toUpperCase() + str.slice(1))
+      .join("");
 
     return result.charAt(0).toLowerCase() + result.slice(1);
   }
