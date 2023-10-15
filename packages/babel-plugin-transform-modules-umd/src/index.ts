@@ -98,8 +98,8 @@ export default declare((api, options: Options) => {
   /**
    * More details: https://babeljs.io/docs/babel-plugin-transform-modules-umd
    *
-   * http://example.com/src/App => _src_App_index__js
-   * /http:/example.com/src/App/index.js => _src_App_index__js
+   * http://example.com/src/App => srcAppIndex_js
+   * /http:/example.com/src/App/index.js => srcAppIndex_js
    */
   function getGlobalNameOfModule(path: string) {
     const normalizedModuleLocation = normalizeModuleLocation(path);
