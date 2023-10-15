@@ -107,13 +107,17 @@ export default declare((api, options: Options) => {
     const normalizedURL = normalizeURL(normalizedModuleLocation);
     const pathname = new URL(normalizedURL).pathname;
 
-    return (
-      pathname
-        .split("/")
-        .map(str => str.charAt(0).toUpperCase() + str.substring(1))
-        .join("")
-        .replaceAll(".", "_")
-    );
+    return normalizeGlobalNameOfModule(pathname);
+  }
+
+  function normalizeGlobalNameOfModule(pathname: string) {
+    const result = pathname
+    .split("/")
+    .map(str => str.charAt(0).toUpperCase() + str.slice(1))
+    .join("")
+    .replaceAll(".", "_")
+
+    return result.charAt(0).toLowerCase() + result.slice(1);
   }
 
   /**
