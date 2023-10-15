@@ -110,8 +110,9 @@ export default declare((api, options: Options) => {
     return (
       pathname
         .split("/")
-        .join("_")
-        .replaceAll(".", "__")
+        .map(str => str.charAt(0).toUpperCase() + str.substring(1))
+        .join("")
+        .replaceAll(".", "_")
     );
   }
 
