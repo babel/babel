@@ -18,11 +18,13 @@ function buildLoopBody(
   let block;
   const bodyPath = path.get("body");
   const body = newBody ?? bodyPath.node;
+  const right = path.node.right;
   if (
     t.isBlockStatement(body) &&
-    Object.keys(path.getBindingIdentifiers())
-      .concat(Object.keys(path.get("right").getBindingIdentifiers()))
-      .some(id => bodyPath.scope.hasOwnBinding(id))
+    (Object.keys(path.getBindingIdentifiers()).some(id =>
+      bodyPath.scope.hasOwnBinding(id),
+    ) ||
+      (t.isIdentifier(right) && bodyPath.scope.hasOwnBinding(right.name)))
   ) {
     block = t.blockStatement([declar, body]);
   } else {
