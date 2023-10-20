@@ -28,9 +28,9 @@ Using plugins:
   transform-parameters { ios < 16.3, safari < 16.3 }
   syntax-async-generators
   syntax-object-rest-spread
+  transform-export-namespace-from { }
   transform-modules-commonjs
   transform-dynamic-import
-  transform-export-namespace-from { }
   syntax-top-level-await
   syntax-import-meta
 

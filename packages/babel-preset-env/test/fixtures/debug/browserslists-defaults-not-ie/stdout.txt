@@ -18,9 +18,9 @@ Using modules transform: auto
 Using plugins:
   transform-unicode-sets-regex { chrome < 112, firefox < 116, ios, opera_mobile < 75, safari < tp, samsung }
   transform-class-static-block { ios < 16.4, safari < 16.4 }
+  transform-export-namespace-from { }
   bugfix/transform-safari-id-destructuring-collision-in-function-expression { ios < 16.3, safari < 16.3 }
   transform-modules-commonjs
   transform-dynamic-import
-  transform-export-namespace-from { }
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
