@@ -4,8 +4,7 @@ import {
   toRanges,
 } from "../lib/util.js";
 
-import babel from "@babel/core";
-const { parseSync, traverse } = babel;
+import { parseSync, traverse } from "@babel/core";
 
 function classPath(input) {
   let targetPath;

@@ -22,6 +22,7 @@
     "bugfix"
   ],
   "dependencies": {
+    "@babel/helper-environment-visitor": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^"
   },
   "peerDependencies": {

@@ -1383,6 +1383,7 @@ __metadata:
   resolution: "@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly@workspace:packages/babel-plugin-bugfix-v8-static-class-fields-redefine-readonly"
   dependencies:
     "@babel/core": "workspace:^"
+    "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/traverse": "workspace:^"

@@ -1,5 +1,6 @@
 import type { NodePath, Visitor } from "@babel/traverse";
 import { types as t } from "@babel/core";
+import { requeueComputedKeyAndDecorators } from "@babel/helper-environment-visitor";
 
 function isNameOrLength(key: t.Node): boolean {
   if (t.isIdentifier(key)) {
@@ -47,10 +48,14 @@ const hasReferenceOrThisVisitor: Visitor<{ name?: string; ref: () => void }> = {
     }
   },
   FunctionParent(path, state) {
+    if (path.isArrowFunctionExpression()) return;
     if (state.name && !path.scope.hasOwnBinding(state.name)) {
       path.traverse(hasReferenceVisitor, state);
     }
     path.skip();
+    if (path.isMethod()) {
+      requeueComputedKeyAndDecorators(path);
+    }
   },
 };
 
@@ -189,14 +194,16 @@ export function getNameOrLengthStaticFieldsIndexes(path: NodePath<t.Class>) {
   return indexes;
 }
 
+type Range = [start: number, end: number];
+
 /**
  * Converts a sorted list of numbers into a list of (inclusive-exclusive)
  * ranges representing the same numbers.
  *
  * @example toRanges([1, 3, 4, 5, 8, 9]) -> [[1, 2], [3, 6], [8, 10]]
  */
-export function toRanges(nums: number[]): [start: number, end: number][] {
-  const ranges = [];
+export function toRanges(nums: number[]): Range[] {
+  const ranges: Range[] = [];
 
   if (nums.length === 0) return ranges;
 
