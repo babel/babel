@@ -36,5 +36,22 @@
   "engines": {
     "node": ">=6.9.0"
   },
-  "author": "The Babel Team (https://babel.dev/team)"
+  "author": "The Babel Team (https://babel.dev/team)",
+  "conditions": {
+    "USE_ESM": [
+      {
+        "type": "module"
+      },
+      null
+    ],
+    "BABEL_8_BREAKING": [
+      {
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+        }
+      },
+      {}
+    ]
+  },
+  "type": "commonjs"
 }
