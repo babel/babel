@@ -2,13 +2,7 @@
 import compatData from "@babel/compat-data/plugins";
 import * as babel from "@babel/core";
 
-import {
-  USE_ESM,
-  itBabel7,
-  itBabel8,
-  describeBabel7,
-  describeBabel7NoESM,
-} from "$repo-utils";
+import { USE_ESM, itBabel7, itBabel8, describeBabel7NoESM } from "$repo-utils";
 
 import * as babelPresetEnv from "../lib/index.js";
 
@@ -60,8 +54,8 @@ describe("babel-preset-env", () => {
       });
     });
   });
-  describe("getModulesPluginNames", () => {
-    describeBabel7("modules is set to false", () => {
+  describeBabel7NoESM("getModulesPluginNames", () => {
+    describe("modules is set to false", () => {
       it("returns only syntax plugins", () => {
         expect(
           babelPresetEnv.getModulesPluginNames({
@@ -80,7 +74,7 @@ describe("babel-preset-env", () => {
       });
     });
     describe("modules is not set to false", () => {
-      describeBabel7("ESMs should not be transformed", () => {
+      describe("ESMs should not be transformed", () => {
         it("returns syntax plugins", () => {
           expect(
             babelPresetEnv.getModulesPluginNames({
@@ -108,17 +102,13 @@ describe("babel-preset-env", () => {
               shouldTransformDynamicImport: false,
               shouldTransformExportNamespaceFrom: false,
             });
-            expect(names).toEqual(
-              process.env.BABEL_8_BREAKING
-                ? ["transform-modules-commonjs"]
-                : [
-                    "transform-modules-commonjs",
-                    "syntax-dynamic-import",
-                    "syntax-export-namespace-from",
-                    "syntax-top-level-await",
-                    "syntax-import-meta",
-                  ],
-            );
+            expect(names).toEqual([
+              "transform-modules-commonjs",
+              "syntax-dynamic-import",
+              "syntax-export-namespace-from",
+              "syntax-top-level-await",
+              "syntax-import-meta",
+            ]);
           });
         });
         describe("dynamic imports should be transformed", () => {
@@ -130,17 +120,13 @@ describe("babel-preset-env", () => {
               shouldTransformDynamicImport: true,
               shouldTransformExportNamespaceFrom: false,
             });
-            expect(names).toEqual(
-              process.env.BABEL_8_BREAKING
-                ? ["transform-modules-systemjs", "transform-dynamic-import"]
-                : [
-                    "transform-modules-systemjs",
-                    "transform-dynamic-import",
-                    "syntax-export-namespace-from",
-                    "syntax-top-level-await",
-                    "syntax-import-meta",
-                  ],
-            );
+            expect(names).toEqual([
+              "transform-modules-systemjs",
+              "transform-dynamic-import",
+              "syntax-export-namespace-from",
+              "syntax-top-level-await",
+              "syntax-import-meta",
+            ]);
           });
           describe("export namespace from should be transformed", () => {
             it("works", () => {
@@ -151,21 +137,13 @@ describe("babel-preset-env", () => {
                 shouldTransformDynamicImport: true,
                 shouldTransformExportNamespaceFrom: true,
               });
-              expect(names).toEqual(
-                process.env.BABEL_8_BREAKING
-                  ? [
-                      "transform-modules-systemjs",
-                      "transform-dynamic-import",
-                      "transform-export-namespace-from",
-                    ]
-                  : [
-                      "transform-modules-systemjs",
-                      "transform-dynamic-import",
-                      "transform-export-namespace-from",
-                      "syntax-top-level-await",
-                      "syntax-import-meta",
-                    ],
-              );
+              expect(names).toEqual([
+                "transform-modules-systemjs",
+                "transform-dynamic-import",
+                "transform-export-namespace-from",
+                "syntax-top-level-await",
+                "syntax-import-meta",
+              ]);
             });
           });
         });

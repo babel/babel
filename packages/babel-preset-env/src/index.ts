@@ -502,45 +502,42 @@ option \`forceAllTransforms: true\` instead.
   return { plugins };
 });
 
-// TODO(Babel 8): This is only here for backward compatibility. Remove it.
-export { getModulesPluginNamesBackwardCompat as getModulesPluginNames };
-const getModulesPluginNamesBackwardCompat = ({
-  modules,
-  transformations,
-  shouldTransformESM,
-  shouldTransformDynamicImport,
-  shouldTransformExportNamespaceFrom,
-}: {
-  modules: ModuleOption;
-  transformations: typeof import("./module-transformations").default;
-  shouldTransformESM: boolean;
-  shouldTransformDynamicImport: boolean;
-  shouldTransformExportNamespaceFrom: boolean;
-}) => {
-  const modulesPluginNames = [];
-  if (modules !== false && transformations[modules]) {
-    if (shouldTransformESM) {
-      modulesPluginNames.push(transformations[modules]);
-    }
+if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
+  // eslint-disable-next-line no-restricted-globals
+  exports.getModulesPluginNames = ({
+    modules,
+    transformations,
+    shouldTransformESM,
+    shouldTransformDynamicImport,
+    shouldTransformExportNamespaceFrom,
+  }: {
+    modules: ModuleOption;
+    transformations: typeof import("./module-transformations").default;
+    shouldTransformESM: boolean;
+    shouldTransformDynamicImport: boolean;
+    shouldTransformExportNamespaceFrom: boolean;
+  }) => {
+    const modulesPluginNames = [];
+    if (modules !== false && transformations[modules]) {
+      if (shouldTransformESM) {
+        modulesPluginNames.push(transformations[modules]);
+      }
 
-    if (shouldTransformDynamicImport) {
-      if (shouldTransformESM && modules !== "umd") {
-        modulesPluginNames.push("transform-dynamic-import");
-      } else {
-        console.warn(
-          "Dynamic import can only be transformed when transforming ES" +
-            " modules to AMD, CommonJS or SystemJS.",
-        );
+      if (shouldTransformDynamicImport) {
+        if (shouldTransformESM && modules !== "umd") {
+          modulesPluginNames.push("transform-dynamic-import");
+        } else {
+          console.warn(
+            "Dynamic import can only be transformed when transforming ES" +
+              " modules to AMD, CommonJS or SystemJS.",
+          );
+        }
       }
     }
-  }
 
-  if (shouldTransformExportNamespaceFrom) {
-    modulesPluginNames.push("transform-export-namespace-from");
-  }
-
-  if (!process.env.BABEL_8_BREAKING) {
-    // Enable module-related syntax plugins for older Babel versions
+    if (shouldTransformExportNamespaceFrom) {
+      modulesPluginNames.push("transform-export-namespace-from");
+    }
     if (!shouldTransformDynamicImport) {
       modulesPluginNames.push("syntax-dynamic-import");
     }
@@ -549,7 +546,7 @@ const getModulesPluginNamesBackwardCompat = ({
     }
     modulesPluginNames.push("syntax-top-level-await");
     modulesPluginNames.push("syntax-import-meta");
-  }
 
-  return modulesPluginNames;
-};
+    return modulesPluginNames;
+  };
+}
