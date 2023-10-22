@@ -1054,7 +1054,7 @@ export default class Scope {
     init?: t.Expression;
     unique?: boolean;
     _blockHoist?: number | undefined;
-    kind?: t.VariableDeclaration["kind"];
+    kind?: "var" | "let" | "const";
   }) {
     let path = this.path;
 
@@ -1119,10 +1119,7 @@ export default class Scope {
 
     const declarator = variableDeclarator(id, init);
     const len = declarPath.node.declarations.push(declarator);
-    path.scope.registerBinding(
-      ["using", "await using"].includes(kind) ? "const" : (kind as BindingKind),
-      declarPath.get("declarations")[len - 1],
-    );
+    path.scope.registerBinding(kind, declarPath.get("declarations")[len - 1]);
   }
 
   /**

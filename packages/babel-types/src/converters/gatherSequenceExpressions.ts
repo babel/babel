@@ -17,7 +17,7 @@ import type * as t from "../index.ts";
 import { buildUndefinedNode } from "../index.ts";
 
 export type DeclarationInfo = {
-  kind: t.VariableDeclaration["kind"];
+  kind: "var";
   id: t.Identifier;
 };
 
