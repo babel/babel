@@ -4,8 +4,8 @@ for (const proto of [{
 }, {
   x: 1
 }]) {
+  let _obj;
   if (true) {
-    let _obj;
     objects.push(_obj = {
       __proto__: proto,
       foo: function () {
