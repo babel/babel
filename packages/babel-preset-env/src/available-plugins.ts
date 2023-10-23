@@ -60,6 +60,7 @@ import bugfixSafariBlockShadowing from "@babel/preset-modules/lib/plugins/transf
 import bugfixSafariForShadowing from "@babel/preset-modules/lib/plugins/transform-safari-for-shadowing/index.js";
 import bugfixSafariIdDestructuringCollisionInFunctionExpression from "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression";
 import bugfixV8SpreadParametersInOptionalChaining from "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining";
+import bugfixV8StaticClassFieldsRedefineReadonly from "@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly";
 
 export { availablePlugins as default };
 const availablePlugins = {
@@ -73,6 +74,8 @@ const availablePlugins = {
   "bugfix/transform-tagged-template-caching": () => bugfixTaggedTemplateCaching,
   "bugfix/transform-v8-spread-parameters-in-optional-chaining": () =>
     bugfixV8SpreadParametersInOptionalChaining,
+  "bugfix/transform-v8-static-class-fields-redefine-readonly": () =>
+    bugfixV8StaticClassFieldsRedefineReadonly,
   "syntax-import-assertions": () => syntaxImportAssertions,
   "syntax-import-attributes": () => syntaxImportAttributes,
   "transform-arrow-functions": () => transformArrowFunctions,
@@ -137,6 +140,7 @@ if (!process.env.BABEL_8_BREAKING) {
   Object.assign(minVersions, {
     "bugfix/transform-safari-id-destructuring-collision-in-function-expression":
       "7.16.0",
+    "bugfix/transform-v8-static-class-fields-redefine-readonly": "7.12.0",
     "syntax-import-attributes": "7.22.0",
     "transform-class-static-block": "7.12.0",
     "transform-private-property-in-object": "7.10.0",

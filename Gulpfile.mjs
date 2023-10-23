@@ -697,6 +697,7 @@ if (bool(process.env.BABEL_8_BREAKING)) {
     "packages/babel-preset-typescript",
     "packages/babel-helper-member-expression-to-functions",
     "packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining",
+    "packages/babel-plugin-bugfix-v8-static-class-fields-redefine-readonly",
     "packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression",
   ].map(src => ({
     src,
