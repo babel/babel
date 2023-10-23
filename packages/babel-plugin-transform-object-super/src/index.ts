@@ -24,11 +24,30 @@ export default declare(api => {
       ? PACKAGE_JSON.version
       : 7,
   );
+  const newLets = new Set<{
+    scopePath: NodePath;
+    id: t.Identifier;
+  }>();
 
   return {
     name: "transform-object-super",
 
     visitor: {
+      Loop: {
+        exit(path) {
+          newLets.forEach(v => {
+            if (v.scopePath === path) {
+              path.scope.push({
+                id: v.id,
+                kind: "let",
+              });
+              path.scope.crawl();
+              path.requeue();
+              newLets.delete(v);
+            }
+          });
+        },
+      },
       ObjectExpression(path, state) {
         let objectRef: t.Identifier;
         const getObjectRef = () =>
@@ -41,7 +60,20 @@ export default declare(api => {
         });
 
         if (objectRef) {
-          path.scope.push({ id: t.cloneNode(objectRef) });
+          const scopePath = path.findParent(
+            p => p.isFunction() || p.isProgram() || p.isLoop(),
+          );
+          const useLet = scopePath.isLoop();
+          // For transform-block-scoping
+          if (useLet) {
+            newLets.add({ scopePath, id: t.cloneNode(objectRef) });
+          } else {
+            path.scope.push({
+              id: t.cloneNode(objectRef),
+              kind: "var",
+            });
+          }
+
           path.replaceWith(
             t.assignmentExpression("=", t.cloneNode(objectRef), path.node),
           );

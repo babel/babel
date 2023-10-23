@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "transform-object-super",
+    "transform-shorthand-properties",
+    "transform-block-scoping"
+  ]
+}
