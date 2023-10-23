@@ -106,7 +106,7 @@ export type * from "./ast-types/generated/index.ts";
 // this is used by @babel/traverse to warn about deprecated visitors
 export { default as __internal__deprecationWarning } from "./utils/deprecationWarning.ts";
 
-if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
+if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
   // eslint-disable-next-line no-restricted-globals
   exports.toSequenceExpression =
     // eslint-disable-next-line no-restricted-globals
