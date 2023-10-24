@@ -332,6 +332,7 @@ function ensureCallbackArrays(obj: Visitor) {
 
 function wrapCheck(nodeType: VIRTUAL_TYPES, fn: Function) {
   const fnKey = `is${nodeType}`;
+  // @ts-expect-error we know virtualTypesValidators will contain `fnKey`, but TS doesn't
   const validator = virtualTypesValidators[fnKey];
   const newFn = function (this: unknown, path: NodePath) {
     if (validator.call(path)) {
