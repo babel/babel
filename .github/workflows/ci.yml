@@ -205,7 +205,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [18, 16, 14, 12, 10, 8, 6]
+        node-version: [20, 18, 16, 14, 12, 10, 8, 6]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -342,7 +342,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Use Node.js 18
+      - name: Use Node.js latest
         uses: actions/setup-node@v3
         with:
           node-version: latest
