@@ -334,7 +334,7 @@ function wrapCheck(nodeType: VIRTUAL_TYPES, fn: Function) {
   const fnKey = `is${nodeType}`;
   const validator = virtualTypesValidators[fnKey];
   const newFn = function (this: unknown, path: NodePath) {
-    if (validator.call(path) {
+    if (validator.call(path)) {
       return fn.apply(this, arguments);
     }
   };
