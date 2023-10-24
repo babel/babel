@@ -18,13 +18,11 @@ function buildLoopBody(
   let block;
   const bodyPath = path.get("body");
   const body = newBody ?? bodyPath.node;
-  const right = path.node.right;
   if (
     t.isBlockStatement(body) &&
-    (Object.keys(path.getBindingIdentifiers()).some(id =>
+    Object.keys(path.getBindingIdentifiers()).some(id =>
       bodyPath.scope.hasOwnBinding(id),
-    ) ||
-      (t.isIdentifier(right) && bodyPath.scope.hasOwnBinding(right.name)))
+    )
   ) {
     block = t.blockStatement([declar, body]);
   } else {
@@ -92,15 +90,14 @@ export default declare((api, options: Options) => {
             return;
           }
           const i = scope.generateUidIdentifier("i");
-          let array: t.Identifier | t.ThisExpression =
-            scope.maybeGenerateMemoised(right, true);
+          const array: t.Identifier =
+            scope.maybeGenerateMemoised(right, true) ||
+            scope.generateUidIdentifier("arr");
 
-          const inits = [t.variableDeclarator(i, t.numericLiteral(0))];
-          if (array) {
-            inits.push(t.variableDeclarator(array, right));
-          } else {
-            array = right as t.Identifier | t.ThisExpression;
-          }
+          const inits = [
+            t.variableDeclarator(i, t.numericLiteral(0)),
+            t.variableDeclarator(array, right),
+          ];
 
           const item = t.memberExpression(
             t.cloneNode(array),
