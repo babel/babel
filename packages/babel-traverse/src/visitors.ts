@@ -1,5 +1,5 @@
 import * as virtualTypes from "./path/lib/virtual-types.ts";
-import * as virtualTypesValidators from "./path/lib/virtual-types-validator.ts"
+import * as virtualTypesValidators from "./path/lib/virtual-types-validator.ts";
 import type { Node } from "@babel/types";
 import {
   DEPRECATED_KEYS,
