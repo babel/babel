@@ -90,14 +90,22 @@ export default declare((api, options: Options) => {
             return;
           }
           const i = scope.generateUidIdentifier("i");
-          const array: t.Identifier =
-            scope.maybeGenerateMemoised(right, true) ||
-            scope.generateUidIdentifier("arr");
+          let array: t.Identifier | t.ThisExpression =
+            scope.maybeGenerateMemoised(right, true);
+          if (
+            !array &&
+            t.isIdentifier(right) &&
+            path.get("body").scope.hasOwnBinding(right.name)
+          ) {
+            array = scope.generateUidIdentifier("arr");
+          }
 
-          const inits = [
-            t.variableDeclarator(i, t.numericLiteral(0)),
-            t.variableDeclarator(array, right),
-          ];
+          const inits = [t.variableDeclarator(i, t.numericLiteral(0))];
+          if (array) {
+            inits.push(t.variableDeclarator(array, right));
+          } else {
+            array = right as t.Identifier | t.ThisExpression;
+          }
 
           const item = t.memberExpression(
             t.cloneNode(array),
