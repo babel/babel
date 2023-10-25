@@ -22,10 +22,9 @@ import type { TraceMap } from "@jridgewell/trace-mapping";
 
 const SCIENTIFIC_NOTATION = /e/i;
 const ZERO_DECIMAL_INTEGER = /\.0+$/;
-const NON_DECIMAL_LITERAL = /^0[box]/;
 const PURE_ANNOTATION_RE = /^\s*[@#]__PURE__\s*$/;
 const HAS_NEWLINE = /[\n\r\u2028\u2029]/;
-const HAS_BlOCK_COMMENT_END = /\*\//;
+const HAS_NEWLINE_OR_BlOCK_COMMENT_END = /[\n\r\u2028\u2029]|\*\//;
 
 const { needsParens } = n;
 
@@ -108,12 +107,13 @@ export type PrintJoinOptions = PrintListOptions & PrintSequenceOptions;
 class Printer {
   constructor(format: Format, map: SourceMap) {
     this.format = format;
-    this._buf = new Buffer(map);
 
     this._indentChar = format.indent.style.charCodeAt(0);
     this._indentRepeat = format.indent.style.length;
 
     this._inputMap = map?._inputMap;
+
+    this._buf = new Buffer(map, this._indentChar);
   }
   declare _inputMap: TraceMap;
 
@@ -237,14 +237,26 @@ class Printer {
    * Writes a number token so that we can validate if it is an integer.
    */
 
-  number(str: string): void {
+  number(str: string, number?: number): void {
+    // const NON_DECIMAL_LITERAL = /^0[box]/;
+    function isNonDecimalLiteral(str: string) {
+      if (str.length > 2 && str.charCodeAt(0) === charCodes.digit0) {
+        const secondChar = str.charCodeAt(1);
+        return (
+          secondChar === charCodes.lowercaseB ||
+          secondChar === charCodes.lowercaseO ||
+          secondChar === charCodes.lowercaseX
+        );
+      }
+      return false;
+    }
     this.word(str);
 
     // Integer tokens need special handling because they cannot have '.'s inserted
     // immediately after them.
     this._endsWithInteger =
-      Number.isInteger(+str) &&
-      !NON_DECIMAL_LITERAL.test(str) &&
+      Number.isInteger(number) &&
+      !isNonDecimalLiteral(str) &&
       !SCIENTIFIC_NOTATION.test(str) &&
       !ZERO_DECIMAL_INTEGER.test(str) &&
       str.charCodeAt(str.length - 1) !== charCodes.dot;
@@ -442,7 +454,7 @@ class Printer {
       firstChar !== charCodes.lineFeed &&
       this.endsWith(charCodes.lineFeed)
     ) {
-      this._buf.queueIndentation(this._indentChar, this._getIndent());
+      this._buf.queueIndentation(this._getIndent());
     }
   }
 
@@ -965,8 +977,7 @@ class Printer {
 
     if (
       this._noLineTerminator &&
-      (HAS_NEWLINE.test(comment.value) ||
-        HAS_BlOCK_COMMENT_END.test(comment.value))
+      HAS_NEWLINE_OR_BlOCK_COMMENT_END.test(comment.value)
     ) {
       return PRINT_COMMENT_HINT.DEFER;
     }
