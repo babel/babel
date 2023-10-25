@@ -6,12 +6,8 @@ import { hasMinVersion } from "./helpers.ts";
 import getRuntimePath, { resolveFSPath } from "./get-runtime-path/index.ts";
 import { createCorejs3Plugin } from "./core-js.ts";
 
-import { createRequire } from "module";
-if (!process.env.BABEL_8_BREAKING) {
-  const require = createRequire(import.meta.url);
-  // eslint-disable-next-line no-var
-  var createBabel7PolyfillPlugins = require("./babel7-polyfills.cjs");
-}
+// TODO(Babel 8): Remove this
+import babel7 from "./babel-7/index.cjs";
 
 function supportsStaticESM(caller: CallerMetadata | undefined) {
   // @ts-expect-error TS does not narrow down optional chaining
@@ -138,7 +134,7 @@ export default declare((api, options: Options, dirname) => {
       ? options.corejs
         ? createCorejs3Plugin(options.corejs, absoluteRuntime)
         : undefined
-      : createBabel7PolyfillPlugins(
+      : babel7.createPolyfillPlugins(
           options,
           runtimeVersion,
           absoluteRuntime,
