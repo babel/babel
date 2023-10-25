@@ -15,7 +15,6 @@ import * as charCodes from "charcodes";
 import {
   ScopeFlag,
   ClassElementType,
-  type BindingTypes,
   BindingFlag,
 } from "../util/scopeflags.ts";
 import { ExpressionErrors } from "./util.ts";
@@ -2300,7 +2299,7 @@ export default abstract class StatementParser extends ExpressionParser {
     node: Undone<N.Class>,
     isStatement: boolean,
     optionalId?: boolean | null,
-    bindingType: BindingTypes = BindingFlag.TYPE_CLASS,
+    bindingType: BindingFlag = BindingFlag.TYPE_CLASS,
   ): void {
     if (tokenIsIdentifier(this.state.type)) {
       node.id = this.parseIdentifier();
@@ -3154,7 +3153,7 @@ export default abstract class StatementParser extends ExpressionParser {
   >(
     specifier: Undone<T>,
     type: T["type"],
-    bindingType: BindingTypes = BindingFlag.TYPE_LEXICAL,
+    bindingType: BindingFlag = BindingFlag.TYPE_LEXICAL,
   ) {
     this.checkLVal(specifier.local, {
       in: { type },
@@ -3400,7 +3399,7 @@ export default abstract class StatementParser extends ExpressionParser {
     /* eslint-disable @typescript-eslint/no-unused-vars -- used in TypeScript and Flow parser */
     isInTypeOnlyImport: boolean,
     isMaybeTypeOnly: boolean,
-    bindingType: BindingTypes | undefined,
+    bindingType: BindingFlag | undefined,
     /* eslint-enable @typescript-eslint/no-unused-vars */
   ): N.ImportSpecifier {
     if (this.eatContextual(tt._as)) {

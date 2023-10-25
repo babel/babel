@@ -17,11 +17,7 @@ import type * as N from "../../types.ts";
 import type { Position } from "../../util/location.ts";
 import { createPositionWithColumnOffset } from "../../util/location.ts";
 import type Parser from "../../parser/index.ts";
-import {
-  type BindingTypes,
-  ScopeFlag,
-  BindingFlag,
-} from "../../util/scopeflags.ts";
+import { ScopeFlag, BindingFlag } from "../../util/scopeflags.ts";
 import TypeScriptScopeHandler from "./scope.ts";
 import * as charCodes from "charcodes";
 import type { ExpressionErrors } from "../../parser/util.ts";
@@ -3167,7 +3163,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       isStatement: boolean,
       optionalId?: boolean | null,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      bindingType?: BindingTypes,
+      bindingType?: BindingFlag,
     ): void {
       if ((!isStatement || optionalId) && this.isContextual(tt._implements)) {
         return;
@@ -3679,7 +3675,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         | "TSSatisfiesExpression"
         | "TSTypeAssertion",
       isUnparenthesizedInAssign: boolean,
-      binding: BindingTypes,
+      binding: BindingFlag,
     ) {
       return (
         getOwn(
@@ -4039,7 +4035,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       isInTypeOnlyImport: boolean,
       isMaybeTypeOnly: boolean,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      bindingType: BindingTypes | undefined,
+      bindingType: BindingFlag | undefined,
     ): N.ImportSpecifier {
       if (!importedIsString && isMaybeTypeOnly) {
         this.parseTypeOnlyImportExportSpecifier(
