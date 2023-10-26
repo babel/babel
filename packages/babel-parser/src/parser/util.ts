@@ -17,8 +17,7 @@ import ClassScopeHandler from "../util/class-scope.ts";
 import ExpressionScopeHandler from "../util/expression-scope.ts";
 import { ScopeFlag } from "../util/scopeflags.ts";
 import ProductionParameterHandler, {
-  PARAM_AWAIT,
-  PARAM,
+  ParamKind,
 } from "../util/production-parameter.ts";
 import {
   Errors,
@@ -347,9 +346,9 @@ export default abstract class UtilParser extends Tokenizer {
   }
 
   enterInitialScopes() {
-    let paramFlags = PARAM;
+    let paramFlags = ParamKind.PARAM;
     if (this.inModule) {
-      paramFlags |= PARAM_AWAIT;
+      paramFlags |= ParamKind.PARAM_AWAIT;
     }
     this.scope.enter(ScopeFlag.PROGRAM);
     this.prodParam.enter(paramFlags);
