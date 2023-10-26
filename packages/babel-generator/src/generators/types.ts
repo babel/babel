@@ -246,7 +246,7 @@ export function StringLiteral(
     this.getPossibleRaw(node);
 
   if (typeof raw === "string") {
-    this.token(raw);
+    this.token(raw, inJsx);
     return;
   }
 
@@ -254,7 +254,7 @@ export function StringLiteral(
     ? `"${escape(node.value)}"`
     : jsesc(node.value, this.format.jsescOption);
 
-  this.token(val);
+  this.token(val, inJsx);
 }
 
 export function BigIntLiteral(this: Printer, node: t.BigIntLiteral) {
