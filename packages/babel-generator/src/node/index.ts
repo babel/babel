@@ -11,33 +11,33 @@ import type * as t from "@babel/types";
 
 import type { WhitespaceFlag } from "./whitespace.ts";
 
+type NodeHandler<R> = (
+  node: t.Node,
+  // todo:
+  // node: K extends keyof typeof t
+  //   ? Extract<typeof t[K], { type: "string" }>
+  //   : t.Node,
+  parent: t.Node,
+  stack?: t.Node[],
+) => R;
+
 export type NodeHandlers<R> = {
-  [K in string]?: (
-    node: K extends t.Node["type"] ? Extract<t.Node, { type: K }> : t.Node,
-    // todo:
-    // node: K extends keyof typeof t
-    //   ? Extract<typeof t[K], { type: "string" }>
-    //   : t.Node,
-    parent: t.Node,
-    stack: t.Node[],
-  ) => R;
+  [K in string]?: NodeHandler<R>;
 };
 
 function expandAliases<R>(obj: NodeHandlers<R>) {
-  const newObj: NodeHandlers<R> = {};
+  const map = new Map<string, NodeHandler<R>>();
 
-  function add(
-    type: string,
-    func: (node: t.Node, parent: t.Node, stack: t.Node[]) => R,
-  ) {
-    const fn = newObj[type];
-    newObj[type] = fn
-      ? function (node, parent, stack) {
-          const result = fn(node, parent, stack);
-
-          return result == null ? func(node, parent, stack) : result;
-        }
-      : func;
+  function add(type: string, func: NodeHandler<R>) {
+    const fn = map.get(type);
+    map.set(
+      type,
+      fn
+        ? function (node, parent, stack) {
+            return fn(node, parent, stack) ?? func(node, parent, stack);
+          }
+        : func,
+    );
   }
 
   for (const type of Object.keys(obj)) {
@@ -51,23 +51,13 @@ function expandAliases<R>(obj: NodeHandlers<R>) {
     }
   }
 
-  return newObj;
+  return map;
 }
 
 // Rather than using `t.is` on each object property, we pre-expand any type aliases
 // into concrete types so that the 'find' call below can be as fast as possible.
 const expandedParens = expandAliases(parens);
 const expandedWhitespaceNodes = expandAliases(whitespace.nodes);
-
-function find<R>(
-  obj: NodeHandlers<R>,
-  node: t.Node,
-  parent: t.Node,
-  printStack?: t.Node[],
-): R | null {
-  const fn = obj[node.type];
-  return fn ? fn(node, parent, printStack) : null;
-}
 
 function isOrHasCallExpression(node: t.Node): boolean {
   if (isCallExpression(node)) {
@@ -88,7 +78,7 @@ export function needsWhitespace(
     node = node.expression;
   }
 
-  const flag = find(expandedWhitespaceNodes, node, parent);
+  const flag = expandedWhitespaceNodes.get(node.type)?.(node, parent);
 
   if (typeof flag === "number") {
     return (flag & type) !== 0;
@@ -116,5 +106,5 @@ export function needsParens(
     if (isOrHasCallExpression(node)) return true;
   }
 
-  return find(expandedParens, node, parent, printStack);
+  return expandedParens.get(node.type)?.(node, parent, printStack);
 }
