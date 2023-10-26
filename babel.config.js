@@ -80,10 +80,7 @@ module.exports = function (api) {
   let convertESM = outputType === "script";
   let replaceTSImportExtension = true;
   let ignoreLib = true;
-  let includeRegeneratorRuntime = false;
   let needsPolyfillsForOldNode = false;
-
-  let transformRuntimeOptions;
 
   const nodeVersion = bool(process.env.BABEL_8_BREAKING) ? "16.20" : "6.9";
   // The vast majority of our src files are modules, but we use
@@ -105,7 +102,6 @@ module.exports = function (api) {
   switch (env) {
     // Configs used during bundling builds.
     case "standalone":
-      includeRegeneratorRuntime = true;
       convertESM = false;
       replaceTSImportExtension = false;
       ignoreLib = false;
@@ -151,16 +147,6 @@ module.exports = function (api) {
   if (process.env.STRIP_BABEL_8_FLAG && bool(process.env.BABEL_8_BREAKING)) {
     // Never apply polyfills when compiling for Babel 8
     needsPolyfillsForOldNode = false;
-  }
-
-  if (includeRegeneratorRuntime) {
-    const babelRuntimePkgPath = require.resolve("@babel/runtime/package.json");
-
-    transformRuntimeOptions = {
-      helpers: false, // Helpers are handled by rollup when needed
-      regenerator: true,
-      version: require(babelRuntimePkgPath).version,
-    };
   }
 
   const config = {
@@ -310,10 +296,6 @@ module.exports = function (api) {
       {
         test: unambiguousSources.map(normalize),
         sourceType: "unambiguous",
-      },
-      includeRegeneratorRuntime && {
-        exclude: /regenerator-runtime/,
-        plugins: [["@babel/transform-runtime", transformRuntimeOptions]],
       },
       env === "standalone" && {
         test: /chalk/,
