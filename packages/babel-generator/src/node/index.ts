@@ -34,9 +34,7 @@ function expandAliases<R>(obj: NodeHandlers<R>) {
       type,
       fn
         ? function (node, parent, stack) {
-            const result = fn(node, parent, stack);
-
-            return result == null ? func(node, parent, stack) : result;
+            return fn(node, parent, stack) ?? func(node, parent, stack);
           }
         : func,
     );
