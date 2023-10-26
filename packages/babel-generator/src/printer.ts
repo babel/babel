@@ -108,12 +108,11 @@ class Printer {
   constructor(format: Format, map: SourceMap) {
     this.format = format;
 
-    this._indentChar = format.indent.style.charCodeAt(0);
     this._indentRepeat = format.indent.style.length;
 
     this._inputMap = map?._inputMap;
 
-    this._buf = new Buffer(map, this._indentChar);
+    this._buf = new Buffer(map, format.indent.style[0]);
   }
   declare _inputMap: TraceMap;
 
@@ -123,7 +122,6 @@ class Printer {
   declare _buf: Buffer;
   _printStack: Array<t.Node> = [];
   _indent: number = 0;
-  _indentChar: number = 0;
   _indentRepeat: number = 0;
   _insideAux: boolean = false;
   _parenPushNewlineState: { printed: boolean } | null = null;

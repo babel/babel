@@ -29,12 +29,12 @@ type QueueItem = {
 };
 
 export default class Buffer {
-  constructor(map: SourceMap | null, indentChar: number) {
+  constructor(map: SourceMap | null, indentChar: string) {
     this._map = map;
     this._indentChar = indentChar;
 
     for (let i = 0; i < 64; i++) {
-      this._fastIndentations.push(String.fromCharCode(indentChar).repeat(i));
+      this._fastIndentations.push(indentChar.repeat(i));
     }
 
     this._allocQueue();
@@ -48,7 +48,7 @@ export default class Buffer {
   _queue: QueueItem[] = [];
   _queueCursor = 0;
   _canMarkIdName = true;
-  _indentChar = 0;
+  _indentChar = "";
   _fastIndentations: string[] = [];
 
   _position = {
@@ -221,11 +221,10 @@ export default class Buffer {
       if (fastIndentation !== undefined) {
         this._str += fastIndentation;
       } else {
-        char = this._indentChar;
+        this._str +=
+          repeat > 1 ? this._indentChar.repeat(repeat) : this._indentChar;
       }
-    }
-
-    if (char !== -1) {
+    } else {
       this._str +=
         repeat > 1
           ? String.fromCharCode(char).repeat(repeat)
