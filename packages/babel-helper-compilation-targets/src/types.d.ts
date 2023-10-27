@@ -2,6 +2,7 @@
 export type Target =
   | "node"
   | "deno"
+  | "hermes"
   | "chrome"
   | "opera"
   | "edge"
