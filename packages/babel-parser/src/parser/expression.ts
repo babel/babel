@@ -162,7 +162,7 @@ export default abstract class ExpressionParser extends LValParser {
     // Unlike parseTopLevel, we need to drain remaining commentStacks
     // because the top level node is _not_ Program.
     this.finalizeRemainingComments();
-    expr.comments = this.state.comments;
+    expr.comments = this.comments;
     expr.errors = this.state.errors;
     if (this.options.tokens) {
       expr.tokens = this.tokens;
@@ -2108,7 +2108,7 @@ export default abstract class ExpressionParser extends LValParser {
   }
 
   addTrailingCommaExtraToNode(node: N.Node): void {
-    this.addExtra(node, "trailingComma", this.state.lastTokStart);
+    this.addExtra(node, "trailingComma", this.state.lastTokStartLoc.index);
     this.addExtra(node, "trailingCommaLoc", this.state.lastTokStartLoc, false);
   }
 

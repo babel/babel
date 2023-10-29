@@ -94,6 +94,7 @@ export default abstract class Tokenizer extends CommentsParser {
     this.state.init(options);
     this.input = input;
     this.length = input.length;
+    this.comments = [];
     this.isLookahead = false;
   }
 
@@ -113,7 +114,6 @@ export default abstract class Tokenizer extends CommentsParser {
       this.pushToken(new Token(this.state));
     }
 
-    this.state.lastTokStart = this.state.start;
     this.state.lastTokEndLoc = this.state.endLoc;
     this.state.lastTokStartLoc = this.state.startLoc;
     this.nextToken();

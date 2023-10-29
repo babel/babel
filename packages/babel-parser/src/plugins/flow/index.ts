@@ -361,7 +361,7 @@ export default (superClass: typeof Parser) =>
       this.next(); // eat `%`
       this.expectContextual(tt._checks);
       // Force '%' and 'checks' to be adjacent
-      if (this.state.lastTokStart > moduloLoc.index + 1) {
+      if (this.state.lastTokStartLoc.index > moduloLoc.index + 1) {
         this.raise(FlowErrors.UnexpectedSpaceBetweenModuloChecks, {
           at: moduloLoc,
         });

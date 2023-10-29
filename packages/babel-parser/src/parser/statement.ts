@@ -30,9 +30,10 @@ import { createPositionWithColumnOffset } from "../util/location.ts";
 import { cloneStringLiteral, cloneIdentifier, type Undone } from "./node.ts";
 import type Parser from "./index.ts";
 import { ParseBindingListFlags } from "./lval.ts";
+import { LoopLabelKind } from "../tokenizer/state.ts";
 
-const loopLabel = { kind: "loop" } as const,
-  switchLabel = { kind: "switch" } as const;
+const loopLabel = { kind: LoopLabelKind.Loop } as const,
+  switchLabel = { kind: LoopLabelKind.Switch } as const;
 
 export const enum ParseFunctionFlag {
   Expression = 0b0000,
@@ -192,7 +193,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
   parseTopLevel(this: Parser, file: N.File, program: N.Program): N.File {
     file.program = this.parseProgram(program);
-    file.comments = this.state.comments;
+    file.comments = this.comments;
 
     if (this.options.tokens) {
       file.tokens = babel7CompatTokens(this.tokens, this.input);
@@ -847,7 +848,9 @@ export default abstract class StatementParser extends ExpressionParser {
     for (i = 0; i < this.state.labels.length; ++i) {
       const lab = this.state.labels[i];
       if (node.label == null || lab.name === node.label.name) {
-        if (lab.kind != null && (isBreak || lab.kind === "loop")) break;
+        if (lab.kind != null && (isBreak || lab.kind === LoopLabelKind.Loop)) {
+          break;
+        }
         if (node.label && isBreak) break;
       }
     }
@@ -1273,9 +1276,9 @@ export default abstract class StatementParser extends ExpressionParser {
     }
 
     const kind = tokenIsLoop(this.state.type)
-      ? "loop"
+      ? LoopLabelKind.Loop
       : this.match(tt._switch)
-        ? "switch"
+        ? LoopLabelKind.Switch
         : null;
     for (let i = this.state.labels.length - 1; i >= 0; i--) {
       const label = this.state.labels[i];

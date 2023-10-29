@@ -506,7 +506,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         result.push(element);
 
         if (this.eat(tt.comma)) {
-          trailingCommaPos = this.state.lastTokStart;
+          trailingCommaPos = this.state.lastTokStartLoc.index;
           continue;
         }
 
