@@ -69,8 +69,7 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
   declareName(name: string, bindingType: BindingFlag, loc: Position) {
     if (bindingType & BindingFlag.FLAG_TS_IMPORT) {
       if (this.hasImport(name, true)) {
-        this.parser.raise(Errors.VarRedeclaration, {
-          at: loc,
+        this.parser.raise(Errors.VarRedeclaration, loc, {
           identifierName: name,
         });
       }

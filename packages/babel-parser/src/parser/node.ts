@@ -98,8 +98,9 @@ export type Undone<T extends NodeType> = Omit<T, "type">;
 
 export abstract class NodeUtils extends UtilParser {
   startNode<T extends NodeType>(): Undone<T> {
+    const loc = this.state.startLoc;
     // @ts-expect-error cast Node as Undone<T>
-    return new Node(this, this.state.start, this.state.startLoc);
+    return new Node(this, loc.index, loc);
   }
 
   startNodeAt<T extends NodeType>(loc: Position): Undone<T> {

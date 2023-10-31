@@ -152,8 +152,7 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
     loc: Position,
   ) {
     if (this.isRedeclaredInScope(scope, name, bindingType)) {
-      this.parser.raise(Errors.VarRedeclaration, {
-        at: loc,
+      this.parser.raise(Errors.VarRedeclaration, loc, {
         identifierName: name,
       });
     }
