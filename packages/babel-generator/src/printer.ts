@@ -1016,16 +1016,19 @@ class Printer {
           const newlineRegex = new RegExp("\\n\\s{1," + offset + "}", "g");
           val = val.replace(newlineRegex, "\n");
         }
+        if (this.format.concise) {
+          val = val.replace(/\n(?!$)/g, `\n`);
+        } else {
+          let indentSize = this.format.retainLines
+            ? 0
+            : this._buf.getCurrentColumn();
 
-        let indentSize = this.format.retainLines
-          ? 0
-          : this._buf.getCurrentColumn();
+          if (this._shouldIndent(charCodes.slash) || this.format.retainLines) {
+            indentSize += this._getIndent();
+          }
 
-        if (this._shouldIndent(charCodes.slash) || this.format.retainLines) {
-          indentSize += this._getIndent();
+          val = val.replace(/\n(?!$)/g, `\n${" ".repeat(indentSize)}`);
         }
-
-        val = val.replace(/\n(?!$)/g, `\n${" ".repeat(indentSize)}`);
       }
     } else if (!noLineTerminator) {
       val = `//${comment.value}`;
