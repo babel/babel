@@ -17,7 +17,6 @@ function expectError(run) {
     run();
   } catch (e) {
     let { stack } = e;
-    return expect(stack);
     // Normalize windows paths
     stack = stack.replace(/\\/g, "/");
     // Remove absolute URLs
@@ -58,6 +57,10 @@ function expectError(run) {
       stack = replaceAll(
         stack,
         "\n    at ... internal jest frames ...\n    at new Promise (<anonymous>)",
+        "",
+      );
+      stack = stack.replace(
+        "\n    at process._tickCallback (internal/process/next_tick.js:68:7)",
         "",
       );
       // Node.js 8
