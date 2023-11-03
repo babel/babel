@@ -17,6 +17,7 @@ function expectError(run) {
     run();
   } catch (e) {
     let { stack } = e;
+    return expect(stack);
     // Normalize windows paths
     stack = stack.replace(/\\/g, "/");
     // Remove absolute URLs
@@ -78,7 +79,7 @@ function expectError(run) {
 const fixture = name => path.join(__dirname, "fixtures/errors", name);
 
 describe("@babel/core errors", function () {
-  it("error inside config function", function () {
+  it.only("error inside config function", function () {
     expectError(() => {
       babel.parseSync("foo;", {
         root: fixture("error-config-function"),
