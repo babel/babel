@@ -83,7 +83,7 @@ function expectError(run) {
 const fixture = name => path.join(__dirname, "fixtures/errors", name);
 
 describe("@babel/core errors", function () {
-  it.only("error inside config function", function () {
+  it("error inside config function", function () {
     expectError(() => {
       babel.parseSync("foo;", {
         root: fixture("error-config-function"),
