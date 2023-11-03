@@ -59,6 +59,11 @@ function expectError(run) {
         "\n    at ... internal jest frames ...\n    at new Promise (<anonymous>)",
         "",
       );
+      // For some reason this is only there in Node.js 10
+      stack = stack.replace(
+        "\n    at process._tickCallback (... internal node frames ...)",
+        "",
+      );
       // Node.js 8
       stack = stack.replace(/\n\s*at <anonymous>$/g, "");
       // Node.js 6
