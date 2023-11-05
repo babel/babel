@@ -21,7 +21,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Use Node.js latest
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "*"
           cache: "yarn"
@@ -55,7 +55,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Use Node.js latest
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "*"
       - name: Get yarn3 cache directory path
