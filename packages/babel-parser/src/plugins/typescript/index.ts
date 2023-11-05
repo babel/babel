@@ -26,7 +26,7 @@ import TypeScriptScopeHandler from "./scope.ts";
 import * as charCodes from "charcodes";
 import type { ExpressionErrors } from "../../parser/util.ts";
 import type { ParseStatementFlag } from "../../parser/statement.ts";
-import { PARAM } from "../../util/production-parameter.ts";
+import { ParamKind } from "../../util/production-parameter.ts";
 import { Errors, ParseErrorEnum } from "../../parse-error.ts";
 import { cloneIdentifier, type Undone } from "../../parser/node.ts";
 import type { Pattern } from "../../types.ts";
@@ -1910,7 +1910,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         node.body = inner;
       } else {
         this.scope.enter(ScopeFlag.TS_MODULE);
-        this.prodParam.enter(PARAM);
+        this.prodParam.enter(ParamKind.PARAM);
         node.body = this.tsParseModuleBlock();
         this.prodParam.exit();
         this.scope.exit();
@@ -1931,7 +1931,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
       if (this.match(tt.braceL)) {
         this.scope.enter(ScopeFlag.TS_MODULE);
-        this.prodParam.enter(PARAM);
+        this.prodParam.enter(ParamKind.PARAM);
         node.body = this.tsParseModuleBlock();
         this.prodParam.exit();
         this.scope.exit();
@@ -2125,7 +2125,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           // Would like to use tsParseAmbientExternalModuleDeclaration here, but already ran past "global".
           if (this.match(tt.braceL)) {
             this.scope.enter(ScopeFlag.TS_MODULE);
-            this.prodParam.enter(PARAM);
+            this.prodParam.enter(ParamKind.PARAM);
             const mod = node;
             mod.global = true;
             mod.id = expr;

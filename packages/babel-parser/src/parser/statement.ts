@@ -19,7 +19,7 @@ import {
   BindingFlag,
 } from "../util/scopeflags.ts";
 import { ExpressionErrors } from "./util.ts";
-import { PARAM, functionFlags } from "../util/production-parameter.ts";
+import { ParamKind, functionFlags } from "../util/production-parameter.ts";
 import {
   newExpressionScope,
   newParameterDeclarationScope,
@@ -2109,7 +2109,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this.state.labels = [];
     // ClassStaticBlockStatementList:
     //   StatementList[~Yield, ~Await, ~Return] opt
-    this.prodParam.enter(PARAM);
+    this.prodParam.enter(ParamKind.PARAM);
     const body: N.Node[] = (member.body = []);
     this.parseBlockOrModuleBlockBody(body, undefined, false, tt.braceR);
     this.prodParam.exit();
@@ -2289,7 +2289,7 @@ export default abstract class StatementParser extends ExpressionParser {
   ): void {
     this.scope.enter(ScopeFlag.CLASS | ScopeFlag.SUPER);
     this.expressionScope.enter(newExpressionScope());
-    this.prodParam.enter(PARAM);
+    this.prodParam.enter(ParamKind.PARAM);
     node.value = this.eat(tt.eq) ? this.parseMaybeAssignAllowIn() : null;
     this.expressionScope.exit();
     this.prodParam.exit();
