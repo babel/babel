@@ -308,6 +308,8 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
+    env:
+      YARN_IGNORE_NODE: 1
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
