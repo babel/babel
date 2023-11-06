@@ -86,7 +86,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: verdaccio-workspace
-          path: /tmp/verdaccio-workspace.tar
+          path: /tmp
       - name: Unpack published packages
         run: tar -C /tmp -xf /tmp/verdaccio-workspace.tar
       - name: Test
