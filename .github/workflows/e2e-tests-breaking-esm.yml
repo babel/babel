@@ -32,10 +32,14 @@ jobs:
         env:
           BABEL_8_BREAKING: true
           USE_ESM: true
+      - name: Pack published packages
+        working-directory: /tmp
+        run: tar -cvf verdaccio-workspace.tar verdaccio-workspace
       - uses: actions/upload-artifact@v3
         with:
           name: verdaccio-workspace
-          path: /tmp/verdaccio-workspace
+          path: /tmp/verdaccio-workspace.tar
+          retention-days: 1
 
   e2e-tests:
     name: Test
@@ -89,7 +93,9 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: verdaccio-workspace
-          path: /tmp/verdaccio-workspace
+          path: /tmp/verdaccio-workspace.tar
+      - name: Unpack published packages
+        run: tar -C /tmp -xf /tmp/verdaccio-workspace.tar
       - name: Test
         run: ./scripts/integration-tests/e2e-${{ matrix.project }}.sh
         env:
