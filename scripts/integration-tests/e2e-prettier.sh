@@ -15,8 +15,8 @@ source utils/cleanup.sh
 set -x
 
 # Clone prettier
-git clone --depth=1 https://github.com/prettier/prettier tmp/prettier
-cd tmp/prettier || exit
+git clone --depth=1 https://github.com/prettier/prettier /tmp/prettier
+cd /tmp/prettier || exit
 
 # Update @babel/* dependencies
 node "$root/utils/bump-babel-dependencies.js"
