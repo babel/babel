@@ -41,14 +41,6 @@ function enforcePackageExports({ Yarn }) {
       "./package.json": "./package.json",
     };
 
-    // TODO: Yarn 4 does not support object literal in constraints as it does in Yarn 3
-    // remove this branch when Yarn 4 supports it
-    if (
-      JSON.stringify(workspace.manifest.exports) ===
-      JSON.stringify(desiredExports)
-    ) {
-      continue;
-    }
     workspace.set("exports", desiredExports);
   }
 }
