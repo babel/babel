@@ -987,3 +987,19 @@ describe("Babel and Espree", () => {
     });
   });
 });
+
+describe("scope", () => {
+  it("should nest a module scope for module expressions", () => {
+    const code = "(module {})";
+    const options = {
+      babelOptions: { parserOpts: { plugins: ["moduleBlocks"] } },
+    };
+    const { ast, scopeManager } = parseForESLint(code, options);
+    const moduleExpression = ast.body[0].expression;
+    scopeManager.acquire(moduleExpression);
+
+    expect(scopeManager.acquire(moduleExpression)).toMatchObject({
+      type: "module",
+    });
+  });
+});

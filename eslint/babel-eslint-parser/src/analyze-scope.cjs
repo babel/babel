@@ -67,10 +67,27 @@ class PatternVisitor extends OriginalPatternVisitor {
 
 class Referencer extends OriginalReferencer {
   #client;
+  visitedTopLevel = false;
 
   constructor(options, scopeManager, client) {
     super(options, scopeManager);
     this.#client = client;
+  }
+
+  Program(node) {
+    if (this.visitedTopLevel) {
+      // Program nodes are also currently used nested in module expressions, leading to an error as only one global scope can exist
+      return;
+    }
+
+    this.visitedTopLevel = true;
+    super.Program(node);
+  }
+
+  ModuleExpression(node) {
+    this.scopeManager.__nestModuleScope(node);
+    this.visitChildren(node);
+    this.close(node);
   }
 
   // inherits.
