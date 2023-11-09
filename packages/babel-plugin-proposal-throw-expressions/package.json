@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-throw-expressions",
-  "version": "7.22.5",
+  "version": "7.23.3",
   "description": "Wraps Throw Expressions in an IIFE",
   "repository": {
     "type": "git",

@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-throw-expressions",
-  "version": "7.22.5",
+  "version": "7.23.3",
   "description": "Allow parsing of Throw Expressions",
   "repository": {
     "type": "git",

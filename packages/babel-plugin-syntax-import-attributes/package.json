@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-import-attributes",
-  "version": "7.22.5",
+  "version": "7.23.3",
   "description": "Allow parsing of the module attributes in the import statement",
   "repository": {
     "type": "git",
