@@ -24,6 +24,36 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.23.3 (2023-11-09)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-typescript`
+  * [#16071](https://github.com/babel/babel/pull/16071) Strip type-only TS namespaces ([@colinaaa](https://github.com/colinaaa))
+* `babel-generator`
+  * [#16078](https://github.com/babel/babel/pull/16078) Fix indentation when generating comments with `concise: true` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-compat-data`, `babel-plugin-bugfix-v8-static-class-fields-redefine-readonly`, `babel-preset-env`
+  * [#14295](https://github.com/babel/babel/pull/14295) Add a bugfix plugin for https://crbug.com/v8/12421 ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-object-super`
+  * [#15948](https://github.com/babel/babel/pull/15948) fix: `super.x` in a loop ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helper-module-transforms`, `babel-plugin-transform-modules-amd`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-umd`
+  * [#16015](https://github.com/babel/babel/pull/16015) fix: handle `__proto__` exports name in CJS/AMD/UMD ([@magic-akari](https://github.com/magic-akari))
+
+#### :memo: Documentation
+* [#16044](https://github.com/babel/babel/pull/16044) docs: Update links in @babel/eslint-parser README ([@aryehb](https://github.com/aryehb))
+
+#### :house: Internal
+* `babel-core`, `babel-preset-env`
+  * [#15988](https://github.com/babel/babel/pull/15988) Refactor handling of modules plugins in `preset-env` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :running_woman: Performance
+* `babel-generator`
+  * [#16061](https://github.com/babel/babel/pull/16061) perf: Improve `@babel/generator` performance ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-traverse`
+  * [#16060](https://github.com/babel/babel/pull/16060) Avoid dynamic dispatch when calling wrapCheck ([@yepitschunked](https://github.com/yepitschunked))
+
+#### :microscope: Output optimization
+* `babel-plugin-transform-computed-properties`
+  * [#6652](https://github.com/babel/babel/pull/6652) Optimize computed properties output (byte-wise) ([@Andarist](https://github.com/Andarist))
 ## v7.23.2 (2023-10-11)
 
 #### :bug: Bug Fix
