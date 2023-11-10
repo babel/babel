@@ -1,13 +1,16 @@
 {
   "validateLogs": true,
   "presets": [
-    ["env", {
-      "debug": true,
-      "bugfixes": true,
-      "targets": {
-        "chrome": "40"
-      },
-      "exclude": ["transform-destructuring", "transform-arrow-functions"]
-    }]
+    [
+      "env",
+      {
+        "debug": true,
+        "bugfixes": true,
+        "targets": {
+          "chrome": "40"
+        },
+        "exclude": ["transform-destructuring", "transform-arrow-functions"]
+      }
+    ]
   ]
 }

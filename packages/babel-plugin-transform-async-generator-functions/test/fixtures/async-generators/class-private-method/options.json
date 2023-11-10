@@ -1,3 +1,6 @@
 {
-  "plugins": ["transform-private-methods", "transform-async-generator-functions"]
+  "plugins": [
+    "transform-private-methods",
+    "transform-async-generator-functions"
+  ]
 }

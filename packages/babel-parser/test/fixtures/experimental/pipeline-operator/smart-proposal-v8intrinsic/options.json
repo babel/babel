@@ -1,6 +1,3 @@
 {
-  "plugins": [
-    ["pipelineOperator", { "proposal": "smart" }],
-    "v8intrinsic"
-  ]
+  "plugins": [["pipelineOperator", { "proposal": "smart" }], "v8intrinsic"]
 }

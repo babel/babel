@@ -6,8 +6,14 @@
   "plugins": [
     "transform-async-to-generator",
     "transform-async-generator-functions",
-    ["babel-plugin-polyfill-corejs3", { "method": "usage-pure", "targets": {
-      "node": "6.17"
-    }}]
+    [
+      "babel-plugin-polyfill-corejs3",
+      {
+        "method": "usage-pure",
+        "targets": {
+          "node": "6.17"
+        }
+      }
+    ]
   ]
 }

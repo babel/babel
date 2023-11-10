@@ -1,5 +1,3 @@
 {
-  "presets": [
-    ["react", { "runtime": "classic" }]
-  ]
+  "presets": [["react", { "runtime": "classic" }]]
 }

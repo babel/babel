@@ -1,3 +1,7 @@
 {
-  "plugins":["transform-typescript", "transform-classes", "transform-modules-commonjs"]
+  "plugins": [
+    "transform-typescript",
+    "transform-classes",
+    "transform-modules-commonjs"
+  ]
 }

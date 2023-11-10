@@ -1,8 +1,4 @@
 {
-  "plugins": [
-    [
-      "importAssertions"
-    ]
-  ],
+  "plugins": [["importAssertions"]],
   "sourceType": "module"
 }

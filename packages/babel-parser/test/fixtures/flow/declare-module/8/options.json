@@ -1,8 +1,5 @@
 {
   "sourceType": "module",
-  "plugins": [
-    "jsx",
-    "flow"
-  ],
+  "plugins": ["jsx", "flow"],
   "throws": "Only declares and type imports are allowed inside declare module. (2:2)"
 }

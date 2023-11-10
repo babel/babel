@@ -1,7 +1,4 @@
 {
   "sourceType": "module",
-  "plugins": [
-    "flow",
-    "optionalChaining"
-  ]
+  "plugins": ["flow", "optionalChaining"]
 }

@@ -1,4 +1,4 @@
 {
-    "plugins": ["transform-parameters"],
-    "throws": "When using '@babel/plugin-transform-parameters', it's not possible to compile `super()` in an arrow function with default or rest parameters without compiling classes.\nPlease add '@babel/plugin-transform-classes' to your Babel configuration."
+  "plugins": ["transform-parameters"],
+  "throws": "When using '@babel/plugin-transform-parameters', it's not possible to compile `super()` in an arrow function with default or rest parameters without compiling classes.\nPlease add '@babel/plugin-transform-classes' to your Babel configuration."
 }

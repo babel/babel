@@ -1,6 +1,12 @@
 {
-  "plugins": ["transform-react-jsx", ["transform-object-rest-spread", {
-    "loose": true,
-    "useBuiltIns": true
-  }]]
+  "plugins": [
+    "transform-react-jsx",
+    [
+      "transform-object-rest-spread",
+      {
+        "loose": true,
+        "useBuiltIns": true
+      }
+    ]
+  ]
 }

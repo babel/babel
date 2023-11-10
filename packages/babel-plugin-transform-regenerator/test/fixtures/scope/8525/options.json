@@ -1,6 +1,4 @@
 {
-  "presets": [
-    ["react", { "runtime": "classic" }]
-  ],
+  "presets": [["react", { "runtime": "classic" }]],
   "plugins": ["transform-regenerator"]
 }

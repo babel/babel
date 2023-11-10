@@ -1,7 +1,12 @@
 {
-  "plugins": [["proposal-record-and-tuple", {
-    "syntaxType": "hash",
-    "importPolyfill": true,
-    "polyfillModuleName": "my-polyfill"
-  }]]
+  "plugins": [
+    [
+      "proposal-record-and-tuple",
+      {
+        "syntaxType": "hash",
+        "importPolyfill": true,
+        "polyfillModuleName": "my-polyfill"
+      }
+    ]
+  ]
 }

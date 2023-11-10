@@ -1,7 +1,5 @@
 {
   "sourceType": "module",
-  "plugins": [
-    "typescript"
-  ],
+  "plugins": ["typescript"],
   "throws": "Unexpected token, expected \"(\" (1:12)"
 }

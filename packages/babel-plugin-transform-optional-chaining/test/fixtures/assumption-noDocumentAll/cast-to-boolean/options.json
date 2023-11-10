@@ -1,3 +1,6 @@
 {
-  "plugins": ["transform-optional-chaining", "transform-nullish-coalescing-operator"]
+  "plugins": [
+    "transform-optional-chaining",
+    "transform-nullish-coalescing-operator"
+  ]
 }

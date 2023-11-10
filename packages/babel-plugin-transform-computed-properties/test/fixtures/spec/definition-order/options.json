@@ -1,6 +1,3 @@
 {
-  "plugins": [
-    "transform-duplicate-keys",
-    "transform-computed-properties"
-  ]
+  "plugins": ["transform-duplicate-keys", "transform-computed-properties"]
 }

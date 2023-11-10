@@ -1,3 +1,7 @@
 {
-  "plugins": ["transform-class-properties", "transform-private-methods", "transform-block-scoping"]
+  "plugins": [
+    "transform-class-properties",
+    "transform-private-methods",
+    "transform-block-scoping"
+  ]
 }

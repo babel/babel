@@ -1,8 +1,3 @@
 {
-  "args": [
-    "script.js",
-    "script2.js",
-    "--out-file",
-    "script3.js"
-  ]
+  "args": ["script.js", "script2.js", "--out-file", "script3.js"]
 }

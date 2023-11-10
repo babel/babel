@@ -1,6 +1,3 @@
 {
-  "plugins": [
-    "transform-modules-systemjs",
-    "transform-class-properties"
-  ]
+  "plugins": ["transform-modules-systemjs", "transform-class-properties"]
 }

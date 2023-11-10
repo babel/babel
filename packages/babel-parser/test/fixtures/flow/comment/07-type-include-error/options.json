@@ -1,15 +1,5 @@
 {
   "sourceType": "module",
-  "plugins": [
-    [
-      "jsx"
-    ],
-    [
-      "flow"
-    ],
-    [
-      "flowComments"
-    ]
-  ],
+  "plugins": [["jsx"], ["flow"], ["flowComments"]],
   "throws": "Unterminated comment. (1:0)"
 }

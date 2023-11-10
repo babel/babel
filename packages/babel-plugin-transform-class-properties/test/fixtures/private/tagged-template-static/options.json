@@ -1,6 +1,3 @@
 {
-  "plugins": [
-    "transform-class-properties",
-    "transform-private-methods"
-  ]
+  "plugins": ["transform-class-properties", "transform-private-methods"]
 }

@@ -1,5 +1,3 @@
 {
-  "plugins": [
-    ["transform-react-jsx", { "runtime": "classic" }]
-  ]
+  "plugins": [["transform-react-jsx", { "runtime": "classic" }]]
 }
