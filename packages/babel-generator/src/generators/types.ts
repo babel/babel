@@ -194,6 +194,7 @@ export function NumericLiteral(this: Printer, node: t.NumericLiteral) {
   const value = node.value;
   if (opts.numbers) {
     this.number(jsesc(value, opts), value);
+    return;
   }
   const raw = this.getPossibleRaw(node);
   if (raw == null) {
