@@ -8,8 +8,8 @@ import {
 import type * as t from "@babel/types";
 
 export function createUnionType(
-  types: Array<t.FlowType | t.TSType>,
-): t.FlowType | t.TSType {
+  types: (t.FlowType | t.TSType)[],
+): t.FlowType | t.TSType | undefined {
   if (process.env.BABEL_8_BREAKING) {
     if (types.every(v => isFlowType(v))) {
       return createFlowUnionType(types as t.FlowType[]);

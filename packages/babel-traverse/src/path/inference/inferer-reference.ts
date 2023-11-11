@@ -155,7 +155,6 @@ function inferAnnotationFromBinaryExpression(
 
   if (operator !== "===" && operator !== "==") return;
 
-  //
   let typeofPath: NodePath<t.UnaryExpression>;
   let typePath: NodePath<t.Expression>;
   if (left.isUnaryExpression({ operator: "typeof" })) {
