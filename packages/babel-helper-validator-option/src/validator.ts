@@ -29,7 +29,7 @@ export class OptionValidator {
 
   // note: we do not consider rewrite them to high order functions
   // until we have to support `validateNumberOption`.
-  validateBooleanOption<T>(
+  validateBooleanOption<T extends boolean>(
     name: string,
     value?: boolean,
     defaultValue?: T,
@@ -45,7 +45,7 @@ export class OptionValidator {
     return value;
   }
 
-  validateStringOption<T>(
+  validateStringOption<T extends string>(
     name: string,
     value?: string,
     defaultValue?: T,
