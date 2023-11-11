@@ -7,7 +7,7 @@
       {
         "debug": true,
         "targets": { "browsers": "ie 6" },
-        "corejs": 3
+        "corejs": "3.0"
       }
     ]
   ]

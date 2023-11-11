@@ -65,7 +65,7 @@ describe("normalize-options", () => {
     );
 
     it("should not throw if corejs version is valid", () => {
-      [3, 3.5].forEach(corejs => {
+      ["3.5", "3.5.5"].forEach(corejs => {
         ["entry", "usage"].forEach(useBuiltIns => {
           expect(() => normalizeOptions({ useBuiltIns, corejs })).not.toThrow();
         });
@@ -81,7 +81,7 @@ describe("normalize-options", () => {
     });
 
     it("should throw if corejs version is invalid", () => {
-      [1, 1.2, 4, 4.5].forEach(corejs => {
+      [1, 1.2, 4, 4.5, 3, 3.1, "3"].forEach(corejs => {
         ["entry", "usage"].forEach(useBuiltIns => {
           expect(() => normalizeOptions({ useBuiltIns, corejs })).toThrow(
             /The version passed to `corejs` is invalid./,
@@ -147,7 +147,7 @@ describe("normalize-options", () => {
     it("should expand regular expressions in `exclude`", () => {
       const normalized = normalizeOptions({
         useBuiltIns: "entry",
-        corejs: 3,
+        corejs: "3.0",
         exclude: ["es.math.log.*"],
       });
       expect(normalized.exclude).toEqual([
@@ -185,7 +185,7 @@ describe("normalize-options", () => {
       const normalizeWithNonExistingPlugin = () => {
         normalizeOptions({
           useBuiltIns: "entry",
-          corejs: 3,
+          corejs: "3.0",
           include: ["es.math.log2"],
           exclude: ["es.math.log.*"],
         });
@@ -196,7 +196,7 @@ describe("normalize-options", () => {
     it("should not do partial match if not explicitly defined `include` and `exclude`", () => {
       const normalized = normalizeOptions({
         useBuiltIns: "entry",
-        corejs: 3,
+        corejs: "3.0",
         include: ["es.reflect.set-prototype-of"],
         exclude: ["es.reflect.set"],
       });
