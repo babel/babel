@@ -5,7 +5,7 @@ import _normalizeOptions, {
   normalizePluginName,
 } from "../lib/normalize-options.js";
 const normalizeOptions = _normalizeOptions.default || _normalizeOptions;
-import { itBabel7 } from "$repo-utils";
+import { itBabel7, itBabel8 } from "$repo-utils";
 
 describe("normalize-options", () => {
   describe("normalizeOptions", () => {
@@ -80,7 +80,17 @@ describe("normalize-options", () => {
       });
     });
 
-    it("should throw if corejs version is invalid", () => {
+    itBabel7("should throw if corejs version is invalid (babel 7)", () => {
+      [1, 1.2, 4, 4.5].forEach(corejs => {
+        ["entry", "usage"].forEach(useBuiltIns => {
+          expect(() => normalizeOptions({ useBuiltIns, corejs })).toThrow(
+            /The version passed to `corejs` is invalid./,
+          );
+        });
+      });
+    });
+
+    itBabel8("should throw if corejs version is invalid", () => {
       [1, 1.2, 4, 4.5, 3, 3.1, "3"].forEach(corejs => {
         ["entry", "usage"].forEach(useBuiltIns => {
           expect(() => normalizeOptions({ useBuiltIns, corejs })).toThrow(

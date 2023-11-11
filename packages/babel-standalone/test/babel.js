@@ -172,7 +172,9 @@ describe("@babel/standalone", () => {
       const output = Babel.transform("[].includes(2)", {
         sourceType: "module",
         targets: { ie: 11 },
-        presets: [["env", { useBuiltIns: "usage", corejs: 3, modules: false }]],
+        presets: [
+          ["env", { useBuiltIns: "usage", corejs: "3.0", modules: false }],
+        ],
       }).code;
 
       expect(output).toMatchInlineSnapshot(`
