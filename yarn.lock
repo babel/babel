@@ -6801,7 +6801,7 @@ __metadata:
     jest: ^30.0.0-alpha.1
     jest-light-runner: ^0.6.0-alpha.1
     jest-worker: ^30.0.0-alpha.1
-    lint-staged: ^15.0.0
+    lint-staged: ^15.1.0
     mergeiterator: ^1.4.4
     prettier: ^3.0.3
     rollup: ^3.28.1
@@ -12297,7 +12297,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lint-staged@npm:^15.0.0":
+"lint-staged@npm:^15.1.0":
   version: 15.1.0
   resolution: "lint-staged@npm:15.1.0"
   dependencies:
