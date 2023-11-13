@@ -671,9 +671,9 @@ export default declare((api, opts: Options) => {
              but allows loading unbundled plugin (which cannot obviously import
              the bundled `@babel/core` version).
            */
-        api.types.tsInstantiationExpression
-        ? "TSNonNullExpression|TSInstantiationExpression"
-        : "TSNonNullExpression"](
+          api.types.tsInstantiationExpression
+          ? "TSNonNullExpression|TSInstantiationExpression"
+          : "TSNonNullExpression"](
         path: NodePath<t.TSNonNullExpression | t.TSExpressionWithTypeArguments>,
       ) {
         path.replaceWith(path.node.expression);

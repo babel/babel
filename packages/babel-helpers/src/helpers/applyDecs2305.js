@@ -137,8 +137,8 @@ function memberDec(
     get && set
       ? { get: get, set: set, has: has }
       : get
-      ? { get: get, has: has }
-      : { set: set, has: has };
+        ? { get: get, has: has }
+        : { set: set, has: has };
 
   try {
     return dec.call(thisArg, value, ctx);

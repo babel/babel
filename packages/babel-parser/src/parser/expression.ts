@@ -2835,8 +2835,8 @@ export default abstract class ExpressionParser extends LValParser {
     const reservedTest = !this.state.strict
       ? isReservedWord
       : isBinding
-      ? isStrictBindReservedWord
-      : isStrictReservedWord;
+        ? isStrictBindReservedWord
+        : isStrictReservedWord;
 
     if (reservedTest(word, this.inModule)) {
       this.raise(Errors.UnexpectedReservedWord, {

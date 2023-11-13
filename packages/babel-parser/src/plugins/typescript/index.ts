@@ -1282,8 +1282,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
               type === tt._void
                 ? "TSVoidKeyword"
                 : type === tt._null
-                ? "TSNullKeyword"
-                : keywordTypeFromName(this.state.value);
+                  ? "TSNullKeyword"
+                  : keywordTypeFromName(this.state.value);
             if (
               nodeType !== undefined &&
               this.lookaheadCharCode() !== charCodes.dot
@@ -1378,10 +1378,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return isTypeOperator
         ? this.tsParseTypeOperator()
         : this.isContextual(tt._infer)
-        ? this.tsParseInferType()
-        : this.tsInAllowConditionalTypesContext(() =>
-            this.tsParseArrayTypeOrHigher(),
-          );
+          ? this.tsParseInferType()
+          : this.tsInAllowConditionalTypesContext(() =>
+              this.tsParseArrayTypeOrHigher(),
+            );
     }
 
     tsParseUnionOrIntersectionType(
@@ -2377,8 +2377,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         type === "FunctionDeclaration"
           ? "TSDeclareFunction"
           : type === "ClassMethod" || type === "ClassPrivateMethod"
-          ? "TSDeclareMethod"
-          : undefined;
+            ? "TSDeclareMethod"
+            : undefined;
       if (bodilessType && !this.match(tt.braceL) && this.isLineTerminator()) {
         return this.finishNode(node, bodilessType);
       }

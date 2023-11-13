@@ -291,9 +291,9 @@ export default declare((api, opts: Options) => {
     inherits: USE_ESM
       ? undefined
       : IS_STANDALONE
-      ? undefined
-      : // eslint-disable-next-line no-restricted-globals
-        require("@babel/plugin-syntax-object-rest-spread").default,
+        ? undefined
+        : // eslint-disable-next-line no-restricted-globals
+          require("@babel/plugin-syntax-object-rest-spread").default,
 
     visitor: {
       // function a({ b, ...c }) {}

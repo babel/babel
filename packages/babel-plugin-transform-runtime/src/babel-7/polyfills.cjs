@@ -74,7 +74,7 @@ module.exports = function createBasePolyfillsPlugin(
     corejsVersion === 2
       ? createCorejs2Plugin(polyfillOpts)
       : corejsVersion === 3
-      ? corejs3Plugin
-      : null,
+        ? corejs3Plugin
+        : null,
   );
 };
