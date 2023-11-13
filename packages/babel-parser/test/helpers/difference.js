@@ -29,14 +29,14 @@ const toType = value =>
   value === null
     ? "null"
     : typeof value !== "object"
-    ? typeof value
-    : isArray(value)
-    ? "Array"
-    : value instanceof RegExp
-    ? "RegExp"
-    : value instanceof Error
-    ? "Error"
-    : "Object";
+      ? typeof value
+      : isArray(value)
+        ? "Array"
+        : value instanceof RegExp
+          ? "RegExp"
+          : value instanceof Error
+            ? "Error"
+            : "Object";
 
 function compare(adjust, expected, actual) {
   // easy.
@@ -126,21 +126,21 @@ const toValueString = (value, type = toType(value)) =>
   type === "string"
     ? JSON.stringify(value)
     : type === "symbol"
-    ? value.toString()
-    : type === "bigint"
-    ? `${value}n`
-    : Object.is(value, -0)
-    ? "-0"
-    : value + "";
+      ? value.toString()
+      : type === "bigint"
+        ? `${value}n`
+        : Object.is(value, -0)
+          ? "-0"
+          : value + "";
 
 const toExplanationString = ({ discrepancy, expected, actual, key }) =>
   discrepancy === "length"
     ? `Array of wrong size, expected length of ${expected}, but got ${actual}`
     : discrepancy === "unexpected-key"
-    ? `Did not expect a property ${toValueString(key)}`
-    : discrepancy === "missing-key"
-    ? `${toType(actual)} is missing property ${toValueString(key)}`
-    : `${toValueString(expected)} != ${toValueString(actual)}`;
+      ? `Did not expect a property ${toValueString(key)}`
+      : discrepancy === "missing-key"
+        ? `${toType(actual)} is missing property ${toValueString(key)}`
+        : `${toValueString(expected)} != ${toValueString(actual)}`;
 
 const isInt = key => isInteger(+key);
 const toAccess = key =>

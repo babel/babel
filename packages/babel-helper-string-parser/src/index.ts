@@ -338,10 +338,10 @@ export function readInt(
     radix === 16
       ? isAllowedNumericSeparatorSibling.hex
       : radix === 10
-      ? isAllowedNumericSeparatorSibling.dec
-      : radix === 8
-      ? isAllowedNumericSeparatorSibling.oct
-      : isAllowedNumericSeparatorSibling.bin;
+        ? isAllowedNumericSeparatorSibling.dec
+        : radix === 8
+          ? isAllowedNumericSeparatorSibling.oct
+          : isAllowedNumericSeparatorSibling.bin;
 
   let invalid = false;
   let total = 0;

@@ -39,8 +39,8 @@ export default class State {
       strictMode === false
         ? false
         : strictMode === true
-        ? true
-        : sourceType === "module";
+          ? true
+          : sourceType === "module";
 
     this.curLine = startLine;
     this.lineStart = -startColumn;

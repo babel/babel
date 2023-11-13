@@ -139,8 +139,8 @@ export function ParseErrorEnum(a: TemplateStringsArray): <
         ? Parameters<T[K]["message"]>[0]
         : {}
       : T[K] extends ToMessage<any>
-      ? Parameters<T[K]>[0]
-      : {}
+        ? Parameters<T[K]>[0]
+        : {}
   >;
 };
 
@@ -154,8 +154,8 @@ export function ParseErrorEnum<T extends ParseErrorTemplates>(
         ? Parameters<T[K]["message"]>[0]
         : {}
       : T[K] extends ToMessage<any>
-      ? Parameters<T[K]>[0]
-      : {}
+        ? Parameters<T[K]>[0]
+        : {}
   >;
 };
 
@@ -200,8 +200,8 @@ export function ParseErrorEnum(
       typeof template === "string"
         ? { message: () => template }
         : typeof template === "function"
-        ? { message: template }
-        : template;
+          ? { message: template }
+          : template;
     const toMessage = typeof message === "string" ? () => message : message;
 
     ParseErrorConstructors[reasonCode] = toParseErrorConstructor({

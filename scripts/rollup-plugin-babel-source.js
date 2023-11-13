@@ -96,8 +96,8 @@ export default function () {
       const filename = internal
         ? `src/${internal}`
         : typeof packageJson["browser"] === "string"
-        ? packageJson["browser"]
-        : packageJson["main"];
+          ? packageJson["browser"]
+          : packageJson["main"];
 
       let asJS = path.normalize(
         path.join(

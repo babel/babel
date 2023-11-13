@@ -1186,8 +1186,8 @@ class Printer {
             i === 0
               ? COMMENT_SKIP_NEWLINE.LEADING
               : i === len - 1
-              ? COMMENT_SKIP_NEWLINE.TRAILING
-              : COMMENT_SKIP_NEWLINE.DEFAULT,
+                ? COMMENT_SKIP_NEWLINE.TRAILING
+                : COMMENT_SKIP_NEWLINE.DEFAULT,
           );
         } else {
           this._printComment(comment, COMMENT_SKIP_NEWLINE.DEFAULT);

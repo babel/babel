@@ -13,9 +13,9 @@ export default declare(api => {
     inherits: USE_ESM
       ? undefined
       : IS_STANDALONE
-      ? undefined
-      : // eslint-disable-next-line no-restricted-globals
-        require("@babel/plugin-syntax-export-namespace-from").default,
+        ? undefined
+        : // eslint-disable-next-line no-restricted-globals
+          require("@babel/plugin-syntax-export-namespace-from").default,
 
     visitor: {
       ExportNamedDeclaration(path) {

@@ -47,8 +47,8 @@ export function getUsageInBody(binding: Binding, loopPath: NodePath<t.Loop>) {
     const id = path.isUpdateExpression()
       ? path.get("argument")
       : path.isAssignmentExpression()
-      ? path.get("left")
-      : null;
+        ? path.get("left")
+        : null;
     if (id) seen.add(id.node);
     return id as NodePath<t.Identifier> | null;
   });

@@ -36,9 +36,9 @@ export default declare(({ types: t, template, assertVersion }) => {
     inherits: USE_ESM
       ? undefined
       : IS_STANDALONE
-      ? undefined
-      : // eslint-disable-next-line no-restricted-globals
-        require("@babel/plugin-syntax-class-static-block").default,
+        ? undefined
+        : // eslint-disable-next-line no-restricted-globals
+          require("@babel/plugin-syntax-class-static-block").default,
 
     pre() {
       // Enable this in @babel/helper-create-class-features-plugin, so that it

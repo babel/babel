@@ -13,9 +13,9 @@ export default declare(api => {
     inherits: USE_ESM
       ? undefined
       : IS_STANDALONE
-      ? undefined
-      : // eslint-disable-next-line no-restricted-globals
-        require("@babel/plugin-syntax-logical-assignment-operators").default,
+        ? undefined
+        : // eslint-disable-next-line no-restricted-globals
+          require("@babel/plugin-syntax-logical-assignment-operators").default,
 
     visitor: {
       AssignmentExpression(path) {

@@ -3407,8 +3407,8 @@ export default (superClass: typeof Parser) =>
         !enumContext.explicitType
           ? FlowErrors.EnumInvalidMemberInitializerUnknownType
           : enumContext.explicitType === "symbol"
-          ? FlowErrors.EnumInvalidMemberInitializerSymbolType
-          : FlowErrors.EnumInvalidMemberInitializerPrimaryType,
+            ? FlowErrors.EnumInvalidMemberInitializerSymbolType
+            : FlowErrors.EnumInvalidMemberInitializerPrimaryType,
         {
           at: loc,
           ...enumContext,

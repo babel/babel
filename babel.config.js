@@ -505,8 +505,8 @@ function pluginToggleBooleanFlag({ types: t }, { name, value }) {
       return arg.unrelated
         ? res.unrelated()
         : arg.replacement
-        ? res.replacement(t.unaryExpression("!", arg.replacement))
-        : res.value(!arg.value);
+          ? res.replacement(t.unaryExpression("!", arg.replacement))
+          : res.value(!arg.value);
     }
 
     if (test.isLogicalExpression({ operator: "||" })) {

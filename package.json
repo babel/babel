@@ -71,7 +71,7 @@
     "jest-worker": "^30.0.0-alpha.1",
     "lint-staged": "^15.1.0",
     "mergeiterator": "^1.4.4",
-    "prettier": "^3.0.3",
+    "prettier": "^3.1.0",
     "rollup": "^3.28.1",
     "rollup-plugin-dts": "^6.0.0",
     "rollup-plugin-dts-5": "npm:rollup-plugin-dts@^5.3.1",

@@ -452,8 +452,8 @@ export default abstract class StatementParser extends ExpressionParser {
             this.state.strict
               ? Errors.StrictFunction
               : this.options.annexB
-              ? Errors.SloppyFunctionAnnexB
-              : Errors.SloppyFunction,
+                ? Errors.SloppyFunctionAnnexB
+                : Errors.SloppyFunction,
             { at: this.state.startLoc },
           );
         }
@@ -1276,8 +1276,8 @@ export default abstract class StatementParser extends ExpressionParser {
     const kind = tokenIsLoop(this.state.type)
       ? "loop"
       : this.match(tt._switch)
-      ? "switch"
-      : null;
+        ? "switch"
+        : null;
     for (let i = this.state.labels.length - 1; i >= 0; i--) {
       const label = this.state.labels[i];
       if (label.statementStart === node.start) {
@@ -1536,8 +1536,8 @@ export default abstract class StatementParser extends ExpressionParser {
       decl.init = !this.eat(tt.eq)
         ? null
         : isFor
-        ? this.parseMaybeAssignDisallowIn()
-        : this.parseMaybeAssignAllowIn();
+          ? this.parseMaybeAssignDisallowIn()
+          : this.parseMaybeAssignAllowIn();
 
       if (decl.init === null && !allowMissingInitializer) {
         if (
@@ -2228,10 +2228,10 @@ export default abstract class StatementParser extends ExpressionParser {
           ? ClassElementType.STATIC_GETTER
           : ClassElementType.INSTANCE_GETTER
         : node.kind === "set"
-        ? node.static
-          ? ClassElementType.STATIC_SETTER
-          : ClassElementType.INSTANCE_SETTER
-        : ClassElementType.OTHER;
+          ? node.static
+            ? ClassElementType.STATIC_SETTER
+            : ClassElementType.INSTANCE_SETTER
+          : ClassElementType.OTHER;
     this.declareClassPrivateMethodInScope(node, kind);
   }
 

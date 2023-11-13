@@ -77,8 +77,8 @@ export default function createPlugin({
       runtime: RUNTIME_DEFAULT = process.env.BABEL_8_BREAKING
         ? "automatic"
         : development
-        ? "automatic"
-        : "classic",
+          ? "automatic"
+          : "classic",
 
       importSource: IMPORT_SOURCE_DEFAULT = DEFAULT.importSource,
       pragma: PRAGMA_DEFAULT = DEFAULT.pragma,
@@ -793,8 +793,8 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         !t.isObjectExpression(props[0].argument)
         ? props[0].argument
         : props.length > 0
-        ? t.objectExpression(props)
-        : t.nullLiteral();
+          ? t.objectExpression(props)
+          : t.nullLiteral();
     }
   });
 
