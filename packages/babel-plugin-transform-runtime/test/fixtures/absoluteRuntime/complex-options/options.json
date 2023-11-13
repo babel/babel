@@ -13,7 +13,6 @@
     [
       "transform-runtime",
       {
-        "regenerator": false,
         "corejs": false,
         "helpers": true,
         "useESModules": true,
