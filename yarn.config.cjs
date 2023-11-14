@@ -1,10 +1,8 @@
 // @ts-check
 
 /**
- * @type {import('@yarnpkg/types')}
  * @typedef {import('@yarnpkg/types').Yarn.Constraints.Context} Context
  * */
-const { defineConfig } = require(`@yarnpkg/types`);
 
 /**
  * Enforces that all workspaces depend on other workspaces using `workspace:^`
@@ -407,7 +405,7 @@ function enforceExports({ Yarn }) {
   }
 }
 
-module.exports = defineConfig({
+module.exports = {
   constraints: async ctx => {
     enforceWorkspaceDependencies(ctx);
     enforceLicenseMITForPublicUnsetForPrivate(ctx);
@@ -426,4 +424,4 @@ module.exports = defineConfig({
     enforceBabelHelperBabelDeps(ctx);
     enforeceBabelCoreNotInDeps(ctx);
   },
-});
+};
