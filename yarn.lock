@@ -193,8 +193,10 @@ __metadata:
     "@babel/helper-compilation-targets": "workspace:^"
     "@babel/helper-validator-identifier": "workspace:^"
     "@babel/parser": "workspace:^"
+    "@babel/plugin-transform-modules-commonjs": "workspace:^"
     "@babel/preset-env": "workspace:^"
     "@babel/preset-flow": "workspace:^"
+    "@babel/preset-typescript": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
     benchmark: ^2.1.4
