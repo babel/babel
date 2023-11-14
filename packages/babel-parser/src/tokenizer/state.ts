@@ -274,6 +274,11 @@ export default class State {
   // Tokens length in token store
   tokensLength: number = 0;
 
+  /**
+   * When we add a new property, we must manually update the `clone` method
+   * @see State#clone
+   */
+
   curPosition(): Position {
     return new Position(this.curLine, this.pos - this.lineStart, this.pos);
   }
