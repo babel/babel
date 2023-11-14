@@ -47,6 +47,7 @@
     "@types/node": "^20.3.3",
     "@typescript-eslint/eslint-plugin": "^6.5.0",
     "@typescript-eslint/parser": "^6.5.0",
+    "@yarnpkg/types": "^4.0.0",
     "babel-plugin-transform-charcodes": "^0.2.0",
     "c8": "^8.0.1",
     "chalk": "^5.3.0",
