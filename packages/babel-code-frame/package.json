@@ -17,7 +17,7 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/highlight": "workspace:^",
-    "chalk": "condition:BABEL_8_BREAKING ? ^5.3.0 : ^2.4.2 (esm:default,Chalk)"
+    "chalk": "condition:BABEL_8_BREAKING ? ^5.3.0 : ^2.4.2 (esm:default|Chalk)"
   },
   "devDependencies": {
     "import-meta-resolve": "^3.0.0",
