@@ -22,7 +22,6 @@ import type { TraceMap } from "@jridgewell/trace-mapping";
 
 const SCIENTIFIC_NOTATION = /e/i;
 const ZERO_DECIMAL_INTEGER = /\.0+$/;
-const PURE_ANNOTATION_RE = /^\s*[@#]__PURE__\s*$/;
 const HAS_NEWLINE = /[\n\r\u2028\u2029]/;
 const HAS_NEWLINE_OR_BlOCK_COMMENT_END = /[\n\r\u2028\u2029]|\*\//;
 
@@ -534,16 +533,7 @@ class Printer {
 
       if (chaPost === charCodes.asterisk) {
         // This is a block comment
-
-        if (PURE_ANNOTATION_RE.test(str.slice(i + 2, len - 2))) {
-          // We avoid printing newlines after #__PURE__ comments (we treat
-          // then as unary operators), but we must keep the old
-          // parenPushNewlineState because, if a newline was forbidden, it is
-          // still forbidden after the comment.
-          return;
-        }
-
-        // NOTE: code flow continues from here to after these if/elses
+        return;
       } else if (chaPost !== charCodes.slash) {
         // This is neither a block comment, nor a line comment.
         // After a normal token, the parentheses aren't needed anymore
@@ -674,12 +664,21 @@ class Printer {
     this._insideAux = node.loc == undefined;
     this._maybeAddAuxComment(this._insideAux && !oldInAux);
 
-    const shouldPrintParens =
+    let shouldPrintParens =
       forceParens ||
       (format.retainFunctionParens &&
         nodeType === "FunctionExpression" &&
         node.extra?.parenthesized) ||
       needsParens(node, parent, this._printStack);
+
+    if (
+      !shouldPrintParens &&
+      parent?.type === "MemberExpression" &&
+      node.extra?.parenthesized &&
+      node.leadingComments?.length
+    ) {
+      shouldPrintParens = true;
+    }
 
     if (shouldPrintParens) {
       this.token("(");
