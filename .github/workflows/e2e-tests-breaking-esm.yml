@@ -2,6 +2,8 @@ name: E2E tests (breaking, esm)
 
 on:
   push:
+    branches:
+      - main
   pull_request:
 
 permissions:
