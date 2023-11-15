@@ -1482,6 +1482,16 @@ describe("programmatic generation", function () {
         `"(x, y): any /*foo*/ => z"`,
       );
     });
+
+    it("multi-line leading comment after return", () => {
+      const val = t.identifier("val");
+      val.leadingComments = [{ type: "CommentBlock", value: "new\nline" }];
+      expect(generate(t.returnStatement(val)).code).toMatch(`return (
+  /*new
+  line*/
+  val
+);`);
+    });
   });
 });
 
