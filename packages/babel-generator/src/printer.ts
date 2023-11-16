@@ -664,20 +664,35 @@ class Printer {
     this._insideAux = node.loc == undefined;
     this._maybeAddAuxComment(this._insideAux && !oldInAux);
 
+    const parenthesized = node.extra?.parenthesized as boolean | undefined;
     let shouldPrintParens =
       forceParens ||
-      (format.retainFunctionParens &&
-        nodeType === "FunctionExpression" &&
-        node.extra?.parenthesized) ||
+      (parenthesized &&
+        format.retainFunctionParens &&
+        nodeType === "FunctionExpression") ||
       needsParens(node, parent, this._printStack);
 
     if (
       !shouldPrintParens &&
-      parent?.type === "MemberExpression" &&
-      node.extra?.parenthesized &&
-      node.leadingComments?.length
+      parenthesized &&
+      node.leadingComments?.length &&
+      node.leadingComments[0].type === "CommentBlock"
     ) {
-      shouldPrintParens = true;
+      const parentType = parent?.type;
+      switch (parentType) {
+        case "ExpressionStatement":
+        case "VariableDeclarator":
+        case "AssignmentExpression":
+        case "ReturnStatement":
+          break;
+        case "CallExpression":
+        case "OptionalCallExpression":
+        case "NewExpression":
+          if (parent.callee !== node) break;
+        // falls through
+        default:
+          shouldPrintParens = true;
+      }
     }
 
     if (shouldPrintParens) {
