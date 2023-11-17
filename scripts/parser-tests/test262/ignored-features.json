@@ -30,6 +30,7 @@
   "Reflect.set",
   "Reflect.setPrototypeOf",
   "Set",
+  "Set-methods",
   "ShadowRealm",
   "SharedArrayBuffer",
   "String.fromCodePoint",
