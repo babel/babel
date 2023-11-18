@@ -1,13 +1,10 @@
 try {
-  //u: using(obj, isAwait), d: dispose()
   var _usingCtx = babelHelpers.usingCtx();
   const x = _usingCtx.u(obj);
   try {
-    //u: using(obj, isAwait), d: dispose()
     var _usingCtx2 = babelHelpers.usingCtx();
     const y = _usingCtx2.u(call(() => {
       try {
-        //u: using(obj, isAwait), d: dispose()
         var _usingCtx3 = babelHelpers.usingCtx();
         const z = _usingCtx3.u(obj);
         return z;

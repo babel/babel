@@ -92,13 +92,6 @@ export default declare(api => {
 
         t.inherits(replacement, path.node);
 
-        t.addComment(
-          replacement.block.body[0],
-          "leading",
-          "u: using(obj, isAwait), d: dispose()",
-          true,
-        );
-
         const { parentPath } = path;
         if (
           parentPath.isFunction() ||
