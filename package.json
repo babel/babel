@@ -103,7 +103,9 @@
     "@babel/plugin-syntax-unicode-sets-regex/@babel/helper-create-regexp-features-plugin": "workspace:*",
     "babel-plugin-polyfill-corejs2/@babel/compat-data": "workspace:*",
     "chokidar@^3.4.0": "patch:chokidar@npm%3A3.5.3#./.yarn/patches/chokidar-npm-3.5.3-c5f9b0a56a.patch",
-    "chokidar@^3.4.1": "patch:chokidar@npm%3A3.5.3#./.yarn/patches/chokidar-npm-3.5.3-c5f9b0a56a.patch"
+    "chokidar@^3.4.1": "patch:chokidar@npm%3A3.5.3#./.yarn/patches/chokidar-npm-3.5.3-c5f9b0a56a.patch",
+    "psl@npm:^1.1.28": "patch:psl@npm%3A1.9.0#~/.yarn/patches/psl-npm-1.9.0-a546edad1a.patch",
+    "psl@npm:^1.1.33": "patch:psl@npm%3A1.9.0#~/.yarn/patches/psl-npm-1.9.0-a546edad1a.patch"
   },
   "engines": {
     "yarn": ">=1.4.0"
