@@ -47,7 +47,7 @@ export function shareCommentsWithSiblings(this: NodePath) {
 }
 
 function removeIfExisting<T>(list: T[], toRemove?: T[]): T[] {
-  if (!toRemove) return list;
+  if (!toRemove?.length) return list;
   const set = new Set(toRemove);
   return list.filter(el => {
     return !set.has(el);
