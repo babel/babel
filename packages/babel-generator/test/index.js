@@ -1492,6 +1492,26 @@ describe("programmatic generation", function () {
   val
 );`);
     });
+
+    it("multi-line leading comment after return 2", () => {
+      const ast = parse(
+        `return (
+        /*new
+        line*/ val);`,
+        {
+          allowReturnOutsideFunction: true,
+        },
+      );
+      // Remove `parenthesized`
+      ast.program.body[0].argument.extra = null;
+      expect(generate(ast).code).toMatchInlineSnapshot(`
+        "return (
+          /*new
+          line*/
+          val
+        );"
+      `);
+    });
   });
 });
 
