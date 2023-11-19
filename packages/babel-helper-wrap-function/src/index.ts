@@ -17,6 +17,7 @@ import {
   logicalExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
+import type { PluginPass } from "@babel/core";
 
 type ExpressionWrapperBuilder<ExtraBody extends t.Node[]> = (
   replacements?: Parameters<ReturnType<typeof template.expression>>[0],
@@ -316,36 +317,45 @@ export default function wrapFunction(
   }
 }
 
-export function onCallExpressionExit(path: NodePath<t.CallExpression>) {
-  if (path.parentPath.isCallExpression()) {
-    const wrappedFn = path.parentPath.getData(
-      "babel-helper-wrap-function_wrapped_function",
-    );
+export function buildOnCallExpression(helperName: string) {
+  return {
+    CallExpression: {
+      exit(path: NodePath<t.CallExpression>, state: PluginPass) {
+        if (!state.availableHelper(helperName)) {
+          return;
+        }
+        if (path.parentPath.isCallExpression()) {
+          const wrappedFn = path.parentPath.getData(
+            "babel-helper-wrap-function_wrapped_function",
+          );
 
-    if (!wrappedFn || wrappedFn === path.node.callee) return;
+          if (!wrappedFn || wrappedFn === path.node.callee) return;
 
-    const fnPath = path.findParent(p => p.isFunction());
+          const fnPath = path.findParent(p => p.isFunction());
 
-    if (
-      fnPath
-        .findParent(p => p.isLoop() || p.isFunction() || p.isClass())
-        ?.isLoop() !== true
-    ) {
-      const ref = path.scope.generateUidIdentifier("ref");
-      fnPath.parentPath.scope.push({
-        id: ref,
-      });
-      const oldNode = path.node;
-      const comments = path.node.leadingComments;
-      if (comments) path.node.leadingComments = undefined;
-      path.replaceWith(
-        assignmentExpression(
-          "=",
-          cloneNode(ref),
-          logicalExpression("||", cloneNode(ref), oldNode),
-        ),
-      );
-      if (comments) oldNode.leadingComments = comments;
-    }
-  }
+          if (
+            fnPath
+              .findParent(p => p.isLoop() || p.isFunction() || p.isClass())
+              ?.isLoop() !== true
+          ) {
+            const ref = path.scope.generateUidIdentifier("ref");
+            fnPath.parentPath.scope.push({
+              id: ref,
+            });
+            const oldNode = path.node;
+            const comments = path.node.leadingComments;
+            if (comments) path.node.leadingComments = undefined;
+            path.replaceWith(
+              assignmentExpression(
+                "=",
+                cloneNode(ref),
+                logicalExpression("||", cloneNode(ref), oldNode),
+              ),
+            );
+            if (comments) oldNode.leadingComments = comments;
+          }
+        }
+      },
+    },
+  };
 }

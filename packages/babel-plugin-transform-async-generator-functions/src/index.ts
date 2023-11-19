@@ -85,18 +85,19 @@ export default declare(api => {
 
       // We don't need to pass the noNewArrows assumption, since
       // async generators are never arrow functions.
-      if (state.availableHelper("callAsyncGenerator")) {
-        remapAsyncToGenerator.default(path, {
-          wrapAsync: "wrapAsyncGenerator",
-          wrapAwait: "awaitAsyncGenerator",
-          callAsync: "callAsyncGenerator",
-        });
-      } else {
-        remapAsyncToGenerator.default(path, {
-          wrapAsync: state.addHelper("wrapAsyncGenerator"),
-          wrapAwait: state.addHelper("awaitAsyncGenerator"),
-        });
-      }
+      remapAsyncToGenerator.default(
+        path,
+        state.availableHelper("callAsyncGenerator")
+          ? {
+              wrapAsync: "wrapAsyncGenerator",
+              wrapAwait: "awaitAsyncGenerator",
+              callAsync: "callAsyncGenerator",
+            }
+          : {
+              wrapAsync: state.addHelper("wrapAsyncGenerator"),
+              wrapAwait: state.addHelper("awaitAsyncGenerator"),
+            },
+      );
     },
   };
 
@@ -109,13 +110,7 @@ export default declare(api => {
           require("@babel/plugin-syntax-async-generators").default,
 
     visitor: {
-      CallExpression: {
-        exit(path, state) {
-          if (state.availableHelper("callAsyncGenerator")) {
-            remapAsyncToGenerator.onCallExpressionExit(path);
-          }
-        },
-      },
+      ...remapAsyncToGenerator.buildOnCallExpression("callAsyncGenerator"),
       Program(path, state) {
         // We need to traverse the ast here (instead of just vising Function
         // in the top level visitor) because for-await needs to run before the

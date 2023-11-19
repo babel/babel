@@ -50,39 +50,24 @@ export default declare<State>((api, options: Options) => {
     name: "transform-async-to-generator",
 
     visitor: {
-      CallExpression: {
-        exit(path, state) {
-          if (state.availableHelper("callAsync")) {
-            remapAsyncToGenerator.onCallExpressionExit(path);
-          }
-        },
-      },
+      ...remapAsyncToGenerator.buildOnCallExpression("callAsync"),
       Function(path, state) {
         if (!path.node.async || path.node.generator) return;
 
-        if (
+        remapAsyncToGenerator.default(
+          path,
           state.availableHelper("callAsync") &&
-          state.availableHelper("asyncToGenerator2")
-        ) {
-          remapAsyncToGenerator.default(
-            path,
-            {
-              wrapAsync: "asyncToGenerator2",
-              callAsync: "callAsync",
-            },
-            noNewArrows,
-            ignoreFunctionLength,
-          );
-        } else {
-          remapAsyncToGenerator.default(
-            path,
-            {
-              wrapAsync: state.addHelper("asyncToGenerator"),
-            },
-            noNewArrows,
-            ignoreFunctionLength,
-          );
-        }
+            state.availableHelper("asyncToGenerator2")
+            ? {
+                wrapAsync: "asyncToGenerator2",
+                callAsync: "callAsync",
+              }
+            : {
+                wrapAsync: state.addHelper("asyncToGenerator"),
+              },
+          noNewArrows,
+          ignoreFunctionLength,
+        );
       },
     },
   };

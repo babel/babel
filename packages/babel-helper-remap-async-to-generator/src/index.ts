@@ -107,4 +107,4 @@ export default function (
   }
 }
 
-export { onCallExpressionExit } from "@babel/helper-wrap-function";
+export { buildOnCallExpression } from "@babel/helper-wrap-function";
