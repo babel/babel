@@ -379,9 +379,6 @@ export default class Buffer {
 
   /**
    * check if current _last + queue ends with newline, return the character before newline
-   *
-   * @param {*} ch
-   * @memberof Buffer
    */
   endsWithCharAndNewline(): number {
     const queue = this._queue;

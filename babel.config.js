@@ -1,12 +1,13 @@
 "use strict";
 
-if (
-  typeof it === "function" &&
+let jestSnapshot = false;
+if (typeof it === "function") {
   // Jest loads the Babel config to parse file and update inline snapshots.
   // This is ok, as it's not loading the Babel config to test Babel itself.
-  !new Error().stack.includes("jest-snapshot")
-) {
-  throw new Error("Monorepo root's babel.config.js loaded by a test.");
+  if (!new Error().stack.includes("jest-snapshot")) {
+    throw new Error("Monorepo root's babel.config.js loaded by a test.");
+  }
+  jestSnapshot = true;
 }
 
 const pathUtils = require("path");
@@ -303,6 +304,16 @@ module.exports = function (api) {
       },
     ].filter(Boolean),
   };
+
+  if (jestSnapshot) {
+    config.plugins = [];
+    config.presets = [];
+    config.overrides = [];
+    config.parserOpts = {
+      plugins: ["typescript"],
+    };
+    config.sourceType = "unambiguous";
+  }
 
   return config;
 };
