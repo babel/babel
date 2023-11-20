@@ -24,6 +24,11 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.23.4 (2023-11-20)
+
+#### :bug: Bug Fix
+* `babel-generator`
+  * [#16104](https://github.com/babel/babel/pull/16104) fix: Pure comments missing parentheses ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.23.3 (2023-11-09)
 
 #### :bug: Bug Fix
