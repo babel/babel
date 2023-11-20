@@ -337,7 +337,7 @@ gen_enforced_dependency(WorkspaceCwd, '@babel/core', 'workspace:^', 'devDependen
 
  * @param {Context} context
  */
-function enforeceBabelCoreNotInDeps({ Yarn }) {
+function enforceBabelCoreNotInDeps({ Yarn }) {
   for (const workspace of Yarn.workspaces()) {
     if (
       workspace.pkg.peerDependencies.has("@babel/core") &&
@@ -422,6 +422,6 @@ module.exports = {
     enforceRuntimeCorejs2DependsOnCorejs2(ctx);
     enforeBabelHelperBabelTraveseDeps(ctx);
     enforceBabelHelperBabelDeps(ctx);
-    enforeceBabelCoreNotInDeps(ctx);
+    enforceBabelCoreNotInDeps(ctx);
   },
 };
