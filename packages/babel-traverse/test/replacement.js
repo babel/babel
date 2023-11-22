@@ -342,13 +342,13 @@ describe("path/replacement", function () {
         const node = parseStmt("{ return }");
         path.replaceExpressionWithStatements([undefinedNode, node]);
         expect(path.toString()).toMatchInlineSnapshot(`
-        "function () {
-          undefined;
-          {
-            return;
-          }
-        }()"
-      `);
+          "function () {
+            undefined;
+            {
+              return;
+            }
+          }()"
+        `);
       });
     });
   });

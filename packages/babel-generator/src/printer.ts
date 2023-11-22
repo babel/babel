@@ -824,6 +824,10 @@ class Printer {
       if (i < len - 1) separator?.();
 
       if (opts.statement) {
+        if (!node.trailingComments?.length) {
+          this._lastCommentLine = 0;
+        }
+
         if (i + 1 === len) {
           this.newline(1);
         } else {
