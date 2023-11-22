@@ -12,6 +12,7 @@ import { fileURLToPath, pathToFileURL } from "url";
 import { resolve as importMetaResolve } from "../../vendor/import-meta-resolve.js";
 
 import { createRequire } from "module";
+import { existsSync } from "fs";
 const require = createRequire(import.meta.url);
 
 const debug = buildDebug("babel:config:loading:files:plugins");
@@ -196,7 +197,15 @@ function resolveStandardizedName(
   }
 
   try {
-    return resolveStandardizedNameForImport(type, name, dirname);
+    const resolved = resolveStandardizedNameForImport(type, name, dirname);
+    // import-meta-resolve 4.0 does not throw if the module is not found.
+    if (!existsSync(resolved)) {
+      throw Object.assign(
+        new Error(`Could not resolve "${name}" in file ${dirname}.`),
+        { type: "MODULE_NOT_FOUND" },
+      );
+    }
+    return resolved;
   } catch (e) {
     try {
       return resolveStandardizedNameForRequire(type, name, dirname);

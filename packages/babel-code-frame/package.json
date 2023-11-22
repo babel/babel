@@ -20,7 +20,7 @@
     "chalk": "condition:BABEL_8_BREAKING ? ^5.3.0 : ^2.4.2 (esm:default|Chalk)"
   },
   "devDependencies": {
-    "import-meta-resolve": "^3.0.0",
+    "import-meta-resolve": "^4.0.0",
     "strip-ansi": "^4.0.0"
   },
   "engines": {
