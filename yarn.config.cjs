@@ -29,68 +29,29 @@ function enforceWorkspaceDependencies({ Yarn }) {
 }
 
 /**
- * Enforces the license in all public workspaces while removing it from private workspaces
- *
-gen_enforced_field(WorkspaceCwd, 'license', 'MIT') :-
-  \+ workspace_field(WorkspaceCwd, 'private', true).
-gen_enforced_field(WorkspaceCwd, 'license', null) :-
-  workspace_field(WorkspaceCwd, 'private', true).
  * @param {Context} context
  */
-function enforceLicenseMITForPublicUnsetForPrivate({ Yarn }) {
+function enforcePackageInfo({ Yarn }) {
   for (const workspace of Yarn.workspaces()) {
-    if (workspace.manifest.private) {
-      workspace.unset("license");
-    } else {
-      workspace.set("license", "MIT");
-    }
-  }
-}
-
-/**
- * Enforces the license in all public workspaces while removing it from private workspaces
- *
-gen_enforced_field(WorkspaceCwd, 'repository.type', 'git') :-
-  \+ workspace_field(WorkspaceCwd, 'private', true).
-gen_enforced_field(WorkspaceCwd, 'repository.url', 'https://github.com/babel/babel.git') :-
-  \+ workspace_field(WorkspaceCwd, 'private', true).
-gen_enforced_field(WorkspaceCwd, 'repository.directory', WorkspaceCwd) :-
-  \+ workspace_field(WorkspaceCwd, 'private', true).
-gen_enforced_field(WorkspaceCwd, 'repository', null) :-
-  workspace_field(WorkspaceCwd, 'private', true).
- * @param {Context} context
- */
-function enforceRepositoryForPublicUnsetForPrivate({ Yarn }) {
-  for (const workspace of Yarn.workspaces()) {
-    if (workspace.manifest.private) {
-      workspace.unset("repository");
-    } else {
-      workspace.set("repository", {
+    const info = {
+      license: "MIT",
+      repository: {
         type: "git",
         url: "https://github.com/babel/babel.git",
         directory: workspace.cwd,
-      });
-    }
-  }
-}
-
-/**
- * Enforces 'publishConfig.access' is set to public for public workspaces while removing it from private workspaces
- *
-gen_enforced_field(WorkspaceCwd, 'publishConfig.access', 'public') :-
-  \+ workspace_field(WorkspaceCwd, 'private', true).
-gen_enforced_field(WorkspaceCwd, 'publishConfig.access', null) :-
-  workspace_field(WorkspaceCwd, 'private', true).
- * @param {Context} context
- */
-function enforcePublishConfigAccessForPublicUnsetForPrivate({ Yarn }) {
-  for (const workspace of Yarn.workspaces()) {
-    if (workspace.manifest.private) {
-      workspace.unset("publishConfig");
-    } else {
-      workspace.set("publishConfig", {
+      },
+      publishConfig: {
         access: "public",
-      });
+      },
+      author: "The Babel Team (https://babel.dev/team)",
+    };
+
+    for (const key of Object.keys(info)) {
+      if (workspace.manifest.private) {
+        workspace.unset(key);
+      } else {
+        workspace.set(key, info[key]);
+      }
     }
   }
 }
@@ -158,24 +119,6 @@ function enforceBothConditionsSetForBABEL_8_BREAKING({ Yarn }) {
       } else if (condition.length === 1) {
         workspace.set("conditions.BABEL_8_BREAKING.1", {});
       }
-    }
-  }
-}
-
-/**
- * Enforces the author field to be consistent
-gen_enforced_field(WorkspaceCwd, 'author', 'The Babel Team (https://babel.dev/team)') :-
-  \+ workspace_field(WorkspaceCwd, 'private', true).
-gen_enforced_field(WorkspaceCwd, 'author', null) :-
-  workspace_field(WorkspaceCwd, 'private', true).
- * @param {Context} context
- */
-function enforceAuthor({ Yarn }) {
-  for (const workspace of Yarn.workspaces()) {
-    if (workspace.manifest.private) {
-      workspace.unset("authors");
-    } else {
-      workspace.set("author", "The Babel Team (https://babel.dev/team)");
     }
   }
 }
@@ -280,26 +223,7 @@ function enforceConditions({ Yarn }) {
     }
   }
 }
-/**
- * Enforces that @babel/helper-* must peer-depend on @babel/core if they depend on @babel/traverse
-gen_enforced_dependency(WorkspaceCwd, '@babel/core', '^7.0.0', 'peerDependencies') :-
-  % Get the workspace name
-  workspace_ident(WorkspaceCwd, WorkspaceIdent),
-  atom_concat('@babel/helper-', _, WorkspaceIdent),
-  workspace_has_dependency(WorkspaceCwd, DependencyIdent, _, 'dependencies'),
-  (DependencyIdent = '@babel/traverse').
- * @param {Context} context
- */
-function enforeBabelHelperBabelTraveseDeps({ Yarn }) {
-  for (const workspace of Yarn.workspaces()) {
-    if (
-      workspace.ident?.startsWith("@babel/helper-") &&
-      workspace.manifest.dependencies?.["@babel/traverse"]
-    ) {
-      workspace.set("peerDependencies['@babel/core']", "^7.0.0");
-    }
-  }
-}
+
 /**
  * Enforces that @babel/helper-* must not depend on @babel/traverse, @babel/template, @babel/types if they peer-depend on @babel/core
 gen_enforced_dependency(WorkspaceCwd, DependencyIdent, null, 'dependencies') :-
@@ -312,16 +236,17 @@ gen_enforced_dependency(WorkspaceCwd, DependencyIdent, null, 'dependencies') :-
  */
 function enforceBabelHelperBabelDeps({ Yarn }) {
   for (const workspace of Yarn.workspaces()) {
-    if (
-      workspace.ident?.startsWith("@babel/helper-") &&
-      workspace.pkg.peerDependencies.has("@babel/core")
-    ) {
-      workspace.unset("dependencies['@babel/template']");
+    if (workspace.ident?.startsWith("@babel/helper-")) {
       workspace.unset("dependencies['@babel/traverse']");
-      workspace.unset("dependencies['@babel/types']");
+
+      if (workspace.pkg.peerDependencies.has("@babel/core")) {
+        workspace.unset("dependencies['@babel/template']");
+        workspace.unset("dependencies['@babel/types']");
+      }
     }
   }
 }
+
 /**
  * Enforces that @babel/core must not be in dependency for most packages
 gen_enforced_dependency(WorkspaceCwd, '@babel/core', null, 'dependencies') :-
@@ -405,22 +330,21 @@ function enforceExports({ Yarn }) {
   }
 }
 
+/**
+ * @type {import('@yarnpkg/types').Yarn.Config}
+ */
 module.exports = {
   constraints: async ctx => {
     enforceWorkspaceDependencies(ctx);
-    enforceLicenseMITForPublicUnsetForPrivate(ctx);
-    enforceRepositoryForPublicUnsetForPrivate(ctx);
-    enforcePublishConfigAccessForPublicUnsetForPrivate(ctx);
+    enforcePackageInfo(ctx);
     enforceEnginesNodeForPublicUnsetForPrivate(ctx);
     enforceBothConditionsSetForBABEL_8_BREAKING(ctx);
-    enforceAuthor(ctx);
     enforceMainAndTypes(ctx);
     enforceType(ctx);
     enforceExports(ctx);
     enforceConditions(ctx);
     enforceNoDualTypeDependencies(ctx);
     enforceRuntimeCorejs2DependsOnCorejs2(ctx);
-    enforeBabelHelperBabelTraveseDeps(ctx);
     enforceBabelHelperBabelDeps(ctx);
     enforceBabelCoreNotInDeps(ctx);
   },
