@@ -1,10 +1,6 @@
 import type { Position } from "../../util/location.ts";
 import ScopeHandler, { Scope } from "../../util/scope.ts";
-import {
-  BindingFlag,
-  ScopeFlag,
-  type BindingTypes,
-} from "../../util/scopeflags.ts";
+import { BindingFlag, ScopeFlag } from "../../util/scopeflags.ts";
 import type * as N from "../../types.ts";
 import { Errors } from "../../parse-error.ts";
 
@@ -70,7 +66,7 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
     return false;
   }
 
-  declareName(name: string, bindingType: BindingTypes, loc: Position) {
+  declareName(name: string, bindingType: BindingFlag, loc: Position) {
     if (bindingType & BindingFlag.FLAG_TS_IMPORT) {
       if (this.hasImport(name, true)) {
         this.parser.raise(Errors.VarRedeclaration, {
@@ -109,7 +105,7 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
   isRedeclaredInScope(
     scope: TypeScriptScope,
     name: string,
-    bindingType: BindingTypes,
+    bindingType: BindingFlag,
   ): boolean {
     if (scope.enums.has(name)) {
       if (bindingType & BindingFlag.FLAG_TS_ENUM) {

@@ -6,7 +6,7 @@ import type * as N from "../types.ts";
 import { ParseErrorEnum } from "../parse-error.ts";
 import type { Undone } from "../parser/node.ts";
 import type { ExpressionErrors } from "../parser/util.ts";
-import type { BindingTypes } from "../util/scopeflags.ts";
+import type { BindingFlag } from "../util/scopeflags.ts";
 import type { Position } from "../util/location.ts";
 
 type PossiblePlaceholders = {
@@ -129,7 +129,7 @@ export default (superClass: typeof Parser) =>
       return this.parsePlaceholder("Pattern") || super.parseBindingAtom();
     }
 
-    isValidLVal(type: string, isParenthesized: boolean, binding: BindingTypes) {
+    isValidLVal(type: string, isParenthesized: boolean, binding: BindingFlag) {
       return (
         type === "Placeholder" ||
         super.isValidLVal(type, isParenthesized, binding)

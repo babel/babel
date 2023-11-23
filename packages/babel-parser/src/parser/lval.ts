@@ -26,7 +26,7 @@ import {
   isStrictBindReservedWord,
 } from "../util/identifier.ts";
 import { NodeUtils, type Undone } from "./node.ts";
-import { type BindingTypes, BindingFlag } from "../util/scopeflags.ts";
+import { BindingFlag } from "../util/scopeflags.ts";
 import type { ExpressionErrors } from "./util.ts";
 import { Errors, type LValAncestor } from "../parse-error.ts";
 import type Parser from "./index.ts";
@@ -539,7 +539,7 @@ export default abstract class LValParser extends NodeUtils {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     isUnparenthesizedInAssign: boolean,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    binding: BindingTypes,
+    binding: BindingFlag,
   ): string | boolean {
     return getOwn(
       {
@@ -595,7 +595,7 @@ export default abstract class LValParser extends NodeUtils {
       hasParenthesizedAncestor = false,
     }: {
       in: LValAncestor;
-      binding?: BindingTypes;
+      binding?: BindingFlag;
       checkClashes?: Set<string> | false;
       strictModeChanged?: boolean;
       hasParenthesizedAncestor?: boolean;
@@ -690,7 +690,7 @@ export default abstract class LValParser extends NodeUtils {
 
   checkIdentifier(
     at: Identifier,
-    bindingType: BindingTypes,
+    bindingType: BindingFlag,
     strictModeChanged: boolean = false,
   ) {
     if (
@@ -718,7 +718,7 @@ export default abstract class LValParser extends NodeUtils {
     }
   }
 
-  declareNameFromIdentifier(identifier: Identifier, binding: BindingTypes) {
+  declareNameFromIdentifier(identifier: Identifier, binding: BindingFlag) {
     this.scope.declareName(identifier.name, binding, identifier.loc.start);
   }
 

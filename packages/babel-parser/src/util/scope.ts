@@ -1,4 +1,4 @@
-import { ScopeFlag, BindingFlag, type BindingTypes } from "./scopeflags.ts";
+import { ScopeFlag, BindingFlag } from "./scopeflags.ts";
 import type { Position } from "./location.ts";
 import type * as N from "../types.ts";
 import { Errors } from "../parse-error.ts";
@@ -95,7 +95,7 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
     );
   }
 
-  declareName(name: string, bindingType: BindingTypes, loc: Position) {
+  declareName(name: string, bindingType: BindingFlag, loc: Position) {
     let scope = this.currentScope();
     if (
       bindingType & BindingFlag.SCOPE_LEXICAL ||
@@ -136,7 +136,7 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
   checkRedeclarationInScope(
     scope: IScope,
     name: string,
-    bindingType: BindingTypes,
+    bindingType: BindingFlag,
     loc: Position,
   ) {
     if (this.isRedeclaredInScope(scope, name, bindingType)) {
@@ -150,7 +150,7 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
   isRedeclaredInScope(
     scope: IScope,
     name: string,
-    bindingType: BindingTypes,
+    bindingType: BindingFlag,
   ): boolean {
     if (!(bindingType & BindingFlag.KIND_VALUE)) return false;
 
