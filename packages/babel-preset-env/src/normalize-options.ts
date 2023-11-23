@@ -225,11 +225,11 @@ export function normalizeCoreJSOption(
         }
 
         if (
-          typeof rawVersion === "number" ||
+          typeof rawVersion !== "string" ||
           !String(rawVersion).includes(".")
         ) {
           throw new Error(
-            "Invalid Option: The version passed to `corejs` is invalid. It must be a string with minor version, like `3.10` or `3.10.1`.",
+            "Invalid Option: The version passed to `corejs` is invalid. Please use string and specify the minor version, such as `\"3.30\"`."
           );
         }
       } else {
