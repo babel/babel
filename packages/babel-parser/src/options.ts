@@ -71,7 +71,7 @@ export const defaultOptions: Options = {
   tokens: false,
   // Whether to create ImportExpression AST nodes (if false
   // `import(foo)` will be parsed as CallExpression(Import, [Identifier(foo)])
-  createImportExpressions: false,
+  createImportExpressions: process.env.BABEL_8_BREAKING ? true : false,
   // Whether to create ParenthesizedExpression AST nodes (if false
   // the parser sets extra.parenthesized on the expression nodes instead).
   createParenthesizedExpressions: false,

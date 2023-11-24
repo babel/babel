@@ -171,6 +171,9 @@ module.exports = function (api) {
     ]
       .filter(Boolean)
       .map(normalize),
+    parserOpts: {
+      createImportExpressions: true,
+    },
     presets: [
       // presets are applied from right to left
       ["@babel/env", envOpts],
