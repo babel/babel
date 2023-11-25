@@ -224,8 +224,9 @@ interface ParserOptions {
   createParenthesizedExpressions?: boolean;
 
   /**
-   * By default, `import(foo)` is parsed as `CallExpression(Import, [Identifier(foo)])`.
+   * The default is false in Babel 7 and true in Babel 8
    * Set this to true to parse it as an `ImportExpression` node.
+   * Otherwise `import(foo)` is parsed as `CallExpression(Import, [Identifier(foo)])`.
    */
   createImportExpressions?: boolean;
 }
