@@ -14,37 +14,6 @@ import type {
 } from "@jridgewell/gen-mapping";
 
 /**
- * Babel's code generator, turns an ast into code, maintaining sourcemaps,
- * user preferences, and valid output.
- */
-
-class Generator extends Printer {
-  constructor(
-    ast: t.Node,
-    opts: GeneratorOptions = {},
-    code: string | { [filename: string]: string },
-  ) {
-    const format = normalizeOptions(code, opts);
-    const map = opts.sourceMaps ? new SourceMap(opts, code) : null;
-    super(format, map);
-
-    this.ast = ast;
-  }
-
-  ast: t.Node;
-
-  /**
-   * Generate code and sourcemap from ast.
-   *
-   * Appends comments that weren't attached to any node to the end of the generated output.
-   */
-
-  generate() {
-    return super.generate(this.ast);
-  }
-}
-
-/**
  * Normalize generator options, setting defaults.
  *
  * - Detects code indentation.
@@ -246,20 +215,27 @@ export interface GeneratorResult {
   rawMappings: Mapping[] | undefined;
 }
 
-/**
- * We originally exported the Generator class above, but to make it extra clear that it is a private API,
- * we have moved that to an internal class instance and simplified the interface to the two public methods
- * that we wish to support.
- */
+if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
+  /**
+   * We originally exported the Generator class above, but to make it extra clear that it is a private API,
+   * we have moved that to an internal class instance and simplified the interface to the two public methods
+   * that we wish to support.
+   */
 
-export class CodeGenerator {
-  private _generator: Generator;
-  constructor(ast: t.Node, opts?: GeneratorOptions, code?: string) {
-    this._generator = new Generator(ast, opts, code);
-  }
-  generate(): GeneratorResult {
-    return this._generator.generate();
-  }
+  // eslint-disable-next-line no-restricted-globals
+  exports.CodeGenerator = class CodeGenerator {
+    private _ast: t.Node;
+    private _opts: GeneratorOptions | undefined;
+    private _code: string | undefined;
+    constructor(ast: t.Node, opts?: GeneratorOptions, code?: string) {
+      this._ast = ast;
+      this._opts = opts;
+      this._code = code;
+    }
+    generate(): GeneratorResult {
+      return generate(this._ast, this._opts, this._code);
+    }
+  };
 }
 
 /**
@@ -271,9 +247,13 @@ export class CodeGenerator {
  */
 export default function generate(
   ast: t.Node,
-  opts?: GeneratorOptions,
+  opts: GeneratorOptions = {},
   code?: string | { [filename: string]: string },
-) {
-  const gen = new Generator(ast, opts, code);
-  return gen.generate();
+): GeneratorResult {
+  const format = normalizeOptions(code, opts);
+  const map = opts.sourceMaps ? new SourceMap(opts, code) : null;
+
+  const printer = new Printer(format, map);
+
+  return printer.generate(ast);
 }
