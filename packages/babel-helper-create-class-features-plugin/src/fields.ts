@@ -585,7 +585,7 @@ function buildPrivateFieldInitLoose(
         writable: true,
         value: ${value}
       });
-    `,
+    ` as t.ExpressionStatement,
     prop,
   );
 }
@@ -607,7 +607,7 @@ function buildPrivateInstanceFieldInitSpec(
           // enumerable is always false for private elements
           writable: true,
           value: ${value},
-        })`,
+        })` as t.ExpressionStatement,
         prop,
       );
     }
@@ -622,7 +622,7 @@ function buildPrivateInstanceFieldInitSpec(
         writable: true,
         value: ${value}
       },
-    )`,
+    )` as t.ExpressionStatement,
     prop,
   );
 }
@@ -689,7 +689,7 @@ function buildPrivateMethodInitLoose(
           // writable is false by default
           value: ${methodId.name}
         });
-      `,
+      ` as t.ExpressionStatement,
       prop,
     );
   }
@@ -709,7 +709,7 @@ function buildPrivateMethodInitLoose(
           get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
           set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
         });
-      `,
+      ` as t.ExpressionStatement,
       prop,
     );
   }
@@ -766,7 +766,7 @@ function buildPrivateAccessorInitialization(
             get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
             set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
           });
-        `,
+        ` as t.ExpressionStatement,
         prop,
       );
     }
@@ -781,7 +781,7 @@ function buildPrivateAccessorInitialization(
         get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
         set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
       },
-    )`,
+    )` as t.ExpressionStatement,
     prop,
   );
 }
@@ -798,7 +798,7 @@ function buildPrivateInstanceMethodInitialization(
   if (!process.env.BABEL_8_BREAKING) {
     if (!state.availableHelper("classPrivateMethodInitSpec")) {
       return inheritPropComments(
-        template.statement.ast`${id}.add(${ref})`,
+        template.statement.ast`${id}.add(${ref})` as t.ExpressionStatement,
         prop,
       );
     }
@@ -809,7 +809,7 @@ function buildPrivateInstanceMethodInitialization(
     template.statement.ast`${helper}(
       ${t.thisExpression()},
       ${t.cloneNode(id)}
-    )`,
+    )` as t.ExpressionStatement,
     prop,
   );
 }
@@ -1095,7 +1095,8 @@ export function buildFieldsInitNodes(
   let classRefFlags = ClassRefFlag.None;
   let injectSuperRef: t.Identifier;
   const staticNodes: t.Statement[] = [];
-  const instanceNodes: t.Statement[] = [];
+  const instanceNodes: t.ExpressionStatement[] = [];
+  let lastInstanceNodeReturnsThis = false;
   // These nodes are pure and can be moved to the closest statement position
   const pureStaticNodes: t.FunctionDeclaration[] = [];
   let classBindingNode: t.ExpressionStatement | null = null;
@@ -1155,6 +1156,8 @@ export function buildFieldsInitNodes(
         classRefFlags |= ClassRefFlag.ForInnerBinding;
       }
     }
+
+    lastInstanceNodeReturnsThis = false;
 
     // TODO(ts): there are so many `ts-expect-error` inside cases since
     // ts can not infer type from pre-computed values (or a case test)
@@ -1301,6 +1304,7 @@ export function buildFieldsInitNodes(
         instanceNodes.push(buildPublicFieldInitLoose(t.thisExpression(), prop));
         break;
       case isInstance && isPublic && isField && !setPublicClassFields:
+        lastInstanceNodeReturnsThis = true;
         instanceNodes.push(
           // @ts-expect-error checked in switch
           buildPublicFieldInitSpec(t.thisExpression(), prop, file),
@@ -1324,6 +1328,7 @@ export function buildFieldsInitNodes(
   return {
     staticNodes: staticNodes.filter(Boolean),
     instanceNodes: instanceNodes.filter(Boolean),
+    lastInstanceNodeReturnsThis,
     pureStaticNodes: pureStaticNodes.filter(Boolean),
     classBindingNode,
     wrapClass(path: NodePath<t.Class>) {

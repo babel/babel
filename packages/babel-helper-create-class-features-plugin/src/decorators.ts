@@ -213,7 +213,11 @@ export function buildDecoratedClass(
   }
 
   return {
-    instanceNodes: [template.statement.ast`${t.cloneNode(initializeId)}(this)`],
+    instanceNodes: [
+      template.statement.ast`
+        ${t.cloneNode(initializeId)}(this)
+      ` as t.ExpressionStatement,
+    ],
     wrapClass(path: NodePath<t.Class>) {
       path.replaceWith(replacement);
       return path.get(classPathDesc) as NodePath;

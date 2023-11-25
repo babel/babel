@@ -205,7 +205,7 @@ export default declare((api, opts: Options) => {
       // property is only added once. This is necessary for cases like
       // using `transform-classes`, which causes this visitor to run
       // twice.
-      const assigns = [];
+      const assigns: t.ExpressionStatement[] = [];
       const { scope } = path;
       for (const paramPath of path.get("params")) {
         const param = paramPath.node;
@@ -226,8 +226,11 @@ export default declare((api, opts: Options) => {
               "Parameter properties can not be destructuring patterns.",
             );
           }
-          assigns.push(template.statement.ast`
-          this.${t.cloneNode(id)} = ${t.cloneNode(id)}`);
+          assigns.push(
+            template.statement.ast`
+              this.${t.cloneNode(id)} = ${t.cloneNode(id)}
+            ` as t.ExpressionStatement,
+          );
 
           paramPath.replaceWith(paramPath.get("parameter"));
           scope.registerBinding("param", paramPath);
