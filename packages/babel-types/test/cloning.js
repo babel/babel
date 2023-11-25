@@ -1,6 +1,7 @@
 import * as t from "../lib/index.js";
 import { parse } from "@babel/parser";
-import { CodeGenerator } from "@babel/generator";
+import _generate from "@babel/generator";
+const generate = _generate.default || _generate;
 
 describe("cloneNode", function () {
   it("should handle undefined", function () {
@@ -159,16 +160,14 @@ describe("cloneNode", function () {
     //test6
     var b;
     `;
-    code = new CodeGenerator(parse(code), { retainLines: true }).generate()
-      .code;
+    code = generate(parse(code), { retainLines: true }).code;
 
     const ast = t.cloneNode(
       parse(code),
       /* deep */ true,
       /* withoutLoc */ false,
     );
-    const newCode = new CodeGenerator(ast, { retainLines: true }).generate()
-      .code;
+    const newCode = generate(ast, { retainLines: true }).code;
 
     expect(newCode).toBe(code);
   });
