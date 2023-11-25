@@ -225,15 +225,17 @@ if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
   // eslint-disable-next-line no-restricted-globals
   exports.CodeGenerator = class CodeGenerator {
     private _ast: t.Node;
-    private _opts: GeneratorOptions | undefined;
-    private _code: string | undefined;
-    constructor(ast: t.Node, opts?: GeneratorOptions, code?: string) {
+    private _format: Format | undefined;
+    private _map: SourceMap | null;
+    constructor(ast: t.Node, opts: GeneratorOptions = {}, code?: string) {
       this._ast = ast;
-      this._opts = opts;
-      this._code = code;
+      this._format = normalizeOptions(code, opts);
+      this._map = opts.sourceMaps ? new SourceMap(opts, code) : null;
     }
     generate(): GeneratorResult {
-      return generate(this._ast, this._opts, this._code);
+      const printer = new Printer(this._format, this._map);
+
+      return printer.generate(this._ast);
     }
   };
 }
