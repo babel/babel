@@ -46,7 +46,7 @@ function memberDec(
   isPrivate,
   value,
   hasPrivateBrand,
-  metadata
+  metadata,
 ) {
   var kindStr;
 
@@ -80,7 +80,7 @@ function memberDec(
   if (kind !== 0 /* FIELD */) {
     ctx.addInitializer = createAddInitializerMethod(
       initializers,
-      decoratorFinishedRef
+      decoratorFinishedRef,
     );
   }
 
@@ -150,7 +150,7 @@ function memberDec(
 function assertNotFinished(decoratorFinishedRef, fnName) {
   if (decoratorFinishedRef.v) {
     throw new Error(
-      "attempted to call " + fnName + " after decoration was finished"
+      "attempted to call " + fnName + " after decoration was finished",
     );
   }
 }
@@ -167,7 +167,7 @@ function assertValidReturnValue(kind, value) {
   if (kind === 1 /* ACCESSOR */) {
     if (type !== "object" || value === null) {
       throw new TypeError(
-        "accessor decorators must return an object with get, set, or init properties or void 0"
+        "accessor decorators must return an object with get, set, or init properties or void 0",
       );
     }
     if (value.get !== undefined) {
@@ -214,7 +214,7 @@ function applyMemberDec(
   isPrivate,
   initializers,
   hasPrivateBrand,
-  metadata
+  metadata,
 ) {
   var decs = decInfo[0];
 
@@ -280,7 +280,7 @@ function applyMemberDec(
       isPrivate,
       value,
       hasPrivateBrand,
-      metadata
+      metadata,
     );
 
     if (newValue !== void 0) {
@@ -436,12 +436,12 @@ function applyMemberDecs(Class, decInfos, instanceBrand, metadata) {
       ) {
         throw new Error(
           "Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " +
-            name
+            name,
         );
       }
       existingNonFields.set(
         name,
-        !existingKind && kind > 2 /* METHOD */ ? kind : true
+        !existingKind && kind > 2 /* METHOD */ ? kind : true,
       );
     }
 
@@ -456,7 +456,7 @@ function applyMemberDecs(Class, decInfos, instanceBrand, metadata) {
       isPrivate,
       initializers,
       hasPrivateBrand,
-      metadata
+      metadata,
     );
   }
 
@@ -496,10 +496,10 @@ function applyClassDecs(targetClass, classDecs, decoratorsHaveThis, metadata) {
             name: name,
             addInitializer: createAddInitializerMethod(
               initializers,
-              decoratorFinishedRef
+              decoratorFinishedRef,
             ),
             metadata,
-          }
+          },
         );
       } finally {
         decoratorFinishedRef.v = true;
@@ -528,7 +528,7 @@ function defineMetadata(Class, metadata) {
   return Object.defineProperty(
     Class,
     Symbol.metadata || Symbol.for("Symbol.metadata"),
-    { configurable: true, enumerable: true, value: metadata }
+    { configurable: true, enumerable: true, value: metadata },
   );
 }
 
@@ -684,14 +684,14 @@ export default function applyDecs2305(
   classDecs,
   classDecsHaveThis,
   instanceBrand,
-  parentClass
+  parentClass,
 ) {
   if (arguments.length >= 6) {
     var parentMetadata =
       parentClass[Symbol.metadata || Symbol.for("Symbol.metadata")];
   }
   var metadata = Object.create(
-    parentMetadata === void 0 ? null : parentMetadata
+    parentMetadata === void 0 ? null : parentMetadata,
   );
   var e = applyMemberDecs(targetClass, memberDecs, instanceBrand, metadata);
   if (!classDecs.length) defineMetadata(targetClass, metadata);
@@ -703,7 +703,7 @@ export default function applyDecs2305(
         targetClass,
         classDecs,
         classDecsHaveThis,
-        metadata
+        metadata,
       );
     },
   };

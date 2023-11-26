@@ -267,7 +267,7 @@ module.exports = [
     },
   },
   {
-    files: ["packages/babel-helpers/src/helpers/**.js"],
+    files: ["packages/babel-helpers/src/helpers/**.{js,ts}"],
     rules: {
       "no-var": "off",
       "comma-dangle": "off",

@@ -35,7 +35,10 @@ import { USE_ESM, commonJS } from "$repo-utils";
 const { require, __dirname: monorepoRoot } = commonJS(import.meta.url);
 
 const defaultPackagesGlob = "./@(codemods|packages|eslint)/*";
-const defaultSourcesGlob = `${defaultPackagesGlob}/src/**/{*.js,*.cjs,!(*.d).ts}`;
+const defaultSourcesGlob = [
+  `${defaultPackagesGlob}/src/**/{*.js,*.cjs,!(*.d).ts}`,
+  "!./packages/babel-helpers/src/helpers/*",
+];
 
 const babelStandalonePluginConfigGlob =
   "./packages/babel-standalone/scripts/pluginConfig.json";
@@ -898,7 +901,7 @@ function watch() {
   gulp.watch(buildTypingsWatchGlob, gulp.task("generate-type-helpers"));
   gulp.watch(
     [
-      "./packages/babel-helpers/src/helpers/*.js",
+      "./packages/babel-helpers/src/helpers/*",
       "!./packages/babel-helpers/src/helpers/regeneratorRuntime.js",
     ],
     gulp.task("generate-runtime-helpers")
