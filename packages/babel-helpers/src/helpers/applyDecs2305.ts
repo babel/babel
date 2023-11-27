@@ -1,5 +1,6 @@
 /* @minVersion 7.21.0 */
 
+// @ts-expect-error helper
 import checkInRHS from "checkInRHS";
 
 /**
