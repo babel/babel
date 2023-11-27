@@ -179,7 +179,7 @@ export function normalizeCoreJSOption(
   useBuiltIns: BuiltInsOption,
 ): NormalizedCorejsOption {
   let proposals = false;
-  let rawVersion;
+  let rawVersion: false | string | number | undefined | null;
 
   if (useBuiltIns && corejs === undefined) {
     if (process.env.BABEL_8_BREAKING) {
@@ -209,7 +209,7 @@ export function normalizeCoreJSOption(
     rawVersion = corejs.version;
     proposals = Boolean(corejs.proposals);
   } else {
-    rawVersion = corejs;
+    rawVersion = corejs as false | string | number | undefined | null;
   }
 
   const version = rawVersion ? semver.coerce(String(rawVersion)) : false;
@@ -221,6 +221,15 @@ export function normalizeCoreJSOption(
           throw new RangeError(
             "Invalid Option: The version passed to `corejs` is invalid. Currently, " +
               "only core-js@3 is supported.",
+          );
+        }
+
+        if (
+          typeof rawVersion !== "string" ||
+          !String(rawVersion).includes(".")
+        ) {
+          throw new Error(
+            'Invalid Option: The version passed to `corejs` is invalid. Please use string and specify the minor version, such as `"3.33"`.',
           );
         }
       } else {
@@ -287,7 +296,7 @@ export default function normalizeOptions(opts: Options) {
       opts.ignoreBrowserslistConfig,
       false,
     ),
-    loose: v.validateBooleanOption<boolean>(TopLevelOptions.loose, opts.loose),
+    loose: v.validateBooleanOption(TopLevelOptions.loose, opts.loose),
     modules: validateModulesOption(opts.modules),
     shippedProposals: v.validateBooleanOption(
       TopLevelOptions.shippedProposals,
@@ -297,7 +306,7 @@ export default function normalizeOptions(opts: Options) {
     spec: v.validateBooleanOption(TopLevelOptions.spec, opts.spec, false),
     targets: normalizeTargets(opts.targets),
     useBuiltIns: useBuiltIns,
-    browserslistEnv: v.validateStringOption<string>(
+    browserslistEnv: v.validateStringOption(
       TopLevelOptions.browserslistEnv,
       opts.browserslistEnv,
     ),

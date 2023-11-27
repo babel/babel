@@ -4,7 +4,7 @@
       "env",
       {
         "useBuiltIns": "usage",
-        "corejs": 3,
+        "corejs": "3.0",
         "targets": { "browsers": "ie 6" },
         "modules": false,
         "exclude": ["transform-destructuring"]

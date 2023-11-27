@@ -5,7 +5,7 @@
       {
         "modules": false,
         "useBuiltIns": "usage",
-        "corejs": 3,
+        "corejs": "3.0",
         "exclude": ["transform-async-to-generator", "transform-regenerator"]
       }
     ]
