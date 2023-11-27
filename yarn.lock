@@ -1176,7 +1176,6 @@ __metadata:
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
     regenerator-runtime: "npm:^0.14.0"
-    terser: "npm:^5.19.2"
   languageName: unknown
   linkType: soft
 
@@ -15835,7 +15834,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"terser@npm:^5.16.8, terser@npm:^5.17.4, terser@npm:^5.19.2":
+"terser@npm:^5.16.8, terser@npm:^5.17.4":
   version: 5.19.2
   resolution: "terser@npm:5.19.2"
   dependencies:
