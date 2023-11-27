@@ -8,13 +8,15 @@ const rule = new eslint.Linter().getRules().get("no-undef");
  * @param  {ASTNode}  node CallExpression node
  * @returns {Boolean} Returns true if the node is under a decorator.
  */
-function isAccessorField(node) {
+function isAccessorFieldName(node) {
   return (
-    node.parent.type === "ClassAccessorProperty" && node.parent.key === node
+    node.parent.type === "ClassAccessorProperty" &&
+    node.parent.key === node &&
+    !node.parent.computed
   );
 }
 
 module.exports = ruleComposer.filterReports(
   rule,
-  problem => !isAccessorField(problem.node),
+  problem => !isAccessorFieldName(problem.node),
 );

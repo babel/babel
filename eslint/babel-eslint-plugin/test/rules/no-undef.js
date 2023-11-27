@@ -16,5 +16,9 @@ ruleTester.run("@babel/no-undef", rule, {
       code: "{ using x = 2; } x;",
       errors: [{ message: "'x' is not defined." }],
     },
+    {
+      code: "class MyClass { accessor [x] = 2 }",
+      errors: [{ message: "'x' is not defined." }],
+    },
   ],
 });
