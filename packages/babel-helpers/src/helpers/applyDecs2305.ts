@@ -88,6 +88,7 @@ function memberDec(
     };
   }
 
+  var decoratorFinishedRef = { v: false };
   var ctx: DecoratorContext = {
     kind: ["field", "accessor", "method", "getter", "setter", "field"][
       kind
@@ -97,16 +98,11 @@ function memberDec(
     static: isStatic,
     private: isPrivate,
     metadata: metadata,
-  };
-
-  var decoratorFinishedRef = { v: false };
-
-  if (kind !== PROP_KIND.FIELD) {
-    ctx.addInitializer = createAddInitializerMethod(
+    addInitializer: createAddInitializerMethod(
       initializers,
       decoratorFinishedRef,
-    );
-  }
+    ),
+  };
 
   var get, set;
   if (!isPrivate && (kind === PROP_KIND.FIELD || kind === PROP_KIND.METHOD)) {
@@ -396,11 +392,9 @@ function applyMemberDecs(
 
     if (isStatic) {
       base = Class;
-      // initialize staticInitializers when we see a non-field static member
-      if (kind !== PROP_KIND.FIELD) {
-        staticInitializers = staticInitializers || [];
-        initializers = staticInitializers;
-      }
+      // initialize staticInitializers when we see a static member
+      staticInitializers = staticInitializers || [];
+      initializers = staticInitializers;
       if (isPrivate && !staticBrand) {
         staticBrand = function (_: any) {
           return checkInRHS(_) === Class;
@@ -409,11 +403,9 @@ function applyMemberDecs(
       hasPrivateBrand = staticBrand;
     } else {
       base = Class.prototype;
-      // initialize protoInitializers when we see a non-field member
-      if (kind !== PROP_KIND.FIELD) {
-        protoInitializers = protoInitializers || [];
-        initializers = protoInitializers;
-      }
+      // initialize protoInitializers when we see a non-static member
+      protoInitializers = protoInitializers || [];
+      initializers = protoInitializers;
     }
 
     if (kind !== PROP_KIND.FIELD && !isPrivate) {
