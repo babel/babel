@@ -155,7 +155,9 @@ const enumSelfReferenceVisitor = {
 };
 
 export function translateEnumValues(path: NodePath<t.TSEnumDeclaration>, t: t) {
-  const seen: PreviousEnumMembers = new Map();
+  const bindingIdentifier = path.scope.getBindingIdentifier(path.node.id.name);
+  const seen: PreviousEnumMembers = ENUMS.get(bindingIdentifier) ?? new Map();
+
   // Start at -1 so the first enum member is its increment, 0.
   let constValue: number | string | undefined = -1;
   let lastName: string;

@@ -3,7 +3,7 @@ var Animals = /*#__PURE__*/function (Animals) {
   Animals[Animals["Dog"] = 2] = "Dog";
   return Animals;
 }(Animals || {});
-Animals = function (Animals) {
-  Animals[Animals["CatDog"] = Cat - Dog] = "CatDog";
+Animals = /*#__PURE__*/function (Animals) {
+  Animals[Animals["CatDog"] = -1] = "CatDog";
   return Animals;
 }(Animals || {});
