@@ -1,5 +1,4 @@
 var _initClass, _obj, _dec, _dec2, _obj2, _dec3, _obj3, _dec4, _obj4, _dec5, _init_x, _obj5, _dec6, _dec7, _init_y;
-let _A;
 _obj = o1;
 _dec = _obj.dec;
 _dec2 = dec;
@@ -12,6 +11,7 @@ _dec5 = _obj4.dec;
 _obj5 = o2;
 _dec6 = _obj5.dec;
 _dec7 = dec;
+let _A;
 class A {
   static {
     ({

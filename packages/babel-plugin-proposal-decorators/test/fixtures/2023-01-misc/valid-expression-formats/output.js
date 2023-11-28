@@ -1,6 +1,5 @@
 var _initClass, _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _initProto;
 const dec = () => {};
-let _Foo;
 _dec = call();
 _dec2 = chain.expr();
 _dec3 = arbitrary + expr;
@@ -9,6 +8,7 @@ _dec5 = call();
 _dec6 = chain.expr();
 _dec7 = arbitrary + expr;
 _dec8 = array[expr];
+let _Foo;
 class Foo {
   static {
     ({
