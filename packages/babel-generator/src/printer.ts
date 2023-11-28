@@ -1036,6 +1036,14 @@ class Printer {
 
     let val;
     if (isBlockComment) {
+      const { _parenPushNewlineState } = this;
+      if (
+        _parenPushNewlineState?.printed === false &&
+        HAS_NEWLINE.test(comment.value)
+      ) {
+        this.token("(");
+        _parenPushNewlineState.printed = true;
+      }
       val = `/*${comment.value}*/`;
       if (this.format.indent.adjustMultilineComment) {
         const offset = comment.loc?.start.column;

@@ -1512,6 +1512,32 @@ describe("programmatic generation", function () {
         );"
       `);
     });
+
+    it("multi-line leading comment after return compact", () => {
+      const val = t.identifier("val");
+      val.leadingComments = [{ type: "CommentBlock", value: "new\nline" }];
+      expect(
+        generate(t.returnStatement(val), {
+          compact: true,
+        }).code,
+      ).toMatchInlineSnapshot(`
+        "return(/*new
+        line*/val);"
+      `);
+    });
+
+    it("multi-line leading comment after return concise", () => {
+      const val = t.identifier("val");
+      val.leadingComments = [{ type: "CommentBlock", value: "new\nline" }];
+      expect(
+        generate(t.returnStatement(val), {
+          concise: true,
+        }).code,
+      ).toMatchInlineSnapshot(`
+        "return (/*new
+        line*/ val );"
+      `);
+    });
   });
 });
 
