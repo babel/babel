@@ -5,6 +5,9 @@ const ruleTester = new RuleTester();
 ruleTester.run("@babel/no-undef", rule, {
   valid: [
     { code: "class MyClass { accessor x = 2 }" },
+    {
+      code: "var x; class MyClass { accessor [x] = 2 }",
+    },
     { code: "using x = 2; x;" },
   ],
   invalid: [
