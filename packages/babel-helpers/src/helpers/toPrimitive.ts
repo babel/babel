@@ -6,6 +6,7 @@ export default function toPrimitive(
   hint: "default" | "string" | "number" | void,
 ) {
   if (typeof input !== "object" || input === null) return input;
+  // @ts-expect-error Symbol.toPrimitive might not index {}
   var prim = input[Symbol.toPrimitive];
   if (prim !== undefined) {
     var res = prim.call(input, hint || "default");
