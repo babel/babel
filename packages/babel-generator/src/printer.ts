@@ -1039,7 +1039,6 @@ class Printer {
       const { _parenPushNewlineState } = this;
       if (
         _parenPushNewlineState?.printed === false &&
-        lastCharCode != charCodes.lineFeed &&
         HAS_NEWLINE.test(comment.value)
       ) {
         this.token("(");
