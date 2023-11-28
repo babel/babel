@@ -2,6 +2,8 @@
 
 // @ts-expect-error helper
 import checkInRHS from "checkInRHS";
+// @ts-expect-error helper
+import toPropertyKey from "toPropertyKey";
 
 /**
   Enums are used in this file, but not assigned to vars to avoid non-hoistable values
@@ -94,7 +96,7 @@ function memberDec(
       kind
     ] as any,
 
-    name: isPrivate ? "#" + name : name,
+    name: isPrivate ? "#" + name : toPropertyKey(name),
     static: isStatic,
     private: isPrivate,
     metadata: metadata,

@@ -1,6 +1,7 @@
 /* @minVersion 7.21.0 */
 
 import checkInRHS from "checkInRHS";
+import toPropertyKey from "toPropertyKey";
 
 /**
   Enums are used in this file, but not assigned to vars to avoid non-hoistable values
@@ -69,7 +70,7 @@ function applyDecs2301Factory() {
 
     var ctx = {
       kind: kindStr,
-      name: isPrivate ? "#" + name : name,
+      name: isPrivate ? "#" + name : toPropertyKey(name),
       static: isStatic,
       private: isPrivate,
     };

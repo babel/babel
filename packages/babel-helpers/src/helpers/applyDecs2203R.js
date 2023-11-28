@@ -1,5 +1,7 @@
 /* @minVersion 7.20.0 */
 
+import toPropertyKey from "toPropertyKey";
+
 /**
   Enums are used in this file, but not assigned to vars to avoid non-hoistable values
 
@@ -58,7 +60,7 @@ function applyDecs2203RFactory() {
 
     var ctx = {
       kind: kindStr,
-      name: isPrivate ? "#" + name : name,
+      name: isPrivate ? "#" + name : toPropertyKey(name),
       static: isStatic,
       private: isPrivate,
     };
