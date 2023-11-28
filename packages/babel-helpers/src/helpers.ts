@@ -865,31 +865,6 @@ helpers.skipFirstGeneratorNext = helper("7.0.0-beta.0")`
   }
 `;
 
-helpers.toPrimitive = helper("7.1.5")`
-  export default function _toPrimitive(
-    input,
-    hint /*: "default" | "string" | "number" | void */
-  ) {
-    if (typeof input !== "object" || input === null) return input;
-    var prim = input[Symbol.toPrimitive];
-    if (prim !== undefined) {
-      var res = prim.call(input, hint || "default");
-      if (typeof res !== "object") return res;
-      throw new TypeError("@@toPrimitive must return a primitive value.");
-    }
-    return (hint === "string" ? String : Number)(input);
-  }
-`;
-
-helpers.toPropertyKey = helper("7.1.5")`
-  import toPrimitive from "toPrimitive";
-
-  export default function _toPropertyKey(arg) {
-    var key = toPrimitive(arg, "string");
-    return typeof key === "symbol" ? key : String(key);
-  }
-`;
-
 /**
  * Add a helper that will throw a useful error if the transform fails to detect the class
  * property assignment, so users know something failed.

@@ -198,6 +198,24 @@
       "./helpers/regeneratorRuntime.js"
     ],
     "./helpers/esm/regeneratorRuntime": "./helpers/esm/regeneratorRuntime.js",
+    "./helpers/toPrimitive": [
+      {
+        "node": "./helpers/toPrimitive.js",
+        "import": "./helpers/esm/toPrimitive.js",
+        "default": "./helpers/toPrimitive.js"
+      },
+      "./helpers/toPrimitive.js"
+    ],
+    "./helpers/esm/toPrimitive": "./helpers/esm/toPrimitive.js",
+    "./helpers/toPropertyKey": [
+      {
+        "node": "./helpers/toPropertyKey.js",
+        "import": "./helpers/esm/toPropertyKey.js",
+        "default": "./helpers/toPropertyKey.js"
+      },
+      "./helpers/toPropertyKey.js"
+    ],
+    "./helpers/esm/toPropertyKey": "./helpers/esm/toPropertyKey.js",
     "./helpers/typeof": [
       {
         "node": "./helpers/typeof.js",
@@ -702,24 +720,6 @@
       "./helpers/skipFirstGeneratorNext.js"
     ],
     "./helpers/esm/skipFirstGeneratorNext": "./helpers/esm/skipFirstGeneratorNext.js",
-    "./helpers/toPrimitive": [
-      {
-        "node": "./helpers/toPrimitive.js",
-        "import": "./helpers/esm/toPrimitive.js",
-        "default": "./helpers/toPrimitive.js"
-      },
-      "./helpers/toPrimitive.js"
-    ],
-    "./helpers/esm/toPrimitive": "./helpers/esm/toPrimitive.js",
-    "./helpers/toPropertyKey": [
-      {
-        "node": "./helpers/toPropertyKey.js",
-        "import": "./helpers/esm/toPropertyKey.js",
-        "default": "./helpers/toPropertyKey.js"
-      },
-      "./helpers/toPropertyKey.js"
-    ],
-    "./helpers/esm/toPropertyKey": "./helpers/esm/toPropertyKey.js",
     "./helpers/initializerWarningHelper": [
       {
         "node": "./helpers/initializerWarningHelper.js",
