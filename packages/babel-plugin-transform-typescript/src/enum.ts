@@ -320,15 +320,11 @@ function computeConstantValue(
       }
 
       if (seen.has(path.node)) return;
+      seen.add(path.node);
 
-      const bindingInitPath = path.resolve(); // It only resolves constant bindings
-      if (bindingInitPath) {
-        seen.add(path.node);
-
-        value = computeConstantValue(bindingInitPath, undefined, seen);
-        prevMembers?.set(name, value);
-        return value;
-      }
+      value = computeConstantValue(path.resolve(), prevMembers, seen);
+      prevMembers?.set(name, value);
+      return value;
     }
   }
 

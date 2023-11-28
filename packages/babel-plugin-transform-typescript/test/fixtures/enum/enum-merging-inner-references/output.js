@@ -4,6 +4,6 @@ var Animals = /*#__PURE__*/function (Animals) {
   return Animals;
 }(Animals || {});
 Animals = function (Animals) {
-  Animals[Animals["CatDog"] = Animals.Cat - Dog] = "CatDog";
+  Animals[Animals["CatDog"] = Cat - Dog] = "CatDog";
   return Animals;
 }(Animals || {});
