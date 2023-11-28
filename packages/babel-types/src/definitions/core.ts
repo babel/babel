@@ -1896,6 +1896,7 @@ export const classMethodOrPropertyCommon = () => ({
           "Identifier",
           "StringLiteral",
           "NumericLiteral",
+          "BigIntLiteral",
         );
         const computed = assertNodeType("Expression");
 
