@@ -22,8 +22,8 @@ describe("plugin ordering", () => {
     ).toMatchInlineSnapshot(`
       "var _class;
       function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-      function _toPropertyKey(arg) { var key = _toPrimitive(arg, \\"string\\"); return typeof key === \\"symbol\\" ? key : String(key); }
-      function _toPrimitive(input, hint) { if (typeof input !== \\"object\\" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || \\"default\\"); if (typeof res !== \\"object\\") return res; throw new TypeError(\\"@@toPrimitive must return a primitive value.\\"); } return (hint === \\"string\\" ? String : Number)(input); }
+      function _toPropertyKey(t) { var i = _toPrimitive(t, \\"string\\"); return \\"symbol\\" == typeof i ? i : String(i); }
+      function _toPrimitive(t, r) { if (\\"object\\" != typeof t || null === t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || \\"default\\"); if (\\"object\\" != typeof i) return i; throw new TypeError(\\"@@toPrimitive must return a primitive value.\\"); } return (\\"string\\" === r ? String : Number)(t); }
       class Foo {}
       _class = Foo;
       _class.foo = _class.bar;
