@@ -3,6 +3,8 @@
 // @ts-expect-error helper
 import checkInRHS from "checkInRHS";
 // @ts-expect-error helper
+import setFunctionName from "setFunctionName";
+// @ts-expect-error helper
 import toPropertyKey from "toPropertyKey";
 
 /**
@@ -205,7 +207,10 @@ function applyMemberDec(
     decs = [decs];
   }
 
-  var desc: PropertyDescriptor, init, value: any;
+  var desc: PropertyDescriptor,
+    init,
+    prefix: "get" | "set" | undefined,
+    value: any;
 
   if (isPrivate) {
     if (kind === PROP_KIND.FIELD || kind === PROP_KIND.ACCESSOR) {
@@ -217,20 +222,29 @@ function applyMemberDec(
           decInfo[4](this, value);
         },
       };
+      prefix = "get";
     } else {
       if (kind === PROP_KIND.GETTER) {
         desc = {
           get: decVal,
         };
+        prefix = "get";
       } else if (kind === PROP_KIND.SETTER) {
         desc = {
           set: decVal,
         };
+        prefix = "set";
       } else {
         desc = {
           value: decVal,
         };
       }
+    }
+    if (kind !== PROP_KIND.FIELD) {
+      if (kind === PROP_KIND.ACCESSOR) {
+        setFunctionName(desc.set, "#" + name, "set");
+      }
+      setFunctionName(desc[prefix || "value"], "#" + name, prefix);
     }
   } else if (kind !== PROP_KIND.FIELD) {
     desc = Object.getOwnPropertyDescriptor(base, name);
