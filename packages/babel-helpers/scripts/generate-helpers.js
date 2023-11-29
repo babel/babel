@@ -5,6 +5,7 @@ import { URL, fileURLToPath } from "url";
 import { minify } from "terser";
 import { transformSync } from "@babel/core";
 import presetTypescript from "@babel/preset-typescript";
+import { gzipSync } from "zlib";
 
 const HELPERS_FOLDER = new URL("../src/helpers", import.meta.url);
 const IGNORED_FILES = new Set(["package.json"]);
@@ -76,6 +77,7 @@ export default Object.freeze({
     ).code;
 
     output += `\
+  // size: ${code.length}, gzip size: ${gzipSync(code).length}
   ${JSON.stringify(helperName)}: helper(
     ${JSON.stringify(minVersion)},
     ${JSON.stringify(code)},
