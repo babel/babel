@@ -1,7 +1,7 @@
 var _initClass, _dec, _initClass2, _dec2;
 const dec = () => {};
-let _Bar;
 _dec = dec1;
+let _Bar;
 class Bar {
   static {
     [_Bar, _initClass] = babelHelpers.applyDecs2203R(this, [], [_dec]).c;
@@ -10,8 +10,8 @@ class Bar {
     _initClass();
   }
 }
-let _Foo;
 _dec2 = dec2;
+let _Foo;
 class Foo extends _Bar {
   static {
     [_Foo, _initClass2] = babelHelpers.applyDecs2203R(this, [], [_dec2]).c;
