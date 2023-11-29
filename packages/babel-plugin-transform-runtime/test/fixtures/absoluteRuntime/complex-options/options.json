@@ -15,7 +15,6 @@
       {
         "corejs": false,
         "helpers": true,
-        "useESModules": true,
         "absoluteRuntime": true,
         "version": "7.100.0"
       }
