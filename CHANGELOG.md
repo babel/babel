@@ -32,9 +32,6 @@ This file contains the changelog starting from v7.15.0.
 * `babel-helpers`, `babel-plugin-proposal-decorators`
   * [#16132](https://github.com/babel/babel/pull/16132) Allow addInitializer in field decorator context ([@JLHwung](https://github.com/JLHwung))
 
-#### :rocket: New Feature
-* [#16023](https://github.com/babel/babel/pull/16023) Add `@babel/eslint-plugin/no-undef` for accessor props ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
-
 #### :bug: Bug Fix
 * `babel-traverse`, `babel-types`
   * [#16131](https://github.com/babel/babel/pull/16131) Do not remove bindings when removing assignment expression path ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
@@ -48,6 +45,8 @@ This file contains the changelog starting from v7.15.0.
   * [#16123](https://github.com/babel/babel/pull/16123) Simplify class fields injetion after `super()` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 * `babel-generator`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-parameters`, `babel-plugin-transform-typescript`, `babel-traverse`
   * [#16110](https://github.com/babel/babel/pull/16110) fix: Unexpected duplication of comments ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-eslint-plugin`
+  * [#16023](https://github.com/babel/babel/pull/16023) Add `@babel/eslint-plugin/no-undef` to fix `no-undef` with accessor props ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 
 #### :microscope: Output optimization
 * `babel-helpers`
