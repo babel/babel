@@ -1,5 +1,6 @@
 /* @minVersion 7.17.8 */
 
+import toPropertyKey from "toPropertyKey";
 /**
  * NOTE: This is an old version of the helper, used for 2021-12 decorators.
  * Updates should be done in applyDecs2203R.js.
@@ -168,7 +169,7 @@ function old_memberDec(
 
   var ctx = {
     kind: kindStr,
-    name: isPrivate ? "#" + name : name,
+    name: isPrivate ? "#" + name : toPropertyKey(name),
     isStatic: isStatic,
     isPrivate: isPrivate,
   };
