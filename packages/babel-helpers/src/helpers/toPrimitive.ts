@@ -5,7 +5,7 @@ export default function toPrimitive(
   input: unknown,
   hint: "default" | "string" | "number" | void,
 ) {
-  if (typeof input !== "object" || input === null) return input;
+  if (typeof input !== "object" || !input) return input;
   // @ts-expect-error Symbol.toPrimitive might not index {}
   var prim = input[Symbol.toPrimitive];
   if (prim !== undefined) {
