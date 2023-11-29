@@ -1,6 +1,6 @@
 {
   "name": "@babel/eslint-shared-fixtures",
-  "version": "7.22.3",
+  "version": "7.23.5",
   "description": "Shared fixtures for testing @babel/eslint-* packages",
   "private": true,
   "dependencies": {
