@@ -1,29 +1,30 @@
 /* @minVersion 7.23.0 */
 
-var disposeSuppressedError2;
+type Stack = {
+  v: any;
+  d: () => any;
+  a: boolean;
+};
 
 export default function _usingCtx() {
-  if (!disposeSuppressedError2) {
-    if (typeof SuppressedError !== "undefined") {
-      // eslint-disable-next-line no-undef
-      disposeSuppressedError2 = SuppressedError;
-    } else {
-      disposeSuppressedError2 = function SuppressedError(suppressed, error) {
-        this.suppressed = suppressed;
-        this.error = error;
-        this.stack = new Error().stack;
-      };
-      Object.setPrototypeOf(disposeSuppressedError2.prototype, Error.prototype);
-    }
-  }
-
-  var empty = {},
-    stack = [];
-  function using(isAwait, value) {
+  var _disposeSuppressedError =
+      typeof SuppressedError === "function"
+        ? // eslint-disable-next-line no-undef
+          SuppressedError
+        : (function (suppressed: boolean, error: Error) {
+            var err = new Error() as SuppressedError;
+            err.name = "SuppressedError";
+            err.suppressed = suppressed;
+            err.error = error;
+            return err;
+          } as SuppressedErrorConstructor),
+    empty = {},
+    stack: Stack[] = [];
+  function using(isAwait: boolean, value: any) {
     if (value != null) {
       if (typeof value !== "object") {
         throw new TypeError(
-          "using declarations can only be used with objects, null, or undefined."
+          "using declarations can only be used with objects, null, or undefined.",
         );
       }
       // core-js-pure uses Symbol.for for polyfilling well-known symbols
@@ -52,7 +53,8 @@ export default function _usingCtx() {
     d: function () {
       var error = this.e;
 
-      function next() {
+      function next(): any {
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
         while ((resource = stack.pop())) {
           try {
             var resource,
@@ -67,8 +69,8 @@ export default function _usingCtx() {
         if (error !== empty) throw error;
       }
 
-      function err(e) {
-        error = error !== empty ? new disposeSuppressedError2(e, error) : e;
+      function err(e: Error) {
+        error = error !== empty ? new _disposeSuppressedError(e, error) : e;
 
         return next();
       }
