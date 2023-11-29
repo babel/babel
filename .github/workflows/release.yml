@@ -145,7 +145,7 @@ jobs:
         continue-on-error: true
         uses: actions/upload-artifact@v3
         with:
-          name: babel-types.md
+          name: babel-types-docs
           path: build/types.md
           retention-days: 3
 
@@ -300,10 +300,11 @@ jobs:
       - name: Download babel-types docs
         uses: actions/download-artifact@v3
         with:
-          name: babel-types.md
+          name: babel-types-docs
+          # Downloaded as ./docs/types.md
+          path: docs
       - name: Commit Babel website changes
         run: |
-          mv babel-types.md docs/types.md
           git config user.name "Babel Bot"
           git config user.email "babel-bot@users.noreply.github.com"
           git checkout -b update-types-docs
