@@ -1,9 +1,9 @@
 try {
   var _usingCtx = babelHelpers.usingCtx();
-  const x = _usingCtx.u(obj, true);
+  const x = _usingCtx.a(obj);
   stmt;
-  const y = _usingCtx.u(obj, true),
-    z = _usingCtx.u(obj, true);
+  const y = _usingCtx.a(obj),
+    z = _usingCtx.a(obj);
   doSomethingWith(x, y);
 } catch (_) {
   _usingCtx.e = _;

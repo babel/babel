@@ -6,7 +6,7 @@ function _fn() {
     yield 0;
     try {
       var _usingCtx = babelHelpers.usingCtx();
-      const x = _usingCtx.u(y, true);
+      const x = _usingCtx.a(y);
       yield 1;
     } catch (_) {
       _usingCtx.e = _;

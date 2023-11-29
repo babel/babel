@@ -19,12 +19,8 @@ export default function _usingCtx() {
 
   var empty = {},
     stack = [];
-  return {
-    // error
-    e: empty,
-    // using
-    u: function (value, isAwait) {
-      if (value === null || value === void 0) return value;
+  function using(isAwait, value) {
+    if (value != null) {
       if (typeof value !== "object") {
         throw new TypeError(
           "using declarations can only be used with objects, null, or undefined."
@@ -35,15 +31,23 @@ export default function _usingCtx() {
         var dispose =
           value[Symbol.asyncDispose || Symbol.for("Symbol.asyncDispose")];
       }
-      if (dispose === null || dispose === void 0) {
+      if (dispose == null) {
         dispose = value[Symbol.dispose || Symbol.for("Symbol.dispose")];
       }
       if (typeof dispose !== "function") {
         throw new TypeError(`Property [Symbol.dispose] is not a function.`);
       }
       stack.push({ v: value, d: dispose, a: isAwait });
-      return value;
-    },
+    }
+    return value;
+  }
+  return {
+    // error
+    e: empty,
+    // using
+    u: using.bind(null, false),
+    // await using
+    a: using.bind(null, true),
     // dispose
     d: function () {
       var error = this.e;

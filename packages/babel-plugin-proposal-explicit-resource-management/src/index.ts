@@ -62,22 +62,22 @@ export default declare(api => {
           if (!TOP_LEVEL_USING.delete(node)) {
             node.kind = "const";
           }
-          node.declarations.forEach(decl => {
-            const args = [decl.init];
-            if (isAwaitUsing) args.push(t.booleanLiteral(true));
+          for (const decl of node.declarations) {
             decl.init = t.callExpression(
-              t.memberExpression(t.cloneNode(ctx), t.identifier("u")),
-              args,
+              t.memberExpression(
+                t.cloneNode(ctx),
+                isAwaitUsing ? t.identifier("a") : t.identifier("u"),
+              ),
+              [decl.init],
             );
-          });
+          }
         }
         if (!ctx) return;
 
-        let disposeCall: t.Expression = t.callExpression(
+        const disposeCall = t.callExpression(
           t.memberExpression(t.cloneNode(ctx), t.identifier("d")),
           [],
         );
-        if (needsAwait) disposeCall = t.awaitExpression(disposeCall);
 
         const replacement = template.statement.ast`
         try {
@@ -86,7 +86,7 @@ export default declare(api => {
         } catch (_) {
           ${t.cloneNode(ctx)}.e = _;
         } finally {
-          ${disposeCall}
+          ${needsAwait ? t.awaitExpression(disposeCall) : disposeCall}
         }
       ` as t.TryStatement;
 
