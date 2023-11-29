@@ -144,4 +144,12 @@ describe("removal", function () {
       expect(ifPath.get("alternate").node).toBeNull();
     });
   });
+
+  it("of AssignmentExpression does not remove binding", function () {
+    const rootPath = getPath("var x; x = 1;");
+    const path = rootPath.get("body.1.expression");
+    path.remove();
+
+    expect(rootPath.scope.hasBinding("x")).toBe(true);
+  });
 });
