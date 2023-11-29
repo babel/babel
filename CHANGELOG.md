@@ -24,6 +24,34 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.23.5 (2023-11-29)
+
+#### :eyeglasses: Spec Compliance
+* `babel-plugin-proposal-decorators`
+  * [#16138](https://github.com/babel/babel/pull/16138) Class binding is in TDZ during decorators initialization ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helpers`, `babel-plugin-proposal-decorators`
+  * [#16132](https://github.com/babel/babel/pull/16132) Allow addInitializer in field decorator context ([@JLHwung](https://github.com/JLHwung))
+
+#### :rocket: New Feature
+* [#16023](https://github.com/babel/babel/pull/16023) Add `@babel/eslint-plugin/no-undef` for accessor props ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :bug: Bug Fix
+* `babel-traverse`, `babel-types`
+  * [#16131](https://github.com/babel/babel/pull/16131) Do not remove bindings when removing assignment expression path ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-classes`
+  * [#16135](https://github.com/babel/babel/pull/16135) Require class properties transform when compiling class with private fields ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`
+  * [#16122](https://github.com/babel/babel/pull/16122) fix: Missing parentheses after line break ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helpers`
+  * [#16130](https://github.com/babel/babel/pull/16130) Fix helpers internal fns names conflict resolution  ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-transform-class-properties`, `babel-plugin-transform-typescript`
+  * [#16123](https://github.com/babel/babel/pull/16123) Simplify class fields injetion after `super()` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-parameters`, `babel-plugin-transform-typescript`, `babel-traverse`
+  * [#16110](https://github.com/babel/babel/pull/16110) fix: Unexpected duplication of comments ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :microscope: Output optimization
+* `babel-helpers`
+  * [#16129](https://github.com/babel/babel/pull/16129) Optimize `decorator` helper size ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.23.4 (2023-11-20)
 
 #### :bug: Bug Fix
