@@ -95,7 +95,7 @@ export default Object.freeze({
   ),
   setFunctionName: helper(
     "7.23.5",
-    'export default function setFunctionName(e,t,r){if("symbol"==typeof t){var n=t.description;t=n?"["+n+"]":""}t+="",r&&(t=r+" "+t);try{return Object.defineProperty(e,"name",{configurable:!0,value:t})}catch(t){return e}}',
+    'export default function setFunctionName(e,t,n){"symbol"==typeof t&&(t=(t=t.description)?"["+t+"]":"");try{Object.defineProperty(e,"name",{configurable:!0,value:n?n+" "+t:t})}catch(e){}return e}',
   ),
   toPrimitive: helper(
     "7.1.5",
