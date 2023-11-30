@@ -8,7 +8,7 @@ export default function setFunctionName(
 ) {
   if (typeof name === "symbol") {
     name = name.description;
-    name = name ? "[" + name + "]" : "";
+    name = name ? "[" + (name as string) + "]" : "";
   }
   // In some older browsers .name was non-configurable, here we catch any
   // errors thrown by defineProperty.
