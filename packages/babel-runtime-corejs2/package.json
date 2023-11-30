@@ -198,6 +198,15 @@
       "./helpers/regeneratorRuntime.js"
     ],
     "./helpers/esm/regeneratorRuntime": "./helpers/esm/regeneratorRuntime.js",
+    "./helpers/setFunctionName": [
+      {
+        "node": "./helpers/setFunctionName.js",
+        "import": "./helpers/esm/setFunctionName.js",
+        "default": "./helpers/setFunctionName.js"
+      },
+      "./helpers/setFunctionName.js"
+    ],
+    "./helpers/esm/setFunctionName": "./helpers/esm/setFunctionName.js",
     "./helpers/toPrimitive": [
       {
         "node": "./helpers/toPrimitive.js",

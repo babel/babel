@@ -1,5 +1,6 @@
 /* @minVersion 7.20.0 */
 
+import setFunctionName from "setFunctionName";
 import toPropertyKey from "toPropertyKey";
 
 /**
@@ -174,7 +175,7 @@ function applyDecs2203RFactory() {
   ) {
     var decs = decInfo[0];
 
-    var desc, init, value;
+    var desc, init, prefix, value;
 
     if (isPrivate) {
       if (kind === 0 /* FIELD */ || kind === 1 /* ACCESSOR */) {
@@ -182,18 +183,27 @@ function applyDecs2203RFactory() {
           get: decInfo[3],
           set: decInfo[4],
         };
+        prefix = "get";
       } else if (kind === 3 /* GETTER */) {
         desc = {
           get: decInfo[3],
         };
+        prefix = "get";
       } else if (kind === 4 /* SETTER */) {
         desc = {
           set: decInfo[3],
         };
+        prefix = "set";
       } else {
         desc = {
           value: decInfo[3],
         };
+      }
+      if (kind !== 0 /* FIELD */) {
+        if (kind === 1 /* ACCESSOR */) {
+          setFunctionName(decInfo[4], "#" + name, "set");
+        }
+        setFunctionName(decInfo[3], "#" + name, prefix);
       }
     } else if (kind !== 0 /* FIELD */) {
       desc = Object.getOwnPropertyDescriptor(base, name);
