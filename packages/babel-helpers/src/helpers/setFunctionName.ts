@@ -7,21 +7,16 @@ export default function setFunctionName(
   prefix?: string,
 ) {
   if (typeof name === "symbol") {
-    var description = name.description;
-    name = description ? "[" + description + "]" : "";
-  }
-  name += "";
-  if (prefix) {
-    name = prefix + " " + name;
+    name = name.description;
+    name = name ? "[" + name + "]" : "";
   }
   // In some older browsers .name was non-configurable, here we catch any
   // errors thrown by defineProperty.
   try {
-    return Object.defineProperty(fn, "name", {
+    Object.defineProperty(fn, "name", {
       configurable: true,
-      value: name,
+      value: prefix ? prefix + " " + name : name,
     });
-  } catch (_) {
-    return fn;
-  }
+  } catch (_) {}
+  return fn;
 }
