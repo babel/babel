@@ -544,10 +544,7 @@ function transformClass(
       const { key, value, static: isStatic, computed } = element.node;
 
       const newId = generateClassPrivateUid();
-
-      const valueNode = value ? t.cloneNode(value) : undefined;
-
-      const newField = generateClassProperty(newId, valueNode, isStatic);
+      const newField = generateClassProperty(newId, value, isStatic);
 
       const [newPath] = element.replaceWith(newField);
       addProxyAccessorsFor(
