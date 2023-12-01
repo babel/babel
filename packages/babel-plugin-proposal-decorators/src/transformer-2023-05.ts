@@ -106,7 +106,6 @@ function replaceClassWithVar(
 ): {
   id: t.Identifier;
   path: NodePath<t.ClassDeclaration | t.ClassExpression>;
-  needsDeclaration: boolean;
 } {
   if (path.type === "ClassDeclaration") {
     const id = path.node.id;
@@ -118,7 +117,7 @@ function replaceClassWithVar(
 
     path.get("id").replaceWith(classId);
 
-    return { id: t.cloneNode(varId), path, needsDeclaration: true };
+    return { id: t.cloneNode(varId), path };
   } else {
     let className: string;
     let varId: t.Identifier;
@@ -151,7 +150,6 @@ function replaceClassWithVar(
     return {
       id: t.cloneNode(varId),
       path: newPath.get("expressions.0") as NodePath<t.ClassExpression>,
-      needsDeclaration: false,
     };
   }
 }
@@ -616,12 +614,8 @@ function transformClass(
   let needsDeclaraionForClassBinding = false;
   if (classDecorators) {
     classInitLocal = scopeParent.generateDeclaredUidIdentifier("initClass");
-
-    ({
-      id: classIdLocal,
-      path,
-      needsDeclaration: needsDeclaraionForClassBinding,
-    } = replaceClassWithVar(path));
+    needsDeclaraionForClassBinding = path.isClassDeclaration();
+    ({ id: classIdLocal, path } = replaceClassWithVar(path, className));
 
     path.node.decorators = null;
 
