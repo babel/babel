@@ -109,10 +109,12 @@ function replaceClassWithVar(
   needsDeclaration: boolean;
 } {
   if (path.type === "ClassDeclaration") {
-    const varId = path.scope.generateUidIdentifierBasedOnNode(path.node.id);
-    const classId = t.identifier(path.node.id.name);
+    const id = path.node.id;
+    const className = id.name;
+    const varId = path.scope.generateUidIdentifierBasedOnNode(id);
+    const classId = t.identifier(className);
 
-    path.scope.rename(classId.name, varId.name);
+    path.scope.rename(className, varId.name);
 
     path.get("id").replaceWith(classId);
 
@@ -137,7 +139,7 @@ function replaceClassWithVar(
     }
 
     const newClassExpr = t.classExpression(
-      className && t.identifier(className),
+      typeof className === "string" ? t.identifier(className) : null,
       path.node.superClass,
       path.node.body,
     );
