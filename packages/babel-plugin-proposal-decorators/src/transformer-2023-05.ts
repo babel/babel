@@ -1255,6 +1255,14 @@ function createLocalsAssignment(
   return t.assignmentExpression("=", lhs, rhs);
 }
 
+function isProtoSetter(
+  node: t.Identifier | t.StringLiteral | t.BigIntLiteral | t.NumericLiteral,
+) {
+  return node.type === "Identifier"
+    ? node.name === "__proto__"
+    : node.value === "__proto__";
+}
+
 function isDecorated(node: t.Class | ClassDecoratableElement) {
   return node.decorators && node.decorators.length > 0;
 }
@@ -1294,6 +1302,37 @@ function NamedEvaluationVisitoryFactory(
       | t.BigIntLiteral,
   ) => void,
 ) {
+  function handleComputedProperty(
+    propertyPath: NodePath<
+      t.ObjectProperty | t.ClassProperty | t.ClassAccessorProperty
+    >,
+    key: t.Expression,
+    state: PluginPass,
+  ): t.StringLiteral | t.Identifier {
+    switch (key.type) {
+      case "StringLiteral":
+        return t.stringLiteral(key.value);
+      case "NumericLiteral":
+      case "BigIntLiteral": {
+        const keyValue = key.value + "";
+        propertyPath.get("key").replaceWith(t.stringLiteral(keyValue));
+        return t.stringLiteral(keyValue);
+      }
+      default: {
+        const ref = propertyPath.scope.maybeGenerateMemoised(key);
+        propertyPath
+          .get("key")
+          .replaceWith(
+            t.assignmentExpression(
+              "=",
+              ref,
+              t.callExpression(state.addHelper("toPropertyKey"), [key]),
+            ),
+          );
+        return t.cloneNode(ref);
+      }
+    }
+  }
   return {
     VariableDeclarator(path, state) {
       const id = path.node.id;
@@ -1302,6 +1341,125 @@ function NamedEvaluationVisitoryFactory(
         if (isAnonymous(initializer)) {
           const name = id.name;
           visitor(initializer, state, name);
+        }
+      }
+    },
+    AssignmentExpression(path, state) {
+      const id = path.node.left;
+      if (id.type === "Identifier") {
+        const initializer = skipTransparentExprWrappers(path.get("right"));
+        if (isAnonymous(initializer)) {
+          switch (path.node.operator) {
+            case "=":
+            case "&&=":
+            case "||=":
+            case "??=":
+              visitor(initializer, state, id.name);
+          }
+        }
+      }
+    },
+    AssignmentPattern(path, state) {
+      const id = path.node.left;
+      if (id.type === "Identifier") {
+        const initializer = skipTransparentExprWrappers(path.get("right"));
+        if (isAnonymous(initializer)) {
+          const name = id.name;
+          visitor(initializer, state, name);
+        }
+      }
+    },
+    // We listen on ObjectExpression so that we don't have to visit
+    // the object properties under object patterns
+    ObjectExpression(path, state) {
+      for (const propertyPath of path.get("properties")) {
+        const { node } = propertyPath;
+        if (node.type !== "ObjectProperty") continue;
+        const id = node.key;
+        const initializer = skipTransparentExprWrappers(
+          propertyPath.get("value"),
+        );
+        if (isAnonymous(initializer)) {
+          if (!node.computed) {
+            // 13.2.5.5 RS: PropertyDefinitionEvaluation
+            if (!isProtoSetter(id as t.StringLiteral | t.Identifier)) {
+              if (id.type === "Identifier") {
+                visitor(initializer, state, id.name);
+              } else {
+                const className = t.stringLiteral(
+                  (id as t.StringLiteral | t.NumericLiteral | t.BigIntLiteral)
+                    .value + "",
+                );
+                visitor(initializer, state, className);
+              }
+            }
+          } else {
+            const ref = handleComputedProperty(
+              propertyPath as NodePath<t.ObjectProperty>,
+              // The key of a computed object property must not be a private name
+              id as t.Expression,
+              state,
+            );
+            visitor(initializer, state, ref);
+          }
+        }
+      }
+    },
+    ClassPrivateProperty(path, state) {
+      const { node } = path;
+      const initializer = skipTransparentExprWrappers(path.get("value"));
+      if (isAnonymous(initializer)) {
+        const className = t.stringLiteral("#" + node.key.id.name);
+        visitor(initializer, state, className);
+      }
+    },
+    ClassAccessorProperty(path, state) {
+      const { node } = path;
+      const id = node.key;
+      const initializer = skipTransparentExprWrappers(path.get("value"));
+      if (isAnonymous(initializer)) {
+        if (!node.computed) {
+          if (id.type === "Identifier") {
+            visitor(initializer, state, id.name);
+          } else if (id.type === "PrivateName") {
+            const className = t.stringLiteral("#" + id.id.name);
+            visitor(initializer, state, className);
+          } else {
+            const className = t.stringLiteral(
+              (id as t.StringLiteral | t.NumericLiteral | t.BigIntLiteral)
+                .value + "",
+            );
+            visitor(initializer, state, className);
+          }
+        } else {
+          const ref = handleComputedProperty(
+            path,
+            // The key of a computed accessor property must not be a private name
+            id as t.Expression,
+            state,
+          );
+          visitor(initializer, state, ref);
+        }
+      }
+    },
+    ClassProperty(path, state) {
+      const { node } = path;
+      const id = node.key;
+      const initializer = skipTransparentExprWrappers(path.get("value"));
+      if (isAnonymous(initializer)) {
+        if (!node.computed) {
+          if (id.type === "Identifier") {
+            visitor(initializer, state, id.name);
+          } else {
+            const className = t.stringLiteral(
+              (id as t.StringLiteral | t.NumericLiteral | t.BigIntLiteral)
+                .value + "",
+            );
+            visitor(initializer, state, className);
+          }
+        } else {
+          const ref = handleComputedProperty(path, id, state);
+          visitor(initializer, state, ref);
         }
       }
     },
