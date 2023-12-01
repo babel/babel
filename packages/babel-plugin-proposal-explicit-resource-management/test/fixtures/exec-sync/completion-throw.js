@@ -7,12 +7,16 @@ try {
   using x = {
     [Symbol.dispose || Symbol.for("Symbol.dispose")]() {
       disposed = true;
-    }
+      throw 1;
+    },
   };
   beforeReturn = disposed;
   throw 0;
-} catch {
+} catch (e) {
   inCatch = disposed;
+  expect(e.name).toBe("SuppressedError");
+  expect(e.suppressed).toBe(1);
+  expect(e.error).toBe(0);
 }
 
 expect(beforeReturn).toBe(false);

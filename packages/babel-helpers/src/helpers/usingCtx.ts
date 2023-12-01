@@ -11,7 +11,7 @@ export default function _usingCtx() {
       typeof SuppressedError === "function"
         ? // eslint-disable-next-line no-undef
           SuppressedError
-        : (function (suppressed: boolean, error: Error) {
+        : (function (error: Error, suppressed: Error) {
             var err = new Error() as SuppressedError;
             err.name = "SuppressedError";
             err.suppressed = suppressed;
@@ -70,7 +70,7 @@ export default function _usingCtx() {
       }
 
       function err(e: Error) {
-        error = error !== empty ? new _disposeSuppressedError(e, error) : e;
+        error = error !== empty ? new _disposeSuppressedError(error, e) : e;
 
         return next();
       }
