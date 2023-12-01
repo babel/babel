@@ -221,7 +221,7 @@ export default function wrapFunction(
         ),
       ];
 
-      // Regardless of whether or not the wrapped function is a an async method
+      // Regardless of whether or not the wrapped function is an async method
       // or generator the outer function should not be
       node.async = false;
       node.generator = false;
