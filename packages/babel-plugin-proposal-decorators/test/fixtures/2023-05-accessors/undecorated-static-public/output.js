@@ -1,4 +1,6 @@
+var _computedKey;
 const dec = () => {};
+_computedKey = 'c';
 class Foo {
   static #A;
   static get a() {
@@ -15,10 +17,10 @@ class Foo {
     Foo.#B = v;
   }
   static #C = 456;
-  static get ['c']() {
+  static get [_computedKey]() {
     return Foo.#C;
   }
-  static set ['c'](v) {
+  static set [_computedKey](v) {
     Foo.#C = v;
   }
 }
