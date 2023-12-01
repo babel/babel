@@ -592,10 +592,15 @@ function transformClass(
       const newField = generateClassProperty(newId, value, isStatic);
 
       const [newPath] = element.replaceWith(newField);
+      const keyType = key.type;
       addProxyAccessorsFor(
         path.node.id,
         newPath,
-        computed && !scopeParent.isStatic(key)
+        computed &&
+          !scopeParent.isStatic(key) &&
+          keyType !== "StringLiteral" &&
+          keyType !== "NumericLiteral" &&
+          keyType !== "BigIntLiteral"
           ? memoiseExpression(key as t.Expression, "computedKey")
           : key,
         newId,

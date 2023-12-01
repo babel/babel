@@ -1,6 +1,4 @@
-var _computedKey;
 const dec = () => {};
-_computedKey = 'c';
 var _A = /*#__PURE__*/new WeakMap();
 var _B = /*#__PURE__*/new WeakMap();
 var _C = /*#__PURE__*/new WeakMap();
@@ -31,10 +29,10 @@ class Foo {
   set b(v) {
     babelHelpers.classPrivateFieldSet(this, _B, v);
   }
-  get [_computedKey]() {
+  get ['c']() {
     return babelHelpers.classPrivateFieldGet(this, _C);
   }
-  set [_computedKey](v) {
+  set ['c'](v) {
     babelHelpers.classPrivateFieldSet(this, _C, v);
   }
 }

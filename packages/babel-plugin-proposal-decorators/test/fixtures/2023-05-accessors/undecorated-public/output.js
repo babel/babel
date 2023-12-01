@@ -1,6 +1,4 @@
-var _computedKey;
 const dec = () => {};
-_computedKey = 'c';
 class Foo {
   #A;
   get a() {
@@ -17,10 +15,10 @@ class Foo {
     this.#B = v;
   }
   #C = 456;
-  get [_computedKey]() {
+  get ['c']() {
     return this.#C;
   }
-  set [_computedKey](v) {
+  set ['c'](v) {
     this.#C = v;
   }
 }
