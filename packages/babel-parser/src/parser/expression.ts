@@ -49,12 +49,7 @@ import {
 import * as charCodes from "charcodes";
 import { ScopeFlag, BindingFlag } from "../util/scopeflags.ts";
 import { ExpressionErrors } from "./util.ts";
-import {
-  PARAM_AWAIT,
-  PARAM_IN,
-  PARAM_RETURN,
-  functionFlags,
-} from "../util/production-parameter.ts";
+import { ParamKind, functionFlags } from "../util/production-parameter.ts";
 import {
   newArrowHeadScope,
   newAsyncArrowScope,
@@ -1543,7 +1538,7 @@ export default abstract class ExpressionParser extends LValParser {
     if (isAsync) {
       // AsyncDoExpression :
       // async [no LineTerminator here] do Block[~Yield, +Await, ~Return]
-      this.prodParam.enter(PARAM_AWAIT);
+      this.prodParam.enter(ParamKind.PARAM_AWAIT);
       node.body = this.parseBlock();
       this.prodParam.exit();
     } else {
@@ -2520,7 +2515,7 @@ export default abstract class ExpressionParser extends LValParser {
     //   [lookahead ≠ {] ExpressionBody[?In, ~Await]
     //   { FunctionBody[~Yield, ~Await] }
     if (!this.match(tt.braceL) && this.prodParam.hasIn) {
-      flags |= PARAM_IN;
+      flags |= ParamKind.PARAM_IN;
     }
     this.prodParam.enter(flags);
     this.initFunction(node, isAsync);
@@ -2585,7 +2580,9 @@ export default abstract class ExpressionParser extends LValParser {
 
       // FunctionBody[Yield, Await]:
       //   StatementList[?Yield, ?Await, +Return] opt
-      this.prodParam.enter(this.prodParam.currentFlags() | PARAM_RETURN);
+      this.prodParam.enter(
+        this.prodParam.currentFlags() | ParamKind.PARAM_RETURN,
+      );
       node.body = this.parseBlock(
         true,
         false,
@@ -2838,8 +2835,8 @@ export default abstract class ExpressionParser extends LValParser {
     const reservedTest = !this.state.strict
       ? isReservedWord
       : isBinding
-      ? isStrictBindReservedWord
-      : isStrictReservedWord;
+        ? isStrictBindReservedWord
+        : isStrictReservedWord;
 
     if (reservedTest(word, this.inModule)) {
       this.raise(Errors.UnexpectedReservedWord, {
@@ -3130,9 +3127,9 @@ export default abstract class ExpressionParser extends LValParser {
 
   allowInAnd<T>(callback: () => T): T {
     const flags = this.prodParam.currentFlags();
-    const prodParamToSet = PARAM_IN & ~flags;
+    const prodParamToSet = ParamKind.PARAM_IN & ~flags;
     if (prodParamToSet) {
-      this.prodParam.enter(flags | PARAM_IN);
+      this.prodParam.enter(flags | ParamKind.PARAM_IN);
       try {
         return callback();
       } finally {
@@ -3144,9 +3141,9 @@ export default abstract class ExpressionParser extends LValParser {
 
   disallowInAnd<T>(callback: () => T): T {
     const flags = this.prodParam.currentFlags();
-    const prodParamToClear = PARAM_IN & flags;
+    const prodParamToClear = ParamKind.PARAM_IN & flags;
     if (prodParamToClear) {
-      this.prodParam.enter(flags & ~PARAM_IN);
+      this.prodParam.enter(flags & ~ParamKind.PARAM_IN);
       try {
         return callback();
       } finally {

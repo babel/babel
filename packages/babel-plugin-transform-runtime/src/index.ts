@@ -4,7 +4,10 @@ import { types as t, type CallerMetadata } from "@babel/core";
 
 import { hasMinVersion } from "./helpers.ts";
 import getRuntimePath, { resolveFSPath } from "./get-runtime-path/index.ts";
-import { createBasePolyfillsPlugin } from "./polyfills.ts";
+import { createCorejs3Plugin } from "./core-js.ts";
+
+// TODO(Babel 8): Remove this
+import babel7 from "./babel-7/index.cjs";
 
 function supportsStaticESM(caller: CallerMetadata | undefined) {
   // @ts-expect-error TS does not narrow down optional chaining
@@ -15,13 +18,16 @@ export interface Options {
   absoluteRuntime?: boolean;
   corejs?: string | number | { version: string | number; proposals?: boolean };
   helpers?: boolean;
-  regenerator?: boolean;
   useESModules?: boolean | "auto";
   version?: string;
 }
 
 export default declare((api, options: Options, dirname) => {
-  api.assertVersion(7);
+  api.assertVersion(
+    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
+      ? PACKAGE_JSON.version
+      : 7,
+  );
 
   const {
     helpers: useRuntimeHelpers = true,
@@ -105,6 +111,17 @@ export default declare((api, options: Options, dirname) => {
     );
   }
 
+  if (process.env.BABEL_8_BREAKING) {
+    if (has(options, "regenerator")) {
+      throw new Error(
+        "The 'regenerator' option has been removed. The generators transform " +
+          "no longers relies on a 'regeneratorRuntime' global. " +
+          "If you still need to replace imports to the 'regeneratorRuntime' " +
+          "global, you can use babel-plugin-polyfill-regenerator.",
+      );
+    }
+  }
+
   const esModules =
     useESModules === "auto" ? api.caller(supportsStaticESM) : useESModules;
 
@@ -113,11 +130,19 @@ export default declare((api, options: Options, dirname) => {
   return {
     name: "transform-runtime",
 
-    inherits: createBasePolyfillsPlugin(
-      options,
-      runtimeVersion,
-      absoluteRuntime,
-    ),
+    inherits: process.env.BABEL_8_BREAKING
+      ? options.corejs
+        ? createCorejs3Plugin(options.corejs, absoluteRuntime)
+        : undefined
+      : babel7.createPolyfillPlugins(
+          options,
+          runtimeVersion,
+          absoluteRuntime,
+          options.corejs === 3 ||
+            (options.corejs as Options["corejs"] & object)?.version === 3
+            ? createCorejs3Plugin(options.corejs, absoluteRuntime)
+            : null,
+        ),
 
     pre(file) {
       if (!useRuntimeHelpers) return;

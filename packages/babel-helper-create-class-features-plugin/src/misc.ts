@@ -64,8 +64,9 @@ interface RenamerState {
 export function injectInitialization(
   path: NodePath<t.Class>,
   constructor: NodePath<t.ClassMethod> | undefined,
-  nodes: t.Statement[],
+  nodes: t.ExpressionStatement[],
   renamer?: (visitor: Visitor<RenamerState>, state: RenamerState) => void,
+  lastReturnsThis?: boolean,
 ) {
   if (!nodes.length) return;
 
@@ -99,10 +100,19 @@ export function injectInitialization(
     let isFirst = true;
     for (const bareSuper of bareSupers) {
       if (isFirst) {
-        bareSuper.insertAfter(nodes);
         isFirst = false;
       } else {
-        bareSuper.insertAfter(nodes.map(n => t.cloneNode(n)));
+        nodes = nodes.map(n => t.cloneNode(n));
+      }
+      if (!bareSuper.parentPath.isExpressionStatement()) {
+        const allNodes: t.Expression[] = [
+          bareSuper.node,
+          ...nodes.map(n => t.toExpression(n)),
+        ];
+        if (!lastReturnsThis) allNodes.push(t.thisExpression());
+        bareSuper.replaceWith(t.sequenceExpression(allNodes));
+      } else {
+        bareSuper.insertAfter(nodes);
       }
     }
   } else {

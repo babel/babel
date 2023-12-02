@@ -31,7 +31,11 @@ if (!process.env.BABEL_8_BREAKING) {
 }
 
 export default declare((api, options: Options) => {
-  api.assertVersion(7);
+  api.assertVersion(
+    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
+      ? PACKAGE_JSON.version
+      : 7,
+  );
 
   const setComputedProperties =
     api.assumption("setComputedProperties") ?? options.loose;
@@ -42,11 +46,15 @@ export default declare((api, options: Options) => {
 
   function buildDefineAccessor(
     state: PluginPass,
-    type: "get" | "set",
     obj: t.Expression,
-    key: t.Expression,
-    fn: t.Expression,
+    prop: t.ObjectMethod,
   ) {
+    const type = prop.kind as "get" | "set";
+    const key =
+      !prop.computed && t.isIdentifier(prop.key)
+        ? t.stringLiteral(prop.key.name)
+        : prop.key;
+    const fn = getValue(prop);
     if (process.env.BABEL_8_BREAKING) {
       return t.callExpression(state.addHelper("defineAccessor"), [
         t.stringLiteral(type),
@@ -118,38 +126,25 @@ export default declare((api, options: Options) => {
     );
   }
 
-  function pushAccessorDefine(
-    { body, computedProps, initPropExpression, objId, state }: PropertyInfo,
-    prop: t.ObjectMethod,
-  ) {
-    const kind = prop.kind as "get" | "set";
-    const key =
-      !prop.computed && t.isIdentifier(prop.key)
-        ? t.stringLiteral(prop.key.name)
-        : prop.key;
-    const value = getValue(prop);
-
-    if (computedProps.length === 1) {
-      return buildDefineAccessor(state, kind, initPropExpression, key, value);
-    } else {
-      body.push(
-        t.expressionStatement(
-          buildDefineAccessor(state, kind, t.cloneNode(objId), key, value),
-        ),
-      );
-    }
-  }
-
   function pushComputedPropsLoose(info: PropertyInfo) {
-    for (const prop of info.computedProps) {
+    const { computedProps, state, initPropExpression, objId, body } = info;
+
+    for (const prop of computedProps) {
       if (
         t.isObjectMethod(prop) &&
         (prop.kind === "get" || prop.kind === "set")
       ) {
-        const single = pushAccessorDefine(info, prop);
-        if (single) return single;
+        if (computedProps.length === 1) {
+          return buildDefineAccessor(state, initPropExpression, prop);
+        } else {
+          body.push(
+            t.expressionStatement(
+              buildDefineAccessor(state, t.cloneNode(objId), prop),
+            ),
+          );
+        }
       } else {
-        pushAssign(t.cloneNode(info.objId), prop, info.body);
+        pushAssign(t.cloneNode(objId), prop, body);
       }
     }
   }
@@ -157,37 +152,42 @@ export default declare((api, options: Options) => {
   function pushComputedPropsSpec(info: PropertyInfo) {
     const { objId, body, computedProps, state } = info;
 
-    for (const prop of computedProps) {
-      // PrivateName must not be in ObjectExpression
-      const key = t.toComputedKey(prop) as t.Expression;
+    // To prevent too deep AST structures in case of large objects
+    const CHUNK_LENGTH_CAP = 10;
 
-      if (
-        t.isObjectMethod(prop) &&
-        (prop.kind === "get" || prop.kind === "set")
-      ) {
-        const single = pushAccessorDefine(info, prop);
-        if (single) return single;
-      } else {
-        // the value of ObjectProperty in ObjectExpression must be an expression
-        const value = getValue(prop);
-        if (computedProps.length === 1) {
-          return t.callExpression(state.addHelper("defineProperty"), [
-            info.initPropExpression,
-            key,
-            value,
-          ]);
+    let currentChunk: t.ObjectMember[] = null;
+    const computedPropsChunks: Array<t.ObjectMember[]> = [];
+    for (const prop of computedProps) {
+      if (!currentChunk || currentChunk.length === CHUNK_LENGTH_CAP) {
+        currentChunk = [];
+        computedPropsChunks.push(currentChunk);
+      }
+      currentChunk.push(prop);
+    }
+
+    for (const chunk of computedPropsChunks) {
+      const single = computedPropsChunks.length === 1;
+      let node: t.Expression = single
+        ? info.initPropExpression
+        : t.cloneNode(objId);
+      for (const prop of chunk) {
+        if (
+          t.isObjectMethod(prop) &&
+          (prop.kind === "get" || prop.kind === "set")
+        ) {
+          node = buildDefineAccessor(info.state, node, prop);
         } else {
-          body.push(
-            t.expressionStatement(
-              t.callExpression(state.addHelper("defineProperty"), [
-                t.cloneNode(objId),
-                key,
-                value,
-              ]),
-            ),
-          );
+          node = t.callExpression(state.addHelper("defineProperty"), [
+            node,
+            // PrivateName must not be in ObjectExpression
+            t.toComputedKey(prop) as t.Expression,
+            // the value of ObjectProperty in ObjectExpression must be an expression
+            getValue(prop),
+          ]);
         }
       }
+      if (single) return node;
+      body.push(t.expressionStatement(node));
     }
   }
 
@@ -250,7 +250,9 @@ export default declare((api, options: Options) => {
           if (single) {
             path.replaceWith(single);
           } else {
-            body.push(t.expressionStatement(t.cloneNode(objId)));
+            if (setComputedProperties) {
+              body.push(t.expressionStatement(t.cloneNode(objId)));
+            }
             path.replaceWithMultiple(body);
           }
         },

@@ -1,6 +1,6 @@
 var _initClass, _dec;
-let _A;
 _dec = dec;
+let _A;
 class A {
   static {
     [_A, _initClass] = babelHelpers.applyDecs(this, [], [_dec]);

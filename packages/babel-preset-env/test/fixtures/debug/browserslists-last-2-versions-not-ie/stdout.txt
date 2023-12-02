@@ -17,8 +17,8 @@ Using modules transform: auto
 
 Using plugins:
   transform-unicode-sets-regex { firefox < 116, ios, opera_mobile < 75, safari < tp, samsung }
+  transform-export-namespace-from { }
   transform-modules-commonjs
   transform-dynamic-import
-  transform-export-namespace-from { }
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

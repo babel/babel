@@ -1,6 +1,11 @@
+var heh = "heh";
+var noo = "noo";
+var foo = "foo";
+
 var obj = {
-  ["x" + foo]: "heh",
-  ["y" + bar]: "noo",
-  foo: "foo",
-  bar: "bar"
+  ["x" + heh]: "heh",
+  ["y" + noo]: "noo",
+  [foo]: "foo1",
+  foo: "foo2",
+  bar: "bar",
 };

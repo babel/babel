@@ -15,11 +15,10 @@ import * as charCodes from "charcodes";
 import {
   ScopeFlag,
   ClassElementType,
-  type BindingTypes,
   BindingFlag,
 } from "../util/scopeflags.ts";
 import { ExpressionErrors } from "./util.ts";
-import { PARAM, functionFlags } from "../util/production-parameter.ts";
+import { ParamKind, functionFlags } from "../util/production-parameter.ts";
 import {
   newExpressionScope,
   newParameterDeclarationScope,
@@ -452,8 +451,8 @@ export default abstract class StatementParser extends ExpressionParser {
             this.state.strict
               ? Errors.StrictFunction
               : this.options.annexB
-              ? Errors.SloppyFunctionAnnexB
-              : Errors.SloppyFunction,
+                ? Errors.SloppyFunctionAnnexB
+                : Errors.SloppyFunction,
             { at: this.state.startLoc },
           );
         }
@@ -1276,8 +1275,8 @@ export default abstract class StatementParser extends ExpressionParser {
     const kind = tokenIsLoop(this.state.type)
       ? "loop"
       : this.match(tt._switch)
-      ? "switch"
-      : null;
+        ? "switch"
+        : null;
     for (let i = this.state.labels.length - 1; i >= 0; i--) {
       const label = this.state.labels[i];
       if (label.statementStart === node.start) {
@@ -1536,8 +1535,8 @@ export default abstract class StatementParser extends ExpressionParser {
       decl.init = !this.eat(tt.eq)
         ? null
         : isFor
-        ? this.parseMaybeAssignDisallowIn()
-        : this.parseMaybeAssignAllowIn();
+          ? this.parseMaybeAssignDisallowIn()
+          : this.parseMaybeAssignAllowIn();
 
       if (decl.init === null && !allowMissingInitializer) {
         if (
@@ -2109,7 +2108,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this.state.labels = [];
     // ClassStaticBlockStatementList:
     //   StatementList[~Yield, ~Await, ~Return] opt
-    this.prodParam.enter(PARAM);
+    this.prodParam.enter(ParamKind.PARAM);
     const body: N.Node[] = (member.body = []);
     this.parseBlockOrModuleBlockBody(body, undefined, false, tt.braceR);
     this.prodParam.exit();
@@ -2228,10 +2227,10 @@ export default abstract class StatementParser extends ExpressionParser {
           ? ClassElementType.STATIC_GETTER
           : ClassElementType.INSTANCE_GETTER
         : node.kind === "set"
-        ? node.static
-          ? ClassElementType.STATIC_SETTER
-          : ClassElementType.INSTANCE_SETTER
-        : ClassElementType.OTHER;
+          ? node.static
+            ? ClassElementType.STATIC_SETTER
+            : ClassElementType.INSTANCE_SETTER
+          : ClassElementType.OTHER;
     this.declareClassPrivateMethodInScope(node, kind);
   }
 
@@ -2289,7 +2288,7 @@ export default abstract class StatementParser extends ExpressionParser {
   ): void {
     this.scope.enter(ScopeFlag.CLASS | ScopeFlag.SUPER);
     this.expressionScope.enter(newExpressionScope());
-    this.prodParam.enter(PARAM);
+    this.prodParam.enter(ParamKind.PARAM);
     node.value = this.eat(tt.eq) ? this.parseMaybeAssignAllowIn() : null;
     this.expressionScope.exit();
     this.prodParam.exit();
@@ -2300,7 +2299,7 @@ export default abstract class StatementParser extends ExpressionParser {
     node: Undone<N.Class>,
     isStatement: boolean,
     optionalId?: boolean | null,
-    bindingType: BindingTypes = BindingFlag.TYPE_CLASS,
+    bindingType: BindingFlag = BindingFlag.TYPE_CLASS,
   ): void {
     if (tokenIsIdentifier(this.state.type)) {
       node.id = this.parseIdentifier();
@@ -3154,7 +3153,7 @@ export default abstract class StatementParser extends ExpressionParser {
   >(
     specifier: Undone<T>,
     type: T["type"],
-    bindingType: BindingTypes = BindingFlag.TYPE_LEXICAL,
+    bindingType: BindingFlag = BindingFlag.TYPE_LEXICAL,
   ) {
     this.checkLVal(specifier.local, {
       in: { type },
@@ -3400,7 +3399,7 @@ export default abstract class StatementParser extends ExpressionParser {
     /* eslint-disable @typescript-eslint/no-unused-vars -- used in TypeScript and Flow parser */
     isInTypeOnlyImport: boolean,
     isMaybeTypeOnly: boolean,
-    bindingType: BindingTypes | undefined,
+    bindingType: BindingFlag | undefined,
     /* eslint-enable @typescript-eslint/no-unused-vars */
   ): N.ImportSpecifier {
     if (this.eatContextual(tt._as)) {

@@ -11,7 +11,7 @@
           "node": 6
         },
         "useBuiltIns": "entry",
-        "corejs": 3
+        "corejs": "3.0"
       }
     ]
   ]

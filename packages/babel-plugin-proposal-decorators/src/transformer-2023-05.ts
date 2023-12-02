@@ -103,19 +103,20 @@ function createLazyPrivateUidGeneratorForClass(
  */
 function replaceClassWithVar(
   path: NodePath<t.ClassDeclaration | t.ClassExpression>,
-): [t.Identifier, NodePath<t.ClassDeclaration | t.ClassExpression>] {
+): {
+  id: t.Identifier;
+  path: NodePath<t.ClassDeclaration | t.ClassExpression>;
+  needsDeclaration: boolean;
+} {
   if (path.type === "ClassDeclaration") {
     const varId = path.scope.generateUidIdentifierBasedOnNode(path.node.id);
     const classId = t.identifier(path.node.id.name);
 
     path.scope.rename(classId.name, varId.name);
 
-    path.insertBefore(
-      t.variableDeclaration("let", [t.variableDeclarator(varId)]),
-    );
     path.get("id").replaceWith(classId);
 
-    return [t.cloneNode(varId), path];
+    return { id: t.cloneNode(varId), path, needsDeclaration: true };
   } else {
     let className: string;
     let varId: t.Identifier;
@@ -145,10 +146,11 @@ function replaceClassWithVar(
       t.sequenceExpression([newClassExpr, varId]),
     );
 
-    return [
-      t.cloneNode(varId),
-      newPath.get("expressions.0") as NodePath<t.ClassExpression>,
-    ];
+    return {
+      id: t.cloneNode(varId),
+      path: newPath.get("expressions.0") as NodePath<t.ClassExpression>,
+      needsDeclaration: false,
+    };
   }
 }
 
@@ -609,12 +611,15 @@ function transformClass(
     }
   };
 
+  let needsDeclaraionForClassBinding = false;
   if (classDecorators) {
     classInitLocal = scopeParent.generateDeclaredUidIdentifier("initClass");
 
-    const [classId, classPath] = replaceClassWithVar(path);
-    path = classPath;
-    classIdLocal = classId;
+    ({
+      id: classIdLocal,
+      path,
+      needsDeclaration: needsDeclaraionForClassBinding,
+    } = replaceClassWithVar(path));
 
     path.node.decorators = null;
 
@@ -1108,6 +1113,14 @@ function transformClass(
   // into a SequenceExpression
   path.insertBefore(assignments.map(expr => t.expressionStatement(expr)));
 
+  if (needsDeclaraionForClassBinding) {
+    path.insertBefore(
+      t.variableDeclaration("let", [
+        t.variableDeclarator(t.cloneNode(classIdLocal)),
+      ]),
+    );
+  }
+
   // Recrawl the scope to make sure new identifiers are properly synced
   path.scope.crawl();
 
@@ -1205,7 +1218,7 @@ export default function (
   version: "2023-05" | "2023-01" | "2022-03" | "2021-12",
 ): PluginObject {
   if (process.env.BABEL_8_BREAKING) {
-    assertVersion("^7.21.0");
+    assertVersion(process.env.IS_PUBLISH ? PACKAGE_JSON.version : "^7.21.0");
   } else {
     if (version === "2023-05" || version === "2023-01") {
       assertVersion("^7.21.0");

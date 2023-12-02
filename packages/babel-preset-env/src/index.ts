@@ -19,17 +19,14 @@ import {
   overlappingPlugins,
 } from "./plugins-compat-data.ts";
 
-import removeRegeneratorEntryPlugin from "./polyfills/regenerator.ts";
-import legacyBabelPolyfillPlugin from "./polyfills/babel-polyfill.ts";
-
 import type { CallerMetadata } from "@babel/core";
 
-import _pluginCoreJS2 from "babel-plugin-polyfill-corejs2";
 import _pluginCoreJS3 from "babel-plugin-polyfill-corejs3";
-import _pluginRegenerator from "babel-plugin-polyfill-regenerator";
-const pluginCoreJS2 = _pluginCoreJS2.default || _pluginCoreJS2;
+// TODO(Babel 8): Just use the default import
 const pluginCoreJS3 = _pluginCoreJS3.default || _pluginCoreJS3;
-const pluginRegenerator = _pluginRegenerator.default || _pluginRegenerator;
+
+// TODO(Babel 8): Remove this
+import babel7 from "./polyfills/babel-7-plugins.cjs";
 
 import getTargets, {
   prettifyTargets,
@@ -40,8 +37,6 @@ import type { Targets, InputTargets } from "@babel/helper-compilation-targets";
 import availablePlugins from "./available-plugins.ts";
 import { declarePreset } from "@babel/helper-plugin-utils";
 
-type ModuleTransformationsType =
-  typeof import("./module-transformations").default;
 import type { BuiltInsOption, ModuleOption, Options } from "./types.ts";
 
 // TODO: Remove in Babel 8
@@ -120,39 +115,24 @@ export const transformIncludesAndExcludes = (opts: Array<string>): any => {
   );
 };
 
-export const getModulesPluginNames = ({
-  modules,
-  transformations,
-  shouldTransformESM,
-  shouldTransformDynamicImport,
-  shouldTransformExportNamespaceFrom,
-}: {
-  modules: ModuleOption;
-  transformations: ModuleTransformationsType;
-  shouldTransformESM: boolean;
-  shouldTransformDynamicImport: boolean;
-  shouldTransformExportNamespaceFrom: boolean;
-}) => {
+function getSpecialModulesPluginNames(
+  modules: Exclude<ModuleOption, "auto">,
+  shouldTransformDynamicImport: boolean,
+) {
   const modulesPluginNames = [];
-  if (modules !== false && transformations[modules]) {
-    if (shouldTransformESM) {
-      modulesPluginNames.push(transformations[modules]);
-    }
-
-    if (shouldTransformDynamicImport) {
-      if (shouldTransformESM && modules !== "umd") {
-        modulesPluginNames.push("transform-dynamic-import");
-      } else {
-        console.warn(
-          "Dynamic import can only be transformed when transforming ES" +
-            " modules to AMD, CommonJS or SystemJS.",
-        );
-      }
-    }
+  if (modules) {
+    modulesPluginNames.push(moduleTransformations[modules]);
   }
 
-  if (shouldTransformExportNamespaceFrom) {
-    modulesPluginNames.push("transform-export-namespace-from");
+  if (shouldTransformDynamicImport) {
+    if (modules && modules !== "umd") {
+      modulesPluginNames.push("transform-dynamic-import");
+    } else {
+      console.warn(
+        "Dynamic import can only be transformed when transforming ES" +
+          " modules to AMD, CommonJS or SystemJS.",
+      );
+    }
   }
 
   if (!process.env.BABEL_8_BREAKING) {
@@ -160,17 +140,14 @@ export const getModulesPluginNames = ({
     if (!shouldTransformDynamicImport) {
       modulesPluginNames.push("syntax-dynamic-import");
     }
-    if (!shouldTransformExportNamespaceFrom) {
-      modulesPluginNames.push("syntax-export-namespace-from");
-    }
     modulesPluginNames.push("syntax-top-level-await");
     modulesPluginNames.push("syntax-import-meta");
   }
 
   return modulesPluginNames;
-};
+}
 
-export const getPolyfillPlugins = ({
+const getCoreJSOptions = ({
   useBuiltIns,
   corejs,
   polyfillTargets,
@@ -178,7 +155,6 @@ export const getPolyfillPlugins = ({
   exclude,
   proposals,
   shippedProposals,
-  regenerator,
   debug,
 }: {
   useBuiltIns: BuiltInsOption;
@@ -188,64 +164,112 @@ export const getPolyfillPlugins = ({
   exclude: Set<string>;
   proposals: boolean;
   shippedProposals: boolean;
-  regenerator: boolean;
   debug: boolean;
-}) => {
-  const polyfillPlugins = [];
-  if (useBuiltIns === "usage" || useBuiltIns === "entry") {
-    const pluginOptions = {
-      method: `${useBuiltIns}-global`,
-      version: corejs ? corejs.toString() : undefined,
-      targets: polyfillTargets,
-      include,
-      exclude,
-      proposals,
-      shippedProposals,
-      debug,
-      "#__secret_key__@babel/preset-env__compatibility": {
-        noRuntimeName: true,
-      },
-    };
+}) => ({
+  method: `${useBuiltIns}-global`,
+  version: corejs ? corejs.toString() : undefined,
+  targets: polyfillTargets,
+  include,
+  exclude,
+  proposals,
+  shippedProposals,
+  debug,
+  "#__secret_key__@babel/preset-env__compatibility": {
+    noRuntimeName: true,
+  },
+});
 
-    if (corejs) {
-      if (useBuiltIns === "usage") {
-        if (corejs.major === 2) {
-          polyfillPlugins.push(
-            [pluginCoreJS2, pluginOptions],
-            [legacyBabelPolyfillPlugin, { usage: true }],
-          );
+if (!process.env.BABEL_8_BREAKING) {
+  // eslint-disable-next-line no-var
+  var getPolyfillPlugins = ({
+    useBuiltIns,
+    corejs,
+    polyfillTargets,
+    include,
+    exclude,
+    proposals,
+    shippedProposals,
+    regenerator,
+    debug,
+  }: {
+    useBuiltIns: BuiltInsOption;
+    corejs: SemVer | null | false;
+    polyfillTargets: Targets;
+    include: Set<string>;
+    exclude: Set<string>;
+    proposals: boolean;
+    shippedProposals: boolean;
+    regenerator: boolean;
+    debug: boolean;
+  }) => {
+    const polyfillPlugins = [];
+    if (useBuiltIns === "usage" || useBuiltIns === "entry") {
+      const pluginOptions = getCoreJSOptions({
+        useBuiltIns,
+        corejs,
+        polyfillTargets,
+        include,
+        exclude,
+        proposals,
+        shippedProposals,
+        debug,
+      });
+
+      if (corejs) {
+        if (process.env.BABEL_8_BREAKING) {
+          polyfillPlugins.push([pluginCoreJS3, pluginOptions]);
         } else {
-          polyfillPlugins.push(
-            [pluginCoreJS3, pluginOptions],
-            [legacyBabelPolyfillPlugin, { usage: true, deprecated: true }],
-          );
-        }
-        if (regenerator) {
-          polyfillPlugins.push([
-            pluginRegenerator,
-            { method: "usage-global", debug },
-          ]);
-        }
-      } else {
-        if (corejs.major === 2) {
-          polyfillPlugins.push(
-            [legacyBabelPolyfillPlugin, { regenerator }],
-            [pluginCoreJS2, pluginOptions],
-          );
-        } else {
-          polyfillPlugins.push(
-            [pluginCoreJS3, pluginOptions],
-            [legacyBabelPolyfillPlugin, { deprecated: true }],
-          );
-          if (!regenerator) {
-            polyfillPlugins.push([removeRegeneratorEntryPlugin, pluginOptions]);
+          if (useBuiltIns === "usage") {
+            if (corejs.major === 2) {
+              polyfillPlugins.push(
+                [babel7.pluginCoreJS2, pluginOptions],
+                [babel7.legacyBabelPolyfillPlugin, { usage: true }],
+              );
+            } else {
+              polyfillPlugins.push(
+                [pluginCoreJS3, pluginOptions],
+                [
+                  babel7.legacyBabelPolyfillPlugin,
+                  { usage: true, deprecated: true },
+                ],
+              );
+            }
+            if (regenerator) {
+              polyfillPlugins.push([
+                babel7.pluginRegenerator,
+                { method: "usage-global", debug },
+              ]);
+            }
+          } else {
+            if (corejs.major === 2) {
+              polyfillPlugins.push(
+                [babel7.legacyBabelPolyfillPlugin, { regenerator }],
+                [babel7.pluginCoreJS2, pluginOptions],
+              );
+            } else {
+              polyfillPlugins.push(
+                [pluginCoreJS3, pluginOptions],
+                [babel7.legacyBabelPolyfillPlugin, { deprecated: true }],
+              );
+              if (!regenerator) {
+                polyfillPlugins.push([
+                  babel7.removeRegeneratorEntryPlugin,
+                  pluginOptions,
+                ]);
+              }
+            }
           }
         }
       }
     }
+    return polyfillPlugins;
+  };
+
+  if (!USE_ESM) {
+    // eslint-disable-next-line no-restricted-globals
+    exports.getPolyfillPlugins = getPolyfillPlugins;
   }
-  return polyfillPlugins;
-};
+}
 
 function getLocalTargets(
   optionsTargets: Options["targets"],
@@ -268,22 +292,29 @@ function getLocalTargets(
 }
 
 function supportsStaticESM(caller: CallerMetadata | undefined) {
+  // TODO(Babel 8): Fallback to true
   // @ts-expect-error supportsStaticESM is not defined in CallerMetadata
   return !!caller?.supportsStaticESM;
 }
 
 function supportsDynamicImport(caller: CallerMetadata | undefined) {
+  // TODO(Babel 8): Fallback to true
   // @ts-expect-error supportsDynamicImport is not defined in CallerMetadata
   return !!caller?.supportsDynamicImport;
 }
 
 function supportsExportNamespaceFrom(caller: CallerMetadata | undefined) {
+  // TODO(Babel 8): Fallback to null
   // @ts-expect-error supportsExportNamespaceFrom is not defined in CallerMetadata
   return !!caller?.supportsExportNamespaceFrom;
 }
 
 export default declarePreset((api, opts: Options) => {
-  api.assertVersion(7);
+  api.assertVersion(
+    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
+      ? PACKAGE_JSON.version
+      : 7,
+  );
 
   const babelTargets = api.targets();
 
@@ -296,7 +327,7 @@ export default declarePreset((api, opts: Options) => {
     ignoreBrowserslistConfig,
     include: optionsInclude,
     loose,
-    modules,
+    modules: optionsModules,
     shippedProposals,
     spec,
     targets: optionsTargets,
@@ -354,31 +385,34 @@ option \`forceAllTransforms: true\` instead.
   const exclude = transformIncludesAndExcludes(optionsExclude);
 
   const compatData = getPluginList(shippedProposals, bugfixes);
-  const shouldSkipExportNamespaceFrom =
-    (modules === "auto" && api.caller?.(supportsExportNamespaceFrom)) ||
-    (modules === false &&
-      !isRequired("transform-export-namespace-from", transformTargets, {
-        compatData,
-        includes: include.plugins,
-        excludes: exclude.plugins,
-      }));
-  const modulesPluginNames = getModulesPluginNames({
-    modules,
-    transformations: moduleTransformations,
-    // TODO: Remove the 'api.caller' check eventually. Just here to prevent
-    // unnecessary breakage in the short term for users on older betas/RCs.
-    shouldTransformESM: modules !== "auto" || !api.caller?.(supportsStaticESM),
-    shouldTransformDynamicImport:
-      modules !== "auto" || !api.caller?.(supportsDynamicImport),
-    shouldTransformExportNamespaceFrom: !shouldSkipExportNamespaceFrom,
-  });
+  const modules =
+    optionsModules === "auto"
+      ? api.caller(supportsStaticESM)
+        ? false
+        : "commonjs"
+      : optionsModules;
+  const shouldTransformDynamicImport =
+    optionsModules === "auto" ? !api.caller(supportsDynamicImport) : !!modules;
+
+  // If the caller does not support export-namespace-from, we forcefully add
+  // the plugin to `includes`.
+  // TODO(Babel 8): stop doing this, similarly to how we don't do this for any
+  // other plugin. We can consider adding bundlers as targets in the future,
+  // but we should not have a one-off special case for this plugin.
+  if (
+    optionsModules === "auto" &&
+    !api.caller(supportsExportNamespaceFrom) &&
+    !exclude.plugins.has("transform-export-namespace-from")
+  ) {
+    include.plugins.add("transform-export-namespace-from");
+  }
 
   const pluginNames = filterItems(
     compatData,
     include.plugins,
     exclude.plugins,
     transformTargets,
-    modulesPluginNames,
+    getSpecialModulesPluginNames(modules, shouldTransformDynamicImport),
     getOptionSpecificExcludesFor({ loose }),
     pluginSyntaxMap,
   );
@@ -388,17 +422,35 @@ option \`forceAllTransforms: true\` instead.
   removeUnsupportedItems(pluginNames, api.version);
   removeUnnecessaryItems(pluginNames, overlappingPlugins);
 
-  const polyfillPlugins = getPolyfillPlugins({
-    useBuiltIns,
-    corejs,
-    polyfillTargets: targets,
-    include: include.builtIns,
-    exclude: exclude.builtIns,
-    proposals,
-    shippedProposals,
-    regenerator: pluginNames.has("transform-regenerator"),
-    debug,
-  });
+  const polyfillPlugins = process.env.BABEL_8_BREAKING
+    ? useBuiltIns
+      ? [
+          [
+            pluginCoreJS3,
+            getCoreJSOptions({
+              useBuiltIns,
+              corejs,
+              polyfillTargets: targets,
+              include: include.builtIns,
+              exclude: exclude.builtIns,
+              proposals,
+              shippedProposals,
+              debug,
+            }),
+          ],
+        ]
+      : []
+    : getPolyfillPlugins({
+        useBuiltIns,
+        corejs,
+        polyfillTargets: targets,
+        include: include.builtIns,
+        exclude: exclude.builtIns,
+        proposals,
+        shippedProposals,
+        regenerator: pluginNames.has("transform-regenerator"),
+        debug,
+      });
 
   const pluginUseBuiltIns = useBuiltIns !== false;
   const plugins = Array.from(pluginNames)
@@ -434,7 +486,7 @@ option \`forceAllTransforms: true\` instead.
     console.log("@babel/preset-env: `DEBUG` option");
     console.log("\nUsing targets:");
     console.log(JSON.stringify(prettifyTargets(targets), null, 2));
-    console.log(`\nUsing modules transform: ${modules.toString()}`);
+    console.log(`\nUsing modules transform: ${optionsModules.toString()}`);
     console.log("\nUsing plugins:");
     pluginNames.forEach(pluginName => {
       logPlugin(pluginName, targets, compatData);
@@ -449,3 +501,52 @@ option \`forceAllTransforms: true\` instead.
 
   return { plugins };
 });
+
+if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
+  // eslint-disable-next-line no-restricted-globals
+  exports.getModulesPluginNames = ({
+    modules,
+    transformations,
+    shouldTransformESM,
+    shouldTransformDynamicImport,
+    shouldTransformExportNamespaceFrom,
+  }: {
+    modules: ModuleOption;
+    transformations: typeof import("./module-transformations").default;
+    shouldTransformESM: boolean;
+    shouldTransformDynamicImport: boolean;
+    shouldTransformExportNamespaceFrom: boolean;
+  }) => {
+    const modulesPluginNames = [];
+    if (modules !== false && transformations[modules]) {
+      if (shouldTransformESM) {
+        modulesPluginNames.push(transformations[modules]);
+      }
+
+      if (shouldTransformDynamicImport) {
+        if (shouldTransformESM && modules !== "umd") {
+          modulesPluginNames.push("transform-dynamic-import");
+        } else {
+          console.warn(
+            "Dynamic import can only be transformed when transforming ES" +
+              " modules to AMD, CommonJS or SystemJS.",
+          );
+        }
+      }
+    }
+
+    if (shouldTransformExportNamespaceFrom) {
+      modulesPluginNames.push("transform-export-namespace-from");
+    }
+    if (!shouldTransformDynamicImport) {
+      modulesPluginNames.push("syntax-dynamic-import");
+    }
+    if (!shouldTransformExportNamespaceFrom) {
+      modulesPluginNames.push("syntax-export-namespace-from");
+    }
+    modulesPluginNames.push("syntax-top-level-await");
+    modulesPluginNames.push("syntax-import-meta");
+
+    return modulesPluginNames;
+  };
+}

@@ -35,7 +35,10 @@ import { USE_ESM, commonJS } from "$repo-utils";
 const { require, __dirname: monorepoRoot } = commonJS(import.meta.url);
 
 const defaultPackagesGlob = "./@(codemods|packages|eslint)/*";
-const defaultSourcesGlob = `${defaultPackagesGlob}/src/**/{*.js,*.cjs,!(*.d).ts}`;
+const defaultSourcesGlob = [
+  `${defaultPackagesGlob}/src/**/{*.js,*.cjs,!(*.d).ts}`,
+  "!./packages/babel-helpers/src/helpers/*",
+];
 
 const babelStandalonePluginConfigGlob =
   "./packages/babel-standalone/scripts/pluginConfig.json";
@@ -697,6 +700,7 @@ if (bool(process.env.BABEL_8_BREAKING)) {
     "packages/babel-preset-typescript",
     "packages/babel-helper-member-expression-to-functions",
     "packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining",
+    "packages/babel-plugin-bugfix-v8-static-class-fields-redefine-readonly",
     "packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression",
   ].map(src => ({
     src,
@@ -897,7 +901,7 @@ function watch() {
   gulp.watch(buildTypingsWatchGlob, gulp.task("generate-type-helpers"));
   gulp.watch(
     [
-      "./packages/babel-helpers/src/helpers/*.js",
+      "./packages/babel-helpers/src/helpers/*",
       "!./packages/babel-helpers/src/helpers/regeneratorRuntime.js",
     ],
     gulp.task("generate-runtime-helpers")

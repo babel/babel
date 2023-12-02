@@ -11,19 +11,27 @@ import {
   assignmentExpression,
   awaitExpression,
   blockStatement,
+  buildUndefinedNode,
   callExpression,
   cloneNode,
+  conditionalExpression,
   expressionStatement,
+  getBindingIdentifiers,
   identifier,
   inheritLeadingComments,
   inheritTrailingComments,
   inheritsComments,
+  isBlockStatement,
+  isEmptyStatement,
   isExpression,
+  isExpressionStatement,
+  isIfStatement,
   isProgram,
   isStatement,
+  isVariableDeclaration,
   removeComments,
   returnStatement,
-  toSequenceExpression,
+  sequenceExpression,
   validate,
   yieldExpression,
 } from "@babel/types";
@@ -229,10 +237,11 @@ export function replaceExpressionWithStatements(
 ) {
   this.resync();
 
-  const nodesAsSequenceExpression = toSequenceExpression(nodes, this.scope);
-
-  if (nodesAsSequenceExpression) {
-    return this.replaceWith(nodesAsSequenceExpression)[0].get("expressions");
+  const declars: t.Identifier[] = [];
+  const nodesAsSingleExpression = gatherSequenceExpressions(nodes, declars);
+  if (nodesAsSingleExpression) {
+    for (const id of declars) this.scope.push({ id });
+    return this.replaceWith(nodesAsSingleExpression)[0].get("expressions");
   }
 
   const functionParent = this.getFunctionParent();
@@ -325,6 +334,75 @@ export function replaceExpressionWithStatements(
   }
 
   return newCallee.get("body.body");
+}
+
+function gatherSequenceExpressions(
+  nodes: ReadonlyArray<t.Node>,
+  declars: Array<t.Identifier>,
+) {
+  const exprs: t.Expression[] = [];
+  let ensureLastUndefined = true;
+
+  for (const node of nodes) {
+    // if we encounter emptyStatement before a non-emptyStatement
+    // we want to disregard that
+    if (!isEmptyStatement(node)) {
+      ensureLastUndefined = false;
+    }
+
+    if (isExpression(node)) {
+      exprs.push(node);
+    } else if (isExpressionStatement(node)) {
+      exprs.push(node.expression);
+    } else if (isVariableDeclaration(node)) {
+      if (node.kind !== "var") return; // bailed
+
+      for (const declar of node.declarations) {
+        const bindings = getBindingIdentifiers(declar);
+        for (const key of Object.keys(bindings)) {
+          declars.push(cloneNode(bindings[key]));
+        }
+
+        if (declar.init) {
+          exprs.push(assignmentExpression("=", declar.id, declar.init));
+        }
+      }
+
+      ensureLastUndefined = true;
+    } else if (isIfStatement(node)) {
+      const consequent = node.consequent
+        ? gatherSequenceExpressions([node.consequent], declars)
+        : buildUndefinedNode();
+      const alternate = node.alternate
+        ? gatherSequenceExpressions([node.alternate], declars)
+        : buildUndefinedNode();
+      if (!consequent || !alternate) return; // bailed
+
+      exprs.push(conditionalExpression(node.test, consequent, alternate));
+    } else if (isBlockStatement(node)) {
+      const body = gatherSequenceExpressions(node.body, declars);
+      if (!body) return; // bailed
+
+      exprs.push(body);
+    } else if (isEmptyStatement(node)) {
+      // empty statement so ensure the last item is undefined if we're last
+      // checks if emptyStatement is first
+      if (nodes.indexOf(node) === 0) {
+        ensureLastUndefined = true;
+      }
+    } else {
+      // bailed, we can't turn this statement into an expression
+      return;
+    }
+  }
+
+  if (ensureLastUndefined) exprs.push(buildUndefinedNode());
+
+  if (exprs.length === 1) {
+    return exprs[0];
+  } else {
+    return sequenceExpression(exprs);
+  }
 }
 
 export function replaceInline(this: NodePath, nodes: t.Node | Array<t.Node>) {

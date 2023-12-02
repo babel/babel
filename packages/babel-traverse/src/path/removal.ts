@@ -4,6 +4,7 @@ import { hooks } from "./lib/removal-hooks.ts";
 import { getCachedPaths } from "../cache.ts";
 import type NodePath from "./index.ts";
 import { REMOVED, SHOULD_SKIP } from "./index.ts";
+import { getBindingIdentifiers } from "@babel/types";
 
 export function remove(this: NodePath) {
   this._assertUnremoved();
@@ -24,7 +25,7 @@ export function remove(this: NodePath) {
 }
 
 export function _removeFromScope(this: NodePath) {
-  const bindings = this.getBindingIdentifiers();
+  const bindings = getBindingIdentifiers(this.node, false, false, true);
   Object.keys(bindings).forEach(name => this.scope.removeBinding(name));
 }
 

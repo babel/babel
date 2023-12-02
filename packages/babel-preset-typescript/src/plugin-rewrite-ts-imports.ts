@@ -16,7 +16,9 @@ export default declare(function ({ types: t }) {
           ? node.importKind
           : node.exportKind;
         if (kind === "value" && source && /[\\/]/.test(source.value)) {
-          source.value = source.value.replace(/(\.[mc]?)ts$/, "$1js");
+          source.value = source.value
+            .replace(/(\.[mc]?)ts$/, "$1js")
+            .replace(/\.tsx$/, ".js");
         }
       },
     },

@@ -17,13 +17,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Use Node.js latest
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: latest
           check-latest: true
           cache: "yarn"
       - name: 'Check or update Yarn cache (fix w/ "yarn install")'
         env:
+          YARN_ENABLE_HARDENED_MODE: true # enable hardened mode as CI may run on untrusted repos
           YARN_ENABLE_SCRIPTS: false # disable post-install scripts
           YARN_NODE_LINKER: pnp # use pnp linker for better linking performance: it's meant to update yarn cache only
         run: |
@@ -37,7 +38,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Use Node.js latest
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: latest
           check-latest: true
@@ -66,7 +67,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Use Node.js latest
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: latest
           check-latest: true
@@ -88,7 +89,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Use Node.js latest
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: latest
           check-latest: true
@@ -115,7 +116,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Use Node.js latest
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: latest
           check-latest: true
@@ -155,7 +156,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Use Node.js latest
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: latest
           check-latest: true
@@ -180,7 +181,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Use Node.js latest
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: latest
           check-latest: true
@@ -205,12 +206,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [18, 16, 14, 12, 10, 8, 6]
+        node-version: [20, 18, 16, 14, 12, 10, 8, 6]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Use Node.js latest # Run yarn on latest node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: latest
           check-latest: true
@@ -244,7 +245,7 @@ jobs:
       - name: Extract artifacts
         run: tar -xf babel-artifact.tar; rm babel-artifact.tar
       - name: Use Node.js ${{ matrix.node-version }} # Checkout node version for test executor
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
       - name: Test on node.js ${{ matrix.node-version }}
@@ -256,7 +257,7 @@ jobs:
           TEST_FUZZ: "${{ (matrix.node-version == '6' || matrix.node-version == '8' || matrix.node-version == '10') && 'false' || 'true' }}"
       - name: Use Node.js latest # For `yarn version` in post actions of the first actions/setup-node
         if: matrix.node-version == '6' || matrix.node-version == '8' || matrix.node-version == '10'
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: latest
 
@@ -271,7 +272,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Use Node.js latest
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: latest
           check-latest: true
@@ -307,11 +308,13 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
+    env:
+      YARN_IGNORE_NODE: 1
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Use Node.js 16.20
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "16.20" # Node.js 16.20 is the first LTS supported by Babel 8
           cache: "yarn"
@@ -342,8 +345,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Use Node.js 18
-        uses: actions/setup-node@v3
+      - name: Use Node.js latest
+        uses: actions/setup-node@v4
         with:
           node-version: latest
           check-latest: true
@@ -369,7 +372,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Use Node.js latest
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: latest
           check-latest: true
@@ -398,7 +401,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Use Node.js latest
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: latest
           check-latest: true
@@ -436,61 +439,61 @@ jobs:
       - name: Test Node.js latest
         run: node test/runtime-integration/node.cjs
       - name: Use Node.js 10
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 10
       - name: Test Node.js 10
         run: node test/runtime-integration/node.cjs
       - name: Use Node.js 12.0
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "12.0" # quoted, otherwise it's just 13
       - name: Test Node.js 12.0
         run: node test/runtime-integration/node.cjs
       - name: Use Node.js 12.17
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 12.17
       - name: Test Node.js  12.17
         run: node test/runtime-integration/node.cjs
       - name: Use Node.js 13.0
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "13.0" # quoted, otherwise it's just 13
       - name: Test Node.js 13.0
         run: node test/runtime-integration/node.cjs
       - name: Use Node.js 13.2
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 13.2
       - name: Test Node.js 13.2
         run: node test/runtime-integration/node.cjs
       - name: Use Node.js 13.6
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 13.6
       - name: Test Node.js 13.6
         run: node test/runtime-integration/node.cjs
       - name: Use Node.js 13.7
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 13.7
       - name: Test Node.js 13.7
         run: node test/runtime-integration/node.cjs
       - name: Use Node.js 14.2
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 14.2
       - name: Test Node.js 14.2
         run: node test/runtime-integration/node.cjs
       - name: Use Node.js 16.5
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 16.5
       - name: Test Node.js 16.5
         run: node test/runtime-integration/node.cjs
       - name: Use Node.js 16.6
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 16.6
       - name: Test Node.js 16.6
@@ -504,7 +507,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Use Node.js latest
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: latest
           check-latest: true
@@ -529,7 +532,7 @@ jobs:
       - name: Checkout Babel
         uses: actions/checkout@v4
       - name: Use Node.js latest
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: latest
           check-latest: true
@@ -566,7 +569,7 @@ jobs:
       - name: Checkout Babel
         uses: actions/checkout@v4
       - name: Use Node.js latest
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: latest
           check-latest: true

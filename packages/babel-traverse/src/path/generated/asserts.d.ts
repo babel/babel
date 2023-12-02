@@ -9,8 +9,8 @@ type Opts<Obj> = Partial<{
   [Prop in keyof Obj]: Obj[Prop] extends t.Node
     ? t.Node
     : Obj[Prop] extends t.Node[]
-    ? t.Node[]
-    : Obj[Prop];
+      ? t.Node[]
+      : Obj[Prop];
 }>;
 
 export interface NodePathAssertions {

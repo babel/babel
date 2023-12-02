@@ -4,13 +4,13 @@ import fs from "fs";
 import path from "path";
 import fixtures from "@babel/helper-fixtures";
 import { TraceMap, originalPositionFor } from "@jridgewell/trace-mapping";
-import { commonJS } from "$repo-utils";
+import { commonJS, describeBabel7NoESM } from "$repo-utils";
 import { encode } from "@jridgewell/sourcemap-codec";
 
-import _generate, { CodeGenerator } from "../lib/index.js";
+import _generate from "../lib/index.js";
 const generate = _generate.default || _generate;
 
-const { __dirname } = commonJS(import.meta.url);
+const { __dirname, require } = commonJS(import.meta.url);
 
 describe("generation", function () {
   it("multiple sources", function () {
@@ -1482,11 +1482,68 @@ describe("programmatic generation", function () {
         `"(x, y): any /*foo*/ => z"`,
       );
     });
+
+    it("multi-line leading comment after return", () => {
+      const val = t.identifier("val");
+      val.leadingComments = [{ type: "CommentBlock", value: "new\nline" }];
+      expect(generate(t.returnStatement(val)).code).toMatch(`return (
+  /*new
+  line*/
+  val
+);`);
+    });
+
+    it("multi-line leading comment after return 2", () => {
+      const ast = parse(
+        `return (
+        /*new
+        line*/ val);`,
+        {
+          allowReturnOutsideFunction: true,
+        },
+      );
+      // Remove `parenthesized`
+      ast.program.body[0].argument.extra = null;
+      expect(generate(ast).code).toMatchInlineSnapshot(`
+        "return (
+          /*new
+          line*/
+          val
+        );"
+      `);
+    });
+
+    it("multi-line leading comment after return compact", () => {
+      const val = t.identifier("val");
+      val.leadingComments = [{ type: "CommentBlock", value: "new\nline" }];
+      expect(
+        generate(t.returnStatement(val), {
+          compact: true,
+        }).code,
+      ).toMatchInlineSnapshot(`
+        "return(/*new
+        line*/val);"
+      `);
+    });
+
+    it("multi-line leading comment after return concise", () => {
+      const val = t.identifier("val");
+      val.leadingComments = [{ type: "CommentBlock", value: "new\nline" }];
+      expect(
+        generate(t.returnStatement(val), {
+          concise: true,
+        }).code,
+      ).toMatchInlineSnapshot(`
+        "return (/*new
+        line*/ val );"
+      `);
+    });
   });
 });
 
-describe("CodeGenerator", function () {
+describeBabel7NoESM("CodeGenerator", function () {
   it("generate", function () {
+    const CodeGenerator = require("../lib/index.js").CodeGenerator;
     const codeGen = new CodeGenerator(t.numericLiteral(123));
     const code = codeGen.generate().code;
     expect(parse(code).program.body[0].expression.value).toBe(123);

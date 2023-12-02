@@ -1,6 +1,6 @@
 {
   "name": "@babel/runtime-corejs2",
-  "version": "7.23.1",
+  "version": "7.23.5",
   "description": "babel's modular runtime helpers with core-js@2 polyfilling",
   "license": "MIT",
   "publishConfig": {
@@ -144,6 +144,15 @@
       "./helpers/importDeferProxy.js"
     ],
     "./helpers/esm/importDeferProxy": "./helpers/esm/importDeferProxy.js",
+    "./helpers/interopRequireWildcard": [
+      {
+        "node": "./helpers/interopRequireWildcard.js",
+        "import": "./helpers/esm/interopRequireWildcard.js",
+        "default": "./helpers/interopRequireWildcard.js"
+      },
+      "./helpers/interopRequireWildcard.js"
+    ],
+    "./helpers/esm/interopRequireWildcard": "./helpers/esm/interopRequireWildcard.js",
     "./helpers/iterableToArrayLimit": [
       {
         "node": "./helpers/iterableToArrayLimit.js",
@@ -189,6 +198,33 @@
       "./helpers/regeneratorRuntime.js"
     ],
     "./helpers/esm/regeneratorRuntime": "./helpers/esm/regeneratorRuntime.js",
+    "./helpers/setFunctionName": [
+      {
+        "node": "./helpers/setFunctionName.js",
+        "import": "./helpers/esm/setFunctionName.js",
+        "default": "./helpers/setFunctionName.js"
+      },
+      "./helpers/setFunctionName.js"
+    ],
+    "./helpers/esm/setFunctionName": "./helpers/esm/setFunctionName.js",
+    "./helpers/toPrimitive": [
+      {
+        "node": "./helpers/toPrimitive.js",
+        "import": "./helpers/esm/toPrimitive.js",
+        "default": "./helpers/toPrimitive.js"
+      },
+      "./helpers/toPrimitive.js"
+    ],
+    "./helpers/esm/toPrimitive": "./helpers/esm/toPrimitive.js",
+    "./helpers/toPropertyKey": [
+      {
+        "node": "./helpers/toPropertyKey.js",
+        "import": "./helpers/esm/toPropertyKey.js",
+        "default": "./helpers/toPropertyKey.js"
+      },
+      "./helpers/toPropertyKey.js"
+    ],
+    "./helpers/esm/toPropertyKey": "./helpers/esm/toPropertyKey.js",
     "./helpers/typeof": [
       {
         "node": "./helpers/typeof.js",
@@ -396,15 +432,6 @@
       "./helpers/interopRequireDefault.js"
     ],
     "./helpers/esm/interopRequireDefault": "./helpers/esm/interopRequireDefault.js",
-    "./helpers/interopRequireWildcard": [
-      {
-        "node": "./helpers/interopRequireWildcard.js",
-        "import": "./helpers/esm/interopRequireWildcard.js",
-        "default": "./helpers/interopRequireWildcard.js"
-      },
-      "./helpers/interopRequireWildcard.js"
-    ],
-    "./helpers/esm/interopRequireWildcard": "./helpers/esm/interopRequireWildcard.js",
     "./helpers/newArrowCheck": [
       {
         "node": "./helpers/newArrowCheck.js",
@@ -702,24 +729,6 @@
       "./helpers/skipFirstGeneratorNext.js"
     ],
     "./helpers/esm/skipFirstGeneratorNext": "./helpers/esm/skipFirstGeneratorNext.js",
-    "./helpers/toPrimitive": [
-      {
-        "node": "./helpers/toPrimitive.js",
-        "import": "./helpers/esm/toPrimitive.js",
-        "default": "./helpers/toPrimitive.js"
-      },
-      "./helpers/toPrimitive.js"
-    ],
-    "./helpers/esm/toPrimitive": "./helpers/esm/toPrimitive.js",
-    "./helpers/toPropertyKey": [
-      {
-        "node": "./helpers/toPropertyKey.js",
-        "import": "./helpers/esm/toPropertyKey.js",
-        "default": "./helpers/toPropertyKey.js"
-      },
-      "./helpers/toPropertyKey.js"
-    ],
-    "./helpers/esm/toPropertyKey": "./helpers/esm/toPropertyKey.js",
     "./helpers/initializerWarningHelper": [
       {
         "node": "./helpers/initializerWarningHelper.js",

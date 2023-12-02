@@ -158,14 +158,16 @@ const es2021 = {
 };
 
 const es2022 = {
+  "bugfix/transform-v8-static-class-fields-redefine-readonly": {
+    features: ["static class fields / static class fields use [[Define]]"],
+    replaces: "transform-class-properties",
+  },
   "transform-class-static-block": "Class static initialization blocks",
   "transform-private-property-in-object":
     "Ergonomic brand checks for private fields",
   "transform-class-properties": {
     features: [
-      "static class fields / public static class fields",
-      "static class fields / private static class fields",
-      "static class fields / computed static class fields",
+      "static class fields",
       "instance class fields / public instance class fields",
       "instance class fields / private instance class fields basic support",
       "instance class fields / computed instance class fields",

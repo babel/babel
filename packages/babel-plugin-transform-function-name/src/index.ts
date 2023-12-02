@@ -3,7 +3,11 @@ import { declare } from "@babel/helper-plugin-utils";
 import nameFunction from "@babel/helper-function-name";
 
 export default declare(api => {
-  api.assertVersion(7);
+  api.assertVersion(
+    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
+      ? PACKAGE_JSON.version
+      : 7,
+  );
   const supportUnicodeId = !isRequired(
     "transform-unicode-escapes",
     api.targets(),

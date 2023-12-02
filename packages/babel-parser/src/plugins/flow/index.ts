@@ -17,11 +17,7 @@ import { types as tc } from "../../tokenizer/context.ts";
 import * as charCodes from "charcodes";
 import { isIteratorStart } from "../../util/identifier.ts";
 import FlowScopeHandler from "./scope.ts";
-import {
-  BindingFlag,
-  ScopeFlag,
-  type BindingTypes,
-} from "../../util/scopeflags.ts";
+import { BindingFlag, ScopeFlag } from "../../util/scopeflags.ts";
 import type { ExpressionErrors } from "../../parser/util.ts";
 import type { ParseStatementFlag } from "../../parser/statement.ts";
 import { Errors, ParseErrorEnum } from "../../parse-error.ts";
@@ -2472,7 +2468,7 @@ export default (superClass: typeof Parser) =>
       return node;
     }
 
-    isValidLVal(type: string, isParenthesized: boolean, binding: BindingTypes) {
+    isValidLVal(type: string, isParenthesized: boolean, binding: BindingFlag) {
       return (
         type === "TypeCastExpression" ||
         super.isValidLVal(type, isParenthesized, binding)
@@ -2767,7 +2763,7 @@ export default (superClass: typeof Parser) =>
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       isMaybeTypeOnly: boolean,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      bindingType: BindingTypes | undefined,
+      bindingType: BindingFlag | undefined,
     ): N.ImportSpecifier {
       const firstIdent = specifier.imported;
 
@@ -3407,8 +3403,8 @@ export default (superClass: typeof Parser) =>
         !enumContext.explicitType
           ? FlowErrors.EnumInvalidMemberInitializerUnknownType
           : enumContext.explicitType === "symbol"
-          ? FlowErrors.EnumInvalidMemberInitializerSymbolType
-          : FlowErrors.EnumInvalidMemberInitializerPrimaryType,
+            ? FlowErrors.EnumInvalidMemberInitializerSymbolType
+            : FlowErrors.EnumInvalidMemberInitializerPrimaryType,
         {
           at: loc,
           ...enumContext,

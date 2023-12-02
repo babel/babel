@@ -1,16 +1,18 @@
 "use strict";
 
-if (
-  typeof it === "function" &&
+let jestSnapshot = false;
+if (typeof it === "function") {
   // Jest loads the Babel config to parse file and update inline snapshots.
   // This is ok, as it's not loading the Babel config to test Babel itself.
-  !new Error().stack.includes("jest-snapshot")
-) {
-  throw new Error("Monorepo root's babel.config.js loaded by a test.");
+  if (!new Error().stack.includes("jest-snapshot")) {
+    throw new Error("Monorepo root's babel.config.js loaded by a test.");
+  }
+  jestSnapshot = true;
 }
 
 const pathUtils = require("path");
 const fs = require("fs");
+const { parseSync } = require("@babel/core");
 
 function normalize(src) {
   return src.replace(/\//, pathUtils.sep);
@@ -79,10 +81,7 @@ module.exports = function (api) {
   let convertESM = outputType === "script";
   let replaceTSImportExtension = true;
   let ignoreLib = true;
-  let includeRegeneratorRuntime = false;
   let needsPolyfillsForOldNode = false;
-
-  let transformRuntimeOptions;
 
   const nodeVersion = bool(process.env.BABEL_8_BREAKING) ? "16.20" : "6.9";
   // The vast majority of our src files are modules, but we use
@@ -104,7 +103,6 @@ module.exports = function (api) {
   switch (env) {
     // Configs used during bundling builds.
     case "standalone":
-      includeRegeneratorRuntime = true;
       convertESM = false;
       replaceTSImportExtension = false;
       ignoreLib = false;
@@ -152,16 +150,6 @@ module.exports = function (api) {
     needsPolyfillsForOldNode = false;
   }
 
-  if (includeRegeneratorRuntime) {
-    const babelRuntimePkgPath = require.resolve("@babel/runtime/package.json");
-
-    transformRuntimeOptions = {
-      helpers: false, // Helpers are handled by rollup when needed
-      regenerator: true,
-      version: require(babelRuntimePkgPath).version,
-    };
-  }
-
   const config = {
     targets,
     assumptions,
@@ -183,6 +171,9 @@ module.exports = function (api) {
     ]
       .filter(Boolean)
       .map(normalize),
+    parserOpts: {
+      createImportExpressions: true,
+    },
     presets: [
       // presets are applied from right to left
       ["@babel/env", envOpts],
@@ -310,16 +301,22 @@ module.exports = function (api) {
         test: unambiguousSources.map(normalize),
         sourceType: "unambiguous",
       },
-      includeRegeneratorRuntime && {
-        exclude: /regenerator-runtime/,
-        plugins: [["@babel/transform-runtime", transformRuntimeOptions]],
-      },
       env === "standalone" && {
         test: /chalk/,
         plugins: [pluginReplaceNavigator],
       },
     ].filter(Boolean),
   };
+
+  if (jestSnapshot) {
+    config.plugins = [];
+    config.presets = [];
+    config.overrides = [];
+    config.parserOpts = {
+      plugins: ["typescript"],
+    };
+    config.sourceType = "unambiguous";
+  }
 
   return config;
 };
@@ -347,7 +344,7 @@ function importInteropSrc(source, filename) {
     return "node";
   }
   if (
-    source[0] === "." ||
+    (source[0] === "." && !source.endsWith(".cjs")) ||
     getMonorepoPackages().some(name => source.startsWith(name))
   ) {
     // We don't need to worry about interop for internal files, since we know
@@ -522,8 +519,8 @@ function pluginToggleBooleanFlag({ types: t }, { name, value }) {
       return arg.unrelated
         ? res.unrelated()
         : arg.replacement
-        ? res.replacement(t.unaryExpression("!", arg.replacement))
-        : res.value(!arg.value);
+          ? res.replacement(t.unaryExpression("!", arg.replacement))
+          : res.value(!arg.value);
     }
 
     if (test.isLogicalExpression({ operator: "||" })) {
@@ -832,13 +829,11 @@ function pluginReplaceTSImportExtension() {
   };
 }
 
-function pluginBabelParserTokenType({
-  parseSync,
-  types: { isIdentifier, numericLiteral },
-}) {
-  const tokenTypeSourcePath = "./packages/babel-parser/src/tokenizer/types.ts";
-  function getTokenTypesMapping() {
-    const tokenTypesMapping = new Map();
+const tokenTypesMapping = new Map();
+const tokenTypeSourcePath = "./packages/babel-parser/src/tokenizer/types.ts";
+
+function getTokenTypesMapping() {
+  if (tokenTypesMapping.size === 0) {
     const tokenTypesAst = parseSync(
       fs.readFileSync(tokenTypeSourcePath, {
         encoding: "utf-8",
@@ -872,9 +867,13 @@ function pluginBabelParserTokenType({
     for (let i = 0; i < tokenTypesDefinition.length; i++) {
       tokenTypesMapping.set(tokenTypesDefinition[i].key.name, i);
     }
-    return tokenTypesMapping;
   }
+  return tokenTypesMapping;
+}
 
+function pluginBabelParserTokenType({
+  types: { isIdentifier, numericLiteral },
+}) {
   const tokenTypesMapping = getTokenTypesMapping();
   return {
     visitor: {

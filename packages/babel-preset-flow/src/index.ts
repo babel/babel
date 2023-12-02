@@ -3,7 +3,11 @@ import transformFlowStripTypes from "@babel/plugin-transform-flow-strip-types";
 import normalizeOptions from "./normalize-options.ts";
 
 export default declarePreset((api, opts) => {
-  api.assertVersion(7);
+  api.assertVersion(
+    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
+      ? PACKAGE_JSON.version
+      : 7,
+  );
   const {
     all,
     allowDeclareFields,

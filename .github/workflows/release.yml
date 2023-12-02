@@ -138,13 +138,14 @@ jobs:
       - name: Generate babel-types docs
         continue-on-error: true
         run: |
+          mkdir build
           node ./packages/babel-types/scripts/generators/docs.js > ./build/types.md
 
       - name: Upload babel-types docs
         continue-on-error: true
         uses: actions/upload-artifact@v3
         with:
-          name: babel-types.md
+          name: babel-types-docs
           path: build/types.md
           retention-days: 3
 
@@ -299,8 +300,9 @@ jobs:
       - name: Download babel-types docs
         uses: actions/download-artifact@v3
         with:
-          name: babel-types.md
-          path: docs/types.md
+          name: babel-types-docs
+          # Downloaded as ./docs/types.md
+          path: docs
       - name: Commit Babel website changes
         run: |
           git config user.name "Babel Bot"

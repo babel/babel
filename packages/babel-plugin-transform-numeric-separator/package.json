@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-numeric-separator",
-  "version": "7.22.11",
+  "version": "7.23.4",
   "description": "Remove numeric separators from Decimal, Binary, Hex and Octal literals",
   "repository": {
     "type": "git",

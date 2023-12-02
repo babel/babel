@@ -4,7 +4,7 @@
     [
       "env",
       {
-        "corejs": 3,
+        "corejs": "3.0",
         "useBuiltIns": "entry"
       }
     ]
@@ -13,7 +13,6 @@
     [
       "transform-runtime",
       {
-        "regenerator": false,
         "corejs": false,
         "helpers": true,
         "useESModules": true,

@@ -6,7 +6,7 @@ var Foo = /*#__PURE__*/function (_Bar) {
   function Foo() {
     var _this;
     babelHelpers.classCallCheck(this, Foo);
-    foo((_this = _super.call(this), babelHelpers.defineProperty(babelHelpers.assertThisInitialized(_this), "bar", "foo"), babelHelpers.assertThisInitialized(_this)));
+    foo((_this = _super.call(this), babelHelpers.defineProperty(babelHelpers.assertThisInitialized(_this), "bar", "foo")));
     return _this;
   }
   return babelHelpers.createClass(Foo);

@@ -1,6 +1,6 @@
 {
   "name": "@babel/core",
-  "version": "7.23.0",
+  "version": "7.23.5",
   "description": "Babel compiler core.",
   "main": "./lib/index.js",
   "author": "The Babel Team (https://babel.dev/team)",
@@ -112,7 +112,10 @@
     ]
   },
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "require": "./cjs-proxy-dev.cjs",
+      "default": "./lib/index.js"
+    },
     "./package.json": "./package.json"
   },
   "type": "commonjs"

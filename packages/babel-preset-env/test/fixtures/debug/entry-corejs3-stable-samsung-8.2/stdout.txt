@@ -19,14 +19,11 @@ Using plugins:
   transform-optional-chaining { samsung < 13 }
   transform-json-strings { samsung < 9 }
   transform-optional-catch-binding { samsung < 9 }
-  syntax-async-generators
-  syntax-object-rest-spread
   transform-unicode-property-regex { samsung < 9 }
   transform-named-capturing-groups-regex { samsung < 9 }
   transform-export-namespace-from { samsung < 11.0 }
   transform-modules-commonjs
   transform-dynamic-import
-  syntax-import-meta
   syntax-import-attributes
 corejs3: `DEBUG` option
 
@@ -65,5 +62,3 @@ The corejs3 polyfill entry has been replaced with the following polyfills:
   web.url { "samsung":"8.2" }
   web.url.to-json { "samsung":"8.2" }
   web.url-search-params { "samsung":"8.2" }
-
-[<CWD>/packages/babel-preset-env/test/fixtures/debug/entry-corejs3-stable-samsung-8.2/input.mjs] Based on your targets, regenerator-runtime import excluded.

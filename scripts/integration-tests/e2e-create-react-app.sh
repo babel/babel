@@ -34,10 +34,10 @@ fi
 sed -i 's/useBuiltIns: true/runtime: "classic"/' packages/babel-preset-react-app/create.js
 
 bump_deps="$PWD/../../utils/bump-babel-dependencies.js"
-node "$bump_deps"
+node "$bump_deps" resolutions
 for d in ./packages/*/
 do
-  (cd "$d"; node "$bump_deps")
+  (cd "$d"; node "$bump_deps" resolutions)
 done
 
 if [[ "$(node --version)" == v17.* ]]; then

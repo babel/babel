@@ -7,7 +7,7 @@
         "targets": {
           "chrome": "71"
         },
-        "corejs": 3,
+        "corejs": "3.0",
         "modules": false
       }
     ]

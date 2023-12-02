@@ -28,6 +28,7 @@ original ones as well!).
   "rules": {
     "@babel/new-cap": "error",
     "@babel/no-invalid-this": "error",
+    "@babel/no-undef": "error",
     "@babel/no-unused-expressions": "error",
     "@babel/object-curly-spacing": "error",
     "@babel/semi": "error"
@@ -43,6 +44,7 @@ Each rule corresponds to a core `eslint` rule and has the same options.
 
 - `@babel/new-cap`: handles decorators (`@Decorator`)
 - `@babel/no-invalid-this`: handles class fields and private class methods (`class A { a = this.b; }`)
+- `@babel/no-undef`: handles class accessor properties (`class A { accessor x = 2 }`)
 - `@babel/no-unused-expressions`: handles `do` expressions
 - `@babel/object-curly-spacing`: handles `export * as x from "mod";` (🛠)
 - `@babel/semi`: Handles class properties (🛠)

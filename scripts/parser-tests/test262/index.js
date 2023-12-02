@@ -32,6 +32,7 @@ const ignoredTests = ["built-ins/RegExp/", "language/literals/regexp/"];
 
 const featuresToPlugins = new Map([
   ["import-assertions", "importAssertions"],
+  ["import-attributes", "importAttributes"],
   [
     "decorators",
     [
@@ -83,6 +84,7 @@ const runner = new TestRunner({
       const fileName = test.file.slice(5).replace(/\\/g, "/");
 
       if (ignoredTests.some(start => fileName.startsWith(start))) continue;
+      if (fileName.endsWith(".md")) continue;
 
       yield {
         contents: test.contents,

@@ -557,6 +557,7 @@ function buildExportInitializationStatements(
 const InitTemplate = {
   computed: template.expression`EXPORTS["NAME"] = VALUE`,
   default: template.expression`EXPORTS.NAME = VALUE`,
+  define: template.expression`Object.defineProperty(EXPORTS, "NAME", { enumerable:true, value: void 0, writable: true })["NAME"] = VALUE`,
 };
 
 function buildInitStatement(
@@ -572,11 +573,16 @@ function buildInitStatement(
         NAME: exportName,
         VALUE: acc,
       };
+
+      if (exportName === "__proto__") {
+        return InitTemplate.define(params);
+      }
+
       if (stringSpecifiers.has(exportName)) {
         return InitTemplate.computed(params);
-      } else {
-        return InitTemplate.default(params);
       }
+
+      return InitTemplate.default(params);
     }, initExpr),
   );
 }

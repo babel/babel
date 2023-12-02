@@ -18,7 +18,11 @@ interface Options extends SyntaxOptions {
 export type { Options };
 
 export default declare((api, options: Options) => {
-  api.assertVersion(7);
+  api.assertVersion(
+    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
+      ? PACKAGE_JSON.version
+      : 7,
+  );
 
   // Options are validated in @babel/plugin-syntax-decorators
   if (!process.env.BABEL_8_BREAKING) {
@@ -45,7 +49,11 @@ export default declare((api, options: Options) => {
   ) {
     return transformer2023_05(api, options, version);
   } else if (!process.env.BABEL_8_BREAKING) {
-    api.assertVersion("^7.0.2");
+    api.assertVersion(
+      process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
+        ? PACKAGE_JSON.version
+        : "^7.0.2",
+    );
     return createClassFeaturePlugin({
       name: "proposal-decorators",
 

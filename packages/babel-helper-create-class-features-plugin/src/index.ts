@@ -238,7 +238,8 @@ export function createClassFeaturePlugin({
 
         let keysNodes: t.Statement[],
           staticNodes: t.Statement[],
-          instanceNodes: t.Statement[],
+          instanceNodes: t.ExpressionStatement[],
+          lastInstanceNodeReturnsThis: boolean,
           pureStaticNodes: t.FunctionDeclaration[],
           classBindingNode: t.Statement | null,
           wrapClass: (path: NodePath<t.Class>) => NodePath;
@@ -258,6 +259,7 @@ export function createClassFeaturePlugin({
               staticNodes,
               pureStaticNodes,
               instanceNodes,
+              lastInstanceNodeReturnsThis,
               classBindingNode,
               wrapClass,
             } = buildFieldsInitNodes(
@@ -278,6 +280,7 @@ export function createClassFeaturePlugin({
             staticNodes,
             pureStaticNodes,
             instanceNodes,
+            lastInstanceNodeReturnsThis,
             classBindingNode,
             wrapClass,
           } = buildFieldsInitNodes(
@@ -308,6 +311,7 @@ export function createClassFeaturePlugin({
                 prop.traverse(referenceVisitor, state);
               }
             },
+            lastInstanceNodeReturnsThis,
           );
         }
 

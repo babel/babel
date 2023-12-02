@@ -87,6 +87,7 @@ module.exports = [
         languageOptions: {
           parser: parserTypeScriptESLint,
           parserOptions: {
+            allowAutomaticSingleRunInference: true,
             project: "./tsconfig.eslint.json",
           },
         },
@@ -266,7 +267,7 @@ module.exports = [
     },
   },
   {
-    files: ["packages/babel-helpers/src/helpers/**.js"],
+    files: ["packages/babel-helpers/src/helpers/**.{js,ts}"],
     rules: {
       "no-var": "off",
       "comma-dangle": "off",

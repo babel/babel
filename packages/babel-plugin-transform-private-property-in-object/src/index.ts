@@ -13,7 +13,11 @@ export interface Options {
   loose?: boolean;
 }
 export default declare((api, opt: Options) => {
-  api.assertVersion(7);
+  api.assertVersion(
+    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
+      ? PACKAGE_JSON.version
+      : 7,
+  );
   const { types: t, template } = api;
   const { loose } = opt;
 
@@ -115,9 +119,9 @@ export default declare((api, opt: Options) => {
     inherits: USE_ESM
       ? undefined
       : IS_STANDALONE
-      ? undefined
-      : // eslint-disable-next-line no-restricted-globals
-        require("@babel/plugin-syntax-private-property-in-object").default,
+        ? undefined
+        : // eslint-disable-next-line no-restricted-globals
+          require("@babel/plugin-syntax-private-property-in-object").default,
     pre() {
       // Enable this in @babel/helper-create-class-features-plugin, so that it
       // can be handled by the private fields and methods transform.

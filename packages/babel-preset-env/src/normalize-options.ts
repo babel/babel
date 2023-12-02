@@ -42,18 +42,23 @@ const modulePlugins = [
 const getValidIncludesAndExcludes = (
   type: "include" | "exclude",
   corejs: number | false,
-) =>
-  Array.from(
-    new Set([
-      ...allPluginsList,
-      ...(type === "exclude" ? modulePlugins : []),
-      ...(corejs
-        ? corejs == 2
-          ? [...Object.keys(corejs2Polyfills), ...corejs2DefaultWebIncludes]
-          : Object.keys(corejs3Polyfills)
-        : []),
-    ]),
-  );
+) => {
+  const set = new Set(allPluginsList);
+  if (type === "exclude") modulePlugins.map(set.add, set);
+  if (corejs) {
+    if (process.env.BABEL_8_BREAKING) {
+      Object.keys(corejs3Polyfills).map(set.add, set);
+    } else {
+      if (corejs === 2) {
+        Object.keys(corejs2Polyfills).map(set.add, set);
+        corejs2DefaultWebIncludes.map(set.add, set);
+      } else {
+        Object.keys(corejs3Polyfills).map(set.add, set);
+      }
+    }
+  }
+  return Array.from(set);
+};
 
 function flatMap<T, U>(array: Array<T>, fn: (item: T) => Array<U>): Array<U> {
   return Array.prototype.concat.apply([], array.map(fn));
@@ -174,45 +179,72 @@ export function normalizeCoreJSOption(
   useBuiltIns: BuiltInsOption,
 ): NormalizedCorejsOption {
   let proposals = false;
-  let rawVersion;
+  let rawVersion: false | string | number | undefined | null;
 
   if (useBuiltIns && corejs === undefined) {
-    rawVersion = 2;
-    console.warn(
-      "\nWARNING (@babel/preset-env): We noticed you're using the `useBuiltIns` option without declaring a " +
-        "core-js version. Currently, we assume version 2.x when no version " +
-        "is passed. Since this default version will likely change in future " +
-        "versions of Babel, we recommend explicitly setting the core-js version " +
-        "you are using via the `corejs` option.\n" +
-        "\nYou should also be sure that the version you pass to the `corejs` " +
-        "option matches the version specified in your `package.json`'s " +
-        "`dependencies` section. If it doesn't, you need to run one of the " +
-        "following commands:\n\n" +
-        "  npm install --save core-js@2    npm install --save core-js@3\n" +
-        "  yarn add core-js@2              yarn add core-js@3\n\n" +
-        "More info about useBuiltIns: https://babeljs.io/docs/en/babel-preset-env#usebuiltins\n" +
-        "More info about core-js: https://babeljs.io/docs/en/babel-preset-env#corejs",
-    );
+    if (process.env.BABEL_8_BREAKING) {
+      throw new Error(
+        "When using the `useBuiltIns` option you must specify" +
+          ' the code-js version you are using, such as `"corejs": "3.32.0"`.',
+      );
+    } else {
+      rawVersion = 2;
+      console.warn(
+        "\nWARNING (@babel/preset-env): We noticed you're using the `useBuiltIns` option without declaring a " +
+          `core-js version. Currently, we assume version 2.x when no version ` +
+          "is passed. Since this default version will likely change in future " +
+          "versions of Babel, we recommend explicitly setting the core-js version " +
+          "you are using via the `corejs` option.\n" +
+          "\nYou should also be sure that the version you pass to the `corejs` " +
+          "option matches the version specified in your `package.json`'s " +
+          "`dependencies` section. If it doesn't, you need to run one of the " +
+          "following commands:\n\n" +
+          "  npm install --save core-js@2    npm install --save core-js@3\n" +
+          "  yarn add core-js@2              yarn add core-js@3\n\n" +
+          "More info about useBuiltIns: https://babeljs.io/docs/en/babel-preset-env#usebuiltins\n" +
+          "More info about core-js: https://babeljs.io/docs/en/babel-preset-env#corejs",
+      );
+    }
   } else if (typeof corejs === "object" && corejs !== null) {
     rawVersion = corejs.version;
     proposals = Boolean(corejs.proposals);
   } else {
-    rawVersion = corejs;
+    rawVersion = corejs as false | string | number | undefined | null;
   }
 
   const version = rawVersion ? semver.coerce(String(rawVersion)) : false;
 
-  if (!useBuiltIns && version) {
-    console.warn(
-      "\nWARNING (@babel/preset-env): The `corejs` option only has an effect when the `useBuiltIns` option is not `false`\n",
-    );
-  }
+  if (version) {
+    if (useBuiltIns) {
+      if (process.env.BABEL_8_BREAKING) {
+        if (version.major !== 3) {
+          throw new RangeError(
+            "Invalid Option: The version passed to `corejs` is invalid. Currently, " +
+              "only core-js@3 is supported.",
+          );
+        }
 
-  if (useBuiltIns && (!version || version.major < 2 || version.major > 3)) {
-    throw new RangeError(
-      "Invalid Option: The version passed to `corejs` is invalid. Currently, " +
-        "only core-js@2 and core-js@3 are supported.",
-    );
+        if (
+          typeof rawVersion !== "string" ||
+          !String(rawVersion).includes(".")
+        ) {
+          throw new Error(
+            'Invalid Option: The version passed to `corejs` is invalid. Please use string and specify the minor version, such as `"3.33"`.',
+          );
+        }
+      } else {
+        if (version.major < 2 || version.major > 3) {
+          throw new RangeError(
+            "Invalid Option: The version passed to `corejs` is invalid. Currently, " +
+              "only core-js@2 and core-js@3 are supported.",
+          );
+        }
+      }
+    } else {
+      console.warn(
+        "\nWARNING (@babel/preset-env): The `corejs` option only has an effect when the `useBuiltIns` option is not `false`\n",
+      );
+    }
   }
 
   return { version, proposals };
@@ -264,7 +296,7 @@ export default function normalizeOptions(opts: Options) {
       opts.ignoreBrowserslistConfig,
       false,
     ),
-    loose: v.validateBooleanOption<boolean>(TopLevelOptions.loose, opts.loose),
+    loose: v.validateBooleanOption(TopLevelOptions.loose, opts.loose),
     modules: validateModulesOption(opts.modules),
     shippedProposals: v.validateBooleanOption(
       TopLevelOptions.shippedProposals,
@@ -274,7 +306,7 @@ export default function normalizeOptions(opts: Options) {
     spec: v.validateBooleanOption(TopLevelOptions.spec, opts.spec, false),
     targets: normalizeTargets(opts.targets),
     useBuiltIns: useBuiltIns,
-    browserslistEnv: v.validateStringOption<string>(
+    browserslistEnv: v.validateStringOption(
       TopLevelOptions.browserslistEnv,
       opts.browserslistEnv,
     ),

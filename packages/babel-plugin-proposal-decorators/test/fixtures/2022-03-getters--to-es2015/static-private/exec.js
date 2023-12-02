@@ -3,6 +3,7 @@ function dec(get, context) {
     this[context.name + 'Context'] = context;
   });
 
+  expect(get.name).toEqual("get " + context.name);
   return function () {
     return get.call(this) + 1;
   }

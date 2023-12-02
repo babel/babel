@@ -1,0 +1,4 @@
+{
+  "plugins": ["transform-classes"],
+  "throws": "Missing class properties transform."
+}

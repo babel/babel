@@ -47,12 +47,10 @@ export function shareCommentsWithSiblings(this: NodePath) {
 }
 
 function removeIfExisting<T>(list: T[], toRemove?: T[]): T[] {
-  if (!toRemove) return list;
-  let lastFoundIndex = -1;
+  if (!toRemove?.length) return list;
+  const set = new Set(toRemove);
   return list.filter(el => {
-    const i = toRemove.indexOf(el, lastFoundIndex);
-    if (i === -1) return true;
-    lastFoundIndex = i;
+    return !set.has(el);
   });
 }
 

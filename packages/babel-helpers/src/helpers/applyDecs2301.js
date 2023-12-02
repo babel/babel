@@ -1,6 +1,8 @@
 /* @minVersion 7.21.0 */
 
 import checkInRHS from "checkInRHS";
+import setFunctionName from "setFunctionName";
+import toPropertyKey from "toPropertyKey";
 
 /**
   Enums are used in this file, but not assigned to vars to avoid non-hoistable values
@@ -69,7 +71,7 @@ function applyDecs2301Factory() {
 
     var ctx = {
       kind: kindStr,
-      name: isPrivate ? "#" + name : name,
+      name: isPrivate ? "#" + name : toPropertyKey(name),
       static: isStatic,
       private: isPrivate,
     };
@@ -136,8 +138,8 @@ function applyDecs2301Factory() {
       get && set
         ? { get: get, set: set, has: has }
         : get
-        ? { get: get, has: has }
-        : { set: set, has: has };
+          ? { get: get, has: has }
+          : { set: set, has: has };
 
     try {
       return dec(value, ctx);
@@ -217,7 +219,7 @@ function applyDecs2301Factory() {
   ) {
     var decs = decInfo[0];
 
-    var desc, init, value;
+    var desc, init, prefix, value;
 
     if (isPrivate) {
       if (kind === 0 /* FIELD */ || kind === 1 /* ACCESSOR */) {
@@ -225,20 +227,29 @@ function applyDecs2301Factory() {
           get: curryThis1(decInfo[3]),
           set: curryThis2(decInfo[4]),
         };
+        prefix = "get";
       } else {
         if (kind === 3 /* GETTER */) {
           desc = {
             get: decInfo[3],
           };
+          prefix = "get";
         } else if (kind === 4 /* SETTER */) {
           desc = {
             set: decInfo[3],
           };
+          prefix = "set";
         } else {
           desc = {
             value: decInfo[3],
           };
         }
+      }
+      if (kind !== 0 /* FIELD */) {
+        if (kind === 1 /* ACCESSOR */) {
+          setFunctionName(desc.set, "#" + name, "set");
+        }
+        setFunctionName(desc[prefix || "value"], "#" + name, prefix);
       }
     } else if (kind !== 0 /* FIELD */) {
       desc = Object.getOwnPropertyDescriptor(base, name);

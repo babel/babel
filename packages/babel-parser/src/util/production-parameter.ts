@@ -1,13 +1,3 @@
-export const // Initial Parameter flags
-  PARAM = 0b0000,
-  // track [Yield] production parameter
-  PARAM_YIELD = 0b0001,
-  // track [Await] production parameter
-  PARAM_AWAIT = 0b0010,
-  // track [Return] production parameter
-  PARAM_RETURN = 0b0100,
-  PARAM_IN = 0b1000; // track [In] production parameter
-
 // ProductionParameterHandler is a stack fashioned production parameter tracker
 // https://tc39.es/ecma262/#sec-grammar-notation
 // The tracked parameters are defined above.
@@ -29,7 +19,18 @@ export const // Initial Parameter flags
 // 6. parse function body
 // 7. exit current stack
 
-export type ParamKind = number;
+export const enum ParamKind {
+  // Initial Parameter flags
+  PARAM = 0b0000,
+  // track [Yield] production parameter
+  PARAM_YIELD = 0b0001,
+  // track [Await] production parameter
+  PARAM_AWAIT = 0b0010,
+  // track [Return] production parameter
+  PARAM_RETURN = 0b0100,
+  // track [In] production parameter
+  PARAM_IN = 0b1000,
+}
 
 // todo(flow->ts) - check if more granular type can be used,
 //  type below is not good because things like PARAM_AWAIT|PARAM_YIELD are not included
@@ -41,8 +42,8 @@ export type ParamKind = number;
 //   | typeof PARAM_YIELD;
 
 export default class ProductionParameterHandler {
-  stacks: Array<number> = [];
-  enter(flags: number) {
+  stacks: Array<ParamKind> = [];
+  enter(flags: ParamKind) {
     this.stacks.push(flags);
   }
 
@@ -50,24 +51,24 @@ export default class ProductionParameterHandler {
     this.stacks.pop();
   }
 
-  currentFlags(): number {
+  currentFlags(): ParamKind {
     return this.stacks[this.stacks.length - 1];
   }
 
   get hasAwait(): boolean {
-    return (this.currentFlags() & PARAM_AWAIT) > 0;
+    return (this.currentFlags() & ParamKind.PARAM_AWAIT) > 0;
   }
 
   get hasYield(): boolean {
-    return (this.currentFlags() & PARAM_YIELD) > 0;
+    return (this.currentFlags() & ParamKind.PARAM_YIELD) > 0;
   }
 
   get hasReturn(): boolean {
-    return (this.currentFlags() & PARAM_RETURN) > 0;
+    return (this.currentFlags() & ParamKind.PARAM_RETURN) > 0;
   }
 
   get hasIn(): boolean {
-    return (this.currentFlags() & PARAM_IN) > 0;
+    return (this.currentFlags() & ParamKind.PARAM_IN) > 0;
   }
 }
 
@@ -75,5 +76,8 @@ export function functionFlags(
   isAsync: boolean,
   isGenerator: boolean,
 ): ParamKind {
-  return (isAsync ? PARAM_AWAIT : 0) | (isGenerator ? PARAM_YIELD : 0);
+  return (
+    (isAsync ? ParamKind.PARAM_AWAIT : 0) |
+    (isGenerator ? ParamKind.PARAM_YIELD : 0)
+  );
 }

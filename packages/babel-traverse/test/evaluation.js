@@ -152,6 +152,12 @@ describe("evaluation", function () {
     expect(eval_invalid_call.confident).toBe(false);
   });
 
+  it("should not evaluate inherited methods", function () {
+    const path = getPath("Math.hasOwnProperty('min')");
+    const evalResult = path.get("body.0.expression").evaluate();
+    expect(evalResult.confident).toBe(false);
+  });
+
   it("should evaluate global call expressions", function () {
     expect(
       getPath("isFinite(1);").get("body.0.expression").evaluate().value,

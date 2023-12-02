@@ -49,16 +49,20 @@ export default class FixtureError extends Error {
     return difference === Difference.None
       ? false
       : difference.path[0] !== "threw"
-      ? new FixtureError.DifferentAST(difference)
-      : !difference.expected
-      ? new FixtureError.UnexpectedError(difference, { cause: actual.threw })
-      : difference.actual
-      ? new FixtureError.DifferentError(difference, { cause: actual.threw })
-      : actual.ast && actual.ast.errors
-      ? new FixtureError.UnexpectedRecovery(difference, {
-          cause: actual.ast.errors,
-        })
-      : new FixtureError.UnexpectedSuccess(difference);
+        ? new FixtureError.DifferentAST(difference)
+        : !difference.expected
+          ? new FixtureError.UnexpectedError(difference, {
+              cause: actual.threw,
+            })
+          : difference.actual
+            ? new FixtureError.DifferentError(difference, {
+                cause: actual.threw,
+              })
+            : actual.ast && actual.ast.errors
+              ? new FixtureError.UnexpectedRecovery(difference, {
+                  cause: actual.ast.errors,
+                })
+              : new FixtureError.UnexpectedSuccess(difference);
   }
 }
 

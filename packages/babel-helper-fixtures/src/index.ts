@@ -207,8 +207,8 @@ function pushTask(
       filename: !loc
         ? undefined
         : fileName === true
-        ? suiteName + "/" + taskName + "/" + path.basename(loc)
-        : fileName || undefined,
+          ? suiteName + "/" + taskName + "/" + path.basename(loc)
+          : fileName || undefined,
     };
   }
 

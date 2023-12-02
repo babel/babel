@@ -17,16 +17,12 @@ import type * as N from "../../types.ts";
 import type { Position } from "../../util/location.ts";
 import { createPositionWithColumnOffset } from "../../util/location.ts";
 import type Parser from "../../parser/index.ts";
-import {
-  type BindingTypes,
-  ScopeFlag,
-  BindingFlag,
-} from "../../util/scopeflags.ts";
+import { ScopeFlag, BindingFlag } from "../../util/scopeflags.ts";
 import TypeScriptScopeHandler from "./scope.ts";
 import * as charCodes from "charcodes";
 import type { ExpressionErrors } from "../../parser/util.ts";
 import type { ParseStatementFlag } from "../../parser/statement.ts";
-import { PARAM } from "../../util/production-parameter.ts";
+import { ParamKind } from "../../util/production-parameter.ts";
 import { Errors, ParseErrorEnum } from "../../parse-error.ts";
 import { cloneIdentifier, type Undone } from "../../parser/node.ts";
 import type { Pattern } from "../../types.ts";
@@ -1282,8 +1278,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
               type === tt._void
                 ? "TSVoidKeyword"
                 : type === tt._null
-                ? "TSNullKeyword"
-                : keywordTypeFromName(this.state.value);
+                  ? "TSNullKeyword"
+                  : keywordTypeFromName(this.state.value);
             if (
               nodeType !== undefined &&
               this.lookaheadCharCode() !== charCodes.dot
@@ -1378,10 +1374,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return isTypeOperator
         ? this.tsParseTypeOperator()
         : this.isContextual(tt._infer)
-        ? this.tsParseInferType()
-        : this.tsInAllowConditionalTypesContext(() =>
-            this.tsParseArrayTypeOrHigher(),
-          );
+          ? this.tsParseInferType()
+          : this.tsInAllowConditionalTypesContext(() =>
+              this.tsParseArrayTypeOrHigher(),
+            );
     }
 
     tsParseUnionOrIntersectionType(
@@ -1910,7 +1906,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         node.body = inner;
       } else {
         this.scope.enter(ScopeFlag.TS_MODULE);
-        this.prodParam.enter(PARAM);
+        this.prodParam.enter(ParamKind.PARAM);
         node.body = this.tsParseModuleBlock();
         this.prodParam.exit();
         this.scope.exit();
@@ -1931,7 +1927,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
       if (this.match(tt.braceL)) {
         this.scope.enter(ScopeFlag.TS_MODULE);
-        this.prodParam.enter(PARAM);
+        this.prodParam.enter(ParamKind.PARAM);
         node.body = this.tsParseModuleBlock();
         this.prodParam.exit();
         this.scope.exit();
@@ -2125,7 +2121,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           // Would like to use tsParseAmbientExternalModuleDeclaration here, but already ran past "global".
           if (this.match(tt.braceL)) {
             this.scope.enter(ScopeFlag.TS_MODULE);
-            this.prodParam.enter(PARAM);
+            this.prodParam.enter(ParamKind.PARAM);
             const mod = node;
             mod.global = true;
             mod.id = expr;
@@ -2377,8 +2373,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         type === "FunctionDeclaration"
           ? "TSDeclareFunction"
           : type === "ClassMethod" || type === "ClassPrivateMethod"
-          ? "TSDeclareMethod"
-          : undefined;
+            ? "TSDeclareMethod"
+            : undefined;
       if (bodilessType && !this.match(tt.braceL) && this.isLineTerminator()) {
         return this.finishNode(node, bodilessType);
       }
@@ -3167,7 +3163,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       isStatement: boolean,
       optionalId?: boolean | null,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      bindingType?: BindingTypes,
+      bindingType?: BindingFlag,
     ): void {
       if ((!isStatement || optionalId) && this.isContextual(tt._implements)) {
         return;
@@ -3679,7 +3675,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         | "TSSatisfiesExpression"
         | "TSTypeAssertion",
       isUnparenthesizedInAssign: boolean,
-      binding: BindingTypes,
+      binding: BindingFlag,
     ) {
       return (
         getOwn(
@@ -4039,7 +4035,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       isInTypeOnlyImport: boolean,
       isMaybeTypeOnly: boolean,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      bindingType: BindingTypes | undefined,
+      bindingType: BindingFlag | undefined,
     ): N.ImportSpecifier {
       if (!importedIsString && isMaybeTypeOnly) {
         this.parseTypeOnlyImportExportSpecifier(

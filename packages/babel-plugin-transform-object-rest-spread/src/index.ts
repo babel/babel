@@ -26,7 +26,11 @@ export interface Options {
 }
 
 export default declare((api, opts: Options) => {
-  api.assertVersion(7);
+  api.assertVersion(
+    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
+      ? PACKAGE_JSON.version
+      : 7,
+  );
 
   const targets = api.targets();
   const supportsObjectAssign = !isRequired("es6.object.assign", targets, {
@@ -287,9 +291,9 @@ export default declare((api, opts: Options) => {
     inherits: USE_ESM
       ? undefined
       : IS_STANDALONE
-      ? undefined
-      : // eslint-disable-next-line no-restricted-globals
-        require("@babel/plugin-syntax-object-rest-spread").default,
+        ? undefined
+        : // eslint-disable-next-line no-restricted-globals
+          require("@babel/plugin-syntax-object-rest-spread").default,
 
     visitor: {
       // function a({ b, ...c }) {}
