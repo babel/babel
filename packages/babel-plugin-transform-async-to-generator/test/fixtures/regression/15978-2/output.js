@@ -1,5 +1,5 @@
 var _ref2;
-babelHelpers.asyncToGenerator2( /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee2() {
+babelHelpers.asyncToGenerator( /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee2() {
   var items, _loop, _i, _items;
   return babelHelpers.regeneratorRuntime().wrap(function _callee2$(_context3) {
     while (1) switch (_context3.prev = _context3.next) {

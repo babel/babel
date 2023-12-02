@@ -3,7 +3,7 @@ class Test {
     var _this = this;
     return babelHelpers.callAsync(function* () {
       console.log(_this);
-      setTimeout( /*#__PURE__*/babelHelpers.asyncToGenerator2(function* () {
+      setTimeout( /*#__PURE__*/babelHelpers.asyncToGenerator(function* () {
         console.log(_this);
       }));
     });
@@ -23,7 +23,7 @@ class Test {
     var _this3 = this;
     return babelHelpers.callAsync(function* () {
       console.log(_this3);
-      setTimeout( /*#__PURE__*/babelHelpers.asyncToGenerator2(function* () {
+      setTimeout( /*#__PURE__*/babelHelpers.asyncToGenerator(function* () {
         console.log(_this3);
       }));
     });

@@ -12,7 +12,7 @@ const {
 } = t;
 
 const awaitVisitor = traverse.visitors.merge<{
-  wrapAwait: t.Expression | string;
+  wrapAwait: t.Expression | (() => t.Expression);
 }>([
   {
     ArrowFunctionExpression(path) {
@@ -26,8 +26,8 @@ const awaitVisitor = traverse.visitors.merge<{
         yieldExpression(
           wrapAwait
             ? callExpression(
-                typeof wrapAwait === "string"
-                  ? path.hub.addHelper(wrapAwait)
+                typeof wrapAwait === "function"
+                  ? wrapAwait()
                   : cloneNode(wrapAwait),
                 [argument.node],
               )
@@ -42,9 +42,9 @@ const awaitVisitor = traverse.visitors.merge<{
 export default function (
   path: NodePath<t.Function>,
   helpers: {
-    wrapAsync: t.Expression | string;
-    wrapAwait?: t.Expression | string;
-    callAsync?: string;
+    wrapAsync: t.Expression | (() => t.Expression);
+    wrapAwait?: t.Expression | (() => t.Expression);
+    callAsync?: () => t.Expression;
   },
   noNewArrows?: boolean,
   ignoreFunctionLength?: boolean,

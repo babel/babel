@@ -34,41 +34,6 @@ helpers.wrapAsyncGenerator = helper("7.0.0-beta.0")`
   }
 `;
 
-helpers.asyncToGenerator = helper("7.0.0-beta.0")`
-  function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
-    try {
-      var info = gen[key](arg);
-      var value = info.value;
-    } catch (error) {
-      reject(error);
-      return;
-    }
-
-    if (info.done) {
-      resolve(value);
-    } else {
-      Promise.resolve(value).then(_next, _throw);
-    }
-  }
-
-  export default function _asyncToGenerator(fn) {
-    return function () {
-      var self = this, args = arguments;
-      return new Promise(function (resolve, reject) {
-        var gen = fn.apply(self, args);
-        function _next(value) {
-          asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
-        }
-        function _throw(err) {
-          asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
-        }
-
-        _next(undefined);
-      });
-    };
-  }
-`;
-
 helpers.callAsyncGenerator = helper("7.23.0")`
   import AsyncGenerator from "AsyncGenerator";
 
@@ -77,9 +42,9 @@ helpers.callAsyncGenerator = helper("7.23.0")`
   }
 `;
 
-helpers.asyncToGenerator2 = helper("7.23.0")`
+helpers.asyncToGenerator = helper("7.23.0")`
   import callAsync from "callAsync";
-  export default function _asyncToGenerator2(fn) {
+  export default function _asyncToGenerator(fn) {
     return function () {
       return callAsync(fn, this, arguments);
     };
@@ -861,31 +826,6 @@ helpers.callSkipFirstGeneratorNext = helper("7.23.0")`
     var it = fn.apply(self, args);
     it.next();
     return it;
-  }
-`;
-
-helpers.toPrimitive = helper("7.1.5")`
-  export default function _toPrimitive(
-    input,
-    hint /*: "default" | "string" | "number" | void */
-  ) {
-    if (typeof input !== "object" || input === null) return input;
-    var prim = input[Symbol.toPrimitive];
-    if (prim !== undefined) {
-      var res = prim.call(input, hint || "default");
-      if (typeof res !== "object") return res;
-      throw new TypeError("@@toPrimitive must return a primitive value.");
-    }
-    return (hint === "string" ? String : Number)(input);
-  }
-`;
-
-helpers.toPropertyKey = helper("7.1.5")`
-  import toPrimitive from "toPrimitive";
-
-  export default function _toPropertyKey(arg) {
-    var key = toPrimitive(arg, "string");
-    return typeof key === "symbol" ? key : String(key);
   }
 `;
 

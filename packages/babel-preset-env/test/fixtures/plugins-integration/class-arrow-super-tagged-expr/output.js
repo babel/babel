@@ -13,10 +13,10 @@ function test() {
           _superprop_get = _prop => super[_prop];
         super(...args);
         _this = this;
-        babelHelpers.defineProperty(this, "a", /*#__PURE__*/babelHelpers.asyncToGenerator2(function* () {
+        babelHelpers.defineProperty(this, "a", /*#__PURE__*/babelHelpers.asyncToGenerator(function* () {
           return _superprop_getFoo().bind(_this)``;
         }));
-        babelHelpers.defineProperty(this, "b", /*#__PURE__*/babelHelpers.asyncToGenerator2(function* () {
+        babelHelpers.defineProperty(this, "b", /*#__PURE__*/babelHelpers.asyncToGenerator(function* () {
           return _superprop_get('foo').bind(_this)``;
         }));
         babelHelpers.defineProperty(this, "c", function (_x) {

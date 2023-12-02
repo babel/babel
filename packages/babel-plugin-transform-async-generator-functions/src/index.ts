@@ -89,9 +89,9 @@ export default declare(api => {
         path,
         state.availableHelper("callAsyncGenerator")
           ? {
-              wrapAsync: "wrapAsyncGenerator",
-              wrapAwait: "awaitAsyncGenerator",
-              callAsync: "callAsyncGenerator",
+              wrapAsync: () => state.addHelper("wrapAsyncGenerator"),
+              wrapAwait: () => state.addHelper("awaitAsyncGenerator"),
+              callAsync: () => state.addHelper("callAsyncGenerator"),
             }
           : {
               wrapAsync: state.addHelper("wrapAsyncGenerator"),
@@ -109,18 +109,20 @@ export default declare(api => {
         : // eslint-disable-next-line no-restricted-globals
           require("@babel/plugin-syntax-async-generators").default,
 
-    visitor: {
-      ...remapAsyncToGenerator.buildOnCallExpression("callAsyncGenerator"),
-      Program(path, state) {
-        // We need to traverse the ast here (instead of just vising Function
-        // in the top level visitor) because for-await needs to run before the
-        // async-to-generator plugin. This is because for-await is transpiled
-        // using "await" expressions, which are then converted to "yield".
-        //
-        // This is bad for performance, but plugin ordering will allow as to
-        // directly visit Function in the top level visitor.
-        path.traverse(visitor, state);
+    visitor: api.traverse.visitors.merge([
+      remapAsyncToGenerator.buildOnCallExpression("callAsyncGenerator"),
+      {
+        Program(path, state) {
+          // We need to traverse the ast here (instead of just vising Function
+          // in the top level visitor) because for-await needs to run before the
+          // async-to-generator plugin. This is because for-await is transpiled
+          // using "await" expressions, which are then converted to "yield".
+          //
+          // This is bad for performance, but plugin ordering will allow as to
+          // directly visit Function in the top level visitor.
+          path.traverse(visitor, state);
+        },
       },
-    },
+    ]),
   };
 });

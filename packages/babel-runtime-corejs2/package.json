@@ -369,15 +369,6 @@
       "./helpers/wrapAsyncGenerator.js"
     ],
     "./helpers/esm/wrapAsyncGenerator": "./helpers/esm/wrapAsyncGenerator.js",
-    "./helpers/asyncToGenerator": [
-      {
-        "node": "./helpers/asyncToGenerator.js",
-        "import": "./helpers/esm/asyncToGenerator.js",
-        "default": "./helpers/asyncToGenerator.js"
-      },
-      "./helpers/asyncToGenerator.js"
-    ],
-    "./helpers/esm/asyncToGenerator": "./helpers/esm/asyncToGenerator.js",
     "./helpers/callAsyncGenerator": [
       {
         "node": "./helpers/callAsyncGenerator.js",
@@ -387,15 +378,15 @@
       "./helpers/callAsyncGenerator.js"
     ],
     "./helpers/esm/callAsyncGenerator": "./helpers/esm/callAsyncGenerator.js",
-    "./helpers/asyncToGenerator2": [
+    "./helpers/asyncToGenerator": [
       {
-        "node": "./helpers/asyncToGenerator2.js",
-        "import": "./helpers/esm/asyncToGenerator2.js",
-        "default": "./helpers/asyncToGenerator2.js"
+        "node": "./helpers/asyncToGenerator.js",
+        "import": "./helpers/esm/asyncToGenerator.js",
+        "default": "./helpers/asyncToGenerator.js"
       },
-      "./helpers/asyncToGenerator2.js"
+      "./helpers/asyncToGenerator.js"
     ],
-    "./helpers/esm/asyncToGenerator2": "./helpers/esm/asyncToGenerator2.js",
+    "./helpers/esm/asyncToGenerator": "./helpers/esm/asyncToGenerator.js",
     "./helpers/callAsync": [
       {
         "node": "./helpers/callAsync.js",

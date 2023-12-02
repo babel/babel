@@ -1,7 +1,7 @@
-babelHelpers.asyncToGenerator2(function* () {
+babelHelpers.asyncToGenerator(function* () {
   yield 'ok';
 })();
-babelHelpers.asyncToGenerator2(function* () {
+babelHelpers.asyncToGenerator(function* () {
   yield 'ok';
 })();
 (function notIIFE() {
@@ -9,6 +9,6 @@ babelHelpers.asyncToGenerator2(function* () {
     yield 'ok';
   }, this, arguments);
 });
-/*#__PURE__*/babelHelpers.asyncToGenerator2(function* () {
+/*#__PURE__*/babelHelpers.asyncToGenerator(function* () {
   yield 'not iife';
 });

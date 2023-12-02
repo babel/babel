@@ -3,7 +3,7 @@
 // https://github.com/babel/babel/issues/14749
 
 class A {
-  a = babelHelpers.asyncToGenerator2(function* () {
+  a = babelHelpers.asyncToGenerator(function* () {
     return _this;
   });
   b = function (_x, _x2, _x3) {

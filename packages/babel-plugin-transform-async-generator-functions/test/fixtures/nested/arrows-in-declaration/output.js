@@ -5,7 +5,7 @@ function g() {
     function f() {
       () => this;
     }
-    /*#__PURE__*/babelHelpers.asyncToGenerator2(function* () {
+    /*#__PURE__*/babelHelpers.asyncToGenerator(function* () {
       _this;
       yield 1;
     });

@@ -1,5 +1,5 @@
 function g() {
-  return babelHelpers.callAsyncGenerator(function* (x = /*#__PURE__*/babelHelpers.asyncToGenerator2(function* () {
+  return babelHelpers.callAsyncGenerator(function* (x = /*#__PURE__*/babelHelpers.asyncToGenerator(function* () {
     yield 1;
   })) {
     yield babelHelpers.awaitAsyncGenerator(2);

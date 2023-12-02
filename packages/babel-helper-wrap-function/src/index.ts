@@ -75,10 +75,12 @@ const buildWrapper = template.statement(`
   replacements: Parameters<ReturnType<typeof template.expression>>[0],
 ) => t.FunctionDeclaration;
 
+const wrappedFns = new WeakMap<t.CallExpression, t.Function>();
+
 function markCallWrapped(path: NodePath<t.Function>) {
-  (path.get("body.body.0.argument") as NodePath).setData(
-    "babel-helper-wrap-function_wrapped_function",
-    (path.get("body.body.0.argument.callee") as NodePath).node,
+  wrappedFns.set(
+    (path.get("body.body.0.argument") as NodePath<t.CallExpression>).node,
+    (path.get("body.body.0.argument.callee") as NodePath<t.Function>).node,
   );
 }
 
@@ -198,11 +200,11 @@ function plainFunction(
 
 export default function wrapFunction(
   path: NodePath<t.Function>,
-  callId: t.Expression | string,
+  callId: t.Expression | (() => t.Expression),
   // TODO(Babel 8): Consider defaulting to false for spec compliance
   noNewArrows: boolean = true,
   ignoreFunctionLength: boolean = false,
-  callAsync?: string,
+  callAsync?: () => t.Expression,
 ) {
   if (callAsync) {
     if (path.isMethod()) {
@@ -215,11 +217,7 @@ export default function wrapFunction(
         blockStatement(body.body),
         true,
       );
-      body.body = [
-        returnStatement(
-          callExpression(path.hub.addHelper(callAsync), [container]),
-        ),
-      ];
+      body.body = [returnStatement(callExpression(callAsync(), [container]))];
 
       // Regardless of whether or not the wrapped function is an async method
       // or generator the outer function should not be
@@ -239,7 +237,9 @@ export default function wrapFunction(
         let path2 = path.arrowFunctionToExpression({ noNewArrows });
         if (!process.env.BABEL_8_BREAKING) {
           // arrowFunctionToExpression returns undefined in @babel/traverse < 7.18.10
-          path2 ??= path;
+          path2 ??= path as unknown as NodePath<
+            t.FunctionDeclaration | t.FunctionExpression | t.CallExpression
+          >;
         }
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         node = path2.node as
@@ -254,7 +254,7 @@ export default function wrapFunction(
       let built = node;
       if (!isCallExpression(node)) {
         functionId = node.id;
-        built = callExpression(path.hub.addHelper(callAsync), [
+        built = callExpression(callAsync(), [
           functionExpression(null, node.params, node.body, node.generator),
           identifier("this"),
           identifier("arguments"),
@@ -294,7 +294,7 @@ export default function wrapFunction(
       } else {
         // we can omit this wrapper as the conditions it protects for do not apply
         path.replaceWith(
-          callExpression(path.hub.addHelper(callId as string), [
+          callExpression((callId as () => t.Expression)(), [
             node as t.FunctionExpression,
           ]),
         );
@@ -322,10 +322,8 @@ export function buildOnCallExpression(helperName: string) {
         if (!state.availableHelper(helperName)) {
           return;
         }
-        if (path.parentPath.isCallExpression()) {
-          const wrappedFn = path.parentPath.getData(
-            "babel-helper-wrap-function_wrapped_function",
-          );
+        if (isCallExpression(path.parent)) {
+          const wrappedFn = wrappedFns.get(path.parent);
 
           if (!wrappedFn || wrappedFn === path.node.callee) return;
 
