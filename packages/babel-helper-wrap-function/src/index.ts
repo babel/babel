@@ -236,12 +236,10 @@ export default function wrapFunction(
       const nodeParams = path.node.params;
 
       if (path.isArrowFunctionExpression()) {
-        let path2;
-        if (process.env.BABEL_8_BREAKING) {
-          path2 = path.arrowFunctionToExpression({ noNewArrows });
-        } else {
+        let path2 = path.arrowFunctionToExpression({ noNewArrows });
+        if (!process.env.BABEL_8_BREAKING) {
           // arrowFunctionToExpression returns undefined in @babel/traverse < 7.18.10
-          path2 = path.arrowFunctionToExpression({ noNewArrows }) ?? path;
+          path2 ??= path;
         }
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         node = path2.node as
