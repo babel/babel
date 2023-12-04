@@ -1289,7 +1289,7 @@ function shouldTransformElement(node: ClassElement) {
 function shouldTransformClass(node: t.Class) {
   return (
     isDecorated(node) ||
-    node.body.body.some(node => shouldTransformElement(node))
+    node.body.body.some(shouldTransformElement)
   );
 }
 
