@@ -1383,6 +1383,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-replace-supers": "workspace:^"
+    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^"
     "@babel/helper-split-export-declaration": "workspace:^"
     "@babel/plugin-syntax-decorators": "workspace:^"
     "@babel/traverse": "workspace:^"

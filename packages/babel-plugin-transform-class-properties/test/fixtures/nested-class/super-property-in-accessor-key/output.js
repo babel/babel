@@ -16,13 +16,12 @@ let Outer = /*#__PURE__*/function (_Hello) {
   babelHelpers.inherits(Outer, _Hello);
   var _super = babelHelpers.createSuper(Outer);
   function Outer() {
-    let _babelHelpers$get$cal, _babelHelpers$get$cal2;
+    var _computedKey;
     var _thisSuper, _this;
     babelHelpers.classCallCheck(this, Outer);
     _this = _super.call(this);
+    _computedKey = babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Outer.prototype)), "toString", _thisSuper).call(_thisSuper);
     var _A = /*#__PURE__*/new WeakMap();
-    _babelHelpers$get$cal = babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Outer.prototype)), "toString", _thisSuper).call(_thisSuper);
-    _babelHelpers$get$cal2 = babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Outer.prototype)), "toString", _thisSuper).call(_thisSuper);
     let Inner = /*#__PURE__*/function () {
       function Inner() {
         babelHelpers.classCallCheck(this, Inner);
@@ -32,12 +31,12 @@ let Outer = /*#__PURE__*/function (_Hello) {
         });
       }
       babelHelpers.createClass(Inner, [{
-        key: _babelHelpers$get$cal,
+        key: _computedKey,
         get: function () {
           return babelHelpers.classPrivateFieldGet(this, _A);
         }
       }, {
-        key: _babelHelpers$get$cal2,
+        key: _computedKey,
         set: function (v) {
           babelHelpers.classPrivateFieldSet(this, _A, v);
         }
