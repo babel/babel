@@ -610,14 +610,16 @@ function transformClass(
     }
   }
 
-  // If nothing is decorated and no assignments inserted, return
   if (!classDecorators && !hasElementDecorators) {
+    // If nothing is decorated but we have assignments, it must be the memoised
+    // computed keys of class accessors
     if (assignments.length > 0) {
       path.insertBefore(assignments.map(expr => t.expressionStatement(expr)));
 
       // Recrawl the scope to make sure new identifiers are properly synced
       path.scope.crawl();
     }
+    // If nothing is decorated and no assignments inserted, return
     return;
   }
 
@@ -1260,7 +1262,7 @@ function createLocalsAssignment(
   return t.assignmentExpression("=", lhs, rhs);
 }
 
-function isProtoSetter(
+function isProtoKey(
   node: t.Identifier | t.StringLiteral | t.BigIntLiteral | t.NumericLiteral,
 ) {
   return node.type === "Identifier"
@@ -1287,10 +1289,7 @@ function shouldTransformElement(node: ClassElement) {
 }
 
 function shouldTransformClass(node: t.Class) {
-  return (
-    isDecorated(node) ||
-    node.body.body.some(shouldTransformElement)
-  );
+  return isDecorated(node) || node.body.body.some(shouldTransformElement);
 }
 
 // Todo: unify name references logic with helper-function-name
@@ -1387,7 +1386,7 @@ function NamedEvaluationVisitoryFactory(
         if (isAnonymous(initializer)) {
           if (!node.computed) {
             // 13.2.5.5 RS: PropertyDefinitionEvaluation
-            if (!isProtoSetter(id as t.StringLiteral | t.Identifier)) {
+            if (!isProtoKey(id as t.StringLiteral | t.Identifier)) {
               if (id.type === "Identifier") {
                 visitor(initializer, state, id.name);
               } else {
