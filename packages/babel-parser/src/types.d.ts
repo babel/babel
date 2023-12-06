@@ -1345,7 +1345,6 @@ export interface TsPropertySignature extends TsNamedTypeElementBase {
   type: "TSPropertySignature";
   readonly?: true;
   typeAnnotation?: TsTypeAnnotation;
-  initializer?: Expression;
 }
 
 export interface TsMethodSignature
