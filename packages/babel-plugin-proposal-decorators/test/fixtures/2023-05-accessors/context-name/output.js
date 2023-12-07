@@ -1,4 +1,4 @@
-var _init_a, _init_a2, _get_a, _set_a, _init_computedKey, _computedKey, _init_computedKey2, _init_computedKey3, _computedKey2, _init_computedKey4, _init_computedKey5, _computedKey3, _init_computedKey6, _computedKey4, _init_computedKey7, _initStatic;
+var _init_a, _init_a2, _get_a, _set_a, _init_computedKey, _init_computedKey2, _init_computedKey3, _init_computedKey4, _init_computedKey5, _init_computedKey6, _computedKey, _init_computedKey7, _initStatic;
 const logs = [];
 const dec = (value, context) => {
   logs.push(context.name);
@@ -9,13 +9,10 @@ const f = () => {
     [Symbol.toPrimitive]: () => "f()"
   };
 };
-_computedKey = "c";
-_computedKey2 = 1;
-_computedKey3 = 3n;
-_computedKey4 = f();
+_computedKey = f();
 class Foo {
   static {
-    [_init_a, _init_a2, _get_a, _set_a, _init_computedKey, _init_computedKey2, _init_computedKey3, _init_computedKey4, _init_computedKey5, _init_computedKey6, _init_computedKey7, _initStatic] = babelHelpers.applyDecs2305(this, [[dec, 9, "a"], [dec, 9, "a", o => o.#B, (o, v) => o.#B = v], [dec, 9, "b"], [dec, 9, _computedKey], [dec, 9, 0], [dec, 9, _computedKey2], [dec, 9, 2n], [dec, 9, _computedKey3], [dec, 9, _computedKey4]], []).e;
+    [_init_a, _init_a2, _get_a, _set_a, _init_computedKey, _init_computedKey2, _init_computedKey3, _init_computedKey4, _init_computedKey5, _init_computedKey6, _init_computedKey7, _initStatic] = babelHelpers.applyDecs2305(this, [[dec, 9, "a"], [dec, 9, "a", o => o.#B, (o, v) => o.#B = v], [dec, 9, "b"], [dec, 9, "c"], [dec, 9, 0], [dec, 9, 1], [dec, 9, 2n], [dec, 9, 3n], [dec, 9, _computedKey]], []).e;
     _initStatic(this);
   }
   static #A = _init_a(this);
@@ -40,10 +37,10 @@ class Foo {
     Foo.#C = v;
   }
   static #D = _init_computedKey2(this);
-  static get [_computedKey]() {
+  static get ["c"]() {
     return Foo.#D;
   }
-  static set [_computedKey](v) {
+  static set ["c"](v) {
     Foo.#D = v;
   }
   static #E = _init_computedKey3(this);
@@ -54,10 +51,10 @@ class Foo {
     Foo.#E = v;
   }
   static #F = _init_computedKey4(this);
-  static get [_computedKey2]() {
+  static get [1]() {
     return Foo.#F;
   }
-  static set [_computedKey2](v) {
+  static set [1](v) {
     Foo.#F = v;
   }
   static #G = _init_computedKey5(this);
@@ -68,17 +65,17 @@ class Foo {
     Foo.#G = v;
   }
   static #H = _init_computedKey6(this);
-  static get [_computedKey3]() {
+  static get [3n]() {
     return Foo.#H;
   }
-  static set [_computedKey3](v) {
+  static set [3n](v) {
     Foo.#H = v;
   }
   static #I = _init_computedKey7(this);
-  static get [_computedKey4]() {
+  static get [_computedKey]() {
     return Foo.#I;
   }
-  static set [_computedKey4](v) {
+  static set [_computedKey](v) {
     Foo.#I = v;
   }
 }

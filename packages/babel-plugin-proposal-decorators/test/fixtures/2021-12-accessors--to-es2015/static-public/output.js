@@ -1,6 +1,5 @@
-var _init_a, _init_b, _computedKey, _init_computedKey, _initStatic, _class;
+var _init_a, _init_b, _init_computedKey, _initStatic, _class;
 const dec = () => {};
-_computedKey = 'c';
 class Foo {
   static get a() {
     return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _A);
@@ -14,16 +13,16 @@ class Foo {
   static set b(v) {
     babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _B, v);
   }
-  static get [_computedKey]() {
+  static get ['c']() {
     return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _C);
   }
-  static set [_computedKey](v) {
+  static set ['c'](v) {
     babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _C, v);
   }
 }
 _class = Foo;
 (() => {
-  [_init_a, _init_b, _init_computedKey, _initStatic] = babelHelpers.applyDecs(_class, [[dec, 6, "a"], [dec, 6, "b"], [dec, 6, _computedKey]], []);
+  [_init_a, _init_b, _init_computedKey, _initStatic] = babelHelpers.applyDecs(_class, [[dec, 6, "a"], [dec, 6, "b"], [dec, 6, 'c']], []);
   _initStatic(_class);
 })();
 var _A = {

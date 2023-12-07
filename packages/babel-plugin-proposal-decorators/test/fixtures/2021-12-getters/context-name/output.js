@@ -1,4 +1,4 @@
-var _call_a, _computedKey, _computedKey2, _computedKey3, _computedKey4, _initStatic;
+var _call_a, _computedKey, _initStatic;
 const logs = [];
 const dec = (value, context) => {
   logs.push(context.name);
@@ -9,13 +9,10 @@ const f = () => {
     [Symbol.toPrimitive]: () => "f()"
   };
 };
-_computedKey = "c";
-_computedKey2 = 1;
-_computedKey3 = 3n;
-_computedKey4 = f();
+_computedKey = f();
 class Foo {
   static {
-    [_call_a, _initStatic] = babelHelpers.applyDecs(this, [[dec, 8, "a"], [dec, 8, "a", function () {}], [dec, 8, "b"], [dec, 8, _computedKey], [dec, 8, 0], [dec, 8, _computedKey2], [dec, 8, 2n], [dec, 8, _computedKey3], [dec, 8, _computedKey4]], []);
+    [_call_a, _initStatic] = babelHelpers.applyDecs(this, [[dec, 8, "a"], [dec, 8, "a", function () {}], [dec, 8, "b"], [dec, 8, "c"], [dec, 8, 0], [dec, 8, 1], [dec, 8, 2n], [dec, 8, 3n], [dec, 8, _computedKey]], []);
     _initStatic(this);
   }
   static get a() {}
@@ -23,11 +20,11 @@ class Foo {
     return _call_a(this);
   }
   static get "b"() {}
-  static get [_computedKey]() {}
+  static get ["c"]() {}
   static get 0() {}
-  static get [_computedKey2]() {}
+  static get [1]() {}
   static get 2n() {}
-  static get [_computedKey3]() {}
-  static get [_computedKey4]() {}
+  static get [3n]() {}
+  static get [_computedKey]() {}
 }
 expect(logs).toStrictEqual(["computing f", "a", "#a", "b", "c", "0", "1", "2", "3", "f()"]);

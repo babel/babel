@@ -590,17 +590,13 @@ function transformClass(
 
       const newId = generateClassPrivateUid();
       const newField = generateClassProperty(newId, value, isStatic);
-
+      const keyPath = element.get("key");
       const [newPath] = element.replaceWith(newField);
-      const keyType = key.type;
+
       addProxyAccessorsFor(
         path.node.id,
         newPath,
-        computed &&
-          !scopeParent.isStatic(key) &&
-          keyType !== "StringLiteral" &&
-          keyType !== "NumericLiteral" &&
-          keyType !== "BigIntLiteral"
+        computed && !keyPath.isConstantExpression()
           ? memoiseExpression(key as t.Expression, "computedKey")
           : key,
         newId,
@@ -703,7 +699,7 @@ function transformClass(
       const isComputed =
         "computed" in element.node && element.node.computed === true;
       if (isComputed) {
-        if (!scopeParent.isStatic(node.key)) {
+        if (!element.get("key").isConstantExpression()) {
           node.key = memoiseExpression(node.key as t.Expression, "computedKey");
         }
       }
