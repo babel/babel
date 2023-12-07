@@ -68,8 +68,9 @@ function memberDec(
   desc: PropertyDescriptor,
   ctx: DecoratorContext,
   kind: PROP_KIND,
-  isStatic: boolean,
   isPrivate: boolean,
+  isField: boolean,
+  isAccessor: boolean,
   value: any,
   hasPrivateBrand: Function,
 ) {
@@ -82,11 +83,11 @@ function memberDec(
   }
 
   var get, set;
-  if (!isPrivate && (kind === PROP_KIND.FIELD || kind === PROP_KIND.METHOD)) {
+  if (!isPrivate && (isField || kind === PROP_KIND.METHOD)) {
     get = function (target: any) {
       return target[name];
     };
-    if (kind === PROP_KIND.FIELD) {
+    if (isField) {
       set = function (target: any, v: any) {
         target[name] = v;
       };
@@ -100,13 +101,10 @@ function memberDec(
       return desc.value;
     };
   } else {
-    // Assert: If kind === 0, then isPrivate is true.
-    var t = kind === PROP_KIND.FIELD || kind === PROP_KIND.ACCESSOR;
-
-    if (t || kind === PROP_KIND.GETTER) {
+    if (kind < PROP_KIND.METHOD || kind === PROP_KIND.GETTER) {
       get = _bindPropCall(desc, "get", isPrivate && assertInstanceIfPrivate);
     }
-    if (t || kind === PROP_KIND.SETTER) {
+    if (kind < PROP_KIND.METHOD || kind === PROP_KIND.SETTER) {
       set = _bindPropCall(desc, "set", isPrivate && assertInstanceIfPrivate);
     }
   }
@@ -156,13 +154,16 @@ function applyDec(
   ret?: Function[],
   isStatic?: boolean,
   isPrivate?: boolean,
+  isField?: boolean,
+  isAccessor?: boolean,
   hasPrivateBrand?: Function,
 ) {
   var decs = decInfo[0],
     decVal = decInfo[3],
-    _: any;
+    _: any,
+    isClass = !ret;
 
-  if (kind !== PROP_KIND.CLASS) {
+  if (!isClass) {
     if (!decoratorsHaveThis && !Array.isArray(decs)) {
       decs = [decs];
     }
@@ -172,12 +173,12 @@ function applyDec(
       key: "get" | "set" | "value" =
         kind === PROP_KIND.GETTER
           ? "get"
-          : kind === PROP_KIND.SETTER || kind === PROP_KIND.ACCESSOR
+          : kind === PROP_KIND.SETTER || isAccessor
             ? "set"
             : "value";
 
     if (isPrivate) {
-      if (kind === PROP_KIND.FIELD || kind === PROP_KIND.ACCESSOR) {
+      if (isField || isAccessor) {
         desc = {
           get: setFunctionName(
             function (this: any) {
@@ -194,10 +195,10 @@ function applyDec(
         desc[key] = decVal;
       }
 
-      if (kind !== PROP_KIND.FIELD) {
+      if (!isField) {
         setFunctionName(desc[key], name, kind === PROP_KIND.METHOD ? "" : key);
       }
-    } else if (kind !== PROP_KIND.FIELD) {
+    } else if (!isField) {
       desc = Object.getOwnPropertyDescriptor(Class, name);
     }
   }
@@ -237,7 +238,7 @@ function applyDec(
     }.bind(null, decoratorFinishedRef);
 
     try {
-      if (kind === PROP_KIND.CLASS) {
+      if (isClass) {
         newValue = dec.call(
           decoratorsHaveThis ? (decs as any[])[i - 1] : undefined,
           Class,
@@ -254,18 +255,14 @@ function applyDec(
           desc,
           ctx,
           kind,
-          isStatic,
           isPrivate,
-          kind === PROP_KIND.ACCESSOR
-            ? {
-                get: desc.get,
-                set: desc.set,
-              }
-            : desc[key],
+          isField,
+          isAccessor,
+          isAccessor ? desc : desc[key],
           hasPrivateBrand,
         );
 
-        if (kind === PROP_KIND.ACCESSOR) {
+        if (isAccessor) {
           if (typeof newValue === "object" && newValue) {
             if ((_ = assertCallable(newValue.get, "accessor.get"))) {
               desc.get = _;
@@ -284,11 +281,11 @@ function applyDec(
         } else if (
           assertCallable(
             newValue,
-            (kind === PROP_KIND.FIELD ? "field" : "method") + " decorators",
+            (isField ? "field" : "method") + " decorators",
             "return",
           )
         ) {
-          if (kind === PROP_KIND.FIELD) {
+          if (isField) {
             init.push(newValue);
           } else {
             desc[key] = newValue;
@@ -300,7 +297,7 @@ function applyDec(
     }
   }
 
-  if (kind === PROP_KIND.FIELD || kind === PROP_KIND.ACCESSOR) {
+  if (isField || isAccessor) {
     ret.push(function (instance: any, value: any) {
       for (var i = init.length - 1; i >= 0; i--) {
         value = init[i].call(instance, value);
@@ -309,9 +306,9 @@ function applyDec(
     });
   }
 
-  if (kind !== PROP_KIND.FIELD && kind !== PROP_KIND.CLASS) {
+  if (!isField && !isClass) {
     if (isPrivate) {
-      if (kind === PROP_KIND.ACCESSOR) {
+      if (isAccessor) {
         ret.push(_bindPropCall(desc, "get"), _bindPropCall(desc, "set"));
       } else {
         ret.push(
@@ -338,8 +335,7 @@ function applyMemberDecs(
     return checkInRHS(_) === Class;
   };
 
-  var existingProtoNonFields = new Map();
-  var existingStaticNonFields = new Map();
+  var existingNonFields = new Map();
 
   function pushInitializers(initializers: Function[]) {
     if (initializers) {
@@ -360,14 +356,14 @@ function applyMemberDecs(
     var decoratorsHaveThis = kind & PROP_KIND.DECORATORS_HAVE_THIS;
     var isStatic = !!(kind & PROP_KIND.STATIC);
 
-    kind &= 7 /* 0b111 */;
+    kind = kind & 7; /* 0b111 */
 
-    if (kind !== PROP_KIND.FIELD && !isPrivate) {
-      var existingNonFields = isStatic
-        ? existingStaticNonFields
-        : existingProtoNonFields;
+    var isField = kind === PROP_KIND.FIELD;
 
-      var existingKind = existingNonFields.get(name) || 0;
+    var key = name + "/" + isStatic;
+
+    if (!isField && !isPrivate) {
+      var existingKind = existingNonFields.get(key) || 0;
 
       if (
         existingKind === true ||
@@ -379,10 +375,7 @@ function applyMemberDecs(
             name,
         );
       }
-      existingNonFields.set(
-        name,
-        !existingKind && kind > PROP_KIND.METHOD ? kind : true,
-      );
+      existingNonFields.set(key, kind > PROP_KIND.METHOD ? kind : true);
     }
 
     applyDec(
@@ -398,6 +391,8 @@ function applyMemberDecs(
       ret,
       isStatic,
       isPrivate,
+      isField,
+      kind === PROP_KIND.ACCESSOR,
       isStatic && isPrivate ? staticBrand : instanceBrand,
     );
   }
