@@ -339,7 +339,7 @@ function applyMemberDecs(
     var decoratorsHaveThis = kind & PROP_KIND.DECORATORS_HAVE_THIS;
     var isStatic = !!(kind & PROP_KIND.STATIC);
 
-    kind = kind & 7; /* 0b111 */
+    kind &= 7; /* 0b111 */
 
     var isField = kind === PROP_KIND.FIELD;
 

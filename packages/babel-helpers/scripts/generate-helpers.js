@@ -51,6 +51,9 @@ export default Object.freeze({
     }
     const { minVersion } = minVersionMatch.groups;
 
+    const mangleFns = code.includes("@mangleFns");
+    const noMangleFns = [];
+
     code = transformSync(code, {
       configFile: false,
       babelrc: false,
@@ -76,16 +79,29 @@ export default Object.freeze({
                 .replace(/\.ts$/, "")
                 .replace(/^\.\//, "");
             },
+            FunctionDeclaration(path) {
+              if (
+                mangleFns &&
+                path.node.leadingComments?.find(c =>
+                  c.value.includes("@no-mangle")
+                )
+              ) {
+                const name = path.node.id.name;
+                if (name) noMangleFns.push(name);
+              }
+            },
           },
         },
       ],
     }).code;
-
     code = (
       await minify(code, {
-        mangle: { keep_fnames: true },
+        mangle: {
+          toplevel: true,
+          keep_fnames: mangleFns ? new RegExp(noMangleFns.join("|")) : true,
+        },
         // The _typeof helper has a custom directive that we must keep
-        compress: { directives: false },
+        compress: { directives: false, passes: 10 },
       })
     ).code;
 
