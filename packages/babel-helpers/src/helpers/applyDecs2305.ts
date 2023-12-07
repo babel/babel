@@ -1,13 +1,10 @@
 /* @minVersion 7.21.0 */
+/* @mangleFns */
 
 // @ts-expect-error helper
 import checkInRHS from "checkInRHS";
 import setFunctionName from "./setFunctionName.ts";
 import toPropertyKey from "./toPropertyKey.ts";
-
-/**
-  Enums are used in this file, but not assigned to vars to avoid non-hoistable values
-*/
 
 const enum PROP_KIND {
   FIELD = 0,
@@ -15,7 +12,7 @@ const enum PROP_KIND {
   METHOD = 2,
   GETTER = 3,
   SETTER = 4,
-  CLASS = 5, // only used in assertValidReturnValue
+  CLASS = 5,
 
   STATIC = 8,
 
@@ -61,68 +58,6 @@ function runInitializers(initializers: Function[], value: any) {
   return value;
 }
 
-function memberDec(
-  dec: Function,
-  thisArg: any,
-  name: string,
-  desc: PropertyDescriptor,
-  ctx: DecoratorContext,
-  kind: PROP_KIND,
-  isPrivate: boolean,
-  isField: boolean,
-  isAccessor: boolean,
-  value: any,
-  hasPrivateBrand: Function,
-) {
-  function assertInstanceIfPrivate(target: any) {
-    if (!hasPrivateBrand(target)) {
-      throw new TypeError(
-        "Attempted to access private element on non-instance",
-      );
-    }
-  }
-
-  var get, set;
-  if (!isPrivate && (isField || kind === PROP_KIND.METHOD)) {
-    get = function (target: any) {
-      return target[name];
-    };
-    if (isField) {
-      set = function (target: any, v: any) {
-        target[name] = v;
-      };
-    }
-  } else if (kind === PROP_KIND.METHOD) {
-    // Assert: isPrivate is true.
-    get = function (_this: any) {
-      if (isPrivate) {
-        assertInstanceIfPrivate(_this);
-      }
-      return desc.value;
-    };
-  } else {
-    if (kind < PROP_KIND.METHOD || kind === PROP_KIND.GETTER) {
-      get = _bindPropCall(desc, "get", isPrivate && assertInstanceIfPrivate);
-    }
-    if (kind < PROP_KIND.METHOD || kind === PROP_KIND.SETTER) {
-      set = _bindPropCall(desc, "set", isPrivate && assertInstanceIfPrivate);
-    }
-  }
-
-  var access: DecoratorContextAccess = (ctx.access = {
-    has: isPrivate
-      ? // @ts-expect-error no thisArg
-        hasPrivateBrand.bind()
-      : function (target: object) {
-          return name in target;
-        },
-  });
-  if (get) access.get = get;
-  if (set) access.set = set;
-
-  return dec.call(thisArg, value, ctx);
-}
-
 function assertCallable(
   fn: any,
   hint1: string,
@@ -143,6 +78,7 @@ function assertCallable(
   return fn;
 }
 
+/* @no-mangle */
 function applyDec(
   Class: any,
   decInfo: DecoratorInfo,
@@ -158,6 +94,14 @@ function applyDec(
   isAccessor?: boolean,
   hasPrivateBrand?: Function,
 ) {
+  function assertInstanceIfPrivate(target: any) {
+    if (!hasPrivateBrand(target)) {
+      throw new TypeError(
+        "Attempted to access private element on non-instance",
+      );
+    }
+  }
+
   var decs = decInfo[0],
     decVal = decInfo[3],
     _: any,
@@ -248,18 +192,56 @@ function applyDec(
         ctx.static = isStatic;
         ctx.private = isPrivate;
 
-        newValue = memberDec(
-          dec,
+        var get, set;
+        if (!isPrivate && (isField || kind === PROP_KIND.METHOD)) {
+          get = function (target: any) {
+            return target[name];
+          };
+          if (isField) {
+            set = function (target: any, v: any) {
+              target[name] = v;
+            };
+          }
+        } else if (kind === PROP_KIND.METHOD) {
+          // Assert: isPrivate is true.
+          get = function (_this: any) {
+            if (isPrivate) {
+              assertInstanceIfPrivate(_this);
+            }
+            return desc.value;
+          };
+        } else {
+          if (kind < PROP_KIND.METHOD || kind === PROP_KIND.GETTER) {
+            get = _bindPropCall(
+              desc,
+              "get",
+              isPrivate && assertInstanceIfPrivate,
+            );
+          }
+          if (kind < PROP_KIND.METHOD || kind === PROP_KIND.SETTER) {
+            set = _bindPropCall(
+              desc,
+              "set",
+              isPrivate && assertInstanceIfPrivate,
+            );
+          }
+        }
+
+        var access: DecoratorContextAccess = (ctx.access = {
+          has: isPrivate
+            ? // @ts-expect-error no thisArg
+              hasPrivateBrand.bind()
+            : function (target: object) {
+                return name in target;
+              },
+        });
+        if (get) access.get = get;
+        if (set) access.set = set;
+
+        newValue = dec.call(
           decoratorsHaveThis ? (decs as any[])[i - 1] : undefined,
-          name,
-          desc,
-          ctx,
-          kind,
-          isPrivate,
-          isField,
-          isAccessor,
           isAccessor ? desc : desc[key],
-          hasPrivateBrand,
+          ctx,
         );
 
         if (isAccessor) {
@@ -322,6 +304,7 @@ function applyDec(
   return newValue;
 }
 
+/* @no-mangle */
 function applyMemberDecs(
   Class: any,
   decInfos: DecoratorInfo[],
@@ -556,7 +539,7 @@ function defineMetadata(Class: any, metadata: any) {
   initializeClass(Class);
  */
 
-export default function applyDecs2305(
+export default /* @no-mangle */ function applyDecs2305(
   targetClass: any,
   memberDecs: DecoratorInfo[],
   classDecs: Function[],
@@ -568,9 +551,7 @@ export default function applyDecs2305(
     var parentMetadata =
       parentClass[Symbol.metadata || Symbol.for("Symbol.metadata")];
   }
-  var metadata = Object.create(
-    parentMetadata === void 0 ? null : parentMetadata,
-  );
+  var metadata = Object.create(parentMetadata == null ? null : parentMetadata);
   var e = applyMemberDecs(targetClass, memberDecs, instanceBrand, metadata);
   if (!classDecs.length) defineMetadata(targetClass, metadata);
   return {
