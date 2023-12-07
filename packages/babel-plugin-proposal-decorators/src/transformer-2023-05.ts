@@ -525,6 +525,10 @@ function createSetFunctionNameCall(
   ]);
 }
 
+function createToPropertyKeyCall(state: PluginPass, propertyKey: t.Expression) {
+  return t.callExpression(state.addHelper("toPropertyKey"), [propertyKey]);
+}
+
 function transformClass(
   path: NodePath<t.ClassExpression | t.ClassDeclaration>,
   state: PluginPass,
@@ -597,7 +601,10 @@ function transformClass(
         path.node.id,
         newPath,
         computed && !keyPath.isConstantExpression()
-          ? memoiseExpression(key as t.Expression, "computedKey")
+          ? memoiseExpression(
+              createToPropertyKeyCall(state, key as t.Expression),
+              "computedKey",
+            )
           : key,
         newId,
         version,
@@ -700,7 +707,10 @@ function transformClass(
         "computed" in element.node && element.node.computed === true;
       if (isComputed) {
         if (!element.get("key").isConstantExpression()) {
-          node.key = memoiseExpression(node.key as t.Expression, "computedKey");
+          node.key = memoiseExpression(
+            createToPropertyKeyCall(state, node.key as t.Expression),
+            "computedKey",
+          );
         }
       }
 

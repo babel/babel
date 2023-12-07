@@ -6,10 +6,10 @@ const dec = (value, context) => {
 const f = () => {
   logs.push("computing f");
   return {
-    [Symbol.toPrimitive]: () => "f()"
+    [Symbol.toPrimitive]: () => (logs.push("calling toPrimitive"), "f()")
   };
 };
-_computedKey = f();
+_computedKey = babelHelpers.toPropertyKey(f());
 class Foo {
   static get a() {}
   static get "b"() {}
@@ -32,4 +32,4 @@ var _a = {
   [_call_a, _initStatic] = babelHelpers.applyDecs2305(_class, [[dec, 11, "a"], [dec, 11, "a", function () {}], [dec, 11, "b"], [dec, 11, "c"], [dec, 11, 0], [dec, 11, 1], [dec, 11, 2n], [dec, 11, 3n], [dec, 11, _computedKey]], []).e;
   _initStatic(_class);
 })();
-expect(logs).toStrictEqual(["computing f", "a", "#a", "b", "c", "0", "1", "2", "3", "f()"]);
+expect(logs).toStrictEqual(["computing f", "calling toPrimitive", "a", "#a", "b", "c", "0", "1", "2", "3", "f()"]);

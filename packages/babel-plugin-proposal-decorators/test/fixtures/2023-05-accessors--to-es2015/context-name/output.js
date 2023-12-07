@@ -6,10 +6,10 @@ const dec = (value, context) => {
 const f = () => {
   logs.push("computing f");
   return {
-    [Symbol.toPrimitive]: () => "f()"
+    [Symbol.toPrimitive]: () => (logs.push("calling toPrimitive"), "f()")
   };
 };
-_computedKey = f();
+_computedKey = babelHelpers.toPropertyKey(f());
 var _a = /*#__PURE__*/new WeakMap();
 class Foo {
   constructor() {
@@ -114,4 +114,4 @@ var _I = {
   writable: true,
   value: _init_computedKey7(_class)
 };
-expect(logs).toStrictEqual(["computing f", "a", "#a", "b", "c", "0", "1", "2", "3", "f()"]);
+expect(logs).toStrictEqual(["computing f", "calling toPrimitive", "a", "#a", "b", "c", "0", "1", "2", "3", "f()"]);

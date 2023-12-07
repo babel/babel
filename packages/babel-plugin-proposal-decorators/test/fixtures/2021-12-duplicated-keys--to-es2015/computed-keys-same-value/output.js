@@ -1,7 +1,7 @@
 var _computedKey, _computedKey2, _initProto, _class;
 const dec = () => {};
-_computedKey = getKeyI();
-_computedKey2 = getKeyJ();
+_computedKey = babelHelpers.toPropertyKey(getKeyI());
+_computedKey2 = babelHelpers.toPropertyKey(getKeyJ());
 class Foo {
   constructor(...args) {
     _initProto(this);
