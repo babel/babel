@@ -97,7 +97,6 @@ export default Object.freeze({
     code = (
       await minify(code, {
         mangle: {
-          toplevel: true,
           keep_fnames: mangleFns ? new RegExp(noMangleFns.join("|")) : true,
         },
         // The _typeof helper has a custom directive that we must keep
