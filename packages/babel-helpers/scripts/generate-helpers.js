@@ -51,22 +51,35 @@ export default Object.freeze({
     }
     const { minVersion } = minVersionMatch.groups;
 
-    if (isTs) {
-      code = transformSync(code, {
-        configFile: false,
-        babelrc: false,
-        filename: filePath,
-        presets: [
-          [
-            presetTypescript,
-            {
-              onlyRemoveTypeImports: true,
-              optimizeConstEnums: true,
-            },
-          ],
+    code = transformSync(code, {
+      configFile: false,
+      babelrc: false,
+      filename: filePath,
+      presets: [
+        [
+          presetTypescript,
+          {
+            onlyRemoveTypeImports: true,
+            optimizeConstEnums: true,
+          },
         ],
-      }).code;
-    }
+      ],
+      plugins: [
+        /**
+         * @type {import("@babel/core").PluginObj}
+         */
+        {
+          visitor: {
+            ImportDeclaration(path) {
+              const source = path.node.source;
+              source.value = source.value
+                .replace(/\.ts$/, "")
+                .replace(/^\.\//, "");
+            },
+          },
+        },
+      ],
+    }).code;
 
     code = (
       await minify(code, {

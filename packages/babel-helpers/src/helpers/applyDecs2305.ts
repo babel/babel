@@ -2,10 +2,8 @@
 
 // @ts-expect-error helper
 import checkInRHS from "checkInRHS";
-// @ts-expect-error helper
-import setFunctionName from "setFunctionName";
-// @ts-expect-error helper
-import toPropertyKey from "toPropertyKey";
+import setFunctionName from "./setFunctionName.ts";
+import toPropertyKey from "./toPropertyKey.ts";
 
 /**
   Enums are used in this file, but not assigned to vars to avoid non-hoistable values
@@ -33,8 +31,8 @@ type DecoratorContextAccess = {
 type DecoratorContext = {
   kind: "accessor" | "method" | "getter" | "setter" | "field" | "class";
   name: string;
-  static: boolean;
-  private: boolean;
+  static?: boolean;
+  private?: boolean;
   access?: DecoratorContextAccess;
   metadata?: any;
   addInitializer?: (initializer: Function) => void;
@@ -56,20 +54,11 @@ function _bindPropCall(obj: any, name: string, before?: Function) {
   };
 }
 
-function createAddInitializerMethod(
-  initializers: Function[],
-  decoratorFinishedRef: DecoratorFinishedRef,
-) {
-  decoratorFinishedRef.v = false;
-  return function addInitializer(initializer: Function) {
-    if (decoratorFinishedRef.v) {
-      throw new Error(
-        "attempted to call addInitializer after decoration was finished",
-      );
-    }
-    assertCallable(initializer, "An initializer", true);
-    initializers.push(initializer);
-  };
+function runInitializers(initializers: Function[], value: any) {
+  for (var i = 0; i < initializers.length; i++) {
+    initializers[i].call(value);
+  }
+  return value;
 }
 
 function memberDec(
@@ -77,13 +66,12 @@ function memberDec(
   thisArg: any,
   name: string,
   desc: PropertyDescriptor,
-  initializers: Function[],
+  ctx: DecoratorContext,
   kind: PROP_KIND,
   isStatic: boolean,
   isPrivate: boolean,
   value: any,
   hasPrivateBrand: Function,
-  metadata: any,
 ) {
   function assertInstanceIfPrivate(target: any) {
     if (!hasPrivateBrand(target)) {
@@ -92,23 +80,6 @@ function memberDec(
       );
     }
   }
-
-  var decoratorFinishedRef: DecoratorFinishedRef = {};
-  var ctx: DecoratorContext = {
-    kind: ["field", "accessor", "method", "getter", "setter", "field"][
-      kind
-    ] as any,
-
-    name: isPrivate ? "#" + name : toPropertyKey(name),
-    static: isStatic,
-    private: isPrivate,
-    metadata: metadata,
-  };
-
-  ctx.addInitializer = createAddInitializerMethod(
-    initializers,
-    decoratorFinishedRef,
-  );
 
   var get, set;
   if (!isPrivate && (kind === PROP_KIND.FIELD || kind === PROP_KIND.METHOD)) {
@@ -151,185 +122,207 @@ function memberDec(
   if (get) access.get = get;
   if (set) access.set = set;
 
-  try {
-    return dec.call(thisArg, value, ctx);
-  } finally {
-    decoratorFinishedRef.v = true;
-  }
+  return dec.call(thisArg, value, ctx);
 }
 
-function assertCallable(fn: any, hint: string, throwUndefined?: boolean) {
+function assertCallable(
+  fn: any,
+  hint1: string,
+  hint2?: string,
+  throwUndefined?: boolean,
+) {
   if (typeof fn !== "function") {
     if (throwUndefined || fn !== void 0) {
-      throw new TypeError(hint + " must be a function");
-    }
-  }
-}
-
-function assertValidReturnValue(kind: PROP_KIND, value: any) {
-  if (value === void 0) return true;
-
-  var type = typeof value;
-
-  if (kind === PROP_KIND.ACCESSOR) {
-    if (type !== "object" || !value) {
       throw new TypeError(
-        "accessor decorators must return an object with get, set, or init properties or void 0",
+        hint1 +
+          " must " +
+          (hint2 || "be") +
+          " a function" +
+          (throwUndefined ? "" : " or void 0"),
       );
     }
-    assertCallable(value.get, "accessor.get");
-    assertCallable(value.set, "accessor.set");
-    assertCallable(value.init, "accessor.init");
-  } else if (type !== "function") {
-    throw new TypeError(
-      (kind === PROP_KIND.FIELD
-        ? "field"
-        : kind === PROP_KIND.CLASS
-          ? "class"
-          : "method") + " decorators must return a function or void 0",
-    );
   }
+  return fn;
 }
 
-function applyMemberDec(
-  ret: Function[],
+function applyDec(
   Class: any,
   decInfo: DecoratorInfo,
   decoratorsHaveThis: number,
   name: string,
   kind: PROP_KIND,
-  isStatic: boolean,
-  isPrivate: boolean,
-  initializers: Function[],
-  hasPrivateBrand: Function,
   metadata: any,
+  initializers: Function[],
+  ret?: Function[],
+  isStatic?: boolean,
+  isPrivate?: boolean,
+  hasPrivateBrand?: Function,
 ) {
   var decs = decInfo[0],
-    decVal = decInfo[3];
+    decVal = decInfo[3],
+    _: any;
 
-  if (!decoratorsHaveThis && !Array.isArray(decs)) {
-    decs = [decs];
-  }
-
-  var desc: PropertyDescriptor = {},
-    init: Function | Function[] = [],
-    key: "get" | "set" | "value" =
-      kind === PROP_KIND.GETTER
-        ? "get"
-        : kind === PROP_KIND.SETTER
-          ? "set"
-          : "value",
-    value: any;
-
-  if (isPrivate) {
-    if (kind === PROP_KIND.FIELD || kind === PROP_KIND.ACCESSOR) {
-      desc = {
-        get: function (this: any) {
-          return decVal(this);
-        },
-        set: function (this: any, value: any) {
-          decInfo[4](this, value);
-        },
-      };
-    } else {
-      desc[key] = decVal;
+  if (kind !== PROP_KIND.CLASS) {
+    if (!decoratorsHaveThis && !Array.isArray(decs)) {
+      decs = [decs];
     }
-    if (kind !== PROP_KIND.FIELD) {
-      if (kind === PROP_KIND.ACCESSOR) {
-        setFunctionName(desc.set, "#" + name, "set");
+
+    var desc: PropertyDescriptor = {},
+      init: Function[] = [],
+      key: "get" | "set" | "value" =
+        kind === PROP_KIND.GETTER
+          ? "get"
+          : kind === PROP_KIND.SETTER || kind === PROP_KIND.ACCESSOR
+            ? "set"
+            : "value";
+
+    if (isPrivate) {
+      if (kind === PROP_KIND.FIELD || kind === PROP_KIND.ACCESSOR) {
+        desc = {
+          get: setFunctionName(
+            function (this: any) {
+              return decVal(this);
+            },
+            name,
+            "get",
+          ),
+          set: function (this: any, value: any) {
+            decInfo[4](this, value);
+          },
+        };
+      } else {
+        desc[key] = decVal;
       }
-      setFunctionName(desc[key], "#" + name, key);
-    }
-  } else if (kind !== PROP_KIND.FIELD) {
-    desc = Object.getOwnPropertyDescriptor(Class, name);
-  }
 
-  if (kind === PROP_KIND.ACCESSOR) {
-    value = {
-      get: desc.get,
-      set: desc.set,
-    };
-  } else if (kind === PROP_KIND.METHOD) {
-    value = desc.value;
-  } else if (kind === PROP_KIND.GETTER) {
-    value = desc.get;
-  } else if (kind === PROP_KIND.SETTER) {
-    value = desc.set;
+      if (kind !== PROP_KIND.FIELD) {
+        setFunctionName(desc[key], name, kind === PROP_KIND.METHOD ? "" : key);
+      }
+    } else if (kind !== PROP_KIND.FIELD) {
+      desc = Object.getOwnPropertyDescriptor(Class, name);
+    }
   }
 
   var newValue;
 
-  var inc = decoratorsHaveThis ? 2 : 1;
-
-  for (var i = decs.length - 1; i >= 0; i -= inc) {
+  for (var i = decs.length - 1; i >= 0; i -= decoratorsHaveThis ? 2 : 1) {
     var dec = (decs as Function[])[i];
 
-    newValue = memberDec(
-      dec,
-      decoratorsHaveThis ? (decs as Function[])[i - 1] : undefined,
-      name,
-      desc,
-      initializers,
-      kind,
-      isStatic,
-      isPrivate,
-      value,
-      hasPrivateBrand,
-      metadata,
-    );
+    var decoratorFinishedRef: DecoratorFinishedRef = {};
+    var ctx: DecoratorContext = {
+      kind: [
+        "field",
+        "accessor",
+        "method",
+        "getter",
+        "setter",
+        "field",
+        "class",
+      ][kind] as any,
 
-    if (!assertValidReturnValue(kind, newValue)) {
-      if (kind === PROP_KIND.FIELD) {
-        // empty
-      } else if (kind === PROP_KIND.ACCESSOR) {
-        value = {
-          get: newValue.get || value.get,
-          set: newValue.set || value.set,
-        };
+      name: name,
+      metadata: metadata,
+    };
 
-        newValue = newValue.init;
+    ctx.addInitializer = function (
+      decoratorFinishedRef: DecoratorFinishedRef,
+      initializer: Function,
+    ) {
+      if (decoratorFinishedRef.v) {
+        throw new Error(
+          "attempted to call addInitializer after decoration was finished",
+        );
+      }
+      assertCallable(initializer, "An initializer", "be", true);
+      initializers.push(initializer);
+    }.bind(null, decoratorFinishedRef);
+
+    try {
+      if (kind === PROP_KIND.CLASS) {
+        newValue = dec.call(
+          decoratorsHaveThis ? (decs as any[])[i - 1] : undefined,
+          Class,
+          ctx,
+        );
       } else {
-        value = newValue;
-        newValue = void 0;
-      }
+        ctx.static = isStatic;
+        ctx.private = isPrivate;
 
-      if (newValue !== void 0) {
-        init.push(newValue);
+        newValue = memberDec(
+          dec,
+          decoratorsHaveThis ? (decs as any[])[i - 1] : undefined,
+          name,
+          desc,
+          ctx,
+          kind,
+          isStatic,
+          isPrivate,
+          kind === PROP_KIND.ACCESSOR
+            ? {
+                get: desc.get,
+                set: desc.set,
+              }
+            : desc[key],
+          hasPrivateBrand,
+        );
+
+        if (kind === PROP_KIND.ACCESSOR) {
+          if (typeof newValue === "object" && newValue) {
+            if ((_ = assertCallable(newValue.get, "accessor.get"))) {
+              desc.get = _;
+            }
+            if ((_ = assertCallable(newValue.set, "accessor.set"))) {
+              desc.set = _;
+            }
+            if ((_ = assertCallable(newValue.init, "accessor.init"))) {
+              init.push(_);
+            }
+          } else if (newValue !== void 0) {
+            throw new TypeError(
+              "accessor decorators must return an object with get, set, or init properties or void 0",
+            );
+          }
+        } else if (
+          assertCallable(
+            newValue,
+            (kind === PROP_KIND.FIELD ? "field" : "method") + " decorators",
+            "return",
+          )
+        ) {
+          if (kind === PROP_KIND.FIELD) {
+            init.push(newValue);
+          } else {
+            desc[key] = newValue;
+          }
+        }
       }
+    } finally {
+      decoratorFinishedRef.v = true;
     }
   }
 
   if (kind === PROP_KIND.FIELD || kind === PROP_KIND.ACCESSOR) {
     ret.push(function (instance: any, value: any) {
       for (var i = init.length - 1; i >= 0; i--) {
-        value = (init as Function[])[i].call(instance, value);
+        value = init[i].call(instance, value);
       }
       return value;
     });
   }
 
-  if (kind !== PROP_KIND.FIELD) {
-    if (kind === PROP_KIND.ACCESSOR) {
-      desc.get = value.get;
-      desc.set = value.set;
-    } else if (kind === PROP_KIND.METHOD) {
-      desc.value = value;
-    } else if (kind === PROP_KIND.GETTER) {
-      desc.get = value;
-    } else if (kind === PROP_KIND.SETTER) {
-      desc.set = value;
-    }
-
+  if (kind !== PROP_KIND.FIELD && kind !== PROP_KIND.CLASS) {
     if (isPrivate) {
       if (kind === PROP_KIND.ACCESSOR) {
         ret.push(_bindPropCall(desc, "get"), _bindPropCall(desc, "set"));
       } else {
-        ret.push(kind === PROP_KIND.METHOD ? value : Function.call.bind(value));
+        ret.push(
+          kind === PROP_KIND.METHOD ? desc[key] : Function.call.bind(desc[key]),
+        );
       }
     } else {
       Object.defineProperty(Class, name, desc);
     }
   }
+  return newValue;
 }
 
 function applyMemberDecs(
@@ -350,12 +343,7 @@ function applyMemberDecs(
 
   function pushInitializers(initializers: Function[]) {
     if (initializers) {
-      ret.push(function (instance: any) {
-        for (var i = 0; i < initializers.length; i++) {
-          initializers[i].call(instance);
-        }
-        return instance;
-      });
+      ret.push(runInitializers.bind(null, initializers));
     }
   }
 
@@ -397,73 +385,26 @@ function applyMemberDecs(
       );
     }
 
-    applyMemberDec(
-      ret,
+    applyDec(
       isStatic ? Class : Class.prototype,
       decInfo,
       decoratorsHaveThis,
-      name,
+      isPrivate ? "#" + name : (toPropertyKey(name) as string),
       kind,
-      isStatic,
-      isPrivate,
+      metadata,
       isStatic
         ? (staticInitializers = staticInitializers || [])
         : (protoInitializers = protoInitializers || []),
+      ret,
+      isStatic,
+      isPrivate,
       isStatic && isPrivate ? staticBrand : instanceBrand,
-      metadata,
     );
   }
 
   pushInitializers(protoInitializers);
   pushInitializers(staticInitializers);
   return ret;
-}
-
-function applyClassDecs(
-  targetClass: any,
-  classDecs: Function[],
-  decoratorsHaveThis: number,
-  metadata: any,
-) {
-  var initializers: Function[] = [];
-  var newClass = targetClass;
-  var name = targetClass.name;
-
-  for (var i = classDecs.length - 1; i >= 0; i -= decoratorsHaveThis ? 2 : 1) {
-    var decoratorFinishedRef: DecoratorFinishedRef = {};
-
-    try {
-      var nextNewClass = classDecs[i].call(
-        decoratorsHaveThis ? classDecs[i - 1] : undefined,
-        newClass,
-        {
-          kind: "class",
-          name: name,
-          addInitializer: createAddInitializerMethod(
-            initializers,
-            decoratorFinishedRef,
-          ),
-          metadata,
-        },
-      );
-    } finally {
-      decoratorFinishedRef.v = true;
-    }
-  }
-
-  return [
-    defineMetadata(
-      assertValidReturnValue(PROP_KIND.CLASS, nextNewClass)
-        ? newClass
-        : nextNewClass,
-      metadata,
-    ),
-    function () {
-      for (var i = 0; i < initializers.length; i++) {
-        initializers[i].call(newClass);
-      }
-    },
-  ];
 }
 
 function defineMetadata(Class: any, metadata: any) {
@@ -621,7 +562,7 @@ function defineMetadata(Class: any, metadata: any) {
  */
 
 export default function applyDecs2305(
-  targetClass: object,
+  targetClass: any,
   memberDecs: DecoratorInfo[],
   classDecs: Function[],
   classDecsHaveThis: number,
@@ -643,9 +584,27 @@ export default function applyDecs2305(
     get c() {
       // The transformer will not emit assignment when there are no class decorators,
       // so we don't have to return an empty array here.
+      var initializers: Function[] = [];
       return (
-        classDecs.length &&
-        applyClassDecs(targetClass, classDecs, classDecsHaveThis, metadata)
+        classDecs.length && [
+          defineMetadata(
+            assertCallable(
+              applyDec(
+                targetClass,
+                [classDecs] as any,
+                classDecsHaveThis,
+                targetClass.name,
+                PROP_KIND.CLASS,
+                metadata,
+                initializers,
+              ),
+              "class decorators",
+              "return",
+            ) || targetClass,
+            metadata,
+          ),
+          runInitializers.bind(null, initializers, targetClass),
+        ]
       );
     },
   };
