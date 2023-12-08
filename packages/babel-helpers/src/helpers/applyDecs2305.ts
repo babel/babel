@@ -326,20 +326,19 @@ export default /* @no-mangle */ function applyDecs2305(
 
         name: name,
         metadata: metadata,
+        addInitializer: function (
+          decoratorFinishedRef: DecoratorFinishedRef,
+          initializer: Function,
+        ) {
+          if (decoratorFinishedRef.v) {
+            throw new Error(
+              "attempted to call addInitializer after decoration was finished",
+            );
+          }
+          assertCallable(initializer, "An initializer", "be", true);
+          initializers.push(initializer);
+        }.bind(null, decoratorFinishedRef),
       };
-
-      ctx.addInitializer = function (
-        decoratorFinishedRef: DecoratorFinishedRef,
-        initializer: Function,
-      ) {
-        if (decoratorFinishedRef.v) {
-          throw new Error(
-            "attempted to call addInitializer after decoration was finished",
-          );
-        }
-        assertCallable(initializer, "An initializer", "be", true);
-        initializers.push(initializer);
-      }.bind(null, decoratorFinishedRef);
 
       try {
         if (isClass) {
@@ -359,11 +358,8 @@ export default /* @no-mangle */ function applyDecs2305(
               };
             }
           } else if (kind === PROP_KIND.METHOD) {
-            // Assert: isPrivate is true.
             get = function (_this: any) {
-              if (isPrivate) {
-                assertInstanceIfPrivate(_this);
-              }
+              assertInstanceIfPrivate(_this);
               return desc.value;
             };
           } else {
