@@ -4304,7 +4304,7 @@ __metadata:
     "@babel/helper-split-export-declaration": "workspace:^"
     "@babel/parser": "workspace:^"
     "@babel/types": "workspace:^"
-    debug: "npm:^4.1.0"
+    debug: "npm:^4.3.1"
     globals: "condition:BABEL_8_BREAKING ? ^13.5.0 : ^11.1.0"
   languageName: unknown
   linkType: soft
@@ -8095,7 +8095,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:4, debug@npm:4.3.4, debug@npm:^4.1.0, debug@npm:^4.1.1, debug@npm:^4.3.2, debug@npm:^4.3.4":
+"debug@npm:4, debug@npm:4.3.4, debug@npm:^4.1.0, debug@npm:^4.1.1, debug@npm:^4.3.1, debug@npm:^4.3.2, debug@npm:^4.3.4":
   version: 4.3.4
   resolution: "debug@npm:4.3.4"
   dependencies:
