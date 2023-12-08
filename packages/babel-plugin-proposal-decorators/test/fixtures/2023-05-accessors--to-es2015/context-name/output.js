@@ -1,4 +1,4 @@
-var _init_a, _init_a2, _get_a, _set_a, _init_computedKey, _computedKey, _init_computedKey2, _init_computedKey3, _computedKey2, _init_computedKey4, _init_computedKey5, _computedKey3, _init_computedKey6, _computedKey4, _init_computedKey7, _initStatic, _class;
+var _init_a, _init_a2, _get_a, _set_a, _init_computedKey, _init_computedKey2, _init_computedKey3, _init_computedKey4, _init_computedKey5, _init_computedKey6, _computedKey, _init_computedKey7, _initStatic, _class;
 const logs = [];
 const dec = (value, context) => {
   logs.push(context.name);
@@ -6,13 +6,10 @@ const dec = (value, context) => {
 const f = () => {
   logs.push("computing f");
   return {
-    [Symbol.toPrimitive]: () => "f()"
+    [Symbol.toPrimitive]: () => (logs.push("calling toPrimitive"), "f()")
   };
 };
-_computedKey = "c";
-_computedKey2 = 1;
-_computedKey3 = 3n;
-_computedKey4 = f();
+_computedKey = babelHelpers.toPropertyKey(f());
 var _a = /*#__PURE__*/new WeakMap();
 class Foo {
   constructor() {
@@ -33,10 +30,10 @@ class Foo {
   static set "b"(v) {
     babelHelpers.classStaticPrivateFieldSpecSet(Foo, Foo, _C, v);
   }
-  static get [_computedKey]() {
+  static get ["c"]() {
     return babelHelpers.classStaticPrivateFieldSpecGet(Foo, Foo, _D);
   }
-  static set [_computedKey](v) {
+  static set ["c"](v) {
     babelHelpers.classStaticPrivateFieldSpecSet(Foo, Foo, _D, v);
   }
   static get 0() {
@@ -45,10 +42,10 @@ class Foo {
   static set 0(v) {
     babelHelpers.classStaticPrivateFieldSpecSet(Foo, Foo, _E, v);
   }
-  static get [_computedKey2]() {
+  static get [1]() {
     return babelHelpers.classStaticPrivateFieldSpecGet(Foo, Foo, _F);
   }
-  static set [_computedKey2](v) {
+  static set [1](v) {
     babelHelpers.classStaticPrivateFieldSpecSet(Foo, Foo, _F, v);
   }
   static get 2n() {
@@ -57,16 +54,16 @@ class Foo {
   static set 2n(v) {
     babelHelpers.classStaticPrivateFieldSpecSet(Foo, Foo, _G, v);
   }
-  static get [_computedKey3]() {
+  static get [3n]() {
     return babelHelpers.classStaticPrivateFieldSpecGet(Foo, Foo, _H);
   }
-  static set [_computedKey3](v) {
+  static set [3n](v) {
     babelHelpers.classStaticPrivateFieldSpecSet(Foo, Foo, _H, v);
   }
-  static get [_computedKey4]() {
+  static get [_computedKey]() {
     return babelHelpers.classStaticPrivateFieldSpecGet(Foo, Foo, _I);
   }
-  static set [_computedKey4](v) {
+  static set [_computedKey](v) {
     babelHelpers.classStaticPrivateFieldSpecSet(Foo, Foo, _I, v);
   }
 }
@@ -78,7 +75,7 @@ function _get_a2() {
   return _get_a(this);
 }
 (() => {
-  [_init_a, _init_a2, _get_a, _set_a, _init_computedKey, _init_computedKey2, _init_computedKey3, _init_computedKey4, _init_computedKey5, _init_computedKey6, _init_computedKey7, _initStatic] = babelHelpers.applyDecs2305(_class, [[dec, 9, "a"], [dec, 9, "a", o => babelHelpers.classStaticPrivateFieldSpecGet(o, _class, _B), (o, v) => babelHelpers.classStaticPrivateFieldSpecSet(o, _class, _B, v)], [dec, 9, "b"], [dec, 9, _computedKey], [dec, 9, 0], [dec, 9, _computedKey2], [dec, 9, 2n], [dec, 9, _computedKey3], [dec, 9, _computedKey4]], []).e;
+  [_init_a, _init_a2, _get_a, _set_a, _init_computedKey, _init_computedKey2, _init_computedKey3, _init_computedKey4, _init_computedKey5, _init_computedKey6, _init_computedKey7, _initStatic] = babelHelpers.applyDecs2305(_class, [[dec, 9, "a"], [dec, 9, "a", o => babelHelpers.classStaticPrivateFieldSpecGet(o, _class, _B), (o, v) => babelHelpers.classStaticPrivateFieldSpecSet(o, _class, _B, v)], [dec, 9, "b"], [dec, 9, "c"], [dec, 9, 0], [dec, 9, 1], [dec, 9, 2n], [dec, 9, 3n], [dec, 9, _computedKey]], []).e;
   _initStatic(_class);
 })();
 var _A = {
@@ -117,4 +114,4 @@ var _I = {
   writable: true,
   value: _init_computedKey7(_class)
 };
-expect(logs).toStrictEqual(["computing f", "a", "#a", "b", "c", "0", "1", "2", "3", "f()"]);
+expect(logs).toStrictEqual(["computing f", "calling toPrimitive", "a", "#a", "b", "c", "0", "1", "2", "3", "f()"]);
