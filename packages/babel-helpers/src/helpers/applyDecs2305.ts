@@ -226,7 +226,7 @@ export default /* @no-mangle */ function applyDecs2305(
             " must " +
             (hint2 || "be") +
             " a function" +
-            (throwUndefined ? "" : " or void 0"),
+            (throwUndefined ? "" : " or undefined"),
         );
       }
     }
