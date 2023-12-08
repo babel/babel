@@ -1,8 +1,7 @@
 /* @minVersion 7.21.0 */
 /* @mangleFns */
 
-// @ts-expect-error helper
-import checkInRHS from "checkInRHS";
+import checkInRHS from "./checkInRHS.ts";
 import setFunctionName from "./setFunctionName.ts";
 import toPropertyKey from "./toPropertyKey.ts";
 
@@ -34,13 +33,15 @@ type DecoratorContext = {
   metadata?: any;
   addInitializer?: (initializer: Function) => void;
 };
-type DecoratorInfo = [
-  fn: Function | Function[],
-  kind: PROP_KIND,
-  name: string,
-  any?,
-  Function?,
-];
+type DecoratorInfo =
+  | [
+      decs: Function | Function[],
+      kind: PROP_KIND,
+      name: string,
+      any?,
+      Function?,
+    ]
+  | [classDecs: Function[]];
 
 /**
   Basic usage:
@@ -308,7 +309,8 @@ export default /* @no-mangle */ function applyDecs2305(
     var newValue;
 
     for (var i = decs.length - 1; i >= 0; i -= decoratorsHaveThis ? 2 : 1) {
-      var dec = (decs as Function[])[i];
+      var dec = (decs as Function[])[i],
+        decThis = decoratorsHaveThis ? (decs as any[])[i - 1] : void 0;
 
       var decoratorFinishedRef: DecoratorFinishedRef = {};
       var ctx: DecoratorContext = {
@@ -341,11 +343,7 @@ export default /* @no-mangle */ function applyDecs2305(
 
       try {
         if (isClass) {
-          newValue = dec.call(
-            decoratorsHaveThis ? (decs as any[])[i - 1] : undefined,
-            Class,
-            ctx,
-          );
+          newValue = dec.call(decThis, Class, ctx);
         } else {
           ctx.static = isStatic;
           ctx.private = isPrivate;
@@ -397,8 +395,13 @@ export default /* @no-mangle */ function applyDecs2305(
           if (set) access.set = set;
 
           newValue = dec.call(
-            decoratorsHaveThis ? (decs as any[])[i - 1] : undefined,
-            isAccessor ? desc : desc[key],
+            decThis,
+            isAccessor
+              ? {
+                  get: desc.get,
+                  set: desc.set,
+                }
+              : desc[key],
             ctx,
           );
 
@@ -506,7 +509,7 @@ export default /* @no-mangle */ function applyDecs2305(
       var key = name + "/" + isStatic;
 
       if (!isField && !isPrivate) {
-        var existingKind = existingNonFields.get(key) || 0;
+        var existingKind = existingNonFields.get(key);
 
         if (
           existingKind === true ||
@@ -573,7 +576,7 @@ export default /* @no-mangle */ function applyDecs2305(
             assertCallable(
               applyDec(
                 targetClass,
-                [classDecs] as any,
+                [classDecs],
                 classDecsHaveThis,
                 targetClass.name,
                 PROP_KIND.CLASS,
