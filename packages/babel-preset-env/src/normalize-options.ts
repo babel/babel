@@ -271,6 +271,11 @@ export default function normalizeOptions(opts: Options) {
 
   checkDuplicateIncludeExcludes(include, exclude);
 
+  if (!process.env.BABEL_8_BREAKING) {
+    v.validateBooleanOption("loose", opts.loose);
+    v.validateBooleanOption("spec", opts.spec);
+  }
+
   return {
     bugfixes: v.validateBooleanOption(
       TopLevelOptions.bugfixes,
@@ -296,14 +301,12 @@ export default function normalizeOptions(opts: Options) {
       opts.ignoreBrowserslistConfig,
       false,
     ),
-    loose: v.validateBooleanOption(TopLevelOptions.loose, opts.loose),
     modules: validateModulesOption(opts.modules),
     shippedProposals: v.validateBooleanOption(
       TopLevelOptions.shippedProposals,
       opts.shippedProposals,
       false,
     ),
-    spec: v.validateBooleanOption(TopLevelOptions.spec, opts.spec, false),
     targets: normalizeTargets(opts.targets),
     useBuiltIns: useBuiltIns,
     browserslistEnv: v.validateStringOption(
