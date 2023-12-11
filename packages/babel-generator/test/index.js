@@ -1465,79 +1465,116 @@ describe("programmatic generation", function () {
         line*/"
       `);
     });
+  });
 
-    it("comment in arrow function with return type", () => {
-      const arrow = t.arrowFunctionExpression(
-        [t.identifier("x"), t.identifier("y")],
-        t.identifier("z"),
-      );
-      arrow.returnType = t.tsTypeAnnotation(t.tsAnyKeyword());
-      arrow.returnType.trailingComments = [
-        { type: "CommentBlock", value: "foo" },
-        // This comment is dropped. There is no way to safely print it
-        // as a trailingComment of the return type.
-        { type: "CommentBlock", value: "new\nline" },
-      ];
-      expect(generate(arrow).code).toMatchInlineSnapshot(
-        `"(x, y): any /*foo*/ => z"`,
-      );
-    });
+  it("comment in arrow function with return type", () => {
+    const arrow = t.arrowFunctionExpression(
+      [t.identifier("x"), t.identifier("y")],
+      t.identifier("z"),
+    );
+    arrow.returnType = t.tsTypeAnnotation(t.tsAnyKeyword());
+    arrow.returnType.trailingComments = [
+      { type: "CommentBlock", value: "foo" },
+      // This comment is dropped. There is no way to safely print it
+      // as a trailingComment of the return type.
+      { type: "CommentBlock", value: "new\nline" },
+    ];
+    expect(generate(arrow).code).toMatchInlineSnapshot(
+      `"(x, y): any /*foo*/ => z"`,
+    );
+  });
 
-    it("multi-line leading comment after return", () => {
-      const val = t.identifier("val");
-      val.leadingComments = [{ type: "CommentBlock", value: "new\nline" }];
-      expect(generate(t.returnStatement(val)).code).toMatch(`return (
+  it("multi-line leading comment after return", () => {
+    const val = t.identifier("val");
+    val.leadingComments = [{ type: "CommentBlock", value: "new\nline" }];
+    expect(generate(t.returnStatement(val)).code).toMatch(`return (
   /*new
   line*/
   val
 );`);
-    });
+  });
 
-    it("multi-line leading comment after return 2", () => {
-      const ast = parse(
-        `return (
+  it("multi-line leading comment after return 2", () => {
+    const ast = parse(
+      `return (
         /*new
         line*/ val);`,
-        {
-          allowReturnOutsideFunction: true,
-        },
-      );
-      // Remove `parenthesized`
-      ast.program.body[0].argument.extra = null;
-      expect(generate(ast).code).toMatchInlineSnapshot(`
+      {
+        allowReturnOutsideFunction: true,
+      },
+    );
+    // Remove `parenthesized`
+    ast.program.body[0].argument.extra = null;
+    expect(generate(ast).code).toMatchInlineSnapshot(`
         "return (
           /*new
           line*/
           val
         );"
       `);
-    });
+  });
 
-    it("multi-line leading comment after return compact", () => {
-      const val = t.identifier("val");
-      val.leadingComments = [{ type: "CommentBlock", value: "new\nline" }];
-      expect(
-        generate(t.returnStatement(val), {
-          compact: true,
-        }).code,
-      ).toMatchInlineSnapshot(`
+  it("multi-line leading comment after return compact", () => {
+    const val = t.identifier("val");
+    val.leadingComments = [{ type: "CommentBlock", value: "new\nline" }];
+    expect(
+      generate(t.returnStatement(val), {
+        compact: true,
+      }).code,
+    ).toMatchInlineSnapshot(`
         "return(/*new
         line*/val);"
       `);
-    });
+  });
 
-    it("multi-line leading comment after return concise", () => {
-      const val = t.identifier("val");
-      val.leadingComments = [{ type: "CommentBlock", value: "new\nline" }];
-      expect(
-        generate(t.returnStatement(val), {
-          concise: true,
-        }).code,
-      ).toMatchInlineSnapshot(`
+  it("multi-line leading comment after return concise", () => {
+    const val = t.identifier("val");
+    val.leadingComments = [{ type: "CommentBlock", value: "new\nline" }];
+    expect(
+      generate(t.returnStatement(val), {
+        concise: true,
+      }).code,
+    ).toMatchInlineSnapshot(`
         "return (/*new
         line*/ val );"
       `);
-    });
+  });
+
+  it("correctly indenting when `retainLines`", () => {
+    const ast = parse(
+      `
+export const App = () => {
+  return (
+      /**
+        * First
+        */
+      2
+  );
+};
+
+/**
+  * Second
+  */`,
+      {
+        sourceType: "module",
+      },
+    );
+
+    expect(generate(ast, { retainLines: true }).code).toMatchInlineSnapshot(`
+      "
+      export const App = () => {
+        return (
+          /**
+            * First
+            */
+          2);
+
+      };
+
+      /**
+        * Second
+        */"
+    `);
   });
 });
 
