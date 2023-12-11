@@ -1042,6 +1042,7 @@ class Printer {
         HAS_NEWLINE.test(comment.value)
       ) {
         this.token("(");
+        this.indent();
         _parenPushNewlineState.printed = true;
       }
       val = `/*${comment.value}*/`;
