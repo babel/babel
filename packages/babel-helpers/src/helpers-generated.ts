@@ -115,7 +115,7 @@ export default Object.freeze({
   ),
   // size: 193, gzip size: 179
   setFunctionName: helper(
-    "7.23.5",
+    "7.23.6",
     'export default function setFunctionName(e,t,n){"symbol"==typeof t&&(t=(t=t.description)?"["+t+"]":"");try{Object.defineProperty(e,"name",{configurable:!0,value:n?n+" "+t:t})}catch(e){}return e}',
   ),
   // size: 285, gzip size: 210

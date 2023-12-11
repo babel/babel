@@ -1,4 +1,4 @@
-/* @minVersion 7.23.5 */
+/* @minVersion 7.23.6 */
 
 // https://tc39.es/ecma262/#sec-setfunctionname
 export default function setFunctionName<T extends Function>(
