@@ -2,8 +2,7 @@
 
 // https://tc39.es/ecma262/#sec-topropertykey
 
-// @ts-expect-error helper
-import toPrimitive from "toPrimitive";
+import toPrimitive from "./toPrimitive.ts";
 
 export default function toPropertyKey(arg: unknown) {
   var key = toPrimitive(arg, "string");

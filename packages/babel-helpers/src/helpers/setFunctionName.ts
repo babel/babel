@@ -1,11 +1,11 @@
 /* @minVersion 7.23.5 */
 
 // https://tc39.es/ecma262/#sec-setfunctionname
-export default function setFunctionName(
-  fn: Function,
+export default function setFunctionName<T extends Function>(
+  fn: T,
   name: symbol | string,
   prefix?: string,
-) {
+): T {
   if (typeof name === "symbol") {
     name = name.description;
     name = name ? "[" + (name as string) + "]" : "";
