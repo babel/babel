@@ -949,7 +949,7 @@ function transformClass(
       value.replaceWith(t.sequenceExpression(body));
     } else if (constructorPath) {
       if (path.node.superClass) {
-        path.traverse({
+        constructorPath.traverse({
           CallExpression: {
             exit(path) {
               if (!path.get("callee").isSuper()) return;
@@ -960,6 +960,11 @@ function transformClass(
 
               path.skip();
             },
+          },
+          ClassMethod(path) {
+            if (path.node.kind === "constructor") {
+              path.skip();
+            }
           },
         });
       } else {
