@@ -127,12 +127,11 @@ const namedTypeElementCommon = () => ({
 
 defineType("TSPropertySignature", {
   aliases: ["TSTypeElement"],
-  visitor: ["key", "typeAnnotation", "initializer"],
+  visitor: ["key", "typeAnnotation"],
   fields: {
     ...namedTypeElementCommon(),
     readonly: validateOptional(bool),
     typeAnnotation: validateOptionalType("TSTypeAnnotation"),
-    initializer: validateOptionalType("Expression"),
     kind: {
       validate: assertOneOf("get", "set"),
     },
