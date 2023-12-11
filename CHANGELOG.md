@@ -24,6 +24,34 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.23.6 (2023-12-11)
+
+#### :eyeglasses: Spec Compliance
+* `babel-generator`, `babel-parser`, `babel-types`
+  * [#16154](https://github.com/babel/babel/pull/16154) Remove `TSPropertySignature.initializer` ([@fisker](https://github.com/fisker))
+* `babel-helpers`, `babel-plugin-proposal-decorators`, `babel-plugin-transform-class-properties`, `babel-plugin-transform-class-static-block`, `babel-plugin-transform-runtime`, `babel-preset-env`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`, `babel-types`
+  * [#16139](https://github.com/babel/babel/pull/16139) Apply `toPropertyKey` on decorator context name ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-generator`
+  * [#16166](https://github.com/babel/babel/pull/16166) fix: Correctly indenting when `retainLines` is enabled ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helpers`, `babel-plugin-proposal-explicit-resource-management`
+  * [#16150](https://github.com/babel/babel/pull/16150) `using`: Allow looking up `Symbol.dispose` on a function ([@odinho](https://github.com/odinho))
+* `babel-plugin-proposal-decorators`, `babel-plugin-transform-class-properties`
+  * [#16161](https://github.com/babel/babel/pull/16161) Ensure the `[[@@toPrimitive]]` call of a decorated class member key is invoked once ([@JLHwung](https://github.com/JLHwung))
+  * [#16148](https://github.com/babel/babel/pull/16148) Support named evaluation for decorated anonymous class exp ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-for-of`, `babel-preset-env`
+  * [#16011](https://github.com/babel/babel/pull/16011) fix: `for of` with `iterableIsArray` and shadowing variable  ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helpers`, `babel-plugin-proposal-decorators`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#16144](https://github.com/babel/babel/pull/16144) Set function name for decorated private non-field elements ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-typescript`
+  * [#16137](https://github.com/babel/babel/pull/16137) Fix references to enum values with merging ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :microscope: Output optimization
+* `babel-helper-create-class-features-plugin`, `babel-plugin-transform-class-properties`
+  * [#16159](https://github.com/babel/babel/pull/16159) Reuse computed key memoiser ([@JLHwung](https://github.com/JLHwung))
+* `babel-helpers`, `babel-plugin-proposal-decorators`
+  * [#16160](https://github.com/babel/babel/pull/16160) Optimize decorator helper size ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.23.5 (2023-11-29)
 
 #### :eyeglasses: Spec Compliance
