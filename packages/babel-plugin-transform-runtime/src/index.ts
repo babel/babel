@@ -1,6 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { addDefault, isModule } from "@babel/helper-module-imports";
-import { types as t, type CallerMetadata } from "@babel/core";
+import { types as t } from "@babel/core";
 
 import { hasMinVersion } from "./helpers.ts";
 import getRuntimePath, { resolveFSPath } from "./get-runtime-path/index.ts";
@@ -9,16 +9,10 @@ import { createCorejs3Plugin } from "./core-js.ts";
 // TODO(Babel 8): Remove this
 import babel7 from "./babel-7/index.cjs";
 
-function supportsStaticESM(caller: CallerMetadata | undefined) {
-  // @ts-expect-error TS does not narrow down optional chaining
-  return !!caller?.supportsStaticESM;
-}
-
 export interface Options {
   absoluteRuntime?: boolean;
   corejs?: string | number | { version: string | number; proposals?: boolean };
   helpers?: boolean;
-  useESModules?: boolean | "auto";
   version?: string;
 }
 
@@ -31,19 +25,12 @@ export default declare((api, options: Options, dirname) => {
 
   const {
     helpers: useRuntimeHelpers = true,
-    useESModules = false,
     version: runtimeVersion = "7.0.0-beta.0",
     absoluteRuntime = false,
   } = options;
 
   if (typeof useRuntimeHelpers !== "boolean") {
     throw new Error("The 'helpers' option must be undefined, or a boolean.");
-  }
-
-  if (typeof useESModules !== "boolean" && useESModules !== "auto") {
-    throw new Error(
-      "The 'useESModules' option must be undefined, or a boolean, or 'auto'.",
-    );
   }
 
   if (
@@ -122,8 +109,31 @@ export default declare((api, options: Options, dirname) => {
     }
   }
 
-  const esModules =
-    useESModules === "auto" ? api.caller(supportsStaticESM) : useESModules;
+  if (process.env.BABEL_8_BREAKING) {
+    if (has(options, "useESModules")) {
+      throw new Error(
+        "The 'useESModules' option has been removed. @babel/runtime now uses " +
+          "package.json#exports to support both CommonJS and ESM helpers.",
+      );
+    }
+  } else {
+    // @ts-expect-error(Babel 7 vs Babel 8)
+    const { useESModules = false } = options;
+    if (typeof useESModules !== "boolean" && useESModules !== "auto") {
+      throw new Error(
+        "The 'useESModules' option must be undefined, or a boolean, or 'auto'.",
+      );
+    }
+
+    // eslint-disable-next-line no-var
+    var esModules =
+      useESModules === "auto"
+        ? api.caller(
+            // @ts-expect-error CallerMetadata does not define supportsStaticESM
+            caller => !!caller?.supportsStaticESM,
+          )
+        : useESModules;
+  }
 
   const HEADER_HELPERS = ["interopRequireWildcard", "interopRequireDefault"];
 
@@ -188,12 +198,13 @@ export default declare((api, options: Options, dirname) => {
         const blockHoist =
           isInteropHelper && !isModule(file.path) ? 4 : undefined;
 
-        const helpersDir =
-          esModules && file.path.node.sourceType === "module"
-            ? "helpers/esm"
-            : "helpers";
-
-        let helperPath = `${modulePath}/${helpersDir}/${name}`;
+        let helperPath = `${modulePath}/helpers/${
+          !process.env.BABEL_8_BREAKING &&
+          esModules &&
+          file.path.node.sourceType === "module"
+            ? "esm/" + name
+            : name
+        }`;
         if (absoluteRuntime) helperPath = resolveFSPath(helperPath);
 
         return addDefaultImport(helperPath, name, blockHoist, true);

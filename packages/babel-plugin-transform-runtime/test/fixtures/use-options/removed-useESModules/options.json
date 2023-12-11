@@ -1,0 +1,5 @@
+{
+  "BABEL_8_BREAKING": true,
+  "plugins": [["transform-runtime", { "useESModules": true }]],
+  "throws": "The 'useESModules' option has been removed."
+}
