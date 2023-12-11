@@ -306,4 +306,24 @@ describe("asynchronicity", () => {
       });
     });
   });
+
+  describe("misc", () => {
+    it("unknown preset in config file does not trigget unhandledRejection if caught", async () => {
+      process.chdir("unknown-preset");
+      const handler = jest.fn();
+
+      process.on("unhandledRejection", handler);
+
+      await babel.loadPartialConfigAsync().catch(() => {});
+
+      // unhandledRejection is triggered at the end of the current microtask
+      // queue. Wait for the event loop to spin to make sure that, if it were to
+      // be triggered, it would have already happened.
+      await new Promise(r => setTimeout(r, 0));
+
+      process.off("unhandledRejection", handler);
+
+      expect(handler).not.toHaveBeenCalled();
+    });
+  });
 });
