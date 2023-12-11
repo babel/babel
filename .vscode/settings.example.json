@@ -12,5 +12,12 @@
       "fileMatch": ["/packages/babel-parser/test/fixtures/**/options.json"],
       "url": "./packages/babel-parser/test/schema.json"
     }
-  ]
+  ],
+  "debug.javascript.terminalOptions": {
+    "outFiles": [
+      "${workspaceFolder}/packages/**",
+      "!${workspaceFolder}/packages/*/test/**",
+      "!**/node_modules/**"
+    ]
+  }
 }

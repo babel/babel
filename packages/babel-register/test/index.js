@@ -2,7 +2,7 @@ import { Module } from "module";
 import path from "path";
 import fs from "fs";
 import child from "child_process";
-import { USE_ESM, commonJS } from "$repo-utils";
+import { USE_ESM, commonJS, describeGte } from "$repo-utils";
 
 const { __dirname, require } = commonJS(import.meta.url);
 
@@ -15,6 +15,7 @@ const testFileMjsContent = fs.readFileSync(testFileMjs, "utf-8");
 
 const piratesPath = require.resolve("pirates");
 const smsPath = require.resolve("source-map-support");
+const sms2Path = require.resolve("@cspotcode/source-map-support");
 
 const defaultOptions = {
   exts: [".js", ".jsx", ".es6", ".es", ".mjs", ".cjs"],
@@ -68,6 +69,10 @@ describe("@babel/register", function () {
   if (OLD_JEST_MOCKS) {
     jest.doMock("pirates", () => mocks["pirates"]);
     jest.doMock("source-map-support", () => mocks["source-map-support"]);
+    jest.doMock(
+      "@cspotcode/source-map-support",
+      () => mocks["source-map-support"],
+    );
 
     afterEach(() => {
       jest.resetModules();
@@ -148,13 +153,7 @@ describe("@babel/register", function () {
     });
   }
 
-  const nodeGte12 = (fn, ...args) => {
-    // "minNodeVersion": "8.0.0" <-- For Ctrl+F when dropping node 6-8-10
-    const testFn = /v(?:6|8|10)\./.test(process.version) ? fn.skip : fn;
-    testFn(...args);
-  };
-
-  nodeGte12(describe, "worker", () => {
+  describeGte("12.0.0")("worker", () => {
     if (!OLD_JEST_MOCKS) {
       beforeEach(() => {
         Object.defineProperty(Module, "_cache", {
@@ -162,6 +161,9 @@ describe("@babel/register", function () {
           value: {
             [piratesPath]: { exports: mocks["pirates"] },
             [smsPath]: { exports: mocks["source-map-support"] },
+            [sms2Path]: {
+              exports: mocks["source-map-support"],
+            },
           },
         });
       });
@@ -401,7 +403,15 @@ describe("@babel/register", function () {
 });
 
 function spawnNodeAsync(args, cwd = __dirname, env) {
-  const spawn = child.spawn(process.execPath, args, { cwd, env });
+  const spawn = child.spawn(process.execPath, args, {
+    cwd,
+    env: {
+      ...env,
+      ...(process.env.BABEL_8_BREAKING && {
+        BABEL_8_BREAKING: process.env.BABEL_8_BREAKING,
+      }),
+    },
+  });
 
   let output = "";
   let callback;

@@ -1,3 +1,5 @@
+// TODO: Remove this file in Babel 8
+
 // required to safely use babel/register within a browserify codebase
 
 function register() {}
