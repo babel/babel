@@ -1336,7 +1336,7 @@ function NamedEvaluationVisitoryFactory(
             t.assignmentExpression(
               "=",
               ref,
-              t.callExpression(state.addHelper("toPropertyKey"), [key]),
+              createToPropertyKeyCall(state, key),
             ),
           );
         return t.cloneNode(ref);
