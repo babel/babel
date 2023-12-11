@@ -133,7 +133,7 @@ export default Object.freeze({
     "7.0.0-beta.0",
     'export default function _typeof(o){"@babel/helpers - typeof";return _typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(o){return typeof o}:function(o){return o&&"function"==typeof Symbol&&o.constructor===Symbol&&o!==Symbol.prototype?"symbol":typeof o},_typeof(o)}',
   ),
-  // size: 426, gzip size: 256
+  // size: 432, gzip size: 261
   using: helper(
     "7.22.0",
     'export default function _using(o,n,e){if(null==n)return n;if(Object(n)!==n)throw new TypeError("using declarations can only be used with objects, functions, null, or undefined.");if(e)var r=n[Symbol.asyncDispose||Symbol.for("Symbol.asyncDispose")];if(null==r&&(r=n[Symbol.dispose||Symbol.for("Symbol.dispose")]),"function"!=typeof r)throw new TypeError("Property [Symbol.dispose] is not a function.");return o.push({v:n,d:r,a:e}),n}',
