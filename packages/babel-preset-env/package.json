@@ -91,9 +91,9 @@
     "@babel/plugin-transform-unicode-regex": "workspace:^",
     "@babel/plugin-transform-unicode-sets-regex": "workspace:^",
     "@babel/preset-modules": "0.1.6-no-external-plugins",
-    "babel-plugin-polyfill-corejs2": "condition:BABEL_8_BREAKING ? : ^0.4.6 (peer:@babel/core) (esm:default)",
-    "babel-plugin-polyfill-corejs3": "^0.8.5",
-    "babel-plugin-polyfill-regenerator": "condition:BABEL_8_BREAKING ? : ^0.5.3 (peer:@babel/core) (esm:default)",
+    "babel-plugin-polyfill-corejs2": "condition:BABEL_8_BREAKING ? : ^0.4.7 (peer:@babel/core) (esm:default)",
+    "babel-plugin-polyfill-corejs3": "^0.8.7",
+    "babel-plugin-polyfill-regenerator": "condition:BABEL_8_BREAKING ? : ^0.5.4 (peer:@babel/core) (esm:default)",
     "core-js-compat": "^3.31.0",
     "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
   },
