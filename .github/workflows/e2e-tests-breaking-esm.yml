@@ -33,6 +33,7 @@ jobs:
         run: ./scripts/integration-tests/publish-local.sh
         env:
           BABEL_8_BREAKING: true
+          BABEL_TYPES_8_BREAKING: true
           USE_ESM: true
       - name: Pack published packages
         working-directory: /tmp

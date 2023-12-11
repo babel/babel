@@ -11,3 +11,4 @@ CHANGELOG.md
 .github/*.md
 
 Makefile.js
+babel8_snapshots/**

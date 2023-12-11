@@ -16,6 +16,9 @@ MAKEJS := node Makefile.js
 
 .PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap use-esm use-cjs
 
+update-source-snapshots:
+	$(MAKEJS) update-source-snapshots
+
 build:
 	$(MAKEJS) build
 

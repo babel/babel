@@ -285,6 +285,7 @@ jobs:
         env:
           BABEL_ENV: test-legacy
           BABEL_8_BREAKING: true
+          BABEL_TYPES_8_BREAKING: true
           STRIP_BABEL_8_FLAG: true
       - name: Lint
         run: make -j tscheck lint-ci
@@ -300,6 +301,10 @@ jobs:
           name: babel8-artifact
           path: babel-artifact.tar
           retention-days: 5
+      - name: Check source snapshots
+        run: |
+          rm -rf babel-artifact.tar
+          node ./scripts/update-source-snapshots.js
 
   test-babel-8-breaking:
     name: Test Babel 8 breaking changes on

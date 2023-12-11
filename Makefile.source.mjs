@@ -142,6 +142,20 @@ target["clean-runtime-helpers"] = function () {
  * BUILD
  */
 
+target["update-source-snapshots"] = function () {
+  if (execFileSync("git", ["status", "--porcelain=v1"], { encoding: "utf8" })) {
+    throw new Error("Please save your changes before running this command.");
+  }
+
+  env(
+    () => {
+      target["build-no-bundle"]();
+    },
+    { BABEL_8_BREAKING: "true", BABEL_TYPES_8_BREAKING: true }
+  );
+  node(["scripts/update-source-snapshots"]);
+};
+
 target["use-cjs"] = function () {
   node(["scripts/set-module-type.js", "commonjs"]);
 

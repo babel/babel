@@ -134,6 +134,7 @@ jobs:
           # Note: `false` doesn't work here, because env vars are strings and Boolean('false')
           # is true. Use the empry string instead.
           BABEL_8_BREAKING: ${{ needs.check-release-type.outputs.is-babel-8 == 'true' || '' }}
+          BABEL_TYPES_8_BREAKING: ${{ needs.check-release-type.outputs.is-babel-8 == 'true' || '' }}
 
       - name: Generate babel-types docs
         continue-on-error: true

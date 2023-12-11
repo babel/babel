@@ -398,7 +398,7 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
         if (importData) {
           path.replaceWith(
             assignmentExpression(
-              update.operator[0] + "=",
+              (update.operator[0] + "=") as "+=" | "-=",
               buildImportReference(importData, arg.node),
               buildImportThrow(localName),
             ),

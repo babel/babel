@@ -181,7 +181,7 @@ export default declare((api, opts: Options) => {
     path: NodePath<t.ObjectPattern>,
     file: PluginPass,
     objRef: t.Identifier | t.MemberExpression,
-  ): [t.VariableDeclarator[], t.LVal, t.CallExpression] {
+  ): [t.VariableDeclarator[], t.RestElement["argument"], t.CallExpression] {
     const props = path.get("properties");
     const last = props[props.length - 1];
     t.assertRestElement(last.node);

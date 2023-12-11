@@ -312,7 +312,7 @@ export function VariableDeclaration(
 export function VariableDeclarator(this: Printer, node: t.VariableDeclarator) {
   this.print(node.id, node);
   if (node.definite) this.token("!"); // TS
-  // @ts-expect-error todo(flow-ts) Property 'typeAnnotation' does not exist on type 'MemberExpression'.
+  // @ts-ignore(Babel 7 vs Babel 8) Property 'typeAnnotation' does not exist on type 'MemberExpression'.
   this.print(node.id.typeAnnotation, node);
   if (node.init) {
     this.space();
