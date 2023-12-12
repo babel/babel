@@ -18,6 +18,7 @@
     "./packages/babel-helper-fixtures/src/**/*.ts",
     "./packages/babel-helper-function-name/src/**/*.ts",
     "./packages/babel-helper-hoist-variables/src/**/*.ts",
+    "./packages/babel-helper-import-to-platform-api/src/**/*.ts",
     "./packages/babel-helper-member-expression-to-functions/src/**/*.ts",
     "./packages/babel-helper-module-imports/src/**/*.ts",
     "./packages/babel-helper-module-transforms/src/**/*.ts",
@@ -230,6 +231,9 @@
       ],
       "@babel/helper-hoist-variables": [
         "./packages/babel-helper-hoist-variables/src"
+      ],
+      "@babel/helper-import-to-platform-api": [
+        "./packages/babel-helper-import-to-platform-api/src"
       ],
       "@babel/helper-member-expression-to-functions": [
         "./packages/babel-helper-member-expression-to-functions/src"

@@ -29,8 +29,7 @@
     "stage-3"
   ],
   "dependencies": {
-    "@babel/helper-compilation-targets": "workspace:^",
-    "@babel/helper-module-imports": "workspace:^",
+    "@babel/helper-import-to-platform-api": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^",
     "@babel/plugin-syntax-import-source": "workspace:^"
   },
