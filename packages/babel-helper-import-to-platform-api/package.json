@@ -22,6 +22,7 @@
   },
   "TODO": "The @babel/traverse dependency is only needed for the NodePath TS type. We can consider exporting it from @babel/core.",
   "devDependencies": {
+    "@babel/core": "workspace:^",
     "@babel/traverse": "workspace:^"
   },
   "engines": {

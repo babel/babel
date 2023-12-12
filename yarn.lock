@@ -785,6 +785,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-import-to-platform-api@workspace:packages/babel-helper-import-to-platform-api"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/helper-compilation-targets": "workspace:^"
     "@babel/helper-module-imports": "workspace:^"
     "@babel/traverse": "workspace:^"
