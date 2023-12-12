@@ -1556,6 +1556,20 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-proposal-json-modules@workspace:packages/babel-plugin-proposal-json-modules":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-proposal-json-modules@workspace:packages/babel-plugin-proposal-json-modules"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-import-to-platform-api": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/plugin-syntax-import-attributes": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.22.0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-proposal-optional-chaining-assign@workspace:^, @babel/plugin-proposal-optional-chaining-assign@workspace:packages/babel-plugin-proposal-optional-chaining-assign":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-optional-chaining-assign@workspace:packages/babel-plugin-proposal-optional-chaining-assign"

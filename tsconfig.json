@@ -55,6 +55,7 @@
     "./packages/babel-plugin-proposal-import-attributes-to-assertions/src/**/*.ts",
     "./packages/babel-plugin-proposal-import-defer/src/**/*.ts",
     "./packages/babel-plugin-proposal-import-wasm-source/src/**/*.ts",
+    "./packages/babel-plugin-proposal-json-modules/src/**/*.ts",
     "./packages/babel-plugin-proposal-optional-chaining-assign/src/**/*.ts",
     "./packages/babel-plugin-proposal-partial-application/src/**/*.ts",
     "./packages/babel-plugin-proposal-pipeline-operator/src/**/*.ts",
@@ -342,6 +343,9 @@
       ],
       "@babel/plugin-proposal-import-wasm-source": [
         "./packages/babel-plugin-proposal-import-wasm-source/src"
+      ],
+      "@babel/plugin-proposal-json-modules": [
+        "./packages/babel-plugin-proposal-json-modules/src"
       ],
       "@babel/plugin-proposal-optional-chaining-assign": [
         "./packages/babel-plugin-proposal-optional-chaining-assign/src"
