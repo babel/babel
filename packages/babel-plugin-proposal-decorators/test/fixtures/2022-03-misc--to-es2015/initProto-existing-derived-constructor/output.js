@@ -1,13 +1,158 @@
-var _dec, _initProto, _class;
-const dec = () => {};
-_dec = deco;
-class A extends B {
-  constructor() {
-    let a = 2;
-    _initProto(super(a));
-    foo();
+{
+  var _initProto, _class;
+  let self, a, initCalled;
+  function deco(_, context) {
+    context.addInitializer(() => {
+      initCalled = true;
+    });
   }
-  method() {}
+  class B {
+    constructor(s) {
+      a = s;
+    }
+  }
+  class A extends B {
+    constructor() {
+      let a = 2;
+      self = _initProto(super(a));
+    }
+    method() {}
+  }
+  _class = A;
+  [_initProto] = babelHelpers.applyDecs2203R(_class, [[deco, 2, "method"]], []).e;
+  let instance = new A();
+  expect(self).toBe(instance);
+  expect(a).toBe(2);
+  expect(initCalled).toBe(true);
 }
-_class = A;
-[_initProto] = babelHelpers.applyDecs2203R(_class, [[_dec, 2, "method"]], []).e;
+{
+  const dec = fn => {
+    return function () {
+      return fn.call(this) + 100;
+    };
+  };
+  class B {
+    constructor(v) {
+      this.a = v;
+    }
+    method() {
+      return this.a;
+    }
+  }
+  {
+    var _initProto2, _class2;
+    "super() nested within another constructor should not be transformed";
+    let log = [];
+    class A extends B {
+      constructor() {
+        log.push(_initProto2(super(3)).method());
+        new class Dummy extends B {
+          constructor() {
+            log.push(super(4).method());
+          }
+        }();
+      }
+      method() {
+        return this.a;
+      }
+    }
+    _class2 = A;
+    [_initProto2] = babelHelpers.applyDecs2203R(_class2, [[dec, 2, "method"]], []).e;
+    new A();
+    expect(log + "").toBe("103,4");
+  }
+  {
+    "super() not in decorated derived constructor should not be transformed: computed key";
+    let log = [];
+    new class Dummy extends B {
+      constructor() {
+        var _computedKey, _initProto3, _class3;
+        let key;
+        _computedKey = babelHelpers.toPropertyKey((key = super(5).method(), log.push(key), key));
+        class A extends B {
+          constructor() {
+            log.push(_initProto3((super(6), babelHelpers.defineProperty(this, _computedKey, void 0))).method());
+          }
+          method() {
+            return this.a;
+          }
+        }
+        _class3 = A;
+        [_initProto3] = babelHelpers.applyDecs2203R(_class3, [[dec, 2, "method"]], []).e;
+        new A();
+      }
+    }();
+    expect(log + "").toBe("5,106");
+  }
+  {
+    "super() in decorator expression within decorated derived constructor should be transformed: decorator expression";
+    let log = [];
+    const noop = () => fn => fn;
+    new class extends B {
+      constructor() {
+        var _dec, _initProto4, _class4;
+        _dec = noop(log.push(super(7).method()));
+        class A extends B {
+          constructor() {
+            log.push(_initProto4(super(8)).method());
+          }
+          method() {
+            return this.a;
+          }
+          noop() {}
+        }
+        _class4 = A;
+        [_initProto4] = babelHelpers.applyDecs2203R(_class4, [[dec, 2, "method"], [_dec, 2, "noop"]], []).e;
+        new A();
+      }
+    }();
+    expect(log + "").toBe("7,108");
+  }
+  {
+    var _initProto5, _class5;
+    "super() within decorated derived constructor should be transformed: computed key";
+    let log = [];
+    class A extends B {
+      constructor() {
+        let _ref;
+        let key;
+        new (_ref = (key = _initProto5(super(9)).method(), log.push(key), key), class Dummy extends B {
+          constructor() {
+            log.push((super(10), babelHelpers.defineProperty(this, _ref, void 0)).method());
+          }
+        })();
+      }
+      method() {
+        return this.a;
+      }
+    }
+    _class5 = A;
+    [_initProto5] = babelHelpers.applyDecs2203R(_class5, [[dec, 2, "method"]], []).e;
+    new A();
+    expect(log + "").toBe("109,10");
+  }
+  {
+    var _initProto6, _class7;
+    "super() within decorated derived constructor should be transformed: decorator expression";
+    let log = [];
+    const noop = () => fn => fn;
+    class A extends B {
+      constructor() {
+        var _dec2, _initProto7, _class8;
+        new (_dec2 = noop(log.push(_initProto6(super(11)).method())), (_class8 = class Dummy extends B {
+          constructor() {
+            log.push(_initProto7(super(12)).method());
+          }
+          noop() {}
+        }, [_initProto7] = babelHelpers.applyDecs2203R(_class8, [[_dec2, 2, "noop"]], []).e, _class8))();
+      }
+      method() {
+        return this.a;
+      }
+    }
+    _class7 = A;
+    [_initProto6] = babelHelpers.applyDecs2203R(_class7, [[dec, 2, "method"]], []).e;
+    new A();
+    expect(log + "").toBe("111,12");
+  }
+}
