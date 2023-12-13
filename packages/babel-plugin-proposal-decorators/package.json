@@ -22,9 +22,6 @@
   "dependencies": {
     "@babel/helper-create-class-features-plugin": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^",
-    "@babel/helper-replace-supers": "workspace:^",
-    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^",
-    "@babel/helper-split-export-declaration": "workspace:^",
     "@babel/plugin-syntax-decorators": "workspace:^"
   },
   "peerDependencies": {
@@ -34,10 +31,8 @@
     "@babel/core": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
     "@babel/traverse": "workspace:^",
-    "@types/charcodes": "^0.2.0",
     "array.prototype.concat": "^1.0.2",
     "babel-plugin-polyfill-es-shims": "^0.10.1",
-    "charcodes": "^0.2.0",
     "object.getownpropertydescriptors": "^2.1.1"
   },
   "engines": {

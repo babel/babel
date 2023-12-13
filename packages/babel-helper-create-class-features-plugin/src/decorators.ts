@@ -1,12 +1,15 @@
 import type { NodePath, Scope, Visitor } from "@babel/traverse";
 import { types as t, template } from "@babel/core";
-import syntaxDecorators from "@babel/plugin-syntax-decorators";
 import ReplaceSupers from "@babel/helper-replace-supers";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import * as charCodes from "charcodes";
 import type { PluginAPI, PluginObject, PluginPass } from "@babel/core";
-import type { Options } from "./index.ts";
 import { skipTransparentExprWrappers } from "@babel/helper-skip-transparent-expression-wrappers";
+
+interface Options {
+  /** @deprecated use `constantSuper` assumption instead. Only supported in 2021-12 version. */
+  loose?: boolean;
+}
 
 type ClassDecoratableElement =
   | t.ClassMethod
@@ -1492,6 +1495,7 @@ export default function (
   { loose }: Options,
   // TODO(Babel 8): Only keep 2023-05
   version: "2023-05" | "2023-01" | "2022-03" | "2021-12",
+  inherits: PluginObject["inherits"],
 ): PluginObject {
   if (process.env.BABEL_8_BREAKING) {
     assertVersion(process.env.IS_PUBLISH ? PACKAGE_JSON.version : "^7.21.0");
@@ -1539,7 +1543,7 @@ export default function (
 
   return {
     name: "proposal-decorators",
-    inherits: syntaxDecorators,
+    inherits: inherits,
 
     visitor: {
       ExportDefaultDeclaration(path, state) {

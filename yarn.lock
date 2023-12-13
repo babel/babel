@@ -642,6 +642,8 @@ __metadata:
     "@babel/helper-skip-transparent-expression-wrappers": "workspace:^"
     "@babel/helper-split-export-declaration": "workspace:^"
     "@babel/preset-env": "workspace:^"
+    "@types/charcodes": "npm:^0.2.0"
+    charcodes: "npm:^0.2.0"
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
   peerDependencies:
     "@babel/core": ^7.0.0
@@ -1382,15 +1384,10 @@ __metadata:
     "@babel/helper-create-class-features-plugin": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/helper-replace-supers": "workspace:^"
-    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^"
-    "@babel/helper-split-export-declaration": "workspace:^"
     "@babel/plugin-syntax-decorators": "workspace:^"
     "@babel/traverse": "workspace:^"
-    "@types/charcodes": "npm:^0.2.0"
     array.prototype.concat: "npm:^1.0.2"
     babel-plugin-polyfill-es-shims: "npm:^0.10.1"
-    charcodes: "npm:^0.2.0"
     object.getownpropertydescriptors: "npm:^2.1.1"
   peerDependencies:
     "@babel/core": ^7.0.0-0
@@ -5130,9 +5127,9 @@ __metadata:
   linkType: soft
 
 "@types/charcodes@npm:^0.2.0":
-  version: 0.2.0
-  resolution: "@types/charcodes@npm:0.2.0"
-  checksum: 3403a591f7dba4164a2a1a48342855a0eee0e22f4f94903c39331339c4e96006ba4f9d5b81072bcd8f61f15d774891b6bb9f3cbe1fb202d558d9ae90f35baa49
+  version: 0.2.2
+  resolution: "@types/charcodes@npm:0.2.2"
+  checksum: 2fc5d02cc2ee6fb89d701f64f892554c6ced76bd0729f4afc0de0248d4b8bc6bae608a7082d21d234e5837201870e3b01c83ec267997c048988d114c6dd060c3
   languageName: node
   linkType: hard
 
