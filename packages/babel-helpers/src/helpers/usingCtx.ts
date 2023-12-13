@@ -22,9 +22,9 @@ export default function _usingCtx() {
     stack: Stack[] = [];
   function using(isAwait: boolean, value: any) {
     if (value != null) {
-      if (typeof value !== "object") {
+      if (Object(value) !== value) {
         throw new TypeError(
-          "using declarations can only be used with objects, null, or undefined.",
+          "using declarations can only be used with objects, functions, null, or undefined.",
         );
       }
       // core-js-pure uses Symbol.for for polyfilling well-known symbols

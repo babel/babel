@@ -83,10 +83,10 @@ export default Object.freeze({
     "7.20.7",
     "export default function _defineAccessor(e,r,n,t){var c={configurable:!0,enumerable:!0};return c[e]=t,Object.defineProperty(r,n,c)}",
   ),
-  // size: 672, gzip size: 332
+  // size: 672, gzip size: 333
   dispose: helper(
     "7.22.0",
-    'function dispose_SuppressedError(r,e){return"undefined"!=typeof SuppressedError?dispose_SuppressedError=SuppressedError:(dispose_SuppressedError=function(r,e){this.suppressed=r,this.error=e,this.stack=(new Error).stack},dispose_SuppressedError.prototype=Object.create(Error.prototype,{constructor:{value:dispose_SuppressedError,writable:!0,configurable:!0}})),new dispose_SuppressedError(r,e)}export default function _dispose(r,e,s){function next(){for(;r.length>0;)try{var o=r.pop(),p=o.d.call(o.v);if(o.a)return Promise.resolve(p).then(next,err)}catch(r){return err(r)}if(s)throw e}function err(r){return e=s?new dispose_SuppressedError(r,e):r,s=!0,next()}return next()}',
+    'function dispose_SuppressedError(r,e){return"undefined"!=typeof SuppressedError?dispose_SuppressedError=SuppressedError:(dispose_SuppressedError=function(r,e){this.suppressed=e,this.error=r,this.stack=(new Error).stack},dispose_SuppressedError.prototype=Object.create(Error.prototype,{constructor:{value:dispose_SuppressedError,writable:!0,configurable:!0}})),new dispose_SuppressedError(r,e)}export default function _dispose(r,e,s){function next(){for(;r.length>0;)try{var o=r.pop(),p=o.d.call(o.v);if(o.a)return Promise.resolve(p).then(next,err)}catch(r){return err(r)}if(s)throw e}function err(r){return e=s?new dispose_SuppressedError(e,r):r,s=!0,next()}return next()}',
   ),
   // size: 552, gzip size: 267
   importDeferProxy: helper(
@@ -152,6 +152,11 @@ export default Object.freeze({
   using: helper(
     "7.22.0",
     'export default function _using(o,n,e){if(null==n)return n;if(Object(n)!==n)throw new TypeError("using declarations can only be used with objects, functions, null, or undefined.");if(e)var r=n[Symbol.asyncDispose||Symbol.for("Symbol.asyncDispose")];if(null==r&&(r=n[Symbol.dispose||Symbol.for("Symbol.dispose")]),"function"!=typeof r)throw new TypeError("Property [Symbol.dispose] is not a function.");return o.push({v:n,d:r,a:e}),n}',
+  ),
+  // size: 893, gzip size: 467
+  usingCtx: helper(
+    "7.23.0",
+    'export default function _usingCtx(){var r="function"==typeof SuppressedError?SuppressedError:function(r,n){var e=new Error;return e.name="SuppressedError",e.suppressed=n,e.error=r,e},n={},e=[];function using(r,n){if(null!=n){if(Object(n)!==n)throw new TypeError("using declarations can only be used with objects, functions, null, or undefined.");if(r)var o=n[Symbol.asyncDispose||Symbol.for("Symbol.asyncDispose")];if(null==o&&(o=n[Symbol.dispose||Symbol.for("Symbol.dispose")]),"function"!=typeof o)throw new TypeError("Property [Symbol.dispose] is not a function.");e.push({v:n,d:o,a:r})}return n}return{e:n,u:using.bind(null,!1),a:using.bind(null,!0),d:function(){var o=this.e;function next(){for(;r=e.pop();)try{var r,t=r.d.call(r.v);if(r.a)return Promise.resolve(t).then(next,err)}catch(r){return err(r)}if(o!==n)throw o}function err(e){return o=o!==n?new r(o,e):e,next()}return next()}}}',
   ),
   // size: 1256, gzip size: 573
   wrapRegExp: helper(
