@@ -48,13 +48,24 @@ export function createClassFeaturePlugin({
   inherits,
   decoratorVersion,
 }: Options): PluginObject {
-  if (
-    decoratorVersion === "2021-12" ||
-    decoratorVersion === "2022-03" ||
-    decoratorVersion === "2023-01" ||
-    decoratorVersion === "2023-05"
-  ) {
-    return createDecoratorTransform(api, { loose }, decoratorVersion, inherits);
+  if (feature & FEATURES.decorators) {
+    if (process.env.BABEL_8_BREAKING) {
+      return createDecoratorTransform(api, { loose }, "2023-05", inherits);
+    } else {
+      if (
+        decoratorVersion === "2021-12" ||
+        decoratorVersion === "2022-03" ||
+        decoratorVersion === "2023-01" ||
+        decoratorVersion === "2023-05"
+      ) {
+        return createDecoratorTransform(
+          api,
+          { loose },
+          decoratorVersion,
+          inherits,
+        );
+      }
+    }
   }
   if (!process.env.BABEL_8_BREAKING) {
     api ??= { assumption: () => void 0 as any } as any;
