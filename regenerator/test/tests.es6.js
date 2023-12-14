@@ -1537,6 +1537,17 @@ describe("delegated yield", function() {
       it.next();
     }, TypeError);
   });
+
+  it("should work with falsy values", function () {
+    try {
+      Boolean.prototype[Symbol.iterator] = function* () { yield "Hello" };
+      function* gen() { yield* false; };
+
+      check(gen(), ["Hello"]);
+    } finally {
+      delete Boolean.prototype[Symbol.iterator];
+    }
+  });
 });
 
 (fullCompatibility

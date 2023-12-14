@@ -487,7 +487,7 @@ var runtime = (function (exports) {
   };
 
   function values(iterable) {
-    if (iterable || iterable === "") {
+    if (iterable != null) {
       var iteratorMethod = iterable[iteratorSymbol];
       if (iteratorMethod) {
         return iteratorMethod.call(iterable);
