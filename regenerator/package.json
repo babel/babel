@@ -34,7 +34,7 @@
     "commoner": "^0.10.8",
     "recast": "^0.23.3",
     "regenerator-preset": "^0.14.1",
-    "regenerator-runtime": "^0.14.0",
+    "regenerator-runtime": "^0.14.1",
     "regenerator-transform": "^0.15.2",
     "through": "^2.3.8"
   },
