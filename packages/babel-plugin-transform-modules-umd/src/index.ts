@@ -14,6 +14,7 @@ import {
 import type { PluginOptions } from "@babel/helper-module-transforms";
 import { types as t, template } from "@babel/core";
 import type { NodePath } from "@babel/traverse";
+import transformExportNamespaceFrom from "@babel/plugin-transform-export-namespace-from";
 
 const buildPrerequisiteAssignment = template(`
   GLOBAL_REFERENCE = GLOBAL_REFERENCE || {}
@@ -164,6 +165,8 @@ export default declare((api, options: Options) => {
 
   return {
     name: "transform-modules-umd",
+
+    inherits: transformExportNamespaceFrom,
 
     visitor: {
       Program: {

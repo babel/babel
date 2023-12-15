@@ -1,0 +1,11 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "modules": "commonjs",
+        "targets": "node 16"
+      }
+    ]
+  ]
+}

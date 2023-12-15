@@ -16,7 +16,8 @@
     "@babel/helper-hoist-variables": "workspace:^",
     "@babel/helper-module-transforms": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^",
-    "@babel/helper-validator-identifier": "workspace:^"
+    "@babel/helper-validator-identifier": "workspace:^",
+    "@babel/plugin-transform-export-namespace-from": "workspace:^"
   },
   "keywords": [
     "babel-plugin"

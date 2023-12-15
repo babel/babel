@@ -13,6 +13,7 @@ import simplifyAccess from "@babel/helper-simple-access";
 import { template, types as t, type PluginPass } from "@babel/core";
 import type { PluginOptions } from "@babel/helper-module-transforms";
 import type { Visitor, Scope, NodePath } from "@babel/traverse";
+import transformExportNamespaceFrom from "@babel/plugin-transform-export-namespace-from";
 
 import { transformDynamicImport } from "./dynamic-import.ts";
 import { lazyImportsHook } from "./lazy.ts";
@@ -177,6 +178,8 @@ export default declare((api, options: Options) => {
 
       if (lazy) defineCommonJSHook(this.file, lazyImportsHook(lazy));
     },
+
+    inherits: transformExportNamespaceFrom,
 
     visitor: {
       ["CallExpression" +
