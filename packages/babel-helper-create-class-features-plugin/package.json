@@ -34,7 +34,9 @@
   "devDependencies": {
     "@babel/core": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
-    "@babel/preset-env": "workspace:^"
+    "@babel/preset-env": "workspace:^",
+    "@types/charcodes": "^0.2.0",
+    "charcodes": "^0.2.0"
   },
   "engines": {
     "node": ">=6.9.0"

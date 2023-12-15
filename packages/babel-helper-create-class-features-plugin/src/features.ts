@@ -1,25 +1,15 @@
 import type { File, types as t } from "@babel/core";
 import type { NodePath } from "@babel/traverse";
-import { hasOwnDecorators } from "./decorators.ts";
+import { hasOwnDecorators } from "./decorators-2018-09.ts";
 
-export const FEATURES = Object.freeze(
-  process.env.BABEL_8_BREAKING
-    ? {
-        //classes: 1 << 0,
-        fields: 1 << 1,
-        privateMethods: 1 << 2,
-        privateIn: 1 << 3,
-        staticBlocks: 1 << 4,
-      }
-    : {
-        //classes: 1 << 0,
-        fields: 1 << 1,
-        privateMethods: 1 << 2,
-        decorators: 1 << 3,
-        privateIn: 1 << 4,
-        staticBlocks: 1 << 5,
-      },
-);
+export const FEATURES = Object.freeze({
+  //classes: 1 << 0,
+  fields: 1 << 1,
+  privateMethods: 1 << 2,
+  decorators: 1 << 3,
+  privateIn: 1 << 4,
+  staticBlocks: 1 << 5,
+});
 
 const featuresSameLoose = new Map([
   [FEATURES.fields, "@babel/plugin-transform-class-properties"],
