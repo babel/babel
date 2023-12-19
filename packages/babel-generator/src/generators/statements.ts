@@ -300,8 +300,8 @@ export function VariableDeclaration(
 
   // don't give semicolons to these nodes since they'll be inserted in the parent generator
   if (
-    isForStatement(parent, { init: node }) ||
-    isForXStatement(parent, { left: node })
+    (isForStatement(parent) && parent.init === node) ||
+    (isForXStatement(parent) && parent.left === node)
   ) {
     return;
   }
