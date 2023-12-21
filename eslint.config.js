@@ -2,7 +2,7 @@
 
 const configInternal = require("@babel/eslint-config-internal");
 const pluginImport = require("eslint-plugin-import");
-const pluginNode = require("eslint-plugin-node");
+const pluginN = require("eslint-plugin-n");
 const pluginPrettier = require("eslint-plugin-prettier");
 const pluginBabelDevelopment = require("@babel/eslint-plugin-development");
 const pluginBabelDevelopmentInternal = require("@babel/eslint-plugin-development-internal");
@@ -65,7 +65,7 @@ module.exports = [
   {
     plugins: {
       import: pluginImport,
-      node: pluginNode,
+      node: pluginN,
       prettier: pluginPrettier,
       "@babel/development": pluginBabelDevelopment,
       "@babel/development-internal": pluginBabelDevelopmentInternal,

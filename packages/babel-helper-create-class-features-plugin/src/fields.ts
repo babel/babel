@@ -1183,13 +1183,11 @@ export function buildFieldsInitNodes(
       }
       case isStatic && isPrivate && isField && privateFieldsAsProperties:
         staticNodes.push(
-          // @ts-expect-error checked in switch
           buildPrivateFieldInitLoose(t.cloneNode(ref), prop, privateNamesMap),
         );
         break;
       case isStatic && isPrivate && isField && !privateFieldsAsProperties:
         staticNodes.push(
-          // @ts-expect-error checked in switch
           buildPrivateStaticFieldInitSpec(prop, privateNamesMap),
         );
         break;
@@ -1214,7 +1212,6 @@ export function buildFieldsInitNodes(
         break;
       case isInstance && isPrivate && isField && privateFieldsAsProperties:
         instanceNodes.push(
-          // @ts-expect-error checked in switch
           buildPrivateFieldInitLoose(t.thisExpression(), prop, privateNamesMap),
         );
         break;
@@ -1222,7 +1219,6 @@ export function buildFieldsInitNodes(
         instanceNodes.push(
           buildPrivateInstanceFieldInitSpec(
             t.thisExpression(),
-            // @ts-expect-error checked in switch
             prop,
             privateNamesMap,
             file,

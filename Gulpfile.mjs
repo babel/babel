@@ -503,10 +503,6 @@ function buildRollup(packages, buildStandalone) {
                 include: "**/*.{js,mjs,cjs,ts}",
               }),
           ].filter(Boolean),
-          acorn: {
-            // babel-cli/src/babel/index.ts has shebang
-            allowHashBang: true,
-          },
         });
 
         const outputFile = path.join(src, dest, filename || "index.js");
