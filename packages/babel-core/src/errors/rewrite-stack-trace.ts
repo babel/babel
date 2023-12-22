@@ -94,28 +94,24 @@ export function beginHiddenCallStack<A extends unknown[], R>(
   if (!SUPPORTED) return fn;
 
   return Object.defineProperty(
-    function (...args: A): R {
+    function (...args: A) {
       setupPrepareStackTrace();
       let isAsync = false;
       try {
         const ret = fn(...args);
-        // @ts-expect-error check if it's a promise
-        if (typeof ret?.then !== "function") return ret;
+        if (typeof (ret as any)?.then !== "function") return ret;
 
         isAsync = true;
-        return (
-          ret
-            // @ts-expect-error checked above
-            .catch(function (err) {
-              err.stack;
-              resetPrepareStackTrace();
-              throw err;
-            })
-            .then(function (val: unknown) {
-              resetPrepareStackTrace();
-              return val;
-            })
-        );
+        return (ret as Promise<unknown>)
+          .catch(function (err) {
+            err.stack;
+            resetPrepareStackTrace();
+            throw err;
+          })
+          .then(function (val: unknown) {
+            resetPrepareStackTrace();
+            return val;
+          }) as R;
       } catch (err) {
         err.stack;
         throw err;
