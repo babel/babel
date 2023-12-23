@@ -95,7 +95,7 @@ export default declare(api => {
             (child.isExportNamedDeclaration() && child.node.source !== null) ||
             child.isExportAllDeclaration()
           ) {
-            const specifier = child.node.source!.value;
+            const specifier = child.node.source.value;
             if (!eagerImports.has(specifier)) {
               eagerImports.add(specifier);
             }
