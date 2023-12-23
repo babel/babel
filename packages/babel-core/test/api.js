@@ -174,6 +174,22 @@ describe("api", function () {
     expect(babel.tokTypes).toBeDefined();
   });
 
+  it("exposes parser", function () {
+    expect(Object.keys(babel.parser)).toMatchInlineSnapshot(`
+      Array [
+        "parse",
+        "parseExpression",
+        "tokTypes",
+      ]
+    `);
+  });
+
+  it("exposes generate", function () {
+    expect(babel.generate(parseSync("foo")).code).toMatchInlineSnapshot(
+      `"foo;"`,
+    );
+  });
+
   itBabel8("parse throws on undefined callback", () => {
     expect(() => parse("", {})).toThrowErrorMatchingInlineSnapshot(
       `"Starting from Babel 8.0.0, the 'parse' function expects a callback. If you need to call it synchronously, please use 'parseSync'."`,

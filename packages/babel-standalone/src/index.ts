@@ -30,6 +30,8 @@ import type { InputOptions } from "@babel/core";
 
 import { runScripts } from "./transformScriptTags.ts";
 
+export { parser, traverse, template, generate, types } from "@babel/core";
+
 // We import this file from another package using a relative path because it's
 // meant to just be build-time script; it's ok because @babel/standalone is
 // bundled anyway.

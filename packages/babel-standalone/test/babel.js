@@ -3,9 +3,12 @@ const require = createRequire(import.meta.url);
 
 // Basic smoke tests for @babel/standalone
 describe("@babel/standalone", () => {
-  let Babel;
-  beforeAll(() => {
-    Babel = require("../babel.js");
+  const Babel = require("../babel.js");
+
+  it("export generate and parser", () => {
+    expect(
+      Babel.generate(Babel.parser.parse("foo")).code,
+    ).toMatchInlineSnapshot(`"foo;"`);
   });
 
   it("handles the es2015-no-commonjs preset", () => {

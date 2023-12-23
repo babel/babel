@@ -20,6 +20,8 @@ export * as types from "@babel/types";
 export { tokTypes } from "@babel/parser";
 export { default as traverse } from "@babel/traverse";
 export { default as template } from "@babel/template";
+export * as parser from "@babel/parser";
+export { default as generate } from "@babel/generator";
 
 export {
   createConfigItem,

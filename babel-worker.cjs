@@ -31,7 +31,7 @@ exports.transform = async function transform(src, dest, opts = {}) {
     return;
   }
   log(`Compiling '${chalk.cyan(src)}'...`);
-  const content = readFileSync(src, { encoding: "utf8" });
+  const content = readFileSync(src, "utf8");
   const { code, map } = await transformAsync(content, {
     filename: src,
     sourceFileName: path.relative(path.dirname(dest), src),

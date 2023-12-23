@@ -7,7 +7,7 @@ describe("@babel/standalone", () => {
   it("should be built into ES5", () => {
     const babelStandaloneSource = fs.readFileSync(
       require.resolve("../babel.js"),
-      { encoding: "utf8" },
+      "utf8",
     );
 
     expect(() => {
