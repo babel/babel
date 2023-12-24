@@ -6,12 +6,11 @@ let Hello = /*#__PURE__*/babelHelpers.createClass(function Hello() {
 });
 let Outer = /*#__PURE__*/function (_Hello) {
   babelHelpers.inherits(Outer, _Hello);
-  var _super = babelHelpers.createSuper(Outer);
   function Outer() {
     var _dec, _init_hello, _class;
     var _this;
     babelHelpers.classCallCheck(this, Outer);
-    _dec = _this = _super.call(this);
+    _dec = _this = babelHelpers.callSuper(this, Outer);
     let Inner = /*#__PURE__*/babelHelpers.createClass(function Inner() {
       babelHelpers.classCallCheck(this, Inner);
       babelHelpers.defineProperty(this, "hello", _init_hello(this));

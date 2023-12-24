@@ -21,10 +21,9 @@ const proper = {
 };
 let Obj = /*#__PURE__*/function (_Base) {
   babelHelpers.inherits(Obj, _Base);
-  var _super = babelHelpers.createSuper(Obj);
   function Obj() {
     babelHelpers.classCallCheck(this, Obj);
-    return _super.apply(this, arguments);
+    return babelHelpers.callSuper(this, Obj, arguments);
   }
   babelHelpers.createClass(Obj, [{
     key: "update",

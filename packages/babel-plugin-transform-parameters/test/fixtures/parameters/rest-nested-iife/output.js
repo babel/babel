@@ -4,10 +4,9 @@ function broken(x) {
       "use strict";
 
       babelHelpers.inherits(Foo, _Bar);
-      var _super = babelHelpers.createSuper(Foo);
       function Foo() {
         babelHelpers.classCallCheck(this, Foo);
-        return _super.apply(this, arguments);
+        return babelHelpers.callSuper(this, Foo, arguments);
       }
       return babelHelpers.createClass(Foo);
     }(Bar);

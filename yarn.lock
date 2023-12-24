@@ -2507,7 +2507,6 @@ __metadata:
     "@babel/helper-compilation-targets": "workspace:^"
     "@babel/helper-environment-visitor": "workspace:^"
     "@babel/helper-function-name": "workspace:^"
-    "@babel/helper-optimise-call-expression": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-replace-supers": "workspace:^"

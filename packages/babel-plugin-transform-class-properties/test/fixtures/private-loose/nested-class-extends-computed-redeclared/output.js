@@ -17,11 +17,10 @@ var Foo = /*#__PURE__*/function () {
       var _foo2 = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("foo");
       var Nested = /*#__PURE__*/function (_ref) {
         babelHelpers.inherits(Nested, _ref);
-        var _super = babelHelpers.createSuper(Nested);
         function Nested(...args) {
           var _this;
           babelHelpers.classCallCheck(this, Nested);
-          _this = _super.call(this, ...args);
+          _this = babelHelpers.callSuper(this, Nested, args);
           Object.defineProperty(babelHelpers.assertThisInitialized(_this), _foo2, {
             writable: true,
             value: 3

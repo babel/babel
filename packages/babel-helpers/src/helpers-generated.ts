@@ -63,6 +63,11 @@ export default Object.freeze({
     "7.0.0-beta.0",
     'import OverloadYield from"OverloadYield";export default function _awaitAsyncGenerator(e){return new OverloadYield(e,0)}',
   ),
+  // size: 366, gzip size: 187
+  callSuper: helper(
+    "7.23.7",
+    'import getPrototypeOf from"getPrototypeOf";import isNativeReflectConstruct from"isNativeReflectConstruct";import possibleConstructorReturn from"possibleConstructorReturn";export default function _callSuper(t,o,e){return o=getPrototypeOf(o),possibleConstructorReturn(t,isNativeReflectConstruct()?Reflect.construct(o,e||[],getPrototypeOf(t).constructor):o.apply(t,e))}',
+  ),
   // size: 161, gzip size: 154
   checkInRHS: helper(
     "7.20.5",
@@ -87,6 +92,11 @@ export default Object.freeze({
   interopRequireWildcard: helper(
     "7.14.0",
     'function _getRequireWildcardCache(e){if("function"!=typeof WeakMap)return null;var r=new WeakMap,t=new WeakMap;return(_getRequireWildcardCache=function(e){return e?t:r})(e)}export default function _interopRequireWildcard(e,r){if(!r&&e&&e.__esModule)return e;if(null===e||"object"!=typeof e&&"function"!=typeof e)return{default:e};var t=_getRequireWildcardCache(r);if(t&&t.has(e))return t.get(e);var n={__proto__:null},a=Object.defineProperty&&Object.getOwnPropertyDescriptor;for(var u in e)if("default"!==u&&Object.prototype.hasOwnProperty.call(e,u)){var i=a?Object.getOwnPropertyDescriptor(e,u):null;i&&(i.get||i.set)?Object.defineProperty(n,u,i):n[u]=e[u]}return n.default=e,t&&t.set(e,n),n}',
+  ),
+  // size: 336, gzip size: 206
+  isNativeReflectConstruct: helper(
+    "7.9.0",
+    'export default function _isNativeReflectConstruct(){if("undefined"==typeof Reflect||!Reflect.construct)return!1;if(Reflect.construct.sham)return!1;if("function"==typeof Proxy)return!0;var t=!1;try{Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),t=!0}catch(t){}_isNativeReflectConstruct=function(){return t}}',
   ),
   // size: 431, gzip size: 303
   iterableToArrayLimit: helper(

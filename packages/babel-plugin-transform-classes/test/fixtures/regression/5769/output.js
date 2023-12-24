@@ -16,11 +16,10 @@ var ColorPoint = /*#__PURE__*/function (_Point) {
   "use strict";
 
   babelHelpers.inherits(ColorPoint, _Point);
-  var _super = babelHelpers.createSuper(ColorPoint);
   function ColorPoint() {
     var _thisSuper, _thisSuper2, _this;
     babelHelpers.classCallCheck(this, ColorPoint);
-    _this = _super.call(this);
+    _this = babelHelpers.callSuper(this, ColorPoint);
     _this.x = 2;
     babelHelpers.set((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(ColorPoint.prototype)), "x", 3, _thisSuper, true);
     expect(_this.x).toBe(3); // A

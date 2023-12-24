@@ -14,12 +14,11 @@ let Hello = /*#__PURE__*/function () {
 }();
 let Outer = /*#__PURE__*/function (_Hello) {
   babelHelpers.inherits(Outer, _Hello);
-  var _super = babelHelpers.createSuper(Outer);
   function Outer() {
     var _computedKey;
     var _thisSuper, _this;
     babelHelpers.classCallCheck(this, Outer);
-    _this = _super.call(this);
+    _this = babelHelpers.callSuper(this, Outer);
     _computedKey = babelHelpers.toPropertyKey(babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Outer.prototype)), "toString", _thisSuper).call(_thisSuper));
     var _A = /*#__PURE__*/new WeakMap();
     let Inner = /*#__PURE__*/function () {
