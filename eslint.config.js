@@ -88,7 +88,6 @@ module.exports = [
           parser: parserTypeScriptESLint,
           parserOptions: {
             allowAutomaticSingleRunInference: true,
-            project: true,
             EXPERIMENTAL_useProjectService: true,
           },
         },
