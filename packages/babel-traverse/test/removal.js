@@ -152,4 +152,17 @@ describe("removal", function () {
 
     expect(rootPath.scope.hasBinding("x")).toBe(true);
   });
+
+  it("should not throw when removing without `Program`", function () {
+    const ast = parse("['1']").program.body[0].expression;
+
+    traverse(ast, {
+      noScope: true,
+      StringLiteral(path) {
+        path.remove();
+      },
+    });
+
+    expect(ast.elements.length).toBe(0);
+  });
 });

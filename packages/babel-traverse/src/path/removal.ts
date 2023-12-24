@@ -30,8 +30,10 @@ export function _removeFromScope(this: NodePath) {
 }
 
 export function _callRemovalHooks(this: NodePath) {
-  for (const fn of hooks) {
-    if (fn(this, this.parentPath)) return true;
+  if (this.parentPath) {
+    for (const fn of hooks) {
+      if (fn(this, this.parentPath)) return true;
+    }
   }
 }
 
