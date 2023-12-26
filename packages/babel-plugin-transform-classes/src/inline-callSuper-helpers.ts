@@ -23,9 +23,8 @@ const helper = template.statement`
       // use our fallback implementation.
       try {
         // If the internal slots aren't set, this throws an error similar to
-        //   TypeError: this is not a Date object.
-        Date.prototype.toString.call(Reflect.construct(Date, [], function() {}));
-        return true;
+        //   TypeError: this is not a Boolean object.
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}),);
       } catch (e) {
         return false;
       }
