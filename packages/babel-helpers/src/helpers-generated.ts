@@ -93,10 +93,10 @@ export default Object.freeze({
     "7.14.0",
     'function _getRequireWildcardCache(e){if("function"!=typeof WeakMap)return null;var r=new WeakMap,t=new WeakMap;return(_getRequireWildcardCache=function(e){return e?t:r})(e)}export default function _interopRequireWildcard(e,r){if(!r&&e&&e.__esModule)return e;if(null===e||"object"!=typeof e&&"function"!=typeof e)return{default:e};var t=_getRequireWildcardCache(r);if(t&&t.has(e))return t.get(e);var n={__proto__:null},a=Object.defineProperty&&Object.getOwnPropertyDescriptor;for(var u in e)if("default"!==u&&Object.prototype.hasOwnProperty.call(e,u)){var i=a?Object.getOwnPropertyDescriptor(e,u):null;i&&(i.get||i.set)?Object.defineProperty(n,u,i):n[u]=e[u]}return n.default=e,t&&t.set(e,n),n}',
   ),
-  // size: 336, gzip size: 206
+  // size: 208, gzip size: 154
   isNativeReflectConstruct: helper(
     "7.9.0",
-    'export default function _isNativeReflectConstruct(){if("undefined"==typeof Reflect||!Reflect.construct)return!1;if(Reflect.construct.sham)return!1;if("function"==typeof Proxy)return!0;var t=!1;try{Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){}))),t=!0}catch(t){}_isNativeReflectConstruct=function(){return t}}',
+    "export default function _isNativeReflectConstruct(){try{var t=!Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],(function(){})))}catch(t){}return(_isNativeReflectConstruct=function(){return!!t})()}",
   ),
   // size: 431, gzip size: 303
   iterableToArrayLimit: helper(

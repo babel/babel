@@ -5,7 +5,7 @@ import _possibleConstructorReturn from "@babel/runtime-corejs3/helpers/esm/possi
 import _getPrototypeOf from "@babel/runtime-corejs3/helpers/esm/getPrototypeOf";
 import _inherits from "@babel/runtime-corejs3/helpers/esm/inherits";
 function _callSuper(t, o, e) { return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? _Reflect$construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e)); }
-function _isNativeReflectConstruct() { if ("undefined" == typeof Reflect || !_Reflect$construct) return !1; if (_Reflect$construct.sham) return !1; if ("function" == typeof Proxy) return !0; var t = !1; try { Boolean.prototype.valueOf.call(_Reflect$construct(Boolean, [], function () {})), t = !0; } catch (t) {} _isNativeReflectConstruct = function () { return t; }; }
+function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(_Reflect$construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function () { return !!t; })(); }
 let Foo = /*#__PURE__*/function (_Bar) {
   _inherits(Foo, _Bar);
   function Foo() {
