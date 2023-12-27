@@ -26,6 +26,6 @@ export default function _importDeferProxy(init) {
       preventExtensions: constValue(true),
       set: constValue(false),
       setPrototypeOf: constValue(false),
-    }
+    },
   );
 }

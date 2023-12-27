@@ -59,7 +59,7 @@ export default function AsyncGenerator(gen) {
         },
         function (err) {
           resume("throw", err);
-        }
+        },
       );
     } catch (err) {
       settle("throw", err);

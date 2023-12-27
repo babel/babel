@@ -8,25 +8,20 @@
   "bracketSameLine": false,
   "tabWidth": 2,
   "printWidth": 80,
-  "overrides": [{
-    "files": [
-      "**/{codemods,eslint,packages}/*/{src,test}/**/*.{js,ts,cjs}"
-    ],
-    "excludeFiles": ["**/packages/babel-helpers/src/helpers/**/*.js"],
-    "options": {
-      "trailingComma": "all"
+  "overrides": [
+    {
+      "files": [
+        "**/{codemods,eslint,packages}/*/{src,test}/**/*.{js,cjs,mjs,ts,cts,mts}"
+      ],
+      "options": {
+        "trailingComma": "all"
+      }
+    },
+    {
+      "files": ["**/{codemods,eslint,packages}/*/test/fixtures/**/*.{js,ts}"],
+      "options": {
+        "trailingComma": "es5"
+      }
     }
-  }, {
-    "files": "**/packages/babel-helpers/src/helpers/**/*.js",
-    "options": {
-      "trailingComma": "es5"
-    }
-  }, {
-    "files": [
-      "**/{codemods,eslint,packages}/*/test/fixtures/**/*.{js,ts}"
-    ],
-    "options": {
-      "trailingComma": "es5"
-    }
-  }]
+  ]
 }
