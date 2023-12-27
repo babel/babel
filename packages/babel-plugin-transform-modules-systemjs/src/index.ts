@@ -9,7 +9,6 @@ import {
 import type { PluginOptions } from "@babel/helper-module-transforms";
 import { isIdentifierName } from "@babel/helper-validator-identifier";
 import type { NodePath, Scope, Visitor } from "@babel/traverse";
-import transformExportNamespaceFrom from "@babel/plugin-transform-export-namespace-from";
 
 const buildTemplate = template.statement(`
   SYSTEM_REGISTER(MODULE_NAME, SOURCES, function (EXPORT_IDENTIFIER, CONTEXT_IDENTIFIER) {
@@ -266,8 +265,6 @@ export default declare<PluginState>((api, options: Options) => {
     pre() {
       this.file.set("@babel/plugin-transform-modules-*", "systemjs");
     },
-
-    inherits: transformExportNamespaceFrom,
 
     visitor: {
       ["CallExpression" +
