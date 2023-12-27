@@ -73,6 +73,11 @@ export default Object.freeze({
     "7.20.5",
     'export default function _checkInRHS(e){if(Object(e)!==e)throw TypeError("right-hand side of \'in\' should be an object, got "+(null!==e?typeof e:"null"));return e}',
   ),
+  // size: 327, gzip size: 200
+  construct: helper(
+    "7.0.0-beta.0",
+    'import setPrototypeOf from"setPrototypeOf";import isNativeReflectConstruct from"isNativeReflectConstruct";export default function _construct(t,e,r){if(isNativeReflectConstruct())return Reflect.construct.apply(null,arguments);var o=[null];o.push.apply(o,e);var p=new(t.bind.apply(t,o));return r&&setPrototypeOf(p,r.prototype),p}',
+  ),
   // size: 130, gzip size: 130
   defineAccessor: helper(
     "7.20.7",

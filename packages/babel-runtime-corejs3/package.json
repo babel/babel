@@ -125,6 +125,15 @@
       "./helpers/checkInRHS.js"
     ],
     "./helpers/esm/checkInRHS": "./helpers/esm/checkInRHS.js",
+    "./helpers/construct": [
+      {
+        "node": "./helpers/construct.js",
+        "import": "./helpers/esm/construct.js",
+        "default": "./helpers/construct.js"
+      },
+      "./helpers/construct.js"
+    ],
+    "./helpers/esm/construct": "./helpers/esm/construct.js",
     "./helpers/defineAccessor": [
       {
         "node": "./helpers/defineAccessor.js",
@@ -395,15 +404,6 @@
       "./helpers/setPrototypeOf.js"
     ],
     "./helpers/esm/setPrototypeOf": "./helpers/esm/setPrototypeOf.js",
-    "./helpers/construct": [
-      {
-        "node": "./helpers/construct.js",
-        "import": "./helpers/esm/construct.js",
-        "default": "./helpers/construct.js"
-      },
-      "./helpers/construct.js"
-    ],
-    "./helpers/esm/construct": "./helpers/esm/construct.js",
     "./helpers/isNativeFunction": [
       {
         "node": "./helpers/isNativeFunction.js",

@@ -272,6 +272,7 @@ module.exports = [
       "no-var": "off",
       "comma-dangle": "off",
       "no-func-assign": "off",
+      "prefer-spread": "off",
       "import/no-extraneous-dependencies": "off",
       "import/no-unresolved": "off",
       "@typescript-eslint/prefer-optional-chain": "off",

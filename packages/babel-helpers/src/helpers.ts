@@ -259,32 +259,6 @@ helpers.setPrototypeOf = helper("7.0.0-beta.0")`
   }
 `;
 
-// need a bind because https://github.com/babel/babel/issues/14527
-helpers.construct = helper("7.0.0-beta.0")`
-  import setPrototypeOf from "setPrototypeOf";
-  import isNativeReflectConstruct from "isNativeReflectConstruct";
-
-  export default function _construct(Parent, args, Class) {
-    if (isNativeReflectConstruct()) {
-      _construct = Reflect.construct.bind();
-    } else {
-      // NOTE: If Parent !== Class, the correct __proto__ is set *after*
-      //       calling the constructor.
-      _construct = function _construct(Parent, args, Class) {
-        var a = [null];
-        a.push.apply(a, args);
-        var Constructor = Function.bind.apply(Parent, a);
-        var instance = new Constructor();
-        if (Class) setPrototypeOf(instance, Class.prototype);
-        return instance;
-      };
-    }
-    // Avoid issues with Class being present but undefined when it wasn't
-    // present in the original call.
-    return _construct.apply(null, arguments);
-  }
-`;
-
 helpers.isNativeFunction = helper("7.0.0-beta.0")`
   export default function _isNativeFunction(fn) {
     // Note: This function returns "true" for core-js functions.
