@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly",
-  "version": "7.23.3",
+  "version": "7.23.7",
   "description": "Transform static class fields assignments that are affected by https://crbug.com/v8/12421",
   "repository": {
     "type": "git",
