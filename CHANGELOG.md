@@ -24,6 +24,23 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.23.7 (2023-12-29)
+
+#### :bug: Bug Fix
+* `babel-traverse`
+  * [#16191](https://github.com/babel/babel/pull/16191) fix: Crash when removing without `Program` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helpers`, `babel-plugin-proposal-decorators`
+  * [#16180](https://github.com/babel/babel/pull/16180) fix: Class decorator `ctx.kind` is wrong ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-plugin-proposal-decorators`
+  * [#16170](https://github.com/babel/babel/pull/16170) Fix decorator initProto usage in derived classes ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`
+  * [#16167](https://github.com/babel/babel/pull/16167) Avoid unpreventable `unhandledRejection` events ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-helper-create-class-features-plugin`
+  * [#16186](https://github.com/babel/babel/pull/16186) chore: Update deps ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-decorators`
+  * [#16177](https://github.com/babel/babel/pull/16177) Merge decorators into class features ([@JLHwung](https://github.com/JLHwung))
 ## v7.23.6 (2023-12-11)
 
 #### :eyeglasses: Spec Compliance
