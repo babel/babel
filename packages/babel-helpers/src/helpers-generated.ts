@@ -65,7 +65,7 @@ export default Object.freeze({
   ),
   // size: 366, gzip size: 187
   callSuper: helper(
-    "7.23.7",
+    "7.23.8",
     'import getPrototypeOf from"getPrototypeOf";import isNativeReflectConstruct from"isNativeReflectConstruct";import possibleConstructorReturn from"possibleConstructorReturn";export default function _callSuper(t,o,e){return o=getPrototypeOf(o),possibleConstructorReturn(t,isNativeReflectConstruct()?Reflect.construct(o,e||[],getPrototypeOf(t).constructor):o.apply(t,e))}',
   ),
   // size: 161, gzip size: 154

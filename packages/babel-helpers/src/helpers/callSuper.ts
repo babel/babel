@@ -1,4 +1,4 @@
-/* @minVersion 7.23.7 */
+/* @minVersion 7.23.8 */
 
 // This is duplicated to packages/babel-plugin-transform-classes/src/inline-callSuper-helpers.ts
 
