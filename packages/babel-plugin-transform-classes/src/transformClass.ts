@@ -349,9 +349,24 @@ export default function transformClass(
           | t.SpreadElement
         )[];
 
+        /**
+         * test262/test/language/expressions/super/call-spread-err-sngl-err-itr-get-get.js
+         *
+         * var iter = {};
+         * Object.defineProperty(iter, Symbol.iterator, {
+         *   get: function() {
+         *     throw new Test262Error();
+         *   }
+         * })
+         * super(...iter);
+         */
+
         if (
           bareSuperNodeArguments.length === 1 &&
-          t.isSpreadElement(bareSuperNodeArguments[0])
+          t.isSpreadElement(bareSuperNodeArguments[0]) &&
+          t.isIdentifier(bareSuperNodeArguments[0].argument, {
+            name: "arguments",
+          })
         ) {
           args.push(bareSuperNodeArguments[0].argument);
         } else {

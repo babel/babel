@@ -13,7 +13,7 @@ var App = exports["default"] = /*#__PURE__*/function (_Component) {
     for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
-    _this = babelHelpers.callSuper(this, App, args);
+    _this = babelHelpers.callSuper(this, App, [].concat(args));
     babelHelpers.defineProperty(babelHelpers.assertThisInitialized(_this), "exportType", '');
     return _this;
   }

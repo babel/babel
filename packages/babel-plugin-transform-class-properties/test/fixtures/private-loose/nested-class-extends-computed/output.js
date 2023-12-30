@@ -19,7 +19,7 @@ var Foo = /*#__PURE__*/function () {
         function Nested(...args) {
           var _this;
           babelHelpers.classCallCheck(this, Nested);
-          _this = babelHelpers.callSuper(this, Nested, args);
+          _this = babelHelpers.callSuper(this, Nested, [...args]);
           Object.defineProperty(babelHelpers.assertThisInitialized(_this), _foo2, {
             writable: true,
             value: 3

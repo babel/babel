@@ -16,7 +16,7 @@ var Bar = /*#__PURE__*/function (_Foo) {
   function Bar(...args) {
     var _this;
     babelHelpers.classCallCheck(this, Bar);
-    _this = babelHelpers.callSuper(this, Bar, args);
+    _this = babelHelpers.callSuper(this, Bar, [...args]);
     babelHelpers.classPrivateFieldInitSpec(babelHelpers.assertThisInitialized(_this), _prop2, {
       writable: true,
       value: "bar"
