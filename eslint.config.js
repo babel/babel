@@ -76,7 +76,10 @@ module.exports = [
       "prettier/prettier": "error",
       "import/no-extraneous-dependencies": "error",
 
-      "unicorn/no-useless-undefined": ["error", { checkArguments: false }],
+      "unicorn/no-useless-undefined": [
+        "error",
+        { checkArguments: false, checkArrowFunctionBody: false },
+      ],
       "unicorn/prefer-includes": "error",
     },
   },
