@@ -314,15 +314,9 @@ export default /* @no-mangle */ function applyDecs2305(
 
       var decoratorFinishedRef: DecoratorFinishedRef = {};
       var ctx: DecoratorContext = {
-        kind: [
-          "field",
-          "accessor",
-          "method",
-          "getter",
-          "setter",
-          "field",
-          "class",
-        ][kind] as any,
+        kind: ["field", "accessor", "method", "getter", "setter", "class"][
+          kind
+        ] as any,
 
         name: name,
         metadata: metadata,
