@@ -306,7 +306,7 @@ export default /* @no-mangle */ function applyDecs2305(
       }
     }
 
-    var newValue;
+    var newValue = Class;
 
     for (var i = decs.length - 1; i >= 0; i -= decoratorsHaveThis ? 2 : 1) {
       var dec = (decs as Function[])[i],
@@ -336,7 +336,15 @@ export default /* @no-mangle */ function applyDecs2305(
 
       try {
         if (isClass) {
-          newValue = dec.call(decThis, Class, ctx);
+          if (
+            (_ = assertCallable(
+              dec.call(decThis, newValue, ctx),
+              "class decorators",
+              "return",
+            ))
+          ) {
+            newValue = _;
+          }
         } else {
           ctx.static = isStatic;
           ctx.private = isPrivate;
@@ -563,19 +571,15 @@ export default /* @no-mangle */ function applyDecs2305(
       return (
         classDecs.length && [
           defineMetadata(
-            assertCallable(
-              applyDec(
-                targetClass,
-                [classDecs],
-                classDecsHaveThis,
-                targetClass.name,
-                PROP_KIND.CLASS,
-                metadata,
-                initializers,
-              ),
-              "class decorators",
-              "return",
-            ) || targetClass,
+            applyDec(
+              targetClass,
+              [classDecs],
+              classDecsHaveThis,
+              targetClass.name,
+              PROP_KIND.CLASS,
+              metadata,
+              initializers,
+            ),
             metadata,
           ),
           runInitializers.bind(null, initializers, targetClass),
