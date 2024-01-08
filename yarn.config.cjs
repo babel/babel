@@ -335,6 +335,10 @@ function enforceExports({ Yarn }) {
  */
 module.exports = {
   constraints: async ctx => {
+    try {
+      require("./scripts/prepare.cjs");
+    } catch (e) {}
+
     enforceWorkspaceDependencies(ctx);
     enforcePackageInfo(ctx);
     enforceEnginesNodeForPublicUnsetForPrivate(ctx);

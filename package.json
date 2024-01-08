@@ -5,7 +5,6 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
-    "prepare": "is-ci || husky install",
     "bootstrap": "make bootstrap",
     "codesandbox:build": "make build-no-bundle",
     "build": "make build",
