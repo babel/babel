@@ -243,6 +243,17 @@ export function validatePlugins(plugins: PluginList) {
         " only supported value is '2023-07'.",
     );
   }
+
+  if (hasPlugin(plugins, "throwExpressions")) {
+    const requireParentheses = getPluginOption(
+      plugins,
+      "throwExpressions",
+      "requireParentheses",
+    );
+    if (requireParentheses != null && typeof requireParentheses !== "boolean") {
+      throw new Error("'requireParentheses' must be a boolean.");
+    }
+  }
 }
 
 // These plugins are defined using a mixin which extends the parser class.

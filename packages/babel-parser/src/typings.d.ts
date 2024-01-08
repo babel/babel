@@ -38,7 +38,6 @@ export type Plugin =
   | "privateIn" // Enabled by default
   | "regexpUnicodeSets" // Enabled by default
   | "sourcePhaseImports"
-  | "throwExpressions"
   | "topLevelAwait"
   | "v8intrinsic"
   | ParserPluginWithOptions[0];
@@ -52,6 +51,7 @@ export type ParserPluginWithOptions =
   | ["optionalChainingAssign", { version: "2023-07" }]
   | ["pipelineOperator", PipelineOperatorPluginOptions]
   | ["recordAndTuple", RecordAndTuplePluginOptions]
+  | ["throwExpressions", { requireParentheses?: boolean }]
   | ["flow", FlowPluginOptions]
   | ["typescript", TypeScriptPluginOptions];
 

@@ -613,17 +613,44 @@ export default abstract class ExpressionParser extends LValParser {
       node.operator = this.state.value;
       node.prefix = true;
 
-      if (this.match(tt._throw)) {
+      const isThrow = this.match(tt._throw);
+      let throwMissingParenthesesReported = false;
+      if (isThrow) {
         this.expectPlugin("throwExpressions");
+        if (
+          // TODO: Uncomment for the next minor
+          // this.getPluginOption("throwExpressions", "requireParentheses") ||
+          process.env.BABEL_8_BREAKING &&
+          this.input.charCodeAt(this.state.lastTokStart) !==
+            charCodes.leftParenthesis
+        ) {
+          this.raise(Errors.ThrowExpressionRequireParentheses, {
+            at: node,
+          });
+          throwMissingParenthesesReported = true;
+        }
       }
-      const isDelete = this.match(tt._delete);
+
+      const isDelete = !isThrow && this.match(tt._delete);
       this.next();
 
       node.argument = this.parseMaybeUnary(null, true);
 
       this.checkExpressionErrors(refExpressionErrors, true);
 
-      if (this.state.strict && isDelete) {
+      if (isThrow) {
+        if (
+          !throwMissingParenthesesReported &&
+          // TODO: Uncomment for the next minor
+          // this.getPluginOption("throwExpressions", "requireParentheses") ||
+          process.env.BABEL_8_BREAKING &&
+          !this.match(tt.parenR)
+        ) {
+          this.raise(Errors.ThrowExpressionRequireParentheses, {
+            at: node,
+          });
+        }
+      } else if (isDelete && this.state.strict) {
         const arg = node.argument;
 
         if (arg.type === "Identifier") {
