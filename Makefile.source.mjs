@@ -1,7 +1,7 @@
 import "shelljs/make.js";
 import path from "path";
 import { execFileSync } from "child_process";
-import { readFileSync, writeFileSync, readdirSync } from "fs";
+import { readFileSync, writeFileSync, readdirSync, existsSync } from "fs";
 import semver from "semver";
 
 /**
@@ -496,11 +496,21 @@ function bumpVersionsToBabel8Pre() {
   SOURCES.forEach(source => {
     readdirSync(source).forEach(name => {
       const pkgPath = `${source}/${name}/package.json`;
-      try {
+      if (existsSync(pkgPath)) {
         const pkg = JSON.parse(readFileSync(pkgPath, "utf8"));
-        pkg.peerDependencies["@babel/core"] = `^${nextVersion}`;
+        if (pkg.peerDependencies?.["@babel/core"]) {
+          pkg.peerDependencies["@babel/core"] = `^${nextVersion}`;
+        }
+        const babel8Condition = pkg.conditions?.["BABEL_8_BREAKING"][0];
+        if (babel8Condition?.peerDependencies?.["@babel/core"]) {
+          babel8Condition.peerDependencies["@babel/core"] = `^${nextVersion}`;
+        }
+        if (name === "babel-eslint-plugin") {
+          babel8Condition.peerDependencies["@babel/eslint-parser"] =
+            `^${nextVersion}`;
+        }
         writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + "\n");
-      } catch {}
+      }
     });
   });
 
