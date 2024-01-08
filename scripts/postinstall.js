@@ -1,6 +1,6 @@
-const { existsSync, readFileSync, writeFileSync } = require("fs");
-const isCI = require("is-ci");
-const husky = require("husky");
+import { existsSync, readFileSync, writeFileSync } from "fs";
+import isCI from "is-ci";
+import husky from "husky";
 
 if (!isCI) {
   if (!existsSync(".husky/_/husky.sh")) {
