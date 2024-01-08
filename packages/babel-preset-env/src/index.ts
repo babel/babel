@@ -410,9 +410,10 @@ option \`forceAllTransforms: true\` instead.
   // other plugin. We can consider adding bundlers as targets in the future,
   // but we should not have a one-off special case for this plugin.
   if (
-    optionsModules === "auto" &&
-    !api.caller(supportsExportNamespaceFrom) &&
-    !exclude.plugins.has("transform-export-namespace-from")
+    !exclude.plugins.has("transform-export-namespace-from") &&
+    (optionsModules === "auto"
+      ? !api.caller(supportsExportNamespaceFrom)
+      : !!modules)
   ) {
     include.plugins.add("transform-export-namespace-from");
   }
