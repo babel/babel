@@ -5402,14 +5402,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*":
-  version: 20.3.3
-  resolution: "@types/node@npm:20.3.3"
-  checksum: 95fdbe10c74cef580b4b47f6b40f58dd26f1ba4689de18bbd1b7dea8535736ef571a8a6f12dafee63cad8c159ba852c8baf294500fc5968fab92807c86381fa2
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:^20.10.5":
+"@types/node@npm:*, @types/node@npm:^20.10.5":
   version: 20.10.5
   resolution: "@types/node@npm:20.10.5"
   dependencies:
