@@ -170,7 +170,7 @@ export function importToPlatformApi(
       throw new Error("Internal Babel error: unreachable code.");
   }
 
-  buildFetchAsync ??= buildFetchSync!;
+  buildFetchAsync ??= buildFetchSync;
   const buildFetchAsyncWrapped: typeof buildFetchAsync = (expression, path) => {
     if (t.isStringLiteral(expression)) {
       return template.expression.ast`
@@ -187,9 +187,9 @@ export function importToPlatformApi(
   };
 
   return {
-    buildFetch: buildFetchSync! || buildFetchAsync,
+    buildFetch: buildFetchSync || buildFetchAsync,
     buildFetchAsync: buildFetchAsyncWrapped,
-    needsAwait: !buildFetchSync!,
+    needsAwait: !buildFetchSync,
   };
 }
 
