@@ -34,7 +34,7 @@ export default function removeTypeDuplicates(
     if (!node) continue;
 
     // detect duplicates
-    if (types.indexOf(node) >= 0) {
+    if (types.includes(node)) {
       continue;
     }
 

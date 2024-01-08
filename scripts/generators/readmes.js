@@ -79,7 +79,7 @@ ${getYarnAdd(name)}
 
 packages
   .filter(x => x !== "README.md") // ignore root readme
-  .filter(x => x.indexOf("babel-helper-check-duplicate-nodes") === -1) // ignore check-duplicate-nodes
+  .filter(x => !x.includes("babel-helper-check-duplicate-nodes")) // ignore check-duplicate-nodes
   .forEach(id => {
     try {
       const { name, description } = getPackageJson(id);

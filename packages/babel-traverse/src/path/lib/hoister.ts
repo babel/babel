@@ -109,7 +109,7 @@ export default class PathHoister<T extends t.Node = t.Node> {
       }
 
       // deopt: These scopes are set in the visitor on const violations
-      if (this.breakOnScopePaths.indexOf(scope.path) >= 0) {
+      if (this.breakOnScopePaths.includes(scope.path)) {
         break;
       }
     } while ((scope = scope.parent));

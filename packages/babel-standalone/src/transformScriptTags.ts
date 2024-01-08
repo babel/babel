@@ -241,7 +241,7 @@ export function runScripts(
     const script = scripts.item(i);
     // Support the old type="text/jsx;harmony=true"
     const type = script.type.split(";")[0];
-    if (scriptTypes.indexOf(type) !== -1) {
+    if (scriptTypes.includes(type)) {
       jsxScripts.push(script);
     }
   }

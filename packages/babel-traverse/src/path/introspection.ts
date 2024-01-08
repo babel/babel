@@ -393,8 +393,8 @@ function _guessExecutionStatusRelativeToCached(
 
   // If this is an ancestor of the target path,
   // e.g. f(g); where this is f and target is g.
-  if (paths.target.indexOf(base) >= 0) return "after";
-  if (paths.this.indexOf(target) >= 0) return "before";
+  if (paths.target.includes(base)) return "after";
+  if (paths.this.includes(target)) return "before";
 
   // get ancestor where the branches intersect
   let commonPath;
@@ -549,7 +549,7 @@ export function _resolve(
 ): NodePath | undefined | null {
   // detect infinite recursion
   // todo: possibly have a max length on this just to be safe
-  if (resolved && resolved.indexOf(this) >= 0) return;
+  if (resolved && resolved.includes(this)) return;
 
   // we store all the paths we've "resolved" in this array to prevent infinite recursion
   resolved = resolved || [];

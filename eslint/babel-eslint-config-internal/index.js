@@ -35,6 +35,11 @@ module.exports = [
       "no-process-exit": "error",
       "no-var": "error",
       "prefer-const": "error",
+      "no-lone-blocks": "error",
+      "no-unused-expressions": "error",
+      "no-useless-concat": "error",
+      "no-useless-return": "error",
+      "no-useless-rename": "error",
     },
   },
 ];

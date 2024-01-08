@@ -332,8 +332,6 @@ class Printer {
     for (let j = 0; j < i; j++) {
       this._newline();
     }
-
-    return;
   }
 
   endsWith(char: number): boolean {

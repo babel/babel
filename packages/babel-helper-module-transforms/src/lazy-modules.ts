@@ -19,7 +19,7 @@ export function toGetWrapperPayload(lazy: Lazy) {
       return /\./.test(source) ? null : "lazy";
     }
     if (Array.isArray(lazy)) {
-      return lazy.indexOf(source) === -1 ? null : "lazy";
+      return !lazy.includes(source) ? null : "lazy";
     }
     if (typeof lazy === "function") {
       return lazy(source) ? "lazy" : null;

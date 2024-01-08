@@ -100,7 +100,7 @@ export default abstract class LValParser extends NodeUtils {
    *              If isLHS is `false`, we are in an arrow function parameters list.
    */
   toAssignable(node: Node, isLHS: boolean = false): void {
-    let parenthesized = undefined;
+    let parenthesized;
     if (node.type === "ParenthesizedExpression" || node.extra?.parenthesized) {
       parenthesized = unwrapParenthesizedExpression(node);
       if (isLHS) {

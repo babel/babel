@@ -2177,7 +2177,7 @@ export default (superClass: typeof Parser) =>
       parse: () => T,
     ): T {
       let result: T;
-      if (this.state.noArrowParamsConversionAt.indexOf(node.start) !== -1) {
+      if (this.state.noArrowParamsConversionAt.includes(node.start)) {
         this.state.noArrowParamsConversionAt.push(this.state.start);
         result = parse();
         this.state.noArrowParamsConversionAt.pop();
@@ -3098,7 +3098,7 @@ export default (superClass: typeof Parser) =>
       node: N.ArrowFunctionExpression,
       params: N.Pattern[],
     ): void {
-      if (this.state.noArrowParamsConversionAt.indexOf(node.start) !== -1) {
+      if (this.state.noArrowParamsConversionAt.includes(node.start)) {
         node.params = params;
       } else {
         super.setArrowFunctionParameters(node, params);
@@ -3113,7 +3113,7 @@ export default (superClass: typeof Parser) =>
     ): void {
       if (
         isArrowFunction &&
-        this.state.noArrowParamsConversionAt.indexOf(node.start) !== -1
+        this.state.noArrowParamsConversionAt.includes(node.start)
       ) {
         return;
       }
@@ -3135,7 +3135,7 @@ export default (superClass: typeof Parser) =>
 
     parseParenAndDistinguishExpression(canBeArrow: boolean): N.Expression {
       return super.parseParenAndDistinguishExpression(
-        canBeArrow && this.state.noArrowAt.indexOf(this.state.start) === -1,
+        canBeArrow && !this.state.noArrowAt.includes(this.state.start),
       );
     }
 
@@ -3148,7 +3148,7 @@ export default (superClass: typeof Parser) =>
       if (
         base.type === "Identifier" &&
         base.name === "async" &&
-        this.state.noArrowAt.indexOf(startLoc.index) !== -1
+        this.state.noArrowAt.includes(startLoc.index)
       ) {
         this.next();
 

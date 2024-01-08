@@ -502,7 +502,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       } else if (children.length > 1) {
         childrenNode = t.arrayExpression(children);
       } else {
-        return undefined;
+        return;
       }
 
       return t.objectProperty(t.identifier("children"), childrenNode);

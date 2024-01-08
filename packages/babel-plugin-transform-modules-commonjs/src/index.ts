@@ -297,7 +297,7 @@ export default declare((api, options: Options) => {
           ensureStatementsHoisted(headers);
           path.unshiftContainer("body", headers);
           path.get("body").forEach(path => {
-            if (headers.indexOf(path.node) === -1) return;
+            if (!headers.includes(path.node)) return;
             if (path.isVariableDeclaration()) {
               path.scope.registerDeclaration(path);
             }

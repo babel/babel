@@ -217,7 +217,7 @@ function loadCachedDescriptor<API>(
     cacheByOptions.set(options, possibilities);
   }
 
-  if (possibilities.indexOf(desc) === -1) {
+  if (!possibilities.includes(desc)) {
     const matches = possibilities.filter(possibility =>
       isEqualDescriptor(possibility, desc),
     );
@@ -309,7 +309,7 @@ export function* createDescriptor<API>(
     }
   }
 
-  let file = undefined;
+  let file;
   let filepath = null;
   if (typeof value === "string") {
     if (typeof type !== "string") {

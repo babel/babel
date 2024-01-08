@@ -13,8 +13,8 @@ const toUnenumerable = (object: any, key: string) =>
   defineProperty(object, key, { enumerable: false, value: object[key] });
 
 function toESTreeLocation(node: any) {
-  node.loc.start && toUnenumerable(node.loc.start, "index");
-  node.loc.end && toUnenumerable(node.loc.end, "index");
+  if (node.loc.start) toUnenumerable(node.loc.start, "index");
+  if (node.loc.end) toUnenumerable(node.loc.end, "index");
 
   return node;
 }

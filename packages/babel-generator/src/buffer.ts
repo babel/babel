@@ -262,6 +262,7 @@ export default class Buffer {
     this._last = str.charCodeAt(len - 1);
 
     if (++this._appendCount > 4096) {
+      // eslint-disable-next-line no-unused-expressions
       +this._str; // Unexplainable huge performance boost. Ref: https://github.com/davidmarkclements/flatstr License: MIT
       this._buf += this._str;
       this._str = str;

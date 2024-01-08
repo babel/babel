@@ -37,7 +37,7 @@ export default declare((api, options: Options) => {
   }
 
   function hasHole(spread: t.ArrayExpression): boolean {
-    return spread.elements.some(el => el === null);
+    return spread.elements.includes(null);
   }
 
   function hasSpread(nodes: Array<t.Node>): boolean {

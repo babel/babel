@@ -61,7 +61,7 @@ function getTypeAnnotationBindingConstantViolations(
 
     // remove constant violations observed before the IfStatement
     constantViolations = constantViolations.filter(
-      path => testConstantViolations.indexOf(path) < 0,
+      path => !testConstantViolations.includes(path),
     );
 
     // clear current types and add in observed test type
@@ -146,7 +146,7 @@ function inferAnnotationFromBinaryExpression(
     if (operator === "===") {
       return target.getTypeAnnotation();
     }
-    if (BOOLEAN_NUMBER_BINARY_OPERATORS.indexOf(operator) >= 0) {
+    if (BOOLEAN_NUMBER_BINARY_OPERATORS.includes(operator)) {
       return numberTypeAnnotation();
     }
 

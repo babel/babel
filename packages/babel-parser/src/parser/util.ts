@@ -145,7 +145,7 @@ export default abstract class UtilParser extends Tokenizer {
   // raise an unexpected token error at given pos.
 
   expect(type: TokenType, loc?: Position | null): void {
-    this.eat(type) || this.unexpected(loc, type);
+    if (!this.eat(type)) this.unexpected(loc, type);
   }
 
   // tryParse will clone parser state.

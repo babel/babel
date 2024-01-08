@@ -549,7 +549,7 @@ function buildRollup(packages, buildStandalone) {
               )}' because not publishing`
             )
           );
-          return undefined;
+          return;
         }
         log(`Minifying '${chalk.cyan(outputFile)}'...`);
 
