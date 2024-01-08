@@ -24,6 +24,21 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.23.8 (2024-01-08)
+
+#### :bug: Bug Fix
+* `babel-preset-env`
+  * [#16181](https://github.com/babel/babel/pull/16181) fix: `preset-env` throws exception for `export * as x` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helpers`, `babel-plugin-proposal-decorators`
+  * [#16201](https://github.com/babel/babel/pull/16201) fix: decorator binds `getter/setter` to `ctx.access` for public fields ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+  * [#16199](https://github.com/babel/babel/pull/16199) fix: Class decorator correctly passes return value ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :leftwards_arrow_with_hook: Revert
+* [#16202](https://github.com/babel/babel/pull/16202) Revert "chore: Update artifact tools (#16184)" ([@JLHwung](https://github.com/JLHwung))
+
+#### :microscope: Output optimization
+* `babel-helpers`, `babel-plugin-proposal-decorators`, `babel-plugin-transform-class-properties`, `babel-plugin-transform-classes`, `babel-plugin-transform-function-name`, `babel-plugin-transform-parameters`, `babel-plugin-transform-react-jsx`, `babel-plugin-transform-runtime`, `babel-plugin-transform-spread`, `babel-plugin-transform-typescript`, `babel-preset-env`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#16194](https://github.com/babel/babel/pull/16194) Improve output of `super()` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.23.7 (2023-12-29)
 
 #### :bug: Bug Fix
