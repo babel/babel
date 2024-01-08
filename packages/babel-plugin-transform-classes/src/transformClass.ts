@@ -2,11 +2,10 @@ import type { NodePath, Scope, Visitor } from "@babel/traverse";
 import nameFunction from "@babel/helper-function-name";
 import ReplaceSupers from "@babel/helper-replace-supers";
 import environmentVisitor from "@babel/helper-environment-visitor";
-import optimiseCall from "@babel/helper-optimise-call-expression";
 import { traverse, template, types as t, type File } from "@babel/core";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 
-import addCreateSuperHelper from "./inline-createSuper-helpers.ts";
+import addCallSuperHelper from "./inline-callSuper-helpers.ts";
 
 type ClassAssumptions = {
   setClassMethods: boolean;
@@ -48,7 +47,6 @@ type State = {
 
   classId: t.Identifier | void;
   classRef: t.Identifier;
-  superFnId: t.Identifier;
   superName: t.Expression | null;
   superReturns: NodePath<t.ReturnStatement>[];
   isDerived: boolean;
@@ -109,7 +107,6 @@ export default function transformClass(
 
     classId: undefined,
     classRef: undefined,
-    superFnId: undefined,
     superName: null,
     superReturns: [],
     isDerived: false,
@@ -342,12 +339,41 @@ export default function transformClass(
 
       call = t.logicalExpression("||", bareSuperNode, t.thisExpression());
     } else {
-      call = optimiseCall(
-        t.cloneNode(classState.superFnId),
+      const args: t.Expression[] = [
         t.thisExpression(),
-        bareSuperNode.arguments,
-        false,
-      );
+        t.cloneNode(classState.classRef),
+      ];
+      if (bareSuperNode.arguments?.length) {
+        const bareSuperNodeArguments = bareSuperNode.arguments as (
+          | t.Expression
+          | t.SpreadElement
+        )[];
+
+        /**
+         * test262/test/language/expressions/super/call-spread-err-sngl-err-itr-get-get.js
+         *
+         * var iter = {};
+         * Object.defineProperty(iter, Symbol.iterator, {
+         *   get: function() {
+         *     throw new Test262Error();
+         *   }
+         * })
+         * super(...iter);
+         */
+
+        if (
+          bareSuperNodeArguments.length === 1 &&
+          t.isSpreadElement(bareSuperNodeArguments[0]) &&
+          t.isIdentifier(bareSuperNodeArguments[0].argument, {
+            name: "arguments",
+          })
+        ) {
+          args.push(bareSuperNodeArguments[0].argument);
+        } else {
+          args.push(t.arrayExpression(bareSuperNodeArguments));
+        }
+      }
+      call = t.callExpression(addCallSuperHelper(classState.file), args);
     }
 
     if (
@@ -661,25 +687,10 @@ export default function transformClass(
   function pushInheritsToBody() {
     if (!classState.isDerived || classState.pushedInherits) return;
 
-    const superFnId = path.scope.generateUidIdentifier("super");
-
-    setState({ pushedInherits: true, superFnId });
+    classState.pushedInherits = true;
 
     // Unshift to ensure that the constructor inheritance is set up before
     // any properties can be assigned to the prototype.
-
-    if (!assumptions.superIsCallableConstructor) {
-      classState.body.unshift(
-        t.variableDeclaration("var", [
-          t.variableDeclarator(
-            superFnId,
-            t.callExpression(addCreateSuperHelper(classState.file), [
-              t.cloneNode(classState.classRef),
-            ]),
-          ),
-        ]),
-      );
-    }
 
     classState.body.unshift(
       t.expressionStatement(

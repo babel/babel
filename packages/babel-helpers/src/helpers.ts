@@ -97,31 +97,33 @@ helpers.createClass = helper("7.0.0-beta.0")`
   }
 `;
 
-helpers.defineEnumerableProperties = helper("7.0.0-beta.0")`
-  export default function _defineEnumerableProperties(obj, descs) {
-    for (var key in descs) {
-      var desc = descs[key];
-      desc.configurable = desc.enumerable = true;
-      if ("value" in desc) desc.writable = true;
-      Object.defineProperty(obj, key, desc);
-    }
-
-    // Symbols are not enumerated over by for-in loops. If native
-    // Symbols are available, fetch all of the descs object's own
-    // symbol properties and define them on our target object too.
-    if (Object.getOwnPropertySymbols) {
-      var objectSymbols = Object.getOwnPropertySymbols(descs);
-      for (var i = 0; i < objectSymbols.length; i++) {
-        var sym = objectSymbols[i];
-        var desc = descs[sym];
+if (!process.env.BABEL_8_BREAKING) {
+  helpers.defineEnumerableProperties = helper("7.0.0-beta.0")`
+    export default function _defineEnumerableProperties(obj, descs) {
+      for (var key in descs) {
+        var desc = descs[key];
         desc.configurable = desc.enumerable = true;
         if ("value" in desc) desc.writable = true;
-        Object.defineProperty(obj, sym, desc);
+        Object.defineProperty(obj, key, desc);
       }
+
+      // Symbols are not enumerated over by for-in loops. If native
+      // Symbols are available, fetch all of the descs object's own
+      // symbol properties and define them on our target object too.
+      if (Object.getOwnPropertySymbols) {
+        var objectSymbols = Object.getOwnPropertySymbols(descs);
+        for (var i = 0; i < objectSymbols.length; i++) {
+          var sym = objectSymbols[i];
+          var desc = descs[sym];
+          desc.configurable = desc.enumerable = true;
+          if ("value" in desc) desc.writable = true;
+          Object.defineProperty(obj, sym, desc);
+        }
+      }
+      return obj;
     }
-    return obj;
-  }
 `;
+}
 
 helpers.defaults = helper("7.0.0-beta.0")`
   export default function _defaults(obj, defaults) {
@@ -254,60 +256,6 @@ helpers.setPrototypeOf = helper("7.0.0-beta.0")`
           return o;
         };
     return _setPrototypeOf(o, p);
-  }
-`;
-
-helpers.isNativeReflectConstruct = helper("7.9.0")`
-  export default function _isNativeReflectConstruct() {
-    if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-
-    // core-js@3
-    if (Reflect.construct.sham) return false;
-
-    // Proxy can't be polyfilled. Every browser implemented
-    // proxies before or at the same time as Reflect.construct,
-    // so if they support Proxy they also support Reflect.construct.
-    if (typeof Proxy === "function") return true;
-
-    // Since Reflect.construct can't be properly polyfilled, some
-    // implementations (e.g. core-js@2) don't set the correct internal slots.
-    // Those polyfills don't allow us to subclass built-ins, so we need to
-    // use our fallback implementation.
-    try {
-      // If the internal slots aren't set, this throws an error similar to
-      //   TypeError: this is not a Boolean object.
-
-      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {}));
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-`;
-
-// need a bind because https://github.com/babel/babel/issues/14527
-helpers.construct = helper("7.0.0-beta.0")`
-  import setPrototypeOf from "setPrototypeOf";
-  import isNativeReflectConstruct from "isNativeReflectConstruct";
-
-  export default function _construct(Parent, args, Class) {
-    if (isNativeReflectConstruct()) {
-      _construct = Reflect.construct.bind();
-    } else {
-      // NOTE: If Parent !== Class, the correct __proto__ is set *after*
-      //       calling the constructor.
-      _construct = function _construct(Parent, args, Class) {
-        var a = [null];
-        a.push.apply(a, args);
-        var Constructor = Function.bind.apply(Parent, a);
-        var instance = new Constructor();
-        if (Class) setPrototypeOf(instance, Class.prototype);
-        return instance;
-      };
-    }
-    // Avoid issues with Class being present but undefined when it wasn't
-    // present in the original call.
-    return _construct.apply(null, arguments);
   }
 `;
 
@@ -455,28 +403,29 @@ helpers.possibleConstructorReturn = helper("7.0.0-beta.0")`
   }
 `;
 
-// This is duplicated to packages/babel-plugin-transform-classes/src/inline-createSuper-helpers.js
-helpers.createSuper = helper("7.9.0")`
-  import getPrototypeOf from "getPrototypeOf";
-  import isNativeReflectConstruct from "isNativeReflectConstruct";
-  import possibleConstructorReturn from "possibleConstructorReturn";
+if (!process.env.BABEL_8_BREAKING) {
+  helpers.createSuper = helper("7.9.0")`
+    import getPrototypeOf from "getPrototypeOf";
+    import isNativeReflectConstruct from "isNativeReflectConstruct";
+    import possibleConstructorReturn from "possibleConstructorReturn";
 
-  export default function _createSuper(Derived) {
-    var hasNativeReflectConstruct = isNativeReflectConstruct();
+    export default function _createSuper(Derived) {
+      var hasNativeReflectConstruct = isNativeReflectConstruct();
 
-    return function _createSuperInternal() {
-      var Super = getPrototypeOf(Derived), result;
-      if (hasNativeReflectConstruct) {
-        // NOTE: This doesn't work if this.__proto__.constructor has been modified.
-        var NewTarget = getPrototypeOf(this).constructor;
-        result = Reflect.construct(Super, arguments, NewTarget);
-      } else {
-        result = Super.apply(this, arguments);
+      return function _createSuperInternal() {
+        var Super = getPrototypeOf(Derived), result;
+        if (hasNativeReflectConstruct) {
+          // NOTE: This doesn't work if this.__proto__.constructor has been modified.
+          var NewTarget = getPrototypeOf(this).constructor;
+          result = Reflect.construct(Super, arguments, NewTarget);
+        } else {
+          result = Super.apply(this, arguments);
+        }
+        return possibleConstructorReturn(this, result);
       }
-      return possibleConstructorReturn(this, result);
     }
-  }
- `;
+`;
+}
 
 helpers.superPropBase = helper("7.0.0-beta.0")`
   import getPrototypeOf from "getPrototypeOf";

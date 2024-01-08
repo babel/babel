@@ -15,10 +15,9 @@ async function* fn() {
     "use strict";
 
     babelHelpers.inherits(B, _A);
-    var _super = babelHelpers.createSuper(B);
     function B() {
       babelHelpers.classCallCheck(this, B);
-      return _super.apply(this, arguments);
+      return babelHelpers.callSuper(this, B, arguments);
     }
     babelHelpers.createClass(B, [{
       key: _await$,

@@ -4,10 +4,9 @@ function withContext(ComposedComponent) {
     "use strict";
 
     babelHelpers.inherits(WithContext, _Component);
-    var _super = babelHelpers.createSuper(WithContext);
     function WithContext() {
       babelHelpers.classCallCheck(this, WithContext);
-      return _super.apply(this, arguments);
+      return babelHelpers.callSuper(this, WithContext, arguments);
     }
     return babelHelpers.createClass(WithContext);
   }(Component), babelHelpers.defineProperty(_class, "propTypes", {

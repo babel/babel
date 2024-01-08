@@ -34,7 +34,7 @@ function applyDecs2301Factory() {
   function assertInstanceIfPrivate(has, target) {
     if (!has(target)) {
       throw new TypeError(
-        "Attempted to access private element on non-instance"
+        "Attempted to access private element on non-instance",
       );
     }
   }
@@ -48,7 +48,7 @@ function applyDecs2301Factory() {
     isStatic,
     isPrivate,
     value,
-    hasPrivateBrand
+    hasPrivateBrand,
   ) {
     var kindStr;
 
@@ -81,7 +81,7 @@ function applyDecs2301Factory() {
     if (kind !== 0 /* FIELD */) {
       ctx.addInitializer = createAddInitializerMethod(
         initializers,
-        decoratorFinishedRef
+        decoratorFinishedRef,
       );
     }
 
@@ -151,7 +151,7 @@ function applyDecs2301Factory() {
   function assertNotFinished(decoratorFinishedRef, fnName) {
     if (decoratorFinishedRef.v) {
       throw new Error(
-        "attempted to call " + fnName + " after decoration was finished"
+        "attempted to call " + fnName + " after decoration was finished",
       );
     }
   }
@@ -168,7 +168,7 @@ function applyDecs2301Factory() {
     if (kind === 1 /* ACCESSOR */) {
       if (type !== "object" || value === null) {
         throw new TypeError(
-          "accessor decorators must return an object with get, set, or init properties or void 0"
+          "accessor decorators must return an object with get, set, or init properties or void 0",
         );
       }
       if (value.get !== undefined) {
@@ -190,7 +190,7 @@ function applyDecs2301Factory() {
         hint = "method";
       }
       throw new TypeError(
-        hint + " decorators must return a function or void 0"
+        hint + " decorators must return a function or void 0",
       );
     }
   }
@@ -215,7 +215,7 @@ function applyDecs2301Factory() {
     isStatic,
     isPrivate,
     initializers,
-    hasPrivateBrand
+    hasPrivateBrand,
   ) {
     var decs = decInfo[0];
 
@@ -280,7 +280,7 @@ function applyDecs2301Factory() {
         isStatic,
         isPrivate,
         value,
-        hasPrivateBrand
+        hasPrivateBrand,
       );
 
       if (newValue !== void 0) {
@@ -311,7 +311,7 @@ function applyDecs2301Factory() {
           isStatic,
           isPrivate,
           value,
-          hasPrivateBrand
+          hasPrivateBrand,
         );
 
         if (newValue !== void 0) {
@@ -466,7 +466,7 @@ function applyDecs2301Factory() {
         ) {
           throw new Error(
             "Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " +
-              name
+              name,
           );
         } else if (!existingKind && kind > 2 /* METHOD */) {
           existingNonFields.set(name, kind);
@@ -484,7 +484,7 @@ function applyDecs2301Factory() {
         isStatic,
         isPrivate,
         initializers,
-        hasPrivateBrand
+        hasPrivateBrand,
       );
     }
 
@@ -519,7 +519,7 @@ function applyDecs2301Factory() {
             name: name,
             addInitializer: createAddInitializerMethod(
               initializers,
-              decoratorFinishedRef
+              decoratorFinishedRef,
             ),
           });
         } finally {
@@ -694,7 +694,7 @@ function applyDecs2301Factory() {
     targetClass,
     memberDecs,
     classDecs,
-    instanceBrand
+    instanceBrand,
   ) {
     return {
       e: applyMemberDecs(targetClass, memberDecs, instanceBrand),
@@ -710,12 +710,12 @@ export default function applyDecs2301(
   targetClass,
   memberDecs,
   classDecs,
-  instanceBrand
+  instanceBrand,
 ) {
   return (applyDecs2301 = applyDecs2301Factory())(
     targetClass,
     memberDecs,
     classDecs,
-    instanceBrand
+    instanceBrand,
   );
 }

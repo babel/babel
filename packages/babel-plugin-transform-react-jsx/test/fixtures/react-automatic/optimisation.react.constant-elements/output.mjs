@@ -1,10 +1,9 @@
 var _div;
 let App = /*#__PURE__*/function (_React$Component) {
   babelHelpers.inherits(App, _React$Component);
-  var _super = babelHelpers.createSuper(App);
   function App() {
     babelHelpers.classCallCheck(this, App);
-    return _super.apply(this, arguments);
+    return babelHelpers.callSuper(this, App, arguments);
   }
   babelHelpers.createClass(App, [{
     key: "render",

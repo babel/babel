@@ -1,7 +1,11 @@
 import { template, types as t, type File } from "@babel/core";
 
 const helper = template.statement`
-  function CREATE_SUPER(Derived) {
+  function CALL_SUPER(
+    _this,
+    derived,
+    args,
+  ) {
     function isNativeReflectConstruct() {
       if (typeof Reflect === "undefined" || !Reflect.construct) return false;
 
@@ -19,31 +23,32 @@ const helper = template.statement`
       // use our fallback implementation.
       try {
         // If the internal slots aren't set, this throws an error similar to
-        //   TypeError: this is not a Date object.
-        Date.prototype.toString.call(Reflect.construct(Date, [], function() {}));
-        return true;
+        //   TypeError: this is not a Boolean object.
+        return !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}),);
       } catch (e) {
         return false;
       }
     }
 
-    return function () {
-      var Super = GET_PROTOTYPE_OF(Derived), result;
-      if (isNativeReflectConstruct()) {
-        // NOTE: This doesn't work if this.__proto__.constructor has been modified.
-        var NewTarget = GET_PROTOTYPE_OF(this).constructor;
-        result = Reflect.construct(Super, arguments, NewTarget);
-      } else {
-        result = Super.apply(this, arguments);
-      }
-      return POSSIBLE_CONSTRUCTOR_RETURN(this, result);
-    }
+    // Super
+    derived = GET_PROTOTYPE_OF(derived);
+    return POSSIBLE_CONSTRUCTOR_RETURN(
+      _this,
+      isNativeReflectConstruct()
+        ? // NOTE: This doesn't work if this.__proto__.constructor has been modified.
+          Reflect.construct(
+            derived,
+            args || [],
+            GET_PROTOTYPE_OF(_this).constructor,
+          )
+        : derived.apply(_this, args),
+    );
   }
 `;
 
 const helperIDs = new WeakMap();
 
-export default function addCreateSuperHelper(file: File) {
+export default function addCallSuperHelper(file: File) {
   if (helperIDs.has(file)) {
     // TODO: Only use t.cloneNode in Babel 8
     // t.cloneNode isn't supported in every version
@@ -51,16 +56,16 @@ export default function addCreateSuperHelper(file: File) {
   }
 
   try {
-    return file.addHelper("createSuper");
+    return file.addHelper("callSuper");
   } catch {
-    // Babel <7.9.0 doesn't support the helper.
+    // old Babel doesn't support the helper.
   }
 
-  const id = file.scope.generateUidIdentifier("createSuper");
+  const id = file.scope.generateUidIdentifier("callSuper");
   helperIDs.set(file, id);
 
   const fn = helper({
-    CREATE_SUPER: id,
+    CALL_SUPER: id,
     GET_PROTOTYPE_OF: file.addHelper("getPrototypeOf"),
     POSSIBLE_CONSTRUCTOR_RETURN: file.addHelper("possibleConstructorReturn"),
   });

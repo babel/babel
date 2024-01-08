@@ -13,10 +13,9 @@ try {
     "use strict";
 
     babelHelpers.inherits(CustomElement, _HTMLElement);
-    var _super = babelHelpers.createSuper(CustomElement);
     function CustomElement() {
       babelHelpers.classCallCheck(this, CustomElement);
-      return _super.apply(this, arguments);
+      return babelHelpers.callSuper(this, CustomElement, arguments);
     }
     return babelHelpers.createClass(CustomElement);
   }( /*#__PURE__*/babelHelpers.wrapNativeSuper(HTMLElement));

@@ -2,10 +2,9 @@ var TestEmpty = /*#__PURE__*/function (_ref) {
   "use strict";
 
   babelHelpers.inherits(TestEmpty, _ref);
-  var _super = babelHelpers.createSuper(TestEmpty);
   function TestEmpty() {
     babelHelpers.classCallCheck(this, TestEmpty);
-    return _super.apply(this, arguments);
+    return babelHelpers.callSuper(this, TestEmpty, arguments);
   }
   return babelHelpers.createClass(TestEmpty);
 }( /*#__PURE__*/function () {
@@ -20,10 +19,9 @@ var TestConstructorOnly = /*#__PURE__*/function (_ref2) {
   "use strict";
 
   babelHelpers.inherits(TestConstructorOnly, _ref2);
-  var _super2 = babelHelpers.createSuper(TestConstructorOnly);
   function TestConstructorOnly() {
     babelHelpers.classCallCheck(this, TestConstructorOnly);
-    return _super2.apply(this, arguments);
+    return babelHelpers.callSuper(this, TestConstructorOnly, arguments);
   }
   return babelHelpers.createClass(TestConstructorOnly);
 }( /*#__PURE__*/function () {
@@ -38,10 +36,9 @@ var TestMethodOnly = /*#__PURE__*/function (_ref3) {
   "use strict";
 
   babelHelpers.inherits(TestMethodOnly, _ref3);
-  var _super3 = babelHelpers.createSuper(TestMethodOnly);
   function TestMethodOnly() {
     babelHelpers.classCallCheck(this, TestMethodOnly);
-    return _super3.apply(this, arguments);
+    return babelHelpers.callSuper(this, TestMethodOnly, arguments);
   }
   return babelHelpers.createClass(TestMethodOnly);
 }( /*#__PURE__*/function () {
@@ -60,10 +57,9 @@ var TestConstructorAndMethod = /*#__PURE__*/function (_ref4) {
   "use strict";
 
   babelHelpers.inherits(TestConstructorAndMethod, _ref4);
-  var _super4 = babelHelpers.createSuper(TestConstructorAndMethod);
   function TestConstructorAndMethod() {
     babelHelpers.classCallCheck(this, TestConstructorAndMethod);
-    return _super4.apply(this, arguments);
+    return babelHelpers.callSuper(this, TestConstructorAndMethod, arguments);
   }
   return babelHelpers.createClass(TestConstructorAndMethod);
 }( /*#__PURE__*/function () {
@@ -82,10 +78,9 @@ var TestMultipleMethods = /*#__PURE__*/function (_ref5) {
   "use strict";
 
   babelHelpers.inherits(TestMultipleMethods, _ref5);
-  var _super5 = babelHelpers.createSuper(TestMultipleMethods);
   function TestMultipleMethods() {
     babelHelpers.classCallCheck(this, TestMultipleMethods);
-    return _super5.apply(this, arguments);
+    return babelHelpers.callSuper(this, TestMultipleMethods, arguments);
   }
   return babelHelpers.createClass(TestMultipleMethods);
 }( /*#__PURE__*/function () {

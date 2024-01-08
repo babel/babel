@@ -5,14 +5,13 @@ var Test = /*#__PURE__*/babelHelpers.createClass(function Test() {
   babelHelpers.classCallCheck(this, Test);
   var Other = /*#__PURE__*/function (_Test) {
     babelHelpers.inherits(Other, _Test);
-    var _super = babelHelpers.createSuper(Other);
     function Other() {
       var _thisSuper, _this;
       babelHelpers.classCallCheck(this, Other);
       for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
       }
-      _this = _super.call.apply(_super, [this].concat(args));
+      _this = babelHelpers.callSuper(this, Other, [].concat(args));
       babelHelpers.defineProperty(babelHelpers.assertThisInitialized(_this), "a", function () {
         return babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Other.prototype)), "test", _thisSuper);
       });
