@@ -350,11 +350,11 @@ export default /* @no-mangle */ function applyDecs2305(
           ctx.private = isPrivate;
 
           var get, set;
-          if (!isPrivate && (isField || kind === PROP_KIND.METHOD)) {
+          if (!isPrivate) {
             get = function (target: any) {
               return target[name];
             };
-            if (isField) {
+            if (kind < PROP_KIND.METHOD || kind === PROP_KIND.SETTER) {
               set = function (target: any, v: any) {
                 target[name] = v;
               };
@@ -365,19 +365,11 @@ export default /* @no-mangle */ function applyDecs2305(
               return desc.value;
             };
           } else {
-            if (kind < PROP_KIND.METHOD || kind === PROP_KIND.GETTER) {
-              get = _bindPropCall(
-                desc,
-                "get",
-                isPrivate && assertInstanceIfPrivate,
-              );
+            if (kind < PROP_KIND.SETTER) {
+              get = _bindPropCall(desc, "get", assertInstanceIfPrivate);
             }
-            if (kind < PROP_KIND.METHOD || kind === PROP_KIND.SETTER) {
-              set = _bindPropCall(
-                desc,
-                "set",
-                isPrivate && assertInstanceIfPrivate,
-              );
+            if (kind !== PROP_KIND.GETTER) {
+              set = _bindPropCall(desc, "set", assertInstanceIfPrivate);
             }
           }
 
