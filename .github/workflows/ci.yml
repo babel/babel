@@ -410,10 +410,11 @@ jobs:
       - name: Support self-references on old Node.js
         run: |
           echo '{
+            "type": "commonjs",
             "private": true,
             "devDependencies": {
-              "@babel/runtime": "workspace:*",
-              "@babel/runtime-corejs3": "workspace:*"
+              "@babel/runtime": "workspace:^",
+              "@babel/runtime-corejs3": "workspace:^"
             }
           }' > packages/package.json
           node -e "
