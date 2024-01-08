@@ -8,9 +8,6 @@ if (!isCI) {
   }
 
   if (!existsSync(".vscode/settings.json")) {
-    writeFileSync(
-      ".vscode/settings.json",
-      readFileSync(".vscode/settings.example.json")
-    );
+    copyFileSync(".vscode/settings.example.json", ".vscode/settings.json");
   }
 }
