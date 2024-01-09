@@ -283,25 +283,21 @@ export default class State {
     return new Position(this.curLine, this.pos - this.lineStart, this.pos);
   }
 
-  clone(skipArrays?: boolean): State {
-    function maybeCopy(val: any[]) {
-      return skipArrays ? val : val.slice();
-    }
-
+  clone(): State {
     const state = new State();
     state.flags = this.flags;
     state.curLine = this.curLine;
     state.lineStart = this.lineStart;
     state.startLoc = this.startLoc;
     state.endLoc = this.endLoc;
-    state.errors = maybeCopy(this.errors);
+    state.errors = this.errors.slice();
     state.potentialArrowAt = this.potentialArrowAt;
-    state.noArrowAt = maybeCopy(this.noArrowAt);
-    state.noArrowParamsConversionAt = maybeCopy(this.noArrowParamsConversionAt);
+    state.noArrowAt = this.noArrowAt.slice();
+    state.noArrowParamsConversionAt = this.noArrowParamsConversionAt.slice();
     state.topicContext = this.topicContext;
-    state.labels = maybeCopy(this.labels);
+    state.labels = this.labels.slice();
     state.commentsLen = this.commentsLen;
-    state.commentStack = maybeCopy(this.commentStack);
+    state.commentStack = this.commentStack.slice();
     state.pos = this.pos;
     state.type = this.type;
     state.value = this.value;
@@ -309,7 +305,7 @@ export default class State {
     state.end = this.end;
     state.lastTokEndLoc = this.lastTokEndLoc;
     state.lastTokStartLoc = this.lastTokStartLoc;
-    state.context = maybeCopy(this.context);
+    state.context = this.context.slice();
     state.firstInvalidTemplateEscapePos = this.firstInvalidTemplateEscapePos;
     state.strictErrors = this.strictErrors;
     state.tokensLength = this.tokensLength;

@@ -194,12 +194,7 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
   checkLocalExport(id: N.Identifier) {
     const { name } = id;
     const topLevelScope = this.scopeStack[0];
-    if (
-      !topLevelScope.names.has(name)
-      // In strict mode, scope.functions will always be empty.
-      // Modules are strict by default, but the `scriptMode` option
-      // can overwrite this behavior.
-    ) {
+    if (!topLevelScope.names.has(name)) {
       this.undefinedExports.set(name, id.loc.start);
     }
   }
