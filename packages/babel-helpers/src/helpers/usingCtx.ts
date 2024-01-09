@@ -1,4 +1,4 @@
-/* @minVersion 7.23.0 */
+/* @minVersion 7.23.9 */
 
 type Stack = {
   v: any;
