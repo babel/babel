@@ -56,6 +56,7 @@ if (!process.env.BABEL_8_BREAKING) {
   (PluginPass as any).prototype.addImport = function addImport(
     this: PluginPass,
   ): void {
+    // @ts-expect-error only exists in Babel 7
     this.file.addImport();
   };
 }
