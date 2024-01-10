@@ -642,17 +642,21 @@ export default declare((api, opts: Options) => {
         if (setSpreadProperties) {
           helper = getExtendsHelper(file);
         } else {
-          try {
+          if (process.env.BABEL_8_BREAKING) {
             helper = file.addHelper("objectSpread2");
-          } catch {
-            // TODO: This is needed to workaround https://github.com/babel/babel/issues/10187
-            // and https://github.com/babel/babel/issues/10179 for older @babel/core versions
-            // where #10187 isn't fixed.
-            this.file.declarations["objectSpread2"] = null;
+          } else {
+            try {
+              helper = file.addHelper("objectSpread2");
+            } catch {
+              // TODO: This is needed to workaround https://github.com/babel/babel/issues/10187
+              // and https://github.com/babel/babel/issues/10179 for older @babel/core versions
+              // where #10187 isn't fixed.
+              this.file.declarations["objectSpread2"] = null;
 
-            // objectSpread2 has been introduced in v7.5.0
-            // We have to maintain backward compatibility.
-            helper = file.addHelper("objectSpread");
+              // objectSpread2 has been introduced in v7.5.0
+              // We have to maintain backward compatibility.
+              helper = file.addHelper("objectSpread");
+            }
           }
         }
 

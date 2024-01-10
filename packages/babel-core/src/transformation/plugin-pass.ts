@@ -1,5 +1,5 @@
+import type * as t from "@babel/types";
 import type File from "./file/file.ts";
-import type { NodeLocation } from "./file/file.ts";
 
 export default class PluginPass<Options = {}> {
   _map: Map<unknown, unknown> = new Map();
@@ -39,7 +39,7 @@ export default class PluginPass<Options = {}> {
   }
 
   buildCodeFrameError(
-    node: NodeLocation | undefined | null,
+    node: t.Node | undefined | null,
     msg: string,
     _Error?: typeof Error,
   ) {
