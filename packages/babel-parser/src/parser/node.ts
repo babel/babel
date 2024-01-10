@@ -1,4 +1,3 @@
-import type Parser from "./index.ts";
 import UtilParser from "./util.ts";
 import { SourceLocation, type Position } from "../util/location.ts";
 import type { Comment, Node as NodeType, NodeBase } from "../types.ts";
@@ -6,7 +5,7 @@ import type { Comment, Node as NodeType, NodeBase } from "../types.ts";
 // Start an AST node, attaching a start offset.
 
 class Node implements NodeBase {
-  constructor(parser: Parser, pos: number, loc: Position) {
+  constructor(parser: UtilParser, pos: number, loc: Position) {
     this.start = pos;
     this.end = 0;
     this.loc = new SourceLocation(loc);
@@ -98,13 +97,12 @@ export type Undone<T extends NodeType> = Omit<T, "type">;
 
 export abstract class NodeUtils extends UtilParser {
   startNode<T extends NodeType>(): Undone<T> {
-    // @ts-expect-error cast Node as Undone<T>
-    return new Node(this, this.state.start, this.state.startLoc);
+    const loc = this.state.startLoc;
+    return new Node(this, loc.index, loc) as unknown as Undone<T>;
   }
 
   startNodeAt<T extends NodeType>(loc: Position): Undone<T> {
-    // @ts-expect-error cast Node as Undone<T>
-    return new Node(this, loc.index, loc);
+    return new Node(this, loc.index, loc) as unknown as Undone<T>;
   }
 
   /** Start a new node with a previous node's location. */

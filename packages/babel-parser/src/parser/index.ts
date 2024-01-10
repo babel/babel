@@ -44,6 +44,7 @@ export default class Parser extends StatementParser {
     file.errors = null;
     this.parseTopLevel(file, program);
     file.errors = this.state.errors;
+    file.comments.length = this.state.commentsLen;
     return file;
   }
 }

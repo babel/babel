@@ -1,6 +1,4 @@
 import { Position } from "./util/location.ts";
-import type { Undone } from "./parser/node.ts";
-import type { Node } from "./types.ts";
 
 type SyntaxPlugin =
   | "flow"
@@ -46,10 +44,10 @@ export type ParseError<ErrorDetails> = SyntaxError &
 // separate classes from `SyntaxError`'s.
 //
 // 1. https://github.com/microsoft/TypeScript/blob/v4.5.5/lib/lib.es5.d.ts#L1027
-export type ParseErrorConstructor<ErrorDetails> = (a: {
-  loc: Position;
-  details: ErrorDetails;
-}) => ParseError<ErrorDetails>;
+export type ParseErrorConstructor<ErrorDetails> = (
+  loc: Position,
+  details: ErrorDetails,
+) => ParseError<ErrorDetails>;
 
 type ToMessage<ErrorDetails> = (self: ErrorDetails) => string;
 
@@ -72,12 +70,7 @@ function toParseErrorConstructor<ErrorDetails extends object>({
   toMessage,
   ...properties
 }: ParseErrorCredentials<ErrorDetails>): ParseErrorConstructor<ErrorDetails> {
-  type ConstructorArgument = {
-    loc: Position;
-    details: ErrorDetails;
-  };
-
-  return function constructor({ loc, details }: ConstructorArgument) {
+  return function constructor(loc: Position, details: ErrorDetails) {
     const error = new SyntaxError();
     Object.assign(error, properties, { loc, pos: loc.index });
     if ("missingPlugin" in details) {
@@ -90,9 +83,9 @@ function toParseErrorConstructor<ErrorDetails extends object>({
     };
     defineHidden(error, "clone", function clone(overrides: Overrides = {}) {
       const { line, column, index } = overrides.loc ?? loc;
-      return constructor({
-        loc: new Position(line, column, index),
-        details: { ...details, ...overrides.details },
+      return constructor(new Position(line, column, index), {
+        ...details,
+        ...overrides.details,
       });
     });
 
@@ -215,10 +208,6 @@ export function ParseErrorEnum(
 
   return ParseErrorConstructors;
 }
-
-export type RaiseProperties<ErrorDetails> = {
-  at: Position | Undone<Node>;
-} & ErrorDetails;
 
 import ModuleErrors from "./parse-error/module-errors.ts";
 import StandardErrors from "./parse-error/standard-errors.ts";

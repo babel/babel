@@ -1,26 +1,26 @@
 import type { Position } from "../../util/location.ts";
-import ScopeHandler, { Scope } from "../../util/scope.ts";
+import ScopeHandler, { NameType, Scope } from "../../util/scope.ts";
 import { BindingFlag, ScopeFlag } from "../../util/scopeflags.ts";
 import type * as N from "../../types.ts";
 import { Errors } from "../../parse-error.ts";
 
-class TypeScriptScope extends Scope {
-  types: Set<string> = new Set();
-
+const enum TsNameType {
+  Types = 1 << 0,
   // enums (which are also in .types)
-  enums: Set<string> = new Set();
-
+  Enums = 1 << 1,
   // const enums (which are also in .enums and .types)
-  constEnums: Set<string> = new Set();
-
+  ConstEnums = 1 << 2,
   // classes (which are also in .lexical) and interface (which are also in .types)
-  classes: Set<string> = new Set();
-
+  Classes = 1 << 3,
   // namespaces and ambient functions (or classes) are too difficult to track,
   // especially without type analysis.
   // We need to track them anyway, to avoid "X is not defined" errors
   // when exporting them.
-  exportOnlyBindings: Set<string> = new Set();
+  ExportOnlyBindings = 1 << 4,
+}
+
+class TypeScriptScope extends Scope {
+  tsNames: Map<string, TsNameType> = new Map();
 }
 
 // See https://github.com/babel/babel/pull/9766#discussion_r268920730 for an
@@ -69,8 +69,7 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
   declareName(name: string, bindingType: BindingFlag, loc: Position) {
     if (bindingType & BindingFlag.FLAG_TS_IMPORT) {
       if (this.hasImport(name, true)) {
-        this.parser.raise(Errors.VarRedeclaration, {
-          at: loc,
+        this.parser.raise(Errors.VarRedeclaration, loc, {
           identifierName: name,
         });
       }
@@ -79,9 +78,11 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
     }
 
     const scope = this.currentScope();
+    let type = scope.tsNames.get(name) || 0;
+
     if (bindingType & BindingFlag.FLAG_TS_EXPORT_ONLY) {
       this.maybeExportDefined(scope, name);
-      scope.exportOnlyBindings.add(name);
+      scope.tsNames.set(name, type | TsNameType.ExportOnlyBindings);
       return;
     }
 
@@ -93,13 +94,18 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
         this.checkRedeclarationInScope(scope, name, bindingType, loc);
         this.maybeExportDefined(scope, name);
       }
-      scope.types.add(name);
+      type = type | TsNameType.Types;
     }
-    if (bindingType & BindingFlag.FLAG_TS_ENUM) scope.enums.add(name);
+    if (bindingType & BindingFlag.FLAG_TS_ENUM) {
+      type = type | TsNameType.Enums;
+    }
     if (bindingType & BindingFlag.FLAG_TS_CONST_ENUM) {
-      scope.constEnums.add(name);
+      type = type | TsNameType.ConstEnums;
     }
-    if (bindingType & BindingFlag.FLAG_CLASS) scope.classes.add(name);
+    if (bindingType & BindingFlag.FLAG_CLASS) {
+      type = type | TsNameType.Classes;
+    }
+    if (type) scope.tsNames.set(name, type);
   }
 
   isRedeclaredInScope(
@@ -107,18 +113,22 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
     name: string,
     bindingType: BindingFlag,
   ): boolean {
-    if (scope.enums.has(name)) {
+    const type = scope.tsNames.get(name);
+    if ((type & TsNameType.Enums) > 0) {
       if (bindingType & BindingFlag.FLAG_TS_ENUM) {
         // Enums can be merged with other enums if they are both
         //  const or both non-const.
         const isConst = !!(bindingType & BindingFlag.FLAG_TS_CONST_ENUM);
-        const wasConst = scope.constEnums.has(name);
+        const wasConst = (type & TsNameType.ConstEnums) > 0;
         return isConst !== wasConst;
       }
       return true;
     }
-    if (bindingType & BindingFlag.FLAG_CLASS && scope.classes.has(name)) {
-      if (scope.lexical.has(name)) {
+    if (
+      bindingType & BindingFlag.FLAG_CLASS &&
+      (type & TsNameType.Classes) > 0
+    ) {
+      if (scope.names.get(name) & NameType.Lexical) {
         // Classes can be merged with interfaces
         return !!(bindingType & BindingFlag.KIND_VALUE);
       } else {
@@ -126,7 +136,7 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
         return false;
       }
     }
-    if (bindingType & BindingFlag.KIND_TYPE && scope.types.has(name)) {
+    if (bindingType & BindingFlag.KIND_TYPE && (type & TsNameType.Types) > 0) {
       return true;
     }
 
@@ -141,7 +151,13 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
     const len = this.scopeStack.length;
     for (let i = len - 1; i >= 0; i--) {
       const scope = this.scopeStack[i];
-      if (scope.types.has(name) || scope.exportOnlyBindings.has(name)) return;
+      const type = scope.tsNames.get(name);
+      if (
+        (type & TsNameType.Types) > 0 ||
+        (type & TsNameType.ExportOnlyBindings) > 0
+      ) {
+        return;
+      }
     }
 
     super.checkLocalExport(id);

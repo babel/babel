@@ -46,11 +46,11 @@ export interface NodeBase {
   start: number;
   end: number;
   loc: SourceLocation;
-  range: [number, number];
+  range?: [number, number];
   leadingComments?: Array<Comment>;
   trailingComments?: Array<Comment>;
   innerComments?: Array<Comment>;
-  extra: {
+  extra?: {
     [key: string]: any;
   };
 }

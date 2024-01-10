@@ -102,7 +102,7 @@ export default abstract class UtilParser extends Tokenizer {
   ): void {
     if (!this.eatContextual(token)) {
       if (toParseError != null) {
-        throw this.raise(toParseError, { at: this.state.startLoc });
+        throw this.raise(toParseError, this.state.startLoc);
       }
       this.unexpected(null, token);
     }
@@ -138,7 +138,7 @@ export default abstract class UtilParser extends Tokenizer {
 
   semicolon(allowAsi: boolean = true): void {
     if (allowAsi ? this.isLineTerminator() : this.eat(tt.semi)) return;
-    this.raise(Errors.MissingSemicolon, { at: this.state.lastTokEndLoc });
+    this.raise(Errors.MissingSemicolon, this.state.lastTokEndLoc);
   }
 
   // Expect a token of a given type. If found, consume it, otherwise,
@@ -232,17 +232,15 @@ export default abstract class UtilParser extends Tokenizer {
     }
 
     if (shorthandAssignLoc != null) {
-      this.raise(Errors.InvalidCoverInitializedName, {
-        at: shorthandAssignLoc,
-      });
+      this.raise(Errors.InvalidCoverInitializedName, shorthandAssignLoc);
     }
 
     if (doubleProtoLoc != null) {
-      this.raise(Errors.DuplicateProto, { at: doubleProtoLoc });
+      this.raise(Errors.DuplicateProto, doubleProtoLoc);
     }
 
     if (privateKeyLoc != null) {
-      this.raise(Errors.UnexpectedPrivateField, { at: privateKeyLoc });
+      this.raise(Errors.UnexpectedPrivateField, privateKeyLoc);
     }
 
     if (optionalParametersLoc != null) {

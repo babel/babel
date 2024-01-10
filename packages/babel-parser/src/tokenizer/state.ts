@@ -1,5 +1,4 @@
 import type { Options } from "../options.ts";
-import type * as N from "../types.ts";
 import type { CommentWhitespace } from "../parser/comments";
 import { Position } from "../util/location.ts";
 
@@ -24,8 +23,40 @@ type TopicContextState = {
   maxTopicIndex: null | 0;
 };
 
+const enum StateFlags {
+  None = 0,
+  Strict = 1 << 0,
+  maybeInArrowParameters = 1 << 1,
+  inType = 1 << 2,
+  noAnonFunctionType = 1 << 3,
+  hasFlowComment = 1 << 4,
+  isAmbientContext = 1 << 5,
+  inAbstractClass = 1 << 6,
+  inDisallowConditionalTypesContext = 1 << 7,
+  soloAwait = 1 << 8,
+  inFSharpPipelineDirectBody = 1 << 9,
+  canStartJSXElement = 1 << 10,
+  containsEsc = 1 << 11,
+}
+
+export const enum LoopLabelKind {
+  Loop = 1,
+  Switch = 2,
+}
+
 export default class State {
-  strict: boolean;
+  flags: number = StateFlags.canStartJSXElement;
+
+  get strict(): boolean {
+    return (this.flags & StateFlags.Strict) > 0;
+  }
+  set strict(value: boolean) {
+    if (value) {
+      this.flags |= StateFlags.Strict;
+    } else {
+      this.flags &= ~StateFlags.Strict;
+    }
+  }
   curLine: number;
   lineStart: number;
 
@@ -67,13 +98,76 @@ export default class State {
   noArrowParamsConversionAt: number[] = [];
 
   // Flags to track
-  maybeInArrowParameters: boolean = false;
-  inType: boolean = false;
-  noAnonFunctionType: boolean = false;
-  hasFlowComment: boolean = false;
-  isAmbientContext: boolean = false;
-  inAbstractClass: boolean = false;
-  inDisallowConditionalTypesContext: boolean = false;
+  get maybeInArrowParameters(): boolean {
+    return (this.flags & StateFlags.maybeInArrowParameters) > 0;
+  }
+  set maybeInArrowParameters(value: boolean) {
+    if (value) {
+      this.flags |= StateFlags.maybeInArrowParameters;
+    } else {
+      this.flags &= ~StateFlags.maybeInArrowParameters;
+    }
+  }
+  get inType(): boolean {
+    return (this.flags & StateFlags.inType) > 0;
+  }
+  set inType(value: boolean) {
+    if (value) {
+      this.flags |= StateFlags.inType;
+    } else {
+      this.flags &= ~StateFlags.inType;
+    }
+  }
+  get noAnonFunctionType(): boolean {
+    return (this.flags & StateFlags.noAnonFunctionType) > 0;
+  }
+  set noAnonFunctionType(value: boolean) {
+    if (value) {
+      this.flags |= StateFlags.noAnonFunctionType;
+    } else {
+      this.flags &= ~StateFlags.noAnonFunctionType;
+    }
+  }
+  get hasFlowComment(): boolean {
+    return (this.flags & StateFlags.hasFlowComment) > 0;
+  }
+  set hasFlowComment(value: boolean) {
+    if (value) {
+      this.flags |= StateFlags.hasFlowComment;
+    } else {
+      this.flags &= ~StateFlags.hasFlowComment;
+    }
+  }
+  get isAmbientContext(): boolean {
+    return (this.flags & StateFlags.isAmbientContext) > 0;
+  }
+  set isAmbientContext(value: boolean) {
+    if (value) {
+      this.flags |= StateFlags.isAmbientContext;
+    } else {
+      this.flags &= ~StateFlags.isAmbientContext;
+    }
+  }
+  get inAbstractClass(): boolean {
+    return (this.flags & StateFlags.inAbstractClass) > 0;
+  }
+  set inAbstractClass(value: boolean) {
+    if (value) {
+      this.flags |= StateFlags.inAbstractClass;
+    } else {
+      this.flags &= ~StateFlags.inAbstractClass;
+    }
+  }
+  get inDisallowConditionalTypesContext(): boolean {
+    return (this.flags & StateFlags.inDisallowConditionalTypesContext) > 0;
+  }
+  set inDisallowConditionalTypesContext(value: boolean) {
+    if (value) {
+      this.flags |= StateFlags.inDisallowConditionalTypesContext;
+    } else {
+      this.flags &= ~StateFlags.inDisallowConditionalTypesContext;
+    }
+  }
 
   // For the Hack-style pipelines plugin
   topicContext: TopicContextState = {
@@ -82,19 +176,35 @@ export default class State {
   };
 
   // For the F#-style pipelines plugin
-  soloAwait: boolean = false;
-  inFSharpPipelineDirectBody: boolean = false;
+  get soloAwait(): boolean {
+    return (this.flags & StateFlags.soloAwait) > 0;
+  }
+  set soloAwait(value: boolean) {
+    if (value) {
+      this.flags |= StateFlags.soloAwait;
+    } else {
+      this.flags &= ~StateFlags.soloAwait;
+    }
+  }
+  get inFSharpPipelineDirectBody(): boolean {
+    return (this.flags & StateFlags.inFSharpPipelineDirectBody) > 0;
+  }
+  set inFSharpPipelineDirectBody(value: boolean) {
+    if (value) {
+      this.flags |= StateFlags.inFSharpPipelineDirectBody;
+    } else {
+      this.flags &= ~StateFlags.inFSharpPipelineDirectBody;
+    }
+  }
 
   // Labels in scope.
   labels: Array<{
-    kind: "loop" | "switch" | undefined | null;
+    kind: LoopLabelKind;
     name?: string | null;
     statementStart?: number;
   }> = [];
 
-  // Comment store for Program.comments
-  comments: Array<N.Comment> = [];
-
+  commentsLen = 0;
   // Comment attachment store
   commentStack: Array<CommentWhitespace> = [];
 
@@ -117,18 +227,35 @@ export default class State {
   lastTokEndLoc: Position = null;
   // this is initialized when generating the second token.
   lastTokStartLoc: Position = null;
-  lastTokStart: number = 0;
 
   // The context stack is used to track whether the apostrophe "`" starts
   // or ends a string template
   context: Array<TokContext> = [ct.brace];
   // Used to track whether a JSX element is allowed to form
-  canStartJSXElement: boolean = true;
+  get canStartJSXElement(): boolean {
+    return (this.flags & StateFlags.canStartJSXElement) > 0;
+  }
+  set canStartJSXElement(value: boolean) {
+    if (value) {
+      this.flags |= StateFlags.canStartJSXElement;
+    } else {
+      this.flags &= ~StateFlags.canStartJSXElement;
+    }
+  }
 
   // Used to signal to callers of `readWord1` whether the word
   // contained any escape sequences. This is needed because words with
   // escape sequences must not be interpreted as keywords.
-  containsEsc: boolean = false;
+  get containsEsc(): boolean {
+    return (this.flags & StateFlags.containsEsc) > 0;
+  }
+  set containsEsc(value: boolean) {
+    if (value) {
+      this.flags |= StateFlags.containsEsc;
+    } else {
+      this.flags &= ~StateFlags.containsEsc;
+    }
+  }
 
   // Used to track invalid escape sequences in template literals,
   // that must be reported if the template is not tagged.
@@ -147,24 +274,41 @@ export default class State {
   // Tokens length in token store
   tokensLength: number = 0;
 
+  /**
+   * When we add a new property, we must manually update the `clone` method
+   * @see State#clone
+   */
+
   curPosition(): Position {
     return new Position(this.curLine, this.pos - this.lineStart, this.pos);
   }
 
-  clone(skipArrays?: boolean): State {
+  clone(): State {
     const state = new State();
-    const keys = Object.keys(this) as (keyof State)[];
-    for (let i = 0, length = keys.length; i < length; i++) {
-      const key = keys[i];
-      let val = this[key];
-
-      if (!skipArrays && Array.isArray(val)) {
-        val = val.slice();
-      }
-
-      // @ts-expect-error val must conform to S[key]
-      state[key] = val;
-    }
+    state.flags = this.flags;
+    state.curLine = this.curLine;
+    state.lineStart = this.lineStart;
+    state.startLoc = this.startLoc;
+    state.endLoc = this.endLoc;
+    state.errors = this.errors.slice();
+    state.potentialArrowAt = this.potentialArrowAt;
+    state.noArrowAt = this.noArrowAt.slice();
+    state.noArrowParamsConversionAt = this.noArrowParamsConversionAt.slice();
+    state.topicContext = this.topicContext;
+    state.labels = this.labels.slice();
+    state.commentsLen = this.commentsLen;
+    state.commentStack = this.commentStack.slice();
+    state.pos = this.pos;
+    state.type = this.type;
+    state.value = this.value;
+    state.start = this.start;
+    state.end = this.end;
+    state.lastTokEndLoc = this.lastTokEndLoc;
+    state.lastTokStartLoc = this.lastTokStartLoc;
+    state.context = this.context.slice();
+    state.firstInvalidTemplateEscapePos = this.firstInvalidTemplateEscapePos;
+    state.strictErrors = this.strictErrors;
+    state.tokensLength = this.tokensLength;
 
     return state;
   }

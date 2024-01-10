@@ -93,9 +93,10 @@ export default (superClass: typeof Parser) =>
       let chunkStart = this.state.pos;
       for (;;) {
         if (this.state.pos >= this.length) {
-          throw this.raise(JsxErrors.UnterminatedJsxContent, {
-            at: this.state.startLoc,
-          });
+          throw this.raise(
+            JsxErrors.UnterminatedJsxContent,
+            this.state.startLoc,
+          );
         }
 
         const ch = this.input.charCodeAt(this.state.pos);
@@ -125,8 +126,7 @@ export default (superClass: typeof Parser) =>
           case charCodes.greaterThan:
           case charCodes.rightCurlyBrace:
             if (process.env.BABEL_8_BREAKING) {
-              this.raise(JsxErrors.UnexpectedToken, {
-                at: this.state.curPosition(),
+              this.raise(JsxErrors.UnexpectedToken, this.state.curPosition(), {
                 unexpected: this.input[this.state.pos],
                 HTMLEntity:
                   ch === charCodes.rightCurlyBrace ? "&rbrace;" : "&gt;",
@@ -170,9 +170,7 @@ export default (superClass: typeof Parser) =>
       let chunkStart = ++this.state.pos;
       for (;;) {
         if (this.state.pos >= this.length) {
-          throw this.raise(Errors.UnterminatedString, {
-            at: this.state.startLoc,
-          });
+          throw this.raise(Errors.UnterminatedString, this.state.startLoc);
         }
 
         const ch = this.input.charCodeAt(this.state.pos);
@@ -320,7 +318,7 @@ export default (superClass: typeof Parser) =>
           this.next();
           node = this.jsxParseExpressionContainer(node, tc.j_oTag);
           if (node.expression.type === "JSXEmptyExpression") {
-            this.raise(JsxErrors.AttributeIsEmpty, { at: node });
+            this.raise(JsxErrors.AttributeIsEmpty, node);
           }
           return node;
 
@@ -329,9 +327,7 @@ export default (superClass: typeof Parser) =>
           return this.parseExprAtom();
 
         default:
-          throw this.raise(JsxErrors.UnsupportedJsxValue, {
-            at: this.state.startLoc,
-          });
+          throw this.raise(JsxErrors.UnsupportedJsxValue, this.state.startLoc);
       }
     }
 
@@ -372,9 +368,10 @@ export default (superClass: typeof Parser) =>
             expression.type === "SequenceExpression" &&
             !expression.extra?.parenthesized
           ) {
-            this.raise(JsxErrors.UnexpectedSequenceExpression, {
-              at: expression.expressions[1],
-            });
+            this.raise(
+              JsxErrors.UnexpectedSequenceExpression,
+              expression.expressions[1],
+            );
           }
         }
 
@@ -500,12 +497,9 @@ export default (superClass: typeof Parser) =>
           !isFragment(closingElement) &&
           closingElement !== null
         ) {
-          this.raise(JsxErrors.MissingClosingTagFragment, {
-            at: closingElement,
-          });
+          this.raise(JsxErrors.MissingClosingTagFragment, closingElement);
         } else if (!isFragment(openingElement) && isFragment(closingElement)) {
-          this.raise(JsxErrors.MissingClosingTagElement, {
-            at: closingElement,
+          this.raise(JsxErrors.MissingClosingTagElement, closingElement, {
             openingTagName: getQualifiedJSXName(openingElement.name),
           });
         } else if (!isFragment(openingElement) && !isFragment(closingElement)) {
@@ -513,8 +507,7 @@ export default (superClass: typeof Parser) =>
             getQualifiedJSXName(closingElement.name) !==
             getQualifiedJSXName(openingElement.name)
           ) {
-            this.raise(JsxErrors.MissingClosingTagElement, {
-              at: closingElement,
+            this.raise(JsxErrors.MissingClosingTagElement, closingElement, {
               openingTagName: getQualifiedJSXName(openingElement.name),
             });
           }
@@ -530,9 +523,10 @@ export default (superClass: typeof Parser) =>
       }
       node.children = children;
       if (this.match(tt.lt)) {
-        throw this.raise(JsxErrors.UnwrappedAdjacentJSXElements, {
-          at: this.state.startLoc,
-        });
+        throw this.raise(
+          JsxErrors.UnwrappedAdjacentJSXElements,
+          this.state.startLoc,
+        );
       }
 
       return isFragment(openingElement)

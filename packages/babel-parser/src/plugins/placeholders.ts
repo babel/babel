@@ -246,9 +246,10 @@ export default (superClass: typeof Parser) =>
           node.body = this.finishPlaceholder(placeholder, "ClassBody");
           return this.finishNode(node, type);
         } else {
-          throw this.raise(PlaceholderErrors.ClassNameIsRequired, {
-            at: this.state.startLoc,
-          });
+          throw this.raise(
+            PlaceholderErrors.ClassNameIsRequired,
+            this.state.startLoc,
+          );
         }
       } else {
         this.parseClassId(node, isStatement, optionalId);
@@ -377,9 +378,7 @@ export default (superClass: typeof Parser) =>
     // Throws if the current token and the prev one are separated by a space.
     assertNoSpace(): void {
       if (this.state.start > this.state.lastTokEndLoc.index) {
-        this.raise(PlaceholderErrors.UnexpectedSpace, {
-          at: this.state.lastTokEndLoc,
-        });
+        this.raise(PlaceholderErrors.UnexpectedSpace, this.state.lastTokEndLoc);
       }
     }
   };

@@ -403,9 +403,9 @@ export default (superClass: typeof Parser) =>
       isLHS: boolean,
     ) {
       if (prop.kind === "get" || prop.kind === "set") {
-        this.raise(Errors.PatternHasAccessor, { at: prop.key });
+        this.raise(Errors.PatternHasAccessor, prop.key);
       } else if (prop.method) {
-        this.raise(Errors.PatternHasMethod, { at: prop.key });
+        this.raise(Errors.PatternHasMethod, prop.key);
       } else {
         super.toAssignableObjectExpressionProp(prop, isLast, isLHS);
       }

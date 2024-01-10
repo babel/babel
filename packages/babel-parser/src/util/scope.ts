@@ -4,15 +4,20 @@ import type * as N from "../types.ts";
 import { Errors } from "../parse-error.ts";
 import type Tokenizer from "../tokenizer/index.ts";
 
+export const enum NameType {
+  // var-declared names in the current lexical scope
+  Var = 1 << 0,
+  // lexically-declared names in the current lexical scope
+  Lexical = 1 << 1,
+  // lexically-declared FunctionDeclaration names in the current lexical scope
+  Function = 1 << 2,
+}
+
 // Start an AST node, attaching a start offset.
 export class Scope {
-  declare flags: ScopeFlag;
-  // A set of var-declared names in the current lexical scope
-  var: Set<string> = new Set();
-  // A set of lexically-declared names in the current lexical scope
-  lexical: Set<string> = new Set();
-  // A set of lexically-declared FunctionDeclaration names in the current lexical scope
-  functions: Set<string> = new Set();
+  flags: ScopeFlag = 0;
+  names: Map<string, NameType> = new Map();
+  firstLexicalName = "";
 
   constructor(flags: ScopeFlag) {
     this.flags = flags;
@@ -103,11 +108,18 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
     ) {
       this.checkRedeclarationInScope(scope, name, bindingType, loc);
 
+      let type = scope.names.get(name) || 0;
+
       if (bindingType & BindingFlag.SCOPE_FUNCTION) {
-        scope.functions.add(name);
+        type = type | NameType.Function;
       } else {
-        scope.lexical.add(name);
+        if (!scope.firstLexicalName) {
+          scope.firstLexicalName = name;
+        }
+        type = type | NameType.Lexical;
       }
+
+      scope.names.set(name, type);
 
       if (bindingType & BindingFlag.SCOPE_LEXICAL) {
         this.maybeExportDefined(scope, name);
@@ -116,7 +128,7 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
       for (let i = this.scopeStack.length - 1; i >= 0; --i) {
         scope = this.scopeStack[i];
         this.checkRedeclarationInScope(scope, name, bindingType, loc);
-        scope.var.add(name);
+        scope.names.set(name, (scope.names.get(name) || 0) | NameType.Var);
         this.maybeExportDefined(scope, name);
 
         if (scope.flags & ScopeFlag.VAR) break;
@@ -140,8 +152,7 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
     loc: Position,
   ) {
     if (this.isRedeclaredInScope(scope, name, bindingType)) {
-      this.parser.raise(Errors.VarRedeclaration, {
-        at: loc,
+      this.parser.raise(Errors.VarRedeclaration, loc, {
         identifierName: name,
       });
     }
@@ -155,43 +166,35 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
     if (!(bindingType & BindingFlag.KIND_VALUE)) return false;
 
     if (bindingType & BindingFlag.SCOPE_LEXICAL) {
-      return (
-        scope.lexical.has(name) ||
-        scope.functions.has(name) ||
-        scope.var.has(name)
-      );
+      return scope.names.has(name);
     }
+
+    const type = scope.names.get(name);
 
     if (bindingType & BindingFlag.SCOPE_FUNCTION) {
       return (
-        scope.lexical.has(name) ||
-        (!this.treatFunctionsAsVarInScope(scope) && scope.var.has(name))
+        (type & NameType.Lexical) > 0 ||
+        (!this.treatFunctionsAsVarInScope(scope) && (type & NameType.Var) > 0)
       );
     }
 
     return (
-      (scope.lexical.has(name) &&
+      ((type & NameType.Lexical) > 0 &&
         // Annex B.3.4
         // https://tc39.es/ecma262/#sec-variablestatements-in-catch-blocks
         !(
           scope.flags & ScopeFlag.SIMPLE_CATCH &&
-          scope.lexical.values().next().value === name
+          scope.firstLexicalName === name
         )) ||
-      (!this.treatFunctionsAsVarInScope(scope) && scope.functions.has(name))
+      (!this.treatFunctionsAsVarInScope(scope) &&
+        (type & NameType.Function) > 0)
     );
   }
 
   checkLocalExport(id: N.Identifier) {
     const { name } = id;
     const topLevelScope = this.scopeStack[0];
-    if (
-      !topLevelScope.lexical.has(name) &&
-      !topLevelScope.var.has(name) &&
-      // In strict mode, scope.functions will always be empty.
-      // Modules are strict by default, but the `scriptMode` option
-      // can overwrite this behavior.
-      !topLevelScope.functions.has(name)
-    ) {
+    if (!topLevelScope.names.has(name)) {
       this.undefinedExports.set(name, id.loc.start);
     }
   }

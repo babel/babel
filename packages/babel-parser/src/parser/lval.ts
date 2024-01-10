@@ -111,7 +111,7 @@ export default abstract class LValParser extends NodeUtils {
         if (parenthesized.type === "Identifier") {
           this.expressionScope.recordArrowParameterBindingError(
             Errors.InvalidParenthesizedAssignment,
-            { at: node },
+            node,
           );
         } else if (
           parenthesized.type !== "MemberExpression" &&
@@ -120,10 +120,10 @@ export default abstract class LValParser extends NodeUtils {
           // A parenthesized member expression can be in LHS but not in pattern.
           // If the LHS is later interpreted as a pattern, `checkLVal` will throw for member expression binding
           // i.e. `([(a.b) = []] = []) => {}`
-          this.raise(Errors.InvalidParenthesizedAssignment, { at: node });
+          this.raise(Errors.InvalidParenthesizedAssignment, node);
         }
       } else {
-        this.raise(Errors.InvalidParenthesizedAssignment, { at: node });
+        this.raise(Errors.InvalidParenthesizedAssignment, node);
       }
     }
 
@@ -151,9 +151,7 @@ export default abstract class LValParser extends NodeUtils {
             prop.type === "RestElement" &&
             node.extra?.trailingCommaLoc
           ) {
-            this.raise(Errors.RestTrailingComma, {
-              at: node.extra.trailingCommaLoc,
-            });
+            this.raise(Errors.RestTrailingComma, node.extra.trailingCommaLoc);
           }
         }
         break;
@@ -188,7 +186,7 @@ export default abstract class LValParser extends NodeUtils {
 
       case "AssignmentExpression":
         if (node.operator !== "=") {
-          this.raise(Errors.MissingEqInAssignment, { at: node.left.loc.end });
+          this.raise(Errors.MissingEqInAssignment, node.left.loc.end);
         }
 
         node.type = "AssignmentPattern";
@@ -217,7 +215,7 @@ export default abstract class LValParser extends NodeUtils {
         prop.kind === "get" || prop.kind === "set"
           ? Errors.PatternHasAccessor
           : Errors.PatternHasMethod,
-        { at: prop.key },
+        prop.key,
       );
     } else if (prop.type === "SpreadElement") {
       prop.type = "RestElement";
@@ -226,7 +224,7 @@ export default abstract class LValParser extends NodeUtils {
       this.toAssignable(arg, isLHS);
 
       if (!isLast) {
-        this.raise(Errors.RestTrailingComma, { at: prop });
+        this.raise(Errors.RestTrailingComma, prop);
       }
     } else {
       this.toAssignable(prop, isLHS);
@@ -257,9 +255,9 @@ export default abstract class LValParser extends NodeUtils {
 
       if (elt.type === "RestElement") {
         if (i < end) {
-          this.raise(Errors.RestTrailingComma, { at: elt });
+          this.raise(Errors.RestTrailingComma, elt);
         } else if (trailingCommaLoc) {
-          this.raise(Errors.RestTrailingComma, { at: trailingCommaLoc });
+          this.raise(Errors.RestTrailingComma, trailingCommaLoc);
         }
       }
     }
@@ -416,9 +414,7 @@ export default abstract class LValParser extends NodeUtils {
       } else {
         const decorators = [];
         if (this.match(tt.at) && this.hasPlugin("decorators")) {
-          this.raise(Errors.UnsupportedParameterDecorator, {
-            at: this.state.startLoc,
-          });
+          this.raise(Errors.UnsupportedParameterDecorator, this.state.startLoc);
         }
         // invariant: hasPlugin("decorators-legacy")
         while (this.match(tt.at)) {
@@ -615,15 +611,14 @@ export default abstract class LValParser extends NodeUtils {
       if (isOptionalMemberExpression) {
         this.expectPlugin("optionalChainingAssign", expression.loc.start);
         if (ancestor.type !== "AssignmentExpression") {
-          this.raise(Errors.InvalidLhsOptionalChaining, {
-            at: expression,
+          this.raise(Errors.InvalidLhsOptionalChaining, expression, {
             ancestor,
           });
         }
       }
 
       if (binding !== BindingFlag.TYPE_NONE) {
-        this.raise(Errors.InvalidPropertyBindingPattern, { at: expression });
+        this.raise(Errors.InvalidPropertyBindingPattern, expression);
       }
       return;
     }
@@ -639,7 +634,7 @@ export default abstract class LValParser extends NodeUtils {
 
       if (checkClashes) {
         if (checkClashes.has(name)) {
-          this.raise(Errors.ParamDupe, { at: expression });
+          this.raise(Errors.ParamDupe, expression);
         } else {
           checkClashes.add(name);
         }
@@ -662,7 +657,7 @@ export default abstract class LValParser extends NodeUtils {
           ? Errors.InvalidLhs
           : Errors.InvalidLhsBinding;
 
-      this.raise(ParseErrorClass, { at: expression, ancestor });
+      this.raise(ParseErrorClass, expression, { ancestor });
       return;
     }
 
@@ -700,17 +695,16 @@ export default abstract class LValParser extends NodeUtils {
         : isStrictBindOnlyReservedWord(at.name))
     ) {
       if (bindingType === BindingFlag.TYPE_NONE) {
-        this.raise(Errors.StrictEvalArguments, { at, referenceName: at.name });
+        this.raise(Errors.StrictEvalArguments, at, { referenceName: at.name });
       } else {
-        this.raise(Errors.StrictEvalArgumentsBinding, {
-          at,
+        this.raise(Errors.StrictEvalArgumentsBinding, at, {
           bindingName: at.name,
         });
       }
     }
 
     if (bindingType & BindingFlag.FLAG_NO_LET_IN_LEXICAL && at.name === "let") {
-      this.raise(Errors.LetInLexicalBinding, { at });
+      this.raise(Errors.LetInLexicalBinding, at);
     }
 
     if (!(bindingType & BindingFlag.TYPE_NONE)) {
@@ -735,7 +729,7 @@ export default abstract class LValParser extends NodeUtils {
         if (allowPattern) break;
       /* falls through */
       default:
-        this.raise(Errors.InvalidRestAssignmentPattern, { at: node });
+        this.raise(Errors.InvalidRestAssignmentPattern, node);
     }
   }
 
@@ -750,7 +744,7 @@ export default abstract class LValParser extends NodeUtils {
       this.lookaheadCharCode() === close
         ? Errors.RestTrailingComma
         : Errors.ElementAfterRest,
-      { at: this.state.startLoc },
+      this.state.startLoc,
     );
 
     return true;
