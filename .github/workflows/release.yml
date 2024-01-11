@@ -312,13 +312,12 @@ jobs:
           git push --force "https://babel-bot:${{ secrets.BOT_TOKEN }}@github.com/babel/website.git" update-types-docs
       - name: Create Pull Request
         uses: babel/actions/create-pull-request@v2
-        env:
-          GITHUB_REPOSITORY: babel/website
         with:
           token: ${{ secrets.BOT_TOKEN }}
+          repository: babel/website
           branch: update-types-docs
           title: Update Babel types docs
-          description: Updated `@babel/types` docs for [Babel v${{ needs.github-release.outputs.version }}](https://github.com/babel/babel/releases/tag/${{ needs.github-release.outputs.version }}).
+          description: Updated `@babel/types` docs for [Babel ${{ needs.github-release.outputs.version }}](https://github.com/babel/babel/releases/tag/${{ needs.github-release.outputs.version }}).
           labels: |
             docs
             repo automation :robot:
