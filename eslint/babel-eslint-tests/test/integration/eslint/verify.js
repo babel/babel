@@ -1749,6 +1749,17 @@ describe("verify", () => {
           { "no-unused-vars": 1 },
         );
       });
+
+      it("no-use-before-define allows referencing the class in a field", () => {
+        verifyAndAssertMessages(
+          `
+            class C {
+              d = C.name;
+            }
+          `,
+          { "no-use-before-define": 1 },
+        );
+      });
     });
 
     describe("private field declarations", () => {
@@ -1771,6 +1782,17 @@ describe("verify", () => {
               }
           `,
           { "no-unused-vars": 1 },
+        );
+      });
+
+      it("no-use-before-define allows referencing the class in a field", () => {
+        verifyAndAssertMessages(
+          `
+            class C {
+              #d = C.name;
+            }
+          `,
+          { "no-use-before-define": 1 },
         );
       });
 
