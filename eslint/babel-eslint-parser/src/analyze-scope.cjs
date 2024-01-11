@@ -213,8 +213,30 @@ class Referencer extends OriginalReferencer {
   }
 
   _visitClassProperty(node) {
-    this._visitTypeAnnotation(node.typeAnnotation);
-    this.visitProperty(node);
+    const { computed, key, typeAnnotation, value } = node;
+
+    if (computed) this.visit(key);
+    this._visitTypeAnnotation(typeAnnotation);
+
+    if (value) {
+      if (this.scopeManager.__nestClassFieldInitializerScope) {
+        this.scopeManager.__nestClassFieldInitializerScope(value);
+      } else {
+        // Given that ESLint 7 didn't have a "class field initializer" scope,
+        // we create a plain method scope. Semantics are the same.
+        this.scopeManager.__nestScope(
+          new Scope(
+            this.scopeManager,
+            "function",
+            this.scopeManager.__currentScope,
+            value,
+            true,
+          ),
+        );
+      }
+      this.visit(value);
+      this.close(value);
+    }
   }
 
   _visitDeclareX(node) {
