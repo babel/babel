@@ -76,7 +76,7 @@ packages/babel-standalone/babel.min.js.map
 
 /eslint/*/lib
 /eslint/*/LICENSE
-!/packages/babel-eslint-plugin/LICENSE
+!/eslint/babel-eslint-plugin/LICENSE
 
 /.vscode/**
 !/.vscode/settings.example.json
