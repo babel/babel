@@ -1002,10 +1002,10 @@ export default abstract class ExpressionParser extends LValParser {
     nodeForExtra?: N.Node | null,
     refExpressionErrors?: ExpressionErrors | null,
   ): Array<N.Expression | undefined | null> {
+    using _ = this.withState("inFSharpPipelineDirectBody", false);
+
     const elts: N.Expression[] = [];
     let first = true;
-    const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
-    this.state.inFSharpPipelineDirectBody = false;
 
     while (!this.eat(close)) {
       if (first) {
@@ -1036,8 +1036,6 @@ export default abstract class ExpressionParser extends LValParser {
         this.parseExprListItem(false, refExpressionErrors, allowPlaceholder),
       );
     }
-
-    this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
 
     return elts;
   }
@@ -1753,11 +1751,6 @@ export default abstract class ExpressionParser extends LValParser {
     this.next(); // eat `(`
     this.expressionScope.enter(newArrowHeadScope());
 
-    const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
-    const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
-    this.state.maybeInArrowParameters = true;
-    this.state.inFSharpPipelineDirectBody = false;
-
     const innerStartLoc = this.state.startLoc;
     const exprList: N.Expression[] = [];
     const refExpressionErrors = new ExpressionErrors();
@@ -1765,47 +1758,49 @@ export default abstract class ExpressionParser extends LValParser {
     let spreadStartLoc;
     let optionalCommaStartLoc;
 
-    while (!this.match(tt.parenR)) {
-      if (first) {
-        first = false;
-      } else {
-        this.expect(
-          tt.comma,
-          refExpressionErrors.optionalParametersLoc === null
-            ? null
-            : refExpressionErrors.optionalParametersLoc,
-        );
-        if (this.match(tt.parenR)) {
-          optionalCommaStartLoc = this.state.startLoc;
-          break;
-        }
-      }
+    {
+      using _1 = this.withState("maybeInArrowParameters", true);
+      using _2 = this.withState("inFSharpPipelineDirectBody", false);
 
-      if (this.match(tt.ellipsis)) {
-        const spreadNodeStartLoc = this.state.startLoc;
-        spreadStartLoc = this.state.startLoc;
-        exprList.push(
-          this.parseParenItem(this.parseRestBinding(), spreadNodeStartLoc),
-        );
-
-        if (!this.checkCommaAfterRest(charCodes.rightParenthesis)) {
-          break;
+      while (!this.match(tt.parenR)) {
+        if (first) {
+          first = false;
+        } else {
+          this.expect(
+            tt.comma,
+            refExpressionErrors.optionalParametersLoc === null
+              ? null
+              : refExpressionErrors.optionalParametersLoc,
+          );
+          if (this.match(tt.parenR)) {
+            optionalCommaStartLoc = this.state.startLoc;
+            break;
+          }
         }
-      } else {
-        exprList.push(
-          this.parseMaybeAssignAllowIn(
-            refExpressionErrors,
-            this.parseParenItem,
-          ),
-        );
+
+        if (this.match(tt.ellipsis)) {
+          const spreadNodeStartLoc = this.state.startLoc;
+          spreadStartLoc = this.state.startLoc;
+          exprList.push(
+            this.parseParenItem(this.parseRestBinding(), spreadNodeStartLoc),
+          );
+
+          if (!this.checkCommaAfterRest(charCodes.rightParenthesis)) {
+            break;
+          }
+        } else {
+          exprList.push(
+            this.parseMaybeAssignAllowIn(
+              refExpressionErrors,
+              this.parseParenItem,
+            ),
+          );
+        }
       }
     }
 
     const innerEndLoc = this.state.lastTokEndLoc;
     this.expect(tt.parenR);
-
-    this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
-    this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
 
     let arrowNode = this.startNodeAt<N.ArrowFunctionExpression>(startLoc);
     if (
@@ -2038,8 +2033,8 @@ export default abstract class ExpressionParser extends LValParser {
     if (isRecord) {
       this.expectPlugin("recordAndTuple");
     }
-    const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
-    this.state.inFSharpPipelineDirectBody = false;
+    using _ = this.withState("inFSharpPipelineDirectBody", false);
+
     const propHash: any = Object.create(null);
     let first = true;
     const node = this.startNode<
@@ -2090,7 +2085,6 @@ export default abstract class ExpressionParser extends LValParser {
 
     this.next();
 
-    this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
     let type = "ObjectExpression";
     if (isPattern) {
       type = "ObjectPattern";
@@ -2468,8 +2462,8 @@ export default abstract class ExpressionParser extends LValParser {
     if (isTuple) {
       this.expectPlugin("recordAndTuple");
     }
-    const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
-    this.state.inFSharpPipelineDirectBody = false;
+    using _ = this.withState("inFSharpPipelineDirectBody", false);
+
     const node = this.startNode<N.ArrayExpression | N.TupleExpression>();
     this.next();
     node.elements = this.parseExprList(
@@ -2479,7 +2473,6 @@ export default abstract class ExpressionParser extends LValParser {
       // @ts-expect-error todo(flow->ts)
       node,
     );
-    this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
     return this.finishNode(
       node,
       isTuple ? "TupleExpression" : "ArrayExpression",
@@ -3076,16 +3069,13 @@ export default abstract class ExpressionParser extends LValParser {
     const startLoc = this.state.startLoc;
 
     this.state.potentialArrowAt = this.state.start;
-    const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
-    this.state.inFSharpPipelineDirectBody = true;
+    using _ = this.withState("inFSharpPipelineDirectBody", true);
 
     const ret = this.parseExprOp(
       this.parseMaybeUnaryOrPrivate(),
       startLoc,
       prec,
     );
-
-    this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
 
     return ret;
   }
