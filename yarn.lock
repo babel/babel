@@ -1450,6 +1450,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-proposal-explicit-resource-management@npm:8.0.0-alpha.5":
+  version: 8.0.0-alpha.5
+  resolution: "@babel/plugin-proposal-explicit-resource-management@npm:8.0.0-alpha.5"
+  dependencies:
+    "@babel/helper-plugin-utils": "npm:^8.0.0-alpha.5"
+    "@babel/plugin-syntax-explicit-resource-management": "npm:^8.0.0-alpha.5"
+  peerDependencies:
+    "@babel/core": ^8.0.0-alpha.5
+  checksum: f4ddbf5c363fee2d67cbce6c69b793e8d9e71da84caabce558b5d19cd4df117e1b0a8c1e00cc068fa4557c1363fdcc1b87b1b657e0b2ee3bf6b3a5f6303b22b4
+  languageName: node
+  linkType: hard
+
 "@babel/plugin-proposal-explicit-resource-management@workspace:^, @babel/plugin-proposal-explicit-resource-management@workspace:packages/babel-plugin-proposal-explicit-resource-management":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-explicit-resource-management@workspace:packages/babel-plugin-proposal-explicit-resource-management"
@@ -1787,6 +1799,17 @@ __metadata:
   dependencies:
     "@babel/plugin-syntax-dynamic-import-BABEL_8_BREAKING-false": "npm:@babel/plugin-syntax-dynamic-import@^7.8.3"
   checksum: 420a529521889af2c832844278b1edc3193ca8fe8682dd64029ae28b46b0ec7241dc058a227f90f967c2e9492d533a62a1083c75fca0d8db798f9996f4cffb17
+  languageName: node
+  linkType: hard
+
+"@babel/plugin-syntax-explicit-resource-management@npm:^8.0.0-alpha.5":
+  version: 8.0.0-alpha.5
+  resolution: "@babel/plugin-syntax-explicit-resource-management@npm:8.0.0-alpha.5"
+  dependencies:
+    "@babel/helper-plugin-utils": "npm:^8.0.0-alpha.5"
+  peerDependencies:
+    "@babel/core": ^8.0.0-alpha.5
+  checksum: 60414d8fcd69fbf400e621367e34cdf5e48de942664c69551bf87f80502818bd463e32a4ce8f225754a93eecadb3af32a47dae26d1caadcc9f77f5c102c0d1a0
   languageName: node
   linkType: hard
 
@@ -6882,6 +6905,7 @@ __metadata:
     "@babel/eslint-parser": "workspace:^"
     "@babel/eslint-plugin-development": "workspace:^"
     "@babel/eslint-plugin-development-internal": "workspace:^"
+    "@babel/plugin-proposal-explicit-resource-management": "npm:8.0.0-alpha.5"
     "@babel/plugin-transform-dynamic-import": "npm:8.0.0-alpha.5"
     "@babel/plugin-transform-export-namespace-from": "npm:8.0.0-alpha.5"
     "@babel/plugin-transform-modules-commonjs": "npm:8.0.0-alpha.5"

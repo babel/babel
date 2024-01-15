@@ -11,18 +11,6 @@ export type DeferredStrictError =
   | typeof Errors.StrictNumericEscape
   | typeof Errors.StrictOctalLiteral;
 
-type TopicContextState = {
-  // When a topic binding has been currently established,
-  // then this is 1. Otherwise, it is 0. This is forwards compatible
-  // with a future plugin for multiple lexical topics.
-  maxNumOfResolvableTopics: number;
-  // When a topic binding has been currently established, and if that binding
-  // has been used as a topic reference `#`, then this is 0. Otherwise, it is
-  // `null`. This is forwards compatible with a future plugin for multiple
-  // lexical topics.
-  maxTopicIndex: null | 0;
-};
-
 const enum StateFlags {
   None = 0,
   Strict = 1 << 0,
@@ -169,11 +157,9 @@ export default class State {
     }
   }
 
-  // For the Hack-style pipelines plugin
-  topicContext: TopicContextState = {
-    maxNumOfResolvableTopics: 0,
-    maxTopicIndex: null,
-  };
+  // For the Hack-style and Smart-style pipelines plugins.
+  // When null, topic references are not allowed.
+  topicReferenceUsage: null | { used: boolean } = null;
 
   // For the F#-style pipelines plugin
   get soloAwait(): boolean {
@@ -294,7 +280,9 @@ export default class State {
     state.potentialArrowAt = this.potentialArrowAt;
     state.noArrowAt = this.noArrowAt.slice();
     state.noArrowParamsConversionAt = this.noArrowParamsConversionAt.slice();
-    state.topicContext = this.topicContext;
+    state.topicReferenceUsage = state.topicReferenceUsage
+      ? { ...state.topicReferenceUsage }
+      : null;
     state.labels = this.labels.slice();
     state.commentsLen = this.commentsLen;
     state.commentStack = this.commentStack.slice();

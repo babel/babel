@@ -514,26 +514,27 @@ export default abstract class ExpressionParser extends LValParser {
     switch (op) {
       case tt.pipeline:
         switch (this.getPluginOption("pipelineOperator", "proposal")) {
-          case "hack":
-            return this.withTopicBindingContext(() => {
-              return this.parseHackPipeBody();
-            });
+          case "hack": {
+            using _ = this.withState("topicReferenceUsage", { used: false });
+            return this.parseHackPipeBody();
+          }
 
-          case "smart":
-            return this.withTopicBindingContext(() => {
-              if (this.prodParam.hasYield && this.isContextual(tt._yield)) {
-                throw this.raise(Errors.PipeBodyIsTighter, this.state.startLoc);
-              }
-              return this.parseSmartPipelineBodyInStyle(
-                this.parseExprOpBaseRightExpr(op, prec),
-                startLoc,
-              );
-            });
+          case "smart": {
+            if (this.prodParam.hasYield && this.isContextual(tt._yield)) {
+              throw this.raise(Errors.PipeBodyIsTighter, this.state.startLoc);
+            }
 
-          case "fsharp":
-            return this.withSoloAwaitPermittingContext(() => {
-              return this.parseFSharpPipelineBody(prec);
-            });
+            using _ = this.withState("topicReferenceUsage", { used: false });
+            return this.parseSmartPipelineBodyInStyle(
+              this.parseExprOpBaseRightExpr(op, prec),
+              startLoc,
+            );
+          }
+
+          case "fsharp": {
+            using _ = this.withState("soloAwait", true);
+            return this.parseFSharpPipelineBody(prec);
+          }
         }
 
       // Falls through.
@@ -573,7 +574,7 @@ export default abstract class ExpressionParser extends LValParser {
         type: body.type as UnparenthesizedPipeBodyTypes,
       });
     }
-    if (!this.topicReferenceWasUsedInCurrentContext()) {
+    if (!this.state.topicReferenceUsage.used) {
       // A Hack pipe body must use the topic reference at least once.
       this.raise(Errors.PipeTopicUnused, startLoc);
     }
@@ -1435,7 +1436,7 @@ export default abstract class ExpressionParser extends LValParser {
             // as enforced by testTopicReferenceConfiguration.
             "TopicReference";
 
-      if (!this.topicReferenceIsAllowedInCurrentContext()) {
+      if (!this.state.topicReferenceUsage) {
         this.raise(
           // The topic reference is not allowed in the current context:
           // it is outside of a pipe body.
@@ -1446,11 +1447,11 @@ export default abstract class ExpressionParser extends LValParser {
               Errors.PipeTopicUnbound,
           startLoc,
         );
+      } else {
+        // Register the topic reference so that its pipe body knows
+        // that its topic was used at least once.
+        this.state.topicReferenceUsage.used = true;
       }
-
-      // Register the topic reference so that its pipe body knows
-      // that its topic was used at least once.
-      this.registerTopicReference();
 
       return this.finishNode(node, nodeType);
     } else {
@@ -3027,74 +3028,19 @@ export default abstract class ExpressionParser extends LValParser {
     }
 
     // A topic-style smart-mix pipe body must use the topic reference at least once.
-    if (!this.topicReferenceWasUsedInCurrentContext()) {
+    if (!this.state.topicReferenceUsage.used) {
       this.raise(Errors.PipelineTopicUnused, startLoc);
-    }
-  }
-
-  // Enable topic references from outer contexts within Hack-style pipe bodies.
-  // The function modifies the parser's topic-context state to enable or disable
-  // the use of topic references.
-  // The function then calls a callback, then resets the parser
-  // to the old topic-context state that it had before the function was called.
-
-  withTopicBindingContext<T>(callback: () => T): T {
-    const outerContextTopicState = this.state.topicContext;
-    this.state.topicContext = {
-      // Enable the use of the primary topic reference.
-      maxNumOfResolvableTopics: 1,
-      // Hide the use of any topic references from outer contexts.
-      maxTopicIndex: null,
-    };
-
-    try {
-      return callback();
-    } finally {
-      this.state.topicContext = outerContextTopicState;
     }
   }
 
   // This helper method is used only with the deprecated smart-mix pipe proposal.
   // Disables topic references from outer contexts within syntax constructs
   // such as the bodies of iteration statements.
-  // The function modifies the parser's topic-context state to enable or disable
-  // the use of topic references with the smartPipelines plugin. They then run a
-  // callback, then they reset the parser to the old topic-context state that it
-  // had before the function was called.
 
-  withSmartMixTopicForbiddingContext<T>(callback: () => T): T {
+  withSmartMixTopicForbiddingContext(): Disposable | undefined {
     if (this.hasPlugin(["pipelineOperator", { proposal: "smart" }])) {
       // Reset the parser’s topic context only if the smart-mix pipe proposal is active.
-      const outerContextTopicState = this.state.topicContext;
-      this.state.topicContext = {
-        // Disable the use of the primary topic reference.
-        maxNumOfResolvableTopics: 0,
-        // Hide the use of any topic references from outer contexts.
-        maxTopicIndex: null,
-      };
-
-      try {
-        return callback();
-      } finally {
-        this.state.topicContext = outerContextTopicState;
-      }
-    } else {
-      // If the pipe proposal is "minimal", "fsharp", or "hack",
-      // or if no pipe proposal is active,
-      // then the callback result is returned
-      // without touching any extra parser state.
-      return callback();
-    }
-  }
-
-  withSoloAwaitPermittingContext<T>(callback: () => T): T {
-    const outerContextSoloAwaitState = this.state.soloAwait;
-    this.state.soloAwait = true;
-
-    try {
-      return callback();
-    } finally {
-      this.state.soloAwait = outerContextSoloAwaitState;
+      return this.withState("topicReferenceUsage", null);
     }
   }
 
@@ -3124,23 +3070,6 @@ export default abstract class ExpressionParser extends LValParser {
       }
     }
     return callback();
-  }
-
-  // Register the use of a topic reference within the current
-  // topic-binding context.
-  registerTopicReference(): void {
-    this.state.topicContext.maxTopicIndex = 0;
-  }
-
-  topicReferenceIsAllowedInCurrentContext(): boolean {
-    return this.state.topicContext.maxNumOfResolvableTopics >= 1;
-  }
-
-  topicReferenceWasUsedInCurrentContext(): boolean {
-    return (
-      this.state.topicContext.maxTopicIndex != null &&
-      this.state.topicContext.maxTopicIndex >= 0
-    );
   }
 
   parseFSharpPipelineBody(this: Parser, prec: number): N.Expression {

@@ -182,6 +182,8 @@ module.exports = function (api) {
     plugins: [
       ["@babel/transform-object-rest-spread", { useBuiltIns: true }],
 
+      "@babel/plugin-proposal-explicit-resource-management",
+
       convertESM ? "@babel/transform-export-namespace-from" : null,
 
       pluginPackageJsonMacro,
