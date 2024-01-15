@@ -1566,6 +1566,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-syntax-import-attributes": "workspace:^"
+    babel-plugin-polyfill-corejs3: "npm:^0.8.7"
   peerDependencies:
     "@babel/core": ^7.22.0
   languageName: unknown
