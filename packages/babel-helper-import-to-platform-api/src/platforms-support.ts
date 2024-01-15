@@ -4,13 +4,13 @@ function isEmpty(obj: object) {
   return Object.keys(obj).length === 0;
 }
 
-// `import.meta.resolve` compat data.
-// Source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import.meta/resolve#browser_compatibility
-// Once Node.js implements `fetch` of local files, we can re-use the web implementation for it
-// similarly to how we do for Deno.
-const imrCompatData = {
+const isRequiredOptions = {
   compatData: {
-    web: {
+    // `import.meta.resolve` compat data.
+    // Source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import.meta/resolve#browser_compatibility
+    // Once Node.js implements `fetch` of local files, we can re-use the web implementation for it
+    // similarly to how we do for Deno.
+    webIMR: {
       chrome: "105.0.0",
       edge: "105.0.0",
       firefox: "106.0.0",
@@ -21,8 +21,12 @@ const imrCompatData = {
       samsung: "20.0",
       deno: "1.24.0",
     },
-    node: {
+    nodeIMR: {
       node: "20.6.0",
+    },
+    // Node.js require("fs").promises compat data.
+    nodeFSP: {
+      node: "10.0.0",
     },
   },
 };
@@ -32,6 +36,7 @@ interface Support {
   needsWebSupport: boolean;
   nodeSupportsIMR: boolean;
   webSupportsIMR: boolean;
+  nodeSupportsFsPromises: boolean;
 }
 
 const SUPPORT_CACHE = new WeakMap<Targets, Support>();
@@ -44,17 +49,21 @@ export default function getSupport(targets: Targets): Support {
   const needsNodeSupport = !emptyNodeTarget || emptyWebTargets;
   const needsWebSupport = !emptyWebTargets || emptyNodeTarget;
 
+  const webSupportsIMR =
+    !emptyWebTargets && !isRequired("webIMR", webTargets, isRequiredOptions);
   const nodeSupportsIMR =
     !emptyNodeTarget &&
-    !isRequired("node", { node: nodeTarget }, imrCompatData);
-  const webSupportsIMR =
-    !emptyWebTargets && !isRequired("web", webTargets, imrCompatData);
+    !isRequired("nodeIMR", { node: nodeTarget }, isRequiredOptions);
+  const nodeSupportsFsPromises =
+    !emptyNodeTarget &&
+    !isRequired("nodeFSP", { node: nodeTarget }, isRequiredOptions);
 
   const result = {
     needsNodeSupport,
     needsWebSupport,
     nodeSupportsIMR,
     webSupportsIMR,
+    nodeSupportsFsPromises,
   };
   SUPPORT_CACHE.set(targets, result);
   return result;

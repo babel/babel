@@ -33,8 +33,13 @@ export function importToPlatformApi(
   transformers: Pieces,
   toCommonJS: boolean,
 ) {
-  const { needsNodeSupport, needsWebSupport, nodeSupportsIMR, webSupportsIMR } =
-    getSupport(targets);
+  const {
+    needsNodeSupport,
+    needsWebSupport,
+    nodeSupportsIMR,
+    webSupportsIMR,
+    nodeSupportsFsPromises,
+  } = getSupport(targets);
 
   let buildFetchAsync: (
     specifier: t.Expression,
@@ -46,17 +51,31 @@ export function importToPlatformApi(
   const p = ({
     web: w,
     node: n,
+    nodeFSP: nF = nodeSupportsFsPromises,
     webIMR: wI = webSupportsIMR,
     nodeIMR: nI = nodeSupportsIMR,
     toCJS: c = toCommonJS,
   }: {
     web: boolean;
     node: boolean;
+    nodeFSP?: boolean;
     webIMR?: boolean;
     nodeIMR?: boolean;
     toCJS?: boolean;
     preferSync?: boolean;
-  }) => +w + (+n << 1) + (+wI << 2) + (+nI << 3) + (+c << 4);
+  }) => +w + (+n << 1) + (+wI << 2) + (+nI << 3) + (+c << 4) + (+nF << 5);
+
+  const readFileP = (fs: t.Expression, arg: t.Expression) => {
+    if (nodeSupportsFsPromises) {
+      return template.expression.ast`${fs}.promises.readFile(${arg})`;
+    }
+    return template.expression.ast`
+      new Promise(
+        (a =>
+          (r, j) => ${fs}.readFile(a, (e, d) => e ? j(e) : r(d))
+        )(${arg})
+      )`;
+  };
 
   switch (
     p({
@@ -77,16 +96,21 @@ export function importToPlatformApi(
         const node = nodeSupportsIMR
           ? template.expression.ast`
                 import("fs").then(
-                  fs => fs.promises.readFile(new URL(${imr(specifier)}))
+                  fs => ${readFileP(
+                    t.identifier("fs"),
+                    template.expression.ast`new URL(${imr(specifier)})`,
+                  )}
                 ).then(${transformers.nodeFsAsync()})
               `
           : template.expression.ast`
                 Promise.all([import("fs"), import("module")])
                   .then(([fs, module]) =>
-                    fs.promises.readFile(
-                      module.createRequire(import.meta.url)
-                        .resolve(${specifier})
-                    )
+                    ${readFileP(
+                      t.identifier("fs"),
+                      template.expression.ast`
+                        module.createRequire(import.meta.url).resolve(${specifier})
+                      `,
+                    )}
                   )
                   .then(${transformers.nodeFsAsync()})
               `;
@@ -97,21 +121,6 @@ export function importToPlatformApi(
               : ${web}
           `;
       };
-      break;
-    case p({ web: true, node: true, webIMR: false, nodeIMR: true }):
-      buildFetchAsync = specifier => template.expression.ast`
-          typeof process === "object" && process.versions?.node
-            ? import("fs").then(fs =>
-                ${transformers.nodeFsAsync()}(fs.readFileSync(
-                  new URL(${imr(specifier)})
-                ))
-              )
-            : ${transformers.webFetch(
-              t.callExpression(t.identifier("fetch"), [
-                imrWithFallback(specifier),
-              ]),
-            )}
-        `;
       break;
     case p({ web: true, node: false, webIMR: true }):
       buildFetchAsync = specifier =>
