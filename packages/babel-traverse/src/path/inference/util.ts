@@ -8,23 +8,23 @@ import {
 import type * as t from "@babel/types";
 
 export function createUnionType(
-  types: Array<t.FlowType | t.TSType>,
-): t.FlowType | t.TSType {
+  types: (t.FlowType | t.TSType)[],
+): t.FlowType | t.TSType | undefined {
   if (process.env.BABEL_8_BREAKING) {
-    if (isFlowType(types[0])) {
+    if (types.every(v => isFlowType(v))) {
       return createFlowUnionType(types as t.FlowType[]);
     }
-    if (isTSType(types[0])) {
+    if (types.every(v => isTSType(v))) {
       return createTSUnionType(types as t.TSType[]);
     }
   } else {
-    if (isFlowType(types[0])) {
+    if (types.every(v => isFlowType(v))) {
       if (createFlowUnionType) {
         return createFlowUnionType(types as t.FlowType[]);
       }
 
       return createUnionTypeAnnotation(types as t.FlowType[]);
-    } else {
+    } else if (types.every(v => isTSType(v))) {
       if (createTSUnionType) {
         return createTSUnionType(types as t.TSType[]);
       }
