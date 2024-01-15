@@ -3,15 +3,15 @@
   "names": [
     "_x",
     "it",
-    "_stack",
-    "x",
+    "_usingCtx",
     "babelHelpers",
-    "using",
+    "usingCtx",
+    "x",
+    "u",
     "doSomethingWith",
     "_",
-    "_error",
-    "_hasError",
-    "dispose"
+    "e",
+    "d"
   ],
   "sources": [
     "source-maps/for-of/input.js"
@@ -19,5 +19,5 @@
   "sourcesContent": [
     "for (using x of it) {\n  doSomethingWith(x);\n}"
   ],
-  "mappings": "AAAA,KAAK,MAAMA,EAAC,IAAIC,EAAE,MAAE;EAAA,IAAAC,MAAA;EAAA,MAATC,CAAC,GAAAC,YAAA,CAAAC,KAAA,CAAAH,MAAA,EAAAF,EAAA;EACVM,eAAe,CAACH,CAAC,CAAC;AACpB,CAAC,QAAAI,CAAA;EAAA,IAAAC,MAAA,GAAAD,CAAA;EAAA,IAAAE,SAAA;AAAA;EAAAL,YAAA,CAAAM,OAAA,CAAAR,MAAA,EAAAM,MAAA,EAAAC,SAAA;AAAA"
+  "mappings": "AAAA,KAAK,MAAMA,EAAC,IAAIC,EAAE,EAAE;EAAA,IAAAC,SAAA,GAAAC,YAAA,CAAAC,QAAA;EAAA,MAATC,CAAC,GAAAH,SAAA,CAAAI,CAAA,CAAAN,EAAA;EACVO,eAAe,CAACF,CAAC,CAAC;AAAC,SAAAG,CAAA;EAAAN,SAAA,CAAAO,CAAA,GAAAD,CAAA;AAAA;EAAAN,SAAA,CAAAQ,CAAA;AAAA"
 }

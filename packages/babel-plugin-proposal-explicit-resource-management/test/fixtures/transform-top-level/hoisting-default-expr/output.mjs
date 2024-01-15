@@ -1,11 +1,10 @@
 export { _default as default };
 try {
-  var _stack = [];
-  var x = babelHelpers.using(_stack, null);
+  var _usingCtx = babelHelpers.usingCtx();
+  var x = _usingCtx.u(null);
   var _default = doSomething();
 } catch (_) {
-  var _error = _;
-  var _hasError = true;
+  _usingCtx.e = _;
 } finally {
-  babelHelpers.dispose(_stack, _error, _hasError);
+  _usingCtx.d();
 }

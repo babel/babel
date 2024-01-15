@@ -1,31 +1,28 @@
 try {
-  var _stack = [];
-  const x = babelHelpers.using(_stack, obj);
+  var _usingCtx = babelHelpers.usingCtx();
+  const x = _usingCtx.u(obj);
   try {
-    var _stack2 = [];
-    const y = babelHelpers.using(_stack2, call(() => {
+    var _usingCtx2 = babelHelpers.usingCtx();
+    const y = _usingCtx2.u(call(() => {
       try {
-        var _stack3 = [];
-        const z = babelHelpers.using(_stack3, obj);
+        var _usingCtx3 = babelHelpers.usingCtx();
+        const z = _usingCtx3.u(obj);
         return z;
       } catch (_) {
-        var _error3 = _;
-        var _hasError3 = true;
+        _usingCtx3.e = _;
       } finally {
-        babelHelpers.dispose(_stack3, _error3, _hasError3);
+        _usingCtx3.d();
       }
     }));
     stmt;
   } catch (_) {
-    var _error2 = _;
-    var _hasError2 = true;
+    _usingCtx2.e = _;
   } finally {
-    babelHelpers.dispose(_stack2, _error2, _hasError2);
+    _usingCtx2.d();
   }
   stmt;
 } catch (_) {
-  var _error = _;
-  var _hasError = true;
+  _usingCtx.e = _;
 } finally {
-  babelHelpers.dispose(_stack, _error, _hasError);
+  _usingCtx.d();
 }

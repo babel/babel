@@ -3,16 +3,14 @@
   "names": [
     "before",
     "x",
-    "babelHelpers",
-    "using",
-    "_stack",
+    "_usingCtx",
+    "u",
     "fn",
     "doSomethingWith",
     "after",
     "_",
-    "_error",
-    "_hasError",
-    "dispose"
+    "e",
+    "d"
   ],
   "sources": [
     "source-maps/top-level/input.mjs"
@@ -20,5 +18,5 @@
   "sourcesContent": [
     "before;\nusing x = fn();\ndoSomethingWith(x);\nafter;"
   ],
-  "mappings": ";;EAAAA,MAAM;EACN,IAAMC,CAAC,GAAAC,YAAA,CAAAC,KAAA,CAAAC,MAAA,EAAGC,EAAE,CAAC,CAAC;EACdC,eAAe,CAACL,CAAC,CAAC;EAClBM,KAAK;AAAC,SAAAC,CAAA;EAAA,IAAAC,MAAA,GAAAD,CAAA;EAAA,IAAAE,SAAA;AAAA;EAAAR,YAAA,CAAAS,OAAA,CAAAP,MAAA,EAAAK,MAAA,EAAAC,SAAA;AAAA"
+  "mappings": ";;EAAAA,MAAM;EACN,IAAMC,CAAC,GAAAC,SAAA,CAAAC,CAAA,CAAGC,EAAE,CAAC,CAAC;EACdC,eAAe,CAACJ,CAAC,CAAC;EAClBK,KAAK;AAAC,SAAAC,CAAA;EAAAL,SAAA,CAAAM,CAAA,GAAAD,CAAA;AAAA;EAAAL,SAAA,CAAAO,CAAA;AAAA"
 }

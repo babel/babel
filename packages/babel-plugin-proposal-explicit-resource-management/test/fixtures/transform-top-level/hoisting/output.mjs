@@ -16,7 +16,7 @@ export { f };
 export { b };
 export { B };
 try {
-  var _stack = [];
+  var _usingCtx = babelHelpers.usingCtx();
   doSomething();
   var {
     b
@@ -24,10 +24,9 @@ try {
   var c = 2;
   var A = class {};
   var B = class {};
-  var x = babelHelpers.using(_stack, null);
+  var x = _usingCtx.u(null);
 } catch (_) {
-  var _error = _;
-  var _hasError = true;
+  _usingCtx.e = _;
 } finally {
-  babelHelpers.dispose(_stack, _error, _hasError);
+  _usingCtx.d();
 }

@@ -270,6 +270,15 @@
       "./helpers/using.js"
     ],
     "./helpers/esm/using": "./helpers/esm/using.js",
+    "./helpers/usingCtx": [
+      {
+        "node": "./helpers/usingCtx.js",
+        "import": "./helpers/esm/usingCtx.js",
+        "default": "./helpers/usingCtx.js"
+      },
+      "./helpers/usingCtx.js"
+    ],
+    "./helpers/esm/usingCtx": "./helpers/esm/usingCtx.js",
     "./helpers/wrapRegExp": [
       {
         "node": "./helpers/wrapRegExp.js",
