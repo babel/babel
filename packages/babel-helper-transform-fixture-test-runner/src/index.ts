@@ -757,6 +757,25 @@ const assertTest = function (
   }
 };
 
+export function buildParallelProcessTests(name: string, tests: ProcessTest[]) {
+  return function (curr: number, total: number) {
+    const sliceLength = Math.ceil(tests.length / total);
+    const sliceStart = curr * sliceLength;
+    const sliceEnd = sliceStart + sliceLength;
+    const testsSlice = tests.slice(sliceStart, sliceEnd);
+
+    describe(`${name} [${curr}/${total}]`, function () {
+      it("dummy", () => {});
+      for (const test of testsSlice) {
+        (test.skip ? it.skip : it)(
+          test.suiteName + " " + test.testName,
+          test.fn as any,
+        );
+      }
+    });
+  };
+}
+
 export function buildProcessTests(
   dir: string,
   beforeHook: ProcessTestBeforeHook,
