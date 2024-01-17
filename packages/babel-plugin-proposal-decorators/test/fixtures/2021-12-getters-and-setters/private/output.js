@@ -8,7 +8,7 @@ class Foo {
       this.value = v;
     }]], []);
   }
-  constructor(...args) {
+  constructor() {
     _initProto(this);
   }
   value = 1;

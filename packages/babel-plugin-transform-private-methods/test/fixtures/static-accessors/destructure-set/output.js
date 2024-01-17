@@ -1,12 +1,12 @@
-var _class;
+var _C;
 class C {
   constructor() {
     [babelHelpers.classStaticPrivateFieldDestructureSet(C, C, _p).value] = [0];
   }
 }
-_class = C;
+_C = C;
 function _set_p(v) {
-  babelHelpers.classStaticPrivateFieldSpecSet(_class, _class, _q, v);
+  babelHelpers.classStaticPrivateFieldSpecSet(_C, _C, _q, v);
 }
 var _p = {
   get: void 0,

@@ -1,7 +1,7 @@
-var _class;
+var _C;
 let a, x, b;
 class C {}
-_class = C;
+_C = C;
 var _x = {
   writable: true,
   value: void 0
@@ -10,7 +10,7 @@ var _x = {
   var _m;
   ({
     a = 1
-  } = _class), _m = babelHelpers.classStaticPrivateFieldSpecGet(_class, _class, _x), x = _m === void 0 ? 2 : _m, ({
+  } = _C), _m = babelHelpers.classStaticPrivateFieldSpecGet(_C, _C, _x), x = _m === void 0 ? 2 : _m, ({
     b = 3
-  } = _class);
+  } = _C);
 })();

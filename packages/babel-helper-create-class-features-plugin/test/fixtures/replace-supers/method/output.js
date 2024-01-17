@@ -1,4 +1,4 @@
-var _class;
+var _A;
 var _foo = /*#__PURE__*/new WeakSet();
 class A extends B {
   constructor(...args) {
@@ -6,8 +6,8 @@ class A extends B {
     babelHelpers.classPrivateMethodInitSpec(this, _foo);
   }
 }
-_class = A;
+_A = A;
 function _foo2() {
-  let _A;
-  babelHelpers.get(babelHelpers.getPrototypeOf(_class.prototype), "x", this);
+  let _A2;
+  babelHelpers.get(babelHelpers.getPrototypeOf(_A.prototype), "x", this);
 }

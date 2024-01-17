@@ -1,11 +1,11 @@
 export default babelHelpers.decorate([dec()], function (_initialize) {
-  class _class {
+  class _Class {
     constructor() {
       _initialize(this);
     }
   }
   return {
-    F: _class,
+    F: _Class,
     d: []
   };
 });

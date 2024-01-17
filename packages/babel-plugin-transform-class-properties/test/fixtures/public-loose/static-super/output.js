@@ -4,10 +4,10 @@ var A = /*#__PURE__*/babelHelpers.createClass(function A() {
   babelHelpers.classCallCheck(this, A);
 });
 A.prop = 1;
-var B = /*#__PURE__*/function (_A) {
+var B = /*#__PURE__*/function (_A2) {
   "use strict";
 
-  babelHelpers.inherits(B, _A);
+  babelHelpers.inherits(B, _A2);
   function B() {
     babelHelpers.classCallCheck(this, B);
     return babelHelpers.callSuper(this, B, arguments);

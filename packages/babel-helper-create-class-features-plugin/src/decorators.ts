@@ -562,7 +562,7 @@ function transformClass(
       continue;
     }
 
-    if (element.node.decorators && element.node.decorators.length > 0) {
+    if (element.node.decorators?.length) {
       switch (element.node.type) {
         case "ClassProperty":
           // @ts-expect-error todo: propertyVisitor.ClassProperty should be callable. Improve typings.
@@ -646,29 +646,50 @@ function transformClass(
     classIdLocal: t.Identifier;
 
   const decoratorsThis = new Map<t.Decorator, t.Expression>();
-  const maybeExtractDecorator = (decorator: t.Decorator) => {
-    const { expression } = decorator;
-    if (version === "2023-05" && t.isMemberExpression(expression)) {
-      let object;
-      if (
-        t.isSuper(expression.object) ||
-        t.isThisExpression(expression.object)
-      ) {
-        object = memoiseExpression(t.thisExpression(), "obj");
-      } else if (!scopeParent.isStatic(expression.object)) {
-        object = memoiseExpression(expression.object, "obj");
-        expression.object = object;
-      } else {
-        object = expression.object;
+  const maybeExtractDecorators = (
+    decorators: t.Decorator[],
+    memoise = false,
+  ) => {
+    let needMemoise = false;
+    for (const decorator of decorators) {
+      const { expression } = decorator;
+      if (version === "2023-05" && t.isMemberExpression(expression)) {
+        let object;
+        if (
+          t.isSuper(expression.object) ||
+          t.isThisExpression(expression.object)
+        ) {
+          needMemoise = true;
+          if (memoise) {
+            object = memoiseExpression(t.thisExpression(), "obj");
+          } else {
+            object = t.thisExpression();
+          }
+        } else {
+          if (!scopeParent.isStatic(expression.object)) {
+            needMemoise = true;
+            if (memoise) {
+              expression.object = memoiseExpression(expression.object, "obj");
+            }
+          }
+          object = t.cloneNode(expression.object);
+        }
+        decoratorsThis.set(decorator, object);
       }
-      decoratorsThis.set(decorator, t.cloneNode(object));
+      if (!scopeParent.isStatic(expression)) {
+        needMemoise = true;
+        if (memoise) {
+          decorator.expression = memoiseExpression(expression, "dec");
+        }
+      }
     }
-    if (!scopeParent.isStatic(expression)) {
-      decorator.expression = memoiseExpression(expression, "dec");
-    }
+    return needMemoise;
   };
 
   let needsDeclaraionForClassBinding = false;
+  let classDecorationsFlag = 0;
+  let classDecorations: t.Expression[] = [];
+  let classDecorationsId: t.Identifier;
   if (classDecorators) {
     classInitLocal = scopeParent.generateDeclaredUidIdentifier("initClass");
     needsDeclaraionForClassBinding = path.isClassDeclaration();
@@ -676,8 +697,21 @@ function transformClass(
 
     path.node.decorators = null;
 
-    for (const classDecorator of classDecorators) {
-      maybeExtractDecorator(classDecorator);
+    const needMemoise = maybeExtractDecorators(classDecorators);
+
+    const { hasThis, decs } = generateDecorationList(
+      classDecorators.map(el => el.expression),
+      classDecorators.map(dec => decoratorsThis.get(dec)),
+      version,
+    );
+    classDecorationsFlag = hasThis ? 1 : 0;
+    classDecorations = decs;
+
+    if (needMemoise) {
+      classDecorationsId = memoiseExpression(
+        t.arrayExpression(classDecorations),
+        "classDecs",
+      );
     }
   } else {
     if (!path.node.id) {
@@ -696,18 +730,15 @@ function transformClass(
       }
 
       const { node } = element;
-      const decorators = element.get("decorators");
+      const decorators = element.node.decorators;
 
-      const hasDecorators = Array.isArray(decorators) && decorators.length > 0;
+      const hasDecorators = !!decorators?.length;
 
       if (hasDecorators) {
-        for (const decoratorPath of decorators) {
-          maybeExtractDecorator(decoratorPath.node);
-        }
+        maybeExtractDecorators(decorators, true);
       }
 
-      const isComputed =
-        "computed" in element.node && element.node.computed === true;
+      const isComputed = "computed" in element.node && element.node.computed;
       if (isComputed) {
         if (!element.get("key").isConstantExpression()) {
           node.key = memoiseExpression(
@@ -722,7 +753,7 @@ function transformClass(
 
       const isPrivate = key.type === "PrivateName";
 
-      const isStatic = !!element.node.static;
+      const isStatic = element.node.static;
 
       let name = "computedKey";
 
@@ -881,8 +912,8 @@ function transformClass(
 
         elementDecoratorInfo.push({
           kind,
-          decorators: decorators.map(d => d.node.expression),
-          decoratorsThis: decorators.map(d => decoratorsThis.get(d.node)),
+          decorators: decorators.map(d => d.expression),
+          decoratorsThis: decorators.map(d => decoratorsThis.get(d)),
           name: nameExpr,
           isStatic,
           privateMethods,
@@ -918,17 +949,6 @@ function transformClass(
     elementDecoratorInfo,
     version,
   );
-  let classDecorationsFlag = 0;
-  let classDecorations: t.Expression[] = [];
-  if (classDecorators) {
-    const { hasThis, decs } = generateDecorationList(
-      classDecorators.map(el => el.expression),
-      classDecorators.map(dec => decoratorsThis.get(dec)),
-      version,
-    );
-    classDecorationsFlag = hasThis ? 1 : 0;
-    classDecorations = decs;
-  }
 
   const elementLocals: t.Identifier[] =
     extractElementLocalAssignments(elementDecoratorInfo);
@@ -992,7 +1012,7 @@ function transformClass(
         t.classMethod(
           "constructor",
           t.identifier("constructor"),
-          [t.restElement(t.identifier("args"))],
+          path.node.superClass ? [t.restElement(t.identifier("args"))] : [],
           t.blockStatement(body),
         ),
       );
@@ -1143,7 +1163,6 @@ function transformClass(
       superClass = id;
     }
   }
-
   originalClass.body.body.unshift(
     t.staticBlock(
       [
@@ -1152,7 +1171,9 @@ function transformClass(
             elementLocals,
             classLocals,
             elementDecorations,
-            t.arrayExpression(classDecorations),
+            classDecorationsId
+              ? t.cloneNode(classDecorationsId)
+              : t.arrayExpression(classDecorations),
             t.numericLiteral(classDecorationsFlag),
             needsInstancePrivateBrandCheck ? lastInstancePrivateName : null,
             typeof className === "object" ? className : undefined,
@@ -1192,8 +1213,8 @@ function transformClass(
 function createLocalsAssignment(
   elementLocals: t.Identifier[],
   classLocals: t.Identifier[],
-  elementDecorations: t.ArrayExpression,
-  classDecorations: t.ArrayExpression,
+  elementDecorations: t.ArrayExpression | t.Identifier,
+  classDecorations: t.ArrayExpression | t.Identifier,
   classDecorationsFlag: t.NumericLiteral,
   maybePrivateBranName: t.PrivateName | null,
   setClassName: t.Identifier | t.StringLiteral | undefined,

@@ -1,4 +1,4 @@
-var _initStatic, _class;
+var _initStatic, _Foo;
 const dec = () => {};
 class Foo {
   static get a() {
@@ -8,9 +8,9 @@ class Foo {
     return this.value;
   }
 }
-_class = Foo;
+_Foo = Foo;
 (() => {
-  [_initStatic] = babelHelpers.applyDecs2305(_class, [[dec, 11, "a"], [dec, 11, 'b']], []).e;
-  _initStatic(_class);
+  [_initStatic] = babelHelpers.applyDecs2305(_Foo, [[dec, 11, "a"], [dec, 11, 'b']], []).e;
+  _initStatic(_Foo);
 })();
 babelHelpers.defineProperty(Foo, "value", 1);

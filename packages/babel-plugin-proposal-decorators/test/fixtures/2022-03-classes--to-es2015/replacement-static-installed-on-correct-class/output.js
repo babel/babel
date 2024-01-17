@@ -12,11 +12,11 @@ new (_x = /*#__PURE__*/new WeakMap(), _m = /*#__PURE__*/new WeakSet(), (_temp = 
       hasM = o => _m.has(babelHelpers.checkInRHS(o));
     })(), _initClass();
   }
-}, (_class2 => {
+}, (_Foo2 => {
   class Foo {
     static m() {}
   }
-  _class2 = Foo;
-  [_Foo, _initClass] = babelHelpers.applyDecs2203R(_class2, [], [dec]).c;
+  _Foo2 = Foo;
+  [_Foo, _initClass] = babelHelpers.applyDecs2203R(_Foo2, [], [dec]).c;
 })(), _temp))();
 function _m2() {}

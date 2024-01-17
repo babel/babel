@@ -1,24 +1,24 @@
 new ( /*#__PURE__*/function () {
   "use strict";
 
-  function _class2() {
-    babelHelpers.classCallCheck(this, _class2);
+  function _class() {
+    babelHelpers.classCallCheck(this, _class);
     babelHelpers.defineProperty(this, "y", function () {
       throw new ReferenceError("'delete super.prop' is invalid");
     }());
   }
-  return babelHelpers.createClass(_class2);
+  return babelHelpers.createClass(_class);
 }())();
 new ( /*#__PURE__*/function () {
   "use strict";
 
-  function _class4() {
-    babelHelpers.classCallCheck(this, _class4);
+  function _class2() {
+    babelHelpers.classCallCheck(this, _class2);
     babelHelpers.defineProperty(this, "y", (babelHelpers.toPropertyKey(0), function () {
       throw new ReferenceError("'delete super[expr]' is invalid");
     }()));
   }
-  return babelHelpers.createClass(_class4);
+  return babelHelpers.createClass(_class2);
 }())();
 var X1 = /*#__PURE__*/babelHelpers.createClass(function X1() {
   "use strict";

@@ -29,15 +29,15 @@ var Foo = /*#__PURE__*/function () {
         }
         return babelHelpers.createClass(Nested);
       }((_foo3 = /*#__PURE__*/new WeakMap(), _babelHelpers$classPr = babelHelpers.classPrivateFieldGet(this, _foo3), /*#__PURE__*/function () {
-        function _class4() {
-          babelHelpers.classCallCheck(this, _class4);
+        function _class() {
+          babelHelpers.classCallCheck(this, _class);
           babelHelpers.classPrivateFieldInitSpec(this, _foo3, {
             writable: true,
             value: 2
           });
           babelHelpers.defineProperty(this, _babelHelpers$classPr, 2);
         }
-        return babelHelpers.createClass(_class4);
+        return babelHelpers.createClass(_class);
       }()));
     }
   }]);

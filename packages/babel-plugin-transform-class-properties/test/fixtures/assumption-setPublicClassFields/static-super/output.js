@@ -1,8 +1,8 @@
-var _class2;
+var _B;
 class A {}
 A.prop = 1;
 class B extends A {}
-_class2 = B;
+_B = B;
 B.prop = 2;
-B.propA = babelHelpers.get(babelHelpers.getPrototypeOf(_class2), "prop", _class2);
-B.getPropA = () => babelHelpers.get(babelHelpers.getPrototypeOf(_class2), "prop", _class2);
+B.propA = babelHelpers.get(babelHelpers.getPrototypeOf(_B), "prop", _B);
+B.getPropA = () => babelHelpers.get(babelHelpers.getPrototypeOf(_B), "prop", _B);

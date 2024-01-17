@@ -1,7 +1,7 @@
-var _class;
+var _C;
 let result;
 class C {}
-_class = C;
+_C = C;
 var _x = {
   writable: true,
   value: "#x"
@@ -14,9 +14,9 @@ babelHelpers.defineProperty(C, "a", "a");
 babelHelpers.defineProperty(C, "b", "b");
 babelHelpers.defineProperty(C, "c", "c");
 (() => {
-  var x = babelHelpers.classStaticPrivateFieldSpecGet(_class, _class, _x),
-    y = babelHelpers.classStaticPrivateFieldSpecGet(_class, _class, _y),
-    z = Object.assign({}, (babelHelpers.objectDestructuringEmpty(_class), _class));
+  var x = babelHelpers.classStaticPrivateFieldSpecGet(_C, _C, _x),
+    y = babelHelpers.classStaticPrivateFieldSpecGet(_C, _C, _y),
+    z = Object.assign({}, (babelHelpers.objectDestructuringEmpty(_C), _C));
   result = {
     x,
     y,
