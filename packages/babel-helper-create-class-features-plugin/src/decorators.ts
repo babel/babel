@@ -648,7 +648,7 @@ function transformClass(
   const decoratorsThis = new Map<t.Decorator, t.Expression>();
   const maybeExtractDecorators = (
     decorators: t.Decorator[],
-    memoise = false,
+    memoiseInPlace: boolean,
   ) => {
     let needMemoise = false;
     for (const decorator of decorators) {
@@ -660,7 +660,7 @@ function transformClass(
           t.isThisExpression(expression.object)
         ) {
           needMemoise = true;
-          if (memoise) {
+          if (memoiseInPlace) {
             object = memoiseExpression(t.thisExpression(), "obj");
           } else {
             object = t.thisExpression();
@@ -668,7 +668,7 @@ function transformClass(
         } else {
           if (!scopeParent.isStatic(expression.object)) {
             needMemoise = true;
-            if (memoise) {
+            if (memoiseInPlace) {
               expression.object = memoiseExpression(expression.object, "obj");
             }
           }
@@ -678,12 +678,12 @@ function transformClass(
       }
       if (!scopeParent.isStatic(expression)) {
         needMemoise = true;
-        if (memoise) {
+        if (memoiseInPlace) {
           decorator.expression = memoiseExpression(expression, "dec");
         }
       }
     }
-    return needMemoise;
+    return needMemoise && !memoiseInPlace;
   };
 
   let needsDeclaraionForClassBinding = false;
@@ -697,7 +697,7 @@ function transformClass(
 
     path.node.decorators = null;
 
-    const needMemoise = maybeExtractDecorators(classDecorators);
+    const needMemoise = maybeExtractDecorators(classDecorators, false);
 
     const { hasThis, decs } = generateDecorationList(
       classDecorators.map(el => el.expression),
