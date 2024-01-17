@@ -639,6 +639,8 @@ function* libBundlesIterator() {
     "babel-plugin-transform-react-jsx",
     // rollup bug https://github.com/babel/babel/pull/16001
     "babel-helper-builder-react-jsx",
+    // exit-loader.cjs
+    "babel-helper-transform-fixture-test-runner",
   ]);
   for (const packageDir of ["packages", "codemods"]) {
     for (const dir of fs.readdirSync(new URL(packageDir, import.meta.url))) {

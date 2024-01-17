@@ -41,10 +41,9 @@
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
-    "@babel/helper-fixtures": "workspace:^",
+    "@babel/helper-transform-fixture-test-runner": "workspace:^",
     "@types/fs-readdir-recursive": "^1.1.0",
     "@types/glob": "^7.2.0",
-    "rimraf": "^3.0.0",
     "semver": "^6.3.1"
   },
   "bin": {
