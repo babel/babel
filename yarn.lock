@@ -224,7 +224,7 @@ __metadata:
   resolution: "@babel/cli@workspace:packages/babel-cli"
   dependencies:
     "@babel/core": "workspace:^"
-    "@babel/helper-fixtures": "workspace:^"
+    "@babel/helper-transform-fixture-test-runner": "workspace:^"
     "@jridgewell/trace-mapping": "npm:^0.3.17"
     "@nicolo-ribaudo/chokidar-2": "condition:BABEL_8_BREAKING ? : 2.1.8-no-fsevents.3"
     "@types/fs-readdir-recursive": "npm:^1.1.0"
@@ -235,7 +235,6 @@ __metadata:
     fs-readdir-recursive: "npm:^1.1.0"
     glob: "npm:^7.2.0"
     make-dir: "condition:BABEL_8_BREAKING ? : ^2.1.0"
-    rimraf: "npm:^3.0.0"
     semver: "npm:^6.3.1"
     slash: "condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0"
   peerDependencies:
@@ -1076,8 +1075,11 @@ __metadata:
     "@babel/helper-check-duplicate-nodes": "workspace:^"
     "@babel/helper-fixtures": "workspace:^"
     "@jridgewell/trace-mapping": "npm:^0.3.17"
+    "@types/fs-readdir-recursive": "npm:^1.1.0"
+    fs-readdir-recursive: "npm:^1.1.0"
     jest-diff: "npm:^29.6.4"
     lru-cache: "condition:BABEL_8_BREAKING ? ^7.14.1 : ^5.1.1"
+    make-dir: "npm:^2.1.0"
   languageName: unknown
   linkType: soft
 
@@ -1213,18 +1215,15 @@ __metadata:
   resolution: "@babel/node@workspace:packages/babel-node"
   dependencies:
     "@babel/core": "workspace:^"
-    "@babel/helper-fixtures": "workspace:^"
+    "@babel/helper-transform-fixture-test-runner": "workspace:^"
     "@babel/preset-env": "workspace:^"
     "@babel/register": "workspace:^"
     "@babel/runtime": "workspace:^"
     "@types/v8flags": "npm:^3.1.1"
     commander: "npm:^4.0.1"
     core-js: "npm:^3.30.2"
-    fs-readdir-recursive: "npm:^1.0.0"
-    make-dir: "condition:BABEL_8_BREAKING ? : ^2.1.0"
     node-environment-flags: "condition:BABEL_8_BREAKING ? : ^1.0.5"
     regenerator-runtime: "npm:^0.14.0"
-    rimraf: "npm:^3.0.0"
     v8flags: "condition:BABEL_8_BREAKING ? ^4.0.0 : ^3.1.1"
   peerDependencies:
     "@babel/core": ^7.0.0-0
@@ -5283,9 +5282,9 @@ __metadata:
   linkType: hard
 
 "@types/fs-readdir-recursive@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "@types/fs-readdir-recursive@npm:1.1.0"
-  checksum: 9ce802ca81259fccf85e217b149e8ce05dae5f665c5bc2292280e9873d2d84f2c37fb5033ae0ca024f3c71b502fb71d5517bf4af030155523882c0c1bfc39f59
+  version: 1.1.2
+  resolution: "@types/fs-readdir-recursive@npm:1.1.2"
+  checksum: 89939841c8b85c855f1f5fdfbcf531139464b5261f90cd6ad7851671a56eaabae87b327f4968937f6209802f8b6f5c5bafd37f69288f095bb1153105ef853fa2
   languageName: node
   linkType: hard
 
@@ -9890,7 +9889,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fs-readdir-recursive@npm:^1.0.0, fs-readdir-recursive@npm:^1.1.0":
+"fs-readdir-recursive@npm:^1.1.0":
   version: 1.1.0
   resolution: "fs-readdir-recursive@npm:1.1.0"
   checksum: d5e3fd8456b8e5d57a43f169a9eaf65c70fa82c4a22f1d4361cdba4ea5e61c60c5c2b4ac481ea137a4d43b2b99b3ea2fae95ac2730255c4206d61af645866c3a
@@ -12683,7 +12682,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"make-dir-BABEL_8_BREAKING-false@npm:make-dir@^2.1.0, make-dir@npm:^2.0.0":
+"make-dir-BABEL_8_BREAKING-false@npm:make-dir@^2.1.0, make-dir@npm:^2.0.0, make-dir@npm:^2.1.0":
   version: 2.1.0
   resolution: "make-dir@npm:2.1.0"
   dependencies:

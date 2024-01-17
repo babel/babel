@@ -305,8 +305,9 @@ jobs:
     name: Test Babel 8 breaking changes on
     needs: build-babel8
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     env:
       YARN_IGNORE_NODE: 1
@@ -338,10 +339,14 @@ jobs:
           BABEL_TYPES_8_BREAKING: true
           BABEL_CLI_FLAKY_TESTS: true
 
-  test-windows:
-    name: Test on Windows
+  test-windows-mac:
+    name: Test on
     needs: build
-    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -358,7 +363,7 @@ jobs:
           name: babel-artifact
       - name: Extract artifacts
         run: tar -xf babel-artifact.tar; rm babel-artifact.tar
-      - name: Test on Windows
+      - name: Test
         run: yarn jest --ci
         env:
           BABEL_ENV: test
