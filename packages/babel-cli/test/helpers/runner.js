@@ -1,11 +1,14 @@
-import { buildProcessTests } from "@babel/helper-transform-fixture-test-runner";
+import {
+  buildProcessTests,
+  buildParallelProcessTests,
+} from "@babel/helper-transform-fixture-test-runner";
 import path from "path";
 import { commonJS } from "$repo-utils";
 
 const { __dirname } = commonJS(import.meta.url);
 
-const fixtureLoc = path.join(__dirname, "fixtures");
-const rootDir = path.resolve(__dirname, "../../..");
+const fixtureLoc = path.join(__dirname, "../fixtures");
+const rootDir = path.resolve(__dirname, "../../../..");
 
 const getPath = name => path.join(rootDir, "packages", name, "lib/index.js");
 
@@ -41,27 +44,24 @@ const normalizeOutput = function (str, cwd) {
   return result;
 };
 
-const tests = buildProcessTests(
-  fixtureLoc,
-  function (test) {
-    test.binLoc = path.join(__dirname, "../lib", test.suiteName);
-    if (
-      test.suiteName !== "babel-external-helpers" &&
-      !test.opts.noDefaultPlugins
-    ) {
-      test.opts.args.push("--presets", presetLocs, "--plugins", pluginLocs);
-    }
-  },
-  function (_, tmpDir, stdout, stderr) {
-    return {
-      stdout: normalizeOutput(stdout, tmpDir),
-      stderr: normalizeOutput(stderr, tmpDir),
-    };
-  },
+export const runParallel = buildParallelProcessTests(
+  "babel-cli",
+  buildProcessTests(
+    fixtureLoc,
+    function (test) {
+      test.binLoc = path.join(__dirname, "../../lib", test.suiteName);
+      if (
+        test.suiteName !== "babel-external-helpers" &&
+        !test.opts.noDefaultPlugins
+      ) {
+        test.opts.args.push("--presets", presetLocs, "--plugins", pluginLocs);
+      }
+    },
+    function (test, tmpDir, stdout, stderr) {
+      return {
+        stdout: normalizeOutput(stdout, tmpDir),
+        stderr: normalizeOutput(stderr, tmpDir),
+      };
+    },
+  ),
 );
-
-describe("bin/babel", function () {
-  for (const test of tests) {
-    (test.skip ? it.skip : it)(test.suiteName + " " + test.testName, test.fn);
-  }
-});
