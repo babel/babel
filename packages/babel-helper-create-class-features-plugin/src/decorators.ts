@@ -1061,10 +1061,6 @@ function transformClass(
     elementLocals.push(staticInitLocal);
   }
 
-  if (decoratedPrivateMethods.size > 0) {
-    checkPrivateMethodUpdateError(path, decoratedPrivateMethods);
-  }
-
   const classLocals: t.Identifier[] = [];
   let classInitInjected = false;
   const classInitCall =
@@ -1209,6 +1205,10 @@ function transformClass(
         t.variableDeclarator(t.cloneNode(classIdLocal)),
       ]),
     );
+  }
+
+  if (decoratedPrivateMethods.size > 0) {
+    checkPrivateMethodUpdateError(path, decoratedPrivateMethods);
   }
 
   // Recrawl the scope to make sure new identifiers are properly synced
