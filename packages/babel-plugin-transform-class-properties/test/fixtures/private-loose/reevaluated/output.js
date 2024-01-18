@@ -1,6 +1,6 @@
 function classFactory() {
-  var _class, _foo, _bar;
-  return _foo = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("foo"), _bar = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("bar"), (_class = class Foo {
+  var _Foo, _foo, _bar;
+  return _foo = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("foo"), _bar = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("bar"), (_Foo = class Foo {
     constructor() {
       Object.defineProperty(this, _foo, {
         writable: true,
@@ -19,10 +19,10 @@ function classFactory() {
     static static() {
       return babelHelpers.classPrivateFieldLooseBase(Foo, _bar)[_bar];
     }
-  }, Object.defineProperty(_class, _bar, {
+  }, Object.defineProperty(_Foo, _bar, {
     writable: true,
     value: "bar"
-  }), _class);
+  }), _Foo);
 }
 var Foo1 = classFactory();
 var Foo2 = classFactory();

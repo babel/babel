@@ -6,7 +6,7 @@ class Foo {
       return this.value;
     }]], []);
   }
-  constructor(...args) {
+  constructor() {
     _initProto(this);
   }
   value = 1;

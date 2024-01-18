@@ -6,7 +6,7 @@ class Foo {
   static {
     [_initProto] = babelHelpers.applyDecs(this, [[dec, 2, _computedKey], [dec, 2, _computedKey2]], []);
   }
-  constructor(...args) {
+  constructor() {
     _initProto(this);
   }
   [_computedKey]() {

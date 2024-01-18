@@ -1110,7 +1110,8 @@ export function buildFieldsInitNodes(
       };
 
   const classRefForInnerBinding =
-    ref ?? props[0].scope.generateUidIdentifier("class");
+    ref ??
+    props[0].scope.generateUidIdentifier(innerBindingRef?.name || "Class");
   ref ??= t.cloneNode(innerBindingRef);
 
   for (const prop of props) {

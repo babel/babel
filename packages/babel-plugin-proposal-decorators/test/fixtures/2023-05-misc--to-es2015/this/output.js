@@ -1,16 +1,12 @@
-var _initClass, _obj, _dec, _dec2, _obj2, _dec3, _obj3, _dec4, _obj4, _dec5, _init_x, _obj5, _dec6, _dec7, _init_y, _class;
-_obj = o1;
+var _initClass, _classDecs, _obj, _dec, _obj2, _dec2, _init_x, _obj3, _dec3, _dec4, _init_y, _A2;
+_classDecs = [o1, o1.dec, void 0, dec, o2, o2.dec];
+_obj = o2;
 _dec = _obj.dec;
-_dec2 = dec;
-_obj2 = o2;
-_dec3 = _obj2.dec;
+_obj2 = o3.o;
+_dec2 = _obj2.dec;
 _obj3 = o2;
-_dec4 = _obj3.dec;
-_obj4 = o3.o;
-_dec5 = _obj4.dec;
-_obj5 = o2;
-_dec6 = _obj5.dec;
-_dec7 = dec;
+_dec3 = _obj3.dec;
+_dec4 = dec;
 let _A;
 class A {
   constructor() {
@@ -18,9 +14,9 @@ class A {
     babelHelpers.defineProperty(this, "y", _init_y(this));
   }
 }
-_class = A;
+_A2 = A;
 ({
   e: [_init_x, _init_y],
   c: [_A, _initClass]
-} = babelHelpers.applyDecs2305(_class, [[[_obj3, _dec4, _obj4, _dec5], 16, "x"], [[_obj5, _dec6, void 0, _dec7], 16, "y"]], [_obj, _dec, void 0, _dec2, _obj2, _dec3], 1));
+} = babelHelpers.applyDecs2305(_A2, [[[_obj, _dec, _obj2, _dec2], 16, "x"], [[_obj3, _dec3, void 0, _dec4], 16, "y"]], _classDecs, 1));
 _initClass();

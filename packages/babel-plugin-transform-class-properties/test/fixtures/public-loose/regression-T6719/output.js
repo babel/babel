@@ -1,6 +1,6 @@
 function withContext(ComposedComponent) {
-  var _class;
-  return _class = /*#__PURE__*/function (_Component) {
+  var _WithContext;
+  return _WithContext = /*#__PURE__*/function (_Component) {
     "use strict";
 
     babelHelpers.inherits(WithContext, _Component);
@@ -9,11 +9,11 @@ function withContext(ComposedComponent) {
       return babelHelpers.callSuper(this, WithContext, arguments);
     }
     return babelHelpers.createClass(WithContext);
-  }(Component), _class.propTypes = {
+  }(Component), _WithContext.propTypes = {
     context: PropTypes.shape({
       addCss: PropTypes.func,
       setTitle: PropTypes.func,
       setMeta: PropTypes.func
     })
-  }, _class;
+  }, _WithContext;
 }

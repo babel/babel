@@ -1,7 +1,7 @@
-var _initProto, _class;
+var _initProto, _Foo;
 const dec = () => {};
 class Foo {
-  constructor(...args) {
+  constructor() {
     babelHelpers.defineProperty(this, "value", 1);
     _initProto(this);
   }
@@ -12,5 +12,5 @@ class Foo {
     return this.value = v;
   }
 }
-_class = Foo;
-[_initProto] = babelHelpers.applyDecs2301(_class, [[dec, 4, "a"], [dec, 4, 'b']], []).e;
+_Foo = Foo;
+[_initProto] = babelHelpers.applyDecs2301(_Foo, [[dec, 4, "a"], [dec, 4, 'b']], []).e;

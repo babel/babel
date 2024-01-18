@@ -28,11 +28,11 @@ var Foo = /*#__PURE__*/function () {
         }
         return babelHelpers.createClass(Nested);
       }((_babelHelpers$classPr = babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo], /*#__PURE__*/function () {
-        function _class4() {
-          babelHelpers.classCallCheck(this, _class4);
+        function _class() {
+          babelHelpers.classCallCheck(this, _class);
           this[_babelHelpers$classPr] = 2;
         }
-        return babelHelpers.createClass(_class4);
+        return babelHelpers.createClass(_class);
       }()));
     }
   }]);

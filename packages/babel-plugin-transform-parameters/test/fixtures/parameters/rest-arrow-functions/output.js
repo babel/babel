@@ -33,14 +33,14 @@ var x = function () {
   return rest;
 };
 var innerclassproperties = function () {
-  var _class;
+  var _Class;
   for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
     args[_key3] = arguments[_key3];
   }
-  return _class = /*#__PURE__*/babelHelpers.createClass(function _class() {
+  return _Class = /*#__PURE__*/babelHelpers.createClass(function _Class() {
     "use strict";
 
-    babelHelpers.classCallCheck(this, _class);
+    babelHelpers.classCallCheck(this, _Class);
     this.args = args;
-  }), _class.args = args, _class;
+  }), _Class.args = args, _Class;
 };

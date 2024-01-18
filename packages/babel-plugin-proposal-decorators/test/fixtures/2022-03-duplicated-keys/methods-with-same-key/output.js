@@ -4,7 +4,7 @@ class Foo {
   static {
     [_initProto] = babelHelpers.applyDecs2203R(this, [[dec, 2, "a"], [dec, 2, "a"]], []).e;
   }
-  constructor(...args) {
+  constructor() {
     _initProto(this);
   }
   a() {

@@ -1,5 +1,5 @@
 (function () {
-  var _class;
+  var _Foo;
   class Foo {
     constructor() {
       var _this = this;
@@ -8,26 +8,26 @@
       });
     }
   }
-  _class = Foo;
+  _Foo = Foo;
   babelHelpers.defineProperty(Foo, "fn", function () {
-    return console.log(_class);
+    return console.log(_Foo);
   });
 });
 (function () {
-  var _class2;
-  return _class2 = class Bar {
+  var _Bar;
+  return _Bar = class Bar {
     constructor() {
       var _this2 = this;
       babelHelpers.defineProperty(this, "fn", function () {
         return console.log(_this2);
       });
     }
-  }, babelHelpers.defineProperty(_class2, "fn", function () {
-    return console.log(_class2);
-  }), _class2;
+  }, babelHelpers.defineProperty(_Bar, "fn", function () {
+    return console.log(_Bar);
+  }), _Bar;
 });
 (function () {
-  var _class3;
+  var _Baz;
   class Baz {
     constructor(_force) {
       var _this3 = this;
@@ -37,13 +37,13 @@
       babelHelpers.defineProperty(this, "force", force);
     }
   }
-  _class3 = Baz;
+  _Baz = Baz;
   babelHelpers.defineProperty(Baz, "fn", function () {
-    return console.log(_class3);
+    return console.log(_Baz);
   });
 });
 var qux = function () {
-  var _class4;
+  var _Qux;
   class Qux {
     constructor() {
       var _this4 = this;
@@ -52,8 +52,8 @@ var qux = function () {
       });
     }
   }
-  _class4 = Qux;
+  _Qux = Qux;
   babelHelpers.defineProperty(Qux, "fn", function () {
-    return console.log(_class4);
+    return console.log(_Qux);
   });
 }.bind(this);

@@ -1,12 +1,12 @@
-var _class;
+var _C;
 class C {}
-_class = C;
+_C = C;
 var _x = {
   writable: true,
   value: void 0
 };
 (() => {
-  for (let x = babelHelpers.classStaticPrivateFieldSpecGet(_class, _class, _x);;) {
+  for (let x = babelHelpers.classStaticPrivateFieldSpecGet(_C, _C, _x);;) {
     break;
   }
 })();

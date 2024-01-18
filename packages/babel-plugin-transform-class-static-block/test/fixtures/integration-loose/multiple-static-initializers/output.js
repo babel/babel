@@ -1,14 +1,14 @@
-var _class;
+var _Foo;
 var _bar = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("bar");
 class Foo {}
-_class = Foo;
+_Foo = Foo;
 Object.defineProperty(Foo, _bar, {
   writable: true,
   value: 21
 });
 (() => {
-  _class.foo = babelHelpers.classPrivateFieldLooseBase(_class, _bar)[_bar];
-  _class.qux1 = _class.qux;
+  _Foo.foo = babelHelpers.classPrivateFieldLooseBase(_Foo, _bar)[_bar];
+  _Foo.qux1 = _Foo.qux;
 })();
 Foo.qux = 21;
-_class.qux2 = _class.qux;
+_Foo.qux2 = _Foo.qux;

@@ -1,4 +1,4 @@
-var _class;
+var _Foo;
 class Foo {
   static getSelf() {
     return this;
@@ -59,7 +59,7 @@ class Foo {
     (_getSelf6 = (_ref22 = fn === null || fn === void 0 ? void 0 : babelHelpers.classStaticPrivateFieldSpecGet(fn().Foo, Foo, _self)) === null || _ref22 === void 0 || (_ref22$getSelf = _ref22.getSelf) === null || _ref22$getSelf === void 0 ? void 0 : _ref22$getSelf.call(_ref22)) === null || _getSelf6 === void 0 ? void 0 : babelHelpers.classStaticPrivateFieldSpecGet(_getSelf6$self = _getSelf6.self, Foo, _m).call(_getSelf6$self);
   }
 }
-_class = Foo;
+_Foo = Foo;
 var _x = {
   writable: true,
   value: 1
@@ -67,12 +67,12 @@ var _x = {
 var _m = {
   writable: true,
   value: function () {
-    return babelHelpers.classStaticPrivateFieldSpecGet(this, _class, _x);
+    return babelHelpers.classStaticPrivateFieldSpecGet(this, _Foo, _x);
   }
 };
 var _self = {
   writable: true,
-  value: _class
+  value: _Foo
 };
-babelHelpers.defineProperty(Foo, "self", _class);
+babelHelpers.defineProperty(Foo, "self", _Foo);
 Foo.test();

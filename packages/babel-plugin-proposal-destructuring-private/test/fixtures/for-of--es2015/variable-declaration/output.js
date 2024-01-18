@@ -1,4 +1,4 @@
-var _class;
+var _C;
 var _x = /*#__PURE__*/new WeakMap();
 class C {
   constructor() {
@@ -8,9 +8,9 @@ class C {
     });
   }
 }
-_class = C;
+_C = C;
 (() => {
-  for (const _ref of [_class]) {
+  for (const _ref of [_C]) {
     const x = babelHelpers.classPrivateFieldGet(_ref, _x);
     ;
   }

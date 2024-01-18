@@ -13,7 +13,7 @@ class C {
       c: [_C, _initClass]
     } = babelHelpers.applyDecs2301(this, [[memberDec, 2, "m"]], [classDec]));
   }
-  constructor(...args) {
+  constructor() {
     _initProto(this);
   }
   m() {}

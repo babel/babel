@@ -1,13 +1,13 @@
-var _class;
+var _Foo;
 class Foo {}
-_class = Foo;
+_Foo = Foo;
 var _bar = {
   writable: true,
   value: 21
 };
 (() => {
-  _class.foo = babelHelpers.classStaticPrivateFieldSpecGet(_class, _class, _bar);
-  _class.qux1 = _class.qux;
+  _Foo.foo = babelHelpers.classStaticPrivateFieldSpecGet(_Foo, _Foo, _bar);
+  _Foo.qux1 = _Foo.qux;
 })();
 babelHelpers.defineProperty(Foo, "qux", 21);
-_class.qux2 = _class.qux;
+_Foo.qux2 = _Foo.qux;
