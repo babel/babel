@@ -756,9 +756,6 @@ defineType("Program", {
   visitor: ["directives", "body"],
   builder: ["body", "directives", "sourceType", "interpreter"],
   fields: {
-    sourceFile: {
-      validate: assertValueType("string"),
-    },
     sourceType: {
       validate: assertOneOf("script", "module"),
       default: "script",
