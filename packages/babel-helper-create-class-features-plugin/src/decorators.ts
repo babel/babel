@@ -5,6 +5,10 @@ import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import * as charCodes from "charcodes";
 import type { PluginAPI, PluginObject, PluginPass } from "@babel/core";
 import { skipTransparentExprWrappers } from "@babel/helper-skip-transparent-expression-wrappers";
+import {
+  privateNameVisitorFactory,
+  type PrivateNameVisitorState,
+} from "./fields.ts";
 
 interface Options {
   /** @deprecated use `constantSuper` assumption instead. Only supported in 2021-12 version. */
@@ -536,9 +540,12 @@ function checkPrivateMethodUpdateError(
   path: NodePath<t.Class>,
   decoratedPrivateMethods: Set<string>,
 ) {
-  path.traverse({
-    PrivateName(path) {
-      if (!decoratedPrivateMethods.has(path.node.id.name)) return;
+  const privateNameVisitor = privateNameVisitorFactory<
+    PrivateNameVisitorState<null>,
+    null
+  >({
+    PrivateName(path, state) {
+      if (!state.privateNamesMap.has(path.node.id.name)) return;
 
       const parentPath = path.parentPath;
       const parentParentPath = parentPath.parentPath;
@@ -566,6 +573,13 @@ function checkPrivateMethodUpdateError(
         );
       }
     },
+  });
+  const privateNamesMap = new Map();
+  for (const name of decoratedPrivateMethods) {
+    privateNamesMap.set(name, null);
+  }
+  path.traverse(privateNameVisitor, {
+    privateNamesMap: privateNamesMap,
   });
 }
 
