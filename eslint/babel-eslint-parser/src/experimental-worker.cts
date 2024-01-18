@@ -6,22 +6,23 @@ if (major < 12 || (major === 12 && minor < 3)) {
   );
 }
 
-const { normalizeESLintConfig } = require("./configuration.cjs");
-const analyzeScope = require("./analyze-scope.cjs");
-const baseParse = require("./parse.cjs");
+import normalizeESLintConfig = require("./configuration.cts");
+import analyzeScope = require("./analyze-scope.cts");
+import baseParse = require("./parse.cts");
 
-const { WorkerClient } = require("./client.cjs");
+import { WorkerClient } from "./client.cts";
+
 const client = new WorkerClient();
 
-exports.meta = {
+export const meta = {
   name: "@babel/eslint-parser/experimental-worker",
   version: PACKAGE_JSON.version,
 };
 
-exports.parseForESLint = function (code, options = {}) {
+export function parseForESLint(code: string, options = {}) {
   const normalizedOptions = normalizeESLintConfig(options);
   const ast = baseParse(code, normalizedOptions, client);
   const scopeManager = analyzeScope(ast, normalizedOptions, client);
 
   return { ast, scopeManager, visitorKeys: client.getVisitorKeys() };
-};
+}

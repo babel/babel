@@ -1,29 +1,31 @@
-const babel = require("./babel-core.cjs");
-const maybeParse = require("./maybeParse.cjs");
-const { getVisitorKeys, getTokLabels } = require("./ast-info.cjs");
-const {
+import babel = require("./babel-core.cts");
+import maybeParse = require("./maybeParse.cts");
+import { getVisitorKeys, getTokLabels } from "./ast-info.cts";
+import {
   normalizeBabelParseConfig,
   normalizeBabelParseConfigSync,
-} = require("./configuration.cjs");
+} from "./configuration.cts";
 
-module.exports = function handleMessage(action, payload) {
+import { ACTIONS } from "../client.cts";
+
+export = function handleMessage(action: ACTIONS, payload: any) {
   switch (action) {
-    case "GET_VERSION":
+    case ACTIONS.GET_VERSION:
       return babel.version;
-    case "GET_TYPES_INFO":
+    case ACTIONS.GET_TYPES_INFO:
       return {
         FLOW_FLIPPED_ALIAS_KEYS: babel.types.FLIPPED_ALIAS_KEYS.Flow,
         VISITOR_KEYS: babel.types.VISITOR_KEYS,
       };
-    case "GET_TOKEN_LABELS":
+    case ACTIONS.GET_TOKEN_LABELS:
       return getTokLabels();
-    case "GET_VISITOR_KEYS":
+    case ACTIONS.GET_VISITOR_KEYS:
       return getVisitorKeys();
-    case "MAYBE_PARSE":
+    case ACTIONS.MAYBE_PARSE:
       return normalizeBabelParseConfig(payload.options).then(options =>
         maybeParse(payload.code, options),
       );
-    case "MAYBE_PARSE_SYNC":
+    case ACTIONS.MAYBE_PARSE_SYNC:
       if (!USE_ESM) {
         return maybeParse(
           payload.code,

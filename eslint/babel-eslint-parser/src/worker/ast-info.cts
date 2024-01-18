@@ -1,8 +1,11 @@
-const ESLINT_VISITOR_KEYS = require("eslint-visitor-keys").KEYS;
-const babel = require("./babel-core.cjs");
+// @ts-expect-error no types
+import _ESLINT_VISITOR_KEYS = require("eslint-visitor-keys");
+import babel = require("./babel-core.cts");
 
-let visitorKeys;
-exports.getVisitorKeys = function getVisitorKeys() {
+const ESLINT_VISITOR_KEYS = _ESLINT_VISITOR_KEYS.KEYS;
+
+let visitorKeys: Record<string, string[]>;
+export function getVisitorKeys() {
   if (!visitorKeys) {
     // AST Types that are not presented in Babel AST
     const newTypes = {
@@ -34,13 +37,13 @@ exports.getVisitorKeys = function getVisitorKeys() {
     };
   }
   return visitorKeys;
-};
+}
 
 let tokLabels;
-exports.getTokLabels = function getTokLabels() {
+export function getTokLabels() {
   return (tokLabels ||= (
     process.env.BABEL_8_BREAKING
       ? Object.fromEntries
-      : p => p.reduce((o, [k, v]) => ({ ...o, [k]: v }), {})
+      : (p: any[]) => p.reduce((o, [k, v]) => ({ ...o, [k]: v }), {})
   )(Object.entries(babel.tokTypes).map(([key, tok]) => [key, tok.label])));
-};
+}

@@ -1,14 +1,26 @@
-const babel = require("./babel-core.cjs");
-const convert = require("../convert/index.cjs");
-const { getVisitorKeys, getTokLabels } = require("./ast-info.cjs");
-const extractParserOptionsPlugin = require("./extract-parser-options-plugin.cjs");
+import babel = require("./babel-core.cts");
+import convert = require("../convert/index.cts");
+import astInfo = require("./ast-info.cts");
+import extractParserOptionsPlugin = require("./extract-parser-options-plugin.cjs");
+
+import type { ConfigItem } from "../../../../packages/babel-core/src/config/item";
+import type { InputOptions } from "@babel/core";
+import type { AST, ParseResult } from "../types.cts";
+
+const { getVisitorKeys, getTokLabels } = astInfo;
 
 const ref = {};
-let extractParserOptionsConfigItem;
+let extractParserOptionsConfigItem: ConfigItem<any>;
 
 const MULTIPLE_OVERRIDES = /More than one plugin attempted to override parsing/;
 
-module.exports = function maybeParse(code, options) {
+export = function maybeParse(
+  code: string,
+  options: InputOptions,
+): {
+  ast: AST.Program | null;
+  parserOptions: ParseResult | null;
+} {
   if (!extractParserOptionsConfigItem) {
     extractParserOptionsConfigItem = babel.createConfigItemSync(
       [extractParserOptionsPlugin, ref],
@@ -17,6 +29,8 @@ module.exports = function maybeParse(code, options) {
   }
   const { plugins } = options;
   options.plugins = plugins.concat(extractParserOptionsConfigItem);
+
+  let ast;
 
   try {
     return {
@@ -32,15 +46,14 @@ module.exports = function maybeParse(code, options) {
   // There was already a parserOverride, so remove our plugin.
   options.plugins = plugins;
 
-  let ast;
   try {
     ast = babel.parseSync(code, options);
   } catch (err) {
-    throw convert.error(err);
+    throw convert.convertError(err);
   }
 
   return {
-    ast: convert.ast(ast, code, getTokLabels(), getVisitorKeys()),
+    ast: convert.convertFile(ast, code, getTokLabels(), getVisitorKeys()),
     parserOptions: null,
   };
 };

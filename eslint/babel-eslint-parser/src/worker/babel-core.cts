@@ -1,4 +1,8 @@
-function initialize(babel) {
+export = exports as typeof import("@babel/core") & {
+  init: Promise<void> | null;
+};
+
+function initialize(babel: typeof import("@babel/core")) {
   exports.init = null;
   exports.version = babel.version;
   exports.traverse = babel.traverse;
@@ -18,6 +22,7 @@ function initialize(babel) {
 }
 
 if (USE_ESM) {
+  // @ts-expect-error There is no types available for import().
   exports.init = import("@babel/core").then(initialize);
 } else {
   initialize(require("@babel/core"));

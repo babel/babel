@@ -1,18 +1,24 @@
-const ESLINT_VERSION = require("../utils/eslint-version.cjs");
+import type * as t from "@babel/types";
+import ESLINT_VERSION = require("../utils/eslint-version.cts");
+import type { ParseResult } from "../types.d.cts";
 
-function* it(children) {
+function* it(children: any) {
   if (Array.isArray(children)) yield* children;
   else yield children;
 }
 
-function traverse(node, visitorKeys, visitor) {
+function traverse(
+  node: ParseResult,
+  visitorKeys: Record<string, string[]>,
+  visitor: typeof convertNodesVisitor,
+) {
   const { type } = node;
   if (!type) return;
   const keys = visitorKeys[type];
   if (!keys) return;
 
   for (const key of keys) {
-    for (const child of it(node[key])) {
+    for (const child of it(node[key as keyof t.Node])) {
       if (child && typeof child === "object") {
         visitor.enter(child);
         traverse(child, visitorKeys, visitor);
@@ -23,7 +29,7 @@ function traverse(node, visitorKeys, visitor) {
 }
 
 const convertNodesVisitor = {
-  enter(node) {
+  enter(node: t.Node) {
     if (node.innerComments) {
       delete node.innerComments;
     }
@@ -36,7 +42,7 @@ const convertNodesVisitor = {
       delete node.leadingComments;
     }
   },
-  exit(node) {
+  exit(node: t.Node) {
     // Used internally by @babel/parser.
     if (node.extra) {
       delete node.extra;
@@ -47,7 +53,9 @@ const convertNodesVisitor = {
     }
 
     if (node.type === "TypeParameter") {
+      // @ts-expect-error eslint
       node.type = "Identifier";
+      // @ts-expect-error eslint
       node.typeAnnotation = node.bound;
       delete node.bound;
     }
@@ -72,6 +80,7 @@ const convertNodesVisitor = {
 
     // modules
     if (node.type === "ImportDeclaration") {
+      // @ts-expect-error legacy?
       delete node.isType;
     }
 
@@ -105,14 +114,17 @@ const convertNodesVisitor = {
   },
 };
 
-function convertNodes(ast, visitorKeys) {
+function convertNodes(ast: ParseResult, visitorKeys: Record<string, string[]>) {
   traverse(ast, visitorKeys, convertNodesVisitor);
 }
 
-function convertProgramNode(ast) {
-  ast.type = "Program";
-  ast.sourceType = ast.program.sourceType;
-  ast.body = ast.program.body;
+function convertProgramNode(ast: ParseResult) {
+  const body = ast.program.body;
+  Object.assign(ast, {
+    type: "Program",
+    sourceType: ast.program.sourceType,
+    body,
+  });
   delete ast.program;
   delete ast.errors;
 
@@ -141,17 +153,20 @@ function convertProgramNode(ast) {
     }
   }
 
-  if (ast.body && ast.body.length > 0) {
-    ast.loc.start.line = ast.body[0].loc.start.line;
-    ast.range[0] = ast.body[0].start;
+  if (body?.length) {
+    ast.loc.start.line = body[0].loc.start.line;
+    ast.range[0] = body[0].start;
 
     if (ESLINT_VERSION >= 8) {
-      ast.start = ast.body[0].start;
+      ast.start = body[0].start;
     }
   }
 }
 
-module.exports = function convertAST(ast, visitorKeys) {
+export = function convertAST(
+  ast: ParseResult,
+  visitorKeys: Record<string, string[]>,
+) {
   convertNodes(ast, visitorKeys);
   convertProgramNode(ast);
 };

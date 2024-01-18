@@ -1,16 +1,20 @@
+import type { Client } from "./client.cts";
+
 const {
   Definition,
   PatternVisitor: OriginalPatternVisitor,
   Referencer: OriginalReferencer,
   Scope,
   ScopeManager,
-} = process.env.BABEL_8_BREAKING
-  ? require("eslint-scope")
-  : require("@nicolo-ribaudo/eslint-scope-5-internals");
+} = (
+  process.env.BABEL_8_BREAKING
+    ? require("eslint-scope")
+    : require("@nicolo-ribaudo/eslint-scope-5-internals")
+) as import("./types.cts").Scope;
 const { getKeys: fallback } = require("eslint-visitor-keys");
 
-let visitorKeysMap;
-function getVisitorValues(nodeType, client) {
+let visitorKeysMap: Record<string, string[]>;
+function getVisitorValues(nodeType: string, client: Client) {
   if (visitorKeysMap) return visitorKeysMap[nodeType];
 
   const { FLOW_FLIPPED_ALIAS_KEYS, VISITOR_KEYS } = client.getTypesInfo();
@@ -28,6 +32,7 @@ function getVisitorValues(nodeType, client) {
 
   visitorKeysMap = Object.entries(VISITOR_KEYS).reduce((acc, [key, value]) => {
     if (!flowFlippedAliasKeys.includes(value)) {
+      // @ts-expect-error FIXME: value is not assignable to type string[]
       acc[key] = value;
     }
     return acc;
@@ -56,11 +61,11 @@ const propertyTypes = {
 };
 
 class PatternVisitor extends OriginalPatternVisitor {
-  ArrayPattern(node) {
+  ArrayPattern(node: any) {
     node.elements.forEach(this.visit, this);
   }
 
-  ObjectPattern(node) {
+  ObjectPattern(node: any) {
     node.properties.forEach(this.visit, this);
   }
 }
@@ -68,13 +73,13 @@ class PatternVisitor extends OriginalPatternVisitor {
 class Referencer extends OriginalReferencer {
   #client;
 
-  constructor(options, scopeManager, client) {
+  constructor(options: any, scopeManager: any, client: Client) {
     super(options, scopeManager);
     this.#client = client;
   }
 
   // inherits.
-  visitPattern(node, options, callback) {
+  visitPattern(node: any, options: any, callback: any) {
     if (!node) {
       return;
     }
@@ -101,7 +106,7 @@ class Referencer extends OriginalReferencer {
   }
 
   // inherits.
-  visitClass(node) {
+  visitClass(node: any) {
     // Decorators.
     this._visitArray(node.decorators);
 
@@ -110,9 +115,7 @@ class Referencer extends OriginalReferencer {
 
     // Flow super types.
     this._visitTypeAnnotation(node.implements);
-    this._visitTypeAnnotation(
-      node.superTypeParameters && node.superTypeParameters.params,
-    );
+    this._visitTypeAnnotation(node.superTypeParameters?.params);
 
     // Basic.
     super.visitClass(node);
@@ -124,7 +127,7 @@ class Referencer extends OriginalReferencer {
   }
 
   // inherits.
-  visitFunction(node) {
+  visitFunction(node: any) {
     const typeParamScope = this._nestTypeParamScope(node);
 
     // Flow return types.
@@ -140,7 +143,7 @@ class Referencer extends OriginalReferencer {
   }
 
   // inherits.
-  visitProperty(node) {
+  visitProperty(node: any) {
     if (node.value?.type === "TypeCastExpression") {
       this._visitTypeAnnotation(node.value);
     }
@@ -148,7 +151,7 @@ class Referencer extends OriginalReferencer {
     super.visitProperty(node);
   }
 
-  InterfaceDeclaration(node) {
+  InterfaceDeclaration(node: any) {
     this._createScopeVariable(node, node.id);
 
     const typeParamScope = this._nestTypeParamScope(node);
@@ -162,7 +165,7 @@ class Referencer extends OriginalReferencer {
     }
   }
 
-  TypeAlias(node) {
+  TypeAlias(node: any) {
     this._createScopeVariable(node, node.id);
 
     const typeParamScope = this._nestTypeParamScope(node);
@@ -174,45 +177,45 @@ class Referencer extends OriginalReferencer {
     }
   }
 
-  ClassProperty(node) {
+  ClassProperty(node: any) {
     this._visitClassProperty(node);
   }
 
-  ClassPrivateProperty(node) {
+  ClassPrivateProperty(node: any) {
     this._visitClassProperty(node);
   }
 
-  PropertyDefinition(node) {
+  PropertyDefinition(node: any) {
     this._visitClassProperty(node);
   }
 
   // TODO: Update to visit type annotations when TypeScript/Flow support this syntax.
-  ClassPrivateMethod(node) {
+  ClassPrivateMethod(node: any) {
     super.MethodDefinition(node);
   }
 
-  DeclareModule(node) {
+  DeclareModule(node: any) {
     this._visitDeclareX(node);
   }
 
-  DeclareFunction(node) {
+  DeclareFunction(node: any) {
     this._visitDeclareX(node);
   }
 
-  DeclareVariable(node) {
+  DeclareVariable(node: any) {
     this._visitDeclareX(node);
   }
 
-  DeclareClass(node) {
+  DeclareClass(node: any) {
     this._visitDeclareX(node);
   }
 
   // visit OptionalMemberExpression as a MemberExpression.
-  OptionalMemberExpression(node) {
+  OptionalMemberExpression(node: any) {
     super.MemberExpression(node);
   }
 
-  _visitClassProperty(node) {
+  _visitClassProperty(node: any) {
     const { computed, key, typeAnnotation, value } = node;
 
     if (computed) this.visit(key);
@@ -239,7 +242,7 @@ class Referencer extends OriginalReferencer {
     }
   }
 
-  _visitDeclareX(node) {
+  _visitDeclareX(node: any) {
     if (node.id) {
       this._createScopeVariable(node, node.id);
     }
@@ -250,14 +253,14 @@ class Referencer extends OriginalReferencer {
     }
   }
 
-  _createScopeVariable(node, name) {
+  _createScopeVariable(node: any, name: any) {
     this.currentScope().variableScope.__define(
       name,
       new Definition("Variable", name, node, null, null, null),
     );
   }
 
-  _nestTypeParamScope(node) {
+  _nestTypeParamScope(node: any) {
     if (!node.typeParameters) {
       return null;
     }
@@ -279,14 +282,12 @@ class Referencer extends OriginalReferencer {
         this._checkIdentifierOrVisit(name);
       }
     }
-    scope.__define = function () {
-      return parentScope.__define.apply(parentScope, arguments);
-    };
+    scope.__define = parentScope.__define.bind(parentScope);
 
     return scope;
   }
 
-  _visitTypeAnnotation(node) {
+  _visitTypeAnnotation(node: any) {
     if (!node) {
       return;
     }
@@ -304,7 +305,7 @@ class Referencer extends OriginalReferencer {
     // can have multiple properties
     for (let i = 0; i < visitorValues.length; i++) {
       const visitorValue = visitorValues[i];
-      const propertyType = propertyTypes[visitorValue];
+      const propertyType = (propertyTypes as Record<string, any>)[visitorValue];
       const nodeProperty = node[visitorValue];
       // check if property or type is defined
       if (propertyType == null || nodeProperty == null) {
@@ -341,7 +342,7 @@ class Referencer extends OriginalReferencer {
     }
   }
 
-  _checkIdentifierOrVisit(node) {
+  _checkIdentifierOrVisit(node: any) {
     if (node?.typeAnnotation) {
       this._visitTypeAnnotation(node.typeAnnotation);
     } else if (node?.type === "Identifier") {
@@ -351,7 +352,7 @@ class Referencer extends OriginalReferencer {
     }
   }
 
-  _visitArray(nodeList) {
+  _visitArray(nodeList: any[]) {
     if (nodeList) {
       for (const node of nodeList) {
         this.visit(node);
@@ -360,7 +361,7 @@ class Referencer extends OriginalReferencer {
   }
 }
 
-module.exports = function analyzeScope(ast, parserOptions, client) {
+export = function analyzeScope(ast: any, parserOptions: any, client: Client) {
   const options = {
     ignoreEval: true,
     optimistic: false,
@@ -372,14 +373,13 @@ module.exports = function analyzeScope(ast, parserOptions, client) {
     sourceType: ast.sourceType,
     ecmaVersion: parserOptions.ecmaVersion,
     fallback,
+    childVisitorKeys: client.getVisitorKeys(),
   };
-
-  options.childVisitorKeys = client.getVisitorKeys();
 
   const scopeManager = new ScopeManager(options);
   const referencer = new Referencer(options, scopeManager, client);
 
   referencer.visit(ast);
 
-  return scopeManager;
+  return scopeManager as any;
 };
