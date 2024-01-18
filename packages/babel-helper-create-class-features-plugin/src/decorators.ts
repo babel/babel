@@ -532,8 +532,45 @@ function createToPropertyKeyCall(state: PluginPass, propertyKey: t.Expression) {
   return t.callExpression(state.addHelper("toPropertyKey"), [propertyKey]);
 }
 
+function checkPrivateMethodUpdateError(
+  path: NodePath<t.Class>,
+  decoratedPrivateMethods: Set<string>,
+) {
+  path.traverse({
+    PrivateName(path) {
+      if (!decoratedPrivateMethods.has(path.node.id.name)) return;
+
+      const parentPath = path.parentPath;
+      const parentParentPath = parentPath.parentPath;
+
+      if (
+        // this.bar().#x = 123;
+        (parentParentPath.node.type === "AssignmentExpression" &&
+          parentParentPath.node.left === parentPath.node) ||
+        // this.#x++;
+        parentParentPath.node.type === "UpdateExpression" ||
+        // ([...this.#x] = foo);
+        parentParentPath.node.type === "RestElement" ||
+        // ([this.#x] = foo);
+        parentParentPath.node.type === "ArrayPattern" ||
+        // ({ a: this.#x } = bar);
+        (parentParentPath.node.type === "ObjectProperty" &&
+          parentParentPath.node.value === parentPath.node &&
+          parentParentPath.parentPath.type === "ObjectPattern") ||
+        // for (this.#x of []);
+        (parentParentPath.node.type === "ForOfStatement" &&
+          parentParentPath.node.left === parentPath.node)
+      ) {
+        throw path.buildCodeFrameError(
+          `Decorated private methods are not updatable, but "#${path.node.id.name}" is updated via this expression.`,
+        );
+      }
+    },
+  });
+}
+
 function transformClass(
-  path: NodePath<t.ClassExpression | t.ClassDeclaration>,
+  path: NodePath<t.Class>,
   state: PluginPass,
   constantSuper: boolean,
   version: DecoratorVersionKind,
@@ -1025,37 +1062,7 @@ function transformClass(
   }
 
   if (decoratedPrivateMethods.size > 0) {
-    path.traverse({
-      PrivateName(path) {
-        if (!decoratedPrivateMethods.has(path.node.id.name)) return;
-
-        const parentPath = path.parentPath;
-        const parentParentPath = parentPath.parentPath;
-
-        if (
-          // this.bar().#x = 123;
-          (parentParentPath.node.type === "AssignmentExpression" &&
-            parentParentPath.node.left === parentPath.node) ||
-          // this.#x++;
-          parentParentPath.node.type === "UpdateExpression" ||
-          // ([...this.#x] = foo);
-          parentParentPath.node.type === "RestElement" ||
-          // ([this.#x] = foo);
-          parentParentPath.node.type === "ArrayPattern" ||
-          // ({ a: this.#x } = bar);
-          (parentParentPath.node.type === "ObjectProperty" &&
-            parentParentPath.node.value === parentPath.node &&
-            parentParentPath.parentPath.type === "ObjectPattern") ||
-          // for (this.#x of []);
-          (parentParentPath.node.type === "ForOfStatement" &&
-            parentParentPath.node.left === parentPath.node)
-        ) {
-          throw path.buildCodeFrameError(
-            `Decorated private methods are not updatable, but "#${path.node.id.name}" is updated via this expression.`,
-          );
-        }
-      },
-    });
+    checkPrivateMethodUpdateError(path, decoratedPrivateMethods);
   }
 
   const classLocals: t.Identifier[] = [];
