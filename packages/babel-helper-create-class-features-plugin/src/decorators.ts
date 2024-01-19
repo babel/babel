@@ -5,6 +5,10 @@ import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import * as charCodes from "charcodes";
 import type { PluginAPI, PluginObject, PluginPass } from "@babel/core";
 import { skipTransparentExprWrappers } from "@babel/helper-skip-transparent-expression-wrappers";
+import {
+  privateNameVisitorFactory,
+  type PrivateNameVisitorState,
+} from "./fields.ts";
 
 interface Options {
   /** @deprecated use `constantSuper` assumption instead. Only supported in 2021-12 version. */
@@ -532,8 +536,55 @@ function createToPropertyKeyCall(state: PluginPass, propertyKey: t.Expression) {
   return t.callExpression(state.addHelper("toPropertyKey"), [propertyKey]);
 }
 
+function checkPrivateMethodUpdateError(
+  path: NodePath<t.Class>,
+  decoratedPrivateMethods: Set<string>,
+) {
+  const privateNameVisitor = privateNameVisitorFactory<
+    PrivateNameVisitorState<null>,
+    null
+  >({
+    PrivateName(path, state) {
+      if (!state.privateNamesMap.has(path.node.id.name)) return;
+
+      const parentPath = path.parentPath;
+      const parentParentPath = parentPath.parentPath;
+
+      if (
+        // this.bar().#x = 123;
+        (parentParentPath.node.type === "AssignmentExpression" &&
+          parentParentPath.node.left === parentPath.node) ||
+        // this.#x++;
+        parentParentPath.node.type === "UpdateExpression" ||
+        // ([...this.#x] = foo);
+        parentParentPath.node.type === "RestElement" ||
+        // ([this.#x] = foo);
+        parentParentPath.node.type === "ArrayPattern" ||
+        // ({ a: this.#x } = bar);
+        (parentParentPath.node.type === "ObjectProperty" &&
+          parentParentPath.node.value === parentPath.node &&
+          parentParentPath.parentPath.type === "ObjectPattern") ||
+        // for (this.#x of []);
+        (parentParentPath.node.type === "ForOfStatement" &&
+          parentParentPath.node.left === parentPath.node)
+      ) {
+        throw path.buildCodeFrameError(
+          `Decorated private methods are read-only, but "#${path.node.id.name}" is updated via this expression.`,
+        );
+      }
+    },
+  });
+  const privateNamesMap = new Map<string, null>();
+  for (const name of decoratedPrivateMethods) {
+    privateNamesMap.set(name, null);
+  }
+  path.traverse(privateNameVisitor, {
+    privateNamesMap: privateNamesMap,
+  });
+}
+
 function transformClass(
-  path: NodePath<t.ClassExpression | t.ClassDeclaration>,
+  path: NodePath<t.Class>,
   state: PluginPass,
   constantSuper: boolean,
   version: DecoratorVersionKind,
@@ -1024,40 +1075,6 @@ function transformClass(
     elementLocals.push(staticInitLocal);
   }
 
-  if (decoratedPrivateMethods.size > 0) {
-    path.traverse({
-      PrivateName(path) {
-        if (!decoratedPrivateMethods.has(path.node.id.name)) return;
-
-        const parentPath = path.parentPath;
-        const parentParentPath = parentPath.parentPath;
-
-        if (
-          // this.bar().#x = 123;
-          (parentParentPath.node.type === "AssignmentExpression" &&
-            parentParentPath.node.left === parentPath.node) ||
-          // this.#x++;
-          parentParentPath.node.type === "UpdateExpression" ||
-          // ([...this.#x] = foo);
-          parentParentPath.node.type === "RestElement" ||
-          // ([this.#x] = foo);
-          parentParentPath.node.type === "ArrayPattern" ||
-          // ({ a: this.#x } = bar);
-          (parentParentPath.node.type === "ObjectProperty" &&
-            parentParentPath.node.value === parentPath.node &&
-            parentParentPath.parentPath.type === "ObjectPattern") ||
-          // for (this.#x of []);
-          (parentParentPath.node.type === "ForOfStatement" &&
-            parentParentPath.node.left === parentPath.node)
-        ) {
-          throw path.buildCodeFrameError(
-            `Decorated private methods are not updatable, but "#${path.node.id.name}" is updated via this expression.`,
-          );
-        }
-      },
-    });
-  }
-
   const classLocals: t.Identifier[] = [];
   let classInitInjected = false;
   const classInitCall =
@@ -1202,6 +1219,10 @@ function transformClass(
         t.variableDeclarator(t.cloneNode(classIdLocal)),
       ]),
     );
+  }
+
+  if (decoratedPrivateMethods.size > 0) {
+    checkPrivateMethodUpdateError(path, decoratedPrivateMethods);
   }
 
   // Recrawl the scope to make sure new identifiers are properly synced
