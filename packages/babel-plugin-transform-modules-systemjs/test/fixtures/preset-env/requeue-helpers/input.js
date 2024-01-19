@@ -2,7 +2,7 @@
 
 let nativeSymbol = Symbol;
 try {
-  delete globalThis.Symbol;
+  delete global.Symbol;
 
   require("core-js/modules/es.symbol.js")
 
@@ -12,7 +12,7 @@ try {
   expect(typeof symbol === "symbol").toBe(true);
   expect(eval("_toPropertyKey(symbol)")).toBe(symbol);
 } finally {
-  globalThis.Symbol = nativeSymbol;
+  global.Symbol = nativeSymbol;
 }
 
 return "done";

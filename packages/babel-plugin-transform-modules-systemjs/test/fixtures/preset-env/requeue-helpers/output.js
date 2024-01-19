@@ -14,14 +14,14 @@ System.register([], function (_export, _context) {
       // Ref: https://github.com/babel/babel/issues/16219
       nativeSymbol = Symbol;
       try {
-        delete globalThis.Symbol;
+        delete global.Symbol;
         require("core-js/modules/es.symbol.js");
         symbol = Symbol("test");
         expect(eval('typeof symbol === "object"')).toBe(true);
         expect(_typeof(symbol) === "symbol").toBe(true);
         expect(eval("_toPropertyKey(symbol)")).toBe(symbol);
       } finally {
-        globalThis.Symbol = nativeSymbol;
+        global.Symbol = nativeSymbol;
       }
       return "done";
       AxiosHeaders = /*#__PURE__*/function (_Symbol$iterator) {

@@ -16,14 +16,13 @@ describe("systemjs exec", function () {
     );
     let ret;
 
-    globalThis.require = require;
-    globalThis.System = {
+    const System = {
       register: function (_, module) {
         ret = module().execute();
       },
     };
     eval(content);
 
-    expect(ret).toBe("done");
+    expect((require, System, ret)).toBe("done");
   });
 });
