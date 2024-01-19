@@ -1,24 +1,21 @@
 // Ref: https://github.com/babel/babel/issues/16219
 
-let nativeSymbol = Symbol;
-try {
-  delete global.Symbol
+delete global.Symbol
 
-  global.Symbol = require("core-js-pure/es/symbol");
+require("core-js/modules/es.symbol.js");
 
-  const symbol = Symbol("test");
+const symbol = Symbol("test");
 
-  expect(eval('typeof symbol === "object"')).toBe(true);
-  expect(typeof symbol === "symbol").toBe(true);
-  expect(eval("_toPropertyKey(symbol)")).toBe(symbol);
-} finally {
-  global.Symbol = nativeSymbol;
-}
+// Use eval to not let Babel transform this `typeof`
+expect(eval('typeof symbol')).toBe("object");
+expect(typeof symbol).toBe("symbol");
 
-return "done";
-
-class AxiosHeaders {
-  [Symbol.iterator]() {
-    return;
+expect(() => {
+  class AxiosHeaders {
+    [Symbol.iterator]() {
+      return;
+    }
   }
-}
+}).not.toThrow()
+
+return "ok";

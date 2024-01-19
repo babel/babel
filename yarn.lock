@@ -2977,7 +2977,9 @@ __metadata:
     "@babel/helper-module-transforms": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/helper-transform-fixture-test-runner": "workspace:^"
     "@babel/helper-validator-identifier": "workspace:^"
+    core-js: "npm:^3.35.0"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -8099,6 +8101,13 @@ __metadata:
   version: 3.31.1
   resolution: "core-js@npm:3.31.1"
   checksum: f3b0b424f9ba02c6235c8739651943f06823e7ec3e02e0f819490a05f15a08cadc3a011853947466bececb6e7f4987f826142293fc4bc2ea11216e839579a257
+  languageName: node
+  linkType: hard
+
+"core-js@npm:^3.35.0":
+  version: 3.35.0
+  resolution: "core-js@npm:3.35.0"
+  checksum: 0815fce6bcc91d79d4b28885975453b0faa4d17fc2230635102b4f3832cd621035e4032aa3307e1dbe0ee14d5e34bcb64b507fd89bd8f567aedaf29538522e6a
   languageName: node
   linkType: hard
 

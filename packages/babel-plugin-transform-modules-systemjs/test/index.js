@@ -2,28 +2,35 @@ import runner from "@babel/helper-plugin-test-runner";
 import { readFileSync } from "fs";
 import { commonJS } from "$repo-utils";
 import path from "path";
+import {
+  runCodeInTestContext,
+  createTestContext,
+} from "@babel/helper-transform-fixture-test-runner";
 
-const { __dirname, require } = commonJS(import.meta.url);
+const { __dirname } = commonJS(import.meta.url);
 
 runner(import.meta.url);
 
 describe("systemjs exec", function () {
   // https://github.com/babel/babel/issues/16219
   it("should requeue helpers", function () {
-    const content = readFileSync(
-      path.join(__dirname, "fixtures/preset-env/requeue-helpers/output.js"),
-      "utf8",
+    const filename = path.join(
+      __dirname,
+      "fixtures/preset-env/requeue-helpers/output.js",
     );
-    let ret;
+    const content = readFileSync(filename, "utf8");
 
-    const System = {
+    let res;
+
+    const context = createTestContext();
+    context.System = {
       register: function (_, module) {
-        ret = module().execute();
+        res = module().execute();
       },
     };
 
-    eval((require, System, content));
+    runCodeInTestContext(content, { filename }, context);
 
-    expect(ret).toBe("done");
+    expect(res).toBe("ok");
   });
 });

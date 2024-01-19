@@ -1,7 +1,7 @@
 System.register([], function (_export, _context) {
   "use strict";
 
-  var nativeSymbol, symbol, AxiosHeaders;
+  var symbol;
   function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
   function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
   function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
@@ -12,32 +12,29 @@ System.register([], function (_export, _context) {
     setters: [],
     execute: function execute() {
       // Ref: https://github.com/babel/babel/issues/16219
-      nativeSymbol = Symbol;
-      try {
-        delete global.Symbol;
-        global.Symbol = require("core-js-pure/es/symbol");
-        symbol = Symbol("test");
-        expect(eval('typeof symbol === "object"')).toBe(true);
-        expect(_typeof(symbol) === "symbol").toBe(true);
-        expect(eval("_toPropertyKey(symbol)")).toBe(symbol);
-      } finally {
-        global.Symbol = nativeSymbol;
-      }
-      return "done";
-      AxiosHeaders = /*#__PURE__*/function (_Symbol$iterator) {
-        "use strict";
 
-        function AxiosHeaders() {
-          _classCallCheck(this, AxiosHeaders);
-        }
-        _createClass(AxiosHeaders, [{
-          key: _Symbol$iterator,
-          value: function value() {
-            return;
+      delete global.Symbol;
+      require("core-js/modules/es.symbol.js");
+      symbol = Symbol("test"); // Use eval to not let Babel transform this `typeof`
+      expect(eval('typeof symbol')).toBe("object");
+      expect(_typeof(symbol)).toBe("symbol");
+      expect(function () {
+        var AxiosHeaders = /*#__PURE__*/function (_Symbol$iterator) {
+          "use strict";
+
+          function AxiosHeaders() {
+            _classCallCheck(this, AxiosHeaders);
           }
-        }]);
-        return AxiosHeaders;
-      }(Symbol.iterator);
+          _createClass(AxiosHeaders, [{
+            key: _Symbol$iterator,
+            value: function value() {
+              return;
+            }
+          }]);
+          return AxiosHeaders;
+        }(Symbol.iterator);
+      }).not.toThrow();
+      return "ok";
     }
   };
 });
