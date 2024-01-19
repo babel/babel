@@ -9,9 +9,6 @@ export = function convertComments(comments: Comment[]) {
     // even with options.ranges === true
 
     // @ts-expect-error eslint
-    if (!comment.range) {
-      // @ts-expect-error eslint
-      comment.range = [comment.start, comment.end];
-    }
+    comment.range ||= [comment.start, comment.end];
   }
 };

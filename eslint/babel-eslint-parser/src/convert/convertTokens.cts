@@ -101,11 +101,8 @@ function convertToken(
       pattern: string;
       flags: string;
     };
-  } = {
-    ...token,
-    type: "",
-    range: [token.start, token.end],
-  };
+  } = token as any;
+  newToken.range = [token.start, token.end];
 
   if (label === tl.name) {
     if (token.value === "static") {

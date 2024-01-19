@@ -2,7 +2,7 @@ import type * as t from "@babel/types";
 import ESLINT_VERSION = require("../utils/eslint-version.cts");
 import type { ParseResult } from "../types.d.cts";
 
-function* it(children: any) {
+function* it<T>(children: T | T[]): Generator<T> {
   if (Array.isArray(children)) yield* children;
   else yield children;
 }
