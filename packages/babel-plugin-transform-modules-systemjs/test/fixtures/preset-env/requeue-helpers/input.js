@@ -4,7 +4,7 @@ let nativeSymbol = Symbol;
 try {
   delete global.Symbol;
 
-  require("core-js/modules/es.symbol.js")
+  require("core-js/es/symbol")
 
   const symbol = Symbol("test");
 
