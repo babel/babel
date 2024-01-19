@@ -2,9 +2,9 @@
 
 let nativeSymbol = Symbol;
 try {
-  delete global.Symbol;
+  delete global.Symbol
 
-  require("core-js/es/symbol")
+  global.Symbol = require("core-js-pure/es/symbol");
 
   const symbol = Symbol("test");
 

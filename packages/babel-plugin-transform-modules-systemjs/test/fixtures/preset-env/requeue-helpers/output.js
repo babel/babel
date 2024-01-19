@@ -15,7 +15,7 @@ System.register([], function (_export, _context) {
       nativeSymbol = Symbol;
       try {
         delete global.Symbol;
-        require("core-js/es/symbol");
+        global.Symbol = require("core-js-pure/es/symbol");
         symbol = Symbol("test");
         expect(eval('typeof symbol === "object"')).toBe(true);
         expect(_typeof(symbol) === "symbol").toBe(true);

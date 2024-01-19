@@ -21,8 +21,9 @@ describe("systemjs exec", function () {
         ret = module().execute();
       },
     };
-    eval(content);
 
-    expect((require, System, ret)).toBe("done");
+    eval((require, System, content));
+
+    expect(ret).toBe("done");
   });
 });
