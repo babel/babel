@@ -569,7 +569,7 @@ function checkPrivateMethodUpdateError(
           parentParentPath.node.left === parentPath.node)
       ) {
         throw path.buildCodeFrameError(
-          `Decorated private methods are not updatable, but "#${path.node.id.name}" is updated via this expression.`,
+          `Decorated private methods are read-only, but "#${path.node.id.name}" is updated via this expression.`,
         );
       }
     },
