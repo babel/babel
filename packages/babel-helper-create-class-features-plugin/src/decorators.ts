@@ -574,7 +574,7 @@ function checkPrivateMethodUpdateError(
       }
     },
   });
-  const privateNamesMap = new Map();
+  const privateNamesMap = new Map<string, null>();
   for (const name of decoratedPrivateMethods) {
     privateNamesMap.set(name, null);
   }

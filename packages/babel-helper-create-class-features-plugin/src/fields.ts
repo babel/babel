@@ -26,7 +26,7 @@ interface PrivateNameMetadata {
   setterDeclared?: boolean;
 }
 
-export type PrivateNamesMapGeneric<V> = Map<string, V>;
+type PrivateNamesMapGeneric<V> = Map<string, V>;
 
 type PrivateNamesMap = PrivateNamesMapGeneric<PrivateNameMetadata>;
 
