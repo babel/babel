@@ -1,4 +1,7 @@
 {
+  "parserOpts": {
+    "allowReturnOutsideFunction": true
+  },
   "presets": [
     [
       "env",
