@@ -19,7 +19,12 @@ System.register([], function (_export, _context) {
     execute: function execute() {
       // Ref: https://github.com/babel/babel/issues/16219
 
-      delete global.Symbol;
+      // delete global.Symbol doesn't work with jest in node 6
+      Object.defineProperty(global, "Symbol", {
+        configurable: true,
+        writable: true,
+        value: undefined
+      });
       require("core-js/modules/es.symbol.js");
       require("core-js/modules/es.symbol.to-primitive");
       symbol = Symbol("test"); // Use eval to not let Babel transform this `typeof`
