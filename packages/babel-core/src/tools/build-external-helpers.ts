@@ -24,7 +24,7 @@ import {
 } from "@babel/types";
 import type * as t from "@babel/types";
 import File from "../transformation/file/file.ts";
-import type { PublicReplacements } from "@babel/template/src/options";
+import type { PublicReplacements } from "../../../babel-template/src/options.ts";
 
 // Wrapped to avoid wasting time parsing this when almost no-one uses
 // build-external-helpers.

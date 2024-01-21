@@ -22,7 +22,6 @@ function initialize(babel: typeof import("@babel/core")) {
 }
 
 if (USE_ESM) {
-  // @ts-expect-error There is no types available for import().
   exports.init = import("@babel/core").then(initialize);
 } else {
   initialize(require("@babel/core"));

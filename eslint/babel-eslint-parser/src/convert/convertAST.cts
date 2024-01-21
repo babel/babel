@@ -2,13 +2,13 @@ import type * as t from "@babel/types";
 import ESLINT_VERSION = require("../utils/eslint-version.cts");
 import type { ParseResult } from "../types.d.cts";
 
-function* it<T>(children: T | T[]): Generator<T> {
+function* it<T>(children: T | T[]) {
   if (Array.isArray(children)) yield* children;
   else yield children;
 }
 
 function traverse(
-  node: ParseResult,
+  node: t.Node,
   visitorKeys: Record<string, string[]>,
   visitor: typeof convertNodesVisitor,
 ) {
@@ -18,7 +18,9 @@ function traverse(
   if (!keys) return;
 
   for (const key of keys) {
-    for (const child of it(node[key as keyof t.Node])) {
+    for (const child of it(
+      node[key as keyof t.Node] as unknown as t.Node | t.Node[],
+    )) {
       if (child && typeof child === "object") {
         visitor.enter(child);
         traverse(child, visitorKeys, visitor);
@@ -115,7 +117,7 @@ const convertNodesVisitor = {
 };
 
 function convertNodes(ast: ParseResult, visitorKeys: Record<string, string[]>) {
-  traverse(ast, visitorKeys, convertNodesVisitor);
+  traverse(ast as unknown as t.Program, visitorKeys, convertNodesVisitor);
 }
 
 function convertProgramNode(ast: ParseResult) {
