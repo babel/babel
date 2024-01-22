@@ -709,6 +709,7 @@ export default declare<PluginState>((api, options: Options) => {
               CONTEXT_IDENTIFIER: t.identifier(contextIdent),
             }),
           ];
+          path.requeue(path.get("body.0"));
         },
       },
     },

@@ -68,7 +68,7 @@ const cachedScripts = new LruCache<
   { code: string; cachedData?: Buffer }
 >({ max: 10 });
 const contextModuleCache = new WeakMap();
-const sharedTestContext = createContext();
+const sharedTestContext = createTestContext();
 
 // We never want our tests to accidentally load the root
 // babel.config.js file, so we disable config loading by
@@ -89,7 +89,7 @@ function transformAsyncWithoutConfigFile(code: string, opts: InputOptions) {
   });
 }
 
-function createContext() {
+export function createTestContext() {
   const context = vm.createContext({
     ...helpers,
     process: process,
@@ -302,7 +302,7 @@ async function run(task: Test) {
   let resultExec;
 
   if (execCode) {
-    const context = createContext();
+    const context = createTestContext();
     const execOpts = getOpts(exec);
 
     // Ignore Babel logs of exec.js files.
