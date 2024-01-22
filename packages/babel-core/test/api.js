@@ -927,7 +927,7 @@ describe("api", function () {
           "'plugins' section of your Babel config to enable transformation.",
       );
       expect(err.message).toMatch(
-        /You can re-run Babel with the BABEL_SHOW_CONFIG_FOR=(.*?)[\\/]parsing-errors[\\/]syntax-and-transform[\\/]file.js environment variable to show the loaded configuration./,
+        /npx cross-env BABEL_SHOW_CONFIG_FOR=(.*?)[\\/]parsing-errors[\\/]syntax-and-transform[\\/]file.js/,
       );
     });
   });
