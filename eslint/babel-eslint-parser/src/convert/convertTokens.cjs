@@ -1,5 +1,7 @@
 const ESLINT_VERSION = require("../utils/eslint-version.cjs");
 
+const TEMPLATE_LABEL = "Template";
+
 function convertTemplateType(tokens, tl) {
   let curlyBrace = null;
   let templateTokens = [];
@@ -20,7 +22,9 @@ function convertTemplateType(tokens, tl) {
     }, "");
 
     result.push({
-      type: "Template",
+      type: {
+        label: TEMPLATE_LABEL,
+      },
       value: value,
       start: start.start,
       end: end.end,
@@ -181,7 +185,11 @@ function convertToken(token, source, tl) {
     token.value = `${token.value}n`;
   } else if (label === tl.privateName) {
     token.type = "PrivateIdentifier";
-  } else if (label === tl.templateNonTail || label === tl.templateTail) {
+  } else if (
+    label === tl.templateNonTail ||
+    label === tl.templateTail ||
+    label === TEMPLATE_LABEL
+  ) {
     token.type = "Template";
   }
 
