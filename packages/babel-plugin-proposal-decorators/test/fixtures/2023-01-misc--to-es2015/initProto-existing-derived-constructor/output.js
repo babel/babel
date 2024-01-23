@@ -66,7 +66,7 @@
     let log = [];
     new class Dummy extends B {
       constructor() {
-        var _computedKey, _initProto3, _A3;
+        var _initProto3, _computedKey, _A3;
         let key;
         _computedKey = babelHelpers.toPropertyKey((key = super(5).method(), log.push(key), key));
         class A extends B {
@@ -90,7 +90,7 @@
     const noop = () => fn => fn;
     new class extends B {
       constructor() {
-        var _dec, _initProto4, _A4;
+        var _initProto4, _dec, _A4;
         _dec = noop(log.push(super(7).method()));
         class A extends B {
           constructor() {
@@ -138,7 +138,7 @@
     const noop = () => fn => fn;
     class A extends B {
       constructor() {
-        var _dec2, _initProto7, _Dummy2;
+        var _initProto7, _dec2, _Dummy2;
         new (_dec2 = noop(log.push(_initProto6(super(11)).method())), (_Dummy2 = class Dummy extends B {
           constructor() {
             log.push(_initProto7(super(12)).method());

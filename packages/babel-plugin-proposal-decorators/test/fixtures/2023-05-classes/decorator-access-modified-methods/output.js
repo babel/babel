@@ -1,4 +1,4 @@
-var _initClass, _initProto;
+var _initProto, _initClass;
 var value;
 const classDec = Class => {
   value = new Class().m();

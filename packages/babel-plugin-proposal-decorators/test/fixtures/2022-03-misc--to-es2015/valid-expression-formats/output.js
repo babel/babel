@@ -1,4 +1,4 @@
-var _initClass, _classDecs, _dec, _dec2, _dec3, _dec4, _initProto, _Foo2;
+var _initProto, _initClass, _classDecs, _dec, _dec2, _dec3, _dec4, _Foo2;
 const dec = () => {};
 _classDecs = [dec, call(), chain.expr(), arbitrary + expr, array[expr]];
 _dec = call();
