@@ -606,14 +606,17 @@ function transformClass(
     return t.cloneNode(localEvaluatedId);
   };
 
+  let protoInitLocal: t.Identifier;
+  let staticInitLocal: t.Identifier;
   // Iterate over the class to see if we need to decorate it, and also to
-  // transform simple auto accessors which are not decorated
+  // transform simple auto accessors which are not decorated, and handle inferred
+  // class name when the initializer of the class field is a class expression
   for (const element of body) {
     if (!isClassDecoratableElementPath(element)) {
       continue;
     }
 
-    if (element.node.decorators?.length) {
+    if (isDecorated(element.node)) {
       switch (element.node.type) {
         case "ClassProperty":
           // @ts-expect-error todo: propertyVisitor.ClassProperty should be callable. Improve typings.
@@ -635,6 +638,15 @@ function transformClass(
             element as NodePath<t.ClassAccessorProperty>,
             state,
           );
+        /* fallthrough */
+        default:
+          if (element.node.static) {
+            staticInitLocal ??=
+              scopeParent.generateDeclaredUidIdentifier("initStatic");
+          } else {
+            protoInitLocal ??=
+              scopeParent.generateDeclaredUidIdentifier("initProto");
+          }
           break;
       }
       hasElementDecorators = true;
@@ -687,14 +699,9 @@ function transformClass(
     | NodePath<t.ClassProperty | t.ClassPrivateProperty>
     | undefined;
   let constructorPath: NodePath<t.ClassMethod> | undefined;
-  let requiresProtoInit = false;
-  let requiresStaticInit = false;
   const decoratedPrivateMethods = new Set<string>();
 
-  let protoInitLocal: t.Identifier,
-    staticInitLocal: t.Identifier,
-    classInitLocal: t.Identifier,
-    classIdLocal: t.Identifier;
+  let classInitLocal: t.Identifier, classIdLocal: t.Identifier;
 
   const decoratorsThis = new Map<t.Decorator, t.Expression>();
   const maybeExtractDecorators = (
@@ -971,14 +978,6 @@ function transformClass(
           locals,
         });
 
-        if (kind !== FIELD) {
-          if (isStatic) {
-            requiresStaticInit = true;
-          } else {
-            requiresProtoInit = true;
-          }
-        }
-
         if (element.node) {
           element.node.decorators = null;
         }
@@ -1004,8 +1003,7 @@ function transformClass(
   const elementLocals: t.Identifier[] =
     extractElementLocalAssignments(elementDecoratorInfo);
 
-  if (requiresProtoInit) {
-    protoInitLocal = scopeParent.generateDeclaredUidIdentifier("initProto");
+  if (protoInitLocal) {
     elementLocals.push(protoInitLocal);
 
     const protoInitCall = t.callExpression(t.cloneNode(protoInitLocal), [
@@ -1070,8 +1068,7 @@ function transformClass(
     }
   }
 
-  if (requiresStaticInit) {
-    staticInitLocal = scopeParent.generateDeclaredUidIdentifier("initStatic");
+  if (staticInitLocal) {
     elementLocals.push(staticInitLocal);
   }
 
@@ -1199,7 +1196,7 @@ function transformClass(
             version,
           ),
         ),
-        requiresStaticInit &&
+        staticInitLocal &&
           t.expressionStatement(
             t.callExpression(t.cloneNode(staticInitLocal), [
               t.thisExpression(),
