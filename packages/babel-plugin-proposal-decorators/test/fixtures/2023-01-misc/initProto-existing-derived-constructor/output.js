@@ -76,12 +76,12 @@
             [_initProto3] = babelHelpers.applyDecs2301(this, [[dec, 2, "method"]], []).e;
           }
           constructor() {
-            log.push(_initProto3(super(6)).method());
+            log.push(super(6).method());
           }
           method() {
             return this.a;
           }
-          [_computedKey];
+          [_computedKey] = void _initProto3(this);
         }
         new A();
       }

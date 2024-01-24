@@ -6,10 +6,7 @@ class Foo {
       return this.value;
     }]], [], _ => #a in _).e;
   }
-  constructor() {
-    _initProto(this);
-  }
-  value = 1;
+  value = (_initProto(this), 1);
   get #a() {
     return _call_a(this);
   }

@@ -2,8 +2,7 @@ var _initProto, _Foo;
 const dec = () => {};
 class Foo {
   constructor() {
-    babelHelpers.defineProperty(this, "value", 1);
-    _initProto(this);
+    babelHelpers.defineProperty(this, "value", (_initProto(this), 1));
   }
   get a() {
     return this.value;

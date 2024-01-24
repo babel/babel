@@ -14,10 +14,7 @@ class Foo {
       c: [_Foo, _initClass]
     } = babelHelpers.applyDecs2305(this, [[[void 0, dec, void 0, _dec, void 0, _dec2, void 0, _dec3, _obj, _dec4], 18, "method"]], _classDecs, 1));
   }
-  constructor() {
-    _initProto(this);
-  }
-  #a;
+  #a = void _initProto(this);
   method() {}
   makeClass() {
     var _obj2, _dec5, _init_bar;

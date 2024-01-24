@@ -71,7 +71,7 @@
         _computedKey = babelHelpers.toPropertyKey((key = super(5).method(), log.push(key), key));
         class A extends B {
           constructor() {
-            log.push(_initProto3((super(6), babelHelpers.defineProperty(this, _computedKey, void 0))).method());
+            log.push((super(6), babelHelpers.defineProperty(this, _computedKey, void _initProto3(this))).method());
           }
           method() {
             return this.a;
