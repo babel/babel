@@ -371,7 +371,7 @@ function insertExpressionsAfterSuperCallAndOptimize(
           path.node,
           ...expressions.map(expr => t.cloneNode(expr)),
         ];
-        // preserve completion result if super() is in the return
+        // preserve completion result if super() is in an RHS or a return statement
         if (path.isCompletionRecord()) {
           newNodes.push(t.thisExpression());
         }
