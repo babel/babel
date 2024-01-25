@@ -1,4 +1,4 @@
-var _call_x, _initProto, _Bar;
+var _initProto, _call_x, _Bar;
 const dec = () => {};
 class Foo extends (_Bar = Bar) {
   static {

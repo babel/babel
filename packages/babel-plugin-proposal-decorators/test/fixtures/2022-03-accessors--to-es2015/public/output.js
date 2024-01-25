@@ -1,4 +1,4 @@
-var _init_a, _init_b, _init_computedKey, _initProto, _Foo;
+var _initProto, _init_a, _init_b, _init_computedKey, _Foo;
 const dec = () => {};
 var _A = /*#__PURE__*/new WeakMap();
 var _B = /*#__PURE__*/new WeakMap();

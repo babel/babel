@@ -1,4 +1,4 @@
-var _call_a, _initStatic;
+var _initStatic, _call_a;
 const dec = () => {};
 class Foo {
   static {

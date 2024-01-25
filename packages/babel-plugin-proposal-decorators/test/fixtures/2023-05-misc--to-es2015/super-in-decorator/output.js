@@ -1,6 +1,6 @@
 class A extends B {
   m() {
-    var _initClass, _classDecs, _obj, _dec, _initProto, _C2;
+    var _initProto, _initClass, _classDecs, _obj, _dec, _C2;
     _classDecs = [this, super.dec1];
     _obj = this;
     _dec = super.dec2;

@@ -268,6 +268,159 @@ function extractProxyAccessorsFor(
   ];
 }
 
+/**
+ * Prepend expressions to the field initializer. If the initializer is not defined,
+ * this function will wrap the last expression within a `void` unary expression.
+ *
+ * @param {t.Expression[]} expressions
+ * @param {(NodePath<
+ *     t.ClassProperty | t.ClassPrivateProperty | t.ClassAccessorProperty
+ *   >)} fieldPath
+ */
+function prependExpressionsToFieldInitializer(
+  expressions: t.Expression[],
+  fieldPath: NodePath<
+    t.ClassProperty | t.ClassPrivateProperty | t.ClassAccessorProperty
+  >,
+) {
+  const initializer = fieldPath.get("value");
+  if (initializer.node) {
+    expressions.push(initializer.node);
+  } else if (expressions.length > 0) {
+    expressions[expressions.length - 1] = t.unaryExpression(
+      "void",
+      expressions[expressions.length - 1],
+    );
+  }
+  initializer.replaceWith(maybeSequenceExpression(expressions));
+}
+
+function prependExpressionsToConstructor(
+  expressions: t.Expression[],
+  constructorPath: NodePath<t.ClassMethod>,
+) {
+  constructorPath.node.body.body.unshift(
+    t.expressionStatement(maybeSequenceExpression(expressions)),
+  );
+}
+
+function isProtoInitCallExpression(
+  expression: t.Expression,
+  protoInitCall: t.Identifier,
+) {
+  return (
+    t.isCallExpression(expression) &&
+    t.isIdentifier(expression.callee, { name: protoInitCall.name })
+  );
+}
+
+/**
+ * Optimize super call and its following expressions
+ *
+ * @param {t.Expression[]} expressions Mutated by this function. The first element must by a super call
+ * @param {t.Identifier} protoInitLocal The generated protoInit id
+ * @returns optimized expression
+ */
+function optimizeSuperCallAndExpressions(
+  expressions: t.Expression[],
+  protoInitLocal: t.Identifier,
+) {
+  // Merge `super(), protoInit(this)` into `protoInit(super())`
+  if (
+    expressions.length >= 2 &&
+    isProtoInitCallExpression(expressions[1], protoInitLocal)
+  ) {
+    const mergedSuperCall = t.callExpression(t.cloneNode(protoInitLocal), [
+      expressions[0],
+    ]);
+    expressions.splice(0, 2, mergedSuperCall);
+  }
+  // Merge `protoInit(super()), this` into `protoInit(super())`
+  if (
+    expressions.length >= 2 &&
+    t.isThisExpression(expressions[expressions.length - 1]) &&
+    isProtoInitCallExpression(
+      expressions[expressions.length - 2],
+      protoInitLocal,
+    )
+  ) {
+    expressions.splice(expressions.length - 1, 1);
+  }
+  return maybeSequenceExpression(expressions);
+}
+
+/**
+ * Insert expressions immediately after super() and optimize the output if possible.
+ * This function will preserve the completion result using the trailing this expression.
+ *
+ * @param {t.Expression[]} expressions
+ * @param {NodePath<t.ClassMethod>} constructorPath
+ * @param {t.Identifier} protoInitLocal The generated protoInit id
+ * @returns
+ */
+function insertExpressionsAfterSuperCallAndOptimize(
+  expressions: t.Expression[],
+  constructorPath: NodePath<t.ClassMethod>,
+  protoInitLocal: t.Identifier,
+) {
+  constructorPath.traverse({
+    CallExpression: {
+      exit(path) {
+        if (!path.get("callee").isSuper()) return;
+        const newNodes = [
+          path.node,
+          ...expressions.map(expr => t.cloneNode(expr)),
+        ];
+        // preserve completion result if super() is in an RHS or a return statement
+        if (path.isCompletionRecord()) {
+          newNodes.push(t.thisExpression());
+        }
+        path.replaceWith(
+          optimizeSuperCallAndExpressions(newNodes, protoInitLocal),
+        );
+
+        path.skip();
+      },
+    },
+    ClassMethod(path) {
+      if (path.node.kind === "constructor") {
+        path.skip();
+      }
+    },
+  });
+}
+
+/**
+ * Build a class constructor path from the given expressions. If the class is
+ * derived, the constructor will call super() first to ensure that `this`
+ * in the expressions work as expected.
+ *
+ * @param {t.Expression[]} expressions
+ * @param {boolean} isDerivedClass
+ * @returns The class constructor node
+ */
+function createConstructorFromExpressions(
+  expressions: t.Expression[],
+  isDerivedClass: boolean,
+) {
+  const body: t.Statement[] = [
+    t.expressionStatement(maybeSequenceExpression(expressions)),
+  ];
+  if (isDerivedClass) {
+    body.unshift(
+      t.expressionStatement(
+        t.callExpression(t.super(), [t.spreadElement(t.identifier("args"))]),
+      ),
+    );
+  }
+  return t.classMethod(
+    "constructor",
+    t.identifier("constructor"),
+    isDerivedClass ? [t.restElement(t.identifier("args"))] : [],
+    t.blockStatement(body),
+  );
+}
+
 // 3 bits reserved to this (0-7)
 const FIELD = 0;
 const ACCESSOR = 1;
@@ -606,14 +759,17 @@ function transformClass(
     return t.cloneNode(localEvaluatedId);
   };
 
+  let protoInitLocal: t.Identifier;
+  let staticInitLocal: t.Identifier;
   // Iterate over the class to see if we need to decorate it, and also to
-  // transform simple auto accessors which are not decorated
+  // transform simple auto accessors which are not decorated, and handle inferred
+  // class name when the initializer of the class field is a class expression
   for (const element of body) {
     if (!isClassDecoratableElementPath(element)) {
       continue;
     }
 
-    if (element.node.decorators?.length) {
+    if (isDecorated(element.node)) {
       switch (element.node.type) {
         case "ClassProperty":
           // @ts-expect-error todo: propertyVisitor.ClassProperty should be callable. Improve typings.
@@ -635,6 +791,15 @@ function transformClass(
             element as NodePath<t.ClassAccessorProperty>,
             state,
           );
+        /* fallthrough */
+        default:
+          if (element.node.static) {
+            staticInitLocal ??=
+              scopeParent.generateDeclaredUidIdentifier("initStatic");
+          } else {
+            protoInitLocal ??=
+              scopeParent.generateDeclaredUidIdentifier("initProto");
+          }
           break;
       }
       hasElementDecorators = true;
@@ -682,19 +847,10 @@ function transformClass(
 
   const elementDecoratorInfo: (DecoratorInfo | ComputedPropInfo)[] = [];
 
-  // The initializer of the first non-static field will be injected with the protoInit call
-  let firstFieldPath:
-    | NodePath<t.ClassProperty | t.ClassPrivateProperty>
-    | undefined;
   let constructorPath: NodePath<t.ClassMethod> | undefined;
-  let requiresProtoInit = false;
-  let requiresStaticInit = false;
   const decoratedPrivateMethods = new Set<string>();
 
-  let protoInitLocal: t.Identifier,
-    staticInitLocal: t.Identifier,
-    classInitLocal: t.Identifier,
-    classIdLocal: t.Identifier;
+  let classInitLocal: t.Identifier, classIdLocal: t.Identifier;
 
   const decoratorsThis = new Map<t.Decorator, t.Expression>();
   const maybeExtractDecorators = (
@@ -774,7 +930,15 @@ function transformClass(
   let lastInstancePrivateName: t.PrivateName;
   let needsInstancePrivateBrandCheck = false;
 
+  let fieldInitializerAssignments = [];
+
   if (hasElementDecorators) {
+    if (protoInitLocal) {
+      const protoInitCall = t.callExpression(t.cloneNode(protoInitLocal), [
+        t.thisExpression(),
+      ]);
+      fieldInitializerAssignments.push(protoInitCall);
+    }
     for (const element of body) {
       if (!isClassDecoratableElementPath(element)) {
         continue;
@@ -971,29 +1135,51 @@ function transformClass(
           locals,
         });
 
-        if (kind !== FIELD) {
-          if (isStatic) {
-            requiresStaticInit = true;
-          } else {
-            requiresProtoInit = true;
-          }
-        }
-
         if (element.node) {
           element.node.decorators = null;
         }
 
         if (
-          !firstFieldPath &&
+          fieldInitializerAssignments.length > 0 &&
           !isStatic &&
           (kind === FIELD || kind === ACCESSOR)
         ) {
-          firstFieldPath = element as NodePath<
-            t.ClassProperty | t.ClassPrivateProperty
-          >;
+          prependExpressionsToFieldInitializer(
+            fieldInitializerAssignments,
+            element as NodePath<
+              t.ClassProperty | t.ClassPrivateProperty | t.ClassAccessorProperty
+            >,
+          );
+          fieldInitializerAssignments = [];
         }
       }
     }
+  }
+
+  if (fieldInitializerAssignments.length > 0) {
+    const isDerivedClass = !!path.node.superClass;
+    if (constructorPath) {
+      if (isDerivedClass) {
+        insertExpressionsAfterSuperCallAndOptimize(
+          fieldInitializerAssignments,
+          constructorPath,
+          protoInitLocal,
+        );
+      } else {
+        prependExpressionsToConstructor(
+          fieldInitializerAssignments,
+          constructorPath,
+        );
+      }
+    } else {
+      path.node.body.body.unshift(
+        createConstructorFromExpressions(
+          fieldInitializerAssignments,
+          isDerivedClass,
+        ),
+      );
+    }
+    fieldInitializerAssignments = [];
   }
 
   const elementDecorations = generateDecorationExprs(
@@ -1004,74 +1190,11 @@ function transformClass(
   const elementLocals: t.Identifier[] =
     extractElementLocalAssignments(elementDecoratorInfo);
 
-  if (requiresProtoInit) {
-    protoInitLocal = scopeParent.generateDeclaredUidIdentifier("initProto");
+  if (protoInitLocal) {
     elementLocals.push(protoInitLocal);
-
-    const protoInitCall = t.callExpression(t.cloneNode(protoInitLocal), [
-      t.thisExpression(),
-    ]);
-
-    if (firstFieldPath) {
-      const value = firstFieldPath.get("value");
-      const body: t.Expression[] = [protoInitCall];
-
-      if (value.node) {
-        body.push(value.node);
-      }
-
-      value.replaceWith(t.sequenceExpression(body));
-    } else if (constructorPath) {
-      if (path.node.superClass) {
-        constructorPath.traverse({
-          CallExpression: {
-            exit(path) {
-              if (!path.get("callee").isSuper()) return;
-
-              path.replaceWith(
-                t.callExpression(t.cloneNode(protoInitLocal), [path.node]),
-              );
-
-              path.skip();
-            },
-          },
-          ClassMethod(path) {
-            if (path.node.kind === "constructor") {
-              path.skip();
-            }
-          },
-        });
-      } else {
-        constructorPath.node.body.body.unshift(
-          t.expressionStatement(protoInitCall),
-        );
-      }
-    } else {
-      const body: t.Statement[] = [t.expressionStatement(protoInitCall)];
-
-      if (path.node.superClass) {
-        body.unshift(
-          t.expressionStatement(
-            t.callExpression(t.super(), [
-              t.spreadElement(t.identifier("args")),
-            ]),
-          ),
-        );
-      }
-
-      path.node.body.body.unshift(
-        t.classMethod(
-          "constructor",
-          t.identifier("constructor"),
-          path.node.superClass ? [t.restElement(t.identifier("args"))] : [],
-          t.blockStatement(body),
-        ),
-      );
-    }
   }
 
-  if (requiresStaticInit) {
-    staticInitLocal = scopeParent.generateDeclaredUidIdentifier("initStatic");
+  if (staticInitLocal) {
     elementLocals.push(staticInitLocal);
   }
 
@@ -1199,7 +1322,7 @@ function transformClass(
             version,
           ),
         ),
-        requiresStaticInit &&
+        staticInitLocal &&
           t.expressionStatement(
             t.callExpression(t.cloneNode(staticInitLocal), [
               t.thisExpression(),
