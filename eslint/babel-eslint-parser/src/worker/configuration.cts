@@ -1,13 +1,17 @@
-const babel = require("./babel-core.cjs");
-const ESLINT_VERSION = require("../utils/eslint-version.cjs");
+import babel = require("./babel-core.cts");
+import ESLINT_VERSION = require("../utils/eslint-version.cts");
+import type { InputOptions } from "@babel/core";
+import type { Options } from "../types.cts";
+import type { PartialConfig } from "../../../../packages/babel-core/src/config";
 
 /**
  * Merge user supplied estree plugin options to default estree plugin options
  *
- * @param {*} babelOptions
  * @returns {Array} Merged parser plugin descriptors
  */
-function getParserPlugins(babelOptions) {
+function getParserPlugins(
+  babelOptions: InputOptions,
+): InputOptions["parserOpts"]["plugins"] {
   const babelParserPlugins = babelOptions.parserOpts?.plugins ?? [];
   const estreeOptions = { classFeatures: ESLINT_VERSION >= 8 };
   for (const plugin of babelParserPlugins) {
@@ -20,7 +24,9 @@ function getParserPlugins(babelOptions) {
   return [["estree", estreeOptions], ...babelParserPlugins];
 }
 
-function normalizeParserOptions(options) {
+function normalizeParserOptions(options: Options): InputOptions & {
+  showIgnoredFiles?: boolean;
+} {
   return {
     sourceType: options.sourceType,
     filename: options.filePath,
@@ -50,7 +56,11 @@ function normalizeParserOptions(options) {
   };
 }
 
-function validateResolvedConfig(config, options, parseOptions) {
+function validateResolvedConfig(
+  config: PartialConfig,
+  options: Options,
+  parseOptions: InputOptions,
+) {
   if (config !== null) {
     if (options.requireConfigFile !== false) {
       if (!config.hasFilesystemConfig()) {
@@ -69,7 +79,7 @@ function validateResolvedConfig(config, options, parseOptions) {
   return getDefaultParserOptions(parseOptions);
 }
 
-function getDefaultParserOptions(options) {
+function getDefaultParserOptions(options: InputOptions): InputOptions {
   return {
     plugins: [],
     ...options,
@@ -81,14 +91,16 @@ function getDefaultParserOptions(options) {
   };
 }
 
-exports.normalizeBabelParseConfig = async function (options) {
+export async function normalizeBabelParseConfig(
+  options: Options,
+): Promise<InputOptions> {
   const parseOptions = normalizeParserOptions(options);
   const config = await babel.loadPartialConfigAsync(parseOptions);
   return validateResolvedConfig(config, options, parseOptions);
-};
+}
 
-exports.normalizeBabelParseConfigSync = function (options) {
+export function normalizeBabelParseConfigSync(options: Options): InputOptions {
   const parseOptions = normalizeParserOptions(options);
   const config = babel.loadPartialConfigSync(parseOptions);
   return validateResolvedConfig(config, options, parseOptions);
-};
+}

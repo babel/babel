@@ -23,3 +23,8 @@ export default Object.assign(smart.bind(undefined) as DefaultTemplateBuilder, {
   program,
   ast: smart.ast,
 });
+
+export type {
+  PublicOpts as Options,
+  PublicReplacements as Replacements,
+} from "./options.ts";

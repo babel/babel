@@ -1,7 +1,9 @@
 "use strict";
 
-const semver = require("semver");
-const convert = require("./convert/index.cjs");
+import semver = require("semver");
+import convert = require("./convert/index.cts");
+import type { Options } from "./types.cts";
+import type { Client } from "./client.cts";
 
 const babelParser = require(
   require.resolve("@babel/parser", {
@@ -9,9 +11,9 @@ const babelParser = require(
   }),
 );
 
-let isRunningMinSupportedCoreVersion = null;
+let isRunningMinSupportedCoreVersion: boolean = null;
 
-module.exports = function parse(code, options, client) {
+export = function parse(code: string, options: Options, client: Client) {
   // Ensure we're using a version of `@babel/core` that includes `parse()` and `tokTypes`.
   const minSupportedCoreVersion =
     process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
@@ -38,13 +40,13 @@ module.exports = function parse(code, options, client) {
   if (ast) return ast;
 
   try {
-    return convert.ast(
+    return convert.convertFile(
       babelParser.parse(code, parserOptions),
       code,
       client.getTokLabels(),
       client.getVisitorKeys(),
     );
   } catch (err) {
-    throw convert.error(err);
+    throw convert.convertError(err);
   }
 };

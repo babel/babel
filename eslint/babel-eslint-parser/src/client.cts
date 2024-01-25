@@ -1,42 +1,44 @@
-const path = require("path");
+import type { Options } from "./types.cts";
 
-const ACTIONS = {
-  GET_VERSION: "GET_VERSION",
-  GET_TYPES_INFO: "GET_TYPES_INFO",
-  GET_VISITOR_KEYS: "GET_VISITOR_KEYS",
-  GET_TOKEN_LABELS: "GET_TOKEN_LABELS",
-  MAYBE_PARSE: "MAYBE_PARSE",
-  MAYBE_PARSE_SYNC: "MAYBE_PARSE_SYNC",
-};
+import path = require("path");
 
-class Client {
+export const enum ACTIONS {
+  GET_VERSION = "GET_VERSION",
+  GET_TYPES_INFO = "GET_TYPES_INFO",
+  GET_VISITOR_KEYS = "GET_VISITOR_KEYS",
+  GET_TOKEN_LABELS = "GET_TOKEN_LABELS",
+  MAYBE_PARSE = "MAYBE_PARSE",
+  MAYBE_PARSE_SYNC = "MAYBE_PARSE_SYNC",
+}
+
+export class Client {
   #send;
 
-  constructor(send) {
+  constructor(send: Function) {
     this.#send = send;
   }
 
-  #vCache;
+  #vCache: string;
   getVersion() {
     return (this.#vCache ??= this.#send(ACTIONS.GET_VERSION, undefined));
   }
 
-  #tiCache;
+  #tiCache: any;
   getTypesInfo() {
     return (this.#tiCache ??= this.#send(ACTIONS.GET_TYPES_INFO, undefined));
   }
 
-  #vkCache;
+  #vkCache: any;
   getVisitorKeys() {
     return (this.#vkCache ??= this.#send(ACTIONS.GET_VISITOR_KEYS, undefined));
   }
 
-  #tlCache;
+  #tlCache: any;
   getTokLabels() {
     return (this.#tlCache ??= this.#send(ACTIONS.GET_TOKEN_LABELS, undefined));
   }
 
-  maybeParse(code, options) {
+  maybeParse(code: string, options: Options) {
     return this.#send(ACTIONS.MAYBE_PARSE, { code, options });
   }
 }
@@ -49,8 +51,8 @@ class Client {
 //    can be asynchronous
 // If ESLint starts supporting async parsers, we can move
 // everything back to the main thread.
-exports.WorkerClient = class WorkerClient extends Client {
-  static #worker_threads_cache;
+export class WorkerClient extends Client {
+  static #worker_threads_cache: typeof import("worker_threads");
   static get #worker_threads() {
     return (WorkerClient.#worker_threads_cache ??= require("worker_threads"));
   }
@@ -61,7 +63,7 @@ exports.WorkerClient = class WorkerClient extends Client {
   );
 
   constructor() {
-    super((action, payload) => {
+    super((action: ACTIONS, payload: any) => {
       // We create a new SharedArrayBuffer every time rather than reusing
       // the same one, otherwise sometimes its contents get corrupted and
       // Atomics.wait wakes up too early.
@@ -88,16 +90,16 @@ exports.WorkerClient = class WorkerClient extends Client {
     // the main process alive.
     this.#worker.unref();
   }
-};
+}
 
 if (!USE_ESM) {
   exports.LocalClient = class LocalClient extends Client {
-    static #handleMessage;
+    static #handleMessage: Function;
 
     constructor() {
       LocalClient.#handleMessage ??= require("./worker/handle-message.cjs");
 
-      super((action, payload) => {
+      super((action: ACTIONS, payload: any) => {
         return LocalClient.#handleMessage(
           action === ACTIONS.MAYBE_PARSE ? ACTIONS.MAYBE_PARSE_SYNC : action,
           payload,

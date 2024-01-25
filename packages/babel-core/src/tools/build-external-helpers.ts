@@ -24,11 +24,11 @@ import {
 } from "@babel/types";
 import type * as t from "@babel/types";
 import File from "../transformation/file/file.ts";
-import type { PublicReplacements } from "@babel/template/src/options";
+import type { Replacements } from "@babel/template";
 
 // Wrapped to avoid wasting time parsing this when almost no-one uses
 // build-external-helpers.
-const buildUmdWrapper = (replacements: PublicReplacements) =>
+const buildUmdWrapper = (replacements: Replacements) =>
   template.statement`
     (function (root, factory) {
       if (typeof define === "function" && define.amd) {

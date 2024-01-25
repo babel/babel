@@ -1,4 +1,8 @@
-function initialize(babel) {
+export = exports as typeof import("@babel/core") & {
+  init: Promise<void> | null;
+};
+
+function initialize(babel: typeof import("@babel/core")) {
   exports.init = null;
   exports.version = babel.version;
   exports.traverse = babel.traverse;

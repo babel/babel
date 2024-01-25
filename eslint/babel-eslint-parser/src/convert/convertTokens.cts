@@ -1,9 +1,10 @@
-const ESLINT_VERSION = require("../utils/eslint-version.cjs");
+import type { BabelToken } from "../types.cts";
+import ESLINT_VERSION = require("../utils/eslint-version.cjs");
 
-function convertTemplateType(tokens, tl) {
-  let curlyBrace = null;
-  let templateTokens = [];
-  const result = [];
+function convertTemplateType(tokens: BabelToken[], tl: Record<string, any>) {
+  let curlyBrace: BabelToken = null;
+  let templateTokens: BabelToken[] = [];
+  const result: any[] = [];
 
   function addTemplateType() {
     const start = templateTokens[0];
@@ -84,16 +85,30 @@ function convertTemplateType(tokens, tl) {
   return result;
 }
 
-function convertToken(token, source, tl) {
+function convertToken(
+  token: BabelToken,
+  source: string,
+  tl: Record<string, any>,
+) {
   const { type } = token;
   const { label } = type;
-  token.range = [token.start, token.end];
+
+  const newToken: {
+    type: string;
+    range?: [number, number];
+    value?: string;
+    regex?: {
+      pattern: string;
+      flags: string;
+    };
+  } = token as any;
+  newToken.range = [token.start, token.end];
 
   if (label === tl.name) {
     if (token.value === "static") {
-      token.type = "Keyword";
+      newToken.type = "Keyword";
     } else {
-      token.type = "Identifier";
+      newToken.type = "Identifier";
     }
   } else if (
     label === tl.semi ||
@@ -144,58 +159,62 @@ function convertToken(token, source, tl) {
     label === tl.doubleAt ||
     type.isAssign
   ) {
-    token.type = "Punctuator";
-    token.value ??= label;
+    newToken.type = "Punctuator";
+    newToken.value ??= label;
   } else if (label === tl.jsxTagStart) {
-    token.type = "Punctuator";
-    token.value = "<";
+    newToken.type = "Punctuator";
+    newToken.value = "<";
   } else if (label === tl.jsxTagEnd) {
-    token.type = "Punctuator";
-    token.value = ">";
+    newToken.type = "Punctuator";
+    newToken.value = ">";
   } else if (label === tl.jsxName) {
-    token.type = "JSXIdentifier";
+    newToken.type = "JSXIdentifier";
   } else if (label === tl.jsxText) {
-    token.type = "JSXText";
+    newToken.type = "JSXText";
   } else if (type.keyword === "null") {
-    token.type = "Null";
+    newToken.type = "Null";
   } else if (type.keyword === "false" || type.keyword === "true") {
-    token.type = "Boolean";
+    newToken.type = "Boolean";
   } else if (type.keyword) {
-    token.type = "Keyword";
+    newToken.type = "Keyword";
   } else if (label === tl.num) {
-    token.type = "Numeric";
-    token.value = source.slice(token.start, token.end);
+    newToken.type = "Numeric";
+    newToken.value = source.slice(token.start, token.end);
   } else if (label === tl.string) {
-    token.type = "String";
-    token.value = source.slice(token.start, token.end);
+    newToken.type = "String";
+    newToken.value = source.slice(token.start, token.end);
   } else if (label === tl.regexp) {
-    token.type = "RegularExpression";
+    newToken.type = "RegularExpression";
     const value = token.value;
-    token.regex = {
+    newToken.regex = {
       pattern: value.pattern,
       flags: value.flags,
     };
-    token.value = `/${value.pattern}/${value.flags}`;
+    newToken.value = `/${value.pattern}/${value.flags}`;
   } else if (label === tl.bigint) {
-    token.type = "Numeric";
-    token.value = `${token.value}n`;
+    newToken.type = "Numeric";
+    newToken.value = `${token.value}n`;
   } else if (label === tl.privateName) {
-    token.type = "PrivateIdentifier";
-  } else if (label === tl.templateNonTail || label === tl.templateTail) {
-    token.type = "Template";
+    newToken.type = "PrivateIdentifier";
+  } else if (
+    label === tl.templateNonTail ||
+    label === tl.templateTail ||
+    label === tl.Template
+  ) {
+    newToken.type = "Template";
   }
-
-  if (typeof token.type !== "string") {
-    // Acorn does not have rightAssociative
-    delete token.type.rightAssociative;
-  }
+  return newToken;
 }
 
-module.exports = function convertTokens(tokens, code, tl) {
+export = function convertTokens(
+  tokens: BabelToken[],
+  code: string,
+  tokLabels: Record<string, any>,
+) {
   const result = [];
   const templateTypeMergedTokens = process.env.BABEL_8_BREAKING
     ? tokens
-    : convertTemplateType(tokens, tl);
+    : convertTemplateType(tokens, tokLabels);
   // The last token is always tt.eof and should be skipped
   for (let i = 0, { length } = templateTypeMergedTokens; i < length - 1; i++) {
     const token = templateTypeMergedTokens[i];
@@ -210,12 +229,15 @@ module.exports = function convertTokens(tokens, code, tl) {
       if (
         ESLINT_VERSION >= 8 &&
         i + 1 < length &&
-        tokenType.label === tl.hash
+        tokenType.label === tokLabels.hash
       ) {
         const nextToken = templateTypeMergedTokens[i + 1];
 
         // We must disambiguate private identifier from the hack pipes topic token
-        if (nextToken.type.label === tl.name && token.end === nextToken.start) {
+        if (
+          nextToken.type.label === tokLabels.name &&
+          token.end === nextToken.start
+        ) {
           i++;
 
           nextToken.type = "PrivateIdentifier";
@@ -229,8 +251,7 @@ module.exports = function convertTokens(tokens, code, tl) {
       }
     }
 
-    convertToken(token, code, tl);
-    result.push(token);
+    result.push(convertToken(token, code, tokLabels));
   }
 
   return result;

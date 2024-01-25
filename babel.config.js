@@ -825,6 +825,10 @@ function pluginReplaceTSImportExtension() {
           source.value = source.value.replace(/(\.[mc]?)ts$/, "$1js");
         }
       },
+      TSImportEqualsDeclaration({ node }) {
+        const { expression } = node.moduleReference;
+        expression.value = expression.value.replace(/(\.[mc]?)ts$/, "$1js");
+      },
     },
   };
 }

@@ -104,6 +104,8 @@ fs.writeFileSync(
         include: tsPkgs
           .map(({ relative }) => `${relative}/src/**/*.ts`)
           .concat([
+            "eslint/babel-eslint-parser/**/*.cts",
+
             "./lib/globals.d.ts",
             "./scripts/repo-utils/*.d.ts",
             "./packages/babel-parser/typings/*.d.ts",
