@@ -1,6 +1,6 @@
 {
   "name": "@babel/template",
-  "version": "7.22.15",
+  "version": "7.23.9",
   "description": "Generate an AST from a string template.",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-template",
