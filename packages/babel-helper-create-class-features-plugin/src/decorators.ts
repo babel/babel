@@ -270,7 +270,7 @@ function extractProxyAccessorsFor(
 
 /**
  * Prepend expressions to the field initializer. If the initializer is not defined,
- * this function will add a trailing `void 0` expression
+ * this function will wrap the last expression within a `void` unary expression.
  *
  * @param {t.Expression[]} expressions
  * @param {(NodePath<
@@ -286,8 +286,11 @@ function prependExpressionsToFieldInitializer(
   const initializer = fieldPath.get("value");
   if (initializer.node) {
     expressions.push(initializer.node);
-  } else {
-    expressions.push(t.unaryExpression("void", t.numericLiteral(0)));
+  } else if (expressions.length > 0) {
+    expressions[expressions.length - 1] = t.unaryExpression(
+      "void",
+      expressions[expressions.length - 1],
+    );
   }
   initializer.replaceWith(maybeSequenceExpression(expressions));
 }
