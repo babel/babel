@@ -6992,7 +6992,7 @@ __metadata:
     shelljs: "npm:^0.8.5"
     test262-stream: "npm:^1.4.0"
     through2: "npm:^4.0.0"
-    typescript: "npm:5.4.0-dev.20240120"
+    typescript: "npm:5.4.0-dev.20240125"
   languageName: unknown
   linkType: soft
 
@@ -16485,23 +16485,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:5.4.0-dev.20240120":
-  version: 5.4.0-dev.20240120
-  resolution: "typescript@npm:5.4.0-dev.20240120"
+"typescript@npm:5.4.0-dev.20240125":
+  version: 5.4.0-dev.20240125
+  resolution: "typescript@npm:5.4.0-dev.20240125"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 398169ca180ff7510061a96a353ede6200e7daccb7b3be331a294fd46634fdae08ec9e9c0cb7a207fd8edb2dea27b73c6d455e163cf2a535a0a2b40564046fa9
+  checksum: 8e151cae1df9a2c4fd22d23148b88a7baf7b526a03e059e24c53ee775f88d8dde0a3326c3824c82ba262852098d3d8af1db6522d32c959059ba3bb7c5063f738
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A5.4.0-dev.20240120#optional!builtin<compat/typescript>":
-  version: 5.4.0-dev.20240120
-  resolution: "typescript@patch:typescript@npm%3A5.4.0-dev.20240120#optional!builtin<compat/typescript>::version=5.4.0-dev.20240120&hash=e012d7"
+"typescript@patch:typescript@npm%3A5.4.0-dev.20240125#optional!builtin<compat/typescript>":
+  version: 5.4.0-dev.20240125
+  resolution: "typescript@patch:typescript@npm%3A5.4.0-dev.20240125#optional!builtin<compat/typescript>::version=5.4.0-dev.20240125&hash=e012d7"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 7e42a5b677e19fb49e426448a9cd1b82ce1b588fb4a93f33bf7462010075d83c75d171283d8a18710fa91360de739dc096d929ea3719cbba0d5c3da46bdc1f05
+  checksum: 93153df3fa2322f098d6cd24faa59224142a2fbac36fd9269f58423a3db114a2aaf0b447a03ffdad0e4c3bc14ba1771c76a332c9943e84e707436145f3625fe0
   languageName: node
   linkType: hard
 

@@ -81,7 +81,7 @@
     "shelljs": "^0.8.5",
     "test262-stream": "^1.4.0",
     "through2": "^4.0.0",
-    "typescript": "5.4.0-dev.20240120"
+    "typescript": "5.4.0-dev.20240125"
   },
   "workspaces": [
     "codemods/*",

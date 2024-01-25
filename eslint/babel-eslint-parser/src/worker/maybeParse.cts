@@ -3,8 +3,7 @@ import convert = require("../convert/index.cts");
 import astInfo = require("./ast-info.cts");
 import extractParserOptionsPlugin = require("./extract-parser-options-plugin.cjs");
 
-import type { ConfigItem } from "../../../../packages/babel-core/src/config/item";
-import type { InputOptions } from "@babel/core";
+import type { InputOptions, ConfigItem } from "@babel/core";
 import type { AST, ParseResult } from "../types.cts";
 
 const { getVisitorKeys, getTokLabels } = astInfo;
