@@ -12,9 +12,8 @@ class Foo {
   constructor() {
     babelHelpers.classPrivateFieldInitSpec(this, _a, {
       writable: true,
-      value: void 0
+      value: void _initProto(this)
     });
-    _initProto(this);
   }
   method() {}
   makeClass() {

@@ -1138,20 +1138,20 @@ function transformClass(
         if (element.node) {
           element.node.decorators = null;
         }
+      }
 
-        if (
-          fieldInitializerAssignments.length > 0 &&
-          !isStatic &&
-          (kind === FIELD || kind === ACCESSOR)
-        ) {
-          prependExpressionsToFieldInitializer(
-            fieldInitializerAssignments,
-            element as NodePath<
-              t.ClassProperty | t.ClassPrivateProperty | t.ClassAccessorProperty
-            >,
-          );
-          fieldInitializerAssignments = [];
-        }
+      if (
+        fieldInitializerAssignments.length > 0 &&
+        !isStatic &&
+        (kind === FIELD || kind === ACCESSOR)
+      ) {
+        prependExpressionsToFieldInitializer(
+          fieldInitializerAssignments,
+          element as NodePath<
+            t.ClassProperty | t.ClassPrivateProperty | t.ClassAccessorProperty
+          >,
+        );
+        fieldInitializerAssignments = [];
       }
     }
   }

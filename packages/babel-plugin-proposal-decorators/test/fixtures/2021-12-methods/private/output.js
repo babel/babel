@@ -6,11 +6,8 @@ class Foo {
       return this.value;
     }]], []);
   }
-  constructor() {
-    _initProto(this);
-  }
   #a = _call_a;
-  value = 1;
+  value = (_initProto(this), 1);
   callA() {
     return this.#a();
   }

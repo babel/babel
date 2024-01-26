@@ -7,8 +7,7 @@ class Foo {
       writable: true,
       value: _call_a
     });
-    babelHelpers.defineProperty(this, "value", 1);
-    _initProto(this);
+    babelHelpers.defineProperty(this, "value", (_initProto(this), 1));
   }
   callA() {
     return babelHelpers.classPrivateFieldGet(this, _a).call(this);
