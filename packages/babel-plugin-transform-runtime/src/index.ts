@@ -14,12 +14,7 @@ export interface Options {
   corejs?: string | number | { version: string | number; proposals?: boolean };
   helpers?: boolean;
   version?: string;
-  moduleName?:
-    | null
-    | "@babel/runtime"
-    | "@babel/runtime-corejs2"
-    | "@babel/runtime-corejs3"
-    | string;
+  moduleName?: null | string;
 }
 
 export default declare((api, options: Options, dirname) => {
@@ -159,7 +154,9 @@ export default declare((api, options: Options, dirname) => {
 
       file.set("helperGenerator", (name: string) => {
         modulePath ??= getRuntimePath(
-          file.get("runtimeHelpersModuleName") ?? "@babel/runtime",
+          moduleName ??
+            file.get("runtimeHelpersModuleName") ??
+            "@babel/runtime",
           dirname,
           absoluteRuntime,
         );
