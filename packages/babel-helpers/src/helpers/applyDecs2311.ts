@@ -1,4 +1,4 @@
-/* @minVersion 7.21.0 */
+/* @minVersion 7.23.0 */
 /* @mangleFns */
 
 import checkInRHS from "./checkInRHS.ts";
@@ -189,7 +189,7 @@ type DecoratorInfo =
   initializeClass(Class);
  */
 
-export default /* @no-mangle */ function applyDecs2305(
+export default /* @no-mangle */ function applyDecs2311(
   targetClass: any,
   memberDecs: DecoratorInfo[],
   classDecs: Function[],
