@@ -216,8 +216,9 @@ class Referencer extends OriginalReferencer {
   }
 
   _visitClassProperty(node: any) {
-    const { computed, key, typeAnnotation, value } = node;
+    const { computed, key, typeAnnotation, decorators, value } = node;
 
+    this._visitArray(decorators);
     if (computed) this.visit(key);
     this._visitTypeAnnotation(typeAnnotation);
 
