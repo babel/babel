@@ -2,6 +2,14 @@ var counter = 0;
 
 @(x => x)
 class A {
+  @((_, { addInitializer }) => {
+    addInitializer(function () {
+      counter++;
+      expect(typeof this.method).toBe("function");
+      expect(this.foo).toBe("foo");
+      expect(this.bar).toBeUndefined();
+    });
+  })
   foo = (() => {
     counter++;
     expect(typeof this.method).toBe("function");
@@ -24,4 +32,4 @@ expect(counter).toBe(0);
 
 new A();
 
-expect(counter).toBe(2);
+expect(counter).toBe(3);
