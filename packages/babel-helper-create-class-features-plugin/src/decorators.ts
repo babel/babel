@@ -303,6 +303,16 @@ function prependExpressionsToFieldInitializer(
   initializer.replaceWith(maybeSequenceExpression(expressions));
 }
 
+function prependExpressionsToStaticBlock(
+  expressions: t.Expression[],
+  blockPath: NodePath<t.StaticBlock>,
+) {
+  blockPath.unshiftContainer(
+    "body",
+    t.expressionStatement(maybeSequenceExpression(expressions)),
+  );
+}
+
 function prependExpressionsToConstructor(
   expressions: t.Expression[],
   constructorPath: NodePath<t.ClassMethod>,
@@ -399,7 +409,7 @@ function insertExpressionsAfterSuperCallAndOptimize(
 }
 
 /**
- * Build a class constructor path from the given expressions. If the class is
+ * Build a class constructor node from the given expressions. If the class is
  * derived, the constructor will call super() first to ensure that `this`
  * in the expressions work as expected.
  *
@@ -427,6 +437,12 @@ function createConstructorFromExpressions(
     isDerivedClass ? [t.restElement(t.identifier("args"))] : [],
     t.blockStatement(body),
   );
+}
+
+function createStaticBlockFromExpressions(expressions: t.Expression[]) {
+  return t.staticBlock([
+    t.expressionStatement(maybeSequenceExpression(expressions)),
+  ]);
 }
 
 // 3 bits reserved to this (0-7)
@@ -802,6 +818,9 @@ function transformClass(
             element as NodePath<t.ClassAccessorProperty>,
             state,
           );
+          if (version === "2023-11") {
+            break;
+          }
         /* fallthrough */
         default:
           if (element.node.static) {
@@ -945,6 +964,7 @@ function transformClass(
   let needsInstancePrivateBrandCheck = false;
 
   let fieldInitializerAssignments = [];
+  let staticFieldInitializerAssignments = [];
 
   if (hasElementDecorators) {
     if (protoInitLocal) {
@@ -955,6 +975,16 @@ function transformClass(
     }
     for (const element of body) {
       if (!isClassDecoratableElementPath(element)) {
+        if (
+          staticFieldInitializerAssignments.length > 0 &&
+          element.isStaticBlock()
+        ) {
+          prependExpressionsToStaticBlock(
+            staticFieldInitializerAssignments,
+            element,
+          );
+          staticFieldInitializerAssignments = [];
+        }
         continue;
       }
 
@@ -1005,8 +1035,8 @@ function transformClass(
         constructorPath = element;
       }
 
+      let locals: t.Identifier[];
       if (hasDecorators) {
-        let locals: t.Identifier | t.Identifier[];
         let privateMethods: Array<
           t.FunctionExpression | t.ArrowFunctionExpression
         >;
@@ -1053,7 +1083,7 @@ function transformClass(
               version,
               isComputed,
             );
-            locals = newFieldInitId;
+            locals = [newFieldInitId];
           }
         } else if (kind === FIELD) {
           const initId = element.scope.parent.generateDeclaredUidIdentifier(
@@ -1070,15 +1100,16 @@ function transformClass(
             ),
           );
 
-          locals = initId;
+          locals = [initId];
 
           if (isPrivate) {
             privateMethods = extractProxyAccessorsFor(key, version);
           }
         } else if (isPrivate) {
-          locals = element.scope.parent.generateDeclaredUidIdentifier(
+          const callId = element.scope.parent.generateDeclaredUidIdentifier(
             `call_${name}`,
           );
+          locals = [callId];
 
           const replaceSupers = new ReplaceSupers({
             constantSuper,
@@ -1110,7 +1141,7 @@ function transformClass(
             movePrivateAccessor(
               element as NodePath<t.ClassPrivateMethod>,
               t.cloneNode(key),
-              t.cloneNode(locals),
+              t.cloneNode(callId),
               isStatic,
             );
           } else {
@@ -1118,7 +1149,7 @@ function transformClass(
 
             // Unshift
             path.node.body.body.unshift(
-              t.classPrivateProperty(key, t.cloneNode(locals), [], node.static),
+              t.classPrivateProperty(key, t.cloneNode(callId), [], node.static),
             );
 
             decoratedPrivateMethods.add(key.id.name);
@@ -1161,11 +1192,38 @@ function transformClass(
       ) {
         prependExpressionsToFieldInitializer(
           fieldInitializerAssignments,
-          element as NodePath<
-            t.ClassProperty | t.ClassPrivateProperty | t.ClassAccessorProperty
-          >,
+          element as NodePath<t.ClassProperty | t.ClassPrivateProperty>,
         );
         fieldInitializerAssignments = [];
+      }
+
+      if (
+        staticFieldInitializerAssignments.length > 0 &&
+        isStatic &&
+        (kind === FIELD || kind === ACCESSOR)
+      ) {
+        prependExpressionsToFieldInitializer(
+          staticFieldInitializerAssignments,
+          element as NodePath<t.ClassProperty | t.ClassPrivateProperty>,
+        );
+        staticFieldInitializerAssignments = [];
+      }
+
+      if (hasDecorators && version === "2023-11") {
+        if (kind === FIELD || kind === ACCESSOR) {
+          const initExtraId = scopeParent.generateDeclaredUidIdentifier(
+            `init_extra_${name}`,
+          );
+          locals.push(initExtraId);
+          const initExtraCall = t.callExpression(t.cloneNode(initExtraId), [
+            t.thisExpression(),
+          ]);
+          if (!isStatic) {
+            fieldInitializerAssignments.push(initExtraCall);
+          } else {
+            staticFieldInitializerAssignments.push(initExtraCall);
+          }
+        }
       }
     }
   }
@@ -1194,6 +1252,12 @@ function transformClass(
       );
     }
     fieldInitializerAssignments = [];
+  }
+
+  if (staticFieldInitializerAssignments.length > 0) {
+    path.node.body.body.push(
+      createStaticBlockFromExpressions(staticFieldInitializerAssignments),
+    );
   }
 
   const elementDecorations = generateDecorationExprs(

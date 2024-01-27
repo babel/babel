@@ -47,8 +47,8 @@ class A {
     A.b(), A.#c();
   }
 
-  @logAccessorDecoratorRun(2, 15, 31, 34)
-  @logAccessorDecoratorRun(3, 14, 30, 35)
+  @logAccessorDecoratorRun(2, 15, 33, 30)
+  @logAccessorDecoratorRun(3, 14, 32, 31)
   accessor a;
 
   @logMethodDecoratorRun(4, 11, 21, 25)
@@ -59,8 +59,8 @@ class A {
   @logMethodDecoratorRun(7, 12, 22, 26)
   static #c() {};
 
-  @logAccessorDecoratorRun(8, 17, 33, 36)
-  @logAccessorDecoratorRun(9, 16, 32, 37)
+  @logAccessorDecoratorRun(8, 17, 37, 34)
+  @logAccessorDecoratorRun(9, 16, 36, 35)
   accessor #d;
 
   constructor() {

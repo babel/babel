@@ -31,34 +31,34 @@ const staticMethodDec2 = (fn, ctxStaticMethod) => {
 };
 const fieldDec1 = (value, ctxField) => {
   log.push("f2");
-  ctxField.addInitializer(() => log.push("f5"));
-  ctxField.addInitializer(() => log.push("f6"));
+  ctxField.addInitializer(() => log.push("f7"));
+  ctxField.addInitializer(() => log.push("f8"));
   return () => {
-    log.push("f7");
+    log.push("f3");
   };
 };
 const fieldDec2 = (value, ctxField) => {
   log.push("f1");
-  ctxField.addInitializer(() => log.push("f3"));
-  ctxField.addInitializer(() => log.push("f4"));
+  ctxField.addInitializer(() => log.push("f5"));
+  ctxField.addInitializer(() => log.push("f6"));
   return () => {
-    log.push("f8");
+    log.push("f4");
   };
 };
 const staticFieldDec1 = (value, ctxStaticField) => {
   log.push("F2");
-  ctxStaticField.addInitializer(() => log.push("F5"));
-  ctxStaticField.addInitializer(() => log.push("F6"));
+  ctxStaticField.addInitializer(() => log.push("F7"));
+  ctxStaticField.addInitializer(() => log.push("F8"));
   return () => {
-    log.push("F7");
+    log.push("F3");
   };
 };
 const staticFieldDec2 = (value, ctxStaticField) => {
   log.push("F1");
-  ctxStaticField.addInitializer(() => log.push("F3"));
-  ctxStaticField.addInitializer(() => log.push("F4"));
+  ctxStaticField.addInitializer(() => log.push("F5"));
+  ctxStaticField.addInitializer(() => log.push("F6"));
   return () => {
-    log.push("F8");
+    log.push("F4");
   };
 };
 const getterDec1 = (fn, ctxGetter) => {
@@ -103,34 +103,34 @@ const staticSetterDec2 = (fn, ctxStaticSetter) => {
 };
 const accessorDec1 = (target, ctxAccessor) => {
   log.push("a2");
-  ctxAccessor.addInitializer(() => log.push("a5"));
-  ctxAccessor.addInitializer(() => log.push("a6"));
+  ctxAccessor.addInitializer(() => log.push("a7"));
+  ctxAccessor.addInitializer(() => log.push("a8"));
   return { init() {
-    log.push("a7");
+    log.push("a3");
   } };
 };
 const accessorDec2 = (target, ctxAccessor) => {
   log.push("a1");
-  ctxAccessor.addInitializer(() => log.push("a3"));
-  ctxAccessor.addInitializer(() => log.push("a4"));
+  ctxAccessor.addInitializer(() => log.push("a5"));
+  ctxAccessor.addInitializer(() => log.push("a6"));
   return { init() {
-    log.push("a8");
+    log.push("a4");
   } };
 };
 const staticAccessorDec1 = (target, ctxStaticAccessor) => {
   log.push("A2");
-  ctxStaticAccessor.addInitializer(() => log.push("A5"));
-  ctxStaticAccessor.addInitializer(() => log.push("A6"));
+  ctxStaticAccessor.addInitializer(() => log.push("A7"));
+  ctxStaticAccessor.addInitializer(() => log.push("A8"));
   return { init() {
-    log.push("A7");
+    log.push("A3");
   } };
 };
 const staticAccessorDec2 = (target, ctxStaticAccessor) => {
   log.push("A1");
-  ctxStaticAccessor.addInitializer(() => log.push("A3"));
-  ctxStaticAccessor.addInitializer(() => log.push("A4"));
+  ctxStaticAccessor.addInitializer(() => log.push("A5"));
+  ctxStaticAccessor.addInitializer(() => log.push("A6"));
   return { init() {
-    log.push("A8");
+    log.push("A4");
   } };
 };
 log.push("start");
@@ -197,15 +197,21 @@ expect(log + "").toEqual(
   'F1,F2,' + // For each element e of staticElements if e.[[Kind]] is field
   'f1,f2,' + // For each element e of instanceElements if e.[[Kind]] is field
   'c1,c2,' + // ApplyDecoratorsToClassDefinition
-  'M3,M4,M5,M6,G3,G4,G5,G6,S3,S4,S5,S6,A3,A4,A5,A6,F3,F4,F5,F6,' + // staticExtraInitializers
+  'M3,M4,M5,M6,G3,G4,G5,G6,S3,S4,S5,S6,' + // staticExtraInitializers
   'static:start,' + // staticElements
-  'F7,F8,A7,A8,' + // InitializeFieldOrAccessor
+  'F3,F4,' + // InitializeFieldOrAccessor
+  'F5,F6,F7,F8,' + // field extraInitializers
+  'A3,A4,' + // InitializeFieldOrAccessor
+  'A5,A6,A7,A8,' + // accessor extraInitializers
   'static:end,' + // staticElements
   'c3,c4,c5,c6,' + // classExtraInitializers
   'after,' +
   'ctor:start,' +
-  'm3,m4,m5,m6,g3,g4,g5,g6,s3,s4,s5,s6,a3,a4,a5,a6,f3,f4,f5,f6,' + // instanceExtraInitializers
-  'f7,f8,a7,a8,' + // InitializeFieldOrAccessor
+  'm3,m4,m5,m6,g3,g4,g5,g6,s3,s4,s5,s6,' + // instanceExtraInitializers
+  'f3,f4,' + // InitializeFieldOrAccessor
+  'f5,f6,f7,f8,' + // field extraInitializers
+  'a3,a4,' + // InitializeFieldOrAccessor
+  'a5,a6,a7,a8,' + // field extraInitializers
   'ctor:end,' +
   'end'
 );

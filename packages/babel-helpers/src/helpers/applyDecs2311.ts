@@ -431,18 +431,29 @@ export default /* @no-mangle */ function applyDecs2311(
     }
 
     if (isField || isAccessor) {
-      ret.push(function (instance: any, value: any) {
-        for (var i = init.length - 1; i >= 0; i--) {
-          value = init[i].call(instance, value);
-        }
-        return value;
-      });
+      ret.push(
+        // init
+        function (instance: any, value: any) {
+          for (var i = init.length - 1; i >= 0; i--) {
+            value = init[i].call(instance, value);
+          }
+          return value;
+        },
+        // init_extra
+        runInitializers.bind(null, initializers),
+      );
     }
 
     if (!isField && !isClass) {
       if (isPrivate) {
         if (isAccessor) {
-          ret.push(_bindPropCall(desc, "get"), _bindPropCall(desc, "set"));
+          // get and set should be returned before init_extra
+          ret.splice(
+            -1,
+            0,
+            _bindPropCall(desc, "get"),
+            _bindPropCall(desc, "set"),
+          );
         } else {
           ret.push(
             kind === PROP_KIND.METHOD
@@ -495,6 +506,7 @@ export default /* @no-mangle */ function applyDecs2311(
       kind &= 7; /* 0b111 */
 
       var isField = kind === PROP_KIND.FIELD;
+      var isAccessor = kind === PROP_KIND.ACCESSOR;
 
       var key = name + "/" + isStatic;
 
@@ -521,14 +533,16 @@ export default /* @no-mangle */ function applyDecs2311(
         isPrivate ? "#" + name : (toPropertyKey(name) as string),
         kind,
         metadata,
-        isStatic
-          ? (staticInitializers = staticInitializers || [])
-          : (protoInitializers = protoInitializers || []),
+        isField || isAccessor
+          ? /* fieldInitializers */ []
+          : isStatic
+            ? (staticInitializers = staticInitializers || [])
+            : (protoInitializers = protoInitializers || []),
         ret,
         isStatic,
         isPrivate,
         isField,
-        kind === PROP_KIND.ACCESSOR,
+        isAccessor,
         isStatic && isPrivate ? staticBrand : instanceBrand,
       );
     }

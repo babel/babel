@@ -47,12 +47,12 @@ class A {
   @logMethodDecoratorRun(3, 14, 30, 34)
   a() {}
 
-  @logAccessorDecoratorRun(4, 11, 21, 24)
-  @logAccessorDecoratorRun(5, 10, 20, 25)
+  @logAccessorDecoratorRun(4, 11, 23, 20)
+  @logAccessorDecoratorRun(5, 10, 22, 21)
   static accessor b;
 
-  @logAccessorDecoratorRun(6, 13, 23, 26)
-  @logAccessorDecoratorRun(7, 12, 22, 27)
+  @logAccessorDecoratorRun(6, 13, 27, 24)
+  @logAccessorDecoratorRun(7, 12, 26, 25)
   static accessor #c;
 
   @logMethodDecoratorRun(8, 17, 33, 37)
