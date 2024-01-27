@@ -12,15 +12,18 @@ class Foo {
     ({
       e: [_initProto],
       c: [_Foo, _initClass]
-    } = babelHelpers.applyDecs2305(this, [[[void 0, dec, void 0, _dec, void 0, _dec2, void 0, _dec3, _obj, _dec4], 18, "method"]], _classDecs, 1));
+    } = babelHelpers.applyDecs2311(this, [[[void 0, dec, void 0, _dec, void 0, _dec2, void 0, _dec3, _obj, _dec4], 18, "method"]], _classDecs, 1));
   }
   #a = void _initProto(this);
   method() {}
   makeClass() {
-    var _obj2, _dec5, _init_bar;
+    var _obj2, _dec5, _init_bar, _init_extra_bar;
     return _obj2 = this, _dec5 = this.#a, class Nested {
       static {
-        [_init_bar] = babelHelpers.applyDecs2305(this, [[[_obj2, _dec5], 16, "bar"]], []).e;
+        [_init_bar, _init_extra_bar] = babelHelpers.applyDecs2311(this, [[[_obj2, _dec5], 16, "bar"]], []).e;
+      }
+      constructor() {
+        _init_extra_bar(this);
       }
       bar = _init_bar(this);
     };

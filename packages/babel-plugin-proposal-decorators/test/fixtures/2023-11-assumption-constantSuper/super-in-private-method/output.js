@@ -2,7 +2,7 @@ var _initProto, _call_x, _Bar;
 const dec = () => {};
 class Foo extends (_Bar = Bar) {
   static {
-    [_call_x, _initProto] = babelHelpers.applyDecs2305(this, [[dec, 2, "x", function () {
+    [_call_x, _initProto] = babelHelpers.applyDecs2311(this, [[dec, 2, "x", function () {
       return Bar.prototype.foo.call(this);
     }]], [], 0, _ => #x in _, _Bar).e;
   }

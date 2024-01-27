@@ -7,7 +7,7 @@ class Foo {
 }
 _Foo = Foo;
 (() => {
-  [_call_a, _initStatic] = babelHelpers.applyDecs2305(_Foo, [[dec, 10, "a", function () {
+  [_call_a, _initStatic] = babelHelpers.applyDecs2311(_Foo, [[dec, 10, "a", function () {
     return this.value;
   }]], []).e;
   _initStatic(_Foo);

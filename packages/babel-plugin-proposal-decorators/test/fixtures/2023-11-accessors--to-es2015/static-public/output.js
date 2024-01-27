@@ -1,4 +1,4 @@
-var _initStatic, _init_a, _init_b, _init_computedKey, _Foo;
+var _init_a, _init_extra_a, _init_b, _init_extra_b, _init_computedKey, _init_extra_computedKey, _Foo;
 const dec = () => {};
 class Foo {
   static get a() {
@@ -21,19 +21,17 @@ class Foo {
   }
 }
 _Foo = Foo;
-(() => {
-  [_init_a, _init_b, _init_computedKey, _initStatic] = babelHelpers.applyDecs2305(_Foo, [[dec, 9, "a"], [dec, 9, "b"], [dec, 9, 'c']], []).e;
-  _initStatic(_Foo);
-})();
+[_init_a, _init_extra_a, _init_b, _init_extra_b, _init_computedKey, _init_extra_computedKey] = babelHelpers.applyDecs2311(_Foo, [[dec, 9, "a"], [dec, 9, "b"], [dec, 9, 'c']], []).e;
 var _A = {
   writable: true,
   value: _init_a(_Foo)
 };
 var _B = {
   writable: true,
-  value: _init_b(_Foo, 123)
+  value: (_init_extra_a(_Foo), _init_b(_Foo, 123))
 };
 var _C = {
   writable: true,
-  value: _init_computedKey(_Foo, 456)
+  value: (_init_extra_b(_Foo), _init_computedKey(_Foo, 456))
 };
+_init_extra_computedKey(_Foo);

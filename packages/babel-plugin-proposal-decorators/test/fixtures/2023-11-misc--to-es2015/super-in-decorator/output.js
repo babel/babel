@@ -15,7 +15,7 @@ class A extends B {
     ({
       e: [_initProto],
       c: [_C, _initClass]
-    } = babelHelpers.applyDecs2305(_C2, [[[_obj, _dec], 18, "m2"]], _classDecs, 1));
+    } = babelHelpers.applyDecs2311(_C2, [[[_obj, _dec], 18, "m2"]], _classDecs, 1));
     _initClass();
   }
 }

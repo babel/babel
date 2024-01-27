@@ -1,4 +1,4 @@
-var _initProto, _init_a, _init_b, _init_computedKey, _Foo;
+var _init_a, _init_extra_a, _init_b, _init_extra_b, _init_computedKey, _init_extra_computedKey, _Foo;
 const dec = () => {};
 var _A = /*#__PURE__*/new WeakMap();
 var _B = /*#__PURE__*/new WeakMap();
@@ -7,16 +7,17 @@ class Foo {
   constructor() {
     babelHelpers.classPrivateFieldInitSpec(this, _A, {
       writable: true,
-      value: (_initProto(this), _init_a(this))
+      value: _init_a(this)
     });
     babelHelpers.classPrivateFieldInitSpec(this, _B, {
       writable: true,
-      value: _init_b(this, 123)
+      value: (_init_extra_a(this), _init_b(this, 123))
     });
     babelHelpers.classPrivateFieldInitSpec(this, _C, {
       writable: true,
-      value: _init_computedKey(this, 456)
+      value: (_init_extra_b(this), _init_computedKey(this, 456))
     });
+    _init_extra_computedKey(this);
   }
   get a() {
     return babelHelpers.classPrivateFieldGet(this, _A);
@@ -38,4 +39,4 @@ class Foo {
   }
 }
 _Foo = Foo;
-[_init_a, _init_b, _init_computedKey, _initProto] = babelHelpers.applyDecs2305(_Foo, [[dec, 1, "a"], [dec, 1, "b"], [dec, 1, 'c']], []).e;
+[_init_a, _init_extra_a, _init_b, _init_extra_b, _init_computedKey, _init_extra_computedKey] = babelHelpers.applyDecs2311(_Foo, [[dec, 1, "a"], [dec, 1, "b"], [dec, 1, 'c']], []).e;

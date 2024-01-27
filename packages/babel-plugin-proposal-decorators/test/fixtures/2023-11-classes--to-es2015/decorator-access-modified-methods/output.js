@@ -16,5 +16,5 @@ _C2 = C;
 ({
   e: [_initProto],
   c: [_C, _initClass]
-} = babelHelpers.applyDecs2305(_C2, [[memberDec, 2, "m"]], [classDec]));
+} = babelHelpers.applyDecs2311(_C2, [[memberDec, 2, "m"]], [classDec]));
 _initClass();

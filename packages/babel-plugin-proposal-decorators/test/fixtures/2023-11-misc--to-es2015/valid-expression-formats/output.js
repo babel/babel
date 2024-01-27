@@ -17,17 +17,18 @@ class Foo {
   }
   method() {}
   makeClass() {
-    var _dec5, _init_bar, _Nested;
+    var _dec5, _init_bar, _init_extra_bar, _Nested;
     return _dec5 = babelHelpers.classPrivateFieldGet(this, _a), (_Nested = class Nested {
       constructor() {
         babelHelpers.defineProperty(this, "bar", _init_bar(this));
+        _init_extra_bar(this);
       }
-    }, [_init_bar] = babelHelpers.applyDecs2305(_Nested, [[_dec5, 0, "bar"]], []).e, _Nested);
+    }, [_init_bar, _init_extra_bar] = babelHelpers.applyDecs2311(_Nested, [[_dec5, 0, "bar"]], []).e, _Nested);
   }
 }
 _Foo2 = Foo;
 ({
   e: [_initProto],
   c: [_Foo, _initClass]
-} = babelHelpers.applyDecs2305(_Foo2, [[[void 0, dec, void 0, _dec, void 0, _dec2, void 0, _dec3, _obj, _dec4], 18, "method"]], _classDecs, 1));
+} = babelHelpers.applyDecs2311(_Foo2, [[[void 0, dec, void 0, _dec, void 0, _dec2, void 0, _dec3, _obj, _dec4], 18, "method"]], _classDecs, 1));
 _initClass();
