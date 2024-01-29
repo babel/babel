@@ -9,8 +9,8 @@ new (_temp = class extends babelHelpers.identity {
       this;
     })(), _initClass();
   }
-}, (_class2 => {
+}, (_Foo2 => {
   class Foo {}
-  _class2 = Foo;
-  [_Foo, _initClass] = babelHelpers.applyDecs(_class2, [], [dec]);
+  _Foo2 = Foo;
+  [_Foo, _initClass] = babelHelpers.applyDecs(_Foo2, [], [dec]);
 })(), _temp)();

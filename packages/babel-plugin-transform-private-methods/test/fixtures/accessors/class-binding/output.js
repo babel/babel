@@ -1,4 +1,4 @@
-var _class;
+var _A;
 var _getA = /*#__PURE__*/new WeakMap();
 class A {
   constructor() {
@@ -8,7 +8,7 @@ class A {
     });
   }
 }
-_class = A;
+_A = A;
 function _get_getA() {
-  return _class;
+  return _A;
 }

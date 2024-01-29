@@ -1,4 +1,4 @@
-var _call_a, _computedKey, _initStatic, _class;
+var _initStatic, _call_a, _computedKey, _Foo;
 const logs = [];
 const dec = (value, context) => {
   logs.push(context.name);
@@ -20,10 +20,10 @@ class Foo {
   static [3n]() {}
   static [_computedKey]() {}
 }
-_class = Foo;
+_Foo = Foo;
 (() => {
-  [_call_a, _initStatic] = babelHelpers.applyDecs(_class, [[dec, 7, "a"], [dec, 7, "a", function () {}], [dec, 7, "b"], [dec, 7, "c"], [dec, 7, 0], [dec, 7, 1], [dec, 7, 2n], [dec, 7, 3n], [dec, 7, _computedKey]], []);
-  _initStatic(_class);
+  [_call_a, _initStatic] = babelHelpers.applyDecs(_Foo, [[dec, 7, "a"], [dec, 7, "a", function () {}], [dec, 7, "b"], [dec, 7, "c"], [dec, 7, 0], [dec, 7, 1], [dec, 7, 2n], [dec, 7, 3n], [dec, 7, _computedKey]], []);
+  _initStatic(_Foo);
 })();
 var _a = {
   writable: true,

@@ -1,4 +1,4 @@
-var _initClass, _initProto;
+var _initProto, _initClass;
 var value;
 const classDec = Class => {
   value = new Class().m();
@@ -13,7 +13,7 @@ class C {
       c: [_C, _initClass]
     } = babelHelpers.applyDecs2203R(this, [[memberDec, 2, "m"]], [classDec]));
   }
-  constructor(...args) {
+  constructor() {
     _initProto(this);
   }
   m() {}

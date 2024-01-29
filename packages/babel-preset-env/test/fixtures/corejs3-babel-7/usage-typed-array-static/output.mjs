@@ -1,4 +1,3 @@
-import "core-js/modules/es.typed-array.of.js";
 import "core-js/modules/es.array.iterator.js";
 import "core-js/modules/es.array-buffer.slice.js";
 import "core-js/modules/es.object.to-string.js";
@@ -16,6 +15,7 @@ import "core-js/modules/es.typed-array.iterator.js";
 import "core-js/modules/es.typed-array.join.js";
 import "core-js/modules/es.typed-array.last-index-of.js";
 import "core-js/modules/es.typed-array.map.js";
+import "core-js/modules/es.typed-array.of.js";
 import "core-js/modules/es.typed-array.reduce.js";
 import "core-js/modules/es.typed-array.reduce-right.js";
 import "core-js/modules/es.typed-array.reverse.js";

@@ -1,7 +1,7 @@
 var Test = /*#__PURE__*/babelHelpers.createClass(function Test() {
   "use strict";
 
-  var _class;
+  var _Other;
   babelHelpers.classCallCheck(this, Test);
   var Other = /*#__PURE__*/function (_Test) {
     babelHelpers.inherits(Other, _Test);
@@ -19,8 +19,8 @@ var Test = /*#__PURE__*/babelHelpers.createClass(function Test() {
     }
     return babelHelpers.createClass(Other);
   }(Test);
-  _class = Other;
+  _Other = Other;
   babelHelpers.defineProperty(Other, "a", function () {
-    return babelHelpers.get(babelHelpers.getPrototypeOf(_class), "test", _class);
+    return babelHelpers.get(babelHelpers.getPrototypeOf(_Other), "test", _Other);
   });
 });

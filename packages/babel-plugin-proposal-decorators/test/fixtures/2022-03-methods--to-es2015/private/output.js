@@ -1,20 +1,19 @@
-var _call_a, _initProto, _class;
+var _initProto, _call_a, _Foo;
 const dec = () => {};
 var _a = /*#__PURE__*/new WeakMap();
 class Foo {
-  constructor(...args) {
+  constructor() {
     babelHelpers.classPrivateFieldInitSpec(this, _a, {
       writable: true,
       value: _call_a
     });
-    babelHelpers.defineProperty(this, "value", 1);
-    _initProto(this);
+    babelHelpers.defineProperty(this, "value", (_initProto(this), 1));
   }
   callA() {
     return babelHelpers.classPrivateFieldGet(this, _a).call(this);
   }
 }
-_class = Foo;
-[_call_a, _initProto] = babelHelpers.applyDecs2203R(_class, [[dec, 2, "a", function () {
+_Foo = Foo;
+[_call_a, _initProto] = babelHelpers.applyDecs2203R(_Foo, [[dec, 2, "a", function () {
   return this.value;
 }]], []).e;

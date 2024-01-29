@@ -1,4 +1,4 @@
-var _call_a, _computedKey, _initStatic, _class;
+var _initStatic, _call_a, _computedKey, _Foo;
 const logs = [];
 const dec = (value, context) => {
   logs.push(context.name);
@@ -20,7 +20,7 @@ class Foo {
   static set [3n](v) {}
   static set [_computedKey](v) {}
 }
-_class = Foo;
+_Foo = Foo;
 function _set_a(v) {
   _call_a(this, v);
 }
@@ -29,7 +29,7 @@ var _a = {
   set: _set_a
 };
 (() => {
-  [_call_a, _initStatic] = babelHelpers.applyDecs2301(_class, [[dec, 9, "a"], [dec, 9, "a", function (v) {}], [dec, 9, "b"], [dec, 9, "c"], [dec, 9, 0], [dec, 9, 1], [dec, 9, 2n], [dec, 9, 3n], [dec, 9, _computedKey]], []).e;
-  _initStatic(_class);
+  [_call_a, _initStatic] = babelHelpers.applyDecs2301(_Foo, [[dec, 9, "a"], [dec, 9, "a", function (v) {}], [dec, 9, "b"], [dec, 9, "c"], [dec, 9, 0], [dec, 9, 1], [dec, 9, 2n], [dec, 9, 3n], [dec, 9, _computedKey]], []).e;
+  _initStatic(_Foo);
 })();
 expect(logs).toStrictEqual(["computing f", "calling toPrimitive", "a", "#a", "b", "c", "0", "1", "2", "3", "f()"]);

@@ -1,8 +1,8 @@
 const _excluded = ["y"];
-var _class;
+var _C;
 let result;
 class C {}
-_class = C;
+_C = C;
 var _x = {
   writable: true,
   value: "#x"
@@ -12,11 +12,11 @@ babelHelpers.defineProperty(C, "a", "a");
 babelHelpers.defineProperty(C, "b", "b");
 babelHelpers.defineProperty(C, "c", "c");
 (() => {
-  var x = babelHelpers.classStaticPrivateFieldSpecGet(_class, _class, _x),
+  var x = babelHelpers.classStaticPrivateFieldSpecGet(_C, _C, _x),
     {
       y
-    } = _class,
-    z = babelHelpers.objectWithoutProperties(_class, _excluded);
+    } = _C,
+    z = babelHelpers.objectWithoutProperties(_C, _excluded);
   result = {
     x,
     y,

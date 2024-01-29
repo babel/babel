@@ -699,7 +699,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
       node.params = this.tsParseBracketedList(
         "TypeParametersOrArguments",
-        // @ts-expect-error refine typings
         this.tsParseTypeParameter.bind(this, parseModifiers),
         /* bracket */ false,
         /* skipFirstToken */ true,

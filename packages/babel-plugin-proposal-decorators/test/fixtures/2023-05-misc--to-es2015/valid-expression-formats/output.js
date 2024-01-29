@@ -1,38 +1,33 @@
-var _initClass, _dec, _dec2, _dec3, _obj, _dec4, _dec5, _dec6, _dec7, _obj2, _dec8, _initProto, _class;
+var _initProto, _initClass, _classDecs, _dec, _dec2, _dec3, _obj, _dec4, _Foo2;
 const dec = () => {};
+_classDecs = [void 0, dec, void 0, call(), void 0, chain.expr(), void 0, arbitrary + expr, array, array[expr]];
 _dec = call();
 _dec2 = chain.expr();
 _dec3 = arbitrary + expr;
 _obj = array;
 _dec4 = _obj[expr];
-_dec5 = call();
-_dec6 = chain.expr();
-_dec7 = arbitrary + expr;
-_obj2 = array;
-_dec8 = _obj2[expr];
 let _Foo;
 var _a = /*#__PURE__*/new WeakMap();
 class Foo {
-  constructor(...args) {
+  constructor() {
     babelHelpers.classPrivateFieldInitSpec(this, _a, {
       writable: true,
-      value: void 0
+      value: void _initProto(this)
     });
-    _initProto(this);
   }
   method() {}
   makeClass() {
-    var _dec9, _init_bar, _class2;
-    return _dec9 = babelHelpers.classPrivateFieldGet(this, _a), (_class2 = class Nested {
+    var _dec5, _init_bar, _Nested;
+    return _dec5 = babelHelpers.classPrivateFieldGet(this, _a), (_Nested = class Nested {
       constructor() {
         babelHelpers.defineProperty(this, "bar", _init_bar(this));
       }
-    }, [_init_bar] = babelHelpers.applyDecs2305(_class2, [[_dec9, 0, "bar"]], []).e, _class2);
+    }, [_init_bar] = babelHelpers.applyDecs2305(_Nested, [[_dec5, 0, "bar"]], []).e, _Nested);
   }
 }
-_class = Foo;
+_Foo2 = Foo;
 ({
   e: [_initProto],
   c: [_Foo, _initClass]
-} = babelHelpers.applyDecs2305(_class, [[[void 0, dec, void 0, _dec5, void 0, _dec6, void 0, _dec7, _obj2, _dec8], 18, "method"]], [void 0, dec, void 0, _dec, void 0, _dec2, void 0, _dec3, _obj, _dec4], 1));
+} = babelHelpers.applyDecs2305(_Foo2, [[[void 0, dec, void 0, _dec, void 0, _dec2, void 0, _dec3, _obj, _dec4], 18, "method"]], _classDecs, 1));
 _initClass();

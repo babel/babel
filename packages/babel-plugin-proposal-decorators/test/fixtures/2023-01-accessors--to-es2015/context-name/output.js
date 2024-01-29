@@ -1,4 +1,4 @@
-var _init_a, _init_a2, _get_a, _set_a, _init_computedKey, _init_computedKey2, _init_computedKey3, _init_computedKey4, _init_computedKey5, _init_computedKey6, _computedKey, _init_computedKey7, _initStatic, _class;
+var _initStatic, _init_a, _init_a2, _get_a, _set_a, _init_computedKey, _init_computedKey2, _init_computedKey3, _init_computedKey4, _init_computedKey5, _init_computedKey6, _computedKey, _init_computedKey7, _Foo;
 const logs = [];
 const dec = (value, context) => {
   logs.push(context.name);
@@ -67,7 +67,7 @@ class Foo {
     babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _I, v);
   }
 }
-_class = Foo;
+_Foo = Foo;
 function _set_a2(v) {
   _set_a(this, v);
 }
@@ -75,43 +75,43 @@ function _get_a2() {
   return _get_a(this);
 }
 (() => {
-  [_init_a, _init_a2, _get_a, _set_a, _init_computedKey, _init_computedKey2, _init_computedKey3, _init_computedKey4, _init_computedKey5, _init_computedKey6, _init_computedKey7, _initStatic] = babelHelpers.applyDecs2301(_class, [[dec, 6, "a"], [dec, 6, "a", o => babelHelpers.classStaticPrivateFieldSpecGet(o, _class, _B), (o, v) => babelHelpers.classStaticPrivateFieldSpecSet(o, _class, _B, v)], [dec, 6, "b"], [dec, 6, "c"], [dec, 6, 0], [dec, 6, 1], [dec, 6, 2n], [dec, 6, 3n], [dec, 6, _computedKey]], []).e;
-  _initStatic(_class);
+  [_init_a, _init_a2, _get_a, _set_a, _init_computedKey, _init_computedKey2, _init_computedKey3, _init_computedKey4, _init_computedKey5, _init_computedKey6, _init_computedKey7, _initStatic] = babelHelpers.applyDecs2301(_Foo, [[dec, 6, "a"], [dec, 6, "a", o => babelHelpers.classStaticPrivateFieldSpecGet(o, _Foo, _B), (o, v) => babelHelpers.classStaticPrivateFieldSpecSet(o, _Foo, _B, v)], [dec, 6, "b"], [dec, 6, "c"], [dec, 6, 0], [dec, 6, 1], [dec, 6, 2n], [dec, 6, 3n], [dec, 6, _computedKey]], []).e;
+  _initStatic(_Foo);
 })();
 var _A = {
   writable: true,
-  value: _init_a(_class)
+  value: _init_a(_Foo)
 };
 var _B = {
   writable: true,
-  value: _init_a2(_class)
+  value: _init_a2(_Foo)
 };
 var _C = {
   writable: true,
-  value: _init_computedKey(_class)
+  value: _init_computedKey(_Foo)
 };
 var _D = {
   writable: true,
-  value: _init_computedKey2(_class)
+  value: _init_computedKey2(_Foo)
 };
 var _E = {
   writable: true,
-  value: _init_computedKey3(_class)
+  value: _init_computedKey3(_Foo)
 };
 var _F = {
   writable: true,
-  value: _init_computedKey4(_class)
+  value: _init_computedKey4(_Foo)
 };
 var _G = {
   writable: true,
-  value: _init_computedKey5(_class)
+  value: _init_computedKey5(_Foo)
 };
 var _H = {
   writable: true,
-  value: _init_computedKey6(_class)
+  value: _init_computedKey6(_Foo)
 };
 var _I = {
   writable: true,
-  value: _init_computedKey7(_class)
+  value: _init_computedKey7(_Foo)
 };
 expect(logs).toStrictEqual(["computing f", "calling toPrimitive", "a", "#a", "b", "c", "0", "1", "2", "3", "f()"]);

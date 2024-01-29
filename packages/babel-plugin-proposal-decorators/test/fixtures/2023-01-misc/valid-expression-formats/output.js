@@ -1,31 +1,25 @@
-var _initClass, _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _initProto;
+var _initProto, _initClass, _classDecs, _dec, _dec2, _dec3, _dec4;
 const dec = () => {};
+_classDecs = [dec, call(), chain.expr(), arbitrary + expr, array[expr]];
 _dec = call();
 _dec2 = chain.expr();
 _dec3 = arbitrary + expr;
 _dec4 = array[expr];
-_dec5 = call();
-_dec6 = chain.expr();
-_dec7 = arbitrary + expr;
-_dec8 = array[expr];
 let _Foo;
 class Foo {
   static {
     ({
       e: [_initProto],
       c: [_Foo, _initClass]
-    } = babelHelpers.applyDecs2301(this, [[[dec, _dec5, _dec6, _dec7, _dec8], 2, "method"]], [dec, _dec, _dec2, _dec3, _dec4]));
+    } = babelHelpers.applyDecs2301(this, [[[dec, _dec, _dec2, _dec3, _dec4], 2, "method"]], _classDecs));
   }
-  constructor(...args) {
-    _initProto(this);
-  }
-  #a;
+  #a = void _initProto(this);
   method() {}
   makeClass() {
-    var _dec9, _init_bar;
-    return _dec9 = this.#a, class Nested {
+    var _dec5, _init_bar;
+    return _dec5 = this.#a, class Nested {
       static {
-        [_init_bar] = babelHelpers.applyDecs2301(this, [[_dec9, 0, "bar"]], []).e;
+        [_init_bar] = babelHelpers.applyDecs2301(this, [[_dec5, 0, "bar"]], []).e;
       }
       bar = _init_bar(this);
     };

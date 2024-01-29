@@ -1,6 +1,6 @@
 {
   "name": "@babel/node",
-  "version": "7.22.19",
+  "version": "7.23.9",
   "description": "Babel command line",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-node",
@@ -35,13 +35,10 @@
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
-    "@babel/helper-fixtures": "workspace:^",
+    "@babel/helper-transform-fixture-test-runner": "workspace:^",
     "@babel/preset-env": "workspace:^",
     "@babel/runtime": "workspace:^",
-    "@types/v8flags": "^3.1.1",
-    "fs-readdir-recursive": "^1.0.0",
-    "make-dir": "condition:BABEL_8_BREAKING ? : ^2.1.0",
-    "rimraf": "^3.0.0"
+    "@types/v8flags": "^3.1.1"
   },
   "bin": {
     "babel-node": "./bin/babel-node.js"

@@ -1,9 +1,9 @@
-var _class;
+var _A;
 var A = /*#__PURE__*/babelHelpers.createClass(function A() {
   "use strict";
 
   babelHelpers.classCallCheck(this, A);
 });
-_class = A;
-A.self = _class;
-A.getA = () => _class;
+_A = A;
+A.self = _A;
+A.getA = () => _A;

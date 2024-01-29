@@ -1,4 +1,4 @@
-var _class;
+var _Foo;
 class Foo {
   static getSelf() {
     return this;
@@ -40,7 +40,7 @@ class Foo {
     j(fn);
   }
 }
-_class = Foo;
+_Foo = Foo;
 var _x = {
   writable: true,
   value: 1
@@ -48,12 +48,12 @@ var _x = {
 var _m = {
   writable: true,
   value: function () {
-    return babelHelpers.classStaticPrivateFieldSpecGet(this, _class, _x);
+    return babelHelpers.classStaticPrivateFieldSpecGet(this, _Foo, _x);
   }
 };
 var _self = {
   writable: true,
-  value: _class
+  value: _Foo
 };
-babelHelpers.defineProperty(Foo, "self", _class);
+babelHelpers.defineProperty(Foo, "self", _Foo);
 Foo.test();

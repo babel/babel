@@ -1,13 +1,13 @@
 babelHelpers.decorate([dec()], function (_initialize) {
   "use strict";
 
-  class _class {
+  class _Class {
     constructor() {
       _initialize(this);
     }
   }
   return {
-    F: _class,
+    F: _Class,
     d: []
   };
 });

@@ -44,6 +44,7 @@ export type {
   PluginObject,
   PresetAPI,
   PresetObject,
+  ConfigItem,
 } from "./config/index.ts";
 
 export {

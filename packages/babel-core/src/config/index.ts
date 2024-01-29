@@ -34,6 +34,7 @@ export type { PartialConfig } from "./partial.ts";
 
 import { createConfigItem as createConfigItemImpl } from "./item.ts";
 import type { ConfigItem } from "./item.ts";
+export type { ConfigItem };
 
 import { beginHiddenCallStack } from "../errors/rewrite-stack-trace.ts";
 

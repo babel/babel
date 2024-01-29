@@ -1,4 +1,4 @@
-var _class;
+var _Cl;
 var _PRIVATE_STATIC_FIELD = /*#__PURE__*/Symbol("PRIVATE_STATIC_FIELD");
 var _privateStaticFieldValue = /*#__PURE__*/Symbol("privateStaticFieldValue");
 class Cl {
@@ -6,9 +6,9 @@ class Cl {
     return babelHelpers.classPrivateFieldLooseBase(Cl, _privateStaticFieldValue)[_privateStaticFieldValue];
   }
 }
-_class = Cl;
+_Cl = Cl;
 function _set_privateStaticFieldValue(newValue) {
-  babelHelpers.classPrivateFieldLooseBase(_class, _PRIVATE_STATIC_FIELD)[_PRIVATE_STATIC_FIELD] = newValue;
+  babelHelpers.classPrivateFieldLooseBase(_Cl, _PRIVATE_STATIC_FIELD)[_PRIVATE_STATIC_FIELD] = newValue;
 }
 Object.defineProperty(Cl, _privateStaticFieldValue, {
   get: void 0,

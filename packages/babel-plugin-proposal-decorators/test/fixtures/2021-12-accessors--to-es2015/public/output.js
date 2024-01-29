@@ -1,4 +1,4 @@
-var _init_a, _init_b, _init_computedKey, _initProto, _class;
+var _initProto, _init_a, _init_b, _init_computedKey, _Foo;
 const dec = () => {};
 var _A = /*#__PURE__*/new WeakMap();
 var _B = /*#__PURE__*/new WeakMap();
@@ -37,5 +37,5 @@ class Foo {
     babelHelpers.classPrivateFieldSet(this, _C, v);
   }
 }
-_class = Foo;
-[_init_a, _init_b, _init_computedKey, _initProto] = babelHelpers.applyDecs(_class, [[dec, 1, "a"], [dec, 1, "b"], [dec, 1, 'c']], []);
+_Foo = Foo;
+[_init_a, _init_b, _init_computedKey, _initProto] = babelHelpers.applyDecs(_Foo, [[dec, 1, "a"], [dec, 1, "b"], [dec, 1, 'c']], []);

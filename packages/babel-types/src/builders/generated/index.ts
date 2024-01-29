@@ -352,7 +352,6 @@ export function program(
     directives,
     sourceType,
     interpreter,
-    sourceFile: null,
   });
 }
 export function objectExpression(

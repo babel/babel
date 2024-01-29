@@ -5,6 +5,10 @@ import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import * as charCodes from "charcodes";
 import type { PluginAPI, PluginObject, PluginPass } from "@babel/core";
 import { skipTransparentExprWrappers } from "@babel/helper-skip-transparent-expression-wrappers";
+import {
+  privateNameVisitorFactory,
+  type PrivateNameVisitorState,
+} from "./fields.ts";
 
 interface Options {
   /** @deprecated use `constantSuper` assumption instead. Only supported in 2021-12 version. */
@@ -262,6 +266,159 @@ function extractProxyAccessorsFor(
       (o, v) => o.${t.cloneNode(targetKey)} = v
     ` as t.ArrowFunctionExpression,
   ];
+}
+
+/**
+ * Prepend expressions to the field initializer. If the initializer is not defined,
+ * this function will wrap the last expression within a `void` unary expression.
+ *
+ * @param {t.Expression[]} expressions
+ * @param {(NodePath<
+ *     t.ClassProperty | t.ClassPrivateProperty | t.ClassAccessorProperty
+ *   >)} fieldPath
+ */
+function prependExpressionsToFieldInitializer(
+  expressions: t.Expression[],
+  fieldPath: NodePath<
+    t.ClassProperty | t.ClassPrivateProperty | t.ClassAccessorProperty
+  >,
+) {
+  const initializer = fieldPath.get("value");
+  if (initializer.node) {
+    expressions.push(initializer.node);
+  } else if (expressions.length > 0) {
+    expressions[expressions.length - 1] = t.unaryExpression(
+      "void",
+      expressions[expressions.length - 1],
+    );
+  }
+  initializer.replaceWith(maybeSequenceExpression(expressions));
+}
+
+function prependExpressionsToConstructor(
+  expressions: t.Expression[],
+  constructorPath: NodePath<t.ClassMethod>,
+) {
+  constructorPath.node.body.body.unshift(
+    t.expressionStatement(maybeSequenceExpression(expressions)),
+  );
+}
+
+function isProtoInitCallExpression(
+  expression: t.Expression,
+  protoInitCall: t.Identifier,
+) {
+  return (
+    t.isCallExpression(expression) &&
+    t.isIdentifier(expression.callee, { name: protoInitCall.name })
+  );
+}
+
+/**
+ * Optimize super call and its following expressions
+ *
+ * @param {t.Expression[]} expressions Mutated by this function. The first element must by a super call
+ * @param {t.Identifier} protoInitLocal The generated protoInit id
+ * @returns optimized expression
+ */
+function optimizeSuperCallAndExpressions(
+  expressions: t.Expression[],
+  protoInitLocal: t.Identifier,
+) {
+  // Merge `super(), protoInit(this)` into `protoInit(super())`
+  if (
+    expressions.length >= 2 &&
+    isProtoInitCallExpression(expressions[1], protoInitLocal)
+  ) {
+    const mergedSuperCall = t.callExpression(t.cloneNode(protoInitLocal), [
+      expressions[0],
+    ]);
+    expressions.splice(0, 2, mergedSuperCall);
+  }
+  // Merge `protoInit(super()), this` into `protoInit(super())`
+  if (
+    expressions.length >= 2 &&
+    t.isThisExpression(expressions[expressions.length - 1]) &&
+    isProtoInitCallExpression(
+      expressions[expressions.length - 2],
+      protoInitLocal,
+    )
+  ) {
+    expressions.splice(expressions.length - 1, 1);
+  }
+  return maybeSequenceExpression(expressions);
+}
+
+/**
+ * Insert expressions immediately after super() and optimize the output if possible.
+ * This function will preserve the completion result using the trailing this expression.
+ *
+ * @param {t.Expression[]} expressions
+ * @param {NodePath<t.ClassMethod>} constructorPath
+ * @param {t.Identifier} protoInitLocal The generated protoInit id
+ * @returns
+ */
+function insertExpressionsAfterSuperCallAndOptimize(
+  expressions: t.Expression[],
+  constructorPath: NodePath<t.ClassMethod>,
+  protoInitLocal: t.Identifier,
+) {
+  constructorPath.traverse({
+    CallExpression: {
+      exit(path) {
+        if (!path.get("callee").isSuper()) return;
+        const newNodes = [
+          path.node,
+          ...expressions.map(expr => t.cloneNode(expr)),
+        ];
+        // preserve completion result if super() is in an RHS or a return statement
+        if (path.isCompletionRecord()) {
+          newNodes.push(t.thisExpression());
+        }
+        path.replaceWith(
+          optimizeSuperCallAndExpressions(newNodes, protoInitLocal),
+        );
+
+        path.skip();
+      },
+    },
+    ClassMethod(path) {
+      if (path.node.kind === "constructor") {
+        path.skip();
+      }
+    },
+  });
+}
+
+/**
+ * Build a class constructor path from the given expressions. If the class is
+ * derived, the constructor will call super() first to ensure that `this`
+ * in the expressions work as expected.
+ *
+ * @param {t.Expression[]} expressions
+ * @param {boolean} isDerivedClass
+ * @returns The class constructor node
+ */
+function createConstructorFromExpressions(
+  expressions: t.Expression[],
+  isDerivedClass: boolean,
+) {
+  const body: t.Statement[] = [
+    t.expressionStatement(maybeSequenceExpression(expressions)),
+  ];
+  if (isDerivedClass) {
+    body.unshift(
+      t.expressionStatement(
+        t.callExpression(t.super(), [t.spreadElement(t.identifier("args"))]),
+      ),
+    );
+  }
+  return t.classMethod(
+    "constructor",
+    t.identifier("constructor"),
+    isDerivedClass ? [t.restElement(t.identifier("args"))] : [],
+    t.blockStatement(body),
+  );
 }
 
 // 3 bits reserved to this (0-7)
@@ -532,8 +689,55 @@ function createToPropertyKeyCall(state: PluginPass, propertyKey: t.Expression) {
   return t.callExpression(state.addHelper("toPropertyKey"), [propertyKey]);
 }
 
+function checkPrivateMethodUpdateError(
+  path: NodePath<t.Class>,
+  decoratedPrivateMethods: Set<string>,
+) {
+  const privateNameVisitor = privateNameVisitorFactory<
+    PrivateNameVisitorState<null>,
+    null
+  >({
+    PrivateName(path, state) {
+      if (!state.privateNamesMap.has(path.node.id.name)) return;
+
+      const parentPath = path.parentPath;
+      const parentParentPath = parentPath.parentPath;
+
+      if (
+        // this.bar().#x = 123;
+        (parentParentPath.node.type === "AssignmentExpression" &&
+          parentParentPath.node.left === parentPath.node) ||
+        // this.#x++;
+        parentParentPath.node.type === "UpdateExpression" ||
+        // ([...this.#x] = foo);
+        parentParentPath.node.type === "RestElement" ||
+        // ([this.#x] = foo);
+        parentParentPath.node.type === "ArrayPattern" ||
+        // ({ a: this.#x } = bar);
+        (parentParentPath.node.type === "ObjectProperty" &&
+          parentParentPath.node.value === parentPath.node &&
+          parentParentPath.parentPath.type === "ObjectPattern") ||
+        // for (this.#x of []);
+        (parentParentPath.node.type === "ForOfStatement" &&
+          parentParentPath.node.left === parentPath.node)
+      ) {
+        throw path.buildCodeFrameError(
+          `Decorated private methods are read-only, but "#${path.node.id.name}" is updated via this expression.`,
+        );
+      }
+    },
+  });
+  const privateNamesMap = new Map<string, null>();
+  for (const name of decoratedPrivateMethods) {
+    privateNamesMap.set(name, null);
+  }
+  path.traverse(privateNameVisitor, {
+    privateNamesMap: privateNamesMap,
+  });
+}
+
 function transformClass(
-  path: NodePath<t.ClassExpression | t.ClassDeclaration>,
+  path: NodePath<t.Class>,
   state: PluginPass,
   constantSuper: boolean,
   version: DecoratorVersionKind,
@@ -555,14 +759,17 @@ function transformClass(
     return t.cloneNode(localEvaluatedId);
   };
 
+  let protoInitLocal: t.Identifier;
+  let staticInitLocal: t.Identifier;
   // Iterate over the class to see if we need to decorate it, and also to
-  // transform simple auto accessors which are not decorated
+  // transform simple auto accessors which are not decorated, and handle inferred
+  // class name when the initializer of the class field is a class expression
   for (const element of body) {
     if (!isClassDecoratableElementPath(element)) {
       continue;
     }
 
-    if (element.node.decorators && element.node.decorators.length > 0) {
+    if (isDecorated(element.node)) {
       switch (element.node.type) {
         case "ClassProperty":
           // @ts-expect-error todo: propertyVisitor.ClassProperty should be callable. Improve typings.
@@ -584,6 +791,15 @@ function transformClass(
             element as NodePath<t.ClassAccessorProperty>,
             state,
           );
+        /* fallthrough */
+        default:
+          if (element.node.static) {
+            staticInitLocal ??=
+              scopeParent.generateDeclaredUidIdentifier("initStatic");
+          } else {
+            protoInitLocal ??=
+              scopeParent.generateDeclaredUidIdentifier("initProto");
+          }
           break;
       }
       hasElementDecorators = true;
@@ -631,44 +847,56 @@ function transformClass(
 
   const elementDecoratorInfo: (DecoratorInfo | ComputedPropInfo)[] = [];
 
-  // The initializer of the first non-static field will be injected with the protoInit call
-  let firstFieldPath:
-    | NodePath<t.ClassProperty | t.ClassPrivateProperty>
-    | undefined;
   let constructorPath: NodePath<t.ClassMethod> | undefined;
-  let requiresProtoInit = false;
-  let requiresStaticInit = false;
   const decoratedPrivateMethods = new Set<string>();
 
-  let protoInitLocal: t.Identifier,
-    staticInitLocal: t.Identifier,
-    classInitLocal: t.Identifier,
-    classIdLocal: t.Identifier;
+  let classInitLocal: t.Identifier, classIdLocal: t.Identifier;
 
   const decoratorsThis = new Map<t.Decorator, t.Expression>();
-  const maybeExtractDecorator = (decorator: t.Decorator) => {
-    const { expression } = decorator;
-    if (version === "2023-05" && t.isMemberExpression(expression)) {
-      let object;
-      if (
-        t.isSuper(expression.object) ||
-        t.isThisExpression(expression.object)
-      ) {
-        object = memoiseExpression(t.thisExpression(), "obj");
-      } else if (!scopeParent.isStatic(expression.object)) {
-        object = memoiseExpression(expression.object, "obj");
-        expression.object = object;
-      } else {
-        object = expression.object;
+  const maybeExtractDecorators = (
+    decorators: t.Decorator[],
+    memoiseInPlace: boolean,
+  ) => {
+    let needMemoise = false;
+    for (const decorator of decorators) {
+      const { expression } = decorator;
+      if (version === "2023-05" && t.isMemberExpression(expression)) {
+        let object;
+        if (
+          t.isSuper(expression.object) ||
+          t.isThisExpression(expression.object)
+        ) {
+          needMemoise = true;
+          if (memoiseInPlace) {
+            object = memoiseExpression(t.thisExpression(), "obj");
+          } else {
+            object = t.thisExpression();
+          }
+        } else {
+          if (!scopeParent.isStatic(expression.object)) {
+            needMemoise = true;
+            if (memoiseInPlace) {
+              expression.object = memoiseExpression(expression.object, "obj");
+            }
+          }
+          object = t.cloneNode(expression.object);
+        }
+        decoratorsThis.set(decorator, object);
       }
-      decoratorsThis.set(decorator, t.cloneNode(object));
+      if (!scopeParent.isStatic(expression)) {
+        needMemoise = true;
+        if (memoiseInPlace) {
+          decorator.expression = memoiseExpression(expression, "dec");
+        }
+      }
     }
-    if (!scopeParent.isStatic(expression)) {
-      decorator.expression = memoiseExpression(expression, "dec");
-    }
+    return needMemoise && !memoiseInPlace;
   };
 
   let needsDeclaraionForClassBinding = false;
+  let classDecorationsFlag = 0;
+  let classDecorations: t.Expression[] = [];
+  let classDecorationsId: t.Identifier;
   if (classDecorators) {
     classInitLocal = scopeParent.generateDeclaredUidIdentifier("initClass");
     needsDeclaraionForClassBinding = path.isClassDeclaration();
@@ -676,8 +904,21 @@ function transformClass(
 
     path.node.decorators = null;
 
-    for (const classDecorator of classDecorators) {
-      maybeExtractDecorator(classDecorator);
+    const needMemoise = maybeExtractDecorators(classDecorators, false);
+
+    const { hasThis, decs } = generateDecorationList(
+      classDecorators.map(el => el.expression),
+      classDecorators.map(dec => decoratorsThis.get(dec)),
+      version,
+    );
+    classDecorationsFlag = hasThis ? 1 : 0;
+    classDecorations = decs;
+
+    if (needMemoise) {
+      classDecorationsId = memoiseExpression(
+        t.arrayExpression(classDecorations),
+        "classDecs",
+      );
     }
   } else {
     if (!path.node.id) {
@@ -689,25 +930,30 @@ function transformClass(
   let lastInstancePrivateName: t.PrivateName;
   let needsInstancePrivateBrandCheck = false;
 
+  let fieldInitializerAssignments = [];
+
   if (hasElementDecorators) {
+    if (protoInitLocal) {
+      const protoInitCall = t.callExpression(t.cloneNode(protoInitLocal), [
+        t.thisExpression(),
+      ]);
+      fieldInitializerAssignments.push(protoInitCall);
+    }
     for (const element of body) {
       if (!isClassDecoratableElementPath(element)) {
         continue;
       }
 
       const { node } = element;
-      const decorators = element.get("decorators");
+      const decorators = element.node.decorators;
 
-      const hasDecorators = Array.isArray(decorators) && decorators.length > 0;
+      const hasDecorators = !!decorators?.length;
 
       if (hasDecorators) {
-        for (const decoratorPath of decorators) {
-          maybeExtractDecorator(decoratorPath.node);
-        }
+        maybeExtractDecorators(decorators, true);
       }
 
-      const isComputed =
-        "computed" in element.node && element.node.computed === true;
+      const isComputed = "computed" in element.node && element.node.computed;
       if (isComputed) {
         if (!element.get("key").isConstantExpression()) {
           node.key = memoiseExpression(
@@ -722,7 +968,7 @@ function transformClass(
 
       const isPrivate = key.type === "PrivateName";
 
-      const isStatic = !!element.node.static;
+      const isStatic = element.node.static;
 
       let name = "computedKey";
 
@@ -881,161 +1127,75 @@ function transformClass(
 
         elementDecoratorInfo.push({
           kind,
-          decorators: decorators.map(d => d.node.expression),
-          decoratorsThis: decorators.map(d => decoratorsThis.get(d.node)),
+          decorators: decorators.map(d => d.expression),
+          decoratorsThis: decorators.map(d => decoratorsThis.get(d)),
           name: nameExpr,
           isStatic,
           privateMethods,
           locals,
         });
 
-        if (kind !== FIELD) {
-          if (isStatic) {
-            requiresStaticInit = true;
-          } else {
-            requiresProtoInit = true;
-          }
-        }
-
         if (element.node) {
           element.node.decorators = null;
         }
+      }
 
-        if (
-          !firstFieldPath &&
-          !isStatic &&
-          (kind === FIELD || kind === ACCESSOR)
-        ) {
-          firstFieldPath = element as NodePath<
-            t.ClassProperty | t.ClassPrivateProperty
-          >;
-        }
+      if (
+        fieldInitializerAssignments.length > 0 &&
+        !isStatic &&
+        (kind === FIELD || kind === ACCESSOR)
+      ) {
+        prependExpressionsToFieldInitializer(
+          fieldInitializerAssignments,
+          element as NodePath<
+            t.ClassProperty | t.ClassPrivateProperty | t.ClassAccessorProperty
+          >,
+        );
+        fieldInitializerAssignments = [];
       }
     }
+  }
+
+  if (fieldInitializerAssignments.length > 0) {
+    const isDerivedClass = !!path.node.superClass;
+    if (constructorPath) {
+      if (isDerivedClass) {
+        insertExpressionsAfterSuperCallAndOptimize(
+          fieldInitializerAssignments,
+          constructorPath,
+          protoInitLocal,
+        );
+      } else {
+        prependExpressionsToConstructor(
+          fieldInitializerAssignments,
+          constructorPath,
+        );
+      }
+    } else {
+      path.node.body.body.unshift(
+        createConstructorFromExpressions(
+          fieldInitializerAssignments,
+          isDerivedClass,
+        ),
+      );
+    }
+    fieldInitializerAssignments = [];
   }
 
   const elementDecorations = generateDecorationExprs(
     elementDecoratorInfo,
     version,
   );
-  let classDecorationsFlag = 0;
-  let classDecorations: t.Expression[] = [];
-  if (classDecorators) {
-    const { hasThis, decs } = generateDecorationList(
-      classDecorators.map(el => el.expression),
-      classDecorators.map(dec => decoratorsThis.get(dec)),
-      version,
-    );
-    classDecorationsFlag = hasThis ? 1 : 0;
-    classDecorations = decs;
-  }
 
   const elementLocals: t.Identifier[] =
     extractElementLocalAssignments(elementDecoratorInfo);
 
-  if (requiresProtoInit) {
-    protoInitLocal = scopeParent.generateDeclaredUidIdentifier("initProto");
+  if (protoInitLocal) {
     elementLocals.push(protoInitLocal);
-
-    const protoInitCall = t.callExpression(t.cloneNode(protoInitLocal), [
-      t.thisExpression(),
-    ]);
-
-    if (firstFieldPath) {
-      const value = firstFieldPath.get("value");
-      const body: t.Expression[] = [protoInitCall];
-
-      if (value.node) {
-        body.push(value.node);
-      }
-
-      value.replaceWith(t.sequenceExpression(body));
-    } else if (constructorPath) {
-      if (path.node.superClass) {
-        constructorPath.traverse({
-          CallExpression: {
-            exit(path) {
-              if (!path.get("callee").isSuper()) return;
-
-              path.replaceWith(
-                t.callExpression(t.cloneNode(protoInitLocal), [path.node]),
-              );
-
-              path.skip();
-            },
-          },
-          ClassMethod(path) {
-            if (path.node.kind === "constructor") {
-              path.skip();
-            }
-          },
-        });
-      } else {
-        constructorPath.node.body.body.unshift(
-          t.expressionStatement(protoInitCall),
-        );
-      }
-    } else {
-      const body: t.Statement[] = [t.expressionStatement(protoInitCall)];
-
-      if (path.node.superClass) {
-        body.unshift(
-          t.expressionStatement(
-            t.callExpression(t.super(), [
-              t.spreadElement(t.identifier("args")),
-            ]),
-          ),
-        );
-      }
-
-      path.node.body.body.unshift(
-        t.classMethod(
-          "constructor",
-          t.identifier("constructor"),
-          [t.restElement(t.identifier("args"))],
-          t.blockStatement(body),
-        ),
-      );
-    }
   }
 
-  if (requiresStaticInit) {
-    staticInitLocal = scopeParent.generateDeclaredUidIdentifier("initStatic");
+  if (staticInitLocal) {
     elementLocals.push(staticInitLocal);
-  }
-
-  if (decoratedPrivateMethods.size > 0) {
-    path.traverse({
-      PrivateName(path) {
-        if (!decoratedPrivateMethods.has(path.node.id.name)) return;
-
-        const parentPath = path.parentPath;
-        const parentParentPath = parentPath.parentPath;
-
-        if (
-          // this.bar().#x = 123;
-          (parentParentPath.node.type === "AssignmentExpression" &&
-            parentParentPath.node.left === parentPath.node) ||
-          // this.#x++;
-          parentParentPath.node.type === "UpdateExpression" ||
-          // ([...this.#x] = foo);
-          parentParentPath.node.type === "RestElement" ||
-          // ([this.#x] = foo);
-          parentParentPath.node.type === "ArrayPattern" ||
-          // ({ a: this.#x } = bar);
-          (parentParentPath.node.type === "ObjectProperty" &&
-            parentParentPath.node.value === parentPath.node &&
-            parentParentPath.parentPath.type === "ObjectPattern") ||
-          // for (this.#x of []);
-          (parentParentPath.node.type === "ForOfStatement" &&
-            parentParentPath.node.left === parentPath.node)
-        ) {
-          throw path.buildCodeFrameError(
-            `Decorated private methods are not updatable, but "#${path.node.id.name}" is updated via this expression.`,
-          );
-        }
-      },
-    });
   }
 
   const classLocals: t.Identifier[] = [];
@@ -1143,7 +1303,6 @@ function transformClass(
       superClass = id;
     }
   }
-
   originalClass.body.body.unshift(
     t.staticBlock(
       [
@@ -1152,7 +1311,9 @@ function transformClass(
             elementLocals,
             classLocals,
             elementDecorations,
-            t.arrayExpression(classDecorations),
+            classDecorationsId
+              ? t.cloneNode(classDecorationsId)
+              : t.arrayExpression(classDecorations),
             t.numericLiteral(classDecorationsFlag),
             needsInstancePrivateBrandCheck ? lastInstancePrivateName : null,
             typeof className === "object" ? className : undefined,
@@ -1161,7 +1322,7 @@ function transformClass(
             version,
           ),
         ),
-        requiresStaticInit &&
+        staticInitLocal &&
           t.expressionStatement(
             t.callExpression(t.cloneNode(staticInitLocal), [
               t.thisExpression(),
@@ -1183,6 +1344,10 @@ function transformClass(
     );
   }
 
+  if (decoratedPrivateMethods.size > 0) {
+    checkPrivateMethodUpdateError(path, decoratedPrivateMethods);
+  }
+
   // Recrawl the scope to make sure new identifiers are properly synced
   path.scope.crawl();
 
@@ -1192,8 +1357,8 @@ function transformClass(
 function createLocalsAssignment(
   elementLocals: t.Identifier[],
   classLocals: t.Identifier[],
-  elementDecorations: t.ArrayExpression,
-  classDecorations: t.ArrayExpression,
+  elementDecorations: t.ArrayExpression | t.Identifier,
+  classDecorations: t.ArrayExpression | t.Identifier,
   classDecorationsFlag: t.NumericLiteral,
   maybePrivateBranName: t.PrivateName | null,
   setClassName: t.Identifier | t.StringLiteral | undefined,

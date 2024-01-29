@@ -1,7 +1,7 @@
-var _class;
+var _Foo;
 class Foo {}
-_class = Foo;
+_Foo = Foo;
 function _tag() {
-  babelHelpers.classStaticPrivateMethodGet(this, _class, _tag).bind(this)``;
+  babelHelpers.classStaticPrivateMethodGet(this, _Foo, _tag).bind(this)``;
 }
 new Foo();

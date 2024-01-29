@@ -1,13 +1,12 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "lib": ["esnext"],
+    "target": "ESNext",
+    "module": "preserve",
+    "lib": ["ESNext"],
     "declaration": true,
-    "declarationMap": true,
     "emitDeclarationOnly": true,
     "declarationDir": "./dts",
-    "moduleResolution": "node",
+    "moduleResolution": "Bundler",
     "esModuleInterop": true,
     "isolatedModules": true,
     "allowImportingTsExtensions": true,

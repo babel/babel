@@ -26,7 +26,9 @@ interface PrivateNameMetadata {
   setterDeclared?: boolean;
 }
 
-type PrivateNamesMap = Map<string, PrivateNameMetadata>;
+type PrivateNamesMapGeneric<V> = Map<string, V>;
+
+type PrivateNamesMap = PrivateNamesMapGeneric<PrivateNameMetadata>;
 
 export function buildPrivateNamesMap(props: PropPath[]) {
   const privateNamesMap: PrivateNamesMap = new Map();
@@ -102,17 +104,16 @@ export function buildPrivateNamesNodes(
   return initNodes;
 }
 
-interface PrivateNameVisitorState {
-  privateNamesMap: PrivateNamesMap;
-  privateFieldsAsProperties: boolean;
+export interface PrivateNameVisitorState<V> {
+  privateNamesMap: PrivateNamesMapGeneric<V>;
   redeclared?: string[];
 }
 
 // Traverses the class scope, handling private name references. If an inner
 // class redeclares the same private name, it will hand off traversal to the
 // restricted visitor (which doesn't traverse the inner class's inner scope).
-function privateNameVisitorFactory<S>(
-  visitor: Visitor<PrivateNameVisitorState & S>,
+export function privateNameVisitorFactory<S, V>(
+  visitor: Visitor<PrivateNameVisitorState<V> & S>,
 ) {
   // Traverses the outer portion of a class, without touching the class's inner
   // scope, for private names.
@@ -123,7 +124,10 @@ function privateNameVisitorFactory<S>(
     environmentVisitor,
   ]);
 
-  const privateNameVisitor: Visitor<PrivateNameVisitorState & S> = {
+  // @ts-expect-error: TS2590: Expression produces a union type that is too complex to represent.
+  const privateNameVisitor: Visitor<
+    PrivateNameVisitorState<PrivateNameMetadata> & S
+  > = {
     ...visitor,
 
     Class(path) {
@@ -175,7 +179,8 @@ interface PrivateNameState {
 }
 
 const privateNameVisitor = privateNameVisitorFactory<
-  HandlerState<PrivateNameState> & PrivateNameState
+  HandlerState<PrivateNameState> & PrivateNameState,
+  PrivateNameMetadata
 >({
   PrivateName(path, { noDocumentAll }) {
     const { privateNamesMap, redeclared } = this;
@@ -222,11 +227,15 @@ export function buildCheckInRHS(
   return t.callExpression(file.addHelper("checkInRHS"), [rhs]);
 }
 
-const privateInVisitor = privateNameVisitorFactory<{
-  classRef: t.Identifier;
-  file: File;
-  innerBinding?: t.Identifier;
-}>({
+const privateInVisitor = privateNameVisitorFactory<
+  {
+    classRef: t.Identifier;
+    file: File;
+    innerBinding?: t.Identifier;
+    privateFieldsAsProperties: boolean;
+  },
+  PrivateNameMetadata
+>({
   BinaryExpression(path, { file }) {
     const { operator, left, right } = path.node;
     if (operator !== "in") return;
@@ -1110,7 +1119,8 @@ export function buildFieldsInitNodes(
       };
 
   const classRefForInnerBinding =
-    ref ?? props[0].scope.generateUidIdentifier("class");
+    ref ??
+    props[0].scope.generateUidIdentifier(innerBindingRef?.name || "Class");
   ref ??= t.cloneNode(innerBindingRef);
 
   for (const prop of props) {

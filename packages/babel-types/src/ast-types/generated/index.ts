@@ -570,7 +570,6 @@ export interface Program extends BaseNode {
   directives: Array<Directive>;
   sourceType: "script" | "module";
   interpreter?: InterpreterDirective | null;
-  sourceFile: string;
 }
 
 export interface ObjectExpression extends BaseNode {

@@ -1,4 +1,4 @@
-var _initClass, _init_field, _init_field2, _init_accessor, _init_accessor2, _initProto, _initStatic, _ref, _B, _temp;
+var _initProto, _initStatic, _initClass, _init_field, _init_field2, _init_accessor, _init_accessor2, _ref, _B, _temp;
 const log = [];
 const classDec1 = (cls, ctxClass) => {
   log.push("c2");
@@ -155,7 +155,7 @@ new (_B = /*#__PURE__*/new WeakMap(), (_temp = class extends babelHelpers.identi
       log.push("static:end");
     })(), _initClass();
   }
-}, (_class2 => {
+}, (_Foo2 => {
   var _A = /*#__PURE__*/new WeakMap();
   class Foo extends (_ref = (log.push("extends"), Object)) {
     constructor() {
@@ -191,13 +191,13 @@ new (_B = /*#__PURE__*/new WeakMap(), (_temp = class extends babelHelpers.identi
       babelHelpers.classPrivateFieldSet(Foo, _B, v);
     }
   }
-  _class2 = Foo;
+  _Foo2 = Foo;
   (() => {
     ({
       e: [_init_accessor2, _init_accessor, _init_field2, _init_field, _initProto, _initStatic],
       c: [_Foo, _initClass]
-    } = babelHelpers.applyDecs2305(_class2, [[[staticMethodDec1, staticMethodDec2], 10, "method"], [[staticGetterDec1, staticGetterDec2], 11, "getter"], [[staticSetterDec1, staticSetterDec2], 12, "getter"], [[staticAccessorDec1, staticAccessorDec2], 9, "accessor"], [[methodDec1, methodDec2], 2, "method"], [[getterDec1, getterDec2], 3, "getter"], [[setterDec1, setterDec2], 4, "setter"], [[accessorDec1, accessorDec2], 1, "accessor"], [[staticFieldDec1, staticFieldDec2], 8, "field"], [[fieldDec1, fieldDec2], 0, "field"]], [classDec1, classDec2], 0, void 0, _ref));
-    _initStatic(_class2);
+    } = babelHelpers.applyDecs2305(_Foo2, [[[staticMethodDec1, staticMethodDec2], 10, "method"], [[staticGetterDec1, staticGetterDec2], 11, "getter"], [[staticSetterDec1, staticSetterDec2], 12, "getter"], [[staticAccessorDec1, staticAccessorDec2], 9, "accessor"], [[methodDec1, methodDec2], 2, "method"], [[getterDec1, getterDec2], 3, "getter"], [[setterDec1, setterDec2], 4, "setter"], [[accessorDec1, accessorDec2], 1, "accessor"], [[staticFieldDec1, staticFieldDec2], 8, "field"], [[fieldDec1, fieldDec2], 0, "field"]], [classDec1, classDec2], 0, void 0, _ref));
+    _initStatic(_Foo2);
   })();
 })(), _temp))();
 log.push("after");

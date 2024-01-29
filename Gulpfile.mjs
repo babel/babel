@@ -36,7 +36,7 @@ const { require, __dirname: monorepoRoot } = commonJS(import.meta.url);
 
 const defaultPackagesGlob = "./@(codemods|packages|eslint)/*";
 const defaultSourcesGlob = [
-  `${defaultPackagesGlob}/src/**/{*.js,*.cjs,!(*.d).ts}`,
+  `${defaultPackagesGlob}/src/**/{*.js,*.cjs,!(*.d).ts,!(*.d).cts}`,
   "!./packages/babel-helpers/src/helpers/*",
 ];
 
@@ -68,7 +68,10 @@ function bool(value) {
  * @returns {string}
  */
 function mapSrcToLib(srcPath) {
-  const parts = srcPath.replace(/(?<!\.d)\.ts$/, ".js").split("/");
+  const parts = srcPath
+    .replace(/(?<!\.d)\.ts$/, ".js")
+    .replace(/(?<!\.d)\.cts$/, ".cjs")
+    .split("/");
   parts[2] = "lib";
   return parts.join("/");
 }
@@ -639,6 +642,8 @@ function* libBundlesIterator() {
     "babel-plugin-transform-react-jsx",
     // rollup bug https://github.com/babel/babel/pull/16001
     "babel-helper-builder-react-jsx",
+    // exit-loader.cjs
+    "babel-helper-transform-fixture-test-runner",
   ]);
   for (const packageDir of ["packages", "codemods"]) {
     for (const dir of fs.readdirSync(new URL(packageDir, import.meta.url))) {

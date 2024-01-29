@@ -4,8 +4,8 @@ System.register(["a"], function (_export, _context) {
   var a;
   return {
     setters: [function (_a) {
-      a = _a.default;
+      a = _a["default"];
     }],
-    execute: function () {}
+    execute: function execute() {}
   };
 });

@@ -1,4 +1,4 @@
-var _dec, _initProto, _class;
+var _initProto, _dec, _A;
 const dec = () => {};
 _dec = deco;
 class A extends B {
@@ -9,5 +9,5 @@ class A extends B {
   }
   method() {}
 }
-_class = A;
-[_initProto] = babelHelpers.applyDecs(_class, [[_dec, 2, "method"]], []);
+_A = A;
+[_initProto] = babelHelpers.applyDecs(_A, [[_dec, 2, "method"]], []);

@@ -1,11 +1,11 @@
-var _class;
+var _A;
 var _getA = /*#__PURE__*/new WeakSet();
 class A {
   constructor() {
     babelHelpers.classPrivateMethodInitSpec(this, _getA);
   }
 }
-_class = A;
+_A = A;
 function _getA2() {
-  return _class;
+  return _A;
 }

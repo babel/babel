@@ -1,6 +1,6 @@
 export default (param => {
-  var _class, _props;
-  return _class = class App {
+  var _App, _props;
+  return _App = class App {
     getParam() {
       return param;
     }
@@ -10,5 +10,5 @@ export default (param => {
       prop1: 'prop1',
       prop2: 'prop2'
     }
-  }, _class;
+  }, _App;
 });

@@ -83,7 +83,7 @@ module.exports = [
     .map(config => {
       return {
         ...config,
-        files: ["**/*.ts"],
+        files: ["**/*.{ts,cts}"],
         languageOptions: {
           parser: parserTypeScriptESLint,
           parserOptions: {

@@ -24,6 +24,35 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.23.9 (2024-01-25)
+
+#### :bug: Bug Fix
+* `babel-helper-transform-fixture-test-runner`, `babel-plugin-transform-function-name`, `babel-plugin-transform-modules-systemjs`, `babel-preset-env`
+  * [#16225](https://github.com/babel/babel/pull/16225) fix: `systemjs` re-traverses helpers ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-decorators`
+  * [#16226](https://github.com/babel/babel/pull/16226) Improve decorated private method check ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-proposal-decorators`, `babel-plugin-transform-async-generator-functions`, `babel-plugin-transform-runtime`, `babel-preset-env`
+  * [#16224](https://github.com/babel/babel/pull/16224) Properly sort `core-js@3` imports ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-traverse`
+  * [#15383](https://github.com/babel/babel/pull/15383) fix: Don't throw in `getTypeAnnotation` when using TS+inference ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* Other
+  * [#16210](https://github.com/babel/babel/pull/16210) [eslint] Fix `no-use-before-define` for class ref in fields ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-core`, `babel-parser`, `babel-template`
+  * [#16222](https://github.com/babel/babel/pull/16222) Migrate `eslint-parser` to cts ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-types`
+  * [#16213](https://github.com/babel/babel/pull/16213) Remove `@babel/types` props that are not produced by the parser ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :running_woman: Performance
+* `babel-parser`
+  * [#16072](https://github.com/babel/babel/pull/16072) perf: Improve parser performance for typescript ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :microscope: Output optimization
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-decorators`, `babel-plugin-proposal-destructuring-private`, `babel-plugin-proposal-pipeline-operator`, `babel-plugin-transform-class-properties`, `babel-plugin-transform-class-static-block`, `babel-plugin-transform-new-target`, `babel-plugin-transform-parameters`, `babel-plugin-transform-private-methods`, `babel-preset-env`
+  * [#16218](https://github.com/babel/babel/pull/16218) Improve temporary variables for decorators ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helpers`, `babel-plugin-proposal-explicit-resource-management`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#15959](https://github.com/babel/babel/pull/15959) Improve output of `using` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.23.8 (2024-01-08)
 
 #### :bug: Bug Fix

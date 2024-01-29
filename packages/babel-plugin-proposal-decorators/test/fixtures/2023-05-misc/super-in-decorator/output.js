@@ -1,19 +1,18 @@
 class A extends B {
   m() {
-    var _initClass, _obj, _dec, _obj2, _dec2, _initProto;
+    var _initProto, _initClass, _classDecs, _obj, _dec;
+    _classDecs = [this, super.dec1];
     _obj = this;
-    _dec = super.dec1;
-    _obj2 = this;
-    _dec2 = super.dec2;
+    _dec = super.dec2;
     let _C;
     class C {
       static {
         ({
           e: [_initProto],
           c: [_C, _initClass]
-        } = babelHelpers.applyDecs2305(this, [[[_obj2, _dec2], 18, "m2"]], [_obj, _dec], 1));
+        } = babelHelpers.applyDecs2305(this, [[[_obj, _dec], 18, "m2"]], _classDecs, 1));
       }
-      constructor(...args) {
+      constructor() {
         _initProto(this);
       }
       m2() {}

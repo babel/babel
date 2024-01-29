@@ -1,4 +1,4 @@
-var _init_a, _get_a, _set_a, _init_b, _get_b, _set_b, _initProto, _class;
+var _initProto, _init_a, _get_a, _set_a, _init_b, _get_b, _set_b, _Foo;
 const dec = () => {};
 var _A = /*#__PURE__*/new WeakMap();
 var _a = /*#__PURE__*/new WeakMap();
@@ -24,7 +24,7 @@ class Foo {
     });
   }
 }
-_class = Foo;
+_Foo = Foo;
 function _set_a2(v) {
   _set_a(this, v);
 }
@@ -37,4 +37,4 @@ function _set_b2(v) {
 function _get_b2() {
   return _get_b(this);
 }
-[_init_a, _get_a, _set_a, _init_b, _get_b, _set_b, _initProto] = babelHelpers.applyDecs2301(_class, [[dec, 1, "a", o => babelHelpers.classPrivateFieldGet(o, _A), (o, v) => babelHelpers.classPrivateFieldSet(o, _A, v)], [dec, 1, "b", o => babelHelpers.classPrivateFieldGet(o, _B), (o, v) => babelHelpers.classPrivateFieldSet(o, _B, v)]], [], _ => _a.has(babelHelpers.checkInRHS(_))).e;
+[_init_a, _get_a, _set_a, _init_b, _get_b, _set_b, _initProto] = babelHelpers.applyDecs2301(_Foo, [[dec, 1, "a", o => babelHelpers.classPrivateFieldGet(o, _A), (o, v) => babelHelpers.classPrivateFieldSet(o, _A, v)], [dec, 1, "b", o => babelHelpers.classPrivateFieldGet(o, _B), (o, v) => babelHelpers.classPrivateFieldSet(o, _B, v)]], [], _ => _a.has(babelHelpers.checkInRHS(_))).e;
