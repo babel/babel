@@ -468,6 +468,13 @@ function pluginPolyfillsOldNode({ template, types: t }) {
         process.allowedNodeEnvironmentFlags || require("node-environment-flags")
       `,
     },
+    {
+      name: "Object.hasOwn",
+      necessary: () => true,
+      supported: path =>
+        path.parentPath.isCallExpression({ callee: path.node }),
+      replacement: template`hasOwnProperty.call`,
+    },
   ];
 
   return {

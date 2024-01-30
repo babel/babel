@@ -1,8 +1,6 @@
 import semver from "semver";
 import { minVersions } from "./available-plugins.ts";
 
-const has = Function.call.bind(Object.hasOwnProperty);
-
 export function addProposalSyntaxPlugins(
   items: Set<string>,
   proposalSyntaxPlugins: readonly string[],
@@ -25,7 +23,7 @@ export function removeUnsupportedItems(
 ) {
   items.forEach(item => {
     if (
-      has(minVersions, item) &&
+      Object.hasOwn(minVersions, item) &&
       semver.lt(
         babelVersion,
         // @ts-expect-error we have checked minVersions[item] in has call
