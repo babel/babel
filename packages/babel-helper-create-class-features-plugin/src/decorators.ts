@@ -964,7 +964,7 @@ function transformClass(
   let needsInstancePrivateBrandCheck = false;
 
   let fieldInitializerAssignments = [];
-  let staticFieldInitializerAssignments = [];
+  let staticFieldInitializerAssignments: t.Expression[] = [];
 
   if (hasElementDecorators) {
     if (protoInitLocal) {
@@ -1258,6 +1258,7 @@ function transformClass(
     path.node.body.body.push(
       createStaticBlockFromExpressions(staticFieldInitializerAssignments),
     );
+    staticFieldInitializerAssignments = [];
   }
 
   const elementDecorations = generateDecorationExprs(
@@ -1290,12 +1291,11 @@ function transformClass(
       | t.ClassPrivateProperty
       | t.ClassPrivateMethod
     )[] = [];
-    let staticBlocks: t.StaticBlock[] = [];
     path.get("body.body").forEach(element => {
       // Static blocks cannot be compiled to "instance blocks", but we can inline
       // them as IIFEs in the next property.
       if (element.isStaticBlock()) {
-        staticBlocks.push(element.node);
+        staticFieldInitializerAssignments.push(staticBlockToIIFE(element.node));
         element.remove();
         return;
       }
@@ -1307,11 +1307,12 @@ function transformClass(
         (isProperty || element.isClassPrivateMethod()) &&
         element.node.static
       ) {
-        if (isProperty && staticBlocks.length > 0) {
-          const allValues: t.Expression[] = staticBlocks.map(staticBlockToIIFE);
-          if (element.node.value) allValues.push(element.node.value);
-          element.node.value = maybeSequenceExpression(allValues);
-          staticBlocks = [];
+        if (isProperty && staticFieldInitializerAssignments.length > 0) {
+          prependExpressionsToFieldInitializer(
+            staticFieldInitializerAssignments,
+            element,
+          );
+          staticFieldInitializerAssignments = [];
         }
 
         element.node.static = false;
@@ -1320,7 +1321,7 @@ function transformClass(
       }
     });
 
-    if (statics.length > 0 || staticBlocks.length > 0) {
+    if (statics.length > 0 || staticFieldInitializerAssignments.length > 0) {
       const staticsClass = template.expression.ast`
         class extends ${state.addHelper("identity")} {}
       ` as t.ClassExpression;
@@ -1338,8 +1339,8 @@ function transformClass(
 
       const newExpr = t.newExpression(staticsClass, []);
 
-      if (staticBlocks.length > 0) {
-        constructorBody.push(...staticBlocks.map(staticBlockToIIFE));
+      if (staticFieldInitializerAssignments.length > 0) {
+        constructorBody.push(...staticFieldInitializerAssignments);
       }
       if (classInitCall) {
         classInitInjected = true;
@@ -1350,14 +1351,11 @@ function transformClass(
           t.callExpression(t.super(), [t.cloneNode(classIdLocal)]),
         );
 
+        // set isDerivedClass to false as we have already prepended super call
         staticsClass.body.body.push(
-          t.classMethod(
-            "constructor",
-            t.identifier("constructor"),
-            [],
-            t.blockStatement([
-              t.expressionStatement(t.sequenceExpression(constructorBody)),
-            ]),
+          createConstructorFromExpressions(
+            constructorBody,
+            /* isDerivedClass */ false,
           ),
         );
       } else {
