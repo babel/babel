@@ -24,6 +24,13 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.23.10 (2024-01-31)
+
+#### :bug: Bug Fix
+* Other
+  * [#16240](https://github.com/babel/babel/pull/16240) [eslint] Include field decorators in scope analysis ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-decorators`
+  * [#16235](https://github.com/babel/babel/pull/16235) Fix `protoInit` call injection timing ([@JLHwung](https://github.com/JLHwung))
 ## v7.23.9 (2024-01-25)
 
 #### :bug: Bug Fix
