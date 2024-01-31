@@ -963,27 +963,27 @@ function transformClass(
   let lastInstancePrivateName: t.PrivateName;
   let needsInstancePrivateBrandCheck = false;
 
-  let fieldInitializerAssignments = [];
-  let staticFieldInitializerAssignments: t.Expression[] = [];
+  let fieldInitializerExpressions = [];
+  let staticFieldInitializerExpressions: t.Expression[] = [];
 
   if (hasElementDecorators) {
     if (protoInitLocal) {
       const protoInitCall = t.callExpression(t.cloneNode(protoInitLocal), [
         t.thisExpression(),
       ]);
-      fieldInitializerAssignments.push(protoInitCall);
+      fieldInitializerExpressions.push(protoInitCall);
     }
     for (const element of body) {
       if (!isClassDecoratableElementPath(element)) {
         if (
-          staticFieldInitializerAssignments.length > 0 &&
+          staticFieldInitializerExpressions.length > 0 &&
           element.isStaticBlock()
         ) {
           prependExpressionsToStaticBlock(
-            staticFieldInitializerAssignments,
+            staticFieldInitializerExpressions,
             element,
           );
-          staticFieldInitializerAssignments = [];
+          staticFieldInitializerExpressions = [];
         }
         continue;
       }
@@ -1186,27 +1186,27 @@ function transformClass(
       }
 
       if (
-        fieldInitializerAssignments.length > 0 &&
+        fieldInitializerExpressions.length > 0 &&
         !isStatic &&
         (kind === FIELD || kind === ACCESSOR)
       ) {
         prependExpressionsToFieldInitializer(
-          fieldInitializerAssignments,
+          fieldInitializerExpressions,
           element as NodePath<t.ClassProperty | t.ClassPrivateProperty>,
         );
-        fieldInitializerAssignments = [];
+        fieldInitializerExpressions = [];
       }
 
       if (
-        staticFieldInitializerAssignments.length > 0 &&
+        staticFieldInitializerExpressions.length > 0 &&
         isStatic &&
         (kind === FIELD || kind === ACCESSOR)
       ) {
         prependExpressionsToFieldInitializer(
-          staticFieldInitializerAssignments,
+          staticFieldInitializerExpressions,
           element as NodePath<t.ClassProperty | t.ClassPrivateProperty>,
         );
-        staticFieldInitializerAssignments = [];
+        staticFieldInitializerExpressions = [];
       }
 
       if (hasDecorators && version === "2023-11") {
@@ -1219,46 +1219,46 @@ function transformClass(
             t.thisExpression(),
           ]);
           if (!isStatic) {
-            fieldInitializerAssignments.push(initExtraCall);
+            fieldInitializerExpressions.push(initExtraCall);
           } else {
-            staticFieldInitializerAssignments.push(initExtraCall);
+            staticFieldInitializerExpressions.push(initExtraCall);
           }
         }
       }
     }
   }
 
-  if (fieldInitializerAssignments.length > 0) {
+  if (fieldInitializerExpressions.length > 0) {
     const isDerivedClass = !!path.node.superClass;
     if (constructorPath) {
       if (isDerivedClass) {
         insertExpressionsAfterSuperCallAndOptimize(
-          fieldInitializerAssignments,
+          fieldInitializerExpressions,
           constructorPath,
           protoInitLocal,
         );
       } else {
         prependExpressionsToConstructor(
-          fieldInitializerAssignments,
+          fieldInitializerExpressions,
           constructorPath,
         );
       }
     } else {
       path.node.body.body.unshift(
         createConstructorFromExpressions(
-          fieldInitializerAssignments,
+          fieldInitializerExpressions,
           isDerivedClass,
         ),
       );
     }
-    fieldInitializerAssignments = [];
+    fieldInitializerExpressions = [];
   }
 
-  if (staticFieldInitializerAssignments.length > 0) {
+  if (staticFieldInitializerExpressions.length > 0) {
     path.node.body.body.push(
-      createStaticBlockFromExpressions(staticFieldInitializerAssignments),
+      createStaticBlockFromExpressions(staticFieldInitializerExpressions),
     );
-    staticFieldInitializerAssignments = [];
+    staticFieldInitializerExpressions = [];
   }
 
   const elementDecorations = generateDecorationExprs(
@@ -1295,7 +1295,7 @@ function transformClass(
       // Static blocks cannot be compiled to "instance blocks", but we can inline
       // them as IIFEs in the next property.
       if (element.isStaticBlock()) {
-        staticFieldInitializerAssignments.push(staticBlockToIIFE(element.node));
+        staticFieldInitializerExpressions.push(staticBlockToIIFE(element.node));
         element.remove();
         return;
       }
@@ -1307,12 +1307,12 @@ function transformClass(
         (isProperty || element.isClassPrivateMethod()) &&
         element.node.static
       ) {
-        if (isProperty && staticFieldInitializerAssignments.length > 0) {
+        if (isProperty && staticFieldInitializerExpressions.length > 0) {
           prependExpressionsToFieldInitializer(
-            staticFieldInitializerAssignments,
+            staticFieldInitializerExpressions,
             element,
           );
-          staticFieldInitializerAssignments = [];
+          staticFieldInitializerExpressions = [];
         }
 
         element.node.static = false;
@@ -1321,7 +1321,7 @@ function transformClass(
       }
     });
 
-    if (statics.length > 0 || staticFieldInitializerAssignments.length > 0) {
+    if (statics.length > 0 || staticFieldInitializerExpressions.length > 0) {
       const staticsClass = template.expression.ast`
         class extends ${state.addHelper("identity")} {}
       ` as t.ClassExpression;
@@ -1339,8 +1339,8 @@ function transformClass(
 
       const newExpr = t.newExpression(staticsClass, []);
 
-      if (staticFieldInitializerAssignments.length > 0) {
-        constructorBody.push(...staticFieldInitializerAssignments);
+      if (staticFieldInitializerExpressions.length > 0) {
+        constructorBody.push(...staticFieldInitializerExpressions);
       }
       if (classInitCall) {
         classInitInjected = true;
