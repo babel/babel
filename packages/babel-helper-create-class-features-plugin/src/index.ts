@@ -4,6 +4,7 @@ import type { NodePath } from "@babel/traverse";
 import nameFunction from "@babel/helper-function-name";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import createDecoratorTransform from "./decorators.ts";
+import type { DecoratorVersionKind } from "./decorators.ts";
 
 import semver from "semver";
 
@@ -36,7 +37,7 @@ interface Options {
   inherits?: PluginObject["inherits"];
   manipulateOptions?: PluginObject["manipulateOptions"];
   api?: PluginAPI;
-  decoratorVersion?: "2023-05" | "2023-01" | "2022-03" | "2021-12" | "2018-09";
+  decoratorVersion?: DecoratorVersionKind | "2018-09";
 }
 
 export function createClassFeaturePlugin({
@@ -50,13 +51,14 @@ export function createClassFeaturePlugin({
 }: Options): PluginObject {
   if (feature & FEATURES.decorators) {
     if (process.env.BABEL_8_BREAKING) {
-      return createDecoratorTransform(api, { loose }, "2023-05", inherits);
+      return createDecoratorTransform(api, { loose }, "2023-11", inherits);
     } else {
       if (
-        decoratorVersion === "2021-12" ||
-        decoratorVersion === "2022-03" ||
+        decoratorVersion === "2023-11" ||
+        decoratorVersion === "2023-05" ||
         decoratorVersion === "2023-01" ||
-        decoratorVersion === "2023-05"
+        decoratorVersion === "2022-03" ||
+        decoratorVersion === "2021-12"
       ) {
         return createDecoratorTransform(
           api,
