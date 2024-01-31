@@ -1441,7 +1441,7 @@ function createLocalsAssignment(
   elementDecorations: t.ArrayExpression | t.Identifier,
   classDecorations: t.ArrayExpression | t.Identifier,
   classDecorationsFlag: t.NumericLiteral,
-  maybePrivateBranName: t.PrivateName | null,
+  maybePrivateBrandName: t.PrivateName | null,
   setClassName: t.Identifier | t.StringLiteral | undefined,
   superClass: null | t.Expression,
   state: PluginPass,
@@ -1476,16 +1476,16 @@ function createLocalsAssignment(
     version === "2023-05"
   ) {
     if (
-      maybePrivateBranName ||
+      maybePrivateBrandName ||
       superClass ||
       classDecorationsFlag.value !== 0
     ) {
       args.push(classDecorationsFlag);
     }
-    if (maybePrivateBranName) {
+    if (maybePrivateBrandName) {
       args.push(
         template.expression.ast`
-            _ => ${t.cloneNode(maybePrivateBranName)} in _
+            _ => ${t.cloneNode(maybePrivateBrandName)} in _
           ` as t.ArrowFunctionExpression,
       );
     } else if (superClass) {
@@ -1498,10 +1498,10 @@ function createLocalsAssignment(
       rhs = t.callExpression(state.addHelper("applyDecs2305"), args);
     }
   } else if (version === "2023-01") {
-    if (maybePrivateBranName) {
+    if (maybePrivateBrandName) {
       args.push(
         template.expression.ast`
-            _ => ${t.cloneNode(maybePrivateBranName)} in _
+            _ => ${t.cloneNode(maybePrivateBrandName)} in _
           ` as t.ArrowFunctionExpression,
       );
     }
