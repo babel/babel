@@ -114,6 +114,7 @@ module.exports = function (api) {
         "packages/babel-runtime/regenerator"
       );
       targets = { ie: 7 };
+      needsPolyfillsForOldNode = true;
       break;
     case "rollup":
       convertESM = false;
@@ -183,10 +184,6 @@ module.exports = function (api) {
       ["@babel/transform-object-rest-spread", { useBuiltIns: true }],
 
       convertESM ? "@babel/transform-export-namespace-from" : null,
-
-      pluginPackageJsonMacro,
-
-      needsPolyfillsForOldNode && pluginPolyfillsOldNode,
     ].filter(Boolean),
     overrides: [
       {
@@ -250,6 +247,10 @@ module.exports = function (api) {
             },
             "flag-BABEL_8_BREAKING",
           ],
+
+          pluginPackageJsonMacro,
+
+          needsPolyfillsForOldNode && pluginPolyfillsOldNode,
         ].filter(Boolean),
       },
       convertESM && {
