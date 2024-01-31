@@ -46,7 +46,8 @@ export default declare((api, options: Options) => {
     version === "2021-12" ||
     version === "2022-03" ||
     version === "2023-01" ||
-    version === "2023-05"
+    version === "2023-05" ||
+    version === "2023-11"
   ) {
     api.assertVersion(
       process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
@@ -65,7 +66,7 @@ export default declare((api, options: Options) => {
     });
   } else {
     throw new Error(
-      "The '.version' option must be one of 'legacy', '2023-05', '2023-01', '2022-03', or '2021-12'.",
+      "The '.version' option must be one of 'legacy', '2023-11', '2023-05', '2023-01', '2022-03', or '2021-12'.",
     );
   }
 });
