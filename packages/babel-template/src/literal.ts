@@ -22,7 +22,7 @@ export default function literalTemplate<T>(
 
       if (replacements) {
         Object.keys(replacements).forEach(key => {
-          if (Object.prototype.hasOwnProperty.call(defaultReplacements, key)) {
+          if (Object.hasOwn(defaultReplacements, key)) {
             throw new Error("Unexpected replacement overlap.");
           }
         });

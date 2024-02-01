@@ -733,7 +733,7 @@ const assertTest = function (
           // saveInFiles always creates an empty .babelrc, so lets exclude for now
           filename !== ".babelrc" &&
           filename !== ".babelignore" &&
-          !Object.prototype.hasOwnProperty.call(opts.inFiles, filename)
+          !Object.hasOwn(opts.inFiles, filename)
         ) {
           const expected = opts.outFiles[filename];
           const actual = actualFiles[filename];

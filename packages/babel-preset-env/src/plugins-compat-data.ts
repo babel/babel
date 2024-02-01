@@ -18,7 +18,7 @@ function filterAvailable<Data extends { [name: string]: unknown }>(
 ): { [Name in keyof Data & keyof typeof availablePlugins]: Data[Name] } {
   const result = {} as any;
   for (const plugin of keys(data)) {
-    if (Object.hasOwnProperty.call(availablePlugins, plugin)) {
+    if (Object.hasOwn(availablePlugins, plugin)) {
       result[plugin] = data[plugin];
     }
   }

@@ -427,7 +427,7 @@ export function assertTargets(
 
     if (key === "esmodules") assertBoolean(subLoc, val);
     else if (key === "browsers") assertBrowsersList(subLoc, val);
-    else if (!Object.hasOwnProperty.call(TargetNames, key)) {
+    else if (!Object.hasOwn(TargetNames, key)) {
       const validTargets = Object.keys(TargetNames).join(", ");
       throw new Error(
         `${msg(

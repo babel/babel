@@ -78,10 +78,10 @@ function copyApiObject(api: PluginAPI): PluginAPI {
     proto = Object.getPrototypeOf(api);
     if (
       proto &&
-      (!has(proto, "version") ||
-        !has(proto, "transform") ||
-        !has(proto, "template") ||
-        !has(proto, "types"))
+      (!Object.hasOwn(proto, "version") ||
+        !Object.hasOwn(proto, "transform") ||
+        !Object.hasOwn(proto, "template") ||
+        !Object.hasOwn(proto, "types"))
     ) {
       proto = null;
     }
@@ -91,10 +91,6 @@ function copyApiObject(api: PluginAPI): PluginAPI {
     ...proto,
     ...api,
   };
-}
-
-function has(obj: {}, key: string) {
-  return Object.prototype.hasOwnProperty.call(obj, key);
 }
 
 function throwVersionError(range: string | number, version: string) {
