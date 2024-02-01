@@ -187,7 +187,9 @@ function addProxyAccessorsFor(
   const { static: isStatic } = element.node;
 
   const thisArg =
-    (version === "2023-11" || version === "2023-05") && isStatic
+    (version === "2023-11" ||
+      (!process.env.BABEL_8_BREAKING && version === "2023-05")) &&
+    isStatic
       ? className
       : t.thisExpression();
 
@@ -538,7 +540,11 @@ function generateDecorationList(
   const hasOneThis = decoratorsThis.some(Boolean);
   const decs: t.Expression[] = [];
   for (let i = 0; i < decsCount; i++) {
-    if ((version === "2023-11" || version === "2023-05") && hasOneThis) {
+    if (
+      (version === "2023-11" ||
+        (!process.env.BABEL_8_BREAKING && version === "2023-05")) &&
+      hasOneThis
+    ) {
       decs.push(
         decoratorsThis[i] || t.unaryExpression("void", t.numericLiteral(0)),
       );
@@ -564,7 +570,8 @@ function generateDecorationExprs(
       let flag = el.kind;
       if (el.isStatic) {
         flag +=
-          version === "2023-11" || version === "2023-05"
+          version === "2023-11" ||
+          (!process.env.BABEL_8_BREAKING && version === "2023-05")
             ? STATIC
             : STATIC_OLD_VERSION;
       }
@@ -714,6 +721,13 @@ function createSetFunctionNameCall(
 
 function createToPropertyKeyCall(state: PluginPass, propertyKey: t.Expression) {
   return t.callExpression(state.addHelper("toPropertyKey"), [propertyKey]);
+}
+
+function createPrivateBrandCheckClosure(brandName: t.PrivateName) {
+  return t.arrowFunctionExpression(
+    [t.identifier("_")],
+    t.binaryExpression("in", t.cloneNode(brandName), t.identifier("_")),
+  );
 }
 
 function checkPrivateMethodUpdateError(
@@ -891,7 +905,8 @@ function transformClass(
     for (const decorator of decorators) {
       const { expression } = decorator;
       if (
-        (version === "2023-11" || version === "2023-05") &&
+        (version === "2023-11" ||
+          (!process.env.BABEL_8_BREAKING && version === "2023-05")) &&
         t.isMemberExpression(expression)
       ) {
         let object;
@@ -1461,20 +1476,37 @@ function createLocalsAssignment(
       version === "2021-12" ||
       (version === "2022-03" && !state.availableHelper("applyDecs2203R"))
     ) {
-      const lhs = t.arrayPattern([...elementLocals, ...classLocals]);
-      const rhs = t.callExpression(
+      lhs = t.arrayPattern([...elementLocals, ...classLocals]);
+      rhs = t.callExpression(
         state.addHelper(version === "2021-12" ? "applyDecs" : "applyDecs2203"),
         args,
       );
       return t.assignmentExpression("=", lhs, rhs);
+    } else if (version === "2022-03") {
+      rhs = t.callExpression(state.addHelper("applyDecs2203R"), args);
+    } else if (version === "2023-01") {
+      if (maybePrivateBrandName) {
+        args.push(createPrivateBrandCheckClosure(maybePrivateBrandName));
+      }
+      rhs = t.callExpression(state.addHelper("applyDecs2301"), args);
+    } else if (version === "2023-05") {
+      if (
+        maybePrivateBrandName ||
+        superClass ||
+        classDecorationsFlag.value !== 0
+      ) {
+        args.push(classDecorationsFlag);
+      }
+      if (maybePrivateBrandName) {
+        args.push(createPrivateBrandCheckClosure(maybePrivateBrandName));
+      } else if (superClass) {
+        args.push(t.unaryExpression("void", t.numericLiteral(0)));
+      }
+      if (superClass) args.push(superClass);
+      rhs = t.callExpression(state.addHelper("applyDecs2305"), args);
     }
   }
-
-  if (
-    process.env.BABEL_8_BREAKING ||
-    version === "2023-11" ||
-    version === "2023-05"
-  ) {
+  if (process.env.BABEL_8_BREAKING || version === "2023-11") {
     if (
       maybePrivateBrandName ||
       superClass ||
@@ -1483,34 +1515,16 @@ function createLocalsAssignment(
       args.push(classDecorationsFlag);
     }
     if (maybePrivateBrandName) {
-      args.push(
-        template.expression.ast`
-            _ => ${t.cloneNode(maybePrivateBrandName)} in _
-          ` as t.ArrowFunctionExpression,
-      );
+      args.push(createPrivateBrandCheckClosure(maybePrivateBrandName));
     } else if (superClass) {
       args.push(t.unaryExpression("void", t.numericLiteral(0)));
     }
     if (superClass) args.push(superClass);
-    if (version === "2023-11") {
-      rhs = t.callExpression(state.addHelper("applyDecs2311"), args);
-    } else {
-      rhs = t.callExpression(state.addHelper("applyDecs2305"), args);
-    }
-  } else if (version === "2023-01") {
-    if (maybePrivateBrandName) {
-      args.push(
-        template.expression.ast`
-            _ => ${t.cloneNode(maybePrivateBrandName)} in _
-          ` as t.ArrowFunctionExpression,
-      );
-    }
-    rhs = t.callExpression(state.addHelper("applyDecs2301"), args);
-  } else {
-    rhs = t.callExpression(state.addHelper("applyDecs2203R"), args);
+    rhs = t.callExpression(state.addHelper("applyDecs2311"), args);
   }
-  // optimize `{ c: [classLocals] } = applyapplyDecs2203R(...)` to
-  // `[classLocals] = applyapplyDecs2203R(...).c`
+
+  // optimize `{ c: [classLocals] } = applyDecsHelper(...)` to
+  // `[classLocals] = applyDecsHelper(...).c`
   if (elementLocals.length > 0) {
     if (classLocals.length > 0) {
       lhs = t.objectPattern([
