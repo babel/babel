@@ -399,7 +399,7 @@ export function resolveOptionPluginOrPreset(
   }
   if (options.env) {
     for (const envName in options.env) {
-      if (!{}.hasOwnProperty.call(options.env, envName)) continue;
+      if (!Object.hasOwn(options.env, envName)) continue;
       resolveOptionPluginOrPreset(options.env[envName], optionsDir);
     }
   }

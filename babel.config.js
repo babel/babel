@@ -114,6 +114,7 @@ module.exports = function (api) {
         "packages/babel-runtime/regenerator"
       );
       targets = { ie: 7 };
+      needsPolyfillsForOldNode = true;
       break;
     case "rollup":
       convertESM = false;
@@ -183,10 +184,6 @@ module.exports = function (api) {
       ["@babel/transform-object-rest-spread", { useBuiltIns: true }],
 
       convertESM ? "@babel/transform-export-namespace-from" : null,
-
-      pluginPackageJsonMacro,
-
-      needsPolyfillsForOldNode && pluginPolyfillsOldNode,
     ].filter(Boolean),
     overrides: [
       {
@@ -250,6 +247,10 @@ module.exports = function (api) {
             },
             "flag-BABEL_8_BREAKING",
           ],
+
+          pluginPackageJsonMacro,
+
+          needsPolyfillsForOldNode && pluginPolyfillsOldNode,
         ].filter(Boolean),
       },
       convertESM && {
@@ -391,7 +392,6 @@ function bool(value) {
 // copy and paste it.
 // `((v,w)=>(v=v.split("."),w=w.split("."),+v[0]>+w[0]||v[0]==w[0]&&+v[1]>=+w[1]))`;
 
-// TODO(Babel 8) This polyfills are only needed for Node.js 6 and 8
 /** @param {import("@babel/core")} api */
 function pluginPolyfillsOldNode({ template, types: t }) {
   const polyfills = [
@@ -467,6 +467,15 @@ function pluginPolyfillsOldNode({ template, types: t }) {
       replacement: template`
         process.allowedNodeEnvironmentFlags || require("node-environment-flags")
       `,
+    },
+    {
+      name: "Object.hasOwn",
+      necessary: () => true,
+      supported: path =>
+        path.parentPath.isCallExpression({ callee: path.node }),
+      // Object.hasOwn has been introduced in Node.js 16.9.0
+      // https://github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V16.md#v8-93
+      replacement: template`hasOwnProperty.call`,
     },
   ];
 

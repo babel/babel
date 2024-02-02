@@ -32,7 +32,7 @@ import { Errors, type LValAncestor } from "../parse-error.ts";
 import type Parser from "./index.ts";
 
 const getOwn = <T extends {}>(object: T, key: keyof T) =>
-  Object.hasOwnProperty.call(object, key) && object[key];
+  Object.hasOwn(object, key) && object[key];
 
 const unwrapParenthesizedExpression = (node: Node): Node => {
   return node.type === "ParenthesizedExpression"

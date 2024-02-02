@@ -31,7 +31,7 @@ import type { IJSXParserMixin } from "../jsx/index.ts";
 import { ParseBindingListFlags } from "../../parser/lval.ts";
 
 const getOwn = <T extends {}>(object: T, key: keyof T) =>
-  Object.hasOwnProperty.call(object, key) && object[key];
+  Object.hasOwn(object, key) && object[key];
 
 type TsModifier =
   | "readonly"
@@ -409,7 +409,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
           enforceOrder(startLoc, modifier, "in", "out");
         } else {
-          if (Object.hasOwnProperty.call(modified, modifier)) {
+          if (Object.hasOwn(modified, modifier)) {
             this.raise(TSErrors.DuplicateModifier, startLoc, { modifier });
           } else {
             enforceOrder(startLoc, modifier, "static", "readonly");

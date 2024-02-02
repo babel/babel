@@ -94,7 +94,7 @@ const isArray =
  */
 function loadBuiltin(builtinTable: Record<string, unknown>, name: any) {
   if (isArray(name) && typeof name[0] === "string") {
-    if (Object.prototype.hasOwnProperty.call(builtinTable, name[0])) {
+    if (Object.hasOwn(builtinTable, name[0])) {
       return [builtinTable[name[0]]].concat(name.slice(1));
     }
     return;
@@ -120,7 +120,7 @@ function processOptions(options: InputOptions) {
       if (
         isArray(preset) &&
         typeof preset[0] === "object" &&
-        Object.prototype.hasOwnProperty.call(preset[0], "buildPreset")
+        Object.hasOwn(preset[0], "buildPreset")
       ) {
         preset[0] = { ...preset[0], buildPreset: preset[0].buildPreset };
       }
@@ -169,7 +169,7 @@ export const buildExternalHelpers = babelBuildExternalHelpers;
  * Registers a named plugin for use with Babel.
  */
 export function registerPlugin(name: string, plugin: () => PluginObject): void {
-  if (Object.prototype.hasOwnProperty.call(availablePlugins, name)) {
+  if (Object.hasOwn(availablePlugins, name)) {
     console.warn(
       `A plugin named "${name}" is already registered, it will be overridden`,
     );
@@ -192,7 +192,7 @@ export function registerPlugins(newPlugins: {
  * Registers a named preset for use with Babel.
  */
 export function registerPreset(name: string, preset: () => PresetObject): void {
-  if (Object.prototype.hasOwnProperty.call(availablePresets, name)) {
+  if (Object.hasOwn(availablePresets, name)) {
     if (name === "env") {
       console.warn(
         "@babel/preset-env is now included in @babel/standalone, please remove @babel/preset-env-standalone",

@@ -55,11 +55,7 @@ export default declare((api, options: Options, dirname) => {
     var supportsCJSDefault = hasMinVersion(DUAL_MODE_RUNTIME, runtimeVersion);
   }
 
-  function has(obj: {}, key: string) {
-    return Object.prototype.hasOwnProperty.call(obj, key);
-  }
-
-  if (has(options, "useBuiltIns")) {
+  if (Object.hasOwn(options, "useBuiltIns")) {
     // @ts-expect-error deprecated options
     if (options["useBuiltIns"]) {
       throw new Error(
@@ -74,7 +70,7 @@ export default declare((api, options: Options, dirname) => {
     }
   }
 
-  if (has(options, "polyfill")) {
+  if (Object.hasOwn(options, "polyfill")) {
     // @ts-expect-error deprecated options
     if (options["polyfill"] === false) {
       throw new Error(
@@ -89,7 +85,7 @@ export default declare((api, options: Options, dirname) => {
     }
   }
 
-  if (has(options, "moduleName")) {
+  if (Object.hasOwn(options, "moduleName")) {
     throw new Error(
       "The 'moduleName' option has been removed. @babel/transform-runtime " +
         "no longer supports arbitrary runtimes. If you were using this to " +
@@ -99,7 +95,7 @@ export default declare((api, options: Options, dirname) => {
   }
 
   if (process.env.BABEL_8_BREAKING) {
-    if (has(options, "regenerator")) {
+    if (Object.hasOwn(options, "regenerator")) {
       throw new Error(
         "The 'regenerator' option has been removed. The generators transform " +
           "no longers relies on a 'regeneratorRuntime' global. " +
@@ -110,7 +106,7 @@ export default declare((api, options: Options, dirname) => {
   }
 
   if (process.env.BABEL_8_BREAKING) {
-    if (has(options, "useESModules")) {
+    if (Object.hasOwn(options, "useESModules")) {
       throw new Error(
         "The 'useESModules' option has been removed. @babel/runtime now uses " +
           "package.json#exports to support both CommonJS and ESM helpers.",

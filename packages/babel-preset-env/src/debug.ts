@@ -22,7 +22,7 @@ export const logPlugin = (
       const proposalName = `proposal-${item.slice(10)}`;
       if (
         proposalName === "proposal-dynamic-import" ||
-        Object.prototype.hasOwnProperty.call(compatData, proposalName)
+        Object.hasOwn(compatData, proposalName)
       ) {
         item = proposalName;
       }
