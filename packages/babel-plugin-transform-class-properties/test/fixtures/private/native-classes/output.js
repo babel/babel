@@ -1,19 +1,15 @@
 var _bar = /*#__PURE__*/new WeakMap();
 class Foo {
   constructor() {
-    babelHelpers.classPrivateFieldInitSpec(this, _bar, {
-      writable: true,
-      value: "bar"
-    });
+    babelHelpers.classPrivateFieldInitSpec(this, _bar, "bar");
   }
   static test() {
-    return babelHelpers.classStaticPrivateFieldSpecGet(Foo, Foo, _foo);
+    return _foo._;
   }
   test() {
-    return babelHelpers.classPrivateFieldGet(this, _bar);
+    return babelHelpers.classPrivateFieldGet2(this, _bar);
   }
 }
 var _foo = {
-  writable: true,
-  value: "foo"
+  _: "foo"
 };

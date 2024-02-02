@@ -3,14 +3,11 @@ const dec = () => {};
 var _a = /*#__PURE__*/new WeakMap();
 class Foo {
   constructor() {
-    babelHelpers.classPrivateFieldInitSpec(this, _a, {
-      writable: true,
-      value: _call_a
-    });
+    babelHelpers.classPrivateFieldInitSpec(this, _a, _call_a);
     babelHelpers.defineProperty(this, "value", (_initProto(this), 1));
   }
   callA() {
-    return babelHelpers.classPrivateFieldGet(this, _a).call(this);
+    return babelHelpers.classPrivateFieldGet2(this, _a).call(this);
   }
 }
 _Foo = Foo;
