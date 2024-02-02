@@ -634,12 +634,6 @@ function addCallAccessorsFor(
   );
 }
 
-function isNotTsParameter(
-  node: t.Identifier | t.Pattern | t.RestElement | t.TSParameterProperty,
-): node is t.Identifier | t.Pattern | t.RestElement {
-  return node.type !== "TSParameterProperty";
-}
-
 function movePrivateAccessor(
   element: NodePath<t.ClassPrivateMethod>,
   key: t.PrivateName,
@@ -700,6 +694,25 @@ function maybeSequenceExpression(exprs: t.Expression[]) {
   if (exprs.length === 0) return t.unaryExpression("void", t.numericLiteral(0));
   if (exprs.length === 1) return exprs[0];
   return t.sequenceExpression(exprs);
+}
+
+/**
+ * Create FunctionExpression from a ClassPrivateMethod.
+ * The returned FunctionExpression node takes ownership of the private method's body and params.
+ *
+ * @param {t.ClassPrivateMethod} node
+ * @returns
+ */
+function createFunctionExpressionFromPrivateMethod(node: t.ClassPrivateMethod) {
+  const { params, body, generator: isGenerator, async: isAsync } = node;
+  return t.functionExpression(
+    undefined,
+    // @ts-expect-error todo: Improve typings: TSParameterProperty is only allowed in constructor
+    params,
+    body,
+    isGenerator,
+    isAsync,
+  );
 }
 
 function createSetFunctionNameCall(
@@ -1122,18 +1135,9 @@ function transformClass(
 
           replaceSupers.replace();
 
-          const {
-            params,
-            body,
-            async: isAsync,
-          } = element.node as t.ClassPrivateMethod;
-
           privateMethods = [
-            t.functionExpression(
-              undefined,
-              params.filter(isNotTsParameter),
-              body,
-              isAsync,
+            createFunctionExpressionFromPrivateMethod(
+              element.node as t.ClassPrivateMethod,
             ),
           ];
 
