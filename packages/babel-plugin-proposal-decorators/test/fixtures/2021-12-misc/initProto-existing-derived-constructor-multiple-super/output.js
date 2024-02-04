@@ -1,4 +1,4 @@
-var _dec, _initProto, _dec2, _initProto2;
+var _initProto, _dec, _initProto2, _dec2;
 const dec = () => {};
 _dec = deco;
 class A extends B {

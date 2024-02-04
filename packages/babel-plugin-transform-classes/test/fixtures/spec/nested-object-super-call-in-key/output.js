@@ -10,12 +10,11 @@ var Hello = /*#__PURE__*/babelHelpers.createClass(function Hello() {
 });
 var Outer = /*#__PURE__*/function (_Hello) {
   babelHelpers.inherits(Outer, _Hello);
-  var _super = babelHelpers.createSuper(Outer);
   function Outer() {
     var _this;
     babelHelpers.classCallCheck(this, Outer);
     var Inner = {
-      [_this = _super.call(this)]() {
+      [_this = babelHelpers.callSuper(this, Outer)]() {
         return 'hello';
       }
     };

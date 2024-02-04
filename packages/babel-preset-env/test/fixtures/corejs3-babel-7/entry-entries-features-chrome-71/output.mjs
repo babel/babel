@@ -1,3 +1,4 @@
+import "core-js/modules/es.object.from-entries.js";
 import "core-js/modules/esnext.set.add-all.js";
 import "core-js/modules/esnext.set.delete-all.js";
 import "core-js/modules/esnext.set.difference.js";
@@ -16,5 +17,4 @@ import "core-js/modules/esnext.set.reduce.js";
 import "core-js/modules/esnext.set.some.js";
 import "core-js/modules/esnext.set.symmetric-difference.js";
 import "core-js/modules/esnext.set.union.js";
-import "core-js/modules/es.object.from-entries.js";
 import "core-js/modules/esnext.string.replace-all.js";

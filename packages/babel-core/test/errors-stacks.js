@@ -27,7 +27,7 @@ function expectError(run) {
     // visible when using --run-in-band, comes from inside jest but doesn't have an
     // associated file path.
     stack = stack.replace(
-      /(?:\n\s*at [^\n]+?node_modules\/(?:@?jest|piscina)[^\n]+|\n\s*at async Promise.all[^\n]+)+/g,
+      /(?:\n\s*at [^\n]+?node_modules\/(?:@?jest|tinypool|piscina)[^\n]+|\n\s*at async Promise.all[^\n]+)+/g,
       "\n    at ... internal jest frames ...",
     );
     // Remove node internal frames, since they change by version
@@ -57,6 +57,11 @@ function expectError(run) {
       stack = replaceAll(
         stack,
         "\n    at ... internal jest frames ...\n    at new Promise (<anonymous>)",
+        "",
+      );
+      // For some reason this is only there in Node.js 10
+      stack = stack.replace(
+        "\n    at process._tickCallback (... internal node frames ...)",
         "",
       );
       // Node.js 8

@@ -756,9 +756,6 @@ defineType("Program", {
   visitor: ["directives", "body"],
   builder: ["body", "directives", "sourceType", "interpreter"],
   fields: {
-    sourceFile: {
-      validate: assertValueType("string"),
-    },
     sourceType: {
       validate: assertOneOf("script", "module"),
       default: "script",
@@ -1896,6 +1893,7 @@ export const classMethodOrPropertyCommon = () => ({
           "Identifier",
           "StringLiteral",
           "NumericLiteral",
+          "BigIntLiteral",
         );
         const computed = assertNodeType("Expression");
 

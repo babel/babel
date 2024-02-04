@@ -40,6 +40,7 @@
     "./packages/babel-parser/src/**/*.ts",
     "./packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression/src/**/*.ts",
     "./packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining/src/**/*.ts",
+    "./packages/babel-plugin-bugfix-v8-static-class-fields-redefine-readonly/src/**/*.ts",
     "./packages/babel-plugin-external-helpers/src/**/*.ts",
     "./packages/babel-plugin-proposal-async-do-expressions/src/**/*.ts",
     "./packages/babel-plugin-proposal-decorators/src/**/*.ts",
@@ -161,6 +162,7 @@
     "./packages/babel-types/src/**/*.ts",
     "./codemods/babel-plugin-codemod-object-assign-to-object-spread/src/**/*.ts",
     "./codemods/babel-plugin-codemod-optional-catch-binding/src/**/*.ts",
+    "eslint/babel-eslint-parser/**/*.cts",
     "./lib/globals.d.ts",
     "./scripts/repo-utils/*.d.ts",
     "./packages/babel-parser/typings/*.d.ts"
@@ -295,6 +297,9 @@
       ],
       "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining": [
         "./packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining/src"
+      ],
+      "@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly": [
+        "./packages/babel-plugin-bugfix-v8-static-class-fields-redefine-readonly/src"
       ],
       "@babel/plugin-external-helpers": [
         "./packages/babel-plugin-external-helpers/src"

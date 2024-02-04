@@ -570,7 +570,6 @@ export interface Program extends BaseNode {
   directives: Array<Directive>;
   sourceType: "script" | "module";
   interpreter?: InterpreterDirective | null;
-  sourceFile: string;
 }
 
 export interface ObjectExpression extends BaseNode {
@@ -1742,7 +1741,6 @@ export interface TSPropertySignature extends BaseNode {
   type: "TSPropertySignature";
   key: Expression;
   typeAnnotation?: TSTypeAnnotation | null;
-  initializer?: Expression | null;
   computed?: boolean;
   kind: "get" | "set";
   optional?: boolean | null;

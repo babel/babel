@@ -445,8 +445,7 @@ function _evaluate(path: NodePath, state: State): any {
       ) {
         context = global[object.node.name];
         const key = property.node.name;
-        // TODO(Babel 8): Use Object.hasOwn
-        if (Object.hasOwnProperty.call(context, key)) {
+        if (Object.hasOwn(context, key)) {
           func = context[key as keyof typeof context];
         }
       }

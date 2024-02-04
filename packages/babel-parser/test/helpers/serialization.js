@@ -35,8 +35,8 @@ export const deserialize = (filename, options, string) =>
             !value[SerializationKey]
               ? value
               : value[SerializationKey] === "RegExp"
-              ? new RegExp(value.source, value.flags)
-              : toBigInt(value.value)),
+                ? new RegExp(value.source, value.flags)
+                : toBigInt(value.value)),
       ),
   );
 
@@ -88,10 +88,10 @@ export function serialize(value) {
     typeof value === "bigint"
       ? toExtended("bigint", { value: value + "" })
       : value instanceof RegExp
-      ? toExtended("RegExp", { source: value.source, flags: value.flags })
-      : value instanceof Error
-      ? value + ""
-      : value;
+        ? toExtended("RegExp", { source: value.source, flags: value.flags })
+        : value instanceof Error
+          ? value + ""
+          : value;
   const serialized = stringify(value, encode, 2).replace(
     CompactRegExp,
     // This is safe since none of the values can have spaces in them.

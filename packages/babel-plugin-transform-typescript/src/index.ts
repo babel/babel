@@ -2,12 +2,17 @@ import { declare } from "@babel/helper-plugin-utils";
 import syntaxTypeScript from "@babel/plugin-syntax-typescript";
 import type { PluginPass, types as t } from "@babel/core";
 import { injectInitialization } from "@babel/helper-create-class-features-plugin";
-import type { Binding, NodePath, Scope } from "@babel/traverse";
+import type { Binding, NodePath } from "@babel/traverse";
 import type { Options as SyntaxOptions } from "@babel/plugin-syntax-typescript";
 
 import transpileConstEnum from "./const-enum.ts";
 import type { NodePathConstEnum } from "./const-enum.ts";
 import transpileEnum from "./enum.ts";
+import {
+  GLOBAL_TYPES,
+  isGlobalType,
+  registerGlobalType,
+} from "./global-types.ts";
 import transpileNamespace from "./namespace.ts";
 
 function isInType(path: NodePath) {
@@ -36,33 +41,11 @@ function isInType(path: NodePath) {
   }
 }
 
-const GLOBAL_TYPES = new WeakMap<Scope, Set<string>>();
 // Track programs which contain imports/exports of values, so that we can include
 // empty exports for programs that do not, but were parsed as modules. This allows
 // tools to infer unambiguously that results are ESM.
 const NEEDS_EXPLICIT_ESM = new WeakMap();
 const PARSED_PARAMS = new WeakSet();
-
-function isGlobalType({ scope }: NodePath, name: string) {
-  if (scope.hasBinding(name)) return false;
-  if (GLOBAL_TYPES.get(scope).has(name)) return true;
-
-  console.warn(
-    `The exported identifier "${name}" is not declared in Babel's scope tracker\n` +
-      `as a JavaScript value binding, and "@babel/plugin-transform-typescript"\n` +
-      `never encountered it as a TypeScript type declaration.\n` +
-      `It will be treated as a JavaScript value.\n\n` +
-      `This problem is likely caused by another plugin injecting\n` +
-      `"${name}" without registering it in the scope tracker. If you are the author\n` +
-      ` of that plugin, please use "scope.registerDeclaration(declarationPath)".`,
-  );
-
-  return false;
-}
-
-function registerGlobalType(programScope: Scope, name: string) {
-  GLOBAL_TYPES.get(programScope).add(name);
-}
 
 // A hack to avoid removing the impl Binding when we remove the declare NodePath
 function safeRemove(path: NodePath) {
@@ -222,7 +205,7 @@ export default declare((api, opts: Options) => {
       // property is only added once. This is necessary for cases like
       // using `transform-classes`, which causes this visitor to run
       // twice.
-      const assigns = [];
+      const assigns: t.ExpressionStatement[] = [];
       const { scope } = path;
       for (const paramPath of path.get("params")) {
         const param = paramPath.node;
@@ -243,8 +226,11 @@ export default declare((api, opts: Options) => {
               "Parameter properties can not be destructuring patterns.",
             );
           }
-          assigns.push(template.statement.ast`
-          this.${t.cloneNode(id)} = ${t.cloneNode(id)}`);
+          assigns.push(
+            template.statement.ast`
+              this.${t.cloneNode(id)} = ${t.cloneNode(id)}
+            ` as t.ExpressionStatement,
+          );
 
           paramPath.replaceWith(paramPath.get("parameter"));
           scope.registerBinding("param", paramPath);
@@ -688,9 +674,9 @@ export default declare((api, opts: Options) => {
              but allows loading unbundled plugin (which cannot obviously import
              the bundled `@babel/core` version).
            */
-        api.types.tsInstantiationExpression
-        ? "TSNonNullExpression|TSInstantiationExpression"
-        : "TSNonNullExpression"](
+          api.types.tsInstantiationExpression
+          ? "TSNonNullExpression|TSInstantiationExpression"
+          : "TSNonNullExpression"](
         path: NodePath<t.TSNonNullExpression | t.TSExpressionWithTypeArguments>,
       ) {
         path.replaceWith(path.node.expression);

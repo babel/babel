@@ -207,8 +207,8 @@ function pushTask(
       filename: !loc
         ? undefined
         : fileName === true
-        ? suiteName + "/" + taskName + "/" + path.basename(loc)
-        : fileName || undefined,
+          ? suiteName + "/" + taskName + "/" + path.basename(loc)
+          : fileName || undefined,
     };
   }
 
@@ -399,7 +399,7 @@ export function resolveOptionPluginOrPreset(
   }
   if (options.env) {
     for (const envName in options.env) {
-      if (!{}.hasOwnProperty.call(options.env, envName)) continue;
+      if (!Object.hasOwn(options.env, envName)) continue;
       resolveOptionPluginOrPreset(options.env[envName], optionsDir);
     }
   }

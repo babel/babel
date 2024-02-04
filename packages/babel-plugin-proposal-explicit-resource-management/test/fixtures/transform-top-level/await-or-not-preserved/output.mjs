@@ -1,11 +1,10 @@
 export { x, y };
 try {
-  var _stack = [];
-  var x = babelHelpers.using(_stack, A);
-  var y = babelHelpers.using(_stack, B, true);
+  var _usingCtx = babelHelpers.usingCtx();
+  var x = _usingCtx.u(A);
+  var y = _usingCtx.a(B);
 } catch (_) {
-  var _error = _;
-  var _hasError = true;
+  _usingCtx.e = _;
 } finally {
-  await babelHelpers.dispose(_stack, _error, _hasError);
+  await _usingCtx.d();
 }

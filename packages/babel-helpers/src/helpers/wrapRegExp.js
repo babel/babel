@@ -37,7 +37,7 @@ export default function _wrapRegExp() {
         substitution.replace(/\$<([^>]+)>/g, function (_, name) {
           var group = groups[name];
           return "$" + (Array.isArray(group) ? group.join("$") : group);
-        })
+        }),
       );
     } else if (typeof substitution === "function") {
       var _this = this;

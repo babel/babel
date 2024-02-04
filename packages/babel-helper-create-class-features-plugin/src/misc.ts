@@ -64,8 +64,9 @@ interface RenamerState {
 export function injectInitialization(
   path: NodePath<t.Class>,
   constructor: NodePath<t.ClassMethod> | undefined,
-  nodes: t.Statement[],
+  nodes: t.ExpressionStatement[],
   renamer?: (visitor: Visitor<RenamerState>, state: RenamerState) => void,
+  lastReturnsThis?: boolean,
 ) {
   if (!nodes.length) return;
 
@@ -99,10 +100,19 @@ export function injectInitialization(
     let isFirst = true;
     for (const bareSuper of bareSupers) {
       if (isFirst) {
-        bareSuper.insertAfter(nodes);
         isFirst = false;
       } else {
-        bareSuper.insertAfter(nodes.map(n => t.cloneNode(n)));
+        nodes = nodes.map(n => t.cloneNode(n));
+      }
+      if (!bareSuper.parentPath.isExpressionStatement()) {
+        const allNodes: t.Expression[] = [
+          bareSuper.node,
+          ...nodes.map(n => t.toExpression(n)),
+        ];
+        if (!lastReturnsThis) allNodes.push(t.thisExpression());
+        bareSuper.replaceWith(t.sequenceExpression(allNodes));
+      } else {
+        bareSuper.insertAfter(nodes);
       }
     }
   } else {
@@ -132,21 +142,37 @@ export function extractComputedKeys(
     // Make sure computed property names are only evaluated once (upon class definition)
     // and in the right order in combination with static properties
     if (!computedKey.isConstantExpression()) {
-      const ident = path.scope.generateUidIdentifierBasedOnNode(
-        computedNode.key,
-      );
-      // Declaring in the same block scope
-      // Ref: https://github.com/babel/babel/pull/10029/files#diff-fbbdd83e7a9c998721c1484529c2ce92
-      path.scope.push({
-        id: ident,
-        kind: "let",
-      });
-      declarations.push(
-        t.expressionStatement(
-          t.assignmentExpression("=", t.cloneNode(ident), computedNode.key),
-        ),
-      );
-      computedNode.key = t.cloneNode(ident);
+      const scope = path.scope;
+      const isUidReference =
+        t.isIdentifier(computedKey.node) && scope.hasUid(computedKey.node.name);
+      const isMemoiseAssignment =
+        computedKey.isAssignmentExpression({ operator: "=" }) &&
+        t.isIdentifier(computedKey.node.left) &&
+        scope.hasUid(computedKey.node.left.name);
+      if (isUidReference) {
+        continue;
+      } else if (isMemoiseAssignment) {
+        declarations.push(t.expressionStatement(t.cloneNode(computedNode.key)));
+        computedNode.key = t.cloneNode(
+          (computedNode.key as t.AssignmentExpression).left as t.Identifier,
+        );
+      } else {
+        const ident = path.scope.generateUidIdentifierBasedOnNode(
+          computedNode.key,
+        );
+        // Declaring in the same block scope
+        // Ref: https://github.com/babel/babel/pull/10029/files#diff-fbbdd83e7a9c998721c1484529c2ce92
+        scope.push({
+          id: ident,
+          kind: "let",
+        });
+        declarations.push(
+          t.expressionStatement(
+            t.assignmentExpression("=", t.cloneNode(ident), computedNode.key),
+          ),
+        );
+        computedNode.key = t.cloneNode(ident);
+      }
     }
   }
 

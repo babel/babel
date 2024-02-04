@@ -1,6 +1,6 @@
 {
   "name": "@babel/register",
-  "version": "7.22.15",
+  "version": "7.23.7",
   "description": "babel require hook",
   "license": "MIT",
   "publishConfig": {
@@ -14,15 +14,13 @@
   "author": "The Babel Team (https://babel.dev/team)",
   "type": "commonjs",
   "main": "./lib/index.js",
-  "browser": {
-    "./lib/index.js": "./lib/browser.js"
-  },
   "dependencies": {
+    "@cspotcode/source-map-support": "condition:BABEL_8_BREAKING ? ^0.8.1 :",
     "clone-deep": "^4.0.1",
     "find-cache-dir": "condition:BABEL_8_BREAKING ? ^3.3.1 : ^2.0.0",
     "make-dir": "condition:BABEL_8_BREAKING ? : ^2.1.0",
-    "pirates": "^4.0.5",
-    "source-map-support": "^0.5.16"
+    "pirates": "^4.0.6",
+    "source-map-support": "condition:BABEL_8_BREAKING ? : ^0.5.16"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
@@ -38,9 +36,13 @@
   "engines": {
     "node": ">=6.9.0"
   },
+  "browser": {
+    "./lib/index.js": "./lib/browser.js"
+  },
   "conditions": {
     "BABEL_8_BREAKING": [
       {
+        "browser": null,
         "engines": {
           "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
         }

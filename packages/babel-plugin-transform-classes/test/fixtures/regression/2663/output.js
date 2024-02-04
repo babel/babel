@@ -10,11 +10,10 @@ var _binarySerializer = babelHelpers.interopRequireDefault(require("./helpers/bi
 // import ...
 var Connection = exports["default"] = /*#__PURE__*/function (_EventEmitter) {
   babelHelpers.inherits(Connection, _EventEmitter);
-  var _super = babelHelpers.createSuper(Connection);
   function Connection(endpoint, joinKey, joinData, roomId) {
     var _this;
     babelHelpers.classCallCheck(this, Connection);
-    _this = _super.call(this);
+    _this = babelHelpers.callSuper(this, Connection);
     _this.isConnected = false;
     _this.roomId = roomId;
 

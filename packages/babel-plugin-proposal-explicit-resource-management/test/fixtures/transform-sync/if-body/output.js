@@ -1,10 +1,9 @@
 if (test) try {
-  var _stack = [];
-  const x = babelHelpers.using(_stack, obj);
+  var _usingCtx = babelHelpers.usingCtx();
+  const x = _usingCtx.u(obj);
   doSomethingWith(x);
 } catch (_) {
-  var _error = _;
-  var _hasError = true;
+  _usingCtx.e = _;
 } finally {
-  babelHelpers.dispose(_stack, _error, _hasError);
+  _usingCtx.d();
 }

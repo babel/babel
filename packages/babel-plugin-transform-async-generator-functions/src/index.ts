@@ -101,9 +101,9 @@ export default declare(api => {
     inherits: USE_ESM
       ? undefined
       : IS_STANDALONE
-      ? undefined
-      : // eslint-disable-next-line no-restricted-globals
-        require("@babel/plugin-syntax-async-generators").default,
+        ? undefined
+        : // eslint-disable-next-line no-restricted-globals
+          require("@babel/plugin-syntax-async-generators").default,
 
     visitor: {
       Program(path, state) {

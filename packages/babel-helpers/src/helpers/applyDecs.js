@@ -1,5 +1,7 @@
 /* @minVersion 7.17.8 */
 
+import setFunctionName from "setFunctionName";
+import toPropertyKey from "toPropertyKey";
 /**
  * NOTE: This is an old version of the helper, used for 2021-12 decorators.
  * Updates should be done in applyDecs2203R.js.
@@ -27,7 +29,7 @@ function old_createMetadataMethodsForProperty(
   metadataMap,
   kind,
   property,
-  decoratorFinishedRef
+  decoratorFinishedRef,
 ) {
   return {
     getMetadata: function (key) {
@@ -145,7 +147,7 @@ function old_memberDec(
   kind,
   isStatic,
   isPrivate,
-  value
+  value,
 ) {
   var kindStr;
 
@@ -168,7 +170,7 @@ function old_memberDec(
 
   var ctx = {
     kind: kindStr,
-    name: isPrivate ? "#" + name : name,
+    name: isPrivate ? "#" + name : toPropertyKey(name),
     isStatic: isStatic,
     isPrivate: isPrivate,
   };
@@ -178,7 +180,7 @@ function old_memberDec(
   if (kind !== 0 /* FIELD */) {
     ctx.addInitializer = old_createAddInitializerMethod(
       initializers,
-      decoratorFinishedRef
+      decoratorFinishedRef,
     );
   }
 
@@ -227,9 +229,9 @@ function old_memberDec(
           metadataMap,
           metadataKind,
           metadataName,
-          decoratorFinishedRef
-        )
-      )
+          decoratorFinishedRef,
+        ),
+      ),
     );
   } finally {
     decoratorFinishedRef.v = true;
@@ -239,7 +241,7 @@ function old_memberDec(
 function old_assertNotFinished(decoratorFinishedRef, fnName) {
   if (decoratorFinishedRef.v) {
     throw new Error(
-      "attempted to call " + fnName + " after decoration was finished"
+      "attempted to call " + fnName + " after decoration was finished",
     );
   }
 }
@@ -262,7 +264,7 @@ function old_assertValidReturnValue(kind, value) {
   if (kind === 1 /* ACCESSOR */) {
     if (type !== "object" || value === null) {
       throw new TypeError(
-        "accessor decorators must return an object with get, set, or init properties or void 0"
+        "accessor decorators must return an object with get, set, or init properties or void 0",
       );
     }
     if (value.get !== undefined) {
@@ -311,11 +313,11 @@ function old_applyMemberDec(
   isStatic,
   isPrivate,
   metadataMap,
-  initializers
+  initializers,
 ) {
   var decs = decInfo[0];
 
-  var desc, initializer, value;
+  var desc, initializer, prefix, value;
 
   if (isPrivate) {
     if (kind === 0 /* FIELD */ || kind === 1 /* ACCESSOR */) {
@@ -323,18 +325,27 @@ function old_applyMemberDec(
         get: decInfo[3],
         set: decInfo[4],
       };
+      prefix = "get";
     } else if (kind === 3 /* GETTER */) {
       desc = {
         get: decInfo[3],
       };
+      prefix = "get";
     } else if (kind === 4 /* SETTER */) {
       desc = {
         set: decInfo[3],
       };
+      prefix = "set";
     } else {
       desc = {
         value: decInfo[3],
       };
+    }
+    if (kind !== 0 /* FIELD */) {
+      if (kind === 1 /* ACCESSOR */) {
+        setFunctionName(decInfo[4], "#" + name, "set");
+      }
+      setFunctionName(decInfo[3], "#" + name, prefix);
     }
   } else if (kind !== 0 /* FIELD */) {
     desc = Object.getOwnPropertyDescriptor(base, name);
@@ -365,7 +376,7 @@ function old_applyMemberDec(
       kind,
       isStatic,
       isPrivate,
-      value
+      value,
     );
 
     if (newValue !== void 0) {
@@ -396,7 +407,7 @@ function old_applyMemberDec(
         kind,
         isStatic,
         isPrivate,
-        value
+        value,
       );
 
       if (newValue !== void 0) {
@@ -495,7 +506,7 @@ function old_applyMemberDecs(
   Class,
   protoMetadataMap,
   staticMetadataMap,
-  decInfos
+  decInfos,
 ) {
   var protoInitializers;
   var staticInitializers;
@@ -551,7 +562,7 @@ function old_applyMemberDecs(
       ) {
         throw new Error(
           "Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " +
-            name
+            name,
         );
       } else if (!existingKind && kind > 2 /* METHOD */) {
         existingNonFields.set(name, kind);
@@ -569,7 +580,7 @@ function old_applyMemberDecs(
       isStatic,
       isPrivate,
       metadataMap,
-      initializers
+      initializers,
     );
   }
 
@@ -604,15 +615,15 @@ function old_applyClassDecs(ret, targetClass, metadataMap, classDecs) {
             name: name,
             addInitializer: old_createAddInitializerMethod(
               initializers,
-              decoratorFinishedRef
+              decoratorFinishedRef,
             ),
           },
           old_createMetadataMethodsForProperty(
             metadataMap,
             0 /* CONSTRUCTOR */,
             name,
-            decoratorFinishedRef
-          )
+            decoratorFinishedRef,
+          ),
         );
         var nextNewClass = classDecs[i](newClass, ctx);
       } finally {
@@ -789,7 +800,7 @@ export default function applyDecs(targetClass, memberDecs, classDecs) {
     targetClass,
     protoMetadataMap,
     staticMetadataMap,
-    memberDecs
+    memberDecs,
   );
 
   old_convertMetadataMapToFinal(targetClass.prototype, protoMetadataMap);

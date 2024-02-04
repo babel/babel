@@ -31,7 +31,7 @@ $ yarn add eslint @babel/core @babel/eslint-parser -D
 
 ### Setup
 
-To use @babel/eslint-parser, `"@babel/eslint-parser"` must be specified as the `parser` in your ESLint configuration file (see [here](https://eslint.org/docs/user-guide/configuring/plugins#specifying-parser) for more detailed information).
+To use @babel/eslint-parser, `"@babel/eslint-parser"` must be specified as the `parser` in your ESLint configuration file (see [here](https://eslint.org/docs/latest/use/configure/parser) for more detailed information).
 
 **.eslintrc.js**
 

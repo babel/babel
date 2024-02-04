@@ -10,7 +10,7 @@
           "chrome": 71
         },
         "useBuiltIns": "usage",
-        "corejs": 3
+        "corejs": "3.0"
       }
     ]
   ]

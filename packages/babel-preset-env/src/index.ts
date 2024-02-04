@@ -1,6 +1,5 @@
 import semver, { type SemVer } from "semver";
 import { logPlugin } from "./debug.ts";
-import getOptionSpecificExcludesFor from "./get-option-specific-excludes.ts";
 import {
   addProposalSyntaxPlugins,
   removeUnnecessaryItems,
@@ -37,8 +36,6 @@ import type { Targets, InputTargets } from "@babel/helper-compilation-targets";
 import availablePlugins from "./available-plugins.ts";
 import { declarePreset } from "@babel/helper-plugin-utils";
 
-type ModuleTransformationsType =
-  typeof import("./module-transformations").default;
 import type { BuiltInsOption, ModuleOption, Options } from "./types.ts";
 
 // TODO: Remove in Babel 8
@@ -117,39 +114,24 @@ export const transformIncludesAndExcludes = (opts: Array<string>): any => {
   );
 };
 
-export const getModulesPluginNames = ({
-  modules,
-  transformations,
-  shouldTransformESM,
-  shouldTransformDynamicImport,
-  shouldTransformExportNamespaceFrom,
-}: {
-  modules: ModuleOption;
-  transformations: ModuleTransformationsType;
-  shouldTransformESM: boolean;
-  shouldTransformDynamicImport: boolean;
-  shouldTransformExportNamespaceFrom: boolean;
-}) => {
+function getSpecialModulesPluginNames(
+  modules: Exclude<ModuleOption, "auto">,
+  shouldTransformDynamicImport: boolean,
+) {
   const modulesPluginNames = [];
-  if (modules !== false && transformations[modules]) {
-    if (shouldTransformESM) {
-      modulesPluginNames.push(transformations[modules]);
-    }
-
-    if (shouldTransformDynamicImport) {
-      if (shouldTransformESM && modules !== "umd") {
-        modulesPluginNames.push("transform-dynamic-import");
-      } else {
-        console.warn(
-          "Dynamic import can only be transformed when transforming ES" +
-            " modules to AMD, CommonJS or SystemJS.",
-        );
-      }
-    }
+  if (modules) {
+    modulesPluginNames.push(moduleTransformations[modules]);
   }
 
-  if (shouldTransformExportNamespaceFrom) {
-    modulesPluginNames.push("transform-export-namespace-from");
+  if (shouldTransformDynamicImport) {
+    if (modules && modules !== "umd") {
+      modulesPluginNames.push("transform-dynamic-import");
+    } else {
+      console.warn(
+        "Dynamic import can only be transformed when transforming ES" +
+          " modules to AMD, CommonJS or SystemJS.",
+      );
+    }
   }
 
   if (!process.env.BABEL_8_BREAKING) {
@@ -157,15 +139,12 @@ export const getModulesPluginNames = ({
     if (!shouldTransformDynamicImport) {
       modulesPluginNames.push("syntax-dynamic-import");
     }
-    if (!shouldTransformExportNamespaceFrom) {
-      modulesPluginNames.push("syntax-export-namespace-from");
-    }
     modulesPluginNames.push("syntax-top-level-await");
     modulesPluginNames.push("syntax-import-meta");
   }
 
   return modulesPluginNames;
-};
+}
 
 const getCoreJSOptions = ({
   useBuiltIns,
@@ -312,16 +291,19 @@ function getLocalTargets(
 }
 
 function supportsStaticESM(caller: CallerMetadata | undefined) {
+  // TODO(Babel 8): Fallback to true
   // @ts-expect-error supportsStaticESM is not defined in CallerMetadata
   return !!caller?.supportsStaticESM;
 }
 
 function supportsDynamicImport(caller: CallerMetadata | undefined) {
+  // TODO(Babel 8): Fallback to true
   // @ts-expect-error supportsDynamicImport is not defined in CallerMetadata
   return !!caller?.supportsDynamicImport;
 }
 
 function supportsExportNamespaceFrom(caller: CallerMetadata | undefined) {
+  // TODO(Babel 8): Fallback to null
   // @ts-expect-error supportsExportNamespaceFrom is not defined in CallerMetadata
   return !!caller?.supportsExportNamespaceFrom;
 }
@@ -335,6 +317,14 @@ export default declarePreset((api, opts: Options) => {
 
   const babelTargets = api.targets();
 
+  if (process.env.BABEL_8_BREAKING && ("loose" in opts || "spec" in opts)) {
+    throw new Error(
+      "@babel/preset-env: The 'loose' and 'spec' options have been removed, " +
+        "and you should configure granular compiler assumptions instead. See " +
+        "https://babeljs.io/assumptions for more information.",
+    );
+  }
+
   const {
     bugfixes,
     configPath,
@@ -343,15 +333,18 @@ export default declarePreset((api, opts: Options) => {
     forceAllTransforms,
     ignoreBrowserslistConfig,
     include: optionsInclude,
-    loose,
-    modules,
+    modules: optionsModules,
     shippedProposals,
-    spec,
     targets: optionsTargets,
     useBuiltIns,
     corejs: { version: corejs, proposals },
     browserslistEnv,
   } = normalizeOptions(opts);
+
+  if (!process.env.BABEL_8_BREAKING) {
+    // eslint-disable-next-line no-var
+    var { loose, spec = false } = opts;
+  }
 
   let targets = babelTargets;
 
@@ -402,32 +395,38 @@ option \`forceAllTransforms: true\` instead.
   const exclude = transformIncludesAndExcludes(optionsExclude);
 
   const compatData = getPluginList(shippedProposals, bugfixes);
-  const shouldSkipExportNamespaceFrom =
-    (modules === "auto" && api.caller?.(supportsExportNamespaceFrom)) ||
-    (modules === false &&
-      !isRequired("transform-export-namespace-from", transformTargets, {
-        compatData,
-        includes: include.plugins,
-        excludes: exclude.plugins,
-      }));
-  const modulesPluginNames = getModulesPluginNames({
-    modules,
-    transformations: moduleTransformations,
-    // TODO: Remove the 'api.caller' check eventually. Just here to prevent
-    // unnecessary breakage in the short term for users on older betas/RCs.
-    shouldTransformESM: modules !== "auto" || !api.caller?.(supportsStaticESM),
-    shouldTransformDynamicImport:
-      modules !== "auto" || !api.caller?.(supportsDynamicImport),
-    shouldTransformExportNamespaceFrom: !shouldSkipExportNamespaceFrom,
-  });
+  const modules =
+    optionsModules === "auto"
+      ? api.caller(supportsStaticESM)
+        ? false
+        : "commonjs"
+      : optionsModules;
+  const shouldTransformDynamicImport =
+    optionsModules === "auto" ? !api.caller(supportsDynamicImport) : !!modules;
+
+  // If the caller does not support export-namespace-from, we forcefully add
+  // the plugin to `includes`.
+  // TODO(Babel 8): stop doing this, similarly to how we don't do this for any
+  // other plugin. We can consider adding bundlers as targets in the future,
+  // but we should not have a one-off special case for this plugin.
+  if (
+    !exclude.plugins.has("transform-export-namespace-from") &&
+    (optionsModules === "auto"
+      ? !api.caller(supportsExportNamespaceFrom)
+      : !!modules)
+  ) {
+    include.plugins.add("transform-export-namespace-from");
+  }
 
   const pluginNames = filterItems(
     compatData,
     include.plugins,
     exclude.plugins,
     transformTargets,
-    modulesPluginNames,
-    getOptionSpecificExcludesFor({ loose }),
+    getSpecialModulesPluginNames(modules, shouldTransformDynamicImport),
+    process.env.BABEL_8_BREAKING || !loose
+      ? undefined
+      : ["transform-typeof-symbol"],
     pluginSyntaxMap,
   );
   if (shippedProposals) {
@@ -470,9 +469,10 @@ option \`forceAllTransforms: true\` instead.
   const plugins = Array.from(pluginNames)
     .map(pluginName => {
       if (
-        pluginName === "transform-class-properties" ||
-        pluginName === "transform-private-methods" ||
-        pluginName === "transform-private-property-in-object"
+        !process.env.BABEL_8_BREAKING &&
+        (pluginName === "transform-class-properties" ||
+          pluginName === "transform-private-methods" ||
+          pluginName === "transform-private-property-in-object")
       ) {
         return [
           getPlugin(pluginName),
@@ -491,7 +491,9 @@ option \`forceAllTransforms: true\` instead.
       }
       return [
         getPlugin(pluginName),
-        { spec, loose, useBuiltIns: pluginUseBuiltIns },
+        process.env.BABEL_8_BREAKING
+          ? { useBuiltIns: pluginUseBuiltIns }
+          : { spec, loose, useBuiltIns: pluginUseBuiltIns },
       ];
     })
     .concat(polyfillPlugins);
@@ -500,7 +502,7 @@ option \`forceAllTransforms: true\` instead.
     console.log("@babel/preset-env: `DEBUG` option");
     console.log("\nUsing targets:");
     console.log(JSON.stringify(prettifyTargets(targets), null, 2));
-    console.log(`\nUsing modules transform: ${modules.toString()}`);
+    console.log(`\nUsing modules transform: ${optionsModules.toString()}`);
     console.log("\nUsing plugins:");
     pluginNames.forEach(pluginName => {
       logPlugin(pluginName, targets, compatData);
@@ -515,3 +517,52 @@ option \`forceAllTransforms: true\` instead.
 
   return { plugins };
 });
+
+if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
+  // eslint-disable-next-line no-restricted-globals
+  exports.getModulesPluginNames = ({
+    modules,
+    transformations,
+    shouldTransformESM,
+    shouldTransformDynamicImport,
+    shouldTransformExportNamespaceFrom,
+  }: {
+    modules: ModuleOption;
+    transformations: typeof import("./module-transformations").default;
+    shouldTransformESM: boolean;
+    shouldTransformDynamicImport: boolean;
+    shouldTransformExportNamespaceFrom: boolean;
+  }) => {
+    const modulesPluginNames = [];
+    if (modules !== false && transformations[modules]) {
+      if (shouldTransformESM) {
+        modulesPluginNames.push(transformations[modules]);
+      }
+
+      if (shouldTransformDynamicImport) {
+        if (shouldTransformESM && modules !== "umd") {
+          modulesPluginNames.push("transform-dynamic-import");
+        } else {
+          console.warn(
+            "Dynamic import can only be transformed when transforming ES" +
+              " modules to AMD, CommonJS or SystemJS.",
+          );
+        }
+      }
+    }
+
+    if (shouldTransformExportNamespaceFrom) {
+      modulesPluginNames.push("transform-export-namespace-from");
+    }
+    if (!shouldTransformDynamicImport) {
+      modulesPluginNames.push("syntax-dynamic-import");
+    }
+    if (!shouldTransformExportNamespaceFrom) {
+      modulesPluginNames.push("syntax-export-namespace-from");
+    }
+    modulesPluginNames.push("syntax-top-level-await");
+    modulesPluginNames.push("syntax-import-meta");
+
+    return modulesPluginNames;
+  };
+}

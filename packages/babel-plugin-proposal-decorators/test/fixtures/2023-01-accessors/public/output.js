@@ -1,9 +1,8 @@
-var _init_a, _init_b, _computedKey, _init_computedKey, _initProto;
+var _initProto, _init_a, _init_b, _init_computedKey;
 const dec = () => {};
-_computedKey = 'c';
 class Foo {
   static {
-    [_init_a, _init_b, _init_computedKey, _initProto] = babelHelpers.applyDecs2301(this, [[dec, 1, "a"], [dec, 1, "b"], [dec, 1, _computedKey]], []).e;
+    [_init_a, _init_b, _init_computedKey, _initProto] = babelHelpers.applyDecs2301(this, [[dec, 1, "a"], [dec, 1, "b"], [dec, 1, 'c']], []).e;
   }
   #A = (_initProto(this), _init_a(this));
   get a() {
@@ -20,10 +19,10 @@ class Foo {
     this.#B = v;
   }
   #C = _init_computedKey(this, 456);
-  get [_computedKey]() {
+  get ['c']() {
     return this.#C;
   }
-  set [_computedKey](v) {
+  set ['c'](v) {
     this.#C = v;
   }
 }

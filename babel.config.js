@@ -1,12 +1,13 @@
 "use strict";
 
-if (
-  typeof it === "function" &&
+let jestSnapshot = false;
+if (typeof it === "function") {
   // Jest loads the Babel config to parse file and update inline snapshots.
   // This is ok, as it's not loading the Babel config to test Babel itself.
-  !new Error().stack.includes("jest-snapshot")
-) {
-  throw new Error("Monorepo root's babel.config.js loaded by a test.");
+  if (!new Error().stack.includes("jest-snapshot")) {
+    throw new Error("Monorepo root's babel.config.js loaded by a test.");
+  }
+  jestSnapshot = true;
 }
 
 const pathUtils = require("path");
@@ -80,10 +81,7 @@ module.exports = function (api) {
   let convertESM = outputType === "script";
   let replaceTSImportExtension = true;
   let ignoreLib = true;
-  let includeRegeneratorRuntime = false;
   let needsPolyfillsForOldNode = false;
-
-  let transformRuntimeOptions;
 
   const nodeVersion = bool(process.env.BABEL_8_BREAKING) ? "16.20" : "6.9";
   // The vast majority of our src files are modules, but we use
@@ -105,7 +103,6 @@ module.exports = function (api) {
   switch (env) {
     // Configs used during bundling builds.
     case "standalone":
-      includeRegeneratorRuntime = true;
       convertESM = false;
       replaceTSImportExtension = false;
       ignoreLib = false;
@@ -117,6 +114,7 @@ module.exports = function (api) {
         "packages/babel-runtime/regenerator"
       );
       targets = { ie: 7 };
+      needsPolyfillsForOldNode = true;
       break;
     case "rollup":
       convertESM = false;
@@ -153,16 +151,6 @@ module.exports = function (api) {
     needsPolyfillsForOldNode = false;
   }
 
-  if (includeRegeneratorRuntime) {
-    const babelRuntimePkgPath = require.resolve("@babel/runtime/package.json");
-
-    transformRuntimeOptions = {
-      helpers: false, // Helpers are handled by rollup when needed
-      regenerator: true,
-      version: require(babelRuntimePkgPath).version,
-    };
-  }
-
   const config = {
     targets,
     assumptions,
@@ -184,6 +172,9 @@ module.exports = function (api) {
     ]
       .filter(Boolean)
       .map(normalize),
+    parserOpts: {
+      createImportExpressions: true,
+    },
     presets: [
       // presets are applied from right to left
       ["@babel/env", envOpts],
@@ -193,10 +184,6 @@ module.exports = function (api) {
       ["@babel/transform-object-rest-spread", { useBuiltIns: true }],
 
       convertESM ? "@babel/transform-export-namespace-from" : null,
-
-      pluginPackageJsonMacro,
-
-      needsPolyfillsForOldNode && pluginPolyfillsOldNode,
     ].filter(Boolean),
     overrides: [
       {
@@ -213,7 +200,7 @@ module.exports = function (api) {
       {
         test: [
           "packages/babel-generator",
-          "packages/babel-plugin-proposal-decorators",
+          "packages/babel-helper-create-class-features-plugin",
           "packages/babel-helper-string-parser",
         ].map(normalize),
         plugins: ["babel-plugin-transform-charcodes"],
@@ -260,6 +247,10 @@ module.exports = function (api) {
             },
             "flag-BABEL_8_BREAKING",
           ],
+
+          pluginPackageJsonMacro,
+
+          needsPolyfillsForOldNode && pluginPolyfillsOldNode,
         ].filter(Boolean),
       },
       convertESM && {
@@ -311,16 +302,22 @@ module.exports = function (api) {
         test: unambiguousSources.map(normalize),
         sourceType: "unambiguous",
       },
-      includeRegeneratorRuntime && {
-        exclude: /regenerator-runtime/,
-        plugins: [["@babel/transform-runtime", transformRuntimeOptions]],
-      },
       env === "standalone" && {
         test: /chalk/,
         plugins: [pluginReplaceNavigator],
       },
     ].filter(Boolean),
   };
+
+  if (jestSnapshot) {
+    config.plugins = [];
+    config.presets = [];
+    config.overrides = [];
+    config.parserOpts = {
+      plugins: ["typescript"],
+    };
+    config.sourceType = "unambiguous";
+  }
 
   return config;
 };
@@ -395,7 +392,6 @@ function bool(value) {
 // copy and paste it.
 // `((v,w)=>(v=v.split("."),w=w.split("."),+v[0]>+w[0]||v[0]==w[0]&&+v[1]>=+w[1]))`;
 
-// TODO(Babel 8) This polyfills are only needed for Node.js 6 and 8
 /** @param {import("@babel/core")} api */
 function pluginPolyfillsOldNode({ template, types: t }) {
   const polyfills = [
@@ -472,6 +468,15 @@ function pluginPolyfillsOldNode({ template, types: t }) {
         process.allowedNodeEnvironmentFlags || require("node-environment-flags")
       `,
     },
+    {
+      name: "Object.hasOwn",
+      necessary: () => true,
+      supported: path =>
+        path.parentPath.isCallExpression({ callee: path.node }),
+      // Object.hasOwn has been introduced in Node.js 16.9.0
+      // https://github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V16.md#v8-93
+      replacement: template`hasOwnProperty.call`,
+    },
   ];
 
   return {
@@ -523,8 +528,8 @@ function pluginToggleBooleanFlag({ types: t }, { name, value }) {
       return arg.unrelated
         ? res.unrelated()
         : arg.replacement
-        ? res.replacement(t.unaryExpression("!", arg.replacement))
-        : res.value(!arg.value);
+          ? res.replacement(t.unaryExpression("!", arg.replacement))
+          : res.value(!arg.value);
     }
 
     if (test.isLogicalExpression({ operator: "||" })) {
@@ -828,6 +833,10 @@ function pluginReplaceTSImportExtension() {
         if (source) {
           source.value = source.value.replace(/(\.[mc]?)ts$/, "$1js");
         }
+      },
+      TSImportEqualsDeclaration({ node }) {
+        const { expression } = node.moduleReference;
+        expression.value = expression.value.replace(/(\.[mc]?)ts$/, "$1js");
       },
     },
   };

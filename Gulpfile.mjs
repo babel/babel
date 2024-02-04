@@ -35,7 +35,10 @@ import { USE_ESM, commonJS } from "$repo-utils";
 const { require, __dirname: monorepoRoot } = commonJS(import.meta.url);
 
 const defaultPackagesGlob = "./@(codemods|packages|eslint)/*";
-const defaultSourcesGlob = `${defaultPackagesGlob}/src/**/{*.js,*.cjs,!(*.d).ts}`;
+const defaultSourcesGlob = [
+  `${defaultPackagesGlob}/src/**/{*.js,*.cjs,!(*.d).ts,!(*.d).cts}`,
+  "!./packages/babel-helpers/src/helpers/*",
+];
 
 const babelStandalonePluginConfigGlob =
   "./packages/babel-standalone/scripts/pluginConfig.json";
@@ -65,7 +68,10 @@ function bool(value) {
  * @returns {string}
  */
 function mapSrcToLib(srcPath) {
-  const parts = srcPath.replace(/(?<!\.d)\.ts$/, ".js").split("/");
+  const parts = srcPath
+    .replace(/(?<!\.d)\.ts$/, ".js")
+    .replace(/(?<!\.d)\.cts$/, ".cjs")
+    .split("/");
   parts[2] = "lib";
   return parts.join("/");
 }
@@ -500,10 +506,6 @@ function buildRollup(packages, buildStandalone) {
                 include: "**/*.{js,mjs,cjs,ts}",
               }),
           ].filter(Boolean),
-          acorn: {
-            // babel-cli/src/babel/index.ts has shebang
-            allowHashBang: true,
-          },
         });
 
         const outputFile = path.join(src, dest, filename || "index.js");
@@ -640,6 +642,8 @@ function* libBundlesIterator() {
     "babel-plugin-transform-react-jsx",
     // rollup bug https://github.com/babel/babel/pull/16001
     "babel-helper-builder-react-jsx",
+    // exit-loader.cjs
+    "babel-helper-transform-fixture-test-runner",
   ]);
   for (const packageDir of ["packages", "codemods"]) {
     for (const dir of fs.readdirSync(new URL(packageDir, import.meta.url))) {
@@ -697,6 +701,7 @@ if (bool(process.env.BABEL_8_BREAKING)) {
     "packages/babel-preset-typescript",
     "packages/babel-helper-member-expression-to-functions",
     "packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining",
+    "packages/babel-plugin-bugfix-v8-static-class-fields-redefine-readonly",
     "packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression",
   ].map(src => ({
     src,
@@ -897,7 +902,7 @@ function watch() {
   gulp.watch(buildTypingsWatchGlob, gulp.task("generate-type-helpers"));
   gulp.watch(
     [
-      "./packages/babel-helpers/src/helpers/*.js",
+      "./packages/babel-helpers/src/helpers/*",
       "!./packages/babel-helpers/src/helpers/regeneratorRuntime.js",
     ],
     gulp.task("generate-runtime-helpers")

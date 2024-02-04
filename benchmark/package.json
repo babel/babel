@@ -3,23 +3,25 @@
   "private": true,
   "type": "module",
   "devDependencies": {
-    "@babel-baseline/core": "npm:@babel/core@7.18.5",
-    "@babel-baseline/generator": "npm:@babel/generator@7.18.2",
-    "@babel-baseline/helper-compilation-targets": "npm:@babel/helper-compilation-targets@7.20.0",
-    "@babel-baseline/helper-validator-identifier": "npm:@babel/helper-validator-identifier@7.16.7",
-    "@babel-baseline/parser": "npm:@babel/parser@7.18.5",
-    "@babel-baseline/traverse": "npm:@babel/traverse@7.18.5",
-    "@babel-baseline/types": "npm:@babel/types@7.18.4",
+    "@babel-baseline/core": "npm:@babel/core@7.23.2",
+    "@babel-baseline/generator": "npm:@babel/generator@7.23.0",
+    "@babel-baseline/helper-compilation-targets": "npm:@babel/helper-compilation-targets@7.22.15",
+    "@babel-baseline/helper-validator-identifier": "npm:@babel/helper-validator-identifier@7.22.20",
+    "@babel-baseline/parser": "npm:@babel/parser@7.23.0",
+    "@babel-baseline/traverse": "npm:@babel/traverse@7.23.2",
+    "@babel-baseline/types": "npm:@babel/types@7.23.0",
     "@babel/core": "workspace:^",
     "@babel/generator": "workspace:^",
     "@babel/helper-compilation-targets": "workspace:^",
     "@babel/helper-validator-identifier": "workspace:^",
     "@babel/parser": "workspace:^",
+    "@babel/plugin-transform-modules-commonjs": "workspace:^",
     "@babel/preset-env": "workspace:^",
     "@babel/preset-flow": "workspace:^",
+    "@babel/preset-typescript": "workspace:^",
     "@babel/traverse": "workspace:^",
     "@babel/types": "workspace:^",
     "benchmark": "^2.1.4"
   },
-  "version": "7.21.5"
+  "version": "7.23.9"
 }

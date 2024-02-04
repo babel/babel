@@ -5,6 +5,8 @@ import {
   isFunctionDeclaration,
   isFunctionExpression,
   isExportAllDeclaration,
+  isAssignmentExpression,
+  isUnaryExpression,
 } from "../validators/generated/index.ts";
 import type * as t from "../index.ts";
 
@@ -14,18 +16,21 @@ function getBindingIdentifiers(
   node: t.Node,
   duplicates: true,
   outerOnly?: boolean,
+  newBindingsOnly?: boolean,
 ): Record<string, Array<t.Identifier>>;
 
 function getBindingIdentifiers(
   node: t.Node,
   duplicates?: false,
   outerOnly?: boolean,
+  newBindingsOnly?: boolean,
 ): Record<string, t.Identifier>;
 
 function getBindingIdentifiers(
   node: t.Node,
   duplicates?: boolean,
   outerOnly?: boolean,
+  newBindingsOnly?: boolean,
 ): Record<string, t.Identifier> | Record<string, Array<t.Identifier>>;
 
 /**
@@ -35,6 +40,7 @@ function getBindingIdentifiers(
   node: t.Node,
   duplicates?: boolean,
   outerOnly?: boolean,
+  newBindingsOnly?: boolean,
 ): Record<string, t.Identifier> | Record<string, Array<t.Identifier>> {
   const search: t.Node[] = [].concat(node);
   const ids = Object.create(null);
@@ -42,6 +48,18 @@ function getBindingIdentifiers(
   while (search.length) {
     const id = search.shift();
     if (!id) continue;
+
+    if (
+      newBindingsOnly &&
+      // These two nodes do not introduce _new_ bindings, but they are included
+      // in getBindingIdentifiers.keys for backwards compatibility.
+      // TODO(@nicolo-ribaudo): Check if we can remove them from .keys in a
+      // backward-compatible way, and if not what we need to do to remove them
+      // in Babel 8.
+      (isAssignmentExpression(id) || isUnaryExpression(id))
+    ) {
+      continue;
+    }
 
     const keys =
       // @ts-expect-error getBindingIdentifiers.keys do not cover all AST types

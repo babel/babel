@@ -1,9 +1,9 @@
-var _initClass, _dec;
+var _initClass, _classDecs;
+_classDecs = [dec];
 let _default2;
-_dec = dec;
 class _default {
   static {
-    [_default2, _initClass] = babelHelpers.applyDecs2301(this, [], [_dec]).c;
+    [_default2, _initClass] = babelHelpers.applyDecs2301(babelHelpers.setFunctionName(this, "default"), [], _classDecs).c;
   }
   static {
     _initClass();

@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-for-of",
-  "version": "7.22.15",
+  "version": "7.23.6",
   "description": "Compile ES2015 for...of to ES5",
   "repository": {
     "type": "git",
@@ -17,7 +17,8 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"

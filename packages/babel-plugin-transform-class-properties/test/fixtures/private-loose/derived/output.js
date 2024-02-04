@@ -9,15 +9,14 @@ var Foo = /*#__PURE__*/babelHelpers.createClass(function Foo() {
   });
 });
 var _prop2 = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("prop");
-var Bar = /*#__PURE__*/function (_Foo) {
+var Bar = /*#__PURE__*/function (_Foo2) {
   "use strict";
 
-  babelHelpers.inherits(Bar, _Foo);
-  var _super = babelHelpers.createSuper(Bar);
+  babelHelpers.inherits(Bar, _Foo2);
   function Bar(...args) {
     var _this;
     babelHelpers.classCallCheck(this, Bar);
-    _this = _super.call(this, ...args);
+    _this = babelHelpers.callSuper(this, Bar, [...args]);
     Object.defineProperty(babelHelpers.assertThisInitialized(_this), _prop2, {
       writable: true,
       value: "bar"

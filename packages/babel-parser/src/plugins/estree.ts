@@ -6,7 +6,7 @@ import type { Node as NodeType, NodeBase, File } from "../types.ts";
 import type { Position } from "../util/location.ts";
 import { Errors } from "../parse-error.ts";
 import type { Undone } from "../parser/node.ts";
-import type { BindingTypes } from "../util/scopeflags.ts";
+import type { BindingFlag } from "../util/scopeflags.ts";
 
 const { defineProperty } = Object;
 const toUnenumerable = (object: any, key: string) =>
@@ -368,7 +368,7 @@ export default (superClass: typeof Parser) =>
     isValidLVal(
       type: string,
       isUnparenthesizedInAssign: boolean,
-      binding: BindingTypes,
+      binding: BindingFlag,
     ) {
       return type === "Property"
         ? "value"
@@ -403,9 +403,9 @@ export default (superClass: typeof Parser) =>
       isLHS: boolean,
     ) {
       if (prop.kind === "get" || prop.kind === "set") {
-        this.raise(Errors.PatternHasAccessor, { at: prop.key });
+        this.raise(Errors.PatternHasAccessor, prop.key);
       } else if (prop.method) {
-        this.raise(Errors.PatternHasMethod, { at: prop.key });
+        this.raise(Errors.PatternHasMethod, prop.key);
       } else {
         super.toAssignableObjectExpressionProp(prop, isLast, isLHS);
       }

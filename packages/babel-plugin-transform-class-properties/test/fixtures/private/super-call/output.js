@@ -17,11 +17,10 @@ var B = /*#__PURE__*/function (_A) {
   "use strict";
 
   babelHelpers.inherits(B, _A);
-  var _super = babelHelpers.createSuper(B);
   function B(...args) {
     var _thisSuper, _this;
     babelHelpers.classCallCheck(this, B);
-    _this = _super.call(this, ...args);
+    _this = babelHelpers.callSuper(this, B, [...args]);
     babelHelpers.classPrivateFieldInitSpec(babelHelpers.assertThisInitialized(_this), _foo, {
       writable: true,
       value: babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(B.prototype)), "foo", _thisSuper).call(_thisSuper)

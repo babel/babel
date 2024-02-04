@@ -1,11 +1,11 @@
+import "core-js/modules/es.symbol.async-iterator.js";
+import "core-js/modules/es.symbol.iterator.js";
+import "core-js/modules/es.array.from.js";
 import "core-js/modules/es.array.iterator.js";
 import "core-js/modules/es.map.js";
 import "core-js/modules/es.object.to-string.js";
-import "core-js/modules/es.string.iterator.js";
-import "core-js/modules/es.set.js";
-import "core-js/modules/es.array.from.js";
 import "core-js/modules/es.promise.js";
 import "core-js/modules/es.promise.finally.js";
-import "core-js/modules/es.symbol.iterator.js";
-import "core-js/modules/es.symbol.async-iterator.js";
+import "core-js/modules/es.set.js";
+import "core-js/modules/es.string.iterator.js";
 import 'foo/index.js';

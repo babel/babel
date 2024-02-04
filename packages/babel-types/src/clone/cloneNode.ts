@@ -2,7 +2,9 @@ import { NODE_FIELDS } from "../definitions/index.ts";
 import type * as t from "../index.ts";
 import { isFile, isIdentifier } from "../validators/generated/index.ts";
 
-const has = Function.call.bind(Object.prototype.hasOwnProperty);
+const { hasOwn } = process.env.BABEL_8_BREAKING
+  ? Object
+  : { hasOwn: Function.call.bind(Object.prototype.hasOwnProperty) };
 
 type CommentCache = Map<t.Comment, t.Comment>;
 
@@ -60,11 +62,11 @@ function cloneNodeInternal<T extends t.Node>(
   if (isIdentifier(node)) {
     newNode.name = node.name;
 
-    if (has(node, "optional") && typeof node.optional === "boolean") {
+    if (hasOwn(node, "optional") && typeof node.optional === "boolean") {
       newNode.optional = node.optional;
     }
 
-    if (has(node, "typeAnnotation")) {
+    if (hasOwn(node, "typeAnnotation")) {
       newNode.typeAnnotation = deep
         ? cloneIfNodeOrArray(
             node.typeAnnotation,
@@ -74,11 +76,11 @@ function cloneNodeInternal<T extends t.Node>(
           )
         : node.typeAnnotation;
     }
-  } else if (!has(NODE_FIELDS, type)) {
+  } else if (!hasOwn(NODE_FIELDS, type)) {
     throw new Error(`Unknown node type: "${type}"`);
   } else {
     for (const field of Object.keys(NODE_FIELDS[type])) {
-      if (has(node, field)) {
+      if (hasOwn(node, field)) {
         if (deep) {
           newNode[field] =
             isFile(node) && field === "comments"
@@ -104,14 +106,14 @@ function cloneNodeInternal<T extends t.Node>(
     }
   }
 
-  if (has(node, "loc")) {
+  if (hasOwn(node, "loc")) {
     if (withoutLoc) {
       newNode.loc = null;
     } else {
       newNode.loc = node.loc;
     }
   }
-  if (has(node, "leadingComments")) {
+  if (hasOwn(node, "leadingComments")) {
     newNode.leadingComments = maybeCloneComments(
       node.leadingComments,
       deep,
@@ -119,7 +121,7 @@ function cloneNodeInternal<T extends t.Node>(
       commentsCache,
     );
   }
-  if (has(node, "innerComments")) {
+  if (hasOwn(node, "innerComments")) {
     newNode.innerComments = maybeCloneComments(
       node.innerComments,
       deep,
@@ -127,7 +129,7 @@ function cloneNodeInternal<T extends t.Node>(
       commentsCache,
     );
   }
-  if (has(node, "trailingComments")) {
+  if (hasOwn(node, "trailingComments")) {
     newNode.trailingComments = maybeCloneComments(
       node.trailingComments,
       deep,
@@ -135,7 +137,7 @@ function cloneNodeInternal<T extends t.Node>(
       commentsCache,
     );
   }
-  if (has(node, "extra")) {
+  if (hasOwn(node, "extra")) {
     newNode.extra = {
       ...node.extra,
     };

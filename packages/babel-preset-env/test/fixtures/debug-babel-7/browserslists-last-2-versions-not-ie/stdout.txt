@@ -2,21 +2,21 @@
 
 Using targets:
 {
-  "android": "113",
-  "chrome": "113",
-  "edge": "113",
-  "firefox": "113",
-  "ios": "16.4",
-  "opera": "98",
+  "android": "118",
+  "chrome": "118",
+  "edge": "118",
+  "firefox": "119",
+  "ios": "17",
+  "opera": "103",
   "opera_mobile": "73",
-  "safari": "16.4",
-  "samsung": "20"
+  "safari": "17",
+  "samsung": "22"
 }
 
 Using modules transform: auto
 
 Using plugins:
-  transform-unicode-sets-regex { firefox < 116, ios, opera_mobile < 75, safari < tp, samsung }
+  transform-unicode-sets-regex { ios, opera_mobile < 75, safari < tp, samsung }
   syntax-class-static-block
   syntax-private-property-in-object
   syntax-class-properties
@@ -27,9 +27,9 @@ Using plugins:
   syntax-optional-catch-binding
   syntax-async-generators
   syntax-object-rest-spread
+  transform-export-namespace-from { }
   transform-modules-commonjs
   transform-dynamic-import
-  transform-export-namespace-from { }
   syntax-top-level-await
   syntax-import-meta
 

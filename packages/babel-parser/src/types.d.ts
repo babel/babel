@@ -46,11 +46,11 @@ export interface NodeBase {
   start: number;
   end: number;
   loc: SourceLocation;
-  range: [number, number];
+  range?: [number, number];
   leadingComments?: Array<Comment>;
   trailingComments?: Array<Comment>;
   innerComments?: Array<Comment>;
-  extra: {
+  extra?: {
     [key: string]: any;
   };
 }
@@ -1345,7 +1345,6 @@ export interface TsPropertySignature extends TsNamedTypeElementBase {
   type: "TSPropertySignature";
   readonly?: true;
   typeAnnotation?: TsTypeAnnotation;
-  initializer?: Expression;
 }
 
 export interface TsMethodSignature

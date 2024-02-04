@@ -1,7 +1,7 @@
 class Base {
   constructor() {
-    var _class;
-    this.Foo = (_class = class {}, _class.foo = void 0, _class);
+    var _Class;
+    this.Foo = (_Class = class {}, _Class.foo = void 0, _Class);
   }
 }
 expect(new Base().Foo.foo).toBe(undefined);

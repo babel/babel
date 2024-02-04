@@ -2,15 +2,15 @@
 
 Using targets:
 {
-  "android": "113",
+  "android": "118",
   "chrome": "109",
-  "edge": "112",
-  "firefox": "102",
+  "edge": "118",
+  "firefox": "115",
   "ios": "15.6",
-  "opera": "98",
+  "opera": "102",
   "opera_mobile": "73",
   "safari": "15.6",
-  "samsung": "20"
+  "samsung": "22"
 }
 
 Using modules transform: auto
@@ -28,9 +28,9 @@ Using plugins:
   transform-parameters { ios < 16.3, safari < 16.3 }
   syntax-async-generators
   syntax-object-rest-spread
+  transform-export-namespace-from { }
   transform-modules-commonjs
   transform-dynamic-import
-  transform-export-namespace-from { }
   syntax-top-level-await
   syntax-import-meta
 

@@ -12,7 +12,7 @@ type GetSetMemberType<T extends Set<any>> = T extends Set<infer M>
   ? M
   : unknown;
 
-type UnparenthesizedPipeBodyTypes = GetSetMemberType<
+export type UnparenthesizedPipeBodyTypes = GetSetMemberType<
   typeof UnparenthesizedPipeBodyDescriptions
 >;
 

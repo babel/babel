@@ -10,6 +10,7 @@ import type {
   PluginConfig,
   PluginOptions,
 } from "../typings.ts";
+import type * as N from "../types.ts";
 
 export default class BaseParser {
   // Properties set by constructor in index.js
@@ -33,6 +34,8 @@ export default class BaseParser {
   // not want to ever copy them, which happens if state gets cloned
   declare input: string;
   declare length: number;
+  // Comment store for Program.comments
+  declare comments: Array<N.Comment>;
 
   // This method accepts either a string (plugin name) or an array pair
   // (plugin name and options object). If an options object is given,

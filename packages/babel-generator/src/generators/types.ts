@@ -187,15 +187,16 @@ export function NullLiteral(this: Printer) {
 export function NumericLiteral(this: Printer, node: t.NumericLiteral) {
   const raw = this.getPossibleRaw(node);
   const opts = this.format.jsescOption;
-  const value = node.value + "";
+  const value = node.value;
+  const str = value + "";
   if (opts.numbers) {
-    this.number(jsesc(node.value, opts));
+    this.number(jsesc(value, opts), value);
   } else if (raw == null) {
-    this.number(value); // normalize
+    this.number(str, value); // normalize
   } else if (this.format.minified) {
-    this.number(raw.length < value.length ? raw : value);
+    this.number(raw.length < str.length ? raw : str, value);
   } else {
-    this.number(raw);
+    this.number(raw, value);
   }
 }
 

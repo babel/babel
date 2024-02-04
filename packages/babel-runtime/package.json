@@ -1,6 +1,6 @@
 {
   "name": "@babel/runtime",
-  "version": "7.23.2",
+  "version": "7.23.9",
   "description": "babel's modular runtime helpers",
   "license": "MIT",
   "publishConfig": {
@@ -107,6 +107,15 @@
       "./helpers/awaitAsyncGenerator.js"
     ],
     "./helpers/esm/awaitAsyncGenerator": "./helpers/esm/awaitAsyncGenerator.js",
+    "./helpers/callSuper": [
+      {
+        "node": "./helpers/callSuper.js",
+        "import": "./helpers/esm/callSuper.js",
+        "default": "./helpers/callSuper.js"
+      },
+      "./helpers/callSuper.js"
+    ],
+    "./helpers/esm/callSuper": "./helpers/esm/callSuper.js",
     "./helpers/checkInRHS": [
       {
         "node": "./helpers/checkInRHS.js",
@@ -116,6 +125,15 @@
       "./helpers/checkInRHS.js"
     ],
     "./helpers/esm/checkInRHS": "./helpers/esm/checkInRHS.js",
+    "./helpers/construct": [
+      {
+        "node": "./helpers/construct.js",
+        "import": "./helpers/esm/construct.js",
+        "default": "./helpers/construct.js"
+      },
+      "./helpers/construct.js"
+    ],
+    "./helpers/esm/construct": "./helpers/esm/construct.js",
     "./helpers/defineAccessor": [
       {
         "node": "./helpers/defineAccessor.js",
@@ -152,6 +170,15 @@
       "./helpers/interopRequireWildcard.js"
     ],
     "./helpers/esm/interopRequireWildcard": "./helpers/esm/interopRequireWildcard.js",
+    "./helpers/isNativeReflectConstruct": [
+      {
+        "node": "./helpers/isNativeReflectConstruct.js",
+        "import": "./helpers/esm/isNativeReflectConstruct.js",
+        "default": "./helpers/isNativeReflectConstruct.js"
+      },
+      "./helpers/isNativeReflectConstruct.js"
+    ],
+    "./helpers/esm/isNativeReflectConstruct": "./helpers/esm/isNativeReflectConstruct.js",
     "./helpers/iterableToArrayLimit": [
       {
         "node": "./helpers/iterableToArrayLimit.js",
@@ -197,6 +224,33 @@
       "./helpers/regeneratorRuntime.js"
     ],
     "./helpers/esm/regeneratorRuntime": "./helpers/esm/regeneratorRuntime.js",
+    "./helpers/setFunctionName": [
+      {
+        "node": "./helpers/setFunctionName.js",
+        "import": "./helpers/esm/setFunctionName.js",
+        "default": "./helpers/setFunctionName.js"
+      },
+      "./helpers/setFunctionName.js"
+    ],
+    "./helpers/esm/setFunctionName": "./helpers/esm/setFunctionName.js",
+    "./helpers/toPrimitive": [
+      {
+        "node": "./helpers/toPrimitive.js",
+        "import": "./helpers/esm/toPrimitive.js",
+        "default": "./helpers/toPrimitive.js"
+      },
+      "./helpers/toPrimitive.js"
+    ],
+    "./helpers/esm/toPrimitive": "./helpers/esm/toPrimitive.js",
+    "./helpers/toPropertyKey": [
+      {
+        "node": "./helpers/toPropertyKey.js",
+        "import": "./helpers/esm/toPropertyKey.js",
+        "default": "./helpers/toPropertyKey.js"
+      },
+      "./helpers/toPropertyKey.js"
+    ],
+    "./helpers/esm/toPropertyKey": "./helpers/esm/toPropertyKey.js",
     "./helpers/typeof": [
       {
         "node": "./helpers/typeof.js",
@@ -215,6 +269,15 @@
       "./helpers/using.js"
     ],
     "./helpers/esm/using": "./helpers/esm/using.js",
+    "./helpers/usingCtx": [
+      {
+        "node": "./helpers/usingCtx.js",
+        "import": "./helpers/esm/usingCtx.js",
+        "default": "./helpers/usingCtx.js"
+      },
+      "./helpers/usingCtx.js"
+    ],
+    "./helpers/esm/usingCtx": "./helpers/esm/usingCtx.js",
     "./helpers/wrapRegExp": [
       {
         "node": "./helpers/wrapRegExp.js",
@@ -350,24 +413,6 @@
       "./helpers/setPrototypeOf.js"
     ],
     "./helpers/esm/setPrototypeOf": "./helpers/esm/setPrototypeOf.js",
-    "./helpers/isNativeReflectConstruct": [
-      {
-        "node": "./helpers/isNativeReflectConstruct.js",
-        "import": "./helpers/esm/isNativeReflectConstruct.js",
-        "default": "./helpers/isNativeReflectConstruct.js"
-      },
-      "./helpers/isNativeReflectConstruct.js"
-    ],
-    "./helpers/esm/isNativeReflectConstruct": "./helpers/esm/isNativeReflectConstruct.js",
-    "./helpers/construct": [
-      {
-        "node": "./helpers/construct.js",
-        "import": "./helpers/esm/construct.js",
-        "default": "./helpers/construct.js"
-      },
-      "./helpers/construct.js"
-    ],
-    "./helpers/esm/construct": "./helpers/esm/construct.js",
     "./helpers/isNativeFunction": [
       {
         "node": "./helpers/isNativeFunction.js",
@@ -701,24 +746,6 @@
       "./helpers/skipFirstGeneratorNext.js"
     ],
     "./helpers/esm/skipFirstGeneratorNext": "./helpers/esm/skipFirstGeneratorNext.js",
-    "./helpers/toPrimitive": [
-      {
-        "node": "./helpers/toPrimitive.js",
-        "import": "./helpers/esm/toPrimitive.js",
-        "default": "./helpers/toPrimitive.js"
-      },
-      "./helpers/toPrimitive.js"
-    ],
-    "./helpers/esm/toPrimitive": "./helpers/esm/toPrimitive.js",
-    "./helpers/toPropertyKey": [
-      {
-        "node": "./helpers/toPropertyKey.js",
-        "import": "./helpers/esm/toPropertyKey.js",
-        "default": "./helpers/toPropertyKey.js"
-      },
-      "./helpers/toPropertyKey.js"
-    ],
-    "./helpers/esm/toPropertyKey": "./helpers/esm/toPropertyKey.js",
     "./helpers/initializerWarningHelper": [
       {
         "node": "./helpers/initializerWarningHelper.js",

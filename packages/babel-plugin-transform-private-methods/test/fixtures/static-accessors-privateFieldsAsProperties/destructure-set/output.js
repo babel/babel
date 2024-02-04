@@ -1,4 +1,4 @@
-var _class;
+var _C;
 var _p = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("p");
 var _q = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("q");
 class C {
@@ -6,9 +6,9 @@ class C {
     [babelHelpers.classPrivateFieldLooseBase(C, _p)[_p]] = [0];
   }
 }
-_class = C;
+_C = C;
 function _set_p(v) {
-  babelHelpers.classPrivateFieldLooseBase(_class, _q)[_q] = v;
+  babelHelpers.classPrivateFieldLooseBase(_C, _q)[_q] = v;
 }
 Object.defineProperty(C, _p, {
   get: void 0,

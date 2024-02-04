@@ -1,12 +1,11 @@
 try {
-  var _stack = [];
+  var _usingCtx = babelHelpers.usingCtx();
   before;
-  var x = babelHelpers.using(_stack, fn());
+  var x = _usingCtx.u(fn());
   doSomethingWith(x);
   after;
 } catch (_) {
-  var _error = _;
-  var _hasError = true;
+  _usingCtx.e = _;
 } finally {
-  babelHelpers.dispose(_stack, _error, _hasError);
+  _usingCtx.d();
 }

@@ -26,7 +26,9 @@ interface PrivateNameMetadata {
   setterDeclared?: boolean;
 }
 
-type PrivateNamesMap = Map<string, PrivateNameMetadata>;
+type PrivateNamesMapGeneric<V> = Map<string, V>;
+
+type PrivateNamesMap = PrivateNamesMapGeneric<PrivateNameMetadata>;
 
 export function buildPrivateNamesMap(props: PropPath[]) {
   const privateNamesMap: PrivateNamesMap = new Map();
@@ -102,17 +104,16 @@ export function buildPrivateNamesNodes(
   return initNodes;
 }
 
-interface PrivateNameVisitorState {
-  privateNamesMap: PrivateNamesMap;
-  privateFieldsAsProperties: boolean;
+export interface PrivateNameVisitorState<V> {
+  privateNamesMap: PrivateNamesMapGeneric<V>;
   redeclared?: string[];
 }
 
 // Traverses the class scope, handling private name references. If an inner
 // class redeclares the same private name, it will hand off traversal to the
 // restricted visitor (which doesn't traverse the inner class's inner scope).
-function privateNameVisitorFactory<S>(
-  visitor: Visitor<PrivateNameVisitorState & S>,
+export function privateNameVisitorFactory<S, V>(
+  visitor: Visitor<PrivateNameVisitorState<V> & S>,
 ) {
   // Traverses the outer portion of a class, without touching the class's inner
   // scope, for private names.
@@ -123,7 +124,10 @@ function privateNameVisitorFactory<S>(
     environmentVisitor,
   ]);
 
-  const privateNameVisitor: Visitor<PrivateNameVisitorState & S> = {
+  // @ts-expect-error: TS2590: Expression produces a union type that is too complex to represent.
+  const privateNameVisitor: Visitor<
+    PrivateNameVisitorState<PrivateNameMetadata> & S
+  > = {
     ...visitor,
 
     Class(path) {
@@ -175,7 +179,8 @@ interface PrivateNameState {
 }
 
 const privateNameVisitor = privateNameVisitorFactory<
-  HandlerState<PrivateNameState> & PrivateNameState
+  HandlerState<PrivateNameState> & PrivateNameState,
+  PrivateNameMetadata
 >({
   PrivateName(path, { noDocumentAll }) {
     const { privateNamesMap, redeclared } = this;
@@ -222,11 +227,15 @@ export function buildCheckInRHS(
   return t.callExpression(file.addHelper("checkInRHS"), [rhs]);
 }
 
-const privateInVisitor = privateNameVisitorFactory<{
-  classRef: t.Identifier;
-  file: File;
-  innerBinding?: t.Identifier;
-}>({
+const privateInVisitor = privateNameVisitorFactory<
+  {
+    classRef: t.Identifier;
+    file: File;
+    innerBinding?: t.Identifier;
+    privateFieldsAsProperties: boolean;
+  },
+  PrivateNameMetadata
+>({
   BinaryExpression(path, { file }) {
     const { operator, left, right } = path.node;
     if (operator !== "in") return;
@@ -585,7 +594,7 @@ function buildPrivateFieldInitLoose(
         writable: true,
         value: ${value}
       });
-    `,
+    ` as t.ExpressionStatement,
     prop,
   );
 }
@@ -607,7 +616,7 @@ function buildPrivateInstanceFieldInitSpec(
           // enumerable is always false for private elements
           writable: true,
           value: ${value},
-        })`,
+        })` as t.ExpressionStatement,
         prop,
       );
     }
@@ -622,7 +631,7 @@ function buildPrivateInstanceFieldInitSpec(
         writable: true,
         value: ${value}
       },
-    )`,
+    )` as t.ExpressionStatement,
     prop,
   );
 }
@@ -689,7 +698,7 @@ function buildPrivateMethodInitLoose(
           // writable is false by default
           value: ${methodId.name}
         });
-      `,
+      ` as t.ExpressionStatement,
       prop,
     );
   }
@@ -709,7 +718,7 @@ function buildPrivateMethodInitLoose(
           get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
           set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
         });
-      `,
+      ` as t.ExpressionStatement,
       prop,
     );
   }
@@ -766,7 +775,7 @@ function buildPrivateAccessorInitialization(
             get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
             set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
           });
-        `,
+        ` as t.ExpressionStatement,
         prop,
       );
     }
@@ -781,7 +790,7 @@ function buildPrivateAccessorInitialization(
         get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
         set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
       },
-    )`,
+    )` as t.ExpressionStatement,
     prop,
   );
 }
@@ -798,7 +807,7 @@ function buildPrivateInstanceMethodInitialization(
   if (!process.env.BABEL_8_BREAKING) {
     if (!state.availableHelper("classPrivateMethodInitSpec")) {
       return inheritPropComments(
-        template.statement.ast`${id}.add(${ref})`,
+        template.statement.ast`${id}.add(${ref})` as t.ExpressionStatement,
         prop,
       );
     }
@@ -809,7 +818,7 @@ function buildPrivateInstanceMethodInitialization(
     template.statement.ast`${helper}(
       ${t.thisExpression()},
       ${t.cloneNode(id)}
-    )`,
+    )` as t.ExpressionStatement,
     prop,
   );
 }
@@ -1095,7 +1104,8 @@ export function buildFieldsInitNodes(
   let classRefFlags = ClassRefFlag.None;
   let injectSuperRef: t.Identifier;
   const staticNodes: t.Statement[] = [];
-  const instanceNodes: t.Statement[] = [];
+  const instanceNodes: t.ExpressionStatement[] = [];
+  let lastInstanceNodeReturnsThis = false;
   // These nodes are pure and can be moved to the closest statement position
   const pureStaticNodes: t.FunctionDeclaration[] = [];
   let classBindingNode: t.ExpressionStatement | null = null;
@@ -1109,7 +1119,8 @@ export function buildFieldsInitNodes(
       };
 
   const classRefForInnerBinding =
-    ref ?? props[0].scope.generateUidIdentifier("class");
+    ref ??
+    props[0].scope.generateUidIdentifier(innerBindingRef?.name || "Class");
   ref ??= t.cloneNode(innerBindingRef);
 
   for (const prop of props) {
@@ -1156,6 +1167,8 @@ export function buildFieldsInitNodes(
       }
     }
 
+    lastInstanceNodeReturnsThis = false;
+
     // TODO(ts): there are so many `ts-expect-error` inside cases since
     // ts can not infer type from pre-computed values (or a case test)
     // even change `isStaticBlock` to `t.isStaticBlock(prop)` will not make prop
@@ -1180,13 +1193,11 @@ export function buildFieldsInitNodes(
       }
       case isStatic && isPrivate && isField && privateFieldsAsProperties:
         staticNodes.push(
-          // @ts-expect-error checked in switch
           buildPrivateFieldInitLoose(t.cloneNode(ref), prop, privateNamesMap),
         );
         break;
       case isStatic && isPrivate && isField && !privateFieldsAsProperties:
         staticNodes.push(
-          // @ts-expect-error checked in switch
           buildPrivateStaticFieldInitSpec(prop, privateNamesMap),
         );
         break;
@@ -1211,7 +1222,6 @@ export function buildFieldsInitNodes(
         break;
       case isInstance && isPrivate && isField && privateFieldsAsProperties:
         instanceNodes.push(
-          // @ts-expect-error checked in switch
           buildPrivateFieldInitLoose(t.thisExpression(), prop, privateNamesMap),
         );
         break;
@@ -1219,7 +1229,6 @@ export function buildFieldsInitNodes(
         instanceNodes.push(
           buildPrivateInstanceFieldInitSpec(
             t.thisExpression(),
-            // @ts-expect-error checked in switch
             prop,
             privateNamesMap,
             file,
@@ -1301,6 +1310,7 @@ export function buildFieldsInitNodes(
         instanceNodes.push(buildPublicFieldInitLoose(t.thisExpression(), prop));
         break;
       case isInstance && isPublic && isField && !setPublicClassFields:
+        lastInstanceNodeReturnsThis = true;
         instanceNodes.push(
           // @ts-expect-error checked in switch
           buildPublicFieldInitSpec(t.thisExpression(), prop, file),
@@ -1324,6 +1334,7 @@ export function buildFieldsInitNodes(
   return {
     staticNodes: staticNodes.filter(Boolean),
     instanceNodes: instanceNodes.filter(Boolean),
+    lastInstanceNodeReturnsThis,
     pureStaticNodes: pureStaticNodes.filter(Boolean),
     classBindingNode,
     wrapClass(path: NodePath<t.Class>) {

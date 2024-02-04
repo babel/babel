@@ -1,6 +1,6 @@
 {
   "name": "@babel/eslint-shared-fixtures",
-  "version": "7.22.3",
+  "version": "7.23.5",
   "description": "Shared fixtures for testing @babel/eslint-* packages",
   "private": true,
   "dependencies": {
@@ -8,6 +8,7 @@
     "@babel/eslint-parser": "workspace:^",
     "@babel/plugin-proposal-decorators": "workspace:^",
     "@babel/plugin-proposal-do-expressions": "workspace:^",
+    "@babel/plugin-proposal-explicit-resource-management": "workspace:^",
     "@babel/plugin-proposal-pipeline-operator": "workspace:^",
     "@babel/plugin-syntax-export-default-from": "workspace:^",
     "@babel/plugin-transform-class-properties": "workspace:^",

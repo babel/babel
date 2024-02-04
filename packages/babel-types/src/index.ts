@@ -44,7 +44,6 @@ export { default as toComputedKey } from "./converters/toComputedKey.ts";
 export { default as toExpression } from "./converters/toExpression.ts";
 export { default as toIdentifier } from "./converters/toIdentifier.ts";
 export { default as toKeyAlias } from "./converters/toKeyAlias.ts";
-export { default as toSequenceExpression } from "./converters/toSequenceExpression.ts";
 export { default as toStatement } from "./converters/toStatement.ts";
 export { default as valueToNode } from "./converters/valueToNode.ts";
 
@@ -106,3 +105,10 @@ export type * from "./ast-types/generated/index.ts";
 
 // this is used by @babel/traverse to warn about deprecated visitors
 export { default as __internal__deprecationWarning } from "./utils/deprecationWarning.ts";
+
+if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
+  // eslint-disable-next-line no-restricted-globals
+  exports.toSequenceExpression =
+    // eslint-disable-next-line no-restricted-globals
+    require("./converters/toSequenceExpression.js").default;
+}

@@ -29,8 +29,13 @@ type QueueItem = {
 };
 
 export default class Buffer {
-  constructor(map?: SourceMap | null) {
+  constructor(map: SourceMap | null, indentChar: string) {
     this._map = map;
+    this._indentChar = indentChar;
+
+    for (let i = 0; i < 64; i++) {
+      this._fastIndentations.push(indentChar.repeat(i));
+    }
 
     this._allocQueue();
   }
@@ -43,6 +48,8 @@ export default class Buffer {
   _queue: QueueItem[] = [];
   _queueCursor = 0;
   _canMarkIdName = true;
+  _indentChar = "";
+  _fastIndentations: string[] = [];
 
   _position = {
     line: 1,
@@ -187,8 +194,9 @@ export default class Buffer {
   /**
    * Same as queue, but this indentation will never have a sourcemap marker.
    */
-  queueIndentation(char: number, repeat: number): void {
-    this._pushQueue(char, repeat, undefined, undefined, undefined);
+  queueIndentation(repeat: number): void {
+    if (repeat === 0) return;
+    this._pushQueue(-1, repeat, undefined, undefined, undefined);
   }
 
   _flush(): void {
@@ -208,10 +216,20 @@ export default class Buffer {
   ): void {
     this._last = char;
 
-    this._str +=
-      repeat > 1
-        ? String.fromCharCode(char).repeat(repeat)
-        : String.fromCharCode(char);
+    if (char === -1) {
+      const fastIndentation = this._fastIndentations[repeat];
+      if (fastIndentation !== undefined) {
+        this._str += fastIndentation;
+      } else {
+        this._str +=
+          repeat > 1 ? this._indentChar.repeat(repeat) : this._indentChar;
+      }
+    } else {
+      this._str +=
+        repeat > 1
+          ? String.fromCharCode(char).repeat(repeat)
+          : String.fromCharCode(char);
+    }
 
     if (char !== charcodes.lineFeed) {
       this._mark(
@@ -361,9 +379,6 @@ export default class Buffer {
 
   /**
    * check if current _last + queue ends with newline, return the character before newline
-   *
-   * @param {*} ch
-   * @memberof Buffer
    */
   endsWithCharAndNewline(): number {
     const queue = this._queue;

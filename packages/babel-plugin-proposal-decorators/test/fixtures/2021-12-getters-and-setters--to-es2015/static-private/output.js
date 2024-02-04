@@ -1,4 +1,4 @@
-var _call_a, _call_a2, _initStatic, _class;
+var _initStatic, _call_a, _call_a2, _Foo;
 const dec = () => {};
 class Foo {
   static getA() {
@@ -8,7 +8,7 @@ class Foo {
     babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _a, v);
   }
 }
-_class = Foo;
+_Foo = Foo;
 function _get_a() {
   return _call_a(this);
 }
@@ -20,11 +20,11 @@ var _a = {
   set: _set_a
 };
 (() => {
-  [_call_a, _call_a2, _initStatic] = babelHelpers.applyDecs(_class, [[dec, 8, "a", function () {
+  [_call_a, _call_a2, _initStatic] = babelHelpers.applyDecs(_Foo, [[dec, 8, "a", function () {
     return this.value;
   }], [dec, 9, "a", function (v) {
     this.value = v;
   }]], []);
-  _initStatic(_class);
+  _initStatic(_Foo);
 })();
 babelHelpers.defineProperty(Foo, "value", 1);

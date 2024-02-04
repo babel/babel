@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-optional-chaining-assign",
-  "version": "7.23.0",
+  "version": "7.23.7",
   "description": "Allow parsing of optional chaining on the left-hand side of assignment expressions",
   "repository": {
     "type": "git",

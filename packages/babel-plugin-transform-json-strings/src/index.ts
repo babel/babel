@@ -24,9 +24,9 @@ export default declare(api => {
     inherits: USE_ESM
       ? undefined
       : IS_STANDALONE
-      ? undefined
-      : // eslint-disable-next-line no-restricted-globals
-        require("@babel/plugin-syntax-json-strings").default,
+        ? undefined
+        : // eslint-disable-next-line no-restricted-globals
+          require("@babel/plugin-syntax-json-strings").default,
 
     visitor: {
       "DirectiveLiteral|StringLiteral"({

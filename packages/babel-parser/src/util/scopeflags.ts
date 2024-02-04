@@ -60,24 +60,6 @@ export const enum BindingFlag {
   TYPE_FLOW_DECLARE_FN = 0          | 0         | 0              | FLAG_FLOW_DECLARE_FN,
 }
 
-export type BindingTypes =
-  | BindingFlag.TYPE_NONE
-  | BindingFlag.TYPE_OUTSIDE
-  | BindingFlag.TYPE_VAR
-  | BindingFlag.TYPE_LEXICAL
-  | BindingFlag.TYPE_CLASS
-  | BindingFlag.TYPE_CATCH_PARAM
-  | BindingFlag.TYPE_FUNCTION
-  | BindingFlag.TYPE_TS_INTERFACE
-  | BindingFlag.TYPE_TS_TYPE
-  | BindingFlag.TYPE_TS_TYPE_IMPORT
-  | BindingFlag.TYPE_TS_VALUE_IMPORT
-  | BindingFlag.TYPE_TS_ENUM
-  | BindingFlag.TYPE_TS_AMBIENT
-  | BindingFlag.TYPE_TS_NAMESPACE
-  | BindingFlag.TYPE_TS_CONST_ENUM
-  | BindingFlag.TYPE_FLOW_DECLARE_FN;
-
 /* prettier-ignore */
 export const enum ClassElementType {
   OTHER           = 0,

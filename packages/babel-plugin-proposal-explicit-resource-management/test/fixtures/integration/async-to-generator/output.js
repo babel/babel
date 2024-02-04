@@ -5,14 +5,13 @@ function _fn() {
   _fn = babelHelpers.asyncToGenerator(function* () {
     yield 0;
     try {
-      var _stack = [];
-      const x = babelHelpers.using(_stack, y, true);
+      var _usingCtx = babelHelpers.usingCtx();
+      const x = _usingCtx.a(y);
       yield 1;
     } catch (_) {
-      var _error = _;
-      var _hasError = true;
+      _usingCtx.e = _;
     } finally {
-      yield babelHelpers.dispose(_stack, _error, _hasError);
+      yield _usingCtx.d();
     }
   });
   return _fn.apply(this, arguments);

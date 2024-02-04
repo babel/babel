@@ -191,6 +191,7 @@ function permuteHelperAST(
 
   const toRename: Record<string, string> = {};
   const bindings = new Set(localBindings || []);
+  if (id.type === "Identifier") bindings.add(id.name);
   localBindingNames.forEach(name => {
     let newName = name;
     while (bindings.has(newName)) newName = "_" + newName;

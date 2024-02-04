@@ -1,16 +1,16 @@
 {
   "version": 3,
   "names": [
-    "_stack",
-    "x",
+    "_usingCtx",
     "babelHelpers",
-    "using",
+    "usingCtx",
+    "x",
+    "u",
     "fn",
     "doSomethingWith",
     "_",
-    "_error",
-    "_hasError",
-    "dispose"
+    "e",
+    "d"
   ],
   "sources": [
     "source-maps/block/input.js"
@@ -18,5 +18,5 @@
   "sourcesContent": [
     "{\n  using x = fn();\n  doSomethingWith(x);\n}"
   ],
-  "mappings": "IAAA;EAAA,IAAAA,MAAA;EACE,MAAMC,CAAC,GAAAC,YAAA,CAAAC,KAAA,CAAAH,MAAA,EAAGI,EAAE,CAAC,CAAC;EACdC,eAAe,CAACJ,CAAC,CAAC;AACpB,CAAC,QAAAK,CAAA;EAAA,IAAAC,MAAA,GAAAD,CAAA;EAAA,IAAAE,SAAA;AAAA;EAAAN,YAAA,CAAAO,OAAA,CAAAT,MAAA,EAAAO,MAAA,EAAAC,SAAA;AAAA"
+  "mappings": "AAAA;EAAA,IAAAA,SAAA,GAAAC,YAAA,CAAAC,QAAA;EACE,MAAMC,CAAC,GAAAH,SAAA,CAAAI,CAAA,CAAGC,EAAE,CAAC,CAAC;EACdC,eAAe,CAACH,CAAC,CAAC;AAAC,SAAAI,CAAA;EAAAP,SAAA,CAAAQ,CAAA,GAAAD,CAAA;AAAA;EAAAP,SAAA,CAAAS,CAAA;AAAA"
 }

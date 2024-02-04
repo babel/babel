@@ -38,7 +38,11 @@ function imp(path: NodePath, name: string, module: string) {
 
 export default declare(api => {
   const { types: t, template } = api;
-  api.assertVersion("^7.23.0");
+  api.assertVersion(
+    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
+      ? PACKAGE_JSON.version
+      : "^7.23.0",
+  );
 
   const { node: nodeTarget, ...webTargets } = api.targets();
   const emptyNodeTarget = nodeTarget == null;

@@ -18,9 +18,9 @@ export default declare((api, { loose = false }: Options) => {
     inherits: USE_ESM
       ? undefined
       : IS_STANDALONE
-      ? undefined
-      : // eslint-disable-next-line no-restricted-globals
-        require("@babel/plugin-syntax-nullish-coalescing-operator").default,
+        ? undefined
+        : // eslint-disable-next-line no-restricted-globals
+          require("@babel/plugin-syntax-nullish-coalescing-operator").default,
 
     visitor: {
       LogicalExpression(path) {

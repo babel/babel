@@ -154,8 +154,8 @@ function requireChokidar(): any {
     return process.env.BABEL_8_BREAKING
       ? require("chokidar")
       : parseInt(process.versions.node) >= 8
-      ? require("chokidar")
-      : require("@nicolo-ribaudo/chokidar-2");
+        ? require("chokidar")
+        : require("@nicolo-ribaudo/chokidar-2");
   } catch (err) {
     console.error(
       "The optional dependency chokidar failed to install and is required for " +

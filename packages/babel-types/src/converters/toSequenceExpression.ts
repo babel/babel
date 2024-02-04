@@ -1,3 +1,10 @@
+// TODO(Babel 8) Remove this file
+if (process.env.BABEL_8_BREAKING) {
+  throw new Error(
+    "Internal Babel error: This file should only be loaded in Babel 7",
+  );
+}
+
 import gatherSequenceExpressions from "./gatherSequenceExpressions.ts";
 import type * as t from "../index.ts";
 import type { DeclarationInfo } from "./gatherSequenceExpressions.ts";

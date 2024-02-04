@@ -22,9 +22,7 @@ export default function populatePlaceholders(
 
   if (replacements) {
     metadata.placeholders.forEach(placeholder => {
-      if (
-        !Object.prototype.hasOwnProperty.call(replacements, placeholder.name)
-      ) {
+      if (!Object.hasOwn(replacements, placeholder.name)) {
         const placeholderName = placeholder.name;
 
         throw new Error(

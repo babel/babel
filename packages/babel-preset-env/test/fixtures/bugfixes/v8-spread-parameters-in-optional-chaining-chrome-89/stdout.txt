@@ -9,6 +9,7 @@ Using modules transform: auto
 
 Using plugins:
   transform-unicode-sets-regex { chrome < 112 }
+  bugfix/transform-v8-static-class-fields-redefine-readonly { chrome < 98 }
   transform-class-static-block { chrome < 94 }
   transform-private-property-in-object { chrome < 91 }
   syntax-class-properties
@@ -19,10 +20,10 @@ Using plugins:
   syntax-optional-catch-binding
   syntax-async-generators
   syntax-object-rest-spread
+  transform-export-namespace-from { }
   bugfix/transform-v8-spread-parameters-in-optional-chaining { chrome < 91 }
   transform-modules-commonjs
   transform-dynamic-import
-  transform-export-namespace-from { }
   syntax-top-level-await
   syntax-import-meta
 

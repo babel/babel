@@ -17,11 +17,10 @@ var Foo = /*#__PURE__*/function () {
       var _foo2 = /*#__PURE__*/new WeakMap();
       var Nested = /*#__PURE__*/function (_ref) {
         babelHelpers.inherits(Nested, _ref);
-        var _super = babelHelpers.createSuper(Nested);
         function Nested(...args) {
           var _this;
           babelHelpers.classCallCheck(this, Nested);
-          _this = _super.call(this, ...args);
+          _this = babelHelpers.callSuper(this, Nested, [...args]);
           babelHelpers.classPrivateFieldInitSpec(babelHelpers.assertThisInitialized(_this), _foo2, {
             writable: true,
             value: 3
@@ -30,15 +29,15 @@ var Foo = /*#__PURE__*/function () {
         }
         return babelHelpers.createClass(Nested);
       }((_foo3 = /*#__PURE__*/new WeakMap(), _babelHelpers$classPr = babelHelpers.classPrivateFieldGet(this, _foo3), /*#__PURE__*/function () {
-        function _class4() {
-          babelHelpers.classCallCheck(this, _class4);
+        function _class() {
+          babelHelpers.classCallCheck(this, _class);
           babelHelpers.classPrivateFieldInitSpec(this, _foo3, {
             writable: true,
             value: 2
           });
           babelHelpers.defineProperty(this, _babelHelpers$classPr, 2);
         }
-        return babelHelpers.createClass(_class4);
+        return babelHelpers.createClass(_class);
       }()));
     }
   }]);

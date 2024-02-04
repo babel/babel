@@ -1,0 +1,7 @@
+{
+  "BABEL_8_BREAKING": false,
+  "plugins": [
+    "transform-classes",
+    ["transform-runtime", { "absoluteRuntime": true, "useESModules": true, "version": "7.100.0" }]
+  ]
+}

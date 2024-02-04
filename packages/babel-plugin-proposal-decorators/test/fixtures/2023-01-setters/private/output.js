@@ -1,4 +1,4 @@
-var _call_a, _initProto;
+var _initProto, _call_a;
 const dec = () => {};
 class Foo {
   static {
@@ -6,10 +6,7 @@ class Foo {
       return this.value = v;
     }]], [], _ => #a in _).e;
   }
-  constructor(...args) {
-    _initProto(this);
-  }
-  value = 1;
+  value = (_initProto(this), 1);
   set #a(v) {
     _call_a(this, v);
   }

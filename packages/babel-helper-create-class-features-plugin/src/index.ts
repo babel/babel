@@ -3,6 +3,7 @@ import type { PluginAPI, PluginObject } from "@babel/core";
 import type { NodePath } from "@babel/traverse";
 import nameFunction from "@babel/helper-function-name";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
+import createDecoratorTransform from "./decorators.ts";
 
 import semver from "semver";
 
@@ -14,7 +15,7 @@ import {
   buildCheckInRHS,
 } from "./fields.ts";
 import type { PropPath } from "./fields.ts";
-import { buildDecoratedClass, hasDecorators } from "./decorators.ts";
+import { buildDecoratedClass, hasDecorators } from "./decorators-2018-09.ts";
 import { injectInitialization, extractComputedKeys } from "./misc.ts";
 import {
   enableFeature,
@@ -35,6 +36,7 @@ interface Options {
   inherits?: PluginObject["inherits"];
   manipulateOptions?: PluginObject["manipulateOptions"];
   api?: PluginAPI;
+  decoratorVersion?: "2023-05" | "2023-01" | "2022-03" | "2021-12" | "2018-09";
 }
 
 export function createClassFeaturePlugin({
@@ -44,7 +46,27 @@ export function createClassFeaturePlugin({
   manipulateOptions,
   api,
   inherits,
+  decoratorVersion,
 }: Options): PluginObject {
+  if (feature & FEATURES.decorators) {
+    if (process.env.BABEL_8_BREAKING) {
+      return createDecoratorTransform(api, { loose }, "2023-05", inherits);
+    } else {
+      if (
+        decoratorVersion === "2021-12" ||
+        decoratorVersion === "2022-03" ||
+        decoratorVersion === "2023-01" ||
+        decoratorVersion === "2023-05"
+      ) {
+        return createDecoratorTransform(
+          api,
+          { loose },
+          decoratorVersion,
+          inherits,
+        );
+      }
+    }
+  }
   if (!process.env.BABEL_8_BREAKING) {
     api ??= { assumption: () => void 0 as any } as any;
   }
@@ -208,7 +230,7 @@ export function createClassFeaturePlugin({
         let ref: t.Identifier | null;
         if (!innerBinding || !pathIsClassDeclaration) {
           nameFunction(path);
-          ref = path.scope.generateUidIdentifier("class");
+          ref = path.scope.generateUidIdentifier(innerBinding?.name || "Class");
         }
         const classRefForDefine = ref ?? t.cloneNode(innerBinding);
 
@@ -238,7 +260,8 @@ export function createClassFeaturePlugin({
 
         let keysNodes: t.Statement[],
           staticNodes: t.Statement[],
-          instanceNodes: t.Statement[],
+          instanceNodes: t.ExpressionStatement[],
+          lastInstanceNodeReturnsThis: boolean,
           pureStaticNodes: t.FunctionDeclaration[],
           classBindingNode: t.Statement | null,
           wrapClass: (path: NodePath<t.Class>) => NodePath;
@@ -258,6 +281,7 @@ export function createClassFeaturePlugin({
               staticNodes,
               pureStaticNodes,
               instanceNodes,
+              lastInstanceNodeReturnsThis,
               classBindingNode,
               wrapClass,
             } = buildFieldsInitNodes(
@@ -278,6 +302,7 @@ export function createClassFeaturePlugin({
             staticNodes,
             pureStaticNodes,
             instanceNodes,
+            lastInstanceNodeReturnsThis,
             classBindingNode,
             wrapClass,
           } = buildFieldsInitNodes(
@@ -308,6 +333,7 @@ export function createClassFeaturePlugin({
                 prop.traverse(referenceVisitor, state);
               }
             },
+            lastInstanceNodeReturnsThis,
           );
         }
 

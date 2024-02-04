@@ -17,11 +17,10 @@ var Foo = /*#__PURE__*/function () {
       var _foo2 = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("foo");
       var Nested = /*#__PURE__*/function (_ref) {
         babelHelpers.inherits(Nested, _ref);
-        var _super = babelHelpers.createSuper(Nested);
         function Nested(...args) {
           var _this;
           babelHelpers.classCallCheck(this, Nested);
-          _this = _super.call(this, ...args);
+          _this = babelHelpers.callSuper(this, Nested, [...args]);
           Object.defineProperty(babelHelpers.assertThisInitialized(_this), _foo2, {
             writable: true,
             value: 3
@@ -30,15 +29,15 @@ var Foo = /*#__PURE__*/function () {
         }
         return babelHelpers.createClass(Nested);
       }((_foo3 = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("foo"), _babelHelpers$classPr = babelHelpers.classPrivateFieldLooseBase(this, _foo3)[_foo3], /*#__PURE__*/function () {
-        function _class4() {
-          babelHelpers.classCallCheck(this, _class4);
+        function _class() {
+          babelHelpers.classCallCheck(this, _class);
           Object.defineProperty(this, _foo3, {
             writable: true,
             value: 2
           });
           this[_babelHelpers$classPr] = 2;
         }
-        return babelHelpers.createClass(_class4);
+        return babelHelpers.createClass(_class);
       }()));
     }
   }]);

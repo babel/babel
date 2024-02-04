@@ -43,8 +43,8 @@ export default declare((api, opts: Options) => {
           const headPath = isForStatement
             ? path.get("init")
             : path.isForXStatement()
-            ? path.get("left")
-            : null;
+              ? path.get("left")
+              : null;
 
           let needsBodyWrap = false;
           const markNeedsBodyWrap = () => {

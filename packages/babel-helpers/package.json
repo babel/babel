@@ -1,6 +1,6 @@
 {
   "name": "@babel/helpers",
-  "version": "7.23.2",
+  "version": "7.23.9",
   "description": "Collection of helper functions used by Babel transforms.",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-helpers",
@@ -23,8 +23,7 @@
     "@babel/generator": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
     "@babel/parser": "workspace:^",
-    "regenerator-runtime": "^0.14.0",
-    "terser": "^5.19.2"
+    "regenerator-runtime": "^0.14.0"
   },
   "engines": {
     "node": ">=6.9.0"

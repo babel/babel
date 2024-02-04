@@ -15,8 +15,8 @@ source utils/cleanup.sh
 set -x
 
 # Clone prettier
-git clone --depth=1 https://github.com/prettier/prettier tmp/prettier
-cd tmp/prettier || exit
+git clone --depth=1 https://github.com/prettier/prettier /tmp/prettier
+cd /tmp/prettier || exit
 
 # Update @babel/* dependencies
 node "$root/utils/bump-babel-dependencies.js"
@@ -24,7 +24,6 @@ node "$root/utils/bump-babel-dependencies.js"
 if [ "$BABEL_8_BREAKING" = true ] ; then
   # Based on https://github.com/prettier/prettier/pull/15157
   sed -i 's/const getChalk = () => chalk/default (code) => code/' scripts/build/shims/babel-highlight.js
-  sed -i 's/const generate = babelGenerator.default/const generate = babelGenerator/' scripts/build/transform/eastasianwidth-module.js
   sed -i 's/const generate = babelGenerator.default/const generate = babelGenerator/' scripts/build/transform/index.js
   sed -i 's/,"updateContext":null//g' tests/integration/__tests__/__snapshots__/debug-print-ast.js.snap
   rm tests/unit/__snapshots__/visitor-keys.js.snap

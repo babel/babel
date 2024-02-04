@@ -3,6 +3,7 @@ function dec(set, context) {
     this[context.name + 'Context'] = context;
   });
 
+  expect(set.name).toEqual("set " + context.name);
   return function (v) {
     return set.call(this, v + 1);
   }

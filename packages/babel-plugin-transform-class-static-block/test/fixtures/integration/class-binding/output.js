@@ -1,6 +1,6 @@
-var _class;
+var _Foo;
 class Foo {}
-_class = Foo;
+_Foo = Foo;
 babelHelpers.defineProperty(Foo, "bar", 42);
-_class.foo = _class.bar;
+_Foo.foo = _Foo.bar;
 expect(Foo.foo).toBe(42);

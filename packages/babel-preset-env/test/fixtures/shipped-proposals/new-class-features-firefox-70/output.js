@@ -1,4 +1,4 @@
-var _class;
+var _A;
 var _foo = /*#__PURE__*/new WeakMap();
 class A {
   constructor() {
@@ -8,5 +8,5 @@ class A {
     });
   }
 }
-_class = A;
-register(_class, _foo.has(babelHelpers.checkInRHS(_class)));
+_A = A;
+register(_A, _foo.has(babelHelpers.checkInRHS(_A)));

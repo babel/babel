@@ -102,7 +102,10 @@ function adjustInnerComments(
 export default class CommentsParser extends BaseParser {
   addComment(comment: Comment): void {
     if (this.filename) comment.loc.filename = this.filename;
-    this.state.comments.push(comment);
+    const { commentsLen } = this.state;
+    if (this.comments.length != commentsLen) this.comments.length = commentsLen;
+    this.comments.push(comment);
+    this.state.commentsLen++;
   }
 
   /**

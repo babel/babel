@@ -396,12 +396,8 @@ function throwUnknownError(loc: OptionPath) {
   }
 }
 
-function has(obj: {}, key: string) {
-  return Object.prototype.hasOwnProperty.call(obj, key);
-}
-
 function assertNoDuplicateSourcemap(opts: {}): void {
-  if (has(opts, "sourceMap") && has(opts, "sourceMaps")) {
+  if (Object.hasOwn(opts, "sourceMap") && Object.hasOwn(opts, "sourceMaps")) {
     throw new Error(".sourceMap is an alias for .sourceMaps, cannot use both");
   }
 }

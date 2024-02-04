@@ -352,7 +352,6 @@ export function program(
     directives,
     sourceType,
     interpreter,
-    sourceFile: null,
   });
 }
 export function objectExpression(
@@ -1968,13 +1967,11 @@ export { tsConstructSignatureDeclaration as tSConstructSignatureDeclaration };
 export function tsPropertySignature(
   key: t.Expression,
   typeAnnotation: t.TSTypeAnnotation | null = null,
-  initializer: t.Expression | null = null,
 ): t.TSPropertySignature {
   return validateNode<t.TSPropertySignature>({
     type: "TSPropertySignature",
     key,
     typeAnnotation,
-    initializer,
     kind: null,
   });
 }
