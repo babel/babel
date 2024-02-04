@@ -187,7 +187,9 @@ function addProxyAccessorsFor(
   const { static: isStatic } = element.node;
 
   const thisArg =
-    (version === "2023-11" || version === "2023-05") && isStatic
+    (version === "2023-11" ||
+      (!process.env.BABEL_8_BREAKING && version === "2023-05")) &&
+    isStatic
       ? className
       : t.thisExpression();
 
@@ -538,7 +540,11 @@ function generateDecorationList(
   const hasOneThis = decoratorsThis.some(Boolean);
   const decs: t.Expression[] = [];
   for (let i = 0; i < decsCount; i++) {
-    if ((version === "2023-11" || version === "2023-05") && hasOneThis) {
+    if (
+      (version === "2023-11" ||
+        (!process.env.BABEL_8_BREAKING && version === "2023-05")) &&
+      hasOneThis
+    ) {
       decs.push(
         decoratorsThis[i] || t.unaryExpression("void", t.numericLiteral(0)),
       );
@@ -564,7 +570,8 @@ function generateDecorationExprs(
       let flag = el.kind;
       if (el.isStatic) {
         flag +=
-          version === "2023-11" || version === "2023-05"
+          version === "2023-11" ||
+          (!process.env.BABEL_8_BREAKING && version === "2023-05")
             ? STATIC
             : STATIC_OLD_VERSION;
       }
@@ -727,6 +734,13 @@ function createSetFunctionNameCall(
 
 function createToPropertyKeyCall(state: PluginPass, propertyKey: t.Expression) {
   return t.callExpression(state.addHelper("toPropertyKey"), [propertyKey]);
+}
+
+function createPrivateBrandCheckClosure(brandName: t.PrivateName) {
+  return t.arrowFunctionExpression(
+    [t.identifier("_")],
+    t.binaryExpression("in", t.cloneNode(brandName), t.identifier("_")),
+  );
 }
 
 function checkPrivateMethodUpdateError(
@@ -904,7 +918,8 @@ function transformClass(
     for (const decorator of decorators) {
       const { expression } = decorator;
       if (
-        (version === "2023-11" || version === "2023-05") &&
+        (version === "2023-11" ||
+          (!process.env.BABEL_8_BREAKING && version === "2023-05")) &&
         t.isMemberExpression(expression)
       ) {
         let object;
@@ -976,27 +991,27 @@ function transformClass(
   let lastInstancePrivateName: t.PrivateName;
   let needsInstancePrivateBrandCheck = false;
 
-  let fieldInitializerAssignments = [];
-  let staticFieldInitializerAssignments = [];
+  let fieldInitializerExpressions = [];
+  let staticFieldInitializerExpressions: t.Expression[] = [];
 
   if (hasElementDecorators) {
     if (protoInitLocal) {
       const protoInitCall = t.callExpression(t.cloneNode(protoInitLocal), [
         t.thisExpression(),
       ]);
-      fieldInitializerAssignments.push(protoInitCall);
+      fieldInitializerExpressions.push(protoInitCall);
     }
     for (const element of body) {
       if (!isClassDecoratableElementPath(element)) {
         if (
-          staticFieldInitializerAssignments.length > 0 &&
+          staticFieldInitializerExpressions.length > 0 &&
           element.isStaticBlock()
         ) {
           prependExpressionsToStaticBlock(
-            staticFieldInitializerAssignments,
+            staticFieldInitializerExpressions,
             element,
           );
-          staticFieldInitializerAssignments = [];
+          staticFieldInitializerExpressions = [];
         }
         continue;
       }
@@ -1190,27 +1205,27 @@ function transformClass(
       }
 
       if (
-        fieldInitializerAssignments.length > 0 &&
+        fieldInitializerExpressions.length > 0 &&
         !isStatic &&
         (kind === FIELD || kind === ACCESSOR)
       ) {
         prependExpressionsToFieldInitializer(
-          fieldInitializerAssignments,
+          fieldInitializerExpressions,
           element as NodePath<t.ClassProperty | t.ClassPrivateProperty>,
         );
-        fieldInitializerAssignments = [];
+        fieldInitializerExpressions = [];
       }
 
       if (
-        staticFieldInitializerAssignments.length > 0 &&
+        staticFieldInitializerExpressions.length > 0 &&
         isStatic &&
         (kind === FIELD || kind === ACCESSOR)
       ) {
         prependExpressionsToFieldInitializer(
-          staticFieldInitializerAssignments,
+          staticFieldInitializerExpressions,
           element as NodePath<t.ClassProperty | t.ClassPrivateProperty>,
         );
-        staticFieldInitializerAssignments = [];
+        staticFieldInitializerExpressions = [];
       }
 
       if (hasDecorators && version === "2023-11") {
@@ -1223,45 +1238,46 @@ function transformClass(
             t.thisExpression(),
           ]);
           if (!isStatic) {
-            fieldInitializerAssignments.push(initExtraCall);
+            fieldInitializerExpressions.push(initExtraCall);
           } else {
-            staticFieldInitializerAssignments.push(initExtraCall);
+            staticFieldInitializerExpressions.push(initExtraCall);
           }
         }
       }
     }
   }
 
-  if (fieldInitializerAssignments.length > 0) {
+  if (fieldInitializerExpressions.length > 0) {
     const isDerivedClass = !!path.node.superClass;
     if (constructorPath) {
       if (isDerivedClass) {
         insertExpressionsAfterSuperCallAndOptimize(
-          fieldInitializerAssignments,
+          fieldInitializerExpressions,
           constructorPath,
           protoInitLocal,
         );
       } else {
         prependExpressionsToConstructor(
-          fieldInitializerAssignments,
+          fieldInitializerExpressions,
           constructorPath,
         );
       }
     } else {
       path.node.body.body.unshift(
         createConstructorFromExpressions(
-          fieldInitializerAssignments,
+          fieldInitializerExpressions,
           isDerivedClass,
         ),
       );
     }
-    fieldInitializerAssignments = [];
+    fieldInitializerExpressions = [];
   }
 
-  if (staticFieldInitializerAssignments.length > 0) {
+  if (staticFieldInitializerExpressions.length > 0) {
     path.node.body.body.push(
-      createStaticBlockFromExpressions(staticFieldInitializerAssignments),
+      createStaticBlockFromExpressions(staticFieldInitializerExpressions),
     );
+    staticFieldInitializerExpressions = [];
   }
 
   const elementDecorations = generateDecorationExprs(
@@ -1294,12 +1310,11 @@ function transformClass(
       | t.ClassPrivateProperty
       | t.ClassPrivateMethod
     )[] = [];
-    let staticBlocks: t.StaticBlock[] = [];
     path.get("body.body").forEach(element => {
       // Static blocks cannot be compiled to "instance blocks", but we can inline
       // them as IIFEs in the next property.
       if (element.isStaticBlock()) {
-        staticBlocks.push(element.node);
+        staticFieldInitializerExpressions.push(staticBlockToIIFE(element.node));
         element.remove();
         return;
       }
@@ -1311,11 +1326,12 @@ function transformClass(
         (isProperty || element.isClassPrivateMethod()) &&
         element.node.static
       ) {
-        if (isProperty && staticBlocks.length > 0) {
-          const allValues: t.Expression[] = staticBlocks.map(staticBlockToIIFE);
-          if (element.node.value) allValues.push(element.node.value);
-          element.node.value = maybeSequenceExpression(allValues);
-          staticBlocks = [];
+        if (isProperty && staticFieldInitializerExpressions.length > 0) {
+          prependExpressionsToFieldInitializer(
+            staticFieldInitializerExpressions,
+            element,
+          );
+          staticFieldInitializerExpressions = [];
         }
 
         element.node.static = false;
@@ -1324,7 +1340,7 @@ function transformClass(
       }
     });
 
-    if (statics.length > 0 || staticBlocks.length > 0) {
+    if (statics.length > 0 || staticFieldInitializerExpressions.length > 0) {
       const staticsClass = template.expression.ast`
         class extends ${state.addHelper("identity")} {}
       ` as t.ClassExpression;
@@ -1342,8 +1358,8 @@ function transformClass(
 
       const newExpr = t.newExpression(staticsClass, []);
 
-      if (staticBlocks.length > 0) {
-        constructorBody.push(...staticBlocks.map(staticBlockToIIFE));
+      if (staticFieldInitializerExpressions.length > 0) {
+        constructorBody.push(...staticFieldInitializerExpressions);
       }
       if (classInitCall) {
         classInitInjected = true;
@@ -1354,14 +1370,11 @@ function transformClass(
           t.callExpression(t.super(), [t.cloneNode(classIdLocal)]),
         );
 
+        // set isDerivedClass to false as we have already prepended super call
         staticsClass.body.body.push(
-          t.classMethod(
-            "constructor",
-            t.identifier("constructor"),
-            [],
-            t.blockStatement([
-              t.expressionStatement(t.sequenceExpression(constructorBody)),
-            ]),
+          createConstructorFromExpressions(
+            constructorBody,
+            /* isDerivedClass */ false,
           ),
         );
       } else {
@@ -1447,7 +1460,7 @@ function createLocalsAssignment(
   elementDecorations: t.ArrayExpression | t.Identifier,
   classDecorations: t.ArrayExpression | t.Identifier,
   classDecorationsFlag: t.NumericLiteral,
-  maybePrivateBranName: t.PrivateName | null,
+  maybePrivateBrandName: t.PrivateName | null,
   setClassName: t.Identifier | t.StringLiteral | undefined,
   superClass: null | t.Expression,
   state: PluginPass,
@@ -1467,56 +1480,55 @@ function createLocalsAssignment(
       version === "2021-12" ||
       (version === "2022-03" && !state.availableHelper("applyDecs2203R"))
     ) {
-      const lhs = t.arrayPattern([...elementLocals, ...classLocals]);
-      const rhs = t.callExpression(
+      lhs = t.arrayPattern([...elementLocals, ...classLocals]);
+      rhs = t.callExpression(
         state.addHelper(version === "2021-12" ? "applyDecs" : "applyDecs2203"),
         args,
       );
       return t.assignmentExpression("=", lhs, rhs);
+    } else if (version === "2022-03") {
+      rhs = t.callExpression(state.addHelper("applyDecs2203R"), args);
+    } else if (version === "2023-01") {
+      if (maybePrivateBrandName) {
+        args.push(createPrivateBrandCheckClosure(maybePrivateBrandName));
+      }
+      rhs = t.callExpression(state.addHelper("applyDecs2301"), args);
+    } else if (version === "2023-05") {
+      if (
+        maybePrivateBrandName ||
+        superClass ||
+        classDecorationsFlag.value !== 0
+      ) {
+        args.push(classDecorationsFlag);
+      }
+      if (maybePrivateBrandName) {
+        args.push(createPrivateBrandCheckClosure(maybePrivateBrandName));
+      } else if (superClass) {
+        args.push(t.unaryExpression("void", t.numericLiteral(0)));
+      }
+      if (superClass) args.push(superClass);
+      rhs = t.callExpression(state.addHelper("applyDecs2305"), args);
     }
   }
-
-  if (
-    process.env.BABEL_8_BREAKING ||
-    version === "2023-11" ||
-    version === "2023-05"
-  ) {
+  if (process.env.BABEL_8_BREAKING || version === "2023-11") {
     if (
-      maybePrivateBranName ||
+      maybePrivateBrandName ||
       superClass ||
       classDecorationsFlag.value !== 0
     ) {
       args.push(classDecorationsFlag);
     }
-    if (maybePrivateBranName) {
-      args.push(
-        template.expression.ast`
-            _ => ${t.cloneNode(maybePrivateBranName)} in _
-          ` as t.ArrowFunctionExpression,
-      );
+    if (maybePrivateBrandName) {
+      args.push(createPrivateBrandCheckClosure(maybePrivateBrandName));
     } else if (superClass) {
       args.push(t.unaryExpression("void", t.numericLiteral(0)));
     }
     if (superClass) args.push(superClass);
-    if (version === "2023-11") {
-      rhs = t.callExpression(state.addHelper("applyDecs2311"), args);
-    } else {
-      rhs = t.callExpression(state.addHelper("applyDecs2305"), args);
-    }
-  } else if (version === "2023-01") {
-    if (maybePrivateBranName) {
-      args.push(
-        template.expression.ast`
-            _ => ${t.cloneNode(maybePrivateBranName)} in _
-          ` as t.ArrowFunctionExpression,
-      );
-    }
-    rhs = t.callExpression(state.addHelper("applyDecs2301"), args);
-  } else {
-    rhs = t.callExpression(state.addHelper("applyDecs2203R"), args);
+    rhs = t.callExpression(state.addHelper("applyDecs2311"), args);
   }
-  // optimize `{ c: [classLocals] } = applyapplyDecs2203R(...)` to
-  // `[classLocals] = applyapplyDecs2203R(...).c`
+
+  // optimize `{ c: [classLocals] } = applyDecsHelper(...)` to
+  // `[classLocals] = applyDecsHelper(...).c`
   if (elementLocals.length > 0) {
     if (classLocals.length > 0) {
       lhs = t.objectPattern([
