@@ -1,19 +1,20 @@
-expect(() => {
-  let elements = [];
+let elements = [];
 
-  function dec(val, context) {
-    elements.push({ val, context });
+function dec(val, context) {
+  elements.push(val);
+}
+
+class Foo {
+  @dec
+  a() {
+    return 1;
   }
 
-  class Foo {
-    @dec
-    a() {
-      return 1;
-    }
-
-    @dec
-    a() {
-      return 2;
-    }
+  @dec
+  a() {
+    return 2;
   }
-}).toThrow("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: a")
+}
+
+expect(elements[0]()).toEqual(2)
+expect(elements[1]()).toEqual(2)

@@ -1,29 +1,30 @@
-expect(() => {
-  var i = 0;
-  var j = 0;
+var i = 0;
+var j = 0;
 
-  function getKeyI() {
-    return (i++).toString();
+function getKeyI() {
+  return (i++).toString();
+}
+function getKeyJ() {
+  return (j++).toString();
+}
+
+let elements = [];
+
+function dec(fn, context) {
+  elements.push(fn);
+}
+
+class Foo {
+  @dec
+  [getKeyI()]() {
+    return 1;
   }
-  function getKeyJ() {
-    return (j++).toString();
+
+  @dec
+  [getKeyJ()]() {
+    return 2;
   }
+}
 
-  let elements = [];
-
-  function dec(fn, context) {
-    elements.push({ fn, context });
-  }
-
-  class Foo {
-    @dec
-    [getKeyI()]() {
-      return 1;
-    }
-
-    @dec
-    [getKeyJ()]() {
-      return 2;
-    }
-  }
-}).toThrow("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: 0")
+expect(elements[0]()).toEqual(2);
+expect(elements[1]()).toEqual(2);
