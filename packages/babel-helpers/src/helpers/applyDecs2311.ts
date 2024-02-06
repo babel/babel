@@ -18,7 +18,7 @@ const enum PROP_KIND {
   DECORATORS_HAVE_THIS = 16,
 }
 
-type DecoratorFinishedRef = { v?: boolean };
+type DecoratorFinishedRef = { v?: number };
 type DecoratorContextAccess = {
   get?: (target: object) => any;
   set?: (target: object, value: any) => void;
@@ -201,21 +201,18 @@ export default /* @no-mangle */ function applyDecs2311(
   var defineProperty = Object.defineProperty;
   var metadata: any;
   var hasClassDecs = classDecs.length;
+  var _: any;
 
-  function _bindPropCall(obj: any, name: string, before?: Function) {
-    return function (_this: any, value?: any) {
-      if (before) {
-        before(_this);
-      }
-      return obj[name].call(_this, value);
-    };
-  }
-
-  function runInitializers(initializers: Function[], value: any) {
+  function runInitializers(
+    initializers: Function[],
+    hasValue: 0 | 1,
+    thisArg: any,
+    value?: any,
+  ) {
     for (var i = 0; i < initializers.length; i++) {
-      initializers[i].call(value);
+      value = initializers[i].apply(thisArg, hasValue ? [value] : []);
     }
-    return value;
+    return hasValue ? value : thisArg;
   }
 
   function assertCallable(
@@ -263,8 +260,17 @@ export default /* @no-mangle */ function applyDecs2311(
 
     var decs = [].concat(decInfo[0]),
       decVal = decInfo[3],
-      _: any,
       isClass = !ret;
+
+    function _bindPropCall(name: keyof PropertyDescriptor, before?: Function) {
+      return function (_this: any, value?: any) {
+        if (before) {
+          before(_this);
+        }
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        return desc[name].call(_this, value);
+      };
+    }
 
     if (!isClass) {
       var desc: PropertyDescriptor = {},
@@ -335,13 +341,10 @@ export default /* @no-mangle */ function applyDecs2311(
       };
 
       if (isClass) {
-        if (
-          (_ = assertCallable(
-            dec.call(decThis, newValue, ctx),
-            "class decorators",
-            "return",
-          ))
-        ) {
+        _ = dec.call(decThis, newValue, ctx);
+        decoratorFinishedRef.v = 1;
+
+        if (assertCallable(_, "class decorators", "return")) {
           newValue = _;
         }
       } else {
@@ -365,10 +368,10 @@ export default /* @no-mangle */ function applyDecs2311(
           };
         } else {
           if (kind < PROP_KIND.SETTER) {
-            get = _bindPropCall(desc, "get", assertInstanceIfPrivate);
+            get = _bindPropCall("get", assertInstanceIfPrivate);
           }
           if (kind !== PROP_KIND.GETTER) {
-            set = _bindPropCall(desc, "set", assertInstanceIfPrivate);
+            set = _bindPropCall("set", assertInstanceIfPrivate);
           }
         }
 
@@ -393,6 +396,7 @@ export default /* @no-mangle */ function applyDecs2311(
             : desc[key],
           ctx,
         );
+        decoratorFinishedRef.v = 1;
 
         if (isAccessor) {
           if (typeof newValue === "object" && newValue) {
@@ -403,7 +407,7 @@ export default /* @no-mangle */ function applyDecs2311(
               desc.set = _;
             }
             if ((_ = assertCallable(newValue.init, "accessor.init"))) {
-              init.push(_);
+              init.unshift(_);
             }
           } else if (newValue !== void 0) {
             throw new TypeError(
@@ -418,27 +422,20 @@ export default /* @no-mangle */ function applyDecs2311(
           )
         ) {
           if (isField) {
-            init.push(newValue);
+            init.unshift(newValue);
           } else {
             desc[key] = newValue;
           }
         }
       }
-
-      decoratorFinishedRef.v = true;
     }
 
     if (isField || isAccessor) {
       ret.push(
         // init
-        function (instance: any, value: any) {
-          for (var i = init.length - 1; i >= 0; i--) {
-            value = init[i].call(instance, value);
-          }
-          return value;
-        },
+        runInitializers.bind(null, init, 1),
         // init_extra
-        runInitializers.bind(null, initializers),
+        runInitializers.bind(null, initializers, 0),
       );
     }
 
@@ -446,21 +443,16 @@ export default /* @no-mangle */ function applyDecs2311(
       if (isPrivate) {
         if (isAccessor) {
           // get and set should be returned before init_extra
-          ret.splice(
-            -1,
-            0,
-            _bindPropCall(desc, "get"),
-            _bindPropCall(desc, "set"),
-          );
+          ret.splice(-1, 0, _bindPropCall("get"), _bindPropCall("set"));
         } else {
           ret.push(
             kind === PROP_KIND.METHOD
               ? desc[key]
-              : _bindPropCall.call.bind(desc[key]),
+              : runInitializers.call.bind(desc[key]),
           );
         }
       } else {
-        Object.defineProperty(Class, name, desc);
+        defineProperty(Class, name, desc);
       }
     }
     return newValue;
@@ -471,13 +463,10 @@ export default /* @no-mangle */ function applyDecs2311(
     var ret: Function[] = [];
     var protoInitializers: Function[];
     var staticInitializers: Function[];
-    var staticBrand = function (_: any) {
-      return checkInRHS(_) === targetClass;
-    };
 
     function pushInitializers(initializers: Function[]) {
       if (initializers) {
-        ret.push(runInitializers.bind(null, initializers));
+        ret.push(runInitializers.bind(null, initializers, 0));
       }
     }
 
@@ -512,7 +501,11 @@ export default /* @no-mangle */ function applyDecs2311(
         isPrivate,
         isField,
         isAccessor,
-        isStatic && isPrivate ? staticBrand : instanceBrand,
+        isStatic && isPrivate
+          ? function (_: any) {
+              return checkInRHS(_) === targetClass;
+            }
+          : instanceBrand,
       );
     }
 
@@ -533,10 +526,10 @@ export default /* @no-mangle */ function applyDecs2311(
     metadata = parentClass[symbolMetadata];
   }
   metadata = Object.create(metadata == null ? null : metadata);
-  var e = applyMemberDecs();
+  _ = applyMemberDecs();
   if (!hasClassDecs) defineMetadata(targetClass);
   return {
-    e: e,
+    e: _,
     // Lazily apply class decorations so that member init locals can be properly bound.
     get c() {
       // The transformer will not emit assignment when there are no class decorators,
@@ -554,7 +547,7 @@ export default /* @no-mangle */ function applyDecs2311(
               initializers,
             ),
           ),
-          runInitializers.bind(null, initializers, targetClass),
+          runInitializers.bind(null, initializers, 0, targetClass),
         ]
       );
     },
