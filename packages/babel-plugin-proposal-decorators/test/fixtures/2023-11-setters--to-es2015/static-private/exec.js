@@ -24,6 +24,8 @@ class Foo {
 
 const aContext = Foo['#aContext'];
 
+expect(aContext.access).not.toHaveProperty("get");
+
 expect(aContext.access.has(Foo)).toBe(true);
 expect(aContext.access.has({})).toBe(false);
 expect(aContext.access.has(Object.create(Foo))).toBe(false);
