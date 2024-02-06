@@ -38,8 +38,8 @@ type DecoratorInfo =
       decs: Function | Function[],
       kind: PROP_KIND,
       name: string,
-      any?,
-      Function?,
+      privateGetter?: Function,
+      privateSetter?: Function,
     ]
   | [classDecs: Function[]];
 
@@ -486,7 +486,7 @@ export default /* @no-mangle */ function applyDecs2311(
 
       var kind = decInfo[1];
       var name = decInfo[2];
-      var isPrivate = decInfo.length > 3;
+      var isPrivate = !!decInfo[3];
 
       var decoratorsHaveThis = kind & PROP_KIND.DECORATORS_HAVE_THIS;
       var isStatic = !!(kind & PROP_KIND.STATIC);
