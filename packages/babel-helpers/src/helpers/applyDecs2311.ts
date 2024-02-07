@@ -459,7 +459,12 @@ export default /* @no-mangle */ function applyDecs2311(
           // get and set should be returned before init_extra
           ret.splice(-1, 0, _bindPropCall("get"), _bindPropCall("set"));
         } else {
-          ret.push(isMethod ? desc[key] : runInitializers.call.bind(desc[key]));
+          ret.push(
+            isMethod
+              ? desc[key]
+              : // Equivalent to `Function.call`, just to reduce code size
+                runInitializers.call.bind(desc[key]),
+          );
         }
       } else {
         defineProperty(Class, name, desc);
