@@ -49,12 +49,6 @@ new class extends babelHelpers.identity {
       static set m(v) {
         Class.#C = v;
       }
-      set #r(v) {
-        _set_r(this, v);
-      }
-      get #r() {
-        return _get_r(this);
-      }
     }
   }
   #o = _call_o;
@@ -68,6 +62,12 @@ new class extends babelHelpers.identity {
     _call_q(this, v);
   }
   #D = (_init_extra_n(this), _init_r(this));
+  set #r(v) {
+    _set_r(this, v);
+  }
+  get #r() {
+    return _get_r(this);
+  }
   constructor() {
     super(_Class), (() => {
       _init_extra_r(this);

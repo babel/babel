@@ -23,10 +23,10 @@ class Foo {
     Foo.#A = v;
   }
   static #B = _init_a2(this);
-  set #a(v) {
+  static set #a(v) {
     _set_a(this, v);
   }
-  get #a() {
+  static get #a() {
     return _get_a(this);
   }
   static #C = _init_computedKey(this);
