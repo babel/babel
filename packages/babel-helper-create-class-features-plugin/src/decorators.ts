@@ -182,10 +182,9 @@ function addProxyAccessorsFor(
   originalKey: t.PrivateName | t.Expression,
   targetKey: t.PrivateName,
   version: DecoratorVersionKind,
-  isComputed = false,
+  isComputed: boolean,
+  isStatic: boolean,
 ): void {
-  const { static: isStatic } = element.node;
-
   const thisArg =
     (version === "2023-11" ||
       (!process.env.BABEL_8_BREAKING && version === "2023-05")) &&
@@ -610,6 +609,7 @@ function addCallAccessorsFor(
   key: t.PrivateName,
   getId: t.Identifier,
   setId: t.Identifier,
+  isStatic: boolean,
 ) {
   element.insertAfter(
     t.classPrivateMethod(
@@ -621,6 +621,7 @@ function addCallAccessorsFor(
           t.callExpression(t.cloneNode(getId), [t.thisExpression()]),
         ),
       ]),
+      isStatic,
     ),
   );
 
@@ -637,6 +638,7 @@ function addCallAccessorsFor(
           ]),
         ),
       ]),
+      isStatic,
     ),
   );
 }
@@ -885,6 +887,7 @@ function transformClass(
         newId,
         version,
         computed,
+        isStatic,
       );
     }
   }
@@ -1099,7 +1102,7 @@ function transformClass(
               `set_${name}`,
             );
 
-            addCallAccessorsFor(newPath, key, getId, setId);
+            addCallAccessorsFor(newPath, key, getId, setId, isStatic);
 
             locals = [newFieldInitId, getId, setId];
           } else {
@@ -1110,6 +1113,7 @@ function transformClass(
               newId,
               version,
               isComputed,
+              isStatic,
             );
             locals = [newFieldInitId];
           }
