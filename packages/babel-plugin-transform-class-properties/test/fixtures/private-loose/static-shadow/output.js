@@ -1,14 +1,15 @@
+var _x = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("x");
 class Test {
   static method() {
-    const _Test2 = 2;
+    const Test = 2;
     const func = () => {
-      const _Test = 3;
-      return babelHelpers.classStaticPrivateFieldSpecGet(this, Test, _x) + _Test;
+      const Test = 3;
+      return babelHelpers.classPrivateFieldLooseBase(this, _x)[_x] + Test;
     };
-    return func() + _Test2;
+    return func() + Test;
   }
 }
-var _x = {
+Object.defineProperty(Test, _x, {
   writable: true,
   value: 1
-};
+});

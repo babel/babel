@@ -1,13 +1,10 @@
-var _foo = /*#__PURE__*/new WeakMap();
+var _foo = /*#__PURE__*/new WeakSet();
 let Foo = /*#__PURE__*/function () {
   "use strict";
 
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
-    babelHelpers.classPrivateFieldInitSpec(this, _foo, {
-      get: _get_foo,
-      set: void 0
-    });
+    babelHelpers.classPrivateMethodInitSpec(this, _foo);
   }
   babelHelpers.createClass(Foo, [{
     key: "test",

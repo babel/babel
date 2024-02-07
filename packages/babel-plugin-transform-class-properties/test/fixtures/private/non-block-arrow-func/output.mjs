@@ -5,8 +5,7 @@ export default (param => {
       return param;
     }
   }, _props = {
-    writable: true,
-    value: {
+    _: {
       prop1: 'prop1',
       prop2: 'prop2'
     }

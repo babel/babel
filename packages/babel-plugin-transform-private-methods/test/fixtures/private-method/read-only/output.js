@@ -8,7 +8,7 @@ class A {
     babelHelpers.classPrivateMethodInitSpec(this, _method);
     babelHelpers.defineProperty(this, "counter", 0);
     this.self(), 2, babelHelpers.readOnlyError("#method");
-    [babelHelpers.classPrivateFieldDestructureSet(this, _method).value] = [2];
+    [(this, babelHelpers.readOnlyError("#method"))._] = [2];
   }
 }
 function _method2() {}

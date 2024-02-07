@@ -9,7 +9,7 @@ class B extends A {
     return 2;
   }
   static extract() {
-    return [babelHelpers.classStaticPrivateMethodGet(this, B, _getA), babelHelpers.classStaticPrivateMethodGet(this, B, _getB)];
+    return [babelHelpers.assertClassBrand(this, B, _getA), babelHelpers.assertClassBrand(this, B, _getB)];
   }
 }
 _B = B;

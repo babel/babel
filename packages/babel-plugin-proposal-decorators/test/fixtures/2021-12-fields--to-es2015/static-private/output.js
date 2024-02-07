@@ -3,19 +3,17 @@ const dec = () => {};
 class Foo {}
 _Foo = Foo;
 [_init_a, _init_b] = babelHelpers.applyDecs(_Foo, [[dec, 5, "a", function () {
-  return babelHelpers.classStaticPrivateFieldSpecGet(this, _Foo, _a);
+  return babelHelpers.assertClassBrand(this, _Foo, _a)._;
 }, function (value) {
-  babelHelpers.classStaticPrivateFieldSpecSet(this, _Foo, _a, value);
+  _a._ = babelHelpers.assertClassBrand(this, _Foo, value);
 }], [dec, 5, "b", function () {
-  return babelHelpers.classStaticPrivateFieldSpecGet(this, _Foo, _b);
+  return babelHelpers.assertClassBrand(this, _Foo, _b)._;
 }, function (value) {
-  babelHelpers.classStaticPrivateFieldSpecSet(this, _Foo, _b, value);
+  _b._ = babelHelpers.assertClassBrand(this, _Foo, value);
 }]], []);
 var _a = {
-  writable: true,
-  value: _init_a(_Foo)
+  _: _init_a(_Foo)
 };
 var _b = {
-  writable: true,
-  value: _init_b(_Foo, 123)
+  _: _init_b(_Foo, 123)
 };

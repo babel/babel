@@ -2,22 +2,22 @@ var _initStatic, _init_a, _init_b, _init_computedKey, _Foo;
 const dec = () => {};
 class Foo {
   static get a() {
-    return babelHelpers.classStaticPrivateFieldSpecGet(Foo, Foo, _A);
+    return _A._;
   }
   static set a(v) {
-    babelHelpers.classStaticPrivateFieldSpecSet(Foo, Foo, _A, v);
+    _A._ = v;
   }
   static get b() {
-    return babelHelpers.classStaticPrivateFieldSpecGet(Foo, Foo, _B);
+    return _B._;
   }
   static set b(v) {
-    babelHelpers.classStaticPrivateFieldSpecSet(Foo, Foo, _B, v);
+    _B._ = v;
   }
   static get ['c']() {
-    return babelHelpers.classStaticPrivateFieldSpecGet(Foo, Foo, _C);
+    return _C._;
   }
   static set ['c'](v) {
-    babelHelpers.classStaticPrivateFieldSpecSet(Foo, Foo, _C, v);
+    _C._ = v;
   }
 }
 _Foo = Foo;
@@ -26,14 +26,11 @@ _Foo = Foo;
   _initStatic(_Foo);
 })();
 var _A = {
-  writable: true,
-  value: _init_a(_Foo)
+  _: _init_a(_Foo)
 };
 var _B = {
-  writable: true,
-  value: _init_b(_Foo, 123)
+  _: _init_b(_Foo, 123)
 };
 var _C = {
-  writable: true,
-  value: _init_computedKey(_Foo, 456)
+  _: _init_computedKey(_Foo, 456)
 };

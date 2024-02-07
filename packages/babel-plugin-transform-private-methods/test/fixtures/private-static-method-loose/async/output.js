@@ -1,6 +1,6 @@
 class Cl {
   test() {
-    return babelHelpers.classStaticPrivateMethodGet(Cl, Cl, _privateStaticMethod).call(Cl);
+    return _privateStaticMethod.call(Cl);
   }
 }
 async function _privateStaticMethod() {

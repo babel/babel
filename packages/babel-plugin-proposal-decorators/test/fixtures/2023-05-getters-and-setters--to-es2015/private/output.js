@@ -1,19 +1,16 @@
 var _initProto, _call_a, _call_a2, _Foo;
 const dec = () => {};
-var _a = /*#__PURE__*/new WeakMap();
+var _a = /*#__PURE__*/new WeakSet();
 class Foo {
   constructor() {
-    babelHelpers.classPrivateFieldInitSpec(this, _a, {
-      get: _get_a,
-      set: _set_a
-    });
+    babelHelpers.classPrivateMethodInitSpec(this, _a);
     babelHelpers.defineProperty(this, "value", (_initProto(this), 1));
   }
   getA() {
-    return babelHelpers.classPrivateFieldGet(this, _a);
+    return babelHelpers.classPrivateGetter(this, _a, _get_a);
   }
   setA(v) {
-    babelHelpers.classPrivateFieldSet(this, _a, v);
+    babelHelpers.classPrivateSetter(this, _a, _set_a, v);
   }
 }
 _Foo = Foo;

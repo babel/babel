@@ -7,18 +7,9 @@ var _g = /*#__PURE__*/new WeakMap();
 var _a = /*#__PURE__*/new WeakMap();
 class Foo {
   constructor() {
-    babelHelpers.classPrivateFieldInitSpec(this, _ag, {
-      writable: true,
-      value: _call_ag
-    });
-    babelHelpers.classPrivateFieldInitSpec(this, _g, {
-      writable: true,
-      value: _call_g
-    });
-    babelHelpers.classPrivateFieldInitSpec(this, _a, {
-      writable: true,
-      value: _call_a
-    });
+    babelHelpers.classPrivateFieldInitSpec(this, _ag, _call_ag);
+    babelHelpers.classPrivateFieldInitSpec(this, _g, _call_g);
+    babelHelpers.classPrivateFieldInitSpec(this, _a, _call_a);
     _initProto(this);
   }
 }
