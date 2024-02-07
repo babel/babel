@@ -22,3 +22,30 @@ expect(() => {
   }
 }).toThrow("Decorating two elements with the same name");
 
+expect(() => {
+  class Foo {
+    @dec
+    [getKey()]() {
+      return 1;
+    }
+
+    @dec
+    get [getKey()]() {
+      return 2;
+    }
+  }
+}).toThrow("Decorating two elements with the same name");
+
+expect(() => {
+  class Foo {
+    @dec
+    [getKey()]() {
+      return 1;
+    }
+
+    @dec
+    set [getKey()](_) {
+      return 2;
+    }
+  }
+}).toThrow("Decorating two elements with the same name");
