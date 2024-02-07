@@ -2,7 +2,7 @@ let addInitializer;
 
 function decMethod(_, context) {
   ({ addInitializer } = context);
-  throw new Error();
+  return null;
 }
 
 try {
@@ -14,4 +14,4 @@ try {
 
 expect(() => {
   addInitializer(() => null);
-}).not.toThrow();
+}).toThrow('attempted to call addInitializer after decoration was finished');
