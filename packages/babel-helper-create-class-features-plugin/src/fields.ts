@@ -108,7 +108,7 @@ export function buildPrivateNamesNodes(
     //   because static fields are directly assigned to a variable in the
     //   buildPrivateStaticFieldInitSpec function.
     const { static: isStatic, method: isMethod, getId, setId } = value;
-    const isAccessor = getId || setId;
+    const isGetterOrSetter = getId || setId;
     const id = t.cloneNode(value.id);
 
     let init: t.Expression;
@@ -126,7 +126,9 @@ export function buildPrivateNamesNodes(
       init = t.newExpression(
         t.identifier(
           isMethod &&
-            (process.env.BABEL_8_BREAKING || !isAccessor || newHelpers(state))
+            (process.env.BABEL_8_BREAKING ||
+              !isGetterOrSetter ||
+              newHelpers(state))
             ? "WeakSet"
             : "WeakMap",
         ),
@@ -386,7 +388,7 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
         getId,
         setId,
       } = privateNamesMap.get(name);
-      const isAccessor = getId || setId;
+      const isGetterOrSetter = getId || setId;
 
       if (isStatic) {
         // if there are any local variable shadowing classRef, unshadow it
@@ -397,7 +399,7 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
           // NOTE: This package has a peerDependency on @babel/core@^7.0.0, but these
           // helpers have been introduced in @babel/helpers@7.1.0.
           const helperName =
-            isMethod && !isAccessor
+            isMethod && !isGetterOrSetter
               ? "classStaticPrivateMethodGet"
               : "classStaticPrivateFieldSpecGet";
 
@@ -462,7 +464,7 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
       }
 
       if (isMethod) {
-        if (isAccessor) {
+        if (isGetterOrSetter) {
           if (!getId) {
             return t.sequenceExpression([
               this.receiver(member),
@@ -514,12 +516,12 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
         setId,
         getId,
       } = privateNamesMap.get(name);
-      const isAccessor = getId || setId;
+      const isGetterOrSetter = getId || setId;
 
       if (isStatic) {
         if (!process.env.BABEL_8_BREAKING && !newHelpers(file)) {
           const helperName =
-            isMethod && !isAccessor
+            isMethod && !isGetterOrSetter
               ? "classStaticPrivateMethodSet"
               : "classStaticPrivateFieldSpecSet";
 
@@ -886,11 +888,11 @@ if (!process.env.BABEL_8_BREAKING) {
   ) {
     const privateName = privateNamesMap.get(prop.node.key.id.name);
     const { id, getId, setId, initAdded } = privateName;
-    const isAccessor = getId || setId;
+    const isGetterOrSetter = getId || setId;
 
-    if (!prop.isProperty() && (initAdded || !isAccessor)) return;
+    if (!prop.isProperty() && (initAdded || !isGetterOrSetter)) return;
 
-    if (isAccessor) {
+    if (isGetterOrSetter) {
       privateNamesMap.set(prop.node.key.id.name, {
         ...privateName,
         initAdded: true,
@@ -947,8 +949,8 @@ function buildPrivateMethodInitLoose(
       prop,
     );
   }
-  const isAccessor = getId || setId;
-  if (isAccessor) {
+  const isGetterOrSetter = getId || setId;
+  if (isGetterOrSetter) {
     privateNamesMap.set(prop.node.key.id.name, {
       ...privateName,
       initAdded: true,
@@ -980,8 +982,8 @@ function buildPrivateInstanceMethodInitSpec(
   if (privateName.initAdded) return;
 
   if (!process.env.BABEL_8_BREAKING && !newHelpers(state)) {
-    const isAccessor = privateName.getId || privateName.setId;
-    if (isAccessor) {
+    const isGetterOrSetter = privateName.getId || privateName.setId;
+    if (isGetterOrSetter) {
       return buildPrivateAccessorInitialization(
         ref,
         prop,
@@ -1121,8 +1123,8 @@ function buildPrivateStaticMethodInitLoose(
 
   if (initAdded) return;
 
-  const isAccessor = getId || setId;
-  if (isAccessor) {
+  const isGetterOrSetter = getId || setId;
+  if (isGetterOrSetter) {
     privateNamesMap.set(prop.node.key.id.name, {
       ...privateName,
       initAdded: true,
