@@ -1,7 +1,3 @@
 {
-  "plugins": [
-    "transform-class-properties",
-    "transform-classes",
-    "transform-block-scoping"
-  ]
+  "plugins": ["transform-class-properties", "transform-classes"]
 }

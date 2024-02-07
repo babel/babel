@@ -7,18 +7,17 @@ babelHelpers.defineProperty(C, "x", "x");
 babelHelpers.defineProperty(C, "y", "y");
 babelHelpers.defineProperty(C, "z", "z");
 var _x = {
-  writable: true,
-  value: _C
+  _: _C
 };
 (() => {
   var {
       x
     } = _C,
-    _babelHelpers$classSt = babelHelpers.classStaticPrivateFieldSpecGet(_C, _C, _x),
+    _x$_ = _x._,
     {
       y
-    } = _babelHelpers$classSt,
-    z = babelHelpers.objectWithoutProperties(_babelHelpers$classSt, _excluded);
+    } = _x$_,
+    z = babelHelpers.objectWithoutProperties(_x$_, _excluded);
   result = {
     x,
     y,

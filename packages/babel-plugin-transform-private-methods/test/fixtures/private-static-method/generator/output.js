@@ -1,6 +1,6 @@
 class Cl {
   test() {
-    return babelHelpers.classStaticPrivateMethodGet(Cl, Cl, _foo).call(Cl);
+    return _foo.call(Cl);
   }
 }
 function* _foo() {

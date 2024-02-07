@@ -1,8 +1,7 @@
 function withContext(ComposedComponent) {
   var _WithContext, _propTypes;
   return _WithContext = class WithContext extends Component {}, _propTypes = {
-    writable: true,
-    value: {
+    _: {
       context: PropTypes.shape({
         addCss: PropTypes.func,
         setTitle: PropTypes.func,

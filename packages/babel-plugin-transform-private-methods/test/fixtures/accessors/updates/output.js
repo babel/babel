@@ -1,22 +1,16 @@
 var _privateField = /*#__PURE__*/new WeakMap();
-var _privateFieldValue = /*#__PURE__*/new WeakMap();
+var _privateFieldValue = /*#__PURE__*/new WeakSet();
 class Cl {
   constructor() {
-    babelHelpers.classPrivateFieldInitSpec(this, _privateFieldValue, {
-      get: _get_privateFieldValue,
-      set: _set_privateFieldValue
-    });
-    babelHelpers.classPrivateFieldInitSpec(this, _privateField, {
-      writable: true,
-      value: "top secret string"
-    });
+    babelHelpers.classPrivateMethodInitSpec(this, _privateFieldValue);
+    babelHelpers.classPrivateFieldInitSpec(this, _privateField, "top secret string");
     this.publicField = "not secret string";
   }
   publicGetPrivateField() {
-    return babelHelpers.classPrivateFieldGet(this, _privateFieldValue);
+    return babelHelpers.classPrivateGetter(this, _privateFieldValue, _get_privateFieldValue);
   }
   publicSetPrivateField(newValue) {
-    babelHelpers.classPrivateFieldSet(this, _privateFieldValue, newValue);
+    babelHelpers.classPrivateSetter(this, _privateFieldValue, _set_privateFieldValue, newValue);
   }
   get publicFieldValue() {
     return this.publicField;
@@ -26,21 +20,21 @@ class Cl {
   }
   testUpdates() {
     var _this$privateFieldVal, _this$privateFieldVal2, _this$privateFieldVal3, _this$privateFieldVal4, _this$privateFieldVal5;
-    babelHelpers.classPrivateFieldSet(this, _privateField, 0);
+    babelHelpers.classPrivateFieldSet2(this, _privateField, 0);
     this.publicField = 0;
-    babelHelpers.classPrivateFieldSet(this, _privateFieldValue, (babelHelpers.classPrivateFieldSet(this, _privateFieldValue, (_this$privateFieldVal3 = babelHelpers.classPrivateFieldGet(this, _privateFieldValue), _this$privateFieldVal4 = _this$privateFieldVal3++, _this$privateFieldVal3)), _this$privateFieldVal4));
+    babelHelpers.classPrivateSetter(this, _privateFieldValue, _set_privateFieldValue, (babelHelpers.classPrivateSetter(this, _privateFieldValue, _set_privateFieldValue, (_this$privateFieldVal3 = babelHelpers.classPrivateGetter(this, _privateFieldValue, _get_privateFieldValue), _this$privateFieldVal4 = _this$privateFieldVal3++, _this$privateFieldVal3)), _this$privateFieldVal4));
     this.publicFieldValue = this.publicFieldValue++;
-    babelHelpers.classPrivateFieldSet(this, _privateFieldValue, (_this$privateFieldVal5 = babelHelpers.classPrivateFieldGet(this, _privateFieldValue), ++_this$privateFieldVal5));
+    babelHelpers.classPrivateSetter(this, _privateFieldValue, _set_privateFieldValue, (_this$privateFieldVal5 = babelHelpers.classPrivateGetter(this, _privateFieldValue, _get_privateFieldValue), ++_this$privateFieldVal5));
     ++this.publicFieldValue;
-    babelHelpers.classPrivateFieldSet(this, _privateFieldValue, babelHelpers.classPrivateFieldGet(this, _privateFieldValue) + 1);
+    babelHelpers.classPrivateSetter(this, _privateFieldValue, _set_privateFieldValue, babelHelpers.classPrivateGetter(this, _privateFieldValue, _get_privateFieldValue) + 1);
     this.publicFieldValue += 1;
-    babelHelpers.classPrivateFieldSet(this, _privateFieldValue, -(babelHelpers.classPrivateFieldGet(this, _privateFieldValue) ** babelHelpers.classPrivateFieldGet(this, _privateFieldValue)));
+    babelHelpers.classPrivateSetter(this, _privateFieldValue, _set_privateFieldValue, -(babelHelpers.classPrivateGetter(this, _privateFieldValue, _get_privateFieldValue) ** babelHelpers.classPrivateGetter(this, _privateFieldValue, _get_privateFieldValue)));
     this.publicFieldValue = -(this.publicFieldValue ** this.publicFieldValue);
   }
 }
 function _get_privateFieldValue() {
-  return babelHelpers.classPrivateFieldGet(this, _privateField);
+  return babelHelpers.classPrivateFieldGet2(this, _privateField);
 }
 function _set_privateFieldValue(newValue) {
-  babelHelpers.classPrivateFieldSet(this, _privateField, newValue);
+  babelHelpers.classPrivateFieldSet2(this, _privateField, newValue);
 }

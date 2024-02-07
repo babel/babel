@@ -2,10 +2,9 @@ var _Foo;
 class Foo {}
 _Foo = Foo;
 var _ = {
-  writable: true,
-  value: 42
+  _: 42
 };
 // static block can not be transformed as `#_` here
 
-_Foo.foo = babelHelpers.classStaticPrivateFieldSpecGet(_Foo, _Foo, _);
+_Foo.foo = babelHelpers.assertClassBrand(_Foo, _Foo, _)._;
 expect(Foo.foo).toBe(42);
