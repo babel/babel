@@ -53,6 +53,11 @@ export default Object.freeze({
     "7.23.0",
     'import checkInRHS from"checkInRHS";import setFunctionName from"setFunctionName";import toPropertyKey from"toPropertyKey";export default function applyDecs2311(e,t,n,r,o,i){var c,a,u=Symbol.metadata||Symbol.for("Symbol.metadata"),s=Object.defineProperty,l={},f=n.length;function p(e,t,n,r){for(var o=0;o<e.length;o++)r=e[o].apply(n,t?[r]:[]);return t?r:n}function d(e,t,n,r){if("function"!=typeof e&&(r||void 0!==e))throw new TypeError(t+" must "+(n||"be")+" a function"+(r?"":" or undefined"));return e}function applyDec(e,t,n,r,o,i,u,f,m,h,y,v){function g(e){if(!v(e))throw new TypeError("Attempted to access private element on non-instance")}var b=[].concat(t[0]),w=t[3],D=!u,S=r+"/"+f,j=3===o,E=4===o,I=2===o;function P(e){if(!H&&!h&&!m){if(l[S+e])throw new Error("Decorating two elements with the same name ("+r+") is not supported yet");l[S+e]=1}}function k(e,t){return function(n,r){return t&&t(n),F[e].call(n,r)}}if(!D){var F={},N=[],O=j?"get":E||y?"set":"value";m?(h||y?F={get:setFunctionName((function(){return w(this)}),r,"get"),set:function(e){t[4](this,e)}}:F[O]=w,h||setFunctionName(F[O],r,I?"":O)):h||(F=Object.getOwnPropertyDescriptor(e,r))}for(var z=e,H=b.length-1;H>=0;H-=n?2:1){var K=b[H],R=n?b[H-1]:void 0,T={},A={kind:["field","accessor","method","getter","setter","class"][o],name:r,metadata:c,addInitializer:function(e,t){if(e.v)throw new Error("attempted to call addInitializer after decoration was finished");d(t,"An initializer","be",!0),i.push(t)}.bind(null,T)};if(D)a=K.call(R,z,A),T.v=1,d(a,"class decorators","return")&&(z=a);else if(A.static=f,A.private=m,a=A.access={has:m?v.bind():function(e){return r in e}},E||(P(),a.get=m?I?function(e){return g(e),F.value}:k("get",g):function(e){return e[r]}),j||(P(1),a.set=m?k("set",g):function(e,t){e[r]=t}),z=K.call(R,y?{get:F.get,set:F.set}:F[O],A),T.v=1,y){if("object"==typeof z&&z)(a=d(z.get,"accessor.get"))&&(F.get=a),(a=d(z.set,"accessor.set"))&&(F.set=a),(a=d(z.init,"accessor.init"))&&N.unshift(a);else if(void 0!==z)throw new TypeError("accessor decorators must return an object with get, set, or init properties or undefined")}else d(z,(h?"field":"method")+" decorators","return")&&(h?N.unshift(z):F[O]=z)}return o<2&&u.push(p.bind(null,N,1),p.bind(null,i,0)),h||D||(m?y?u.splice(-1,0,k("get"),k("set")):u.push(I?F[O]:p.call.bind(F[O])):s(e,r,F)),z}function m(e){return s(e,u,{configurable:!0,enumerable:!0,value:c})}return void 0!==i&&(c=i[u]),c=Object.create(null==c?null:c),a=function(){var n,r,i=[];function c(e){e&&i.push(p.bind(null,e,0))}for(var a=0;a<t.length;a++){var u=t[a],s=u[1],l=u[2],f=!!u[3],d=16&s,m=!!(8&s),h=0==(s&=7),y=1===s;applyDec(m?e:e.prototype,u,d,f?"#"+l:toPropertyKey(l),s,h||y?[]:m?r=r||[]:n=n||[],i,m,f,h,y,m&&f?function(t){return checkInRHS(t)===e}:o)}return c(n),c(r),i}(),f||m(e),{e:a,get c(){var t=[];return f&&[m(applyDec(e,[n],r,e.name,5,t)),p.bind(null,t,0,e)]}}}',
   ),
+  // size: 187, gzip size: 167
+  assertClassBrand: helper(
+    "7.22.0",
+    'export default function _assertClassBrand(e,t,n){if("function"==typeof t?t===e:t.has(e))return arguments.length<3?e:n;throw new TypeError("Private element is not present on this object")}',
+  ),
   // size: 544, gzip size: 300
   asyncGeneratorDelegate: helper(
     "7.0.0-beta.0",
@@ -77,6 +82,26 @@ export default Object.freeze({
   checkInRHS: helper(
     "7.20.5",
     'export default function _checkInRHS(e){if(Object(e)!==e)throw TypeError("right-hand side of \'in\' should be an object, got "+(null!==e?typeof e:"null"));return e}',
+  ),
+  // size: 135, gzip size: 116
+  classPrivateFieldGet2: helper(
+    "7.22.0",
+    'import assertClassBrand from"assertClassBrand";export default function _classPrivateFieldGet2(s,a){return a.get(assertClassBrand(s,a))}',
+  ),
+  // size: 141, gzip size: 123
+  classPrivateFieldSet2: helper(
+    "7.22.0",
+    'import assertClassBrand from"assertClassBrand";export default function _classPrivateFieldSet2(s,a,r){return a.set(assertClassBrand(s,a),r),r}',
+  ),
+  // size: 135, gzip size: 117
+  classPrivateGetter: helper(
+    "7.22.0",
+    'import assertClassBrand from"assertClassBrand";export default function _classPrivateGetter(s,a,r){return r.call(assertClassBrand(s,a))}',
+  ),
+  // size: 141, gzip size: 121
+  classPrivateSetter: helper(
+    "7.22.0",
+    'import assertClassBrand from"assertClassBrand";export default function _classPrivateSetter(s,a,r,t){return r.call(assertClassBrand(s,a),t),t}',
   ),
   // size: 327, gzip size: 200
   construct: helper(
@@ -147,6 +172,11 @@ export default Object.freeze({
   toPropertyKey: helper(
     "7.1.5",
     'import toPrimitive from"toPrimitive";export default function toPropertyKey(t){var i=toPrimitive(t,"string");return"symbol"==typeof i?i:String(i)}',
+  ),
+  // size: 151, gzip size: 146
+  toSetter: helper(
+    "7.22.0",
+    'export default function _toSetter(e,t){var r=[].slice.call(arguments,2);return Object.defineProperty({},"_",{set:function(n){r.push(n),e.apply(t,r)}})}',
   ),
   // size: 289, gzip size: 165
   typeof: helper(

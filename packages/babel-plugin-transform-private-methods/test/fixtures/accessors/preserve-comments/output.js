@@ -1,11 +1,8 @@
-var _a = /*#__PURE__*/new WeakMap();
+var _a = /*#__PURE__*/new WeakSet();
 class C {
   constructor() {
     /* before get a */
-    babelHelpers.classPrivateFieldInitSpec(this, _a, {
-      get: _get_a,
-      set: _set_a
-    });
+    babelHelpers.classPrivateMethodInitSpec(this, _a);
   }
   /* after set a */
 }

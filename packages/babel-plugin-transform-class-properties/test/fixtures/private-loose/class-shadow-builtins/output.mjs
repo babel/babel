@@ -1,12 +1,11 @@
-function _classPrivateFieldInitSpec(obj, privateMap, value) { _checkPrivateRedeclaration(obj, privateMap); privateMap.set(obj, value); }
-function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollection.has(obj)) { throw new TypeError("Cannot initialize the same private elements twice on an object"); } }
-var _message = /*#__PURE__*/new WeakMap();
-class _TypeError2 {
+var id = 0;
+function _classPrivateFieldLooseKey(name) { return "__private_" + id++ + "_" + name; }
+var _message = /*#__PURE__*/_classPrivateFieldLooseKey("message");
+export class TypeError {
   constructor() {
-    _classPrivateFieldInitSpec(this, _message, {
+    Object.defineProperty(this, _message, {
       writable: true,
       value: void 0
     });
   }
 }
-export { _TypeError2 as TypeError };

@@ -13,6 +13,5 @@ let Foo = /*#__PURE__*/function () {
   return Foo;
 }();
 var _foo = {
-  writable: true,
-  value: 1
+  _: 1
 };
