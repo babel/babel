@@ -4,17 +4,17 @@ function dec(val, context) {
   elements.push(val);
 }
 
-class Foo {
-  @dec
-  a() {
-    return 1;
-  }
+expect(() => {
+  class Foo {
+    @dec
+    a() {
+      return 1;
+    }
 
-  @dec
-  a() {
-    return 2;
+    @dec
+    a() {
+      return 2;
+    }
   }
-}
+}).toThrow("Decorating two elements with the same name");
 
-expect(elements[0]()).toEqual(2)
-expect(elements[1]()).toEqual(2)

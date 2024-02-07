@@ -1,11 +1,5 @@
-var i = 0;
-var j = 0;
-
-function getKeyI() {
-  return (i++).toString();
-}
-function getKeyJ() {
-  return (j++).toString();
+function getKey() {
+  return eval("0")
 }
 
 let elements = [];
@@ -14,17 +8,17 @@ function dec(fn, context) {
   elements.push(fn);
 }
 
-class Foo {
-  @dec
-  [getKeyI()]() {
-    return 1;
-  }
+expect(() => {
+  class Foo {
+    @dec
+    [getKey()]() {
+      return 1;
+    }
 
-  @dec
-  [getKeyJ()]() {
-    return 2;
+    @dec
+    [getKey()]() {
+      return 2;
+    }
   }
-}
+}).toThrow("Decorating two elements with the same name");
 
-expect(elements[0]()).toEqual(2);
-expect(elements[1]()).toEqual(2);

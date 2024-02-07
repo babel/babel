@@ -200,7 +200,9 @@ export default /* @no-mangle */ function applyDecs2311(
   var symbolMetadata = Symbol.metadata || Symbol.for("Symbol.metadata");
   var defineProperty = Object.defineProperty;
   var metadata: any;
+  var existingNonFields: Record<string, number> = {};
   var hasClassDecs = classDecs.length;
+  // This is a temporary variable for smaller helper size
   var _: any;
 
   function runInitializers(
@@ -260,7 +262,27 @@ export default /* @no-mangle */ function applyDecs2311(
 
     var decs = [].concat(decInfo[0]),
       decVal = decInfo[3],
-      isClass = !ret;
+      isClass = !ret,
+      mapKey = name + "/" + isStatic;
+
+    var isGetter = kind === PROP_KIND.GETTER;
+    var isSetter = kind === PROP_KIND.SETTER;
+    var isMethod = kind === PROP_KIND.METHOD;
+
+    function markExistingNonField(hasSetter?: 1) {
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      if (!i && !isField && !isPrivate) {
+        if (existingNonFields[mapKey + hasSetter]) {
+          throw new Error(
+            "Decorating two elements with the same name (" +
+              name +
+              ") is not supported yet",
+          );
+        }
+
+        existingNonFields[mapKey + hasSetter] = 1;
+      }
+    }
 
     function _bindPropCall(name: keyof PropertyDescriptor, before?: Function) {
       return function (_this: any, value?: any) {
@@ -275,12 +297,11 @@ export default /* @no-mangle */ function applyDecs2311(
     if (!isClass) {
       var desc: PropertyDescriptor = {},
         init: Function[] = [],
-        key: "get" | "set" | "value" =
-          kind === PROP_KIND.GETTER
-            ? "get"
-            : kind === PROP_KIND.SETTER || isAccessor
-              ? "set"
-              : "value";
+        key: "get" | "set" | "value" = isGetter
+          ? "get"
+          : isSetter || isAccessor
+            ? "set"
+            : "value";
 
       if (isPrivate) {
         if (isField || isAccessor) {
@@ -301,11 +322,7 @@ export default /* @no-mangle */ function applyDecs2311(
         }
 
         if (!isField) {
-          setFunctionName(
-            desc[key],
-            name,
-            kind === PROP_KIND.METHOD ? "" : key,
-          );
+          setFunctionName(desc[key], name, isMethod ? "" : key);
         }
       } else if (!isField) {
         desc = Object.getOwnPropertyDescriptor(Class, name);
@@ -351,40 +368,36 @@ export default /* @no-mangle */ function applyDecs2311(
         ctx.static = isStatic;
         ctx.private = isPrivate;
 
-        var get, set;
-        if (!isPrivate) {
-          get = function (target: any) {
-            return target[name];
-          };
-          if (kind < PROP_KIND.METHOD || kind === PROP_KIND.SETTER) {
-            set = function (target: any, v: any) {
-              target[name] = v;
-            };
-          }
-        } else if (kind === PROP_KIND.METHOD) {
-          get = function (_this: any) {
-            assertInstanceIfPrivate(_this);
-            return desc.value;
-          };
-        } else {
-          if (kind < PROP_KIND.SETTER) {
-            get = _bindPropCall("get", assertInstanceIfPrivate);
-          }
-          if (kind !== PROP_KIND.GETTER) {
-            set = _bindPropCall("set", assertInstanceIfPrivate);
-          }
-        }
-
-        var access: DecoratorContextAccess = (ctx.access = {
+        _ = ctx.access = {
           has: isPrivate
             ? // @ts-expect-error no thisArg
               hasPrivateBrand.bind()
             : function (target: object) {
                 return name in target;
               },
-        });
-        if (get) access.get = get;
-        if (set) access.set = set;
+        };
+
+        if (!isSetter) {
+          markExistingNonField();
+          _.get = isPrivate
+            ? isMethod
+              ? function (_this: any) {
+                  assertInstanceIfPrivate(_this);
+                  return desc.value;
+                }
+              : _bindPropCall("get", assertInstanceIfPrivate)
+            : function (target: any) {
+                return target[name];
+              };
+        }
+        if (!isGetter) {
+          markExistingNonField(1);
+          _.set = isPrivate
+            ? _bindPropCall("set", assertInstanceIfPrivate)
+            : function (target: any, v: any) {
+                target[name] = v;
+              };
+        }
 
         newValue = dec.call(
           decThis,
@@ -430,7 +443,8 @@ export default /* @no-mangle */ function applyDecs2311(
       }
     }
 
-    if (isField || isAccessor) {
+    // isField || isAccessor
+    if (kind < PROP_KIND.METHOD) {
       ret.push(
         // init
         runInitializers.bind(null, init, 1),
@@ -445,11 +459,7 @@ export default /* @no-mangle */ function applyDecs2311(
           // get and set should be returned before init_extra
           ret.splice(-1, 0, _bindPropCall("get"), _bindPropCall("set"));
         } else {
-          ret.push(
-            kind === PROP_KIND.METHOD
-              ? desc[key]
-              : runInitializers.call.bind(desc[key]),
-          );
+          ret.push(isMethod ? desc[key] : runInitializers.call.bind(desc[key]));
         }
       } else {
         defineProperty(Class, name, desc);
