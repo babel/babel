@@ -5,13 +5,10 @@ for (let i = 0; i <= 10; ++i) {
   classes.push((_bar = /*#__PURE__*/new WeakMap(), _i = i, (_A = class A {
     constructor() {
       babelHelpers.defineProperty(this, _i, `computed field ${i}`);
-      babelHelpers.classPrivateFieldInitSpec(this, _bar, {
-        writable: true,
-        value: `private field ${i}`
-      });
+      babelHelpers.classPrivateFieldInitSpec(this, _bar, `private field ${i}`);
     }
     getBar() {
-      return babelHelpers.classPrivateFieldGet(this, _bar);
+      return babelHelpers.classPrivateFieldGet2(this, _bar);
     }
   }, babelHelpers.defineProperty(_A, "foo", `static field ${i}`), _A)));
 }

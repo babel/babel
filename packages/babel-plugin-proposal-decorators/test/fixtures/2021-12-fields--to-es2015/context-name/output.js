@@ -13,14 +13,13 @@ _computedKey = babelHelpers.toPropertyKey(f());
 class Foo {}
 _Foo = Foo;
 [_init_a, _init_a2, _init_computedKey, _init_computedKey2, _init_computedKey3, _init_computedKey4, _init_computedKey5, _init_computedKey6, _init_computedKey7] = babelHelpers.applyDecs(_Foo, [[dec, 5, "a"], [dec, 5, "a", function () {
-  return babelHelpers.classStaticPrivateFieldSpecGet(this, _Foo, _a);
+  return babelHelpers.assertClassBrand(this, _Foo, _a)._;
 }, function (value) {
-  babelHelpers.classStaticPrivateFieldSpecSet(this, _Foo, _a, value);
+  _a._ = babelHelpers.assertClassBrand(this, _Foo, value);
 }], [dec, 5, "b"], [dec, 5, "c"], [dec, 5, 0], [dec, 5, 1], [dec, 5, 2n], [dec, 5, 3n], [dec, 5, _computedKey]], []);
 babelHelpers.defineProperty(Foo, "a", _init_a(_Foo));
 var _a = {
-  writable: true,
-  value: _init_a2(_Foo)
+  _: _init_a2(_Foo)
 };
 babelHelpers.defineProperty(Foo, "b", _init_computedKey(_Foo));
 babelHelpers.defineProperty(Foo, "c", _init_computedKey2(_Foo));

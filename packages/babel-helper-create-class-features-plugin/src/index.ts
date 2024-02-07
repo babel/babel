@@ -239,7 +239,7 @@ export function createClassFeaturePlugin({
         // NODE: These three functions don't support decorators yet,
         //       but verifyUsedFeatures throws if there are both
         //       decorators and private fields.
-        const privateNamesMap = buildPrivateNamesMap(props);
+        const privateNamesMap = buildPrivateNamesMap(props, file);
         const privateNamesNodes = buildPrivateNamesNodes(
           privateNamesMap,
           privateFieldsAsProperties ?? loose,

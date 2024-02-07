@@ -6,12 +6,9 @@ var _y = /*#__PURE__*/new WeakSet();
 class B {
   constructor() {
     babelHelpers.classPrivateMethodInitSpec(this, _y);
-    babelHelpers.classPrivateFieldInitSpec(this, _x, {
-      writable: true,
-      value: void 0
-    });
+    babelHelpers.classPrivateFieldInitSpec(this, _x, void 0);
   }
 }
 function _y2() {
-  babelHelpers.classPrivateFieldGet(this, _x);
+  babelHelpers.classPrivateFieldGet2(this, _x);
 }

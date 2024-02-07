@@ -5,37 +5,28 @@ var _B = /*#__PURE__*/new WeakMap();
 var _C = /*#__PURE__*/new WeakMap();
 class Foo {
   constructor() {
-    babelHelpers.classPrivateFieldInitSpec(this, _A, {
-      writable: true,
-      value: _init_a(this)
-    });
-    babelHelpers.classPrivateFieldInitSpec(this, _B, {
-      writable: true,
-      value: (_init_extra_a(this), _init_b(this, 123))
-    });
-    babelHelpers.classPrivateFieldInitSpec(this, _C, {
-      writable: true,
-      value: (_init_extra_b(this), _init_computedKey(this, 456))
-    });
+    babelHelpers.classPrivateFieldInitSpec(this, _A, _init_a(this));
+    babelHelpers.classPrivateFieldInitSpec(this, _B, (_init_extra_a(this), _init_b(this, 123)));
+    babelHelpers.classPrivateFieldInitSpec(this, _C, (_init_extra_b(this), _init_computedKey(this, 456)));
     _init_extra_computedKey(this);
   }
   get a() {
-    return babelHelpers.classPrivateFieldGet(this, _A);
+    return babelHelpers.classPrivateFieldGet2(this, _A);
   }
   set a(v) {
-    babelHelpers.classPrivateFieldSet(this, _A, v);
+    babelHelpers.classPrivateFieldSet2(this, _A, v);
   }
   get b() {
-    return babelHelpers.classPrivateFieldGet(this, _B);
+    return babelHelpers.classPrivateFieldGet2(this, _B);
   }
   set b(v) {
-    babelHelpers.classPrivateFieldSet(this, _B, v);
+    babelHelpers.classPrivateFieldSet2(this, _B, v);
   }
   get ['c']() {
-    return babelHelpers.classPrivateFieldGet(this, _C);
+    return babelHelpers.classPrivateFieldGet2(this, _C);
   }
   set ['c'](v) {
-    babelHelpers.classPrivateFieldSet(this, _C, v);
+    babelHelpers.classPrivateFieldSet2(this, _C, v);
   }
 }
 _Foo = Foo;

@@ -14,23 +14,13 @@ function _set_b2(v) {
 function _get_b2() {
   return _get_b(this);
 }
-var _b = {
-  get: _get_b2,
-  set: _set_b2
-};
-var _a = {
-  get: _get_a2,
-  set: _set_a2
-};
 (() => {
-  [_init_a, _get_a, _set_a, _init_b, _get_b, _set_b, _initStatic] = babelHelpers.applyDecs2301(_Foo, [[dec, 6, "a", o => babelHelpers.classStaticPrivateFieldSpecGet(o, _Foo, _A), (o, v) => babelHelpers.classStaticPrivateFieldSpecSet(o, _Foo, _A, v)], [dec, 6, "b", o => babelHelpers.classStaticPrivateFieldSpecGet(o, _Foo, _B), (o, v) => babelHelpers.classStaticPrivateFieldSpecSet(o, _Foo, _B, v)]], []).e;
+  [_init_a, _get_a, _set_a, _init_b, _get_b, _set_b, _initStatic] = babelHelpers.applyDecs2301(_Foo, [[dec, 6, "a", o => babelHelpers.assertClassBrand(o, _Foo, _A)._, (o, v) => _A._ = babelHelpers.assertClassBrand(o, _Foo, v)], [dec, 6, "b", o => babelHelpers.assertClassBrand(o, _Foo, _B)._, (o, v) => _B._ = babelHelpers.assertClassBrand(o, _Foo, v)]], []).e;
   _initStatic(_Foo);
 })();
 var _A = {
-  writable: true,
-  value: _init_a(_Foo)
+  _: _init_a(_Foo)
 };
 var _B = {
-  writable: true,
-  value: _init_b(_Foo, 123)
+  _: _init_b(_Foo, 123)
 };

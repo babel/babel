@@ -10,15 +10,12 @@ let _Foo;
 var _a = /*#__PURE__*/new WeakMap();
 class Foo {
   constructor() {
-    babelHelpers.classPrivateFieldInitSpec(this, _a, {
-      writable: true,
-      value: void _initProto(this)
-    });
+    babelHelpers.classPrivateFieldInitSpec(this, _a, void _initProto(this));
   }
   method() {}
   makeClass() {
     var _dec5, _init_bar, _Nested;
-    return _dec5 = babelHelpers.classPrivateFieldGet(this, _a), (_Nested = class Nested {
+    return _dec5 = babelHelpers.classPrivateFieldGet2(this, _a), (_Nested = class Nested {
       constructor() {
         babelHelpers.defineProperty(this, "bar", _init_bar(this));
       }

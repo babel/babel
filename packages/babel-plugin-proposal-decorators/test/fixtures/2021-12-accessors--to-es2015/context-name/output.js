@@ -12,52 +12,52 @@ const f = () => {
 _computedKey = babelHelpers.toPropertyKey(f());
 class Foo {
   static get a() {
-    return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _A);
+    return babelHelpers.assertClassBrand(this, Foo, _A)._;
   }
   static set a(v) {
-    babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _A, v);
+    _A._ = babelHelpers.assertClassBrand(this, Foo, v);
   }
   static get "b"() {
-    return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _C);
+    return babelHelpers.assertClassBrand(this, Foo, _C)._;
   }
   static set "b"(v) {
-    babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _C, v);
+    _C._ = babelHelpers.assertClassBrand(this, Foo, v);
   }
   static get ["c"]() {
-    return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _D);
+    return babelHelpers.assertClassBrand(this, Foo, _D)._;
   }
   static set ["c"](v) {
-    babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _D, v);
+    _D._ = babelHelpers.assertClassBrand(this, Foo, v);
   }
   static get 0() {
-    return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _E);
+    return babelHelpers.assertClassBrand(this, Foo, _E)._;
   }
   static set 0(v) {
-    babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _E, v);
+    _E._ = babelHelpers.assertClassBrand(this, Foo, v);
   }
   static get [1]() {
-    return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _F);
+    return babelHelpers.assertClassBrand(this, Foo, _F)._;
   }
   static set [1](v) {
-    babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _F, v);
+    _F._ = babelHelpers.assertClassBrand(this, Foo, v);
   }
   static get 2n() {
-    return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _G);
+    return babelHelpers.assertClassBrand(this, Foo, _G)._;
   }
   static set 2n(v) {
-    babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _G, v);
+    _G._ = babelHelpers.assertClassBrand(this, Foo, v);
   }
   static get [3n]() {
-    return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _H);
+    return babelHelpers.assertClassBrand(this, Foo, _H)._;
   }
   static set [3n](v) {
-    babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _H, v);
+    _H._ = babelHelpers.assertClassBrand(this, Foo, v);
   }
   static get [_computedKey]() {
-    return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _I);
+    return babelHelpers.assertClassBrand(this, Foo, _I)._;
   }
   static set [_computedKey](v) {
-    babelHelpers.classStaticPrivateFieldSpecSet(this, Foo, _I, v);
+    _I._ = babelHelpers.assertClassBrand(this, Foo, v);
   }
 }
 _Foo = Foo;
@@ -67,52 +67,39 @@ function _set_a2(v) {
 function _get_a2() {
   return _get_a(this);
 }
-var _a = {
-  get: _get_a2,
-  set: _set_a2
-};
 (() => {
   [_init_a, _init_a2, _get_a, _set_a, _init_computedKey, _init_computedKey2, _init_computedKey3, _init_computedKey4, _init_computedKey5, _init_computedKey6, _init_computedKey7, _initStatic] = babelHelpers.applyDecs(_Foo, [[dec, 6, "a"], [dec, 6, "a", function () {
-    return babelHelpers.classStaticPrivateFieldSpecGet(this, _Foo, _B);
+    return babelHelpers.assertClassBrand(this, _Foo, _B)._;
   }, function (value) {
-    babelHelpers.classStaticPrivateFieldSpecSet(this, _Foo, _B, value);
+    _B._ = babelHelpers.assertClassBrand(this, _Foo, value);
   }], [dec, 6, "b"], [dec, 6, "c"], [dec, 6, 0], [dec, 6, 1], [dec, 6, 2n], [dec, 6, 3n], [dec, 6, _computedKey]], []);
   _initStatic(_Foo);
 })();
 var _A = {
-  writable: true,
-  value: _init_a(_Foo)
+  _: _init_a(_Foo)
 };
 var _B = {
-  writable: true,
-  value: _init_a2(_Foo)
+  _: _init_a2(_Foo)
 };
 var _C = {
-  writable: true,
-  value: _init_computedKey(_Foo)
+  _: _init_computedKey(_Foo)
 };
 var _D = {
-  writable: true,
-  value: _init_computedKey2(_Foo)
+  _: _init_computedKey2(_Foo)
 };
 var _E = {
-  writable: true,
-  value: _init_computedKey3(_Foo)
+  _: _init_computedKey3(_Foo)
 };
 var _F = {
-  writable: true,
-  value: _init_computedKey4(_Foo)
+  _: _init_computedKey4(_Foo)
 };
 var _G = {
-  writable: true,
-  value: _init_computedKey5(_Foo)
+  _: _init_computedKey5(_Foo)
 };
 var _H = {
-  writable: true,
-  value: _init_computedKey6(_Foo)
+  _: _init_computedKey6(_Foo)
 };
 var _I = {
-  writable: true,
-  value: _init_computedKey7(_Foo)
+  _: _init_computedKey7(_Foo)
 };
 expect(logs).toStrictEqual(["computing f", "calling toPrimitive", "a", "#a", "b", "c", "0", "1", "2", "3", "f()"]);
