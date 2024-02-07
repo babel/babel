@@ -4,10 +4,7 @@ let Foo = /*#__PURE__*/function () {
 
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
-    babelHelpers.classPrivateFieldInitSpec(this, _foo, {
-      writable: true,
-      value: 1
-    });
+    babelHelpers.classPrivateFieldInitSpec(this, _foo, 1);
   }
   babelHelpers.createClass(Foo, [{
     key: "test",

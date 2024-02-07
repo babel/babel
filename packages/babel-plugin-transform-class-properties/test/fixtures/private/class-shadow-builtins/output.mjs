@@ -3,10 +3,7 @@ function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollect
 var _message = /*#__PURE__*/new WeakMap();
 class _TypeError2 {
   constructor() {
-    _classPrivateFieldInitSpec(this, _message, {
-      writable: true,
-      value: void 0
-    });
+    _classPrivateFieldInitSpec(this, _message, void 0);
   }
 }
 export { _TypeError2 as TypeError };
