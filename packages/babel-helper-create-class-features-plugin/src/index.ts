@@ -75,6 +75,8 @@ export function createClassFeaturePlugin({
   const setPublicClassFields = api.assumption("setPublicClassFields");
   const privateFieldsAsSymbols = api.assumption("privateFieldsAsSymbols");
   const privateFieldsAsProperties = api.assumption("privateFieldsAsProperties");
+  const noUninitializedPrivateFieldAccess =
+    api.assumption("noUninitializedPrivateFieldAccess") ?? false;
   const constantSuper = api.assumption("constantSuper");
   const noDocumentAll = api.assumption("noDocumentAll");
 
@@ -256,6 +258,7 @@ export function createClassFeaturePlugin({
           {
             privateFieldsAsProperties:
               privateFieldsAsSymbolsOrProperties ?? loose,
+            noUninitializedPrivateFieldAccess,
             noDocumentAll,
             innerBinding,
           },
@@ -296,6 +299,7 @@ export function createClassFeaturePlugin({
               file,
               setPublicClassFields ?? loose,
               privateFieldsAsSymbolsOrProperties ?? loose,
+              noUninitializedPrivateFieldAccess,
               constantSuper ?? loose,
               innerBinding,
             ));
@@ -317,6 +321,7 @@ export function createClassFeaturePlugin({
             file,
             setPublicClassFields ?? loose,
             privateFieldsAsSymbolsOrProperties ?? loose,
+            noUninitializedPrivateFieldAccess,
             constantSuper ?? loose,
             innerBinding,
           ));
