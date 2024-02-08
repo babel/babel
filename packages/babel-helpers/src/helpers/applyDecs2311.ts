@@ -26,7 +26,7 @@ type DecoratorContextAccess = {
 };
 type DecoratorContext = {
   kind: "accessor" | "method" | "getter" | "setter" | "field" | "class";
-  name: string;
+  name: string | symbol;
   static?: boolean;
   private?: boolean;
   access?: DecoratorContextAccess;
@@ -42,7 +42,10 @@ type DecoratorInfo =
       privateSetter?: Function,
     ]
   | [classDecs: Function[]];
-
+type DecoratorNonFieldCheckStorage = Record<
+  string | symbol,
+  PROP_KIND.ACCESSOR | PROP_KIND.GETTER | PROP_KIND.SETTER
+>;
 /**
   Basic usage:
 
@@ -202,13 +205,10 @@ export default /* @no-mangle */ function applyDecs2311(
   var create = Object.create;
   var metadata: any;
   // Use both as and satisfies to ensure that we only use non-zero values
-  var existingNonFields = create(null) as Record<
-    string,
-    1 | 3 | 4
-  > satisfies Record<
-    string,
-    PROP_KIND.ACCESSOR | PROP_KIND.GETTER | PROP_KIND.SETTER
-  >;
+  var existingNonFields = [create(null), create(null)] as [
+    DecoratorNonFieldCheckStorage,
+    DecoratorNonFieldCheckStorage,
+  ];
   var hasClassDecs = classDecs.length;
   // This is a temporary variable for smaller helper size
   var _: any;
@@ -250,7 +250,7 @@ export default /* @no-mangle */ function applyDecs2311(
     Class: any,
     decInfo: DecoratorInfo,
     decoratorsHaveThis: number,
-    name: string,
+    name: string | symbol,
     kind: PROP_KIND,
     initializers: Function[],
     ret?: Function[],
@@ -270,8 +270,7 @@ export default /* @no-mangle */ function applyDecs2311(
 
     var decs = [].concat(decInfo[0]),
       decVal = decInfo[3],
-      isClass = !ret,
-      mapKey = name + "/" + isStatic;
+      isClass = !ret;
 
     var isGetter = kind === PROP_KIND.GETTER;
     var isSetter = kind === PROP_KIND.SETTER;
@@ -322,19 +321,19 @@ export default /* @no-mangle */ function applyDecs2311(
       }
 
       if (!isField && !isPrivate) {
-        _ = existingNonFields[mapKey];
+        _ = existingNonFields[+isStatic][name];
         // flag is 1, 3, or 4; kind is 0, 1, 2, 3, or 4
         // flag ^ kind is 7 if and only if one of them is 3 and the other one is 4.
         if (_ && (_ ^ kind) !== 7) {
           throw new Error(
             "Decorating two elements with the same name (" +
-              name +
+              desc[key].name +
               ") is not supported yet",
           );
         }
         // We use PROP_KIND.ACCESSOR to mark a name as "fully used":
         // either a get/set pair, or a non-getter/setter.
-        existingNonFields[mapKey] =
+        existingNonFields[+isStatic][name] =
           kind < PROP_KIND.GETTER
             ? PROP_KIND.ACCESSOR
             : (kind as PROP_KIND.GETTER | PROP_KIND.SETTER);
