@@ -49,3 +49,30 @@ expect(() => {
     }
   }
 }).toThrow("Decorating two elements with the same name");
+
+expect(() => {
+  class Foo {
+    @dec
+    *[Symbol.iterator]() {
+      return 1;
+    }
+
+    @dec
+    get [Symbol.iterator]() {
+      return function *() {};
+    }
+  }
+}).toThrow("Decorating two elements with the same name (get [Symbol.iterator]) is not supported yet");
+
+expect(() => {
+  class Foo {
+    @dec
+    *[Symbol.iterator]() {}
+
+    @dec
+    *[Symbol("Symbol.iterator")]() {}
+
+    @dec
+    *"[Symbol.iterator]"() {}
+  }
+}).not.toThrow();
