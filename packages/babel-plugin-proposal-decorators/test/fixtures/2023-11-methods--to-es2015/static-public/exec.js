@@ -1,5 +1,8 @@
+let aContext;
+
 function dec(fn, context) {
   expect(fn.name).toEqual(context.name);
+  if (!aContext) aContext = context;
   return function () {
     return fn.call(this) + 1;
   }
@@ -18,6 +21,8 @@ class Foo {
     return this.value;
   }
 }
+
+expect(aContext.access).not.toHaveProperty("set");
 
 expect(Foo.a()).toBe(2);
 expect(Foo.b()).toBe(2);
