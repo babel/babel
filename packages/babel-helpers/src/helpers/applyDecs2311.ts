@@ -199,9 +199,10 @@ export default /* @no-mangle */ function applyDecs2311(
 ) {
   var symbolMetadata = Symbol.metadata || Symbol.for("Symbol.metadata");
   var defineProperty = Object.defineProperty;
+  var create = Object.create;
   var metadata: any;
   // Use both as and satisfies to ensure that we only use non-zero values
-  var existingNonFields = { __proto__: null } as Record<
+  var existingNonFields = create(null) as Record<
     string,
     1 | 3 | 4
   > satisfies Record<
@@ -319,6 +320,25 @@ export default /* @no-mangle */ function applyDecs2311(
       } else if (!isField) {
         desc = Object.getOwnPropertyDescriptor(Class, name);
       }
+
+      if (!isField && !isPrivate) {
+        _ = existingNonFields[mapKey];
+        // flag is 1, 3, or 4; kind is 0, 1, 2, 3, or 4
+        // flag ^ kind is 7 if and only if one of them is 3 and the other one is 4.
+        if (_ && (_ ^ kind) !== 7) {
+          throw new Error(
+            "Decorating two elements with the same name (" +
+              name +
+              ") is not supported yet",
+          );
+        }
+        // We use PROP_KIND.ACCESSOR to mark a name as "fully used":
+        // either a get/set pair, or a non-getter/setter.
+        existingNonFields[mapKey] =
+          kind < PROP_KIND.GETTER
+            ? PROP_KIND.ACCESSOR
+            : (kind as PROP_KIND.GETTER | PROP_KIND.SETTER);
+      }
     }
 
     var newValue = Class;
@@ -369,29 +389,6 @@ export default /* @no-mangle */ function applyDecs2311(
               },
         };
 
-        if (!i && !isField && !isPrivate) {
-          var flag = existingNonFields[mapKey];
-          if (flag) {
-            if ((flag ^ kind) === 7) {
-              // flag is 1, 3, or 4; kind is 0, 1, 2, 3, or 4
-              // flag ^ kind is 7 if and only if one of them is 3 and the other one is 4.
-              existingNonFields[mapKey] = PROP_KIND.ACCESSOR;
-            } else {
-              throw new Error(
-                "Decorating two elements with the same name (" +
-                  name +
-                  ") is not supported yet",
-              );
-            }
-          } else {
-            // We use PROP_KIND.ACCESSOR to mark a name as "fully used":
-            // either a get/set pair, or a non-getter/setter.
-            existingNonFields[mapKey] =
-              kind > PROP_KIND.METHOD
-                ? (kind as PROP_KIND.GETTER | PROP_KIND.SETTER)
-                : PROP_KIND.ACCESSOR;
-          }
-        }
         if (!isSetter) {
           _.get = isPrivate
             ? isMethod
@@ -404,7 +401,7 @@ export default /* @no-mangle */ function applyDecs2311(
                 return target[name];
               };
         }
-        if (kind < PROP_KIND.METHOD || isSetter) {
+        if (!isMethod && !isGetter) {
           _.set = isPrivate
             ? _bindPropCall("set", assertInstanceIfPrivate)
             : function (target: any, v: any) {
@@ -553,7 +550,7 @@ export default /* @no-mangle */ function applyDecs2311(
   if (parentClass !== undefined) {
     metadata = parentClass[symbolMetadata];
   }
-  metadata = Object.create(metadata == null ? null : metadata);
+  metadata = create(metadata == null ? null : metadata);
   _ = applyMemberDecs();
   if (!hasClassDecs) defineMetadata(targetClass);
   return {
