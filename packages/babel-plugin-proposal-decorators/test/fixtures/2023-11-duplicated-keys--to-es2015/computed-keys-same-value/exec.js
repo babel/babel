@@ -68,6 +68,10 @@ expect(() => {
   class Foo {
     @dec
     *[Symbol.iterator]() {}
+
+    @dec
+    *[Symbol("Symbol.iterator")]() {}
+
     @dec
     *"[Symbol.iterator]"() {}
   }
