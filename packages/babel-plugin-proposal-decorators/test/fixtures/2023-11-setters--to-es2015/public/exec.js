@@ -28,6 +28,9 @@ let foo = new Foo();
 const aContext = foo['aContext'];
 const bContext = foo['bContext'];
 
+expect(aContext.access).not.toHaveProperty("get");
+expect(bContext.access).not.toHaveProperty("get");
+
 expect(aContext.access.has(foo)).toBe(true);
 expect(aContext.access.has({})).toBe(false);
 expect(aContext.access.has(Object.create(foo))).toBe(true);
