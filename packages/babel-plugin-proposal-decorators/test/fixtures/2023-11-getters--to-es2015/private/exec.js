@@ -26,6 +26,8 @@ let foo = new Foo();
 
 const aContext = foo['#aContext'];
 
+expect(aContext.access).not.toHaveProperty("set");
+
 expect(aContext.access.has(foo)).toBe(true);
 expect(aContext.access.has({})).toBe(false);
 expect(aContext.access.has(Object.create(foo))).toBe(false);
