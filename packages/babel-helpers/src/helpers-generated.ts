@@ -173,10 +173,10 @@ export default Object.freeze({
     "7.1.5",
     'import toPrimitive from"toPrimitive";export default function toPropertyKey(t){var i=toPrimitive(t,"string");return"symbol"==typeof i?i:String(i)}',
   ),
-  // size: 122, gzip size: 124
+  // size: 134, gzip size: 134
   toSetter: helper(
     "7.22.0",
-    'export default function _toSetter(t,e,n){return Object.defineProperty({},"_",{set:function(o){t.apply(n,e.concat([o]))}})}',
+    'export default function _toSetter(t,e,n){var r=e.length++;return Object.defineProperty({},"_",{set:function(o){e[r]=o,t.apply(n,e)}})}',
   ),
   // size: 289, gzip size: 165
   typeof: helper(
