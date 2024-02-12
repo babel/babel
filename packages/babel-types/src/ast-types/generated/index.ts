@@ -2033,6 +2033,7 @@ export interface TSImportType extends BaseNode {
   argument: StringLiteral;
   qualifier?: TSEntityName | null;
   typeParameters?: TSTypeParameterInstantiation | null;
+  options?: Expression | null;
 }
 
 export interface TSImportEqualsDeclaration extends BaseNode {
@@ -2893,6 +2894,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -3006,6 +3008,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -3071,6 +3074,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -3153,6 +3157,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -3218,6 +3223,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSLiteralType
     | TSMethodSignature
@@ -3284,6 +3290,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -3349,6 +3356,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -3439,6 +3447,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSLiteralType
     | TSMethodSignature
@@ -3569,6 +3578,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -3653,6 +3663,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -3730,6 +3741,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -3823,6 +3835,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -4084,6 +4097,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -4398,6 +4412,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -4657,6 +4672,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -4742,6 +4758,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -4923,6 +4940,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -4993,6 +5011,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -5094,6 +5113,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -5161,6 +5181,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -5226,6 +5247,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -5316,6 +5338,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -5381,6 +5404,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -5465,6 +5489,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -5632,6 +5657,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSLiteralType
     | TSMethodSignature
@@ -5698,6 +5724,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -5854,6 +5881,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -5944,6 +5972,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -6009,6 +6038,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -6074,6 +6104,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -6139,6 +6170,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -6204,6 +6236,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -6284,6 +6317,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -6349,6 +6383,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -6452,6 +6487,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -6658,6 +6694,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -6807,6 +6844,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -7130,6 +7168,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -7351,6 +7390,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -7562,6 +7602,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -7754,6 +7795,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -8040,6 +8082,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -8106,6 +8149,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSLiteralType
     | TSMethodSignature
@@ -8172,6 +8216,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -8276,6 +8321,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -8355,6 +8401,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -8484,6 +8531,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -8610,6 +8658,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSLiteralType
     | TSMethodSignature
@@ -8701,6 +8750,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
@@ -8845,6 +8895,7 @@ export interface ParentMaps {
     | TSEnumDeclaration
     | TSEnumMember
     | TSExportAssignment
+    | TSImportType
     | TSInstantiationExpression
     | TSMethodSignature
     | TSNonNullExpression
