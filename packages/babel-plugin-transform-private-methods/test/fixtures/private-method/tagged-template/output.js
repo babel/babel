@@ -1,10 +1,10 @@
-var _tag = /*#__PURE__*/new WeakSet();
+var _Foo_brand = /*#__PURE__*/new WeakSet();
 class Foo {
   constructor() {
-    babelHelpers.classPrivateMethodInitSpec(this, _tag);
+    babelHelpers.classPrivateMethodInitSpec(this, _Foo_brand);
   }
 }
-function _tag2() {
-  babelHelpers.classPrivateMethodGet(this, _tag, _tag2).bind(this)``;
+function _tag() {
+  babelHelpers.classPrivateMethodGet(this, _Foo_brand, _tag).bind(this)``;
 }
 new Foo();
