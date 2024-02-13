@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    "typescript",
+    "jsx",
+    "importAttributes"
+  ],
+  "throws": "Unexpected token, expected \"jsxTagEnd\" (1:65)"
+}
