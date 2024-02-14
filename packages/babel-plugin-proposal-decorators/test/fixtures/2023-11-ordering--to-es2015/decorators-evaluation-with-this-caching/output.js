@@ -1,7 +1,6 @@
 var _initProto, _obj, _methodDecs, _A;
 let fn, obj;
-_obj = obj.prop;
-_methodDecs = [void 0, fn(), _obj, _obj.foo];
+_methodDecs = [void 0, fn(), _obj = obj.prop, _obj.foo];
 class A {
   constructor() {
     _initProto(this);

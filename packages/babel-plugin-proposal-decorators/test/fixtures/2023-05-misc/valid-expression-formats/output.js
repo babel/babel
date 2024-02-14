@@ -1,9 +1,7 @@
 var _initProto, _initClass, _obj, _classDecs, _obj2, _methodDecs;
 const dec = () => {};
-_obj = array;
-_classDecs = [void 0, dec, void 0, call(), void 0, chain.expr(), void 0, arbitrary + expr, _obj, _obj[expr]];
-_obj2 = array;
-_methodDecs = [void 0, dec, void 0, call(), void 0, chain.expr(), void 0, arbitrary + expr, _obj2, _obj2[expr]];
+_classDecs = [void 0, dec, void 0, call(), void 0, chain.expr(), void 0, arbitrary + expr, _obj = array, _obj[expr]];
+_methodDecs = [void 0, dec, void 0, call(), void 0, chain.expr(), void 0, arbitrary + expr, _obj2 = array, _obj2[expr]];
 let _Foo;
 class Foo {
   static {
