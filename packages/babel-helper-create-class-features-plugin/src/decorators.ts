@@ -522,19 +522,33 @@ function toSortedDecoratorInfo(info: DecoratorInfo[]): DecoratorInfo[] {
   ];
 }
 
+type GenerateDecorationListResult = {
+  // The zipped decorators array that will be passed to generateDecorationExprs
+  decs: t.Expression[];
+  // Whether there are non-empty decorator this values
+  haveThis: boolean;
+};
+/**
+ * Zip decorators and decorator this values into an array
+ *
+ * @param {t.Expression[]} decorators
+ * @param {((t.Expression | undefined)[])} decoratorsThis decorator this values
+ * @param {DecoratorVersionKind} version
+ * @returns {GenerateDecorationListResult}
+ */
 function generateDecorationList(
   decorators: t.Expression[],
   decoratorsThis: (t.Expression | undefined)[],
   version: DecoratorVersionKind,
-) {
+): GenerateDecorationListResult {
   const decsCount = decorators.length;
-  const hasOneThis = decoratorsThis.some(Boolean);
+  const haveOneThis = decoratorsThis.some(Boolean);
   const decs: t.Expression[] = [];
   for (let i = 0; i < decsCount; i++) {
     if (
       (version === "2023-11" ||
         (!process.env.BABEL_8_BREAKING && version === "2023-05")) &&
-      hasOneThis
+      haveOneThis
     ) {
       decs.push(
         decoratorsThis[i] || t.unaryExpression("void", t.numericLiteral(0)),
@@ -543,7 +557,7 @@ function generateDecorationList(
     decs.push(decorators[i]);
   }
 
-  return { hasThis: hasOneThis, decs };
+  return { haveThis: haveOneThis, decs };
 }
 
 function generateDecorationExprs(
@@ -897,7 +911,7 @@ function transformClass(
   let classInitLocal: t.Identifier, classIdLocal: t.Identifier;
 
   // Memoise the this value `a.b` of decorator member expressions `@a.b.dec`,
-  type handleDecoratorExpressionsResult = {
+  type HandleDecoratorExpressionsResult = {
     // whether the whole decorator list requires memoisation
     needMemoise: boolean;
     // the this value of each decorator if applicable
@@ -905,7 +919,7 @@ function transformClass(
   };
   function handleDecoratorExpressions(
     expressions: t.Expression[],
-  ): handleDecoratorExpressionsResult {
+  ): HandleDecoratorExpressionsResult {
     let needMemoise = false;
     const decoratorsThis: (t.Expression | null)[] = [];
     for (const expression of expressions) {
@@ -948,12 +962,12 @@ function transformClass(
     const { needMemoise, decoratorsThis } =
       handleDecoratorExpressions(decoratorExpressions);
 
-    const { hasThis, decs } = generateDecorationList(
+    const { haveThis, decs } = generateDecorationList(
       decoratorExpressions,
       decoratorsThis,
       version,
     );
-    classDecorationsFlag = hasThis ? 1 : 0;
+    classDecorationsFlag = haveThis ? 1 : 0;
     classDecorations = decs;
 
     if (needMemoise) {
@@ -1018,13 +1032,12 @@ function transformClass(
         const decoratorExpressions = decorators.map(d => d.expression);
         const { needMemoise, decoratorsThis } =
           handleDecoratorExpressions(decoratorExpressions);
-        const decorationList = generateDecorationList(
+        const { decs, haveThis } = generateDecorationList(
           decoratorExpressions,
           decoratorsThis,
           version,
         );
-        const { decs } = decorationList;
-        decoratorsHaveThis = decorationList.hasThis;
+        decoratorsHaveThis = haveThis;
         decoratorsArray = decs.length === 1 ? decs[0] : t.arrayExpression(decs);
         if (needMemoise) {
           decoratorsArray = memoiseExpression(decoratorsArray, name + "Decs");
