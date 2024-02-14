@@ -16,12 +16,12 @@ class Foo {
         babelHelpers.defineProperty(this, "bar", _init_bar(this));
         _init_extra_bar(this);
       }
-    }, [_init_bar, _init_extra_bar] = babelHelpers.applyDecs2311(_Nested, [[_barDecs, 0, "bar"]], []).e, _Nested);
+    }, [_init_bar, _init_extra_bar] = babelHelpers.applyDecs2311(_Nested, [], [[_barDecs, 0, "bar"]]).e, _Nested);
   }
 }
 _Foo2 = Foo;
 ({
   e: [_initProto],
   c: [_Foo, _initClass]
-} = babelHelpers.applyDecs2311(_Foo2, [[_methodDecs, 18, "method"]], _classDecs, 1));
+} = babelHelpers.applyDecs2311(_Foo2, _classDecs, [[_methodDecs, 18, "method"]], 1));
 _initClass();

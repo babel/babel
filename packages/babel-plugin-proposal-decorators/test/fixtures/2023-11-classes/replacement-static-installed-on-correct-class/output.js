@@ -6,7 +6,7 @@ new class extends babelHelpers.identity {
   static {
     class Foo {
       static {
-        [_Foo, _initClass] = babelHelpers.applyDecs2311(this, [], [dec]).c;
+        [_Foo, _initClass] = babelHelpers.applyDecs2311(this, [dec], []).c;
       }
       static get a() {
         return _Foo.#B;

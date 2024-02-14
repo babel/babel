@@ -3,7 +3,7 @@ _classDecs = [dec];
 let _default2;
 class _default {
   static {
-    [_default2, _initClass] = babelHelpers.applyDecs2311(babelHelpers.setFunctionName(this, "default"), [], _classDecs).c;
+    [_default2, _initClass] = babelHelpers.applyDecs2311(babelHelpers.setFunctionName(this, "default"), _classDecs, []).c;
   }
   static {
     _initClass();

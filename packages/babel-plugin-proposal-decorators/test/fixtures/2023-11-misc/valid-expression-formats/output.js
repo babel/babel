@@ -8,7 +8,7 @@ class Foo {
     ({
       e: [_initProto],
       c: [_Foo, _initClass]
-    } = babelHelpers.applyDecs2311(this, [[_methodDecs, 18, "method"]], _classDecs, 1));
+    } = babelHelpers.applyDecs2311(this, _classDecs, [[_methodDecs, 18, "method"]], 1));
   }
   #a = void _initProto(this);
   method() {}
@@ -16,7 +16,7 @@ class Foo {
     var _barDecs, _init_bar, _init_extra_bar;
     return _barDecs = [this, this.#a], class Nested {
       static {
-        [_init_bar, _init_extra_bar] = babelHelpers.applyDecs2311(this, [[_barDecs, 16, "bar"]], []).e;
+        [_init_bar, _init_extra_bar] = babelHelpers.applyDecs2311(this, [], [[_barDecs, 16, "bar"]]).e;
       }
       constructor() {
         _init_extra_bar(this);

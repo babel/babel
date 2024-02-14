@@ -17,7 +17,7 @@ let Outer = /*#__PURE__*/function (_Hello) {
       _init_extra_hello(this);
     });
     _Inner = Inner;
-    [_init_hello, _init_extra_hello] = babelHelpers.applyDecs2311(_Inner, [[_helloDecs, 0, "hello"]], []).e;
+    [_init_hello, _init_extra_hello] = babelHelpers.applyDecs2311(_Inner, [], [[_helloDecs, 0, "hello"]]).e;
     return babelHelpers.possibleConstructorReturn(_this, new Inner());
   }
   return babelHelpers.createClass(Outer);

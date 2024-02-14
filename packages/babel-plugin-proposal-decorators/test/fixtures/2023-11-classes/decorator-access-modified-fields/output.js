@@ -11,7 +11,7 @@ class C {
     ({
       e: [_init_m, _init_extra_m],
       c: [_C, _initClass]
-    } = babelHelpers.applyDecs2311(this, [[memberDec, 0, "m"]], [classDec]));
+    } = babelHelpers.applyDecs2311(this, [classDec], [[memberDec, 0, "m"]]));
   }
   constructor() {
     _init_extra_m(this);

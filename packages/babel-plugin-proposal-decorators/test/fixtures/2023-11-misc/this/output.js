@@ -8,7 +8,7 @@ class A {
     ({
       e: [_init_x, _init_extra_x, _init_y, _init_extra_y],
       c: [_A, _initClass]
-    } = babelHelpers.applyDecs2311(this, [[_xDecs, 16, "x"], [_yDecs, 16, "y"]], _classDecs, 1));
+    } = babelHelpers.applyDecs2311(this, _classDecs, [[_xDecs, 16, "x"], [_yDecs, 16, "y"]], 1));
   }
   constructor() {
     _init_extra_y(this);

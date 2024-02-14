@@ -194,8 +194,8 @@ type DecoratorNonFieldCheckStorage = Record<
 
 export default /* @no-mangle */ function applyDecs2311(
   targetClass: any,
-  memberDecs: DecoratorInfo[],
   classDecs: Function[],
+  memberDecs: DecoratorInfo[],
   classDecsHaveThis: number,
   instanceBrand: Function,
   parentClass: any,

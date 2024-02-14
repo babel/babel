@@ -4,7 +4,7 @@ _classDecs = [dec1];
 let _Bar;
 class Bar {
   static {
-    [_Bar, _initClass] = babelHelpers.applyDecs2311(this, [], _classDecs).c;
+    [_Bar, _initClass] = babelHelpers.applyDecs2311(this, _classDecs, []).c;
   }
   static {
     _initClass();
@@ -14,7 +14,7 @@ _classDecs2 = [dec2];
 let _Foo;
 class Foo extends (_Bar2 = _Bar) {
   static {
-    [_Foo, _initClass2] = babelHelpers.applyDecs2311(this, [], _classDecs2, 0, void 0, _Bar2).c;
+    [_Foo, _initClass2] = babelHelpers.applyDecs2311(this, _classDecs2, [], 0, void 0, _Bar2).c;
   }
   static {
     _initClass2();

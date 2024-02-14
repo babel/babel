@@ -8,4 +8,4 @@ class A {
   method() {}
 }
 _A = A;
-[_initProto] = babelHelpers.applyDecs2311(_A, [[_methodDecs, 18, "method"]], []).e;
+[_initProto] = babelHelpers.applyDecs2311(_A, [], [[_methodDecs, 18, "method"]]).e;

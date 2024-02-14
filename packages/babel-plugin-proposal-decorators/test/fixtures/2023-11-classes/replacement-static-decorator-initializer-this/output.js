@@ -28,7 +28,7 @@ new class extends babelHelpers.identity {
         ({
           e: [_init_accessor, _init_extra_accessor, _init_property, _init_extra_property, _initStatic],
           c: [_Foo, _initClass]
-        } = babelHelpers.applyDecs2311(this, [[_accessorDecs, 9, "accessor"], [_getterDecs, 11, "getter"], [_setterDecs, 12, "setter"], [_methodDecs, 10, "method"], [_propertyDecs, 8, "property"]], [dec]));
+        } = babelHelpers.applyDecs2311(this, [dec], [[_accessorDecs, 9, "accessor"], [_getterDecs, 11, "getter"], [_setterDecs, 12, "setter"], [_methodDecs, 10, "method"], [_propertyDecs, 8, "property"]]));
         _initStatic(this);
       }
       static get accessor() {

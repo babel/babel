@@ -14,5 +14,5 @@ _A2 = A;
 ({
   e: [_init_x, _init_extra_x, _init_y, _init_extra_y],
   c: [_A, _initClass]
-} = babelHelpers.applyDecs2311(_A2, [[_xDecs, 16, "x"], [_yDecs, 16, "y"]], _classDecs, 1));
+} = babelHelpers.applyDecs2311(_A2, _classDecs, [[_xDecs, 16, "x"], [_yDecs, 16, "y"]], 1));
 _initClass();

@@ -8,6 +8,6 @@ new (_temp = class extends babelHelpers.identity {
 }, (_Foo2 => {
   class Foo {}
   _Foo2 = Foo;
-  [_Foo, _initClass] = babelHelpers.applyDecs2311(_Foo2, [], [dec]).c;
+  [_Foo, _initClass] = babelHelpers.applyDecs2311(_Foo2, [dec], []).c;
 })(), _temp)();
 const foo = new _Foo();

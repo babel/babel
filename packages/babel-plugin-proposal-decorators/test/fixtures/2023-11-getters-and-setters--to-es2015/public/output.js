@@ -18,4 +18,4 @@ class Foo {
   }
 }
 _Foo = Foo;
-[_initProto] = babelHelpers.applyDecs2311(_Foo, [[dec, 3, "a"], [dec, 4, "a"], [dec, 3, 'b'], [dec, 4, 'b']], []).e;
+[_initProto] = babelHelpers.applyDecs2311(_Foo, [], [[dec, 3, "a"], [dec, 4, "a"], [dec, 3, 'b'], [dec, 4, 'b']]).e;

@@ -10,9 +10,9 @@ function _get_a() {
   return _call_a(this);
 }
 (() => {
-  [_call_a, _initStatic] = babelHelpers.applyDecs2311(_Foo, [[dec, 11, "a", function () {
+  [_call_a, _initStatic] = babelHelpers.applyDecs2311(_Foo, [], [[dec, 11, "a", function () {
     return this.value;
-  }]], []).e;
+  }]]).e;
   _initStatic(_Foo);
 })();
 babelHelpers.defineProperty(Foo, "value", 1);

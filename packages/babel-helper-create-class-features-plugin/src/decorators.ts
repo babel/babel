@@ -1500,11 +1500,14 @@ function createLocalsAssignment(
     setClassName
       ? createSetFunctionNameCall(state, setClassName)
       : t.thisExpression(),
-    elementDecorations,
     classDecorations,
+    elementDecorations,
   ];
 
   if (!process.env.BABEL_8_BREAKING) {
+    if (version !== "2023-11") {
+      args.splice(1, 2, elementDecorations, classDecorations);
+    }
     if (
       version === "2021-12" ||
       (version === "2022-03" && !state.availableHelper("applyDecs2203R"))

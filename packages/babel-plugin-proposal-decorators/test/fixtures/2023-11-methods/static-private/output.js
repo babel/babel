@@ -2,9 +2,9 @@ var _initStatic, _call_a;
 const dec = () => {};
 class Foo {
   static {
-    [_call_a, _initStatic] = babelHelpers.applyDecs2311(this, [[dec, 10, "a", function () {
+    [_call_a, _initStatic] = babelHelpers.applyDecs2311(this, [], [[dec, 10, "a", function () {
       return this.value;
-    }]], []).e;
+    }]]).e;
     _initStatic(this);
   }
   static #a = _call_a;

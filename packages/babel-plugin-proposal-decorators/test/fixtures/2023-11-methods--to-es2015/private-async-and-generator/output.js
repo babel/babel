@@ -14,4 +14,4 @@ class Foo {
   }
 }
 _Foo = Foo;
-[_call_a, _call_g, _call_ag, _initProto] = babelHelpers.applyDecs2311(_Foo, [[_aDecs, 2, "a", async function () {}], [_gDecs, 2, "g", function* () {}], [_agDecs, 2, "ag", async function* () {}]], [], 0, _ => _a.has(babelHelpers.checkInRHS(_))).e;
+[_call_a, _call_g, _call_ag, _initProto] = babelHelpers.applyDecs2311(_Foo, [], [[_aDecs, 2, "a", async function () {}], [_gDecs, 2, "g", function* () {}], [_agDecs, 2, "ag", async function* () {}]], 0, _ => _a.has(babelHelpers.checkInRHS(_))).e;
