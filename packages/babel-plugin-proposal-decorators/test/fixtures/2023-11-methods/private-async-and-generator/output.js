@@ -1,10 +1,10 @@
-var _initProto, _dec, _call_a, _dec2, _call_g, _dec3, _call_ag;
-_dec = dec;
-_dec2 = dec;
-_dec3 = dec;
+var _initProto, _aDecs, _call_a, _gDecs, _call_g, _agDecs, _call_ag;
+_aDecs = dec;
+_gDecs = dec;
+_agDecs = dec;
 class Foo {
   static {
-    [_call_a, _call_g, _call_ag, _initProto] = babelHelpers.applyDecs2311(this, [[_dec, 2, "a", async function () {}], [_dec2, 2, "g", function* () {}], [_dec3, 2, "ag", async function* () {}]], [], 0, _ => #a in _).e;
+    [_call_a, _call_g, _call_ag, _initProto] = babelHelpers.applyDecs2311(this, [[_aDecs, 2, "a", async function () {}], [_gDecs, 2, "g", function* () {}], [_agDecs, 2, "ag", async function* () {}]], [], 0, _ => #a in _).e;
   }
   constructor() {
     _initProto(this);
