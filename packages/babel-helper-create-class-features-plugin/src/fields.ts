@@ -677,20 +677,32 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
         );
       }
 
-      // someHelper(foo, bar, _) -> someHelper, null, foo, bar
-      // aFn.call(foo, bar, _) -> aFn, foo, bar
-      const args: t.Expression[] = setCall.arguments as t.Expression[];
+      // someHelper(foo, bar, _) -> someHelper, [foo, bar]
+      // aFn.call(foo, bar, _) -> aFn, [bar], foo
+      let args: t.Expression[];
       if (
         t.isMemberExpression(setCall.callee, { computed: false }) &&
         t.isIdentifier(setCall.callee.property) &&
         setCall.callee.property.name === "call"
       ) {
-        // @ts-ignore(Babel 7 vs Babel 8) member.node.object is not t.Super
-        args.unshift(setCall.callee.object);
+        args = [
+          // @ts-ignore(Babel 7 vs Babel 8) member.node.object is not t.Super
+          setCall.callee.object,
+          t.arrayExpression(
+            // Remove '_'
+            (setCall.arguments as t.Expression[]).slice(1, -1),
+          ),
+          setCall.arguments[0] as t.Expression,
+        ];
       } else {
-        args.unshift(setCall.callee as t.Expression, t.nullLiteral());
+        args = [
+          setCall.callee as t.Expression,
+          t.arrayExpression(
+            // Remove '_'
+            (setCall.arguments as t.Expression[]).slice(0, -1),
+          ),
+        ];
       }
-      args.pop(); // Remove '_'
 
       return t.memberExpression(
         t.callExpression(file.addHelper("toSetter"), args),
