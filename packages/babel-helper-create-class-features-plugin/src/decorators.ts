@@ -930,18 +930,10 @@ function transformClass(
           t.isSuper(expression.object) ||
           t.isThisExpression(expression.object)
         ) {
-          needMemoise = true;
-          if (memoiseInPlace) {
-            object = memoiseExpression(t.thisExpression(), "obj");
-          } else {
-            object = t.thisExpression();
-          }
+          object = memoiseExpression(t.thisExpression(), "obj");
         } else {
           if (!scopeParent.isStatic(expression.object)) {
-            needMemoise = true;
-            if (memoiseInPlace) {
-              expression.object = memoiseExpression(expression.object, "obj");
-            }
+            expression.object = memoiseExpression(expression.object, "obj");
           }
           object = t.cloneNode(expression.object);
         }
