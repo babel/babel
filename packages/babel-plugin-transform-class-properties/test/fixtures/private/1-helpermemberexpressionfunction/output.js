@@ -25,7 +25,7 @@ let C = /*#__PURE__*/function () {
   babelHelpers.createClass(C, [{
     key: "m",
     value: function m() {
-      for (babelHelpers.toSetter(babelHelpers.classPrivateFieldSet2, null, this, _p)._ of []);
+      for (babelHelpers.toSetter(babelHelpers.classPrivateFieldSet2, [this, _p])._ of []);
     }
   }]);
   return C;
@@ -41,7 +41,7 @@ let E = /*#__PURE__*/function () {
   babelHelpers.createClass(E, [{
     key: "f",
     value: function f() {
-      for (babelHelpers.toSetter(babelHelpers.classPrivateFieldSet2, null, this, _arr2)._ of [1, 2]);
+      for (babelHelpers.toSetter(babelHelpers.classPrivateFieldSet2, [this, _arr2])._ of [1, 2]);
     }
   }]);
   return E;
@@ -57,7 +57,7 @@ let F = /*#__PURE__*/function () {
   babelHelpers.createClass(F, [{
     key: "g",
     value: function g() {
-      for (babelHelpers.toSetter(babelHelpers.classPrivateFieldSet2, null, this, _ar)._ in [1, 2, 3]);
+      for (babelHelpers.toSetter(babelHelpers.classPrivateFieldSet2, [this, _ar])._ in [1, 2, 3]);
     }
   }]);
   return F;
