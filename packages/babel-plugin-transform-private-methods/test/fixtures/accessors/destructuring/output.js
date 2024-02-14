@@ -4,7 +4,7 @@ class A {
     babelHelpers.classPrivateMethodInitSpec(this, _setter);
   }
   m() {
-    [babelHelpers.toSetter(babelHelpers.classPrivateSetter, null, this, _setter, _set_setter)._] = [1];
+    [babelHelpers.toSetter(babelHelpers.classPrivateSetter, [this, _setter, _set_setter])._] = [1];
     [(this, babelHelpers.readOnlyError("#getter"))._] = [1];
   }
 }

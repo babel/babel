@@ -6,6 +6,6 @@ let Foo = /*#__PURE__*/babelHelpers.createClass(function Foo(props) {
   babelHelpers.classPrivateFieldInitSpec(this, _client, void 0);
   ({
     x,
-    ...babelHelpers.toSetter(babelHelpers.classPrivateFieldSet2, null, this, _client)._
+    ...babelHelpers.toSetter(babelHelpers.classPrivateFieldSet2, [this, _client])._
   } = props);
 });
