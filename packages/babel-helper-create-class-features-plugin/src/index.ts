@@ -236,10 +236,12 @@ export function createClassFeaturePlugin({
         }
         const classRefForDefine = ref ?? t.cloneNode(innerBinding);
 
-        // NODE: These three functions don't support decorators yet,
-        //       but verifyUsedFeatures throws if there are both
-        //       decorators and private fields.
-        const privateNamesMap = buildPrivateNamesMap(props, file);
+        const privateNamesMap = buildPrivateNamesMap(
+          classRefForDefine.name,
+          privateFieldsAsProperties ?? loose,
+          props,
+          file,
+        );
         const privateNamesNodes = buildPrivateNamesNodes(
           privateNamesMap,
           privateFieldsAsProperties ?? loose,

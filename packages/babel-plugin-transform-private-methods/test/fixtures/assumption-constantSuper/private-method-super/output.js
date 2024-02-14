@@ -3,19 +3,19 @@ class Base {
     return 'good';
   }
 }
-var _privateMethod = /*#__PURE__*/new WeakSet();
+var _Sub_brand = /*#__PURE__*/new WeakSet();
 class Sub extends Base {
   constructor(...args) {
     super(...args);
-    babelHelpers.classPrivateMethodInitSpec(this, _privateMethod);
+    babelHelpers.classPrivateMethodInitSpec(this, _Sub_brand);
   }
   superMethod() {
     return 'bad';
   }
   publicMethod() {
-    return babelHelpers.classPrivateMethodGet(this, _privateMethod, _privateMethod2).call(this);
+    return babelHelpers.classPrivateMethodGet(this, _Sub_brand, _privateMethod).call(this);
   }
 }
-function _privateMethod2() {
+function _privateMethod() {
   return Base.prototype.superMethod.call(this);
 }
