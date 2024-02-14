@@ -1,8 +1,8 @@
-var _a = /*#__PURE__*/new WeakSet();
+var _C_brand = /*#__PURE__*/new WeakSet();
 class C {
   constructor() {
     /* before a */
-    babelHelpers.classPrivateMethodInitSpec(this, _a);
+    babelHelpers.classPrivateMethodInitSpec(this, _C_brand);
   }
 } /* after a */
-function _a2() {}
+function _a() {}
