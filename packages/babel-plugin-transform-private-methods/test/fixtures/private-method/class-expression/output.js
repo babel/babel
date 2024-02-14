@@ -1,10 +1,10 @@
-var _foo;
-console.log((_foo = /*#__PURE__*/new WeakSet(), class A {
+var _A_brand;
+console.log((_A_brand = /*#__PURE__*/new WeakSet(), class A {
   constructor() {
-    babelHelpers.classPrivateMethodInitSpec(this, _foo);
+    babelHelpers.classPrivateMethodInitSpec(this, _A_brand);
   }
   method() {
-    babelHelpers.classPrivateMethodGet(this, _foo, _foo2).call(this);
+    babelHelpers.classPrivateMethodGet(this, _A_brand, _foo).call(this);
   }
 }));
-function _foo2() {}
+function _foo() {}

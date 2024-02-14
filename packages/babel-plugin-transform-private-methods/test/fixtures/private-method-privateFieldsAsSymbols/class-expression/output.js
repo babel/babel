@@ -1,12 +1,12 @@
-var _foo;
-console.log((_foo = /*#__PURE__*/Symbol("foo"), class A {
+var _A_brand;
+console.log((_A_brand = /*#__PURE__*/Symbol("foo"), class A {
   constructor() {
-    Object.defineProperty(this, _foo, {
-      value: _foo2
+    Object.defineProperty(this, _A_brand, {
+      value: _foo
     });
   }
   method() {
-    babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo]();
+    babelHelpers.classPrivateFieldLooseBase(this, _A_brand)[_A_brand]();
   }
 }));
-function _foo2() {}
+function _foo() {}
