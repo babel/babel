@@ -499,34 +499,26 @@ interface DecoratorInfo {
   locals: t.Identifier | t.Identifier[] | undefined;
 }
 
-// Information about a computed property key. These must be evaluated
-// interspersed with decorator expressions, which is why they get added to the
-// array of DecoratorInfos later on.
-interface ComputedPropInfo {
-  localComputedNameId: t.Identifier;
-  keyNode: t.Expression;
-}
-
-function isDecoratorInfo(
-  info: DecoratorInfo | ComputedPropInfo,
-): info is DecoratorInfo {
-  return "decoratorsArray" in info;
-}
-
-function filteredOrderedDecoratorInfo(
-  info: (DecoratorInfo | ComputedPropInfo)[],
-): DecoratorInfo[] {
-  const filtered = info.filter(isDecoratorInfo);
-
+/**
+ * Sort decoration info in the application order:
+ * - static non-fields
+ * - instance non-fields
+ * - static fields
+ * - instance fields
+ *
+ * @param {DecoratorInfo[]} info
+ * @returns {DecoratorInfo[]} Sorted decoration info
+ */
+function toSortedDecoratorInfo(info: DecoratorInfo[]): DecoratorInfo[] {
   return [
-    ...filtered.filter(
+    ...info.filter(
       el => el.isStatic && el.kind >= ACCESSOR && el.kind <= SETTER,
     ),
-    ...filtered.filter(
+    ...info.filter(
       el => !el.isStatic && el.kind >= ACCESSOR && el.kind <= SETTER,
     ),
-    ...filtered.filter(el => el.isStatic && el.kind === FIELD),
-    ...filtered.filter(el => !el.isStatic && el.kind === FIELD),
+    ...info.filter(el => el.isStatic && el.kind === FIELD),
+    ...info.filter(el => !el.isStatic && el.kind === FIELD),
   ];
 }
 
@@ -555,11 +547,11 @@ function generateDecorationList(
 }
 
 function generateDecorationExprs(
-  info: (DecoratorInfo | ComputedPropInfo)[],
+  decorationInfo: DecoratorInfo[],
   version: DecoratorVersionKind,
 ): t.ArrayExpression {
   return t.arrayExpression(
-    filteredOrderedDecoratorInfo(info).map(el => {
+    decorationInfo.map(el => {
       let flag = el.kind;
       if (el.isStatic) {
         flag +=
@@ -580,12 +572,10 @@ function generateDecorationExprs(
   );
 }
 
-function extractElementLocalAssignments(
-  decorationInfo: (DecoratorInfo | ComputedPropInfo)[],
-) {
+function extractElementLocalAssignments(decorationInfo: DecoratorInfo[]) {
   const localIds: t.Identifier[] = [];
 
-  for (const el of filteredOrderedDecoratorInfo(decorationInfo)) {
+  for (const el of decorationInfo) {
     const { locals } = el;
 
     if (Array.isArray(locals)) {
@@ -899,7 +889,7 @@ function transformClass(
     return;
   }
 
-  const elementDecoratorInfo: (DecoratorInfo | ComputedPropInfo)[] = [];
+  const elementDecoratorInfo: DecoratorInfo[] = [];
 
   let constructorPath: NodePath<t.ClassMethod> | undefined;
   const decoratedPrivateMethods = new Set<string>();
@@ -1283,13 +1273,17 @@ function transformClass(
     staticFieldInitializerExpressions = [];
   }
 
+  const sortedElementDecoratorInfo =
+    toSortedDecoratorInfo(elementDecoratorInfo);
+
   const elementDecorations = generateDecorationExprs(
-    elementDecoratorInfo,
+    sortedElementDecoratorInfo,
     version,
   );
 
-  const elementLocals: t.Identifier[] =
-    extractElementLocalAssignments(elementDecoratorInfo);
+  const elementLocals: t.Identifier[] = extractElementLocalAssignments(
+    sortedElementDecoratorInfo,
+  );
 
   if (protoInitLocal) {
     elementLocals.push(protoInitLocal);
