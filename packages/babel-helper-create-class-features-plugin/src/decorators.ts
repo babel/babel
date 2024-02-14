@@ -478,9 +478,9 @@ function getElementKind(element: NodePath<ClassDecoratableElement>): number {
 
 // Information about the decorators applied to an element
 interface DecoratorInfo {
-  // The expressions of the decorators themselves
-  decorators: t.Expression[];
-  decoratorsThis: t.Expression[];
+  // An array of applied decorators or a memoised identifier
+  decoratorsArray: t.Identifier | t.ArrayExpression | t.Expression;
+  decoratorsHaveThis: boolean;
 
   // The kind of the decorated value, matches the kind value passed to applyDecs
   kind: number;
@@ -510,7 +510,7 @@ interface ComputedPropInfo {
 function isDecoratorInfo(
   info: DecoratorInfo | ComputedPropInfo,
 ): info is DecoratorInfo {
-  return "decorators" in info;
+  return "decoratorsArray" in info;
 }
 
 function filteredOrderedDecoratorInfo(
@@ -560,12 +560,6 @@ function generateDecorationExprs(
 ): t.ArrayExpression {
   return t.arrayExpression(
     filteredOrderedDecoratorInfo(info).map(el => {
-      const { decs, hasThis } = generateDecorationList(
-        el.decorators,
-        el.decoratorsThis,
-        version,
-      );
-
       let flag = el.kind;
       if (el.isStatic) {
         flag +=
@@ -574,10 +568,10 @@ function generateDecorationExprs(
             ? STATIC
             : STATIC_OLD_VERSION;
       }
-      if (hasThis) flag += DECORATORS_HAVE_THIS;
+      if (el.decoratorsHaveThis) flag += DECORATORS_HAVE_THIS;
 
       return t.arrayExpression([
-        decs.length === 1 ? decs[0] : t.arrayExpression(decs),
+        el.decoratorsArray,
         t.numericLiteral(flag),
         el.name,
         ...(el.privateMethods || []),
@@ -1012,15 +1006,37 @@ function transformClass(
       }
 
       const { node } = element;
-      const decorators = element.node.decorators;
+      const decorators = node.decorators;
 
       const hasDecorators = !!decorators?.length;
 
+      const isComputed = "computed" in node && node.computed;
+
+      let name = "computedKey";
+
+      if (node.key.type === "PrivateName") {
+        name = node.key.id.name;
+      } else if (!isComputed && node.key.type === "Identifier") {
+        name = node.key.name;
+      }
+      let decoratorsArray: t.Identifier | t.ArrayExpression | t.Expression;
+      let decoratorsHaveThis;
+
       if (hasDecorators) {
-        maybeExtractDecorators(decorators, true);
+        const needMemoise = maybeExtractDecorators(decorators, false);
+        const decorationList = generateDecorationList(
+          decorators.map(d => d.expression),
+          decorators.map(d => decoratorsThis.get(d)),
+          version,
+        );
+        const { decs } = decorationList;
+        decoratorsHaveThis = decorationList.hasThis;
+        decoratorsArray = decs.length === 1 ? decs[0] : t.arrayExpression(decs);
+        if (needMemoise) {
+          decoratorsArray = memoiseExpression(decoratorsArray, name + "Decs");
+        }
       }
 
-      const isComputed = "computed" in element.node && element.node.computed;
       if (isComputed) {
         if (!element.get("key").isConstantExpression()) {
           node.key = memoiseExpression(
@@ -1030,20 +1046,11 @@ function transformClass(
         }
       }
 
-      const kind = getElementKind(element);
-      const { key } = node;
+      const { key, static: isStatic } = node;
 
       const isPrivate = key.type === "PrivateName";
 
-      const isStatic = element.node.static;
-
-      let name = "computedKey";
-
-      if (isPrivate) {
-        name = key.id.name;
-      } else if (!isComputed && key.type === "Identifier") {
-        name = key.name;
-      }
+      const kind = getElementKind(element);
 
       if (isPrivate && !isStatic) {
         if (hasDecorators) {
@@ -1187,8 +1194,8 @@ function transformClass(
 
         elementDecoratorInfo.push({
           kind,
-          decorators: decorators.map(d => d.expression),
-          decoratorsThis: decorators.map(d => decoratorsThis.get(d)),
+          decoratorsArray,
+          decoratorsHaveThis,
           name: nameExpr,
           isStatic,
           privateMethods,
@@ -1407,9 +1414,7 @@ function transformClass(
             elementLocals,
             classLocals,
             elementDecorations,
-            classDecorationsId
-              ? t.cloneNode(classDecorationsId)
-              : t.arrayExpression(classDecorations),
+            classDecorationsId ?? t.arrayExpression(classDecorations),
             t.numericLiteral(classDecorationsFlag),
             needsInstancePrivateBrandCheck ? lastInstancePrivateName : null,
             typeof className === "object" ? className : undefined,
