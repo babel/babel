@@ -809,16 +809,8 @@ function transformClass(
   const scopeParent: Scope = path.scope.parent;
   const memoiseExpression = (expression: t.Expression, hint: string) => {
     const localEvaluatedId = scopeParent.generateDeclaredUidIdentifier(hint);
-    const assign = t.assignmentExpression("=", localEvaluatedId, expression);
-    return { assign, ref: localEvaluatedId };
-  };
-  const memoiseExpressionAndAssign = (
-    expression: t.Expression,
-    hint: string,
-  ) => {
-    const { assign, ref } = memoiseExpression(expression, hint);
-    assignments.push(assign);
-    return t.cloneNode(ref);
+    assignments.push(t.assignmentExpression("=", localEvaluatedId, expression));
+    return t.cloneNode(localEvaluatedId);
   };
 
   let protoInitLocal: t.Identifier;
@@ -885,7 +877,7 @@ function transformClass(
         path.node.id,
         newPath,
         computed && !keyPath.isConstantExpression()
-          ? memoiseExpressionAndAssign(
+          ? memoiseExpression(
               createToPropertyKeyCall(state, key as t.Expression),
               "computedKey",
             )
@@ -930,6 +922,7 @@ function transformClass(
   ): HandleDecoratorExpressionsResult {
     let needMemoise = false;
     const decoratorsThis: (t.Expression | null)[] = [];
+    let receiverId: t.Identifier | null = null;
     for (const expression of expressions) {
       let object;
       if (
@@ -937,17 +930,18 @@ function transformClass(
           (!process.env.BABEL_8_BREAKING && version === "2023-05")) &&
         t.isMemberExpression(expression)
       ) {
-        if (
-          t.isSuper(expression.object) ||
-          t.isThisExpression(expression.object)
-        ) {
-          object = memoiseExpressionAndAssign(t.thisExpression(), "obj");
+        if (t.isSuper(expression.object)) {
+          object = t.thisExpression();
         } else if (scopeParent.isStatic(expression.object)) {
           object = t.cloneNode(expression.object);
         } else {
-          const { assign, ref } = memoiseExpression(expression.object, "obj");
-          object = assign;
-          expression.object = t.cloneNode(ref);
+          receiverId ??= scopeParent.generateDeclaredUidIdentifier("obj");
+          object = t.assignmentExpression(
+            "=",
+            t.cloneNode(receiverId),
+            expression.object,
+          );
+          expression.object = t.cloneNode(receiverId);
         }
       }
       decoratorsThis.push(object);
@@ -980,7 +974,7 @@ function transformClass(
     classDecorations = decs;
 
     if (needMemoise) {
-      classDecorationsId = memoiseExpressionAndAssign(
+      classDecorationsId = memoiseExpression(
         t.arrayExpression(classDecorations),
         "classDecs",
       );
@@ -1049,16 +1043,13 @@ function transformClass(
         decoratorsHaveThis = haveThis;
         decoratorsArray = decs.length === 1 ? decs[0] : t.arrayExpression(decs);
         if (needMemoise) {
-          decoratorsArray = memoiseExpressionAndAssign(
-            decoratorsArray,
-            name + "Decs",
-          );
+          decoratorsArray = memoiseExpression(decoratorsArray, name + "Decs");
         }
       }
 
       if (isComputed) {
         if (!element.get("key").isConstantExpression()) {
-          node.key = memoiseExpressionAndAssign(
+          node.key = memoiseExpression(
             createToPropertyKeyCall(state, node.key as t.Expression),
             "computedKey",
           );

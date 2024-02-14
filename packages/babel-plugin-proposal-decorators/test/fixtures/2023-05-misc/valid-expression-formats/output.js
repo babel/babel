@@ -13,8 +13,8 @@ class Foo {
   #a = void _initProto(this);
   method() {}
   makeClass() {
-    var _obj3, _barDecs, _init_bar;
-    return _obj3 = this, _barDecs = [_obj3, this.#a], class Nested {
+    var _barDecs, _init_bar;
+    return _barDecs = [this, this.#a], class Nested {
       static {
         [_init_bar] = babelHelpers.applyDecs2305(this, [[_barDecs, 16, "bar"]], []).e;
       }
