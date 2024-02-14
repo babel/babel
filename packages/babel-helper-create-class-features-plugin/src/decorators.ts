@@ -909,6 +909,7 @@ function transformClass(
   const decoratedPrivateMethods = new Set<string>();
 
   let classInitLocal: t.Identifier, classIdLocal: t.Identifier;
+  let decoratorReceiverId: t.Identifier | null = null;
 
   // Memoise the this value `a.b` of decorator member expressions `@a.b.dec`,
   type HandleDecoratorExpressionsResult = {
@@ -922,7 +923,6 @@ function transformClass(
   ): HandleDecoratorExpressionsResult {
     let needMemoise = false;
     const decoratorsThis: (t.Expression | null)[] = [];
-    let receiverId: t.Identifier | null = null;
     for (const expression of expressions) {
       let object;
       if (
@@ -935,13 +935,14 @@ function transformClass(
         } else if (scopeParent.isStatic(expression.object)) {
           object = t.cloneNode(expression.object);
         } else {
-          receiverId ??= scopeParent.generateDeclaredUidIdentifier("obj");
+          decoratorReceiverId ??=
+            scopeParent.generateDeclaredUidIdentifier("obj");
           object = t.assignmentExpression(
             "=",
-            t.cloneNode(receiverId),
+            t.cloneNode(decoratorReceiverId),
             expression.object,
           );
-          expression.object = t.cloneNode(receiverId);
+          expression.object = t.cloneNode(decoratorReceiverId);
         }
       }
       decoratorsThis.push(object);

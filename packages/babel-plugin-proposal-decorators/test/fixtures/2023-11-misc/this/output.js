@@ -1,7 +1,7 @@
-var _initClass, _obj, _classDecs, _obj2, _xDecs, _init_x, _init_extra_x, _obj3, _yDecs, _init_y, _init_extra_y;
+var _initClass, _obj, _classDecs, _xDecs, _init_x, _init_extra_x, _yDecs, _init_y, _init_extra_y;
 _classDecs = [_obj = o1, _obj.dec, void 0, dec, _obj = o2, _obj.dec, _obj = o4.o(), _obj.dec];
-_xDecs = [_obj2 = o2, _obj2.dec, _obj2 = o3.o, _obj2.dec, _obj2 = o4.o(), _obj2.dec];
-_yDecs = [_obj3 = o2, _obj3.dec, void 0, dec];
+_xDecs = [_obj = o2, _obj.dec, _obj = o3.o, _obj.dec, _obj = o4.o(), _obj.dec];
+_yDecs = [_obj = o2, _obj.dec, void 0, dec];
 let _A;
 class A {
   static {
