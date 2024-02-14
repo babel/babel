@@ -896,11 +896,19 @@ function transformClass(
 
   let classInitLocal: t.Identifier, classIdLocal: t.Identifier;
 
-  const maybeExtractDecorators = (decorators: t.Decorator[]) => {
+  // Memoise the this value `a.b` of decorator member expressions `@a.b.dec`,
+  type handleDecoratorExpressionsResult = {
+    // whether the whole decorator list requires memoisation
+    needMemoise: boolean;
+    // the this value of each decorator if applicable
+    decoratorsThis: (t.Expression | undefined)[];
+  };
+  function handleDecoratorExpressions(
+    expressions: t.Expression[],
+  ): handleDecoratorExpressionsResult {
     let needMemoise = false;
     const decoratorsThis: (t.Expression | null)[] = [];
-    for (const decorator of decorators) {
-      const { expression } = decorator;
+    for (const expression of expressions) {
       let object;
       if (
         (version === "2023-11" ||
@@ -920,12 +928,10 @@ function transformClass(
         }
       }
       decoratorsThis.push(object);
-      if (!scopeParent.isStatic(expression)) {
-        needMemoise = true;
-      }
+      needMemoise ||= !scopeParent.isStatic(expression);
     }
     return { needMemoise, decoratorsThis };
-  };
+  }
 
   let needsDeclaraionForClassBinding = false;
   let classDecorationsFlag = 0;
@@ -938,11 +944,12 @@ function transformClass(
 
     path.node.decorators = null;
 
+    const decoratorExpressions = classDecorators.map(el => el.expression);
     const { needMemoise, decoratorsThis } =
-      maybeExtractDecorators(classDecorators);
+      handleDecoratorExpressions(decoratorExpressions);
 
     const { hasThis, decs } = generateDecorationList(
-      classDecorators.map(el => el.expression),
+      decoratorExpressions,
       decoratorsThis,
       version,
     );
@@ -1008,10 +1015,11 @@ function transformClass(
       let decoratorsHaveThis;
 
       if (hasDecorators) {
+        const decoratorExpressions = decorators.map(d => d.expression);
         const { needMemoise, decoratorsThis } =
-          maybeExtractDecorators(decorators);
+          handleDecoratorExpressions(decoratorExpressions);
         const decorationList = generateDecorationList(
-          decorators.map(d => d.expression),
+          decoratorExpressions,
           decoratorsThis,
           version,
         );
