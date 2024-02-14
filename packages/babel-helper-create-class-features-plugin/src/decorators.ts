@@ -455,7 +455,7 @@ const SETTER = 4;
 
 const STATIC_OLD_VERSION = 5; // Before 2023-05
 const STATIC = 8; // 1 << 3
-const DECORATORS_HAVE_THIS = 16; // 1 << 3
+const DECORATORS_HAVE_THIS = 16; // 1 << 4
 
 function getElementKind(element: NodePath<ClassDecoratableElement>): number {
   switch (element.node.type) {
@@ -478,9 +478,9 @@ function getElementKind(element: NodePath<ClassDecoratableElement>): number {
 
 // Information about the decorators applied to an element
 interface DecoratorInfo {
-  // The expressions of the decorators themselves
-  decorators: t.Expression[];
-  decoratorsThis: t.Expression[];
+  // An array of applied decorators or a memoised identifier
+  decoratorsArray: t.Identifier | t.ArrayExpression | t.Expression;
+  decoratorsHaveThis: boolean;
 
   // The kind of the decorated value, matches the kind value passed to applyDecs
   kind: number;
@@ -499,50 +499,56 @@ interface DecoratorInfo {
   locals: t.Identifier | t.Identifier[] | undefined;
 }
 
-// Information about a computed property key. These must be evaluated
-// interspersed with decorator expressions, which is why they get added to the
-// array of DecoratorInfos later on.
-interface ComputedPropInfo {
-  localComputedNameId: t.Identifier;
-  keyNode: t.Expression;
-}
-
-function isDecoratorInfo(
-  info: DecoratorInfo | ComputedPropInfo,
-): info is DecoratorInfo {
-  return "decorators" in info;
-}
-
-function filteredOrderedDecoratorInfo(
-  info: (DecoratorInfo | ComputedPropInfo)[],
-): DecoratorInfo[] {
-  const filtered = info.filter(isDecoratorInfo);
-
+/**
+ * Sort decoration info in the application order:
+ * - static non-fields
+ * - instance non-fields
+ * - static fields
+ * - instance fields
+ *
+ * @param {DecoratorInfo[]} info
+ * @returns {DecoratorInfo[]} Sorted decoration info
+ */
+function toSortedDecoratorInfo(info: DecoratorInfo[]): DecoratorInfo[] {
   return [
-    ...filtered.filter(
+    ...info.filter(
       el => el.isStatic && el.kind >= ACCESSOR && el.kind <= SETTER,
     ),
-    ...filtered.filter(
+    ...info.filter(
       el => !el.isStatic && el.kind >= ACCESSOR && el.kind <= SETTER,
     ),
-    ...filtered.filter(el => el.isStatic && el.kind === FIELD),
-    ...filtered.filter(el => !el.isStatic && el.kind === FIELD),
+    ...info.filter(el => el.isStatic && el.kind === FIELD),
+    ...info.filter(el => !el.isStatic && el.kind === FIELD),
   ];
 }
 
+type GenerateDecorationListResult = {
+  // The zipped decorators array that will be passed to generateDecorationExprs
+  decs: t.Expression[];
+  // Whether there are non-empty decorator this values
+  haveThis: boolean;
+};
+/**
+ * Zip decorators and decorator this values into an array
+ *
+ * @param {t.Expression[]} decorators
+ * @param {((t.Expression | undefined)[])} decoratorsThis decorator this values
+ * @param {DecoratorVersionKind} version
+ * @returns {GenerateDecorationListResult}
+ */
 function generateDecorationList(
   decorators: t.Expression[],
-  decoratorsThis: (t.Expression | null)[],
+  decoratorsThis: (t.Expression | undefined)[],
   version: DecoratorVersionKind,
-) {
+): GenerateDecorationListResult {
   const decsCount = decorators.length;
-  const hasOneThis = decoratorsThis.some(Boolean);
+  const haveOneThis = decoratorsThis.some(Boolean);
   const decs: t.Expression[] = [];
   for (let i = 0; i < decsCount; i++) {
     if (
       (version === "2023-11" ||
         (!process.env.BABEL_8_BREAKING && version === "2023-05")) &&
-      hasOneThis
+      haveOneThis
     ) {
       decs.push(
         decoratorsThis[i] || t.unaryExpression("void", t.numericLiteral(0)),
@@ -551,21 +557,15 @@ function generateDecorationList(
     decs.push(decorators[i]);
   }
 
-  return { hasThis: hasOneThis, decs };
+  return { haveThis: haveOneThis, decs };
 }
 
 function generateDecorationExprs(
-  info: (DecoratorInfo | ComputedPropInfo)[],
+  decorationInfo: DecoratorInfo[],
   version: DecoratorVersionKind,
 ): t.ArrayExpression {
   return t.arrayExpression(
-    filteredOrderedDecoratorInfo(info).map(el => {
-      const { decs, hasThis } = generateDecorationList(
-        el.decorators,
-        el.decoratorsThis,
-        version,
-      );
-
+    decorationInfo.map(el => {
       let flag = el.kind;
       if (el.isStatic) {
         flag +=
@@ -574,10 +574,10 @@ function generateDecorationExprs(
             ? STATIC
             : STATIC_OLD_VERSION;
       }
-      if (hasThis) flag += DECORATORS_HAVE_THIS;
+      if (el.decoratorsHaveThis) flag += DECORATORS_HAVE_THIS;
 
       return t.arrayExpression([
-        decs.length === 1 ? decs[0] : t.arrayExpression(decs),
+        el.decoratorsArray,
         t.numericLiteral(flag),
         el.name,
         ...(el.privateMethods || []),
@@ -586,12 +586,10 @@ function generateDecorationExprs(
   );
 }
 
-function extractElementLocalAssignments(
-  decorationInfo: (DecoratorInfo | ComputedPropInfo)[],
-) {
+function extractElementLocalAssignments(decorationInfo: DecoratorInfo[]) {
   const localIds: t.Identifier[] = [];
 
-  for (const el of filteredOrderedDecoratorInfo(decorationInfo)) {
+  for (const el of decorationInfo) {
     const { locals } = el;
 
     if (Array.isArray(locals)) {
@@ -905,27 +903,32 @@ function transformClass(
     return;
   }
 
-  const elementDecoratorInfo: (DecoratorInfo | ComputedPropInfo)[] = [];
+  const elementDecoratorInfo: DecoratorInfo[] = [];
 
   let constructorPath: NodePath<t.ClassMethod> | undefined;
   const decoratedPrivateMethods = new Set<string>();
 
   let classInitLocal: t.Identifier, classIdLocal: t.Identifier;
 
-  const decoratorsThis = new Map<t.Decorator, t.Expression>();
-  const maybeExtractDecorators = (
-    decorators: t.Decorator[],
-    memoiseInPlace: boolean,
-  ) => {
+  // Memoise the this value `a.b` of decorator member expressions `@a.b.dec`,
+  type HandleDecoratorExpressionsResult = {
+    // whether the whole decorator list requires memoisation
+    needMemoise: boolean;
+    // the this value of each decorator if applicable
+    decoratorsThis: (t.Expression | undefined)[];
+  };
+  function handleDecoratorExpressions(
+    expressions: t.Expression[],
+  ): HandleDecoratorExpressionsResult {
     let needMemoise = false;
-    for (const decorator of decorators) {
-      const { expression } = decorator;
+    const decoratorsThis: (t.Expression | null)[] = [];
+    for (const expression of expressions) {
+      let object;
       if (
         (version === "2023-11" ||
           (!process.env.BABEL_8_BREAKING && version === "2023-05")) &&
         t.isMemberExpression(expression)
       ) {
-        let object;
         if (
           t.isSuper(expression.object) ||
           t.isThisExpression(expression.object)
@@ -937,17 +940,12 @@ function transformClass(
           }
           object = t.cloneNode(expression.object);
         }
-        decoratorsThis.set(decorator, object);
       }
-      if (!scopeParent.isStatic(expression)) {
-        needMemoise = true;
-        if (memoiseInPlace) {
-          decorator.expression = memoiseExpression(expression, "dec");
-        }
-      }
+      decoratorsThis.push(object);
+      needMemoise ||= !scopeParent.isStatic(expression);
     }
-    return needMemoise && !memoiseInPlace;
-  };
+    return { needMemoise, decoratorsThis };
+  }
 
   let needsDeclaraionForClassBinding = false;
   let classDecorationsFlag = 0;
@@ -960,14 +958,16 @@ function transformClass(
 
     path.node.decorators = null;
 
-    const needMemoise = maybeExtractDecorators(classDecorators, false);
+    const decoratorExpressions = classDecorators.map(el => el.expression);
+    const { needMemoise, decoratorsThis } =
+      handleDecoratorExpressions(decoratorExpressions);
 
-    const { hasThis, decs } = generateDecorationList(
-      classDecorators.map(el => el.expression),
-      classDecorators.map(dec => decoratorsThis.get(dec)),
+    const { haveThis, decs } = generateDecorationList(
+      decoratorExpressions,
+      decoratorsThis,
       version,
     );
-    classDecorationsFlag = hasThis ? 1 : 0;
+    classDecorationsFlag = haveThis ? 1 : 0;
     classDecorations = decs;
 
     if (needMemoise) {
@@ -1012,15 +1012,38 @@ function transformClass(
       }
 
       const { node } = element;
-      const decorators = element.node.decorators;
+      const decorators = node.decorators;
 
       const hasDecorators = !!decorators?.length;
 
+      const isComputed = "computed" in node && node.computed;
+
+      let name = "computedKey";
+
+      if (node.key.type === "PrivateName") {
+        name = node.key.id.name;
+      } else if (!isComputed && node.key.type === "Identifier") {
+        name = node.key.name;
+      }
+      let decoratorsArray: t.Identifier | t.ArrayExpression | t.Expression;
+      let decoratorsHaveThis;
+
       if (hasDecorators) {
-        maybeExtractDecorators(decorators, true);
+        const decoratorExpressions = decorators.map(d => d.expression);
+        const { needMemoise, decoratorsThis } =
+          handleDecoratorExpressions(decoratorExpressions);
+        const { decs, haveThis } = generateDecorationList(
+          decoratorExpressions,
+          decoratorsThis,
+          version,
+        );
+        decoratorsHaveThis = haveThis;
+        decoratorsArray = decs.length === 1 ? decs[0] : t.arrayExpression(decs);
+        if (needMemoise) {
+          decoratorsArray = memoiseExpression(decoratorsArray, name + "Decs");
+        }
       }
 
-      const isComputed = "computed" in element.node && element.node.computed;
       if (isComputed) {
         if (!element.get("key").isConstantExpression()) {
           node.key = memoiseExpression(
@@ -1030,20 +1053,11 @@ function transformClass(
         }
       }
 
-      const kind = getElementKind(element);
-      const { key } = node;
+      const { key, static: isStatic } = node;
 
       const isPrivate = key.type === "PrivateName";
 
-      const isStatic = element.node.static;
-
-      let name = "computedKey";
-
-      if (isPrivate) {
-        name = key.id.name;
-      } else if (!isComputed && key.type === "Identifier") {
-        name = key.name;
-      }
+      const kind = getElementKind(element);
 
       if (isPrivate && !isStatic) {
         if (hasDecorators) {
@@ -1187,8 +1201,8 @@ function transformClass(
 
         elementDecoratorInfo.push({
           kind,
-          decorators: decorators.map(d => d.expression),
-          decoratorsThis: decorators.map(d => decoratorsThis.get(d)),
+          decoratorsArray,
+          decoratorsHaveThis,
           name: nameExpr,
           isStatic,
           privateMethods,
@@ -1276,13 +1290,17 @@ function transformClass(
     staticFieldInitializerExpressions = [];
   }
 
+  const sortedElementDecoratorInfo =
+    toSortedDecoratorInfo(elementDecoratorInfo);
+
   const elementDecorations = generateDecorationExprs(
-    elementDecoratorInfo,
+    sortedElementDecoratorInfo,
     version,
   );
 
-  const elementLocals: t.Identifier[] =
-    extractElementLocalAssignments(elementDecoratorInfo);
+  const elementLocals: t.Identifier[] = extractElementLocalAssignments(
+    sortedElementDecoratorInfo,
+  );
 
   if (protoInitLocal) {
     elementLocals.push(protoInitLocal);
@@ -1407,9 +1425,7 @@ function transformClass(
             elementLocals,
             classLocals,
             elementDecorations,
-            classDecorationsId
-              ? t.cloneNode(classDecorationsId)
-              : t.arrayExpression(classDecorations),
+            classDecorationsId ?? t.arrayExpression(classDecorations),
             t.numericLiteral(classDecorationsFlag),
             needsInstancePrivateBrandCheck ? lastInstancePrivateName : null,
             typeof className === "object" ? className : undefined,
