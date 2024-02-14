@@ -455,7 +455,7 @@ const SETTER = 4;
 
 const STATIC_OLD_VERSION = 5; // Before 2023-05
 const STATIC = 8; // 1 << 3
-const DECORATORS_HAVE_THIS = 16; // 1 << 3
+const DECORATORS_HAVE_THIS = 16; // 1 << 4
 
 function getElementKind(element: NodePath<ClassDecoratableElement>): number {
   switch (element.node.type) {
@@ -524,7 +524,7 @@ function toSortedDecoratorInfo(info: DecoratorInfo[]): DecoratorInfo[] {
 
 function generateDecorationList(
   decorators: t.Expression[],
-  decoratorsThis: (t.Expression | null)[],
+  decoratorsThis: (t.Expression | undefined)[],
   version: DecoratorVersionKind,
 ) {
   const decsCount = decorators.length;
@@ -896,20 +896,17 @@ function transformClass(
 
   let classInitLocal: t.Identifier, classIdLocal: t.Identifier;
 
-  const decoratorsThis = new Map<t.Decorator, t.Expression>();
-  const maybeExtractDecorators = (
-    decorators: t.Decorator[],
-    memoiseInPlace: boolean,
-  ) => {
+  const maybeExtractDecorators = (decorators: t.Decorator[]) => {
     let needMemoise = false;
+    const decoratorsThis: (t.Expression | null)[] = [];
     for (const decorator of decorators) {
       const { expression } = decorator;
+      let object;
       if (
         (version === "2023-11" ||
           (!process.env.BABEL_8_BREAKING && version === "2023-05")) &&
         t.isMemberExpression(expression)
       ) {
-        let object;
         if (
           t.isSuper(expression.object) ||
           t.isThisExpression(expression.object)
@@ -921,16 +918,13 @@ function transformClass(
           }
           object = t.cloneNode(expression.object);
         }
-        decoratorsThis.set(decorator, object);
       }
+      decoratorsThis.push(object);
       if (!scopeParent.isStatic(expression)) {
         needMemoise = true;
-        if (memoiseInPlace) {
-          decorator.expression = memoiseExpression(expression, "dec");
-        }
       }
     }
-    return needMemoise && !memoiseInPlace;
+    return { needMemoise, decoratorsThis };
   };
 
   let needsDeclaraionForClassBinding = false;
@@ -944,11 +938,12 @@ function transformClass(
 
     path.node.decorators = null;
 
-    const needMemoise = maybeExtractDecorators(classDecorators, false);
+    const { needMemoise, decoratorsThis } =
+      maybeExtractDecorators(classDecorators);
 
     const { hasThis, decs } = generateDecorationList(
       classDecorators.map(el => el.expression),
-      classDecorators.map(dec => decoratorsThis.get(dec)),
+      decoratorsThis,
       version,
     );
     classDecorationsFlag = hasThis ? 1 : 0;
@@ -1013,10 +1008,11 @@ function transformClass(
       let decoratorsHaveThis;
 
       if (hasDecorators) {
-        const needMemoise = maybeExtractDecorators(decorators, false);
+        const { needMemoise, decoratorsThis } =
+          maybeExtractDecorators(decorators);
         const decorationList = generateDecorationList(
           decorators.map(d => d.expression),
-          decorators.map(d => decoratorsThis.get(d)),
+          decoratorsThis,
           version,
         );
         const { decs } = decorationList;
