@@ -45,7 +45,12 @@ if (!process.env.BABEL_8_BREAKING) {
   };
 }
 
-export function buildPrivateNamesMap(props: PropPath[], file: File) {
+export function buildPrivateNamesMap(
+  className: string,
+  privateFieldsAsProperties: boolean,
+  props: PropPath[],
+  file: File,
+) {
   const privateNamesMap: PrivateNamesMap = new Map();
   let classBrandId: t.Identifier;
   for (const prop of props) {
@@ -58,12 +63,15 @@ export function buildPrivateNamesMap(props: PropPath[], file: File) {
         let initAdded = false;
         let id: t.Identifier;
         if (
+          !privateFieldsAsProperties &&
           (process.env.BABEL_8_BREAKING || newHelpers(file)) &&
           isMethod &&
           !isStatic
         ) {
           initAdded = !!classBrandId;
-          classBrandId ??= prop.scope.generateUidIdentifier(name);
+          classBrandId ??= prop.scope.generateUidIdentifier(
+            `${className}_brand`,
+          );
           id = classBrandId;
         } else {
           id = prop.scope.generateUidIdentifier(name);

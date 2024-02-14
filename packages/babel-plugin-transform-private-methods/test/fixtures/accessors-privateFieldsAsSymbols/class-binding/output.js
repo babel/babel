@@ -1,8 +1,8 @@
 var _A;
-var _getA = /*#__PURE__*/Symbol("getA");
+var _A_brand = /*#__PURE__*/Symbol("getA");
 class A {
   constructor() {
-    Object.defineProperty(this, _getA, {
+    Object.defineProperty(this, _A_brand, {
       get: _get_getA,
       set: void 0
     });

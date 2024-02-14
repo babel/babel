@@ -1,13 +1,13 @@
 var _initProto, _call_a, _Foo;
 const dec = () => {};
-var _a = /*#__PURE__*/new WeakSet();
+var _Foo_brand = /*#__PURE__*/new WeakSet();
 class Foo {
   constructor() {
-    babelHelpers.classPrivateMethodInitSpec(this, _a);
+    babelHelpers.classPrivateMethodInitSpec(this, _Foo_brand);
     babelHelpers.defineProperty(this, "value", (_initProto(this), 1));
   }
   getA() {
-    return babelHelpers.classPrivateGetter(this, _a, _get_a);
+    return babelHelpers.classPrivateGetter(this, _Foo_brand, _get_a);
   }
 }
 _Foo = Foo;

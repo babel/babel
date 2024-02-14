@@ -1,8 +1,8 @@
 var _privateField = /*#__PURE__*/Symbol("privateField");
-var _privateFieldValue = /*#__PURE__*/Symbol("privateFieldValue");
+var _Cl_brand = /*#__PURE__*/Symbol("privateFieldValue");
 class Cl {
   constructor() {
-    Object.defineProperty(this, _privateFieldValue, {
+    Object.defineProperty(this, _Cl_brand, {
       get: _get_privateFieldValue,
       set: void 0
     });
@@ -10,8 +10,8 @@ class Cl {
       writable: true,
       value: 0
     });
-    babelHelpers.classPrivateFieldLooseBase(this, _privateFieldValue)[_privateFieldValue] = 1;
-    [babelHelpers.classPrivateFieldLooseBase(this, _privateFieldValue)[_privateFieldValue]] = [1];
+    babelHelpers.classPrivateFieldLooseBase(this, _Cl_brand)[_Cl_brand] = 1;
+    [babelHelpers.classPrivateFieldLooseBase(this, _Cl_brand)[_Cl_brand]] = [1];
   }
 }
 function _get_privateFieldValue() {
