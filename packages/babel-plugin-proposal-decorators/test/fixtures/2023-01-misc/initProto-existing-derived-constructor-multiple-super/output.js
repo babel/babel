@@ -1,9 +1,9 @@
-var _initProto, _dec, _initProto2, _dec2;
+var _initProto, _methodDecs, _initProto2, _methodDecs2;
 const dec = () => {};
-_dec = deco;
+_methodDecs = deco;
 class A extends B {
   static {
-    [_initProto] = babelHelpers.applyDecs2301(this, [[_dec, 2, "method"]], []).e;
+    [_initProto] = babelHelpers.applyDecs2301(this, [[_methodDecs, 2, "method"]], []).e;
   }
   constructor() {
     if (Math.random() > 0.5) {
@@ -14,10 +14,10 @@ class A extends B {
   }
   method() {}
 }
-_dec2 = deco;
+_methodDecs2 = deco;
 class C extends B {
   static {
-    [_initProto2] = babelHelpers.applyDecs2301(this, [[_dec2, 2, "method"]], []).e;
+    [_initProto2] = babelHelpers.applyDecs2301(this, [[_methodDecs2, 2, "method"]], []).e;
   }
   constructor() {
     try {
