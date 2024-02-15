@@ -31,6 +31,7 @@ describe("normalize options", () => {
         Object {
           "all": undefined,
           "ignoreExtensions": undefined,
+          "useHermesParser": undefined,
         }
       `);
     });
@@ -51,6 +52,7 @@ describe("normalize options", () => {
           "all": undefined,
           "allowDeclareFields": undefined,
           "ignoreExtensions": undefined,
+          "useHermesParser": undefined,
         }
       `);
     });

@@ -1,6 +1,9 @@
 import { declarePreset } from "@babel/helper-plugin-utils";
 import transformFlowStripTypes from "@babel/plugin-transform-flow-strip-types";
 import normalizeOptions from "./normalize-options.ts";
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
 
 export default declarePreset((api, opts) => {
   api.assertVersion(
@@ -12,14 +15,19 @@ export default declarePreset((api, opts) => {
     all,
     allowDeclareFields,
     ignoreExtensions = false,
+    useHermesParser = false,
   } = normalizeOptions(opts);
 
-  const flowPlugin = [transformFlowStripTypes, { all, allowDeclareFields }];
+  const plugins = [[transformFlowStripTypes, { all, allowDeclareFields }]];
+
+  if (useHermesParser) {
+    plugins.unshift(require("babel-plugin-syntax-hermes-parser"));
+  }
 
   // TODO: In Babel 7, ignoreExtensions is always true.
   // Allow setting it to false in the next minor.
   if (process.env.BABEL_8_BREAKING ? ignoreExtensions : true) {
-    return { plugins: [flowPlugin] };
+    return { plugins };
   }
 
   if (process.env.BABEL_8_BREAKING) {
@@ -27,7 +35,7 @@ export default declarePreset((api, opts) => {
       overrides: [
         {
           test: filename => filename == null || !/\.tsx?$/.test(filename),
-          plugins: [flowPlugin],
+          plugins,
         },
       ],
     };

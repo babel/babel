@@ -4007,6 +4007,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-validator-option": "workspace:^"
     "@babel/plugin-transform-flow-strip-types": "workspace:^"
+    babel-plugin-syntax-hermes-parser: "npm:^0.19.1"
   peerDependencies:
     "@babel/core": ^7.0.0-0
   languageName: unknown
@@ -6880,6 +6881,15 @@ __metadata:
   peerDependencies:
     "@babel/core": "*"
   checksum: 3ed709b91da09756c959be47762d889163e3875e0d90cb080edfeadb4244d349afc25ba0170bfe7fd16e705809803d2b060d4295400e4afdee88ced295e1543b
+  languageName: node
+  linkType: hard
+
+"babel-plugin-syntax-hermes-parser@npm:^0.19.1":
+  version: 0.19.1
+  resolution: "babel-plugin-syntax-hermes-parser@npm:0.19.1"
+  dependencies:
+    hermes-parser: "npm:0.19.1"
+  checksum: cb99e79b2d979cd3a69be3da23748f957d9fab294464f0720602271afb1f4ec40bed71d8884549edf00fa47523c60e9ff2407f4a2a0167eb9ac1dd094c0f8b57
   languageName: node
   linkType: hard
 
@@ -10635,6 +10645,22 @@ __metadata:
   dependencies:
     function-bind: "npm:^1.1.2"
   checksum: c330f8d93f9d23fe632c719d4db3d698ef7d7c367d51548b836069e06a90fa9151e868c8e67353cfe98d67865bf7354855db28fa36eb1b18fa5d4a3f4e7f1c90
+  languageName: node
+  linkType: hard
+
+"hermes-estree@npm:0.19.1":
+  version: 0.19.1
+  resolution: "hermes-estree@npm:0.19.1"
+  checksum: dadafea5cf8fcf7d2c2d3d43740898c73b03db4747d4cc83e3cdb06bfcfbf3ee97f4ee26f077aea455771703f5bd18a4cb40c1ce7af9e38ce541d6c03fc8847a
+  languageName: node
+  linkType: hard
+
+"hermes-parser@npm:0.19.1":
+  version: 0.19.1
+  resolution: "hermes-parser@npm:0.19.1"
+  dependencies:
+    hermes-estree: "npm:0.19.1"
+  checksum: 4fd886ce3ab80c79b258fa60085f2915f587aef57bf59e17f6cfe3b0ad2e7b1a1cfff8371b736392f66cff0658a90ece279b608edcb5589f8c56957e799c56f2
   languageName: node
   linkType: hard
 
