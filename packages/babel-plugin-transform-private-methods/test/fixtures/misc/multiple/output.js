@@ -2,7 +2,7 @@ var _A_brand = /*#__PURE__*/new WeakSet();
 class A {
   constructor() {
     babelHelpers.classPrivateMethodInitSpec(this, _A_brand);
-    babelHelpers.classPrivateMethodGet(this, _A_brand, _method).call(this);
+    babelHelpers.assertClassBrand(this, _A_brand, _method).call(this);
     babelHelpers.classPrivateGetter(this, _A_brand, _get_getter);
     babelHelpers.classPrivateSetter(this, _A_brand, _set_setter, 1);
     babelHelpers.classPrivateGetter(this, _A_brand, _get_getset);
