@@ -19,7 +19,7 @@ function captureInitializerThis(callback) {
 @dec
 class Foo {
   @(captureInitializerThis(v => accessorThis = v))
-  static accessor;
+  static accessor accessor;
   @(captureInitializerThis(v => getterThis = v))
   static get getter() {};
   @(captureInitializerThis(v => setterThis = v))
