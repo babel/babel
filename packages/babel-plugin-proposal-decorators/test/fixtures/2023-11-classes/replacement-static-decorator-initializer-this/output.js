@@ -25,15 +25,21 @@ new class extends babelHelpers.identity {
         ({
           e: [_init_accessor, _init_extra_accessor, _init_property, _init_extra_property, _initStatic],
           c: [_Foo, _initClass]
-        } = babelHelpers.applyDecs2311(this, [[_getterDecs, 11, "getter"], [_setterDecs, 12, "setter"], [_methodDecs, 10, "method"], [_accessorDecs, 8, "accessor"], [_propertyDecs, 8, "property"]], [dec]));
+        } = babelHelpers.applyDecs2311(this, [[_accessorDecs, 9, "accessor"], [_getterDecs, 11, "getter"], [_setterDecs, 12, "setter"], [_methodDecs, 10, "method"], [_propertyDecs, 8, "property"]], [dec]));
         _initStatic(this);
+      }
+      static get accessor() {
+        return Foo.#A;
+      }
+      static set accessor(v) {
+        Foo.#A = v;
       }
       static get getter() {}
       static set setter(_) {}
       static method() {}
     }
   }
-  accessor = _init_accessor();
+  #A = _init_accessor();
   property = (_init_extra_accessor(), _init_property());
   constructor() {
     super(_Foo), (() => {
