@@ -52,25 +52,25 @@ new class extends babelHelpers.identity {
     }
   }
   #o = _call_o;
-  i = _init_i(this);
-  #C = (_init_extra_i(this), _init_m(this));
-  #n = (_init_extra_m(this), _init_n(this));
+  i = _init_i();
+  #C = (_init_extra_i(), _init_m());
+  #n = (_init_extra_m(), _init_n());
   get #p() {
     return _call_p(this);
   }
   set #q(v) {
     _call_q(this, v);
   }
-  #D = (_init_extra_n(this), _init_r(this));
+  #D = (_init_extra_n(), _init_r());
   set #r(v) {
-    _set_r(this, v);
+    _set_r(v);
   }
   get #r() {
-    return _get_r(this);
+    return _get_r();
   }
   constructor() {
     super(_Class), (() => {
-      _init_extra_r(this);
+      _init_extra_r();
     })(), _initClass();
   }
 }();

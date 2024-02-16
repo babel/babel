@@ -603,6 +603,7 @@ function extractElementLocalAssignments(decorationInfo: DecoratorInfo[]) {
 }
 
 function addCallAccessorsFor(
+  version: DecoratorVersionKind,
   element: NodePath,
   key: t.PrivateName,
   getId: t.Identifier,
@@ -616,7 +617,10 @@ function addCallAccessorsFor(
       [],
       t.blockStatement([
         t.returnStatement(
-          t.callExpression(t.cloneNode(getId), [t.thisExpression()]),
+          t.callExpression(
+            t.cloneNode(getId),
+            version === "2023-11" && isStatic ? [] : [t.thisExpression()],
+          ),
         ),
       ]),
       isStatic,
@@ -630,10 +634,12 @@ function addCallAccessorsFor(
       [t.identifier("v")],
       t.blockStatement([
         t.expressionStatement(
-          t.callExpression(t.cloneNode(setId), [
-            t.thisExpression(),
-            t.identifier("v"),
-          ]),
+          t.callExpression(
+            t.cloneNode(setId),
+            version === "2023-11" && isStatic
+              ? [t.identifier("v")]
+              : [t.thisExpression(), t.identifier("v")],
+          ),
         ),
       ]),
       isStatic,
@@ -1081,7 +1087,8 @@ function transformClass(
         if (kind === ACCESSOR) {
           const { value } = element.node as t.ClassAccessorProperty;
 
-          const params: t.Expression[] = [t.thisExpression()];
+          const params: t.Expression[] =
+            version === "2023-11" && isStatic ? [] : [t.thisExpression()];
 
           if (value) {
             params.push(t.cloneNode(value));
@@ -1108,7 +1115,7 @@ function transformClass(
               `set_${name}`,
             );
 
-            addCallAccessorsFor(newPath, key, getId, setId, isStatic);
+            addCallAccessorsFor(version, newPath, key, getId, setId, isStatic);
 
             locals = [newFieldInitId, getId, setId];
           } else {
@@ -1131,12 +1138,11 @@ function transformClass(
             element as NodePath<t.ClassProperty | t.ClassPrivateProperty>
           ).get("value");
 
-          valuePath.replaceWith(
-            t.callExpression(
-              t.cloneNode(initId),
-              [t.thisExpression(), valuePath.node].filter(v => v),
-            ),
-          );
+          const args: t.Expression[] =
+            version === "2023-11" && isStatic ? [] : [t.thisExpression()];
+          if (valuePath.node) args.push(valuePath.node);
+
+          valuePath.replaceWith(t.callExpression(t.cloneNode(initId), args));
 
           locals = [initId];
 
@@ -1244,9 +1250,10 @@ function transformClass(
             `init_extra_${name}`,
           );
           locals.push(initExtraId);
-          const initExtraCall = t.callExpression(t.cloneNode(initExtraId), [
-            t.thisExpression(),
-          ]);
+          const initExtraCall = t.callExpression(
+            t.cloneNode(initExtraId),
+            isStatic ? [] : [t.thisExpression()],
+          );
           if (!isStatic) {
             fieldInitializerExpressions.push(initExtraCall);
           } else {

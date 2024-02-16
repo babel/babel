@@ -23,12 +23,12 @@ class Foo {
 _Foo = Foo;
 [_init_a, _init_extra_a, _init_b, _init_extra_b, _init_computedKey, _init_extra_computedKey] = babelHelpers.applyDecs2311(_Foo, [[dec, 9, "a"], [dec, 9, "b"], [dec, 9, 'c']], []).e;
 var _A = {
-  _: _init_a(_Foo)
+  _: _init_a()
 };
 var _B = {
-  _: (_init_extra_a(_Foo), _init_b(_Foo, 123))
+  _: (_init_extra_a(), _init_b(123))
 };
 var _C = {
-  _: (_init_extra_b(_Foo), _init_computedKey(_Foo, 456))
+  _: (_init_extra_b(), _init_computedKey(456))
 };
-_init_extra_computedKey(_Foo);
+_init_extra_computedKey();

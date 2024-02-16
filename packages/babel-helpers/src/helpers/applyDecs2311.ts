@@ -213,16 +213,21 @@ export default /* @no-mangle */ function applyDecs2311(
   // This is a temporary variable for smaller helper size
   var _: any;
 
-  function runInitializers(
+  function createRunInitializers(
     initializers: Function[],
-    hasValue: 0 | 1,
-    thisArg: any,
-    value?: any,
+    useStaticThis?: 0 | 1 | boolean,
+    hasValue?: 0 | 1,
   ) {
-    for (var i = 0; i < initializers.length; i++) {
-      value = initializers[i].apply(thisArg, hasValue ? [value] : []);
-    }
-    return hasValue ? value : thisArg;
+    return function (thisArg: any, value?: any) {
+      if (useStaticThis) {
+        value = thisArg;
+        thisArg = targetClass;
+      }
+      for (var i = 0; i < initializers.length; i++) {
+        value = initializers[i].apply(thisArg, hasValue ? [value] : []);
+      }
+      return hasValue ? value : thisArg;
+    };
   }
 
   function assertCallable(
@@ -276,8 +281,16 @@ export default /* @no-mangle */ function applyDecs2311(
     var isSetter = kind === PROP_KIND.SETTER;
     var isMethod = kind === PROP_KIND.METHOD;
 
-    function _bindPropCall(name: keyof PropertyDescriptor, before?: Function) {
+    function _bindPropCall(
+      name: keyof PropertyDescriptor,
+      useStaticThis: 0 | 1 | boolean,
+      before?: Function,
+    ) {
       return function (_this: any, value?: any) {
+        if (useStaticThis) {
+          value = _this;
+          _this = Class;
+        }
         if (before) {
           before(_this);
         }
@@ -395,14 +408,14 @@ export default /* @no-mangle */ function applyDecs2311(
                   assertInstanceIfPrivate(_this);
                   return desc.value;
                 }
-              : _bindPropCall("get", assertInstanceIfPrivate)
+              : _bindPropCall("get", 0, assertInstanceIfPrivate)
             : function (target: any) {
                 return target[name];
               };
         }
         if (!isMethod && !isGetter) {
           _.set = isPrivate
-            ? _bindPropCall("set", assertInstanceIfPrivate)
+            ? _bindPropCall("set", 0, assertInstanceIfPrivate)
             : function (target: any, v: any) {
                 target[name] = v;
               };
@@ -456,9 +469,9 @@ export default /* @no-mangle */ function applyDecs2311(
     if (kind < PROP_KIND.METHOD) {
       ret.push(
         // init
-        runInitializers.bind(null, init, 1),
+        createRunInitializers(init, isStatic, 1),
         // init_extra
-        runInitializers.bind(null, initializers, 0),
+        createRunInitializers(initializers, isStatic, 0),
       );
     }
 
@@ -466,13 +479,18 @@ export default /* @no-mangle */ function applyDecs2311(
       if (isPrivate) {
         if (isAccessor) {
           // get and set should be returned before init_extra
-          ret.splice(-1, 0, _bindPropCall("get"), _bindPropCall("set"));
+          ret.splice(
+            -1,
+            0,
+            _bindPropCall("get", isStatic),
+            _bindPropCall("set", isStatic),
+          );
         } else {
           ret.push(
             isMethod
               ? desc[key]
               : // Equivalent to `Function.call`, just to reduce code size
-                runInitializers.call.bind(desc[key]),
+                assertCallable.call.bind(desc[key]),
           );
         }
       } else {
@@ -490,7 +508,7 @@ export default /* @no-mangle */ function applyDecs2311(
 
     function pushInitializers(initializers: Function[]) {
       if (initializers) {
-        ret.push(runInitializers.bind(null, initializers, 0));
+        ret.push(createRunInitializers(initializers));
       }
     }
 
@@ -571,7 +589,7 @@ export default /* @no-mangle */ function applyDecs2311(
               initializers,
             ),
           ),
-          runInitializers.bind(null, initializers, 0, targetClass),
+          createRunInitializers(initializers, 1),
         ]
       );
     },
