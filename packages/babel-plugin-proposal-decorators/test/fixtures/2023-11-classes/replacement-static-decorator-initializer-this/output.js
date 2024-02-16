@@ -33,11 +33,11 @@ new class extends babelHelpers.identity {
       static method() {}
     }
   }
-  accessor = _init_accessor(this);
-  property = (_init_extra_accessor(this), _init_property(this));
+  accessor = _init_accessor();
+  property = (_init_extra_accessor(), _init_property());
   constructor() {
     super(_Foo), (() => {
-      _init_extra_property(this);
+      _init_extra_property();
     })(), _initClass();
   }
 }();

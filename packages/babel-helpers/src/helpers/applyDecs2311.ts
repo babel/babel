@@ -580,14 +580,14 @@ export default /* @no-mangle */ function applyDecs2311(
       return (
         hasClassDecs && [
           defineMetadata(
-            applyDec(
+            (targetClass = applyDec(
               targetClass,
               [classDecs],
               classDecsHaveThis,
               targetClass.name,
               PROP_KIND.CLASS,
               initializers,
-            ),
+            )),
           ),
           createRunInitializers(initializers, 1),
         ]

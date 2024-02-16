@@ -20,8 +20,8 @@ _propertyDecs = captureInitializerThis(v => propertyThis = v);
 let _Foo;
 new (_temp = class extends babelHelpers.identity {
   constructor() {
-    (super(_Foo), babelHelpers.defineProperty(this, "accessor", _init_accessor(this)), babelHelpers.defineProperty(this, "property", (_init_extra_accessor(this), _init_property(this)))), (() => {
-      _init_extra_property(this);
+    (super(_Foo), babelHelpers.defineProperty(this, "accessor", _init_accessor()), babelHelpers.defineProperty(this, "property", (_init_extra_accessor(), _init_property()))), (() => {
+      _init_extra_property();
     })(), _initClass();
   }
 }, (_Foo2 => {
