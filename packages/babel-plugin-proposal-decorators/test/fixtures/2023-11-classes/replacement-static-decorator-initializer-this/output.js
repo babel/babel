@@ -1,8 +1,11 @@
 var _initStatic, _initClass, _accessorDecs, _init_accessor, _init_extra_accessor, _getterDecs, _setterDecs, _methodDecs, _propertyDecs, _init_property, _init_extra_property;
-let original, replaced, accessorThis, getterThis, setterThis, methodThis, propertyThis;
-function dec(Klass) {
+let original, replaced, accessorThis, getterThis, setterThis, methodThis, propertyThis, classThis;
+function dec(Klass, context) {
   original = Klass;
   replaced = class extends Klass {};
+  context.addInitializer(function () {
+    classThis = this;
+  });
   return replaced;
 }
 function captureInitializerThis(callback) {
