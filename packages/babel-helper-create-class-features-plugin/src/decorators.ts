@@ -619,7 +619,9 @@ function addCallAccessorsFor(
         t.returnStatement(
           t.callExpression(
             t.cloneNode(getId),
-            (process.env.BABEL_8_BREAKING || version === "2023-11") && isStatic ? [] : [t.thisExpression()],
+            (process.env.BABEL_8_BREAKING || version === "2023-11") && isStatic
+              ? []
+              : [t.thisExpression()],
           ),
         ),
       ]),
@@ -1088,7 +1090,9 @@ function transformClass(
           const { value } = element.node as t.ClassAccessorProperty;
 
           const params: t.Expression[] =
-            (process.env.BABEL_8_BREAKING || version === "2023-11") && isStatic ? [] : [t.thisExpression()];
+            (process.env.BABEL_8_BREAKING || version === "2023-11") && isStatic
+              ? []
+              : [t.thisExpression()];
 
           if (value) {
             params.push(t.cloneNode(value));
@@ -1139,7 +1143,9 @@ function transformClass(
           ).get("value");
 
           const args: t.Expression[] =
-            (process.env.BABEL_8_BREAKING || version === "2023-11") && isStatic ? [] : [t.thisExpression()];
+            (process.env.BABEL_8_BREAKING || version === "2023-11") && isStatic
+              ? []
+              : [t.thisExpression()];
           if (valuePath.node) args.push(valuePath.node);
 
           valuePath.replaceWith(t.callExpression(t.cloneNode(initId), args));
