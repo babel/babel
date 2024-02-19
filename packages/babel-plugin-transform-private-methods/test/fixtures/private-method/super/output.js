@@ -14,7 +14,7 @@ class Sub extends Base {
     return 'bad';
   }
   publicMethod() {
-    return babelHelpers.classPrivateMethodGet(this, _Sub_brand, _privateMethod).call(this);
+    return babelHelpers.assertClassBrand(this, _Sub_brand, _privateMethod).call(this);
   }
 }
 _Sub = Sub;

@@ -1728,6 +1728,7 @@ helpers.decorate = helper("7.1.5")`
 
 `;
 
+// TODO: Remove in Babel 8
 helpers.classPrivateMethodGet = helper("7.1.6")`
   import assertClassBrand from "assertClassBrand";
   export default function _classPrivateMethodGet(receiver, privateSet, fn) {

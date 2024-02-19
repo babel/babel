@@ -4,7 +4,7 @@ console.log((_A_brand = /*#__PURE__*/new WeakSet(), class A {
     babelHelpers.classPrivateMethodInitSpec(this, _A_brand);
   }
   method() {
-    babelHelpers.classPrivateMethodGet(this, _A_brand, _foo).call(this);
+    babelHelpers.assertClassBrand(this, _A_brand, _foo).call(this);
   }
 }));
 function _foo() {}
