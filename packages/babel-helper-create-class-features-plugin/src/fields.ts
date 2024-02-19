@@ -167,9 +167,7 @@ export function privateNameVisitorFactory<S, V>(
   // Traverses the outer portion of a class, without touching the class's inner
   // scope, for private names.
   const nestedVisitor = traverse.visitors.merge([
-    {
-      ...visitor,
-    },
+    { ...visitor },
     environmentVisitor,
   ]);
 
@@ -224,6 +222,7 @@ interface PrivateNameState {
   classRef: t.Identifier;
   file: File;
   noDocumentAll: boolean;
+  noUninitializedPrivateFieldAccess: boolean;
   innerBinding?: t.Identifier;
 }
 
@@ -361,6 +360,14 @@ function writeOnlyError(file: File, name: string) {
   ]);
 }
 
+function buildStaticPrivateFieldAccess<N extends t.Expression>(
+  expr: N,
+  noUninitializedPrivateFieldAccess: boolean,
+) {
+  if (noUninitializedPrivateFieldAccess) return expr;
+  return t.memberExpression(expr, t.identifier("_"));
+}
+
 const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
   {
     memoise(member, count) {
@@ -386,7 +393,13 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
     },
 
     get(member) {
-      const { classRef, privateNamesMap, file, innerBinding } = this;
+      const {
+        classRef,
+        privateNamesMap,
+        file,
+        innerBinding,
+        noUninitializedPrivateFieldAccess,
+      } = this;
       const { name } = (member.node.property as t.PrivateName).id;
       const {
         id,
@@ -424,16 +437,19 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
 
         if (!isMethod) {
           if (skipCheck) {
-            return t.memberExpression(t.cloneNode(id), t.identifier("_"));
+            return buildStaticPrivateFieldAccess(
+              t.cloneNode(id),
+              noUninitializedPrivateFieldAccess,
+            );
           }
 
-          return t.memberExpression(
+          return buildStaticPrivateFieldAccess(
             t.callExpression(file.addHelper("assertClassBrand"), [
               receiver,
               t.cloneNode(classRef),
               t.cloneNode(id),
             ]),
-            t.identifier("_"),
+            noUninitializedPrivateFieldAccess,
           );
         }
 
@@ -515,7 +531,12 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
     },
 
     set(member, value) {
-      const { classRef, privateNamesMap, file } = this;
+      const {
+        classRef,
+        privateNamesMap,
+        file,
+        noUninitializedPrivateFieldAccess,
+      } = this;
       const { name } = (member.node.property as t.PrivateName).id;
       const {
         id,
@@ -574,7 +595,10 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
         }
         return t.assignmentExpression(
           "=",
-          t.memberExpression(t.cloneNode(id), t.identifier("_")),
+          buildStaticPrivateFieldAccess(
+            t.cloneNode(id),
+            noUninitializedPrivateFieldAccess,
+          ),
           skipCheck
             ? value
             : t.callExpression(file.addHelper("assertClassBrand"), [
@@ -615,7 +639,12 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
     },
 
     destructureSet(member) {
-      const { classRef, privateNamesMap, file } = this;
+      const {
+        classRef,
+        privateNamesMap,
+        file,
+        noUninitializedPrivateFieldAccess,
+      } = this;
       const { name } = (member.node.property as t.PrivateName).id;
       const {
         id,
@@ -669,7 +698,19 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
       }
 
       if (isStatic && !isMethod) {
-        return this.get(member);
+        const getCall = this.get(member);
+        if (
+          !noUninitializedPrivateFieldAccess ||
+          !t.isCallExpression(getCall)
+        ) {
+          return getCall;
+        }
+        const ref = getCall.arguments.pop();
+        getCall.arguments.push(template.expression.ast`(_) => ${ref} = _`);
+        return t.memberExpression(
+          t.callExpression(file.addHelper("toSetter"), [getCall]),
+          t.identifier("_"),
+        );
       }
 
       const setCall = this.set(member, t.identifier("_"));
@@ -793,10 +834,12 @@ export function transformPrivateNamesUsage(
   privateNamesMap: PrivateNamesMap,
   {
     privateFieldsAsProperties,
+    noUninitializedPrivateFieldAccess,
     noDocumentAll,
     innerBinding,
   }: {
     privateFieldsAsProperties: boolean;
+    noUninitializedPrivateFieldAccess: boolean;
     noDocumentAll: boolean;
     innerBinding: t.Identifier;
   },
@@ -815,6 +858,7 @@ export function transformPrivateNamesUsage(
     file: state,
     ...handler,
     noDocumentAll,
+    noUninitializedPrivateFieldAccess,
     innerBinding,
   });
   body.traverse(privateInVisitor, {
@@ -888,14 +932,20 @@ function buildPrivateInstanceFieldInitSpec(
 function buildPrivateStaticFieldInitSpec(
   prop: NodePath<t.ClassPrivateProperty>,
   privateNamesMap: PrivateNamesMap,
+  noUninitializedPrivateFieldAccess: boolean,
 ) {
   const privateName = privateNamesMap.get(prop.node.key.id.name);
-  return inheritPropComments(
-    template.statement.ast`
-      var ${t.cloneNode(privateName.id)} = {
+
+  const value = noUninitializedPrivateFieldAccess
+    ? prop.node.value
+    : template.expression.ast`{
         _: ${prop.node.value || t.buildUndefinedNode()}
-      };
-    `,
+      }`;
+
+  return inheritPropComments(
+    t.variableDeclaration("var", [
+      t.variableDeclarator(t.cloneNode(privateName.id), value),
+    ]),
     prop,
   );
 }
@@ -1368,6 +1418,7 @@ export function buildFieldsInitNodes(
   file: File,
   setPublicClassFields: boolean,
   privateFieldsAsProperties: boolean,
+  noUninitializedPrivateFieldAccess: boolean,
   constantSuper: boolean,
   innerBindingRef: t.Identifier | null,
 ) {
@@ -1473,7 +1524,11 @@ export function buildFieldsInitNodes(
           );
         } else {
           staticNodes.push(
-            buildPrivateStaticFieldInitSpec(prop, privateNamesMap),
+            buildPrivateStaticFieldInitSpec(
+              prop,
+              privateNamesMap,
+              noUninitializedPrivateFieldAccess,
+            ),
           );
         }
         break;
