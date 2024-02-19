@@ -1,9 +1,13 @@
 
-let original, replaced, accessorThis, getterThis, setterThis, methodThis, propertyThis;
+let original, replaced, accessorThis, getterThis, setterThis, methodThis, propertyThis, classThis;
 
-function dec(Klass) {
+function dec(Klass, context) {
   original = Klass;
   replaced = class extends Klass {};
+
+  context.addInitializer(function () {
+    classThis = this;
+  })
 
   return replaced;
 }
@@ -19,7 +23,7 @@ function captureInitializerThis(callback) {
 @dec
 class Foo {
   @(captureInitializerThis(v => accessorThis = v))
-  static accessor;
+  static accessor accessor;
   @(captureInitializerThis(v => getterThis = v))
   static get getter() {};
   @(captureInitializerThis(v => setterThis = v))
