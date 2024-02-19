@@ -5,6 +5,6 @@ class Foo {
   }
 }
 function _tag() {
-  babelHelpers.classPrivateMethodGet(this, _Foo_brand, _tag).bind(this)``;
+  babelHelpers.assertClassBrand(this, _Foo_brand, _tag).bind(this)``;
 }
 new Foo();

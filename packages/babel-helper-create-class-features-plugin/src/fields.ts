@@ -507,11 +507,14 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
             t.cloneNode(getId),
           ]);
         }
-        return t.callExpression(file.addHelper("classPrivateMethodGet"), [
-          this.receiver(member),
-          t.cloneNode(id),
-          t.cloneNode(methodId),
-        ]);
+        return t.callExpression(
+          file.addHelper(
+            !process.env.BABEL_8_BREAKING && !newHelpers(file)
+              ? "classPrivateMethodGet"
+              : "assertClassBrand",
+          ),
+          [this.receiver(member), t.cloneNode(id), t.cloneNode(methodId)],
+        );
       }
       return t.callExpression(
         process.env.BABEL_8_BREAKING || newHelpers(file)
