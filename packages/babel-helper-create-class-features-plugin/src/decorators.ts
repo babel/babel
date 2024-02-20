@@ -751,6 +751,32 @@ function createPrivateBrandCheckClosure(brandName: t.PrivateName) {
   );
 }
 
+// Check if the expression does not reference function-specific
+// context or the given identifier name.
+// `true` means "maybe" and `false` means "no".
+function usesFunctionContextOrRef(
+  expression: t.Node,
+  refName: string | undefined,
+) {
+  try {
+    t.traverseFast(expression, node => {
+      if (
+        t.isThisExpression(node) ||
+        t.isSuper(node) ||
+        t.isIdentifier(node, { name: "arguments" }) ||
+        (t.isMetaProperty(node) && node.meta.name !== "import") ||
+        (refName && t.isIdentifier(node, { name: refName }))
+      ) {
+        // TODO: Add early return support to t.traverseFast
+        throw null;
+      }
+    });
+    return false;
+  } catch {
+    return true;
+  }
+}
+
 function checkPrivateMethodUpdateError(
   path: NodePath<t.Class>,
   decoratedPrivateMethods: Set<string>,
@@ -810,6 +836,8 @@ function transformClass(
 
   const classDecorators = path.node.decorators;
   let hasElementDecorators = false;
+  let hasComputedKeysSideEffects = false;
+  let elemDecsUseFnContext = false;
 
   const generateClassPrivateUid = createLazyPrivateUidGeneratorForClass(path);
 
@@ -868,6 +896,9 @@ function transformClass(
           break;
       }
       hasElementDecorators = true;
+      elemDecsUseFnContext ||= element.node.decorators.some(dec =>
+        usesFunctionContextOrRef(dec, path.node.id?.name),
+      );
     } else if (element.node.type === "ClassAccessorProperty") {
       // @ts-expect-error todo: propertyVisitor.ClassAccessorProperty should be callable. Improve typings.
       propertyVisitor.ClassAccessorProperty(
@@ -896,6 +927,10 @@ function transformClass(
         isStatic,
       );
     }
+
+    if ("computed" in element.node && element.node.computed) {
+      hasComputedKeysSideEffects ||= !scopeParent.isStatic(element.node.key);
+    }
   }
 
   if (!classDecorators && !hasElementDecorators) {
@@ -922,14 +957,16 @@ function transformClass(
   // Memoise the this value `a.b` of decorator member expressions `@a.b.dec`,
   type HandleDecoratorExpressionsResult = {
     // whether the whole decorator list requires memoisation
-    needMemoise: boolean;
+    hasSideEffects: boolean;
+    usesFnContext: boolean;
     // the this value of each decorator if applicable
     decoratorsThis: (t.Expression | undefined)[];
   };
   function handleDecoratorExpressions(
     expressions: t.Expression[],
   ): HandleDecoratorExpressionsResult {
-    let needMemoise = false;
+    let hasSideEffects = false;
+    let usesFnContext = false;
     const decoratorsThis: (t.Expression | null)[] = [];
     for (const expression of expressions) {
       let object;
@@ -954,10 +991,20 @@ function transformClass(
         }
       }
       decoratorsThis.push(object);
-      needMemoise ||= !scopeParent.isStatic(expression);
+      hasSideEffects ||= !scopeParent.isStatic(expression);
+      usesFnContext ||= usesFunctionContextOrRef(
+        expression,
+        path.node.id?.name,
+      );
     }
-    return { needMemoise, decoratorsThis };
+    return { hasSideEffects, usesFnContext, decoratorsThis };
   }
+
+  const willExtractSomeElemDecs =
+    hasComputedKeysSideEffects ||
+    (process.env.BABEL_8_BREAKING
+      ? elemDecsUseFnContext
+      : elemDecsUseFnContext || version !== "2023-11");
 
   let needsDeclaraionForClassBinding = false;
   let classDecorationsFlag = 0;
@@ -971,7 +1018,7 @@ function transformClass(
     path.node.decorators = null;
 
     const decoratorExpressions = classDecorators.map(el => el.expression);
-    const { needMemoise, decoratorsThis } =
+    const { hasSideEffects, decoratorsThis } =
       handleDecoratorExpressions(decoratorExpressions);
 
     const { haveThis, decs } = generateDecorationList(
@@ -982,7 +1029,7 @@ function transformClass(
     classDecorationsFlag = haveThis ? 1 : 0;
     classDecorations = decs;
 
-    if (needMemoise) {
+    if (hasSideEffects && willExtractSomeElemDecs) {
       classDecorationsId = memoiseExpression(
         t.arrayExpression(classDecorations),
         "classDecs",
@@ -1042,8 +1089,11 @@ function transformClass(
 
       if (hasDecorators) {
         const decoratorExpressions = decorators.map(d => d.expression);
-        const { needMemoise, decoratorsThis } =
-          handleDecoratorExpressions(decoratorExpressions);
+        const {
+          hasSideEffects,
+          usesFnContext: usesFunctionContext,
+          decoratorsThis,
+        } = handleDecoratorExpressions(decoratorExpressions);
         const { decs, haveThis } = generateDecorationList(
           decoratorExpressions,
           decoratorsThis,
@@ -1051,7 +1101,10 @@ function transformClass(
         );
         decoratorsHaveThis = haveThis;
         decoratorsArray = decs.length === 1 ? decs[0] : t.arrayExpression(decs);
-        if (needMemoise) {
+        if (
+          usesFunctionContext ||
+          (hasSideEffects && willExtractSomeElemDecs)
+        ) {
           decoratorsArray = memoiseExpression(decoratorsArray, name + "Decs");
         }
       }
