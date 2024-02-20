@@ -1311,7 +1311,9 @@ function transformClass(
     toSortedDecoratorInfo(elementDecoratorInfo);
 
   const elementDecorations = generateDecorationExprs(
-    sortedElementDecoratorInfo,
+    process.env.BABEL_8_BREAKING || version === "2023-11"
+      ? elementDecoratorInfo
+      : sortedElementDecoratorInfo,
     version,
   );
 
