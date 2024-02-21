@@ -25,7 +25,7 @@ function _get_a() {
   return _call_a(this);
 }
 (() => {
-  [_call_a, _initStatic] = babelHelpers.applyDecs2311(_Foo, [[dec, 11, "a"], [dec, 11, "a", function () {}], [dec, 11, "b"], [dec, 11, "c"], [dec, 11, 0], [dec, 11, 1], [dec, 11, 2n], [dec, 11, 3n], [dec, 11, _computedKey]], []).e;
+  [_call_a, _initStatic] = babelHelpers.applyDecs2311(_Foo, [], [[dec, 11, "a"], [dec, 11, "a", function () {}], [dec, 11, "b"], [dec, 11, "c"], [dec, 11, 0], [dec, 11, 1], [dec, 11, 2n], [dec, 11, 3n], [dec, 11, _computedKey]]).e;
   _initStatic(_Foo);
 })();
 expect(logs).toStrictEqual(["computing f", "calling toPrimitive", "a", "#a", "b", "c", "0", "1", "2", "3", "f()"]);

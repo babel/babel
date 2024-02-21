@@ -10,7 +10,7 @@ class Foo {
 }
 _Foo = Foo;
 (() => {
-  [_initStatic] = babelHelpers.applyDecs2311(_Foo, [[dec, 10, "a"], [dec, 10, 'b']], []).e;
+  [_initStatic] = babelHelpers.applyDecs2311(_Foo, [], [[dec, 10, "a"], [dec, 10, 'b']]).e;
   _initStatic(_Foo);
 })();
 babelHelpers.defineProperty(Foo, "value", 1);

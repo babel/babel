@@ -1,9 +1,8 @@
-var _initProto, _obj, _methodDecs;
+var _initProto, _obj;
 let fn, obj;
-_methodDecs = [void 0, fn(), _obj = obj.prop, _obj.foo];
 class A {
   static {
-    [_initProto] = babelHelpers.applyDecs2311(this, [[_methodDecs, 18, "method"]], []).e;
+    [_initProto] = babelHelpers.applyDecs2311(this, [], [[[void 0, fn(), _obj = obj.prop, _obj.foo], 18, "method"]]).e;
   }
   constructor() {
     _initProto(this);

@@ -12,6 +12,7 @@ const enum PROP_KIND {
   GETTER = 3,
   SETTER = 4,
   CLASS = 5,
+  KIND_MASK = 7, // 0b111
 
   STATIC = 8,
 
@@ -194,8 +195,8 @@ type DecoratorNonFieldCheckStorage = Record<
 
 export default /* @no-mangle */ function applyDecs2311(
   targetClass: any,
-  memberDecs: DecoratorInfo[],
   classDecs: Function[],
+  memberDecs: DecoratorInfo[],
   classDecsHaveThis: number,
   instanceBrand: Function,
   parentClass: any,
@@ -254,15 +255,14 @@ export default /* @no-mangle */ function applyDecs2311(
   function applyDec(
     Class: any,
     decInfo: DecoratorInfo,
-    decoratorsHaveThis: number,
+    decoratorsHaveThis: 0 | PROP_KIND.DECORATORS_HAVE_THIS,
     name: string | symbol,
     kind: PROP_KIND,
     initializers: Function[],
     ret?: Function[],
     isStatic?: boolean,
     isPrivate?: boolean,
-    isField?: boolean,
-    isAccessor?: boolean,
+    isField?: 0 | 1,
     hasPrivateBrand?: Function,
   ) {
     function assertInstanceIfPrivate(target: any) {
@@ -277,6 +277,7 @@ export default /* @no-mangle */ function applyDecs2311(
       decVal = decInfo[3],
       isClass = !ret;
 
+    var isAccessor = kind === PROP_KIND.ACCESSOR;
     var isGetter = kind === PROP_KIND.GETTER;
     var isSetter = kind === PROP_KIND.SETTER;
     var isMethod = kind === PROP_KIND.METHOD;
@@ -506,50 +507,62 @@ export default /* @no-mangle */ function applyDecs2311(
     var protoInitializers: Function[];
     var staticInitializers: Function[];
 
-    function pushInitializers(initializers: Function[]) {
+    var pushInitializers = function (initializers: Function[]) {
       if (initializers) {
         ret.push(createRunInitializers(initializers));
       }
-    }
+    };
 
-    for (var i = 0; i < memberDecs.length; i++) {
-      var decInfo = memberDecs[i];
+    var applyMemberDecsOfKind = function (
+      isStatic: PROP_KIND.STATIC | 0,
+      isField: 0 | 1,
+    ) {
+      for (var i = 0; i < memberDecs.length; i++) {
+        var decInfo = memberDecs[i];
 
-      var kind = decInfo[1];
-      var name = decInfo[2];
-      var isPrivate = !!decInfo[3];
+        var kind = decInfo[1];
+        var kindOnly: PROP_KIND = kind & PROP_KIND.KIND_MASK;
+        if (
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
+          (kind & PROP_KIND.STATIC) == isStatic &&
+          // @ts-expect-error comparing a boolean with 0 | 1
+          !kindOnly == isField
+        ) {
+          var name = decInfo[2];
+          var isPrivate = !!decInfo[3];
 
-      var decoratorsHaveThis = kind & PROP_KIND.DECORATORS_HAVE_THIS;
-      var isStatic = !!(kind & PROP_KIND.STATIC);
+          var decoratorsHaveThis: 0 | PROP_KIND.DECORATORS_HAVE_THIS =
+            kind & PROP_KIND.DECORATORS_HAVE_THIS;
 
-      kind &= 7; /* 0b111 */
+          applyDec(
+            isStatic ? targetClass : targetClass.prototype,
+            decInfo,
+            decoratorsHaveThis,
+            isPrivate ? "#" + name : (toPropertyKey(name) as string),
+            kindOnly,
+            kindOnly < PROP_KIND.METHOD // isField || isAccessor
+              ? /* fieldInitializers */ []
+              : isStatic
+                ? (staticInitializers = staticInitializers || [])
+                : (protoInitializers = protoInitializers || []),
+            ret,
+            !!isStatic,
+            isPrivate,
+            isField,
+            isStatic && isPrivate
+              ? function (_: any) {
+                  return checkInRHS(_) === targetClass;
+                }
+              : instanceBrand,
+          );
+        }
+      }
+    };
 
-      var isField = kind === PROP_KIND.FIELD;
-      var isAccessor = kind === PROP_KIND.ACCESSOR;
-
-      applyDec(
-        isStatic ? targetClass : targetClass.prototype,
-        decInfo,
-        decoratorsHaveThis,
-        isPrivate ? "#" + name : (toPropertyKey(name) as string),
-        kind,
-        isField || isAccessor
-          ? /* fieldInitializers */ []
-          : isStatic
-            ? (staticInitializers = staticInitializers || [])
-            : (protoInitializers = protoInitializers || []),
-        ret,
-        isStatic,
-        isPrivate,
-        isField,
-        isAccessor,
-        isStatic && isPrivate
-          ? function (_: any) {
-              return checkInRHS(_) === targetClass;
-            }
-          : instanceBrand,
-      );
-    }
+    applyMemberDecsOfKind(PROP_KIND.STATIC, 0);
+    applyMemberDecsOfKind(0, 0);
+    applyMemberDecsOfKind(PROP_KIND.STATIC, 1);
+    applyMemberDecsOfKind(0, 1);
 
     pushInitializers(protoInitializers);
     pushInitializers(staticInitializers);

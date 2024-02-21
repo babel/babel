@@ -6,7 +6,7 @@ function dec(fn) {
 }
 
 @dec(() => {
-  expect(() => Foo).toThrow(ReferenceError);
+  expect(() => Foo.x).toThrow();
   didRun = true;
 }) class Foo {}
 

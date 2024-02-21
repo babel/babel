@@ -22,7 +22,7 @@ class Foo {
 }
 _Foo = Foo;
 (() => {
-  [_call_a, _initStatic] = babelHelpers.applyDecs2311(_Foo, [[dec, 10, "a"], [dec, 10, "a", function () {}], [dec, 10, "b"], [dec, 10, "c"], [dec, 10, 0], [dec, 10, 1], [dec, 10, 2n], [dec, 10, 3n], [dec, 10, _computedKey]], []).e;
+  [_call_a, _initStatic] = babelHelpers.applyDecs2311(_Foo, [], [[dec, 10, "a"], [dec, 10, "a", function () {}], [dec, 10, "b"], [dec, 10, "c"], [dec, 10, 0], [dec, 10, 1], [dec, 10, 2n], [dec, 10, 3n], [dec, 10, _computedKey]]).e;
   _initStatic(_Foo);
 })();
 var _a = {

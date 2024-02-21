@@ -2,7 +2,7 @@ var _init_a, _init_extra_a, _init_b, _init_extra_b, _init_computedKey, _init_ext
 const dec = () => {};
 class Foo {
   static {
-    [_init_a, _init_extra_a, _init_b, _init_extra_b, _init_computedKey, _init_extra_computedKey] = babelHelpers.applyDecs2311(this, [[dec, 9, "a"], [dec, 9, "b"], [dec, 9, 'c']], []).e;
+    [_init_a, _init_extra_a, _init_b, _init_extra_b, _init_computedKey, _init_extra_computedKey] = babelHelpers.applyDecs2311(this, [], [[dec, 9, "a"], [dec, 9, "b"], [dec, 9, 'c']]).e;
   }
   static #A = _init_a();
   static get a() {
