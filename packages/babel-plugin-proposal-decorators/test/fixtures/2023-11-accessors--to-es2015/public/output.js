@@ -30,4 +30,4 @@ class Foo {
   }
 }
 _Foo = Foo;
-[_init_a, _init_extra_a, _init_b, _init_extra_b, _init_computedKey, _init_extra_computedKey] = babelHelpers.applyDecs2311(_Foo, [[dec, 1, "a"], [dec, 1, "b"], [dec, 1, 'c']], []).e;
+[_init_a, _init_extra_a, _init_b, _init_extra_b, _init_computedKey, _init_extra_computedKey] = babelHelpers.applyDecs2311(_Foo, [], [[dec, 1, "a"], [dec, 1, "b"], [dec, 1, 'c']]).e;

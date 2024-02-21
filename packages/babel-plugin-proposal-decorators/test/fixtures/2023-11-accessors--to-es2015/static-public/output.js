@@ -21,7 +21,7 @@ class Foo {
   }
 }
 _Foo = Foo;
-[_init_a, _init_extra_a, _init_b, _init_extra_b, _init_computedKey, _init_extra_computedKey] = babelHelpers.applyDecs2311(_Foo, [[dec, 9, "a"], [dec, 9, "b"], [dec, 9, 'c']], []).e;
+[_init_a, _init_extra_a, _init_b, _init_extra_b, _init_computedKey, _init_extra_computedKey] = babelHelpers.applyDecs2311(_Foo, [], [[dec, 9, "a"], [dec, 9, "b"], [dec, 9, 'c']]).e;
 var _A = {
   _: _init_a()
 };

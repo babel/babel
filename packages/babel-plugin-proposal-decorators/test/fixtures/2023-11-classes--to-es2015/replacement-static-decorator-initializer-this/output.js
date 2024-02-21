@@ -1,4 +1,4 @@
-var _initStatic, _initClass, _accessorDecs, _init_accessor, _init_extra_accessor, _getterDecs, _setterDecs, _methodDecs, _propertyDecs, _init_property, _init_extra_property, _A, _temp;
+var _initStatic, _initClass, _init_accessor, _init_extra_accessor, _init_property, _init_extra_property, _A, _temp;
 let original, replaced, accessorThis, getterThis, setterThis, methodThis, propertyThis, classThis;
 function dec(Klass, context) {
   original = Klass;
@@ -15,11 +15,6 @@ function captureInitializerThis(callback) {
     });
   };
 }
-_accessorDecs = captureInitializerThis(v => accessorThis = v);
-_getterDecs = captureInitializerThis(v => getterThis = v);
-_setterDecs = captureInitializerThis(v => setterThis = v);
-_methodDecs = captureInitializerThis(v => methodThis = v);
-_propertyDecs = captureInitializerThis(v => propertyThis = v);
 let _Foo;
 new (_A = /*#__PURE__*/new WeakMap(), (_temp = class extends babelHelpers.identity {
   constructor() {
@@ -44,7 +39,7 @@ new (_A = /*#__PURE__*/new WeakMap(), (_temp = class extends babelHelpers.identi
     ({
       e: [_init_accessor, _init_extra_accessor, _init_property, _init_extra_property, _initStatic],
       c: [_Foo, _initClass]
-    } = babelHelpers.applyDecs2311(_Foo2, [[_accessorDecs, 9, "accessor"], [_getterDecs, 11, "getter"], [_setterDecs, 12, "setter"], [_methodDecs, 10, "method"], [_propertyDecs, 8, "property"]], [dec]));
+    } = babelHelpers.applyDecs2311(_Foo2, [dec], [[captureInitializerThis(v => accessorThis = v), 9, "accessor"], [captureInitializerThis(v => getterThis = v), 11, "getter"], [captureInitializerThis(v => setterThis = v), 12, "setter"], [captureInitializerThis(v => methodThis = v), 10, "method"], [captureInitializerThis(v => propertyThis = v), 8, "property"]]));
     _initStatic(_Foo2);
   })();
 })(), _temp))();

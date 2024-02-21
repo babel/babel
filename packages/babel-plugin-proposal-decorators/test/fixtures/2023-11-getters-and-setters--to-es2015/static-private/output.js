@@ -16,11 +16,11 @@ function _set_a(v) {
   _call_a2(this, v);
 }
 (() => {
-  [_call_a, _call_a2, _initStatic] = babelHelpers.applyDecs2311(_Foo, [[dec, 11, "a", function () {
+  [_call_a, _call_a2, _initStatic] = babelHelpers.applyDecs2311(_Foo, [], [[dec, 11, "a", function () {
     return this.value;
   }], [dec, 12, "a", function (v) {
     this.value = v;
-  }]], []).e;
+  }]]).e;
   _initStatic(_Foo);
 })();
 babelHelpers.defineProperty(Foo, "value", 1);

@@ -543,7 +543,6 @@ function pluginToggleBooleanFlag({ types: t }, { name, value }) {
       if (left.value === false) return res.replace(right.replacement);
       if (right.value === false) return res.replace(left.replacement);
       if (left.unrelated && right.unrelated) return res.unrelated();
-      console.log(left, right);
       return res.replace(
         t.logicalExpression("||", left.replacement, right.replacement)
       );
