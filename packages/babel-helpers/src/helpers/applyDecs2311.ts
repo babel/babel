@@ -255,14 +255,14 @@ export default /* @no-mangle */ function applyDecs2311(
   function applyDec(
     Class: any,
     decInfo: DecoratorInfo,
-    decoratorsHaveThis: number,
+    decoratorsHaveThis: 0 | PROP_KIND.DECORATORS_HAVE_THIS,
     name: string | symbol,
     kind: PROP_KIND,
     initializers: Function[],
     ret?: Function[],
     isStatic?: boolean,
     isPrivate?: boolean,
-    isField?: boolean,
+    isField?: 0 | 1,
     hasPrivateBrand?: Function,
   ) {
     function assertInstanceIfPrivate(target: any) {
@@ -515,7 +515,7 @@ export default /* @no-mangle */ function applyDecs2311(
 
     var applyMemberDecsOfKind = function (
       isStatic: PROP_KIND.STATIC | 0,
-      isField: boolean,
+      isField: 0 | 1,
     ) {
       for (var i = 0; i < memberDecs.length; i++) {
         var decInfo = memberDecs[i];
@@ -525,12 +525,14 @@ export default /* @no-mangle */ function applyDecs2311(
         if (
           // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
           (kind & PROP_KIND.STATIC) == isStatic &&
-          (kindOnly == PROP_KIND.FIELD) == isField
+          // @ts-expect-error comparing a boolean with 0 | 1
+          !kindOnly == isField
         ) {
           var name = decInfo[2];
           var isPrivate = !!decInfo[3];
 
-          var decoratorsHaveThis = kind & PROP_KIND.DECORATORS_HAVE_THIS;
+          var decoratorsHaveThis: 0 | PROP_KIND.DECORATORS_HAVE_THIS =
+            kind & PROP_KIND.DECORATORS_HAVE_THIS;
 
           applyDec(
             isStatic ? targetClass : targetClass.prototype,
@@ -557,10 +559,10 @@ export default /* @no-mangle */ function applyDecs2311(
       }
     };
 
-    applyMemberDecsOfKind(PROP_KIND.STATIC, false);
-    applyMemberDecsOfKind(0, false);
-    applyMemberDecsOfKind(PROP_KIND.STATIC, true);
-    applyMemberDecsOfKind(0, true);
+    applyMemberDecsOfKind(PROP_KIND.STATIC, 0);
+    applyMemberDecsOfKind(0, 0);
+    applyMemberDecsOfKind(PROP_KIND.STATIC, 1);
+    applyMemberDecsOfKind(0, 1);
 
     pushInitializers(protoInitializers);
     pushInitializers(staticInitializers);
