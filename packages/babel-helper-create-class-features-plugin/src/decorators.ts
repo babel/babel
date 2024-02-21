@@ -754,19 +754,29 @@ function createPrivateBrandCheckClosure(brandName: t.PrivateName) {
 // Check if the expression does not reference function-specific
 // context or the given identifier name.
 // `true` means "maybe" and `false` means "no".
-function usesFunctionContextOrRef(
-  expression: t.Node,
-  refName: string | undefined,
-) {
+function usesFunctionContext(expression: t.Node) {
   try {
     t.traverseFast(expression, node => {
       if (
         t.isThisExpression(node) ||
         t.isSuper(node) ||
         t.isIdentifier(node, { name: "arguments" }) ||
-        (t.isMetaProperty(node) && node.meta.name !== "import") ||
-        (refName && t.isIdentifier(node, { name: refName }))
+        (t.isMetaProperty(node) && node.meta.name !== "import")
       ) {
+        // TODO: Add early return support to t.traverseFast
+        throw null;
+      }
+    });
+    return false;
+  } catch {
+    return true;
+  }
+}
+
+function usesPrivateField(expression: t.Node) {
+  try {
+    t.traverseFast(expression, node => {
+      if (t.isPrivateName(node)) {
         // TODO: Add early return support to t.traverseFast
         throw null;
       }
@@ -896,9 +906,8 @@ function transformClass(
           break;
       }
       hasElementDecorators = true;
-      elemDecsUseFnContext ||= element.node.decorators.some(dec =>
-        usesFunctionContextOrRef(dec, path.node.id?.name),
-      );
+      elemDecsUseFnContext ||=
+        element.node.decorators.some(usesFunctionContext);
     } else if (element.node.type === "ClassAccessorProperty") {
       // @ts-expect-error todo: propertyVisitor.ClassAccessorProperty should be callable. Improve typings.
       propertyVisitor.ClassAccessorProperty(
@@ -992,10 +1001,7 @@ function transformClass(
       }
       decoratorsThis.push(object);
       hasSideEffects ||= !scopeParent.isStatic(expression);
-      usesFnContext ||= usesFunctionContextOrRef(
-        expression,
-        path.node.id?.name,
-      );
+      usesFnContext ||= usesFunctionContext(expression);
     }
     return { hasSideEffects, usesFnContext, decoratorsThis };
   }
@@ -1018,6 +1024,7 @@ function transformClass(
     path.node.decorators = null;
 
     const decoratorExpressions = classDecorators.map(el => el.expression);
+    const classDecsUsePrivateName = decoratorExpressions.some(usesPrivateField);
     const { hasSideEffects, decoratorsThis } =
       handleDecoratorExpressions(decoratorExpressions);
 
@@ -1029,7 +1036,10 @@ function transformClass(
     classDecorationsFlag = haveThis ? 1 : 0;
     classDecorations = decs;
 
-    if (hasSideEffects && willExtractSomeElemDecs) {
+    if (
+      (hasSideEffects && willExtractSomeElemDecs) ||
+      classDecsUsePrivateName
+    ) {
       classDecorationsId = memoiseExpression(
         t.arrayExpression(classDecorations),
         "classDecs",
@@ -1089,11 +1099,8 @@ function transformClass(
 
       if (hasDecorators) {
         const decoratorExpressions = decorators.map(d => d.expression);
-        const {
-          hasSideEffects,
-          usesFnContext: usesFunctionContext,
-          decoratorsThis,
-        } = handleDecoratorExpressions(decoratorExpressions);
+        const { hasSideEffects, usesFnContext, decoratorsThis } =
+          handleDecoratorExpressions(decoratorExpressions);
         const { decs, haveThis } = generateDecorationList(
           decoratorExpressions,
           decoratorsThis,
@@ -1101,10 +1108,7 @@ function transformClass(
         );
         decoratorsHaveThis = haveThis;
         decoratorsArray = decs.length === 1 ? decs[0] : t.arrayExpression(decs);
-        if (
-          usesFunctionContext ||
-          (hasSideEffects && willExtractSomeElemDecs)
-        ) {
+        if (usesFnContext || (hasSideEffects && willExtractSomeElemDecs)) {
           decoratorsArray = memoiseExpression(decoratorsArray, name + "Decs");
         }
       }
