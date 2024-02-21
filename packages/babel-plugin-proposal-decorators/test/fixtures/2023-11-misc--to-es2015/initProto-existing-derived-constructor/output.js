@@ -19,7 +19,7 @@
     method() {}
   }
   _A = A;
-  [_initProto] = babelHelpers.applyDecs2311(_A, [[deco, 2, "method"]], [], 0, void 0, B).e;
+  [_initProto] = babelHelpers.applyDecs2311(_A, [], [[deco, 2, "method"]], 0, void 0, B).e;
   let instance = new A();
   expect(self).toBe(instance);
   expect(a).toBe(2);
@@ -57,7 +57,7 @@
       }
     }
     _A2 = A;
-    [_initProto2] = babelHelpers.applyDecs2311(_A2, [[dec, 2, "method"]], [], 0, void 0, B).e;
+    [_initProto2] = babelHelpers.applyDecs2311(_A2, [], [[dec, 2, "method"]], 0, void 0, B).e;
     new A();
     expect(log + "").toBe("103,4");
   }
@@ -78,7 +78,7 @@
           }
         }
         _A3 = A;
-        [_initProto3] = babelHelpers.applyDecs2311(_A3, [[dec, 2, "method"]], [], 0, void 0, B).e;
+        [_initProto3] = babelHelpers.applyDecs2311(_A3, [], [[dec, 2, "method"]], 0, void 0, B).e;
         new A();
       }
     }();
@@ -102,7 +102,7 @@
           noop() {}
         }
         _A4 = A;
-        [_initProto4] = babelHelpers.applyDecs2311(_A4, [[dec, 2, "method"], [_noopDecs, 2, "noop"]], [], 0, void 0, B).e;
+        [_initProto4] = babelHelpers.applyDecs2311(_A4, [], [[dec, 2, "method"], [_noopDecs, 2, "noop"]], 0, void 0, B).e;
         new A();
       }
     }();
@@ -127,7 +127,7 @@
       }
     }
     _A5 = A;
-    [_initProto5] = babelHelpers.applyDecs2311(_A5, [[dec, 2, "method"]], [], 0, void 0, B).e;
+    [_initProto5] = babelHelpers.applyDecs2311(_A5, [], [[dec, 2, "method"]], 0, void 0, B).e;
     new A();
     expect(log + "").toBe("109,10");
   }
@@ -144,14 +144,14 @@
             log.push(_initProto7(super(12)).method());
           }
           noop() {}
-        }, [_initProto7] = babelHelpers.applyDecs2311(_Dummy2, [[_noopDecs2, 2, "noop"]], [], 0, void 0, B).e, _Dummy2))();
+        }, [_initProto7] = babelHelpers.applyDecs2311(_Dummy2, [], [[_noopDecs2, 2, "noop"]], 0, void 0, B).e, _Dummy2))();
       }
       method() {
         return this.a;
       }
     }
     _A6 = A;
-    [_initProto6] = babelHelpers.applyDecs2311(_A6, [[dec, 2, "method"]], [], 0, void 0, B).e;
+    [_initProto6] = babelHelpers.applyDecs2311(_A6, [], [[dec, 2, "method"]], 0, void 0, B).e;
     new A();
     expect(log + "").toBe("111,12");
   }

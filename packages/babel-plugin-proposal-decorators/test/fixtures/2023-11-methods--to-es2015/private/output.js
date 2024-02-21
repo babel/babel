@@ -11,6 +11,6 @@ class Foo {
   }
 }
 _Foo = Foo;
-[_call_a, _initProto] = babelHelpers.applyDecs2311(_Foo, [[dec, 2, "a", function () {
+[_call_a, _initProto] = babelHelpers.applyDecs2311(_Foo, [], [[dec, 2, "a", function () {
   return this.value;
-}]], [], 0, _ => _a.has(babelHelpers.checkInRHS(_))).e;
+}]], 0, _ => _a.has(babelHelpers.checkInRHS(_))).e;

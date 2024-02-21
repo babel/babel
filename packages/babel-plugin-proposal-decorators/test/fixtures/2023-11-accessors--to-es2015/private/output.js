@@ -24,4 +24,4 @@ function _set_b2(v) {
 function _get_b2() {
   return _get_b(this);
 }
-[_init_a, _get_a, _set_a, _init_extra_a, _init_b, _get_b, _set_b, _init_extra_b] = babelHelpers.applyDecs2311(_Foo, [[dec, 1, "a", o => babelHelpers.classPrivateFieldGet2(o, _A), (o, v) => babelHelpers.classPrivateFieldSet2(o, _A, v)], [dec, 1, "b", o => babelHelpers.classPrivateFieldGet2(o, _B), (o, v) => babelHelpers.classPrivateFieldSet2(o, _B, v)]], [], 0, _ => _Foo_brand.has(babelHelpers.checkInRHS(_))).e;
+[_init_a, _get_a, _set_a, _init_extra_a, _init_b, _get_b, _set_b, _init_extra_b] = babelHelpers.applyDecs2311(_Foo, [], [[dec, 1, "a", o => babelHelpers.classPrivateFieldGet2(o, _A), (o, v) => babelHelpers.classPrivateFieldSet2(o, _A, v)], [dec, 1, "b", o => babelHelpers.classPrivateFieldGet2(o, _B), (o, v) => babelHelpers.classPrivateFieldSet2(o, _B, v)]], 0, _ => _Foo_brand.has(babelHelpers.checkInRHS(_))).e;

@@ -10,4 +10,4 @@ class Foo {
   }
 }
 _Foo = Foo;
-[_init_a, _init_extra_a, _init_b, _init_extra_b] = babelHelpers.applyDecs2311(_Foo, [[dec, 0, "a", o => babelHelpers.classPrivateFieldGet2(o, _a), (o, v) => babelHelpers.classPrivateFieldSet2(o, _a, v)], [dec, 0, "b", o => babelHelpers.classPrivateFieldGet2(o, _b), (o, v) => babelHelpers.classPrivateFieldSet2(o, _b, v)]], [], 0, _ => _b.has(babelHelpers.checkInRHS(_))).e;
+[_init_a, _init_extra_a, _init_b, _init_extra_b] = babelHelpers.applyDecs2311(_Foo, [], [[dec, 0, "a", o => babelHelpers.classPrivateFieldGet2(o, _a), (o, v) => babelHelpers.classPrivateFieldSet2(o, _a, v)], [dec, 0, "b", o => babelHelpers.classPrivateFieldGet2(o, _b), (o, v) => babelHelpers.classPrivateFieldSet2(o, _b, v)]], 0, _ => _b.has(babelHelpers.checkInRHS(_))).e;

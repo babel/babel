@@ -15,18 +15,17 @@ let Hello = /*#__PURE__*/function () {
 let Outer = /*#__PURE__*/function (_Hello) {
   babelHelpers.inherits(Outer, _Hello);
   function Outer() {
-    var _helloDecs, _init_hello, _init_extra_hello, _Inner;
+    var _init_hello, _init_extra_hello, _Inner;
     var _thisSuper, _this;
     babelHelpers.classCallCheck(this, Outer);
     _this = babelHelpers.callSuper(this, Outer);
-    _helloDecs = babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Outer.prototype)), "dec", _thisSuper);
     let Inner = /*#__PURE__*/babelHelpers.createClass(function Inner() {
       babelHelpers.classCallCheck(this, Inner);
       babelHelpers.defineProperty(this, "hello", _init_hello(this));
       _init_extra_hello(this);
     });
     _Inner = Inner;
-    [_init_hello, _init_extra_hello] = babelHelpers.applyDecs2311(_Inner, [[_helloDecs, 0, "hello"]], []).e;
+    [_init_hello, _init_extra_hello] = babelHelpers.applyDecs2311(_Inner, [], [[babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Outer.prototype)), "dec", _thisSuper), 0, "hello"]]).e;
     return babelHelpers.possibleConstructorReturn(_this, new Inner());
   }
   return babelHelpers.createClass(Outer);

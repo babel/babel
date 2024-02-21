@@ -2,7 +2,7 @@ var _init_a, _get_a, _set_a, _init_extra_a, _init_b, _get_b, _set_b, _init_extra
 const dec = () => {};
 class Foo {
   static {
-    [_init_a, _get_a, _set_a, _init_extra_a, _init_b, _get_b, _set_b, _init_extra_b] = babelHelpers.applyDecs2311(this, [[dec, 9, "a", o => o.#A, (o, v) => o.#A = v], [dec, 9, "b", o => o.#B, (o, v) => o.#B = v]], []).e;
+    [_init_a, _get_a, _set_a, _init_extra_a, _init_b, _get_b, _set_b, _init_extra_b] = babelHelpers.applyDecs2311(this, [], [[dec, 9, "a", o => o.#A, (o, v) => o.#A = v], [dec, 9, "b", o => o.#B, (o, v) => o.#B = v]]).e;
   }
   static #A = _init_a();
   static set #a(v) {

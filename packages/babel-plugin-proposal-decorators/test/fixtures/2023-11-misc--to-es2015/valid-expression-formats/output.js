@@ -1,7 +1,5 @@
-var _initProto, _initClass, _obj, _classDecs, _methodDecs, _Foo2;
+var _initProto, _initClass, _obj, _Foo2;
 const dec = () => {};
-_classDecs = [void 0, dec, void 0, call(), void 0, chain.expr(), void 0, arbitrary + expr, _obj = array, _obj[expr]];
-_methodDecs = [void 0, dec, void 0, call(), void 0, chain.expr(), void 0, arbitrary + expr, _obj = array, _obj[expr]];
 let _Foo;
 var _a = /*#__PURE__*/new WeakMap();
 class Foo {
@@ -16,12 +14,12 @@ class Foo {
         babelHelpers.defineProperty(this, "bar", _init_bar(this));
         _init_extra_bar(this);
       }
-    }, [_init_bar, _init_extra_bar] = babelHelpers.applyDecs2311(_Nested, [[_barDecs, 0, "bar"]], []).e, _Nested);
+    }, [_init_bar, _init_extra_bar] = babelHelpers.applyDecs2311(_Nested, [], [[_barDecs, 0, "bar"]]).e, _Nested);
   }
 }
 _Foo2 = Foo;
 ({
   e: [_initProto],
   c: [_Foo, _initClass]
-} = babelHelpers.applyDecs2311(_Foo2, [[_methodDecs, 18, "method"]], _classDecs, 1));
+} = babelHelpers.applyDecs2311(_Foo2, [void 0, dec, void 0, call(), void 0, chain.expr(), void 0, arbitrary + expr, _obj = array, _obj[expr]], [[[void 0, dec, void 0, call(), void 0, chain.expr(), void 0, arbitrary + expr, _obj = array, _obj[expr]], 18, "method"]], 1));
 _initClass();

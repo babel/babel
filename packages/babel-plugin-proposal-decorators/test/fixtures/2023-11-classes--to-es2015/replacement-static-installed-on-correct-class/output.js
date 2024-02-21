@@ -21,7 +21,7 @@ new (_x = /*#__PURE__*/new WeakMap(), _A = /*#__PURE__*/new WeakMap(), _Class_br
     static m() {}
   }
   _Foo2 = Foo;
-  [_Foo, _initClass] = babelHelpers.applyDecs2311(_Foo2, [], [dec]).c;
+  [_Foo, _initClass] = babelHelpers.applyDecs2311(_Foo2, [dec], []).c;
 })(), _temp))();
 function _get_a() {
   return babelHelpers.classPrivateFieldGet2(_Foo, _A);
