@@ -56,7 +56,7 @@ export default Object.freeze({
   // size: 187, gzip size: 167
   assertClassBrand: helper(
     "7.22.0",
-    'export default function _assertClassBrand(e,t,n){if("function"==typeof t?t===e:t.has(e))return arguments.length<3?e:n;throw new TypeError("Private element is not present on this object")}',
+    'export default function _assertClassBrand(e,t,n){if("function"==typeof e?e===t:e.has(t))return arguments.length<3?t:n;throw new TypeError("Private element is not present on this object")}',
   ),
   // size: 544, gzip size: 300
   asyncGeneratorDelegate: helper(
@@ -86,22 +86,22 @@ export default Object.freeze({
   // size: 135, gzip size: 116
   classPrivateFieldGet2: helper(
     "7.22.0",
-    'import assertClassBrand from"assertClassBrand";export default function _classPrivateFieldGet2(s,a){return a.get(assertClassBrand(s,a))}',
+    'import assertClassBrand from"assertClassBrand";export default function _classPrivateFieldGet2(s,a){return s.get(assertClassBrand(s,a))}',
   ),
   // size: 141, gzip size: 123
   classPrivateFieldSet2: helper(
     "7.22.0",
-    'import assertClassBrand from"assertClassBrand";export default function _classPrivateFieldSet2(s,a,r){return a.set(assertClassBrand(s,a),r),r}',
+    'import assertClassBrand from"assertClassBrand";export default function _classPrivateFieldSet2(s,a,r){return s.set(assertClassBrand(s,a),r),r}',
   ),
   // size: 135, gzip size: 117
   classPrivateGetter: helper(
     "7.22.0",
     'import assertClassBrand from"assertClassBrand";export default function _classPrivateGetter(s,a,r){return r.call(assertClassBrand(s,a))}',
   ),
-  // size: 141, gzip size: 121
+  // size: 141, gzip size: 122
   classPrivateSetter: helper(
     "7.22.0",
-    'import assertClassBrand from"assertClassBrand";export default function _classPrivateSetter(s,a,r,t){return r.call(assertClassBrand(s,a),t),t}',
+    'import assertClassBrand from"assertClassBrand";export default function _classPrivateSetter(s,a,r,t){return a.call(assertClassBrand(s,r),t),t}',
   ),
   // size: 327, gzip size: 200
   construct: helper(

@@ -10,12 +10,12 @@ class Derived extends Base {
     babelHelpers.classPrivateMethodInitSpec(this, _Derived_brand);
   }
   static get(obj) {
-    return babelHelpers.classPrivateGetter(obj, _Derived_brand, _get_foo).call(obj);
+    return babelHelpers.classPrivateGetter(_Derived_brand, obj, _get_foo).call(obj);
   }
 }
 function _get_foo() {
   return 'bar';
 }
 function _set_foo(value) {
-  babelHelpers.classPrivateSetter(this, _Derived_brand, _set_foo, value);
+  babelHelpers.classPrivateSetter(_Derived_brand, _set_foo, this, value);
 }

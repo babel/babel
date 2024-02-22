@@ -19,44 +19,44 @@ class Foo {
     function fnDeep() {
       return deep;
     }
-    o == null ? void 0 : babelHelpers.assertClassBrand(_o$Foo = o.Foo, Foo, _m)._.call(_o$Foo);
-    o == null ? void 0 : babelHelpers.assertClassBrand(_o$Foo2 = o.Foo, Foo, _m)._.call(_o$Foo2).toString;
-    o == null ? void 0 : babelHelpers.assertClassBrand(_o$Foo3 = o.Foo, Foo, _m)._.call(_o$Foo3).toString();
-    (_deep$very$o = deep?.very.o) == null ? void 0 : babelHelpers.assertClassBrand(_deep$very$o$Foo = _deep$very$o.Foo, Foo, _m)._.call(_deep$very$o$Foo);
-    (_deep$very$o2 = deep?.very.o) == null ? void 0 : babelHelpers.assertClassBrand(_deep$very$o2$Foo = _deep$very$o2.Foo, Foo, _m)._.call(_deep$very$o2$Foo).toString;
-    (_deep$very$o3 = deep?.very.o) == null ? void 0 : babelHelpers.assertClassBrand(_deep$very$o3$Foo = _deep$very$o3.Foo, Foo, _m)._.call(_deep$very$o3$Foo).toString();
-    o == null ? void 0 : babelHelpers.assertClassBrand(_babelHelpers$assertC = babelHelpers.assertClassBrand(o.Foo, Foo, _self)._, Foo, _m)._.call(_babelHelpers$assertC);
-    o == null ? void 0 : babelHelpers.assertClassBrand(_babelHelpers$assertC2 = babelHelpers.assertClassBrand(o.Foo, Foo, _self)._.self, Foo, _m)._.call(_babelHelpers$assertC2);
-    (_ref = o == null ? void 0 : babelHelpers.assertClassBrand(o.Foo, Foo, _self)._) == null ? void 0 : babelHelpers.assertClassBrand(_ref$self = _ref.self, Foo, _m)._.call(_ref$self);
-    (_ref2 = o == null ? void 0 : babelHelpers.assertClassBrand(o.Foo, Foo, _self)._.self) == null ? void 0 : babelHelpers.assertClassBrand(_ref2$self = _ref2.self, Foo, _m)._.call(_ref2$self);
-    (_self2 = (o == null ? void 0 : babelHelpers.assertClassBrand(o.Foo, Foo, _self)._)?.self) == null ? void 0 : babelHelpers.assertClassBrand(_self2$self = _self2.self, Foo, _m)._.call(_self2$self);
-    o == null ? void 0 : babelHelpers.assertClassBrand(_babelHelpers$assertC3 = babelHelpers.assertClassBrand(o.Foo, Foo, _self)._.getSelf(), Foo, _m)._.call(_babelHelpers$assertC3);
-    (_ref3 = o == null ? void 0 : (_babelHelpers$assertC4 = babelHelpers.assertClassBrand(o.Foo, Foo, _self)._).getSelf) == null ? void 0 : babelHelpers.assertClassBrand(_ref3$call = _ref3.call(_babelHelpers$assertC4), Foo, _m)._.call(_ref3$call);
-    (_ref4 = o == null ? void 0 : babelHelpers.assertClassBrand(o.Foo, Foo, _self)._) == null ? void 0 : babelHelpers.assertClassBrand(_ref4$getSelf = _ref4.getSelf(), Foo, _m)._.call(_ref4$getSelf);
-    (_getSelf = (_ref5 = o == null ? void 0 : babelHelpers.assertClassBrand(o.Foo, Foo, _self)._)?.getSelf) == null ? void 0 : babelHelpers.assertClassBrand(_getSelf$call = _getSelf.call(_ref5), Foo, _m)._.call(_getSelf$call);
-    (_ref6 = o == null ? void 0 : babelHelpers.assertClassBrand(o.Foo, Foo, _self)._.getSelf()) == null ? void 0 : babelHelpers.assertClassBrand(_ref6$self = _ref6.self, Foo, _m)._.call(_ref6$self);
-    (_call = (o == null ? void 0 : (_babelHelpers$assertC5 = babelHelpers.assertClassBrand(o.Foo, Foo, _self)._).getSelf)?.call(_babelHelpers$assertC5)) == null ? void 0 : babelHelpers.assertClassBrand(_call$self = _call.self, Foo, _m)._.call(_call$self);
-    (_getSelf2 = (o == null ? void 0 : babelHelpers.assertClassBrand(o.Foo, Foo, _self)._)?.getSelf()) == null ? void 0 : babelHelpers.assertClassBrand(_getSelf2$self = _getSelf2.self, Foo, _m)._.call(_getSelf2$self);
-    (_getSelf3 = (o == null ? void 0 : babelHelpers.assertClassBrand(o.Foo, Foo, _self)._)?.getSelf?.()) == null ? void 0 : babelHelpers.assertClassBrand(_getSelf3$self = _getSelf3.self, Foo, _m)._.call(_getSelf3$self);
-    fn == null ? void 0 : babelHelpers.assertClassBrand(_fn$Foo = fn().Foo, Foo, _m)._.call(_fn$Foo);
-    fn == null ? void 0 : babelHelpers.assertClassBrand(_fn$Foo2 = fn().Foo, Foo, _m)._.call(_fn$Foo2).toString;
-    fn == null ? void 0 : babelHelpers.assertClassBrand(_fn$Foo3 = fn().Foo, Foo, _m)._.call(_fn$Foo3).toString();
-    (_fnDeep$very$o = fnDeep?.().very.o) == null ? void 0 : babelHelpers.assertClassBrand(_fnDeep$very$o$Foo = _fnDeep$very$o.Foo, Foo, _m)._.call(_fnDeep$very$o$Foo);
-    (_fnDeep$very$o2 = fnDeep?.().very.o) == null ? void 0 : babelHelpers.assertClassBrand(_fnDeep$very$o2$Foo = _fnDeep$very$o2.Foo, Foo, _m)._.call(_fnDeep$very$o2$Foo).toString;
-    (_fnDeep$very$o3 = fnDeep?.().very.o) == null ? void 0 : babelHelpers.assertClassBrand(_fnDeep$very$o3$Foo = _fnDeep$very$o3.Foo, Foo, _m)._.call(_fnDeep$very$o3$Foo).toString();
-    fn == null ? void 0 : babelHelpers.assertClassBrand(_babelHelpers$assertC6 = babelHelpers.assertClassBrand(fn().Foo, Foo, _self)._, Foo, _m)._.call(_babelHelpers$assertC6);
-    fn == null ? void 0 : babelHelpers.assertClassBrand(_babelHelpers$assertC7 = babelHelpers.assertClassBrand(fn().Foo, Foo, _self)._.self, Foo, _m)._.call(_babelHelpers$assertC7);
-    (_ref7 = fn == null ? void 0 : babelHelpers.assertClassBrand(fn().Foo, Foo, _self)._) == null ? void 0 : babelHelpers.assertClassBrand(_ref7$self = _ref7.self, Foo, _m)._.call(_ref7$self);
-    (_ref8 = fn == null ? void 0 : babelHelpers.assertClassBrand(fn().Foo, Foo, _self)._.self) == null ? void 0 : babelHelpers.assertClassBrand(_ref8$self = _ref8.self, Foo, _m)._.call(_ref8$self);
-    (_self3 = (fn == null ? void 0 : babelHelpers.assertClassBrand(fn().Foo, Foo, _self)._)?.self) == null ? void 0 : babelHelpers.assertClassBrand(_self3$self = _self3.self, Foo, _m)._.call(_self3$self);
-    fn == null ? void 0 : babelHelpers.assertClassBrand(_babelHelpers$assertC8 = babelHelpers.assertClassBrand(fn().Foo, Foo, _self)._.getSelf(), Foo, _m)._.call(_babelHelpers$assertC8);
-    (_ref9 = fn == null ? void 0 : (_babelHelpers$assertC9 = babelHelpers.assertClassBrand(fn().Foo, Foo, _self)._).getSelf) == null ? void 0 : babelHelpers.assertClassBrand(_ref9$call = _ref9.call(_babelHelpers$assertC9), Foo, _m)._.call(_ref9$call);
-    (_ref10 = fn == null ? void 0 : babelHelpers.assertClassBrand(fn().Foo, Foo, _self)._) == null ? void 0 : babelHelpers.assertClassBrand(_ref10$getSelf = _ref10.getSelf(), Foo, _m)._.call(_ref10$getSelf);
-    (_getSelf4 = (_ref11 = fn == null ? void 0 : babelHelpers.assertClassBrand(fn().Foo, Foo, _self)._)?.getSelf) == null ? void 0 : babelHelpers.assertClassBrand(_getSelf4$call = _getSelf4.call(_ref11), Foo, _m)._.call(_getSelf4$call);
-    (_ref12 = fn == null ? void 0 : babelHelpers.assertClassBrand(fn().Foo, Foo, _self)._.getSelf()) == null ? void 0 : babelHelpers.assertClassBrand(_ref12$self = _ref12.self, Foo, _m)._.call(_ref12$self);
-    (_call2 = (fn == null ? void 0 : (_babelHelpers$assertC10 = babelHelpers.assertClassBrand(fn().Foo, Foo, _self)._).getSelf)?.call(_babelHelpers$assertC10)) == null ? void 0 : babelHelpers.assertClassBrand(_call2$self = _call2.self, Foo, _m)._.call(_call2$self);
-    (_getSelf5 = (fn == null ? void 0 : babelHelpers.assertClassBrand(fn().Foo, Foo, _self)._)?.getSelf()) == null ? void 0 : babelHelpers.assertClassBrand(_getSelf5$self = _getSelf5.self, Foo, _m)._.call(_getSelf5$self);
-    (_getSelf6 = (fn == null ? void 0 : babelHelpers.assertClassBrand(fn().Foo, Foo, _self)._)?.getSelf?.()) == null ? void 0 : babelHelpers.assertClassBrand(_getSelf6$self = _getSelf6.self, Foo, _m)._.call(_getSelf6$self);
+    o == null ? void 0 : babelHelpers.assertClassBrand(Foo, _o$Foo = o.Foo, _m)._.call(_o$Foo);
+    o == null ? void 0 : babelHelpers.assertClassBrand(Foo, _o$Foo2 = o.Foo, _m)._.call(_o$Foo2).toString;
+    o == null ? void 0 : babelHelpers.assertClassBrand(Foo, _o$Foo3 = o.Foo, _m)._.call(_o$Foo3).toString();
+    (_deep$very$o = deep?.very.o) == null ? void 0 : babelHelpers.assertClassBrand(Foo, _deep$very$o$Foo = _deep$very$o.Foo, _m)._.call(_deep$very$o$Foo);
+    (_deep$very$o2 = deep?.very.o) == null ? void 0 : babelHelpers.assertClassBrand(Foo, _deep$very$o2$Foo = _deep$very$o2.Foo, _m)._.call(_deep$very$o2$Foo).toString;
+    (_deep$very$o3 = deep?.very.o) == null ? void 0 : babelHelpers.assertClassBrand(Foo, _deep$very$o3$Foo = _deep$very$o3.Foo, _m)._.call(_deep$very$o3$Foo).toString();
+    o == null ? void 0 : babelHelpers.assertClassBrand(Foo, _babelHelpers$assertC = babelHelpers.assertClassBrand(Foo, o.Foo, _self)._, _m)._.call(_babelHelpers$assertC);
+    o == null ? void 0 : babelHelpers.assertClassBrand(Foo, _babelHelpers$assertC2 = babelHelpers.assertClassBrand(Foo, o.Foo, _self)._.self, _m)._.call(_babelHelpers$assertC2);
+    (_ref = o == null ? void 0 : babelHelpers.assertClassBrand(Foo, o.Foo, _self)._) == null ? void 0 : babelHelpers.assertClassBrand(Foo, _ref$self = _ref.self, _m)._.call(_ref$self);
+    (_ref2 = o == null ? void 0 : babelHelpers.assertClassBrand(Foo, o.Foo, _self)._.self) == null ? void 0 : babelHelpers.assertClassBrand(Foo, _ref2$self = _ref2.self, _m)._.call(_ref2$self);
+    (_self2 = (o == null ? void 0 : babelHelpers.assertClassBrand(Foo, o.Foo, _self)._)?.self) == null ? void 0 : babelHelpers.assertClassBrand(Foo, _self2$self = _self2.self, _m)._.call(_self2$self);
+    o == null ? void 0 : babelHelpers.assertClassBrand(Foo, _babelHelpers$assertC3 = babelHelpers.assertClassBrand(Foo, o.Foo, _self)._.getSelf(), _m)._.call(_babelHelpers$assertC3);
+    (_ref3 = o == null ? void 0 : (_babelHelpers$assertC4 = babelHelpers.assertClassBrand(Foo, o.Foo, _self)._).getSelf) == null ? void 0 : babelHelpers.assertClassBrand(Foo, _ref3$call = _ref3.call(_babelHelpers$assertC4), _m)._.call(_ref3$call);
+    (_ref4 = o == null ? void 0 : babelHelpers.assertClassBrand(Foo, o.Foo, _self)._) == null ? void 0 : babelHelpers.assertClassBrand(Foo, _ref4$getSelf = _ref4.getSelf(), _m)._.call(_ref4$getSelf);
+    (_getSelf = (_ref5 = o == null ? void 0 : babelHelpers.assertClassBrand(Foo, o.Foo, _self)._)?.getSelf) == null ? void 0 : babelHelpers.assertClassBrand(Foo, _getSelf$call = _getSelf.call(_ref5), _m)._.call(_getSelf$call);
+    (_ref6 = o == null ? void 0 : babelHelpers.assertClassBrand(Foo, o.Foo, _self)._.getSelf()) == null ? void 0 : babelHelpers.assertClassBrand(Foo, _ref6$self = _ref6.self, _m)._.call(_ref6$self);
+    (_call = (o == null ? void 0 : (_babelHelpers$assertC5 = babelHelpers.assertClassBrand(Foo, o.Foo, _self)._).getSelf)?.call(_babelHelpers$assertC5)) == null ? void 0 : babelHelpers.assertClassBrand(Foo, _call$self = _call.self, _m)._.call(_call$self);
+    (_getSelf2 = (o == null ? void 0 : babelHelpers.assertClassBrand(Foo, o.Foo, _self)._)?.getSelf()) == null ? void 0 : babelHelpers.assertClassBrand(Foo, _getSelf2$self = _getSelf2.self, _m)._.call(_getSelf2$self);
+    (_getSelf3 = (o == null ? void 0 : babelHelpers.assertClassBrand(Foo, o.Foo, _self)._)?.getSelf?.()) == null ? void 0 : babelHelpers.assertClassBrand(Foo, _getSelf3$self = _getSelf3.self, _m)._.call(_getSelf3$self);
+    fn == null ? void 0 : babelHelpers.assertClassBrand(Foo, _fn$Foo = fn().Foo, _m)._.call(_fn$Foo);
+    fn == null ? void 0 : babelHelpers.assertClassBrand(Foo, _fn$Foo2 = fn().Foo, _m)._.call(_fn$Foo2).toString;
+    fn == null ? void 0 : babelHelpers.assertClassBrand(Foo, _fn$Foo3 = fn().Foo, _m)._.call(_fn$Foo3).toString();
+    (_fnDeep$very$o = fnDeep?.().very.o) == null ? void 0 : babelHelpers.assertClassBrand(Foo, _fnDeep$very$o$Foo = _fnDeep$very$o.Foo, _m)._.call(_fnDeep$very$o$Foo);
+    (_fnDeep$very$o2 = fnDeep?.().very.o) == null ? void 0 : babelHelpers.assertClassBrand(Foo, _fnDeep$very$o2$Foo = _fnDeep$very$o2.Foo, _m)._.call(_fnDeep$very$o2$Foo).toString;
+    (_fnDeep$very$o3 = fnDeep?.().very.o) == null ? void 0 : babelHelpers.assertClassBrand(Foo, _fnDeep$very$o3$Foo = _fnDeep$very$o3.Foo, _m)._.call(_fnDeep$very$o3$Foo).toString();
+    fn == null ? void 0 : babelHelpers.assertClassBrand(Foo, _babelHelpers$assertC6 = babelHelpers.assertClassBrand(Foo, fn().Foo, _self)._, _m)._.call(_babelHelpers$assertC6);
+    fn == null ? void 0 : babelHelpers.assertClassBrand(Foo, _babelHelpers$assertC7 = babelHelpers.assertClassBrand(Foo, fn().Foo, _self)._.self, _m)._.call(_babelHelpers$assertC7);
+    (_ref7 = fn == null ? void 0 : babelHelpers.assertClassBrand(Foo, fn().Foo, _self)._) == null ? void 0 : babelHelpers.assertClassBrand(Foo, _ref7$self = _ref7.self, _m)._.call(_ref7$self);
+    (_ref8 = fn == null ? void 0 : babelHelpers.assertClassBrand(Foo, fn().Foo, _self)._.self) == null ? void 0 : babelHelpers.assertClassBrand(Foo, _ref8$self = _ref8.self, _m)._.call(_ref8$self);
+    (_self3 = (fn == null ? void 0 : babelHelpers.assertClassBrand(Foo, fn().Foo, _self)._)?.self) == null ? void 0 : babelHelpers.assertClassBrand(Foo, _self3$self = _self3.self, _m)._.call(_self3$self);
+    fn == null ? void 0 : babelHelpers.assertClassBrand(Foo, _babelHelpers$assertC8 = babelHelpers.assertClassBrand(Foo, fn().Foo, _self)._.getSelf(), _m)._.call(_babelHelpers$assertC8);
+    (_ref9 = fn == null ? void 0 : (_babelHelpers$assertC9 = babelHelpers.assertClassBrand(Foo, fn().Foo, _self)._).getSelf) == null ? void 0 : babelHelpers.assertClassBrand(Foo, _ref9$call = _ref9.call(_babelHelpers$assertC9), _m)._.call(_ref9$call);
+    (_ref10 = fn == null ? void 0 : babelHelpers.assertClassBrand(Foo, fn().Foo, _self)._) == null ? void 0 : babelHelpers.assertClassBrand(Foo, _ref10$getSelf = _ref10.getSelf(), _m)._.call(_ref10$getSelf);
+    (_getSelf4 = (_ref11 = fn == null ? void 0 : babelHelpers.assertClassBrand(Foo, fn().Foo, _self)._)?.getSelf) == null ? void 0 : babelHelpers.assertClassBrand(Foo, _getSelf4$call = _getSelf4.call(_ref11), _m)._.call(_getSelf4$call);
+    (_ref12 = fn == null ? void 0 : babelHelpers.assertClassBrand(Foo, fn().Foo, _self)._.getSelf()) == null ? void 0 : babelHelpers.assertClassBrand(Foo, _ref12$self = _ref12.self, _m)._.call(_ref12$self);
+    (_call2 = (fn == null ? void 0 : (_babelHelpers$assertC10 = babelHelpers.assertClassBrand(Foo, fn().Foo, _self)._).getSelf)?.call(_babelHelpers$assertC10)) == null ? void 0 : babelHelpers.assertClassBrand(Foo, _call2$self = _call2.self, _m)._.call(_call2$self);
+    (_getSelf5 = (fn == null ? void 0 : babelHelpers.assertClassBrand(Foo, fn().Foo, _self)._)?.getSelf()) == null ? void 0 : babelHelpers.assertClassBrand(Foo, _getSelf5$self = _getSelf5.self, _m)._.call(_getSelf5$self);
+    (_getSelf6 = (fn == null ? void 0 : babelHelpers.assertClassBrand(Foo, fn().Foo, _self)._)?.getSelf?.()) == null ? void 0 : babelHelpers.assertClassBrand(Foo, _getSelf6$self = _getSelf6.self, _m)._.call(_getSelf6$self);
   }
 }
 _Foo = Foo;
@@ -65,7 +65,7 @@ var _x = {
 };
 var _m = {
   _: function () {
-    return babelHelpers.assertClassBrand(this, _Foo, _x)._;
+    return babelHelpers.assertClassBrand(_Foo, this, _x)._;
   }
 };
 var _self = {

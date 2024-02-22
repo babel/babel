@@ -2,10 +2,10 @@ var _initStatic, _call_a, _call_a2, _Foo;
 const dec = () => {};
 class Foo {
   static getA() {
-    return babelHelpers.classPrivateGetter(this, Foo, _get_a);
+    return babelHelpers.classPrivateGetter(Foo, this, _get_a);
   }
   static setA(v) {
-    babelHelpers.classPrivateSetter(this, Foo, _set_a, v);
+    babelHelpers.classPrivateSetter(Foo, _set_a, this, v);
   }
 }
 _Foo = Foo;

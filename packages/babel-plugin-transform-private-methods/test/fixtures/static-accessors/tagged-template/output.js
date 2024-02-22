@@ -1,6 +1,6 @@
 class Foo {
   static test() {
-    var receiver = babelHelpers.classPrivateGetter(this, Foo, _get_tag).bind(this)``;
+    var receiver = babelHelpers.classPrivateGetter(Foo, this, _get_tag).bind(this)``;
     expect(receiver).toBe(this);
   }
 }

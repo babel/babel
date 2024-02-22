@@ -9,21 +9,21 @@ class Foo {
     babelHelpers.classPrivateFieldInitSpec(this, _C, 456);
   }
   get a() {
-    return babelHelpers.classPrivateFieldGet2(this, _A);
+    return babelHelpers.classPrivateFieldGet2(_A, this);
   }
   set a(v) {
-    babelHelpers.classPrivateFieldSet2(this, _A, v);
+    babelHelpers.classPrivateFieldSet2(_A, this, v);
   }
   get b() {
-    return babelHelpers.classPrivateFieldGet2(this, _B);
+    return babelHelpers.classPrivateFieldGet2(_B, this);
   }
   set b(v) {
-    babelHelpers.classPrivateFieldSet2(this, _B, v);
+    babelHelpers.classPrivateFieldSet2(_B, this, v);
   }
   get ['c']() {
-    return babelHelpers.classPrivateFieldGet2(this, _C);
+    return babelHelpers.classPrivateFieldGet2(_C, this);
   }
   set ['c'](v) {
-    babelHelpers.classPrivateFieldSet2(this, _C, v);
+    babelHelpers.classPrivateFieldSet2(_C, this, v);
   }
 }

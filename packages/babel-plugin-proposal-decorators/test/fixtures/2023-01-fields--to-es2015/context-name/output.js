@@ -12,7 +12,7 @@ const f = () => {
 _computedKey = babelHelpers.toPropertyKey(f());
 class Foo {}
 _Foo = Foo;
-[_init_a, _init_a2, _init_computedKey, _init_computedKey2, _init_computedKey3, _init_computedKey4, _init_computedKey5, _init_computedKey6, _init_computedKey7] = babelHelpers.applyDecs2301(_Foo, [[dec, 5, "a"], [dec, 5, "a", o => babelHelpers.assertClassBrand(o, _Foo, _a)._, (o, v) => _a._ = babelHelpers.assertClassBrand(o, _Foo, v)], [dec, 5, "b"], [dec, 5, "c"], [dec, 5, 0], [dec, 5, 1], [dec, 5, 2n], [dec, 5, 3n], [dec, 5, _computedKey]], []).e;
+[_init_a, _init_a2, _init_computedKey, _init_computedKey2, _init_computedKey3, _init_computedKey4, _init_computedKey5, _init_computedKey6, _init_computedKey7] = babelHelpers.applyDecs2301(_Foo, [[dec, 5, "a"], [dec, 5, "a", o => babelHelpers.assertClassBrand(_Foo, o, _a)._, (o, v) => _a._ = babelHelpers.assertClassBrand(_Foo, o, v)], [dec, 5, "b"], [dec, 5, "c"], [dec, 5, 0], [dec, 5, 1], [dec, 5, 2n], [dec, 5, 3n], [dec, 5, _computedKey]], []).e;
 babelHelpers.defineProperty(Foo, "a", _init_a(_Foo));
 var _a = {
   _: _init_a2(_Foo)

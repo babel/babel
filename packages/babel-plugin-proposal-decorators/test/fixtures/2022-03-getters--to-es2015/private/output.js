@@ -7,7 +7,7 @@ class Foo {
     babelHelpers.defineProperty(this, "value", (_initProto(this), 1));
   }
   getA() {
-    return babelHelpers.classPrivateGetter(this, _Foo_brand, _get_a);
+    return babelHelpers.classPrivateGetter(_Foo_brand, this, _get_a);
   }
 }
 _Foo = Foo;

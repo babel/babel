@@ -445,8 +445,8 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
 
           return buildStaticPrivateFieldAccess(
             t.callExpression(file.addHelper("assertClassBrand"), [
-              receiver,
               t.cloneNode(classRef),
+              receiver,
               t.cloneNode(id),
             ]),
             noUninitializedPrivateFieldAccess,
@@ -461,8 +461,8 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
             );
           }
           return t.callExpression(file.addHelper("classPrivateGetter"), [
-            receiver,
             t.cloneNode(classRef),
+            receiver,
             t.cloneNode(getId),
           ]);
         }
@@ -472,8 +472,8 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
           if (skipCheck) return err;
           return t.sequenceExpression([
             t.callExpression(file.addHelper("assertClassBrand"), [
-              receiver,
               t.cloneNode(classRef),
+              receiver,
             ]),
             err,
           ]);
@@ -481,8 +481,8 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
 
         if (skipCheck) return t.cloneNode(id);
         return t.callExpression(file.addHelper("assertClassBrand"), [
-          receiver,
           t.cloneNode(classRef),
+          receiver,
           t.cloneNode(id),
         ]);
       }
@@ -502,26 +502,35 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
             ]);
           }
           return t.callExpression(file.addHelper("classPrivateGetter"), [
-            this.receiver(member),
             t.cloneNode(id),
+            this.receiver(member),
             t.cloneNode(getId),
           ]);
         }
-        return t.callExpression(
-          file.addHelper(
-            !process.env.BABEL_8_BREAKING && !newHelpers(file)
-              ? "classPrivateMethodGet"
-              : "assertClassBrand",
-          ),
-          [this.receiver(member), t.cloneNode(id), t.cloneNode(methodId)],
-        );
+        if (!process.env.BABEL_8_BREAKING && !newHelpers(file)) {
+          return t.callExpression(file.addHelper("classPrivateMethodGet"), [
+            this.receiver(member),
+            t.cloneNode(id),
+            t.cloneNode(methodId),
+          ]);
+        }
+        return t.callExpression(file.addHelper("assertClassBrand"), [
+          t.cloneNode(id),
+          this.receiver(member),
+          t.cloneNode(methodId),
+        ]);
       }
-      return t.callExpression(
-        process.env.BABEL_8_BREAKING || newHelpers(file)
-          ? file.addHelper("classPrivateFieldGet2")
-          : file.addHelper("classPrivateFieldGet"),
-        [this.receiver(member), t.cloneNode(id)],
-      );
+      if (process.env.BABEL_8_BREAKING || newHelpers(file)) {
+        return t.callExpression(file.addHelper("classPrivateFieldGet2"), [
+          t.cloneNode(id),
+          this.receiver(member),
+        ]);
+      }
+
+      return t.callExpression(file.addHelper("classPrivateFieldGet"), [
+        this.receiver(member),
+        t.cloneNode(id),
+      ]);
     },
 
     boundGet(member) {
@@ -575,8 +584,8 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
           return t.sequenceExpression([
             value,
             t.callExpression(file.addHelper("assertClassBrand"), [
-              receiver,
               t.cloneNode(classRef),
+              receiver,
             ]),
             readOnlyError(file, name),
           ]);
@@ -590,9 +599,9 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
             );
           }
           return t.callExpression(file.addHelper("classPrivateSetter"), [
-            receiver,
             t.cloneNode(classRef),
             t.cloneNode(setId),
+            receiver,
             value,
           ]);
         }
@@ -605,8 +614,8 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
           skipCheck
             ? value
             : t.callExpression(file.addHelper("assertClassBrand"), [
-                receiver,
                 t.cloneNode(classRef),
+                receiver,
                 value,
               ]),
         );
@@ -621,9 +630,9 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
             ]);
           }
           return t.callExpression(file.addHelper("classPrivateSetter"), [
-            this.receiver(member),
             t.cloneNode(id),
             t.cloneNode(setId),
+            this.receiver(member),
             value,
           ]);
         }
@@ -633,12 +642,20 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
           readOnlyError(file, name),
         ]);
       }
-      return t.callExpression(
-        process.env.BABEL_8_BREAKING || newHelpers(file)
-          ? file.addHelper("classPrivateFieldSet2")
-          : file.addHelper("classPrivateFieldSet"),
-        [this.receiver(member), t.cloneNode(id), value],
-      );
+
+      if (process.env.BABEL_8_BREAKING || newHelpers(file)) {
+        return t.callExpression(file.addHelper("classPrivateFieldSet2"), [
+          t.cloneNode(id),
+          this.receiver(member),
+          value,
+        ]);
+      }
+
+      return t.callExpression(file.addHelper("classPrivateFieldSet"), [
+        this.receiver(member),
+        t.cloneNode(id),
+        value,
+      ]);
     },
 
     destructureSet(member) {

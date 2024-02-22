@@ -13,6 +13,6 @@ class Cl {
   }
 }
 function _get_privateFieldValue() {
-  return babelHelpers.classPrivateFieldGet2(this, _privateField);
+  return babelHelpers.classPrivateFieldGet2(_privateField, this);
 }
 var cl = new Cl();

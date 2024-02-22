@@ -7,7 +7,7 @@ class Foo {
     babelHelpers.defineProperty(this, "value", (_initProto(this), 1));
   }
   setA(v) {
-    babelHelpers.classPrivateSetter(this, _Foo_brand, _set_a, v);
+    babelHelpers.classPrivateSetter(_Foo_brand, _set_a, this, v);
   }
 }
 _Foo = Foo;

@@ -11,5 +11,5 @@ var _x = {
     y
   }, _p, ..._p2] = [{
     y: 1
-  }, _C], _m = babelHelpers.assertClassBrand(_p, _C, _x)._, x = _m === void 0 ? y : _m, z = _p2;
+  }, _C], _m = babelHelpers.assertClassBrand(_C, _p, _x)._, x = _m === void 0 ? y : _m, z = _p2;
 })();

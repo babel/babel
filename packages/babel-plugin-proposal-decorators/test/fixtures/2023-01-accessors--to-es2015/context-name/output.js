@@ -12,52 +12,52 @@ const f = () => {
 _computedKey = babelHelpers.toPropertyKey(f());
 class Foo {
   static get a() {
-    return babelHelpers.assertClassBrand(this, Foo, _A)._;
+    return babelHelpers.assertClassBrand(Foo, this, _A)._;
   }
   static set a(v) {
-    _A._ = babelHelpers.assertClassBrand(this, Foo, v);
+    _A._ = babelHelpers.assertClassBrand(Foo, this, v);
   }
   static get "b"() {
-    return babelHelpers.assertClassBrand(this, Foo, _C)._;
+    return babelHelpers.assertClassBrand(Foo, this, _C)._;
   }
   static set "b"(v) {
-    _C._ = babelHelpers.assertClassBrand(this, Foo, v);
+    _C._ = babelHelpers.assertClassBrand(Foo, this, v);
   }
   static get ["c"]() {
-    return babelHelpers.assertClassBrand(this, Foo, _D)._;
+    return babelHelpers.assertClassBrand(Foo, this, _D)._;
   }
   static set ["c"](v) {
-    _D._ = babelHelpers.assertClassBrand(this, Foo, v);
+    _D._ = babelHelpers.assertClassBrand(Foo, this, v);
   }
   static get 0() {
-    return babelHelpers.assertClassBrand(this, Foo, _E)._;
+    return babelHelpers.assertClassBrand(Foo, this, _E)._;
   }
   static set 0(v) {
-    _E._ = babelHelpers.assertClassBrand(this, Foo, v);
+    _E._ = babelHelpers.assertClassBrand(Foo, this, v);
   }
   static get [1]() {
-    return babelHelpers.assertClassBrand(this, Foo, _F)._;
+    return babelHelpers.assertClassBrand(Foo, this, _F)._;
   }
   static set [1](v) {
-    _F._ = babelHelpers.assertClassBrand(this, Foo, v);
+    _F._ = babelHelpers.assertClassBrand(Foo, this, v);
   }
   static get 2n() {
-    return babelHelpers.assertClassBrand(this, Foo, _G)._;
+    return babelHelpers.assertClassBrand(Foo, this, _G)._;
   }
   static set 2n(v) {
-    _G._ = babelHelpers.assertClassBrand(this, Foo, v);
+    _G._ = babelHelpers.assertClassBrand(Foo, this, v);
   }
   static get [3n]() {
-    return babelHelpers.assertClassBrand(this, Foo, _H)._;
+    return babelHelpers.assertClassBrand(Foo, this, _H)._;
   }
   static set [3n](v) {
-    _H._ = babelHelpers.assertClassBrand(this, Foo, v);
+    _H._ = babelHelpers.assertClassBrand(Foo, this, v);
   }
   static get [_computedKey]() {
-    return babelHelpers.assertClassBrand(this, Foo, _I)._;
+    return babelHelpers.assertClassBrand(Foo, this, _I)._;
   }
   static set [_computedKey](v) {
-    _I._ = babelHelpers.assertClassBrand(this, Foo, v);
+    _I._ = babelHelpers.assertClassBrand(Foo, this, v);
   }
 }
 _Foo = Foo;
@@ -68,7 +68,7 @@ function _get_a2() {
   return _get_a(this);
 }
 (() => {
-  [_init_a, _init_a2, _get_a, _set_a, _init_computedKey, _init_computedKey2, _init_computedKey3, _init_computedKey4, _init_computedKey5, _init_computedKey6, _init_computedKey7, _initStatic] = babelHelpers.applyDecs2301(_Foo, [[dec, 6, "a"], [dec, 6, "a", o => babelHelpers.assertClassBrand(o, _Foo, _B)._, (o, v) => _B._ = babelHelpers.assertClassBrand(o, _Foo, v)], [dec, 6, "b"], [dec, 6, "c"], [dec, 6, 0], [dec, 6, 1], [dec, 6, 2n], [dec, 6, 3n], [dec, 6, _computedKey]], []).e;
+  [_init_a, _init_a2, _get_a, _set_a, _init_computedKey, _init_computedKey2, _init_computedKey3, _init_computedKey4, _init_computedKey5, _init_computedKey6, _init_computedKey7, _initStatic] = babelHelpers.applyDecs2301(_Foo, [[dec, 6, "a"], [dec, 6, "a", o => babelHelpers.assertClassBrand(_Foo, o, _B)._, (o, v) => _B._ = babelHelpers.assertClassBrand(_Foo, o, v)], [dec, 6, "b"], [dec, 6, "c"], [dec, 6, 0], [dec, 6, 1], [dec, 6, 2n], [dec, 6, 3n], [dec, 6, _computedKey]], []).e;
   _initStatic(_Foo);
 })();
 var _A = {

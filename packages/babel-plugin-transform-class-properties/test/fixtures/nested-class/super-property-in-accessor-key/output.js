@@ -29,12 +29,12 @@ let Outer = /*#__PURE__*/function (_Hello) {
       babelHelpers.createClass(Inner, [{
         key: _computedKey,
         get: function () {
-          return babelHelpers.classPrivateFieldGet2(this, _A);
+          return babelHelpers.classPrivateFieldGet2(_A, this);
         }
       }, {
         key: _computedKey,
         set: function (v) {
-          babelHelpers.classPrivateFieldSet2(this, _A, v);
+          babelHelpers.classPrivateFieldSet2(_A, this, v);
         }
       }]);
       return Inner;

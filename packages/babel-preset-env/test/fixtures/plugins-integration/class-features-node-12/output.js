@@ -10,5 +10,5 @@ class B {
   }
 }
 function _y() {
-  babelHelpers.classPrivateFieldGet2(this, _x);
+  babelHelpers.classPrivateFieldGet2(_x, this);
 }

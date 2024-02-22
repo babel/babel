@@ -2,7 +2,7 @@ var _initStatic, _call_a, _Foo;
 const dec = () => {};
 class Foo {
   static callA() {
-    return babelHelpers.assertClassBrand(this, Foo, _a)._.call(this);
+    return babelHelpers.assertClassBrand(Foo, this, _a)._.call(this);
   }
 }
 _Foo = Foo;

@@ -16,13 +16,13 @@ function _get_b2() {
 }
 (() => {
   [_init_a, _get_a, _set_a, _init_b, _get_b, _set_b, _initStatic] = babelHelpers.applyDecs2203R(_Foo, [[dec, 6, "a", function () {
-    return babelHelpers.assertClassBrand(this, _Foo, _A)._;
+    return babelHelpers.assertClassBrand(_Foo, this, _A)._;
   }, function (value) {
-    _A._ = babelHelpers.assertClassBrand(this, _Foo, value);
+    _A._ = babelHelpers.assertClassBrand(_Foo, this, value);
   }], [dec, 6, "b", function () {
-    return babelHelpers.assertClassBrand(this, _Foo, _B)._;
+    return babelHelpers.assertClassBrand(_Foo, this, _B)._;
   }, function (value) {
-    _B._ = babelHelpers.assertClassBrand(this, _Foo, value);
+    _B._ = babelHelpers.assertClassBrand(_Foo, this, value);
   }]], []).e;
   _initStatic(_Foo);
 })();

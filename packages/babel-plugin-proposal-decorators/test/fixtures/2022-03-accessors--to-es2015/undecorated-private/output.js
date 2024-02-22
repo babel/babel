@@ -10,14 +10,14 @@ class Foo {
   }
 }
 function _get_a() {
-  return babelHelpers.classPrivateFieldGet2(this, _A);
+  return babelHelpers.classPrivateFieldGet2(_A, this);
 }
 function _set_a(v) {
-  babelHelpers.classPrivateFieldSet2(this, _A, v);
+  babelHelpers.classPrivateFieldSet2(_A, this, v);
 }
 function _get_b() {
-  return babelHelpers.classPrivateFieldGet2(this, _B);
+  return babelHelpers.classPrivateFieldGet2(_B, this);
 }
 function _set_b(v) {
-  babelHelpers.classPrivateFieldSet2(this, _B, v);
+  babelHelpers.classPrivateFieldSet2(_B, this, v);
 }

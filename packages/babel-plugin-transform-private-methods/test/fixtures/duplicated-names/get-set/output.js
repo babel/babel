@@ -7,8 +7,8 @@ class Cl {
   }
 }
 function _get_getSet() {
-  return babelHelpers.classPrivateFieldGet2(this, _privateField);
+  return babelHelpers.classPrivateFieldGet2(_privateField, this);
 }
 function _set_getSet(newValue) {
-  babelHelpers.classPrivateFieldSet2(this, _privateField, newValue);
+  babelHelpers.classPrivateFieldSet2(_privateField, this, newValue);
 }

@@ -10,7 +10,7 @@ class Derived extends Base {
     babelHelpers.classPrivateMethodInitSpec(this, _Derived_brand);
   }
   static get(obj) {
-    return babelHelpers.assertClassBrand(obj, _Derived_brand, _foo).call(obj);
+    return babelHelpers.assertClassBrand(_Derived_brand, obj, _foo).call(obj);
   }
 }
 function _foo() {

@@ -4,7 +4,7 @@ class Cl {
     babelHelpers.classPrivateMethodInitSpec(this, _Cl_brand);
   }
   test() {
-    return babelHelpers.assertClassBrand(this, _Cl_brand, _foo).call(this);
+    return babelHelpers.assertClassBrand(_Cl_brand, this, _foo).call(this);
   }
 }
 function* _foo() {
