@@ -1,14 +1,8 @@
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var _foo = new WeakSet();
-
+var _foo = /*#__PURE__*/new WeakSet();
 class A {
   constructor() {
-    _foo.add(this);
-
-    _defineProperty(this, "x", 2);
+    babelHelpers.classPrivateMethodInitSpec(this, _foo);
+    babelHelpers.defineProperty(this, "x", 2);
   }
-
 }
-
-var _foo2 = function _foo2() {};
+function _foo2() {}

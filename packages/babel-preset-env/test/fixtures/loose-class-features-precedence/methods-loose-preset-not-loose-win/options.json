@@ -11,5 +11,5 @@
       }
     ]
   ],
-  "plugins": [["proposal-private-methods", { "loose": true }]]
+  "plugins": [["transform-private-methods", { "loose": true }]]
 }

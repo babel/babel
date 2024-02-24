@@ -11,5 +11,5 @@
       }
     ]
   ],
-  "plugins": [["proposal-class-properties", { "loose": true }]]
+  "plugins": [["transform-class-properties", { "loose": true }]]
 }
