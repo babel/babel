@@ -9,11 +9,11 @@ class Foo {
   }
 }
 _Foo = Foo;
-function _get_a() {
-  return _call_a(this);
+function _get_a(_this) {
+  return _call_a(_this);
 }
-function _set_a(v) {
-  _call_a2(this, v);
+function _set_a(_this2, v) {
+  _call_a2(_this2, v);
 }
 (() => {
   [_call_a, _call_a2, _initStatic] = babelHelpers.applyDecs2311(_Foo, [], [[dec, 11, "a", function () {

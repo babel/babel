@@ -11,8 +11,8 @@ class Foo {
   }
 }
 _Foo = Foo;
-function _set_a(v) {
-  _call_a(this, v);
+function _set_a(_this, v) {
+  _call_a(_this, v);
 }
 [_call_a, _initProto] = babelHelpers.applyDecs2305(_Foo, [[dec, 4, "a", function (v) {
   return this.value = v;

@@ -4,7 +4,7 @@ class Foo {
     expect(receiver).toBe(this);
   }
 }
-function _get_tag() {
+function _get_tag(_this) {
   return function () {
     return this;
   };

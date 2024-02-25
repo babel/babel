@@ -93,15 +93,15 @@ export default Object.freeze({
     "7.22.0",
     'import assertClassBrand from"assertClassBrand";export default function _classPrivateFieldSet2(s,a,r){return s.set(assertClassBrand(s,a),r),r}',
   ),
-  // size: 135, gzip size: 117
+  // size: 130, gzip size: 112
   classPrivateGetter: helper(
     "7.22.0",
-    'import assertClassBrand from"assertClassBrand";export default function _classPrivateGetter(s,a,r){return r.call(assertClassBrand(s,a))}',
+    'import assertClassBrand from"assertClassBrand";export default function _classPrivateGetter(s,r,a){return a(assertClassBrand(s,r))}',
   ),
-  // size: 141, gzip size: 122
+  // size: 136, gzip size: 118
   classPrivateSetter: helper(
     "7.22.0",
-    'import assertClassBrand from"assertClassBrand";export default function _classPrivateSetter(s,a,r,t){return a.call(assertClassBrand(s,r),t),t}',
+    'import assertClassBrand from"assertClassBrand";export default function _classPrivateSetter(s,r,a,t){return r(assertClassBrand(s,a),t),t}',
   ),
   // size: 327, gzip size: 200
   construct: helper(

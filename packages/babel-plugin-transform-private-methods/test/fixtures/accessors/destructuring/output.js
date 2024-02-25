@@ -8,5 +8,5 @@ class A {
     [(this, babelHelpers.readOnlyError("#getter"))._] = [1];
   }
 }
-function _set_setter(v) {}
-function _get_getter() {}
+function _set_setter(_this, v) {}
+function _get_getter(_this2) {}

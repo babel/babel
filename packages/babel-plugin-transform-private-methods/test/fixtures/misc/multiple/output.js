@@ -10,7 +10,7 @@ class A {
   }
 }
 function _method() {}
-function _get_getter() {}
-function _set_setter(v) {}
-function _get_getset() {}
-function _set_getset(v) {}
+function _get_getter(_this) {}
+function _set_setter(_this2, v) {}
+function _get_getset(_this3) {}
+function _set_getset(_this4, v) {}

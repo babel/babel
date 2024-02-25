@@ -6,9 +6,9 @@ class Cl {
     babelHelpers.classPrivateFieldInitSpec(this, _privateField, 0);
   }
 }
-function _set_getSet(newValue) {
-  babelHelpers.classPrivateFieldSet2(_privateField, this, newValue);
+function _set_getSet(_this, newValue) {
+  babelHelpers.classPrivateFieldSet2(_privateField, _this, newValue);
 }
-function _get_getSet() {
-  return babelHelpers.classPrivateFieldGet2(_privateField, this);
+function _get_getSet(_this2) {
+  return babelHelpers.classPrivateFieldGet2(_privateField, _this2);
 }

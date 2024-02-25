@@ -5,7 +5,7 @@ class Foo {
     babelHelpers.classPrivateGetter(_Foo_brand, this, _get_tag).bind(this)``;
   }
 }
-function _get_tag() {
-  return () => this;
+function _get_tag(_this) {
+  return () => _this;
 }
 new Foo();

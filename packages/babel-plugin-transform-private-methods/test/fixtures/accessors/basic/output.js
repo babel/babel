@@ -13,9 +13,9 @@ class Cl {
     babelHelpers.classPrivateSetter(_Cl_brand, _set_privateFieldValue, this, newValue);
   }
 }
-function _get_privateFieldValue() {
-  return babelHelpers.classPrivateFieldGet2(_privateField, this);
+function _get_privateFieldValue(_this) {
+  return babelHelpers.classPrivateFieldGet2(_privateField, _this);
 }
-function _set_privateFieldValue(newValue) {
-  babelHelpers.classPrivateFieldSet2(_privateField, this, newValue);
+function _set_privateFieldValue(_this2, newValue) {
+  babelHelpers.classPrivateFieldSet2(_privateField, _this2, newValue);
 }

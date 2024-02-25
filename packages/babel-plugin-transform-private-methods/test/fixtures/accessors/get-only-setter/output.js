@@ -7,6 +7,6 @@ class Cl {
     this.publicField = (this, babelHelpers.writeOnlyError("#privateFieldValue"));
   }
 }
-function _set_privateFieldValue(newValue) {
-  babelHelpers.classPrivateFieldSet2(_privateField, this, newValue);
+function _set_privateFieldValue(_this, newValue) {
+  babelHelpers.classPrivateFieldSet2(_privateField, _this, newValue);
 }

@@ -7,5 +7,5 @@ export default function _classPrivateGetter(
   receiver: any,
   getter: Function,
 ) {
-  return getter.call(assertClassBrand(privateMap, receiver));
+  return getter(assertClassBrand(privateMap, receiver));
 }

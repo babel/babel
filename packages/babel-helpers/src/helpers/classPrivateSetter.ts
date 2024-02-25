@@ -8,6 +8,6 @@ export default function _classPrivateSetter(
   receiver: any,
   value: any,
 ) {
-  setter.call(assertClassBrand(privateMap, receiver), value);
+  setter(assertClassBrand(privateMap, receiver), value);
   return value;
 }

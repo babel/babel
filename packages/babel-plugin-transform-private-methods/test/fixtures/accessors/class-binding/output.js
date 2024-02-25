@@ -6,6 +6,6 @@ class A {
   }
 }
 _A = A;
-function _get_getA() {
+function _get_getA(_this) {
   return _A;
 }
