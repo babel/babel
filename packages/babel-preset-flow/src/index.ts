@@ -12,7 +12,7 @@ export default declarePreset((api, opts) => {
     all,
     allowDeclareFields,
     ignoreExtensions = false,
-    useHermesParser = false,
+    experimental_useHermesParser: useHermesParser = false,
   } = normalizeOptions(opts);
 
   const plugins: any[] = [
