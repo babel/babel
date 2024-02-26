@@ -20,4 +20,4 @@ jobs:
           github-token: ${{ secrets.BOT_TOKEN }}
           script: |
             const { default: repl } = await import('${{ github.workspace }}/scripts/actions/repl.js');
-            await repl();
+            await repl(github, context);
