@@ -798,6 +798,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/helper-import-to-platform-api@workspace:^, @babel/helper-import-to-platform-api@workspace:packages/babel-helper-import-to-platform-api":
+  version: 0.0.0-use.local
+  resolution: "@babel/helper-import-to-platform-api@workspace:packages/babel-helper-import-to-platform-api"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-compilation-targets": "workspace:^"
+    "@babel/helper-module-imports": "workspace:^"
+    "@babel/traverse": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
+
 "@babel/helper-member-expression-to-functions@npm:^8.0.0-alpha.5":
   version: 8.0.0-alpha.5
   resolution: "@babel/helper-member-expression-to-functions@npm:8.0.0-alpha.5"
@@ -1552,11 +1565,25 @@ __metadata:
   resolution: "@babel/plugin-proposal-import-wasm-source@workspace:packages/babel-plugin-proposal-import-wasm-source"
   dependencies:
     "@babel/core": "workspace:^"
-    "@babel/helper-compilation-targets": "workspace:^"
-    "@babel/helper-module-imports": "workspace:^"
+    "@babel/helper-import-to-platform-api": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-syntax-import-source": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.22.0
+  languageName: unknown
+  linkType: soft
+
+"@babel/plugin-proposal-json-modules@workspace:^, @babel/plugin-proposal-json-modules@workspace:packages/babel-plugin-proposal-json-modules":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-proposal-json-modules@workspace:packages/babel-plugin-proposal-json-modules"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-import-to-platform-api": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/plugin-syntax-import-attributes": "workspace:^"
+    babel-plugin-polyfill-corejs3: "npm:^0.8.7"
   peerDependencies:
     "@babel/core": ^7.22.0
   languageName: unknown
@@ -4159,6 +4186,7 @@ __metadata:
     "@babel/plugin-proposal-function-bind": "workspace:^"
     "@babel/plugin-proposal-function-sent": "workspace:^"
     "@babel/plugin-proposal-import-defer": "workspace:^"
+    "@babel/plugin-proposal-json-modules": "workspace:^"
     "@babel/plugin-proposal-optional-chaining-assign": "workspace:^"
     "@babel/plugin-proposal-pipeline-operator": "workspace:^"
     "@babel/plugin-proposal-record-and-tuple": "workspace:^"
