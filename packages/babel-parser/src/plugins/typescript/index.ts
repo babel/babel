@@ -566,6 +566,19 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
       // For compatibility to estree we cannot call parseLiteral directly here
       node.argument = super.parseExprAtom() as N.StringLiteral;
+      if (
+        this.hasPlugin("importAttributes") ||
+        this.hasPlugin("importAssertions")
+      ) {
+        node.options = null;
+      }
+      if (this.eat(tt.comma)) {
+        this.expectImportAttributesPlugin();
+        if (!this.match(tt.parenR)) {
+          node.options = super.parseMaybeAssignAllowIn();
+          this.eat(tt.comma);
+        }
+      }
       this.expect(tt.parenR);
 
       if (this.eat(tt.dot)) {

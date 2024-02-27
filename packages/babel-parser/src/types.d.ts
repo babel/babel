@@ -1543,6 +1543,7 @@ export interface TsImportType extends TsTypeBase {
   argument: StringLiteral;
   qualifier?: TsEntityName;
   typeParameters?: TsTypeParameterInstantiation;
+  options?: Expression | null;
 }
 
 // ================

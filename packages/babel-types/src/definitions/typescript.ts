@@ -530,6 +530,10 @@ defineType("TSImportType", {
     argument: validateType("StringLiteral"),
     qualifier: validateOptionalType("TSEntityName"),
     typeParameters: validateOptionalType("TSTypeParameterInstantiation"),
+    options: {
+      validate: assertNodeType("Expression"),
+      optional: true,
+    },
   },
 });
 
