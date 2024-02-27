@@ -269,7 +269,7 @@ export function createClassFeaturePlugin({
           staticNodes: t.Statement[],
           instanceNodes: t.ExpressionStatement[],
           lastInstanceNodeReturnsThis: boolean,
-          pureStaticNodes: (t.FunctionDeclaration | t.VariableDeclaration)[],
+          pureStaticNodes: t.FunctionDeclaration[],
           classBindingNode: t.Statement | null,
           wrapClass: (path: NodePath<t.Class>) => NodePath;
 

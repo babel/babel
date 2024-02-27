@@ -6,11 +6,13 @@ class Cl {
   }
 
   get #privateFieldValue() {
+    expect(arguments.length).toBe(0);
     return this.#privateField;
   }
 
   set #privateFieldValue(newValue) {
-    this.#privateField = arguments[0];
+    expect(arguments.length).toBe(1);
+    this.#privateField = newValue;
   }
 
   publicGetPrivateField() {

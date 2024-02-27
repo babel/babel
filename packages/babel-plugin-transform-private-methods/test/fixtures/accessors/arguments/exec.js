@@ -11,7 +11,8 @@ class Cl {
   }
 
   set #privateFieldValue(newValue) {
-    this.#privateField = arguments[0];
+    expect(arguments.length).toBe(1);
+    this.#privateField = newValue;
   }
 
   publicGetPrivateField() {

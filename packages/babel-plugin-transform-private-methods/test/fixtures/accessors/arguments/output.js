@@ -14,8 +14,12 @@ class Cl {
   }
 }
 function _get_privateFieldValue(_this) {
+  var _arguments = [].slice.call(arguments, 1);
+  expect(_arguments.length).toBe(0);
   return babelHelpers.classPrivateFieldGet2(_privateField, _this);
 }
-var _set_privateFieldValue = babelHelpers.curryThis(function _set_privateFieldValue(newValue) {
-  babelHelpers.classPrivateFieldSet2(_privateField, this, arguments[0]);
-});
+function _set_privateFieldValue(_this2, newValue) {
+  var _arguments2 = [].slice.call(arguments, 1);
+  expect(_arguments2.length).toBe(1);
+  babelHelpers.classPrivateFieldSet2(_privateField, _this2, newValue);
+}
