@@ -898,7 +898,7 @@ helpers.classPrivateFieldGet = helper("7.0.0-beta.0")`
   import classApplyDescriptorGet from "classApplyDescriptorGet";
   import classPrivateFieldGet2 from "classPrivateFieldGet2";
   export default function _classPrivateFieldGet(receiver, privateMap) {
-    var descriptor = classPrivateFieldGet2(receiver, privateMap);
+    var descriptor = classPrivateFieldGet2(privateMap, receiver);
     return classApplyDescriptorGet(receiver, descriptor);
   }
 `;
@@ -908,7 +908,7 @@ helpers.classPrivateFieldSet = helper("7.0.0-beta.0")`
   import classApplyDescriptorSet from "classApplyDescriptorSet";
   import classPrivateFieldGet2 from "classPrivateFieldGet2";
   export default function _classPrivateFieldSet(receiver, privateMap, value) {
-    var descriptor = classPrivateFieldGet2(receiver, privateMap);
+    var descriptor = classPrivateFieldGet2(privateMap, receiver);
     classApplyDescriptorSet(receiver, descriptor, value);
     return value;
   }
@@ -919,7 +919,7 @@ helpers.classPrivateFieldDestructureSet = helper("7.4.4")`
   import classApplyDescriptorDestructureSet from "classApplyDescriptorDestructureSet";
   import classPrivateFieldGet2 from "classPrivateFieldGet2";
   export default function _classPrivateFieldDestructureSet(receiver, privateMap) {
-    var descriptor = classPrivateFieldGet2(receiver, privateMap);
+    var descriptor = classPrivateFieldGet2(privateMap, receiver);
     return classApplyDescriptorDestructureSet(receiver, descriptor);
   }
 `;
@@ -929,7 +929,7 @@ helpers.classExtractFieldDescriptor = helper("7.13.10")`
   import classPrivateFieldGet2 from "classPrivateFieldGet2";
 
   export default function _classExtractFieldDescriptor(receiver, privateMap) {
-    return classPrivateFieldGet2(receiver, privateMap);
+    return classPrivateFieldGet2(privateMap, receiver);
   }
 `;
 
@@ -939,7 +939,7 @@ helpers.classStaticPrivateFieldSpecGet = helper("7.0.2")`
   import assertClassBrand from "assertClassBrand";
   import classCheckPrivateStaticFieldDescriptor from "classCheckPrivateStaticFieldDescriptor";
   export default function _classStaticPrivateFieldSpecGet(receiver, classConstructor, descriptor) {
-    assertClassBrand(receiver, classConstructor);
+    assertClassBrand(classConstructor, receiver);
     classCheckPrivateStaticFieldDescriptor(descriptor, "get");
     return classApplyDescriptorGet(receiver, descriptor);
   }
@@ -951,7 +951,7 @@ helpers.classStaticPrivateFieldSpecSet = helper("7.0.2")`
   import assertClassBrand from "assertClassBrand";
   import classCheckPrivateStaticFieldDescriptor from "classCheckPrivateStaticFieldDescriptor";
   export default function _classStaticPrivateFieldSpecSet(receiver, classConstructor, descriptor, value) {
-    assertClassBrand(receiver, classConstructor);
+    assertClassBrand(classConstructor, receiver);
     classCheckPrivateStaticFieldDescriptor(descriptor, "set");
     classApplyDescriptorSet(receiver, descriptor, value);
     return value;
@@ -961,7 +961,7 @@ helpers.classStaticPrivateFieldSpecSet = helper("7.0.2")`
 helpers.classStaticPrivateMethodGet = helper("7.3.2")`
   import assertClassBrand from "assertClassBrand";
   export default function _classStaticPrivateMethodGet(receiver, classConstructor, method) {
-    assertClassBrand(receiver, classConstructor);
+    assertClassBrand(classConstructor, receiver);
     return method;
   }
 `;
@@ -1031,7 +1031,7 @@ helpers.classStaticPrivateFieldDestructureSet = helper("7.13.10")`
   import assertClassBrand from "assertClassBrand";
   import classCheckPrivateStaticFieldDescriptor from "classCheckPrivateStaticFieldDescriptor";
   export default function _classStaticPrivateFieldDestructureSet(receiver, classConstructor, descriptor) {
-    assertClassBrand(receiver, classConstructor);
+    assertClassBrand(classConstructor, receiver);
     classCheckPrivateStaticFieldDescriptor(descriptor, "set");
     return classApplyDescriptorDestructureSet(receiver, descriptor);
   }
@@ -1041,7 +1041,7 @@ helpers.classStaticPrivateFieldDestructureSet = helper("7.13.10")`
 helpers.classCheckPrivateStaticAccess = helper("7.13.10")`
   import assertClassBrand from "assertClassBrand";
   export default function _classCheckPrivateStaticAccess(receiver, classConstructor, returnValue) {
-    return assertClassBrand(receiver, classConstructor, returnValue);
+    return assertClassBrand(classConstructor, receiver, returnValue);
   }
 `;
 
@@ -1732,7 +1732,7 @@ helpers.decorate = helper("7.1.5")`
 helpers.classPrivateMethodGet = helper("7.1.6")`
   import assertClassBrand from "assertClassBrand";
   export default function _classPrivateMethodGet(receiver, privateSet, fn) {
-    assertClassBrand(receiver, privateSet);
+    assertClassBrand(privateSet, receiver);
     return fn;
   }
 `;

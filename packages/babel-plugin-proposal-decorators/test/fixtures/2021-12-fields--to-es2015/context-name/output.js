@@ -13,9 +13,9 @@ _computedKey = babelHelpers.toPropertyKey(f());
 class Foo {}
 _Foo = Foo;
 [_init_a, _init_a2, _init_computedKey, _init_computedKey2, _init_computedKey3, _init_computedKey4, _init_computedKey5, _init_computedKey6, _init_computedKey7] = babelHelpers.applyDecs(_Foo, [[dec, 5, "a"], [dec, 5, "a", function () {
-  return babelHelpers.assertClassBrand(this, _Foo, _a)._;
+  return babelHelpers.assertClassBrand(_Foo, this, _a)._;
 }, function (value) {
-  _a._ = babelHelpers.assertClassBrand(this, _Foo, value);
+  _a._ = babelHelpers.assertClassBrand(_Foo, this, value);
 }], [dec, 5, "b"], [dec, 5, "c"], [dec, 5, 0], [dec, 5, 1], [dec, 5, 2n], [dec, 5, 3n], [dec, 5, _computedKey]], []);
 babelHelpers.defineProperty(Foo, "a", _init_a(_Foo));
 var _a = {

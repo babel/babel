@@ -8,7 +8,7 @@ for (let i = 0; i <= 10; ++i) {
       babelHelpers.classPrivateFieldInitSpec(this, _bar, `private field ${i}`);
     }
     getBar() {
-      return babelHelpers.classPrivateFieldGet2(this, _bar);
+      return babelHelpers.classPrivateFieldGet2(_bar, this);
     }
   }, babelHelpers.defineProperty(_A, "foo", `static field ${i}`), _A)));
 }

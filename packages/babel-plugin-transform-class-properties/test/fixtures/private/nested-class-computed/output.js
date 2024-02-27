@@ -18,8 +18,8 @@ let Foo = /*#__PURE__*/function () {
           value: function () {}
         }]);
         return Nested;
-      }(babelHelpers.classPrivateFieldGet2(this, _foo));
-      babelHelpers.classPrivateFieldGet2(this, _foo);
+      }(babelHelpers.classPrivateFieldGet2(_foo, this));
+      babelHelpers.classPrivateFieldGet2(_foo, this);
     }
   }]);
   return Foo;

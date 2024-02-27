@@ -2,6 +2,6 @@ var _Foo;
 class Foo {}
 _Foo = Foo;
 function _tag() {
-  babelHelpers.assertClassBrand(this, _Foo, _tag).bind(this)``;
+  babelHelpers.assertClassBrand(_Foo, this, _tag).bind(this)``;
 }
 new Foo();

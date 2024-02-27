@@ -9,7 +9,7 @@ class Foo {
   method() {}
   makeClass() {
     var _barDecs, _init_bar, _init_extra_bar, _Nested;
-    return _barDecs = babelHelpers.classPrivateFieldGet2(this, _a), (_Nested = class Nested {
+    return _barDecs = babelHelpers.classPrivateFieldGet2(_a, this), (_Nested = class Nested {
       constructor() {
         babelHelpers.defineProperty(this, "bar", _init_bar(this));
         _init_extra_bar(this);

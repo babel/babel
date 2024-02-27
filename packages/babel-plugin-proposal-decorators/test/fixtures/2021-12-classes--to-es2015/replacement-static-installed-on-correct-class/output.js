@@ -13,20 +13,20 @@ new (_x = /*#__PURE__*/new WeakMap(), _A = /*#__PURE__*/new WeakMap(), _Class_br
 }, (_Foo2 => {
   class Foo {
     static get a() {
-      return babelHelpers.classPrivateFieldGet2(this, _B);
+      return babelHelpers.classPrivateFieldGet2(_B, this);
     }
     static set a(v) {
-      babelHelpers.classPrivateFieldSet2(this, _B, v);
+      babelHelpers.classPrivateFieldSet2(_B, this, v);
     }
     static m() {}
   }
   _Foo2 = Foo;
   [_Foo, _initClass] = babelHelpers.applyDecs(_Foo2, [], [dec]);
 })(), _temp))();
-function _get_a() {
-  return babelHelpers.classPrivateFieldGet2(this, _A);
+function _get_a(_this) {
+  return babelHelpers.classPrivateFieldGet2(_A, _this);
 }
-function _set_a(v) {
-  babelHelpers.classPrivateFieldSet2(this, _A, v);
+function _set_a(_this2, v) {
+  babelHelpers.classPrivateFieldSet2(_A, _this2, v);
 }
 function _m() {}

@@ -1,6 +1,10 @@
 /* @minVersion 7.22.0 */
 
-export default function _assertClassBrand(receiver, brand, returnValue) {
+export default function _assertClassBrand(
+  brand: Function | WeakMap<any, any> | WeakSet<any>,
+  receiver: any,
+  returnValue?: any,
+) {
   if (typeof brand === "function" ? brand === receiver : brand.has(receiver)) {
     return arguments.length < 3 ? receiver : returnValue;
   }

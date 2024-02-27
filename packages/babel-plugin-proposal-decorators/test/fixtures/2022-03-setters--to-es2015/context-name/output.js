@@ -21,8 +21,8 @@ class Foo {
   static set [_computedKey](v) {}
 }
 _Foo = Foo;
-function _set_a(v) {
-  _call_a(this, v);
+function _set_a(_this, v) {
+  _call_a(_this, v);
 }
 (() => {
   [_call_a, _initStatic] = babelHelpers.applyDecs2203R(_Foo, [[dec, 9, "a"], [dec, 9, "a", function (v) {}], [dec, 9, "b"], [dec, 9, "c"], [dec, 9, 0], [dec, 9, 1], [dec, 9, 2n], [dec, 9, 3n], [dec, 9, _computedKey]], []).e;

@@ -173,16 +173,16 @@ new (_B = /*#__PURE__*/new WeakMap(), (_temp = class extends babelHelpers.identi
     set setter(x) {}
     static set getter(x) {}
     get accessor() {
-      return babelHelpers.classPrivateFieldGet2(this, _A);
+      return babelHelpers.classPrivateFieldGet2(_A, this);
     }
     set accessor(v) {
-      babelHelpers.classPrivateFieldSet2(this, _A, v);
+      babelHelpers.classPrivateFieldSet2(_A, this, v);
     }
     static get accessor() {
-      return babelHelpers.classPrivateFieldGet2(Foo, _B);
+      return babelHelpers.classPrivateFieldGet2(_B, Foo);
     }
     static set accessor(v) {
-      babelHelpers.classPrivateFieldSet2(Foo, _B, v);
+      babelHelpers.classPrivateFieldSet2(_B, Foo, v);
     }
   }
   _Foo2 = Foo;

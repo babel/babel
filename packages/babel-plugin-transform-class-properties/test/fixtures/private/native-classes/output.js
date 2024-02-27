@@ -7,7 +7,7 @@ class Foo {
     return _foo._;
   }
   test() {
-    return babelHelpers.classPrivateFieldGet2(this, _bar);
+    return babelHelpers.classPrivateFieldGet2(_bar, this);
   }
 }
 var _foo = {

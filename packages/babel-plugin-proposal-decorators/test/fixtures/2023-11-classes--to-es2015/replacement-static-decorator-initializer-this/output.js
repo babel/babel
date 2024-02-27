@@ -25,10 +25,10 @@ new (_A = /*#__PURE__*/new WeakMap(), (_temp = class extends babelHelpers.identi
 }, (_Foo2 => {
   class Foo {
     static get accessor() {
-      return babelHelpers.classPrivateFieldGet2(Foo, _A);
+      return babelHelpers.classPrivateFieldGet2(_A, Foo);
     }
     static set accessor(v) {
-      babelHelpers.classPrivateFieldSet2(Foo, _A, v);
+      babelHelpers.classPrivateFieldSet2(_A, Foo, v);
     }
     static get getter() {}
     static set setter(_) {}

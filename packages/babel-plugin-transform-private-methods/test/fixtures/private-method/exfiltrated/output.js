@@ -4,7 +4,7 @@ class Foo {
   constructor() {
     babelHelpers.classPrivateMethodInitSpec(this, _Foo_brand);
     if (exfiltrated === undefined) {
-      exfiltrated = babelHelpers.assertClassBrand(this, _Foo_brand, _privateMethod);
+      exfiltrated = babelHelpers.assertClassBrand(_Foo_brand, this, _privateMethod);
     }
   }
 }

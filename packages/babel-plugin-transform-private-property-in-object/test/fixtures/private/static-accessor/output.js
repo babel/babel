@@ -12,4 +12,4 @@ let Foo = /*#__PURE__*/function () {
   }]);
   return Foo;
 }();
-function _get_foo() {}
+function _get_foo(_this) {}

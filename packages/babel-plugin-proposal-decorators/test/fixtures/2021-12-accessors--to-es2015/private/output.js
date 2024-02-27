@@ -11,24 +11,24 @@ class Foo {
   }
 }
 _Foo = Foo;
-function _set_a2(v) {
-  _set_a(this, v);
+function _set_a2(_this, v) {
+  _set_a(_this, v);
 }
-function _get_a2() {
-  return _get_a(this);
+function _get_a2(_this2) {
+  return _get_a(_this2);
 }
-function _set_b2(v) {
-  _set_b(this, v);
+function _set_b2(_this3, v) {
+  _set_b(_this3, v);
 }
-function _get_b2() {
-  return _get_b(this);
+function _get_b2(_this4) {
+  return _get_b(_this4);
 }
 [_init_a, _get_a, _set_a, _init_b, _get_b, _set_b, _initProto] = babelHelpers.applyDecs(_Foo, [[dec, 1, "a", function () {
-  return babelHelpers.classPrivateFieldGet2(this, _A);
+  return babelHelpers.classPrivateFieldGet2(_A, this);
 }, function (value) {
-  babelHelpers.classPrivateFieldSet2(this, _A, value);
+  babelHelpers.classPrivateFieldSet2(_A, this, value);
 }], [dec, 1, "b", function () {
-  return babelHelpers.classPrivateFieldGet2(this, _B);
+  return babelHelpers.classPrivateFieldGet2(_B, this);
 }, function (value) {
-  babelHelpers.classPrivateFieldSet2(this, _B, value);
+  babelHelpers.classPrivateFieldSet2(_B, this, value);
 }]], []);

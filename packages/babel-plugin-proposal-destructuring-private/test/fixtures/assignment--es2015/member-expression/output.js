@@ -14,5 +14,5 @@ var _z = {
 (() => {
   var _p, _p2;
   let z;
-  [_x._, _p, ..._p2] = [0, _C], x = babelHelpers.assertClassBrand(_p, _C, _x)._, z = _p2;
+  [_x._, _p, ..._p2] = [0, _C], x = babelHelpers.assertClassBrand(_C, _p, _x)._, z = _p2;
 })();

@@ -1,6 +1,6 @@
 class Foo {
   static getReceiver() {
-    return babelHelpers.assertClassBrand(this, Foo, _tag)._.bind(this)``;
+    return babelHelpers.assertClassBrand(Foo, this, _tag)._.bind(this)``;
   }
 }
 var _tag = {
