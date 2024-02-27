@@ -1325,7 +1325,7 @@ type ReplaceThisState = {
   thisRef: t.Identifier;
   needsClassRef?: boolean;
   innerBinding?: t.Identifier | null;
-  argumentsPath?: t.NodePath<t.Identifier>[];
+  argumentsPath?: NodePath<t.Identifier>[];
 };
 
 type ReplaceInnerBindingReferenceState = ReplaceThisState;
