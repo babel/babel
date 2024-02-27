@@ -1,0 +1,4 @@
+{
+  "presets": [["flow", { "experimental_useHermesParser": true }]],
+  "minNodeVersion": "12.0.0"
+}
