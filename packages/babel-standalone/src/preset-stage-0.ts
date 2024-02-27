@@ -10,7 +10,6 @@ export default (_: any, opts: any = {}) => {
     decoratorsBeforeExport,
     pipelineProposal,
     pipelineTopicToken,
-    importAssertionsVersion = "september-2020",
   } = opts;
 
   return {
@@ -25,7 +24,6 @@ export default (_: any, opts: any = {}) => {
           decoratorsBeforeExport,
           pipelineProposal,
           pipelineTopicToken,
-          importAssertionsVersion,
         },
       ],
     ],

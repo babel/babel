@@ -9,7 +9,7 @@ export default (_: any, opts: any = {}) => {
   } = opts;
 
   const plugins = [
-    babelPlugins.syntaxImportAssertions,
+    [babelPlugins.syntaxImportAttributes, { deprecatedAssertSyntax: true }],
     babelPlugins.transformUnicodeSetsRegex,
     babelPlugins.proposalDuplicateNamedCapturingGroupsRegex,
     [
@@ -21,6 +21,7 @@ export default (_: any, opts: any = {}) => {
     ],
     babelPlugins.proposalRegexpModifiers,
     babelPlugins.proposalExplicitResourceManagement,
+    babelPlugins.proposalJsonModules,
     // These are Stage 4
     ...(process.env.BABEL_8_BREAKING
       ? []

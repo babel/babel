@@ -103,6 +103,7 @@ import transformUnicodeEscapes from "@babel/plugin-transform-unicode-escapes";
 import transformUnicodeRegex from "@babel/plugin-transform-unicode-regex";
 import proposalExplicitResourceManagement from "@babel/plugin-proposal-explicit-resource-management";
 import proposalImportDefer from "@babel/plugin-proposal-import-defer";
+import proposalJsonModules from "@babel/plugin-proposal-json-modules";
 export const syntaxAsyncGenerators = makeNoopPlugin(),
   syntaxClassProperties = makeNoopPlugin(),
   syntaxClassStaticBlock = makeNoopPlugin(),
@@ -211,6 +212,7 @@ export {
   transformUnicodeRegex,
   proposalExplicitResourceManagement,
   proposalImportDefer,
+  proposalJsonModules,
 };
 export const all: { [k: string]: any } = {
   "syntax-async-generators": syntaxAsyncGenerators,
@@ -322,4 +324,5 @@ export const all: { [k: string]: any } = {
   "transform-unicode-regex": transformUnicodeRegex,
   "proposal-explicit-resource-management": proposalExplicitResourceManagement,
   "proposal-import-defer": proposalImportDefer,
+  "proposal-json-modules": proposalJsonModules,
 };
