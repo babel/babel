@@ -4,5 +4,5 @@ let Foo = /*#__PURE__*/babelHelpers.createClass(function Foo(props) {
 
   babelHelpers.classCallCheck(this, Foo);
   babelHelpers.classPrivateFieldInitSpec(this, _client, void 0);
-  [x, ...babelHelpers.toSetter(babelHelpers.classPrivateFieldSet2, [this, _client])._] = props;
+  [x, ...babelHelpers.toSetter(babelHelpers.classPrivateFieldSet2, [_client, this])._] = props;
 });

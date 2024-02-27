@@ -6,7 +6,7 @@ var _x = {
 };
 (() => {
   var [_p, ..._p2] = [_C],
-    _m = babelHelpers.assertClassBrand(_p, _C, _x)._,
+    _m = babelHelpers.assertClassBrand(_C, _p, _x)._,
     x = _m === void 0 ? 1 : _m,
     z = _p2;
 })();

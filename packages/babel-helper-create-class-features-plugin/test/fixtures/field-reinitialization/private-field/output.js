@@ -11,6 +11,6 @@ class Derived extends Base {
     babelHelpers.classPrivateFieldInitSpec(this, _foo, ++counter);
   }
   static get(obj) {
-    return babelHelpers.classPrivateFieldGet2(obj, _foo);
+    return babelHelpers.classPrivateFieldGet2(_foo, obj);
   }
 }

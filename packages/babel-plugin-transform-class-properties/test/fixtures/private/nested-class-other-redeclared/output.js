@@ -20,14 +20,14 @@ let Foo = /*#__PURE__*/function () {
         babelHelpers.createClass(Nested, [{
           key: "test",
           value: function test() {
-            babelHelpers.classPrivateFieldGet2(this, _foo);
-            babelHelpers.classPrivateFieldGet2(this, _bar2);
+            babelHelpers.classPrivateFieldGet2(_foo, this);
+            babelHelpers.classPrivateFieldGet2(_bar2, this);
           }
         }]);
         return Nested;
       }();
-      babelHelpers.classPrivateFieldGet2(this, _foo);
-      babelHelpers.classPrivateFieldGet2(this, _bar);
+      babelHelpers.classPrivateFieldGet2(_foo, this);
+      babelHelpers.classPrivateFieldGet2(_bar, this);
     }
   }]);
   return Foo;

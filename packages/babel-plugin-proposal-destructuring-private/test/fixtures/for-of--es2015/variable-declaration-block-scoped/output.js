@@ -8,7 +8,7 @@ var _x = {
 (() => {
   const a = "a";
   for (const _ref of [_C]) {
-    const x = babelHelpers.assertClassBrand(_ref, _C, _x)._,
+    const x = babelHelpers.assertClassBrand(_C, _ref, _x)._,
       {
         [a]: _
       } = _ref;

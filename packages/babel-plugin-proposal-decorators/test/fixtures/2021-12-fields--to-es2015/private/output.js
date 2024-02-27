@@ -10,11 +10,11 @@ class Foo {
 }
 _Foo = Foo;
 [_init_a, _init_b] = babelHelpers.applyDecs(_Foo, [[dec, 0, "a", function () {
-  return babelHelpers.classPrivateFieldGet2(this, _a);
+  return babelHelpers.classPrivateFieldGet2(_a, this);
 }, function (value) {
-  babelHelpers.classPrivateFieldSet2(this, _a, value);
+  babelHelpers.classPrivateFieldSet2(_a, this, value);
 }], [dec, 0, "b", function () {
-  return babelHelpers.classPrivateFieldGet2(this, _b);
+  return babelHelpers.classPrivateFieldGet2(_b, this);
 }, function (value) {
-  babelHelpers.classPrivateFieldSet2(this, _b, value);
+  babelHelpers.classPrivateFieldSet2(_b, this, value);
 }]], []);

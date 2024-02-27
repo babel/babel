@@ -12,8 +12,8 @@ let Foo = /*#__PURE__*/function () {
     key: "test",
     value: function test(other) {
       var _other$obj;
-      babelHelpers.classPrivateFieldGet2(this, _foo).call(this);
-      babelHelpers.classPrivateFieldGet2(_other$obj = other.obj, _foo).call(_other$obj);
+      babelHelpers.classPrivateFieldGet2(_foo, this).call(this);
+      babelHelpers.classPrivateFieldGet2(_foo, _other$obj = other.obj).call(_other$obj);
     }
   }]);
   return Foo;

@@ -5,7 +5,7 @@ class C {
     babelHelpers.classPrivateFieldInitSpec(this, _m, void 0);
     const o = null;
     const n = this;
-    const p = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGet2(o, _m).call(o, ...c, 1);
-    const q = n === null || n === void 0 ? void 0 : (_babelHelpers$classPr = babelHelpers.classPrivateFieldGet2(n, _m)) === null || _babelHelpers$classPr === void 0 ? void 0 : _babelHelpers$classPr.call(n, ...c, 1);
+    const p = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGet2(_m, o).call(o, ...c, 1);
+    const q = n === null || n === void 0 ? void 0 : (_babelHelpers$classPr = babelHelpers.classPrivateFieldGet2(_m, n)) === null || _babelHelpers$classPr === void 0 ? void 0 : _babelHelpers$classPr.call(n, ...c, 1);
   }
 }

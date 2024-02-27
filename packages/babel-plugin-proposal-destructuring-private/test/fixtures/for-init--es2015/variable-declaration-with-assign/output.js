@@ -6,7 +6,7 @@ var _x = {
 };
 (() => {
   let y;
-  for (let x = babelHelpers.assertClassBrand((_m = _C, y = babelHelpers.assertClassBrand(_m, _C, _x)._, _m), _C, _x)._;;) {
+  for (let x = babelHelpers.assertClassBrand(_C, (_m = _C, y = babelHelpers.assertClassBrand(_C, _m, _x)._, _m), _x)._;;) {
     var _m;
     break;
   }

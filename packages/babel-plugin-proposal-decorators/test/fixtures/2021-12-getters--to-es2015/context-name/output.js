@@ -21,8 +21,8 @@ class Foo {
   static get [_computedKey]() {}
 }
 _Foo = Foo;
-function _get_a() {
-  return _call_a(this);
+function _get_a(_this) {
+  return _call_a(_this);
 }
 (() => {
   [_call_a, _initStatic] = babelHelpers.applyDecs(_Foo, [[dec, 8, "a"], [dec, 8, "a", function () {}], [dec, 8, "b"], [dec, 8, "c"], [dec, 8, 0], [dec, 8, 1], [dec, 8, 2n], [dec, 8, 3n], [dec, 8, _computedKey]], []);

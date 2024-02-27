@@ -12,6 +12,6 @@ _C = C;
   try {
     throw new _C();
   } catch (_e) {
-    let x = babelHelpers.classPrivateFieldGet2(_e, _x);
+    let x = babelHelpers.classPrivateFieldGet2(_x, _e);
   }
 })();

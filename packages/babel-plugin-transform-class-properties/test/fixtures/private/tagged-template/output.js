@@ -9,7 +9,7 @@ let Foo = /*#__PURE__*/function () {
   babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test() {
-      babelHelpers.classPrivateFieldGet2(this, _tag).bind(this)``;
+      babelHelpers.classPrivateFieldGet2(_tag, this).bind(this)``;
     }
   }]);
   return Foo;

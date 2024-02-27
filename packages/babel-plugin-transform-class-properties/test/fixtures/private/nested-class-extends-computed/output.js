@@ -21,7 +21,7 @@ let Foo = /*#__PURE__*/function () {
           return _this;
         }
         return babelHelpers.createClass(Nested);
-      }((_babelHelpers$classPr = babelHelpers.classPrivateFieldGet2(this, _foo), /*#__PURE__*/function () {
+      }((_babelHelpers$classPr = babelHelpers.classPrivateFieldGet2(_foo, this), /*#__PURE__*/function () {
         function _class() {
           babelHelpers.classCallCheck(this, _class);
           babelHelpers.defineProperty(this, _babelHelpers$classPr, 2);

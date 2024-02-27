@@ -8,7 +8,7 @@ class C {
 _C = C;
 (() => {
   for (const _ref of [_C]) {
-    x = babelHelpers.classPrivateFieldGet2(_ref, _x);
+    x = babelHelpers.classPrivateFieldGet2(_x, _ref);
     ;
   }
 })();

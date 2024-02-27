@@ -10,10 +10,10 @@ let Foo = /*#__PURE__*/function () {
     key: "test",
     value: function test(other) {
       var _other$obj;
-      babelHelpers.classPrivateFieldSet2(this, _foo, babelHelpers.classPrivateFieldGet2(this, _foo) + 1);
-      babelHelpers.classPrivateFieldSet2(this, _foo, 2);
-      babelHelpers.classPrivateFieldSet2(_other$obj = other.obj, _foo, babelHelpers.classPrivateFieldGet2(_other$obj, _foo) + 1);
-      babelHelpers.classPrivateFieldSet2(other.obj, _foo, 2);
+      babelHelpers.classPrivateFieldSet2(_foo, this, babelHelpers.classPrivateFieldGet2(_foo, this) + 1);
+      babelHelpers.classPrivateFieldSet2(_foo, this, 2);
+      babelHelpers.classPrivateFieldSet2(_foo, _other$obj = other.obj, babelHelpers.classPrivateFieldGet2(_foo, _other$obj) + 1);
+      babelHelpers.classPrivateFieldSet2(_foo, other.obj, 2);
     }
   }]);
   return Foo;

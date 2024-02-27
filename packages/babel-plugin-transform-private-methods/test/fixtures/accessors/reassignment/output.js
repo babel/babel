@@ -10,6 +10,6 @@ class Foo {
     return this;
   }
 }
-function _get_privateFieldValue() {
+function _get_privateFieldValue(_this) {
   return 42;
 }

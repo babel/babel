@@ -9,7 +9,7 @@ var _x = {
 (() => {
   var _p, _m;
   var x, z;
-  [..._p] = [_C], _m = babelHelpers.assertClassBrand(_p[0], _C, _x)._, x = _m === void 0 ? 1 : _m, z = babelHelpers.objectWithoutProperties(_p, _excluded);
+  [..._p] = [_C], _m = babelHelpers.assertClassBrand(_C, _p[0], _x)._, x = _m === void 0 ? 1 : _m, z = babelHelpers.objectWithoutProperties(_p, _excluded);
   result = {
     x,
     z
