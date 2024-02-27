@@ -11,7 +11,7 @@ export default declarePreset((api, opts) => {
   const {
     all,
     allowDeclareFields,
-    ignoreExtensions = false,
+    ignoreExtensions = process.env.BABEL_8_BREAKING ? false : true,
     experimental_useHermesParser: useHermesParser = false,
   } = normalizeOptions(opts);
 
@@ -33,22 +33,16 @@ export default declarePreset((api, opts) => {
     plugins.unshift("babel-plugin-syntax-hermes-parser");
   }
 
-  // TODO: In Babel 7, ignoreExtensions is always true.
-  // Allow setting it to false in the next minor.
-  if (process.env.BABEL_8_BREAKING ? ignoreExtensions : true) {
+  if (ignoreExtensions) {
     return { plugins };
   }
 
-  if (process.env.BABEL_8_BREAKING) {
-    return {
-      overrides: [
-        {
-          test: filename => filename == null || !/\.tsx?$/.test(filename),
-          plugins,
-        },
-      ],
-    };
-  } else {
-    // unreachable
-  }
+  return {
+    overrides: [
+      {
+        test: filename => filename == null || !/\.tsx?$/.test(filename),
+        plugins,
+      },
+    ],
+  };
 });
