@@ -1261,19 +1261,6 @@ function buildPrivateMethodDeclaration(
   const isGetter = getId && !getterDeclared && params.length === 0;
   const isSetter = setId && !setterDeclared && params.length > 0;
 
-  if (
-    (process.env.BABEL_8_BREAKING || newHelpers(file)) &&
-    (isGetter || isSetter) &&
-    !privateFieldsAsProperties
-  ) {
-    const thisArg = prop.get("body").scope.generateUidIdentifier("this");
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    prop.traverse(thisContextVisitor, {
-      thisRef: thisArg,
-    });
-    params.unshift(t.cloneNode(thisArg));
-  }
-
   let declId = methodId;
 
   if (isGetter) {
@@ -1294,6 +1281,43 @@ function buildPrivateMethodDeclaration(
     declId = id;
   }
 
+  if (
+    (process.env.BABEL_8_BREAKING || newHelpers(file)) &&
+    (isGetter || isSetter) &&
+    !privateFieldsAsProperties
+  ) {
+    const thisArg = prop.get("body").scope.generateUidIdentifier("this");
+    const state: ReplaceThisState = {
+      thisPaths: [],
+    };
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    prop.traverse(thisContextVisitor, state);
+    if (state.hasArguments) {
+      return t.variableDeclaration("var", [
+        t.variableDeclarator(
+          t.cloneNode(declId),
+          t.callExpression(file.addHelper("curryThis"), [
+            inheritPropComments(
+              t.functionExpression(
+                t.cloneNode(declId),
+                // @ts-expect-error params for ClassMethod has TSParameterProperty
+                params,
+                body,
+                generator,
+                async,
+              ),
+              prop,
+            ),
+          ]),
+        ),
+      ]);
+    } else {
+      for (const path of state.thisPaths) {
+        path.replaceWith(t.cloneNode(thisArg));
+      }
+      params.unshift(t.cloneNode(thisArg));
+    }
+  }
   return inheritPropComments(
     t.functionDeclaration(
       t.cloneNode(declId),
@@ -1308,7 +1332,9 @@ function buildPrivateMethodDeclaration(
 }
 
 type ReplaceThisState = {
-  thisRef: t.Identifier;
+  thisRef?: t.Identifier;
+  thisPaths?: NodePath<t.ThisExpression>[];
+  hasArguments?: boolean;
   needsClassRef?: boolean;
   innerBinding?: t.Identifier | null;
 };
@@ -1317,6 +1343,11 @@ type ReplaceInnerBindingReferenceState = ReplaceThisState;
 
 const thisContextVisitor = traverse.visitors.merge<ReplaceThisState>([
   {
+    Identifier(path, state) {
+      if (path.node.name === "arguments") {
+        state.hasArguments = true;
+      }
+    },
     UnaryExpression(path) {
       // Replace `delete this` with `true`
       const { node } = path;
@@ -1329,7 +1360,11 @@ const thisContextVisitor = traverse.visitors.merge<ReplaceThisState>([
     },
     ThisExpression(path, state) {
       state.needsClassRef = true;
-      path.replaceWith(t.cloneNode(state.thisRef));
+      if (state.thisPaths) {
+        state.thisPaths.push(path);
+      } else {
+        path.replaceWith(t.cloneNode(state.thisRef));
+      }
     },
     MetaProperty(path) {
       const { node, scope } = path;
@@ -1456,7 +1491,7 @@ export function buildFieldsInitNodes(
   const instanceNodes: t.ExpressionStatement[] = [];
   let lastInstanceNodeReturnsThis = false;
   // These nodes are pure and can be moved to the closest statement position
-  const pureStaticNodes: t.FunctionDeclaration[] = [];
+  const pureStaticNodes: (t.FunctionDeclaration | t.VariableDeclaration)[] = [];
   let classBindingNode: t.ExpressionStatement | null = null;
 
   const getSuperRef = t.isIdentifier(superRef)

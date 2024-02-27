@@ -108,6 +108,11 @@ export default Object.freeze({
     "7.0.0-beta.0",
     'import setPrototypeOf from"setPrototypeOf";import isNativeReflectConstruct from"isNativeReflectConstruct";export default function _construct(t,e,r){if(isNativeReflectConstruct())return Reflect.construct.apply(null,arguments);var o=[null];o.push.apply(o,e);var p=new(t.bind.apply(t,o));return r&&setPrototypeOf(p,r.prototype),p}',
   ),
+  // size: 103, gzip size: 103
+  curryThis: helper(
+    "7.24.0",
+    "export default function _curryThis(r){return function(n){return r.apply(n,[].slice.call(arguments,1))}}",
+  ),
   // size: 130, gzip size: 130
   defineAccessor: helper(
     "7.20.7",

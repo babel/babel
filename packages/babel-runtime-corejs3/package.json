@@ -188,6 +188,15 @@
       "./helpers/construct.js"
     ],
     "./helpers/esm/construct": "./helpers/esm/construct.js",
+    "./helpers/curryThis": [
+      {
+        "node": "./helpers/curryThis.js",
+        "import": "./helpers/esm/curryThis.js",
+        "default": "./helpers/curryThis.js"
+      },
+      "./helpers/curryThis.js"
+    ],
+    "./helpers/esm/curryThis": "./helpers/esm/curryThis.js",
     "./helpers/defineAccessor": [
       {
         "node": "./helpers/defineAccessor.js",
