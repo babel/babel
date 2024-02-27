@@ -7,13 +7,10 @@ class Foo {
     babelHelpers.defineProperty(this, "value", (_initProto(this), 1));
   }
   getA() {
-    return babelHelpers.classPrivateGetter(_Foo_brand, this, _get_a);
+    return babelHelpers.classPrivateGetter(_Foo_brand, this, _call_a);
   }
 }
 _Foo = Foo;
-function _get_a(_this) {
-  return _call_a(_this);
-}
 [_call_a, _initProto] = babelHelpers.applyDecs2301(_Foo, [[dec, 3, "a", function () {
   return this.value;
 }]], [], _ => _Foo_brand.has(babelHelpers.checkInRHS(_))).e;

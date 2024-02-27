@@ -2,13 +2,10 @@ var _initStatic, _call_a, _Foo;
 const dec = () => {};
 class Foo {
   static getA() {
-    return babelHelpers.classPrivateGetter(Foo, this, _get_a);
+    return babelHelpers.classPrivateGetter(Foo, this, _call_a);
   }
 }
 _Foo = Foo;
-function _get_a(_this) {
-  return _call_a(_this);
-}
 (() => {
   [_call_a, _initStatic] = babelHelpers.applyDecs2305(_Foo, [[dec, 11, "a", function () {
     return this.value;
