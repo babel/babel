@@ -18,12 +18,12 @@ let Foo = /*#__PURE__*/function () {
         babelHelpers.createClass(Nested, [{
           key: "test",
           value: function test() {
-            babelHelpers.classPrivateFieldGet2(this, _foo2);
+            babelHelpers.classPrivateFieldGet2(_foo2, this);
           }
         }]);
         return Nested;
       }();
-      babelHelpers.classPrivateFieldGet2(this, _foo);
+      babelHelpers.classPrivateFieldGet2(_foo, this);
     }
   }]);
   return Foo;

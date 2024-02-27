@@ -5,6 +5,6 @@ class Foo {
   }
 }
 function _tag() {
-  babelHelpers.assertClassBrand(this, _Foo_brand, _tag).bind(this)``;
+  babelHelpers.assertClassBrand(_Foo_brand, this, _tag).bind(this)``;
 }
 new Foo();

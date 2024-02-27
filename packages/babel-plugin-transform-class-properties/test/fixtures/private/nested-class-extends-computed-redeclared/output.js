@@ -22,7 +22,7 @@ let Foo = /*#__PURE__*/function () {
           return _this;
         }
         return babelHelpers.createClass(Nested);
-      }((_foo3 = /*#__PURE__*/new WeakMap(), _babelHelpers$classPr = babelHelpers.classPrivateFieldGet2(this, _foo3), /*#__PURE__*/function () {
+      }((_foo3 = /*#__PURE__*/new WeakMap(), _babelHelpers$classPr = babelHelpers.classPrivateFieldGet2(_foo3, this), /*#__PURE__*/function () {
         function _class() {
           babelHelpers.classCallCheck(this, _class);
           babelHelpers.classPrivateFieldInitSpec(this, _foo3, 2);

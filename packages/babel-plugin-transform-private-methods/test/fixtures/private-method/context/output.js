@@ -5,13 +5,13 @@ class Foo {
     this.status = status;
   }
   getCurrentStatus() {
-    return babelHelpers.assertClassBrand(this, _Foo_brand, _getStatus).call(this);
+    return babelHelpers.assertClassBrand(_Foo_brand, this, _getStatus).call(this);
   }
   setCurrentStatus(newStatus) {
     this.status = newStatus;
   }
   getFakeStatus(fakeStatus) {
-    var fakeGetStatus = babelHelpers.assertClassBrand(this, _Foo_brand, _getStatus);
+    var fakeGetStatus = babelHelpers.assertClassBrand(_Foo_brand, this, _getStatus);
     return function () {
       return fakeGetStatus.call({
         status: fakeStatus
@@ -21,7 +21,7 @@ class Foo {
   getFakeStatusFunc() {
     return {
       status: 'fake-status',
-      getFakeStatus: babelHelpers.assertClassBrand(this, _Foo_brand, _getStatus)
+      getFakeStatus: babelHelpers.assertClassBrand(_Foo_brand, this, _getStatus)
     };
   }
 }

@@ -12,7 +12,7 @@ class Cl {
     this.self, 1([(this.self, babelHelpers.readOnlyError("#privateFieldValue"))._] = [1]), babelHelpers.readOnlyError("#privateFieldValue");
   }
 }
-function _get_privateFieldValue() {
-  return babelHelpers.classPrivateFieldGet2(this, _privateField);
+function _get_privateFieldValue(_this) {
+  return babelHelpers.classPrivateFieldGet2(_privateField, _this);
 }
 var cl = new Cl();

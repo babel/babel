@@ -11,5 +11,5 @@ let Outer = /*#__PURE__*/babelHelpers.createClass(function Outer() {
       return babelHelpers.callSuper(this, Test, arguments);
     }
     return babelHelpers.createClass(Test);
-  }(babelHelpers.classPrivateFieldGet2(this, _outer));
+  }(babelHelpers.classPrivateFieldGet2(_outer, this));
 });

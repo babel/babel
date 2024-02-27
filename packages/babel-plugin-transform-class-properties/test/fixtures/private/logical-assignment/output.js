@@ -12,9 +12,9 @@ class Foo {
   }
   test() {
     var _this$self;
-    babelHelpers.classPrivateFieldGet2(this, _nullish) ?? babelHelpers.classPrivateFieldSet2(this, _nullish, 42);
-    babelHelpers.classPrivateFieldGet2(this, _and) && babelHelpers.classPrivateFieldSet2(this, _and, 0);
-    babelHelpers.classPrivateFieldGet2(this, _or) || babelHelpers.classPrivateFieldSet2(this, _or, 0);
-    babelHelpers.classPrivateFieldGet2(_this$self = this.self(), _nullish) ?? babelHelpers.classPrivateFieldSet2(_this$self, _nullish, 42);
+    babelHelpers.classPrivateFieldGet2(_nullish, this) ?? babelHelpers.classPrivateFieldSet2(_nullish, this, 42);
+    babelHelpers.classPrivateFieldGet2(_and, this) && babelHelpers.classPrivateFieldSet2(_and, this, 0);
+    babelHelpers.classPrivateFieldGet2(_or, this) || babelHelpers.classPrivateFieldSet2(_or, this, 0);
+    babelHelpers.classPrivateFieldGet2(_nullish, _this$self = this.self()) ?? babelHelpers.classPrivateFieldSet2(_nullish, _this$self, 42);
   }
 }

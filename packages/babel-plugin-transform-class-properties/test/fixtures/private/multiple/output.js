@@ -5,5 +5,5 @@ let Foo = /*#__PURE__*/babelHelpers.createClass(function Foo() {
 
   babelHelpers.classCallCheck(this, Foo);
   babelHelpers.classPrivateFieldInitSpec(this, _x, 0);
-  babelHelpers.classPrivateFieldInitSpec(this, _y, babelHelpers.classPrivateFieldGet2(this, _x));
+  babelHelpers.classPrivateFieldInitSpec(this, _y, babelHelpers.classPrivateFieldGet2(_x, this));
 });

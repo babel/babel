@@ -1,9 +1,9 @@
 class Base {
   static getThis() {
-    return babelHelpers.assertClassBrand(this, Base, _foo)._;
+    return babelHelpers.assertClassBrand(Base, this, _foo)._;
   }
   static updateThis(val) {
-    return _foo._ = babelHelpers.assertClassBrand(this, Base, val);
+    return _foo._ = babelHelpers.assertClassBrand(Base, this, val);
   }
   static getClass() {
     return _foo._;
@@ -17,7 +17,7 @@ var _foo = {
 };
 class Sub1 extends Base {
   static update(val) {
-    return _foo2._ = babelHelpers.assertClassBrand(this, Sub1, val);
+    return _foo2._ = babelHelpers.assertClassBrand(Sub1, this, val);
   }
 }
 var _foo2 = {

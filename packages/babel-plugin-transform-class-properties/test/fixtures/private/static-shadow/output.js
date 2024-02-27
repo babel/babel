@@ -3,7 +3,7 @@ class Test {
     const _Test2 = 2;
     const func = () => {
       const _Test = 3;
-      return babelHelpers.assertClassBrand(this, Test, _x)._ + _Test;
+      return babelHelpers.assertClassBrand(Test, this, _x)._ + _Test;
     };
     return func() + _Test2;
   }

@@ -4,9 +4,9 @@ class A {
     babelHelpers.classPrivateMethodInitSpec(this, _A_brand);
   }
   m() {
-    [babelHelpers.toSetter(babelHelpers.classPrivateSetter, [this, _A_brand, _set_setter])._] = [1];
+    [babelHelpers.toSetter(babelHelpers.classPrivateSetter, [_A_brand, _set_setter, this])._] = [1];
     [(this, babelHelpers.readOnlyError("#getter"))._] = [1];
   }
 }
-function _set_setter(v) {}
-function _get_getter() {}
+function _set_setter(_this, v) {}
+function _get_getter(_this2) {}

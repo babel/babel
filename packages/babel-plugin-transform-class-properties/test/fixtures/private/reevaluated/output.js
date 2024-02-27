@@ -5,16 +5,16 @@ function classFactory() {
       babelHelpers.classPrivateFieldInitSpec(this, _foo, "foo");
     }
     instance() {
-      return babelHelpers.classPrivateFieldGet2(this, _foo);
+      return babelHelpers.classPrivateFieldGet2(_foo, this);
     }
     static() {
-      return babelHelpers.assertClassBrand(Foo, _Foo, _bar)._;
+      return babelHelpers.assertClassBrand(_Foo, Foo, _bar)._;
     }
     static instance(inst) {
-      return babelHelpers.classPrivateFieldGet2(inst, _foo);
+      return babelHelpers.classPrivateFieldGet2(_foo, inst);
     }
     static static() {
-      return babelHelpers.assertClassBrand(Foo, _Foo, _bar)._;
+      return babelHelpers.assertClassBrand(_Foo, Foo, _bar)._;
     }
   }, _bar = {
     _: "bar"
