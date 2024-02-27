@@ -3613,9 +3613,9 @@ __metadata:
     "@babel/preset-env": "workspace:^"
     "@babel/runtime": "workspace:^"
     "@babel/runtime-corejs3": "workspace:^"
-    babel-plugin-polyfill-corejs2: "npm:^0.4.8"
-    babel-plugin-polyfill-corejs3: "npm:^0.9.0"
-    babel-plugin-polyfill-regenerator: "npm:^0.5.5"
+    babel-plugin-polyfill-corejs2: "condition:BABEL_8_BREAKING ? : ^0.4.8 (peer:@babel/core)"
+    babel-plugin-polyfill-corejs3: "condition:BABEL_8_BREAKING ? : ^0.9.0 (peer:@babel/core)"
+    babel-plugin-polyfill-regenerator: "condition:BABEL_8_BREAKING ? : ^0.5.5 (peer:@babel/core)"
     make-dir: "condition:BABEL_8_BREAKING ? : ^2.1.0"
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
   peerDependencies:
@@ -6865,6 +6865,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"babel-plugin-polyfill-corejs2@condition:BABEL_8_BREAKING ? : ^0.4.8 (peer:@babel/core)":
+  version: 0.0.0-condition-76318c
+  resolution: "babel-plugin-polyfill-corejs2@condition:BABEL_8_BREAKING?:^0.4.8(peer:@babel/core)#76318c"
+  dependencies:
+    babel-plugin-polyfill-corejs2-BABEL_8_BREAKING-false: "npm:babel-plugin-polyfill-corejs2@^0.4.8"
+  peerDependencies:
+    "@babel/core": "*"
+  checksum: 10/26970d2a630f21751e944ba54e854ff0edc46d589606c21b2d75ea131fffeff41bb7074fb285d4aa228224b65a5dc72641d9af433edecb8591fbac43ddfd167d
+  languageName: node
+  linkType: hard
+
 "babel-plugin-polyfill-corejs2@condition:BABEL_8_BREAKING ? : ^0.4.8 (peer:@babel/core) (esm:default)":
   version: 0.0.0-condition-ff3e86
   resolution: "babel-plugin-polyfill-corejs2@condition:BABEL_8_BREAKING?:^0.4.8(esm:default)(peer:@babel/core)#ff3e86"
@@ -6873,6 +6884,29 @@ __metadata:
   peerDependencies:
     "@babel/core": "*"
   checksum: 10/1b08dd64a3574f00a545c81fdfaade467820a1a3eb77c25254abf17bf3165cd8727b813ea82cf5459460fd79a8dc6c81581b4aa7cb0e75aea524ec7910eb6a7f
+  languageName: node
+  linkType: hard
+
+"babel-plugin-polyfill-corejs3-BABEL_8_BREAKING-false@npm:babel-plugin-polyfill-corejs3@^0.9.0, babel-plugin-polyfill-corejs3@npm:^0.9.0":
+  version: 0.9.0
+  resolution: "babel-plugin-polyfill-corejs3@npm:0.9.0"
+  dependencies:
+    "@babel/helper-define-polyfill-provider": "npm:^0.5.0"
+    core-js-compat: "npm:^3.34.0"
+  peerDependencies:
+    "@babel/core": ^7.4.0 || ^8.0.0-0 <8.0.0
+  checksum: 10/efdf9ba82e7848a2c66e0522adf10ac1646b16f271a9006b61a22f976b849de22a07c54c8826887114842ccd20cc9a4617b61e8e0789227a74378ab508e715cd
+  languageName: node
+  linkType: hard
+
+"babel-plugin-polyfill-corejs3@condition:BABEL_8_BREAKING ? : ^0.9.0 (peer:@babel/core)":
+  version: 0.0.0-condition-e49192
+  resolution: "babel-plugin-polyfill-corejs3@condition:BABEL_8_BREAKING?:^0.9.0(peer:@babel/core)#e49192"
+  dependencies:
+    babel-plugin-polyfill-corejs3-BABEL_8_BREAKING-false: "npm:babel-plugin-polyfill-corejs3@^0.9.0"
+  peerDependencies:
+    "@babel/core": "*"
+  checksum: 10/414888820e4425e14d7e78762e87d807f27ba8ae5e489b0476c280260c468c9fe386da411cede15ce9b5661f5941d6265d3046061c1f8c83bf5b1555df50a33d
   languageName: node
   linkType: hard
 
@@ -6885,18 +6919,6 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.4.0 || ^8.0.0-0 <8.0.0
   checksum: 10/defbc6de3d309c9639dd31223b5011707fcc0384037ac5959a1aefe16eb314562e1c1e5cfbce0af14a220d639ef92dfe5baf66664e9e6054656aca2841677622
-  languageName: node
-  linkType: hard
-
-"babel-plugin-polyfill-corejs3@npm:^0.9.0":
-  version: 0.9.0
-  resolution: "babel-plugin-polyfill-corejs3@npm:0.9.0"
-  dependencies:
-    "@babel/helper-define-polyfill-provider": "npm:^0.5.0"
-    core-js-compat: "npm:^3.34.0"
-  peerDependencies:
-    "@babel/core": ^7.4.0 || ^8.0.0-0 <8.0.0
-  checksum: 10/efdf9ba82e7848a2c66e0522adf10ac1646b16f271a9006b61a22f976b849de22a07c54c8826887114842ccd20cc9a4617b61e8e0789227a74378ab508e715cd
   languageName: node
   linkType: hard
 
@@ -6919,6 +6941,17 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.4.0 || ^8.0.0-0 <8.0.0
   checksum: 10/3a9b4828673b23cd648dcfb571eadcd9d3fadfca0361d0a7c6feeb5a30474e92faaa49f067a6e1c05e49b6a09812879992028ff3ef3446229ff132d6e1de7eb6
+  languageName: node
+  linkType: hard
+
+"babel-plugin-polyfill-regenerator@condition:BABEL_8_BREAKING ? : ^0.5.5 (peer:@babel/core)":
+  version: 0.0.0-condition-6ba135
+  resolution: "babel-plugin-polyfill-regenerator@condition:BABEL_8_BREAKING?:^0.5.5(peer:@babel/core)#6ba135"
+  dependencies:
+    babel-plugin-polyfill-regenerator-BABEL_8_BREAKING-false: "npm:babel-plugin-polyfill-regenerator@^0.5.5"
+  peerDependencies:
+    "@babel/core": "*"
+  checksum: 10/ebf04abb42d441d75769987e0a13c10ba078db8b344e66fcf8170b685402a4459174ce8dc6b75d62a7d716816fa78701512a044479d24495cf760f3dd70d6f03
   languageName: node
   linkType: hard
 

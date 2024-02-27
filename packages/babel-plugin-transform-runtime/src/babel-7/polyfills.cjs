@@ -6,12 +6,17 @@ if (process.env.BABEL_8_BREAKING) {
 }
 
 const pluginCorejs2 = require("babel-plugin-polyfill-corejs2").default;
+const pluginCorejs3 = require("babel-plugin-polyfill-corejs3").default;
 const pluginRegenerator = require("babel-plugin-polyfill-regenerator").default;
 
 const pluginsCompat = "#__secret_key__@babel/runtime__compatibility";
 
 function createCorejs2Plugin(options) {
   return (api, _, filename) => pluginCorejs2(api, options, filename);
+}
+
+function createCorejs3Plugin(options) {
+  return (api, _, filename) => pluginCorejs3(api, options, filename);
 }
 
 function createRegeneratorPlugin(options, useRuntimeRegenerator, corejsPlugin) {
@@ -28,7 +33,6 @@ module.exports = function createBasePolyfillsPlugin(
   { corejs, regenerator = true },
   runtimeVersion,
   absoluteImports,
-  corejs3Plugin,
 ) {
   let proposals = false;
   let rawVersion;
@@ -65,6 +69,7 @@ module.exports = function createBasePolyfillsPlugin(
   const polyfillOpts = {
     method: "usage-pure",
     absoluteImports,
+    proposals,
     [pluginsCompat]: { useBabelRuntime: true, runtimeVersion, ext: "" },
   };
 
@@ -74,7 +79,7 @@ module.exports = function createBasePolyfillsPlugin(
     corejsVersion === 2
       ? createCorejs2Plugin(polyfillOpts)
       : corejsVersion === 3
-        ? corejs3Plugin
+        ? createCorejs3Plugin(polyfillOpts)
         : null,
   );
 };
