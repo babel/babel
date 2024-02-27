@@ -1312,11 +1312,25 @@ function buildPrivateMethodDeclaration(
     (isGetter || isSetter) &&
     !privateFieldsAsProperties
   ) {
-    const thisArg = prop.get("body").scope.generateUidIdentifier("this");
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    prop.traverse(thisContextVisitor, {
+    const scope = prop.get("body").scope;
+    const thisArg = scope.generateUidIdentifier("this");
+    const state: ReplaceThisState = {
       thisRef: thisArg,
-    });
+      argumentsPath: [],
+    };
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    prop.traverse(thisContextVisitor, state);
+    if (state.argumentsPath.length) {
+      const argumentsId = scope.generateUidIdentifier("arguments");
+      scope.push({
+        id: argumentsId,
+        init: template.expression.ast`[].slice.call(arguments, 1)`,
+      });
+      for (const path of state.argumentsPath) {
+        path.replaceWith(t.cloneNode(argumentsId));
+      }
+    }
+
     params.unshift(t.cloneNode(thisArg));
   }
 
@@ -1357,12 +1371,18 @@ type ReplaceThisState = {
   thisRef: t.Identifier;
   needsClassRef?: boolean;
   innerBinding?: t.Identifier | null;
+  argumentsPath?: NodePath<t.Identifier>[];
 };
 
 type ReplaceInnerBindingReferenceState = ReplaceThisState;
 
 const thisContextVisitor = traverse.visitors.merge<ReplaceThisState>([
   {
+    Identifier(path, state) {
+      if (state.argumentsPath && path.node.name === "arguments") {
+        state.argumentsPath.push(path);
+      }
+    },
     UnaryExpression(path) {
       // Replace `delete this` with `true`
       const { node } = path;
