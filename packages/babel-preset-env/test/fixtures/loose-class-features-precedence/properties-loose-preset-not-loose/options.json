@@ -1,12 +1,14 @@
 {
   "BABEL_8_BREAKING": false,
+  "os": ["darwin", "linux"],
   "validateLogs": true,
   "presets": [
-    ["env", {
-      "targets": { "node": 10 }
-    }]
+    [
+      "env",
+      {
+        "targets": { "node": 10 }
+      }
+    ]
   ],
-  "plugins": [
-    ["transform-class-properties", { "loose": true }]
-  ]
+  "plugins": [["transform-class-properties", { "loose": true }]]
 }

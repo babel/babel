@@ -318,6 +318,7 @@ export default function generateMissingPluginMessage(
     column: number;
   },
   codeFrame: string,
+  filename: string,
 ): string {
   let helpMessage =
     `Support for the experimental syntax '${missingPluginName}' isn't currently enabled ` +
@@ -342,5 +343,17 @@ If you want to leave it as-is, add ${syntaxPluginInfo} to the 'plugins' section 
       }
     }
   }
+
+  const msgFilename =
+    filename === "unknown" ? "<name of the input file>" : filename;
+  helpMessage += `
+
+If you already added the plugin for this syntax to your config, it's possible that your config \
+isn't being loaded.
+You can re-run Babel with the BABEL_SHOW_CONFIG_FOR environment variable to show the loaded \
+configuration:
+\tnpx cross-env BABEL_SHOW_CONFIG_FOR=${msgFilename} <your build command>
+See https://babeljs.io/docs/configuration#print-effective-configs for more info.
+`;
   return helpMessage;
 }
