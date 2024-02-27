@@ -61,12 +61,6 @@ class Foo {
   }
 }
 _Foo = Foo;
-function _set_a2(_this, v) {
-  _set_a(_this, v);
-}
-function _get_a2(_this2) {
-  return _get_a(_this2);
-}
 (() => {
   [_init_a, _init_a2, _get_a, _set_a, _init_computedKey, _init_computedKey2, _init_computedKey3, _init_computedKey4, _init_computedKey5, _init_computedKey6, _init_computedKey7, _initStatic] = babelHelpers.applyDecs(_Foo, [[dec, 6, "a"], [dec, 6, "a", function () {
     return babelHelpers.assertClassBrand(_Foo, this, _B)._;

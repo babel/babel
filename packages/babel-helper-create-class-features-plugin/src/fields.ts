@@ -81,9 +81,47 @@ export function buildPrivateNamesMap(
       }
       if (prop.isClassPrivateMethod()) {
         if (prop.node.kind === "get") {
-          update.getId = prop.scope.generateUidIdentifier(`get_${name}`);
+          const { body } = prop.node.body;
+          let $: t.Node;
+          if (
+            // If we have
+            //   get #foo() { return _some_fn(this); }
+            // we can use _some_fn directly.
+            body.length === 1 &&
+            t.isReturnStatement(($ = body[0])) &&
+            t.isCallExpression(($ = $.argument)) &&
+            $.arguments.length === 1 &&
+            t.isThisExpression($.arguments[0]) &&
+            t.isIdentifier(($ = $.callee))
+          ) {
+            update.getId = t.cloneNode($);
+            update.getterDeclared = true;
+          } else {
+            update.getId = prop.scope.generateUidIdentifier(`get_${name}`);
+          }
         } else if (prop.node.kind === "set") {
-          update.setId = prop.scope.generateUidIdentifier(`set_${name}`);
+          const { params } = prop.node;
+          const { body } = prop.node.body;
+          let $: t.Node;
+          if (
+            // If we have
+            //   set #foo(val) { _some_fn(this, val); }
+            // we can use _some_fn directly.
+            body.length === 1 &&
+            t.isExpressionStatement(($ = body[0])) &&
+            t.isCallExpression(($ = $.expression)) &&
+            $.arguments.length === 2 &&
+            t.isThisExpression($.arguments[0]) &&
+            t.isIdentifier($.arguments[1], {
+              name: (params[0] as t.Identifier).name,
+            }) &&
+            t.isIdentifier(($ = $.callee))
+          ) {
+            update.setId = t.cloneNode($);
+            update.setterDeclared = true;
+          } else {
+            update.setId = prop.scope.generateUidIdentifier(`set_${name}`);
+          }
         } else if (prop.node.kind === "method") {
           update.methodId = prop.scope.generateUidIdentifier(name);
         }
@@ -1258,8 +1296,16 @@ function buildPrivateMethodDeclaration(
     static: isStatic,
   } = privateName;
   const { params, body, generator, async } = prop.node;
-  const isGetter = getId && !getterDeclared && params.length === 0;
-  const isSetter = setId && !setterDeclared && params.length > 0;
+  const isGetter = getId && params.length === 0;
+  const isSetter = setId && params.length > 0;
+
+  if ((isGetter && getterDeclared) || (isSetter && setterDeclared)) {
+    privateNamesMap.set(prop.node.key.id.name, {
+      ...privateName,
+      initAdded: true,
+    });
+    return null;
+  }
 
   if (
     (process.env.BABEL_8_BREAKING || newHelpers(file)) &&
