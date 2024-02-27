@@ -6,7 +6,7 @@ class Cl {
   }
 
   get #privateFieldValue() {
-    expect(arguments[0]).toBeUndefined();
+    expect(arguments.length).toBe(0);
     return this.#privateField;
   }
 
