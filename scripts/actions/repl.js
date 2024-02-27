@@ -21,7 +21,11 @@ export default async function (github, context) {
 
   // Make sure Circleci is triggered.
   await sleep(60000);
-  const circleciId = await getCircleciJobId(pull_number);
+  const circleciId = await getCircleciJobId(
+    context.payload.pull_request.head.repo.fork
+      ? "pull/" + pull_number
+      : process.env.GITHUB_HEAD_REF
+  );
 
   const commentBody = `${COMMENT_PREFIX}https://babeljs.io/repl/build/${circleciId}`;
 
@@ -42,11 +46,11 @@ export default async function (github, context) {
   }
 }
 
-async function getCircleciJobId(pull_number) {
+async function getCircleciJobId(branch) {
   let resp = await (
     await fetch(
-      "https://circleci.com/api/v2/project/github/babel/babel/pipeline?branch=pull/" +
-        pull_number,
+      "https://circleci.com/api/v2/project/github/babel/babel/pipeline?branch=" +
+        branch,
       {
         method: "GET",
       }
