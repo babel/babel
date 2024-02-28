@@ -314,6 +314,44 @@ describe("traverse", function () {
         ["EXIT", "./Bar"],
       ]);
     });
+    it("should preserve the context for those nodes that are not visited in sub-traversal", () => {
+      const code = `{ var first; function second() {} }`;
+      const ast = parse(code);
+      let contextLevel;
+      traverse(
+        ast,
+        {
+          enter(path) {
+            if (path.isFunctionDeclaration()) {
+              path.parentPath.traverse(
+                {
+                  enter(path) {
+                    if (path.isFunctionDeclaration()) {
+                      path.parentPath.traverse(
+                        {
+                          enter(path) {
+                            if (path.isVariableDeclaration()) path.stop();
+                          },
+                        },
+                        { level: 3 },
+                      );
+                      // the function declaration path should have state.level as 2
+                      // as it is defined within level 2 traversal and the node is
+                      // not visited in the next sub-traversal
+                      contextLevel = path.state.level;
+                    }
+                  },
+                },
+                { level: 2 },
+              );
+            }
+          },
+        },
+        undefined,
+        { level: 1 },
+      );
+      expect(contextLevel).toBe(2);
+    });
   });
   describe("path.stop()", () => {
     it("should stop the traversal when a grand child is stopped", () => {

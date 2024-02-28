@@ -118,9 +118,12 @@ export default class TraversalContext<S = unknown> {
 
     const visited = new WeakSet();
     let stop = false;
+    let visitIndex = 0;
 
     // visit the queue
-    for (const path of queue) {
+    for (; visitIndex < queue.length; ) {
+      const path = queue[visitIndex];
+      visitIndex++;
       path.resync();
 
       if (
@@ -154,9 +157,9 @@ export default class TraversalContext<S = unknown> {
       }
     }
 
-    // clear queue
-    for (const path of queue) {
-      path.popContext();
+    // pop contexts
+    for (let i = 0; i < visitIndex; i++) {
+      queue[i].popContext();
     }
 
     // clear queue
