@@ -4,7 +4,7 @@ class Foo {
     Object.defineProperty(this, _privateMethod, {
       value: _privateMethod2
     });
-    this.publicField = babelHelpers.classPrivateFieldLooseBase(this, _privateMethod)[_privateMethod]();
+    this.publicField = this[_privateMethod]();
   }
 }
 function _privateMethod2() {

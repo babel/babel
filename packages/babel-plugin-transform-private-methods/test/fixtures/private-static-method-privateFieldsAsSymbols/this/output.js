@@ -11,7 +11,7 @@ class B extends A {
     return 2;
   }
   static extract() {
-    return [babelHelpers.classPrivateFieldLooseBase(this, _getA)[_getA], babelHelpers.classPrivateFieldLooseBase(this, _getB)[_getB]];
+    return [babelHelpers.classPrivateFieldLoose(this, _getA), babelHelpers.classPrivateFieldLoose(this, _getB)];
   }
 }
 _B = B;

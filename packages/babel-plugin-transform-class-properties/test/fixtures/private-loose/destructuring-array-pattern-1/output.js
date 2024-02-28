@@ -7,6 +7,6 @@ var Foo = /*#__PURE__*/babelHelpers.createClass(function Foo(props) {
     writable: true,
     value: void 0
   });
-  babelHelpers.classPrivateFieldLooseBase(this, _client)[_client] = 1;
-  [this.x = babelHelpers.classPrivateFieldLooseBase(this, _client)[_client], babelHelpers.classPrivateFieldLooseBase(this, _client)[_client], this.y = babelHelpers.classPrivateFieldLooseBase(this, _client)[_client]] = props;
+  babelHelpers.classPrivateFieldLoose(this, _client, 1)[_client] = 1;
+  [this.x = babelHelpers.classPrivateFieldLoose(this, _client), babelHelpers.classPrivateFieldLoose(this, _client, 1)[_client], this.y = babelHelpers.classPrivateFieldLoose(this, _client)] = props;
 });

@@ -10,7 +10,7 @@ class Sub extends Base {
     return 'bad';
   }
   static check() {
-    babelHelpers.classPrivateFieldLooseBase(Sub, _subStaticPrivateMethod)[_subStaticPrivateMethod]();
+    Sub[_subStaticPrivateMethod]();
   }
 }
 _Sub = Sub;

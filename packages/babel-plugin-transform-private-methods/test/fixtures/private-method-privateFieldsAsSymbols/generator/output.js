@@ -6,7 +6,7 @@ class Cl {
     });
   }
   test() {
-    return babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo]();
+    return this[_foo]();
   }
 }
 function* _foo2() {

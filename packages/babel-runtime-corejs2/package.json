@@ -855,6 +855,15 @@
       "./helpers/classPrivateFieldLooseBase.js"
     ],
     "./helpers/esm/classPrivateFieldLooseBase": "./helpers/esm/classPrivateFieldLooseBase.js",
+    "./helpers/classPrivateFieldLoose": [
+      {
+        "node": "./helpers/classPrivateFieldLoose.js",
+        "import": "./helpers/esm/classPrivateFieldLoose.js",
+        "default": "./helpers/classPrivateFieldLoose.js"
+      },
+      "./helpers/classPrivateFieldLoose.js"
+    ],
+    "./helpers/esm/classPrivateFieldLoose": "./helpers/esm/classPrivateFieldLoose.js",
     "./helpers/classPrivateFieldGet": [
       {
         "node": "./helpers/classPrivateFieldGet.js",

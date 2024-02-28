@@ -3,7 +3,7 @@ var _privateStaticMethod = Symbol("privateStaticMethod");
 class Cl {
   constructor() {
     if (exfiltrated === undefined) {
-      exfiltrated = babelHelpers.classPrivateFieldLooseBase(Cl, _privateStaticMethod)[_privateStaticMethod];
+      exfiltrated = babelHelpers.classPrivateFieldLoose(Cl, _privateStaticMethod);
     }
   }
 }

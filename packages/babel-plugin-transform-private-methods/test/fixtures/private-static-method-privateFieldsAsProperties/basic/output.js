@@ -1,19 +1,19 @@
 var _privateStaticMethod = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("privateStaticMethod");
 class Cl {
   static staticMethod2() {
-    return babelHelpers.classPrivateFieldLooseBase(Cl, _privateStaticMethod)[_privateStaticMethod]();
+    return Cl[_privateStaticMethod]();
   }
   static staticMethod() {
-    return babelHelpers.classPrivateFieldLooseBase(Cl, _privateStaticMethod)[_privateStaticMethod]();
+    return Cl[_privateStaticMethod]();
   }
   static privateStaticMethod() {
-    return babelHelpers.classPrivateFieldLooseBase(Cl, _privateStaticMethod)[_privateStaticMethod]();
+    return Cl[_privateStaticMethod]();
   }
   publicMethod() {
-    return babelHelpers.classPrivateFieldLooseBase(Cl, _privateStaticMethod)[_privateStaticMethod]();
+    return Cl[_privateStaticMethod]();
   }
   constructor() {
-    this.instanceField = babelHelpers.classPrivateFieldLooseBase(Cl, _privateStaticMethod)[_privateStaticMethod]();
+    this.instanceField = Cl[_privateStaticMethod]();
   }
 }
 function _privateStaticMethod2() {

@@ -7,15 +7,15 @@ class Foo {
     });
   }
   init() {
-    babelHelpers.classPrivateFieldLooseBase(this, _m)[_m] = (...args) => args;
+    babelHelpers.classPrivateFieldLoose(this, _m, 1)[_m] = (...args) => args;
   }
   static test() {
     const f = new Foo();
     f.init();
-    return babelHelpers.classPrivateFieldLooseBase(f, _m)[_m]?.(...arguments);
+    return f[_m]?.(...arguments);
   }
   static testNull() {
     const f = new Foo();
-    return babelHelpers.classPrivateFieldLooseBase(f, _m)[_m]?.(...arguments);
+    return f[_m]?.(...arguments);
   }
 }

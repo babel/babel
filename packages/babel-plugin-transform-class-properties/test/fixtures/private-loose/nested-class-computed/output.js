@@ -20,8 +20,8 @@ var Foo = /*#__PURE__*/function () {
           key: _babelHelpers$classPr,
           value: function () {}
         }]);
-      }(babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo]);
-      babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo];
+      }(babelHelpers.classPrivateFieldLoose(this, _foo));
+      babelHelpers.classPrivateFieldLoose(this, _foo);
     }
   }]);
 }();

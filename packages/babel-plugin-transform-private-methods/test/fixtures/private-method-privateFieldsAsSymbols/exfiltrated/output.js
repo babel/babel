@@ -6,7 +6,7 @@ class Foo {
       value: _privateMethod2
     });
     if (exfiltrated === undefined) {
-      exfiltrated = babelHelpers.classPrivateFieldLooseBase(this, _privateMethod)[_privateMethod];
+      exfiltrated = babelHelpers.classPrivateFieldLoose(this, _privateMethod);
     }
   }
 }

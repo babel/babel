@@ -1,7 +1,7 @@
 var _foo = Symbol("foo");
 class Cl {
   test() {
-    return babelHelpers.classPrivateFieldLooseBase(Cl, _foo)[_foo]();
+    return Cl[_foo]();
   }
 }
 function* _foo2() {

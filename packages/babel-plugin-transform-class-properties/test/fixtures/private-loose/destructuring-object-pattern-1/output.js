@@ -7,10 +7,10 @@ var Foo = /*#__PURE__*/babelHelpers.createClass(function Foo(props) {
     writable: true,
     value: void 0
   });
-  babelHelpers.classPrivateFieldLooseBase(this, _client)[_client] = 'foo';
+  babelHelpers.classPrivateFieldLoose(this, _client, 1)[_client] = 'foo';
   ({
-    x: this.x = babelHelpers.classPrivateFieldLooseBase(this, _client)[_client],
-    y: babelHelpers.classPrivateFieldLooseBase(this, _client)[_client],
-    z: this.z = babelHelpers.classPrivateFieldLooseBase(this, _client)[_client]
+    x: this.x = babelHelpers.classPrivateFieldLoose(this, _client),
+    y: babelHelpers.classPrivateFieldLoose(this, _client, 1)[_client],
+    z: this.z = babelHelpers.classPrivateFieldLoose(this, _client)
   } = props);
 });

@@ -1,16 +1,16 @@
 var _foo = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("foo");
 class Base {
   static getThis() {
-    return babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo];
+    return babelHelpers.classPrivateFieldLoose(this, _foo);
   }
   static updateThis(val) {
-    return babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo] = val;
+    return babelHelpers.classPrivateFieldLoose(this, _foo, 1)[_foo] = val;
   }
   static getClass() {
-    return babelHelpers.classPrivateFieldLooseBase(Base, _foo)[_foo];
+    return babelHelpers.classPrivateFieldLoose(Base, _foo);
   }
   static updateClass(val) {
-    return babelHelpers.classPrivateFieldLooseBase(Base, _foo)[_foo] = val;
+    return babelHelpers.classPrivateFieldLoose(Base, _foo, 1)[_foo] = val;
   }
 }
 Object.defineProperty(Base, _foo, {
@@ -20,7 +20,7 @@ Object.defineProperty(Base, _foo, {
 var _foo2 = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("foo");
 class Sub1 extends Base {
   static update(val) {
-    return babelHelpers.classPrivateFieldLooseBase(this, _foo2)[_foo2] = val;
+    return babelHelpers.classPrivateFieldLoose(this, _foo2, 1)[_foo2] = val;
   }
 }
 Object.defineProperty(Sub1, _foo2, {

@@ -21,9 +21,9 @@ class Foo {
   }
   test() {
     var _babelHelpers$classPr, _babelHelpers$classPr2, _babelHelpers$classPr3, _babelHelpers$classPr4;
-    (_babelHelpers$classPr = babelHelpers.classPrivateFieldLooseBase(this, _nullish))[_nullish] ?? (_babelHelpers$classPr[_nullish] = 42);
-    (_babelHelpers$classPr2 = babelHelpers.classPrivateFieldLooseBase(this, _and))[_and] && (_babelHelpers$classPr2[_and] = 0);
-    (_babelHelpers$classPr3 = babelHelpers.classPrivateFieldLooseBase(this, _or))[_or] || (_babelHelpers$classPr3[_or] = 0);
-    (_babelHelpers$classPr4 = babelHelpers.classPrivateFieldLooseBase(this.self(), _nullish))[_nullish] ?? (_babelHelpers$classPr4[_nullish] = 42);
+    (_babelHelpers$classPr = babelHelpers.classPrivateFieldLoose(this, _nullish, 1))[_nullish] ?? (_babelHelpers$classPr[_nullish] = 42);
+    (_babelHelpers$classPr2 = babelHelpers.classPrivateFieldLoose(this, _and, 1))[_and] && (_babelHelpers$classPr2[_and] = 0);
+    (_babelHelpers$classPr3 = babelHelpers.classPrivateFieldLoose(this, _or, 1))[_or] || (_babelHelpers$classPr3[_or] = 0);
+    (_babelHelpers$classPr4 = babelHelpers.classPrivateFieldLoose(this.self(), _nullish, 1))[_nullish] ?? (_babelHelpers$classPr4[_nullish] = 42);
   }
 }

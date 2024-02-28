@@ -13,10 +13,10 @@ class Cl {
     this.publicField = "not secret string";
   }
   publicGetPrivateField() {
-    return babelHelpers.classPrivateFieldLooseBase(this, _privateFieldValue)[_privateFieldValue];
+    return babelHelpers.classPrivateFieldLoose(this, _privateFieldValue);
   }
   publicSetPrivateField(newValue) {
-    babelHelpers.classPrivateFieldLooseBase(this, _privateFieldValue)[_privateFieldValue] = newValue;
+    babelHelpers.classPrivateFieldLoose(this, _privateFieldValue, 1)[_privateFieldValue] = newValue;
   }
   get publicFieldValue() {
     return this.publicField;
@@ -25,21 +25,21 @@ class Cl {
     this.publicField = newValue;
   }
   testUpdates() {
-    babelHelpers.classPrivateFieldLooseBase(this, _privateField)[_privateField] = 0;
+    babelHelpers.classPrivateFieldLoose(this, _privateField, 1)[_privateField] = 0;
     this.publicField = 0;
-    babelHelpers.classPrivateFieldLooseBase(this, _privateFieldValue)[_privateFieldValue] = babelHelpers.classPrivateFieldLooseBase(this, _privateFieldValue)[_privateFieldValue]++;
+    babelHelpers.classPrivateFieldLoose(this, _privateFieldValue, 1)[_privateFieldValue] = babelHelpers.classPrivateFieldLoose(this, _privateFieldValue, 1)[_privateFieldValue]++;
     this.publicFieldValue = this.publicFieldValue++;
-    ++babelHelpers.classPrivateFieldLooseBase(this, _privateFieldValue)[_privateFieldValue];
+    ++babelHelpers.classPrivateFieldLoose(this, _privateFieldValue, 1)[_privateFieldValue];
     ++this.publicFieldValue;
-    babelHelpers.classPrivateFieldLooseBase(this, _privateFieldValue)[_privateFieldValue] += 1;
+    babelHelpers.classPrivateFieldLoose(this, _privateFieldValue, 1)[_privateFieldValue] += 1;
     this.publicFieldValue += 1;
-    babelHelpers.classPrivateFieldLooseBase(this, _privateFieldValue)[_privateFieldValue] = -(babelHelpers.classPrivateFieldLooseBase(this, _privateFieldValue)[_privateFieldValue] ** babelHelpers.classPrivateFieldLooseBase(this, _privateFieldValue)[_privateFieldValue]);
+    babelHelpers.classPrivateFieldLoose(this, _privateFieldValue, 1)[_privateFieldValue] = -(babelHelpers.classPrivateFieldLoose(this, _privateFieldValue) ** babelHelpers.classPrivateFieldLoose(this, _privateFieldValue));
     this.publicFieldValue = -(this.publicFieldValue ** this.publicFieldValue);
   }
 }
 function _get_privateFieldValue() {
-  return babelHelpers.classPrivateFieldLooseBase(this, _privateField)[_privateField];
+  return babelHelpers.classPrivateFieldLoose(this, _privateField);
 }
 function _set_privateFieldValue(newValue) {
-  babelHelpers.classPrivateFieldLooseBase(this, _privateField)[_privateField] = newValue;
+  babelHelpers.classPrivateFieldLoose(this, _privateField, 1)[_privateField] = newValue;
 }
