@@ -4176,6 +4176,8 @@ __metadata:
   resolution: "@babel/standalone@workspace:packages/babel-standalone"
   dependencies:
     "@babel/core": "workspace:^"
+    "@babel/generator": "workspace:^"
+    "@babel/parser": "workspace:^"
     "@babel/plugin-external-helpers": "workspace:^"
     "@babel/plugin-proposal-decorators": "workspace:^"
     "@babel/plugin-proposal-destructuring-private": "workspace:^"
@@ -4281,6 +4283,9 @@ __metadata:
     "@babel/preset-flow": "workspace:^"
     "@babel/preset-react": "workspace:^"
     "@babel/preset-typescript": "workspace:^"
+    "@babel/template": "workspace:^"
+    "@babel/traverse": "workspace:^"
+    "@babel/types": "workspace:^"
     acorn: "npm:^8.7.0"
     jsdom: "npm:^22.1.0"
   languageName: unknown
