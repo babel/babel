@@ -16,6 +16,15 @@ This file contains the changelog starting from v8.0.0-alpha.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS -->
 <!-- insert-new-changelog-here -->
+## v8.0.0-alpha.7 (2024-02-28)
+
+#### :house: Internal
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-decorators`
+  * [#16256](https://github.com/babel/babel/pull/16256) Remove logic for deprecated decorator versions from Babel 8 ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`, `babel-helper-fixtures`, `babel-helper-plugin-utils`, `babel-helper-transform-fixture-test-runner`, `babel-parser`, `babel-plugin-transform-runtime`, `babel-preset-env`, `babel-standalone`, `babel-template`, `babel-traverse`, `babel-types`
+  * [#16248](https://github.com/babel/babel/pull/16248) Use `Object.hasOwn` when available ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`, `babel-plugin-transform-object-rest-spread`
+  * [#16209](https://github.com/babel/babel/pull/16209) chore: Helper changes for Babel 8 ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v8.0.0-alpha.6 (2024-01-26)
 
 #### :nail_care: Polish
