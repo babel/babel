@@ -450,24 +450,14 @@ target["bootstrap-flow"] = function () {
 
 target["new-version-checklist"] = function () {
   // eslint-disable-next-line no-constant-condition
-  if (1) {
+  if (0) {
     console.log(
       `
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!                                                   !!!!!!
-Update minVersion in packages/babel-helpers/src/helpers/applyDecs2311.ts
 !!!!!! Write any important message here, and change the  !!!!!!
 !!!!!! if (0) above to if (1)                            !!!!!!
-
-- Update the version:
-  - assertClassBrand
-  - classPrivateFieldGet2
-  - classPrivateFieldSet2
-  - classPrivateGetter
-  - classPrivateSetter
-  - toSetter
-
 !!!!!!                                                   !!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

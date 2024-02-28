@@ -1,4 +1,4 @@
-/* @minVersion 7.22.0 */
+/* @minVersion 7.24.0 */
 
 export default function _assertClassBrand(
   brand: Function | WeakMap<any, any> | WeakSet<any>,

@@ -1,4 +1,4 @@
-/* @minVersion 7.23.0 */
+/* @minVersion 7.24.0 */
 /* @mangleFns */
 
 import checkInRHS from "./checkInRHS.ts";

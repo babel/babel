@@ -1,4 +1,4 @@
-/* @minVersion 7.22.0 */
+/* @minVersion 7.24.0 */
 
 import assertClassBrand from "./assertClassBrand.ts";
 
