@@ -24,6 +24,70 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.24.0 (2024-02-28)
+
+#### :rocket: New Feature
+* `babel-standalone`
+  * [#11696](https://github.com/babel/babel/pull/11696) Export babel tooling packages in `@babel/standalone` ([@ajihyf](https://github.com/ajihyf))
+* `babel-core`, `babel-helper-create-class-features-plugin`, `babel-helpers`, `babel-plugin-transform-class-properties`
+  * [#16267](https://github.com/babel/babel/pull/16267) Implement `noUninitializedPrivateFieldAccess` assumption ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-create-class-features-plugin`, `babel-helpers`, `babel-plugin-proposal-decorators`, `babel-plugin-proposal-pipeline-operator`, `babel-plugin-syntax-decorators`, `babel-plugin-transform-class-properties`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#16242](https://github.com/babel/babel/pull/16242) Support decorator 2023-11 normative updates ([@JLHwung](https://github.com/JLHwung))
+* `babel-preset-flow`
+  * [#16309](https://github.com/babel/babel/pull/16309) [babel 7] Allow setting `ignoreExtensions` in Flow preset ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#16284](https://github.com/babel/babel/pull/16284) Add `experimental_useHermesParser` option in `preset-flow` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helper-import-to-platform-api`, `babel-plugin-proposal-import-wasm-source`, `babel-plugin-proposal-json-modules`, `babel-standalone`
+  * [#16172](https://github.com/babel/babel/pull/16172) Add transform support for JSON modules imports ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-runtime`
+  * [#16241](https://github.com/babel/babel/pull/16241) Add back `moduleName` option to `@babel/plugin-transform-runtime` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`, `babel-types`
+  * [#16277](https://github.com/babel/babel/pull/16277) Allow import attributes for `TSImportType` ([@sosukesuzuki](https://github.com/sosukesuzuki))
+
+#### :bug: Bug Fix
+* `babel-plugin-proposal-do-expressions`, `babel-traverse`
+  * [#16305](https://github.com/babel/babel/pull/16305) fix: avoid `popContext` on unvisited node paths ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-transform-private-methods`, `babel-plugin-transform-private-property-in-object`
+  * [#16312](https://github.com/babel/babel/pull/16312) Fix class private properties when `privateFieldsAsSymbols` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-transform-private-methods`
+  * [#16307](https://github.com/babel/babel/pull/16307) Fix the support of `arguments` in private `get/set` method ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helper-create-class-features-plugin`, `babel-helpers`, `babel-plugin-proposal-decorators`
+  * [#16287](https://github.com/babel/babel/pull/16287) Reduce decorator static property size ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-decorators`
+  * [#16281](https://github.com/babel/babel/pull/16281) Fix evaluation order of decorators with cached receiver ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#16279](https://github.com/babel/babel/pull/16279) Fix decorator this memoization ([@JLHwung](https://github.com/JLHwung))
+  * [#16266](https://github.com/babel/babel/pull/16266) Preserve `static` on decorated private `accessor` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#16258](https://github.com/babel/babel/pull/16258) fix: handle decorated async private method and generator ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-decorators`, `babel-plugin-transform-async-generator-functions`, `babel-plugin-transform-private-methods`, `babel-plugin-transform-private-property-in-object`, `babel-plugin-transform-typescript`, `babel-preset-env`
+  * [#16275](https://github.com/babel/babel/pull/16275) Fix class private properties when `privateFieldsAsProperties` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helpers`
+  * [#16268](https://github.com/babel/babel/pull/16268) Do not consider `arguments` in a helper as a global reference ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helpers`, `babel-plugin-proposal-decorators`
+  * [#16270](https://github.com/babel/babel/pull/16270) Handle symbol key class elements decoration ([@JLHwung](https://github.com/JLHwung))
+  * [#16265](https://github.com/babel/babel/pull/16265) Do not define `access.get` for public setter decorators ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :nail_care: Polish
+* `babel-core`, `babel-helper-create-class-features-plugin`, `babel-preset-env`
+  * [#12428](https://github.com/babel/babel/pull/12428) Suggest using `BABEL_SHOW_CONFIG_FOR` for config problems ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-helper-transform-fixture-test-runner`
+  * [#16278](https://github.com/babel/babel/pull/16278) Continue writing `output.js` when `exec.js` throws ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :microscope: Output optimization
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-decorators`
+  * [#16306](https://github.com/babel/babel/pull/16306) Avoid intermediate functions for private accessors with decs ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-create-class-features-plugin`, `babel-helpers`, `babel-plugin-proposal-decorators`, `babel-plugin-proposal-pipeline-operator`, `babel-plugin-transform-class-properties`
+  * [#16294](https://github.com/babel/babel/pull/16294) More aggressively inline decorators in the static block ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-create-class-features-plugin`, `babel-helpers`, `babel-plugin-transform-private-methods`
+  * [#16283](https://github.com/babel/babel/pull/16283) Do not use `classPrivateMethodGet` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helper-create-class-features-plugin`, `babel-helpers`, `babel-plugin-proposal-decorators`
+  * [#16287](https://github.com/babel/babel/pull/16287) Reduce decorator static property size ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-decorators`, `babel-plugin-transform-class-properties`
+  * [#16280](https://github.com/babel/babel/pull/16280) Reduce element decorator temp variables ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-create-class-features-plugin`, `babel-helper-fixtures`, `babel-helpers`, `babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining`, `babel-plugin-proposal-decorators`, `babel-plugin-proposal-destructuring-private`, `babel-plugin-proposal-optional-chaining-assign`, `babel-plugin-transform-class-properties`, `babel-plugin-transform-class-static-block`, `babel-plugin-transform-private-methods`, `babel-plugin-transform-private-property-in-object`, `babel-preset-env`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#16261](https://github.com/babel/babel/pull/16261) Do not use descriptors for private class elements ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helpers`, `babel-plugin-proposal-decorators`
+  * [#16263](https://github.com/babel/babel/pull/16263) Reduce helper size for decorator 2023-11 ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v7.23.10 (2024-01-31)
 
 #### :bug: Bug Fix
