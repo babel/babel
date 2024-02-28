@@ -1,19 +1,19 @@
-var _Foo_brand = /*#__PURE__*/Symbol("getStatus");
+var _getStatus = Symbol("getStatus");
 class Foo {
   constructor(status) {
-    Object.defineProperty(this, _Foo_brand, {
-      value: _getStatus
+    Object.defineProperty(this, _getStatus, {
+      value: _getStatus2
     });
     this.status = status;
   }
   getCurrentStatus() {
-    return babelHelpers.classPrivateFieldLooseBase(this, _Foo_brand)[_Foo_brand]();
+    return babelHelpers.classPrivateFieldLooseBase(this, _getStatus)[_getStatus]();
   }
   setCurrentStatus(newStatus) {
     this.status = newStatus;
   }
   getFakeStatus(fakeStatus) {
-    const fakeGetStatus = babelHelpers.classPrivateFieldLooseBase(this, _Foo_brand)[_Foo_brand];
+    const fakeGetStatus = babelHelpers.classPrivateFieldLooseBase(this, _getStatus)[_getStatus];
     return function () {
       return fakeGetStatus.call({
         status: fakeStatus
@@ -23,10 +23,10 @@ class Foo {
   getFakeStatusFunc() {
     return {
       status: 'fake-status',
-      getFakeStatus: babelHelpers.classPrivateFieldLooseBase(this, _Foo_brand)[_Foo_brand]
+      getFakeStatus: babelHelpers.classPrivateFieldLooseBase(this, _getStatus)[_getStatus]
     };
   }
 }
-function _getStatus() {
+function _getStatus2() {
   return this.status;
 }

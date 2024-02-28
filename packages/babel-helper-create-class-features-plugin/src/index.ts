@@ -240,7 +240,7 @@ export function createClassFeaturePlugin({
 
         const privateNamesMap = buildPrivateNamesMap(
           classRefForDefine.name,
-          privateFieldsAsProperties ?? loose,
+          privateFieldsAsSymbolsOrProperties ?? loose,
           props,
           file,
         );

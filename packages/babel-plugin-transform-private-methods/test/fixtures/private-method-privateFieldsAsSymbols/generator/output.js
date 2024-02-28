@@ -1,15 +1,15 @@
-var _Cl_brand = /*#__PURE__*/Symbol("foo");
+var _foo = Symbol("foo");
 class Cl {
   constructor() {
-    Object.defineProperty(this, _Cl_brand, {
-      value: _foo
+    Object.defineProperty(this, _foo, {
+      value: _foo2
     });
   }
   test() {
-    return babelHelpers.classPrivateFieldLooseBase(this, _Cl_brand)[_Cl_brand]();
+    return babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo]();
   }
 }
-function* _foo() {
+function* _foo2() {
   yield 2;
   return 3;
 }
