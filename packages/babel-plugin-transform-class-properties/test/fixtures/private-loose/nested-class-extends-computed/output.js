@@ -27,7 +27,7 @@ var Foo = /*#__PURE__*/function () {
         }
         babelHelpers.inherits(Nested, _ref);
         return babelHelpers.createClass(Nested);
-      }((_babelHelpers$classPr = babelHelpers.classPrivateFieldLoose(this, _foo), /*#__PURE__*/function () {
+      }((_babelHelpers$classPr = babelHelpers.classPrivateFieldGetLoose(this, _foo), /*#__PURE__*/function () {
         function _class() {
           babelHelpers.classCallCheck(this, _class);
           this[_babelHelpers$classPr] = 2;

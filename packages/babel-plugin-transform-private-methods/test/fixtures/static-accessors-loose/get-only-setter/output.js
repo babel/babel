@@ -3,12 +3,12 @@ var _PRIVATE_STATIC_FIELD = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey(
 var _privateStaticFieldValue = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("privateStaticFieldValue");
 class Cl {
   static getPrivateStaticFieldValue() {
-    return babelHelpers.classPrivateFieldLoose(Cl, _privateStaticFieldValue);
+    return babelHelpers.classPrivateFieldGetLoose(Cl, _privateStaticFieldValue);
   }
 }
 _Cl = Cl;
 function _set_privateStaticFieldValue(newValue) {
-  babelHelpers.classPrivateFieldLoose(_Cl, _PRIVATE_STATIC_FIELD, 1)[_PRIVATE_STATIC_FIELD] = newValue;
+  babelHelpers.classPrivateFieldGetLoose(_Cl, _PRIVATE_STATIC_FIELD, 1)[_PRIVATE_STATIC_FIELD] = newValue;
 }
 Object.defineProperty(Cl, _privateStaticFieldValue, {
   get: void 0,

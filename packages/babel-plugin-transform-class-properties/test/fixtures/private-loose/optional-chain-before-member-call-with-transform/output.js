@@ -28,38 +28,38 @@ class Foo {
     (_deep$very$o = deep == null ? void 0 : deep.very.o) === null || _deep$very$o === void 0 ? void 0 : _deep$very$o.Foo[_m]();
     (_deep$very$o2 = deep == null ? void 0 : deep.very.o) === null || _deep$very$o2 === void 0 ? void 0 : _deep$very$o2.Foo[_m]().toString;
     (_deep$very$o3 = deep == null ? void 0 : deep.very.o) === null || _deep$very$o3 === void 0 ? void 0 : _deep$very$o3.Foo[_m]().toString();
-    o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldLoose(o.Foo, _self)[_m]();
-    o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldLoose(o.Foo, _self).self[_m]();
-    (_ref = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldLoose(o.Foo, _self)) === null || _ref === void 0 ? void 0 : _ref.self[_m]();
-    (_ref2 = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldLoose(o.Foo, _self).self) === null || _ref2 === void 0 ? void 0 : _ref2.self[_m]();
-    (_self2 = (_ref13 = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldLoose(o.Foo, _self)) == null ? void 0 : _ref13.self) === null || _self2 === void 0 ? void 0 : _self2.self[_m]();
-    o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldLoose(o.Foo, _self).getSelf()[_m]();
-    (_ref3 = o === null || o === void 0 ? void 0 : (_babelHelpers$classPr = babelHelpers.classPrivateFieldLoose(o.Foo, _self)).getSelf) === null || _ref3 === void 0 ? void 0 : _ref3.call(_babelHelpers$classPr)[_m]();
-    (_ref4 = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldLoose(o.Foo, _self)) === null || _ref4 === void 0 ? void 0 : _ref4.getSelf()[_m]();
-    (_getSelf = (_ref14 = _ref5 = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldLoose(o.Foo, _self)) == null ? void 0 : _ref14.getSelf) === null || _getSelf === void 0 ? void 0 : _getSelf.call(_ref5)[_m]();
-    (_ref6 = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldLoose(o.Foo, _self).getSelf()) === null || _ref6 === void 0 ? void 0 : _ref6.self[_m]();
-    (_call = (_ref15 = o === null || o === void 0 ? void 0 : (_babelHelpers$classPr2 = babelHelpers.classPrivateFieldLoose(o.Foo, _self)).getSelf) == null ? void 0 : _ref15.call(_babelHelpers$classPr2)) === null || _call === void 0 ? void 0 : _call.self[_m]();
-    (_getSelf2 = (_ref16 = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldLoose(o.Foo, _self)) == null ? void 0 : _ref16.getSelf()) === null || _getSelf2 === void 0 ? void 0 : _getSelf2.self[_m]();
-    (_getSelf3 = (_ref17 = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldLoose(o.Foo, _self)) == null || _ref17.getSelf == null ? void 0 : _ref17.getSelf()) === null || _getSelf3 === void 0 ? void 0 : _getSelf3.self[_m]();
+    o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(o.Foo, _self)[_m]();
+    o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(o.Foo, _self).self[_m]();
+    (_ref = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(o.Foo, _self)) === null || _ref === void 0 ? void 0 : _ref.self[_m]();
+    (_ref2 = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(o.Foo, _self).self) === null || _ref2 === void 0 ? void 0 : _ref2.self[_m]();
+    (_self2 = (_ref13 = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(o.Foo, _self)) == null ? void 0 : _ref13.self) === null || _self2 === void 0 ? void 0 : _self2.self[_m]();
+    o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(o.Foo, _self).getSelf()[_m]();
+    (_ref3 = o === null || o === void 0 ? void 0 : (_babelHelpers$classPr = babelHelpers.classPrivateFieldGetLoose(o.Foo, _self)).getSelf) === null || _ref3 === void 0 ? void 0 : _ref3.call(_babelHelpers$classPr)[_m]();
+    (_ref4 = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(o.Foo, _self)) === null || _ref4 === void 0 ? void 0 : _ref4.getSelf()[_m]();
+    (_getSelf = (_ref14 = _ref5 = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(o.Foo, _self)) == null ? void 0 : _ref14.getSelf) === null || _getSelf === void 0 ? void 0 : _getSelf.call(_ref5)[_m]();
+    (_ref6 = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(o.Foo, _self).getSelf()) === null || _ref6 === void 0 ? void 0 : _ref6.self[_m]();
+    (_call = (_ref15 = o === null || o === void 0 ? void 0 : (_babelHelpers$classPr2 = babelHelpers.classPrivateFieldGetLoose(o.Foo, _self)).getSelf) == null ? void 0 : _ref15.call(_babelHelpers$classPr2)) === null || _call === void 0 ? void 0 : _call.self[_m]();
+    (_getSelf2 = (_ref16 = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(o.Foo, _self)) == null ? void 0 : _ref16.getSelf()) === null || _getSelf2 === void 0 ? void 0 : _getSelf2.self[_m]();
+    (_getSelf3 = (_ref17 = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(o.Foo, _self)) == null || _ref17.getSelf == null ? void 0 : _ref17.getSelf()) === null || _getSelf3 === void 0 ? void 0 : _getSelf3.self[_m]();
     fn === null || fn === void 0 ? void 0 : fn().Foo[_m]();
     fn === null || fn === void 0 ? void 0 : fn().Foo[_m]().toString;
     fn === null || fn === void 0 ? void 0 : fn().Foo[_m]().toString();
     (_fnDeep$very$o = fnDeep == null ? void 0 : fnDeep().very.o) === null || _fnDeep$very$o === void 0 ? void 0 : _fnDeep$very$o.Foo[_m]();
     (_fnDeep$very$o2 = fnDeep == null ? void 0 : fnDeep().very.o) === null || _fnDeep$very$o2 === void 0 ? void 0 : _fnDeep$very$o2.Foo[_m]().toString;
     (_fnDeep$very$o3 = fnDeep == null ? void 0 : fnDeep().very.o) === null || _fnDeep$very$o3 === void 0 ? void 0 : _fnDeep$very$o3.Foo[_m]().toString();
-    fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLoose(fn().Foo, _self)[_m]();
-    fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLoose(fn().Foo, _self).self[_m]();
-    (_ref7 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLoose(fn().Foo, _self)) === null || _ref7 === void 0 ? void 0 : _ref7.self[_m]();
-    (_ref8 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLoose(fn().Foo, _self).self) === null || _ref8 === void 0 ? void 0 : _ref8.self[_m]();
-    (_self3 = (_ref18 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLoose(fn().Foo, _self)) == null ? void 0 : _ref18.self) === null || _self3 === void 0 ? void 0 : _self3.self[_m]();
-    fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLoose(fn().Foo, _self).getSelf()[_m]();
-    (_ref9 = fn === null || fn === void 0 ? void 0 : (_babelHelpers$classPr3 = babelHelpers.classPrivateFieldLoose(fn().Foo, _self)).getSelf) === null || _ref9 === void 0 ? void 0 : _ref9.call(_babelHelpers$classPr3)[_m]();
-    (_ref10 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLoose(fn().Foo, _self)) === null || _ref10 === void 0 ? void 0 : _ref10.getSelf()[_m]();
-    (_getSelf4 = (_ref19 = _ref11 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLoose(fn().Foo, _self)) == null ? void 0 : _ref19.getSelf) === null || _getSelf4 === void 0 ? void 0 : _getSelf4.call(_ref11)[_m]();
-    (_ref12 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLoose(fn().Foo, _self).getSelf()) === null || _ref12 === void 0 ? void 0 : _ref12.self[_m]();
-    (_call2 = (_ref20 = fn === null || fn === void 0 ? void 0 : (_babelHelpers$classPr4 = babelHelpers.classPrivateFieldLoose(fn().Foo, _self)).getSelf) == null ? void 0 : _ref20.call(_babelHelpers$classPr4)) === null || _call2 === void 0 ? void 0 : _call2.self[_m]();
-    (_getSelf5 = (_ref21 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLoose(fn().Foo, _self)) == null ? void 0 : _ref21.getSelf()) === null || _getSelf5 === void 0 ? void 0 : _getSelf5.self[_m]();
-    (_getSelf6 = (_ref22 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLoose(fn().Foo, _self)) == null || _ref22.getSelf == null ? void 0 : _ref22.getSelf()) === null || _getSelf6 === void 0 ? void 0 : _getSelf6.self[_m]();
+    fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self)[_m]();
+    fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self).self[_m]();
+    (_ref7 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self)) === null || _ref7 === void 0 ? void 0 : _ref7.self[_m]();
+    (_ref8 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self).self) === null || _ref8 === void 0 ? void 0 : _ref8.self[_m]();
+    (_self3 = (_ref18 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self)) == null ? void 0 : _ref18.self) === null || _self3 === void 0 ? void 0 : _self3.self[_m]();
+    fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self).getSelf()[_m]();
+    (_ref9 = fn === null || fn === void 0 ? void 0 : (_babelHelpers$classPr3 = babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self)).getSelf) === null || _ref9 === void 0 ? void 0 : _ref9.call(_babelHelpers$classPr3)[_m]();
+    (_ref10 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self)) === null || _ref10 === void 0 ? void 0 : _ref10.getSelf()[_m]();
+    (_getSelf4 = (_ref19 = _ref11 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self)) == null ? void 0 : _ref19.getSelf) === null || _getSelf4 === void 0 ? void 0 : _getSelf4.call(_ref11)[_m]();
+    (_ref12 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self).getSelf()) === null || _ref12 === void 0 ? void 0 : _ref12.self[_m]();
+    (_call2 = (_ref20 = fn === null || fn === void 0 ? void 0 : (_babelHelpers$classPr4 = babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self)).getSelf) == null ? void 0 : _ref20.call(_babelHelpers$classPr4)) === null || _call2 === void 0 ? void 0 : _call2.self[_m]();
+    (_getSelf5 = (_ref21 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self)) == null ? void 0 : _ref21.getSelf()) === null || _getSelf5 === void 0 ? void 0 : _getSelf5.self[_m]();
+    (_getSelf6 = (_ref22 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self)) == null || _ref22.getSelf == null ? void 0 : _ref22.getSelf()) === null || _getSelf6 === void 0 ? void 0 : _getSelf6.self[_m]();
   }
 }
 _Foo = Foo;
@@ -70,7 +70,7 @@ Object.defineProperty(Foo, _x, {
 Object.defineProperty(Foo, _m, {
   writable: true,
   value: function () {
-    return babelHelpers.classPrivateFieldLoose(this, _x);
+    return babelHelpers.classPrivateFieldGetLoose(this, _x);
   }
 });
 Object.defineProperty(Foo, _self, {

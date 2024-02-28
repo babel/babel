@@ -7,7 +7,7 @@ class Foo {
     });
   }
   init() {
-    babelHelpers.classPrivateFieldLoose(this, _m, 1)[_m] = (...args) => args;
+    babelHelpers.classPrivateFieldGetLoose(this, _m, 1)[_m] = (...args) => args;
   }
   static test() {
     const f = new Foo();

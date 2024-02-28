@@ -5,7 +5,7 @@ class Foo {
     Object.defineProperty(this, _privateMethod, {
       value: _privateMethod2
     });
-    babelHelpers.classPrivateFieldLoose(this, _privateMethod, 1)[_privateMethod] = ++counter;
+    babelHelpers.classPrivateFieldGetLoose(this, _privateMethod, 1)[_privateMethod] = ++counter;
   }
 }
 function _privateMethod2() {

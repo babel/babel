@@ -7,5 +7,5 @@ var Foo = /*#__PURE__*/babelHelpers.createClass(function Foo(props) {
     writable: true,
     value: void 0
   });
-  [babelHelpers.classPrivateFieldLoose(this, _client, 1)[_client] = 5] = props;
+  [babelHelpers.classPrivateFieldGetLoose(this, _client, 1)[_client] = 5] = props;
 });

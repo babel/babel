@@ -6,7 +6,7 @@ class Foo {
       get: _get_privateFieldValue,
       set: void 0
     });
-    babelHelpers.classPrivateFieldLoose(this, _privateFieldValue, 1)[_privateFieldValue] = ++counter;
+    babelHelpers.classPrivateFieldGetLoose(this, _privateFieldValue, 1)[_privateFieldValue] = ++counter;
   }
 }
 function _get_privateFieldValue() {

@@ -13,15 +13,15 @@ class Cl {
     this.publicField = "not secret string";
   }
   publicGetPrivateField() {
-    return babelHelpers.classPrivateFieldLoose(this, _privateFieldValue);
+    return babelHelpers.classPrivateFieldGetLoose(this, _privateFieldValue);
   }
   publicSetPrivateField(newValue) {
-    babelHelpers.classPrivateFieldLoose(this, _privateFieldValue, 1)[_privateFieldValue] = newValue;
+    babelHelpers.classPrivateFieldGetLoose(this, _privateFieldValue, 1)[_privateFieldValue] = newValue;
   }
 }
 function _get_privateFieldValue() {
-  return babelHelpers.classPrivateFieldLoose(this, _privateField);
+  return babelHelpers.classPrivateFieldGetLoose(this, _privateField);
 }
 function _set_privateFieldValue(newValue) {
-  babelHelpers.classPrivateFieldLoose(this, _privateField, 1)[_privateField] = newValue;
+  babelHelpers.classPrivateFieldGetLoose(this, _privateField, 1)[_privateField] = newValue;
 }

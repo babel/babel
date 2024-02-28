@@ -24,11 +24,11 @@ var Foo = /*#__PURE__*/function () {
         return babelHelpers.createClass(Nested, [{
           key: "test",
           value: function test() {
-            babelHelpers.classPrivateFieldLoose(this, _foo2);
+            babelHelpers.classPrivateFieldGetLoose(this, _foo2);
           }
         }]);
       }();
-      babelHelpers.classPrivateFieldLoose(this, _foo);
+      babelHelpers.classPrivateFieldGetLoose(this, _foo);
     }
   }]);
 }();

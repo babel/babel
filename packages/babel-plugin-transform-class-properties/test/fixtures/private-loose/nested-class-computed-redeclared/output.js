@@ -14,7 +14,7 @@ var Foo = /*#__PURE__*/function () {
     value: function test() {
       var _babelHelpers$classPr;
       var _foo2 = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("foo");
-      _babelHelpers$classPr = babelHelpers.classPrivateFieldLoose(this, _foo2);
+      _babelHelpers$classPr = babelHelpers.classPrivateFieldGetLoose(this, _foo2);
       var Nested = /*#__PURE__*/function () {
         function Nested() {
           babelHelpers.classCallCheck(this, Nested);
@@ -28,7 +28,7 @@ var Foo = /*#__PURE__*/function () {
           value: function () {}
         }]);
       }();
-      babelHelpers.classPrivateFieldLoose(this, _foo);
+      babelHelpers.classPrivateFieldGetLoose(this, _foo);
     }
   }]);
 }();

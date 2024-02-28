@@ -9,6 +9,6 @@ var Foo = /*#__PURE__*/babelHelpers.createClass(function Foo(props) {
   });
   ({
     x,
-    ...babelHelpers.classPrivateFieldLoose(this, _client, 1)[_client]
+    ...babelHelpers.classPrivateFieldGetLoose(this, _client, 1)[_client]
   } = props);
 });

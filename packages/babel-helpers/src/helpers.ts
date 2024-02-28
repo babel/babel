@@ -893,7 +893,7 @@ helpers.classPrivateFieldLooseBase = helper("7.0.0-beta.0")`
   }
 `;
 
-helpers.classPrivateFieldLoose = helper("7.24.0")`
+helpers.classPrivateFieldGetLoose = helper("7.24.0")`
   export default function _classPrivateFieldBase2(receiver, privateKey, retThis) {
     if (!{}.hasOwnProperty.call(receiver, privateKey)) {
       throw TypeError("attempted to use private field on non-instance");

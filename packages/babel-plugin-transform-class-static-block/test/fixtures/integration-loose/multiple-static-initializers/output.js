@@ -7,7 +7,7 @@ Object.defineProperty(Foo, _bar, {
   value: 21
 });
 (() => {
-  _Foo.foo = babelHelpers.classPrivateFieldLoose(_Foo, _bar);
+  _Foo.foo = babelHelpers.classPrivateFieldGetLoose(_Foo, _bar);
   _Foo.qux1 = _Foo.qux;
 })();
 Foo.qux = 21;

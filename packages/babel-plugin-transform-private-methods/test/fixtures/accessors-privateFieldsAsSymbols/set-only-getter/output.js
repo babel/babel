@@ -10,10 +10,10 @@ class Cl {
       writable: true,
       value: 0
     });
-    babelHelpers.classPrivateFieldLoose(this, _privateFieldValue, 1)[_privateFieldValue] = 1;
-    [babelHelpers.classPrivateFieldLoose(this, _privateFieldValue, 1)[_privateFieldValue]] = [1];
+    babelHelpers.classPrivateFieldGetLoose(this, _privateFieldValue, 1)[_privateFieldValue] = 1;
+    [babelHelpers.classPrivateFieldGetLoose(this, _privateFieldValue, 1)[_privateFieldValue]] = [1];
   }
 }
 function _get_privateFieldValue() {
-  return babelHelpers.classPrivateFieldLoose(this, _privateField);
+  return babelHelpers.classPrivateFieldGetLoose(this, _privateField);
 }

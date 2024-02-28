@@ -841,7 +841,7 @@ const privateNameHandlerLoose: Handler<PrivateNameState> = {
 
     if (process.env.BABEL_8_BREAKING || newHelpers(file)) {
       return template.expression`BASE(REF, PROP)`({
-        BASE: file.addHelper("classPrivateFieldLoose"),
+        BASE: file.addHelper("classPrivateFieldGetLoose"),
         REF: t.cloneNode(object),
         PROP: t.cloneNode(privateNamesMap.get(name).id),
       });
@@ -873,7 +873,7 @@ const privateNameHandlerLoose: Handler<PrivateNameState> = {
 
     if (process.env.BABEL_8_BREAKING || newHelpers(file)) {
       return template.expression`BASE(REF, PROP, 1)[PROP]`({
-        BASE: file.addHelper("classPrivateFieldLoose"),
+        BASE: file.addHelper("classPrivateFieldGetLoose"),
         REF: t.cloneNode(object),
         PROP: t.cloneNode(privateNamesMap.get(name).id),
       });

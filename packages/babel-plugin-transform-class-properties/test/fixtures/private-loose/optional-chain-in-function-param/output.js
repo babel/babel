@@ -24,16 +24,16 @@ class Foo {
     function f(o, r = (() => o === null || o === void 0 ? void 0 : o.Foo[_m]())()) {
       return r;
     }
-    function g(o, r = (() => o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldLoose(babelHelpers.classPrivateFieldLoose(o.Foo, _self).getSelf(), _m))()?.()) {
+    function g(o, r = (() => o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(babelHelpers.classPrivateFieldGetLoose(o.Foo, _self).getSelf(), _m))()?.()) {
       return r;
     }
     function h(fnDeep, r = (_fnDeep$very$o$Foo => (_fnDeep$very$o$Foo = fnDeep?.().very.o?.Foo) === null || _fnDeep$very$o$Foo === void 0 ? void 0 : _fnDeep$very$o$Foo[_m]())()) {
       return r;
     }
-    function i(fn, r = (_getSelf => (_getSelf = (() => fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldLoose(fn().Foo, _self))()?.getSelf()) === null || _getSelf === void 0 ? void 0 : _getSelf.self[_m]())()) {
+    function i(fn, r = (_getSelf => (_getSelf = (() => fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self))()?.getSelf()) === null || _getSelf === void 0 ? void 0 : _getSelf.self[_m]())()) {
       return r;
     }
-    function j(fn, r = (() => babelHelpers.classPrivateFieldLoose(fn().Foo, _self).getSelf().self[_m]?.())()) {
+    function j(fn, r = (() => babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self).getSelf().self[_m]?.())()) {
       return r;
     }
     f(o);
@@ -51,7 +51,7 @@ Object.defineProperty(Foo, _x, {
 Object.defineProperty(Foo, _m, {
   writable: true,
   value: function () {
-    return babelHelpers.classPrivateFieldLoose(this, _x);
+    return babelHelpers.classPrivateFieldGetLoose(this, _x);
   }
 });
 Object.defineProperty(Foo, _self, {
