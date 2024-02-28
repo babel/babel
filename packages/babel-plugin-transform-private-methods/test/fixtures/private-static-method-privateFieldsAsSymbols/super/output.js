@@ -4,7 +4,7 @@ class Base {
     return 'good';
   }
 }
-var _subStaticPrivateMethod = /*#__PURE__*/Symbol("subStaticPrivateMethod");
+var _subStaticPrivateMethod = Symbol("subStaticPrivateMethod");
 class Sub extends Base {
   static basePublicStaticMethod() {
     return 'bad';

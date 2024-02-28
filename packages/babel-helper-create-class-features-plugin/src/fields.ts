@@ -183,7 +183,9 @@ export function buildPrivateNamesNodes(
     }
 
     if (init) {
-      annotateAsPure(init);
+      if (!privateFieldsAsSymbols) {
+        annotateAsPure(init);
+      }
       initNodes.push(template.statement.ast`var ${id} = ${init}`);
     }
   }
@@ -1283,7 +1285,7 @@ function buildPrivateMethodDeclaration(
   file: File,
   prop: NodePath<t.ClassPrivateMethod>,
   privateNamesMap: PrivateNamesMap,
-  privateFieldsAsProperties = false,
+  privateFieldsAsSymbolsOrProperties = false,
 ) {
   const privateName = privateNamesMap.get(prop.node.key.id.name);
   const {
@@ -1310,7 +1312,7 @@ function buildPrivateMethodDeclaration(
   if (
     (process.env.BABEL_8_BREAKING || newHelpers(file)) &&
     (isGetter || isSetter) &&
-    !privateFieldsAsProperties
+    !privateFieldsAsSymbolsOrProperties
   ) {
     const scope = prop.get("body").scope;
     const thisArg = scope.generateUidIdentifier("this");
@@ -1350,7 +1352,7 @@ function buildPrivateMethodDeclaration(
       initAdded: true,
     });
     declId = setId;
-  } else if (isStatic && !privateFieldsAsProperties) {
+  } else if (isStatic && !privateFieldsAsSymbolsOrProperties) {
     declId = id;
   }
 
@@ -1511,7 +1513,7 @@ export function buildFieldsInitNodes(
   privateNamesMap: PrivateNamesMap,
   file: File,
   setPublicClassFields: boolean,
-  privateFieldsAsProperties: boolean,
+  privateFieldsAsSymbolsOrProperties: boolean,
   noUninitializedPrivateFieldAccess: boolean,
   constantSuper: boolean,
   innerBindingRef: t.Identifier | null,
@@ -1606,12 +1608,18 @@ export function buildFieldsInitNodes(
         }
         break;
       }
-      case isStatic && isPrivate && isField && privateFieldsAsProperties:
+      case isStatic &&
+        isPrivate &&
+        isField &&
+        privateFieldsAsSymbolsOrProperties:
         staticNodes.push(
           buildPrivateFieldInitLoose(t.cloneNode(ref), prop, privateNamesMap),
         );
         break;
-      case isStatic && isPrivate && isField && !privateFieldsAsProperties:
+      case isStatic &&
+        isPrivate &&
+        isField &&
+        !privateFieldsAsSymbolsOrProperties:
         if (!process.env.BABEL_8_BREAKING && !newHelpers(file)) {
           staticNodes.push(
             buildPrivateStaticFieldInitSpecOld(prop, privateNamesMap),
@@ -1645,12 +1653,18 @@ export function buildFieldsInitNodes(
           buildPublicFieldInitSpec(t.cloneNode(ref), prop, file),
         );
         break;
-      case isInstance && isPrivate && isField && privateFieldsAsProperties:
+      case isInstance &&
+        isPrivate &&
+        isField &&
+        privateFieldsAsSymbolsOrProperties:
         instanceNodes.push(
           buildPrivateFieldInitLoose(t.thisExpression(), prop, privateNamesMap),
         );
         break;
-      case isInstance && isPrivate && isField && !privateFieldsAsProperties:
+      case isInstance &&
+        isPrivate &&
+        isField &&
+        !privateFieldsAsSymbolsOrProperties:
         instanceNodes.push(
           buildPrivateInstanceFieldInitSpec(
             t.thisExpression(),
@@ -1660,7 +1674,10 @@ export function buildFieldsInitNodes(
           ),
         );
         break;
-      case isInstance && isPrivate && isMethod && privateFieldsAsProperties:
+      case isInstance &&
+        isPrivate &&
+        isMethod &&
+        privateFieldsAsSymbolsOrProperties:
         instanceNodes.unshift(
           buildPrivateMethodInitLoose(
             t.thisExpression(),
@@ -1675,11 +1692,14 @@ export function buildFieldsInitNodes(
             // @ts-expect-error checked in switch
             prop,
             privateNamesMap,
-            privateFieldsAsProperties,
+            privateFieldsAsSymbolsOrProperties,
           ),
         );
         break;
-      case isInstance && isPrivate && isMethod && !privateFieldsAsProperties:
+      case isInstance &&
+        isPrivate &&
+        isMethod &&
+        !privateFieldsAsSymbolsOrProperties:
         instanceNodes.unshift(
           buildPrivateInstanceMethodInitSpec(
             t.thisExpression(),
@@ -1695,11 +1715,14 @@ export function buildFieldsInitNodes(
             // @ts-expect-error checked in switch
             prop,
             privateNamesMap,
-            privateFieldsAsProperties,
+            privateFieldsAsSymbolsOrProperties,
           ),
         );
         break;
-      case isStatic && isPrivate && isMethod && !privateFieldsAsProperties:
+      case isStatic &&
+        isPrivate &&
+        isMethod &&
+        !privateFieldsAsSymbolsOrProperties:
         if (!process.env.BABEL_8_BREAKING && !newHelpers(file)) {
           staticNodes.unshift(
             // @ts-expect-error checked in switch
@@ -1712,11 +1735,14 @@ export function buildFieldsInitNodes(
             // @ts-expect-error checked in switch
             prop,
             privateNamesMap,
-            privateFieldsAsProperties,
+            privateFieldsAsSymbolsOrProperties,
           ),
         );
         break;
-      case isStatic && isPrivate && isMethod && privateFieldsAsProperties:
+      case isStatic &&
+        isPrivate &&
+        isMethod &&
+        privateFieldsAsSymbolsOrProperties:
         staticNodes.unshift(
           buildPrivateStaticMethodInitLoose(
             t.cloneNode(ref),
@@ -1732,7 +1758,7 @@ export function buildFieldsInitNodes(
             // @ts-expect-error checked in switch
             prop,
             privateNamesMap,
-            privateFieldsAsProperties,
+            privateFieldsAsSymbolsOrProperties,
           ),
         );
         break;

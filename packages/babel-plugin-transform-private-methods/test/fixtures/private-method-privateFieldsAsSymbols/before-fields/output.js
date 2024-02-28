@@ -1,5 +1,5 @@
-var _priv = /*#__PURE__*/Symbol("priv");
-var _method = /*#__PURE__*/Symbol("method");
+var _priv = Symbol("priv");
+var _method = Symbol("method");
 class Cl {
   constructor() {
     Object.defineProperty(this, _method, {

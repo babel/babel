@@ -1,6 +1,6 @@
 var _Cl;
-var _PRIVATE_STATIC_FIELD = /*#__PURE__*/Symbol("PRIVATE_STATIC_FIELD");
-var _privateStaticFieldValue = /*#__PURE__*/Symbol("privateStaticFieldValue");
+var _PRIVATE_STATIC_FIELD = Symbol("PRIVATE_STATIC_FIELD");
+var _privateStaticFieldValue = Symbol("privateStaticFieldValue");
 class Cl {
   static getValue() {
     return babelHelpers.classPrivateFieldLooseBase(Cl, _privateStaticFieldValue)[_privateStaticFieldValue];

@@ -1,5 +1,5 @@
-var _foo = /*#__PURE__*/Symbol("foo");
-var _foo3 = /*#__PURE__*/Symbol("foo2");
+var _foo = Symbol("foo");
+var _foo3 = Symbol("foo2");
 class Foo {
   constructor() {
     Object.defineProperty(this, _foo3, {
