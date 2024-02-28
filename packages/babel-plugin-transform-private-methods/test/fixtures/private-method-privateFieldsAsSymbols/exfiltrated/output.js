@@ -1,13 +1,13 @@
 let exfiltrated;
-var _Foo_brand = /*#__PURE__*/Symbol("privateMethod");
+var _privateMethod = /*#__PURE__*/Symbol("privateMethod");
 class Foo {
   constructor() {
-    Object.defineProperty(this, _Foo_brand, {
-      value: _privateMethod
+    Object.defineProperty(this, _privateMethod, {
+      value: _privateMethod2
     });
     if (exfiltrated === undefined) {
-      exfiltrated = babelHelpers.classPrivateFieldLooseBase(this, _Foo_brand)[_Foo_brand];
+      exfiltrated = babelHelpers.classPrivateFieldLooseBase(this, _privateMethod)[_privateMethod];
     }
   }
 }
-function _privateMethod() {}
+function _privateMethod2() {}

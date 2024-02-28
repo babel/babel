@@ -1,13 +1,13 @@
-var _Foo_brand = /*#__PURE__*/Symbol("foo");
+var _foo = /*#__PURE__*/Symbol("foo");
 class Foo {
   constructor() {
-    Object.defineProperty(this, _Foo_brand, {
+    Object.defineProperty(this, _foo, {
       get: _get_foo,
       set: void 0
     });
   }
   test(other) {
-    return Object.prototype.hasOwnProperty.call(babelHelpers.checkInRHS(other), _Foo_brand);
+    return Object.prototype.hasOwnProperty.call(babelHelpers.checkInRHS(other), _foo);
   }
 }
 function _get_foo() {}

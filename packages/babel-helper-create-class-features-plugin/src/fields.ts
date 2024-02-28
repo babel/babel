@@ -47,7 +47,7 @@ if (!process.env.BABEL_8_BREAKING) {
 
 export function buildPrivateNamesMap(
   className: string,
-  privateFieldsAsProperties: boolean,
+  privateFieldsAsSymbolsOrProperties: boolean,
   props: PropPath[],
   file: File,
 ) {
@@ -63,7 +63,7 @@ export function buildPrivateNamesMap(
         let initAdded = false;
         let id: t.Identifier;
         if (
-          !privateFieldsAsProperties &&
+          !privateFieldsAsSymbolsOrProperties &&
           (process.env.BABEL_8_BREAKING || newHelpers(file)) &&
           isMethod &&
           !isStatic
