@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "ESNext",
+    "module": "preserve",
     "lib": ["ESNext"],
     "declaration": true,
     "emitDeclarationOnly": true,
