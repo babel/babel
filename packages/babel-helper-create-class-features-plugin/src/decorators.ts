@@ -1,7 +1,8 @@
 import type { NodePath, Scope, Visitor } from "@babel/traverse";
-import { types as t, template } from "@babel/core";
+import { types as t, template, traverse } from "@babel/core";
 import ReplaceSupers from "@babel/helper-replace-supers";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
+import environmentVisitor from "@babel/helper-environment-visitor";
 import * as charCodes from "charcodes";
 import type { PluginAPI, PluginObject, PluginPass } from "@babel/core";
 import { skipTransparentExprWrappers } from "@babel/helper-skip-transparent-expression-wrappers";
@@ -1538,6 +1539,7 @@ function transformClass(
   const classInitCall =
     classInitLocal && t.callExpression(t.cloneNode(classInitLocal), []);
 
+  let originalClassPath = path;
   const originalClass = path.node;
 
   if (classDecorators) {
@@ -1619,6 +1621,15 @@ function transformClass(
       }
 
       path.replaceWith(newExpr);
+
+      path.traverse({
+        Class(path) {
+          if (path.node === originalClass) {
+            originalClassPath = path;
+            path.stop();
+          }
+        },
+      });
     }
   }
   if (!classInitInjected && classInitCall) {
@@ -1640,35 +1651,82 @@ function transformClass(
       superClass = id;
     }
   }
-  originalClass.body.body.unshift(
-    t.staticBlock(
-      [
-        computedKeyAssignments.length > 0 &&
-          t.expressionStatement(
-            maybeSequenceExpression(computedKeyAssignments),
-          ),
-        t.expressionStatement(
-          createLocalsAssignment(
-            elementLocals,
-            classLocals,
-            elementDecorations,
-            classDecorationsId ?? t.arrayExpression(classDecorations),
-            t.numericLiteral(classDecorationsFlag),
-            needsInstancePrivateBrandCheck ? lastInstancePrivateName : null,
-            typeof className === "object" ? className : undefined,
-            t.cloneNode(superClass),
-            state,
-            version,
-          ),
-        ),
-        staticInitLocal &&
-          t.expressionStatement(
-            t.callExpression(t.cloneNode(staticInitLocal), [
-              t.thisExpression(),
+
+  originalClass.body.body.unshift(t.staticBlock([]));
+  const applyDecoratorWrapperPath = originalClassPath
+    .get("body")
+    .get("body")[0] as NodePath<t.StaticBlock>;
+
+  if (computedKeyAssignments.length > 0) {
+    applyDecoratorWrapperPath.pushContainer(
+      "body",
+      t.expressionStatement(maybeSequenceExpression(computedKeyAssignments)),
+    );
+
+    const computedKeysPath = applyDecoratorWrapperPath.get("body")[0];
+
+    // Capture lexical this and super call, replace their usage in computed key assignments
+    let outerThis: t.Identifier, outerSuperCall: t.Identifier;
+    const computedKeysPathVisitor: Visitor = {
+      ThisExpression(path) {
+        outerThis ??= scopeParent.generateDeclaredUidIdentifier("outerThis");
+        path.replaceWith(t.cloneNode(outerThis));
+      },
+      CallExpression(path) {
+        const calleePath = path.get("callee");
+        if (calleePath.isSuper()) {
+          outerSuperCall ??=
+            scopeParent.generateDeclaredUidIdentifier("outerSuper");
+          calleePath.replaceWith(t.cloneNode(outerSuperCall));
+        }
+      },
+    };
+    computedKeysPath.traverse(
+      traverse.visitors.merge([computedKeysPathVisitor, environmentVisitor]),
+    );
+    if (outerThis) {
+      classAssignments.push(
+        t.assignmentExpression("=", t.cloneNode(outerThis), t.thisExpression()),
+      );
+    }
+    if (outerSuperCall) {
+      classAssignments.push(
+        t.assignmentExpression(
+          "=",
+          t.cloneNode(outerSuperCall),
+          t.arrowFunctionExpression(
+            [t.restElement(t.identifier("args"))],
+            t.callExpression(t.super(), [
+              t.spreadElement(t.identifier("args")),
             ]),
           ),
-      ].filter(Boolean),
-    ),
+        ),
+      );
+    }
+  }
+
+  applyDecoratorWrapperPath.pushContainer(
+    "body",
+    [
+      t.expressionStatement(
+        createLocalsAssignment(
+          elementLocals,
+          classLocals,
+          elementDecorations,
+          classDecorationsId ?? t.arrayExpression(classDecorations),
+          t.numericLiteral(classDecorationsFlag),
+          needsInstancePrivateBrandCheck ? lastInstancePrivateName : null,
+          typeof className === "object" ? className : undefined,
+          t.cloneNode(superClass),
+          state,
+          version,
+        ),
+      ),
+      staticInitLocal &&
+        t.expressionStatement(
+          t.callExpression(t.cloneNode(staticInitLocal), [t.thisExpression()]),
+        ),
+    ].filter(Boolean),
   );
 
   // When path is a ClassExpression, path.insertBefore will convert `path`
