@@ -291,13 +291,18 @@ function getComputedKeyMemoiser(path: NodePath<t.Expression>): t.Expression {
   if (completion.isConstantExpression()) {
     return t.cloneNode(path.node);
   } else if (
+    completion.isIdentifier() &&
+    path.scope.hasUid(completion.node.name)
+  ) {
+    return t.cloneNode(path.node);
+  } else if (
     completion.isAssignmentExpression() &&
     completion.get("left").isIdentifier()
   ) {
-    return t.cloneNode(completion.node.left);
+    return t.cloneNode(completion.node.left as t.Identifier);
   } else {
     throw new Error(
-      "Internal Error: the computed key has not yet been memoised.",
+      `Internal Error: the computed key ${path.toString()} has not yet been memoised.`,
     );
   }
 }
@@ -1212,7 +1217,15 @@ function transformClass(
             scopeParent.generateUid("computedKey"),
           );
           if (maybeAssignment != null) {
-            node.key = maybeAssignment;
+            // If it is a static computed field within a decorated class, move the computed key into
+            // computed key assignments which will be then moved into the non-static class, to ensure
+            // that the evaluation order is correct and the private environment is correct
+            if (classDecorators && element.isClassProperty({ static: true })) {
+              node.key = t.cloneNode(maybeAssignment.left);
+              computedKeyAssignments.push(maybeAssignment);
+            } else {
+              node.key = maybeAssignment;
+            }
           }
         }
       }
@@ -1241,6 +1254,20 @@ function transformClass(
         let privateMethods: Array<
           t.FunctionExpression | t.ArrowFunctionExpression
         >;
+
+        let nameExpr: t.Expression;
+
+        if (isComputed) {
+          nameExpr = getComputedKeyMemoiser(
+            element.get("key") as NodePath<t.Expression>,
+          );
+        } else if (key.type === "PrivateName") {
+          nameExpr = t.stringLiteral(key.id.name);
+        } else if (key.type === "Identifier") {
+          nameExpr = t.stringLiteral(key.name);
+        } else {
+          nameExpr = t.cloneNode(key as t.Expression);
+        }
 
         if (kind === ACCESSOR) {
           const { value } = element.node as t.ClassAccessorProperty;
@@ -1358,20 +1385,6 @@ function transformClass(
           }
         }
 
-        let nameExpr: t.Expression;
-
-        if (isComputed) {
-          nameExpr = getComputedKeyMemoiser(
-            element.get("key") as NodePath<t.Expression>,
-          );
-        } else if (key.type === "PrivateName") {
-          nameExpr = t.stringLiteral(key.id.name);
-        } else if (key.type === "Identifier") {
-          nameExpr = t.stringLiteral(key.name);
-        } else {
-          nameExpr = t.cloneNode(key as t.Expression);
-        }
-
         elementDecoratorInfo.push({
           kind,
           decoratorsArray,
@@ -1388,11 +1401,15 @@ function transformClass(
       }
 
       if (isComputed && computedKeyAssignments.length > 0) {
-        prependExpressionsToComputedKey(
-          computedKeyAssignments,
-          element as NodePath<ClassElementCanHaveComputedKeys>,
-        );
-        computedKeyAssignments = [];
+        if (classDecorators && element.isClassProperty({ static: true })) {
+          // do nothing
+        } else {
+          prependExpressionsToComputedKey(
+            computedKeyAssignments,
+            element as NodePath<ClassElementCanHaveComputedKeys>,
+          );
+          computedKeyAssignments = [];
+        }
       }
 
       if (
@@ -1440,11 +1457,14 @@ function transformClass(
   }
 
   if (computedKeyAssignments.length > 0) {
-    const lastComputedKey = path
-      .get("body.body")
-      .findLast(
-        path => (path.node as ClassElementCanHaveComputedKeys).computed,
-      );
+    const lastComputedKey = path.get("body.body").findLast(path => {
+      if ((path.node as ClassElementCanHaveComputedKeys).computed) {
+        if (classDecorators && path.isClassProperty({ static: true })) {
+          return false;
+        }
+        return true;
+      }
+    });
     if (lastComputedKey != null) {
       appendExpressionsToComputedKey(
         computedKeyAssignments,
@@ -1452,7 +1472,7 @@ function transformClass(
       );
       computedKeyAssignments = [];
     } else {
-      // todo: handle super usage on computedKeyAssignments
+      // todo: handle function context e.g. super, this, and arguments in computedKeyAssignments
       // if there is no computed key, the decorator expressions assignment will
       // be injected right before the `applyDecs` call.
     }
