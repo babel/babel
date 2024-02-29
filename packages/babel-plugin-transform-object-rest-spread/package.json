@@ -17,7 +17,6 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/compat-data": "workspace:^",
     "@babel/helper-compilation-targets": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^",
     "@babel/plugin-syntax-object-rest-spread": "condition:BABEL_8_BREAKING ? : ^7.8.3",

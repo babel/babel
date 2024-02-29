@@ -1,5 +1,4 @@
 import semver, { type SemVer } from "semver";
-import corejs2Polyfills from "@babel/compat-data/corejs2-built-ins";
 // @ts-expect-error Fixme: TS can not infer types from ../data/core-js-compat.js
 // but we can't import core-js-compat/data.json because JSON imports do
 // not work on Node 14
@@ -13,11 +12,8 @@ import {
 } from "./options.ts";
 import { OptionValidator } from "@babel/helper-validator-option";
 
-const corejs2DefaultWebIncludes = [
-  "web.timers",
-  "web.immediate",
-  "web.dom.iterable",
-];
+// TODO(Babel 8): Remove this
+import babel7 from "./polyfills/babel-7-plugins.cjs";
 
 import type {
   BuiltInsOption,
@@ -46,15 +42,11 @@ const getValidIncludesAndExcludes = (
   const set = new Set(allPluginsList);
   if (type === "exclude") modulePlugins.map(set.add, set);
   if (corejs) {
-    if (process.env.BABEL_8_BREAKING) {
-      Object.keys(corejs3Polyfills).map(set.add, set);
+    if (!process.env.BABEL_8_BREAKING && corejs === 2) {
+      Object.keys(babel7.corejs2Polyfills).map(set.add, set);
+      set.add("web.timers").add("web.immediate").add("web.dom.iterable");
     } else {
-      if (corejs === 2) {
-        Object.keys(corejs2Polyfills).map(set.add, set);
-        corejs2DefaultWebIncludes.map(set.add, set);
-      } else {
-        Object.keys(corejs3Polyfills).map(set.add, set);
-      }
+      Object.keys(corejs3Polyfills).map(set.add, set);
     }
   }
   return Array.from(set);

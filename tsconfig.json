@@ -183,12 +183,6 @@
       "@babel/compat-data/native-modules": [
         "./packages/babel-compat-data/data/native-modules.json"
       ],
-      "@babel/compat-data/corejs2-built-ins": [
-        "./packages/babel-compat-data/data/corejs2-built-ins.json"
-      ],
-      "@babel/compat-data/corejs3-shipped-proposals": [
-        "./packages/babel-compat-data/data/corejs3-shipped-proposals.json"
-      ],
       "@babel/compat-data/overlapping-plugins": [
         "./packages/babel-compat-data/data/overlapping-plugins.json"
       ],
