@@ -798,6 +798,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/helper-import-to-platform-api@npm:^8.0.0-alpha.7":
+  version: 8.0.0-alpha.7
+  resolution: "@babel/helper-import-to-platform-api@npm:8.0.0-alpha.7"
+  dependencies:
+    "@babel/helper-compilation-targets": "npm:^8.0.0-alpha.7"
+    "@babel/helper-module-imports": "npm:^8.0.0-alpha.7"
+  peerDependencies:
+    "@babel/core": ^8.0.0-alpha.7
+  checksum: dc580af2371e328a82c3960a207aa4d731a923b8b8c62bbd3d59b0893d37c475b0caee4f11bd3d4a359d695a328b1ad0f9c8e107b156d1844ab674f4546f1e3b
+  languageName: node
+  linkType: hard
+
 "@babel/helper-import-to-platform-api@workspace:^, @babel/helper-import-to-platform-api@workspace:packages/babel-helper-import-to-platform-api":
   version: 0.0.0-use.local
   resolution: "@babel/helper-import-to-platform-api@workspace:packages/babel-helper-import-to-platform-api"
@@ -1573,6 +1585,19 @@ __metadata:
     "@babel/core": ^7.22.0
   languageName: unknown
   linkType: soft
+
+"@babel/plugin-proposal-json-modules@npm:8.0.0-alpha.7":
+  version: 8.0.0-alpha.7
+  resolution: "@babel/plugin-proposal-json-modules@npm:8.0.0-alpha.7"
+  dependencies:
+    "@babel/helper-import-to-platform-api": "npm:^8.0.0-alpha.7"
+    "@babel/helper-plugin-utils": "npm:^8.0.0-alpha.7"
+    "@babel/plugin-syntax-import-attributes": "npm:^8.0.0-alpha.7"
+  peerDependencies:
+    "@babel/core": ^8.0.0-alpha.7
+  checksum: 552c4014a48cc9e211068e316016a8bdc5027fe1d205ce0a08ccd35ad97c4ee106de20ea5366bb2ca67d175c3d6cc16eee7564ab378145ddf1a0d0a61230b37e
+  languageName: node
+  linkType: hard
 
 "@babel/plugin-proposal-json-modules@workspace:^, @babel/plugin-proposal-json-modules@workspace:packages/babel-plugin-proposal-json-modules":
   version: 0.0.0-use.local
@@ -6974,6 +6999,7 @@ __metadata:
     "@babel/eslint-parser": "workspace:^"
     "@babel/eslint-plugin-development": "workspace:^"
     "@babel/eslint-plugin-development-internal": "workspace:^"
+    "@babel/plugin-proposal-json-modules": "npm:8.0.0-alpha.7"
     "@babel/plugin-transform-dynamic-import": "npm:8.0.0-alpha.7"
     "@babel/plugin-transform-export-namespace-from": "npm:8.0.0-alpha.7"
     "@babel/plugin-transform-modules-commonjs": "npm:8.0.0-alpha.7"

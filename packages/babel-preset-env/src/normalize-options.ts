@@ -1,8 +1,5 @@
 import semver, { type SemVer } from "semver";
-// @ts-expect-error Fixme: TS can not infer types from ../data/core-js-compat.js
-// but we can't import core-js-compat/data.json because JSON imports do
-// not work on Node 14
-import corejs3Polyfills from "../data/core-js-compat.js";
+import corejs3Polyfills from "core-js-compat/data.json" with { type: "json" };
 import { plugins as pluginsList } from "./plugins-compat-data.ts";
 import moduleTransformations from "./module-transformations.ts";
 import {

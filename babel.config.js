@@ -184,6 +184,7 @@ module.exports = function (api) {
       ["@babel/transform-object-rest-spread", { useBuiltIns: true }],
 
       convertESM ? "@babel/transform-export-namespace-from" : null,
+      env !== "standalone" ? "@babel/plugin-proposal-json-modules" : null,
     ].filter(Boolean),
     overrides: [
       {
