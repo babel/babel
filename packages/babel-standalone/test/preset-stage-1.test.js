@@ -45,10 +45,10 @@ describe("stage-1 preset", () => {
     }).code;
     expect(output).toMatchInlineSnapshot(`"x;"`);
   });
-  it("should support decorators versioned 2021-12", () => {
+  it("should support decorators versioned 2023-11", () => {
     const output = Babel.transform("@dec class C {}", {
       plugins: [["external-helpers", { helperVersion: "7.100.0" }]],
-      presets: [["stage-1", { decoratorsVersion: "2021-12" }]],
+      presets: [["stage-3", { decoratorsVersion: "2023-11" }]],
     }).code;
     expect(output).toMatch("babelHelpers.applyDecs");
   });
