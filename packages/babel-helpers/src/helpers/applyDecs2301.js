@@ -1,4 +1,5 @@
 /* @minVersion 7.21.0 */
+/* @onlyBabel7 */
 
 import checkInRHS from "checkInRHS";
 import setFunctionName from "setFunctionName";

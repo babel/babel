@@ -51,6 +51,10 @@ export default Object.freeze({
     }
     const { minVersion } = minVersionMatch.groups;
 
+    if (process.env.BABEL_8_BREAKING && code.includes("@onlyBabel7")) {
+      continue;
+    }
+
     const mangleFns = code.includes("@mangleFns");
     const noMangleFns = [];
 
@@ -101,7 +105,12 @@ export default Object.freeze({
           keep_fnames: mangleFns ? new RegExp(noMangleFns.join("|")) : true,
         },
         // The _typeof helper has a custom directive that we must keep
-        compress: { directives: false, passes: 10 },
+        compress: {
+          directives: false,
+          passes: 10,
+          unsafe: true,
+          unsafe_proto: true,
+        },
       })
     ).code;
 
