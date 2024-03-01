@@ -6,6 +6,7 @@ import { minify } from "terser";
 import { transformSync } from "@babel/core";
 import presetTypescript from "@babel/preset-typescript";
 import { gzipSync } from "zlib";
+import { IS_BABEL_8 } from "$repo-utils";
 
 const HELPERS_FOLDER = new URL("../src/helpers", import.meta.url);
 const IGNORED_FILES = new Set(["package.json"]);
@@ -51,7 +52,7 @@ export default Object.freeze({
     }
     const { minVersion } = minVersionMatch.groups;
 
-    if (process.env.BABEL_8_BREAKING && code.includes("@onlyBabel7")) {
+    if (IS_BABEL_8() && code.includes("@onlyBabel7")) {
       continue;
     }
 
