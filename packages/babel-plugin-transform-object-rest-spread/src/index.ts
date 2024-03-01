@@ -4,8 +4,8 @@ import type { PluginPass } from "@babel/core";
 import type { NodePath, Scope } from "@babel/traverse";
 import { convertFunctionParams } from "@babel/plugin-transform-parameters";
 import { isRequired } from "@babel/helper-compilation-targets";
-import compatData from "@babel/compat-data/corejs2-built-ins";
 import shouldStoreRHSInTemporaryVariable from "./shouldStoreRHSInTemporaryVariable.ts";
+import compatData from "./compat-data.ts";
 
 const { isAssignmentPattern, isObjectProperty } = t;
 // @babel/types <=7.3.3 counts FOO as referenced in var { x: FOO }.
@@ -33,7 +33,7 @@ export default declare((api, opts: Options) => {
   );
 
   const targets = api.targets();
-  const supportsObjectAssign = !isRequired("es6.object.assign", targets, {
+  const supportsObjectAssign = !isRequired("Object.assign", targets, {
     compatData,
   });
 
