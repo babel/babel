@@ -839,12 +839,14 @@ function createPrivateBrandCheckClosure(brandName: t.PrivateName) {
 // Check if the expression does not reference function-specific
 // context or the given identifier name.
 // `true` means "maybe" and `false` means "no".
-function usesFunctionContext(expression: t.Node) {
+function usesFunctionContextOrYieldAwait(expression: t.Node) {
   try {
     t.traverseFast(expression, node => {
       if (
         t.isThisExpression(node) ||
         t.isSuper(node) ||
+        t.isYieldExpression(node) ||
+        t.isAwaitExpression(node) ||
         t.isIdentifier(node, { name: "arguments" }) ||
         (t.isMetaProperty(node) && node.meta.name !== "import")
       ) {
@@ -869,6 +871,14 @@ function usesPrivateField(expression: t.Node) {
     return false;
   } catch {
     return true;
+  }
+}
+
+function convertToComputedKey(path: NodePath<t.ClassProperty | t.ClassMethod>) {
+  const { node } = path;
+  node.computed = true;
+  if (t.isIdentifier(node.key)) {
+    node.key = t.stringLiteral(node.key.name);
   }
 }
 
@@ -995,8 +1005,9 @@ function transformClass(
           break;
       }
       hasElementDecorators = true;
-      elemDecsUseFnContext ||=
-        element.node.decorators.some(usesFunctionContext);
+      elemDecsUseFnContext ||= element.node.decorators.some(
+        usesFunctionContextOrYieldAwait,
+      );
     } else if (element.node.type === "ClassAccessorProperty") {
       // @ts-expect-error todo: propertyVisitor.ClassAccessorProperty should be callable. Improve typings.
       propertyVisitor.ClassAccessorProperty(
@@ -1091,7 +1102,7 @@ function transformClass(
       }
       decoratorsThis.push(object);
       hasSideEffects ||= !scopeParent.isStatic(expression);
-      usesFnContext ||= usesFunctionContext(expression);
+      usesFnContext ||= usesFunctionContextOrYieldAwait(expression);
     }
     return { hasSideEffects, usesFnContext, decoratorsThis };
   }
@@ -1407,7 +1418,9 @@ function transformClass(
         } else {
           prependExpressionsToComputedKey(
             computedKeyAssignments,
-            element as NodePath<ClassElementCanHaveComputedKeys>,
+            (kind === ACCESSOR
+              ? element.getNextSibling() // the getter transpiled from the accessor
+              : element) as NodePath<ClassElementCanHaveComputedKeys>,
           );
           computedKeyAssignments = [];
         }
@@ -1458,24 +1471,24 @@ function transformClass(
   }
 
   if (computedKeyAssignments.length > 0) {
-    const lastComputedKey = path.get("body.body").findLast(path => {
+    const elements = path.get("body.body");
+    const lastComputedElement = elements.findLast(path => {
       if ((path.node as ClassElementCanHaveComputedKeys).computed) {
         if (classDecorators && path.isClassProperty({ static: true })) {
           return false;
         }
         return true;
       }
-    });
-    if (lastComputedKey != null) {
+    }) as NodePath<ClassElementCanHaveComputedKeys>;
+    if (lastComputedElement != null) {
       appendExpressionsToComputedKey(
         computedKeyAssignments,
-        lastComputedKey as NodePath<ClassElementCanHaveComputedKeys>,
+        lastComputedElement,
       );
       computedKeyAssignments = [];
     } else {
-      // todo: handle function context e.g. super, this, and arguments in computedKeyAssignments
-      // if there is no computed key, the decorator expressions assignment will
-      // be injected right before the `applyDecs` call.
+      // if there is no computed key, we will try to convert the last non-computed class element
+      // into a computed key and insert them there
     }
   }
 
@@ -1659,6 +1672,32 @@ function transformClass(
   }
 
   originalClass.body.body.unshift(t.staticBlock([]));
+  if (computedKeyAssignments.length > 0) {
+    // todo: the following branch will fail on 2023-05 version
+    if (version === "2023-11") {
+      const elements = originalClassPath.get("body.body");
+      const lastPublicElement = elements.findLast(path => {
+        if (
+          (path.isClassProperty() || path.isClassMethod()) &&
+          !path.node.computed &&
+          (path.node as t.ClassMethod).kind !== "constructor"
+        ) {
+          return true;
+        }
+      }) as NodePath<t.ClassProperty | t.ClassMethod>;
+      if (lastPublicElement != null) {
+        // Convert it to a computed key to host decorator evaluations
+        convertToComputedKey(lastPublicElement);
+        prependExpressionsToComputedKey(
+          computedKeyAssignments,
+          lastPublicElement as NodePath<ClassElementCanHaveComputedKeys>,
+        );
+        computedKeyAssignments = [];
+      }
+      // when there is no public class elements, the decorator expressions
+      // assignment will be injected right before the `applyDecs` call.
+    }
+  }
   const applyDecoratorWrapperPath = originalClassPath
     .get("body")
     .get("body")[0] as NodePath<t.StaticBlock>;
