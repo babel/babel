@@ -1584,12 +1584,18 @@ function transformClass(
         class extends ${state.addHelper("identity")} {}
       ` as t.ClassExpression;
       staticsClass.body.body = [
-        t.staticBlock([
-          t.toStatement(originalClass, true) ||
-            // If toStatement returns false, originalClass must be an anonymous ClassExpression,
-            // because `export default @dec ...` has been handled in the export visitor before.
-            t.expressionStatement(originalClass as t.ClassExpression),
-        ]),
+        // Insert the original class to a computed key of the wrapper so that
+        // 1) they share the same function context with the wrapper class
+        // 2) the memoisation of static computed field is evaluated before they are referenced
+        //    in the wrapper class keys
+        t.classProperty(
+          t.toExpression(originalClass),
+          undefined,
+          undefined,
+          undefined,
+          /* computed */ true,
+          /* static */ true,
+        ),
         ...statics,
       ];
 
