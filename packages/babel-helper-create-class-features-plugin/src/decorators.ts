@@ -836,6 +836,58 @@ function createPrivateBrandCheckClosure(brandName: t.PrivateName) {
   );
 }
 
+/**
+ * create a super() delegate
+ * (...args) => super(...args)
+ *
+ */
+function createSuperCallDelegate() {
+  return t.arrowFunctionExpression(
+    [t.restElement(t.identifier("args"))],
+    t.callExpression(t.super(), [t.spreadElement(t.identifier("args"))]),
+  );
+}
+
+/**
+ * create a super[prop] delegate
+ * (prop) => Object.defineProperty({}, "_", {
+ *   get: () => super[prop],
+ *   set: (v) => super[prop] = v
+ * })
+ *
+ */
+function createSuperPropDelegate() {
+  const getDelegate = t.arrowFunctionExpression(
+    [],
+    t.memberExpression(t.super(), t.identifier("prop"), true),
+  );
+  const setDelegate = t.assignmentExpression(
+    "=",
+    t.memberExpression(t.super(), t.identifier("prop"), true),
+    t.identifier("v"),
+  );
+  return t.arrowFunctionExpression(
+    [t.identifier("prop")],
+    t.callExpression(
+      t.memberExpression(
+        t.identifier("Object"),
+        t.identifier("defineProperty"),
+      ),
+      [
+        t.objectExpression([]),
+        t.stringLiteral("_"),
+        t.objectExpression([
+          t.objectProperty(t.identifier("get"), getDelegate),
+          t.objectProperty(
+            t.identifier("set"),
+            t.arrowFunctionExpression([t.identifier("v")], setDelegate),
+          ),
+        ]),
+      ],
+    ),
+  );
+}
+
 // Check if the expression does not reference function-specific
 // context or the given identifier name.
 // `true` means "maybe" and `false` means "no".
@@ -1710,7 +1762,8 @@ function transformClass(
 
     const computedKeysPath = applyDecoratorWrapperPath.get("body")[0];
 
-    // Capture lexical this and super call, replace their usage in computed key assignments
+    // Capture lexical this, super() and other function contexts, replace their usage
+    // in computed key assignments
     let outerThis: t.Identifier,
       outerSuperCall: t.Identifier,
       outerSuperProp: t.Identifier,
@@ -1775,12 +1828,7 @@ function transformClass(
         t.assignmentExpression(
           "=",
           t.cloneNode(outerSuperCall),
-          t.arrowFunctionExpression(
-            [t.restElement(t.identifier("args"))],
-            t.callExpression(t.super(), [
-              t.spreadElement(t.identifier("args")),
-            ]),
-          ),
+          createSuperCallDelegate(),
         ),
       );
     }
@@ -1789,43 +1837,7 @@ function transformClass(
         t.assignmentExpression(
           "=",
           t.cloneNode(outerSuperProp),
-          t.arrowFunctionExpression(
-            [t.identifier("prop")],
-            t.callExpression(
-              t.memberExpression(
-                t.identifier("Object"),
-                t.identifier("defineProperty"),
-              ),
-              [
-                t.objectExpression([]),
-                t.stringLiteral("_"),
-                t.objectExpression([
-                  t.objectProperty(
-                    t.identifier("get"),
-                    t.arrowFunctionExpression(
-                      [],
-                      t.memberExpression(t.super(), t.identifier("prop"), true),
-                    ),
-                  ),
-                  t.objectProperty(
-                    t.identifier("set"),
-                    t.arrowFunctionExpression(
-                      [t.identifier("v")],
-                      t.assignmentExpression(
-                        "=",
-                        t.memberExpression(
-                          t.super(),
-                          t.identifier("prop"),
-                          true,
-                        ),
-                        t.identifier("v"),
-                      ),
-                    ),
-                  ),
-                ]),
-              ],
-            ),
-          ),
+          createSuperPropDelegate(),
         ),
       );
     }
