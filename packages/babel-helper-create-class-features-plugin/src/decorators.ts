@@ -1666,7 +1666,11 @@ function transformClass(
     const computedKeysPath = applyDecoratorWrapperPath.get("body")[0];
 
     // Capture lexical this and super call, replace their usage in computed key assignments
-    let outerThis: t.Identifier, outerSuperCall: t.Identifier;
+    let outerThis: t.Identifier,
+      outerSuperCall: t.Identifier,
+      outerSuperProp: t.Identifier,
+      outerArguments: t.Identifier,
+      outerNewTarget: t.Identifier;
     const computedKeysPathVisitor: Visitor = {
       ThisExpression(path) {
         outerThis ??= scopeParent.generateDeclaredUidIdentifier("outerThis");
@@ -1678,6 +1682,38 @@ function transformClass(
           outerSuperCall ??=
             scopeParent.generateDeclaredUidIdentifier("outerSuper");
           calleePath.replaceWith(t.cloneNode(outerSuperCall));
+        }
+      },
+      MemberExpression(path) {
+        const objectPath = path.get("object");
+        if (objectPath.isSuper()) {
+          outerSuperProp ??=
+            scopeParent.generateDeclaredUidIdentifier("outerSuperProp");
+          path.replaceWith(
+            t.memberExpression(
+              t.callExpression(t.cloneNode(outerSuperProp), [
+                path.node.computed
+                  ? (path.node.property as t.Expression)
+                  : t.stringLiteral((path.node.property as t.Identifier).name),
+              ]),
+              t.identifier("_"),
+            ),
+          );
+        }
+      },
+      Identifier(path) {
+        if (path.node.name === "arguments") {
+          outerArguments ??=
+            scopeParent.generateDeclaredUidIdentifier("outerArguments");
+          path.replaceWith(t.cloneNode(outerArguments));
+        }
+      },
+      MetaProperty(path) {
+        const object = path.node.meta;
+        if (object.name === "new") {
+          outerNewTarget ??=
+            scopeParent.generateDeclaredUidIdentifier("outerNewTarget");
+          path.replaceWith(t.cloneNode(outerNewTarget));
         }
       },
     };
@@ -1700,6 +1736,69 @@ function transformClass(
               t.spreadElement(t.identifier("args")),
             ]),
           ),
+        ),
+      );
+    }
+    if (outerSuperProp) {
+      classAssignments.push(
+        t.assignmentExpression(
+          "=",
+          t.cloneNode(outerSuperProp),
+          t.arrowFunctionExpression(
+            [t.identifier("prop")],
+            t.callExpression(
+              t.memberExpression(
+                t.identifier("Object"),
+                t.identifier("defineProperty"),
+              ),
+              [
+                t.objectExpression([]),
+                t.stringLiteral("_"),
+                t.objectExpression([
+                  t.objectProperty(
+                    t.identifier("get"),
+                    t.arrowFunctionExpression(
+                      [],
+                      t.memberExpression(t.super(), t.identifier("prop"), true),
+                    ),
+                  ),
+                  t.objectProperty(
+                    t.identifier("set"),
+                    t.arrowFunctionExpression(
+                      [t.identifier("v")],
+                      t.assignmentExpression(
+                        "=",
+                        t.memberExpression(
+                          t.super(),
+                          t.identifier("prop"),
+                          true,
+                        ),
+                        t.identifier("v"),
+                      ),
+                    ),
+                  ),
+                ]),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+    if (outerArguments) {
+      classAssignments.push(
+        t.assignmentExpression(
+          "=",
+          t.cloneNode(outerArguments),
+          t.identifier("arguments"),
+        ),
+      );
+    }
+    if (outerNewTarget) {
+      classAssignments.push(
+        t.assignmentExpression(
+          "=",
+          t.cloneNode(outerNewTarget),
+          t.metaProperty(t.identifier("new"), t.identifier("target")),
         ),
       );
     }
