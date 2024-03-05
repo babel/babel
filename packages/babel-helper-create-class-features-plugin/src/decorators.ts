@@ -1524,14 +1524,18 @@ function transformClass(
 
   if (computedKeyAssignments.length > 0) {
     const elements = path.get("body.body");
-    const lastComputedElement = elements.findLast(path => {
-      if ((path.node as ClassElementCanHaveComputedKeys).computed) {
-        if (classDecorators && path.isClassProperty({ static: true })) {
-          return false;
+    let lastComputedElement: NodePath<ClassElementCanHaveComputedKeys>;
+    for (let i = elements.length - 1; i >= 0; i--) {
+      const path = elements[i];
+      const node = path.node as ClassElementCanHaveComputedKeys;
+      if (node.computed) {
+        if (classDecorators && t.isClassProperty(node, { static: true })) {
+          continue;
         }
-        return true;
+        lastComputedElement = path as NodePath<ClassElementCanHaveComputedKeys>;
+        break;
       }
-    }) as NodePath<ClassElementCanHaveComputedKeys>;
+    }
     if (lastComputedElement != null) {
       appendExpressionsToComputedKey(
         computedKeyAssignments,
@@ -1728,21 +1732,24 @@ function transformClass(
     // todo: the following branch will fail on 2023-05 version
     if (version === "2023-11") {
       const elements = originalClassPath.get("body.body");
-      const lastPublicElement = elements.findLast(path => {
+      let lastPublicElement: NodePath<t.ClassProperty | t.ClassMethod>;
+      for (let i = elements.length - 1; i >= 0; i--) {
+        const path = elements[i];
         if (
           (path.isClassProperty() || path.isClassMethod()) &&
           !path.node.computed &&
           (path.node as t.ClassMethod).kind !== "constructor"
         ) {
-          return true;
+          lastPublicElement = path;
+          break;
         }
-      }) as NodePath<t.ClassProperty | t.ClassMethod>;
+      }
       if (lastPublicElement != null) {
         // Convert it to a computed key to host decorator evaluations
         convertToComputedKey(lastPublicElement);
         prependExpressionsToComputedKey(
           computedKeyAssignments,
-          lastPublicElement as NodePath<ClassElementCanHaveComputedKeys>,
+          lastPublicElement,
         );
         computedKeyAssignments = [];
       }
