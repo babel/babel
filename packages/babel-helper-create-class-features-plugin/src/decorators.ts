@@ -1678,10 +1678,9 @@ function transformClass(
     }
   }
 
-  originalClass.body.body.unshift(t.staticBlock([]));
-  const applyDecoratorWrapperPath = originalClassPath
-    .get("body")
-    .get("body")[0] as NodePath<t.StaticBlock>;
+  const applyDecoratorWrapper = t.staticBlock([]);
+  originalClass.body.body.unshift(applyDecoratorWrapper);
+  const applyDecsBody = applyDecoratorWrapper.body;
   if (computedKeyAssignments.length > 0) {
     const elements = originalClassPath.get("body.body");
     let lastPublicElement: NodePath<t.ClassProperty | t.ClassMethod>;
@@ -1719,8 +1718,7 @@ function transformClass(
           /* static */ true,
         ),
       );
-      applyDecoratorWrapperPath.pushContainer(
-        "body",
+      applyDecsBody.push(
         t.expressionStatement(
           t.unaryExpression(
             "delete",
@@ -1732,29 +1730,29 @@ function transformClass(
     computedKeyAssignments = [];
   }
 
-  applyDecoratorWrapperPath.pushContainer(
-    "body",
-    [
-      t.expressionStatement(
-        createLocalsAssignment(
-          elementLocals,
-          classLocals,
-          elementDecorations,
-          classDecorationsId ?? t.arrayExpression(classDecorations),
-          t.numericLiteral(classDecorationsFlag),
-          needsInstancePrivateBrandCheck ? lastInstancePrivateName : null,
-          typeof className === "object" ? className : undefined,
-          t.cloneNode(superClass),
-          state,
-          version,
-        ),
+  applyDecsBody.push(
+    t.expressionStatement(
+      createLocalsAssignment(
+        elementLocals,
+        classLocals,
+        elementDecorations,
+        classDecorationsId ?? t.arrayExpression(classDecorations),
+        t.numericLiteral(classDecorationsFlag),
+        needsInstancePrivateBrandCheck ? lastInstancePrivateName : null,
+        typeof className === "object" ? className : undefined,
+        t.cloneNode(superClass),
+        state,
+        version,
       ),
-      staticInitLocal &&
-        t.expressionStatement(
-          t.callExpression(t.cloneNode(staticInitLocal), [t.thisExpression()]),
-        ),
-    ].filter(Boolean),
+    ),
   );
+  if (staticInitLocal) {
+    applyDecsBody.push(
+      t.expressionStatement(
+        t.callExpression(t.cloneNode(staticInitLocal), [t.thisExpression()]),
+      ),
+    );
+  }
 
   // When path is a ClassExpression, path.insertBefore will convert `path`
   // into a SequenceExpression
