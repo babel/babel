@@ -37,6 +37,7 @@
     "@babel/preset-env": "workspace:^",
     "@babel/runtime": "workspace:^",
     "@babel/runtime-corejs3": "workspace:^",
+    "babel-plugin-polyfill-corejs3": "^0.9.0",
     "make-dir": "condition:BABEL_8_BREAKING ? : ^2.1.0"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-runtime",
