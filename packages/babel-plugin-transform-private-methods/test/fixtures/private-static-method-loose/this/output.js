@@ -10,7 +10,7 @@ class B extends A {
     return 2;
   }
   static extract() {
-    return [babelHelpers.classPrivateFieldGetLoose(this, _getA), babelHelpers.classPrivateFieldGetLoose(this, _getB)];
+    return [babelHelpers.assertClassBrandLoose(this, _getA, 1), babelHelpers.assertClassBrandLoose(this, _getB, 1)];
   }
 }
 function _getA2() {

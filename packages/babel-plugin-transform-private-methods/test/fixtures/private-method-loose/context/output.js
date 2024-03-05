@@ -13,7 +13,7 @@ class Foo {
     this.status = newStatus;
   }
   getFakeStatus(fakeStatus) {
-    var fakeGetStatus = babelHelpers.classPrivateFieldGetLoose(this, _getStatus);
+    var fakeGetStatus = babelHelpers.assertClassBrandLoose(this, _getStatus, 1);
     return function () {
       return fakeGetStatus.call({
         status: fakeStatus
@@ -23,7 +23,7 @@ class Foo {
   getFakeStatusFunc() {
     return {
       status: 'fake-status',
-      getFakeStatus: babelHelpers.classPrivateFieldGetLoose(this, _getStatus)
+      getFakeStatus: babelHelpers.assertClassBrandLoose(this, _getStatus, 1)
     };
   }
 }

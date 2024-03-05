@@ -12,10 +12,10 @@ var Foo = /*#__PURE__*/function () {
   return babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test(other) {
-      babelHelpers.classPrivateFieldGetLoose(this, _foo, 1)[_foo] += 1;
-      babelHelpers.classPrivateFieldGetLoose(this, _foo, 1)[_foo] = 2;
-      babelHelpers.classPrivateFieldGetLoose(other.obj, _foo, 1)[_foo] += 1;
-      babelHelpers.classPrivateFieldGetLoose(other.obj, _foo, 1)[_foo] = 2;
+      babelHelpers.assertClassBrandLoose(this, _foo)[_foo] += 1;
+      babelHelpers.assertClassBrandLoose(this, _foo)[_foo] = 2;
+      babelHelpers.assertClassBrandLoose(other.obj, _foo)[_foo] += 1;
+      babelHelpers.assertClassBrandLoose(other.obj, _foo)[_foo] = 2;
     }
   }]);
 }();

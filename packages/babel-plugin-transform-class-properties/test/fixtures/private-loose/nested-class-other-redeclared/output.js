@@ -29,13 +29,13 @@ var Foo = /*#__PURE__*/function () {
         return babelHelpers.createClass(Nested, [{
           key: "test",
           value: function test() {
-            babelHelpers.classPrivateFieldGetLoose(this, _foo);
-            babelHelpers.classPrivateFieldGetLoose(this, _bar2);
+            babelHelpers.assertClassBrandLoose(this, _foo, 1);
+            babelHelpers.assertClassBrandLoose(this, _bar2, 1);
           }
         }]);
       }();
-      babelHelpers.classPrivateFieldGetLoose(this, _foo);
-      babelHelpers.classPrivateFieldGetLoose(this, _bar);
+      babelHelpers.assertClassBrandLoose(this, _foo, 1);
+      babelHelpers.assertClassBrandLoose(this, _bar, 1);
     }
   }]);
 }();

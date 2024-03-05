@@ -8,11 +8,11 @@ class A {
   }
   method() {
     var _obj, _obj2, _obj3, _obj4, _obj5, _obj6;
-    (_obj = obj) === null || _obj === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_obj, _x, 1)[_x] = 1;
-    (_obj2 = obj) === null || _obj2 === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_obj2, _x, 1)[_x] += 2;
-    (_obj3 = obj) === null || _obj3 === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_obj3, _x, 1)[_x] ??= 3;
-    (_obj4 = obj) === null || _obj4 === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_obj4, _x).y = 4;
-    (_obj5 = obj) === null || _obj5 === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_obj5, _x).y += 5;
-    (_obj6 = obj) === null || _obj6 === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_obj6, _x).y ??= 6;
+    (_obj = obj) === null || _obj === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_obj, _x)[_x] = 1;
+    (_obj2 = obj) === null || _obj2 === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_obj2, _x)[_x] += 2;
+    (_obj3 = obj) === null || _obj3 === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_obj3, _x)[_x] ??= 3;
+    (_obj4 = obj) === null || _obj4 === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_obj4, _x, 1).y = 4;
+    (_obj5 = obj) === null || _obj5 === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_obj5, _x, 1).y += 5;
+    (_obj6 = obj) === null || _obj6 === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_obj6, _x, 1).y ??= 6;
   }
 }

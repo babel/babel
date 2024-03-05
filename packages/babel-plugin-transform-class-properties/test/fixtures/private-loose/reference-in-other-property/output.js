@@ -5,18 +5,18 @@ var Foo = /*#__PURE__*/babelHelpers.createClass(function Foo() {
   "use strict";
 
   babelHelpers.classCallCheck(this, Foo);
-  this.one = babelHelpers.classPrivateFieldGetLoose(this, _private);
+  this.one = babelHelpers.assertClassBrandLoose(this, _private, 1);
   Object.defineProperty(this, _two, {
     writable: true,
-    value: babelHelpers.classPrivateFieldGetLoose(this, _private)
+    value: babelHelpers.assertClassBrandLoose(this, _private, 1)
   });
   Object.defineProperty(this, _private, {
     writable: true,
     value: 0
   });
-  this.three = babelHelpers.classPrivateFieldGetLoose(this, _private);
+  this.three = babelHelpers.assertClassBrandLoose(this, _private, 1);
   Object.defineProperty(this, _four, {
     writable: true,
-    value: babelHelpers.classPrivateFieldGetLoose(this, _private)
+    value: babelHelpers.assertClassBrandLoose(this, _private, 1)
   });
 });

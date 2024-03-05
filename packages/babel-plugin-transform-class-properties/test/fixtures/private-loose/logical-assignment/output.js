@@ -20,10 +20,10 @@ class Foo {
     return this;
   }
   test() {
-    var _babelHelpers$classPr, _babelHelpers$classPr2, _babelHelpers$classPr3, _babelHelpers$classPr4;
-    (_babelHelpers$classPr = babelHelpers.classPrivateFieldGetLoose(this, _nullish, 1))[_nullish] ?? (_babelHelpers$classPr[_nullish] = 42);
-    (_babelHelpers$classPr2 = babelHelpers.classPrivateFieldGetLoose(this, _and, 1))[_and] && (_babelHelpers$classPr2[_and] = 0);
-    (_babelHelpers$classPr3 = babelHelpers.classPrivateFieldGetLoose(this, _or, 1))[_or] || (_babelHelpers$classPr3[_or] = 0);
-    (_babelHelpers$classPr4 = babelHelpers.classPrivateFieldGetLoose(this.self(), _nullish, 1))[_nullish] ?? (_babelHelpers$classPr4[_nullish] = 42);
+    var _babelHelpers$assertC, _babelHelpers$assertC2, _babelHelpers$assertC3, _babelHelpers$assertC4;
+    (_babelHelpers$assertC = babelHelpers.assertClassBrandLoose(this, _nullish))[_nullish] ?? (_babelHelpers$assertC[_nullish] = 42);
+    (_babelHelpers$assertC2 = babelHelpers.assertClassBrandLoose(this, _and))[_and] && (_babelHelpers$assertC2[_and] = 0);
+    (_babelHelpers$assertC3 = babelHelpers.assertClassBrandLoose(this, _or))[_or] || (_babelHelpers$assertC3[_or] = 0);
+    (_babelHelpers$assertC4 = babelHelpers.assertClassBrandLoose(this.self(), _nullish))[_nullish] ?? (_babelHelpers$assertC4[_nullish] = 42);
   }
 }

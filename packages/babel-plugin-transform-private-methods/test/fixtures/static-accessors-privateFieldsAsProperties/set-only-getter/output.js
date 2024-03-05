@@ -2,12 +2,12 @@ var _privateField = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("private
 var _privateFieldValue = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("privateFieldValue");
 class Cl {
   constructor() {
-    babelHelpers.classPrivateFieldGetLoose(Cl, _privateFieldValue, 1)[_privateFieldValue] = 1;
-    [babelHelpers.classPrivateFieldGetLoose(Cl, _privateFieldValue, 1)[_privateFieldValue]] = [1];
+    babelHelpers.assertClassBrandLoose(Cl, _privateFieldValue)[_privateFieldValue] = 1;
+    [babelHelpers.assertClassBrandLoose(Cl, _privateFieldValue)[_privateFieldValue]] = [1];
   }
 }
 function _get_privateFieldValue() {
-  return babelHelpers.classPrivateFieldGetLoose(this, _privateField);
+  return babelHelpers.assertClassBrandLoose(this, _privateField, 1);
 }
 Object.defineProperty(Cl, _privateFieldValue, {
   get: _get_privateFieldValue,

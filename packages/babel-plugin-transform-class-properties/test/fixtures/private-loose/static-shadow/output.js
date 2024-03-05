@@ -4,7 +4,7 @@ class Test {
     const Test = 2;
     const func = () => {
       const Test = 3;
-      return babelHelpers.classPrivateFieldGetLoose(this, _x) + Test;
+      return babelHelpers.assertClassBrandLoose(this, _x, 1) + Test;
     };
     return func() + Test;
   }

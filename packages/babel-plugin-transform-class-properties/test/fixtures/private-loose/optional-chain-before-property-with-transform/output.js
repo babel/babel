@@ -6,7 +6,7 @@ class Foo {
     return this;
   }
   static test() {
-    var _deep$very$o, _deep$very$o2, _deep$very$o3, _ref, _ref2, _self2, _babelHelpers$classPr, _ref3, _ref4, _getSelf, _ref5, _ref6, _babelHelpers$classPr2, _call, _getSelf2, _getSelf3, _fnDeep$very$o, _fnDeep$very$o2, _fnDeep$very$o3, _ref7, _ref8, _self3, _babelHelpers$classPr3, _ref9, _ref10, _getSelf4, _ref11, _ref12, _babelHelpers$classPr4, _call2, _getSelf5, _getSelf6, _ref13, _ref14, _ref15, _ref16, _ref17, _ref18, _ref19, _ref20, _ref21, _ref22;
+    var _deep$very$o, _deep$very$o2, _deep$very$o3, _ref, _ref2, _self2, _babelHelpers$assertC, _ref3, _ref4, _getSelf, _ref5, _ref6, _babelHelpers$assertC2, _call, _getSelf2, _getSelf3, _fnDeep$very$o, _fnDeep$very$o2, _fnDeep$very$o3, _ref7, _ref8, _self3, _babelHelpers$assertC3, _ref9, _ref10, _getSelf4, _ref11, _ref12, _babelHelpers$assertC4, _call2, _getSelf5, _getSelf6, _ref13, _ref14, _ref15, _ref16, _ref17, _ref18, _ref19, _ref20, _ref21, _ref22;
     const o = {
       Foo: Foo
     };
@@ -21,44 +21,44 @@ class Foo {
     function fnDeep() {
       return deep;
     }
-    o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(o.Foo, _x);
-    o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(o.Foo, _x).toString;
-    o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(o.Foo, _x).toString();
-    (_deep$very$o = deep == null ? void 0 : deep.very.o) === null || _deep$very$o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_deep$very$o.Foo, _x);
-    (_deep$very$o2 = deep == null ? void 0 : deep.very.o) === null || _deep$very$o2 === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_deep$very$o2.Foo, _x).toString;
-    (_deep$very$o3 = deep == null ? void 0 : deep.very.o) === null || _deep$very$o3 === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_deep$very$o3.Foo, _x).toString();
-    o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(babelHelpers.classPrivateFieldGetLoose(o.Foo, _self), _x);
-    o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(babelHelpers.classPrivateFieldGetLoose(o.Foo, _self).self, _x);
-    (_ref = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(o.Foo, _self)) === null || _ref === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_ref.self, _x);
-    (_ref2 = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(o.Foo, _self).self) === null || _ref2 === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_ref2.self, _x);
-    (_self2 = (_ref13 = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(o.Foo, _self)) == null ? void 0 : _ref13.self) === null || _self2 === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_self2.self, _x);
-    o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(babelHelpers.classPrivateFieldGetLoose(o.Foo, _self).getSelf(), _x);
-    (_ref3 = o === null || o === void 0 ? void 0 : (_babelHelpers$classPr = babelHelpers.classPrivateFieldGetLoose(o.Foo, _self)).getSelf) === null || _ref3 === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_ref3.call(_babelHelpers$classPr), _x);
-    (_ref4 = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(o.Foo, _self)) === null || _ref4 === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_ref4.getSelf(), _x);
-    (_getSelf = (_ref14 = _ref5 = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(o.Foo, _self)) == null ? void 0 : _ref14.getSelf) === null || _getSelf === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_getSelf.call(_ref5), _x);
-    (_ref6 = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(o.Foo, _self).getSelf()) === null || _ref6 === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_ref6.self, _x);
-    (_call = (_ref15 = o === null || o === void 0 ? void 0 : (_babelHelpers$classPr2 = babelHelpers.classPrivateFieldGetLoose(o.Foo, _self)).getSelf) == null ? void 0 : _ref15.call(_babelHelpers$classPr2)) === null || _call === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_call.self, _x);
-    (_getSelf2 = (_ref16 = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(o.Foo, _self)) == null ? void 0 : _ref16.getSelf()) === null || _getSelf2 === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_getSelf2.self, _x);
-    (_getSelf3 = (_ref17 = o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(o.Foo, _self)) == null || _ref17.getSelf == null ? void 0 : _ref17.getSelf()) === null || _getSelf3 === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_getSelf3.self, _x);
-    fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _x);
-    fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _x).toString;
-    fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _x).toString();
-    (_fnDeep$very$o = fnDeep == null ? void 0 : fnDeep().very.o) === null || _fnDeep$very$o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_fnDeep$very$o.Foo, _x);
-    (_fnDeep$very$o2 = fnDeep == null ? void 0 : fnDeep().very.o) === null || _fnDeep$very$o2 === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_fnDeep$very$o2.Foo, _x).toString;
-    (_fnDeep$very$o3 = fnDeep == null ? void 0 : fnDeep().very.o) === null || _fnDeep$very$o3 === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_fnDeep$very$o3.Foo, _x).toString();
-    fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self), _x);
-    fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self).self, _x);
-    (_ref7 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self)) === null || _ref7 === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_ref7.self, _x);
-    (_ref8 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self).self) === null || _ref8 === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_ref8.self, _x);
-    (_self3 = (_ref18 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self)) == null ? void 0 : _ref18.self) === null || _self3 === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_self3.self, _x);
-    fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self).getSelf(), _x);
-    (_ref9 = fn === null || fn === void 0 ? void 0 : (_babelHelpers$classPr3 = babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self)).getSelf) === null || _ref9 === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_ref9.call(_babelHelpers$classPr3), _x);
-    (_ref10 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self)) === null || _ref10 === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_ref10.getSelf(), _x);
-    (_getSelf4 = (_ref19 = _ref11 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self)) == null ? void 0 : _ref19.getSelf) === null || _getSelf4 === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_getSelf4.call(_ref11), _x);
-    (_ref12 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self).getSelf()) === null || _ref12 === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_ref12.self, _x);
-    (_call2 = (_ref20 = fn === null || fn === void 0 ? void 0 : (_babelHelpers$classPr4 = babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self)).getSelf) == null ? void 0 : _ref20.call(_babelHelpers$classPr4)) === null || _call2 === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_call2.self, _x);
-    (_getSelf5 = (_ref21 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self)) == null ? void 0 : _ref21.getSelf()) === null || _getSelf5 === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_getSelf5.self, _x);
-    (_getSelf6 = (_ref22 = fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self)) == null || _ref22.getSelf == null ? void 0 : _ref22.getSelf()) === null || _getSelf6 === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(_getSelf6.self, _x);
+    o === null || o === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(o.Foo, _x, 1);
+    o === null || o === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(o.Foo, _x, 1).toString;
+    o === null || o === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(o.Foo, _x, 1).toString();
+    (_deep$very$o = deep == null ? void 0 : deep.very.o) === null || _deep$very$o === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_deep$very$o.Foo, _x, 1);
+    (_deep$very$o2 = deep == null ? void 0 : deep.very.o) === null || _deep$very$o2 === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_deep$very$o2.Foo, _x, 1).toString;
+    (_deep$very$o3 = deep == null ? void 0 : deep.very.o) === null || _deep$very$o3 === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_deep$very$o3.Foo, _x, 1).toString();
+    o === null || o === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(babelHelpers.assertClassBrandLoose(o.Foo, _self, 1), _x, 1);
+    o === null || o === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(babelHelpers.assertClassBrandLoose(o.Foo, _self, 1).self, _x, 1);
+    (_ref = o === null || o === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(o.Foo, _self, 1)) === null || _ref === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_ref.self, _x, 1);
+    (_ref2 = o === null || o === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(o.Foo, _self, 1).self) === null || _ref2 === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_ref2.self, _x, 1);
+    (_self2 = (_ref13 = o === null || o === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(o.Foo, _self, 1)) == null ? void 0 : _ref13.self) === null || _self2 === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_self2.self, _x, 1);
+    o === null || o === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(babelHelpers.assertClassBrandLoose(o.Foo, _self, 1).getSelf(), _x, 1);
+    (_ref3 = o === null || o === void 0 ? void 0 : (_babelHelpers$assertC = babelHelpers.assertClassBrandLoose(o.Foo, _self, 1)).getSelf) === null || _ref3 === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_ref3.call(_babelHelpers$assertC), _x, 1);
+    (_ref4 = o === null || o === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(o.Foo, _self, 1)) === null || _ref4 === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_ref4.getSelf(), _x, 1);
+    (_getSelf = (_ref14 = _ref5 = o === null || o === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(o.Foo, _self, 1)) == null ? void 0 : _ref14.getSelf) === null || _getSelf === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_getSelf.call(_ref5), _x, 1);
+    (_ref6 = o === null || o === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(o.Foo, _self, 1).getSelf()) === null || _ref6 === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_ref6.self, _x, 1);
+    (_call = (_ref15 = o === null || o === void 0 ? void 0 : (_babelHelpers$assertC2 = babelHelpers.assertClassBrandLoose(o.Foo, _self, 1)).getSelf) == null ? void 0 : _ref15.call(_babelHelpers$assertC2)) === null || _call === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_call.self, _x, 1);
+    (_getSelf2 = (_ref16 = o === null || o === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(o.Foo, _self, 1)) == null ? void 0 : _ref16.getSelf()) === null || _getSelf2 === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_getSelf2.self, _x, 1);
+    (_getSelf3 = (_ref17 = o === null || o === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(o.Foo, _self, 1)) == null || _ref17.getSelf == null ? void 0 : _ref17.getSelf()) === null || _getSelf3 === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_getSelf3.self, _x, 1);
+    fn === null || fn === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(fn().Foo, _x, 1);
+    fn === null || fn === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(fn().Foo, _x, 1).toString;
+    fn === null || fn === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(fn().Foo, _x, 1).toString();
+    (_fnDeep$very$o = fnDeep == null ? void 0 : fnDeep().very.o) === null || _fnDeep$very$o === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_fnDeep$very$o.Foo, _x, 1);
+    (_fnDeep$very$o2 = fnDeep == null ? void 0 : fnDeep().very.o) === null || _fnDeep$very$o2 === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_fnDeep$very$o2.Foo, _x, 1).toString;
+    (_fnDeep$very$o3 = fnDeep == null ? void 0 : fnDeep().very.o) === null || _fnDeep$very$o3 === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_fnDeep$very$o3.Foo, _x, 1).toString();
+    fn === null || fn === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(babelHelpers.assertClassBrandLoose(fn().Foo, _self, 1), _x, 1);
+    fn === null || fn === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(babelHelpers.assertClassBrandLoose(fn().Foo, _self, 1).self, _x, 1);
+    (_ref7 = fn === null || fn === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(fn().Foo, _self, 1)) === null || _ref7 === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_ref7.self, _x, 1);
+    (_ref8 = fn === null || fn === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(fn().Foo, _self, 1).self) === null || _ref8 === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_ref8.self, _x, 1);
+    (_self3 = (_ref18 = fn === null || fn === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(fn().Foo, _self, 1)) == null ? void 0 : _ref18.self) === null || _self3 === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_self3.self, _x, 1);
+    fn === null || fn === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(babelHelpers.assertClassBrandLoose(fn().Foo, _self, 1).getSelf(), _x, 1);
+    (_ref9 = fn === null || fn === void 0 ? void 0 : (_babelHelpers$assertC3 = babelHelpers.assertClassBrandLoose(fn().Foo, _self, 1)).getSelf) === null || _ref9 === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_ref9.call(_babelHelpers$assertC3), _x, 1);
+    (_ref10 = fn === null || fn === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(fn().Foo, _self, 1)) === null || _ref10 === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_ref10.getSelf(), _x, 1);
+    (_getSelf4 = (_ref19 = _ref11 = fn === null || fn === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(fn().Foo, _self, 1)) == null ? void 0 : _ref19.getSelf) === null || _getSelf4 === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_getSelf4.call(_ref11), _x, 1);
+    (_ref12 = fn === null || fn === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(fn().Foo, _self, 1).getSelf()) === null || _ref12 === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_ref12.self, _x, 1);
+    (_call2 = (_ref20 = fn === null || fn === void 0 ? void 0 : (_babelHelpers$assertC4 = babelHelpers.assertClassBrandLoose(fn().Foo, _self, 1)).getSelf) == null ? void 0 : _ref20.call(_babelHelpers$assertC4)) === null || _call2 === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_call2.self, _x, 1);
+    (_getSelf5 = (_ref21 = fn === null || fn === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(fn().Foo, _self, 1)) == null ? void 0 : _ref21.getSelf()) === null || _getSelf5 === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_getSelf5.self, _x, 1);
+    (_getSelf6 = (_ref22 = fn === null || fn === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(fn().Foo, _self, 1)) == null || _ref22.getSelf == null ? void 0 : _ref22.getSelf()) === null || _getSelf6 === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(_getSelf6.self, _x, 1);
   }
 }
 _Foo = Foo;

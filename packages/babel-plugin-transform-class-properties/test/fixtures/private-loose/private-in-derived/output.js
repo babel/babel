@@ -14,5 +14,5 @@ var Outer = /*#__PURE__*/babelHelpers.createClass(function Outer() {
     }
     babelHelpers.inherits(Test, _babelHelpers$classPr);
     return babelHelpers.createClass(Test);
-  }(babelHelpers.classPrivateFieldGetLoose(this, _outer));
+  }(babelHelpers.assertClassBrandLoose(this, _outer, 1));
 });

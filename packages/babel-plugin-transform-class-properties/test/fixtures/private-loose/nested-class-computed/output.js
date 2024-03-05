@@ -12,7 +12,7 @@ var Foo = /*#__PURE__*/function () {
   return babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test() {
-      var Nested = /*#__PURE__*/function (_babelHelpers$classPr) {
+      var Nested = /*#__PURE__*/function (_babelHelpers$assertC) {
         function Nested() {
           babelHelpers.classCallCheck(this, Nested);
         }

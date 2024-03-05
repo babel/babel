@@ -3,7 +3,7 @@ var C = /*#__PURE__*/babelHelpers.createClass(function C() {
   "use strict";
 
   babelHelpers.classCallCheck(this, C);
-  this.y = babelHelpers.classPrivateFieldGetLoose(this, _x);
+  this.y = babelHelpers.assertClassBrandLoose(this, _x, 1);
   Object.defineProperty(this, _x, {
     writable: true,
     value: void 0

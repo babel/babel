@@ -13,10 +13,10 @@ class Cl {
     this.publicField = "not secret string";
   }
   publicGetPrivateField() {
-    return babelHelpers.classPrivateFieldGetLoose(this, _privateFieldValue);
+    return babelHelpers.assertClassBrandLoose(this, _privateFieldValue, 1);
   }
   publicSetPrivateField(newValue) {
-    babelHelpers.classPrivateFieldGetLoose(this, _privateFieldValue, 1)[_privateFieldValue] = newValue;
+    babelHelpers.assertClassBrandLoose(this, _privateFieldValue)[_privateFieldValue] = newValue;
   }
   get publicFieldValue() {
     return this.publicField;
@@ -25,21 +25,21 @@ class Cl {
     this.publicField = newValue;
   }
   testUpdates() {
-    babelHelpers.classPrivateFieldGetLoose(this, _privateField, 1)[_privateField] = 0;
+    babelHelpers.assertClassBrandLoose(this, _privateField)[_privateField] = 0;
     this.publicField = 0;
-    babelHelpers.classPrivateFieldGetLoose(this, _privateFieldValue, 1)[_privateFieldValue] = babelHelpers.classPrivateFieldGetLoose(this, _privateFieldValue, 1)[_privateFieldValue]++;
+    babelHelpers.assertClassBrandLoose(this, _privateFieldValue)[_privateFieldValue] = babelHelpers.assertClassBrandLoose(this, _privateFieldValue)[_privateFieldValue]++;
     this.publicFieldValue = this.publicFieldValue++;
-    ++babelHelpers.classPrivateFieldGetLoose(this, _privateFieldValue, 1)[_privateFieldValue];
+    ++babelHelpers.assertClassBrandLoose(this, _privateFieldValue)[_privateFieldValue];
     ++this.publicFieldValue;
-    babelHelpers.classPrivateFieldGetLoose(this, _privateFieldValue, 1)[_privateFieldValue] += 1;
+    babelHelpers.assertClassBrandLoose(this, _privateFieldValue)[_privateFieldValue] += 1;
     this.publicFieldValue += 1;
-    babelHelpers.classPrivateFieldGetLoose(this, _privateFieldValue, 1)[_privateFieldValue] = -(babelHelpers.classPrivateFieldGetLoose(this, _privateFieldValue) ** babelHelpers.classPrivateFieldGetLoose(this, _privateFieldValue));
+    babelHelpers.assertClassBrandLoose(this, _privateFieldValue)[_privateFieldValue] = -(babelHelpers.assertClassBrandLoose(this, _privateFieldValue, 1) ** babelHelpers.assertClassBrandLoose(this, _privateFieldValue, 1));
     this.publicFieldValue = -(this.publicFieldValue ** this.publicFieldValue);
   }
 }
 function _get_privateFieldValue() {
-  return babelHelpers.classPrivateFieldGetLoose(this, _privateField);
+  return babelHelpers.assertClassBrandLoose(this, _privateField, 1);
 }
 function _set_privateFieldValue(newValue) {
-  babelHelpers.classPrivateFieldGetLoose(this, _privateField, 1)[_privateField] = newValue;
+  babelHelpers.assertClassBrandLoose(this, _privateField)[_privateField] = newValue;
 }

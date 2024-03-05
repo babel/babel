@@ -98,6 +98,15 @@
       "./helpers/assertClassBrand.js"
     ],
     "./helpers/esm/assertClassBrand": "./helpers/esm/assertClassBrand.js",
+    "./helpers/assertClassBrandLoose": [
+      {
+        "node": "./helpers/assertClassBrandLoose.js",
+        "import": "./helpers/esm/assertClassBrandLoose.js",
+        "default": "./helpers/assertClassBrandLoose.js"
+      },
+      "./helpers/assertClassBrandLoose.js"
+    ],
+    "./helpers/esm/assertClassBrandLoose": "./helpers/esm/assertClassBrandLoose.js",
     "./helpers/asyncGeneratorDelegate": [
       {
         "node": "./helpers/asyncGeneratorDelegate.js",
@@ -854,15 +863,6 @@
       "./helpers/classPrivateFieldLooseBase.js"
     ],
     "./helpers/esm/classPrivateFieldLooseBase": "./helpers/esm/classPrivateFieldLooseBase.js",
-    "./helpers/classPrivateFieldGetLoose": [
-      {
-        "node": "./helpers/classPrivateFieldGetLoose.js",
-        "import": "./helpers/esm/classPrivateFieldGetLoose.js",
-        "default": "./helpers/classPrivateFieldGetLoose.js"
-      },
-      "./helpers/classPrivateFieldGetLoose.js"
-    ],
-    "./helpers/esm/classPrivateFieldGetLoose": "./helpers/esm/classPrivateFieldGetLoose.js",
     "./helpers/classPrivateFieldGet": [
       {
         "node": "./helpers/classPrivateFieldGet.js",

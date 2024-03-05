@@ -12,7 +12,7 @@ class Cl {
     });
   }
   getPriv() {
-    return babelHelpers.classPrivateFieldGetLoose(this, _priv);
+    return babelHelpers.assertClassBrandLoose(this, _priv, 1);
   }
 }
 function _method2(x) {

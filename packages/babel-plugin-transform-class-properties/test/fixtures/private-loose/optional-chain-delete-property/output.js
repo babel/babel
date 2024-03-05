@@ -6,7 +6,7 @@ class Foo {
     return this;
   }
   static test() {
-    var _deep$very$o, _babelHelpers$classPr, _babelHelpers$classPr2, _fnDeep$very$o, _babelHelpers$classPr3, _babelHelpers$classPr4;
+    var _deep$very$o, _babelHelpers$assertC, _babelHelpers$assertC2, _fnDeep$very$o, _babelHelpers$assertC3, _babelHelpers$assertC4;
     const o = {
       Foo: Foo
     };
@@ -21,36 +21,36 @@ class Foo {
     function fnDeep() {
       return deep;
     }
-    Foo === null || Foo === void 0 ? true : delete babelHelpers.classPrivateFieldGetLoose(Foo, _self).unicorn;
-    (_deep$very$o = deep?.very.o) === null || _deep$very$o === void 0 ? true : delete babelHelpers.classPrivateFieldGetLoose(_deep$very$o.Foo, _self).unicorn;
-    o === null || o === void 0 ? true : delete babelHelpers.classPrivateFieldGetLoose(o.Foo, _self).unicorn;
-    o === null || o === void 0 ? true : delete babelHelpers.classPrivateFieldGetLoose(o.Foo, _self).self.unicorn;
-    delete (o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(o.Foo, _self))?.self.unicorn;
-    delete (o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(o.Foo, _self).self)?.self.unicorn;
-    delete (o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(o.Foo, _self))?.self?.self.unicorn;
-    o === null || o === void 0 ? true : delete babelHelpers.classPrivateFieldGetLoose(o.Foo, _self).getSelf().unicorn;
-    delete (o === null || o === void 0 ? void 0 : (_babelHelpers$classPr = babelHelpers.classPrivateFieldGetLoose(o.Foo, _self)).getSelf)?.call(_babelHelpers$classPr).unicorn;
-    delete (o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(o.Foo, _self))?.getSelf().unicorn;
-    delete (o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(o.Foo, _self))?.getSelf?.().unicorn;
-    delete (o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(o.Foo, _self).getSelf())?.self.unicorn;
-    delete (o === null || o === void 0 ? void 0 : (_babelHelpers$classPr2 = babelHelpers.classPrivateFieldGetLoose(o.Foo, _self)).getSelf)?.call(_babelHelpers$classPr2)?.self.unicorn;
-    delete (o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(o.Foo, _self))?.getSelf()?.self.unicorn;
-    delete (o === null || o === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(o.Foo, _self))?.getSelf?.()?.self.unicorn;
-    fn === null || fn === void 0 ? true : delete babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self).unicorn;
-    (_fnDeep$very$o = fnDeep?.().very.o) === null || _fnDeep$very$o === void 0 ? true : delete babelHelpers.classPrivateFieldGetLoose(_fnDeep$very$o.Foo, _self).unicorn;
-    fn === null || fn === void 0 ? true : delete babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self).unicorn;
-    fn === null || fn === void 0 ? true : delete babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self).self.unicorn;
-    delete (fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self))?.self.unicorn;
-    delete (fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self).self)?.self.unicorn;
-    delete (fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self))?.self?.self.unicorn;
-    fn === null || fn === void 0 ? true : delete babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self).getSelf().unicorn;
-    delete (fn === null || fn === void 0 ? void 0 : (_babelHelpers$classPr3 = babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self)).getSelf)?.call(_babelHelpers$classPr3).unicorn;
-    delete (fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self))?.getSelf().unicorn;
-    delete (fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self))?.getSelf?.().unicorn;
-    delete (fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self).getSelf())?.self.unicorn;
-    delete (fn === null || fn === void 0 ? void 0 : (_babelHelpers$classPr4 = babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self)).getSelf)?.call(_babelHelpers$classPr4)?.self.unicorn;
-    delete (fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self))?.getSelf()?.self.unicorn;
-    delete (fn === null || fn === void 0 ? void 0 : babelHelpers.classPrivateFieldGetLoose(fn().Foo, _self))?.getSelf?.()?.self.unicorn;
+    Foo === null || Foo === void 0 ? true : delete babelHelpers.assertClassBrandLoose(Foo, _self, 1).unicorn;
+    (_deep$very$o = deep?.very.o) === null || _deep$very$o === void 0 ? true : delete babelHelpers.assertClassBrandLoose(_deep$very$o.Foo, _self, 1).unicorn;
+    o === null || o === void 0 ? true : delete babelHelpers.assertClassBrandLoose(o.Foo, _self, 1).unicorn;
+    o === null || o === void 0 ? true : delete babelHelpers.assertClassBrandLoose(o.Foo, _self, 1).self.unicorn;
+    delete (o === null || o === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(o.Foo, _self, 1))?.self.unicorn;
+    delete (o === null || o === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(o.Foo, _self, 1).self)?.self.unicorn;
+    delete (o === null || o === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(o.Foo, _self, 1))?.self?.self.unicorn;
+    o === null || o === void 0 ? true : delete babelHelpers.assertClassBrandLoose(o.Foo, _self, 1).getSelf().unicorn;
+    delete (o === null || o === void 0 ? void 0 : (_babelHelpers$assertC = babelHelpers.assertClassBrandLoose(o.Foo, _self, 1)).getSelf)?.call(_babelHelpers$assertC).unicorn;
+    delete (o === null || o === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(o.Foo, _self, 1))?.getSelf().unicorn;
+    delete (o === null || o === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(o.Foo, _self, 1))?.getSelf?.().unicorn;
+    delete (o === null || o === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(o.Foo, _self, 1).getSelf())?.self.unicorn;
+    delete (o === null || o === void 0 ? void 0 : (_babelHelpers$assertC2 = babelHelpers.assertClassBrandLoose(o.Foo, _self, 1)).getSelf)?.call(_babelHelpers$assertC2)?.self.unicorn;
+    delete (o === null || o === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(o.Foo, _self, 1))?.getSelf()?.self.unicorn;
+    delete (o === null || o === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(o.Foo, _self, 1))?.getSelf?.()?.self.unicorn;
+    fn === null || fn === void 0 ? true : delete babelHelpers.assertClassBrandLoose(fn().Foo, _self, 1).unicorn;
+    (_fnDeep$very$o = fnDeep?.().very.o) === null || _fnDeep$very$o === void 0 ? true : delete babelHelpers.assertClassBrandLoose(_fnDeep$very$o.Foo, _self, 1).unicorn;
+    fn === null || fn === void 0 ? true : delete babelHelpers.assertClassBrandLoose(fn().Foo, _self, 1).unicorn;
+    fn === null || fn === void 0 ? true : delete babelHelpers.assertClassBrandLoose(fn().Foo, _self, 1).self.unicorn;
+    delete (fn === null || fn === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(fn().Foo, _self, 1))?.self.unicorn;
+    delete (fn === null || fn === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(fn().Foo, _self, 1).self)?.self.unicorn;
+    delete (fn === null || fn === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(fn().Foo, _self, 1))?.self?.self.unicorn;
+    fn === null || fn === void 0 ? true : delete babelHelpers.assertClassBrandLoose(fn().Foo, _self, 1).getSelf().unicorn;
+    delete (fn === null || fn === void 0 ? void 0 : (_babelHelpers$assertC3 = babelHelpers.assertClassBrandLoose(fn().Foo, _self, 1)).getSelf)?.call(_babelHelpers$assertC3).unicorn;
+    delete (fn === null || fn === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(fn().Foo, _self, 1))?.getSelf().unicorn;
+    delete (fn === null || fn === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(fn().Foo, _self, 1))?.getSelf?.().unicorn;
+    delete (fn === null || fn === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(fn().Foo, _self, 1).getSelf())?.self.unicorn;
+    delete (fn === null || fn === void 0 ? void 0 : (_babelHelpers$assertC4 = babelHelpers.assertClassBrandLoose(fn().Foo, _self, 1)).getSelf)?.call(_babelHelpers$assertC4)?.self.unicorn;
+    delete (fn === null || fn === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(fn().Foo, _self, 1))?.getSelf()?.self.unicorn;
+    delete (fn === null || fn === void 0 ? void 0 : babelHelpers.assertClassBrandLoose(fn().Foo, _self, 1))?.getSelf?.()?.self.unicorn;
   }
 }
 _Foo = Foo;

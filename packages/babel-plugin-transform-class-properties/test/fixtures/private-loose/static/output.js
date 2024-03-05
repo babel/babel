@@ -1,10 +1,10 @@
 var _bar = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("bar");
 class Foo {
   static test() {
-    return babelHelpers.classPrivateFieldGetLoose(Foo, _bar);
+    return babelHelpers.assertClassBrandLoose(Foo, _bar, 1);
   }
   test() {
-    return babelHelpers.classPrivateFieldGetLoose(Foo, _bar);
+    return babelHelpers.assertClassBrandLoose(Foo, _bar, 1);
   }
 }
 Object.defineProperty(Foo, _bar, {
