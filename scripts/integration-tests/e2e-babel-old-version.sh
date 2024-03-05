@@ -81,6 +81,9 @@ node -e "
     'patch:@babel/plugin-proposal-json-modules@npm:' +
     pkg.devDependencies['@babel/plugin-proposal-json-modules'] +
     '#~/.yarn/patches/babel__plugin-proposal-json-modules.patch';
+  pkg.resolutions['@babel/plugin-proposal-json-modules/@babel/plugin-syntax-import-attributes'] =
+    'patch:@babel/plugin-syntax-import-attributes@npm:^7.23.3' +
+    '#~/.yarn/patches/babel__plugin-proposal-json-modules.patch';
   fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2));
 "
 
