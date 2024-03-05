@@ -419,16 +419,27 @@ export default class ReplaceSupers {
   }
 
   replace() {
+    const { methodPath } = this;
     // https://github.com/babel/babel/issues/11994
     if (this.opts.refToPreserve) {
-      this.methodPath.traverse(unshadowSuperBindingVisitor, {
+      methodPath.traverse(unshadowSuperBindingVisitor, {
         refName: this.opts.refToPreserve.name,
       });
     }
 
     const handler = this.constantSuper ? looseHandlers : specHandlers;
 
-    memberExpressionToFunctions<ReplaceState>(this.methodPath, visitor, {
+    // todo: this should have been handled by the environmentVisitor,
+    // consider add visitSelf support for the path.traverse
+    visitor.shouldSkip = path => {
+      if (path.parentPath === methodPath) {
+        if (path.parentKey === "decorators" || path.parentKey === "key") {
+          return true;
+        }
+      }
+    };
+
+    memberExpressionToFunctions<ReplaceState>(methodPath, visitor, {
       file: this.file,
       scope: this.methodPath.scope,
       isDerivedConstructor: this.isDerivedConstructor,
