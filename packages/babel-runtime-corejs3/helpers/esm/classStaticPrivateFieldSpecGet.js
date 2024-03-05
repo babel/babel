@@ -1,8 +1,8 @@
 import classApplyDescriptorGet from "./classApplyDescriptorGet.js";
-import classCheckPrivateStaticAccess from "./classCheckPrivateStaticAccess.js";
+import assertClassBrand from "./assertClassBrand.js";
 import classCheckPrivateStaticFieldDescriptor from "./classCheckPrivateStaticFieldDescriptor.js";
 export default function _classStaticPrivateFieldSpecGet(receiver, classConstructor, descriptor) {
-  classCheckPrivateStaticAccess(receiver, classConstructor);
+  assertClassBrand(classConstructor, receiver);
   classCheckPrivateStaticFieldDescriptor(descriptor, "get");
   return classApplyDescriptorGet(receiver, descriptor);
 }

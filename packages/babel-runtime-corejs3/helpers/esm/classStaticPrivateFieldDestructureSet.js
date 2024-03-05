@@ -1,8 +1,8 @@
 import classApplyDescriptorDestructureSet from "./classApplyDescriptorDestructureSet.js";
-import classCheckPrivateStaticAccess from "./classCheckPrivateStaticAccess.js";
+import assertClassBrand from "./assertClassBrand.js";
 import classCheckPrivateStaticFieldDescriptor from "./classCheckPrivateStaticFieldDescriptor.js";
 export default function _classStaticPrivateFieldDestructureSet(receiver, classConstructor, descriptor) {
-  classCheckPrivateStaticAccess(receiver, classConstructor);
+  assertClassBrand(classConstructor, receiver);
   classCheckPrivateStaticFieldDescriptor(descriptor, "set");
   return classApplyDescriptorDestructureSet(receiver, descriptor);
 }

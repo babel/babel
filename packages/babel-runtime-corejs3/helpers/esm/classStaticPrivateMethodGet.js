@@ -1,5 +1,5 @@
-import classCheckPrivateStaticAccess from "./classCheckPrivateStaticAccess.js";
+import assertClassBrand from "./assertClassBrand.js";
 export default function _classStaticPrivateMethodGet(receiver, classConstructor, method) {
-  classCheckPrivateStaticAccess(receiver, classConstructor);
+  assertClassBrand(classConstructor, receiver);
   return method;
 }

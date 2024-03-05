@@ -1,7 +1,7 @@
 import classApplyDescriptorSet from "./classApplyDescriptorSet.js";
-import classExtractFieldDescriptor from "./classExtractFieldDescriptor.js";
+import classPrivateFieldGet2 from "./classPrivateFieldGet2.js";
 export default function _classPrivateFieldSet(receiver, privateMap, value) {
-  var descriptor = classExtractFieldDescriptor(receiver, privateMap, "set");
+  var descriptor = classPrivateFieldGet2(privateMap, receiver);
   classApplyDescriptorSet(receiver, descriptor, value);
   return value;
 }
