@@ -431,7 +431,9 @@ export default class ReplaceSupers {
 
     // todo: this should have been handled by the environmentVisitor,
     // consider add visitSelf support for the path.traverse
-    visitor.shouldSkip = path => {
+    // @ts-expect-error: Refine typings in packages/babel-traverse/src/types.ts
+    // shouldSkip is accepted in traverseNode
+    visitor.shouldSkip = (path: NodePath) => {
       if (path.parentPath === methodPath) {
         if (path.parentKey === "decorators" || path.parentKey === "key") {
           return true;
