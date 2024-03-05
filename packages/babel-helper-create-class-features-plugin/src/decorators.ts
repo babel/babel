@@ -1683,56 +1683,53 @@ function transformClass(
     .get("body")
     .get("body")[0] as NodePath<t.StaticBlock>;
   if (computedKeyAssignments.length > 0) {
-    // todo: the following branch will fail on 2023-05 version
-    if (process.env.BABEL_8_BREAKING || version === "2023-11") {
-      const elements = originalClassPath.get("body.body");
-      let lastPublicElement: NodePath<t.ClassProperty | t.ClassMethod>;
-      for (let i = elements.length - 1; i >= 0; i--) {
-        const path = elements[i];
-        if (
-          (path.isClassProperty() || path.isClassMethod()) &&
-          !path.node.computed &&
-          (path.node as t.ClassMethod).kind !== "constructor"
-        ) {
-          lastPublicElement = path;
-          break;
-        }
-      }
-      if (lastPublicElement != null) {
-        // Convert it to a computed key to host decorator evaluations
-        convertToComputedKey(lastPublicElement);
-        prependExpressionsToComputedKey(
-          computedKeyAssignments,
-          lastPublicElement,
-        );
-        computedKeyAssignments = [];
+    const elements = originalClassPath.get("body.body");
+    let lastPublicElement: NodePath<t.ClassProperty | t.ClassMethod>;
+    for (let i = elements.length - 1; i >= 0; i--) {
+      const path = elements[i];
+      if (
+        (path.isClassProperty() || path.isClassMethod()) &&
+        !path.node.computed &&
+        (path.node as t.ClassMethod).kind !== "constructor"
+      ) {
+        lastPublicElement = path;
+        break;
       }
     }
-  }
-
-  if (computedKeyAssignments.length > 0) {
-    // when there is no public class elements or decorators version is earlier than 2305,
-    // we inject a temporary computed field whose key will host the decorator expressions
-    // assignment.
-    originalClass.body.body.unshift(
-      t.classProperty(
-        t.sequenceExpression([...computedKeyAssignments, t.stringLiteral("_")]),
-        undefined,
-        undefined,
-        undefined,
-        /* computed */ true,
-        /* static */ true,
-      ),
-    );
-    applyDecoratorWrapperPath.pushContainer(
-      "body",
-      t.expressionStatement(
-        t.unaryExpression(
-          "delete",
-          t.memberExpression(t.thisExpression(), t.identifier("_")),
+    if (lastPublicElement != null) {
+      // Convert it to a computed key to host decorator evaluations
+      convertToComputedKey(lastPublicElement);
+      prependExpressionsToComputedKey(
+        computedKeyAssignments,
+        lastPublicElement,
+      );
+    } else {
+      // when there is no public class elements, we inject a temporary computed field
+      // whose key will host the decorator expressions assignment.
+      originalClass.body.body.unshift(
+        t.classProperty(
+          t.sequenceExpression([
+            ...computedKeyAssignments,
+            t.stringLiteral("_"),
+          ]),
+          undefined,
+          undefined,
+          undefined,
+          /* computed */ true,
+          /* static */ true,
         ),
-      ),
-    );
+      );
+      applyDecoratorWrapperPath.pushContainer(
+        "body",
+        t.expressionStatement(
+          t.unaryExpression(
+            "delete",
+            t.memberExpression(t.thisExpression(), t.identifier("_")),
+          ),
+        ),
+      );
+    }
+    computedKeyAssignments = [];
   }
 
   applyDecoratorWrapperPath.pushContainer(
