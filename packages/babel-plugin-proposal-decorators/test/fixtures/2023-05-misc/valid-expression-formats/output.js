@@ -4,7 +4,6 @@ _classDecs = [void 0, dec, void 0, call(), void 0, chain.expr(), void 0, arbitra
 let _Foo;
 class Foo {
   static {
-    _methodDecs = [void 0, dec, void 0, call(), void 0, chain.expr(), void 0, arbitrary + expr, _obj = array, _obj[expr]];
     ({
       e: [_initProto],
       c: [_Foo, _initClass]
@@ -12,14 +11,13 @@ class Foo {
   }
   #a = void _initProto(this);
   method() {}
-  makeClass() {
-    var _barDecs, _init_bar, _outerThis;
-    return _outerThis = this, class Nested {
+  [(_methodDecs = [void 0, dec, void 0, call(), void 0, chain.expr(), void 0, arbitrary + expr, _obj = array, _obj[expr]], "makeClass")]() {
+    var _barDecs, _init_bar;
+    return class Nested {
       static {
-        _barDecs = [_outerThis, _outerThis.#a];
         [_init_bar] = babelHelpers.applyDecs2305(this, [[_barDecs, 16, "bar"]], []).e;
       }
-      bar = _init_bar(this);
+      [(_barDecs = [this, this.#a], "bar")] = _init_bar(this);
     };
   }
   static {
