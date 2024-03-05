@@ -1,8 +1,8 @@
-function noopFactory() { return function noop() {} }
+function noopFactory() { return function noop(x) { return x } }
 
 {
   class C {
-    [("a1", "a2") as any];
+    [("a1", "a2") as any]() {};
     @noopFactory(0) #p;
   }
   expect(new C()).toHaveProperty("a2");
@@ -10,7 +10,7 @@ function noopFactory() { return function noop() {} }
 
 {
   class C {
-    [("a1", ("b1", "b2")) as any];
+    [("a1", ("b1", "b2")) as any]() {};
     @noopFactory(1) #p;
   }
   expect(new C()).toHaveProperty("b2");
