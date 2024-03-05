@@ -63,29 +63,9 @@ sed -i 's/describeGte("12.0.0")("worker"/describeGte("12.0.0").skip("worker"/g' 
 sed -i 's/nodeGte12(/nodeGte12.skip(/g' eslint/babel-eslint-tests/test/integration/parser-override.js
 sed -i 's/nodeGte12NoESM(/nodeGte12NoESM.skip(/g' eslint/babel-eslint-tests/test/integration/config-files.js
 
-
-# @babel/plugin-proposal-json-modules says that it needs @babel/core@^7.22.0, but
-# it actually only needs @babel/parser@^7.22.0. We are running this test with an
-# old @babel/core version and a new @babel/parser version, so we can just suppress
-# the version assertion.
-echo 'diff --git a/lib/index.js b/lib/index.js
-index e42148103bec33c8b6d8f1bd4d07ebce2049c3b6..396cdf46c0e4d430be5e27ee6911fb4872e9b160 100644
---- a/lib/index.js
-+++ b/lib/index.js
-@@ -1,1 +1,1 @@ var index = declare(api => {
--  api.assertVersion("^7.22.0");
-+  //api.assertVersion("^7.22.0");' > .yarn/patches/babel__plugin-proposal-json-modules.patch
-node -e "
-  var pkg = require('./package.json');
-  pkg.devDependencies['@babel/plugin-proposal-json-modules'] =
-    'patch:@babel/plugin-proposal-json-modules@npm:' +
-    pkg.devDependencies['@babel/plugin-proposal-json-modules'] +
-    '#~/.yarn/patches/babel__plugin-proposal-json-modules.patch';
-  pkg.resolutions['@babel/plugin-proposal-json-modules/@babel/plugin-syntax-import-attributes'] =
-    'patch:@babel/plugin-syntax-import-attributes@npm:^7.23.3' +
-    '#~/.yarn/patches/babel__plugin-proposal-json-modules.patch';
-  fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2));
-"
+# We only support transforming import attributes in new @babel/core versions
+sed -i 's#"@babel/plugin-proposal-json-modules"#null#g' babel.config.js
+sed -i 's#with { type: "json" }##g' packages/babel-preset-env/src/normalize-options.ts
 
 # Update deps, build and test
 rm yarn.lock
