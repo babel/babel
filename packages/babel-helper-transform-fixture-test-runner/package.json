@@ -19,7 +19,7 @@
     "@babel/core": "workspace:^",
     "@babel/helper-check-duplicate-nodes": "workspace:^",
     "@babel/helper-fixtures": "workspace:^",
-    "@jridgewell/trace-mapping": "^0.3.17",
+    "@jridgewell/trace-mapping": "^0.3.25",
     "fs-readdir-recursive": "^1.1.0",
     "jest-diff": "^29.6.4",
     "lru-cache": "condition:BABEL_8_BREAKING ? ^7.14.1 : ^5.1.1",

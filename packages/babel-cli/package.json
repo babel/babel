@@ -24,7 +24,7 @@
     "compiler"
   ],
   "dependencies": {
-    "@jridgewell/trace-mapping": "^0.3.17",
+    "@jridgewell/trace-mapping": "^0.3.25",
     "commander": "^4.0.1",
     "convert-source-map": "^2.0.0",
     "fs-readdir-recursive": "^1.1.0",

@@ -7,5 +7,6 @@
   "sourcesContent": [
     "\"before\\\nafter\";\n\n\"before\\\n\\\nafter\";"
   ],
-  "mappings": "AAAA;AACA,MAAM;AAEN;AACA;AACA,MAAM"
+  "mappings": "AAAA;AACA,MAAM;AAEN;AACA;AACA,MAAM",
+  "ignoreList": []
 }
