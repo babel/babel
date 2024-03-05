@@ -1,8 +1,7 @@
 import type { NodePath, Scope, Visitor } from "@babel/traverse";
-import { types as t, template, traverse } from "@babel/core";
+import { types as t, template } from "@babel/core";
 import ReplaceSupers from "@babel/helper-replace-supers";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
-import environmentVisitor from "@babel/helper-environment-visitor";
 import * as charCodes from "charcodes";
 import type { PluginAPI, PluginObject, PluginPass } from "@babel/core";
 import { skipTransparentExprWrappers } from "@babel/helper-skip-transparent-expression-wrappers";
@@ -833,58 +832,6 @@ function createPrivateBrandCheckClosure(brandName: t.PrivateName) {
   return t.arrowFunctionExpression(
     [t.identifier("_")],
     t.binaryExpression("in", t.cloneNode(brandName), t.identifier("_")),
-  );
-}
-
-/**
- * create a super() delegate
- * (...args) => super(...args)
- *
- */
-function createSuperCallDelegate() {
-  return t.arrowFunctionExpression(
-    [t.restElement(t.identifier("args"))],
-    t.callExpression(t.super(), [t.spreadElement(t.identifier("args"))]),
-  );
-}
-
-/**
- * create a super[prop] delegate
- * (prop) => Object.defineProperty({}, "_", {
- *   get: () => super[prop],
- *   set: (v) => super[prop] = v
- * })
- *
- */
-function createSuperPropDelegate() {
-  const getDelegate = t.arrowFunctionExpression(
-    [],
-    t.memberExpression(t.super(), t.identifier("prop"), true),
-  );
-  const setDelegate = t.assignmentExpression(
-    "=",
-    t.memberExpression(t.super(), t.identifier("prop"), true),
-    t.identifier("v"),
-  );
-  return t.arrowFunctionExpression(
-    [t.identifier("prop")],
-    t.callExpression(
-      t.memberExpression(
-        t.identifier("Object"),
-        t.identifier("defineProperty"),
-      ),
-      [
-        t.objectExpression([]),
-        t.stringLiteral("_"),
-        t.objectExpression([
-          t.objectProperty(t.identifier("get"), getDelegate),
-          t.objectProperty(
-            t.identifier("set"),
-            t.arrowFunctionExpression([t.identifier("v")], setDelegate),
-          ),
-        ]),
-      ],
-    ),
   );
 }
 
@@ -1728,9 +1675,12 @@ function transformClass(
   }
 
   originalClass.body.body.unshift(t.staticBlock([]));
+  const applyDecoratorWrapperPath = originalClassPath
+    .get("body")
+    .get("body")[0] as NodePath<t.StaticBlock>;
   if (computedKeyAssignments.length > 0) {
     // todo: the following branch will fail on 2023-05 version
-    if (version === "2023-11") {
+    if (process.env.BABEL_8_BREAKING || version === "2023-11") {
       const elements = originalClassPath.get("body.body");
       let lastPublicElement: NodePath<t.ClassProperty | t.ClassMethod>;
       for (let i = elements.length - 1; i >= 0; i--) {
@@ -1753,119 +1703,32 @@ function transformClass(
         );
         computedKeyAssignments = [];
       }
-      // when there is no public class elements, the decorator expressions
-      // assignment will be injected right before the `applyDecs` call.
     }
   }
-  const applyDecoratorWrapperPath = originalClassPath
-    .get("body")
-    .get("body")[0] as NodePath<t.StaticBlock>;
 
   if (computedKeyAssignments.length > 0) {
+    // when there is no public class elements or decorators version is earlier than 2305,
+    // we inject a temporary computed field whose key will host the decorator expressions
+    // assignment.
+    originalClass.body.body.unshift(
+      t.classProperty(
+        t.sequenceExpression([...computedKeyAssignments, t.stringLiteral("_")]),
+        undefined,
+        undefined,
+        undefined,
+        /* computed */ true,
+        /* static */ true,
+      ),
+    );
     applyDecoratorWrapperPath.pushContainer(
       "body",
-      t.expressionStatement(maybeSequenceExpression(computedKeyAssignments)),
+      t.expressionStatement(
+        t.unaryExpression(
+          "delete",
+          t.memberExpression(t.thisExpression(), t.identifier("_")),
+        ),
+      ),
     );
-
-    const computedKeysPath = applyDecoratorWrapperPath.get("body")[0];
-
-    // Capture lexical this, super() and other function contexts, replace their usage
-    // in computed key assignments
-    let outerThis: t.Identifier,
-      outerSuperCall: t.Identifier,
-      outerSuperProp: t.Identifier,
-      outerArguments: t.Identifier,
-      outerNewTarget: t.Identifier;
-    const computedKeysPathVisitor: Visitor = {
-      ThisExpression(path) {
-        outerThis ??= scopeParent.generateDeclaredUidIdentifier("outerThis");
-        path.replaceWith(t.cloneNode(outerThis));
-      },
-      CallExpression(path) {
-        const calleePath = path.get("callee");
-        if (calleePath.isSuper()) {
-          outerSuperCall ??=
-            scopeParent.generateDeclaredUidIdentifier("outerSuper");
-          calleePath.replaceWith(t.cloneNode(outerSuperCall));
-        }
-      },
-      MemberExpression(path) {
-        const objectPath = path.get("object");
-        if (objectPath.isSuper()) {
-          outerSuperProp ??=
-            scopeParent.generateDeclaredUidIdentifier("outerSuperProp");
-          path.replaceWith(
-            t.memberExpression(
-              t.callExpression(t.cloneNode(outerSuperProp), [
-                path.node.computed
-                  ? (path.node.property as t.Expression)
-                  : t.stringLiteral((path.node.property as t.Identifier).name),
-              ]),
-              t.identifier("_"),
-            ),
-          );
-        }
-      },
-      Identifier(path) {
-        if (path.node.name === "arguments") {
-          outerArguments ??=
-            scopeParent.generateDeclaredUidIdentifier("outerArguments");
-          path.replaceWith(t.cloneNode(outerArguments));
-        }
-      },
-      MetaProperty(path) {
-        const object = path.node.meta;
-        if (object.name === "new") {
-          outerNewTarget ??=
-            scopeParent.generateDeclaredUidIdentifier("outerNewTarget");
-          path.replaceWith(t.cloneNode(outerNewTarget));
-        }
-      },
-    };
-    computedKeysPath.traverse(
-      traverse.visitors.merge([computedKeysPathVisitor, environmentVisitor]),
-    );
-    if (outerThis) {
-      classAssignments.push(
-        t.assignmentExpression("=", t.cloneNode(outerThis), t.thisExpression()),
-      );
-    }
-    if (outerSuperCall) {
-      classAssignments.push(
-        t.assignmentExpression(
-          "=",
-          t.cloneNode(outerSuperCall),
-          createSuperCallDelegate(),
-        ),
-      );
-    }
-    if (outerSuperProp) {
-      classAssignments.push(
-        t.assignmentExpression(
-          "=",
-          t.cloneNode(outerSuperProp),
-          createSuperPropDelegate(),
-        ),
-      );
-    }
-    if (outerArguments) {
-      classAssignments.push(
-        t.assignmentExpression(
-          "=",
-          t.cloneNode(outerArguments),
-          t.identifier("arguments"),
-        ),
-      );
-    }
-    if (outerNewTarget) {
-      classAssignments.push(
-        t.assignmentExpression(
-          "=",
-          t.cloneNode(outerNewTarget),
-          t.metaProperty(t.identifier("new"), t.identifier("target")),
-        ),
-      );
-    }
   }
 
   applyDecoratorWrapperPath.pushContainer(
