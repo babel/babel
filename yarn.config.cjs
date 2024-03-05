@@ -89,10 +89,13 @@ function enforceEnginesNodeForPublicUnsetForPrivate({ Yarn }) {
     if (workspace.manifest.private) {
       workspace.unset("engines.node");
     } else {
-      workspace.set(
-        "conditions.BABEL_8_BREAKING.0.engines.node",
-        "^16.20.0 || ^18.16.0 || >=20.0.0"
-      );
+      if (!workspace.manifest.conditions?.BABEL_8_BREAKING?.[0].private) {
+        workspace.set(
+          "conditions.BABEL_8_BREAKING.0.engines.node",
+          "^16.20.0 || ^18.16.0 || >=20.0.0"
+        );
+      }
+
       if (workspace.ident === "@babel/parser") continue;
       if (workspace.ident?.startsWith("@babel/eslint")) {
         workspace.set("engines.node", "^10.13.0 || ^12.13.0 || >=14.0.0");
