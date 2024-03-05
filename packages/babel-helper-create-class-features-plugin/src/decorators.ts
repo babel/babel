@@ -279,11 +279,12 @@ function extractProxyAccessorsFor(
 }
 
 function getComputedKeyCompletion(path: NodePath<t.Expression>) {
+  path = skipTransparentExprWrappers(path);
   if (path.isSequenceExpression()) {
     const expressions = path.get("expressions");
     return getComputedKeyCompletion(expressions[expressions.length - 1]);
   }
-  return skipTransparentExprWrappers(path);
+  return path;
 }
 
 function getComputedKeyMemoiser(path: NodePath<t.Expression>): t.Expression {
@@ -314,7 +315,11 @@ function prependExpressionsToComputedKey(
   >,
 ) {
   const key = fieldPath.get("key") as NodePath<t.Expression>;
-  expressions.push(key.node);
+  if (key.isSequenceExpression()) {
+    expressions.push(...key.node.expressions);
+  } else {
+    expressions.push(key.node);
+  }
   key.replaceWith(maybeSequenceExpression(expressions));
 }
 
@@ -328,7 +333,6 @@ function appendExpressionsToComputedKey(
   const completion = getComputedKeyCompletion(key);
   if (completion.isConstantExpression()) {
     prependExpressionsToComputedKey(expressions, fieldPath);
-    return;
   } else {
     const scopeParent = key.scope.parent;
     const maybeAssignment = memoiseComputedKey(
@@ -336,7 +340,11 @@ function appendExpressionsToComputedKey(
       scopeParent,
       scopeParent.generateUid("computedKey"),
     );
-    if (maybeAssignment != null) {
+    if (!maybeAssignment) {
+      // If the memoiseComputedKey returns undefined, the key is already a uid reference,
+      // treat it as a constant expression and prepend expressions before it
+      prependExpressionsToComputedKey(expressions, fieldPath);
+    } else {
       const expressionSequence = [
         ...expressions,
         // preserve the completion result
@@ -353,10 +361,6 @@ function appendExpressionsToComputedKey(
           ]),
         );
       }
-    } else {
-      // If the computed key is an uid reference, treat it as
-      // a constant expression
-      prependExpressionsToComputedKey(expressions, fieldPath);
     }
   }
 }

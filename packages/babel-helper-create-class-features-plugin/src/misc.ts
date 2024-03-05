@@ -123,19 +123,31 @@ export function injectInitialization(
 type ComputedKeyAssignmentExpression = t.AssignmentExpression & {
   left: t.Identifier;
 };
+
+/**
+ * Try to memoise a computed key.
+ * It returns undefined when the computed key is an uid reference, otherwise
+ * an assignment expression `memoiserId = computed key`
+ * @export
+ * @param {t.Expression} keyNode Computed key
+ * @param {Scope} scope The scope where memoiser id should be registered
+ * @param {string} hint The memoiser id hint
+ * @returns {(ComputedKeyAssignmentExpression | undefined)}
+ */
 export function memoiseComputedKey(
   keyNode: t.Expression,
   scope: Scope,
   hint: string,
 ): ComputedKeyAssignmentExpression | undefined {
   const isUidReference = t.isIdentifier(keyNode) && scope.hasUid(keyNode.name);
+  if (isUidReference) {
+    return;
+  }
   const isMemoiseAssignment =
     t.isAssignmentExpression(keyNode, { operator: "=" }) &&
     t.isIdentifier(keyNode.left) &&
     scope.hasUid(keyNode.left.name);
-  if (isUidReference) {
-    return;
-  } else if (isMemoiseAssignment) {
+  if (isMemoiseAssignment) {
     return t.cloneNode(keyNode as ComputedKeyAssignmentExpression);
   } else {
     const ident = t.identifier(hint);
