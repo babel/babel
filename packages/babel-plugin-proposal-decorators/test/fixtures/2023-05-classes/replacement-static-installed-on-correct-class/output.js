@@ -3,20 +3,18 @@ const dec = () => {};
 let hasX, hasA, hasM;
 let _Foo;
 new class extends babelHelpers.identity {
-  static {
-    class Foo {
-      static {
-        [_Foo, _initClass] = babelHelpers.applyDecs2305(this, [], [dec]).c;
-      }
-      static get a() {
-        return _Foo.#B;
-      }
-      static set a(v) {
-        _Foo.#B = v;
-      }
-      static m() {}
+  static [class Foo {
+    static {
+      [_Foo, _initClass] = babelHelpers.applyDecs2305(this, [], [dec]).c;
     }
-  }
+    static get a() {
+      return _Foo.#B;
+    }
+    static set a(v) {
+      _Foo.#B = v;
+    }
+    static m() {}
+  }];
   #x;
   #A;
   get #a() {

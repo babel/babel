@@ -1,4 +1,5 @@
-var _initProto, _initStatic, _initClass, _init_field, _init_field2, _init_accessor, _init_accessor2, _ref, _B, _temp;
+let _Foo2;
+var _initProto, _initStatic, _initClass, _init_field, _init_field2, _init_accessor, _init_accessor2, _ref, _Class, _B, _Foo3, _A;
 const log = [];
 const classDec1 = (cls, ctxClass) => {
   log.push("c2");
@@ -144,7 +145,43 @@ const staticAccessorDec2 = (target, ctxStaticAccessor) => {
 };
 log.push("start");
 let _Foo;
-new (_B = /*#__PURE__*/new WeakMap(), (_temp = class extends babelHelpers.identity {
+new (_B = /*#__PURE__*/new WeakMap(), _Foo2 = (_A = /*#__PURE__*/new WeakMap(), (_Foo3 = class Foo extends (_ref = (log.push("extends"), Object)) {
+  constructor() {
+    log.push("ctor:start");
+    super();
+    babelHelpers.defineProperty(this, "field", (_initProto(this), _init_field(this)));
+    babelHelpers.classPrivateFieldInitSpec(this, _A, _init_accessor(this));
+    log.push("ctor:end");
+  }
+  method() {}
+  static method() {}
+  get getter() {
+    return;
+  }
+  static get getter() {
+    return;
+  }
+  set setter(x) {}
+  static set getter(x) {}
+  get accessor() {
+    return babelHelpers.classPrivateFieldGet2(_A, this);
+  }
+  set accessor(v) {
+    babelHelpers.classPrivateFieldSet2(_A, this, v);
+  }
+  static get accessor() {
+    return babelHelpers.classPrivateFieldGet2(_B, Foo);
+  }
+  static set accessor(v) {
+    babelHelpers.classPrivateFieldSet2(_B, Foo, v);
+  }
+}, (() => {
+  ({
+    e: [_init_accessor2, _init_accessor, _init_field2, _init_field, _initProto, _initStatic],
+    c: [_Foo, _initClass]
+  } = babelHelpers.applyDecs2305(_Foo3, [[[staticMethodDec1, staticMethodDec2], 10, "method"], [[staticGetterDec1, staticGetterDec2], 11, "getter"], [[staticSetterDec1, staticSetterDec2], 12, "getter"], [[staticAccessorDec1, staticAccessorDec2], 9, "accessor"], [[methodDec1, methodDec2], 2, "method"], [[getterDec1, getterDec2], 3, "getter"], [[setterDec1, setterDec2], 4, "setter"], [[accessorDec1, accessorDec2], 1, "accessor"], [[staticFieldDec1, staticFieldDec2], 8, "field"], [[fieldDec1, fieldDec2], 0, "field"]], [classDec1, classDec2], 0, void 0, _ref));
+  _initStatic(_Foo3);
+})(), _Foo3)), (_Class = class extends babelHelpers.identity {
   constructor() {
     (super(_Foo), babelHelpers.defineProperty(this, "field", ((() => {
       log.push("static:start");
@@ -152,48 +189,7 @@ new (_B = /*#__PURE__*/new WeakMap(), (_temp = class extends babelHelpers.identi
       log.push("static:end");
     })(), _initClass();
   }
-}, (_Foo2 => {
-  var _A = /*#__PURE__*/new WeakMap();
-  class Foo extends (_ref = (log.push("extends"), Object)) {
-    constructor() {
-      log.push("ctor:start");
-      super();
-      babelHelpers.defineProperty(this, "field", (_initProto(this), _init_field(this)));
-      babelHelpers.classPrivateFieldInitSpec(this, _A, _init_accessor(this));
-      log.push("ctor:end");
-    }
-    method() {}
-    static method() {}
-    get getter() {
-      return;
-    }
-    static get getter() {
-      return;
-    }
-    set setter(x) {}
-    static set getter(x) {}
-    get accessor() {
-      return babelHelpers.classPrivateFieldGet2(_A, this);
-    }
-    set accessor(v) {
-      babelHelpers.classPrivateFieldSet2(_A, this, v);
-    }
-    static get accessor() {
-      return babelHelpers.classPrivateFieldGet2(_B, Foo);
-    }
-    static set accessor(v) {
-      babelHelpers.classPrivateFieldSet2(_B, Foo, v);
-    }
-  }
-  _Foo2 = Foo;
-  (() => {
-    ({
-      e: [_init_accessor2, _init_accessor, _init_field2, _init_field, _initProto, _initStatic],
-      c: [_Foo, _initClass]
-    } = babelHelpers.applyDecs2305(_Foo2, [[[staticMethodDec1, staticMethodDec2], 10, "method"], [[staticGetterDec1, staticGetterDec2], 11, "getter"], [[staticSetterDec1, staticSetterDec2], 12, "getter"], [[staticAccessorDec1, staticAccessorDec2], 9, "accessor"], [[methodDec1, methodDec2], 2, "method"], [[getterDec1, getterDec2], 3, "getter"], [[setterDec1, setterDec2], 4, "setter"], [[accessorDec1, accessorDec2], 1, "accessor"], [[staticFieldDec1, staticFieldDec2], 8, "field"], [[fieldDec1, fieldDec2], 0, "field"]], [classDec1, classDec2], 0, void 0, _ref));
-    _initStatic(_Foo2);
-  })();
-})(), _temp))();
+}, babelHelpers.defineProperty(_Class, _Foo2, void 0), _Class))();
 log.push("after");
 new _Foo();
 log.push("end");

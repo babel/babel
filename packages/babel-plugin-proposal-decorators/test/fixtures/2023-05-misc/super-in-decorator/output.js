@@ -1,11 +1,16 @@
 class A extends B {
   m() {
-    var _initProto, _initClass, _classDecs, _m2Decs;
+    var _initProto, _initClass, _classDecs, _m2Decs, _outerThis, _outerSuperProp;
     _classDecs = [this, super.dec1];
-    _m2Decs = [this, super.dec2];
+    _outerThis = this;
+    _outerSuperProp = prop => Object.defineProperty({}, "_", {
+      get: () => super[prop],
+      set: v => super[prop] = v
+    });
     let _C;
     class C {
       static {
+        _m2Decs = [_outerThis, _outerSuperProp("dec2")._];
         ({
           e: [_initProto],
           c: [_C, _initClass]
