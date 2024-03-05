@@ -69,7 +69,7 @@
     "@babel/plugin-transform-modules-commonjs": "workspace:^",
     "@babel/preset-env": "workspace:^",
     "@babel/preset-typescript": "workspace:^",
-    "@jridgewell/trace-mapping": "^0.3.17",
+    "@jridgewell/trace-mapping": "^0.3.25",
     "@types/convert-source-map": "^2.0.0",
     "@types/debug": "^4.1.0",
     "@types/gensync": "^1.0.0",

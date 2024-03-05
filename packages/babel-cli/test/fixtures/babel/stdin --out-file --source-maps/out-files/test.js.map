@@ -1,1 +1,1 @@
-{"version":3,"file":"test.js","names":["arr","map","x"],"sources":["stdin"],"sourcesContent":["arr.map(x => x * x);"],"mappings":";;AAAAA,GAAG,CAACC,GAAG,CAAC,UAAAC,CAAC;EAAA,OAAIA,CAAC,GAAGA,CAAC;AAAA,EAAC"}
+{"version":3,"file":"test.js","names":["arr","map","x"],"sources":["stdin"],"sourcesContent":["arr.map(x => x * x);"],"mappings":";;AAAAA,GAAG,CAACC,GAAG,CAAC,UAAAC,CAAC;EAAA,OAAIA,CAAC,GAAGA,CAAC;AAAA,EAAC","ignoreList":[]}

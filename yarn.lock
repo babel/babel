@@ -225,7 +225,7 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/helper-transform-fixture-test-runner": "workspace:^"
-    "@jridgewell/trace-mapping": "npm:^0.3.17"
+    "@jridgewell/trace-mapping": "npm:^0.3.25"
     "@nicolo-ribaudo/chokidar-2": "condition:BABEL_8_BREAKING ? : 2.1.8-no-fsevents.3"
     "@types/fs-readdir-recursive": "npm:^1.1.0"
     "@types/glob": "npm:^7.2.0"
@@ -386,7 +386,7 @@ __metadata:
     "@babel/template": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
-    "@jridgewell/trace-mapping": "npm:^0.3.17"
+    "@jridgewell/trace-mapping": "npm:^0.3.25"
     "@types/convert-source-map": "npm:^2.0.0"
     "@types/debug": "npm:^4.1.0"
     "@types/gensync": "npm:^1.0.0"
@@ -518,9 +518,9 @@ __metadata:
     "@babel/helper-fixtures": "workspace:^"
     "@babel/parser": "workspace:^"
     "@babel/types": "workspace:^"
-    "@jridgewell/gen-mapping": "npm:^0.3.2"
+    "@jridgewell/gen-mapping": "npm:^0.3.5"
     "@jridgewell/sourcemap-codec": "npm:^1.4.15"
-    "@jridgewell/trace-mapping": "npm:^0.3.17"
+    "@jridgewell/trace-mapping": "npm:^0.3.25"
     "@types/jsesc": "npm:^2.5.0"
     charcodes: "npm:^0.2.0"
     jsesc: "condition: BABEL_8_BREAKING ? ^3.0.2 : ^2.5.1"
@@ -736,7 +736,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-fixtures@workspace:packages/babel-helper-fixtures"
   dependencies:
-    "@jridgewell/gen-mapping": "npm:^0.3.3"
+    "@jridgewell/gen-mapping": "npm:^0.3.5"
     "@types/semver": "npm:^7.3.4"
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
   languageName: unknown
@@ -1105,7 +1105,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-check-duplicate-nodes": "workspace:^"
     "@babel/helper-fixtures": "workspace:^"
-    "@jridgewell/trace-mapping": "npm:^0.3.17"
+    "@jridgewell/trace-mapping": "npm:^0.3.25"
     "@types/fs-readdir-recursive": "npm:^1.1.0"
     fs-readdir-recursive: "npm:^1.1.0"
     jest-diff: "npm:^29.6.4"
@@ -4798,28 +4798,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jridgewell/gen-mapping@npm:^0.3.0, @jridgewell/gen-mapping@npm:^0.3.2, @jridgewell/gen-mapping@npm:^0.3.3":
-  version: 0.3.3
-  resolution: "@jridgewell/gen-mapping@npm:0.3.3"
+"@jridgewell/gen-mapping@npm:^0.3.0, @jridgewell/gen-mapping@npm:^0.3.2, @jridgewell/gen-mapping@npm:^0.3.5":
+  version: 0.3.5
+  resolution: "@jridgewell/gen-mapping@npm:0.3.5"
   dependencies:
-    "@jridgewell/set-array": "npm:^1.0.1"
+    "@jridgewell/set-array": "npm:^1.2.1"
     "@jridgewell/sourcemap-codec": "npm:^1.4.10"
-    "@jridgewell/trace-mapping": "npm:^0.3.9"
-  checksum: 10/072ace159c39ab85944bdabe017c3de15c5e046a4a4a772045b00ff05e2ebdcfa3840b88ae27e897d473eb4d4845b37be3c78e28910c779f5aeeeae2fb7f0cc2
+    "@jridgewell/trace-mapping": "npm:^0.3.24"
+  checksum: 10/81587b3c4dd8e6c60252122937cea0c637486311f4ed208b52b62aae2e7a87598f63ec330e6cd0984af494bfb16d3f0d60d3b21d7e5b4aedd2602ff3fe9d32e2
   languageName: node
   linkType: hard
 
-"@jridgewell/resolve-uri@npm:3.1.0, @jridgewell/resolve-uri@npm:^3.0.3":
-  version: 3.1.0
-  resolution: "@jridgewell/resolve-uri@npm:3.1.0"
-  checksum: 10/320ceb37af56953757b28e5b90c34556157676d41e3d0a3ff88769274d62373582bb0f0276a4f2d29c3f4fdd55b82b8be5731f52d391ad2ecae9b321ee1c742d
+"@jridgewell/resolve-uri@npm:^3.0.3, @jridgewell/resolve-uri@npm:^3.1.0":
+  version: 3.1.2
+  resolution: "@jridgewell/resolve-uri@npm:3.1.2"
+  checksum: 10/97106439d750a409c22c8bff822d648f6a71f3aa9bc8e5129efdc36343cd3096ddc4eeb1c62d2fe48e9bdd4db37b05d4646a17114ecebd3bbcacfa2de51c3c1d
   languageName: node
   linkType: hard
 
-"@jridgewell/set-array@npm:^1.0.0, @jridgewell/set-array@npm:^1.0.1":
-  version: 1.1.2
-  resolution: "@jridgewell/set-array@npm:1.1.2"
-  checksum: 10/69a84d5980385f396ff60a175f7177af0b8da4ddb81824cb7016a9ef914eee9806c72b6b65942003c63f7983d4f39a5c6c27185bbca88eb4690b62075602e28e
+"@jridgewell/set-array@npm:^1.0.0, @jridgewell/set-array@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "@jridgewell/set-array@npm:1.2.1"
+  checksum: 10/832e513a85a588f8ed4f27d1279420d8547743cc37fcad5a5a76fc74bb895b013dfe614d0eed9cb860048e6546b798f8f2652020b4b2ba0561b05caa8c654b10
   languageName: node
   linkType: hard
 
@@ -4833,14 +4833,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jridgewell/sourcemap-codec@npm:1.4.14":
-  version: 1.4.14
-  resolution: "@jridgewell/sourcemap-codec@npm:1.4.14"
-  checksum: 10/26e768fae6045481a983e48aa23d8fcd23af5da70ebd74b0649000e815e7fbb01ea2bc088c9176b3fffeb9bec02184e58f46125ef3320b30eaa1f4094cfefa38
-  languageName: node
-  linkType: hard
-
-"@jridgewell/sourcemap-codec@npm:^1.4.10, @jridgewell/sourcemap-codec@npm:^1.4.13, @jridgewell/sourcemap-codec@npm:^1.4.15":
+"@jridgewell/sourcemap-codec@npm:^1.4.10, @jridgewell/sourcemap-codec@npm:^1.4.13, @jridgewell/sourcemap-codec@npm:^1.4.14, @jridgewell/sourcemap-codec@npm:^1.4.15":
   version: 1.4.15
   resolution: "@jridgewell/sourcemap-codec@npm:1.4.15"
   checksum: 10/89960ac087781b961ad918978975bcdf2051cd1741880469783c42de64239703eab9db5230d776d8e6a09d73bb5e4cb964e07d93ee6e2e7aea5a7d726e865c09
@@ -4857,13 +4850,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jridgewell/trace-mapping@npm:^0.3.12, @jridgewell/trace-mapping@npm:^0.3.17, @jridgewell/trace-mapping@npm:^0.3.18, @jridgewell/trace-mapping@npm:^0.3.9":
-  version: 0.3.18
-  resolution: "@jridgewell/trace-mapping@npm:0.3.18"
+"@jridgewell/trace-mapping@npm:^0.3.12, @jridgewell/trace-mapping@npm:^0.3.17, @jridgewell/trace-mapping@npm:^0.3.18, @jridgewell/trace-mapping@npm:^0.3.24, @jridgewell/trace-mapping@npm:^0.3.25, @jridgewell/trace-mapping@npm:^0.3.9":
+  version: 0.3.25
+  resolution: "@jridgewell/trace-mapping@npm:0.3.25"
   dependencies:
-    "@jridgewell/resolve-uri": "npm:3.1.0"
-    "@jridgewell/sourcemap-codec": "npm:1.4.14"
-  checksum: 10/f4fabdddf82398a797bcdbb51c574cd69b383db041a6cae1a6a91478681d6aab340c01af655cfd8c6e01cde97f63436a1445f08297cdd33587621cf05ffa0d55
+    "@jridgewell/resolve-uri": "npm:^3.1.0"
+    "@jridgewell/sourcemap-codec": "npm:^1.4.14"
+  checksum: 10/dced32160a44b49d531b80a4a2159dceab6b3ddf0c8e95a0deae4b0e894b172defa63d5ac52a19c2068e1fe7d31ea4ba931fbeec103233ecb4208953967120fc
   languageName: node
   linkType: hard
 
