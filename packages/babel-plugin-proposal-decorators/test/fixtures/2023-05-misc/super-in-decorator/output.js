@@ -2,7 +2,6 @@ class A extends B {
   m() {
     var _initProto, _initClass, _classDecs, _m2Decs;
     _classDecs = [this, super.dec1];
-    _m2Decs = [this, super.dec2];
     let _C;
     class C {
       static {
@@ -14,7 +13,7 @@ class A extends B {
       constructor() {
         _initProto(this);
       }
-      m2() {}
+      [(_m2Decs = [this, super.dec2], "m2")]() {}
       static {
         _initClass();
       }

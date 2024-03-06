@@ -12,14 +12,14 @@ class Foo {
   method() {}
   makeClass() {
     var _barDecs, _init_bar, _init_extra_bar;
-    return _barDecs = [this, this.#a], class Nested {
+    return class Nested {
       static {
         [_init_bar, _init_extra_bar] = babelHelpers.applyDecs2311(this, [], [[_barDecs, 16, "bar"]]).e;
       }
       constructor() {
         _init_extra_bar(this);
       }
-      bar = _init_bar(this);
+      [(_barDecs = [this, this.#a], "bar")] = _init_bar(this);
     };
   }
   static {

@@ -1,14 +1,15 @@
 class A extends B {
   m() {
+    let _ref;
     var _initProto, _initClass, _classDecs, _m2Decs, _C2;
     _classDecs = [this, super.dec1];
-    _m2Decs = [this, super.dec2];
     let _C;
+    _ref = (_m2Decs = [this, super.dec2], "m2");
     class C {
       constructor() {
         _initProto(this);
       }
-      m2() {}
+      [_ref]() {}
     }
     _C2 = C;
     ({

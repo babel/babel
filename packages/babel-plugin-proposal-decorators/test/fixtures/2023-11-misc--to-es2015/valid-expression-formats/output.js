@@ -8,10 +8,11 @@ class Foo {
   }
   method() {}
   makeClass() {
+    let _ref;
     var _barDecs, _init_bar, _init_extra_bar, _Nested;
-    return _barDecs = babelHelpers.classPrivateFieldGet2(_a, this), (_Nested = class Nested {
+    return _ref = (_barDecs = babelHelpers.classPrivateFieldGet2(_a, this), "bar"), (_Nested = class Nested {
       constructor() {
-        babelHelpers.defineProperty(this, "bar", _init_bar(this));
+        babelHelpers.defineProperty(this, _ref, _init_bar(this));
         _init_extra_bar(this);
       }
     }, [_init_bar, _init_extra_bar] = babelHelpers.applyDecs2311(_Nested, [], [[_barDecs, 0, "bar"]]).e, _Nested);

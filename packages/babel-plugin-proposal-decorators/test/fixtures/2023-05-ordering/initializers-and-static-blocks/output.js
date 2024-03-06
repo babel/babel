@@ -145,46 +145,44 @@ const staticAccessorDec2 = (target, ctxStaticAccessor) => {
 log.push("start");
 let _Foo;
 new class extends babelHelpers.identity {
-  static {
-    class Foo extends (_ref = (log.push("extends"), Object)) {
-      static {
-        ({
-          e: [_init_accessor2, _init_accessor, _init_field2, _init_field, _initProto, _initStatic],
-          c: [_Foo, _initClass]
-        } = babelHelpers.applyDecs2305(this, [[[staticMethodDec1, staticMethodDec2], 10, "method"], [[staticGetterDec1, staticGetterDec2], 11, "getter"], [[staticSetterDec1, staticSetterDec2], 12, "getter"], [[staticAccessorDec1, staticAccessorDec2], 9, "accessor"], [[methodDec1, methodDec2], 2, "method"], [[getterDec1, getterDec2], 3, "getter"], [[setterDec1, setterDec2], 4, "setter"], [[accessorDec1, accessorDec2], 1, "accessor"], [[staticFieldDec1, staticFieldDec2], 8, "field"], [[fieldDec1, fieldDec2], 0, "field"]], [classDec1, classDec2], 0, void 0, _ref));
-        _initStatic(this);
-      }
-      constructor() {
-        log.push("ctor:start");
-        super();
-        log.push("ctor:end");
-      }
-      method() {}
-      static method() {}
-      field = (_initProto(this), _init_field(this));
-      get getter() {
-        return;
-      }
-      static get getter() {
-        return;
-      }
-      set setter(x) {}
-      static set getter(x) {}
-      #A = _init_accessor(this);
-      get accessor() {
-        return this.#A;
-      }
-      set accessor(v) {
-        this.#A = v;
-      }
-      static get accessor() {
-        return Foo.#B;
-      }
-      static set accessor(v) {
-        Foo.#B = v;
-      }
+  static [class Foo extends (_ref = (log.push("extends"), Object)) {
+    static {
+      ({
+        e: [_init_accessor2, _init_accessor, _init_field2, _init_field, _initProto, _initStatic],
+        c: [_Foo, _initClass]
+      } = babelHelpers.applyDecs2305(this, [[[staticMethodDec1, staticMethodDec2], 10, "method"], [[staticGetterDec1, staticGetterDec2], 11, "getter"], [[staticSetterDec1, staticSetterDec2], 12, "getter"], [[staticAccessorDec1, staticAccessorDec2], 9, "accessor"], [[methodDec1, methodDec2], 2, "method"], [[getterDec1, getterDec2], 3, "getter"], [[setterDec1, setterDec2], 4, "setter"], [[accessorDec1, accessorDec2], 1, "accessor"], [[staticFieldDec1, staticFieldDec2], 8, "field"], [[fieldDec1, fieldDec2], 0, "field"]], [classDec1, classDec2], 0, void 0, _ref));
+      _initStatic(this);
     }
-  }
+    constructor() {
+      log.push("ctor:start");
+      super();
+      log.push("ctor:end");
+    }
+    method() {}
+    static method() {}
+    field = (_initProto(this), _init_field(this));
+    get getter() {
+      return;
+    }
+    static get getter() {
+      return;
+    }
+    set setter(x) {}
+    static set getter(x) {}
+    #A = _init_accessor(this);
+    get accessor() {
+      return this.#A;
+    }
+    set accessor(v) {
+      this.#A = v;
+    }
+    static get accessor() {
+      return Foo.#B;
+    }
+    static set accessor(v) {
+      Foo.#B = v;
+    }
+  }];
   field = ((() => {
     log.push("static:start");
   })(), _init_field2(this));

@@ -9,6 +9,7 @@ import {
   privateNameVisitorFactory,
   type PrivateNameVisitorState,
 } from "./fields.ts";
+import { memoiseComputedKey } from "./misc.ts";
 
 interface Options {
   /** @deprecated use `constantSuper` assumption instead. Only supported in 2021-12 version. */
@@ -27,6 +28,11 @@ type ClassElement =
   | t.TSDeclareMethod
   | t.TSIndexSignature
   | t.StaticBlock;
+
+type ClassElementCanHaveComputedKeys =
+  | t.ClassMethod
+  | t.ClassProperty
+  | t.ClassAccessorProperty;
 
 // TODO(Babel 8): Only keep 2023-11
 export type DecoratorVersionKind =
@@ -179,11 +185,12 @@ function generateClassProperty(
 function addProxyAccessorsFor(
   className: t.Identifier,
   element: NodePath<ClassDecoratableElement>,
-  originalKey: t.PrivateName | t.Expression,
+  getterKey: t.PrivateName | t.Expression,
+  setterKey: t.PrivateName | t.Expression,
   targetKey: t.PrivateName,
-  version: DecoratorVersionKind,
   isComputed: boolean,
   isStatic: boolean,
+  version: DecoratorVersionKind,
 ): void {
   const thisArg =
     (version === "2023-11" ||
@@ -211,17 +218,11 @@ function addProxyAccessorsFor(
   let getter: t.ClassMethod | t.ClassPrivateMethod,
     setter: t.ClassMethod | t.ClassPrivateMethod;
 
-  if (originalKey.type === "PrivateName") {
-    getter = t.classPrivateMethod(
-      "get",
-      t.cloneNode(originalKey),
-      [],
-      getterBody,
-      isStatic,
-    );
+  if (getterKey.type === "PrivateName") {
+    getter = t.classPrivateMethod("get", getterKey, [], getterBody, isStatic);
     setter = t.classPrivateMethod(
       "set",
-      t.cloneNode(originalKey),
+      setterKey as t.PrivateName,
       [t.identifier("v")],
       setterBody,
       isStatic,
@@ -229,7 +230,7 @@ function addProxyAccessorsFor(
   } else {
     getter = t.classMethod(
       "get",
-      t.cloneNode(originalKey),
+      getterKey,
       [],
       getterBody,
       isComputed,
@@ -237,7 +238,7 @@ function addProxyAccessorsFor(
     );
     setter = t.classMethod(
       "set",
-      t.cloneNode(originalKey),
+      setterKey as t.Expression,
       [t.identifier("v")],
       setterBody,
       isComputed,
@@ -275,6 +276,134 @@ function extractProxyAccessorsFor(
       (o, v) => o.${t.cloneNode(targetKey)} = v
     ` as t.ArrowFunctionExpression,
   ];
+}
+
+/**
+ * Get the last element for the given computed key path.
+ *
+ * This function unwraps transparent wrappers and gets the last item when
+ * the key is a SequenceExpression.
+ *
+ * @param {NodePath<t.Expression>} path The key of a computed class element
+ * @returns {NodePath<t.Expression>} The simple completion result
+ */
+function getComputedKeyLastElement(
+  path: NodePath<t.Expression>,
+): NodePath<t.Expression> {
+  path = skipTransparentExprWrappers(path);
+  if (path.isSequenceExpression()) {
+    const expressions = path.get("expressions");
+    return getComputedKeyLastElement(expressions[expressions.length - 1]);
+  }
+  return path;
+}
+
+/**
+ * Get a memoiser of the computed key path.
+ *
+ * This function does not mutate AST. If the computed key is not a constant
+ * expression, this function must be called after the key has been memoised.
+ *
+ * @param {NodePath<t.Expression>} path The key of a computed class element.
+ * @returns {t.Expression} A clone of key if key is a constant expression,
+ * otherwise a memoiser identifier.
+ */
+function getComputedKeyMemoiser(path: NodePath<t.Expression>): t.Expression {
+  const element = getComputedKeyLastElement(path);
+  if (element.isConstantExpression()) {
+    return t.cloneNode(path.node);
+  } else if (element.isIdentifier() && path.scope.hasUid(element.node.name)) {
+    return t.cloneNode(path.node);
+  } else if (
+    element.isAssignmentExpression() &&
+    element.get("left").isIdentifier()
+  ) {
+    return t.cloneNode(element.node.left as t.Identifier);
+  } else {
+    throw new Error(
+      `Internal Error: the computed key ${path.toString()} has not yet been memoised.`,
+    );
+  }
+}
+
+/**
+ * Prepend expressions to the computed key of the given field path.
+ *
+ * If the computed key is a sequence expression, this function will unwrap
+ * the sequence expression for optimal output size.
+ *
+ * @param {t.Expression[]} expressions
+ * @param {(NodePath<
+ *     t.ClassMethod | t.ClassProperty | t.ClassAccessorProperty
+ *   >)} fieldPath
+ */
+function prependExpressionsToComputedKey(
+  expressions: t.Expression[],
+  fieldPath: NodePath<
+    t.ClassMethod | t.ClassProperty | t.ClassAccessorProperty
+  >,
+) {
+  const key = fieldPath.get("key") as NodePath<t.Expression>;
+  if (key.isSequenceExpression()) {
+    expressions.push(...key.node.expressions);
+  } else {
+    expressions.push(key.node);
+  }
+  key.replaceWith(maybeSequenceExpression(expressions));
+}
+
+/**
+ * Append expressions to the computed key of the given field path.
+ *
+ * If the computed key is a constant expression or uid reference, it
+ * will prepend expressions before the comptued key. Otherwise it will
+ * memoise the computed key to preserve its completion result.
+ *
+ * @param {t.Expression[]} expressions
+ * @param {(NodePath<
+ *     t.ClassMethod | t.ClassProperty | t.ClassAccessorProperty
+ *   >)} fieldPath
+ */
+function appendExpressionsToComputedKey(
+  expressions: t.Expression[],
+  fieldPath: NodePath<
+    t.ClassMethod | t.ClassProperty | t.ClassAccessorProperty
+  >,
+) {
+  const key = fieldPath.get("key") as NodePath<t.Expression>;
+  const completion = getComputedKeyLastElement(key);
+  if (completion.isConstantExpression()) {
+    prependExpressionsToComputedKey(expressions, fieldPath);
+  } else {
+    const scopeParent = key.scope.parent;
+    const maybeAssignment = memoiseComputedKey(
+      completion.node,
+      scopeParent,
+      scopeParent.generateUid("computedKey"),
+    );
+    if (!maybeAssignment) {
+      // If the memoiseComputedKey returns undefined, the key is already a uid reference,
+      // treat it as a constant expression and prepend expressions before it
+      prependExpressionsToComputedKey(expressions, fieldPath);
+    } else {
+      const expressionSequence = [
+        ...expressions,
+        // preserve the completion result
+        t.cloneNode(maybeAssignment.left),
+      ];
+      const completionParent = completion.parentPath;
+      if (completionParent.isSequenceExpression()) {
+        completionParent.pushContainer("expressions", expressionSequence);
+      } else {
+        completion.replaceWith(
+          maybeSequenceExpression([
+            t.cloneNode(maybeAssignment),
+            ...expressionSequence,
+          ]),
+        );
+      }
+    }
+  }
 }
 
 /**
@@ -754,12 +883,14 @@ function createPrivateBrandCheckClosure(brandName: t.PrivateName) {
 // Check if the expression does not reference function-specific
 // context or the given identifier name.
 // `true` means "maybe" and `false` means "no".
-function usesFunctionContext(expression: t.Node) {
+function usesFunctionContextOrYieldAwait(expression: t.Node) {
   try {
     t.traverseFast(expression, node => {
       if (
         t.isThisExpression(node) ||
         t.isSuper(node) ||
+        t.isYieldExpression(node) ||
+        t.isAwaitExpression(node) ||
         t.isIdentifier(node, { name: "arguments" }) ||
         (t.isMetaProperty(node) && node.meta.name !== "import")
       ) {
@@ -784,6 +915,22 @@ function usesPrivateField(expression: t.Node) {
     return false;
   } catch {
     return true;
+  }
+}
+
+/**
+ * Convert a non-computed class element to its equivalent computed form.
+ *
+ * This function is to provide a decorator evaluation storage from non-computed
+ * class elements.
+ *
+ * @param {(NodePath<t.ClassProperty | t.ClassMethod>)} path A non-computed class property or method
+ */
+function convertToComputedKey(path: NodePath<t.ClassProperty | t.ClassMethod>) {
+  const { node } = path;
+  node.computed = true;
+  if (t.isIdentifier(node.key)) {
+    node.key = t.stringLiteral(node.key.name);
   }
 }
 
@@ -851,9 +998,13 @@ function transformClass(
 
   const generateClassPrivateUid = createLazyPrivateUidGeneratorForClass(path);
 
-  const assignments: t.AssignmentExpression[] = [];
+  const classAssignments: t.AssignmentExpression[] = [];
   const scopeParent: Scope = path.scope.parent;
-  const memoiseExpression = (expression: t.Expression, hint: string) => {
+  const memoiseExpression = (
+    expression: t.Expression,
+    hint: string,
+    assignments: t.AssignmentExpression[],
+  ) => {
     const localEvaluatedId = scopeParent.generateDeclaredUidIdentifier(hint);
     assignments.push(t.assignmentExpression("=", localEvaluatedId, expression));
     return t.cloneNode(localEvaluatedId);
@@ -906,8 +1057,9 @@ function transformClass(
           break;
       }
       hasElementDecorators = true;
-      elemDecsUseFnContext ||=
-        element.node.decorators.some(usesFunctionContext);
+      elemDecsUseFnContext ||= element.node.decorators.some(
+        usesFunctionContextOrYieldAwait,
+      );
     } else if (element.node.type === "ClassAccessorProperty") {
       // @ts-expect-error todo: propertyVisitor.ClassAccessorProperty should be callable. Improve typings.
       propertyVisitor.ClassAccessorProperty(
@@ -921,19 +1073,28 @@ function transformClass(
       const keyPath = element.get("key");
       const [newPath] = element.replaceWith(newField);
 
+      let getterKey, setterKey;
+      if (computed && !keyPath.isConstantExpression()) {
+        getterKey = memoiseComputedKey(
+          createToPropertyKeyCall(state, key as t.Expression),
+          scopeParent,
+          scopeParent.generateUid("computedKey"),
+        )!;
+        setterKey = t.cloneNode(getterKey.left as t.Identifier);
+      } else {
+        getterKey = t.cloneNode(key);
+        setterKey = t.cloneNode(key);
+      }
+
       addProxyAccessorsFor(
         path.node.id,
         newPath,
-        computed && !keyPath.isConstantExpression()
-          ? memoiseExpression(
-              createToPropertyKeyCall(state, key as t.Expression),
-              "computedKey",
-            )
-          : key,
+        getterKey,
+        setterKey,
         newId,
-        version,
         computed,
         isStatic,
+        version,
       );
     }
 
@@ -943,14 +1104,6 @@ function transformClass(
   }
 
   if (!classDecorators && !hasElementDecorators) {
-    // If nothing is decorated but we have assignments, it must be the memoised
-    // computed keys of class accessors
-    if (assignments.length > 0) {
-      path.insertBefore(assignments.map(expr => t.expressionStatement(expr)));
-
-      // Recrawl the scope to make sure new identifiers are properly synced
-      path.scope.crawl();
-    }
     // If nothing is decorated and no assignments inserted, return
     return;
   }
@@ -1001,7 +1154,7 @@ function transformClass(
       }
       decoratorsThis.push(object);
       hasSideEffects ||= !scopeParent.isStatic(expression);
-      usesFnContext ||= usesFunctionContext(expression);
+      usesFnContext ||= usesFunctionContextOrYieldAwait(expression);
     }
     return { hasSideEffects, usesFnContext, decoratorsThis };
   }
@@ -1043,6 +1196,7 @@ function transformClass(
       classDecorationsId = memoiseExpression(
         t.arrayExpression(classDecorations),
         "classDecs",
+        classAssignments,
       );
     }
   } else {
@@ -1055,6 +1209,7 @@ function transformClass(
   let lastInstancePrivateName: t.PrivateName;
   let needsInstancePrivateBrandCheck = false;
 
+  let computedKeyAssignments: t.AssignmentExpression[] = [];
   let fieldInitializerExpressions = [];
   let staticFieldInitializerExpressions: t.Expression[] = [];
 
@@ -1109,16 +1264,33 @@ function transformClass(
         decoratorsHaveThis = haveThis;
         decoratorsArray = decs.length === 1 ? decs[0] : t.arrayExpression(decs);
         if (usesFnContext || (hasSideEffects && willExtractSomeElemDecs)) {
-          decoratorsArray = memoiseExpression(decoratorsArray, name + "Decs");
+          decoratorsArray = memoiseExpression(
+            decoratorsArray,
+            name + "Decs",
+            computedKeyAssignments,
+          );
         }
       }
 
       if (isComputed) {
         if (!element.get("key").isConstantExpression()) {
-          node.key = memoiseExpression(
-            createToPropertyKeyCall(state, node.key as t.Expression),
-            "computedKey",
+          const key = node.key as t.Expression;
+          const maybeAssignment = memoiseComputedKey(
+            hasDecorators ? createToPropertyKeyCall(state, key) : key,
+            scopeParent,
+            scopeParent.generateUid("computedKey"),
           );
+          if (maybeAssignment != null) {
+            // If it is a static computed field within a decorated class, we move the computed key
+            // into `computedKeyAssignments` which will be then moved into the non-static class,
+            // to ensure that the evaluation order and private environment are correct
+            if (classDecorators && element.isClassProperty({ static: true })) {
+              node.key = t.cloneNode(maybeAssignment.left);
+              computedKeyAssignments.push(maybeAssignment);
+            } else {
+              node.key = maybeAssignment;
+            }
+          }
         }
       }
 
@@ -1146,6 +1318,20 @@ function transformClass(
         let privateMethods: Array<
           t.FunctionExpression | t.ArrowFunctionExpression
         >;
+
+        let nameExpr: t.Expression;
+
+        if (isComputed) {
+          nameExpr = getComputedKeyMemoiser(
+            element.get("key") as NodePath<t.Expression>,
+          );
+        } else if (key.type === "PrivateName") {
+          nameExpr = t.stringLiteral(key.id.name);
+        } else if (key.type === "Identifier") {
+          nameExpr = t.stringLiteral(key.name);
+        } else {
+          nameExpr = t.cloneNode(key as t.Expression);
+        }
 
         if (kind === ACCESSOR) {
           const { value } = element.node as t.ClassAccessorProperty;
@@ -1187,11 +1373,14 @@ function transformClass(
             addProxyAccessorsFor(
               path.node.id,
               newPath,
-              key,
+              t.cloneNode(key),
+              t.isAssignmentExpression(key)
+                ? t.cloneNode(key.left as t.Identifier)
+                : t.cloneNode(key),
               newId,
-              version,
               isComputed,
               isStatic,
+              version,
             );
             locals = [newFieldInitId];
           }
@@ -1260,18 +1449,6 @@ function transformClass(
           }
         }
 
-        let nameExpr: t.Expression;
-
-        if (isComputed) {
-          nameExpr = t.cloneNode(key as t.Expression);
-        } else if (key.type === "PrivateName") {
-          nameExpr = t.stringLiteral(key.id.name);
-        } else if (key.type === "Identifier") {
-          nameExpr = t.stringLiteral(key.name);
-        } else {
-          nameExpr = t.cloneNode(key as t.Expression);
-        }
-
         elementDecoratorInfo.push({
           kind,
           decoratorsArray,
@@ -1284,6 +1461,24 @@ function transformClass(
 
         if (element.node) {
           element.node.decorators = null;
+        }
+      }
+
+      if (isComputed && computedKeyAssignments.length > 0) {
+        if (classDecorators && element.isClassProperty({ static: true })) {
+          // If the class is decorated, we don't insert computedKeyAssignments here
+          // because any non-static computed elements defined after it will be moved
+          // into the non-static class, so they will be evaluated before the key of
+          // this field. At this momemnt, its key must be either a constant expression
+          // or a uid reference which has been assigned _within_ the non-static class.
+        } else {
+          prependExpressionsToComputedKey(
+            computedKeyAssignments,
+            (kind === ACCESSOR
+              ? element.getNextSibling() // the transpiled getter of the accessor property
+              : element) as NodePath<ClassElementCanHaveComputedKeys>,
+          );
+          computedKeyAssignments = [];
         }
       }
 
@@ -1328,6 +1523,33 @@ function transformClass(
           }
         }
       }
+    }
+  }
+
+  if (computedKeyAssignments.length > 0) {
+    const elements = path.get("body.body");
+    let lastComputedElement: NodePath<ClassElementCanHaveComputedKeys>;
+    for (let i = elements.length - 1; i >= 0; i--) {
+      const path = elements[i];
+      const node = path.node as ClassElementCanHaveComputedKeys;
+      if (node.computed) {
+        if (classDecorators && t.isClassProperty(node, { static: true })) {
+          continue;
+        }
+        lastComputedElement = path as NodePath<ClassElementCanHaveComputedKeys>;
+        break;
+      }
+    }
+    if (lastComputedElement != null) {
+      appendExpressionsToComputedKey(
+        computedKeyAssignments,
+        lastComputedElement,
+      );
+      computedKeyAssignments = [];
+    } else {
+      // If there is no computed key, we will try to convert the first non-computed
+      // class element into a computed key and insert assignments there. This will
+      // be done after we handle the class elements split when the class is decorated.
     }
   }
 
@@ -1391,6 +1613,7 @@ function transformClass(
   const classInitCall =
     classInitLocal && t.callExpression(t.cloneNode(classInitLocal), []);
 
+  let originalClassPath = path;
   const originalClass = path.node;
 
   if (classDecorators) {
@@ -1435,12 +1658,20 @@ function transformClass(
         class extends ${state.addHelper("identity")} {}
       ` as t.ClassExpression;
       staticsClass.body.body = [
-        t.staticBlock([
-          t.toStatement(originalClass, true) ||
-            // If toStatement returns false, originalClass must be an anonymous ClassExpression,
-            // because `export default @dec ...` has been handled in the export visitor before.
-            t.expressionStatement(originalClass as t.ClassExpression),
-        ]),
+        // Insert the original class to a computed key of the wrapper so that
+        // 1) they share the same function context with the wrapper class
+        // 2) the memoisation of static computed field is evaluated before they
+        //    are referenced in the wrapper class keys
+        // Note that any static elements of the wrapper class can not be accessed
+        // in the user land, so we don't have to remove the temporary class field.
+        t.classProperty(
+          t.toExpression(originalClass),
+          undefined,
+          undefined,
+          undefined,
+          /* computed */ true,
+          /* static */ true,
+        ),
         ...statics,
       ];
 
@@ -1471,7 +1702,14 @@ function transformClass(
         newExpr.arguments.push(t.cloneNode(classIdLocal));
       }
 
-      path.replaceWith(newExpr);
+      const [newPath] = path.replaceWith(newExpr);
+
+      // update originalClassPath according to the new AST
+      originalClassPath = (
+        newPath.get("callee").get("body") as NodePath<t.ClassBody>
+      )
+        .get("body")[0]
+        .get("key");
     }
   }
   if (!classInitInjected && classInitCall) {
@@ -1493,36 +1731,85 @@ function transformClass(
       superClass = id;
     }
   }
-  originalClass.body.body.unshift(
-    t.staticBlock(
-      [
+
+  const applyDecoratorWrapper = t.staticBlock([]);
+  originalClass.body.body.unshift(applyDecoratorWrapper);
+  const applyDecsBody = applyDecoratorWrapper.body;
+  if (computedKeyAssignments.length > 0) {
+    const elements = originalClassPath.get("body.body");
+    let firstPublicElement: NodePath<t.ClassProperty | t.ClassMethod>;
+    for (const path of elements) {
+      if (
+        (path.isClassProperty() || path.isClassMethod()) &&
+        (path.node as t.ClassMethod).kind !== "constructor"
+      ) {
+        firstPublicElement = path;
+        break;
+      }
+    }
+    if (firstPublicElement != null) {
+      // Convert its key to a computed one to host the decorator evaluations.
+      convertToComputedKey(firstPublicElement);
+      prependExpressionsToComputedKey(
+        computedKeyAssignments,
+        firstPublicElement,
+      );
+    } else {
+      // When there is no public class elements, we inject a temporary computed
+      // field whose key will host the decorator evaluations. The field will be
+      // deleted immediately after it is defiend.
+      originalClass.body.body.unshift(
+        t.classProperty(
+          t.sequenceExpression([
+            ...computedKeyAssignments,
+            t.stringLiteral("_"),
+          ]),
+          undefined,
+          undefined,
+          undefined,
+          /* computed */ true,
+          /* static */ true,
+        ),
+      );
+      applyDecsBody.push(
         t.expressionStatement(
-          createLocalsAssignment(
-            elementLocals,
-            classLocals,
-            elementDecorations,
-            classDecorationsId ?? t.arrayExpression(classDecorations),
-            t.numericLiteral(classDecorationsFlag),
-            needsInstancePrivateBrandCheck ? lastInstancePrivateName : null,
-            typeof className === "object" ? className : undefined,
-            t.cloneNode(superClass),
-            state,
-            version,
+          t.unaryExpression(
+            "delete",
+            t.memberExpression(t.thisExpression(), t.identifier("_")),
           ),
         ),
-        staticInitLocal &&
-          t.expressionStatement(
-            t.callExpression(t.cloneNode(staticInitLocal), [
-              t.thisExpression(),
-            ]),
-          ),
-      ].filter(Boolean),
+      );
+    }
+    computedKeyAssignments = [];
+  }
+
+  applyDecsBody.push(
+    t.expressionStatement(
+      createLocalsAssignment(
+        elementLocals,
+        classLocals,
+        elementDecorations,
+        classDecorationsId ?? t.arrayExpression(classDecorations),
+        t.numericLiteral(classDecorationsFlag),
+        needsInstancePrivateBrandCheck ? lastInstancePrivateName : null,
+        typeof className === "object" ? className : undefined,
+        t.cloneNode(superClass),
+        state,
+        version,
+      ),
     ),
   );
+  if (staticInitLocal) {
+    applyDecsBody.push(
+      t.expressionStatement(
+        t.callExpression(t.cloneNode(staticInitLocal), [t.thisExpression()]),
+      ),
+    );
+  }
 
   // When path is a ClassExpression, path.insertBefore will convert `path`
   // into a SequenceExpression
-  path.insertBefore(assignments.map(expr => t.expressionStatement(expr)));
+  path.insertBefore(classAssignments.map(expr => t.expressionStatement(expr)));
 
   if (needsDeclaraionForClassBinding) {
     path.insertBefore(

@@ -15,30 +15,30 @@ let Hello = /*#__PURE__*/function () {
 let Outer = /*#__PURE__*/function (_Hello) {
   babelHelpers.inherits(Outer, _Hello);
   function Outer() {
-    var _computedKey;
+    let _computedKey;
     var _thisSuper, _this;
     babelHelpers.classCallCheck(this, Outer);
     _this = babelHelpers.callSuper(this, Outer);
-    _computedKey = babelHelpers.toPropertyKey(babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Outer.prototype)), "toString", _thisSuper).call(_thisSuper));
     var _A = /*#__PURE__*/new WeakMap();
-    let Inner = /*#__PURE__*/function () {
+    _computedKey = babelHelpers.toPropertyKey(babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Outer.prototype)), "toString", _thisSuper).call(_thisSuper));
+    let Inner = /*#__PURE__*/function (_computedKey4, _computedKey5) {
       function Inner() {
         babelHelpers.classCallCheck(this, Inner);
         babelHelpers.classPrivateFieldInitSpec(this, _A, 'hello');
       }
       babelHelpers.createClass(Inner, [{
-        key: _computedKey,
+        key: _computedKey4,
         get: function () {
           return babelHelpers.classPrivateFieldGet2(_A, this);
         }
       }, {
-        key: _computedKey,
+        key: _computedKey5,
         set: function (v) {
           babelHelpers.classPrivateFieldSet2(_A, this, v);
         }
       }]);
       return Inner;
-    }();
+    }(_computedKey, _computedKey);
     return babelHelpers.possibleConstructorReturn(_this, new Inner());
   }
   return babelHelpers.createClass(Outer);

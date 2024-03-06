@@ -1,4 +1,5 @@
-var _initStatic, _call_a, _computedKey, _Foo;
+let _computedKey;
+var _initStatic, _call_a, _Foo;
 const logs = [];
 const dec = (value, context) => {
   logs.push(context.name);

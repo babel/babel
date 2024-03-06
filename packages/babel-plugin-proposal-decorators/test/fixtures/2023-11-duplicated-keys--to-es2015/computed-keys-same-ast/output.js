@@ -1,4 +1,5 @@
-var _initProto, _computedKey, _computedKey2, _Foo;
+let _computedKey, _computedKey2;
+var _initProto, _Foo;
 const dec = () => {};
 _computedKey = babelHelpers.toPropertyKey(getKey());
 _computedKey2 = babelHelpers.toPropertyKey(getKey());
