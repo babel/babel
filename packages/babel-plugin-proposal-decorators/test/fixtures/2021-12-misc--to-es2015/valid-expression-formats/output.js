@@ -4,13 +4,13 @@ const dec = () => {};
 _classDecs = [dec, call(), chain.expr(), arbitrary + expr, array[expr]];
 let _Foo;
 var _a = /*#__PURE__*/new WeakMap();
-_ref = (_methodDecs = [dec, call(), chain.expr(), arbitrary + expr, array[expr]], "makeClass");
+_ref = (_methodDecs = [dec, call(), chain.expr(), arbitrary + expr, array[expr]], "method");
 class Foo {
   constructor() {
     babelHelpers.classPrivateFieldInitSpec(this, _a, void _initProto(this));
   }
-  method() {}
-  [_ref]() {
+  [_ref]() {}
+  makeClass() {
     let _ref2;
     var _barDecs, _init_bar, _Nested;
     return _ref2 = (_barDecs = babelHelpers.classPrivateFieldGet2(_a, this), "bar"), (_Nested = class Nested {

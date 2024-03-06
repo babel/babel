@@ -93,15 +93,15 @@
       constructor() {
         let _ref;
         var _initProto4, _noopDecs, _A4;
-        _ref = (_noopDecs = noop(log.push(super(7).method())), "noop");
+        _ref = (_noopDecs = noop(log.push(super(7).method())), "method");
         class A extends B {
           constructor() {
             log.push(_initProto4(super(8)).method());
           }
-          method() {
+          [_ref]() {
             return this.a;
           }
-          [_ref]() {}
+          noop() {}
         }
         _A4 = A;
         [_initProto4] = babelHelpers.applyDecs2311(_A4, [], [[dec, 2, "method"], [_noopDecs, 2, "noop"]], 0, void 0, B).e;

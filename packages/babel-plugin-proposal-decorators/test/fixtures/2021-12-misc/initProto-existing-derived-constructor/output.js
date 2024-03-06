@@ -102,10 +102,10 @@
           constructor() {
             log.push(_initProto4(super(8)).method());
           }
-          method() {
+          [(_noopDecs = noop(log.push(super(7).method())), "method")]() {
             return this.a;
           }
-          [(_noopDecs = noop(log.push(super(7).method())), "noop")]() {}
+          noop() {}
         }
         new A();
       }

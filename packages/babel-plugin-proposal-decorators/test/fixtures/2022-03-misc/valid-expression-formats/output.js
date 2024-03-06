@@ -10,8 +10,8 @@ class Foo {
     } = babelHelpers.applyDecs2203R(this, [[_methodDecs, 2, "method"]], _classDecs));
   }
   #a = void _initProto(this);
-  method() {}
-  [(_methodDecs = [dec, call(), chain.expr(), arbitrary + expr, array[expr]], "makeClass")]() {
+  [(_methodDecs = [dec, call(), chain.expr(), arbitrary + expr, array[expr]], "method")]() {}
+  makeClass() {
     var _barDecs, _init_bar;
     return class Nested {
       static {
