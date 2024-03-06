@@ -25,11 +25,7 @@ function generateUid(scope: Scope, denyList: Set<string>) {
 }
 
 export default declare(({ types: t, template, assertVersion, version }) => {
-  assertVersion(
-    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
-      ? PACKAGE_JSON.version
-      : "^7.12.0",
-  );
+  assertVersion(REQUIRED_VERSION("^7.12.0"));
 
   return {
     name: "transform-class-static-block",

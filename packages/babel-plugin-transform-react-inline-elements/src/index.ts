@@ -3,11 +3,7 @@ import helper from "@babel/helper-builder-react-jsx";
 import { types as t } from "@babel/core";
 
 export default declare(api => {
-  api.assertVersion(
-    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
-      ? PACKAGE_JSON.version
-      : 7,
-  );
+  api.assertVersion(REQUIRED_VERSION(7));
 
   function hasRefOrSpread(attrs: t.JSXOpeningElement["attributes"]) {
     for (let i = 0; i < attrs.length; i++) {
