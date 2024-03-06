@@ -262,10 +262,10 @@ module.exports = function (api) {
                 if (process.env.BABEL_8_BREAKING) {
                   return packageJson.version;
                 }
-                const pkgName = filename.match(/packages[\\/](.+?)[\\/]/)?.[1];
+                const match = filename.match(/packages[\\/](.+?)[\\/]/);
                 if (
-                  pkgName &&
-                  babel7_8compat["babel7plugins-babel8core"].includes(pkgName)
+                  match &&
+                  babel7_8compat["babel7plugins-babel8core"].includes(match[1])
                 ) {
                   return `${requiredVersion} || >8.0.0-alpha <8.0.0-beta`;
                 }
