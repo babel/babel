@@ -26,15 +26,17 @@ function corejsVersion(pkgName, depName) {
 }
 
 writeHelpers("@babel/runtime");
-writeHelpers("@babel/runtime-corejs2", {
-  polyfillProvider: [
-    polyfillCorejs2,
-    {
-      method: "usage-pure",
-      version: corejsVersion("babel-runtime-corejs2", "core-js"),
-    },
-  ],
-});
+if (!process.env.BABEL_8_BREAKING) {
+  writeHelpers("@babel/runtime-corejs2", {
+    polyfillProvider: [
+      polyfillCorejs2,
+      {
+        method: "usage-pure",
+        version: corejsVersion("babel-runtime-corejs2", "core-js"),
+      },
+    ],
+  });
+}
 writeHelpers("@babel/runtime-corejs3", {
   polyfillProvider: [
     polyfillCorejs3,
@@ -46,20 +48,22 @@ writeHelpers("@babel/runtime-corejs3", {
   ],
 });
 
-writeCoreJS({
-  corejs: 2,
-  proposals: true,
-  definitions: corejs2Definitions,
-  paths: [
-    "is-iterable",
-    "get-iterator",
-    // This was previously in definitions, but was removed to work around
-    // zloirock/core-js#262. We need to keep it in @babel/runtime-corejs2 to
-    // avoid a breaking change there.
-    "symbol/async-iterator",
-  ],
-  corejsRoot: "core-js/library/fn",
-});
+if (!process.env.BABEL_8_BREAKING) {
+  writeCoreJS({
+    corejs: 2,
+    proposals: true,
+    definitions: corejs2Definitions,
+    paths: [
+      "is-iterable",
+      "get-iterator",
+      // This was previously in definitions, but was removed to work around
+      // zloirock/core-js#262. We need to keep it in @babel/runtime-corejs2 to
+      // avoid a breaking change there.
+      "symbol/async-iterator",
+    ],
+    corejsRoot: "core-js/library/fn",
+  });
+}
 writeCoreJS({
   corejs: 3,
   proposals: false,
@@ -148,7 +152,7 @@ function writeHelperFile(
 
   outputFile(
     fullPath,
-    buildHelper(runtimeName, pkgDirname, fullPath, helperName, {
+    buildHelper(runtimeName, fullPath, helperName, {
       esm,
       polyfillProvider,
     })
@@ -234,7 +238,6 @@ function getRuntimeRoot(runtimeName) {
 
 function buildHelper(
   runtimeName,
-  pkgDirname,
   helperFilename,
   helperName,
   { esm, polyfillProvider }

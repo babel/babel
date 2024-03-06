@@ -89,10 +89,13 @@ function enforceEnginesNodeForPublicUnsetForPrivate({ Yarn }) {
     if (workspace.manifest.private) {
       workspace.unset("engines.node");
     } else {
-      workspace.set(
-        "conditions.BABEL_8_BREAKING.0.engines.node",
-        "^16.20.0 || ^18.16.0 || >=20.0.0"
-      );
+      if (!workspace.manifest.conditions?.BABEL_8_BREAKING?.[0].private) {
+        workspace.set(
+          "conditions.BABEL_8_BREAKING.0.engines.node",
+          "^16.20.0 || ^18.16.0 || >=20.0.0"
+        );
+      }
+
       if (workspace.ident === "@babel/parser") continue;
       if (workspace.ident?.startsWith("@babel/eslint")) {
         workspace.set("engines.node", "^10.13.0 || ^12.13.0 || >=14.0.0");
@@ -191,6 +194,14 @@ gen_enforced_dependency(WorkspaceCwd, DependencyIdent, null, 'devDependencies') 
  */
 function enforceNoDualTypeDependencies({ Yarn }) {
   for (const dependency of Yarn.dependencies({ type: "devDependencies" })) {
+    if (
+      // TODO(Babel 8): Remove this check
+      // We use conditions to remove the dependency, but we still need it as a devDependency
+      dependency.workspace.ident === "@babel/plugin-transform-runtime" &&
+      dependency.ident === "babel-plugin-polyfill-corejs3"
+    ) {
+      continue;
+    }
     const otherDependency = Yarn.dependency({
       workspace: dependency.workspace,
       ident: dependency.ident,

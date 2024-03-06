@@ -4,7 +4,6 @@ import { types as t } from "@babel/core";
 
 import { hasMinVersion } from "./helpers.ts";
 import getRuntimePath, { resolveFSPath } from "./get-runtime-path/index.ts";
-import { createCorejs3Plugin } from "./core-js.ts";
 
 // TODO(Babel 8): Remove this
 import babel7 from "./babel-7/index.cjs";
@@ -25,15 +24,10 @@ export default declare((api, options: Options, dirname) => {
   );
 
   const {
-    helpers: useRuntimeHelpers = true,
     version: runtimeVersion = "7.0.0-beta.0",
     absoluteRuntime = false,
     moduleName = null,
   } = options;
-
-  if (typeof useRuntimeHelpers !== "boolean") {
-    throw new Error("The 'helpers' option must be undefined, or a boolean.");
-  }
 
   if (
     typeof absoluteRuntime !== "boolean" &&
@@ -128,27 +122,37 @@ export default declare((api, options: Options, dirname) => {
         : useESModules;
   }
 
-  const HEADER_HELPERS = ["interopRequireWildcard", "interopRequireDefault"];
+  if (process.env.BABEL_8_BREAKING) {
+    if (Object.hasOwn(options, "helpers")) {
+      throw new Error(
+        "The 'helpers' option has been removed. " +
+          "Remove the plugin from your config if " +
+          "you want to disable helpers import injection.",
+      );
+    }
+  } else {
+    // eslint-disable-next-line no-var
+    var { helpers: useRuntimeHelpers = true } = options;
+
+    if (typeof useRuntimeHelpers !== "boolean") {
+      throw new Error("The 'helpers' option must be undefined, or a boolean.");
+    }
+  }
+
+  const HEADER_HELPERS = new Set([
+    "interopRequireWildcard",
+    "interopRequireDefault",
+  ]);
 
   return {
     name: "transform-runtime",
 
     inherits: process.env.BABEL_8_BREAKING
-      ? options.corejs
-        ? createCorejs3Plugin(options.corejs, absoluteRuntime)
-        : undefined
-      : babel7.createPolyfillPlugins(
-          options,
-          runtimeVersion,
-          absoluteRuntime,
-          options.corejs === 3 ||
-            (options.corejs as Options["corejs"] & object)?.version === 3
-            ? createCorejs3Plugin(options.corejs, absoluteRuntime)
-            : null,
-        ),
+      ? undefined
+      : babel7.createPolyfillPlugins(options, runtimeVersion, absoluteRuntime),
 
     pre(file) {
-      if (!useRuntimeHelpers) return;
+      if (!process.env.BABEL_8_BREAKING && !useRuntimeHelpers) return;
 
       let modulePath: string;
 
@@ -185,13 +189,11 @@ export default declare((api, options: Options, dirname) => {
           if (!file.availableHelper(name, runtimeVersion)) return;
         }
 
-        const isInteropHelper = HEADER_HELPERS.indexOf(name) !== -1;
-
         // Explicitly set the CommonJS interop helpers to their reserve
         // blockHoist of 4 so they are guaranteed to exist
         // when other things used them to import.
         const blockHoist =
-          isInteropHelper && !isModule(file.path) ? 4 : undefined;
+          HEADER_HELPERS.has(name) && !isModule(file.path) ? 4 : undefined;
 
         let helperPath = `${modulePath}/helpers/${
           !process.env.BABEL_8_BREAKING &&
