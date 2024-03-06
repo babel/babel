@@ -1407,10 +1407,7 @@ function transformClass(
             privateMethods = extractProxyAccessorsFor(key, version);
           }
         } else if (isPrivate) {
-          const callId = generateLetUidIdentifier(
-            element.scope.parent,
-            `call_${name}`,
-          );
+          const callId = generateLetUidIdentifier(scopeParent, `call_${name}`);
           locals = [callId];
 
           const replaceSupers = new ReplaceSupers({
