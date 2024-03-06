@@ -15,9 +15,8 @@ export default declare((api, { loose = false }: Options) => {
 
   return {
     name: "transform-nullish-coalescing-operator",
-    inherits: USE_ESM
-      ? undefined
-      : IS_STANDALONE
+    inherits:
+      USE_ESM || IS_STANDALONE || api.version[0] === "8"
         ? undefined
         : // eslint-disable-next-line no-restricted-globals
           require("@babel/plugin-syntax-nullish-coalescing-operator").default,

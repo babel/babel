@@ -9,9 +9,8 @@ export default declare(api => {
 
   return {
     name: "transform-optional-catch-binding",
-    inherits: USE_ESM
-      ? undefined
-      : IS_STANDALONE
+    inherits:
+      USE_ESM || IS_STANDALONE || api.version[0] === "8"
         ? undefined
         : // eslint-disable-next-line no-restricted-globals
           require("@babel/plugin-syntax-optional-catch-binding").default,
