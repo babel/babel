@@ -514,26 +514,27 @@ export default abstract class ExpressionParser extends LValParser {
     switch (op) {
       case tt.pipeline:
         switch (this.getPluginOption("pipelineOperator", "proposal")) {
-          case "hack":
-            return this.withTopicBindingContext(() => {
-              return this.parseHackPipeBody();
-            });
+          case "hack": {
+            using _ = this.withState("topicReferenceUsage", { used: false });
+            return this.parseHackPipeBody();
+          }
 
-          case "smart":
-            return this.withTopicBindingContext(() => {
-              if (this.prodParam.hasYield && this.isContextual(tt._yield)) {
-                throw this.raise(Errors.PipeBodyIsTighter, this.state.startLoc);
-              }
-              return this.parseSmartPipelineBodyInStyle(
-                this.parseExprOpBaseRightExpr(op, prec),
-                startLoc,
-              );
-            });
+          case "smart": {
+            if (this.prodParam.hasYield && this.isContextual(tt._yield)) {
+              throw this.raise(Errors.PipeBodyIsTighter, this.state.startLoc);
+            }
 
-          case "fsharp":
-            return this.withSoloAwaitPermittingContext(() => {
-              return this.parseFSharpPipelineBody(prec);
-            });
+            using _ = this.withState("topicReferenceUsage", { used: false });
+            return this.parseSmartPipelineBodyInStyle(
+              this.parseExprOpBaseRightExpr(op, prec),
+              startLoc,
+            );
+          }
+
+          case "fsharp": {
+            using _ = this.withState("soloAwait", true);
+            return this.parseFSharpPipelineBody(prec);
+          }
         }
 
       // Falls through.
@@ -573,7 +574,7 @@ export default abstract class ExpressionParser extends LValParser {
         type: body.type as UnparenthesizedPipeBodyTypes,
       });
     }
-    if (!this.topicReferenceWasUsedInCurrentContext()) {
+    if (!this.state.topicReferenceUsage.used) {
       // A Hack pipe body must use the topic reference at least once.
       this.raise(Errors.PipeTopicUnused, startLoc);
     }
@@ -1001,10 +1002,10 @@ export default abstract class ExpressionParser extends LValParser {
     nodeForExtra?: N.Node | null,
     refExpressionErrors?: ExpressionErrors | null,
   ): Array<N.Expression | undefined | null> {
+    using _ = this.withState("inFSharpPipelineDirectBody", false);
+
     const elts: N.Expression[] = [];
     let first = true;
-    const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
-    this.state.inFSharpPipelineDirectBody = false;
 
     while (!this.eat(close)) {
       if (first) {
@@ -1035,8 +1036,6 @@ export default abstract class ExpressionParser extends LValParser {
         this.parseExprListItem(false, refExpressionErrors, allowPlaceholder),
       );
     }
-
-    this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
 
     return elts;
   }
@@ -1435,7 +1434,7 @@ export default abstract class ExpressionParser extends LValParser {
             // as enforced by testTopicReferenceConfiguration.
             "TopicReference";
 
-      if (!this.topicReferenceIsAllowedInCurrentContext()) {
+      if (!this.state.topicReferenceUsage) {
         this.raise(
           // The topic reference is not allowed in the current context:
           // it is outside of a pipe body.
@@ -1446,11 +1445,11 @@ export default abstract class ExpressionParser extends LValParser {
               Errors.PipeTopicUnbound,
           startLoc,
         );
+      } else {
+        // Register the topic reference so that its pipe body knows
+        // that its topic was used at least once.
+        this.state.topicReferenceUsage.used = true;
       }
-
-      // Register the topic reference so that its pipe body knows
-      // that its topic was used at least once.
-      this.registerTopicReference();
 
       return this.finishNode(node, nodeType);
     } else {
@@ -1752,11 +1751,6 @@ export default abstract class ExpressionParser extends LValParser {
     this.next(); // eat `(`
     this.expressionScope.enter(newArrowHeadScope());
 
-    const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
-    const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
-    this.state.maybeInArrowParameters = true;
-    this.state.inFSharpPipelineDirectBody = false;
-
     const innerStartLoc = this.state.startLoc;
     const exprList: N.Expression[] = [];
     const refExpressionErrors = new ExpressionErrors();
@@ -1764,47 +1758,49 @@ export default abstract class ExpressionParser extends LValParser {
     let spreadStartLoc;
     let optionalCommaStartLoc;
 
-    while (!this.match(tt.parenR)) {
-      if (first) {
-        first = false;
-      } else {
-        this.expect(
-          tt.comma,
-          refExpressionErrors.optionalParametersLoc === null
-            ? null
-            : refExpressionErrors.optionalParametersLoc,
-        );
-        if (this.match(tt.parenR)) {
-          optionalCommaStartLoc = this.state.startLoc;
-          break;
-        }
-      }
+    {
+      using _1 = this.withState("maybeInArrowParameters", true);
+      using _2 = this.withState("inFSharpPipelineDirectBody", false);
 
-      if (this.match(tt.ellipsis)) {
-        const spreadNodeStartLoc = this.state.startLoc;
-        spreadStartLoc = this.state.startLoc;
-        exprList.push(
-          this.parseParenItem(this.parseRestBinding(), spreadNodeStartLoc),
-        );
-
-        if (!this.checkCommaAfterRest(charCodes.rightParenthesis)) {
-          break;
+      while (!this.match(tt.parenR)) {
+        if (first) {
+          first = false;
+        } else {
+          this.expect(
+            tt.comma,
+            refExpressionErrors.optionalParametersLoc === null
+              ? null
+              : refExpressionErrors.optionalParametersLoc,
+          );
+          if (this.match(tt.parenR)) {
+            optionalCommaStartLoc = this.state.startLoc;
+            break;
+          }
         }
-      } else {
-        exprList.push(
-          this.parseMaybeAssignAllowIn(
-            refExpressionErrors,
-            this.parseParenItem,
-          ),
-        );
+
+        if (this.match(tt.ellipsis)) {
+          const spreadNodeStartLoc = this.state.startLoc;
+          spreadStartLoc = this.state.startLoc;
+          exprList.push(
+            this.parseParenItem(this.parseRestBinding(), spreadNodeStartLoc),
+          );
+
+          if (!this.checkCommaAfterRest(charCodes.rightParenthesis)) {
+            break;
+          }
+        } else {
+          exprList.push(
+            this.parseMaybeAssignAllowIn(
+              refExpressionErrors,
+              this.parseParenItem,
+            ),
+          );
+        }
       }
     }
 
     const innerEndLoc = this.state.lastTokEndLoc;
     this.expect(tt.parenR);
-
-    this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
-    this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
 
     let arrowNode = this.startNodeAt<N.ArrowFunctionExpression>(startLoc);
     if (
@@ -2037,8 +2033,8 @@ export default abstract class ExpressionParser extends LValParser {
     if (isRecord) {
       this.expectPlugin("recordAndTuple");
     }
-    const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
-    this.state.inFSharpPipelineDirectBody = false;
+    using _ = this.withState("inFSharpPipelineDirectBody", false);
+
     const propHash: any = Object.create(null);
     let first = true;
     const node = this.startNode<
@@ -2089,7 +2085,6 @@ export default abstract class ExpressionParser extends LValParser {
 
     this.next();
 
-    this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
     let type = "ObjectExpression";
     if (isPattern) {
       type = "ObjectPattern";
@@ -2467,8 +2462,8 @@ export default abstract class ExpressionParser extends LValParser {
     if (isTuple) {
       this.expectPlugin("recordAndTuple");
     }
-    const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
-    this.state.inFSharpPipelineDirectBody = false;
+    using _ = this.withState("inFSharpPipelineDirectBody", false);
+
     const node = this.startNode<N.ArrayExpression | N.TupleExpression>();
     this.next();
     node.elements = this.parseExprList(
@@ -2478,7 +2473,6 @@ export default abstract class ExpressionParser extends LValParser {
       // @ts-expect-error todo(flow->ts)
       node,
     );
-    this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
     return this.finishNode(
       node,
       isTuple ? "TupleExpression" : "ArrayExpression",
@@ -3027,74 +3021,19 @@ export default abstract class ExpressionParser extends LValParser {
     }
 
     // A topic-style smart-mix pipe body must use the topic reference at least once.
-    if (!this.topicReferenceWasUsedInCurrentContext()) {
+    if (!this.state.topicReferenceUsage.used) {
       this.raise(Errors.PipelineTopicUnused, startLoc);
-    }
-  }
-
-  // Enable topic references from outer contexts within Hack-style pipe bodies.
-  // The function modifies the parser's topic-context state to enable or disable
-  // the use of topic references.
-  // The function then calls a callback, then resets the parser
-  // to the old topic-context state that it had before the function was called.
-
-  withTopicBindingContext<T>(callback: () => T): T {
-    const outerContextTopicState = this.state.topicContext;
-    this.state.topicContext = {
-      // Enable the use of the primary topic reference.
-      maxNumOfResolvableTopics: 1,
-      // Hide the use of any topic references from outer contexts.
-      maxTopicIndex: null,
-    };
-
-    try {
-      return callback();
-    } finally {
-      this.state.topicContext = outerContextTopicState;
     }
   }
 
   // This helper method is used only with the deprecated smart-mix pipe proposal.
   // Disables topic references from outer contexts within syntax constructs
   // such as the bodies of iteration statements.
-  // The function modifies the parser's topic-context state to enable or disable
-  // the use of topic references with the smartPipelines plugin. They then run a
-  // callback, then they reset the parser to the old topic-context state that it
-  // had before the function was called.
 
-  withSmartMixTopicForbiddingContext<T>(callback: () => T): T {
+  withSmartMixTopicForbiddingContext(): Disposable | undefined {
     if (this.hasPlugin(["pipelineOperator", { proposal: "smart" }])) {
       // Reset the parser’s topic context only if the smart-mix pipe proposal is active.
-      const outerContextTopicState = this.state.topicContext;
-      this.state.topicContext = {
-        // Disable the use of the primary topic reference.
-        maxNumOfResolvableTopics: 0,
-        // Hide the use of any topic references from outer contexts.
-        maxTopicIndex: null,
-      };
-
-      try {
-        return callback();
-      } finally {
-        this.state.topicContext = outerContextTopicState;
-      }
-    } else {
-      // If the pipe proposal is "minimal", "fsharp", or "hack",
-      // or if no pipe proposal is active,
-      // then the callback result is returned
-      // without touching any extra parser state.
-      return callback();
-    }
-  }
-
-  withSoloAwaitPermittingContext<T>(callback: () => T): T {
-    const outerContextSoloAwaitState = this.state.soloAwait;
-    this.state.soloAwait = true;
-
-    try {
-      return callback();
-    } finally {
-      this.state.soloAwait = outerContextSoloAwaitState;
+      return this.withState("topicReferenceUsage", null);
     }
   }
 
@@ -3126,37 +3065,17 @@ export default abstract class ExpressionParser extends LValParser {
     return callback();
   }
 
-  // Register the use of a topic reference within the current
-  // topic-binding context.
-  registerTopicReference(): void {
-    this.state.topicContext.maxTopicIndex = 0;
-  }
-
-  topicReferenceIsAllowedInCurrentContext(): boolean {
-    return this.state.topicContext.maxNumOfResolvableTopics >= 1;
-  }
-
-  topicReferenceWasUsedInCurrentContext(): boolean {
-    return (
-      this.state.topicContext.maxTopicIndex != null &&
-      this.state.topicContext.maxTopicIndex >= 0
-    );
-  }
-
   parseFSharpPipelineBody(this: Parser, prec: number): N.Expression {
     const startLoc = this.state.startLoc;
 
     this.state.potentialArrowAt = this.state.start;
-    const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
-    this.state.inFSharpPipelineDirectBody = true;
+    using _ = this.withState("inFSharpPipelineDirectBody", true);
 
     const ret = this.parseExprOp(
       this.parseMaybeUnaryOrPrivate(),
       startLoc,
       prec,
     );
-
-    this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
 
     return ret;
   }

@@ -24,6 +24,10 @@ startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml
 
 node "$PWD"/scripts/integration-tests/utils/bump-babel-dependencies.js
 
+# Go back to a commit that can be compiled using Babel 7.0.0. Newer commits rely
+# on `using` declarations, that are only supported since Babel 7.22.0
+git checkout 218faee4351345415b40b23a9e0102f628d45108
+
 node -e "
   var pkg = require('./package.json');
   pkg.devDependencies['@babel/core'] = '7.0.0';

@@ -97,7 +97,10 @@ module.exports = [
         rules: {
           ...config.rules,
           "no-unused-vars": "off",
-          "@typescript-eslint/no-unused-vars": "error",
+          "@typescript-eslint/no-unused-vars": [
+            "error",
+            { varsIgnorePattern: "^_" },
+          ],
           "no-dupe-class-members": "off",
           "@typescript-eslint/no-dupe-class-members": "error",
           "no-undef": "off",
