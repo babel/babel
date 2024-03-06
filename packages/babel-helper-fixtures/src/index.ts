@@ -362,12 +362,9 @@ function wrapPackagesArray(
         name = match[2];
       }
 
-      const monorepoRoot =
-        process.env.BABEL_MONOREPO_ROOT ||
-        path.join(path.dirname(fileURLToPath(import.meta.url)), "../../..");
-
       const monorepoPath = path.join(
-        monorepoRoot,
+        path.dirname(fileURLToPath(import.meta.url)),
+        "../../..",
         name.startsWith("codemod") ? "codemods" : "packages",
         `babel-${type}-${name}/lib/index.js`,
       );
