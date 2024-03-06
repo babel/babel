@@ -1547,7 +1547,7 @@ function transformClass(
       );
       computedKeyAssignments = [];
     } else {
-      // If there is no computed key, we will try to convert the last non-computed
+      // If there is no computed key, we will try to convert the first non-computed
       // class element into a computed key and insert assignments there. This will
       // be done after we handle the class elements split when the class is decorated.
     }
@@ -1737,24 +1737,22 @@ function transformClass(
   const applyDecsBody = applyDecoratorWrapper.body;
   if (computedKeyAssignments.length > 0) {
     const elements = originalClassPath.get("body.body");
-    let lastPublicElement: NodePath<t.ClassProperty | t.ClassMethod>;
-    for (let i = elements.length - 1; i >= 0; i--) {
-      const path = elements[i];
+    let firstPublicElement: NodePath<t.ClassProperty | t.ClassMethod>;
+    for (const path of elements) {
       if (
         (path.isClassProperty() || path.isClassMethod()) &&
-        !path.node.computed &&
         (path.node as t.ClassMethod).kind !== "constructor"
       ) {
-        lastPublicElement = path;
+        firstPublicElement = path;
         break;
       }
     }
-    if (lastPublicElement != null) {
+    if (firstPublicElement != null) {
       // Convert its key to a computed one to host the decorator evaluations.
-      convertToComputedKey(lastPublicElement);
+      convertToComputedKey(firstPublicElement);
       prependExpressionsToComputedKey(
         computedKeyAssignments,
-        lastPublicElement,
+        firstPublicElement,
       );
     } else {
       // When there is no public class elements, we inject a temporary computed
