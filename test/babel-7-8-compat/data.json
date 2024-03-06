@@ -1,0 +1,6 @@
+{
+  "babel7plugins-babel8core": [
+    "babel-plugin-external-helpers",
+    "babel-plugin-transform-json-strings"
+  ]
+}

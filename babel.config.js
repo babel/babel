@@ -14,7 +14,7 @@ const pathUtils = require("path");
 const fs = require("fs");
 const { parseSync } = require("@babel/core");
 const packageJson = require("./package.json");
-const babel7_8compat = require("./babel-7-8-compatibility.json");
+const babel7_8compat = require("./test/babel-7-8-compat/data.json");
 
 function normalize(src) {
   return src.replace(/\//, pathUtils.sep);

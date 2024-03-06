@@ -268,6 +268,7 @@ function enforceBabelCoreNotInDeps({ Yarn }) {
       workspace.pkg.peerDependencies.has("@babel/core") &&
       !workspace.manifest.dependencies?.["@babel/core"]
     ) {
+      if (process.env.SKIP_YARN_CORE_DEP_CHECK) continue;
       workspace.set("devDependencies['@babel/core']", "workspace:^");
     }
     if (
