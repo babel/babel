@@ -242,7 +242,6 @@ module.exports = [
       "no-restricted-imports": [
         "error",
         {
-          patterns: ["**/*.json"],
           paths: [
             {
               name: "semver",

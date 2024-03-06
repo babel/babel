@@ -63,6 +63,10 @@ sed -i 's/describeGte("12.0.0")("worker"/describeGte("12.0.0").skip("worker"/g' 
 sed -i 's/nodeGte12(/nodeGte12.skip(/g' eslint/babel-eslint-tests/test/integration/parser-override.js
 sed -i 's/nodeGte12NoESM(/nodeGte12NoESM.skip(/g' eslint/babel-eslint-tests/test/integration/config-files.js
 
+# We only support transforming import attributes in new @babel/core versions
+sed -i 's#"@babel/plugin-proposal-json-modules"#null#g' babel.config.js
+sed -i 's#with { type: "json" }##g' packages/babel-preset-env/src/normalize-options.ts
+
 # Update deps, build and test
 rm yarn.lock
 YARN_ENABLE_IMMUTABLE_INSTALLS=false make -j test-ci

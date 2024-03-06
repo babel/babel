@@ -362,6 +362,7 @@ function buildRollup(packages, buildStandalone) {
             switch (warning.code) {
               case "CIRCULAR_DEPENDENCY":
               case "SOURCEMAP_ERROR": // Rollup warns about the babel-polyfills source maps
+              case "INCONSISTENT_IMPORT_ATTRIBUTES": // @rollup/plugin-commonjs transforms require("...json") to an import without attributes
                 return;
               case "UNUSED_EXTERNAL_IMPORT":
                 warn(warning);
