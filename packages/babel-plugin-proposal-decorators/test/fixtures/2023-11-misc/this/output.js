@@ -1,4 +1,4 @@
-var _initClass, _obj, _init_x, _init_extra_x, _init_y, _init_extra_y;
+let _initClass, _obj, _init_x, _init_extra_x, _init_y, _init_extra_y;
 let _A;
 class A {
   static {

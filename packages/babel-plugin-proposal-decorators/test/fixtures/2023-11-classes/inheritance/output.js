@@ -1,4 +1,5 @@
-var _initClass, _initClass2, _Bar2;
+var _Bar2;
+let _initClass, _initClass2;
 const dec = () => {};
 let _Bar;
 class Bar {

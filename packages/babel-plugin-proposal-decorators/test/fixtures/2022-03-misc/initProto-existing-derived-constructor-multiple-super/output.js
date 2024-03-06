@@ -1,4 +1,4 @@
-var _initProto, _methodDecs, _initProto2, _methodDecs2;
+let _initProto, _methodDecs, _initProto2, _methodDecs2;
 const dec = () => {};
 class A extends B {
   static {

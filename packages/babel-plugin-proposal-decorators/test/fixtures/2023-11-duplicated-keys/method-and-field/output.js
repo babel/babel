@@ -1,4 +1,4 @@
-var _initProto, _init_a, _init_extra_a;
+let _initProto, _init_a, _init_extra_a;
 const dec = () => {};
 class Foo {
   static {

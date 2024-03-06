@@ -1,4 +1,5 @@
-var _initStatic, _Foo;
+var _Foo;
+let _initStatic;
 const dec = () => {};
 class Foo {
   static set a(v) {

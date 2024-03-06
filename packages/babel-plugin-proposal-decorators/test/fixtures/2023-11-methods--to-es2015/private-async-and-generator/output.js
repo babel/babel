@@ -1,4 +1,5 @@
-var _initProto, _call_a, _call_g, _call_ag, _Foo;
+var _Foo;
+let _initProto, _call_a, _call_g, _call_ag;
 var _ag = /*#__PURE__*/new WeakMap();
 var _g = /*#__PURE__*/new WeakMap();
 var _a = /*#__PURE__*/new WeakMap();

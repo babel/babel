@@ -1,4 +1,4 @@
-var _initClass;
+let _initClass;
 const dec = () => {};
 let hasX, hasA, hasM;
 let _Foo;

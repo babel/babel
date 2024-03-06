@@ -1,7 +1,7 @@
 class A extends B {
   m() {
-    let _ref;
-    var _initProto, _initClass, _classDecs, _m2Decs, _C2;
+    var _C2;
+    let _initProto, _initClass, _classDecs, _m2Decs, _ref;
     _classDecs = [this, super.dec1];
     let _C;
     _ref = (_m2Decs = [this, super.dec2], "m2");

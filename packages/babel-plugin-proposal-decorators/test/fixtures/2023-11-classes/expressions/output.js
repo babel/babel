@@ -1,4 +1,5 @@
-var _initClass, _A, _initClass2, _C, _initClass3, _D, _initClass4, _decorated_class, _initClass5, _G, _initClass6, _decorated_class2, _initClass7, _H, _I, _initClass8, _K, _L;
+var _I, _L;
+let _initClass, _A, _initClass2, _C, _initClass3, _D, _initClass4, _decorated_class, _initClass5, _G, _initClass6, _decorated_class2, _initClass7, _H, _initClass8, _K;
 const dec = () => {};
 const A = (class A {
   static {
@@ -64,7 +65,7 @@ const J = (class K extends (_L = L) {
   }
 }, _K);
 function classFactory() {
-  var _initClass9, _decorated_class3;
+  let _initClass9, _decorated_class3;
   return class {
     static {
       [_decorated_class3, _initClass9] = babelHelpers.applyDecs2311(this, [dec], []).c;

@@ -1,5 +1,5 @@
-let _ref;
-var _initProto, _initClass, _classDecs, _methodDecs, _Foo2;
+var _Foo2;
+let _initProto, _initClass, _classDecs, _methodDecs, _ref;
 const dec = () => {};
 _classDecs = [dec, call(), chain.expr(), arbitrary + expr, array[expr]];
 let _Foo;
@@ -11,8 +11,8 @@ class Foo {
   }
   [_ref]() {}
   makeClass() {
-    let _ref2;
-    var _barDecs, _init_bar, _Nested;
+    var _Nested;
+    let _barDecs, _init_bar, _ref2;
     return _ref2 = (_barDecs = babelHelpers.classPrivateFieldGet2(_a, this), "bar"), (_Nested = class Nested {
       constructor() {
         babelHelpers.defineProperty(this, _ref2, _init_bar(this));

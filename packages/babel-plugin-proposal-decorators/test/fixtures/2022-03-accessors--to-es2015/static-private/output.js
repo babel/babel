@@ -1,4 +1,5 @@
-var _initStatic, _init_a, _get_a, _set_a, _init_b, _get_b, _set_b, _Foo;
+var _Foo;
+let _initStatic, _init_a, _get_a, _set_a, _init_b, _get_b, _set_b;
 const dec = () => {};
 class Foo {}
 _Foo = Foo;

@@ -1,4 +1,4 @@
-var _initClass, _obj, _classDecs, _xDecs, _init_x, _yDecs, _init_y;
+let _initClass, _obj, _classDecs, _xDecs, _init_x, _yDecs, _init_y;
 _classDecs = [_obj = o1, _obj.dec, void 0, dec, _obj = o2, _obj.dec];
 let _A;
 class A {

@@ -1,4 +1,4 @@
-var _initClass, _A, _initClass2, _C, _initClass3, _D, _initClass4, _decorated_class, _initClass5, _G, _initClass6, _decorated_class2, _initClass7, _H, _initClass8, _K;
+let _initClass, _A, _initClass2, _C, _initClass3, _D, _initClass4, _decorated_class, _initClass5, _G, _initClass6, _decorated_class2, _initClass7, _H, _initClass8, _K;
 const dec = () => {};
 const A = (new class extends babelHelpers.identity {
   static [class A {
@@ -80,7 +80,7 @@ const J = (new class extends babelHelpers.identity {
   }
 }(), _K);
 function classFactory() {
-  var _initClass9, _decorated_class3;
+  let _initClass9, _decorated_class3;
   return new class extends babelHelpers.identity {
     static [class {
       static {

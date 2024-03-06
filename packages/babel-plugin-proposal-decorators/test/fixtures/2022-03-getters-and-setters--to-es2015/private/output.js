@@ -1,4 +1,5 @@
-var _initProto, _call_a, _call_a2, _Foo;
+var _Foo;
+let _initProto, _call_a, _call_a2;
 const dec = () => {};
 var _Foo_brand = /*#__PURE__*/new WeakSet();
 class Foo {

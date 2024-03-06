@@ -1,4 +1,5 @@
-var _init_a, _get_a, _set_a, _init_extra_a, _init_b, _get_b, _set_b, _init_extra_b, _Foo;
+var _Foo;
+let _init_a, _get_a, _set_a, _init_extra_a, _init_b, _get_b, _set_b, _init_extra_b;
 const dec = () => {};
 var _A = /*#__PURE__*/new WeakMap();
 var _Foo_brand = /*#__PURE__*/new WeakSet();

@@ -1,4 +1,4 @@
-var _initStatic, _initClass, _init_accessor, _init_extra_accessor, _init_property, _init_extra_property;
+let _initStatic, _initClass, _init_accessor, _init_extra_accessor, _init_property, _init_extra_property;
 let original, replaced, accessorThis, getterThis, setterThis, methodThis, propertyThis, classThis;
 function dec(Klass, context) {
   original = Klass;

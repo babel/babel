@@ -1,4 +1,4 @@
-var _init_x, _init_extra_x;
+let _init_x, _init_extra_x;
 export class A {
   static {
     [_init_x, _init_extra_x] = babelHelpers.applyDecs2311(this, [], [[dec, 0, "x"]]).e;

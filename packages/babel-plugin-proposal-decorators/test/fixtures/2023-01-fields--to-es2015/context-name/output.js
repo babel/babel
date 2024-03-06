@@ -1,5 +1,5 @@
-let _computedKey;
-var _init_a, _init_a2, _init_computedKey, _init_computedKey2, _init_computedKey3, _init_computedKey4, _init_computedKey5, _init_computedKey6, _init_computedKey7, _Foo;
+var _Foo;
+let _init_a, _init_a2, _init_computedKey, _init_computedKey2, _init_computedKey3, _init_computedKey4, _init_computedKey5, _init_computedKey6, _computedKey, _init_computedKey7;
 const logs = [];
 const dec = (value, context) => {
   logs.push(context.name);

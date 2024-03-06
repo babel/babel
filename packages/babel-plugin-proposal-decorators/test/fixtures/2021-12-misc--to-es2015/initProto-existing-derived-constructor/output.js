@@ -1,5 +1,5 @@
-let _ref;
-var _initProto, _methodDecs, _A;
+var _A;
+let _initProto, _methodDecs, _ref;
 const dec = () => {};
 _ref = (_methodDecs = deco, "method");
 class A extends B {

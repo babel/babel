@@ -1,4 +1,4 @@
-var _initProto, _call_a;
+let _initProto, _call_a;
 const dec = () => {};
 class Foo {
   static {

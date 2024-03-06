@@ -1,4 +1,4 @@
-var _initClass, _classDecs, _initClass2, _classDecs2;
+let _initClass, _classDecs, _initClass2, _classDecs2;
 const dec = () => {};
 _classDecs = [dec1];
 let _Bar;
