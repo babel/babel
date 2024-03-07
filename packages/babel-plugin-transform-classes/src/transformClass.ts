@@ -49,6 +49,7 @@ type State = {
   classRef: t.Identifier;
   superName: t.Expression | null;
   superReturns: NodePath<t.ReturnStatement>[];
+  thisRef: t.Identifier | null;
   isDerived: boolean;
   extendsNative: boolean;
 
@@ -57,6 +58,7 @@ type State = {
   userConstructor: ClassConstructor;
   userConstructorPath: NodePath<ClassConstructor>;
   hasConstructor: boolean;
+  hasThisInParamsOfConstructor: boolean;
 
   body: t.Statement[];
   superThises: NodePath<t.ThisExpression>[];
@@ -109,6 +111,7 @@ export default function transformClass(
     classRef: undefined,
     superName: null,
     superReturns: [],
+    thisRef: null,
     isDerived: false,
     extendsNative: false,
 
@@ -117,6 +120,7 @@ export default function transformClass(
     userConstructor: undefined,
     userConstructorPath: undefined,
     hasConstructor: false,
+    hasThisInParamsOfConstructor: false,
 
     body: [],
     superThises: [],
@@ -250,6 +254,14 @@ export default function transformClass(
         );
 
         if (isConstructor) {
+          (path as NodePath<ClassConstructor>).traverse({
+            ThisExpression(path) {
+              const p = path.findParent(p => p.parent == node);
+              if (p.parentKey === "params") {
+                classState.hasThisInParamsOfConstructor = true;
+              }
+            },
+          });
           pushConstructor(superReturns, node as ClassConstructor, path);
         } else {
           pushMethod(node, path);
@@ -402,11 +414,13 @@ export default function transformClass(
 
     path.traverse(findThisesVisitor);
 
-    let thisRef = function () {
-      const ref = path.scope.generateDeclaredUidIdentifier("this");
-      thisRef = () => t.cloneNode(ref);
-      return ref;
-    };
+    let thisRef = classState.thisRef
+      ? () => t.cloneNode(classState.thisRef)
+      : () => {
+          const ref = path.scope.generateDeclaredUidIdentifier("this");
+          thisRef = () => t.cloneNode(ref);
+          return ref;
+        };
 
     for (const thisPath of classState.superThises) {
       const { node, parentPath } = thisPath;
@@ -663,10 +677,10 @@ export default function transformClass(
     t.inherits(construct.body, method.body);
     construct.body.directives = method.body.directives;
 
-    pushConstructorToBody();
+    pushConstructorToBody(path);
   }
 
-  function pushConstructorToBody() {
+  function pushConstructorToBody(path: NodePath<ClassConstructor>) {
     if (classState.pushedConstructor) return;
     classState.pushedConstructor = true;
 
@@ -676,9 +690,32 @@ export default function transformClass(
       pushDescriptors();
     }
 
-    classState.body.push(classState.construct);
-
     pushInheritsToBody();
+
+    if (classState.hasThisInParamsOfConstructor) {
+      const construct = classState.construct;
+      const newConstruct = t.functionExpression(
+        null,
+        construct.params,
+        construct.body,
+        construct.generator,
+        construct.async,
+      );
+      t.inherits(newConstruct, construct);
+
+      classState.thisRef = path.scope.generateUidIdentifier("this");
+
+      const statements = template.statements`
+var ${t.cloneNode(classState.classRef)};
+(function () {
+  var ${t.cloneNode(classState.thisRef)};
+  ${classState.classRef} = ${newConstruct};
+})()
+`();
+      classState.body.unshift(...statements);
+    } else {
+      classState.body.push(classState.construct);
+    }
   }
 
   /**
