@@ -6,7 +6,7 @@ let Foo = /*#__PURE__*/function () {
     babelHelpers.classCallCheck(this, Foo);
     babelHelpers.classPrivateFieldInitSpec(this, _foo, 0);
   }
-  babelHelpers.createClass(Foo, [{
+  return babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test(other) {
       var _other$obj;
@@ -16,5 +16,4 @@ let Foo = /*#__PURE__*/function () {
       babelHelpers.classPrivateFieldSet2(_foo, other.obj, 2);
     }
   }]);
-  return Foo;
 }();

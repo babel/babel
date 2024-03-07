@@ -4,18 +4,16 @@ var Point = /*#__PURE__*/function () {
   function Point() {
     babelHelpers.classCallCheck(this, Point);
   }
-  babelHelpers.createClass(Point, [{
+  return babelHelpers.createClass(Point, [{
     key: "getX",
     value: function getX() {
       expect(this.x).toBe(3); // C
     }
   }]);
-  return Point;
 }();
 var ColorPoint = /*#__PURE__*/function (_Point) {
   "use strict";
 
-  babelHelpers.inherits(ColorPoint, _Point);
   function ColorPoint() {
     var _thisSuper, _thisSuper2, _this;
     babelHelpers.classCallCheck(this, ColorPoint);
@@ -26,13 +24,13 @@ var ColorPoint = /*#__PURE__*/function (_Point) {
     expect(babelHelpers.get((_thisSuper2 = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(ColorPoint.prototype)), "x", _thisSuper2)).toBeUndefined(); // B
     return _this;
   }
-  babelHelpers.createClass(ColorPoint, [{
+  babelHelpers.inherits(ColorPoint, _Point);
+  return babelHelpers.createClass(ColorPoint, [{
     key: "m",
     value: function m() {
       this.getX();
     }
   }]);
-  return ColorPoint;
 }(Point);
 var cp = new ColorPoint();
 cp.m();

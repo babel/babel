@@ -6,7 +6,7 @@ let Foo = /*#__PURE__*/function () {
     babelHelpers.classCallCheck(this, Foo);
     babelHelpers.classPrivateFieldInitSpec(this, _foo, 1);
   }
-  babelHelpers.createClass(Foo, [{
+  return babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test() {
       let _babelHelpers$classPr;
@@ -17,14 +17,12 @@ let Foo = /*#__PURE__*/function () {
           babelHelpers.classCallCheck(this, Nested);
           babelHelpers.classPrivateFieldInitSpec(this, _foo2, 2);
         }
-        babelHelpers.createClass(Nested, [{
+        return babelHelpers.createClass(Nested, [{
           key: _babelHelpers$classPr,
           value: function () {}
         }]);
-        return Nested;
       }();
       babelHelpers.classPrivateFieldGet2(_foo, this);
     }
   }]);
-  return Foo;
 }();

@@ -4,7 +4,7 @@ let A = /*#__PURE__*/function () {
   function A() {
     babelHelpers.classCallCheck(this, A);
   }
-  babelHelpers.createClass(A, [{
+  return babelHelpers.createClass(A, [{
     key: "1",
     get: function () {},
     set: function (_) {}
@@ -29,5 +29,4 @@ let A = /*#__PURE__*/function () {
     key: "5n",
     set: function (_) {}
   }]);
-  return A;
 }();

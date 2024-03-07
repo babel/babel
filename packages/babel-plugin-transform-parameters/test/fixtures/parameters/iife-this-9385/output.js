@@ -8,7 +8,7 @@ var Test = exports.Test = /*#__PURE__*/function () {
   function Test() {
     babelHelpers.classCallCheck(this, Test);
   }
-  babelHelpers.createClass(Test, [{
+  return babelHelpers.createClass(Test, [{
     key: "invite",
     value: function invite() {
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -16,5 +16,4 @@ var Test = exports.Test = /*#__PURE__*/function () {
       console.log(this);
     }
   }]);
-  return Test;
 }();

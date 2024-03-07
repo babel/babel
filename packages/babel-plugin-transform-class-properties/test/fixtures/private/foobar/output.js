@@ -2,7 +2,6 @@ var _scopedFunctionWithThis = /*#__PURE__*/new WeakMap();
 let Child = /*#__PURE__*/function (_Parent) {
   "use strict";
 
-  babelHelpers.inherits(Child, _Parent);
   function Child() {
     var _this;
     babelHelpers.classCallCheck(this, Child);
@@ -12,5 +11,6 @@ let Child = /*#__PURE__*/function (_Parent) {
     });
     return _this;
   }
+  babelHelpers.inherits(Child, _Parent);
   return babelHelpers.createClass(Child);
 }(Parent);

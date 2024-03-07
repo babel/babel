@@ -5,10 +5,10 @@ var _inherits = require("@babel/runtime/helpers/inherits").default;
 let Foo = /*#__PURE__*/function (_Bar) {
   "use strict";
 
-  _inherits(Foo, _Bar);
   function Foo() {
     _classCallCheck(this, Foo);
     return _callSuper(this, Foo, arguments);
   }
+  _inherits(Foo, _Bar);
   return _createClass(Foo);
 }(Bar);

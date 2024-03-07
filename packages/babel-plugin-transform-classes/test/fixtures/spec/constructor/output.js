@@ -7,7 +7,6 @@ var Test = /*#__PURE__*/babelHelpers.createClass(function Test() {
 var Foo = /*#__PURE__*/function (_Bar) {
   "use strict";
 
-  babelHelpers.inherits(Foo, _Bar);
   function Foo() {
     var _this;
     babelHelpers.classCallCheck(this, Foo);
@@ -15,6 +14,7 @@ var Foo = /*#__PURE__*/function (_Bar) {
     _this.state = "test";
     return _this;
   }
+  babelHelpers.inherits(Foo, _Bar);
   return babelHelpers.createClass(Foo);
 }(Bar);
 var ConstructorScoping = /*#__PURE__*/babelHelpers.createClass(function ConstructorScoping() {

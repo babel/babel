@@ -8,7 +8,7 @@ let Foo = /*#__PURE__*/function () {
     babelHelpers.classPrivateFieldInitSpec(this, _foo, 1);
     babelHelpers.classPrivateFieldInitSpec(this, _bar, 1);
   }
-  babelHelpers.createClass(Foo, [{
+  return babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test() {
       var _bar2 = /*#__PURE__*/new WeakMap();
@@ -17,18 +17,16 @@ let Foo = /*#__PURE__*/function () {
           babelHelpers.classCallCheck(this, Nested);
           babelHelpers.classPrivateFieldInitSpec(this, _bar2, 2);
         }
-        babelHelpers.createClass(Nested, [{
+        return babelHelpers.createClass(Nested, [{
           key: "test",
           value: function test() {
             babelHelpers.classPrivateFieldGet2(_foo, this);
             babelHelpers.classPrivateFieldGet2(_bar2, this);
           }
         }]);
-        return Nested;
       }();
       babelHelpers.classPrivateFieldGet2(_foo, this);
       babelHelpers.classPrivateFieldGet2(_bar, this);
     }
   }]);
-  return Foo;
 }();

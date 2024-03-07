@@ -1,7 +1,6 @@
 var Test = /*#__PURE__*/function (_Foo) {
   "use strict";
 
-  babelHelpers.inherits(Test, _Foo);
   function Test() {
     var _babelHelpers$get;
     var _thisSuper, _thisSuper2, _thisSuper3, _this;
@@ -15,7 +14,8 @@ var Test = /*#__PURE__*/function (_Foo) {
     (_babelHelpers$get = babelHelpers.get((_thisSuper3 = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Test.prototype)), "test", _thisSuper3)).call.apply(_babelHelpers$get, [_thisSuper3, "test"].concat(Array.prototype.slice.call(arguments)));
     return _this;
   }
-  babelHelpers.createClass(Test, [{
+  babelHelpers.inherits(Test, _Foo);
+  return babelHelpers.createClass(Test, [{
     key: "test",
     value: function test() {
       var _babelHelpers$get2;
@@ -32,5 +32,4 @@ var Test = /*#__PURE__*/function (_Foo) {
       (_babelHelpers$get3 = babelHelpers.get(babelHelpers.getPrototypeOf(Test), "foo", this)).call.apply(_babelHelpers$get3, [this, "test"].concat(Array.prototype.slice.call(arguments)));
     }
   }]);
-  return Test;
 }(Foo);

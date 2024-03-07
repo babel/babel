@@ -5,24 +5,22 @@ async function* fn() {
     function A() {
       babelHelpers.classCallCheck(this, A);
     }
-    babelHelpers.createClass(A, [{
+    return babelHelpers.createClass(A, [{
       key: _yield$,
       value: function value() {}
     }]);
-    return A;
   }(yield 1);
   var B = /*#__PURE__*/function (_A, _await$) {
     "use strict";
 
-    babelHelpers.inherits(B, _A);
     function B() {
       babelHelpers.classCallCheck(this, B);
       return babelHelpers.callSuper(this, B, arguments);
     }
-    babelHelpers.createClass(B, [{
+    babelHelpers.inherits(B, _A);
+    return babelHelpers.createClass(B, [{
       key: _await$,
       value: function value() {}
     }]);
-    return B;
   }(A, await 1);
 }

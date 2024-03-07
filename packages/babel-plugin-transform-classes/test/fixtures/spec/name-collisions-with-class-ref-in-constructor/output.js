@@ -4,16 +4,14 @@ var Base = /*#__PURE__*/function () {
   function Base() {
     babelHelpers.classCallCheck(this, Base);
   }
-  babelHelpers.createClass(Base, [{
+  return babelHelpers.createClass(Base, [{
     key: "method",
     value: function method() {}
   }]);
-  return Base;
 }();
 var Foo = /*#__PURE__*/function (_Base) {
   "use strict";
 
-  babelHelpers.inherits(Foo, _Base);
   function Foo() {
     var _thisSuper, _this;
     babelHelpers.classCallCheck(this, Foo);
@@ -24,9 +22,9 @@ var Foo = /*#__PURE__*/function (_Base) {
     }
     return _this;
   }
-  babelHelpers.createClass(Foo, [{
+  babelHelpers.inherits(Foo, _Base);
+  return babelHelpers.createClass(Foo, [{
     key: "method",
     value: function method() {}
   }]);
-  return Foo;
 }(Base);

@@ -8,7 +8,7 @@ let Foo = /*#__PURE__*/function () {
       return this;
     });
   }
-  babelHelpers.createClass(Foo, [{
+  return babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test(other) {
       var _other$obj;
@@ -16,5 +16,4 @@ let Foo = /*#__PURE__*/function () {
       babelHelpers.classPrivateFieldGet2(_foo, _other$obj = other.obj).call(_other$obj);
     }
   }]);
-  return Foo;
 }();

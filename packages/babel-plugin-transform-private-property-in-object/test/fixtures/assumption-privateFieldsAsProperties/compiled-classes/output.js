@@ -10,7 +10,7 @@ let Foo = /*#__PURE__*/function () {
       value: "bar"
     });
   }
-  babelHelpers.createClass(Foo, [{
+  return babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test() {
       return Object.prototype.hasOwnProperty.call(babelHelpers.checkInRHS(this), _bar);
@@ -21,7 +21,6 @@ let Foo = /*#__PURE__*/function () {
       return Object.prototype.hasOwnProperty.call(babelHelpers.checkInRHS(Foo), _foo);
     }
   }]);
-  return Foo;
 }();
 Object.defineProperty(Foo, _foo, {
   writable: true,

@@ -37,13 +37,12 @@ System.register([], function (_export, _context) {
           function AxiosHeaders() {
             _classCallCheck(this, AxiosHeaders);
           }
-          _createClass(AxiosHeaders, [{
+          return _createClass(AxiosHeaders, [{
             key: _objectWithPrimitive,
             value: function value() {
               return;
             }
           }]);
-          return AxiosHeaders;
         }(objectWithPrimitive(symbol));
       }).not.toThrow();
       expect(function () {
@@ -53,13 +52,12 @@ System.register([], function (_export, _context) {
           function AxiosHeaders() {
             _classCallCheck(this, AxiosHeaders);
           }
-          _createClass(AxiosHeaders, [{
+          return _createClass(AxiosHeaders, [{
             key: _objectWithPrimitive2,
             value: function value() {
               return;
             }
           }]);
-          return AxiosHeaders;
         }(objectWithPrimitive({}));
       }).toThrow();
       return "ok";

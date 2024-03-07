@@ -5,12 +5,11 @@ var Foo = /*#__PURE__*/function (_Symbol, _Symbol2) {
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
   }
-  babelHelpers.createClass(Foo, [{
+  return babelHelpers.createClass(Foo, [{
     key: _Symbol,
     value: function value() {}
   }, {
     key: _Symbol2,
     value: function value() {}
   }]);
-  return Foo;
 }(Symbol(), Symbol());

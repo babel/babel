@@ -10,7 +10,7 @@ let Point = /*#__PURE__*/function () {
     babelHelpers.classPrivateFieldSet2(_x, this, +x);
     babelHelpers.classPrivateFieldSet2(_y, this, +y);
   }
-  babelHelpers.createClass(Point, [{
+  return babelHelpers.createClass(Point, [{
     key: "x",
     get: function () {
       return babelHelpers.classPrivateFieldGet2(_x, this);
@@ -37,5 +37,4 @@ let Point = /*#__PURE__*/function () {
       return `Point<${babelHelpers.classPrivateFieldGet2(_x, this)},${babelHelpers.classPrivateFieldGet2(_y, this)}>`;
     }
   }]);
-  return Point;
 }();

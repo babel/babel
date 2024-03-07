@@ -11,10 +11,10 @@ let Base = /*#__PURE__*/function () {
   return Base;
 }();
 let Obj = /*#__PURE__*/function (_Base) {
-  babelHelpers.inheritsLoose(Obj, _Base);
   function Obj() {
     return _Base.apply(this, arguments) || this;
   }
+  babelHelpers.inheritsLoose(Obj, _Base);
   var _proto2 = Obj.prototype;
   _proto2.call = function call() {
     _Base.prototype.test.call(this, 1, 2, 3);

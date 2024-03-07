@@ -2,7 +2,7 @@ let C = /*#__PURE__*/function () {
   "use strict";
 
   function C() {}
-  babelHelpers.createClass(C, [{
+  return babelHelpers.createClass(C, [{
     key: "a",
     get: /* before get a */
     function () {
@@ -14,5 +14,4 @@ let C = /*#__PURE__*/function () {
     set: function (v) {}
     /* after set a */
   }]);
-  return C;
 }();

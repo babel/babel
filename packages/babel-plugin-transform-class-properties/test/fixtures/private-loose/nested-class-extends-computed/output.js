@@ -9,13 +9,12 @@ var Foo = /*#__PURE__*/function () {
       value: 1
     });
   }
-  babelHelpers.createClass(Foo, [{
+  return babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test() {
       var _babelHelpers$classPr;
       var _foo2 = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("foo");
       var Nested = /*#__PURE__*/function (_ref) {
-        babelHelpers.inherits(Nested, _ref);
         function Nested(...args) {
           var _this;
           babelHelpers.classCallCheck(this, Nested);
@@ -26,6 +25,7 @@ var Foo = /*#__PURE__*/function () {
           });
           return _this;
         }
+        babelHelpers.inherits(Nested, _ref);
         return babelHelpers.createClass(Nested);
       }((_babelHelpers$classPr = babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo], /*#__PURE__*/function () {
         function _class() {
@@ -36,5 +36,4 @@ var Foo = /*#__PURE__*/function () {
       }()));
     }
   }]);
-  return Foo;
 }();

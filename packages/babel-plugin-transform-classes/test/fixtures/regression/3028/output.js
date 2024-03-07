@@ -8,7 +8,6 @@ var b = /*#__PURE__*/babelHelpers.createClass(function b() {
   babelHelpers.classCallCheck(this, b);
 });
 var a1 = /*#__PURE__*/function (_b) {
-  babelHelpers.inherits(a1, _b);
   function a1() {
     var _this;
     babelHelpers.classCallCheck(this, a1);
@@ -18,10 +17,10 @@ var a1 = /*#__PURE__*/function (_b) {
     };
     return _this;
   }
+  babelHelpers.inherits(a1, _b);
   return babelHelpers.createClass(a1);
 }(b);
 var a2 = exports["default"] = /*#__PURE__*/function (_b2) {
-  babelHelpers.inherits(a2, _b2);
   function a2() {
     var _this2;
     babelHelpers.classCallCheck(this, a2);
@@ -31,5 +30,6 @@ var a2 = exports["default"] = /*#__PURE__*/function (_b2) {
     };
     return _this2;
   }
+  babelHelpers.inherits(a2, _b2);
   return babelHelpers.createClass(a2);
 }(b);
