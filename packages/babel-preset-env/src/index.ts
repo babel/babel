@@ -309,11 +309,7 @@ function supportsExportNamespaceFrom(caller: CallerMetadata | undefined) {
 }
 
 export default declarePreset((api, opts: Options) => {
-  api.assertVersion(
-    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
-      ? PACKAGE_JSON.version
-      : 7,
-  );
+  api.assertVersion(REQUIRED_VERSION(7));
 
   const babelTargets = api.targets();
 

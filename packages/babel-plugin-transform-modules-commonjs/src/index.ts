@@ -34,11 +34,7 @@ export interface Options extends PluginOptions {
 }
 
 export default declare((api, options: Options) => {
-  api.assertVersion(
-    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
-      ? PACKAGE_JSON.version
-      : 7,
-  );
+  api.assertVersion(REQUIRED_VERSION(7));
 
   const {
     // 'true' for imports to strictly have .default, instead of having

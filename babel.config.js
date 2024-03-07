@@ -13,6 +13,8 @@ if (typeof it === "function") {
 const pathUtils = require("path");
 const fs = require("fs");
 const { parseSync } = require("@babel/core");
+const packageJson = require("./package.json");
+const babel7_8compat = require("./test/babel-7-8-compat/data.json");
 
 function normalize(src) {
   return src.replace(/\//, pathUtils.sep);
@@ -250,6 +252,26 @@ module.exports = function (api) {
           ],
 
           pluginPackageJsonMacro,
+
+          [
+            pluginRequiredVersionMacro,
+            {
+              allowAny: !process.env.IS_PUBLISH || env === "standalone",
+              overwrite(requiredVersion, filename) {
+                if (requiredVersion === 7) requiredVersion = "^7.0.0-0";
+                if (process.env.BABEL_8_BREAKING) {
+                  return packageJson.version;
+                }
+                const match = filename.match(/packages[\\/](.+?)[\\/]/);
+                if (
+                  match &&
+                  babel7_8compat["babel7plugins-babel8core"].includes(match[1])
+                ) {
+                  return `${requiredVersion} || >8.0.0-alpha <8.0.0-beta`;
+                }
+              },
+            },
+          ],
 
           needsPolyfillsForOldNode && pluginPolyfillsOldNode,
         ].filter(Boolean),
@@ -660,6 +682,51 @@ function pluginPackageJsonMacro({ types: t }) {
 
         const value = JSON.parse(pkg)[field];
         path.replaceWith(t.valueToNode(value));
+      },
+    },
+  };
+}
+
+function pluginRequiredVersionMacro({ types: t }, { allowAny, overwrite }) {
+  const fnName = "REQUIRED_VERSION";
+
+  return {
+    visitor: {
+      ReferencedIdentifier(path) {
+        if (path.isIdentifier({ name: fnName })) {
+          throw path.buildCodeFrameError(
+            `"${fnName}" is only supported in call expressions.`
+          );
+        }
+      },
+      CallExpression(path) {
+        if (!path.get("callee").isIdentifier({ name: fnName })) return;
+
+        if (path.node.arguments.length !== 1) {
+          throw path.buildCodeFrameError(
+            `"${fnName}" expects exactly one argument.`
+          );
+        }
+
+        const arg = path.get("arguments.0").evaluate().value;
+        if (!arg) {
+          throw path.buildCodeFrameError(
+            `"${fnName}" expects a literal argument.`
+          );
+        }
+
+        if (allowAny) {
+          path.replaceWith(t.stringLiteral("*"));
+          return;
+        }
+
+        const version = overwrite(arg, this.filename);
+        if (version != null) {
+          path.replaceWith(t.stringLiteral(version));
+          return;
+        }
+
+        path.replaceWith(path.node.arguments[0]);
       },
     },
   };

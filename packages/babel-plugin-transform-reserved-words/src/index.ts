@@ -3,11 +3,7 @@ import { types as t } from "@babel/core";
 import type { NodePath } from "@babel/traverse";
 
 export default declare(api => {
-  api.assertVersion(
-    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
-      ? PACKAGE_JSON.version
-      : 7,
-  );
+  api.assertVersion(REQUIRED_VERSION(7));
 
   return {
     name: "transform-reserved-words",

@@ -4,11 +4,7 @@ import hoistVariables from "@babel/helper-hoist-variables";
 import type * as t from "@babel/types";
 
 export default declare(({ types: t, assertVersion }) => {
-  assertVersion(
-    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
-      ? PACKAGE_JSON.version
-      : "^7.13.0",
-  );
+  assertVersion(REQUIRED_VERSION("^7.13.0"));
 
   return {
     name: "proposal-async-do-expressions",

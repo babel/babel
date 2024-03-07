@@ -1,8 +1,13 @@
 // @ts-check
+/// <reference lib="es2015" />
 
 /**
  * @typedef {import('@yarnpkg/types').Yarn.Constraints.Context} Context
  * */
+
+const babel7plugins_babel8core = new Set(
+  require("./test/babel-7-8-compat/data.json")["babel7plugins-babel8core"]
+);
 
 /**
  * Enforces that all workspaces depend on other workspaces using `workspace:^`
@@ -21,7 +26,7 @@ function enforceWorkspaceDependencies({ Yarn }) {
       dependency.type === "dependencies" ||
       dependency.type === "devDependencies"
     ) {
-      if (dependency.range.startsWith("workspace:")) {
+      if (/^workspace:(?!\^$)/.test(dependency.range)) {
         dependency.update("workspace:^");
       }
     }
@@ -279,7 +284,20 @@ function enforceBabelCoreNotInDeps({ Yarn }) {
       workspace.pkg.peerDependencies.has("@babel/core") &&
       !workspace.manifest.dependencies?.["@babel/core"]
     ) {
-      workspace.set("devDependencies['@babel/core']", "workspace:^");
+      if (
+        process.env.BABEL_CORE_DEV_DEP_VERSION &&
+        workspace.ident &&
+        babel7plugins_babel8core.has(
+          workspace.ident.replace("@babel/", "babel-")
+        )
+      ) {
+        workspace.set(
+          "devDependencies['@babel/core']",
+          process.env.BABEL_CORE_DEV_DEP_VERSION
+        );
+      } else {
+        workspace.set("devDependencies['@babel/core']", "workspace:^");
+      }
     }
     if (
       workspace.ident !== null &&

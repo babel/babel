@@ -11,11 +11,7 @@ import {
 
 export default declare(api => {
   const { types: t, template } = api;
-  api.assertVersion(
-    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
-      ? PACKAGE_JSON.version
-      : "^7.23.0",
-  );
+  api.assertVersion(REQUIRED_VERSION("^7.23.0"));
 
   const targets = api.targets();
 

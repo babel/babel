@@ -53,6 +53,7 @@ jobs:
         # todo: verify which of these tests can be re-enabled
         project:
           - babel
+          - babel7plugins-babel8core
           - create-react-app
           # - vue-cli
           # - jest

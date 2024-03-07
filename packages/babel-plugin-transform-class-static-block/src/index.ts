@@ -24,18 +24,13 @@ function generateUid(scope: Scope, denyList: Set<string>) {
   return uid;
 }
 
-export default declare(({ types: t, template, assertVersion }) => {
-  assertVersion(
-    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
-      ? PACKAGE_JSON.version
-      : "^7.12.0",
-  );
+export default declare(({ types: t, template, assertVersion, version }) => {
+  assertVersion(REQUIRED_VERSION("^7.12.0"));
 
   return {
     name: "transform-class-static-block",
-    inherits: USE_ESM
-      ? undefined
-      : IS_STANDALONE
+    inherits:
+      USE_ESM || IS_STANDALONE || version[0] === "8"
         ? undefined
         : // eslint-disable-next-line no-restricted-globals
           require("@babel/plugin-syntax-class-static-block").default,
