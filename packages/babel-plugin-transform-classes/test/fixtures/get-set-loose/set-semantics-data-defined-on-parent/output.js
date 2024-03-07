@@ -7,10 +7,10 @@ Object.defineProperty(Base.prototype, 'test', {
   configurable: true
 });
 let Obj = /*#__PURE__*/function (_Base) {
-  babelHelpers.inheritsLoose(Obj, _Base);
   function Obj() {
     return _Base.apply(this, arguments) || this;
   }
+  babelHelpers.inheritsLoose(Obj, _Base);
   var _proto = Obj.prototype;
   _proto.set = function set() {
     return this.test = 3;

@@ -60,7 +60,6 @@ type State = {
 
   body: t.Statement[];
   superThises: NodePath<t.ThisExpression>[];
-  pushedConstructor: boolean;
   pushedInherits: boolean;
   pushedCreateClass: boolean;
   protoAlias: t.Identifier | null;
@@ -120,7 +119,6 @@ export default function transformClass(
 
     body: [],
     superThises: [],
-    pushedConstructor: false,
     pushedInherits: false,
     pushedCreateClass: false,
     protoAlias: null,
@@ -301,7 +299,7 @@ export default function transformClass(
       }
       args = args.slice(0, lastNonNullIndex + 1);
 
-      body.push(t.expressionStatement(createClassHelper(args)));
+      body.push(t.returnStatement(createClassHelper(args)));
       classState.pushedCreateClass = true;
     }
   }
@@ -663,20 +661,11 @@ export default function transformClass(
     t.inherits(construct.body, method.body);
     construct.body.directives = method.body.directives;
 
-    pushConstructorToBody();
-  }
-
-  function pushConstructorToBody() {
-    if (classState.pushedConstructor) return;
-    classState.pushedConstructor = true;
-
     // we haven't pushed any descriptors yet
     // @ts-expect-error todo(flow->ts) maybe remove this block - properties from condition are not used anywhere else
     if (classState.hasInstanceDescriptors || classState.hasStaticDescriptors) {
       pushDescriptors();
     }
-
-    classState.body.push(classState.construct);
 
     pushInheritsToBody();
   }
@@ -811,7 +800,7 @@ export default function transformClass(
     }
 
     const isStrict = path.isInStrictMode();
-    let constructorOnly = classState.classId && body.length === 1;
+    let constructorOnly = classState.classId && body.length === 0;
     if (constructorOnly && !isStrict) {
       for (const param of classState.construct.params) {
         // It's illegal to put a use strict directive into the body of a function
@@ -825,8 +814,7 @@ export default function transformClass(
     }
 
     const directives = constructorOnly
-      ? (body[0] as t.FunctionExpression | t.FunctionDeclaration).body
-          .directives
+      ? classState.construct.body.directives
       : [];
     if (!isStrict) {
       directives.push(t.directive(t.directiveLiteral("use strict")));
@@ -834,18 +822,22 @@ export default function transformClass(
 
     if (constructorOnly) {
       // named class with only a constructor
-      const expr = t.toExpression(
-        body[0] as t.FunctionExpression | t.FunctionDeclaration,
-      );
+      const expr = t.toExpression(classState.construct);
       return classState.isLoose ? expr : createClassHelper([expr]);
     }
 
-    let returnArg: t.Expression = t.cloneNode(classState.classRef);
-    if (!classState.pushedCreateClass && !classState.isLoose) {
-      returnArg = createClassHelper([returnArg]);
+    if (!classState.pushedCreateClass) {
+      body.push(
+        t.returnStatement(
+          classState.isLoose
+            ? t.cloneNode(classState.classRef)
+            : createClassHelper([t.cloneNode(classState.classRef)]),
+        ),
+      );
     }
 
-    body.push(t.returnStatement(returnArg));
+    body.unshift(classState.construct);
+
     const container = t.arrowFunctionExpression(
       closureParams,
       t.blockStatement(body, directives),

@@ -9,7 +9,6 @@ var Hello = /*#__PURE__*/babelHelpers.createClass(function Hello() {
   };
 });
 var Outer = /*#__PURE__*/function (_Hello) {
-  babelHelpers.inherits(Outer, _Hello);
   function Outer() {
     var _this;
     babelHelpers.classCallCheck(this, Outer);
@@ -20,6 +19,7 @@ var Outer = /*#__PURE__*/function (_Hello) {
     };
     return babelHelpers.possibleConstructorReturn(_this, Inner);
   }
+  babelHelpers.inherits(Outer, _Hello);
   return babelHelpers.createClass(Outer);
 }(Hello);
 expect(new Outer().hello()).toBe('hello');

@@ -4,16 +4,14 @@ var Hello = /*#__PURE__*/function () {
   function Hello() {
     babelHelpers.classCallCheck(this, Hello);
   }
-  babelHelpers.createClass(Hello, [{
+  return babelHelpers.createClass(Hello, [{
     key: "toString",
     value: function toString() {
       return 'hello';
     }
   }]);
-  return Hello;
 }();
 var Outer = /*#__PURE__*/function (_Hello) {
-  babelHelpers.inherits(Outer, _Hello);
   function Outer() {
     var _thisSuper, _this;
     babelHelpers.classCallCheck(this, Outer);
@@ -25,6 +23,7 @@ var Outer = /*#__PURE__*/function (_Hello) {
     };
     return babelHelpers.possibleConstructorReturn(_this, Inner);
   }
+  babelHelpers.inherits(Outer, _Hello);
   return babelHelpers.createClass(Outer);
 }(Hello);
 expect(new Outer().hello()).toBe('hello');

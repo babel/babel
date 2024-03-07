@@ -12,7 +12,6 @@ function generateAsyncAction(type) {
 var A = /*#__PURE__*/function (_B) {
   "use strict";
 
-  babelHelpers.inherits(A, _B);
   function A(timestamp) {
     var _this;
     babelHelpers.classCallCheck(this, A);
@@ -21,5 +20,6 @@ var A = /*#__PURE__*/function (_B) {
     _this.moment = moment(timestamp);
     return _this;
   }
+  babelHelpers.inherits(A, _B);
   return babelHelpers.createClass(A);
 }(B);

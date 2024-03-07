@@ -4,13 +4,12 @@ export default (param => {
     function App() {
       babelHelpers.classCallCheck(this, App);
     }
-    babelHelpers.createClass(App, [{
+    return babelHelpers.createClass(App, [{
       key: "getParam",
       value: function getParam() {
         return param;
       }
     }]);
-    return App;
   }(), babelHelpers.defineProperty(_App, "props", {
     prop1: 'prop1',
     prop2: 'prop2'

@@ -10,7 +10,6 @@ import _concatInstanceProperty from "@babel/runtime-corejs3/core-js-stable/insta
 function _callSuper(t, o, e) { return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? _Reflect$construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e)); }
 function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(_Reflect$construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function () { return !!t; })(); }
 let B = /*#__PURE__*/function (_A) {
-  _inherits(B, _A);
   function B(...args) {
     var _context;
     var _this;
@@ -19,5 +18,6 @@ let B = /*#__PURE__*/function (_A) {
     _defineProperty(_assertThisInitialized(_this), "b", 8);
     return _this;
   }
+  _inherits(B, _A);
   return _createClass(B);
 }(A);

@@ -4,16 +4,14 @@ let Hello = /*#__PURE__*/function () {
   function Hello() {
     babelHelpers.classCallCheck(this, Hello);
   }
-  babelHelpers.createClass(Hello, [{
+  return babelHelpers.createClass(Hello, [{
     key: "toString",
     value: function toString() {
       return 'hello';
     }
   }]);
-  return Hello;
 }();
 let Outer = /*#__PURE__*/function (_Hello) {
-  babelHelpers.inherits(Outer, _Hello);
   function Outer() {
     let _computedKey;
     var _thisSuper, _this;
@@ -26,7 +24,7 @@ let Outer = /*#__PURE__*/function (_Hello) {
         babelHelpers.classCallCheck(this, Inner);
         babelHelpers.classPrivateFieldInitSpec(this, _A, 'hello');
       }
-      babelHelpers.createClass(Inner, [{
+      return babelHelpers.createClass(Inner, [{
         key: _computedKey4,
         get: function () {
           return babelHelpers.classPrivateFieldGet2(_A, this);
@@ -37,10 +35,10 @@ let Outer = /*#__PURE__*/function (_Hello) {
           babelHelpers.classPrivateFieldSet2(_A, this, v);
         }
       }]);
-      return Inner;
     }(_computedKey, _computedKey);
     return babelHelpers.possibleConstructorReturn(_this, new Inner());
   }
+  babelHelpers.inherits(Outer, _Hello);
   return babelHelpers.createClass(Outer);
 }(Hello);
 expect(new Outer().hello).toBe('hello');

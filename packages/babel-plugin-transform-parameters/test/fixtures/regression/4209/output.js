@@ -5,7 +5,7 @@ var Thing = /*#__PURE__*/function () {
   function Thing() {
     babelHelpers.classCallCheck(this, Thing);
   }
-  babelHelpers.createClass(Thing, [{
+  return babelHelpers.createClass(Thing, [{
     key: "handleCopySomething",
     value: function handleCopySomething() {
       (0, _copyPaste.copy)();
@@ -16,5 +16,4 @@ var Thing = /*#__PURE__*/function () {
       var copy = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 123;
     }
   }]);
-  return Thing;
 }();

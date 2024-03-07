@@ -11,12 +11,11 @@ var Foo = /*#__PURE__*/function () {
       }
     });
   }
-  babelHelpers.createClass(Foo, [{
+  return babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test(other) {
       babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo]();
       babelHelpers.classPrivateFieldLooseBase(other.obj, _foo)[_foo]();
     }
   }]);
-  return Foo;
 }();

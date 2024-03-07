@@ -6,12 +6,12 @@ Object.defineProperty(exports, "__esModule", {
 exports["default"] = void 0;
 var _react = babelHelpers.interopRequireWildcard(require("react"));
 var RandomComponent = exports["default"] = /*#__PURE__*/function (_Component) {
-  babelHelpers.inherits(RandomComponent, _Component);
   function RandomComponent() {
     babelHelpers.classCallCheck(this, RandomComponent);
     return babelHelpers.callSuper(this, RandomComponent);
   }
-  babelHelpers.createClass(RandomComponent, [{
+  babelHelpers.inherits(RandomComponent, _Component);
+  return babelHelpers.createClass(RandomComponent, [{
     key: "render",
     value: function render() {
       return /*#__PURE__*/_react["default"].createElement("div", {
@@ -19,5 +19,4 @@ var RandomComponent = exports["default"] = /*#__PURE__*/function (_Component) {
       }, /*#__PURE__*/_react["default"].createElement("h2", null, "Hi there!"));
     }
   }]);
-  return RandomComponent;
 }(_react.Component);

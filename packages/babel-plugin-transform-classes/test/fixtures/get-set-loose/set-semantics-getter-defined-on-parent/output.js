@@ -3,21 +3,20 @@
 let called = false;
 let Base = /*#__PURE__*/function () {
   function Base() {}
-  babelHelpers.createClass(Base, [{
+  return babelHelpers.createClass(Base, [{
     key: "test",
     get: function () {
       called = true;
       return 1;
     }
   }]);
-  return Base;
 }();
 ;
 let Obj = /*#__PURE__*/function (_Base) {
-  babelHelpers.inheritsLoose(Obj, _Base);
   function Obj() {
     return _Base.apply(this, arguments) || this;
   }
+  babelHelpers.inheritsLoose(Obj, _Base);
   var _proto = Obj.prototype;
   _proto.set = function set() {
     return this.test = 3;

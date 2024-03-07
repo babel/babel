@@ -6,13 +6,12 @@ let Foo = /*#__PURE__*/function () {
     babelHelpers.classCallCheck(this, Foo);
     babelHelpers.classPrivateFieldInitSpec(this, _foo, 1);
   }
-  babelHelpers.createClass(Foo, [{
+  return babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test() {
       let _babelHelpers$classPr;
       var _foo2 = /*#__PURE__*/new WeakMap();
       let Nested = /*#__PURE__*/function (_ref) {
-        babelHelpers.inherits(Nested, _ref);
         function Nested(...args) {
           var _this;
           babelHelpers.classCallCheck(this, Nested);
@@ -20,6 +19,7 @@ let Foo = /*#__PURE__*/function () {
           babelHelpers.classPrivateFieldInitSpec(babelHelpers.assertThisInitialized(_this), _foo2, 3);
           return _this;
         }
+        babelHelpers.inherits(Nested, _ref);
         return babelHelpers.createClass(Nested);
       }((_babelHelpers$classPr = babelHelpers.classPrivateFieldGet2(_foo, this), /*#__PURE__*/function () {
         function _class() {
@@ -30,5 +30,4 @@ let Foo = /*#__PURE__*/function () {
       }()));
     }
   }]);
-  return Foo;
 }();
