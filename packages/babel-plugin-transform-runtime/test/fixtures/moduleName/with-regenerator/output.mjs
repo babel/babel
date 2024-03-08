@@ -1,2 +1,2 @@
-import _regeneratorRuntime from "@babel/runtime-corejs3/regenerator";
+import _regeneratorRuntime from "@babel/runtime/regenerator";
 _regeneratorRuntime.mark(function () {});

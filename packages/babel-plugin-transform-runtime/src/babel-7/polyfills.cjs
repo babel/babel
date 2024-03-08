@@ -30,7 +30,7 @@ function createRegeneratorPlugin(options, useRuntimeRegenerator, corejsPlugin) {
 }
 
 module.exports = function createBasePolyfillsPlugin(
-  { corejs, regenerator = true },
+  { corejs, regenerator = true, moduleName },
   runtimeVersion,
   absoluteImports,
 ) {
@@ -70,7 +70,12 @@ module.exports = function createBasePolyfillsPlugin(
     method: "usage-pure",
     absoluteImports,
     proposals,
-    [pluginsCompat]: { useBabelRuntime: true, runtimeVersion, ext: "" },
+    [pluginsCompat]: {
+      useBabelRuntime: true,
+      runtimeVersion,
+      ext: "",
+      moduleName,
+    },
   };
 
   return createRegeneratorPlugin(
