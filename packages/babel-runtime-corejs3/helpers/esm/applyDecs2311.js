@@ -65,7 +65,7 @@ export default function applyDecs2311(e, t, n, r, o, i) {
           t[4](this, e);
         }
       } : P[F] = v, l || setFunctionName(P[F], r, E ? "" : F)) : l || (P = _Object$getOwnPropertyDescriptor(e, r)), !l && !f) {
-        if ((c = y[+s][r]) && 7 != (c ^ o)) throw new Error("Decorating two elements with the same name (" + P[F].name + ") is not supported yet");
+        if ((c = y[+s][r]) && 7 != (c ^ o)) throw Error("Decorating two elements with the same name (" + P[F].name + ") is not supported yet");
         y[+s][r] = o < 3 ? 1 : o;
       }
     }
@@ -79,7 +79,7 @@ export default function applyDecs2311(e, t, n, r, o, i) {
           name: r,
           metadata: a,
           addInitializer: _bindInstanceProperty(_context2 = function _context2(e, t) {
-            if (e.v) throw new Error("attempted to call addInitializer after decoration was finished");
+            if (e.v) throw Error("attempted to call addInitializer after decoration was finished");
             b(t, "An initializer", "be", !0), _pushInstanceProperty(i).call(i, t);
           }).call(_context2, null, K)
         };

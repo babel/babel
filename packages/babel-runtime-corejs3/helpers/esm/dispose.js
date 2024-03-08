@@ -3,7 +3,7 @@ import _Object$create from "core-js-pure/features/object/create.js";
 import _Promise from "core-js-pure/features/promise/index.js";
 function dispose_SuppressedError(r, e) {
   return "undefined" != typeof _SuppressedError ? dispose_SuppressedError = _SuppressedError : (dispose_SuppressedError = function dispose_SuppressedError(r, e) {
-    this.suppressed = e, this.error = r, this.stack = new Error().stack;
+    this.suppressed = e, this.error = r, this.stack = Error().stack;
   }, dispose_SuppressedError.prototype = _Object$create(Error.prototype, {
     constructor: {
       value: dispose_SuppressedError,

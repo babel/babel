@@ -58,7 +58,7 @@ export default function applyDecs2305(e, t, r, n, o, a) {
           name: n,
           metadata: a,
           addInitializer: _bindInstanceProperty(_context = function _context(e, t) {
-            if (e.v) throw new Error("attempted to call addInitializer after decoration was finished");
+            if (e.v) throw Error("attempted to call addInitializer after decoration was finished");
             s(t, "An initializer", "be", !0), _pushInstanceProperty(c).call(c, t);
           }).call(_context, null, I)
         };
@@ -125,7 +125,7 @@ export default function applyDecs2305(e, t, r, n, o, a) {
             b = h + "/" + v;
           if (!g && !m) {
             var w = u.get(b);
-            if (!0 === w || 3 === w && 4 !== d || 4 === w && 3 !== d) throw new Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + h);
+            if (!0 === w || 3 === w && 4 !== d || 4 === w && 3 !== d) throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + h);
             u.set(b, !(d > 2) || d);
           }
           applyDec(v ? e : e.prototype, p, y, m ? "#" + h : toPropertyKey(h), d, n, v ? a = a || [] : o = o || [], i, v, m, g, 1 === d, v && m ? s : r);

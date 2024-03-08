@@ -10,7 +10,7 @@ function applyDecs2203RFactory() {
   function createAddInitializerMethod(e, t) {
     return function (r) {
       !function (e, t) {
-        if (e.v) throw new Error("attempted to call addInitializer after decoration was finished");
+        if (e.v) throw Error("attempted to call addInitializer after decoration was finished");
       }(t), assertCallable(r, "An initializer"), _pushInstanceProperty(e).call(e, r);
     };
   }
@@ -146,7 +146,7 @@ function applyDecs2203RFactory() {
         if (h ? (l = e, 0 != (f -= 5) && (u = n = n || [])) : (l = e.prototype, 0 !== f && (u = r = r || [])), 0 !== f && !d) {
           var v = h ? o : i,
             g = v.get(p) || 0;
-          if (!0 === g || 3 === g && 4 !== f || 4 === g && 3 !== f) throw new Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + p);
+          if (!0 === g || 3 === g && 4 !== f || 4 === g && 3 !== f) throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + p);
           !g && f > 2 ? v.set(p, f) : v.set(p, !0);
         }
         applyMemberDec(a, l, c, p, f, h, d, u);

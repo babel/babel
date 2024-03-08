@@ -7,7 +7,7 @@ import _bindInstanceProperty from "core-js-pure/features/instance/bind.js";
 import _Promise from "core-js-pure/features/promise/index.js";
 export default function _usingCtx() {
   var r = "function" == typeof _SuppressedError ? _SuppressedError : function (r, n) {
-      var e = new Error();
+      var e = Error();
       return e.name = "SuppressedError", e.suppressed = n, e.error = r, e;
     },
     n = {},
