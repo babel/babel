@@ -2,7 +2,6 @@
   "plugins": [
     "transform-regenerator",
     ["transform-runtime", { "moduleName": "@babel/runtime" }],
-    ["babel-plugin-polyfill-corejs3", { "method": "usage-global" }],
-    ["babel-plugin-polyfill-regenerator", { "method": "usage-global" }]
+    ["babel-plugin-polyfill-corejs3", { "method": "usage-global" }]
   ]
 }
