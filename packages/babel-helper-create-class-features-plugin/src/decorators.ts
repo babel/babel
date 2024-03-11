@@ -836,6 +836,10 @@ function staticBlockToIIFE(block: t.StaticBlock) {
   );
 }
 
+function staticBlockToFunctionClosure(block: t.StaticBlock) {
+  return t.functionExpression(null, [], t.blockStatement(block.body));
+}
+
 function maybeSequenceExpression(exprs: t.Expression[]) {
   if (exprs.length === 0) return t.unaryExpression("void", t.numericLiteral(0));
   if (exprs.length === 1) return exprs[0];
@@ -936,6 +940,34 @@ function convertToComputedKey(path: NodePath<t.ClassProperty | t.ClassMethod>) {
   }
 }
 
+function hasInstancePrivateAccess(
+  path: NodePath<t.ClassPrivateMethod | t.ClassPrivateProperty | t.StaticBlock>,
+  privateNames: string[],
+) {
+  let containsInstancePrivateAccess = false;
+  if (privateNames.length > 0) {
+    const privateNameVisitor = privateNameVisitorFactory<
+      PrivateNameVisitorState<null>,
+      null
+    >({
+      PrivateName(path, state) {
+        if (state.privateNamesMap.has(path.node.id.name)) {
+          containsInstancePrivateAccess = true;
+          path.stop();
+        }
+      },
+    });
+    const privateNamesMap = new Map<string, null>();
+    for (const name of privateNames) {
+      privateNamesMap.set(name, null);
+    }
+    path.traverse(privateNameVisitor, {
+      privateNamesMap: privateNamesMap,
+    });
+  }
+  return containsInstancePrivateAccess;
+}
+
 function checkPrivateMethodUpdateError(
   path: NodePath<t.Class>,
   decoratedPrivateMethods: Set<string>,
@@ -1014,6 +1046,7 @@ function transformClass(
 
   let protoInitLocal: t.Identifier;
   let staticInitLocal: t.Identifier;
+  const instancePrivateNames: string[] = [];
   // Iterate over the class to see if we need to decorate it, and also to
   // transform simple auto accessors which are not decorated, and handle inferred
   // class name when the initializer of the class field is a class expression
@@ -1022,8 +1055,14 @@ function transformClass(
       continue;
     }
 
-    if (isDecorated(element.node)) {
-      switch (element.node.type) {
+    const elementNode = element.node;
+
+    if (!elementNode.static && t.isPrivateName(elementNode.key)) {
+      instancePrivateNames.push(elementNode.key.id.name);
+    }
+
+    if (isDecorated(elementNode)) {
+      switch (elementNode.type) {
         case "ClassProperty":
           // @ts-expect-error todo: propertyVisitor.ClassProperty should be callable. Improve typings.
           propertyVisitor.ClassProperty(
@@ -1049,7 +1088,7 @@ function transformClass(
           }
         /* fallthrough */
         default:
-          if (element.node.static) {
+          if (elementNode.static) {
             staticInitLocal ??= generateLetUidIdentifier(
               scopeParent,
               "initStatic",
@@ -1063,16 +1102,16 @@ function transformClass(
           break;
       }
       hasElementDecorators = true;
-      elemDecsUseFnContext ||= element.node.decorators.some(
+      elemDecsUseFnContext ||= elementNode.decorators.some(
         usesFunctionContextOrYieldAwait,
       );
-    } else if (element.node.type === "ClassAccessorProperty") {
+    } else if (elementNode.type === "ClassAccessorProperty") {
       // @ts-expect-error todo: propertyVisitor.ClassAccessorProperty should be callable. Improve typings.
       propertyVisitor.ClassAccessorProperty(
         element as NodePath<t.ClassAccessorProperty>,
         state,
       );
-      const { key, value, static: isStatic, computed } = element.node;
+      const { key, value, static: isStatic, computed } = elementNode;
 
       const newId = generateClassPrivateUid();
       const newField = generateClassProperty(newId, value, isStatic);
@@ -1616,6 +1655,7 @@ function transformClass(
   let originalClassPath = path;
   const originalClass = path.node;
 
+  const staticClosures: t.AssignmentExpression[] = [];
   if (classDecorators) {
     classLocals.push(classIdLocal, classInitLocal);
     const statics: (
@@ -1627,7 +1667,24 @@ function transformClass(
       // Static blocks cannot be compiled to "instance blocks", but we can inline
       // them as IIFEs in the next property.
       if (element.isStaticBlock()) {
-        staticFieldInitializerExpressions.push(staticBlockToIIFE(element.node));
+        if (hasInstancePrivateAccess(element, instancePrivateNames)) {
+          const staticBlockClosureId = memoiseExpression(
+            staticBlockToFunctionClosure(element.node),
+            "staticBlock",
+            staticClosures,
+          );
+          staticFieldInitializerExpressions.push(
+            t.callExpression(
+              t.memberExpression(staticBlockClosureId, t.identifier("call")),
+              [t.thisExpression()],
+            ),
+          );
+        } else {
+          staticFieldInitializerExpressions.push(
+            staticBlockToIIFE(element.node),
+          );
+        }
+
         element.remove();
         return;
       }
@@ -1804,6 +1861,11 @@ function transformClass(
       t.expressionStatement(
         t.callExpression(t.cloneNode(staticInitLocal), [t.thisExpression()]),
       ),
+    );
+  }
+  if (staticClosures.length > 0) {
+    applyDecsBody.push(
+      ...staticClosures.map(expr => t.expressionStatement(expr)),
     );
   }
 
