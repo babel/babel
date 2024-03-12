@@ -13,7 +13,7 @@ var Hello = /*#__PURE__*/function () {
 }();
 var Outer = /*#__PURE__*/function (_Hello) {
   function Outer() {
-    var _thisSuper, _this;
+    var _this;
     babelHelpers.classCallCheck(this, Outer);
     _this = babelHelpers.callSuper(this, Outer);
     var Inner = /*#__PURE__*/function (_babelHelpers$get$cal) {
@@ -26,7 +26,7 @@ var Outer = /*#__PURE__*/function (_Hello) {
           return 'hello';
         }
       }]);
-    }(babelHelpers.get((_thisSuper = _this, babelHelpers.getPrototypeOf(Outer.prototype)), "toString", _thisSuper).call(_thisSuper));
+    }(babelHelpers.get((_this, babelHelpers.getPrototypeOf(Outer.prototype)), "toString", _this).call(_this));
     return babelHelpers.possibleConstructorReturn(_this, new Inner());
   }
   babelHelpers.inherits(Outer, _Hello);

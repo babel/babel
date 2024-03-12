@@ -2,7 +2,7 @@ var Foo = /*#__PURE__*/function (_Bar) {
   "use strict";
 
   function Foo() {
-    var _thisSuper, _this;
+    var _this;
     babelHelpers.classCallCheck(this, Foo);
     _this = babelHelpers.callSuper(this, Foo);
     var X = /*#__PURE__*/function (_ref) {
@@ -15,7 +15,7 @@ var Foo = /*#__PURE__*/function (_Bar) {
       }]);
     }((() => {
       var _Foo;
-      babelHelpers.get((_thisSuper = _this, babelHelpers.getPrototypeOf(Foo.prototype)), "method", _thisSuper).call(_thisSuper);
+      babelHelpers.get((_this, babelHelpers.getPrototypeOf(Foo.prototype)), "method", _this).call(_this);
     })());
     return _this;
   }

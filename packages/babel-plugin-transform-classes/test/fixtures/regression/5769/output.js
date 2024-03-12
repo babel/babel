@@ -15,13 +15,13 @@ var ColorPoint = /*#__PURE__*/function (_Point) {
   "use strict";
 
   function ColorPoint() {
-    var _thisSuper, _thisSuper2, _this;
+    var _this;
     babelHelpers.classCallCheck(this, ColorPoint);
     _this = babelHelpers.callSuper(this, ColorPoint);
     _this.x = 2;
-    babelHelpers.set((_thisSuper = _this, babelHelpers.getPrototypeOf(ColorPoint.prototype)), "x", 3, _thisSuper, true);
+    babelHelpers.set((_this, babelHelpers.getPrototypeOf(ColorPoint.prototype)), "x", 3, _this, true);
     expect(_this.x).toBe(3); // A
-    expect(babelHelpers.get((_thisSuper2 = _this, babelHelpers.getPrototypeOf(ColorPoint.prototype)), "x", _thisSuper2)).toBeUndefined(); // B
+    expect(babelHelpers.get((_this, babelHelpers.getPrototypeOf(ColorPoint.prototype)), "x", _this)).toBeUndefined(); // B
     return _this;
   }
   babelHelpers.inherits(ColorPoint, _Point);

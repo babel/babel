@@ -14,10 +14,10 @@ let Hello = /*#__PURE__*/function () {
 let Outer = /*#__PURE__*/function (_Hello) {
   function Outer() {
     let _babelHelpers$get$cal;
-    var _thisSuper, _this;
+    var _this;
     babelHelpers.classCallCheck(this, Outer);
     _this = babelHelpers.callSuper(this, Outer);
-    _babelHelpers$get$cal = babelHelpers.get((_thisSuper = _this, babelHelpers.getPrototypeOf(Outer.prototype)), "toString", _thisSuper).call(_thisSuper);
+    _babelHelpers$get$cal = babelHelpers.get((_this, babelHelpers.getPrototypeOf(Outer.prototype)), "toString", _this).call(_this);
     let Inner = /*#__PURE__*/babelHelpers.createClass(function Inner() {
       babelHelpers.classCallCheck(this, Inner);
       babelHelpers.defineProperty(this, _babelHelpers$get$cal, 'hello');

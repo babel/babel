@@ -3,15 +3,15 @@ var Test = /*#__PURE__*/function (_Foo) {
 
   function Test() {
     var _babelHelpers$get;
-    var _thisSuper, _thisSuper2, _thisSuper3, _this;
+    var _this;
     babelHelpers.classCallCheck(this, Test);
     woops.super.test();
     _this = babelHelpers.callSuper(this, Test);
-    babelHelpers.get((_thisSuper = _this, babelHelpers.getPrototypeOf(Test.prototype)), "test", _thisSuper).call(_thisSuper);
+    babelHelpers.get((_this, babelHelpers.getPrototypeOf(Test.prototype)), "test", _this).call(_this);
     _this = babelHelpers.callSuper(this, Test, arguments);
     _this = babelHelpers.callSuper(this, Test, ["test"].concat(Array.prototype.slice.call(arguments)));
-    babelHelpers.get((_thisSuper2 = _this, babelHelpers.getPrototypeOf(Test.prototype)), "test", _thisSuper2).apply(_thisSuper2, arguments);
-    (_babelHelpers$get = babelHelpers.get((_thisSuper3 = _this, babelHelpers.getPrototypeOf(Test.prototype)), "test", _thisSuper3)).call.apply(_babelHelpers$get, [_thisSuper3, "test"].concat(Array.prototype.slice.call(arguments)));
+    babelHelpers.get((_this, babelHelpers.getPrototypeOf(Test.prototype)), "test", _this).apply(_this, arguments);
+    (_babelHelpers$get = babelHelpers.get((_this, babelHelpers.getPrototypeOf(Test.prototype)), "test", _this)).call.apply(_babelHelpers$get, [_this, "test"].concat(Array.prototype.slice.call(arguments)));
     return _this;
   }
   babelHelpers.inherits(Test, _Foo);
