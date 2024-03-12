@@ -45,5 +45,5 @@ function _set_a(_this2, v) {
 }
 function _m() {}
 function _method2() {
-  return _method.call(this, ...arguments);
+  return _method.apply(this, arguments);
 }

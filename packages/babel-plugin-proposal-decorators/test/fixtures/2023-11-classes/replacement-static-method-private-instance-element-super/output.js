@@ -38,7 +38,7 @@ new class extends babelHelpers.identity {
     m() {}
   }];
   #method() {
-    return _method.call(this, ...arguments);
+    return _method.apply(this, arguments);
   }
   constructor() {
     super(_Foo), _initClass();
