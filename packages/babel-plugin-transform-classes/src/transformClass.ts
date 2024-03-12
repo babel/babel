@@ -406,17 +406,20 @@ export default function transformClass(
       return ref;
     };
 
+    const buildAssertThisInitialized = function () {
+      return t.callExpression(
+        classState.file.addHelper("assertThisInitialized"),
+        [thisRef()],
+      );
+    };
+
     for (const thisPath of classState.superThises) {
       const { node, parentPath } = thisPath;
       if (parentPath.isMemberExpression({ object: node })) {
         thisPath.replaceWith(thisRef());
         continue;
       }
-      thisPath.replaceWith(
-        t.callExpression(classState.file.addHelper("assertThisInitialized"), [
-          thisRef(),
-        ]),
-      );
+      thisPath.replaceWith(buildAssertThisInitialized());
     }
 
     const bareSupers: NodePath<t.CallExpression>[] = [];
@@ -462,10 +465,7 @@ export default function transformClass(
 
     if (classState.isLoose) {
       wrapReturn = (returnArg: t.Expression | void) => {
-        const thisExpr = t.callExpression(
-          classState.file.addHelper("assertThisInitialized"),
-          [thisRef()],
-        );
+        const thisExpr = buildAssertThisInitialized();
         return returnArg
           ? t.logicalExpression("||", returnArg, thisExpr)
           : thisExpr;
@@ -490,7 +490,9 @@ export default function transformClass(
       body.pushContainer(
         "body",
         t.returnStatement(
-          guaranteedSuperBeforeFinish ? thisRef() : wrapReturn(),
+          guaranteedSuperBeforeFinish
+            ? thisRef()
+            : buildAssertThisInitialized(),
         ),
       );
     }
