@@ -199,9 +199,12 @@ function writeHelpers(runtimeName, { polyfillProvider } = {}) {
       { node: cjs, import: esm, default: cjs },
       cjs,
     ];
-    // For backward compatibility. We can remove this in Babel 8.
-    helperSubExports[`./${path.posix.join("helpers", "esm", helperName)}`] =
-      esm;
+    if (!process.env.BABEL_8_BREAKING) {
+      // This is needed for backwards compatibility, but new versions of Babel
+      // do not emit imports to the /esm/ directory anymore.
+      helperSubExports[`./${path.posix.join("helpers", "esm", helperName)}`] =
+        esm;
+    }
   }
 
   writeHelperExports(runtimeName, helperSubExports);
