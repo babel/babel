@@ -12,7 +12,7 @@ let Foo = /*#__PURE__*/function (_Bar) {
       _this = babelHelpers.callSuper(this, Foo);
       babelHelpers.classPrivateFieldInitSpec(babelHelpers.assertThisInitialized(_this), _bar, "foo");
     }
-    return babelHelpers.possibleConstructorReturn(_this);
+    return babelHelpers.assertThisInitialized(_this);
   }
   babelHelpers.inherits(Foo, _Bar);
   return babelHelpers.createClass(Foo);

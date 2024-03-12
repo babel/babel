@@ -18,7 +18,7 @@ var Foo = /*#__PURE__*/function (_Bar) {
         value: "foo"
       });
     }
-    return babelHelpers.possibleConstructorReturn(_this);
+    return babelHelpers.assertThisInitialized(_this);
   }
   babelHelpers.inherits(Foo, _Bar);
   return babelHelpers.createClass(Foo);
