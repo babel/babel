@@ -1752,9 +1752,9 @@ function transformClass(
                 t.callExpression(
                   t.memberExpression(
                     privateMethodDelegateId,
-                    t.identifier("call"),
+                    t.identifier("apply"),
                   ),
-                  [t.thisExpression(), t.spreadElement(t.identifier("arg"))],
+                  [t.thisExpression(), t.identifier("arg")],
                 ),
               ),
             ]);
