@@ -1,4 +1,4 @@
-var _initProto, _obj;
+let _initProto, _obj;
 let fn, obj;
 class A {
   static {

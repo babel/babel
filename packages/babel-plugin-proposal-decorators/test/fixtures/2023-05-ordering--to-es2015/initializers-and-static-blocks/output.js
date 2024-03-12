@@ -1,5 +1,5 @@
-let _Foo2;
-var _initProto, _initStatic, _initClass, _init_field, _init_field2, _init_accessor, _init_accessor2, _ref, _Class, _B, _Foo3, _A;
+var _ref, _Class, _B, _Foo3, _A;
+let _initProto, _initStatic, _initClass, _init_field, _init_field2, _init_accessor, _init_accessor2, _Foo2;
 const log = [];
 const classDec1 = (cls, ctxClass) => {
   log.push("c2");

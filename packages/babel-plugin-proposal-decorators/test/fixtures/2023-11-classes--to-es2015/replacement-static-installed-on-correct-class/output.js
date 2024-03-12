@@ -1,5 +1,5 @@
-let _Foo2;
-var _initClass, _Class, _x, _A, _Class_brand, _B, _Foo3;
+var _Class, _x, _A, _Class_brand, _B, _Foo3;
+let _initClass, _Foo2;
 const dec = () => {};
 let hasX, hasA, hasM;
 let _Foo;

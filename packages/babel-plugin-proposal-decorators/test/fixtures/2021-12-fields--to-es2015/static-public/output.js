@@ -1,4 +1,5 @@
-var _init_a, _init_b, _init_computedKey, _Foo;
+var _Foo;
+let _init_a, _init_b, _init_computedKey;
 const dec = () => {};
 class Foo {}
 _Foo = Foo;

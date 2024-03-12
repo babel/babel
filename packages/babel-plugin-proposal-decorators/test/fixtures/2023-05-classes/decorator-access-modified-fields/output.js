@@ -1,4 +1,4 @@
-var _initClass, _init_m;
+let _initClass, _init_m;
 var value;
 const classDec = Class => {
   value = new Class().p;

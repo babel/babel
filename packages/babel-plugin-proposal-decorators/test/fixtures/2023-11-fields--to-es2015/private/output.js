@@ -1,4 +1,5 @@
-var _init_a, _init_extra_a, _init_b, _init_extra_b, _Foo;
+var _Foo;
+let _init_a, _init_extra_a, _init_b, _init_extra_b;
 const dec = () => {};
 var _a = /*#__PURE__*/new WeakMap();
 var _b = /*#__PURE__*/new WeakMap();

@@ -1,4 +1,5 @@
-var _initProto, _obj, _A;
+var _A;
+let _initProto, _obj;
 let fn, obj;
 class A {
   constructor() {

@@ -13,7 +13,8 @@ let Hello = /*#__PURE__*/function () {
 }();
 let Outer = /*#__PURE__*/function (_Hello) {
   function Outer() {
-    var _init_hello, _init_extra_hello, _Inner;
+    var _Inner;
+    let _init_hello, _init_extra_hello;
     var _thisSuper, _this;
     babelHelpers.classCallCheck(this, Outer);
     _this = babelHelpers.callSuper(this, Outer);

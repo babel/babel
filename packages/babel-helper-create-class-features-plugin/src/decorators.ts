@@ -129,13 +129,14 @@ function replaceClassWithVar(
   id: t.Identifier;
   path: NodePath<t.ClassDeclaration | t.ClassExpression>;
 } {
+  const id = path.node.id;
+  const scope = path.scope;
   if (path.type === "ClassDeclaration") {
-    const id = path.node.id;
     const className = id.name;
-    const varId = path.scope.generateUidIdentifierBasedOnNode(id);
+    const varId = scope.generateUidIdentifierBasedOnNode(id);
     const classId = t.identifier(className);
 
-    path.scope.rename(className, varId.name);
+    scope.rename(className, varId.name);
 
     path.get("id").replaceWith(classId);
 
@@ -143,12 +144,13 @@ function replaceClassWithVar(
   } else {
     let varId: t.Identifier;
 
-    if (path.node.id) {
-      className = path.node.id.name;
-      varId = path.scope.parent.generateDeclaredUidIdentifier(className);
-      path.scope.rename(className, varId.name);
+    if (id) {
+      className = id.name;
+      varId = generateLetUidIdentifier(scope.parent, className);
+      scope.rename(className, varId.name);
     } else {
-      varId = path.scope.parent.generateDeclaredUidIdentifier(
+      varId = generateLetUidIdentifier(
+        scope.parent,
         typeof className === "string" ? className : "decorated_class",
       );
     }
@@ -1005,7 +1007,7 @@ function transformClass(
     hint: string,
     assignments: t.AssignmentExpression[],
   ) => {
-    const localEvaluatedId = scopeParent.generateDeclaredUidIdentifier(hint);
+    const localEvaluatedId = generateLetUidIdentifier(scopeParent, hint);
     assignments.push(t.assignmentExpression("=", localEvaluatedId, expression));
     return t.cloneNode(localEvaluatedId);
   };
@@ -1048,11 +1050,15 @@ function transformClass(
         /* fallthrough */
         default:
           if (element.node.static) {
-            staticInitLocal ??=
-              scopeParent.generateDeclaredUidIdentifier("initStatic");
+            staticInitLocal ??= generateLetUidIdentifier(
+              scopeParent,
+              "initStatic",
+            );
           } else {
-            protoInitLocal ??=
-              scopeParent.generateDeclaredUidIdentifier("initProto");
+            protoInitLocal ??= generateLetUidIdentifier(
+              scopeParent,
+              "initProto",
+            );
           }
           break;
       }
@@ -1142,8 +1148,7 @@ function transformClass(
         } else if (scopeParent.isStatic(expression.object)) {
           object = t.cloneNode(expression.object);
         } else {
-          decoratorReceiverId ??=
-            scopeParent.generateDeclaredUidIdentifier("obj");
+          decoratorReceiverId ??= generateLetUidIdentifier(scopeParent, "obj");
           object = t.assignmentExpression(
             "=",
             t.cloneNode(decoratorReceiverId),
@@ -1170,7 +1175,7 @@ function transformClass(
   let classDecorations: t.Expression[] = [];
   let classDecorationsId: t.Identifier;
   if (classDecorators) {
-    classInitLocal = scopeParent.generateDeclaredUidIdentifier("initClass");
+    classInitLocal = generateLetUidIdentifier(scopeParent, "initClass");
     needsDeclaraionForClassBinding = path.isClassDeclaration();
     ({ id: classIdLocal, path } = replaceClassWithVar(path, className));
 
@@ -1346,8 +1351,10 @@ function transformClass(
           }
 
           const newId = generateClassPrivateUid();
-          const newFieldInitId =
-            element.scope.parent.generateDeclaredUidIdentifier(`init_${name}`);
+          const newFieldInitId = generateLetUidIdentifier(
+            scopeParent,
+            `init_${name}`,
+          );
           const newValue = t.callExpression(
             t.cloneNode(newFieldInitId),
             params,
@@ -1359,12 +1366,8 @@ function transformClass(
           if (isPrivate) {
             privateMethods = extractProxyAccessorsFor(newId, version);
 
-            const getId = newPath.scope.parent.generateDeclaredUidIdentifier(
-              `get_${name}`,
-            );
-            const setId = newPath.scope.parent.generateDeclaredUidIdentifier(
-              `set_${name}`,
-            );
+            const getId = generateLetUidIdentifier(scopeParent, `get_${name}`);
+            const setId = generateLetUidIdentifier(scopeParent, `set_${name}`);
 
             addCallAccessorsFor(version, newPath, key, getId, setId, isStatic);
 
@@ -1385,9 +1388,7 @@ function transformClass(
             locals = [newFieldInitId];
           }
         } else if (kind === FIELD) {
-          const initId = element.scope.parent.generateDeclaredUidIdentifier(
-            `init_${name}`,
-          );
+          const initId = generateLetUidIdentifier(scopeParent, `init_${name}`);
           const valuePath = (
             element as NodePath<t.ClassProperty | t.ClassPrivateProperty>
           ).get("value");
@@ -1406,9 +1407,7 @@ function transformClass(
             privateMethods = extractProxyAccessorsFor(key, version);
           }
         } else if (isPrivate) {
-          const callId = element.scope.parent.generateDeclaredUidIdentifier(
-            `call_${name}`,
-          );
+          const callId = generateLetUidIdentifier(scopeParent, `call_${name}`);
           locals = [callId];
 
           const replaceSupers = new ReplaceSupers({
@@ -1508,7 +1507,8 @@ function transformClass(
 
       if (hasDecorators && version === "2023-11") {
         if (kind === FIELD || kind === ACCESSOR) {
-          const initExtraId = scopeParent.generateDeclaredUidIdentifier(
+          const initExtraId = generateLetUidIdentifier(
+            scopeParent,
             `init_extra_${name}`,
           );
           locals.push(initExtraId);
@@ -2138,6 +2138,12 @@ function isDecoratedAnonymousClassExpression(path: NodePath) {
   return (
     path.isClassExpression({ id: null }) && shouldTransformClass(path.node)
   );
+}
+
+function generateLetUidIdentifier(scope: Scope, name: string) {
+  const id = scope.generateUidIdentifier(name);
+  scope.push({ id, kind: "let" });
+  return t.cloneNode(id);
 }
 
 export default function (

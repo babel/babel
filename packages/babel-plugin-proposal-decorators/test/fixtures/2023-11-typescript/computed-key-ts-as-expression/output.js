@@ -4,8 +4,7 @@ function noopFactory() {
   };
 }
 {
-  var _pDecs, _init_p, _init_extra_p;
-  let _computedKey;
+  let _computedKey, _pDecs, _init_p, _init_extra_p;
   class C {
     static {
       [_init_p, _init_extra_p] = babelHelpers.applyDecs2311(this, [], [[_pDecs, 0, "p", o => o.#p, (o, v) => o.#p = v]], 0, _ => #p in _).e;
@@ -19,8 +18,7 @@ function noopFactory() {
   expect(new C()).toHaveProperty("a2");
 }
 {
-  var _pDecs2, _init_p2, _init_extra_p2;
-  let _computedKey3;
+  let _computedKey3, _pDecs2, _init_p2, _init_extra_p2;
   class C {
     static {
       [_init_p2, _init_extra_p2] = babelHelpers.applyDecs2311(this, [], [[_pDecs2, 0, "p", o => o.#p, (o, v) => o.#p = v]], 0, _ => #p in _).e;

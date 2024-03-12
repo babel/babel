@@ -1,5 +1,4 @@
-let _computedKey, _computedKey2;
-var _initProto;
+let _initProto, _computedKey, _computedKey2;
 const dec = () => {};
 class Foo {
   static {

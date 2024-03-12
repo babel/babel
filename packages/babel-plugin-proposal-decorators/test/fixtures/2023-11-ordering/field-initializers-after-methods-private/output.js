@@ -1,4 +1,4 @@
-var _fooDecs, _init_foo, _init_extra_foo;
+let _fooDecs, _init_foo, _init_extra_foo;
 var counter = 0;
 class A {
   static {

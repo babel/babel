@@ -1,4 +1,5 @@
-var _initClass, _initClass2, _Foo2;
+var _Foo2;
+let _initClass, _initClass2;
 const dec = () => {};
 let _Foo;
 new class extends babelHelpers.identity {

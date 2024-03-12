@@ -1,4 +1,4 @@
-var _initProto, _initClass, _classDecs, _methodDecs;
+let _initProto, _initClass, _classDecs, _methodDecs;
 const dec = () => {};
 _classDecs = [dec, call(), chain.expr(), arbitrary + expr, array[expr]];
 let _Foo;
@@ -12,7 +12,7 @@ class Foo {
   #a = void _initProto(this);
   [(_methodDecs = [dec, call(), chain.expr(), arbitrary + expr, array[expr]], "method")]() {}
   makeClass() {
-    var _barDecs, _init_bar;
+    let _barDecs, _init_bar;
     return class Nested {
       static {
         [_init_bar] = babelHelpers.applyDecs2301(this, [[_barDecs, 0, "bar"]], []).e;

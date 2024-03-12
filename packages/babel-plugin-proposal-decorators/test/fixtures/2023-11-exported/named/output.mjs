@@ -1,4 +1,4 @@
-var _initClass;
+let _initClass;
 let _A;
 class A {
   static {

@@ -1,4 +1,4 @@
-var _initStatic, _init_a, _init_b, _init_computedKey;
+let _initStatic, _init_a, _init_b, _init_computedKey;
 const dec = () => {};
 class Foo {
   static {

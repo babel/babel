@@ -6,8 +6,8 @@ let Hello = /*#__PURE__*/babelHelpers.createClass(function Hello() {
 });
 let Outer = /*#__PURE__*/function (_Hello) {
   function Outer() {
-    let _ref;
-    var _helloDecs, _init_hello, _init_extra_hello, _Inner;
+    var _Inner;
+    let _helloDecs, _init_hello, _init_extra_hello, _ref;
     var _this;
     babelHelpers.classCallCheck(this, Outer);
     _ref = (_helloDecs = _this = babelHelpers.callSuper(this, Outer), "hello");

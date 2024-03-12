@@ -1,5 +1,5 @@
-let _Foo2;
-var _initClass, _Class, _Foo3;
+var _Class, _Foo3;
+let _initClass, _Foo2;
 const dec = () => {};
 let _Foo;
 new (_Foo2 = (_Foo3 = class Foo {}, [_Foo, _initClass] = babelHelpers.applyDecs(_Foo3, [], [dec]), _Foo3), (_Class = class extends babelHelpers.identity {

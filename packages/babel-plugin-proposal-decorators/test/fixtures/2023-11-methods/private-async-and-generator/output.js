@@ -1,4 +1,4 @@
-var _initProto, _call_a, _call_g, _call_ag;
+let _initProto, _call_a, _call_g, _call_ag;
 class Foo {
   static {
     [_call_a, _call_g, _call_ag, _initProto] = babelHelpers.applyDecs2311(this, [], [[dec, 2, "a", async function () {}], [dec, 2, "g", function* () {}], [dec, 2, "ag", async function* () {}]], 0, _ => #a in _).e;

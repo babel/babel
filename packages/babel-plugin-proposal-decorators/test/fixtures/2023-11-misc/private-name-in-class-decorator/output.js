@@ -4,7 +4,7 @@ class A {
     called = true;
   }
   constructor() {
-    var _initClass, _classDecs;
+    let _initClass, _classDecs;
     _classDecs = [A, A.#x];
     let _B;
     new class extends babelHelpers.identity {

@@ -1,4 +1,5 @@
-var _initClass, _obj, _init_x, _init_extra_x, _init_y, _init_extra_y, _A2;
+var _A2;
+let _initClass, _obj, _init_x, _init_extra_x, _init_y, _init_extra_y;
 let _A;
 class A {
   constructor() {

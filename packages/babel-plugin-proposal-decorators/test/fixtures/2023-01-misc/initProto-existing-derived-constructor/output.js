@@ -1,5 +1,5 @@
 {
-  var _initProto;
+  let _initProto;
   let self, a, initCalled;
   function deco(_, context) {
     context.addInitializer(() => {
@@ -41,7 +41,7 @@
     }
   }
   {
-    var _initProto2;
+    let _initProto2;
     "super() nested within another constructor should not be transformed";
     let log = [];
     class A extends B {
@@ -68,8 +68,7 @@
     let log = [];
     new class Dummy extends B {
       constructor() {
-        let _computedKey;
-        var _initProto3;
+        let _initProto3, _computedKey;
         let key;
         class A extends B {
           static {
@@ -94,7 +93,7 @@
     const noop = () => fn => fn;
     new class extends B {
       constructor() {
-        var _initProto4, _noopDecs;
+        let _initProto4, _noopDecs;
         class A extends B {
           static {
             [_initProto4] = babelHelpers.applyDecs2301(this, [[dec, 2, "method"], [_noopDecs, 2, "noop"]], []).e;
@@ -113,7 +112,7 @@
     expect(log + "").toBe("7,108");
   }
   {
-    var _initProto5;
+    let _initProto5;
     "super() within decorated derived constructor should be transformed: computed key";
     let log = [];
     class A extends B {
@@ -137,7 +136,7 @@
     expect(log + "").toBe("109,10");
   }
   {
-    var _initProto6;
+    let _initProto6;
     "super() within decorated derived constructor should be transformed: decorator expression";
     let log = [];
     const noop = () => fn => fn;
@@ -146,7 +145,7 @@
         [_initProto6] = babelHelpers.applyDecs2301(this, [[dec, 2, "method"]], []).e;
       }
       constructor() {
-        var _initProto7, _noopDecs2;
+        let _initProto7, _noopDecs2;
         new class Dummy extends B {
           static {
             [_initProto7] = babelHelpers.applyDecs2301(this, [[_noopDecs2, 2, "noop"]], []).e;

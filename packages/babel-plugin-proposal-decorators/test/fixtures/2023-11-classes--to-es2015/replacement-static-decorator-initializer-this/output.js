@@ -1,5 +1,5 @@
-let _Foo2;
-var _initStatic, _initClass, _init_accessor, _init_extra_accessor, _init_property, _init_extra_property, _Class, _A, _Foo3;
+var _Class, _A, _Foo3;
+let _initStatic, _initClass, _init_accessor, _init_extra_accessor, _init_property, _init_extra_property, _Foo2;
 let original, replaced, accessorThis, getterThis, setterThis, methodThis, propertyThis, classThis;
 function dec(Klass, context) {
   original = Klass;

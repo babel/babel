@@ -1,4 +1,5 @@
-var _initClass, _Bar;
+var _Bar;
+let _initClass;
 const dec = () => {};
 let _Foo;
 class Foo extends (_Bar = Bar) {

@@ -1,4 +1,5 @@
-var _initProto, _initClass, _obj, _Foo2;
+var _Foo2;
+let _initProto, _initClass, _obj;
 const dec = () => {};
 let _Foo;
 var _a = /*#__PURE__*/new WeakMap();
@@ -8,8 +9,8 @@ class Foo {
   }
   method() {}
   makeClass() {
-    let _ref;
-    var _barDecs, _init_bar, _init_extra_bar, _Nested;
+    var _Nested;
+    let _barDecs, _init_bar, _init_extra_bar, _ref;
     return _ref = (_barDecs = babelHelpers.classPrivateFieldGet2(_a, this), "bar"), (_Nested = class Nested {
       constructor() {
         babelHelpers.defineProperty(this, _ref, _init_bar(this));
