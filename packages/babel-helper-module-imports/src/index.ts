@@ -6,12 +6,28 @@ export { ImportInjector };
 
 export { default as isModule } from "./is-module.ts";
 
+const programPathInjectorCache = new WeakMap<
+  NodePath<t.Program>,
+  ImportInjector
+>();
+
+function getImportInjector(path: NodePath<t.Node>) {
+  const programPath = path.find(p => p.isProgram()) as NodePath<t.Program>;
+  if (!programPathInjectorCache.has(programPath)) {
+    const injector = new ImportInjector(programPath);
+    programPathInjectorCache.set(programPath, injector);
+    return injector;
+  } else {
+    return programPathInjectorCache.get(programPath);
+  }
+}
+
 export function addDefault(
   path: NodePath,
   importedSource: string,
   opts?: Partial<ImportOptions>,
 ) {
-  return new ImportInjector(path).addDefault(importedSource, opts);
+  return getImportInjector(path).addDefault(importedSource, opts);
 }
 
 function addNamed(
@@ -56,7 +72,7 @@ function addNamed(
   importedSource: string,
   opts?: Partial<ImportOptions>,
 ) {
-  return new ImportInjector(path).addNamed(name, importedSource, opts);
+  return getImportInjector(path).addNamed(name, importedSource, opts);
 }
 export { addNamed };
 
@@ -65,7 +81,7 @@ export function addNamespace(
   importedSource: string,
   opts?: Partial<ImportOptions>,
 ) {
-  return new ImportInjector(path).addNamespace(importedSource, opts);
+  return getImportInjector(path).addNamespace(importedSource, opts);
 }
 
 export function addSideEffect(
@@ -73,5 +89,5 @@ export function addSideEffect(
   importedSource: string,
   opts?: Partial<ImportOptions>,
 ) {
-  return new ImportInjector(path).addSideEffect(importedSource, opts);
+  return getImportInjector(path).addSideEffect(importedSource, opts);
 }

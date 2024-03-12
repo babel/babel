@@ -1,5 +1,4 @@
-import { Tuple as _Tuple } from "@bloomberg/record-tuple-polyfill";
-import { Record as _Record } from "@bloomberg/record-tuple-polyfill";
+import { Record as _Record, Tuple as _Tuple } from "@bloomberg/record-tuple-polyfill";
 const r2 = _Record({
   a: _Record({
     b: 456

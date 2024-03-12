@@ -130,6 +130,11 @@ export default class ImportInjector {
     importPosition: "before",
   };
 
+  private declare _lastImportDeclaration: [
+    string,
+    NodePath<t.ImportDeclaration>,
+  ];
+
   constructor(
     path: NodePath,
     importedSource?: string,
@@ -414,7 +419,42 @@ export default class ImportInjector {
 
     const { statements, resultName } = builder.done();
 
-    this._insertStatements(statements, importPosition, blockHoist);
+    // Combine multiple ES6 import if the it share the same source with
+    // the last inserted import.
+    // Assumption: Users are not manipulating imports using other libraries.
+    // Otherwise we are pushing new imports before the actual last imports.
+    if (
+      this._lastImportDeclaration?.[0] === importedSource &&
+      statements.length === 1 &&
+      statements[0].type === "ImportDeclaration"
+    ) {
+      const importDeclarationPath = this._lastImportDeclaration[1];
+
+      if (
+        !importDeclarationPath.removed &&
+        importDeclarationPath.parentPath === this._programPath
+      ) {
+        // use `pushContainer` because importPosition must be "after"
+        importDeclarationPath.pushContainer(
+          "specifiers",
+          statements[0].specifiers,
+        );
+        return resultName;
+      }
+    }
+
+    const insertedPaths = this._insertStatements(
+      statements,
+      importPosition,
+      blockHoist,
+    );
+
+    if (statements.length === 1 && statements[0].type === "ImportDeclaration") {
+      this._lastImportDeclaration = [
+        importedSource,
+        insertedPaths[0] as NodePath<t.ImportDeclaration>,
+      ];
+    }
 
     if (
       (isDefault || isNamed) &&
@@ -436,8 +476,7 @@ export default class ImportInjector {
     if (importPosition === "after") {
       for (let i = body.length - 1; i >= 0; i--) {
         if (body[i].isImportDeclaration()) {
-          body[i].insertAfter(statements);
-          return;
+          return body[i].insertAfter(statements);
         }
       }
     } else {
@@ -453,11 +492,10 @@ export default class ImportInjector {
       });
 
       if (targetPath) {
-        targetPath.insertBefore(statements);
-        return;
+        return targetPath.insertBefore(statements);
       }
     }
 
-    this._programPath.unshiftContainer("body", statements);
+    return this._programPath.unshiftContainer("body", statements);
   }
 }
