@@ -68,78 +68,80 @@ if (!bool(process.env.BABEL_8_BREAKING)) {
     ],
     corejsRoot: "core-js/library/fn",
   });
-}
-writeCoreJS({
-  corejs: 3,
-  proposals: false,
-  definitions: corejs3Definitions,
-  paths: [],
-  corejsRoot: "core-js-pure/stable",
-});
-writeCoreJS({
-  corejs: 3,
-  proposals: true,
-  definitions: corejs3Definitions,
-  paths: ["is-iterable", "get-iterator", "get-iterator-method"],
-  corejsRoot: "core-js-pure/features",
-});
-
-function writeCoreJS({
-  corejs,
-  proposals,
-  definitions: { BuiltIns, StaticProperties, InstanceProperties },
-  paths,
-  corejsRoot,
-}) {
-  const pkgDirname = getRuntimeRoot(`@babel/runtime-corejs${corejs}`);
-
-  Object.keys(BuiltIns).forEach(name => {
-    const { stable, path } = BuiltIns[name];
-    if (stable || proposals) paths.push(path);
+  writeCoreJS({
+    corejs: 3,
+    proposals: false,
+    definitions: corejs3Definitions,
+    paths: [],
+    corejsRoot: "core-js-pure/stable",
+  });
+  writeCoreJS({
+    corejs: 3,
+    proposals: true,
+    definitions: corejs3Definitions,
+    paths: ["is-iterable", "get-iterator", "get-iterator-method"],
+    corejsRoot: "core-js-pure/features",
   });
 
-  Object.keys(StaticProperties).forEach(builtin => {
-    const props = StaticProperties[builtin];
-    Object.keys(props).forEach(name => {
-      const { stable, path } = props[name];
+  // eslint-disable-next-line no-inner-declarations
+  function writeCoreJS({
+    corejs,
+    proposals,
+    definitions: { BuiltIns, StaticProperties, InstanceProperties },
+    paths,
+    corejsRoot,
+  }) {
+    const pkgDirname = getRuntimeRoot(`@babel/runtime-corejs${corejs}`);
+
+    Object.keys(BuiltIns).forEach(name => {
+      const { stable, path } = BuiltIns[name];
       if (stable || proposals) paths.push(path);
     });
-  });
 
-  if (InstanceProperties) {
-    Object.keys(InstanceProperties).forEach(name => {
-      const { stable, path } = InstanceProperties[name];
-      if (stable || proposals) paths.push(`instance/${path}`);
+    Object.keys(StaticProperties).forEach(builtin => {
+      const props = StaticProperties[builtin];
+      Object.keys(props).forEach(name => {
+        const { stable, path } = props[name];
+        if (stable || proposals) paths.push(path);
+      });
     });
+
+    if (InstanceProperties) {
+      Object.keys(InstanceProperties).forEach(name => {
+        const { stable, path } = InstanceProperties[name];
+        if (stable || proposals) paths.push(`instance/${path}`);
+      });
+    }
+
+    const runtimeRoot = proposals ? "core-js" : "core-js-stable";
+    paths.forEach(function (corejsPath) {
+      outputFile(
+        path.join(pkgDirname, runtimeRoot, `${corejsPath}.js`),
+        `module.exports = require("${corejsRoot}/${corejsPath}");`
+      );
+    });
+
+    writeCorejsExports(pkgDirname, runtimeRoot, paths);
   }
 
-  const runtimeRoot = proposals ? "core-js" : "core-js-stable";
-  paths.forEach(function (corejsPath) {
-    outputFile(
-      path.join(pkgDirname, runtimeRoot, `${corejsPath}.js`),
-      `module.exports = require("${corejsRoot}/${corejsPath}");`
-    );
-  });
-
-  writeCorejsExports(pkgDirname, runtimeRoot, paths);
-}
-
-function writeCorejsExports(pkgDirname, runtimeRoot, paths) {
-  const pkgJsonPath = require.resolve(`${pkgDirname}/package.json`);
-  const pkgJson = require(pkgJsonPath);
-  const exports = pkgJson.exports;
-  // Export `./core-js/` so `import "@babel/runtime-corejs3/core-js/some-feature.js"` works
-  // Node < 17
-  exports[`./${runtimeRoot}/`] = `./${runtimeRoot}/`;
-  // Node >= 17
-  exports[`./${runtimeRoot}/*.js`] = `./${runtimeRoot}/*.js`;
-  for (const corejsPath of paths) {
-    // Export `./core-js/some-feature` so `import "@babel/runtime-corejs3/core-js/some-feature"` also works
-    const corejsExportPath = `./${runtimeRoot}/${corejsPath}`;
-    exports[corejsExportPath] = corejsExportPath + ".js";
+  // eslint-disable-next-line no-inner-declarations
+  function writeCorejsExports(pkgDirname, runtimeRoot, paths) {
+    const pkgJsonPath = require.resolve(`${pkgDirname}/package.json`);
+    const pkgJson = require(pkgJsonPath);
+    const exports = pkgJson.exports;
+    // Export `./core-js/` so `import "@babel/runtime-corejs3/core-js/some-feature.js"` works
+    // Node < 17
+    exports[`./${runtimeRoot}/`] = `./${runtimeRoot}/`;
+    // Node >= 17
+    exports[`./${runtimeRoot}/*.js`] = `./${runtimeRoot}/*.js`;
+    for (const corejsPath of paths) {
+      // Export `./core-js/some-feature` so `import "@babel/runtime-corejs3/core-js/some-feature"` also works
+      const corejsExportPath = `./${runtimeRoot}/${corejsPath}`;
+      exports[corejsExportPath] = corejsExportPath + ".js";
+    }
+    pkgJson.exports = exports;
+    outputFile(pkgJsonPath, JSON.stringify(pkgJson, undefined, 2) + "\n");
   }
-  pkgJson.exports = exports;
-  outputFile(pkgJsonPath, JSON.stringify(pkgJson, undefined, 2) + "\n");
 }
 
 function writeHelperFile(
@@ -239,14 +241,18 @@ function writeHelperExports(runtimeName, helperSubExports) {
     ...helperSubExports,
     "./package": "./package.json",
     "./package.json": "./package.json",
-    "./regenerator": "./regenerator/index.js",
-    "./regenerator/*.js": "./regenerator/*.js",
-    // These patterns are deprecated, but since patterns
-    // containing * are not supported in every Node.js
-    // version we keep them for better compatibility.
-    // For node < 17
-    "./regenerator/": "./regenerator/",
   };
+  if (!process.env.BABEL_8_BREAKING) {
+    Object.assign(exports, {
+      "./regenerator": "./regenerator/index.js",
+      "./regenerator/*.js": "./regenerator/*.js",
+      // These patterns are deprecated, but since patterns
+      // containing * are not supported in every Node.js
+      // version we keep them for better compatibility.
+      // For node < 17
+      "./regenerator/": "./regenerator/",
+    });
+  }
   const pkgDirname = getRuntimeRoot(runtimeName);
   const pkgJsonPath = require.resolve(`${pkgDirname}/package.json`);
   const pkgJson = require(pkgJsonPath);

@@ -135,6 +135,8 @@ target["clean-runtime-helpers"] = function () {
     "packages/babel-runtime-corejs2/helpers/**/*.mjs",
     "packages/babel-runtime-corejs3/helpers/**/*.mjs",
     "packages/babel-runtime-corejs2/core-js",
+    "packages/babel-runtime-corejs3/core-js",
+    "packages/babel-runtime-corejs3/core-js-stable",
   ]);
 };
 
