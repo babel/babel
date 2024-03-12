@@ -840,6 +840,14 @@ function staticBlockToFunctionClosure(block: t.StaticBlock) {
   return t.functionExpression(null, [], t.blockStatement(block.body));
 }
 
+function fieldInitializerToClosure(value: t.Expression) {
+  return t.functionExpression(
+    null,
+    [],
+    t.blockStatement([t.returnStatement(value)]),
+  );
+}
+
 function maybeSequenceExpression(exprs: t.Expression[]) {
   if (exprs.length === 0) return t.unaryExpression("void", t.numericLiteral(0));
   if (exprs.length === 1) return exprs[0];
@@ -940,10 +948,7 @@ function convertToComputedKey(path: NodePath<t.ClassProperty | t.ClassMethod>) {
   }
 }
 
-function hasInstancePrivateAccess(
-  path: NodePath<t.ClassPrivateMethod | t.ClassPrivateProperty | t.StaticBlock>,
-  privateNames: string[],
-) {
+function hasInstancePrivateAccess(path: NodePath, privateNames: string[]) {
   let containsInstancePrivateAccess = false;
   if (privateNames.length > 0) {
     const privateNameVisitor = privateNameVisitorFactory<
@@ -1019,9 +1024,10 @@ function transformClass(
   path: NodePath<t.Class>,
   state: PluginPass,
   constantSuper: boolean,
-  version: DecoratorVersionKind,
+  ignoreFunctionLength: boolean,
   className: string | t.Identifier | t.StringLiteral | undefined,
   propertyVisitor: Visitor<PluginPass>,
+  version: DecoratorVersionKind,
 ): NodePath {
   const body = path.get("body.body");
 
@@ -1684,26 +1690,98 @@ function transformClass(
             staticBlockToIIFE(element.node),
           );
         }
-
         element.remove();
         return;
       }
 
-      const isProperty =
-        element.isClassProperty() || element.isClassPrivateProperty();
-
       if (
-        (isProperty || element.isClassPrivateMethod()) &&
+        (element.isClassProperty() || element.isClassPrivateProperty()) &&
         element.node.static
       ) {
-        if (isProperty && staticFieldInitializerExpressions.length > 0) {
+        const valuePath = (
+          element as NodePath<t.ClassProperty | t.ClassPrivateProperty>
+        ).get("value");
+        if (hasInstancePrivateAccess(valuePath, instancePrivateNames)) {
+          const fieldValueClosureId = memoiseExpression(
+            fieldInitializerToClosure(valuePath.node),
+            "fieldValue",
+            staticClosures,
+          );
+          valuePath.replaceWith(
+            t.callExpression(
+              t.memberExpression(fieldValueClosureId, t.identifier("call")),
+              [t.thisExpression()],
+            ),
+          );
+        }
+        if (staticFieldInitializerExpressions.length > 0) {
           prependExpressionsToFieldInitializer(
             staticFieldInitializerExpressions,
             element,
           );
           staticFieldInitializerExpressions = [];
         }
+        element.node.static = false;
+        statics.push(element.node);
+        element.remove();
+      } else if (element.isClassPrivateMethod({ static: true })) {
+        // At this moment the element must not have decorators, so any private name
+        // within the element must come from either params or body
+        if (hasInstancePrivateAccess(element, instancePrivateNames)) {
+          const replaceSupers = new ReplaceSupers({
+            constantSuper,
+            methodPath: element,
+            objectRef: classIdLocal,
+            superRef: path.node.superClass,
+            file: state.file,
+            refToPreserve: classIdLocal,
+          });
 
+          replaceSupers.replace();
+
+          const privateMethodDelegateId = memoiseExpression(
+            createFunctionExpressionFromPrivateMethod(element.node),
+            element.get("key.id").node.name,
+            staticClosures,
+          );
+
+          if (ignoreFunctionLength) {
+            element.node.params = [t.restElement(t.identifier("arg"))];
+            element.node.body = t.blockStatement([
+              t.returnStatement(
+                t.callExpression(
+                  t.memberExpression(
+                    privateMethodDelegateId,
+                    t.identifier("call"),
+                  ),
+                  [t.thisExpression(), t.spreadElement(t.identifier("arg"))],
+                ),
+              ),
+            ]);
+          } else {
+            element.node.params = element.node.params.map((p, i) => {
+              if (t.isRestElement(p)) {
+                return t.restElement(t.identifier("arg"));
+              } else {
+                return t.identifier("_" + i);
+              }
+            });
+            element.node.body = t.blockStatement([
+              t.returnStatement(
+                t.callExpression(
+                  t.memberExpression(
+                    privateMethodDelegateId,
+                    t.identifier("call"),
+                  ),
+                  [
+                    t.thisExpression(),
+                    t.spreadElement(t.identifier("arguments")),
+                  ],
+                ),
+              ),
+            ]);
+          }
+        }
         element.node.static = false;
         statics.push(element.node);
         element.remove();
@@ -2232,6 +2310,7 @@ export default function (
 
   const VISITED = new WeakSet<NodePath>();
   const constantSuper = assumption("constantSuper") ?? loose;
+  const ignoreFunctionLength = assumption("ignoreFunctionLength") ?? loose;
 
   const namedEvaluationVisitor: Visitor<PluginPass> =
     NamedEvaluationVisitoryFactory(
@@ -2251,9 +2330,10 @@ export default function (
       path,
       state,
       constantSuper,
-      version,
+      ignoreFunctionLength,
       className,
       namedEvaluationVisitor,
+      version,
     );
     if (newPath) {
       VISITED.add(newPath);
