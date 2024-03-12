@@ -3,7 +3,6 @@ import _createClass from "@babel/runtime-corejs3/helpers/createClass";
 import _classCallCheck from "@babel/runtime-corejs3/helpers/classCallCheck";
 import _possibleConstructorReturn from "@babel/runtime-corejs3/helpers/possibleConstructorReturn";
 import _getPrototypeOf from "@babel/runtime-corejs3/helpers/getPrototypeOf";
-import _assertThisInitialized from "@babel/runtime-corejs3/helpers/assertThisInitialized";
 import _inherits from "@babel/runtime-corejs3/helpers/inherits";
 import _defineProperty from "@babel/runtime-corejs3/helpers/defineProperty";
 import _concatInstanceProperty from "@babel/runtime-corejs3/core-js-stable/instance/concat";
@@ -15,7 +14,7 @@ let B = /*#__PURE__*/function (_A) {
     var _this;
     _classCallCheck(this, B);
     _this = _callSuper(this, B, _concatInstanceProperty(_context = []).call(_context, args));
-    _defineProperty(_assertThisInitialized(_this), "b", 8);
+    _defineProperty(_this, "b", 8);
     return _this;
   }
   _inherits(B, _A);

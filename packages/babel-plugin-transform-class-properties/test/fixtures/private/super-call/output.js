@@ -19,7 +19,7 @@ let B = /*#__PURE__*/function (_A) {
     var _thisSuper, _this;
     babelHelpers.classCallCheck(this, B);
     _this = babelHelpers.callSuper(this, B, [...args]);
-    babelHelpers.classPrivateFieldInitSpec(babelHelpers.assertThisInitialized(_this), _foo, babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(B.prototype)), "foo", _thisSuper).call(_thisSuper));
+    babelHelpers.classPrivateFieldInitSpec(_this, _foo, babelHelpers.get((_thisSuper = _this, babelHelpers.getPrototypeOf(B.prototype)), "foo", _thisSuper).call(_thisSuper));
     return _this;
   }
   babelHelpers.inherits(B, _A);

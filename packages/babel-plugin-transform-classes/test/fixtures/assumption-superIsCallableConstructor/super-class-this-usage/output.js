@@ -5,7 +5,7 @@ var Test = /*#__PURE__*/function (_Foo) {
     var _this;
     babelHelpers.classCallCheck(this, Test);
     _this = _Foo.call(this) || this;
-    babelHelpers.assertThisInitialized(_this);
+    _this;
     _this.prop = 1;
     return _this;
   }

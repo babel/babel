@@ -11,8 +11,8 @@ var Test = /*#__PURE__*/babelHelpers.createClass(function Test() {
         args[_key] = arguments[_key];
       }
       _this = babelHelpers.callSuper(this, Other, [].concat(args));
-      babelHelpers.defineProperty(babelHelpers.assertThisInitialized(_this), "a", function () {
-        return babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Other.prototype)), "test", _thisSuper);
+      babelHelpers.defineProperty(_this, "a", function () {
+        return babelHelpers.get((_thisSuper = _this, babelHelpers.getPrototypeOf(Other.prototype)), "test", _thisSuper);
       });
       return _this;
     }

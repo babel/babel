@@ -26,7 +26,7 @@ var Outer = /*#__PURE__*/function (_Hello) {
           return 'hello';
         }
       }]);
-    }(babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Outer.prototype)), "toString", _thisSuper).call(_thisSuper));
+    }(babelHelpers.get((_thisSuper = _this, babelHelpers.getPrototypeOf(Outer.prototype)), "toString", _thisSuper).call(_thisSuper));
     return babelHelpers.possibleConstructorReturn(_this, new Inner());
   }
   babelHelpers.inherits(Outer, _Hello);
