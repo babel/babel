@@ -463,7 +463,11 @@ export default class ImportInjector {
     const importDeclarations: Map<string, t.ImportDeclaration[]> = new Map();
 
     for (const statement of statements) {
-      if (isImportDeclaration(statement) && isValueImport(statement)) {
+      if (
+        isImportDeclaration(statement) &&
+        isValueImport(statement) &&
+        !hasNamespaceImport(statement)
+      ) {
         const source = statement.source.value;
         if (!importDeclarations.has(source)) importDeclarations.set(source, []);
         importDeclarations.get(source).push(statement);
@@ -474,6 +478,8 @@ export default class ImportInjector {
     for (const bodyStmt of this._programPath.get("body")) {
       if (bodyStmt.isImportDeclaration() && isValueImport(bodyStmt.node)) {
         lastImportPath = bodyStmt;
+
+        if (hasNamespaceImport(bodyStmt.node)) continue;
 
         const source = bodyStmt.node.source.value;
         const newImports = importDeclarations.get(source);
@@ -496,4 +502,13 @@ export default class ImportInjector {
 
 function isValueImport(node: t.ImportDeclaration) {
   return node.importKind !== "type" && node.importKind !== "typeof";
+}
+
+function hasNamespaceImport(node: t.ImportDeclaration) {
+  return (
+    node.specifiers.length <= 2 &&
+    node.specifiers.some(
+      specifier => specifier.type === "ImportNamespaceSpecifier",
+    )
+  );
 }

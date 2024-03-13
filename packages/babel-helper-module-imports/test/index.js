@@ -638,25 +638,6 @@ describe("@babel/helper-module-imports", () => {
             `,
           );
         });
-
-        it("should try to merge imports", () => {
-          testModule(
-            { importingInterop, importedType },
-            m => {
-              return babel.types.arrayExpression([
-                m.addNamed("x", "modA", { importPosition: "after" }),
-                m.addNamed("y", "modA", { importPosition: "after" }),
-                m.addNamed("z", "modB", { importPosition: "after" }),
-                m.addNamed("w", "modA", { importPosition: "after" }),
-              ]);
-            },
-            `
-              import { x as _x, y as _y, w as _w } from "modA";
-              import { z as _z } from "modB";
-              [_x, _y, _z, _w];
-            `,
-          );
-        });
       });
 
       describe("using Babel's interop", () => {
@@ -1161,6 +1142,52 @@ describe("@babel/helper-module-imports", () => {
           m.addNamed("read", "source"),
         ),
       ).toThrow(`"importPosition": "after" is only supported in modules`);
+    });
+
+    describe("imports merging", () => {
+      it("should try to merge imports", () => {
+        testModule(
+          { importingInterop: "babel", importedType: "es6" },
+          m => {
+            return babel.types.arrayExpression([
+              m.addNamed("x", "modA", { importPosition: "after" }),
+              m.addNamed("y", "modA", { importPosition: "after" }),
+              m.addNamed("z", "modB", { importPosition: "after" }),
+              m.addNamed("w", "modA", { importPosition: "after" }),
+            ]);
+          },
+          `
+            import { x as _x, y as _y, w as _w } from "modA";
+            import { z as _z } from "modB";
+            [_x, _y, _z, _w];
+          `,
+        );
+      });
+
+      it("with user imports", () => {
+        testModule(
+          { importingInterop: "babel", importedType: "es6" },
+          m => {
+            return babel.types.arrayExpression([
+              m.addNamed("x", "modA", { importPosition: "after" }),
+              m.addNamed("y", "modB", { importPosition: "after" }),
+              m.addNamed("z", "modC", { importPosition: "after" }),
+            ]);
+          },
+          `
+            import { foo } from "modA";
+            import bar from "modB";
+            import * as baz from "modC";
+          `,
+          `
+            import { foo, x as _x } from "modA";
+            import bar, { y as _y } from "modB";
+            import * as baz from "modC";
+            import { z as _z } from "modC";
+            [_x, _y, _z];
+          `,
+        );
+      });
     });
   });
 });
