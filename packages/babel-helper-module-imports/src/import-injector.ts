@@ -1,5 +1,7 @@
 import assert from "assert";
 import {
+  identifier,
+  importSpecifier,
   numericLiteral,
   sequenceExpression,
   isImportDeclaration,
@@ -448,8 +450,7 @@ export default class ImportInjector {
     if (
       statements.length === 1 &&
       isImportDeclaration(statements[0]) &&
-      isValueImport(statements[0]) &&
-      !hasNamespaceImport(statements[0])
+      isValueImport(statements[0])
     ) {
       const firstImportDecl = this._programPath
         .get("body")
@@ -458,11 +459,9 @@ export default class ImportInjector {
         });
 
       if (
-        firstImportDecl &&
-        firstImportDecl.node.source.value === statements[0].source.value &&
-        !hasNamespaceImport(firstImportDecl.node)
+        firstImportDecl?.node.source.value === statements[0].source.value &&
+        maybeAppendImportSpecifiers(firstImportDecl.node, statements[0])
       ) {
-        firstImportDecl.node.specifiers.push(...statements[0].specifiers);
         return true;
       }
     }
@@ -491,11 +490,7 @@ export default class ImportInjector {
     const importDeclarations: Map<string, t.ImportDeclaration[]> = new Map();
 
     for (const statement of statements) {
-      if (
-        isImportDeclaration(statement) &&
-        isValueImport(statement) &&
-        !hasNamespaceImport(statement)
-      ) {
+      if (isImportDeclaration(statement) && isValueImport(statement)) {
         const source = statement.source.value;
         if (!importDeclarations.has(source)) importDeclarations.set(source, []);
         importDeclarations.get(source).push(statement);
@@ -507,15 +502,14 @@ export default class ImportInjector {
       if (bodyStmt.isImportDeclaration() && isValueImport(bodyStmt.node)) {
         lastImportPath = bodyStmt;
 
-        if (hasNamespaceImport(bodyStmt.node)) continue;
-
         const source = bodyStmt.node.source.value;
         const newImports = importDeclarations.get(source);
         if (!newImports) continue;
 
         for (const decl of newImports) {
-          statementsSet.delete(decl);
-          bodyStmt.node.specifiers.push(...decl.specifiers);
+          if (maybeAppendImportSpecifiers(bodyStmt.node, decl)) {
+            statementsSet.delete(decl);
+          }
         }
       }
     }
@@ -534,9 +528,44 @@ function isValueImport(node: t.ImportDeclaration) {
 
 function hasNamespaceImport(node: t.ImportDeclaration) {
   return (
-    node.specifiers.length <= 2 &&
-    node.specifiers.some(
-      specifier => specifier.type === "ImportNamespaceSpecifier",
-    )
+    (node.specifiers.length === 1 &&
+      node.specifiers[0].type === "ImportNamespaceSpecifier") ||
+    (node.specifiers.length === 2 &&
+      node.specifiers[1].type === "ImportNamespaceSpecifier")
   );
+}
+
+function hasDefaultImport(node: t.ImportDeclaration) {
+  return (
+    node.specifiers.length > 0 &&
+    node.specifiers[0].type === "ImportDefaultSpecifier"
+  );
+}
+
+function maybeAppendImportSpecifiers(
+  target: t.ImportDeclaration,
+  source: t.ImportDeclaration,
+): boolean {
+  if (!target.specifiers.length) {
+    target.specifiers = source.specifiers;
+    return true;
+  }
+  if (!source.specifiers.length) return true;
+
+  if (hasNamespaceImport(target) || hasNamespaceImport(source)) return false;
+
+  if (hasDefaultImport(source)) {
+    if (hasDefaultImport(target)) {
+      source.specifiers[0] = importSpecifier(
+        source.specifiers[0].local,
+        identifier("default"),
+      );
+    } else {
+      target.specifiers.unshift(source.specifiers.shift());
+    }
+  }
+
+  target.specifiers.push(...source.specifiers);
+
+  return true;
 }
