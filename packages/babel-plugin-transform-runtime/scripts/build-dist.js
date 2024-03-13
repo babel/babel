@@ -16,6 +16,11 @@ import polyfillCorejs3 from "babel-plugin-polyfill-corejs3";
 const require = createRequire(import.meta.url);
 const runtimeVersion = require("@babel/runtime/package.json").version;
 
+// env vars from the cli are always strings, so !!ENV_VAR returns true for "false"
+function bool(value) {
+  return Boolean(value) && value !== "false" && value !== "0";
+}
+
 function outputFile(filePath, data) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, data);
@@ -26,7 +31,7 @@ function corejsVersion(pkgName, depName) {
 }
 
 writeHelpers("@babel/runtime");
-if (!process.env.BABEL_8_BREAKING) {
+if (!bool(process.env.BABEL_8_BREAKING)) {
   writeHelpers("@babel/runtime-corejs2", {
     polyfillProvider: [
       polyfillCorejs2,
@@ -48,7 +53,7 @@ writeHelpers("@babel/runtime-corejs3", {
   ],
 });
 
-if (!process.env.BABEL_8_BREAKING) {
+if (!bool(process.env.BABEL_8_BREAKING)) {
   writeCoreJS({
     corejs: 2,
     proposals: true,
@@ -181,7 +186,7 @@ function writeHelpers(runtimeName, { polyfillProvider } = {}) {
       { esm: true, polyfillProvider }
     );
 
-    if (process.env.BABEL_8_BREAKING) {
+    if (bool(process.env.BABEL_8_BREAKING)) {
       // Note: This does not work in Node.js 13.0 and 13.1, which support
       // the `exports` field only as strings and not as objects.
       // For other Node.js versions:
