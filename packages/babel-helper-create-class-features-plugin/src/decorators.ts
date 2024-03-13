@@ -1219,6 +1219,7 @@ function transformClass(
   let classDecorationsFlag = 0;
   let classDecorations: t.Expression[] = [];
   let classDecorationsId: t.Identifier;
+  let computedKeyAssignments: t.AssignmentExpression[] = [];
   if (classDecorators) {
     classInitLocal = generateLetUidIdentifier(scopeParent, "initClass");
     needsDeclaraionForClassBinding = path.isClassDeclaration();
@@ -1249,6 +1250,40 @@ function transformClass(
         classAssignments,
       );
     }
+
+    if (!hasElementDecorators) {
+      // Sync body paths as non-decorated computed accessors have been transpiled
+      // to getter-setter pairs.
+      for (const element of path.get("body.body")) {
+        const { node } = element;
+        const isComputed = "computed" in node && node.computed;
+        if (isComputed) {
+          if (element.isClassProperty({ static: true })) {
+            if (!element.get("key").isConstantExpression()) {
+              const key = (node as t.ClassProperty).key;
+              const maybeAssignment = memoiseComputedKey(
+                key,
+                scopeParent,
+                scopeParent.generateUid("computedKey"),
+              );
+              if (maybeAssignment != null) {
+                // If it is a static computed field within a decorated class, we move the computed key
+                // into `computedKeyAssignments` which will be then moved into the non-static class,
+                // to ensure that the evaluation order and private environment are correct
+                node.key = t.cloneNode(maybeAssignment.left);
+                computedKeyAssignments.push(maybeAssignment);
+              }
+            }
+          } else if (computedKeyAssignments.length > 0) {
+            prependExpressionsToComputedKey(
+              computedKeyAssignments,
+              element as NodePath<ClassElementCanHaveComputedKeys>,
+            );
+            computedKeyAssignments = [];
+          }
+        }
+      }
+    }
   } else {
     if (!path.node.id) {
       path.node.id = path.scope.generateUidIdentifier("Class");
@@ -1259,7 +1294,6 @@ function transformClass(
   let lastInstancePrivateName: t.PrivateName;
   let needsInstancePrivateBrandCheck = false;
 
-  let computedKeyAssignments: t.AssignmentExpression[] = [];
   let fieldInitializerExpressions = [];
   let staticFieldInitializerExpressions: t.Expression[] = [];
 
