@@ -647,13 +647,13 @@ describe("@babel/helper-module-imports", () => {
                 m.addNamed("x", "modA", { importPosition: "after" }),
                 m.addNamed("y", "modA", { importPosition: "after" }),
                 m.addNamed("z", "modB", { importPosition: "after" }),
+                m.addNamed("w", "modA", { importPosition: "after" }),
               ]);
             },
             `
-              import { x as _x } from "modA";
-              import { y as _y } from "modA";
+              import { x as _x, y as _y, w as _w } from "modA";
               import { z as _z } from "modB";
-              [_x, _y, _z];
+              [_x, _y, _z, _w];
             `,
           );
         });

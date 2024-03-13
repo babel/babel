@@ -1,5 +1,9 @@
 import assert from "assert";
-import { numericLiteral, sequenceExpression } from "@babel/types";
+import {
+  numericLiteral,
+  sequenceExpression,
+  isImportDeclaration,
+} from "@babel/types";
 import type * as t from "@babel/types";
 import type { NodePath, Scope } from "@babel/traverse";
 import type { File } from "@babel/core";
@@ -431,22 +435,15 @@ export default class ImportInjector {
     importPosition = "before",
     blockHoist = 3,
   ) {
-    const body = this._programPath.get("body");
-
     if (importPosition === "after") {
-      for (let i = body.length - 1; i >= 0; i--) {
-        if (body[i].isImportDeclaration()) {
-          body[i].insertAfter(statements);
-          return;
-        }
-      }
+      if (this._insertStatementsAfter(statements)) return;
     } else {
       statements.forEach(node => {
         // @ts-expect-error handle _blockHoist
         node._blockHoist = blockHoist;
       });
 
-      const targetPath = body.find(p => {
+      const targetPath = this._programPath.get("body").find(p => {
         // @ts-expect-error todo(flow->ts): avoid mutations
         const val = p.node._blockHoist;
         return Number.isFinite(val) && val < 4;
@@ -460,4 +457,43 @@ export default class ImportInjector {
 
     this._programPath.unshiftContainer("body", statements);
   }
+
+  _insertStatementsAfter(statements: t.Statement[]): boolean {
+    const statementsSet = new Set(statements);
+    const importDeclarations: Map<string, t.ImportDeclaration[]> = new Map();
+
+    for (const statement of statements) {
+      if (isImportDeclaration(statement) && isValueImport(statement)) {
+        const source = statement.source.value;
+        if (!importDeclarations.has(source)) importDeclarations.set(source, []);
+        importDeclarations.get(source).push(statement);
+      }
+    }
+
+    let lastImportPath = null;
+    for (const bodyStmt of this._programPath.get("body")) {
+      if (bodyStmt.isImportDeclaration() && isValueImport(bodyStmt.node)) {
+        lastImportPath = bodyStmt;
+
+        const source = bodyStmt.node.source.value;
+        const newImports = importDeclarations.get(source);
+        if (!newImports) continue;
+
+        for (const decl of newImports) {
+          statementsSet.delete(decl);
+          bodyStmt.node.specifiers.push(...decl.specifiers);
+        }
+      }
+    }
+
+    if (statementsSet.size === 0) return true;
+
+    if (lastImportPath) lastImportPath.insertAfter(Array.from(statementsSet));
+
+    return !!lastImportPath;
+  }
+}
+
+function isValueImport(node: t.ImportDeclaration) {
+  return node.importKind !== "type" && node.importKind !== "typeof";
 }
