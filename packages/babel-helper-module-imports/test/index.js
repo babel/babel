@@ -16,6 +16,9 @@ function transform(sourceType, opts, initializer, inputCode) {
     plugins: [
       function ({ types: t }) {
         return {
+          manipulateOptions({ parserOpts }) {
+            parserOpts.plugins.push("typescript");
+          },
           pre(file) {
             file.set("helperGenerator", name =>
               t.memberExpression(
@@ -1153,23 +1156,29 @@ describe("@babel/helper-module-imports", () => {
       const addNamespace = m => void m.addNamespace("s", opts);
       const addDefault = m => void m.addDefault("s", opts);
       const addNamed = m => void m.addNamed("n", "s", opts);
+      const addSideEffect = m => void m.addSideEffect("s", opts);
 
       it.each`
-        input                         | operation       | expected
-        ${`import "s"`}               | ${addNamespace} | ${`import * as _s from "s";`}
-        ${`import x from "s"`}        | ${addNamespace} | ${`import x from "s"; import * as _s from "s";`}
-        ${`import { x } from "s"`}    | ${addNamespace} | ${`import { x } from "s"; import * as _s from "s";`}
-        ${`import * as x from "s"`}   | ${addNamespace} | ${`import * as x from "s"; import * as _s from "s";`}
-        ${`import "s"`}               | ${addNamed}     | ${`import { n as _n } from "s";`}
-        ${`import x from "s"`}        | ${addNamed}     | ${`import x, { n as _n } from  "s";`}
-        ${`import { x } from "s"`}    | ${addNamed}     | ${`import { x, n as _n } from "s";`}
-        ${`import x, { y } from "s"`} | ${addNamed}     | ${`import x, { y, n as _n } from  "s";`}
-        ${`import * as x from "s"`}   | ${addNamed}     | ${`import * as x from "s"; import { n as _n } from "s";`}
-        ${`import "s"`}               | ${addDefault}   | ${`import _default from "s";`}
-        ${`import x from "s"`}        | ${addDefault}   | ${`import x, { default as _default } from  "s";`}
-        ${`import { x } from "s"`}    | ${addDefault}   | ${`import _default, { x } from "s";`}
-        ${`import x, { y } from "s"`} | ${addDefault}   | ${`import x, { y, default as _default } from  "s";`}
-        ${`import * as x from "s"`}   | ${addDefault}   | ${`import * as x from "s"; import _default from "s";`}
+        input                                   | operation        | expected
+        ${`import "s"`}                         | ${addNamespace}  | ${`import * as _s from "s";`}
+        ${`import x from "s"`}                  | ${addNamespace}  | ${`import x from "s"; import * as _s from "s";`}
+        ${`import { x } from "s"`}              | ${addNamespace}  | ${`import { x } from "s"; import * as _s from "s";`}
+        ${`import * as x from "s"`}             | ${addNamespace}  | ${`import * as x from "s"; import * as _s from "s";`}
+        ${`import "s"`}                         | ${addNamed}      | ${`import { n as _n } from "s";`}
+        ${`import x from "s"`}                  | ${addNamed}      | ${`import x, { n as _n } from  "s";`}
+        ${`import { x } from "s"`}              | ${addNamed}      | ${`import { x, n as _n } from "s";`}
+        ${`import x, { y } from "s"`}           | ${addNamed}      | ${`import x, { y, n as _n } from  "s";`}
+        ${`import * as x from "s"`}             | ${addNamed}      | ${`import * as x from "s"; import { n as _n } from "s";`}
+        ${`import "s"`}                         | ${addDefault}    | ${`import _default from "s";`}
+        ${`import x from "s"`}                  | ${addDefault}    | ${`import x, { default as _default } from  "s";`}
+        ${`import { x } from "s"`}              | ${addDefault}    | ${`import _default, { x } from "s";`}
+        ${`import x, { y } from "s"`}           | ${addDefault}    | ${`import x, { y, default as _default } from  "s";`}
+        ${`import * as x from "s"`}             | ${addDefault}    | ${`import * as x from "s"; import _default from "s";`}
+        ${`import "s"`}                         | ${addSideEffect} | ${`import "s";`}
+        ${`import x from "s"`}                  | ${addSideEffect} | ${`import x from "s";`}
+        ${`import { x } from "s"`}              | ${addSideEffect} | ${`import { x } from "s";`}
+        ${`import * as x from "s"`}             | ${addSideEffect} | ${`import * as x from "s";`}
+        ${`import "u"; import type T from "s"`} | ${addSideEffect} | ${`import "u"; import "s"; import type T from "s";`}
       `(
         "$operation.name works with `$input`",
         ({ input, operation, expected }) => {
