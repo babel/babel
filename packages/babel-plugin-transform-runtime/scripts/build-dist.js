@@ -242,7 +242,7 @@ function writeHelperExports(runtimeName, helperSubExports) {
     "./package": "./package.json",
     "./package.json": "./package.json",
   };
-  if (!process.env.BABEL_8_BREAKING) {
+  if (!bool(process.env.BABEL_8_BREAKING)) {
     Object.assign(exports, {
       "./regenerator": "./regenerator/index.js",
       "./regenerator/*.js": "./regenerator/*.js",
