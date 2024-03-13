@@ -638,6 +638,25 @@ describe("@babel/helper-module-imports", () => {
             `,
           );
         });
+
+        it("should try to merge imports", () => {
+          testModule(
+            { importingInterop, importedType },
+            m => {
+              return babel.types.arrayExpression([
+                m.addNamed("x", "modA", { importPosition: "after" }),
+                m.addNamed("y", "modA", { importPosition: "after" }),
+                m.addNamed("z", "modB", { importPosition: "after" }),
+              ]);
+            },
+            `
+              import { x as _x } from "modA";
+              import { y as _y } from "modA";
+              import { z as _z } from "modB";
+              [_x, _y, _z];
+            `,
+          );
+        });
       });
 
       describe("using Babel's interop", () => {
