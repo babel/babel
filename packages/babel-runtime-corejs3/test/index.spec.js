@@ -1,7 +1,9 @@
-"use strict";
+import { describeBabel7 } from "$repo-utils";
 
 describe("babel-runtime", () => {
-  describe("instance methods entries", () => {
+  it("dummy", () => {});
+
+  describeBabel7("instance methods entries", () => {
     it("at, exists", () => {
       expect(require("../core-js/instance/at")("").call("a", 0)).toEqual("a");
     });
