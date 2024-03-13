@@ -438,24 +438,52 @@ export default class ImportInjector {
     if (importPosition === "after") {
       if (this._insertStatementsAfter(statements)) return;
     } else {
-      statements.forEach(node => {
-        // @ts-expect-error handle _blockHoist
-        node._blockHoist = blockHoist;
-      });
-
-      const targetPath = this._programPath.get("body").find(p => {
-        // @ts-expect-error todo(flow->ts): avoid mutations
-        const val = p.node._blockHoist;
-        return Number.isFinite(val) && val < 4;
-      });
-
-      if (targetPath) {
-        targetPath.insertBefore(statements);
-        return;
-      }
+      if (this._insertStatementsBefore(statements, blockHoist)) return;
     }
 
     this._programPath.unshiftContainer("body", statements);
+  }
+
+  _insertStatementsBefore(statements: t.Statement[], blockHoist: number) {
+    if (
+      statements.length === 1 &&
+      isImportDeclaration(statements[0]) &&
+      isValueImport(statements[0]) &&
+      !hasNamespaceImport(statements[0])
+    ) {
+      const firstImportDecl = this._programPath
+        .get("body")
+        .find((p): p is NodePath<t.ImportDeclaration> => {
+          return p.isImportDeclaration() && isValueImport(p.node);
+        });
+
+      if (
+        firstImportDecl &&
+        firstImportDecl.node.source.value === statements[0].source.value &&
+        !hasNamespaceImport(firstImportDecl.node)
+      ) {
+        firstImportDecl.node.specifiers.push(...statements[0].specifiers);
+        return true;
+      }
+    }
+
+    statements.forEach(node => {
+      // @ts-expect-error handle _blockHoist
+      node._blockHoist = blockHoist;
+    });
+
+    const targetPath = this._programPath.get("body").find(p => {
+      // @ts-expect-error todo(flow->ts): avoid mutations
+      const val = p.node._blockHoist;
+      return Number.isFinite(val) && val < 4;
+    });
+
+    if (targetPath) {
+      targetPath.insertBefore(statements);
+      return true;
+    }
+
+    return false;
   }
 
   _insertStatementsAfter(statements: t.Statement[]): boolean {

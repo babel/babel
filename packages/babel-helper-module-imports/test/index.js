@@ -1188,6 +1188,32 @@ describe("@babel/helper-module-imports", () => {
           `,
         );
       });
+
+      it("with importPosition: before", () => {
+        testModule(
+          { importingInterop: "babel", importedType: "es6" },
+          m => {
+            return babel.types.arrayExpression([
+              m.addNamed("x", "modA", { importPosition: "before" }),
+              m.addNamed("y", "modB", { importPosition: "before" }),
+              m.addNamed("z", "modC", { importPosition: "before" }),
+            ]);
+          },
+          `
+            import { foo } from "modA";
+            import bar from "modB";
+            import * as baz from "modC";
+          `,
+          `
+            import { z as _z } from "modC";
+            import { y as _y } from "modB";
+            import { foo, x as _x } from "modA";
+            import bar from "modB";
+            import * as baz from "modC";
+            [_x, _y, _z];
+          `,
+        );
+      });
     });
   });
 });
