@@ -269,7 +269,11 @@ function pushTask(
     }
 
     if (semver.lt(nodeVersion, minimumVersion)) {
-      return;
+      if (test.actual.code) {
+        test.exec.code = null;
+      } else {
+        return;
+      }
     }
 
     // Delete to avoid option validation error
