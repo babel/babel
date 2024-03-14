@@ -16,6 +16,11 @@ import polyfillCorejs3 from "babel-plugin-polyfill-corejs3";
 const require = createRequire(import.meta.url);
 const runtimeVersion = require("@babel/runtime/package.json").version;
 
+// env vars from the cli are always strings, so !!ENV_VAR returns true for "false"
+function bool(value) {
+  return Boolean(value) && value !== "false" && value !== "0";
+}
+
 function outputFile(filePath, data) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, data);
@@ -26,7 +31,7 @@ function corejsVersion(pkgName, depName) {
 }
 
 writeHelpers("@babel/runtime");
-if (!process.env.BABEL_8_BREAKING) {
+if (!bool(process.env.BABEL_8_BREAKING)) {
   writeHelpers("@babel/runtime-corejs2", {
     polyfillProvider: [
       polyfillCorejs2,
@@ -48,7 +53,7 @@ writeHelpers("@babel/runtime-corejs3", {
   ],
 });
 
-if (!process.env.BABEL_8_BREAKING) {
+if (!bool(process.env.BABEL_8_BREAKING)) {
   writeCoreJS({
     corejs: 2,
     proposals: true,
@@ -181,27 +186,49 @@ function writeHelpers(runtimeName, { polyfillProvider } = {}) {
       { esm: true, polyfillProvider }
     );
 
-    // Node.js versions >=13.0.0, <13.7.0 support the `exports` field but
-    // not conditional exports (`require`/`node`/`default`)
-    // We can specify exports with an array of fallbacks:
-    // - Node.js >=13.7.0 and bundlers will successfully load the first
-    //   array entry:
-    //    * Node.js will always load the CJS file
-    //    * Modern tools when using "import" will load the ESM file
-    //    * Everything else (old tools, or require() in tools) will
-    //      load the CJS file
-    // - Node.js 13.2-13.7 will ignore the "node" and "import" conditions,
-    //   will fallback to "default" and load the CJS file
-    // - Node.js <13.2.0 will fail resolving the first array entry, and will
-    //   fallback to the second entry (the CJS file)
-    // In Babel 8 we can simplify this.
-    helperSubExports[`./${path.posix.join("helpers", helperName)}`] = [
-      { node: cjs, import: esm, default: cjs },
-      cjs,
-    ];
-    // For backward compatibility. We can remove this in Babel 8.
-    helperSubExports[`./${path.posix.join("helpers", "esm", helperName)}`] =
-      esm;
+    if (bool(process.env.BABEL_8_BREAKING)) {
+      // Note: This does not work in Node.js 13.0 and 13.1, which support
+      // the `exports` field only as strings and not as objects.
+      // For other Node.js versions:
+      // - <13.0.0 does not support `exports` at all, so
+      //   @babel/runtime/helpers/foo will automatically resolve to
+      //   @babel/runtime/helpers/foo.js
+      // - >=13.2.0 < 13.7.0 ignore the `node` and `import` conditions, so
+      //   they will always fallback to `default` and correctly load the
+      //   CJS helper.
+      // - Node.js >=13.7.0 and bundlers will successfully parse `conditions`
+      //    * Node.js will always load the CJS file
+      //    * Modern tools when using "import" will load the ESM file
+      //    * Tools when using require() will load the CJS file
+      helperSubExports[`./${path.posix.join("helpers", helperName)}`] = {
+        node: cjs,
+        import: esm,
+        default: cjs,
+      };
+    } else {
+      // Node.js versions >=13.0.0, <13.7.0 support the `exports` field but
+      // not conditional exports (`require`/`node`/`default`)
+      // We can specify exports with an array of fallbacks:
+      // - Node.js >=13.7.0 and bundlers will successfully load the first
+      //   array entry:
+      //    * Node.js will always load the CJS file
+      //    * Modern tools when using "import" will load the ESM file
+      //    * Everything else (old tools, or require() in tools) will
+      //      load the CJS file
+      // - Node.js 13.2-13.7 will ignore the "node" and "import" conditions,
+      //   will fallback to "default" and load the CJS file
+      // - Node.js <13.2.0 will fail resolving the first array entry, and will
+      //   fallback to the second entry (the CJS file)
+      // In Babel 8 we can simplify this.
+      helperSubExports[`./${path.posix.join("helpers", helperName)}`] = [
+        { node: cjs, import: esm, default: cjs },
+        cjs,
+      ];
+      // This is needed for backwards compatibility, but new versions of Babel
+      // do not emit imports to the /esm/ directory anymore.
+      helperSubExports[`./${path.posix.join("helpers", "esm", helperName)}`] =
+        esm;
+    }
   }
 
   writeHelperExports(runtimeName, helperSubExports);
