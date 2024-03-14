@@ -13,7 +13,7 @@ var App = exports["default"] = /*#__PURE__*/function (_Component) {
       args[_key] = arguments[_key];
     }
     _this = babelHelpers.callSuper(this, App, [].concat(args));
-    babelHelpers.defineProperty(babelHelpers.assertThisInitialized(_this), "exportType", '');
+    babelHelpers.defineProperty(_this, "exportType", '');
     return _this;
   }
   babelHelpers.inherits(App, _Component);

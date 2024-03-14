@@ -6,7 +6,7 @@ var Foo = /*#__PURE__*/function (_Bar) {
     var _this;
     babelHelpers.classCallCheck(this, Foo);
     _this = babelHelpers.callSuper(this, Foo);
-    Object.defineProperty(babelHelpers.assertThisInitialized(_this), _bar, {
+    Object.defineProperty(_this, _bar, {
       writable: true,
       value: "foo"
     });

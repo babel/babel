@@ -15,10 +15,10 @@ var B = /*#__PURE__*/function (_A) {
   "use strict";
 
   function B(...args) {
-    var _thisSuper, _this;
+    var _this;
     babelHelpers.classCallCheck(this, B);
     _this = babelHelpers.callSuper(this, B, [...args]);
-    babelHelpers.defineProperty(babelHelpers.assertThisInitialized(_this), "foo", babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(B.prototype)), "foo", _thisSuper).call(_thisSuper));
+    babelHelpers.defineProperty(_this, "foo", babelHelpers.get((_this, babelHelpers.getPrototypeOf(B.prototype)), "foo", _this).call(_this));
     return _this;
   }
   babelHelpers.inherits(B, _A);

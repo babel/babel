@@ -13,7 +13,7 @@ var a1 = /*#__PURE__*/function (_b) {
     babelHelpers.classCallCheck(this, a1);
     _this = babelHelpers.callSuper(this, a1);
     _this.x = function () {
-      return babelHelpers.assertThisInitialized(_this);
+      return _this;
     };
     return _this;
   }
@@ -26,7 +26,7 @@ var a2 = exports["default"] = /*#__PURE__*/function (_b2) {
     babelHelpers.classCallCheck(this, a2);
     _this2 = babelHelpers.callSuper(this, a2);
     _this2.x = function () {
-      return babelHelpers.assertThisInitialized(_this2);
+      return _this2;
     };
     return _this2;
   }

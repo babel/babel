@@ -6,7 +6,7 @@ let Child = /*#__PURE__*/function (_Parent) {
     var _this;
     babelHelpers.classCallCheck(this, Child);
     _this = babelHelpers.callSuper(this, Child);
-    babelHelpers.classPrivateFieldInitSpec(babelHelpers.assertThisInitialized(_this), _scopedFunctionWithThis, () => {
+    babelHelpers.classPrivateFieldInitSpec(_this, _scopedFunctionWithThis, () => {
       _this.name = {};
     });
     return _this;

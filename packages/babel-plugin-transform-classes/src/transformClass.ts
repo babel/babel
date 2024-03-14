@@ -398,10 +398,15 @@ export default function transformClass(
     const path = classState.userConstructorPath;
     const body = path.get("body");
 
+    const constructorBody = path.get("body");
+
+    let maxGuaranteedSuperBeforeIndex = constructorBody.node.body.length;
+
     path.traverse(findThisesVisitor);
 
     let thisRef = function () {
       const ref = path.scope.generateDeclaredUidIdentifier("this");
+      maxGuaranteedSuperBeforeIndex++;
       thisRef = () => t.cloneNode(ref);
       return ref;
     };
@@ -412,15 +417,6 @@ export default function transformClass(
         [thisRef()],
       );
     };
-
-    for (const thisPath of classState.superThises) {
-      const { node, parentPath } = thisPath;
-      if (parentPath.isMemberExpression({ object: node })) {
-        thisPath.replaceWith(thisRef());
-        continue;
-      }
-      thisPath.replaceWith(buildAssertThisInitialized());
-    }
 
     const bareSupers: NodePath<t.CallExpression>[] = [];
     path.traverse(
@@ -437,15 +433,18 @@ export default function transformClass(
       ]),
     );
 
-    let guaranteedSuperBeforeFinish = !!bareSupers.length;
-
     for (const bareSuper of bareSupers) {
       wrapSuperCall(bareSuper, classState.superName, thisRef, body);
 
-      if (guaranteedSuperBeforeFinish) {
+      if (maxGuaranteedSuperBeforeIndex >= 0) {
+        let lastParentPath: NodePath;
         bareSuper.find(function (parentPath) {
           // hit top so short circuit
-          if (parentPath === path) {
+          if (parentPath === constructorBody) {
+            maxGuaranteedSuperBeforeIndex = Math.min(
+              maxGuaranteedSuperBeforeIndex,
+              lastParentPath.key as number,
+            );
             return true;
           }
 
@@ -454,10 +453,37 @@ export default function transformClass(
             parentPath.isConditional() ||
             parentPath.isArrowFunctionExpression()
           ) {
-            guaranteedSuperBeforeFinish = false;
+            maxGuaranteedSuperBeforeIndex = -1;
             return true;
           }
+
+          lastParentPath = parentPath;
         });
+      }
+    }
+
+    for (const thisPath of classState.superThises) {
+      const { node, parentPath } = thisPath;
+      if (parentPath.isMemberExpression({ object: node })) {
+        thisPath.replaceWith(thisRef());
+        continue;
+      }
+
+      let thisIndex: number;
+      thisPath.find(function (parentPath) {
+        if (parentPath.parentPath === constructorBody) {
+          thisIndex = parentPath.key as number;
+          return true;
+        }
+      });
+
+      if (
+        maxGuaranteedSuperBeforeIndex != -1 &&
+        thisIndex > maxGuaranteedSuperBeforeIndex
+      ) {
+        thisPath.replaceWith(thisRef());
+      } else {
+        thisPath.replaceWith(buildAssertThisInitialized());
       }
     }
 
@@ -486,6 +512,9 @@ export default function transformClass(
     // if we have a return as the last node in the body then we've already caught that
     // return
     const bodyPaths = body.get("body");
+    const guaranteedSuperBeforeFinish =
+      maxGuaranteedSuperBeforeIndex !== -1 &&
+      maxGuaranteedSuperBeforeIndex < bodyPaths.length;
     if (!bodyPaths.length || !bodyPaths.pop().isReturnStatement()) {
       body.pushContainer(
         "body",

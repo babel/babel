@@ -6,7 +6,7 @@ var Test = /*#__PURE__*/function (_Foo) {
     babelHelpers.classCallCheck(this, Test);
     _this = babelHelpers.callSuper(this, Test);
     _Foo.prototype.test.whatever();
-    _Foo.prototype.test.call(babelHelpers.assertThisInitialized(_this));
+    _Foo.prototype.test.call(_this);
     return _this;
   }
   babelHelpers.inherits(Test, _Foo);

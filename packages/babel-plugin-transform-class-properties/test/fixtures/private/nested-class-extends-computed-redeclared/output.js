@@ -17,7 +17,7 @@ let Foo = /*#__PURE__*/function () {
           var _this;
           babelHelpers.classCallCheck(this, Nested);
           _this = babelHelpers.callSuper(this, Nested, [...args]);
-          babelHelpers.classPrivateFieldInitSpec(babelHelpers.assertThisInitialized(_this), _foo2, 3);
+          babelHelpers.classPrivateFieldInitSpec(_this, _foo2, 3);
           return _this;
         }
         babelHelpers.inherits(Nested, _ref);

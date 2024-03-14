@@ -5,7 +5,7 @@ var Child = /*#__PURE__*/function (_Parent) {
     var _this;
     babelHelpers.classCallCheck(this, Child);
     _this = babelHelpers.callSuper(this, Child);
-    babelHelpers.defineProperty(babelHelpers.assertThisInitialized(_this), "scopedFunctionWithThis", function () {
+    babelHelpers.defineProperty(_this, "scopedFunctionWithThis", function () {
       _this.name = {};
     });
     return _this;

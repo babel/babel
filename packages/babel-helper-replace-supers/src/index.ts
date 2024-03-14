@@ -26,12 +26,11 @@ if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
   exports.skipAllButComputedKey = ns.skipAllButComputedKey;
 }
 
-type ThisRef =
-  | {
-      memo: t.AssignmentExpression;
-      this: t.Identifier;
-    }
-  | { this: t.ThisExpression };
+type ThisRef = {
+  needAccessFirst?: boolean;
+  this: t.ThisExpression;
+};
+
 /**
  * Creates an expression which result is the proto of objectRef.
  *
@@ -175,21 +174,18 @@ const specHandlers: SpecHandler = {
       this.isPrivateMethod,
     );
     return callExpression(this.file.addHelper("get"), [
-      // @ts-expect-error memo does not exist when this.isDerivedConstructor is false
-      thisRefs.memo ? sequenceExpression([thisRefs.memo, proto]) : proto,
+      thisRefs.needAccessFirst
+        ? sequenceExpression([thisRefs.this, proto])
+        : proto,
       this.prop(superMember),
       thisRefs.this,
     ]);
   },
 
   _getThisRefs(this: Handler & SpecHandler): ThisRef {
-    if (!this.isDerivedConstructor) {
-      return { this: thisExpression() };
-    }
-    const thisRef = this.scope.generateDeclaredUidIdentifier("thisSuper");
     return {
-      memo: assignmentExpression("=", thisRef, thisExpression()),
-      this: cloneNode(thisRef),
+      needAccessFirst: this.isDerivedConstructor,
+      this: thisExpression(),
     };
   },
 
@@ -206,8 +202,9 @@ const specHandlers: SpecHandler = {
       this.isPrivateMethod,
     );
     return callExpression(this.file.addHelper("set"), [
-      // @ts-expect-error memo does not exist when this.isDerivedConstructor is false
-      thisRefs.memo ? sequenceExpression([thisRefs.memo, proto]) : proto,
+      thisRefs.needAccessFirst
+        ? sequenceExpression([thisRefs.this, proto])
+        : proto,
       this.prop(superMember),
       value,
       thisRefs.this,
