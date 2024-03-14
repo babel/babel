@@ -1,5 +1,8 @@
 import { describeBabel7 } from "$repo-utils";
 
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+
 describe("babel-runtime", () => {
   it("dummy", () => {});
 
