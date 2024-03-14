@@ -53,6 +53,7 @@ export interface TaskOptions extends InputOptions {
   externalHelpers?: boolean;
   ignoreOutput?: boolean;
   minNodeVersion?: string;
+  minNodeVersionInputJs?: string;
   sourceMap?: boolean;
   os?: string | string[];
   validateLogs?: boolean;
@@ -278,6 +279,23 @@ function pushTask(
 
     // Delete to avoid option validation error
     delete taskOpts.minNodeVersion;
+  }
+
+  if (taskOpts.minNodeVersionInputJs) {
+    const minimumVersion = semver.clean(taskOpts.minNodeVersionInputJs);
+
+    if (minimumVersion == null) {
+      throw new Error(
+        `'minNodeVersionInputJs' has invalid semver format: ${taskOpts.minNodeVersionInputJs}`,
+      );
+    }
+
+    if (semver.lt(nodeVersion, minimumVersion)) {
+      return;
+    }
+
+    // Delete to avoid option validation error
+    delete taskOpts.minNodeVersionInputJs;
   }
 
   if (taskOpts.os) {
