@@ -41,7 +41,7 @@ interface Support {
 
 const SUPPORT_CACHE = new WeakMap<Targets, Support>();
 export default function getSupport(targets: Targets): Support {
-  if (SUPPORT_CACHE.has(targets)) return SUPPORT_CACHE.get(targets)!;
+  if (SUPPORT_CACHE.has(targets)) return SUPPORT_CACHE.get(targets);
 
   const { node: nodeTarget, ...webTargets } = targets;
   const emptyNodeTarget = nodeTarget == null;
