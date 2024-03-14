@@ -16,7 +16,7 @@ export default function _wrapRegExp() {
   var e = RegExp.prototype,
     r = new _WeakMap();
   function BabelRegExp(e, t, p) {
-    var o = new RegExp(e, t);
+    var o = RegExp(e, t);
     return r.set(o, p || r.get(e)), setPrototypeOf(o, BabelRegExp.prototype);
   }
   function buildGroups(e, t) {

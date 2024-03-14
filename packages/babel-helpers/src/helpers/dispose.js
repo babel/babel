@@ -1,4 +1,6 @@
 /* @minVersion 7.22.0 */
+/* @onlyBabel7 */
+
 function dispose_SuppressedError(error, suppressed) {
   if (typeof SuppressedError !== "undefined") {
     // eslint-disable-next-line no-undef

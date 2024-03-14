@@ -115,7 +115,7 @@ function old_memberDec(e, t, a, r, o, i, n, l, s) {
   }
 }
 function old_assertNotFinished(e, t) {
-  if (e.v) throw new Error("attempted to call " + t + " after decoration was finished");
+  if (e.v) throw Error("attempted to call " + t + " after decoration was finished");
 }
 function old_assertMetadataKey(e) {
   if ("symbol" != _typeof(e)) throw new TypeError("Metadata keys must be symbols, received: " + e);
@@ -132,7 +132,7 @@ function old_assertValidReturnValue(e, t) {
 }
 function old_getInit(e) {
   var t;
-  return null == (t = e.init) && (t = e.initializer) && "undefined" != typeof console && console.warn(".initializer has been renamed to .init as of March 2022"), t;
+  return null == (t = e.init) && (t = e.initializer) && void 0 !== console && console.warn(".initializer has been renamed to .init as of March 2022"), t;
 }
 function old_applyMemberDec(e, t, a, r, o, i, n, l, s) {
   var c,
@@ -204,7 +204,7 @@ function old_applyMemberDecs(e, t, a, r, o) {
       if (m ? (u = t, f = r, 0 != (v -= 5) && (p = n = n || [])) : (u = t.prototype, f = a, 0 !== v && (p = i = i || [])), 0 !== v && !h) {
         var b = m ? s : l,
           g = b.get(y) || 0;
-        if (!0 === g || 3 === g && 4 !== v || 4 === g && 3 !== v) throw new Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + y);
+        if (!0 === g || 3 === g && 4 !== v || 4 === g && 3 !== v) throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + y);
         !g && v > 2 ? b.set(y, v) : b.set(y, !0);
       }
       old_applyMemberDec(e, u, d, y, v, m, h, f, p);

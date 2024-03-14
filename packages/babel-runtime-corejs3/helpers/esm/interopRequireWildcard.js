@@ -21,7 +21,7 @@ export default function _interopRequireWildcard(e, r) {
       __proto__: null
     },
     a = _Object$defineProperty && _Object$getOwnPropertyDescriptor;
-  for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) {
+  for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) {
     var i = a ? _Object$getOwnPropertyDescriptor(e, u) : null;
     i && (i.get || i.set) ? _Object$defineProperty(n, u, i) : n[u] = e[u];
   }

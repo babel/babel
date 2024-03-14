@@ -1,4 +1,5 @@
 export const USE_ESM: boolean;
+export const IS_BABEL_8: () => boolean;
 export function commonJS(metaUrl: string): {
   __dirname: string;
   __filename: string;
