@@ -304,7 +304,7 @@ Other than normal Babel options, `options.json` can contain other properties to 
   }
   ```
 
-  Use `minNodeVersionInputJs` if an `input.js` test requires a minimum Node version.
+  Use `minNodeVersionTransform` if an `input.js` test requires a minimum Node version.
 
 - **`externalHelpers`** (boolean)
 

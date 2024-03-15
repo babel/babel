@@ -1,5 +1,5 @@
 {
-  "minNodeVersionInputJs": "12.0.0",
+  "minNodeVersionTransform": "12.0.0",
   "presets": [
     [
       "env",

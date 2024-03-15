@@ -1,5 +1,5 @@
 {
-  "minNodeVersionInputJs": "12.11.0",
+  "minNodeVersionTransform": "12.11.0",
   "plugins": [
     "./plugin.mjs",
     "bugfix-safari-id-destructuring-collision-in-function-expression"

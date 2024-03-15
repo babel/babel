@@ -31,7 +31,7 @@
           "type": "string",
           "pattern": "^\\d+(\\.\\d+){0,2}$"
         },
-        "minNodeVersionInputJs": {
+        "minNodeVersionTransform": {
           "description": "The minimum Node.js version the input.js transform test should run on",
           "type": "string",
           "pattern": "^\\d+(\\.\\d+){0,2}$"

@@ -6,5 +6,5 @@
   "parserOpts": {
     "allowReturnOutsideFunction": true
   },
-  "minNodeVersionInputJs": "8.0.0"
+  "minNodeVersionTransform": "8.0.0"
 }
