@@ -53,6 +53,7 @@ export interface TaskOptions extends InputOptions {
   externalHelpers?: boolean;
   ignoreOutput?: boolean;
   minNodeVersion?: string;
+  minNodeVersionTransform?: string;
   sourceMap?: boolean;
   os?: string | string[];
   validateLogs?: boolean;
@@ -269,11 +270,32 @@ function pushTask(
     }
 
     if (semver.lt(nodeVersion, minimumVersion)) {
-      return;
+      if (test.actual.code) {
+        test.exec.code = null;
+      } else {
+        return;
+      }
     }
 
     // Delete to avoid option validation error
     delete taskOpts.minNodeVersion;
+  }
+
+  if (taskOpts.minNodeVersionTransform) {
+    const minimumVersion = semver.clean(taskOpts.minNodeVersionTransform);
+
+    if (minimumVersion == null) {
+      throw new Error(
+        `'minNodeVersionTransform' has invalid semver format: ${taskOpts.minNodeVersionTransform}`,
+      );
+    }
+
+    if (semver.lt(nodeVersion, minimumVersion)) {
+      return;
+    }
+
+    // Delete to avoid option validation error
+    delete taskOpts.minNodeVersionTransform;
   }
 
   if (taskOpts.os) {

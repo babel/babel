@@ -295,7 +295,7 @@ Other than normal Babel options, `options.json` can contain other properties to 
 
 - **`minNodeVersion`** (string)
 
-  If the test requires a minimum Node version, you can add `minNodeVersion` (must be in semver format).
+  If an `exec.js`` test requires a minimum Node version, you can add `minNodeVersion` (must be in semver format).
 
   ```jsonc
   // options.json example
@@ -303,6 +303,8 @@ Other than normal Babel options, `options.json` can contain other properties to 
     "minNodeVersion": "5.0.0"
   }
   ```
+
+  Use `minNodeVersionTransform` if an `input.js` test requires a minimum Node version.
 
 - **`externalHelpers`** (boolean)
 
