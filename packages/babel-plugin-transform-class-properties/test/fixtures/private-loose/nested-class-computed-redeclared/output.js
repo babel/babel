@@ -24,7 +24,7 @@ var Foo = /*#__PURE__*/function () {
           });
         }
         return babelHelpers.createClass(Nested, [{
-          key: _babelHelpers$classPr,
+          key: _babelHelpers$assertC,
           value: function () {}
         }]);
       }();

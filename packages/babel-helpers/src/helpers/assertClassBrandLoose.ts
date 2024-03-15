@@ -1,6 +1,6 @@
 /* @minVersion 7.24.1 */
 
-export default function _classPrivateFieldGetLoose(
+export default function _assertClassBrandLoose(
   receiver: any,
   privateKey: string | symbol,
   returnProperty: boolean,

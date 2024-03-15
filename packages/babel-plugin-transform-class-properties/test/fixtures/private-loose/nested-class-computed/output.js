@@ -17,11 +17,11 @@ var Foo = /*#__PURE__*/function () {
           babelHelpers.classCallCheck(this, Nested);
         }
         return babelHelpers.createClass(Nested, [{
-          key: _babelHelpers$classPr,
+          key: _babelHelpers$assertC,
           value: function () {}
         }]);
-      }(babelHelpers.classPrivateFieldLoose(this, _foo));
-      babelHelpers.classPrivateFieldLoose(this, _foo);
+      }(babelHelpers.assertClassBrandLoose(this, _foo, 1));
+      babelHelpers.assertClassBrandLoose(this, _foo, 1);
     }
   }]);
 }();

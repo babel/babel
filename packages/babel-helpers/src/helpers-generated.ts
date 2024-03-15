@@ -58,10 +58,10 @@ export default Object.freeze({
     "7.24.0",
     'export default function _assertClassBrand(e,t,n){if("function"==typeof e?e===t:e.has(t))return arguments.length<3?t:n;throw new TypeError("Private element is not present on this object")}',
   ),
-  // size: 172, gzip size: 160
+  // size: 168, gzip size: 159
   assertClassBrandLoose: helper(
     "7.24.1",
-    'export default function _classPrivateFieldGetLoose(e,t,r){if(!{}.hasOwnProperty.call(e,t))throw TypeError("attempted to use private field on non-instance");return r?e[t]:e}',
+    'export default function _assertClassBrandLoose(e,t,r){if(!{}.hasOwnProperty.call(e,t))throw TypeError("attempted to use private field on non-instance");return r?e[t]:e}',
   ),
   // size: 544, gzip size: 300
   asyncGeneratorDelegate: helper(

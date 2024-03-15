@@ -7,12 +7,12 @@ var Outer = /*#__PURE__*/babelHelpers.createClass(function Outer() {
     writable: true,
     value: void 0
   });
-  var Test = /*#__PURE__*/function (_babelHelpers$classPr) {
+  var Test = /*#__PURE__*/function (_babelHelpers$assertC) {
     function Test() {
       babelHelpers.classCallCheck(this, Test);
       return babelHelpers.callSuper(this, Test, arguments);
     }
-    babelHelpers.inherits(Test, _babelHelpers$classPr);
+    babelHelpers.inherits(Test, _babelHelpers$assertC);
     return babelHelpers.createClass(Test);
   }(babelHelpers.assertClassBrandLoose(this, _outer, 1));
 });
