@@ -25,37 +25,6 @@ if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
   exports.skipAllButComputedKey = ns.skipAllButComputedKey;
 }
 
-type ThisRef = {
-  needAccessFirst?: boolean;
-  this: t.ThisExpression;
-};
-
-/**
- * Creates an expression which result is the proto of objectRef.
- *
- * @example <caption>isStatic === true</caption>
- *
- *   helpers.getPrototypeOf(CLASS)
- *
- * @example <caption>isStatic === false</caption>
- *
- *   helpers.getPrototypeOf(CLASS.prototype)
- */
-function getPrototypeOfExpression(
-  objectRef: t.Identifier,
-  isStatic: boolean,
-  file: File,
-  isPrivateMethod: boolean,
-) {
-  objectRef = cloneNode(objectRef);
-  const targetRef =
-    isStatic || isPrivateMethod
-      ? objectRef
-      : memberExpression(objectRef, identifier("prototype"));
-
-  return callExpression(file.addHelper("getPrototypeOf"), [targetRef]);
-}
-
 const visitor = traverse.visitors.merge<
   HandlerState<ReplaceState> & ReplaceState
 >([
@@ -115,12 +84,8 @@ interface SpecHandler
     | "optionalCall"
     | "delete"
   > {
-  _get(
-    this: Handler & SpecHandler,
-    superMember: SuperMember,
-    thisRefs: ThisRef,
-  ): t.CallExpression;
-  _getThisRefs(): ThisRef;
+  _get(this: Handler & SpecHandler, superMember: SuperMember): t.CallExpression;
+  _getPrototypeOfExpression(this: Handler & SpecHandler): t.CallExpression;
   prop(this: Handler & SpecHandler, superMember: SuperMember): t.Expression;
 }
 
@@ -157,35 +122,40 @@ const specHandlers: SpecHandler = {
     return stringLiteral((property as t.Identifier).name);
   },
 
-  get(this: Handler & SpecHandler, superMember: SuperMember) {
-    return this._get(superMember, this._getThisRefs());
+  /**
+   * Creates an expression which result is the proto of objectRef.
+   *
+   * @example <caption>isStatic === true</caption>
+   *
+   *   helpers.getPrototypeOf(CLASS)
+   *
+   * @example <caption>isStatic === false</caption>
+   *
+   *   helpers.getPrototypeOf(CLASS.prototype)
+   */
+  _getPrototypeOfExpression(this: Handler & SpecHandler) {
+    const objectRef = cloneNode(this.getObjectRef());
+    const targetRef =
+      this.isStatic || this.isPrivateMethod
+        ? objectRef
+        : memberExpression(objectRef, identifier("prototype"));
+
+    return callExpression(this.file.addHelper("getPrototypeOf"), [targetRef]);
   },
 
-  _get(
-    this: Handler & SpecHandler,
-    superMember: SuperMember,
-    thisRefs: ThisRef,
-  ) {
-    const proto = getPrototypeOfExpression(
-      this.getObjectRef(),
-      this.isStatic,
-      this.file,
-      this.isPrivateMethod,
-    );
+  get(this: Handler & SpecHandler, superMember: SuperMember) {
+    return this._get(superMember);
+  },
+
+  _get(this: Handler & SpecHandler, superMember: SuperMember) {
+    const proto = this._getPrototypeOfExpression();
     return callExpression(this.file.addHelper("get"), [
-      thisRefs.needAccessFirst
-        ? sequenceExpression([thisRefs.this, proto])
+      this.isDerivedConstructor
+        ? sequenceExpression([thisExpression(), proto])
         : proto,
       this.prop(superMember),
-      thisRefs.this,
+      thisExpression(),
     ]);
-  },
-
-  _getThisRefs(this: Handler & SpecHandler): ThisRef {
-    return {
-      needAccessFirst: this.isDerivedConstructor,
-      this: thisExpression(),
-    };
   },
 
   set(
@@ -193,20 +163,15 @@ const specHandlers: SpecHandler = {
     superMember: SuperMember,
     value: t.Expression,
   ) {
-    const thisRefs = this._getThisRefs();
-    const proto = getPrototypeOfExpression(
-      this.getObjectRef(),
-      this.isStatic,
-      this.file,
-      this.isPrivateMethod,
-    );
+    const proto = this._getPrototypeOfExpression();
+
     return callExpression(this.file.addHelper("set"), [
-      thisRefs.needAccessFirst
-        ? sequenceExpression([thisRefs.this, proto])
+      this.isDerivedConstructor
+        ? sequenceExpression([thisExpression(), proto])
         : proto,
       this.prop(superMember),
       value,
-      thisRefs.this,
+      thisExpression(),
       booleanLiteral(superMember.isInStrictMode()),
     ]);
   },
@@ -222,13 +187,7 @@ const specHandlers: SpecHandler = {
     superMember: SuperMember,
     args: t.CallExpression["arguments"],
   ) {
-    const thisRefs = this._getThisRefs();
-    return optimiseCall(
-      this._get(superMember, thisRefs),
-      cloneNode(thisRefs.this),
-      args,
-      false,
-    );
+    return optimiseCall(this._get(superMember), thisExpression(), args, false);
   },
 
   optionalCall(
@@ -236,10 +195,9 @@ const specHandlers: SpecHandler = {
     superMember: SuperMember,
     args: t.CallExpression["arguments"],
   ) {
-    const thisRefs = this._getThisRefs();
     return optimiseCall(
-      this._get(superMember, thisRefs),
-      cloneNode(thisRefs.this),
+      this._get(superMember),
+      cloneNode(thisExpression()),
       args,
       true,
     );
