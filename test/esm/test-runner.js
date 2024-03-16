@@ -1,4 +1,4 @@
-import chalk from "chalk";
+import colors from "picocolors";
 
 export default async function testRunner({ title, testcases }) {
   console.log(title);
@@ -6,9 +6,9 @@ export default async function testRunner({ title, testcases }) {
   for (const [subtitle, testcase] of testcases) {
     try {
       await testcase();
-      console.log(chalk.green(indent + "✓ " + subtitle));
+      console.log(colors.green(indent + "✓ " + subtitle));
     } catch (e) {
-      console.log(chalk.red(indent + "✗ " + subtitle));
+      console.log(colors.red(indent + "✗ " + subtitle));
       console.error(e);
       process.exitCode = 1;
     }

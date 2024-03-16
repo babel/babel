@@ -5,7 +5,7 @@ import { createRequire } from "module";
 import { fileURLToPath } from "url";
 import plumber from "gulp-plumber";
 import through from "through2";
-import chalk from "chalk";
+import colors from "picocolors";
 import filter from "gulp-filter";
 import gulp from "gulp";
 import { rollup } from "rollup";
@@ -125,7 +125,7 @@ function generateHelpers(generator, dest, filename, message) {
         file.contents = Buffer.from(
           await formatCode(await generateCode(filename), dest + file.path)
         );
-        log(`${chalk.green("✔")} Generated ${message}`);
+        log(`${colors.green("✔")} Generated ${message}`);
         callback(null, file);
       })
     )
@@ -352,7 +352,7 @@ function buildRollup(packages, buildStandalone) {
           /@babel\/preset-modules\/.*/,
         ];
 
-        log(`Compiling '${chalk.cyan(input)}' with rollup ...`);
+        log(`Compiling '${colors.cyan(input)}' with rollup ...`);
         const bundle = await rollup({
           input,
           external: buildStandalone ? [] : external,
@@ -562,15 +562,15 @@ function buildRollup(packages, buildStandalone) {
 
         if (!process.env.IS_PUBLISH) {
           log(
-            chalk.yellow(
-              `Skipped minification of '${chalk.cyan(
+            colors.yellow(
+              `Skipped minification of '${colors.cyan(
                 outputFile
               )}' because not publishing`
             )
           );
           return undefined;
         }
-        log(`Minifying '${chalk.cyan(outputFile)}'...`);
+        log(`Minifying '${colors.cyan(outputFile)}'...`);
 
         await bundle.write({
           file: outputFile.replace(/\.js$/, ".min.js"),
@@ -597,7 +597,7 @@ function buildRollup(packages, buildStandalone) {
 
 function buildRollupDts(packages) {
   async function build(input, output, banner) {
-    log(`Bundling '${chalk.cyan(output)}' with rollup ...`);
+    log(`Bundling '${colors.cyan(output)}' with rollup ...`);
 
     const bundle = await rollup({
       input,
@@ -837,7 +837,7 @@ ${fs.readFileSync(path.join(path.dirname(input), "license"), "utf8")}*/
 gulp.task("build-cjs-bundles", () => {
   if (!USE_ESM) {
     log(
-      chalk.yellow(
+      colors.yellow(
         "Skipping CJS-compat bundles for ESM-based builds, because not compiling to ESM"
       )
     );
