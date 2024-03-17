@@ -344,9 +344,8 @@ helpers.objectWithoutPropertiesLoose = helper("7.0.0-beta.0")`
     if (source == null) return {};
 
     var target = {};
-    var key;
 
-    for (key in source) {
+    for (var key in source) {
       if (Object.prototype.hasOwnProperty.call(source, key)) {
         if (excluded.indexOf(key) >= 0) continue;
         target[key] = source[key];
