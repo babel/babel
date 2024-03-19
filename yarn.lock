@@ -284,8 +284,8 @@ __metadata:
   resolution: "@babel/code-frame@workspace:packages/babel-code-frame"
   dependencies:
     "@babel/highlight": "workspace:^"
-    chalk: "condition:BABEL_8_BREAKING ? ^5.3.0 : ^2.4.2 (esm:default|Chalk)"
     import-meta-resolve: "npm:^4.0.0"
+    picocolors: "npm:^1.0.0"
     strip-ansi: "npm:^4.0.0"
   languageName: unknown
   linkType: soft
@@ -1247,8 +1247,9 @@ __metadata:
   resolution: "@babel/highlight@workspace:packages/babel-highlight"
   dependencies:
     "@babel/helper-validator-identifier": "workspace:^"
-    chalk: "condition:BABEL_8_BREAKING ? ^5.3.0 : ^2.4.2 (esm:default|Chalk)"
+    chalk: "condition:BABEL_8_BREAKING ? : ^2.4.2"
     js-tokens: "condition:BABEL_8_BREAKING ? ^8.0.0 : ^4.0.0"
+    picocolors: "npm:^1.0.0"
     strip-ansi: "npm:^4.0.0"
   languageName: unknown
   linkType: soft
@@ -4362,7 +4363,7 @@ __metadata:
   dependencies:
     "@babel/runtime": "workspace:^"
     "@babel/runtime-corejs3": "workspace:^"
-    chalk: "npm:^5.3.0"
+    picocolors: "npm:^1.0.0"
   languageName: unknown
   linkType: soft
 
@@ -7128,7 +7129,6 @@ __metadata:
     "@yarnpkg/types": "npm:^4.0.0"
     babel-plugin-transform-charcodes: "npm:^0.2.0"
     c8: "npm:^8.0.1"
-    chalk: "npm:^5.3.0"
     charcodes: "npm:^0.2.0"
     core-js: "npm:^3.31.1"
     eslint: "npm:^8.57.0"
@@ -7150,6 +7150,7 @@ __metadata:
     jest-worker: "npm:^30.0.0-alpha.2"
     lint-staged: "npm:^15.2.0"
     mergeiterator: "npm:^1.4.4"
+    picocolors: "npm:^1.0.0"
     prettier: "npm:^3.2.5"
     rollup: "npm:^4.9.1"
     rollup-plugin-dts: "npm:^6.1.0"
@@ -7727,20 +7728,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk-BABEL_8_BREAKING-true@npm:chalk@^5.3.0, chalk@npm:5.3.0, chalk@npm:^5.3.0":
-  version: 5.3.0
-  resolution: "chalk@npm:5.3.0"
-  checksum: 10/6373caaab21bd64c405bfc4bd9672b145647fc9482657b5ea1d549b3b2765054e9d3d928870cdf764fb4aad67555f5061538ff247b8310f110c5c888d92397ea
+"chalk@condition:BABEL_8_BREAKING ? : ^2.4.2":
+  version: 0.0.0-condition-0a3819
+  resolution: "chalk@condition:BABEL_8_BREAKING?:^2.4.2#0a3819"
+  dependencies:
+    chalk-BABEL_8_BREAKING-false: "npm:chalk@^2.4.2"
+  checksum: 10/69cc7db142bd6802351b6471c5c6eb1b8465a5e070e7f14f8d92e59ba2492b86db2bc42c12bd2ad4f055add5392f1d0611a21c4c1019c30b2f1799237ae21834
   languageName: node
   linkType: hard
 
-"chalk@condition:BABEL_8_BREAKING ? ^5.3.0 : ^2.4.2 (esm:default|Chalk)":
-  version: 0.0.0-condition-90587c
-  resolution: "chalk@condition:BABEL_8_BREAKING?^5.3.0:^2.4.2(esm:default|Chalk)#90587c"
-  dependencies:
-    chalk-BABEL_8_BREAKING-false: "npm:chalk@^2.4.2"
-    chalk-BABEL_8_BREAKING-true: "npm:chalk@^5.3.0"
-  checksum: 10/dbb98f9a2d72cb6dcb43e8d6eab7de58c67db9ed08f83314a26013daef55918ff2d748554dc07bb5cb58b0f0900af4ee8c57b0f5f84a93fc1da4459eb9644e56
+"chalk@npm:5.3.0, chalk@npm:^5.3.0":
+  version: 5.3.0
+  resolution: "chalk@npm:5.3.0"
+  checksum: 10/6373caaab21bd64c405bfc4bd9672b145647fc9482657b5ea1d549b3b2765054e9d3d928870cdf764fb4aad67555f5061538ff247b8310f110c5c888d92397ea
   languageName: node
   linkType: hard
 

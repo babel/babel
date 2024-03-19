@@ -6,6 +6,6 @@
   "devDependencies": {
     "@babel/runtime": "workspace:^",
     "@babel/runtime-corejs3": "workspace:^",
-    "chalk": "^5.3.0"
+    "picocolors": "^1.0.0"
   }
 }

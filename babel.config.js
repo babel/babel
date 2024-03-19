@@ -325,10 +325,6 @@ module.exports = function (api) {
         test: unambiguousSources.map(normalize),
         sourceType: "unambiguous",
       },
-      env === "standalone" && {
-        test: /chalk/,
-        plugins: [pluginReplaceNavigator],
-      },
     ].filter(Boolean),
   };
 
@@ -1047,23 +1043,6 @@ function pluginGeneratorOptimization({ types: t }) {
             }
           }
         },
-      },
-    },
-  };
-}
-
-function pluginReplaceNavigator({ template }) {
-  return {
-    visitor: {
-      MemberExpression(path) {
-        const object = path.get("object");
-        if (object.isIdentifier({ name: "navigator" })) {
-          object.replaceWith(
-            template.expression.ast`
-              typeof navigator == "object" ? navigator : {}
-            `
-          );
-        }
       },
     },
   };
