@@ -4,7 +4,8 @@ import _colors, { createColors } from "picocolors";
 import type { Colors, Formatter } from "picocolors/types";
 // See https://github.com/alexeyraspopov/picocolors/issues/62
 const colors =
-  typeof process === "object" && process.env.FORCE_COLOR === "0"
+  typeof process === "object" &&
+  (process.env.FORCE_COLOR === "0" || process.env.FORCE_COLOR === "false")
     ? createColors(false)
     : _colors;
 
