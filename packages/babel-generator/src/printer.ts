@@ -832,7 +832,7 @@ class Printer {
           this.newline(1);
         } else {
           const nextNode = nodes[i + 1];
-          newlineOpts.nextNodeStartLine = nextNode.loc?.start.line || 0;
+          newlineOpts.nextNodeStartLine = nextNode.loc?.start?.line || 0;
 
           this._printNewline(true, newlineOpts);
         }
