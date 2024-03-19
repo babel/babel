@@ -24,6 +24,11 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.24.2 (2024-03-19)
+
+#### :bug: Bug Fix
+* `babel-code-frame`, `babel-highlight`
+  * [#16362](https://github.com/babel/babel/pull/16362) Restore previous `FORCE_COLOR=0` behavior ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.24.1 (2024-03-19)
 
 #### :bug: Bug Fix
