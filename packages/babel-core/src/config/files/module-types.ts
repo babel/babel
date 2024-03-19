@@ -16,11 +16,15 @@ const debug = buildDebug("babel:config:loading:files:module-types");
 
 const require = createRequire(import.meta.url);
 
-let import_: ((specifier: string | URL) => any) | undefined;
-try {
-  // Old Node.js versions don't support import() syntax.
-  import_ = require("./import.cjs");
-} catch {}
+if (!process.env.BABEL_8_BREAKING) {
+  try {
+    // Old Node.js versions don't support import() syntax.
+    // eslint-disable-next-line no-var
+    var import_:
+      | ((specifier: string | URL) => any)
+      | undefined = require("./import.cjs");
+  } catch {}
+}
 
 export const supportsESM = semver.satisfies(
   process.versions.node,
@@ -64,6 +68,7 @@ export default function* loadCodeDefault(
       }
   }
   if (yield* isAsync()) {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     return yield* waitFor(loadMjsDefault(filepath));
   }
   throw new ConfigError(asyncError, filepath);
@@ -169,19 +174,24 @@ function loadCjsDefault(filepath: string) {
   }
 }
 
-async function loadMjsDefault(filepath: string) {
-  if (!import_) {
-    throw new ConfigError(
-      "Internal error: Native ECMAScript modules aren't supported by this platform.\n",
-      filepath,
-    );
-  }
+const loadMjsDefault = endHiddenCallStack(async function loadMjsDefault(
+  filepath: string,
+) {
+  const url = pathToFileURL(filepath).toString();
 
-  // import() expects URLs, not file paths.
-  // https://github.com/nodejs/node/issues/31710
-  const module = await endHiddenCallStack(import_)(pathToFileURL(filepath));
-  return module.default;
-}
+  if (process.env.BABEL_8_BREAKING) {
+    return (await import(url)).default;
+  } else {
+    if (!import_) {
+      throw new ConfigError(
+        "Internal error: Native ECMAScript modules aren't supported by this platform.\n",
+        filepath,
+      );
+    }
+
+    return (await import_(url)).default;
+  }
+});
 
 function getTSPreset(filepath: string) {
   try {
