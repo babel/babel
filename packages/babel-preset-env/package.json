@@ -92,7 +92,7 @@
     "@babel/plugin-transform-unicode-sets-regex": "workspace:^",
     "@babel/preset-modules": "0.1.6-no-external-plugins",
     "babel-plugin-polyfill-corejs2": "condition:BABEL_8_BREAKING ? : ^0.4.10 (peer:@babel/core) (esm:default)",
-    "babel-plugin-polyfill-corejs3": "^0.10.1",
+    "babel-plugin-polyfill-corejs3": "^0.10.4",
     "babel-plugin-polyfill-regenerator": "condition:BABEL_8_BREAKING ? : ^0.6.1 (peer:@babel/core) (esm:default)",
     "core-js-compat": "^3.31.0",
     "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
