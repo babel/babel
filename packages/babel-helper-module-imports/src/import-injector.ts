@@ -507,6 +507,7 @@ export default class ImportInjector {
         if (!newImports) continue;
 
         for (const decl of newImports) {
+          if (!statementsSet.has(decl)) continue;
           if (maybeAppendImportSpecifiers(bodyStmt.node, decl)) {
             statementsSet.delete(decl);
           }
