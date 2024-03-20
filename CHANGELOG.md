@@ -24,6 +24,11 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.24.3 (2024-03-20)
+
+#### :bug: Bug Fix
+* `babel-helper-module-imports`
+  * [#16370](https://github.com/babel/babel/pull/16370) fix: do not inject the same imported identifier multiple times ([@ota-meshi](https://github.com/ota-meshi))
 ## v7.24.2 (2024-03-19)
 
 #### :bug: Bug Fix
