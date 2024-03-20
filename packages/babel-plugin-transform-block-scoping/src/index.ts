@@ -57,12 +57,11 @@ export default declare((api, opts: Options) => {
           let bodyScope: Scope | null;
           if (body.isBlockStatement()) {
             bodyScope = body.scope;
-
-            const bindings = getLoopBodyBindings(path);
-            for (const binding of bindings) {
-              const { capturedInClosure } = getUsageInBody(binding, path);
-              if (capturedInClosure) markNeedsBodyWrap();
-            }
+          }
+          const bindings = getLoopBodyBindings(path);
+          for (const binding of bindings) {
+            const { capturedInClosure } = getUsageInBody(binding, path);
+            if (capturedInClosure) markNeedsBodyWrap();
           }
 
           const captured: string[] = [];
