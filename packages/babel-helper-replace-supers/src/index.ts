@@ -188,12 +188,15 @@ const specHandlers: SpecHandler = {
         t.numericLiteral(this.isStatic || this.isPrivateMethod ? 0 : 1),
         argsNode,
       ],
-      optional,
-    ] as Parameters<typeof t.optionalCallExpression>;
+    ] as Parameters<typeof t.callExpression>;
     if (optional) {
-      return t.optionalCallExpression.apply(null, buildArgs);
+      return t.optionalCallExpression(
+        buildArgs[0] as t.Expression,
+        buildArgs[1],
+        true,
+      );
     }
-    return callExpression(...(buildArgs as any));
+    return callExpression(...buildArgs);
   },
 
   set(
