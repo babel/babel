@@ -6,7 +6,6 @@ import optimiseCall from "@babel/helper-optimise-call-expression";
 import { traverse, template, types as t } from "@babel/core";
 const {
   assignmentExpression,
-  booleanLiteral,
   callExpression,
   cloneNode,
   identifier,
@@ -84,7 +83,12 @@ interface SpecHandler
     | "optionalCall"
     | "delete"
   > {
-  _get(this: Handler & SpecHandler, superMember: SuperMember): t.CallExpression;
+  _call(
+    this: Handler & SpecHandler,
+    superMember: SuperMember,
+    args: t.CallExpression["arguments"],
+    optional: boolean,
+  ): t.CallExpression | t.OptionalCallExpression;
   _getPrototypeOfExpression(this: Handler & SpecHandler): t.CallExpression;
   prop(this: Handler & SpecHandler, superMember: SuperMember): t.Expression;
 }
@@ -144,18 +148,52 @@ const specHandlers: SpecHandler = {
   },
 
   get(this: Handler & SpecHandler, superMember: SuperMember) {
-    return this._get(superMember);
-  },
-
-  _get(this: Handler & SpecHandler, superMember: SuperMember) {
-    const proto = this._getPrototypeOfExpression();
-    return callExpression(this.file.addHelper("get"), [
+    const objectRef = cloneNode(this.getObjectRef());
+    return callExpression(this.file.addHelper("superPropertyGetCall"), [
       this.isDerivedConstructor
-        ? sequenceExpression([thisExpression(), proto])
-        : proto,
+        ? sequenceExpression([thisExpression(), objectRef])
+        : objectRef,
       this.prop(superMember),
       thisExpression(),
+      ...(this.isStatic || this.isPrivateMethod ? [] : [t.numericLiteral(1)]),
     ]);
+  },
+
+  _call(
+    this: Handler & SpecHandler,
+    superMember: SuperMember,
+    args: t.CallExpression["arguments"],
+    optional: boolean,
+  ): t.CallExpression | t.OptionalCallExpression {
+    const objectRef = cloneNode(this.getObjectRef());
+    let argsNode: t.ArrayExpression | t.Identifier;
+    if (
+      args.length === 1 &&
+      t.isSpreadElement(args[0]) &&
+      (t.isIdentifier(args[0].argument) ||
+        t.isArrayExpression(args[0].argument))
+    ) {
+      argsNode = args[0].argument;
+    } else {
+      argsNode = t.arrayExpression(args as t.Expression[]);
+    }
+    const buildArgs = [
+      this.file.addHelper("superPropertyGetCall"),
+      [
+        this.isDerivedConstructor
+          ? sequenceExpression([thisExpression(), objectRef])
+          : objectRef,
+        this.prop(superMember),
+        thisExpression(),
+        t.numericLiteral(this.isStatic || this.isPrivateMethod ? 0 : 1),
+        argsNode,
+      ],
+      optional,
+    ] as Parameters<typeof t.optionalCallExpression>;
+    if (optional) {
+      return t.optionalCallExpression.apply(null, buildArgs);
+    }
+    return callExpression(...(buildArgs as any));
   },
 
   set(
@@ -163,16 +201,17 @@ const specHandlers: SpecHandler = {
     superMember: SuperMember,
     value: t.Expression,
   ) {
-    const proto = this._getPrototypeOfExpression();
+    const objectRef = cloneNode(this.getObjectRef());
 
-    return callExpression(this.file.addHelper("set"), [
+    return callExpression(this.file.addHelper("superPropertySet"), [
       this.isDerivedConstructor
-        ? sequenceExpression([thisExpression(), proto])
-        : proto,
+        ? sequenceExpression([thisExpression(), objectRef])
+        : objectRef,
       this.prop(superMember),
       value,
       thisExpression(),
-      booleanLiteral(superMember.isInStrictMode()),
+      t.numericLiteral(superMember.isInStrictMode() ? 1 : 0),
+      ...(this.isStatic || this.isPrivateMethod ? [] : [t.numericLiteral(1)]),
     ]);
   },
 
@@ -187,7 +226,7 @@ const specHandlers: SpecHandler = {
     superMember: SuperMember,
     args: t.CallExpression["arguments"],
   ) {
-    return optimiseCall(this._get(superMember), thisExpression(), args, false);
+    return this._call(superMember, args, false);
   },
 
   optionalCall(
@@ -195,12 +234,7 @@ const specHandlers: SpecHandler = {
     superMember: SuperMember,
     args: t.CallExpression["arguments"],
   ) {
-    return optimiseCall(
-      this._get(superMember),
-      cloneNode(thisExpression()),
-      args,
-      true,
-    );
+    return this._call(superMember, args, true);
   },
 
   delete(this: Handler & SpecHandler, superMember: SuperMember) {
