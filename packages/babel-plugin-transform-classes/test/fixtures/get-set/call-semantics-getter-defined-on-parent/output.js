@@ -25,10 +25,10 @@ let Obj = /*#__PURE__*/function (_Base) {
   return babelHelpers.createClass(Obj, [{
     key: "call",
     value: function call() {
-      babelHelpers.get(babelHelpers.getPrototypeOf(Obj.prototype), "test", this).call(this, 1, 2, 3);
-      babelHelpers.get(babelHelpers.getPrototypeOf(Obj.prototype), "test", this).call(this, 1, ...[2, 3]);
-      babelHelpers.get(babelHelpers.getPrototypeOf(Obj.prototype), "test", this).call(this, ...[1, 2, 3]);
-      return babelHelpers.get(babelHelpers.getPrototypeOf(Obj.prototype), "test", this).apply(this, arguments);
+      babelHelpers.superPropertyGetCall(Obj, "test", this, 1, [1, 2, 3]);
+      babelHelpers.superPropertyGetCall(Obj, "test", this, 1, [1, ...[2, 3]]);
+      babelHelpers.superPropertyGetCall(Obj, "test", this, 1, [1, 2, 3]);
+      return babelHelpers.superPropertyGetCall(Obj, "test", this, 1, arguments);
     }
   }, {
     key: "test",

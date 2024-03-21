@@ -17,7 +17,7 @@ var Outer = /*#__PURE__*/function (_Hello) {
     babelHelpers.classCallCheck(this, Outer);
     _this = babelHelpers.callSuper(this, Outer);
     var Inner = {
-      [babelHelpers.get((_this, babelHelpers.getPrototypeOf(Outer.prototype)), "toString", _this).call(_this)]() {
+      [babelHelpers.superPropertyGetCall((_this, Outer), "toString", _this, 1, [])]() {
         return 'hello';
       }
     };

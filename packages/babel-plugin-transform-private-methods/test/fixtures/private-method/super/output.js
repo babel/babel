@@ -19,5 +19,5 @@ class Sub extends Base {
 }
 _Sub = Sub;
 function _privateMethod() {
-  return babelHelpers.get(babelHelpers.getPrototypeOf(_Sub.prototype), "superMethod", this).call(this);
+  return babelHelpers.superPropertyGetCall(_Sub.prototype, "superMethod", this, 0, []);
 }
