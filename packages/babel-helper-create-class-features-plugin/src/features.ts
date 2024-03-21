@@ -94,7 +94,9 @@ export function enableFeature(file: File, feature: number, loose: boolean) {
       throw new Error(
         "'loose' mode configuration must be the same for @babel/plugin-transform-class-properties, " +
           "@babel/plugin-transform-private-methods and " +
-          "@babel/plugin-transform-private-property-in-object (when they are enabled).",
+          "@babel/plugin-transform-private-property-in-object (when they are enabled)." +
+          "\n\n" +
+          getBabelShowConfigForHint(file),
       );
     } else {
       resolvedLoose = loose;
@@ -118,11 +120,27 @@ export function enableFeature(file: File, feature: number, loose: boolean) {
             `and @babel/plugin-transform-private-property-in-object (when they are enabled): you can ` +
             `silence this warning by explicitly adding\n` +
             `\t["${name}", { "loose": ${resolvedLoose} }]\n` +
-            `to the "plugins" section of your Babel config.`,
+            `to the "plugins" section of your Babel config.` +
+            "\n\n" +
+            getBabelShowConfigForHint(file),
         );
       }
     }
   }
+}
+
+function getBabelShowConfigForHint(file: File) {
+  let { filename } = file.opts;
+  if (!filename || filename === "unknown") {
+    filename = "[name of the input file]";
+  }
+  return `\
+If you already set the same 'loose' mode for these plugins in your config, it's possible that they \
+are enabled multiple times with different options.
+You can re-run Babel with the BABEL_SHOW_CONFIG_FOR environment variable to show the loaded \
+configuration:
+\tnpx cross-env BABEL_SHOW_CONFIG_FOR=${filename} <your build command>
+See https://babeljs.io/docs/configuration#print-effective-configs for more info.`;
 }
 
 function hasFeature(file: File, feature: number) {

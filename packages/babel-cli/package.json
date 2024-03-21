@@ -1,6 +1,6 @@
 {
   "name": "@babel/cli",
-  "version": "7.23.9",
+  "version": "7.24.1",
   "description": "Babel command line.",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-cli",
@@ -24,7 +24,7 @@
     "compiler"
   ],
   "dependencies": {
-    "@jridgewell/trace-mapping": "^0.3.17",
+    "@jridgewell/trace-mapping": "^0.3.25",
     "commander": "^4.0.1",
     "convert-source-map": "^2.0.0",
     "fs-readdir-recursive": "^1.1.0",

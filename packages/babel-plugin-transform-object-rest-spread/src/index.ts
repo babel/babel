@@ -4,8 +4,8 @@ import type { PluginPass } from "@babel/core";
 import type { NodePath, Scope } from "@babel/traverse";
 import { convertFunctionParams } from "@babel/plugin-transform-parameters";
 import { isRequired } from "@babel/helper-compilation-targets";
-import compatData from "@babel/compat-data/corejs2-built-ins";
 import shouldStoreRHSInTemporaryVariable from "./shouldStoreRHSInTemporaryVariable.ts";
+import compatData from "./compat-data.ts";
 
 const { isAssignmentPattern, isObjectProperty } = t;
 // @babel/types <=7.3.3 counts FOO as referenced in var { x: FOO }.
@@ -26,14 +26,10 @@ export interface Options {
 }
 
 export default declare((api, opts: Options) => {
-  api.assertVersion(
-    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
-      ? PACKAGE_JSON.version
-      : 7,
-  );
+  api.assertVersion(REQUIRED_VERSION(7));
 
   const targets = api.targets();
-  const supportsObjectAssign = !isRequired("es6.object.assign", targets, {
+  const supportsObjectAssign = !isRequired("Object.assign", targets, {
     compatData,
   });
 
@@ -105,39 +101,52 @@ export default declare((api, opts: Options) => {
 
   // returns an array of all keys of an object, and a status flag indicating if all extracted keys
   // were converted to stringLiterals or not
-  // e.g. extracts {keys: ["a", "b", "3", ++x], allLiteral: false }
+  // e.g. extracts {keys: ["a", "b", "3", ++x], allPrimitives: false }
   // from ast of {a: "foo", b, 3: "bar", [++x]: "baz"}
+  // `allPrimitives: false` doesn't necessarily mean that there is a non-primitive, but just
+  // that we are not sure.
   function extractNormalizedKeys(node: t.ObjectPattern) {
     // RestElement has been removed in createObjectRest
     const props = node.properties as t.ObjectProperty[];
     const keys: t.Expression[] = [];
-    let allLiteral = true;
+    let allPrimitives = true;
     let hasTemplateLiteral = false;
 
     for (const prop of props) {
-      if (t.isIdentifier(prop.key) && !prop.computed) {
+      const { key } = prop;
+      if (t.isIdentifier(key) && !prop.computed) {
         // since a key {a: 3} is equivalent to {"a": 3}, use the latter
-        keys.push(t.stringLiteral(prop.key.name));
-      } else if (t.isTemplateLiteral(prop.key)) {
-        keys.push(t.cloneNode(prop.key));
+        keys.push(t.stringLiteral(key.name));
+      } else if (t.isTemplateLiteral(key)) {
+        keys.push(t.cloneNode(key));
         hasTemplateLiteral = true;
-      } else if (t.isLiteral(prop.key)) {
+      } else if (t.isLiteral(key)) {
         keys.push(
           t.stringLiteral(
             String(
               // @ts-expect-error prop.key can not be a NullLiteral
-              prop.key.value,
+              key.value,
             ),
           ),
         );
       } else {
         // @ts-expect-error private name has been handled by destructuring-private
-        keys.push(t.cloneNode(prop.key));
-        allLiteral = false;
+        keys.push(t.cloneNode(key));
+
+        if (
+          (t.isMemberExpression(key, { computed: false }) &&
+            t.isIdentifier(key.object, { name: "Symbol" })) ||
+          (t.isCallExpression(key) &&
+            t.matchesPattern(key.callee, "Symbol.for"))
+        ) {
+          // there all return a primitive
+        } else {
+          allPrimitives = false;
+        }
       }
     }
 
-    return { keys, allLiteral, hasTemplateLiteral };
+    return { keys, allPrimitives, hasTemplateLiteral };
   }
 
   // replaces impure computed keys with new identifiers
@@ -192,7 +201,7 @@ export default declare((api, opts: Options) => {
       path.get("properties") as NodePath<t.ObjectProperty>[],
       path.scope,
     );
-    const { keys, allLiteral, hasTemplateLiteral } = extractNormalizedKeys(
+    const { keys, allPrimitives, hasTemplateLiteral } = extractNormalizedKeys(
       path.node,
     );
 
@@ -213,7 +222,7 @@ export default declare((api, opts: Options) => {
     }
 
     let keyExpression;
-    if (!allLiteral) {
+    if (!allPrimitives) {
       // map to toPropertyKey to handle the possible non-string values
       keyExpression = t.callExpression(
         t.memberExpression(t.arrayExpression(keys), t.identifier("map")),
@@ -288,9 +297,8 @@ export default declare((api, opts: Options) => {
 
   return {
     name: "transform-object-rest-spread",
-    inherits: USE_ESM
-      ? undefined
-      : IS_STANDALONE
+    inherits:
+      USE_ESM || IS_STANDALONE || api.version[0] === "8"
         ? undefined
         : // eslint-disable-next-line no-restricted-globals
           require("@babel/plugin-syntax-object-rest-spread").default,

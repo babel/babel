@@ -2,19 +2,18 @@
 
 let Base = /*#__PURE__*/function () {
   function Base() {}
-  babelHelpers.createClass(Base, [{
+  return babelHelpers.createClass(Base, [{
     key: "test",
     set: function (v) {
       throw new Error("gobbledygook");
     }
   }]);
-  return Base;
 }();
 let Obj = /*#__PURE__*/function (_Base) {
-  babelHelpers.inheritsLoose(Obj, _Base);
   function Obj() {
     return _Base.apply(this, arguments) || this;
   }
+  babelHelpers.inheritsLoose(Obj, _Base);
   var _proto = Obj.prototype;
   _proto.call = function call() {
     return _Base.prototype.test.call(this);

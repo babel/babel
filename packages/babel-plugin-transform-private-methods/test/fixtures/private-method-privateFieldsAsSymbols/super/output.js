@@ -4,7 +4,7 @@ class Base {
     return 'good';
   }
 }
-var _privateMethod = /*#__PURE__*/Symbol("privateMethod");
+var _privateMethod = Symbol("privateMethod");
 class Sub extends Base {
   constructor(...args) {
     super(...args);

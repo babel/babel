@@ -1,8 +1,7 @@
-var _dec, _init_x;
-_dec = dec;
+let _xDecs, _init_x;
 export class A {
   static {
-    [_init_x] = babelHelpers.applyDecs2305(this, [[_dec, 0, "x"]], []).e;
+    [_init_x] = babelHelpers.applyDecs2305(this, [[_xDecs, 0, "x"]], []).e;
   }
-  x = _init_x(this);
+  [(_xDecs = dec, "x")] = _init_x(this);
 }

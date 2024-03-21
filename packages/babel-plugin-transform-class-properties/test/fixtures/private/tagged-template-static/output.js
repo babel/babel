@@ -1,11 +1,10 @@
 class Foo {
   static getReceiver() {
-    return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _tag).bind(this)``;
+    return babelHelpers.assertClassBrand(Foo, this, _tag)._.bind(this)``;
   }
 }
 var _tag = {
-  writable: true,
-  value: function () {
+  _: function () {
     return this;
   }
 };

@@ -26,12 +26,11 @@ if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
   exports.skipAllButComputedKey = ns.skipAllButComputedKey;
 }
 
-type ThisRef =
-  | {
-      memo: t.AssignmentExpression;
-      this: t.Identifier;
-    }
-  | { this: t.ThisExpression };
+type ThisRef = {
+  needAccessFirst?: boolean;
+  this: t.ThisExpression;
+};
+
 /**
  * Creates an expression which result is the proto of objectRef.
  *
@@ -175,21 +174,18 @@ const specHandlers: SpecHandler = {
       this.isPrivateMethod,
     );
     return callExpression(this.file.addHelper("get"), [
-      // @ts-expect-error memo does not exist when this.isDerivedConstructor is false
-      thisRefs.memo ? sequenceExpression([thisRefs.memo, proto]) : proto,
+      thisRefs.needAccessFirst
+        ? sequenceExpression([thisRefs.this, proto])
+        : proto,
       this.prop(superMember),
       thisRefs.this,
     ]);
   },
 
   _getThisRefs(this: Handler & SpecHandler): ThisRef {
-    if (!this.isDerivedConstructor) {
-      return { this: thisExpression() };
-    }
-    const thisRef = this.scope.generateDeclaredUidIdentifier("thisSuper");
     return {
-      memo: assignmentExpression("=", thisRef, thisExpression()),
-      this: cloneNode(thisRef),
+      needAccessFirst: this.isDerivedConstructor,
+      this: thisExpression(),
     };
   },
 
@@ -206,8 +202,9 @@ const specHandlers: SpecHandler = {
       this.isPrivateMethod,
     );
     return callExpression(this.file.addHelper("set"), [
-      // @ts-expect-error memo does not exist when this.isDerivedConstructor is false
-      thisRefs.memo ? sequenceExpression([thisRefs.memo, proto]) : proto,
+      thisRefs.needAccessFirst
+        ? sequenceExpression([thisRefs.this, proto])
+        : proto,
       this.prop(superMember),
       value,
       thisRefs.this,
@@ -419,16 +416,29 @@ export default class ReplaceSupers {
   }
 
   replace() {
+    const { methodPath } = this;
     // https://github.com/babel/babel/issues/11994
     if (this.opts.refToPreserve) {
-      this.methodPath.traverse(unshadowSuperBindingVisitor, {
+      methodPath.traverse(unshadowSuperBindingVisitor, {
         refName: this.opts.refToPreserve.name,
       });
     }
 
     const handler = this.constantSuper ? looseHandlers : specHandlers;
 
-    memberExpressionToFunctions<ReplaceState>(this.methodPath, visitor, {
+    // todo: this should have been handled by the environmentVisitor,
+    // consider add visitSelf support for the path.traverse
+    // @ts-expect-error: Refine typings in packages/babel-traverse/src/types.ts
+    // shouldSkip is accepted in traverseNode
+    visitor.shouldSkip = (path: NodePath) => {
+      if (path.parentPath === methodPath) {
+        if (path.parentKey === "decorators" || path.parentKey === "key") {
+          return true;
+        }
+      }
+    };
+
+    memberExpressionToFunctions<ReplaceState>(methodPath, visitor, {
       file: this.file,
       scope: this.methodPath.scope,
       isDerivedConstructor: this.isDerivedConstructor,

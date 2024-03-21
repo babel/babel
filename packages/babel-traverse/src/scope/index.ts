@@ -13,6 +13,7 @@ import {
   identifier,
   isArrayExpression,
   isBinary,
+  isCallExpression,
   isClass,
   isClassBody,
   isClassDeclaration,
@@ -23,6 +24,7 @@ import {
   isIdentifier,
   isImportDeclaration,
   isLiteral,
+  isMemberExpression,
   isMethod,
   isModuleSpecifier,
   isNullLiteral,
@@ -929,17 +931,33 @@ export default class Scope {
       return true;
     } else if (isUnaryExpression(node)) {
       return this.isPure(node.argument, constantsOnly);
-    } else if (isTaggedTemplateExpression(node)) {
-      return (
-        matchesPattern(node.tag, "String.raw") &&
-        !this.hasBinding("String", true) &&
-        this.isPure(node.quasi, constantsOnly)
-      );
     } else if (isTemplateLiteral(node)) {
       for (const expression of node.expressions) {
         if (!this.isPure(expression, constantsOnly)) return false;
       }
       return true;
+    } else if (isTaggedTemplateExpression(node)) {
+      return (
+        matchesPattern(node.tag, "String.raw") &&
+        !this.hasBinding("String", { noGlobals: true }) &&
+        this.isPure(node.quasi, constantsOnly)
+      );
+    } else if (isMemberExpression(node)) {
+      return (
+        !node.computed &&
+        isIdentifier(node.object) &&
+        node.object.name === "Symbol" &&
+        isIdentifier(node.property) &&
+        node.property.name !== "for" &&
+        !this.hasBinding("Symbol", { noGlobals: true })
+      );
+    } else if (isCallExpression(node)) {
+      return (
+        matchesPattern(node.callee, "Symbol.for") &&
+        !this.hasBinding("Symbol", { noGlobals: true }) &&
+        node.arguments.length === 1 &&
+        t.isStringLiteral(node.arguments[0])
+      );
     } else {
       return isPureish(node);
     }
@@ -1081,9 +1099,9 @@ export default class Scope {
       path.isFunction() &&
       // @ts-expect-error ArrowFunctionExpression never has a name
       !path.node.name &&
-      t.isCallExpression(path.parent, { callee: path.node }) &&
+      isCallExpression(path.parent, { callee: path.node }) &&
       path.parent.arguments.length <= path.node.params.length &&
-      t.isIdentifier(id)
+      isIdentifier(id)
     ) {
       path.pushContainer("params", id);
       path.scope.registerBinding(

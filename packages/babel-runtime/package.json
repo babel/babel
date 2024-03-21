@@ -1,6 +1,6 @@
 {
   "name": "@babel/runtime",
-  "version": "7.23.9",
+  "version": "7.24.1",
   "description": "babel's modular runtime helpers",
   "license": "MIT",
   "publishConfig": {
@@ -80,6 +80,24 @@
       "./helpers/applyDecs2305.js"
     ],
     "./helpers/esm/applyDecs2305": "./helpers/esm/applyDecs2305.js",
+    "./helpers/applyDecs2311": [
+      {
+        "node": "./helpers/applyDecs2311.js",
+        "import": "./helpers/esm/applyDecs2311.js",
+        "default": "./helpers/applyDecs2311.js"
+      },
+      "./helpers/applyDecs2311.js"
+    ],
+    "./helpers/esm/applyDecs2311": "./helpers/esm/applyDecs2311.js",
+    "./helpers/assertClassBrand": [
+      {
+        "node": "./helpers/assertClassBrand.js",
+        "import": "./helpers/esm/assertClassBrand.js",
+        "default": "./helpers/assertClassBrand.js"
+      },
+      "./helpers/assertClassBrand.js"
+    ],
+    "./helpers/esm/assertClassBrand": "./helpers/esm/assertClassBrand.js",
     "./helpers/asyncGeneratorDelegate": [
       {
         "node": "./helpers/asyncGeneratorDelegate.js",
@@ -125,6 +143,42 @@
       "./helpers/checkInRHS.js"
     ],
     "./helpers/esm/checkInRHS": "./helpers/esm/checkInRHS.js",
+    "./helpers/classPrivateFieldGet2": [
+      {
+        "node": "./helpers/classPrivateFieldGet2.js",
+        "import": "./helpers/esm/classPrivateFieldGet2.js",
+        "default": "./helpers/classPrivateFieldGet2.js"
+      },
+      "./helpers/classPrivateFieldGet2.js"
+    ],
+    "./helpers/esm/classPrivateFieldGet2": "./helpers/esm/classPrivateFieldGet2.js",
+    "./helpers/classPrivateFieldSet2": [
+      {
+        "node": "./helpers/classPrivateFieldSet2.js",
+        "import": "./helpers/esm/classPrivateFieldSet2.js",
+        "default": "./helpers/classPrivateFieldSet2.js"
+      },
+      "./helpers/classPrivateFieldSet2.js"
+    ],
+    "./helpers/esm/classPrivateFieldSet2": "./helpers/esm/classPrivateFieldSet2.js",
+    "./helpers/classPrivateGetter": [
+      {
+        "node": "./helpers/classPrivateGetter.js",
+        "import": "./helpers/esm/classPrivateGetter.js",
+        "default": "./helpers/classPrivateGetter.js"
+      },
+      "./helpers/classPrivateGetter.js"
+    ],
+    "./helpers/esm/classPrivateGetter": "./helpers/esm/classPrivateGetter.js",
+    "./helpers/classPrivateSetter": [
+      {
+        "node": "./helpers/classPrivateSetter.js",
+        "import": "./helpers/esm/classPrivateSetter.js",
+        "default": "./helpers/classPrivateSetter.js"
+      },
+      "./helpers/classPrivateSetter.js"
+    ],
+    "./helpers/esm/classPrivateSetter": "./helpers/esm/classPrivateSetter.js",
     "./helpers/construct": [
       {
         "node": "./helpers/construct.js",
@@ -251,6 +305,15 @@
       "./helpers/toPropertyKey.js"
     ],
     "./helpers/esm/toPropertyKey": "./helpers/esm/toPropertyKey.js",
+    "./helpers/toSetter": [
+      {
+        "node": "./helpers/toSetter.js",
+        "import": "./helpers/esm/toSetter.js",
+        "default": "./helpers/toSetter.js"
+      },
+      "./helpers/toSetter.js"
+    ],
+    "./helpers/esm/toSetter": "./helpers/esm/toSetter.js",
     "./helpers/typeof": [
       {
         "node": "./helpers/typeof.js",

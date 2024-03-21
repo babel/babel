@@ -655,6 +655,23 @@ export function isConstantExpression(this: NodePath): boolean {
     );
   }
 
+  if (this.isMemberExpression()) {
+    return (
+      !this.node.computed &&
+      this.get("object").isIdentifier({ name: "Symbol" }) &&
+      !this.scope.hasBinding("Symbol", { noGlobals: true })
+    );
+  }
+
+  if (this.isCallExpression()) {
+    return (
+      this.node.arguments.length === 1 &&
+      this.get("callee").matchesPattern("Symbol.for") &&
+      !this.scope.hasBinding("Symbol", { noGlobals: true }) &&
+      this.get("arguments")[0].isStringLiteral()
+    );
+  }
+
   return false;
 }
 

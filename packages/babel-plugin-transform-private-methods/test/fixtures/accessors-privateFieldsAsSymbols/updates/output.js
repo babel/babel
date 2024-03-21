@@ -1,5 +1,5 @@
-var _privateField = /*#__PURE__*/Symbol("privateField");
-var _privateFieldValue = /*#__PURE__*/Symbol("privateFieldValue");
+var _privateField = Symbol("privateField");
+var _privateFieldValue = Symbol("privateFieldValue");
 class Cl {
   constructor() {
     Object.defineProperty(this, _privateFieldValue, {

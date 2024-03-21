@@ -18,6 +18,7 @@
     "./packages/babel-helper-fixtures/src/**/*.ts",
     "./packages/babel-helper-function-name/src/**/*.ts",
     "./packages/babel-helper-hoist-variables/src/**/*.ts",
+    "./packages/babel-helper-import-to-platform-api/src/**/*.ts",
     "./packages/babel-helper-member-expression-to-functions/src/**/*.ts",
     "./packages/babel-helper-module-imports/src/**/*.ts",
     "./packages/babel-helper-module-transforms/src/**/*.ts",
@@ -54,6 +55,7 @@
     "./packages/babel-plugin-proposal-import-attributes-to-assertions/src/**/*.ts",
     "./packages/babel-plugin-proposal-import-defer/src/**/*.ts",
     "./packages/babel-plugin-proposal-import-wasm-source/src/**/*.ts",
+    "./packages/babel-plugin-proposal-json-modules/src/**/*.ts",
     "./packages/babel-plugin-proposal-optional-chaining-assign/src/**/*.ts",
     "./packages/babel-plugin-proposal-partial-application/src/**/*.ts",
     "./packages/babel-plugin-proposal-pipeline-operator/src/**/*.ts",
@@ -181,12 +183,6 @@
       "@babel/compat-data/native-modules": [
         "./packages/babel-compat-data/data/native-modules.json"
       ],
-      "@babel/compat-data/corejs2-built-ins": [
-        "./packages/babel-compat-data/data/corejs2-built-ins.json"
-      ],
-      "@babel/compat-data/corejs3-shipped-proposals": [
-        "./packages/babel-compat-data/data/corejs3-shipped-proposals.json"
-      ],
       "@babel/compat-data/overlapping-plugins": [
         "./packages/babel-compat-data/data/overlapping-plugins.json"
       ],
@@ -231,6 +227,9 @@
       ],
       "@babel/helper-hoist-variables": [
         "./packages/babel-helper-hoist-variables/src"
+      ],
+      "@babel/helper-import-to-platform-api": [
+        "./packages/babel-helper-import-to-platform-api/src"
       ],
       "@babel/helper-member-expression-to-functions": [
         "./packages/babel-helper-member-expression-to-functions/src"
@@ -339,6 +338,9 @@
       ],
       "@babel/plugin-proposal-import-wasm-source": [
         "./packages/babel-plugin-proposal-import-wasm-source/src"
+      ],
+      "@babel/plugin-proposal-json-modules": [
+        "./packages/babel-plugin-proposal-json-modules/src"
       ],
       "@babel/plugin-proposal-optional-chaining-assign": [
         "./packages/babel-plugin-proposal-optional-chaining-assign/src"

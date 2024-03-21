@@ -1,5 +1,5 @@
 var _A, _foo;
-console.log((_foo = /*#__PURE__*/Symbol("foo"), (_A = class A {
+console.log((_foo = Symbol("foo"), (_A = class A {
   method() {
     babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo]();
   }

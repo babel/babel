@@ -1,4 +1,4 @@
-var _a = /*#__PURE__*/Symbol("a");
+var _a = Symbol("a");
 class C {}
 /* before get a */
 function _get_a() {

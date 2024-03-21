@@ -1,4 +1,5 @@
 /* @minVersion 7.17.8 */
+/* @onlyBabel7 */
 
 import setFunctionName from "setFunctionName";
 import toPropertyKey from "toPropertyKey";

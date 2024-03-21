@@ -6,11 +6,7 @@ import rewriteForAwait from "./for-await.ts";
 import environmentVisitor from "@babel/helper-environment-visitor";
 
 export default declare(api => {
-  api.assertVersion(
-    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
-      ? PACKAGE_JSON.version
-      : 7,
-  );
+  api.assertVersion(REQUIRED_VERSION(7));
 
   const yieldStarVisitor = traverse.visitors.merge<PluginPass>([
     {
@@ -98,9 +94,8 @@ export default declare(api => {
 
   return {
     name: "transform-async-generator-functions",
-    inherits: USE_ESM
-      ? undefined
-      : IS_STANDALONE
+    inherits:
+      USE_ESM || IS_STANDALONE || api.version[0] === "8"
         ? undefined
         : // eslint-disable-next-line no-restricted-globals
           require("@babel/plugin-syntax-async-generators").default,

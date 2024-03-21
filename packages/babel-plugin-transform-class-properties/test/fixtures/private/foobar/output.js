@@ -1,19 +1,16 @@
 var _scopedFunctionWithThis = /*#__PURE__*/new WeakMap();
-var Child = /*#__PURE__*/function (_Parent) {
+let Child = /*#__PURE__*/function (_Parent) {
   "use strict";
 
-  babelHelpers.inherits(Child, _Parent);
   function Child() {
     var _this;
     babelHelpers.classCallCheck(this, Child);
     _this = babelHelpers.callSuper(this, Child);
-    babelHelpers.classPrivateFieldInitSpec(babelHelpers.assertThisInitialized(_this), _scopedFunctionWithThis, {
-      writable: true,
-      value: () => {
-        _this.name = {};
-      }
+    babelHelpers.classPrivateFieldInitSpec(_this, _scopedFunctionWithThis, () => {
+      _this.name = {};
     });
     return _this;
   }
+  babelHelpers.inherits(Child, _Parent);
   return babelHelpers.createClass(Child);
 }(Parent);

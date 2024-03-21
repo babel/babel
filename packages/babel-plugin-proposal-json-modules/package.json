@@ -1,0 +1,65 @@
+{
+  "name": "@babel/plugin-proposal-json-modules",
+  "version": "7.24.3",
+  "description": "Transform json modules imports (`import '...' with { type: 'json' }`) to work in browsers and Node.js.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-proposal-json-modules"
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-json-modules",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
+  "keywords": [
+    "babel-plugin",
+    "import",
+    "source",
+    "phase",
+    "wasm",
+    "WebAssembly",
+    "assertions",
+    "proposal",
+    "stage-3"
+  ],
+  "dependencies": {
+    "@babel/helper-import-to-platform-api": "workspace:^",
+    "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/plugin-syntax-import-attributes": "workspace:^"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.22.0"
+  },
+  "devDependencies": {
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^",
+    "babel-plugin-polyfill-corejs3": "^0.10.4"
+  },
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)",
+  "type": "commonjs",
+  "conditions": {
+    "USE_ESM": [
+      {
+        "type": "module"
+      },
+      null
+    ],
+    "BABEL_8_BREAKING": [
+      {
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+        }
+      },
+      {}
+    ]
+  }
+}

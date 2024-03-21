@@ -1,10 +1,10 @@
-var _g = /*#__PURE__*/new WeakSet();
+var _C_brand = /*#__PURE__*/new WeakSet();
 class C {
   constructor() {
-    babelHelpers.classPrivateMethodInitSpec(this, _g);
+    babelHelpers.classPrivateMethodInitSpec(this, _C_brand);
   }
 }
-function _g2() {
+function _g() {
   var _this = this;
   return babelHelpers.wrapAsyncGenerator(function* () {
     _this;

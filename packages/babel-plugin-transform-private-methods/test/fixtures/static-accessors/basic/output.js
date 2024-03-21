@@ -1,24 +1,17 @@
-var _Cl;
 class Cl {
   static getValue() {
-    return babelHelpers.classStaticPrivateFieldSpecGet(Cl, Cl, _privateStaticFieldValue);
+    return _get_privateStaticFieldValue(Cl);
   }
   static setValue() {
-    babelHelpers.classStaticPrivateFieldSpecSet(Cl, Cl, _privateStaticFieldValue, "dank");
+    _set_privateStaticFieldValue(Cl, "dank");
   }
 }
-_Cl = Cl;
-function _get_privateStaticFieldValue() {
-  return babelHelpers.classStaticPrivateFieldSpecGet(_Cl, _Cl, _PRIVATE_STATIC_FIELD);
+function _get_privateStaticFieldValue(_this) {
+  return _PRIVATE_STATIC_FIELD._;
 }
-function _set_privateStaticFieldValue(newValue) {
-  babelHelpers.classStaticPrivateFieldSpecSet(_Cl, _Cl, _PRIVATE_STATIC_FIELD, `Updated: ${newValue}`);
+function _set_privateStaticFieldValue(_this2, newValue) {
+  _PRIVATE_STATIC_FIELD._ = `Updated: ${newValue}`;
 }
-var _privateStaticFieldValue = {
-  get: _get_privateStaticFieldValue,
-  set: _set_privateStaticFieldValue
-};
 var _PRIVATE_STATIC_FIELD = {
-  writable: true,
-  value: "top secret string"
+  _: "top secret string"
 };

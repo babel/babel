@@ -1,21 +1,20 @@
 class C {
   static 0(..._p) {
     var [..._p2] = _p,
-      x = babelHelpers.classStaticPrivateFieldSpecGet(_p2[0], C, _x);
+      x = babelHelpers.assertClassBrand(C, _p2[0], _x)._;
   }
   static 1(a, b = 1, _p3, ..._p4) {
-    var x = babelHelpers.classStaticPrivateFieldSpecGet(_p3, C, _x),
+    var x = babelHelpers.assertClassBrand(C, _p3, _x)._,
       c = _p4;
   }
   static 2(a, b, _p5 = void 0) {
-    var x = babelHelpers.classStaticPrivateFieldSpecGet(_p5 === void 0 ? C : _p5, C, _x);
+    var x = babelHelpers.assertClassBrand(C, _p5 === void 0 ? C : _p5, _x)._;
   }
   static 3(a, b, _p6, _p7 = void 0) {
-    var x = babelHelpers.classStaticPrivateFieldSpecGet(_p6, C, _x),
+    var x = babelHelpers.assertClassBrand(C, _p6, _x)._,
       c = _p7 === void 0 ? 1 : _p7;
   }
 }
 var _x = {
-  writable: true,
-  value: void 0
+  _: void 0
 };

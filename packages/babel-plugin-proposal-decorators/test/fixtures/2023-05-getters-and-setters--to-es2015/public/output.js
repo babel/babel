@@ -1,4 +1,5 @@
-var _initProto, _Foo;
+var _Foo;
+let _initProto;
 const dec = () => {};
 class Foo {
   constructor() {

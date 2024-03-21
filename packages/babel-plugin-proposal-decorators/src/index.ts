@@ -17,11 +17,7 @@ interface Options extends SyntaxOptions {
 export type { Options };
 
 export default declare((api, options: Options) => {
-  api.assertVersion(
-    process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
-      ? PACKAGE_JSON.version
-      : 7,
-  );
+  api.assertVersion(REQUIRED_VERSION(7));
 
   // Options are validated in @babel/plugin-syntax-decorators
   if (!process.env.BABEL_8_BREAKING) {
@@ -46,13 +42,10 @@ export default declare((api, options: Options) => {
     version === "2021-12" ||
     version === "2022-03" ||
     version === "2023-01" ||
-    version === "2023-05"
+    version === "2023-05" ||
+    version === "2023-11"
   ) {
-    api.assertVersion(
-      process.env.BABEL_8_BREAKING && process.env.IS_PUBLISH
-        ? PACKAGE_JSON.version
-        : "^7.0.2",
-    );
+    api.assertVersion(REQUIRED_VERSION("^7.0.2"));
     return createClassFeaturePlugin({
       name: "proposal-decorators",
 
@@ -65,7 +58,7 @@ export default declare((api, options: Options) => {
     });
   } else {
     throw new Error(
-      "The '.version' option must be one of 'legacy', '2023-05', '2023-01', '2022-03', or '2021-12'.",
+      "The '.version' option must be one of 'legacy', '2023-11', '2023-05', '2023-01', '2022-03', or '2021-12'.",
     );
   }
 });

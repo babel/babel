@@ -26,7 +26,7 @@ var MyClass = /*#__PURE__*/function () {
     this[`template`] = "template";
     this[_ref4] = "template-with-expression";
   }
-  babelHelpers.createClass(MyClass, [{
+  return babelHelpers.createClass(MyClass, [{
     key: "whatever",
     get: function () {},
     set: function (value) {}
@@ -43,7 +43,6 @@ var MyClass = /*#__PURE__*/function () {
     key: "10",
     value: function _() {}
   }]);
-  return MyClass;
 }();
 MyClass[_one] = "test";
 MyClass[2 * 4 + 7] = "247";

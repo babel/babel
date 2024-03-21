@@ -893,60 +893,65 @@ helpers.classPrivateFieldLooseBase = helper("7.0.0-beta.0")`
   }
 `;
 
+// TODO(Babel 8): Remove
 helpers.classPrivateFieldGet = helper("7.0.0-beta.0")`
   import classApplyDescriptorGet from "classApplyDescriptorGet";
-  import classExtractFieldDescriptor from "classExtractFieldDescriptor";
+  import classPrivateFieldGet2 from "classPrivateFieldGet2";
   export default function _classPrivateFieldGet(receiver, privateMap) {
-    var descriptor = classExtractFieldDescriptor(receiver, privateMap, "get");
+    var descriptor = classPrivateFieldGet2(privateMap, receiver);
     return classApplyDescriptorGet(receiver, descriptor);
   }
 `;
 
+// TODO(Babel 8): Remove
 helpers.classPrivateFieldSet = helper("7.0.0-beta.0")`
   import classApplyDescriptorSet from "classApplyDescriptorSet";
-  import classExtractFieldDescriptor from "classExtractFieldDescriptor";
+  import classPrivateFieldGet2 from "classPrivateFieldGet2";
   export default function _classPrivateFieldSet(receiver, privateMap, value) {
-    var descriptor = classExtractFieldDescriptor(receiver, privateMap, "set");
+    var descriptor = classPrivateFieldGet2(privateMap, receiver);
     classApplyDescriptorSet(receiver, descriptor, value);
     return value;
   }
 `;
 
+// TODO(Babel 8): Remove
 helpers.classPrivateFieldDestructureSet = helper("7.4.4")`
   import classApplyDescriptorDestructureSet from "classApplyDescriptorDestructureSet";
-  import classExtractFieldDescriptor from "classExtractFieldDescriptor";
+  import classPrivateFieldGet2 from "classPrivateFieldGet2";
   export default function _classPrivateFieldDestructureSet(receiver, privateMap) {
-    var descriptor = classExtractFieldDescriptor(receiver, privateMap, "set");
+    var descriptor = classPrivateFieldGet2(privateMap, receiver);
     return classApplyDescriptorDestructureSet(receiver, descriptor);
   }
 `;
 
+// TODO(Babel 8): Remove
 helpers.classExtractFieldDescriptor = helper("7.13.10")`
-  export default function _classExtractFieldDescriptor(receiver, privateMap, action) {
-    if (!privateMap.has(receiver)) {
-      throw new TypeError("attempted to " + action + " private field on non-instance");
-    }
-    return privateMap.get(receiver);
+  import classPrivateFieldGet2 from "classPrivateFieldGet2";
+
+  export default function _classExtractFieldDescriptor(receiver, privateMap) {
+    return classPrivateFieldGet2(privateMap, receiver);
   }
 `;
 
+// TODO(Babel 8): Remove
 helpers.classStaticPrivateFieldSpecGet = helper("7.0.2")`
   import classApplyDescriptorGet from "classApplyDescriptorGet";
-  import classCheckPrivateStaticAccess from "classCheckPrivateStaticAccess";
+  import assertClassBrand from "assertClassBrand";
   import classCheckPrivateStaticFieldDescriptor from "classCheckPrivateStaticFieldDescriptor";
   export default function _classStaticPrivateFieldSpecGet(receiver, classConstructor, descriptor) {
-    classCheckPrivateStaticAccess(receiver, classConstructor);
+    assertClassBrand(classConstructor, receiver);
     classCheckPrivateStaticFieldDescriptor(descriptor, "get");
     return classApplyDescriptorGet(receiver, descriptor);
   }
 `;
 
+// TODO(Babel 8): Remove
 helpers.classStaticPrivateFieldSpecSet = helper("7.0.2")`
   import classApplyDescriptorSet from "classApplyDescriptorSet";
-  import classCheckPrivateStaticAccess from "classCheckPrivateStaticAccess";
+  import assertClassBrand from "assertClassBrand";
   import classCheckPrivateStaticFieldDescriptor from "classCheckPrivateStaticFieldDescriptor";
   export default function _classStaticPrivateFieldSpecSet(receiver, classConstructor, descriptor, value) {
-    classCheckPrivateStaticAccess(receiver, classConstructor);
+    assertClassBrand(classConstructor, receiver);
     classCheckPrivateStaticFieldDescriptor(descriptor, "set");
     classApplyDescriptorSet(receiver, descriptor, value);
     return value;
@@ -954,19 +959,21 @@ helpers.classStaticPrivateFieldSpecSet = helper("7.0.2")`
 `;
 
 helpers.classStaticPrivateMethodGet = helper("7.3.2")`
-  import classCheckPrivateStaticAccess from "classCheckPrivateStaticAccess";
+  import assertClassBrand from "assertClassBrand";
   export default function _classStaticPrivateMethodGet(receiver, classConstructor, method) {
-    classCheckPrivateStaticAccess(receiver, classConstructor);
+    assertClassBrand(classConstructor, receiver);
     return method;
   }
 `;
 
+// TODO(Babel 8): Remove
 helpers.classStaticPrivateMethodSet = helper("7.3.2")`
   export default function _classStaticPrivateMethodSet() {
     throw new TypeError("attempted to set read only static private field");
   }
 `;
 
+// TODO(Babel 8): Remove
 helpers.classApplyDescriptorGet = helper("7.13.10")`
   export default function _classApplyDescriptorGet(receiver, descriptor) {
     if (descriptor.get) {
@@ -976,6 +983,7 @@ helpers.classApplyDescriptorGet = helper("7.13.10")`
   }
 `;
 
+// TODO(Babel 8): Remove
 helpers.classApplyDescriptorSet = helper("7.13.10")`
   export default function _classApplyDescriptorSet(receiver, descriptor, value) {
     if (descriptor.set) {
@@ -992,6 +1000,7 @@ helpers.classApplyDescriptorSet = helper("7.13.10")`
   }
 `;
 
+// TODO(Babel 8): Remove
 helpers.classApplyDescriptorDestructureSet = helper("7.13.10")`
   export default function _classApplyDescriptorDestructureSet(receiver, descriptor) {
     if (descriptor.set) {
@@ -1016,25 +1025,27 @@ helpers.classApplyDescriptorDestructureSet = helper("7.13.10")`
   }
 `;
 
+// TODO(Babel 8): Remove
 helpers.classStaticPrivateFieldDestructureSet = helper("7.13.10")`
   import classApplyDescriptorDestructureSet from "classApplyDescriptorDestructureSet";
-  import classCheckPrivateStaticAccess from "classCheckPrivateStaticAccess";
+  import assertClassBrand from "assertClassBrand";
   import classCheckPrivateStaticFieldDescriptor from "classCheckPrivateStaticFieldDescriptor";
   export default function _classStaticPrivateFieldDestructureSet(receiver, classConstructor, descriptor) {
-    classCheckPrivateStaticAccess(receiver, classConstructor);
+    assertClassBrand(classConstructor, receiver);
     classCheckPrivateStaticFieldDescriptor(descriptor, "set");
     return classApplyDescriptorDestructureSet(receiver, descriptor);
   }
 `;
 
+// TODO(Babel 8): Remove
 helpers.classCheckPrivateStaticAccess = helper("7.13.10")`
-  export default function _classCheckPrivateStaticAccess(receiver, classConstructor) {
-    if (receiver !== classConstructor) {
-      throw new TypeError("Private static access of wrong provenance");
-    }
+  import assertClassBrand from "assertClassBrand";
+  export default function _classCheckPrivateStaticAccess(receiver, classConstructor, returnValue) {
+    return assertClassBrand(classConstructor, receiver, returnValue);
   }
 `;
 
+// TODO(Babel 8): Remove
 helpers.classCheckPrivateStaticFieldDescriptor = helper("7.13.10")`
   export default function _classCheckPrivateStaticFieldDescriptor(descriptor, action) {
     if (descriptor === undefined) {
@@ -1717,11 +1728,11 @@ helpers.decorate = helper("7.1.5")`
 
 `;
 
+// TODO: Remove in Babel 8
 helpers.classPrivateMethodGet = helper("7.1.6")`
+  import assertClassBrand from "assertClassBrand";
   export default function _classPrivateMethodGet(receiver, privateSet, fn) {
-    if (!privateSet.has(receiver)) {
-      throw new TypeError("attempted to get private field on non-instance");
-    }
+    assertClassBrand(privateSet, receiver);
     return fn;
   }
 `;

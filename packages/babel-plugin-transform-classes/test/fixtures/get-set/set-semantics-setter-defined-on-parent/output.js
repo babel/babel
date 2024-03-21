@@ -5,27 +5,25 @@ let Base = /*#__PURE__*/function () {
   function Base() {
     babelHelpers.classCallCheck(this, Base);
   }
-  babelHelpers.createClass(Base, [{
+  return babelHelpers.createClass(Base, [{
     key: "test",
     set: function (v) {
       value = v;
     }
   }]);
-  return Base;
 }();
 let Obj = /*#__PURE__*/function (_Base) {
-  babelHelpers.inherits(Obj, _Base);
   function Obj() {
     babelHelpers.classCallCheck(this, Obj);
     return babelHelpers.callSuper(this, Obj, arguments);
   }
-  babelHelpers.createClass(Obj, [{
+  babelHelpers.inherits(Obj, _Base);
+  return babelHelpers.createClass(Obj, [{
     key: "set",
     value: function set() {
       return babelHelpers.set(babelHelpers.getPrototypeOf(Obj.prototype), "test", 3, this, true);
     }
   }]);
-  return Obj;
 }(Base);
 Object.defineProperty(Obj.prototype, 'test', {
   value: 2,

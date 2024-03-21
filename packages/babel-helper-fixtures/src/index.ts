@@ -49,9 +49,11 @@ export interface Test {
 export interface TaskOptions extends InputOptions {
   BABEL_8_BREAKING?: boolean;
   DO_NOT_SET_SOURCE_TYPE?: boolean;
+  SKIP_ON_PUBLISH?: boolean;
   externalHelpers?: boolean;
   ignoreOutput?: boolean;
   minNodeVersion?: string;
+  minNodeVersionTransform?: string;
   sourceMap?: boolean;
   os?: string | string[];
   validateLogs?: boolean;
@@ -191,9 +193,11 @@ function pushTask(
     return;
   }
 
-  const shouldIgnore = process.env.BABEL_8_BREAKING
-    ? taskOpts.BABEL_8_BREAKING === false
-    : taskOpts.BABEL_8_BREAKING === true;
+  const shouldIgnore =
+    (process.env.BABEL_8_BREAKING
+      ? taskOpts.BABEL_8_BREAKING === false
+      : taskOpts.BABEL_8_BREAKING === true) ||
+    (process.env.IS_PUBLISH ? taskOpts.SKIP_ON_PUBLISH : false);
 
   if (shouldIgnore) return;
 
@@ -253,6 +257,7 @@ function pushTask(
 
   delete taskOpts.BABEL_8_BREAKING;
   delete taskOpts.DO_NOT_SET_SOURCE_TYPE;
+  delete taskOpts.SKIP_ON_PUBLISH;
 
   // If there's node requirement, check it before pushing task
   if (taskOpts.minNodeVersion) {
@@ -265,11 +270,32 @@ function pushTask(
     }
 
     if (semver.lt(nodeVersion, minimumVersion)) {
-      return;
+      if (test.actual.code) {
+        test.exec.code = null;
+      } else {
+        return;
+      }
     }
 
     // Delete to avoid option validation error
     delete taskOpts.minNodeVersion;
+  }
+
+  if (taskOpts.minNodeVersionTransform) {
+    const minimumVersion = semver.clean(taskOpts.minNodeVersionTransform);
+
+    if (minimumVersion == null) {
+      throw new Error(
+        `'minNodeVersionTransform' has invalid semver format: ${taskOpts.minNodeVersionTransform}`,
+      );
+    }
+
+    if (semver.lt(nodeVersion, minimumVersion)) {
+      return;
+    }
+
+    // Delete to avoid option validation error
+    delete taskOpts.minNodeVersionTransform;
   }
 
   if (taskOpts.os) {

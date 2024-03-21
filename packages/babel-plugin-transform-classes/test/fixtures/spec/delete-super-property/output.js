@@ -4,7 +4,7 @@ new ( /*#__PURE__*/function () {
   function _class() {
     babelHelpers.classCallCheck(this, _class);
   }
-  babelHelpers.createClass(_class, [{
+  return babelHelpers.createClass(_class, [{
     key: "f",
     value: function f() {
       (function () {
@@ -12,7 +12,6 @@ new ( /*#__PURE__*/function () {
       })();
     }
   }]);
-  return _class;
 }())().f();
 new ( /*#__PURE__*/function () {
   "use strict";
@@ -20,7 +19,7 @@ new ( /*#__PURE__*/function () {
   function _class2() {
     babelHelpers.classCallCheck(this, _class2);
   }
-  babelHelpers.createClass(_class2, [{
+  return babelHelpers.createClass(_class2, [{
     key: "f",
     value: function f() {
       babelHelpers.toPropertyKey(0), function () {
@@ -28,7 +27,6 @@ new ( /*#__PURE__*/function () {
       }();
     }
   }]);
-  return _class2;
 }())().f();
 
 // [expr] should be evaluated
@@ -39,7 +37,7 @@ new ( /*#__PURE__*/function () {
   function _class3() {
     babelHelpers.classCallCheck(this, _class3);
   }
-  babelHelpers.createClass(_class3, [{
+  return babelHelpers.createClass(_class3, [{
     key: "f",
     value: function f() {
       babelHelpers.toPropertyKey(++counter), function () {
@@ -47,7 +45,6 @@ new ( /*#__PURE__*/function () {
       }();
     }
   }]);
-  return _class3;
 }())().f();
 
 // TypeError before ReferenceError
@@ -57,7 +54,7 @@ new ( /*#__PURE__*/function () {
   function _class4() {
     babelHelpers.classCallCheck(this, _class4);
   }
-  babelHelpers.createClass(_class4, [{
+  return babelHelpers.createClass(_class4, [{
     key: "f",
     value: function f() {
       babelHelpers.toPropertyKey(0()), function () {
@@ -65,5 +62,4 @@ new ( /*#__PURE__*/function () {
       }();
     }
   }]);
-  return _class4;
 }())().f();

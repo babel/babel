@@ -1,14 +1,13 @@
 class Foo {
   static test() {
-    return babelHelpers.classStaticPrivateFieldSpecGet(Foo, Foo, _bar);
+    return _bar._;
   }
   test() {
-    return babelHelpers.classStaticPrivateFieldSpecGet(Foo, Foo, _bar);
+    return _bar._;
   }
 }
 var _bar = {
-  writable: true,
-  value: "foo"
+  _: "foo"
 };
 expect("bar" in Foo).toBe(false);
 expect(Foo.test()).toBe("foo");

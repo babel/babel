@@ -9,7 +9,6 @@ var _events = require("events");
 var _binarySerializer = babelHelpers.interopRequireDefault(require("./helpers/binary-serializer"));
 // import ...
 var Connection = exports["default"] = /*#__PURE__*/function (_EventEmitter) {
-  babelHelpers.inherits(Connection, _EventEmitter);
   function Connection(endpoint, joinKey, joinData, roomId) {
     var _this;
     babelHelpers.classCallCheck(this, Connection);
@@ -20,7 +19,8 @@ var Connection = exports["default"] = /*#__PURE__*/function (_EventEmitter) {
     // ...
     return _this;
   }
-  babelHelpers.createClass(Connection, [{
+  babelHelpers.inherits(Connection, _EventEmitter);
+  return babelHelpers.createClass(Connection, [{
     key: "send",
     value: function send(message) {
       this.sock.write(_binarySerializer["default"].serializeMessage(message));
@@ -31,5 +31,4 @@ var Connection = exports["default"] = /*#__PURE__*/function (_EventEmitter) {
       this.sock.close();
     }
   }]);
-  return Connection;
 }(_events.EventEmitter);

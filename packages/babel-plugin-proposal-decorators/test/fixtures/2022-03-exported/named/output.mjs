@@ -1,4 +1,4 @@
-var _initClass, _classDecs;
+let _initClass, _classDecs;
 _classDecs = [dec];
 let _A;
 class A {

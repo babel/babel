@@ -906,23 +906,29 @@ describe("api", function () {
       });
     });
 
-    it("both syntax and transform plugin available", function () {
-      return new Promise(resolve => {
+    it("both syntax and transform plugin available", async function () {
+      const promise = new Promise((resolve, reject) => {
         transformFile(
           cwd + "/fixtures/api/parsing-errors/syntax-and-transform/file.js",
           options,
-          function (err) {
-            expect(err.message).toMatch(
-              "Support for the experimental syntax 'doExpressions' isn't currently enabled (1:2):",
-            );
-            expect(err.message).toMatch(
-              "Add @babel/plugin-proposal-do-expressions (https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-do-expressions) to the " +
-                "'plugins' section of your Babel config to enable transformation.",
-            );
-            resolve();
-          },
+          (err, result) => (err ? reject(err) : resolve(result)),
         );
       });
+
+      await expect(promise).rejects.toThrow();
+
+      const err = await promise.catch(e => e);
+
+      expect(err.message).toMatch(
+        "Support for the experimental syntax 'doExpressions' isn't currently enabled (1:2):",
+      );
+      expect(err.message).toMatch(
+        "Add @babel/plugin-proposal-do-expressions (https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-do-expressions) to the " +
+          "'plugins' section of your Babel config to enable transformation.",
+      );
+      expect(err.message).toMatch(
+        /npx cross-env BABEL_SHOW_CONFIG_FOR=(.*?)[\\/]parsing-errors[\\/]syntax-and-transform[\\/]file.js/,
+      );
     });
   });
 

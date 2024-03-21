@@ -9,6 +9,13 @@ if (execSync("git status --porcelain=v1", { encoding: "utf8" })) {
     `Please re-run "${fixCommand}" and checkout the following changes to git`
   );
   execSync("git status", { stdio: "inherit" });
+
+  if (process.env.GITHUB_ACTIONS) {
+    console.log("::group::git diff");
+    execSync("git diff", { stdio: "inherit" });
+    console.log("::endgroup::");
+  }
+
   // eslint-disable-next-line no-process-exit
   process.exit(1);
 }

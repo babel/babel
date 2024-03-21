@@ -1,6 +1,6 @@
 {
   "name": "@babel/compat-data",
-  "version": "7.23.5",
+  "version": "7.24.1",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
   "description": "",
@@ -15,10 +15,12 @@
   "conditions": {
     "BABEL_8_BREAKING": [
       {
-        "./plugins": "./plugins.js",
-        "./native-modules": "./native-modules.js",
-        "./overlapping-plugins": "./overlapping-plugins.js",
-        "./plugin-bugfixes": "./plugin-bugfixes.js",
+        "exports": {
+          "./plugins": "./plugins.js",
+          "./native-modules": "./native-modules.js",
+          "./overlapping-plugins": "./overlapping-plugins.js",
+          "./plugin-bugfixes": "./plugin-bugfixes.js"
+        },
         "engines": {
           "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
         }

@@ -9,5 +9,6 @@
   "sourcesContent": [
     "var foo = () => 4;"
   ],
-  "mappings": "AAAA,IAAAA,GAAA,GAAU,SAAAA,CAAA,E;SAAM,C;CAAC"
+  "mappings": "AAAA,IAAAA,GAAA,GAAU,SAAAA,CAAA,E;SAAM,C;CAAC",
+  "ignoreList": []
 }

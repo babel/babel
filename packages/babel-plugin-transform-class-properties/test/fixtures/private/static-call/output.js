@@ -1,20 +1,18 @@
-var Foo = /*#__PURE__*/function () {
+let Foo = /*#__PURE__*/function () {
   "use strict";
 
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
   }
-  babelHelpers.createClass(Foo, [{
+  return babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test(x) {
-      return babelHelpers.classStaticPrivateFieldSpecGet(Foo, Foo, _foo).call(Foo, x);
+      return _foo._.call(Foo, x);
     }
   }]);
-  return Foo;
 }();
 var _foo = {
-  writable: true,
-  value: function (x) {
+  _: function (x) {
     return x;
   }
 };

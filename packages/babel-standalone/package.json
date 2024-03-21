@@ -1,6 +1,6 @@
 {
   "name": "@babel/standalone",
-  "version": "7.23.10",
+  "version": "7.24.3",
   "description": "Standalone build of Babel for use in non-Node.js environments.",
   "main": "./babel.js",
   "files": [
@@ -11,6 +11,8 @@
   ],
   "devDependencies": {
     "@babel/core": "workspace:^",
+    "@babel/generator": "workspace:^",
+    "@babel/parser": "workspace:^",
     "@babel/plugin-external-helpers": "workspace:^",
     "@babel/plugin-proposal-decorators": "workspace:^",
     "@babel/plugin-proposal-destructuring-private": "workspace:^",
@@ -21,6 +23,7 @@
     "@babel/plugin-proposal-function-bind": "workspace:^",
     "@babel/plugin-proposal-function-sent": "workspace:^",
     "@babel/plugin-proposal-import-defer": "workspace:^",
+    "@babel/plugin-proposal-json-modules": "workspace:^",
     "@babel/plugin-proposal-optional-chaining-assign": "workspace:^",
     "@babel/plugin-proposal-pipeline-operator": "workspace:^",
     "@babel/plugin-proposal-record-and-tuple": "workspace:^",
@@ -115,6 +118,9 @@
     "@babel/preset-flow": "workspace:^",
     "@babel/preset-react": "workspace:^",
     "@babel/preset-typescript": "workspace:^",
+    "@babel/template": "workspace:^",
+    "@babel/traverse": "workspace:^",
+    "@babel/types": "workspace:^",
     "acorn": "^8.7.0",
     "jsdom": "^22.1.0"
   },

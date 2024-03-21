@@ -5,7 +5,7 @@ import { createRequire } from "module";
 import { fileURLToPath } from "url";
 import plumber from "gulp-plumber";
 import through from "through2";
-import chalk from "chalk";
+import colors from "picocolors";
 import filter from "gulp-filter";
 import gulp from "gulp";
 import { rollup } from "rollup";
@@ -125,7 +125,7 @@ function generateHelpers(generator, dest, filename, message) {
         file.contents = Buffer.from(
           await formatCode(await generateCode(filename), dest + file.path)
         );
-        log(`${chalk.green("✔")} Generated ${message}`);
+        log(`${colors.green("✔")} Generated ${message}`);
         callback(null, file);
       })
     )
@@ -352,7 +352,7 @@ function buildRollup(packages, buildStandalone) {
           /@babel\/preset-modules\/.*/,
         ];
 
-        log(`Compiling '${chalk.cyan(input)}' with rollup ...`);
+        log(`Compiling '${colors.cyan(input)}' with rollup ...`);
         const bundle = await rollup({
           input,
           external: buildStandalone ? [] : external,
@@ -362,6 +362,7 @@ function buildRollup(packages, buildStandalone) {
             switch (warning.code) {
               case "CIRCULAR_DEPENDENCY":
               case "SOURCEMAP_ERROR": // Rollup warns about the babel-polyfills source maps
+              case "INCONSISTENT_IMPORT_ATTRIBUTES": // @rollup/plugin-commonjs transforms require("...json") to an import without attributes
                 return;
               case "UNUSED_EXTERNAL_IMPORT":
                 warn(warning);
@@ -419,6 +420,21 @@ function buildRollup(packages, buildStandalone) {
                 "packages/babel-compat-data/scripts/data/legacy-plugin-aliases.js",
                 "packages/*/src/**/*.cjs",
               ],
+              ignore:
+                process.env.STRIP_BABEL_8_FLAG &&
+                bool(process.env.BABEL_8_BREAKING)
+                  ? [
+                      // These require()s are all in babel-preset-env/src/polyfills/babel-7-plugins.cjs
+                      // They are gated by a !process.env.BABEL_8_BREAKING check, but
+                      // @rollup/plugin-commonjs extracts them to import statements outside of the
+                      // check and thus they end up in the final bundle.
+                      "babel-plugin-polyfill-corejs2",
+                      "babel-plugin-polyfill-regenerator",
+                      "./babel-polyfill.cjs",
+                      "./regenerator.cjs",
+                      "@babel/compat-data/corejs2-built-ins",
+                    ]
+                  : [],
               dynamicRequireTargets: [
                 // https://github.com/mathiasbynens/regexpu-core/blob/ffd8fff2e31f4597f6fdfee75d5ac1c5c8111ec3/rewrite-pattern.js#L48
                 resolveChain(
@@ -546,15 +562,15 @@ function buildRollup(packages, buildStandalone) {
 
         if (!process.env.IS_PUBLISH) {
           log(
-            chalk.yellow(
-              `Skipped minification of '${chalk.cyan(
+            colors.yellow(
+              `Skipped minification of '${colors.cyan(
                 outputFile
               )}' because not publishing`
             )
           );
           return undefined;
         }
-        log(`Minifying '${chalk.cyan(outputFile)}'...`);
+        log(`Minifying '${colors.cyan(outputFile)}'...`);
 
         await bundle.write({
           file: outputFile.replace(/\.js$/, ".min.js"),
@@ -581,7 +597,7 @@ function buildRollup(packages, buildStandalone) {
 
 function buildRollupDts(packages) {
   async function build(input, output, banner) {
-    log(`Bundling '${chalk.cyan(output)}' with rollup ...`);
+    log(`Bundling '${colors.cyan(output)}' with rollup ...`);
 
     const bundle = await rollup({
       input,
@@ -821,7 +837,7 @@ ${fs.readFileSync(path.join(path.dirname(input), "license"), "utf8")}*/
 gulp.task("build-cjs-bundles", () => {
   if (!USE_ESM) {
     log(
-      chalk.yellow(
+      colors.yellow(
         "Skipping CJS-compat bundles for ESM-based builds, because not compiling to ESM"
       )
     );

@@ -1,37 +1,23 @@
 const dec = () => {};
 var _A = /*#__PURE__*/new WeakMap();
-var _a = /*#__PURE__*/new WeakMap();
+var _Foo_brand = /*#__PURE__*/new WeakSet();
 var _B = /*#__PURE__*/new WeakMap();
-var _b = /*#__PURE__*/new WeakMap();
 class Foo {
   constructor() {
-    babelHelpers.classPrivateFieldInitSpec(this, _b, {
-      get: _get_b,
-      set: _set_b
-    });
-    babelHelpers.classPrivateFieldInitSpec(this, _a, {
-      get: _get_a,
-      set: _set_a
-    });
-    babelHelpers.classPrivateFieldInitSpec(this, _A, {
-      writable: true,
-      value: void 0
-    });
-    babelHelpers.classPrivateFieldInitSpec(this, _B, {
-      writable: true,
-      value: 123
-    });
+    babelHelpers.classPrivateMethodInitSpec(this, _Foo_brand);
+    babelHelpers.classPrivateFieldInitSpec(this, _A, void 0);
+    babelHelpers.classPrivateFieldInitSpec(this, _B, 123);
   }
 }
-function _get_a() {
-  return babelHelpers.classPrivateFieldGet(this, _A);
+function _get_a(_this) {
+  return babelHelpers.classPrivateFieldGet2(_A, _this);
 }
-function _set_a(v) {
-  babelHelpers.classPrivateFieldSet(this, _A, v);
+function _set_a(_this2, v) {
+  babelHelpers.classPrivateFieldSet2(_A, _this2, v);
 }
-function _get_b() {
-  return babelHelpers.classPrivateFieldGet(this, _B);
+function _get_b(_this3) {
+  return babelHelpers.classPrivateFieldGet2(_B, _this3);
 }
-function _set_b(v) {
-  babelHelpers.classPrivateFieldSet(this, _B, v);
+function _set_b(_this4, v) {
+  babelHelpers.classPrivateFieldSet2(_B, _this4, v);
 }

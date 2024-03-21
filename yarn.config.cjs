@@ -1,8 +1,13 @@
 // @ts-check
+/// <reference lib="es2015" />
 
 /**
  * @typedef {import('@yarnpkg/types').Yarn.Constraints.Context} Context
  * */
+
+const babel7plugins_babel8core = new Set(
+  require("./test/babel-7-8-compat/data.json")["babel7plugins-babel8core"]
+);
 
 /**
  * Enforces that all workspaces depend on other workspaces using `workspace:^`
@@ -21,7 +26,7 @@ function enforceWorkspaceDependencies({ Yarn }) {
       dependency.type === "dependencies" ||
       dependency.type === "devDependencies"
     ) {
-      if (dependency.range.startsWith("workspace:")) {
+      if (/^workspace:(?!\^$)/.test(dependency.range)) {
         dependency.update("workspace:^");
       }
     }
@@ -89,10 +94,13 @@ function enforceEnginesNodeForPublicUnsetForPrivate({ Yarn }) {
     if (workspace.manifest.private) {
       workspace.unset("engines.node");
     } else {
-      workspace.set(
-        "conditions.BABEL_8_BREAKING.0.engines.node",
-        "^16.20.0 || ^18.16.0 || >=20.0.0"
-      );
+      if (!workspace.manifest.conditions?.BABEL_8_BREAKING?.[0].private) {
+        workspace.set(
+          "conditions.BABEL_8_BREAKING.0.engines.node",
+          "^16.20.0 || ^18.16.0 || >=20.0.0"
+        );
+      }
+
       if (workspace.ident === "@babel/parser") continue;
       if (workspace.ident?.startsWith("@babel/eslint")) {
         workspace.set("engines.node", "^10.13.0 || ^12.13.0 || >=14.0.0");
@@ -191,6 +199,14 @@ gen_enforced_dependency(WorkspaceCwd, DependencyIdent, null, 'devDependencies') 
  */
 function enforceNoDualTypeDependencies({ Yarn }) {
   for (const dependency of Yarn.dependencies({ type: "devDependencies" })) {
+    if (
+      // TODO(Babel 8): Remove this check
+      // We use conditions to remove the dependency, but we still need it as a devDependency
+      dependency.workspace.ident === "@babel/plugin-transform-runtime" &&
+      dependency.ident === "babel-plugin-polyfill-corejs3"
+    ) {
+      continue;
+    }
     const otherDependency = Yarn.dependency({
       workspace: dependency.workspace,
       ident: dependency.ident,
@@ -268,7 +284,20 @@ function enforceBabelCoreNotInDeps({ Yarn }) {
       workspace.pkg.peerDependencies.has("@babel/core") &&
       !workspace.manifest.dependencies?.["@babel/core"]
     ) {
-      workspace.set("devDependencies['@babel/core']", "workspace:^");
+      if (
+        process.env.BABEL_CORE_DEV_DEP_VERSION &&
+        workspace.ident &&
+        babel7plugins_babel8core.has(
+          workspace.ident.replace("@babel/", "babel-")
+        )
+      ) {
+        workspace.set(
+          "devDependencies['@babel/core']",
+          process.env.BABEL_CORE_DEV_DEP_VERSION
+        );
+      } else {
+        workspace.set("devDependencies['@babel/core']", "workspace:^");
+      }
     }
     if (
       workspace.ident !== null &&

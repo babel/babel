@@ -1,0 +1,5 @@
+{
+  "BABEL_8_BREAKING": false,
+  "presets": [["flow", { "experimental_useHermesParser": true }]],
+  "minNodeVersionTransform": "12.0.0"
+}

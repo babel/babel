@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-decorators",
-  "version": "7.23.3",
+  "version": "7.24.1",
   "description": "Allow parsing of decorators",
   "repository": {
     "type": "git",

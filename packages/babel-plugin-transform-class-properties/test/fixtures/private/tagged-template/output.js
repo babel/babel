@@ -1,20 +1,16 @@
 var _tag = /*#__PURE__*/new WeakMap();
-var Foo = /*#__PURE__*/function () {
+let Foo = /*#__PURE__*/function () {
   "use strict";
 
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
-    babelHelpers.classPrivateFieldInitSpec(this, _tag, {
-      writable: true,
-      value: void 0
-    });
+    babelHelpers.classPrivateFieldInitSpec(this, _tag, void 0);
   }
-  babelHelpers.createClass(Foo, [{
+  return babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test() {
-      babelHelpers.classPrivateFieldGet(this, _tag).bind(this)``;
+      babelHelpers.classPrivateFieldGet2(_tag, this).bind(this)``;
     }
   }]);
-  return Foo;
 }();
 new Foo();

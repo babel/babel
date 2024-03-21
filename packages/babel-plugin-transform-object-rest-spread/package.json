@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-object-rest-spread",
-  "version": "7.23.4",
+  "version": "7.24.1",
   "description": "Compile object rest and spread to ES5",
   "repository": {
     "type": "git",
@@ -17,7 +17,6 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/compat-data": "workspace:^",
     "@babel/helper-compilation-targets": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^",
     "@babel/plugin-syntax-object-rest-spread": "condition:BABEL_8_BREAKING ? : ^7.8.3",

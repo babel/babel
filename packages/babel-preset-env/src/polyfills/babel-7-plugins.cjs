@@ -10,5 +10,8 @@ if (!process.env.BABEL_8_BREAKING) {
     },
     legacyBabelPolyfillPlugin: { get: () => require("./babel-polyfill.cjs") },
     removeRegeneratorEntryPlugin: { get: () => require("./regenerator.cjs") },
+    corejs2Polyfills: {
+      get: () => require("@babel/compat-data/corejs2-built-ins"),
+    },
   });
 }

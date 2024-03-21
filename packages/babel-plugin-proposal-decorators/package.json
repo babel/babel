@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-decorators",
-  "version": "7.23.9",
+  "version": "7.24.1",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
   "publishConfig": {
@@ -32,7 +32,7 @@
     "@babel/helper-plugin-test-runner": "workspace:^",
     "@babel/traverse": "workspace:^",
     "array.prototype.concat": "^1.0.2",
-    "babel-plugin-polyfill-es-shims": "^0.10.2",
+    "babel-plugin-polyfill-es-shims": "^0.10.4",
     "object.getownpropertydescriptors": "^2.1.1"
   },
   "engines": {

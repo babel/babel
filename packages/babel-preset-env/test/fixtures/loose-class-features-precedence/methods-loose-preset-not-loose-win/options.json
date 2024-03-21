@@ -1,0 +1,15 @@
+{
+  "BABEL_8_BREAKING": false,
+  "os": ["win32"],
+  "validateLogs": true,
+  "presets": [
+    [
+      "env",
+      {
+        "targets": { "node": 10 },
+        "shippedProposals": true
+      }
+    ]
+  ],
+  "plugins": [["transform-private-methods", { "loose": true }]]
+}

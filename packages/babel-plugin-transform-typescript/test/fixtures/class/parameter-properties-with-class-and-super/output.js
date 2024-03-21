@@ -1,7 +1,6 @@
 let Employee = /*#__PURE__*/function (_Person) {
   "use strict";
 
-  babelHelpers.inherits(Employee, _Person);
   function Employee(name) {
     var _this;
     babelHelpers.classCallCheck(this, Employee);
@@ -9,5 +8,6 @@ let Employee = /*#__PURE__*/function (_Person) {
     _this.name = name;
     return _this;
   }
+  babelHelpers.inherits(Employee, _Person);
   return babelHelpers.createClass(Employee);
 }(Person);

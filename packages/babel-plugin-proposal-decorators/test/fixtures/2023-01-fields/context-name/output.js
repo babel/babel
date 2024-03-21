@@ -1,4 +1,4 @@
-var _init_a, _init_a2, _init_computedKey, _init_computedKey2, _init_computedKey3, _init_computedKey4, _init_computedKey5, _init_computedKey6, _computedKey, _init_computedKey7;
+let _init_a, _init_a2, _init_computedKey, _init_computedKey2, _init_computedKey3, _init_computedKey4, _init_computedKey5, _init_computedKey6, _computedKey, _init_computedKey7;
 const logs = [];
 const dec = (value, context) => {
   logs.push(context.name);
@@ -9,7 +9,6 @@ const f = () => {
     [Symbol.toPrimitive]: () => (logs.push("calling toPrimitive"), "f()")
   };
 };
-_computedKey = babelHelpers.toPropertyKey(f());
 class Foo {
   static {
     [_init_a, _init_a2, _init_computedKey, _init_computedKey2, _init_computedKey3, _init_computedKey4, _init_computedKey5, _init_computedKey6, _init_computedKey7] = babelHelpers.applyDecs2301(this, [[dec, 5, "a"], [dec, 5, "a", o => o.#a, (o, v) => o.#a = v], [dec, 5, "b"], [dec, 5, "c"], [dec, 5, 0], [dec, 5, 1], [dec, 5, 2n], [dec, 5, 3n], [dec, 5, _computedKey]], []).e;
@@ -22,6 +21,6 @@ class Foo {
   static [1] = _init_computedKey4(this);
   static 2n = _init_computedKey5(this);
   static [3n] = _init_computedKey6(this);
-  static [_computedKey] = _init_computedKey7(this);
+  static [_computedKey = babelHelpers.toPropertyKey(f())] = _init_computedKey7(this);
 }
 expect(logs).toStrictEqual(["computing f", "calling toPrimitive", "a", "#a", "b", "c", "0", "1", "2", "3", "f()"]);

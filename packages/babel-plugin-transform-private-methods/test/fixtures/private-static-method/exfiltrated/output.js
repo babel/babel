@@ -2,7 +2,7 @@ var exfiltrated;
 class Cl {
   constructor() {
     if (exfiltrated === undefined) {
-      exfiltrated = babelHelpers.classStaticPrivateMethodGet(Cl, Cl, _privateStaticMethod);
+      exfiltrated = _privateStaticMethod;
     }
   }
 }

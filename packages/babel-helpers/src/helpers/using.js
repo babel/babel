@@ -1,4 +1,5 @@
 /* @minVersion 7.22.0 */
+/* @onlyBabel7 */
 
 export default function _using(stack, value, isAwait) {
   if (value === null || value === void 0) return value;

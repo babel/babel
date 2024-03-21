@@ -4,8 +4,8 @@ class A {
     return 1;
   }
 }
-var _getA = /*#__PURE__*/Symbol("getA");
-var _getB = /*#__PURE__*/Symbol("getB");
+var _getA = Symbol("getA");
+var _getB = Symbol("getB");
 class B extends A {
   static get b() {
     return 2;

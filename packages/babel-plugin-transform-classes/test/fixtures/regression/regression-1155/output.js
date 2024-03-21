@@ -1,7 +1,6 @@
 var Foo = /*#__PURE__*/function (_Bar) {
   "use strict";
 
-  babelHelpers.inherits(Foo, _Bar);
   function Foo(options) {
     babelHelpers.classCallCheck(this, Foo);
     var parentOptions = {};
@@ -10,5 +9,6 @@ var Foo = /*#__PURE__*/function (_Bar) {
     };
     return babelHelpers.callSuper(this, Foo, [parentOptions]);
   }
+  babelHelpers.inherits(Foo, _Bar);
   return babelHelpers.createClass(Foo);
 }(Bar);

@@ -1,4 +1,5 @@
-var _initStatic, _call_a, _computedKey, _Foo;
+var _Foo;
+let _initStatic, _call_a, _computedKey;
 const logs = [];
 const dec = (value, context) => {
   logs.push(context.name);
@@ -26,7 +27,6 @@ _Foo = Foo;
   _initStatic(_Foo);
 })();
 var _a = {
-  writable: true,
-  value: _call_a
+  _: _call_a
 };
 expect(logs).toStrictEqual(["computing f", "calling toPrimitive", "a", "#a", "b", "c", "0", "1", "2", "3", "f()"]);

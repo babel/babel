@@ -1,8 +1,9 @@
-var _initStatic, _call_a, _Foo;
+var _Foo;
+let _initStatic, _call_a;
 const dec = () => {};
 class Foo {
   static callA() {
-    return babelHelpers.classStaticPrivateFieldSpecGet(this, Foo, _a).call(this);
+    return babelHelpers.assertClassBrand(Foo, this, _a)._.call(this);
   }
 }
 _Foo = Foo;
@@ -13,7 +14,6 @@ _Foo = Foo;
   _initStatic(_Foo);
 })();
 var _a = {
-  writable: true,
-  value: _call_a
+  _: _call_a
 };
 babelHelpers.defineProperty(Foo, "value", 1);
