@@ -18,7 +18,7 @@ var B = /*#__PURE__*/function (_A) {
     var _this;
     babelHelpers.classCallCheck(this, B);
     _this = babelHelpers.callSuper(this, B, [...args]);
-    _this.foo = babelHelpers.get((_this, babelHelpers.getPrototypeOf(B.prototype)), "foo", _this).call(_this);
+    _this.foo = babelHelpers.superPropertyGetCall((_this, B), "foo", _this, 1, []);
     return _this;
   }
   babelHelpers.inherits(B, _A);

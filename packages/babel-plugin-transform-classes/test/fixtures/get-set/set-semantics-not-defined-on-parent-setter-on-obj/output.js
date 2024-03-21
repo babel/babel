@@ -19,7 +19,7 @@ let Obj = /*#__PURE__*/function (_Base) {
   }, {
     key: "set",
     value: function set() {
-      return babelHelpers.set(babelHelpers.getPrototypeOf(Obj.prototype), "test", 3, this, true);
+      return babelHelpers.superPropertySet(Obj, "test", 3, this, 1, 1);
     }
   }]);
 }(Base);

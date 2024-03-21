@@ -18,7 +18,7 @@ var Foo = /*#__PURE__*/function (_Base) {
     _this = babelHelpers.callSuper(this, Foo);
     if (true) {
       var _Foo;
-      babelHelpers.get((_this, babelHelpers.getPrototypeOf(Foo.prototype)), "method", _this).call(_this);
+      babelHelpers.superPropertyGetCall((_this, Foo), "method", _this, 1, []);
     }
     return _this;
   }
