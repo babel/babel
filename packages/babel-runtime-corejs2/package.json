@@ -288,6 +288,24 @@
       "./helpers/setFunctionName.js"
     ],
     "./helpers/esm/setFunctionName": "./helpers/esm/setFunctionName.js",
+    "./helpers/superPropertyGetCall": [
+      {
+        "node": "./helpers/superPropertyGetCall.js",
+        "import": "./helpers/esm/superPropertyGetCall.js",
+        "default": "./helpers/superPropertyGetCall.js"
+      },
+      "./helpers/superPropertyGetCall.js"
+    ],
+    "./helpers/esm/superPropertyGetCall": "./helpers/esm/superPropertyGetCall.js",
+    "./helpers/superPropertySet": [
+      {
+        "node": "./helpers/superPropertySet.js",
+        "import": "./helpers/esm/superPropertySet.js",
+        "default": "./helpers/superPropertySet.js"
+      },
+      "./helpers/superPropertySet.js"
+    ],
+    "./helpers/esm/superPropertySet": "./helpers/esm/superPropertySet.js",
     "./helpers/toPrimitive": [
       {
         "node": "./helpers/toPrimitive.js",
