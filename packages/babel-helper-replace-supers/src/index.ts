@@ -83,7 +83,11 @@ interface SpecHandler
     | "optionalCall"
     | "delete"
   > {
-  _call(
+  _get?(
+    this: Handler & SpecHandler,
+    superMember: SuperMember,
+  ): t.CallExpression;
+  _call?(
     this: Handler & SpecHandler,
     superMember: SuperMember,
     args: t.CallExpression["arguments"],
@@ -238,6 +242,138 @@ const specHandlers: SpecHandler = {
     args: t.CallExpression["arguments"],
   ) {
     return this._call(superMember, args, true);
+  },
+
+  delete(this: Handler & SpecHandler, superMember: SuperMember) {
+    if (superMember.node.computed) {
+      return sequenceExpression([
+        callExpression(this.file.addHelper("toPropertyKey"), [
+          cloneNode(superMember.node.property),
+        ]),
+        template.expression.ast`
+          function () { throw new ReferenceError("'delete super[expr]' is invalid"); }()
+        `,
+      ]);
+    } else {
+      return template.expression.ast`
+        function () { throw new ReferenceError("'delete super.prop' is invalid"); }()
+      `;
+    }
+  },
+};
+
+const specHandlers_old: SpecHandler = {
+  memoise(
+    this: Handler & SpecHandler,
+    superMember: SuperMember,
+    count: number,
+  ) {
+    const { scope, node } = superMember;
+    const { computed, property } = node;
+    if (!computed) {
+      return;
+    }
+
+    const memo = scope.maybeGenerateMemoised(property);
+    if (!memo) {
+      return;
+    }
+
+    this.memoiser.set(property, memo, count);
+  },
+
+  prop(this: Handler & SpecHandler, superMember: SuperMember) {
+    const { computed, property } = superMember.node;
+    if (this.memoiser.has(property)) {
+      return cloneNode(this.memoiser.get(property));
+    }
+
+    if (computed) {
+      return cloneNode(property);
+    }
+
+    return stringLiteral((property as t.Identifier).name);
+  },
+
+  /**
+   * Creates an expression which result is the proto of objectRef.
+   *
+   * @example <caption>isStatic === true</caption>
+   *
+   *   helpers.getPrototypeOf(CLASS)
+   *
+   * @example <caption>isStatic === false</caption>
+   *
+   *   helpers.getPrototypeOf(CLASS.prototype)
+   */
+  _getPrototypeOfExpression(this: Handler & SpecHandler) {
+    const objectRef = cloneNode(this.getObjectRef());
+    const targetRef =
+      this.isStatic || this.isPrivateMethod
+        ? objectRef
+        : memberExpression(objectRef, identifier("prototype"));
+
+    return callExpression(this.file.addHelper("getPrototypeOf"), [targetRef]);
+  },
+
+  get(this: Handler & SpecHandler, superMember: SuperMember) {
+    return this._get(superMember);
+  },
+
+  _get(this: Handler & SpecHandler, superMember: SuperMember) {
+    const proto = this._getPrototypeOfExpression();
+    return callExpression(this.file.addHelper("get"), [
+      this.isDerivedConstructor
+        ? sequenceExpression([thisExpression(), proto])
+        : proto,
+      this.prop(superMember),
+      thisExpression(),
+    ]);
+  },
+
+  set(
+    this: Handler & SpecHandler,
+    superMember: SuperMember,
+    value: t.Expression,
+  ) {
+    const proto = this._getPrototypeOfExpression();
+
+    return callExpression(this.file.addHelper("set"), [
+      this.isDerivedConstructor
+        ? sequenceExpression([thisExpression(), proto])
+        : proto,
+      this.prop(superMember),
+      value,
+      thisExpression(),
+      t.booleanLiteral(superMember.isInStrictMode()),
+    ]);
+  },
+
+  destructureSet(this: Handler & SpecHandler, superMember: SuperMember) {
+    throw superMember.buildCodeFrameError(
+      `Destructuring to a super field is not supported yet.`,
+    );
+  },
+
+  call(
+    this: Handler & SpecHandler,
+    superMember: SuperMember,
+    args: t.CallExpression["arguments"],
+  ) {
+    return optimiseCall(this._get(superMember), thisExpression(), args, false);
+  },
+
+  optionalCall(
+    this: Handler & SpecHandler,
+    superMember: SuperMember,
+    args: t.CallExpression["arguments"],
+  ) {
+    return optimiseCall(
+      this._get(superMember),
+      cloneNode(thisExpression()),
+      args,
+      true,
+    );
   },
 
   delete(this: Handler & SpecHandler, superMember: SuperMember) {
@@ -418,7 +554,12 @@ export default class ReplaceSupers {
       });
     }
 
-    const handler = this.constantSuper ? looseHandlers : specHandlers;
+    const handler = this.constantSuper
+      ? looseHandlers
+      : process.env.BABEL_8_BREAKING ||
+          this.file.availableHelper("superPropertySet")
+        ? specHandlers
+        : specHandlers_old;
 
     // todo: this should have been handled by the environmentVisitor,
     // consider add visitSelf support for the path.traverse
