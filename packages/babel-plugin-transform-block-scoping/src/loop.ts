@@ -239,17 +239,13 @@ export function wrapLoopBody(
       varNames.push(...Object.keys(t.getBindingIdentifiers(decl.id)));
       if (decl.init) {
         assign.push(t.assignmentExpression("=", decl.id, decl.init));
+      } else if (t.isForXStatement(varPath.parent, { left: varPath.node })) {
+        assign.push(decl.id as t.Identifier);
       }
     }
     if (assign.length > 0) {
-      let replacement: t.Node =
+      const replacement: t.Node =
         assign.length === 1 ? assign[0] : t.sequenceExpression(assign);
-      if (
-        !t.isForStatement(varPath.parent, { init: varPath.node }) &&
-        !t.isForXStatement(varPath.parent, { left: varPath.node })
-      ) {
-        replacement = t.expressionStatement(replacement);
-      }
       varPath.replaceWith(replacement);
     } else {
       varPath.remove();
