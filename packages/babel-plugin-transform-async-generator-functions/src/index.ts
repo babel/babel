@@ -87,11 +87,11 @@ export default declare(api => {
       // async generators are never arrow functions.
       remapAsyncToGenerator.default(
         path,
-        state.availableHelper("callAsyncGenerator")
+        state.availableHelper("newAsyncGenerator")
           ? {
               wrapAsync: () => state.addHelper("wrapAsyncGenerator"),
               wrapAwait: () => state.addHelper("awaitAsyncGenerator"),
-              callAsync: () => state.addHelper("callAsyncGenerator"),
+              callAsync: () => state.addHelper("newAsyncGenerator"),
             }
           : {
               wrapAsync: state.addHelper("wrapAsyncGenerator"),
@@ -110,7 +110,7 @@ export default declare(api => {
           require("@babel/plugin-syntax-async-generators").default,
 
     visitor: api.traverse.visitors.merge([
-      remapAsyncToGenerator.buildOnCallExpression("callAsyncGenerator"),
+      remapAsyncToGenerator.buildOnCallExpression("newAsyncGenerator"),
       {
         Program(path, state) {
           // We need to traverse the ast here (instead of just vising Function

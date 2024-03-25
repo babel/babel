@@ -1,5 +1,5 @@
 function agf() {
-  return babelHelpers.callAsyncGenerator(function* () {
+  return babelHelpers.newAsyncGenerator(function* () {
     this;
     yield babelHelpers.awaitAsyncGenerator(1);
     yield 2;

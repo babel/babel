@@ -368,15 +368,15 @@
       "./helpers/wrapAsyncGenerator.js"
     ],
     "./helpers/esm/wrapAsyncGenerator": "./helpers/esm/wrapAsyncGenerator.js",
-    "./helpers/callAsyncGenerator": [
+    "./helpers/newAsyncGenerator": [
       {
-        "node": "./helpers/callAsyncGenerator.js",
-        "import": "./helpers/esm/callAsyncGenerator.js",
-        "default": "./helpers/callAsyncGenerator.js"
+        "node": "./helpers/newAsyncGenerator.js",
+        "import": "./helpers/esm/newAsyncGenerator.js",
+        "default": "./helpers/newAsyncGenerator.js"
       },
-      "./helpers/callAsyncGenerator.js"
+      "./helpers/newAsyncGenerator.js"
     ],
-    "./helpers/esm/callAsyncGenerator": "./helpers/esm/callAsyncGenerator.js",
+    "./helpers/esm/newAsyncGenerator": "./helpers/esm/newAsyncGenerator.js",
     "./helpers/asyncToGenerator": [
       {
         "node": "./helpers/asyncToGenerator.js",

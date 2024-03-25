@@ -34,15 +34,15 @@ helpers.wrapAsyncGenerator = helper("7.0.0-beta.0")`
   }
 `;
 
-helpers.callAsyncGenerator = helper("7.23.0")`
+helpers.newAsyncGenerator = helper("7.24.4")`
   import AsyncGenerator from "AsyncGenerator";
 
-  export default function _callAsyncGenerator(fn, self, args) {
+  export default function _newAsyncGenerator(fn, self, args) {
     return new AsyncGenerator(fn.apply(self, args));
   }
 `;
 
-helpers.asyncToGenerator = helper("7.23.0")`
+helpers.asyncToGenerator = helper("7.0.0-beta.0")`
   import callAsync from "callAsync";
   export default function _asyncToGenerator(fn) {
     return function () {
@@ -51,7 +51,7 @@ helpers.asyncToGenerator = helper("7.23.0")`
   }
 `;
 
-helpers.callAsync = helper("7.23.0")`
+helpers.callAsync = helper("7.24.4")`
   export default function _callAsync(fn, self, args) {
     return new Promise(function (resolve, reject) {
       function step(key, arg) {
@@ -821,7 +821,7 @@ helpers.skipFirstGeneratorNext = helper("7.0.0-beta.0")`
   }
 `;
 
-helpers.callSkipFirstGeneratorNext = helper("7.23.0")`
+helpers.callSkipFirstGeneratorNext = helper("7.24.4")`
   export default function _callSkipFirstGeneratorNext(fn, self, args) {
     var it = fn.apply(self, args);
     it.next();

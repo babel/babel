@@ -1,7 +1,7 @@
 class C {
   static g() {
     var _this = this;
-    return babelHelpers.callAsyncGenerator(function* () {
+    return babelHelpers.newAsyncGenerator(function* () {
       _this;
       yield babelHelpers.awaitAsyncGenerator(1);
       yield 2;

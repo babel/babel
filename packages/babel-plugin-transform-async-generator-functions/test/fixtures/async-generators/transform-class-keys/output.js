@@ -1,5 +1,5 @@
 function fn() {
-  return babelHelpers.callAsyncGenerator(function* () {
+  return babelHelpers.newAsyncGenerator(function* () {
     class A {
       [yield 1]() {}
     }

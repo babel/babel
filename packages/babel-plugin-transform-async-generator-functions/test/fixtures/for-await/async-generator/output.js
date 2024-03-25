@@ -1,5 +1,5 @@
 function g() {
-  return babelHelpers.callAsyncGenerator(function* () {
+  return babelHelpers.newAsyncGenerator(function* () {
     var _iteratorAbruptCompletion = false;
     var _didIteratorError = false;
     var _iteratorError;
