@@ -23,28 +23,39 @@ const blockHoistPlugin: PluginObject = {
   visitor: {
     Block: {
       exit({ node }) {
-        const { body } = node;
-
-        // Largest SMI
-        let max = 2 ** 30 - 1;
-        let hasChange = false;
-        for (let i = 0; i < body.length; i++) {
-          const n = body[i];
-          const p = priority(n);
-          if (p > max) {
-            hasChange = true;
-            break;
-          }
-          max = p;
-        }
-        if (!hasChange) return;
-
-        // My kingdom for a stable sort!
-        node.body = stableSort(body.slice());
+        node.body = performHoisting(node.body);
+      },
+    },
+    SwitchCase: {
+      exit({ node }) {
+        // In case statements, hoisting is difficult to perform correctly due to
+        // functions that are declared and referenced in different blocks.
+        // Nevertheless, hoisting the statements *inside* of each case should at
+        // least mitigate the failure cases.
+        node.consequent = performHoisting(node.consequent);
       },
     },
   },
 };
+
+function performHoisting(body: Statement[]): Statement[] {
+  // Largest SMI
+  let max = 2 ** 30 - 1;
+  let hasChange = false;
+  for (let i = 0; i < body.length; i++) {
+    const n = body[i];
+    const p = priority(n);
+    if (p > max) {
+      hasChange = true;
+      break;
+    }
+    max = p;
+  }
+  if (!hasChange) return body;
+
+  // My kingdom for a stable sort!
+  return stableSort(body.slice());
+}
 
 export default function loadBlockHoistPlugin(): Plugin {
   if (!LOADED_PLUGIN) {
