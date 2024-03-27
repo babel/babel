@@ -894,30 +894,6 @@ function createPrivateBrandCheckClosure(brandName: t.PrivateName) {
   );
 }
 
-// Check if the expression does not reference function-specific
-// context or the given identifier name.
-// `true` means "maybe" and `false` means "no".
-function usesFunctionContextOrYieldAwait(expression: t.Node) {
-  try {
-    t.traverseFast(expression, node => {
-      if (
-        t.isThisExpression(node) ||
-        t.isSuper(node) ||
-        t.isYieldExpression(node) ||
-        t.isAwaitExpression(node) ||
-        t.isIdentifier(node, { name: "arguments" }) ||
-        (t.isMetaProperty(node) && node.meta.name !== "import")
-      ) {
-        // TODO: Add early return support to t.traverseFast
-        throw null;
-      }
-    });
-    return false;
-  } catch {
-    return true;
-  }
-}
-
 function usesPrivateField(expression: t.Node) {
   try {
     t.traverseFast(expression, node => {
@@ -1052,6 +1028,32 @@ function transformClass(
 
   let protoInitLocal: t.Identifier;
   let staticInitLocal: t.Identifier;
+  const classIdName = path.node.id?.name;
+  // Check if the expression does not reference function-specific
+  // context or the given identifier name.
+  // `true` means "maybe" and `false` means "no".
+  const usesFunctionContextOrYieldAwait = (expression: t.Node) => {
+    try {
+      t.traverseFast(expression, node => {
+        if (
+          t.isThisExpression(node) ||
+          t.isSuper(node) ||
+          t.isYieldExpression(node) ||
+          t.isAwaitExpression(node) ||
+          t.isIdentifier(node, { name: "arguments" }) ||
+          (classIdName && t.isIdentifier(node, { name: classIdName })) ||
+          (t.isMetaProperty(node) && node.meta.name !== "import")
+        ) {
+          // TODO: Add early return support to t.traverseFast
+          throw null;
+        }
+      });
+      return false;
+    } catch {
+      return true;
+    }
+  };
+
   const instancePrivateNames: string[] = [];
   // Iterate over the class to see if we need to decorate it, and also to
   // transform simple auto accessors which are not decorated, and handle inferred
@@ -1983,11 +1985,47 @@ function transformClass(
   path.insertBefore(classAssignments.map(expr => t.expressionStatement(expr)));
 
   if (needsDeclaraionForClassBinding) {
-    path.insertBefore(
-      t.variableDeclaration("let", [
-        t.variableDeclarator(t.cloneNode(classIdLocal)),
-      ]),
-    );
+    const classBindingInfo = scopeParent.getBinding(classIdLocal.name);
+    if (!classBindingInfo.constantViolations.length) {
+      // optimization: reuse the inner class binding if the outer class binding is not mutated
+      path.insertBefore(
+        t.variableDeclaration("let", [
+          t.variableDeclarator(t.cloneNode(classIdLocal)),
+        ]),
+      );
+    } else {
+      const classOuterBindingDelegateLocal = scopeParent.generateUidIdentifier(
+        "t" + classIdLocal.name,
+      );
+      const classOuterBindingLocal = classIdLocal;
+      path.replaceWithMultiple([
+        t.variableDeclaration("let", [
+          t.variableDeclarator(t.cloneNode(classOuterBindingLocal)),
+          t.variableDeclarator(classOuterBindingDelegateLocal),
+        ]),
+        t.blockStatement([
+          t.variableDeclaration("let", [
+            t.variableDeclarator(t.cloneNode(classIdLocal)),
+          ]),
+          // needsDeclaraionForClassBinding is true ↔ node is a class declaration
+          path.node as t.ClassDeclaration,
+          t.expressionStatement(
+            t.assignmentExpression(
+              "=",
+              t.cloneNode(classOuterBindingDelegateLocal),
+              t.cloneNode(classIdLocal),
+            ),
+          ),
+        ]),
+        t.expressionStatement(
+          t.assignmentExpression(
+            "=",
+            t.cloneNode(classOuterBindingLocal),
+            t.cloneNode(classOuterBindingDelegateLocal),
+          ),
+        ),
+      ]);
+    }
   }
 
   if (decoratedPrivateMethods.size > 0) {
