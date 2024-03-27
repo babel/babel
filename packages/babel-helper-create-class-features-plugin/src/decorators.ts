@@ -475,26 +475,28 @@ function optimizeSuperCallAndExpressions(
   expressions: t.Expression[],
   protoInitLocal: t.Identifier,
 ) {
-  // Merge `super(), protoInit(this)` into `protoInit(super())`
-  if (
-    expressions.length >= 2 &&
-    isProtoInitCallExpression(expressions[1], protoInitLocal)
-  ) {
-    const mergedSuperCall = t.callExpression(t.cloneNode(protoInitLocal), [
-      expressions[0],
-    ]);
-    expressions.splice(0, 2, mergedSuperCall);
-  }
-  // Merge `protoInit(super()), this` into `protoInit(super())`
-  if (
-    expressions.length >= 2 &&
-    t.isThisExpression(expressions[expressions.length - 1]) &&
-    isProtoInitCallExpression(
-      expressions[expressions.length - 2],
-      protoInitLocal,
-    )
-  ) {
-    expressions.splice(expressions.length - 1, 1);
+  if (protoInitLocal) {
+    if (
+      expressions.length >= 2 &&
+      isProtoInitCallExpression(expressions[1], protoInitLocal)
+    ) {
+      // Merge `super(), protoInit(this)` into `protoInit(super())`
+      const mergedSuperCall = t.callExpression(t.cloneNode(protoInitLocal), [
+        expressions[0],
+      ]);
+      expressions.splice(0, 2, mergedSuperCall);
+    }
+    // Merge `protoInit(super()), this` into `protoInit(super())`
+    if (
+      expressions.length >= 2 &&
+      t.isThisExpression(expressions[expressions.length - 1]) &&
+      isProtoInitCallExpression(
+        expressions[expressions.length - 2],
+        protoInitLocal,
+      )
+    ) {
+      expressions.splice(expressions.length - 1, 1);
+    }
   }
   return maybeSequenceExpression(expressions);
 }
