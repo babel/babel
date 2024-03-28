@@ -162,6 +162,13 @@ const es2022 = {
     features: ["static class fields / static class fields use [[Define]]"],
     replaces: "transform-class-properties",
   },
+  "bugfix/transform-firefox-class-in-computed-class-key": {
+    replaces: "transform-class-properties",
+    overwrite: {
+      // TODO: Once Firefox releases the fix, write the correct version here.
+      firefox: undefined,
+    },
+  },
   "transform-class-static-block": "Class static initialization blocks",
   "transform-private-property-in-object":
     "Ergonomic brand checks for private fields",

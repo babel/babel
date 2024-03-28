@@ -103,6 +103,14 @@ exports.generateData = (environments, features) => {
 
   const normalized = {};
   for (const [key, options] of Object.entries(features)) {
+    if (options.overwrite) {
+      if (!options.replaces || options.features) {
+        throw new Error(
+          `.overwrite is only supported when using .replace and not defining .features (${key})`
+        );
+      }
+      options.features = features[options.replaces].features;
+    }
     if (!options.features) {
       normalized[key] = {
         features: expandFeatures([options]),
@@ -118,14 +126,24 @@ exports.generateData = (environments, features) => {
   const overlapping = {};
 
   // Apply bugfixes
-  for (const [key, { features, replaces }] of Object.entries(normalized)) {
+  for (const [key, { features, replaces, overwrite }] of Object.entries(
+    normalized
+  )) {
     if (replaces) {
       if (normalized[replaces].replaces) {
-        throw new Error("Transitive replacement is not supported");
+        throw new Error(`Transitive replacement is not supported (${key})`);
       }
-      normalized[replaces].features = normalized[replaces].features.filter(
-        feat => !features.includes(feat)
-      );
+
+      if (overwrite) {
+        normalized[key] = {
+          features: normalized[replaces].features,
+          overwrite,
+        };
+      } else {
+        normalized[replaces].features = normalized[replaces].features.filter(
+          feat => !features.includes(feat)
+        );
+      }
 
       if (!overlapping[replaces]) overlapping[replaces] = [];
       overlapping[replaces].push(key);
@@ -141,6 +159,8 @@ exports.generateData = (environments, features) => {
       if (version) plugin[env] = version;
     });
     addElectronSupportFromChromium(plugin);
+
+    if (options.overwrite) Object.assign(plugin, options.overwrite);
 
     data[key] = plugin;
   }

@@ -1,0 +1,43 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "firefox": "50"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  transform-unicode-sets-regex { firefox < 116 }
+  transform-class-static-block { firefox < 93 }
+  transform-private-property-in-object { firefox < 90 }
+  transform-class-properties { firefox < 90 }
+  transform-private-methods { firefox < 90 }
+  transform-numeric-separator { firefox < 70 }
+  transform-logical-assignment-operators { firefox < 79 }
+  transform-nullish-coalescing-operator { firefox < 72 }
+  transform-optional-chaining { firefox < 74 }
+  transform-json-strings { firefox < 62 }
+  transform-optional-catch-binding { firefox < 58 }
+  transform-parameters { firefox < 53 }
+  transform-async-generator-functions { firefox < 57 }
+  transform-object-rest-spread { firefox < 55 }
+  transform-dotall-regex { firefox < 78 }
+  transform-unicode-property-regex { firefox < 78 }
+  transform-named-capturing-groups-regex { firefox < 78 }
+  transform-async-to-generator { firefox < 52 }
+  transform-exponentiation-operator { firefox < 52 }
+  transform-literals { firefox < 53 }
+  transform-function-name { firefox < 53 }
+  transform-for-of { firefox < 53 }
+  transform-unicode-escapes { firefox < 53 }
+  transform-destructuring { firefox < 53 }
+  transform-block-scoping { firefox < 53 }
+  transform-regenerator { firefox < 53 }
+  transform-export-namespace-from { firefox < 80 }
+  transform-modules-commonjs
+  transform-dynamic-import
+  syntax-top-level-await
+  syntax-import-meta
+
+Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
