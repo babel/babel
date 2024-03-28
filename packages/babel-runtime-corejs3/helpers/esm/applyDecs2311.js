@@ -71,19 +71,19 @@ export default function applyDecs2311(e, t, n, r, o, i) {
     }
     for (var N = e, O = h.length - 1; O >= 0; O -= n ? 2 : 1) {
       var _context2;
-      var z = h[O],
-        H = n ? h[O - 1] : void 0,
-        K = {},
-        R = {
+      var z = b(h[O], "A decorator", "be", !0),
+        A = n ? h[O - 1] : void 0,
+        H = {},
+        K = {
           kind: ["field", "accessor", "method", "getter", "setter", "class"][o],
           name: r,
           metadata: a,
           addInitializer: _bindInstanceProperty(_context2 = function _context2(e, t) {
             if (e.v) throw Error("attempted to call addInitializer after decoration was finished");
             b(t, "An initializer", "be", !0), _pushInstanceProperty(i).call(i, t);
-          }).call(_context2, null, K)
+          }).call(_context2, null, H)
         };
-      if (w) c = z.call(H, N, R), K.v = 1, b(c, "class decorators", "return") && (N = c);else if (R["static"] = s, R["private"] = f, c = R.access = {
+      if (w) c = z.call(A, N, K), H.v = 1, b(c, "class decorators", "return") && (N = c);else if (K["static"] = s, K["private"] = f, c = K.access = {
         has: f ? _bindInstanceProperty(p).call(p) : function (e) {
           return r in e;
         }
@@ -93,10 +93,10 @@ export default function applyDecs2311(e, t, n, r, o, i) {
         return e[r];
       }), E || S || (c.set = f ? I("set", 0, d) : function (e, t) {
         e[r] = t;
-      }), N = z.call(H, D ? {
+      }), N = z.call(A, D ? {
         get: P.get,
         set: P.set
-      } : P[F], R), K.v = 1, D) {
+      } : P[F], K), H.v = 1, D) {
         if ("object" == _typeof(N) && N) (c = b(N.get, "accessor.get")) && (P.get = c), (c = b(N.set, "accessor.set")) && (P.set = c), (c = b(N.init, "accessor.init")) && _unshiftInstanceProperty(k).call(k, c);else if (void 0 !== N) throw new TypeError("accessor decorators must return an object with get, set, or init properties or undefined");
       } else b(N, (l ? "field" : "method") + " decorators", "return") && (l ? _unshiftInstanceProperty(k).call(k, N) : P[F] = N);
     }
