@@ -372,6 +372,9 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
       path.scope.registerBinding("local", path);
     }
   },
+  TSTypeAnnotation(path) {
+    path.skip();
+  },
 };
 
 let uid = 0;
