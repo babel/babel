@@ -1,0 +1,57 @@
+{
+  "name": "@babel/plugin-bugfix-firefox-class-in-computed-class-key",
+  "version": "7.24.1",
+  "description": "Wraps classes defined in computed keys of other classes affected by https://bugzilla.mozilla.org/show_bug.cgi?id=1887677",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-bugfix-firefox-class-in-computed-class-key"
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-bugfix-firefox-class-in-computed-class-key",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
+  "keywords": [
+    "babel-plugin",
+    "bugfix"
+  ],
+  "dependencies": {
+    "@babel/helper-environment-visitor": "workspace:^",
+    "@babel/helper-plugin-utils": "workspace:^"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^",
+    "@babel/traverse": "workspace:^"
+  },
+  "engines": {
+    "node": ">=6.9.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)",
+  "conditions": {
+    "USE_ESM": [
+      {
+        "type": "module"
+      },
+      null
+    ],
+    "BABEL_8_BREAKING": [
+      {
+        "engines": {
+          "node": "^16.20.0 || ^18.16.0 || >=20.0.0"
+        }
+      },
+      {}
+    ]
+  },
+  "type": "commonjs"
+}
