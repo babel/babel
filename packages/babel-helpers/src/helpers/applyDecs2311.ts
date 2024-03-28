@@ -357,7 +357,7 @@ export default /* @no-mangle */ function applyDecs2311(
     var newValue = Class;
 
     for (var i = decs.length - 1; i >= 0; i -= decoratorsHaveThis ? 2 : 1) {
-      var dec = (decs as Function[])[i],
+      var dec = assertCallable(decs[i], "A decorator", "be", true) as Function,
         decThis = decoratorsHaveThis ? decs[i - 1] : void 0;
 
       var decoratorFinishedRef: DecoratorFinishedRef = {};
