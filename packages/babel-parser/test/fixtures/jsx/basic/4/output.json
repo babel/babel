@@ -57,7 +57,8 @@
                   "start":13,"end":16,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":16,"index":16}},
                   "extra": {
                     "rawValue": " ",
-                    "raw": "\" \""
+                    "raw": "\" \"",
+                    "jsx": true
                   },
                   "value": " "
                 }
@@ -75,7 +76,8 @@
                   "start":19,"end":26,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":26,"index":26}},
                   "extra": {
                     "rawValue": "&",
-                    "raw": "\"&amp;\""
+                    "raw": "\"&amp;\"",
+                    "jsx": true
                   },
                   "value": "&"
                 }
@@ -93,7 +95,8 @@
                   "start":29,"end":37,"loc":{"start":{"line":1,"column":29,"index":29},"end":{"line":1,"column":37,"index":37}},
                   "extra": {
                     "rawValue": "&ampr;",
-                    "raw": "\"&ampr;\""
+                    "raw": "\"&ampr;\"",
+                    "jsx": true
                   },
                   "value": "&ampr;"
                 }

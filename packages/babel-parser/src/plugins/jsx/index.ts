@@ -324,7 +324,11 @@ export default (superClass: typeof Parser) =>
 
         case tt.jsxTagStart:
         case tt.string:
-          return this.parseExprAtom();
+          node = this.parseExprAtom();
+          if (node.type === "StringLiteral") {
+            node.extra.jsx = true;
+          }
+          return node;
 
         default:
           throw this.raise(JsxErrors.UnsupportedJsxValue, this.state.startLoc);

@@ -1581,6 +1581,77 @@ export const App = () => {
         */"
     `);
   });
+
+  describe("jsx StringLiteral", () => {
+    // packages\babel-generator\test\fixtures\types\JSXAttribute\input.js
+
+    it("should correctly generate StringLiteral without `raw`", () => {
+      const ast = parse(
+        `
+      <div id="wow"></div>;
+
+      <div id="wow">text</div>;
+
+      <div id="wow" disabled></div>;
+
+      <div id="wow" disabled>text</div>;
+
+      <div id="wôw" />;
+      <div id="\\w" />;
+      <div id="w &lt; w" />;
+      `,
+        {
+          sourceType: "module",
+          plugins: ["jsx"],
+        },
+      );
+
+      const output1 = generate(ast).code;
+
+      for (const stmt of ast.program.body) {
+        const extra = stmt.expression.openingElement.attributes[0].value.extra;
+        expect(extra.raw).toBeTruthy();
+        extra.raw = null;
+      }
+
+      const output2 = generate(ast).code;
+      expect(output2).toBe(output1);
+      expect(output2).toMatchInlineSnapshot(`
+        "<div id=\\"wow\\"></div>;
+        <div id=\\"wow\\">text</div>;
+        <div id=\\"wow\\" disabled></div>;
+        <div id=\\"wow\\" disabled>text</div>;
+        <div id=\\"wôw\\" />;
+        <div id=\\"\\\\w\\" />;
+        <div id=\\"w &lt; w\\" />;"
+      `);
+    });
+
+    it("should correctly generate with `t.StringLiteral()`", () => {
+      const output = generate(
+        t.jsxElement(
+          t.jsxOpeningElement(t.jsxIdentifier("b"), [
+            t.jsxAttribute(t.jsxIdentifier("title"), t.stringLiteral('"')),
+          ]),
+          t.jsxClosingElement(t.jsxIdentifier("b")),
+          [],
+        ),
+      ).code;
+      expect(output).toMatchInlineSnapshot(`"<b title=\\"&quot;\\"></b>"`);
+    });
+
+    it("should correctly generate StringLiteral when jsx -> js", () => {
+      const code = '<b title="&amp; \\xxx" />';
+      const ast = parse(code, { plugins: ["jsx"] });
+      const value =
+        ast.program.body[0].expression.openingElement.attributes[0].value;
+      const output = generate(
+        t.callExpression(t.identifier("setTitle"), [value]),
+      ).code;
+
+      expect(output).toMatchInlineSnapshot(`"setTitle(\\"& \\\\\\\\xxx\\")"`);
+    });
+  });
 });
 
 describeBabel7NoESM("CodeGenerator", function () {

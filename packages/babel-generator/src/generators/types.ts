@@ -1,6 +1,11 @@
 import type Printer from "../printer.ts";
-import { isAssignmentPattern, isIdentifier } from "@babel/types";
+import {
+  isAssignmentPattern,
+  isIdentifier,
+  isJSXAttribute,
+} from "@babel/types";
 import type * as t from "@babel/types";
+import type { NodePath } from "@babel/traverse";
 import jsesc from "jsesc";
 
 export function Identifier(this: Printer, node: t.Identifier) {
@@ -185,36 +190,77 @@ export function NullLiteral(this: Printer) {
 }
 
 export function NumericLiteral(this: Printer, node: t.NumericLiteral) {
-  const raw = this.getPossibleRaw(node);
   const opts = this.format.jsescOption;
   const value = node.value;
-  const str = value + "";
   if (opts.numbers) {
     this.number(jsesc(value, opts), value);
-  } else if (raw == null) {
-    this.number(str, value); // normalize
+    return;
+  }
+  const raw = this.getPossibleRaw(node);
+  if (raw == null) {
+    this.number(value + "", value); // normalize
   } else if (this.format.minified) {
+    const str = value + "";
     this.number(raw.length < str.length ? raw : str, value);
   } else {
     this.number(raw, value);
   }
 }
 
-export function StringLiteral(this: Printer, node: t.StringLiteral) {
-  const raw = this.getPossibleRaw(node);
-  if (!this.format.minified && raw !== undefined) {
-    this.token(raw);
+const escapeCodeMap = new Map([
+  [34, "&quot;"],
+  [38, "&amp;"],
+  [60, "&lt;"],
+  [62, "&gt;"],
+]);
+const escapeReplacer = /["&<>]/g;
+
+// From https://www.npmjs.com/package/entities License: MIT
+function escape(data: string) {
+  let match;
+  let lastIdx = 0;
+  let result = "";
+  while ((match = escapeReplacer.exec(data))) {
+    if (lastIdx !== match.index) {
+      result += data.substring(lastIdx, match.index);
+    }
+    // We know that this character will be in the map.
+    result += escapeCodeMap.get(match[0].charCodeAt(0));
+    // Every match will be of length 1
+    lastIdx = match.index + 1;
+  }
+  return result + data.substring(lastIdx);
+}
+
+export function StringLiteral(
+  this: Printer,
+  node: t.StringLiteral,
+  parent: NodePath<
+    t.FunctionDeclaration | t.FunctionExpression | t.TSDeclareFunction
+  >["parent"],
+) {
+  const inJsx = isJSXAttribute(parent);
+
+  const raw =
+    !this.format.minified &&
+    inJsx == !!node.extra?.jsx &&
+    this.getPossibleRaw(node);
+
+  if (typeof raw === "string") {
+    this.token(raw, inJsx);
     return;
   }
 
-  const val = jsesc(node.value, this.format.jsescOption);
+  const val = inJsx
+    ? `"${escape(node.value)}"`
+    : jsesc(node.value, this.format.jsescOption);
 
-  this.token(val);
+  this.token(val, inJsx);
 }
 
 export function BigIntLiteral(this: Printer, node: t.BigIntLiteral) {
-  const raw = this.getPossibleRaw(node);
-  if (!this.format.minified && raw !== undefined) {
+  const raw = !this.format.minified && this.getPossibleRaw(node);
+  if (typeof raw === "string") {
     this.word(raw);
     return;
   }
@@ -222,8 +268,8 @@ export function BigIntLiteral(this: Printer, node: t.BigIntLiteral) {
 }
 
 export function DecimalLiteral(this: Printer, node: t.DecimalLiteral) {
-  const raw = this.getPossibleRaw(node);
-  if (!this.format.minified && raw !== undefined) {
+  const raw = !this.format.minified && this.getPossibleRaw(node);
+  if (typeof raw === "string") {
     this.word(raw);
     return;
   }
