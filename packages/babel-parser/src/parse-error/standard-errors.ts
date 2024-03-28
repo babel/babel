@@ -247,6 +247,8 @@ export default {
   SuperNotAllowed:
     "`super()` is only valid inside a class constructor of a subclass. Maybe a typo in the method name ('constructor') or not extending another class?",
   SuperPrivateField: "Private fields can't be accessed on super.",
+  ThrowExpressionRequireParentheses:
+    "`throw ...` expressions must be wrapped in parentheses.",
   TrailingDecorator: "Decorators must be attached to a class element.",
   TupleExpressionBarIncorrectEndSyntaxType:
     "Tuple expressions ending with '|]' are only allowed when the 'syntaxType' option of the 'recordAndTuple' plugin is set to 'bar'.",
