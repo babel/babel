@@ -96,7 +96,28 @@ export function beginHiddenCallStack<A extends unknown[], R>(
   return Object.defineProperty(
     function (...args: A) {
       setupPrepareStackTrace();
-      return fn(...args);
+      let isAsync = false;
+      try {
+        const ret = fn(...args);
+        if (typeof (ret as any)?.then !== "function") return ret;
+
+        isAsync = true;
+        return (ret as Promise<unknown>)
+          .catch(function (err) {
+            err.stack;
+            resetPrepareStackTrace();
+            throw err;
+          })
+          .then(function (val: unknown) {
+            resetPrepareStackTrace();
+            return val;
+          }) as R;
+      } catch (err) {
+        err.stack;
+        throw err;
+      } finally {
+        if (!isAsync) resetPrepareStackTrace();
+      }
     },
     "name",
     { value: STOP_HIDING },
@@ -117,12 +138,43 @@ export function endHiddenCallStack<A extends unknown[], R>(
   );
 }
 
-function setupPrepareStackTrace() {
-  // @ts-expect-error This function is a singleton
-  // eslint-disable-next-line no-func-assign
-  setupPrepareStackTrace = () => {};
+let originalPrepareStackTrace: (err: Error, trace: CallSite[]) => string;
+let originalMaxStackTraceLimit: number;
 
-  const { prepareStackTrace = defaultPrepareStackTrace } = Error;
+function stackTraceRewriter(err: Error, trace: CallSite[]) {
+  let newTrace = [];
+
+  const isExpected = expectedErrors.has(err);
+  let status: "showing" | "hiding" | "unknown" = isExpected
+    ? "hiding"
+    : "unknown";
+  for (let i = 0; i < trace.length; i++) {
+    const name = trace[i].getFunctionName();
+    if (name === START_HIDING) {
+      status = "hiding";
+    } else if (name === STOP_HIDING) {
+      if (status === "hiding") {
+        status = "showing";
+        if (virtualFrames.has(err)) {
+          newTrace.unshift(...virtualFrames.get(err));
+        }
+      } else if (status === "unknown") {
+        // Unexpected internal error, show the full stack trace
+        newTrace = trace;
+        break;
+      }
+    } else if (status !== "hiding") {
+      newTrace.push(trace[i]);
+    }
+  }
+
+  return (originalPrepareStackTrace || defaultPrepareStackTrace)(err, newTrace);
+}
+
+function setupPrepareStackTrace() {
+  if (Error.prepareStackTrace === stackTraceRewriter) return;
+  originalPrepareStackTrace = Error.prepareStackTrace;
+  originalMaxStackTraceLimit = Error.stackTraceLimit;
 
   // We add some extra frames to Error.stackTraceLimit, so that we can
   // always show some useful frames even after deleting ours.
@@ -137,35 +189,12 @@ function setupPrepareStackTrace() {
     MIN_STACK_TRACE_LIMIT,
   );
 
-  Error.prepareStackTrace = function stackTraceRewriter(err, trace) {
-    let newTrace = [];
+  Error.prepareStackTrace = stackTraceRewriter;
+}
 
-    const isExpected = expectedErrors.has(err);
-    let status: "showing" | "hiding" | "unknown" = isExpected
-      ? "hiding"
-      : "unknown";
-    for (let i = 0; i < trace.length; i++) {
-      const name = trace[i].getFunctionName();
-      if (name === START_HIDING) {
-        status = "hiding";
-      } else if (name === STOP_HIDING) {
-        if (status === "hiding") {
-          status = "showing";
-          if (virtualFrames.has(err)) {
-            newTrace.unshift(...virtualFrames.get(err));
-          }
-        } else if (status === "unknown") {
-          // Unexpected internal error, show the full stack trace
-          newTrace = trace;
-          break;
-        }
-      } else if (status !== "hiding") {
-        newTrace.push(trace[i]);
-      }
-    }
-
-    return prepareStackTrace(err, newTrace);
-  };
+function resetPrepareStackTrace() {
+  Error.prepareStackTrace = originalPrepareStackTrace;
+  Error.stackTraceLimit = originalMaxStackTraceLimit;
 }
 
 function defaultPrepareStackTrace(err: Error, trace: CallSite[]) {
