@@ -3,5 +3,5 @@ var A = /*#__PURE__*/babelHelpers.createClass(function A(_force) {
 
   babelHelpers.classCallCheck(this, A);
   this.force = force;
-  this.foo = babelHelpers.get(babelHelpers.getPrototypeOf(A.prototype), "method", this).call(this);
+  this.foo = babelHelpers.superPropertyGetCall(A, "method", this, 1, []);
 });

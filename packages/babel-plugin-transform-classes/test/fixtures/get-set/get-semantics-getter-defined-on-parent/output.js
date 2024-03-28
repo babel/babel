@@ -21,7 +21,7 @@ let Obj = /*#__PURE__*/function (_Base) {
   return babelHelpers.createClass(Obj, [{
     key: "get",
     value: function get() {
-      return babelHelpers.get(babelHelpers.getPrototypeOf(Obj.prototype), "test", this);
+      return babelHelpers.superPropertyGetCall(Obj, "test", this, 1);
     }
   }]);
 }(Base);

@@ -7,7 +7,7 @@ const Base = {
 const obj = _obj = {
   test: 2,
   set() {
-    return babelHelpers.set(babelHelpers.getPrototypeOf(_obj), "test", 3, this, true);
+    return babelHelpers.superPropertySet(_obj, "test", 3, this, 1);
   }
 };
 Object.setPrototypeOf(obj, Base);

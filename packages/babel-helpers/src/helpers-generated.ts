@@ -163,6 +163,16 @@ export default Object.freeze({
     "7.23.6",
     'export default function setFunctionName(e,t,n){"symbol"==typeof t&&(t=(t=t.description)?"["+t+"]":"");try{Object.defineProperty(e,"name",{configurable:!0,value:n?n+" "+t:t})}catch(e){}return e}',
   ),
+  // size: 192, gzip size: 151
+  superPropertyGetCall: helper(
+    "7.24.4",
+    'import get from"get";import getPrototypeOf from"getPrototypeOf";export default function _superPropertyGetCall(t,e,o,r,p){var f=get(getPrototypeOf(r?t.prototype:t),e,o);return p?f.apply(o,p):f}',
+  ),
+  // size: 171, gzip size: 133
+  superPropertySet: helper(
+    "7.24.4",
+    'import set from"set";import getPrototypeOf from"getPrototypeOf";export default function _superPropertySet(t,e,o,r,p,f){return set(getPrototypeOf(f?t.prototype:t),e,o,r,p)}',
+  ),
   // size: 285, gzip size: 210
   toPrimitive: helper(
     "7.1.5",
