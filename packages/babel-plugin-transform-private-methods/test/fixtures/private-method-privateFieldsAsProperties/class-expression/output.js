@@ -6,7 +6,7 @@ console.log((_foo = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("foo"), 
     });
   }
   method() {
-    babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo]();
+    this[_foo]();
   }
 }));
 function _foo2() {}

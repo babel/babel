@@ -8,7 +8,7 @@ var Foo = /*#__PURE__*/function () {
   return babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test(x) {
-      return babelHelpers.classPrivateFieldLooseBase(Foo, _foo)[_foo](x);
+      return Foo[_foo](x);
     }
   }]);
 }();

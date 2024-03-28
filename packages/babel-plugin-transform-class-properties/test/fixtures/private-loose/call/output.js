@@ -14,8 +14,8 @@ var Foo = /*#__PURE__*/function () {
   return babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test(other) {
-      babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo]();
-      babelHelpers.classPrivateFieldLooseBase(other.obj, _foo)[_foo]();
+      this[_foo]();
+      other.obj[_foo]();
     }
   }]);
 }();

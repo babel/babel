@@ -15,7 +15,7 @@ class Sub extends Base {
     return 'bad';
   }
   publicMethod() {
-    return babelHelpers.classPrivateFieldLooseBase(this, _privateMethod)[_privateMethod]();
+    return this[_privateMethod]();
   }
 }
 function _privateMethod2() {

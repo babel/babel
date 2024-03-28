@@ -8,16 +8,16 @@ function classFactory() {
       });
     }
     instance() {
-      return babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo];
+      return babelHelpers.assertClassBrandLoose(this, _foo, 1);
     }
     static() {
-      return babelHelpers.classPrivateFieldLooseBase(Foo, _bar)[_bar];
+      return babelHelpers.assertClassBrandLoose(Foo, _bar, 1);
     }
     static instance(inst) {
-      return babelHelpers.classPrivateFieldLooseBase(inst, _foo)[_foo];
+      return babelHelpers.assertClassBrandLoose(inst, _foo, 1);
     }
     static static() {
-      return babelHelpers.classPrivateFieldLooseBase(Foo, _bar)[_bar];
+      return babelHelpers.assertClassBrandLoose(Foo, _bar, 1);
     }
   }, Object.defineProperty(_Foo, _bar, {
     writable: true,

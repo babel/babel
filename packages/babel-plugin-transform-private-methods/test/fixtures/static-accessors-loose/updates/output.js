@@ -3,10 +3,10 @@ var _privateField = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("private
 var _privateFieldValue = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("privateFieldValue");
 class Cl {
   static publicGetPrivateField() {
-    return babelHelpers.classPrivateFieldLooseBase(Cl, _privateFieldValue)[_privateFieldValue];
+    return babelHelpers.assertClassBrandLoose(Cl, _privateFieldValue, 1);
   }
   static publicSetPrivateField(newValue) {
-    babelHelpers.classPrivateFieldLooseBase(Cl, _privateFieldValue)[_privateFieldValue] = newValue;
+    babelHelpers.assertClassBrandLoose(Cl, _privateFieldValue)[_privateFieldValue] = newValue;
   }
   static get publicFieldValue() {
     return Cl.publicField;
@@ -15,24 +15,24 @@ class Cl {
     Cl.publicField = newValue;
   }
   static testUpdates() {
-    babelHelpers.classPrivateFieldLooseBase(Cl, _privateField)[_privateField] = 0;
+    babelHelpers.assertClassBrandLoose(Cl, _privateField)[_privateField] = 0;
     Cl.publicField = 0;
-    babelHelpers.classPrivateFieldLooseBase(Cl, _privateFieldValue)[_privateFieldValue] = babelHelpers.classPrivateFieldLooseBase(Cl, _privateFieldValue)[_privateFieldValue]++;
+    babelHelpers.assertClassBrandLoose(Cl, _privateFieldValue)[_privateFieldValue] = babelHelpers.assertClassBrandLoose(Cl, _privateFieldValue)[_privateFieldValue]++;
     Cl.publicFieldValue = Cl.publicFieldValue++;
-    ++babelHelpers.classPrivateFieldLooseBase(Cl, _privateFieldValue)[_privateFieldValue];
+    ++babelHelpers.assertClassBrandLoose(Cl, _privateFieldValue)[_privateFieldValue];
     ++Cl.publicFieldValue;
-    babelHelpers.classPrivateFieldLooseBase(Cl, _privateFieldValue)[_privateFieldValue] += 1;
+    babelHelpers.assertClassBrandLoose(Cl, _privateFieldValue)[_privateFieldValue] += 1;
     Cl.publicFieldValue += 1;
-    babelHelpers.classPrivateFieldLooseBase(Cl, _privateFieldValue)[_privateFieldValue] = -(babelHelpers.classPrivateFieldLooseBase(Cl, _privateFieldValue)[_privateFieldValue] ** babelHelpers.classPrivateFieldLooseBase(Cl, _privateFieldValue)[_privateFieldValue]);
+    babelHelpers.assertClassBrandLoose(Cl, _privateFieldValue)[_privateFieldValue] = -(babelHelpers.assertClassBrandLoose(Cl, _privateFieldValue, 1) ** babelHelpers.assertClassBrandLoose(Cl, _privateFieldValue, 1));
     Cl.publicFieldValue = -(Cl.publicFieldValue ** Cl.publicFieldValue);
   }
 }
 _Cl = Cl;
 function _get_privateFieldValue() {
-  return babelHelpers.classPrivateFieldLooseBase(_Cl, _privateField)[_privateField];
+  return babelHelpers.assertClassBrandLoose(_Cl, _privateField, 1);
 }
 function _set_privateFieldValue(newValue) {
-  babelHelpers.classPrivateFieldLooseBase(_Cl, _privateField)[_privateField] = newValue;
+  babelHelpers.assertClassBrandLoose(_Cl, _privateField)[_privateField] = newValue;
 }
 Object.defineProperty(Cl, _privateFieldValue, {
   get: _get_privateFieldValue,

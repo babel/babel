@@ -8,10 +8,10 @@ class Foo {
     });
   }
   static test() {
-    return babelHelpers.classPrivateFieldLooseBase(Foo, _foo)[_foo];
+    return babelHelpers.assertClassBrandLoose(Foo, _foo, 1);
   }
   test() {
-    return babelHelpers.classPrivateFieldLooseBase(this, _bar)[_bar];
+    return babelHelpers.assertClassBrandLoose(this, _bar, 1);
   }
 }
 Object.defineProperty(Foo, _foo, {

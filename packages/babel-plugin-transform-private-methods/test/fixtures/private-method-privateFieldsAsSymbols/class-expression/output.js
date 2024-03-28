@@ -6,7 +6,7 @@ console.log((_foo = Symbol("foo"), class A {
     });
   }
   method() {
-    babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo]();
+    this[_foo]();
   }
 }));
 function _foo2() {}
