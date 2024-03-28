@@ -34,38 +34,45 @@ helpers.wrapAsyncGenerator = helper("7.0.0-beta.0")`
   }
 `;
 
-helpers.asyncToGenerator = helper("7.0.0-beta.0")`
-  function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
-    try {
-      var info = gen[key](arg);
-      var value = info.value;
-    } catch (error) {
-      reject(error);
-      return;
-    }
+helpers.newAsyncGenerator = helper("7.24.4")`
+  import AsyncGenerator from "AsyncGenerator";
 
-    if (info.done) {
-      resolve(value);
-    } else {
-      Promise.resolve(value).then(_next, _throw);
-    }
+  export default function _newAsyncGenerator(fn, self, args) {
+    return new AsyncGenerator(fn.apply(self, args));
   }
+`;
 
+helpers.asyncToGenerator = helper("7.0.0-beta.0")`
+  import callAsync from "callAsync";
   export default function _asyncToGenerator(fn) {
     return function () {
-      var self = this, args = arguments;
-      return new Promise(function (resolve, reject) {
-        var gen = fn.apply(self, args);
-        function _next(value) {
-          asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
-        }
-        function _throw(err) {
-          asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+      return callAsync(fn, this, arguments);
+    };
+  }
+`;
+
+helpers.callAsync = helper("7.24.4")`
+  export default function _callAsync(fn, self, args) {
+    return new Promise(function (resolve, reject) {
+      function step(key, arg) {
+        try {
+          var info = gen[key](arg);
+          var value = info.value;
+        } catch (error) {
+          reject(error);
+          return;
         }
 
-        _next(undefined);
-      });
-    };
+        if (info.done) {
+          resolve(value);
+        } else {
+          Promise.resolve(value).then(_next, _throw);
+        }
+      }
+      var gen = fn.apply(self, args), _next = step.bind(this, "next"), _throw = step.bind(this, "throw");
+
+      _next();
+    });
   }
 `;
 
@@ -811,6 +818,14 @@ helpers.skipFirstGeneratorNext = helper("7.0.0-beta.0")`
       it.next();
       return it;
     }
+  }
+`;
+
+helpers.callSkipFirstGeneratorNext = helper("7.24.4")`
+  export default function _callSkipFirstGeneratorNext(fn, self, args) {
+    var it = fn.apply(self, args);
+    it.next();
+    return it;
   }
 `;
 

@@ -369,6 +369,15 @@
       "./helpers/wrapAsyncGenerator.js"
     ],
     "./helpers/esm/wrapAsyncGenerator": "./helpers/esm/wrapAsyncGenerator.js",
+    "./helpers/newAsyncGenerator": [
+      {
+        "node": "./helpers/newAsyncGenerator.js",
+        "import": "./helpers/esm/newAsyncGenerator.js",
+        "default": "./helpers/newAsyncGenerator.js"
+      },
+      "./helpers/newAsyncGenerator.js"
+    ],
+    "./helpers/esm/newAsyncGenerator": "./helpers/esm/newAsyncGenerator.js",
     "./helpers/asyncToGenerator": [
       {
         "node": "./helpers/asyncToGenerator.js",
@@ -378,6 +387,15 @@
       "./helpers/asyncToGenerator.js"
     ],
     "./helpers/esm/asyncToGenerator": "./helpers/esm/asyncToGenerator.js",
+    "./helpers/callAsync": [
+      {
+        "node": "./helpers/callAsync.js",
+        "import": "./helpers/esm/callAsync.js",
+        "default": "./helpers/callAsync.js"
+      },
+      "./helpers/callAsync.js"
+    ],
+    "./helpers/esm/callAsync": "./helpers/esm/callAsync.js",
     "./helpers/classCallCheck": [
       {
         "node": "./helpers/classCallCheck.js",
@@ -810,6 +828,15 @@
       "./helpers/skipFirstGeneratorNext.js"
     ],
     "./helpers/esm/skipFirstGeneratorNext": "./helpers/esm/skipFirstGeneratorNext.js",
+    "./helpers/callSkipFirstGeneratorNext": [
+      {
+        "node": "./helpers/callSkipFirstGeneratorNext.js",
+        "import": "./helpers/esm/callSkipFirstGeneratorNext.js",
+        "default": "./helpers/callSkipFirstGeneratorNext.js"
+      },
+      "./helpers/callSkipFirstGeneratorNext.js"
+    ],
+    "./helpers/esm/callSkipFirstGeneratorNext": "./helpers/esm/callSkipFirstGeneratorNext.js",
     "./helpers/initializerWarningHelper": [
       {
         "node": "./helpers/initializerWarningHelper.js",
