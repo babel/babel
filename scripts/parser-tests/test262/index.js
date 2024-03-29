@@ -40,6 +40,7 @@ const featuresToPlugins = new Map([
       "decoratorAutoAccessors",
     ],
   ],
+  ["explicit-resource-management", "explicitResourceManagement"],
 ]);
 
 const unmappedFeatures = new Set();
