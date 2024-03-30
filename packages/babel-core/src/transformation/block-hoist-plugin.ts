@@ -26,15 +26,6 @@ const blockHoistPlugin: PluginObject = {
         node.body = performHoisting(node.body);
       },
     },
-    SwitchCase: {
-      exit({ node }) {
-        // In case statements, hoisting is difficult to perform correctly due to
-        // functions that are declared and referenced in different blocks.
-        // Nevertheless, hoisting the statements *inside* of each case should at
-        // least mitigate the failure cases.
-        node.consequent = performHoisting(node.consequent);
-      },
-    },
   },
 };
 
