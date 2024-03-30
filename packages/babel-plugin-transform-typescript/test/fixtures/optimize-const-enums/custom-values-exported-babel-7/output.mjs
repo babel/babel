@@ -1,4 +1,4 @@
-export const A = {
+export var A = {
   x: 3,
   y: "f",
   z: 16,

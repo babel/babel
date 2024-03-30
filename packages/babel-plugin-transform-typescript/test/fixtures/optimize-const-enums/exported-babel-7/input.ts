@@ -1,5 +1,5 @@
-const A = {
-  y: 0
-};
+const enum A { y }
+
 let x = A.y;
+
 export { A };
