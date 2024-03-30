@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Usage: BABEL_CORE_DEV_DEP_VERSION=next ./test/babel-7-8-compat/babel-7-plugins-with-babel-8-core.sh
 # NOTE: This will change files in your monorepo, make sure to commit/stage
