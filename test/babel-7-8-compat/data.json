@@ -1,5 +1,6 @@
 {
   "babel7plugins-babel8core": [
+    "babel-plugin-bugfix-v8-static-class-fields-redefine-readonly",
     "babel-plugin-transform-class-properties",
     "babel-plugin-transform-class-static-block",
     "babel-plugin-transform-json-strings",
