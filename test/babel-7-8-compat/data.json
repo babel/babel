@@ -1,6 +1,10 @@
 {
   "babel7plugins-babel8core": [
+    "babel-plugin-transform-class-properties",
+    "babel-plugin-transform-class-static-block",
     "babel-plugin-transform-json-strings",
+    "babel-plugin-transform-private-methods",
+    "babel-plugin-transform-private-property-in-object",
     "babel-plugin-transform-unicode-sets-regex"
   ]
 }
