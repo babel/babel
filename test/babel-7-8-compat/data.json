@@ -1,3 +1,6 @@
 {
-  "babel7plugins-babel8core": ["babel-plugin-transform-json-strings"]
+  "babel7plugins-babel8core": [
+    "babel-plugin-transform-json-strings",
+    "babel-plugin-transform-unicode-sets-regex"
+  ]
 }
