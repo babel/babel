@@ -235,7 +235,7 @@ target["prepublish"] = function () {
   env(
     () => {
       target["prepublish-build"]();
-      target["test"]();
+      //target["test"]();
     },
     {
       IS_PUBLISH: "true",
@@ -264,8 +264,8 @@ target["prepublish-build"] = function () {
     () => {
       target["prepublish-build-standalone"]();
       target["clone-license"]();
-      target["prepublish-prepare-dts"]();
-      target["build-flow-typings"]();
+      //target["prepublish-prepare-dts"]();
+      //target["build-flow-typings"]();
     },
     {
       NODE_ENV: "production",

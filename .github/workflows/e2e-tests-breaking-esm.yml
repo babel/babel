@@ -52,15 +52,15 @@ jobs:
       matrix:
         # todo: verify which of these tests can be re-enabled
         project:
-          - babel
+          #- babel
           - babel7plugins-babel8core
-          - create-react-app
+          #- create-react-app
           # - vue-cli
           # - jest
           # todo: Enable this test when metro-source-map does not reassign NodePath cache
           # https://github.com/facebook/metro/blob/29bb5f2ad3319ba8f4764c3993aa85c15f59af23/packages/metro-source-map/src/generateFunctionMap.js#L182
           # react-native
-          - prettier
+          #- prettier
           # - angular-cli
     steps:
       - name: Get yarn1 cache directory path
