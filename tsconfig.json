@@ -39,6 +39,7 @@
     "./packages/babel-highlight/src/**/*.ts",
     "./packages/babel-node/src/**/*.ts",
     "./packages/babel-parser/src/**/*.ts",
+    "./packages/babel-plugin-bugfix-firefox-class-in-computed-class-key/src/**/*.ts",
     "./packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression/src/**/*.ts",
     "./packages/babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining/src/**/*.ts",
     "./packages/babel-plugin-bugfix-v8-static-class-fields-redefine-readonly/src/**/*.ts",
@@ -290,6 +291,9 @@
       ],
       "@babel/parser": [
         "./packages/babel-parser/src"
+      ],
+      "@babel/plugin-bugfix-firefox-class-in-computed-class-key": [
+        "./packages/babel-plugin-bugfix-firefox-class-in-computed-class-key/src"
       ],
       "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression": [
         "./packages/babel-plugin-bugfix-safari-id-destructuring-collision-in-function-expression/src"

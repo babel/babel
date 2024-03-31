@@ -1300,6 +1300,20 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-bugfix-firefox-class-in-computed-class-key@workspace:^, @babel/plugin-bugfix-firefox-class-in-computed-class-key@workspace:packages/babel-plugin-bugfix-firefox-class-in-computed-class-key":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-bugfix-firefox-class-in-computed-class-key@workspace:packages/babel-plugin-bugfix-firefox-class-in-computed-class-key"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-environment-visitor": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/traverse": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression@npm:^8.0.0-alpha.7":
   version: 8.0.0-alpha.7
   resolution: "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression@npm:8.0.0-alpha.7"
@@ -3967,6 +3981,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-validator-option": "workspace:^"
+    "@babel/plugin-bugfix-firefox-class-in-computed-class-key": "workspace:^"
     "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression": "workspace:^"
     "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining": "workspace:^"
     "@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly": "workspace:^"

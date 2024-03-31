@@ -17,6 +17,7 @@ Using modules transform: auto
 
 Using plugins:
   transform-unicode-sets-regex { ios, opera_mobile < 75, safari < tp, samsung }
+  bugfix/transform-firefox-class-in-computed-class-key { firefox }
   transform-export-namespace-from { }
   transform-modules-commonjs
   transform-dynamic-import

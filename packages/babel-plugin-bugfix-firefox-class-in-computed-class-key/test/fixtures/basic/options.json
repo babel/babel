@@ -1,0 +1,3 @@
+{
+  "plugins": ["bugfix-firefox-class-in-computed-class-key"]
+}
