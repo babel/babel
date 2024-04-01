@@ -87,7 +87,7 @@ function env(fun, env) {
  */
 
 target["clean-all"] = function () {
-  shell.rm("-rf", ["node_modules", "package-lock.json", ".changelog"]);
+  shell.rm("-rf", ["package-lock.json", ".changelog"]);
 
   SOURCES.forEach(source => {
     shell.rm("-rf", `${source}/*/test/tmp`);
@@ -96,6 +96,14 @@ target["clean-all"] = function () {
 
   target["clean"]();
   target["clean-lib"]();
+  target["clean-node-modules"]();
+};
+
+target["clean-node-modules"] = function () {
+  shell.rm("-rf", "node_modules");
+  SOURCES.forEach(source => {
+    shell.rm("-rf", `${source}/*/node_modules`);
+  });
 };
 
 target["clean"] = function () {

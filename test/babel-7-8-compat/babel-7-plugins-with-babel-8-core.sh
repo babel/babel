@@ -43,6 +43,7 @@ export TOP_LEVEL_CORE_VERSION=$(node -e '
   pkg.devDependencies["@babel/core"] = process.env.BABEL_CORE_DEV_DEP_VERSION;
   fs.writeFileSync("package.json", JSON.stringify(pkg, null, 2) + "\n");
 ')
+make clean-node-modules
 yarn
 
 # Test
