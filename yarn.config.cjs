@@ -280,25 +280,6 @@ gen_enforced_dependency(WorkspaceCwd, '@babel/core', 'workspace:^', 'devDependen
  */
 function enforceBabelCoreNotInDeps({ Yarn }) {
   for (const workspace of Yarn.workspaces()) {
-    if (process.env.BABEL_CORE_DEV_DEP_VERSION && workspace.ident) {
-      if (workspace.ident === "@babel/helper-transform-fixture-test-runner") {
-        workspace.set(
-          "dependencies['@babel/core']",
-          process.env.BABEL_CORE_DEV_DEP_VERSION
-        );
-      } else if (
-        babel7plugins_babel8core.has(
-          workspace.ident.replace("@babel/", "babel-")
-        )
-      ) {
-        workspace.set(
-          "devDependencies['@babel/core']",
-          process.env.BABEL_CORE_DEV_DEP_VERSION
-        );
-      }
-      continue;
-    }
-
     if (
       workspace.pkg.peerDependencies.has("@babel/core") &&
       !workspace.manifest.dependencies?.["@babel/core"]
@@ -365,6 +346,23 @@ function enforceExports({ Yarn }) {
   }
 }
 
+function enforceBabelCodeVersionFor78Compat({ Yarn }, version) {
+  for (const workspace of Yarn.workspaces()) {
+    if (workspace.cwd === ".") {
+      workspace.set("devDependencies['@babel/core']", version);
+    } else if (
+      workspace.ident === "@babel/helper-transform-fixture-test-runner"
+    ) {
+      workspace.set("dependencies['@babel/core']", version);
+    } else if (
+      workspace.ident &&
+      babel7plugins_babel8core.has(workspace.ident.replace("@babel/", "babel-"))
+    ) {
+      workspace.set("devDependencies['@babel/core']", version);
+    }
+  }
+}
+
 /**
  * @type {import('@yarnpkg/types').Yarn.Config}
  */
@@ -381,6 +379,13 @@ module.exports = {
     enforceNoDualTypeDependencies(ctx);
     enforceRuntimeCorejs2DependsOnCorejs2(ctx);
     enforceBabelHelperBabelDeps(ctx);
-    enforceBabelCoreNotInDeps(ctx);
+    if (process.env.BABEL_CORE_DEV_DEP_VERSION) {
+      enforceBabelCodeVersionFor78Compat(
+        ctx,
+        process.env.BABEL_CORE_DEV_DEP_VERSION
+      );
+    } else {
+      enforceBabelCoreNotInDeps(ctx);
+    }
   },
 };

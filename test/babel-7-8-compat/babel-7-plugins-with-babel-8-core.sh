@@ -31,19 +31,11 @@ cd ../..
 export YARN_ENABLE_IMMUTABLE_INSTALLS=false
 
 # Build
-yarn constraints --fix
-make -j use-cjs
+BABEL_CORE_DEV_DEP_VERSION= make -j use-cjs
 
-# Make sure that packages we want to test share all the same hoisted @babel/core,
-# rather than having their own copies. This allows pre-loading it (for the CJS proxy),
-# and matches usage outside of the monorepo (where @babel/core is provided by the user).
-export TOP_LEVEL_CORE_VERSION=$(node -e '
-  const pkg = require("./package.json");
-  process.stdout.write(pkg.devDependencies["@babel/core"]);
-  pkg.devDependencies["@babel/core"] = process.env.BABEL_CORE_DEV_DEP_VERSION;
-  fs.writeFileSync("package.json", JSON.stringify(pkg, null, 2) + "\n");
-')
+
 make clean-node-modules
+yarn constraints --fix
 yarn
 
 # Test
@@ -51,9 +43,4 @@ TEST_babel7plugins_babel8core=true yarn jest $(node -p 'require("./test/babel-7-
 
 # Reset package.json changes
 BABEL_CORE_DEV_DEP_VERSION= yarn constraints --fix
-node -e '
-  const pkg = require("./package.json");
-  pkg.devDependencies["@babel/core"] = process.env.TOP_LEVEL_CORE_VERSION;
-  fs.writeFileSync("package.json", JSON.stringify(pkg, null, 2) + "\n");
-'
 BABEL_CORE_DEV_DEP_VERSION= yarn
