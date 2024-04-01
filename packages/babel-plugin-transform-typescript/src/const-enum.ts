@@ -52,7 +52,9 @@ export default function transpileConstEnum(
       );
     } else {
       path.replaceWith(
-        t.variableDeclaration("var", [t.variableDeclarator(path.node.id, obj)]),
+        t.variableDeclaration(process.env.BABEL_8_BREAKING ? "const" : "var", [
+          t.variableDeclarator(path.node.id, obj),
+        ]),
       );
       path.scope.registerDeclaration(path);
     }

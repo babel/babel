@@ -1,4 +1,4 @@
-const WhitespaceFlag = {
+var WhitespaceFlag = {
   before: 1,
   after: 2
 };

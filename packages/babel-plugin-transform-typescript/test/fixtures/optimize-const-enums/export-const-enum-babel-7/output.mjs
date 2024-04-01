@@ -1,4 +1,4 @@
-export const A = {
+export var A = {
   y: 0
 };
 let x = A.y;
