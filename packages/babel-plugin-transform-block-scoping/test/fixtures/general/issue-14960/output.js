@@ -2,8 +2,8 @@
   switch (1) {
     case 1:
       expect(f()).toBe(1);
-      var f = function () {
+      function f() {
         return 1;
-      };
+      }
   }
 }

@@ -1,7 +1,7 @@
 if (true) {
-  var run = function () {
+  function run() {
     return true;
-  };
+  }
 }
 function test() {
   return run();
