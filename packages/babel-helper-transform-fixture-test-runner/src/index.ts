@@ -544,7 +544,9 @@ export default function (
       ) {
         // Make sure that the ESM version of @babel/core is always loaded
         // for babel7-8 interop tests.
-        beforeAll(() => import("@babel/core").catch(console.error));
+        // In `eval` so that it doesn't cause a syntax error when running
+        // tests in old Node.js.
+        beforeAll(() => eval('import("@babel/core")').catch(console.error));
       }
 
       for (const task of testSuite.tests) {
