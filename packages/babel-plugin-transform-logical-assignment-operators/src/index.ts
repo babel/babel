@@ -5,6 +5,13 @@ export default declare(api => {
   api.assertVersion(REQUIRED_VERSION(7));
   const { types: t } = api;
 
+  if (
+    process.env.TEST_babel7plugins_babel8core &&
+    !api.version.startsWith("8.")
+  ) {
+    throw new Error("Running in Babel " + api.version);
+  }
+
   return {
     name: "transform-logical-assignment-operators",
     inherits:
