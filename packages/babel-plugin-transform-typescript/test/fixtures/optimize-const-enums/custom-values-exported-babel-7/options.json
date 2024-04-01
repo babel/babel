@@ -1,3 +1,5 @@
 {
-	"BABEL_8_BREAKING": false
+  "plugins": [["transform-typescript", { "optimizeConstEnums": true }]],
+  "sourceType": "module",
+  "BABEL_8_BREAKING": false
 }
