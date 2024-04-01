@@ -40,6 +40,12 @@ export default declare(api => {
 
         transformStatementList(path.get("body"));
       },
+
+      SwitchCase(path) {
+        if (!path.isInStrictMode()) return;
+
+        transformStatementList(path.get("consequent"));
+      },
     },
   };
 });
