@@ -1,7 +1,7 @@
 if (true) {
-  var foo = function () {};
-  var bar = function () {
+  function foo() {}
+  function bar() {
     return foo;
-  };
+  }
   for (var x in {}) {}
 }
