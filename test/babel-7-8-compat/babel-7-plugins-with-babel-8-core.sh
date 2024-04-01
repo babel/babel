@@ -31,7 +31,7 @@ export YARN_ENABLE_IMMUTABLE_INSTALLS=false
 # Build and test
 yarn constraints --fix
 make -j use-cjs
-yarn jest $(node -p 'require("./test/babel-7-8-compat/data.json")["babel7plugins-babel8core"].join(" ")' || exit)
+TEST_babel7plugins_babel8core=true yarn jest $(node -p 'require("./test/babel-7-8-compat/data.json")["babel7plugins-babel8core"].join(" ")' || exit)
 
 # Reset package.json changes
 BABEL_CORE_DEV_DEP_VERSION= yarn constraints --fix
