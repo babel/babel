@@ -1,6 +1,7 @@
 if (true) {
-  var _run = /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee() {
-    return babelHelpers.regeneratorRuntime().wrap(function _callee$(_context) {
+  var _marked = /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(run);
+  function run() {
+    return babelHelpers.regeneratorRuntime().wrap(function run$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           return _context.abrupt("return", true);
@@ -8,8 +9,8 @@ if (true) {
         case "end":
           return _context.stop();
       }
-    }, _callee);
-  });
+    }, _marked);
+  }
 }
 function test() {
   return run();

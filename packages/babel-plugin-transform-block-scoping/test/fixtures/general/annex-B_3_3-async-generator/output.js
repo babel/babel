@@ -6,9 +6,9 @@
 // This is a bug.
 
 if (true) {
-  var _run = async function* () {
+  async function* run() {
     return true;
-  };
+  }
 }
 function test() {
   return run();
