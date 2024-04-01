@@ -1,4 +1,4 @@
 class A {
   #x = 1;
-  [(() => class {}).call()];
+  [(() => class {})()];
 }
