@@ -7,6 +7,9 @@ export default declare(api => {
   function transformStatementList(paths: NodePath<t.Statement>[]) {
     for (const path of paths) {
       if (!path.isFunctionDeclaration()) continue;
+      // Annex B.3.3 only applies to plain functions.
+      if (path.node.async || path.node.generator) continue;
+
       const func = path.node;
       const declar = t.variableDeclaration("let", [
         t.variableDeclarator(func.id, t.toExpression(func)),
