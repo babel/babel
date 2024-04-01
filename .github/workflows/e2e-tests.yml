@@ -1,4 +1,4 @@
-name: E2E tests (breaking, esm)
+name: E2E tests
 
 on:
   push:
@@ -27,13 +27,8 @@ jobs:
         with:
           node-version: "*"
           cache: "yarn"
-      - name: Use ESM
-        run: make use-esm
       - name: Publish
         run: ./scripts/integration-tests/publish-local.sh
-        env:
-          BABEL_8_BREAKING: true
-          USE_ESM: true
       - name: Pack published packages
         working-directory: /tmp
         run: tar -cvf verdaccio-workspace.tar verdaccio-workspace
@@ -50,18 +45,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # todo: verify which of these tests can be re-enabled
         project:
           - babel
-          - babel7plugins-babel8core
+          - babel-old-version
           - create-react-app
-          # - vue-cli
-          # - jest
-          # todo: Enable this test when metro-source-map does not reassign NodePath cache
-          # https://github.com/facebook/metro/blob/29bb5f2ad3319ba8f4764c3993aa85c15f59af23/packages/metro-source-map/src/generateFunctionMap.js#L182
-          # react-native
+          - vue-cli
+          - jest
+          - react-native
           - prettier
-          # - angular-cli
+          - angular-cli
     steps:
       - name: Get yarn1 cache directory path
         id: yarn1-cache-dir-path
@@ -80,15 +72,15 @@ jobs:
         id: yarn1-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
           path: ${{ steps.yarn1-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn1-e2e-breaking-${{ matrix.project }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-yarn1-e2e-breaking-${{ matrix.project }}-
+          key: ${{ runner.os }}-yarn1-e2e-${{ matrix.project }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn1-e2e-${{ matrix.project }}-
       - name: Use yarn cache
         uses: actions/cache@v4
         id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-e2e-breaking-${{ matrix.project }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-yarn-e2e-breaking-${{ matrix.project }}-
+          key: ${{ runner.os }}-yarn-e2e-${{ matrix.project }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-e2e-${{ matrix.project }}-
       - name: Clean babel cache
         run: |
           rm -rf ${{ steps.yarn1-cache-dir-path.outputs.dir }}/*babel*
@@ -101,6 +93,3 @@ jobs:
         run: tar -C /tmp -xf /tmp/verdaccio-workspace.tar
       - name: Test
         run: ./scripts/integration-tests/e2e-${{ matrix.project }}.sh
-        env:
-          USE_ESM: true
-          BABEL_8_BREAKING: true
