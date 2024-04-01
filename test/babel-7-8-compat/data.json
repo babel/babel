@@ -5,7 +5,9 @@
     "babel-plugin-transform-class-static-block",
     "babel-plugin-transform-json-strings",
     "babel-plugin-transform-logical-assignment-operators",
+    "babel-plugin-transform-nullish-coalescing-operator",
     "babel-plugin-transform-numeric-separator",
+    "babel-plugin-transform-optional-chaining",
     "babel-plugin-transform-private-methods",
     "babel-plugin-transform-private-property-in-object",
     "babel-plugin-transform-unicode-sets-regex"
