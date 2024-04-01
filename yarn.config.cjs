@@ -280,13 +280,13 @@ gen_enforced_dependency(WorkspaceCwd, '@babel/core', 'workspace:^', 'devDependen
  */
 function enforceBabelCoreNotInDeps({ Yarn }) {
   for (const workspace of Yarn.workspaces()) {
-    if (
-      workspace.pkg.peerDependencies.has("@babel/core") &&
-      !workspace.manifest.dependencies?.["@babel/core"]
-    ) {
-      if (
-        process.env.BABEL_CORE_DEV_DEP_VERSION &&
-        workspace.ident &&
+    if (process.env.BABEL_CORE_DEV_DEP_VERSION && workspace.ident) {
+      if (workspace.ident === "@babel/helper-transform-fixture-test-runner") {
+        workspace.set(
+          "dependencies['@babel/core']",
+          process.env.BABEL_CORE_DEV_DEP_VERSION
+        );
+      } else if (
         babel7plugins_babel8core.has(
           workspace.ident.replace("@babel/", "babel-")
         )
@@ -295,9 +295,15 @@ function enforceBabelCoreNotInDeps({ Yarn }) {
           "devDependencies['@babel/core']",
           process.env.BABEL_CORE_DEV_DEP_VERSION
         );
-      } else {
-        workspace.set("devDependencies['@babel/core']", "workspace:^");
       }
+      continue;
+    }
+
+    if (
+      workspace.pkg.peerDependencies.has("@babel/core") &&
+      !workspace.manifest.dependencies?.["@babel/core"]
+    ) {
+      workspace.set("devDependencies['@babel/core']", "workspace:^");
     }
     if (
       workspace.ident !== null &&
