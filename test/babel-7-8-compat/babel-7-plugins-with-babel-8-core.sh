@@ -4,6 +4,8 @@
 # NOTE: This will change files in your monorepo, make sure to commit/stage
 # everything before running it.
 
+set -e
+
 #==============================================================================#
 #                                  SETUP                                       #
 #==============================================================================#
