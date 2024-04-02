@@ -1,6 +1,6 @@
 async function f() {
   {
-    await using f, f = foo();
+    await using f = foo(), f = foo();
   }
   {
     await using g = foo();

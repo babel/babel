@@ -5,7 +5,7 @@ async function f() {
   await using \u0061wait = h();
 }
 async function f() {
-  await using x, await = h();
+  await using x = h(), await = h();
 }
 async function f() {
   for (await using await of []);
