@@ -19,8 +19,10 @@ negative:
   type: ReferenceError
 ---*/
 
-switch (0) {
-  default:
-    async function* x() {}
-}
-x;
+expect(() => {
+  switch (0) {
+    default:
+      async function* x() {}
+  }
+  x;
+}).toThrow(ReferenceError);

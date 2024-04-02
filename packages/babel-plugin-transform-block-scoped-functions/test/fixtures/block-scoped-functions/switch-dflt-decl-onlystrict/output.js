@@ -32,5 +32,5 @@ var err1, err2;
     err2 = exception;
   }
 })();
-assert.sameValue(err1.constructor, ReferenceError);
-assert.sameValue(err2.constructor, ReferenceError);
+expect(err1.constructor).toBe(ReferenceError);
+expect(err2.constructor).toBe(ReferenceError);

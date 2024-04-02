@@ -32,7 +32,41 @@ export const annexB33FunctionsVisitor: Visitor = {
       names: Object.keys(path.getBindingIdentifiers()),
     });
   },
+
+  // NOTE: These two visitors target the same nodes as the
+  // block-scoped-functions plugin
+
+  BlockStatement(path) {
+    if (isStrict(path)) return;
+    if (t.isFunction(path.parent, { body: path.node })) return;
+    transformStatementList(path.get("body"));
+  },
+
+  SwitchCase(path) {
+    if (isStrict(path)) return;
+    transformStatementList(path.get("consequent"));
+  },
 };
+
+function transformStatementList(paths: NodePath<t.Statement>[]) {
+  outer: for (const path of paths) {
+    if (!path.isFunctionDeclaration()) continue;
+    // Annex B.3.3 only applies to plain functions.
+    if (path.node.async || path.node.generator) {
+      const { scope } = path.parentPath;
+      if (isVarScope(scope)) return;
+
+      const { name } = path.node.id;
+      let currScope = scope;
+      do {
+        if (currScope.parent.hasOwnBinding(name)) continue outer;
+        currScope = currScope.parent;
+      } while (!isVarScope(currScope));
+
+      maybeTransformBlockScopedFunction(path);
+    }
+  }
+}
 
 function maybeTransformBlockScopedFunction(
   path: NodePath<t.FunctionDeclaration>,
@@ -46,7 +80,7 @@ function maybeTransformBlockScopedFunction(
   scope.removeOwnBinding(id.name);
   node.id = null;
 
-  const varNode = t.variableDeclaration("var", [
+  const varNode = t.variableDeclaration("let", [
     t.variableDeclarator(id, t.toExpression(node)),
   ]);
   // @ts-expect-error undocumented property

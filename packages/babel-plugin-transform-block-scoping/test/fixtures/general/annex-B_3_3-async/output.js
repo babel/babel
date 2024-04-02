@@ -1,13 +1,12 @@
 if (true) {
-  function run() {
-    return _run.apply(this, arguments);
-  }
-  function _run() {
-    _run = babelHelpers.asyncToGenerator(function* () {
+  var _run = /*#__PURE__*/function () {
+    var _ref = babelHelpers.asyncToGenerator(function* () {
       return true;
     });
-    return _run.apply(this, arguments);
-  }
+    return function _run() {
+      return _ref.apply(this, arguments);
+    };
+  }();
 }
 function test() {
   return run();

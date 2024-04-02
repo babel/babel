@@ -2,7 +2,7 @@ var run = function () {
   return false;
 };
 if (true) {
-  var run = function () {
+  var _run = function () {
     return true;
   };
 }
