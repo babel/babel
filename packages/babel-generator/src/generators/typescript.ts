@@ -443,11 +443,12 @@ export function TSMappedType(this: Printer, node: t.TSMappedType) {
 
   this.token("]");
 
+  if (optional) {
+    tokenIfPlusMinus(this, optional);
+    this.token("?");
+  }
+
   if (typeAnnotation) {
-    if (optional) {
-      tokenIfPlusMinus(this, optional);
-      this.token("?");
-    }
     this.token(":");
     this.space();
     this.print(typeAnnotation, node);
