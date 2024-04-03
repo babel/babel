@@ -111,6 +111,9 @@ use-esm:
 clean-lib:
 	$(MAKEJS) clean-lib
 
+clean-node-modules:
+	$(MAKEJS) clean-node-modules
+
 clean-runtime-helpers:
 	$(MAKEJS) clean-runtime-helpers
 

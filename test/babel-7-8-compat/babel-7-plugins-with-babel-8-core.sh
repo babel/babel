@@ -4,6 +4,8 @@
 # NOTE: This will change files in your monorepo, make sure to commit/stage
 # everything before running it.
 
+set -e
+
 #==============================================================================#
 #                                  SETUP                                       #
 #==============================================================================#
@@ -28,10 +30,16 @@ cd ../..
 
 export YARN_ENABLE_IMMUTABLE_INSTALLS=false
 
-# Build and test
+# Build
+BABEL_CORE_DEV_DEP_VERSION= make -j use-cjs
+
+
+make clean-node-modules
 yarn constraints --fix
-make -j use-cjs
-yarn jest $(node -p 'require("./test/babel-7-8-compat/data.json")["babel7plugins-babel8core"].join(" ")' || exit)
+yarn
+
+# Test
+TEST_babel7plugins_babel8core=true yarn jest $(node -p 'require("./test/babel-7-8-compat/data.json")["babel7plugins-babel8core"].join(" ")' || exit)
 
 # Reset package.json changes
 BABEL_CORE_DEV_DEP_VERSION= yarn constraints --fix

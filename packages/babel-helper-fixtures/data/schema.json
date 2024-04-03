@@ -54,6 +54,10 @@
           "description": "Whether this test should validate the stdout and stderr",
           "type": "boolean",
           "default": false
+        },
+        "SKIP_babel7plugins_babel8core": {
+          "description": "The reason for skipping when testing Babel 7 plugins with Babel 8 core, if any",
+          "type": "string"
         }
       }
     }

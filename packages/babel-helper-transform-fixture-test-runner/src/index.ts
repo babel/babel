@@ -68,7 +68,6 @@ const cachedScripts = new LruCache<
   { code: string; cachedData?: Buffer }
 >({ max: 10 });
 const contextModuleCache = new WeakMap();
-const sharedTestContext = createTestContext();
 
 // We never want our tests to accidentally load the root
 // babel.config.js file, so we disable config loading by
@@ -201,6 +200,8 @@ function runModuleInTestContext(
   ).exports;
 }
 
+let sharedTestContext: vm.Context;
+
 /**
  * Run the given snippet of code inside a CommonJS module.
  *
@@ -211,7 +212,7 @@ export function runCodeInTestContext(
   opts: {
     filename: string;
   },
-  context = sharedTestContext,
+  context = (sharedTestContext ??= createTestContext()),
 ) {
   const filename = opts.filename;
   const dirname = path.dirname(filename);
@@ -537,6 +538,17 @@ export default function (
     if (suiteOpts.ignoreSuites?.includes(testSuite.title)) continue;
 
     describe(name + "/" + testSuite.title, function () {
+      if (
+        !process.env.IS_PUBLISH &&
+        process.env.TEST_babel7plugins_babel8core
+      ) {
+        // Make sure that the ESM version of @babel/core is always loaded
+        // for babel7-8 interop tests.
+        // In `eval` so that it doesn't cause a syntax error when running
+        // tests in old Node.js.
+        beforeAll(() => eval('import("@babel/core")').catch(console.error));
+      }
+
       for (const task of testSuite.tests) {
         if (
           suiteOpts.ignoreTasks?.includes(task.title) ||
@@ -546,9 +558,13 @@ export default function (
         }
 
         const testFn = task.disabled ? it.skip : it;
+        const testTitle =
+          typeof task.disabled === "string"
+            ? `(SKIP: ${task.disabled}) ${task.title}`
+            : task.title;
 
         testFn(
-          task.title,
+          testTitle,
 
           async function () {
             const runTask = () => run(task);

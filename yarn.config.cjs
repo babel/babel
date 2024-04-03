@@ -284,20 +284,7 @@ function enforceBabelCoreNotInDeps({ Yarn }) {
       workspace.pkg.peerDependencies.has("@babel/core") &&
       !workspace.manifest.dependencies?.["@babel/core"]
     ) {
-      if (
-        process.env.BABEL_CORE_DEV_DEP_VERSION &&
-        workspace.ident &&
-        babel7plugins_babel8core.has(
-          workspace.ident.replace("@babel/", "babel-")
-        )
-      ) {
-        workspace.set(
-          "devDependencies['@babel/core']",
-          process.env.BABEL_CORE_DEV_DEP_VERSION
-        );
-      } else {
-        workspace.set("devDependencies['@babel/core']", "workspace:^");
-      }
+      workspace.set("devDependencies['@babel/core']", "workspace:^");
     }
     if (
       workspace.ident !== null &&
@@ -359,6 +346,23 @@ function enforceExports({ Yarn }) {
   }
 }
 
+function enforceBabelCodeVersionFor78Compat({ Yarn }, version) {
+  for (const workspace of Yarn.workspaces()) {
+    if (workspace.cwd === ".") {
+      workspace.set("devDependencies['@babel/core']", version);
+    } else if (
+      workspace.ident === "@babel/helper-transform-fixture-test-runner"
+    ) {
+      workspace.set("dependencies['@babel/core']", version);
+    } else if (
+      workspace.ident &&
+      babel7plugins_babel8core.has(workspace.ident.replace("@babel/", "babel-"))
+    ) {
+      workspace.set("devDependencies['@babel/core']", version);
+    }
+  }
+}
+
 /**
  * @type {import('@yarnpkg/types').Yarn.Config}
  */
@@ -375,6 +379,13 @@ module.exports = {
     enforceNoDualTypeDependencies(ctx);
     enforceRuntimeCorejs2DependsOnCorejs2(ctx);
     enforceBabelHelperBabelDeps(ctx);
-    enforceBabelCoreNotInDeps(ctx);
+    if (process.env.BABEL_CORE_DEV_DEP_VERSION) {
+      enforceBabelCodeVersionFor78Compat(
+        ctx,
+        process.env.BABEL_CORE_DEV_DEP_VERSION
+      );
+    } else {
+      enforceBabelCoreNotInDeps(ctx);
+    }
   },
 };
