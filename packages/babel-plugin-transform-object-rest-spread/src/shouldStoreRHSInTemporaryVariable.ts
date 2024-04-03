@@ -10,6 +10,7 @@ import type { types as t } from "@babel/core";
 export default function shouldStoreRHSInTemporaryVariable(
   node: t.LVal,
 ): boolean {
+  if (!node) return false;
   if (node.type === "ArrayPattern") {
     const nonNullElements = node.elements.filter(element => element !== null);
     if (nonNullElements.length > 1) return true;
