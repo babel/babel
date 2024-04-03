@@ -3,6 +3,5 @@
   "presets": [["env", { "targets": { "browsers": "ie 6" } }]],
   "assumptions": {
     "setPublicClassFields": true
-  },
-  "SKIP_babel7plugins_babel8core": "This test uses preset-env"
+  }
 }
