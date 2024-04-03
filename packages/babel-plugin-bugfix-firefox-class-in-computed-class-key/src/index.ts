@@ -70,19 +70,8 @@ export default declare(({ types: t, traverse, assertVersion }) => {
     } else {
       const fn = t.arrowFunctionExpression([], path.node, context.await);
 
-      if (context.await) {
-        replacement = t.awaitExpression(t.callExpression(fn, []));
-      } else {
-        replacement = t.callExpression(
-          // We need to use fn.call() instead of just fn() because
-          // terser transforms (() => class {})() to class {}, effectively
-          // undoing the wrapping introduced by this plugin.
-          // https://github.com/terser/terser/issues/1514
-          // TODO(Babel 8): Remove .call if Terser stops inlining this case.
-          t.memberExpression(fn, t.identifier("call")),
-          [],
-        );
-      }
+      replacement = t.callExpression(fn, []);
+      if (context.await) replacement = t.awaitExpression(replacement);
     }
 
     path.replaceWith(replacement);

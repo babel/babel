@@ -1,4 +1,4 @@
 class A {
   #x = 1;
-  [(() => useIt([1 + class {}])).call()];
+  [(() => useIt([1 + class {}]))()];
 }

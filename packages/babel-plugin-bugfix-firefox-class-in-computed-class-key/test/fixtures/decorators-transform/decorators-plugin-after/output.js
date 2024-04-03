@@ -6,7 +6,7 @@ new class extends babelHelpers.identity {
       [_A, _initClass] = babelHelpers.applyDecs2311(this, [deco], []).c;
     }
     #x = 1;
-  }).call()];
+  })()];
   #y = 2;
   constructor() {
     super(_A), _initClass();

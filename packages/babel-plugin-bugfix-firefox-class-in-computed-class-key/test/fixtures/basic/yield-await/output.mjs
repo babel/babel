@@ -1,12 +1,12 @@
 class A {
   #x;
-  [(() => class {}).call()];
+  [(() => class {})()];
   [await (async () => await class {})()];
 }
 async function* f() {
   class A {
     #x;
-    [(() => class {}).call()];
+    [(() => class {})()];
     [await (async () => await class {})()];
     [yield* function* () {
       return yield class {};
