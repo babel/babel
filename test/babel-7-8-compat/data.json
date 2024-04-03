@@ -10,6 +10,7 @@
     "babel-plugin-transform-named-capturing-groups-regex",
     "babel-plugin-transform-nullish-coalescing-operator",
     "babel-plugin-transform-numeric-separator",
+    "babel-plugin-transform-object-rest-spread",
     "babel-plugin-transform-optional-catch-binding",
     "babel-plugin-transform-optional-chaining",
     "babel-plugin-transform-unicode-property-regex",
