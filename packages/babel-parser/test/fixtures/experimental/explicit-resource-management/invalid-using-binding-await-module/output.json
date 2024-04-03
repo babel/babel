@@ -1,15 +1,15 @@
 {
   "type": "File",
-  "start":0,"end":113,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":12,"column":1,"index":113}},
+  "start":0,"end":119,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":12,"column":1,"index":119}},
   "errors": [
     "SyntaxError: Unexpected reserved word 'await'. (2:8)",
     "SyntaxError: Unexpected reserved word 'await'. (5:8)",
-    "SyntaxError: Unexpected reserved word 'await'. (8:11)",
+    "SyntaxError: Unexpected reserved word 'await'. (8:17)",
     "SyntaxError: Unexpected reserved word 'await'. (11:13)"
   ],
   "program": {
     "type": "Program",
-    "start":0,"end":113,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":12,"column":1,"index":113}},
+    "start":0,"end":119,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":12,"column":1,"index":119}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
@@ -81,36 +81,45 @@
       },
       {
         "type": "BlockStatement",
-        "start":55,"end":82,"loc":{"start":{"line":7,"column":0,"index":55},"end":{"line":9,"column":1,"index":82}},
+        "start":55,"end":88,"loc":{"start":{"line":7,"column":0,"index":55},"end":{"line":9,"column":1,"index":88}},
         "body": [
           {
             "type": "VariableDeclaration",
-            "start":59,"end":80,"loc":{"start":{"line":8,"column":2,"index":59},"end":{"line":8,"column":23,"index":80}},
+            "start":59,"end":86,"loc":{"start":{"line":8,"column":2,"index":59},"end":{"line":8,"column":29,"index":86}},
             "declarations": [
               {
                 "type": "VariableDeclarator",
-                "start":65,"end":66,"loc":{"start":{"line":8,"column":8,"index":65},"end":{"line":8,"column":9,"index":66}},
+                "start":65,"end":72,"loc":{"start":{"line":8,"column":8,"index":65},"end":{"line":8,"column":15,"index":72}},
                 "id": {
                   "type": "Identifier",
                   "start":65,"end":66,"loc":{"start":{"line":8,"column":8,"index":65},"end":{"line":8,"column":9,"index":66},"identifierName":"x"},
                   "name": "x"
                 },
-                "init": null
+                "init": {
+                  "type": "CallExpression",
+                  "start":69,"end":72,"loc":{"start":{"line":8,"column":12,"index":69},"end":{"line":8,"column":15,"index":72}},
+                  "callee": {
+                    "type": "Identifier",
+                    "start":69,"end":70,"loc":{"start":{"line":8,"column":12,"index":69},"end":{"line":8,"column":13,"index":70},"identifierName":"h"},
+                    "name": "h"
+                  },
+                  "arguments": []
+                }
               },
               {
                 "type": "VariableDeclarator",
-                "start":68,"end":79,"loc":{"start":{"line":8,"column":11,"index":68},"end":{"line":8,"column":22,"index":79}},
+                "start":74,"end":85,"loc":{"start":{"line":8,"column":17,"index":74},"end":{"line":8,"column":28,"index":85}},
                 "id": {
                   "type": "Identifier",
-                  "start":68,"end":73,"loc":{"start":{"line":8,"column":11,"index":68},"end":{"line":8,"column":16,"index":73},"identifierName":"await"},
+                  "start":74,"end":79,"loc":{"start":{"line":8,"column":17,"index":74},"end":{"line":8,"column":22,"index":79},"identifierName":"await"},
                   "name": "await"
                 },
                 "init": {
                   "type": "CallExpression",
-                  "start":76,"end":79,"loc":{"start":{"line":8,"column":19,"index":76},"end":{"line":8,"column":22,"index":79}},
+                  "start":82,"end":85,"loc":{"start":{"line":8,"column":25,"index":82},"end":{"line":8,"column":28,"index":85}},
                   "callee": {
                     "type": "Identifier",
-                    "start":76,"end":77,"loc":{"start":{"line":8,"column":19,"index":76},"end":{"line":8,"column":20,"index":77},"identifierName":"h"},
+                    "start":82,"end":83,"loc":{"start":{"line":8,"column":25,"index":82},"end":{"line":8,"column":26,"index":83},"identifierName":"h"},
                     "name": "h"
                   },
                   "arguments": []
@@ -124,22 +133,22 @@
       },
       {
         "type": "BlockStatement",
-        "start":83,"end":113,"loc":{"start":{"line":10,"column":0,"index":83},"end":{"line":12,"column":1,"index":113}},
+        "start":89,"end":119,"loc":{"start":{"line":10,"column":0,"index":89},"end":{"line":12,"column":1,"index":119}},
         "body": [
           {
             "type": "ForOfStatement",
-            "start":87,"end":111,"loc":{"start":{"line":11,"column":2,"index":87},"end":{"line":11,"column":26,"index":111}},
+            "start":93,"end":117,"loc":{"start":{"line":11,"column":2,"index":93},"end":{"line":11,"column":26,"index":117}},
             "await": false,
             "left": {
               "type": "VariableDeclaration",
-              "start":92,"end":103,"loc":{"start":{"line":11,"column":7,"index":92},"end":{"line":11,"column":18,"index":103}},
+              "start":98,"end":109,"loc":{"start":{"line":11,"column":7,"index":98},"end":{"line":11,"column":18,"index":109}},
               "declarations": [
                 {
                   "type": "VariableDeclarator",
-                  "start":98,"end":103,"loc":{"start":{"line":11,"column":13,"index":98},"end":{"line":11,"column":18,"index":103}},
+                  "start":104,"end":109,"loc":{"start":{"line":11,"column":13,"index":104},"end":{"line":11,"column":18,"index":109}},
                   "id": {
                     "type": "Identifier",
-                    "start":98,"end":103,"loc":{"start":{"line":11,"column":13,"index":98},"end":{"line":11,"column":18,"index":103},"identifierName":"await"},
+                    "start":104,"end":109,"loc":{"start":{"line":11,"column":13,"index":104},"end":{"line":11,"column":18,"index":109},"identifierName":"await"},
                     "name": "await"
                   },
                   "init": null
@@ -149,12 +158,12 @@
             },
             "right": {
               "type": "ArrayExpression",
-              "start":107,"end":109,"loc":{"start":{"line":11,"column":22,"index":107},"end":{"line":11,"column":24,"index":109}},
+              "start":113,"end":115,"loc":{"start":{"line":11,"column":22,"index":113},"end":{"line":11,"column":24,"index":115}},
               "elements": []
             },
             "body": {
               "type": "EmptyStatement",
-              "start":110,"end":111,"loc":{"start":{"line":11,"column":25,"index":110},"end":{"line":11,"column":26,"index":111}}
+              "start":116,"end":117,"loc":{"start":{"line":11,"column":25,"index":116},"end":{"line":11,"column":26,"index":117}}
             }
           }
         ],

@@ -1541,15 +1541,13 @@ export default abstract class StatementParser extends ExpressionParser {
             },
           );
         } else if (
-          kind === "const" &&
+          (kind === "const" || kind === "using" || kind === "await using") &&
           !(this.match(tt._in) || this.isContextual(tt._of))
         ) {
           this.raise(
             Errors.DeclarationMissingInitializer,
             this.state.lastTokEndLoc,
-            {
-              kind: "const",
-            },
+            { kind },
           );
         }
       }
