@@ -117,6 +117,7 @@ export const transformIncludesAndExcludes = (opts: Array<string>): any => {
 function getSpecialModulesPluginNames(
   modules: Exclude<ModuleOption, "auto">,
   shouldTransformDynamicImport: boolean,
+  babelVersion: string,
 ) {
   const modulesPluginNames = [];
   if (modules) {
@@ -134,7 +135,7 @@ function getSpecialModulesPluginNames(
     }
   }
 
-  if (!process.env.BABEL_8_BREAKING) {
+  if (!process.env.BABEL_8_BREAKING && babelVersion[0] !== "8") {
     // Enable module-related syntax plugins for older Babel versions
     if (!shouldTransformDynamicImport) {
       modulesPluginNames.push("syntax-dynamic-import");
@@ -419,7 +420,11 @@ option \`forceAllTransforms: true\` instead.
     include.plugins,
     exclude.plugins,
     transformTargets,
-    getSpecialModulesPluginNames(modules, shouldTransformDynamicImport),
+    getSpecialModulesPluginNames(
+      modules,
+      shouldTransformDynamicImport,
+      api.version,
+    ),
     process.env.BABEL_8_BREAKING || !loose
       ? undefined
       : ["transform-typeof-symbol"],

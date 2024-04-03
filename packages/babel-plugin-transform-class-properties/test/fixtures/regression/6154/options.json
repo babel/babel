@@ -1,5 +1,4 @@
 {
   "presets": [["env", { "targets": { "browsers": "ie 6" } }]],
-  "plugins": ["transform-class-properties"],
-  "SKIP_babel7plugins_babel8core": "This test uses preset-env"
+  "plugins": ["transform-class-properties"]
 }
