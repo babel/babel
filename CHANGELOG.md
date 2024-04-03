@@ -24,6 +24,28 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.24.4 (2024-04-03)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#16403](https://github.com/babel/babel/pull/16403) Forbid initializerless using ([@JLHwung](https://github.com/JLHwung))
+* `babel-helpers`, `babel-plugin-proposal-decorators`, `babel-runtime-corejs3`
+  * [#16388](https://github.com/babel/babel/pull/16388) Ensure decorators are callable ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-generator`
+  * [#16402](https://github.com/babel/babel/pull/16402) fix: Correctly prints `{ [key in Bar]? }` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+  * [#16394](https://github.com/babel/babel/pull/16394) fix: Correctly generate `TSMappedType` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-compat-data`, `babel-plugin-bugfix-firefox-class-in-computed-class-key`, `babel-preset-env`
+  * [#16390](https://github.com/babel/babel/pull/16390) Create bugfix plugin for classes in computed keys in Firefox ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-decorators`
+  * [#16387](https://github.com/babel/babel/pull/16387) fix: support mutated outer decorated class binding ([@JLHwung](https://github.com/JLHwung))
+  * [#16385](https://github.com/babel/babel/pull/16385) fix: Decorators when `super()` exists and `protoInit` is not needed ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-plugin-transform-block-scoping`
+  * [#16384](https://github.com/babel/babel/pull/16384) fix: Transform scoping for `for X` in loop ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+  * [#16368](https://github.com/babel/babel/pull/16368) fix: Capture `let` when the `for` body is not a block ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-core`, `babel-plugin-transform-block-scoped-functions`, `babel-plugin-transform-block-scoping`
+  * [#16363](https://github.com/babel/babel/pull/16363) Fix incorrect function hoisting in some case statements ([@luiscubal](https://github.com/luiscubal))
 ## v7.24.3 (2024-03-20)
 
 #### :bug: Bug Fix
