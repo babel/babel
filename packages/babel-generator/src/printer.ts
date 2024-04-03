@@ -1128,8 +1128,7 @@ class Printer {
             if (
               this._buf.hasContent() &&
               (comment.type === "CommentLine" ||
-                // eslint-disable-next-line eqeqeq
-                commentStartLine != commentEndLine)
+                commentStartLine !== commentEndLine)
             ) {
               offset = leadingCommentNewline = 1;
             }
