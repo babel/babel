@@ -478,7 +478,7 @@ export default function transformClass(
       });
 
       if (
-        maxGuaranteedSuperBeforeIndex != -1 &&
+        maxGuaranteedSuperBeforeIndex !== -1 &&
         thisIndex > maxGuaranteedSuperBeforeIndex
       ) {
         thisPath.replaceWith(thisRef());

@@ -523,9 +523,10 @@ export default /* @no-mangle */ function applyDecs2311(
         var kind = decInfo[1];
         var kindOnly: PROP_KIND = kind & PROP_KIND.KIND_MASK;
         if (
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-enum-comparison, eqeqeq
           (kind & PROP_KIND.STATIC) == isStatic &&
           // @ts-expect-error comparing a boolean with 0 | 1
+          // eslint-disable-next-line eqeqeq
           !kindOnly == isField
         ) {
           var name = decInfo[2];

@@ -362,10 +362,12 @@ function booleanify(val: "true" | 1): true;
 function booleanify(val: any): any {
   if (val === undefined) return undefined;
 
+  // eslint-disable-next-line eqeqeq
   if (val === "true" || val == 1) {
     return true;
   }
 
+  // eslint-disable-next-line eqeqeq
   if (val === "false" || val == 0 || !val) {
     return false;
   }

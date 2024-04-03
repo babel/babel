@@ -1036,7 +1036,7 @@ function pluginGeneratorOptimization({ types: t }) {
               t.isStringLiteral(args[0])
             ) {
               const str = args[0].value;
-              if (str.length == 1) {
+              if (str.length === 1) {
                 node.callee.property.name = "tokenChar";
                 args[0] = t.numericLiteral(str.charCodeAt(0));
               }

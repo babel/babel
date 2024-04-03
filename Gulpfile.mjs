@@ -288,7 +288,7 @@ async function buildBabel(useWorker, ignore = []) {
   return Promise.allSettled(promises)
     .then(results => {
       results.forEach(result => {
-        if (result.status == "rejected") {
+        if (result.status === "rejected") {
           if (process.env.WATCH_SKIP_BUILD) {
             console.error(result.reason);
           } else {

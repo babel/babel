@@ -661,7 +661,7 @@ class Printer {
     this._printStack.push(node);
 
     const oldInAux = this._insideAux;
-    this._insideAux = node.loc == undefined;
+    this._insideAux = node.loc == null;
     this._maybeAddAuxComment(this._insideAux && !oldInAux);
 
     const parenthesized = node.extra?.parenthesized as boolean | undefined;
@@ -1128,6 +1128,7 @@ class Printer {
             if (
               this._buf.hasContent() &&
               (comment.type === "CommentLine" ||
+                // eslint-disable-next-line eqeqeq
                 commentStartLine != commentEndLine)
             ) {
               offset = leadingCommentNewline = 1;

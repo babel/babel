@@ -35,6 +35,7 @@ module.exports = [
       "no-process-exit": "error",
       "no-var": "error",
       "prefer-const": "error",
+      eqeqeq: ["error", "smart"],
     },
   },
 ];

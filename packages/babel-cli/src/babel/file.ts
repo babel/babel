@@ -100,7 +100,7 @@ export default async function ({
       let outputMap: "both" | "external" | false = false;
       if (babelOptions.sourceMaps && babelOptions.sourceMaps !== "inline") {
         outputMap = "external";
-      } else if (babelOptions.sourceMaps == undefined && result.hasRawMap) {
+      } else if (babelOptions.sourceMaps == null && result.hasRawMap) {
         outputMap = util.hasDataSourcemap(result.code) ? "external" : "both";
       }
 

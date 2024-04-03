@@ -221,7 +221,7 @@ export default (superClass: typeof Parser) =>
         while (
           count++ < 10 &&
           this.state.pos < this.length &&
-          !(semi = this.codePointAtPos(this.state.pos) == charCodes.semicolon)
+          !(semi = this.codePointAtPos(this.state.pos) === charCodes.semicolon)
         ) {
           ++this.state.pos;
         }

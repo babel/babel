@@ -22,7 +22,7 @@ async function pack(inputPath, outputPath, dynamicRequireTargets) {
     .update(readFileSync(inputPath, "utf8"))
     .digest("hex");
 
-  if (process.argv[2] == "--auto") {
+  if (process.argv[2] === "--auto") {
     if (readFileSync(outputPath, "utf8").includes(hash)) {
       return;
     }
