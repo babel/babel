@@ -313,6 +313,7 @@ export default {
   UnterminatedRegExp: "Unterminated regular expression.",
   UnterminatedString: "Unterminated string constant.",
   UnterminatedTemplate: "Unterminated template.",
+  UsingDeclarationExport: "Using declaration cannot be exported.",
   UsingDeclarationHasBindingPattern:
     "Using declaration cannot have destructuring patterns.",
   VarRedeclaration: ({ identifierName }: { identifierName: string }) =>

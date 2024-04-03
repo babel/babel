@@ -2649,6 +2649,16 @@ export default abstract class StatementParser extends ExpressionParser {
       }
     }
 
+    if (this.isContextual(tt._using)) {
+      this.raise(Errors.UsingDeclarationExport, this.state.startLoc);
+      return true;
+    }
+
+    if (this.isContextual(tt._await) && this.startsAwaitUsing()) {
+      this.raise(Errors.UsingDeclarationExport, this.state.startLoc);
+      return true;
+    }
+
     return (
       type === tt._var ||
       type === tt._const ||
