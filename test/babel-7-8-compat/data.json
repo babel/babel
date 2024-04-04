@@ -1,14 +1,21 @@
 {
   "babel7plugins-babel8core": [
     "babel-plugin-bugfix-v8-static-class-fields-redefine-readonly",
+    "babel-plugin-transform-async-generator-functions",
+    "babel-plugin-transform-async-to-generator",
     "babel-plugin-transform-class-properties",
     "babel-plugin-transform-class-static-block",
+    "babel-plugin-transform-dotall-regex",
+    "babel-plugin-transform-exponentiation-operator",
     "babel-plugin-transform-json-strings",
     "babel-plugin-transform-logical-assignment-operators",
+    "babel-plugin-transform-named-capturing-groups-regex",
     "babel-plugin-transform-nullish-coalescing-operator",
     "babel-plugin-transform-numeric-separator",
+    "babel-plugin-transform-object-rest-spread",
     "babel-plugin-transform-optional-catch-binding",
     "babel-plugin-transform-optional-chaining",
+    "babel-plugin-transform-unicode-property-regex",
     "babel-plugin-transform-private-methods",
     "babel-plugin-transform-private-property-in-object",
     "babel-plugin-transform-unicode-sets-regex"

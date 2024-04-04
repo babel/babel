@@ -1,13 +1,5 @@
-import { types as t } from "@babel/core";
+import type { types as t } from "@babel/core";
 
-const {
-  isObjectProperty,
-  isArrayPattern,
-  isObjectPattern,
-  isAssignmentPattern,
-  isRestElement,
-  isIdentifier,
-} = t;
 /**
  * This is a helper function to determine if we should create an intermediate variable
  * such that the RHS of an assignment is not duplicated.
@@ -18,27 +10,28 @@ const {
 export default function shouldStoreRHSInTemporaryVariable(
   node: t.LVal,
 ): boolean {
-  if (isArrayPattern(node)) {
+  if (!node) return false;
+  if (node.type === "ArrayPattern") {
     const nonNullElements = node.elements.filter(element => element !== null);
     if (nonNullElements.length > 1) return true;
     else return shouldStoreRHSInTemporaryVariable(nonNullElements[0]);
-  } else if (isObjectPattern(node)) {
+  } else if (node.type === "ObjectPattern") {
     const { properties } = node;
     if (properties.length > 1) return true;
     else if (properties.length === 0) return false;
     else {
       const firstProperty = properties[0];
-      if (isObjectProperty(firstProperty)) {
+      if (firstProperty.type === "ObjectProperty") {
         // the value of the property must be an LVal
         return shouldStoreRHSInTemporaryVariable(firstProperty.value as t.LVal);
       } else {
         return shouldStoreRHSInTemporaryVariable(firstProperty);
       }
     }
-  } else if (isAssignmentPattern(node)) {
+  } else if (node.type === "AssignmentPattern") {
     return shouldStoreRHSInTemporaryVariable(node.left);
-  } else if (isRestElement(node)) {
-    if (isIdentifier(node.argument)) return true;
+  } else if (node.type === "RestElement") {
+    if (node.argument.type === "Identifier") return true;
     return shouldStoreRHSInTemporaryVariable(node.argument);
   } else {
     // node is Identifier or MemberExpression
