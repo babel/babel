@@ -1,9 +1,18 @@
 /* @minVersion 7.23.9 */
 
+const enum DisposeFlag {
+  // set when the dispose function is a [Symbol.asyncDispose] method
+  ASYNC_FLAG = 1,
+  // alias of AWAIT_FLAG: set when the resource is an `await using` disposable
+  ASYNC_MASK = 2,
+}
+
 const enum DisposeKind {
   SYNC = 0,
-  AWAIT_ASYNC = 1,
+  // AWAIT_FLAG
   AWAIT_SYNC = 2,
+  // AWAIT_FLAG | ASYNC_FLAG
+  AWAIT_ASYNC = 3,
 }
 
 type Stack = {
@@ -41,13 +50,12 @@ export default function _usingCtx() {
       }
       if (dispose === undefined) {
         dispose = value[Symbol.dispose || Symbol.for("Symbol.dispose")];
-        kind = isAwait ? DisposeKind.AWAIT_SYNC : DisposeKind.SYNC;
+        kind &= DisposeFlag.ASYNC_MASK;
       }
       if (typeof dispose !== "function") {
         throw new TypeError(
           "Property [Symbol." +
-            // kind == DisposeKind.AWAIT_ASYNC
-            (kind & DisposeKind.AWAIT_ASYNC ? "asyncDispose" : "dispose") +
+            (kind & DisposeFlag.ASYNC_FLAG ? "asyncDispose" : "dispose") +
             "] is not a function.",
         );
       }
@@ -77,10 +85,8 @@ export default function _usingCtx() {
               disposalResult = resource.d && resource.d.call(resource.v);
             if (resource.k) {
               return Promise.resolve(
-                // resource.k == DisposeKind.AWAIT_SYNC
-                resource.k ^ DisposeKind.AWAIT_ASYNC
-                  ? undefined
-                  : disposalResult,
+                // provide 0 here for minification gain
+                resource.k & DisposeFlag.ASYNC_FLAG ? disposalResult : 0,
               ).then(next, err);
             }
           } catch (e) {
