@@ -32,7 +32,7 @@ export default function _usingCtx() {
         var dispose =
           value[Symbol.asyncDispose || Symbol.for("Symbol.asyncDispose")];
       }
-      if (dispose == null) {
+      if (dispose === undefined) {
         dispose = value[Symbol.dispose || Symbol.for("Symbol.dispose")];
       }
       if (typeof dispose !== "function") {
