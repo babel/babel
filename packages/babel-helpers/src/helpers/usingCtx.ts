@@ -44,7 +44,12 @@ export default function _usingCtx() {
         kind = isAwait ? DisposeKind.AWAIT_SYNC : DisposeKind.SYNC;
       }
       if (typeof dispose !== "function") {
-        throw new TypeError(`Property [Symbol.dispose] is not a function.`);
+        throw new TypeError(
+          "Property [Symbol." +
+            // kind == DisposeKind.AWAIT_ASYNC
+            (kind & DisposeKind.AWAIT_ASYNC ? "asyncDispose" : "dispose") +
+            "] is not a function.",
+        );
       }
       stack.push({ v: value, d: dispose, k: kind });
     } else if (isAwait) {
