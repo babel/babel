@@ -16,6 +16,29 @@ This file contains the changelog starting from v8.0.0-alpha.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS -->
 <!-- insert-new-changelog-here -->
+## v8.0.0-alpha.8 (2024-04-04)
+
+#### :boom: Breaking Change
+* `babel-plugin-transform-runtime`, `babel-runtime-corejs3`
+  * [#16347](https://github.com/babel/babel/pull/16347) Remove core-js and regenerator entrypoints from `@babel/runtime-*` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-runtime`
+  * [#16346](https://github.com/babel/babel/pull/16346) Remove `./helpers/esm` exports from `@babel/runtime` and drop Node.js 13.0-13.1 ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-runtime`, `babel-plugin-transform-typeof-symbol`, `babel-runtime-corejs2`
+  * [#16311](https://github.com/babel/babel/pull/16311) [babel 8] Cleanup `plugin-transform-runtime` options ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :nail_care: Polish
+* `babel-plugin-transform-typescript`
+  * [#16396](https://github.com/babel/babel/pull/16396) [babel 8] Turn `const enum`s into `const` variables ([@samualtnorman](https://github.com/samualtnorman))
+
+#### :house: Internal
+* `babel-core`
+  * [#16365](https://github.com/babel/babel/pull/16365) [babel 8] Remove `import_` fallback ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helpers`, `babel-plugin-transform-async-generator-functions`, `babel-plugin-transform-class-properties`, `babel-plugin-transform-class-static-block`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-systemjs`, `babel-plugin-transform-regenerator`, `babel-plugin-transform-runtime`, `babel-preset-env`, `babel-runtime-corejs3`, `babel-runtime`, `babel-standalone`
+  * [#16323](https://github.com/babel/babel/pull/16323) Allow separate helpers to be excluded in Babel 8 ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helper-plugin-test-runner`
+  * [#16330](https://github.com/babel/babel/pull/16330) Add missing `"type": "module"` to helper-plugin-test-runner ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-compat-data`, `babel-plugin-transform-object-rest-spread`, `babel-preset-env`
+  * [#16318](https://github.com/babel/babel/pull/16318) [babel 8] Fix `@babel/compat-data` package.json ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v8.0.0-alpha.7 (2024-02-28)
 
 #### :house: Internal
