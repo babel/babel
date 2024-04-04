@@ -2,7 +2,7 @@
 
 type Stack = {
   v?: any;
-  d?: () => any;
+  d: false | (() => any);
   a: boolean;
 };
 
@@ -40,7 +40,8 @@ export default function _usingCtx() {
       }
       stack.push({ v: value, d: dispose, a: isAwait });
     } else if (isAwait) {
-      stack.push({ a: isAwait });
+      // provide the nullish `value` as `d` for minification gain
+      stack.push({ d: value, a: isAwait });
     }
     return value;
   }
