@@ -23,6 +23,7 @@ export default function _usingCtx() {
         a: r
       });
     } else r && _pushInstanceProperty(e).call(e, {
+      d: n,
       a: r
     });
     return n;
