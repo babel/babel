@@ -1,9 +1,15 @@
 /* @minVersion 7.23.9 */
 
+const enum DisposeKind {
+  SYNC = 0,
+  AWAIT_ASYNC = 1,
+  AWAIT_SYNC = 2,
+}
+
 type Stack = {
   v?: any;
   d: null | undefined | (() => any);
-  a: boolean;
+  k: DisposeKind;
 };
 
 export default function _usingCtx() {
@@ -30,18 +36,20 @@ export default function _usingCtx() {
       // core-js-pure uses Symbol.for for polyfilling well-known symbols
       if (isAwait) {
         var dispose =
-          value[Symbol.asyncDispose || Symbol.for("Symbol.asyncDispose")];
+            value[Symbol.asyncDispose || Symbol.for("Symbol.asyncDispose")],
+          kind = DisposeKind.AWAIT_ASYNC;
       }
       if (dispose === undefined) {
         dispose = value[Symbol.dispose || Symbol.for("Symbol.dispose")];
+        kind = isAwait ? DisposeKind.AWAIT_SYNC : DisposeKind.SYNC;
       }
       if (typeof dispose !== "function") {
         throw new TypeError(`Property [Symbol.dispose] is not a function.`);
       }
-      stack.push({ v: value, d: dispose, a: isAwait });
+      stack.push({ v: value, d: dispose, k: kind });
     } else if (isAwait) {
       // provide the nullish `value` as `d` for minification gain
-      stack.push({ d: value, a: isAwait });
+      stack.push({ d: value, k: DisposeKind.AWAIT_SYNC });
     }
     return value;
   }
@@ -62,8 +70,13 @@ export default function _usingCtx() {
           try {
             var resource,
               disposalResult = resource.d && resource.d.call(resource.v);
-            if (resource.a) {
-              return Promise.resolve(disposalResult).then(next, err);
+            if (resource.k) {
+              return Promise.resolve(
+                // resource.k == DisposeKind.AWAIT_SYNC
+                resource.k ^ DisposeKind.AWAIT_ASYNC
+                  ? undefined
+                  : disposalResult,
+              ).then(next, err);
             }
           } catch (e) {
             return err(e);
