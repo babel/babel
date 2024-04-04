@@ -22,7 +22,10 @@ export default function _usingCtx() {
         d: o,
         a: r
       });
-    }
+    } else r && _pushInstanceProperty(e).call(e, {
+      d: n,
+      a: r
+    });
     return n;
   }
   return {
@@ -34,7 +37,7 @@ export default function _usingCtx() {
       function next() {
         for (; r = e.pop();) try {
           var r,
-            t = r.d.call(r.v);
+            t = r.d && r.d.call(r.v);
           if (r.a) return _Promise.resolve(t).then(next, err);
         } catch (r) {
           return err(r);

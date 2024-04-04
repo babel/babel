@@ -1,8 +1,8 @@
 /* @minVersion 7.23.9 */
 
 type Stack = {
-  v: any;
-  d: () => any;
+  v?: any;
+  d: null | undefined | (() => any);
   a: boolean;
 };
 
@@ -39,6 +39,9 @@ export default function _usingCtx() {
         throw new TypeError(`Property [Symbol.dispose] is not a function.`);
       }
       stack.push({ v: value, d: dispose, a: isAwait });
+    } else if (isAwait) {
+      // provide the nullish `value` as `d` for minification gain
+      stack.push({ d: value, a: isAwait });
     }
     return value;
   }
@@ -58,7 +61,7 @@ export default function _usingCtx() {
         while ((resource = stack.pop())) {
           try {
             var resource,
-              disposalResult = resource.d.call(resource.v);
+              disposalResult = resource.d && resource.d.call(resource.v);
             if (resource.a) {
               return Promise.resolve(disposalResult).then(next, err);
             }
