@@ -61,7 +61,7 @@ export default function _usingCtx(): UsingCtxReturn {
           value as AsyncDisposable
         )[Symbol.asyncDispose || Symbol.for("Symbol.asyncDispose")];
       }
-      if (dispose == null) {
+      if (dispose === undefined) {
         dispose = (value as Disposable)[
           Symbol.dispose || Symbol.for("Symbol.dispose")
         ];
