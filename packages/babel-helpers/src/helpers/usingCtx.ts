@@ -2,7 +2,7 @@
 
 type Stack = {
   v?: any;
-  d: false | (() => any);
+  d: null | undefined | (() => any);
   a: boolean;
 };
 
