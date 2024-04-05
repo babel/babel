@@ -81,7 +81,7 @@ export default function _usingCtx() {
               disposalResult = resource.d && resource.d.call(resource.v);
             if (resource.k) {
               return Promise.resolve(
-                // provide 0 here for minification gain
+                // do not await the promise returned from the sync @@dispose
                 resource.k & DisposeFlag.ASYNC_FLAG && disposalResult,
               ).then(next, err);
             }
