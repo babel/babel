@@ -53,11 +53,7 @@ export default function _usingCtx() {
         kind &= DisposeFlag.ASYNC_MASK;
       }
       if (typeof dispose !== "function") {
-        throw new TypeError(
-          "Property [Symbol." +
-            (kind & DisposeFlag.ASYNC_FLAG ? "asyncDispose" : "dispose") +
-            "] is not a function.",
-        );
+        throw new TypeError("Object is not disposable.");
       }
       stack.push({ v: value, d: dispose, k: kind });
     } else if (isAwait) {
