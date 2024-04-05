@@ -12,7 +12,7 @@ expect(
       [Symbol.asyncDispose || Symbol.for("Symbol.asyncDispose")]: 3,
     };
   })()
-).rejects.toThrow("Property [Symbol.asyncDispose] is not a function.");
+).rejects.toThrow("Object is not disposable.");
 
 expect(
   (async function () {
@@ -21,4 +21,4 @@ expect(
       [Symbol.dispose || Symbol.for("Symbol.dispose")]() {},
     };
   })()
-).rejects.toThrow("Property [Symbol.asyncDispose] is not a function.");
+).rejects.toThrow("Object is not disposable.");
