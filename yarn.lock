@@ -5314,15 +5314,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel__core@link:./nope::locator=babel%40workspace%3A.":
+"@types/babel__core@link:./.husky::locator=babel%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "@types/babel__core@link:./nope::locator=babel%40workspace%3A."
+  resolution: "@types/babel__core@link:./.husky::locator=babel%40workspace%3A."
   languageName: node
   linkType: soft
 
-"@types/babel__traverse@link:./nope::locator=babel%40workspace%3A.":
+"@types/babel__traverse@link:./.husky::locator=babel%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "@types/babel__traverse@link:./nope::locator=babel%40workspace%3A."
+  resolution: "@types/babel__traverse@link:./.husky::locator=babel%40workspace%3A."
   languageName: node
   linkType: soft
 
