@@ -1,6 +1,17 @@
 {
   "babel7plugins-babel8core": [
     "babel-plugin-bugfix-v8-static-class-fields-redefine-readonly",
+    "babel-plugin-proposal-decorators",
+    "babel-plugin-proposal-duplicate-named-capturing-groups-regex",
+    "babel-plugin-proposal-explicit-resource-management",
+    "babel-plugin-proposal-import-attributes-to-assertions",
+    "babel-plugin-proposal-import-wasm-source",
+    "babel-plugin-proposal-json-modules",
+    "babel-plugin-proposal-regexp-modifiers",
+    "babel-plugin-syntax-decorators",
+    "babel-plugin-syntax-explicit-resource-management",
+    "babel-plugin-syntax-import-source",
+    "babel-plugin-syntax-import-attributes",
     "babel-plugin-transform-async-generator-functions",
     "babel-plugin-transform-async-to-generator",
     "babel-plugin-transform-class-properties",
