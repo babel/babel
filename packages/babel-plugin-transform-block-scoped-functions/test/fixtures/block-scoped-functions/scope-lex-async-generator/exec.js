@@ -19,10 +19,8 @@ negative:
   type: ReferenceError
 ---*/
 
-// TODO: not.toThrow -> toThrow
-// This test currently fails due to `transform-async-generator-functions` being transformed in `Program.enter`.
 expect(() => {
   switch (0) { default: async function * x() {} }
   x;
-}).not.toThrow(ReferenceError);
+}).toThrow(ReferenceError);
 
