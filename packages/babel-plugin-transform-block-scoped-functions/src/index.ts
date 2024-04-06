@@ -4,11 +4,18 @@ import { types as t, type NodePath } from "@babel/core";
 export default declare(api => {
   api.assertVersion(REQUIRED_VERSION(7));
 
-  function transformStatementList(paths: NodePath<t.Statement>[]) {
+  function transformStatementList(
+    parentPath: NodePath,
+    paths: NodePath<t.Statement>[],
+  ) {
+    const isInStrictMode = parentPath.isInStrictMode();
+
     for (const path of paths) {
       if (!path.isFunctionDeclaration()) continue;
-      // Annex B.3.3 only applies to plain functions.
-      if (path.node.async || path.node.generator) continue;
+
+      if (!isInStrictMode && !(path.node.async || path.node.generator)) {
+        continue;
+      }
 
       const func = path.node;
       const declar = t.variableDeclaration("let", [
@@ -31,8 +38,6 @@ export default declare(api => {
 
     visitor: {
       BlockStatement(path) {
-        if (!path.isInStrictMode()) return;
-
         const { node, parent } = path;
         if (
           t.isFunction(parent, { body: node }) ||
@@ -41,13 +46,11 @@ export default declare(api => {
           return;
         }
 
-        transformStatementList(path.get("body"));
+        transformStatementList(path, path.get("body"));
       },
 
       SwitchCase(path) {
-        if (!path.isInStrictMode()) return;
-
-        transformStatementList(path.get("consequent"));
+        transformStatementList(path, path.get("consequent"));
       },
     },
   };
