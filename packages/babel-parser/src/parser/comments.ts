@@ -103,7 +103,9 @@ export default class CommentsParser extends BaseParser {
   addComment(comment: Comment): void {
     if (this.filename) comment.loc.filename = this.filename;
     const { commentsLen } = this.state;
-    if (this.comments.length != commentsLen) this.comments.length = commentsLen;
+    if (this.comments.length !== commentsLen) {
+      this.comments.length = commentsLen;
+    }
     this.comments.push(comment);
     this.state.commentsLen++;
   }

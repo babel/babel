@@ -28,6 +28,7 @@ module.exports = [
     },
     rules: {
       curly: ["error", "multi-line"],
+      eqeqeq: ["error", "smart"],
       "linebreak-style": ["error", "unix"],
       "no-case-declarations": "error",
       "no-confusing-arrow": "error",

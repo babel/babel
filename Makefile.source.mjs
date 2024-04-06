@@ -54,7 +54,7 @@ function exec(executable, args, cwd, inheritStdio = true) {
       env: process.env,
     });
   } catch (error) {
-    if (inheritStdio && error.status != 0) {
+    if (inheritStdio && error.status !== 0) {
       console.error(
         new Error(
           `\ncommand: ${executable} ${args.join(" ")}\ncode: ${error.status}`
@@ -180,7 +180,7 @@ target["bootstrap"] = function () {
 target["build"] = function () {
   target["build-no-bundle"]();
 
-  if (process.env.BABEL_COVERAGE != "true") {
+  if (process.env.BABEL_COVERAGE !== "true") {
     target["build-standalone"]();
   }
 };

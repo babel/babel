@@ -36,7 +36,7 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
   }
 
   enter(flags: ScopeFlag): void {
-    if (flags == ScopeFlag.TS_MODULE) {
+    if (flags === ScopeFlag.TS_MODULE) {
       this.importsStack.push(new Set());
     }
 
@@ -46,7 +46,7 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
   exit() {
     const flags = super.exit();
 
-    if (flags == ScopeFlag.TS_MODULE) {
+    if (flags === ScopeFlag.TS_MODULE) {
       this.importsStack.pop();
     }
 

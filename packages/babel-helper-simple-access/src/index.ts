@@ -97,7 +97,7 @@ if (!process.env.BABEL_8_BREAKING) {
         !path.isCompletionRecord()
       ) {
         // ++i => (i += 1);
-        const operator = path.node.operator == "++" ? "+=" : "-=";
+        const operator = path.node.operator === "++" ? "+=" : "-=";
         path.replaceWith(
           assignmentExpression(operator, arg.node, numericLiteral(1)),
         );

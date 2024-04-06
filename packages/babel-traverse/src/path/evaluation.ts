@@ -397,7 +397,7 @@ function _evaluate(path: NodePath, state: State): any {
       case "==":
         return left == right; // eslint-disable-line eqeqeq
       case "!=":
-        return left != right;
+        return left != right; // eslint-disable-line eqeqeq
       case "===":
         return left === right;
       case "!==":

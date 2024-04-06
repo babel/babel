@@ -61,7 +61,7 @@ export function addSourceMappingUrl(code: string, loc: string): string {
 
 export function hasDataSourcemap(code: string): boolean {
   const pos = code.lastIndexOf("\n", code.length - 2);
-  return pos != -1 && code.lastIndexOf("//# sourceMappingURL") < pos;
+  return pos !== -1 && code.lastIndexOf("//# sourceMappingURL") < pos;
 }
 
 const CALLER = {
