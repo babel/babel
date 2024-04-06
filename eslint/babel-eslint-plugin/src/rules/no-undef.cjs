@@ -1,9 +1,12 @@
 const ruleComposer = require("eslint-rule-composer");
 const eslint = require("eslint");
+const eslintVersion = eslint.ESLint.version;
 
-const rule = new eslint.Linter({ configType: "eslintrc" })
-  .getRules()
-  .get("no-undef");
+const rule = (
+  parseInt(eslintVersion, 10) >= 9
+    ? require("eslint/use-at-your-own-risk").builtinRules
+    : new eslint.Linter().getRules()
+).get("no-undef");
 
 /**
  * Returns whether a node is under a decorator or not.
