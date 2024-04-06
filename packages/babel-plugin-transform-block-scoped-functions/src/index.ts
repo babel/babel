@@ -13,7 +13,16 @@ export default declare(api => {
     for (const path of paths) {
       if (!path.isFunctionDeclaration()) continue;
 
-      if (!isInStrictMode && !(path.node.async || path.node.generator)) {
+      if (
+        !isInStrictMode &&
+        !(
+          path.node.async ||
+          path.node.generator ||
+          path.getData(
+            "babel-plugin-transform-async-generator-functions#async_generator_function",
+          )
+        )
+      ) {
         continue;
       }
 

@@ -3,6 +3,5 @@
     "transform-block-scoped-functions",
     "transform-block-scoping",
     "transform-async-generator-functions"
-  ],
-  "minNodeVersion": "8.0.0"
+  ]
 }
