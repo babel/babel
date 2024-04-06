@@ -34,14 +34,14 @@
   "homepage": "https://babel.dev/",
   "peerDependencies": {
     "@babel/eslint-parser": "^7.11.0",
-    "eslint": "^7.5.0 || ^8.0.0"
+    "eslint": "^7.5.0 || ^8.0.0 || ^9.0.0"
   },
   "dependencies": {
     "eslint-rule-composer": "^0.3.0"
   },
   "devDependencies": {
     "clone-deep": "^4.0.1",
-    "eslint": "^8.22.0"
+    "eslint": "^9.0.0"
   },
   "conditions": {
     "BABEL_8_BREAKING": [
@@ -51,7 +51,7 @@
         },
         "peerDependencies": {
           "@babel/eslint-parser": "^7.11.0",
-          "eslint": "^8.9.0"
+          "eslint": "^8.9.0 || ^9.0.0"
         }
       },
       {}

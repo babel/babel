@@ -2,7 +2,9 @@ const ruleComposer = require("eslint-rule-composer");
 const eslint = require("eslint");
 const eslintVersion = eslint.ESLint.version;
 
-const noInvalidThisRule = new eslint.Linter().getRules().get("no-invalid-this");
+const noInvalidThisRule = new eslint.Linter({ configType: "eslintrc" })
+  .getRules()
+  .get("no-invalid-this");
 
 if (parseInt(eslintVersion, 10) >= 8) {
   // ESLint 8 supports class properties / private methods natively

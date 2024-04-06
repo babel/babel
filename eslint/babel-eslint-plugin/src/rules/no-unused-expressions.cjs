@@ -1,7 +1,9 @@
 const ruleComposer = require("eslint-rule-composer");
 const eslint = require("eslint");
 
-const rule = new eslint.Linter().getRules().get("no-unused-expressions");
+const rule = new eslint.Linter({ configType: "eslintrc" })
+  .getRules()
+  .get("no-unused-expressions");
 
 /**
  * @param {ASTNode} node - any node
