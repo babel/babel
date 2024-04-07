@@ -43,7 +43,7 @@ export default (superClass: typeof Parser) =>
       expectedNode: T,
     ): /*?N.Placeholder<T>*/ MaybePlaceholder<T> | undefined | null {
       if (this.match(tt.placeholder)) {
-        const node = this.startNode();
+        const node = this.startNode<N.Placeholder<T>>();
         this.next();
         this.assertNoSpace();
 
@@ -276,7 +276,7 @@ export default (superClass: typeof Parser) =>
 
       // export %%NAME%% from "foo";
       this.expectPlugin("exportDefaultFrom");
-      const specifier = this.startNode();
+      const specifier = this.startNode<N.ExportDefaultSpecifier>();
       specifier.exported = placeholder;
       node.specifiers = [this.finishNode(specifier, "ExportDefaultSpecifier")];
 

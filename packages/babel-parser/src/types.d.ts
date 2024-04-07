@@ -597,8 +597,8 @@ export interface OptionalCallExpression extends CallOrNewBase {
 }
 export interface BindExpression extends NodeBase {
   type: "BindExpression";
-  object: Array<Expression | undefined | null>;
-  callee: Expression[];
+  object: Expression | undefined | null;
+  callee: Expression;
 }
 
 export interface ConditionalExpression extends NodeBase {
@@ -954,7 +954,9 @@ export interface ImportNamespaceSpecifier extends ModuleSpecifier {
 export interface ExportNamedDeclaration extends NodeBase {
   type: "ExportNamedDeclaration";
   declaration: Declaration | undefined | null;
-  specifiers: Array<ExportSpecifier | ExportDefaultSpecifier>;
+  specifiers: Array<
+    ExportSpecifier | ExportDefaultSpecifier | ExportNamespaceSpecifier
+  >;
   source: Literal | undefined | null;
   exportKind?: "type" | "value"; // TODO: Not in spec,
   attributes?: ImportAttribute[];
@@ -972,6 +974,11 @@ export interface ExportSpecifier extends NodeBase {
 export interface ExportDefaultSpecifier extends NodeBase {
   type: "ExportDefaultSpecifier";
   exported: Identifier;
+}
+
+export interface ExportNamespaceSpecifier extends NodeBase {
+  type: "ExportNamespaceSpecifier";
+  exported: Identifier | StringLiteral;
 }
 
 export interface ExportDefaultDeclaration extends NodeBase {
@@ -1009,6 +1016,7 @@ export type JSXEmptyExpression = Node;
 export type JSXSpreadChild = Node;
 export type JSXExpressionContainer = Node;
 export type JSXAttribute = Node;
+export type JSXSpreadAttribute = Node;
 export interface JSXOpeningElement extends NodeBase {
   type: "JSXOpeningElement";
   name: JSXNamespacedName | JSXMemberExpression;
@@ -1239,6 +1247,11 @@ export interface EstreePropertyDefinition extends NodeBase {
   key: Expression | EstreePrivateIdentifier;
   computed: boolean;
   value: Expression;
+}
+
+export interface EstreeChainExpression extends NodeBase {
+  type: "ChainExpression";
+  expression: Expression;
 }
 
 // === === === ===
@@ -1679,7 +1692,7 @@ export interface TsInstantiationExpression extends NodeBase {
 export interface Placeholder<N extends PlaceholderTypes = PlaceholderTypes>
   extends NodeBase {
   type: "Placeholder";
-  id: Identifier;
+  name: Identifier;
   expectedNode: N;
 }
 

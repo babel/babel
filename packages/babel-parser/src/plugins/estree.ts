@@ -470,7 +470,6 @@ export default (superClass: typeof Parser) =>
         case "ExportNamedDeclaration":
           if (
             node.specifiers.length === 1 &&
-            // @ts-expect-error mutating AST types
             node.specifiers[0].type === "ExportNamespaceSpecifier"
           ) {
             // @ts-expect-error mutating AST types
@@ -524,7 +523,7 @@ export default (superClass: typeof Parser) =>
           node.type = node.type.substring(8); // strip Optional prefix
         }
         if (state.stop) {
-          const chain = this.startNodeAtNode(node);
+          const chain = this.startNodeAtNode<N.EstreeChainExpression>(node);
           chain.expression = node;
           return this.finishNode(chain, "ChainExpression");
         }
