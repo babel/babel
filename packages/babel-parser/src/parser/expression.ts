@@ -214,7 +214,7 @@ export default abstract class ExpressionParser extends LValParser {
     const startLoc = this.state.startLoc;
     const expr = this.parseMaybeAssign(refExpressionErrors);
     if (this.match(tt.comma)) {
-      const node = this.startNodeAt(startLoc);
+      const node = this.startNodeAt<N.SequenceExpression>(startLoc);
       node.expressions = [expr];
       while (this.eat(tt.comma)) {
         node.expressions.push(this.parseMaybeAssign(refExpressionErrors));
@@ -366,7 +366,7 @@ export default abstract class ExpressionParser extends LValParser {
     refExpressionErrors?: ExpressionErrors | null,
   ): N.Expression {
     if (this.eat(tt.question)) {
-      const node = this.startNodeAt(startLoc);
+      const node = this.startNodeAt<N.ConditionalExpression>(startLoc);
       node.test = expr;
       node.consequent = this.parseMaybeAssignAllowIn();
       this.expect(tt.colon);
@@ -826,7 +826,7 @@ export default abstract class ExpressionParser extends LValParser {
     noCalls: boolean | undefined | null,
     state: N.ParseSubscriptState,
   ): N.Expression {
-    const node = this.startNodeAt(startLoc);
+    const node = this.startNodeAt<N.BindExpression>(startLoc);
     node.object = base;
     this.next(); // eat '::'
     node.callee = this.parseNoCallExpr();
@@ -1120,7 +1120,7 @@ export default abstract class ExpressionParser extends LValParser {
         }
 
       case tt._this:
-        node = this.startNode();
+        node = this.startNode<N.ThisExpression>();
         this.next();
         return this.finishNode(node, "ThisExpression");
 
@@ -1213,7 +1213,7 @@ export default abstract class ExpressionParser extends LValParser {
       // BindExpression[Yield]
       //   :: MemberExpression[?Yield]
       case tt.doubleColon: {
-        node = this.startNode();
+        node = this.startNode<N.BindExpression>();
         this.next();
         node.object = null;
         const callee = (node.callee = this.parseNoCallExpr());
@@ -2728,7 +2728,7 @@ export default abstract class ExpressionParser extends LValParser {
       if (!allowPlaceholder) {
         this.raise(Errors.UnexpectedArgumentPlaceholder, this.state.startLoc);
       }
-      const node = this.startNode();
+      const node = this.startNode<N.ArgumentPlaceholder>();
       this.next();
       elt = this.finishNode(node, "ArgumentPlaceholder");
     } else {

@@ -261,7 +261,7 @@ export default (superClass: typeof Parser) =>
     // Parse next token as JSX identifier
 
     jsxParseIdentifier(): N.JSXIdentifier {
-      const node = this.startNode();
+      const node = this.startNode<N.JSXIdentifier>();
       if (this.match(tt.jsxName)) {
         node.name = this.state.value;
       } else if (tokenIsKeyword(this.state.type)) {
@@ -280,7 +280,7 @@ export default (superClass: typeof Parser) =>
       const name = this.jsxParseIdentifier();
       if (!this.eat(tt.colon)) return name;
 
-      const node = this.startNodeAt(startLoc);
+      const node = this.startNodeAt<N.JSXNamespacedName>(startLoc);
       node.namespace = name;
       node.name = this.jsxParseIdentifier();
       return this.finishNode(node, "JSXNamespacedName");
@@ -299,7 +299,7 @@ export default (superClass: typeof Parser) =>
         return node;
       }
       while (this.eat(tt.dot)) {
-        const newNode = this.startNodeAt(startLoc);
+        const newNode = this.startNodeAt<N.JSXMemberExpression>(startLoc);
         newNode.object = node;
         newNode.property = this.jsxParseIdentifier();
         node = this.finishNode(newNode, "JSXMemberExpression");
@@ -387,7 +387,7 @@ export default (superClass: typeof Parser) =>
     // Parses following JSX attribute name-value pair.
 
     jsxParseAttribute(): N.JSXAttribute {
-      const node = this.startNode();
+      const node = this.startNode<N.JSXAttribute | N.JSXSpreadAttribute>();
       if (this.match(tt.braceL)) {
         this.setContext(tc.brace);
         this.next();
@@ -435,7 +435,9 @@ export default (superClass: typeof Parser) =>
     // Parses JSX closing tag starting after "</".
 
     jsxParseClosingElementAt(startLoc: Position): N.JSXClosingElement {
-      const node = this.startNodeAt(startLoc);
+      const node = this.startNodeAt<N.JSXClosingFragment | N.JSXClosingElement>(
+        startLoc,
+      );
       if (this.eat(tt.jsxTagEnd)) {
         return this.finishNode(node, "JSXClosingFragment");
       }
@@ -448,7 +450,7 @@ export default (superClass: typeof Parser) =>
     // (starting after "<"), attributes, contents and closing tag.
 
     jsxParseElementAt(startLoc: Position): N.JSXElement {
-      const node = this.startNodeAt(startLoc);
+      const node = this.startNodeAt<N.JSXElement>(startLoc);
       const children = [];
       const openingElement = this.jsxParseOpeningElementAt(startLoc);
       let closingElement = null;

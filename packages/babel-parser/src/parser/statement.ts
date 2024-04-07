@@ -191,7 +191,11 @@ export default abstract class StatementParser extends ExpressionParser {
   // `program` argument.  If present, the statements will be appended
   // to its body instead of creating a new node.
 
-  parseTopLevel(this: Parser, file: N.File, program: N.Program): N.File {
+  parseTopLevel(
+    this: Parser,
+    file: Undone<N.File>,
+    program: Undone<N.Program>,
+  ): N.File {
     file.program = this.parseProgram(program);
     file.comments = this.comments;
 
@@ -767,7 +771,7 @@ export default abstract class StatementParser extends ExpressionParser {
         expr = this.parseIdentifier(false);
 
         while (this.eat(tt.dot)) {
-          const node = this.startNodeAt(startLoc);
+          const node = this.startNodeAt<N.MemberExpression>(startLoc);
           node.object = expr;
           if (this.match(tt.privateName)) {
             this.classScope.usePrivateName(
@@ -792,7 +796,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
   parseMaybeDecoratorArguments(this: Parser, expr: N.Expression): N.Expression {
     if (this.eat(tt.parenL)) {
-      const node = this.startNodeAtNode(expr);
+      const node = this.startNodeAtNode<N.CallExpression>(expr);
       node.callee = expr;
       node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
       this.toReferencedList(node.arguments);
@@ -1081,7 +1085,7 @@ export default abstract class StatementParser extends ExpressionParser {
         const isCase = this.match(tt._case);
         if (cur) this.finishNode(cur, "SwitchCase");
         // @ts-expect-error Fixme
-        cases.push((cur = this.startNode()));
+        cases.push((cur = this.startNode<N.SwitchCase>()));
         cur.consequent = [];
         this.next();
         if (isCase) {
@@ -2450,7 +2454,9 @@ export default abstract class StatementParser extends ExpressionParser {
     if (this.isContextual(tt._as)) {
       if (!node.specifiers) node.specifiers = [];
 
-      const specifier = this.startNodeAt(this.state.lastTokStartLoc);
+      const specifier = this.startNodeAt<N.ExportNamespaceSpecifier>(
+        this.state.lastTokStartLoc,
+      );
 
       this.next();
 
@@ -2796,8 +2802,8 @@ export default abstract class StatementParser extends ExpressionParser {
       }
       const isMaybeTypeOnly = this.isContextual(tt._type);
       const isString = this.match(tt.string);
-      const node = this.startNode();
-      node.local = this.parseModuleExportName();
+      const node = this.startNode<N.ExportSpecifier>();
+      node.local = this.parseModuleExportName() as N.Identifier;
       nodes.push(
         this.parseExportSpecifier(
           node,

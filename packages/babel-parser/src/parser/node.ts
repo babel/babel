@@ -96,17 +96,19 @@ export function cloneStringLiteral(node: any): any {
 export type Undone<T extends NodeType> = Omit<T, "type">;
 
 export abstract class NodeUtils extends UtilParser {
-  startNode<T extends NodeType>(): Undone<T> {
+  startNode<T extends NodeType = never>(): Undone<T> {
     const loc = this.state.startLoc;
     return new Node(this, loc.index, loc) as unknown as Undone<T>;
   }
 
-  startNodeAt<T extends NodeType>(loc: Position): Undone<T> {
+  startNodeAt<T extends NodeType = never>(loc: Position): Undone<T> {
     return new Node(this, loc.index, loc) as unknown as Undone<T>;
   }
 
   /** Start a new node with a previous node's location. */
-  startNodeAtNode<T extends NodeType>(type: Undone<NodeType>): Undone<T> {
+  startNodeAtNode<T extends NodeType = never>(
+    type: Undone<NodeType>,
+  ): Undone<T> {
     return this.startNodeAt(type.loc.start);
   }
 

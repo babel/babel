@@ -38,14 +38,14 @@ export default class Parser extends StatementParser {
 
   parse(): N.File {
     this.enterInitialScopes();
-    const file = this.startNode() as N.File;
-    const program = this.startNode() as N.Program;
+    const file = this.startNode<N.File>();
+    const program = this.startNode<N.Program>();
     this.nextToken();
     file.errors = null;
     this.parseTopLevel(file, program);
     file.errors = this.state.errors;
     file.comments.length = this.state.commentsLen;
-    return file;
+    return file as N.File;
   }
 }
 
