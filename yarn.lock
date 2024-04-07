@@ -7173,7 +7173,7 @@ __metadata:
     picocolors: "npm:^1.0.0"
     prettier: "npm:^3.2.5"
     rollup: "npm:^4.9.1"
-    rollup-plugin-dts: "npm:^6.1.0"
+    rollup-plugin-dts: "patch:rollup-plugin-dts@npm%3A6.1.0#~/.yarn/patches/rollup-plugin-dts-npm-6.1.0-6d41e665a7.patch"
     rollup-plugin-dts-5: "npm:rollup-plugin-dts@^5.3.1"
     rollup-plugin-polyfill-node: "npm:^0.13.0"
     semver: "npm:^6.3.1"
@@ -15178,7 +15178,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup-plugin-dts@npm:^6.1.0":
+"rollup-plugin-dts@npm:6.1.0":
   version: 6.1.0
   resolution: "rollup-plugin-dts@npm:6.1.0"
   dependencies:
@@ -15191,6 +15191,22 @@ __metadata:
     "@babel/code-frame":
       optional: true
   checksum: 10/2ecbda8eb0644ce98ee3a795bf5b99368d80e357972c227b07c382c4af34e03fe681c0f6674e1967330b69e79f2ddf288a672f8964441d5f98e9998c50f41a01
+  languageName: node
+  linkType: hard
+
+"rollup-plugin-dts@patch:rollup-plugin-dts@npm%3A6.1.0#~/.yarn/patches/rollup-plugin-dts-npm-6.1.0-6d41e665a7.patch":
+  version: 6.1.0
+  resolution: "rollup-plugin-dts@patch:rollup-plugin-dts@npm%3A6.1.0#~/.yarn/patches/rollup-plugin-dts-npm-6.1.0-6d41e665a7.patch::version=6.1.0&hash=2a7348"
+  dependencies:
+    "@babel/code-frame": "npm:^7.22.13"
+    magic-string: "npm:^0.30.4"
+  peerDependencies:
+    rollup: ^3.29.4 || ^4
+    typescript: ^4.5 || ^5.0
+  dependenciesMeta:
+    "@babel/code-frame":
+      optional: true
+  checksum: 10/59e110adea284f2e50efc99e3d3d5859e96919f5b34e6815868dedc62966ffc06b6d8169effb371dcf80bacf4babca9ec146a7d9363cc138d170e07c65fb0c34
   languageName: node
   linkType: hard
 
