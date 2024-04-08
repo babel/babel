@@ -186,12 +186,7 @@ defineType("CallExpression", {
       validate: chain(
         assertValueType("array"),
         assertEach(
-          assertNodeType(
-            "Expression",
-            "SpreadElement",
-            "JSXNamespacedName",
-            "ArgumentPlaceholder",
-          ),
+          assertNodeType("Expression", "SpreadElement", "ArgumentPlaceholder"),
         ),
       ),
     },
@@ -2242,12 +2237,7 @@ defineType("OptionalCallExpression", {
       validate: chain(
         assertValueType("array"),
         assertEach(
-          assertNodeType(
-            "Expression",
-            "SpreadElement",
-            "JSXNamespacedName",
-            "ArgumentPlaceholder",
-          ),
+          assertNodeType("Expression", "SpreadElement", "ArgumentPlaceholder"),
         ),
       ),
     },

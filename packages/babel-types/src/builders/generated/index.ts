@@ -98,9 +98,7 @@ export function breakStatement(
 }
 export function callExpression(
   callee: t.Expression | t.Super | t.V8IntrinsicIdentifier,
-  _arguments: Array<
-    t.Expression | t.SpreadElement | t.JSXNamespacedName | t.ArgumentPlaceholder
-  >,
+  _arguments: Array<t.Expression | t.SpreadElement | t.ArgumentPlaceholder>,
 ): t.CallExpression {
   return validateNode<t.CallExpression>({
     type: "CallExpression",
@@ -330,9 +328,7 @@ export function memberExpression(
 }
 export function newExpression(
   callee: t.Expression | t.Super | t.V8IntrinsicIdentifier,
-  _arguments: Array<
-    t.Expression | t.SpreadElement | t.JSXNamespacedName | t.ArgumentPlaceholder
-  >,
+  _arguments: Array<t.Expression | t.SpreadElement | t.ArgumentPlaceholder>,
 ): t.NewExpression {
   return validateNode<t.NewExpression>({
     type: "NewExpression",
@@ -878,9 +874,7 @@ export function optionalMemberExpression(
 }
 export function optionalCallExpression(
   callee: t.Expression,
-  _arguments: Array<
-    t.Expression | t.SpreadElement | t.JSXNamespacedName | t.ArgumentPlaceholder
-  >,
+  _arguments: Array<t.Expression | t.SpreadElement | t.ArgumentPlaceholder>,
   optional: boolean,
 ): t.OptionalCallExpression {
   return validateNode<t.OptionalCallExpression>({

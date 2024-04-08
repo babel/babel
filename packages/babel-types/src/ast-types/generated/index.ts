@@ -375,9 +375,7 @@ export interface BreakStatement extends BaseNode {
 export interface CallExpression extends BaseNode {
   type: "CallExpression";
   callee: Expression | Super | V8IntrinsicIdentifier;
-  arguments: Array<
-    Expression | SpreadElement | JSXNamespacedName | ArgumentPlaceholder
-  >;
+  arguments: Array<Expression | SpreadElement | ArgumentPlaceholder>;
   optional?: true | false | null;
   typeArguments?: TypeParameterInstantiation | null;
   typeParameters?: TSTypeParameterInstantiation | null;
@@ -556,9 +554,7 @@ export interface MemberExpression extends BaseNode {
 export interface NewExpression extends BaseNode {
   type: "NewExpression";
   callee: Expression | Super | V8IntrinsicIdentifier;
-  arguments: Array<
-    Expression | SpreadElement | JSXNamespacedName | ArgumentPlaceholder
-  >;
+  arguments: Array<Expression | SpreadElement | ArgumentPlaceholder>;
   optional?: true | false | null;
   typeArguments?: TypeParameterInstantiation | null;
   typeParameters?: TSTypeParameterInstantiation | null;
@@ -1003,9 +999,7 @@ export interface OptionalMemberExpression extends BaseNode {
 export interface OptionalCallExpression extends BaseNode {
   type: "OptionalCallExpression";
   callee: Expression;
-  arguments: Array<
-    Expression | SpreadElement | JSXNamespacedName | ArgumentPlaceholder
-  >;
+  arguments: Array<Expression | SpreadElement | ArgumentPlaceholder>;
   optional: boolean;
   typeArguments?: TypeParameterInstantiation | null;
   typeParameters?: TSTypeParameterInstantiation | null;
@@ -5039,13 +5033,7 @@ export interface ParentMaps {
     | JSXClosingElement
     | JSXMemberExpression
     | JSXOpeningElement;
-  JSXNamespacedName:
-    | CallExpression
-    | JSXAttribute
-    | JSXClosingElement
-    | JSXOpeningElement
-    | NewExpression
-    | OptionalCallExpression;
+  JSXNamespacedName: JSXAttribute | JSXClosingElement | JSXOpeningElement;
   JSXOpeningElement: JSXElement;
   JSXOpeningFragment: JSXFragment;
   JSXSpreadAttribute: JSXOpeningElement;
