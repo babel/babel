@@ -3755,7 +3755,9 @@ export default (superClass: typeof Parser) =>
       }
     }
 
-    flowParseEnumDeclaration(node: Undone<N.Node>): N.Node {
+    flowParseEnumDeclaration(
+      node: Undone<N.FlowEnumDeclaration>,
+    ): N.FlowEnumDeclaration {
       const id = this.parseIdentifier();
       node.id = id;
       node.body = this.flowEnumBody(this.startNode(), id);

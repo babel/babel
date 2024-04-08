@@ -2105,7 +2105,7 @@ export default abstract class StatementParser extends ExpressionParser {
     // ClassStaticBlockStatementList:
     //   StatementList[~Yield, ~Await, ~Return] opt
     this.prodParam.enter(ParamKind.PARAM);
-    const body: N.Node[] = (member.body = []);
+    const body: N.Statement[] = (member.body = []);
     this.parseBlockOrModuleBlockBody(body, undefined, false, tt.braceR);
     this.prodParam.exit();
     this.scope.exit();

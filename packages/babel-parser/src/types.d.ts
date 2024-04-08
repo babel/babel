@@ -67,7 +67,53 @@ type NodeAny<T extends string, KnownProps = {}> = NodeBase & {
   [key: string]: any;
 } & KnownProps;
 export type Expression = Node;
-export type Statement = Node;
+export type Statement =
+  | BlockStatement
+  | BreakStatement
+  | ContinueStatement
+  | DebuggerStatement
+  | DoWhileStatement
+  | EmptyStatement
+  | ExpressionStatement
+  | ForInStatement
+  | ForStatement
+  | FunctionDeclaration
+  | IfStatement
+  | LabeledStatement
+  | ReturnStatement
+  | SwitchStatement
+  | ThrowStatement
+  | TryStatement
+  | VariableDeclaration
+  | WhileStatement
+  | WithStatement
+  | ClassDeclaration
+  | ExportAllDeclaration
+  | ExportDefaultDeclaration
+  | ExportNamedDeclaration
+  | ForOfStatement
+  | ImportDeclaration
+  | FlowDeclareClass
+  | FlowDeclareFunction
+  | FlowDeclareInterface
+  | FlowDeclareModule
+  | FlowDeclareModuleExports
+  | FlowDeclareTypeAlias
+  | FlowDeclareOpaqueType
+  | FlowDeclareVariable
+  | FlowDeclareExportDeclaration
+  | FlowEnumDeclaration
+  | FlowInterface
+  | FlowOpaqueType
+  | FlowTypeAlias
+  | TSDeclareFunction
+  | TsInterfaceDeclaration
+  | TsTypeAliasDeclaration
+  | TsEnumDeclaration
+  | TsModuleDeclaration
+  | TsImportEqualsDeclaration
+  | TsExportAssignment
+  | TsNamespaceExportDeclaration;
 export type Pattern =
   | Identifier
   | ObjectPattern
@@ -1151,6 +1197,7 @@ export type FlowTypeAlias = NodeAny<"TypeAlias">;
 export type FlowOpaqueType = NodeAny<"OpaqueType">;
 export type FlowObjectTypeIndexer = NodeAny<"ObjectTypeIndexer">;
 export type FlowObjectTypeInternalSlot = NodeAny<"ObjectTypeInternalSlot">;
+export type FlowEnumDeclaration = NodeAny<"EnumDeclaration">;
 export type FlowFunctionTypeAnnotation = NodeAny<"FunctionTypeAnnotation">;
 export type FlowObjectTypeProperty = NodeAny<"ObjectTypeProperty">;
 export type FlowObjectTypeSpreadProperty = NodeAny<"ObjectTypeSpreadProperty">;

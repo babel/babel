@@ -196,7 +196,7 @@ export default (superClass: typeof Parser) =>
       }
 
       this.semicolon();
-      node.name = expr.name;
+      (node as unknown as N.Placeholder<"Statement">).name = expr.name;
       return this.finishPlaceholder(node, "Statement");
     }
 
