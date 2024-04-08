@@ -1013,26 +1013,29 @@ export interface PipelineBareFunction extends NodeBase {
 
 // JSX (TODO: Not in spec)
 
-export type JSXIdentifier = Node;
-export type JSXNamespacedName = Node;
-export type JSXMemberExpression = Node;
-export type JSXEmptyExpression = Node;
-export type JSXSpreadChild = Node;
-export type JSXExpressionContainer = Node;
-export type JSXAttribute = Node;
-export type JSXSpreadAttribute = Node;
+export type JSXIdentifier = NodeAny<"JSXIdentifier">;
+export type JSXNamespacedName = NodeAny<"JSXNamespacedName">;
+export type JSXMemberExpression = NodeAny<"JSXMemberExpression">;
+export type JSXEmptyExpression = NodeAny<"JSXEmptyExpression">;
+export type JSXSpreadChild = NodeAny<"JSXSpreadChild">;
+export type JSXExpressionContainer = NodeAny<"JSXExpressionContainer">;
+export type JSXAttribute = NodeAny<"JSXAttribute">;
+export type JSXSpreadAttribute = NodeAny<"JSXSpreadAttribute">;
 export interface JSXOpeningElement extends NodeBase {
   type: "JSXOpeningElement";
   name: JSXNamespacedName | JSXMemberExpression;
   typeParameters?: TypeParameterInstantiationBase | null; // TODO: Not in spec,
-  attributes: JSXAttribute[];
+  attributes: (JSXAttribute | JSXSpreadAttribute)[];
   selfClosing: boolean;
 }
-export type JSXClosingElement = Node;
-export type JSXElement = Node;
-export type JSXOpeningFragment = Node;
-export type JSXClosingFragment = Node;
-export type JSXFragment = Node;
+export type JSXClosingElement = NodeAny<"JSXClosingElement">;
+export type JSXElement = NodeAny<"JSXElement">;
+export type JSXOpeningFragment = NodeAny<"JSXOpeningFragment">;
+export type JSXClosingFragment = NodeAny<"JSXClosingFragment">;
+export type JSXFragment = NodeAny<"JSXFragment">;
+export type JSXElementTag = JSXOpeningElement | JSXClosingElement;
+export type JSXFragmentTag = JSXOpeningFragment | JSXClosingFragment;
+export type JSXTag = JSXElementTag | JSXFragmentTag;
 
 // Flow/TypeScript common (TODO: Not in spec)
 
