@@ -1,6 +1,6 @@
 {
   "name": "@babel/eslint-plugin",
-  "version": "7.23.5",
+  "version": "7.24.5-pre.1+pr.16414",
   "description": "Companion rules for @babel/eslint-parser",
   "main": "./lib/index.cjs",
   "type": "commonjs",
