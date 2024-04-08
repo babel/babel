@@ -410,7 +410,7 @@ export default (superClass: typeof Parser) =>
 
       const id = (node.id = this.parseIdentifier());
 
-      const typeNode = this.startNode<N.FlowDeclareFunction>();
+      const typeNode = this.startNode<N.FlowFunctionTypeAnnotation>();
       const typeContainer = this.startNode<N.TypeAnnotation>();
 
       if (this.match(tt.lt)) {
@@ -638,7 +638,7 @@ export default (superClass: typeof Parser) =>
 
           node.type = "Declare" + node.type;
 
-          return node as N.Node;
+          return node as N.FlowDeclareExportDeclaration;
         }
       }
 
@@ -660,7 +660,9 @@ export default (superClass: typeof Parser) =>
       node: Undone<N.FlowDeclareTypeAlias>,
     ): N.FlowDeclareTypeAlias {
       this.next();
-      const finished = this.flowParseTypeAlias(node);
+      const finished = this.flowParseTypeAlias(
+        node,
+      ) as unknown as N.FlowDeclareTypeAlias;
       // Don't do finishNode as we don't want to process comments twice
       finished.type = "DeclareTypeAlias";
       return finished;
@@ -670,7 +672,10 @@ export default (superClass: typeof Parser) =>
       node: Undone<N.FlowDeclareOpaqueType>,
     ): N.FlowDeclareOpaqueType {
       this.next();
-      const finished = this.flowParseOpaqueType(node, true);
+      const finished = this.flowParseOpaqueType(
+        node,
+        true,
+      ) as unknown as N.FlowDeclareOpaqueType;
       // Don't do finishNode as we don't want to process comments twice
       finished.type = "DeclareOpaqueType";
       return finished;
@@ -1388,7 +1393,7 @@ export default (superClass: typeof Parser) =>
     flowParseQualifiedTypeIdentifier(
       startLoc?: Position,
       id?: N.Identifier,
-    ): N.FlowQualifiedTypeIdentifier {
+    ): N.FlowQualifiedTypeIdentifier | N.Identifier {
       startLoc ??= this.state.startLoc;
       let node: N.Identifier | N.FlowQualifiedTypeIdentifier =
         id || this.flowParseRestrictedIdentifier(true);
@@ -1508,9 +1513,9 @@ export default (superClass: typeof Parser) =>
 
     flowIdentToTypeAnnotation(
       startLoc: Position,
-      node: Undone<N.FlowTypeAnnotation>,
+      node: Undone<N.FlowType>,
       id: N.Identifier,
-    ): N.FlowTypeAnnotation {
+    ): N.FlowType {
       switch (id.name) {
         case "any":
           return this.finishNode(node, "AnyTypeAnnotation");
@@ -1543,9 +1548,9 @@ export default (superClass: typeof Parser) =>
     // The parsing of types roughly parallels the parsing of expressions, and
     // primary types are kind of like primary expressions...they're the
     // primitives with which other types are constructed.
-    flowParsePrimaryType(): N.FlowTypeAnnotation {
+    flowParsePrimaryType(): N.FlowType {
       const startLoc = this.state.startLoc;
-      const node = this.startNode<N.FlowTypeAnnotation>();
+      const node = this.startNode<N.FlowOtherTypeAnnotation>();
       let tmp;
       let type;
       let isGroupedType = false;
@@ -1576,7 +1581,8 @@ export default (superClass: typeof Parser) =>
           this.state.noAnonFunctionType = oldNoAnonFunctionType;
           return type;
 
-        case tt.lt:
+        case tt.lt: {
+          const node = this.startNode<N.FlowFunctionTypeAnnotation>();
           node.typeParameters = this.flowParseTypeParameterDeclaration();
           this.expect(tt.parenL);
           tmp = this.flowParseFunctionTypeParams();
@@ -1590,8 +1596,10 @@ export default (superClass: typeof Parser) =>
           node.returnType = this.flowParseType();
 
           return this.finishNode(node, "FunctionTypeAnnotation");
+        }
 
-        case tt.parenL:
+        case tt.parenL: {
+          const node = this.startNode<N.FlowFunctionTypeAnnotation>();
           this.next();
 
           // Check to see if this is actually a grouped type
@@ -1646,6 +1654,7 @@ export default (superClass: typeof Parser) =>
           node.typeParameters = null;
 
           return this.finishNode(node, "FunctionTypeAnnotation");
+        }
 
         case tt.string:
           return this.parseLiteral<N.StringLiteralTypeAnnotation>(
@@ -1740,7 +1749,7 @@ export default (superClass: typeof Parser) =>
       this.unexpected();
     }
 
-    flowParsePostfixType(): N.FlowTypeAnnotation {
+    flowParsePostfixType(): N.FlowType {
       const startLoc = this.state.startLoc;
       let type = this.flowParsePrimaryType();
       let seenOptionalIndexedAccess = false;
@@ -1748,7 +1757,7 @@ export default (superClass: typeof Parser) =>
         (this.match(tt.bracketL) || this.match(tt.questionDot)) &&
         !this.canInsertSemicolon()
       ) {
-        const node = this.startNodeAt<N.FlowTypeAnnotation>(startLoc);
+        const node = this.startNodeAt<N.FlowOtherTypeAnnotation>(startLoc);
         const optional = this.eat(tt.questionDot);
         seenOptionalIndexedAccess = seenOptionalIndexedAccess || optional;
         this.expect(tt.bracketL);
@@ -1779,8 +1788,8 @@ export default (superClass: typeof Parser) =>
       return type;
     }
 
-    flowParsePrefixType(): N.FlowTypeAnnotation {
-      const node = this.startNode<N.FlowTypeAnnotation>();
+    flowParsePrefixType(): N.FlowType {
+      const node = this.startNode<N.FlowOtherTypeAnnotation>();
       if (this.eat(tt.question)) {
         node.typeAnnotation = this.flowParsePrefixType();
         return this.finishNode(node, "NullableTypeAnnotation");
@@ -1789,7 +1798,7 @@ export default (superClass: typeof Parser) =>
       }
     }
 
-    flowParseAnonFunctionWithoutParens(): N.FlowTypeAnnotation {
+    flowParseAnonFunctionWithoutParens(): N.FlowType {
       const param = this.flowParsePrefixType();
       if (!this.state.noAnonFunctionType && this.eat(tt.arrow)) {
         // TODO: This should be a type error. Passing in a SourceLocation, and it expects a Position.
@@ -1806,8 +1815,8 @@ export default (superClass: typeof Parser) =>
       return param;
     }
 
-    flowParseIntersectionType(): N.FlowTypeAnnotation {
-      const node = this.startNode<N.FlowTypeAnnotation>();
+    flowParseIntersectionType(): N.FlowType {
+      const node = this.startNode<N.FlowOtherTypeAnnotation>();
       this.eat(tt.bitwiseAND);
       const type = this.flowParseAnonFunctionWithoutParens();
       node.types = [type];
@@ -1819,8 +1828,8 @@ export default (superClass: typeof Parser) =>
         : this.finishNode(node, "IntersectionTypeAnnotation");
     }
 
-    flowParseUnionType(): N.FlowTypeAnnotation {
-      const node = this.startNode<N.FlowTypeAnnotation>();
+    flowParseUnionType(): N.FlowType {
+      const node = this.startNode<N.FlowOtherTypeAnnotation>();
       this.eat(tt.bitwiseOR);
       const type = this.flowParseIntersectionType();
       node.types = [type];
@@ -1832,7 +1841,7 @@ export default (superClass: typeof Parser) =>
         : this.finishNode(node, "UnionTypeAnnotation");
     }
 
-    flowParseType(): N.FlowTypeAnnotation {
+    flowParseType(): N.FlowType {
       const oldInType = this.state.inType;
       this.state.inType = true;
       const type = this.flowParseUnionType();
@@ -1840,7 +1849,7 @@ export default (superClass: typeof Parser) =>
       return type;
     }
 
-    flowParseTypeOrImplicitInstantiation(): N.FlowTypeAnnotation {
+    flowParseTypeOrImplicitInstantiation(): N.FlowType {
       if (this.state.type === tt.name && this.state.value === "_") {
         const startLoc = this.state.startLoc;
         const node = this.parseIdentifier();

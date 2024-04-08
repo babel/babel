@@ -62,6 +62,10 @@ export interface Node extends NodeBase {
   type: string;
   [key: string]: any;
 }
+type NodeAny<T extends string, KnownProps = {}> = NodeBase & {
+  type: T;
+  [key: string]: any;
+} & KnownProps;
 export type Expression = Node;
 export type Statement = Node;
 export type Pattern =
@@ -1038,7 +1042,7 @@ export interface TypeAnnotationBase extends NodeBase {
 
 export interface TypeAnnotation extends NodeBase {
   type: "TypeAnnotation";
-  typeAnnotation: FlowTypeAnnotation;
+  typeAnnotation: FlowType;
 }
 
 export interface TsTypeAnnotation extends NodeBase {
@@ -1113,37 +1117,81 @@ export interface TsTypeCastExpression extends NodeBase {
   typeAnnotation: TsTypeAnnotation;
 }
 
-export type FlowType = Node;
-export type FlowPredicate = Node;
-export type FlowDeclare = Node;
-export type FlowDeclareClass = Node;
-export type FlowDeclareExportDeclaration = Node;
-export type FlowDeclareFunction = Node;
-export type FlowDeclareVariable = Node;
-export type FlowDeclareModule = Node;
-export type FlowDeclareModuleExports = Node;
-export type FlowDeclareTypeAlias = Node;
-export type FlowDeclareOpaqueType = Node;
-export type FlowDeclareInterface = Node;
-export type FlowInterface = Node;
-export type FlowInterfaceExtends = Node;
-export type FlowTypeAlias = Node;
-export type FlowOpaqueType = Node;
-export type FlowObjectTypeIndexer = Node;
-export type FlowObjectTypeInternalSlot = Node;
-export type FlowFunctionTypeAnnotation = Node;
-export type FlowObjectTypeProperty = Node;
-export type FlowObjectTypeSpreadProperty = Node;
-export type FlowObjectTypeCallProperty = Node;
-export type FlowObjectTypeAnnotation = Node;
-export type FlowQualifiedTypeIdentifier = Node;
-export type FlowGenericTypeAnnotation = Node;
-export type FlowTypeofTypeAnnotation = Node;
-export type FlowTupleTypeAnnotation = Node;
-export type FlowFunctionTypeParam = Node;
-export type FlowTypeAnnotation = Node;
-export type FlowVariance = Node;
-export type FlowClassImplements = Node;
+export type FlowPredicate =
+  | NodeAny<"DeclaredPredicate">
+  | NodeAny<"InferredPredicate">;
+export type FlowDeclare =
+  | FlowDeclareClass
+  | FlowDeclareExportDeclaration
+  | FlowDeclareFunction
+  | FlowDeclareVariable
+  | FlowDeclareModule
+  | FlowDeclareModuleExports
+  | FlowDeclareTypeAlias
+  | FlowDeclareOpaqueType
+  | FlowDeclareInterface;
+export type FlowDeclareClass = NodeAny<"DeclareClass">;
+export type FlowDeclareExportDeclaration =
+  | NodeAny<"DeclareExportDeclaration">
+  | NodeAny<"DeclareExportDefaultDeclaration">
+  | NodeAny<"DeclareExportAllDeclaration">;
+export type FlowDeclareFunction = NodeAny<"DeclareFunction">;
+export type FlowDeclareVariable = NodeAny<"DeclareVariable">;
+export type FlowDeclareModule = NodeAny<"DeclareModule">;
+export type FlowDeclareModuleExports = NodeAny<"DeclareModuleExports">;
+export type FlowDeclareTypeAlias = NodeAny<"DeclareTypeAlias">;
+export type FlowDeclareOpaqueType = NodeAny<"DeclareOpaqueType">;
+export type FlowDeclareInterface = NodeAny<"DeclareInterface">;
+export type FlowInterface = NodeAny<"InterfaceDeclaration">;
+export type FlowInterfaceExtends = NodeAny<"InterfaceExtends">;
+export type FlowTypeAlias = NodeAny<"TypeAlias">;
+export type FlowOpaqueType = NodeAny<"OpaqueType">;
+export type FlowObjectTypeIndexer = NodeAny<"ObjectTypeIndexer">;
+export type FlowObjectTypeInternalSlot = NodeAny<"ObjectTypeInternalSlot">;
+export type FlowFunctionTypeAnnotation = NodeAny<"FunctionTypeAnnotation">;
+export type FlowObjectTypeProperty = NodeAny<"ObjectTypeProperty">;
+export type FlowObjectTypeSpreadProperty = NodeAny<"ObjectTypeSpreadProperty">;
+export type FlowObjectTypeCallProperty = NodeAny<"ObjectTypeCallProperty">;
+export type FlowObjectTypeAnnotation = NodeAny<"ObjectTypeAnnotation">;
+export type FlowQualifiedTypeIdentifier = NodeAny<"QualifiedTypeIdentifier">;
+export type FlowGenericTypeAnnotation = NodeAny<"GenericTypeAnnotation">;
+export type FlowTypeofTypeAnnotation = NodeAny<"TypeofTypeAnnotation">;
+export type FlowTupleTypeAnnotation = NodeAny<"TupleTypeAnnotation">;
+export type FlowFunctionTypeParam = NodeAny<"FunctionTypeParam">;
+export type FlowOtherTypeAnnotation = NodeAny<
+  | "AnyTypeAnnotation"
+  | "BooleanTypeAnnotation"
+  | "MixedTypeAnnotation"
+  | "EmptyTypeAnnotation"
+  | "ExistsTypeAnnotation"
+  | "NumberTypeAnnotation"
+  | "StringTypeAnnotation"
+  | "SymbolTypeAnnotation"
+  | "NullLiteralTypeAnnotation"
+  | "VoidTypeAnnotation"
+  | "ThisTypeAnnotation"
+  | "ArrayTypeAnnotation"
+  | "NullableTypeAnnotation"
+  | "IntersectionTypeAnnotation"
+  | "UnionTypeAnnotation"
+>;
+export type FlowType =
+  | FlowFunctionTypeAnnotation
+  | FlowObjectTypeAnnotation
+  | FlowGenericTypeAnnotation
+  | FlowTypeofTypeAnnotation
+  | FlowTupleTypeAnnotation
+  | FlowInterfaceType
+  | FlowIndexedAccessType
+  | FlowOptionalIndexedAccessType
+  | FlowOtherTypeAnnotation
+  | StringLiteralTypeAnnotation
+  | BooleanLiteralTypeAnnotation
+  | NumberLiteralTypeAnnotation
+  | BigIntLiteralTypeAnnotation
+  | Identifier;
+export type FlowVariance = NodeAny<"Variance">;
+export type FlowClassImplements = NodeAny<"ClassImplements">;
 
 export interface FlowInterfaceType extends NodeBase {
   type: "InterfaceTypeAnnotation";
