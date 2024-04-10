@@ -14,6 +14,7 @@ export default declare(api => {
       if (!path.isFunctionDeclaration()) continue;
 
       if (
+        process.env.BABEL_8_BREAKING &&
         !isInStrictMode &&
         !(
           path.node.async ||
