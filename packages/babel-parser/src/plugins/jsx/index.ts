@@ -311,7 +311,10 @@ export default (superClass: typeof Parser) =>
 
     // Parses any type of JSX attribute value.
 
-    jsxParseAttributeValue(): N.Expression {
+    jsxParseAttributeValue():
+      | N.JSXExpressionContainer
+      | N.JSXElement
+      | N.StringLiteral {
       let node;
       switch (this.state.type) {
         case tt.braceL:
@@ -326,7 +329,7 @@ export default (superClass: typeof Parser) =>
 
         case tt.jsxTagStart:
         case tt.string:
-          return this.parseExprAtom();
+          return this.parseExprAtom() as N.JSXElement | N.StringLiteral;
 
         default:
           throw this.raise(JsxErrors.UnsupportedJsxValue, this.state.startLoc);
@@ -474,7 +477,7 @@ export default (superClass: typeof Parser) =>
               break;
 
             case tt.jsxText:
-              children.push(this.parseExprAtom());
+              children.push(this.parseLiteral(this.state.value, "JSXText"));
               break;
 
             case tt.braceL: {
@@ -559,9 +562,7 @@ export default (superClass: typeof Parser) =>
     // ==================================
 
     parseExprAtom(refExpressionErrors?: ExpressionErrors | null): N.Expression {
-      if (this.match(tt.jsxText)) {
-        return this.parseLiteral(this.state.value, "JSXText");
-      } else if (this.match(tt.jsxTagStart)) {
+      if (this.match(tt.jsxTagStart)) {
         return this.jsxParseElement();
       } else if (
         this.match(tt.lt) &&

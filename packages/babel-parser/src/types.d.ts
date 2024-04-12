@@ -66,7 +66,62 @@ type NodeAny<T extends string, KnownProps = {}> = NodeBase & {
   type: T;
   [key: string]: any;
 } & KnownProps;
-export type Expression = Node;
+export type Expression =
+  | ArrayExpression
+  | AssignmentExpression
+  | BinaryExpression
+  | CallExpression
+  | ConditionalExpression
+  | FunctionExpression
+  | Identifier
+  | StringLiteral
+  | NumericLiteral
+  | NullLiteral
+  | BooleanLiteral
+  | RegExpLiteral
+  | LogicalExpression
+  | MemberExpression
+  | NewExpression
+  | ObjectExpression
+  | SequenceExpression
+  | ParenthesizedExpression
+  | ThisExpression
+  | UnaryExpression
+  | UpdateExpression
+  | ArrowFunctionExpression
+  | ClassExpression
+  | ImportExpression
+  | MetaProperty
+  | Super
+  | TaggedTemplateExpression
+  | TemplateLiteral
+  | YieldExpression
+  | AwaitExpression
+  | Import
+  | BigIntLiteral
+  | OptionalMemberExpression
+  | OptionalCallExpression
+  | TypeCastExpression
+  | JSXElement
+  | JSXFragment
+  | BindExpression
+  | DoExpression
+  | RecordExpression
+  | TupleExpression
+  | DecimalLiteral
+  | ModuleExpression
+  | TopicReference
+  | PipelineTopicExpression
+  | PipelineBareFunction
+  | PipelinePrimaryTopicReference
+  | TsInstantiationExpression
+  | TsAsExpression
+  | TsSatisfiesExpression
+  | TsTypeAssertion
+  | TsTypeCastExpression
+  | TsNonNullExpression
+  | EstreeChainExpression
+  | EstreeLiteral;
 export type Statement =
   | BlockStatement
   | BreakStatement
@@ -376,7 +431,7 @@ export interface ForStatement extends NodeBase {
 export type ForInOf = ForInStatement | ForOfStatement;
 
 interface ForInOfBase extends NodeBase {
-  left: VariableDeclaration | Expression;
+  left: VariableDeclaration | Assignable;
   right: Expression;
   body: Statement;
 }
@@ -504,7 +559,6 @@ export type ObjectOrClassMember = ClassMethod | ClassProperty | ObjectMember;
 export type ObjectMember = ObjectProperty | ObjectMethod;
 
 export interface ObjectMemberBase extends NodeBase {
-  key: Expression;
   computed: boolean;
   value: Expression | Pattern;
   decorators?: Decorator[];
@@ -517,12 +571,14 @@ export interface ObjectMemberBase extends NodeBase {
 export interface ObjectProperty extends ObjectMemberBase {
   type: "ObjectProperty";
   shorthand: boolean;
+  key: Expression | PrivateName; // For private destructuring
   value: Expression | Pattern;
 }
 
 export interface ObjectMethod extends ObjectMemberBase, FunctionBase {
   type: "ObjectMethod";
   kind: "get" | "set" | "method"; // Never "constructor"
+  key: Expression;
   value: Expression;
 }
 
@@ -564,7 +620,7 @@ export type UpdateOperator = "++" | "--";
 export interface BinaryExpression extends NodeBase {
   type: "BinaryExpression";
   operator: BinaryOperator;
-  left: Expression;
+  left: Expression | PrivateName;
   right: Expression;
 }
 
@@ -591,10 +647,12 @@ export type BinaryOperator =
   | "in"
   | "instanceof";
 
+export type Assignable = Pattern | ParenthesizedExpression | MemberExpression;
+
 export interface AssignmentExpression extends NodeBase {
   type: "AssignmentExpression";
   operator: AssignmentOperator;
-  left: Pattern | Expression;
+  left: Assignable;
   right: Expression;
 }
 
@@ -629,14 +687,14 @@ export interface SpreadElement extends NodeBase {
 export interface MemberExpression extends NodeBase {
   type: "MemberExpression";
   object: Expression | Super;
-  property: Expression;
+  property: Expression | PrivateName;
   computed: boolean;
 }
 
 export interface OptionalMemberExpression extends NodeBase {
   type: "OptionalMemberExpression";
   object: Expression | Super;
-  property: Expression;
+  property: Expression | PrivateName;
   computed: boolean;
   optional: boolean;
 }
@@ -738,7 +796,7 @@ export interface PipelinePrimaryTopicReference extends NodeBase {
 export interface TemplateLiteral extends NodeBase {
   type: "TemplateLiteral";
   quasis: TemplateElement[];
-  expressions: Expression[];
+  expressions: Expression[] | TsType[];
 }
 
 export interface TaggedTemplateExpression extends NodeBase {
@@ -862,7 +920,7 @@ interface MethodBase extends FunctionBase {
 export type MethodKind = "constructor" | "method" | "get" | "set";
 
 export interface ClassMethodOrDeclareMethodCommon extends ClassMemberBase {
-  key: Expression;
+  key: Expression | PrivateName;
   kind: MethodKind;
   static: boolean;
   decorators?: Decorator[];
@@ -1037,6 +1095,8 @@ export interface ExportDefaultDeclaration extends NodeBase {
     | OptFunctionDeclaration
     | OptTSDeclareFunction
     | OptClassDeclaration
+    | FlowEnumDeclaration
+    | TsInterfaceDeclaration
     | Expression;
 }
 
@@ -1318,7 +1378,7 @@ export interface EstreeMethodDefinition extends NodeBase {
   static: boolean;
   key: Expression;
   computed: boolean;
-  value: Expression;
+  value: FunctionExpression;
   decorators: Decorator[];
   kind?: "get" | "set" | "method";
   variance?: FlowVariance | null;

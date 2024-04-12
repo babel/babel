@@ -135,8 +135,7 @@ export default (superClass: typeof Parser) =>
     }
 
     getObjectOrClassMethodParams(method: N.ObjectMethod | N.ClassMethod) {
-      return (method as any as N.EstreeProperty | N.EstreeMethodDefinition)
-        .value.params;
+      return (method as unknown as N.EstreeMethodDefinition).value.params;
     }
 
     isValidDirective(stmt: N.Statement): boolean {
@@ -295,6 +294,11 @@ export default (superClass: typeof Parser) =>
       );
     }
 
+    nameIsConstructor(key: N.Expression | N.PrivateName): boolean {
+      if (key.type === "Literal") return key.value === "constructor";
+      return super.nameIsConstructor(key);
+    }
+
     parseClassProperty(...args: [N.ClassProperty]): any {
       const propertyNode = super.parseClassProperty(...args) as any;
       if (!process.env.BABEL_8_BREAKING) {
@@ -419,16 +423,17 @@ export default (superClass: typeof Parser) =>
 
       if (node.callee.type === "Import") {
         (node as N.Node as N.EstreeImportExpression).type = "ImportExpression";
-        (node as N.Node as N.EstreeImportExpression).source = node.arguments[0];
+        (node as N.Node as N.EstreeImportExpression).source = node
+          .arguments[0] as N.Expression;
         if (
           this.hasPlugin("importAttributes") ||
           this.hasPlugin("importAssertions")
         ) {
           (node as N.Node as N.EstreeImportExpression).options =
-            node.arguments[1] ?? null;
+            (node.arguments[1] as N.Expression) ?? null;
           // compatibility with previous ESTree AST
           (node as N.Node as N.EstreeImportExpression).attributes =
-            node.arguments[1] ?? null;
+            (node.arguments[1] as N.Expression) ?? null;
         }
         // arguments isn't optional in the type definition
         delete node.arguments;
@@ -511,7 +516,7 @@ export default (superClass: typeof Parser) =>
       startLoc: Position,
       noCalls: boolean | undefined | null,
       state: N.ParseSubscriptState,
-    ) {
+    ): N.Expression {
       const node = super.parseSubscript(base, startLoc, noCalls, state);
 
       if (state.optionalChainMember) {
@@ -520,7 +525,9 @@ export default (superClass: typeof Parser) =>
           node.type === "OptionalMemberExpression" ||
           node.type === "OptionalCallExpression"
         ) {
-          node.type = node.type.substring(8); // strip Optional prefix
+          // strip Optional prefix
+          (node as unknown as N.CallExpression | N.MemberExpression).type =
+            node.type.substring(8) as "CallExpression" | "MemberExpression";
         }
         if (state.stop) {
           const chain = this.startNodeAtNode<N.EstreeChainExpression>(node);
@@ -531,6 +538,7 @@ export default (superClass: typeof Parser) =>
         node.type === "MemberExpression" ||
         node.type === "CallExpression"
       ) {
+        // @ts-expect-error not in the type definitions
         node.optional = false;
       }
 

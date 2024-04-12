@@ -647,7 +647,6 @@ export default abstract class StatementParser extends ExpressionParser {
       return this.parseLabeledStatement(
         node as Undone<N.LabeledStatement>,
         maybeName,
-        // @ts-expect-error migrate to Babel types
         expr,
         flags,
       );
@@ -1723,12 +1722,16 @@ export default abstract class StatementParser extends ExpressionParser {
     return this.match(tt.parenL);
   }
 
+  nameIsConstructor(key: N.Expression | N.PrivateName): boolean {
+    return (
+      (key.type === "Identifier" && key.name === "constructor") ||
+      (key.type === "StringLiteral" && key.value === "constructor")
+    );
+  }
+
   isNonstaticConstructor(method: N.ClassMethod | N.ClassProperty): boolean {
     return (
-      !method.computed &&
-      !method.static &&
-      (method.key.name === "constructor" || // Identifier
-        method.key.value === "constructor") // String literal
+      !method.computed && !method.static && this.nameIsConstructor(method.key)
     );
   }
 
@@ -1918,9 +1921,10 @@ export default abstract class StatementParser extends ExpressionParser {
     }
 
     const isContextual =
-      tokenIsIdentifier(this.state.type) && !this.state.containsEsc;
-    const isPrivate = this.match(tt.privateName);
+      !this.state.containsEsc && tokenIsIdentifier(this.state.type);
     const key = this.parseClassElementName(member);
+    const maybeContextualKw = isContextual ? (key as N.Identifier).name : null;
+    const isPrivate = this.isPrivateName(key);
     const maybeQuestionTokenStartLoc = this.state.startLoc;
 
     this.parsePostMemberNameModifiers(publicMember);
@@ -1964,11 +1968,7 @@ export default abstract class StatementParser extends ExpressionParser {
       } else {
         this.pushClassProperty(classBody, publicProp);
       }
-    } else if (
-      isContextual &&
-      key.name === "async" &&
-      !this.isLineTerminator()
-    ) {
+    } else if (maybeContextualKw === "async" && !this.isLineTerminator()) {
       // an async method
       this.resetPreviousNodeTrailingComments(key);
       const isGenerator = this.eat(tt.star);
@@ -2006,14 +2006,13 @@ export default abstract class StatementParser extends ExpressionParser {
         );
       }
     } else if (
-      isContextual &&
-      (key.name === "get" || key.name === "set") &&
+      (maybeContextualKw === "get" || maybeContextualKw === "set") &&
       !(this.match(tt.star) && this.isLineTerminator())
     ) {
       // `get\n*` is an uninitialized property named 'get' followed by a generator.
       // a getter or setter
       this.resetPreviousNodeTrailingComments(key);
-      method.kind = key.name;
+      method.kind = maybeContextualKw;
       // The so-called parsed name would have been "get/set": get the real name.
       const isPrivate = this.match(tt.privateName);
       this.parseClassElementName(publicMethod);
@@ -2036,11 +2035,7 @@ export default abstract class StatementParser extends ExpressionParser {
       }
 
       this.checkGetterSetterParams(publicMethod);
-    } else if (
-      isContextual &&
-      key.name === "accessor" &&
-      !this.isLineTerminator()
-    ) {
+    } else if (maybeContextualKw === "accessor" && !this.isLineTerminator()) {
       this.expectPlugin("decoratorAutoAccessors");
       this.resetPreviousNodeTrailingComments(key);
 
@@ -2064,7 +2059,7 @@ export default abstract class StatementParser extends ExpressionParser {
   parseClassElementName(
     this: Parser,
     member: Undone<N.ClassMember>,
-  ): N.Expression | N.Identifier {
+  ): N.Expression | N.Identifier | N.PrivateName {
     const { type, value } = this.state;
     if (
       (type === tt.name || type === tt.string) &&
@@ -2083,7 +2078,8 @@ export default abstract class StatementParser extends ExpressionParser {
       return key;
     }
 
-    return this.parsePropertyName(member);
+    this.parsePropertyName(member);
+    return member.key;
   }
 
   parseClassStaticBlock(
@@ -2121,10 +2117,7 @@ export default abstract class StatementParser extends ExpressionParser {
     classBody: Undone<N.ClassBody>,
     prop: N.ClassProperty,
   ) {
-    if (
-      !prop.computed &&
-      (prop.key.name === "constructor" || prop.key.value === "constructor")
-    ) {
+    if (!prop.computed && this.nameIsConstructor(prop.key)) {
       // Non-computed field, which is either an identifier named "constructor"
       // or a string literal named "constructor"
       this.raise(Errors.ConstructorClassField, prop.key);
@@ -2154,15 +2147,10 @@ export default abstract class StatementParser extends ExpressionParser {
     prop: N.ClassAccessorProperty,
     isPrivate: boolean,
   ) {
-    if (!isPrivate && !prop.computed) {
-      // Not private, so not node is not a PrivateName and we can safely cast
-      const key = prop.key as N.Expression;
-
-      if (key.name === "constructor" || key.value === "constructor") {
-        // Non-computed field, which is either an identifier named "constructor"
-        // or a string literal named "constructor"
-        this.raise(Errors.ConstructorClassField, key);
-      }
+    if (!isPrivate && !prop.computed && this.nameIsConstructor(prop.key)) {
+      // Non-computed field, which is either an identifier named "constructor"
+      // or a string literal named "constructor"
+      this.raise(Errors.ConstructorClassField, prop.key);
     }
 
     const node = this.parseClassAccessorProperty(prop);
@@ -2508,7 +2496,9 @@ export default abstract class StatementParser extends ExpressionParser {
     return this.isUnparsedContextual(next, "function");
   }
 
-  parseExportDefaultExpression(this: Parser): N.Expression | N.Declaration {
+  parseExportDefaultExpression(
+    this: Parser,
+  ): N.ExportDefaultDeclaration["declaration"] {
     const expr = this.startNode();
 
     if (this.match(tt._function)) {

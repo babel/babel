@@ -2026,7 +2026,7 @@ export default (superClass: typeof Parser) =>
       return super.isExportDefaultSpecifier();
     }
 
-    parseExportDefaultExpression(): N.Expression | N.Declaration {
+    parseExportDefaultExpression() {
       if (this.shouldParseEnums() && this.isContextual(tt._enum)) {
         const node = this.startNode();
         this.next();
@@ -2143,13 +2143,14 @@ export default (superClass: typeof Parser) =>
 
       while (stack.length !== 0) {
         const node = stack.pop();
-        if (node.type === "ArrowFunctionExpression") {
+        if (
+          node.type === "ArrowFunctionExpression" &&
+          node.body.type !== "BlockStatement"
+        ) {
           if (node.typeParameters || !node.returnType) {
             // This is an arrow expression without ambiguity, so check its parameters
-            // @ts-expect-error: refine typings
             this.finishArrowValidation(node);
           } else {
-            // @ts-expect-error: refine typings
             arrows.push(node);
           }
           stack.push(node.body);
@@ -2200,14 +2201,14 @@ export default (superClass: typeof Parser) =>
       return result;
     }
 
-    parseParenItem(
-      node: N.Expression,
-
+    parseParenItem<T extends N.Expression | N.RestElement | N.SpreadElement>(
+      node: T,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       startLoc: Position,
-    ): N.Expression {
-      node = super.parseParenItem(node, startLoc);
+    ): T | N.TypeCastExpression | N.TsTypeCastExpression {
+      const newNode = super.parseParenItem(node, startLoc);
       if (this.eat(tt.question)) {
-        node.optional = true;
+        (newNode as N.Identifier).optional = true;
         // Include questionmark in location of node
         // Don't use this.finishNode() as otherwise we might process comments twice and
         // include already consumed parens
@@ -2216,13 +2217,13 @@ export default (superClass: typeof Parser) =>
 
       if (this.match(tt.colon)) {
         const typeCastNode = this.startNodeAt<N.TypeCastExpression>(startLoc);
-        typeCastNode.expression = node;
+        typeCastNode.expression = newNode as N.Expression;
         typeCastNode.typeAnnotation = this.flowParseTypeAnnotation();
 
         return this.finishNode(typeCastNode, "TypeCastExpression");
       }
 
-      return node;
+      return newNode;
     }
 
     assertModuleNodeAllowed(node: N.Node) {
@@ -2423,6 +2424,7 @@ export default (superClass: typeof Parser) =>
       for (let i = 0; i < exprList.length; i++) {
         const expr = exprList[i];
         if (expr?.type === "TypeCastExpression") {
+          // @ts-expect-error We are replacing expressions with type params
           exprList[i] = this.typeCastToParameter(expr);
         }
       }
@@ -2432,9 +2434,14 @@ export default (superClass: typeof Parser) =>
     // this is a list of nodes, from something like a call expression, we need to filter the
     // type casts that we've found that are illegal in this context
     toReferencedList(
-      exprList: ReadonlyArray<N.Expression | undefined | null>,
+      exprList:
+        | ReadonlyArray<N.Expression | N.SpreadElement>
+        | ReadonlyArray<N.Expression | N.RestElement>,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       isParenthesizedExpr?: boolean,
-    ): ReadonlyArray<N.Expression | undefined | null> {
+    ):
+      | ReadonlyArray<N.Expression | N.SpreadElement>
+      | ReadonlyArray<N.Expression | N.RestElement> {
       for (let i = 0; i < exprList.length; i++) {
         const expr = exprList[i];
         if (
@@ -2619,15 +2626,15 @@ export default (superClass: typeof Parser) =>
     }
 
     // parse type parameters for object method shorthand
-    parseObjPropValue(
-      prop: Undone<N.ObjectMethod | N.ObjectProperty>,
+    parseObjPropValue<T extends N.ObjectMember>(
+      prop: Undone<T>,
       startLoc: Position | undefined | null,
       isGenerator: boolean,
       isAsync: boolean,
       isPattern: boolean,
       isAccessor: boolean,
       refExpressionErrors?: ExpressionErrors | null,
-    ): N.ObjectMethod | N.ObjectProperty {
+    ): T {
       if ((prop as any).variance) {
         this.unexpected((prop as any).variance.loc.start);
       }
@@ -3094,11 +3101,13 @@ export default (superClass: typeof Parser) =>
     }
 
     setArrowFunctionParameters(
-      node: N.ArrowFunctionExpression,
-      params: N.Pattern[],
+      node: Undone<N.ArrowFunctionExpression>,
+      params:
+        | Array<N.Expression | N.SpreadElement>
+        | Array<N.Expression | N.RestElement>,
     ): void {
       if (this.state.noArrowParamsConversionAt.indexOf(node.start) !== -1) {
-        node.params = params;
+        node.params = params as N.ArrowFunctionExpression["params"];
       } else {
         super.setArrowFunctionParameters(node, params);
       }

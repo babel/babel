@@ -179,8 +179,9 @@ export default (superClass: typeof Parser) =>
     // @ts-expect-error Plugin will override parser interface
     parseExpressionStatement(
       node: MaybePlaceholder<"Statement">,
-      expr: N.Expression,
+      expr: MaybePlaceholder<"Expression">,
     ): MaybePlaceholder<"Statement"> {
+      // @ts-expect-error placeholder typings
       if (expr.type !== "Placeholder" || expr.extra?.parenthesized) {
         // @ts-expect-error placeholder typings
         return super.parseExpressionStatement(node, expr);
@@ -196,7 +197,9 @@ export default (superClass: typeof Parser) =>
       }
 
       this.semicolon();
-      (node as unknown as N.Placeholder<"Statement">).name = expr.name;
+      (node as unknown as N.Placeholder<"Statement">).name = (
+        expr as N.Placeholder
+      ).name;
       return this.finishPlaceholder(node, "Statement");
     }
 
