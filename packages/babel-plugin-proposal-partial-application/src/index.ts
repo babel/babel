@@ -36,14 +36,7 @@ export default declare(api => {
           );
           node.argument = t.cloneNode(id);
         } else {
-          init.push(
-            t.assignmentExpression(
-              "=",
-              t.cloneNode(id),
-              // @ts-expect-error Fixme: may need to handle JSXNamespacedName here
-              node,
-            ),
-          );
+          init.push(t.assignmentExpression("=", t.cloneNode(id), node));
           args[i] = t.cloneNode(id);
         }
       }
