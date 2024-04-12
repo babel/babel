@@ -9,8 +9,10 @@ import type State from "../tokenizer/state.ts";
 import type {
   EstreePropertyDefinition,
   Node,
+  ObjectMethod,
   ObjectProperty,
-} from "../types.ts";
+  PrivateName,
+} from "../types.d.ts";
 import { lineBreak, skipWhiteSpaceToLineBreak } from "../util/whitespace.ts";
 import { isIdentifierChar } from "../util/identifier.ts";
 import ClassScopeHandler from "../util/class-scope.ts";
@@ -265,7 +267,7 @@ export default abstract class UtilParser extends Tokenizer {
    * Test if given node is a PrivateName
    * will be overridden in ESTree plugin
    */
-  isPrivateName(node: Node): boolean {
+  isPrivateName(node: Node): node is PrivateName {
     return node.type === "PrivateName";
   }
 
@@ -274,7 +276,7 @@ export default abstract class UtilParser extends Tokenizer {
    * WITHOUT `#`
    * @see {@link https://tc39.es/ecma262/#sec-static-semantics-stringvalue}
    */
-  getPrivateNameSV(node: Node): string {
+  getPrivateNameSV(node: PrivateName): string {
     return node.id.name;
   }
 
@@ -297,7 +299,7 @@ export default abstract class UtilParser extends Tokenizer {
     return node.type === "ObjectProperty";
   }
 
-  isObjectMethod(node: Node): boolean {
+  isObjectMethod(node: Node): node is ObjectMethod {
     return node.type === "ObjectMethod";
   }
 

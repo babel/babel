@@ -234,7 +234,9 @@ function isEsModuleType(bodyElement: N.Node): boolean {
   );
 }
 
-function hasTypeImportKind(node: N.Node): boolean {
+function hasTypeImportKind(
+  node: Undone<N.ImportSpecifier | N.ImportDeclaration>,
+): boolean {
   return node.importKind === "type" || node.importKind === "typeof";
 }
 
@@ -1878,8 +1880,8 @@ export default (superClass: typeof Parser) =>
       return ident;
     }
 
-    typeCastToParameter(node: N.Node): N.Node {
-      node.expression.typeAnnotation = node.typeAnnotation;
+    typeCastToParameter(node: N.TypeCastExpression): N.Expression {
+      (node.expression as N.Identifier).typeAnnotation = node.typeAnnotation;
 
       this.resetEndLocation(node.expression, node.typeAnnotation.loc.end);
 
@@ -2288,11 +2290,15 @@ export default (superClass: typeof Parser) =>
       }
     }
 
-    eatExportStar(node: N.Node): boolean {
+    eatExportStar(
+      node: Undone<N.Node>,
+    ): node is Undone<N.ExportNamedDeclaration | N.ExportAllDeclaration> {
       if (super.eatExportStar(node)) return true;
 
       if (this.isContextual(tt._type) && this.lookahead().type === tt.star) {
-        node.exportKind = "type";
+        (
+          node as Undone<N.ExportNamedDeclaration | N.ExportAllDeclaration>
+        ).exportKind = "type";
         this.next();
         this.next();
         return true;
@@ -2301,7 +2307,9 @@ export default (superClass: typeof Parser) =>
       return false;
     }
 
-    maybeParseExportNamespaceSpecifier(node: N.Node): boolean {
+    maybeParseExportNamespaceSpecifier(
+      node: Undone<N.ExportNamedDeclaration | N.ExportAllDeclaration>,
+    ): node is Undone<N.ExportNamedDeclaration> {
       const { startLoc } = this.state;
       const hasNamespace = super.maybeParseExportNamespaceSpecifier(node);
       if (hasNamespace && node.exportKind === "type") {
@@ -2410,7 +2418,7 @@ export default (superClass: typeof Parser) =>
         node.type === "AssignmentExpression" &&
         node.left.type === "TypeCastExpression"
       ) {
-        node.left = this.typeCastToParameter(node.left);
+        node.left = this.typeCastToParameter(node.left) as N.Assignable;
       }
       super.toAssignable(node, isLHS);
     }
@@ -2424,7 +2432,6 @@ export default (superClass: typeof Parser) =>
       for (let i = 0; i < exprList.length; i++) {
         const expr = exprList[i];
         if (expr?.type === "TypeCastExpression") {
-          // @ts-expect-error We are replacing expressions with type params
           exprList[i] = this.typeCastToParameter(expr);
         }
       }
@@ -2960,7 +2967,7 @@ export default (superClass: typeof Parser) =>
 
         let typeParameters: N.TypeParameterDeclaration;
 
-        const arrow = this.tryParse(abort => {
+        const arrow = this.tryParse((abort: () => never) => {
           typeParameters = this.flowParseTypeParameterDeclaration();
 
           const arrowExpression = this.forwardNoArrowParamsConversionAt(
@@ -3002,7 +3009,6 @@ export default (superClass: typeof Parser) =>
 
         if (
           arrow.node &&
-          // @ts-expect-error: refine tryParse typings
           this.maybeUnwrapTypeCastExpression(arrow.node).type ===
             "ArrowFunctionExpression"
         ) {
@@ -3016,7 +3022,6 @@ export default (superClass: typeof Parser) =>
                 typeParameters,
               );
             }
-            // @ts-expect-error: refine tryParse typings
             return arrow.node;
           }
 
@@ -3061,7 +3066,7 @@ export default (superClass: typeof Parser) =>
     ): Undone<N.ArrowFunctionExpression> | undefined | null {
       if (this.match(tt.colon)) {
         // @ts-expect-error todo(flow->ts)
-        const result = this.tryParse(() => {
+        const result = this.tryParse<N.TypeAnnotation>(() => {
           const oldNoAnonFunctionType = this.state.noAnonFunctionType;
           this.state.noAnonFunctionType = true;
 
@@ -3473,7 +3478,7 @@ export default (superClass: typeof Parser) =>
     }
 
     flowEnumMemberRaw(): {
-      id: N.Node;
+      id: N.Identifier;
       init: EnumMemberInit;
     } {
       const loc = this.state.startLoc;
@@ -3506,10 +3511,22 @@ export default (superClass: typeof Parser) =>
       explicitType: EnumExplicitType;
     }): {
       members: {
-        booleanMembers: Array<N.Node>;
-        numberMembers: Array<N.Node>;
-        stringMembers: Array<N.Node>;
-        defaultedMembers: Array<N.Node>;
+        booleanMembers: Extract<
+          N.FlowEnumMember,
+          { type: "EnumBooleanMember" }
+        >[];
+        numberMembers: Extract<
+          N.FlowEnumMember,
+          { type: "EnumNumberMember" }
+        >[];
+        stringMembers: Extract<
+          N.FlowEnumMember,
+          { type: "EnumStringMember" }
+        >[];
+        defaultedMembers: Extract<
+          N.FlowEnumMember,
+          { type: "EnumDefaultedMember" }
+        >[];
       };
       hasUnknownMembers: boolean;
     } {
@@ -3530,7 +3547,7 @@ export default (superClass: typeof Parser) =>
           hasUnknownMembers = true;
           break;
         }
-        const memberNode = this.startNode<N.Node>();
+        const memberNode = this.startNode<N.FlowEnumMember>();
         const { id, init } = this.flowEnumMemberRaw();
         const memberName = id.name;
         if (memberName === "") {
@@ -3675,7 +3692,7 @@ export default (superClass: typeof Parser) =>
       return value;
     }
 
-    flowEnumBody(node: Undone<N.Node>, id: N.Node): N.Node {
+    flowEnumBody(node: Undone<N.FlowEnumBody>, id: N.Identifier): N.Node {
       const enumName = id.name;
       const nameLoc = id.loc.start;
       const explicitType = this.flowEnumParseExplicitType({ enumName });

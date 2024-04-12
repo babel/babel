@@ -2158,7 +2158,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
     if (isPrivate) {
       this.classScope.declarePrivateName(
-        this.getPrivateNameSV(node.key),
+        this.getPrivateNameSV(node.key as N.PrivateName),
         ClassElementType.OTHER,
         node.key.loc.start,
       );
@@ -2219,13 +2219,11 @@ export default abstract class StatementParser extends ExpressionParser {
   }
 
   declareClassPrivateMethodInScope(
-    node: Undone<
-      N.ClassPrivateMethod | N.EstreeMethodDefinition | N.TSDeclareMethod
-    >,
+    node: Undone<N.ClassPrivateMethod | N.TSDeclareMethod>,
     kind: number,
   ) {
     this.classScope.declarePrivateName(
-      this.getPrivateNameSV(node.key),
+      this.getPrivateNameSV(node.key as N.PrivateName),
       kind,
       node.key.loc.start,
     );
@@ -2325,18 +2323,9 @@ export default abstract class StatementParser extends ExpressionParser {
       maybeDefaultIdentifier,
     );
     const parseAfterDefault = !hasDefault || this.eat(tt.comma);
-    const hasStar =
-      parseAfterDefault &&
-      this.eatExportStar(
-        // @ts-expect-error todo(flow->ts)
-        node,
-      );
+    const hasStar = parseAfterDefault && this.eatExportStar(node);
     const hasNamespace =
-      hasStar &&
-      this.maybeParseExportNamespaceSpecifier(
-        // @ts-expect-error todo(flow->ts)
-        node,
-      );
+      hasStar && this.maybeParseExportNamespaceSpecifier(node);
     const parseAfterNamespace =
       parseAfterDefault && (!hasNamespace || this.eat(tt.comma));
     const isFromRequired = hasDefault || hasStar;
@@ -2346,15 +2335,12 @@ export default abstract class StatementParser extends ExpressionParser {
       if (decorators) {
         throw this.raise(Errors.UnsupportedDecoratorExport, node);
       }
-      this.parseExportFrom(node as Undone<N.ExportNamedDeclaration>, true);
+      this.parseExportFrom(node, true);
 
       return this.finishNode(node, "ExportAllDeclaration");
     }
 
-    const hasSpecifiers = this.maybeParseExportNamedSpecifiers(
-      // @ts-expect-error todo(flow->ts)
-      node,
-    );
+    const hasSpecifiers = this.maybeParseExportNamedSpecifiers(node);
 
     if (hasDefault && parseAfterDefault && !hasStar && !hasSpecifiers) {
       this.unexpected(null, tt.braceL);
@@ -2412,7 +2398,9 @@ export default abstract class StatementParser extends ExpressionParser {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  eatExportStar(node: N.Node): boolean {
+  eatExportStar(
+    node: Undone<N.Node>,
+  ): node is Undone<N.ExportNamedDeclaration | N.ExportAllDeclaration> {
     return this.eat(tt.star);
   }
 
@@ -2438,9 +2426,11 @@ export default abstract class StatementParser extends ExpressionParser {
     return false;
   }
 
-  maybeParseExportNamespaceSpecifier(node: N.Node): boolean {
+  maybeParseExportNamespaceSpecifier(
+    node: Undone<N.ExportNamedDeclaration | N.ExportAllDeclaration>,
+  ): node is Undone<N.ExportNamedDeclaration> {
     if (this.isContextual(tt._as)) {
-      if (!node.specifiers) node.specifiers = [];
+      (node as Undone<N.ExportNamedDeclaration>).specifiers ??= [];
 
       const specifier = this.startNodeAt<N.ExportNamespaceSpecifier>(
         this.state.lastTokStartLoc,
@@ -2449,7 +2439,7 @@ export default abstract class StatementParser extends ExpressionParser {
       this.next();
 
       specifier.exported = this.parseModuleExportName();
-      node.specifiers.push(
+      (node as Undone<N.ExportNamedDeclaration>).specifiers.push(
         this.finishNode(specifier, "ExportNamespaceSpecifier"),
       );
       return true;
@@ -2457,16 +2447,20 @@ export default abstract class StatementParser extends ExpressionParser {
     return false;
   }
 
-  maybeParseExportNamedSpecifiers(node: N.Node): boolean {
+  maybeParseExportNamedSpecifiers(
+    node: Undone<N.Node>,
+  ): node is Undone<N.ExportNamedDeclaration> {
     if (this.match(tt.braceL)) {
-      if (!node.specifiers) node.specifiers = [];
-      const isTypeExport = node.exportKind === "type";
-      node.specifiers.push(...this.parseExportSpecifiers(isTypeExport));
+      const node2 = node as Undone<N.ExportNamedDeclaration>;
 
-      node.source = null;
-      node.declaration = null;
+      if (!node2.specifiers) node2.specifiers = [];
+      const isTypeExport = node2.exportKind === "type";
+      node2.specifiers.push(...this.parseExportSpecifiers(isTypeExport));
+
+      node2.source = null;
+      node2.declaration = null;
       if (this.hasPlugin("importAssertions")) {
-        node.assertions = [];
+        node2.assertions = [];
       }
 
       return true;
@@ -2615,7 +2609,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
   parseExportFrom(
     this: Parser,
-    node: Undone<N.ExportNamedDeclaration>,
+    node: Undone<N.ExportNamedDeclaration | N.ExportAllDeclaration>,
     expect?: boolean,
   ): void {
     if (this.eatContextual(tt._from)) {
@@ -2666,7 +2660,11 @@ export default abstract class StatementParser extends ExpressionParser {
   }
 
   checkExport(
-    node: Undone<N.ExportNamedDeclaration | N.ExportDefaultDeclaration>,
+    node: Undone<
+      | N.ExportNamedDeclaration
+      | N.ExportAllDeclaration
+      | N.ExportDefaultDeclaration
+    >,
     checkNames?: boolean,
     isDefault?: boolean,
     isFrom?: boolean,
@@ -2712,18 +2710,19 @@ export default abstract class StatementParser extends ExpressionParser {
             }
           }
         }
-      } else if (node.declaration) {
+      } else if ((node as Undone<N.ExportNamedDeclaration>).declaration) {
+        const decl = (node as Undone<N.ExportNamedDeclaration>).declaration;
         // Exported declarations
         if (
-          node.declaration.type === "FunctionDeclaration" ||
-          node.declaration.type === "ClassDeclaration"
+          decl.type === "FunctionDeclaration" ||
+          decl.type === "ClassDeclaration"
         ) {
-          const id = node.declaration.id;
+          const { id } = decl;
           if (!id) throw new Error("Assertion failure");
 
           this.checkDuplicateExports(node, id.name);
-        } else if (node.declaration.type === "VariableDeclaration") {
-          for (const declaration of node.declaration.declarations) {
+        } else if (decl.type === "VariableDeclaration") {
+          for (const declaration of decl.declarations) {
             this.checkDeclaration(declaration.id);
           }
         }
@@ -3245,7 +3244,9 @@ export default abstract class StatementParser extends ExpressionParser {
   }
 
   maybeParseImportAttributes(
-    node: Undone<N.ImportDeclaration | N.ExportNamedDeclaration>,
+    node: Undone<
+      N.ImportDeclaration | N.ExportNamedDeclaration | N.ExportAllDeclaration
+    >,
   ) {
     let attributes: N.ImportAttribute[];
     let useWith = false;

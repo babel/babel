@@ -7,9 +7,7 @@ import type { ParseError } from "./parse-error.ts";
 /*
  * If making any changes to the AST, update:
  * - This repository:
- *   - This file
- *   - `ast` directory
- * - Babel repository:
+ *   - This file (including the `Node` alias at the bottom)
  *   - packages/babel-types/src/definitions
  *   - packages/babel-generators/src/generators
  */
@@ -55,13 +53,6 @@ export interface NodeBase {
   };
 }
 
-// Using a union type for `Node` makes type-checking too slow.
-// Instead, add an index signature to allow a Node to be treated as anything.
-// todo(flow->ts): this probably should be replaced with union
-export interface Node extends NodeBase {
-  type: string;
-  [key: string]: any;
-}
 type NodeAny<T extends string, KnownProps = {}> = NodeBase & {
   type: T;
   [key: string]: any;
@@ -647,7 +638,12 @@ export type BinaryOperator =
   | "in"
   | "instanceof";
 
-export type Assignable = Pattern | ParenthesizedExpression | MemberExpression;
+export type Assignable =
+  | Pattern
+  | MemberExpression
+  | ParenthesizedExpression
+  | TsTypeCastExpression
+  | TypeCastExpression;
 
 export interface AssignmentExpression extends NodeBase {
   type: "AssignmentExpression";
@@ -1105,6 +1101,7 @@ export interface ExportAllDeclaration extends NodeBase {
   source: Literal;
   exportKind?: "type" | "value"; // TODO: Not in spec,
   assertions?: ImportAttribute[];
+  attributes?: ImportAttribute[];
 }
 
 export interface PipelineTopicExpression extends NodeBase {
@@ -1142,6 +1139,7 @@ export type JSXFragment = NodeAny<"JSXFragment">;
 export type JSXElementTag = JSXOpeningElement | JSXClosingElement;
 export type JSXFragmentTag = JSXOpeningFragment | JSXClosingFragment;
 export type JSXTag = JSXElementTag | JSXFragmentTag;
+export type JSXText = NodeAny<"JSXText">;
 
 // Flow/TypeScript common (TODO: Not in spec)
 
@@ -1258,6 +1256,14 @@ export type FlowOpaqueType = NodeAny<"OpaqueType">;
 export type FlowObjectTypeIndexer = NodeAny<"ObjectTypeIndexer">;
 export type FlowObjectTypeInternalSlot = NodeAny<"ObjectTypeInternalSlot">;
 export type FlowEnumDeclaration = NodeAny<"EnumDeclaration">;
+export type FlowEnumBody = NodeAny<
+  "EnumBooleanBody" | "EnumNumberBody" | "EnumStringBody" | "EnumSymbolBody"
+>;
+export type FlowEnumMember =
+  | NodeAny<"EnumBooleanMember">
+  | NodeAny<"EnumNumberMember">
+  | NodeAny<"EnumStringMember">
+  | NodeAny<"EnumDefaultedMember">;
 export type FlowFunctionTypeAnnotation = NodeAny<"FunctionTypeAnnotation">;
 export type FlowObjectTypeProperty = NodeAny<"ObjectTypeProperty">;
 export type FlowObjectTypeSpreadProperty = NodeAny<"ObjectTypeSpreadProperty">;
@@ -1346,6 +1352,7 @@ export interface BigIntLiteralTypeAnnotation extends NodeBase {
 export interface EstreeLiteral extends NodeBase {
   type: "Literal";
   value: any;
+  decimal?: string;
 }
 
 interface EstreeRegExpLiteralRegex {
@@ -1364,8 +1371,9 @@ export interface EstreeBigIntLiteral extends EstreeLiteral {
 
 export interface EstreeProperty extends NodeBase {
   type: "Property";
+  method: boolean;
   shorthand: boolean;
-  key: Expression;
+  key: Expression | EstreePrivateIdentifier;
   computed: boolean;
   value: Expression;
   decorators: Decorator[];
@@ -1868,3 +1876,235 @@ export interface ParseClassMemberState {
   hadConstructor: boolean;
   hadSuperClass: boolean;
 }
+
+export type Node =
+  | ArgumentPlaceholder
+  | ArrayExpression
+  | ArrayPattern
+  | ArrowFunctionExpression
+  | AssignmentExpression
+  | AssignmentPattern
+  | AwaitExpression
+  | BigIntLiteral
+  | BigIntLiteralTypeAnnotation
+  | BinaryExpression
+  | BindExpression
+  | BlockStatement
+  | BooleanLiteral
+  | BooleanLiteralTypeAnnotation
+  | BreakStatement
+  | CallExpression
+  | CatchClause
+  | ClassAccessorProperty
+  | ClassBody
+  | ClassDeclaration
+  | ClassExpression
+  | ClassMethod
+  | ClassPrivateMethod
+  | ClassPrivateProperty
+  | ClassProperty
+  | ConditionalExpression
+  | ContinueStatement
+  | DebuggerStatement
+  | DecimalLiteral
+  | Decorator
+  | Directive
+  | DirectiveLiteral
+  | DoExpression
+  | DoWhileStatement
+  | EmptyStatement
+  | EstreeChainExpression
+  | EstreeLiteral
+  | EstreeMethodDefinition
+  | EstreePrivateIdentifier
+  | EstreeProperty
+  | EstreePropertyDefinition
+  | ExportAllDeclaration
+  | ExportDefaultDeclaration
+  | ExportDefaultSpecifier
+  | ExportNamedDeclaration
+  | ExportNamespaceSpecifier
+  | ExportSpecifier
+  | ExpressionStatement
+  | File
+  | FlowClassImplements
+  | FlowDeclareClass
+  | FlowDeclareExportDeclaration
+  | FlowDeclareFunction
+  | FlowDeclareInterface
+  | FlowDeclareModule
+  | FlowDeclareModuleExports
+  | FlowDeclareOpaqueType
+  | FlowDeclareTypeAlias
+  | FlowDeclareVariable
+  | FlowEnumBody
+  | FlowEnumDeclaration
+  | FlowEnumMember
+  | FlowFunctionTypeAnnotation
+  | FlowFunctionTypeParam
+  | FlowGenericTypeAnnotation
+  | FlowIndexedAccessType
+  | FlowInterface
+  | FlowInterfaceExtends
+  | FlowInterfaceType
+  | FlowObjectTypeAnnotation
+  | FlowObjectTypeCallProperty
+  | FlowObjectTypeIndexer
+  | FlowObjectTypeInternalSlot
+  | FlowObjectTypeProperty
+  | FlowObjectTypeSpreadProperty
+  | FlowOpaqueType
+  | FlowOptionalIndexedAccessType
+  | FlowOtherTypeAnnotation
+  | FlowPredicate
+  | FlowPredicate
+  | FlowQualifiedTypeIdentifier
+  | FlowTupleTypeAnnotation
+  | FlowTypeAlias
+  | FlowTypeofTypeAnnotation
+  | FlowVariance
+  | ForInStatement
+  | ForOfStatement
+  | ForStatement
+  | FunctionDeclaration
+  | FunctionExpression
+  | Identifier
+  | IfStatement
+  | Import
+  | ImportAttribute
+  | ImportDeclaration
+  | ImportDefaultSpecifier
+  | ImportExpression
+  | ImportExpression
+  | ImportNamespaceSpecifier
+  | ImportSpecifier
+  | InterpreterDirective
+  | JSXAttribute
+  | JSXClosingElement
+  | JSXClosingFragment
+  | JSXElement
+  | JSXEmptyExpression
+  | JSXExpressionContainer
+  | JSXFragment
+  | JSXIdentifier
+  | JSXMemberExpression
+  | JSXNamespacedName
+  | JSXOpeningElement
+  | JSXOpeningFragment
+  | JSXSpreadAttribute
+  | JSXSpreadChild
+  | JSXText
+  | LabeledStatement
+  | Literal
+  | LogicalExpression
+  | MemberExpression
+  | MetaProperty
+  | ModuleExpression
+  | NewExpression
+  | NullLiteral
+  | NumberLiteralTypeAnnotation
+  | NumericLiteral
+  | ObjectExpression
+  | ObjectMethod
+  | ObjectPattern
+  | ObjectProperty
+  | OptionalCallExpression
+  | OptionalMemberExpression
+  | ParenthesizedExpression
+  | PipelineBareAwaitedFunctionBody
+  | PipelineBareConstructorBody
+  | PipelineBareFunction
+  | PipelineBareFunctionBody
+  | PipelineBody
+  | PipelinePrimaryTopicReference
+  | PipelineTopicBody
+  | PipelineTopicExpression
+  | Placeholder
+  | PrivateName
+  | Program
+  | RecordExpression
+  | RegExpLiteral
+  | RestElement
+  | ReturnStatement
+  | SequenceExpression
+  | SpreadElement
+  | StaticBlock
+  | StringLiteral
+  | StringLiteralTypeAnnotation
+  | Super
+  | SwitchCase
+  | SwitchStatement
+  | TSDeclareFunction
+  | TSDeclareMethod
+  | TSInterfaceBody
+  | TSParameterProperty
+  | TaggedTemplateExpression
+  | TemplateElement
+  | TemplateLiteral
+  | ThisExpression
+  | ThrowStatement
+  | TopicReference
+  | TryStatement
+  | TsArrayType
+  | TsAsExpression
+  | TsCallSignatureDeclaration
+  | TsConditionalType
+  | TsConstructSignatureDeclaration
+  | TsConstructorType
+  | TsEnumDeclaration
+  | TsEnumMember
+  | TsExportAssignment
+  | TsExpressionWithTypeArguments
+  | TsExternalModuleReference
+  | TsFunctionType
+  | TsImportEqualsDeclaration
+  | TsImportType
+  | TsIndexSignature
+  | TsIndexedAccessType
+  | TsInferType
+  | TsInstantiationExpression
+  | TsInterfaceDeclaration
+  | TsIntersectionType
+  | TsKeywordType
+  | TsLiteralType
+  | TsMappedType
+  | TsMethodSignature
+  | TsModuleBlock
+  | TsModuleDeclaration
+  | TsNamedTupleMember
+  | TsNamespaceExportDeclaration
+  | TsNonNullExpression
+  | TsOptionalType
+  | TsParenthesizedType
+  | TsPropertySignature
+  | TsQualifiedName
+  | TsRestType
+  | TsSatisfiesExpression
+  | TsThisType
+  | TsTupleType
+  | TsTypeAliasDeclaration
+  | TsTypeAnnotation
+  | TsTypeAssertion
+  | TsTypeCastExpression
+  | TsTypeLiteral
+  | TsTypeOperator
+  | TsTypeParameter
+  | TsTypeParameterDeclaration
+  | TsTypeParameterInstantiation
+  | TsTypePredicate
+  | TsTypeQuery
+  | TsTypeReference
+  | TsUnionType
+  | TupleExpression
+  | TypeAnnotation
+  | TypeCastExpression
+  | TypeParameter
+  | TypeParameterDeclaration
+  | TypeParameterInstantiation
+  | UnaryExpression
+  | UpdateExpression
+  | VariableDeclaration
+  | VariableDeclarator
+  | WhileStatement
+  | WithStatement
+  | YieldExpression;

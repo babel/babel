@@ -480,13 +480,13 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
      */
     tsParseDelimitedListWorker<T extends N.Node>(
       kind: ParsingContext,
-      parseElement: () => T | undefined | null,
+      parseElement: () => T | undefined,
       expectSuccess: boolean,
       refTrailingCommaPos?: {
         value: number;
       },
-    ): T[] | undefined | null {
-      const result = [];
+    ): T[] | undefined {
+      const result: T[] = [];
       let trailingCommaPos = -1;
 
       for (;;) {
@@ -1333,16 +1333,13 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       node.typeAnnotation = this.tsParseTypeOperatorOrHigher();
 
       if (operator === "readonly") {
-        this.tsCheckTypeAnnotationForReadOnly(
-          // @ts-expect-error todo(flow->ts)
-          node,
-        );
+        this.tsCheckTypeAnnotationForReadOnly(node);
       }
 
       return this.finishNode(node, "TSTypeOperator");
     }
 
-    tsCheckTypeAnnotationForReadOnly(node: N.Node) {
+    tsCheckTypeAnnotationForReadOnly(node: Undone<N.TsTypeOperator>) {
       switch (node.typeAnnotation.type) {
         case "TSTupleType":
         case "TSArrayType":
@@ -2762,12 +2759,17 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     parseExport(
-      node: Undone<N.Node>,
+      node: Undone<
+        | N.ExportDefaultDeclaration
+        | N.ExportAllDeclaration
+        | N.ExportNamedDeclaration
+      >,
       decorators: N.Decorator[] | null,
     ): N.AnyExport {
       if (this.match(tt._import)) {
         // `export import A = B;`
         this.next(); // eat `tt._import`
+        const nodeImportEquals = node as Undone<N.TsImportEqualsDeclaration>;
         let maybeDefaultIdentifier: N.Identifier | null = null;
         if (
           this.isContextual(tt._type) &&
@@ -2775,14 +2777,14 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           this.isPotentialImportPhase(/* isExport */ false)
         ) {
           maybeDefaultIdentifier = this.parseMaybeImportPhase(
-            node as Undone<N.TsImportEqualsDeclaration>,
+            nodeImportEquals,
             /* isExport */ false,
           );
         } else {
-          node.importKind = "value";
+          nodeImportEquals.importKind = "value";
         }
         return this.tsParseImportEqualsDeclaration(
-          node as Undone<N.TsImportEqualsDeclaration>,
+          nodeImportEquals,
           maybeDefaultIdentifier,
           /* isExport */ true,
         );
@@ -3308,14 +3310,17 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     declareClassPrivateMethodInScope(
-      node: N.ClassPrivateMethod | N.EstreeMethodDefinition | N.TSDeclareMethod,
+      node: N.ClassPrivateMethod | N.TSDeclareMethod,
       kind: number,
     ) {
       if (node.type === "TSDeclareMethod") return;
       // This happens when using the "estree" plugin.
       if (
-        node.type === "MethodDefinition" &&
-        !Object.hasOwn(node.value, "body")
+        (node as N.Node).type === "MethodDefinition" &&
+        !Object.hasOwn(
+          (node as unknown as N.EstreeMethodDefinition).value,
+          "body",
+        )
       ) {
         return;
       }
@@ -3644,7 +3649,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           break;
         case "AssignmentExpression":
           if (!isLHS && node.left.type === "TSTypeCastExpression") {
-            node.left = this.typeCastToParameter(node.left);
+            node.left = this.typeCastToParameter(node.left) as N.Assignable;
           }
         /* fall through */
         default:
@@ -3652,7 +3657,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
     }
 
-    toAssignableParenthesizedExpression(node: N.Node, isLHS: boolean): void {
+    toAssignableParenthesizedExpression(
+      node: N.ParenthesizedExpression,
+      isLHS: boolean,
+    ): void {
       switch (node.expression.type) {
         case "TSAsExpression":
         case "TSSatisfiesExpression":

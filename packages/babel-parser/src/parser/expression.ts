@@ -117,7 +117,6 @@ export default abstract class ExpressionParser extends LValParser {
       prop.type === "SpreadElement" ||
       this.isObjectMethod(prop) ||
       prop.computed ||
-      // @ts-expect-error prop must be an ObjectProperty
       prop.shorthand
     ) {
       return;

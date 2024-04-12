@@ -17,7 +17,6 @@ import type {
   PrivateName,
   ObjectExpression,
   ObjectPattern,
-  ArrayExpression,
   ArrayPattern,
   AssignmentProperty,
   Assignable,
@@ -138,7 +137,7 @@ export default abstract class LValParser extends NodeUtils {
         break;
 
       case "ObjectExpression":
-        node.type = "ObjectPattern";
+        (node as Node).type = "ObjectPattern";
         for (
           let i = 0, length = node.properties.length, last = length - 1;
           i < length;
@@ -150,7 +149,7 @@ export default abstract class LValParser extends NodeUtils {
 
           if (
             isLast &&
-            prop.type === "RestElement" &&
+            (prop as Node).type === "RestElement" &&
             node.extra?.trailingCommaLoc
           ) {
             this.raise(Errors.RestTrailingComma, node.extra.trailingCommaLoc);
@@ -178,7 +177,7 @@ export default abstract class LValParser extends NodeUtils {
       }
 
       case "ArrayExpression":
-        node.type = "ArrayPattern";
+        (node as Node).type = "ArrayPattern";
         this.toAssignableList(
           node.elements,
           node.extra?.trailingCommaLoc,
@@ -191,7 +190,7 @@ export default abstract class LValParser extends NodeUtils {
           this.raise(Errors.MissingEqInAssignment, node.left.loc.end);
         }
 
-        node.type = "AssignmentPattern";
+        (node as Node).type = "AssignmentPattern";
         delete node.operator;
         this.toAssignable(node.left, isLHS);
         break;
@@ -220,7 +219,7 @@ export default abstract class LValParser extends NodeUtils {
         prop.key,
       );
     } else if (prop.type === "SpreadElement") {
-      prop.type = "RestElement";
+      (prop as Node).type = "RestElement";
       const arg = prop.argument;
       this.checkToRestConversion(arg, /* allowPattern */ false);
       this.toAssignable(arg, isLHS);
@@ -276,15 +275,13 @@ export default abstract class LValParser extends NodeUtils {
 
       case "ObjectExpression": {
         const last = node.properties.length - 1;
-        return (node.properties as ObjectExpression["properties"]).every(
-          (prop, i) => {
-            return (
-              prop.type !== "ObjectMethod" &&
-              (i === last || prop.type !== "SpreadElement") &&
-              this.isAssignable(prop)
-            );
-          },
-        );
+        return node.properties.every((prop, i) => {
+          return (
+            prop.type !== "ObjectMethod" &&
+            (i === last || prop.type !== "SpreadElement") &&
+            this.isAssignable(prop)
+          );
+        });
       }
 
       case "ObjectProperty":
@@ -294,7 +291,7 @@ export default abstract class LValParser extends NodeUtils {
         return this.isAssignable(node.argument);
 
       case "ArrayExpression":
-        return (node as ArrayExpression).elements.every(
+        return node.elements.every(
           element => element === null || this.isAssignable(element),
         );
 
