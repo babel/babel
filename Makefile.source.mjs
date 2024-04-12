@@ -52,16 +52,16 @@ function exec(executable, args, cwd, inheritStdio = true) {
       stdio: inheritStdio ? "inherit" : undefined,
       cwd: cwd && path.resolve(cwd),
       env: process.env,
-    });
+    }).stdout;
   } catch (error) {
-    if (inheritStdio && error.status !== 0) {
+    if (inheritStdio && error.exitCode !== 0) {
       console.error(
         new Error(
-          `\ncommand: ${executable} ${args.join(" ")}\ncode: ${error.status}`
+          `\ncommand: ${executable} ${args.join(" ")}\ncode: ${error.exitCode}`
         )
       );
       // eslint-disable-next-line no-process-exit
-      process.exit(error.status);
+      process.exit(error.exitCode);
     }
     throw error;
   }
