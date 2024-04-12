@@ -1,8 +1,8 @@
 import "shelljs/make.js";
 import path from "path";
-import { execFileSync } from "child_process";
 import { readFileSync, writeFileSync, readdirSync, existsSync } from "fs";
 import semver from "semver";
+import { execaSync } from "execa";
 
 /**
  * @type {import("shelljs")}
@@ -48,7 +48,7 @@ function exec(executable, args, cwd, inheritStdio = true) {
   );
 
   try {
-    return execFileSync(executable, args, {
+    return execaSync(executable, args, {
       stdio: inheritStdio ? "inherit" : undefined,
       cwd: cwd && path.resolve(cwd),
       env: process.env,
