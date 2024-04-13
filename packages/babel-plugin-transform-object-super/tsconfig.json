@@ -15,9 +15,6 @@
     },
     {
       "path": "../../packages/babel-helper-replace-supers"
-    },
-    {
-      "path": "../../packages/babel-core"
     }
   ]
 }

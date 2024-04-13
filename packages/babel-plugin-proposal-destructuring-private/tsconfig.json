@@ -21,9 +21,6 @@
     },
     {
       "path": "../../packages/babel-plugin-transform-parameters"
-    },
-    {
-      "path": "../../packages/babel-core"
     }
   ]
 }

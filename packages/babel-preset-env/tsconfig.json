@@ -14,15 +14,6 @@
       "path": "../../packages/babel-helper-plugin-utils"
     },
     {
-      "path": "../../packages/babel-compat-data"
-    },
-    {
-      "path": "../../packages/babel-core"
-    },
-    {
-      "path": "../../packages/babel-helper-validator-option"
-    },
-    {
       "path": "../../packages/babel-plugin-bugfix-firefox-class-in-computed-class-key"
     },
     {

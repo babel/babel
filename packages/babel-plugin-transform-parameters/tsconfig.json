@@ -12,9 +12,6 @@
   "references": [
     {
       "path": "../../packages/babel-helper-plugin-utils"
-    },
-    {
-      "path": "../../packages/babel-core"
     }
   ]
 }

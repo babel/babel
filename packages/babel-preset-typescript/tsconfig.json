@@ -14,9 +14,6 @@
       "path": "../../packages/babel-helper-plugin-utils"
     },
     {
-      "path": "../../packages/babel-helper-validator-option"
-    },
-    {
       "path": "../../packages/babel-plugin-syntax-jsx"
     },
     {
@@ -24,9 +21,6 @@
     },
     {
       "path": "../../packages/babel-plugin-transform-typescript"
-    },
-    {
-      "path": "../../packages/babel-core"
     }
   ]
 }

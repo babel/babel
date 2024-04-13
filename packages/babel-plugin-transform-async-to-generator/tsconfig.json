@@ -14,9 +14,6 @@
       "path": "../../packages/babel-helper-plugin-utils"
     },
     {
-      "path": "../../packages/babel-core"
-    },
-    {
       "path": "../../packages/babel-helper-remap-async-to-generator"
     }
   ]

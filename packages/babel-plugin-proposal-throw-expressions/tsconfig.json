@@ -15,9 +15,6 @@
     },
     {
       "path": "../../packages/babel-plugin-syntax-throw-expressions"
-    },
-    {
-      "path": "../../packages/babel-core"
     }
   ]
 }

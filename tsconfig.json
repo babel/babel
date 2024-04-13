@@ -18,66 +18,6 @@
       "path": "./packages/babel-cli"
     },
     {
-      "path": "./packages/babel-code-frame"
-    },
-    {
-      "path": "./packages/babel-compat-data"
-    },
-    {
-      "path": "./packages/babel-core"
-    },
-    {
-      "path": "./packages/babel-core"
-    },
-    {
-      "path": "./packages/babel-core"
-    },
-    {
-      "path": "./packages/babel-core"
-    },
-    {
-      "path": "./packages/babel-core"
-    },
-    {
-      "path": "./packages/babel-core"
-    },
-    {
-      "path": "./packages/babel-core"
-    },
-    {
-      "path": "./packages/babel-core"
-    },
-    {
-      "path": "./packages/babel-core"
-    },
-    {
-      "path": "./packages/babel-core"
-    },
-    {
-      "path": "./packages/babel-core"
-    },
-    {
-      "path": "./packages/babel-core"
-    },
-    {
-      "path": "./packages/babel-core"
-    },
-    {
-      "path": "./packages/babel-core"
-    },
-    {
-      "path": "./packages/babel-core"
-    },
-    {
-      "path": "./packages/babel-core"
-    },
-    {
-      "path": "./packages/babel-core"
-    },
-    {
-      "path": "./packages/babel-core"
-    },
-    {
       "path": "./packages/babel-helper-annotate-as-pure"
     },
     {
@@ -93,9 +33,6 @@
       "path": "./packages/babel-helper-create-regexp-features-plugin"
     },
     {
-      "path": "./packages/babel-helper-fixtures"
-    },
-    {
       "path": "./packages/babel-helper-import-to-platform-api"
     },
     {
@@ -103,6 +40,81 @@
     },
     {
       "path": "./packages/babel-helper-optimise-call-expression"
+    },
+    {
+      "path": "./packages/babel-helper-plugin-utils"
+    },
+    {
+      "path": "./packages/babel-helper-plugin-utils"
+    },
+    {
+      "path": "./packages/babel-helper-plugin-utils"
+    },
+    {
+      "path": "./packages/babel-helper-plugin-utils"
+    },
+    {
+      "path": "./packages/babel-helper-plugin-utils"
+    },
+    {
+      "path": "./packages/babel-helper-plugin-utils"
+    },
+    {
+      "path": "./packages/babel-helper-plugin-utils"
+    },
+    {
+      "path": "./packages/babel-helper-plugin-utils"
+    },
+    {
+      "path": "./packages/babel-helper-plugin-utils"
+    },
+    {
+      "path": "./packages/babel-helper-plugin-utils"
+    },
+    {
+      "path": "./packages/babel-helper-plugin-utils"
+    },
+    {
+      "path": "./packages/babel-helper-plugin-utils"
+    },
+    {
+      "path": "./packages/babel-helper-plugin-utils"
+    },
+    {
+      "path": "./packages/babel-helper-plugin-utils"
+    },
+    {
+      "path": "./packages/babel-helper-plugin-utils"
+    },
+    {
+      "path": "./packages/babel-helper-plugin-utils"
+    },
+    {
+      "path": "./packages/babel-helper-plugin-utils"
+    },
+    {
+      "path": "./packages/babel-helper-plugin-utils"
+    },
+    {
+      "path": "./packages/babel-helper-plugin-utils"
+    },
+    {
+      "path": "./packages/babel-helper-plugin-utils"
+    },
+    {
+      "path": "./packages/babel-helper-plugin-utils"
+    },
+    {
+      "path": "./packages/babel-helper-plugin-utils"
+    },
+    {
+      "path": "./packages/babel-helper-plugin-utils"
+    },
+    {
+      "path": "./packages/babel-helper-plugin-utils"
+    },
+    {
+      "path": "./packages/babel-helper-plugin-utils"
     },
     {
       "path": "./packages/babel-helper-plugin-utils"
@@ -117,19 +129,7 @@
       "path": "./packages/babel-helper-skip-transparent-expression-wrappers"
     },
     {
-      "path": "./packages/babel-helper-string-parser"
-    },
-    {
-      "path": "./packages/babel-helper-validator-identifier"
-    },
-    {
-      "path": "./packages/babel-helper-validator-option"
-    },
-    {
       "path": "./packages/babel-helper-wrap-function"
-    },
-    {
-      "path": "./packages/babel-highlight"
     },
     {
       "path": "./packages/babel-node"

@@ -15,9 +15,6 @@
     },
     {
       "path": "../../packages/babel-register"
-    },
-    {
-      "path": "../../packages/babel-core"
     }
   ]
 }

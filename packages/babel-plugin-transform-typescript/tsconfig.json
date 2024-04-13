@@ -21,9 +21,6 @@
     },
     {
       "path": "../../packages/babel-plugin-syntax-typescript"
-    },
-    {
-      "path": "../../packages/babel-core"
     }
   ]
 }

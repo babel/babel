@@ -15,9 +15,6 @@
     },
     {
       "path": "../../packages/babel-plugin-syntax-pipeline-operator"
-    },
-    {
-      "path": "../../packages/babel-core"
     }
   ]
 }

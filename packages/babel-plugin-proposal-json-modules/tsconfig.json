@@ -18,9 +18,6 @@
     },
     {
       "path": "../../packages/babel-plugin-syntax-import-attributes"
-    },
-    {
-      "path": "../../packages/babel-core"
     }
   ]
 }
