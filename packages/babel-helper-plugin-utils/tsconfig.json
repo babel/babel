@@ -33,7 +33,7 @@
     "../../packages/babel-types/src/**/*.ts",
     "../../lib/globals.d.ts",
     "../../scripts/repo-utils/*.d.ts",
-    "./packages/babel-parser/typings/*.d.ts"
+    "../../packages/babel-parser/typings/*.d.ts"
   ],
   "references": []
 }

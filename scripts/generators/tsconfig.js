@@ -236,7 +236,7 @@ function buildTSConfig(pkgs, allDeps) {
           "../../lib/globals.d.ts",
           "../../scripts/repo-utils/*.d.ts",
           pkgs.some(p => p.name === "@babel/parser")
-            ? "./packages/babel-parser/typings/*.d.ts"
+            ? "../../packages/babel-parser/typings/*.d.ts"
             : null,
         ].filter(Boolean)
       ),
