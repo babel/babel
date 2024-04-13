@@ -96,7 +96,8 @@ function getTsPkgs(subRoot) {
         ...Object.keys(packageJSON.dependencies ?? {}),
         ...Object.keys(packageJSON.devDependencies ?? {}).filter(
           n =>
-            !n.startsWith("@babel/plugin-") && !n.startsWith("@babel/preset-")
+            name === "@babel/standalone" ||
+            (!n.startsWith("@babel/plugin-") && !n.startsWith("@babel/preset-"))
         ),
         ...Object.keys(packageJSON.peerDependencies ?? {}),
       ]);

@@ -12,6 +12,321 @@
   "references": [
     {
       "path": "../../packages/babel-helper-plugin-utils"
+    },
+    {
+      "path": "../../packages/babel-plugin-external-helpers"
+    },
+    {
+      "path": "../../packages/babel-plugin-proposal-decorators"
+    },
+    {
+      "path": "../../packages/babel-plugin-proposal-destructuring-private"
+    },
+    {
+      "path": "../../packages/babel-plugin-proposal-do-expressions"
+    },
+    {
+      "path": "../../packages/babel-plugin-proposal-duplicate-named-capturing-groups-regex"
+    },
+    {
+      "path": "../../packages/babel-plugin-proposal-explicit-resource-management"
+    },
+    {
+      "path": "../../packages/babel-plugin-proposal-export-default-from"
+    },
+    {
+      "path": "../../packages/babel-plugin-proposal-function-bind"
+    },
+    {
+      "path": "../../packages/babel-plugin-proposal-function-sent"
+    },
+    {
+      "path": "../../packages/babel-plugin-proposal-import-defer"
+    },
+    {
+      "path": "../../packages/babel-plugin-proposal-json-modules"
+    },
+    {
+      "path": "../../packages/babel-plugin-proposal-optional-chaining-assign"
+    },
+    {
+      "path": "../../packages/babel-plugin-proposal-pipeline-operator"
+    },
+    {
+      "path": "../../packages/babel-plugin-proposal-record-and-tuple"
+    },
+    {
+      "path": "../../packages/babel-plugin-proposal-regexp-modifiers"
+    },
+    {
+      "path": "../../packages/babel-plugin-proposal-throw-expressions"
+    },
+    {
+      "path": "../../packages/babel-plugin-syntax-decimal"
+    },
+    {
+      "path": "../../packages/babel-plugin-syntax-decorators"
+    },
+    {
+      "path": "../../packages/babel-plugin-syntax-destructuring-private"
+    },
+    {
+      "path": "../../packages/babel-plugin-syntax-do-expressions"
+    },
+    {
+      "path": "../../packages/babel-plugin-syntax-explicit-resource-management"
+    },
+    {
+      "path": "../../packages/babel-plugin-syntax-export-default-from"
+    },
+    {
+      "path": "../../packages/babel-plugin-syntax-flow"
+    },
+    {
+      "path": "../../packages/babel-plugin-syntax-function-bind"
+    },
+    {
+      "path": "../../packages/babel-plugin-syntax-function-sent"
+    },
+    {
+      "path": "../../packages/babel-plugin-syntax-import-assertions"
+    },
+    {
+      "path": "../../packages/babel-plugin-syntax-import-attributes"
+    },
+    {
+      "path": "../../packages/babel-plugin-syntax-import-reflection"
+    },
+    {
+      "path": "../../packages/babel-plugin-syntax-jsx"
+    },
+    {
+      "path": "../../packages/babel-plugin-syntax-module-blocks"
+    },
+    {
+      "path": "../../packages/babel-plugin-syntax-optional-chaining-assign"
+    },
+    {
+      "path": "../../packages/babel-plugin-syntax-pipeline-operator"
+    },
+    {
+      "path": "../../packages/babel-plugin-syntax-record-and-tuple"
+    },
+    {
+      "path": "../../packages/babel-plugin-syntax-typescript"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-arrow-functions"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-async-generator-functions"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-async-to-generator"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-block-scoped-functions"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-block-scoping"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-class-properties"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-class-static-block"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-classes"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-computed-properties"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-destructuring"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-dotall-regex"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-duplicate-keys"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-dynamic-import"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-exponentiation-operator"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-export-namespace-from"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-flow-comments"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-flow-strip-types"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-for-of"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-function-name"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-instanceof"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-jscript"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-json-strings"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-literals"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-logical-assignment-operators"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-member-expression-literals"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-modules-amd"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-modules-commonjs"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-modules-systemjs"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-modules-umd"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-named-capturing-groups-regex"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-new-target"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-nullish-coalescing-operator"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-numeric-separator"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-object-assign"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-object-rest-spread"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-object-set-prototype-of-to-assign"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-object-super"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-optional-catch-binding"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-optional-chaining"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-parameters"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-private-methods"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-private-property-in-object"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-property-literals"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-property-mutators"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-proto-to-assign"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-react-constant-elements"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-react-display-name"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-react-inline-elements"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-react-jsx"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-react-jsx-compat"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-react-jsx-development"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-react-jsx-self"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-react-jsx-source"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-regenerator"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-reserved-words"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-runtime"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-shorthand-properties"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-spread"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-sticky-regex"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-strict-mode"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-template-literals"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-typeof-symbol"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-typescript"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-unicode-escapes"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-unicode-property-regex"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-unicode-regex"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-unicode-sets-regex"
+    },
+    {
+      "path": "../../packages/babel-preset-env"
+    },
+    {
+      "path": "../../packages/babel-preset-flow"
+    },
+    {
+      "path": "../../packages/babel-preset-react"
+    },
+    {
+      "path": "../../packages/babel-preset-typescript"
     }
   ]
 }
