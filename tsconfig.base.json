@@ -1,9 +1,12 @@
 {
   "compilerOptions": {
+    "composite": true,
+    "rootDir": ".",
     "target": "ESNext",
     "module": "preserve",
     "lib": ["ESNext"],
     "declaration": true,
+    "declarationMap": true,
     "emitDeclarationOnly": true,
     "declarationDir": "./dts",
     "moduleResolution": "Bundler",
