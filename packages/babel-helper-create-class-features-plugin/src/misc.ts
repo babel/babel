@@ -54,6 +54,9 @@ function handleClassTDZ(
 
 const classFieldDefinitionEvaluationTDZVisitor: Visitor<HandleClassTDZState> = {
   ReferencedIdentifier: handleClassTDZ,
+  Function(path) {
+    path.skip();
+  },
 };
 
 interface RenamerState {
