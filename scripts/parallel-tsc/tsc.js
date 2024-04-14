@@ -113,8 +113,6 @@ class Pool {
     }
     this.#pending = this.#pending.filter((_, i) => !toRemove.has(i));
 
-    console.log(`RUN node ${this.#filename} -b ${tasks.join(" ")}`);
-
     const taskProcess = cp.fork(this.#filename, ["-b", ...tasks, "--pretty"], {
       stdio: this.#showOutput(tasks) ? "inherit" : "ignore",
     });
