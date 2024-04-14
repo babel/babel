@@ -337,25 +337,18 @@ type Split<P extends string> =
     ? [MaybeToIndex<O>, ...Split<U>]
     : [MaybeToIndex<P>];
 
-// get all K with Node[K] is t.Node | t.Node[]
-type NodeKeyOf<Node extends t.Node | t.Node[]> = keyof Pick<
-  Node,
-  {
-    [Key in keyof Node]-?: Node[Key] extends t.Node | t.Node[] ? Key : never;
-  }[keyof Node]
->;
-
 // traverse the Node with tuple path ["body", "body", 1]
 // Path should be created with Split
 type Trav<
   Node extends t.Node | t.Node[],
   Path extends unknown[],
 > = Path extends [infer K, ...infer R]
-  ? K extends NodeKeyOf<Node>
-    ? R extends []
-      ? Node[K]
-      : // @ts-expect-error ignore since TS is not smart enough
-        Trav<Node[K], R>
+  ? K extends keyof Node
+    ? Node[K] extends t.Node | t.Node[]
+      ? R extends []
+        ? Node[K]
+        : Trav<Node[K], R>
+      : never
     : never
   : never;
 

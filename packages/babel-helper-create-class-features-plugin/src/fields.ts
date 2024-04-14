@@ -202,7 +202,7 @@ export interface PrivateNameVisitorState<V> {
 // class redeclares the same private name, it will hand off traversal to the
 // restricted visitor (which doesn't traverse the inner class's inner scope).
 export function privateNameVisitorFactory<S, V>(
-  visitor: Visitor<PrivateNameVisitorState<V> & S>,
+  visitor: Visitor<PrivateNameVisitorState<V & PrivateNameMetadata> & S>,
 ) {
   // Traverses the outer portion of a class, without touching the class's inner
   // scope, for private names.
@@ -211,9 +211,8 @@ export function privateNameVisitorFactory<S, V>(
     environmentVisitor,
   ]);
 
-  // @ts-expect-error: TS2590: Expression produces a union type that is too complex to represent.
   const privateNameVisitor: Visitor<
-    PrivateNameVisitorState<PrivateNameMetadata> & S
+    PrivateNameVisitorState<V & PrivateNameMetadata> & S
   > = {
     ...visitor,
 
