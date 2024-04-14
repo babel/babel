@@ -295,6 +295,7 @@ target["prepublish-build-standalone"] = function () {
 };
 
 target["prepublish-prepare-dts"] = function () {
+  target["clean-ts"]();
   target["tscheck"]();
 
   yarn(["gulp", "bundle-dts"]);
@@ -304,11 +305,14 @@ target["prepublish-prepare-dts"] = function () {
 
 target["tscheck"] = function () {
   target["generate-tsconfig"]();
-
-  // ts doesn't generate declaration files after we remove the output directory by manually when incremental==true
-  shell.rm("-rf", "tsconfig.tsbuildinfo");
-  shell.rm("-rf", "dts");
   yarn(["tsc", "-b", "."]);
+};
+
+target["clean-ts"] = function () {
+  // ts doesn't generate declaration files after we remove the output directory manually when incremental==true
+  shell.rm("-rf", "tsconfig.tsbuildinfo");
+  shell.rm("-rf", "*/*/tsconfig.tsbuildinfo");
+  shell.rm("-rf", "dts");
 };
 
 target["generate-tsconfig"] = function () {

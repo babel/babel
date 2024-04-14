@@ -944,6 +944,8 @@ __metadata:
 "@babel/helper-plugin-utils@workspace:^, @babel/helper-plugin-utils@workspace:packages/babel-helper-plugin-utils":
   version: 0.0.0-use.local
   resolution: "@babel/helper-plugin-utils@workspace:packages/babel-helper-plugin-utils"
+  dependencies:
+    "@babel/core": "workspace:^"
   languageName: unknown
   linkType: soft
 

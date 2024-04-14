@@ -60,6 +60,9 @@ code-quality: tscheck lint
 tscheck:
 	$(MAKEJS) tscheck
 
+clean-ts:
+	$(MAKEJS) clean-ts
+
 lint-ci: lint check-compat-data
 
 generate-readme:
