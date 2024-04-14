@@ -294,6 +294,7 @@ fs.writeFileSync(
     JSON.stringify(
       {
         extends: ["./tsconfig.base.json", "./tsconfig.paths.json"],
+        include: [],
         references: Array.from(projectsFolders.values())
           .sort()
           .map(path => ({ path })),

@@ -4,6 +4,7 @@
     "./tsconfig.base.json",
     "./tsconfig.paths.json"
   ],
+  "include": [],
   "references": [
     {
       "path": "./codemods/babel-plugin-codemod-object-assign-to-object-spread"
