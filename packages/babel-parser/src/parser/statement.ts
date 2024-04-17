@@ -426,7 +426,7 @@ export default abstract class StatementParser extends ExpressionParser {
     flags: ParseStatementFlag,
     decorators?: N.Decorator[] | null,
   ): N.Statement {
-    const starttype = this.state.type;
+    const startType = this.state.type;
     const node = this.startNode();
     const allowDeclaration = !!(flags & ParseStatementFlag.AllowDeclaration);
     const allowFunctionDeclaration = !!(
@@ -438,7 +438,7 @@ export default abstract class StatementParser extends ExpressionParser {
     // start with. Many are trivial to parse, some require a bit of
     // complexity.
 
-    switch (starttype) {
+    switch (startType) {
       case tt._break:
         return this.parseBreakContinueStatement(node, /* isBreak */ true);
       case tt._continue:
@@ -578,7 +578,7 @@ export default abstract class StatementParser extends ExpressionParser {
         this.next(); // eat `import`/`export`
 
         let result;
-        if (starttype === tt._import) {
+        if (startType === tt._import) {
           result = this.parseImport(node as Undone<N.ImportDeclaration>);
 
           if (
@@ -640,7 +640,7 @@ export default abstract class StatementParser extends ExpressionParser {
     const expr = this.parseExpression();
 
     if (
-      tokenIsIdentifier(starttype) &&
+      tokenIsIdentifier(startType) &&
       expr.type === "Identifier" &&
       this.eat(tt.colon)
     ) {

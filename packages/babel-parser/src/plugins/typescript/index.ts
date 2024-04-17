@@ -1,5 +1,3 @@
-/*:: declare var invariant; */
-
 import type State from "../../tokenizer/state.ts";
 import {
   tokenIsIdentifier,
