@@ -52,7 +52,12 @@ export default abstract class UtilParser extends Tokenizer {
   ): void {
     if (!node) return;
 
-    const extra = (node.extra = node.extra || {});
+    let { extra } = node;
+    if (extra == null) {
+      extra = {};
+      node.extra = extra;
+    }
+
     if (enumerable) {
       extra[key] = value;
     } else {
