@@ -1,10 +1,8 @@
 import type { Options } from "./options.ts";
 import {
-  hasPlugin,
   validatePlugins,
   mixinPluginNames,
   mixinPlugins,
-  type PluginList,
 } from "./plugin-utils.ts";
 import type {
   PluginConfig as ParserPlugin,
@@ -12,7 +10,7 @@ import type {
   RecordAndTuplePluginOptions,
   PipelineOperatorPluginOptions,
 } from "./typings.ts";
-import Parser from "./parser/index.ts";
+import Parser, { type PluginsMap } from "./parser/index.ts";
 
 import type { ExportedTokenType } from "./tokenizer/types.ts";
 import {
@@ -91,33 +89,43 @@ export const tokTypes = generateExportedTokenTypes(internalTokenTypes);
 
 function getParser(options: Options | undefined | null, input: string): Parser {
   let cls = Parser;
+  const pluginsMap: PluginsMap = new Map();
   if (options?.plugins) {
-    validatePlugins(options.plugins);
-    cls = getParserClass(options.plugins);
+    for (const plugin of options.plugins) {
+      if (typeof plugin === "string") {
+        pluginsMap.set(plugin, {});
+      } else {
+        pluginsMap.set(plugin[0], plugin[1] || {});
+      }
+    }
+    validatePlugins(options.plugins, pluginsMap);
+    cls = getParserClass(pluginsMap);
   }
 
-  return new cls(options, input);
+  return new cls(options, input, pluginsMap);
 }
 
-const parserClassCache: { [key: string]: { new (...args: any): Parser } } = {};
+const parserClassCache = new Map<string, { new (...args: any): Parser }>();
 
 /** Get a Parser class with plugins applied. */
-function getParserClass(pluginsFromOptions: PluginList): {
+function getParserClass(pluginsMap: Map<string, any>): {
   new (...args: any): Parser;
 } {
-  const pluginList = mixinPluginNames.filter(name =>
-    hasPlugin(pluginsFromOptions, name),
-  );
-
-  const key = pluginList.join("/");
-  let cls = parserClassCache[key];
+  const pluginList = [];
+  for (const name of mixinPluginNames) {
+    if (pluginsMap.has(name)) {
+      pluginList.push(name);
+    }
+  }
+  const key = pluginList.join("|");
+  let cls = parserClassCache.get(key);
   if (!cls) {
     cls = Parser;
     for (const plugin of pluginList) {
       // @ts-expect-error todo(flow->ts)
       cls = mixinPlugins[plugin](cls);
     }
-    parserClassCache[key] = cls;
+    parserClassCache.set(key, cls);
   }
   return cls;
 }
