@@ -2,7 +2,7 @@ import * as charCodes from "charcodes";
 
 // Matches a whole line break (where CRLF is considered a single
 // line break). Used to count lines.
-export const lineBreak = /\r\n?|[\n\u2028\u2029]/;
+export const lineBreak = /\r\n|[\r\n\u2028\u2029]/;
 export const lineBreakG = new RegExp(lineBreak.source, "g");
 
 // https://tc39.github.io/ecma262/#sec-line-terminators
@@ -17,6 +17,15 @@ export function isNewLine(code: number): boolean {
     default:
       return false;
   }
+}
+
+export function hasNewLine(input: string, start: number, end: number): boolean {
+  for (let i = start; i < end; i++) {
+    if (isNewLine(input.charCodeAt(i))) {
+      return true;
+    }
+  }
+  return false;
 }
 
 export const skipWhiteSpace = /(?:\s|\/\/.*|\/\*[^]*?\*\/)*/g;

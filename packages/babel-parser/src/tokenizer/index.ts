@@ -325,7 +325,6 @@ export default abstract class Tokenizer extends CommentsParser {
     // If we are doing a lookahead right now we need to advance the position (above code)
     // but we do not want to push the comment to the state.
     if (this.isLookahead) return;
-    /*:: invariant(startLoc) */
 
     const end = this.state.pos;
     const value = this.input.slice(start + startSkip, end);
