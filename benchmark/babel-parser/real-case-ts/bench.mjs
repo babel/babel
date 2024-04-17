@@ -29,8 +29,8 @@ function benchCases(name, implementation, options) {
   }
 }
 
-benchCases("current", current.parse);
 benchCases("baseline", baseline.parse);
+benchCases("current", current.parse);
 benchCases("current", current.parse);
 benchCases("baseline", baseline.parse);
 

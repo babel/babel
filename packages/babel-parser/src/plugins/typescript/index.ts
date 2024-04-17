@@ -30,9 +30,6 @@ import type { Expression } from "../../types.ts";
 import type { IJSXParserMixin } from "../jsx/index.ts";
 import { ParseBindingListFlags } from "../../parser/lval.ts";
 
-const getOwn = <T extends {}>(object: T, key: keyof T) =>
-  Object.hasOwn(object, key) && object[key];
-
 type TsModifier =
   | "readonly"
   | "abstract"
@@ -2510,7 +2507,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           if (tokenIsTemplate(this.state.type)) {
             const result = super.parseTaggedTemplateExpression(
               base,
-
               startLoc,
               state,
             );
@@ -3699,25 +3695,21 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       isUnparenthesizedInAssign: boolean,
       binding: BindingFlag,
     ) {
-      return (
-        getOwn(
-          {
-            // Allow "typecasts" to appear on the left of assignment expressions,
-            // because it may be in an arrow function.
-            // e.g. `const f = (foo: number = 0) => foo;`
-            TSTypeCastExpression: true,
-            TSParameterProperty: "parameter",
-            TSNonNullExpression: "expression",
-            TSAsExpression: (binding !== BindingFlag.TYPE_NONE ||
-              !isUnparenthesizedInAssign) && ["expression", true],
-            TSSatisfiesExpression: (binding !== BindingFlag.TYPE_NONE ||
-              !isUnparenthesizedInAssign) && ["expression", true],
-            TSTypeAssertion: (binding !== BindingFlag.TYPE_NONE ||
-              !isUnparenthesizedInAssign) && ["expression", true],
-          },
-          type,
-        ) || super.isValidLVal(type, isUnparenthesizedInAssign, binding)
-      );
+      switch (type) {
+        case "TSTypeCastExpression":
+          return true;
+        case "TSParameterProperty":
+          return "parameter";
+        case "TSNonNullExpression":
+          return "expression";
+        case "TSAsExpression":
+        case "TSSatisfiesExpression":
+        case "TSTypeAssertion":
+          return (
+            (binding !== BindingFlag.TYPE_NONE ||
+              !isUnparenthesizedInAssign) && ["expression", true]
+          );
+      }
     }
 
     parseBindingAtom(): N.Pattern {

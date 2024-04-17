@@ -32,9 +32,6 @@ import type { ExpressionErrors } from "./util.ts";
 import { Errors, type LValAncestor } from "../parse-error.ts";
 import type Parser from "./index.ts";
 
-const getOwn = <T extends {}>(object: T, key: keyof T) =>
-  Object.hasOwn(object, key) && object[key];
-
 const unwrapParenthesizedExpression = (node: Node): Node => {
   return node.type === "ParenthesizedExpression"
     ? unwrapParenthesizedExpression(node.expression)
@@ -544,18 +541,21 @@ export default abstract class LValParser extends NodeUtils {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     binding: BindingFlag,
   ): string | boolean {
-    return getOwn(
-      {
-        AssignmentPattern: "left",
-        RestElement: "argument",
-        ObjectProperty: "value",
-        ParenthesizedExpression: "expression",
-        ArrayPattern: "elements",
-        ObjectPattern: "properties",
-      },
-      // @ts-expect-error refine string to enum
-      type,
-    );
+    switch (type) {
+      case "AssignmentPattern":
+        return "left";
+      case "RestElement":
+        return "argument";
+      case "ObjectProperty":
+        return "value";
+      case "ParenthesizedExpression":
+        return "expression";
+      case "ArrayPattern":
+        return "elements";
+      case "ObjectPattern":
+        return "properties";
+    }
+    return false;
   }
 
   // Overridden by the estree plugin
