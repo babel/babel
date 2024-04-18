@@ -340,7 +340,9 @@ async function run(task: Test) {
       babel.transformAsync(inputCode, getOpts(actual)),
     ));
 
-    const outputCode = normalizeOutput(result.code);
+    const outputCode = normalizeOutput(result.code, {
+      normalizePathSeparator: true,
+    });
 
     checkDuplicateNodes(result.ast);
     if (!ignoreOutput) {
@@ -469,31 +471,29 @@ function normalizeOutput(
   code: string,
   { normalizePathSeparator = false, normalizePresetEnvDebug = false } = {},
 ) {
-  const projectRoot = path.resolve(
+  const dir = path.resolve(
     path.dirname(fileURLToPath(import.meta.url)),
     "../../../",
   );
-  const cwdSymbol = "<CWD>";
+  const symbol = "<CWD>";
   let result = code
     .trim()
     // (non-win32) /foo/babel/packages -> <CWD>/packages
     // (win32) C:\foo\babel\packages -> <CWD>\packages
-    .replace(new RegExp(escapeRegExp(projectRoot), "g"), cwdSymbol);
+    .replace(new RegExp(escapeRegExp(dir), "g"), symbol);
   if (process.platform === "win32") {
     result = result
       // C:/foo/babel/packages -> <CWD>/packages
-      .replace(
-        new RegExp(escapeRegExp(projectRoot.replace(/\\/g, "/")), "g"),
-        cwdSymbol,
-      )
+      .replace(new RegExp(escapeRegExp(dir.replace(/\\/g, "/")), "g"), symbol)
       // C:\\foo\\babel\\packages -> <CWD>\\packages (in js string literal)
       .replace(
-        new RegExp(escapeRegExp(projectRoot.replace(/\\/g, "\\\\")), "g"),
-        cwdSymbol,
+        new RegExp(escapeRegExp(dir.replace(/\\/g, "\\\\")), "g"),
+        symbol,
       );
     if (normalizePathSeparator) {
-      result = result.replace(/<CWD>[\w\\/.-]+/g, path =>
-        path.replace(/\\\\?/g, "/"),
+      result = result.replace(
+        new RegExp(`${escapeRegExp(symbol)}[\\w\\\\/.-]+`, "g"),
+        path => path.replace(/\\\\?/g, "/"),
       );
     }
   }
