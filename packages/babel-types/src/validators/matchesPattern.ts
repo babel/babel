@@ -24,7 +24,7 @@ export default function matchesPattern(
   const parts = Array.isArray(match) ? match : match.split(".");
   const nodes = [member.property];
 
-  let node = member.object;
+  let node: t.Node = member.object;
   for (; isMemberExpression(node); node = node.object) {
     nodes.push(node.property);
   }
