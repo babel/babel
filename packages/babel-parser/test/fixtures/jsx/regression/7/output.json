@@ -35,7 +35,8 @@
                   "start":8,"end":60,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":3,"column":15,"index":60}},
                   "extra": {
                     "rawValue": "M230 80\n\t\tA 45 45, 0, 1, 0, 275 125\n    L 275 80 Z",
-                    "raw": "\"M230 80\n\t\tA 45 45, 0, 1, 0, 275 125\n    L 275 80 Z\""
+                    "raw": "\"M230 80\n\t\tA 45 45, 0, 1, 0, 275 125\n    L 275 80 Z\"",
+                    "jsx": true
                   },
                   "value": "M230 80\n\t\tA 45 45, 0, 1, 0, 275 125\n    L 275 80 Z"
                 }

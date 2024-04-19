@@ -35,7 +35,8 @@
                   "start":16,"end":31,"loc":{"start":{"line":2,"column":7,"index":16},"end":{"line":2,"column":22,"index":31}},
                   "extra": {
                     "rawValue": "&&",
-                    "raw": "\"&#x0026;&#38;\""
+                    "raw": "\"&#x0026;&#38;\"",
+                    "jsx": true
                   },
                   "value": "&&"
                 }

@@ -44,7 +44,8 @@
                   "start":21,"end":32,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":32,"index":32}},
                   "extra": {
                     "rawValue": "attribute",
-                    "raw": "\"attribute\""
+                    "raw": "\"attribute\"",
+                    "jsx": true
                   },
                   "value": "attribute"
                 }
