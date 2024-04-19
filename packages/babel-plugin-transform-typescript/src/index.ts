@@ -282,7 +282,9 @@ export default declare((api, opts: Options) => {
           }
 
           // remove type imports
-          for (let stmt of path.get("body")) {
+          for (let stmt of path.get("body") as Iterable<
+            NodePath<t.Statement | t.Expression>
+          >) {
             if (stmt.isImportDeclaration()) {
               if (!NEEDS_EXPLICIT_ESM.has(state.file.ast.program)) {
                 NEEDS_EXPLICIT_ESM.set(state.file.ast.program, true);

@@ -289,7 +289,10 @@ export default declare((api, opts: Options) => {
         container.push(declar);
       } else {
         parentPath.ensureBlock();
-        parentPath.get("body").unshiftContainer("body", declar);
+        (parentPath.get("body") as NodePath<t.BlockStatement>).unshiftContainer(
+          "body",
+          declar,
+        );
       }
       paramPath.replaceWith(t.cloneNode(uid));
     }
@@ -575,7 +578,7 @@ export default declare((api, opts: Options) => {
           ]);
 
           path.ensureBlock();
-          const body = path.node.body;
+          const body = path.node.body as t.BlockStatement;
 
           if (body.body.length === 0 && path.isCompletionRecord()) {
             body.body.unshift(

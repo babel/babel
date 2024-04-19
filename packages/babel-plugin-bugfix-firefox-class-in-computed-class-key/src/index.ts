@@ -93,7 +93,10 @@ export default declare(({ types: t, traverse, assertVersion }) => {
             elem.node.computed &&
             containsClassExpression(elem.get("key"))
           ) {
-            wrap(elem.get("key"));
+            wrap(
+              // @ts-expect-error .key also includes t.PrivateName
+              elem.get("key") satisfies NodePath<t.Expression>,
+            );
           }
         }
       },

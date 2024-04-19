@@ -76,7 +76,9 @@ function disallowConstantViolations(
             t.variableDeclarator(violation.scope.generateUidIdentifier(name)),
           ]),
         );
-      violation.node.body.body.unshift(t.expressionStatement(throwNode));
+      (violation.node.body as t.BlockStatement).body.unshift(
+        t.expressionStatement(throwNode),
+      );
     }
   }
 }

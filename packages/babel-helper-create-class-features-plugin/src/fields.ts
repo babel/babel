@@ -1593,7 +1593,7 @@ export function buildFieldsInitNodes(
     // this maybe a bug for ts
     switch (true) {
       case isStaticBlock: {
-        const blockBody = (prop.node as t.StaticBlock).body;
+        const blockBody = prop.node.body;
         // We special-case the single expression case to avoid the iife, since
         // it's common.
         if (blockBody.length === 1 && t.isExpressionStatement(blockBody[0])) {
@@ -1640,16 +1640,13 @@ export function buildFieldsInitNodes(
         // It might still be possible to a computed static fields whose resulting
         // key is "name" or "length", but the assumption is telling us that it's
         // not going to happen.
-        // @ts-expect-error checked in switch
         if (!isNameOrLength(prop.node)) {
-          // @ts-expect-error checked in switch
           staticNodes.push(buildPublicFieldInitLoose(t.cloneNode(ref), prop));
           break;
         }
       // falls through
       case isStatic && isPublic && isField && !setPublicClassFields:
         staticNodes.push(
-          // @ts-expect-error checked in switch
           buildPublicFieldInitSpec(t.cloneNode(ref), prop, file),
         );
         break;
@@ -1681,7 +1678,6 @@ export function buildFieldsInitNodes(
         instanceNodes.unshift(
           buildPrivateMethodInitLoose(
             t.thisExpression(),
-            // @ts-expect-error checked in switch
             prop,
             privateNamesMap,
           ),
@@ -1689,7 +1685,6 @@ export function buildFieldsInitNodes(
         pureStaticNodes.push(
           buildPrivateMethodDeclaration(
             file,
-            // @ts-expect-error checked in switch
             prop,
             privateNamesMap,
             privateFieldsAsSymbolsOrProperties,
@@ -1703,7 +1698,6 @@ export function buildFieldsInitNodes(
         instanceNodes.unshift(
           buildPrivateInstanceMethodInitSpec(
             t.thisExpression(),
-            // @ts-expect-error checked in switch
             prop,
             privateNamesMap,
             file,
@@ -1712,7 +1706,6 @@ export function buildFieldsInitNodes(
         pureStaticNodes.push(
           buildPrivateMethodDeclaration(
             file,
-            // @ts-expect-error checked in switch
             prop,
             privateNamesMap,
             privateFieldsAsSymbolsOrProperties,
@@ -1732,7 +1725,6 @@ export function buildFieldsInitNodes(
         pureStaticNodes.push(
           buildPrivateMethodDeclaration(
             file,
-            // @ts-expect-error checked in switch
             prop,
             privateNamesMap,
             privateFieldsAsSymbolsOrProperties,
@@ -1746,7 +1738,6 @@ export function buildFieldsInitNodes(
         staticNodes.unshift(
           buildPrivateStaticMethodInitLoose(
             t.cloneNode(ref),
-            // @ts-expect-error checked in switch
             prop,
             file,
             privateNamesMap,
@@ -1755,7 +1746,6 @@ export function buildFieldsInitNodes(
         pureStaticNodes.push(
           buildPrivateMethodDeclaration(
             file,
-            // @ts-expect-error checked in switch
             prop,
             privateNamesMap,
             privateFieldsAsSymbolsOrProperties,
@@ -1763,13 +1753,11 @@ export function buildFieldsInitNodes(
         );
         break;
       case isInstance && isPublic && isField && setPublicClassFields:
-        // @ts-expect-error checked in switch
         instanceNodes.push(buildPublicFieldInitLoose(t.thisExpression(), prop));
         break;
       case isInstance && isPublic && isField && !setPublicClassFields:
         lastInstanceNodeReturnsThis = true;
         instanceNodes.push(
-          // @ts-expect-error checked in switch
           buildPublicFieldInitSpec(t.thisExpression(), prop, file),
         );
         break;

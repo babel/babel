@@ -59,7 +59,6 @@ function getHelperMetadata(file: File): HelperMetadata {
       }
       if (
         child.get("specifiers").length !== 1 ||
-        // @ts-expect-error isImportDefaultSpecifier does not work with NodePath union
         !child.get("specifiers.0").isImportDefaultSpecifier()
       ) {
         throw child.buildCodeFrameError(
@@ -223,7 +222,7 @@ function permuteHelperAST(
     exp.replaceWith(decl);
   } else if (id.type === "MemberExpression") {
     exportBindingAssignments.forEach(assignPath => {
-      const assign: NodePath<t.Expression> = path.get(assignPath);
+      const assign = path.get(assignPath) as NodePath<t.Expression>;
       assign.replaceWith(assignmentExpression("=", id, assign.node));
     });
     exp.replaceWith(decl);

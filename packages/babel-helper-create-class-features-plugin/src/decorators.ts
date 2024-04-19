@@ -1876,10 +1876,8 @@ function transformClass(
 
       // update originalClassPath according to the new AST
       originalClassPath = (
-        newPath.get("callee").get("body") as NodePath<t.ClassBody>
-      )
-        .get("body")[0]
-        .get("key");
+        newPath.get("callee").get("body") as NodePath<t.Class>
+      ).get("body.0.key");
     }
   }
   if (!classInitInjected && classInitCall) {
@@ -2252,11 +2250,11 @@ function NamedEvaluationVisitoryFactory(
     // the object properties under object patterns
     ObjectExpression(path, state) {
       for (const propertyPath of path.get("properties")) {
+        if (!propertyPath.isObjectProperty()) continue;
         const { node } = propertyPath;
-        if (node.type !== "ObjectProperty") continue;
         const id = node.key;
         const initializer = skipTransparentExprWrappers(
-          propertyPath.get("value"),
+          propertyPath.get("value") as NodePath<t.Expression>,
         );
         if (isAnonymous(initializer)) {
           if (!node.computed) {
@@ -2274,7 +2272,7 @@ function NamedEvaluationVisitoryFactory(
             }
           } else {
             const ref = handleComputedProperty(
-              propertyPath as NodePath<t.ObjectProperty>,
+              propertyPath,
               // The key of a computed object property must not be a private name
               id as t.Expression,
               state,

@@ -41,7 +41,6 @@ function needsMemoize(
   ) {
     const { node } = optionalPath;
     const childPath = skipTransparentExprWrappers(
-      // @ts-expect-error isOptionalMemberExpression does not work with NodePath union
       optionalPath.isOptionalMemberExpression()
         ? optionalPath.get("object")
         : optionalPath.get("callee"),
@@ -98,7 +97,6 @@ export function transformOptionalChain(
     if (node.optional) {
       optionals.push(node);
     }
-    // @ts-expect-error isOptionalMemberExpression does not work with NodePath union
     if (optionalPath.isOptionalMemberExpression()) {
       // @ts-expect-error todo(flow->ts) avoid changing more type
       optionalPath.node.type = "MemberExpression";

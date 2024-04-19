@@ -549,7 +549,6 @@ function getLocalExportMetadata(
         declaration.isFunctionDeclaration() ||
         declaration.isClassDeclaration()
       ) {
-        // @ts-expect-error todo(flow->ts): improve babel-types
         getLocalMetadata(declaration.get("id")).names.push("default");
       } else {
         // These should have been removed by the nameAnonymousExports() call.
@@ -594,9 +593,7 @@ function removeImportExportDeclarations(programPath: NodePath<t.Program>) {
       ) {
         // @ts-expect-error todo(flow->ts): avoid mutations
         declaration._blockHoist = child.node._blockHoist;
-        child.replaceWith(
-          declaration as NodePath<t.FunctionDeclaration | t.ClassDeclaration>,
-        );
+        child.replaceWith(declaration);
       } else {
         // These should have been removed by the nameAnonymousExports() call.
         throw declaration.buildCodeFrameError(

@@ -31,7 +31,6 @@ function getThisFunctionParent(
   do {
     const { path } = scope;
     if (path.isFunctionParent() && !path.isArrowFunctionExpression()) {
-      // @ts-expect-error TS does not exclude ArrowFunctionExpression from FunctionParent
       return path;
     }
   } while ((scope = scope.parent));

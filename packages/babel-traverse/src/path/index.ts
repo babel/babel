@@ -33,8 +33,8 @@ export const REMOVED = 1 << 0;
 export const SHOULD_STOP = 1 << 1;
 export const SHOULD_SKIP = 1 << 2;
 
-class NodePath<T extends t.Node = t.Node> {
-  constructor(hub: HubInterface, parent: t.ParentMaps[T["type"]]) {
+const NodePath_Final = class NodePath {
+  constructor(hub: HubInterface, parent: t.Node | null) {
     this.parent = parent;
     this.hub = hub;
     this.data = null;
@@ -43,7 +43,7 @@ class NodePath<T extends t.Node = t.Node> {
     this.scope = null;
   }
 
-  declare parent: t.ParentMaps[T["type"]];
+  declare parent: t.Node;
   declare hub: HubInterface;
   declare data: Record<string | symbol, unknown>;
   // TraversalContext is configured by setContext
@@ -56,14 +56,12 @@ class NodePath<T extends t.Node = t.Node> {
   // this.shouldSkip = false; this.shouldStop = false; this.removed = false;
   _traverseFlags: number = 0;
   skipKeys: Record<string, boolean> | null = null;
-  parentPath: t.ParentMaps[T["type"]] extends null
-    ? null
-    : NodePath<t.ParentMaps[T["type"]]> | null = null;
+  parentPath: NodePath_Final | null = null;
   container: t.Node | Array<t.Node> | null = null;
   listKey: string | null = null;
   key: string | number | null = null;
-  node: T = null;
-  type: T["type"] | null = null;
+  node: t.Node | null = null;
+  type: t.Node["type"] | null = null;
 
   static get({
     hub,
@@ -74,12 +72,12 @@ class NodePath<T extends t.Node = t.Node> {
     key,
   }: {
     hub?: HubInterface;
-    parentPath: NodePath | null;
+    parentPath: NodePath_Final | null;
     parent: t.Node;
     container: t.Node | t.Node[];
     listKey?: string;
     key: string | number;
-  }): NodePath {
+  }): NodePath_Final {
     if (!hub && parentPath) {
       hub = parentPath.hub;
     }
@@ -96,7 +94,7 @@ class NodePath<T extends t.Node = t.Node> {
 
     let path = paths.get(targetNode);
     if (!path) {
-      path = new NodePath(hub, parent);
+      path = new NodePath(hub, parent) as NodePath_Final;
       if (targetNode) paths.set(targetNode, path);
     }
 
@@ -105,7 +103,7 @@ class NodePath<T extends t.Node = t.Node> {
     return path;
   }
 
-  getScope(scope: Scope): Scope {
+  getScope(this: NodePath_Final, scope: Scope): Scope {
     return this.isScope() ? new Scope(this) : scope;
   }
 
@@ -125,7 +123,7 @@ class NodePath<T extends t.Node = t.Node> {
     return val;
   }
 
-  hasNode(): this is NodePath<NonNullable<this["node"]>> {
+  hasNode(): boolean {
     return this.node != null;
   }
 
@@ -136,9 +134,9 @@ class NodePath<T extends t.Node = t.Node> {
     return this.hub.buildError(this.node, msg, Error);
   }
 
-  traverse<T>(visitor: Visitor<T>, state: T): void;
-  traverse(visitor: Visitor): void;
-  traverse(visitor: any, state?: any) {
+  traverse<T>(this: NodePath_Final, visitor: Visitor<T>, state: T): void;
+  traverse(this: NodePath_Final, visitor: Visitor): void;
+  traverse(this: NodePath_Final, visitor: any, state?: any) {
     traverse(this.node, visitor, this.scope, state, this);
   }
 
@@ -148,9 +146,9 @@ class NodePath<T extends t.Node = t.Node> {
     this.node[key] = node;
   }
 
-  getPathLocation(): string {
+  getPathLocation(this: NodePath_Final): string {
     const parts = [];
-    let path: NodePath = this;
+    let path: NodePath_Final = this;
     do {
       let key = path.key;
       if (path.inList) key = `${path.listKey}[${key}]`;
@@ -159,7 +157,7 @@ class NodePath<T extends t.Node = t.Node> {
     return parts.join(".");
   }
 
-  debug(message: string) {
+  debug(this: NodePath_Final, message: string) {
     if (!debug.enabled) return;
     debug(`${this.getPathLocation()} ${this.type}: ${message}`);
   }
@@ -217,10 +215,10 @@ class NodePath<T extends t.Node = t.Node> {
       this._traverseFlags &= ~REMOVED;
     }
   }
-}
+};
 
 Object.assign(
-  NodePath.prototype,
+  NodePath_Final.prototype,
   NodePath_ancestry,
   NodePath_inference,
   NodePath_replacement,
@@ -237,7 +235,7 @@ Object.assign(
 if (!process.env.BABEL_8_BREAKING) {
   // @ts-expect-error The original _guessExecutionStatusRelativeToDifferentFunctions only worked for paths in
   // different functions, but _guessExecutionStatusRelativeTo works as a replacement in those cases.
-  NodePath.prototype._guessExecutionStatusRelativeToDifferentFunctions =
+  NodePath_Final.prototype._guessExecutionStatusRelativeToDifferentFunctions =
     NodePath_introspection._guessExecutionStatusRelativeTo;
 }
 
@@ -250,12 +248,12 @@ for (const type of t.TYPES) {
   // @ts-expect-error typeKey must present in t
   const fn = t[typeKey];
   // @ts-expect-error augmenting NodePath prototype
-  NodePath.prototype[typeKey] = function (opts: any) {
+  NodePath_Final.prototype[typeKey] = function (opts: any) {
     return fn(this.node, opts);
   };
 
   // @ts-expect-error augmenting NodePath prototype
-  NodePath.prototype[`assert${type}`] = function (opts: any) {
+  NodePath_Final.prototype[`assert${type}`] = function (opts: any) {
     if (!fn(this.node, opts)) {
       throw new TypeError(`Expected node path of type ${type}`);
     }
@@ -263,47 +261,77 @@ for (const type of t.TYPES) {
 }
 
 // Register virtual types validators after base types validators
-Object.assign(NodePath.prototype, NodePath_virtual_types_validator);
+Object.assign(NodePath_Final.prototype, NodePath_virtual_types_validator);
 
 for (const type of Object.keys(virtualTypes) as (keyof typeof virtualTypes)[]) {
   if (type[0] === "_") continue;
   if (!t.TYPES.includes(type)) t.TYPES.push(type);
 }
 
-type NodePathMixins = typeof NodePath_ancestry &
-  typeof NodePath_inference &
-  typeof NodePath_replacement &
-  typeof NodePath_evaluation &
-  typeof NodePath_conversion &
-  typeof NodePath_introspection &
-  typeof NodePath_context &
-  typeof NodePath_removal &
-  typeof NodePath_modification &
-  typeof NodePath_family &
-  typeof NodePath_comments;
+interface NodePathOverwrites {
+  // We need to re-define these predicate and assertion
+  // methods here, because we cannot refine `this` in
+  // a function declaration.
+  // See https://github.com/microsoft/TypeScript/issues/38150
 
-// @ts-expect-error TS throws because ensureBlock returns the body node path
-// however, we don't use the return value and treat it as a transform and
-// assertion utilities. For better type inference we annotate it as an
-// assertion method
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-interface NodePath<T>
-  extends NodePathAssertions,
-    NodePathValidators,
-    NodePathMixins {
   /**
-   * @see ./conversion.ts for implementation
+   * NOTE: This assertion doesn't narrow the type on unions of
+   * NodePaths, due to https://github.com/microsoft/TypeScript/issues/44212
+   *
+   * @see ./conversion.ts for implementation.
    */
-  ensureBlock<
-    T extends
+  ensureBlock(
+    this: NodePath_Final,
+  ): asserts this is NodePath_Final<
+    (
       | t.Loop
       | t.WithStatement
       | t.Function
       | t.LabeledStatement
-      | t.CatchClause,
-  >(
-    this: NodePath<T>,
-  ): asserts this is NodePath<T & { body: t.BlockStatement }>;
+      | t.CatchClause
+    ) & { body: t.BlockStatement }
+  >;
+  /**
+   * @see ./introspection.ts for implementation.
+   */
+  isStatementOrBlock(
+    this: NodePath_Final,
+  ): this is NodePath_Final<t.Statement | t.Block>;
 }
 
-export default NodePath;
+type NodePathMixins = Omit<
+  typeof NodePath_ancestry &
+    typeof NodePath_inference &
+    typeof NodePath_replacement &
+    typeof NodePath_evaluation &
+    typeof NodePath_conversion &
+    typeof NodePath_introspection &
+    typeof NodePath_context &
+    typeof NodePath_removal &
+    typeof NodePath_modification &
+    typeof NodePath_family &
+    typeof NodePath_comments,
+  keyof NodePathOverwrites
+>;
+
+interface NodePath<T extends t.Node>
+  extends InstanceType<typeof NodePath_Final>,
+    NodePathAssertions,
+    NodePathValidators,
+    NodePathMixins,
+    NodePathOverwrites {
+  parent: t.ParentMaps[T["type"]];
+  parentPath: t.ParentMaps[T["type"]] extends null
+    ? null
+    : NodePath_Final<t.ParentMaps[T["type"]]> | null;
+  node: T;
+  type: T["type"] | null;
+}
+
+// This trick is necessary so that
+// NodePath_Final<A | B> is the same as NodePath_Final<A> | NodePath_Final<B>
+type NodePath_Final<T extends t.Node = t.Node> = T extends any
+  ? NodePath<T>
+  : never;
+
+export { NodePath_Final as default, type NodePath as NodePath_Internal };

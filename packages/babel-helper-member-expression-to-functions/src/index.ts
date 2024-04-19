@@ -215,12 +215,9 @@ const handle = {
         );
       }
 
-      // @ts-expect-error isOptionalMemberExpression does not work with NodePath union
       const startingNode = startingOptional.isOptionalMemberExpression()
-        ? // @ts-expect-error isOptionalMemberExpression does not work with NodePath union
-          startingOptional.node.object
-        : // @ts-expect-error isOptionalMemberExpression does not work with NodePath union
-          startingOptional.node.callee;
+        ? startingOptional.node.object
+        : startingOptional.node.callee;
       const baseNeedsMemoised = scope.maybeGenerateMemoised(startingNode);
       const baseRef = baseNeedsMemoised ?? startingNode;
 

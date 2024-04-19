@@ -55,7 +55,7 @@ export function ensureBlock(
   this: NodePath<
     t.Loop | t.WithStatement | t.Function | t.LabeledStatement | t.CatchClause
   >,
-) {
+): void {
   const body = this.get("body");
   const bodyNode = body.node;
 
@@ -67,6 +67,11 @@ export function ensureBlock(
   }
 
   if (body.isBlockStatement()) {
+    // @ts-expect-error TS throws because ensureBlock returns the body node path
+    // however, we don't use the return value and treat it as a transform and
+    // assertion utilities. For better type inference we annotate it as an
+    // assertion method
+    // TODO: Unify the implementation with the type definition
     return bodyNode;
   }
 
@@ -102,6 +107,11 @@ export function ensureBlock(
     key,
   );
 
+  // @ts-expect-error TS throws because ensureBlock returns the body node path
+  // however, we don't use the return value and treat it as a transform and
+  // assertion utilities. For better type inference we annotate it as an
+  // assertion method
+  // TODO: Unify the implementation with the type definition
   return this.node;
 }
 
@@ -177,7 +187,6 @@ export function arrowFunctionToExpression(
     allowInsertArrowWithRest,
   );
 
-  // @ts-expect-error TS requires explicit fn type annotation
   fn.ensureBlock();
   setType(fn, "FunctionExpression");
 
@@ -554,7 +563,7 @@ function standardizeSuperProperty(
 
     return [
       assignmentPath.get("left") as NodePath<t.MemberExpression>,
-      assignmentPath.get("right").get("left"),
+      assignmentPath.get("right").get("left") as NodePath<t.MemberExpression>,
     ];
   } else if (superProp.parentPath.isUpdateExpression()) {
     const updateExpr = superProp.parentPath;

@@ -110,7 +110,7 @@ export default declare((api, opts: Options) => {
           if (needsBodyWrap) {
             const varPath = wrapLoopBody(path, captured, updatedBindingsUsages);
 
-            if (headPath?.isVariableDeclaration<t.Node>()) {
+            if (headPath?.isVariableDeclaration()) {
               // If we wrap the loop body, we transform the var
               // declaration in the loop head now, to avoid
               // invalid references that break other plugins:

@@ -74,10 +74,7 @@ export default function splitExportDeclaration(
     }
 
     return exportDeclaration;
-  } else if (
-    // @ts-expect-error TS can not narrow down to NodePath<t.ExportNamedDeclaration>
-    exportDeclaration.get("specifiers").length > 0
-  ) {
+  } else if (exportDeclaration.get("specifiers").length > 0) {
     throw new Error("It doesn't make sense to split exported specifiers.");
   }
 

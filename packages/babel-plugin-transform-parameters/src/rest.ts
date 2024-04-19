@@ -323,7 +323,9 @@ export default function convertFunctionRest(path: NodePath<t.Function>) {
       path.ensureBlock();
       path.set(
         "body",
-        t.blockStatement([buildScopeIIFE(shadowedParams, path.node.body)]),
+        t.blockStatement([
+          buildScopeIIFE(shadowedParams, path.node.body as t.BlockStatement),
+        ]),
       );
     }
   }
