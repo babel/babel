@@ -1,6 +1,5 @@
 {
   "BABEL_8_BREAKING": false,
-  "os": ["darwin", "linux"],
   "validateLogs": true,
   "presets": [
     [
