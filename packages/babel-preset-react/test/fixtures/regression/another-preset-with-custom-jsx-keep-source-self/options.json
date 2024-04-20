@@ -2,6 +2,5 @@
   "presets": [
     ["react", { "development": true }],
     "./emotion-css-prop-preset.js"
-  ],
-  "os": ["linux", "darwin"]
+  ]
 }
