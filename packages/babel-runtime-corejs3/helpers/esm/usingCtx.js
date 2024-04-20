@@ -45,7 +45,7 @@ export default function _usingCtx() {
         if (o !== n) throw o;
       }
       function err(e) {
-        return o = o !== n ? new r(o, e) : e, next();
+        return o = o !== n ? new r(e, o) : e, next();
       }
       return next();
     }
