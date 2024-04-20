@@ -73,7 +73,7 @@ export default function _usingCtx() {
       }
 
       function err(e: Error) {
-        error = error !== empty ? new _disposeSuppressedError(error, e) : e;
+        error = error !== empty ? new _disposeSuppressedError(e, error) : e;
 
         return next();
       }
