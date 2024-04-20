@@ -15,8 +15,8 @@ try {
 } catch (e) {
   inCatch = disposed;
   expect(e.name).toBe("SuppressedError");
-  expect(e.suppressed).toBe(1);
-  expect(e.error).toBe(0);
+  expect(e.suppressed).toBe(0);
+  expect(e.error).toBe(1);
 }
 
 expect(beforeReturn).toBe(false);
