@@ -194,7 +194,7 @@ export default declare(api => {
               continue;
             }
 
-            let { node } = stmt;
+            let node: t.Statement | t.Declaration = stmt.node;
             let shouldRemove = true;
 
             if (stmt.isExportDefaultDeclaration()) {

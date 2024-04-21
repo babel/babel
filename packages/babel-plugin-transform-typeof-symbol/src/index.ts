@@ -41,7 +41,6 @@ export default declare(api => {
         let isUnderHelper = path.findParent(path => {
           if (path.isFunction()) {
             return (
-              // @ts-expect-error the access is coupled with the shape of typeof helper
               path.get("body.directives.0")?.node.value.value ===
               "@babel/helpers - typeof"
             );

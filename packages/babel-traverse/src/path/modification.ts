@@ -202,19 +202,20 @@ export function insertAfter(
       !parentPath.isJSXElement()) ||
     (parentPath.isForStatement() && this.key === "init")
   ) {
-    if (this.node) {
-      const node = this.node as t.Expression | t.VariableDeclaration;
+    const self = this as NodePath<t.Expression | t.VariableDeclaration>;
+    if (self.node) {
+      const node = self.node;
       let { scope } = this;
 
       if (scope.path.isPattern()) {
         assertExpression(node);
 
-        this.replaceWith(callExpression(arrowFunctionExpression([], node), []));
-        (this.get("callee.body") as NodePath<t.Expression>).insertAfter(nodes);
-        return [this];
+        self.replaceWith(callExpression(arrowFunctionExpression([], node), []));
+        (self.get("callee.body") as NodePath<t.Expression>).insertAfter(nodes);
+        return [self];
       }
 
-      if (isHiddenInSequenceExpression(this)) {
+      if (isHiddenInSequenceExpression(self)) {
         nodes.unshift(node);
       }
       // We need to preserve the value of this expression.
@@ -347,7 +348,7 @@ export function unshiftContainer<N extends t.Node, K extends keyof N & string>(
   const path = NodePath.get({
     parentPath: this,
     parent: this.node,
-    container: this.node[listKey] as unknown as t.Node | t.Node[],
+    container: (this.node as N)[listKey] as unknown as t.Node | t.Node[],
     listKey,
     key: 0,
   }).setContext(this.context);
@@ -358,10 +359,13 @@ export function unshiftContainer<N extends t.Node, K extends keyof N & string>(
   );
 }
 
-export function pushContainer<N extends t.Node, K extends keyof N & string>(
-  this: NodePath<N>,
+export function pushContainer<
+  P extends NodePath,
+  K extends string & keyof P["node"],
+>(
+  this: P,
   listKey: K,
-  nodes: N[K] extends (infer E)[]
+  nodes: P["node"][K] extends (infer E)[]
     ? E | E[]
     : // todo: refine to t.Node[]
       //  ? E extends t.Node
@@ -379,13 +383,12 @@ export function pushContainer<N extends t.Node, K extends keyof N & string>(
   // get an invisible path that represents the last node + 1 and replace it with our
   // nodes, effectively inlining it
 
-  const container = this.node[listKey];
+  const container = (this.node as P["node"])[listKey] as t.Node[];
   const path = NodePath.get({
     parentPath: this,
     parent: this.node,
     container: container as unknown as t.Node | t.Node[],
     listKey,
-    // @ts-expect-error TS cannot infer that container is t.Node[]
     key: container.length,
   }).setContext(this.context);
 

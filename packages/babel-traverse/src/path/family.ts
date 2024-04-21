@@ -5,7 +5,6 @@ import NodePath from "./index.ts";
 import {
   getBindingIdentifiers as _getBindingIdentifiers,
   getOuterBindingIdentifiers as _getOuterBindingIdentifiers,
-  isDeclaration,
   numericLiteral,
   unaryExpression,
 } from "@babel/types";
@@ -237,10 +236,8 @@ function _getCompletionRecords(
     path.isWhile() ||
     path.isLabeledStatement()
   ) {
-    // @ts-expect-error(flow->ts): todo
     return addCompletionRecords(path.get("body"), records, context);
   } else if (path.isProgram() || path.isBlockStatement()) {
-    // @ts-expect-error(flow->ts): todo
     return getStatementListCompletion(path.get("body"), context);
   } else if (path.isFunction()) {
     return _getCompletionRecords(path.get("body"), context);
@@ -369,30 +366,32 @@ type ToNodePath<T> =
       ? NodePath<T>
       : never;
 
-function get<T extends t.Node, K extends keyof T>(
-  this: NodePath<T>,
+function get<T extends NodePath, K extends keyof T["node"]>(
+  this: T,
   key: K,
   context?: boolean | TraversalContext,
-): T[K] extends Array<t.Node | null | undefined>
-  ? Array<NodePath<T[K][number]>>
-  : T[K] extends t.Node | null | undefined
-    ? NodePath<T[K]>
-    : never;
+): T extends any
+  ? T["node"][K] extends Array<t.Node | null | undefined>
+    ? Array<NodePath<T["node"][K][number]>>
+    : T["node"][K] extends t.Node | null | undefined
+      ? NodePath<T["node"][K]>
+      : never
+  : never;
 
-function get<T extends t.Node, K extends string>(
-  this: NodePath<T>,
+function get<T extends NodePath, K extends string>(
+  this: T,
   key: K,
   context?: boolean | TraversalContext,
-): ToNodePath<Trav<T, Split<K>>>;
+): T extends any ? ToNodePath<Trav<T["node"], Split<K>>> : never;
 
-function get<T extends t.Node>(
-  this: NodePath<T>,
+function get(
+  this: NodePath,
   key: string,
   context?: true | TraversalContext,
 ): NodePath | NodePath[];
 
-function get<T extends t.Node>(
-  this: NodePath<T>,
+function get(
+  this: NodePath,
   key: string,
   context: true | TraversalContext = true,
 ): NodePath | NodePath[] {
@@ -415,7 +414,7 @@ export function _getKey<T extends t.Node>(
   key: keyof T & string,
   context?: TraversalContext,
 ): NodePath | NodePath[] {
-  const node = this.node;
+  const node = this.node as T;
   const container = node[key];
 
   if (Array.isArray(container)) {
@@ -544,7 +543,7 @@ function getBindingIdentifierPaths(
 
     if (id.isExportDeclaration()) {
       const declaration = id.get("declaration");
-      if (isDeclaration(declaration)) {
+      if (declaration.isDeclaration()) {
         search.push(declaration);
       }
       continue;

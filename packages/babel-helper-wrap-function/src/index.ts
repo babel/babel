@@ -117,7 +117,7 @@ function plainFunction(
       | t.FunctionExpression
       | t.CallExpression;
   } else {
-    node = path.node as t.FunctionDeclaration | t.FunctionExpression;
+    node = path.node;
   }
 
   const isDeclaration = isFunctionDeclaration(node);

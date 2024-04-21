@@ -110,11 +110,18 @@ export function replaceWithSourceString(this: NodePath, replacement: string) {
 /**
  * Replace the current node with another.
  */
-
 export function replaceWith<R extends t.Node>(
   this: NodePath,
-  replacementPath: R | NodePath<R>,
-): [NodePath<R>] {
+  replacementPath: R,
+): [NodePath<R>];
+export function replaceWith<R extends NodePath>(
+  this: NodePath,
+  replacementPath: R,
+): [R];
+export function replaceWith(
+  this: NodePath,
+  replacementPath: t.Node | NodePath,
+): [NodePath] {
   this.resync();
 
   if (this.removed) {
@@ -133,7 +140,7 @@ export function replaceWith<R extends t.Node>(
   }
 
   if (this.node === replacement) {
-    return [this as NodePath<R>];
+    return [this];
   }
 
   if (this.isProgram() && !isProgram(replacement)) {
@@ -174,9 +181,7 @@ export function replaceWith<R extends t.Node>(
       !this.canSwapBetweenExpressionAndStatement(replacement)
     ) {
       // replacing an expression with a statement so let's explode it
-      return this.replaceExpressionWithStatements([replacement]) as [
-        NodePath<R>,
-      ];
+      return this.replaceExpressionWithStatements([replacement]) as [NodePath];
     }
   }
 
@@ -196,9 +201,7 @@ export function replaceWith<R extends t.Node>(
   // requeue for visiting
   this.requeue();
 
-  return [
-    nodePath ? (this.get(nodePath) as NodePath<R>) : (this as NodePath<R>),
-  ];
+  return [nodePath ? this.get(nodePath) : this];
 }
 
 /**

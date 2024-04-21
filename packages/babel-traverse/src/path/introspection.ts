@@ -38,7 +38,7 @@ export function has<N extends t.Node>(
   this: NodePath<N>,
   key: keyof N,
 ): boolean {
-  const val = this.node && this.node[key];
+  const val = (this.node as N)?.[key];
   if (val && Array.isArray(val)) {
     return !!val.length;
   } else {
@@ -80,7 +80,7 @@ export function equals<N extends t.Node>(
   key: keyof N,
   value: any,
 ): boolean {
-  return this.node[key] === value;
+  return (this.node as N)[key] === value;
 }
 
 /**
@@ -694,6 +694,9 @@ export function isInStrictMode(this: NodePath) {
     if (path.isFunction()) {
       body = path.node.body as t.BlockStatement;
     } else if (path.isProgram()) {
+      // @ts-expect-error TODO: TS thinks that `path` here cannot be
+      // Program due to the `isProgram()` check at the beginning of
+      // the function
       body = path.node;
     } else {
       return false;

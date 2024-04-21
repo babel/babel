@@ -80,7 +80,7 @@ export default declare((api, options: Options) => {
           ]);
 
           path.ensureBlock();
-          const statementBody = path.node.body.body;
+          const statementBody = (path.node.body as t.BlockStatement).body;
           const nodes = [];
           // todo: the completion of a for statement can only be observed from
           // a do block (or eval that we don't support),

@@ -569,7 +569,7 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
       }
 
       path.ensureBlock();
-      const bodyPath = path.get("body");
+      const bodyPath = path.get("body") as NodePath<t.BlockStatement>;
 
       const newLoopId = scope.generateUidIdentifierBasedOnNode(left);
       path

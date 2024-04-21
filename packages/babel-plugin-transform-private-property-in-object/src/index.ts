@@ -83,7 +83,7 @@ export default declare((api, opt: Options) => {
   }
 
   function getWeakSetId<Ref extends t.Node>(
-    weakSets: WeakMap<Ref, t.Identifier>,
+    weakSets: WeakMap<t.Node, t.Identifier>,
     outerClass: NodePath<t.Class>,
     reference: NodePath<Ref>,
     name = "",

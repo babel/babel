@@ -27,7 +27,7 @@ export function unshiftForXStatementBody(
     // var a = 0;for (const { #x: x, [a++]: y } of z) { const a = 1; }
     node.body = t.blockStatement([...newStatements, node.body]);
   } else {
-    node.body.body.unshift(...newStatements);
+    (node.body as t.BlockStatement).body.unshift(...newStatements);
   }
 }
 

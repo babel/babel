@@ -233,7 +233,7 @@ export function createClassFeaturePlugin({
         const innerBinding = path.node.id;
         let ref: t.Identifier | null;
         if (!innerBinding || !pathIsClassDeclaration) {
-          nameFunction(path);
+          nameFunction(path as NodePath<t.ClassExpression>);
           ref = path.scope.generateUidIdentifier(innerBinding?.name || "Class");
         }
         const classRefForDefine = ref ?? t.cloneNode(innerBinding);

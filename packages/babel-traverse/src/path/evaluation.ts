@@ -306,9 +306,8 @@ function _evaluate(path: NodePath, state: State): any {
         deopt(prop, state);
         return;
       }
-      const keyPath = (prop as NodePath<t.ObjectProperty>).get("key");
+      const keyPath = prop.get("key");
       let key;
-      // @ts-expect-error todo(flow->ts): type refinement issues ObjectMethod and SpreadElement somehow not excluded
       if (prop.node.computed) {
         key = keyPath.evaluate();
         if (!key.confident) {
@@ -323,7 +322,7 @@ function _evaluate(path: NodePath, state: State): any {
           keyPath.node as t.StringLiteral | t.NumericLiteral | t.BigIntLiteral
         ).value;
       }
-      const valuePath = (prop as NodePath<t.ObjectProperty>).get("value");
+      const valuePath = prop.get("value");
       let value = valuePath.evaluate();
       if (!value.confident) {
         deopt(value.deopt, state);

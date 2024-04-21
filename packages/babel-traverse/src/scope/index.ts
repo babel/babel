@@ -1112,9 +1112,7 @@ export default class Scope {
     }
 
     if (path.isLoop() || path.isCatchClause() || path.isFunction()) {
-      // @ts-expect-error TS can not infer NodePath<Loop> | NodePath<CatchClause> as NodePath<Loop | CatchClause>
       path.ensureBlock();
-      // @ts-expect-error todo(flow->ts): improve types
       path = path.get("body");
     }
 
