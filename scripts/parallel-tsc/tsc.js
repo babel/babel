@@ -1,12 +1,18 @@
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 
-import { resolve as resolvePath, relative as relativePath } from "node:path";
-import { readFileSync } from "node:fs";
+import {
+  resolve as resolvePath,
+  relative as relativePath,
+  join as joinPath,
+  dirname,
+} from "node:path";
+import { readFileSync, copyFileSync, mkdirSync } from "node:fs";
 import cp from "node:child_process";
 import os from "node:os";
 
 import JSON5 from "json5";
+import { glob } from "glob";
 
 const tscPath = require.resolve("typescript/lib/tsc.js");
 
@@ -117,18 +123,18 @@ class Pool {
       stdio: this.#showOutput(tasks) ? "inherit" : "ignore",
     });
 
-    taskProcess.once("exit", code => {
+    taskProcess.once("exit", async code => {
       const startTime = this.#running.get(taskProcess);
       const duration = performance.now() - startTime;
       this.#running.delete(taskProcess);
-      this.#onTaskDone(tasks, code, duration);
+      await this.#onTaskDone(tasks, code, duration);
 
-      queueMicrotask(() => {
-        this.#runTasks();
-        if (this.#running.size === 0 && this.#pending.length === 0) {
-          this.#emptyListeners.forEach(f => f());
-        }
-      });
+      await null;
+
+      this.#runTasks();
+      if (this.#running.size === 0 && this.#pending.length === 0) {
+        this.#emptyListeners.forEach(f => f());
+      }
     });
 
     this.#onTaskStart(tasks, weight);
@@ -148,7 +154,7 @@ class Pool {
   }
 }
 
-let total = projectToDependencies.size + ready.size;
+const total = projectToDependencies.size + ready.size;
 let done = 0;
 
 const pool = new Pool({
@@ -161,17 +167,32 @@ const pool = new Pool({
   showOutput(projects) {
     return projects.some(task => entryProjectsPaths.has(task));
   },
-  onTaskStart(projects, weight) {
-    0 &&
-      console.log(
-        `Start typechecking [w:${weight}]`,
-        projects
-          .map(project => "./" + relativePath(process.cwd(), project))
-          .join(" ")
-      );
-  },
-  onTaskDone(projects, code, duration) {
+  // eslint-disable-next-line no-unused-vars
+  onTaskStart(projects, weight) {},
+  async onTaskDone(projects, code, duration) {
     if (code !== 0) process.exitCode = code;
+
+    await Promise.all(
+      projects.map(async project => {
+        const { include: projectFiles } = JSON5.parse(
+          readFileSync(resolvePath(project, "tsconfig.json"), "utf8")
+        );
+        if (!projectFiles) return;
+        const globPatterns = projectFiles
+          .filter(file => file.endsWith("*.ts"))
+          .map(file => `${project}/${file.slice(0, -3)}*.d.ts`);
+        const files = await glob(globPatterns);
+        for (const file of files) {
+          const out = joinPath(
+            process.cwd(),
+            "dts",
+            relativePath(process.cwd(), file)
+          );
+          mkdirSync(dirname(out), { recursive: true });
+          copyFileSync(file, out);
+        }
+      })
+    );
 
     done += projects.length;
     console.log(
