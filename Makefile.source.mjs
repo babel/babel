@@ -305,6 +305,11 @@ target["prepublish-prepare-dts"] = function () {
 
 target["tscheck"] = function () {
   target["generate-tsconfig"]();
+  node(["scripts/parallel-tsc/tsc.js", "."]);
+};
+
+target["tscheck-slow"] = function () {
+  target["generate-tsconfig"]();
   yarn(["tsc", "-b", "."]);
 };
 

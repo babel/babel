@@ -55,10 +55,14 @@ build-plugin-transform-runtime-dist:
 watch:
 	$(MAKEJS) watch
 
-code-quality: tscheck lint
+code-quality: tscheck
+	$(MAKEJS) lint
 
 tscheck:
 	$(MAKEJS) tscheck
+
+tscheck-slow:
+	$(MAKEJS) tscheck-slow
 
 clean-ts:
 	$(MAKEJS) clean-ts
