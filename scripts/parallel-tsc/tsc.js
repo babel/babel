@@ -180,7 +180,9 @@ const pool = new Pool({
         if (!projectFiles) return;
         const globPatterns = projectFiles
           .filter(file => file.endsWith("*.ts"))
-          .map(file => `${project}/${file.slice(0, -3)}*.d.ts`);
+          .map(
+            file => `${project}/${file.slice(0, -3)}*.d.ts`.replace(/\\/g, "/") // glob doesn't support \ on Windows
+          );
         const files = await glob(globPatterns);
         for (const file of files) {
           const out = joinPath(
