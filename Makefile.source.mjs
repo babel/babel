@@ -349,15 +349,16 @@ target["clone-license"] = function () {
  */
 
 target["lint"] = function () {
-  // Pre-run tscheck, otherwise typescript-eslint
-  // will run it by itsels
-  target["tscheck"]();
   env(
     () => {
+      // Pre-run tscheck, otherwise typescript-eslint
+      // will run it by itsels
+      target["tscheck"]();
       yarn(EslintArgs);
     },
     {
       BABEL_ENV: "test",
+      TSCHECK_SILENT: "true",
     }
   );
 };

@@ -195,9 +195,11 @@ const pool = new Pool({
     );
 
     done += projects.length;
-    console.log(
-      `[${done}/${total}] ${projects.map(project => "./" + relativePath(process.cwd(), project)).join(" ")} took ${Math.round(duration) / 1e3}s`
-    );
+    if (!process.env.TSCHECK_SILENT) {
+      console.log(
+        `[${done}/${total}] ${projects.map(project => "./" + relativePath(process.cwd(), project)).join(" ")} took ${Math.round(duration) / 1e3}s`
+      );
+    }
     for (const project of projects) {
       for (const dependent of projectToDependents.get(project) ?? []) {
         const dependencies = projectToDependencies.get(dependent);
