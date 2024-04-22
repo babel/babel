@@ -21,20 +21,6 @@ const target = new Proxy(global.target, {
 });
 const SOURCES = ["packages", "codemods", "eslint"];
 
-const EslintArgs = [
-  "eslint",
-  "scripts",
-  "benchmark",
-  ...SOURCES,
-  "*.{js,cjs,mjs,ts}",
-  "--format",
-  "codeframe",
-];
-
-const MAX_OLD_SPACE = {
-  NODE_OPTIONS: `${process.env.NODE_OPTIONS || ""} --max-old-space-size=4096`,
-};
-
 const YARN_PATH = shell.which("yarn").stdout;
 const NODE_PATH = process.execPath; // `yarn node` is so slow on Windows
 
@@ -352,20 +338,43 @@ target["clone-license"] = function () {
  * DEV
  */
 
-target["lint"] = function () {
-  env(
-    () => {
-      // Pre-run tscheck, otherwise typescript-eslint
-      // will run it by itsels
-      target["tscheck"]();
-      yarn(EslintArgs);
-    },
-    {
-      ...MAX_OLD_SPACE,
-      BABEL_ENV: "test",
-      TSCHECK_SILENT: "true",
-    }
+function eslint(...extraArgs) {
+  const eslintEnv = { BABEL_ENV: "test" };
+  const eslintArgs = ["--format", "codeframe", ...extraArgs.filter(Boolean)];
+
+  const packagesPackages = readdirSync("packages").filter(n =>
+    existsSync(`packages/${n}/package.json`)
   );
+  const chunks = [];
+  // Linting everything at the same time needs too much memory and crashes
+  // Do it in batches packages
+  for (let i = 0, chunkSize = 40; i < packagesPackages.length; i += chunkSize) {
+    chunks.push([
+      `packages/{${packagesPackages.slice(i, i + chunkSize)}}/**/*`,
+    ]);
+  }
+  const rest = [
+    "eslint",
+    "codemods",
+    "scripts",
+    "benchmark",
+    "*.{js,cjs,mjs,ts}",
+  ];
+  chunks.push(rest);
+
+  if (process.env.ESLINT_GO_BRRRR) {
+    // Run as a single process. Needs a lot of memory (12GB).
+    env(() => yarn(["eslint", "packages", ...rest, ...eslintArgs]), eslintEnv);
+  } else {
+    for (const chunk of chunks) {
+      env(() => yarn(["eslint", ...chunk, ...eslintArgs]), eslintEnv);
+    }
+  }
+}
+
+target["lint"] = function () {
+  env(() => target["tscheck"](), { TSCHECK_SILENT: "true" });
+  eslint();
 };
 
 target["fix"] = function () {
@@ -374,7 +383,8 @@ target["fix"] = function () {
 };
 
 target["fix-js"] = function () {
-  env(() => yarn([...EslintArgs, "--fix"]), MAX_OLD_SPACE);
+  env(() => target["tscheck"](), { TSCHECK_SILENT: "true" });
+  eslint("--fix");
 };
 
 target["fix-json"] = function () {
