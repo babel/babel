@@ -31,6 +31,10 @@ const EslintArgs = [
   "codeframe",
 ];
 
+const MAX_OLD_SPACE = {
+  NODE_OPTIONS: `${process.env.NODE_OPTIONS || ""} --max-old-space-size=4096`,
+};
+
 const YARN_PATH = shell.which("yarn").stdout;
 const NODE_PATH = process.execPath; // `yarn node` is so slow on Windows
 
@@ -357,6 +361,7 @@ target["lint"] = function () {
       yarn(EslintArgs);
     },
     {
+      ...MAX_OLD_SPACE,
       BABEL_ENV: "test",
       TSCHECK_SILENT: "true",
     }
@@ -369,7 +374,7 @@ target["fix"] = function () {
 };
 
 target["fix-js"] = function () {
-  yarn([...EslintArgs, "--fix"]);
+  env(() => yarn([...EslintArgs, "--fix"]), MAX_OLD_SPACE);
 };
 
 target["fix-json"] = function () {
