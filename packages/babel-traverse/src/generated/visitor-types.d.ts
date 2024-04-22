@@ -1,5 +1,7 @@
-// TODO: Actually generate this
-
+/*
+ * This file is auto-generated! Do not modify it directly.
+ * To re-generate run 'make build'
+ */
 import type * as t from "@babel/types";
 
 import type { ExplVisitNode, VisitNode } from "../types.ts";
@@ -540,54 +542,54 @@ export interface VisitorBaseNodes<S> {
 }
 
 export interface VisitorBaseAliases<S> {
-  Standardized?: VisitNode<S, t.Standardized>;
-  Expression?: VisitNode<S, t.Expression>;
+  Accessor?: VisitNode<S, t.Accessor>;
   Binary?: VisitNode<S, t.Binary>;
-  Scopable?: VisitNode<S, t.Scopable>;
-  BlockParent?: VisitNode<S, t.BlockParent>;
   Block?: VisitNode<S, t.Block>;
-  Statement?: VisitNode<S, t.Statement>;
-  Terminatorless?: VisitNode<S, t.Terminatorless>;
+  BlockParent?: VisitNode<S, t.BlockParent>;
+  Class?: VisitNode<S, t.Class>;
   CompletionStatement?: VisitNode<S, t.CompletionStatement>;
   Conditional?: VisitNode<S, t.Conditional>;
-  Loop?: VisitNode<S, t.Loop>;
-  While?: VisitNode<S, t.While>;
+  Declaration?: VisitNode<S, t.Declaration>;
+  EnumBody?: VisitNode<S, t.EnumBody>;
+  EnumMember?: VisitNode<S, t.EnumMember>;
+  ExportDeclaration?: VisitNode<S, t.ExportDeclaration>;
+  Expression?: VisitNode<S, t.Expression>;
   ExpressionWrapper?: VisitNode<S, t.ExpressionWrapper>;
+  Flow?: VisitNode<S, t.Flow>;
+  FlowBaseAnnotation?: VisitNode<S, t.FlowBaseAnnotation>;
+  FlowDeclaration?: VisitNode<S, t.FlowDeclaration>;
+  FlowPredicate?: VisitNode<S, t.FlowPredicate>;
+  FlowType?: VisitNode<S, t.FlowType>;
   For?: VisitNode<S, t.For>;
   ForXStatement?: VisitNode<S, t.ForXStatement>;
   Function?: VisitNode<S, t.Function>;
   FunctionParent?: VisitNode<S, t.FunctionParent>;
-  Pureish?: VisitNode<S, t.Pureish>;
-  Declaration?: VisitNode<S, t.Declaration>;
-  PatternLike?: VisitNode<S, t.PatternLike>;
-  LVal?: VisitNode<S, t.LVal>;
-  TSEntityName?: VisitNode<S, t.TSEntityName>;
-  Literal?: VisitNode<S, t.Literal>;
   Immutable?: VisitNode<S, t.Immutable>;
-  UserWhitespacable?: VisitNode<S, t.UserWhitespacable>;
-  Method?: VisitNode<S, t.Method>;
-  ObjectMember?: VisitNode<S, t.ObjectMember>;
-  Property?: VisitNode<S, t.Property>;
-  UnaryLike?: VisitNode<S, t.UnaryLike>;
-  Pattern?: VisitNode<S, t.Pattern>;
-  Class?: VisitNode<S, t.Class>;
   ImportOrExportDeclaration?: VisitNode<S, t.ImportOrExportDeclaration>;
-  ExportDeclaration?: VisitNode<S, t.ExportDeclaration>;
-  ModuleSpecifier?: VisitNode<S, t.ModuleSpecifier>;
-  Accessor?: VisitNode<S, t.Accessor>;
-  Private?: VisitNode<S, t.Private>;
-  Flow?: VisitNode<S, t.Flow>;
-  FlowType?: VisitNode<S, t.FlowType>;
-  FlowBaseAnnotation?: VisitNode<S, t.FlowBaseAnnotation>;
-  FlowDeclaration?: VisitNode<S, t.FlowDeclaration>;
-  FlowPredicate?: VisitNode<S, t.FlowPredicate>;
-  EnumBody?: VisitNode<S, t.EnumBody>;
-  EnumMember?: VisitNode<S, t.EnumMember>;
   JSX?: VisitNode<S, t.JSX>;
+  LVal?: VisitNode<S, t.LVal>;
+  Literal?: VisitNode<S, t.Literal>;
+  Loop?: VisitNode<S, t.Loop>;
+  Method?: VisitNode<S, t.Method>;
   Miscellaneous?: VisitNode<S, t.Miscellaneous>;
-  TypeScript?: VisitNode<S, t.TypeScript>;
-  TSTypeElement?: VisitNode<S, t.TSTypeElement>;
-  TSType?: VisitNode<S, t.TSType>;
-  TSBaseType?: VisitNode<S, t.TSBaseType>;
   ModuleDeclaration?: VisitNode<S, t.ModuleDeclaration>;
+  ModuleSpecifier?: VisitNode<S, t.ModuleSpecifier>;
+  ObjectMember?: VisitNode<S, t.ObjectMember>;
+  Pattern?: VisitNode<S, t.Pattern>;
+  PatternLike?: VisitNode<S, t.PatternLike>;
+  Private?: VisitNode<S, t.Private>;
+  Property?: VisitNode<S, t.Property>;
+  Pureish?: VisitNode<S, t.Pureish>;
+  Scopable?: VisitNode<S, t.Scopable>;
+  Standardized?: VisitNode<S, t.Standardized>;
+  Statement?: VisitNode<S, t.Statement>;
+  TSBaseType?: VisitNode<S, t.TSBaseType>;
+  TSEntityName?: VisitNode<S, t.TSEntityName>;
+  TSType?: VisitNode<S, t.TSType>;
+  TSTypeElement?: VisitNode<S, t.TSTypeElement>;
+  Terminatorless?: VisitNode<S, t.Terminatorless>;
+  TypeScript?: VisitNode<S, t.TypeScript>;
+  UnaryLike?: VisitNode<S, t.UnaryLike>;
+  UserWhitespacable?: VisitNode<S, t.UserWhitespacable>;
+  While?: VisitNode<S, t.While>;
 }

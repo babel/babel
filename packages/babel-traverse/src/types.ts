@@ -5,7 +5,7 @@ import type {
   ExplVisitorBase,
   VisitorBaseNodes,
   VisitorBaseAliases,
-} from "./types/generated.ts";
+} from "./generated/visitor-types.d.ts";
 
 export type VisitPhase = "enter" | "exit";
 
