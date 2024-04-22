@@ -1,5 +1,3 @@
-/// <reference path="../../../lib/third-party-libs.d.ts" />
-
 import type { Token as JSToken, JSXToken } from "js-tokens";
 import jsTokens from "js-tokens";
 
