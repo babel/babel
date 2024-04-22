@@ -4,7 +4,14 @@
     "./tsconfig.base.json",
     "./tsconfig.paths.json"
   ],
-  "include": [],
+  "compilerOptions": {
+    "skipLibCheck": false
+  },
+  "include": [
+    "packages/*/src/**/*.d.ts",
+    "packages/babel-parser/typings/*.d.ts",
+    "dts/**/*.d.ts"
+  ],
   "references": [
     {
       "path": "./codemods/babel-plugin-codemod-object-assign-to-object-spread"

@@ -147,8 +147,6 @@ for (const name of roots) {
       }
       return;
     }
-    if (node.name === "@babel/traverse" || node.name === "@babel/core")
-      debugger;
     seen.add(node);
     stack.push(node.name);
     for (const dep of node.dependencies) {
@@ -226,11 +224,11 @@ function buildTSConfig(pkgs, allDeps) {
   return {
     extends: ["../../tsconfig.base.json", "../../tsconfig.paths.json"],
     include: pkgs
-      .map(({ name, relative }) =>
-        name === "@babel/eslint-parser"
+      .map(({ name, relative }) => {
+        return name === "@babel/eslint-parser"
           ? `../../${relative.slice(2)}/src/**/*.cts`
-          : `../../${relative.slice(2)}/src/**/*.ts`
-      )
+          : `../../${relative.slice(2)}/src/**/*.ts`;
+      })
       .concat(
         [
           "../../lib/globals.d.ts",
@@ -294,7 +292,14 @@ fs.writeFileSync(
     JSON.stringify(
       {
         extends: ["./tsconfig.base.json", "./tsconfig.paths.json"],
-        include: [],
+        compilerOptions: {
+          skipLibCheck: false,
+        },
+        include: [
+          "packages/*/src/**/*.d.ts",
+          "packages/babel-parser/typings/*.d.ts",
+          "dts/**/*.d.ts",
+        ],
         references: Array.from(projectsFolders.values())
           .sort()
           .map(path => ({ path })),
