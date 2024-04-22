@@ -1477,8 +1477,11 @@ export default abstract class Tokenizer extends CommentsParser {
    *
    * If `errorRecovery` is `true`, the error is pushed to the errors array and
    * returned. If `errorRecovery` is `false`, the error is instead thrown.
+   *
+   * The return type is marked as `never` for simplicity, as error recovery
+   * will create types in an invalid AST shape.
    */
-  raise<ErrorDetails>(
+  raise<ErrorDetails = {}>(
     toParseError: ParseErrorConstructor<ErrorDetails>,
     at: Position | Undone<Node>,
     details: ErrorDetails = {} as ErrorDetails,

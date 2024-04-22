@@ -7,9 +7,7 @@ import type { ParseError } from "./parse-error.ts";
 /*
  * If making any changes to the AST, update:
  * - This repository:
- *   - This file
- *   - `ast` directory
- * - Babel repository:
+ *   - This file (including the `Node` alias at the bottom)
  *   - packages/babel-types/src/definitions
  *   - packages/babel-generators/src/generators
  */
@@ -55,15 +53,113 @@ export interface NodeBase {
   };
 }
 
-// Using a union type for `Node` makes type-checking too slow.
-// Instead, add an index signature to allow a Node to be treated as anything.
-// todo(flow->ts): this probably should be replaced with union
-export interface Node extends NodeBase {
-  type: string;
+type NodeAny<T extends string, KnownProps = {}> = NodeBase & {
+  type: T;
   [key: string]: any;
-}
-export type Expression = Node;
-export type Statement = Node;
+} & KnownProps;
+export type Expression =
+  | ArrayExpression
+  | AssignmentExpression
+  | BinaryExpression
+  | CallExpression
+  | ConditionalExpression
+  | FunctionExpression
+  | Identifier
+  | StringLiteral
+  | NumericLiteral
+  | NullLiteral
+  | BooleanLiteral
+  | RegExpLiteral
+  | LogicalExpression
+  | MemberExpression
+  | NewExpression
+  | ObjectExpression
+  | SequenceExpression
+  | ParenthesizedExpression
+  | ThisExpression
+  | UnaryExpression
+  | UpdateExpression
+  | ArrowFunctionExpression
+  | ClassExpression
+  | ImportExpression
+  | MetaProperty
+  | Super
+  | TaggedTemplateExpression
+  | TemplateLiteral
+  | YieldExpression
+  | AwaitExpression
+  | Import
+  | BigIntLiteral
+  | OptionalMemberExpression
+  | OptionalCallExpression
+  | TypeCastExpression
+  | JSXElement
+  | JSXFragment
+  | BindExpression
+  | DoExpression
+  | RecordExpression
+  | TupleExpression
+  | DecimalLiteral
+  | ModuleExpression
+  | TopicReference
+  | PipelineTopicExpression
+  | PipelineBareFunction
+  | PipelinePrimaryTopicReference
+  | TsInstantiationExpression
+  | TsAsExpression
+  | TsSatisfiesExpression
+  | TsTypeAssertion
+  | TsTypeCastExpression
+  | TsNonNullExpression
+  | EstreeChainExpression
+  | EstreeLiteral;
+export type Statement =
+  | BlockStatement
+  | BreakStatement
+  | ContinueStatement
+  | DebuggerStatement
+  | DoWhileStatement
+  | EmptyStatement
+  | ExpressionStatement
+  | ForInStatement
+  | ForStatement
+  | FunctionDeclaration
+  | IfStatement
+  | LabeledStatement
+  | ReturnStatement
+  | SwitchStatement
+  | ThrowStatement
+  | TryStatement
+  | VariableDeclaration
+  | WhileStatement
+  | WithStatement
+  | ClassDeclaration
+  | ExportAllDeclaration
+  | ExportDefaultDeclaration
+  | ExportNamedDeclaration
+  | ForOfStatement
+  | ImportDeclaration
+  | FlowDeclareClass
+  | FlowDeclareFunction
+  | FlowDeclareInterface
+  | FlowDeclareModule
+  | FlowDeclareModuleExports
+  | FlowDeclareTypeAlias
+  | FlowDeclareOpaqueType
+  | FlowDeclareVariable
+  | FlowDeclareExportDeclaration
+  | FlowEnumDeclaration
+  | FlowInterface
+  | FlowOpaqueType
+  | FlowTypeAlias
+  | TSDeclareFunction
+  | TsInterfaceDeclaration
+  | TsTypeAliasDeclaration
+  | TsEnumDeclaration
+  | TsModuleDeclaration
+  | TsImportEqualsDeclaration
+  | TsExportAssignment
+  | TsNamespaceExportDeclaration;
 export type Pattern =
   | Identifier
   | ObjectPattern
@@ -326,7 +422,7 @@ export interface ForStatement extends NodeBase {
 export type ForInOf = ForInStatement | ForOfStatement;
 
 interface ForInOfBase extends NodeBase {
-  left: VariableDeclaration | Expression;
+  left: VariableDeclaration | Assignable;
   right: Expression;
   body: Statement;
 }
@@ -454,7 +550,6 @@ export type ObjectOrClassMember = ClassMethod | ClassProperty | ObjectMember;
 export type ObjectMember = ObjectProperty | ObjectMethod;
 
 export interface ObjectMemberBase extends NodeBase {
-  key: Expression;
   computed: boolean;
   value: Expression | Pattern;
   decorators?: Decorator[];
@@ -467,12 +562,14 @@ export interface ObjectMemberBase extends NodeBase {
 export interface ObjectProperty extends ObjectMemberBase {
   type: "ObjectProperty";
   shorthand: boolean;
+  key: Expression | PrivateName; // For private destructuring
   value: Expression | Pattern;
 }
 
 export interface ObjectMethod extends ObjectMemberBase, FunctionBase {
   type: "ObjectMethod";
   kind: "get" | "set" | "method"; // Never "constructor"
+  key: Expression;
   value: Expression;
 }
 
@@ -514,7 +611,7 @@ export type UpdateOperator = "++" | "--";
 export interface BinaryExpression extends NodeBase {
   type: "BinaryExpression";
   operator: BinaryOperator;
-  left: Expression;
+  left: Expression | PrivateName;
   right: Expression;
 }
 
@@ -541,10 +638,17 @@ export type BinaryOperator =
   | "in"
   | "instanceof";
 
+export type Assignable =
+  | Pattern
+  | MemberExpression
+  | ParenthesizedExpression
+  | TsTypeCastExpression
+  | TypeCastExpression;
+
 export interface AssignmentExpression extends NodeBase {
   type: "AssignmentExpression";
   operator: AssignmentOperator;
-  left: Pattern | Expression;
+  left: Assignable;
   right: Expression;
 }
 
@@ -579,14 +683,14 @@ export interface SpreadElement extends NodeBase {
 export interface MemberExpression extends NodeBase {
   type: "MemberExpression";
   object: Expression | Super;
-  property: Expression;
+  property: Expression | PrivateName;
   computed: boolean;
 }
 
 export interface OptionalMemberExpression extends NodeBase {
   type: "OptionalMemberExpression";
   object: Expression | Super;
-  property: Expression;
+  property: Expression | PrivateName;
   computed: boolean;
   optional: boolean;
 }
@@ -688,7 +792,7 @@ export interface PipelinePrimaryTopicReference extends NodeBase {
 export interface TemplateLiteral extends NodeBase {
   type: "TemplateLiteral";
   quasis: TemplateElement[];
-  expressions: Expression[];
+  expressions: Expression[] | TsType[];
 }
 
 export interface TaggedTemplateExpression extends NodeBase {
@@ -812,7 +916,7 @@ interface MethodBase extends FunctionBase {
 export type MethodKind = "constructor" | "method" | "get" | "set";
 
 export interface ClassMethodOrDeclareMethodCommon extends ClassMemberBase {
-  key: Expression;
+  key: Expression | PrivateName;
   kind: MethodKind;
   static: boolean;
   decorators?: Decorator[];
@@ -987,6 +1091,8 @@ export interface ExportDefaultDeclaration extends NodeBase {
     | OptFunctionDeclaration
     | OptTSDeclareFunction
     | OptClassDeclaration
+    | FlowEnumDeclaration
+    | TsInterfaceDeclaration
     | Expression;
 }
 
@@ -995,6 +1101,7 @@ export interface ExportAllDeclaration extends NodeBase {
   source: Literal;
   exportKind?: "type" | "value"; // TODO: Not in spec,
   assertions?: ImportAttribute[];
+  attributes?: ImportAttribute[];
 }
 
 export interface PipelineTopicExpression extends NodeBase {
@@ -1009,26 +1116,30 @@ export interface PipelineBareFunction extends NodeBase {
 
 // JSX (TODO: Not in spec)
 
-export type JSXIdentifier = Node;
-export type JSXNamespacedName = Node;
-export type JSXMemberExpression = Node;
-export type JSXEmptyExpression = Node;
-export type JSXSpreadChild = Node;
-export type JSXExpressionContainer = Node;
-export type JSXAttribute = Node;
-export type JSXSpreadAttribute = Node;
+export type JSXIdentifier = NodeAny<"JSXIdentifier">;
+export type JSXNamespacedName = NodeAny<"JSXNamespacedName">;
+export type JSXMemberExpression = NodeAny<"JSXMemberExpression">;
+export type JSXEmptyExpression = NodeAny<"JSXEmptyExpression">;
+export type JSXSpreadChild = NodeAny<"JSXSpreadChild">;
+export type JSXExpressionContainer = NodeAny<"JSXExpressionContainer">;
+export type JSXAttribute = NodeAny<"JSXAttribute">;
+export type JSXSpreadAttribute = NodeAny<"JSXSpreadAttribute">;
 export interface JSXOpeningElement extends NodeBase {
   type: "JSXOpeningElement";
   name: JSXNamespacedName | JSXMemberExpression;
   typeParameters?: TypeParameterInstantiationBase | null; // TODO: Not in spec,
-  attributes: JSXAttribute[];
+  attributes: (JSXAttribute | JSXSpreadAttribute)[];
   selfClosing: boolean;
 }
-export type JSXClosingElement = Node;
-export type JSXElement = Node;
-export type JSXOpeningFragment = Node;
-export type JSXClosingFragment = Node;
-export type JSXFragment = Node;
+export type JSXClosingElement = NodeAny<"JSXClosingElement">;
+export type JSXElement = NodeAny<"JSXElement">;
+export type JSXOpeningFragment = NodeAny<"JSXOpeningFragment">;
+export type JSXClosingFragment = NodeAny<"JSXClosingFragment">;
+export type JSXFragment = NodeAny<"JSXFragment">;
+export type JSXElementTag = JSXOpeningElement | JSXClosingElement;
+export type JSXFragmentTag = JSXOpeningFragment | JSXClosingFragment;
+export type JSXTag = JSXElementTag | JSXFragmentTag;
+export type JSXText = NodeAny<"JSXText">;
 
 // Flow/TypeScript common (TODO: Not in spec)
 
@@ -1038,7 +1149,7 @@ export interface TypeAnnotationBase extends NodeBase {
 
 export interface TypeAnnotation extends NodeBase {
   type: "TypeAnnotation";
-  typeAnnotation: FlowTypeAnnotation;
+  typeAnnotation: FlowType;
 }
 
 export interface TsTypeAnnotation extends NodeBase {
@@ -1113,37 +1224,90 @@ export interface TsTypeCastExpression extends NodeBase {
   typeAnnotation: TsTypeAnnotation;
 }
 
-export type FlowType = Node;
-export type FlowPredicate = Node;
-export type FlowDeclare = Node;
-export type FlowDeclareClass = Node;
-export type FlowDeclareExportDeclaration = Node;
-export type FlowDeclareFunction = Node;
-export type FlowDeclareVariable = Node;
-export type FlowDeclareModule = Node;
-export type FlowDeclareModuleExports = Node;
-export type FlowDeclareTypeAlias = Node;
-export type FlowDeclareOpaqueType = Node;
-export type FlowDeclareInterface = Node;
-export type FlowInterface = Node;
-export type FlowInterfaceExtends = Node;
-export type FlowTypeAlias = Node;
-export type FlowOpaqueType = Node;
-export type FlowObjectTypeIndexer = Node;
-export type FlowObjectTypeInternalSlot = Node;
-export type FlowFunctionTypeAnnotation = Node;
-export type FlowObjectTypeProperty = Node;
-export type FlowObjectTypeSpreadProperty = Node;
-export type FlowObjectTypeCallProperty = Node;
-export type FlowObjectTypeAnnotation = Node;
-export type FlowQualifiedTypeIdentifier = Node;
-export type FlowGenericTypeAnnotation = Node;
-export type FlowTypeofTypeAnnotation = Node;
-export type FlowTupleTypeAnnotation = Node;
-export type FlowFunctionTypeParam = Node;
-export type FlowTypeAnnotation = Node;
-export type FlowVariance = Node;
-export type FlowClassImplements = Node;
+export type FlowPredicate =
+  | NodeAny<"DeclaredPredicate">
+  | NodeAny<"InferredPredicate">;
+export type FlowDeclare =
+  | FlowDeclareClass
+  | FlowDeclareExportDeclaration
+  | FlowDeclareFunction
+  | FlowDeclareVariable
+  | FlowDeclareModule
+  | FlowDeclareModuleExports
+  | FlowDeclareTypeAlias
+  | FlowDeclareOpaqueType
+  | FlowDeclareInterface;
+export type FlowDeclareClass = NodeAny<"DeclareClass">;
+export type FlowDeclareExportDeclaration =
+  | NodeAny<"DeclareExportDeclaration">
+  | NodeAny<"DeclareExportDefaultDeclaration">
+  | NodeAny<"DeclareExportAllDeclaration">;
+export type FlowDeclareFunction = NodeAny<"DeclareFunction">;
+export type FlowDeclareVariable = NodeAny<"DeclareVariable">;
+export type FlowDeclareModule = NodeAny<"DeclareModule">;
+export type FlowDeclareModuleExports = NodeAny<"DeclareModuleExports">;
+export type FlowDeclareTypeAlias = NodeAny<"DeclareTypeAlias">;
+export type FlowDeclareOpaqueType = NodeAny<"DeclareOpaqueType">;
+export type FlowDeclareInterface = NodeAny<"DeclareInterface">;
+export type FlowInterface = NodeAny<"InterfaceDeclaration">;
+export type FlowInterfaceExtends = NodeAny<"InterfaceExtends">;
+export type FlowTypeAlias = NodeAny<"TypeAlias">;
+export type FlowOpaqueType = NodeAny<"OpaqueType">;
+export type FlowObjectTypeIndexer = NodeAny<"ObjectTypeIndexer">;
+export type FlowObjectTypeInternalSlot = NodeAny<"ObjectTypeInternalSlot">;
+export type FlowEnumDeclaration = NodeAny<"EnumDeclaration">;
+export type FlowEnumBody = NodeAny<
+  "EnumBooleanBody" | "EnumNumberBody" | "EnumStringBody" | "EnumSymbolBody"
+>;
+export type FlowEnumMember =
+  | NodeAny<"EnumBooleanMember">
+  | NodeAny<"EnumNumberMember">
+  | NodeAny<"EnumStringMember">
+  | NodeAny<"EnumDefaultedMember">;
+export type FlowFunctionTypeAnnotation = NodeAny<"FunctionTypeAnnotation">;
+export type FlowObjectTypeProperty = NodeAny<"ObjectTypeProperty">;
+export type FlowObjectTypeSpreadProperty = NodeAny<"ObjectTypeSpreadProperty">;
+export type FlowObjectTypeCallProperty = NodeAny<"ObjectTypeCallProperty">;
+export type FlowObjectTypeAnnotation = NodeAny<"ObjectTypeAnnotation">;
+export type FlowQualifiedTypeIdentifier = NodeAny<"QualifiedTypeIdentifier">;
+export type FlowGenericTypeAnnotation = NodeAny<"GenericTypeAnnotation">;
+export type FlowTypeofTypeAnnotation = NodeAny<"TypeofTypeAnnotation">;
+export type FlowTupleTypeAnnotation = NodeAny<"TupleTypeAnnotation">;
+export type FlowFunctionTypeParam = NodeAny<"FunctionTypeParam">;
+export type FlowOtherTypeAnnotation = NodeAny<
+  | "AnyTypeAnnotation"
+  | "BooleanTypeAnnotation"
+  | "MixedTypeAnnotation"
+  | "EmptyTypeAnnotation"
+  | "ExistsTypeAnnotation"
+  | "NumberTypeAnnotation"
+  | "StringTypeAnnotation"
+  | "SymbolTypeAnnotation"
+  | "NullLiteralTypeAnnotation"
+  | "VoidTypeAnnotation"
+  | "ThisTypeAnnotation"
+  | "ArrayTypeAnnotation"
+  | "NullableTypeAnnotation"
+  | "IntersectionTypeAnnotation"
+  | "UnionTypeAnnotation"
+>;
+export type FlowType =
+  | FlowFunctionTypeAnnotation
+  | FlowObjectTypeAnnotation
+  | FlowGenericTypeAnnotation
+  | FlowTypeofTypeAnnotation
+  | FlowTupleTypeAnnotation
+  | FlowInterfaceType
+  | FlowIndexedAccessType
+  | FlowOptionalIndexedAccessType
+  | FlowOtherTypeAnnotation
+  | StringLiteralTypeAnnotation
+  | BooleanLiteralTypeAnnotation
+  | NumberLiteralTypeAnnotation
+  | BigIntLiteralTypeAnnotation
+  | Identifier;
+export type FlowVariance = NodeAny<"Variance">;
+export type FlowClassImplements = NodeAny<"ClassImplements">;
 
 export interface FlowInterfaceType extends NodeBase {
   type: "InterfaceTypeAnnotation";
@@ -1188,6 +1352,7 @@ export interface BigIntLiteralTypeAnnotation extends NodeBase {
 export interface EstreeLiteral extends NodeBase {
   type: "Literal";
   value: any;
+  decimal?: string;
 }
 
 interface EstreeRegExpLiteralRegex {
@@ -1206,8 +1371,9 @@ export interface EstreeBigIntLiteral extends EstreeLiteral {
 
 export interface EstreeProperty extends NodeBase {
   type: "Property";
+  method: boolean;
   shorthand: boolean;
-  key: Expression;
+  key: Expression | EstreePrivateIdentifier;
   computed: boolean;
   value: Expression;
   decorators: Decorator[];
@@ -1220,7 +1386,7 @@ export interface EstreeMethodDefinition extends NodeBase {
   static: boolean;
   key: Expression;
   computed: boolean;
-  value: Expression;
+  value: FunctionExpression;
   decorators: Decorator[];
   kind?: "get" | "set" | "method";
   variance?: FlowVariance | null;
@@ -1710,3 +1876,235 @@ export interface ParseClassMemberState {
   hadConstructor: boolean;
   hadSuperClass: boolean;
 }
+
+export type Node =
+  | ArgumentPlaceholder
+  | ArrayExpression
+  | ArrayPattern
+  | ArrowFunctionExpression
+  | AssignmentExpression
+  | AssignmentPattern
+  | AwaitExpression
+  | BigIntLiteral
+  | BigIntLiteralTypeAnnotation
+  | BinaryExpression
+  | BindExpression
+  | BlockStatement
+  | BooleanLiteral
+  | BooleanLiteralTypeAnnotation
+  | BreakStatement
+  | CallExpression
+  | CatchClause
+  | ClassAccessorProperty
+  | ClassBody
+  | ClassDeclaration
+  | ClassExpression
+  | ClassMethod
+  | ClassPrivateMethod
+  | ClassPrivateProperty
+  | ClassProperty
+  | ConditionalExpression
+  | ContinueStatement
+  | DebuggerStatement
+  | DecimalLiteral
+  | Decorator
+  | Directive
+  | DirectiveLiteral
+  | DoExpression
+  | DoWhileStatement
+  | EmptyStatement
+  | EstreeChainExpression
+  | EstreeLiteral
+  | EstreeMethodDefinition
+  | EstreePrivateIdentifier
+  | EstreeProperty
+  | EstreePropertyDefinition
+  | ExportAllDeclaration
+  | ExportDefaultDeclaration
+  | ExportDefaultSpecifier
+  | ExportNamedDeclaration
+  | ExportNamespaceSpecifier
+  | ExportSpecifier
+  | ExpressionStatement
+  | File
+  | FlowClassImplements
+  | FlowDeclareClass
+  | FlowDeclareExportDeclaration
+  | FlowDeclareFunction
+  | FlowDeclareInterface
+  | FlowDeclareModule
+  | FlowDeclareModuleExports
+  | FlowDeclareOpaqueType
+  | FlowDeclareTypeAlias
+  | FlowDeclareVariable
+  | FlowEnumBody
+  | FlowEnumDeclaration
+  | FlowEnumMember
+  | FlowFunctionTypeAnnotation
+  | FlowFunctionTypeParam
+  | FlowGenericTypeAnnotation
+  | FlowIndexedAccessType
+  | FlowInterface
+  | FlowInterfaceExtends
+  | FlowInterfaceType
+  | FlowObjectTypeAnnotation
+  | FlowObjectTypeCallProperty
+  | FlowObjectTypeIndexer
+  | FlowObjectTypeInternalSlot
+  | FlowObjectTypeProperty
+  | FlowObjectTypeSpreadProperty
+  | FlowOpaqueType
+  | FlowOptionalIndexedAccessType
+  | FlowOtherTypeAnnotation
+  | FlowPredicate
+  | FlowPredicate
+  | FlowQualifiedTypeIdentifier
+  | FlowTupleTypeAnnotation
+  | FlowTypeAlias
+  | FlowTypeofTypeAnnotation
+  | FlowVariance
+  | ForInStatement
+  | ForOfStatement
+  | ForStatement
+  | FunctionDeclaration
+  | FunctionExpression
+  | Identifier
+  | IfStatement
+  | Import
+  | ImportAttribute
+  | ImportDeclaration
+  | ImportDefaultSpecifier
+  | ImportExpression
+  | ImportExpression
+  | ImportNamespaceSpecifier
+  | ImportSpecifier
+  | InterpreterDirective
+  | JSXAttribute
+  | JSXClosingElement
+  | JSXClosingFragment
+  | JSXElement
+  | JSXEmptyExpression
+  | JSXExpressionContainer
+  | JSXFragment
+  | JSXIdentifier
+  | JSXMemberExpression
+  | JSXNamespacedName
+  | JSXOpeningElement
+  | JSXOpeningFragment
+  | JSXSpreadAttribute
+  | JSXSpreadChild
+  | JSXText
+  | LabeledStatement
+  | Literal
+  | LogicalExpression
+  | MemberExpression
+  | MetaProperty
+  | ModuleExpression
+  | NewExpression
+  | NullLiteral
+  | NumberLiteralTypeAnnotation
+  | NumericLiteral
+  | ObjectExpression
+  | ObjectMethod
+  | ObjectPattern
+  | ObjectProperty
+  | OptionalCallExpression
+  | OptionalMemberExpression
+  | ParenthesizedExpression
+  | PipelineBareAwaitedFunctionBody
+  | PipelineBareConstructorBody
+  | PipelineBareFunction
+  | PipelineBareFunctionBody
+  | PipelineBody
+  | PipelinePrimaryTopicReference
+  | PipelineTopicBody
+  | PipelineTopicExpression
+  | Placeholder
+  | PrivateName
+  | Program
+  | RecordExpression
+  | RegExpLiteral
+  | RestElement
+  | ReturnStatement
+  | SequenceExpression
+  | SpreadElement
+  | StaticBlock
+  | StringLiteral
+  | StringLiteralTypeAnnotation
+  | Super
+  | SwitchCase
+  | SwitchStatement
+  | TSDeclareFunction
+  | TSDeclareMethod
+  | TSInterfaceBody
+  | TSParameterProperty
+  | TaggedTemplateExpression
+  | TemplateElement
+  | TemplateLiteral
+  | ThisExpression
+  | ThrowStatement
+  | TopicReference
+  | TryStatement
+  | TsArrayType
+  | TsAsExpression
+  | TsCallSignatureDeclaration
+  | TsConditionalType
+  | TsConstructSignatureDeclaration
+  | TsConstructorType
+  | TsEnumDeclaration
+  | TsEnumMember
+  | TsExportAssignment
+  | TsExpressionWithTypeArguments
+  | TsExternalModuleReference
+  | TsFunctionType
+  | TsImportEqualsDeclaration
+  | TsImportType
+  | TsIndexSignature
+  | TsIndexedAccessType
+  | TsInferType
+  | TsInstantiationExpression
+  | TsInterfaceDeclaration
+  | TsIntersectionType
+  | TsKeywordType
+  | TsLiteralType
+  | TsMappedType
+  | TsMethodSignature
+  | TsModuleBlock
+  | TsModuleDeclaration
+  | TsNamedTupleMember
+  | TsNamespaceExportDeclaration
+  | TsNonNullExpression
+  | TsOptionalType
+  | TsParenthesizedType
+  | TsPropertySignature
+  | TsQualifiedName
+  | TsRestType
+  | TsSatisfiesExpression
+  | TsThisType
+  | TsTupleType
+  | TsTypeAliasDeclaration
+  | TsTypeAnnotation
+  | TsTypeAssertion
+  | TsTypeCastExpression
+  | TsTypeLiteral
+  | TsTypeOperator
+  | TsTypeParameter
+  | TsTypeParameterDeclaration
+  | TsTypeParameterInstantiation
+  | TsTypePredicate
+  | TsTypeQuery
+  | TsTypeReference
+  | TsUnionType
+  | TupleExpression
+  | TypeAnnotation
+  | TypeCastExpression
+  | TypeParameter
+  | TypeParameterDeclaration
+  | TypeParameterInstantiation
+  | UnaryExpression
+  | UpdateExpression
+  | VariableDeclaration
+  | VariableDeclarator
+  | WhileStatement
+  | WithStatement
+  | YieldExpression;

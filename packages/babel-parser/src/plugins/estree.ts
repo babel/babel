@@ -72,7 +72,7 @@ export default (superClass: typeof Parser) =>
       return node;
     }
 
-    estreeParseLiteral<T extends N.Node>(value: any) {
+    estreeParseLiteral<T extends N.EstreeLiteral>(value: any) {
       // @ts-expect-error ESTree plugin changes node types
       return this.parseLiteral<T>(value, "Literal");
     }
@@ -92,6 +92,7 @@ export default (superClass: typeof Parser) =>
     }
 
     parseBooleanLiteral(value: boolean): N.BooleanLiteral {
+      // @ts-expect-error ESTree plugin changes node types
       return this.estreeParseLiteral(value);
     }
 
@@ -135,8 +136,7 @@ export default (superClass: typeof Parser) =>
     }
 
     getObjectOrClassMethodParams(method: N.ObjectMethod | N.ClassMethod) {
-      return (method as any as N.EstreeProperty | N.EstreeMethodDefinition)
-        .value.params;
+      return (method as unknown as N.EstreeMethodDefinition).value.params;
     }
 
     isValidDirective(stmt: N.Statement): boolean {
@@ -219,7 +219,8 @@ export default (superClass: typeof Parser) =>
       return node as unknown as N.EstreePrivateIdentifier;
     }
 
-    isPrivateName(node: N.Node): boolean {
+    // @ts-expect-error ESTree plugin changes node types
+    isPrivateName(node: N.Node): node is N.EstreePrivateIdentifier {
       if (!process.env.BABEL_8_BREAKING) {
         if (!this.getPluginOption("estree", "classFeatures")) {
           return super.isPrivateName(node);
@@ -228,10 +229,11 @@ export default (superClass: typeof Parser) =>
       return node.type === "PrivateIdentifier";
     }
 
-    getPrivateNameSV(node: N.Node): string {
+    // @ts-expect-error ESTree plugin changes node types
+    getPrivateNameSV(node: N.EstreePrivateIdentifier): string {
       if (!process.env.BABEL_8_BREAKING) {
         if (!this.getPluginOption("estree", "classFeatures")) {
-          return super.getPrivateNameSV(node);
+          return super.getPrivateNameSV(node as unknown as N.PrivateName);
         }
       }
       return node.name;
@@ -293,6 +295,11 @@ export default (superClass: typeof Parser) =>
         node as Undone<N.EstreeMethodDefinition>,
         "MethodDefinition",
       );
+    }
+
+    nameIsConstructor(key: N.Expression | N.PrivateName): boolean {
+      if (key.type === "Literal") return key.value === "constructor";
+      return super.nameIsConstructor(key);
     }
 
     parseClassProperty(...args: [N.ClassProperty]): any {
@@ -402,9 +409,12 @@ export default (superClass: typeof Parser) =>
       isLast: boolean,
       isLHS: boolean,
     ) {
-      if (prop.kind === "get" || prop.kind === "set") {
+      if (
+        prop.type === "Property" &&
+        (prop.kind === "get" || prop.kind === "set")
+      ) {
         this.raise(Errors.PatternHasAccessor, prop.key);
-      } else if (prop.method) {
+      } else if (prop.type === "Property" && prop.method) {
         this.raise(Errors.PatternHasMethod, prop.key);
       } else {
         super.toAssignableObjectExpressionProp(prop, isLast, isLHS);
@@ -419,16 +429,17 @@ export default (superClass: typeof Parser) =>
 
       if (node.callee.type === "Import") {
         (node as N.Node as N.EstreeImportExpression).type = "ImportExpression";
-        (node as N.Node as N.EstreeImportExpression).source = node.arguments[0];
+        (node as N.Node as N.EstreeImportExpression).source = node
+          .arguments[0] as N.Expression;
         if (
           this.hasPlugin("importAttributes") ||
           this.hasPlugin("importAssertions")
         ) {
           (node as N.Node as N.EstreeImportExpression).options =
-            node.arguments[1] ?? null;
+            (node.arguments[1] as N.Expression) ?? null;
           // compatibility with previous ESTree AST
           (node as N.Node as N.EstreeImportExpression).attributes =
-            node.arguments[1] ?? null;
+            (node.arguments[1] as N.Expression) ?? null;
         }
         // arguments isn't optional in the type definition
         delete node.arguments;
@@ -511,7 +522,7 @@ export default (superClass: typeof Parser) =>
       startLoc: Position,
       noCalls: boolean | undefined | null,
       state: N.ParseSubscriptState,
-    ) {
+    ): N.Expression {
       const node = super.parseSubscript(base, startLoc, noCalls, state);
 
       if (state.optionalChainMember) {
@@ -520,7 +531,9 @@ export default (superClass: typeof Parser) =>
           node.type === "OptionalMemberExpression" ||
           node.type === "OptionalCallExpression"
         ) {
-          node.type = node.type.substring(8); // strip Optional prefix
+          // strip Optional prefix
+          (node as unknown as N.CallExpression | N.MemberExpression).type =
+            node.type.substring(8) as "CallExpression" | "MemberExpression";
         }
         if (state.stop) {
           const chain = this.startNodeAtNode<N.EstreeChainExpression>(node);
@@ -531,6 +544,7 @@ export default (superClass: typeof Parser) =>
         node.type === "MemberExpression" ||
         node.type === "CallExpression"
       ) {
+        // @ts-expect-error not in the type definitions
         node.optional = false;
       }
 
@@ -551,13 +565,17 @@ export default (superClass: typeof Parser) =>
       return super.hasPropertyAsPrivateName(node);
     }
 
-    // @ts-expect-error override interfaces
-    isObjectProperty(node: N.Node): boolean {
+    // @ts-expect-error ESTree plugin changes node types
+    isObjectProperty(node: N.Node): node is N.EstreeProperty {
       return node.type === "Property" && node.kind === "init" && !node.method;
     }
 
-    isObjectMethod(node: N.Node): boolean {
-      return node.method || node.kind === "get" || node.kind === "set";
+    // @ts-expect-error ESTree plugin changes node types
+    isObjectMethod(node: N.Node): node is N.EstreeProperty {
+      return (
+        node.type === "Property" &&
+        (node.method || node.kind === "get" || node.kind === "set")
+      );
     }
 
     finishNodeAt<T extends NodeType>(
