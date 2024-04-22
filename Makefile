@@ -63,7 +63,8 @@ tscheck:
 clean-ts:
 	$(MAKEJS) clean-ts
 
-lint-ci: lint-ci check-compat-data
+lint-ci:
+	$(MAKEJS) lint-ci
 
 generate-readme:
 	$(NODE) scripts/generators/readmes.js
