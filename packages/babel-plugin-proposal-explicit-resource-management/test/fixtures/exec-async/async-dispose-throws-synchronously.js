@@ -1,4 +1,4 @@
-return async function () {
+return (async function () {
   let disposed = false;
   let beforeEnd;
 
@@ -10,13 +10,13 @@ return async function () {
     await using x = {
       [Symbol.asyncDispose || Symbol.for("Symbol.asyncDispose")]() {
         throw err1;
-      }
+      },
     };
     throw err2;
   } catch (e) {
     thrown = e;
   }
 
-  expect(thrown.suppressed).toBe(err1);
-  expect(thrown.error).toBe(err2);
-}();
+  expect(thrown.suppressed).toBe(err2);
+  expect(thrown.error).toBe(err1);
+})();

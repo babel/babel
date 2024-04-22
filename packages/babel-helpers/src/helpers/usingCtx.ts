@@ -14,8 +14,8 @@ export default function _usingCtx() {
         : (function (error: Error, suppressed: Error) {
             var err = new Error() as SuppressedError;
             err.name = "SuppressedError";
-            err.suppressed = suppressed;
             err.error = error;
+            err.suppressed = suppressed;
             return err;
           } as SuppressedErrorConstructor),
     empty = {},
@@ -73,7 +73,7 @@ export default function _usingCtx() {
       }
 
       function err(e: Error) {
-        error = error !== empty ? new _disposeSuppressedError(error, e) : e;
+        error = error !== empty ? new _disposeSuppressedError(e, error) : e;
 
         return next();
       }
