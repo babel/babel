@@ -287,20 +287,17 @@ target["prepublish-build-standalone"] = function () {
 target["prepublish-prepare-dts"] = function () {
   target["clean-ts"]();
   target["tscheck"]();
+  target["prepublish-prepare-dts-no-clean"]();
+};
 
+target["prepublish-prepare-dts-no-clean"] = function () {
   yarn(["gulp", "bundle-dts"]);
-
   target["build-typescript-legacy-typings"]();
 };
 
 target["tscheck"] = function () {
   target["generate-tsconfig"]();
   node(["scripts/parallel-tsc/tsc.js", "."]);
-};
-
-target["tscheck-slow"] = function () {
-  target["generate-tsconfig"]();
-  yarn(["tsc", "-b", "."]);
 };
 
 target["clean-ts"] = function () {
@@ -375,6 +372,12 @@ function eslint(...extraArgs) {
 target["lint"] = function () {
   env(() => target["tscheck"](), { TSCHECK_SILENT: "true" });
   eslint();
+};
+
+target["lint-ci"] = function () {
+  target["tscheck"]();
+  eslint();
+  target["prepublish-prepare-dts-no-clean"]();
 };
 
 target["fix"] = function () {
