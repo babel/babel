@@ -320,12 +320,12 @@ interface NodePath<T extends t.Node>
     NodePathValidators,
     NodePathMixins,
     NodePathOverwrites {
+  type: T["type"] | null;
+  node: T;
   parent: t.ParentMaps[T["type"]];
   parentPath: t.ParentMaps[T["type"]] extends null
     ? null
     : NodePath_Final<t.ParentMaps[T["type"]]> | null;
-  node: T;
-  type: T["type"] | null;
 }
 
 // This trick is necessary so that
