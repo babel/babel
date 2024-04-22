@@ -8,7 +8,6 @@
     "skipLibCheck": false
   },
   "include": [
-    "packages/*/src/**/*.d.ts",
     "packages/babel-parser/typings/*.d.ts",
     "dts/**/*.d.ts"
   ],

@@ -295,11 +295,7 @@ fs.writeFileSync(
         compilerOptions: {
           skipLibCheck: false,
         },
-        include: [
-          "packages/*/src/**/*.d.ts",
-          "packages/babel-parser/typings/*.d.ts",
-          "dts/**/*.d.ts",
-        ],
+        include: ["packages/babel-parser/typings/*.d.ts", "dts/**/*.d.ts"],
         references: Array.from(projectsFolders.values())
           .sort()
           .map(path => ({ path })),
