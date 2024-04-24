@@ -20,6 +20,7 @@
     "@babel/types": "workspace:^"
   },
   "devDependencies": {
+    "@babel/core": "workspace:^",
     "@babel/generator": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
     "@babel/parser": "workspace:^",
