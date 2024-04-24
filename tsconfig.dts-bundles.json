@@ -1,0 +1,12 @@
+{
+  "extends": ["./tsconfig.base.json"],
+  "compilerOptions": {
+    "skipLibCheck": false
+  },
+  "include": [
+    "packages/babel-parser/typings/*.d.ts",
+    "packages/*/lib/*.d.ts",
+    "eslint/*/lib/*.d.ts",
+    "codemods/*/lib/*.d.ts"
+  ]
+}
