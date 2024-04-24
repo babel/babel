@@ -248,4 +248,4 @@ type ParseResult<Result> = Result & {
   errors: ParseError[];
 };
 
-export { DecoratorsPluginOptions, FlowPluginOptions, ParseError, ParseResult, ParserOptions, ParserPlugin, ParserPluginWithOptions, PipelineOperatorPluginOptions, RecordAndTuplePluginOptions, TypeScriptPluginOptions, parse, parseExpression, tokTypes };
+export { type DecoratorsPluginOptions, type FlowPluginOptions, type ParseError, type ParseResult, type ParserOptions, type ParserPlugin, type ParserPluginWithOptions, type PipelineOperatorPluginOptions, type RecordAndTuplePluginOptions, type TypeScriptPluginOptions, parse, parseExpression, tokTypes };

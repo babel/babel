@@ -61,7 +61,6 @@
     "execa": "^8.0.1",
     "glob": "^10.3.10",
     "gulp": "^4.0.2",
-    "gulp-filter": "^7.0.0",
     "gulp-plumber": "^1.2.1",
     "husky": "^8.0.3",
     "import-meta-resolve": "^4.1.0",

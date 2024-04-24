@@ -6,7 +6,6 @@ import { fileURLToPath } from "url";
 import plumber from "gulp-plumber";
 import through from "through2";
 import colors from "picocolors";
-import filter from "gulp-filter";
 import gulp from "gulp";
 import { rollup } from "rollup";
 import {
@@ -97,13 +96,6 @@ function errorsLogger() {
     errorHandler(err) {
       log(err.stack);
     },
-  });
-}
-
-function rename(fn) {
-  return through.obj(function (file, enc, callback) {
-    file.path = fn(file);
-    callback(null, file);
   });
 }
 
@@ -231,22 +223,6 @@ function finish(stream) {
     stream.on("finish", resolve);
     stream.on("error", reject);
   });
-}
-
-function getFiles(glob, { include, exclude }) {
-  let stream = gulp.src(glob, { base: monorepoRoot });
-
-  if (exclude) {
-    const filters = exclude.map(p => `!**/${p}/**`);
-    filters.unshift("**");
-    stream = stream.pipe(filter(filters));
-  }
-  if (include) {
-    const filters = include.map(p => `**/${p}/**`);
-    stream = stream.pipe(filter(filters));
-  }
-
-  return stream;
 }
 
 function createWorker(useWorker) {
@@ -664,13 +640,6 @@ function buildRollupDts(packages) {
   return Promise.all(tasks);
 }
 
-// Copies manually-written .d.ts files from `src` to /dts
-function copyDts(packages) {
-  return getFiles(`${defaultPackagesGlob}/src/**/*.d.ts`, { include: packages })
-    .pipe(rename(file => path.resolve(file.base, mapToDts(file.relative))))
-    .pipe(gulp.dest(monorepoRoot));
-}
-
 function* packagesIterator(exclude) {
   for (const packageDir of ["packages", "codemods"]) {
     for (const dir of fs.readdirSync(new URL(packageDir, import.meta.url))) {
@@ -833,11 +802,7 @@ gulp.task(
   gulp.series("generate-standalone", "rollup-babel-standalone")
 );
 
-gulp.task("copy-dts", () => copyDts(dtsBundles));
-gulp.task(
-  "bundle-dts",
-  gulp.series("copy-dts", () => buildRollupDts(dtsBundles))
-);
+gulp.task("bundle-dts", () => buildRollupDts(dtsBundles));
 
 gulp.task("build-babel", () => buildBabel(true, /* exclude */ libBundles));
 
