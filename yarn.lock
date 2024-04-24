@@ -4031,6 +4031,7 @@ __metadata:
     "@babel/plugin-transform-destructuring": "workspace:^"
     "@babel/plugin-transform-dotall-regex": "workspace:^"
     "@babel/plugin-transform-duplicate-keys": "workspace:^"
+    "@babel/plugin-transform-duplicate-named-capturing-groups-regex": "workspace:^"
     "@babel/plugin-transform-dynamic-import": "workspace:^"
     "@babel/plugin-transform-exponentiation-operator": "workspace:^"
     "@babel/plugin-transform-export-namespace-from": "workspace:^"

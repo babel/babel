@@ -68,6 +68,9 @@
       "path": "../../packages/babel-plugin-transform-duplicate-keys"
     },
     {
+      "path": "../../packages/babel-plugin-transform-duplicate-named-capturing-groups-regex"
+    },
+    {
       "path": "../../packages/babel-plugin-transform-dynamic-import"
     },
     {
