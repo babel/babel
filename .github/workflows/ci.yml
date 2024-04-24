@@ -194,10 +194,10 @@ jobs:
       - name: Extract artifacts
         run: tar -xf babel-artifact.tar; rm babel-artifact.tar
       - name: Lint
-        run: make -j prepublish-prepare-dts lint-ci
+        run: make -j lint-ci check-compat-data
       - name: Ensure cwd does not contain uncommitted changes
         run: |
-          node ./scripts/assert-dir-git-clean.js "prepublish-prepare-dts lint-ci"
+          node ./scripts/assert-dir-git-clean.js "lint-ci check-compat-data"
 
   test:
     name: Test on Node.js # GitHub will add ${{ matrix.node-version }} to this title
@@ -287,7 +287,7 @@ jobs:
           BABEL_8_BREAKING: true
           STRIP_BABEL_8_FLAG: true
       - name: Lint
-        run: make -j tscheck lint-ci
+        run: make -j lint-ci check-compat-data
         env:
           BABEL_ENV: test
           BABEL_8_BREAKING: true

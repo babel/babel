@@ -55,12 +55,16 @@ build-plugin-transform-runtime-dist:
 watch:
 	$(MAKEJS) watch
 
-code-quality: tscheck lint
+code-quality: lint
 
 tscheck:
 	$(MAKEJS) tscheck
 
-lint-ci: lint check-compat-data
+clean-ts:
+	$(MAKEJS) clean-ts
+
+lint-ci:
+	$(MAKEJS) lint-ci
 
 generate-readme:
 	$(NODE) scripts/generators/readmes.js
@@ -87,7 +91,7 @@ test: lint test-only
 clone-license:
 	$(MAKEJS) clone-license
 
-prepublish-prepare-dts:
+prepublish-prepare-dts: tscheck
 	$(MAKEJS) prepublish-prepare-dts
 
 prepublish-build:

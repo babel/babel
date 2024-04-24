@@ -17,6 +17,9 @@
   "engines": {
     "node": ">=6.9.0"
   },
+  "devDependencies": {
+    "@babel/core": "workspace:^"
+  },
   "conditions": {
     "BABEL_8_BREAKING": [
       {
