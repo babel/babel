@@ -28,7 +28,7 @@ import transformClassStaticBlock from "@babel/plugin-transform-class-static-bloc
 import proposalDecorators from "@babel/plugin-proposal-decorators";
 import proposalDestructuringPrivate from "@babel/plugin-proposal-destructuring-private";
 import proposalDoExpressions from "@babel/plugin-proposal-do-expressions";
-import proposalDuplicateNamedCapturingGroupsRegex from "@babel/plugin-proposal-duplicate-named-capturing-groups-regex";
+import transformDuplicateNamedCapturingGroupsRegex from "@babel/plugin-transform-duplicate-named-capturing-groups-regex";
 import transformDynamicImport from "@babel/plugin-transform-dynamic-import";
 import proposalExportDefaultFrom from "@babel/plugin-proposal-export-default-from";
 import transformExportNamespaceFrom from "@babel/plugin-transform-export-namespace-from";
@@ -137,7 +137,7 @@ export {
   proposalDecorators,
   proposalDestructuringPrivate,
   proposalDoExpressions,
-  proposalDuplicateNamedCapturingGroupsRegex,
+  transformDuplicateNamedCapturingGroupsRegex,
   transformDynamicImport,
   proposalExportDefaultFrom,
   transformExportNamespaceFrom,
@@ -247,8 +247,8 @@ export const all: { [k: string]: any } = {
   "proposal-decorators": proposalDecorators,
   "proposal-destructuring-private": proposalDestructuringPrivate,
   "proposal-do-expressions": proposalDoExpressions,
-  "proposal-duplicate-named-capturing-groups-regex":
-    proposalDuplicateNamedCapturingGroupsRegex,
+  "transform-duplicate-named-capturing-groups-regex":
+    transformDuplicateNamedCapturingGroupsRegex,
   "transform-dynamic-import": transformDynamicImport,
   "proposal-export-default-from": proposalExportDefaultFrom,
   "transform-export-namespace-from": transformExportNamespaceFrom,

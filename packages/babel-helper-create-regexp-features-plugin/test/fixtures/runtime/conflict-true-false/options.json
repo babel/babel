@@ -1,7 +1,7 @@
 {
   "plugins": [
     ["transform-named-capturing-groups-regex", { "runtime": false }],
-    ["proposal-duplicate-named-capturing-groups-regex", { "runtime": true }]
+    ["transform-duplicate-named-capturing-groups-regex", { "runtime": true }]
   ],
-  "throws": "The 'runtime' option must be the same for '@babel/plugin-transform-named-capturing-groups-regex' and '@babel/plugin-proposal-duplicate-named-capturing-groups-regex'."
+  "throws": "The 'runtime' option must be the same for '@babel/plugin-transform-named-capturing-groups-regex' and '@babel/plugin-transform-duplicate-named-capturing-groups-regex'."
 }

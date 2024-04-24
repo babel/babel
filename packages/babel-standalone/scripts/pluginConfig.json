@@ -44,7 +44,7 @@
     "proposal-decorators",
     "proposal-destructuring-private",
     "proposal-do-expressions",
-    "proposal-duplicate-named-capturing-groups-regex",
+    "transform-duplicate-named-capturing-groups-regex",
     "transform-dynamic-import",
     "proposal-export-default-from",
     "transform-export-namespace-from",
