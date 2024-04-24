@@ -58,8 +58,108 @@ export function declare<State = {}, Option = {}>(
       clonedApi[name] = apiPolyfills[name](clonedApi);
     }
 
-    // @ts-expect-error options || {} may not be assigned to Options
-    return builder(clonedApi ?? api, options || {}, dirname);
+    const pluginObject = builder(
+      clonedApi ?? api,
+      options || ({} as Option),
+      dirname,
+    );
+
+    const orderList = [
+      "transform-modules-commonjs",
+      "transform-modules-amd",
+      "transform-modules-systemjs",
+      "transform-modules-umd",
+
+      "transform-typescript",
+      "transform-flow",
+
+      "proposal-async-do-expressions",
+      "proposal-decorators",
+      "proposal-destructuring-private",
+      "proposal-do-expressions",
+      "proposal-duplicate-named-capturing-groups-regex",
+      "proposal-explicit-resource-management",
+      "proposal-export-default-from",
+      "proposal-function-bind",
+      "proposal-function-sent",
+      "proposal-import-attributes-to-assertions",
+      "proposal-import-defer",
+      "proposal-import-wasm-source",
+      "proposal-json-modules",
+      "proposal-optional-chaining-assign",
+      "proposal-partial-application",
+      "proposal-pipeline-operator",
+      "proposal-record-and-tuple",
+      "proposal-regexp-modifiers",
+      "proposal-throw-expressions",
+
+      "transform-unicode-sets-regex",
+      "bugfix/transform-v8-static-class-fields-redefine-readonly",
+      "bugfix/transform-firefox-class-in-computed-class-key",
+      "transform-class-static-block",
+      "transform-private-property-in-object",
+      "transform-class-properties",
+      "transform-private-methods",
+      "transform-numeric-separator",
+      "transform-logical-assignment-operators",
+      "transform-nullish-coalescing-operator",
+      "transform-optional-chaining",
+      "transform-json-strings",
+      "transform-optional-catch-binding",
+      "transform-parameters",
+      "transform-async-generator-functions",
+      "transform-object-rest-spread",
+      "transform-dotall-regex",
+      "transform-unicode-property-regex",
+      "transform-named-capturing-groups-regex",
+      "transform-async-to-generator",
+      "transform-exponentiation-operator",
+      "transform-template-literals",
+      "transform-literals",
+      "transform-function-name",
+      "transform-arrow-functions",
+      "transform-block-scoped-functions",
+      "transform-classes",
+      "transform-object-super",
+      "transform-shorthand-properties",
+      "transform-duplicate-keys",
+      "transform-computed-properties",
+      "transform-for-of",
+      "transform-sticky-regex",
+      "transform-unicode-escapes",
+      "transform-unicode-regex",
+      "transform-spread",
+      "transform-destructuring",
+      "transform-block-scoping",
+      "transform-typeof-symbol",
+      "transform-new-target",
+      "transform-regenerator",
+      "transform-member-expression-literals",
+      "transform-property-literals",
+      "transform-reserved-words",
+      "transform-export-namespace-from",
+      "bugfix/transform-async-arrows-in-class",
+      "bugfix/transform-edge-default-parameters",
+      "bugfix/transform-edge-function-name",
+      "bugfix/transform-safari-block-shadowing",
+      "bugfix/transform-safari-for-shadowing",
+      "bugfix/transform-safari-id-destructuring-collision-in-function-expression",
+      "bugfix/transform-tagged-template-caching",
+      "bugfix/transform-v8-spread-parameters-in-optional-chaining",
+    ];
+
+    if (process.env.BABEL_8_BREAKING && orderList.includes(pluginObject.name)) {
+      pluginObject.orderData = {
+        id: "@babel/helper-plugin-order-data",
+        version: 1,
+        type: "list",
+        data: () => {
+          return orderList;
+        },
+      };
+    }
+
+    return pluginObject;
   };
 }
 

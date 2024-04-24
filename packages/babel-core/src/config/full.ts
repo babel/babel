@@ -56,6 +56,88 @@ export type { Plugin };
 export type PluginPassList = Array<Plugin>;
 export type PluginPasses = Array<PluginPassList>;
 
+function sortPlugins(plugins: Plugin[]) {
+  function stableSort(plugins: Plugin[], orderMap: Map<string, number>) {
+    const buckets = Object.create(null);
+
+    // By collecting into buckets, we can guarantee a stable sort.
+    for (let i = 0; i < plugins.length; i++) {
+      const n = plugins[i];
+      const p = 1000 - orderMap.get(n.key);
+
+      // In case some plugin is setting an unexpected priority.
+      const bucket = buckets[p] || (buckets[p] = []);
+      bucket.push(n);
+    }
+
+    // Sort our keys in descending order. Keys are unique, so we don't have to
+    // worry about stability.
+    const keys = Object.keys(buckets)
+      .map(k => +k)
+      .sort((a, b) => b - a);
+
+    let index = 0;
+    for (const key of keys) {
+      const bucket = buckets[key];
+      for (const n of bucket) {
+        plugins[index++] = n;
+      }
+    }
+    return plugins;
+  }
+
+  const orderDataListMap: Map<
+    string,
+    {
+      version: number;
+      data: () => string[];
+      plugins: Plugin[];
+    }
+  > = new Map();
+
+  const pluginsWithPadding: (Plugin | string)[] = [];
+
+  for (let i = plugins.length - 1; i >= 0; i--) {
+    const plugin = plugins[i];
+    const { orderData } = plugin;
+    if (orderData) {
+      let orderData2 = orderDataListMap.get(orderData.id);
+      if ((orderData2?.version || 0) < orderData.version) {
+        if (orderData2 == null) {
+          pluginsWithPadding.unshift(orderData.id);
+        }
+        orderDataListMap.set(
+          orderData.id,
+          (orderData2 = {
+            version: orderData.version,
+            data: () => orderData.data(),
+            plugins: [],
+          }),
+        );
+      }
+      orderData2.plugins.unshift(plugin);
+    } else {
+      pluginsWithPadding.unshift(plugin);
+    }
+  }
+
+  const newPlugins: Plugin[] = [];
+
+  for (const value of pluginsWithPadding) {
+    if (typeof value === "string") {
+      const orderData = orderDataListMap.get(value);
+      const map = new Map<string, number>(
+        orderData.data().map((key, i) => [key, i]),
+      );
+      newPlugins.push(...stableSort(orderData.plugins, map));
+    } else {
+      newPlugins.push(value);
+    }
+  }
+
+  return newPlugins;
+}
+
 export default gensync(function* loadFullConfig(
   inputOpts: unknown,
 ): Handler<ResolvedConfig | null> {
@@ -168,7 +250,7 @@ export default gensync(function* loadFullConfig(
 
   if (ignored) return null;
 
-  const opts: any = optionDefaults;
+  const opts: ValidatedOptions = optionDefaults;
   mergeOptions(opts, options);
 
   const pluginContext: Context.FullPlugin = {
@@ -210,6 +292,10 @@ export default gensync(function* loadFullConfig(
     .filter(plugins => plugins.length > 0)
     .map(plugins => ({ plugins }));
   opts.passPerPreset = opts.presets.length > 0;
+
+  if (opts.sortPlugins && !opts.passPerPreset) {
+    opts.plugins = passes[0] = sortPlugins(opts.plugins as Plugin[]);
+  }
 
   return {
     options: opts,
