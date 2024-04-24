@@ -213,7 +213,18 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
   const errors: string[] = [];
 
   let filenames = commander.args.reduce(function (globbed: string[], input) {
-    let files = glob.sync(input);
+    if (process.env.BABEL_8_BREAKING) {
+      // glob 9+ no longer sorts the result, here we maintain the glob 7 behaviour
+      // https://github.com/isaacs/node-glob/blob/c3cd57ae128faa0e9190492acc743bb779ac4054/common.js#L151
+      // eslint-disable-next-line no-var
+      var files = glob
+        .sync(input, { dotRelative: true })
+        .sort(function alphasort(a, b) {
+          return a.localeCompare(b, "en");
+        });
+    } else {
+      files = glob.sync(input);
+    }
     if (!files.length) files = [input];
     globbed.push(...files);
     return globbed;
