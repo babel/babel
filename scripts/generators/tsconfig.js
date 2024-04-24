@@ -239,7 +239,6 @@ function buildTSConfig(pkgs, allDeps) {
         ].filter(Boolean)
       ),
     references: Array.from(referencePaths, path => ({ path })),
-    //compilerOptions: { paths },
   };
 }
 
@@ -296,7 +295,7 @@ fs.writeFileSync(
           skipLibCheck: false,
         },
         include: ["packages/babel-parser/typings/*.d.ts", "dts/**/*.d.ts"],
-        references: Array.from(projectsFolders.values())
+        references: Array.from(new Set(projectsFolders.values()))
           .sort()
           .map(path => ({ path })),
       },
