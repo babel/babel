@@ -27,6 +27,7 @@ import transformComputedProperties from "@babel/plugin-transform-computed-proper
 import transformDestructuring from "@babel/plugin-transform-destructuring";
 import transformDotallRegex from "@babel/plugin-transform-dotall-regex";
 import transformDuplicateKeys from "@babel/plugin-transform-duplicate-keys";
+import transformDuplicateNamedCapturingGroupsRegex from "@babel/plugin-transform-duplicate-named-capturing-groups-regex";
 import transformExponentialOperator from "@babel/plugin-transform-exponentiation-operator";
 import transformForOf from "@babel/plugin-transform-for-of";
 import transformFunctionName from "@babel/plugin-transform-function-name";
@@ -93,6 +94,8 @@ const availablePlugins = {
   "transform-destructuring": () => transformDestructuring,
   "transform-dotall-regex": () => transformDotallRegex,
   "transform-duplicate-keys": () => transformDuplicateKeys,
+  "transform-duplicate-named-capturing-groups-regex": () =>
+    transformDuplicateNamedCapturingGroupsRegex,
   "transform-dynamic-import": () => proposalDynamicImport,
   "transform-exponentiation-operator": () => transformExponentialOperator,
   "transform-export-namespace-from": () => proposalExportNamespaceFrom,
