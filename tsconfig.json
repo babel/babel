@@ -95,9 +95,6 @@
       "path": "./packages/babel-plugin-proposal-do-expressions"
     },
     {
-      "path": "./packages/babel-plugin-proposal-duplicate-named-capturing-groups-regex"
-    },
-    {
       "path": "./packages/babel-plugin-proposal-explicit-resource-management"
     },
     {
@@ -243,6 +240,9 @@
     },
     {
       "path": "./packages/babel-plugin-transform-duplicate-keys"
+    },
+    {
+      "path": "./packages/babel-plugin-transform-duplicate-named-capturing-groups-regex"
     },
     {
       "path": "./packages/babel-plugin-transform-dynamic-import"

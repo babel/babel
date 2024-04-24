@@ -149,9 +149,6 @@
       "@babel/plugin-proposal-do-expressions": [
         "./packages/babel-plugin-proposal-do-expressions/src"
       ],
-      "@babel/plugin-proposal-duplicate-named-capturing-groups-regex": [
-        "./packages/babel-plugin-proposal-duplicate-named-capturing-groups-regex/src"
-      ],
       "@babel/plugin-proposal-explicit-resource-management": [
         "./packages/babel-plugin-proposal-explicit-resource-management/src"
       ],
@@ -298,6 +295,9 @@
       ],
       "@babel/plugin-transform-duplicate-keys": [
         "./packages/babel-plugin-transform-duplicate-keys/src"
+      ],
+      "@babel/plugin-transform-duplicate-named-capturing-groups-regex": [
+        "./packages/babel-plugin-transform-duplicate-named-capturing-groups-regex/src"
       ],
       "@babel/plugin-transform-dynamic-import": [
         "./packages/babel-plugin-transform-dynamic-import/src"

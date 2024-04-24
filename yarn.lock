@@ -1510,20 +1510,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-proposal-duplicate-named-capturing-groups-regex@workspace:^, @babel/plugin-proposal-duplicate-named-capturing-groups-regex@workspace:packages/babel-plugin-proposal-duplicate-named-capturing-groups-regex":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-proposal-duplicate-named-capturing-groups-regex@workspace:packages/babel-plugin-proposal-duplicate-named-capturing-groups-regex"
-  dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-create-regexp-features-plugin": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-    core-js: "npm:^3.30.2"
-  peerDependencies:
-    "@babel/core": ^7.0.0
-  languageName: unknown
-  linkType: soft
-
 "@babel/plugin-proposal-explicit-resource-management@workspace:^, @babel/plugin-proposal-explicit-resource-management@workspace:packages/babel-plugin-proposal-explicit-resource-management":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-explicit-resource-management@workspace:packages/babel-plugin-proposal-explicit-resource-management"
@@ -2713,6 +2699,20 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.0.0-0
+  languageName: unknown
+  linkType: soft
+
+"@babel/plugin-transform-duplicate-named-capturing-groups-regex@workspace:^, @babel/plugin-transform-duplicate-named-capturing-groups-regex@workspace:packages/babel-plugin-transform-duplicate-named-capturing-groups-regex":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-transform-duplicate-named-capturing-groups-regex@workspace:packages/babel-plugin-transform-duplicate-named-capturing-groups-regex"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-create-regexp-features-plugin": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+    core-js: "npm:^3.30.2"
+  peerDependencies:
+    "@babel/core": ^7.0.0
   languageName: unknown
   linkType: soft
 
@@ -4246,7 +4246,6 @@ __metadata:
     "@babel/plugin-proposal-decorators": "workspace:^"
     "@babel/plugin-proposal-destructuring-private": "workspace:^"
     "@babel/plugin-proposal-do-expressions": "workspace:^"
-    "@babel/plugin-proposal-duplicate-named-capturing-groups-regex": "workspace:^"
     "@babel/plugin-proposal-explicit-resource-management": "workspace:^"
     "@babel/plugin-proposal-export-default-from": "workspace:^"
     "@babel/plugin-proposal-function-bind": "workspace:^"
@@ -4288,6 +4287,7 @@ __metadata:
     "@babel/plugin-transform-destructuring": "workspace:^"
     "@babel/plugin-transform-dotall-regex": "workspace:^"
     "@babel/plugin-transform-duplicate-keys": "workspace:^"
+    "@babel/plugin-transform-duplicate-named-capturing-groups-regex": "workspace:^"
     "@babel/plugin-transform-dynamic-import": "workspace:^"
     "@babel/plugin-transform-exponentiation-operator": "workspace:^"
     "@babel/plugin-transform-export-namespace-from": "workspace:^"
