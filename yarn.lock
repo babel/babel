@@ -233,7 +233,7 @@ __metadata:
     commander: "npm:^4.0.1"
     convert-source-map: "npm:^2.0.0"
     fs-readdir-recursive: "npm:^1.1.0"
-    glob: "condition:BABEL_8_BREAKING ? ^10.3.12 : ^7.2.0"
+    glob: "condition:BABEL_8_BREAKING ? ^10.3.12 : ^7.2.0 (esm:sync)"
     make-dir: "condition:BABEL_8_BREAKING ? : ^2.1.0"
     semver: "npm:^6.3.1"
     slash: "condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0"
@@ -10422,13 +10422,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@condition:BABEL_8_BREAKING ? ^10.3.12 : ^7.2.0":
-  version: 0.0.0-condition-0bad83
-  resolution: "glob@condition:BABEL_8_BREAKING?^10.3.12:^7.2.0#0bad83"
+"glob@condition:BABEL_8_BREAKING ? ^10.3.12 : ^7.2.0 (esm:sync)":
+  version: 0.0.0-condition-9884bd
+  resolution: "glob@condition:BABEL_8_BREAKING?^10.3.12:^7.2.0(esm:sync)#9884bd"
   dependencies:
     glob-BABEL_8_BREAKING-false: "npm:glob@^7.2.0"
     glob-BABEL_8_BREAKING-true: "npm:glob@^10.3.12"
-  checksum: 10/2887d633e02b13b92c81b3de2eebbd841f454a90f972f23ca45bafab4408fca132873b5486b24b373d9f0366ff55232b67cbddead5e17fd9b6ba0cfd1bde3232
+  checksum: 10/93dba76cd35ecd4de162e84ad76a8d33f9316c5a6856fadb78919ba306c27e24128a0d91bfd58f6c9f1b4971a84d8d755b7aad2dbdf23732d53e940118f0b3a5
   languageName: node
   linkType: hard
 
