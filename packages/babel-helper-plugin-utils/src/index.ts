@@ -64,15 +64,35 @@ export function declare<State = {}, Option = {}>(
       dirname,
     );
 
-    const orderList = [
+    function definePluginOrderData(
+      pluginObject: PluginObject,
+      id: string,
+      list: string[],
+      before?: string,
+    ) {
+      if (list.includes(pluginObject.name)) {
+        pluginObject.orderData = {
+          id: id,
+          version: 1,
+          data: () => ({
+            type: "list",
+            list,
+            before,
+          }),
+        };
+      }
+    }
+
+    const modulePlugins = [
       "transform-modules-commonjs",
       "transform-modules-amd",
       "transform-modules-systemjs",
       "transform-modules-umd",
+    ];
 
-      "transform-typescript",
-      "transform-flow",
+    const languagePlugins = ["transform-typescript", "transform-flow"];
 
+    const featurePlugins = [
       "proposal-async-do-expressions",
       "proposal-decorators",
       "proposal-destructuring-private",
@@ -148,15 +168,26 @@ export function declare<State = {}, Option = {}>(
       "bugfix/transform-v8-spread-parameters-in-optional-chaining",
     ];
 
-    if (process.env.BABEL_8_BREAKING && orderList.includes(pluginObject.name)) {
-      pluginObject.orderData = {
-        id: "@babel/helper-plugin-order-data",
-        version: 1,
-        type: "list",
-        data: () => {
-          return orderList;
-        },
-      };
+    if (process.env.BABEL_8_BREAKING) {
+      definePluginOrderData(
+        pluginObject,
+        "@babel/helper-plugin-order-data#module",
+        modulePlugins,
+        "@babel/helper-plugin-order-data#language",
+      );
+
+      definePluginOrderData(
+        pluginObject,
+        "@babel/helper-plugin-order-data#language",
+        languagePlugins,
+        "@babel/helper-plugin-order-data#feature",
+      );
+
+      definePluginOrderData(
+        pluginObject,
+        "@babel/helper-plugin-order-data#feature",
+        featurePlugins,
+      );
     }
 
     return pluginObject;

@@ -26,7 +26,10 @@ import {
   checkNoUnwrappedItemOptionPairs,
 } from "./validation/options.ts";
 import type { PluginItem } from "./validation/options.ts";
-import { validatePluginObject } from "./validation/plugins.ts";
+import {
+  type PluginObject,
+  validatePluginObject,
+} from "./validation/plugins.ts";
 import { makePluginAPI, makePresetAPI } from "./helpers/config-api.ts";
 import type { PluginAPI, PresetAPI } from "./helpers/config-api.ts";
 
@@ -83,17 +86,16 @@ function sortPlugins(plugins: Plugin[]) {
         plugins[index++] = n;
       }
     }
-    return plugins;
   }
 
-  const orderDataListMap: Map<
-    string,
-    {
-      version: number;
-      data: () => string[];
-      plugins: Plugin[];
-    }
-  > = new Map();
+  type OrderData = {
+    version: number;
+    getData: PluginObject["orderData"]["data"];
+    list?: string[];
+    before?: string;
+    plugins: Plugin[];
+  };
+  const orderDataMap: Map<string, OrderData> = new Map();
 
   const pluginsWithPadding: (Plugin | string)[] = [];
 
@@ -101,16 +103,16 @@ function sortPlugins(plugins: Plugin[]) {
     const plugin = plugins[i];
     const { orderData } = plugin;
     if (orderData) {
-      let orderData2 = orderDataListMap.get(orderData.id);
+      let orderData2 = orderDataMap.get(orderData.id);
       if ((orderData2?.version || 0) < orderData.version) {
         if (orderData2 == null) {
           pluginsWithPadding.unshift(orderData.id);
         }
-        orderDataListMap.set(
+        orderDataMap.set(
           orderData.id,
           (orderData2 = {
             version: orderData.version,
-            data: () => orderData.data(),
+            getData: () => orderData.data(),
             plugins: [],
           }),
         );
@@ -121,15 +123,75 @@ function sortPlugins(plugins: Plugin[]) {
     }
   }
 
+  orderDataMap.forEach(v => {
+    const data = v.getData();
+    v.list = data.list;
+    v.before = data.before;
+    stableSort(v.plugins, new Map(data.list.map((key, i) => [key, i])));
+  });
+
+  // Detect cycles
+  const seen = new Set<string>();
+
+  function visit(k: string) {
+    const v = orderDataMap.get(k);
+    if (!v) return;
+
+    if (seen.has(k)) {
+      throw new Error(
+        `Plugin/preset order list cycles with '${Array.from(seen.keys()).join(" -> ")}'`,
+      );
+    }
+    seen.add(k);
+
+    if (v.before) {
+      visit(v.before);
+    }
+  }
+
+  for (const k of orderDataMap.keys()) {
+    visit(k);
+    seen.clear();
+  }
+
+  // Sort
+
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    let changed = false;
+
+    for (let i = 0; i < pluginsWithPadding.length; i++) {
+      const plugin = pluginsWithPadding[i];
+      if (typeof plugin !== "string" || !orderDataMap.has(plugin)) {
+        continue;
+      }
+
+      const orderData = orderDataMap.get(plugin);
+      const { before } = orderData;
+      if (!before) {
+        continue;
+      }
+      const index = pluginsWithPadding.indexOf(before);
+      if (index === -1) {
+        continue;
+      }
+      if (index < i) {
+        changed = true;
+        pluginsWithPadding.splice(i, 1);
+        pluginsWithPadding.splice(index, 0, plugin);
+      }
+    }
+
+    if (!changed) {
+      break;
+    }
+  }
+
   const newPlugins: Plugin[] = [];
 
   for (const value of pluginsWithPadding) {
     if (typeof value === "string") {
-      const orderData = orderDataListMap.get(value);
-      const map = new Map<string, number>(
-        orderData.data().map((key, i) => [key, i]),
-      );
-      newPlugins.push(...stableSort(orderData.plugins, map));
+      newPlugins.push(...orderDataMap.get(value).plugins);
     } else {
       newPlugins.push(value);
     }
@@ -295,6 +357,12 @@ export default gensync(function* loadFullConfig(
 
   if (opts.sortPlugins && !opts.passPerPreset) {
     opts.plugins = passes[0] = sortPlugins(opts.plugins as Plugin[]);
+  }
+
+  if (!process.env.IS_PUBLISH && process.env.TEST_THROW_PLUGINS) {
+    throw Object.assign(new Error("TEST_THROW_PLUGINS"), {
+      plugins: opts.plugins,
+    });
   }
 
   return {

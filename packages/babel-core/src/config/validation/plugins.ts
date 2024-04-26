@@ -117,9 +117,11 @@ export type PluginObject<S extends PluginPass = PluginPass> = {
   orderData?: {
     id: string;
     version: number;
-  } & {
-    type: "list";
-    data: () => string[];
+    data: () => {
+      type: "list";
+      before?: string;
+      list: string[];
+    };
   };
 };
 
