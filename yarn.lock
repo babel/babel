@@ -233,7 +233,7 @@ __metadata:
     commander: "npm:^4.0.1"
     convert-source-map: "npm:^2.0.0"
     fs-readdir-recursive: "npm:^1.1.0"
-    glob: "condition:BABEL_8_BREAKING ? ^9.3.5 : ^7.2.0"
+    glob: "condition:BABEL_8_BREAKING ? ^10.3.12 : ^7.2.0"
     make-dir: "condition:BABEL_8_BREAKING ? : ^2.1.0"
     semver: "npm:^6.3.1"
     slash: "condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0"
@@ -10339,15 +10339,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob-BABEL_8_BREAKING-true@npm:glob@^9.3.5":
-  version: 9.3.5
-  resolution: "glob@npm:9.3.5"
+"glob-BABEL_8_BREAKING-true@npm:glob@^10.3.12":
+  version: 10.3.12
+  resolution: "glob@npm:10.3.12"
   dependencies:
-    fs.realpath: "npm:^1.0.0"
-    minimatch: "npm:^8.0.2"
-    minipass: "npm:^4.2.4"
-    path-scurry: "npm:^1.6.1"
-  checksum: 10/e5fa8a58adf53525bca42d82a1fad9e6800032b7e4d372209b80cfdca524dd9a7dbe7d01a92d7ed20d89c572457f12c250092bc8817cb4f1c63efefdf9b658c0
+    foreground-child: "npm:^3.1.0"
+    jackspeak: "npm:^2.3.6"
+    minimatch: "npm:^9.0.1"
+    minipass: "npm:^7.0.4"
+    path-scurry: "npm:^1.10.2"
+  bin:
+    glob: dist/esm/bin.mjs
+  checksum: 10/9e8186abc22dc824b5dd86cefd8e6b5621a72d1be7f68bacc0fd681e8c162ec5546660a6ec0553d6a74757a585e655956c7f8f1a6d24570e8d865c307323d178
   languageName: node
   linkType: hard
 
@@ -10419,13 +10422,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@condition:BABEL_8_BREAKING ? ^9.3.5 : ^7.2.0":
-  version: 0.0.0-condition-99e4f3
-  resolution: "glob@condition:BABEL_8_BREAKING?^9.3.5:^7.2.0#99e4f3"
+"glob@condition:BABEL_8_BREAKING ? ^10.3.12 : ^7.2.0":
+  version: 0.0.0-condition-0bad83
+  resolution: "glob@condition:BABEL_8_BREAKING?^10.3.12:^7.2.0#0bad83"
   dependencies:
     glob-BABEL_8_BREAKING-false: "npm:glob@^7.2.0"
-    glob-BABEL_8_BREAKING-true: "npm:glob@^9.3.5"
-  checksum: 10/9863d5ac03449494b1993f6f2e980006232e618713690e7c2475ada191e84415bff1b68f828e7d24b3fa04781866bc86559d5cd03accf804df7f030dedfdc87c
+    glob-BABEL_8_BREAKING-true: "npm:glob@^10.3.12"
+  checksum: 10/2887d633e02b13b92c81b3de2eebbd841f454a90f972f23ca45bafab4408fca132873b5486b24b373d9f0366ff55232b67cbddead5e17fd9b6ba0cfd1bde3232
   languageName: node
   linkType: hard
 
@@ -11705,7 +11708,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jackspeak@npm:^2.3.5":
+"jackspeak@npm:^2.3.5, jackspeak@npm:^2.3.6":
   version: 2.3.6
   resolution: "jackspeak@npm:2.3.6"
   dependencies:
@@ -13171,15 +13174,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^8.0.2":
-  version: 8.0.4
-  resolution: "minimatch@npm:8.0.4"
-  dependencies:
-    brace-expansion: "npm:^2.0.1"
-  checksum: 10/aef05598ee565e1013bc8a10f53410ac681561f901c1a084b8ecfd016c9ed919f58f4bbd5b63e05643189dfb26e8106a84f0e1ff12e4a263aa37e1cae7ce9828
-  languageName: node
-  linkType: hard
-
 "minimist@npm:^1.1.0, minimist@npm:^1.2.0, minimist@npm:^1.2.6":
   version: 1.2.8
   resolution: "minimist@npm:1.2.8"
@@ -13196,14 +13190,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minipass@npm:^4.2.4":
-  version: 4.2.8
-  resolution: "minipass@npm:4.2.8"
-  checksum: 10/e148eb6dcb85c980234cad889139ef8ddf9d5bdac534f4f0268446c8792dd4c74f4502479be48de3c1cce2f6450f6da4d0d4a86405a8a12be04c1c36b339569a
-  languageName: node
-  linkType: hard
-
-"minipass@npm:^5.0.0 || ^6.0.2 || ^7.0.0":
+"minipass@npm:^5.0.0 || ^6.0.2 || ^7.0.0, minipass@npm:^7.0.4":
   version: 7.0.4
   resolution: "minipass@npm:7.0.4"
   checksum: 10/e864bd02ceb5e0707696d58f7ce3a0b89233f0d686ef0d447a66db705c0846a8dc6f34865cd85256c1472ff623665f616b90b8ff58058b2ad996c5de747d2d18
@@ -14140,7 +14127,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"path-scurry@npm:^1.10.1, path-scurry@npm:^1.6.1":
+"path-scurry@npm:^1.10.1, path-scurry@npm:^1.10.2":
   version: 1.10.2
   resolution: "path-scurry@npm:1.10.2"
   dependencies:
