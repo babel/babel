@@ -4,7 +4,11 @@ const eslintVersion = eslint.ESLint.version;
 
 const OPT_OUT_PATTERN = /^[-[(/+`]/; // One of [(/+-`
 
-const rule = new eslint.Linter().getRules().get("semi");
+const rule = (
+  parseInt(eslintVersion, 10) >= 9
+    ? require("eslint/use-at-your-own-risk").builtinRules
+    : new eslint.Linter().getRules()
+).get("semi");
 
 function isSemicolon(token) {
   return token.type === "Punctuator" && token.value === ";";

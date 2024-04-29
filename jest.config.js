@@ -65,6 +65,9 @@ module.exports = {
     ...(process.version === "v20.6.0"
       ? ["/babel-preset-env/test/regressions.js"]
       : []),
+    ...(!semver.satisfies(nodeVersion, "^18.18.0 || >=20.0")
+      ? ["<rootDir>/eslint/"]
+      : []),
   ],
   testEnvironment: "node",
   transformIgnorePatterns: [

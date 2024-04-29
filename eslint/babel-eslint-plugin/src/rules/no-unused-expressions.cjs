@@ -1,7 +1,12 @@
 const ruleComposer = require("eslint-rule-composer");
 const eslint = require("eslint");
+const eslintVersion = eslint.ESLint.version;
 
-const rule = new eslint.Linter().getRules().get("no-unused-expressions");
+const rule = (
+  parseInt(eslintVersion, 10) >= 9
+    ? require("eslint/use-at-your-own-risk").builtinRules
+    : new eslint.Linter().getRules()
+).get("no-unused-expressions");
 
 /**
  * @param {ASTNode} node - any node

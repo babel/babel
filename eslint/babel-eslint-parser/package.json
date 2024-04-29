@@ -28,7 +28,7 @@
   },
   "peerDependencies": {
     "@babel/core": "^7.11.0",
-    "eslint": "^7.5.0 || ^8.0.0"
+    "eslint": "^7.5.0 || ^8.0.0 || ^9.0.0"
   },
   "dependencies": {
     "@nicolo-ribaudo/eslint-scope-5-internals": "condition:BABEL_8_BREAKING ? : 5.1.1-v1",
@@ -42,7 +42,7 @@
     "@types/estree": "^1.0.5",
     "@typescript-eslint/scope-manager": "^6.19.0",
     "dedent": "^0.7.0",
-    "eslint": "^8.22.0"
+    "eslint": "^9.0.0"
   },
   "conditions": {
     "BABEL_8_BREAKING": [
@@ -52,7 +52,7 @@
         },
         "peerDependencies": {
           "@babel/core": ">=7.11.0",
-          "eslint": "^8.9.0"
+          "eslint": "^8.9.0 || ^9.0.0"
         }
       },
       {}
