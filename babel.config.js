@@ -311,11 +311,6 @@ module.exports = function (api) {
         ].map(normalize),
         plugins: [pluginImportMetaUrl],
       },
-      !convertESM &&
-        !bool(process.env.BABEL_8_BREAKING) && {
-          include: ["./packages/babel-cli/src/babel/options.ts"],
-          plugins: [pluginReplaceGlobImport],
-        },
       {
         test: sources.map(source => normalize(source.replace("/src", "/test"))),
         plugins: [
@@ -1048,50 +1043,6 @@ function pluginGeneratorOptimization({ types: t }) {
             }
           }
         },
-      },
-    },
-  };
-}
-
-/**
- * Replace
- *   `import { sync as globSync } from "glob"`
- * by
- *   `import * as glob from "glob";const globSync = glob.default.sync`
- *
- * When USE_ESM is true and BABEL_8_BREAKING is false, the proxy package inserted
- * by yarn-plugin-condition becomes an ESM wrapper for the glob 7 authored in CJS,
- * so we have to replace the glob imports following this ESM wrapper interface.
- * @param {import("@babel/core")} pluginAPI
- * @returns {import("@babel/core").PluginObj}
- */
-function pluginReplaceGlobImport({ types: t }) {
-  return {
-    visitor: {
-      ImportDeclaration(path) {
-        if (
-          path.node.source.value === "glob" &&
-          path.node.specifiers[0].type === "ImportSpecifier"
-        ) {
-          path.replaceWithMultiple([
-            t.importDeclaration(
-              [t.importNamespaceSpecifier(t.identifier("glob"))],
-              path.node.source
-            ),
-            t.variableDeclaration("const", [
-              t.variableDeclarator(
-                t.identifier("globSync"),
-                t.memberExpression(
-                  t.memberExpression(
-                    t.identifier("glob"),
-                    t.identifier("default")
-                  ),
-                  t.identifier("sync")
-                )
-              ),
-            ]),
-          ]);
-        }
       },
     },
   };
