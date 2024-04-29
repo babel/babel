@@ -219,8 +219,8 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
         glob.sync(input, { dotRelative: true }).sort(function alphasort(a, b) {
           return a.localeCompare(b, "en");
         })
-      : // When USE_ESM is true and BABEL_8_BREAKING is off, the glob package is
-        // an ESM wrapper of the CJS glob 7
+      : // @ts-expect-error When USE_ESM is true and BABEL_8_BREAKING is off,
+        // the glob package is an ESM wrapper of the CJS glob 7
         (USE_ESM ? glob.default.sync : glob.sync)(input);
     if (!files.length) files = [input];
     globbed.push(...files);
