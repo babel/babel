@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-explicit-resource-management",
-  "version": "7.24.1",
+  "version": "7.24.5",
   "description": "Compile `using` declarations to ES2015",
   "repository": {
     "type": "git",
