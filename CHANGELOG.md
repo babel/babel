@@ -24,6 +24,35 @@ This file contains the changelog starting from v7.15.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.24.5 (2024-04-29)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-classes`, `babel-traverse`
+  * [#16377](https://github.com/babel/babel/pull/16377) fix: TypeScript annotation affects output ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helpers`, `babel-plugin-proposal-explicit-resource-management`, `babel-runtime-corejs3`
+  * [#16440](https://github.com/babel/babel/pull/16440) Fix suppressed error order ([@sossost](https://github.com/sossost))
+  * [#16408](https://github.com/babel/babel/pull/16408) Await nullish async disposable ([@JLHwung](https://github.com/JLHwung))
+
+#### :nail_care: Polish
+* `babel-parser`
+  * [#16407](https://github.com/babel/babel/pull/16407) Recover from exported `using` declaration ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* Other
+  * [#16414](https://github.com/babel/babel/pull/16414) Relax ESLint peerDependency constraint to allow v9 ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-parser`
+  * [#16425](https://github.com/babel/babel/pull/16425) Improve `@babel/parser` AST types ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#16417](https://github.com/babel/babel/pull/16417) Always pass type argument to `.startNode` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-create-class-features-plugin`, `babel-helper-member-expression-to-functions`, `babel-helper-module-transforms`, `babel-helper-split-export-declaration`, `babel-helper-wrap-function`, `babel-helpers`, `babel-plugin-bugfix-firefox-class-in-computed-class-key`, `babel-plugin-proposal-explicit-resource-management`, `babel-plugin-transform-block-scoping`, `babel-plugin-transform-destructuring`, `babel-plugin-transform-object-rest-spread`, `babel-plugin-transform-optional-chaining`, `babel-plugin-transform-parameters`, `babel-plugin-transform-private-property-in-object`, `babel-plugin-transform-react-jsx-self`, `babel-plugin-transform-typeof-symbol`, `babel-plugin-transform-typescript`, `babel-traverse`
+  * [#16439](https://github.com/babel/babel/pull/16439) Make `NodePath<T | U>` distributive ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-proposal-partial-application`, `babel-types`
+  * [#16421](https://github.com/babel/babel/pull/16421) Remove `JSXNamespacedName` from valid `CallExpression` args ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-class-properties`, `babel-preset-env`
+  * [#16406](https://github.com/babel/babel/pull/16406) Do not load unnecessary Babel 7 syntax plugins in Babel 8 ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :running_woman: Performance
+* `babel-helpers`, `babel-preset-env`, `babel-runtime-corejs3`
+  * [#16357](https://github.com/babel/babel/pull/16357) Performance: improve `objectWithoutPropertiesLoose` on V8 ([@romgrk](https://github.com/romgrk))
 ## v7.24.4 (2024-04-03)
 
 #### :eyeglasses: Spec Compliance
