@@ -109,19 +109,7 @@ export async function compile(filename: string, opts: InputOptions) {
 }
 
 export function deleteDir(path: string): void {
-  if (fs.existsSync(path)) {
-    fs.readdirSync(path).forEach(function (file) {
-      const curPath = path + "/" + file;
-      if (fs.lstatSync(curPath).isDirectory()) {
-        // recurse
-        deleteDir(curPath);
-      } else {
-        // delete file
-        fs.unlinkSync(curPath);
-      }
-    });
-    fs.rmdirSync(path);
-  }
+  fs.rmSync(path, { force: true, recursive: true });
 }
 
 process.on("uncaughtException", function (err) {
