@@ -515,7 +515,10 @@ export default abstract class Tokenizer extends CommentsParser {
       // which is not allowed in the spec. Throwing expecting recordAndTuple is
       // misleading
       this.expectPlugin("recordAndTuple");
-      if (this.getPluginOption("recordAndTuple", "syntaxType") === "bar") {
+      if (
+        !process.env.BABEL_8_BREAKING &&
+        this.getPluginOption("recordAndTuple", "syntaxType") === "bar"
+      ) {
         throw this.raise(
           next === charCodes.leftCurlyBrace
             ? Errors.RecordExpressionHashIncorrectStartSyntaxType
@@ -640,6 +643,7 @@ export default abstract class Tokenizer extends CommentsParser {
       }
       // '|}'
       if (
+        !process.env.BABEL_8_BREAKING &&
         this.hasPlugin("recordAndTuple") &&
         next === charCodes.rightCurlyBrace
       ) {
@@ -656,6 +660,7 @@ export default abstract class Tokenizer extends CommentsParser {
 
       // '|]'
       if (
+        !process.env.BABEL_8_BREAKING &&
         this.hasPlugin("recordAndTuple") &&
         next === charCodes.rightSquareBracket
       ) {
@@ -872,6 +877,7 @@ export default abstract class Tokenizer extends CommentsParser {
         return;
       case charCodes.leftSquareBracket:
         if (
+          !process.env.BABEL_8_BREAKING &&
           this.hasPlugin("recordAndTuple") &&
           this.input.charCodeAt(this.state.pos + 1) === charCodes.verticalBar
         ) {
@@ -896,6 +902,7 @@ export default abstract class Tokenizer extends CommentsParser {
         return;
       case charCodes.leftCurlyBrace:
         if (
+          !process.env.BABEL_8_BREAKING &&
           this.hasPlugin("recordAndTuple") &&
           this.input.charCodeAt(this.state.pos + 1) === charCodes.verticalBar
         ) {
