@@ -1,4 +1,11 @@
 {
-  "plugins": [["recordAndTuple", { "syntaxType": "invalid" }]],
-  "throws": "The 'syntaxType' option of the 'recordAndTuple' plugin must be one of: 'hash', 'bar'"
+  "plugins": [
+    [
+      "recordAndTuple",
+      {
+        "syntaxType": "invalid"
+      }
+    ]
+  ],
+  "throws": "The syntaxType option is no longer required in Babel 8. Please remove { syntaxType: \"bar\" } from the recordAndTuple config and migrate to the hash syntax #{} and #[]."
 }

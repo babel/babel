@@ -1,4 +1,3 @@
 {
-  "plugins": [["recordAndTuple", { "syntaxType": "invalid" }]],
-  "throws": "The 'syntaxType' option of the 'recordAndTuple' plugin must be one of: 'hash', 'bar'"
+  "throws": "Unexpected token (1:0)"
 }

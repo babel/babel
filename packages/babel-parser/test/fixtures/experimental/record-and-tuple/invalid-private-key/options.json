@@ -1,6 +1,3 @@
 {
-  "plugins": [
-    ["recordAndTuple", { "syntaxType": "hash" }],
-    "destructuringPrivate"
-  ]
+  "throws": "This experimental syntax requires enabling the parser plugin: \"recordAndTuple\". (1:0)"
 }

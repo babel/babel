@@ -1,5 +1,5 @@
 {
-  "BABEL_8_BREAKING": true,
+  "BABEL_8_BREAKING": false,
   "plugins": [
     [
       "pipelineOperator",
@@ -14,6 +14,5 @@
         "syntaxType": "hash"
       }
     ]
-  ],
-  "throws": "The syntaxType option is no longer required in Babel 8. You can safely remove { syntaxType: \"hash\" } from the recordAndTuple config."
+  ]
 }
