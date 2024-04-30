@@ -60,7 +60,10 @@ export type Format = {
     adjustMultilineComment: boolean;
     style: string;
   };
-  recordAndTupleSyntaxType: RecordAndTuplePluginOptions["syntaxType"];
+  /**
+   * @deprecated Removed in Babel 8, syntax type is always 'hash'
+   */
+  recordAndTupleSyntaxType?: RecordAndTuplePluginOptions["syntaxType"];
   jsescOption: jsescOptions;
   /**
    * @deprecated Removed in Babel 8, use `jsescOption` instead
