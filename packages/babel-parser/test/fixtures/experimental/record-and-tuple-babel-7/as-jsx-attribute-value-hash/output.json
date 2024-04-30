@@ -1,0 +1,83 @@
+{
+  "type": "File",
+  "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":36,"index":36}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":36,"index":36}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":36,"index":36}},
+        "expression": {
+          "type": "JSXElement",
+          "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":36,"index":36}},
+          "openingElement": {
+            "type": "JSXOpeningElement",
+            "start":0,"end":29,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":29,"index":29}},
+            "name": {
+              "type": "JSXIdentifier",
+              "start":1,"end":5,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":5,"index":5}},
+              "name": "Card"
+            },
+            "attributes": [
+              {
+                "type": "JSXAttribute",
+                "start":6,"end":28,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":28,"index":28}},
+                "name": {
+                  "type": "JSXIdentifier",
+                  "start":6,"end":10,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":10,"index":10}},
+                  "name": "card"
+                },
+                "value": {
+                  "type": "JSXExpressionContainer",
+                  "start":11,"end":28,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":28,"index":28}},
+                  "expression": {
+                    "type": "RecordExpression",
+                    "start":12,"end":27,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":27,"index":27}},
+                    "properties": [
+                      {
+                        "type": "ObjectProperty",
+                        "start":14,"end":26,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":26,"index":26}},
+                        "method": false,
+                        "key": {
+                          "type": "Identifier",
+                          "start":14,"end":19,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":19,"index":19},"identifierName":"title"},
+                          "name": "title"
+                        },
+                        "computed": false,
+                        "shorthand": false,
+                        "value": {
+                          "type": "StringLiteral",
+                          "start":21,"end":26,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":26,"index":26}},
+                          "extra": {
+                            "rawValue": "foo",
+                            "raw": "\"foo\""
+                          },
+                          "value": "foo"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "selfClosing": false
+          },
+          "closingElement": {
+            "type": "JSXClosingElement",
+            "start":29,"end":36,"loc":{"start":{"line":1,"column":29,"index":29},"end":{"line":1,"column":36,"index":36}},
+            "name": {
+              "type": "JSXIdentifier",
+              "start":31,"end":35,"loc":{"start":{"line":1,"column":31,"index":31},"end":{"line":1,"column":35,"index":35}},
+              "name": "Card"
+            }
+          },
+          "children": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}
