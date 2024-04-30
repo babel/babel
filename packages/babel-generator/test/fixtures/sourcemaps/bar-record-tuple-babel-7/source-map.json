@@ -5,7 +5,7 @@
     "b"
   ],
   "sources": [
-    "fixtures/sourcemaps/bar-record-tuple/input.js"
+    "fixtures/sourcemaps/bar-record-tuple-babel-7/input.js"
   ],
   "sourcesContent": [
     "let a = [| 1 |];\nlet b = {| a: 1 |};"
