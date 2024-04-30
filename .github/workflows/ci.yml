@@ -314,10 +314,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Use Node.js 16.20
+      - name: Use Node.js 18.20.0
         uses: actions/setup-node@v4
         with:
-          node-version: "16.20" # Node.js 16.20 is the first LTS supported by Babel 8
+          node-version: "18.20.0" # Node.js 18.20.0 is the first LTS supported by Babel 8
           cache: "yarn"
       - name: Install
         run: |
