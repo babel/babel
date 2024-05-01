@@ -499,10 +499,8 @@ function pluginPolyfillsOldNode({ template, types: t }) {
     {
       name: "fs.rmSync",
       necessary({ node, parent }) {
-        return (
-          t.isCallExpression(parent, { callee: node }) &&
-          parent.arguments.length > 1
-        );
+        // To avoid infinite replacement loops
+        return !t.isLogicalExpression(parent, { operator: "||", left: node });
       },
       supported({ parent: { arguments: args } }) {
         return (
@@ -517,9 +515,7 @@ function pluginPolyfillsOldNode({ template, types: t }) {
       // fs.rmSync has been introduced in Node.js 14.14
       // https://nodejs.org/api/fs.html#fsrmsyncpath-options
       replacement: template`
-        ((v,w)=>(v=v.split("."),w=w.split("."),+v[0]>+w[0]||v[0]==w[0]&&+v[1]>=+w[1]))(process.versions.node, "14.14")
-          ? fs.rmSync
-          : function d(/* path */ p) {
+        fs.rmSync || function d(/* path */ p) {
             if (fs.existsSync(p)) {
               fs.readdirSync(p).forEach(function (f) {
                 const /* currentPath */ c = p + "/" + f;
