@@ -26,7 +26,6 @@ import { diff } from "jest-diff";
 import type { ChildProcess } from "child_process";
 import { spawn } from "child_process";
 import os from "os";
-import { sync as makeDir } from "make-dir";
 import readdir from "fs-readdir-recursive";
 
 import { createRequire } from "module";
@@ -675,7 +674,7 @@ const readDir = function (loc: string, filter: Parameters<typeof readdir>[1]) {
 };
 
 const outputFileSync = function (filePath: string, data: string) {
-  makeDir(path.dirname(filePath));
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, data);
 };
 
@@ -903,7 +902,7 @@ export function buildProcessTests(
             createHash("sha1").update(testLoc).digest("hex"),
           );
           deleteDir(tmpLoc);
-          makeDir(tmpLoc);
+          fs.mkdirSync(tmpLoc, { recursive: true });
 
           const { inFiles } = opts;
           for (const filename of Object.keys(inFiles)) {
