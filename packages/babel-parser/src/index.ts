@@ -102,7 +102,7 @@ function getParser(options: Options | undefined | null, input: string): Parser {
         pluginsMap.set(name, opts || {});
       }
     }
-    validatePlugins(options.plugins, pluginsMap);
+    validatePlugins(pluginsMap);
     cls = getParserClass(pluginsMap);
   }
 

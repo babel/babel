@@ -1,9 +1,5 @@
 import type Parser from "./parser/index.ts";
-import type {
-  ParserPluginWithOptions,
-  PluginConfig,
-  PluginOptions,
-} from "./typings.ts";
+import type { PluginConfig } from "./typings.ts";
 
 export type Plugin = PluginConfig;
 
@@ -13,74 +9,10 @@ export type MixinPlugin = (superClass: { new (...args: any): Parser }) => {
   new (...args: any): Parser;
 };
 
-// This function’s second parameter accepts either a string (plugin name) or an
-// array pair (plugin name and options object). If an options object is given,
-// then each value is non-recursively checked for identity with the actual
-// option value of each plugin in the first argument (which is an array of
-// plugin names or array pairs).
-export function hasPlugin(
-  plugins: PluginList,
-  expectedConfig: PluginConfig,
-): boolean {
-  // The expectedOptions object is by default an empty object if the given
-  // expectedConfig argument does not give an options object (i.e., if it is a
-  // string).
-  let expectedName, expectedOptions;
-  if (typeof expectedConfig === "string") {
-    expectedName = expectedConfig;
-    expectedOptions = {};
-  } else {
-    [expectedName, expectedOptions] = expectedConfig;
-  }
-  const expectedKeys = Object.keys(expectedOptions);
-
-  const expectedOptionsIsEmpty = expectedKeys.length === 0;
-
-  return plugins.some(p => {
-    if (typeof p === "string") {
-      return expectedOptionsIsEmpty && p === expectedName;
-    } else {
-      const [pluginName, pluginOptions] = p;
-      if (pluginName !== expectedName) {
-        return false;
-      }
-      for (const key of expectedKeys) {
-        // @ts-expect-error key may not exist in plugin options
-        if (pluginOptions[key] !== expectedOptions[key]) {
-          return false;
-        }
-      }
-      return true;
-    }
-  });
-}
-
-export function getPluginOption<
-  PluginName extends ParserPluginWithOptions[0],
-  OptionName extends keyof PluginOptions<PluginName>,
->(plugins: PluginList, name: PluginName, option: OptionName) {
-  const plugin = plugins.find(plugin => {
-    if (Array.isArray(plugin)) {
-      return plugin[0] === name;
-    } else {
-      return plugin === name;
-    }
-  });
-
-  if (plugin && Array.isArray(plugin) && plugin.length > 1) {
-    return (plugin[1] as PluginOptions<PluginName>)[option];
-  }
-
-  return null;
-}
-
 const PIPELINE_PROPOSALS = ["minimal", "fsharp", "hack", "smart"];
 const TOPIC_TOKENS = ["^^", "@@", "^", "%", "#"];
 
-export function validatePlugins(
-  plugins: PluginList,
-  pluginsMap: Map<string, any>,
-) {
+export function validatePlugins(pluginsMap: Map<string, any>) {
   if (pluginsMap.has("decorators")) {
     if (pluginsMap.has("decorators-legacy")) {
       throw new Error(
@@ -127,13 +59,9 @@ export function validatePlugins(
       );
     }
 
-    const recordAndTupleConfigItem:
-      | "recordAndTuple"
-      | ["recordAndTuple", { syntaxType: "hash" }] = process.env
-      .BABEL_8_BREAKING
-      ? "recordAndTuple"
-      : ["recordAndTuple", { syntaxType: "hash" }];
-    const tupleSyntaxIsHash = hasPlugin(plugins, recordAndTupleConfigItem);
+    const tupleSyntaxIsHash = process.env.BABEL_8_BREAKING
+      ? true
+      : pluginsMap.get("recordAndTuple")?.syntaxType === "hash";
 
     if (proposal === "hack") {
       if (pluginsMap.has("placeholders")) {
