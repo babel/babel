@@ -83,9 +83,9 @@ function toParseErrorConstructor<ErrorDetails extends object>({
     error.pos = loc.index;
 
     error.syntaxPlugin = syntaxPlugin;
-    error.missingPlugin = hasMissingPlugin
-      ? (details as any).missingPlugin
-      : undefined;
+    if (hasMissingPlugin) {
+      error.missingPlugin = (details as any).missingPlugin;
+    }
 
     type Overrides = {
       loc?: Position;

@@ -260,6 +260,7 @@ function createWorker(useWorker) {
     return require("./babel-worker.cjs");
   }
   const worker = new JestWorker(require.resolve("./babel-worker.cjs"), {
+    enableWorkerThreads: true,
     numWorkers,
     exposedMethods: ["transform"],
   });
