@@ -119,9 +119,7 @@ export default async function ({
 
       const files = util.readdir(dirname, cliOptions.includeDotfiles);
       for (const filename of files) {
-        const src = path.join(dirname, filename);
-
-        const written = await handleFile(src, dirname);
+        const written = await handleFile(filename, dirname);
         if (written) count += 1;
       }
 

@@ -26,7 +26,7 @@ import { diff } from "jest-diff";
 import type { ChildProcess } from "child_process";
 import { spawn } from "child_process";
 import os from "os";
-import readdir from "fs-readdir-recursive";
+import readdirRecursive from "fs-readdir-recursive";
 
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
@@ -663,12 +663,21 @@ const nodeGte8 = parseInt(process.versions.node, 10) >= 8;
 // https://github.com/nodejs/node/issues/11422#issue-208189446
 const tmpDir = realpathSync(os.tmpdir());
 
-const readDir = function (loc: string, filter: Parameters<typeof readdir>[1]) {
+const readDir = function (loc: string, pathFilter: (arg0: string) => boolean) {
   const files: Record<string, string> = {};
   if (fs.existsSync(loc)) {
-    readdir(loc, filter).forEach(function (filename) {
-      files[filename] = readFile(path.join(loc, filename));
-    });
+    if (process.env.BABEL_8_BREAKING) {
+      fs.readdirSync(loc, { withFileTypes: true, recursive: true })
+        .filter(dirent => dirent.isFile() && pathFilter(dirent.name))
+        .forEach(dirent => {
+          const fullpath = path.join(dirent.path, dirent.name);
+          files[path.relative(loc, fullpath)] = readFile(fullpath);
+        });
+    } else {
+      readdirRecursive(loc, pathFilter).forEach(function (filename) {
+        files[filename] = readFile(path.join(loc, filename));
+      });
+    }
   }
   return files;
 };
@@ -682,8 +691,8 @@ function deleteDir(path: string): void {
   fs.rmSync(path, { force: true, recursive: true });
 }
 
-const fileFilter = function (x: string) {
-  return x !== ".DS_Store";
+const pathFilter = function (x: string) {
+  return path.basename(x) !== ".DS_Store";
 };
 
 const assertTest = function (
@@ -738,7 +747,7 @@ const assertTest = function (
   }
 
   if (opts.outFiles) {
-    const actualFiles = readDir(tmpDir, fileFilter);
+    const actualFiles = readDir(tmpDir, pathFilter);
 
     Object.keys(actualFiles).forEach(function (filename) {
       try {
@@ -852,8 +861,8 @@ export function buildProcessTests(
       }
 
       opts.testLoc = testLoc;
-      opts.outFiles = readDir(path.join(testLoc, "out-files"), fileFilter);
-      opts.inFiles = readDir(path.join(testLoc, "in-files"), fileFilter);
+      opts.outFiles = readDir(path.join(testLoc, "out-files"), pathFilter);
+      opts.inFiles = readDir(path.join(testLoc, "in-files"), pathFilter);
 
       const babelrcLoc = path.join(testLoc, ".babelrc");
       const babelIgnoreLoc = path.join(testLoc, ".babelignore");

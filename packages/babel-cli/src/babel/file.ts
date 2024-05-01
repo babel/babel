@@ -158,17 +158,13 @@ export default async function ({
 
       const stat = fs.statSync(filename);
       if (stat.isDirectory()) {
-        const dirname = filename;
-
-        util
-          .readdirForCompilable(
+        _filenames.push(
+          ...util.readdirForCompilable(
             filename,
             cliOptions.includeDotfiles,
             cliOptions.extensions,
-          )
-          .forEach(function (filename) {
-            _filenames.push(path.join(dirname, filename));
-          });
+          ),
+        );
       } else {
         _filenames.push(filename);
       }
