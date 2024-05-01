@@ -92,10 +92,14 @@ function getParser(options: Options | undefined | null, input: string): Parser {
   const pluginsMap: PluginsMap = new Map();
   if (options?.plugins) {
     for (const plugin of options.plugins) {
+      let name, opts;
       if (typeof plugin === "string") {
-        pluginsMap.set(plugin, {});
+        name = plugin;
       } else {
-        pluginsMap.set(plugin[0], plugin[1] || {});
+        [name, opts] = plugin;
+      }
+      if (!pluginsMap.has(name)) {
+        pluginsMap.set(name, opts || {});
       }
     }
     validatePlugins(options.plugins, pluginsMap);
