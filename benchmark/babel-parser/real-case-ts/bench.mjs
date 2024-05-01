@@ -1,7 +1,9 @@
-import baseline from "@babel-baseline/parser";
-import current from "@babel/parser";
+import { copyFileSync, readFileSync, rmSync } from "fs";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { commonJS } from "$repo-utils";
 import { Benchmark } from "../../util.mjs";
-import { readFileSync } from "fs";
+
+const { require } = commonJS(import.meta.url);
 
 const benchmark = new Benchmark();
 
@@ -27,10 +29,25 @@ function benchCases(name, implementation, options) {
     });
   }
 }
+copyFileSync(
+  require.resolve("@babel-baseline/parser"),
+  "./parser-baseline.cjs"
+);
+copyFileSync(
+  "../../../packages/babel-parser/lib/index.js",
+  "./parser-current.cjs"
+);
+
+const baseline = require("./parser-baseline.cjs");
+const current = require("./parser-current.cjs");
 
 benchCases("current", current.parse);
 benchCases("baseline", baseline.parse);
 benchCases("current", current.parse);
 benchCases("baseline", baseline.parse);
 
+benchmark.suite.on("complete", () => {
+  rmSync("./parser-current.cjs");
+  rmSync("./parser-baseline.cjs");
+});
 benchmark.run();

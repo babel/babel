@@ -3694,6 +3694,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       binding: BindingFlag,
     ) {
       switch (type) {
+        // Allow "typecasts" to appear on the left of assignment expressions,
+        // because it may be in an arrow function.
+        // e.g. `const f = (foo: number = 0) => foo;`
         case "TSTypeCastExpression":
           return true;
         case "TSParameterProperty":
@@ -3707,6 +3710,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             (binding !== BindingFlag.TYPE_NONE ||
               !isUnparenthesizedInAssign) && ["expression", true]
           );
+        default:
+          return super.isValidLVal(type, isUnparenthesizedInAssign, binding);
       }
     }
 
