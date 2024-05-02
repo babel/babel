@@ -15,6 +15,10 @@ export function chmod(src: string, dest: string): void {
   }
 }
 
+export function alphasort(a: string, b: string) {
+  return a.localeCompare(b, "en");
+}
+
 type ReaddirFilter = (filename: string) => boolean;
 
 export function readdir(
@@ -22,15 +26,43 @@ export function readdir(
   includeDotfiles: boolean,
   filter?: ReaddirFilter,
 ): Array<string> {
-  return readdirRecursive(dirname, (filename, index, currentDirectory) => {
-    const stat = fs.statSync(path.join(currentDirectory, filename));
-
-    if (stat.isDirectory()) return true;
-
+  if (process.env.BABEL_8_BREAKING) {
     return (
-      (includeDotfiles || filename[0] !== ".") && (!filter || filter(filename))
+      fs
+        .readdirSync(dirname, { recursive: true, withFileTypes: true })
+        .filter(dirent => {
+          // exclude directory entries from readdir results
+          if (dirent.isDirectory()) return false;
+          const filename = dirent.name;
+          return (
+            (includeDotfiles || filename[0] !== ".") &&
+            (!filter || filter(filename))
+          );
+        })
+        .map(dirent => path.join(dirent.path, dirent.name))
+        // readdirSyncRecursive conducts BFS, sort the entries so we can match the DFS behaviour of fs-readdir-recursive
+        // https://github.com/nodejs/node/blob/d6b12f5b77e35c58a611d614cf0aac674ec2c3ed/lib/fs.js#L1421
+        .sort(alphasort)
     );
-  });
+  } else {
+    return readdirRecursive(
+      "",
+      (filename, index, currentDirectory) => {
+        const stat = fs.statSync(path.join(currentDirectory, filename));
+
+        // ensure we recurse into .* folders
+        if (stat.isDirectory()) return true;
+
+        return (
+          (includeDotfiles || filename[0] !== ".") &&
+          (!filter || filter(filename))
+        );
+      },
+      // @ts-expect-error improve @types/fs-readdir-recursive typings
+      [],
+      dirname,
+    );
+  }
 }
 
 export function readdirForCompilable(
@@ -109,19 +141,7 @@ export async function compile(filename: string, opts: InputOptions) {
 }
 
 export function deleteDir(path: string): void {
-  if (fs.existsSync(path)) {
-    fs.readdirSync(path).forEach(function (file) {
-      const curPath = path + "/" + file;
-      if (fs.lstatSync(curPath).isDirectory()) {
-        // recurse
-        deleteDir(curPath);
-      } else {
-        // delete file
-        fs.unlinkSync(curPath);
-      }
-    });
-    fs.rmdirSync(path);
-  }
+  fs.rmSync(path, { force: true, recursive: true });
 }
 
 process.on("uncaughtException", function (err) {

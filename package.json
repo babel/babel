@@ -45,7 +45,7 @@
     "@rollup/plugin-replace": "^5.0.5",
     "@rollup/plugin-terser": "^0.4.4",
     "@types/jest": "^29.5.11",
-    "@types/node": "^20.11.5",
+    "@types/node": "^20.12.7",
     "@yarnpkg/types": "^4.0.0",
     "babel-plugin-transform-charcodes": "^0.2.0",
     "c8": "^8.0.1",

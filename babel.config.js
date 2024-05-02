@@ -496,6 +496,40 @@ function pluginPolyfillsOldNode({ template, types: t }) {
       // https://github.com/nodejs/node/blob/main/doc/changelogs/CHANGELOG_V16.md#v8-93
       replacement: template`hasOwnProperty.call`,
     },
+    {
+      name: "fs.rmSync",
+      necessary({ node, parent }) {
+        // To avoid infinite replacement loops
+        return !t.isLogicalExpression(parent, { operator: "||", left: node });
+      },
+      supported({ parent: { arguments: args } }) {
+        return (
+          t.isObjectExpression(args[1]) &&
+          args[1].properties.length === 2 &&
+          t.isIdentifier(args[1].properties[0].key, { name: "force" }) &&
+          t.isBooleanLiteral(args[1].properties[0].value, { value: true }) &&
+          t.isIdentifier(args[1].properties[1].key, { name: "recursive" }) &&
+          t.isBooleanLiteral(args[1].properties[1].value, { value: true })
+        );
+      },
+      // fs.rmSync has been introduced in Node.js 14.14
+      // https://nodejs.org/api/fs.html#fsrmsyncpath-options
+      replacement: template`
+        fs.rmSync || function d(/* path */ p) {
+            if (fs.existsSync(p)) {
+              fs.readdirSync(p).forEach(function (f) {
+                const /* currentPath */ c = p + "/" + f;
+                if (fs.lstatSync(c).isDirectory()) {
+                  d(c);
+                } else {
+                  fs.unlinkSync(c);
+                }
+              });
+              fs.rmdirSync(p);
+            }
+          }
+      `,
+    },
   ];
 
   return {
