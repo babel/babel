@@ -1,3 +1,11 @@
 {
-  "plugins": [["recordAndTuple", { "syntaxType": "hash" }]]
+  "plugins": [
+    [
+      "recordAndTuple",
+      {
+        "syntaxType": "hash"
+      }
+    ]
+  ],
+  "throws": "The syntaxType option is no longer required in Babel 8. You can safely remove { syntaxType: \"hash\" } from the recordAndTuple config."
 }

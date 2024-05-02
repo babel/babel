@@ -1,4 +1,5 @@
 import { parse } from "@babel/parser";
+import { IS_BABEL_8 } from "$repo-utils";
 
 import _traverse from "../../lib/index.js";
 const traverse = _traverse.default || _traverse;
@@ -6,8 +7,10 @@ const traverse = _traverse.default || _traverse;
 function getPath(code) {
   const ast = parse(code, {
     plugins: [
-      ["decorators", { version: "2021-12", decoratorsBeforeExport: true }],
-      ["recordAndTuple", { syntaxType: "hash" }],
+      ["decorators", { version: "2023-11", decoratorsBeforeExport: true }],
+      IS_BABEL_8()
+        ? "recordAndTuple"
+        : ["recordAndTuple", { syntaxType: "hash" }],
       "decoratorAutoAccessors",
       ["pipelineOperator", { proposal: "hack", topicToken: "%" }],
     ],

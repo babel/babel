@@ -1,5 +1,0 @@
-{
-  "recordAndTupleSyntaxType": "bar",
-  "plugins": [["recordAndTuple", { "syntaxType": "bar" }]],
-  "sourceMaps": true
-}

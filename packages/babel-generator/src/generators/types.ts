@@ -113,21 +113,26 @@ export function RecordExpression(this: Printer, node: t.RecordExpression) {
 
   let startToken;
   let endToken;
-  if (this.format.recordAndTupleSyntaxType === "bar") {
-    startToken = "{|";
-    endToken = "|}";
-  } else if (
-    this.format.recordAndTupleSyntaxType !== "hash" &&
-    this.format.recordAndTupleSyntaxType != null
-  ) {
-    throw new Error(
-      `The "recordAndTupleSyntaxType" generator option must be "bar" or "hash" (${JSON.stringify(
-        this.format.recordAndTupleSyntaxType,
-      )} received).`,
-    );
-  } else {
+  if (process.env.BABEL_8_BREAKING) {
     startToken = "#{";
     endToken = "}";
+  } else {
+    if (this.format.recordAndTupleSyntaxType === "bar") {
+      startToken = "{|";
+      endToken = "|}";
+    } else if (
+      this.format.recordAndTupleSyntaxType !== "hash" &&
+      this.format.recordAndTupleSyntaxType != null
+    ) {
+      throw new Error(
+        `The "recordAndTupleSyntaxType" generator option must be "bar" or "hash" (${JSON.stringify(
+          this.format.recordAndTupleSyntaxType,
+        )} received).`,
+      );
+    } else {
+      startToken = "#{";
+      endToken = "}";
+    }
   }
 
   this.token(startToken);
@@ -146,16 +151,21 @@ export function TupleExpression(this: Printer, node: t.TupleExpression) {
 
   let startToken;
   let endToken;
-  if (this.format.recordAndTupleSyntaxType === "bar") {
-    startToken = "[|";
-    endToken = "|]";
-  } else if (this.format.recordAndTupleSyntaxType === "hash") {
+  if (process.env.BABEL_8_BREAKING) {
     startToken = "#[";
     endToken = "]";
   } else {
-    throw new Error(
-      `${this.format.recordAndTupleSyntaxType} is not a valid recordAndTuple syntax type`,
-    );
+    if (this.format.recordAndTupleSyntaxType === "bar") {
+      startToken = "[|";
+      endToken = "|]";
+    } else if (this.format.recordAndTupleSyntaxType === "hash") {
+      startToken = "#[";
+      endToken = "]";
+    } else {
+      throw new Error(
+        `${this.format.recordAndTupleSyntaxType} is not a valid recordAndTuple syntax type`,
+      );
+    }
   }
 
   this.token(startToken);

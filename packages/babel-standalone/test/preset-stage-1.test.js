@@ -1,4 +1,5 @@
 import { createRequire } from "module";
+import { itBabel7 } from "$repo-utils";
 const require = createRequire(import.meta.url);
 
 describe("stage-1 preset", () => {
@@ -29,7 +30,7 @@ describe("stage-1 preset", () => {
     expect(output).toMatchInlineSnapshot(`"x;"`);
   });
 
-  it("should support hack pipeline with `#` topic token", () => {
+  itBabel7("should support hack pipeline with `#` topic token", () => {
     const output = Babel.transform("x |> #", {
       presets: [
         [

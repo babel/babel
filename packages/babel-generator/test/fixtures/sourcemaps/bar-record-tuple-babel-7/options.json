@@ -1,0 +1,6 @@
+{
+  "BABEL_8_BREAKING": false,
+  "recordAndTupleSyntaxType": "bar",
+  "plugins": [["recordAndTuple", { "syntaxType": "bar" }]],
+  "sourceMaps": true
+}

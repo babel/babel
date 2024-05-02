@@ -1,7 +1,13 @@
 {
+  "BABEL_8_BREAKING": true,
   "plugins": [
-    ["pipelineOperator", { "proposal": "smart" }],
-    ["recordAndTuple", { "syntaxType": "hash" }]
+    [
+      "pipelineOperator",
+      {
+        "proposal": "smart"
+      }
+    ],
+    ["recordAndTuple"]
   ],
-  "throws": "Plugin conflict between `[\"pipelineOperator\", { proposal: \"smart\" }]` and `[\"recordAndtuple\", { syntaxType: \"hash\"}]`."
+  "throws": "Plugin conflict between `[\"pipelineOperator\", { proposal: \"smart\" }]` and `\"recordAndTuple\"`."
 }

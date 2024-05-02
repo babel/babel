@@ -1,0 +1,6 @@
+{
+  "BABEL_8_BREAKING": false,
+  "recordAndTupleSyntaxType": "hash",
+  "plugins": [["recordAndTuple", { "syntaxType": "hash" }]],
+  "sourceMaps": true
+}

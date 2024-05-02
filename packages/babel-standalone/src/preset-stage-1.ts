@@ -10,7 +10,6 @@ export default (_: any, opts: any = {}) => {
     decoratorsBeforeExport,
     pipelineProposal,
     pipelineTopicToken,
-    recordAndTupleSyntax,
     optionalChainingAssignVersion = "2023-07",
   } = opts;
 
@@ -18,16 +17,26 @@ export default (_: any, opts: any = {}) => {
     presets: [
       [
         presetStage2,
-        {
-          loose,
-          useBuiltIns,
-          decoratorsLegacy,
-          decoratorsVersion,
-          decoratorsBeforeExport,
-          pipelineProposal,
-          pipelineTopicToken,
-          recordAndTupleSyntax,
-        },
+        process.env.BABEL_8_BREAKING
+          ? {
+              loose,
+              useBuiltIns,
+              decoratorsLegacy,
+              decoratorsVersion,
+              decoratorsBeforeExport,
+              pipelineProposal,
+              pipelineTopicToken,
+            }
+          : {
+              loose,
+              useBuiltIns,
+              decoratorsLegacy,
+              decoratorsVersion,
+              decoratorsBeforeExport,
+              pipelineProposal,
+              pipelineTopicToken,
+              recordAndTupleSyntax: opts.recordAndTupleSyntax,
+            },
       ],
     ],
     plugins: [
