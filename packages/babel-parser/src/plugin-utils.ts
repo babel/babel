@@ -60,7 +60,7 @@ export function validatePlugins(pluginsMap: Map<string, any>) {
     }
 
     const tupleSyntaxIsHash = process.env.BABEL_8_BREAKING
-      ? true
+      ? pluginsMap.has("recordAndTuple")
       : pluginsMap.get("recordAndTuple")?.syntaxType === "hash";
 
     if (proposal === "hack") {
@@ -88,12 +88,12 @@ export function validatePlugins(pluginsMap: Map<string, any>) {
 
       if (topicToken === "#" && tupleSyntaxIsHash) {
         throw new Error(
-          `Plugin conflict between \`["pipelineOperator", { proposal: "hack", topicToken: "#" }]\` and \`${JSON.stringify(recordAndTupleConfigItem)}\`.`,
+          `Plugin conflict between \`["pipelineOperator", { proposal: "hack", topicToken: "#" }]\` and \`${JSON.stringify(["recordAndTuple", pluginsMap.get("recordAndTuple")])}\`.`,
         );
       }
     } else if (proposal === "smart" && tupleSyntaxIsHash) {
       throw new Error(
-        `Plugin conflict between \`["pipelineOperator", { proposal: "smart" }]\` and \`${JSON.stringify(recordAndTupleConfigItem)}\`.`,
+        `Plugin conflict between \`["pipelineOperator", { proposal: "smart" }]\` and \`${JSON.stringify(["recordAndTuple", pluginsMap.get("recordAndTuple")])}\`.`,
       );
     }
   }
