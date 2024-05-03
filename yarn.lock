@@ -284,7 +284,7 @@ __metadata:
   resolution: "@babel/code-frame@workspace:packages/babel-code-frame"
   dependencies:
     "@babel/highlight": "workspace:^"
-    import-meta-resolve: "npm:^4.0.0"
+    import-meta-resolve: "npm:^4.1.0"
     picocolors: "npm:^1.0.0"
     strip-ansi: "npm:^4.0.0"
   languageName: unknown
@@ -7164,7 +7164,7 @@ __metadata:
     gulp-filter: "npm:^7.0.0"
     gulp-plumber: "npm:^1.2.1"
     husky: "npm:^8.0.3"
-    import-meta-resolve: "npm:^4.0.0"
+    import-meta-resolve: "npm:^4.1.0"
     is-ci: "npm:^3.0.1"
     jest: "npm:^30.0.0-alpha.2"
     jest-light-runner: "npm:^0.6.0"
@@ -11144,10 +11144,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"import-meta-resolve@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "import-meta-resolve@npm:4.0.0"
-  checksum: 10/73f0f1d68f7280cb4415e3a212a6e5d57fbfe61ab6f467df3dad5361529fbd89ac7d8ea2b694412b74985a4226d218ad3fb22fd8f06f5429beda521dc9f0229c
+"import-meta-resolve@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "import-meta-resolve@npm:4.1.0"
+  checksum: 10/40162f67eb406c8d5d49266206ef12ff07b54f5fad8cfd806db9efe3a055958e9969be51d6efaf82e34b8bea6758113dcc17bb79ff148292a4badcabc3472f22
   languageName: node
   linkType: hard
 
