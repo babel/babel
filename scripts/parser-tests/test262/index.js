@@ -12,7 +12,7 @@ const ignoredFeaturesJsonPath = new URL(
 );
 const ignoredFeatures = (
   await import(ignoredFeaturesJsonPath, {
-    assert: { type: "json" },
+    with: { type: "json" },
   })
 ).default;
 
