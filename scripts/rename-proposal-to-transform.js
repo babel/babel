@@ -13,7 +13,8 @@ const oldPackageJSONPath = path.join(oldPackageFolder, "package.json");
 
 console.info("Updating package.json...");
 {
-  const pkgJSON = JSON.parse(fs.readFileSync(oldPackageJSONPath, "utf8"));
+  const pkgJSON = (await import(oldPackageJSONPath, { with: { type: "json" } }))
+    .default;
   pkgJSON.name = pkgJSON.name.replace(oldName, newName);
   pkgJSON.description = pkgJSON.description.replace(
     /the ([a-z-]+?)s? proposal/gi,
