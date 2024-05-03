@@ -94,10 +94,10 @@
     "benchmark"
   ],
   "resolutions": {
-    "browserslist": "npm:4.22.2",
-    "caniuse-lite": "npm:1.0.30001566",
-    "core-js-compat": "npm:3.36.1",
-    "electron-to-chromium": "npm:1.4.441",
+    "browserslist": "npm:4.23.0",
+    "caniuse-lite": "npm:1.0.30001615",
+    "core-js-compat": "npm:3.37.0",
+    "electron-to-chromium": "npm:1.4.755",
     "glob-watcher/chokidar": "npm:^3.4.0",
     "@types/babel__core": "link:./nope",
     "@types/babel__traverse": "link:./nope",
