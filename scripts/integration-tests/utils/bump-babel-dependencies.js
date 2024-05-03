@@ -1,5 +1,9 @@
 import fs from "fs";
-import content from "../../../package.json" with { type: "json" };
+import path from "path";
+
+const packageJSONPath = path.resolve(process.cwd(), "./package.json");
+const content = (await import(packageJSONPath, { with: { type: "json" } }))
+  .default;
 
 function bumpBabelDependency(type, version) {
   const dependencies = content[type];
@@ -32,5 +36,4 @@ if (process.argv[2] === "resolutions") {
   }
 }
 
-const packageJSONPath = new URL("../../../package.json", import.meta.url);
 fs.writeFileSync(packageJSONPath, JSON.stringify(content, undefined, 2));
