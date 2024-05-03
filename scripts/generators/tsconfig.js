@@ -1,5 +1,5 @@
 import fs from "fs";
-import archivedSyntaxPkgs from "./archived-syntax-pkgs.json" with { "type": "json" };
+import archivedSyntaxPkgs from "./archived-syntax-pkgs.json" with { type: "json" };
 
 function importJSON(path) {
   return JSON.parse(fs.readFileSync(path));
