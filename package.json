@@ -94,7 +94,6 @@
     "benchmark"
   ],
   "resolutions": {
-    "acorn@^8.9.0": "npm:8.10.0",
     "browserslist": "npm:4.22.2",
     "caniuse-lite": "npm:1.0.30001566",
     "core-js-compat": "npm:3.36.1",

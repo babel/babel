@@ -121,7 +121,7 @@
     "@babel/template": "workspace:^",
     "@babel/traverse": "workspace:^",
     "@babel/types": "workspace:^",
-    "acorn": "^8.7.0",
+    "acorn": "^8.11.3",
     "jsdom": "^22.1.0"
   },
   "keywords": [
