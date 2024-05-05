@@ -1,11 +1,9 @@
 import fs from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const packageJSONPath = path.resolve(process.cwd(), "./package.json");
-const content = JSON.parse(fs.readFileSync(packageJSONPath));
+const content = (await import(packageJSONPath, { with: { type: "json" } }))
+  .default;
 
 function bumpBabelDependency(type, version) {
   const dependencies = content[type];
@@ -20,7 +18,7 @@ function bumpBabelDependency(type, version) {
 if (process.argv[2] === "resolutions") {
   const resolutions = content.resolutions || {};
   for (const name of fs.readdirSync(
-    path.join(__dirname, "../../../packages")
+    new URL("../../../packages", import.meta.url)
   )) {
     if (!name.startsWith("babel-")) continue;
     resolutions[name.replace("babel-", "@babel/")] = "*";

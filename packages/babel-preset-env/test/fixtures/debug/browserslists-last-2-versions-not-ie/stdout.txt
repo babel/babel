@@ -2,21 +2,21 @@
 
 Using targets:
 {
-  "android": "118",
-  "chrome": "118",
-  "edge": "118",
-  "firefox": "119",
-  "ios": "17",
-  "opera": "103",
-  "opera_mobile": "73",
-  "safari": "17",
-  "samsung": "22"
+  "android": "123",
+  "chrome": "123",
+  "edge": "123",
+  "firefox": "124",
+  "ios": "17.3",
+  "opera": "108",
+  "opera_mobile": "80",
+  "safari": "17.3",
+  "samsung": "23"
 }
 
 Using modules transform: auto
 
 Using plugins:
-  transform-unicode-sets-regex { ios, opera_mobile < 75, safari < tp, samsung }
+  transform-unicode-sets-regex { ios, safari < tp, samsung }
   bugfix/transform-firefox-class-in-computed-class-key { firefox }
   transform-export-namespace-from { }
   transform-modules-commonjs

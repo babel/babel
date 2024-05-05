@@ -9,7 +9,7 @@ Using targets:
   "ios": "10.3",
   "node": "13.2",
   "opera": "48",
-  "opera_mobile": "73",
+  "opera_mobile": "80",
   "safari": "10.1",
   "samsung": "8.2"
 }
@@ -17,7 +17,7 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
-  transform-unicode-sets-regex { android, chrome < 112, edge < 112, firefox < 116, ios, node < 20, opera < 98, opera_mobile < 75, safari < tp, samsung }
+  transform-unicode-sets-regex { android, chrome < 112, edge < 112, firefox < 116, ios, node < 20, opera < 98, safari < tp, samsung }
   transform-class-static-block { android, chrome < 94, edge < 94, firefox < 93, ios < 16.4, node < 16.11, opera < 80, safari < 16.4, samsung < 17 }
   transform-private-property-in-object { android, chrome < 91, edge < 91, firefox < 90, ios < 15, node < 16.9, opera < 77, safari < 15, samsung < 16 }
   transform-class-properties { android, chrome < 74, edge < 79, firefox < 90, ios < 14.5, opera < 62, safari < 14.1, samsung < 11 }
