@@ -309,8 +309,6 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
-    env:
-      YARN_IGNORE_NODE: 1
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -320,8 +318,7 @@ jobs:
           node-version: "18.20.0" # Node.js 18.20.0 is the first LTS supported by Babel 8
           cache: "yarn"
       - name: Install
-        run: |
-          yarn install
+        run: yarn install
       - uses: actions/download-artifact@v3
         with:
           name: babel8-artifact
@@ -330,9 +327,14 @@ jobs:
       - name: Use ESM
         run: node scripts/set-module-type.js module
       - name: Test
-        run: |
-          yarn jest --ci
-          yarn test:esm
+        run: yarn jest --ci
+        env:
+          BABEL_ENV: test
+          BABEL_8_BREAKING: true
+          BABEL_TYPES_8_BREAKING: true
+          BABEL_CLI_FLAKY_TESTS: true
+      - name: Test ESM
+        run: yarn test:esm
         env:
           BABEL_ENV: test
           BABEL_8_BREAKING: true
