@@ -253,6 +253,9 @@ describe("@babel/core errors", function () {
   });
 
   it("internal errors have the full stack trace", function () {
+    // Remove `Error.prepareStackTrace` because `source-map-support` used `Array.prototype.map`
+    const { prepareStackTrace } = Error;
+    Error.prepareStackTrace = null;
     expectError(() => {
       const { map } = Array.prototype;
       try {
@@ -268,18 +271,18 @@ describe("@babel/core errors", function () {
     }).toMatchTemplate`\
 Error: Internal error! This is a fake bug :)
     at Array.map (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
-    at ${/loadOneConfig|findRootConfig/} (<CWD>/packages/babel-core/src/config/files/configuration.ts:_:_)
+    at ${/loadOneConfig|findRootConfig/} (<CWD>/packages/babel-core/lib/config/files/configuration.js:_:_)
     at loadOneConfig.next (<anonymous>)
-    at buildRootChain (<CWD>/packages/babel-core/src/config/config-chain.ts:_:_)
+    at buildRootChain (<CWD>/packages/babel-core/lib/config/config-chain.js:_:_)
     at buildRootChain.next (<anonymous>)
-    at loadPrivatePartialConfig (<CWD>/packages/babel-core/src/config/partial.ts:_:_)
+    at loadPrivatePartialConfig (<CWD>/packages/babel-core/lib/config/partial.js:_:_)
     at loadPrivatePartialConfig.next (<anonymous>)
-    at ${/loadFullConfig|loadConfig/} (<CWD>/packages/babel-core/src/config/full.ts:_:_)
+    at ${/loadFullConfig|loadConfig/} (<CWD>/packages/babel-core/lib/config/full.js:_:_)
     at loadFullConfig.next (<anonymous>)
-    at parse (<CWD>/packages/babel-core/src/parse.ts:_:_)
+    at parse (<CWD>/packages/babel-core/lib/parse.js:_:_)
     at parse.next (<anonymous>)
     at evaluateSync (<CWD>/node_modules/gensync/index.js:_:_)
-    at fn (<CWD>/node_modules/gensync/index.js:_:_)
+    at sync (<CWD>/node_modules/gensync/index.js:_:_)
     at stopHiding - secret - don't use this - v1 (<CWD>/packages/babel-core/src/errors/rewrite-stack-trace.ts:_:_)
     at Module.parseSync (<CWD>/packages/babel-core/src/parse.ts:_:_)
     at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
@@ -288,6 +291,45 @@ Error: Internal error! This is a fake bug :)
     at ... internal jest frames ...\
 `;
     // TODO(Babel 8): We do not need regexps anymore in the matcher above
+    Error.prepareStackTrace = prepareStackTrace;
+  });
+
+  it("should reset `Error.prepareStackTrace`", async function () {
+    const { prepareStackTrace } = Error;
+    Error.prepareStackTrace = null;
+    babel.parseSync("foo;", {
+      root: fixture("valid"),
+    });
+    expect(Error.prepareStackTrace).toBeNull();
+
+    await babel.parseAsync("foo;", {
+      root: fixture("valid"),
+    });
+    expect(Error.prepareStackTrace).toBeNull();
+
+    const errors = [];
+
+    try {
+      babel.parseSync("foo;", {
+        root: fixture("invalid-json"),
+      });
+    } catch (e) {
+      errors.push(e);
+    }
+    expect(Error.prepareStackTrace).toBeNull();
+
+    try {
+      await babel.parseAsync("foo;", {
+        root: fixture("invalid-json"),
+      });
+    } catch (e) {
+      errors.push(e);
+    }
+    expect(Error.prepareStackTrace).toBeNull();
+
+    expect(errors).toHaveLength(2);
+
+    Error.prepareStackTrace = prepareStackTrace;
   });
 
   nodeGte12("should not throw in `node --frozen-intrinsics`", function () {
