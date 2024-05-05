@@ -3708,6 +3708,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             TSTypeCastExpression: true,
             TSParameterProperty: "parameter",
             TSNonNullExpression: "expression",
+            TSInstantiationExpression: "expression",
             TSAsExpression: (binding !== BindingFlag.TYPE_NONE ||
               !isUnparenthesizedInAssign) && ["expression", true],
             TSSatisfiesExpression: (binding !== BindingFlag.TYPE_NONE ||
