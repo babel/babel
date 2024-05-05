@@ -1,4 +1,11 @@
 {
   "sourceType": "module",
-  "plugins": ["transform-typescript"]
+  "plugins": [
+    [
+      "transform-typescript",
+      {
+        "allowDeclareFields": true
+      }
+    ]
+  ]
 }
