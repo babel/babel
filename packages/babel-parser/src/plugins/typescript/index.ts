@@ -3687,6 +3687,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         | "TSTypeCastExpression"
         | "TSParameterProperty"
         | "TSNonNullExpression"
+        | "TSInstantiationExpression"
         | "TSAsExpression"
         | "TSSatisfiesExpression"
         | "TSTypeAssertion",
