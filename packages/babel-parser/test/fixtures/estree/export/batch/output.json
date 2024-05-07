@@ -18,6 +18,9 @@
         },
         "exported": null
       }
-    ]
+    ],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

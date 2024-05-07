@@ -272,7 +272,10 @@
         "finalizer": null
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   },
   "comments": [
     {

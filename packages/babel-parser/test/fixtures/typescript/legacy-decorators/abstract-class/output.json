@@ -11,22 +11,6 @@
         "type": "ClassDeclaration",
         "start":0,"end":85,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":85}},
         "abstract": true,
-        "decorators": [
-          {
-            "type": "Decorator",
-            "start":0,"end":11,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":11,"index":11}},
-            "expression": {
-              "type": "CallExpression",
-              "start":1,"end":11,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":11,"index":11}},
-              "callee": {
-                "type": "Identifier",
-                "start":1,"end":9,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":9,"index":9},"identifierName":"decorate"},
-                "name": "decorate"
-              },
-              "arguments": []
-            }
-          }
-        ],
         "id": {
           "type": "Identifier",
           "start":27,"end":31,"loc":{"start":{"line":2,"column":15,"index":27},"end":{"line":2,"column":19,"index":31},"identifierName":"Test"},
@@ -78,9 +62,28 @@
               }
             }
           ]
-        }
+        },
+        "decorators": [
+          {
+            "type": "Decorator",
+            "start":0,"end":11,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":11,"index":11}},
+            "expression": {
+              "type": "CallExpression",
+              "start":1,"end":11,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":11,"index":11}},
+              "callee": {
+                "type": "Identifier",
+                "start":1,"end":9,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":9,"index":9},"identifierName":"decorate"},
+                "name": "decorate"
+              },
+              "arguments": []
+            }
+          }
+        ]
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

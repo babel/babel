@@ -10,6 +10,7 @@
       {
         "type": "ImportDeclaration",
         "start":0,"end":58,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":58,"index":58}},
+        "importKind": "value",
         "specifiers": [
           {
             "type": "ImportSpecifier",
@@ -50,7 +51,6 @@
             }
           }
         ],
-        "importKind": "value",
         "source": {
           "type": "StringLiteral",
           "start":47,"end":57,"loc":{"start":{"line":1,"column":47,"index":47},"end":{"line":1,"column":57,"index":57}},
@@ -64,6 +64,7 @@
       {
         "type": "ExportNamedDeclaration",
         "start":59,"end":93,"loc":{"start":{"line":2,"column":0,"index":59},"end":{"line":2,"column":34,"index":93}},
+        "exportKind": "value",
         "specifiers": [
           {
             "type": "ExportNamespaceSpecifier",
@@ -87,12 +88,12 @@
             "raw": "\"module-b\""
           },
           "value": "module-b"
-        },
-        "exportKind": "value"
+        }
       },
       {
         "type": "ExportNamedDeclaration",
         "start":94,"end":139,"loc":{"start":{"line":3,"column":0,"index":94},"end":{"line":3,"column":45,"index":139}},
+        "exportKind": "value",
         "specifiers": [
           {
             "type": "ExportSpecifier",
@@ -122,10 +123,12 @@
           },
           "value": "module-b"
         },
-        "declaration": null,
-        "exportKind": "value"
+        "declaration": null
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

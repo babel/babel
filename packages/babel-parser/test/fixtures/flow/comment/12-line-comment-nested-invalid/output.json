@@ -11,6 +11,9 @@
     "interpreter": null,
     "body": [],
     "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    },
     "innerComments": [
       {
         "type": "CommentLine",

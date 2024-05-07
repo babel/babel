@@ -27,6 +27,7 @@
       {
         "type": "ExportNamedDeclaration",
         "start":9,"end":29,"loc":{"start":{"line":2,"column":0,"index":9},"end":{"line":2,"column":20,"index":29}},
+        "exportKind": "type",
         "specifiers": [
           {
             "type": "ExportSpecifier",
@@ -44,10 +45,12 @@
           }
         ],
         "source": null,
-        "exportKind": "type",
         "declaration": null
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

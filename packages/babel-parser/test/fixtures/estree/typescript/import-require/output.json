@@ -28,6 +28,9 @@
           }
         }
       }
-    ]
+    ],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

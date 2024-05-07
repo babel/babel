@@ -514,7 +514,10 @@
         "kind": "const"
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   },
   "comments": [
     {

@@ -37,6 +37,7 @@ const enum StateFlags {
   inFSharpPipelineDirectBody = 1 << 9,
   canStartJSXElement = 1 << 10,
   containsEsc = 1 << 11,
+  hasTopLevelAwait = 1 << 12,
 }
 
 export const enum LoopLabelKind {
@@ -45,7 +46,7 @@ export const enum LoopLabelKind {
 }
 
 export default class State {
-  flags: number = StateFlags.canStartJSXElement;
+  flags: StateFlags = StateFlags.canStartJSXElement;
 
   get strict(): boolean {
     return (this.flags & StateFlags.Strict) > 0;
@@ -260,6 +261,17 @@ export default class State {
   // Used to track invalid escape sequences in template literals,
   // that must be reported if the template is not tagged.
   firstInvalidTemplateEscapePos: null | Position = null;
+
+  get hasTopLevelAwait(): boolean {
+    return (this.flags & StateFlags.hasTopLevelAwait) > 0;
+  }
+  set hasTopLevelAwait(value: boolean) {
+    if (value) {
+      this.flags |= StateFlags.hasTopLevelAwait;
+    } else {
+      this.flags &= ~StateFlags.hasTopLevelAwait;
+    }
+  }
 
   // This property is used to track the following errors
   // - StrictNumericEscape

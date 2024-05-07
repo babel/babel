@@ -65,6 +65,9 @@
           ]
         }
       }
-    ]
+    ],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }
