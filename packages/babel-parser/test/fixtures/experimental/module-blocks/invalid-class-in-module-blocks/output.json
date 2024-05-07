@@ -99,7 +99,10 @@
                             }
                           }
                         ],
-                        "directives": []
+                        "directives": [],
+                        "extra": {
+                          "topLevelAwait": false
+                        }
                       }
                     }
                   }
@@ -111,6 +114,9 @@
         }
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

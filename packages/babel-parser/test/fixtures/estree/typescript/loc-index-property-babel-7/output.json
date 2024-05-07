@@ -172,6 +172,9 @@
           ]
         }
       }
-    ]
+    ],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

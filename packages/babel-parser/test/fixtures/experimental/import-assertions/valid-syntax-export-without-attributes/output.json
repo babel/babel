@@ -39,6 +39,9 @@
         "assertions": []
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

@@ -207,6 +207,9 @@
         "predicate": null
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

@@ -13,6 +13,7 @@
       {
         "type": "ImportDeclaration",
         "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":37,"index":37}},
+        "importKind": "typeof",
         "specifiers": [
           {
             "type": "ImportNamespaceSpecifier",
@@ -24,7 +25,6 @@
             }
           }
         ],
-        "importKind": "typeof",
         "source": {
           "type": "StringLiteral",
           "start":31,"end":36,"loc":{"start":{"line":1,"column":31,"index":31},"end":{"line":1,"column":36,"index":36}},
@@ -36,6 +36,9 @@
         }
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

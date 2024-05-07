@@ -129,6 +129,9 @@
         "attributes": []
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

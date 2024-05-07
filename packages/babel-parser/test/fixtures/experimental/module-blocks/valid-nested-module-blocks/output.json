@@ -72,12 +72,18 @@
                             }
                           }
                         ],
-                        "directives": []
+                        "directives": [],
+                        "extra": {
+                          "topLevelAwait": false
+                        }
                       }
                     }
                   }
                 ],
-                "directives": []
+                "directives": [],
+                "extra": {
+                  "topLevelAwait": false
+                }
               }
             }
           }
@@ -85,6 +91,9 @@
         "kind": "let"
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }
