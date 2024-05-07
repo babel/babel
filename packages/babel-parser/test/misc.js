@@ -4,7 +4,9 @@ describe("misc", () => {
   describe("Program.extra.async", () => {
     it("not set for scripts", () => {
       const ast = parse("function f() {}", { sourceType: "script" });
-      expect(ast.program.extra?.topLevelAwait).toBeUndefined();
+      expect(
+        ast.program.extra && ast.program.extra.topLevelAwait,
+      ).toBeUndefined();
     });
 
     test.each([
