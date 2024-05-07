@@ -2205,7 +2205,6 @@ export default (superClass: typeof Parser) =>
 
     parseParenItem<T extends N.Expression | N.RestElement | N.SpreadElement>(
       node: T,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       startLoc: Position,
     ): T | N.TypeCastExpression | N.TsTypeCastExpression {
       const newNode = super.parseParenItem(node, startLoc);
@@ -2444,7 +2443,6 @@ export default (superClass: typeof Parser) =>
       exprList:
         | ReadonlyArray<N.Expression | N.SpreadElement>
         | ReadonlyArray<N.Expression | N.RestElement>,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       isParenthesizedExpr?: boolean,
     ):
       | ReadonlyArray<N.Expression | N.SpreadElement>

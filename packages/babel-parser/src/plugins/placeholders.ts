@@ -35,8 +35,6 @@ const PlaceholderErrors = ParseErrorEnum`placeholders`({
   UnexpectedSpace: "Unexpected space in placeholder.",
 });
 
-/* eslint-disable sort-keys */
-
 export default (superClass: typeof Parser) =>
   class PlaceholdersParserMixin extends superClass implements Parser {
     parsePlaceholder<T extends PlaceholderTypes>(

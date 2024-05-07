@@ -440,7 +440,7 @@ export default class Scope {
       const shouldSkip = path.key === "key" || path.listKey === "decorators";
       path = path.parentPath;
       if (shouldSkip && path.isMethod()) path = path.parentPath;
-      if (path && path.isScope()) parent = path;
+      if (path?.isScope()) parent = path;
     } while (path && !parent);
 
     return parent?.scope;

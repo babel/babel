@@ -9,8 +9,7 @@ type Stack = {
 export default function _usingCtx() {
   var _disposeSuppressedError =
       typeof SuppressedError === "function"
-        ? // eslint-disable-next-line no-undef
-          SuppressedError
+        ? SuppressedError
         : (function (error: Error, suppressed: Error) {
             var err = new Error() as SuppressedError;
             err.name = "SuppressedError";

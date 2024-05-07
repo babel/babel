@@ -167,7 +167,6 @@ export default async function ({
     for (const filename of cliOptions.filenames) {
       // compiledFiles is just incremented without reading its value, so we
       // don't risk race conditions.
-      // eslint-disable-next-line require-atomic-updates
       compiledFiles += await handle(filename);
     }
 

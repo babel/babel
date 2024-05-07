@@ -65,7 +65,7 @@ module.exports = [
   {
     plugins: {
       import: pluginImport,
-      node: pluginN,
+      n: pluginN,
       prettier: pluginPrettier,
       "@babel/development": pluginBabelDevelopment,
       "@babel/development-internal": pluginBabelDevelopmentInternal,
@@ -85,7 +85,10 @@ module.exports = [
       parser: typescriptEslint.parser,
       parserOptions: {
         allowAutomaticSingleRunInference: true,
-        EXPERIMENTAL_useProjectService: true,
+        // @ts-expect-error types are old
+        EXPERIMENTAL_useProjectService: {
+          maximumDefaultProjectFileMatchCount_THIS_WILL_SLOW_DOWN_LINTING: 1000,
+        },
       },
     },
     plugins: {
@@ -218,9 +221,9 @@ module.exports = [
   {
     files: testFiles,
     rules: {
-      "node/no-unsupported-features": [
+      "n/no-unsupported-features/node-builtins": [
         "error",
-        { version: "12.17.0", ignores: ["modules"] },
+        { version: "12.17.0", ignores: ["module"] },
       ],
       "@babel/development-internal/require-default-import-fallback": "error",
       "import/no-unresolved": "error",
@@ -282,12 +285,6 @@ module.exports = [
     },
   },
   {
-    files: ["eslint/babel-eslint-parser/src/**/*.js"],
-    rules: {
-      "no-restricted-imports": ["error", "@babel/core"],
-    },
-  },
-  {
     files: ["packages/babel-plugin-transform-runtime/scripts/**/*.js"],
     rules: {
       "import/no-extraneous-dependencies": [
@@ -306,7 +303,7 @@ module.exports = [
     },
   },
   {
-    files: ["scripts/**/*.{js,cjs}"],
+    files: ["scripts/**/*.{js,cjs,mjs}"],
     rules: {
       "import/no-extraneous-dependencies": ["error", { packageDir: "." }],
     },

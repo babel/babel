@@ -33,7 +33,7 @@ module.exports = {
         );
         if (!defaultSpecifier) return;
 
-        const scope = ctx.getScope();
+        const scope = ctx.sourceCode.getScope(node);
 
         const { name: local } = defaultSpecifier.local;
         const { references } = scope.variables.find(v => v.name === local);
