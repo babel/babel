@@ -31,7 +31,7 @@ export const enum LoopLabelKind {
 declare const bit: import("../../../../scripts/babel-plugin-bit-decorator/types.d.ts").BitDecorator<State>;
 
 export default class State {
-  @bit.storage #flags: number;
+  @bit.storage flags: number;
 
   @bit accessor strict = false;
 
@@ -165,7 +165,7 @@ export default class State {
 
   clone(): State {
     const state = new State();
-    state.#flags = this.#flags;
+    state.flags = this.flags;
     state.curLine = this.curLine;
     state.lineStart = this.lineStart;
     state.startLoc = this.startLoc;
