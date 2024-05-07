@@ -28,26 +28,11 @@ export const enum LoopLabelKind {
   Switch = 2,
 }
 
-// This is observably a no-op, but we use it to statically pack
-// multiple booleans into a single bitfield.
-declare function bit(
-  target: ClassAccessorDecoratorTarget<State, boolean>,
-  context: ClassAccessorDecoratorContext<State, boolean> & {
-    private: false;
-    static: false;
-  },
-): void; /*{
-  ((context.metadata.bits as any[]) ??= []).push(context.name);
-} */
-// This function copies all properties marked with the `bit` decorator from
-// `from` to `to`.
-declare function cloneBits<T>(to: T, from: T): void; /* {
-  from.constructor[Symbol.metadata].bits?.forEach((name) => {
-    to[name] = from[name];
-  });
-} */
+declare const bit: import("../../../../scripts/babel-plugin-bit-decorator/types.d.ts").BitDecorator<State>;
 
 export default class State {
+  @bit.storage #flags: number;
+
   @bit accessor strict = false;
 
   curLine: number;
@@ -180,7 +165,7 @@ export default class State {
 
   clone(): State {
     const state = new State();
-    cloneBits(state, this);
+    state.#flags = this.#flags;
     state.curLine = this.curLine;
     state.lineStart = this.lineStart;
     state.startLoc = this.startLoc;

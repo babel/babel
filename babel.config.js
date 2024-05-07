@@ -187,6 +187,8 @@ module.exports = function (api) {
 
       convertESM ? "@babel/transform-export-namespace-from" : null,
       env !== "standalone" ? "@babel/plugin-proposal-json-modules" : null,
+
+      require("./scripts/babel-plugin-bit-decorator/plugin.cjs"),
     ].filter(Boolean),
     overrides: [
       {
@@ -197,7 +199,6 @@ module.exports = function (api) {
         plugins: [
           "babel-plugin-transform-charcodes",
           pluginBabelParserTokenType,
-          pluginBabelParserBitField,
         ],
         assumptions: parserAssumptions,
       },
@@ -1003,120 +1004,6 @@ function pluginBabelParserTokenType({
             );
           }
           path.replaceWith(numericLiteral(tokenType));
-        }
-      },
-    },
-  };
-}
-
-/** @param {{ types: import("@babel/types") }} api */
-function pluginBabelParserBitField({ types: t, template }) {
-  const bodyTemplate = template.statement({ allowReturnOutsideFunction: true });
-
-  return {
-    manipulateOptions({ parserOpts }) {
-      parserOpts.plugins.push("decorators", "decoratorAutoAccessors");
-    },
-    visitor: {
-      Class(path) {
-        let storageName;
-        let initial = 0;
-        let nextMask = 1;
-        for (const element of path.get("body.body")) {
-          if (
-            element.isClassAccessorProperty() &&
-            element.node.decorators?.some(dec =>
-              t.isIdentifier(dec.expression, { name: "bit" })
-            )
-          ) {
-            if (element.node.static || t.isPrivateName(element.node.key)) {
-              throw element.buildCodeFrameError(
-                "@bit cannot be used on static or private fields"
-              );
-            }
-            if (element.node.decorators.length > 1) {
-              throw element.buildCodeFrameError(
-                "@bit cannot be used with other decorators"
-              );
-            }
-            if (!t.isBooleanLiteral(element.node.value)) {
-              throw element.buildCodeFrameError(
-                "@bit fields must be initialized to a boolean literal"
-              );
-            }
-            if (nextMask === 0) {
-              // overflow
-              throw path.buildCodeFrameError(
-                "A class can contain at most 32 @bit decorators"
-              );
-            }
-
-            storageName ??= t.privateName(
-              path.scope.generateUidIdentifier("flags")
-            );
-
-            if (element.node.value.value) {
-              initial |= nextMask;
-            }
-
-            element.replaceWithMultiple([
-              t.classMethod(
-                "get",
-                element.node.key,
-                [],
-                bodyTemplate.ast`{
-                  return (
-                    this.${t.cloneNode(storageName)} & ${t.numericLiteral(nextMask)}
-                  ) > 0;
-                }`
-              ),
-              t.classMethod(
-                "set",
-                element.node.key,
-                [t.identifier("v")],
-                bodyTemplate.ast`{
-                  if (v) this.${t.cloneNode(storageName)} |= ${t.numericLiteral(nextMask)};
-                  else this.${t.cloneNode(storageName)} &= ${t.valueToNode(~nextMask)};
-                }`
-              ),
-            ]);
-
-            nextMask <<= 1;
-          }
-        }
-
-        if (storageName) {
-          path
-            .get("body")
-            .unshiftContainer(
-              "body",
-              t.classPrivateProperty(storageName, t.numericLiteral(initial))
-            );
-
-          path.traverse({
-            CallExpression(path) {
-              if (path.get("callee").isIdentifier({ name: "cloneBits" })) {
-                if (path.node.arguments.length !== 2) {
-                  throw path.buildCodeFrameError(
-                    "cloneBits expects two arguments"
-                  );
-                }
-                path.replaceWith(
-                  t.assignmentExpression(
-                    "=",
-                    t.memberExpression(
-                      path.node.arguments[0],
-                      t.cloneNode(storageName)
-                    ),
-                    t.memberExpression(
-                      path.node.arguments[1],
-                      t.cloneNode(storageName)
-                    )
-                  )
-                );
-              }
-            },
-          });
         }
       },
     },
