@@ -141,6 +141,8 @@ export default class State {
   // that must be reported if the template is not tagged.
   firstInvalidTemplateEscapePos: null | Position = null;
 
+  @bit accessor hasTopLevelAwait = false;
+
   // This property is used to track the following errors
   // - StrictNumericEscape
   // - StrictOctalLiteral

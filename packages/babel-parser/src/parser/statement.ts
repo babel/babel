@@ -215,14 +215,16 @@ export default abstract class StatementParser extends ExpressionParser {
     program.sourceType = sourceType;
     program.interpreter = this.parseInterpreterDirective();
     this.parseBlockBody(program, true, true, end);
-    if (
-      this.inModule &&
-      !this.options.allowUndeclaredExports &&
-      this.scope.undefinedExports.size > 0
-    ) {
-      for (const [localName, at] of Array.from(this.scope.undefinedExports)) {
-        this.raise(Errors.ModuleExportUndefined, at, { localName });
+    if (this.inModule) {
+      if (
+        !this.options.allowUndeclaredExports &&
+        this.scope.undefinedExports.size > 0
+      ) {
+        for (const [localName, at] of Array.from(this.scope.undefinedExports)) {
+          this.raise(Errors.ModuleExportUndefined, at, { localName });
+        }
       }
+      this.addExtra(program, "topLevelAwait", this.state.hasTopLevelAwait);
     }
     let finishedProgram: N.Program;
     if (end === tt.eof) {
@@ -493,7 +495,7 @@ export default abstract class StatementParser extends ExpressionParser {
       case tt._await:
         // [+Await] await [no LineTerminator here] using [no LineTerminator here] BindingList[+Using]
         if (!this.state.containsEsc && this.startsAwaitUsing()) {
-          if (!this.isAwaitAllowed()) {
+          if (!this.recordAwaitIfAllowed()) {
             this.raise(Errors.AwaitUsingNotInAsyncContext, node);
           } else if (!allowDeclaration) {
             this.raise(Errors.UnexpectedLexicalDeclaration, node);
@@ -915,8 +917,9 @@ export default abstract class StatementParser extends ExpressionParser {
 
     let awaitAt = null;
 
-    if (this.isAwaitAllowed() && this.eatContextual(tt._await)) {
-      awaitAt = this.state.lastTokStartLoc;
+    if (this.isContextual(tt._await) && this.recordAwaitIfAllowed()) {
+      awaitAt = this.state.startLoc;
+      this.next();
     }
     this.scope.enter(ScopeFlag.OTHER);
     this.expect(tt.parenL);
@@ -944,7 +947,7 @@ export default abstract class StatementParser extends ExpressionParser {
         let kind;
         if (startsWithAwaitUsing) {
           kind = "await using";
-          if (!this.isAwaitAllowed()) {
+          if (!this.recordAwaitIfAllowed()) {
             this.raise(Errors.AwaitUsingNotInAsyncContext, this.state.startLoc);
           }
           this.next(); // eat 'await'

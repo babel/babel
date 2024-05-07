@@ -604,7 +604,7 @@ export default abstract class ExpressionParser extends LValParser {
     const startLoc = this.state.startLoc;
     const isAwait = this.isContextual(tt._await);
 
-    if (isAwait && this.isAwaitAllowed()) {
+    if (isAwait && this.recordAwaitIfAllowed()) {
       this.next();
       const expr = this.parseAwait(startLoc);
       if (!sawUnary) this.checkExponentialAfterUnary(expr);
@@ -2867,12 +2867,18 @@ export default abstract class ExpressionParser extends LValParser {
     }
   }
 
-  isAwaitAllowed(): boolean {
-    if (this.prodParam.hasAwait) return true;
-    if (this.options.allowAwaitOutsideFunction && !this.scope.inFunction) {
-      return true;
+  // Returns wether `await` is allowed or not in this context, and if it is
+  // keeps track of it to determine whether a module uses top-level await.
+  recordAwaitIfAllowed(): boolean {
+    const isAwaitAllowed =
+      this.prodParam.hasAwait ||
+      (this.options.allowAwaitOutsideFunction && !this.scope.inFunction);
+
+    if (isAwaitAllowed && !this.scope.inFunction) {
+      this.state.hasTopLevelAwait = true;
     }
-    return false;
+
+    return isAwaitAllowed;
   }
 
   // Parses await expression inside async function.
