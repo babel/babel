@@ -23,40 +23,33 @@ type TopicContextState = {
   maxTopicIndex: null | 0;
 };
 
-const enum StateFlags {
-  None = 0,
-  Strict = 1 << 0,
-  maybeInArrowParameters = 1 << 1,
-  inType = 1 << 2,
-  noAnonFunctionType = 1 << 3,
-  hasFlowComment = 1 << 4,
-  isAmbientContext = 1 << 5,
-  inAbstractClass = 1 << 6,
-  inDisallowConditionalTypesContext = 1 << 7,
-  soloAwait = 1 << 8,
-  inFSharpPipelineDirectBody = 1 << 9,
-  canStartJSXElement = 1 << 10,
-  containsEsc = 1 << 11,
-}
-
 export const enum LoopLabelKind {
   Loop = 1,
   Switch = 2,
 }
 
-export default class State {
-  flags: number = StateFlags.canStartJSXElement;
+// This is observably a no-op, but we use it to statically pack
+// multiple booleans into a single bitfield.
+declare function bit(
+  target: ClassAccessorDecoratorTarget<State, boolean>,
+  context: ClassAccessorDecoratorContext<State, boolean> & {
+    private: false;
+    static: false;
+  },
+): void; /*{
+  ((context.metadata.bits as any[]) ??= []).push(context.name);
+} */
+// This function copies all properties marked with the `bit` decorator from
+// `from` to `to`.
+declare function cloneBits<T>(to: T, from: T): void; /* {
+  from.constructor[Symbol.metadata].bits?.forEach((name) => {
+    to[name] = from[name];
+  });
+} */
 
-  get strict(): boolean {
-    return (this.flags & StateFlags.Strict) > 0;
-  }
-  set strict(value: boolean) {
-    if (value) {
-      this.flags |= StateFlags.Strict;
-    } else {
-      this.flags &= ~StateFlags.Strict;
-    }
-  }
+export default class State {
+  @bit accessor strict = false;
+
   curLine: number;
   lineStart: number;
 
@@ -98,76 +91,13 @@ export default class State {
   noArrowParamsConversionAt: number[] = [];
 
   // Flags to track
-  get maybeInArrowParameters(): boolean {
-    return (this.flags & StateFlags.maybeInArrowParameters) > 0;
-  }
-  set maybeInArrowParameters(value: boolean) {
-    if (value) {
-      this.flags |= StateFlags.maybeInArrowParameters;
-    } else {
-      this.flags &= ~StateFlags.maybeInArrowParameters;
-    }
-  }
-  get inType(): boolean {
-    return (this.flags & StateFlags.inType) > 0;
-  }
-  set inType(value: boolean) {
-    if (value) {
-      this.flags |= StateFlags.inType;
-    } else {
-      this.flags &= ~StateFlags.inType;
-    }
-  }
-  get noAnonFunctionType(): boolean {
-    return (this.flags & StateFlags.noAnonFunctionType) > 0;
-  }
-  set noAnonFunctionType(value: boolean) {
-    if (value) {
-      this.flags |= StateFlags.noAnonFunctionType;
-    } else {
-      this.flags &= ~StateFlags.noAnonFunctionType;
-    }
-  }
-  get hasFlowComment(): boolean {
-    return (this.flags & StateFlags.hasFlowComment) > 0;
-  }
-  set hasFlowComment(value: boolean) {
-    if (value) {
-      this.flags |= StateFlags.hasFlowComment;
-    } else {
-      this.flags &= ~StateFlags.hasFlowComment;
-    }
-  }
-  get isAmbientContext(): boolean {
-    return (this.flags & StateFlags.isAmbientContext) > 0;
-  }
-  set isAmbientContext(value: boolean) {
-    if (value) {
-      this.flags |= StateFlags.isAmbientContext;
-    } else {
-      this.flags &= ~StateFlags.isAmbientContext;
-    }
-  }
-  get inAbstractClass(): boolean {
-    return (this.flags & StateFlags.inAbstractClass) > 0;
-  }
-  set inAbstractClass(value: boolean) {
-    if (value) {
-      this.flags |= StateFlags.inAbstractClass;
-    } else {
-      this.flags &= ~StateFlags.inAbstractClass;
-    }
-  }
-  get inDisallowConditionalTypesContext(): boolean {
-    return (this.flags & StateFlags.inDisallowConditionalTypesContext) > 0;
-  }
-  set inDisallowConditionalTypesContext(value: boolean) {
-    if (value) {
-      this.flags |= StateFlags.inDisallowConditionalTypesContext;
-    } else {
-      this.flags &= ~StateFlags.inDisallowConditionalTypesContext;
-    }
-  }
+  @bit accessor maybeInArrowParameters = false;
+  @bit accessor inType = false;
+  @bit accessor noAnonFunctionType = false;
+  @bit accessor hasFlowComment = false;
+  @bit accessor isAmbientContext = false;
+  @bit accessor inAbstractClass = false;
+  @bit accessor inDisallowConditionalTypesContext = false;
 
   // For the Hack-style pipelines plugin
   topicContext: TopicContextState = {
@@ -176,26 +106,8 @@ export default class State {
   };
 
   // For the F#-style pipelines plugin
-  get soloAwait(): boolean {
-    return (this.flags & StateFlags.soloAwait) > 0;
-  }
-  set soloAwait(value: boolean) {
-    if (value) {
-      this.flags |= StateFlags.soloAwait;
-    } else {
-      this.flags &= ~StateFlags.soloAwait;
-    }
-  }
-  get inFSharpPipelineDirectBody(): boolean {
-    return (this.flags & StateFlags.inFSharpPipelineDirectBody) > 0;
-  }
-  set inFSharpPipelineDirectBody(value: boolean) {
-    if (value) {
-      this.flags |= StateFlags.inFSharpPipelineDirectBody;
-    } else {
-      this.flags &= ~StateFlags.inFSharpPipelineDirectBody;
-    }
-  }
+  @bit accessor soloAwait = false;
+  @bit accessor inFSharpPipelineDirectBody = false;
 
   // Labels in scope.
   labels: Array<{
@@ -231,31 +143,14 @@ export default class State {
   // The context stack is used to track whether the apostrophe "`" starts
   // or ends a string template
   context: Array<TokContext> = [ct.brace];
+
   // Used to track whether a JSX element is allowed to form
-  get canStartJSXElement(): boolean {
-    return (this.flags & StateFlags.canStartJSXElement) > 0;
-  }
-  set canStartJSXElement(value: boolean) {
-    if (value) {
-      this.flags |= StateFlags.canStartJSXElement;
-    } else {
-      this.flags &= ~StateFlags.canStartJSXElement;
-    }
-  }
+  @bit accessor canStartJSXElement = true;
 
   // Used to signal to callers of `readWord1` whether the word
   // contained any escape sequences. This is needed because words with
   // escape sequences must not be interpreted as keywords.
-  get containsEsc(): boolean {
-    return (this.flags & StateFlags.containsEsc) > 0;
-  }
-  set containsEsc(value: boolean) {
-    if (value) {
-      this.flags |= StateFlags.containsEsc;
-    } else {
-      this.flags &= ~StateFlags.containsEsc;
-    }
-  }
+  @bit accessor containsEsc = false;
 
   // Used to track invalid escape sequences in template literals,
   // that must be reported if the template is not tagged.
@@ -285,7 +180,7 @@ export default class State {
 
   clone(): State {
     const state = new State();
-    state.flags = this.flags;
+    cloneBits(state, this);
     state.curLine = this.curLine;
     state.lineStart = this.lineStart;
     state.startLoc = this.startLoc;
