@@ -999,7 +999,7 @@ export default abstract class StatementParser extends ExpressionParser {
       this.checkDestructuringPrivate(refExpressionErrors);
       this.toAssignable(init, /* isLHS */ true);
       const type = isForOf ? "ForOfStatement" : "ForInStatement";
-      this.checkLVal(init, { in: { type } });
+      this.checkLVal(init, { type });
       return this.parseForIn(
         node as Undone<N.ForInStatement | N.ForOfStatement>,
         // @ts-expect-error init has been transformed to an assignable
@@ -1133,10 +1133,11 @@ export default abstract class StatementParser extends ExpressionParser {
         ? ScopeFlag.SIMPLE_CATCH
         : 0,
     );
-    this.checkLVal(param, {
-      in: { type: "CatchClause" },
-      binding: BindingFlag.TYPE_CATCH_PARAM,
-    });
+    this.checkLVal(
+      param,
+      { type: "CatchClause" },
+      BindingFlag.TYPE_CATCH_PARAM,
+    );
 
     return param;
   }
@@ -1566,10 +1567,11 @@ export default abstract class StatementParser extends ExpressionParser {
     kind: "var" | "let" | "const" | "using" | "await using",
   ): void {
     const id = this.parseBindingAtom();
-    this.checkLVal(id, {
-      in: { type: "VariableDeclarator" },
-      binding: kind === "var" ? BindingFlag.TYPE_VAR : BindingFlag.TYPE_LEXICAL,
-    });
+    this.checkLVal(
+      id,
+      { type: "VariableDeclarator" },
+      kind === "var" ? BindingFlag.TYPE_VAR : BindingFlag.TYPE_LEXICAL,
+    );
     decl.id = id;
   }
 
@@ -3146,10 +3148,7 @@ export default abstract class StatementParser extends ExpressionParser {
     type: T["type"],
     bindingType: BindingFlag = BindingFlag.TYPE_LEXICAL,
   ) {
-    this.checkLVal(specifier.local, {
-      in: { type },
-      binding: bindingType,
-    });
+    this.checkLVal(specifier.local, { type }, bindingType);
     return this.finishNode(specifier, type);
   }
 

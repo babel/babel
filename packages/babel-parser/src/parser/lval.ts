@@ -540,7 +540,7 @@ export default abstract class LValParser extends NodeUtils {
     isUnparenthesizedInAssign: boolean,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     binding: BindingFlag,
-  ): string | boolean {
+  ): string | boolean | [string, boolean] {
     switch (type) {
       case "AssignmentPattern":
         return "left";
@@ -567,23 +567,22 @@ export default abstract class LValParser extends NodeUtils {
    * Verify that a target expression is an lval (something that can be assigned to).
    *
    * @param expression The expression in question to check.
-   * @param options A set of options described below.
-   * @param options.in
+   * @param ancestor
    *        The relevant ancestor to provide context information for the error
    *        if the check fails.
-   * @param options.binding
+   * @param binding
    *        The desired binding type. If the given expression is an identifier
    *        and `binding` is not `BindingFlag.TYPE_NONE`, `checkLVal` will register binding
    *        to the parser scope See also `src/util/scopeflags.js`
-   * @param options.checkClashes
+   * @param checkClashes
    *        An optional string set to check if an identifier name is included.
    *        `checkLVal` will add checked identifier name to `checkClashes` It is
    *        used in tracking duplicates in function parameter lists. If it is
    *        false, `checkLVal` will skip duplicate checks
-   * @param options.strictModeChanged
+   * @param strictModeChanged
    *        Whether an identifier has been parsed in a sloppy context but should
    *        be reinterpreted as strict-mode. e.g. `(arguments) => { "use strict "}`
-   * @param options.hasParenthesizedAncestor
+   * @param hasParenthesizedAncestor
    *        This is only used internally during recursive calls, and you should
    *        not have to set it yourself.
    */
@@ -595,19 +594,11 @@ export default abstract class LValParser extends NodeUtils {
       | RestElement
       | Pattern
       | TSParameterProperty,
-    {
-      in: ancestor,
-      binding = BindingFlag.TYPE_NONE,
-      checkClashes = false,
-      strictModeChanged = false,
-      hasParenthesizedAncestor = false,
-    }: {
-      in: LValAncestor;
-      binding?: BindingFlag;
-      checkClashes?: Set<string> | false;
-      strictModeChanged?: boolean;
-      hasParenthesizedAncestor?: boolean;
-    },
+    ancestor: LValAncestor,
+    binding: BindingFlag = BindingFlag.TYPE_NONE,
+    checkClashes: Set<string> | false = false,
+    strictModeChanged: boolean = false,
+    hasParenthesizedAncestor: boolean = false,
   ): void {
     const type = expression.type;
 
@@ -669,25 +660,43 @@ export default abstract class LValParser extends NodeUtils {
       return;
     }
 
-    const [key, isParenthesizedExpression] = Array.isArray(validity)
-      ? validity
-      : [validity, type === "ParenthesizedExpression"];
+    let key: string, isParenthesizedExpression: boolean;
+    if (typeof validity === "string") {
+      key = validity;
+      isParenthesizedExpression = type === "ParenthesizedExpression";
+    } else {
+      [key, isParenthesizedExpression] = validity;
+    }
+
     const nextAncestor =
       type === "ArrayPattern" || type === "ObjectPattern"
         ? ({ type } as const)
         : ancestor;
 
     // @ts-expect-error key may not index expression.
-    for (const child of [].concat(expression[key])) {
-      if (child) {
-        this.checkLVal(child, {
-          in: nextAncestor,
-          binding,
-          checkClashes,
-          strictModeChanged,
-          hasParenthesizedAncestor: isParenthesizedExpression,
-        });
+    const val = expression[key];
+    if (Array.isArray(val)) {
+      for (const child of val) {
+        if (child) {
+          this.checkLVal(
+            child,
+            nextAncestor,
+            binding,
+            checkClashes,
+            strictModeChanged,
+            isParenthesizedExpression,
+          );
+        }
       }
+    } else if (val) {
+      this.checkLVal(
+        val,
+        nextAncestor,
+        binding,
+        checkClashes,
+        strictModeChanged,
+        isParenthesizedExpression,
+      );
     }
   }
 

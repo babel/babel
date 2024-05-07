@@ -3681,7 +3681,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
     }
 
-    // @ts-expect-error plugin overrides interfaces
     isValidLVal(
       type:
         | "TSTypeCastExpression"
@@ -3709,8 +3708,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         case "TSSatisfiesExpression":
         case "TSTypeAssertion":
           return (
-            (binding !== BindingFlag.TYPE_NONE ||
-              !isUnparenthesizedInAssign) && ["expression", true]
+            (binding !== BindingFlag.TYPE_NONE || !isUnparenthesizedInAssign) &&
+            (["expression", true] as [string, boolean])
           );
         default:
           return super.isValidLVal(type, isUnparenthesizedInAssign, binding);
