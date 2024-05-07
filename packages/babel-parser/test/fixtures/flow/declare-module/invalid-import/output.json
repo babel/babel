@@ -29,6 +29,7 @@
             {
               "type": "ImportDeclaration",
               "start":21,"end":40,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":40,"index":40}},
+              "importKind": "value",
               "specifiers": [
                 {
                   "type": "ImportDefaultSpecifier",
@@ -40,7 +41,6 @@
                   }
                 }
               ],
-              "importKind": "value",
               "source": {
                 "type": "StringLiteral",
                 "start":35,"end":39,"loc":{"start":{"line":1,"column":35,"index":35},"end":{"line":1,"column":39,"index":39}},
@@ -56,6 +56,9 @@
         "kind": "CommonJS"
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

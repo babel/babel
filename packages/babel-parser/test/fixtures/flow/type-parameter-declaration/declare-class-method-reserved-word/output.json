@@ -331,6 +331,9 @@
         "start":205,"end":206,"loc":{"start":{"line":10,"column":1,"index":205},"end":{"line":10,"column":2,"index":206}}
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

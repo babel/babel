@@ -25,6 +25,9 @@
           "value": "\\9"
         }
       }
-    ]
+    ],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

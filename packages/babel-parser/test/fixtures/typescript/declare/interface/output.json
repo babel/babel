@@ -10,6 +10,7 @@
       {
         "type": "TSInterfaceDeclaration",
         "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+        "declare": true,
         "id": {
           "type": "Identifier",
           "start":18,"end":19,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":19,"index":19},"identifierName":"I"},
@@ -19,10 +20,12 @@
           "type": "TSInterfaceBody",
           "start":20,"end":22,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":22,"index":22}},
           "body": []
-        },
-        "declare": true
+        }
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

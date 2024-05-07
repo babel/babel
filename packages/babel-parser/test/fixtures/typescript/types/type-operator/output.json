@@ -147,6 +147,9 @@
         "kind": "let"
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

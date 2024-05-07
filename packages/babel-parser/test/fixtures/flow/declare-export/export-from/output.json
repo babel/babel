@@ -59,6 +59,9 @@
         "kind": "ES"
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

@@ -37,11 +37,17 @@
                 }
               }
             ],
-            "directives": []
+            "directives": [],
+            "extra": {
+              "topLevelAwait": true
+            }
           }
         }
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": true
+    }
   }
 }

@@ -10,6 +10,7 @@
       {
         "type": "ExportNamedDeclaration",
         "start":0,"end":33,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":33}},
+        "exportKind": "value",
         "specifiers": [
           {
             "type": "ExportSpecifier",
@@ -34,9 +35,11 @@
           "value": "module-a",
           "raw": "\"module-a\""
         },
-        "declaration": null,
-        "exportKind": "value"
+        "declaration": null
       }
-    ]
+    ],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

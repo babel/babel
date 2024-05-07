@@ -10,6 +10,8 @@
       {
         "type": "ImportDeclaration",
         "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":39,"index":39}},
+        "module": true,
+        "importKind": "value",
         "specifiers": [
           {
             "type": "ImportDefaultSpecifier",
@@ -21,8 +23,6 @@
             }
           }
         ],
-        "module": true,
-        "importKind": "value",
         "source": {
           "type": "StringLiteral",
           "start":23,"end":38,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":38,"index":38}},
@@ -36,6 +36,8 @@
       {
         "type": "ImportDeclaration",
         "start":40,"end":72,"loc":{"start":{"line":2,"column":0,"index":40},"end":{"line":2,"column":32,"index":72}},
+        "module": false,
+        "importKind": "value",
         "specifiers": [
           {
             "type": "ImportDefaultSpecifier",
@@ -47,8 +49,6 @@
             }
           }
         ],
-        "module": false,
-        "importKind": "value",
         "source": {
           "type": "StringLiteral",
           "start":56,"end":71,"loc":{"start":{"line":2,"column":16,"index":56},"end":{"line":2,"column":31,"index":71}},
@@ -60,6 +60,9 @@
         }
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

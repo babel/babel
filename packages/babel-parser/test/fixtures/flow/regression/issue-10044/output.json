@@ -100,6 +100,7 @@
       {
         "type": "ExportNamedDeclaration",
         "start":106,"end":140,"loc":{"start":{"line":8,"column":0,"index":106},"end":{"line":8,"column":34,"index":140}},
+        "exportKind": "type",
         "specifiers": [
           {
             "type": "ExportSpecifier",
@@ -173,10 +174,12 @@
           }
         ],
         "source": null,
-        "exportKind": "type",
         "declaration": null
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

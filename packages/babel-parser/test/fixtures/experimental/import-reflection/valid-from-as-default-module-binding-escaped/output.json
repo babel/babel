@@ -10,6 +10,7 @@
       {
         "type": "ImportDeclaration",
         "start":0,"end":45,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":45,"index":45}},
+        "module": true,
         "specifiers": [
           {
             "type": "ImportDefaultSpecifier",
@@ -21,7 +22,6 @@
             }
           }
         ],
-        "module": true,
         "source": {
           "type": "StringLiteral",
           "start":29,"end":44,"loc":{"start":{"line":1,"column":29,"index":29},"end":{"line":1,"column":44,"index":44}},
@@ -33,6 +33,9 @@
         }
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

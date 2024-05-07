@@ -34,6 +34,9 @@
         "kind": "var"
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

@@ -73,6 +73,9 @@
         "start":50,"end":51,"loc":{"start":{"line":2,"column":24,"index":50},"end":{"line":2,"column":25,"index":51}}
       }
     ],
-    "directives": []
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }
