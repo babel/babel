@@ -16,7 +16,8 @@ function pluginBabelBitDecorator({ types: t, template }) {
         for (const element of path.get("body.body")) {
           if (
             (element.isClassProperty() || element.isClassPrivateProperty()) &&
-            element.node.decorators?.some(dec =>
+            element.node.decorators &&
+            element.node.decorators.some(dec =>
               t.matchesPattern(dec.expression, "bit.storage")
             )
           ) {
@@ -36,14 +37,16 @@ function pluginBabelBitDecorator({ types: t, template }) {
           let dec;
           if (
             element.isClassAccessorProperty() &&
-            (dec = element
-              .get("decorators")
-              ?.find(
-                ({ node: dec }) =>
-                  t.isIdentifier(dec.expression, { name: "bit" }) ||
-                  (t.isCallExpression(dec.expression) &&
-                    t.isIdentifier(dec.expression.callee, { name: "bit" }))
-              ))
+            (dec =
+              element.node.decorators &&
+              element
+                .get("decorators")
+                .find(
+                  ({ node: dec }) =>
+                    t.isIdentifier(dec.expression, { name: "bit" }) ||
+                    (t.isCallExpression(dec.expression) &&
+                      t.isIdentifier(dec.expression.callee, { name: "bit" }))
+                ))
           ) {
             if (element.node.static || t.isPrivateName(element.node.key)) {
               throw element.buildCodeFrameError(
@@ -80,7 +83,7 @@ function pluginBabelBitDecorator({ types: t, template }) {
                 nextMask
             ) {
               throw dec.buildCodeFrameError(
-                `Bit mask is ${nextMask.toString(2)}, but found ${val?.toString(2)} (or couldn't evaluate)`
+                `Bit mask is ${nextMask.toString(2)}, but found ${val.toString(2)} (or couldn't evaluate)`
               );
             }
 
