@@ -4,7 +4,10 @@
   "description": "Babel helper module for babel transforms authors to check the AST against duplicated nodes.",
   "main": "./lib/index.js",
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [
