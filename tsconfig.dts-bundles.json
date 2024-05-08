@@ -1,7 +1,10 @@
 {
   "extends": ["./tsconfig.base.json"],
   "compilerOptions": {
-    "skipLibCheck": false
+    "skipLibCheck": false,
+    "paths": {
+      "@babel/core": ["./packages/babel-core/lib/index.d.ts"]
+    }
   },
   "include": [
     "packages/babel-parser/typings/*.d.ts",
