@@ -709,7 +709,11 @@ class Printer {
 
     const loc = nodeType === "Program" || nodeType === "File" ? null : node.loc;
 
-    this.exactSource(loc, printMethod.bind(this, node, parent));
+    this.exactSource(
+      loc,
+      // @ts-expect-error: https://github.com/microsoft/TypeScript/issues/58468
+      printMethod.bind(this, node, parent),
+    );
 
     if (shouldPrintParens) {
       this._printTrailingComments(node, parent);
