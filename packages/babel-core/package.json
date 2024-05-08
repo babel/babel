@@ -102,6 +102,7 @@
         "type": "module",
         "exports": {
           ".": {
+            "types": "./lib/index.d.ts",
             "require": "./cjs-proxy.cjs",
             "default": "./lib/index.js"
           },
@@ -113,6 +114,7 @@
   },
   "exports": {
     ".": {
+      "types": "./lib/index.d.ts",
       "require": "./cjs-proxy-dev.cjs",
       "default": "./lib/index.js"
     },
