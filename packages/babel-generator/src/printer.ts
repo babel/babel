@@ -711,7 +711,10 @@ class Printer {
 
     this.exactSource(
       loc,
-      // @ts-expect-error: https://github.com/microsoft/TypeScript/issues/58468
+      // We must use @ts-ignore because this error appears in VSCode but not
+      // when doing a full build?
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore https://github.com/microsoft/TypeScript/issues/58468
       printMethod.bind(this, node, parent),
     );
 
