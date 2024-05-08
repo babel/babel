@@ -340,7 +340,10 @@ function enforceExports({ Yarn }) {
     }
 
     workspace.set("exports", {
-      ".": "./lib/index.js",
+      ".": {
+        types: "./lib/index.d.ts",
+        default: "./lib/index.js",
+      },
       "./package.json": "./package.json",
     });
   }
