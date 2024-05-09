@@ -664,13 +664,13 @@ type GenerateDecorationListResult = {
 /**
  * Zip decorators and decorator this values into an array
  *
- * @param {t.Expression[]} decorators
+ * @param {t.Decorator[]} decorators
  * @param {((t.Expression | undefined)[])} decoratorsThis decorator this values
  * @param {DecoratorVersionKind} version
  * @returns {GenerateDecorationListResult}
  */
 function generateDecorationList(
-  decorators: t.Expression[],
+  decorators: t.Decorator[],
   decoratorsThis: (t.Expression | undefined)[],
   version: DecoratorVersionKind,
 ): GenerateDecorationListResult {
@@ -687,7 +687,7 @@ function generateDecorationList(
         decoratorsThis[i] || t.unaryExpression("void", t.numericLiteral(0)),
       );
     }
-    decs.push(decorators[i]);
+    decs.push(decorators[i].expression);
   }
 
   return { haveThis: haveOneThis, decs };
@@ -1031,12 +1031,12 @@ function transformClass(
   let protoInitLocal: t.Identifier;
   let staticInitLocal: t.Identifier;
   const classIdName = path.node.id?.name;
-  // Check if the expression does not reference function-specific
-  // context or the given identifier name.
+  // Check if the decorator does not reference function-specific
+  // context or the given identifier name or contains yield or await expression.
   // `true` means "maybe" and `false` means "no".
-  const usesFunctionContextOrYieldAwait = (expression: t.Node) => {
+  const usesFunctionContextOrYieldAwait = (decorator: t.Decorator) => {
     try {
-      t.traverseFast(expression, node => {
+      t.traverseFast(decorator, node => {
         if (
           t.isThisExpression(node) ||
           t.isSuper(node) ||
@@ -1172,20 +1172,19 @@ function transformClass(
   let decoratorReceiverId: t.Identifier | null = null;
 
   // Memoise the this value `a.b` of decorator member expressions `@a.b.dec`,
-  type HandleDecoratorExpressionsResult = {
+  type HandleDecoratorsResult = {
     // whether the whole decorator list requires memoisation
     hasSideEffects: boolean;
     usesFnContext: boolean;
     // the this value of each decorator if applicable
     decoratorsThis: (t.Expression | undefined)[];
   };
-  function handleDecoratorExpressions(
-    expressions: t.Expression[],
-  ): HandleDecoratorExpressionsResult {
+  function handleDecorators(decorators: t.Decorator[]): HandleDecoratorsResult {
     let hasSideEffects = false;
     let usesFnContext = false;
     const decoratorsThis: (t.Expression | null)[] = [];
-    for (const expression of expressions) {
+    for (const decorator of decorators) {
+      const { expression } = decorator;
       let object;
       if (
         (version === "2023-11" ||
@@ -1208,7 +1207,7 @@ function transformClass(
       }
       decoratorsThis.push(object);
       hasSideEffects ||= !scopeParent.isStatic(expression);
-      usesFnContext ||= usesFunctionContextOrYieldAwait(expression);
+      usesFnContext ||= usesFunctionContextOrYieldAwait(decorator);
     }
     return { hasSideEffects, usesFnContext, decoratorsThis };
   }
@@ -1231,13 +1230,12 @@ function transformClass(
 
     path.node.decorators = null;
 
-    const decoratorExpressions = classDecorators.map(el => el.expression);
-    const classDecsUsePrivateName = decoratorExpressions.some(usesPrivateField);
+    const classDecsUsePrivateName = classDecorators.some(usesPrivateField);
     const { hasSideEffects, decoratorsThis } =
-      handleDecoratorExpressions(decoratorExpressions);
+      handleDecorators(classDecorators);
 
     const { haveThis, decs } = generateDecorationList(
-      decoratorExpressions,
+      classDecorators,
       decoratorsThis,
       version,
     );
@@ -1341,11 +1339,10 @@ function transformClass(
       let decoratorsHaveThis;
 
       if (hasDecorators) {
-        const decoratorExpressions = decorators.map(d => d.expression);
         const { hasSideEffects, usesFnContext, decoratorsThis } =
-          handleDecoratorExpressions(decoratorExpressions);
+          handleDecorators(decorators);
         const { decs, haveThis } = generateDecorationList(
-          decoratorExpressions,
+          decorators,
           decoratorsThis,
           version,
         );
