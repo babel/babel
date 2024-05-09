@@ -578,18 +578,17 @@ function buildRollupDts(packages) {
     let external;
     if (packageName) {
       const pkgJSON = require("./" + packageName + "/package.json");
-      const { dependencies = {}, peerDependencies = {} } = pkgJSON;
+      const {
+        dependencies = {},
+        devDependencies = {},
+        peerDependencies = {},
+      } = pkgJSON;
       external = [
         ...Object.keys(dependencies),
         ...Object.keys(peerDependencies),
-        // @babel/compat-data sub exports
-        /@babel\/compat-data\/.*/,
-        // Ideally they should be constructed from package.json exports
-        // required by modules-commonjs
-        /babel-plugin-dynamic-import-node\/utils/,
-        // required by preset-env
-        /@babel\/preset-modules\/.*/,
-      ];
+        // TODO: These should all be moved to dependencies
+        ...Object.keys(devDependencies),
+      ].map(dep => new RegExp(`^${dep}(?:/.+)?$`));
     }
 
     const bundle = await rollup({
@@ -633,7 +632,8 @@ function buildRollupDts(packages) {
     build(
       "packages/babel-parser/typings/babel-parser.source.d.ts",
       "packages/babel-parser/typings/babel-parser.d.ts",
-      "// This file is auto-generated! Do not modify it directly.\n/* eslint-disable import/no-extraneous-dependencies, @typescript-eslint/consistent-type-imports, prettier/prettier */"
+      "// This file is auto-generated! Do not modify it directly.\n/* eslint-disable import/no-extraneous-dependencies, @typescript-eslint/consistent-type-imports, prettier/prettier */",
+      "packages/babel-parser"
     )
   );
 
