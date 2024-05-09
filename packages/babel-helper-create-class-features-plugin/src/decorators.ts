@@ -1231,7 +1231,7 @@ function transformClass(
     path.node.decorators = null;
 
     const classDecsUsePrivateName = classDecorators.some(usesPrivateField);
-    const { hasSideEffects, decoratorsThis } =
+    const { hasSideEffects, usesFnContext, decoratorsThis } =
       handleDecorators(classDecorators);
 
     const { haveThis, decs } = generateDecorationList(
@@ -1243,6 +1243,7 @@ function transformClass(
     classDecorations = decs;
 
     if (
+      usesFnContext ||
       (hasSideEffects && willExtractSomeElemDecs) ||
       classDecsUsePrivateName
     ) {
