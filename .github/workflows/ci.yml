@@ -528,7 +528,7 @@ jobs:
       - name: Downgrade ESLint to 7.5.0
         run: yarn up eslint@7.5.0
       - name: Run babel/eslint tests
-        run: node ./node_modules/.bin/jest eslint/babel-eslint-parser/ eslint/babel-eslint-plugin/ eslint/babel-eslint-tests/
+        run: node ./node_modules/.bin/jest eslint
 
   eslint8-test:
     name: Test @babel/eslint-* with ESLint 8.0.0
@@ -553,7 +553,7 @@ jobs:
       - name: Downgrade ESLint to 8.0.0
         run: yarn up eslint@8.0.0
       - name: Run babel/eslint tests
-        run: node ./node_modules/.bin/jest eslint/babel-eslint-parser/ eslint/babel-eslint-plugin/ eslint/babel-eslint-tests/
+        run: node ./node_modules/.bin/jest eslint
 
   test262-prepare:
     name: test262 - Prepare for running in parallel

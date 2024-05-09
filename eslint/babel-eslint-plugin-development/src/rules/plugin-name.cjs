@@ -32,7 +32,14 @@ module.exports = {
     };
 
     function functionVisitor(node) {
-      if (!isBabelPluginFactory(node, context.sourceCode.getScope(node))) {
+      if (
+        !isBabelPluginFactory(
+          node,
+          context.sourceCode
+            ? context.sourceCode.getScope(node)
+            : context.getScope(),
+        )
+      ) {
         return;
       }
 
