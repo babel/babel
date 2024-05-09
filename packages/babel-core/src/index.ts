@@ -21,6 +21,13 @@ export { tokTypes } from "@babel/parser";
 export { default as traverse } from "@babel/traverse";
 export { default as template } from "@babel/template";
 
+// rollup-plugin-dts assumes that all re-exported types are also valid values
+// Visitor is only a type, so we need to use this workaround to prevent
+// rollup-plugin-dts from breaking it.
+// TODO: Figure out how to fix this upstream.
+export type { NodePath, Scope } from "@babel/traverse";
+export type Visitor<S = unknown> = import("@babel/traverse").Visitor<S>;
+
 export {
   createConfigItem,
   createConfigItemSync,

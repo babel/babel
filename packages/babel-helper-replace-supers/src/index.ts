@@ -1,10 +1,9 @@
-import type { File } from "@babel/core";
+import type { File, NodePath, Scope } from "@babel/core";
 import environmentVisitor from "@babel/helper-environment-visitor";
 import memberExpressionToFunctions from "@babel/helper-member-expression-to-functions";
 import type { HandlerState } from "@babel/helper-member-expression-to-functions";
 import optimiseCall from "@babel/helper-optimise-call-expression";
 import { traverse, template, types as t } from "@babel/core";
-import type { NodePath, Scope } from "@babel/traverse";
 const {
   assignmentExpression,
   booleanLiteral,

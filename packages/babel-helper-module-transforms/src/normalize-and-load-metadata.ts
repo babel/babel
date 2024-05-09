@@ -1,9 +1,8 @@
 import { basename, extname } from "path";
-import type * as t from "@babel/types";
+import type { types as t, NodePath } from "@babel/core";
 
 import { isIdentifierName } from "@babel/helper-validator-identifier";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
-import type { NodePath } from "@babel/traverse";
 
 export interface ModuleMetadata {
   exportName: string;

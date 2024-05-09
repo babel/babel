@@ -1,4 +1,4 @@
-import type { NodePath } from "@babel/traverse";
+import type { NodePath } from "@babel/core";
 import type * as t from "@babel/types";
 
 export function assertFieldTransformed(
