@@ -12,6 +12,9 @@ try {
   }
 } catch(_) {}
 
-expect(() => {
+const testFn = () => {
   addInitializer(() => null);
-}).toThrow('attempted to call addInitializer after decoration was finished');
+};
+
+expect(testFn).toThrow(TypeError);
+expect(testFn).toThrow('attempted to call addInitializer after decoration was finished');
