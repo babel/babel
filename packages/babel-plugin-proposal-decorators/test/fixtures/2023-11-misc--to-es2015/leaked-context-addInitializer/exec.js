@@ -9,10 +9,13 @@ function decMethod(_, context) {
   addInitializer(() => null);
 }
 
-expect(() => {
+const testFn = () => {
   class C {
     @callCapturedFunc
     @decMethod
     m() {}
   }
-}).toThrow('attempted to call addInitializer after decoration was finished')
+};
+
+expect(testFn).toThrow(TypeError);
+expect(testFn).toThrow('attempted to call addInitializer after decoration was finished')
