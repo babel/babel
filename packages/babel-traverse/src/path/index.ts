@@ -33,6 +33,8 @@ export const REMOVED = 1 << 0;
 export const SHOULD_STOP = 1 << 1;
 export const SHOULD_SKIP = 1 << 2;
 
+declare const bit: import("../../../../scripts/babel-plugin-bit-decorator/types.d.ts").BitDecorator<any>;
+
 const NodePath_Final = class NodePath {
   constructor(hub: HubInterface, parent: t.Node | null) {
     this.parent = parent;
@@ -53,8 +55,12 @@ const NodePath_Final = class NodePath {
   contexts: Array<TraversalContext> = [];
   state: any = null;
   opts: ExplodedTraverseOptions | null = null;
-  // this.shouldSkip = false; this.shouldStop = false; this.removed = false;
-  _traverseFlags: number = 0;
+
+  @bit.storage _traverseFlags: number;
+  @bit(REMOVED) accessor removed = false;
+  @bit(SHOULD_STOP) accessor shouldStop = false;
+  @bit(SHOULD_SKIP) accessor shouldSkip = false;
+
   skipKeys: Record<string, boolean> | null = null;
   parentPath: NodePath_Final | null = null;
   container: t.Node | Array<t.Node> | null = null;
@@ -179,41 +185,6 @@ const NodePath_Final = class NodePath {
 
   get parentKey(): string {
     return (this.listKey || this.key) as string;
-  }
-
-  get shouldSkip() {
-    return !!(this._traverseFlags & SHOULD_SKIP);
-  }
-
-  set shouldSkip(v) {
-    if (v) {
-      this._traverseFlags |= SHOULD_SKIP;
-    } else {
-      this._traverseFlags &= ~SHOULD_SKIP;
-    }
-  }
-
-  get shouldStop() {
-    return !!(this._traverseFlags & SHOULD_STOP);
-  }
-
-  set shouldStop(v) {
-    if (v) {
-      this._traverseFlags |= SHOULD_STOP;
-    } else {
-      this._traverseFlags &= ~SHOULD_STOP;
-    }
-  }
-
-  get removed() {
-    return !!(this._traverseFlags & REMOVED);
-  }
-  set removed(v) {
-    if (v) {
-      this._traverseFlags |= REMOVED;
-    } else {
-      this._traverseFlags &= ~REMOVED;
-    }
   }
 };
 
