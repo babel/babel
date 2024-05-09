@@ -1141,6 +1141,10 @@ function transformClass(
         setterKey = t.cloneNode(key);
       }
 
+      if (!path.node.id) {
+        path.node.id = path.scope.generateUidIdentifier("Class");
+      }
+
       addProxyAccessorsFor(
         path.node.id,
         newPath,
@@ -1454,6 +1458,9 @@ function transformClass(
 
             locals = [newFieldInitId, getId, setId];
           } else {
+            if (!path.node.id) {
+              path.node.id = path.scope.generateUidIdentifier("Class");
+            }
             addProxyAccessorsFor(
               path.node.id,
               newPath,
