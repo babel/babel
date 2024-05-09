@@ -22,3 +22,26 @@ class Foo {
     Foo.#C = v;
   }
 }
+Foo = class _Class {
+  static #A;
+  static get a() {
+    return _Class.#A;
+  }
+  static set a(v) {
+    _Class.#A = v;
+  }
+  static #B = 123;
+  static get b() {
+    return _Class.#B;
+  }
+  static set b(v) {
+    _Class.#B = v;
+  }
+  static #C = 456;
+  static get ['c']() {
+    return _Class.#C;
+  }
+  static set ['c'](v) {
+    _Class.#C = v;
+  }
+};

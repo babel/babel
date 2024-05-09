@@ -4,3 +4,9 @@ class Foo {
 
   static accessor #b = 123;
 }
+
+Foo = class {
+  static accessor #a;
+
+  static accessor #b = 123;
+}
