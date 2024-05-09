@@ -540,6 +540,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-annotate-as-pure@workspace:packages/babel-helper-annotate-as-pure"
   dependencies:
+    "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
   languageName: unknown
   linkType: soft
@@ -753,6 +754,7 @@ __metadata:
   resolution: "@babel/helper-function-name@workspace:packages/babel-helper-function-name"
   dependencies:
     "@babel/template": "workspace:^"
+    "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
   languageName: unknown
   linkType: soft
@@ -1071,6 +1073,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-split-export-declaration@workspace:packages/babel-helper-split-export-declaration"
   dependencies:
+    "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
   languageName: unknown
   linkType: soft
@@ -1283,6 +1286,7 @@ __metadata:
     "@babel/helper-fixtures": "workspace:^"
     "@babel/helper-string-parser": "workspace:^"
     "@babel/helper-validator-identifier": "workspace:^"
+    "@babel/types": "workspace:^"
     charcodes: "npm:^0.2.0"
   bin:
     parser: ./bin/babel-parser.js
