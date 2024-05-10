@@ -138,7 +138,6 @@ export function explode<S>(visitor: Visitor<S>): ExplodedVisitor<S> {
       if (existing) {
         mergePair(existing, fns);
       } else {
-        // @ts-expect-error Expression produces a union type that is too complex to represent.
         visitor[alias] = { ...fns };
       }
     }

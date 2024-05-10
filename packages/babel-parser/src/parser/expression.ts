@@ -2652,7 +2652,6 @@ export default abstract class ExpressionParser extends LValParser {
   checkParams(
     node: Undone<N.Function>,
     allowDuplicates: boolean,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     isArrowFunction?: boolean | null,
     strictModeChanged: boolean = true,
   ): void {

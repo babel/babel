@@ -281,7 +281,7 @@ const privateNameVisitor = privateNameVisitorFactory<
     }
     const { name } = node.id;
     if (!privateNamesMap.has(name)) return;
-    if (redeclared && redeclared.includes(name)) return;
+    if (redeclared?.includes(name)) return;
 
     this.handle(parentPath, noDocumentAll);
   },
@@ -333,7 +333,7 @@ const privateInVisitor = privateNameVisitorFactory<
     const { name } = left.id;
 
     if (!privateNamesMap.has(name)) return;
-    if (redeclared && redeclared.includes(name)) return;
+    if (redeclared?.includes(name)) return;
 
     // if there are any local variable shadowing classRef, unshadow it
     // see #12960

@@ -1,5 +1,4 @@
 // Each scope gets a bitset that may contain these flags
-/* eslint-disable prettier/prettier */
 /* prettier-ignore */
 export const enum ScopeFlag {
   OTHER        = 0b000000000,

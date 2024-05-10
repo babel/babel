@@ -119,7 +119,7 @@ export default declare((api, options: Options) => {
       // Ignore constant bindings.
       if (path.isIdentifier()) {
         const binding = path.scope.getBinding(path.node.name);
-        if (binding && binding.constant) return;
+        if (binding?.constant) return;
       }
 
       // If we allow mutable props, tags with function expressions can be

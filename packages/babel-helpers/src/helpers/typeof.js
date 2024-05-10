@@ -1,7 +1,5 @@
 /* @minVersion 7.0.0-beta.0 */
 
-/* eslint-disable no-func-assign */
-
 export default function _typeof(obj) {
   "@babel/helpers - typeof";
 

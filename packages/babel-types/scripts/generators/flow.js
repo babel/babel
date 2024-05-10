@@ -133,14 +133,10 @@ lines.push(
   `declare export function assertNode(obj: any): void`,
 
   // builders/
-  // eslint-disable-next-line max-len
   `declare export function createTypeAnnotationBasedOnTypeof(type: 'string' | 'number' | 'undefined' | 'boolean' | 'function' | 'object' | 'symbol'): ${NODE_PREFIX}TypeAnnotation`,
-  // eslint-disable-next-line max-len
   `declare export function createUnionTypeAnnotation(types: Array<${NODE_PREFIX}FlowType>): ${NODE_PREFIX}UnionTypeAnnotation`,
-  // eslint-disable-next-line max-len
   `declare export function createFlowUnionType(types: Array<${NODE_PREFIX}FlowType>): ${NODE_PREFIX}UnionTypeAnnotation`,
   // this smells like "internal API"
-  // eslint-disable-next-line max-len
   `declare export function buildChildren(node: { children: Array<${NODE_PREFIX}JSXText | ${NODE_PREFIX}JSXExpressionContainer | ${NODE_PREFIX}JSXSpreadChild | ${NODE_PREFIX}JSXElement | ${NODE_PREFIX}JSXFragment | ${NODE_PREFIX}JSXEmptyExpression> }): Array<${NODE_PREFIX}JSXText | ${NODE_PREFIX}JSXExpressionContainer | ${NODE_PREFIX}JSXSpreadChild | ${NODE_PREFIX}JSXElement | ${NODE_PREFIX}JSXFragment>`,
 
   // clone/
@@ -152,9 +148,7 @@ lines.push(
 
   // comments/
   `declare type CommentTypeShorthand = 'leading' | 'inner' | 'trailing'`,
-  // eslint-disable-next-line max-len
   `declare export function addComment<T: BabelNode>(node: T, type: CommentTypeShorthand, content: string, line?: boolean): T`,
-  // eslint-disable-next-line max-len
   `declare export function addComments<T: BabelNode>(node: T, type: CommentTypeShorthand, comments: Array<Comment>): T`,
   `declare export function inheritInnerComments(node: BabelNode, parent: BabelNode): void`,
   `declare export function inheritLeadingComments(node: BabelNode, parent: BabelNode): void`,
@@ -165,39 +159,28 @@ lines.push(
   // converters/
   `declare export function ensureBlock(node: ${NODE_PREFIX}, key: string): ${NODE_PREFIX}BlockStatement`,
   `declare export function toBindingIdentifierName(name?: ?string): string`,
-  // eslint-disable-next-line max-len
   `declare export function toBlock(node: ${NODE_PREFIX}Statement | ${NODE_PREFIX}Expression, parent?: ${NODE_PREFIX}Function | null): ${NODE_PREFIX}BlockStatement`,
-  // eslint-disable-next-line max-len
   `declare export function toComputedKey(node: ${NODE_PREFIX}Method | ${NODE_PREFIX}Property, key?: ${NODE_PREFIX}Expression | ${NODE_PREFIX}Identifier): ${NODE_PREFIX}Expression`,
-  // eslint-disable-next-line max-len
   `declare export function toExpression(node: ${NODE_PREFIX}ExpressionStatement | ${NODE_PREFIX}Expression | ${NODE_PREFIX}Class | ${NODE_PREFIX}Function): ${NODE_PREFIX}Expression`,
   `declare export function toIdentifier(name?: ?string): string`,
-  // eslint-disable-next-line max-len
   `declare export function toKeyAlias(node: ${NODE_PREFIX}Method | ${NODE_PREFIX}Property, key?: ${NODE_PREFIX}): string`,
   // toSequenceExpression relies on types that aren't declared in flow
-  // eslint-disable-next-line max-len
   `declare export function toStatement(node: ${NODE_PREFIX}Statement | ${NODE_PREFIX}Class | ${NODE_PREFIX}Function | ${NODE_PREFIX}AssignmentExpression, ignore?: boolean): ${NODE_PREFIX}Statement | void`,
   `declare export function valueToNode(value: any): ${NODE_PREFIX}Expression`,
 
   // modifications/
-  // eslint-disable-next-line max-len
   `declare export function removeTypeDuplicates(types: Array<${NODE_PREFIX}FlowType>): Array<${NODE_PREFIX}FlowType>`,
-  // eslint-disable-next-line max-len
   `declare export function appendToMemberExpression(member: ${NODE_PREFIX}MemberExpression, append: ${NODE_PREFIX}, computed?: boolean): ${NODE_PREFIX}MemberExpression`,
-  // eslint-disable-next-line max-len
   `declare export function inherits<T: BabelNode>(child: T, parent: ${NODE_PREFIX} | null | void): T`,
-  // eslint-disable-next-line max-len
   `declare export function prependToMemberExpression(member: ${NODE_PREFIX}MemberExpression, prepend: ${NODE_PREFIX}Expression): ${NODE_PREFIX}MemberExpression`,
   `declare export function removeProperties<T>(n: T, opts: ?{}): void;`,
   `declare export function removePropertiesDeep<T>(n: T, opts: ?{}): T;`,
 
   // retrievers/
-  // eslint-disable-next-line max-len
   `declare export var getBindingIdentifiers: {
     (node: ${NODE_PREFIX}, duplicates?: boolean, outerOnly?: boolean): { [key: string]: ${NODE_PREFIX}Identifier | Array<${NODE_PREFIX}Identifier> },
     keys: { [type: string]: string[] }
   }`,
-  // eslint-disable-next-line max-len
   `declare export function getOuterBindingIdentifiers(node: BabelNode, duplicates?: boolean): { [key: string]: ${NODE_PREFIX}Identifier | Array<${NODE_PREFIX}Identifier> }`,
 
   // traverse/
@@ -211,7 +194,6 @@ lines.push(
     enter?: TraversalHandler<T>,
     exit?: TraversalHandler<T>,
   };`.replace(/(^|\n) {2}/g, "$1"),
-  // eslint-disable-next-line
   `declare export function traverse<T>(n: BabelNode, TraversalHandler<T> | TraversalHandlers<T>, state?: T): void;`,
   `declare export function traverseFast<T>(n: BabelNode, h: TraversalHandler<T>, state?: T): void;`,
 
@@ -221,7 +203,6 @@ lines.push(
   `declare export function shallowEqual(actual: Object, expected: Object): boolean`,
 
   // validators/
-  // eslint-disable-next-line max-len
   `declare export function buildMatchMemberExpression(match: string, allowPartial?: boolean): (?BabelNode) => boolean`,
   `declare export function is(type: string, n: BabelNode, opts: Object): boolean;`,
   `declare export function isBinding(node: BabelNode, parent: BabelNode, grandparent?: BabelNode): boolean`,
@@ -239,7 +220,6 @@ lines.push(
   `declare export function isValidES3Identifier(name: string): boolean`,
   `declare export function isValidIdentifier(name: string): boolean`,
   `declare export function isVar(node: BabelNode): boolean`,
-  // eslint-disable-next-line max-len
   `declare export function matchesPattern(node: ?BabelNode, match: string | Array<string>, allowPartial?: boolean): boolean`,
   `declare export function validate(n: BabelNode, key: string, value: mixed): void;`
 );

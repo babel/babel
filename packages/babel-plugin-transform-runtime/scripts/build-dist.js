@@ -83,7 +83,6 @@ if (!bool(process.env.BABEL_8_BREAKING)) {
     corejsRoot: "core-js-pure/features",
   });
 
-  // eslint-disable-next-line no-inner-declarations
   function writeCoreJS({
     corejs,
     proposals,
@@ -124,7 +123,6 @@ if (!bool(process.env.BABEL_8_BREAKING)) {
     writeCorejsExports(pkgDirname, runtimeRoot, paths);
   }
 
-  // eslint-disable-next-line no-inner-declarations
   function writeCorejsExports(pkgDirname, runtimeRoot, paths) {
     const pkgJsonPath = require.resolve(`${pkgDirname}/package.json`);
     const pkgJson = require(pkgJsonPath);

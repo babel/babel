@@ -34,6 +34,7 @@ module.exports = [
       "no-confusing-arrow": "error",
       "no-empty": ["error", { allowEmptyCatch: true }],
       "no-process-exit": "error",
+      "no-unused-vars": ["error", { caughtErrors: "none" }],
       "no-var": "error",
       "prefer-const": "error",
     },
