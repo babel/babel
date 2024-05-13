@@ -15,19 +15,19 @@ class Foo {
     Foo.#B = v;
   }
 }
-Foo = class _Class {
+Foo = class Foo {
   static #A;
   static get #a() {
-    return _Class.#A;
+    return Foo.#A;
   }
   static set #a(v) {
-    _Class.#A = v;
+    Foo.#A = v;
   }
   static #B = 123;
   static get #b() {
-    return _Class.#B;
+    return Foo.#B;
   }
   static set #b(v) {
-    _Class.#B = v;
+    Foo.#B = v;
   }
 };

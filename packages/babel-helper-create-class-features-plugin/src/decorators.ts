@@ -184,6 +184,18 @@ function generateClassProperty(
   }
 }
 
+function assignIdForAnonymousClass(
+  path: NodePath<t.Class>,
+  className: string | t.Identifier | t.StringLiteral | undefined,
+) {
+  if (!path.node.id) {
+    path.node.id =
+      typeof className === "string"
+        ? t.identifier(className)
+        : path.scope.generateUidIdentifier("Class");
+  }
+}
+
 function addProxyAccessorsFor(
   className: t.Identifier,
   element: NodePath<ClassDecoratableElement>,
@@ -1031,6 +1043,8 @@ function transformClass(
   let protoInitLocal: t.Identifier;
   let staticInitLocal: t.Identifier;
   const classIdName = path.node.id?.name;
+  // Whether to generate a setFunctionName call to preserve the class name
+  const setClassName = typeof className === "object" ? className : undefined;
   // Check if the decorator does not reference function-specific
   // context or the given identifier name or contains yield or await expression.
   // `true` means "maybe" and `false` means "no".
@@ -1141,9 +1155,7 @@ function transformClass(
         setterKey = t.cloneNode(key);
       }
 
-      if (!path.node.id) {
-        path.node.id = path.scope.generateUidIdentifier("Class");
-      }
+      assignIdForAnonymousClass(path, className);
 
       addProxyAccessorsFor(
         path.node.id,
@@ -1163,6 +1175,16 @@ function transformClass(
   }
 
   if (!classDecorators && !hasElementDecorators) {
+    if (!path.node.id && typeof className === "string") {
+      path.node.id = t.identifier(className);
+    }
+    if (setClassName) {
+      path.node.body.body.unshift(
+        createStaticBlockFromExpressions([
+          createSetFunctionNameCall(state, setClassName),
+        ]),
+      );
+    }
     // If nothing is decorated and no assignments inserted, return
     return;
   }
@@ -1292,9 +1314,7 @@ function transformClass(
       }
     }
   } else {
-    if (!path.node.id) {
-      path.node.id = path.scope.generateUidIdentifier("Class");
-    }
+    assignIdForAnonymousClass(path, className);
     classIdLocal = t.cloneNode(path.node.id);
   }
 
@@ -1458,9 +1478,7 @@ function transformClass(
 
             locals = [newFieldInitId, getId, setId];
           } else {
-            if (!path.node.id) {
-              path.node.id = path.scope.generateUidIdentifier("Class");
-            }
+            assignIdForAnonymousClass(path, className);
             addProxyAccessorsFor(
               path.node.id,
               newPath,
@@ -1965,7 +1983,7 @@ function transformClass(
         classDecorationsId ?? t.arrayExpression(classDecorations),
         t.numericLiteral(classDecorationsFlag),
         needsInstancePrivateBrandCheck ? lastInstancePrivateName : null,
-        typeof className === "object" ? className : undefined,
+        setClassName,
         t.cloneNode(superClass),
         state,
         version,
