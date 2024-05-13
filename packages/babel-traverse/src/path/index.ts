@@ -228,8 +228,10 @@ Object.assign(NodePath_Final.prototype, {
   ensureBlock: NodePath_conversion.ensureBlock,
   ...(!process.env.BABEL_8_BREAKING && !USE_ESM
     ? {
-        // @ts-expect-error babel 7 only
-        arrowFunctionToShadowed: NodePath_conversion.arrowFunctionToShadowed,
+        arrowFunctionToShadowed:
+          // workaround for rollup
+          // @ts-expect-error babel 7 only
+          NodePath_conversion[String("arrowFunctionToShadowed")],
       }
     : {}),
   unwrapFunctionEnvironment: NodePath_conversion.unwrapFunctionEnvironment,
