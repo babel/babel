@@ -188,7 +188,7 @@ const NodePath_Final = class NodePath {
   }
 };
 
-Object.assign(NodePath_Final.prototype, {
+const methods = {
   // NodePath_ancestry
   findParent: NodePath_ancestry.findParent,
   find: NodePath_ancestry.find,
@@ -325,7 +325,9 @@ Object.assign(NodePath_Final.prototype, {
   shareCommentsWithSiblings: NodePath_comments.shareCommentsWithSiblings,
   addComment: NodePath_comments.addComment,
   addComments: NodePath_comments.addComments,
-});
+};
+
+Object.assign(NodePath_Final.prototype, methods);
 
 if (!process.env.BABEL_8_BREAKING) {
   // @ts-expect-error The original _guessExecutionStatusRelativeToDifferentFunctions only worked for paths in
@@ -394,20 +396,7 @@ interface NodePathOverwrites {
   ): this is NodePath_Final<t.Statement | t.Block>;
 }
 
-type NodePathMixins = Omit<
-  typeof NodePath_ancestry &
-    typeof NodePath_inference &
-    typeof NodePath_replacement &
-    typeof NodePath_evaluation &
-    typeof NodePath_conversion &
-    typeof NodePath_introspection &
-    typeof NodePath_context &
-    typeof NodePath_removal &
-    typeof NodePath_modification &
-    typeof NodePath_family &
-    typeof NodePath_comments,
-  keyof NodePathOverwrites
->;
+type NodePathMixins = Omit<typeof methods, keyof NodePathOverwrites>;
 
 interface NodePath<T extends t.Node>
   extends InstanceType<typeof NodePath_Final>,
