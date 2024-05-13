@@ -226,14 +226,6 @@ const methods = {
   // NodePath_conversion
   toComputedKey: NodePath_conversion.toComputedKey,
   ensureBlock: NodePath_conversion.ensureBlock,
-  ...(!process.env.BABEL_8_BREAKING && !USE_ESM
-    ? {
-        arrowFunctionToShadowed:
-          // workaround for rollup
-          // @ts-expect-error babel 7 only
-          NodePath_conversion[String("arrowFunctionToShadowed")],
-      }
-    : {}),
   unwrapFunctionEnvironment: NodePath_conversion.unwrapFunctionEnvironment,
   arrowFunctionToExpression: NodePath_conversion.arrowFunctionToExpression,
 
@@ -328,6 +320,14 @@ const methods = {
 };
 
 Object.assign(NodePath_Final.prototype, methods);
+
+if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
+  // @ts-expect-error babel 7 only
+  NodePath_Final.prototype.arrowFunctionToShadowed =
+    // workaround for rollup
+    // @ts-expect-error babel 7 only
+    NodePath_conversion[String("arrowFunctionToShadowed")];
+}
 
 if (!process.env.BABEL_8_BREAKING) {
   // @ts-expect-error The original _guessExecutionStatusRelativeToDifferentFunctions only worked for paths in
