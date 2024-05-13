@@ -1010,6 +1010,20 @@ function checkPrivateMethodUpdateError(
   });
 }
 
+/**
+ * Apply decorator and accessor transform
+ * @param path The class path.
+ * @param state The plugin pass.
+ * @param constantSuper The constantSuper compiler assumption.
+ * @param ignoreFunctionLength The ignoreFunctionLength compiler assumption.
+ * @param className The class name.
+ * - If className is a `string`, it will be a valid identifier name that can safely serve as a class id
+ * - If className is an Identifier, it is the reference to the name derived from NamedEvaluation
+ * - If className is a StringLiteral, it is derived from NamedEvaluation on literal computed keys
+ * @param propertyVisitor The visitor that should be applied on property prior to the transform.
+ * @param version The decorator version.
+ * @returns The transformed class path or undefined if there are no decorators.
+ */
 function transformClass(
   path: NodePath<t.Class>,
   state: PluginPass,
@@ -1018,7 +1032,7 @@ function transformClass(
   className: string | t.Identifier | t.StringLiteral | undefined,
   propertyVisitor: Visitor<PluginPass>,
   version: DecoratorVersionKind,
-): NodePath {
+): NodePath | undefined {
   const body = path.get("body.body");
 
   const classDecorators = path.node.decorators;
