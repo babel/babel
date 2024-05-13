@@ -1,5 +1,5 @@
 import { NodePath } from "../../lib/index.js";
-import { itBabel7 } from "$repo-utils";
+import { itBabel7NoESM } from "$repo-utils";
 
 describe("NodePath", () => {
   describe("setData/getData", () => {
@@ -64,7 +64,7 @@ describe("NodePath", () => {
       });
     });
 
-    itBabel7("methods babel 7", () => {
+    itBabel7NoESM("methods babel 7", () => {
       const path = new NodePath({}, {});
       const keys = Object.keys(Object.getPrototypeOf(path)).sort();
 
