@@ -10,3 +10,9 @@ Foo = class {
 
   static accessor #b = 123;
 }
+
+export default class {
+  static accessor #a;
+
+  static accessor #b = 123;
+}
