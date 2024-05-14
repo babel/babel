@@ -175,6 +175,10 @@ module.exports = [
       "guard-for-in": "error",
       "import/extensions": ["error", "ignorePackages"],
       "import/no-unresolved": "error",
+      "import/no-extraneous-dependencies": [
+        "error",
+        { includeTypes: true, devDependencies: false },
+      ],
     },
   },
   ...compat.extends("plugin:jest/recommended").map(config => {
