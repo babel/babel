@@ -175,6 +175,15 @@ module.exports = [
       "guard-for-in": "error",
       "import/extensions": ["error", "ignorePackages"],
       "import/no-unresolved": "error",
+    },
+  },
+  {
+    files: sourceFiles("js,ts,cjs,mjs"),
+    ignores: [
+      // This is bundled
+      "packages/babel-parser/**/*.{js,ts}",
+    ],
+    rules: {
       "import/no-extraneous-dependencies": [
         "error",
         { includeTypes: true, devDependencies: false },
