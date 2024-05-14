@@ -184,6 +184,18 @@ function generateClassProperty(
   }
 }
 
+function assignIdForAnonymousClass(
+  path: NodePath<t.Class>,
+  className: string | t.Identifier | t.StringLiteral | undefined,
+) {
+  if (!path.node.id) {
+    path.node.id =
+      typeof className === "string"
+        ? t.identifier(className)
+        : path.scope.generateUidIdentifier("Class");
+  }
+}
+
 function addProxyAccessorsFor(
   className: t.Identifier,
   element: NodePath<ClassDecoratableElement>,
@@ -998,6 +1010,20 @@ function checkPrivateMethodUpdateError(
   });
 }
 
+/**
+ * Apply decorator and accessor transform
+ * @param path The class path.
+ * @param state The plugin pass.
+ * @param constantSuper The constantSuper compiler assumption.
+ * @param ignoreFunctionLength The ignoreFunctionLength compiler assumption.
+ * @param className The class name.
+ * - If className is a `string`, it will be a valid identifier name that can safely serve as a class id
+ * - If className is an Identifier, it is the reference to the name derived from NamedEvaluation
+ * - If className is a StringLiteral, it is derived from NamedEvaluation on literal computed keys
+ * @param propertyVisitor The visitor that should be applied on property prior to the transform.
+ * @param version The decorator version.
+ * @returns The transformed class path or undefined if there are no decorators.
+ */
 function transformClass(
   path: NodePath<t.Class>,
   state: PluginPass,
@@ -1006,7 +1032,7 @@ function transformClass(
   className: string | t.Identifier | t.StringLiteral | undefined,
   propertyVisitor: Visitor<PluginPass>,
   version: DecoratorVersionKind,
-): NodePath {
+): NodePath | undefined {
   const body = path.get("body.body");
 
   const classDecorators = path.node.decorators;
@@ -1031,6 +1057,8 @@ function transformClass(
   let protoInitLocal: t.Identifier;
   let staticInitLocal: t.Identifier;
   const classIdName = path.node.id?.name;
+  // Whether to generate a setFunctionName call to preserve the class name
+  const setClassName = typeof className === "object" ? className : undefined;
   // Check if the decorator does not reference function-specific
   // context or the given identifier name or contains yield or await expression.
   // `true` means "maybe" and `false` means "no".
@@ -1141,6 +1169,8 @@ function transformClass(
         setterKey = t.cloneNode(key);
       }
 
+      assignIdForAnonymousClass(path, className);
+
       addProxyAccessorsFor(
         path.node.id,
         newPath,
@@ -1159,6 +1189,16 @@ function transformClass(
   }
 
   if (!classDecorators && !hasElementDecorators) {
+    if (!path.node.id && typeof className === "string") {
+      path.node.id = t.identifier(className);
+    }
+    if (setClassName) {
+      path.node.body.body.unshift(
+        createStaticBlockFromExpressions([
+          createSetFunctionNameCall(state, setClassName),
+        ]),
+      );
+    }
     // If nothing is decorated and no assignments inserted, return
     return;
   }
@@ -1288,9 +1328,7 @@ function transformClass(
       }
     }
   } else {
-    if (!path.node.id) {
-      path.node.id = path.scope.generateUidIdentifier("Class");
-    }
+    assignIdForAnonymousClass(path, className);
     classIdLocal = t.cloneNode(path.node.id);
   }
 
@@ -1454,6 +1492,7 @@ function transformClass(
 
             locals = [newFieldInitId, getId, setId];
           } else {
+            assignIdForAnonymousClass(path, className);
             addProxyAccessorsFor(
               path.node.id,
               newPath,
@@ -1958,7 +1997,7 @@ function transformClass(
         classDecorationsId ?? t.arrayExpression(classDecorations),
         t.numericLiteral(classDecorationsFlag),
         needsInstancePrivateBrandCheck ? lastInstancePrivateName : null,
-        typeof className === "object" ? className : undefined,
+        setClassName,
         t.cloneNode(superClass),
         state,
         version,
