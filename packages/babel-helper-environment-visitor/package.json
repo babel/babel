@@ -20,7 +20,7 @@
     },
     "./package.json": "./package.json"
   },
-  "devDependencies": {
+  "dependencies": {
     "@babel/traverse": "workspace:^",
     "@babel/types": "workspace:^"
   },

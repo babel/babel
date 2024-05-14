@@ -17,7 +17,7 @@ import type {
   SourceModuleMetadata,
 } from "./normalize-and-load-metadata.ts";
 import * as Lazy from "./lazy-modules.ts";
-import type { NodePath } from "@babel/traverse";
+import type { NodePath } from "@babel/core";
 
 const {
   booleanLiteral,

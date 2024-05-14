@@ -16,13 +16,11 @@
   "dependencies": {
     "@babel/helper-function-name": "workspace:^",
     "@babel/template": "workspace:^",
+    "@babel/traverse": "workspace:^",
     "@babel/types": "workspace:^"
   },
   "engines": {
     "node": ">=6.9.0"
-  },
-  "devDependencies": {
-    "@babel/traverse": "workspace:^"
   },
   "author": "The Babel Team (https://babel.dev/team)",
   "conditions": {

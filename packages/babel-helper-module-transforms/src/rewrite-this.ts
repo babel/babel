@@ -2,7 +2,7 @@ import environmentVisitor from "@babel/helper-environment-visitor";
 import { traverse, types as t } from "@babel/core";
 const { numericLiteral, unaryExpression } = t;
 
-import type { NodePath, Visitor } from "@babel/traverse";
+import type { NodePath, Visitor } from "@babel/core";
 
 /**
  * A visitor to walk the tree, rewriting all `this` references in the top-level scope to be
