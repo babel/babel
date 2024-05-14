@@ -1,6 +1,5 @@
 import { types as t } from "@babel/core";
-import type { NodePath, Visitor } from "@babel/traverse";
-import type { PluginPass } from "@babel/core";
+import type { PluginPass, NodePath, Visitor } from "@babel/core";
 
 type State = {
   topicReferences: NodePath<t.TopicReference>[];

@@ -1,7 +1,7 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxExplicitResourceManagement from "@babel/plugin-syntax-explicit-resource-management";
-import { types as t, template, traverse, type PluginPass } from "@babel/core";
-import type { NodePath, Visitor } from "@babel/traverse";
+import { types as t, template, traverse } from "@babel/core";
+import type { NodePath, Visitor, PluginPass } from "@babel/core";
 
 const enum USING_KIND {
   NORMAL,

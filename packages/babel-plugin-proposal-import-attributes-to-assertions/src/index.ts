@@ -1,6 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import type { NodePath } from "@babel/traverse";
-import type * as t from "@babel/types";
+import type { types as t, NodePath } from "@babel/core";
 import syntaxImportAttributes from "@babel/plugin-syntax-import-attributes";
 
 export default declare(api => {

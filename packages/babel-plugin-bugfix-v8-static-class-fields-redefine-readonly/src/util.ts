@@ -1,5 +1,4 @@
-import type { NodePath, Visitor } from "@babel/traverse";
-import { types as t } from "@babel/core";
+import { types as t, type NodePath, type Visitor } from "@babel/core";
 import { requeueComputedKeyAndDecorators } from "@babel/helper-environment-visitor";
 
 function isNameOrLength(key: t.Node): boolean {
