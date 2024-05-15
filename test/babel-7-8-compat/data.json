@@ -19,7 +19,12 @@
     "babel-plugin-syntax-import-attributes",
     "babel-plugin-transform-async-generator-functions",
     "babel-plugin-transform-async-to-generator",
-    "babel-plugin-transform-class-properties",
+    [
+      "babel-plugin-transform-class-properties",
+      {
+        "excludeFixtures": ["regression/old-helpers"]
+      }
+    ],
     "babel-plugin-transform-class-static-block",
     "babel-plugin-transform-dotall-regex",
     "babel-plugin-transform-exponentiation-operator",
