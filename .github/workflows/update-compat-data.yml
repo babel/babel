@@ -1,0 +1,76 @@
+name: Update compat data
+env:
+  YARN_ENABLE_SCRIPTS: false # disable post-install scripts
+on:
+  workflow_dispatch:
+    inputs: {}
+  schedule:
+    - cron: "0 0 * * 5"
+
+jobs:
+  createPullRequest:
+    name: Update compat-table
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # for Git to git push
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: kangax/compat-table
+          path: packages/babel-compat-data/build/compat-table
+      - name: Use Node.js latest
+        uses: actions/setup-node@v4
+        with:
+          node-version: "*"
+      - name: Get latest kangax/compat-table commit
+        id: lastCommit
+        run: echo "sha1=$(./scripts/update-compat-table/get-last-commit.sh)" >> $GITHUB_OUTPUT
+      - name: Update compat-table commit
+        run: echo ${{ steps.lastCommit.outputs.sha1 }} | ./scripts/update-compat-table/bump-compat-table-commit.sh
+      - name: Check if it has been updated
+        run: |
+          [[ -z $(git status -s) ]] &&
+            echo "updated=false" >> $GITHUB_OUTPUT ||
+            echo "updated=true" >> $GITHUB_OUTPUT
+        id: updated
+      - name: Bootstrap
+        if: steps.updated.outputs.updated == 'true'
+        run: make bootstrap
+      - name: Run update script
+        if: steps.updated.outputs.updated == 'true'
+        run: make build-compat-data
+      - name: Update tests
+        if: steps.updated.outputs.updated == 'true'
+        continue-on-error: true
+        run: |
+          make use-esm
+          yarn jest -u
+        env:
+          OVERWRITE: true
+      - name: Update tests (Babel 8)
+        if: steps.updated.outputs.updated == 'true'
+        continue-on-error: true
+        run: yarn jest -u
+        env:
+          OVERWRITE: true
+          BABEL_8_BREAKING: true
+      - name: Commit changes
+        if: steps.updated.outputs.updated == 'true'
+        run: |
+          git config user.name "Babel Bot"
+          git config user.email "babel-bot@users.noreply.github.com"
+          git checkout -b update-compat-data
+          git commit -am "chore: update compat data to ${{ steps.lastCommit.outputs.sha1 }}"
+          git push --force origin update-compat-data
+      - name: Create Pull Request
+        if: steps.updated.outputs.updated == 'true'
+        uses: babel/actions/create-pull-request@v2
+        with:
+          token: ${{ secrets.BOT_TOKEN }}
+          branch: update-compat-data
+          title: Update compat data
+          description: Update compat data to [${{ steps.lastCommit.outputs.sha1 }}](https://github.com/kangax/compat-table/commit/${{ steps.lastCommit.outputs.sha1 }}).
+          labels: |
+            area: compat-table
+            repo automation :robot:

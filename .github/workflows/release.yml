@@ -1,0 +1,324 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        # Often minor versions require human intervention, so it's safer if we
+        # force ourselves to always create them locally.
+        description: ⚠️ This workflow can only automatically release patch versions, or Babel 8 pre-releases
+        required: true
+        default: patch
+        type: choice
+        options:
+          - patch
+          - breaking-prerelease
+
+permissions:
+  contents: read
+
+jobs:
+  check-release-type:
+    name: Check the release type
+    runs-on: ubuntu-latest
+    outputs:
+      is-babel-8: >-
+        ${{
+          (github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v8')) ||
+          (github.event_name == 'workflow_dispatch' && github.event.inputs.version == 'breaking-prerelease')
+        }}
+    steps:
+      - name: Log
+        run: |
+          echo "Is Babel 8 push? ${{ github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v8') }}"
+          echo "Is Babel 8 dispatch? ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.version == 'breaking-prerelease' }}"
+
+  log-updates:
+    name: Log packages to publish
+    runs-on: ubuntu-latest
+    needs: check-release-type
+    if: needs.check-release-type.outputs.is-babel-8 == 'false'
+    steps:
+      - name: Checkout the new tag
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: This release will publish the following packages
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            yarn release-tool version --dry patch
+          else
+            git diff --name-only HEAD^..HEAD
+          fi;
+
+  git-version:
+    permissions:
+      contents: write # for Git to git push
+    name: Create git tag and commit
+    runs-on: ubuntu-latest
+    needs: check-release-type
+    if: github.event_name == 'workflow_dispatch'
+    outputs:
+      branch: ${{ steps.branch-name.outputs.branch }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set @babel-bot as committer
+        run: |
+          git config user.name "Babel Bot"
+          git config user.email "babel-bot@users.noreply.github.com"
+
+      - name: Create new version (Babel 7)
+        if: needs.check-release-type.outputs.is-babel-8 == 'false'
+        run: |
+          make new-version-checklist
+          yarn release-tool version -f @babel/standalone --yes patch
+
+      - name: Create new version (Babel 8)
+        if: needs.check-release-type.outputs.is-babel-8 == 'true'
+        run: |
+          make new-babel-8-version
+
+      - name: Compute temporary branch name
+        id: branch-name
+        run: |
+          branch="release/temp/$(git describe --abbrev=0)"
+          echo $branch
+          echo "branch=$branch" >> $GITHUB_OUTPUT
+
+      - name: Push to GitHub
+        run: |
+          git push "https://babel-bot:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" HEAD:"${{ steps.branch-name.outputs.branch }}" --follow-tags
+
+  npm-release:
+    name: Build, Test and Publish
+    runs-on: ubuntu-latest
+    needs:
+      - check-release-type
+      - git-version
+    environment: npm
+    # The default condition is success(), but this is false when one of the previous jobs is skipped
+    if: |
+      always() &&
+      (needs.git-version.result == 'success' || needs.git-version.result == 'skipped') &&
+      needs.check-release-type.result == 'success'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Checkout the temporary branch
+        if: needs.git-version.result == 'success'
+        run: git checkout ${{ needs.git-version.outputs.branch }}
+
+      - name: Set @babel-bot as committer
+        run: |
+          git config user.name "Babel Bot"
+          git config user.email "babel-bot@users.noreply.github.com"
+
+      - name: Bump package versions (Babel 8)
+        if: needs.check-release-type.outputs.is-babel-8 == 'true'
+        run: |
+          make new-babel-8-version-create-commit-ci
+          YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn
+
+      - name: Build and Test
+        run: make prepublish
+        env:
+          # Hack: use FORCE_COLOR so that supports-color@5 returnes true for GitHub CI
+          # Remove once `chalk` is bumped to 4.0.
+          FORCE_COLOR: true
+          # Note: `false` doesn't work here, because env vars are strings and Boolean('false')
+          # is true. Use the empry string instead.
+          BABEL_8_BREAKING: ${{ needs.check-release-type.outputs.is-babel-8 == 'true' || '' }}
+
+      - name: Generate babel-types docs
+        continue-on-error: true
+        run: |
+          mkdir build
+          node ./packages/babel-types/scripts/generators/docs.js > ./build/types.md
+
+      - name: Upload babel-types docs
+        continue-on-error: true
+        uses: actions/upload-artifact@v3
+        with:
+          name: babel-types-docs
+          path: build/types.md
+          retention-days: 3
+
+      - name: Publish to npm (Babel 7)
+        run: yarn release-tool publish --yes
+        if: needs.check-release-type.outputs.is-babel-8 == 'false'
+        env:
+          YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish to npm (Babel 8)
+        # --tag-version-prefix must match the one set in `make new-babel-8-version-create-branch`
+        run: yarn release-tool publish --yes --tag next --tag-version-prefix tmp.v
+        if: needs.check-release-type.outputs.is-babel-8 == 'true'
+        env:
+          YARN_NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          BABEL_8_BREAKING: true
+          USE_ESM: true
+
+  github-release:
+    name: Create GitHub release draft
+    runs-on: ubuntu-latest
+    needs:
+      - check-release-type
+      - git-version
+    # The default condition is success(), but this is false when one of the previous jobs is skipped
+    if: |
+      always() &&
+      (needs.git-version.result == 'success' || needs.git-version.result == 'skipped') &&
+      needs.check-release-type.result == 'success'
+    outputs:
+      is-main: ${{ steps.is-main.outputs.result == 1 }}
+      changelog: ${{ steps.changelog.outputs.changelog }}
+      version: ${{ steps.tags.outputs.new }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check if releasing from main
+        id: is-main
+        uses: babel/actions/ref-matches-branch@v2
+        with:
+          name: main
+
+      - name: Checkout the temporary branch
+        if: needs.git-version.result == 'success'
+        run: git checkout ${{ needs.git-version.outputs.branch }}
+
+      - name: Get tag info
+        id: tags
+        uses: babel/actions/get-release-tags@v2
+        with:
+          # GitHub workflow do not support the ternary operator:
+          # https://github.com/actions/runner/issues/409
+          # `a && b || c` is equivalent to `a ? b : c` if `b` is truthy
+          prefix: ${{ needs.check-release-type.outputs.is-babel-8 == 'true' && 'v8' || 'v7' }}
+
+      - name: Use Babel 8 PR labels
+        if: needs.check-release-type.outputs.is-babel-8 == 'true'
+        run: |
+          node -e "
+            const pkg = require('./package.json');
+            pkg.changelog.labels = pkg.changelog.labels_breaking
+            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2))
+          "
+
+      - name: Generate the changelog
+        id: changelog
+        uses: babel/actions/generate-lerna-changelog@v2
+        with:
+          from: ${{ steps.tags.outputs.old }}
+          to: ${{ steps.tags.outputs.new }}
+          filter: ${{ needs.check-release-type.outputs.is-babel-8 == 'true' && 'v8' || 'v7' }}
+        env:
+          GITHUB_AUTH: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create a draft GitHub release
+        uses: babel/actions/publish-github-release@v2
+        with:
+          tag: ${{ steps.tags.outputs.new }}
+          changelog: ${{ steps.changelog.outputs.changelog }}
+          token: ${{ secrets.BOT_TOKEN }}
+
+  github-push:
+    permissions:
+      contents: write # for Git to git push
+    name: Push release commit to "main"
+    runs-on: ubuntu-latest
+    needs:
+      - npm-release
+      - github-release
+      - git-version
+      - check-release-type
+    # The default condition is success(), but this is false when one of the previous jobs is skipped
+    if: |
+      always() &&
+      needs.npm-release.result == 'success' &&
+      needs.github-release.result == 'success' &&
+      needs.github-release.outputs.is-main
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Checkout the temporary branch
+        if: needs.git-version.result == 'success'
+        run: git checkout ${{ needs.git-version.outputs.branch }}
+
+      - name: Get changelog file name
+        id: filename
+        run: |
+          echo "filename=${{ needs.check-release-type.outputs.is-babel-8 == 'true' && '.github/CHANGELOG-v8.md' || 'CHANGELOG.md' }}" >> $GITHUB_OUTPUT
+
+      - name: Update CHANGELOG.md
+        uses: babel/actions/update-changelog@v2
+        with:
+          changelog: ${{ needs.github-release.outputs.changelog }}
+          filename: ${{ steps.filename.outputs.filename }}
+
+      - name: Commit CHANGELOG.md
+        run: |
+          git add ${{ steps.filename.outputs.filename }}
+          git -c user.name="Babel Bot" -c user.email="babel-bot@users.noreply.github.com" \
+            commit -m "Add ${{ needs.github-release.outputs.version }} to ${{ steps.filename.outputs.filename }} [skip ci]" --no-verify --quiet
+
+      - name: Push to GitHub
+        run: |
+          git push "https://babel-bot:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" HEAD:main --follow-tags
+
+      - name: Delete temporary branch from GitHub
+        if: needs.git-version.result == 'success'
+        run: git push "https://babel-bot:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" :${{ needs.git-version.outputs.branch }}
+
+  types-docs-updates:
+    name: Update Babel types docs
+    runs-on: ubuntu-latest
+    needs:
+      - check-release-type
+      - github-release
+      - github-push
+    if: |
+      always() &&
+      needs.check-release-type.outputs.is-babel-8 == 'false' &&
+      needs.github-push.result == 'success' &&
+      needs.github-release.result == 'success' &&
+      needs.github-release.outputs.is-main
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: babel/website
+          fetch-depth: 0 # Otherwise we cannot push
+          persist-credentials: false # So that we can push with BOT_TOKEN, otherwise it doesn't trigger CI
+      - name: Download babel-types docs
+        uses: actions/download-artifact@v3
+        with:
+          name: babel-types-docs
+          # Downloaded as ./docs/types.md
+          path: docs
+      - name: Commit Babel website changes
+        run: |
+          git config user.name "Babel Bot"
+          git config user.email "babel-bot@users.noreply.github.com"
+          git checkout -b update-types-docs
+          git commit -am "docs: update babel types"
+          git push --force "https://babel-bot:${{ secrets.BOT_TOKEN }}@github.com/babel/website.git" update-types-docs
+      - name: Create Pull Request
+        uses: babel/actions/create-pull-request@v2
+        with:
+          token: ${{ secrets.BOT_TOKEN }}
+          repository: babel/website
+          branch: update-types-docs
+          base: main
+          title: Update Babel types docs
+          description: Updated `@babel/types` docs for [Babel ${{ needs.github-release.outputs.version }}](https://github.com/babel/babel/releases/tag/${{ needs.github-release.outputs.version }}).
+          labels: |
+            docs
+            repo automation :robot:

@@ -1,0 +1,113 @@
+name: Issue Triage
+
+on:
+  issues:
+    types: [opened, labeled]
+
+permissions:
+  contents: read
+
+jobs:
+  welcome:
+    name: Welcome comment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if Babel member
+        id: is_babel_member
+        if: github.event.action == 'opened'
+        uses: babel/actions/is-org-member@v2
+        with:
+          org: babel
+          username: ${{ github.event.issue.user.login }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Welcome Comment
+        uses: babel/actions/create-comment@v2
+        if: |
+          github.event.action == 'opened' &&
+          steps.is_babel_member.outputs.result == 0
+        with:
+          token: ${{ secrets.BOT_TOKEN }}
+          issue: ${{ github.event.issue.number }}
+          comment: >
+            Hey @${{ github.event.issue.user.login }}!
+            We really appreciate you taking the time to report an issue. The
+            collaborators on this project attempt to help as many people as
+            possible, but we're a limited number of volunteers, so it's
+            possible this won't be addressed swiftly.
+
+
+            If you need any help, or just have general Babel or JavaScript questions, we have a
+            vibrant [Slack community](https://babeljs.slack.com) that typically always has someone
+            willing to help. You can sign-up [here](https://slack.babeljs.io/) for an invite.
+
+  needs_info:
+    name: Needs Info
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Needs Info Comment
+        uses: babel/actions/create-comment@v2
+        if: |
+          github.event.action == 'labeled' &&
+          github.event.label.name == 'Needs Info'
+        with:
+          token: ${{ secrets.BOT_TOKEN }}
+          issue: ${{ github.event.issue.number }}
+          comment: >
+            Hi @${{ github.event.issue.user.login }}!
+            This issue is missing some important information we'll need
+            to be able to reproduce this issue.
+
+
+            Please understand that we receive a high volume of issues,
+            and there are only a limited number of volunteers that help
+            maintain this project. The easier it is for us to decipher an
+            issue with the info provided, the more likely it is that we'll
+            be able to help.
+
+
+            Please make sure you have the following information documented in
+            this ticket:
+
+            1. Your Babel configuration (typically from `.babelrc` or `babel.config.js`)
+
+            2. The current (incorrect) behavior you're seeing
+
+            3. The behavior you expect
+
+            4. A [short, self-contained example](http://sscce.org/)
+
+
+            Please provide either a link to the problem via the
+            [`repl`](https://babeljs.io/repl/), or if the `repl` is
+            insufficient, a new and minimal repository with instructions on
+            how to build/replicate the issue.
+
+  npm_cache:
+    name: Npm Cache
+    runs-on: ubuntu-latest
+    steps:
+      - name: Npm Cache Comment
+        uses: babel/actions/create-comment@v2
+        if: |
+          github.event.action == 'labeled' &&
+          github.event.label.name == 'i: npm cache'
+        with:
+          token: ${{ secrets.BOT_TOKEN }}
+          issue: ${{ github.event.issue.number }}
+          comment: >
+            Hi @${{ github.event.issue.user.login }}!
+
+            This seems to be an issue caused by a package that you are not able to download.
+            You can verify that the package is available using the npm website:
+            for example, https://www.npmjs.com/package/@babel/types?activeTab=versions is the URL for `@babel/types`
+            (replace `@babel/types` in the URL with the package you want to check). If you see zero downloads don't worry:
+            npm can take up to a few days to display the downloads count, but this does not mean that the package is not available.
+            
+            Here are some things you can try:
+
+            1. Please check if there is a stale proxy or cache between you and npm
+            (this is the most likely cause and it is common in corporate networks).
+
+            2. Visit https://status.npmjs.org/ to see if the current npm is working properly.
+
+            3. See https://gist.github.com/hzoo/df94af2d2ec48696e683b772c775aa67
