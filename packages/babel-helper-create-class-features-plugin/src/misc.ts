@@ -1,6 +1,5 @@
 import { template, traverse, types as t } from "@babel/core";
-import type { File } from "@babel/core";
-import type { NodePath, Scope, Visitor, Binding } from "@babel/traverse";
+import type { File, NodePath, Scope, Visitor } from "@babel/core";
 import environmentVisitor from "@babel/helper-environment-visitor";
 
 const findBareSupers = traverse.visitors.merge<NodePath<t.CallExpression>[]>([
@@ -31,7 +30,7 @@ const referenceVisitor: Visitor<{ scope: Scope }> = {
 };
 
 type HandleClassTDZState = {
-  classBinding: Binding;
+  classBinding: Scope.Binding;
   file: File;
 };
 

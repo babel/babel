@@ -709,7 +709,14 @@ class Printer {
 
     const loc = nodeType === "Program" || nodeType === "File" ? null : node.loc;
 
-    this.exactSource(loc, printMethod.bind(this, node, parent));
+    this.exactSource(
+      loc,
+      // We must use @ts-ignore because this error appears in VSCode but not
+      // when doing a full build?
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore https://github.com/microsoft/TypeScript/issues/58468
+      printMethod.bind(this, node, parent),
+    );
 
     if (shouldPrintParens) {
       this._printTrailingComments(node, parent);

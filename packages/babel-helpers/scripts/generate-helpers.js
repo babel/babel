@@ -3,8 +3,7 @@ import fs from "fs";
 import { join } from "path";
 import { URL, fileURLToPath } from "url";
 import { minify } from "terser";
-import { transformSync } from "@babel/core";
-import presetTypescript from "@babel/preset-typescript";
+import { babel, presetTypescript } from "$repo-utils/babel-top-level";
 import { gzipSync } from "zlib";
 import { IS_BABEL_8 } from "$repo-utils";
 
@@ -59,7 +58,7 @@ export default Object.freeze({
     const mangleFns = code.includes("@mangleFns");
     const noMangleFns = [];
 
-    code = transformSync(code, {
+    code = babel.transformSync(code, {
       configFile: false,
       babelrc: false,
       filename: filePath,

@@ -1,6 +1,5 @@
 import { types as t } from "@babel/core";
-import type { PluginAPI, PluginObject } from "@babel/core";
-import type { NodePath } from "@babel/traverse";
+import type { PluginAPI, PluginObject, NodePath } from "@babel/core";
 import nameFunction from "@babel/helper-function-name";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import createDecoratorTransform from "./decorators.ts";

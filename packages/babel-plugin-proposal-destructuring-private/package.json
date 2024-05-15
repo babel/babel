@@ -36,7 +36,10 @@
   },
   "author": "The Babel Team (https://babel.dev/team)",
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
     "./package.json": "./package.json"
   },
   "type": "commonjs",

@@ -381,7 +381,8 @@ let uid = 0;
 
 export type { Binding };
 
-export default class Scope {
+export { Scope as default };
+class Scope {
   uid;
 
   path: NodePath;
@@ -1363,4 +1364,9 @@ export default class Scope {
       }
     } while ((scope = scope.parent));
   }
+}
+
+type _Binding = Binding;
+namespace Scope {
+  export type Binding = _Binding;
 }

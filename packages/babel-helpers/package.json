@@ -20,6 +20,7 @@
     "@babel/types": "workspace:^"
   },
   "devDependencies": {
+    "@babel/core": "workspace:^",
     "@babel/generator": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
     "@babel/parser": "workspace:^",
@@ -47,7 +48,10 @@
     ]
   },
   "exports": {
-    ".": "./lib/index.js",
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
     "./package.json": "./package.json"
   },
   "type": "commonjs"

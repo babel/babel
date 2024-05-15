@@ -1,4 +1,4 @@
-import type { NodePath, Scope, Visitor } from "@babel/traverse";
+import type { NodePath, Scope, Visitor } from "@babel/core";
 import { types as t, template } from "@babel/core";
 import ReplaceSupers from "@babel/helper-replace-supers";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";

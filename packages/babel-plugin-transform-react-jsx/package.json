@@ -54,8 +54,14 @@
     ]
   },
   "exports": {
-    ".": "./lib/index.js",
-    "./lib/development": "./lib/development.js",
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./lib/development": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/development.js"
+    },
     "./package.json": "./package.json"
   },
   "type": "commonjs"

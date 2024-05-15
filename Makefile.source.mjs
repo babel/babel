@@ -293,6 +293,7 @@ target["prepublish-prepare-dts"] = function () {
 target["prepublish-prepare-dts-no-clean"] = function () {
   yarn(["gulp", "bundle-dts"]);
   target["build-typescript-legacy-typings"]();
+  yarn(["tsc", "-p", "tsconfig.dts-bundles.json"]);
 };
 
 target["tscheck"] = function () {

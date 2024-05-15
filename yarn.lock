@@ -540,6 +540,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-annotate-as-pure@workspace:packages/babel-helper-annotate-as-pure"
   dependencies:
+    "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
   languageName: unknown
   linkType: soft
@@ -721,6 +722,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-fixtures@workspace:packages/babel-helper-fixtures"
   dependencies:
+    "@babel/core": "workspace:^"
     "@jridgewell/gen-mapping": "npm:^0.3.5"
     "@types/semver": "npm:^7.3.4"
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
@@ -752,6 +754,7 @@ __metadata:
   resolution: "@babel/helper-function-name@workspace:packages/babel-helper-function-name"
   dependencies:
     "@babel/template": "workspace:^"
+    "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
   languageName: unknown
   linkType: soft
@@ -1070,6 +1073,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-split-export-declaration@workspace:packages/babel-helper-split-export-declaration"
   dependencies:
+    "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
   languageName: unknown
   linkType: soft
@@ -1197,6 +1201,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helpers@workspace:packages/babel-helpers"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/generator": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/parser": "workspace:^"
@@ -1281,6 +1286,7 @@ __metadata:
     "@babel/helper-fixtures": "workspace:^"
     "@babel/helper-string-parser": "workspace:^"
     "@babel/helper-validator-identifier": "workspace:^"
+    "@babel/types": "workspace:^"
     charcodes: "npm:^0.2.0"
   bin:
     parser: ./bin/babel-parser.js
@@ -5496,7 +5502,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/minimatch@npm:*, @types/minimatch@npm:^3.0.3":
+"@types/minimatch@npm:*":
   version: 3.0.5
   resolution: "@types/minimatch@npm:3.0.5"
   checksum: 10/c41d136f67231c3131cf1d4ca0b06687f4a322918a3a5adddc87ce90ed9dbd175a3610adee36b106ae68c0b92c637c35e02b58c8a56c424f71d30993ea220b92
@@ -6622,13 +6628,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"array-differ@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "array-differ@npm:3.0.0"
-  checksum: 10/117edd9df5c1530bd116c6e8eea891d4bd02850fd89b1b36e532b6540e47ca620a373b81feca1c62d1395d9ae601516ba538abe5e8172d41091da2c546b05fb7
-  languageName: node
-  linkType: hard
-
 "array-each@npm:^1.0.0, array-each@npm:^1.0.1":
   version: 1.0.1
   resolution: "array-each@npm:1.0.1"
@@ -6796,13 +6795,6 @@ __metadata:
     is-array-buffer: "npm:^3.0.4"
     is-shared-array-buffer: "npm:^1.0.2"
   checksum: 10/0221f16c1e3ec7b67da870ee0e1f12b825b5f9189835392b59a22990f715827561a4f4cd5330dc7507de272d8df821be6cd4b0cb569babf5ea4be70e365a2f3d
-  languageName: node
-  linkType: hard
-
-"arrify@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "arrify@npm:2.0.1"
-  checksum: 10/067c4c1afd182806a82e4c1cb8acee16ab8b5284fbca1ce29408e6e91281c36bb5b612f6ddfbd40a0f7a7e0c75bf2696eb94c027f6e328d6e9c52465c98e4209
   languageName: node
   linkType: hard
 
@@ -7159,7 +7151,6 @@ __metadata:
     execa: "npm:^8.0.1"
     glob: "npm:^10.3.10"
     gulp: "npm:^4.0.2"
-    gulp-filter: "npm:^7.0.0"
     gulp-plumber: "npm:^1.2.1"
     husky: "npm:^8.0.3"
     import-meta-resolve: "npm:^4.1.0"
@@ -7173,7 +7164,7 @@ __metadata:
     picocolors: "npm:^1.0.0"
     prettier: "npm:^3.2.5"
     rollup: "npm:^4.9.1"
-    rollup-plugin-dts: "npm:^6.1.0"
+    rollup-plugin-dts: "patch:rollup-plugin-dts@npm%3A6.1.0#~/.yarn/patches/rollup-plugin-dts-npm-6.1.0-6d41e665a7.patch"
     rollup-plugin-dts-5: "npm:rollup-plugin-dts@^5.3.1"
     rollup-plugin-polyfill-node: "npm:^0.13.0"
     semver: "npm:^6.3.1"
@@ -10737,23 +10728,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gulp-filter@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "gulp-filter@npm:7.0.0"
-  dependencies:
-    multimatch: "npm:^5.0.0"
-    plugin-error: "npm:^1.0.1"
-    streamfilter: "npm:^3.0.0"
-    to-absolute-glob: "npm:^2.0.2"
-  peerDependencies:
-    gulp: ">=4"
-  peerDependenciesMeta:
-    gulp:
-      optional: true
-  checksum: 10/e9f8657cea5ed42538282331b7ac08206cb2d6bae9a019c557072fe685db3f05d8a1a5850417d686e59cb3acfbef642c6fac58e189f4e00eb82ff8162dd4fd37
-  languageName: node
-  linkType: hard
-
 "gulp-plumber@npm:^1.2.1":
   version: 1.2.1
   resolution: "gulp-plumber@npm:1.2.1"
@@ -13473,19 +13447,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"multimatch@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "multimatch@npm:5.0.0"
-  dependencies:
-    "@types/minimatch": "npm:^3.0.3"
-    array-differ: "npm:^3.0.0"
-    array-union: "npm:^2.1.0"
-    arrify: "npm:^2.0.1"
-    minimatch: "npm:^3.0.4"
-  checksum: 10/82c8030a53af965cab48da22f1b0f894ef99e16ee680dabdfbd38d2dfacc3c8208c475203d747afd9e26db44118ed0221d5a0d65268c864f06d6efc7ac6df812
-  languageName: node
-  linkType: hard
-
 "mute-stdout@npm:^1.0.0":
   version: 1.0.1
   resolution: "mute-stdout@npm:1.0.1"
@@ -14440,18 +14401,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"plugin-error@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "plugin-error@npm:1.0.1"
-  dependencies:
-    ansi-colors: "npm:^1.0.1"
-    arr-diff: "npm:^4.0.0"
-    arr-union: "npm:^3.1.0"
-    extend-shallow: "npm:^3.0.2"
-  checksum: 10/5cacd34372b909f07125829c2876707f4add64dcdf0dd8bd23d7ceac70eeb961c038a9707a998cc498bf8d478cc81f8d85b82584313926fe61a8fa294f79f3e4
-  languageName: node
-  linkType: hard
-
 "posix-character-classes@npm:^0.1.0":
   version: 0.1.1
   resolution: "posix-character-classes@npm:0.1.1"
@@ -14757,7 +14706,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"readable-stream@npm:3, readable-stream@npm:^3.0.6, readable-stream@npm:^3.6.0":
+"readable-stream@npm:3, readable-stream@npm:^3.6.0":
   version: 3.6.2
   resolution: "readable-stream@npm:3.6.2"
   dependencies:
@@ -15178,7 +15127,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup-plugin-dts@npm:^6.1.0":
+"rollup-plugin-dts@npm:6.1.0":
   version: 6.1.0
   resolution: "rollup-plugin-dts@npm:6.1.0"
   dependencies:
@@ -15191,6 +15140,22 @@ __metadata:
     "@babel/code-frame":
       optional: true
   checksum: 10/2ecbda8eb0644ce98ee3a795bf5b99368d80e357972c227b07c382c4af34e03fe681c0f6674e1967330b69e79f2ddf288a672f8964441d5f98e9998c50f41a01
+  languageName: node
+  linkType: hard
+
+"rollup-plugin-dts@patch:rollup-plugin-dts@npm%3A6.1.0#~/.yarn/patches/rollup-plugin-dts-npm-6.1.0-6d41e665a7.patch":
+  version: 6.1.0
+  resolution: "rollup-plugin-dts@patch:rollup-plugin-dts@npm%3A6.1.0#~/.yarn/patches/rollup-plugin-dts-npm-6.1.0-6d41e665a7.patch::version=6.1.0&hash=2a7348"
+  dependencies:
+    "@babel/code-frame": "npm:^7.22.13"
+    magic-string: "npm:^0.30.4"
+  peerDependencies:
+    rollup: ^3.29.4 || ^4
+    typescript: ^4.5 || ^5.0
+  dependenciesMeta:
+    "@babel/code-frame":
+      optional: true
+  checksum: 10/59e110adea284f2e50efc99e3d3d5859e96919f5b34e6815868dedc62966ffc06b6d8169effb371dcf80bacf4babca9ec146a7d9363cc138d170e07c65fb0c34
   languageName: node
   linkType: hard
 
@@ -15981,15 +15946,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"streamfilter@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "streamfilter@npm:3.0.0"
-  dependencies:
-    readable-stream: "npm:^3.0.6"
-  checksum: 10/7554c996a807276e1a6f50452a108d3923c16e09c5ee1d60abe40e4e13aa8aac51a4aa6ad211179174ac4f12c60c9e8f2281a5431bd11a9d945f290f770c223c
-  languageName: node
-  linkType: hard
-
 "string-argv@npm:0.3.2":
   version: 0.3.2
   resolution: "string-argv@npm:0.3.2"
@@ -16507,7 +16463,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"to-absolute-glob@npm:^2.0.0, to-absolute-glob@npm:^2.0.2":
+"to-absolute-glob@npm:^2.0.0":
   version: 2.0.2
   resolution: "to-absolute-glob@npm:2.0.2"
   dependencies:

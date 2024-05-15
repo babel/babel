@@ -39,6 +39,7 @@
     "@babel/helper-fixtures": "workspace:^",
     "@babel/helper-string-parser": "workspace:^",
     "@babel/helper-validator-identifier": "workspace:^",
+    "@babel/types": "workspace:^",
     "charcodes": "^0.2.0"
   },
   "bin": "./bin/babel-parser.js",
@@ -58,7 +59,6 @@
         "type": "module",
         "exports": {
           ".": {
-            "types": "./typings/babel-parser.d.ts",
             "require": "./lib/index.cjs",
             "default": "./lib/index.js"
           },
@@ -70,7 +70,6 @@
   },
   "exports": {
     ".": {
-      "types": "./typings/babel-parser.d.ts",
       "require": "./index.cjs",
       "default": "./lib/index.js"
     },
