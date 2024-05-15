@@ -253,9 +253,13 @@ gen_enforced_dependency(WorkspaceCwd, DependencyIdent, null, 'dependencies') :-
 function enforceBabelHelperBabelDeps({ Yarn }) {
   for (const workspace of Yarn.workspaces()) {
     if (workspace.ident?.startsWith("@babel/helper-")) {
-      workspace.unset("dependencies['@babel/traverse']");
-
-      if (workspace.pkg.peerDependencies.has("@babel/core")) {
+      if (
+        workspace.pkg.peerDependencies.has("@babel/core") &&
+        // In some cases, we remove peerDependencies for Babel 7
+        workspace.manifest.conditions?.BABEL_8_BREAKING?.[1]
+          ?.peerDependencies !== null
+      ) {
+        workspace.unset("dependencies['@babel/traverse']");
         workspace.unset("dependencies['@babel/template']");
         workspace.unset("dependencies['@babel/types']");
       }
