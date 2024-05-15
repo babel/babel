@@ -1,6 +1,6 @@
 import AsyncGenerator from "./AsyncGenerator.js";
-export default function _wrapAsyncGenerator(fn) {
+export default function _wrapAsyncGenerator(r) {
   return function () {
-    return new AsyncGenerator(fn.apply(this, arguments));
+    return new AsyncGenerator(r.apply(this, arguments));
   };
 }
