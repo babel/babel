@@ -9,7 +9,7 @@ import {
   identifier,
 } from "@babel/types";
 import type * as t from "@babel/types";
-import helpers from "./helpers.ts";
+import helpers from "./helpers-generated.ts";
 
 function makePath(path: NodePath) {
   const parts = [];

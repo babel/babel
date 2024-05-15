@@ -17,15 +17,22 @@ export default async function generateHelpers() {
  */
 
 import template from "@babel/template";
+import type * as t from "@babel/types";
 
-function helper(minVersion: string, source: string) {
+interface Helper {
+  minVersion: string;
+  ast: () => t.Program;
+}
+
+function helper(minVersion: string, source: string): Helper {
   return Object.freeze({
     minVersion,
     ast: () => template.program.ast(source, { preserveComments: true }),
   })
 }
 
-export default Object.freeze({
+export default {
+  __proto__: null,
 `;
 
   for (const file of (await fs.promises.readdir(HELPERS_FOLDER)).sort()) {
@@ -123,6 +130,6 @@ export default Object.freeze({
 `;
   }
 
-  output += "});";
+  output += "} as Record<string, Helper>;";
   return output;
 }
