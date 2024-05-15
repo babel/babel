@@ -38,8 +38,27 @@ make clean-node-modules
 yarn constraints --fix
 yarn
 
+packagesToTest=$(node -e '
+  const data = require("./test/babel-7-8-compat/data.json")["babel7plugins-babel8core"];
+  const packagesToTest = data.map((pkg) =>
+    Array.isArray(pkg) ? pkg[0] : pkg
+  );
+  process.stdout.write(packagesToTest.join(" "));
+' || exit 1)
+
+foldersToRemove=$(node -e '
+  const data = require("./test/babel-7-8-compat/data.json")["babel7plugins-babel8core"];
+  const foldersToRemove = data.flatMap((pkg) => {
+    if (!Array.isArray(pkg)) return [];
+    return pkg[1].excludeFixtures.map((fixture) => `./packages/${pkg[0]}/test/fixtures/${fixture}`);
+  });
+  process.stdout.write(foldersToRemove.join(" "));
+' || exit 1)
+
+bash -c "rm -r $foldersToRemove" # Call `bash` to perform glob expansion
+
 # Test
-TEST_babel7plugins_babel8core=true yarn jest $(node -p 'require("./test/babel-7-8-compat/data.json")["babel7plugins-babel8core"].join(" ")' || exit)
+TEST_babel7plugins_babel8core=true yarn jest $packagesToTest
 
 # Reset package.json changes
 BABEL_CORE_DEV_DEP_VERSION= yarn constraints --fix
