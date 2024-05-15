@@ -1,7 +1,7 @@
 import { declare } from "@babel/helper-plugin-utils";
 import ReplaceSupers from "@babel/helper-replace-supers";
-import { types as t, type File } from "@babel/core";
-import type { NodePath } from "@babel/traverse";
+import { types as t } from "@babel/core";
+import type { File, NodePath } from "@babel/core";
 
 function replacePropertySuper(
   path: NodePath<t.ObjectMethod>,

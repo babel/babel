@@ -1,8 +1,8 @@
 import { template, types as t } from "@babel/core";
-import type { NodePath, Visitor, Binding } from "@babel/traverse";
+import type { NodePath, Visitor, Scope } from "@babel/core";
 
 interface LoopBodyBindingsState {
-  blockScoped: Binding[];
+  blockScoped: Scope.Binding[];
 }
 
 const collectLoopBodyBindingsVisitor: Visitor<LoopBodyBindingsState> = {
@@ -32,7 +32,10 @@ export function getLoopBodyBindings(loopPath: NodePath<t.Loop>) {
   return state.blockScoped;
 }
 
-export function getUsageInBody(binding: Binding, loopPath: NodePath<t.Loop>) {
+export function getUsageInBody(
+  binding: Scope.Binding,
+  loopPath: NodePath<t.Loop>,
+) {
   // UpdateExpressions are counted both as a reference and a mutation,
   // so we need to de-duplicate them.
   const seen = new WeakSet<t.Node>();

@@ -1,5 +1,4 @@
-import { types as t, template } from "@babel/core";
-import type { NodePath } from "@babel/traverse";
+import { types as t, template, type NodePath } from "@babel/core";
 
 const buildForAwait = template(`
   async function wrapper() {

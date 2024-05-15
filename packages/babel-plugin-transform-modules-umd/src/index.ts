@@ -12,8 +12,7 @@ import {
   getModuleName,
 } from "@babel/helper-module-transforms";
 import type { PluginOptions } from "@babel/helper-module-transforms";
-import { types as t, template } from "@babel/core";
-import type { NodePath } from "@babel/traverse";
+import { types as t, template, type NodePath } from "@babel/core";
 
 const buildPrerequisiteAssignment = template(`
   GLOBAL_REFERENCE = GLOBAL_REFERENCE || {}

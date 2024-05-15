@@ -1,8 +1,7 @@
 import jsx from "@babel/plugin-syntax-jsx";
 import { declare } from "@babel/helper-plugin-utils";
 import { template, types as t } from "@babel/core";
-import type { PluginPass } from "@babel/core";
-import type { NodePath, Scope, Visitor } from "@babel/traverse";
+import type { PluginPass, NodePath, Scope, Visitor } from "@babel/core";
 import { addNamed, addNamespace, isModule } from "@babel/helper-module-imports";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 import type {

@@ -1,6 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import type * as t from "@babel/types";
-import type { NodePath } from "@babel/traverse";
+import type { NodePath, types as t } from "@babel/core";
 
 export default declare(api => {
   api.assertVersion(REQUIRED_VERSION(7));

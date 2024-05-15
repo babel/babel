@@ -1,5 +1,5 @@
 import { types as t } from "@babel/core";
-import type { NodePath, Scope, Visitor } from "@babel/traverse";
+import type { NodePath, Scope, Visitor } from "@babel/core";
 
 type State = {
   needsOuterBinding: boolean;
