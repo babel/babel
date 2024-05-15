@@ -22,12 +22,25 @@ import type * as t from "@babel/types";
 interface Helper {
   minVersion: string;
   ast: () => t.Program;
+  metadata: HelperMetadata;
 }
 
-function helper(minVersion: string, source: string): Helper {
+export interface HelperMetadata {
+  globals: string[];
+  localBindingNames: string[];
+  dependencies: Map<string, string>;
+  exportBindingAssignments: string[];
+  exportPath: string;
+  exportName: string;
+  importBindingsReferences: string[];
+  importPaths: string[];
+}
+
+function helper(minVersion: string, source: string, metadata: HelperMetadata): Helper {
   return Object.freeze({
     minVersion,
     ast: () => template.program.ast(source, { preserveComments: true }),
+    metadata,
   })
 }
 
@@ -121,11 +134,23 @@ const helpers: Record<string, Helper> = {
       })
     ).code;
 
+    const metadata = getHelperMetadata(code, helperName);
+
     const helperStr = `\
   // size: ${code.length}, gzip size: ${gzipSync(code).length}
   ${JSON.stringify(helperName)}: helper(
     ${JSON.stringify(minVersion)},
     ${JSON.stringify(code)},
+    {
+      globals: ${JSON.stringify(metadata.globals)},
+      localBindingNames: ${JSON.stringify(metadata.localBindingNames)},
+      dependencies: new Map(${JSON.stringify(Array.from(metadata.dependencies))}),
+      exportBindingAssignments: ${JSON.stringify(metadata.exportBindingAssignments)},
+      exportPath: ${JSON.stringify(metadata.exportPath)},
+      exportName: ${JSON.stringify(metadata.exportName)},
+      importBindingsReferences: ${JSON.stringify(metadata.importBindingsReferences)},
+      importPaths: ${JSON.stringify(metadata.importPaths)},
+    }
   ),
 `;
 
@@ -150,4 +175,154 @@ if (!process.env.BABEL_8_BREAKING) {
   }
 
   return output;
+}
+
+/**
+ * @typedef {Object} HelperMetadata
+ * @property {string[]} globals
+ * @property {string[]} localBindingNames
+ * @property {Map<string, string>} dependencies
+ * @property {string[]} exportBindingAssignments
+ * @property {string} exportPath
+ * @property {string} exportName
+ * @property {string[]} importBindingsReferences
+ * @property {string[]} importPaths
+ */
+
+/**
+ * Given a file AST for a given helper, get a bunch of metadata about it so that Babel can quickly render
+ * the helper is whatever context it is needed in.
+ *
+ * @returns {HelperMetadata}
+ */
+export function getHelperMetadata(code, helperName) {
+  const globals = new Set();
+  const localBindingNames = new Set();
+  // Maps imported identifier -> helper name
+  const dependencies = new Map();
+
+  let exportName;
+  let exportPath;
+  const exportBindingAssignments = [];
+  const importPaths = [];
+  const importBindingsReferences = [];
+
+  const dependencyVisitor = {
+    ImportDeclaration(child) {
+      const name = child.node.source.value;
+      if (
+        child.get("specifiers").length !== 1 ||
+        !child.get("specifiers.0").isImportDefaultSpecifier()
+      ) {
+        throw new Error(
+          `Helpers can only import a default value (in ${helperName})`
+        );
+      }
+      dependencies.set(child.node.specifiers[0].local.name, name);
+      importPaths.push(makePath(child));
+    },
+    ExportDefaultDeclaration(child) {
+      const decl = child.get("declaration");
+
+      if (!decl.isFunctionDeclaration() || !decl.node.id) {
+        throw new Error(
+          `Helpers can only export named function declarations (in ${helperName})`
+        );
+      }
+
+      exportName = decl.node.id.name;
+      exportPath = makePath(child);
+    },
+    ExportAllDeclaration() {
+      throw new Error(`Helpers can only export default (in ${helperName})`);
+    },
+    ExportNamedDeclaration() {
+      throw new Error(`Helpers can only export default (in ${helperName})`);
+    },
+    Statement(child) {
+      if (child.isImportDeclaration() || child.isExportDeclaration()) return;
+
+      child.skip();
+    },
+  };
+
+  const referenceVisitor = {
+    Program(path) {
+      const bindings = path.scope.getAllBindings();
+
+      Object.keys(bindings).forEach(name => {
+        if (name === exportName) return;
+        if (dependencies.has(name)) return;
+
+        localBindingNames.add(name);
+      });
+    },
+    ReferencedIdentifier(child) {
+      const name = child.node.name;
+      const binding = child.scope.getBinding(name);
+      if (!binding) {
+        if (name !== "arguments" || child.scope.path.isProgram()) {
+          globals.add(name);
+        }
+      } else if (dependencies.has(name)) {
+        importBindingsReferences.push(makePath(child));
+      }
+    },
+    AssignmentExpression(child) {
+      const left = child.get("left");
+
+      if (!(exportName in left.getBindingIdentifiers())) return;
+
+      if (!left.isIdentifier()) {
+        throw new Error(
+          `Only simple assignments to exports are allowed in helpers (in ${helperName})`
+        );
+      }
+
+      const binding = child.scope.getBinding(exportName);
+
+      if (binding?.scope.path.isProgram()) {
+        exportBindingAssignments.push(makePath(child));
+      }
+    },
+  };
+
+  babel.transformSync(code, {
+    configFile: false,
+    babelrc: false,
+    plugins: [() => ({ visitor: dependencyVisitor })],
+  });
+  babel.transformSync(code, {
+    configFile: false,
+    babelrc: false,
+    plugins: [() => ({ visitor: referenceVisitor })],
+  });
+
+  if (!exportPath) throw new Error("Helpers must have a default export.");
+
+  // Process these in reverse so that mutating the references does not invalidate any later paths in
+  // the list.
+  exportBindingAssignments.reverse();
+
+  return {
+    globals: Array.from(globals),
+    localBindingNames: Array.from(localBindingNames),
+    dependencies,
+    exportBindingAssignments,
+    exportPath,
+    exportName,
+    importBindingsReferences,
+    importPaths,
+  };
+}
+
+function makePath(path) {
+  const parts = [];
+
+  for (; path.parentPath; path = path.parentPath) {
+    parts.push(path.key);
+    if (path.inList) parts.push(path.listKey);
+  }
+
+  return parts.reverse().join(".");
 }

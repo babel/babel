@@ -1,5 +1,5 @@
 import type { File } from "@babel/core";
-import type { NodePath, Visitor } from "@babel/traverse";
+import type { NodePath } from "@babel/traverse";
 import traverse from "@babel/traverse";
 import {
   assignmentExpression,
@@ -10,151 +10,9 @@ import {
 } from "@babel/types";
 import type * as t from "@babel/types";
 import helpers from "./helpers-generated.ts";
-
-function makePath(path: NodePath) {
-  const parts = [];
-
-  for (; path.parentPath; path = path.parentPath) {
-    parts.push(path.key);
-    if (path.inList) parts.push(path.listKey);
-  }
-
-  return parts.reverse().join(".");
-}
+import type { HelperMetadata } from "./helpers-generated.ts";
 
 let FileClass: typeof File | undefined = undefined;
-
-interface HelperMetadata {
-  globals: string[];
-  localBindingNames: string[];
-  dependencies: Map<t.Identifier, string>;
-  exportBindingAssignments: string[];
-  exportPath: string;
-  exportName: string;
-  importBindingsReferences: string[];
-  importPaths: string[];
-}
-
-/**
- * Given a file AST for a given helper, get a bunch of metadata about it so that Babel can quickly render
- * the helper is whatever context it is needed in.
- */
-function getHelperMetadata(file: File, helperName: string): HelperMetadata {
-  const globals = new Set<string>();
-  const localBindingNames = new Set<string>();
-  // Maps imported identifier -> helper name
-  const dependencies = new Map<t.Identifier, string>();
-
-  let exportName: string | undefined;
-  let exportPath: string | undefined;
-  const exportBindingAssignments: string[] = [];
-  const importPaths: string[] = [];
-  const importBindingsReferences: string[] = [];
-
-  const dependencyVisitor: Visitor = {
-    ImportDeclaration(child) {
-      const name = child.node.source.value;
-      if (!helpers[name]) {
-        throw new Error(`Unknown helper ${name} (in ${helperName})`);
-      }
-      if (
-        child.get("specifiers").length !== 1 ||
-        !child.get("specifiers.0").isImportDefaultSpecifier()
-      ) {
-        throw new Error(
-          `Helpers can only import a default value (in ${helperName})`,
-        );
-      }
-      const bindingIdentifier = child.node.specifiers[0].local;
-      dependencies.set(bindingIdentifier, name);
-      importPaths.push(makePath(child));
-    },
-    ExportDefaultDeclaration(child) {
-      const decl = child.get("declaration");
-
-      if (!decl.isFunctionDeclaration() || !decl.node.id) {
-        throw new Error(
-          `Helpers can only export named function declarations (in ${helperName})`,
-        );
-      }
-
-      exportName = decl.node.id.name;
-      exportPath = makePath(child);
-    },
-    ExportAllDeclaration() {
-      throw new Error(`Helpers can only export default (in ${helperName})`);
-    },
-    ExportNamedDeclaration() {
-      throw new Error(`Helpers can only export default (in ${helperName})`);
-    },
-    Statement(child) {
-      if (child.isImportDeclaration() || child.isExportDeclaration()) return;
-
-      child.skip();
-    },
-  };
-
-  const referenceVisitor: Visitor = {
-    Program(path) {
-      const bindings = path.scope.getAllBindings();
-
-      Object.keys(bindings).forEach(name => {
-        if (name === exportName) return;
-        if (dependencies.has(bindings[name].identifier)) return;
-
-        localBindingNames.add(name);
-      });
-    },
-    ReferencedIdentifier(child) {
-      const name = child.node.name;
-      const binding = child.scope.getBinding(name);
-      if (!binding) {
-        if (name !== "arguments" || child.scope.path.isProgram()) {
-          globals.add(name);
-        }
-      } else if (dependencies.has(binding.identifier)) {
-        importBindingsReferences.push(makePath(child));
-      }
-    },
-    AssignmentExpression(child) {
-      const left = child.get("left");
-
-      if (!(exportName in left.getBindingIdentifiers())) return;
-
-      if (!left.isIdentifier()) {
-        throw new Error(
-          `Only simple assignments to exports are allowed in helpers (in ${helperName})`,
-        );
-      }
-
-      const binding = child.scope.getBinding(exportName);
-
-      if (binding?.scope.path.isProgram()) {
-        exportBindingAssignments.push(makePath(child));
-      }
-    },
-  };
-
-  traverse(file.ast, dependencyVisitor, file.scope);
-  traverse(file.ast, referenceVisitor, file.scope);
-
-  if (!exportPath) throw new Error("Helpers must have a default export.");
-
-  // Process these in reverse so that mutating the references does not invalidate any later paths in
-  // the list.
-  exportBindingAssignments.reverse();
-
-  return {
-    globals: Array.from(globals),
-    localBindingNames: Array.from(localBindingNames),
-    dependencies,
-    exportBindingAssignments,
-    exportPath,
-    exportName,
-    importBindingsReferences,
-    importPaths,
-  };
-}
 
 type GetDependency = (name: string) => t.Expression;
 
@@ -186,8 +44,9 @@ function permuteHelperAST(
 
   const dependenciesRefs: Record<string, t.Expression> = {};
   dependencies.forEach((name, id) => {
-    dependenciesRefs[id.name] =
-      (typeof getDependency === "function" && getDependency(name)) || id;
+    dependenciesRefs[id] =
+      (typeof getDependency === "function" && getDependency(name)) ||
+      identifier(id);
   });
 
   const toRename: Record<string, string> = {};
@@ -291,26 +150,25 @@ function loadHelper(name: string) {
       );
     };
 
-    // We compute the helper metadata lazily, so that we skip that
-    // work if we only need the `.minVersion` (for example because
-    // of a call to `.availableHelper` when `@babel/runtime`).
-    let metadata: HelperMetadata | null = null;
-
     helperData[name] = {
       minVersion: helper.minVersion,
       build(getDependency, id, localBindings) {
         const file = fn();
-        metadata ||= getHelperMetadata(file, name);
-        permuteHelperAST(file, metadata, id, localBindings, getDependency);
+        permuteHelperAST(
+          file,
+          helper.metadata,
+          id,
+          localBindings,
+          getDependency,
+        );
 
         return {
           nodes: file.ast.program.body,
-          globals: metadata.globals,
+          globals: helper.metadata.globals,
         };
       },
       getDependencies() {
-        metadata ||= getHelperMetadata(fn(), name);
-        return Array.from(metadata.dependencies.values());
+        return Array.from(helper.metadata.dependencies.values());
       },
     };
   }
