@@ -31,9 +31,12 @@ function helper(minVersion: string, source: string): Helper {
   })
 }
 
-export default {
+export { helpers as default };
+const helpers: Record<string, Helper> = {
   __proto__: null,
 `;
+
+  let babel7extraOutput = "";
 
   for (const file of (await fs.promises.readdir(HELPERS_FOLDER)).sort()) {
     if (IGNORED_FILES.has(file)) continue;
@@ -58,10 +61,7 @@ export default {
     }
     const { minVersion } = minVersionMatch.groups;
 
-    if (IS_BABEL_8() && code.includes("@onlyBabel7")) {
-      continue;
-    }
-
+    const onlyBabel7 = code.includes("@onlyBabel7");
     const mangleFns = code.includes("@mangleFns");
     const noMangleFns = [];
 
@@ -121,15 +121,33 @@ export default {
       })
     ).code;
 
-    output += `\
+    const helperStr = `\
   // size: ${code.length}, gzip size: ${gzipSync(code).length}
   ${JSON.stringify(helperName)}: helper(
     ${JSON.stringify(minVersion)},
     ${JSON.stringify(code)},
   ),
 `;
+
+    if (onlyBabel7) {
+      if (!IS_BABEL_8()) babel7extraOutput += helperStr;
+    } else {
+      output += helperStr;
+    }
   }
 
-  output += "} as Record<string, Helper>;";
+  output += "};";
+
+  if (babel7extraOutput) {
+    output += `
+
+if (!process.env.BABEL_8_BREAKING) {
+  Object.assign(helpers, {
+    ${babel7extraOutput}
+  });
+}
+`;
+  }
+
   return output;
 }

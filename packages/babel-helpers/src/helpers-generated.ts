@@ -18,17 +18,13 @@ function helper(minVersion: string, source: string): Helper {
   });
 }
 
-export default {
+export { helpers as default };
+const helpers: Record<string, Helper> = {
   __proto__: null,
   // size: 1126, gzip size: 512
   AsyncGenerator: helper(
     "7.0.0-beta.0",
     'import OverloadYield from"OverloadYield";export default function AsyncGenerator(e){var r,t;function resume(r,t){try{var n=e[r](t),o=n.value,u=o instanceof OverloadYield;Promise.resolve(u?o.v:o).then((function(t){if(u){var i="return"===r?"return":"next";if(!o.k||t.done)return resume(i,t);t=e[i](t).value}settle(n.done?"return":"normal",t)}),(function(e){resume("throw",e)}))}catch(e){settle("throw",e)}}function settle(e,n){switch(e){case"return":r.resolve({value:n,done:!0});break;case"throw":r.reject(n);break;default:r.resolve({value:n,done:!1})}(r=r.next)?resume(r.key,r.arg):t=null}this._invoke=function(e,n){return new Promise((function(o,u){var i={key:e,arg:n,resolve:o,reject:u,next:null};t?t=t.next=i:(r=t=i,resume(e,n))}))},"function"!=typeof e.return&&(this.return=void 0)}AsyncGenerator.prototype["function"==typeof Symbol&&Symbol.asyncIterator||"@@asyncIterator"]=function(){return this},AsyncGenerator.prototype.next=function(e){return this._invoke("next",e)},AsyncGenerator.prototype.throw=function(e){return this._invoke("throw",e)},AsyncGenerator.prototype.return=function(e){return this._invoke("return",e)};',
-  ),
-  // size: 54, gzip size: 74
-  AwaitValue: helper(
-    "7.0.0-beta.0",
-    "export default function _AwaitValue(t){this.wrapped=t}",
   ),
   // size: 62, gzip size: 78
   OverloadYield: helper(
@@ -39,31 +35,6 @@ export default {
   applyDecoratedDescriptor: helper(
     "7.0.0-beta.0",
     'export default function _applyDecoratedDescriptor(i,e,r,n,l){var a={};return Object.keys(n).forEach((function(i){a[i]=n[i]})),a.enumerable=!!a.enumerable,a.configurable=!!a.configurable,("value"in a||a.initializer)&&(a.writable=!0),a=r.slice().reverse().reduce((function(r,n){return n(i,e,r)||r}),a),l&&void 0!==a.initializer&&(a.value=a.initializer?a.initializer.call(l):void 0,a.initializer=void 0),void 0===a.initializer&&(Object.defineProperty(i,e,a),a=null),a}',
-  ),
-  // size: 5868, gzip size: 2216
-  applyDecs: helper(
-    "7.17.8",
-    'import setFunctionName from"setFunctionName";import toPropertyKey from"toPropertyKey";function old_createMetadataMethodsForProperty(e,t,a,r){return{getMetadata:function(o){old_assertNotFinished(r,"getMetadata"),old_assertMetadataKey(o);var i=e[o];if(void 0!==i)if(1===t){var n=i.public;if(void 0!==n)return n[a]}else if(2===t){var l=i.private;if(void 0!==l)return l.get(a)}else if(Object.hasOwnProperty.call(i,"constructor"))return i.constructor},setMetadata:function(o,i){old_assertNotFinished(r,"setMetadata"),old_assertMetadataKey(o);var n=e[o];if(void 0===n&&(n=e[o]={}),1===t){var l=n.public;void 0===l&&(l=n.public={}),l[a]=i}else if(2===t){var s=n.priv;void 0===s&&(s=n.private=new Map),s.set(a,i)}else n.constructor=i}}}function old_convertMetadataMapToFinal(e,t){var a=e[Symbol.metadata||Symbol.for("Symbol.metadata")],r=Object.getOwnPropertySymbols(t);if(0!==r.length){for(var o=0;o<r.length;o++){var i=r[o],n=t[i],l=a?a[i]:null,s=n.public,c=l?l.public:null;s&&c&&Object.setPrototypeOf(s,c);var d=n.private;if(d){var u=Array.from(d.values()),f=l?l.private:null;f&&(u=u.concat(f)),n.private=u}l&&Object.setPrototypeOf(n,l)}a&&Object.setPrototypeOf(t,a),e[Symbol.metadata||Symbol.for("Symbol.metadata")]=t}}function old_createAddInitializerMethod(e,t){return function(a){old_assertNotFinished(t,"addInitializer"),old_assertCallable(a,"An initializer"),e.push(a)}}function old_memberDec(e,t,a,r,o,i,n,l,s){var c;switch(i){case 1:c="accessor";break;case 2:c="method";break;case 3:c="getter";break;case 4:c="setter";break;default:c="field"}var d,u,f={kind:c,name:l?"#"+t:toPropertyKey(t),isStatic:n,isPrivate:l},p={v:!1};if(0!==i&&(f.addInitializer=old_createAddInitializerMethod(o,p)),l){d=2,u=Symbol(t);var v={};0===i?(v.get=a.get,v.set=a.set):2===i?v.get=function(){return a.value}:(1!==i&&3!==i||(v.get=function(){return a.get.call(this)}),1!==i&&4!==i||(v.set=function(e){a.set.call(this,e)})),f.access=v}else d=1,u=t;try{return e(s,Object.assign(f,old_createMetadataMethodsForProperty(r,d,u,p)))}finally{p.v=!0}}function old_assertNotFinished(e,t){if(e.v)throw Error("attempted to call "+t+" after decoration was finished")}function old_assertMetadataKey(e){if("symbol"!=typeof e)throw new TypeError("Metadata keys must be symbols, received: "+e)}function old_assertCallable(e,t){if("function"!=typeof e)throw new TypeError(t+" must be a function")}function old_assertValidReturnValue(e,t){var a=typeof t;if(1===e){if("object"!==a||null===t)throw new TypeError("accessor decorators must return an object with get, set, or init properties or void 0");void 0!==t.get&&old_assertCallable(t.get,"accessor.get"),void 0!==t.set&&old_assertCallable(t.set,"accessor.set"),void 0!==t.init&&old_assertCallable(t.init,"accessor.init"),void 0!==t.initializer&&old_assertCallable(t.initializer,"accessor.initializer")}else if("function"!==a)throw new TypeError((0===e?"field":10===e?"class":"method")+" decorators must return a function or void 0")}function old_getInit(e){var t;return null==(t=e.init)&&(t=e.initializer)&&void 0!==console&&console.warn(".initializer has been renamed to .init as of March 2022"),t}function old_applyMemberDec(e,t,a,r,o,i,n,l,s){var c,d,u,f,p,v,y,h=a[0];if(n?(0===o||1===o?(c={get:a[3],set:a[4]},u="get"):3===o?(c={get:a[3]},u="get"):4===o?(c={set:a[3]},u="set"):c={value:a[3]},0!==o&&(1===o&&setFunctionName(a[4],"#"+r,"set"),setFunctionName(a[3],"#"+r,u))):0!==o&&(c=Object.getOwnPropertyDescriptor(t,r)),1===o?f={get:c.get,set:c.set}:2===o?f=c.value:3===o?f=c.get:4===o&&(f=c.set),"function"==typeof h)void 0!==(p=old_memberDec(h,r,c,l,s,o,i,n,f))&&(old_assertValidReturnValue(o,p),0===o?d=p:1===o?(d=old_getInit(p),v=p.get||f.get,y=p.set||f.set,f={get:v,set:y}):f=p);else for(var m=h.length-1;m>=0;m--){var b;void 0!==(p=old_memberDec(h[m],r,c,l,s,o,i,n,f))&&(old_assertValidReturnValue(o,p),0===o?b=p:1===o?(b=old_getInit(p),v=p.get||f.get,y=p.set||f.set,f={get:v,set:y}):f=p,void 0!==b&&(void 0===d?d=b:"function"==typeof d?d=[d,b]:d.push(b)))}if(0===o||1===o){if(void 0===d)d=function(e,t){return t};else if("function"!=typeof d){var g=d;d=function(e,t){for(var a=t,r=0;r<g.length;r++)a=g[r].call(e,a);return a}}else{var _=d;d=function(e,t){return _.call(e,t)}}e.push(d)}0!==o&&(1===o?(c.get=f.get,c.set=f.set):2===o?c.value=f:3===o?c.get=f:4===o&&(c.set=f),n?1===o?(e.push((function(e,t){return f.get.call(e,t)})),e.push((function(e,t){return f.set.call(e,t)}))):2===o?e.push(f):e.push((function(e,t){return f.call(e,t)})):Object.defineProperty(t,r,c))}function old_applyMemberDecs(e,t,a,r,o){for(var i,n,l=new Map,s=new Map,c=0;c<o.length;c++){var d=o[c];if(Array.isArray(d)){var u,f,p,v=d[1],y=d[2],h=d.length>3,m=v>=5;if(m?(u=t,f=r,0!=(v-=5)&&(p=n=n||[])):(u=t.prototype,f=a,0!==v&&(p=i=i||[])),0!==v&&!h){var b=m?s:l,g=b.get(y)||0;if(!0===g||3===g&&4!==v||4===g&&3!==v)throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: "+y);!g&&v>2?b.set(y,v):b.set(y,!0)}old_applyMemberDec(e,u,d,y,v,m,h,f,p)}}old_pushInitializers(e,i),old_pushInitializers(e,n)}function old_pushInitializers(e,t){t&&e.push((function(e){for(var a=0;a<t.length;a++)t[a].call(e);return e}))}function old_applyClassDecs(e,t,a,r){if(r.length>0){for(var o=[],i=t,n=t.name,l=r.length-1;l>=0;l--){var s={v:!1};try{var c=Object.assign({kind:"class",name:n,addInitializer:old_createAddInitializerMethod(o,s)},old_createMetadataMethodsForProperty(a,0,n,s)),d=r[l](i,c)}finally{s.v=!0}void 0!==d&&(old_assertValidReturnValue(10,d),i=d)}e.push(i,(function(){for(var e=0;e<o.length;e++)o[e].call(i)}))}}export default function applyDecs(e,t,a){var r=[],o={},i={};return old_applyMemberDecs(r,e,i,o,t),old_convertMetadataMapToFinal(e.prototype,i),old_applyClassDecs(r,e,o,a),old_convertMetadataMapToFinal(e,o),r}',
-  ),
-  // size: 3860, gzip size: 1578
-  applyDecs2203: helper(
-    "7.19.0",
-    'function applyDecs2203Factory(){function createAddInitializerMethod(e,t){return function(r){!function(e,t){if(e.v)throw Error("attempted to call addInitializer after decoration was finished")}(t),assertCallable(r,"An initializer"),e.push(r)}}function memberDec(e,t,r,a,n,i,s,o){var c;switch(n){case 1:c="accessor";break;case 2:c="method";break;case 3:c="getter";break;case 4:c="setter";break;default:c="field"}var l,u,f={kind:c,name:s?"#"+t:t,static:i,private:s},p={v:!1};0!==n&&(f.addInitializer=createAddInitializerMethod(a,p)),0===n?s?(l=r.get,u=r.set):(l=function(){return this[t]},u=function(e){this[t]=e}):2===n?l=function(){return r.value}:(1!==n&&3!==n||(l=function(){return r.get.call(this)}),1!==n&&4!==n||(u=function(e){r.set.call(this,e)})),f.access=l&&u?{get:l,set:u}:l?{get:l}:{set:u};try{return e(o,f)}finally{p.v=!0}}function assertCallable(e,t){if("function"!=typeof e)throw new TypeError(t+" must be a function")}function assertValidReturnValue(e,t){var r=typeof t;if(1===e){if("object"!==r||null===t)throw new TypeError("accessor decorators must return an object with get, set, or init properties or void 0");void 0!==t.get&&assertCallable(t.get,"accessor.get"),void 0!==t.set&&assertCallable(t.set,"accessor.set"),void 0!==t.init&&assertCallable(t.init,"accessor.init")}else if("function"!==r)throw new TypeError((0===e?"field":10===e?"class":"method")+" decorators must return a function or void 0")}function applyMemberDec(e,t,r,a,n,i,s,o){var c,l,u,f,p,d,h=r[0];if(s?c=0===n||1===n?{get:r[3],set:r[4]}:3===n?{get:r[3]}:4===n?{set:r[3]}:{value:r[3]}:0!==n&&(c=Object.getOwnPropertyDescriptor(t,a)),1===n?u={get:c.get,set:c.set}:2===n?u=c.value:3===n?u=c.get:4===n&&(u=c.set),"function"==typeof h)void 0!==(f=memberDec(h,a,c,o,n,i,s,u))&&(assertValidReturnValue(n,f),0===n?l=f:1===n?(l=f.init,p=f.get||u.get,d=f.set||u.set,u={get:p,set:d}):u=f);else for(var v=h.length-1;v>=0;v--){var g;void 0!==(f=memberDec(h[v],a,c,o,n,i,s,u))&&(assertValidReturnValue(n,f),0===n?g=f:1===n?(g=f.init,p=f.get||u.get,d=f.set||u.set,u={get:p,set:d}):u=f,void 0!==g&&(void 0===l?l=g:"function"==typeof l?l=[l,g]:l.push(g)))}if(0===n||1===n){if(void 0===l)l=function(e,t){return t};else if("function"!=typeof l){var y=l;l=function(e,t){for(var r=t,a=0;a<y.length;a++)r=y[a].call(e,r);return r}}else{var m=l;l=function(e,t){return m.call(e,t)}}e.push(l)}0!==n&&(1===n?(c.get=u.get,c.set=u.set):2===n?c.value=u:3===n?c.get=u:4===n&&(c.set=u),s?1===n?(e.push((function(e,t){return u.get.call(e,t)})),e.push((function(e,t){return u.set.call(e,t)}))):2===n?e.push(u):e.push((function(e,t){return u.call(e,t)})):Object.defineProperty(t,a,c))}function pushInitializers(e,t){t&&e.push((function(e){for(var r=0;r<t.length;r++)t[r].call(e);return e}))}return function(e,t,r){var a=[];return function(e,t,r){for(var a,n,i=new Map,s=new Map,o=0;o<r.length;o++){var c=r[o];if(Array.isArray(c)){var l,u,f=c[1],p=c[2],d=c.length>3,h=f>=5;if(h?(l=t,0!=(f-=5)&&(u=n=n||[])):(l=t.prototype,0!==f&&(u=a=a||[])),0!==f&&!d){var v=h?s:i,g=v.get(p)||0;if(!0===g||3===g&&4!==f||4===g&&3!==f)throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: "+p);!g&&f>2?v.set(p,f):v.set(p,!0)}applyMemberDec(e,l,c,p,f,h,d,u)}}pushInitializers(e,a),pushInitializers(e,n)}(a,e,t),function(e,t,r){if(r.length>0){for(var a=[],n=t,i=t.name,s=r.length-1;s>=0;s--){var o={v:!1};try{var c=r[s](n,{kind:"class",name:i,addInitializer:createAddInitializerMethod(a,o)})}finally{o.v=!0}void 0!==c&&(assertValidReturnValue(10,c),n=c)}e.push(n,(function(){for(var e=0;e<a.length;e++)a[e].call(n)}))}}(a,e,r),a}}var applyDecs2203Impl;export default function applyDecs2203(e,t,r){return(applyDecs2203Impl=applyDecs2203Impl||applyDecs2203Factory())(e,t,r)}',
-  ),
-  // size: 4083, gzip size: 1651
-  applyDecs2203R: helper(
-    "7.20.0",
-    'import setFunctionName from"setFunctionName";import toPropertyKey from"toPropertyKey";function applyDecs2203RFactory(){function createAddInitializerMethod(e,t){return function(r){!function(e,t){if(e.v)throw Error("attempted to call addInitializer after decoration was finished")}(t),assertCallable(r,"An initializer"),e.push(r)}}function memberDec(e,t,r,n,a,i,o,s){var c;switch(a){case 1:c="accessor";break;case 2:c="method";break;case 3:c="getter";break;case 4:c="setter";break;default:c="field"}var l,u,f={kind:c,name:o?"#"+t:toPropertyKey(t),static:i,private:o},p={v:!1};0!==a&&(f.addInitializer=createAddInitializerMethod(n,p)),0===a?o?(l=r.get,u=r.set):(l=function(){return this[t]},u=function(e){this[t]=e}):2===a?l=function(){return r.value}:(1!==a&&3!==a||(l=function(){return r.get.call(this)}),1!==a&&4!==a||(u=function(e){r.set.call(this,e)})),f.access=l&&u?{get:l,set:u}:l?{get:l}:{set:u};try{return e(s,f)}finally{p.v=!0}}function assertCallable(e,t){if("function"!=typeof e)throw new TypeError(t+" must be a function")}function assertValidReturnValue(e,t){var r=typeof t;if(1===e){if("object"!==r||null===t)throw new TypeError("accessor decorators must return an object with get, set, or init properties or void 0");void 0!==t.get&&assertCallable(t.get,"accessor.get"),void 0!==t.set&&assertCallable(t.set,"accessor.set"),void 0!==t.init&&assertCallable(t.init,"accessor.init")}else if("function"!==r)throw new TypeError((0===e?"field":10===e?"class":"method")+" decorators must return a function or void 0")}function applyMemberDec(e,t,r,n,a,i,o,s){var c,l,u,f,p,d,h,v=r[0];if(o?(0===a||1===a?(c={get:r[3],set:r[4]},u="get"):3===a?(c={get:r[3]},u="get"):4===a?(c={set:r[3]},u="set"):c={value:r[3]},0!==a&&(1===a&&setFunctionName(r[4],"#"+n,"set"),setFunctionName(r[3],"#"+n,u))):0!==a&&(c=Object.getOwnPropertyDescriptor(t,n)),1===a?f={get:c.get,set:c.set}:2===a?f=c.value:3===a?f=c.get:4===a&&(f=c.set),"function"==typeof v)void 0!==(p=memberDec(v,n,c,s,a,i,o,f))&&(assertValidReturnValue(a,p),0===a?l=p:1===a?(l=p.init,d=p.get||f.get,h=p.set||f.set,f={get:d,set:h}):f=p);else for(var g=v.length-1;g>=0;g--){var y;void 0!==(p=memberDec(v[g],n,c,s,a,i,o,f))&&(assertValidReturnValue(a,p),0===a?y=p:1===a?(y=p.init,d=p.get||f.get,h=p.set||f.set,f={get:d,set:h}):f=p,void 0!==y&&(void 0===l?l=y:"function"==typeof l?l=[l,y]:l.push(y)))}if(0===a||1===a){if(void 0===l)l=function(e,t){return t};else if("function"!=typeof l){var m=l;l=function(e,t){for(var r=t,n=0;n<m.length;n++)r=m[n].call(e,r);return r}}else{var b=l;l=function(e,t){return b.call(e,t)}}e.push(l)}0!==a&&(1===a?(c.get=f.get,c.set=f.set):2===a?c.value=f:3===a?c.get=f:4===a&&(c.set=f),o?1===a?(e.push((function(e,t){return f.get.call(e,t)})),e.push((function(e,t){return f.set.call(e,t)}))):2===a?e.push(f):e.push((function(e,t){return f.call(e,t)})):Object.defineProperty(t,n,c))}function applyMemberDecs(e,t){for(var r,n,a=[],i=new Map,o=new Map,s=0;s<t.length;s++){var c=t[s];if(Array.isArray(c)){var l,u,f=c[1],p=c[2],d=c.length>3,h=f>=5;if(h?(l=e,0!=(f-=5)&&(u=n=n||[])):(l=e.prototype,0!==f&&(u=r=r||[])),0!==f&&!d){var v=h?o:i,g=v.get(p)||0;if(!0===g||3===g&&4!==f||4===g&&3!==f)throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: "+p);!g&&f>2?v.set(p,f):v.set(p,!0)}applyMemberDec(a,l,c,p,f,h,d,u)}}return pushInitializers(a,r),pushInitializers(a,n),a}function pushInitializers(e,t){t&&e.push((function(e){for(var r=0;r<t.length;r++)t[r].call(e);return e}))}return function(e,t,r){return{e:applyMemberDecs(e,t),get c(){return function(e,t){if(t.length>0){for(var r=[],n=e,a=e.name,i=t.length-1;i>=0;i--){var o={v:!1};try{var s=t[i](n,{kind:"class",name:a,addInitializer:createAddInitializerMethod(r,o)})}finally{o.v=!0}void 0!==s&&(assertValidReturnValue(10,s),n=s)}return[n,function(){for(var e=0;e<r.length;e++)r[e].call(n)}]}}(e,r)}}}}export default function applyDecs2203R(e,t,r){return(applyDecs2203R=applyDecs2203RFactory())(e,t,r)}',
-  ),
-  // size: 4662, gzip size: 1848
-  applyDecs2301: helper(
-    "7.21.0",
-    'import checkInRHS from"checkInRHS";import setFunctionName from"setFunctionName";import toPropertyKey from"toPropertyKey";function applyDecs2301Factory(){function createAddInitializerMethod(e,t){return function(r){!function(e,t){if(e.v)throw Error("attempted to call addInitializer after decoration was finished")}(t),assertCallable(r,"An initializer"),e.push(r)}}function assertInstanceIfPrivate(e,t){if(!e(t))throw new TypeError("Attempted to access private element on non-instance")}function memberDec(e,t,r,n,a,i,s,o,c){var u;switch(a){case 1:u="accessor";break;case 2:u="method";break;case 3:u="getter";break;case 4:u="setter";break;default:u="field"}var l,f,p={kind:u,name:s?"#"+t:toPropertyKey(t),static:i,private:s},d={v:!1};if(0!==a&&(p.addInitializer=createAddInitializerMethod(n,d)),s||0!==a&&2!==a)if(2===a)l=function(e){return assertInstanceIfPrivate(c,e),r.value};else{var h=0===a||1===a;(h||3===a)&&(l=s?function(e){return assertInstanceIfPrivate(c,e),r.get.call(e)}:function(e){return r.get.call(e)}),(h||4===a)&&(f=s?function(e,t){assertInstanceIfPrivate(c,e),r.set.call(e,t)}:function(e,t){r.set.call(e,t)})}else l=function(e){return e[t]},0===a&&(f=function(e,r){e[t]=r});var v=s?c.bind():function(e){return t in e};p.access=l&&f?{get:l,set:f,has:v}:l?{get:l,has:v}:{set:f,has:v};try{return e(o,p)}finally{d.v=!0}}function assertCallable(e,t){if("function"!=typeof e)throw new TypeError(t+" must be a function")}function assertValidReturnValue(e,t){var r=typeof t;if(1===e){if("object"!==r||null===t)throw new TypeError("accessor decorators must return an object with get, set, or init properties or void 0");void 0!==t.get&&assertCallable(t.get,"accessor.get"),void 0!==t.set&&assertCallable(t.set,"accessor.set"),void 0!==t.init&&assertCallable(t.init,"accessor.init")}else if("function"!==r)throw new TypeError((0===e?"field":10===e?"class":"method")+" decorators must return a function or void 0")}function curryThis2(e){return function(t){e(this,t)}}function applyMemberDec(e,t,r,n,a,i,s,o,c){var u,l,f,p,d,h,v,y,g=r[0];if(s?(0===a||1===a?(u={get:(d=r[3],function(){return d(this)}),set:curryThis2(r[4])},f="get"):3===a?(u={get:r[3]},f="get"):4===a?(u={set:r[3]},f="set"):u={value:r[3]},0!==a&&(1===a&&setFunctionName(u.set,"#"+n,"set"),setFunctionName(u[f||"value"],"#"+n,f))):0!==a&&(u=Object.getOwnPropertyDescriptor(t,n)),1===a?p={get:u.get,set:u.set}:2===a?p=u.value:3===a?p=u.get:4===a&&(p=u.set),"function"==typeof g)void 0!==(h=memberDec(g,n,u,o,a,i,s,p,c))&&(assertValidReturnValue(a,h),0===a?l=h:1===a?(l=h.init,v=h.get||p.get,y=h.set||p.set,p={get:v,set:y}):p=h);else for(var m=g.length-1;m>=0;m--){var b;void 0!==(h=memberDec(g[m],n,u,o,a,i,s,p,c))&&(assertValidReturnValue(a,h),0===a?b=h:1===a?(b=h.init,v=h.get||p.get,y=h.set||p.set,p={get:v,set:y}):p=h,void 0!==b&&(void 0===l?l=b:"function"==typeof l?l=[l,b]:l.push(b)))}if(0===a||1===a){if(void 0===l)l=function(e,t){return t};else if("function"!=typeof l){var I=l;l=function(e,t){for(var r=t,n=0;n<I.length;n++)r=I[n].call(e,r);return r}}else{var w=l;l=function(e,t){return w.call(e,t)}}e.push(l)}0!==a&&(1===a?(u.get=p.get,u.set=p.set):2===a?u.value=p:3===a?u.get=p:4===a&&(u.set=p),s?1===a?(e.push((function(e,t){return p.get.call(e,t)})),e.push((function(e,t){return p.set.call(e,t)}))):2===a?e.push(p):e.push((function(e,t){return p.call(e,t)})):Object.defineProperty(t,n,u))}function applyMemberDecs(e,t,r){for(var n,a,i,s=[],o=new Map,c=new Map,u=0;u<t.length;u++){var l=t[u];if(Array.isArray(l)){var f,p,d=l[1],h=l[2],v=l.length>3,y=d>=5,g=r;if(y?(f=e,0!=(d-=5)&&(p=a=a||[]),v&&!i&&(i=function(t){return checkInRHS(t)===e}),g=i):(f=e.prototype,0!==d&&(p=n=n||[])),0!==d&&!v){var m=y?c:o,b=m.get(h)||0;if(!0===b||3===b&&4!==d||4===b&&3!==d)throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: "+h);!b&&d>2?m.set(h,d):m.set(h,!0)}applyMemberDec(s,f,l,h,d,y,v,p,g)}}return pushInitializers(s,n),pushInitializers(s,a),s}function pushInitializers(e,t){t&&e.push((function(e){for(var r=0;r<t.length;r++)t[r].call(e);return e}))}return function(e,t,r,n){return{e:applyMemberDecs(e,t,n),get c(){return function(e,t){if(t.length>0){for(var r=[],n=e,a=e.name,i=t.length-1;i>=0;i--){var s={v:!1};try{var o=t[i](n,{kind:"class",name:a,addInitializer:createAddInitializerMethod(r,s)})}finally{s.v=!0}void 0!==o&&(assertValidReturnValue(10,o),n=o)}return[n,function(){for(var e=0;e<r.length;e++)r[e].call(n)}]}}(e,r)}}}}export default function applyDecs2301(e,t,r,n){return(applyDecs2301=applyDecs2301Factory())(e,t,r,n)}',
-  ),
-  // size: 3245, gzip size: 1611
-  applyDecs2305: helper(
-    "7.21.0",
-    'import checkInRHS from"checkInRHS";import setFunctionName from"setFunctionName";import toPropertyKey from"toPropertyKey";export default function applyDecs2305(e,t,r,n,o,a){function i(e,t,r){return function(n,o){return r&&r(n),e[t].call(n,o)}}function c(e,t){for(var r=0;r<e.length;r++)e[r].call(t);return t}function s(e,t,r,n){if("function"!=typeof e&&(n||void 0!==e))throw new TypeError(t+" must "+(r||"be")+" a function"+(n?"":" or undefined"));return e}function applyDec(e,t,r,n,o,a,c,u,l,f,p,d,h){function m(e){if(!h(e))throw new TypeError("Attempted to access private element on non-instance")}var y,v=t[0],g=t[3],b=!u;if(!b){r||Array.isArray(v)||(v=[v]);var w={},S=[],A=3===o?"get":4===o||d?"set":"value";f?(p||d?w={get:setFunctionName((function(){return g(this)}),n,"get"),set:function(e){t[4](this,e)}}:w[A]=g,p||setFunctionName(w[A],n,2===o?"":A)):p||(w=Object.getOwnPropertyDescriptor(e,n))}for(var P=e,j=v.length-1;j>=0;j-=r?2:1){var D=v[j],E=r?v[j-1]:void 0,I={},O={kind:["field","accessor","method","getter","setter","class"][o],name:n,metadata:a,addInitializer:function(e,t){if(e.v)throw Error("attempted to call addInitializer after decoration was finished");s(t,"An initializer","be",!0),c.push(t)}.bind(null,I)};try{if(b)(y=s(D.call(E,P,O),"class decorators","return"))&&(P=y);else{var k,F;O.static=l,O.private=f,f?2===o?k=function(e){return m(e),w.value}:(o<4&&(k=i(w,"get",m)),3!==o&&(F=i(w,"set",m))):(k=function(e){return e[n]},(o<2||4===o)&&(F=function(e,t){e[n]=t}));var N=O.access={has:f?h.bind():function(e){return n in e}};if(k&&(N.get=k),F&&(N.set=F),P=D.call(E,d?{get:w.get,set:w.set}:w[A],O),d){if("object"==typeof P&&P)(y=s(P.get,"accessor.get"))&&(w.get=y),(y=s(P.set,"accessor.set"))&&(w.set=y),(y=s(P.init,"accessor.init"))&&S.push(y);else if(void 0!==P)throw new TypeError("accessor decorators must return an object with get, set, or init properties or void 0")}else s(P,(p?"field":"method")+" decorators","return")&&(p?S.push(P):w[A]=P)}}finally{I.v=!0}}return(p||d)&&u.push((function(e,t){for(var r=S.length-1;r>=0;r--)t=S[r].call(e,t);return t})),p||b||(f?d?u.push(i(w,"get"),i(w,"set")):u.push(2===o?w[A]:i.call.bind(w[A])):Object.defineProperty(e,n,w)),P}function u(e,t){return Object.defineProperty(e,Symbol.metadata||Symbol.for("Symbol.metadata"),{configurable:!0,enumerable:!0,value:t})}if(arguments.length>=6)var l=a[Symbol.metadata||Symbol.for("Symbol.metadata")];var f=Object.create(null==l?null:l),p=function(e,t,r,n){var o,a,i=[],s=function(t){return checkInRHS(t)===e},u=new Map;function l(e){e&&i.push(c.bind(null,e))}for(var f=0;f<t.length;f++){var p=t[f];if(Array.isArray(p)){var d=p[1],h=p[2],m=p.length>3,y=16&d,v=!!(8&d),g=0==(d&=7),b=h+"/"+v;if(!g&&!m){var w=u.get(b);if(!0===w||3===w&&4!==d||4===w&&3!==d)throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: "+h);u.set(b,!(d>2)||d)}applyDec(v?e:e.prototype,p,y,m?"#"+h:toPropertyKey(h),d,n,v?a=a||[]:o=o||[],i,v,m,g,1===d,v&&m?s:r)}}return l(o),l(a),i}(e,t,o,f);return r.length||u(e,f),{e:p,get c(){var t=[];return r.length&&[u(applyDec(e,[r],n,e.name,5,f,t),f),c.bind(null,t,e)]}}}',
   ),
   // size: 2976, gzip size: 1510
   applyDecs2311: helper(
@@ -130,55 +101,15 @@ export default {
     "7.14.1",
     'export default function _checkPrivateRedeclaration(e,t){if(t.has(e))throw new TypeError("Cannot initialize the same private elements twice on an object")}',
   ),
-  // size: 246, gzip size: 197
-  classApplyDescriptorDestructureSet: helper(
-    "7.13.10",
-    'export default function _classApplyDescriptorDestructureSet(e,t){if(t.set)return"__destrObj"in t||(t.__destrObj={set value(r){t.set.call(e,r)}}),t.__destrObj;if(!t.writable)throw new TypeError("attempted to set read only private field");return t}',
-  ),
-  // size: 89, gzip size: 102
-  classApplyDescriptorGet: helper(
-    "7.13.10",
-    "export default function _classApplyDescriptorGet(e,t){return t.get?t.get.call(e):t.value}",
-  ),
-  // size: 176, gzip size: 158
-  classApplyDescriptorSet: helper(
-    "7.13.10",
-    'export default function _classApplyDescriptorSet(e,t,l){if(t.set)t.set.call(e,l);else{if(!t.writable)throw new TypeError("attempted to set read only private field");t.value=l}}',
-  ),
   // size: 123, gzip size: 120
   classCallCheck: helper(
     "7.0.0-beta.0",
     'export default function _classCallCheck(a,n){if(!(a instanceof n))throw new TypeError("Cannot call a class as a function")}',
   ),
-  // size: 140, gzip size: 123
-  classCheckPrivateStaticAccess: helper(
-    "7.13.10",
-    'import assertClassBrand from"assertClassBrand";export default function _classCheckPrivateStaticAccess(s,a,r){return assertClassBrand(a,s,r)}',
-  ),
-  // size: 169, gzip size: 154
-  classCheckPrivateStaticFieldDescriptor: helper(
-    "7.13.10",
-    'export default function _classCheckPrivateStaticFieldDescriptor(t,e){if(void 0===t)throw new TypeError("attempted to "+e+" private static field before its declaration")}',
-  ),
-  // size: 149, gzip size: 118
-  classExtractFieldDescriptor: helper(
-    "7.13.10",
-    'import classPrivateFieldGet2 from"classPrivateFieldGet2";export default function _classExtractFieldDescriptor(e,t){return classPrivateFieldGet2(t,e)}',
-  ),
   // size: 136, gzip size: 131
   classNameTDZError: helper(
     "7.0.0-beta.0",
     "export default function _classNameTDZError(e){throw new ReferenceError('Class \"'+e+'\" cannot be referenced in computed property keys.')}",
-  ),
-  // size: 282, gzip size: 150
-  classPrivateFieldDestructureSet: helper(
-    "7.4.4",
-    'import classApplyDescriptorDestructureSet from"classApplyDescriptorDestructureSet";import classPrivateFieldGet2 from"classPrivateFieldGet2";export default function _classPrivateFieldDestructureSet(e,t){var r=classPrivateFieldGet2(t,e);return classApplyDescriptorDestructureSet(e,r)}',
-  ),
-  // size: 238, gzip size: 139
-  classPrivateFieldGet: helper(
-    "7.0.0-beta.0",
-    'import classApplyDescriptorGet from"classApplyDescriptorGet";import classPrivateFieldGet2 from"classPrivateFieldGet2";export default function _classPrivateFieldGet(e,t){var r=classPrivateFieldGet2(t,e);return classApplyDescriptorGet(e,r)}',
   ),
   // size: 135, gzip size: 116
   classPrivateFieldGet2: helper(
@@ -200,11 +131,6 @@ export default {
     "7.0.0-beta.0",
     'var id=0;export default function _classPrivateFieldKey(e){return"__private_"+id+++"_"+e}',
   ),
-  // size: 244, gzip size: 145
-  classPrivateFieldSet: helper(
-    "7.0.0-beta.0",
-    'import classApplyDescriptorSet from"classApplyDescriptorSet";import classPrivateFieldGet2 from"classPrivateFieldGet2";export default function _classPrivateFieldSet(e,t,r){var s=classPrivateFieldGet2(t,e);return classApplyDescriptorSet(e,s,r),r}',
-  ),
   // size: 141, gzip size: 123
   classPrivateFieldSet2: helper(
     "7.24.0",
@@ -215,50 +141,20 @@ export default {
     "7.24.0",
     'import assertClassBrand from"assertClassBrand";export default function _classPrivateGetter(s,r,a){return a(assertClassBrand(s,r))}',
   ),
-  // size: 132, gzip size: 116
-  classPrivateMethodGet: helper(
-    "7.1.6",
-    'import assertClassBrand from"assertClassBrand";export default function _classPrivateMethodGet(s,a,r){return assertClassBrand(a,s),r}',
-  ),
   // size: 162, gzip size: 121
   classPrivateMethodInitSpec: helper(
     "7.14.1",
     'import checkPrivateRedeclaration from"checkPrivateRedeclaration";export default function _classPrivateMethodInitSpec(e,a){checkPrivateRedeclaration(e,a),a.add(e)}',
-  ),
-  // size: 109, gzip size: 113
-  classPrivateMethodSet: helper(
-    "7.1.6",
-    'export default function _classPrivateMethodSet(){throw new TypeError("attempted to reassign private method")}',
   ),
   // size: 136, gzip size: 118
   classPrivateSetter: helper(
     "7.24.0",
     'import assertClassBrand from"assertClassBrand";export default function _classPrivateSetter(s,r,a,t){return r(assertClassBrand(s,a),t),t}',
   ),
-  // size: 408, gzip size: 186
-  classStaticPrivateFieldDestructureSet: helper(
-    "7.13.10",
-    'import classApplyDescriptorDestructureSet from"classApplyDescriptorDestructureSet";import assertClassBrand from"assertClassBrand";import classCheckPrivateStaticFieldDescriptor from"classCheckPrivateStaticFieldDescriptor";export default function _classStaticPrivateFieldDestructureSet(t,r,s){return assertClassBrand(r,t),classCheckPrivateStaticFieldDescriptor(s,"set"),classApplyDescriptorDestructureSet(t,s)}',
-  ),
-  // size: 368, gzip size: 182
-  classStaticPrivateFieldSpecGet: helper(
-    "7.0.2",
-    'import classApplyDescriptorGet from"classApplyDescriptorGet";import assertClassBrand from"assertClassBrand";import classCheckPrivateStaticFieldDescriptor from"classCheckPrivateStaticFieldDescriptor";export default function _classStaticPrivateFieldSpecGet(t,s,r){return assertClassBrand(s,t),classCheckPrivateStaticFieldDescriptor(r,"get"),classApplyDescriptorGet(t,r)}',
-  ),
-  // size: 374, gzip size: 183
-  classStaticPrivateFieldSpecSet: helper(
-    "7.0.2",
-    'import classApplyDescriptorSet from"classApplyDescriptorSet";import assertClassBrand from"assertClassBrand";import classCheckPrivateStaticFieldDescriptor from"classCheckPrivateStaticFieldDescriptor";export default function _classStaticPrivateFieldSpecSet(s,t,r,e){return assertClassBrand(t,s),classCheckPrivateStaticFieldDescriptor(r,"set"),classApplyDescriptorSet(s,r,e),e}',
-  ),
   // size: 138, gzip size: 122
   classStaticPrivateMethodGet: helper(
     "7.3.2",
     'import assertClassBrand from"assertClassBrand";export default function _classStaticPrivateMethodGet(s,a,t){return assertClassBrand(a,s),t}',
-  ),
-  // size: 126, gzip size: 122
-  classStaticPrivateMethodSet: helper(
-    "7.3.2",
-    'export default function _classStaticPrivateMethodSet(){throw new TypeError("attempted to set read only static private field")}',
   ),
   // size: 327, gzip size: 200
   construct: helper(
@@ -300,20 +196,10 @@ export default {
     "7.20.7",
     "export default function _defineAccessor(e,r,n,t){var c={configurable:!0,enumerable:!0};return c[e]=t,Object.defineProperty(r,n,c)}",
   ),
-  // size: 383, gzip size: 218
-  defineEnumerableProperties: helper(
-    "7.0.0-beta.0",
-    'export default function _defineEnumerableProperties(e,r){for(var t in r){var n=r[t];n.configurable=n.enumerable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,t,n)}if(Object.getOwnPropertySymbols)for(var a=Object.getOwnPropertySymbols(r),b=0;b<a.length;b++){var i=a[b];(n=r[i]).configurable=n.enumerable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,i,n)}return e}',
-  ),
   // size: 207, gzip size: 155
   defineProperty: helper(
     "7.0.0-beta.0",
     'import toPropertyKey from"toPropertyKey";export default function _defineProperty(e,r,t){return(r=toPropertyKey(r))in e?Object.defineProperty(e,r,{value:t,enumerable:!0,configurable:!0,writable:!0}):e[r]=t,e}',
-  ),
-  // size: 668, gzip size: 330
-  dispose: helper(
-    "7.22.0",
-    'function dispose_SuppressedError(r,e){return"undefined"!=typeof SuppressedError?dispose_SuppressedError=SuppressedError:(dispose_SuppressedError=function(r,e){this.suppressed=e,this.error=r,this.stack=Error().stack},dispose_SuppressedError.prototype=Object.create(Error.prototype,{constructor:{value:dispose_SuppressedError,writable:!0,configurable:!0}})),new dispose_SuppressedError(r,e)}export default function _dispose(r,e,s){function next(){for(;r.length>0;)try{var o=r.pop(),p=o.d.call(o.v);if(o.a)return Promise.resolve(p).then(next,err)}catch(r){return err(r)}if(s)throw e}function err(r){return e=s?new dispose_SuppressedError(e,r):r,s=!0,next()}return next()}',
   ),
   // size: 252, gzip size: 188
   extends: helper(
@@ -431,11 +317,6 @@ export default {
   objectDestructuringEmpty: helper(
     "7.0.0-beta.0",
     'export default function _objectDestructuringEmpty(t){if(null==t)throw new TypeError("Cannot destructure "+t)}',
-  ),
-  // size: 421, gzip size: 258
-  objectSpread: helper(
-    "7.0.0-beta.0",
-    'import defineProperty from"defineProperty";export default function _objectSpread(e){for(var r=1;r<arguments.length;r++){var t=null!=arguments[r]?Object(arguments[r]):{},o=Object.keys(t);"function"==typeof Object.getOwnPropertySymbols&&o.push.apply(o,Object.getOwnPropertySymbols(t).filter((function(e){return Object.getOwnPropertyDescriptor(t,e).enumerable}))),o.forEach((function(r){defineProperty(e,r,t[r])}))}return e}',
   ),
   // size: 677, gzip size: 316
   objectSpread2: helper(
@@ -562,11 +443,6 @@ export default {
     "7.9.0",
     'import arrayLikeToArray from"arrayLikeToArray";export default function _unsupportedIterableToArray(r,a){if(r){if("string"==typeof r)return arrayLikeToArray(r,a);var t={}.toString.call(r).slice(8,-1);return"Object"===t&&r.constructor&&(t=r.constructor.name),"Map"===t||"Set"===t?Array.from(r):"Arguments"===t||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t)?arrayLikeToArray(r,a):void 0}}',
   ),
-  // size: 432, gzip size: 261
-  using: helper(
-    "7.22.0",
-    'export default function _using(o,n,e){if(null==n)return n;if(Object(n)!==n)throw new TypeError("using declarations can only be used with objects, functions, null, or undefined.");if(e)var r=n[Symbol.asyncDispose||Symbol.for("Symbol.asyncDispose")];if(null==r&&(r=n[Symbol.dispose||Symbol.for("Symbol.dispose")]),"function"!=typeof r)throw new TypeError("Property [Symbol.dispose] is not a function.");return o.push({v:n,d:r,a:e}),n}',
-  ),
   // size: 922, gzip size: 481
   usingCtx: helper(
     "7.23.9",
@@ -592,4 +468,134 @@ export default {
     "7.12.13",
     "export default function _writeOnlyError(r){throw new TypeError('\"'+r+'\" is write-only')}",
   ),
-} as Record<string, Helper>;
+};
+
+if (!process.env.BABEL_8_BREAKING) {
+  Object.assign(helpers, {
+    // size: 54, gzip size: 74
+    AwaitValue: helper(
+      "7.0.0-beta.0",
+      "export default function _AwaitValue(t){this.wrapped=t}",
+    ),
+    // size: 5868, gzip size: 2216
+    applyDecs: helper(
+      "7.17.8",
+      'import setFunctionName from"setFunctionName";import toPropertyKey from"toPropertyKey";function old_createMetadataMethodsForProperty(e,t,a,r){return{getMetadata:function(o){old_assertNotFinished(r,"getMetadata"),old_assertMetadataKey(o);var i=e[o];if(void 0!==i)if(1===t){var n=i.public;if(void 0!==n)return n[a]}else if(2===t){var l=i.private;if(void 0!==l)return l.get(a)}else if(Object.hasOwnProperty.call(i,"constructor"))return i.constructor},setMetadata:function(o,i){old_assertNotFinished(r,"setMetadata"),old_assertMetadataKey(o);var n=e[o];if(void 0===n&&(n=e[o]={}),1===t){var l=n.public;void 0===l&&(l=n.public={}),l[a]=i}else if(2===t){var s=n.priv;void 0===s&&(s=n.private=new Map),s.set(a,i)}else n.constructor=i}}}function old_convertMetadataMapToFinal(e,t){var a=e[Symbol.metadata||Symbol.for("Symbol.metadata")],r=Object.getOwnPropertySymbols(t);if(0!==r.length){for(var o=0;o<r.length;o++){var i=r[o],n=t[i],l=a?a[i]:null,s=n.public,c=l?l.public:null;s&&c&&Object.setPrototypeOf(s,c);var d=n.private;if(d){var u=Array.from(d.values()),f=l?l.private:null;f&&(u=u.concat(f)),n.private=u}l&&Object.setPrototypeOf(n,l)}a&&Object.setPrototypeOf(t,a),e[Symbol.metadata||Symbol.for("Symbol.metadata")]=t}}function old_createAddInitializerMethod(e,t){return function(a){old_assertNotFinished(t,"addInitializer"),old_assertCallable(a,"An initializer"),e.push(a)}}function old_memberDec(e,t,a,r,o,i,n,l,s){var c;switch(i){case 1:c="accessor";break;case 2:c="method";break;case 3:c="getter";break;case 4:c="setter";break;default:c="field"}var d,u,f={kind:c,name:l?"#"+t:toPropertyKey(t),isStatic:n,isPrivate:l},p={v:!1};if(0!==i&&(f.addInitializer=old_createAddInitializerMethod(o,p)),l){d=2,u=Symbol(t);var v={};0===i?(v.get=a.get,v.set=a.set):2===i?v.get=function(){return a.value}:(1!==i&&3!==i||(v.get=function(){return a.get.call(this)}),1!==i&&4!==i||(v.set=function(e){a.set.call(this,e)})),f.access=v}else d=1,u=t;try{return e(s,Object.assign(f,old_createMetadataMethodsForProperty(r,d,u,p)))}finally{p.v=!0}}function old_assertNotFinished(e,t){if(e.v)throw Error("attempted to call "+t+" after decoration was finished")}function old_assertMetadataKey(e){if("symbol"!=typeof e)throw new TypeError("Metadata keys must be symbols, received: "+e)}function old_assertCallable(e,t){if("function"!=typeof e)throw new TypeError(t+" must be a function")}function old_assertValidReturnValue(e,t){var a=typeof t;if(1===e){if("object"!==a||null===t)throw new TypeError("accessor decorators must return an object with get, set, or init properties or void 0");void 0!==t.get&&old_assertCallable(t.get,"accessor.get"),void 0!==t.set&&old_assertCallable(t.set,"accessor.set"),void 0!==t.init&&old_assertCallable(t.init,"accessor.init"),void 0!==t.initializer&&old_assertCallable(t.initializer,"accessor.initializer")}else if("function"!==a)throw new TypeError((0===e?"field":10===e?"class":"method")+" decorators must return a function or void 0")}function old_getInit(e){var t;return null==(t=e.init)&&(t=e.initializer)&&void 0!==console&&console.warn(".initializer has been renamed to .init as of March 2022"),t}function old_applyMemberDec(e,t,a,r,o,i,n,l,s){var c,d,u,f,p,v,y,h=a[0];if(n?(0===o||1===o?(c={get:a[3],set:a[4]},u="get"):3===o?(c={get:a[3]},u="get"):4===o?(c={set:a[3]},u="set"):c={value:a[3]},0!==o&&(1===o&&setFunctionName(a[4],"#"+r,"set"),setFunctionName(a[3],"#"+r,u))):0!==o&&(c=Object.getOwnPropertyDescriptor(t,r)),1===o?f={get:c.get,set:c.set}:2===o?f=c.value:3===o?f=c.get:4===o&&(f=c.set),"function"==typeof h)void 0!==(p=old_memberDec(h,r,c,l,s,o,i,n,f))&&(old_assertValidReturnValue(o,p),0===o?d=p:1===o?(d=old_getInit(p),v=p.get||f.get,y=p.set||f.set,f={get:v,set:y}):f=p);else for(var m=h.length-1;m>=0;m--){var b;void 0!==(p=old_memberDec(h[m],r,c,l,s,o,i,n,f))&&(old_assertValidReturnValue(o,p),0===o?b=p:1===o?(b=old_getInit(p),v=p.get||f.get,y=p.set||f.set,f={get:v,set:y}):f=p,void 0!==b&&(void 0===d?d=b:"function"==typeof d?d=[d,b]:d.push(b)))}if(0===o||1===o){if(void 0===d)d=function(e,t){return t};else if("function"!=typeof d){var g=d;d=function(e,t){for(var a=t,r=0;r<g.length;r++)a=g[r].call(e,a);return a}}else{var _=d;d=function(e,t){return _.call(e,t)}}e.push(d)}0!==o&&(1===o?(c.get=f.get,c.set=f.set):2===o?c.value=f:3===o?c.get=f:4===o&&(c.set=f),n?1===o?(e.push((function(e,t){return f.get.call(e,t)})),e.push((function(e,t){return f.set.call(e,t)}))):2===o?e.push(f):e.push((function(e,t){return f.call(e,t)})):Object.defineProperty(t,r,c))}function old_applyMemberDecs(e,t,a,r,o){for(var i,n,l=new Map,s=new Map,c=0;c<o.length;c++){var d=o[c];if(Array.isArray(d)){var u,f,p,v=d[1],y=d[2],h=d.length>3,m=v>=5;if(m?(u=t,f=r,0!=(v-=5)&&(p=n=n||[])):(u=t.prototype,f=a,0!==v&&(p=i=i||[])),0!==v&&!h){var b=m?s:l,g=b.get(y)||0;if(!0===g||3===g&&4!==v||4===g&&3!==v)throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: "+y);!g&&v>2?b.set(y,v):b.set(y,!0)}old_applyMemberDec(e,u,d,y,v,m,h,f,p)}}old_pushInitializers(e,i),old_pushInitializers(e,n)}function old_pushInitializers(e,t){t&&e.push((function(e){for(var a=0;a<t.length;a++)t[a].call(e);return e}))}function old_applyClassDecs(e,t,a,r){if(r.length>0){for(var o=[],i=t,n=t.name,l=r.length-1;l>=0;l--){var s={v:!1};try{var c=Object.assign({kind:"class",name:n,addInitializer:old_createAddInitializerMethod(o,s)},old_createMetadataMethodsForProperty(a,0,n,s)),d=r[l](i,c)}finally{s.v=!0}void 0!==d&&(old_assertValidReturnValue(10,d),i=d)}e.push(i,(function(){for(var e=0;e<o.length;e++)o[e].call(i)}))}}export default function applyDecs(e,t,a){var r=[],o={},i={};return old_applyMemberDecs(r,e,i,o,t),old_convertMetadataMapToFinal(e.prototype,i),old_applyClassDecs(r,e,o,a),old_convertMetadataMapToFinal(e,o),r}',
+    ),
+    // size: 3860, gzip size: 1578
+    applyDecs2203: helper(
+      "7.19.0",
+      'function applyDecs2203Factory(){function createAddInitializerMethod(e,t){return function(r){!function(e,t){if(e.v)throw Error("attempted to call addInitializer after decoration was finished")}(t),assertCallable(r,"An initializer"),e.push(r)}}function memberDec(e,t,r,a,n,i,s,o){var c;switch(n){case 1:c="accessor";break;case 2:c="method";break;case 3:c="getter";break;case 4:c="setter";break;default:c="field"}var l,u,f={kind:c,name:s?"#"+t:t,static:i,private:s},p={v:!1};0!==n&&(f.addInitializer=createAddInitializerMethod(a,p)),0===n?s?(l=r.get,u=r.set):(l=function(){return this[t]},u=function(e){this[t]=e}):2===n?l=function(){return r.value}:(1!==n&&3!==n||(l=function(){return r.get.call(this)}),1!==n&&4!==n||(u=function(e){r.set.call(this,e)})),f.access=l&&u?{get:l,set:u}:l?{get:l}:{set:u};try{return e(o,f)}finally{p.v=!0}}function assertCallable(e,t){if("function"!=typeof e)throw new TypeError(t+" must be a function")}function assertValidReturnValue(e,t){var r=typeof t;if(1===e){if("object"!==r||null===t)throw new TypeError("accessor decorators must return an object with get, set, or init properties or void 0");void 0!==t.get&&assertCallable(t.get,"accessor.get"),void 0!==t.set&&assertCallable(t.set,"accessor.set"),void 0!==t.init&&assertCallable(t.init,"accessor.init")}else if("function"!==r)throw new TypeError((0===e?"field":10===e?"class":"method")+" decorators must return a function or void 0")}function applyMemberDec(e,t,r,a,n,i,s,o){var c,l,u,f,p,d,h=r[0];if(s?c=0===n||1===n?{get:r[3],set:r[4]}:3===n?{get:r[3]}:4===n?{set:r[3]}:{value:r[3]}:0!==n&&(c=Object.getOwnPropertyDescriptor(t,a)),1===n?u={get:c.get,set:c.set}:2===n?u=c.value:3===n?u=c.get:4===n&&(u=c.set),"function"==typeof h)void 0!==(f=memberDec(h,a,c,o,n,i,s,u))&&(assertValidReturnValue(n,f),0===n?l=f:1===n?(l=f.init,p=f.get||u.get,d=f.set||u.set,u={get:p,set:d}):u=f);else for(var v=h.length-1;v>=0;v--){var g;void 0!==(f=memberDec(h[v],a,c,o,n,i,s,u))&&(assertValidReturnValue(n,f),0===n?g=f:1===n?(g=f.init,p=f.get||u.get,d=f.set||u.set,u={get:p,set:d}):u=f,void 0!==g&&(void 0===l?l=g:"function"==typeof l?l=[l,g]:l.push(g)))}if(0===n||1===n){if(void 0===l)l=function(e,t){return t};else if("function"!=typeof l){var y=l;l=function(e,t){for(var r=t,a=0;a<y.length;a++)r=y[a].call(e,r);return r}}else{var m=l;l=function(e,t){return m.call(e,t)}}e.push(l)}0!==n&&(1===n?(c.get=u.get,c.set=u.set):2===n?c.value=u:3===n?c.get=u:4===n&&(c.set=u),s?1===n?(e.push((function(e,t){return u.get.call(e,t)})),e.push((function(e,t){return u.set.call(e,t)}))):2===n?e.push(u):e.push((function(e,t){return u.call(e,t)})):Object.defineProperty(t,a,c))}function pushInitializers(e,t){t&&e.push((function(e){for(var r=0;r<t.length;r++)t[r].call(e);return e}))}return function(e,t,r){var a=[];return function(e,t,r){for(var a,n,i=new Map,s=new Map,o=0;o<r.length;o++){var c=r[o];if(Array.isArray(c)){var l,u,f=c[1],p=c[2],d=c.length>3,h=f>=5;if(h?(l=t,0!=(f-=5)&&(u=n=n||[])):(l=t.prototype,0!==f&&(u=a=a||[])),0!==f&&!d){var v=h?s:i,g=v.get(p)||0;if(!0===g||3===g&&4!==f||4===g&&3!==f)throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: "+p);!g&&f>2?v.set(p,f):v.set(p,!0)}applyMemberDec(e,l,c,p,f,h,d,u)}}pushInitializers(e,a),pushInitializers(e,n)}(a,e,t),function(e,t,r){if(r.length>0){for(var a=[],n=t,i=t.name,s=r.length-1;s>=0;s--){var o={v:!1};try{var c=r[s](n,{kind:"class",name:i,addInitializer:createAddInitializerMethod(a,o)})}finally{o.v=!0}void 0!==c&&(assertValidReturnValue(10,c),n=c)}e.push(n,(function(){for(var e=0;e<a.length;e++)a[e].call(n)}))}}(a,e,r),a}}var applyDecs2203Impl;export default function applyDecs2203(e,t,r){return(applyDecs2203Impl=applyDecs2203Impl||applyDecs2203Factory())(e,t,r)}',
+    ),
+    // size: 4083, gzip size: 1651
+    applyDecs2203R: helper(
+      "7.20.0",
+      'import setFunctionName from"setFunctionName";import toPropertyKey from"toPropertyKey";function applyDecs2203RFactory(){function createAddInitializerMethod(e,t){return function(r){!function(e,t){if(e.v)throw Error("attempted to call addInitializer after decoration was finished")}(t),assertCallable(r,"An initializer"),e.push(r)}}function memberDec(e,t,r,n,a,i,o,s){var c;switch(a){case 1:c="accessor";break;case 2:c="method";break;case 3:c="getter";break;case 4:c="setter";break;default:c="field"}var l,u,f={kind:c,name:o?"#"+t:toPropertyKey(t),static:i,private:o},p={v:!1};0!==a&&(f.addInitializer=createAddInitializerMethod(n,p)),0===a?o?(l=r.get,u=r.set):(l=function(){return this[t]},u=function(e){this[t]=e}):2===a?l=function(){return r.value}:(1!==a&&3!==a||(l=function(){return r.get.call(this)}),1!==a&&4!==a||(u=function(e){r.set.call(this,e)})),f.access=l&&u?{get:l,set:u}:l?{get:l}:{set:u};try{return e(s,f)}finally{p.v=!0}}function assertCallable(e,t){if("function"!=typeof e)throw new TypeError(t+" must be a function")}function assertValidReturnValue(e,t){var r=typeof t;if(1===e){if("object"!==r||null===t)throw new TypeError("accessor decorators must return an object with get, set, or init properties or void 0");void 0!==t.get&&assertCallable(t.get,"accessor.get"),void 0!==t.set&&assertCallable(t.set,"accessor.set"),void 0!==t.init&&assertCallable(t.init,"accessor.init")}else if("function"!==r)throw new TypeError((0===e?"field":10===e?"class":"method")+" decorators must return a function or void 0")}function applyMemberDec(e,t,r,n,a,i,o,s){var c,l,u,f,p,d,h,v=r[0];if(o?(0===a||1===a?(c={get:r[3],set:r[4]},u="get"):3===a?(c={get:r[3]},u="get"):4===a?(c={set:r[3]},u="set"):c={value:r[3]},0!==a&&(1===a&&setFunctionName(r[4],"#"+n,"set"),setFunctionName(r[3],"#"+n,u))):0!==a&&(c=Object.getOwnPropertyDescriptor(t,n)),1===a?f={get:c.get,set:c.set}:2===a?f=c.value:3===a?f=c.get:4===a&&(f=c.set),"function"==typeof v)void 0!==(p=memberDec(v,n,c,s,a,i,o,f))&&(assertValidReturnValue(a,p),0===a?l=p:1===a?(l=p.init,d=p.get||f.get,h=p.set||f.set,f={get:d,set:h}):f=p);else for(var g=v.length-1;g>=0;g--){var y;void 0!==(p=memberDec(v[g],n,c,s,a,i,o,f))&&(assertValidReturnValue(a,p),0===a?y=p:1===a?(y=p.init,d=p.get||f.get,h=p.set||f.set,f={get:d,set:h}):f=p,void 0!==y&&(void 0===l?l=y:"function"==typeof l?l=[l,y]:l.push(y)))}if(0===a||1===a){if(void 0===l)l=function(e,t){return t};else if("function"!=typeof l){var m=l;l=function(e,t){for(var r=t,n=0;n<m.length;n++)r=m[n].call(e,r);return r}}else{var b=l;l=function(e,t){return b.call(e,t)}}e.push(l)}0!==a&&(1===a?(c.get=f.get,c.set=f.set):2===a?c.value=f:3===a?c.get=f:4===a&&(c.set=f),o?1===a?(e.push((function(e,t){return f.get.call(e,t)})),e.push((function(e,t){return f.set.call(e,t)}))):2===a?e.push(f):e.push((function(e,t){return f.call(e,t)})):Object.defineProperty(t,n,c))}function applyMemberDecs(e,t){for(var r,n,a=[],i=new Map,o=new Map,s=0;s<t.length;s++){var c=t[s];if(Array.isArray(c)){var l,u,f=c[1],p=c[2],d=c.length>3,h=f>=5;if(h?(l=e,0!=(f-=5)&&(u=n=n||[])):(l=e.prototype,0!==f&&(u=r=r||[])),0!==f&&!d){var v=h?o:i,g=v.get(p)||0;if(!0===g||3===g&&4!==f||4===g&&3!==f)throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: "+p);!g&&f>2?v.set(p,f):v.set(p,!0)}applyMemberDec(a,l,c,p,f,h,d,u)}}return pushInitializers(a,r),pushInitializers(a,n),a}function pushInitializers(e,t){t&&e.push((function(e){for(var r=0;r<t.length;r++)t[r].call(e);return e}))}return function(e,t,r){return{e:applyMemberDecs(e,t),get c(){return function(e,t){if(t.length>0){for(var r=[],n=e,a=e.name,i=t.length-1;i>=0;i--){var o={v:!1};try{var s=t[i](n,{kind:"class",name:a,addInitializer:createAddInitializerMethod(r,o)})}finally{o.v=!0}void 0!==s&&(assertValidReturnValue(10,s),n=s)}return[n,function(){for(var e=0;e<r.length;e++)r[e].call(n)}]}}(e,r)}}}}export default function applyDecs2203R(e,t,r){return(applyDecs2203R=applyDecs2203RFactory())(e,t,r)}',
+    ),
+    // size: 4662, gzip size: 1848
+    applyDecs2301: helper(
+      "7.21.0",
+      'import checkInRHS from"checkInRHS";import setFunctionName from"setFunctionName";import toPropertyKey from"toPropertyKey";function applyDecs2301Factory(){function createAddInitializerMethod(e,t){return function(r){!function(e,t){if(e.v)throw Error("attempted to call addInitializer after decoration was finished")}(t),assertCallable(r,"An initializer"),e.push(r)}}function assertInstanceIfPrivate(e,t){if(!e(t))throw new TypeError("Attempted to access private element on non-instance")}function memberDec(e,t,r,n,a,i,s,o,c){var u;switch(a){case 1:u="accessor";break;case 2:u="method";break;case 3:u="getter";break;case 4:u="setter";break;default:u="field"}var l,f,p={kind:u,name:s?"#"+t:toPropertyKey(t),static:i,private:s},d={v:!1};if(0!==a&&(p.addInitializer=createAddInitializerMethod(n,d)),s||0!==a&&2!==a)if(2===a)l=function(e){return assertInstanceIfPrivate(c,e),r.value};else{var h=0===a||1===a;(h||3===a)&&(l=s?function(e){return assertInstanceIfPrivate(c,e),r.get.call(e)}:function(e){return r.get.call(e)}),(h||4===a)&&(f=s?function(e,t){assertInstanceIfPrivate(c,e),r.set.call(e,t)}:function(e,t){r.set.call(e,t)})}else l=function(e){return e[t]},0===a&&(f=function(e,r){e[t]=r});var v=s?c.bind():function(e){return t in e};p.access=l&&f?{get:l,set:f,has:v}:l?{get:l,has:v}:{set:f,has:v};try{return e(o,p)}finally{d.v=!0}}function assertCallable(e,t){if("function"!=typeof e)throw new TypeError(t+" must be a function")}function assertValidReturnValue(e,t){var r=typeof t;if(1===e){if("object"!==r||null===t)throw new TypeError("accessor decorators must return an object with get, set, or init properties or void 0");void 0!==t.get&&assertCallable(t.get,"accessor.get"),void 0!==t.set&&assertCallable(t.set,"accessor.set"),void 0!==t.init&&assertCallable(t.init,"accessor.init")}else if("function"!==r)throw new TypeError((0===e?"field":10===e?"class":"method")+" decorators must return a function or void 0")}function curryThis2(e){return function(t){e(this,t)}}function applyMemberDec(e,t,r,n,a,i,s,o,c){var u,l,f,p,d,h,v,y,g=r[0];if(s?(0===a||1===a?(u={get:(d=r[3],function(){return d(this)}),set:curryThis2(r[4])},f="get"):3===a?(u={get:r[3]},f="get"):4===a?(u={set:r[3]},f="set"):u={value:r[3]},0!==a&&(1===a&&setFunctionName(u.set,"#"+n,"set"),setFunctionName(u[f||"value"],"#"+n,f))):0!==a&&(u=Object.getOwnPropertyDescriptor(t,n)),1===a?p={get:u.get,set:u.set}:2===a?p=u.value:3===a?p=u.get:4===a&&(p=u.set),"function"==typeof g)void 0!==(h=memberDec(g,n,u,o,a,i,s,p,c))&&(assertValidReturnValue(a,h),0===a?l=h:1===a?(l=h.init,v=h.get||p.get,y=h.set||p.set,p={get:v,set:y}):p=h);else for(var m=g.length-1;m>=0;m--){var b;void 0!==(h=memberDec(g[m],n,u,o,a,i,s,p,c))&&(assertValidReturnValue(a,h),0===a?b=h:1===a?(b=h.init,v=h.get||p.get,y=h.set||p.set,p={get:v,set:y}):p=h,void 0!==b&&(void 0===l?l=b:"function"==typeof l?l=[l,b]:l.push(b)))}if(0===a||1===a){if(void 0===l)l=function(e,t){return t};else if("function"!=typeof l){var I=l;l=function(e,t){for(var r=t,n=0;n<I.length;n++)r=I[n].call(e,r);return r}}else{var w=l;l=function(e,t){return w.call(e,t)}}e.push(l)}0!==a&&(1===a?(u.get=p.get,u.set=p.set):2===a?u.value=p:3===a?u.get=p:4===a&&(u.set=p),s?1===a?(e.push((function(e,t){return p.get.call(e,t)})),e.push((function(e,t){return p.set.call(e,t)}))):2===a?e.push(p):e.push((function(e,t){return p.call(e,t)})):Object.defineProperty(t,n,u))}function applyMemberDecs(e,t,r){for(var n,a,i,s=[],o=new Map,c=new Map,u=0;u<t.length;u++){var l=t[u];if(Array.isArray(l)){var f,p,d=l[1],h=l[2],v=l.length>3,y=d>=5,g=r;if(y?(f=e,0!=(d-=5)&&(p=a=a||[]),v&&!i&&(i=function(t){return checkInRHS(t)===e}),g=i):(f=e.prototype,0!==d&&(p=n=n||[])),0!==d&&!v){var m=y?c:o,b=m.get(h)||0;if(!0===b||3===b&&4!==d||4===b&&3!==d)throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: "+h);!b&&d>2?m.set(h,d):m.set(h,!0)}applyMemberDec(s,f,l,h,d,y,v,p,g)}}return pushInitializers(s,n),pushInitializers(s,a),s}function pushInitializers(e,t){t&&e.push((function(e){for(var r=0;r<t.length;r++)t[r].call(e);return e}))}return function(e,t,r,n){return{e:applyMemberDecs(e,t,n),get c(){return function(e,t){if(t.length>0){for(var r=[],n=e,a=e.name,i=t.length-1;i>=0;i--){var s={v:!1};try{var o=t[i](n,{kind:"class",name:a,addInitializer:createAddInitializerMethod(r,s)})}finally{s.v=!0}void 0!==o&&(assertValidReturnValue(10,o),n=o)}return[n,function(){for(var e=0;e<r.length;e++)r[e].call(n)}]}}(e,r)}}}}export default function applyDecs2301(e,t,r,n){return(applyDecs2301=applyDecs2301Factory())(e,t,r,n)}',
+    ),
+    // size: 3245, gzip size: 1611
+    applyDecs2305: helper(
+      "7.21.0",
+      'import checkInRHS from"checkInRHS";import setFunctionName from"setFunctionName";import toPropertyKey from"toPropertyKey";export default function applyDecs2305(e,t,r,n,o,a){function i(e,t,r){return function(n,o){return r&&r(n),e[t].call(n,o)}}function c(e,t){for(var r=0;r<e.length;r++)e[r].call(t);return t}function s(e,t,r,n){if("function"!=typeof e&&(n||void 0!==e))throw new TypeError(t+" must "+(r||"be")+" a function"+(n?"":" or undefined"));return e}function applyDec(e,t,r,n,o,a,c,u,l,f,p,d,h){function m(e){if(!h(e))throw new TypeError("Attempted to access private element on non-instance")}var y,v=t[0],g=t[3],b=!u;if(!b){r||Array.isArray(v)||(v=[v]);var w={},S=[],A=3===o?"get":4===o||d?"set":"value";f?(p||d?w={get:setFunctionName((function(){return g(this)}),n,"get"),set:function(e){t[4](this,e)}}:w[A]=g,p||setFunctionName(w[A],n,2===o?"":A)):p||(w=Object.getOwnPropertyDescriptor(e,n))}for(var P=e,j=v.length-1;j>=0;j-=r?2:1){var D=v[j],E=r?v[j-1]:void 0,I={},O={kind:["field","accessor","method","getter","setter","class"][o],name:n,metadata:a,addInitializer:function(e,t){if(e.v)throw Error("attempted to call addInitializer after decoration was finished");s(t,"An initializer","be",!0),c.push(t)}.bind(null,I)};try{if(b)(y=s(D.call(E,P,O),"class decorators","return"))&&(P=y);else{var k,F;O.static=l,O.private=f,f?2===o?k=function(e){return m(e),w.value}:(o<4&&(k=i(w,"get",m)),3!==o&&(F=i(w,"set",m))):(k=function(e){return e[n]},(o<2||4===o)&&(F=function(e,t){e[n]=t}));var N=O.access={has:f?h.bind():function(e){return n in e}};if(k&&(N.get=k),F&&(N.set=F),P=D.call(E,d?{get:w.get,set:w.set}:w[A],O),d){if("object"==typeof P&&P)(y=s(P.get,"accessor.get"))&&(w.get=y),(y=s(P.set,"accessor.set"))&&(w.set=y),(y=s(P.init,"accessor.init"))&&S.push(y);else if(void 0!==P)throw new TypeError("accessor decorators must return an object with get, set, or init properties or void 0")}else s(P,(p?"field":"method")+" decorators","return")&&(p?S.push(P):w[A]=P)}}finally{I.v=!0}}return(p||d)&&u.push((function(e,t){for(var r=S.length-1;r>=0;r--)t=S[r].call(e,t);return t})),p||b||(f?d?u.push(i(w,"get"),i(w,"set")):u.push(2===o?w[A]:i.call.bind(w[A])):Object.defineProperty(e,n,w)),P}function u(e,t){return Object.defineProperty(e,Symbol.metadata||Symbol.for("Symbol.metadata"),{configurable:!0,enumerable:!0,value:t})}if(arguments.length>=6)var l=a[Symbol.metadata||Symbol.for("Symbol.metadata")];var f=Object.create(null==l?null:l),p=function(e,t,r,n){var o,a,i=[],s=function(t){return checkInRHS(t)===e},u=new Map;function l(e){e&&i.push(c.bind(null,e))}for(var f=0;f<t.length;f++){var p=t[f];if(Array.isArray(p)){var d=p[1],h=p[2],m=p.length>3,y=16&d,v=!!(8&d),g=0==(d&=7),b=h+"/"+v;if(!g&&!m){var w=u.get(b);if(!0===w||3===w&&4!==d||4===w&&3!==d)throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: "+h);u.set(b,!(d>2)||d)}applyDec(v?e:e.prototype,p,y,m?"#"+h:toPropertyKey(h),d,n,v?a=a||[]:o=o||[],i,v,m,g,1===d,v&&m?s:r)}}return l(o),l(a),i}(e,t,o,f);return r.length||u(e,f),{e:p,get c(){var t=[];return r.length&&[u(applyDec(e,[r],n,e.name,5,f,t),f),c.bind(null,t,e)]}}}',
+    ),
+    // size: 246, gzip size: 197
+    classApplyDescriptorDestructureSet: helper(
+      "7.13.10",
+      'export default function _classApplyDescriptorDestructureSet(e,t){if(t.set)return"__destrObj"in t||(t.__destrObj={set value(r){t.set.call(e,r)}}),t.__destrObj;if(!t.writable)throw new TypeError("attempted to set read only private field");return t}',
+    ),
+    // size: 89, gzip size: 102
+    classApplyDescriptorGet: helper(
+      "7.13.10",
+      "export default function _classApplyDescriptorGet(e,t){return t.get?t.get.call(e):t.value}",
+    ),
+    // size: 176, gzip size: 158
+    classApplyDescriptorSet: helper(
+      "7.13.10",
+      'export default function _classApplyDescriptorSet(e,t,l){if(t.set)t.set.call(e,l);else{if(!t.writable)throw new TypeError("attempted to set read only private field");t.value=l}}',
+    ),
+    // size: 140, gzip size: 123
+    classCheckPrivateStaticAccess: helper(
+      "7.13.10",
+      'import assertClassBrand from"assertClassBrand";export default function _classCheckPrivateStaticAccess(s,a,r){return assertClassBrand(a,s,r)}',
+    ),
+    // size: 169, gzip size: 154
+    classCheckPrivateStaticFieldDescriptor: helper(
+      "7.13.10",
+      'export default function _classCheckPrivateStaticFieldDescriptor(t,e){if(void 0===t)throw new TypeError("attempted to "+e+" private static field before its declaration")}',
+    ),
+    // size: 149, gzip size: 118
+    classExtractFieldDescriptor: helper(
+      "7.13.10",
+      'import classPrivateFieldGet2 from"classPrivateFieldGet2";export default function _classExtractFieldDescriptor(e,t){return classPrivateFieldGet2(t,e)}',
+    ),
+    // size: 282, gzip size: 150
+    classPrivateFieldDestructureSet: helper(
+      "7.4.4",
+      'import classApplyDescriptorDestructureSet from"classApplyDescriptorDestructureSet";import classPrivateFieldGet2 from"classPrivateFieldGet2";export default function _classPrivateFieldDestructureSet(e,t){var r=classPrivateFieldGet2(t,e);return classApplyDescriptorDestructureSet(e,r)}',
+    ),
+    // size: 238, gzip size: 139
+    classPrivateFieldGet: helper(
+      "7.0.0-beta.0",
+      'import classApplyDescriptorGet from"classApplyDescriptorGet";import classPrivateFieldGet2 from"classPrivateFieldGet2";export default function _classPrivateFieldGet(e,t){var r=classPrivateFieldGet2(t,e);return classApplyDescriptorGet(e,r)}',
+    ),
+    // size: 244, gzip size: 145
+    classPrivateFieldSet: helper(
+      "7.0.0-beta.0",
+      'import classApplyDescriptorSet from"classApplyDescriptorSet";import classPrivateFieldGet2 from"classPrivateFieldGet2";export default function _classPrivateFieldSet(e,t,r){var s=classPrivateFieldGet2(t,e);return classApplyDescriptorSet(e,s,r),r}',
+    ),
+    // size: 132, gzip size: 116
+    classPrivateMethodGet: helper(
+      "7.1.6",
+      'import assertClassBrand from"assertClassBrand";export default function _classPrivateMethodGet(s,a,r){return assertClassBrand(a,s),r}',
+    ),
+    // size: 109, gzip size: 113
+    classPrivateMethodSet: helper(
+      "7.1.6",
+      'export default function _classPrivateMethodSet(){throw new TypeError("attempted to reassign private method")}',
+    ),
+    // size: 408, gzip size: 186
+    classStaticPrivateFieldDestructureSet: helper(
+      "7.13.10",
+      'import classApplyDescriptorDestructureSet from"classApplyDescriptorDestructureSet";import assertClassBrand from"assertClassBrand";import classCheckPrivateStaticFieldDescriptor from"classCheckPrivateStaticFieldDescriptor";export default function _classStaticPrivateFieldDestructureSet(t,r,s){return assertClassBrand(r,t),classCheckPrivateStaticFieldDescriptor(s,"set"),classApplyDescriptorDestructureSet(t,s)}',
+    ),
+    // size: 368, gzip size: 182
+    classStaticPrivateFieldSpecGet: helper(
+      "7.0.2",
+      'import classApplyDescriptorGet from"classApplyDescriptorGet";import assertClassBrand from"assertClassBrand";import classCheckPrivateStaticFieldDescriptor from"classCheckPrivateStaticFieldDescriptor";export default function _classStaticPrivateFieldSpecGet(t,s,r){return assertClassBrand(s,t),classCheckPrivateStaticFieldDescriptor(r,"get"),classApplyDescriptorGet(t,r)}',
+    ),
+    // size: 374, gzip size: 183
+    classStaticPrivateFieldSpecSet: helper(
+      "7.0.2",
+      'import classApplyDescriptorSet from"classApplyDescriptorSet";import assertClassBrand from"assertClassBrand";import classCheckPrivateStaticFieldDescriptor from"classCheckPrivateStaticFieldDescriptor";export default function _classStaticPrivateFieldSpecSet(s,t,r,e){return assertClassBrand(t,s),classCheckPrivateStaticFieldDescriptor(r,"set"),classApplyDescriptorSet(s,r,e),e}',
+    ),
+    // size: 126, gzip size: 122
+    classStaticPrivateMethodSet: helper(
+      "7.3.2",
+      'export default function _classStaticPrivateMethodSet(){throw new TypeError("attempted to set read only static private field")}',
+    ),
+    // size: 383, gzip size: 218
+    defineEnumerableProperties: helper(
+      "7.0.0-beta.0",
+      'export default function _defineEnumerableProperties(e,r){for(var t in r){var n=r[t];n.configurable=n.enumerable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,t,n)}if(Object.getOwnPropertySymbols)for(var a=Object.getOwnPropertySymbols(r),b=0;b<a.length;b++){var i=a[b];(n=r[i]).configurable=n.enumerable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,i,n)}return e}',
+    ),
+    // size: 668, gzip size: 330
+    dispose: helper(
+      "7.22.0",
+      'function dispose_SuppressedError(r,e){return"undefined"!=typeof SuppressedError?dispose_SuppressedError=SuppressedError:(dispose_SuppressedError=function(r,e){this.suppressed=e,this.error=r,this.stack=Error().stack},dispose_SuppressedError.prototype=Object.create(Error.prototype,{constructor:{value:dispose_SuppressedError,writable:!0,configurable:!0}})),new dispose_SuppressedError(r,e)}export default function _dispose(r,e,s){function next(){for(;r.length>0;)try{var o=r.pop(),p=o.d.call(o.v);if(o.a)return Promise.resolve(p).then(next,err)}catch(r){return err(r)}if(s)throw e}function err(r){return e=s?new dispose_SuppressedError(e,r):r,s=!0,next()}return next()}',
+    ),
+    // size: 421, gzip size: 258
+    objectSpread: helper(
+      "7.0.0-beta.0",
+      'import defineProperty from"defineProperty";export default function _objectSpread(e){for(var r=1;r<arguments.length;r++){var t=null!=arguments[r]?Object(arguments[r]):{},o=Object.keys(t);"function"==typeof Object.getOwnPropertySymbols&&o.push.apply(o,Object.getOwnPropertySymbols(t).filter((function(e){return Object.getOwnPropertyDescriptor(t,e).enumerable}))),o.forEach((function(r){defineProperty(e,r,t[r])}))}return e}',
+    ),
+    // size: 432, gzip size: 261
+    using: helper(
+      "7.22.0",
+      'export default function _using(o,n,e){if(null==n)return n;if(Object(n)!==n)throw new TypeError("using declarations can only be used with objects, functions, null, or undefined.");if(e)var r=n[Symbol.asyncDispose||Symbol.for("Symbol.asyncDispose")];if(null==r&&(r=n[Symbol.dispose||Symbol.for("Symbol.dispose")]),"function"!=typeof r)throw new TypeError("Property [Symbol.dispose] is not a function.");return o.push({v:n,d:r,a:e}),n}',
+    ),
+  });
+}

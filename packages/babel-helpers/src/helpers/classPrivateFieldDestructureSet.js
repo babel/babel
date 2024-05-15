@@ -1,4 +1,5 @@
 /* @minVersion 7.4.4 */
+/* @onlyBabel7 */
 
 import classApplyDescriptorDestructureSet from "classApplyDescriptorDestructureSet";
 import classPrivateFieldGet2 from "classPrivateFieldGet2";

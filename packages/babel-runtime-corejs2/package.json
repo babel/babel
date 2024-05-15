@@ -27,15 +27,6 @@
       "./helpers/AsyncGenerator.js"
     ],
     "./helpers/esm/AsyncGenerator": "./helpers/esm/AsyncGenerator.js",
-    "./helpers/AwaitValue": [
-      {
-        "node": "./helpers/AwaitValue.js",
-        "import": "./helpers/esm/AwaitValue.js",
-        "default": "./helpers/AwaitValue.js"
-      },
-      "./helpers/AwaitValue.js"
-    ],
-    "./helpers/esm/AwaitValue": "./helpers/esm/AwaitValue.js",
     "./helpers/OverloadYield": [
       {
         "node": "./helpers/OverloadYield.js",
@@ -54,51 +45,6 @@
       "./helpers/applyDecoratedDescriptor.js"
     ],
     "./helpers/esm/applyDecoratedDescriptor": "./helpers/esm/applyDecoratedDescriptor.js",
-    "./helpers/applyDecs": [
-      {
-        "node": "./helpers/applyDecs.js",
-        "import": "./helpers/esm/applyDecs.js",
-        "default": "./helpers/applyDecs.js"
-      },
-      "./helpers/applyDecs.js"
-    ],
-    "./helpers/esm/applyDecs": "./helpers/esm/applyDecs.js",
-    "./helpers/applyDecs2203": [
-      {
-        "node": "./helpers/applyDecs2203.js",
-        "import": "./helpers/esm/applyDecs2203.js",
-        "default": "./helpers/applyDecs2203.js"
-      },
-      "./helpers/applyDecs2203.js"
-    ],
-    "./helpers/esm/applyDecs2203": "./helpers/esm/applyDecs2203.js",
-    "./helpers/applyDecs2203R": [
-      {
-        "node": "./helpers/applyDecs2203R.js",
-        "import": "./helpers/esm/applyDecs2203R.js",
-        "default": "./helpers/applyDecs2203R.js"
-      },
-      "./helpers/applyDecs2203R.js"
-    ],
-    "./helpers/esm/applyDecs2203R": "./helpers/esm/applyDecs2203R.js",
-    "./helpers/applyDecs2301": [
-      {
-        "node": "./helpers/applyDecs2301.js",
-        "import": "./helpers/esm/applyDecs2301.js",
-        "default": "./helpers/applyDecs2301.js"
-      },
-      "./helpers/applyDecs2301.js"
-    ],
-    "./helpers/esm/applyDecs2301": "./helpers/esm/applyDecs2301.js",
-    "./helpers/applyDecs2305": [
-      {
-        "node": "./helpers/applyDecs2305.js",
-        "import": "./helpers/esm/applyDecs2305.js",
-        "default": "./helpers/applyDecs2305.js"
-      },
-      "./helpers/applyDecs2305.js"
-    ],
-    "./helpers/esm/applyDecs2305": "./helpers/esm/applyDecs2305.js",
     "./helpers/applyDecs2311": [
       {
         "node": "./helpers/applyDecs2311.js",
@@ -216,33 +162,6 @@
       "./helpers/checkPrivateRedeclaration.js"
     ],
     "./helpers/esm/checkPrivateRedeclaration": "./helpers/esm/checkPrivateRedeclaration.js",
-    "./helpers/classApplyDescriptorDestructureSet": [
-      {
-        "node": "./helpers/classApplyDescriptorDestructureSet.js",
-        "import": "./helpers/esm/classApplyDescriptorDestructureSet.js",
-        "default": "./helpers/classApplyDescriptorDestructureSet.js"
-      },
-      "./helpers/classApplyDescriptorDestructureSet.js"
-    ],
-    "./helpers/esm/classApplyDescriptorDestructureSet": "./helpers/esm/classApplyDescriptorDestructureSet.js",
-    "./helpers/classApplyDescriptorGet": [
-      {
-        "node": "./helpers/classApplyDescriptorGet.js",
-        "import": "./helpers/esm/classApplyDescriptorGet.js",
-        "default": "./helpers/classApplyDescriptorGet.js"
-      },
-      "./helpers/classApplyDescriptorGet.js"
-    ],
-    "./helpers/esm/classApplyDescriptorGet": "./helpers/esm/classApplyDescriptorGet.js",
-    "./helpers/classApplyDescriptorSet": [
-      {
-        "node": "./helpers/classApplyDescriptorSet.js",
-        "import": "./helpers/esm/classApplyDescriptorSet.js",
-        "default": "./helpers/classApplyDescriptorSet.js"
-      },
-      "./helpers/classApplyDescriptorSet.js"
-    ],
-    "./helpers/esm/classApplyDescriptorSet": "./helpers/esm/classApplyDescriptorSet.js",
     "./helpers/classCallCheck": [
       {
         "node": "./helpers/classCallCheck.js",
@@ -252,33 +171,6 @@
       "./helpers/classCallCheck.js"
     ],
     "./helpers/esm/classCallCheck": "./helpers/esm/classCallCheck.js",
-    "./helpers/classCheckPrivateStaticAccess": [
-      {
-        "node": "./helpers/classCheckPrivateStaticAccess.js",
-        "import": "./helpers/esm/classCheckPrivateStaticAccess.js",
-        "default": "./helpers/classCheckPrivateStaticAccess.js"
-      },
-      "./helpers/classCheckPrivateStaticAccess.js"
-    ],
-    "./helpers/esm/classCheckPrivateStaticAccess": "./helpers/esm/classCheckPrivateStaticAccess.js",
-    "./helpers/classCheckPrivateStaticFieldDescriptor": [
-      {
-        "node": "./helpers/classCheckPrivateStaticFieldDescriptor.js",
-        "import": "./helpers/esm/classCheckPrivateStaticFieldDescriptor.js",
-        "default": "./helpers/classCheckPrivateStaticFieldDescriptor.js"
-      },
-      "./helpers/classCheckPrivateStaticFieldDescriptor.js"
-    ],
-    "./helpers/esm/classCheckPrivateStaticFieldDescriptor": "./helpers/esm/classCheckPrivateStaticFieldDescriptor.js",
-    "./helpers/classExtractFieldDescriptor": [
-      {
-        "node": "./helpers/classExtractFieldDescriptor.js",
-        "import": "./helpers/esm/classExtractFieldDescriptor.js",
-        "default": "./helpers/classExtractFieldDescriptor.js"
-      },
-      "./helpers/classExtractFieldDescriptor.js"
-    ],
-    "./helpers/esm/classExtractFieldDescriptor": "./helpers/esm/classExtractFieldDescriptor.js",
     "./helpers/classNameTDZError": [
       {
         "node": "./helpers/classNameTDZError.js",
@@ -288,24 +180,6 @@
       "./helpers/classNameTDZError.js"
     ],
     "./helpers/esm/classNameTDZError": "./helpers/esm/classNameTDZError.js",
-    "./helpers/classPrivateFieldDestructureSet": [
-      {
-        "node": "./helpers/classPrivateFieldDestructureSet.js",
-        "import": "./helpers/esm/classPrivateFieldDestructureSet.js",
-        "default": "./helpers/classPrivateFieldDestructureSet.js"
-      },
-      "./helpers/classPrivateFieldDestructureSet.js"
-    ],
-    "./helpers/esm/classPrivateFieldDestructureSet": "./helpers/esm/classPrivateFieldDestructureSet.js",
-    "./helpers/classPrivateFieldGet": [
-      {
-        "node": "./helpers/classPrivateFieldGet.js",
-        "import": "./helpers/esm/classPrivateFieldGet.js",
-        "default": "./helpers/classPrivateFieldGet.js"
-      },
-      "./helpers/classPrivateFieldGet.js"
-    ],
-    "./helpers/esm/classPrivateFieldGet": "./helpers/esm/classPrivateFieldGet.js",
     "./helpers/classPrivateFieldGet2": [
       {
         "node": "./helpers/classPrivateFieldGet2.js",
@@ -342,15 +216,6 @@
       "./helpers/classPrivateFieldLooseKey.js"
     ],
     "./helpers/esm/classPrivateFieldLooseKey": "./helpers/esm/classPrivateFieldLooseKey.js",
-    "./helpers/classPrivateFieldSet": [
-      {
-        "node": "./helpers/classPrivateFieldSet.js",
-        "import": "./helpers/esm/classPrivateFieldSet.js",
-        "default": "./helpers/classPrivateFieldSet.js"
-      },
-      "./helpers/classPrivateFieldSet.js"
-    ],
-    "./helpers/esm/classPrivateFieldSet": "./helpers/esm/classPrivateFieldSet.js",
     "./helpers/classPrivateFieldSet2": [
       {
         "node": "./helpers/classPrivateFieldSet2.js",
@@ -369,15 +234,6 @@
       "./helpers/classPrivateGetter.js"
     ],
     "./helpers/esm/classPrivateGetter": "./helpers/esm/classPrivateGetter.js",
-    "./helpers/classPrivateMethodGet": [
-      {
-        "node": "./helpers/classPrivateMethodGet.js",
-        "import": "./helpers/esm/classPrivateMethodGet.js",
-        "default": "./helpers/classPrivateMethodGet.js"
-      },
-      "./helpers/classPrivateMethodGet.js"
-    ],
-    "./helpers/esm/classPrivateMethodGet": "./helpers/esm/classPrivateMethodGet.js",
     "./helpers/classPrivateMethodInitSpec": [
       {
         "node": "./helpers/classPrivateMethodInitSpec.js",
@@ -387,15 +243,6 @@
       "./helpers/classPrivateMethodInitSpec.js"
     ],
     "./helpers/esm/classPrivateMethodInitSpec": "./helpers/esm/classPrivateMethodInitSpec.js",
-    "./helpers/classPrivateMethodSet": [
-      {
-        "node": "./helpers/classPrivateMethodSet.js",
-        "import": "./helpers/esm/classPrivateMethodSet.js",
-        "default": "./helpers/classPrivateMethodSet.js"
-      },
-      "./helpers/classPrivateMethodSet.js"
-    ],
-    "./helpers/esm/classPrivateMethodSet": "./helpers/esm/classPrivateMethodSet.js",
     "./helpers/classPrivateSetter": [
       {
         "node": "./helpers/classPrivateSetter.js",
@@ -405,33 +252,6 @@
       "./helpers/classPrivateSetter.js"
     ],
     "./helpers/esm/classPrivateSetter": "./helpers/esm/classPrivateSetter.js",
-    "./helpers/classStaticPrivateFieldDestructureSet": [
-      {
-        "node": "./helpers/classStaticPrivateFieldDestructureSet.js",
-        "import": "./helpers/esm/classStaticPrivateFieldDestructureSet.js",
-        "default": "./helpers/classStaticPrivateFieldDestructureSet.js"
-      },
-      "./helpers/classStaticPrivateFieldDestructureSet.js"
-    ],
-    "./helpers/esm/classStaticPrivateFieldDestructureSet": "./helpers/esm/classStaticPrivateFieldDestructureSet.js",
-    "./helpers/classStaticPrivateFieldSpecGet": [
-      {
-        "node": "./helpers/classStaticPrivateFieldSpecGet.js",
-        "import": "./helpers/esm/classStaticPrivateFieldSpecGet.js",
-        "default": "./helpers/classStaticPrivateFieldSpecGet.js"
-      },
-      "./helpers/classStaticPrivateFieldSpecGet.js"
-    ],
-    "./helpers/esm/classStaticPrivateFieldSpecGet": "./helpers/esm/classStaticPrivateFieldSpecGet.js",
-    "./helpers/classStaticPrivateFieldSpecSet": [
-      {
-        "node": "./helpers/classStaticPrivateFieldSpecSet.js",
-        "import": "./helpers/esm/classStaticPrivateFieldSpecSet.js",
-        "default": "./helpers/classStaticPrivateFieldSpecSet.js"
-      },
-      "./helpers/classStaticPrivateFieldSpecSet.js"
-    ],
-    "./helpers/esm/classStaticPrivateFieldSpecSet": "./helpers/esm/classStaticPrivateFieldSpecSet.js",
     "./helpers/classStaticPrivateMethodGet": [
       {
         "node": "./helpers/classStaticPrivateMethodGet.js",
@@ -441,15 +261,6 @@
       "./helpers/classStaticPrivateMethodGet.js"
     ],
     "./helpers/esm/classStaticPrivateMethodGet": "./helpers/esm/classStaticPrivateMethodGet.js",
-    "./helpers/classStaticPrivateMethodSet": [
-      {
-        "node": "./helpers/classStaticPrivateMethodSet.js",
-        "import": "./helpers/esm/classStaticPrivateMethodSet.js",
-        "default": "./helpers/classStaticPrivateMethodSet.js"
-      },
-      "./helpers/classStaticPrivateMethodSet.js"
-    ],
-    "./helpers/esm/classStaticPrivateMethodSet": "./helpers/esm/classStaticPrivateMethodSet.js",
     "./helpers/construct": [
       {
         "node": "./helpers/construct.js",
@@ -522,15 +333,6 @@
       "./helpers/defineAccessor.js"
     ],
     "./helpers/esm/defineAccessor": "./helpers/esm/defineAccessor.js",
-    "./helpers/defineEnumerableProperties": [
-      {
-        "node": "./helpers/defineEnumerableProperties.js",
-        "import": "./helpers/esm/defineEnumerableProperties.js",
-        "default": "./helpers/defineEnumerableProperties.js"
-      },
-      "./helpers/defineEnumerableProperties.js"
-    ],
-    "./helpers/esm/defineEnumerableProperties": "./helpers/esm/defineEnumerableProperties.js",
     "./helpers/defineProperty": [
       {
         "node": "./helpers/defineProperty.js",
@@ -540,15 +342,6 @@
       "./helpers/defineProperty.js"
     ],
     "./helpers/esm/defineProperty": "./helpers/esm/defineProperty.js",
-    "./helpers/dispose": [
-      {
-        "node": "./helpers/dispose.js",
-        "import": "./helpers/esm/dispose.js",
-        "default": "./helpers/dispose.js"
-      },
-      "./helpers/dispose.js"
-    ],
-    "./helpers/esm/dispose": "./helpers/esm/dispose.js",
     "./helpers/extends": [
       {
         "node": "./helpers/extends.js",
@@ -765,15 +558,6 @@
       "./helpers/objectDestructuringEmpty.js"
     ],
     "./helpers/esm/objectDestructuringEmpty": "./helpers/esm/objectDestructuringEmpty.js",
-    "./helpers/objectSpread": [
-      {
-        "node": "./helpers/objectSpread.js",
-        "import": "./helpers/esm/objectSpread.js",
-        "default": "./helpers/objectSpread.js"
-      },
-      "./helpers/objectSpread.js"
-    ],
-    "./helpers/esm/objectSpread": "./helpers/esm/objectSpread.js",
     "./helpers/objectSpread2": [
       {
         "node": "./helpers/objectSpread2.js",
@@ -999,15 +783,6 @@
       "./helpers/unsupportedIterableToArray.js"
     ],
     "./helpers/esm/unsupportedIterableToArray": "./helpers/esm/unsupportedIterableToArray.js",
-    "./helpers/using": [
-      {
-        "node": "./helpers/using.js",
-        "import": "./helpers/esm/using.js",
-        "default": "./helpers/using.js"
-      },
-      "./helpers/using.js"
-    ],
-    "./helpers/esm/using": "./helpers/esm/using.js",
     "./helpers/usingCtx": [
       {
         "node": "./helpers/usingCtx.js",
@@ -1053,6 +828,231 @@
       "./helpers/writeOnlyError.js"
     ],
     "./helpers/esm/writeOnlyError": "./helpers/esm/writeOnlyError.js",
+    "./helpers/AwaitValue": [
+      {
+        "node": "./helpers/AwaitValue.js",
+        "import": "./helpers/esm/AwaitValue.js",
+        "default": "./helpers/AwaitValue.js"
+      },
+      "./helpers/AwaitValue.js"
+    ],
+    "./helpers/esm/AwaitValue": "./helpers/esm/AwaitValue.js",
+    "./helpers/applyDecs": [
+      {
+        "node": "./helpers/applyDecs.js",
+        "import": "./helpers/esm/applyDecs.js",
+        "default": "./helpers/applyDecs.js"
+      },
+      "./helpers/applyDecs.js"
+    ],
+    "./helpers/esm/applyDecs": "./helpers/esm/applyDecs.js",
+    "./helpers/applyDecs2203": [
+      {
+        "node": "./helpers/applyDecs2203.js",
+        "import": "./helpers/esm/applyDecs2203.js",
+        "default": "./helpers/applyDecs2203.js"
+      },
+      "./helpers/applyDecs2203.js"
+    ],
+    "./helpers/esm/applyDecs2203": "./helpers/esm/applyDecs2203.js",
+    "./helpers/applyDecs2203R": [
+      {
+        "node": "./helpers/applyDecs2203R.js",
+        "import": "./helpers/esm/applyDecs2203R.js",
+        "default": "./helpers/applyDecs2203R.js"
+      },
+      "./helpers/applyDecs2203R.js"
+    ],
+    "./helpers/esm/applyDecs2203R": "./helpers/esm/applyDecs2203R.js",
+    "./helpers/applyDecs2301": [
+      {
+        "node": "./helpers/applyDecs2301.js",
+        "import": "./helpers/esm/applyDecs2301.js",
+        "default": "./helpers/applyDecs2301.js"
+      },
+      "./helpers/applyDecs2301.js"
+    ],
+    "./helpers/esm/applyDecs2301": "./helpers/esm/applyDecs2301.js",
+    "./helpers/applyDecs2305": [
+      {
+        "node": "./helpers/applyDecs2305.js",
+        "import": "./helpers/esm/applyDecs2305.js",
+        "default": "./helpers/applyDecs2305.js"
+      },
+      "./helpers/applyDecs2305.js"
+    ],
+    "./helpers/esm/applyDecs2305": "./helpers/esm/applyDecs2305.js",
+    "./helpers/classApplyDescriptorDestructureSet": [
+      {
+        "node": "./helpers/classApplyDescriptorDestructureSet.js",
+        "import": "./helpers/esm/classApplyDescriptorDestructureSet.js",
+        "default": "./helpers/classApplyDescriptorDestructureSet.js"
+      },
+      "./helpers/classApplyDescriptorDestructureSet.js"
+    ],
+    "./helpers/esm/classApplyDescriptorDestructureSet": "./helpers/esm/classApplyDescriptorDestructureSet.js",
+    "./helpers/classApplyDescriptorGet": [
+      {
+        "node": "./helpers/classApplyDescriptorGet.js",
+        "import": "./helpers/esm/classApplyDescriptorGet.js",
+        "default": "./helpers/classApplyDescriptorGet.js"
+      },
+      "./helpers/classApplyDescriptorGet.js"
+    ],
+    "./helpers/esm/classApplyDescriptorGet": "./helpers/esm/classApplyDescriptorGet.js",
+    "./helpers/classApplyDescriptorSet": [
+      {
+        "node": "./helpers/classApplyDescriptorSet.js",
+        "import": "./helpers/esm/classApplyDescriptorSet.js",
+        "default": "./helpers/classApplyDescriptorSet.js"
+      },
+      "./helpers/classApplyDescriptorSet.js"
+    ],
+    "./helpers/esm/classApplyDescriptorSet": "./helpers/esm/classApplyDescriptorSet.js",
+    "./helpers/classCheckPrivateStaticAccess": [
+      {
+        "node": "./helpers/classCheckPrivateStaticAccess.js",
+        "import": "./helpers/esm/classCheckPrivateStaticAccess.js",
+        "default": "./helpers/classCheckPrivateStaticAccess.js"
+      },
+      "./helpers/classCheckPrivateStaticAccess.js"
+    ],
+    "./helpers/esm/classCheckPrivateStaticAccess": "./helpers/esm/classCheckPrivateStaticAccess.js",
+    "./helpers/classCheckPrivateStaticFieldDescriptor": [
+      {
+        "node": "./helpers/classCheckPrivateStaticFieldDescriptor.js",
+        "import": "./helpers/esm/classCheckPrivateStaticFieldDescriptor.js",
+        "default": "./helpers/classCheckPrivateStaticFieldDescriptor.js"
+      },
+      "./helpers/classCheckPrivateStaticFieldDescriptor.js"
+    ],
+    "./helpers/esm/classCheckPrivateStaticFieldDescriptor": "./helpers/esm/classCheckPrivateStaticFieldDescriptor.js",
+    "./helpers/classExtractFieldDescriptor": [
+      {
+        "node": "./helpers/classExtractFieldDescriptor.js",
+        "import": "./helpers/esm/classExtractFieldDescriptor.js",
+        "default": "./helpers/classExtractFieldDescriptor.js"
+      },
+      "./helpers/classExtractFieldDescriptor.js"
+    ],
+    "./helpers/esm/classExtractFieldDescriptor": "./helpers/esm/classExtractFieldDescriptor.js",
+    "./helpers/classPrivateFieldDestructureSet": [
+      {
+        "node": "./helpers/classPrivateFieldDestructureSet.js",
+        "import": "./helpers/esm/classPrivateFieldDestructureSet.js",
+        "default": "./helpers/classPrivateFieldDestructureSet.js"
+      },
+      "./helpers/classPrivateFieldDestructureSet.js"
+    ],
+    "./helpers/esm/classPrivateFieldDestructureSet": "./helpers/esm/classPrivateFieldDestructureSet.js",
+    "./helpers/classPrivateFieldGet": [
+      {
+        "node": "./helpers/classPrivateFieldGet.js",
+        "import": "./helpers/esm/classPrivateFieldGet.js",
+        "default": "./helpers/classPrivateFieldGet.js"
+      },
+      "./helpers/classPrivateFieldGet.js"
+    ],
+    "./helpers/esm/classPrivateFieldGet": "./helpers/esm/classPrivateFieldGet.js",
+    "./helpers/classPrivateFieldSet": [
+      {
+        "node": "./helpers/classPrivateFieldSet.js",
+        "import": "./helpers/esm/classPrivateFieldSet.js",
+        "default": "./helpers/classPrivateFieldSet.js"
+      },
+      "./helpers/classPrivateFieldSet.js"
+    ],
+    "./helpers/esm/classPrivateFieldSet": "./helpers/esm/classPrivateFieldSet.js",
+    "./helpers/classPrivateMethodGet": [
+      {
+        "node": "./helpers/classPrivateMethodGet.js",
+        "import": "./helpers/esm/classPrivateMethodGet.js",
+        "default": "./helpers/classPrivateMethodGet.js"
+      },
+      "./helpers/classPrivateMethodGet.js"
+    ],
+    "./helpers/esm/classPrivateMethodGet": "./helpers/esm/classPrivateMethodGet.js",
+    "./helpers/classPrivateMethodSet": [
+      {
+        "node": "./helpers/classPrivateMethodSet.js",
+        "import": "./helpers/esm/classPrivateMethodSet.js",
+        "default": "./helpers/classPrivateMethodSet.js"
+      },
+      "./helpers/classPrivateMethodSet.js"
+    ],
+    "./helpers/esm/classPrivateMethodSet": "./helpers/esm/classPrivateMethodSet.js",
+    "./helpers/classStaticPrivateFieldDestructureSet": [
+      {
+        "node": "./helpers/classStaticPrivateFieldDestructureSet.js",
+        "import": "./helpers/esm/classStaticPrivateFieldDestructureSet.js",
+        "default": "./helpers/classStaticPrivateFieldDestructureSet.js"
+      },
+      "./helpers/classStaticPrivateFieldDestructureSet.js"
+    ],
+    "./helpers/esm/classStaticPrivateFieldDestructureSet": "./helpers/esm/classStaticPrivateFieldDestructureSet.js",
+    "./helpers/classStaticPrivateFieldSpecGet": [
+      {
+        "node": "./helpers/classStaticPrivateFieldSpecGet.js",
+        "import": "./helpers/esm/classStaticPrivateFieldSpecGet.js",
+        "default": "./helpers/classStaticPrivateFieldSpecGet.js"
+      },
+      "./helpers/classStaticPrivateFieldSpecGet.js"
+    ],
+    "./helpers/esm/classStaticPrivateFieldSpecGet": "./helpers/esm/classStaticPrivateFieldSpecGet.js",
+    "./helpers/classStaticPrivateFieldSpecSet": [
+      {
+        "node": "./helpers/classStaticPrivateFieldSpecSet.js",
+        "import": "./helpers/esm/classStaticPrivateFieldSpecSet.js",
+        "default": "./helpers/classStaticPrivateFieldSpecSet.js"
+      },
+      "./helpers/classStaticPrivateFieldSpecSet.js"
+    ],
+    "./helpers/esm/classStaticPrivateFieldSpecSet": "./helpers/esm/classStaticPrivateFieldSpecSet.js",
+    "./helpers/classStaticPrivateMethodSet": [
+      {
+        "node": "./helpers/classStaticPrivateMethodSet.js",
+        "import": "./helpers/esm/classStaticPrivateMethodSet.js",
+        "default": "./helpers/classStaticPrivateMethodSet.js"
+      },
+      "./helpers/classStaticPrivateMethodSet.js"
+    ],
+    "./helpers/esm/classStaticPrivateMethodSet": "./helpers/esm/classStaticPrivateMethodSet.js",
+    "./helpers/defineEnumerableProperties": [
+      {
+        "node": "./helpers/defineEnumerableProperties.js",
+        "import": "./helpers/esm/defineEnumerableProperties.js",
+        "default": "./helpers/defineEnumerableProperties.js"
+      },
+      "./helpers/defineEnumerableProperties.js"
+    ],
+    "./helpers/esm/defineEnumerableProperties": "./helpers/esm/defineEnumerableProperties.js",
+    "./helpers/dispose": [
+      {
+        "node": "./helpers/dispose.js",
+        "import": "./helpers/esm/dispose.js",
+        "default": "./helpers/dispose.js"
+      },
+      "./helpers/dispose.js"
+    ],
+    "./helpers/esm/dispose": "./helpers/esm/dispose.js",
+    "./helpers/objectSpread": [
+      {
+        "node": "./helpers/objectSpread.js",
+        "import": "./helpers/esm/objectSpread.js",
+        "default": "./helpers/objectSpread.js"
+      },
+      "./helpers/objectSpread.js"
+    ],
+    "./helpers/esm/objectSpread": "./helpers/esm/objectSpread.js",
+    "./helpers/using": [
+      {
+        "node": "./helpers/using.js",
+        "import": "./helpers/esm/using.js",
+        "default": "./helpers/using.js"
+      },
+      "./helpers/using.js"
+    ],
+    "./helpers/esm/using": "./helpers/esm/using.js",
     "./package": "./package.json",
     "./package.json": "./package.json",
     "./regenerator": "./regenerator/index.js",
