@@ -180,8 +180,9 @@ module.exports = [
   {
     files: sourceFiles("js,ts,cjs,mjs"),
     ignores: [
-      // This is bundled
+      // These are bundled
       "packages/babel-parser/**/*.{js,ts}",
+      "packages/babel-standalone/**/*.{js,ts}",
     ],
     rules: {
       "import/no-extraneous-dependencies": [
