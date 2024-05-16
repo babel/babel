@@ -255,7 +255,7 @@ export function getHelperMetadata(code, helperName) {
         if (name !== "arguments" || child.scope.path.isProgram()) {
           globals.add(name);
         }
-      } else if (dependencies.has(name)) {
+      } else if (dependencies.has(name) && binding.scope.path.isProgram()) {
         importBindingsReferences.push(makePath(child));
       }
     },
