@@ -13,34 +13,34 @@ var Point = /*#__PURE__*/function () {
       writable: true,
       value: void 0
     });
-    babelHelpers.classPrivateFieldLooseBase(this, _x)[_x] = +x;
-    babelHelpers.classPrivateFieldLooseBase(this, _y)[_y] = +y;
+    babelHelpers.assertClassBrandLoose(this, _x)[_x] = +x;
+    babelHelpers.assertClassBrandLoose(this, _y)[_y] = +y;
   }
   return babelHelpers.createClass(Point, [{
     key: "x",
     get: function () {
-      return babelHelpers.classPrivateFieldLooseBase(this, _x)[_x];
+      return babelHelpers.assertClassBrandLoose(this, _x, 1);
     },
     set: function (value) {
-      babelHelpers.classPrivateFieldLooseBase(this, _x)[_x] = +value;
+      babelHelpers.assertClassBrandLoose(this, _x)[_x] = +value;
     }
   }, {
     key: "y",
     get: function () {
-      return babelHelpers.classPrivateFieldLooseBase(this, _y)[_y];
+      return babelHelpers.assertClassBrandLoose(this, _y, 1);
     },
     set: function (value) {
-      babelHelpers.classPrivateFieldLooseBase(this, _y)[_y] = +value;
+      babelHelpers.assertClassBrandLoose(this, _y)[_y] = +value;
     }
   }, {
     key: "equals",
     value: function equals(p) {
-      return babelHelpers.classPrivateFieldLooseBase(this, _x)[_x] === babelHelpers.classPrivateFieldLooseBase(p, _x)[_x] && babelHelpers.classPrivateFieldLooseBase(this, _y)[_y] === babelHelpers.classPrivateFieldLooseBase(p, _y)[_y];
+      return babelHelpers.assertClassBrandLoose(this, _x, 1) === babelHelpers.assertClassBrandLoose(p, _x, 1) && babelHelpers.assertClassBrandLoose(this, _y, 1) === babelHelpers.assertClassBrandLoose(p, _y, 1);
     }
   }, {
     key: "toString",
     value: function toString() {
-      return `Point<${babelHelpers.classPrivateFieldLooseBase(this, _x)[_x]},${babelHelpers.classPrivateFieldLooseBase(this, _y)[_y]}>`;
+      return `Point<${babelHelpers.assertClassBrandLoose(this, _x, 1)},${babelHelpers.assertClassBrandLoose(this, _y, 1)}>`;
     }
   }]);
 }();

@@ -8,5 +8,5 @@ Object.defineProperty(Foo, _, {
 });
 // static block can not be transformed as `#_` here
 
-_Foo.foo = babelHelpers.classPrivateFieldLooseBase(_Foo, _)[_];
+_Foo.foo = babelHelpers.assertClassBrandLoose(_Foo, _, 1);
 expect(Foo.foo).toBe(42);

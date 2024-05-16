@@ -12,16 +12,16 @@ var Foo = /*#__PURE__*/function () {
   return babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test() {
-      var Nested = /*#__PURE__*/function (_babelHelpers$classPr) {
+      var Nested = /*#__PURE__*/function (_babelHelpers$assertC) {
         function Nested() {
           babelHelpers.classCallCheck(this, Nested);
         }
         return babelHelpers.createClass(Nested, [{
-          key: _babelHelpers$classPr,
+          key: _babelHelpers$assertC,
           value: function () {}
         }]);
-      }(babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo]);
-      babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo];
+      }(babelHelpers.assertClassBrandLoose(this, _foo, 1));
+      babelHelpers.assertClassBrandLoose(this, _foo, 1);
     }
   }]);
 }();

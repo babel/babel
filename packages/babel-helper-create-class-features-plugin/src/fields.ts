@@ -622,7 +622,7 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
               t.cloneNode(classRef),
               receiver,
             ]),
-            readOnlyError(file, name),
+            err,
           ]);
         }
 
@@ -837,6 +837,13 @@ const privateNameHandlerLoose: Handler<PrivateNameState> = {
     const { object } = member.node;
     const { name } = (member.node.property as t.PrivateName).id;
 
+    if (process.env.BABEL_8_BREAKING || newHelpers(file)) {
+      return template.expression`BASE(REF, PROP, 1)`({
+        BASE: file.addHelper("assertClassBrandLoose"),
+        REF: t.cloneNode(object),
+        PROP: t.cloneNode(privateNamesMap.get(name).id),
+      });
+    }
     return template.expression`BASE(REF, PROP)[PROP]`({
       BASE: file.addHelper("classPrivateFieldLooseBase"),
       REF: t.cloneNode(object),
@@ -858,19 +865,57 @@ const privateNameHandlerLoose: Handler<PrivateNameState> = {
   },
 
   simpleSet(member) {
+    const { privateNamesMap, file } = this;
+    const { object } = member.node;
+    const { name } = (member.node.property as t.PrivateName).id;
+
+    if (process.env.BABEL_8_BREAKING || newHelpers(file)) {
+      return template.expression`BASE(REF, PROP)[PROP]`({
+        BASE: file.addHelper("assertClassBrandLoose"),
+        REF: t.cloneNode(object),
+        PROP: t.cloneNode(privateNamesMap.get(name).id),
+      });
+    }
     return this.get(member);
   },
 
   destructureSet(member) {
-    return this.get(member);
+    return this.simpleSet(member);
   },
 
   call(member, args) {
-    return t.callExpression(this.get(member), args);
+    const { privateNamesMap } = this;
+    const { node } = member;
+
+    return t.callExpression(
+      t.memberExpression(
+        t.cloneNode(node.object),
+        t.cloneNode(
+          privateNamesMap.get((member.node.property as t.PrivateName).id.name)
+            .id,
+        ),
+        true,
+      ),
+      args,
+    );
   },
 
   optionalCall(member, args) {
-    return t.optionalCallExpression(this.get(member), args, true);
+    const { privateNamesMap } = this;
+    const { node } = member;
+
+    return t.optionalCallExpression(
+      t.memberExpression(
+        t.cloneNode(node.object),
+        t.cloneNode(
+          privateNamesMap.get((member.node.property as t.PrivateName).id.name)
+            .id,
+        ),
+        true,
+      ),
+      args,
+      true,
+    );
   },
 
   delete() {

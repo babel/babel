@@ -10,6 +10,6 @@ var Foo = /*#__PURE__*/babelHelpers.createClass(function Foo() {
   });
   Object.defineProperty(this, _y, {
     writable: true,
-    value: babelHelpers.classPrivateFieldLooseBase(this, _x)[_x]
+    value: babelHelpers.assertClassBrandLoose(this, _x, 1)
   });
 });

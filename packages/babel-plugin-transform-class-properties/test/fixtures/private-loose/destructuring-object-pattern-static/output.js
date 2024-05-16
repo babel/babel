@@ -4,7 +4,7 @@ var Foo = /*#__PURE__*/babelHelpers.createClass(function Foo(props) {
 
   babelHelpers.classCallCheck(this, Foo);
   ({
-    client: babelHelpers.classPrivateFieldLooseBase(Foo, _client)[_client]
+    client: babelHelpers.assertClassBrandLoose(Foo, _client)[_client]
   } = props);
 });
 Object.defineProperty(Foo, _client, {

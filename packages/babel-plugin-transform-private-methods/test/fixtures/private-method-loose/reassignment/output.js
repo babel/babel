@@ -5,7 +5,7 @@ class Foo {
     Object.defineProperty(this, _privateMethod, {
       value: _privateMethod2
     });
-    babelHelpers.classPrivateFieldLooseBase(this, _privateMethod)[_privateMethod] = ++counter;
+    babelHelpers.assertClassBrandLoose(this, _privateMethod)[_privateMethod] = ++counter;
   }
 }
 function _privateMethod2() {
