@@ -12,6 +12,7 @@
     "fix": "make fix",
     "lint": "make lint",
     "test": "make test",
+    "test-only": "make test-only",
     "version": "yarn --immutable-cache && git add yarn.lock",
     "test:esm": "node test/esm/index.js",
     "test:runtime:generate-absolute-runtime": "node test/runtime-integration/generate-absolute-runtime.cjs",
