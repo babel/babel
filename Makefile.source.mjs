@@ -299,6 +299,11 @@ target["prepublish-prepare-dts-no-clean"] = function () {
 target["tscheck"] = function () {
   target["generate-tsconfig"]();
   node(["scripts/parallel-tsc/tsc.js", "."]);
+  target["tscheck-helpers"]();
+};
+
+target["tscheck-helpers"] = function () {
+  yarn(["tsc", "-p", "./packages/babel-helpers/src/helpers/tsconfig.json"]);
 };
 
 target["clean-ts"] = function () {

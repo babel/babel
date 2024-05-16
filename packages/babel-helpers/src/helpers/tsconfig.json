@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "rootDir": ".",
+    "target": "ESNext",
+    "module": "preserve",
+    "lib": ["ESNext"],
+    "declaration": false,
+    "noEmit": true,
+    "moduleResolution": "Bundler",
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "allowImportingTsExtensions": true,
+    "strict": true
+  },
+  "include": ["./*.ts"],
+  "exclude": [
+    "./applyDecs2305.ts",
+    "./applyDecs2311.ts",
+    "./construct.ts",
+    "./setFunctionName.ts",
+    "./usingCtx.ts"
+  ]
+}
